@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.35 2004-12-25 07:19:38 thorstenr Exp $
+* $Id: functions.php,v 1.36 2004-12-25 07:28:57 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -309,17 +309,18 @@ function IPCheck($ip)
 * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since    2004-12-25
 */
-function hilight($string)
+function hilight($content)
 {
     $appendPHP = FALSE;
+    $string = $content[2];
     if (!ereg('^<\\?', $string)) {
         $appendPHP = TRUE;
         $string = "<?php\n".$string."\n?>";
     }
     
-    $string = highlight_string($string, TRUE ); 
-    $string = eregi_replace('^.*<code>',  '', $string);
-    $string = eregi_replace('</code>.*$', '', $string);
+    $string = highlight_string($string, TRUE); 
+    $string = eregi_replace('^.*<pre>',  '', $string);
+    $string = eregi_replace('</pre>.*$', '', $string);
     
     $string = str_replace("\n", "", $string);
     $string = str_replace("&nbsp;", " ", $string);
