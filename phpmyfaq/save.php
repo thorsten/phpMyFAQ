@@ -1,9 +1,11 @@
 <?php
 /******************************************************************************
+ * $Id: save.php,v 1.2 2004-10-31 10:40:37 thorstenr Exp $
+ *
  * Datei:				save.php
  * Autor:				Thorsten Rinne <thorsten@phpmyfaq.de>
  * Datum:				2002-09-16
- * Letzte Änderung:		2004-06-27
+ * Letzte Änderung:		2004-10-31
  * Copyright:           (c) 2001-2004 Thorsten Rinne
  * 
  * The contents of this file are subject to the Mozilla Public License
@@ -20,7 +22,7 @@
 if (isset($_REQUEST["username"]) && isset($_REQUEST["rubrik"]) && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "" && isset($_REQUEST["content"]) && $_REQUEST["content"] != "" && isset($_REQUEST["usermail"]) && $_REQUEST["usermail"] != "" && IPCheck($_SERVER["REMOTE_ADDR"])) {
 	Tracking("savenewentry",0);
 	$datum = date("YmdHis");
-	$content = safeHTML($_REQUEST["content"]);
+	$content = nl2br($_REQUEST["content"]);
 	if (substr($_REQUEST["contentlink"],7) != "") {
 		if ($PMF_CONF["ubbcode"]) {
 			$content = $content."\n".$PMF_LANG["msgInfo"].$_REQUEST["contentlink"];
@@ -37,7 +39,7 @@ if (isset($_REQUEST["username"]) && isset($_REQUEST["rubrik"]) && isset($_REQUES
 		$lang = "en";
 		}
 	
-	$content = safeSQL($content);
+	$content = safeSQL(safeHTML($content));
 	$thema = safeSQL(safeHTML($_REQUEST["thema"]));
 	$keywords = safeSQL($_REQUEST["keywords"]);
 	$author = $_REQUEST["username"];
