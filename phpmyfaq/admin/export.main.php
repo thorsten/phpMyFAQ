@@ -1,11 +1,13 @@
 <?php
-/******************************************************************************
+/**
+ * $Id: export.main.php,v 1.3 2004-11-05 23:07:27 thorstenr Exp $
+ *
  * File:				export.main.php
  * Description:			RSS and FAQ export - main page
  * Author:				Thorsten Rinne <thorsten@phpmyfaq.de>
  * Contributor:         Peter Beauvain <pbeauvain@web.de>
  * Date:				2003-04-17
- * Last change:			2004-11-01
+ * Last change:			2004-11-05
  * Copyright:           (c) 2001-2004 phpMyFAQ Team
  * 
  * The contents of this file are subject to the Mozilla Public License
@@ -26,95 +28,16 @@ if (isset($_REQUEST["submit"])) {
 	}
 
 if (isset($submit[0])) {
-	// RSS feed from news
-	$result = $db->query("SELECT datum, header, artikel, link, linktitel, target FROM ".SQLPREFIX."faqnews ORDER BY datum desc LIMIT 0,".$PMF_CONF["numNewsArticles"]);
-	
-	$output = "<?xml version=\"1.0\" encoding=\"".$PMF_LANG["metaCharset"]."\" standalone=\"yes\" ?>\n<rss version=\"2.0\">\n<channel>\n";
-	$output .= "<title>".$PMF_CONF["title"]."</title>\n";
-	$output .= "<description>".$PMF_CONF["metaDescription"]."</description>\n";
-	$output .= "<link>http://".$_SERVER["HTTP_HOST"]."</link>";
-	if ($db->num_rows($result) > 0) {
-		while ($row = $db->fetch_object($result)) {
-			$output .= "\t<item>\n";
-			$output .= "\t\t<title>".$row->header."</title>\n";
-			$output .= "\t\t<description>".stripslashes(htmlspecialchars($row->artikel))."</description>\n";
-			$output .= "\t\t<link>http://".$_SERVER["HTTP_HOST"].str_replace ("admin/", "", $_SERVER["PHP_SELF"])."</link>\n";
-			$output .= "\t</item>\n";
-		    }
-	    }
-	$output .= "</channel>\n</rss>";
-	$fp = @fopen(PMF_ROOT_DIR."/xml/news.xml", "w");
-	if ($fp != FALSE) {
-		fputs($fp, $output);
-		print "<p>".$PMF_LANG["ad_export_1"]." <em><a href=\"../xml/news.xml\" target=\"_blank\">../xml/news.xml</a></em> ".$PMF_LANG["ad_export_2"]."</p>";
-		fclose($fp);
-		}
-	else {
-		print "<p>".$PMF_LANG["ad_export_file"]."</p>";
-		}
-	}
+	// XML export
+    
+}
 
 if (isset($submit[1])) {
-	// RSS feed from top ten
-	$result = $db->query("SELECT DISTINCT ".SQLPREFIX."faqdata.id, ".SQLPREFIX."faqdata.lang, ".SQLPREFIX."faqdata.thema, ".SQLPREFIX."faqdata.rubrik, ".SQLPREFIX."faqvisits.visits FROM ".SQLPREFIX."faqvisits, ".SQLPREFIX."faqdata WHERE ".SQLPREFIX."faqdata.id = ".SQLPREFIX."faqvisits.id AND ".SQLPREFIX."faqdata.lang = ".SQLPREFIX."faqvisits.lang AND ".SQLPREFIX."faqdata.active = 'yes' ORDER BY ".SQLPREFIX."faqvisits.visits DESC LIMIT 0,10");
-	
-	$output = "<?xml version=\"1.0\" encoding=\"".$PMF_LANG["metaCharset"]."\" standalone=\"yes\" ?>\n<rss version=\"2.0\">\n<channel>\n";
-	$output .= "<title>".$PMF_CONF["title"]."</title>\n";
-	$output .= "<description>".$PMF_CONF["metaDescription"]."</description>\n";
-	$output .= "<link>http://".$_SERVER["HTTP_HOST"]."</link>";
-	if ($db->num_rows($result) > 0) {
-		$i = 1;
-		while ($row = $db->fetch_object($result)) {
-			$output .= "\t<item>\n";
-			$output .= "\t\t<title>[".$i.".] ".$row->visits." ".$PMF_LANG["msgViews"].":</title>\n";
-			$output .= "\t\t<description>".stripslashes(htmlspecialchars(makeShorterText($row->thema, 8)))."</description>\n";
-			$output .= "\t\t<link>http://".$_SERVER["HTTP_HOST"].str_replace ("admin/", "", $_SERVER["PHP_SELF"])."?aktion=artikel&amp;cat=".$row->rubrik."&amp;id=".$row->id."&amp;artlang=".$row->lang."</link>\n";
-			$output .= "\t</item>\n";
-			$i++;
-			}
-		}
-	$output .= "</channel>\n</rss>";
-	$fp = fopen(PMF_ROOT_DIR."/xml/topten.xml", "w");
-	if ($fp != FALSE) {
-		fputs($fp, $output);
-		print "<p>".$PMF_LANG["ad_export_1"]." <em><a href=\"../xml/topten.xml\" target=\"_blank\">../xml/topten.xml</a></em> ".$PMF_LANG["ad_export_2"]."</p>";
-		fclose($fp);
-		}
-	else {
-		print "<p>".$PMF_LANG["ad_export_file"]."</p>";
-		}
-	}
+	// XHTML export
+    
+}
 
 if (isset($submit[2])) {
-	// RSS feed from five latest records
-	$result = $db->query("SELECT DISTINCT ".SQLPREFIX."faqdata.id, ".SQLPREFIX."faqdata.lang, ".SQLPREFIX."faqdata.rubrik, ".SQLPREFIX."faqdata.thema, ".SQLPREFIX."faqdata.datum, ".SQLPREFIX."faqvisits.visits FROM ".SQLPREFIX."faqdata, ".SQLPREFIX."faqvisits WHERE ".SQLPREFIX."faqdata.id = ".SQLPREFIX."faqvisits.id AND ".SQLPREFIX."faqdata.lang = ".SQLPREFIX."faqvisits.lang AND ".SQLPREFIX."faqdata.active = 'yes' ORDER BY ".SQLPREFIX."faqdata.datum desc LIMIT 0,5");
-	
-	$output = "<?xml version=\"1.0\" encoding=\"".$PMF_LANG["metaCharset"]."\" standalone=\"yes\" ?>\n<rss version=\"2.0\">\n<channel>\n";
-	$output .= "<title>".$PMF_CONF["title"]."</title>\n";
-	$output .= "<description>".$PMF_CONF["metaDescription"]."</description>\n";
-	$output .= "<link>http://".$_SERVER["HTTP_HOST"]."</link>";
-	if ($num = $db->num_rows($result) > 0) {
-		while ($row = $db->fetch_object($result)) {
-			$output .= "\t<item>\n";
-			$output .= "\t\t<title>".stripslashes(htmlspecialchars(makeShorterText($row->thema, 8)))." ...</title>\n";
-			$output .= "\t\t<description>".stripslashes(htmlspecialchars(makeShorterText($row->thema, 8)))." (".$row->visits." ".$PMF_LANG["msgViews"].")</description>\n";
-			$output .= "\t\t<link>http://".$_SERVER["HTTP_HOST"].str_replace ("admin/", "", $_SERVER["PHP_SELF"])."?aktion=artikel&amp;cat=".$row->rubrik."&amp;id=".$row->id."&amp;artlang=".$row->lang."</link>\n";
-			$output .= "\t</item>\n";
-			}
-		}
-	$output .= "</channel>\n</rss>";
-	$fp = fopen(PMF_ROOT_DIR."/xml/latest.xml", "w");
-	if ($fp != FALSE) {
-		fputs($fp, $output);
-		print "<p>".$PMF_LANG["ad_export_1"]." <em><a href=\"../xml/latest.xml\" target=\"_blank\">../xml/latest.xml</a></em> ".$PMF_LANG["ad_export_2"]."</p>";
-		fclose($fp);
-		}
-	else {
-		print "<p>".$PMF_LANG["ad_export_file"]."</p>";
-		}
-	}
-
-if (isset($submit[3])) {
 	// Full PDF Export
 	define("FPDF_FONTPATH", PMF_ROOT_DIR."/font/");
 	require (PMF_ROOT_DIR."/inc/fpdf.php");
@@ -495,14 +418,12 @@ if (!emptyTable(SQLPREFIX."faqdata")) {
 ?>
 	<form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>" method="post">
 	<input type="hidden" name="aktion" value="export" />
-	<p><strong><?php print $PMF_LANG["ad_export_news"]; ?></strong></p>
-    <p align="center"><input class="submit" type="submit" name="submit[0]" value="<?php print $PMF_LANG["ad_export_generate"]; ?>" /></p>
-	<p><strong><?php print $PMF_LANG["ad_export_topten"]; ?></strong></p>
-    <p align="center"><input class="submit" type="submit" name="submit[1]" value="<?php print $PMF_LANG["ad_export_generate"]; ?>" /></p>
-	<p><strong><?php print $PMF_LANG["ad_export_latest"]; ?></strong></p>
-    <p align="center"><input class="submit" type="submit" name="submit[2]" value="<?php print $PMF_LANG["ad_export_generate"]; ?>" /></p>
+	<p><strong>XML export</strong></p>
+    <p align="center"><input class="submit" type="submit" name="submit[0]" value="XML export" /></p>
+	<p><strong>XHTML export</strong></p>
+    <p align="center"><input class="submit" type="submit" name="submit[1]" value="XHTML export" /></p>
 	<p><strong><?php print $PMF_LANG["ad_export_pdf"]; ?></strong></p>
-    <p align="center"><input class="submit" type="submit" name="submit[3]" value="<?php print $PMF_LANG["ad_export_generate_pdf"]; ?>" /></p>
+    <p align="center"><input class="submit" type="submit" name="submit[2]" value="<?php print $PMF_LANG["ad_export_generate_pdf"]; ?>" /></p>
 	</form>
 <?php
     }
