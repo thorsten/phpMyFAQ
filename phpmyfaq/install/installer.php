@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.18 2005-03-23 07:18:22 thorstenr Exp $
+* $Id: installer.php,v 1.19 2005-03-28 13:43:06 thorstenr Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -55,7 +55,7 @@ function php_check ($ist = "", $soll = "", $err_msg = "")
 
 function db_check()
 {
-	if (!extension_loaded('mysql') && !extension_loaded('pgsql') && !extension_loaded('sybase') && !extension_loaded('mssql')) {
+	if (!extension_loaded('mysql') && !extension_loaded('mysqli') && !extension_loaded('pgsql') && !extension_loaded('sybase') && !extension_loaded('mssql')) {
 		return FALSE;
 	} else {
         return TRUE;
