@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.13 2005-01-04 15:37:47 thorstenr Exp $
+* $Id: update.php,v 1.14 2005-01-06 14:53:04 thorstenr Exp $
 *
 * Main update script
 *
@@ -445,7 +445,7 @@ if ($step == 5) {
         // create new table faqcategoryrelations
         $query[] = "CREATE TABLE ".SQLPREFIX."faqcategoryrelations ( category_id INT(11) NOT NULL, category_lang VARCHAR(5) NOT NULL default '', record_id INT(11) NOT NULL, record_lang VARCHAR(5) NOT NULL default '', PRIMARY KEY  (category_id,category_lang,record_id,record_lang) )";
         // fill the new table
-        $query[] = "INSERT INTO ".SQLPREFIX."faqcategoryrelations SELECT ".SQLPREFIX."faqcategories.id as category_id, ".SQLPREFIX."faqcategories.lang as category_lang, ".SQLPREFIX."faqdata.id as record_id, ".SQLPREFIX."faqdata.lang as record_lang WHERE ".SQLPREFIX."faqcategories.id = ".SQLPREFIX."faqdata.rubrik ORDER BY category_id";
+        $query[] = "INSERT INTO ".SQLPREFIX."faqcategoryrelations SELECT ".SQLPREFIX."faqcategories.id as category_id, ".SQLPREFIX."faqcategories.lang as category_lang, ".SQLPREFIX."faqdata.id as record_id, ".SQLPREFIX."faqdata.lang as record_lang FROM ".SQLPREFIX."faqcategories, ".SQLPREFIX."faqdata WHERE ".SQLPREFIX."faqcategories.id = ".SQLPREFIX."faqdata.rubrik ORDER BY category_id";
         // drop faqdata.rubrik
         $query[] = "ALTER TABLE ".SQLPREFIX."faqdata DROP rubrik";
         // remove all auto-increments
