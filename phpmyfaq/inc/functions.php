@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.27 2004-12-17 10:30:01 thorstenr Exp $
+* $Id: functions.php,v 1.28 2004-12-20 08:55:37 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -1324,21 +1324,59 @@ function hex2dec($color = "#000000")
 
 // LDAP functions
 
-    function getShortUserName() {
-        return getenv('REMOTE_USER');
+/**
+* Returns the user name from REMOTE_USER
+*
+* @return   string
+* @access   public
+* @author   Adam Greene <phpmyfaq@skippy.fastmail.fm>
+* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+*/
+function getShortUserName()
+{
+    if (isset($_ENV['REMOTE_USER'])) {
+        return $_ENV['REMOTE_USER'];
+    } elseif (isset($_SERVER['REMOTE_USER'])) {
+        return $_SERVER['REMOTE_USER'];
+    } else {
+        return;
     }
+}
 
-    function getFullUserName() {
-
-        $value = ldap_getCompleteName($PMF_LDAP['ldap_server'], $PMF_LDAP['ldap_port'], getenv('REMOTE_USER'), $PMF_LDAP['ldap_base']);
-        if ($value == "") {
-            return getevn('REMOTE_USER');
-        }
-        return $value;
+/**
+* Returns the full user name from LDAP if available
+*
+* @return   string
+* @access   public
+* @author   Adam Greene <phpmyfaq@skippy.fastmail.fm>
+* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+*/
+function getFullUserName()
+{
+    if ($PMF_CONF["ldap_support"] == TRUE) {
+        global $ldap;
+        return $ldap->ldap_getCompleteName(getShortUserName());
+    } else {
+        return getShortUserName();
     }
+}
 
-    function getEmailAddress() {
-        return ldap_getMail($PMF_LDAP['ldap_server'], $PMF_LDAP['ldap_port'], getenv('REMOTE_USER'), $PMF_LDAP['ldap_base']);
+/**
+* Returns the full user name from LDAP if available
+*
+* @return   string
+* @access   public
+* @author   Adam Greene <phpmyfaq@skippy.fastmail.fm>
+* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+*/
+function getEmailAddress()
+{
+    if ($PMF_CONF["ldap_support"] == TRUE) {
+        global $ldap;
+        return $ldap->ldap_getMail(getShortUserName());
+    } else {
+        return '';
     }
+}
 
 ?>
