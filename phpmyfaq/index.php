@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * $Id: index.php,v 1.3 2004-11-13 13:36:53 thorstenr Exp $
+ * $Id: index.php,v 1.4 2004-11-13 19:18:20 thorstenr Exp $
  *
  * File:				index.php
  * Description:         main file
@@ -197,8 +197,7 @@ $tpl = new phpmyfaqTemplate (array(
 				"writeContent" => $inc_tpl
 				));
 
-/* get main template, set main variables */
-$tpl->processTemplate ("index", array(
+$main_template_vars = array(
                 "title" => $PMF_CONF["title"].$title,
                 "header" => $PMF_CONF["title"],
 				"metaDescription" => $PMF_CONF["metaDescription"],
@@ -212,21 +211,10 @@ $tpl->processTemplate ("index", array(
                 "writeLangAdress" => $writeLangAdress,
                 "switchLanguages" => selectLanguages($LANGCODE),
 				"userOnline" => userOnline().$PMF_LANG["msgUserOnline"],
-				"copyright" => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> '.$PMF_CONF["version"]));
+				"copyright" => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> '.$PMF_CONF["version"]);
 
-if (isset($PMF_CONF["mod_rewrite"])) {
-    $tpl->processTemplate ("index", array(
-				"msgSearch" => '<a href="'.$_SERVER["PHP_SELF"].'?'.$sids.'action=search">'.$PMF_LANG["msgSearch"].'</a>',
-				"msgAddContent" => '<a href="'.$_SERVER["PHP_SELF"].'?'.$sids.'action=add">'.$PMF_LANG["msgAddContent"].'</a>',
-				"msgQuestion" => '<a href="'.$_SERVER["PHP_SELF"].'?'.$sids.'action=ask">'.$PMF_LANG["msgQuestion"].'</a>',
-				"msgOpenQuestions" => '<a href="'.$_SERVER["PHP_SELF"].'?'.$sids.'action=open">'.$PMF_LANG["msgOpenQuestions"].'</a>',
-				"msgHelp" => '<a href="'.$_SERVER["PHP_SELF"].'?'.$sids.'action=help">'.$PMF_LANG["msgHelp"].'</a>',
-				"msgContact" => '<a href="'.$_SERVER["PHP_SELF"].'?'.$sids.'action=contact">'.$PMF_LANG["msgContact"].'</a>',
-                "allCategories" => '<a href="'.$_SERVER["PHP_SELF"].'?'.$sids.'action=show">'.$PMF_LANG["msgShowAllCategories"].'</a>',
-				"backToHome" => '<a href="'.$_SERVER["PHP_SELF"].'?'.$sids.'">'.$PMF_LANG["msgHome"].'</a>',
-				"writeSendAdress" => $_SERVER["PHP_SELF"]."?".$sids."action=search"));
-} else {
-    $tpl->processTemplate ("index", array(
+if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == TRUE) {
+    $links_template_vars = array(
                 "msgSearch" => '<a href="search.html">'.$PMF_LANG["msgSearch"].'</a>',
 				"msgAddContent" => '<a href="addcontent.html">'.$PMF_LANG["msgAddContent"].'</a>',
 				"msgQuestion" => '<a href="ask.html">'.$PMF_LANG["msgQuestion"].'</a>',
@@ -235,8 +223,22 @@ if (isset($PMF_CONF["mod_rewrite"])) {
 				"msgContact" => '<a href="contact.html">'.$PMF_LANG["msgContact"].'</a>',
 				"backToHome" => '<a href="index.html">'.$PMF_LANG["msgHome"].'</a>',
                 "allCategories" => '<a href="showcat.html">'.$PMF_LANG["msgShowAllCategories"].'</a>',
-				"writeSendAdress" => 'search.html'));
+				"writeSendAdress" => 'search.html');
+} else {
+    $links_template_vars = array(
+				"msgSearch" => '<a href="'.$_SERVER["PHP_SELF"].'?'.$sids.'action=search">'.$PMF_LANG["msgSearch"].'</a>',
+				"msgAddContent" => '<a href="'.$_SERVER["PHP_SELF"].'?'.$sids.'action=add">'.$PMF_LANG["msgAddContent"].'</a>',
+				"msgQuestion" => '<a href="'.$_SERVER["PHP_SELF"].'?'.$sids.'action=ask">'.$PMF_LANG["msgQuestion"].'</a>',
+				"msgOpenQuestions" => '<a href="'.$_SERVER["PHP_SELF"].'?'.$sids.'action=open">'.$PMF_LANG["msgOpenQuestions"].'</a>',
+				"msgHelp" => '<a href="'.$_SERVER["PHP_SELF"].'?'.$sids.'action=help">'.$PMF_LANG["msgHelp"].'</a>',
+				"msgContact" => '<a href="'.$_SERVER["PHP_SELF"].'?'.$sids.'action=contact">'.$PMF_LANG["msgContact"].'</a>',
+                "allCategories" => '<a href="'.$_SERVER["PHP_SELF"].'?'.$sids.'action=show">'.$PMF_LANG["msgShowAllCategories"].'</a>',
+				"backToHome" => '<a href="'.$_SERVER["PHP_SELF"].'?'.$sids.'">'.$PMF_LANG["msgHome"].'</a>',
+				"writeSendAdress" => $_SERVER["PHP_SELF"]."?".$sids."action=search");
 }
+
+/* get main template, set main variables */
+$tpl->processTemplate ("index", array_merge($main_template_vars, $links_template_vars));
 
 /* include requested PHP file */
 require_once($inc_php);
