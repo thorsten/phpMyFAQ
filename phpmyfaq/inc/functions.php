@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.34 2004-12-25 06:52:51 thorstenr Exp $
+* $Id: functions.php,v 1.35 2004-12-25 07:19:38 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -323,7 +323,6 @@ function hilight($string)
     
     $string = str_replace("\n", "", $string);
     $string = str_replace("&nbsp;", " ", $string);
-    $string = implode("\n", explode("<br />", $string));
     
     // Making the PHP generated stuff XHTML compatible
     $string = preg_replace('/<FONT COLOR="/i', '<span style="color:', $string);
