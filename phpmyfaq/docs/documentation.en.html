@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<!-- $Id: documentation.en.html,v 1.10 2004-12-28 13:29:19 thorstenr Exp $ -->
+<!-- $Id: documentation.en.html,v 1.11 2005-01-06 09:57:25 thorstenr Exp $ -->
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<title>Documentation for phpMyFAQ 1.5.0 and later</title>
@@ -34,7 +34,12 @@
             <li><a href="#2b">Preparations</a></li>
             <li><a href="#2c">Install-Script</a></li>
             <li><a href="#2d">First Steps</a></li>
-            <li><a href="#2e">Notes</a></li>
+            <li><a href="#2e">Notes regarding the search-function</a></li>
+            <li><a href="#2f">Automatic content negotiation</a></li>
+            <li><a href="#2g">PHP settings</a></li>
+            <li><a href="#2h">Enabling mod_rewrite support</a></li>
+            <li><a href="#2i">Enabling LDAP support</a></li>
+            <li><a href="#2j">PDF export</a></li>
         </ol></li>
         <li><strong><a href="#3">Upgrading</a></strong>
         <ol>
@@ -94,7 +99,7 @@
     
     <hr style="width: 90%; height: 1px;"  />
     <p><a name="1c"></a><strong>1.c. Copyright</strong></p>
-    <p>&copy; 2001 - 2004 by Thorsten Rinne under the <a href="http://www.mozilla.org/MPL/MPL-1.1.html">Mozilla Public License</a>. All rights reserved.</p>
+    <p>&copy; 2001 - 200t by Thorsten Rinne and phpMyFAQ Team under the <a href="http://www.mozilla.org/MPL/MPL-1.1.html">Mozilla Public License</a>. All rights reserved.</p>
     <p><a href="#top">back to top</a></p>
     
     
@@ -185,14 +190,15 @@
     <p><a href="#top">back to top</a></p>
     
     
-    <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="2e"></a>2.e. Notes</strong></p>
+    <hr style="width: 90%; height: 1px;" />
+    <p><strong><a name="2e"></a>2.e. Notes regarding the search-function</strong></p>
+    <p>The boolean fulltext-search will only work with MySQL and if there are some entries in the database (5 or more). The term you are looking for should also not be in more than 50% of all your entries, or it will automatically be excluded from search. This is not a bug, but rather a feature of MySQL. Please remember that you need MySQL 4.1 to use the boolean fulltext search for languages like Arabic, Chinese, Hebrew, Korean or Japanese.</p>    
+    <p><a href="#top">back to top</a></p>
     
-    <p><em>Regarding the search-function:</em><br />
-    Fulltext-search will only work with MySQL and if there are some entries in the database (5 or more). The term you are looking for should also not be in more than 50% of all your entries, or it will automatically be excluded from search. This is not a bug, but rather a feature of MySQL.</p>
     
-    <p><em>Automatic content negotiation</em><br />
-    To set the default language in your browser you have to set a variable that gets passed to the web server. How this is done depends on the browser you are using.</p>
+    <hr style="width: 90%; height: 1px;" />
+    <p><strong><a name="2f"></a>2.f. Automatic content negotiation</strong></p>
+    <p>To set the default language in your browser you have to set a variable that gets passed to the web server. How this is done depends on the browser you are using.</p>
     <ul>
         <li>Mozilla/Netscape 4.x and later versions<pre>Edit -> Preferences -> Navigator -> Languages</pre></li>
         <li>Mozilla Firefox<br />Go to about:config and change the value of intl.accept_languages.</li>
@@ -200,17 +206,33 @@
         <li>Opera<br />Most versions:<pre>File -> Preferences -> Languages</pre>Linux/*BSD versions 5.x and 6.x:<pre>File -> Preferences -> Document -> Languages</pre></li>
         <li>Internet Explorer<br />Windows:<pre>Tools or View or Extras -> Internet Options -> (General) Languages</pre>MacOS:<pre>Edit -> Preferences -> Web Browser -> Language/Fonts</pre></li>
     </ul>
+    <p><a href="#top">back to top</a></p>
     
-    <p><em>PHP settings:</em><br />
-    If you're able to edit the php.ini file, please check that the variable <em>file_upload = On</em> is set; otherwise the file upload will not work for the attachments.</p>
     
-    <p><em>mod_rewrite support:</em><br />
-    If you want to enable the search engine optimization you have to rename the file _.htaccess to .htaccess in the root directory where your FAQ is located. Then you have to activate the mod_rewrite support in the admin backend in the configuration page.
-    </p>
+    <hr style="width: 90%; height: 1px;" />
+    <p><strong><a name="2g"></a>2.g. PHP settings</strong></p>
+    <p>If you're able to edit the php.ini file, please check that the variable <em>file_upload = On</em> is set; otherwise the file upload will not work for the attachments.</p>
+    <p><a href="#top">back to top</a></p>
     
-    <p><em>PDF export:</em><br />
-    Not every (X)HTML tag is supported by the PDF export. Currently we're supporting the following tags in the PDFs:
-    </p>
+    
+    <hr style="width: 90%; height: 1px;" />
+    <p><strong><a name="2h"></a>2.h. Enabling mod_rewrite support</strong></p>
+    <p><em>Apache Webserver</em></p>
+    <p>If you want to enable the search engine optimization you have to rename the file _.htaccess to .htaccess in the root directory where your FAQ is located. Then you have to activate the mod_rewrite support in the admin backend in the configuration page.</p>
+    <p><em>IIS Webserver</em></p>
+    <p>If you want to enable the search engine optimization you have to rename the file _httpd.ini to httpd.ini in the root directory where your FAQ is located. Then you have to activate the mod_rewrite support in the admin backend in the configuration page.</p>
+    <p><a href="#top">back to top</a></p>
+    
+    
+    <hr style="width: 90%; height: 1px;" />
+    <p><strong><a name="2i"></a>2.i. Enabling LDAP support</strong></p>
+    <p></p>
+    <p><a href="#top">back to top</a></p>
+    
+    
+    <hr style="width: 90%; height: 1px;" />
+    <p><strong><a name="2j"></a>2.j. PDF export</strong></p>
+    <p>Not every (X)HTML tag is supported by the PDF export. Currently we're supporting the following tags in the PDFs:</p>
     <ul>
     	<li>support for bold, italics, underlined text</li>
     	<li>support for images</li>
@@ -226,7 +248,7 @@
     
     <hr style="width: 90%; height: 1px;"  />
     <p><a name="3"></a><strong>3. Upgrading</strong></p>
-    <p>Upgrading to phpMyFAQ 1.4.x is possible from the following versions:</p>
+    <p>Upgrading to phpMyFAQ 1.5.x is possible from the following versions:</p>
     <ul>
     <li>phpMyFAQ 1.3.x</li>
     <li>phpMyFAQ 1.4.x </li>
@@ -488,8 +510,8 @@
     <p>
     Author: Thorsten Rinne<br />
     Basic translation by: <a href="mailto:stephan@yauh.de">Stephan Hochhaus</a><br />
-    Last Change: 2004-12-28</p>
-    <p>&copy; 2001-2004 phpMyFAQ Team</p>
+    Last Change: 2005-01-06</p>
+    <p>&copy; 2001-2005 phpMyFAQ Team</p>
     <p>This documentation is licensed under a <a href="http://creativecommons.org/licenses/by/2.0/" class="subfoot">Creative Commons License</a>.</p>
     <p><a href="#top">back to top</a></p>
 </div>
