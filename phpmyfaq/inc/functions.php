@@ -1,5 +1,7 @@
 <?php
-/******************************************************************************
+/**
+ * $Id: functions.php,v 1.4 2004-11-10 19:23:19 thorstenr Exp $
+ *
  * File:                functions.php
  * Description:         This is the main functions file!
  * Author:              Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -7,7 +9,7 @@
  *                      Bastian Pöttner <bastian@poettner.net>
  *                      Meikel Katzengreis
  * Date:                2001-02-18
- * Last Update:         2004-10-31
+ * Last Update:         2004-11-10
  * Copyright:           (c) 2001-2004 phpMyFAQ Team
  *
  * Portions created by Matthias Sommerfeld are Copyright (c) 2001-2004 blue
@@ -943,13 +945,13 @@ function printOpenQuestions()
 
 /*
  * Logt den Admin | @@ Bastian, 2001-02-18
- * Last Update: @@ Thorsten, 2004-08-21
+ * Last Update: @@ Thorsten, 2004-11-10
  */
 function adminlog($text)
 {
 	global $db, $PMF_CONF, $auth_user;
 	if (isset($PMF_CONF["enableadminlog"])) {
-		$db->query("INSERT INTO ".SQLPREFIX."faqadminlog (id, time, usr, text, ip) VALUES ('', '".time()."','".$auth_user."','".nl2br(addslashes($text))."','".$_SERVER["REMOTE_ADDR"]."')");
+		$db->query("INSERT INTO ".SQLPREFIX."faqadminlog (id, time, usr, text, ip) VALUES ('".time()."','".$auth_user."','".nl2br(addslashes($text))."','".$_SERVER["REMOTE_ADDR"]."')");
 		}
 }
 
