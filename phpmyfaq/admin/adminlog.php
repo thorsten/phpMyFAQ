@@ -1,24 +1,23 @@
 <?php
-/******************************************************************************
- * $Id: adminlog.php,v 1.2 2004-10-31 15:20:44 thorstenr Exp $
- *
- * File:				adminlog.php
- * Description:			shows admin log
- * Authors:				Thorsten Rinne <thorsten@phpmyfaq.de>
- * Date:				2003-02-23
- * Last change:			2004-10-31
- * Copyright:           (c) 2001-2004 Thorsten Rinne
- * 
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- * 
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- ******************************************************************************/
+/**
+* $Id: adminlog.php,v 1.3 2004-12-13 20:03:01 thorstenr Exp $
+*
+* Overview of actions in the admin section
+*
+* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+* @since        2003-02-23
+* @copyright    (c) 2001-2004 phpMyFAQ Team
+* 
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
+* 
+* Software distributed under the License is distributed on an "AS IS"
+* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+* License for the specific language governing rights and limitations
+* under the License.
+*/
 
 if ($permission["adminlog"]) {
 	$perpage = 15;
@@ -60,7 +59,7 @@ if ($permission["adminlog"]) {
     <tbody>
 <?php
 	while (list($id,$tim,$usr,$text,$ip) = $db->fetch_row($result)) {
-		list($usr) = $db->fetch_row($db->query("SELECT NAME FROM ".SQLPREFIX."faquser WHERE ID='".$usr."'"));
+		list($usr) = $db->fetch_row($db->query("SELECT NAME FROM ".SQLPREFIX."faquser WHERE id = ".$usr));
 ?>
         <tr class="cell">
             <td class="list"><?php print $id; ?></td>
