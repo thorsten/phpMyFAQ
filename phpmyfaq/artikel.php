@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.3 2004-11-22 20:58:58 thorstenr Exp $
+* $Id: artikel.php,v 1.4 2004-11-23 19:48:52 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Meikel Katzengreis <meikel@katzengreis.com>
@@ -39,7 +39,7 @@ while ($row = $db->fetch_object($result)) {
 	$id = $row->id;
 	$comment = $row->comment;
 	logViews($id, $lang);
-	$output = str_replace('../', '', stripslashes($row->content));
+	$content = str_replace('../', '', stripslashes($row->content));
 	if (is_dir('attachments/')  && is_dir('attachments/'.$id) && isset($PMF_CONF['disatt'])) {
 		$files = 0;
 		$outstr = "";
@@ -52,7 +52,7 @@ while ($row = $db->fetch_object($result)) {
 			}
 		}
 		if ($files > 0) {
-			$output .= '<p>'.$PMF_LANG['msgAttachedFiles'].' '.substr($outstr, 0, -2).'</p>';
+			$content .= '<p>'.$PMF_LANG['msgAttachedFiles'].' '.substr($outstr, 0, -2).'</p>';
 		}
 	}
 	$writeDateMsg = makeDate($row->datum);
