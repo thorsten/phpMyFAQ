@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: savequestion.php,v 1.7 2004-12-22 08:27:36 thorstenr Exp $
+* $Id: savequestion.php,v 1.8 2005-01-09 12:09:06 thorstenr Exp $
 *
 * @author           Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author           David Saez Padros <david@ols.es>
@@ -18,15 +18,13 @@
 * under the License.
 */
 
-if ($_REQUEST["username"] && $_REQUEST["usermail"] && $_REQUEST["content"] && IPCheck($_SERVER["REMOTE_ADDR"])) {
+if (isset($username) && $username != '' && isset($_REQUEST["usermail"]) && checkEmail($_REQUEST["usermail"]) && isset($_REQUEST["content"]) && $_REQUEST["content"] != '' && IPCheck($_SERVER["REMOTE_ADDR"])) {
 
 	if (isset($_POST['try_search'])) {
-        
         $suchbegriff = safeSQL($_POST['content']);
 		$printResult = searchEngine($suchbegriff, $numr);
         echo $numr;
     } else {
-        
         $numr = 0;
     }
 
@@ -34,16 +32,20 @@ if ($_REQUEST["username"] && $_REQUEST["usermail"] && $_REQUEST["content"] && IP
         
         $cat = new category;
         $categories = $cat->getAllCategories();
-    	list($user, $host) = explode("@", $_REQUEST["usermail"]);
-        if (checkEmail($_REQUEST["usermail"])) {
+        $usermail = $IDN->encode($_REQUEST["usermail"])
+        $username = strip_tags($_REQUEST["username"]);
+        $selected_category = intval($_REQUEST["rubrik"]);
+        
+    	list($user, $host) = explode("@", $usermail);
+        if (checkEmail($usermail)) {
             $datum = date("YmdHis");
             $content  = $db->escape_string($_REQUEST["content"]);
             
-            $result = $db->query("INSERT INTO ".SQLPREFIX."faqfragen (id, ask_username, ask_usermail, ask_rubrik, ask_content, ask_date) VALUES (".$db->nextID(SQLPREFIX."faqfragen", "id").", '".$db->escape_string($_REQUEST["username"])."', '".$db->escape_string($_REQUEST["usermail"])."', ".$_REQUEST["rubrik"].", '".$content."', '".$datum."')");
+            $result = $db->query("INSERT INTO ".SQLPREFIX."faqfragen (id, ask_username, ask_usermail, ask_rubrik, ask_content, ask_date) VALUES (".$db->nextID(SQLPREFIX."faqfragen", "id").", '".$db->escape_string($username)."', '".$db->escape_string($usermail)."', ".$selected_category.", '".$content."', '".$datum."')");
             
-            $questionMail = "User: ".$_REQUEST["username"].", mailto:".$_REQUEST["usermail"]."\n".$PMF_LANG["msgCategory"].":  ".$categories[$_REQUEST["rubrik"]]["name"]."\n\n".wordwrap(stripslashes($content), 72);
+            $questionMail = "User: ".$username.", mailto:".$usermail."\n".$PMF_LANG["msgCategory"].":  ".$categories[$selected_category]["name"]."\n\n".wordwrap(stripslashes($content), 72);
             
-            mail($IDN->encode($PMF_CONF["adminmail"]), $PMF_CONF["title"], strip_tags($questionMail), "From: ".encode_iso88591($_REQUEST["username"])."<".$IDN->encode($_REQUEST["usermail"]).">");
+            mail($IDN->encode($PMF_CONF["adminmail"]), $PMF_CONF["title"], strip_tags($questionMail), "From: ".encode_iso88591($username)."<".$IDN->encode($usermail).">");
             
             $tpl->processTemplate ("writeContent", array(
                     "msgQuestion" => $PMF_LANG["msgQuestion"],

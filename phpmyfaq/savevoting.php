@@ -1,57 +1,65 @@
 <?php
-/******************************************************************************
- * $Id: savevoting.php,v 1.6 2004-12-16 13:34:55 thorstenr Exp $
- *
- * Datei:				savevoting.php
- * Autor:				Thorsten Rinne <thorsten@phpmyfaq.de>
- * Datum:				2002-09-16
- * Letzte Änderung:		2004-05-29
- * Copyright:           (c) 2001-2004 Thorsten Rinne
- * 
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- * 
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- ******************************************************************************/
+/**
+* $Id: savevoting.php,v 1.7 2005-01-09 12:09:06 thorstenr Exp $
+*
+* Saves a user voting
+*
+* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+* @since        2002-09-16
+* @copyright    (c) 2001-2005 phpMyFAQ Team
+* 
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
+* 
+* Software distributed under the License is distributed on an "AS IS"
+* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+* License for the specific language governing rights and limitations
+* under the License.
+******************************************************************************/
 
-if (isset($_POST["vote"]) && $_POST["vote"] != "" && votingCheck($_POST["artikel"], $_POST["userip"]) && intval($_POST["vote"]) > 0 && intval($_POST["vote"]) < 6) {
-	Tracking("savevoting", $_POST["artikel"]);
+$record = (isset($_POST["artikel"]) ? intval($_POST["artikel"]) : '';
+$vote = (isset($_POST["vote"]) ? intval($_POST["vote"]) : 0;
+$userip = (isset($_POST["userip"]) ? intval($_POST["userip"]) : '';
+
+if (isset($vote) && $vote != "" && votingCheck($record, $userip) && intval($_POST["vote"]) > 0 && intval($_POST["vote"]) < 6) {
+    
 	$noUser = "0";
 	$datum = date("YmdHis");
-	if ($result = $db->query("SELECT usr FROM ".SQLPREFIX."faqvoting WHERE artikel = ".$_POST["artikel"])) {
+	Tracking("savevoting", $record);
+    
+	if ($result = $db->query("SELECT usr FROM ".SQLPREFIX."faqvoting WHERE artikel = ".$record)) {
 		while ($row = $db->fetch_object($result)) {
 			$noUser = $row->user;
-			}
 		}
+	}
+    
 	if ($noUser == "0" || $noUser == "") {
-		$db->query("INSERT INTO ".SQLPREFIX."faqvoting (id, artikel, vote, usr, datum, ip) VALUES (".$db->nextID(SQLPREFIX."faqvoting", "id").", ".$_POST["artikel"].", ".$_POST["vote"].", '1', ".time().", '".$_POST["userip"]."');");
-		}
-    else {
-		$db->query("UPDATE ".SQLPREFIX."faqvoting SET vote = vote + ".$_POST["vote"].", usr = user + 1, datum = ".time().", ip = '".$_POST["userip"]."' where artikel = ".$_POST["artikel"]);
-		}
+		$db->query("INSERT INTO ".SQLPREFIX."faqvoting (id, artikel, vote, usr, datum, ip) VALUES (".$db->nextID(SQLPREFIX."faqvoting", "id").", ".$record.", ".$vote.", '1', ".time().", '".$userip."');");
+	}  else {
+		$db->query("UPDATE ".SQLPREFIX."faqvoting SET vote = vote + ".$vote.", usr = user + 1, datum = ".time().", ip = '".$userip."' where artikel = ".$record);
+	}
+    
 	$tpl->processTemplate ("writeContent", array(
 				"msgVoteThanks" => $PMF_LANG["msgVoteThanks"]
 				));
-	}
-elseif(isset($_POST["vote"])  && !votingCheck($_POST["artikel"], $_POST["userip"])) {
-    Tracking("savevotingerror", $_POST["artikel"]);
+    
+} elseif (isset($_POST["vote"])  && !votingCheck($record, $userip)) {
+    
+    Tracking("savevotingerror", $record);
 	$tpl->processTemplate ("writeContent", array(
 				"msgVoteThanks" => $PMF_LANG["err_VoteTooMuch"]
 				));
-    }
-else
-	{
-	Tracking("savevotingerror", $_POST["artikel"]);
+    
+} else {
+    
+	Tracking("savevotingerror", $record);
 	$tpl->processTemplate ("writeContent", array(
 				"msgVoteThanks" => $PMF_LANG["err_noVote"]
 				));
-	}
+    
+}
 
 $tpl->includeTemplate("writeContent", "index");
 ?>
->>>>>>> 1.5
