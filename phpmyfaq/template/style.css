@@ -1,22 +1,27 @@
-/******************************************************************************
- * File:                style.css
- * Authors:             Jens Grochtdreis <jens@grochtdreis.de>
- *                      Thorsten Rinne <thorsten@rinne.info>
- * Date:                2004-06-02
- * Last change:         2004-06-29
- * Copyright:           (c) 2004 phpMyFAQ Team
- * 
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- * 
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- ******************************************************************************/
+/**
+* $Id: style.css,v 1.3 2005-02-05 19:32:53 thorstenr Exp $
+*
+* @author		Jens Grochtdreis <jens@grochtdreis.de>
+* @author		Thorsten Rinne <thorsten@rinne.info>
+* @since			2004-06-02
+* @copyright	(c) 2004-2005 phpMyFAQ Team
+* 
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
+* 
+* Software distributed under the License is distributed on an "AS IS"
+* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+* License for the specific language governing rights and limitations
+* under the License.
+*/
 
+/**
+* Main definitions
+*
+* Note: You can remove them if you don't need them to embed phpMyFAQ into your current layout
+*/
 body, td {
     font-family: "Bitstream Vera Sans", "Trebuchet MS", Geneva, Arial, Helvetica, sans-serif;
     font-size: 100.01%; 
@@ -49,6 +54,10 @@ h3 {
     font-size: 125%;
     }
 	 
+img {
+	border: none;
+}
+	 
 #phpmyfaq {
 	text-align: left;
 	vertical-align: middle;
@@ -62,21 +71,22 @@ The header
 **************************/
 
 #header {
-    height: 70px;
-    margin: 0px;
-    }
+	margin: 0px;
+	padding: 0px;
+}
 #header h1 {
-    margin: 10px auto 2px 20px;
-    }
+	margin-left: 15px;
+	padding: 10px 10px 10px 0px;
+	}
 
 /**************************
 The horizontal navigation
 **************************/
 #horizontalnav ul {
-    padding: 0;
-    list-style-type: none;
-    font-size: 80%;
-    margin-left: 10px;
+	margin: 5px;
+	list-style-type: none;
+	font-size: 80%;
+	padding-left: 10px;
     }
 #horizontalnav ul li {
     display: inline;
@@ -114,8 +124,6 @@ The category-menu
     display: block;
     padding: 3px 15px;
     width: 100%;
-    color: #fff;
-    border-left: 10px solid;
     text-decoration: none;
     }
 #categories a:hover {
@@ -259,35 +267,41 @@ Template: contact.tpl
     line-height: 14px;
     }
 
-/**************************
-Colors
-**************************/
+/**
+* main color definitions
+*/
+
+/* main body */
 html, body {
-    background: #8B96B9;
+    background: #E5E5E5;
     color: #172244;
     }
-#header {
-    background: #2D4488;
-    color: #DFC9A7;
-    border-color: #ffffff;
+
+/* the header with the title and the horizontal navigation */
+#header, #header a, #horizontalnav, #horizontalnav ul {
+    background: #5C7099;
+    color: #001B37;
+	 text-decoration: none;
     }
+
+/* all hyperlink definitions */
 a, #horizontalnav a, #categories a, #categories ul ul a, .inputfield, .inputarea, table.topten th, table.fivenewest th, select, option {
-    color: #ffffff;
+    color: #004085;
     }
 #categories a:hover, #categories ul ul a:hover {
-    color: #000000;
-    }
+	color: #ffffff;
+}
 #categories a:hover {
-    background: #FF9900;
+    background: #5C7099;
     }
 #categories a, #content ul li, a.active {
-    border-color: #FF9900;
+	background: #E5E5E5;
     }
 #categories ul ul a {
     border-color: #FFCC80;
     }
 #categories ul ul a:hover {
-    background: #FFCC80;
+    background: #5C7099;
     }
 h2, .inputfield, .inputarea, table.topten, table.fivenewest, div.block, table.topten th, table.fivenewest th, select, option {
     border-color: #ffffff;
