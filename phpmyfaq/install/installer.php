@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.12 2005-01-20 15:28:18 thorstenr Exp $
+* $Id: installer.php,v 1.13 2005-02-01 07:43:44 thorstenr Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -328,7 +328,7 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 <span class="help" title="Please enter the port of your LDAP server here.">?</span>
 </p>
 <p>
-<span class="text">Specified RDN:</span>
+<span class="text">LDAP username:</span>
 <input class="input" type="text" name="ldap_user" />
 <span class="help" title="Please enter your specified RDN username here.">?</span>
 </p>
