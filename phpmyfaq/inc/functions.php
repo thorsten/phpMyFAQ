@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.52 2005-02-19 13:09:22 thorstenr Exp $
+* $Id: functions.php,v 1.53 2005-02-22 19:50:33 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -1061,20 +1061,15 @@ function searchEngine($begriff)
 	global $db, $sids, $tree, $PMF_LANG, $PMF_CONF;
 	$seite = "";
 	$output = "";
-	
+    
 	if (isset($_REQUEST["seite"])) {
 		$seite = $_REQUEST["seite"];
     } else {
         $seite = 1;
     }
     
-	if (isset($_REQUEST["search"])) {
-		$begriff = $_REQUEST["search"];
-    } else {
-        return $PMF_LANG["err_noArticles"];
-    }
-    
 	$result = $db->search(SQLPREFIX."faqdata", array("id" => NULL, "lang" => NULL, "rubrik" => NULL, "thema" => NULL, "content" => NULL), array("thema", "content", "keywords"), $begriff, array("active"=>"yes"));
+    
 	$num = $db->num_rows($result);
 	
     $pages = ceil($num / $PMF_CONF["numRecordsPage"]);
