@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.edit.php,v 1.7 2004-12-11 21:54:12 thorstenr Exp $
+* $Id: record.edit.php,v 1.8 2004-12-11 21:58:44 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23
@@ -56,7 +56,7 @@ if ($permission["editbt"] && emptyTable(SQLPREFIX."faqcategory")) {
 		if ((!isset($rubrik) && !isset($thema)) || (isset($_REQUEST["id"]) && $_REQUEST["id"] != "")) {
 		    adminlog("Beitragedit, ".$_REQUEST["id"]);
             // Get the category
-            $resultCategory = $db->query('');
+            $resultCategory = $db->query('SELECT category_id, category_lang FROM '.SQLPREFIX.'faqcategoryrelations WHERE record_id = '.$_REQUEST["id"].' AND record_lang = "'.$_GET["lang"].'"');
             while ($row = $db->fetch_object($resultCategory)) {
                 $categories[] = array('category_id' => $row->category_id, 'category_lang' => $row->category_lang);
             }
