@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.16 2005-02-26 09:10:08 thorstenr Exp $
+* $Id: installer.php,v 1.17 2005-03-06 19:52:29 thorstenr Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -25,7 +25,7 @@
 * under the License.
 */
 
-define("VERSION", "1.5.0 RC2");
+define("VERSION", "1.5.0 RC3");
 define("COPYRIGHT", "&copy; 2001-2005 <a href=\"http://www.phpmyfaq.de/\">phpMyFAQ-Team</a> | All rights reserved.");
 define("SAFEMODE", @ini_get("safe_mode"));
 define("PMF_ROOT_DIR", dirname(dirname(__FILE__)));
@@ -502,14 +502,14 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
             die();
         }
         if (isset($_POST["ldap_password"]) && $_POST["ldap_password"] != "") {
-            $ldap_password = $_POST["ldap_passwort"];
+            $ldap_password = $_POST["ldap_password"];
         } else {
             print "<p class=\"error\"><strong>Error:</strong> There's no LDAP password input.</p>\n";
             HTMLFooter();
             die();
         }
         if (isset($_POST["ldap_base"]) && $_POST["ldap_base"] != "") {
-            $ldap_password = $_POST["ldap_base"];
+            $ldap_base = $_POST["ldap_base"];
         } else {
             print "<p class=\"error\"><strong>Error:</strong> There's no distinguished name input for LDAP.</p>\n";
             HTMLFooter();
