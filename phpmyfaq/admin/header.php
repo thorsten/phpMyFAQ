@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: header.php,v 1.6 2005-03-11 15:22:31 thorstenr Exp $
+* $Id: header.php,v 1.7 2005-03-30 06:49:06 thorstenr Exp $
 *
 * header of the admin area
 *
@@ -88,7 +88,8 @@ if (isset($_REQUEST["aktion"]) && ($_REQUEST["aktion"] == "editentry" || $_REQUE
 		"Heading 6": "h6",
 		"Normal": "p",
 		"Address": "address",
-		"Formatted": "pre"
+		"Formatted": "pre",
+        "Code": "code"
 	};
         HTMLArea.replace("content", config);
         }
