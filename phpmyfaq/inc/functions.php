@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.10 2004-11-21 14:06:41 thorstenr Exp $
+ * $Id: functions.php,v 1.11 2004-11-21 17:49:55 thorstenr Exp $
  *
  * File:                functions.php
  * Description:         This is the main functions file!
@@ -216,10 +216,9 @@ function checkIntVar($myInt)
 {
 	if (preg_match("/^[0-9-]+$/", $myInt)) {
     	return TRUE;
-		}
-	else {
+    } else {
     	return FALSE;
-		}
+	}
 }
 
 /*

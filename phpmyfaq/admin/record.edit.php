@@ -1,22 +1,23 @@
 <?php
-/******************************************************************************
- * File:				record.edit.php
- * Description:			edit a record
- * Authors:				Thorsten Rinne <thorsten@phpmyfaq.de>
- * Date:				2003-02-23
- * Last change:			2004-11-01
- * Copyright:           (c) 2001-2004 Thorsten Rinne
- * 
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- * 
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- ******************************************************************************/
+/**
+* $Id: record.edit.php,v 1.3 2004-11-21 17:49:25 thorstenr Exp $
+*
+* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+* @since        2003-02-23
+* @license      Mozilla Public License 1.1
+* @copyright    (c) 2001-2004 Thorsten Rinne
+*
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
+*
+* Software distributed under the License is distributed on an "AS IS"
+* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+* License for the specific language governing rights and limitations
+* under the License.
+*/
+
 if ($permission["editbt"] && emptyTable(SQLPREFIX."faqcategory")) {
 	$tree = new Category();
     $tree->buildTree();
@@ -54,6 +55,7 @@ if ($permission["editbt"] && emptyTable(SQLPREFIX."faqcategory")) {
 		    adminlog("Beitragedit, ".$_REQUEST["id"]);
 			$result = $db->query("SELECT id, lang, active, rubrik, keywords, thema, content, author, email, comment, datum FROM ".SQLPREFIX."faqdata WHERE id = '".$_REQUEST["id"]."' AND lang = '".$_GET["lang"]."'");
 			list($id, $lang, $active, $rubrik, $keywords, $thema, $content, $author, $email, $comment, $date) = $db->fetch_row($result);
+            $content = htmlspecialchars($content);
 			$acti = "saveentry&amp;id=".$_REQUEST["id"];
 			$id = $_REQUEST["id"];
 			}
@@ -101,19 +103,17 @@ if ($permission["editbt"] && emptyTable(SQLPREFIX."faqcategory")) {
     					print "<a href=\""."../attachments/".$id."/".$dat."\">".$dat."</a> ";
                         if ($permission["delatt"]) {
                             print "[ <a href=\"".$_SERVER["PHP_SELF"].$linkext."&amp;aktion=delatt&amp;id=".$id."&amp;which=".rawurlencode($dat)."&amp;lang=".$lang."\">".$PMF_LANG["ad_att_del"]."</a> ]";
-                            }
+                        }
                         print "<br />\n";
-    					}
     				}
     			}
-    		else {
+    		} else {
     			print "<em>".$PMF_LANG["ad_att_none"]."</em><br />";
-    			}
+    		}
     		print "<a href=\"javascript:Picture('attachment.php?uin=".$uin."&amp;id=".$id."&amp;rubrik=".$rubrik."', 'Attachment', 400,80)\">".$PMF_LANG["ad_att_add"]."</a>";
-    		}
-    	else {
+    	} else {
     		print $PMF_LANG["ad_att_nope"];
-    		}
+    	}
 ?></dd>
 
 <?php
@@ -144,11 +144,10 @@ if ($permission["editbt"] && emptyTable(SQLPREFIX."faqcategory")) {
 	if (isset($active) && $active == "yes") {
 		$suf = " checked=\"checked\"";
 		unset($sul);
-		}
-	else {
+	} else {
 		unset($suf);
 		$sul = " checked=\"checked\"";
-		}
+	}
 ?>
     <dt><strong><?php print $PMF_LANG["ad_entry_active"]; ?></strong></dt>
     <dd><input type="radio" name="active" value="yes"<?php if (isset($suf)) { print $suf; } ?> /> <?php print $PMF_LANG["ad_gen_yes"]; ?> <input type="radio" name="active" value="no"<?php if (isset($sul)) { print $sul; } ?> /> <?php print $PMF_LANG["ad_gen_no"]; ?></dd>
@@ -172,7 +171,7 @@ if ($permission["editbt"] && emptyTable(SQLPREFIX."faqcategory")) {
 ?>
     <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_entry_delete"]; ?>" name="submit[0]" />
 <?php
-		}
+	}
 ?></dd>
 	</dl>
 <?php
@@ -186,8 +185,8 @@ if ($permission["editbt"] && emptyTable(SQLPREFIX."faqcategory")) {
 ?>
     <div style="font-size: 10px;"><strong><?php print date("Y-m-d H:i:s",$dat).": ".$usr; ?></strong><br /><?php print $wht; ?></div>	
 <?php
-			}
 		}
+	}
 ?>
     </form>
 <?php
@@ -200,13 +199,11 @@ if ($permission["editbt"] && emptyTable(SQLPREFIX."faqcategory")) {
 ?>	
     <p><?php print $PMF_LANG["ad_entry_commentby"] ?> <a href="mailto:<?php print $eml; ?>"><?php print $usr; ?></a>:<br /><?php print $cmt; ?><br /><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=delcomment&amp;artid=<?php print $id; ?>&amp;cmtid=<?php print $cm_id; ?>&amp;lang=<?php print $lang; ?>"><img src="images/delete.gif" alt="<?php print $PMF_LANG["ad_entry_delete"] ?>" title="<?php print $PMF_LANG["ad_entry_delete"] ?>" border="0" width="17" height="18" align="right" /></a></p>
 <?php
-			}
 		}
 	}
-elseif ($permission["editbt"] != 1 && emptyTable(SQLPREFIX."faqcategory")) {
+} elseif ($permission["editbt"] != 1 && emptyTable(SQLPREFIX."faqcategory")) {
     print $PMF_LANG["err_NotAuth"];
-    }
-elseif ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategory")) {
+} elseif ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategory")) {
     print $PMF_LANG["no_cats"];
-    }
+}
 ?>
