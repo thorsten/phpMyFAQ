@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.16 2005-02-06 20:26:30 thorstenr Exp $
+* $Id: index.php,v 1.17 2005-03-02 21:19:12 thorstenr Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the 
@@ -45,15 +45,6 @@ define("SQLPREFIX", $DB["prefix"]);
 $db = db::db_select($DB["type"]);
 $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
 
-/* connect to LDAP server, when LDAP support is enabled */
-if (isset($PMF_CONF["ldap_support"]) && $PMF_CONF["ldap_support"] == TRUE) {
-    require_once('inc/dataldap.php');
-    require_once('inc/ldap.php');
-    $ldap = new LDAP($PMF_LDAP['ldap_server'], $PMF_LDAP['ldap_port'], $PMF_LDAP['ldap_base'], $PMF_LDAP['ldap_user'], $PMF_LDAP['ldap_password']);
-} else {
-    $ldap = null;
-}
-
 /* get configuration, constants, main functions, template parser, category class, IDNA class */
 require_once("inc/config.php");
 require_once("inc/constants.php");
@@ -62,6 +53,15 @@ require_once("inc/parser.php");
 require_once("inc/category.php");
 require_once("inc/idna_convert.class.php");
 $IDN = new Net_IDNA;
+
+/* connect to LDAP server, when LDAP support is enabled */
+if (isset($PMF_CONF["ldap_support"]) && $PMF_CONF["ldap_support"] == TRUE) {
+    require_once('inc/dataldap.php');
+    require_once('inc/ldap.php');
+    $ldap = new LDAP($PMF_LDAP['ldap_server'], $PMF_LDAP['ldap_port'], $PMF_LDAP['ldap_base'], $PMF_LDAP['ldap_user'], $PMF_LDAP['ldap_password']);
+} else {
+    $ldap = null;
+}
 
 /* get language (default: english) */
 // TODO: write a global function for that?
