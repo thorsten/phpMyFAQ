@@ -1,22 +1,23 @@
 <?php
-/******************************************************************************
- * File:				record.save.php
- * Description:			save a record
- * Author:				Thorsten Rinne <thorsten@phpmyfaq.de>
- * Date:				2003-02-23
- * Last change:			2004-11-01
- * Copyright:           (c) 2001-2004 Thorsten Rinne
- * 
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- * 
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- ******************************************************************************/
+/**
+* $Id: record.save.php,v 1.3 2004-11-30 20:17:43 thorstenr Exp $
+*
+* Save or update a FAQ record
+*
+* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+* @since        2003-02-23
+* @copyright    (c) 2001-2004 phpMyFAQ Team
+*
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
+*
+* Software distributed under the License is distributed on an "AS IS"
+* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+* License for the specific language governing rights and limitations
+* under the License.
+*/
 
 $submit = $_REQUEST["submit"];
 
@@ -48,7 +49,7 @@ if (isset($submit[2]) && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "") 
     <p align="center"><input type="submit" name="submit" value="<?php print $PMF_LANG["ad_entry_back"]; ?>" /></p>
     </form>
 <?php
-	}
+}
 
 if (isset($submit[1]) && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "") {
 	// Wenn auf Speichern geklickt wurde...
@@ -58,46 +59,48 @@ if (isset($submit[1]) && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "") 
 	$content = addslashes($_REQUEST["content"]);
 	$keywords = addslashes($_REQUEST["keywords"]);
 	$author = addslashes($_REQUEST["author"]);
+    
     if (isset($_REQUEST["comment"]) && $_REQUEST["comment"] != "") {
         $comment = $_REQUEST["comment"];
-        }
-    else {
+    } else {
         $comment = "n";
-		}
-	$datum = date("YmdHis");
+    }
+	
+    $datum = date("YmdHis");
 	
 	$result = $db->query("SELECT id, lang FROM ".SQLPREFIX."faqdata WHERE id = '".$_REQUEST["id"]."' AND lang = '".$_REQUEST["language"]."'");
 	$num = $db->num_rows($result);
 	
+    // save or update the FAQ record
 	if ($num == "1") {
-		$query = "UPDATE ".SQLPREFIX."faqdata SET thema = '".$thema."', content = '".$content."', keywords = '".$keywords."', author = '".$author."', rubrik = '".$_REQUEST["rubrik"]."', active = '".$_REQUEST["active"]."', datum = '".$datum."', email = '".$_REQUEST["email"]."', comment = '".$comment."' WHERE id = '".$_REQUEST["id"]."' AND lang = '".$_REQUEST["language"]."'";
-		}
-	else {
-		$query = "INSERT INTO ".SQLPREFIX."faqdata (id, lang, thema, content, keywords, author, rubrik, active, datum, email, comment) VALUES ('".$_REQUEST["id"]."','".$_REQUEST["language"]."', '".$thema."', '".$content."', '".$keywords."', '".$author."', '".$_REQUEST["rubrik"]."', '".$_REQUEST["active"]."', '".$datum."', '".$_REQUEST["email"]."', '".$comment."')";
-		}
-	
+		$query = "UPDATE ".SQLPREFIX."faqdata SET thema = '".$thema."', content = '".$content."', keywords = '".$keywords."', author = '".$author."', active = '".$_REQUEST["active"]."', datum = '".$datum."', email = '".$_REQUEST["email"]."', comment = '".$comment."' WHERE id = '".$_REQUEST["id"]."' AND lang = '".$_REQUEST["language"]."'";
+    } else {
+		$query = "INSERT INTO ".SQLPREFIX."faqdata (id, lang, thema, content, keywords, author, active, datum, email, comment) VALUES ('".$_REQUEST["id"]."','".$_REQUEST["language"]."', '".$thema."', '".$content."', '".$keywords."', '".$author."', '".$_REQUEST["active"]."', '".$datum."', '".$_REQUEST["email"]."', '".$comment."')";
+    }
+    
+	// save or update the category relations
+    
+    
+    
 	if ($db->query($query)) {
 		print $PMF_LANG["ad_entry_savedsuc"];
-		}
-	else {
-		print $PMF_LANG["ad_entry_savedfail"];
-		print $db->error();
-		}
-	}
+    } else {
+		print $PMF_LANG["ad_entry_savedfail"].$db->error();
+    }
+}
+
 if (isset($submit[0])) {
 	if ($permission["delbt"])	{
         if (isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "") {
             $thema = "<strong>".$_REQUEST["thema"]."</strong>";
-            }
-        else {
+        } else {
             $thema = "";
-            }
+        }
         if (isset($_REQUEST["author"]) && $_REQUEST["author"] != "") {
             $author = $PMF_LANG["ad_entry_del_2"]."<strong>".$_REQUEST["author"]."</strong>";
-            }
-        else {
+        } else {
             $author = "";
-            }
+        }
 ?>
 	<p align="center"><?php print $PMF_LANG["ad_entry_del_1"]." ".$thema." ".$author." ".$PMF_LANG["ad_entry_del_3"]; ?></p>
 	<div align="center">
@@ -111,13 +114,11 @@ if (isset($submit[0])) {
     </form>
     </div>
 <?php
-		}
-	else {
+    } else {
 		print $PMF_LANG["err_NotAuth"];
-		}
-	}
-elseif (!isset($_REQUEST["thema"]) || $_REQUEST["thema"] == "") {
+    }
+} elseif (!isset($_REQUEST["thema"]) || $_REQUEST["thema"] == "") {
 	print "<p>".$PMF_LANG["ad_entryins_fail"]."</p>";
 	print "<p><a href=\"javascript:history.back();\">".$PMF_LANG["ad_entry_back"]."</a></p>";
-	}
+}
 ?>
