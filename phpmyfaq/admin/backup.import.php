@@ -1,12 +1,12 @@
 <?php
 /**
-* $Id: backup.import.php,v 1.3 2004-12-28 13:26:10 thorstenr Exp $
+* $Id: backup.import.php,v 1.4 2005-02-02 19:13:38 thorstenr Exp $
 *
 * The import function to import the phpMyFAQ backups
 *
 * @author       Thorsten Rinne <thorsten@rinne.info>
 * @since        2003-02-24
-* @copyright    (c) 2001-2004 phpMyFAQ Team
+* @copyright    (c) 2001-2005 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -27,7 +27,7 @@ if ($permission["restore"]) {
     	$fp = fopen($_FILES["userfile"]["tmp_name"], "r");
     	$dat = fgets($fp, 65536);
     	
-    	if (substr($dat, 0, 5) != "# pmf-1.5") {
+    	if (substr($dat, 0, 10) != "-- pmf-1.5") {
     		print $PMF_LANG["ad_csv_no"];
     		$ok = 0;
         } else {
