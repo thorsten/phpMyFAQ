@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.56 2005-03-08 19:00:25 thorstenr Exp $
+* $Id: functions.php,v 1.57 2005-03-08 19:02:57 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -433,7 +433,7 @@ function generateNews()
 	$counter = 0;
 	$result = $db->query("SELECT datum, header, artikel, link, linktitel, target FROM ".SQLPREFIX."faqnews ORDER BY datum desc");
 	$output = "";
-	if ($db->num_rows($result) > 0) {
+	if ($PMF_CONF["numNewsArticles"] > 0 && $db->num_rows($result) > 0) {
 		while (($row = $db->fetch_object($result)) && $counter < $PMF_CONF["numNewsArticles"]) {
 			$counter++;
 			$output .= "<h3>".$row->header."</h3>\n<div class=\"block\"><span class=\"date\">".makeDate($row->datum)."</span>".stripslashes($row->artikel)."\n";
