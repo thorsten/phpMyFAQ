@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.6 2004-12-16 15:20:38 thorstenr Exp $
+* $Id: installer.php,v 1.7 2004-12-17 10:26:55 thorstenr Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -316,7 +316,7 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 </p>
 <p>
 <span class="text">Specified RDN:</span>
-<input class="input" type="text" name="ldap_rdn" />
+<input class="input" type="text" name="ldap_username" />
 <span class="help" title="Please enter your specified RDN username here.">?</span>
 </p>
 <p>
@@ -326,7 +326,7 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 </p>
 <p>
 <span class="text">Distinguished name (dn):</span>
-<input class="input" type="text" name="ldap_dn" />
+<input class="input" type="text" name="ldap_base" />
 <span class="help" title="Please enter your distinguished name, e.g. 'cn=John Smith,ou=Accounts,o=My Company,c=US' here.">?</span>
 </p>
 </fieldset>
@@ -389,10 +389,9 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 <?php
     HTMLFooter();
 } else {
+    // check database entries
 	if (isset($_POST["sql_type"]) && $_POST["sql_type"] != "") {
-		
 		$sql_type = $_POST["sql_type"];
-		
 		switch ($sql_type) {
 		
 			case 'mysql':		
@@ -444,18 +443,60 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 		die();
     }
     
+    // check database connection
 	$func = "db_".$sql_type;
 	$db = new $func();
 	$db->connect($sql_server, $sql_user, $sql_passwort, $sql_db);
-    
 	if (!$db) {
 		print "<p class=\"error\"><strong>DB Error:</strong> ".$db->error()."</p>\n";
 		HTMLFooter();
 		die();
     }
     
-    // TODO: check LDAP entries and LDAP connection
+    // check LDAP if available
+    if (extension_loaded('ldap')) {
+        
+        // check LDAP entries
+        if (isset($_POST["ldap_server"]) && $_POST["ldap_server"] != "") {
+            $ldap_server = $_POST["ldap_server"];
+        } else {
+            print "<p class=\"error\"><strong>Error:</strong> There's no LDAP server input.</p>\n";
+            HTMLFooter();
+            die();
+        }
+        if (isset($_POST["ldap_user"]) && $_POST["ldap_user"] != "") {
+            $ldap_user = $_POST["ldap_user"];
+        } else {
+            print "<p class=\"error\"><strong>Error:</strong> There's no LDAP username input.</p>\n";
+            HTMLFooter();
+            die();
+        }
+        if (isset($_POST["ldap_password"]) && $_POST["ldap_password"] != "") {
+            $ldap_password = $_POST["ldap_passwort"];
+        } else {
+            print "<p class=\"error\"><strong>Error:</strong> There's no LDAP password input.</p>\n";
+            HTMLFooter();
+            die();
+        }
+        if (isset($_POST["ldap_base"]) && $_POST["ldap_base"] != "") {
+            $ldap_password = $_POST["ldap_base"];
+        } else {
+            print "<p class=\"error\"><strong>Error:</strong> There's no distinguished name input for LDAP.</p>\n";
+            HTMLFooter();
+            die();
+        }
+        
+        // check LDAP connection
+        require_once(PMF_ROOT_DIR."/inc/ldap.php");
+        $ldap = new LDAP($ldap_server, $ldap_port, $ldap_user, $ldap_base);
+        if (!$ldap) {
+            print "<p class=\"error\"><strong>LDAP Error:</strong> ".$ldap->error()."</p>\n";
+            HTMLFooter();
+            die();
+        }
+    }
     
+    // check user entries
     if (isset($_POST["password"]) && $_POST["password"] != "") {
         $password = $_POST["password"];
     } else {
