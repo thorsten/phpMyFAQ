@@ -7,7 +7,7 @@
  *                      Bastian Pöttner <bastian@poettner.net>
  *                      Meikel Katzengreis
  * Date:                2001-02-18
- * Last Update:         2004-07-27
+ * Last Update:         2004-10-31
  * Copyright:           (c) 2001-2004 phpMyFAQ Team
  *
  * Portions created by Matthias Sommerfeld are Copyright (c) 2001-2004 blue
@@ -26,35 +26,38 @@
 
 /*
  * This function displays the <select> box for the available languages | @@ Thorsten 2003-12-12
- * Last update: @@ Thorsten 2004-07-11
+ * Last update: @@ Thorsten 2004-08-21
  */
 function selectLanguages($default)
 {
     global $languageCodes;
+    $search = array("language_", ".php");
     $output = "<select class=\"language\" name=\"language\" size=\"1\">\n";
 	if ($dir = @opendir("lang/")) {
         while (FALSE !== ($file = @readdir($dir))) {
             if ($file != "." && $file != "..") {
-                $languageArray[] = $file;
-                }
+                $languageArray[] = strtoupper(str_replace($search, "", trim($file)));
             }
+        }
         closedir($dir);
-        sort($languageArray);
-        reset($languageArray);
-        foreach ($languageArray as $value) {
-			if (substr($value, -4) == ".php") {
-                $lang = substr($value, 9, 2);
-				$output .= "\t\t<option value=\"".$lang."\"";
-				if ($lang == $default) {
-					$output .= " selected=\"selected\"";
-					}
-				$output .=  ">".$languageCodes[strtoupper($lang)]."</option>\n";
-				}
-			}
-		}
-	else {
+        
+        foreach ($languageArray as $cc) {
+            $languages[strtolower($cc)] = $languageCodes[$cc];
+        }
+        
+        asort($languages);
+        reset($languages);
+        
+        foreach ($languages as $lang => $cc) {
+            $output .= "\t\t<option value=\"".$lang."\"";
+            if ($lang == $default) {
+            	$output .= " selected=\"selected\"";
+            }
+            $output .=  ">".$cc."</option>\n";
+        }
+    } else {
 		$output .= "\t\t<option value=\"en\">english</option>";
-		}
+    }
     $output .= "</select>\n";
     return $output;
 }
@@ -214,11 +217,11 @@ function br2nl($str)
 
 /*
  * Funktion für Umwandlung der E-Mailadressen (Spam!) | @@ Thorsten, 2003-04-17
- * Last Update: @@ Thorsten, 2003-04-17
+ * Last Update: @@ Thorsten, 2003-09-22
  */
 function safeEmail($email)
 {
-	return str_replace(array('@', '.'), array(' at ', ' dot '), $email);
+	return str_replace(array('@', '.'), array('_AT_', '_DOT_'), $email);
 }
 
 /*
@@ -278,24 +281,26 @@ function Tracking($action, $id)
 			$db->query("INSERT INTO ".SQLPREFIX."faqsessions (IP,TIME) VALUES ('".$_SERVER["REMOTE_ADDR"]."', '".time()."')");
 			list($sid) = $db->fetch_row($db->query("SELECT sid FROM ".SQLPREFIX."faqsessions ORDER BY sid DESC LIMIT 0,1"));
 			}
-		$fp = fopen("./data/tracking".date("dmY"), "a+b");
-		$flanz = "0";
-		while (!flock($fp, LOCK_EX) && $flanz < 6) {
-			wait(500);
-			$flanz++;
-			}
-		if ($flanz >= 6) {
-			fclose($fp);
-			}
-		elseif (!empty($_SERVER["HTTP_REFERER"])) {
-            if (!isset($_SERVER["QUERY_STRING"])) {
-                $_SERVER["QUERY_STRING"] = "";
-                }
-			fputs($fp, $sid.";".str_replace(";", ",",$action).";".$id.";".$_SERVER["REMOTE_ADDR"].";".str_replace(";", ",", $_SERVER["QUERY_STRING"]).";".str_replace(";", ",", $_SERVER["HTTP_REFERER"]).";".str_replace(";", ",", $_SERVER["HTTP_USER_AGENT"]).";".time().";\n");
-			flock($fp, LOCK_UN);
-			fclose($fp);
-			}
-		}
+		$fp = @fopen("./data/tracking".date("dmY"), "a+b");
+        if ($fp) {
+    		$flanz = "0";
+    		while (!flock($fp, LOCK_EX) && $flanz < 6) {
+    			wait(500);
+    			$flanz++;
+    			}
+    		if ($flanz >= 6) {
+    			fclose($fp);
+    			}
+    		elseif (!empty($_SERVER["HTTP_REFERER"])) {
+                if (!isset($_SERVER["QUERY_STRING"])) {
+                    $_SERVER["QUERY_STRING"] = "";
+                    }
+    			fputs($fp, $sid.";".str_replace(";", ",",$action).";".$id.";".$_SERVER["REMOTE_ADDR"].";".str_replace(";", ",", $_SERVER["QUERY_STRING"]).";".str_replace(";", ",", $_SERVER["HTTP_REFERER"]).";".str_replace(";", ",", $_SERVER["HTTP_USER_AGENT"]).";".time().";\n");
+    			flock($fp, LOCK_UN);
+    			fclose($fp);
+    			}
+		    }
+        }
 }
 
 /*
@@ -354,7 +359,7 @@ function userOnline()
 
 /*
  * Function for generating the FAQ news | @@ Thorsten, 2002-08-23
- * Last Update: @@ Thorsten, 2004-06-21
+ * Last Update: @@ Thorsten, 2004-08-11
  */
 function generateNews()
 {
@@ -368,7 +373,6 @@ function generateNews()
     		    $output .= "<br />Info: <a href=\"http://".$row->link."\" target=\"_".$row->target."\">".$row->linktitel."</a>\n";
     		    }
 		    $output .=  "</div>\n";
-		    flush();
 		    }
         return $output;
 	    }
@@ -489,7 +493,7 @@ function EndSlash($string)
 
 /*
  * Gibt die Votings des Artikels aus | @@ Thorsten - 2002-08-29
- * Last Update: @@ Thorsten, 2004-07-17
+ * Last Update: @@ Thorsten, 2004-08-21
  */
 function generateVoting($id)
 {
@@ -507,7 +511,7 @@ function generateVoting($id)
 
 /*
  * Gibt die Kommentare zum Artikel aus | @@ Thorsten - 2002-08-29
- * Last Update: @@ Thorsten, 2003-04-17
+ * Last Update: @@ Thorsten, 2004-10-22
  */
 function generateComments($id)
 {
@@ -518,7 +522,7 @@ function generateComments($id)
 	if ($db->num_rows($result) > 0) {
 		while ($row = $db->fetch_object($result)) {
 			$output .= "<p class=\"comment\">\n";;
-			$output .= "<strong>".$PMF_LANG["msgCommentBy"]."<a href=\"mailto:".safeEmail($row->email)."\">".$row->user."</a>:</strong>\n";
+			$output .= "<strong>".$PMF_LANG["msgCommentBy"]."<a href=\"mailto:".safeEmail($row->email)."\">".$row->usr."</a>:</strong>\n";
 			$output .= "<br />".ereg_replace("&lt;br /&gt;","<br />",stripslashes(htmlspecialchars($row->comment)))."\n</p>";
 			}
 		}
@@ -537,12 +541,12 @@ function pre_core ($text)
 
 /*
  * Funktion zum Entfernen von HTML-Tags bis auf <strong>, <em>, <u>, und <a> | @@ Thorsten, 2003-02-23
- * Last Update: @@ Thorsten, 2004-06-01
+ * Last Update: @@ Thorsten, 2004-10-31
  */
 function safeHTML($html)
 {
 	$html = stripslashes($html);
-	$html = strip_tags($html, "<strong><em><em><u><a>");
+	$html = strip_tags($html, "<strong><em><i><u><a><br>");
 	return $html;
 }
 
@@ -688,21 +692,15 @@ function quoted_printable_encode($return = '')
 
 /*
  * Gibt die XML-Datei zum Artikel aus | @@ Thorsten - 2002-08-29
- * Last Update: @@ Thorsten, 2004-05-31
+ * Last Update: @@ Thorsten, 2004-08-11
  */
 function generateXMLExport($id, $lang = "")
 {
-	global $db, $PMF_LANG, $PMF_CONF;
+	global $db, $categories, $PMF_LANG, $PMF_CONF;
 	$result = $db->query("SELECT id, lang, active, rubrik, keywords, thema, content, author, datum FROM ".SQLPREFIX."faqdata WHERE id = '".$id."' AND lang = '".$lang."' AND active = 'yes'");
 	if ($db->num_rows($result) > 0) {
 		while ($row = $db->fetch_object($result)) {
-			if ($PMF_CONF["ubbcode"]) {
-                $bbcode = new BBCode();
-                $xml_content = $bbcode->parse($row->content);
-				}
-			else {
-				$xml_content = stripslashes($row->content);
-				}
+            $xml_content = stripslashes($row->content);
 			$xml_rubrik = $categories[$row->rubrik];
 			$xml_thema = wordwrap($row->thema, 60);
 			$xml_keywords = $row->keywords;
@@ -799,7 +797,7 @@ function generateXMLFile()
 
 /*
  * Suchfunktion für die Volltextsuche | @@ Thorsten - 2002-09-16
- * Last Update: @@ Thorsten, 2004-07-04
+ * Last Update: @@ Thorsten, 2004-10-31
  */
 function searchEngine($begriff)
 {
@@ -813,11 +811,7 @@ function searchEngine($begriff)
 	if (isset($_REQUEST["search"])) {
 		$begriff = $_REQUEST["search"];
 		}
-	$result = $db->search(SQLPREFIX."faqdata", 
-			Array("id"=>NULL, "lang"=>NULL, "rubrik"=>NULL, "thema"=>NULL, "content"=>NULL),
-			Array("thema", "content", "keywords"),
-			$begriff,
-			Array("active"=>"yes"));
+	$result = $db->search(SQLPREFIX."faqdata", array("id" => NULL, "lang" => NULL, "rubrik" => NULL, "thema" => NULL, "content" => NULL), array("thema", "content", "keywords"), $begriff, array("active"=>"yes"));
 	$num = $db->num_rows($result);
 	
     $pages = ceil($num / $PMF_CONF["numRecordsPage"]);
@@ -830,12 +824,7 @@ function searchEngine($begriff)
 		$y = $num;
 		}
 	
-	$result = $db->search(SQLPREFIX."faqdata", 
-			Array("id"=>NULL, "lang"=>NULL, "rubrik"=>NULL, "thema"=>NULL, "content"=>NULL),
-			Array("thema", "content", "keywords"),
-			$begriff,
-			Array("active"=>"yes"), $PMF_CONF["numRecordsPage"], $x);
-
+	$result = $db->search(SQLPREFIX."faqdata", array("id" => NULL, "lang" => NULL, "rubrik" => NULL, "thema" => NULL, "content" => NULL), array("thema", "content", "keywords"), $begriff, array("active" => "yes"), $PMF_CONF["numRecordsPage"], $x);
     
 	if ($num > 0) {
 		if ($num == "1") {
@@ -850,7 +839,7 @@ function searchEngine($begriff)
 		$output .= "<ul class=\"phpmyfaq_ul\">\n";
 	    for ($i = $x; $i < $y ; $i++) {
 			list($id, $lang, $rubrik, $thema, $content) = $db->fetch_row($result);
-			$rubriktext = $tree->categoryName[$rubrik]["name"];
+			$rubriktext = $tree->getPath($rubrik);
 			$thema = chopString($thema, 15);
             $content = stripslashes(chopString(strip_tags($content), 25));
             $thema = preg_replace('/(((href|src)="[^"]*)?'.$begriff.'(?(1).*"))/mies', "highlight_no_links(\"\\1\")", $thema);
@@ -954,13 +943,13 @@ function printOpenQuestions()
 
 /*
  * Logt den Admin | @@ Bastian, 2001-02-18
- * Last Update: @@ Thorsten, 2004-07-22
+ * Last Update: @@ Thorsten, 2004-08-21
  */
 function adminlog($text)
 {
 	global $db, $PMF_CONF, $auth_user;
 	if (isset($PMF_CONF["enableadminlog"])) {
-		$db->query("INSERT INTO ".SQLPREFIX."faqadminlog (time, usr, text, ip) VALUES ('".time()."','".$auth_user."','".nl2br(addslashes($text))."','".$_SERVER["REMOTE_ADDR"]."')");
+		$db->query("INSERT INTO ".SQLPREFIX."faqadminlog (id, time, usr, text, ip) VALUES ('', '".time()."','".$auth_user."','".nl2br(addslashes($text))."','".$_SERVER["REMOTE_ADDR"]."')");
 		}
 }
 
