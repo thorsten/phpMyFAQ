@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.add.php,v 1.14 2005-01-20 15:34:45 thorstenr Exp $
+* $Id: record.add.php,v 1.15 2005-01-21 07:37:08 thorstenr Exp $
 *
 * Adds a record in the database
 *
@@ -56,7 +56,7 @@ if ($permission["editbt"]) {
             
             if (!$db->query('INSERT INTO '.SQLPREFIX.'faqcategoryrelations VALUES ('.$categories.', \''.$_REQUEST["lang"].'\', '.$nextID.', \''.$_REQUEST["lang"].'\')')) {
                 
-                $db->query('UPDATE '.SQLPREFIX.'faqcategoryrelations SET record_id = '.$nextID.', record_lang = \''.$_REQUEST["lang"].'\' WHERE category_id = '.$categories.' AND category_lang = "'.$_REQUEST["lang"].'"');
+                $db->query('UPDATE '.SQLPREFIX.'faqcategoryrelations SET record_id = '.$nextID.', record_lang = \''.$_REQUEST["lang"].'\' WHERE category_id = '.$categories.' AND category_lang = \''.$_REQUEST["lang"].'\'');
             
             }
         }
@@ -108,3 +108,4 @@ if ($permission["editbt"]) {
 	print $PMF_LANG["err_NotAuth"];
 }
 ?>
+>>>>>>> 1.14
