@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: header.php,v 1.3 2005-01-16 10:52:50 thorstenr Exp $
+* $Id: header.php,v 1.4 2005-02-03 20:56:44 thorstenr Exp $
 *
 * header of the admin area
 *
@@ -49,6 +49,7 @@ if (isset($_REQUEST["aktion"]) && ($_REQUEST["aktion"] == "editentry" || $_REQUE
     <script language="JavaScript" type="text/javascript" src="editor/plugins/ImageManager/image-manager.js"></script>
     <script language="JavaScript" type="text/javascript">
     //<![CDATA[
+    HTMLArea.init();
     HTMLArea.loadPlugin("ImageManager");
     function initEditor() {
         var editor = new HTMLArea("content");
@@ -79,7 +80,7 @@ if (isset($_REQUEST["aktion"]) && ($_REQUEST["aktion"] == "editentry" || $_REQUE
                     refresh :   function(editor) { }
                     };
         config.registerDropdown(internalLinks);
-        config.toolbar = [ [ "fontsize", "space", "formatblock", "space", "bold", "italic", "underline", "strikethrough", "separator", "subscript", "superscript", "separator", "copy", "cut", "paste", "space", "undo", "redo" ], [ "justifyleft", "justifycenter", "justifyright", "justifyfull", "separator", "lefttoright", "righttoleft", "separator", "orderedlist", "unorderedlist", "outdent", "indent", "separator", "forecolor", "hilitecolor", "separator", "inserthorizontalrule", "createlink", "insertimage", "inserttable", "htmlmode" ], [ "internalLinks" ] ];
+        config.toolbar = [ [ "fontsize", "space", "formatblock", "space", "bold", "italic", "underline", "strikethrough", "separator", "subscript", "superscript", "separator", "copy", "cut", "paste", "space", "undo", "redo", "space", "removeformat", "killword" ], [ "justifyleft", "justifycenter", "justifyright", "justifyfull", "separator", "lefttoright", "righttoleft", "separator", "orderedlist", "unorderedlist", "outdent", "indent", "separator", "forecolor", "hilitecolor", "separator", "inserthorizontalrule", "createlink", "insertimage", "inserttable", "htmlmode" ], [ "internalLinks" ] ];
         config.formatblock = {
 		"Heading 3": "h3",
 		"Heading 4": "h4",
