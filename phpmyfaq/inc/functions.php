@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.33 2004-12-25 06:11:14 thorstenr Exp $
+* $Id: functions.php,v 1.34 2004-12-25 06:52:51 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -298,6 +298,37 @@ function IPCheck($ip)
 			}
 		}
 	return TRUE;
+}
+
+/**
+* Adds PHP syntax highlighting to your pre tags
+*
+* @param    string
+* @return   string
+* @access   public
+* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+* @since    2004-12-25
+*/
+function hilight($string)
+{
+    $appendPHP = FALSE;
+    if (!ereg('^<\\?', $string)) {
+        $appendPHP = TRUE;
+        $string = "<?php\n".$string."\n?>";
+    }
+    
+    $string = highlight_string($string, TRUE ); 
+    $string = eregi_replace('^.*<code>',  '', $string);
+    $string = eregi_replace('</code>.*$', '', $string);
+    
+    $string = str_replace("\n", "", $string);
+    $string = str_replace("&nbsp;", " ", $string);
+    $string = implode("\n", explode("<br />", $string));
+    
+    // Making the PHP generated stuff XHTML compatible
+    $string = preg_replace('/<FONT COLOR="/i', '<span style="color:', $string);
+    $string = preg_replace('/<\/FONT>/i', '</span>', $string);
+    return $string;
 }
 
 
@@ -1018,7 +1049,7 @@ function generateDocBookExport()
     $xml_fp = fopen("../xml/docbook.xml","w");
     fputs($xml_fp, $output);
 	fclose($xml_fp);
-	print "<p><a href=\"../xml/phpmyfaq.xml\" target=\"_blank\">XML DocBook File okay!</a></p>";
+	print "<p><a href=\"../xml/docbook.xml\" target=\"_blank\">XML DocBook File okay!</a></p>";
 }
 
 /**
