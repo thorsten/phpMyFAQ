@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: rss.php,v 1.2 2004-11-22 21:31:20 thorstenr Exp $
+* $Id: rss.php,v 1.3 2004-11-23 19:30:56 thorstenr Exp $
 *
 * The RSS feed with the top ten
 *
@@ -61,7 +61,7 @@ $rss .= "</channel>\n</rss>";
 
 header("Content-Type: text/xml");
 header("Content-Length: ".strlen($rss));
-$rss .= $rss;
+print $rss;
 
 $db->dbclose();
 ?>

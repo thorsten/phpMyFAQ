@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: rss.php,v 1.2 2004-11-22 21:30:59 thorstenr Exp $
+* $Id: rss.php,v 1.3 2004-11-23 19:30:36 thorstenr Exp $
 *
 * The RSS feed with the latest five records
 *
@@ -57,7 +57,7 @@ $rss .= "</channel>\n</rss>";
 
 header("Content-Type: text/xml");
 header("Content-Length: ".strlen($rss));
-$rss .= $rss;
+print $rss;
 
 $db->dbclose();
 ?>
