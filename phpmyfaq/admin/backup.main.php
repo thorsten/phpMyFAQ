@@ -4,7 +4,7 @@
  * Description:			main page of backup
  * Authors:				Thorsten Rinne <thorsten@phpmyfaq.de>
  * Date:				2003-02-24
- * Last change:			2004-07-26
+ * Last change:			2004-11-06
  * Copyright:           (c) 2001-2004 Thorsten Rinne
  * 
  * The contents of this file are subject to the Mozilla Public License
@@ -36,15 +36,7 @@ if ($permission["backup"]) {
     </form>
     </div>
 <?php
-    if (emptyTable(SQLPREFIX."faqdata")) {
-?>
-    <p><strong><?php print $PMF_LANG["ad_xml_head"]; ?></strong></p>
-    <p><?php print $PMF_LANG["ad_xml_hint"]; ?></p>
-    <p align="center"><a href="<?php print $_SERVER["PHP_SELF"]; ?>?uin=<?php print $uin; ?>&aktion=xml"><?php print $PMF_LANG["ad_xml_gen"]; ?></a></p>
-<?php
-        }
-	}
-else {
+} else {
 	print $PMF_LANG["err_NotAuth"];
-	}
+}
 ?>
