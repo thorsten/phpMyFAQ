@@ -1,12 +1,12 @@
 <?php
 /**
-* $Id: record.add.php,v 1.8 2004-12-25 05:50:22 thorstenr Exp $
+* $Id: record.add.php,v 1.9 2005-01-04 16:45:31 thorstenr Exp $
 *
 * Adds a record in the database
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23
-* @copyright    (c) 2001-2004 phpMyFAQ Team
+* @copyright    (c) 2001-2005 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -50,9 +50,9 @@ if ($permission["editbt"]) {
         	// save or update the category relations
         foreach ($rubrik as $categories) {
             
-            if (!$db->query('INSERT INTO '.SQLQPREFIX.'faqcategoryrelations VALUES ('.$categories.', "'.$_REQUEST["lang"].'", '.$_REQUEST["id"].', "'.$_REQUEST["lang"].'")')) {
+            if (!$db->query('INSERT INTO '.SQLPREFIX.'faqcategoryrelations VALUES ('.$categories.', "'.$_REQUEST["lang"].'", '.$db->insert_id(SQLPREFIX."faqdata", "id").', "'.$_REQUEST["lang"].'")')) {
                 
-                $db->query('UPDATE '.SQLQPREFIX.'faqcategoryrelations SET record_id = '.$_REQUEST["id"].', record_lang = "'.$_REQUEST["lang"].'" WHERE category_id = '.$categories.' AND category_lang = "'.$_REQUEST["lang"].'"');
+                $db->query('UPDATE '.SQLPREFIX.'faqcategoryrelations SET record_id = '.$db->insert_id(SQLPREFIX."faqdata", "id").', record_lang = "'.$_REQUEST["lang"].'" WHERE category_id = '.$categories.' AND category_lang = "'.$_REQUEST["lang"].'"');
             
             }
         }
