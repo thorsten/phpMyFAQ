@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.8 2004-11-19 17:33:37 thorstenr Exp $
+ * $Id: functions.php,v 1.9 2004-11-21 11:05:53 thorstenr Exp $
  *
  * File:                functions.php
  * Description:         This is the main functions file!
@@ -9,7 +9,7 @@
  *                      Bastian Pöttner <bastian@poettner.net>
  *                      Meikel Katzengreis
  * Date:                2001-02-18
- * Last Update:         2004-11-19
+ * Last Update:         2004-11-21
  * Copyright:           (c) 2001-2004 phpMyFAQ Team
  *
  * Portions created by Matthias Sommerfeld are Copyright (c) 2001-2004 blue
@@ -872,12 +872,13 @@ function generateXMLFile()
 * The main search function for the full text search
 *
 * @param    string
+* @param    int
 * @return   string
 * @access   public
 * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since    2002-09-16
 */
-function searchEngine($begriff)
+function searchEngine($begriff, &$num = 0)
 {
 	global $db, $sids, $tree, $PMF_LANG, $PMF_CONF;
 	$seite = "";
