@@ -1,12 +1,12 @@
 <?php
 /******************************************************************************
- * $Id: index.php,v 1.2 2004-10-31 10:29:58 thorstenr Exp $
+ * $Id: index.php,v 1.3 2004-11-13 13:36:53 thorstenr Exp $
  *
  * File:				index.php
  * Description:         main file
  * Author:				Thorsten Rinne <thorsten@phpmyfaq.de>
  * Date:				2001-02-12
- * Last Update:			2004-10-31
+ * Last Update:			2004-11-13
  * Copyright:           (c) 2001-2004 Thorsten Rinne
  * 
  * The contents of this file are subject to the Mozilla Public License
@@ -207,21 +207,36 @@ $tpl->processTemplate ("index", array(
 				"metaLanguage" => $PMF_LANG["metaLanguage"],
 				"metaCharset" => $PMF_LANG["metaCharset"],
                 "dir" => $PMF_LANG["dir"],
+				"msgCategory" => $PMF_LANG["msgCategory"],
+				"showCategories" => $tree->printCategories($cat),
+                "writeLangAdress" => $writeLangAdress,
+                "switchLanguages" => selectLanguages($LANGCODE),
+				"userOnline" => userOnline().$PMF_LANG["msgUserOnline"],
+				"copyright" => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> '.$PMF_CONF["version"]));
+
+if (isset($PMF_CONF["mod_rewrite"])) {
+    $tpl->processTemplate ("index", array(
 				"msgSearch" => '<a href="'.$_SERVER["PHP_SELF"].'?'.$sids.'action=search">'.$PMF_LANG["msgSearch"].'</a>',
 				"msgAddContent" => '<a href="'.$_SERVER["PHP_SELF"].'?'.$sids.'action=add">'.$PMF_LANG["msgAddContent"].'</a>',
 				"msgQuestion" => '<a href="'.$_SERVER["PHP_SELF"].'?'.$sids.'action=ask">'.$PMF_LANG["msgQuestion"].'</a>',
 				"msgOpenQuestions" => '<a href="'.$_SERVER["PHP_SELF"].'?'.$sids.'action=open">'.$PMF_LANG["msgOpenQuestions"].'</a>',
 				"msgHelp" => '<a href="'.$_SERVER["PHP_SELF"].'?'.$sids.'action=help">'.$PMF_LANG["msgHelp"].'</a>',
 				"msgContact" => '<a href="'.$_SERVER["PHP_SELF"].'?'.$sids.'action=contact">'.$PMF_LANG["msgContact"].'</a>',
-				"msgCategory" => $PMF_LANG["msgCategory"],
-				"backToHome" => '<a href="'.$_SERVER["PHP_SELF"].'?'.$sids.'">'.$PMF_LANG["msgHome"].'</a>',
                 "allCategories" => '<a href="'.$_SERVER["PHP_SELF"].'?'.$sids.'action=show">'.$PMF_LANG["msgShowAllCategories"].'</a>',
-				"showCategories" => $tree->printCategories($cat),
-				"writeSendAdress" => $_SERVER["PHP_SELF"]."?".$sids."action=search",
-                "writeLangAdress" => $writeLangAdress,
-                "switchLanguages" => selectLanguages($LANGCODE),
-				"userOnline" => userOnline().$PMF_LANG["msgUserOnline"],
-				"copyright" => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> '.$PMF_CONF["version"]));
+				"backToHome" => '<a href="'.$_SERVER["PHP_SELF"].'?'.$sids.'">'.$PMF_LANG["msgHome"].'</a>',
+				"writeSendAdress" => $_SERVER["PHP_SELF"]."?".$sids."action=search"));
+} else {
+    $tpl->processTemplate ("index", array(
+                "msgSearch" => '<a href="search.html">'.$PMF_LANG["msgSearch"].'</a>',
+				"msgAddContent" => '<a href="addcontent.html">'.$PMF_LANG["msgAddContent"].'</a>',
+				"msgQuestion" => '<a href="ask.html">'.$PMF_LANG["msgQuestion"].'</a>',
+				"msgOpenQuestions" => '<a href="open.html">'.$PMF_LANG["msgOpenQuestions"].'</a>',
+				"msgHelp" => '<a href="help.html">'.$PMF_LANG["msgHelp"].'</a>',
+				"msgContact" => '<a href="contact.html">'.$PMF_LANG["msgContact"].'</a>',
+				"backToHome" => '<a href="index.html">'.$PMF_LANG["msgHome"].'</a>',
+                "allCategories" => '<a href="showcat.html">'.$PMF_LANG["msgShowAllCategories"].'</a>',
+				"writeSendAdress" => 'search.html'));
+}
 
 /* include requested PHP file */
 require_once($inc_php);
