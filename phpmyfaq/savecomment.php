@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: savecomment.php,v 1.4 2004-12-11 22:41:30 thorstenr Exp $
+* $Id: savecomment.php,v 1.5 2004-12-16 13:31:47 thorstenr Exp $
 *
 * Saves the posted comment
 *
@@ -24,7 +24,7 @@ if (isset($_POST["user"]) && isset($_POST["mail"]) && isset($_POST["comment"]) &
 	
 	$helped = ""; // not used in this version - maybe in the future
 	$datum = date("YmdHis");
-	$comment = nl2br(addslashes(safeHTML($_REQUEST["comment"])));
+	$comment = nl2br($db->escape_string(safeHTML($_REQUEST["comment"])));
 	
 	$result = $db->query("INSERT INTO ".SQLPREFIX."faqcomments (id_comment, id, usr, email, comment, datum, helped) VALUES (".$db->nextID(SQLPREFIX."faqcomments", "id_comment").", ".$_REQUEST["id"].",'".$_REQUEST["user"]."','".$_REQUEST["mail"]."','".$comment."','".$datum."','".$helped."')");
 	

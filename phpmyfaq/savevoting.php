@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * $Id: savevoting.php,v 1.4 2004-12-11 22:41:30 thorstenr Exp $
+ * $Id: savevoting.php,v 1.5 2004-12-16 13:31:47 thorstenr Exp $
  *
  * Datei:				savevoting.php
  * Autor:				Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -23,16 +23,16 @@ if (isset($_POST["vote"]) && $_POST["vote"] != "" && votingCheck($_POST["artikel
 	Tracking("savevoting", $_POST["artikel"]);
 	$noUser = "0";
 	$datum = date("YmdHis");
-	if ($result = $db->query("SELECT usr FROM ".SQLPREFIX."faqvoting WHERE artikel = '".$_POST["artikel"]."'")) {
+	if ($result = $db->query("SELECT usr FROM ".SQLPREFIX."faqvoting WHERE artikel = ".$_POST["artikel"])) {
 		while ($row = $db->fetch_object($result)) {
 			$noUser = $row->user;
 			}
 		}
 	if ($noUser == "0" || $noUser == "") {
-		$db->query("INSERT INTO ".SQLPREFIX."faqvoting (id, artikel, vote, usr, datum, ip) VALUES (".$db->nextID(SQLPREFIX."faqvoting", "id").", '".$_POST["artikel"]."', '".$_POST["vote"]."', '1', '".time()."', '".$_POST["userip"]."');");
+		$db->query("INSERT INTO ".SQLPREFIX."faqvoting (id, artikel, vote, usr, datum, ip) VALUES (".$db->nextID(SQLPREFIX."faqvoting", "id").", ".$_POST["artikel"].", ".$_POST["vote"].", '1', ".time().", '".$_POST["userip"]."');");
 		}
     else {
-		$db->query("UPDATE ".SQLPREFIX."faqvoting SET vote = vote+'".$_POST["vote"]."', usr = user+'1', datum = '".time()."', ip = '".$_POST["userip"]."' where artikel = '".$_POST["artikel"]."';");
+		$db->query("UPDATE ".SQLPREFIX."faqvoting SET vote = vote + ".$_POST["vote"].", usr = user + 1, datum = ".time().", ip = '".$_POST["userip"]."' where artikel = ".$_POST["artikel"]);
 		}
 	$tpl->processTemplate ("writeContent", array(
 				"msgVoteThanks" => $PMF_LANG["msgVoteThanks"]

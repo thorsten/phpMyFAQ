@@ -23,7 +23,7 @@ Tracking("s2fmail",0);
 if (isset($_POST["name"]) && isset($_POST["mailfrom"]) && IPCheck($_SERVER["REMOTE_ADDR"])) {
 	$mailto = $_POST["mailto"];
 	list($user, $host) = explode("@", $mailto[0]);
-    if (checkEmail($_REQUEST["mailfrom"]) && gethostbyname($host) != "64.94.110.11") {
+    if (checkEmail($_REQUEST["mailfrom"])) {
         foreach($mailto as $mail) {
             if ($mail != "") {
                 mail($IDN->encode($mail), $PMF_LANG["msgS2FMailSubject"].$_POST["name"], $PMF_LANG["send2friend_text"]."\n\n".$PMF_LANG["msgS2FText2"]."\n".$_POST["link"]."\n\n".stripslashes($_POST["zusatz"]), "From: ".$IDN->encode($_POST["mailfrom"]));

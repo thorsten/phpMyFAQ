@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: savequestion.php,v 1.4 2004-12-11 22:41:30 thorstenr Exp $
+* $Id: savequestion.php,v 1.5 2004-12-16 13:31:47 thorstenr Exp $
 *
 * @author           Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author           David Saez Padros <david@ols.es>
@@ -35,11 +35,11 @@ if ($_REQUEST["username"] && $_REQUEST["usermail"] && $_REQUEST["content"] && IP
         $cat = new category;
         $categories = $cat->getAllCategories();
     	list($user, $host) = explode("@", $_REQUEST["usermail"]);
-        if (checkEmail($_REQUEST["usermail"]) && gethostbyname($host) != "64.94.110.11") {
+        if (checkEmail($_REQUEST["usermail"])) {
             $datum = date("YmdHis");
-            $content  = addslashes($_REQUEST["content"]);
+            $content  = $db->escape_string($_REQUEST["content"]);
             
-            $result = $db->query("INSERT INTO ".SQLPREFIX."faqfragen (id, ask_username, ask_usermail, ask_rubrik, ask_content, ask_date) VALUES (".$db->nextID(SQLPREFIX."faqfragen", "id").", '".$_REQUEST["username"]."', '".$_REQUEST["usermail"]."', '".$_REQUEST["rubrik"]."', '".$content."', '".$datum."')");
+            $result = $db->query("INSERT INTO ".SQLPREFIX."faqfragen (id, ask_username, ask_usermail, ask_rubrik, ask_content, ask_date) VALUES (".$db->nextID(SQLPREFIX."faqfragen", "id").", '".$db->escape_string($_REQUEST["username"])."', '".$db->escape_string($_REQUEST["usermail"])."', ".$_REQUEST["rubrik"].", '".$content."', '".$datum."')");
             
             $questionMail = "User: ".$_REQUEST["username"].", mailto:".$_REQUEST["usermail"]."\n".$PMF_LANG["msgCategory"].":  ".$categories[$_REQUEST["rubrik"]]["name"]."\n\n".wordwrap(stripslashes($content), 72);
             
