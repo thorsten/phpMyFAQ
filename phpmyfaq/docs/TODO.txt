@@ -6,6 +6,9 @@ TODO list for future versions of phpMyFAQ:
 - add MySQL 4.1 and 5.0 support
 - bugfixing for stability or security reasons
 
+1.5.2 and later:
+- bugfixing for stability or security reasons
+
 1.6.0 "Prometheus":
 - new authentication class ?
 - glossary support ?
