@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: pdf.php,v 1.3 2004-11-16 19:46:28 thorstenr Exp $
+* $Id: pdf.php,v 1.4 2004-11-21 11:28:33 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Peter Beauvain <pbeauvain@web.de>
@@ -273,6 +273,9 @@ class PDF extends FPDF
                 }
             $this->tdbegin = TRUE;
             }
+        if ($tag == "P") {
+            $this->Ln(5);
+        }
     }
 	
 	function CloseTag($tag)

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: export.main.php,v 1.5 2004-11-13 20:36:52 thorstenr Exp $
+ * $Id: export.main.php,v 1.6 2004-11-21 11:28:44 thorstenr Exp $
  *
  * File:				export.main.php
  * Description:			RSS and FAQ export - main page
@@ -279,7 +279,10 @@ function txtentities($html){
 		if ($tag == "BR") {
 			$this->Ln(5);
 			}
-		}
+        if ($tag == "P") {
+            $this->Ln(5);
+        }
+    }
 	
 	function CloseTag($tag) {
 		
