@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: add.php,v 1.3 2004-11-30 21:53:11 thorstenr Exp $
+* $Id: add.php,v 1.4 2004-12-11 21:41:30 thorstenr Exp $
 *
 * This is the page there a user can add a FAQ record.
 *
@@ -29,7 +29,7 @@ if (isset($_GET["question"])) {
     $readonly = "";
 }
 
-if (isset($_GET["cat"]) is_numeric($_GET["cat"])) {
+if (isset($_GET["cat"]) && is_numeric($_GET["cat"])) {
 	$category = $_GET["cat"];
 } else {
 	$category = "";
