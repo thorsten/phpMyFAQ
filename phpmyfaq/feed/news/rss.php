@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: rss.php,v 1.3 2004-11-23 19:30:46 thorstenr Exp $
+* $Id: rss.php,v 1.4 2004-11-24 21:34:24 thorstenr Exp $
 *
 * The RSS feed with the news
 *
@@ -47,7 +47,7 @@ if ($db->num_rows($result) > 0) {
         $rss .= "\t<item>\n";
         $rss .= "\t\t<title>".$row->header."</title>\n";
         $rss .= "\t\t<description>".stripslashes(htmlspecialchars($row->artikel))."</description>\n";
-        $rss .= "\t\t<link>http://".$_SERVER["HTTP_HOST"].str_replace ("admin/", "", $_SERVER["PHP_SELF"])."</link>\n";
+        $rss .= "\t\t<link>http://".$_SERVER["HTTP_HOST"].str_replace ("feed/news/rss.php", "", $_SERVER["PHP_SELF"])."</link>\n";
         $rss .= "\t</item>\n";
         
     }

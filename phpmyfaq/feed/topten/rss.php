@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: rss.php,v 1.3 2004-11-23 19:30:56 thorstenr Exp $
+* $Id: rss.php,v 1.4 2004-11-24 21:35:52 thorstenr Exp $
 *
 * The RSS feed with the top ten
 *
@@ -49,7 +49,7 @@ if ($db->num_rows($result) > 0) {
         $rss .= "\t<item>\n";
         $rss .= "\t\t<title>[".$i.".] ".$row->visits." ".$PMF_LANG["msgViews"].":</title>\n";
         $rss .= "\t\t<description>".stripslashes(htmlspecialchars(makeShorterText($row->thema, 8)))."</description>\n";
-        $rss .= "\t\t<link>http://".$_SERVER["HTTP_HOST"].str_replace ("admin/", "", $_SERVER["PHP_SELF"])."?aktion=artikel&amp;cat=".$row->rubrik."&amp;id=".$row->id."&amp;artlang=".$row->lang."</link>\n";
+        $rss .= "\t\t<link>http://".$_SERVER["HTTP_HOST"].str_replace ("feed/topten/rss.php", "index.php", $_SERVER["PHP_SELF"])."?action=artikel&amp;cat=".$row->rubrik."&amp;id=".$row->id."&amp;artlang=".$row->lang."</link>\n";
         $rss .= "\t</item>\n";
         $i++;
         
