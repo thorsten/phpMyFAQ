@@ -1,12 +1,12 @@
 <?php
 /**
-* $Id: news.php,v 1.5 2004-12-16 12:26:24 thorstenr Exp $
+* $Id: news.php,v 1.6 2005-01-04 15:52:47 thorstenr Exp $
 *
 * The main administration file for the news
 *
 * @author			Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since			2003-02-23
-* @copyright		(c) 2001-2004 phpMyFAQ Team
+* @copyright		(c) 2001-2005 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -18,9 +18,10 @@
 * License for the specific language governing rights and limitations
 * under the License.
 */
+
+print '<h2>'.$PMF_LANG['ad_news_add'].'</h2>';
 if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews"]) {
 ?>
-	<h2><?php print $PMF_LANG["ad_news_add"]; ?></h2>
 	<form id="editRecord" name="editRecord" action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>" method="post">
 	<input type="hidden" name="aktion" value="news" />
 	<input type="hidden" name="do" value="save" />
@@ -41,14 +42,11 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
     </dl>
 	</form>
 <?php
-	}
-elseif (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews"]) {
+} elseif (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews"]) {
 	print $PMF_LANG["err_NotAuth"];
-	}
-if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "edit" && $permission["editnews"]) {
+} elseif (isset($_REQUEST["do"]) && $_REQUEST["do"] == "edit" && $permission["editnews"]) {
 	if (!isset($_REQUEST["id"])) {
 ?>
-	<h2><?php print $PMF_LANG["ad_news_edit"]; ?></h2>
     <table class="list">
     <thead>
         <tr>
@@ -70,18 +68,16 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "edit" && $permission["editnews
             <td class="list"><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=news&amp;do=edit&amp;id=<?php print $row->id; ?>" title="<?php print $PMF_LANG["ad_news_update"]; ?>"><img src="images/edit.gif" width="18" height="18" alt="<?php print $PMF_LANG["ad_news_update"]; ?>" border="0" /></a>&nbsp;&nbsp;<a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=news&amp;do=delete&amp;id=<?php print $row->id; ?>" title="<?php print $PMF_LANG["ad_news_delete"]; ?>"><img src="images/delete.gif" width="17" height="18" alt="<?php print $PMF_LANG["ad_news_delete"]; ?>" border="0" /></a></td>
         </tr>
 <?php
-           		}
-			}
-		else {
+           	}
+		} else {
            	print "<tr><td colspan=\"3\" class=\"list\">".$PMF_LANG["ad_news_nodata"]."</td></tr>"; 
-			}
+		}
 ?>
     </tbody>
     </table>
     <p><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=news&amp;do=write"><?php print $PMF_LANG["ad_menu_news_add"]; ?></a></p>
 <?php
-		}
-	elseif (isset($_REQUEST["id"])) {
+	} elseif (isset($_REQUEST["id"])) {
 		$result = $db->query("select id, header, artikel, link, linktitel, target from ".SQLPREFIX."faqnews where id = ".$_REQUEST["id"]); 
 		while ($row = $db->fetch_object($result)) {
 ?>
@@ -106,50 +102,28 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "edit" && $permission["editnews
     </dl>
 	</form>
 <?php
-			}
 		}
 	}
-elseif (isset($_REQUEST["do"]) && $_REQUEST["do"] == "edit" && $permission["editnews"]) {
+} elseif (isset($_REQUEST["do"]) && $_REQUEST["do"] == "edit" && $permission["editnews"]) {
 	print $PMF_LANG["err_NotAuth"];
-	}
-
-// neuen newseintrag in der datenbank speichern
-if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "save" && $permission["addnews"]) {
+} elseif (isset($_REQUEST["do"]) && $_REQUEST["do"] == "save" && $permission["addnews"]) {
 	$datum = date("YmdHis");
 	$artikel = nl2br($db->escape_string($_REQUEST["content"]));
-	if (!isset($_REQUEST["target"])) {
-		$target = "";
-		}
-	else {
-		$target = $_REQUEST["target"];
-		}
+    (!isset($_REQUEST["target"])) ? $target = "" : $target = $_POST["target"];
     $result = $db->query("INSERT INTO ".SQLPREFIX."faqnews (id, header, artikel, link, linktitel, datum, target) VALUES (".$db->nextID(SQLPREFIX."faqnews",
 "id").", '".$db->escape_string($_REQUEST["header"])."', '".$artikel."', '".$_REQUEST["link"]."', '".$_REQUEST["linktitel"]."', '".$datum."', '".$target."')");
 	print "<p>".$PMF_LANG["ad_news_updatesuc"]."</p>";
-	}
-elseif (isset($_REQUEST["do"]) && $_REQUEST["do"] == "save" && $permission["addnews"]) {
+} elseif (isset($_REQUEST["do"]) && $_REQUEST["do"] == "save" && $permission["addnews"]) {
 	print $PMF_LANG["err_NotAuth"];
-	}
-
-// bestehenden Newseintrag updaten
-if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "update" && $permission["editnews"]) {
+} elseif (isset($_REQUEST["do"]) && $_REQUEST["do"] == "update" && $permission["editnews"]) {
 	$datum = date("YmdHis");
 	$artikel = nl2br($db->escape_string($_REQUEST["content"]));
-	if (!isset($_REQUEST["target"])) {
-		$target = "";
-		}
-	else {
-		$target = $_REQUEST["target"];
-		}
+	(!isset($_REQUEST["target"])) ? $target = "" : $target = $_POST["target"];
 	$result = $db->query("UPDATE ".SQLPREFIX."faqnews SET header = '".$db->escape_string($_REQUEST["header"])."', artikel = '".$artikel."', link = '".$_REQUEST["link"]."', linktitel = '".$_REQUEST["linktitel"]."', datum = '".$datum."', target = '".$target."' WHERE id = ".$_REQUEST["id"]);
 	print "<p>".$PMF_LANG["ad_news_updatesuc"]."</p>";
-	}
-elseif (isset($_REQUEST["do"]) && $_REQUEST["do"] == "update" && $permission["editnews"]) {
+} elseif (isset($_REQUEST["do"]) && $_REQUEST["do"] == "update" && $permission["editnews"]) {
 	print $PMF_LANG["err_NotAuth"];
-	}
-
-// löscht den Newseintrag mit der gesendeten ID
-if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "delete" && $permission["delnews"]) {
+} elseif (isset($_REQUEST["do"]) && $_REQUEST["do"] == "delete" && $permission["delnews"]) {
 	if (!isset($_REQUEST["really"])) {
 ?>
 	<p><?php print $PMF_LANG["ad_news_del"]; ?></p>
@@ -163,13 +137,11 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "delete" && $permission["delnew
     </form>
     </div>
 <?php
-		}
-	elseif ($_REQUEST["really"] == "yes") {
+	} elseif ($_REQUEST["really"] == "yes") {
 		$result = $db->query("DELETE FROM ".SQLPREFIX."faqnews WHERE id = ".$_REQUEST["id"]);
 		print "<p>".$PMF_LANG["ad_news_delsuc"]."</p>";
-		}
 	}
-elseif (isset($_REQUEST["do"]) && $_REQUEST["do"] == "delete" && $permission["delnews"]) {
+} elseif (isset($_REQUEST["do"]) && $_REQUEST["do"] == "delete" && $permission["delnews"]) {
 	print $PMF_LANG["err_NotAuth"];
-	}
+}
 ?>
