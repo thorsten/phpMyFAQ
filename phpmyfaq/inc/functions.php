@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.37 2004-12-25 07:50:57 thorstenr Exp $
+* $Id: functions.php,v 1.38 2004-12-25 20:49:52 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -463,16 +463,24 @@ function generateNews()
 /**
 * This function generates the Top Ten with the mosted viewed records
 *
+* @param    string
 * @return   string
 * @access   public
 * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since    2002-05-07
 */
-function generateTopTen()
+function generateTopTen($language = '')
 {
 	global $db, $sids, $PMF_LANG;
-	$result = $db->query('SELECT DISTINCT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqvisits.visits FROM '.SQLPREFIX.'faqvisits, '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang WHERE '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvisits.id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqvisits.lang AND '.SQLPREFIX.'faqdata.active = "yes" ORDER BY '.SQLPREFIX.'faqvisits.visits DESC');
+	$query = 'SELECT DISTINCT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqvisits.visits FROM '.SQLPREFIX.'faqvisits, '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang WHERE ';
     
+    if (isset($language) && strlen($language) == 2) {
+        $query .= SQLPREFIX.'faqdata.lang = "'.$language.'" AND ';
+    }
+    
+    $query .= SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvisits.id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqvisits.lang AND '.SQLPREFIX.'faqdata.active = "yes" ORDER BY '.SQLPREFIX.'faqvisits.visits DESC';
+    
+    $result = $db->query($query);
 	$output = "";
 	if ($db->num_rows($result) > 0) {
 		$i = 1;
@@ -499,16 +507,23 @@ function generateTopTen()
 /**
 * This function generates the list with the five latest published records
 *
+* @param    string
 * @return   string
 * @access   public
 * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since    2002-05-07
 */
-function generateFiveNewest()
+function generateFiveNewest($language = '')
 {
 	global $db, $sids, $PMF_LANG;
-	$result = $db->query('SELECT DISTINCT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqdata.datum, '.SQLPREFIX.'faqvisits.visits FROM '.SQLPREFIX.'faqvisits, '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang WHERE '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvisits.id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqvisits.lang AND '.SQLPREFIX.'faqdata.active = "yes" ORDER BY '.SQLPREFIX.'faqdata.datum DESC');
-	
+	$query = 'SELECT DISTINCT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqdata.datum, '.SQLPREFIX.'faqvisits.visits FROM '.SQLPREFIX.'faqvisits, '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang WHERE ';
+    
+    if (isset($language) && strlen($language) == 2) {
+        $query .= SQLPREFIX.'faqdata.lang = "'.$language.'" AND ';
+    }
+    
+    $query .= SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvisits.id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqvisits.lang AND '.SQLPREFIX.'faqdata.active = "yes" ORDER BY '.SQLPREFIX.'faqdata.datum DESC';
+    $result = $db->query($query);
 	if ($num = $db->num_rows($result) > 0) {
 		$output = "";
 		$i = 0;
