@@ -4,7 +4,7 @@
  * Autor:				Thorsten Rinne <thorsten@phpmyfaq.de>
  * Contributors:		Meikel Katzengreis <meikel@katzengreis.com>
  * Datum:				2002-08-27
- * Letzte Änderung:		2004-07-25
+ * Letzte Änderung:		2004-10-31
  * Copyright:           (c) 2001-2004 Thorsten Rinne
  * 
  * The contents of this file are subject to the Mozilla Public License
@@ -57,7 +57,7 @@ while ($row = $db->fetch_object($result)) {
 		}
 	$writeDateMsg = makeDate($row->datum);
 	$writeAuthor = $row->author;
-    $categoryName = $tree->categoryName[$row->rubrik]["name"];
+    $categoryName = $tree->getPath($row->rubrik);
 	}
 
 $writePrintMsg = "<a href=\"javascript:printarticle('".$id."','".$lang."');\">".$PMF_LANG["msgPrinterFriendly"]."</a>";
@@ -66,7 +66,7 @@ $writeSend2FriendMsg = "<a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=send2
 $writeXMLMsg = "<a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=xml&amp;id=".$id."&amp;artlang=".$lang."\">".$PMF_LANG["msgMakeXMLExport"]."</a>";
 $changeLanguagePATH = $_SERVER["PHP_SELF"]."?".$sids."action=artikel&amp;cat=".$rubrik."&amp;id=".$id;
 $writeCommentMsg = $PMF_LANG["msgYouCan"]."<a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=writecomment&amp;id=".$id."&amp;artlang=".$lang."\">".$PMF_LANG["msgWriteComment"]."</a>";
-$writeCategory = "<a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=show&amp;cat=".$rubrik."\">".stripslashes($categoryName)."</a>";
+$writeCategory = stripslashes($categoryName)."<br />\n";
 $saveVotingPATH = $_SERVER["PHP_SELF"]."?".$sids."action=savevoting";
 
 $content = preg_replace_callback("{(<pre>.*</pre>)}siU", "pre_core", $output);

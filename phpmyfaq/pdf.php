@@ -1,12 +1,14 @@
 <?php
 /******************************************************************************
+ * $Id: pdf.php,v 1.2 2004-10-31 10:17:38 thorstenr Exp $
+ *
  * File:				pdf.php
  * Author:				Thorsten Rinne <thorsten@phpmyfaq.de>
  * Contributors:        Peter Beauvain <pbeauvain@web.de>
  *                      Olivier Plathey <olivier@fpdf.org>
  *                      Krzysztof Kruszynski <thywolf@wolf.homelinux.net>
  * Date:				2003-02-12
- * Last change:			2004-07-22
+ * Last change:			2004-10-31
  * Copyright:           (c) 2001-2004 Thorsten Rinne
  * 
  * The contents of this file are subject to the Mozilla Public License
@@ -34,12 +36,47 @@ $db = new db($DB["type"]);
 $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
 $tree = new Category;
 
-if (isset($PMF_CONF["language"]) || !is_file("./lang/".$PMF_CONF["language"])) {
-	include "./lang/language_en.php";
-	}
-else {
-	include "./lang/".$PMF_CONF["language"];
-	}
+if (isset($_GET["lang"]) && $_GET["lang"] != "" && strlen($_GET["lang"]) <= 2 && !preg_match("=/=", $_GET["lang"])) {
+    if (@is_file("lang/language_".$_REQUEST["lang"].".php")) {
+        require_once("lang/language_".$_REQUEST["lang"].".php");
+        $LANGCODE = $_REQUEST["lang"];
+    } else {
+        unset($LANGCODE);
+    }
+}
+
+if (!isset($LANGCODE) && isset($_COOKIE["lang"]) && $_COOKIE["lang"] != "" && strlen($_COOKIE["lang"]) <= 2 && !preg_match("=/=", $_COOKIE["lang"])) {
+    if (@is_file("lang/language_".$_COOKIE["lang"].".php")) {
+        require_once("lang/language_".$_COOKIE["lang"].".php");
+        $LANGCODE = $_COOKIE["lang"];
+    } else {
+        unset($LANGCODE);
+    }
+}
+
+if (!isset($LANGCODE) && isset($PMF_CONF["detection"]) && isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) {
+    if (@is_file("lang/language_".substr($_SERVER["HTTP_ACCEPT_LANGUAGE"], 0, 2).".php")) {
+        require_once("lang/language_".substr($_SERVER["HTTP_ACCEPT_LANGUAGE"], 0, 2).".php");
+        $LANGCODE = substr($_SERVER["HTTP_ACCEPT_LANGUAGE"], 0, 2);
+        @setcookie("lang", $LANGCODE, time()+3600);
+    } else {
+        unset($LANGCODE);
+    }
+} elseif (!isset($PMF_CONF["detection"])) {
+    if (@require_once("lang/".$PMF_CONF["language"])) {
+        $LANGCODE = $PMF_LANG["metaLanguage"];
+        @setcookie("lang", $LANGCODE, time()+3600);
+    } else {
+        unset($LANGCODE);
+    }
+}
+
+if (isset($LANGCODE)) {
+    require_once("lang/language_".$LANGCODE.".php");
+} else {
+    $LANGCODE = "en";
+    require_once ("lang/language_en.php");
+}
 
 class PDF extends FPDF
 {
@@ -50,6 +87,12 @@ class PDF extends FPDF
     var $HREF;
     var $PRE;
     var $CENTER;
+    var $tableborder;
+    var $tdbegin;
+    var $tdwidth;
+    var $tdheight;
+    var $tdalign;
+    var $tdbgcolor;
     
     // PDF Konstruktor
     function PDF ($rubrik = "", $thema = "", $categories = "", $orientation = "P", $unit = "mm", $format = "A4")
@@ -83,7 +126,7 @@ class PDF extends FPDF
 	
 	// PDF-Footer
 	function Footer() {
-        global $LANG, $PMF_CONF;
+        global $cat, $PMF_CONF, $PMF_LANG;
     	$this->SetY(-25);
     	$this->SetFont("Arial", "I", 10);
     	$this->Cell(0, 10, $PMF_LANG["ad_gen_page"]." ".$this->PageNo()."/{nb}",0,0,"C");
@@ -92,7 +135,7 @@ class PDF extends FPDF
 		$this->Cell(0, 10, "(c) ".date("Y")." ".$PMF_CONF["metaPublisher"]." <".$PMF_CONF["adminmail"].">",0,1,"C");
 		$this->SetY(-15);
     	$this->SetFont("Arial", "", 8);
-		$this->Cell(0, 10, "URL: http://".$_SERVER["HTTP_HOST"].str_replace("pdf.php", "index.php?action=artikel&cat=".$cat."&id=".$_REQUEST["id"]."&artlang=".$_REQUEST["lang"], $_SERVER["PHP_SELF"]),0,1,"C");
+		$this->Cell(0, 10, "URL: http://".$_SERVER["HTTP_HOST"].str_replace("pdf.php", "index.php?action=artikel&cat=".$this->categories[$this->rubrik]["id"]."&id=".$_REQUEST["id"]."&artlang=".$_REQUEST["lang"], $_SERVER["PHP_SELF"]),0,1,"C");
 		}
     
     // HTML-Parser
@@ -152,7 +195,13 @@ class PDF extends FPDF
 	function OpenTag($tag, $attr)
     {
 		if ($tag == "B" or $tag == "I" or $tag == "U" or $tag == "STRONG" or $tag == "EM") {
-			$this->SetStyle($tag,TRUE);
+            if ($tag == "STRONG") {
+                $tag = "B";
+                }
+            if ($tag == "EM") {
+                $tag = "I";
+                }
+			$this->SetStyle($tag, TRUE);
 			}
 		if ($tag == "PRE") {
 			$this->SetFont("Courier", "", 10);
@@ -291,7 +340,8 @@ class PDF extends FPDF
 	
 	function AddImage($image)
     {
-        $info = GetImageSize($image);
+        $image = "..".$image; // what a stupid hack :-)
+        $info = GetImageSize("$image");
         if ($info[0] > 555 ) {
             $w = $info[0] / 144 * 25.4;
             $h = $info[1] / 144 * 25.4;
@@ -394,4 +444,3 @@ else {
     header("Content-Length: ".filesize($pdfFile));
     readfile($pdfFile);
     }
-?>
