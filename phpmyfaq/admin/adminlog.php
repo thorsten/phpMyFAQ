@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: adminlog.php,v 1.4 2004-12-16 11:47:31 thorstenr Exp $
+* $Id: adminlog.php,v 1.5 2005-01-04 16:06:06 thorstenr Exp $
 *
 * Overview of actions in the admin section
 *
@@ -64,7 +64,7 @@ if ($permission["adminlog"]) {
 
         $counter++;
         if ($counter <= $start) {
-            next;
+            continue;
         }
         $displayedCounter++; 
 		
