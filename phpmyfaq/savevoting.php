@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * $Id: savevoting.php,v 1.5 2004-12-16 13:31:47 thorstenr Exp $
+ * $Id: savevoting.php,v 1.6 2004-12-16 13:34:55 thorstenr Exp $
  *
  * Datei:				savevoting.php
  * Autor:				Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -54,3 +54,4 @@ else
 
 $tpl->includeTemplate("writeContent", "index");
 ?>
+>>>>>>> 1.5

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: savequestion.php,v 1.5 2004-12-16 13:31:47 thorstenr Exp $
+* $Id: savequestion.php,v 1.6 2004-12-16 13:34:55 thorstenr Exp $
 *
 * @author           Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author           David Saez Padros <david@ols.es>
@@ -87,4 +87,5 @@ if ($_REQUEST["username"] && $_REQUEST["usermail"] && $_REQUEST["content"] && IP
 }
 
 $tpl->includeTemplate("writeContent", "index");
+>>>>>>> 1.5
 ?>
