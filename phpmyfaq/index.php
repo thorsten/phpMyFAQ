@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.14 2005-02-02 09:05:32 thorstenr Exp $
+* $Id: index.php,v 1.15 2005-02-05 19:20:38 thorstenr Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the 
@@ -216,6 +216,7 @@ $main_template_vars = array(
 
 if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == "TRUE") {
     $links_template_vars = array(
+                "faqHome" => 'index.html',
                 "msgSearch" => '<a href="search.html">'.$PMF_LANG["msgSearch"].'</a>',
 				"msgAddContent" => '<a href="addcontent.html">'.$PMF_LANG["msgAddContent"].'</a>',
 				"msgQuestion" => '<a href="ask.html">'.$PMF_LANG["msgQuestion"].'</a>',
@@ -227,6 +228,7 @@ if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == "TRUE") {
 				"writeSendAdress" => 'search.html');
 } else {
     $links_template_vars = array(
+                "faqHome" => $_SERVER['PHP_SELF'],
 				"msgSearch" => '<a href="'.$_SERVER["PHP_SELF"].'?'.$sids.'action=search">'.$PMF_LANG["msgSearch"].'</a>',
 				"msgAddContent" => '<a href="'.$_SERVER["PHP_SELF"].'?'.$sids.'action=add">'.$PMF_LANG["msgAddContent"].'</a>',
 				"msgQuestion" => '<a href="'.$_SERVER["PHP_SELF"].'?'.$sids.'action=ask">'.$PMF_LANG["msgQuestion"].'</a>',
