@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.44 2005-01-10 14:57:26 thorstenr Exp $
+* $Id: functions.php,v 1.45 2005-01-11 11:45:55 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -953,7 +953,7 @@ function generateDocBookExport()
     
     $output = '<?xml version="1.0"?>
 <!DOCTYPE book PUBLIC "-//Norman Walsh//DTD DocBk XML V3.1.4//EN" "http://nwalsh.com/docbook/xml/3.1.4/db3xml.dtd">
-<book id="faqname" lang="'.$PMF_LANG['metaLanguage'].'">
+<book id="phpmyfaq" lang="'.$PMF_LANG['metaLanguage'].'">
     <bookinfo>
         <title>'.$PMF_CONF['title'].'</title>
         <author>
@@ -1036,8 +1036,8 @@ function generateDocBookExport()
         }
             
         $output .= '</chapter>';
-        $output .= "</book>";
     }
+    $output .= "</book>";
     
     // write xml file
     $xml_fp = fopen("../xml/docbook.xml","w");
