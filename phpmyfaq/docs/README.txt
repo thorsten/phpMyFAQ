@@ -11,6 +11,8 @@ Changes since 1.4.x:
 - full support for PostgreSQL
 - mod_rewrite support
 - template engine parses PHP code
+- rewritten PDF export
+- many code improvements and code cleanup
 - better RSS support
 
 Known issues in phpMyFAQ 1.5.0:
@@ -19,10 +21,12 @@ Known issues in phpMyFAQ 1.5.0:
 
 CHANGELOG:
 
-Version 1.5.0 alpha - 2004-xx-xx
+Version 1.5.0 alpha - 2004-11-xx
 - full support for PostgreSQL
 - mod_rewrite support
 - template engine parses PHP code
+- rewritten PDF export
+- many code improvements and code cleanup
 - better RSS support
 
 Version 1.4.3 - 2004-11-05
