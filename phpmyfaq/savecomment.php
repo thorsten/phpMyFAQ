@@ -1,12 +1,12 @@
 <?php
 /**
-* $Id: savecomment.php,v 1.5 2004-12-16 13:31:47 thorstenr Exp $
+* $Id: savecomment.php,v 1.6 2005-01-07 05:24:44 thorstenr Exp $
 *
 * Saves the posted comment
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-08-29
-* @copyright    (c) 2001-2004 phpMyFAQ Team
+* @copyright    (c) 2001-2005 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -19,14 +19,18 @@
 * under the License.
 */
 
-if (isset($_POST["user"]) && isset($_POST["mail"]) && isset($_POST["comment"]) && IPCheck($_SERVER["REMOTE_ADDR"])) {
+if (isset($_POST["user"]) && $_POST["user"] != "" && isset($_POST["mail"]) && $_POST["mail"] != "" && isset($_POST["comment"]) && $_POST["comment"] != "" && IPCheck($_SERVER["REMOTE_ADDR"])) {
+
+    $id = (isset($_REQUEST["id"])) ? $_REQUEST["id"] : 0;
 	Tracking("commentsave", $_REQUEST["id"]);
 	
 	$helped = ""; // not used in this version - maybe in the future
 	$datum = date("YmdHis");
 	$comment = nl2br($db->escape_string(safeHTML($_REQUEST["comment"])));
+    $comment_by_user = $db->escape_string(safeHTML($_REQUEST["user"]));
+    $comment_by_mail = $db->escape_string(safeHTML($_REQUEST["mail"]));
 	
-	$result = $db->query("INSERT INTO ".SQLPREFIX."faqcomments (id_comment, id, usr, email, comment, datum, helped) VALUES (".$db->nextID(SQLPREFIX."faqcomments", "id_comment").", ".$_REQUEST["id"].",'".$_REQUEST["user"]."','".$_REQUEST["mail"]."','".$comment."','".$datum."','".$helped."')");
+	$result = $db->query("INSERT INTO ".SQLPREFIX."faqcomments (id_comment, id, usr, email, comment, datum, helped) VALUES (".$db->nextID(SQLPREFIX."faqcomments", "id_comment").", ".$id.",'".$comment_by_user."','".$comment_by_mail."','".$comment."','".$datum."','".$helped."')");
 	
 	$tpl->processTemplate ("writeContent", array(
 				"msgCommentHeader" => $PMF_LANG["msgWriteComment"],

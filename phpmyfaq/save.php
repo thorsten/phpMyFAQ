@@ -1,12 +1,12 @@
 <?php
 /**
-* $Id: save.php,v 1.7 2004-12-31 12:51:24 thorstenr Exp $
+* $Id: save.php,v 1.8 2005-01-07 05:24:44 thorstenr Exp $
 *
 * Saves a user FAQ record and sends an email to the user
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-09-16
-* @copyright    (c) 2001-2004 phpMyFAQ Team
+* @copyright    (c) 2001-2005 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -19,54 +19,55 @@
 * under the License.
 */
 
-if (isset($_REQUEST["username"]) && isset($_REQUEST["rubrik"]) && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "" && isset($_REQUEST["content"]) && $_REQUEST["content"] != "" && isset($_REQUEST["usermail"]) && $_REQUEST["usermail"] != "" && IPCheck($_SERVER["REMOTE_ADDR"])) {
-	Tracking("savenewentry",0);
+if (isset($_POST["username"]) && isset($_POST["rubrik"]) && is_numeric($_POST["rubrik"]) && isset($_POST["thema"]) && $_POST["thema"] != "" && isset($_POST["content"]) && $_POST["content"] != "" && isset($_POST["usermail"]) && $_POST["usermail"] != "" && IPCheck($_SERVER["REMOTE_ADDR"])) {
+	
+    Tracking("savenewentry",0);
 	$datum = date("YmdHis");
-	$content = nl2br($_REQUEST["content"]);
-	if (substr($_REQUEST["contentlink"],7) != "") {
-		if ($PMF_CONF["ubbcode"]) {
-			$content = $content."\n".$PMF_LANG["msgInfo"].$_REQUEST["contentlink"];
-			}
-		else {
-			$content = $content."<br />".$PMF_LANG["msgInfo"]."<a href=\"http://".substr($_REQUEST["contentlink"],7)."\" target=\"_blank\">".$_REQUEST["contentlink"]."</a>";
-			}
-		}
+	$content = $db->escape_string(safeSQL(safeHTML(nl2br($_POST["content"]))));
+    $contentlink = $db->escape_string(safeSQL(safeHTML($_POST["contentlink"])));
+	
+    if (substr($contentlink,7) != "") {
+		$content = $content."<br />".$PMF_LANG["msgInfo"]."<a href=\"http://".substr($contentlink,7)."\" target=\"_blank\">".$contentlink."</a>";
+	}
 	
 	if (isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) {
 		$lang = trim(strtolower(substr($_SERVER["HTTP_ACCEPT_LANGUAGE"], 0, 2)));
-		}
-	else {
+	} else {
 		$lang = "en";
-		}
+	}
 	
-	$content = $db->escape_string(safeSQL(safeHTML($content)));
 	$thema = $db->escape_string(safeSQL(safeHTML($_REQUEST["thema"])));
+    $selected_category = intval($_REQUEST["rubrik"]);
 	$keywords = $db->escape_string(safeSQL($_REQUEST["keywords"]));
 	$author = $_REQUEST["username"];
-	$db->query("INSERT INTO ".SQLPREFIX."faqdata (id, lang, active, thema, content, keywords, author, email, comment, datum) VALUES (".$db->nextID(SQLPREFIX."faqdata", "id").", '".$lang."', 'no', '".$thema."', '".$content."', '".$keywords."', '".$author."', '".$_REQUEST["usermail"]."', 'y', '".$datum."')");
+    $usermail = $IDN->encode($_REQUEST["usermail"]);
+    
+	$db->query("INSERT INTO ".SQLPREFIX."faqdata (id, lang, active, thema, content, keywords, author, email, comment, datum) VALUES (".$db->nextID(SQLPREFIX."faqdata", "id").", '".$lang."', 'no', '".$thema."', '".$content."', '".$keywords."', '".$author."', '".$usermail."', 'y', '".$datum."')");
+    
+    $db->query('INSERT INTO '.SQLPREFIX.'faqcategoryrelations (category_id, category_lang, record_id, record_lang) VALUES ('.$selected_category.', "'.$lang.'", '.$db->insert_id('faqdata', 'id').', "'.$lang.'")');
+    
 	$db->query("INSERT INTO ".SQLPREFIX."faqvisits (id, lang, visits, last_visit) VALUES (".$db->insert_id('faqdata', 'id').", '".$lang."', '1', ".time().")");
-	mail($IDN->encode($PMF_CONF["adminmail"]), unhtmlentities($PMF_CONF["title"]), unhtmlentities($PMF_LANG["msgMailCheck"])."\n".unhtmlentities($PMF_CONF["title"]).": http://".$_SERVER["SERVER_NAME"].dirname($_SERVER["PHP_SELF"]), "From: ".$IDN->encode($_REQUEST["usermail"]));
+    
+	mail($IDN->encode($PMF_CONF["adminmail"]), unhtmlentities($PMF_CONF["title"]), unhtmlentities($PMF_LANG["msgMailCheck"])."\n".unhtmlentities($PMF_CONF["title"]).": http://".$_SERVER["SERVER_NAME"].dirname($_SERVER["PHP_SELF"]), "From: ".$usermail);
+    
 	$tpl->processTemplate ("writeContent", array(
 				"msgNewContentHeader" => $PMF_LANG["msgNewContentHeader"],
 				"Message" => $PMF_LANG["msgNewContentThanks"]
 				));
-	}
-else {
+} else {
 	if (IPCheck($_SERVER["REMOTE_ADDR"]) == FALSE) {
 		$tpl->processTemplate ("writeContent", array(
 				"msgNewContentHeader" => $PMF_LANG["msgNewContentHeader"],
 				"Message" => $PMF_LANG["err_bannedIP"]
 				));
-		}
-	else {
+	} else {
 		Tracking("entrypflichfeldfehler",$_GET["id"]);
 		$tpl->processTemplate ("writeContent", array(
 				"msgNewContentHeader" => $PMF_LANG["msgNewContentHeader"],
 				"Message" => $PMF_LANG["err_SaveEntries"]
 				));
-		}
 	}
+}
 
 $tpl->includeTemplate("writeContent", "index");
-
 ?>
