@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.42 2005-01-09 16:41:08 thorstenr Exp $
+* $Id: functions.php,v 1.43 2005-01-09 19:19:50 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -188,7 +188,7 @@ LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPR
 				$visits = $row->visits;
             }
             
-            if (isset($PMF_CONF["mod_rewrite"])) {
+            if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == "TRUE") {
                 
                 $output .= "\t<li><a href=\"".$row->rubrik."_".$row->id."_".$row->lang.".html\">".stripslashes($row->thema)."</a> [".$row->lang."]<br /><div class=\"little\">(".$visits." ".$PMF_LANG["msgViews"].")</div></li>\n";
             } else {
@@ -208,7 +208,7 @@ LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPR
         
         if ($previous != 0) {
             
-            if (isset($PMF_CONF["mod_rewrite"])) {
+            if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == "TRUE") {
                 
                 $output .= "[ <a href=\"category".$category."_".$previous.".html\">".$PMF_LANG["msgPrevious"]."</a> ]";
             } else {
@@ -221,7 +221,7 @@ LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPR
         
         if ($next <= $pages) {
             
-            if (isset($PMF_CONF["mod_rewrite"])) {
+            if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == "TRUE") {
                 
                 $output .= "[ <a href=\"category".$category."_".$next.".html\">".$PMF_LANG["msgNext"]."</a> ]";
             } else {
@@ -476,7 +476,7 @@ function generateTopTen($language = '')
 		while (($row = $db->fetch_object($result)) && $i <= 10) {
 			$output .= "<tr>\n\t<td>\n";
             
-            if (isset($PMF_CONF["mod_rewrite"])) {
+            if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == "TRUE") {
                 
                 $output .= "\t<strong>[".$i.".] ".$row->visits." ".$PMF_LANG["msgViews"].":</strong><br /><a href=\"".$row->category_id."_".$row->id."_".$row->lang.".html\">".stripslashes(makeShorterText($row->thema, 8))."</a>\n";
             } else {
@@ -520,7 +520,7 @@ function generateFiveNewest($language = '')
 			$output .= "\t\t<tr>\n";
 			$output .= "\t\t\t<td nowrap=\"nowrap\">".makeDate($row->datum)."</td>\n";
             
-            if (isset($PMF_CONF["mod_rewrite"])) {
+            if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == "TRUE") {
                 
                 $output .= "\t\t\t<td><a href=\"".$row->category_id."_".$row->id."_".$row->lang.".html\">".stripslashes(makeShorterText($row->thema, 8))."</a></td>\n";
             } else {
