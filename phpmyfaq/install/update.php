@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.5 2004-11-27 10:50:47 thorstenr Exp $
+* $Id: update.php,v 1.6 2004-11-30 19:28:06 thorstenr Exp $
 *
 * Main update script
 *
@@ -349,10 +349,10 @@ if ($step == 4) {
 
 /**************************** STEP 4 OF 5 ***************************/
 if ($step == 5) {
-    require_once (PMF_ROOT_DIR."/inc/functions.php");
-    require_once (PMF_ROOT_DIR."/inc/mysql.php");
+    require_once(PMF_ROOT_DIR."/inc/functions.php");
+    require_once(PMF_ROOT_DIR."inc/db.php");
     define("SQLPREFIX", $DB["prefix"]);
-    $db = new DB();
+    $db = new db($DB["type"]);
     $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
     
     $version = str_replace(".", "", $_REQUEST["version"]);
@@ -405,10 +405,12 @@ if ($step == 5) {
         $query[] = "ALTER TABLE ".SQLPREFIX."faqvoting CHANGE user usr INT(11) DEFAULT '0' NOT NULL";
     }
     if ($version < 150) {
+        // TODO: alter column faqdata.rubrik to integer
+        
         // create new table faqcategoryrelations
         $query[] = "CREATE TABLE ".SQLPREFIX."faqcategoryrelations ( category_id INT(11) NOT NULL, category_lang VARCHAR(5) NOT NULL default '', record_id INT(11) NOT NULL, record_lang VARCHAR(5) NOT NULL default '', PRIMARY KEY  (category_id,category_lang,record_id,record_lang) )";
         // fill the new table
-        $query[] = "INSERT INTO ".SQLPREFIX."faqcategoryrelations SELECT ".SQLPREFIX."faqcategories.id as category_id, ".SQLPREFIX."faqcategories as category_lang, ".SQLPREFIX."faqdata.id as record_id, ".SQLPREFIX."faqdata as record_lang WHERE ".SQLPREFIX."faqcategories.id = ".SQLPREFIX."faqdata.rubrik ORDER BY category_id";
+        $query[] = "INSERT INTO ".SQLPREFIX."faqcategoryrelations SELECT ".SQLPREFIX."faqcategories.id as category_id, ".SQLPREFIX."faqcategories.lang as category_lang, ".SQLPREFIX."faqdata.id as record_id, ".SQLPREFIX."faqdata.lang as record_lang WHERE ".SQLPREFIX."faqcategories.id = ".SQLPREFIX."faqdata.rubrik ORDER BY category_id";
         //
         // TODO: rebuild table faqdata
         //
