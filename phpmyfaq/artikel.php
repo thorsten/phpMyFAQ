@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.9 2004-12-13 20:29:18 thorstenr Exp $
+* $Id: artikel.php,v 1.10 2004-12-25 07:09:01 thorstenr Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -104,7 +104,7 @@ if ($comment == "n") {
 $tpl->processTemplate ("writeContent", array(
 				"writeRubrik" => $writeCategory,
 				"writeThema" => stripslashes(getThema($id, $lang)),
-				"writeContent" => $content,
+				"writeContent" => preg_replace_callback("/<pre([^>]*)>(.*?)<\/pre>/is", 'hilight', $content),
 				"writeDateMsg" => $PMF_LANG["msgLastUpdateArticle"].$writeDateMsg,
 				"writeAuthor" => $PMF_LANG["msgAuthor"].$writeAuthor,
 				"writePrintMsg" => $writePrintMsg,
