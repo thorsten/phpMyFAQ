@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: pdf.php,v 1.6 2004-11-21 12:27:21 thorstenr Exp $
+* $Id: pdf.php,v 1.7 2004-11-21 12:30:35 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Peter Beauvain <pbeauvain@web.de>
@@ -276,7 +276,9 @@ class PDF extends FPDF
                             $this->tdbegin = TRUE;
                             break;
             case "HR":      
-                            $this->PutLine();
+                            $this->Ln(2);
+                            $this->Line($this->GetX(), $this->GetY(), $this->GetX() + 187, $this->GetY());
+                            $this->Ln(3);
                             break;
             default:        
                             break;

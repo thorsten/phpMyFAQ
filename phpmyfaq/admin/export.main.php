@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: export.main.php,v 1.8 2004-11-21 12:28:14 thorstenr Exp $
+ * $Id: export.main.php,v 1.9 2004-11-21 12:30:24 thorstenr Exp $
  *
  * File:				export.main.php
  * Description:			RSS and FAQ export - main page
@@ -330,7 +330,9 @@ function txtentities($html){
                             $this->tdbegin = TRUE;
                             break;
             case "HR":      
-                            $this->PutLine();
+                            $this->Ln(2);
+                            $this->Line($this->GetX(), $this->GetY(), $this->GetX() + 187, $this->GetY());
+                            $this->Ln(3);
                             break;
             default:        
                             break;
