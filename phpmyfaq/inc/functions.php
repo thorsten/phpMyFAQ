@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.57 2005-03-08 19:02:57 thorstenr Exp $
+* $Id: functions.php,v 1.58 2005-03-11 15:31:08 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -151,10 +151,10 @@ function printThemes($category)
 		$seite = $_REQUEST["seite"];
 		}
     
-	$numResult = $db->query("SELECT id FROM ".SQLPREFIX."faqdata WHERE active = 'yes' AND rubrik = ".$category);
+	$numResult = $db->query("SELECT id FROM ".SQLPREFIX."faqdata LEFT JOIN ".SQLPREFIX."faqcategoryrelations ON ".SQLPREFIX."faqdata.id = ".SQLPREFIX."faqcategoryrelations.record_id AND ".SQLPREFIX."faqdata.lang = ".SQLPREFIX."faqcategoryrelations.record_lang WHERE active = 'yes'");
 	$num = $db->num_rows($numResult);
 	$pages = ceil($num / $PMF_CONF["numRecordsPage"]);
-    
+	
 	if ($seite == 1) {
 		$first = 0;
 		}
@@ -176,7 +176,7 @@ LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPR
 		while (($row = $db->fetch_object($result)) && $displayedCounter < $PMF_CONF['numRecordsPage']) {
 			$counter ++;
 			if ($counter <= $first) {
-				next;
+				continue;
 			}
 			$displayedCounter++;
 			
