@@ -1,6 +1,6 @@
 <?php
-/******************************************************************************
- * $Id: index.php,v 1.4 2004-11-13 19:18:20 thorstenr Exp $
+/**
+ * $Id: index.php,v 1.5 2004-11-13 19:39:03 thorstenr Exp $
  *
  * File:				index.php
  * Description:         main file
@@ -213,7 +213,7 @@ $main_template_vars = array(
 				"userOnline" => userOnline().$PMF_LANG["msgUserOnline"],
 				"copyright" => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> '.$PMF_CONF["version"]);
 
-if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == TRUE) {
+if (isset($PMF_CONF["mod_rewrite"])) {
     $links_template_vars = array(
                 "msgSearch" => '<a href="search.html">'.$PMF_LANG["msgSearch"].'</a>',
 				"msgAddContent" => '<a href="addcontent.html">'.$PMF_LANG["msgAddContent"].'</a>',
