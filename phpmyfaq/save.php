@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: save.php,v 1.8 2005-01-07 05:24:44 thorstenr Exp $
+* $Id: save.php,v 1.9 2005-02-27 19:22:52 thorstenr Exp $
 *
 * Saves a user FAQ record and sends an email to the user
 *
@@ -61,7 +61,7 @@ if (isset($_POST["username"]) && isset($_POST["rubrik"]) && is_numeric($_POST["r
 				"Message" => $PMF_LANG["err_bannedIP"]
 				));
 	} else {
-		Tracking("entrypflichfeldfehler",$_GET["id"]);
+		Tracking("entrypflichfeldfehler", 0);
 		$tpl->processTemplate ("writeContent", array(
 				"msgNewContentHeader" => $PMF_LANG["msgNewContentHeader"],
 				"Message" => $PMF_LANG["err_SaveEntries"]
