@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.25 2004-12-14 07:26:54 thorstenr Exp $
+* $Id: functions.php,v 1.26 2004-12-16 13:05:50 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -542,7 +542,7 @@ function logViews($myid, $lang)
 		list($nVisits) = $db->fetch_row($result);
 		}
 	if ($nVisits == "0" || $nVisits == "") {
-		$db->query ("INSERT INTO ".SQLPREFIX."faqvisits (id, lang, visits, last_visit) VALUES (".$myid.", '".$lang."', '1', '".$heute."')");
+		$db->query ("INSERT INTO ".SQLPREFIX."faqvisits (id, lang, visits, last_visit) VALUES (".$myid.", '".$lang."', '1', ".$heute.")");
 		}
 	else {
 		
