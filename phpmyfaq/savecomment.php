@@ -17,7 +17,7 @@
  * under the License.
  ******************************************************************************/
 
-if ($_REQUEST["user"] && $_REQUEST["mail"] && $_REQUEST["comment"] && IPCheck($_SERVER["REMOTE_ADDR"])) {
+if (isset($_POST["user"]) && isset($_POST["mail"]) && isset($_POST["comment"]) && IPCheck($_SERVER["REMOTE_ADDR"])) {
 	Tracking("commentsave", $_REQUEST["id"]);
 	
 	$helped = ""; // not used in this version - maybe in the future
