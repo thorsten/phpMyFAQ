@@ -48,6 +48,14 @@ h3 {
     padding-top: 8px;
     font-size: 125%;
     }
+	 
+#phpmyfaq {
+	text-align: left;
+	vertical-align: middle;
+	margin: 0px auto;
+	padding: 0px;
+	width: 760px;
+}
 
 /**************************
 The header
@@ -55,10 +63,7 @@ The header
 
 #header {
     height: 70px;
-    -height:60px; 
-    border: solid;
-    border-width: 2px 0px;
-    margin: 40px 0 0 0;
+    margin: 0px;
     }
 #header h1 {
     margin: 10px auto 2px 20px;
@@ -70,7 +75,7 @@ The horizontal navigation
 #horizontalnav ul {
     padding: 0;
     list-style-type: none;
-    font-size: 100%;
+    font-size: 80%;
     margin-left: 10px;
     }
 #horizontalnav ul li {
@@ -91,13 +96,11 @@ The horizontal navigation
 The category-menu
 **************************/
 #categories {
-    position: absolute;
-    top: 160px;
-    left: 20px;
     width: 180px;
     margin: 0px;
     padding: 0px;
     font-size: 80%;
+	 float: left;
     }
 #categories ul {
     margin: 0;
@@ -149,8 +152,8 @@ a.active {
 The content
 **************************/
 #content{
-    margin: 20px 20px 20px 240px;
-    padding: 20px;
+    margin: 10px 10px 10px 220px;
+    padding: 10px;
     font-size: 80%;
     }
 #content h3 {
@@ -176,8 +179,8 @@ span.date {
 div#topten {
     margin-bottom: 10px;
     float: left;
-    width: 35%;
-    margin-left: 5%;
+    width: 39%;
+    margin-left: 1%;
     }
 table.topten, table.fivenewest, table.openquestions {
     border: 1px solid;
