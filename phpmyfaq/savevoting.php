@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: savevoting.php,v 1.7 2005-01-09 12:09:06 thorstenr Exp $
+* $Id: savevoting.php,v 1.8 2005-02-01 12:08:38 thorstenr Exp $
 *
 * Saves a user voting
 *
@@ -19,9 +19,9 @@
 * under the License.
 ******************************************************************************/
 
-$record = (isset($_POST["artikel"]) ? intval($_POST["artikel"]) : '';
-$vote = (isset($_POST["vote"]) ? intval($_POST["vote"]) : 0;
-$userip = (isset($_POST["userip"]) ? intval($_POST["userip"]) : '';
+$record = (isset($_POST["artikel"])) ? intval($_POST["artikel"]) : '';
+$vote = (isset($_POST["vote"])) ? intval($_POST["vote"]) : 0;
+$userip = (isset($_POST["userip"])) ? intval($_POST["userip"]) : '';
 
 if (isset($vote) && $vote != "" && votingCheck($record, $userip) && intval($_POST["vote"]) > 0 && intval($_POST["vote"]) < 6) {
     
