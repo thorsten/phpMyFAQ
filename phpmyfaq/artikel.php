@@ -1,76 +1,73 @@
 <?php
-/******************************************************************************
- * Datei:				artikel.php
- * Autor:				Thorsten Rinne <thorsten@phpmyfaq.de>
- * Contributors:		Meikel Katzengreis <meikel@katzengreis.com>
- * Datum:				2002-08-27
- * Letzte Änderung:		2004-10-31
- * Copyright:           (c) 2001-2004 Thorsten Rinne
- * 
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- * 
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- ******************************************************************************/
+/**
+* $Id: artikel.php,v 1.3 2004-11-22 20:58:58 thorstenr Exp $
+*
+* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+* @author       Meikel Katzengreis <meikel@katzengreis.com>
+* @since        2002-08-27
+* @copyright    (c) 2001-2004 phpMyFAQ Team
+* 
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
+* 
+* Software distributed under the License is distributed on an "AS IS"
+* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+* License for the specific language governing rights and limitations
+* under the License.
+*/
 
-if (isset($_REQUEST["cat"]) && checkIntVar($_REQUEST["cat"]) == TRUE) {
-	$rubrik = $_REQUEST["cat"];
-	}
-if (isset($_REQUEST["id"]) && checkIntVar($_REQUEST["id"]) == TRUE) {
-	$id = $_REQUEST["id"];
-	}
+if (isset($_REQUEST['cat']) && checkIntVar($_REQUEST['cat']) == TRUE) {
+	$rubrik = $_REQUEST['cat'];
+}
+if (isset($_REQUEST['id']) && checkIntVar($_REQUEST['id']) == TRUE) {
+	$id = $_REQUEST['id'];
+}
 if (isset($_GET["artlang"])) {
 	$lang = $_GET["artlang"];
-	}
+}
 if (isset($_POST["artlang"]) && $_POST["artlang"] != "") {
 	$lang = $_POST["artlang"];
-	}
+}
 
 Tracking("artikelview", $id);
 
-$comment = "";
+$comment = '';
 $result = $db->query("SELECT id, rubrik, content, datum, author, email, comment FROM ".SQLPREFIX."faqdata WHERE id = '".$id."' AND lang = '".$lang."' AND active = 'yes'");
 while ($row = $db->fetch_object($result)) {
 	$id = $row->id;
 	$comment = $row->comment;
 	logViews($id, $lang);
-	$output = str_replace("../", "", stripslashes($row->content));
-	if (@is_dir("attachments/")  && @is_dir("attachments/".$id) && isset($PMF_CONF["disatt"])) {
+	$output = str_replace('../', '', stripslashes($row->content));
+	if (is_dir('attachments/')  && is_dir('attachments/'.$id) && isset($PMF_CONF['disatt'])) {
 		$files = 0;
 		$outstr = "";
-		$dir = opendir("attachments/".$id);
+		$dir = opendir('attachments/'.$id);
 		
 		while ($dat = readdir($dir)) {
-			if ($dat != "." && $dat != "..") {
+			if ($dat != '.' && $dat != '..') {
 				$files++;
-				$outstr .= "<a href=\""."attachments/".$id."/".$dat."\" target=\"_blank\">".$dat."</a>, ";
-				}
-			}
-		if ($files > 0) {
-			$output .= "<p>".$PMF_LANG["msgAttachedFiles"]." ".substr($outstr, 0, -2)."</p>";
+				$outstr .= '<a href="attachments/'.$id.'/'.$dat.'" target="_blank">'.$dat.'</a>, ';
 			}
 		}
+		if ($files > 0) {
+			$output .= '<p>'.$PMF_LANG['msgAttachedFiles'].' '.substr($outstr, 0, -2).'</p>';
+		}
+	}
 	$writeDateMsg = makeDate($row->datum);
 	$writeAuthor = $row->author;
     $categoryName = $tree->getPath($row->rubrik);
-	}
+}
 
-$writePrintMsg = "<a href=\"javascript:printarticle('".$id."','".$lang."');\">".$PMF_LANG["msgPrinterFriendly"]."</a>";
-$writePDF = "<a target=\"_blank\" href=\"pdf.php?id=".$id."&amp;lang=".$lang."\"> ".$PMF_LANG["msgPDF"]."</a>";
-$writeSend2FriendMsg = "<a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=send2friend&amp;cat=".$rubrik."&amp;id=".$id."&amp;artlang=".$lang."\">".$PMF_LANG["msgSend2Friend"]."</a>";
-$writeXMLMsg = "<a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=xml&amp;id=".$id."&amp;artlang=".$lang."\">".$PMF_LANG["msgMakeXMLExport"]."</a>";
-$changeLanguagePATH = $_SERVER["PHP_SELF"]."?".$sids."action=artikel&amp;cat=".$rubrik."&amp;id=".$id;
-$writeCommentMsg = $PMF_LANG["msgYouCan"]."<a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=writecomment&amp;id=".$id."&amp;artlang=".$lang."\">".$PMF_LANG["msgWriteComment"]."</a>";
-$writeCategory = stripslashes($categoryName)."<br />\n";
-$saveVotingPATH = $_SERVER["PHP_SELF"]."?".$sids."action=savevoting";
-
-$content = preg_replace_callback("{(<pre>.*</pre>)}siU", "pre_core", $output);
-$content = preg_replace_callback("{(<pre+.*</pre>)}siU", "pre_core", $output);
+$writePrintMsg          = '<a href="#" onclick="javascript:window.print();">'.$PMF_LANG['msgPrinterFriendly'].'</a>';
+$writePDF               = '<a target="_blank" href="pdf.php?id='.$id.'&amp;lang='.$lang.'">'.$PMF_LANG['msgPDF'].'</a>';
+$writeSend2FriendMsg    = '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=send2friend&amp;cat='.$rubrik.'&amp;id='.$id.'&amp;artlang='.$lang.'">'.$PMF_LANG['msgSend2Friend'].'</a>';
+$writeXMLMsg            = "<a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=xml&amp;id=".$id."&amp;artlang=".$lang."\">".$PMF_LANG["msgMakeXMLExport"]."</a>";
+$changeLanguagePATH     = $_SERVER["PHP_SELF"]."?".$sids."action=artikel&amp;cat=".$rubrik."&amp;id=".$id;
+$writeCommentMsg        = $PMF_LANG["msgYouCan"]."<a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=writecomment&amp;id=".$id."&amp;artlang=".$lang."\">".$PMF_LANG["msgWriteComment"]."</a>";
+$writeCategory          = stripslashes($categoryName)."<br />\n";
+$saveVotingPATH         = $_SERVER["PHP_SELF"]."?".$sids."action=savevoting";
 
 if (isset($_REQUEST["highlight"]) && $_REQUEST["highlight"] != "/" && $_REQUEST["highlight"] != "<" && $_REQUEST["highlight"] != ">") {
     $highlight = $_REQUEST["highlight"];
@@ -85,7 +82,7 @@ $num = count($arrLanguage);
 if ($num > 1) {
 	foreach ($arrLanguage as $language) {
 		$check4Lang .= "<option value=\"".$language."\">".$languageCodes[strtoupper($language)]."</option>\n";
-		}
+	}
 	$switchLanguage .= "<p>\n";
     $switchLanguage .= "<fieldset>\n";
     $switchLanguage .= "<legend>".$PMF_LANG["msgLangaugeSubmit"]."</legend>\n";
@@ -98,12 +95,12 @@ if ($num > 1) {
     $switchLanguage .= "</fieldset>\n";
 	$switchLanguage .= "</form>\n";
 	$switchLanguage .= "</p>\n";
-	}
+}
 
 $myComment = $writeCommentMsg;
 if ($comment == "n") {
 	$myComment = $PMF_LANG["msgWriteNoComment"];
-	}
+}
 
 $tpl->processTemplate ("writeContent", array(
 				"writeRubrik" => $writeCategory,

@@ -1,24 +1,21 @@
 <?php
 /**
- * $Id: index.php,v 1.5 2004-11-13 19:39:03 thorstenr Exp $
- *
- * File:				index.php
- * Description:         main file
- * Author:				Thorsten Rinne <thorsten@phpmyfaq.de>
- * Date:				2001-02-12
- * Last Update:			2004-11-13
- * Copyright:           (c) 2001-2004 Thorsten Rinne
- * 
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- * 
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- ******************************************************************************/
+* $Id: index.php,v 1.6 2004-11-22 21:07:23 thorstenr Exp $
+*
+* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+* @since        2001-02-12
+* @copyright:   (c) 2001-2004 Thorsten Rinne
+*
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
+*
+* Software distributed under the License is distributed on an "AS IS"
+* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+* License for the specific language governing rights and limitations
+* under the License.
+*/
 
 /* debug mode:
  * - FALSE	debug mode disabled
@@ -26,14 +23,14 @@
  */
 define("DEBUG", FALSE);
 
-if (DEBUG == TRUE) {
+if (DEBUG) {
 	error_reporting(E_ALL);
-	}
+}
 
 /* are install.php or update.php not deleted yet? */
 if (file_exists("install/installer.php") || file_exists("install/update.php")) {
 	die("<p align=\"center\"><strong>Attention !!</strong><br />Please delete all files in the directory <strong>\"install/\"!</strong></p>\n");
-	}
+}
 
 /* connect to the database server */
 require_once("inc/data.php");
@@ -104,98 +101,86 @@ if (isset($LANGCODE)) {
 if (!isset($_GET["sid"]) && !isset($_COOKIE["sid"])) {
 	Tracking("NewSession", 0);
     setcookie("sid", $sid, time()+3600);
-	}
-else {
+} else {
 	if (isset($_REQUEST["sid"]) && checkIntVar($_REQUEST["sid"]) == TRUE) {
 		CheckSID($_REQUEST["sid"], getenv("REMOTE_ADDR"));
-		}
 	}
+}
 
 /* is user tracking activated? */
 if (isset($PMF_CONF["tracking"])) {
 	if (isset($sid)) {
         if (!isset($_COOKIE["sid"])) {
             $sids = "sid=".$sid."&amp;lang=".$LANGCODE."&amp;";
-            }
-        else {
+        } else {
             $sids = "";
-            }
-		}
-	elseif (isset($_REQUEST["sid"])) {
+        }
+	} elseif (isset($_REQUEST["sid"])) {
         if (!isset($_COOKIE["sid"])) {
             $sids = "sid=".$_REQUEST["sid"]."&amp;lang=".$LANGCODE."&amp;";
-            }
-        else {
+        } else {
             $sids = "";
-            }
-		}
+        }
 	}
-else {
+} else {
     if (!setcookie("lang", $LANGCODE, time()+3600)) {
         $sids = "lang=".$LANGCODE."&amp;";
-        }
-    else {
+    } else {
         $sids = "";
-        }
-	}
+    }
+}
 
 /* found a article language? */
 if (isset($_GET["artlang"]) && strlen($_GET["artlang"]) <= 2 && !preg_match("=/=", $_GET["artlang"])) {
 	$lang = $_GET["artlang"];
-	}
-else {
+} else {
 	$lang = $LANGCODE;
-	}
+}
 
 /* found a record ID? */
 if (isset($_REQUEST["id"]) && checkIntVar($_REQUEST["id"]) == TRUE) {
 	$id = $_REQUEST["id"];
     $title = " - ".stripslashes(getThema($id, $lang));
-	}
-else {
+} else {
 	$id = "";
     $title = " -  powered by phpMyFAQ ".$PMF_CONF["version"];
-	}
+}
 
 /* found a category? */
 if (isset($_GET["cat"])) {
     $cat = $_GET["cat"];
-    }
-else {
+} else {
     $cat = 0;
-    }
+}
 $tree = new Category();
 $tree->transform(0);
 $tree->collapseAll();
 if ($cat != 0) {
     $tree->expandTo($cat);
-    }
+}
 
 /* found an action request? */
 if (isset($_REQUEST["action"]) && !preg_match("=/=", $_REQUEST["action"]) && isset($allowedVariables[$_REQUEST["action"]])) {
 	$action = $_REQUEST["action"];
-	}
-else {
+} else {
 	$action = "main";
-	}
+}
 
 /* select the template for the requested page */
 if ($action != "main") {
     $inc_tpl = "template/".trim($action).".tpl";
     $inc_php = $action.".php";
     $writeLangAdress = $_SERVER["PHP_SELF"]."?".str_replace("&", "&amp;",$_SERVER["QUERY_STRING"]);
-    }
-else {
+} else {
     $inc_tpl = "template/main.tpl";
     $inc_php = "main.php";
     $writeLangAdress = $_SERVER["PHP_SELF"]."?".$sids;
-    }
+}
 
 /* load templates */
 $tpl = new phpmyfaqTemplate (array(
 				"index" => 'template/index.tpl',
-				"writeContent" => $inc_tpl
-				));
+				"writeContent" => $inc_tpl));
 
 $main_template_vars = array(
                 "title" => $PMF_CONF["title"].$title,
@@ -243,7 +228,7 @@ $tpl->processTemplate ("index", array_merge($main_template_vars, $links_template
 /* include requested PHP file */
 require_once($inc_php);
 
-if (DEBUG == TRUE) {
+if (DEBUG) {
 	print "<p>DEBUG INFORMATION:</p>\n";
     print "<p>".$db->sqllog()."</p>\n";
 	}
