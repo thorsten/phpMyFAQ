@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.5 2004-11-13 18:34:27 thorstenr Exp $
+ * $Id: functions.php,v 1.6 2004-11-13 19:09:11 thorstenr Exp $
  *
  * File:                functions.php
  * Description:         This is the main functions file!
@@ -132,7 +132,7 @@ function printThemes($category)
 		$seite = $_REQUEST["seite"];
 		}
     
-	$numResult = $db->query("SELECT id FROM ".SQLPREFIX."faqdata WHERE active = 'yes' AND rubrik = ".$category.);
+	$numResult = $db->query("SELECT id FROM ".SQLPREFIX."faqdata WHERE active = 'yes' AND rubrik = ".$category);
 	$num = $db->num_rows($numResult);
 	$pages = ceil($num / $PMF_CONF["numRecordsPage"]);
     
