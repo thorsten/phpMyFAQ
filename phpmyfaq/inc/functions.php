@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.51 2005-02-14 12:27:25 thorstenr Exp $
+* $Id: functions.php,v 1.52 2005-02-19 13:09:22 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -1122,6 +1122,7 @@ function searchEngine($begriff)
 			$rubriktext = $tree->getPath($rubrik);
 			$thema = chopString($thema, 15);
             $content = stripslashes(chopString(strip_tags($content), 25));
+            $begriff = str_replace(array('^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']'), '', $begriff);
             $thema = preg_replace('/(((href|src)="[^"]*)?'.$begriff.'(?(1).*"))/mies', "highlight_no_links(\"\\1\")", $thema);
 			$content = preg_replace('/(((href|src)="[^"]*)?'.$begriff.'(?(1).*"))/mies', "highlight_no_links(\"\\1\")", $content);
             $output .= "<li><strong>".$rubriktext."</strong>: <a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=artikel&amp;cat=".$rubrik."&amp;id=".$id."&amp;artlang=".$lang."&amp;highlight=".$begriff."\">".stripslashes($thema)."...</a><br /><div style=\"font-size: 10px;\"><strong>".$PMF_LANG["msgSearchContent"]."</strong> ".stripslashes($content)."...</div><br /></li>\n";
