@@ -1,13 +1,13 @@
 <?php
 /**
- * $Id: export.main.php,v 1.3 2004-11-05 23:07:27 thorstenr Exp $
+ * $Id: export.main.php,v 1.4 2004-11-06 09:59:17 thorstenr Exp $
  *
  * File:				export.main.php
  * Description:			RSS and FAQ export - main page
  * Author:				Thorsten Rinne <thorsten@phpmyfaq.de>
  * Contributor:         Peter Beauvain <pbeauvain@web.de>
  * Date:				2003-04-17
- * Last change:			2004-11-05
+ * Last change:			2004-11-06
  * Copyright:           (c) 2001-2004 phpMyFAQ Team
  * 
  * The contents of this file are subject to the Mozilla Public License
@@ -29,7 +29,7 @@ if (isset($_REQUEST["submit"])) {
 
 if (isset($submit[0])) {
 	// XML export
-    
+    generateXMLFile();
 }
 
 if (isset($submit[1])) {
