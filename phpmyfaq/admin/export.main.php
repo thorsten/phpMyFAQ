@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: export.main.php,v 1.10 2004-11-22 20:07:24 thorstenr Exp $
+ * $Id: export.main.php,v 1.11 2004-11-22 20:10:36 thorstenr Exp $
  *
  * File:				export.main.php
  * Description:			XML, XHTML and PDF export - main page
@@ -25,7 +25,7 @@
 <?php
 if (isset($_REQUEST["submit"])) {
 	$submit = $_REQUEST["submit"];
-	}
+}
 
 if (isset($submit[0])) {
 	// XML export
@@ -56,10 +56,11 @@ if (isset($submit[2])) {
 			$arrDatum[$i] = $row->datum;
 			$arrAuthor[$i] = $row->author;
 			$i++;
-			}
 		}
+	}
 	
 	$pdf = new PDF();
+    $pdf->enableBookmarks = TRUE;
 	$pdf->Open();
 	$pdf->AliasNbPages();
 	$pdf->SetDisplayMode("real"); 
@@ -72,7 +73,7 @@ if (isset($submit[2])) {
 		$pdf->AddPage();
 		$pdf->SetFont("Arial", "", 12);
     	$pdf->WriteHTML(unhtmlentities(stripslashes($value)));
-    	}
+    }
 	
 	$pdfFile = PMF_ROOT_DIR."/pdf/faq.pdf";
 	$pdf->Output($pdfFile);
@@ -91,7 +92,7 @@ if (!emptyTable(SQLPREFIX."faqdata")) {
     <p align="center"><input class="submit" type="submit" name="submit[2]" value="<?php print $PMF_LANG["ad_export_generate_pdf"]; ?>" /></p>
 	</form>
 <?php
-    }
-else {
+} else {
     print $PMF_LANG["err_noArticles"];
-    }
+}
+?>
