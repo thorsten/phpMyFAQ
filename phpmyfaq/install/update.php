@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.20 2005-03-19 14:37:54 thorstenr Exp $
+* $Id: update.php,v 1.21 2005-03-29 13:01:30 thorstenr Exp $
 *
 * Main update script
 *
@@ -20,8 +20,8 @@
 * under the License.
 */
 
-define("NEWVERSION", "1.5.0 RC3");
-define("COPYRIGHT", "&copy; 2001-2005 <a href=\"http://www.phpmyfaq.de/\" target=\"_blank\">phpMyFAQ-Team</a> | All rights reserved.");
+define("NEWVERSION", "1.5.0 RC4");
+define("COPYRIGHT", "&copy; 2001-2005 <a href=\"http://www.phpmyfaq.de/\" target=\"_blank\">phpMyFAQ Team</a> | All rights reserved.");
 define("PMF_ROOT_DIR", dirname(dirname(__FILE__)));
 
 require_once (PMF_ROOT_DIR."/inc/data.php");
