@@ -14,7 +14,7 @@
     <meta name="revisit-after" content="7 days" />
     <meta name="MSSmartTagsPreventParsing" content="true" />
     <style type="text/css" media="screen">@import "template/style.css";</style>
-    <!-- <style type="text/css" media="print">@import "template/print.css";</style> -->
+    <style type="text/css" media="print">@import "template/print.css";</style>
 	<script src="inc/functions.js" type="text/javascript"></script>
     <link rel="shortcut icon" href="template/favicon.ico" />
 </head>
@@ -22,7 +22,8 @@
 
 <!-- start header -->
 <div id="header">
-    <h1>{header}</h1>
+    <!-- <h1>{header}</h1> -->
+    <h1>phpMyFAQ Codename "Phoebe"</h1>
     <div id="horizontalnav">
      <ul>
       <li>{msgSearch}</li>
