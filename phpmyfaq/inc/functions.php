@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.41 2005-01-08 11:55:39 thorstenr Exp $
+* $Id: functions.php,v 1.42 2005-01-09 16:41:08 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -1458,7 +1458,7 @@ function getShortUserName()
 function getFullUserName()
 {
     global $PMF_CONF;
-    if (isset($PMF_CONF["ldap_support"]) && $PMF_CONF["ldap_support"] == TRUE) {
+    if (isset($PMF_CONF['ldap_support']) && $PMF_CONF['ldap_support'] == 'TRUE') {
         global $ldap;
         return $ldap->ldap_getCompleteName(getShortUserName());
     } else {
@@ -1477,7 +1477,7 @@ function getFullUserName()
 function getEmailAddress()
 {
     global $PMF_CONF;
-    if (isset($PMF_CONF["ldap_support"]) && $PMF_CONF["ldap_support"] == TRUE) {
+    if (isset($PMF_CONF['ldap_support']) && $PMF_CONF['ldap_support'] == TRUE) {
         global $ldap;
         return $ldap->ldap_getMail(getShortUserName());
     } else {
