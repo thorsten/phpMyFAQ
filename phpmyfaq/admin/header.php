@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: header.php,v 1.4 2005-02-03 20:56:44 thorstenr Exp $
+* $Id: header.php,v 1.5 2005-02-25 16:01:25 thorstenr Exp $
 *
 * header of the admin area
 *
@@ -36,7 +36,7 @@ header("Vary: Negotiate,Accept");
     <style type="text/css"> @import url(../template/admin.css); </style>
     <script language="JavaScript" type="text/javascript" src="../inc/functions.js"></script>
 <?php
-if (isset($_REQUEST["aktion"]) && ($_REQUEST["aktion"] == "editentry" || $_REQUEST["aktion"] == "news" || $_REQUEST["aktion"] == "editpreview" || $_REQUEST["aktion"] == "takequestion")) {
+if (isset($_REQUEST["aktion"]) && ($_REQUEST["aktion"] == "editentry" || $_REQUEST["aktion"] == "news" || $_REQUEST["aktion"] == "editpreview" || $_REQUEST["aktion"] == "takequestion") && !emptyTable(SQLPREFIX."faqcategories")) {
 ?>
     <style type="text/css"> @import url(editor/htmlarea.css); </style>
     <script language="JavaScript" type="text/javascript">
