@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: installer.php,v 1.2 2004-11-06 10:24:42 thorstenr Exp $
+ * $Id: installer.php,v 1.3 2004-12-11 17:37:31 thorstenr Exp $
  *
  * Author:				Thorsten Rinne <thorsten@phpmyfaq.de>
  * Contributor:         Tom Rochester <tom.rochester@gmail.com>
@@ -247,6 +247,7 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 <select class="input" name="sql_type" size="1">
 	<option value="mysql">MySQL</option>
 	<option value="pgsql">PostgreSQL</option>
+	<option value="sybase">Sybase</option>
 </select>
 <span class="help" title="Please enter the type of SQL server here.">?</span>
 </p>
@@ -329,15 +330,24 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
     HTMLFooter();
 } else {
 	if (isset($_POST["sql_type"]) && $_POST["sql_type"] != "") {
-        $sql_type = $_POST["sql_type"];
-		if ($sql_type == "pgsql") {
-			require_once(PMF_ROOT_DIR."/inc/pgsql.php");
-		} elseif ($sql_type == "mysql") {
-			require_once(PMF_ROOT_DIR."/inc/mysql.php");
-    	} else {
-        	print "<p class=\"error\"><strong>Error:</strong> Invalid server type.</p>\n";
-			HTMLFooter();
-			die();
+		
+		$sql_type = $_POST["sql_type"];
+		
+		switch ($sql_type) {
+		
+			case 'mysql':		
+											require_once(PMF_ROOT_DIR."/inc/mysql.php");
+											break;
+			case 'pgsql':
+											require_once(PMF_ROOT_DIR."/inc/pgsql.php");
+											break;
+			case 'sybase':	
+											require_once(PMF_ROOT_DIR."/inc/sybase.php");
+											break;
+			default:				
+											print '<p class="error"><strong>Error:</strong> Invalid server type.</p>';
+											HTMLFooter();
+											die();
 		}
 	} else {
         print "<p class=\"error\"><strong>Error:</strong> There's no DB server input.</p>\n";
