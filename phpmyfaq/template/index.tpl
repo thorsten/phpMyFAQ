@@ -8,7 +8,7 @@
     <meta name="keywords" content="{metaKeywords}" />
     <meta name="author" content="{metaPublisher}" />
     <meta name="publisher" content="{metaPublisher}" />
-    <meta name="copyright" content="(c) 2001 - 2004 phpMyFAQ Team" />
+    <meta name="copyright" content="(c) 2001 - 2005 phpMyFAQ Team" />
     <meta name="Content-Language" content="{metaCharset}" />
     <meta name="robots" content="INDEX, NOFOLLOW" />
     <meta name="revisit-after" content="7 days" />
@@ -23,8 +23,7 @@
 <div id="phpmyfaq">
     <!-- start header -->
     <div id="header">
-        <!-- <h1>{header}</h1> -->
-        <h1>phpMyFAQ Codename "Phoebe"</h1>
+        <h1><a title="{header}" href="{faqHome}">{header}</a></h1>
         <div id="horizontalnav">
         <ul>
             <li>{msgSearch}</li>
@@ -49,13 +48,19 @@
         </div>
         <div id="search">
         <form action="{writeSendAdress}" method="post">
+        <fieldset>
+        <legend>{searchBox}</legend>
         <input alt="search..." class="inputfield" type="text" name="suchbegriff" size="18" />
         <input type="submit" name="submit" value="Go" class="submit" />
+        </fieldset>
         </form>
         </div>
         <div id="langform">
         <form action="{writeLangAdress}" method="post">
+        <fieldset>
+        <legend>{languageBox}</legend>
         {switchLanguages}<input type="submit" name="submit" value="Go" class="submit" />
+        </fieldset>
         </form>
         </div>
         <div id="useronline">
