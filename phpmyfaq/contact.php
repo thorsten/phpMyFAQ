@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: contact.php,v 1.2 2004-11-22 21:02:46 thorstenr Exp $
+* $Id: contact.php,v 1.3 2004-12-16 12:29:30 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-09-16
@@ -26,6 +26,8 @@ $tpl->processTemplate ('writeContent', array(
                        'writeSendAdress' => $_SERVER['PHP_SELF'].'?'.$sids.'action=sendmail',
                        'msgNewContentName' => $PMF_LANG['msgNewContentName'],
                        'msgNewContentMail' => $PMF_LANG['msgNewContentMail'],
+				       'defaultContentMail' => getEmailAddress(),
+				       'defaultContentName' => getFullUserName(),
                        'msgMessage' => $PMF_LANG['msgMessage'],
                        'msgS2FButton' => $PMF_LANG['msgS2FButton'],
                        'version' => $PMF_CONF['version']));

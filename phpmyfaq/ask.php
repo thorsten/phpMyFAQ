@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ask.php,v 1.2 2004-11-22 21:01:10 thorstenr Exp $
+* $Id: ask.php,v 1.3 2004-12-16 12:28:06 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-09-17
@@ -27,6 +27,8 @@ $tpl->processTemplate('writeContent', array(
                       'writeSendAdress' => $_SERVER['PHP_SELF'].'?'.$sids.'action=savequestion',
                       'msgNewContentName' => $PMF_LANG['msgNewContentName'],
                       'msgNewContentMail' => $PMF_LANG['msgNewContentMail'],
+				      'defaultContentMail' => getEmailAddress(),
+				      'defaultContentName' => getFullUserName(),
                       'msgAskCategory' => $PMF_LANG['msgAskCategory'],
                       'printCategoryOptions' => $tree->printCategoryOptions(),
                       'msgAskYourQuestion' => $PMF_LANG['msgAskYourQuestion'],
