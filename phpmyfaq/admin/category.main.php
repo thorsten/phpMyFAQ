@@ -18,10 +18,29 @@
  * under the License.
  ******************************************************************************/
 
+print "<h2>".$PMF_LANG["ad_categ_existing"]."</h2>\n";
+ 
 if ($permission["editcateg"]) {
-    print "<h2>".$PMF_LANG["ad_categ_existing"]."</h2>\n";
     
-    $tree = new Category;
+    if (isset($_POST['language'])) {
+        $lang = $_POST['language'];
+    } else {
+        $lang = '';
+    }
+?>
+
+    <form action="" enctype="multipart/form-data" method="POST">
+    <fieldset>
+    <legend>Select category language</legend>
+    <select name="language" id="language">
+    <?php print languageOptions($lang); ?>
+	</select>
+	<input type="submit" class="submit" value="OK" />
+    </fieldset>
+    </form>
+
+<?php
+    $tree = new Category($lang);
     $tree->buildTree();
     
     foreach ($tree->catTree as $cat) {
@@ -45,8 +64,7 @@ if ($permission["editcateg"]) {
 	<p><img src="images/arrow.gif" width="11" height="11" alt="" border="0"> <a href="<?php print $_SERVER["PHP_SELF"].$linkext."&amp;aktion=addcategory"; ?>"><?php print $PMF_LANG["ad_kateg_add"]; ?></a></p>
 	<p><?php print $PMF_LANG["ad_categ_remark"]; ?></p>
 <?php
-	}
-else {
+} else {
 	print $PMF_LANG["err_NotAuth"];
-	}
+}
 ?>

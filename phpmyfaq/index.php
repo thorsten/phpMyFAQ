@@ -1,10 +1,15 @@
 <?php
 /**
-* $Id: index.php,v 1.8 2004-12-09 20:58:27 thorstenr Exp $
+* $Id: index.php,v 1.9 2004-12-16 07:04:13 thorstenr Exp $
+*
+* This is the main public frontend page of phpMyFAQ. It detects the browser's
+* language, gets all cookie, post and get informations and includes the 
+* templates we need and set all internal variables to the template variables.
+* That's all.
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2001-02-12
-* @copyright:   (c) 2001-2004 Thorsten Rinne
+* @copyright:   (c) 2001-2004 phpMyFAQ
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -27,7 +32,7 @@ if (DEBUG) {
 	error_reporting(E_ALL);
 }
 
-/* connect to the database server */
+/* connect to the database server, define the prefix and connect */
 require_once("inc/data.php");
 require_once("inc/db.php");
 define("SQLPREFIX", $DB["prefix"]);
@@ -44,6 +49,7 @@ require_once("inc/idna_convert.class.php");
 $IDN = new Net_IDNA;
 
 /* get language (default: english) */
+// TODO: write a global function for that?
 if (isset($_POST["language"]) && $_POST["language"] != "" && strlen($_POST["language"]) <= 2 && !preg_match("=/=", $_REQUEST["language"])) {
     $LANGCODE = $_POST["language"];
     require_once("lang/language_".$_POST["language"].".php");
@@ -147,7 +153,7 @@ if (isset($_GET["cat"])) {
 } else {
     $cat = 0;
 }
-$tree = new Category();
+$tree = new Category($LANGCODE);
 $tree->transform(0);
 $tree->collapseAll();
 if ($cat != 0) {
