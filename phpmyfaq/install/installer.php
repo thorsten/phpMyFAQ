@@ -1,25 +1,31 @@
 <?php
 /**
- * $Id: installer.php,v 1.3 2004-12-11 17:37:31 thorstenr Exp $
- *
- * Author:				Thorsten Rinne <thorsten@phpmyfaq.de>
- * Contributor:         Tom Rochester <tom.rochester@gmail.com>
- * Date:				2002-08-20
- * Last Update:			2004-11-06
- * Copyright:           (c) 2001-2004 Thorsten Rinne
- * 
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- * 
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- */
+* $Id: installer.php,v 1.4 2004-12-12 10:55:46 thorstenr Exp $
+*
+* The main phpMyFAQ Installer
+*
+* This script tests the complete environment, writes the database connection
+* paramters into the file data.php and the configuration into the file
+* config.php. After that the script creates all MySQL tables and inserts the
+* admin user.
+*
+* @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+* @author      Tom Rochester <tom.rochester@gmail.com>
+* @since       2002-08-20
+* @copyright   (c) 2001-2004 phpMyFAQ Team
+* 
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
+* 
+* Software distributed under the License is distributed on an "AS IS"
+* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+* License for the specific language governing rights and limitations
+* under the License.
+*/
 
-define("VERSION", "1.5.0 alpha1");
+define("VERSION", "1.5.0 alpha");
 define("COPYRIGHT", "&copy; 2001-2004 <a href=\"http://www.phpmyfaq.de/\">phpMyFAQ-Team</a> | All rights reserved.");
 define("SAFEMODE", @ini_get("safe_mode"));
 define("PMF_ROOT_DIR", dirname(dirname(__FILE__)));
@@ -170,59 +176,59 @@ if (!phpmyfaq_check("../inc/data.php")) {
 }
 if (!is_dir(PMF_ROOT_DIR."/attachments")) {
     if (!mkdir (PMF_ROOT_DIR."/attachments", 0755)) {
-        print "<p class=\"center\">The directory ../attachments could not be created.</p>\n";
+        print "<p class=\"center\">The directory ../attachments could not be created. Please create it manually and change access to chmod 755 (or greater if necessary).</p>\n";
 	    HTMLFooter();
 	    die();
     }
 }
 if (!is_dir(PMF_ROOT_DIR."/data")) {
     if (!mkdir (PMF_ROOT_DIR."/data", 0755)) {
-        print "<p class=\"center\">The directory ../data could not be created.</p>\n";
+        print "<p class=\"center\">The directory ../data could not be created. Please create it manually and change access to chmod 755 (or greater if necessary).</p>\n";
 	    HTMLFooter();
 	    die();
     }
 }
 if (!is_dir(PMF_ROOT_DIR."/images")) {
     if (!mkdir (PMF_ROOT_DIR."/images", 0755)) {
-        print "<p class=\"center\">The directory ../images could not be created.</p>\n";
+        print "<p class=\"center\">The directory ../images could not be created. Please create it manually and change access to chmod 755 (or greater if necessary).</p>\n";
 	    HTMLFooter();
 	    die();
         }
      }
 if (!is_dir(PMF_ROOT_DIR."/pdf")) {
     if (!mkdir (PMF_ROOT_DIR."/pdf", 0755)) {
-        print "<p class=\"center\">The directory ../pdf could not be created.</p>\n";
+        print "<p class=\"center\">The directory ../pdf could not be created. Please create it manually and change access to chmod 755 (or greater if necessary).</p>\n";
 	    HTMLFooter();
 	    die();
     }
 }
 if (!is_writeable(PMF_ROOT_DIR."/inc") || !@copy("index.html", PMF_ROOT_DIR."/inc/index.html")) {
-    print "<p class=\"center\">The directory ../inc is not writeable.</p>\n";
+    print "<p class=\"center\">The directory ../inc is not writeable. Please change access to chmod 755 (or greater if necessary).</p>\n";
     HTMLFooter();
     die();
 }
 if (!is_writeable(PMF_ROOT_DIR."/attachments") || !@copy("index.html", PMF_ROOT_DIR."/attachments/index.html")) {
-    print "<p class=\"center\">The directory ../attachments is not writeable.</p>\n";
+    print "<p class=\"center\">The directory ../attachments is not writeable. Please change access to chmod 755 (or greater if necessary).</p>\n";
     HTMLFooter();
     die();
 }
 if (!is_writeable(PMF_ROOT_DIR."/data") || !@copy("index.html", PMF_ROOT_DIR."/data/index.html")) {
-    print "<p class=\"center\">The directory ../data is not writeable.</p>\n";
+    print "<p class=\"center\">The directory ../data is not writeable. Please change access to chmod 755 (or greater if necessary).</p>\n";
     HTMLFooter();
     die();
 }
 if (!is_writeable(PMF_ROOT_DIR."/images") || !@copy("index.html", PMF_ROOT_DIR."/images/index.html")) {
-    print "<p class=\"center\">The directory ../images is not writeable.</p>\n";
+    print "<p class=\"center\">The directory ../images is not writeable. Please change access to chmod 755 (or greater if necessary).</p>\n";
     HTMLFooter();
     die();
 }
 if (!is_writeable(PMF_ROOT_DIR."/pdf") || !@copy("index.html", PMF_ROOT_DIR."/pdf/index.html")) {
-	print "<p class=\"center\">The directory ../pdf is not writeable.</p>\n";
+	print "<p class=\"center\">The directory ../pdf is not writeable. Please change access to chmod 755 (or greater if necessary).</p>\n";
 	HTMLFooter();
 	die();
 }
 if (!is_writeable(PMF_ROOT_DIR."/xml") || !@copy("index.html", PMF_ROOT_DIR."/xml/index.html")) {
-	print "<p class=\"center\">The directory ../xml is not writeable.</p>\n";
+	print "<p class=\"center\">The directory ../xml is not writeable. Please change access to chmod 755 (or greater if necessary).</p>\n";
 	HTMLFooter();
 	die();
 }
@@ -286,14 +292,13 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 				print "\t\t<option value=\"".$dat."\"";
 				if ($dat == "language_en.php") {
 					print " selected=\"selected\"";
-					}
-                print ">".$languageCodes[substr(strtoupper($dat), 9, 2)]."</option>\n";
 				}
+                print ">".$languageCodes[substr(strtoupper($dat), 9, 2)]."</option>\n";
 			}
 		}
-	else {
+	} else {
 		print "\t\t<option>english</option>";
-		}
+    }
 ?>
 </select>
 <span class="help" title="Please select your default language.">?</span>
@@ -449,7 +454,7 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 		print "<p class=\"error\"><strong>Error:</strong> Cannot write to data.php.</p>";
         HTMLFooter();
 		die();
-		}
+	}
     
     /**
      * Create config.php and write the language variables in the file
@@ -469,30 +474,28 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 		while($dat = fgets($fp,1024)) {
 			$anz++;
 			$inp[$anz] = $dat;
-			}
+		}
 		@fclose($fp);
 		for ($h = 1; $h <= $anz; $h++) {
 			if (str_replace("\$PMF_CONF[\"language\"] = \"en\";", "", $inp[$h]) != $inp[$h]) {
 				$inp[$h] = "\$PMF_CONF[\"language\"] = \"".$language."\";\n";
-				}
 			}
+		}
 		if ($fp = @fopen(PMF_ROOT_DIR."/inc/config.php","w")) {
 			for ($h = 1; $h <= $anz; $h++) {
 				fputs($fp,$inp[$h]);
-				}
-			@fclose($fp);
 			}
-		else {
+			@fclose($fp);
+		} else {
 			print "<p>Cannot write to config.php.</p></td>";
             HTMLFooter();
 		    die();
-			}
 		}
-	else {
+	} else {
 		print "<p>Cannot read config.php.</p></td>";
         HTMLFooter();
 		die();
-		}
+	}
 	
     /**
      * connect to the database using inc/data.php
@@ -505,7 +508,7 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 		print "<p class=\"error\"><strong>DB Error:</strong> ".$db->error()."</p>\n";
 		HTMLFooter();
 		die();
-		}
+	}
 	include_once($sql_type.".sql.php");
 	print "<p class=\"center\"><strong>";
 	while ($each_query = each($query)) {
@@ -516,9 +519,9 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 			uninstall();
 		    HTMLFooter();
 		    die();
-			}
-        usleep(250);
 		}
+        usleep(250);
+	}
 	print "</strong></p>\n";
 	
     print "<p class=\"center\">All tables were created and filled with the data.</p>\n";
