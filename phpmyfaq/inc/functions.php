@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.26 2004-12-16 13:05:50 thorstenr Exp $
+* $Id: functions.php,v 1.27 2004-12-17 10:30:01 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -1321,5 +1321,24 @@ function hex2dec($color = "#000000")
     $tbl_color['B'] = $blue;
     return $tbl_color;
 }
+
+// LDAP functions
+
+    function getShortUserName() {
+        return getenv('REMOTE_USER');
+    }
+
+    function getFullUserName() {
+
+        $value = ldap_getCompleteName($PMF_LDAP['ldap_server'], $PMF_LDAP['ldap_port'], getenv('REMOTE_USER'), $PMF_LDAP['ldap_base']);
+        if ($value == "") {
+            return getevn('REMOTE_USER');
+        }
+        return $value;
+    }
+
+    function getEmailAddress() {
+        return ldap_getMail($PMF_LDAP['ldap_server'], $PMF_LDAP['ldap_port'], getenv('REMOTE_USER'), $PMF_LDAP['ldap_base']);
+    }
 
 ?>
