@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.62 2005-03-21 19:28:21 thorstenr Exp $
+* $Id: functions.php,v 1.63 2005-03-25 18:27:33 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -397,7 +397,7 @@ function CheckSID($sid, $ip)
 	global $db;
 	if ($db->num_rows($db->query("SELECT sid FROM ".SQLPREFIX."faqsessions WHERE sid = ".$sid." AND ip = '".$ip."' AND time > ".(time()-86400))) < 1) {
 		Tracking("oldSession",$sid);
-		}
+	}
 }
 
 /*
@@ -412,11 +412,10 @@ function userOnline()
 		$result = $db->query("SELECT count(sid) FROM ".SQLPREFIX."faqsessions WHERE time > ".$timeNow." GROUP BY ip");
 		if (isset($result)) {
 			return $db->num_rows($result);
-	        }
-		}
-    else {
+	    }
+    } else {
         return 0;
-        }
+    }
 }
 
 
@@ -657,25 +656,29 @@ function EndSlash($string)
 {
 	if (substr($string, strlen($string)-1, 1) != "/" ) {
 		$string .= "/";
-		}
+	}
 	return $string;	
 }
 
-/*
- * Gibt die Votings des Artikels aus | @@ Thorsten - 2002-08-29
- * Last Update: @@ Thorsten, 2004-08-21
- */
+/**
+* Calculates the rating of the user votings
+*
+* @param    integer     record id
+* @access   public
+* @since    2002-08-29
+* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+*/
 function generateVoting($id)
 {
 	global $db, $PMF_LANG;
-	$result = $db->query("SELECT vote, usr FROM ".SQLPREFIX."faqvoting WHERE artikel = ".$id);
+	$query = 'SELECT AVG(vote), COUNT(*) FROM '.SQLPREFIX.'faqvoting WHERE artikel = \''.$id.'\'';
+ 	$result = $db->query($query);
 	if ($db->num_rows($result) > 0) {
-		list($vote, $user) = $db->fetch_row($result);
-		return " ".round(($vote/$user),2)." ".$PMF_LANG["msgVoteFrom"]." 5 (".$user." ".$PMF_LANG["msgVotings"].")";
-		}
-	else {
+        list($vote, $user) = $db->fetch_row($result);
+        return " ".$vote." ".$PMF_LANG["msgVoteFrom"]." 5 (".$user." ".$PMF_LANG["msgVotings"].")";
+	} else {
 		return " 0 ".$PMF_LANG["msgVoteFrom"]." 5 (0 ".$PMF_LANG["msgVotings"].")";
-		}
+	}
 }
 
 /*
@@ -693,8 +696,8 @@ function generateComments($id)
 			$output .= "<p class=\"comment\">\n";;
 			$output .= "<strong>".$PMF_LANG["msgCommentBy"]."<a href=\"mailto:".safeEmail($row->email)."\">".$row->usr."</a>:</strong>\n";
 			$output .= "<br />".stripslashes(safeHTML($row->comment))."\n</p>";
-			}
 		}
+	}
 	return $output;
 }
 
