@@ -1,33 +1,23 @@
 TODO list for future versions of phpMyFAQ:
 
-1.5.0 "Phoebe":
-- full support for PostgreSQL 7.x (done by Tom)
-- full support for Sybase (done by Adam)
-- full support for MSSQL (done by Thorsten)
-- support for LDAP (done by Adam)
-- mod_rewrite support (done by Thorsten)
-- one entry in various categories (done by Thorsten)
-- template engine parse PHP code (done by Thorsten)
-- better RSS support (done by Thorsten)
-- complete XML, XHTML and DocBook XML exports (done by Thorsten)
-- more accessibility features (partly done by Thorsten)
-- bugfixing for stability or security reasons
-
 1.6.0 "Prometheus":
 - new authentication class ?
 - glossary support ?
+- improved WYSIWYG editor ?
+- improved Image Manager ?
 - add related articles [new sql table: faqrelatedentries] ?
 - reorder records ?
-- improved category administration ?
-- search in one category
+- batch insertion script ?
 - more accessibility features (WAI and Section 508) ?
 - bugfixing for stability or security reasons
 
 1.7.0 "Pandora":
-- show all comments ?
+- show/edit/delete comments ?
 - subscription service for new articles ?
 - message to the user, who has posted a question and an answer is availible ?
 - better news system with multiple pages and sticky news
+- improved category administration ?
+- search in one category
 - more accessibility features (WAI and Section 508) ?
 - bugfixing for stability or security reasons
 
