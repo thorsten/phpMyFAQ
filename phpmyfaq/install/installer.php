@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.11 2005-01-11 20:51:25 thorstenr Exp $
+* $Id: installer.php,v 1.12 2005-01-20 15:28:18 thorstenr Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -264,13 +264,17 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 	// check what extensions are loaded in PHP
 	if (extension_loaded('mysql')) {
 		print '<option value="mysql">MySQL</option>';
-	} elseif (extension_loaded('pgsql')) {
+	}
+	if (extension_loaded('pgsql')) {
 		print '<option value="pgsql">PostgreSQL</option>';
-	} elseif (extension_loaded('sybase')) {
+	}
+	if (extension_loaded('sybase')) {
 		print '<option value="sybase">Sybase</option>';
-	} elseif (extension_loaded('mssql')) {
+	}
+	if (extension_loaded('mssql')) {
 		print '<option value="mssql">MS SQL Server</option>';
-	} else {
+	}
+	if (!extension_loaded('mysql') && !extension_loaded('pgsql') && !extension_loaded('sybase') && !extension_loaded('mssql')) {
 		print '<option value="">Sorry, no supported database found in your PHP version!</option>';
 	}
 ?>	
