@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.16 2005-03-20 09:52:10 thorstenr Exp $
+* $Id: artikel.php,v 1.17 2005-03-20 10:34:01 thorstenr Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -59,7 +59,7 @@ while ($row = $db->fetch_object($result)) {
     $categoryName = $tree->getPath($currentCategory);
 }
 
-$writePrintMsg          = '<a href="#" onclick="javascript:window.print();">'.$PMF_LANG['msgPrinterFriendly'].'</a>';
+$writePrintMsg          = '<a href="#" onclick="javascript:window.print();">'.$PMF_LANG["msgPrintArticle"].'</a>';
 $writePDF               = '<a target="_blank" href="pdf.php?cat='.$currentCategory.'&amp;id='.$id.'&amp;lang='.$lang.'">'.$PMF_LANG['msgPDF'].'</a>';
 $writeSend2FriendMsg    = '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=send2friend&amp;cat='.$currentCategory.'&amp;id='.$id.'&amp;artlang='.$lang.'">'.$PMF_LANG['msgSend2Friend'].'</a>';
 $writeXMLMsg            = "<a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=xml&amp;id=".$id."&amp;artlang=".$lang."\">".$PMF_LANG["msgMakeXMLExport"]."</a>";
