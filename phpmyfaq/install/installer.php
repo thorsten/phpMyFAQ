@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.4 2004-12-12 10:55:46 thorstenr Exp $
+* $Id: installer.php,v 1.5 2004-12-13 15:14:54 thorstenr Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -239,7 +239,7 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 
 <?php
     if (SAFEMODE == 1) {
-        print "<p>The PHP safe mode is enabled. You may have problems when phpMyFAQ writes in some directories.</p>\n";
+        print "<p class=\"center\">The PHP safe mode is enabled. You may have problems when phpMyFAQ writes in some directories.</p>\n";
     }
 ?>
 
@@ -251,9 +251,18 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 <p>
 <span class="text">SQL server:</span>
 <select class="input" name="sql_type" size="1">
-	<option value="mysql">MySQL</option>
-	<option value="pgsql">PostgreSQL</option>
-	<option value="sybase">Sybase</option>
+<?php
+	// check what extensions are loaded in PHP
+	if (extension_loaded('mysql')) {
+		print '<option value="mysql">MySQL</option>';
+	} elseif (extension_loaded('pgsql')) {
+		print '<option value="pgsql">PostgreSQL</option>';
+	} elseif (extension_loaded('sybase')) {
+		print '<option value="sybase">Sybase</option>';
+	} else {
+		print '<option value="">Sorry, no supported database found in your PHP version!</option>';
+	}
+?>	
 </select>
 <span class="help" title="Please enter the type of SQL server here.">?</span>
 </p>
