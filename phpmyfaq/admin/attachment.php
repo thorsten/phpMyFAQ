@@ -3,7 +3,7 @@
  * Datei:				attachment.php
  * Autor:				Thorsten Rinne <thorsten@phpmyfaq.de>
  * Datum:				2002-09-17
- * Letzte Änderung:		2004-07-26
+ * Letzte Änderung:		2004-10-31
  * Copyright:           (c) 2001-2004 Thorsten Rinne
  * 
  * The contents of this file are subject to the Mozilla Public License
@@ -22,6 +22,7 @@
  * - TRUE	debug mode enabled
  */
 define("DEBUG", FALSE);
+define("PMF_ROOT_DIR", dirname(dirname(__FILE__)));
 
 if (DEBUG == TRUE) {
 	error_reporting(E_ALL);
@@ -38,11 +39,11 @@ if (isset($_REQUEST["aktion"]) && ($_REQUEST["aktion"] == "sicherdaten" || $_REQ
 	Header("Pragma: no-cache");
 	}
 
-require_once ("../inc/config.php");
-require_once ("../inc/constants.php");
-require_once ("../inc/functions.php");
-require_once ("../inc/data.php");
-require_once ("../inc/db.php");
+require_once (PMF_ROOT_DIR."/inc/config.php");
+require_once (PMF_ROOT_DIR."/inc/constants.php");
+require_once (PMF_ROOT_DIR."/inc/functions.php");
+require_once (PMF_ROOT_DIR."/inc/data.php");
+require_once (PMF_ROOT_DIR."/inc/db.php");
 define("SQLPREFIX", $DB["prefix"]);
 
 $db = new db($DB["type"]);
@@ -50,18 +51,18 @@ $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
 
 /* get language (default: english) */
 if (isset($PMF_CONF["detection"]) && isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) {
-    require_once("../lang/language_".substr($_SERVER["HTTP_ACCEPT_LANGUAGE"], 0, 2).".php");
+    require_once(PMF_ROOT_DIR."/lang/language_".substr($_SERVER["HTTP_ACCEPT_LANGUAGE"], 0, 2).".php");
     $LANGCODE = substr($_SERVER["HTTP_ACCEPT_LANGUAGE"], 0, 2);
     }
 elseif (!isset($PMF_CONF["detection"])) {
-    require_once("../lang/".$PMF_CONF["language"]);
+    require_once(PMF_ROOT_DIR."/lang/".$PMF_CONF["language"]);
     $LANGCODE = $PMF_LANG["metaLanguage"];
     }
 if (isset($LANGCODE)) {
-    require_once("../lang/language_".$LANGCODE.".php");
+    require_once(PMF_ROOT_DIR."/lang/language_".$LANGCODE.".php");
     }
 else {
-    require_once ("../lang/language_en.php");
+    require_once (PMF_ROOT_DIR."/lang/language_en.php");
     $LANGCODE = "en";
     }
 
@@ -83,7 +84,7 @@ if (!isset($_REQUEST["aktion"]) || isset($_REQUEST["save"])) {
 <?php
 	}
 
-$db->query("DELETE FROM ".SQLPREFIX."faqadminsessions WHERE TIME<'".(time()-(30*60))."'");
+$db->query("DELETE FROM ".SQLPREFIX."faqadminsessions WHERE time < '".(time()-(30*60))."'");
 
 $user = "";
 $pass = "";
@@ -97,7 +98,7 @@ if (isset($uin)) {
 		$query .= " AND ip = '".$_SERVER["REMOTE_ADDR"]."'";
 		}
 	list($user,$pass) = $db->fetch_row($db->query($query));
-	$db->query("UPDATE ".SQLPREFIX."faqadminsessions SET TIME='".time()."' WHERE UIN='".$uin."'");
+	$db->query("UPDATE ".SQLPREFIX."faqadminsessions SET time = '".time()."' WHERE uin = '".$uin."'");
 	}
 
 if ($pass == "" && $user == "") {
@@ -141,14 +142,14 @@ if (isset($_REQUEST["save"]) && $_REQUEST["save"] == TRUE && $auth && $permissio
 <p><strong><?php print $PMF_LANG["ad_att_addto"]." ".$PMF_LANG["ad_att_addto_2"]; ?></strong></p>
 <?php
 	if (is_uploaded_file($_FILES["userfile"]["tmp_name"]) && !(@filesize($_FILES["userfile"]["tmp_name"]) > $PMF_CONF["attmax"])) {
-		if (!is_dir("../attachments/")) {
-			mkdir("../attachments/", 0777);
+		if (!is_dir(PMF_ROOT_DIR."/attachments/")) {
+			mkdir(PMF_ROOT_DIR."/attachments/", 0777);
 			}
-		if (!is_dir("../attachments/".$_REQUEST["id"])) {
-			mkdir("../attachments/".$_REQUEST["id"], 0777);
+		if (!is_dir(PMF_ROOT_DIR."/attachments/".$_REQUEST["id"])) {
+			mkdir(PMF_ROOT_DIR."/attachments/".$_REQUEST["id"], 0777);
 			}
-		if (@move_uploaded_file($_FILES["userfile"]["tmp_name"], "../attachments/".$_REQUEST["id"]."/".$_FILES["userfile"]["name"])) {
-            chmod ("../attachments/".$_REQUEST["id"]."/".$_FILES["userfile"]["name"], 0644);
+		if (@move_uploaded_file($_FILES["userfile"]["tmp_name"], PMF_ROOT_DIR."/attachments/".$_REQUEST["id"]."/".$_FILES["userfile"]["name"])) {
+            chmod (PMF_ROOT_DIR."/attachments/".$_REQUEST["id"]."/".$_FILES["userfile"]["name"], 0644);
 			print "<p>".$PMF_LANG["ad_att_suc"]."</p>";
 			}
 		else {
@@ -165,7 +166,7 @@ if (isset($_REQUEST["save"]) && $_REQUEST["save"] == TRUE && $auth && !$permissi
 	}
 
 if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "sicherdaten") {
-	$text[] = "# pmf: ".SQLPREFIX."faqchanges ".SQLPREFIX."faqnews ".SQLPREFIX."faqcategories ".SQLPREFIX."faqvoting ".SQLPREFIX."faqdata ".SQLPREFIX."faqcomments ".SQLPREFIX."faquser ". SQLPREFIX."faqvisits";
+	$text[] = "# pmf: ".SQLPREFIX."faqchanges ".SQLPREFIX."faqnews ".SQLPREFIX."faqcategories ".SQLPREFIX."faqvoting ".SQLPREFIX."faqdata ".SQLPREFIX."faqcomments ".SQLPREFIX."faquser ". SQLPREFIX."faqvisits ".SQLPREFIX."faqfragen"";
 	$text[] = "# DO NOT REMOVE THE FIRST LINE!";
 	$text[] = "# otherwise this backup will be broken";
 	$text[] = "#";
@@ -185,6 +186,8 @@ if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "sicherdaten") {
 	$text = build_insert ("SELECT * FROM ".SQLPREFIX."faqvisits", SQLPREFIX."faqvisits");
 	print implode("\r\n",$text);
 	$text = build_insert ("SELECT * FROM ".SQLPREFIX."faqvoting", SQLPREFIX."faqvoting");
+    print implode("\r\n",$text);
+    $text = build_insert ("SELECT * FROM ".SQLPREFIX."faqfragen", SQLPREFIX."faqfragen");
 	print implode("\r\n",$text);
 	}
 elseif (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "sicherdaten" && $auth && !$permission["backup"]) {

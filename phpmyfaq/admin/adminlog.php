@@ -1,10 +1,12 @@
 <?php
 /******************************************************************************
+ * $Id: adminlog.php,v 1.2 2004-10-31 15:20:44 thorstenr Exp $
+ *
  * File:				adminlog.php
  * Description:			shows admin log
  * Authors:				Thorsten Rinne <thorsten@phpmyfaq.de>
  * Date:				2003-02-23
- * Last change:			2004-07-23
+ * Last change:			2004-10-31
  * Copyright:           (c) 2001-2004 Thorsten Rinne
  * 
  * The contents of this file are subject to the Mozilla Public License
@@ -20,19 +22,18 @@
 
 if ($permission["adminlog"]) {
 	$perpage = 15;
-	if(!isset($_REQUEST["pages"])) {
-		$pages = round(($db->num_rows($db->query("SELECT id FROM ".SQLPREFIX."faqadminlog"))+($perpage/3)) / $perpage,0);
-		}
-	else {
-		$pages = $_REQUEST["pages"];
-		}
+    
+	if (!isset($_REQUEST["pages"])) {
+        $pages = round(($db->num_rows($db->query("SELECT id FROM ".SQLPREFIX."faqadminlog"))+($perpage/3)) / $perpage,0);
+    } else {
+        $pages = $_REQUEST["pages"];
+    }
 	
-	if(!isset($_REQUEST["page"])) {
-		$page = 1;
-		}
-	else {
-		$page = $_REQUEST["page"];
-		}
+	if (!isset($_REQUEST["page"])) {
+        $page = 1;
+    } else {
+        $page = $_REQUEST["page"];
+    }
 	
 	$start = ($page-1) * $perpage;
 	$ende = $start + $perpage;
@@ -82,13 +83,12 @@ if ($permission["adminlog"]) {
 ?></td>
         </tr>
 <?php
-		}
+    }
 ?>
 	</tbody>
 	</table>
 <?php
-	}
-else {
+} else {
 	print $PMF_LANG["err_NotAuth"];
-	}
+}
 ?>
