@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: savecomment.php,v 1.6 2005-01-07 05:24:44 thorstenr Exp $
+* $Id: savecomment.php,v 1.7 2005-03-06 10:17:14 thorstenr Exp $
 *
 * Saves the posted comment
 *
@@ -22,7 +22,7 @@
 if (isset($_POST["user"]) && $_POST["user"] != "" && isset($_POST["mail"]) && $_POST["mail"] != "" && isset($_POST["comment"]) && $_POST["comment"] != "" && IPCheck($_SERVER["REMOTE_ADDR"])) {
 
     $id = (isset($_REQUEST["id"])) ? $_REQUEST["id"] : 0;
-	Tracking("commentsave", $_REQUEST["id"]);
+	Tracking("commentsave", $id);
 	
 	$helped = ""; // not used in this version - maybe in the future
 	$datum = date("YmdHis");
