@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.45 2005-01-11 11:45:55 thorstenr Exp $
+* $Id: functions.php,v 1.46 2005-01-16 21:35:22 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -163,7 +163,7 @@ function printThemes($category)
 		}
     
 	$result = $db->query('SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqvisits.visits FROM '.SQLPREFIX.'faqdata 
-LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang LEFT JOIN '.SQLPREFIX.'faqvisits ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvisits.id AND '.SQLPREFIX.'faqvisits.lang = '.SQLPREFIX.'faqdata.lang WHERE '.SQLPREFIX.'faqdata.active = "yes" AND '.SQLPREFIX.'faqcategoryrelations.category_id ='.$category.' ORDER BY '.SQLPREFIX.'faqdata.id');
+LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang LEFT JOIN '.SQLPREFIX.'faqvisits ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvisits.id AND '.SQLPREFIX.'faqvisits.lang = '.SQLPREFIX.'faqdata.lang WHERE '.SQLPREFIX.'faqdata.active = \'yes\' AND '.SQLPREFIX.'faqcategoryrelations.category_id ='.$category.' ORDER BY '.SQLPREFIX.'faqdata.id');
 	$num = $db->num_rows($result);
 	
 	if ($num > 0) {
@@ -467,7 +467,7 @@ function generateTopTen($language = '')
         $query .= SQLPREFIX.'faqdata.lang = "'.$language.'" AND ';
     }
     
-    $query .= SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvisits.id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqvisits.lang AND '.SQLPREFIX.'faqdata.active = "yes" ORDER BY '.SQLPREFIX.'faqvisits.visits DESC';
+    $query .= SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvisits.id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqvisits.lang AND '.SQLPREFIX.'faqdata.active = \'yes\' ORDER BY '.SQLPREFIX.'faqvisits.visits DESC';
     
     $result = $db->query($query);
 	$output = "";
@@ -511,7 +511,7 @@ function generateFiveNewest($language = '')
         $query .= SQLPREFIX.'faqdata.lang = "'.$language.'" AND ';
     }
     
-    $query .= SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvisits.id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqvisits.lang AND '.SQLPREFIX.'faqdata.active = "yes" ORDER BY '.SQLPREFIX.'faqdata.datum DESC';
+    $query .= SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvisits.id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqvisits.lang AND '.SQLPREFIX.'faqdata.active = \'yes\' ORDER BY '.SQLPREFIX.'faqdata.datum DESC';
     $result = $db->query($query);
 	if ($db->num_rows($result) > 0) {
 		$output = "";
@@ -792,7 +792,7 @@ function quoted_printable_encode($return = '')
 function generateXMLExport($id, $lang = "")
 {
 	global $db, $categories, $PMF_LANG, $PMF_CONF;
-	$result = $db->query('SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.keywords, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqdata.content, '.SQLPREFIX.'faqdata.author, '.SQLPREFIX.'faqdata.datum FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang WHERE id = '.$id.' AND lang = "'.$lang.'" AND active = "yes"');
+	$result = $db->query('SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.keywords, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqdata.content, '.SQLPREFIX.'faqdata.author, '.SQLPREFIX.'faqdata.datum FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang WHERE id = '.$id.' AND lang = "'.$lang.'" AND active = \'yes\'');
     
 	if ($db->num_rows($result) > 0) {
 		while ($row = $db->fetch_object($result)) {
@@ -1097,7 +1097,7 @@ function searchEngine($begriff)
                 $where = $where." OR ";
             }
             
-            $where = $where.'('.SQLPREFIX.'faqdata.keywords LIKE "%'.$keys[$i].'%") AND '.SQLPREFIX.'faqdata.active = "yes"';
+            $where = $where.'('.SQLPREFIX.'faqdata.keywords LIKE "%'.$keys[$i].'%") AND '.SQLPREFIX.'faqdata.active = \'yes\'';
         }
         
         $where = " WHERE (".$where.") AND active = 'yes'";

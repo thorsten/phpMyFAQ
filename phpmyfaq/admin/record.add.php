@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.add.php,v 1.12 2005-01-16 21:28:40 thorstenr Exp $
+* $Id: record.add.php,v 1.13 2005-01-16 21:38:29 thorstenr Exp $
 *
 * Adds a record in the database
 *
@@ -56,7 +56,7 @@ if ($permission["editbt"]) {
             
             if (!$db->query('INSERT INTO '.SQLPREFIX.'faqcategoryrelations VALUES ('.$categories.', "'.$_REQUEST["lang"].'", '.$nextID.', "'.$_REQUEST["lang"].'")')) {
                 
-                $db->query('UPDATE '.SQLPREFIX.'faqcategoryrelations SET record_id = '.$nextID.', record_lang = "'.$_REQUEST["lang"].'" WHERE category_id = '.$categories.' AND category_lang = "'.$_REQUEST["lang"].'"');
+                $db->query('UPDATE '.SQLPREFIX.'faqcategoryrelations SET record_id = '.$nextID.', record_lang = \''.$_REQUEST["lang"].'\' WHERE category_id = '.$categories.' AND category_lang = "'.$_REQUEST["lang"].'"');
             
             }
         }
