@@ -1,24 +1,25 @@
 <?php
-/******************************************************************************
- * File:				language_en.php
- * Description:		    English language file
- * Authors:				Thorsten Rinne <thorsten@phpmyfaq.de>
- *                      Matthias Sommerfeld <mso@bluebirdy.de>
- *                      Henning Schulzrinne <hgs@cs.columbia.edu>
- * Date:				2004-02-19
- * Last Update:		    2004-11-13
- * Copyright:           (c) 2004 phpMyFAQ Team
- * 
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- * 
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- ******************************************************************************/
+/**
+* $Id: language_en.php,v 1.3 2004-12-11 19:35:16 thorstenr Exp $
+*
+* The English language file - try to be the best of British and American English
+*
+* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+* @author       Matthias Sommerfeld <mso@bluebirdy.de>
+* @author       Henning Schulzrinne <hgs@cs.columbia.edu>
+* @since        2004-02-19
+* @copyright    (c) 2004 phpMyFAQ Team
+*
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
+*
+* Software distributed under the License is distributed on an "AS IS"
+* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+* License for the specific language governing rights and limitations
+* under the License.
+*/
 
 $PMF_LANG["metaCharset"] = "iso-8859-1";
 $PMF_LANG["metaLanguage"] = "en";
@@ -281,7 +282,7 @@ $PMF_LANG["ad_categ_existing"] = "Existing Categories";
 $PMF_LANG["ad_categ_id"] = "#";
 $PMF_LANG["ad_categ_categ"] = "Category";
 $PMF_LANG["ad_categ_subcateg"] = "Subcategory";
-$PMF_LANG["ad_categ_titel"] = "Categorytitle";
+$PMF_LANG["ad_categ_titel"] = "Category title";
 $PMF_LANG["ad_categ_action"] = "Action";
 $PMF_LANG["ad_categ_update"] = "update";
 $PMF_LANG["ad_categ_delete"] = "delete";
@@ -557,9 +558,9 @@ $LANG_CONF["version"] = array(0 => "print", 1 => "FAQ Version");
 $LANG_CONF["metaDescription"] = array(0 => "input", 1 => "Describtion of the Page");
 $LANG_CONF["metaKeywords"] = array(0 => "input", 1 => "Keywords for Spiders");
 $LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "Name of the Publisher");
-$LANG_CONF["adminmail"] = array(0 => "input", 1 => "Emailadress of the Admin");
-$LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Contactinformation");
-$LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Copyrighttext for the startpage");
+$LANG_CONF["adminmail"] = array(0 => "input", 1 => "Email adress of the Admin");
+$LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Contact information");
+$LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Copyright text for the startpage");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Text for the send2friend page");
 $LANG_CONF["attmax"] = array(0 => "input", 1 => "maximum Size for attachments in Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["disatt"] = array(0 => "checkbox", 1 => "Link the attachments below the entries?");
