@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.14 2004-11-27 11:09:27 thorstenr Exp $
+* $Id: functions.php,v 1.15 2004-11-29 21:15:24 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -162,7 +162,8 @@ function printThemes($category)
 		$first = ($seite * $PMF_CONF["numRecordsPage"]) - $PMF_CONF["numRecordsPage"];
 		}
     
-	$result = $db->query("SELECT ".SQLPREFIX."faqdata.id, ".SQLPREFIX."faqdata.lang, ".SQLPREFIX."faqdata.thema, ".SQLPREFIX."faqdata.rubrik, ".SQLPREFIX."faqvisits.visits FROM ".SQLPREFIX."faqdata LEFT JOIN ".SQLPREFIX."faqvisits ON ".SQLPREFIX."faqdata.id = ".SQLPREFIX."faqvisits.id AND ".SQLPREFIX."faqvisits.lang = ".SQLPREFIX."faqdata.lang WHERE ".SQLPREFIX."faqdata.active = 'yes' AND ".SQLPREFIX."faqdata.rubrik = ".$category." ORDER BY ".SQLPREFIX."faqdata.id LIMIT ".$first.", ".$PMF_CONF["numRecordsPage"]);
+	$result = $db->query('SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqvisits.visits FROM '.SQLPREFIX.'faqdata 
+LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang LEFT JOIN '.SQLPREFIX.'faqvisits ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvisits.id AND '.SQLPREFIX.'faqvisits.lang = '.SQLPREFIX.'faqdata.lang WHERE '.SQLPREFIX.'faqdata.active = "yes" AND '.SQLPREFIX.'faqcategoryrelations.category_id ='.$category.' ORDER BY '.SQLPREFIX.'faqdata.id LIMIT '.$first.', '.$PMF_CONF['numRecordsPage']);
 	$num = $db->num_rows($result);
 	
 	if ($num > 0) {
@@ -443,7 +444,8 @@ function generateNews()
 function generateTopTen()
 {
 	global $db, $sids, $PMF_LANG;
-	$result = $db->query("SELECT DISTINCT ".SQLPREFIX."faqdata.id, ".SQLPREFIX."faqdata.lang, ".SQLPREFIX."faqdata.thema, ".SQLPREFIX."faqdata.rubrik, ".SQLPREFIX."faqvisits.visits FROM ".SQLPREFIX."faqvisits, ".SQLPREFIX."faqdata WHERE ".SQLPREFIX."faqdata.id = ".SQLPREFIX."faqvisits.id AND ".SQLPREFIX."faqdata.lang = ".SQLPREFIX."faqvisits.lang AND ".SQLPREFIX."faqdata.active = 'yes' ORDER BY ".SQLPREFIX."faqvisits.visits DESC LIMIT 0,10");
+	$result = $db->query('SELECT DISTINCT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqvisits.visits FROM '.SQLPREFIX.'faqvisits, '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang WHERE '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvisits.id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqvisits.lang AND '.SQLPREFIX.'faqdata.active = "yes" ORDER BY '.SQLPREFIX.'faqvisits.visits DESC LIMIT 0, 10');
+    
 	$output = "";
 	if ($db->num_rows($result) > 0) {
 		$i = 1;
@@ -452,10 +454,10 @@ function generateTopTen()
             
             if (isset($PMF_CONF["mod_rewrite"])) {
                 
-                $output .= "\t<strong>[".$i.".] ".$row->visits." ".$PMF_LANG["msgViews"].":</strong><br /><a href=\"".$row->rubrik."_".$row->id."_".$row->lang.".html\">".stripslashes(makeShorterText($row->thema, 8))."</a>\n";
+                $output .= "\t<strong>[".$i.".] ".$row->visits." ".$PMF_LANG["msgViews"].":</strong><br /><a href=\"".$row->category_id."_".$row->id."_".$row->lang.".html\">".stripslashes(makeShorterText($row->thema, 8))."</a>\n";
             } else {
                 
-                $output .= "\t<strong>[".$i.".] ".$row->visits." ".$PMF_LANG["msgViews"].":</strong><br /><a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=artikel&amp;cat=".$row->rubrik."&amp;id=".$row->id."&amp;artlang=".$row->lang."\">".stripslashes(makeShorterText($row->thema, 8))."</a>\n";
+                $output .= "\t<strong>[".$i.".] ".$row->visits." ".$PMF_LANG["msgViews"].":</strong><br /><a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=artikel&amp;cat=".$row->category_id."&amp;id=".$row->id."&amp;artlang=".$row->lang."\">".stripslashes(makeShorterText($row->thema, 8))."</a>\n";
             }
             
 			$output .= "\t</td>\n\t</tr>\n";
@@ -478,7 +480,7 @@ function generateTopTen()
 function generateFiveNewest()
 {
 	global $db, $sids, $PMF_LANG;
-	$result = $db->query("SELECT DISTINCT ".SQLPREFIX."faqdata.id, ".SQLPREFIX."faqdata.lang, ".SQLPREFIX."faqdata.rubrik, ".SQLPREFIX."faqdata.thema, ".SQLPREFIX."faqdata.datum, ".SQLPREFIX."faqvisits.visits FROM ".SQLPREFIX."faqdata, ".SQLPREFIX."faqvisits WHERE ".SQLPREFIX."faqdata.id = ".SQLPREFIX."faqvisits.id AND ".SQLPREFIX."faqdata.lang = ".SQLPREFIX."faqvisits.lang AND ".SQLPREFIX."faqdata.active = 'yes' ORDER BY ".SQLPREFIX."faqdata.datum desc LIMIT 0,5");
+	$result = $db->query('SELECT DISTINCT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqdata.datum, '.SQLPREFIX.'faqvisits.visits FROM '.SQLPREFIX.'faqdata, '.SQLPREFIX.'faqvisits LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang WHERE '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvisits.id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqvisits.lang AND '.SQLPREFIX.'faqdata.active = "yes" ORDER BY '.SQLPREFIX.'faqdata.datum desc LIMIT 0, 5');
 	
 	if ($num = $db->num_rows($result) > 0) {
 		$output = "";
@@ -488,10 +490,10 @@ function generateFiveNewest()
             
             if (isset($PMF_CONF["mod_rewrite"])) {
                 
-                $output .= "\t\t\t<td><a href=\"".$row->rubrik."_".$row->id."_".$row->lang.".html\">".stripslashes(makeShorterText($row->thema, 8))."</a></td>\n";
+                $output .= "\t\t\t<td><a href=\"".$row->category_id."_".$row->id."_".$row->lang.".html\">".stripslashes(makeShorterText($row->thema, 8))."</a></td>\n";
             } else {
                 
-                $output .= "\t\t\t<td><a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=artikel&amp;cat=".$row->rubrik."&amp;id=".$row->id."&amp;artlang=".$row->lang."\">".stripslashes(makeShorterText($row->thema, 8))."</a></td>\n";
+                $output .= "\t\t\t<td><a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=artikel&amp;cat=".$row->category_id."&amp;id=".$row->id."&amp;artlang=".$row->lang."\">".stripslashes(makeShorterText($row->thema, 8))."</a></td>\n";
             }
 			$output .= "\t\t\t<td nowrap=\"nowrap\">".$row->visits." ".$PMF_LANG["msgViews"]."</td>\n";
 			$output .= "\t\t</tr>\n";
@@ -769,11 +771,12 @@ function quoted_printable_encode($return = '')
 function generateXMLExport($id, $lang = "")
 {
 	global $db, $categories, $PMF_LANG, $PMF_CONF;
-	$result = $db->query("SELECT id, lang, active, rubrik, keywords, thema, content, author, datum FROM ".SQLPREFIX."faqdata WHERE id = '".$id."' AND lang = '".$lang."' AND active = 'yes'");
+	$result = $db->query('SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.keywords, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqdata.content, '.SQLPREFIX.'faqdata.author, '.SQLPREFIX.'faqdata.datum FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang WHERE id = '.$id.' AND lang = "'.$lang.'" AND active = "yes"');
+    
 	if ($db->num_rows($result) > 0) {
 		while ($row = $db->fetch_object($result)) {
             $xml_content = stripslashes($row->content);
-			$xml_rubrik = $categories[$row->rubrik];
+			$xml_rubrik = $categories[$row->category_id];
 			$xml_thema = wordwrap($row->thema, 60);
 			$xml_keywords = $row->keywords;
 			$xml_content = trim(htmlspecialchars(stripslashes(wordwrap($xml_content, 60))));
@@ -827,7 +830,7 @@ function generateXHTMLFile()
     $tree->transform(0);
     $old = 0;
     
-	$result = $db->query("SELECT id, lang, active, rubrik, thema, content, author, datum FROM ".SQLPREFIX."faqdata ORDER BY rubrik, id");
+	$result = $db->query('SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqdata.content, '.SQLPREFIX.'faqdata.author, '.SQLPREFIX.'faqdata.datum FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang ORDER BY '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.id');
     
     $xhtml = '<?xml version="1.0" encoding="'.$PMF_LANG['metaCharset'].'" ?>';
     $xhtml .= '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
@@ -841,7 +844,7 @@ function generateXHTMLFile()
     
     if ($db->num_rows($result) > 0) {
         
-        while (list($id, $lang, $active, $rub, $thema, $content, $author, $datum) = $db->fetch_row($result)) {
+        while (list($id, $lang, $rub, $thema, $content, $author, $datum) = $db->fetch_row($result)) {
             if ($rub != $old) {
                 $xhtml .= '<h1>'.$tree->getPath($rub).'</h1>';
             }
@@ -872,7 +875,8 @@ function generateXMLFile()
 {
 	global $db, $tree, $PMF_CONF, $PMF_LANG;
 	
-	$result = $db->query("SELECT id, lang, active, rubrik, keywords, thema, content, author, datum FROM ".SQLPREFIX."faqdata ORDER BY id");
+	$result = $db->query('SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqdata.content, '.SQLPREFIX.'faqdata.author, '.SQLPREFIX.'faqdata.datum FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang ORDER BY '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.id');
+    
 	if ($db->num_rows($result) > 0) {
 		$my_xml_output = "<?xml version=\"1.0\" encoding=\"".$PMF_LANG["metaCharset"]."\" standalone=\"yes\" ?>\n";
 		$my_xml_output .= "<!-- XML-Output by phpMyFAQ ".$PMF_CONF["version"]." | Date: ".makeDate(date("YmdHis"))." -->\n";
@@ -880,7 +884,7 @@ function generateXMLFile()
 		$xml_fp = fopen("../xml/phpmyfaq.xml","w");
 		while ($row = $db->fetch_object($result)) {
         $xml_content = wordwrap(stripslashes($row->content));
-			$xml_rubrik = $tree->categoryName[$row->rubrik]["name"];
+			$xml_rubrik = $tree->categoryName[$row->category_id]["name"];
 			$xml_thema = wordwrap($row->thema, 60);
 			$xml_keywords = $row->keywords;
 			$xml_content = trim(htmlspecialchars(stripslashes(wordwrap($xml_content, 60))));
