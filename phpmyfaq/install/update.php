@@ -1,24 +1,24 @@
 <?php
 /**
- * $Id: update.php,v 1.2 2004-11-05 22:45:11 thorstenr Exp $
- *
- * File:                update.php
- * Author:              Thorsten Rinne <thorsten@phpmyfaq.de>
- * Contributor:         Thomas Melchinger <t.melchinger@uni.de>
- * Date:                2002-01-10
- * Last Update:         2004-11-05
- * Copyright:           (c) 2001-2004 phpMyFAQ Team
- * 
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- * 
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- */
+* $Id: update.php,v 1.3 2004-11-25 20:58:41 thorstenr Exp $
+*
+* Main update script
+*
+* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+* @author       Thomas Melchinger <t.melchinger@uni.de>
+* @since        2002-01-10
+* @copyright    (c) 2001-2004 phpMyFAQ Team
+* 
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
+* 
+* Software distributed under the License is distributed on an "AS IS"
+* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+* License for the specific language governing rights and limitations
+* under the License.
+*/
 
 define("NEWVERSION", "1.5.0 alpha1");
 define("COPYRIGHT", "&copy; 2001-2004 <a href=\"http://www.phpmyfaq.de/\" target=\"_blank\">phpMyFAQ-Team</a> | All rights reserved.");
@@ -26,10 +26,9 @@ define("PMF_ROOT_DIR", dirname(dirname(__FILE__)));
 
 if (isset($_GET["step"]) && $_GET["step"] != "") {
     $step = $_GET["step"];
-    }
-else {
+} else {
     $step = 1;
-    }
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -150,7 +149,7 @@ if ($step == 1) {
 </fieldset>
 </form>
 <?php
-    }
+}
 
 /**************************** STEP 2 OF 5 ***************************/
 if ($step == 2) {
@@ -160,28 +159,24 @@ if ($step == 2) {
     $test4 = 0;
     if (!is_writeable(PMF_ROOT_DIR."/inc/data.php")) {
 		print "<p class=\"error\"><strong>Error:</strong> The file ../inc/data.php or the directory ../inc is not writeable. Please correct this!</p>";
-        }
-    else {
+    } else {
         $test1 = 1;
-		}
+	}
 	if (!is_writeable(PMF_ROOT_DIR."/inc/config.php")) {
 		print "<p class=\"error\"><strong>Error:</strong> The file ../inc/config.php is not writeable. Please correct this!</p>";
-        }
-    else {
+    } else {
         $test2 = 1;
-		}
+    }
     if (!@copy(PMF_ROOT_DIR."/inc/data.php", PMF_ROOT_DIR."/inc/data.php.bak")) {
         print "<p class=\"error\"><strong>Error:</strong> The backup file ../inc/data.php.bak could not be written. Please correct this!</p>";
-        }
-    else {
+    } else {
         $test3 = 1;
-        }
+    }
     if (!@copy(PMF_ROOT_DIR."/inc/config.php", PMF_ROOT_DIR."/inc/config.php.bak")) {
         print "<p class=\"error\"><strong>Error:</strong> The backup file ../inc/config.php.bak could not be written. Please correct this!</p>";
-        }
-    else {
+    } else {
         $test4 = 1;
-        }
+    }
     // is everything is okay?
     if ($test1 == 1 && $test2  == 1 && $test3  == 1 && $test4 == 1 ) {
 ?>
@@ -195,11 +190,10 @@ if ($step == 2) {
 </fieldset>
 </form>
 <?php
-        }
-    else {
+    } else {
         print "<p class=\"error\"><strong>Error:</strong> Your version of phpMyFAQ could not updated.</p>";
-        }
     }
+}
 
 /**************************** STEP 3 OF 5 ***************************/
 if ($step == 3) {
@@ -243,8 +237,7 @@ if ($step == 3) {
 <input type="hidden" name="edit[parse_php]" value="" />
 <input type="hidden" name="edit[mod_rewrite]" value="" />
 <?php
-        }
-    elseif ($ver == 0) {
+    } elseif ($ver == 0) {
         // Version 1.4.x
 ?>
 <input type="hidden" name="edit[language]" value="<?php print $PMF_CONF["language"]; ?>" />
@@ -269,14 +262,14 @@ if ($step == 3) {
 <input type="hidden" name="edit[parse_php]" value="" />
 <input type="hidden" name="edit[mod_rewrite]" value="" />
 <?php
-        }
+    }
 ?>
 <p class="center">The configuration files will be updated after the next step.</p>
 <p class="center"><input type="submit" value="Go to step 4 of 5" class="button" /></p>
 </fieldset>
 </form>
 <?php
-    }
+}
 
 /**************************** STEP 4 OF 5 ***************************/
 if ($step == 4) {
@@ -318,7 +311,7 @@ if ($step == 4) {
 </fieldset>
 </form>
 <?php
-    }
+}
 
 /**************************** STEP 4 OF 5 ***************************/
 if ($step == 5) {
@@ -378,6 +371,12 @@ if ($step == 5) {
         $query[] = "ALTER TABLE ".SQLPREFIX."faqchanges CHANGE user usr INT(11) DEFAULT '0' NOT NULL";
         $query[] = "ALTER TABLE ".SQLPREFIX."faqcomments CHANGE user usr VARCHAR(255) NOT NULL";
         $query[] = "ALTER TABLE ".SQLPREFIX."faqvoting CHANGE user usr INT(11) DEFAULT '0' NOT NULL";
+    }
+    if ($version < 150) {
+        $query[] = "CREATE TABLE ".$sqltblpre."faqcategoryrelations ( category_id INT(11) NOT NULL, category_lang VARCHAR(5) NOT NULL default '', record_id INT(11) NOT NULL, record_lang VARCHAR(5) NOT NULL default '', PRIMARY KEY  (category_id,category_lang,record_id,record_lang) )";
+        //
+        // TODO: rebuild table faqdata, fill faqcategoryrelations
+        //
     }
     
 	$query[] = "OPTIMIZE TABLE ".SQLPREFIX."faqadminlog, ".SQLPREFIX."faqadminsessions, ".SQLPREFIX."faqcategories, ".SQLPREFIX."faqchanges, ".SQLPREFIX."faqcomments, ".SQLPREFIX."faqdata, ".SQLPREFIX."faqfragen, ".SQLPREFIX."faqnews, ".SQLPREFIX."faqsessions, ".SQLPREFIX."faquser, ".SQLPREFIX."faqvisits, ".SQLPREFIX."faqvoting";
