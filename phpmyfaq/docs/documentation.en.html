@@ -1,10 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<!-- $Id: documentation.en.html,v 1.11 2005-01-06 09:57:25 thorstenr Exp $ -->
+<!-- $Id: documentation.en.html,v 1.12 2005-01-09 12:24:58 thorstenr Exp $ -->
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<title>Documentation for phpMyFAQ 1.5.0 and later</title>
     <style type="text/css"><!--
-    body { font: normal normal 14px "Bitstream Vera Sans", "Trebuchet MS", Verdana, Geneva, Arial, Helvetica, sans-serif;	background-color: #f5f5f5; line-height: 20px; }
+    body { font: normal normal 14px "Trebuchet MS", Verdana, Geneva, Arial, Helvetica, sans-serif;	background-color: #f5f5f5; line-height: 20px; }
     pre { background-color: #FAFAD2; padding: 5px; }
 	a { color: #0000ff; }
 	a:hover { color: #ff0000; }
@@ -174,8 +174,9 @@
     <p><strong><a name="2c"></a>2.c. Install-Script</strong></p>
     <p>Open your browser and type in the following URL:</p>
     <pre>http://www.example.com/faq/install/installer.php</pre>
-    <p>Substitute <strong>www.example.com</strong> with your actual domain name. When the site is loaded enter the address of your database server (e.g. db.provider.com), your database username and password as well as the database name. The datebase must be availible before running the installation script. You can leave the prefix-field empty. If you are planning on using multiple FAQs in one database you will have to use a tableprefix, though (i.e. <em>sport</em> for a sports-FAQ, <em>weather</em> for a weather-FAQ, etc.). Please note that only letters and an underline: "_" can be used as the prefix.
-    When using multiple FAQs you need to install them independently into different directories (e.g. faq1/, faq2/. faq3/ etc.). In addition you can enter your language, default here is English. Furthermore you should register your name, your email address and - very importantly - your password. You must enter the password twice and it have to be at least six places long. Then click the button <strong>"install"</strong> to initialize the tables in your database.</p>
+    <p>Substitute <strong>www.example.com</strong> with your actual domain name. When the site is loaded enter the address of your database server (e.g. db.provider.com), your database username and password as well as the database name. The datebase must be availible before running the installation script. You can leave the prefix-field empty. If you are planning on using multiple FAQs in one database you will have to use a tableprefix, though (i.e. <em>sport</em> for a sports-FAQ, <em>weather</em> for a weather-FAQ, etc.). Please note that only letters and an underline: "_" can be used as the prefix.</p>
+    <p>If your PHP was compiled with the LDAP extension you can add your LDAP information, too. You have to insert your LDAP informations, too.</p>
+    <p>When using multiple FAQs you need to install them independently into different directories (e.g. faq1/, faq2/. faq3/ etc.). In addition you can enter your language, default here is English. Furthermore you should register your name, your email address and - very importantly - your password. You must enter the password twice and it have to be at least six places long. Then click the button <strong>"install"</strong> to initialize the tables in your database.</p>
     <p><a href="#top">back to top</a></p>
     
     
@@ -226,7 +227,7 @@
     
     <hr style="width: 90%; height: 1px;" />
     <p><strong><a name="2i"></a>2.i. Enabling LDAP support</strong></p>
-    <p></p>
+    <p>If you're entered the correct LDAP information during the installation you have to enable the LDAP support in the configuration in the admin backend. After this action phpMyFAQ reads the full username and email address from LDAP and fills this information automatically into the input forms in the public frontend.</p>
     <p><a href="#top">back to top</a></p>
     
     
@@ -510,7 +511,7 @@
     <p>
     Author: Thorsten Rinne<br />
     Basic translation by: <a href="mailto:stephan@yauh.de">Stephan Hochhaus</a><br />
-    Last Change: 2005-01-06</p>
+    Last Change: 2005-01-09</p>
     <p>&copy; 2001-2005 phpMyFAQ Team</p>
     <p>This documentation is licensed under a <a href="http://creativecommons.org/licenses/by/2.0/" class="subfoot">Creative Commons License</a>.</p>
     <p><a href="#top">back to top</a></p>
