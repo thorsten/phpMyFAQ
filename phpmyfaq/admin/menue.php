@@ -1,22 +1,23 @@
 <?php
-/******************************************************************************
- * File:				menue.php
- * Description:			navigation menue of the admin area
- * Authors:				Thorsten Rinne <thorsten@phpmyfaq.de>
- * Date:				2003-02-26
- * Last change:			2004-07-23
- * Copyright:           (c) 2001-2004 Thorsten Rinne
- * 
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- * 
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- ******************************************************************************/
+/**
+* $Id: menue.php,v 1.2 2005-03-10 12:16:46 thorstenr Exp $
+*
+* Navigation menue of the admin area
+*
+* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+* @since        2003-02-26
+* @copyright    (c) 2001-2005 phpMyFAQ Team
+* 
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
+* 
+* Software distributed under the License is distributed on an "AS IS"
+* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+* License for the specific language governing rights and limitations
+* under the License.
+*/
 ?>
 <div id="menue">
     <ul>
@@ -34,7 +35,7 @@ if ($permission["addcateg"] || $permission["editcateg"] || $permission["delcateg
     }
 if ($permission["addbt"]) {
 ?>
-        <li><a href="<?php print $linkext; ?>&amp;aktion=editentry"><? print $PMF_LANG["ad_entry_add"]; ?></a></li>
+        <li><a href="<?php print $linkext; ?>&amp;aktion=editentry"><?php print $PMF_LANG["ad_entry_add"]; ?></a></li>
 <?php
     }
 if ($permission["editbt"] || $permission["delbt"]) {
@@ -87,11 +88,11 @@ if ($permission["editconfig"]) {
     }
 if ($permission["backup"] || $permission["restore"]) {
 ?>
-        <li><a href="<?php print $linkext; ?>&amp;aktion=csv"><? print $PMF_LANG["ad_menu_backup"]; ?></a></li>
+        <li><a href="<?php print $linkext; ?>&amp;aktion=csv"><?php print $PMF_LANG["ad_menu_backup"]; ?></a></li>
 <?php
     }
 ?>
-        <li><a href="<?php print $linkext; ?>&amp;aktion=export"><? print $PMF_LANG["ad_menu_export"]; ?></a></li>
+        <li><a href="<?php print $linkext; ?>&amp;aktion=export"><?php print $PMF_LANG["ad_menu_export"]; ?></a></li>
         <li><a href="<?php print $linkext; ?>&amp;aktion=logout"><?php print $PMF_LANG["ad_menu_logout"]; ?></a></li>
     </ul>
 </div>
