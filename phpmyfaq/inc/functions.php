@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.16 2004-11-30 19:27:29 thorstenr Exp $
+* $Id: functions.php,v 1.17 2004-11-30 21:42:24 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -226,19 +226,6 @@ LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPR
         $output .= "</strong></p>";
     }
 	return $output;
-}
-
-/*
- * Funktion für die Überprüfung von übergebenen Variablen | @@ Thorsten, 2003-01-30
- * Last Update: @@ Thorsten, 2003-01-30
- */
-function checkIntVar($myInt)
-{
-	if (preg_match("/^[0-9-]+$/", $myInt)) {
-    	return TRUE;
-    } else {
-    	return FALSE;
-	}
 }
 
 /*
