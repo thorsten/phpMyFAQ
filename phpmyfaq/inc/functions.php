@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.4 2004-11-10 19:23:19 thorstenr Exp $
+ * $Id: functions.php,v 1.5 2004-11-13 18:34:27 thorstenr Exp $
  *
  * File:                functions.php
  * Description:         This is the main functions file!
@@ -113,10 +113,15 @@ function generateNumberOfArticles()
 		}
 }
 
-/*
- * Diese Funktion gibt alle Themen einer Rubrik aus | @@ Thorsten, 2002-08-27
- * Last Update: @@ Thorsten, 2004-06-21
- */
+/**
+* This function returns all records from one category
+*
+* @param    int     the category id
+* @return   string
+* @access   public
+* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+* @since    2002-08-27
+*/
 function printThemes($category)
 {
 	global $db, $sids, $PMF_LANG, $PMF_CONF;
@@ -127,7 +132,7 @@ function printThemes($category)
 		$seite = $_REQUEST["seite"];
 		}
     
-	$numResult = $db->query("SELECT id FROM ".SQLPREFIX."faqdata WHERE active = 'yes' AND rubrik = '".$category."'");
+	$numResult = $db->query("SELECT id FROM ".SQLPREFIX."faqdata WHERE active = 'yes' AND rubrik = ".$category.);
 	$num = $db->num_rows($numResult);
 	$pages = ceil($num / $PMF_CONF["numRecordsPage"]);
     
@@ -138,7 +143,7 @@ function printThemes($category)
 		$first = ($seite * $PMF_CONF["numRecordsPage"]) - $PMF_CONF["numRecordsPage"];
 		}
     
-	$result = $db->query("SELECT ".SQLPREFIX."faqdata.id, ".SQLPREFIX."faqdata.lang, ".SQLPREFIX."faqdata.thema, ".SQLPREFIX."faqdata.rubrik, ".SQLPREFIX."faqvisits.visits FROM ".SQLPREFIX."faqdata LEFT JOIN ".SQLPREFIX."faqvisits ON ".SQLPREFIX."faqdata.id = ".SQLPREFIX."faqvisits.id AND ".SQLPREFIX."faqvisits.lang = ".SQLPREFIX."faqdata.lang WHERE ".SQLPREFIX."faqdata.active = 'yes' AND ".SQLPREFIX."faqdata.rubrik = '".$category."' ORDER BY ".SQLPREFIX."faqdata.id LIMIT ".$first.", ".$PMF_CONF["numRecordsPage"]);
+	$result = $db->query("SELECT ".SQLPREFIX."faqdata.id, ".SQLPREFIX."faqdata.lang, ".SQLPREFIX."faqdata.thema, ".SQLPREFIX."faqdata.rubrik, ".SQLPREFIX."faqvisits.visits FROM ".SQLPREFIX."faqdata LEFT JOIN ".SQLPREFIX."faqvisits ON ".SQLPREFIX."faqdata.id = ".SQLPREFIX."faqvisits.id AND ".SQLPREFIX."faqvisits.lang = ".SQLPREFIX."faqdata.lang WHERE ".SQLPREFIX."faqdata.active = 'yes' AND ".SQLPREFIX."faqdata.rubrik = ".$category." ORDER BY ".SQLPREFIX."faqdata.id LIMIT ".$first.", ".$PMF_CONF["numRecordsPage"]);
 	$num = $db->num_rows($result);
 	
 	if ($num > 0) {
@@ -147,33 +152,59 @@ function printThemes($category)
 			}
 		$output .= "<ul class=\"phpmyfaq_ul\">\n";
         while ($row = $db->fetch_object($result)) {
-			if (empty($row->visits)) {
+			
+            if (empty($row->visits)) {
+                
 				$visits = "0";
-				}
-			else {
+            } else {
+                
 				$visits = $row->visits;
-				}
-            $output .= "\t<li><a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=artikel&amp;cat=".$row->rubrik."&amp;id=".$row->id."&amp;artlang=".$row->lang."\">".stripslashes($row->thema)."</a> [".$row->lang."]<br /><div class=\"little\">(".$visits." ".$PMF_LANG["msgViews"].")</div></li>\n";
             }
-        $output .= "</ul>\n";
+            
+            if (isset($PMF_CONF["mod_rewrite"])) {
+                
+                $output .= "\t<li><a href=\"".$row->rubrik."_".$row->id."_".$row->lang.".html\">".stripslashes($row->thema)."</a> [".$row->lang."]<br /><div class=\"little\">(".$visits." ".$PMF_LANG["msgViews"].")</div></li>\n";
+            } else {
+                
+                $output .= "\t<li><a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=artikel&amp;cat=".$row->rubrik."&amp;id=".$row->id."&amp;artlang=".$row->lang."\">".stripslashes($row->thema)."</a> [".$row->lang."]<br /><div class=\"little\">(".$visits." ".$PMF_LANG["msgViews"].")</div></li>\n";
+            }
         }
-    else {
+        $output .= "</ul>\n";
+    } else {
 		$output = $PMF_LANG["err_noArticles"];
-		}
+	}
     
     if ($pages > 1) {
         $output .= "<p align=\"center\"><strong>";
         $previous = $seite - 1; 
         $next = $seite + 1;
+        
         if ($previous != 0) {
-            $output .= "[ <a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=show&amp;cat=".$category."&amp;seite=".$previous."\">".$PMF_LANG["msgPrevious"]."</a> ]";
+            
+            if (isset($PMF_CONF["mod_rewrite"])) {
+                
+                $output .= "[ <a href=\"category".$category."_".$previous.".html\">".$PMF_LANG["msgPrevious"]."</a> ]";
+            } else {
+                
+                $output .= "[ <a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=show&amp;cat=".$category."&amp;seite=".$previous."\">".$PMF_LANG["msgPrevious"]."</a> ]";
             }
+        }
+        
         $output .= " ";
+        
         if ($next <= $pages) {
-            $output .= "[ <a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=show&amp;cat=".$category."&amp;seite=".$next."\">".$PMF_LANG["msgNext"]."</a> ]";
+            
+            if (isset($PMF_CONF["mod_rewrite"])) {
+                
+                $output .= "[ <a href=\"category".$category."_".$next.".html\">".$PMF_LANG["msgNext"]."</a> ]";
+            } else {
+                
+                $output .= "[ <a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=show&amp;cat=".$category."&amp;seite=".$next."\">".$PMF_LANG["msgNext"]."</a> ]";
             }
+        }
+        
         $output .= "</strong></p>";
-		}
+    }
 	return $output;
 }
 
@@ -383,10 +414,14 @@ function generateNews()
 		}
 }
 
-/*
- * Zeigt die Top Ten an - die zehn am häufigsten besuchten Artikel der FAQ | @@ Thorsten - 2002-05-07
- * Last Update: @@ Thorsten, 2004-07-17
- */
+/**
+* This function generates the Top Ten with the mosted viewed records
+*
+* @return   string
+* @access   public
+* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+* @since    2002-05-07
+*/
 function generateTopTen()
 {
 	global $db, $sids, $PMF_LANG;
@@ -396,21 +431,32 @@ function generateTopTen()
 		$i = 1;
 		while ($row = $db->fetch_object($result)) {
 			$output .= "<tr>\n\t<td>\n";
-			$output .= "\t<strong>[".$i.".] ".$row->visits." ".$PMF_LANG["msgViews"].":</strong><br /><a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=artikel&amp;cat=".$row->rubrik."&amp;id=".$row->id."&amp;artlang=".$row->lang."\">".stripslashes(makeShorterText($row->thema, 8))."</a>\n";
+            
+            if (isset($PMF_CONF["mod_rewrite"])) {
+                
+                $output .= "\t<strong>[".$i.".] ".$row->visits." ".$PMF_LANG["msgViews"].":</strong><br /><a href=\"".$row->rubrik."_".$row->id."_".$row->lang.".html\">".stripslashes(makeShorterText($row->thema, 8))."</a>\n";
+            } else {
+                
+                $output .= "\t<strong>[".$i.".] ".$row->visits." ".$PMF_LANG["msgViews"].":</strong><br /><a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=artikel&amp;cat=".$row->rubrik."&amp;id=".$row->id."&amp;artlang=".$row->lang."\">".stripslashes(makeShorterText($row->thema, 8))."</a>\n";
+            }
+            
 			$output .= "\t</td>\n\t</tr>\n";
 			$i++;
-			}
 		}
-	else {
+	} else {
 		$output = "<tr><td>".$PMF_LANG["err_noTopTen"]."</td></tr>\n";
-		}
+	}
 	return $output;
 }
 
-/*
- * Zeigt die fünf neuesten Artikel an | @@ Thorsten - 2002-05-07
- * Last Update: @@ Thorsten, 2004-07-17
- */
+/**
+* This function generates the list with the five latest published records
+*
+* @return   string
+* @access   public
+* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+* @since    2002-05-07
+*/
 function generateFiveNewest()
 {
 	global $db, $sids, $PMF_LANG;
@@ -421,14 +467,20 @@ function generateFiveNewest()
 		while ($row = $db->fetch_object($result)) {
 			$output .= "\t\t<tr>\n";
 			$output .= "\t\t\t<td nowrap=\"nowrap\">".makeDate($row->datum)."</td>\n";
-			$output .= "\t\t\t<td><a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=artikel&amp;cat=".$row->rubrik."&amp;id=".$row->id."&amp;artlang=".$row->lang."\">".stripslashes(makeShorterText($row->thema, 8))."</a></td>\n";
+            
+            if (isset($PMF_CONF["mod_rewrite"])) {
+                
+                $output .= "\t\t\t<td><a href=\"".$row->rubrik."_".$row->id."_".$row->lang.".html\">".stripslashes(makeShorterText($row->thema, 8))."</a></td>\n";
+            } else {
+                
+                $output .= "\t\t\t<td><a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=artikel&amp;cat=".$row->rubrik."&amp;id=".$row->id."&amp;artlang=".$row->lang."\">".stripslashes(makeShorterText($row->thema, 8))."</a></td>\n";
+            }
 			$output .= "\t\t\t<td nowrap=\"nowrap\">".$row->visits." ".$PMF_LANG["msgViews"]."</td>\n";
 			$output .= "\t\t</tr>\n";
-			}
-		}
-	else {
+        }
+    } else {
 		$output = "<tr class=\"fivenewest\"><td>".$PMF_LANG["err_noTopTen"]."</td></tr>\n";
-		}
+    }
 	return $output;
 }
 
@@ -797,10 +849,15 @@ function generateXMLFile()
  * Funktionen für die Volltextsuche
  ******************************************************************************/
 
-/*
- * Suchfunktion für die Volltextsuche | @@ Thorsten - 2002-09-16
- * Last Update: @@ Thorsten, 2004-10-31
- */
+/**
+* The main search function for the full text search
+*
+* @param    string
+* @return   string
+* @access   public
+* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+* @since    2002-09-16
+*/
 function searchEngine($begriff)
 {
 	global $db, $sids, $tree, $PMF_LANG, $PMF_CONF;
@@ -809,17 +866,20 @@ function searchEngine($begriff)
 	
 	if (isset($_REQUEST["seite"])) {
 		$seite = $_REQUEST["seite"];
-		}
+    } else {
+        $seite = 1;
+    }
+    
 	if (isset($_REQUEST["search"])) {
 		$begriff = $_REQUEST["search"];
-		}
+    } else {
+        return $PMF_LANG["err_noArticles"];
+    }
+    
 	$result = $db->search(SQLPREFIX."faqdata", array("id" => NULL, "lang" => NULL, "rubrik" => NULL, "thema" => NULL, "content" => NULL), array("thema", "content", "keywords"), $begriff, array("active"=>"yes"));
 	$num = $db->num_rows($result);
 	
     $pages = ceil($num / $PMF_CONF["numRecordsPage"]);
-	if (!$seite) {
-		$seite = 1;
-		}
 	$y = $seite * $PMF_CONF["numRecordsPage"]; 
 	$x = $y - $PMF_CONF["numRecordsPage"];
 	if ($y > $num) {
