@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.show.php,v 1.9 2005-01-04 16:12:33 thorstenr Exp $
+* $Id: record.show.php,v 1.10 2005-01-08 10:34:54 thorstenr Exp $
 *
 * Shows the list of records ordered by categories
 *
@@ -24,28 +24,9 @@ if ($permission["editbt"] || $permission["delbt"]) {
 	$tree = new Category();
     $tree->transform(0);
     
-    $perpage = 20;
-	if (!isset($_REQUEST["pages"])) {
-		$anz = $db->num_rows($db->query($query));
-		$pages = ceil($anz / $perpage);
-		if ($pages < 1) {
-			$pages = 1;
-        }
-    } else {
-		$pages = $_REQUEST["pages"];
-    }
-	
-    if (!isset($_REQUEST["page"])) {
-		$page = 1;
-    } else {
-		$page = $_REQUEST["page"];
-    }
-	
-	$start = ($page - 1) * $perpage;
-	
     if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "view" && !isset($_REQUEST["suchbegriff"])) {
         
-        $result = $db->query('SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema,'.SQLPREFIX.'faqdata.author FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang ='.SQLPREFIX.'faqcategoryrelations.record_lang WHERE '.SQLPREFIX.'faqdata.active = "yes" ORDER BY '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.id ');
+        $query = 'SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema,'.SQLPREFIX.'faqdata.author FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang ='.SQLPREFIX.'faqcategoryrelations.record_lang WHERE '.SQLPREFIX.'faqdata.active = "yes" ORDER BY '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.id ');
         $laktion = 'view';
         $internalSearch = '';
         
@@ -70,15 +51,36 @@ if ($permission["editbt"] || $permission["delbt"]) {
         $start = 0;
         $perpage = 10;
         
-        $result = $db->query('SELECT '.SQLPREFIX.'faqdata.id,'.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema,'.SQLPREFIX.'faqdata.author FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON'.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang ='.SQLPREFIX.'faqcategoryrelations.record_lang WHERE '.SQLPREFIX.'faqdata.active = "no" ORDER BY'.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.id ');
+        $query = 'SELECT '.SQLPREFIX.'faqdata.id,'.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema,'.SQLPREFIX.'faqdata.author FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON'.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang ='.SQLPREFIX.'faqcategoryrelations.record_lang WHERE '.SQLPREFIX.'faqdata.active = "no" ORDER BY'.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.id ';
         $laktion = "accept";
         $internalSearch = "";
     }
+    
+    $perpage = 20;
+	if (!isset($_REQUEST["pages"])) {
+		$anz = $db->num_rows($db->query($query));
+		$pages = ceil($anz / $perpage);
+		if ($pages < 1) {
+			$pages = 1;
+        }
+    } else {
+		$pages = $_REQUEST["pages"];
+    }
+	
+    if (!isset($_REQUEST["page"])) {
+		$page = 1;
+    } else {
+		$page = $_REQUEST["page"];
+    }
+	
+	$start = ($page - 1) * $perpage;
     
     $PageSpan = PageSpan("<a href=\"".$_SERVER["PHP_SELF"].$linkext."&amp;aktion=".$laktion."&amp;pages=".$pages."&amp;page=<NUM>".$internalSearch."\">", 1, $pages, $page);
     
 	$old = 0;
 	$previousID = 0;
+    
+    $result = $db->query($query);
     
 	if ($db->num_rows($result) > 0) {
 ?>
