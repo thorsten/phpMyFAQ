@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.49 2005-01-27 12:32:11 thorstenr Exp $
+* $Id: functions.php,v 1.50 2005-02-05 09:03:01 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -1203,7 +1203,7 @@ function printOpenQuestions()
 		while ($row = $db->fetch_object($result)) {
 			$output .= "\t<tr class=\"openquestions\">\n";
 			$output .= "\t\t<td valign=\"top\" nowrap=\"nowrap\">".makeDate($row->ask_date)."<br /><a href=\"mailto:".safeEmail($row->ask_usermail)."\">".$row->ask_username."</a></td>\n";
-			$output .= "\t\t<td valign=\"top\"><strong>".$tree->categoryName[$row->ask_rubrik]["name"].":</strong><br />".stripslashes($row->ask_content)."</td>\n";
+			$output .= "\t\t<td valign=\"top\"><strong>".$tree->categoryName[$row->ask_rubrik]["name"].":</strong><br />".stripslashes(strip_tags($row->ask_content))."</td>\n";
         	$output .= "\t\t<td valign=\"top\"><a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=add&amp;question=".rawurlencode($row->ask_content)."&amp;cat=".$row->ask_rubrik."\">".$PMF_LANG["msg2answer"]."</a></td>\n";
     		$output .= "\t</tr>\n";
 			}
