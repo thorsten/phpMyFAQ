@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.7 2004-12-11 20:20:20 thorstenr Exp $
+* $Id: update.php,v 1.8 2004-12-12 15:40:37 thorstenr Exp $
 *
 * Main update script
 *
@@ -20,7 +20,7 @@
 * under the License.
 */
 
-define("NEWVERSION", "1.5.0 alpha1");
+define("NEWVERSION", "1.5.0 alpha");
 define("COPYRIGHT", "&copy; 2001-2004 <a href=\"http://www.phpmyfaq.de/\" target=\"_blank\">phpMyFAQ-Team</a> | All rights reserved.");
 define("PMF_ROOT_DIR", dirname(dirname(__FILE__)));
 
@@ -357,17 +357,21 @@ if ($step == 5) {
     
     $version = str_replace(".", "", $_REQUEST["version"]);
     
+    // update from version 1.3.0
 	if ($version <= "130") {
 		$query[] = "ALTER TABLE ".SQLPREFIX."faqadminsessions CHANGE pass pass VARCHAR(64) BINARY NOT NULL";
 		$query[] = "ALTER TABLE ".SQLPREFIX."faquser CHANGE pass pass VARCHAR(64) BINARY NOT NULL";
     }
+    // update from version 1.3.1
 	if ($version <= "131") {
 		$query[] = "ALTER TABLE ".SQLPREFIX."faqvoting ADD ip VARCHAR(15) NOT NULL";
     }
+    // update from version 1.3.2
 	if ($version <= "132") {
 		$query[] = "ALTER TABLE ".SQLPREFIX."faqdata ADD comment ENUM('y', 'n') NOT NULL AFTER email";
 		$query[] = "ALTER TABLE ".SQLPREFIX."faquser ADD realname VARCHAR(255) NOT NULL AFTER pass, ADD email VARCHAR(255) NOT NULL AFTER realname";
     }
+    // update from version 1.3.3
 	if ($version <= "133") {
         $query[] = "DROP TABLE ".SQLPREFIX."faqrights";
         $query[] = "DROP TABLE ".SQLPREFIX."faqstatistik";
@@ -390,6 +394,7 @@ if ($step == 5) {
         $query[] = "UPDATE ".SQLPREFIX."faqcategories SET parent_id = 0";
         $query[] = "UPDATE ".SQLPREFIX."faqcategories SET description = ''";
     }
+    // update from version 1.4.0
     if ($version <= "140") {
         // rewrite data.php
         if ($fp = @fopen("../inc/data.php","w")) {
@@ -404,17 +409,16 @@ if ($step == 5) {
         $query[] = "ALTER TABLE ".SQLPREFIX."faqcomments CHANGE user usr VARCHAR(255) NOT NULL";
         $query[] = "ALTER TABLE ".SQLPREFIX."faqvoting CHANGE user usr INT(11) DEFAULT '0' NOT NULL";
     }
+    // update from versions before 1.5.0
     if ($version < 150) {
-        // TODO: alter column faqdata.rubrik to integer
-        
+        // alter column faqdata.rubrik to integer
+        $query[] = "ALTER TABLE ".SQLPREFIX."faqdata CHANGE rubrik rubrik INT NOT NULL";
         // create new table faqcategoryrelations
         $query[] = "CREATE TABLE ".SQLPREFIX."faqcategoryrelations ( category_id INT(11) NOT NULL, category_lang VARCHAR(5) NOT NULL default '', record_id INT(11) NOT NULL, record_lang VARCHAR(5) NOT NULL default '', PRIMARY KEY  (category_id,category_lang,record_id,record_lang) )";
         // fill the new table
         $query[] = "INSERT INTO ".SQLPREFIX."faqcategoryrelations SELECT ".SQLPREFIX."faqcategories.id as category_id, ".SQLPREFIX."faqcategories.lang as category_lang, ".SQLPREFIX."faqdata.id as record_id, ".SQLPREFIX."faqdata.lang as record_lang WHERE ".SQLPREFIX."faqcategories.id = ".SQLPREFIX."faqdata.rubrik ORDER BY category_id";
-        //
-        // TODO: rebuild table faqdata
-        //
-		
+        // drop faqdata.rubrik
+        $query[] = "ALTER TABLE ".SQLPREFIX."faqdata DROP rubrik";
         // remove all auto-increments
         $query[] = 'ALTER TABLE '.SQLPREFIX.'faqadminlog CHANGE id id INT(11) NOT NULL';
 		$query[] = 'ALTER TABLE '.SQLPREFIX.'faqcategories CHANGE id id INT(11) NOT NULL';
@@ -438,19 +442,18 @@ if ($step == 5) {
             print "<p>Query:</p>\n";
             print "<pre>".$each_query[1]."</pre>\n";
 			die();
-			}
-        wait(250);
 		}
+        wait(250);
+	}
     print "</p>\n";
     print "<p class=\"center\">The database was updated successfully.</p>";
     print "<p class=\"center\"><a href=\"../index.php\">phpMyFAQ</a></p>";
     if (@unlink(basename($_SERVER["PHP_SELF"]))) {
         print "<p class=\"center\">This file was deleted automatically.</p>\n";
-        }
-    else {
+    } else {
         print "<p class=\"center\">Please delete this file manually.</p>\n";
-        }
     }
+}
 ?>
 <p class="center"><?php print COPYRIGHT; ?></p>
 </body>
