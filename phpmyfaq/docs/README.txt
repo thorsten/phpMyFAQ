@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.16 2005-02-14 14:01:35 thorstenr Exp $
+$Id: README.txt,v 1.17 2005-02-15 20:44:07 thorstenr Exp $
 
 phpMyFAQ 1.5.0 RC1
 Codename "Phoebe"
@@ -12,6 +12,7 @@ Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 Changes since 1.5.0 beta3:
 - fixed bug in update script
 - fixed some bugs in RSS feeds
+- updated French language file
 
 Known issues in phpMyFAQ 1.5.0:
 - some language files need an update
