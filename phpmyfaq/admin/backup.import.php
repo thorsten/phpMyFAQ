@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: backup.import.php,v 1.5 2005-03-30 06:48:45 thorstenr Exp $
+* $Id: backup.import.php,v 1.6 2005-03-31 09:32:27 thorstenr Exp $
 *
 * The import function to import the phpMyFAQ backups
 *
@@ -22,7 +22,7 @@ if ($permission["restore"]) {
 ?>
 	<h2><?php print $PMF_LANG["ad_csv_rest"]; ?></h2>
 <?php
-    if (isset($_FILES["userfile"]["type"]) && ($_FILES["userfile"]["type"] == "application/octet-stream" || $_FILES["userfile"]["type"] == "text/plain")) {
+    if (isset($_FILES["userfile"]["type"]) && ($_FILES["userfile"]["type"] == "application/octet-stream" || $_FILES["userfile"]["type"] == "text/plain" || $_FILES["userfile"]["type"] == "text/x-sql")) {
     	$ok = 1;
     	$fp = fopen($_FILES["userfile"]["tmp_name"], "r");
     	$dat = fgets($fp, 65536);
