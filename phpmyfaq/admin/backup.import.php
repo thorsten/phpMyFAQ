@@ -1,10 +1,12 @@
 <?php
 /******************************************************************************
+ * $Id: backup.import.php,v 1.2 2004-10-31 15:37:04 thorstenr Exp $
+ *
  * File:				backup.import.php
  * Description:			import the backup
  * Authors:				Thorsten Rinne <thorsten@rinne.info>
  * Date:				2003-02-24
- * Last change:			2004-07-23
+ * Last change:			2004-10-31
  * Copyright:           (c) 2001-2004 Thorsten Rinne
  * 
  * The contents of this file are subject to the Mozilla Public License
@@ -29,17 +31,16 @@ if ($permission["restore"]) {
     	if (substr($dat, 0, 5) != "# pmf") {
     		print $PMF_LANG["ad_csv_no"];
     		$ok = 0;
-    		}
-    	else {
+        } else {
     		$dat = substr($dat, 7, strlen($dat)-6);
     		$tbl = explode(" ", $dat);
     		for ($h = 0; $h <= 10; $h++) {
     			if (isset($tbl[$h])) {
     				$mquery[] = "DELETE FROM ".trim($tbl[$h]);
-    				}
-    			}
+                }
+            }
     		$ok = 1;
-    		}
+        }
     	
     	if ($ok == 1) {
     		print "<p>".$PMF_LANG["ad_csv_prepare"]."</p>\n";
@@ -47,34 +48,28 @@ if ($permission["restore"]) {
             while (($dat = fgets($fp, 65536))) {
     			if (substr($dat, 0, 1) != "#") {
     				$mquery[] = trim(substr($dat, 0, -1));
-    				}
-    			}
+                }
+            }
     		fclose($fp);
     		
     		$k = 0;
     		$g = 0;
     		print "<p>".$PMF_LANG["ad_csv_process"]."</p>\n";
-    		flush();
     		$anz = count($mquery);
     		$kg = "";
     		for ($i = 0; $i < $anz; $i++) {
     			$kg = $db->query($mquery[$i]);
     			if (!$kg) {
     				print "<div style=\"font-size: 9px;\"><b>Query</b>: \"".$mquery[$i]."\" <span style=\"color: red;\">failed (Reason: ".$db->error().")</span></div>\n";
-    				}
-    			else {
+                } else {
     				print "<div style=\"font-size: 9px;\"><b>Query</b>: <!-- \"".$mquery[$i]."\" --> <span style=\"color: green;\">okay</span></div>\n";
-    				}
-    			flush();
-    			}
+                }
+            }
     		print "<p>".$i." ".$PMF_LANG["ad_csv_of"]." ".$anz." ".$PMF_LANG["ad_csv_suc"]."</p>\n";
-    		}
-    	}
-    else {
+        }
+    } else {
     	print "<p>".$PMF_LANG["ad_csv_no"]."</p>";
-    	}
-	}
-else {
-	print $PMF_LANG["err_NotAuth"];
-	}
-?>
+    }
+} else {
+    print $PMF_LANG["err_NotAuth"];
+}
