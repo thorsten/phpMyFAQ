@@ -279,9 +279,9 @@ if (isset($auth)) {
 		<dt><strong>Safe Mode</strong></dt>
 		<dd><?php print $sm; ?></dd>
 		<dt><strong>Database Client Version</strong></dt>
-		<dd><?php print $db->version(); ?></dd>
+		<dd><?php print $db->client_version(); ?></dd>
 		<dt><strong>Database Server Version</strong></dt>
-		<dd><?php //print mysql_get_server_info(); ?></dd>
+		<dd><?php print $db->server_version(); ?></dd>
 		<dt><strong>Webserver Interface</strong></dt>
 		<dd><?php print strtoupper(@php_sapi_name()); ?></dd>
     </dl>
