@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.54 2005-02-22 20:33:59 thorstenr Exp $
+* $Id: functions.php,v 1.55 2005-02-22 20:51:03 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -629,7 +629,7 @@ function generateComments($id)
 		while ($row = $db->fetch_object($result)) {
 			$output .= "<p class=\"comment\">\n";;
 			$output .= "<strong>".$PMF_LANG["msgCommentBy"]."<a href=\"mailto:".safeEmail($row->email)."\">".$row->usr."</a>:</strong>\n";
-			$output .= "<br />".ereg_replace("&lt;br /&gt;","<br />",stripslashes(htmlspecialchars($row->comment)))."\n</p>";
+			$output .= "<br />".stripslashes(safeHTML($row->comment))."\n</p>";
 			}
 		}
 	return $output;
