@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.11 2005-01-21 12:45:03 thorstenr Exp $
+$Id: README.txt,v 1.12 2005-01-30 06:22:29 thorstenr Exp $
 
 phpMyFAQ 1.5.0 beta2
 Codename "Phoebe"
@@ -18,7 +18,7 @@ Known issues in phpMyFAQ 1.5.0:
 
 CHANGELOG:
 
-Version 1.5.0 beta2 - 2005-01-23
+Version 1.5.0 beta2 - 2005-01-30
 - full support for PostgreSQL databases
 - full support for Sybase databases
 - experimental support for MSSQL databases
@@ -31,8 +31,11 @@ Version 1.5.0 beta2 - 2005-01-23
 - many code improvements and code cleanup
 - better RSS support
 - PHP5 compatible
-- updated Chinese (Trad.) language file
+
+Version 1.4.5 - 2005-01-21
 - updated Japanese language file
+- updated Chinese (Traditional) translation
+- some minor bugfixes
 
 Version 1.4.4 - 2004-12-06
 - added Romanian translation
