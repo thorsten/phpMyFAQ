@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.edit.php,v 1.8 2004-12-11 21:58:44 thorstenr Exp $
+* $Id: record.edit.php,v 1.9 2004-12-11 22:23:06 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23
@@ -55,17 +55,22 @@ if ($permission["editbt"] && emptyTable(SQLPREFIX."faqcategory")) {
         
 		if ((!isset($rubrik) && !isset($thema)) || (isset($_REQUEST["id"]) && $_REQUEST["id"] != "")) {
 		    adminlog("Beitragedit, ".$_REQUEST["id"]);
+			$id = intval($_GET["id"]);
+            $lang = $_GET["lang"]
+            
             // Get the category
-            $resultCategory = $db->query('SELECT category_id, category_lang FROM '.SQLPREFIX.'faqcategoryrelations WHERE record_id = '.$_REQUEST["id"].' AND record_lang = "'.$_GET["lang"].'"');
+            $resultCategory = $db->query('SELECT category_id, category_lang FROM '.SQLPREFIX.'faqcategoryrelations WHERE record_id = '.$id.' AND record_lang = "'.$lang.'"');
             while ($row = $db->fetch_object($resultCategory)) {
                 $categories[] = array('category_id' => $row->category_id, 'category_lang' => $row->category_lang);
             }
+            
             // Get the record
-			$resultRecord = $db->query('SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqdata.active, '.SQLPREFIX.'faqdata.keywords, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqdata.content, '.SQLPREFIX.'faqdata.author, '.SQLPREFIX.'faqdata.email, '.SQLPREFIX.'faqdata.comment, '.SQLPREFIX.'faqdata.datum FROM '.SQLPREFIX.'faqdata WHERE id = '.$_REQUEST["id"].' AND lang = "'.$_GET["lang"]);
+			$resultRecord = $db->query('SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqdata.active, '.SQLPREFIX.'faqdata.keywords, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqdata.content, '.SQLPREFIX.'faqdata.author, '.SQLPREFIX.'faqdata.email, '.SQLPREFIX.'faqdata.comment, '.SQLPREFIX.'faqdata.datum FROM '.SQLPREFIX.'faqdata WHERE id = '.$id.' AND lang = "'.$lang.'"');
+            
 			list($id, $lang, $active, $keywords, $thema, $content, $author, $email, $comment, $date) = $db->fetch_row($resultRecord);
+            
             $content = htmlspecialchars($content);
 			$acti = "saveentry&amp;id=".$_REQUEST["id"];
-			$id = $_REQUEST["id"];
 		} else {
 			$acti = "insertentry";
 			$id = "";
