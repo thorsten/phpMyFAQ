@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-	<title>Documentation for phpMyFAQ 1.4.0 and later</title>
+	<title>Documentation for phpMyFAQ 1.5.0 and later</title>
     <style type="text/css"><!--
     body { font: normal normal 14px "Bitstream Vera Sans", "Trebuchet MS", Verdana, Geneva, Arial, Helvetica, sans-serif;	background-color: #f5f5f5; line-height: 20px; }
     pre { background-color: #FAFAD2; padding: 5px; }
@@ -138,9 +138,9 @@
     <p>In case PHP runs as module of the Apache, you will have to be able to do a chown on the files before installation. The files and directories must be owned by the Apache user.</p>
     <p>You can determine which versions your webserver is running by creating a file called <strong>info.php</strong> with the following content:</p>
     <pre>&lt;?php phpinfo(); ?&gt;</pre>
-    <p>Upload this file to your webspace and open it using your browser. You will now be prompted the PHP and MySQL version numbers. The installation-script also checks which versions of PHP and MySQL are installed on your server. Should you not meet the requirements, you cannot start the installation process.</p>
+    <p>Upload this file to your webspace and open it using your browser.  The installation-script  checks which version of PHP is installed on your server. Should you not meet the requirements, you cannot start the installation process.</p>
     <p>In case you only have PHP3 or PHP 4.0.x installed you cannot use phpMyFAQ.</p>
-    <p>phpMyFAQ uses a WYSIWYG online editor. It uses a non-standard feature based on JavaScript implemented in Mozilla Firefox 0.7+ (any platform), Mozilla 1.3+ (any platform) and Internet Explorer 5.5+ for Windows, therefore the editor will only work in one of these browsers. You have to enable JavaScript. Safari and Konquerer aren't supported by this time. </p>
+    <p>phpMyFAQ uses a WYSIWYG online editor. It uses a non-standard feature based on JavaScript implemented in Mozilla Firefox 0.7+ (any platform), Mozilla 1.3+ (any platform) and Internet Explorer 5.5+ for Windows, therefore the editor will only work in one of these browsers. You have to enable JavaScript. Safari and Konquerer aren't supported by this time but future versions should work. </p>
     <p><a href="#top">back to top</a></p>
     
     
@@ -150,6 +150,16 @@
     <p>You can modify the layout of phpMyFAQ using templates. A description of how this is done can be found <a href="#5">below</a>. Copy all unzipped files to your webserver in a directory using FTP. A good choice would be the directory <strong>faq/</strong>.<br />
     <strong>Important:</strong><br />
     Writing permission for your script is needed in this directory to be able to configure the files <strong>data.php</strong> and <strong>config.php</strong> during installation. This is the case if you're running PHP as CGI or as mod_php with disabled safe-mode. The installation script will stop when your webserver isn't configured as needed.</p>
+    <p>It might help to set chmod 777 to the whole phpMyFAQ directory to avoid problems during the installation. If you're running a very restrictive mod_php installation you should keep the chmod 777 for the following files and directories even after the succesful installation:</p>
+    <ul>
+      <li>the files <strong>data.php</strong> and <strong>config.php</strong> in the directory <strong>inc/</strong> </li>
+      <li>the directory <strong>attachment/</strong></li>
+      <li>the directory <strong>data/</strong></li>
+      <li>the directory <strong>images/</strong></li>
+      <li>the directory <strong>pdf/</strong></li>
+      <li>the directory <strong>xml/</strong></li>
+    </ul>
+    All other dirtectories shouldn't be world-writable for your own security.
     <p><a href="#top">back to top</a></p>
     
     
@@ -225,7 +235,7 @@
     
     <hr style="width: 90%; height: 1px;"  />
     <p><a name="3a"></a><strong>3.a. Upgrading from phpMyFAQ 1.3.x</strong></p>
-    <p>Upgrading from 1.3.x to 1.4.x is a major upgrade. Please make a full backup before you run the upgrade! Updating from phpMyFAQ 1.3.x is fairly simple. Via FTP delete all files <strong>except</strong>:</p>
+    <p>Upgrading from 1.3.x to 1.4.x is a major upgrade. Please make a full backup before you run the upgrade! Nevertheless the update from phpMyFAQ 1.3.x to the current release is fairly simple. First you have to delete all files <strong>except</strong>:</p>
     <ul>
       <li>the files <strong>data.php</strong> and <strong>config.php</strong> in the directory <strong>inc/</strong> </li>
       <li>the directory <strong>attachment/</strong></li>
@@ -236,8 +246,8 @@
     </ul>
     <p>Copy the new files to your webspace and open the following URL in your browser:</p>
     <pre>http://www.example.com/faq/install/update.php</pre>
-    <p>Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be updated. It is possible that your attached images or documents are gone. You have to reinsert them in the new Image Manager. Additionally you have to reorder your categories.</p>
-    <p>After that you have to convert the BBCode from phpMyFAQ 1.3.x into XHTML code. This will be done by a convert script. Open the following URL in your browser:</p>
+    <p>Choose your currently installed phpMyFAQ version and click the button of the update script, your version will automatically be updated. It is possible that your attached images or documents are gone. You have to reinsert them in the new Image Manager. Additionally you have to reorder your categories.</p>
+    <p>After that you have to convert the BBCode from phpMyFAQ 1.3.x into XHTML code because phpMyFAQ 1.5.0 doesn't support BBCode anymore.. This will be done by a convert script. Open the following URL in your browser:</p>
     <pre>http://www.example.com/faq/install/bbcode2xhtml.php</pre>
     <p>Maybe this update will work some seconds due to the fact that in all entries the BBCode have to converted into XHTML.</p>
     <p>Note: You cannot update from MySQL to PostgreSQL. </p>
@@ -282,7 +292,8 @@
     <p>The administration of phpMyFAQ is completely browser-based. The admin area can be found under this URL:</p>
     <pre>http://www.example.com/faq/admin/index.php</pre>
     <p>If you have lost your password, there you can reset it. A new random password will be generated and sent to you via e-mail. Please change it after your successful login with the generated password.</p>
-    <p>After entering your username and password you can log into the system. On the startpage you can see the admin menu on the left, some statistics about visits, entries and comments on the right. The menu contains the following sections:</p>
+    <p>After entering your username and password you can log into the system. On the startpage you can see the admin menu on the left, some statistics about visits, entries and comments on the right. At the bottom of the main admin page you'll see a button for version information. If you click on that button your version of phpMyFAQ will check the latest version number from our website www.phpmyfaq.de. We do not log anything in this process!</p>
+    <p>The menu contains the following sections:</p>
     <ul>
     <li><strong>User Administration</strong></li>
     <li><strong>Create Records</strong></li>
