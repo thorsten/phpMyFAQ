@@ -1,22 +1,23 @@
 <?php
-/******************************************************************************
- * File:				header.php
- * Description:			header of the admin area
- * Author:				Thorsten Rinne <thorsten@phpmyfaq.de>
- * Date:				2003-02-26
- * Last change:			2004-07-25
- * Copyright:           (c) 2001-2004 Thorsten Rinne
- * 
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- * 
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- ******************************************************************************/
+/**
+* $Id: header.php,v 1.3 2005-01-16 10:52:50 thorstenr Exp $
+*
+* header of the admin area
+*
+* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+* @since        2003-02-26
+* @copyright    (c) 2001-2005 phpMyFAQ Team
+* 
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
+* 
+* Software distributed under the License is distributed on an "AS IS"
+* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+* License for the specific language governing rights and limitations
+* under the License.
+*/
 
 header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
 header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
@@ -30,7 +31,7 @@ header("Vary: Negotiate,Accept");
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php print $PMF_LANG["metaLanguage"]; ?>" lang="<?php print $PMF_LANG["metaLanguage"]; ?>">
 <head>
     <title><?php print $PMF_CONF["title"]; ?> - powered by phpMyFAQ</title>
-    <meta name="copyright" content="(c) 2001-2004 Thorsten Rinne" />
+    <meta name="copyright" content="(c) 2001-2005 phpMyFAQ Team" />
     <meta http-equiv="Content-Type" content="text/html; charset=<?php print $PMF_LANG["metaCharset"]; ?>" />
     <style type="text/css"> @import url(../template/admin.css); </style>
     <script language="JavaScript" type="text/javascript" src="../inc/functions.js"></script>
@@ -59,7 +60,7 @@ if (isset($_REQUEST["aktion"]) && ($_REQUEST["aktion"] == "editentry" || $_REQUE
     $output = "'Include internal links' : '',\n";
     $result = $db->query('SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang ORDER BY '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.id');
     while ($row = $db->fetch_object($result)) {
-        $output .= "'".safeSQL(chopString($row->thema, 8))."' : '<a href=\"index.php?action=artikel&amp;cat=".$row->category_id."&amp;id=".$row->id."&amp;artlang=".$row->lang."\">".safeSQL(chopString($row->thema, 8))."</a>',\n";
+        $output .= "'".safeSQL(chopString($row->thema, 8))."' : '<a href=\"index.php?action=artikel&amp;cat=".$row->category_id."&amp;id=".$row->id."&amp;artlang=".$row->lang."\">".safeSQL($row->thema)."</a>',\n";
         };
     $output = substr($output, 0, -2);
     print $output;
