@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.11 2005-01-03 15:11:30 thorstenr Exp $
+* $Id: update.php,v 1.12 2005-01-03 15:50:52 thorstenr Exp $
 *
 * Main update script
 *
@@ -37,6 +37,8 @@ require_once (PMF_ROOT_DIR."/inc/config.php");
 */
 function getVersionNumber()
 {
+    global $version, $PMF_CONF;
+    
     if (isset($version)) {
         $oldversion = $version;
     } elseif (isset($PMF_CONF["version"])) {
@@ -159,29 +161,29 @@ if ($step == 1) {
     <li>phpMyFAQ 1.4.0 M2</li>
 </ul>
 <p><strong>Please make a full backup of your SQL tables before running this update.</strong></p>
-<p>
+
 <?php
     $oldversion = getVersionNumber();
     if ($oldversion != FALSE) {
 ?>
-<span class="text">Your detected current version: phpMyFAQ <?php print $oldversion; ?></span>
+<p>Your detected current version: phpMyFAQ <?php print $oldversion; ?></p>
 <input type="hidden" name="version" value="<?php print $oldversion; ?>" />
 <?php
     } else {
 ?>
-<span class="text">Please select your current version:</span>
+<p>Please select your current version:</p>
 <select name="version" size="1">
-    <option value="1.3.0">phpMyFAQ version 1.3.0</option>
-    <option value="1.3.1">phpMyFAQ version 1.3.1</option>
-    <option value="1.3.2">phpMyFAQ version 1.3.2</option>
-    <option value="1.3.3">phpMyFAQ version 1.3.3 or later</option>
-    <option value="1.4.0">phpMyFAQ version 1.4.0 alpha2 or later</option>
-    <option value="1.4.1">phpMyFAQ version 1.4.1 and later</option>
+    <option value="1.3.0">phpMyFAQ 1.3.0</option>
+    <option value="1.3.1">phpMyFAQ 1.3.1</option>
+    <option value="1.3.2">phpMyFAQ 1.3.2</option>
+    <option value="1.3.3">phpMyFAQ 1.3.3 or later</option>
+    <option value="1.4.0">phpMyFAQ 1.4.0 alpha2 or later</option>
+    <option value="1.4.1">phpMyFAQ 1.4.1 and later</option>
 </select>
 <?php
     }
 ?>
-</p>
+
 <p class="center"><input type="submit" value="Go to step 2 of 5" class="button" /></p>
 </fieldset>
 </form>
@@ -299,6 +301,31 @@ if ($step == 3) {
 <input type="hidden" name="edit[mod_rewrite]" value="" />
 <input type="hidden" name="edit[ldap_support]" value="" />
 <?php
+    } else {
+?>
+<input type="hidden" name="edit[language]" value="<?php print $PMF_CONF["language"]; ?>" />
+<input type="hidden" name="edit[detection]" value="<?php print $PMF_CONF["detection"]; ?>" />
+<input type="hidden" name="edit[title]" value="<?php print $PMF_CONF["title"]; ?>" />
+<input type="hidden" name="edit[version]" value="<?php print NEWVERSION; ?>" />
+<input type="hidden" name="edit[metaDescription]" value="<?php print $PMF_CONF["metaDescription"]; ?>" />
+<input type="hidden" name="edit[metaKeywords]" value="<?php print $PMF_CONF["metaKeywords"]; ?>" />
+<input type="hidden" name="edit[metaPublisher]" value="<?php print $PMF_CONF["metaPublisher"]; ?>" />
+<input type="hidden" name="edit[adminmail]" value="<?php print $PMF_CONF["adminmail"]; ?>" />
+<input type="hidden" name="edit[msgContactOwnText]" value="<?php print $PMF_CONF["msgContactOwnText"]; ?>" />
+<input type="hidden" name="edit[copyright_eintrag]" value="<?php print $PMF_CONF["copyright_eintrag"]; ?>" />
+<input type="hidden" name="edit[send2friend_text]" value="<?php print $PMF_CONF["send2friend_text"]; ?>" />
+<input type="hidden" name="edit[attmax]" value="<?php print $PMF_CONF["attmax"]; ?>" />
+<input type="hidden" name="edit[disatt]" value="<?php print $PMF_CONF["disatt"]; ?>" />
+<input type="hidden" name="edit[tracking]" value="<?php print $PMF_CONF["tracking"]; ?>" />
+<input type="hidden" name="edit[enableadminlog]" value="<?php print $PMF_CONF["enableadminlog"]; ?>" />
+<input type="hidden" name="edit[ipcheck]" value="<?php print $PMF_CONF["ipcheck"]; ?>">
+<input type="hidden" name="edit[numRecordsPage]" value="<?php print $PMF_CONF["numRecordsPage"]; ?>" />
+<input type="hidden" name="edit[numNewsArticles]" value="<?php print $PMF_CONF["numNewsArticles"]; ?>" />
+<input type="hidden" name="edit[bannedIP]" value="<?php print $PMF_CONF["bannedIP"]; ?>" />
+<input type="hidden" name="edit[parse_php]" value="<?php print $PMF_CONF["parse_php"]; ?>" />
+<input type="hidden" name="edit[mod_rewrite]" value="<?php print $PMF_CONF["mod_rewrite"]; ?>" />
+<input type="hidden" name="edit[ldap_support]" value="<?php print $PMF_CONF["ldap_support"]; ?>" />
+<?php
     }
 ?>
 <p class="center">The configuration files will be updated after the next step.</p>
@@ -398,13 +425,6 @@ if ($step == 5) {
     }
     // update from version 1.4.0
     if ($version <= "140") {
-        // rewrite data.php
-        if ($fp = @fopen("../inc/data.php","w")) {
-    		@fputs($fp,"<?php\n\$DB[\"server\"] = '".$DB["server"]."';\n\$DB[\"user\"] = '".$DB["user"]."';\n\$DB[\"password\"] = '".$DB["password"]."';\n\$DB[\"db\"] = '".$DB["db"]."';\n\$DB[\"prefix\"] = '".SQLPREFIX."';\n\$DB[\"type\"] = 'mysql';\n?>");
-    		@fclose($fp);
-        } else {
-    		print "<p class=\"error\"><strong>Error:</strong> Cannot rewrite to data.php.</p>";
-        }
         $query[] = "ALTER TABLE ".SQLPREFIX."faqadminlog CHANGE user usr INT(11) DEFAULT '0' NOT NULL";
         $query[] = "ALTER TABLE ".SQLPREFIX."faqadminsessions CHANGE user usr TINYTEXT NOT NULL";
         $query[] = "ALTER TABLE ".SQLPREFIX."faqchanges CHANGE user usr INT(11) DEFAULT '0' NOT NULL";
@@ -412,7 +432,14 @@ if ($step == 5) {
         $query[] = "ALTER TABLE ".SQLPREFIX."faqvoting CHANGE user usr INT(11) DEFAULT '0' NOT NULL";
     }
     // update from versions before 1.5.0
-    if ($version < 150) {
+    if ($version < "150") {
+        // rewrite data.php
+        if ($fp = @fopen("../inc/data.php","w")) {
+    		@fputs($fp,"<?php\n\$DB[\"server\"] = '".$DB["server"]."';\n\$DB[\"user\"] = '".$DB["user"]."';\n\$DB[\"password\"] = '".$DB["password"]."';\n\$DB[\"db\"] = '".$DB["db"]."';\n\$DB[\"prefix\"] = '".SQLPREFIX."';\n\$DB[\"type\"] = 'mysql';\n?>");
+    		@fclose($fp);
+        } else {
+    		print "<p class=\"error\"><strong>Error:</strong> Cannot rewrite to data.php.</p>";
+        }
         // alter column faqdata.rubrik to integer
         $query[] = "ALTER TABLE ".SQLPREFIX."faqdata CHANGE rubrik rubrik INT NOT NULL";
         // create new table faqcategoryrelations
