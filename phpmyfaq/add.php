@@ -1,12 +1,12 @@
 <?php
 /**
-* $Id: add.php,v 1.5 2004-12-16 11:48:03 thorstenr Exp $
+* $Id: add.php,v 1.6 2005-03-04 06:19:34 thorstenr Exp $
 *
 * This is the page there a user can add a FAQ record.
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-09-16
-* @copyright    (c) 2001-2004 Thorsten Rinne
+* @copyright    (c) 2001-2005 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -30,9 +30,10 @@ if (isset($_GET["question"])) {
 }
 
 if (isset($_GET["cat"]) && is_numeric($_GET["cat"])) {
-	$category = $_GET["cat"];
+    $rubrik = intval($_GET["cat"]);
+	$category = array(array('category_id' => $rubrik, 'category_lang' => $LANGCODE));
 } else {
-	$category = "";
+	$category = array();
 }
 
 $tree->buildTree();
