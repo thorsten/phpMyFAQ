@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.19 2004-12-11 20:07:13 thorstenr Exp $
+* $Id: functions.php,v 1.20 2004-12-11 21:40:27 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -444,7 +444,7 @@ function generateTopTen()
 	$output = "";
 	if ($db->num_rows($result) > 0) {
 		$i = 1;
-		while (($row = $db->fetch_object($result)) && $i <= 10)
+		while (($row = $db->fetch_object($result)) && $i <= 10) {
 			$output .= "<tr>\n\t<td>\n";
             
             if (isset($PMF_CONF["mod_rewrite"])) {
