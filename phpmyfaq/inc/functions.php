@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.43 2005-01-09 19:19:50 thorstenr Exp $
+* $Id: functions.php,v 1.44 2005-01-10 14:57:26 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -460,7 +460,7 @@ function generateNews()
 */
 function generateTopTen($language = '')
 {
-	global $db, $sids, $PMF_LANG;
+	global $db, $sids, $PMF_LANG, $PMF_CONF;
 	$query = 'SELECT DISTINCT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqvisits.visits FROM '.SQLPREFIX.'faqvisits, '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang WHERE ';
     
     if (isset($language) && strlen($language) == 2) {
@@ -504,7 +504,7 @@ function generateTopTen($language = '')
 */
 function generateFiveNewest($language = '')
 {
-	global $db, $sids, $PMF_LANG;
+	global $db, $sids, $PMF_LANG, $PMF_CONF;
 	$query = 'SELECT DISTINCT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqdata.datum, '.SQLPREFIX.'faqvisits.visits FROM '.SQLPREFIX.'faqvisits, '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang WHERE ';
     
     if (isset($language) && strlen($language) == 2) {
@@ -513,7 +513,7 @@ function generateFiveNewest($language = '')
     
     $query .= SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvisits.id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqvisits.lang AND '.SQLPREFIX.'faqdata.active = "yes" ORDER BY '.SQLPREFIX.'faqdata.datum DESC';
     $result = $db->query($query);
-	if ($num = $db->num_rows($result) > 0) {
+	if ($db->num_rows($result) > 0) {
 		$output = "";
 		$i = 0;
 		while (($row = $db->fetch_object($result)) && $i < 5 ) {
@@ -1005,8 +1005,8 @@ function generateDocBookExport()
         $output .= '<title>'.$c_value['title'].'</title>';
         $output .= "\n";
         
-        foreach($c_value['faqs'] as $f_id=>$data){
-            foreach($data as $d_id=>$posting){
+        foreach($c_value['faqs'] as $f_id => $data){
+            foreach($data as $d_id => $posting){
                 $output .= '<sect1 id="'.$d_id.'">';
                 $output .= "\n";
                 
@@ -1090,6 +1090,7 @@ function searchEngine($begriff)
         
         $keys = preg_split("/\s+/", $begriff);
         $numKeys = count($keys);
+        $where = '';
         for ($i = 0; $i < $numKeys; $i++) {
             
             if (strlen($where) != 0 ) {
@@ -1443,7 +1444,7 @@ function getShortUserName()
     } elseif (isset($_SERVER['REMOTE_USER'])) {
         return $_SERVER['REMOTE_USER'];
     } else {
-        return;
+        return '';
     }
 }
 
