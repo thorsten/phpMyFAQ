@@ -1,11 +1,13 @@
 <?php
-/******************************************************************************
+/**
+ * $Id: update.php,v 1.2 2004-11-05 22:45:11 thorstenr Exp $
+ *
  * File:                update.php
  * Author:              Thorsten Rinne <thorsten@phpmyfaq.de>
  * Contributor:         Thomas Melchinger <t.melchinger@uni.de>
  * Date:                2002-01-10
- * Last Update:         2004-10-10
- * Copyright:           (c) 2001-2004 Thorsten Rinne
+ * Last Update:         2004-11-05
+ * Copyright:           (c) 2001-2004 phpMyFAQ Team
  * 
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -238,6 +240,7 @@ if ($step == 3) {
 <input type="hidden" name="edit[numRecordsPage]" value="10" />
 <input type="hidden" name="edit[numNewsArticles]" value="<?php print $numNewsArticles; ?>" />
 <input type="hidden" name="edit[bannedIP]" value="<?php print $bannedIP; ?>" />
+<input type="hidden" name="edit[parse_php]" value="" />
 <input type="hidden" name="edit[mod_rewrite]" value="" />
 <?php
         }
@@ -263,6 +266,7 @@ if ($step == 3) {
 <input type="hidden" name="edit[numRecordsPage]" value="<?php print $PMF_CONF["numRecordsPage"]; ?>" />
 <input type="hidden" name="edit[numNewsArticles]" value="<?php print $PMF_CONF["numNewsArticles"]; ?>" />
 <input type="hidden" name="edit[bannedIP]" value="<?php print $PMF_CONF["bannedIP"]; ?>" />
+<input type="hidden" name="edit[parse_php]" value="" />
 <input type="hidden" name="edit[mod_rewrite]" value="" />
 <?php
         }
