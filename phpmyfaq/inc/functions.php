@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.11 2004-11-21 17:49:55 thorstenr Exp $
+ * $Id: functions.php,v 1.12 2004-11-23 20:23:05 thorstenr Exp $
  *
  * File:                functions.php
  * Description:         This is the main functions file!
@@ -795,7 +795,6 @@ function generateXMLExport($id, $lang = "")
 /**
 * This function generates a plain XHTML file with all entries.
 *
-
 * @return   boolean
 * @access   public
 * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -804,10 +803,22 @@ function generateXMLExport($id, $lang = "")
 function generateXHTMLFile()
 {
 	global $db, $tree, $PMF_CONF, $PMF_LANG;
-    
 	$result = $db->query("SELECT id, lang, active, rubrik, thema, content, author, datum FROM ".SQLPREFIX."faqdata ORDER BY rubrik, id");
 	if ($db->num_rows($result) > 0) {
         
+        $xhtml = '<?xml version="1.0" encoding="'.$PMF_LANG['metaCharset'].'" ?>';
+        $xhtml .= '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
+        $xhtml .= '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="'.$PMF_LANG['metaLanguage'].'" lang="'.$PMF_LANG['metaLanguage'].'">';
+        $xhtml .= '<head>';
+        $xhtml .= '    <title>'.$PMF_CONF['title'].'</title>';
+        $xhtml .= '    <meta http-equiv="Content-Type" content="application/xhtml+xml; charset='.$PMF_LANG['metaCharset'].'" />';
+        $xhtml .= '    <meta name="title" content="{title}" />';
+        $xhtml .= '</head>';
+        $xhtml .= '<body dir="{dir}">';
+        
+        
+        $xhtml .= '</body>';
+        $xhtml .= '</html>';
     }
 }
 
