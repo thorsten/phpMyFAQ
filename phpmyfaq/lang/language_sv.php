@@ -569,6 +569,8 @@ $LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "Kolla IP:n när UIN kollas i
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Antal visade rubriker per sida");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Antal nyhetsartiklar");
 $LANG_CONF["bannedIP"] = array(0 => "area", 1 => "Blocka dessa IP-adresser");
+$LANG_CONF["parse_php"] = array(0 => "checkbox", 1 => "Should the template engine parse PHP code? (default: disabled)");
+$LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Activate mod_rewrite support? (default: disabled)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "Som ny huvudkategori";
 $PMF_LANG["ad_categ_paste_error"] = "Att flytta denna kategori är inte möjligt.";

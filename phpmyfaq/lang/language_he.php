@@ -569,6 +569,8 @@ $LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "האם הנך רוצה שהIP יבדק כאשר
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "מספר עמודים מוצגים בכל עמוד");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "מספר כתבות חדשות");
 $LANG_CONF["bannedIP"] = array(0 => "area", 1 => "חסום את IP זה");
+$LANG_CONF["parse_php"] = array(0 => "checkbox", 1 => "Should the template engine parse PHP code? (default: disabled)");
+$LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Activate mod_rewrite support? (default: disabled)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "כקטגוריה ראשית חדשה";
 $PMF_LANG["ad_categ_paste_error"] = "הזזת הקטגוריה בלתי אפשרית.";

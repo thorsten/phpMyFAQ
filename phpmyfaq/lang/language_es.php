@@ -569,6 +569,8 @@ $LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "¿Quieres que las IP sean ch
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Number of displayed topics per page");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Número de nuevos artículos");
 $LANG_CONF["bannedIP"] = array(0 => "area", 1 => "Bloquear estas IPs");
+$LANG_CONF["parse_php"] = array(0 => "checkbox", 1 => "Should the template engine parse PHP code? (default: disabled)");
+$LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Activate mod_rewrite support? (default: disabled)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "as new main category";
 $PMF_LANG["ad_categ_paste_error"] = "Moving this category isn't possible.";

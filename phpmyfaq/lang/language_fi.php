@@ -567,6 +567,8 @@ $LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "Haluatko, ett‰ admin.php:ss
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "N‰ytettyjen tietueiden m‰‰r‰ per sivu");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Uutisten m‰‰r‰");
 $LANG_CONF["bannedIP"] = array(0 => "area", 1 => "Est‰ k‰yttˆ n‰ist‰ IP-osoitteista");
+$LANG_CONF["parse_php"] = array(0 => "checkbox", 1 => "Should the template engine parse PHP code? (default: disabled)");
+$LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Activate mod_rewrite support? (default: disabled)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "uutena p‰‰-kategoriana";
 $PMF_LANG["ad_categ_paste_error"] = "T‰m‰n kategorian siiro ei ole mahdollista.";

@@ -567,6 +567,8 @@ $LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "admin.php에서 UINs를 체크할
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "페이지당 표시할 글의 수");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "공지사항 표시 개수");
 $LANG_CONF["bannedIP"] = array(0 => "area", 1 => "아래 IP주소로 부터 사용 금지");
+$LANG_CONF["parse_php"] = array(0 => "checkbox", 1 => "Should the template engine parse PHP code? (default: disabled)");
+$LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Activate mod_rewrite support? (default: disabled)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "새로운 메인 카테고리로";
 $PMF_LANG["ad_categ_paste_error"] = "이 카테고리를 옮기는 것은 불가능합니다.";

@@ -567,6 +567,8 @@ $LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "Apakah anda ingin pemeriksa
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Jumlah materi yang ditampilkan per halaman");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Jumlah kabar yang ditampilkan");
 $LANG_CONF["bannedIP"] = array(0 => "area", 1 => "Larang IP berikut");
+$LANG_CONF["parse_php"] = array(0 => "checkbox", 1 => "Should the template engine parse PHP code? (default: disabled)");
+$LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Activate mod_rewrite support? (default: disabled)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "sebagai kategori utama baru";
 $PMF_LANG["ad_categ_paste_error"] = "Kategori ini tidak dapat dipindahkan.";

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.2 2004-11-03 19:34:55 thorstenr Exp $
+ * $Id: language_de.php,v 1.3 2004-11-13 18:41:22 thorstenr Exp $
  *
  * File:                language_de.php
  * Description:		    German language file
@@ -568,6 +568,8 @@ $LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "Soll die IP zum Check der U
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Anzahl der angezeigten Themen pro Seite");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Anzahl der angezeigten News");
 $LANG_CONF["bannedIP"] = array(0 => "area", 1 => "Gesperrte IPs");
+$LANG_CONF["parse_php"] = array(0 => "checkbox", 1 => "Soll der Template Parser PHP ausführen? (Voreinstellung: deaktiviert)");
+$LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Activate mod_rewrite support? (Voreinstellung: deaktiviert)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "Als neue Hauptrubrik";
 $PMF_LANG["ad_categ_paste_error"] = "Diese Rubrik kann hier nicht eingef&uuml;gt werden.";
