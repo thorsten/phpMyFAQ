@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.edit.php,v 1.13 2004-12-16 12:26:24 thorstenr Exp $
+* $Id: record.edit.php,v 1.14 2004-12-25 07:08:45 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23
@@ -18,7 +18,7 @@
 * under the License.
 */
 
-if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategory")) {
+if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 	$tree = new Category();
     $tree->buildTree();
     $rubrik = "";
@@ -212,9 +212,9 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategory")) {
 <?php
 		}
 	}
-} elseif ($permission["editbt"] != 1 && !emptyTable(SQLPREFIX."faqcategory")) {
+} elseif ($permission["editbt"] != 1 && !emptyTable(SQLPREFIX."faqcategories")) {
     print $PMF_LANG["err_NotAuth"];
-} elseif ($permission["editbt"] && emptyTable(SQLPREFIX."faqcategory")) {
+} elseif ($permission["editbt"] && emptyTable(SQLPREFIX."faqcategories")) {
     print $PMF_LANG["no_cats"];
 }
 ?>
