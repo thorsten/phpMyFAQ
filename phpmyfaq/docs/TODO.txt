@@ -6,6 +6,11 @@ TODO list for future versions of phpMyFAQ:
 - bugfixing for stability or security reasons
 
 1.5.2 and later:
+- change 'id' to 'record' for better Google compliance
+- improved Image Manager
+- bugfixing for stability or security reasons
+
+1.5.3 and later:
 - bugfixing for stability or security reasons
 
 1.6.0 "Prometheus":
