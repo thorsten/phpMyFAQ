@@ -1,12 +1,14 @@
 <?php
-/******************************************************************************
+/**
+ * $Id: mysql.sql.php,v 1.3 2004-11-07 13:07:50 thorstenr Exp $
+ *
  * File:                update.php
  * Description:         CREATE TABLE instruction for MySQL database
  * Authors:				Thorsten Rinne <thorsten@phpmyfaq.de>
  *                      Tom Rochester <tom.rochester@gmail.com>
  * Date:				2004-09-18
- * Last Update:			2004-11-01
- * Copyright:           (c) 2001-2004 Thorsten Rinne
+ * Last Update:			2004-11-07
+ * Copyright:           (c) 2001-2004 phpMyFAQ Team
  * 
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -57,7 +59,7 @@ email varchar(255) NOT NULL,
 comment enum('y','n') NOT NULL default 'y',
 datum varchar(15) NOT NULL,
 FULLTEXT (keywords,thema,content),
-PRIMARY KEY (id, lang))";
+PRIMARY KEY (id, lang)) TYPE = MYISAM";
 
 //faqadminlog
 $query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqadminlog (
