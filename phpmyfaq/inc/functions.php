@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.61 2005-03-12 20:10:27 thorstenr Exp $
+* $Id: functions.php,v 1.62 2005-03-21 19:28:21 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -302,10 +302,11 @@ function IPCheck($ip)
 */
 function hilight($content)
 {
-    $appendPHP = FALSE;
     $string = $content[2];
+    $string = str_replace("&lt;?php", " ", $string);
+    $string = str_replace("?&gt;", " ", $string);
+    
     if (!ereg('^<\\?', $string) || !ereg('^&lt;\\?', $string)) {
-        $appendPHP = TRUE;
         $string = "<?php\n".$string."\n?>";
     }
     
