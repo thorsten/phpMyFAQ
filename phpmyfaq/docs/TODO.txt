@@ -3,12 +3,12 @@ TODO list for future versions of phpMyFAQ:
 1.5.0 "Phoebe":
 - full support for PostgreSQL 7.x (done by Tom)
 - mod_rewrite support (done by Thorsten)
-- one entry in various categories
+- one entry in various categories (partly done by Thorsten)
 - template engine parse PHP code (done by Thorsten)
 - better RSS support (done by Thorsten)
 - complete XML and XHTML exports (done by Thorsten)
 - reorder records ?
-- more accessibility features (WAI and Section 508) ?
+- more accessibility features (partly done by Thorsten)
 - bugfixing for stability or security reasons
 
 1.6.0 "Prometheus":
@@ -29,7 +29,7 @@ TODO list for future versions of phpMyFAQ:
 
 1.8.0 "Paaliaq":
 - possibility to disable multiple languages
-- XML-RPC interface for adding records ?
+- SOAP interface ?
 - "sticky" records ?
 - PDF2Mail ?
 - users can request a record changing ?
@@ -37,7 +37,6 @@ TODO list for future versions of phpMyFAQ:
 - bugfixing for stability or security reasons
 
 1.9.0 "Portia":
-- SOAP interface ?
 - add auto update feature ?
 - modularisation of all features ?
 - Unicode support for PDFs ?
@@ -45,10 +44,8 @@ TODO list for future versions of phpMyFAQ:
 - bugfixing for stability or security reasons
 
 2.0.0 "NG":
-- PHP 5 ?
-- MySQL 4.1 ?
-- new database independent abstraction layer ?
-- new authentication ?
-- new template engine ?
-- XPI interface ?
+- PHP 5.1 ?
+- MySQL 5.0 ?
+- PDO support ?
+- XUL interface ?
 - bugfixing for stability or security reasons

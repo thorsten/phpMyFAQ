@@ -7,8 +7,9 @@ Please read the documentation (documentation.en.html) carefully.
 Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
-Changes since 1.4.x:
-- full support for PostgreSQL
+Changes since 1.4.4:
+- full support for PostgreSQL databases
+- full support for Sybase databases
 - mod_rewrite support
 - template engine parses PHP code
 - rewritten PDF export
@@ -22,14 +23,20 @@ Known issues in phpMyFAQ 1.5.0:
 
 CHANGELOG:
 
-Version 1.5.0 alpha - 2004-11-xx
-- full support for PostgreSQL
+Version 1.5.0 alpha - 2004-12-xx
+- full support for PostgreSQL databases
+- full support for Sybase databases
 - mod_rewrite support
 - template engine parses PHP code
 - rewritten PDF export
 - complete XML and XHTML exports
 - many code improvements and code cleanup
 - better RSS support
+
+Version 1.4.4 - 2004-12-06
+- added Romanian translation
+- added Chinese (Traditional) translation
+- many bugfixes
 
 Version 1.4.3 - 2004-11-05
 - added Turkish translation
