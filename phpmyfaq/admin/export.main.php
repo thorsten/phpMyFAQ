@@ -5,7 +5,7 @@
  * Author:				Thorsten Rinne <thorsten@phpmyfaq.de>
  * Contributor:         Peter Beauvain <pbeauvain@web.de>
  * Date:				2003-04-17
- * Last change:			2004-06-18
+ * Last change:			2004-11-01
  * Copyright:           (c) 2001-2004 phpMyFAQ Team
  * 
  * The contents of this file are subject to the Mozilla Public License
@@ -37,13 +37,13 @@ if (isset($submit[0])) {
 		while ($row = $db->fetch_object($result)) {
 			$output .= "\t<item>\n";
 			$output .= "\t\t<title>".$row->header."</title>\n";
-			$output .= "\t\t<description>".stripslashes($row->artikel)."</description>\n";
+			$output .= "\t\t<description>".stripslashes(htmlspecialchars($row->artikel))."</description>\n";
 			$output .= "\t\t<link>http://".$_SERVER["HTTP_HOST"].str_replace ("admin/", "", $_SERVER["PHP_SELF"])."</link>\n";
 			$output .= "\t</item>\n";
 		    }
 	    }
 	$output .= "</channel>\n</rss>";
-	$fp = @fopen("../xml/news.xml", "w");
+	$fp = @fopen(PMF_ROOT_DIR."/xml/news.xml", "w");
 	if ($fp != FALSE) {
 		fputs($fp, $output);
 		print "<p>".$PMF_LANG["ad_export_1"]." <em><a href=\"../xml/news.xml\" target=\"_blank\">../xml/news.xml</a></em> ".$PMF_LANG["ad_export_2"]."</p>";
@@ -67,14 +67,14 @@ if (isset($submit[1])) {
 		while ($row = $db->fetch_object($result)) {
 			$output .= "\t<item>\n";
 			$output .= "\t\t<title>[".$i.".] ".$row->visits." ".$PMF_LANG["msgViews"].":</title>\n";
-			$output .= "\t\t<description>".stripslashes(makeShorterText($row->thema, 8))."</description>\n";
-			$output .= "\t\t<link>http://".$_SERVER["HTTP_HOST"].str_replace ("admin/", "", $_SERVER["PHP_SELF"])."?aktion=artikel&amp;rubrik=".$row->rubrik."&amp;id=".$row->id."&amp;artlang=".$row->lang."</link>\n";
+			$output .= "\t\t<description>".stripslashes(htmlspecialchars(makeShorterText($row->thema, 8)))."</description>\n";
+			$output .= "\t\t<link>http://".$_SERVER["HTTP_HOST"].str_replace ("admin/", "", $_SERVER["PHP_SELF"])."?aktion=artikel&amp;cat=".$row->rubrik."&amp;id=".$row->id."&amp;artlang=".$row->lang."</link>\n";
 			$output .= "\t</item>\n";
 			$i++;
 			}
 		}
 	$output .= "</channel>\n</rss>";
-	$fp = fopen("../xml/topten.xml", "w");
+	$fp = fopen(PMF_ROOT_DIR."/xml/topten.xml", "w");
 	if ($fp != FALSE) {
 		fputs($fp, $output);
 		print "<p>".$PMF_LANG["ad_export_1"]." <em><a href=\"../xml/topten.xml\" target=\"_blank\">../xml/topten.xml</a></em> ".$PMF_LANG["ad_export_2"]."</p>";
@@ -96,14 +96,14 @@ if (isset($submit[2])) {
 	if ($num = $db->num_rows($result) > 0) {
 		while ($row = $db->fetch_object($result)) {
 			$output .= "\t<item>\n";
-			$output .= "\t\t<title>".makeDate($row->datum)."</title>\n";
-			$output .= "\t\t<description>".stripslashes(makeShorterText($row->thema, 8))." (".$row->visits." ".$PMF_LANG["msgViews"].")</description>\n";
-			$output .= "\t\t<link>http://".$_SERVER["HTTP_HOST"].str_replace ("admin/", "", $_SERVER["PHP_SELF"])."?aktion=artikel&amp;rubrik=".$row->rubrik."&amp;id=".$row->id."&amp;artlang=".$row->lang."</link>\n";
+			$output .= "\t\t<title>".stripslashes(htmlspecialchars(makeShorterText($row->thema, 8)))." ...</title>\n";
+			$output .= "\t\t<description>".stripslashes(htmlspecialchars(makeShorterText($row->thema, 8)))." (".$row->visits." ".$PMF_LANG["msgViews"].")</description>\n";
+			$output .= "\t\t<link>http://".$_SERVER["HTTP_HOST"].str_replace ("admin/", "", $_SERVER["PHP_SELF"])."?aktion=artikel&amp;cat=".$row->rubrik."&amp;id=".$row->id."&amp;artlang=".$row->lang."</link>\n";
 			$output .= "\t</item>\n";
 			}
 		}
 	$output .= "</channel>\n</rss>";
-	$fp = fopen("../xml/latest.xml", "w");
+	$fp = fopen(PMF_ROOT_DIR."/xml/latest.xml", "w");
 	if ($fp != FALSE) {
 		fputs($fp, $output);
 		print "<p>".$PMF_LANG["ad_export_1"]." <em><a href=\"../xml/latest.xml\" target=\"_blank\">../xml/latest.xml</a></em> ".$PMF_LANG["ad_export_2"]."</p>";
@@ -116,8 +116,8 @@ if (isset($submit[2])) {
 
 if (isset($submit[3])) {
 	// Full PDF Export
-	define("FPDF_FONTPATH", "../font/");
-	require ("../inc/fpdf.php");
+	define("FPDF_FONTPATH", PMF_ROOT_DIR."/font/");
+	require (PMF_ROOT_DIR."/inc/fpdf.php");
 	$tree = new Category();
 	$arrRubrik = array();
 	$arrThema = array();
@@ -315,68 +315,6 @@ function txtentities($html){
         		}
     		}
 		}
-
-// HTML-Parser für BBCode
-	function WriteHTML_BB($html) {
-		$html = str_replace('&quot;','"',$html);
-		$html = str_replace('&lt;','‹',$html); //sonst wird HTML-CODE innerhalb des [pre] Tags im PDF unterschlagen
-		$html = str_replace('&gt;','›',$html); // '›' = chr155,'‹' = chr139 habe keine besseren Zeichen gefunden
-		$html = str_replace('&nbsp;',' ',$html);
-		$html = str_replace('&amp;','&',$html);
-		$html = str_replace("\n", "<br />", $html);
-        $html = str_replace('images/','../images/',$html);
-        //Echtfarben aus dem Editor in HEX-Code Umwandeln | @@ Peter Beauvain, 2004-04-12
-        $html = str_replace('color="darkred', 'color="#8B0000', $html);
-		$html = str_replace('color="red', 'color="#FF0000', $html);
-		$html = str_replace('color="orange', 'color="#FFA500', $html);
-		$html = str_replace('color="brown', 'color="#A52A2A', $html);
-		$html = str_replace('color="yellow', 'color="#FFFF00', $html);
-		$html = str_replace('color="green', 'color="#008000', $html);
-		$html = str_replace('color="Chartreuse', 'color="#7FFF00', $html);
-		$html = str_replace('color="olive', 'color="#808000', $html);
-		$html = str_replace('color="cyan', 'color="#00FFFF', $html);
-		$html = str_replace('color="blue', 'color="#0000FF', $html);
-		$html = str_replace('color="darkblue', 'color="#00008B', $html);
-		$html = str_replace('color="indigo', 'color="#4B0082', $html);
-		$html = str_replace('color="violet', 'color="#EE82EE', $html);
-		$html = str_replace('color="white', 'color="#FFFFFF', $html);
-		$html = str_replace('color="black', 'color="#000000', $html);
- 		$a = preg_split("/<(.*)>/U", $html, -1, PREG_SPLIT_DELIM_CAPTURE);
-		foreach($a as $i => $e) {
-			if ($i % 2 == 0) {
-				if ($this->HREF) {
-					$this->PutLink($this->HREF,$e);
-				        }
-				
-				elseif ($this->SRC) {
-					$this->AddImage($this->SRC);
-                                        $this->SRC = "";
-                                     }
-				elseif ($this->CENTER) {
-					$this->MultiCell(0, 1, $e, 0, "L");
-					}
-            	else {
-                	$this->Write(5,$e);
-					}
-        		}
-        	else {
-				if ($e{0} == "/") {
-					$this->CloseTag(strtoupper(substr($e,1)));
-					}
-				else {
-					$a2 = explode(" ",$e);
-					$tag = strtoupper(array_shift($a2));
-					$attr = array();
-					foreach ($a2 as $v) {
-						if (ereg('^([^=]*)=["\']?([^"\']*)["\']?$',$v,$a3)) {
-                        	$attr[strtoupper($a3[1])]=$a3[2];
-							}
-						}
-                	$this->OpenTag($tag,$attr);
-            		}
-        		}
-    		}
-		}
 	
 	function OpenTag($tag, $attr) {
 		
@@ -471,7 +409,8 @@ function txtentities($html){
 		}
 	
 	function AddImage($image) {
-		$info = GetImageSize($image);
+		$image = dirname(PMF_ROOT_DIR).$image;
+        $info = GetImageSize("$image");
         if ($info[0] > 555 ){
         $w = $info[0] / 144 * 25.4;
         $h = $info[1] / 144 * 25.4;
@@ -524,7 +463,7 @@ function txtentities($html){
 		$i = 0;
 		while ($row = $db->fetch_object($result)) {
 			$arrRubrik[$i] = $row->rubrik;
-			$arrThema[$i] = $row->thema;
+			$arrThema[$i] = stripslashes($row->thema);
 			$arrContent[$i] = $row->content;
 			$arrDatum[$i] = $row->datum;
 			$arrAuthor[$i] = $row->author;
@@ -547,10 +486,10 @@ function txtentities($html){
     	$pdf->WriteHTML(unhtmlentities(stripslashes($value)));
     	}
 	
-	$pdfFile = "../pdf/faq.pdf";
+	$pdfFile = PMF_ROOT_DIR."/pdf/faq.pdf";
 	$pdf->Output($pdfFile);
 	
-	print "<p>".$PMF_LANG["ad_export_full_faq"]."<a href=\"".$pdfFile."\" target=\"_blank\">".$PMF_CONF["title"]."</a></p>";
+	print "<p>".$PMF_LANG["ad_export_full_faq"]."<a href=\"../pdf/faq.pdf\" target=\"_blank\">".$PMF_CONF["title"]."</a></p>";
     }
 if (!emptyTable(SQLPREFIX."faqdata")) {
 ?>
