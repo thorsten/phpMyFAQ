@@ -1,26 +1,24 @@
 <?php
-/******************************************************************************
- * $Id: pdf.php,v 1.2 2004-10-31 10:17:38 thorstenr Exp $
- *
- * File:				pdf.php
- * Author:				Thorsten Rinne <thorsten@phpmyfaq.de>
- * Contributors:        Peter Beauvain <pbeauvain@web.de>
- *                      Olivier Plathey <olivier@fpdf.org>
- *                      Krzysztof Kruszynski <thywolf@wolf.homelinux.net>
- * Date:				2003-02-12
- * Last change:			2004-10-31
- * Copyright:           (c) 2001-2004 Thorsten Rinne
- * 
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- * 
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- ******************************************************************************/
+/**
+* $Id: pdf.php,v 1.3 2004-11-16 19:46:28 thorstenr Exp $
+*
+* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+* @author       Peter Beauvain <pbeauvain@web.de>
+* @author       Olivier Plathey <olivier@fpdf.org>
+* @author       Krzysztof Kruszynski <thywolf@wolf.homelinux.net>
+* @since        2003-02-12
+* @copyright    (c) 2001-2004 phpMyFAQ Team
+*
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
+*
+* Software distributed under the License is distributed on an "AS IS"
+* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+* License for the specific language governing rights and limitations
+* under the License.
+*/
 
 define("FPDF_FONTPATH", "./font/");
 require_once ("inc/data.php");
@@ -412,7 +410,7 @@ $pdf->AddPage();
 $pdf->SetFont("Arial", "", 12);
 $pdf->SetDisplayMode("real");
 // FIXME: Header
-$pdf->WriteHTML(unhtmlentities(str_replace("../", "", stripslashes($content))));
+$pdf->WriteHTML(str_replace("../", "", stripslashes($content)));
 $pdf->Ln();
 $pdf->Ln();
 $pdf->Write(5,unhtmlentities($PMF_LANG["msgAuthor"]).$author);
