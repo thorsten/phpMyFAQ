@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<!-- $Id: documentation.en.html,v 1.6 2004-11-30 21:20:22 thorstenr Exp $ -->
+<!-- $Id: documentation.en.html,v 1.7 2004-12-12 09:58:03 thorstenr Exp $ -->
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<title>Documentation for phpMyFAQ 1.5.0 and later</title>
@@ -71,7 +71,7 @@
     
     <hr style="width: 90%; height: 1px;"  />
     <p><a name="1"></a><strong>1. Introduction</strong></p>
-    <p>phpMyFAQ is a multilingual, completely database-driven FAQ-system. A MySQL or a PostgreSQL database is used to store all data, PHP 4.1.0 (or higher) is needed in order to access this data. phpMyFAQ also offers a Content Management-System with a WYSIWYG editor and an Image Manager, flexible multi-user support, a news-system, user-tracking, language modules, enhanced automatic content negotiation, templates, extensive XML-support, PDF-support, a backup-system and an easy to use installation script.</p>
+    <p>phpMyFAQ is a multilingual, completely database-driven FAQ-system. It supports various databases to store all data, PHP 4.1.0 (or higher) is needed in order to access this data. phpMyFAQ also offers a Content Management-System with a WYSIWYG editor and an Image Manager, flexible multi-user support, a news-system, user-tracking, language modules, enhanced automatic content negotiation, templates, extensive XML-support, PDF-support, a backup-system and an easy to use installation script.</p>
     <p>This documentation should help you with installing and administrating phpMyFAQ.</p>
     <p><a href="#top">back to top</a></p>
     
@@ -118,7 +118,7 @@
     <hr style="width: 90%; height: 1px;"  />
     <p><strong><a name="2"></a>2.Installation</strong></p>
     <p><strong><a name="2a"></a>2.a. Requirements for phpMyFAQ</strong></p>
-    <p>phpMyFAQ addresses a MySQL database via PHP. In order to install it you will need a webserver that meets the following requirements:</p>
+    <p>phpMyFAQ addresses a database system via PHP. In order to install it you will need a webserver that meets the following requirements:</p>
     <ul>
         <li>PHP</li>
         <ul>    
@@ -127,10 +127,11 @@
             <li>safe_mode = off</li>
         </ul>    
         <li>Webserver (Apache 1.3/2.0 or IIS)</li>
-        <li>Database
+        <li>Supported Databases
           <ul>
             <li>MySQL 3.23.23+ or 4.0.x or 4.1.x (recommended: 4.0.x)</li>
             <li>PostgreSQL 7.2.x or later </li>
+            <li>Sybase</li>
           </ul>
         </li>
         <li>correctly set: access permissions, owner, group</li>
@@ -160,7 +161,7 @@
       <li>the directory <strong>pdf/</strong></li>
       <li>the directory <strong>xml/</strong></li>
     </ul>
-    All other dirtectories shouldn't be world-writable for your own security.
+    All other directories shouldn't be world-writable for your own security.
     <p><a href="#top">back to top</a></p>
     
     
@@ -168,7 +169,7 @@
     <p><strong><a name="2c"></a>2.c. Install-Script</strong></p>
     <p>Open your browser and type in the following URL:</p>
     <pre>http://www.example.com/faq/install/installer.php</pre>
-    <p>Substitute <strong>www.example.com</strong> with your actual domain name. When the site is loaded enter the address of your MySQL/PostgreSQL server (e.g. db.provider.com), your MySQL/PostgreSQL username and password as well as the database name. The datebase must be availible before running the installation script. You can leave the prefix-field empty. If you are planning on using multiple FAQs in one database you will have to use a tableprefix, though (i.e. <em>sport</em> for a sports-FAQ, <em>weather</em> for a weather-FAQ, etc.). Please note that only letters and an underline: "_" can be used as the prefix.
+    <p>Substitute <strong>www.example.com</strong> with your actual domain name. When the site is loaded enter the address of your database server (e.g. db.provider.com), your database username and password as well as the database name. The datebase must be availible before running the installation script. You can leave the prefix-field empty. If you are planning on using multiple FAQs in one database you will have to use a tableprefix, though (i.e. <em>sport</em> for a sports-FAQ, <em>weather</em> for a weather-FAQ, etc.). Please note that only letters and an underline: "_" can be used as the prefix.
     When using multiple FAQs you need to install them independently into different directories (e.g. faq1/, faq2/. faq3/ etc.). In addition you can enter your language, default here is English. Furthermore you should register your name, your email address and - very importantly - your password. You must enter the password twice and it have to be at least six places long. Then click the button <strong>"install"</strong> to initialize the tables in your database.</p>
     <p><a href="#top">back to top</a></p>
     
@@ -251,7 +252,7 @@
     <p>After that you have to convert the BBCode from phpMyFAQ 1.3.x into XHTML code because phpMyFAQ 1.5.0 doesn't support BBCode anymore.. This will be done by a convert script. Open the following URL in your browser:</p>
     <pre>http://www.example.com/faq/install/bbcode2xhtml.php</pre>
     <p>Maybe this update will work some seconds due to the fact that in all entries the BBCode have to converted into XHTML.</p>
-    <p>Note: You cannot update from MySQL to PostgreSQL. </p>
+    <p>Note: You cannot update from MySQL to another database. </p>
     <p><a href="#top">back to top</a></p>
     
     
@@ -265,7 +266,7 @@
     <p>Open the following URL in your browser:</p>
     <pre>http://www.example.com/faq/install/update.php</pre>
     <p>Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be updated.</p>
-    <p>Note: You cannot update from MySQL to PostgreSQL. </p>
+    <p>Note: You cannot update from MySQL to another database. </p>
     <p><a href="#top">back to top</a></p>
     
     
