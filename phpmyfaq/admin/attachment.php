@@ -1,21 +1,23 @@
 <?php
-/******************************************************************************
- * Datei:				attachment.php
- * Autor:				Thorsten Rinne <thorsten@phpmyfaq.de>
- * Datum:				2002-09-17
- * Letzte Änderung:		2004-10-31
- * Copyright:           (c) 2001-2004 Thorsten Rinne
- * 
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- * 
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- ******************************************************************************/
+/**
+* $Id: attachment.php,v 1.3 2004-12-14 12:57:59 thorstenr Exp $
+*
+* Select an attachment and save it or create the SQL backup files
+*
+* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+* @since        2002-09-17
+* @copyright    (c) 2001-2004 phpMyFAQ
+* 
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
+* 
+* Software distributed under the License is distributed on an "AS IS"
+* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+* License for the specific language governing rights and limitations
+* under the License.
+*/
 
 /* debug mode:
  * - FALSE	debug mode disabled
@@ -26,18 +28,17 @@ define("PMF_ROOT_DIR", dirname(dirname(__FILE__)));
 
 if (DEBUG == TRUE) {
 	error_reporting(E_ALL);
-	}
+}
 
 if (isset($_REQUEST["aktion"]) && ($_REQUEST["aktion"] == "sicherdaten" || $_REQUEST["aktion"] == "sicherlog")) {
 	Header("Content-Type: application/octet-stream");
 	if ($_REQUEST["aktion"] == "sicherdaten") {
 		Header("Content-Disposition: attachment; filename=\"phpmyfaq-data.".date("Y-m-d").".sql\"");
-		}
-	elseif ($_REQUEST["aktion"] == "sicherlog") {
+	} elseif ($_REQUEST["aktion"] == "sicherlog") {
 		Header("Content-Disposition: attachment; filename=\"phpmyfaq-logs.".date("Y-m-d").".sql\"");
-		}
-	Header("Pragma: no-cache");
 	}
+	Header("Pragma: no-cache");
+}
 
 require_once (PMF_ROOT_DIR."/inc/config.php");
 require_once (PMF_ROOT_DIR."/inc/constants.php");
@@ -53,18 +54,17 @@ $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
 if (isset($PMF_CONF["detection"]) && isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) {
     require_once(PMF_ROOT_DIR."/lang/language_".substr($_SERVER["HTTP_ACCEPT_LANGUAGE"], 0, 2).".php");
     $LANGCODE = substr($_SERVER["HTTP_ACCEPT_LANGUAGE"], 0, 2);
-    }
-elseif (!isset($PMF_CONF["detection"])) {
+} elseif (!isset($PMF_CONF["detection"])) {
     require_once(PMF_ROOT_DIR."/lang/".$PMF_CONF["language"]);
     $LANGCODE = $PMF_LANG["metaLanguage"];
-    }
+}
+
 if (isset($LANGCODE)) {
     require_once(PMF_ROOT_DIR."/lang/language_".$LANGCODE.".php");
-    }
-else {
+} else {
     require_once (PMF_ROOT_DIR."/lang/language_en.php");
     $LANGCODE = "en";
-    }
+}
 
 if (!isset($_REQUEST["aktion"]) || isset($_REQUEST["save"])) {
 ?>
@@ -82,9 +82,9 @@ if (!isset($_REQUEST["aktion"]) || isset($_REQUEST["save"])) {
 </head>
 <body>
 <?php
-	}
+}
 
-$db->query("DELETE FROM ".SQLPREFIX."faqadminsessions WHERE time < '".(time()-(30*60))."'");
+$db->query("DELETE FROM ".SQLPREFIX."faqadminsessions WHERE time < ".(time()-(30*60)));
 
 $user = "";
 $pass = "";
@@ -98,7 +98,7 @@ if (isset($uin)) {
 		$query .= " AND ip = '".$_SERVER["REMOTE_ADDR"]."'";
 		}
 	list($user,$pass) = $db->fetch_row($db->query($query));
-	$db->query("UPDATE ".SQLPREFIX."faqadminsessions SET time = '".time()."' WHERE uin = '".$uin."'");
+	$db->query("UPDATE ".SQLPREFIX."faqadminsessions SET time = ".time()." WHERE uin = '".$uin."'");
 	}
 
 if ($pass == "" && $user == "") {
@@ -128,14 +128,15 @@ if (!isset($_REQUEST["aktion"]) && $auth && $permission["addatt"]) {
 <input type="hidden" name="id" value="<?php print $_REQUEST["id"]; ?>" />
 <input type="hidden" name="save" value="TRUE" />
 <?php print $PMF_LANG["ad_att_att"]; ?> <input name="userfile" type="file" />
-<input class="submit" type="submit" value="<?php print $PMF_LANG["ad_att_butt"]; ?>">
+<input class="submit" type="submit" value="<?php print $PMF_LANG["ad_att_butt"]; ?>" />
 </fieldset>
 </form> 
 <?php
-	}
+}
+
 if (isset($_REQUEST["aktion"]) && $auth && !$permission["addatt"]) {
 	print $PMF_LANG["err_NotAuth"];
-	}
+}
 
 if (isset($_REQUEST["save"]) && $_REQUEST["save"] == TRUE && $auth && $permission["addatt"]) {
 ?>
@@ -144,29 +145,28 @@ if (isset($_REQUEST["save"]) && $_REQUEST["save"] == TRUE && $auth && $permissio
 	if (is_uploaded_file($_FILES["userfile"]["tmp_name"]) && !(@filesize($_FILES["userfile"]["tmp_name"]) > $PMF_CONF["attmax"])) {
 		if (!is_dir(PMF_ROOT_DIR."/attachments/")) {
 			mkdir(PMF_ROOT_DIR."/attachments/", 0777);
-			}
+		}
 		if (!is_dir(PMF_ROOT_DIR."/attachments/".$_REQUEST["id"])) {
 			mkdir(PMF_ROOT_DIR."/attachments/".$_REQUEST["id"], 0777);
-			}
+		}
 		if (@move_uploaded_file($_FILES["userfile"]["tmp_name"], PMF_ROOT_DIR."/attachments/".$_REQUEST["id"]."/".$_FILES["userfile"]["name"])) {
             chmod (PMF_ROOT_DIR."/attachments/".$_REQUEST["id"]."/".$_FILES["userfile"]["name"], 0644);
 			print "<p>".$PMF_LANG["ad_att_suc"]."</p>";
-			}
+		}
 		else {
 			print "<p>".$PMF_LANG["ad_att_fail"]."</p>";
-			}
 		}
-	else {
+	} else {
 		print "<p>".$PMF_LANG["ad_attach_4"]."</p>";
-		}
-	print "<p align=\"center\"><a href=\"javascript:window.close()\">".$PMF_LANG["ad_att_close"]."</a></p>";
 	}
+	print "<p align=\"center\"><a href=\"javascript:window.close()\">".$PMF_LANG["ad_att_close"]."</a></p>";
+}
 if (isset($_REQUEST["save"]) && $_REQUEST["save"] == TRUE && $auth && !$permission["addatt"]) {
 	print $PMF_LANG["err_NotAuth"];
-	}
+}
 
 if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "sicherdaten") {
-	$text[] = "# pmf: ".SQLPREFIX."faqchanges ".SQLPREFIX."faqnews ".SQLPREFIX."faqcategories ".SQLPREFIX."faqvoting ".SQLPREFIX."faqdata ".SQLPREFIX."faqcomments ".SQLPREFIX."faquser ". SQLPREFIX."faqvisits ".SQLPREFIX."faqfragen"";
+	$text[] = "# pmf: ".SQLPREFIX."faqchanges ".SQLPREFIX."faqnews ".SQLPREFIX."faqcategories ".SQLPREFIX."faqcategoryrelations ".SQLPREFIX."faqvoting ".SQLPREFIX."faqdata ".SQLPREFIX."faqcomments ".SQLPREFIX."faquser ". SQLPREFIX."faqvisits ".SQLPREFIX."faqfragen";
 	$text[] = "# DO NOT REMOVE THE FIRST LINE!";
 	$text[] = "# otherwise this backup will be broken";
 	$text[] = "#";
@@ -181,6 +181,8 @@ if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "sicherdaten") {
 	print implode("\r\n",$text);
 	$text = build_insert ("SELECT * FROM ".SQLPREFIX."faqcategories", SQLPREFIX."faqcategories");
 	print implode("\r\n",$text);
+	$text = build_insert ("SELECT * FROM ".SQLPREFIX."faqcategoryrelations", SQLPREFIX."faqcategoryrelations");
+	print implode("\r\n",$text);
 	$text = build_insert ("SELECT * FROM ".SQLPREFIX."faquser", SQLPREFIX."faquser");
 	print implode("\r\n",$text);
 	$text = build_insert ("SELECT * FROM ".SQLPREFIX."faqvisits", SQLPREFIX."faqvisits");
@@ -189,10 +191,9 @@ if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "sicherdaten") {
     print implode("\r\n",$text);
     $text = build_insert ("SELECT * FROM ".SQLPREFIX."faqfragen", SQLPREFIX."faqfragen");
 	print implode("\r\n",$text);
-	}
-elseif (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "sicherdaten" && $auth && !$permission["backup"]) {
+} elseif (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "sicherdaten" && $auth && !$permission["backup"]) {
 	print $PMF_LANG["err_NotAuth"];
-	}
+}
 
 if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "sicherlog") {
 	$text[] = "# pmf: ".SQLPREFIX."faqadminlog ".SQLPREFIX."faqsessions";
@@ -204,16 +205,15 @@ if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "sicherlog") {
 	print implode("\r\n",$text);
 	$text = build_insert ("SELECT * FROM ".SQLPREFIX."faqsessions", SQLPREFIX."faqsessions");
 	print implode("\r\n",$text);
-	}
+}
 
 if (DEBUG == TRUE) {
 	print "<p>".$db->sqllog()."</p>";
-	print "<p>".$db->countqueries()." Queries executed</p>";
-	}
+}
 
 if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] != "sicherdaten" && $_REQUEST["aktion"] != "sicherlog") {
 	print "</body></html>";
-	}
+}
 
 $db->dbclose();
 ?>
