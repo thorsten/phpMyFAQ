@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.save.php,v 1.15 2005-03-10 19:29:28 thorstenr Exp $
+* $Id: record.save.php,v 1.16 2005-03-15 20:05:44 thorstenr Exp $
 *
 * Save or update a FAQ record
 *
@@ -95,13 +95,12 @@ if (isset($submit[1]) && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "") 
 		print $PMF_LANG["ad_entry_savedfail"].$db->error();
     }
     
-	// save or update the category relations
+	// delete all the category relations and then insert the new ones
     foreach ($rubrik as $categories) {
         
-        if (!$db->query('INSERT INTO '.SQLPREFIX.'faqcategoryrelations VALUES ('.$categories.', "'.$_REQUEST["language"].'", '.$_REQUEST["id"].', "'.$_REQUEST["language"].'")')) {
+        if ($db->query('DELETE FROM '.SQLPREFIX.'faqcategoryrelations WHERE category_id = '.$categories.' AND category_lang = \''.$_REQUEST["language"].'\'')) {
             
-            $db->query('UPDATE '.SQLPREFIX.'faqcategoryrelations SET record_id = '.$_REQUEST["id"].', record_lang = "'.$_REQUEST["language"].'" WHERE category_id = '.$categories.' AND category_lang = \''.$_REQUEST["language"].'\'');
-        
+            $db->query('INSERT INTO '.SQLPREFIX.'faqcategoryrelations VALUES ('.$categories.', "'.$_REQUEST["language"].'", '.$_REQUEST["id"].', "'.$_REQUEST["language"].'")');
         }
     }
 }
