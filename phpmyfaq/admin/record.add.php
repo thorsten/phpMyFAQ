@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.add.php,v 1.20 2005-03-17 07:11:50 thorstenr Exp $
+* $Id: record.add.php,v 1.21 2005-03-19 14:01:34 thorstenr Exp $
 *
 * Adds a record in the database
 *
@@ -51,13 +51,9 @@ if ($permission["editbt"]) {
     		print $PMF_LANG["ad_entry_savedfail"].$db->error();
         }
         
-        	// save or update the category relations
+      	// save or update the category relations
         foreach ($rubrik as $categories) {
-            
-            if (!$db->query('INSERT INTO '.SQLPREFIX.'faqcategoryrelations VALUES ('.$categories.', \''.$_REQUEST["lang"].'\', '.$nextID.', \''.$_REQUEST["language"].'\')')) {
-                
-                $db->query('UPDATE '.SQLPREFIX.'faqcategoryrelations SET record_id = '.$nextID.', record_lang = \''.$_REQUEST["language"].'\' WHERE category_id = '.$categories.' AND category_lang = \''.$_REQUEST["language"].'\'');
-            
+            $db->query('INSERT INTO '.SQLPREFIX.'faqcategoryrelations VALUES ('.$categories.', \''.$_REQUEST["language"].'\', '.$nextID.', \''.$_REQUEST["language"].'\')');
             }
         }
 	} elseif (isset($submit[2]) && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "" && isset($_REQUEST['rubrik']) && is_array($_REQUEST['rubrik'])) {
@@ -110,7 +106,7 @@ if ($permission["editbt"]) {
 ?>=======
 <?php
 /**
-* $Id: record.add.php,v 1.20 2005-03-17 07:11:50 thorstenr Exp $
+* $Id: record.add.php,v 1.21 2005-03-19 14:01:34 thorstenr Exp $
 *
 * Adds a record in the database
 *
