@@ -14,6 +14,7 @@
     <meta name="revisit-after" content="7 days" />
     <meta name="MSSmartTagsPreventParsing" content="true" />
     <style type="text/css" media="screen">@import "template/style.css";</style>
+    <style type="text/css" media="screen">@import "template/colors.css";</style>
     <style type="text/css" media="print">@import "template/print.css";</style>
 	<script src="inc/functions.js" type="text/javascript"></script>
     <link rel="shortcut icon" href="template/favicon.ico" />
@@ -21,10 +22,11 @@
 <body dir="{dir}">
 
 <div id="phpmyfaq">
-    <!-- start header -->
+    <!-- start headers -->
     <div id="header">
         <h1><a title="{header}" href="{faqHome}">{header}</a></h1>
-        <div id="horizontalnav">
+    </div>
+    <div id="horizontalnav">
         <ul>
             <li>{msgSearch}</li>
             <li>{msgAddContent}</li>
@@ -33,15 +35,14 @@
             <li>{msgHelp}</li>
             <li>{msgContact}</li>
         </ul>
-        </div>
     </div>
-    <!-- end header -->
+    <!-- end headers -->
     
     <!-- start categories -->
     <div id="categories">
         <div id="mainnav">
         <ul>
-            <li>{backToHome}</li>
+            <li class="home">{backToHome}</li>
             <li>{allCategories}</li>
             {showCategories}
         </ul>

@@ -1,5 +1,5 @@
 /**
-* $Id: style.css,v 1.3 2005-02-05 19:32:53 thorstenr Exp $
+* $Id: style.css,v 1.4 2005-03-13 12:58:24 thorstenr Exp $
 *
 * @author		Jens Grochtdreis <jens@grochtdreis.de>
 * @author		Thorsten Rinne <thorsten@rinne.info>
@@ -26,23 +26,6 @@ body, td {
     font-family: "Bitstream Vera Sans", "Trebuchet MS", Geneva, Arial, Helvetica, sans-serif;
     font-size: 100.01%; 
     }
-body, h1, h2, h3, h4, h5, h6, div, p, table, td, ul, ol, li, dd, dt, dl, blockquote, address, hr, pre {
-    margin: 0;
-    padding: 0;
-    }
-h1, h2, h3, h4, h5, h6 {
-    font-weight: normal;
-    font-size: 100%;
-    }
-a {
-    text-decoration: none;
-    }
-a:hover {
-    text-decoration: underline;
-    }
-h1 {
-    font-size: 200%;
-    }
 h2 {
     margin-top: 5px;
     margin-bottom: 10px;
@@ -61,46 +44,50 @@ img {
 #phpmyfaq {
 	text-align: left;
 	vertical-align: middle;
-	margin: 0px auto;
-	padding: 0px;
+	margin: 0 auto;
+	padding: 0;
 	width: 760px;
 }
 
-/**************************
-The header
-**************************/
-
+/* The header */
 #header {
-	margin: 0px;
-	padding: 0px;
+   margin: 0px;
+   padding: 0px;
+   border-top: 1px solid;
+   border-left: 1px solid;
+   border-right: 1px solid;
+}
+#header a {	
+   text-decoration: none;
 }
 #header h1 {
-	margin-left: 15px;
-	padding: 10px 10px 10px 0px;
-	}
+   margin-left: 5px;
+   font-family: "Garamond", "Times New Roman", Times, serif;
+   font-size: 200%;
+   font-variant: small-caps;
+}
 
-/**************************
-The horizontal navigation
-**************************/
+/* the horizontal navigation */
 #horizontalnav ul {
-	margin: 5px;
-	list-style-type: none;
-	font-size: 80%;
-	padding-left: 10px;
-    }
+   margin-top: 5px;
+   margin-bottom: 10px;
+   list-style-type: none;
+   font-size: 80%;
+   padding: 0px;
+}
 #horizontalnav ul li {
-    display: inline;
-    list-style-type: none;
-    }
+   display: inline;
+   list-style-type: none;
+}
 #horizontalnav ul li a {
-    text-decoration: none;
-    margin: 0 10px; /* That's the distance between the items. */
-    padding: 1px;
-    float: left;
-    }
+   text-decoration: none;
+   margin: 0 10px; /* That's the distance between the items. */
+   padding: 1px;
+   float: left;
+}
 #horizontalnav ul li a:hover {
-    text-decoration: underline;
-    }
+   text-decoration: underline;
+}
 
 /**************************
 The category-menu
@@ -265,54 +252,4 @@ Template: contact.tpl
     text-align: center;
     font-size: 85%;
     line-height: 14px;
-    }
-
-/**
-* main color definitions
-*/
-
-/* main body */
-html, body {
-    background: #E5E5E5;
-    color: #172244;
-    }
-
-/* the header with the title and the horizontal navigation */
-#header, #header a, #horizontalnav, #horizontalnav ul {
-    background: #5C7099;
-    color: #001B37;
-	 text-decoration: none;
-    }
-
-/* all hyperlink definitions */
-a, #horizontalnav a, #categories a, #categories ul ul a, .inputfield, .inputarea, table.topten th, table.fivenewest th, select, option {
-    color: #004085;
-    }
-#categories a:hover, #categories ul ul a:hover {
-	color: #ffffff;
-}
-#categories a:hover {
-    background: #5C7099;
-    }
-#categories a, #content ul li, a.active {
-	background: #E5E5E5;
-    }
-#categories ul ul a {
-    border-color: #FFCC80;
-    }
-#categories ul ul a:hover {
-    background: #5C7099;
-    }
-h2, .inputfield, .inputarea, table.topten, table.fivenewest, div.block, table.topten th, table.fivenewest th, select, option {
-    border-color: #ffffff;
-    }
-table.topten th, table.fivenewest th {
-    background: #172244;
-    }
-.inputfield, .inputarea, select, option {
-    background: #5368A6;
-    }
-.submit {
-    border-color: #696969;
-    background: #dcdcdc;
     }
