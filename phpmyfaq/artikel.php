@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.14 2005-01-16 21:42:11 thorstenr Exp $
+* $Id: artikel.php,v 1.15 2005-02-07 07:11:58 thorstenr Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -106,6 +106,10 @@ $tpl->processTemplate ("writeContent", array(
 				"writePDF" => $writePDF,
 				"writeSend2FriendMsg" => $writeSend2FriendMsg,
 				"writeXMLMsg" => $writeXMLMsg,
+				"writePrintMsgTag" => $PMF_LANG["msgPrinterFriendly"],
+				"writePDFTag" => $PMF_LANG["msgPDF"],
+				"writeSend2FriendMsgTag" => $PMF_LANG["msgSend2Friend"],
+				"writeXMLMsgTag" => $PMF_LANG["msgMakeXMLExport"],
 				"saveVotingPATH" => $saveVotingPATH,
 				"saveVotingID" => $id,
 				"saveVotingIP" => $_SERVER["REMOTE_ADDR"],
