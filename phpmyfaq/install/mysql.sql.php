@@ -1,30 +1,28 @@
 <?php
 /**
- * $Id: mysql.sql.php,v 1.3 2004-11-07 13:07:50 thorstenr Exp $
- *
- * File:                update.php
- * Description:         CREATE TABLE instruction for MySQL database
- * Authors:				Thorsten Rinne <thorsten@phpmyfaq.de>
- *                      Tom Rochester <tom.rochester@gmail.com>
- * Date:				2004-09-18
- * Last Update:			2004-11-07
- * Copyright:           (c) 2001-2004 phpMyFAQ Team
- * 
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- * 
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- */
+* $Id: mysql.sql.php,v 1.4 2004-11-25 20:58:11 thorstenr Exp $
+*
+* CREATE TABLE instruction for MySQL database
+* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+* @author       Tom Rochester <tom.rochester@gmail.com>
+* @since        2004-09-18
+* @copyright    (c) 2001-2004 phpMyFAQ Team
+* 
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
+* 
+* Software distributed under the License is distributed on an "AS IS"
+* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+* License for the specific language governing rights and limitations
+* under the License.
+*/
 
 $uninst[] = "DROP TABLE ".$sqltblpre."faqadminlog";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqadminsessions";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcategories";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqcategory";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqcategoryrelations";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqchanges";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcomments";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqdata";
@@ -87,12 +85,13 @@ name VARCHAR(255) NOT NULL,
 description VARCHAR(255) NOT NULL ,
 PRIMARY KEY (id,lang))";
 
-//faqcategories
-$query[] = "CREATE TABLE ".$sqltblpre."faqcategory (
-id INT(11) NOT NULL auto_increment,
-lang VARCHAR(5) NOT NULL default '',
-rubrik INT(11) NOT NULL default '',
-PRIMARY KEY  (id,lang,rubrik)
+//faqcategoryrelations
+$query[] = "CREATE TABLE ".$sqltblpre."faqcategoryrelations (
+category_id INT(11) NOT NULL,
+category_lang VARCHAR(5) NOT NULL default '',
+record_id INT(11) NOT NULL,
+record_lang VARCHAR(5) NOT NULL default '',
+PRIMARY KEY  (category_id,category_lang,record_id,record_lang)
 )";
 
 //faqchanges
