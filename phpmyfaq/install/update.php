@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.8 2004-12-12 15:40:37 thorstenr Exp $
+* $Id: update.php,v 1.9 2004-12-28 13:10:37 thorstenr Exp $
 *
 * Main update script
 *
@@ -271,6 +271,7 @@ if ($step == 3) {
 <input type="hidden" name="edit[bannedIP]" value="<?php print $bannedIP; ?>" />
 <input type="hidden" name="edit[parse_php]" value="" />
 <input type="hidden" name="edit[mod_rewrite]" value="" />
+<input type="hidden" name="edit[ldap_support]" value="" />
 <?php
     } elseif ($ver == 0) {
         // Version 1.4.x
@@ -296,6 +297,7 @@ if ($step == 3) {
 <input type="hidden" name="edit[bannedIP]" value="<?php print $PMF_CONF["bannedIP"]; ?>" />
 <input type="hidden" name="edit[parse_php]" value="" />
 <input type="hidden" name="edit[mod_rewrite]" value="" />
+<input type="hidden" name="edit[ldap_support]" value="" />
 <?php
     }
 ?>
