@@ -10,10 +10,11 @@ Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 Changes since 1.4.4:
 - full support for PostgreSQL databases
 - full support for Sybase databases
+- LDAP support
 - mod_rewrite support
 - template engine parses PHP code
 - rewritten PDF export
-- complete XML and XHTML exports
+- complete XML, XHTML and DocBook XML exports
 - many code improvements and code cleanup
 - better RSS support
 
@@ -26,6 +27,7 @@ CHANGELOG:
 Version 1.5.0 alpha - 2004-12-xx
 - full support for PostgreSQL databases
 - full support for Sybase databases
+- LDAP support
 - mod_rewrite support
 - template engine parses PHP code
 - rewritten PDF export
