@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.32 2004-12-25 06:10:00 uid10141 Exp $
+* $Id: functions.php,v 1.33 2004-12-25 06:11:14 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -1016,7 +1016,7 @@ function generateDocBookExport()
     
     // write xml file
     $xml_fp = fopen("../xml/docbook.xml","w");
-    fputs($xml_fp, $my_xml_output);
+    fputs($xml_fp, $output);
 	fclose($xml_fp);
 	print "<p><a href=\"../xml/phpmyfaq.xml\" target=\"_blank\">XML DocBook File okay!</a></p>";
 }
