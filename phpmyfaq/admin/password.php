@@ -1,22 +1,23 @@
 <?php
-/******************************************************************************
- * File:				password.php
- * Description:         set a new password for an existing user
- * Author:				Thorsten Rinne <thorsten@phpmyfaq.de>
- * Date:				2004-05-11
- * Last change:			2004-11-01
- * Copyright:			(c) 2004 Thorsten Rinne
- * 
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- * 
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- ******************************************************************************/
+/**
+* $Id: password.php,v 1.3 2004-12-11 20:06:54 thorstenr Exp $
+*
+* Reset a forgotten password to a new one
+*
+* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+* @since        2004-05-11
+* @copyright    (c) 2004 phpMyFAQ Team
+* 
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
+* 
+* Software distributed under the License is distributed on an "AS IS"
+* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+* License for the specific language governing rights and limitations
+* under the License.
+*/
 
 /* debug mode:
  * - FALSE	debug mode disabled
@@ -83,7 +84,7 @@ elseif (isset($_GET["action"]) && $_GET["action"] == "sendmail") {
                 $newPassword .= $consonants[rand(0,19)];
                 $newPassword .= $vowels[rand(0,4)];
                 }
-            $db->query("UPDATE ".SQLPREFIX."faquser SET pass = MD5('".$newPassword."') WHERE name = '".$username."' AND email = '".$email."'");
+            $db->query("UPDATE ".SQLPREFIX."faquser SET pass = '".md5($newPassword)."' WHERE name = '".$username."' AND email = '".$email."'");
             $text = $PMF_LANG["lostpwd_text_1"]."\nUsername: ".$username."\nNew Password: ".$newPassword."\n\n".$PMF_LANG["lostpwd_text_2"];
             mail($IDN->encode($email), $PMF_CONF["title"].": username / password request", $text, "From: ".$IDN->encode($PMF_CONF["adminmail"]));
             print $PMF_LANG["lostpwd_mail_okay"];

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.18 2004-12-11 19:31:52 thorstenr Exp $
+* $Id: functions.php,v 1.19 2004-12-11 20:07:13 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -316,37 +316,36 @@ function Tracking($action, $id)
 	if (isset($PMF_CONF["tracking"])) {
 		if (isset($_GET["sid"])) {
 			$sid = $_GET["sid"];
-			}
+        }
 		if (isset($_COOKIE["sid"])) {
 			$sid = $_COOKIE["sid"];
-			}
+        }
 		if ($action == "oldSession") {
 			$sid = "";
-			}
+        }
 		if (!isset($sid)) {
-			$db->query("INSERT INTO ".SQLPREFIX."faqsessions (IP,TIME) VALUES ('".$_SERVER["REMOTE_ADDR"]."', '".time()."')");
-			list($sid) = $db->fetch_row($db->query("SELECT sid FROM ".SQLPREFIX."faqsessions ORDER BY sid DESC"));
-			}
+            $sid = $db->insert_id(SQLPREFIX."faqsessions", "sid");
+			$db->query("INSERT INTO ".SQLPREFIX."faqsessions (sid, ip, time) VALUES (".$sid.", '".$_SERVER["REMOTE_ADDR"]."', ".time().")");
+        }
 		$fp = @fopen("./data/tracking".date("dmY"), "a+b");
         if ($fp) {
     		$flanz = "0";
     		while (!flock($fp, LOCK_EX) && $flanz < 6) {
     			wait(500);
     			$flanz++;
-    			}
+            }
     		if ($flanz >= 6) {
     			fclose($fp);
-    			}
-    		elseif (!empty($_SERVER["HTTP_REFERER"])) {
+            } elseif (!empty($_SERVER["HTTP_REFERER"])) {
                 if (!isset($_SERVER["QUERY_STRING"])) {
                     $_SERVER["QUERY_STRING"] = "";
-                    }
+                }
     			fputs($fp, $sid.";".str_replace(";", ",",$action).";".$id.";".$_SERVER["REMOTE_ADDR"].";".str_replace(";", ",", $_SERVER["QUERY_STRING"]).";".str_replace(";", ",", $_SERVER["HTTP_REFERER"]).";".str_replace(";", ",", $_SERVER["HTTP_USER_AGENT"]).";".time().";\n");
     			flock($fp, LOCK_UN);
     			fclose($fp);
-    			}
-		    }
+            }
         }
+    }
 }
 
 /*
@@ -1090,16 +1089,22 @@ function printOpenQuestions()
  * Funktionen für die Benutzerauthentifizierung und Rechtevergabe
  ******************************************************************************/
 
-/*
- * Logt den Admin | @@ Bastian, 2001-02-18
- * Last Update: @@ Thorsten, 2004-11-10
- */
+/**
+* Administrator logging
+*
+* @param    string
+* @return   void
+* @access   public
+* @since    2001-02-18
+* @author   Bastian Poettner <bastian@poettner.net>
+* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+*/
 function adminlog($text)
 {
-	global $db, $PMF_CONF, $auth_user;
-	if (isset($PMF_CONF["enableadminlog"])) {
-		$db->query("INSERT INTO ".SQLPREFIX."faqadminlog (id, time, usr, text, ip) VALUES ('".time()."','".$auth_user."','".nl2br(addslashes($text))."','".$_SERVER["REMOTE_ADDR"]."')");
-		}
+    global $db, $PMF_CONF, $auth_user;
+    if (isset($PMF_CONF["enableadminlog"])) {
+        $db->query('INSERT INTO '.SQLPREFIX.'faqadminlog (id, time, usr, text, ip) VALUES ('.$db->insert_id(SQLPREFIX.'faqadminlog', 'id').', '.time().', "'.$auth_user.'", "'.nl2br(addslashes($text)).'", "'.$_SERVER["REMOTE_ADDR"].'")');
+    }
 }
 
 /*
