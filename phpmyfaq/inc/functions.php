@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.48 2005-01-20 15:37:38 thorstenr Exp $
+* $Id: functions.php,v 1.49 2005-01-27 12:32:11 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -792,7 +792,7 @@ function quoted_printable_encode($return = '')
 function generateXMLExport($id, $lang = "")
 {
 	global $db, $categories, $PMF_LANG, $PMF_CONF;
-	$result = $db->query('SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.keywords, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqdata.content, '.SQLPREFIX.'faqdata.author, '.SQLPREFIX.'faqdata.datum FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang WHERE id = '.$id.' AND lang = "'.$lang.'" AND active = \'yes\'');
+	$result = $db->query('SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.keywords, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqdata.content, '.SQLPREFIX.'faqdata.author, '.SQLPREFIX.'faqdata.datum FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang WHERE id = '.$id.' AND lang = \''.$lang.'\' AND active = \'yes\'');
     
 	if ($db->num_rows($result) > 0) {
 		while ($row = $db->fetch_object($result)) {
@@ -1235,7 +1235,7 @@ function adminlog($text)
 {
     global $db, $PMF_CONF, $auth_user;
     if (isset($PMF_CONF["enableadminlog"])) {
-        $db->query('INSERT INTO '.SQLPREFIX.'faqadminlog (id, time, usr, text, ip) VALUES ('.$db->nextID(SQLPREFIX.'faqadminlog', 'id').', '.time().', "'.$auth_user.'", "'.nl2br(addslashes($text)).'", "'.$_SERVER["REMOTE_ADDR"].'")');
+        $db->query('INSERT INTO '.SQLPREFIX.'faqadminlog (id, time, usr, text, ip) VALUES ('.$db->nextID(SQLPREFIX.'faqadminlog', 'id').', '.time().', \''.$auth_user.'\', \''.nl2br(addslashes($text)).'\', \''.$_SERVER["REMOTE_ADDR"].'\')');
     }
 }
 
