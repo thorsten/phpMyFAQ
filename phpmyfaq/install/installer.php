@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.17 2005-03-06 19:52:29 thorstenr Exp $
+* $Id: installer.php,v 1.18 2005-03-23 07:18:22 thorstenr Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -25,7 +25,7 @@
 * under the License.
 */
 
-define("VERSION", "1.5.0 RC3");
+define("VERSION", "1.5.0 RC4");
 define("COPYRIGHT", "&copy; 2001-2005 <a href=\"http://www.phpmyfaq.de/\">phpMyFAQ-Team</a> | All rights reserved.");
 define("SAFEMODE", @ini_get("safe_mode"));
 define("PMF_ROOT_DIR", dirname(dirname(__FILE__)));
@@ -279,7 +279,7 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 <?php
 	// check what extensions are loaded in PHP
 	if (extension_loaded('mysql')) {
-		print '<option value="mysql">MySQL</option>';
+		print '<option value="mysql">MySQL 3.23/4.0</option>';
 	}
 	if (extension_loaded('pgsql')) {
 		print '<option value="pgsql">PostgreSQL</option>';
@@ -288,7 +288,10 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 		print '<option value="sybase">Sybase</option>';
 	}
 	if (extension_loaded('mssql')) {
-		print '<option value="mssql">MS SQL Server</option>';
+		print '<option value="mssql">MS SQL Server (experimental)</option>';
+	}
+	if (extension_loaded('mysqli') && php_check(phpversion(), '5.0.0')) {
+		print '<option value="mysqli">MySQL 4.1/5.0 (experimental)</option>';
 	}
 ?>	
 </select>
@@ -420,6 +423,8 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 		$sql_type = $_POST["sql_type"];
 		switch ($sql_type) {
 			case 'mysql':		require_once(PMF_ROOT_DIR."/inc/mysql.php");
+								break;
+			case 'mysqli':		require_once(PMF_ROOT_DIR."/inc/mysqli.php");
 								break;
 			case 'pgsql':       require_once(PMF_ROOT_DIR."/inc/pgsql.php");
 								break;
