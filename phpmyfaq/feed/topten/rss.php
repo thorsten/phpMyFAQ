@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: rss.php,v 1.6 2005-01-02 13:31:22 thorstenr Exp $
+* $Id: rss.php,v 1.7 2005-02-14 13:42:35 thorstenr Exp $
 *
 * The RSS feed with the top ten
 *
@@ -34,7 +34,9 @@ require_once (PMF_ROOT_DIR."/inc/category.php");
 require_once (PMF_ROOT_DIR."/inc/functions.php");
 require_once (PMF_ROOT_DIR."/lang/language_en.php");
 
-$result = $db->query("SELECT DISTINCT ".SQLPREFIX."faqdata.id, ".SQLPREFIX."faqdata.lang, ".SQLPREFIX."faqdata.thema, ".SQLPREFIX."faqdata.rubrik, ".SQLPREFIX."faqvisits.visits FROM ".SQLPREFIX."faqvisits, ".SQLPREFIX."faqdata WHERE ".SQLPREFIX."faqdata.id = ".SQLPREFIX."faqvisits.id AND ".SQLPREFIX."faqdata.lang = ".SQLPREFIX."faqvisits.lang AND ".SQLPREFIX."faqdata.active = 'yes' ORDER BY ".SQLPREFIX."faqvisits.visits DESC");
+$query = 'SELECT DISTINCT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqvisits.visits FROM '.SQLPREFIX.'faqvisits, '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang WHERE '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvisits.id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqvisits.lang AND '.SQLPREFIX.'faqdata.active = \'yes\' ORDER BY '.SQLPREFIX.'faqvisits.visits DESC';
+    
+$result = $db->query($query);
 
 $rss = "<?xml version=\"1.0\" encoding=\"".$PMF_LANG["metaCharset"]."\" standalone=\"yes\" ?>\n<rss version=\"2.0\">\n<channel>\n";
 $rss .= "<title>".$PMF_CONF["title"]."</title>\n";
