@@ -1087,10 +1087,10 @@ if (!function_exists("array_combine")) {
         $num = count($values);
         for ($i = 0; $i < $num; $i++) {
             $combined[$keys[$i]] = $values[$i];
-            }
+        }
         return $combined;
     }
-    }
+}
 
 
 
@@ -1169,42 +1169,4 @@ function hex2dec($color = "#000000")
     return $tbl_color;
 }
 
-/******************************************************************************
- * Verschiedene Funktionen
- ******************************************************************************/
-
-/*
- * Funktion für Versioncheck | @@ Thorsten, 2003-10-10
- * Last Update: @@ Thorsten, 2004-07-07
- */
-function version_check($actual = "", $target = "")
-{
-    if (empty($actual) || empty($target)) {
-        return FALSE;
-        }
-    $actual = explode(".", $actual);
-    $target = explode(".", $target);
-    $num = count($target);
-    for ($i = 0; $i < $num; $i++) {
-        if ($actual[$i] <  $target[$i]) {
-            return FALSE;
-            }
-        if ($actual[$i] == $target[$i]) {
-            continue;
-            }
-        if ($actual[$i] >= $target[$i]) {
-            return TRUE;
-            }
-        }
-    return TRUE;
-}
-
-/*
- * Funktion für MySQL-Versioncheck | @@ Thorsten, 2003-10-10
- * Last Update: @@ Thorsten, 2003-10-10
- */
-function mysql_check($version)
-{
-    return version_check(mysql_get_server_info(), $version);
-}
 ?>
