@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.58 2005-03-11 15:31:08 thorstenr Exp $
+* $Id: functions.php,v 1.59 2005-03-12 12:55:14 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -149,27 +149,24 @@ function printThemes($category)
     
 	if (isset($_REQUEST["seite"])) {
 		$seite = $_REQUEST["seite"];
-		}
+	}
     
-	$numResult = $db->query("SELECT id FROM ".SQLPREFIX."faqdata LEFT JOIN ".SQLPREFIX."faqcategoryrelations ON ".SQLPREFIX."faqdata.id = ".SQLPREFIX."faqcategoryrelations.record_id AND ".SQLPREFIX."faqdata.lang = ".SQLPREFIX."faqcategoryrelations.record_lang WHERE active = 'yes'");
-	$num = $db->num_rows($numResult);
+	$result = $db->query('SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqvisits.visits FROM '.SQLPREFIX.'faqdata 
+LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang LEFT JOIN '.SQLPREFIX.'faqvisits ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvisits.id AND '.SQLPREFIX.'faqvisits.lang = '.SQLPREFIX.'faqdata.lang WHERE '.SQLPREFIX.'faqdata.active = \'yes\' AND '.SQLPREFIX.'faqcategoryrelations.category_id ='.$category.' ORDER BY '.SQLPREFIX.'faqdata.id');
+    
+	$num = $db->num_rows($result);
 	$pages = ceil($num / $PMF_CONF["numRecordsPage"]);
 	
 	if ($seite == 1) {
 		$first = 0;
-		}
-	else {
+	} else {
 		$first = ($seite * $PMF_CONF["numRecordsPage"]) - $PMF_CONF["numRecordsPage"];
-		}
-    
-	$result = $db->query('SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqvisits.visits FROM '.SQLPREFIX.'faqdata 
-LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang LEFT JOIN '.SQLPREFIX.'faqvisits ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvisits.id AND '.SQLPREFIX.'faqvisits.lang = '.SQLPREFIX.'faqdata.lang WHERE '.SQLPREFIX.'faqdata.active = \'yes\' AND '.SQLPREFIX.'faqcategoryrelations.category_id ='.$category.' ORDER BY '.SQLPREFIX.'faqdata.id');
-	$num = $db->num_rows($result);
+	}
 	
 	if ($num > 0) {
 		if ($pages > 1) {
 			$output .= "<p><strong>".$PMF_LANG["msgPage"].$seite." ".$PMF_LANG["msgVoteFrom"]." ".$pages.$PMF_LANG["msgPages"]."</strong></p>";
-			}
+		}
 		$output .= "<ul class=\"phpmyfaq_ul\">\n";
 		$counter = 0;
 		$displayedCounter = 0;
