@@ -27,7 +27,7 @@ if ($permission["delcateg"]) {
 	<input type="hidden" name="aktion" value="removecategory" />
 	<input type="hidden" name="cat" value="<?php print $_GET["cat"]; ?>" />
 	<input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_del_yes"]; ?>" style="color: Red;" />&nbsp;&nbsp;
-	<input class="submit" type="Reset" value="<?php print $PMF_LANG["ad_categ_del_no"]; ?>" />
+	<input class="submit" type="reset" onclick="javascript:history.back();" value="<?php print $PMF_LANG["ad_categ_del_no"]; ?>" />
     </div>
     </fieldset>
 	</form>
