@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.50 2005-02-05 09:03:01 thorstenr Exp $
+* $Id: functions.php,v 1.51 2005-02-14 12:27:25 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -190,7 +190,7 @@ LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPR
             
             if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == "TRUE") {
                 
-                $output .= "\t<li><a href=\"".$row->rubrik."_".$row->id."_".$row->lang.".html\">".stripslashes($row->thema)."</a> [".$row->lang."]<br /><div class=\"little\">(".$visits." ".$PMF_LANG["msgViews"].")</div></li>\n";
+                $output .= "\t<li><a href=\"".$row->category_id."_".$row->id."_".$row->lang.".html\">".stripslashes($row->thema)."</a> [".$row->lang."]<br /><div class=\"little\">(".$visits." ".$PMF_LANG["msgViews"].")</div></li>\n";
             } else {
                 
                 $output .= "\t<li><a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=artikel&amp;cat=".$row->category_id."&amp;id=".$row->id."&amp;artlang=".$row->lang."\">".stripslashes($row->thema)."</a> [".$row->lang."]<br /><div class=\"little\">(".$visits." ".$PMF_LANG["msgViews"].")</div></li>\n";
