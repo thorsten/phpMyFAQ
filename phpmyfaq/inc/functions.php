@@ -1,0 +1,1221 @@
+<?php
+/******************************************************************************
+ * File:                functions.php
+ * Description:         This is the main functions file!
+ * Author:              Thorsten Rinne <thorsten@phpmyfaq.de>
+ * Contributors:        Matthias Sommerfeld <phlymail@phlylabs.de>
+ *                      Bastian Pöttner <bastian@poettner.net>
+ *                      Meikel Katzengreis
+ * Date:                2001-02-18
+ * Last Update:         2004-07-27
+ * Copyright:           (c) 2001-2004 phpMyFAQ Team
+ *
+ * Portions created by Matthias Sommerfeld are Copyright (c) 2001-2004 blue
+ * birdy, Berlin (http://bluebirdy.de). All Rights Reserved.
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ ******************************************************************************/
+
+/*
+ * This function displays the <select> box for the available languages | @@ Thorsten 2003-12-12
+ * Last update: @@ Thorsten 2004-07-11
+ */
+function selectLanguages($default)
+{
+    global $languageCodes;
+    $output = "<select class=\"language\" name=\"language\" size=\"1\">\n";
+	if ($dir = @opendir("lang/")) {
+        while (FALSE !== ($file = @readdir($dir))) {
+            if ($file != "." && $file != "..") {
+                $languageArray[] = $file;
+                }
+            }
+        closedir($dir);
+        sort($languageArray);
+        reset($languageArray);
+        foreach ($languageArray as $value) {
+			if (substr($value, -4) == ".php") {
+                $lang = substr($value, 9, 2);
+				$output .= "\t\t<option value=\"".$lang."\"";
+				if ($lang == $default) {
+					$output .= " selected=\"selected\"";
+					}
+				$output .=  ">".$languageCodes[strtoupper($lang)]."</option>\n";
+				}
+			}
+		}
+	else {
+		$output .= "\t\t<option value=\"en\">english</option>";
+		}
+    $output .= "</select>\n";
+    return $output;
+}
+
+/*
+ * Funktion für Umwandlung der Artikelnamen | @@ Thorsten, 2002-08-28
+ * Last Update: @@ Thorsten, 2004-05-07
+ */
+function getThema($id, $lang)
+{
+	global $db, $PMF_LANG;
+	$query = "SELECT ".SQLPREFIX."faqdata.thema FROM ".SQLPREFIX."faqdata WHERE id = '".$id."' AND lang = '".$lang."'";
+	$result = $db->query($query);
+	if ($db->num_rows($result) > 0) {
+		while ($row = $db->fetch_object($result)) {
+			$output = $row->thema;
+			}
+		}
+	else {
+		$output = $PMF_LANG["no_cats"];
+		}
+	return $output;
+}
+
+/*
+ * Funktion für die Datumsumwandlung nach ISO 8601 | @@ Thorsten, 2001-04-30
+ * Last Update: @@ Thorsten, 2004-07-27
+ */
+function makeDate($date)
+{
+    global $PMF_CONST;
+    $offset = (60 * 60) * ($PMF_CONST["timezone"] / 100);
+    $current = strtotime(substr($date,0,4)."-".substr($date,4,2)."-".substr($date,6,2)." ".substr($date,8,2).":".substr($date,10,2));
+    $timestamp = $current + $offset;
+    return date("Y-m-d H:i", $timestamp);
+}
+
+/*
+ * Funktion für die Ausgabe der Anzahl der Artikel in der FAQ | @@ Thorsten, 2002-08-23
+ * Last Update: @@ Thorsten, 2003-10-26
+ */
+function generateNumberOfArticles()
+{
+	global $db;
+	$num = $db->num_rows($db->query("SELECT id FROM ".SQLPREFIX."faqdata WHERE active = 'yes'"));
+	if ($num > 0) {
+		return "<strong>".$num."</strong>";
+	    }
+    else {
+        return "<strong>0</strong>";
+		}
+}
+
+/*
+ * Diese Funktion gibt alle Themen einer Rubrik aus | @@ Thorsten, 2002-08-27
+ * Last Update: @@ Thorsten, 2004-06-21
+ */
+function printThemes($category)
+{
+	global $db, $sids, $PMF_LANG, $PMF_CONF;
+	$seite = 1;
+	$output = "";
+    
+	if (isset($_REQUEST["seite"])) {
+		$seite = $_REQUEST["seite"];
+		}
+    
+	$numResult = $db->query("SELECT id FROM ".SQLPREFIX."faqdata WHERE active = 'yes' AND rubrik = '".$category."'");
+	$num = $db->num_rows($numResult);
+	$pages = ceil($num / $PMF_CONF["numRecordsPage"]);
+    
+	if ($seite == 1) {
+		$first = 0;
+		}
+	else {
+		$first = ($seite * $PMF_CONF["numRecordsPage"]) - $PMF_CONF["numRecordsPage"];
+		}
+    
+	$result = $db->query("SELECT ".SQLPREFIX."faqdata.id, ".SQLPREFIX."faqdata.lang, ".SQLPREFIX."faqdata.thema, ".SQLPREFIX."faqdata.rubrik, ".SQLPREFIX."faqvisits.visits FROM ".SQLPREFIX."faqdata LEFT JOIN ".SQLPREFIX."faqvisits ON ".SQLPREFIX."faqdata.id = ".SQLPREFIX."faqvisits.id AND ".SQLPREFIX."faqvisits.lang = ".SQLPREFIX."faqdata.lang WHERE ".SQLPREFIX."faqdata.active = 'yes' AND ".SQLPREFIX."faqdata.rubrik = '".$category."' ORDER BY ".SQLPREFIX."faqdata.id LIMIT ".$first.", ".$PMF_CONF["numRecordsPage"]);
+	$num = $db->num_rows($result);
+	
+	if ($num > 0) {
+		if ($pages > 1) {
+			$output .= "<p><strong>".$PMF_LANG["msgPage"].$seite." ".$PMF_LANG["msgVoteFrom"]." ".$pages.$PMF_LANG["msgPages"]."</strong></p>";
+			}
+		$output .= "<ul class=\"phpmyfaq_ul\">\n";
+        while ($row = $db->fetch_object($result)) {
+			if (empty($row->visits)) {
+				$visits = "0";
+				}
+			else {
+				$visits = $row->visits;
+				}
+            $output .= "\t<li><a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=artikel&amp;cat=".$row->rubrik."&amp;id=".$row->id."&amp;artlang=".$row->lang."\">".stripslashes($row->thema)."</a> [".$row->lang."]<br /><div class=\"little\">(".$visits." ".$PMF_LANG["msgViews"].")</div></li>\n";
+            }
+        $output .= "</ul>\n";
+        }
+    else {
+		$output = $PMF_LANG["err_noArticles"];
+		}
+    
+    if ($pages > 1) {
+        $output .= "<p align=\"center\"><strong>";
+        $previous = $seite - 1; 
+        $next = $seite + 1;
+        if ($previous != 0) {
+            $output .= "[ <a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=show&amp;cat=".$category."&amp;seite=".$previous."\">".$PMF_LANG["msgPrevious"]."</a> ]";
+            }
+        $output .= " ";
+        if ($next <= $pages) {
+            $output .= "[ <a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=show&amp;cat=".$category."&amp;seite=".$next."\">".$PMF_LANG["msgNext"]."</a> ]";
+            }
+        $output .= "</strong></p>";
+		}
+	return $output;
+}
+
+/*
+ * Funktion für die Überprüfung von übergebenen Variablen | @@ Thorsten, 2003-01-30
+ * Last Update: @@ Thorsten, 2003-01-30
+ */
+function checkIntVar($myInt)
+{
+	if (preg_match("/^[0-9-]+$/", $myInt)) {
+    	return TRUE;
+		}
+	else {
+    	return FALSE;
+		}
+}
+
+/*
+ * Check, ob eine weitere Sprache eines Artikels vorhanden ist | @@ Thorsten, 2003-03-17
+ * Last Update: @@ Thorsten, 2003-03-17
+ */
+function check4Language($id)
+{
+	global $db;
+	$result = $db->query("SELECT lang FROM ".SQLPREFIX."faqdata WHERE id = '".$id."'");
+	if ($db->num_rows($result) > 0) {
+		while ($row = $db->fetch_object($result)) {
+			$output[] = $row->lang;
+			}
+		}
+	return $output;
+}
+
+/*
+ * Funktion fuer Umwandlung der <br /> in \n | @@ Thorsten, 2001-07-01
+ * copyright Johannes Frömter von http://www.koehntopp.de/php
+ * Last Update: @@ Thorsten - 2002-09-27
+ */
+function br2nl($str)
+{
+	return preg_replace("=<br(>|([\s/][^>]*)>)\r?\n?=i", "\n", $str);
+}
+
+/*
+ * Funktion für Umwandlung der E-Mailadressen (Spam!) | @@ Thorsten, 2003-04-17
+ * Last Update: @@ Thorsten, 2003-04-17
+ */
+function safeEmail($email)
+{
+	return str_replace(array('@', '.'), array(' at ', ' dot '), $email);
+}
+
+/*
+ * Funktion für Reload-Sperre beim Voting | @@ Thorsten, 2003-05-15
+ * Last Update: @@ Thorsten, 2003-05-15
+ */
+function votingCheck($id, $ip)
+{
+	global $db;
+	$timeNow = (time() - 300);
+	if ($db->num_rows($db->query("SELECT id FROM ".SQLPREFIX."faqvoting WHERE artikel = '".$id."' AND (ip = '".$ip."' AND datum > '".$timeNow."')"))) {
+		return FALSE;
+		}
+	return TRUE;
+}
+
+/*
+ * Funktion für IP-Bann | @@ Thorsten, 2003-06-06
+ * Last Update: @@ Thorsten, 2003-11-22
+ */
+function IPCheck($ip)
+{
+	global $PMF_CONF;
+	$arrBannedIPs = explode(" ", $PMF_CONF["bannedIP"]);
+	foreach ($arrBannedIPs as $oneIP) {
+    	if ($oneIP == $ip) {
+			return FALSE;
+			}
+		}
+	return TRUE;
+}
+
+
+
+/******************************************************************************
+ * Funktionen für das Usertracking
+ ******************************************************************************/
+
+/*
+ * Trackt den User und zeichnet die Bewegungen auf | @@ Bastian, 2001-02-18
+ * Last Update: @@ Thorsten, 2004-07-18
+ */
+function Tracking($action, $id)
+{
+	global $db, $PMF_CONF, $sid;
+	if (isset($PMF_CONF["tracking"])) {
+		if (isset($_GET["sid"])) {
+			$sid = $_GET["sid"];
+			}
+		if (isset($_COOKIE["sid"])) {
+			$sid = $_COOKIE["sid"];
+			}
+		if ($action == "oldSession") {
+			$sid = "";
+			}
+		if (!isset($sid)) {
+			$db->query("INSERT INTO ".SQLPREFIX."faqsessions (IP,TIME) VALUES ('".$_SERVER["REMOTE_ADDR"]."', '".time()."')");
+			list($sid) = $db->fetch_row($db->query("SELECT sid FROM ".SQLPREFIX."faqsessions ORDER BY sid DESC LIMIT 0,1"));
+			}
+		$fp = fopen("./data/tracking".date("dmY"), "a+b");
+		$flanz = "0";
+		while (!flock($fp, LOCK_EX) && $flanz < 6) {
+			wait(500);
+			$flanz++;
+			}
+		if ($flanz >= 6) {
+			fclose($fp);
+			}
+		elseif (!empty($_SERVER["HTTP_REFERER"])) {
+            if (!isset($_SERVER["QUERY_STRING"])) {
+                $_SERVER["QUERY_STRING"] = "";
+                }
+			fputs($fp, $sid.";".str_replace(";", ",",$action).";".$id.";".$_SERVER["REMOTE_ADDR"].";".str_replace(";", ",", $_SERVER["QUERY_STRING"]).";".str_replace(";", ",", $_SERVER["HTTP_REFERER"]).";".str_replace(";", ",", $_SERVER["HTTP_USER_AGENT"]).";".time().";\n");
+			flock($fp, LOCK_UN);
+			fclose($fp);
+			}
+		}
+}
+
+/*
+ * A OS independent function like usleep | @@ Thorsten 2004-05-30
+ * Last Update: @@ Thorsten 2004-05-30
+ */
+function wait($usecs)
+{
+    $temp = gettimeofday();
+    $start = (int)$temp["usec"];
+    while(1) {
+        $temp = gettimeofday();
+        $stop = (int)$temp["usec"];
+        if ($stop - $start >= $usecs) {
+            break;
+            }
+        }
+}
+
+/*
+ * Testet ob die SID zu der IP passt |  @@ Bastian, 2001-04-07
+ * Last Update: @@ Thorsten, 2003-03-06
+ */
+function CheckSID($sid, $ip)
+{
+	global $db;
+	if ($db->num_rows($db->query("SELECT sid FROM ".SQLPREFIX."faqsessions WHERE sid='".$sid."' AND IP='".$ip."' AND time > ".(time()-86400))) < 1) {
+		Tracking("oldSession",$sid);
+		}
+}
+
+/*
+ * Funktion für Anzeige von Usern, die online sind | @@ Thorsten, 2001-05-02
+ * Last Update: @@ Thorsten, 2004-07-17
+ */
+function userOnline()
+{
+	global $db, $PMF_CONF;
+    if (isset($PMF_CONF["tracking"])) {
+		$timeNow = (time() - 300);
+		$result = $db->query("SELECT count(sid) FROM ".SQLPREFIX."faqsessions WHERE time > '".$timeNow."' GROUP BY ip");
+		if (isset($result)) {
+			return $db->num_rows($result);
+	        }
+		}
+    else {
+        return 0;
+        }
+}
+
+
+
+/******************************************************************************
+ * Funktionen für die Startseite
+ ******************************************************************************/
+
+/*
+ * Function for generating the FAQ news | @@ Thorsten, 2002-08-23
+ * Last Update: @@ Thorsten, 2004-06-21
+ */
+function generateNews()
+{
+	global $db, $PMF_LANG, $PMF_CONF;
+	$result = $db->query("SELECT datum, header, artikel, link, linktitel, target FROM ".SQLPREFIX."faqnews ORDER BY datum desc LIMIT 0,".$PMF_CONF["numNewsArticles"]);
+	$output = "";
+	if ($db->num_rows($result) > 0) {
+		while ($row = $db->fetch_object($result)) {
+            $output .= "<h3>".$row->header."</h3>\n<div class=\"block\"><span class=\"date\">".makeDate($row->datum)."</span>".stripslashes($row->artikel)."\n";
+            if ($row->link != "") {
+    		    $output .= "<br />Info: <a href=\"http://".$row->link."\" target=\"_".$row->target."\">".$row->linktitel."</a>\n";
+    		    }
+		    $output .=  "</div>\n";
+		    flush();
+		    }
+        return $output;
+	    }
+    else {
+        return $PMF_LANG["msgNoNews"];
+		}
+}
+
+/*
+ * Zeigt die Top Ten an - die zehn am häufigsten besuchten Artikel der FAQ | @@ Thorsten - 2002-05-07
+ * Last Update: @@ Thorsten, 2004-07-17
+ */
+function generateTopTen()
+{
+	global $db, $sids, $PMF_LANG;
+	$result = $db->query("SELECT DISTINCT ".SQLPREFIX."faqdata.id, ".SQLPREFIX."faqdata.lang, ".SQLPREFIX."faqdata.thema, ".SQLPREFIX."faqdata.rubrik, ".SQLPREFIX."faqvisits.visits FROM ".SQLPREFIX."faqvisits, ".SQLPREFIX."faqdata WHERE ".SQLPREFIX."faqdata.id = ".SQLPREFIX."faqvisits.id AND ".SQLPREFIX."faqdata.lang = ".SQLPREFIX."faqvisits.lang AND ".SQLPREFIX."faqdata.active = 'yes' ORDER BY ".SQLPREFIX."faqvisits.visits DESC LIMIT 0,10");
+	$output = "";
+	if ($db->num_rows($result) > 0) {
+		$i = 1;
+		while ($row = $db->fetch_object($result)) {
+			$output .= "<tr>\n\t<td>\n";
+			$output .= "\t<strong>[".$i.".] ".$row->visits." ".$PMF_LANG["msgViews"].":</strong><br /><a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=artikel&amp;cat=".$row->rubrik."&amp;id=".$row->id."&amp;artlang=".$row->lang."\">".stripslashes(makeShorterText($row->thema, 8))."</a>\n";
+			$output .= "\t</td>\n\t</tr>\n";
+			$i++;
+			}
+		}
+	else {
+		$output = "<tr><td>".$PMF_LANG["err_noTopTen"]."</td></tr>\n";
+		}
+	return $output;
+}
+
+/*
+ * Zeigt die fünf neuesten Artikel an | @@ Thorsten - 2002-05-07
+ * Last Update: @@ Thorsten, 2004-07-17
+ */
+function generateFiveNewest()
+{
+	global $db, $sids, $PMF_LANG;
+	$result = $db->query("SELECT DISTINCT ".SQLPREFIX."faqdata.id, ".SQLPREFIX."faqdata.lang, ".SQLPREFIX."faqdata.rubrik, ".SQLPREFIX."faqdata.thema, ".SQLPREFIX."faqdata.datum, ".SQLPREFIX."faqvisits.visits FROM ".SQLPREFIX."faqdata, ".SQLPREFIX."faqvisits WHERE ".SQLPREFIX."faqdata.id = ".SQLPREFIX."faqvisits.id AND ".SQLPREFIX."faqdata.lang = ".SQLPREFIX."faqvisits.lang AND ".SQLPREFIX."faqdata.active = 'yes' ORDER BY ".SQLPREFIX."faqdata.datum desc LIMIT 0,5");
+	
+	if ($num = $db->num_rows($result) > 0) {
+		$output = "";
+		while ($row = $db->fetch_object($result)) {
+			$output .= "\t\t<tr>\n";
+			$output .= "\t\t\t<td nowrap=\"nowrap\">".makeDate($row->datum)."</td>\n";
+			$output .= "\t\t\t<td><a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=artikel&amp;cat=".$row->rubrik."&amp;id=".$row->id."&amp;artlang=".$row->lang."\">".stripslashes(makeShorterText($row->thema, 8))."</a></td>\n";
+			$output .= "\t\t\t<td nowrap=\"nowrap\">".$row->visits." ".$PMF_LANG["msgViews"]."</td>\n";
+			$output .= "\t\t</tr>\n";
+			}
+		}
+	else {
+		$output = "<tr class=\"fivenewest\"><td>".$PMF_LANG["err_noTopTen"]."</td></tr>\n";
+		}
+	return $output;
+}
+
+/*
+ * Kürzt einen String auf eine bestimmte Anzahl von Wörtern | @@ Thorsten - 2002-08-26
+ * Last Update: @@ Thorsten, 2004-06-09
+ */
+function makeShorterText($str, $char)
+{
+	$str = ereg_replace("[[:space:]]+", " ", $str);
+	$arrStr = explode(" ", $str);
+	$shortStr = "";
+    $num = count($arrStr);
+	if ($num > $char) {
+		for ($j = 0; $j <= $char; $j++) {
+			$shortStr .= $arrStr[$j]." ";
+			}
+		$shortStr .= "...";
+		}
+	else {
+		$shortStr = $str;
+		}
+	return $shortStr;
+}
+
+
+
+/******************************************************************************
+ * Funktionen für Artikelseiten
+ ******************************************************************************/
+
+/*
+ * Funktion für das Zählen der Visits | @@ Bastian, 2001-02-15
+ * Last Update: @@ Thorsten, 2004-07-17
+ */
+function logViews($myid, $lang)
+{
+	global $db;
+	$nVisits = "0";
+	$heute = time();
+	if ($result = $db->query ("SELECT visits FROM ".SQLPREFIX."faqvisits WHERE id = '".$myid."' AND lang = '".$lang."'")) {
+		list($nVisits) = $db->fetch_row($result);
+		}
+	if ($nVisits == "0" || $nVisits == "") {
+		$db->query ("INSERT INTO ".SQLPREFIX."faqvisits (id, lang, visits, last_visit) VALUES ('".$myid."', '".$lang."', '1', '".$heute."')");
+		}
+	else {
+		
+		$db->query ("UPDATE ".SQLPREFIX."faqvisits SET visits = visits+1, last_visit = '".$heute."' WHERE id = '".$myid."' AND lang = '".$lang."'");
+		}
+}
+
+/*
+ * Macht an den String nen / dran, falls keiner da ist
+ * @@ Bastian, 2002-01-06
+ */
+function EndSlash($string)
+{
+	if (substr($string, strlen($string)-1, 1) != "/" ) {
+		$string .= "/";
+		}
+	return $string;	
+}
+
+/*
+ * Gibt die Votings des Artikels aus | @@ Thorsten - 2002-08-29
+ * Last Update: @@ Thorsten, 2004-07-17
+ */
+function generateVoting($id)
+{
+	global $db, $PMF_LANG;
+	$query = "SELECT vote, usr FROM ".SQLPREFIX."faqvoting WHERE artikel = '".$id."'";
+	$result = $db->query($query);
+	if ($db->num_rows($result) > 0) {
+		list($vote, $user) = $db->fetch_row($result);
+		return " ".round(($vote/$user),2)." ".$PMF_LANG["msgVoteFrom"]." 5 (".$user." ".$PMF_LANG["msgVotings"].")";
+		}
+	else {
+		return " 0 ".$PMF_LANG["msgVoteFrom"]." 5 (0 ".$PMF_LANG["msgVotings"].")";
+		}
+}
+
+/*
+ * Gibt die Kommentare zum Artikel aus | @@ Thorsten - 2002-08-29
+ * Last Update: @@ Thorsten, 2003-04-17
+ */
+function generateComments($id)
+{
+	global $db, $PMF_LANG;
+	
+	$result = $db->query("SELECT usr,email,comment FROM ".SQLPREFIX."faqcomments WHERE id = '".$id."'");
+	$output = "";
+	if ($db->num_rows($result) > 0) {
+		while ($row = $db->fetch_object($result)) {
+			$output .= "<p class=\"comment\">\n";;
+			$output .= "<strong>".$PMF_LANG["msgCommentBy"]."<a href=\"mailto:".safeEmail($row->email)."\">".$row->user."</a>:</strong>\n";
+			$output .= "<br />".ereg_replace("&lt;br /&gt;","<br />",stripslashes(htmlspecialchars($row->comment)))."\n</p>";
+			}
+		}
+	return $output;
+}
+
+/*
+ * Funktion zum Entfernen von <br /> in Abschnitten zwischen <pre> | @@ Meikel Katzengreis, 2003-02-21
+ * Last Update: @@ Thorsten, 2003-07-23
+ */
+function pre_core ($text)
+{
+	$text = preg_replace("=<br(>|([\s/][^>]*)>)\r?\n?=i", "\n", $text[1]);
+    return $text;
+}
+
+/*
+ * Funktion zum Entfernen von HTML-Tags bis auf <strong>, <em>, <u>, und <a> | @@ Thorsten, 2003-02-23
+ * Last Update: @@ Thorsten, 2004-06-01
+ */
+function safeHTML($html)
+{
+	$html = stripslashes($html);
+	$html = strip_tags($html, "<strong><em><em><u><a>");
+	return $html;
+}
+
+/*
+ * Funktion wandelt HTML Entities zurück | @@ Thorsten, 2003-03-27
+ * Last Update: @@ Thorsten, 2003-03-27
+ */
+function unhtmlentities($html)
+{
+	$translation_table = get_html_translation_table (HTML_ENTITIES);
+	$translation_table = array_flip ($translation_table);
+	$content = strtr ($html, $translation_table);
+	return preg_replace('/\&\#([0-9]+)\;/me', "chr('\\1')", $content);
+}
+
+/*
+ * Syntax check for e-mails | @@ Thorsten, 2004-01-19
+ * Last Update: @@ Thorsten, 2004-06-27
+ */
+function checkEmail($sender)
+{
+    global $IDN;
+    $sender = $IDN->decode($sender);
+    $pattern =  "#^[-!\#$%&\"*+\\./\d=?A-Z^_|'a-z{|}~]+".
+                "@".
+                "[-!\#$%&\"*+\\./\d=?A-Z^_|'a-z{|}~]+\.".
+                "[-!\#$%&\"*+\\./\d=?A-Z^_|'a-z{|}~]+$#";
+    if (isset($sender) && preg_match($pattern, $sender)) {
+        return TRUE;
+        }
+    else {
+        return FALSE;
+        }
+}
+
+/*
+ * Decode MIME header elements in e-mails | @@ Matthias Sommerfeld
+ * (c) 2001-2004 blue birdy, Berlin (http://bluebirdy.de)
+ * used with permission
+ * Last Update: @@ Thorsten, 2004-07-17
+ */
+function encode_iso88591($coded = "", $cmode = "g")
+{
+    if ("g" == $cmode) {
+        $coded = str_replace(" ", "_", quoted_printable_encode($coded));
+        $zeilen = explode("\r\n", $coded);
+        $coded = "";
+        foreach ($zeilen as $key => $value) {
+            if (!$value) {
+                continue;
+                }
+            if ($key > 0) {
+                $coded .= "\t";
+                }
+            $coded .= '=?iso-8859-1?Q?'.$value.'?='."\r\n";
+            }
+        return rtrim($coded);
+        }
+    elseif ("@" == $cmode) {
+        $zeilen = explode("\r\n", $coded);
+        $coded = "";
+        foreach ($zeilen as $key => $value) {
+            if (!$value) {
+                continue;
+                }
+            if ($key > 0) {
+                $coded .= "\t";
+                }
+            unset ($words);
+            $words = explode(" ", $value, 2);
+            foreach ($words as $k => $word) {
+                if (preg_match("/[\x80-\xff]/", $word) && preg_match("/\(|\)/", $word)) {
+                    $words[$k] = preg_replace
+                            ("/^(\()?([^\)]+)(\))?$/ie"
+                            ,"'(=?iso-8859-1?Q?'.rtrim(quoted_printable_encode(str_replace(' ', '_', '\\2'))).'?=)'"
+                            ,$word
+                            );
+                    }
+                }
+            $coded .= join(" ", $words)."\r\n";
+            }
+        return rtrim($coded);
+        }
+    else {
+        $zeilen = explode("\r\n", $coded);
+        $coded = '';
+        foreach ($zeilen as $key => $value) {
+            if (!$value) {
+                continue;
+                }
+            if ($key > 0) {
+                $coded .= "\t";
+                }
+            unset ($words);
+            $words = explode(" ", $value);
+            foreach ($words as $k => $word) {
+                if (preg_match('/[\x80-\xff]/', $word)) {
+                    $words[$k] = '=?iso-8859-1?Q?'.rtrim(quoted_printable_encode($word)).'?=';
+                    }
+                }
+            $coded .= join(' ', $words)."\r\n";
+            }
+        return rtrim($coded);
+        }
+}
+
+/*
+ * Decode MIME header elements in e-mails | @@ Matthias Sommerfeld
+ * (c) 2001-2004 blue birdy, Berlin (http://bluebirdy.de)
+ * used with permission
+ * Last Update: @@ Thorsten, 2004-07-17
+ */
+function quoted_printable_encode($return = '')
+{
+    // Ersetzen der lt. RFC 1521 nötigen Zeichen
+    $return = preg_replace('/([^\t\x20\x2E\041-\074\076-\176])/ie', "sprintf('=%2X',ord('\\1'))", $return);
+    $return = preg_replace('!=\ ([A-F0-9])!', '=0\\1', $return);
+    // Einfügen von QP-Breaks (=\r\n)
+    if (strlen($return) > 75) {
+        $length = strlen($return); $offset = 0;
+        do {
+            $step = 76;
+            $add_mode = (($offset+$step) < $length) ? 1 : 0;
+            $auszug = substr($return, $offset, $step);
+            if (preg_match('!\=$!', $auszug))   $step = 75;
+            if (preg_match('!\=.$!', $auszug))  $step = 74;
+            if (preg_match('!\=..$!', $auszug)) $step = 73;
+            $auszug = substr($return, $offset, $step);
+            $offset += $step;
+            $schachtel .= $auszug;
+            if (1 == $add_mode) $schachtel.= '='."\r\n";
+            } while ($offset < $length);
+        $return = $schachtel;
+        }
+    $return = preg_replace('!\.$!', '. ', $return);
+    return preg_replace('!(\r\n|\r|\n)$!', '', $return)."\r\n";
+}
+
+
+/******************************************************************************
+ * Funktionen für den XML-Export
+ ******************************************************************************/
+
+/*
+ * Gibt die XML-Datei zum Artikel aus | @@ Thorsten - 2002-08-29
+ * Last Update: @@ Thorsten, 2004-05-31
+ */
+function generateXMLExport($id, $lang = "")
+{
+	global $db, $PMF_LANG, $PMF_CONF;
+	$result = $db->query("SELECT id, lang, active, rubrik, keywords, thema, content, author, datum FROM ".SQLPREFIX."faqdata WHERE id = '".$id."' AND lang = '".$lang."' AND active = 'yes'");
+	if ($db->num_rows($result) > 0) {
+		while ($row = $db->fetch_object($result)) {
+			if ($PMF_CONF["ubbcode"]) {
+                $bbcode = new BBCode();
+                $xml_content = $bbcode->parse($row->content);
+				}
+			else {
+				$xml_content = stripslashes($row->content);
+				}
+			$xml_rubrik = $categories[$row->rubrik];
+			$xml_thema = wordwrap($row->thema, 60);
+			$xml_keywords = $row->keywords;
+			$xml_content = trim(htmlspecialchars(stripslashes(wordwrap($xml_content, 60))));
+			if (is_writeable("./xml/")) {
+				$xml_fp = @fopen("./xml/article_".$row->id."_".$row->lang.".xml","wb");
+				$my_xml_output = "<?xml version=\"1.0\" encoding=\"".$PMF_LANG["metaCharset"]."\" standalone=\"yes\" ?>\n";
+				$my_xml_output .= "<!-- XML-Output by phpMyFAQ ".$PMF_CONF["version"]." | Date: ".makeDate(date("YmdHis"))." -->\n";
+				$my_xml_output .= "<phpmyfaq xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:NamespaceSchemaLocation=\"http://www.phpmyfaq.de/xml/faqschema.xsd\">\n";
+				$my_xml_output .= "\t<article id=\"".$row->id."\">\n";
+				$my_xml_output .= "\t<language>".$row->lang."</language>\n";
+				$my_xml_output .= "\t<category>".strip_tags(stripslashes($xml_rubrik))."</category>\n";
+				if ($xml_keywords) {
+					$my_xml_output .= "\t<keywords>".$xml_keywords."</keywords>\n";
+					}
+				else {
+					$my_xml_output .= "\t<keywords />\n";
+					}
+				$my_xml_output .= "\t<theme>".strip_tags($xml_thema)."</theme>\n";
+				$my_xml_output .= "\t<content xmlns=\"http://www.w3.org/TR/REC-html40\">".strip_tags($xml_content)."</content>\n";
+				if ($row->author) {
+					$my_xml_output .= "\t<author>".$row->author."</author>\n";
+					}
+				else {
+					$my_xml_output .= "\t<author />\n";
+					}
+				$my_xml_output .= "\t<date>".makeDate($row->datum)."</date>\n";
+				$my_xml_output .= "\t</article>\n";
+				$my_xml_output .= "</phpmyfaq>";
+				@fputs($xml_fp, $my_xml_output);
+				@fclose($xml_fp);
+				}
+			}
+		return TRUE;
+        }
+	return FALSE;
+}
+
+/*
+ * Funktion zum Exportieren aller Artikel in eine XML-Datei | @@ Thorsten, 2003-03-03
+ * Last Update: @@ Thorsten, 2004-05-07
+ */
+function generateXMLFile()
+{
+	global $db, $tree, $PMF_CONF, $PMF_LANG;
+	
+	$result = $db->query("SELECT id, lang, active, rubrik, keywords, thema, content, author, datum FROM ".SQLPREFIX."faqdata ORDER BY id");
+	if ($db->num_rows($result) > 0) {
+		$my_xml_output = "<?xml version=\"1.0\" encoding=\"".$PMF_LANG["metaCharset"]."\" standalone=\"yes\" ?>\n";
+		$my_xml_output .= "<!-- XML-Output by phpMyFAQ ".$PMF_CONF["version"]." | Date: ".makeDate(date("YmdHis"))." -->\n";
+		$my_xml_output .= "<phpmyfaq xmlns=\"http://www.phpmyfaq.de/phpmyfaq\">\n";
+		$xml_fp = fopen("../xml/phpmyfaq.xml","w");
+		while ($row = $db->fetch_object($result)) {
+        $xml_content = wordwrap(stripslashes($row->content));
+			$xml_rubrik = $tree->categoryName[$row->rubrik]["name"];
+			$xml_thema = wordwrap($row->thema, 60);
+			$xml_keywords = $row->keywords;
+			$xml_content = trim(htmlspecialchars(stripslashes(wordwrap($xml_content, 60))));
+			
+			if (is_writeable("../xml/")) {
+				$my_xml_output .= "\t<article id=\"".$row->id."\">\n";
+				$my_xml_output .= "\t<language>".$row->lang."</language>\n";
+				$my_xml_output .= "\t<category>".htmlentities(strip_tags($xml_rubrik))."</category>\n";
+				if ($xml_keywords) {
+					$my_xml_output .= "\t<keywords>".$xml_keywords."</keywords>\n";
+					}
+				else {
+					$my_xml_output .= "\t<keywords />\n";
+					}
+				$my_xml_output .= "\t<theme>".strip_tags($xml_thema)."</theme>\n";
+				$my_xml_output .= "\t<content xmlns=\"http://www.w3.org/TR/REC-html40\">".strip_tags($xml_content)."</content>\n";
+				if ($row->author) {
+					$my_xml_output .= "\t<author>".$row->author."</author>\n";
+					}
+				else {
+					$my_xml_output .= "\t<author />\n";
+					}
+				$my_xml_output .= "\t<date>".makeDate($row->datum)."</date>\n";
+				$my_xml_output .= "\t</article>\n\n";
+				}
+			}
+		$my_xml_output .= "</phpmyfaq>";
+		fputs($xml_fp, $my_xml_output);
+		fclose($xml_fp);
+		}
+	print "<p><a href=\"../xml/phpmyfaq.xml\" target=\"_blank\">XML File okay!</a></p>";
+}
+
+
+
+/******************************************************************************
+ * Funktionen für die Volltextsuche
+ ******************************************************************************/
+
+/*
+ * Suchfunktion für die Volltextsuche | @@ Thorsten - 2002-09-16
+ * Last Update: @@ Thorsten, 2004-07-04
+ */
+function searchEngine($begriff)
+{
+	global $db, $sids, $tree, $PMF_LANG, $PMF_CONF;
+	$seite = "";
+	$output = "";
+	
+	if (isset($_REQUEST["seite"])) {
+		$seite = $_REQUEST["seite"];
+		}
+	if (isset($_REQUEST["search"])) {
+		$begriff = $_REQUEST["search"];
+		}
+	$result = $db->search(SQLPREFIX."faqdata", 
+			Array("id"=>NULL, "lang"=>NULL, "rubrik"=>NULL, "thema"=>NULL, "content"=>NULL),
+			Array("thema", "content", "keywords"),
+			$begriff,
+			Array("active"=>"yes"));
+	$num = $db->num_rows($result);
+	
+    $pages = ceil($num / $PMF_CONF["numRecordsPage"]);
+	if (!$seite) {
+		$seite = 1;
+		}
+	$y = $seite * $PMF_CONF["numRecordsPage"]; 
+	$x = $y - $PMF_CONF["numRecordsPage"];
+	if ($y > $num) {
+		$y = $num;
+		}
+	
+	$result = $db->search(SQLPREFIX."faqdata", 
+			Array("id"=>NULL, "lang"=>NULL, "rubrik"=>NULL, "thema"=>NULL, "content"=>NULL),
+			Array("thema", "content", "keywords"),
+			$begriff,
+			Array("active"=>"yes"), $PMF_CONF["numRecordsPage"], $x);
+
+    
+	if ($num > 0) {
+		if ($num == "1") {
+			$output .= "<p>".$num.$PMF_LANG["msgSearchAmount"]."</p>\n";
+			}
+		else {
+			$output .= "<p>".$num.$PMF_LANG["msgSearchAmounts"]."</p>\n";
+			}
+		if ($pages > 1) {
+			$output .= "<p><strong>".$PMF_LANG["msgPage"].$seite." ".$PMF_LANG["msgVoteFrom"]." ".$pages.$PMF_LANG["msgPages"]."</strong></p>";
+			}
+		$output .= "<ul class=\"phpmyfaq_ul\">\n";
+	    for ($i = $x; $i < $y ; $i++) {
+			list($id, $lang, $rubrik, $thema, $content) = $db->fetch_row($result);
+			$rubriktext = $tree->categoryName[$rubrik]["name"];
+			$thema = chopString($thema, 15);
+            $content = stripslashes(chopString(strip_tags($content), 25));
+            $thema = preg_replace('/(((href|src)="[^"]*)?'.$begriff.'(?(1).*"))/mies', "highlight_no_links(\"\\1\")", $thema);
+			$content = preg_replace('/(((href|src)="[^"]*)?'.$begriff.'(?(1).*"))/mies', "highlight_no_links(\"\\1\")", $content);
+            $output .= "<li><strong>".$rubriktext."</strong>: <a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=artikel&amp;cat=".$rubrik."&amp;id=".$id."&amp;artlang=".$lang."&amp;highlight=".$begriff."\">".stripslashes($thema)."...</a><br /><div style=\"font-size: 10px;\"><strong>".$PMF_LANG["msgSearchContent"]."</strong> ".stripslashes($content)."...</div><br /></li>\n";
+            }
+        $output .= "</ul>\n";
+        }
+    else {
+		$output = $PMF_LANG["err_noArticles"];
+		}
+    
+    if ($num > $PMF_CONF["numRecordsPage"]) {
+        $output .= "<p align=\"center\"><strong>";
+        $vor = $seite - 1; 
+        $next = $seite + 1;
+        if ($vor != 0) {
+            $output .= "[ <a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=search&amp;&search=".$begriff."&amp;seite=".$vor."\">".$PMF_LANG["msgPrevious"]."</a> ]";
+            }
+        $output .= " ";
+        if ($next <= $pages) {
+            $output .= "[ <a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=search&amp;search=".$begriff."&amp;seite=".$next."\">".$PMF_LANG["msgNext"]."</a> ]";
+            }
+        $output .= "</strong></p>";
+		}
+	return $output;
+}
+
+/*
+ * Funktion für das Herausfiltern von highlighting HTML aus URLs und Images | @@ Matthias Sommerfeld, 2003-07-14
+ * Last Update: @@ Thorsten, 2003-12-16
+ */
+function highlight_no_links($string = "")
+{
+    if ("" == $string) {
+        return "";
+        }
+    if ("href=" == substr($string, 0, 5) || "src=" == substr($string, 0, 4)) {
+        return $string;
+    }
+    else {
+        return "<span class=\"highlight\">".$string."</span>";
+    }
+}
+
+/*
+ * This functions chops a string | @@ Thorsten, 2003-12-16
+ * Last Update: @@ Thorsten, 2003-12-16
+ */
+function chopString($string, $words)
+{
+    $str = "";
+    $pieces = explode(" ", $string);
+    $num = count($pieces);
+    if ($words > $num) {
+        $words = $num;
+        }
+    for ($i = 0; $i < $words; $i++) {
+        $str .= $pieces[$i]." ";
+        }
+    return $str;
+}
+
+
+/******************************************************************************
+ * Funktionen für die Offenen Fragen
+ ******************************************************************************/
+
+/*
+ * Diese Funktion gibt die offenen Fragen aus | @@ Thorsten, 2002-09-17
+ * Last Update: @@ Thorsten, 2004-07-08
+ */
+function printOpenQuestions()
+{
+	global $db, $sids, $tree, $PMF_LANG;
+	
+	$query = "SELECT id,ask_username,ask_usermail,ask_rubrik,ask_content,ask_date FROM ".SQLPREFIX."faqfragen ORDER BY ask_date ASC";
+	$result = $db->query($query);
+	$output = "";
+	if ($db->num_rows($result) > 0) {
+		while ($row = $db->fetch_object($result)) {
+			$output .= "\t<tr class=\"openquestions\">\n";
+			$output .= "\t\t<td valign=\"top\" nowrap=\"nowrap\">".makeDate($row->ask_date)."<br /><a href=\"mailto:".safeEmail($row->ask_usermail)."\">".$row->ask_username."</a></td>\n";
+			$output .= "\t\t<td valign=\"top\"><strong>".$tree->categoryName[$row->ask_rubrik]["name"].":</strong><br />".stripslashes($row->ask_content)."</td>\n";
+        	$output .= "\t\t<td valign=\"top\"><a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=add&amp;question=".rawurlencode($row->ask_content)."&amp;cat=".$row->ask_rubrik."\">".$PMF_LANG["msg2answer"]."</a></td>\n";
+    		$output .= "\t</tr>\n";
+			}
+		}
+	else {
+		$output = "\t<tr>\n\t\t<td colspan=\"3\">".$PMF_LANG["msgNoQuestionsAvailable"]."</td>\n\t</tr>\n";
+		}
+	return $output;
+}
+
+
+
+
+/******************************************************************************
+ * Funktionen für die Benutzerauthentifizierung und Rechtevergabe
+ ******************************************************************************/
+
+/*
+ * Logt den Admin | @@ Bastian, 2001-02-18
+ * Last Update: @@ Thorsten, 2004-07-22
+ */
+function adminlog($text)
+{
+	global $db, $PMF_CONF, $auth_user;
+	if (isset($PMF_CONF["enableadminlog"])) {
+		$db->query("INSERT INTO ".SQLPREFIX."faqadminlog (time, usr, text, ip) VALUES ('".time()."','".$auth_user."','".nl2br(addslashes($text))."','".$_SERVER["REMOTE_ADDR"]."')");
+		}
+}
+
+/*
+ * Checkt, ob eine SQL-Tabelle leer ist | @@ Thorsten 2002-01-10
+ * Last Update: @@ Thorsten, 2003-03-24
+ */
+function emptyTable($table)
+{
+	global $db;
+	if ($db->num_rows($db->query("SELECT * FROM ".$table)) < 1) {
+		return TRUE;
+		}
+	else {
+		return FALSE;
+		}
+}
+
+
+
+/******************************************************************************
+ * Funktionen für den Adminbereich
+ ******************************************************************************/
+
+/*
+ * Function for displaying all languages in <option> | @@ Thorsten, 2004-06-01
+ * Last Update: @@ Thorsten, 2004-07-09
+ */
+function languageOptions($lang = "")
+{
+    global $languageCodes;
+    $output = "";
+    foreach ($languageCodes as $key => $value) {
+        $output .= "\t<option value=\"".strtolower($key)."\"";
+        if (strtolower($key) == $lang) {
+            $output .= " selected=\"selected\"";
+            }
+        $output .= ">".$value."</option>\n";
+        }
+    return $output;
+}
+
+/*
+ * Funktion zum generieren vom "Umblättern" | @@ Bastian, 2002-01-03
+ * Last Update: @@ Thorsten, 2004-05-07
+ */
+function PageSpan($code, $start, $end, $akt)
+{
+	global $PMF_LANG;
+	if ($akt > $start) {
+		$out = str_replace("<NUM>", $akt-1, $code).$PMF_LANG["msgPreviusPage"]."</a> | ";
+		}
+	else {
+		$out = "";
+		}
+	for ($h = $start; $h<=$end; $h++) {
+		if($h > $start) {
+			$out .= ", ";
+			}
+		if($h != $akt) {
+			$out .= str_replace("<NUM>", $h, $code).$h."</a>";
+			}
+		else {
+			$out .= $h;
+			}
+		}
+	if ($akt < $end) {
+		$out .= " | ".str_replace("<NUM>", $akt+1, $code).$PMF_LANG["msgNextPage"]."</a>";
+		}
+		$out = $PMF_LANG["msgPageDoublePoint"].$out;
+		return $out;
+}
+
+/*
+ * Bastelt aus den Dateinamen des Tracking einen Timestamp | @@ Bastian, 2002-01-05
+ * Last Update: @@ Thorsten, 2002-09-19
+ */
+function FileToDate($file)
+{
+	if (strlen($file) >= 16) {
+		$tag = substr($file, 8, 2);
+		$mon = substr($file, 10, 2);
+		$yea = substr($file, 12, 4);
+		$tim = mktime(1, 1, 1, $mon, $tag, $yea);
+		return $tim;
+		}
+	else {
+		return -1;
+		}
+}
+
+/*
+ * Bastelt nen Timestamp ausm Datum | @@ Bastian, 2001-04-09
+ * Last Update: @@ Thorsten - 2002-09-27
+ */
+function mkts($datum,$zeit)
+{
+	if (strlen($datum) > 0) {
+		$tag = substr($datum,0,strpos($datum,"."));
+		$datum = substr($datum,(strpos($datum,".")+1),strlen($datum));
+		$monat = substr($datum,0,strpos($datum,"."));
+		$datum = substr($datum,(strpos($datum,".")+1),strlen($datum));
+		$jahr = $datum;
+	}
+	else {
+		$tag = date("d");
+		$monat = date("m");
+		$jahr = date("Y");
+	}
+	if (strlen($zeit) > 0) {
+		$stunde = substr($zeit,0,strpos($zeit,":"));
+		$zeit = substr($zeit,(strpos($zeit,":")+1),strlen($zeit));
+		$minute = substr($zeit,0,strpos($zeit,":"));
+		$zeit = substr($zeit,(strpos($zeit,":")+1),strlen($zeit));
+		$sekunde = $zeit;
+	}
+	else {
+		$stunde = date("H");
+		$minute = date("i");
+		$sekunde = date("s");
+	}
+	return mktime($stunde, $minute, $sekunde, $monat, $tag, $jahr);
+}
+
+/* Creates an array by using one array for keys and another for its values | @@ Thorsten - 2004-07-23
+ * Last Update: @@ Thorsten - 2004-07-23
+ * This function is included in PHP 5.0.0 and later
+ */
+if (!function_exists("array_combine")) {
+    function array_combine($keys, $values)
+    {
+        $keys = array_values($keys);
+        $values  = array_values($values);
+        $combined = array ();
+        $num = count($values);
+        for ($i = 0; $i < $num; $i++) {
+            $combined[$keys[$i]] = $values[$i];
+            }
+        return $combined;
+    }
+    }
+
+
+
+/******************************************************************************
+ * Funktionen für das Backup
+ ******************************************************************************/
+
+/*
+ * Funktion zum Zusammensetzen der zu sichernden SQL Queries | @@ Meikel, 2003-03-24
+ * Last Update: @@ Thorsten, 2003-11-13
+ */
+function build_insert ($query, $table)
+{
+	global $db;
+	if (!$result = $db->query($query)) {
+		return;
+		}
+	$ret = array();
+	$ret[] = "\n# Table: ".$table;
+	while ($row = $db->fetch_assoc ($result)) {
+		$p1 = array();
+		$p2 = array();
+		foreach ($row as $key => $val) {
+            $val = safeSQL($val);
+			$p1[] = $key;
+			$p2[] = "'".$val."'";
+			}
+		$ret[] = "INSERT INTO ".$table." (".implode(",", $p1).") VALUES (".implode(",", $p2).");";
+		}
+	return $ret;
+}
+
+/*
+ * Funktion zum Escapen von SQL Queries | @@ Thorsten, 2003-11-13
+ * Last Update: @@ Thorsten, 2004-07-07
+ */
+function safeSQL($string)
+{
+    $str = "";
+    $length = strlen($string);
+    for ($i = 0; $i < $length; $i++) {
+        $char = $string[$i];
+        switch ($char) {
+            case "'":    $str .= "\'"; break;
+            case "\\":    $str .= "\\\\"; break;
+            case "\n":    $str .= "\\n"; break;
+            case "\r":    $str .= "\\r"; break;
+            default:    $str .= $char;
+            }
+        }
+    return $str;
+}
+
+
+
+/******************************************************************************
+ * Functions for exporting as PDF
+ ******************************************************************************/
+
+/*
+ * Funktion wandelt HEX Farbcodes in dezimale RGB Werte um für FPDF-Class | @@ Peter Beauvain, 2004-04-12
+ * Last Update: @@ Thorsten, 2004-07-04
+ */
+function hex2dec($color = "#000000")
+{
+    $R = substr($color, 1, 2);
+    $red = hexdec($R);
+    $G = substr($color, 3, 2);
+    $green = hexdec($G);
+    $B = substr($color, 5, 2);
+    $blue = hexdec($B);
+    $tbl_color = array();
+    $tbl_color['R'] = $red;
+    $tbl_color['G'] = $green;
+    $tbl_color['B'] = $blue;
+    return $tbl_color;
+}
+
+/******************************************************************************
+ * Verschiedene Funktionen
+ ******************************************************************************/
+
+/*
+ * Funktion für Versioncheck | @@ Thorsten, 2003-10-10
+ * Last Update: @@ Thorsten, 2004-07-07
+ */
+function version_check($actual = "", $target = "")
+{
+    if (empty($actual) || empty($target)) {
+        return FALSE;
+        }
+    $actual = explode(".", $actual);
+    $target = explode(".", $target);
+    $num = count($target);
+    for ($i = 0; $i < $num; $i++) {
+        if ($actual[$i] <  $target[$i]) {
+            return FALSE;
+            }
+        if ($actual[$i] == $target[$i]) {
+            continue;
+            }
+        if ($actual[$i] >= $target[$i]) {
+            return TRUE;
+            }
+        }
+    return TRUE;
+}
+
+/*
+ * Funktion für MySQL-Versioncheck | @@ Thorsten, 2003-10-10
+ * Last Update: @@ Thorsten, 2003-10-10
+ */
+function mysql_check($version)
+{
+    return version_check(mysql_get_server_info(), $version);
+}
+?>

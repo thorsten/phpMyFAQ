@@ -1,0 +1,453 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<title>Documentation for phpMyFAQ 1.4.0 and later</title>
+    <style type="text/css"><!--
+    body { font: normal normal 14px "Bitstream Vera Sans", "Trebuchet MS", Verdana, Geneva, Arial, Helvetica, sans-serif;	background-color: #f5f5f5; line-height: 20px; }
+    pre { background-color: #FAFAD2; padding: 5px; }
+	a { color: #0000ff; }
+	a:hover { color: #ff0000; }
+    #doc { width: 700px; }
+    ol {}
+    ul {}
+    -->
+    </style>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+</head>
+<body>
+<!-- beginn dokumentation -->
+<div id="doc">
+    <a id="top"></a>
+    <h3>[ phpMyFAQ 1.4.0 Documentation ]</h3>
+    <ol>
+        <li><strong><a href="#1">Introduction</a></strong>
+        <ol>
+            <li><a href="#1a">License</a></li>
+            <li><a href="#1b">Support</a></li>
+            <li><a href="#1c">Copyright</a></li>
+            <li><a href="#1d">Donations</a></li>
+        </ol></li>
+        <li><strong><a href="#2">Installation</a></strong>
+        <ol>
+            <li><a href="#2a">Requirements</a></li>
+            <li><a href="#2b">Preparations</a></li>
+            <li><a href="#2c">Install-Script</a></li>
+            <li><a href="#2d">First Steps</a></li>
+            <li><a href="#2e">Notes</a></li>
+        </ol></li>
+        <li><strong><a href="#3">Upgrading</a></strong>
+        <ol>
+            <li><a href="#3a">Upgrading from phpMyFAQ 1.1.x or 1.2.x</a></li>
+            <li><a href="#3b">Upgrading phpMyFAQ 1.3.x</a></li>
+            <li><a href="#3c">Modifying templates for phpMyFAQ 1.3.x</a></li>
+            <li><a href="#3d">Upgrading phpMyFAQ 1.4.x</a></li>
+        </ol></li>
+        <li><strong><a href="#4">Administration</a></strong>
+        <ol>
+            <li><a href="#4a">User Administration</a></li>
+            <li><a href="#4b">Record Administration</a></li>
+            <li><a href="#4c">Category Administration</a></li>
+            <li><a href="#4d">News Administration</a></li>
+            <li><a href="#4e">Edit open questions</a></li>
+            <li><a href="#4f">Rating Statistics</a></li>
+            <li><a href="#4g">Cookies</a></li>
+            <li><a href="#4h">View Sessions</a></li>
+            <li><a href="#4i">View Adminlog</a></li>
+            <li><a href="#4j">Change passwords</a></li>
+            <li><a href="#4k">Edit configuration</a></li>
+            <li><a href="#4l">Backups</a></li>
+            <li><a href="#4m">Export your FAQ</a></li>
+            <li><a href="#4n">Logout</a></li>
+        </ol></li>
+        <li><strong><a href="#5">Customising phpMyFAQ 1.4.x</a></strong>
+        <ol>
+            <li><a href="#5a">The file template/index.tpl</a></li>
+            <li><a href="#5b">The file template/style.css</a></li>
+            <li><a href="#5c">More Templates</a></li>
+        </ol></li>
+        <li><strong><a href="#6">One more thing</a></strong></li>
+    </ol>	
+    
+    <hr style="width: 90%; height: 1px;"  />
+    <p><a name="1"></a><strong>1. Introduction</strong></p>
+    <p>phpMyFAQ is a multilingual, completely database-driven FAQ-system. A MySQL database is used to store all data, PHP 4.1.0 (or higher) is needed in order to access this data. phpMyFAQ also offers a Content Management-System, flexible multi-user support, a news-system, user-tracking, language modules, enhanced automatic content negotiation, templates, extensive XML-support, PDF-support, a backup-system and an easy to use installation script.</p>
+    <p>This documentation should help you with installing and administrating phpMyFAQ.</p>
+    <p><a href="#top">back to top</a></p>
+    
+    
+    <hr style="width: 90%; height: 1px;"  />
+    <p><a name="1a"></a><strong>1.a. License</strong></p>
+    <p>phpMyFAQ is published unter the <a href="http://www.mozilla.org/MPL/MPL-1.1.html">Mozilla Public License Version 1.1</a> (MPL). This license guarantees you the free usage of phpMyFAQ, access to the sourcecode and the right to modify and distribute phpMyFAQ.</p>
+    <p>The only restrictions apply to the copyright, which remains at all times at Thorsten Rinne. Any modified versions of phpMyFAQ will also fall under the terms of MPL. Any other program, that may only be accessing certain functions of phpMyFAQ is not affected by these restrictions and may be distributed under any type of license.</p>
+    <p>A commercial usage or commercially distribution of phpMyFAQ, e.g. on CD-ROMs, is allowed, as long as the conditions mentioned above are met.</p>
+    <p>We decided to use MPL as the licensing model for phpMyFAQ because we feel that it is a good compromise between the protection of the openness and  free distribution on the one hand and the interaction with other software regardless of its licensing model. When compared to other licensing models its text is short and easily comprehensible, even for newcomers.</p>
+    <p>This documentation is licensed under a <a href="http://creativecommons.org/licenses/by/2.0/" class="subfoot">Creative Commons License</a>.</p>
+    <p><a href="#top">back to top</a></p>
+    
+    
+    <hr style="width: 90%; height: 1px;"  />
+    <p><a name="1b"></a><strong>1.b. Support</strong></p>
+    <p>If you should run into any problems using phpMyFAQ check out our support forums at <a href="http://forum.phpmyfaq.de">forum.phpmyfaq.de</a>. There is no support by phone or email, please refrain from calling us.</p>
+    <p><a href="#top">back to top</a></p>
+    
+    
+    <hr style="width: 90%; height: 1px;"  />
+    <p><a name="1c"></a><strong>1.c. Copyright</strong></p>
+    <p>&copy; 2001 - 2004 by Thorsten Rinne under the <a href="http://www.mozilla.org/MPL/MPL-1.1.html">Mozilla Public License</a>. All rights reserved.</p>
+    <p><a href="#top">back to top</a></p>
+    
+    
+    <hr style="width: 90%; height: 1px;"  />
+    <p><a name="1d"></a><strong>1.d. Donations</strong></p>
+    <p> If you find phpMyFAQ useful and want to express your appreciation, have a look at my <a href="http://www.amazon.de/exec/obidos/registry/UQQJEX7BCHPZ/">amazon.de Wishlist</a>. I also accept online donations through PayPal. Please use the button below to make a donation online:</p>
+    <p align="center">
+    <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+    <input type="hidden" name="cmd" value="_xclick" />
+    <input type="hidden" name="business" value="thorsten@phpmyfaq.de" />
+    <input type="hidden" name="item_name" value="phpMyFAQ" />
+    <input type="hidden" name="no_note" value="1" />
+    <input type="hidden" name="currency_code" value="EUR" />
+    <input type="hidden" name="tax" value="0" />
+    <input type="image" src="https://www.paypal.com/en_US/i/btn/x-click-but21.gif" name="submit" alt="Make payments with PayPal - it's fast, free and secure!" />
+    </form>
+    </p>
+    <p><a href="#top">back to top</a></p>
+    
+    
+    <hr style="width: 90%; height: 1px;"  />
+    <p><strong><a name="2"></a>2.Installation</strong></p>
+    <p><strong><a name="2a"></a>2.a. Requirements for phpMyFAQ</strong></p>
+    <p>phpMyFAQ addresses a MySQL database via PHP. In order to install it you will need a webserver that meets the following requirements:</p>
+    <ul>
+        <li>PHP</li>
+        <ul>    
+            <li>from version 4.1.0 (recommended: PHP 4.3)</li>
+            <li>register_globals = off (recommended)</li>
+            <li>safe_mode = off</li>
+        </ul>    
+        <li>Webserver (Apache 1.3/2.0 or IIS)</li>
+        <li>MySQL 3.23.23+ or 4.0.x (recommended: 4.0.x)</li>
+        <li>correctly set: access permissions, owner, group</li>
+	</ul>
+    <p>You can only run phpMyFAQ successfully, when the PHP directive safe_mode is set to off, further constraints affect the directives open_basedir and disable_functions, which can be set in the central php.ini or the httpd.conf respectively.</p>
+    <p>In case PHP runs as module of the Apache, you will have to be able to do a chown on the files before installation. The files and directories must be owned by the Apache user.</p>
+    <p>You can determine which versions your webserver is running by creating a file called <strong>info.php</strong> with the following content:</p>
+    <pre>&lt;?php phpinfo(); ?&gt;</pre>
+    <p>Upload this file to your webspace and open it using your browser. You will now be prompted the PHP and MySQL version numbers. The installation-script also checks which versions of PHP and MySQL are installed on your server. Should you not meet the requirements, you cannot start the installation process.</p>
+    <p>In case you only have PHP3 or PHP 4.0.x installed you cannot use phpMyFAQ.</p>
+    <p>phpMyFAQ uses a WYSIWYG online editor. It uses a non-standard feature based on JavaScript implemented in Mozilla Firefox 0.7+ (any platform), Mozilla 1.3+ (any platform) and Internet Explorer 5.5+ for Windows, therefore the editor will only work in one of these browsers. You have to enable JavaScript.</p>
+    <p><a href="#top">back to top</a></p>
+    
+    
+    <hr style="width: 90%; height: 1px;"  />
+    <p><strong><a name="2b"></a>2.b. Preparations</strong></p>
+    <p>Please unzip the downloaded archive on your harddisk.</p>
+    <p>You can modify the layout of phpMyFAQ using templates. A description of how this is done can be found <a href="#5">below</a>. Copy all unzipped files to your webserver in a directory using FTP. A good choice would be the directory <strong>faq/</strong>.<br />
+    <strong>Important:</strong><br />
+    Writing permission for your script is needed in this directory to be able to configure the files <strong>data.php</strong> and <strong>config.php</strong> during installation. This is the case if you're running PHP as CGI or as mod_php with disabled safe-mode. The installation script will stop when your webserver isn't configured as needed.</p>
+    <p><a href="#top">back to top</a></p>
+    
+    
+    <hr style="width: 90%; height: 1px;"  />
+    <p><strong><a name="2c"></a>2.c. Install-Script</strong></p>
+    <p>Open your browser and type in the following URL:</p>
+    <pre>http://www.yourdomain.com/faq/install/installer.php</pre>
+    <p>Substitute <strong>www.yourdomain.com</strong> with your actual domain name. When the site is loaded enter the address of your MySQL server (e.g. db.provider.com), your MySQL username and password as well as the database name. The datebase must be availible before running the installation script. You can leave the prefix-field empty. If you are planning on using multiple FAQs in one database you will have to use a tableprefix, though (i.e. <em>sport</em> for a sports-FAQ, <em>weather</em> for a weather-FAQ, etc.). Please note that only letters and an underline: "_" can be used as the prefix.
+    When using multiple FAQs you need to install them independently into different directories (e.g. faq1/, faq2/. faq3/ etc.). In addition you can enter your language, default here is English. Furthermore you should register your name, your email address and - very importantly - your password. You must enter the password twice and it have to be at least six places long. Then click the button <strong>"install"</strong> to initialize the tables in your database.</p>
+    <p><a href="#top">back to top</a></p>
+    
+    
+    <hr style="width: 90%; height: 1px;"  />
+    <p><strong><a name="2d"></a>2.d. First Steps</strong></p>
+    <p>You can enter the public area of your FAQ by entering</p>
+    <pre>http://www.yourdomain.com/faq/index.php</pre>
+    <p>into your browser's address field. Your FAQ will be empty and presented in the the standard layout.</p>
+    <p>To configure phpMyFAQ point your browser to</p>
+    <pre>http://www.yourdomain.com/faq/admin/index.php</pre>
+    <p>Use the username <strong>admin</strong> and your selected password for your first login into the admin section.</p>
+    <p><a href="#top">back to top</a></p>
+    
+    
+    <hr style="width: 90%; height: 1px;"  />
+    <p><strong><a name="2e"></a>2.e. Notes</strong></p>
+    <p><em>Regarding the search-function:</em><br />
+    Fulltext-search will only work if there are some entries in the database (5 or more). The term you are looking for should also not be in more than 50% of all your entries, or it will automatically be excluded from search. This is not a bug, but rather a feature of MySQL.</p>
+    <p><em>Automatic content negotiation</em><br />
+    To set the default language in your browser you have to set a variable that gets passed to the web server. How this is done depends on the browser you are using.</p>
+    <ul>
+        <li>Mozilla/Netscape 4.x and later versions<pre>Edit -> Preferences -> Navigator -> Languages</pre></li>
+        <li>Mozilla Firefox<br />Go to about:config and change the value of intl.accept_languages.</li>
+        <li>Safari<br />Safari uses the MacOS X system preferences to determine your preferred language:<pre>System preferences -> International -> Language</pre></li>
+        <li>Opera<br />Most versions:<pre>File -> Preferences -> Languages</pre>Linux/*BSD versions 5.x and 6.x:<pre>File -> Preferences -> Document -> Languages</pre></li>
+        <li>Internet Explorer<br />Windows:<pre>Tools or View or Extras -> Internet Options -> (General) Languages</pre>MacOS:<pre>Edit -> Preferences -> Web Browser -> Language/Fonts</pre></li>
+    </ul>
+    <p><em>PHP settings:</em><br />
+    If you're able to edit the php.ini file, please check that the variable <em>file_upload = On</em> is set; otherwise the file upload will not work for the attachments.</p>
+    <p><a href="#top">back to top</a></p>
+    
+    
+    <hr style="width: 90%; height: 1px;"  />
+    <p><a name="3"></a><strong>3. Upgrading</strong></p>
+    <p>Upgrading to phpMyFAQ 1.4.x is possible from the following versions:</p>
+    <ul>
+    <li>phpMyFAQ 1.3.x</li>
+    </ul>
+    <p>We recommend a new and fresh install due to the many changes between phpMyFAQ 1.3.x and 1.4.x.</p>
+    <p><a href="#top">back to top</a></p>
+    
+    
+    <hr style="width: 90%; height: 1px;"  />
+    <p><a name="3a"></a><strong>3.a. Upgrading from phpMyFAQ 1.1.x or 1.2.x</strong></p>
+    <p>There's only a difficult way to update a rather old version of phpMyFAQ. You have to update to phpMyFAQ 1.3.14 first and then you can update it to 1.4.0.</p>
+    <p>We recommend a new and fresh install due to the many changes in phpMyFAQ 1.3.x and 1.4.x.</p>
+    <p><a href="#top">back to top</a></p>
+    
+    
+    <hr style="width: 90%; height: 1px;"  />
+    <p><a name="3b"></a><strong>3.b. Upgrading phpMyFAQ 1.3.x</strong></p>
+    <p>Upgrading from 1.3.x to 1.4.x is a major upgrade. Please make a full backup before you run the upgrade! Updating from phpMyFAQ 1.3.x is fairly simple. Via FTP delete all files <strong>except</strong>:</p>
+    <ul>
+        <li>the files <strong>data.php</strong> and <strong>config.php</strong> in the directory <strong>inc/</strong> </li>
+        <li>the directory <strong>attachment/</strong></li>
+        <li>the directory <strong>data/</strong></li>
+        <li>the directory <strong>images/</strong></li>
+        <li>the directory <strong>pdf/</strong></li>
+        <li>the directory <strong>xml/</strong></li>
+    </ul>
+    <p>Copy the new files to your webspace and open the following URL in your browser:</p>
+    <pre>http://www.yourdomain.com/faq/install/update.php</pre>
+    <p>Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be updated. It is possible that your attached images or documents are gone. You have to reinsert them in the new Image Manager. Additionally you have to reorder your categories.</p>
+    <p>After that you have to convert the BBCode from phpMyFAQ 1.3.x into XHTML code. This will be done by a convert script. Open the following URL in your browser:</p>
+    <pre>http://www.yourdomain.com/faq/install/bbcode2xhtml.php</pre>
+    <p>Maybe this update will work some seconds due to the fact that in all entries the BBCode have to converted into XHTML.</p>
+    <p><a href="#top">back to top</a></p>
+    
+    
+    <hr style="width: 90%; height: 1px;"  />
+    <p><a name="3c"></a><strong>3.c. Modifying templates for phpMyFAQ 1.3.x</strong></p>
+    <p>Since phpMyFAQ 1.4.0 supports untabled XHTML, you have to rewrite your templates from the scratch. Please use the new templates included with version 1.4.0 and adjust your layout to avoid any problems.</p>
+    <p><a href="#top">back to top</a></p>
+    
+    
+    <hr style="width: 90%; height: 1px;"  />
+    <p><a name="3d"></a><strong>3.d. Upgrading phpMyFAQ 1.4.x</strong></p>
+    <p>Updating phpMyFAQ 1.4.x is fairly simple. Via FTP copy all new files from the update zip file <strong>except</strong>:</p>
+    <ul>
+    <li>the files <strong>data.php</strong> and <strong>config.php</strong> in the directory <strong>inc/</strong> </li>
+    <li>your CSS file style.css in the <strong>template/</strong> directory</li>
+    </ul>
+    <p>Open the following URL in your browser:</p>
+    <pre>http://www.yourdomain.com/faq/install/update.php</pre>            
+    <p>Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be updated.</p>
+    <p><a href="#top">back to top</a></p>
+    
+    
+    <hr style="width: 90%; height: 1px;"  />
+    <p><strong><a name="4"></a>4. Administration</strong></p>
+    <p>The administration of phpMyFAQ is completely browser-based. The admin area can be found under this URL:</p>
+    <pre>http://www.yourdomain.com/faq/admin/index.php</pre>
+    <p>If you have lost your password, there you can reset it. A new random password will be generated and sent to you via e-mail. Please change it after your successful login with the generated password.</p>
+    <p>After entering your username and password you can log into the system. On the startpage you can see the admin menu on the left, some statistics about visits, entries and comments on the right. The menu contains the following sections:</p>
+    <ul>
+    <li><strong>User Administration</strong></li>
+    <li><strong>Create Records</strong></li>
+    <li><strong>Approve Records</strong></li>
+    <li><strong>Edit Records</strong></li>
+    <li><strong>Category Administration</strong></li>
+    <li><strong>Add News</strong></li>
+    <li><strong>Edit News</strong></li>
+    <li><strong>Edit open questions</strong></li>
+    <li><strong>Rating Statistics</strong></li>
+    <li><strong>Cookies</strong></li>
+    <li><strong>View Sessions</strong></li>
+    <li><strong>View Adminlog</strong></li>
+    <li><strong>Change Password</strong></li>
+    <li><strong>Edit configuration</strong></li>
+    <li><strong>Backups</strong></li>
+    <li><strong>Export your FAQ</strong></li>
+    <li><strong>Logout</strong></li>
+    <li><strong>Startpage</strong></li>
+    </ul>
+    <p><a href="#top">back to top</a></p>
+    
+    
+    <hr style="width: 90%; height: 1px;"  />
+    <p><strong><a name="4a"></a>4.a. User Administration</strong></p>
+    <p>phpMyFAQ offers a flexible management of privileges (or rights) for different users in the admin area. It is possible to assign different priviledges to real people (represented by the term users). Those priviledges are very detailed and specific, so that you could allow a certain user to edit but not to delete an entry. It is very important to contemplate which user shall get which priviledges. You could edit an entry by completely deleting all content, which would be equivalent to deleting the whole entry. The number of possible users is not limited by phpMyFAQ.</p>
+    <p>In the main screen of the user administration you'll see an overview of all active user profiles, whereas a combination of "1" and "0" represents the priviledges of a user. A "1" symbolizes that a user has this priviledge, a "0" shows that a user cannot perform a certain action. The order is essentially the same as the listing of the "Rights" when creating or editing a user.</p>
+    <p>Keep in mind that new users have no priviledges at all, you will have to assign them by editing the user's profile. The <em>admin</em> user cannot be deleted, nor can the name be changed.</p>
+    <p><a href="#top">back to top</a></p>
+    
+    
+    <hr style="width: 90%; height: 1px;"  />   
+    <p><strong><a name="4b"></a>4.b. Record Administration</strong></p>
+    <p>You can create entries directly in the admin area. Created entries are NOT published by default. The meaning of the fields is as follows:</p>
+    <ul>
+    <li><strong>Theme</strong><br />This is the question or headline of your entry. </li>
+    <li><strong>Content</strong><br />The content is an answer to the question or a solution for a problem. The content can be edited with the included WYSIWYG (<strong>W</strong>hat <strong>Y</strong>ou <strong>S</strong>ee <strong>I</strong>s <strong>W</strong>hat <strong>Y</strong>ou <strong>G</strong>et) editor when JavaScript is enabled. You can place images where you want with the integrated image manager. The editor provides the following key combinations:
+        <ul>
+        <li>CTRL-A - select all</li>
+        <li>CTRL-B - bold</li>
+        <li>CTRL-I - italic</li>
+        <li>CTRL-U - underline</li>
+        <li>CTRL-S - strikethrough</li>
+        <li>CTRL-L - justify left</li>
+        <li>CTRL-E - justify center</li>
+        <li>CTRL-R - justify right</li>
+        <li>CTRL-J - justify full</li>
+        <li>CTRL-1 .. CTRL-6 - headings (&lt;h1&gt; .. &lt;h6&gt;)</li>
+        <li>CTRL-0 (zero) - clean content pasted from Word</li>
+        </ul></li>
+    <li><strong>Language</strong><br />
+    You can select the language of your entry. By default the language of the browser will be chosen. You can create entries in multiple languages like this: Write an article in English (or any other language) and save it. Now choose <em>edit records</em> and edit your English entry. Change the theme, content and keywords and change language to, let's say Brazilian portuguese. <em>Save</em> the entry. Now you can, when you click <em>edit records</em>, see both entries in your list, having the same id, yet different languages.</li>
+    <li><strong>Keywords</strong><br />
+    Keywords are relevant for searching through the database. In case you didn't include a specific word in the entry itself, but it is closely related to the content you may wish to include it as a keyword, so the entry will come up as a search result. It is also possible to use non-related keywords so that a wrongly entered search will also lead to the right results.</li>
+    <li><strong>Author</strong><br />
+    It is possible to specify an author for your entries. Right now this field isn't displayed, it only serves internal purposes.</li>
+    <li><strong>Category</strong><br />
+    The place in the FAQ hierarchy where this entry will be published depends on these settings.</li>
+    <li><strong>Active?</strong><br />
+    If an entry is "active" it is visible in the public area and will be included in searches. Is it "deactivated" it will be invisible. Suggested entries are deactivated by default to prevent any abuse.</li>
+    <li><strong>Date</strong><br />
+    Date of the last change.</li>
+    <li><strong>Changed?</strong><br />
+    This field is reserved for comments that can reflect what changes have been applied to a certain entry. This helps multiple admins to keep track of what happened to the entry over time. Any information entered here will remain invisible in the public area.</li>
+    <li><strong>Changelog</strong><br />
+    The changelog lists all previous changes, including user and date of change.</li>
+    <li><strong>approve records</strong><br />
+    All entries in the database that are <strong>not</strong> active (and therefore not publicly visible) are listed here. Content suggested by visitors will also be placed here. To approve those entries click on the entry to edit it. Change it to "active" so it becomes visible. You can also delete entries here (this includes a security check if you are certain).</li>
+    <li><strong>edit records</strong><br />
+    All available entries are listed here. By clicking on them the same interface that lets you create records will open up, this time with all the relevant data of the specific entry.</li>
+    </ul>
+    <p>You can edit and delete all records as well.</p>
+    <p><a href="#top">back to top</a></p>
+    
+    
+    <hr style="width: 90%; height: 1px;"  />   
+    <p><strong><a name="4c"></a>4.c. Category Administration</strong></p>
+    <p>phpMyFAQ lets you create different sections and subsections for your FAQ. You can also re-arrange your categories in a different order.</p>
+    <p><a href="#top">back to top</a></p>
+    
+    
+    <hr style="width: 90%; height: 1px;"  />
+    <p><strong><a name="4d"></a>4.d. News Administration</strong></p>
+    <p>phpMyFAQ offers you the ability to post news on the starting page of your FAQ. In the administration area you can create new items, edit existing news or delete them. </p>
+    <p><a href="#top">back to top</a></p>
+    
+    
+    <hr style="width: 90%; height: 1px;"  />
+    <p><strong><a name="4e"></a>4.e. Edit open questions</strong></p>
+    <p>phpMyFAQ lets visitors contribute to the FAQ by asking questions. Every visitor is able to view these open questions in the public area, and may give an answer. If you wish to get rid of open questions you can do so using this section. Alternatively you can take over a question and answer it yourself and hereby add it to the FAQ.</p>
+    <p><a href="#top">back to top</a></p>
+    
+    
+    <hr style="width: 90%; height: 1px;"  />
+    <p><strong><a name="4f"></a>4.f. Rating statistics</strong></p>
+    <p>Below every entry visitors have the chance to rate the overall quality of an article by giving ratings from 1 to 5 (whereas 1 is the worst, 5 the best rating). In the statistics the average rating and number of votes becomes visible for every rated entry. To give you a quick overview entries with an average rating of 2 or worse are displayed in red, an average above 4 results in a green number.</p>
+    <p><a href="#top">back to top</a></p>
+    
+    
+    <hr style="width: 90%; height: 1px;"  />
+    <p><strong><a name="4g"></a>4.g. Cookies</strong></p>
+    <p>phpMyFAQ can save the login information to the admin area as a cookie on your computer. Although this feature may be very comfortable it is a potential security hole. Only use cookies if you are the only person using the computer.
+    </p>
+    <p><a href="#top">back to top</a></p>
+    
+    
+    <hr style="width: 90%; height: 1px;"  />
+    <p><strong><a name="4h"></a>4.h. View Sessions</strong></p>
+    <p>This functions lets you keep track of your visitors. Every visitor is assigned an id when coming to your starting page, that identifies him during his whole visit. Using the information gathered here you could reconstruct the way visitors use your FAQ and make neccessary adjustments to your categories, content or keywords. There is also a search function that you can use to look for <strong>a certain IP</strong>, the <strong>number of minimum actions</strong> or <strong>the date of a visit</strong>.</p>
+    <p><a href="#top">back to top</a></p>
+    
+    
+    <hr style="width: 90%; height: 1px;"  />
+    <p><strong><a name="4i"></a>4.i. View Adminlog</strong></p>
+    <p>The adminlog allows you to track any actions taken by users in the admin area of phpMyFAQ. If you feel you have an intruder in the system you can find out for sure by checking the admin log.</p>
+    <p><a href="#top">back to top</a></p>
+    
+    
+    <hr style="width: 90%; height: 1px;"  />
+    <p><strong><a name="4j"></a>4.j. Change passwords</strong></p>
+    <p>This section lets you change your password. It is possible to deny this function for a certain user, which is very reasonable for group accounts. In order to change the password you need to have "Change Password" enabled for this user.</p>
+    <p><a href="#top">back to top</a></p>
+    
+    
+    <hr style="width: 90%; height: 1px;"  />
+    <p><strong><a name="4k"></a>4.k. Edit configuration</strong></p>
+    <p>Here you can edit the general settings of phpMyFAQ. However, colours or layout cannot be modified here.</p>
+    <p>Should you want to enter multiple email addresses in the configuration separate them by a comma (",").</p>
+    <p><a href="#top">back to top</a></p>
+    
+    
+    <hr style="width: 90%; height: 1px;"  />
+    <p><strong><a name="4l"></a>4.l. Backups</strong></p>
+    <p>Using the backup function it is possible to create a copy of the database to a single file. This makes it possible to restore the FAQ after a possible "crash" or to move the FAQ from one server to another. It is recommended to make regular backups of your FAQ.</p>
+    <ul>
+    <li><strong>backup data</strong><br />
+    A backup of all <strong>data</strong> will include all entries, users, comments, etc.</li>
+    <li><strong>backup LOGs</strong><br />
+    The sessions of visits and the adminlog will be saved (i.e. all <strong>LOG</strong> files). This information is not necessary for running phpMyFAQ, they serve only statistical purposes.</li>
+    <li><strong>make XML file</strong><br />
+    You could write all entries to an XML-file. The resulting file can be found in the directory <strong>xml/phpmyfaq.xml</strong>.</li>
+    </ul>
+    <p><a href="#top">back to top</a></p>
+    
+    
+    <hr style="width: 90%; height: 1px;"  />
+    <p><strong><a name="4m"></a>4.m. Export your FAQ</strong></p>
+    <p>Maybe you want to show the news, the Top 10 or the latest records on your website. For this reason you can export these parts to RSS feeds. RSS is a Web content syndication format. Its name is an acronym for <strong>R</strong>eally <strong>S</strong>imple <strong>S</strong>yndication. RSS is dialect of XML.</p>
+    <p>You'll find a PHP script on our <a href="http://www.phpmyfaq.de/download.php"> download page</a>, that reads the RSS feeds and you can include it on your website. You have to build the RSS files at the point <em>Export your FAQ</em> in the admin area. You'll find the files in the directory xml/. The following files will be created:</p>
+    <ul>
+    <li><em>xml/news.xml</em> for the News</li>
+    <li><em>xml/topten.xml</em> for the Top 10</li>
+    <li><em>xml/latest.xml</em> for the newest entries</li>
+    </ul>
+    <p><a href="#top">nach oben</a></p>
+    
+    
+    <hr style="width: 90%; height: 1px;"  />
+    <p><strong><a name="4n"></a>4.n. Logout</strong></p>
+    <p>Clicking on <strong>Logout</strong> will end the current session. It is recommended to logout before closing the browser to prevent exploits.</p>
+    <p><a href="#top">back to top</a></p>
+    
+    
+    <hr style="width: 90%; height: 1px;"  />
+    <p><strong><a name="5"></a>5. Customising phpMyFAQ 1.4.x</strong></p>
+    <p>Since phpMyFAQ 1.2.0 and later code and layout are almost completely seperated. The layout is based on several templates, that you can modify to suit your own needs. The most important files for phpMyFAQ's layout can be found in the directory <em>template/</em>. All original templates are XHTML 1.0 valid and we don't use tables for layout reasons.</p>
+    <p><strong>Note:</strong> You can change the layout of the admin area using the CSS file <em>style.css</em>.</p>
+    <p><a href="#top">back to top</a></p>
+    
+    <hr style="width: 90%; height: 1px;"  />
+    <p><strong><a name="5a"></a>5.a. The file template/index.tpl</strong></p>
+    <p>The default layout of phpMyFAQ is saved in the <strong>index.tpl</strong> file. This is a normal HTML-file including some variables in curly brackets, serving as placeholders for content.</p>
+    <p>Example:</p>
+    <pre>&lt;span class="useronline"&gt;{userOnline}&lt;/span&gt;</pre>
+    <p>The template-parser of the FAQ converts the placeholder <em>{userOnline}</em> to the actual number of visitors online.</p>
+    <p>You can change the template as you wish, but you may want to keep the original template in case something goes wrong. Theoretically you can use any editor for changing the templates, test using Dreamweaver were successful. Modifying the files with Microsoft Frontpage, Adobe GoLive or NetObjects Fusion may mess up the template, since they alter the source-code.</p>
+    <p><a href="#top">back to top</a></p>
+    
+    <hr style="width: 90%; height: 1px;"  />
+    <p><strong><a name="5b"></a>5.b. The file template/style.css</strong></p>
+    <p>All formattings such as fonts, colors and the like can be modified in the CSS-file <strong>style.css</strong>. More info can be found at <a href="http://www.w3.org/Style/CSS">the official W3C website</a>.</p>
+    <p><a href="#top">back to top</a></p>
+    
+    <hr style="width: 90%; height: 1px;"  />
+    <p><strong><a name="5c"></a>5.c. More Templates</strong></p>
+    <p>You need an other template design or more XHTML/CSS features? Then visit the <a href="http://www.jg-webentwicklung.de/">website of the author</a> from the main template and get what you deserve.</p>
+    <p><a href="#top">back to top</a></p>
+     
+    <hr style="width: 90%; height: 1px;"  />
+    <p><strong><a name="6"></a>6. One more thing</strong></p>
+    <p>Thank you for using phpMyFAQ! :-)</p>
+    <p>
+    Author: Thorsten Rinne<br />
+    Basic translation by: <a href="mailto:stephan@yauh.de">Stephan Hochhaus</a><br />
+    Last Change: 2004-07-30
+    </p>
+    <p>&copy; 2001-2004 Thorsten Rinne</p>
+    <p>This documentation is licensed under a <a href="http://creativecommons.org/licenses/by/2.0/" class="subfoot">Creative Commons License</a>.</p>
+    <p><a href="#top">back to top</a></p>
+</div>
+<!-- ende dokumentation -->
+</body>
+</html>

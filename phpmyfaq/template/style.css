@@ -1,0 +1,301 @@
+/******************************************************************************
+ * File:                style.css
+ * Authors:             Jens Grochtdreis <jens@grochtdreis.de>
+ *                      Thorsten Rinne <thorsten@rinne.info>
+ * Date:                2004-06-02
+ * Last change:         2004-06-29
+ * Copyright:           (c) 2004 phpMyFAQ Team
+ * 
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ ******************************************************************************/
+
+body, td {
+    font-family: "Bitstream Vera Sans", "Trebuchet MS", Geneva, Arial, Helvetica, sans-serif;
+    font-size: 100.01%; 
+    }
+body, h1, h2, h3, h4, h5, h6, div, p, table, td, ul, ol, li, dd, dt, dl, blockquote, address, hr, pre {
+    margin: 0;
+    padding: 0;
+    }
+h1, h2, h3, h4, h5, h6 {
+    font-weight: normal;
+    font-size: 100%;
+    }
+a {
+    text-decoration: none;
+    }
+a:hover {
+    text-decoration: underline;
+    }
+h1 {
+    font-size: 200%;
+    }
+h2 {
+    margin-top: 5px;
+    margin-bottom: 10px;
+    font-size: 175%;
+    border-bottom: 1px solid;
+    }
+h3 {
+    padding-top: 8px;
+    font-size: 125%;
+    }
+
+/**************************
+The header
+**************************/
+
+#header {
+    height: 70px;
+    -height:60px; 
+    border: solid;
+    border-width: 2px 0px;
+    margin: 40px 0 0 0;
+    }
+#header h1 {
+    margin: 10px auto 2px 20px;
+    }
+
+/**************************
+The horizontal navigation
+**************************/
+#horizontalnav ul {
+    padding: 0;
+    list-style-type: none;
+    font-size: 100%;
+    margin-left: 10px;
+    }
+#horizontalnav ul li {
+    display: inline;
+    list-style-type: none;
+    }
+#horizontalnav ul li a {
+    text-decoration: none;
+    margin: 0 10px; /* That's the distance between the items. */
+    padding: 1px;
+    float: left;
+    }
+#horizontalnav ul li a:hover {
+    text-decoration: underline;
+    }
+
+/**************************
+The category-menu
+**************************/
+#categories {
+    position: absolute;
+    top: 160px;
+    left: 20px;
+    width: 180px;
+    margin: 0px;
+    padding: 0px;
+    font-size: 80%;
+    }
+#categories ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    }
+#categories li {
+    margin: 2px 0;
+    }
+#categories a {
+    display: block;
+    padding: 3px 15px;
+    width: 100%;
+    color: #fff;
+    border-left: 10px solid;
+    text-decoration: none;
+    }
+#categories a:hover {
+    text-decoration: none;
+    }
+#categories ul ul li {
+    margin: 5px 0 5px 10px;
+    }
+#categories ul ul a {
+    display: block;
+    padding: 3px 15px;
+    width: 100%;
+    border-left: 10px solid;
+    text-decoration: none;
+    }
+#categories ul ul a:hover {
+    background-color: #fb0;
+    text-decoration: none;
+    }
+a.active {
+    border: 1px solid;
+    }
+#search {
+    margin-top: 10px;
+    }
+#langform {
+    
+    }
+#useronline {
+    text-align: center;
+    }
+ 
+/**************************
+The content
+**************************/
+#content{
+    margin: 20px 20px 20px 240px;
+    padding: 20px;
+    font-size: 80%;
+    }
+#content h3 {
+    font-size: 140%;
+    }
+#content p {
+    padding: 10px 0 10px 0;
+    line-height: 20px;
+    }
+div#news {
+    float: left;
+    width: 55%;
+    }
+div.block {
+    padding: 2px 0px 8px 0px;
+    border-bottom: 1px dashed;
+    }
+span.date {
+    padding: 1px;
+    margin: 1px;
+    display: block;
+    }
+div#topten {
+    margin-bottom: 10px;
+    float: left;
+    width: 35%;
+    margin-left: 5%;
+    }
+table.topten, table.fivenewest, table.openquestions {
+    border: 1px solid;
+    border-collapse: collapse;
+    }
+table.topten, table.fivenewest, table.openquestions th, td {
+    padding: 2px;
+    text-align: left;
+    vertical-align: top;
+    }
+table.topten th, table.fivenewest th, table.openquestions th {
+    padding: 2px;
+    border: 1px solid;
+    }
+table.topten th {
+    text-align: center;
+    }
+div#fivenewest {
+    clear: both;
+    }
+p#copyrightnote {
+    margin-top: 10px;
+    }
+#content ul {
+    list-style-type: none;
+    }
+#content ul li {
+    border-left: 5px solid;
+    margin: 3px auto;
+    padding-left: 10px;
+    }
+#content ul li li, #content ul li li li, #content ul li li li li {
+    border: none;
+    }
+#content ol {
+    padding-left: 20px;
+    display: block;
+    }
+
+/**************************
+The forms
+**************************/
+div.row {
+    clear: both;
+    margin: 0px;
+    padding: 2px;
+    }
+div.row span.label {
+    float: left;
+    width: 150px;
+    text-align: right;
+    line-height: 20px;
+    padding-right: 5px;
+    }
+.inputfield, .inputarea, select {
+    border: 1px solid;
+    }
+.submit {
+    border: 2px solid;
+    }
+
+/**************************
+Template: contact.tpl
+**************************/
+#version {
+    padding: 30px 0px 2px 0px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 85%;
+    line-height: 14px;
+    }
+#copyright {
+    padding: 2px 0px 2px 0px;
+    text-align: center;
+    font-size: 85%;
+    line-height: 14px;
+    }
+
+/**************************
+Colors
+**************************/
+html, body {
+    background: #8B96B9;
+    color: #172244;
+    }
+#header {
+    background: #2D4488;
+    color: #DFC9A7;
+    border-color: #ffffff;
+    }
+a, #horizontalnav a, #categories a, #categories ul ul a, .inputfield, .inputarea, table.topten th, table.fivenewest th, select, option {
+    color: #ffffff;
+    }
+#categories a:hover, #categories ul ul a:hover {
+    color: #000000;
+    }
+#categories a:hover {
+    background: #FF9900;
+    }
+#categories a, #content ul li, a.active {
+    border-color: #FF9900;
+    }
+#categories ul ul a {
+    border-color: #FFCC80;
+    }
+#categories ul ul a:hover {
+    background: #FFCC80;
+    }
+h2, .inputfield, .inputarea, table.topten, table.fivenewest, div.block, table.topten th, table.fivenewest th, select, option {
+    border-color: #ffffff;
+    }
+table.topten th, table.fivenewest th {
+    background: #172244;
+    }
+.inputfield, .inputarea, select, option {
+    background: #5368A6;
+    }
+.submit {
+    border-color: #696969;
+    background: #dcdcdc;
+    }

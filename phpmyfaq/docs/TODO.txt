@@ -1,0 +1,51 @@
+TODO list for future versions of phpMyFAQ:
+
+1.5.0 "Phoebe":
+- full support for PostgreSQL 7.x (done)
+- mod_rewrite support ?
+- one entry in various categories (done)
+- reorder records ?
+- more accessibility features (WAI and Section 508) ?
+- bugfixing for stability or security reasons
+
+1.6.0 "Prometheus":
+- glossary support ?
+- add related articles [new sql table: faqrelatedentries] ?
+- improved category administration ?
+- search in one category
+- more accessibility features (WAI and Section 508) ?
+- bugfixing for stability or security reasons
+
+1.7.0 "Pandora":
+- show all comments ?
+- subscription service for new articles ?
+- message to the user, who has posted a question and an answer is availible ?
+- better news system with multiple pages and sticky news
+- more accessibility features (WAI and Section 508) ?
+- bugfixing for stability or security reasons
+
+1.8.0 "Paaliaq":
+- possibility to disable multiple languages
+- XML-RPC interface for adding records ?
+- "sticky" records ?
+- PDF2Mail ?
+- users can request a record changing ?
+- more accessibility features (WAI and Section 508) ?
+- bugfixing for stability or security reasons
+
+1.9.0 "Portia":
+- SOAP interface ?
+- add auto update feature ?
+- modularisation of all features ?
+- Unicode support for PDFs ?
+- directory-like listing of entries ?
+- bugfixing for stability or security reasons
+
+2.0.0 "NG":
+- PHP 5 ?
+- MySQL 4.1 ?
+- new database independent abstraction layer ?
+- new authentication ?
+- new template engine ?
+- XPI interface ?
+- bugfixing for stability or security reasons
