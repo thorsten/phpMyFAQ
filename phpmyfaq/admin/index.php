@@ -5,7 +5,7 @@
  * Contributors:		Bastian Poettner <bastian@poettner.net>
  *                      Meikel Katzengreis <meikel@katzengreis.com>
  * Date:				2002-09-16
- * Last change:			2004-07-27
+ * Last change:			2004-11-01
  * Copyright:			(c) 2001-2004 Thorsten Rinne
  * 
  * The contents of this file are subject to the Mozilla Public License
@@ -24,6 +24,7 @@
  * - TRUE	debug mode enabled
  */
 define("DEBUG", FALSE);
+define("PMF_ROOT_DIR", dirname(dirname(__FILE__)));
 
 if (DEBUG == TRUE) {
 	error_reporting(E_ALL);
@@ -36,15 +37,15 @@ if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "delcookie") {
 	}
 
 /* read configuration, include classes and functions */
-require_once ("../inc/data.php");
-require_once ("../inc/db.php");
+require_once (PMF_ROOT_DIR."/inc/data.php");
+require_once (PMF_ROOT_DIR."/inc/db.php");
 define("SQLPREFIX", $DB["prefix"]);
 $db = new db($DB["type"]);
 $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
-require_once ("../inc/config.php");
-require_once ("../inc/constants.php");
-require_once ("../inc/category.php");
-require_once ("../inc/functions.php");
+require_once (PMF_ROOT_DIR."/inc/config.php");
+require_once (PMF_ROOT_DIR."/inc/constants.php");
+require_once (PMF_ROOT_DIR."/inc/category.php");
+require_once (PMF_ROOT_DIR."/inc/functions.php");
 
 /* set cookie before sending a header */
 if (isset($_POST["aktion"]) && $_POST["aktion"] == "setcookie") {
@@ -58,20 +59,21 @@ if (isset($_POST["aktion"]) && $_POST["aktion"] == "setcookie") {
 
 /* get language (default: english) */
 if (isset($PMF_CONF["detection"]) && isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) {
-    require_once("../lang/language_".substr($_SERVER["HTTP_ACCEPT_LANGUAGE"], 0, 2).".php");
-    $LANGCODE = substr($_SERVER["HTTP_ACCEPT_LANGUAGE"], 0, 2);
+    if (@is_file(PMF_ROOT_DIR."/lang/language_".substr($_SERVER["HTTP_ACCEPT_LANGUAGE"], 0, 2).".php")) {
+        require_once(PMF_ROOT_DIR."/lang/language_".substr($_SERVER["HTTP_ACCEPT_LANGUAGE"], 0, 2).".php");
+        $LANGCODE = substr($_SERVER["HTTP_ACCEPT_LANGUAGE"], 0, 2);
+        @setcookie(PMF_ROOT_DIR."/lang", $LANGCODE, time()+3600);
     }
-elseif (!isset($PMF_CONF["detection"])) {
-    require_once("../lang/".$PMF_CONF["language"]);
+} elseif (!isset($PMF_CONF["detection"])) {
+    require_once(PMF_ROOT_DIR."/lang/".$PMF_CONF["language"]);
     $LANGCODE = $PMF_LANG["metaLanguage"];
-    }
+}
 if (isset($LANGCODE)) {
-    require_once("../lang/language_".$LANGCODE.".php");
-    }
-else {
-    require_once ("../lang/language_en.php");
+    require_once(PMF_ROOT_DIR."/lang/language_".$LANGCODE.".php");
+} else {
+    require_once (PMF_ROOT_DIR."/lang/language_en.php");
     $LANGCODE = "en";
-    }
+}
 
 unset($auth);
 
@@ -96,7 +98,7 @@ if (isset($uin)) {
 		$query .= " AND ip = '".$_SERVER["REMOTE_ADDR"]."'";
 		}
 	list($user, $pass) = $db->fetch_row($db->query($query));
-	$db->query ("UPDATE ".SQLPREFIX."faqadminsessions SET TIME='".time()."' WHERE UIN='".$uin."'");
+	$db->query ("UPDATE ".SQLPREFIX."faqadminsessions SET time = '".time()."' WHERE uin = '".$uin."'");
 	}
 
 /* authenticate the user */
@@ -130,15 +132,14 @@ if ((isset($user) && isset($pass)) || isset($uin)) {
 			while (!$ok) {
 				srand((double)microtime()*1000000);
   				$uin = md5(uniqid(rand())); 
-				if ($db->num_rows($db->query("SELECT uin FROM ".SQLPREFIX."faqadminsessions WHERE UIN='".$uin."'")) < 1) {
+				if ($db->num_rows($db->query("SELECT uin FROM ".SQLPREFIX."faqadminsessions WHERE uin = '".$uin."'")) < 1) {
 					$ok = 1;
-					}
-				else {
+                } else {
 					$ok = 0;
-					}
-				}
-			$db->query("INSERT INTO ".SQLPREFIX."faqadminsessions (uin,time,ip,usr,pass) VALUES ('".$uin."','".time()."','".$_SERVER["REMOTE_ADDR"]."','".$user."','".$pass."')");
+			    }
 			}
+			$db->query("INSERT INTO ".SQLPREFIX."faqadminsessions (uin, time, ip, usr, pass) VALUES ('".$uin."','".time()."','".$_SERVER["REMOTE_ADDR"]."','".$user."','".$pass."')");
+		}
 		$linkext = "?uin=".$uin;
 		list($auth_user, $auth_name, $auth_realname, $auth_email, $auth_pass, $auth_rights) = $db->fetch_row($result);
 		$user = $auth_name;
@@ -149,7 +150,7 @@ if ((isset($user) && isset($pass)) || isset($uin)) {
 
 /* logout - delete session */
 if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "logout" && $auth) {
-	$db->query("DELETE FROM ".SQLPREFIX."faqadminsessions WHERE UIN='".$uin."'");
+	$db->query("DELETE FROM ".SQLPREFIX."faqadminsessions WHERE uin = '".$uin."'");
 	unset($auth);
 	unset($uid);
 	}
@@ -287,7 +288,7 @@ if (isset($auth)) {
 	<h2>Online Version Information</h2>
 <?php
         if (isset($_POST["param"]) && $_POST["param"] == "version") {
-            require_once ("../inc/xmlrpc.php");
+            require_once (PMF_ROOT_DIR."/inc/xmlrpc.php");
             $param = $_POST["param"];
             $xmlrpc = new xmlrpc_client("/xml/version.php", "www.phpmyfaq.de", 80);
             $msg = new xmlrpcmsg("phpmyfaq.version", array(new xmlrpcval($param, "string")));
