@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.40 2005-01-05 15:41:56 thorstenr Exp $
+* $Id: functions.php,v 1.41 2005-01-08 11:55:39 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -252,16 +252,6 @@ function check4Language($id)
 }
 
 /*
- * Funktion fuer Umwandlung der <br /> in \n | @@ Thorsten, 2001-07-01
- * copyright Johannes Frömter von http://www.koehntopp.de/php
- * Last Update: @@ Thorsten - 2002-09-27
- */
-function br2nl($str)
-{
-	return preg_replace("=<br(>|([\s/][^>]*)>)\r?\n?=i", "\n", $str);
-}
-
-/*
  * Funktion für Umwandlung der E-Mailadressen (Spam!) | @@ Thorsten, 2003-04-17
  * Last Update: @@ Thorsten, 2003-09-22
  */
@@ -311,7 +301,6 @@ function IPCheck($ip)
 */
 function hilight($content)
 {
-
     $appendPHP = FALSE;
     $string = $content[2];
     if (!ereg('^<\\?', $string) || !ereg('^&lt;\\?', $string)) {
@@ -647,16 +636,6 @@ function generateComments($id)
 }
 
 /*
- * Funktion zum Entfernen von <br /> in Abschnitten zwischen <pre> | @@ Meikel Katzengreis, 2003-02-21
- * Last Update: @@ Thorsten, 2003-07-23
- */
-function pre_core ($text)
-{
-	$text = preg_replace("=<br(>|([\s/][^>]*)>)\r?\n?=i", "\n", $text[1]);
-    return $text;
-}
-
-/*
  * Funktion zum Entfernen von HTML-Tags bis auf <strong>, <em>, <u>, und <a> | @@ Thorsten, 2003-02-23
  * Last Update: @@ Thorsten, 2004-10-31
  */
@@ -693,10 +672,9 @@ function checkEmail($sender)
                 "[-!\#$%&\"*+\\./\d=?A-Z^_|'a-z{|}~]+$#";
     if (isset($sender) && preg_match($pattern, $sender)) {
         return TRUE;
-        }
-    else {
+    } else {
         return FALSE;
-        }
+    }
 }
 
 /*
@@ -1197,10 +1175,10 @@ function chopString($string, $words)
     $num = count($pieces);
     if ($words > $num) {
         $words = $num;
-        }
+    }
     for ($i = 0; $i < $words; $i++) {
         $str .= $pieces[$i]." ";
-        }
+    }
     return $str;
 }
 
@@ -1269,10 +1247,9 @@ function emptyTable($table)
 	global $db;
 	if ($db->num_rows($db->query("SELECT * FROM ".$table)) < 1) {
 		return TRUE;
-		}
-	else {
+    } else {
 		return FALSE;
-		}
+	}
 }
 
 
@@ -1308,26 +1285,24 @@ function PageSpan($code, $start, $end, $akt)
 	global $PMF_LANG;
 	if ($akt > $start) {
 		$out = str_replace("<NUM>", $akt-1, $code).$PMF_LANG["msgPreviusPage"]."</a> | ";
-		}
-	else {
+	} else {
 		$out = "";
-		}
+	}
 	for ($h = $start; $h<=$end; $h++) {
-		if($h > $start) {
+		if ($h > $start) {
 			$out .= ", ";
-			}
-		if($h != $akt) {
-			$out .= str_replace("<NUM>", $h, $code).$h."</a>";
-			}
-		else {
-			$out .= $h;
-			}
 		}
+		if ($h != $akt) {
+			$out .= str_replace("<NUM>", $h, $code).$h."</a>";
+		} else {
+			$out .= $h;
+		}
+	}
 	if ($akt < $end) {
 		$out .= " | ".str_replace("<NUM>", $akt+1, $code).$PMF_LANG["msgNextPage"]."</a>";
-		}
-		$out = $PMF_LANG["msgPageDoublePoint"].$out;
-		return $out;
+	}
+	$out = $PMF_LANG["msgPageDoublePoint"].$out;
+	return $out;
 }
 
 /*
@@ -1342,10 +1317,9 @@ function FileToDate($file)
 		$yea = substr($file, 12, 4);
 		$tim = mktime(1, 1, 1, $mon, $tag, $yea);
 		return $tim;
-		}
-	else {
+	} else {
 		return -1;
-		}
+	}
 }
 
 /*
@@ -1360,20 +1334,17 @@ function mkts($datum,$zeit)
 		$monat = substr($datum,0,strpos($datum,"."));
 		$datum = substr($datum,(strpos($datum,".")+1),strlen($datum));
 		$jahr = $datum;
-	}
-	else {
+	} else {
 		$tag = date("d");
 		$monat = date("m");
 		$jahr = date("Y");
-	}
-	if (strlen($zeit) > 0) {
+	} if (strlen($zeit) > 0) {
 		$stunde = substr($zeit,0,strpos($zeit,":"));
 		$zeit = substr($zeit,(strpos($zeit,":")+1),strlen($zeit));
 		$minute = substr($zeit,0,strpos($zeit,":"));
 		$zeit = substr($zeit,(strpos($zeit,":")+1),strlen($zeit));
 		$sekunde = $zeit;
-	}
-	else {
+	} else {
 		$stunde = date("H");
 		$minute = date("i");
 		$sekunde = date("s");
@@ -1450,34 +1421,9 @@ function safeSQL($string)
             case "\n":  $str .= "\\n"; break;
             case "\r":  $str .= "\\r"; break;
             default:    $str .= $char;
-            }
         }
+    }
     return $str;
-}
-
-
-
-/******************************************************************************
- * Functions for exporting as PDF
- ******************************************************************************/
-
-/*
- * Funktion wandelt HEX Farbcodes in dezimale RGB Werte um für FPDF-Class | @@ Peter Beauvain, 2004-04-12
- * Last Update: @@ Thorsten, 2004-07-04
- */
-function hex2dec($color = "#000000")
-{
-    $R = substr($color, 1, 2);
-    $red = hexdec($R);
-    $G = substr($color, 3, 2);
-    $green = hexdec($G);
-    $B = substr($color, 5, 2);
-    $blue = hexdec($B);
-    $tbl_color = array();
-    $tbl_color['R'] = $red;
-    $tbl_color['G'] = $green;
-    $tbl_color['B'] = $blue;
-    return $tbl_color;
 }
 
 // LDAP functions
