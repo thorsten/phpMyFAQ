@@ -1,30 +1,47 @@
 <?php
 /**
- * $Id: functions.php,v 1.13 2004-11-24 21:55:01 thorstenr Exp $
- *
- * File:                functions.php
- * Description:         This is the main functions file!
- * Author:              Thorsten Rinne <thorsten@phpmyfaq.de>
- * Contributors:        Matthias Sommerfeld <phlymail@phlylabs.de>
- *                      Bastian Pöttner <bastian@poettner.net>
- *                      Meikel Katzengreis
- * Date:                2001-02-18
- * Last Update:         2004-11-21
- * Copyright:           (c) 2001-2004 phpMyFAQ Team
- *
- * Portions created by Matthias Sommerfeld are Copyright (c) 2001-2004 blue
- * birdy, Berlin (http://bluebirdy.de). All Rights Reserved.
- *
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- * 
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- ******************************************************************************/
+* $Id: functions.php,v 1.14 2004-11-27 11:09:27 thorstenr Exp $
+*
+* This is the main functions file!
+*
+* @auhtor       Thorsten Rinne <thorsten@phpmyfaq.de>
+* @auhtor       Matthias Sommerfeld <phlymail@phlylabs.de>
+* @auhtor       Bastian Pöttner <bastian@poettner.net>
+* @auhtor       Meikel Katzengreis <meikel@katzengreis.com>
+* @since        2001-02-18
+* @copyright    (c) 2001-2004 phpMyFAQ Team
+*
+* Portions created by Matthias Sommerfeld are Copyright (c) 2001-2004 blue
+* birdy, Berlin (http://bluebirdy.de). All Rights Reserved.
+*
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
+* 
+* Software distributed under the License is distributed on an "AS IS"
+* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+* License for the specific language governing rights and limitations
+* under the License.
+******************************************************************************/
+
+/**
+* Function to get a pretty formatted output of a variable
+*
+* NOTE: Just for debugging!
+*
+* @param    string
+* @return   void
+* @access   public
+* @since    2004-11-27
+* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+*/
+function pmf_dump($var)
+{
+    print '<pre>';
+    print_r($var);
+    print '</pre>';
+}
 
 /*
  * This function displays the <select> box for the available languages | @@ Thorsten 2003-12-12
@@ -76,11 +93,10 @@ function getThema($id, $lang)
 	if ($db->num_rows($result) > 0) {
 		while ($row = $db->fetch_object($result)) {
 			$output = $row->thema;
-			}
-		}
-	else {
+        }
+    } else {
 		$output = $PMF_LANG["no_cats"];
-		}
+    }
 	return $output;
 }
 
@@ -97,20 +113,23 @@ function makeDate($date)
     return date("Y-m-d H:i", $timestamp);
 }
 
-/*
- * Funktion für die Ausgabe der Anzahl der Artikel in der FAQ | @@ Thorsten, 2002-08-23
- * Last Update: @@ Thorsten, 2003-10-26
- */
+/**
+* Returns the number of activated records
+*
+* @return   int
+* @access   public
+* @since    2002-08-23
+* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+*/
 function generateNumberOfArticles()
 {
 	global $db;
 	$num = $db->num_rows($db->query("SELECT id FROM ".SQLPREFIX."faqdata WHERE active = 'yes'"));
 	if ($num > 0) {
-		return "<strong>".$num."</strong>";
-	    }
-    else {
-        return "<strong>0</strong>";
-		}
+		return $num;
+    } else {
+        return 0;
+    }
 }
 
 /**
