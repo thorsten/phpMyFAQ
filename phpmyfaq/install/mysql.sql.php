@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mysql.sql.php,v 1.5 2004-11-30 07:03:48 thorstenr Exp $
+* $Id: mysql.sql.php,v 1.6 2004-12-11 17:55:24 thorstenr Exp $
 *
 * CREATE TABLE instruction for MySQL database
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -35,7 +35,7 @@ $uninst[] = "DROP TABLE ".$sqltblpre."faqvisits";
 
 //faquser
 $query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faquser (
-id int(2) NOT NULL auto_increment,
+id int(2) NOT NULL,
 name text NOT NULL,
 pass varchar(64) BINARY NOT NULL,
 realname varchar(255) NOT NULL default '',
@@ -45,7 +45,7 @@ PRIMARY KEY (id))";
 
 //faqdata
 $query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqdata (
-id int(11) NOT NULL auto_increment,
+id int(11) NOT NULL,
 lang varchar(5) NOT NULL,
 active char(3) NOT NULL,
 rubrik text NOT NULL,
@@ -61,7 +61,7 @@ PRIMARY KEY (id, lang)) TYPE = MYISAM";
 
 //faqadminlog
 $query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqadminlog (
-id int(11) NOT NULL auto_increment,
+id int(11) NOT NULL,
 time int(11) NOT NULL,
 usr int(11) NOT NULL,
 text text NOT NULL,
@@ -96,7 +96,7 @@ PRIMARY KEY  (category_id,category_lang,record_id,record_lang)
 
 //faqchanges
 $query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqchanges (
-id int(11) NOT NULL auto_increment,
+id int(11) NOT NULL,
 beitrag int(11) NOT NULL,
 lang varchar(5) NOT NULL,
 usr int(11) NOT NULL,
@@ -106,7 +106,7 @@ PRIMARY KEY (id))";
 
 //faqcomments
 $query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqcomments (
-id_comment int(11) NOT NULL auto_increment,
+id_comment int(11) NOT NULL,
 id int(11) NOT NULL,
 usr varchar(255) NOT NULL,
 email varchar(255) NOT NULL,
@@ -117,7 +117,7 @@ PRIMARY KEY (id_comment))";
 
 //faqfragen
 $query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqfragen (
-id int(11) unsigned NOT NULL auto_increment,
+id int(11) unsigned NOT NULL,
 ask_username varchar(100) NOT NULL,
 ask_usermail varchar(100) NOT NULL,
 ask_rubrik varchar(100) NOT NULL,
@@ -127,7 +127,7 @@ PRIMARY KEY (id))";
 
 //faqnews
 $query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqnews (
-id int(11) NOT NULL auto_increment,
+id int(11) NOT NULL,
 header varchar(255) NOT NULL,
 artikel text NOT NULL,
 datum varchar(14) NOT NULL,
@@ -138,7 +138,7 @@ PRIMARY KEY (id))";
 
 //faqvoting
 $query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqvoting (
-id int(11) unsigned NOT NULL auto_increment,
+id int(11) unsigned NOT NULL,
 artikel int(11) unsigned NOT NULL,
 vote int(11) unsigned NOT NULL,
 usr int(11) unsigned NOT NULL,
@@ -148,14 +148,14 @@ PRIMARY KEY (id))";
 
 //faqsessions
 $query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqsessions (
-sid int(11) NOT NULL auto_increment,
+sid int(11) NOT NULL,
 ip text NOT NULL,
 time int(11) NOT NULL,
 PRIMARY KEY sid (sid))";
 
 //faqvisits
 $query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqvisits (
-id int(11) NOT NULL auto_increment,
+id int(11) NOT NULL,
 lang varchar(5) NOT NULL,
 visits int(11) NOT NULL,
 last_visit int(15) NOT NULL,

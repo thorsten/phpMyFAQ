@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: pgsql.sql.php,v 1.4 2004-11-30 07:03:48 thorstenr Exp $
+* $Id: pgsql.sql.php,v 1.5 2004-12-11 17:55:24 thorstenr Exp $
 *
 * CREATE TABLE instruction for PostgreSQL database
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -35,7 +35,7 @@ $uninst[] = "DROP TABLE ".$sqltblpre."faqvisits";
 
 //faquser
 $query[] = "CREATE TABLE  ".$sqltblpre."faquser (
-id SERIAL NOT NULL,
+id int4 NOT NULL,
 name text NOT NULL,
 pass varchar(64)  NOT NULL,
 realname varchar(255) NOT NULL default '',
@@ -45,7 +45,7 @@ PRIMARY KEY (id))";
 
 //faqdata
 $query[] = "CREATE TABLE  ".$sqltblpre."faqdata (
-id SERIAL NOT NULL,
+id int4 NOT NULL,
 lang varchar(5) NOT NULL,
 active char(3) NOT NULL,
 rubrik text NOT NULL,
@@ -60,7 +60,7 @@ PRIMARY KEY (id, lang))";
 
 //faqadminlog
 $query[] = "CREATE TABLE ".$sqltblpre."faqadminlog (
-id SERIAL NOT NULL,
+id int4 NOT NULL,
 time int4 NOT NULL,
 usr int4 NOT NULL REFERENCES ".$sqltblpre."faquser(id),
 text text NOT NULL,
@@ -95,7 +95,7 @@ PRIMARY KEY  (category_id,category_lang,record_id,record_lang)
 
 //faqchanges
 $query[] = "CREATE TABLE  ".$sqltblpre."faqchanges (
-id SERIAL NOT NULL,
+id int4 NOT NULL,
 beitrag int4 NOT NULL,
 lang varchar(5) NOT NULL,
 usr int4 NOT NULL REFERENCES ".$sqltblpre."faquser(id),
@@ -105,7 +105,7 @@ PRIMARY KEY (id, lang))";
 
 //faqcomments
 $query[] = "CREATE TABLE  ".$sqltblpre."faqcomments (
-id_comment SERIAL NOT NULL,
+id_comment int4 NOT NULL,
 id int4 NOT NULL,
 usr varchar(255) NOT NULL,
 email varchar(255) NOT NULL,
@@ -116,7 +116,7 @@ PRIMARY KEY (id_comment))";
 
 //faqfragen
 $query[] = "CREATE TABLE  ".$sqltblpre."faqfragen (
-id SERIAL NOT NULL,
+id int4 NOT NULL,
 ask_username varchar(100) NOT NULL,
 ask_usermail varchar(100) NOT NULL,
 ask_rubrik varchar(100) NOT NULL,
@@ -126,7 +126,7 @@ PRIMARY KEY (id))";
 
 //faqnews
 $query[] = "CREATE TABLE  ".$sqltblpre."faqnews (
-id SERIAL NOT NULL,
+id int4 NOT NULL,
 header varchar(255) NOT NULL,
 artikel text NOT NULL,
 datum varchar(14) NOT NULL,
@@ -137,7 +137,7 @@ PRIMARY KEY (id))";
 
 //faqvoting
 $query[] = "CREATE TABLE  ".$sqltblpre."faqvoting (
-id SERIAL NOT NULL,
+id int4 NOT NULL,
 artikel int4 NOT NULL,
 vote int4 NOT NULL,
 usr int4 NOT NULL,
@@ -147,14 +147,14 @@ PRIMARY KEY (id))";
 
 //faqsessions
 $query[] = "CREATE TABLE  ".$sqltblpre."faqsessions (
-sid SERIAL NOT NULL,
+sid int4 NOT NULL,
 ip text NOT NULL,
 time int4 NOT NULL,
 PRIMARY KEY (sid))";
 
 //faqvisits
 $query[] = "CREATE TABLE  ".$sqltblpre."faqvisits (
-id SERIAL NOT NULL,
+id int4 NOT NULL,
 lang varchar(5) NOT NULL,
 visits int4 NOT NULL,
 last_visit int8 NOT NULL,
