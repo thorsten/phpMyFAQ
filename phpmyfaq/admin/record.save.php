@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.save.php,v 1.22 2005-03-19 14:06:30 thorstenr Exp $
+* $Id: record.save.php,v 1.23 2005-03-19 14:07:22 thorstenr Exp $
 *
 * Save or update a FAQ record
 *
@@ -100,7 +100,6 @@ if (isset($submit[1]) && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "") 
 	// save or update the category relations
     foreach ($rubrik as $categories) {
         $db->query('INSERT INTO '.SQLPREFIX.'faqcategoryrelations VALUES ('.$categories.', "'.$_REQUEST["language"].'", '.$_REQUEST["id"].', "'.$_REQUEST["language"].'")');
-        }
     }
 }
 
