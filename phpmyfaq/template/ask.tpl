@@ -11,7 +11,7 @@
     <input class="inputfield" type="text" name="usermail" id="usermail" size="50" /><br />
 	
     <label for="rubrik">{msgAskCategory}</label>
-    <select name="rubrik[]" multiple="multiple" size="1">
+    <select name="rubrik" id="rubrik">
     {printCategoryOptions}
     </select><br />
 	
