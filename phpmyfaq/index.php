@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.10 2004-12-28 13:18:17 thorstenr Exp $
+* $Id: index.php,v 1.11 2004-12-28 13:19:59 thorstenr Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the 
