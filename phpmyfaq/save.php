@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: save.php,v 1.9 2005-02-27 19:22:52 thorstenr Exp $
+* $Id: save.php,v 1.10 2005-03-06 10:15:27 thorstenr Exp $
 *
 * Saves a user FAQ record and sends an email to the user
 *
@@ -39,7 +39,7 @@ if (isset($_POST["username"]) && isset($_POST["rubrik"]) && is_numeric($_POST["r
 	$thema = $db->escape_string(safeSQL(safeHTML($_REQUEST["thema"])));
     $selected_category = intval($_REQUEST["rubrik"]);
 	$keywords = $db->escape_string(safeSQL($_REQUEST["keywords"]));
-	$author = $_REQUEST["username"];
+	$author = safeSQL($_REQUEST["username"]);
     $usermail = $IDN->encode($_REQUEST["usermail"]);
     
 	$db->query("INSERT INTO ".SQLPREFIX."faqdata (id, lang, active, thema, content, keywords, author, email, comment, datum) VALUES (".$db->nextID(SQLPREFIX."faqdata", "id").", '".$lang."', 'no', '".$thema."', '".$content."', '".$keywords."', '".$author."', '".$usermail."', 'y', '".$datum."')");
