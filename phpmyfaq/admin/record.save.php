@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.save.php,v 1.14 2005-02-25 17:08:09 thorstenr Exp $
+* $Id: record.save.php,v 1.15 2005-03-10 19:29:28 thorstenr Exp $
 *
 * Save or update a FAQ record
 *
@@ -35,7 +35,7 @@ if (isset($submit[2]) && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "") 
     
 	<h3><strong><em><?php print $categorylist; ?></em>
     <?php print stripslashes($_REQUEST["thema"]); ?></strong></h3>
-    <?php print stripslashes($content); ?>
+    <?php print stripslashes($_REQUEST["content"]); ?>
     <p class="little"><?php print $PMF_LANG["msgLastUpdateArticle"].makeDate(date("YmdHis")); ?><br />
     <?php print $PMF_LANG["msgAuthor"].$_REQUEST["author"]; ?></p>
 
