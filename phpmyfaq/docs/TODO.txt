@@ -6,7 +6,7 @@ TODO list for future versions of phpMyFAQ:
 - one entry in various categories
 - template engine parse PHP code (done by Thorsten)
 - better RSS support (done by Thorsten)
-- complete XML and XHTML exports (partly done by Thorsten)
+- complete XML and XHTML exports (done by Thorsten)
 - reorder records ?
 - more accessibility features (WAI and Section 508) ?
 - bugfixing for stability or security reasons
