@@ -1,5 +1,7 @@
 <?php
 /******************************************************************************
+ * $Id: savevoting.php,v 1.2 2004-10-31 10:46:08 thorstenr Exp $
+ *
  * Datei:				savevoting.php
  * Autor:				Thorsten Rinne <thorsten@phpmyfaq.de>
  * Datum:				2002-09-16
@@ -18,7 +20,7 @@
  ******************************************************************************/
 
 if (isset($_POST["vote"]) && $_POST["vote"] != "" && votingCheck($_POST["artikel"], $_POST["userip"]) && intval($_POST["vote"]) > 0 && intval($_POST["vote"]) < 6) {
-	Tracking("savevoting",$artikel);
+	Tracking("savevoting", $_POST["artikel"]);
 	$noUser = "0";
 	$datum = date("YmdHis");
 	if ($result = $db->query("SELECT usr FROM ".SQLPREFIX."faqvoting WHERE artikel = '".$_POST["artikel"]."'")) {
@@ -30,7 +32,7 @@ if (isset($_POST["vote"]) && $_POST["vote"] != "" && votingCheck($_POST["artikel
 		$db->query("INSERT INTO ".SQLPREFIX."faqvoting (artikel, vote, usr, datum, ip) VALUES ('".$_POST["artikel"]."', '".$_POST["vote"]."', '1', '".time()."', '".$_POST["userip"]."');");
 		}
     else {
-		$db->query("UPDATE ".SQLPREFIX."faqvoting SET vote = vote+'".$_POST["vote"]."', user = user+'1', datum = '".time()."', ip = '".$_POST["userip"]."' where artikel = '".$_POST["artikel"]."';");
+		$db->query("UPDATE ".SQLPREFIX."faqvoting SET vote = vote+'".$_POST["vote"]."', usr = user+'1', datum = '".time()."', ip = '".$_POST["userip"]."' where artikel = '".$_POST["artikel"]."';");
 		}
 	$tpl->processTemplate ("writeContent", array(
 				"msgVoteThanks" => $PMF_LANG["msgVoteThanks"]
