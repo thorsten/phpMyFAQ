@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.17 2005-02-15 20:44:07 thorstenr Exp $
+$Id: README.txt,v 1.18 2005-02-24 19:29:13 thorstenr Exp $
 
 phpMyFAQ 1.5.0 RC1
 Codename "Phoebe"
@@ -12,15 +12,17 @@ Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 Changes since 1.5.0 beta3:
 - fixed bug in update script
 - fixed some bugs in RSS feeds
+- fixed some bugs in full text search
 - updated French language file
 
 Known issues in phpMyFAQ 1.5.0:
+- templates are not finished
 - some language files need an update
 - using UTF-8 will not work in the PDF files
 
 CHANGELOG:
 
-Version 1.5.0 RC1 - 2005-02-
+Version 1.5.0 RC1 - 2005-02-24
 - full support for PostgreSQL databases
 - full support for Sybase databases
 - experimental support for MSSQL databases
@@ -34,6 +36,11 @@ Version 1.5.0 RC1 - 2005-02-
 - better RSS support
 - updated bundled htmlArea 3.0 RC3
 - PHP5 compatible
+
+Version 1.4.6 - 2005-02-20
+- updated Polish language file
+- updated French language file
+- some minor bugfixes
 
 Version 1.4.5 - 2005-01-21
 - updated Japanese language file
