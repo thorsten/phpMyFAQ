@@ -233,7 +233,7 @@ $languageCodes = array (
         "TR" => "Turkish",
         "TS" => "Tsonga",
         "TT" => "Tatar",
-        "TW" => "Twi",
+        "TW" => "Chinese (Traditional)",
         "UK" => "Ukrainian",
         "UR" => "Urdu",
         "UZ" => "Uzbek",
@@ -242,7 +242,7 @@ $languageCodes = array (
         "WO" => "Wolof",
         "XH" => "Xhosa",
         "YO" => "Yoruba",
-        "ZH" => "Chinese",
+        "ZH" => "Chinese (Simplified)",
         "ZU" => "Zulu"
         );
 ?>
