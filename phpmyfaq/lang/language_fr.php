@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_fr.php,v 1.5 2005-02-17 11:27:27 thorstenr Exp $
+* $Id: language_fr.php,v 1.6 2005-02-25 16:43:50 thorstenr Exp $
 *
 * The French language file - try to be the best
 *
@@ -590,5 +590,3 @@ $PMF_LANG["lostpwd_mail_okay"] = "L'e-mail a &eacute;t&eacute; envoy&eacute;.";
 
 $PMF_LANG["ad_xmlrpc_button"] = "Obtenez la derni&eacute;re version de phpMyFAQ";
 $PMF_LANG["ad_xmlrpc_latest"] = "Derni&eacute;re version disponible sur";
-?>
->>>>>>> 1.4
