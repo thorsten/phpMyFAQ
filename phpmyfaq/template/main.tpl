@@ -1,6 +1,6 @@
     <!-- begin news -->
     <div id="news">
-    <h2>{writeNewsHeader}</h2>
+    <h2><img src="images/rss.png" width="28" height="16" alt="RSS" title="RSS" />{writeNewsHeader}</h2>
     {writeNews}
     <p align="center">{writeNumberOfArticles}</p>
     </div>
@@ -8,7 +8,7 @@
     <div id="topten">
     <table class="topten">
     <tr class="topten">
-        <th>{writeTopTenHeader}</th>
+        <th><img src="images/rss.png" width="28" height="16" alt="RSS" title="RSS" />{writeTopTenHeader}</th>
     </tr>
     {writeTopTenRow}
     </table>
@@ -17,7 +17,7 @@
     <div id="fivenewest">
     <table class="fivenewest">
     <tr>
-        <th colspan="3">{writeNewestHeader}</th>
+        <th colspan="3"><img src="images/rss.png" width="28" height="16" alt="RSS" title="RSS" />{writeNewestHeader}</th>
     </tr>
     {writeNewestRow}
     </table>
