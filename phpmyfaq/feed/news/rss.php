@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: rss.php,v 1.1 2004-11-05 23:05:47 thorstenr Exp $
+* $Id: rss.php,v 1.2 2004-11-22 21:31:09 thorstenr Exp $
 *
 * The RSS feed with the news
 *
@@ -35,26 +35,30 @@ require_once (PMF_ROOT_DIR."/lang/language_en.php");
 
 $result = $db->query("SELECT datum, header, artikel, link, linktitel, target FROM ".SQLPREFIX."faqnews ORDER BY datum desc LIMIT 0,".$PMF_CONF["numNewsArticles"]);
 
-print "<?xml version=\"1.0\" encoding=\"".$PMF_LANG["metaCharset"]."\" standalone=\"yes\" ?>\n<rss version=\"2.0\">\n<channel>\n";
-print "<title>".$PMF_CONF["title"]."</title>\n";
-print "<description>".$PMF_CONF["metaDescription"]."</description>\n";
-print "<link>http://".$_SERVER["HTTP_HOST"]."</link>";
+$rss = "<?xml version=\"1.0\" encoding=\"".$PMF_LANG["metaCharset"]."\" standalone=\"yes\" ?>\n<rss version=\"2.0\">\n<channel>\n";
+$rss .= "<title>".$PMF_CONF["title"]."</title>\n";
+$rss .= "<description>".$PMF_CONF["metaDescription"]."</description>\n";
+$rss .= "<link>http://".$_SERVER["HTTP_HOST"]."</link>";
 
 if ($db->num_rows($result) > 0) {
     
     while ($row = $db->fetch_object($result)) {
         
-        print "\t<item>\n";
-        print "\t\t<title>".$row->header."</title>\n";
-        print "\t\t<description>".stripslashes(htmlspecialchars($row->artikel))."</description>\n";
-        print "\t\t<link>http://".$_SERVER["HTTP_HOST"].str_replace ("admin/", "", $_SERVER["PHP_SELF"])."</link>\n";
-        print "\t</item>\n";
+        $rss .= "\t<item>\n";
+        $rss .= "\t\t<title>".$row->header."</title>\n";
+        $rss .= "\t\t<description>".stripslashes(htmlspecialchars($row->artikel))."</description>\n";
+        $rss .= "\t\t<link>http://".$_SERVER["HTTP_HOST"].str_replace ("admin/", "", $_SERVER["PHP_SELF"])."</link>\n";
+        $rss .= "\t</item>\n";
         
     }
     
 }
 
-print "</channel>\n</rss>";
+$rss .= "</channel>\n</rss>";
+
+header("Content-Type: text/xml");
+header("Content-Length: ".strlen($rss));
+$rss .= $rss;
 
 $db->dbclose();
 ?>
