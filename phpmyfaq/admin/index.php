@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.6 2004-12-25 05:59:24 thorstenr Exp $
+* $Id: index.php,v 1.7 2004-12-25 07:14:02 thorstenr Exp $
 *
 * The main admin backend index file
 *
@@ -82,10 +82,10 @@ unset($auth);
 /* if the cookie is set, take the data from it */
 if (isset($_COOKIE["cuser"])) {
 	$user = $_COOKIE["cuser"];
-	}
+}
 if (isset($_COOKIE["cpass"])) {
 	$pass = $_COOKIE["cpass"];
-	}
+}
 
 /* delete old sessions */
 $db->query("DELETE FROM ".SQLPREFIX."faqadminsessions WHERE time < ".(time()-($PMF_CONST["timeout"] * 60)));
@@ -93,23 +93,23 @@ $db->query("DELETE FROM ".SQLPREFIX."faqadminsessions WHERE time < ".(time()-($P
 /* is there an UIN? -> take it for authentication */
 if (isset($_REQUEST["uin"])) {
 	$uin = $_REQUEST["uin"];
-	}
+}
 if (isset($uin)) {
 	$query = "SELECT usr, pass FROM ".SQLPREFIX."faqadminsessions WHERE uin = '".$uin."'";
 	if ($PMF_CONF["ipcheck"]) {
 		$query .= " AND ip = '".$_SERVER["REMOTE_ADDR"]."'";
-		}
+	}
 	list($user, $pass) = $db->fetch_row($db->query($query));
 	$db->query ("UPDATE ".SQLPREFIX."faqadminsessions SET time = ".time()." WHERE uin = '".$uin."'");
-	}
+}
 
 /* authenticate the user */
 if (isset($_REQUEST["faqusername"])) {
     $user = $_REQUEST["faqusername"];
-    }
+}
 if (isset($_REQUEST["faqpassword"])) {
     $pass = md5($_REQUEST["faqpassword"]);
-    }
+}
 
 if ((isset($user) && isset($pass)) || isset($uin)) {
 	$result = $db->query("SELECT id, name, realname, email, pass, rights FROM ".SQLPREFIX."faquser WHERE name = '".$user."' AND pass = '".$pass."'");
@@ -125,8 +125,7 @@ if ((isset($user) && isset($pass)) || isset($uin)) {
 			}
 		unset($auth);
 		$_REQUEST["aktion"] = "";
-		}
-	else {
+	} else {
 		// okay, write new session, if not written
 		$auth = 1;
 		if (!isset($uin)) {
@@ -147,21 +146,21 @@ if ((isset($user) && isset($pass)) || isset($uin)) {
 		$user = $auth_name;
 		$pass = $auth_pass;
         $permission = array_combine($faqrights, explode(",", substr(chunk_split($auth_rights,1,","), 0, -1)));
-		}
 	}
+}
 
 /* logout - delete session */
 if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "logout" && $auth) {
 	$db->query("DELETE FROM ".SQLPREFIX."faqadminsessions WHERE uin = '".$uin."'");
 	unset($auth);
 	unset($uid);
-	}
+}
 
 /* header of the admin page */
 require_once ("header.php");
 if (isset($auth)) {
 	require_once ("menue.php");
-	}
+}
 ?>
 </div>
 <div id="bodyText">
@@ -233,9 +232,8 @@ if (isset($auth)) {
 			// functions for FAQ export
 			case "export":					require_once ("export.main.php"); break;
 			default:						print "Error"; break;
-			}
 		}
-	else {
+	} else {
         /* start page with some informations about the FAQ */
         $PMF_TABLE_INFO = $db->getTableStatus();
 ?>
@@ -254,17 +252,15 @@ if (isset($auth)) {
         $rg = @ini_get("register_globals");
 		if ($rg == "1") {
 			$rg = "on";
-			}
-		else {
+		} else {
 			$rg = "off";
-			}
+		}
 		$sm = @ini_get("safe_mode");
 		if ($sm == "1") {
 			$sm = "on";
-			}
-		else {
+		} else {
 			$sm = "off";
-			}
+		}
 ?>
 	<h2>System Information</h2>
 	<dl class="table-display">
@@ -298,23 +294,19 @@ if (isset($auth)) {
             $result = $answer->value();
             if ($answer->faultCode()) {
                 print "<p>Error: ".$answer->faultCode()." (" .htmlspecialchars($answer->faultString()).")</p>";
-                }
-            else {
+            } else {
                 print "<p>".$PMF_LANG["ad_xmlrpc_latest"]." <a href=\"http://www.phpmyfaq.de\" target=\"_blank\">www.phpmyfaq.de</a>: phpMyFAQ ".$result->scalarval()."</p>";
-                }
             }
-        else {
+        } else {
 ?>
     <form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>" method="post">
     <input type="hidden" name="param" value="version" />
     <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_xmlrpc_button"]; ?>" />
     </form>
 <?php
-            }
-		}
+        }
 	}
-/* user is NOT authenticated */
-else {
+} else {
 ?>
 	<form action="<?php print $_SERVER["PHP_SELF"]; ?>" method="post">
     <fieldset class="login">
@@ -322,13 +314,12 @@ else {
 <?php 
 	if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "logout") {
 		print "<p>".$PMF_LANG["ad_logout"]."</p>";
-		}
+	}
 	if (isset($error)) {
 		print "<p><strong>".$error."</strong></p>\n";
-		}
-	else {
+	} else {
 		print "<p><strong>".$PMF_LANG["ad_auth_insert"]."</strong></p>\n";
-		}
+	}
 ?>
         <div class="row"><span class="label"><strong><?php print $PMF_LANG["ad_auth_user"]; ?></strong></span>
         <input class="admin" type="text" name="faqusername" size="20" /></div>
@@ -347,12 +338,12 @@ else {
 	</form>
     
 <?php
-	}
+}
 
 if (DEBUG == TRUE) {
     print "<p>DEBUG INFORMATION:</p>\n";
 	print "<p>".$db->sqllog()."</p>";
-	}
+}
 
 require_once ("footer.php");
 $db->dbclose();
