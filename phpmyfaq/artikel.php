@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.7 2004-11-30 21:53:11 thorstenr Exp $
+* $Id: artikel.php,v 1.8 2004-12-13 19:58:14 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Meikel Katzengreis <meikel@katzengreis.com>
@@ -20,6 +20,8 @@
 
 if (isset($_REQUEST['cat']) && is_numeric($_REQUEST['cat'])) {
 	$currentCategory = $_REQUEST['cat'];
+} else {
+    $currentCategory = '';
 }
 if (isset($_REQUEST['id']) && is_numeric($_REQUEST['id'])) {
 	$id = $_REQUEST['id'];
