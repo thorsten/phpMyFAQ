@@ -1,12 +1,12 @@
 <?php
 /**
-* $Id: record.save.php,v 1.10 2005-01-04 16:18:02 thorstenr Exp $
+* $Id: record.save.php,v 1.11 2005-01-05 11:46:54 thorstenr Exp $
 *
 * Save or update a FAQ record
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23
-* @copyright    (c) 2001-2004 phpMyFAQ Team
+* @copyright    (c) 2001-2005 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in

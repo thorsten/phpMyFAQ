@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.add.php,v 1.9 2005-01-04 16:45:31 thorstenr Exp $
+* $Id: record.add.php,v 1.10 2005-01-05 11:46:54 thorstenr Exp $
 *
 * Adds a record in the database
 *
@@ -77,7 +77,7 @@ if ($permission["editbt"]) {
     <?php print stripslashes($_REQUEST["thema"]); ?></strong></h3>
     <?php print stripslashes($content); ?>
     <p class="little"><?php print $PMF_LANG["msgLastUpdateArticle"].makeDate(date("YmdHis")); ?><br />
-    <?php print $PMF_LANG["msgAuthor"].$_REQUEST["author"]; ?></p>
+    <?php print $PMF_LANG["msgAuthor"].' '.$_REQUEST["author"]; ?></p>
     
     <form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=editpreview" method="post">
     <input type="hidden" name="id" value="<?php print $id; ?>" />
