@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: savequestion.php,v 1.8 2005-01-09 12:09:06 thorstenr Exp $
+* $Id: savequestion.php,v 1.9 2005-01-10 13:38:42 thorstenr Exp $
 *
 * @author           Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author           David Saez Padros <david@ols.es>
@@ -32,7 +32,7 @@ if (isset($username) && $username != '' && isset($_REQUEST["usermail"]) && check
         
         $cat = new category;
         $categories = $cat->getAllCategories();
-        $usermail = $IDN->encode($_REQUEST["usermail"])
+        $usermail = $IDN->encode($_REQUEST["usermail"]);
         $username = strip_tags($_REQUEST["username"]);
         $selected_category = intval($_REQUEST["rubrik"]);
         
