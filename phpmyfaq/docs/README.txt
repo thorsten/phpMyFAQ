@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.21 2005-03-13 11:00:04 thorstenr Exp $
+$Id: README.txt,v 1.22 2005-03-19 14:36:38 thorstenr Exp $
 
 phpMyFAQ 1.5.0 RC3
 Codename "Phoebe"
@@ -10,7 +10,7 @@ Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 1.5.0 RC2:
-- fixed some minor bugs
+- fixed many minor bugs
 
 Known issues in phpMyFAQ 1.5.0:
 - templates are not finished
@@ -19,10 +19,10 @@ Known issues in phpMyFAQ 1.5.0:
 
 CHANGELOG:
 
-Version 1.5.0 RC3 - 2005-03-
+Version 1.5.0 RC3 - 2005-03-20
 - full support for PostgreSQL databases
 - full support for Sybase databases
-- experimental support for MSSQL databases
+- experimental support for MS SQL databases
 - LDAP support as an additional option
 - one entry in various categories
 - mod_rewrite support
@@ -31,7 +31,7 @@ Version 1.5.0 RC3 - 2005-03-
 - complete XML, XHTML and DocBook XML exports
 - many code improvements and code cleanup
 - better RSS support
-- updated bundled htmlArea 3.0 RC3
+- updated bundled htmlArea
 - PHP5 compatible
 
 Version 1.4.7 - 2005-03-06
