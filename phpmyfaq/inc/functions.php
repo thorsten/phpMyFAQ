@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.30 2004-12-23 17:40:46 thorstenr Exp $
+* $Id: functions.php,v 1.31 2004-12-25 06:06:46 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -847,7 +847,7 @@ function generateXHTMLFile()
             $xhtml .= '<h2>'.$thema.'</h2>';
             $xhtml .= '<p>'.stripslashes($content).'</p>';
             $xhtml .= '<p>'.$PMF_LANG["msgAuthor"].$author.'<br />';
-            $xhtml .= $PMF_LANG["msgLastUpdateArticle"].makeDate($row->datum).'</p>';
+            $xhtml .= $PMF_LANG["msgLastUpdateArticle"].makeDate($datum).'</p>';
             $xhtml .= '<hr style="width: 90%;" />';
             $old = $rub;
         }
@@ -882,7 +882,6 @@ function generateXMLFile()
         $xml_content = wordwrap(stripslashes($row->content));
 			$xml_rubrik = $tree->categoryName[$row->category_id]["name"];
 			$xml_thema = wordwrap($row->thema, 60);
-			$xml_keywords = $row->keywords;
 			$xml_content = trim(htmlspecialchars(stripslashes(wordwrap($xml_content, 60))));
 			
 			if (is_writeable("../xml/")) {
@@ -1016,7 +1015,7 @@ function generateDocBookExport()
     }
     
     // write xml file
-    $filename = 'xml/docbook_export.xml';
+    $filename = '../xml/docbook_export.xml';
     if (is_writable($filename)) {
        if (!$handle = fopen($filename, "w")) {
              print "can't open $filename";
