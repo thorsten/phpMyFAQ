@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.15 2005-01-09 16:37:44 thorstenr Exp $
+* $Id: update.php,v 1.16 2005-01-16 10:52:10 thorstenr Exp $
 *
 * Main update script
 *
@@ -437,6 +437,10 @@ if ($step == 5) {
         $query[] = "ALTER TABLE ".SQLPREFIX."faqchanges CHANGE user usr INT(11) DEFAULT '0' NOT NULL";
         $query[] = "ALTER TABLE ".SQLPREFIX."faqcomments CHANGE user usr VARCHAR(255) NOT NULL";
         $query[] = "ALTER TABLE ".SQLPREFIX."faqvoting CHANGE user usr INT(11) DEFAULT '0' NOT NULL";
+    }
+    // update from version 1.4.4
+    if ($version <= "144") {
+        $query[] = "ALTER TABLE ".SQLPREFIX."faqdata CHANGE content content LONGTEXT NOT NULL";
     }
     // update from versions before 1.5.0
     if ($version < "150") {

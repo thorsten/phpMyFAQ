@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mysql.sql.php,v 1.7 2005-01-06 14:53:58 thorstenr Exp $
+* $Id: mysql.sql.php,v 1.8 2005-01-16 10:52:10 thorstenr Exp $
 *
 * CREATE TABLE instruction for MySQL database
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -50,7 +50,7 @@ lang varchar(5) NOT NULL,
 active char(3) NOT NULL,
 keywords text NOT NULL,
 thema text NOT NULL,
-content text NOT NULL,
+content longtext NOT NULL,
 author varchar(255) NOT NULL,
 email varchar(255) NOT NULL,
 comment enum('y','n') NOT NULL default 'y',
