@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.add.php,v 1.15 2005-01-21 07:37:08 thorstenr Exp $
+* $Id: record.add.php,v 1.16 2005-01-24 07:12:54 thorstenr Exp $
 *
 * Adds a record in the database
 *
@@ -54,9 +54,9 @@ if ($permission["editbt"]) {
         	// save or update the category relations
         foreach ($rubrik as $categories) {
             
-            if (!$db->query('INSERT INTO '.SQLPREFIX.'faqcategoryrelations VALUES ('.$categories.', \''.$_REQUEST["lang"].'\', '.$nextID.', \''.$_REQUEST["lang"].'\')')) {
+            if (!$db->query('INSERT INTO '.SQLPREFIX.'faqcategoryrelations VALUES ('.$categories.', \''.$_REQUEST["lang"].'\', '.$nextID.', \''.$_REQUEST["language"].'\')')) {
                 
-                $db->query('UPDATE '.SQLPREFIX.'faqcategoryrelations SET record_id = '.$nextID.', record_lang = \''.$_REQUEST["lang"].'\' WHERE category_id = '.$categories.' AND category_lang = \''.$_REQUEST["lang"].'\'');
+                $db->query('UPDATE '.SQLPREFIX.'faqcategoryrelations SET record_id = '.$nextID.', record_lang = \''.$_REQUEST["language"].'\' WHERE category_id = '.$categories.' AND category_lang = \''.$_REQUEST["language"].'\'');
             
             }
         }
