@@ -12,6 +12,7 @@ Changes since 1.4.x:
 - mod_rewrite support
 - template engine parses PHP code
 - rewritten PDF export
+- complete XML and XHTML exports
 - many code improvements and code cleanup
 - better RSS support
 
@@ -26,6 +27,7 @@ Version 1.5.0 alpha - 2004-11-xx
 - mod_rewrite support
 - template engine parses PHP code
 - rewritten PDF export
+- complete XML and XHTML exports
 - many code improvements and code cleanup
 - better RSS support
 
