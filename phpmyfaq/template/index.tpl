@@ -20,56 +20,58 @@
 </head>
 <body dir="{dir}">
 
-<!-- start header -->
-<div id="header">
-    <!-- <h1>{header}</h1> -->
-    <h1>phpMyFAQ Codename "Phoebe"</h1>
-    <div id="horizontalnav">
-     <ul>
-      <li>{msgSearch}</li>
-      <li>{msgAddContent}</li>
-      <li>{msgQuestion}</li>
-      <li>{msgOpenQuestions}</li>
-      <li>{msgHelp}</li>
-      <li>{msgContact}</li>
-     </ul>
+<div id="phpmyfaq">
+    <!-- start header -->
+    <div id="header">
+        <!-- <h1>{header}</h1> -->
+        <h1>phpMyFAQ Codename "Phoebe"</h1>
+        <div id="horizontalnav">
+        <ul>
+            <li>{msgSearch}</li>
+            <li>{msgAddContent}</li>
+            <li>{msgQuestion}</li>
+            <li>{msgOpenQuestions}</li>
+            <li>{msgHelp}</li>
+            <li>{msgContact}</li>
+        </ul>
+        </div>
     </div>
+    <!-- end header -->
+    
+    <!-- start categories -->
+    <div id="categories">
+        <div id="mainnav">
+        <ul>
+            <li>{backToHome}</li>
+            <li>{allCategories}</li>
+            {showCategories}
+        </ul>
+        </div>
+        <div id="search">
+        <form action="{writeSendAdress}" method="post">
+        <input alt="search..." class="inputfield" type="text" name="suchbegriff" size="18" />
+        <input type="submit" name="submit" value="Go" class="submit" />
+        </form>
+        </div>
+        <div id="langform">
+        <form action="{writeLangAdress}" method="post">
+        {switchLanguages}<input type="submit" name="submit" value="Go" class="submit" />
+        </form>
+        </div>
+        <div id="useronline">
+        {userOnline}
+        </div>
+    </div>
+    <!-- end categories -->
+    
+    <!-- begin content -->
+    <div id="content">
+    {writeContent}
+    <!-- please do not remove the following line -->
+    <p id="copyrightnote">{copyright}</p>
+    </div>
+    <!-- end content -->
 </div>
-<!-- end header -->
-
-<!-- start categories -->
-<div id="categories">
-  <div id="mainnav">
-    <ul>
-        <li>{backToHome}</li>
-        <li>{allCategories}</li>
-           {showCategories} 
-    </ul>
-  </div>
-  <div id="search">
-    <form action="{writeSendAdress}" method="post">
-      <input alt="search..." class="inputfield" type="text" name="suchbegriff" size="18" />
-      <input type="submit" name="submit" value="Go" class="submit" />
-    </form>
-  </div>
-  <div id="langform">
-    <form action="{writeLangAdress}" method="post">
-     {switchLanguages}<input type="submit" name="submit" value="Go" class="submit" />
-    </form>
-  </div>
-  <div id="useronline">
-    {userOnline}
-  </div>
-</div>
-<!-- end categories -->
-
-<!-- begin content -->
-<div id="content">
-        {writeContent}
-        <!-- please do not remove the following line -->
-        <p id="copyrightnote">{copyright}</p>
-</div>
-<!-- end content -->
 
 </body>
 </html>
