@@ -1,6 +1,6 @@
-$Id: README.txt,v 1.12 2005-01-30 06:22:29 thorstenr Exp $
+$Id: README.txt,v 1.13 2005-02-03 13:41:01 thorstenr Exp $
 
-phpMyFAQ 1.5.0 beta2
+phpMyFAQ 1.5.0 beta3
 Codename "Phoebe"
 
 Installation/Update:
@@ -9,7 +9,10 @@ Please read the documentation (documentation.en.html) carefully.
 Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
-Changes since 1.5.0 beta1:
+Changes since 1.5.0 beta2:
+- some PostgreSQL related fixes
+- some LDAP related fixes
+- some fixes for better accessibility 
 - many bugfixes
 
 Known issues in phpMyFAQ 1.5.0:
@@ -18,7 +21,7 @@ Known issues in phpMyFAQ 1.5.0:
 
 CHANGELOG:
 
-Version 1.5.0 beta2 - 2005-01-30
+Version 1.5.0 beta3 - 2005-02-
 - full support for PostgreSQL databases
 - full support for Sybase databases
 - experimental support for MSSQL databases
