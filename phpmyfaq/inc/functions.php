@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.47 2005-01-16 21:41:42 thorstenr Exp $
+* $Id: functions.php,v 1.48 2005-01-20 15:37:38 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -193,7 +193,7 @@ LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPR
                 $output .= "\t<li><a href=\"".$row->rubrik."_".$row->id."_".$row->lang.".html\">".stripslashes($row->thema)."</a> [".$row->lang."]<br /><div class=\"little\">(".$visits." ".$PMF_LANG["msgViews"].")</div></li>\n";
             } else {
                 
-                $output .= "\t<li><a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=artikel&amp;cat=".$row->rubrik."&amp;id=".$row->id."&amp;artlang=".$row->lang."\">".stripslashes($row->thema)."</a> [".$row->lang."]<br /><div class=\"little\">(".$visits." ".$PMF_LANG["msgViews"].")</div></li>\n";
+                $output .= "\t<li><a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=artikel&amp;cat=".$row->category_id."&amp;id=".$row->id."&amp;artlang=".$row->lang."\">".stripslashes($row->thema)."</a> [".$row->lang."]<br /><div class=\"little\">(".$visits." ".$PMF_LANG["msgViews"].")</div></li>\n";
             }
         }
         $output .= "</ul>\n";
