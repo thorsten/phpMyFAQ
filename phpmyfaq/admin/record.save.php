@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.save.php,v 1.5 2004-12-11 22:40:06 thorstenr Exp $
+* $Id: record.save.php,v 1.6 2004-12-12 10:39:05 thorstenr Exp $
 *
 * Save or update a FAQ record
 *
@@ -25,15 +25,20 @@ if (isset($submit[2]) && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "") 
 	// Preview
 	$rubrik = $_REQUEST["rubrik"];
     $cat = new Category;
+    $cat->transform(0);
+    $categorylist = '';
+    foreach ($rubrik as $categories) {
+        $categorylist .= $cat->getPath($categories).'<br />';
+    }
 ?>
 	<h2><?php print $PMF_LANG["ad_entry_preview"]; ?></h2>
-	<p><strong><?php print $cat->categoryName[$rubrik]["name"]; ?>:</strong> <?php print stripslashes($_REQUEST["thema"]); ?></p>
-<?php
-    $content = preg_replace_callback("{(<pre>.*</pre>)}siU", "pre_core", $_REQUEST["content"]);
-    $content = preg_replace_callback("{(<pre+.*</pre>)}siU", "pre_core", $content);
-    print stripslashes($content);
-?>
-    <p class="little"><?php print $PMF_LANG["msgLastUpdateArticle"].makeDate(date("YmdHis")); ?><br /><?php print $PMF_LANG["msgAuthor"].$_REQUEST["author"]; ?></p>
+    
+	<h3><strong><em><?php print $categorylist; ?></em>
+    <?php print stripslashes($_REQUEST["thema"]); ?></strong></h3>
+    <?php print stripslashes($content); ?>
+    <p class="little"><?php print $PMF_LANG["msgLastUpdateArticle"].makeDate(date("YmdHis")); ?><br />
+    <?php print $PMF_LANG["msgAuthor"].$_REQUEST["author"]; ?></p>
+
     <form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=editpreview" method="post">
     <input type="hidden" name="id" value="<?php print $_REQUEST["id"]; ?>" />
     <input type="hidden" name="thema" value="<?php print htmlspecialchars($_REQUEST["thema"]); ?>" />
@@ -42,7 +47,11 @@ if (isset($submit[2]) && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "") 
     <input type="hidden" name="keywords" value="<?php print $_REQUEST["keywords"]; ?>" />
     <input type="hidden" name="author" value="<?php print $_REQUEST["author"]; ?>" />
     <input type="hidden" name="email" value="<?php print $_REQUEST["email"]; ?>" />
-    <input type="hidden" name="rubrik" value="<?php print $_REQUEST["rubrik"]; ?>" />
+<?php
+    foreach ($rubrik as $key => $categories) {
+        print '    <input type="hidden" name="rubrik['.$key.']" value="'.$categories.'" />';
+    }
+?>
     <input type="hidden" name="active" value="<?php print $_REQUEST["active"]; ?>" />
     <input type="hidden" name="changed" value="<?php print $_REQUEST["changed"]; ?>" />
     <input type="hidden" name="comment" value="<?php print $_REQUEST["comment"]; ?>" />
