@@ -1,11 +1,11 @@
 <?php
 /**
-* $Id: savequestion.php,v 1.10 2005-02-02 08:52:17 thorstenr Exp $
+* $Id: savequestion.php,v 1.11 2005-02-04 13:18:14 thorstenr Exp $
 *
 * @author           Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author           David Saez Padros <david@ols.es>
 * @since            2002-09-17
-* @copyright        (c) 2001-2004 phpMyFAQ Team
+* @copyright        (c) 2001-2005 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -39,7 +39,7 @@ if (isset($_REQUEST["username"]) && $_REQUEST["username"] != '' && isset($_REQUE
     	list($user, $host) = explode("@", $usermail);
         if (checkEmail($usermail)) {
             $datum = date("YmdHis");
-            $content  = $db->escape_string($_REQUEST["content"]);
+            $content  = $db->escape_string(strip_tags($_REQUEST["content"]));
             
             $result = $db->query("INSERT INTO ".SQLPREFIX."faqfragen (id, ask_username, ask_usermail, ask_rubrik, ask_content, ask_date) VALUES (".$db->nextID(SQLPREFIX."faqfragen", "id").", '".$db->escape_string($username)."', '".$db->escape_string($usermail)."', ".$selected_category.", '".$content."', '".$datum."')");
             
