@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.show.php,v 1.13 2005-01-16 21:34:01 thorstenr Exp $
+* $Id: record.show.php,v 1.14 2005-02-24 19:34:27 thorstenr Exp $
 *
 * Shows the list of records ordered by categories
 *
@@ -41,7 +41,20 @@ if ($permission["editbt"] || $permission["delbt"]) {
     } else if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "view" && isset($_REQUEST["suchbegriff"]) && $_REQUEST["suchbegriff"] != "") {
         
         $begriff = safeSQL($_REQUEST["suchbegriff"]);
-        $result = $db->search(SQLPREFIX."faqdata", array("id" => NULL, "lang" => NULL, "rubrik" => NULL, "thema" => NULL, "content" => NULL), array("thema", "content", "keywords"), $begriff, array("active" => "yes"), 10, 0);
+        $result = $db->search(SQLPREFIX."faqdata",
+                          array(SQLPREFIX."faqdata.id",
+                                SQLPREFIX."faqdata.lang",
+                                SQLPREFIX."faqcategoryrelations.category_id",
+                                SQLPREFIX."faqdata.thema",
+                                SQLPREFIX."faqdata.content"),
+                          SQLPREFIX."faqcategoryrelations",
+                          array(SQLPREFIX."faqdata.id = ".SQLPREFIX."faqcategoryrelations.record_id",
+                                SQLPREFIX."faqdata.lang = ".SQLPREFIX."faqcategoryrelations.record_lang"),
+                          array(SQLPREFIX."faqdata.thema",
+                                SQLPREFIX."faqdata.content",
+                                SQLPREFIX."faqdata.keywords"),
+                          $begriff,
+                          array(SQLPREFIX."faqdata.active"=>"yes"));
         
         $laktion = "view";
         $internalSearch = "&amp;search=".$begriff;
@@ -90,8 +103,8 @@ if ($permission["editbt"] || $permission["delbt"]) {
 <?php
         $counter = 0;
         $displayedCounter = 0;
-        while ( (list($id, $lang, $rub, $topic, $author) = $db->fetch_row($result)) && $displayedCounter < $perpage) {
-
+        while ((list($id, $lang, $rub, $topic, $author) = $db->fetch_row($result)) && $displayedCounter < $perpage) {
+            
             $counter ++;
             if ($counter <= $start) {
                 continue;
