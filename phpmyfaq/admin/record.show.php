@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.show.php,v 1.8 2005-01-04 15:44:02 thorstenr Exp $
+* $Id: record.show.php,v 1.9 2005-01-04 16:12:33 thorstenr Exp $
 *
 * Shows the list of records ordered by categories
 *
@@ -95,7 +95,7 @@ if ($permission["editbt"] || $permission["delbt"]) {
 
             $counter ++;
             if ($counter <= $start) {
-                next;
+                continue;
             }
             $displayedCounter++; 
             
