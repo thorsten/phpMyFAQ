@@ -1,7 +1,6 @@
 <?php
-<?php
 /**
-* $Id: show.php,v 1.2 2004-11-22 21:12:12 thorstenr Exp $
+* $Id: show.php,v 1.3 2004-11-22 21:12:36 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-08-27
