@@ -14,6 +14,7 @@ TODO list for future versions of phpMyFAQ:
 - bugfixing for stability or security reasons
 
 1.6.0 "Prometheus":
+- new authentication class for frontend and backend ?
 - glossary support ?
 - add related articles [new sql table: faqrelatedentries] ?
 - improved category administration ?
