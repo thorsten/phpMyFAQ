@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.10 2005-01-04 15:37:47 thorstenr Exp $
+* $Id: installer.php,v 1.11 2005-01-11 20:51:25 thorstenr Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -25,7 +25,7 @@
 * under the License.
 */
 
-define("VERSION", "1.5.0 alpha2");
+define("VERSION", "1.5.0 beta1");
 define("COPYRIGHT", "&copy; 2001-2005 <a href=\"http://www.phpmyfaq.de/\">phpMyFAQ-Team</a> | All rights reserved.");
 define("SAFEMODE", @ini_get("safe_mode"));
 define("PMF_ROOT_DIR", dirname(dirname(__FILE__)));
@@ -268,6 +268,8 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 		print '<option value="pgsql">PostgreSQL</option>';
 	} elseif (extension_loaded('sybase')) {
 		print '<option value="sybase">Sybase</option>';
+	} elseif (extension_loaded('mssql')) {
+		print '<option value="mssql">MS SQL Server</option>';
 	} else {
 		print '<option value="">Sorry, no supported database found in your PHP version!</option>';
 	}
@@ -406,6 +408,8 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 								break;
 			case 'sybase':	    require_once(PMF_ROOT_DIR."/inc/sybase.php");
 							    break;
+            case 'mssql':		require_once(PMF_ROOT_DIR."/inc/mssql.php");
+								break;
 			default:            print '<p class="error"><strong>Error:</strong> Invalid server type.</p>';
 								HTMLFooter();
 								die();
