@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.9 2004-12-16 07:04:13 thorstenr Exp $
+* $Id: index.php,v 1.10 2004-12-28 13:18:17 thorstenr Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the 
@@ -38,6 +38,15 @@ require_once("inc/db.php");
 define("SQLPREFIX", $DB["prefix"]);
 $db = new db($DB["type"]);
 $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
+
+/* connect to LDAP server, if in configuration enabled */
+if (isset($PMF_CONF["ldap_support"]) && $PMF_CONF["ldap_support"] == TRUE) {
+    require_once('inc/dataldap.php');
+    require_once('inc/ldap.php');
+    $ldap = new LDAP($PMF_LDAP['ldap_server'], $PMF_LDAP['ldap_port'], $PMF_LDAP['ldap_base'], $PMF_LDAP['ldap_user'], $PMF_LDAP['ldap_password']);
+} else {
+    $ldap = null;
+}
 
 /* get configuration, constants, main functions, template parser, category class, IDNA class */
 require_once("inc/config.php");
