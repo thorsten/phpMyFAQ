@@ -1,4 +1,4 @@
-<h2><em>{writeRubrik}:</em> {writeThema}</h2>
+<h2><em>{writeRubrik}</em> {writeThema}</h2>
     <!-- Article -->
     <p>{writeContent}</p>
     <!-- /Article -->
@@ -6,10 +6,10 @@
     
     {switchLanguage}
     <p>
-    <img src="images/print.gif" alt="Print" width="16" height="16" border="0" /> {writePrintMsg}
-    <img src="images/email.gif" alt="Send2friends" width="16" height="16" border="0" /> {writeSend2FriendMsg}
-    <img src="images/pdf.gif" alt="PDF" width="16" height="16" border="0" /> {writePDF}
-    <img src="images/xml.gif" alt="XML" width="24" height="16" border="0" /> {writeXMLMsg}
+    <img src="images/print.gif" alt="{writePrintMsgTag}" title="{writePrintMsgTag}" width="16" height="16" border="0" /> {writePrintMsg}<br />
+    <img src="images/email.gif" alt="{writeSend2FriendMsgTag}" title="{writeSend2FriendMsgTag}" width="16" height="16" border="0" /> {writeSend2FriendMsg}<br />
+    <img src="images/pdf.gif" alt="{writePDFTag}" title="{writePDFTag}" width="16" height="16" border="0" /> {writePDF}<br />
+    <img src="images/xml.gif" alt="{writeXMLMsgTag}" title="{writeXMLMsgTag}" width="24" height="16" border="0" /> {writeXMLMsg}
     </p>
 
     <!-- Voting Form -->
