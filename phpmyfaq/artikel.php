@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.13 2005-01-16 21:35:47 thorstenr Exp $
+* $Id: artikel.php,v 1.14 2005-01-16 21:42:11 thorstenr Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -33,7 +33,7 @@ if (isset($_REQUEST['id']) && is_numeric($_REQUEST['id'])) {
 Tracking("artikelview", $id);
 
 $comment = '';
-$result = $db->query('SELECT id, content, datum, author, email, comment FROM '.SQLPREFIX.'faqdata WHERE id = '.$id.' AND lang = "'.$lang.'" AND active = \'yes\'');
+$result = $db->query('SELECT id, content, datum, author, email, comment FROM '.SQLPREFIX.'faqdata WHERE id = '.$id.' AND lang = \''.$lang.'\' AND active = \'yes\'');
 while ($row = $db->fetch_object($result)) {
 	$id = $row->id;
 	$comment = $row->comment;

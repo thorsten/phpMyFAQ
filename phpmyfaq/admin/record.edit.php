@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.edit.php,v 1.14 2004-12-25 07:08:45 thorstenr Exp $
+* $Id: record.edit.php,v 1.15 2005-01-16 21:38:29 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23
@@ -61,13 +61,13 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
             $lang = $_GET["lang"];
             
             // Get the category
-            $resultCategory = $db->query('SELECT category_id, category_lang FROM '.SQLPREFIX.'faqcategoryrelations WHERE record_id = '.$id.' AND record_lang = "'.$lang.'"');
+            $resultCategory = $db->query('SELECT category_id, category_lang FROM '.SQLPREFIX.'faqcategoryrelations WHERE record_id = '.$id.' AND record_lang = \''.$lang.'\'');
             while ($row = $db->fetch_object($resultCategory)) {
                 $categories[] = array('category_id' => $row->category_id, 'category_lang' => $row->category_lang);
             }
             
             // Get the record
-			$resultRecord = $db->query('SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqdata.active, '.SQLPREFIX.'faqdata.keywords, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqdata.content, '.SQLPREFIX.'faqdata.author, '.SQLPREFIX.'faqdata.email, '.SQLPREFIX.'faqdata.comment, '.SQLPREFIX.'faqdata.datum FROM '.SQLPREFIX.'faqdata WHERE id = '.$id.' AND lang = "'.$lang.'"');
+			$resultRecord = $db->query('SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqdata.active, '.SQLPREFIX.'faqdata.keywords, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqdata.content, '.SQLPREFIX.'faqdata.author, '.SQLPREFIX.'faqdata.email, '.SQLPREFIX.'faqdata.comment, '.SQLPREFIX.'faqdata.datum FROM '.SQLPREFIX.'faqdata WHERE id = '.$id.' AND lang = \''.$lang.'\'');
             
 			list($id, $lang, $active, $keywords, $thema, $content, $author, $email, $comment, $date) = $db->fetch_row($resultRecord);
             

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.46 2005-01-16 21:35:22 thorstenr Exp $
+* $Id: functions.php,v 1.47 2005-01-16 21:41:42 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -464,7 +464,7 @@ function generateTopTen($language = '')
 	$query = 'SELECT DISTINCT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqvisits.visits FROM '.SQLPREFIX.'faqvisits, '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang WHERE ';
     
     if (isset($language) && strlen($language) == 2) {
-        $query .= SQLPREFIX.'faqdata.lang = "'.$language.'" AND ';
+        $query .= SQLPREFIX.'faqdata.lang = \''.$language.'\' AND ';
     }
     
     $query .= SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvisits.id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqvisits.lang AND '.SQLPREFIX.'faqdata.active = \'yes\' ORDER BY '.SQLPREFIX.'faqvisits.visits DESC';
@@ -508,7 +508,7 @@ function generateFiveNewest($language = '')
 	$query = 'SELECT DISTINCT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqdata.datum, '.SQLPREFIX.'faqvisits.visits FROM '.SQLPREFIX.'faqvisits, '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang WHERE ';
     
     if (isset($language) && strlen($language) == 2) {
-        $query .= SQLPREFIX.'faqdata.lang = "'.$language.'" AND ';
+        $query .= SQLPREFIX.'faqdata.lang = \''.$language.'\' AND ';
     }
     
     $query .= SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvisits.id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqvisits.lang AND '.SQLPREFIX.'faqdata.active = \'yes\' ORDER BY '.SQLPREFIX.'faqdata.datum DESC';
