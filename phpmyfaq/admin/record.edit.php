@@ -1,11 +1,11 @@
 <?php
 /**
-* $Id: record.edit.php,v 1.15 2005-01-16 21:38:29 thorstenr Exp $
+* $Id: record.edit.php,v 1.16 2005-03-03 15:39:21 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23
 * @license      Mozilla Public License 1.1
-* @copyright    (c) 2001-2004 Thorsten Rinne
+* @copyright    (c) 2001-2005 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -83,7 +83,9 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
         
 		adminlog('Beitragcreate');
 		$acti = 'insertentry';
-        $categories = array();
+		if (!is_array($categories)) {
+            $categories = array();
+		}
 		$id = '';
 		$lang = $LANGCODE;
         
