@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.5 2004-12-13 15:14:54 thorstenr Exp $
+* $Id: installer.php,v 1.6 2004-12-16 15:20:38 thorstenr Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -113,6 +113,8 @@ function HTMLFooter() {
         margin: auto;
         border: 1px solid black;
         width: 550px;
+        margin-bottom: 10px;
+        clear: both;
     }
     legend.installation {
         border: 1px solid black;
@@ -169,11 +171,13 @@ if (php_check(phpversion(), '4.1.0') == FALSE) {
 	HTMLFooter();
 	die();
 }
+/*
 if (!phpmyfaq_check("../inc/data.php")) {
 	print "<p class=\"center\">It seems you already running a version of phpMyFAQ.<br />Please use the <a href=\"update.php\">update script</a>.</p>\n";
 	HTMLFooter();
 	die();
 }
+*/
 if (!is_dir(PMF_ROOT_DIR."/attachments")) {
     if (!mkdir (PMF_ROOT_DIR."/attachments", 0755)) {
         print "<p class=\"center\">The directory ../attachments could not be created. Please create it manually and change access to chmod 755 (or greater if necessary).</p>\n";
@@ -198,6 +202,13 @@ if (!is_dir(PMF_ROOT_DIR."/images")) {
 if (!is_dir(PMF_ROOT_DIR."/pdf")) {
     if (!mkdir (PMF_ROOT_DIR."/pdf", 0755)) {
         print "<p class=\"center\">The directory ../pdf could not be created. Please create it manually and change access to chmod 755 (or greater if necessary).</p>\n";
+	    HTMLFooter();
+	    die();
+    }
+}
+if (!is_dir(PMF_ROOT_DIR."/xml")) {
+    if (!mkdir (PMF_ROOT_DIR."/xml", 0755)) {
+        print "<p class=\"center\">The directory ../xml could not be created. Please create it manually and change access to chmod 755 (or greater if necessary).</p>\n";
 	    HTMLFooter();
 	    die();
     }
@@ -247,7 +258,7 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 
 <form action="<?php print $_SERVER["PHP_SELF"]; ?>" method="post">
 <fieldset class="installation">
-<legend class="installation"><strong>phpMyFAQ <?php print VERSION; ?> Installation</strong></legend>
+<legend class="installation">Database information</legend>
 <p>
 <span class="text">SQL server:</span>
 <select class="input" name="sql_type" size="1">
@@ -291,6 +302,41 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 <input class="input" type="text" name="sqltblpre" />
 <span class="help" title="Please enter a table prefix here if you want to install more phpMyFAQ installations on one database.">?</span>
 </p>
+</fieldset>
+<br />
+<?php
+    //if (extension_loaded('ldap')) {
+?>
+<fieldset class="installation">
+<legend class="installation">LDAP information</legend>
+<p>
+<span class="text">LDAP server host:</span>
+<input class="input" type="text" name="ldap_server" />
+<span class="help" title="Please enter the host of your LDAP server here.">?</span>
+</p>
+<p>
+<span class="text">Specified RDN:</span>
+<input class="input" type="text" name="ldap_rdn" />
+<span class="help" title="Please enter your specified RDN username here.">?</span>
+</p>
+<p>
+<span class="text">LDAP password:</span>
+<input class="input" name="ldap_password" type="password" />
+<span class="help" title="Please enter your LDAP password here.">?</span>
+</p>
+<p>
+<span class="text">Distinguished name (dn):</span>
+<input class="input" type="text" name="ldap_dn" />
+<span class="help" title="Please enter your distinguished name, e.g. 'cn=John Smith,ou=Accounts,o=My Company,c=US' here.">?</span>
+</p>
+</fieldset>
+<br />
+<?php
+    //}
+?>
+
+<fieldset class="installation">
+<legend class="installation">phpMyFAQ information</legend>
 <p>
 <span class="text">Default language:</span>
 <select class="input" name="language" size="1">
@@ -407,6 +453,9 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 		HTMLFooter();
 		die();
     }
+    
+    // TODO: check LDAP entries and LDAP connection
+    
     if (isset($_POST["password"]) && $_POST["password"] != "") {
         $password = $_POST["password"];
     } else {
