@@ -86,19 +86,19 @@ if (isset($_COOKIE["cpass"])) {
 	}
 
 /* delete old sessions */
-$db->query("DELETE FROM ".SQLPREFIX."faqadminsessions WHERE time < '".(time()-($PMF_CONST["timeout"] * 60))."'");
+$db->query("DELETE FROM ".SQLPREFIX."faqadminsessions WHERE time < ".(time()-($PMF_CONST["timeout"] * 60)));
 
 /* is there an UIN? -> take it for authentication */
 if (isset($_REQUEST["uin"])) {
 	$uin = $_REQUEST["uin"];
 	}
 if (isset($uin)) {
-	$query = "SELECT usr, pass FROM ".SQLPREFIX."faqadminsessions WHERE UIN='".$uin."'";
+	$query = "SELECT usr, pass FROM ".SQLPREFIX."faqadminsessions WHERE uin = '".$uin."'";
 	if ($PMF_CONF["ipcheck"]) {
 		$query .= " AND ip = '".$_SERVER["REMOTE_ADDR"]."'";
 		}
 	list($user, $pass) = $db->fetch_row($db->query($query));
-	$db->query ("UPDATE ".SQLPREFIX."faqadminsessions SET time = '".time()."' WHERE uin = '".$uin."'");
+	$db->query ("UPDATE ".SQLPREFIX."faqadminsessions SET time = ".time()." WHERE uin = '".$uin."'");
 	}
 
 /* authenticate the user */
@@ -138,7 +138,7 @@ if ((isset($user) && isset($pass)) || isset($uin)) {
 					$ok = 0;
 			    }
 			}
-			$db->query("INSERT INTO ".SQLPREFIX."faqadminsessions (uin, time, ip, usr, pass) VALUES ('".$uin."','".time()."','".$_SERVER["REMOTE_ADDR"]."','".$user."','".$pass."')");
+			$db->query("INSERT INTO ".SQLPREFIX."faqadminsessions (uin, time, ip, usr, pass) VALUES ('".$uin."',".time().",'".$_SERVER["REMOTE_ADDR"]."','".$user."','".$pass."')");
 		}
 		$linkext = "?uin=".$uin;
 		list($auth_user, $auth_name, $auth_realname, $auth_email, $auth_pass, $auth_rights) = $db->fetch_row($result);
