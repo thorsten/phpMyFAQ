@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.3 2004-11-25 20:58:41 thorstenr Exp $
+* $Id: update.php,v 1.4 2004-11-27 10:36:17 thorstenr Exp $
 *
 * Main update script
 *
@@ -373,9 +373,12 @@ if ($step == 5) {
         $query[] = "ALTER TABLE ".SQLPREFIX."faqvoting CHANGE user usr INT(11) DEFAULT '0' NOT NULL";
     }
     if ($version < 150) {
-        $query[] = "CREATE TABLE ".$sqltblpre."faqcategoryrelations ( category_id INT(11) NOT NULL, category_lang VARCHAR(5) NOT NULL default '', record_id INT(11) NOT NULL, record_lang VARCHAR(5) NOT NULL default '', PRIMARY KEY  (category_id,category_lang,record_id,record_lang) )";
+        // create new table faqcategoryrelations
+        $query[] = "CREATE TABLE ".SQLPREFIX."faqcategoryrelations ( category_id INT(11) NOT NULL, category_lang VARCHAR(5) NOT NULL default '', record_id INT(11) NOT NULL, record_lang VARCHAR(5) NOT NULL default '', PRIMARY KEY  (category_id,category_lang,record_id,record_lang) )";
+        // fill the new table
+        $query[] = "INSERT INTO ".SQLPREFIX."faqcategoryrelations SELECT ".SQLPREFIX."faqcategories.id as category_id, ".SQLPREFIX."faqcategories as category_lang, ".SQLPREFIX."faqdata.id as record_id, ".SQLPREFIX."faqdata as record_lang WHERE ".SQLPREFIX."faqcategories.id = ".SQLPREFIX."faqdata.rubrik ORDER BY category_id";
         //
-        // TODO: rebuild table faqdata, fill faqcategoryrelations
+        // TODO: rebuild table faqdata
         //
     }
     
