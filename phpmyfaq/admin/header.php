@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: header.php,v 1.5 2005-02-25 16:01:25 thorstenr Exp $
+* $Id: header.php,v 1.6 2005-03-11 15:22:31 thorstenr Exp $
 *
 * header of the admin area
 *
@@ -51,7 +51,7 @@ if (isset($_REQUEST["aktion"]) && ($_REQUEST["aktion"] == "editentry" || $_REQUE
     //<![CDATA[
     HTMLArea.init();
     HTMLArea.loadPlugin("ImageManager");
-    function initEditor() {
+    HTMLArea.onload = function() {
         var editor = new HTMLArea("content");
         var config = new HTMLArea.Config();
         config.width = "525px";
@@ -94,18 +94,11 @@ if (isset($_REQUEST["aktion"]) && ($_REQUEST["aktion"] == "editentry" || $_REQUE
         }
     //]]>
     </script>
-</head>
-<body id="body" onload="initEditor();" dir="<?php print $PMF_LANG["dir"]; ?>"><a name="top"></a>
 <?php
-    }
-else {
+}
 ?>
 </head>
 <body id="body" dir="<?php print $PMF_LANG["dir"]; ?>"><a name="top"></a>
-<?php
-    }
-?>
-
 <!-- Header -->
 <div id="header">
     <h1>phpMyFAQ <?php print $PMF_CONF["version"]; ?></h1>
