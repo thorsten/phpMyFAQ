@@ -1,4 +1,4 @@
-phpMyFAQ 1.5.0 alpha2
+phpMyFAQ 1.5.0 beta1
 Codename "Phoebe"
 
 Installation/Update:
@@ -7,12 +7,8 @@ Please read the documentation (documentation.en.html) carefully.
 Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
-Changes since 1.5.0 alpha1:
-- PHP5 compatible
-- template engine is faster
-- now LDAP is only a additional option
-- updated Chinese (Trad.) language file
-- updated Japanese language file
+Changes since 1.5.0 alpha2:
+- experimental support for MSSQL databases
 - many bugfixes
 
 Known issues in phpMyFAQ 1.5.0:
@@ -21,9 +17,10 @@ Known issues in phpMyFAQ 1.5.0:
 
 CHANGELOG:
 
-Version 1.5.0 alpha2 - 2005-01-xx
+Version 1.5.0 beta1 - 2005-01-16
 - full support for PostgreSQL databases
 - full support for Sybase databases
+- experimental support for MSSQL databases
 - LDAP support as an additional option
 - one entry in various categories
 - mod_rewrite support
