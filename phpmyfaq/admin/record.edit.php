@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.edit.php,v 1.11 2004-12-12 10:10:40 thorstenr Exp $
+* $Id: record.edit.php,v 1.12 2004-12-12 10:45:14 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23
@@ -28,7 +28,7 @@ if ($permission["editbt"] && emptyTable(SQLPREFIX."faqcategory")) {
     
 		list($rubrik, $thema) = $db->fetch_row($db->query("SELECT ask_rubrik, ask_content FROM ".SQLPREFIX."faqfragen WHERE id = '".$_REQUEST["id"]."'"));
 		$lang = trim(strtolower(substr($_SERVER["HTTP_ACCEPT_LANGUAGE"], 0, 2)));
-        
+        $categories = array(array('category_id' => $rubrik, 'category_lang' => $lang));
     }
     if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "editpreview") {
         
@@ -39,10 +39,12 @@ if ($permission["editbt"] && emptyTable(SQLPREFIX."faqcategory")) {
             $acti = "insertentry";
 			$id = "";
         }
-        
         $lang = $_REQUEST["lang"];
-        $active = $_REQUEST["active"];
         $rubrik = $_REQUEST["rubrik"];
+        foreach ($rubrik as $cats) {
+            $categories[] = array('category_id' => $cats, 'category_lang' => $lang);
+        }
+        $active = $_REQUEST["active"];
         $keywords = $_REQUEST["keywords"];
         $thema = stripslashes($_REQUEST["thema"]);
         $content = stripslashes(htmlspecialchars($_REQUEST["content"]));
@@ -70,19 +72,19 @@ if ($permission["editbt"] && emptyTable(SQLPREFIX."faqcategory")) {
 			list($id, $lang, $active, $keywords, $thema, $content, $author, $email, $comment, $date) = $db->fetch_row($resultRecord);
             
             $content = htmlspecialchars($content);
-			$acti = "saveentry&amp;id=".$_REQUEST["id"];
+			$acti = 'saveentry&amp;id='.$_REQUEST['id'];
 		} else {
-			$acti = "insertentry";
-			$id = "";
+			$acti = 'insertentry';
+			$id = '';
 		    $lang = $LANGCODE;
 		}
         
 	} else {
         
-		adminlog("Beitragcreate");
-		$acti = "insertentry";
-        $rubrik = "";
-		$id = "";
+		adminlog('Beitragcreate');
+		$acti = 'insertentry';
+        $categories = array();
+		$id = '';
 		$lang = $LANGCODE;
         
 	}
