@@ -3,11 +3,11 @@ TODO list for future versions of phpMyFAQ:
 1.6.0 "Prometheus":
 - new authentication class ?
 - glossary support ?
-- improved WYSIWYG editor ?
-- improved Image Manager ?
+- improved WYSIWYG editor and Image Manager ?
 - add related articles [new sql table: faqrelatedentries] ?
 - reorder records ?
 - batch insertion script ?
+- improved category and FAQ record functions ?
 - more accessibility features (WAI and Section 508) ?
 - bugfixing for stability or security reasons
 
