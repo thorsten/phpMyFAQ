@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: pdf.php,v 1.4 2004-11-21 11:28:33 thorstenr Exp $
+* $Id: pdf.php,v 1.5 2004-11-21 11:38:09 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Peter Beauvain <pbeauvain@web.de>
@@ -316,6 +316,9 @@ class PDF extends FPDF
         if ($tag == "TABLE") {
             $this->tableborder = 0;
             }
+        if ($tag == "P") {
+            $this->Ln(5);
+        }
     }
 	
 	function SetStyle($tag, $enable)

@@ -1,13 +1,13 @@
 <?php
 /**
- * $Id: export.main.php,v 1.6 2004-11-21 11:28:44 thorstenr Exp $
+ * $Id: export.main.php,v 1.7 2004-11-21 11:37:59 thorstenr Exp $
  *
  * File:				export.main.php
  * Description:			RSS and FAQ export - main page
  * Author:				Thorsten Rinne <thorsten@phpmyfaq.de>
  * Contributor:         Peter Beauvain <pbeauvain@web.de>
  * Date:				2003-04-17
- * Last change:			2004-11-13
+ * Last change:			2004-11-21
  * Copyright:           (c) 2001-2004 phpMyFAQ Team
  * 
  * The contents of this file are subject to the Mozilla Public License
@@ -299,20 +299,23 @@ function txtentities($html){
 		if ($tag == "DIV") {
 			$this->CENTER = "";
 		}
-		 if($tag=='FONT'){
-        if ($this->issetcolor==true) {
-            $this->SetTextColor(0);
+        if ($tag=='FONT'){
+            if ($this->issetcolor==true) {
+                $this->SetTextColor(0);
+            }
+            if ($this->issetfont) {
+                $this->SetFont('arial');
+                $this->issetfont=false;
+            }
         }
-        if ($this->issetfont) {
-            $this->SetFont('arial');
-            $this->issetfont=false;
-        }
-    }
-         if ($tag == "UL") {
+        if ($tag == "UL") {
             $this->SetLeftMargin($this->lMargin-10);
             $this->Ln();
-            }
-		}
+        }
+        if ($tag == "P") {
+            $this->Ln(5);
+        }
+	}
 	
 	function SetStyle($tag,$enable) {
 		
