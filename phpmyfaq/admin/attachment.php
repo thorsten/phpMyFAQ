@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: attachment.php,v 1.3 2004-12-14 12:57:59 thorstenr Exp $
+* $Id: attachment.php,v 1.4 2004-12-28 13:26:10 thorstenr Exp $
 *
 * Select an attachment and save it or create the SQL backup files
 *
@@ -166,7 +166,7 @@ if (isset($_REQUEST["save"]) && $_REQUEST["save"] == TRUE && $auth && !$permissi
 }
 
 if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "sicherdaten") {
-	$text[] = "# pmf: ".SQLPREFIX."faqchanges ".SQLPREFIX."faqnews ".SQLPREFIX."faqcategories ".SQLPREFIX."faqcategoryrelations ".SQLPREFIX."faqvoting ".SQLPREFIX."faqdata ".SQLPREFIX."faqcomments ".SQLPREFIX."faquser ". SQLPREFIX."faqvisits ".SQLPREFIX."faqfragen";
+	$text[] = "# pmf-1.5: ".SQLPREFIX."faqchanges ".SQLPREFIX."faqnews ".SQLPREFIX."faqcategories ".SQLPREFIX."faqcategoryrelations ".SQLPREFIX."faqvoting ".SQLPREFIX."faqdata ".SQLPREFIX."faqcomments ".SQLPREFIX."faquser ". SQLPREFIX."faqvisits ".SQLPREFIX."faqfragen";
 	$text[] = "# DO NOT REMOVE THE FIRST LINE!";
 	$text[] = "# otherwise this backup will be broken";
 	$text[] = "#";
@@ -196,7 +196,7 @@ if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "sicherdaten") {
 }
 
 if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "sicherlog") {
-	$text[] = "# pmf: ".SQLPREFIX."faqadminlog ".SQLPREFIX."faqsessions";
+	$text[] = "# pmf-1.5: ".SQLPREFIX."faqadminlog ".SQLPREFIX."faqsessions";
 	$text[] = "# DO NOT REMOVE THE FIRST LINE!";
 	$text[] = "# otherwise this backup will be broken";
 	$text[] = '';

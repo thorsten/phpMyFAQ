@@ -1,24 +1,23 @@
 <?php
-/******************************************************************************
- * $Id: backup.import.php,v 1.2 2004-10-31 15:37:04 thorstenr Exp $
- *
- * File:				backup.import.php
- * Description:			import the backup
- * Authors:				Thorsten Rinne <thorsten@rinne.info>
- * Date:				2003-02-24
- * Last change:			2004-10-31
- * Copyright:           (c) 2001-2004 Thorsten Rinne
- * 
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- * 
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- ******************************************************************************/
+/**
+* $Id: backup.import.php,v 1.3 2004-12-28 13:26:10 thorstenr Exp $
+*
+* The import function to import the phpMyFAQ backups
+*
+* @author       Thorsten Rinne <thorsten@rinne.info>
+* @since        2003-02-24
+* @copyright    (c) 2001-2004 phpMyFAQ Team
+* 
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
+* 
+* Software distributed under the License is distributed on an "AS IS"
+* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+* License for the specific language governing rights and limitations
+* under the License.
+*/
 if ($permission["restore"]) {
 ?>
 	<h2><?php print $PMF_LANG["ad_csv_rest"]; ?></h2>
@@ -28,7 +27,7 @@ if ($permission["restore"]) {
     	$fp = fopen($_FILES["userfile"]["tmp_name"], "r");
     	$dat = fgets($fp, 65536);
     	
-    	if (substr($dat, 0, 5) != "# pmf") {
+    	if (substr($dat, 0, 5) != "# pmf-1.5") {
     		print $PMF_LANG["ad_csv_no"];
     		$ok = 0;
         } else {
