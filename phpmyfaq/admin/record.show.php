@@ -4,7 +4,7 @@
  * Description:			show a record
  * Authors:				Thorsten Rinne <thorsten@phpmyfaq.de>
  * Date:				2003-02-23
- * Last change:			2004-11-06
+ * Last change:			2004-11-12
  * Copyright:           (c) 2001-2004 Thorsten Rinne
  * 
  * The contents of this file are subject to the Mozilla Public License
@@ -22,23 +22,6 @@ print "<h2>".$PMF_LANG["ad_entry_aor"]."</h2>\n";
 if ($permission["editbt"] || $permission["delbt"]) {
 	$tree = new Category();
     $tree->transform(0);
-	
-    $query = "SELECT id, lang, rubrik, thema, author FROM ".SQLPREFIX."faqdata WHERE active = 'no' ORDER BY rubrik, id ";
-    $laktion = 'view';
-    $internalSearch = '';
-    
-    if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "accept") {
-        $query = "SELECT id, lang, rubrik, thema, author FROM ".SQLPREFIX."faqdata WHERE active = 'no' ORDER BY rubrik, id ";
-        $laktion = "accept";
-        $internalSearch = "";
-    }
-    
-    if (isset($_REQUEST["suchbegriff"]) && $_REQUEST["suchbegriff"] != "") {
-        $begriff = $_REQUEST["suchbegriff"];
-        $query = ("SELECT id, lang, rubrik, thema, author FROM ".SQLPREFIX."faqdata WHERE MATCH (thema,content,keywords) AGAINST ('".$begriff."')  ORDER BY rubrik, id ");
-        $laktion = "view";
-        $internalSearch = "&amp;search=".$begriff;
-    }
     
     $perpage = 20;
 	if (!isset($_REQUEST["pages"])) {
@@ -58,24 +41,44 @@ if ($permission["editbt"] || $permission["delbt"]) {
     }
 	
 	$start = ($page - 1) * $perpage;
-	$PageSpan = PageSpan("<a href=\"".$_SERVER["PHP_SELF"].$linkext."&amp;aktion=".$laktion."&amp;pages=".$pages."&amp;page=<NUM>".$internalSearch."\">", 1, $pages, $page);
 	
-	$result = $db->query($query." LIMIT ".$start.", ".$perpage);
-	
-	if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "view") {
+    if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "view" && !isset($_REQUEST["suchbegriff"])) {
+        
+        $result = $db->query("SELECT id, lang, rubrik, thema, author FROM ".SQLPREFIX."faqdata WHERE active = 'yes' ORDER BY rubrik, id LIMIT ".$start.", ".$perpage);
+        $laktion = 'view';
+        $internalSearch = '';
+        
 		$resultComments = $db->query("SELECT count(id) as anz, id FROM ".SQLPREFIX."faqcomments GROUP BY id ORDER BY id;");
 		if ($db->num_rows($resultComments) > 1) {
+            
 			while ($row = $db->fetch_object($resultComments)) {
+                
 				$numComments[$row->id] = $row->anz;
             }
         }
+    } else if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "view" && isset($_REQUEST["suchbegriff"]) && $_REQUEST["suchbegriff"] != "") {
+        
+        $begriff = safeSQL($_REQUEST["suchbegriff"]);
+        $result = $db->search(SQLPREFIX."faqdata", array("id" => NULL, "lang" => NULL, "rubrik" => NULL, "thema" => NULL, "content" => NULL), array("thema", "content", "keywords"), $begriff, array("active" => "yes"), 10, 0);
+        
+        $laktion = "view";
+        $internalSearch = "&amp;search=".$begriff;
+        
+    } else if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "accept") {
+        
+        $result = $db->query("SELECT id, lang, rubrik, thema, author FROM ".SQLPREFIX."faqdata WHERE active = 'no' ORDER BY rubrik, id  LIMIT ".$start.", ".$perpage);
+        $laktion = "accept";
+        $internalSearch = "";
     }
+    
+    $PageSpan = PageSpan("<a href=\"".$_SERVER["PHP_SELF"].$linkext."&amp;aktion=".$laktion."&amp;pages=".$pages."&amp;page=<NUM>".$internalSearch."\">", 1, $pages, $page);
+    
 	$old = 0;
 	$previousID = 0;
     
 	if ($db->num_rows($result) > 0) {
 ?>
-    <form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=accept" method="post">
+    <form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=view" method="post">
     <fieldset>
     <legend><?php print $PMF_LANG["msgSearch"]; ?></legend>
     <strong><?php print $PMF_LANG["msgSearchWord"]; ?>:</strong> <input class="admin" type="text" name="suchbegriff" size="50">&nbsp;&nbsp;<input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG["msgSearch"]; ?>">
