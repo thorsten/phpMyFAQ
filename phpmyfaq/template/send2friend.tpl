@@ -6,10 +6,10 @@
     <input type="hidden" name="{msgS2FReferrer}" value="{send2friendLink}" />
 	
     <label for="">{msgS2FName}</label>
-    <input class="inputfield" type="text" name="name" size="25" /><br />
+    <input class="inputfield" type="text" name="name" value="{defaultContentName}" size="25" /><br />
 	
     <label for="">{msgS2FEMail}</label>
-    <input class="inputfield" type="text" name="mailfrom" size="25" /><br />
+    <input class="inputfield" type="text" name="mailfrom" value="{defaultContentMail}" size="25" /><br />
 	
     <div class="row">{msgS2FFriends}</div>
 	

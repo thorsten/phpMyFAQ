@@ -7,10 +7,10 @@
     <strong><em>{writeThema}</em></strong></div>
 	
     <div class="row"><span class="label">{msgNewContentName}</span>
-    <input class="inputfield" type="text" name="user" size="20" /></div>
+    <input class="inputfield" type="text" name="user" value="{defaultContentName}" size="20" /></div>
 	
     <div class="row"><span class="label">{msgNewContentMail}</span>
-    <input class="inputfield" type="text" name="mail" size="20" /></div>
+    <input class="inputfield" type="text" name="mail" value="{defaultContentMail}" size="20" /></div>
 	
     <div class="row"><span class="label">{msgYourComment}</span>
     <textarea class="inputarea" cols="30" rows="10" name="comment"></textarea></div>
