@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.4 2004-11-27 10:36:17 thorstenr Exp $
+* $Id: update.php,v 1.5 2004-11-27 10:50:47 thorstenr Exp $
 *
 * Main update script
 *
@@ -23,6 +23,31 @@
 define("NEWVERSION", "1.5.0 alpha1");
 define("COPYRIGHT", "&copy; 2001-2004 <a href=\"http://www.phpmyfaq.de/\" target=\"_blank\">phpMyFAQ-Team</a> | All rights reserved.");
 define("PMF_ROOT_DIR", dirname(dirname(__FILE__)));
+
+require_once (PMF_ROOT_DIR."/inc/data.php");
+require_once (PMF_ROOT_DIR."/inc/config.php");
+
+/**
+* A function to read the version number
+*
+* @return   string
+* @access   public
+* @since    2004-11-27
+* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+*/
+function getVersionNumber()
+{
+    if (isset($version)) {
+        $oldversion = $version;
+    } elseif (isset($PMF_CONF["version"])) {
+        $oldversion = $PMF_CONF["version"];
+    } else {
+        return FALSE;
+    }
+    
+    $t = explode(' ', $oldversion);
+    return $t[0];
+}
 
 if (isset($_GET["step"]) && $_GET["step"] != "") {
     $step = $_GET["step"];
@@ -133,8 +158,17 @@ if ($step == 1) {
     <li>phpMyFAQ 1.4.0 M1</li>
     <li>phpMyFAQ 1.4.0 M2</li>
 </ul>
-<p><strong>Please make a backup of your SQL tables before running this update.</strong></p>
+<p><strong>Please make a full backup of your SQL tables before running this update.</strong></p>
 <p>
+<?php
+    $oldversion = getVersionNumber();
+    if ($oldversion != FALSE) {
+?>
+<span class="text">Your detected current version: phpMyFAQ <?php print $oldversion; ?></span>
+<input type="hidden" name="version" value="<?php print $oldversion; ?>" />
+<?php
+    } else {
+?>
 <span class="text">Please select your current version:</span>
 <select name="version" size="1">
     <option value="1.3.0">phpMyFAQ version 1.3.0</option>
@@ -144,6 +178,9 @@ if ($step == 1) {
     <option value="1.4.0">phpMyFAQ version 1.4.0 alpha2 or later</option>
     <option value="1.4.1">phpMyFAQ version 1.4.1 and later</option>
 </select>
+<?php
+    }
+?>
 </p>
 <p class="center"><input type="submit" value="Go to step 2 of 5" class="button" /></p>
 </fieldset>
@@ -184,7 +221,7 @@ if ($step == 2) {
 <input type="hidden" name="version" value="<?php print $_POST["version"]; ?>" />
 <fieldset class="installation">
 <legend class="installation"><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 2 of 5)</strong></legend>
-<p>A backup of your configuration files have been made.</p>
+<p>A backup of your configuration files (config.php and data.php) have been made.</p>
 <p>Now the configuration files will be updated.</p>
 <p class="center"><input type="submit" value="Go to step 3 of 5" class="button" /></p>
 </fieldset>
@@ -197,8 +234,6 @@ if ($step == 2) {
 
 /**************************** STEP 3 OF 5 ***************************/
 if ($step == 3) {
-    require_once (PMF_ROOT_DIR."/inc/data.php");
-    require_once (PMF_ROOT_DIR."/inc/config.php");
     $ver = version_compare("1.4.1", $_POST["version"]);
 ?>
 <form action="update.php?step=4" method="post">
@@ -279,7 +314,6 @@ if ($step == 4) {
 <fieldset class="installation">
 <legend class="installation"><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 4 of 5)</strong></legend>
 <?php
-    require_once(PMF_ROOT_DIR."/inc/config.php");
     require_once(PMF_ROOT_DIR."/lang/language_en.php");
     
     if (is_array($_REQUEST["db"])) {
@@ -298,7 +332,7 @@ if ($step == 4) {
     if ($fp = @fopen(PMF_ROOT_DIR."/inc/config.php", "w")) {
         @fputs($fp, "<?php \n# Created ".date("Y-m-d H:i:s")."\n\n");
         foreach ($arrVar as $key => $value) {
-            fputs($fp, "# ".$LANG_CONF[$key][1]."\n\$PMF_CONF[\"".$key."\"] = \"".htmlspecialchars(stripslashes($value))."\";\n\n");
+            fputs($fp, "// ".$LANG_CONF[$key][1]."\n\$PMF_CONF[\"".$key."\"] = \"".htmlspecialchars(stripslashes($value))."\";\n\n");
         }
         @fputs($fp, "?>");
 	    @fclose($fp);
@@ -315,8 +349,6 @@ if ($step == 4) {
 
 /**************************** STEP 4 OF 5 ***************************/
 if ($step == 5) {
-    require_once (PMF_ROOT_DIR."/inc/data.php");
-    require_once (PMF_ROOT_DIR."/inc/config.php");
     require_once (PMF_ROOT_DIR."/inc/functions.php");
     require_once (PMF_ROOT_DIR."/inc/mysql.php");
     define("SQLPREFIX", $DB["prefix"]);
