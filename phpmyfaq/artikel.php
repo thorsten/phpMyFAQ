@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.10 2004-12-25 07:09:01 thorstenr Exp $
+* $Id: artikel.php,v 1.11 2004-12-29 20:05:33 thorstenr Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -96,11 +96,6 @@ if ($num > 1) {
 	$switchLanguage .= "</p>\n";
 }
 
-$myComment = $writeCommentMsg;
-if ($comment == "n") {
-	$myComment = $PMF_LANG["msgWriteNoComment"];
-}
-
 $tpl->processTemplate ("writeContent", array(
 				"writeRubrik" => $writeCategory,
 				"writeThema" => stripslashes(getThema($id, $lang)),
@@ -121,8 +116,7 @@ $tpl->processTemplate ("writeContent", array(
 				"msgVoteBad" => $PMF_LANG["msgVoteBad"],
 				"msgVoteGood" => $PMF_LANG["msgVoteGood"],
 				"msgVoteSubmit" => $PMF_LANG["msgVoteSubmit"],
-				"writeCommentMsg" => $myComment,
-				"writeListMsg" => $PMF_LANG["msgShowCategory"].$writeCategory,
+				"writeCommentMsg" => ($comment == 'n') ? $PMF_LANG['msgWriteNoComment'] : $writeCommentMsg,
 				"writeComments" => generateComments($id)
 				));
 
