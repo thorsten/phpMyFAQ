@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: sybase.sql.php,v 1.1 2004-12-11 17:36:38 thorstenr Exp $
+* $Id: sybase.sql.php,v 1.2 2004-12-16 13:08:35 thorstenr Exp $
 *
 * CREATE TABLE instruction for sybase database
 *
@@ -48,7 +48,6 @@ $query[] = "CREATE TABLE  ".$sqltblpre."faqdata (
 id integer NOT NULL,
 lang varchar(5) NOT NULL,
 active char(3) NOT NULL,
-rubrik text default '',
 keywords varchar(512) NOT NULL,
 thema varchar(512) NOT NULL,
 content text NOT NULL,
@@ -106,11 +105,11 @@ PRIMARY KEY (id, lang))";
 //faqcomments
 $query[] = "CREATE TABLE  ".$sqltblpre."faqcomments (
 id_comment integer NOT NULL,
-id SMALLINT NOT NULL,
+id integer NOT NULL,
 usr varchar(255) NOT NULL,
 email varchar(255) NOT NULL,
 comment text NOT NULL,
-datum INTEGER NOT NULL,
+datum varchar(64) NOT NULL,
 helped text NOT NULL,
 PRIMARY KEY (id_comment))";
 
@@ -119,7 +118,7 @@ $query[] = "CREATE TABLE  ".$sqltblpre."faqfragen (
 id integer NOT NULL,
 ask_username varchar(100) NOT NULL,
 ask_usermail varchar(100) NOT NULL,
-ask_rubrik varchar(100) NOT NULL,
+ask_rubrik integer NOT NULL,
 ask_content text NOT NULL,
 ask_date varchar(20) NOT NULL,
 PRIMARY KEY (id))";
