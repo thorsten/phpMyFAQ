@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: pgsql.sql.php,v 1.5 2004-12-11 17:55:24 thorstenr Exp $
+* $Id: pgsql.sql.php,v 1.6 2005-01-06 14:53:58 thorstenr Exp $
 *
 * CREATE TABLE instruction for PostgreSQL database
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -48,7 +48,6 @@ $query[] = "CREATE TABLE  ".$sqltblpre."faqdata (
 id int4 NOT NULL,
 lang varchar(5) NOT NULL,
 active char(3) NOT NULL,
-rubrik text NOT NULL,
 keywords text NOT NULL,
 thema text NOT NULL,
 content text NOT NULL,
