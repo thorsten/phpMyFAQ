@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.28 2004-12-20 08:55:37 thorstenr Exp $
+* $Id: functions.php,v 1.29 2004-12-23 14:35:30 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -912,6 +912,125 @@ function generateXMLFile()
 		fclose($xml_fp);
 		}
 	print "<p><a href=\"../xml/phpmyfaq.xml\" target=\"_blank\">XML File okay!</a></p>";
+}
+
+/**
+* This function generates a plain XHTML file with all entries.
+*
+* @return   boolean
+* @access   public
+* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+* @author   Johann-Peter Hartmann <hartmann@mayflower.de>
+* @since    2004-12-23
+*/
+function generateDocBookExport()
+{
+    global $db, $tree, $PMF_CONF, $PMF_LANG;
+    
+    $output = '<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//Norman Walsh//DTD DocBk XML V3.1.4//EN" "http://nwalsh.com/docbook/xml/3.1.4/db3xml.dtd">
+<book id="faqname" lang="'.$PMF_LANG['metaLanguage'].'">
+    <bookinfo>
+        <title>'.$PMF_CONF['title'].'</title>
+        <author>
+            <firstname></firstname>
+            <surname></surname>
+        </author>
+        <date>'.makeDate('Y-m-d', time()).'</date>
+        <abstract>
+            <para>'.$PMF_CONF['metaDescription'].'</para>
+        </abstract>
+    </bookinfo>
+';
+    
+    // get all categories
+    $result_chapters = $db->query("SELECT id, name FROM ".SQLPREFIX."faqcategories");
+    // get all faqs
+    $result_faqs = $db->query("SELECT category_id, record_id, id FROM ".SQLPREFIX."faqcategoryrelations");
+    // get all data
+    $result_data = $db->query("SELECT * FROM ".SQLPREFIX."faqdata d, ".SQLPREFIX."faqcategoryrelations r where d.id = r.record_id");
+    
+    // chapters
+    $chapters = array();
+    while ($row = $db->fetch_object($result_chapters)) {
+        $chapters[$row->id]['title'] = $row->name;
+        $chapters[$row->id]['faqs'] = array();
+    }
+    
+    // faqs
+    while ($row = $db->fetch_object($result_faqs)) {
+        $chapters[$row->category_id]['faqs'][$row->id] = array();
+    }
+    
+    // data
+    while ($row = $db->fetch_object($result_data)) {
+        $chapters[$row->category_id]['faqs'][$row->id][$row->record_id] =
+            array(
+                'author' => $row->author,
+                'date'   => $row->datum,
+                'thema'  => $row->thema,
+                'para'   => $row->content
+            );
+    }
+    
+    // output
+    foreach($chapters as $c_key=>$c_value){
+        
+        $output .= '<chapter id="'.$c_key.'">';
+        $output .= "\n";
+        $output .= '<title>'.$c_value['title'].'</title>';
+        $output .= "\n";
+        
+        foreach($c_value['faqs'] as $f_id=>$data){
+            foreach($data as $d_id=>$posting){
+                $output .= '<sect1 id="'.$d_id.'">';
+                $output .= "\n";
+                
+                $output .= '<author>';
+                $output .= $posting['author'];
+                $output .= '</author>';
+                $output .= "\n";
+    
+                $output .= '<date>';
+                $output .= $posting['date'];
+                $output .= '</date>';
+                $output .= "\n";
+                
+                $output .= '<title>';
+                $output .= $posting['thema'];
+                $output .= '</title>';
+                $output .= "\n";
+    
+                $output .= '<para>';
+                $output .= $posting['para'];
+                $output .= '</para>';
+                $output .= "\n";
+    
+                $output .= '</sect1>';
+                $output .= "\n";
+            }
+        }
+            
+        $output .= '</chapter>';
+        $output .= "</book>";
+    }
+    
+    // write xml file
+    $filename = 'xml/docbook_export.xml';
+    if (is_writable($filename)) {
+       if (!$handle = fopen($filename, "w")) {
+             print "can't open $filename";
+             exit;
+       }
+       if (!fwrite($handle, $output)) {
+           print "can not write into $filename nicht schreiben";
+           exit;
+       }
+       print "xml was created ($filename)";
+       fclose($handle);
+    } else {
+       print "$filename is not writeable";
+    }
 }
 
 /**
