@@ -1,12 +1,12 @@
 <?php
 /**
-* $Id: attachment.php,v 1.4 2004-12-28 13:26:10 thorstenr Exp $
+* $Id: attachment.php,v 1.5 2005-01-02 13:30:16 thorstenr Exp $
 *
 * Select an attachment and save it or create the SQL backup files
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-09-17
-* @copyright    (c) 2001-2004 phpMyFAQ
+* @copyright    (c) 2001-2005 phpMyFAQ
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -47,7 +47,7 @@ require_once (PMF_ROOT_DIR."/inc/data.php");
 require_once (PMF_ROOT_DIR."/inc/db.php");
 define("SQLPREFIX", $DB["prefix"]);
 
-$db = new db($DB["type"]);
+$db = db::db_select($DB["type"]);
 $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
 
 /* get language (default: english) */

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.7 2004-12-25 07:14:02 thorstenr Exp $
+* $Id: index.php,v 1.8 2005-01-02 13:30:16 thorstenr Exp $
 *
 * The main admin backend index file
 *
@@ -8,7 +8,7 @@
 * @author       Bastian Poettner <bastian@poettner.net>
 * @author       Meikel Katzengreis <meikel@katzengreis.com>
 * @since        2002-09-16
-* @copyright    (c) 2001-2004 phpMyFAQ Team
+* @copyright    (c) 2001-2005 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -42,7 +42,7 @@ if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "delcookie") {
 require_once (PMF_ROOT_DIR."/inc/data.php");
 require_once (PMF_ROOT_DIR."/inc/db.php");
 define("SQLPREFIX", $DB["prefix"]);
-$db = new db($DB["type"]);
+$db = db::db_select($DB["type"]);
 $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
 require_once (PMF_ROOT_DIR."/inc/config.php");
 require_once (PMF_ROOT_DIR."/inc/constants.php");

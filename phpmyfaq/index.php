@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.11 2004-12-28 13:19:59 thorstenr Exp $
+* $Id: index.php,v 1.12 2005-01-02 13:29:56 thorstenr Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the 
@@ -9,7 +9,7 @@
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2001-02-12
-* @copyright:   (c) 2001-2004 phpMyFAQ
+* @copyright:   (c) 2001-2005 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -36,7 +36,7 @@ if (DEBUG) {
 require_once("inc/data.php");
 require_once("inc/db.php");
 define("SQLPREFIX", $DB["prefix"]);
-$db = new db($DB["type"]);
+$db = db::db_select($DB["type"]);
 $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
 
 /* connect to LDAP server, if in configuration enabled */

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.9 2004-12-28 13:10:37 thorstenr Exp $
+* $Id: update.php,v 1.10 2005-01-02 13:34:42 thorstenr Exp $
 *
 * Main update script
 *
@@ -354,7 +354,7 @@ if ($step == 5) {
     require_once(PMF_ROOT_DIR."/inc/functions.php");
     require_once(PMF_ROOT_DIR."inc/db.php");
     define("SQLPREFIX", $DB["prefix"]);
-    $db = new db($DB["type"]);
+    $db = db::db_select($DB["type"]);
     $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
     
     $version = str_replace(".", "", $_REQUEST["version"]);

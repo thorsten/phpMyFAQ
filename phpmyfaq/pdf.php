@@ -1,13 +1,13 @@
 <?php
 /**
-* $Id: pdf.php,v 1.12 2004-12-13 20:29:18 thorstenr Exp $
+* $Id: pdf.php,v 1.13 2005-01-02 13:29:56 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Peter Beauvain <pbeauvain@web.de>
 * @author       Olivier Plathey <olivier@fpdf.org>
 * @author       Krzysztof Kruszynski <thywolf@wolf.homelinux.net>
 * @since        2003-02-12
-* @copyright    (c) 2001-2004 phpMyFAQ Team
+* @copyright    (c) 2001-2005 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -28,7 +28,7 @@ require_once ("inc/category.php");
 require_once ("inc/pdf.php");
 
 define("SQLPREFIX", $DB["prefix"]);
-$db = new db($DB["type"]);
+$db = db::db_select($DB["type"]);
 $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
 $tree = new Category;
 

@@ -1,12 +1,12 @@
 <?php
 /**
-* $Id: password.php,v 1.3 2004-12-11 20:06:54 thorstenr Exp $
+* $Id: password.php,v 1.4 2005-01-02 13:30:16 thorstenr Exp $
 *
 * Reset a forgotten password to a new one
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2004-05-11
-* @copyright    (c) 2004 phpMyFAQ Team
+* @copyright    (c) 2004 - 2005 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -38,7 +38,7 @@ require_once (PMF_ROOT_DIR."/inc/constants.php");
 /* include classes and functions */
 require_once (PMF_ROOT_DIR."/inc/db.php");
 define("SQLPREFIX", $DB["prefix"]);
-$db = new db($DB["type"]);
+$db = db::db_select($DB["type"]);
 $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
 require_once (PMF_ROOT_DIR."/inc/category.php");
 require_once (PMF_ROOT_DIR."/inc/functions.php");

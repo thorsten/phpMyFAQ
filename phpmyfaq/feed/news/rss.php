@@ -1,12 +1,13 @@
 <?php
 /**
-* $Id: rss.php,v 1.4 2004-11-24 21:34:24 thorstenr Exp $
+* $Id: rss.php,v 1.5 2005-01-02 13:31:09 thorstenr Exp $
 *
 * The RSS feed with the news
 *
-* @package  phpMyFAQ
-* @access   public
-* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+* @package      phpMyFAQ
+* @access       public
+* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+* @copyright    (c) 2004 - 2005 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -25,7 +26,7 @@ define("PMF_ROOT_DIR", dirname(dirname(dirname(__FILE__))));
 require_once (PMF_ROOT_DIR."/inc/data.php");
 require_once (PMF_ROOT_DIR."/inc/db.php");
 define("SQLPREFIX", $DB["prefix"]);
-$db = new db($DB["type"]);
+$db = db::db_select($DB["type"]);
 $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
 require_once (PMF_ROOT_DIR."/inc/config.php");
 require_once (PMF_ROOT_DIR."/inc/constants.php");
