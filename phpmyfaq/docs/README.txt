@@ -1,6 +1,6 @@
-$Id: README.txt,v 1.20 2005-03-06 10:25:08 thorstenr Exp $
+$Id: README.txt,v 1.21 2005-03-13 11:00:04 thorstenr Exp $
 
-phpMyFAQ 1.5.0 RC2
+phpMyFAQ 1.5.0 RC3
 Codename "Phoebe"
 
 Installation/Update:
@@ -9,11 +9,7 @@ Please read the documentation (documentation.en.html) carefully.
 Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
-Changes since 1.5.0 RC1:
-- fixed possible SQL injection bug
-- fixed bug in MS SQL class
-- fixed bug when ext/xmlrpc is installed
-- fixed many bugs in LDAP support
+Changes since 1.5.0 RC2:
 - fixed some minor bugs
 
 Known issues in phpMyFAQ 1.5.0:
@@ -23,7 +19,7 @@ Known issues in phpMyFAQ 1.5.0:
 
 CHANGELOG:
 
-Version 1.5.0 RC2 - 2005-03-06
+Version 1.5.0 RC3 - 2005-03-
 - full support for PostgreSQL databases
 - full support for Sybase databases
 - experimental support for MSSQL databases
