@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.add.php,v 1.10 2005-01-05 11:46:54 thorstenr Exp $
+* $Id: record.add.php,v 1.11 2005-01-08 10:14:27 thorstenr Exp $
 *
 * Adds a record in the database
 *
@@ -18,12 +18,14 @@
 * License for the specific language governing rights and limitations
 * under the License.
 */
+
 if ($permission["editbt"]) {
 	$submit = $_REQUEST["submit"];
 	
 	if (isset($submit[1]) && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "") {
 		// new entry
 		adminlog("Beitragcreatesave");
+        print "<h2>".$PMF_LANG["ad_entry_aor"]."</h2>\n";
         $lang = $_REQUEST["language"];
 		$thema = $db->escape_string($_REQUEST["thema"]);
 		$content = $db->escape_string($_REQUEST["content"]);
@@ -37,9 +39,11 @@ if ($permission["editbt"]) {
 		$datum = date("YmdHis");
         $rubrik = $_REQUEST['rubrik'];
 		
-        $result_record = $db->query("INSERT INTO ".SQLPREFIX."faqdata (id, lang, thema, content, keywords, author, active, datum, email, comment) VALUES (".$db->nextID(SQLPREFIX."faqdata", "id").", '".$lang."', '".$thema."', '".$content."', '".$keywords."', '".$author."', '".$_REQUEST["active"]."', '".$datum."', '".$_REQUEST["email"]."', '".$comment."')");
+        $nextID = $db->nextID(SQLPREFIX."faqdata", "id");
         
-        $result_visits = $db->query("INSERT INTO ".SQLPREFIX."faqvisits (id, lang, visits, last_visit) VALUES (".$db->insert_id(SQLPREFIX."faqdata", "id").", '".$lang."', 1, ".time().")");
+        $result_record = $db->query("INSERT INTO ".SQLPREFIX."faqdata (id, lang, thema, content, keywords, author, active, datum, email, comment) VALUES (".$nextID.", '".$lang."', '".$thema."', '".$content."', '".$keywords."', '".$author."', '".$_REQUEST["active"]."', '".$datum."', '".$_REQUEST["email"]."', '".$comment."')");
+        
+        $result_visits = $db->query("INSERT INTO ".SQLPREFIX."faqvisits (id, lang, visits, last_visit) VALUES (".$nextID.", '".$lang."', 1, ".time().")");
     	
         if ($result_record) {
     		print $PMF_LANG["ad_entry_savedsuc"];
@@ -50,15 +54,13 @@ if ($permission["editbt"]) {
         	// save or update the category relations
         foreach ($rubrik as $categories) {
             
-            if (!$db->query('INSERT INTO '.SQLPREFIX.'faqcategoryrelations VALUES ('.$categories.', "'.$_REQUEST["lang"].'", '.$db->insert_id(SQLPREFIX."faqdata", "id").', "'.$_REQUEST["lang"].'")')) {
+            if (!$db->query('INSERT INTO '.SQLPREFIX.'faqcategoryrelations VALUES ('.$categories.', "'.$_REQUEST["lang"].'", '.$nextID.', "'.$_REQUEST["lang"].'")')) {
                 
-                $db->query('UPDATE '.SQLPREFIX.'faqcategoryrelations SET record_id = '.$db->insert_id(SQLPREFIX."faqdata", "id").', record_lang = "'.$_REQUEST["lang"].'" WHERE category_id = '.$categories.' AND category_lang = "'.$_REQUEST["lang"].'"');
+                $db->query('UPDATE '.SQLPREFIX.'faqcategoryrelations SET record_id = '.$nextID.', record_lang = "'.$_REQUEST["lang"].'" WHERE category_id = '.$categories.' AND category_lang = "'.$_REQUEST["lang"].'"');
             
             }
         }
-	}
-	
-	if (isset($submit[2]) && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "") {
+	} elseif (isset($submit[2]) && is_array($_REQUEST["thema"])) {
 		// Preview
 	    $rubrik = $_REQUEST["rubrik"];
         $cat = new Category;
