@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.edit.php,v 1.3 2004-11-21 17:49:25 thorstenr Exp $
+* $Id: record.edit.php,v 1.4 2004-11-23 20:15:25 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23
@@ -25,19 +25,21 @@ if ($permission["editbt"] && emptyTable(SQLPREFIX."faqcategory")) {
     $thema = "";
     
     if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "takequestion") {
+    
 		list($rubrik, $thema) = $db->fetch_row($db->query("SELECT ask_rubrik, ask_content FROM ".SQLPREFIX."faqfragen WHERE id = '".$_REQUEST["id"]."'"));
 		$lang = trim(strtolower(substr($_SERVER["HTTP_ACCEPT_LANGUAGE"], 0, 2)));
-		}
-	
+        
+    }
     if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "editpreview") {
+        
         if (isset($_REQUEST["id"]) && $_REQUEST["id"] != "") {
             $id = $_REQUEST["id"];
             $acti = "saveentry&amp;id=".$id;
-            }
-        else {
+        } else {
             $acti = "insertentry";
 			$id = "";
-            }
+        }
+        
         $lang = $_REQUEST["lang"];
         $active = $_REQUEST["active"];
         $rubrik = $_REQUEST["rubrik"];
@@ -48,9 +50,9 @@ if ($permission["editbt"] && emptyTable(SQLPREFIX."faqcategory")) {
         $email = $_REQUEST["email"];
         $comment = $_REQUEST["comment"];
         $changed = $_REQUEST["changed"];
-        }
-    
-    elseif (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "editentry") {
+        
+    } elseif (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "editentry") {
+        
 		if ((!isset($rubrik) && !isset($thema)) || (isset($_REQUEST["id"]) && $_REQUEST["id"] != "")) {
 		    adminlog("Beitragedit, ".$_REQUEST["id"]);
 			$result = $db->query("SELECT id, lang, active, rubrik, keywords, thema, content, author, email, comment, datum FROM ".SQLPREFIX."faqdata WHERE id = '".$_REQUEST["id"]."' AND lang = '".$_GET["lang"]."'");
@@ -58,27 +60,32 @@ if ($permission["editbt"] && emptyTable(SQLPREFIX."faqcategory")) {
             $content = htmlspecialchars($content);
 			$acti = "saveentry&amp;id=".$_REQUEST["id"];
 			$id = $_REQUEST["id"];
-			}
-		else {
+		} else {
 			$acti = "insertentry";
 			$id = "";
 		    $lang = $LANGCODE;
-			}
 		}
-	
-    else {
+        
+	} else {
+        
 		adminlog("Beitragcreate");
 		$acti = "insertentry";
         $rubrik = "";
 		$id = "";
 		$lang = $LANGCODE;
-		}
+        
+	}
 ?>
     <h2><?php print $PMF_LANG["ad_entry_edit_1"]; ?> <span style="color: Red;"><?php print $id; ?></span> <?php print $PMF_LANG["ad_entry_edit_2"]; ?></h2>
     
     <form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=<?php print $acti; ?>" method="post">
     <dl>
 
+    <dt><strong><?php print $PMF_LANG["ad_entry_category"]; ?></strong></dt>
+    <dd><select name="rubrik" size="1">
+<?php print $tree->printCategoryOptions($rubrik); ?>
+    </select></dd>
+    
     <dt><strong><?php print $PMF_LANG["ad_entry_theme"]; ?></strong></dt>
     <dd><textarea class="admin" name="thema" style="width: 525px; height: 50px;" cols="2" rows="50"><?php if (isset($thema)) { print stripslashes($thema); } ?></textarea></dd>
 	
@@ -134,12 +141,6 @@ if ($permission["editbt"] && emptyTable(SQLPREFIX."faqcategory")) {
     <dt><strong><?php print $PMF_LANG["ad_entry_email"]; ?></strong></dt>
     <dd><input class="admin" name="email" style="width: 525px;" value="<?php if (isset($email)) { print $email; } else { print $auth_email; } ?>" /></dd>
 	
-    <dt><strong><?php print $PMF_LANG["ad_entry_category"]; ?></strong></dt>
-    <dd><select name="rubrik" size="1">
-<?php
-	print $tree->printCategoryOptions($rubrik);
-?>
-    </select></dd>
 <?php
 	if (isset($active) && $active == "yes") {
 		$suf = " checked=\"checked\"";
