@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: add.php,v 1.4 2004-12-11 21:41:30 thorstenr Exp $
+* $Id: add.php,v 1.5 2004-12-16 11:48:03 thorstenr Exp $
 *
 * This is the page there a user can add a FAQ record.
 *
@@ -41,6 +41,8 @@ $tpl->processTemplate ("writeContent", array(
 				"msgNewContentHeader" => $PMF_LANG["msgNewContentHeader"],
                 "msgNewContentAddon" => $PMF_LANG["msgNewContentAddon"],
 				"writeSendAdress" => $_SERVER["PHP_SELF"]."?".$sids."action=save",
+				"defaultContentMail" => getEmailAddress(),
+				"defaultContentName" => getFullUserName(),
 				"msgNewContentName" => $PMF_LANG["msgNewContentName"],
 				"msgNewContentMail" => $PMF_LANG["msgNewContentMail"],
 				"msgNewContentCategory" => $PMF_LANG["msgNewContentCategory"],
