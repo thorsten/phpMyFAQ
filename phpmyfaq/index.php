@@ -1,10 +1,12 @@
 <?php
 /******************************************************************************
+ * $Id: index.php,v 1.2 2004-10-31 10:29:58 thorstenr Exp $
+ *
  * File:				index.php
  * Description:         main file
  * Author:				Thorsten Rinne <thorsten@phpmyfaq.de>
  * Date:				2001-02-12
- * Last Update:			2004-07-26
+ * Last Update:			2004-10-31
  * Copyright:           (c) 2001-2004 Thorsten Rinne
  * 
  * The contents of this file are subject to the Mozilla Public License
@@ -47,55 +49,56 @@ require_once("inc/functions.php");
 require_once("inc/parser.php");
 require_once("inc/category.php");
 require_once("inc/idna_convert.class.php");
-$IDN = new idna_convert();
+$IDN = new Net_IDNA;
 
 /* get language (default: english) */
 if (isset($_POST["language"]) && $_POST["language"] != "" && strlen($_POST["language"]) <= 2 && !preg_match("=/=", $_REQUEST["language"])) {
     $LANGCODE = $_POST["language"];
     require_once("lang/language_".$_POST["language"].".php");
     @setcookie("lang", $LANGCODE, time()+3600);
-    }
+}
+
 if (!isset($LANGCODE) && isset($_GET["lang"]) && $_GET["lang"] != "" && strlen($_GET["lang"]) <= 2 && !preg_match("=/=", $_GET["lang"])) {
-    if (@require_once("lang/language_".$_REQUEST["lang"].".php")) {
+    if (@is_file("lang/language_".$_REQUEST["lang"].".php")) {
+        require_once("lang/language_".$_REQUEST["lang"].".php");
         $LANGCODE = $_REQUEST["lang"];
-        }
-    else {
+    } else {
         unset($LANGCODE);
-        }
     }
+}
+
 if (!isset($LANGCODE) && isset($_COOKIE["lang"]) && $_COOKIE["lang"] != "" && strlen($_COOKIE["lang"]) <= 2 && !preg_match("=/=", $_COOKIE["lang"])) {
-    if (@require_once("lang/language_".$_COOKIE["lang"].".php")) {
+    if (@is_file("lang/language_".$_COOKIE["lang"].".php")) {
+        require_once("lang/language_".$_COOKIE["lang"].".php");
         $LANGCODE = $_COOKIE["lang"];
-        }
-    else {
+    } else {
         unset($LANGCODE);
-        }
     }
+}
+
 if (!isset($LANGCODE) && isset($PMF_CONF["detection"]) && isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) {
-    if (@require_once("lang/language_".substr($_SERVER["HTTP_ACCEPT_LANGUAGE"], 0, 2).".php")) {
+    if (@is_file("lang/language_".substr($_SERVER["HTTP_ACCEPT_LANGUAGE"], 0, 2).".php")) {
+        require_once("lang/language_".substr($_SERVER["HTTP_ACCEPT_LANGUAGE"], 0, 2).".php");
         $LANGCODE = substr($_SERVER["HTTP_ACCEPT_LANGUAGE"], 0, 2);
         @setcookie("lang", $LANGCODE, time()+3600);
-        }
-    else {
+    } else {
         unset($LANGCODE);
-        }
     }
-elseif (!isset($PMF_CONF["detection"])) {
+} elseif (!isset($PMF_CONF["detection"])) {
     if (@require_once("lang/".$PMF_CONF["language"])) {
         $LANGCODE = $PMF_LANG["metaLanguage"];
         @setcookie("lang", $LANGCODE, time()+3600);
-        }
-    else {
+    } else {
         unset($LANGCODE);
-        }
     }
+}
+
 if (isset($LANGCODE)) {
     require_once("lang/language_".$LANGCODE.".php");
-    }
-else {
+} else {
     $LANGCODE = "en";
     require_once ("lang/language_en.php");
-    }
+}
 
 /* found a session ID? */
 if (!isset($_GET["sid"]) && !isset($_COOKIE["sid"])) {
@@ -229,13 +232,13 @@ if (DEBUG == TRUE) {
 	}
 else {
     /* send headers and print template */
-    header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-    header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
-    header("Cache-Control: no-store, no-cache, must-revalidate");
-    header("Cache-Control: post-check=0, pre-check=0", false);
-    header("Pragma: no-cache");
-    header("Content-type: text/html; charset=".$PMF_LANG["metaCharset"]);
-    header("Vary: Negotiate,Accept");
+    @header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+    @header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
+    @header("Cache-Control: no-store, no-cache, must-revalidate");
+    @header("Cache-Control: post-check=0, pre-check=0", false);
+    @header("Pragma: no-cache");
+    @header("Content-type: text/html; charset=".$PMF_LANG["metaCharset"]);
+    @header("Vary: Negotiate,Accept");
     }
 $tpl->printTemplate();
 
