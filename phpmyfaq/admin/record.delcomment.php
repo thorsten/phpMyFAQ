@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.delcomment.php,v 1.2 2004-12-13 20:26:43 thorstenr Exp $
+* $Id: record.delcomment.php,v 1.3 2004-12-16 12:26:24 thorstenr Exp $
 *
 * Deletes a user comment
 *
@@ -23,7 +23,7 @@ print "<h2>".$PMF_LANG["ad_entry_aor"]."</h2>\n";
 if ($permission["delcomment"]) {
 	if ($_REQUEST["subm"] == $PMF_LANG["ad_gen_yes"]) {
 		// Wenn ja geklickt wurde
-		$db->query("DELETE FROM ".SQLPREFIX."faqcomments WHERE id = ".$_REQUEST["artid"]." AND id_comment = '".$_REQUEST["cmtid"]."'");
+		$db->query("DELETE FROM ".SQLPREFIX."faqcomments WHERE id = ".$_REQUEST["artid"]." AND id_comment = ".$_REQUEST["cmtid"]);
 		print "<p align=\"center\">".$PMF_LANG["ad_entry_commentdelsuc"]."<p><a href=\"".$_SERVER["PHP_SELF"].$linkext."&aktion=editentry&id=".$_REQUEST["artid"]."&amp;lang=".$_REQUEST["lang"]."\">".$PMF_LANG["ad_entry_back"]."</a></p>";
 	}
 	if ($_REQUEST["subm"] == $PMF_LANG["ad_gen_no"]) {

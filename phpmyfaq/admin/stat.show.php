@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: stat.show.php,v 1.3 2004-12-13 20:26:43 thorstenr Exp $
+* $Id: stat.show.php,v 1.4 2004-12-16 12:26:24 thorstenr Exp $
 *
 * Show the session
 *
@@ -37,7 +37,7 @@ if ($permission["viewlog"]) {
 ?>
         <tr>
             <td class="list"><?php print date("Y-m-d H:i:s",$time); ?></td>
-            <td class="list"><?php print $longn; ?> (<?php print $lentry ?>)</td>
+            <td class="list"><?php print '-'; ?> (<?php print '-'; ?>)</td>
         </tr>
 <?php
 				if ($anz == 1) {

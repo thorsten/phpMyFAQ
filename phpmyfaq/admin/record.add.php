@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.add.php,v 1.6 2004-12-13 20:26:43 thorstenr Exp $
+* $Id: record.add.php,v 1.7 2004-12-16 12:26:24 thorstenr Exp $
 *
 * Adds a record in the database
 *
@@ -25,12 +25,12 @@ if ($permission["editbt"]) {
 		// new entry
 		adminlog("Beitragcreatesave");
         $lang = $_REQUEST["language"];
-		$thema = addslashes($_REQUEST["thema"]);
-		$content = addslashes($_REQUEST["content"]);
-		$keywords = addslashes($_REQUEST["keywords"]);
-		$author = addslashes($_REQUEST["author"]);
+		$thema = $db->escape_string($_REQUEST["thema"]);
+		$content = $db->escape_string($_REQUEST["content"]);
+		$keywords = $db->escape_string($_REQUEST["keywords"]);
+		$author = $db->escape_string($_REQUEST["author"]);
         if (isset($_REQUEST["comment"])) {
-            $comment = $_REQUEST["comment"];
+            $comment = $db->escape_string($_REQUEST["comment"]);
         } else {
 			$comment = "n";
 	    }
@@ -39,20 +39,21 @@ if ($permission["editbt"]) {
         $category_query = '';
         $catgories = $_REQUEST['rubrik'];
         foreach ($catgories as $val) {
-            $category_query .= 
+            $category_query .= '';
         }
 		
         $result_record = $db->query("INSERT INTO ".SQLPREFIX."faqdata (id, lang, thema, content, keywords, author, active, datum, email, comment) VALUES (".$db->nextID(SQLPREFIX."faqdata", "id").", '".$lang."', '".$thema."', '".$content."', '".$keywords."', '".$author."', '".$_REQUEST["active"]."', '".$datum."', '".$_REQUEST["email"]."', '".$comment."')");
         
-        $result_categories = $db->query('INSERT INTO '.SQLPREFIX.'faqcategoryrelations (category_id, catgeory_lang, record_id, record_lang) VALUES ('', '', '.$db->insert_id(SQLPREFIX.'faqdata', 'id').', "'.$lang'"');
+        $result_categories = $db->query('INSERT INTO '.SQLPREFIX.'faqcategoryrelations (category_id, catgeory_lang, record_id, record_lang) VALUES ("", "", '.$db->insert_id(SQLPREFIX.'faqdata', 'id').', "'.$lang.'"');
         
-        $result_visits = $db->query("INSERT INTO ".SQLPREFIX."faqvisits (id, lang, visits, last_visit) VALUES (".$db->insert_id(SQLPREFIX."faqdata", "id") - 1.", '".$lang."', 1, ".time().")");
-        
+        $result_visits = $db->query("INSERT INTO ".SQLPREFIX."faqvisits (id, lang, visits, last_visit) VALUES (".$db->insert_id(SQLPREFIX."faqdata", "id").", '".$lang."', 1, ".time().")");
+        /*
 		if () {
 			print $PMF_LANG["ad_entryins_suc"];
 		}else {
 			print $PMF_LANG["ad_entryins_fail"];
 		}
+		*/
 	}
 	
 	if (isset($submit[2]) && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "") {

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.edit.php,v 1.12 2004-12-12 10:45:14 thorstenr Exp $
+* $Id: record.edit.php,v 1.13 2004-12-16 12:26:24 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23
@@ -18,7 +18,7 @@
 * under the License.
 */
 
-if ($permission["editbt"] && emptyTable(SQLPREFIX."faqcategory")) {
+if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategory")) {
 	$tree = new Category();
     $tree->buildTree();
     $rubrik = "";
@@ -26,7 +26,7 @@ if ($permission["editbt"] && emptyTable(SQLPREFIX."faqcategory")) {
     
     if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "takequestion") {
     
-		list($rubrik, $thema) = $db->fetch_row($db->query("SELECT ask_rubrik, ask_content FROM ".SQLPREFIX."faqfragen WHERE id = '".$_REQUEST["id"]."'"));
+		list($rubrik, $thema) = $db->fetch_row($db->query("SELECT ask_rubrik, ask_content FROM ".SQLPREFIX."faqfragen WHERE id = ".$_REQUEST["id"]));
 		$lang = trim(strtolower(substr($_SERVER["HTTP_ACCEPT_LANGUAGE"], 0, 2)));
         $categories = array(array('category_id' => $rubrik, 'category_lang' => $lang));
     }
@@ -190,9 +190,9 @@ if ($permission["editbt"] && emptyTable(SQLPREFIX."faqcategory")) {
 ?>
     <h3><?php print $PMF_LANG["ad_entry_changelog"]; ?></h3>
 <?php
-		$result = $db->query("SELECT usr, datum, what FROM ".SQLPREFIX."faqchanges WHERE beitrag = '".$id."' ORDER BY id DESC");
+		$result = $db->query("SELECT usr, datum, what FROM ".SQLPREFIX."faqchanges WHERE beitrag = ".$id." ORDER BY id DESC");
 		while (list($usr,$dat,$wht) = $db->fetch_row($result)) {
-			list($usr) = $db->fetch_row($db->query("SELECT NAME FROM ".SQLPREFIX."faquser WHERE ID='".$usr."'"));
+			list($usr) = $db->fetch_row($db->query("SELECT NAME FROM ".SQLPREFIX."faquser WHERE id = ".$usr));
 ?>
     <div style="font-size: 10px;"><strong><?php print date("Y-m-d H:i:s",$dat).": ".$usr; ?></strong><br /><?php print $wht; ?></div>	
 <?php
@@ -201,7 +201,7 @@ if ($permission["editbt"] && emptyTable(SQLPREFIX."faqcategory")) {
 ?>
     </form>
 <?php
-	$result = $db->query("SELECT id, id_comment, usr, email, comment, datum FROM ".SQLPREFIX."faqcomments WHERE id ='".$id."' ORDER BY datum DESC");
+	$result = $db->query("SELECT id, id_comment, usr, email, comment, datum FROM ".SQLPREFIX."faqcomments WHERE id = ".$id." ORDER BY datum DESC");
 	if ($db->num_rows($result) > 0) {
 ?>
     <p><strong><?php print $PMF_LANG["ad_entry_comment"] ?></strong></p>
@@ -212,9 +212,9 @@ if ($permission["editbt"] && emptyTable(SQLPREFIX."faqcategory")) {
 <?php
 		}
 	}
-} elseif ($permission["editbt"] != 1 && emptyTable(SQLPREFIX."faqcategory")) {
+} elseif ($permission["editbt"] != 1 && !emptyTable(SQLPREFIX."faqcategory")) {
     print $PMF_LANG["err_NotAuth"];
-} elseif ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategory")) {
+} elseif ($permission["editbt"] && emptyTable(SQLPREFIX."faqcategory")) {
     print $PMF_LANG["no_cats"];
 }
 ?>

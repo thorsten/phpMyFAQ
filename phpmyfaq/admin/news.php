@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: news.php,v 1.4 2004-12-13 20:26:43 thorstenr Exp $
+* $Id: news.php,v 1.5 2004-12-16 12:26:24 thorstenr Exp $
 *
 * The main administration file for the news
 *
@@ -116,7 +116,7 @@ elseif (isset($_REQUEST["do"]) && $_REQUEST["do"] == "edit" && $permission["edit
 // neuen newseintrag in der datenbank speichern
 if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "save" && $permission["addnews"]) {
 	$datum = date("YmdHis");
-	$artikel = nl2br(addslashes($_REQUEST["content"]));
+	$artikel = nl2br($db->escape_string($_REQUEST["content"]));
 	if (!isset($_REQUEST["target"])) {
 		$target = "";
 		}
@@ -124,7 +124,7 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "save" && $permission["addnews"
 		$target = $_REQUEST["target"];
 		}
     $result = $db->query("INSERT INTO ".SQLPREFIX."faqnews (id, header, artikel, link, linktitel, datum, target) VALUES (".$db->nextID(SQLPREFIX."faqnews",
-"id").", '".$_REQUEST["header"]."', '".$artikel."', '".$_REQUEST["link"]."', '".$_REQUEST["linktitel"]."', '".$datum."', '".$target."')");
+"id").", '".$db->escape_string($_REQUEST["header"])."', '".$artikel."', '".$_REQUEST["link"]."', '".$_REQUEST["linktitel"]."', '".$datum."', '".$target."')");
 	print "<p>".$PMF_LANG["ad_news_updatesuc"]."</p>";
 	}
 elseif (isset($_REQUEST["do"]) && $_REQUEST["do"] == "save" && $permission["addnews"]) {
@@ -134,14 +134,14 @@ elseif (isset($_REQUEST["do"]) && $_REQUEST["do"] == "save" && $permission["addn
 // bestehenden Newseintrag updaten
 if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "update" && $permission["editnews"]) {
 	$datum = date("YmdHis");
-	$artikel = nl2br(addslashes($_REQUEST["content"]));
+	$artikel = nl2br($db->escape_string($_REQUEST["content"]));
 	if (!isset($_REQUEST["target"])) {
 		$target = "";
 		}
 	else {
 		$target = $_REQUEST["target"];
 		}
-	$result = $db->query("UPDATE ".SQLPREFIX."faqnews SET header = '".$_REQUEST["header"]."', artikel = '".$artikel."', link = '".$_REQUEST["link"]."', linktitel = '".$_REQUEST["linktitel"]."', datum = '".$datum."', target = '".$target."' WHERE id = ".$_REQUEST["id"]);
+	$result = $db->query("UPDATE ".SQLPREFIX."faqnews SET header = '".$db->escape_string($_REQUEST["header"])."', artikel = '".$artikel."', link = '".$_REQUEST["link"]."', linktitel = '".$_REQUEST["linktitel"]."', datum = '".$datum."', target = '".$target."' WHERE id = ".$_REQUEST["id"]);
 	print "<p>".$PMF_LANG["ad_news_updatesuc"]."</p>";
 	}
 elseif (isset($_REQUEST["do"]) && $_REQUEST["do"] == "update" && $permission["editnews"]) {

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.save.php,v 1.6 2004-12-12 10:39:05 thorstenr Exp $
+* $Id: record.save.php,v 1.7 2004-12-16 12:26:24 thorstenr Exp $
 *
 * Save or update a FAQ record
 *
@@ -64,10 +64,10 @@ if (isset($submit[1]) && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "") 
 	// Wenn auf Speichern geklickt wurde...
 	adminlog("Beitragsave", $_REQUEST["id"]);
 	$db->query("INSERT INTO ".SQLPREFIX."faqchanges (id, beitrag, usr, datum, what) VALUES (".$db->nextID(SQLPREFIX."faqchanges", "id").", '".$_REQUEST["id"]."','".$auth_user."','".time()."','".nl2br(addslashes($_REQUEST["changed"]))."')");
-	$thema = addslashes($_REQUEST["thema"]);
-	$content = addslashes($_REQUEST["content"]);
-	$keywords = addslashes($_REQUEST["keywords"]);
-	$author = addslashes($_REQUEST["author"]);
+	$thema = $db->escape_string($_REQUEST["thema"]);
+	$content = $db->escape_string($_REQUEST["content"]);
+	$keywords = $db->escape_string($_REQUEST["keywords"]);
+	$author = $db->escape_string($_REQUEST["author"]);
     
     if (isset($_REQUEST["comment"]) && $_REQUEST["comment"] != "") {
         $comment = $_REQUEST["comment"];
@@ -82,9 +82,9 @@ if (isset($submit[1]) && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "") 
 	
     // save or update the FAQ record
 	if ($num == "1") {
-		$query = "UPDATE ".SQLPREFIX."faqdata SET thema = '".$thema."', content = '".$content."', keywords = '".$keywords."', author = '".$author."', active = '".$_REQUEST["active"]."', datum = '".$datum."', email = '".$_REQUEST["email"]."', comment = '".$comment."' WHERE id = '".$_REQUEST["id"]."' AND lang = '".$_REQUEST["language"]."'";
+		$query = "UPDATE ".SQLPREFIX."faqdata SET thema = '".$thema."', content = '".$content."', keywords = '".$keywords."', author = '".$author."', active = '".$_REQUEST["active"]."', datum = '".$datum."', email = '".$db->escape_string($_REQUEST["email"])."', comment = '".$comment."' WHERE id = '".$_REQUEST["id"]."' AND lang = '".$_REQUEST["language"]."'";
     } else {
-		$query = "INSERT INTO ".SQLPREFIX."faqdata (id, lang, thema, content, keywords, author, active, datum, email, comment) VALUES ('".$_REQUEST["id"]."','".$_REQUEST["language"]."', '".$thema."', '".$content."', '".$keywords."', '".$author."', '".$_REQUEST["active"]."', '".$datum."', '".$_REQUEST["email"]."', '".$comment."')";
+		$query = "INSERT INTO ".SQLPREFIX."faqdata (id, lang, thema, content, keywords, author, active, datum, email, comment) VALUES ('".$_REQUEST["id"]."','".$_REQUEST["language"]."', '".$thema."', '".$content."', '".$keywords."', '".$author."', '".$_REQUEST["active"]."', '".$datum."', '".$db->escape_string($_REQUEST["email"])."', '".$comment."')";
     }
     
 	// save or update the category relations

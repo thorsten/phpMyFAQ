@@ -44,7 +44,7 @@ if ($permission["editbt"] || $permission["delbt"]) {
 	
     if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "view" && !isset($_REQUEST["suchbegriff"])) {
         
-        $result = $db->query('SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqdata.author FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang WHERE '.SQLPREFIX.'faqdata.active = "yes" ORDER BY '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.id LIMIT '.$start.', '.$perpage);
+        $result = $db->query('SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema,'.SQLPREFIX.'faqdata.author FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON'.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang ='.SQLPREFIX.'faqcategoryrelations.record_lang WHERE '.SQLPREFIX.'faqdata.active = "yes" ORDER BY'.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.id ');
         $laktion = 'view';
         $internalSearch = '';
         
@@ -66,7 +66,10 @@ if ($permission["editbt"] || $permission["delbt"]) {
         
     } else if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "accept") {
         
-        $result = $db->query('SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqdata.author FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang WHERE '.SQLPREFIX.'faqdata.active = "no" ORDER BY '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.id LIMIT '.$start.', '.$perpage);
+        $start = 0;
+        $perpage = 10;
+        
+        > $result = $db->query('SELECT '.SQLPREFIX.'faqdata.id,'.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema,'.SQLPREFIX.'faqdata.author FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON'.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang ='.SQLPREFIX.'faqcategoryrelations.record_lang WHERE '.SQLPREFIX.'faqdata.active = "no" ORDER BY'.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.id ');
         $laktion = "accept";
         $internalSearch = "";
     }
@@ -85,7 +88,16 @@ if ($permission["editbt"] || $permission["delbt"]) {
     </fieldset>
     </form>
 <?php
-        while (list($id, $lang, $rub, $topic, $author) = $db->fetch_row($result)) {
+        $counter = 0;
+        $displayedCounter = 0;
+        while ( (list($id, $lang, $rub, $topic, $author) = $db->fetch_row($result)) && $displayedCounter < $perpage) {
+
+            $counter ++;
+            if ($counter <= $start) {
+                next;
+            }
+            $displayCounter++; 
+            
             if ($rub != $old) {
 			    if ($old == 0) {
 ?>
