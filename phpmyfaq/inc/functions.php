@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.6 2004-11-13 19:09:11 thorstenr Exp $
+ * $Id: functions.php,v 1.7 2004-11-13 20:42:40 thorstenr Exp $
  *
  * File:                functions.php
  * Description:         This is the main functions file!
@@ -791,6 +791,25 @@ function generateXMLExport($id, $lang = "")
 		return TRUE;
         }
 	return FALSE;
+}
+
+/**
+* This function generates a plain XHTML file with all entries.
+*
+
+* @return   boolean
+* @access   public
+* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+* @since    2004-11-13
+*/
+function generateXHTMLFile()
+{
+	global $db, $tree, $PMF_CONF, $PMF_LANG;
+    
+	$result = $db->query("SELECT id, lang, active, rubrik, thema, content, author, datum FROM ".SQLPREFIX."faqdata ORDER BY rubrik, id");
+	if ($db->num_rows($result) > 0) {
+        
+    }
 }
 
 /*
