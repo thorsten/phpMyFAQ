@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: savequestion.php,v 1.9 2005-01-10 13:38:42 thorstenr Exp $
+* $Id: savequestion.php,v 1.10 2005-02-02 08:52:17 thorstenr Exp $
 *
 * @author           Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author           David Saez Padros <david@ols.es>
@@ -18,7 +18,7 @@
 * under the License.
 */
 
-if (isset($username) && $username != '' && isset($_REQUEST["usermail"]) && checkEmail($_REQUEST["usermail"]) && isset($_REQUEST["content"]) && $_REQUEST["content"] != '' && IPCheck($_SERVER["REMOTE_ADDR"])) {
+if (isset($_REQUEST["username"]) && $_REQUEST["username"] != '' && isset($_REQUEST["usermail"]) && checkEmail($_REQUEST["usermail"]) && isset($_REQUEST["content"]) && $_REQUEST["content"] != '' && IPCheck($_SERVER["REMOTE_ADDR"])) {
 
 	if (isset($_POST['try_search'])) {
         $suchbegriff = safeSQL($_POST['content']);
