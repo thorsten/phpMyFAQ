@@ -1,9 +1,12 @@
 TODO list for future versions of phpMyFAQ:
 
 1.5.0 "Phoebe":
-- full support for PostgreSQL 7.x (done)
+- full support for PostgreSQL 7.x (done by Tom)
 - mod_rewrite support ?
-- one entry in various categories (done)
+- one entry in various categories
+- template engine parse PHP code (done by Thorsten)
+- better RSS support (done by Thorsten)
+- complete XML and XHTML exports
 - reorder records ?
 - more accessibility features (WAI and Section 508) ?
 - bugfixing for stability or security reasons
