@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.13 2005-01-09 16:39:14 thorstenr Exp $
+* $Id: index.php,v 1.14 2005-02-02 09:05:32 thorstenr Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the 
@@ -32,6 +32,12 @@ if (DEBUG) {
 	error_reporting(E_ALL);
 }
 
+/* check if config.php and data.php exist -> if not, redirect to installer */
+if (!file_exists('inc/config.php') || !file_exists('inc/data.php')) {
+    header("Location: http://".$_SERVER['HTTP_HOST'].dirname($_SERVER['PHP_SELF'])."/install/installer.php");
+    exit();
+}
+
 /* connect to the database server, define the prefix and connect */
 require_once("inc/data.php");
 require_once("inc/db.php");
@@ -39,7 +45,7 @@ define("SQLPREFIX", $DB["prefix"]);
 $db = db::db_select($DB["type"]);
 $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
 
-/* connect to LDAP server, if in configuration enabled */
+/* connect to LDAP server, when LDAP support is enabled */
 if (isset($PMF_CONF["ldap_support"]) && $PMF_CONF["ldap_support"] == TRUE) {
     require_once('inc/dataldap.php');
     require_once('inc/ldap.php');
