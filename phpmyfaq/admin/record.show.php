@@ -4,7 +4,7 @@
  * Description:			show a record
  * Authors:				Thorsten Rinne <thorsten@phpmyfaq.de>
  * Date:				2003-02-23
- * Last change:			2004-07-29
+ * Last change:			2004-11-01
  * Copyright:           (c) 2001-2004 Thorsten Rinne
  * 
  * The contents of this file are subject to the Mozilla Public License
@@ -26,12 +26,27 @@ if ($permission["editbt"] || $permission["delbt"]) {
     if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "accept") {
 		$query = "SELECT id, lang, rubrik, thema, author FROM ".SQLPREFIX."faqdata WHERE active = 'no' ORDER BY rubrik, id ";
 		$laktion = "accept";
+        $internalSearch = "";
 		}
-	if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "view") {
-		$query = ("SELECT id, lang, rubrik, thema, author FROM ".SQLPREFIX."faqdata ORDER BY rubrik, id ");
-		$laktion = "view";
-		}
-	
+?>
+    <form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=accept" method="post">
+    <fieldset>
+    <legend><?php print $PMF_LANG["msgSearch"]; ?></legend>
+    <strong><?php print $PMF_LANG["msgSearchWord"]; ?>:</strong> <input class="admin" type="text" name="suchbegriff" size="50">&nbsp;&nbsp;<input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG["msgSearch"]; ?>">
+    </fieldset>
+    </form>
+<?php
+        $query = ("SELECT id, lang, rubrik, thema, author FROM ".SQLPREFIX."faqdata ORDER BY rubrik, id ");
+        $laktion = "view";
+        $internalSearch = "";
+    }
+    if (isset($_REQUEST["suchbegriff"]) && $_REQUEST["suchbegriff"] != "") {
+        $begriff = $_REQUEST["suchbegriff"];
+        $query = ("SELECT id, lang, rubrik, thema, author FROM ".SQLPREFIX."faqdata WHERE MATCH (thema,content,keywords) AGAINST ('".$begriff."')  ORDER BY rubrik, id ");
+        $laktion = "view";
+        $internalSearch = "&amp;search=".$begriff;
+    }
+    
     $perpage = 20;
 	if (!isset($_REQUEST["pages"])) {
 		$anz = $db->num_rows($db->query($query));
@@ -52,9 +67,9 @@ if ($permission["editbt"] || $permission["delbt"]) {
 		}
 	
 	$start = ($page - 1) * $perpage;
-	$PageSpan = PageSpan("<a href=\"".$_SERVER["PHP_SELF"].$linkext."&amp;aktion=".$laktion."&amp;pages=".$pages."&amp;page=<NUM>\">", 1, $pages, $page);
+	$PageSpan = PageSpan("<a href=\"".$_SERVER["PHP_SELF"].$linkext."&amp;aktion=".$laktion."&amp;pages=".$pages."&amp;page=<NUM>".$internalSearch."\">", 1, $pages, $page);
 	
-	$result = $db->query($query."LIMIT ".$start.", ".$perpage);
+	$result = $db->query($query." LIMIT ".$start.", ".$perpage);
 	
 	if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "view") {
 		$resultComments = $db->query("SELECT count(id) as anz, id FROM ".SQLPREFIX."faqcomments GROUP BY id ORDER BY id;");

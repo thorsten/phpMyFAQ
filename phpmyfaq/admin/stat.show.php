@@ -4,7 +4,7 @@
  * Description:			show the session
  * Authors:				Thorsten Rinne <thorsten@phpmyfaq.de>
  * Date:				2003-02-24
- * Last change:			2004-06-19
+ * Last change:			2004-11-01
  * Copyright:           (c) 2001-2004 Thorsten Rinne
  * 
  * The contents of this file are subject to the Mozilla Public License
@@ -23,7 +23,7 @@ if ($permission["viewlog"]) {
 	<h2><?php print $PMF_LANG["ad_sess_session"]; ?> "<span style="color: Red;"><?php print $_REQUEST["id"]; ?></span>"</h2>
 <?php
 	list($time) = $db->fetch_row($db->query("SELECT TIME FROM ".SQLPREFIX."faqsessions WHERE SID='".$_REQUEST["id"]."'"));
-	$fp = fopen("../data/tracking".date("dmY", $time), "r");
+	$fp = fopen(PMF_ROOT_DIR."/data/tracking".date("dmY", $time), "r");
 ?>
     <table class="list">
     <tbody>

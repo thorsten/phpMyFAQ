@@ -4,7 +4,7 @@
  * Description:			main page statistics
  * Authors:				Thorsten Rinne <thorsten@phpmyfaq.de>
  * Date:				2003-02-24
- * Last change:			2004-06-19
+ * Last change:			2004-11-01
  * Copyright:           (c) 2001-2004 Thorsten Rinne
  * 
  * The contents of this file are subject to the Mozilla Public License
@@ -26,7 +26,7 @@ if ($permission["viewlog"]) {
 	$danz = 0;
 	$fir = 9999999999999999999999999;
 	$las = 0;		
-	$dir = opendir("../data");
+	$dir = opendir(PMF_ROOT_DIR."/data");
 	while($dat = readdir($dir)) {
 		if ($dat != "." && $dat != "..") {
 			$danz++;
@@ -48,8 +48,8 @@ if ($permission["viewlog"]) {
         <dd><?php print round(($vanz / $danz),2); ?></dd>
         <dt><strong><?php print $PMF_LANG["ad_stat_fien"]; ?>:</strong></dt>
         <dd><?php
-	if (is_file("../data/tracking".date("dmY", $fir))) {
-		$fp = @fopen("../data/tracking".date("dmY", $fir), "r");
+	if (is_file(PMF_ROOT_DIR."/data/tracking".date("dmY", $fir))) {
+		$fp = @fopen(PMF_ROOT_DIR."/data/tracking".date("dmY", $fir), "r");
 		list($dummy, $dummy, $dummy, $dummy, $dummy, $dummy, $dummy, $qstamp) = fgetcsv($fp, 1024, ";");
 		fclose($fp);	
 		print date("d.m.Y H:i:s", $qstamp);
@@ -59,8 +59,8 @@ if ($permission["viewlog"]) {
 		} ?></dd>
         <dt><strong><?php print $PMF_LANG["ad_stat_laen"]; ?>:</strong></dt>
         <dd><?php
-	if (is_file("../data/tracking".date("dmY", $las))) {
-		$fp = fopen("../data/tracking".date("dmY", $las), "r");
+	if (is_file(PMF_ROOT_DIR."/data/tracking".date("dmY", $las))) {
+		$fp = fopen(PMF_ROOT_DIR."/data/tracking".date("dmY", $las), "r");
 		while (list($dummy, $dummy, $dummy, $dummy, $dummy, $dummy, $dummy, $tstamp) = fgetcsv($fp, 1024, ";")) {
 			$stamp = $tstamp;
 			}
@@ -79,7 +79,7 @@ if ($permission["viewlog"]) {
 		<input type="hidden" name="aktion" value="sessionbrowse" />
 		<select name="day" size="1">
 <?php
-	$dir = opendir("../data");
+	$dir = opendir(PMF_ROOT_DIR."/data");
 	while ($dat = readdir($dir)) {
 		if ($dat != "." && $dat != "..") {
 			print "<option value=\"".FileToDate($dat)."\"";

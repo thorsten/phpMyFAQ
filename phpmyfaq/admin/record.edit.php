@@ -4,7 +4,7 @@
  * Description:			edit a record
  * Authors:				Thorsten Rinne <thorsten@phpmyfaq.de>
  * Date:				2003-02-23
- * Last change:			2004-07-29
+ * Last change:			2004-11-01
  * Copyright:           (c) 2001-2004 Thorsten Rinne
  * 
  * The contents of this file are subject to the Mozilla Public License
@@ -41,7 +41,8 @@ if ($permission["editbt"] && emptyTable(SQLPREFIX."faqcategory")) {
         $active = $_REQUEST["active"];
         $rubrik = $_REQUEST["rubrik"];
         $keywords = $_REQUEST["keywords"];
-        $thema = $_REQUEST["thema"];
+        $thema = stripslashes($_REQUEST["thema"]);
+        $content = stripslashes(htmlspecialchars($_REQUEST["content"]));
         $author = $_REQUEST["author"];
         $email = $_REQUEST["email"];
         $comment = $_REQUEST["comment"];
@@ -51,7 +52,7 @@ if ($permission["editbt"] && emptyTable(SQLPREFIX."faqcategory")) {
     elseif (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "editentry") {
 		if ((!isset($rubrik) && !isset($thema)) || (isset($_REQUEST["id"]) && $_REQUEST["id"] != "")) {
 		    adminlog("Beitragedit, ".$_REQUEST["id"]);
-			$result = $db->query("SELECT id, lang, active, rubrik, keywords, thema, content, author, email, comment, datum FROM ".SQLPREFIX."faqdata WHERE id = '".$_REQUEST["id"]."' AND lang = '".$_REQUEST["lang"]."'");
+			$result = $db->query("SELECT id, lang, active, rubrik, keywords, thema, content, author, email, comment, datum FROM ".SQLPREFIX."faqdata WHERE id = '".$_REQUEST["id"]."' AND lang = '".$_GET["lang"]."'");
 			list($id, $lang, $active, $rubrik, $keywords, $thema, $content, $author, $email, $comment, $date) = $db->fetch_row($result);
 			$acti = "saveentry&amp;id=".$_REQUEST["id"];
 			$id = $_REQUEST["id"];
@@ -77,7 +78,7 @@ if ($permission["editbt"] && emptyTable(SQLPREFIX."faqcategory")) {
     <dl>
 
     <dt><strong><?php print $PMF_LANG["ad_entry_theme"]; ?></strong></dt>
-    <dd><textarea class="admin" name="thema" style="width: 525px; height: 50px;" cols="2" rows="50"><?php if (isset($thema)) { print htmlspecialchars(stripslashes($thema), ENT_QUOTES); } ?></textarea></dd>
+    <dd><textarea class="admin" name="thema" style="width: 525px; height: 50px;" cols="2" rows="50"><?php if (isset($thema)) { print stripslashes($thema); } ?></textarea></dd>
 	
     <dt><strong><?php print $PMF_LANG["ad_entry_content"]; ?></strong></dt>
     <dd><noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript><textarea class="admin" id="content" name="content" cols="50" rows="10"><?php if (isset($content)) { print stripslashes($content); } ?></textarea></dd>
@@ -93,8 +94,8 @@ if ($permission["editbt"] && emptyTable(SQLPREFIX."faqcategory")) {
 ?>
         <strong><?php print "../attachments/".$id."/" ?></strong><br />
 <?php
-    		if (@is_dir("../attachments/".$id."/")) {
-    			$do = dir("../attachments/".$id."/");
+    		if (@is_dir(PMF_ROOT_DIR."/attachments/".$id."/")) {
+    			$do = dir(PMF_ROOT_DIR."/attachments/".$id."/");
     			while ($dat = $do->read()) {
     				if ($dat != "." && $dat != "..") {
     					print "<a href=\""."../attachments/".$id."/".$dat."\">".$dat."</a> ";

@@ -4,7 +4,7 @@
  * Description:			form to delete user comment
  * Authors:				Thorsten Rinne <thorsten@phpmyfaq.de>
  * Date:				2003-02-23
- * Last change:			2004-07-29
+ * Last change:			2004-11-01
  * Copyright:           (c) 2001-2004 Thorsten Rinne
  * 
  * The contents of this file are subject to the Mozilla Public License
@@ -27,7 +27,7 @@ if ($permission["delcomment"]) {
 	<input type="hidden" name="cmtid" value="<?php print $_REQUEST["cmtid"]; ?>" />
 	<input type="hidden" name="lang" value="<?php print $_REQUEST["lang"]; ?>" />
 <?php
-	$result = $db->query("SELECT usr,email,comment FROM ".SQLPREFIX."faqcomments WHERE id = '".$_REQUEST["artid"]."' AND id_comment = '".$_REQUEST["cmtid"]."'");
+	$result = $db->query("SELECT usr, email, comment FROM ".SQLPREFIX."faqcomments WHERE id = '".$_REQUEST["artid"]."' AND id_comment = '".$_REQUEST["cmtid"]."'");
 	list($usr,$eml,$cmt) = $db->fetch_row($result);
 ?>
     <p align="center"><?php print $PMF_LANG["ad_entry_delcom_1"]; ?> <a href="mailto:<?php print $eml; ?>"><?php print $usr; ?></a> <?php print $PMF_LANG["ad_entry_delcom_2"]; ?></p>

@@ -4,7 +4,7 @@
  * Description:			delete an attachment
  * Authors:				Thorsten Rinne <thorsten@phpmyfaq.de>
  * Date:				2003-02-24
- * Last change:			2004-07-29
+ * Last change:			2004-11-01
  * Copyright:           (c) 2001-2004 Thorsten Rinne
  * 
  * The contents of this file are subject to the Mozilla Public License
@@ -20,7 +20,7 @@
 
 print "<h2>".$PMF_LANG["ad_entry_aor"]."</h2>\n";
 if ($permission["delatt"]) {
-	if (unlink("../attachments/".$_REQUEST["id"]."/".$_REQUEST["which"])) {
+	if (unlink(PMF_ROOT_DIR."/attachments/".$_REQUEST["id"]."/".$_REQUEST["which"])) {
 		print "<p>".$PMF_LANG["ad_att_delsuc"]."</p>\n";
 		}
 	else {

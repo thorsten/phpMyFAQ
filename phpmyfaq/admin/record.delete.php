@@ -4,7 +4,7 @@
  * Description:			delete a record
  * Author:				Thorsten Rinne <thorsten@phpmyfaq.de>
  * Date:				2003-02-23
- * Last change:			2004-07-29
+ * Last change:			2004-11-01
  * Copyright:           (c) 2001-2004 Thorsten Rinne
  * 
  * The contents of this file are subject to the Mozilla Public License
@@ -23,14 +23,14 @@ if ($permission["delbt"]) {
 	if ($_REQUEST["subm"] == $PMF_LANG["ad_gen_yes"]) {
 		// "yes" -> delete it
 		adminlog("Beitragdel, ".$_REQUEST["id"]);
-		if (@is_dir("../attachments/".$_REQUEST["id"]."/")) {
-			$do = dir("../attachments/".$_REQUEST["id"]."/");
+		if (@is_dir(PMF_ROOT_DIR."/attachments/".$_REQUEST["id"]."/")) {
+			$do = dir(PMF_ROOT_DIR."/attachments/".$_REQUEST["id"]."/");
 			while ($dat = $do->read()) {
 				if ($dat != "." && $dat != "..") {
-					unlink("../attachments/".$_REQUEST["id"]."/".$dat);
+					unlink(PMF_ROOT_DIR."/attachments/".$_REQUEST["id"]."/".$dat);
 					}
 				}
-			rmdir ("../attachments/".$_REQUEST["id"]."/");
+			rmdir (PMF_ROOT_DIR."/attachments/".$_REQUEST["id"]."/");
 			}
 		$db->query("DELETE FROM ".SQLPREFIX."faqdata WHERE id = '".$_REQUEST["id"]."' AND lang = '".$_REQUEST["language"]."'");
 		$db->query("DELETE FROM ".SQLPREFIX."faqvoting WHERE artikel = '".$_REQUEST["id"]."' AND lang = '".$_REQUEST["language"]."'");
@@ -42,6 +42,7 @@ if ($permission["delbt"]) {
 	if ($_REQUEST["subm"] == $PMF_LANG["ad_gen_no"]) {
 		print "<p>".$PMF_LANG["ad_entry_delfail"]."<br />&nbsp;<br /><a href=\"javascript:history.back()\">".$PMF_LANG["ad_entry_back"]."</p></a>\n";
 		}
+    print "<p><img src=\"images/arrow.gif\" width=\"11\" height=\"11\" alt=\"\" border=\"0\"> <a href=\"".$_SERVER["PHP_SELF"].$linkext."&amp;aktion=accept\">".$PMF_LANG["ad_menu_entry_aprove"]."</a></p>\n";
 	}
 else {
 	print $PMF_LANG["err_NotAuth"];

@@ -4,7 +4,7 @@
  * Description:			add a record
  * Authors:				Thorsten Rinne <thorsten@phpmyfaq.de>
  * Date:				2003-02-23
- * Last change:			2004-07-23
+ * Last change:			2004-11-01
  * Copyright:           (c) 2001-2004 Thorsten Rinne
  * 
  * The contents of this file are subject to the Mozilla Public License
@@ -60,7 +60,7 @@ if ($permission["editbt"]) {
             }
 ?>
 	<h2><?php print $PMF_LANG["ad_entry_preview"]; ?></h2>
-	<p><strong><?php print $cat->categoryName[$rubrik]["name"]; ?>:</strong> <?php print $_REQUEST["thema"]; ?></p>
+	<p><strong><?php print $cat->categoryName[$rubrik]["name"]; ?>:</strong> <?php print stripslashes($_REQUEST["thema"]); ?></p>
 <?php
         $content = preg_replace_callback("{(<pre>.*</pre>)}siU", "pre_core", $_REQUEST["content"]);
         $content = preg_replace_callback("{(<pre+.*</pre>)}siU", "pre_core", $content);
@@ -69,8 +69,8 @@ if ($permission["editbt"]) {
     <p class="little"><?php print $PMF_LANG["msgLastUpdateArticle"].makeDate(date("YmdHis")); ?><br /><?php print $PMF_LANG["msgAuthor"].$_REQUEST["author"]; ?></p>
     <form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=editpreview" method="post">
     <input type="hidden" name="id" value="<?php print $id; ?>" />
-    <input type="hidden" name="thema" value="<?php print $_REQUEST["thema"]; ?>" />
-    <input type="hidden" name="content" value="<?php print stripslashes(str_replace("\"", "'", $_REQUEST["content"])); ?>" />
+    <input type="hidden" name="thema" value="<?php print htmlspecialchars($_REQUEST["thema"]); ?>" />
+    <input type="hidden" name="content" value="<?php print htmlspecialchars($_REQUEST["content"]); ?>" />
     <input type="hidden" name="lang" value="<?php print $_REQUEST["language"]; ?>" />
     <input type="hidden" name="keywords" value="<?php print $_REQUEST["keywords"]; ?>" />
     <input type="hidden" name="author" value="<?php print $_REQUEST["author"]; ?>" />

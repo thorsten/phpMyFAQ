@@ -2,9 +2,9 @@
 /******************************************************************************
  * File:				stat.form.php
  * Description:			form for the session search
- * Authors:				Thorsten Rinne		thorsten@phpmyfaq.de
+ * Authors:				Thorsten Rinne <thorsten@phpmyfaq.de>
  * Date:				2003-02-24
- * Last change:			2004-03-2543 Thorsten Rinne
+ * Last change:			2004-11-01
  * 
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -16,7 +16,7 @@
  * License for the specific language governing rights and limitations
  * under the License.
  ******************************************************************************/
-$dir = opendir("../data");
+$dir = opendir(PMF_ROOT_DIR."/data");
 while ($dat = readdir($dir)) {
 	if ($dat != "." && $dat != "..") {
 		$arrDates[] = FileToDate($dat);
