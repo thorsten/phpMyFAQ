@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.11 2004-12-29 20:05:33 thorstenr Exp $
+* $Id: artikel.php,v 1.12 2005-01-09 10:24:59 thorstenr Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -8,7 +8,7 @@
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Meikel Katzengreis <meikel@katzengreis.com>
 * @since        2002-08-27
-* @copyright    (c) 2001-2004 phpMyFAQ Team
+* @copyright    (c) 2001-2005 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -38,7 +38,7 @@ while ($row = $db->fetch_object($result)) {
 	$id = $row->id;
 	$comment = $row->comment;
 	logViews($id, $lang);
-	$content = str_replace('../', '', stripslashes($row->content));
+	$content = stripslashes($row->content);
 	if (is_dir('attachments/')  && is_dir('attachments/'.$id) && isset($PMF_CONF['disatt'])) {
 		$files = 0;
 		$outstr = "";
