@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.save.php,v 1.7 2004-12-16 12:26:24 thorstenr Exp $
+* $Id: record.save.php,v 1.8 2004-12-25 05:50:22 thorstenr Exp $
 *
 * Save or update a FAQ record
 *
@@ -82,19 +82,25 @@ if (isset($submit[1]) && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "") 
 	
     // save or update the FAQ record
 	if ($num == "1") {
-		$query = "UPDATE ".SQLPREFIX."faqdata SET thema = '".$thema."', content = '".$content."', keywords = '".$keywords."', author = '".$author."', active = '".$_REQUEST["active"]."', datum = '".$datum."', email = '".$db->escape_string($_REQUEST["email"])."', comment = '".$comment."' WHERE id = '".$_REQUEST["id"]."' AND lang = '".$_REQUEST["language"]."'";
+		$query = "UPDATE ".SQLPREFIX."faqdata SET thema = '".$thema."', content = '".$content."', keywords = '".$keywords."', author = '".$author."', active = '".$_REQUEST["active"]."', datum = '".$datum."', email = '".$db->escape_string($_REQUEST["email"])."', comment = '".$comment."' WHERE id = ".$_REQUEST["id"]." AND lang = '".$_REQUEST["language"]."'";
     } else {
-		$query = "INSERT INTO ".SQLPREFIX."faqdata (id, lang, thema, content, keywords, author, active, datum, email, comment) VALUES ('".$_REQUEST["id"]."','".$_REQUEST["language"]."', '".$thema."', '".$content."', '".$keywords."', '".$author."', '".$_REQUEST["active"]."', '".$datum."', '".$db->escape_string($_REQUEST["email"])."', '".$comment."')";
+		$query = "INSERT INTO ".SQLPREFIX."faqdata (id, lang, thema, content, keywords, author, active, datum, email, comment) VALUES (".$_REQUEST["id"].",'".$_REQUEST["language"]."', '".$thema."', '".$content."', '".$keywords."', '".$author."', '".$_REQUEST["active"]."', '".$datum."', '".$db->escape_string($_REQUEST["email"])."', '".$comment."')";
     }
-    
-	// save or update the category relations
-    
-    
     
 	if ($db->query($query)) {
 		print $PMF_LANG["ad_entry_savedsuc"];
     } else {
 		print $PMF_LANG["ad_entry_savedfail"].$db->error();
+    }
+    
+	// save or update the category relations
+    foreach ($rubrik as $categories) {
+        
+        if (!$db->query('INSERT INTO '.SQLQPREFIX.'faqcategoryrelations VALUES ('.$categories.', "'.$_REQUEST["lang"].'", '.$_REQUEST["id"].', "'.$_REQUEST["lang"].'")')) {
+            
+            $db->query('UPDATE '.SQLQPREFIX.'faqcategoryrelations SET record_id = '.$_REQUEST["id"].', record_lang = "'.$_REQUEST["lang"].'" WHERE category_id = '.$categories.' AND category_lang = "'.$_REQUEST["lang"].'"');
+        
+        }
     }
 }
 

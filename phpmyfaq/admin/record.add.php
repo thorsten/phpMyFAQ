@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.add.php,v 1.7 2004-12-16 12:26:24 thorstenr Exp $
+* $Id: record.add.php,v 1.8 2004-12-25 05:50:22 thorstenr Exp $
 *
 * Adds a record in the database
 *
@@ -35,25 +35,27 @@ if ($permission["editbt"]) {
 			$comment = "n";
 	    }
 		$datum = date("YmdHis");
-        
-        $category_query = '';
-        $catgories = $_REQUEST['rubrik'];
-        foreach ($catgories as $val) {
-            $category_query .= '';
-        }
+        $rubrik = $_REQUEST['rubrik'];
 		
         $result_record = $db->query("INSERT INTO ".SQLPREFIX."faqdata (id, lang, thema, content, keywords, author, active, datum, email, comment) VALUES (".$db->nextID(SQLPREFIX."faqdata", "id").", '".$lang."', '".$thema."', '".$content."', '".$keywords."', '".$author."', '".$_REQUEST["active"]."', '".$datum."', '".$_REQUEST["email"]."', '".$comment."')");
         
-        $result_categories = $db->query('INSERT INTO '.SQLPREFIX.'faqcategoryrelations (category_id, catgeory_lang, record_id, record_lang) VALUES ("", "", '.$db->insert_id(SQLPREFIX.'faqdata', 'id').', "'.$lang.'"');
-        
         $result_visits = $db->query("INSERT INTO ".SQLPREFIX."faqvisits (id, lang, visits, last_visit) VALUES (".$db->insert_id(SQLPREFIX."faqdata", "id").", '".$lang."', 1, ".time().")");
-        /*
-		if () {
-			print $PMF_LANG["ad_entryins_suc"];
-		}else {
-			print $PMF_LANG["ad_entryins_fail"];
-		}
-		*/
+    	
+        if ($result_record) {
+    		print $PMF_LANG["ad_entry_savedsuc"];
+        } else {
+    		print $PMF_LANG["ad_entry_savedfail"].$db->error();
+        }
+        
+        	// save or update the category relations
+        foreach ($rubrik as $categories) {
+            
+            if (!$db->query('INSERT INTO '.SQLQPREFIX.'faqcategoryrelations VALUES ('.$categories.', "'.$_REQUEST["lang"].'", '.$_REQUEST["id"].', "'.$_REQUEST["lang"].'")')) {
+                
+                $db->query('UPDATE '.SQLQPREFIX.'faqcategoryrelations SET record_id = '.$_REQUEST["id"].', record_lang = "'.$_REQUEST["lang"].'" WHERE category_id = '.$categories.' AND category_lang = "'.$_REQUEST["lang"].'"');
+            
+            }
+        }
 	}
 	
 	if (isset($submit[2]) && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "") {
