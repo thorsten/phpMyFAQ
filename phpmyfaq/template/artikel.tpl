@@ -32,5 +32,5 @@
     </form>
     <!-- /Voting Form -->
 
-    <p>{writeCommentMsg} | {writeListMsg}</p>
+    <p>{writeCommentMsg}</p>
     {writeComments}
