@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.20 2004-12-11 21:40:27 thorstenr Exp $
+* $Id: functions.php,v 1.21 2004-12-11 21:43:53 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -925,7 +925,7 @@ function generateXMLFile()
 * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since    2002-09-16
 */
-function searchEngine($begriff, &$num)
+function searchEngine($begriff)
 {
 	global $db, $sids, $tree, $PMF_LANG, $PMF_CONF;
 	$seite = "";
