@@ -81,7 +81,7 @@ if ($permission["viewlog"]) {
 <?php
 	$dir = opendir(PMF_ROOT_DIR."/data");
 	while ($dat = readdir($dir)) {
-		if ($dat != "." && $dat != "..") {
+		if ($dat != "." && $dat != ".." && strlen($dat) == 16 && !is_dir($dat)) {
 			print "<option value=\"".FileToDate($dat)."\"";
 			if (date("d.m.Y", FileToDate($dat)) == strftime("%d.%m.%Y", time())) {
 				print " selected=\"selected\"";
