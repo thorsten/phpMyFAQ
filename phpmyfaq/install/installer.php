@@ -1,9 +1,11 @@
 <?php
-/******************************************************************************
+/**
+ * $Id: installer.php,v 1.2 2004-11-06 10:24:42 thorstenr Exp $
+ *
  * Author:				Thorsten Rinne <thorsten@phpmyfaq.de>
  * Contributor:         Tom Rochester <tom.rochester@gmail.com>
  * Date:				2002-08-20
- * Last Update:			2004-10-10
+ * Last Update:			2004-11-06
  * Copyright:           (c) 2001-2004 Thorsten Rinne
  * 
  * The contents of this file are subject to the Mozilla Public License
@@ -156,7 +158,7 @@ function HTMLFooter() {
 <h1 id="header">phpMyFAQ <?php print VERSION; ?> Installation</h1>
 
 <?php
-if (php_check("4.1.0") == FALSE) {
+if (php_check(phpversion(), '4.1.0') == FALSE) {
 	print "<p class=\"center\">You need PHP Version 4.1.0 or higher!</p>\n";
 	HTMLFooter();
 	die();
