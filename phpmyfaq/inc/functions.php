@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.17 2004-11-30 21:42:24 thorstenr Exp $
+* $Id: functions.php,v 1.18 2004-12-11 19:31:52 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -163,7 +163,7 @@ function printThemes($category)
 		}
     
 	$result = $db->query('SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqvisits.visits FROM '.SQLPREFIX.'faqdata 
-LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang LEFT JOIN '.SQLPREFIX.'faqvisits ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvisits.id AND '.SQLPREFIX.'faqvisits.lang = '.SQLPREFIX.'faqdata.lang WHERE '.SQLPREFIX.'faqdata.active = "yes" AND '.SQLPREFIX.'faqcategoryrelations.category_id ='.$category.' ORDER BY '.SQLPREFIX.'faqdata.id LIMIT '.$first.', '.$PMF_CONF['numRecordsPage']);
+LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang LEFT JOIN '.SQLPREFIX.'faqvisits ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvisits.id AND '.SQLPREFIX.'faqvisits.lang = '.SQLPREFIX.'faqdata.lang WHERE '.SQLPREFIX.'faqdata.active = "yes" AND '.SQLPREFIX.'faqcategoryrelations.category_id ='.$category.' ORDER BY '.SQLPREFIX.'faqdata.id');
 	$num = $db->num_rows($result);
 	
 	if ($num > 0) {
@@ -171,7 +171,14 @@ LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPR
 			$output .= "<p><strong>".$PMF_LANG["msgPage"].$seite." ".$PMF_LANG["msgVoteFrom"]." ".$pages.$PMF_LANG["msgPages"]."</strong></p>";
 			}
 		$output .= "<ul class=\"phpmyfaq_ul\">\n";
-        while ($row = $db->fetch_object($result)) {
+		$counter = 0;
+		$displayedCounter = 0;
+		while (($row = $db->fetch_object($result)) && $displayedCounter < $PMF_CONF['numRecordsPage']) {
+			$counter ++;
+			if ($counter <= $first) {
+				next;
+			}
+			$displayedCounter++;
 			
             if (empty($row->visits)) {
                 
@@ -318,7 +325,7 @@ function Tracking($action, $id)
 			}
 		if (!isset($sid)) {
 			$db->query("INSERT INTO ".SQLPREFIX."faqsessions (IP,TIME) VALUES ('".$_SERVER["REMOTE_ADDR"]."', '".time()."')");
-			list($sid) = $db->fetch_row($db->query("SELECT sid FROM ".SQLPREFIX."faqsessions ORDER BY sid DESC LIMIT 0,1"));
+			list($sid) = $db->fetch_row($db->query("SELECT sid FROM ".SQLPREFIX."faqsessions ORDER BY sid DESC"));
 			}
 		$fp = @fopen("./data/tracking".date("dmY"), "a+b");
         if ($fp) {
@@ -403,11 +410,13 @@ function userOnline()
 function generateNews()
 {
 	global $db, $PMF_LANG, $PMF_CONF;
-	$result = $db->query("SELECT datum, header, artikel, link, linktitel, target FROM ".SQLPREFIX."faqnews ORDER BY datum desc LIMIT 0,".$PMF_CONF["numNewsArticles"]);
+	$counter = 0;
+	$result = $db->query("SELECT datum, header, artikel, link, linktitel, target FROM ".SQLPREFIX."faqnews ORDER BY datum desc");
 	$output = "";
 	if ($db->num_rows($result) > 0) {
-		while ($row = $db->fetch_object($result)) {
-            $output .= "<h3>".$row->header."</h3>\n<div class=\"block\"><span class=\"date\">".makeDate($row->datum)."</span>".stripslashes($row->artikel)."\n";
+		while (($row = $db->fetch_object($result)) && $counter < $PMF_CONF["numNewsArticles"]) {
+			$counter++;
+			$output .= "<h3>".$row->header."</h3>\n<div class=\"block\"><span class=\"date\">".makeDate($row->datum)."</span>".stripslashes($row->artikel)."\n";
             if ($row->link != "") {
     		    $output .= "<br />Info: <a href=\"http://".$row->link."\" target=\"_".$row->target."\">".$row->linktitel."</a>\n";
     		    }
@@ -431,12 +440,12 @@ function generateNews()
 function generateTopTen()
 {
 	global $db, $sids, $PMF_LANG;
-	$result = $db->query('SELECT DISTINCT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqvisits.visits FROM '.SQLPREFIX.'faqvisits, '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang WHERE '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvisits.id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqvisits.lang AND '.SQLPREFIX.'faqdata.active = "yes" ORDER BY '.SQLPREFIX.'faqvisits.visits DESC LIMIT 0, 10');
+	$result = $db->query('SELECT DISTINCT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqvisits.visits FROM '.SQLPREFIX.'faqvisits, '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang WHERE '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvisits.id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqvisits.lang AND '.SQLPREFIX.'faqdata.active = "yes" ORDER BY '.SQLPREFIX.'faqvisits.visits DESC');
     
 	$output = "";
 	if ($db->num_rows($result) > 0) {
 		$i = 1;
-		while ($row = $db->fetch_object($result)) {
+		while (($row = $db->fetch_object($result)) && $i <= 10)
 			$output .= "<tr>\n\t<td>\n";
             
             if (isset($PMF_CONF["mod_rewrite"])) {
@@ -467,11 +476,12 @@ function generateTopTen()
 function generateFiveNewest()
 {
 	global $db, $sids, $PMF_LANG;
-	$result = $db->query('SELECT DISTINCT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqdata.datum, '.SQLPREFIX.'faqvisits.visits FROM '.SQLPREFIX.'faqdata, '.SQLPREFIX.'faqvisits LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang WHERE '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvisits.id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqvisits.lang AND '.SQLPREFIX.'faqdata.active = "yes" ORDER BY '.SQLPREFIX.'faqdata.datum desc LIMIT 0, 5');
+	$result = $db->query('SELECT DISTINCT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqdata.datum, '.SQLPREFIX.'faqvisits.visits FROM '.SQLPREFIX.'faqvisits, '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang WHERE '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvisits.id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqvisits.lang AND '.SQLPREFIX.'faqdata.active = "yes" ORDER BY '.SQLPREFIX.'faqdata.datum DESC');
 	
 	if ($num = $db->num_rows($result) > 0) {
 		$output = "";
-		while ($row = $db->fetch_object($result)) {
+		$i = 0;
+		while (($row = $db->fetch_object($result)) && $i < 5 ) {
 			$output .= "\t\t<tr>\n";
 			$output .= "\t\t\t<td nowrap=\"nowrap\">".makeDate($row->datum)."</td>\n";
             
@@ -484,6 +494,7 @@ function generateFiveNewest()
             }
 			$output .= "\t\t\t<td nowrap=\"nowrap\">".$row->visits." ".$PMF_LANG["msgViews"]."</td>\n";
 			$output .= "\t\t</tr>\n";
+			$i++;
         }
     } else {
 		$output = "<tr class=\"fivenewest\"><td>".$PMF_LANG["err_noTopTen"]."</td></tr>\n";
