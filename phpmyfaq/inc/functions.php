@@ -1,15 +1,16 @@
 <?php
 /**
-* $Id: functions.php,v 1.59 2005-03-12 12:55:14 thorstenr Exp $
+* $Id: functions.php,v 1.60 2005-03-12 20:08:53 thorstenr Exp $
 *
 * This is the main functions file!
 *
-* @auhtor       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @auhtor       Matthias Sommerfeld <phlymail@phlylabs.de>
-* @auhtor       Bastian Pöttner <bastian@poettner.net>
-* @auhtor       Meikel Katzengreis <meikel@katzengreis.com>
+* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+* @author       Matthias Sommerfeld <phlymail@phlylabs.de>
+* @author       Bastian Pöttner <bastian@poettner.net>
+* @author       Meikel Katzengreis <meikel@katzengreis.com>
+* @author       Robin Wood <robin@digininja.org>
 * @since        2001-02-18
-* @copyright    (c) 2001-2004 phpMyFAQ Team
+* @copyright    (c) 2001-2005 phpMyFAQ Team
 *
 * Portions created by Matthias Sommerfeld are Copyright (c) 2001-2004 blue
 * birdy, Berlin (http://bluebirdy.de). All Rights Reserved.
@@ -446,16 +447,18 @@ function generateNews()
 		}
 }
 
+
+
 /**
-* This function generates the Top Ten with the mosted viewed records
+* This function generates the Top Ten data with the mosted viewed records
 *
-* @param    string
+* @param    string, int
 * @return   string
 * @access   public
-* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-* @since    2002-05-07
+* @author   Robin Wood <robin@digininja.org>
+* @since    2005-03-06
 */
-function generateTopTen($language = '')
+function generateTopTenData ($language = '', $count = 10)
 {
 	global $db, $sids, $PMF_LANG, $PMF_CONF;
 	$query = 'SELECT DISTINCT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqvisits.visits FROM '.SQLPREFIX.'faqvisits, '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang WHERE ';
@@ -467,28 +470,56 @@ function generateTopTen($language = '')
     $query .= SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvisits.id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqvisits.lang AND '.SQLPREFIX.'faqdata.active = \'yes\' ORDER BY '.SQLPREFIX.'faqvisits.visits DESC';
     
     $result = $db->query($query);
-	$output = "";
-	if ($db->num_rows($result) > 0) {
-		$i = 1;
-		while (($row = $db->fetch_object($result)) && $i <= 10) {
-			$output .= "<tr>\n\t<td>\n";
-            
-            if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == "TRUE") {
-                
-                $output .= "\t<strong>[".$i.".] ".$row->visits." ".$PMF_LANG["msgViews"].":</strong><br /><a href=\"".$row->category_id."_".$row->id."_".$row->lang.".html\">".stripslashes(makeShorterText($row->thema, 8))."</a>\n";
-            } else {
-                
-                $output .= "\t<strong>[".$i.".] ".$row->visits." ".$PMF_LANG["msgViews"].":</strong><br /><a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=artikel&amp;cat=".$row->category_id."&amp;id=".$row->id."&amp;artlang=".$row->lang."\">".stripslashes(makeShorterText($row->thema, 8))."</a>\n";
-            }
-            
-			$output .= "\t</td>\n\t</tr>\n";
-			$i++;
+	$returnArray = array();
+
+	$i = 1;
+	while (($row = $db->fetch_object($result)) && $i <= $count) {
+		$data['visits'] =  $row->visits;
+		$data['thema'] = $row->thema;
+
+		if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == "TRUE") {
+			$data['url'] = $row->category_id."_".$row->id."_".$row->lang.".html";
+		} else {
+			$data['url'] = $_SERVER["PHP_SELF"]."?".$sids."action=artikel&amp;cat=".$row->category_id."&amp;id=".$row->id."&amp;artlang=".$row->lang;
+		}
+		
+		$returnArray[] = $data;
+		$i++;
+	}
+    
+	return $returnArray;
+}
+
+
+
+/**
+* This function generates the Top Ten with the mosted viewed records
+*
+* @param    string
+* @return   string
+* @access   public
+* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+* @since    2002-05-07
+*/
+function generateTopTen($language = '')
+{
+	global $PMF_LANG, $PMF_CONF;
+    
+    $result = generateTopTenData($language, 10);
+	$output = "<ol>\n";
+	if (count($result) > 0) {
+		foreach ($result as $row) {
+            $output .= "\t<li><strong>".$row['visits']." ".$PMF_LANG["msgViews"].":</strong><br />";
+			$output .= '<a href="'.$row['url'] . '">'.stripslashes(makeShorterText($row['thema'], 8))."</a></li>\n";
 		}
 	} else {
-		$output = "<tr><td>".$PMF_LANG["err_noTopTen"]."</td></tr>\n";
+		$output = "\t<li>".$PMF_LANG["err_noTopTen"]."</li>\n";
 	}
+    $output .= "</ol>\n";
 	return $output;
 }
+
+
 
 /**
 * This function generates the list with the five latest published records
@@ -501,6 +532,39 @@ function generateTopTen($language = '')
 */
 function generateFiveNewest($language = '')
 {
+	global $PMF_LANG;
+	$result = generateNewestData ($language, 5);
+    
+	if (count ($result) > 0) {
+		$output = "";
+		$i = 0;
+		foreach ($result as $row) {
+			$output .= "\t\t<tr>\n";
+			$output .= "\t\t\t<td nowrap=\"nowrap\">".makeDate($row['datum'])."</td>\n";
+			$output .= "\t\t\t<td><a href=\"".$row['url'] . '">' .stripslashes(makeShorterText($row['thema'], 8))."</a></td>\n";
+			$output .= "\t\t\t<td nowrap=\"nowrap\">".$row['visits']." ".$PMF_LANG["msgViews"]."</td>\n";
+			$output .= "\t\t</tr>\n";
+			$i++;
+        }
+    } else {
+		$output = "<tr class=\"fivenewest\"><td>".$PMF_LANG["err_noArticles"]."</td></tr>\n";
+    }
+	return $output;
+}
+
+
+
+/**
+* This function generates an array with a specified number of most recent published records
+*
+* @param    string, int
+* @return   array
+* @access   public
+* @author   Robin Wood <robin@digininja.org>
+* @since    2005-03-06
+*/
+function generateNewestData($language = '', $count = 5)
+{
 	global $db, $sids, $PMF_LANG, $PMF_CONF;
 	$query = 'SELECT DISTINCT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqdata.datum, '.SQLPREFIX.'faqvisits.visits FROM '.SQLPREFIX.'faqvisits, '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang WHERE ';
     
@@ -510,29 +574,27 @@ function generateFiveNewest($language = '')
     
     $query .= SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvisits.id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqvisits.lang AND '.SQLPREFIX.'faqdata.active = \'yes\' ORDER BY '.SQLPREFIX.'faqdata.datum DESC';
     $result = $db->query($query);
-	if ($db->num_rows($result) > 0) {
-		$output = "";
-		$i = 0;
-		while (($row = $db->fetch_object($result)) && $i < 5 ) {
-			$output .= "\t\t<tr>\n";
-			$output .= "\t\t\t<td nowrap=\"nowrap\">".makeDate($row->datum)."</td>\n";
-            
-            if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == "TRUE") {
-                
-                $output .= "\t\t\t<td><a href=\"".$row->category_id."_".$row->id."_".$row->lang.".html\">".stripslashes(makeShorterText($row->thema, 8))."</a></td>\n";
-            } else {
-                
-                $output .= "\t\t\t<td><a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=artikel&amp;cat=".$row->category_id."&amp;id=".$row->id."&amp;artlang=".$row->lang."\">".stripslashes(makeShorterText($row->thema, 8))."</a></td>\n";
-            }
-			$output .= "\t\t\t<td nowrap=\"nowrap\">".$row->visits." ".$PMF_LANG["msgViews"]."</td>\n";
-			$output .= "\t\t</tr>\n";
-			$i++;
-        }
-    } else {
-		$output = "<tr class=\"fivenewest\"><td>".$PMF_LANG["err_noTopTen"]."</td></tr>\n";
-    }
-	return $output;
+
+	$newestArray = array();
+
+	$i = 0;
+	while (($row = $db->fetch_object($result)) && $i < $count ) {
+		$data['datum'] = $row->datum;
+		
+		$data['thema'] = $row->thema;
+		if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == "TRUE") {
+			$data['url'] = $row->category_id."_".$row->id."_".$row->lang.".html";
+		} else {
+			$data['url'] = $_SERVER["PHP_SELF"]."?".$sids."action=artikel&amp;cat=".$row->category_id."&amp;id=".$row->id."&amp;artlang=".$row->lang;
+		}
+		$data['visits'] = $row->visits;
+		$newestArray[] = $data;
+		$i++;
+	}
+	return ($newestArray);
 }
+
+
 
 /*
  * Kürzt einen String auf eine bestimmte Anzahl von Wörtern | @@ Thorsten - 2002-08-26
