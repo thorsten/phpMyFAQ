@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: adminlog.php,v 1.3 2004-12-13 20:03:01 thorstenr Exp $
+* $Id: adminlog.php,v 1.4 2004-12-16 11:47:31 thorstenr Exp $
 *
 * Overview of actions in the admin section
 *
@@ -39,7 +39,7 @@ if ($permission["adminlog"]) {
 	
 	$PageSpan = PageSpan("<a href=\"".$_SERVER["PHP_SELF"].$linkext."&amp;aktion=adminlog&amp;pages=".$pages."&amp;page=<NUM>\">", 1, $pages, $page);
 	
-	$result = $db->query("SELECT id, time, usr, text, ip FROM ".SQLPREFIX."faqadminlog ORDER BY id DESC LIMIT ".$start.", ".$perpage);
+	$result = $db->query("SELECT id, time, usr, text, ip FROM ".SQLPREFIX."faqadminlog ORDER BY id DESC");
 ?>
 	<h2><?php print $PMF_LANG["ad_adminlog"]; ?></h2>
     <table class="list">
@@ -58,8 +58,17 @@ if ($permission["adminlog"]) {
     </tfoot>
     <tbody>
 <?php
-	while (list($id,$tim,$usr,$text,$ip) = $db->fetch_row($result)) {
-		list($usr) = $db->fetch_row($db->query("SELECT NAME FROM ".SQLPREFIX."faquser WHERE id = ".$usr));
+    $counter = 0;
+    $displayedCounter = 0;
+    while ((list($id,$tim,$usr,$text,$ip) = $db->fetch_row($result)) && $displayedCounter < $perpage) {
+
+        $counter++;
+        if ($counter <= $start) {
+            next;
+        }
+        $displayedCounter++; 
+		
+        list($usr) = $db->fetch_row($db->query("SELECT NAME FROM ".SQLPREFIX."faquser WHERE id = ".$usr));
 ?>
         <tr class="cell">
             <td class="list"><?php print $id; ?></td>
