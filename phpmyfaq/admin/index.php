@@ -1,29 +1,31 @@
 <?php
-/******************************************************************************
- * File:				index.php
- * Author:				Thorsten Rinne <thorsten@phpmyfaq.de>
- * Contributors:		Bastian Poettner <bastian@poettner.net>
- *                      Meikel Katzengreis <meikel@katzengreis.com>
- * Date:				2002-09-16
- * Last change:			2004-11-12
- * Copyright:			(c) 2001-2004 Thorsten Rinne
- * 
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- * 
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- ******************************************************************************/
+/**
+* $Id: index.php,v 1.6 2004-12-25 05:59:24 thorstenr Exp $
+*
+* The main admin backend index file
+*
+* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+* @author       Bastian Poettner <bastian@poettner.net>
+* @author       Meikel Katzengreis <meikel@katzengreis.com>
+* @since        2002-09-16
+* @copyright    (c) 2001-2004 phpMyFAQ Team
+* 
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
+* 
+* Software distributed under the License is distributed on an "AS IS"
+* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+* License for the specific language governing rights and limitations
+* under the License.
+*/
 
 /* debug mode:
  * - FALSE	debug mode disabled
  * - TRUE	debug mode enabled
  */
-define("DEBUG", TRUE);
+define("DEBUG", FALSE);
 define("PMF_ROOT_DIR", dirname(dirname(__FILE__)));
 
 if (DEBUG == FALSE) {
