@@ -29,7 +29,8 @@ if ($permission["editcateg"]) {
     }
 ?>
 
-    <form action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=category" enctype="multipart/form-data" method="POST">
+    <form action="<?php print $_SERVER['PHP_SELF'].$linkext; ?>" enctype="multipart/form-data" method="POST">
+    <input type="hidden" name="aktion" value="category" />
     <fieldset>
     <legend>Select category language</legend>
     <select name="language" id="language">
