@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mysql.sql.php,v 1.4 2004-11-25 20:58:11 thorstenr Exp $
+* $Id: mysql.sql.php,v 1.5 2004-11-30 07:03:48 thorstenr Exp $
 *
 * CREATE TABLE instruction for MySQL database
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -78,7 +78,7 @@ time int(11) NOT NULL)";
 
 //faqcategories
 $query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqcategories (
-id INT(11) NOT NULL AUTO_INCREMENT,
+id INT(11) NOT NULL,
 lang VARCHAR(5) NOT NULL,
 parent_id INT(11) NOT NULL,
 name VARCHAR(255) NOT NULL,
