@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.7 2004-11-13 20:42:40 thorstenr Exp $
+ * $Id: functions.php,v 1.8 2004-11-19 17:33:37 thorstenr Exp $
  *
  * File:                functions.php
  * Description:         This is the main functions file!
@@ -9,7 +9,7 @@
  *                      Bastian Pöttner <bastian@poettner.net>
  *                      Meikel Katzengreis
  * Date:                2001-02-18
- * Last Update:         2004-11-10
+ * Last Update:         2004-11-19
  * Copyright:           (c) 2001-2004 phpMyFAQ Team
  *
  * Portions created by Matthias Sommerfeld are Copyright (c) 2001-2004 blue
@@ -906,6 +906,25 @@ function searchEngine($begriff)
 		}
 	
 	$result = $db->search(SQLPREFIX."faqdata", array("id" => NULL, "lang" => NULL, "rubrik" => NULL, "thema" => NULL, "content" => NULL), array("thema", "content", "keywords"), $begriff, array("active" => "yes"), $PMF_CONF["numRecordsPage"], $x);
+    
+    if (0 == $num) {
+        
+        $keys = preg_split("/\s+/", $begriff);
+        $numKeys = count($keys);
+        for ($i = 0; $i < $numKeys; $i++) {
+            
+            if (strlen($where) != 0 ) {
+                $where = $where." OR ";
+            }
+            
+            $where = $where."(keywords LIKE '%".$keys[$i]."%')";
+        }
+        
+        $where = " WHERE (".$where.") AND active = 'yes'";
+        $query = "SELECT id, lang, rubrik, thema, content FROM ".SQLPREFIX."faqdata ".$where;
+        $result = $db->query($query);
+        $num = $db->num_rows($result);
+    }
     
 	if ($num > 0) {
 		if ($num == "1") {
