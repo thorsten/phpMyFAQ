@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.12 2004-11-23 20:23:05 thorstenr Exp $
+ * $Id: functions.php,v 1.13 2004-11-24 21:55:01 thorstenr Exp $
  *
  * File:                functions.php
  * Description:         This is the main functions file!
@@ -802,24 +802,47 @@ function generateXMLExport($id, $lang = "")
 */
 function generateXHTMLFile()
 {
-	global $db, $tree, $PMF_CONF, $PMF_LANG;
+	global $db, $PMF_CONF, $PMF_LANG;
+    
+    $tree = new Category();
+    $tree->transform(0);
+    $old = 0;
+    
 	$result = $db->query("SELECT id, lang, active, rubrik, thema, content, author, datum FROM ".SQLPREFIX."faqdata ORDER BY rubrik, id");
-	if ($db->num_rows($result) > 0) {
+    
+    $xhtml = '<?xml version="1.0" encoding="'.$PMF_LANG['metaCharset'].'" ?>';
+    $xhtml .= '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
+    $xhtml .= '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="'.$PMF_LANG['metaLanguage'].'" lang="'.$PMF_LANG['metaLanguage'].'">';
+    $xhtml .= '<head>';
+    $xhtml .= '    <title>'.$PMF_CONF['title'].'</title>';
+    $xhtml .= '    <meta http-equiv="Content-Type" content="application/xhtml+xml; charset='.$PMF_LANG['metaCharset'].'" />';
+    $xhtml .= '    <meta name="title" content="'.$PMF_CONF['title'].'" />';
+    $xhtml .= '</head>';
+    $xhtml .= '<body dir="'.$PMF_LANG['dir'].'">';
+    
+    if ($db->num_rows($result) > 0) {
         
-        $xhtml = '<?xml version="1.0" encoding="'.$PMF_LANG['metaCharset'].'" ?>';
-        $xhtml .= '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
-        $xhtml .= '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="'.$PMF_LANG['metaLanguage'].'" lang="'.$PMF_LANG['metaLanguage'].'">';
-        $xhtml .= '<head>';
-        $xhtml .= '    <title>'.$PMF_CONF['title'].'</title>';
-        $xhtml .= '    <meta http-equiv="Content-Type" content="application/xhtml+xml; charset='.$PMF_LANG['metaCharset'].'" />';
-        $xhtml .= '    <meta name="title" content="{title}" />';
-        $xhtml .= '</head>';
-        $xhtml .= '<body dir="{dir}">';
-        
-        
-        $xhtml .= '</body>';
-        $xhtml .= '</html>';
+        while (list($id, $lang, $active, $rub, $thema, $content, $author, $datum) = $db->fetch_row($result)) {
+            if ($rub != $old) {
+                $xhtml .= '<h1>'.$tree->getPath($rub).'</h1>';
+            }
+            $xhtml .= '<h2>'.$thema.'</h2>';
+            $xhtml .= '<p>'.stripslashes($content).'</p>';
+            $xhtml .= '<p>'.$PMF_LANG["msgAuthor"].$author.'<br />';
+            $xhtml .= $PMF_LANG["msgLastUpdateArticle"].makeDate($row->datum).'</p>';
+            $xhtml .= '<hr style="width: 90%;" />';
+            $old = $rub;
+        }
     }
+    $xhtml .= '</body>';
+    $xhtml .= '</html>';
+    
+    if ($fp = fopen("../xml/phpmyfaq.html","w")) {
+        
+        fputs($fp, $xhtml);
+		fclose($fp);
+    }
+    print "<p><a href=\"../xml/phpmyfaq.html\" target=\"_blank\">XHTML File okay!</a></p>";
 }
 
 /*
