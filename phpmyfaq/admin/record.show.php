@@ -1,22 +1,23 @@
 <?php
-/******************************************************************************
- * File:				record.show.php
- * Description:			show a record
- * Authors:				Thorsten Rinne <thorsten@phpmyfaq.de>
- * Date:				2003-02-23
- * Last change:			2004-11-12
- * Copyright:           (c) 2001-2004 Thorsten Rinne
- * 
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- * 
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- ******************************************************************************/
+/**
+* $Id: record.show.php,v 1.8 2005-01-04 15:44:02 thorstenr Exp $
+*
+* Shows the list of records ordered by categories
+*
+* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+* @since        2003-02-23
+* @copyright    (c) 2001 - 2005 phpMyFAQ Team
+* 
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
+* 
+* Software distributed under the License is distributed on an "AS IS"
+* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+* License for the specific language governing rights and limitations
+* under the License.
+*/
 
 print "<h2>".$PMF_LANG["ad_entry_aor"]."</h2>\n";
 if ($permission["editbt"] || $permission["delbt"]) {
@@ -96,7 +97,7 @@ if ($permission["editbt"] || $permission["delbt"]) {
             if ($counter <= $start) {
                 next;
             }
-            $displayCounter++; 
+            $displayedCounter++; 
             
             if ($rub != $old) {
 			    if ($old == 0) {
