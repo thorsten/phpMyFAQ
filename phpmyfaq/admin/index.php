@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.8 2005-01-02 13:30:16 thorstenr Exp $
+* $Id: index.php,v 1.9 2005-03-19 08:36:46 thorstenr Exp $
 *
 * The main admin backend index file
 *
@@ -96,7 +96,7 @@ if (isset($_REQUEST["uin"])) {
 }
 if (isset($uin)) {
 	$query = "SELECT usr, pass FROM ".SQLPREFIX."faqadminsessions WHERE uin = '".$uin."'";
-	if ($PMF_CONF["ipcheck"]) {
+	if (isset($PMF_CONF["ipcheck"]) && $PMF_CONF["ipcheck"] == "TRUE") {
 		$query .= " AND ip = '".$_SERVER["REMOTE_ADDR"]."'";
 	}
 	list($user, $pass) = $db->fetch_row($db->query($query));
