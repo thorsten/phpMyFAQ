@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.55 2005-02-22 20:51:03 thorstenr Exp $
+* $Id: functions.php,v 1.56 2005-03-08 19:00:25 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -1083,13 +1083,6 @@ function searchEngine($begriff)
                           $begriff,
                           array(SQLPREFIX."faqdata.active"=>"yes"));
 	$num = $db->num_rows($result);
-	
-    $pages = ceil($num / $PMF_CONF["numRecordsPage"]);
-	$y = $seite * $PMF_CONF["numRecordsPage"]; 
-	$x = $y - $PMF_CONF["numRecordsPage"];
-	if ($y > $num) {
-		$y = $num;
-		}
     
     if (0 == $num) {
         
@@ -1108,7 +1101,15 @@ function searchEngine($begriff)
         $where = " WHERE (".$where.") AND active = 'yes'";
         $query = 'SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.record_id, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqdata.content FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang '.$where;
         $result = $db->query($query);
+        $num = $db->num_rows($result);
     }
+    
+    $pages = ceil($num / $PMF_CONF["numRecordsPage"]);
+	$y = $seite * $PMF_CONF["numRecordsPage"]; 
+	$x = $y - $PMF_CONF["numRecordsPage"];
+	if ($y > $num) {
+		$y = $num;
+	}
     
 	if ($num > 0) {
 		if ($num == "1") {
