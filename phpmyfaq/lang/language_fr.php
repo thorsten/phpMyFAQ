@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_fr.php,v 1.4 2005-02-15 20:43:22 thorstenr Exp $
+* $Id: language_fr.php,v 1.5 2005-02-17 11:27:27 thorstenr Exp $
 *
 * The French language file - try to be the best
 *
@@ -23,7 +23,7 @@
 
 $PMF_LANG["metaCharset"] = "iso-8859-1";
 $PMF_LANG["metaLanguage"] = "fr";
-$PMF_LANG["language"] = "french";
+$PMF_LANG["language"] = "French";
 $PMF_LANG["dir"] = "ltr"; // ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
 
 // Navigation
@@ -591,3 +591,4 @@ $PMF_LANG["lostpwd_mail_okay"] = "L'e-mail a &eacute;t&eacute; envoy&eacute;.";
 $PMF_LANG["ad_xmlrpc_button"] = "Obtenez la derni&eacute;re version de phpMyFAQ";
 $PMF_LANG["ad_xmlrpc_latest"] = "Derni&eacute;re version disponible sur";
 ?>
+>>>>>>> 1.4
