@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: search.php,v 1.2 2005-01-09 12:15:43 thorstenr Exp $
+* $Id: search.php,v 1.3 2005-02-22 19:50:04 thorstenr Exp $
 *
 * The fulltext search page
 *
@@ -24,16 +24,15 @@ Tracking("searchpage",0);
 if (isset($_REQUEST["suchbegriff"]) || isset($_GET["search"])) {
 	if (isset($_REQUEST["suchbegriff"])) {
 		$suchbegriff = safeSQL($_REQUEST["suchbegriff"]);
-		}
+	}
 	if (isset($_REQUEST["search"])) {
 		$suchbegriff = safeSQL($_REQUEST["search"]);
-		}
-	$printResult = searchEngine($suchbegriff);
 	}
-else {
+	$printResult = searchEngine($suchbegriff);
+} else {
 	$printResult = $PMF_LANG["help_search"];
     $suchbegriff = "";
-	}
+}
 
 $tpl->processTemplate ("writeContent", array(
 				"msgSearch" => $PMF_LANG["msgSearch"],
