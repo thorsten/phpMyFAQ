@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: writecomment.php,v 1.2 2004-11-22 21:09:48 thorstenr Exp $
+* $Id: writecomment.php,v 1.3 2004-12-16 13:36:53 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-08-29
@@ -27,6 +27,8 @@ $tpl->processTemplate('writeContent', array(
                       'writeThema' => stripslashes(getThema($_GET['id'], $_GET['artlang'])),
                       'msgNewContentName' => $PMF_LANG['msgNewContentName'],
                       'msgNewContentMail' => $PMF_LANG['msgNewContentMail'],
+                      'defaultContentMail' => getEmailAddress(),
+                      'defaultContentName' => getFullUserName(), 
                       'msgYourComment' => $PMF_LANG['msgYourComment'],
                       'msgNewContentSubmit' => $PMF_LANG['msgNewContentSubmit'],
                       'copyright_eintrag' => unhtmlentities($PMF_CONF['copyright_eintrag'])));

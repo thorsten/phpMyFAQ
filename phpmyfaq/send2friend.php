@@ -27,6 +27,8 @@ $tpl->processTemplate ("writeContent", array(
 				"msgS2FReferrer" => 'link',
 				"msgS2FName" => $PMF_LANG["msgS2FName"],
 				"msgS2FEMail" => $PMF_LANG["msgS2FEMail"],
+				"defaultContentMail" => getEmailAddress(),
+                "defaultContentName" => getFullUserName(), 
 				"msgS2FFriends" => $PMF_LANG["msgS2FFriends"],
 				"msgS2FEMails" => $PMF_LANG["msgS2FEMails"],
 				"msgS2FText" => $PMF_LANG["msgS2FText"],
