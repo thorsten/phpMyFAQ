@@ -44,7 +44,7 @@ if ($permission["editbt"] || $permission["delbt"]) {
 	
     if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "view" && !isset($_REQUEST["suchbegriff"])) {
         
-        $result = $db->query("SELECT id, lang, rubrik, thema, author FROM ".SQLPREFIX."faqdata WHERE active = 'yes' ORDER BY rubrik, id LIMIT ".$start.", ".$perpage);
+        $result = $db->query('SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqdata.author FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang WHERE '.SQLPREFIX.'faqdata.active = "yes" ORDER BY '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.id LIMIT '.$start.', '.$perpage);
         $laktion = 'view';
         $internalSearch = '';
         
@@ -66,7 +66,7 @@ if ($permission["editbt"] || $permission["delbt"]) {
         
     } else if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "accept") {
         
-        $result = $db->query("SELECT id, lang, rubrik, thema, author FROM ".SQLPREFIX."faqdata WHERE active = 'no' ORDER BY rubrik, id  LIMIT ".$start.", ".$perpage);
+        $result = $db->query('SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqdata.author FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang WHERE '.SQLPREFIX.'faqdata.active = "no" ORDER BY '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.id LIMIT '.$start.', '.$perpage);
         $laktion = "accept";
         $internalSearch = "";
     }

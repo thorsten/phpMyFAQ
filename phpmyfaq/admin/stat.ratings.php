@@ -1,29 +1,31 @@
 <?php
-/******************************************************************************
- * File:				stat.ratings.php
- * Description:			show the ratings
- * Authors:				Thorsten Rinne <thorsten@phpmyfaq.de>
- * Date:				2003-02-24
- * Last change:			2004-06-20
- * Copyright:           (c) 2001-2004 Thorsten Rinne
- * 
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- * 
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- ******************************************************************************/
+/**
+* $Id: stat.ratings.php,v 1.2 2004-11-30 20:02:42 thorstenr Exp $
+*
+* The page with the ratings of the votings
+*
+* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+* @since        2003-02-24
+* @copyright    (c) 2001-2004 phpMyFAQ Team
+* 
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
+* 
+* Software distributed under the License is distributed on an "AS IS"
+* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+* License for the specific language governing rights and limitations
+* under the License.
+*/
+
 if ($permission["viewlog"]) {
 	$tree = new Category();
 ?>
 	<h2><?php print $PMF_LANG["ad_rs"] ?></h2>
     <table class="list">
 <?php
-	$result = $db->query("SELECT DISTINCT ".SQLPREFIX."faqdata.id, ".SQLPREFIX."faqdata.lang, ".SQLPREFIX."faqdata.active, ".SQLPREFIX."faqdata.rubrik, ".SQLPREFIX."faqdata.thema, ( ".SQLPREFIX."faqvoting.vote / ".SQLPREFIX."faqvoting.usr ) AS num, ".SQLPREFIX."faqvoting.usr FROM ".SQLPREFIX."faqdata, ".SQLPREFIX."faqvoting WHERE ".SQLPREFIX."faqdata.id = ".SQLPREFIX."faqvoting.artikel GROUP BY ".SQLPREFIX."faqdata.id, ".SQLPREFIX."faqdata.lang, ".SQLPREFIX."faqdata.active, ".SQLPREFIX."faqdata.rubrik, ".SQLPREFIX."faqdata.thema, ".SQLPREFIX."faqvoting.vote, ".SQLPREFIX."faqvoting.usr ORDER BY ".SQLPREFIX."faqdata.rubrik");
+	$result = $db->query('SELECT DISTINCT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqdata.active, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema, ( '.SQLPREFIX.'faqvoting.vote / '.SQLPREFIX.'faqvoting.usr ) AS num, '.SQLPREFIX.'faqvoting.usr FROM '.SQLPREFIX.'faqdata, '.SQLPREFIX.'faqvoting LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang WHERE '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvoting.artikel GROUP BY '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqdata.active, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqvoting.vote, '.SQLPREFIX.'faqvoting.usr ORDER BY '.SQLPREFIX.'faqcategoryrelations.category_id');
 	$anz = $db->num_rows($result);
 	$old = "";
 	while (list($id, $lang, $active, $rubrik, $thema, $num, $user) = $db->fetch_row($result)) {
