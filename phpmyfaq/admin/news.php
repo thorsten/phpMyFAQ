@@ -1,22 +1,23 @@
 <?php
-/******************************************************************************
- * File:				news.php
- * Description:			add, edit or delete news
- * Authors:				Thorsten Rinne <thorsten@phpmyfaq.de>
- * Date:				2003-02-23
- * Last change:			2004-07-23
- * Copyright:           (c) 2001-2004 Thorsten Rinne
- * 
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- * 
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- ******************************************************************************/
+/**
+* $Id: news.php,v 1.2 2004-12-11 18:11:33 thorstenr Exp $
+*
+* The main administration file for the news
+*
+* @author			Thorsten Rinne <thorsten@phpmyfaq.de>
+* @since			2003-02-23
+* @copyright		(c) 2001-2004 phpMyFAQ Team
+* 
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
+* 
+* Software distributed under the License is distributed on an "AS IS"
+* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+* License for the specific language governing rights and limitations
+* under the License.
+*/
 if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews"]) {
 ?>
 	<h2><?php print $PMF_LANG["ad_news_add"]; ?></h2>
@@ -122,7 +123,8 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "save" && $permission["addnews"
 	else {
 		$target = $_REQUEST["target"];
 		}
-    $result = $db->query("INSERT INTO ".SQLPREFIX."faqnews (header,artikel,link,linktitel,datum,target) VALUES ('".$_REQUEST["header"]."','".$artikel."','".$_REQUEST["link"]."','".$_REQUEST["linktitel"]."','".$datum."','".$target."')");
+    $result = $db->query("INSERT INTO ".SQLPREFIX."faqnews (id, header, artikel, link, linktitel, datum, target) VALUES (".$db->insert_id(SQLPREFIX."faqnews",
+"id").", '".$_REQUEST["header"]."', '".$artikel."', '".$_REQUEST["link"]."', '".$_REQUEST["linktitel"]."', '".$datum."', '".$target."')");
 	print "<p>".$PMF_LANG["ad_news_updatesuc"]."</p>";
 	}
 elseif (isset($_REQUEST["do"]) && $_REQUEST["do"] == "save" && $permission["addnews"]) {

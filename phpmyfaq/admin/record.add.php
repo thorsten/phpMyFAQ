@@ -23,30 +23,36 @@ if ($permission["editbt"]) {
 	if (isset($submit[1]) && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "") {
 		// new entry
 		adminlog("Beitragcreatesave");
+        $lang = $_REQUEST["language"];
 		$thema = addslashes($_REQUEST["thema"]);
 		$content = addslashes($_REQUEST["content"]);
 		$keywords = addslashes($_REQUEST["keywords"]);
 		$author = addslashes($_REQUEST["author"]);
         if (isset($_REQUEST["comment"])) {
             $comment = $_REQUEST["comment"];
-            }
-        else {
+        } else {
 			$comment = "n";
-			}
+	    }
 		$datum = date("YmdHis");
+        
+        $category_query = '';
+        $catgories = $_REQUEST['rubrik'];
+        foreach ($catgories as $val) {
+            $category_query .= 
+        }
 		
-		if ($db->query("INSERT INTO ".SQLPREFIX."faqdata (lang, thema, content, keywords, author, active, datum, email, comment) VALUES ('".$_REQUEST["language"]."', '".$thema."', '".$content."', '".$keywords."', '".$author."', '".$_REQUEST["active"]."', '".$datum."', '".$_REQUEST["email"]."', '".$comment."')")) {
-			if ($db->query("INSERT INTO ".SQLPREFIX."faqvisits (id, lang, visits, last_visit) VALUES ('".$db->insert_id(SQLPREFIX."faqdata", "id")."', '".$_REQUEST["language"]."', '1', '".time()."')")) {
-				print $PMF_LANG["ad_entryins_suc"];
-				}
-			else {
-				print $PMF_LANG["ad_entryins_fail"];
-				}
-			}
-		else {
+        $result_record = $db->query("INSERT INTO ".SQLPREFIX."faqdata (id, lang, thema, content, keywords, author, active, datum, email, comment) VALUES (".$db->insert_id(SQLPREFIX."faqdata", "id").", '".$lang."', '".$thema."', '".$content."', '".$keywords."', '".$author."', '".$_REQUEST["active"]."', '".$datum."', '".$_REQUEST["email"]."', '".$comment."')");
+        
+        $result_categories = $db->query('INSERT INTO '.SQLPREFIX.'faqcategoryrelations (category_id, catgeory_lang, record_id, record_lang) VALUES ('', '', '.$db->insert_id(SQLPREFIX.'faqdata', 'id').', "'.$lang'"');
+        
+        $result_visits = $db->query("INSERT INTO ".SQLPREFIX."faqvisits (id, lang, visits, last_visit) VALUES ('".$db->insert_id(SQLPREFIX."faqdata", "id") - 1."', '".$lang."', '1', '".time()."')");
+        
+		if () {
+			print $PMF_LANG["ad_entryins_suc"];
+		}else {
 			print $PMF_LANG["ad_entryins_fail"];
-			}
 		}
+	}
 	
 	if (isset($submit[2]) && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "") {
 		// Preview
