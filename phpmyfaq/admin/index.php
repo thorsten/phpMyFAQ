@@ -5,7 +5,7 @@
  * Contributors:		Bastian Poettner <bastian@poettner.net>
  *                      Meikel Katzengreis <meikel@katzengreis.com>
  * Date:				2002-09-16
- * Last change:			2004-11-01
+ * Last change:			2004-11-12
  * Copyright:			(c) 2001-2004 Thorsten Rinne
  * 
  * The contents of this file are subject to the Mozilla Public License
@@ -23,10 +23,10 @@
  * - FALSE	debug mode disabled
  * - TRUE	debug mode enabled
  */
-define("DEBUG", FALSE);
+define("DEBUG", TRUE);
 define("PMF_ROOT_DIR", dirname(dirname(__FILE__)));
 
-if (DEBUG == TRUE) {
+if (DEBUG == FALSE) {
 	error_reporting(E_ALL);
 	}
 
@@ -278,10 +278,10 @@ if (isset($auth)) {
 		<dd><?php print $rg; ?></dd>
 		<dt><strong>Safe Mode</strong></dt>
 		<dd><?php print $sm; ?></dd>
-		<dt><strong>MySQL Client Version</strong></dt>
-		<dd>MySQL <?php print mysql_get_client_info(); ?></dd>
-		<dt><strong>MySQL Server Version</strong></dt>
-		<dd>MySQL <?php print mysql_get_server_info(); ?></dd>
+		<dt><strong>Database Client Version</strong></dt>
+		<dd><?php print $db->version(); ?></dd>
+		<dt><strong>Database Server Version</strong></dt>
+		<dd><?php //print mysql_get_server_info(); ?></dd>
 		<dt><strong>Webserver Interface</strong></dt>
 		<dd><?php print strtoupper(@php_sapi_name()); ?></dd>
     </dl>
