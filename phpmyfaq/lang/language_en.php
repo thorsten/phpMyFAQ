@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.3 2004-12-11 19:35:16 thorstenr Exp $
+* $Id: language_en.php,v 1.4 2004-12-16 13:12:37 thorstenr Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -392,7 +392,7 @@ $PMF_LANG["ad_att_delfail"] = "An error occured while deleting the attachment.";
 $PMF_LANG["ad_entry_add"] = "Create Entry";
 
 // Added v0.85 - 08.06.2001 - Bastian - Admin
-$PMF_LANG["ad_csv_make"] = "A backup is a complete image of the database content. A backup should be performed at least once a month. The format of the backup ist a MySQL transaction file, which can be imported using tools like phpMyAdmin or the commandline mysql client.";
+$PMF_LANG["ad_csv_make"] = "> A backup is a complete image of the database content. The format of the backup is a SQL transaction file, which can be imported using tools like phpMyAdmin or the commandline sql client. A backup should be performed at least once a month.";
 $PMF_LANG["ad_csv_link"] = "Download the backup";
 $PMF_LANG["ad_csv_head"] = "Make a backup";
 $PMF_LANG["ad_att_addto"] = "Add an attachment to the issue";
@@ -558,7 +558,7 @@ $LANG_CONF["version"] = array(0 => "print", 1 => "FAQ Version");
 $LANG_CONF["metaDescription"] = array(0 => "input", 1 => "Describtion of the Page");
 $LANG_CONF["metaKeywords"] = array(0 => "input", 1 => "Keywords for Spiders");
 $LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "Name of the Publisher");
-$LANG_CONF["adminmail"] = array(0 => "input", 1 => "Email adress of the Admin");
+$LANG_CONF["adminmail"] = array(0 => "input", 1 => "Email address of the Admin");
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Contact information");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Copyright text for the startpage");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Text for the send2friend page");
