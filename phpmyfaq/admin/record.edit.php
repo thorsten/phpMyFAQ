@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.edit.php,v 1.6 2004-11-30 20:11:24 thorstenr Exp $
+* $Id: record.edit.php,v 1.7 2004-12-11 21:54:12 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23
@@ -89,7 +89,7 @@ if ($permission["editbt"] && emptyTable(SQLPREFIX."faqcategory")) {
 
     <dt><strong><?php print $PMF_LANG["ad_entry_category"]; ?></strong></dt>
     <dd><select name="rubrik[]" size="3" multiple="multiple">
-<?php print $tree->printCategoryOptions($categories); ?>
+<?php print $tree->printCategoryOptions($categories['category_id']); ?>
     </select></dd>
     
     <dt><strong><?php print $PMF_LANG["ad_entry_theme"]; ?></strong></dt>
