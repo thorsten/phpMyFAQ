@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: news.php,v 1.7 2005-01-09 11:15:02 thorstenr Exp $
+* $Id: news.php,v 1.8 2005-02-03 13:37:35 thorstenr Exp $
 *
 * The main administration file for the news
 *
@@ -134,6 +134,7 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
     <input type="hidden" name="id" value="<?php print $_REQUEST["id"]; ?>" />
     <input type="hidden" name="really" value="yes" />
     <input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG["ad_news_yesdelete"]; ?>" style="color: Red;" />
+    <input class="submit" type="reset" onclick="javascript:history.back();" value="<?php print $PMF_LANG["ad_news_nodelete"]; ?>" />
     </form>
     </div>
 <?php
