@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.31 2004-12-25 06:06:46 thorstenr Exp $
+* $Id: functions.php,v 1.32 2004-12-25 06:10:00 uid10141 Exp $
 *
 * This is the main functions file!
 *
@@ -1015,21 +1015,10 @@ function generateDocBookExport()
     }
     
     // write xml file
-    $filename = '../xml/docbook_export.xml';
-    if (is_writable($filename)) {
-       if (!$handle = fopen($filename, "w")) {
-             print "can't open $filename";
-             exit;
-       }
-       if (!fwrite($handle, $output)) {
-           print "can not write into $filename nicht schreiben";
-           exit;
-       }
-       print "xml was created ($filename)";
-       fclose($handle);
-    } else {
-       print "$filename is not writeable";
-    }
+    $xml_fp = fopen("../xml/docbook.xml","w");
+    fputs($xml_fp, $my_xml_output);
+	fclose($xml_fp);
+	print "<p><a href=\"../xml/phpmyfaq.xml\" target=\"_blank\">XML DocBook File okay!</a></p>";
 }
 
 /**
