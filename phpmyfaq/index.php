@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.7 2004-11-30 21:41:59 thorstenr Exp $
+* $Id: index.php,v 1.8 2004-12-09 20:58:27 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2001-02-12
@@ -25,11 +25,6 @@ define("DEBUG", FALSE);
 
 if (DEBUG) {
 	error_reporting(E_ALL);
-}
-
-/* are install.php or update.php not deleted yet? */
-if (file_exists("install/installer.php") || file_exists("install/update.php")) {
-	die("<p align=\"center\"><strong>Attention !!</strong><br />Please delete all files in the directory <strong>\"install/\"!</strong></p>\n");
 }
 
 /* connect to the database server */
