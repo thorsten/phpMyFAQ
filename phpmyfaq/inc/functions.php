@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.38 2004-12-25 20:49:52 thorstenr Exp $
+* $Id: functions.php,v 1.39 2005-01-04 16:15:38 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -918,7 +918,7 @@ function generateXMLFile()
 {
 	global $db, $tree, $PMF_CONF, $PMF_LANG;
 	
-	$result = $db->query('SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqdata.content, '.SQLPREFIX.'faqdata.author, '.SQLPREFIX.'faqdata.datum FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang ORDER BY '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.id');
+	$result = $db->query('SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqdata.content, '.SQLPREFIX.'faqdata.keywords, '.SQLPREFIX.'faqdata.author, '.SQLPREFIX.'faqdata.datum FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang ORDER BY '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.id');
     
 	if ($db->num_rows($result) > 0) {
 		$my_xml_output = "<?xml version=\"1.0\" encoding=\"".$PMF_LANG["metaCharset"]."\" standalone=\"yes\" ?>\n";
@@ -926,7 +926,7 @@ function generateXMLFile()
 		$my_xml_output .= "<phpmyfaq xmlns=\"http://www.phpmyfaq.de/phpmyfaq\">\n";
 		$xml_fp = fopen("../xml/phpmyfaq.xml","w");
 		while ($row = $db->fetch_object($result)) {
-        $xml_content = wordwrap(stripslashes($row->content));
+            $xml_content = wordwrap(stripslashes($row->content));
 			$xml_rubrik = $tree->categoryName[$row->category_id]["name"];
 			$xml_thema = wordwrap($row->thema, 60);
 			$xml_content = trim(htmlspecialchars(stripslashes(wordwrap($xml_content, 60))));
@@ -935,8 +935,8 @@ function generateXMLFile()
 				$my_xml_output .= "\t<article id=\"".$row->id."\">\n";
 				$my_xml_output .= "\t<language>".$row->lang."</language>\n";
 				$my_xml_output .= "\t<category>".htmlentities(strip_tags($xml_rubrik))."</category>\n";
-				if ($xml_keywords) {
-					$my_xml_output .= "\t<keywords>".$xml_keywords."</keywords>\n";
+				if (isset($row->keywords) && $row->keywords != '') {
+					$my_xml_output .= "\t<keywords>".$row->keywords."</keywords>\n";
 					}
 				else {
 					$my_xml_output .= "\t<keywords />\n";
