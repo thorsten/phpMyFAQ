@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.53 2005-02-22 19:50:33 thorstenr Exp $
+* $Id: functions.php,v 1.54 2005-02-22 20:33:59 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -1068,8 +1068,20 @@ function searchEngine($begriff)
         $seite = 1;
     }
     
-	$result = $db->search(SQLPREFIX."faqdata", array("id" => NULL, "lang" => NULL, "rubrik" => NULL, "thema" => NULL, "content" => NULL), array("thema", "content", "keywords"), $begriff, array("active"=>"yes"));
-    
+	$result = $db->search(SQLPREFIX."faqdata",
+                          array(SQLPREFIX."faqdata.id",
+                                SQLPREFIX."faqdata.lang",
+                                SQLPREFIX."faqcategoryrelations.category_id",
+                                SQLPREFIX."faqdata.thema",
+                                SQLPREFIX."faqdata.content"),
+                          SQLPREFIX."faqcategoryrelations",
+                          array(SQLPREFIX."faqdata.id = ".SQLPREFIX."faqcategoryrelations.record_id",
+                                SQLPREFIX."faqdata.lang = ".SQLPREFIX."faqcategoryrelations.record_lang"),
+                          array(SQLPREFIX."faqdata.thema",
+                                SQLPREFIX."faqdata.content",
+                                SQLPREFIX."faqdata.keywords"),
+                          $begriff,
+                          array(SQLPREFIX."faqdata.active"=>"yes"));
 	$num = $db->num_rows($result);
 	
     $pages = ceil($num / $PMF_CONF["numRecordsPage"]);
@@ -1078,8 +1090,6 @@ function searchEngine($begriff)
 	if ($y > $num) {
 		$y = $num;
 		}
-	
-	$result = $db->search(SQLPREFIX."faqdata", array("id" => NULL, "lang" => NULL, "rubrik" => NULL, "thema" => NULL, "content" => NULL), array("thema", "content", "keywords"), $begriff, array("active" => "yes"), $PMF_CONF["numRecordsPage"], $x);
     
     if (0 == $num) {
         
@@ -1098,7 +1108,6 @@ function searchEngine($begriff)
         $where = " WHERE (".$where.") AND active = 'yes'";
         $query = 'SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.record_id, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqdata.content FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang '.$where;
         $result = $db->query($query);
-        $num = $db->num_rows($result);
     }
     
 	if ($num > 0) {
