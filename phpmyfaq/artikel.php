@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.4 2004-11-23 19:48:52 thorstenr Exp $
+* $Id: artikel.php,v 1.5 2004-11-27 10:58:10 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Meikel Katzengreis <meikel@katzengreis.com>
@@ -19,7 +19,7 @@
 */
 
 if (isset($_REQUEST['cat']) && checkIntVar($_REQUEST['cat']) == TRUE) {
-	$rubrik = $_REQUEST['cat'];
+	$currentCategory = $_REQUEST['cat'];
 }
 if (isset($_REQUEST['id']) && checkIntVar($_REQUEST['id']) == TRUE) {
 	$id = $_REQUEST['id'];
@@ -34,7 +34,7 @@ if (isset($_POST["artlang"]) && $_POST["artlang"] != "") {
 Tracking("artikelview", $id);
 
 $comment = '';
-$result = $db->query("SELECT id, rubrik, content, datum, author, email, comment FROM ".SQLPREFIX."faqdata WHERE id = '".$id."' AND lang = '".$lang."' AND active = 'yes'");
+$result = $db->query("SELECT id, content, datum, author, email, comment FROM ".SQLPREFIX."faqdata WHERE id = '".$id."' AND lang = '".$lang."' AND active = 'yes'");
 while ($row = $db->fetch_object($result)) {
 	$id = $row->id;
 	$comment = $row->comment;
@@ -57,14 +57,14 @@ while ($row = $db->fetch_object($result)) {
 	}
 	$writeDateMsg = makeDate($row->datum);
 	$writeAuthor = $row->author;
-    $categoryName = $tree->getPath($row->rubrik);
+    $categoryName = $tree->getPath($currentCategory);
 }
 
 $writePrintMsg          = '<a href="#" onclick="javascript:window.print();">'.$PMF_LANG['msgPrinterFriendly'].'</a>';
-$writePDF               = '<a target="_blank" href="pdf.php?id='.$id.'&amp;lang='.$lang.'">'.$PMF_LANG['msgPDF'].'</a>';
-$writeSend2FriendMsg    = '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=send2friend&amp;cat='.$rubrik.'&amp;id='.$id.'&amp;artlang='.$lang.'">'.$PMF_LANG['msgSend2Friend'].'</a>';
+$writePDF               = '<a target="_blank" href="pdf.php?cat='.$currentCategory.'&amp;id='.$id.'&amp;lang='.$lang.'">'.$PMF_LANG['msgPDF'].'</a>';
+$writeSend2FriendMsg    = '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=send2friend&amp;cat='.$currentCategory.'&amp;id='.$id.'&amp;artlang='.$lang.'">'.$PMF_LANG['msgSend2Friend'].'</a>';
 $writeXMLMsg            = "<a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=xml&amp;id=".$id."&amp;artlang=".$lang."\">".$PMF_LANG["msgMakeXMLExport"]."</a>";
-$changeLanguagePATH     = $_SERVER["PHP_SELF"]."?".$sids."action=artikel&amp;cat=".$rubrik."&amp;id=".$id;
+$changeLanguagePATH     = $_SERVER["PHP_SELF"]."?".$sids."action=artikel&amp;cat=".$currentCategory."&amp;id=".$id;
 $writeCommentMsg        = $PMF_LANG["msgYouCan"]."<a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=writecomment&amp;id=".$id."&amp;artlang=".$lang."\">".$PMF_LANG["msgWriteComment"]."</a>";
 $writeCategory          = stripslashes($categoryName)."<br />\n";
 $saveVotingPATH         = $_SERVER["PHP_SELF"]."?".$sids."action=savevoting";

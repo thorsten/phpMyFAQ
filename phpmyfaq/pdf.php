@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: pdf.php,v 1.8 2004-11-22 19:49:43 thorstenr Exp $
+* $Id: pdf.php,v 1.9 2004-11-27 10:58:10 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Peter Beauvain <pbeauvain@web.de>
@@ -74,6 +74,9 @@ if (isset($LANGCODE)) {
     require_once ("lang/language_en.php");
 }
 
+if (isset($_GET['cat']) && checkIntVar($_GET['cat']) == TRUE) {
+	$currentCategory = $_REQUEST['cat'];
+}
 if (isset($_GET["id"]) && checkIntVar($_GET["id"]) == TRUE) {
 	$id = $_GET["id"];
 	}
@@ -81,11 +84,10 @@ if (isset($_GET["lang"]) && strlen($_GET["lang"]) <= 2 && !preg_match("=/=", $_G
     $lang = $_GET["lang"];
     }
 
-$result = $db->query("SELECT id, lang, rubrik, thema, content, datum, author FROM ".SQLPREFIX."faqdata WHERE id = '".$id."' AND lang = '".$lang."' AND active = 'yes'");
+$result = $db->query("SELECT id, lang, thema, content, datum, author FROM ".SQLPREFIX."faqdata WHERE id = '".$id."' AND lang = '".$lang."' AND active = 'yes'");
 if ($db->num_rows($result) > 0) {
 	while ($row = $db->fetch_object($result)) {
 		$lang = $row->lang;
-		$rubrik = $row->rubrik;
 		$thema = $row->thema;
 		$content = $row->content;
 		$date = $row->datum;
@@ -96,7 +98,7 @@ else {
 	print "Error!";
 	}
 
-$pdf = new PDF($rubrik, $thema, $tree->categoryName, $orientation = "P", $unit = "mm", $format = "A4");
+$pdf = new PDF($currentCategory, $thema, $tree->categoryName, $orientation = "P", $unit = "mm", $format = "A4");
 $pdf->Open();
 $pdf->AliasNbPages();
 $pdf->AddPage();
