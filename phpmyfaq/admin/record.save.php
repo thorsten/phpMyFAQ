@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.save.php,v 1.13 2005-01-16 21:38:29 thorstenr Exp $
+* $Id: record.save.php,v 1.14 2005-02-25 17:08:09 thorstenr Exp $
 *
 * Save or update a FAQ record
 *
@@ -98,9 +98,9 @@ if (isset($submit[1]) && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "") 
 	// save or update the category relations
     foreach ($rubrik as $categories) {
         
-        if (!$db->query('INSERT INTO '.SQLPREFIX.'faqcategoryrelations VALUES ('.$categories.', "'.$_REQUEST["lang"].'", '.$_REQUEST["id"].', "'.$_REQUEST["lang"].'")')) {
+        if (!$db->query('INSERT INTO '.SQLPREFIX.'faqcategoryrelations VALUES ('.$categories.', "'.$_REQUEST["language"].'", '.$_REQUEST["id"].', "'.$_REQUEST["language"].'")')) {
             
-            $db->query('UPDATE '.SQLPREFIX.'faqcategoryrelations SET record_id = '.$_REQUEST["id"].', record_lang = "'.$_REQUEST["lang"].'" WHERE category_id = '.$categories.' AND category_lang = \''.$_REQUEST["lang"].'\'');
+            $db->query('UPDATE '.SQLPREFIX.'faqcategoryrelations SET record_id = '.$_REQUEST["id"].', record_lang = "'.$_REQUEST["language"].'" WHERE category_id = '.$categories.' AND category_lang = \''.$_REQUEST["language"].'\'');
         
         }
     }
