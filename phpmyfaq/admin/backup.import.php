@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: backup.import.php,v 1.4 2005-02-02 19:13:38 thorstenr Exp $
+* $Id: backup.import.php,v 1.5 2005-03-30 06:48:45 thorstenr Exp $
 *
 * The import function to import the phpMyFAQ backups
 *
@@ -27,7 +27,7 @@ if ($permission["restore"]) {
     	$fp = fopen($_FILES["userfile"]["tmp_name"], "r");
     	$dat = fgets($fp, 65536);
     	
-    	if (substr($dat, 0, 10) != "-- pmf-1.5") {
+    	if (substr($dat, 0, 10) != "-- pmf1.5") {
     		print $PMF_LANG["ad_csv_no"];
     		$ok = 0;
         } else {
