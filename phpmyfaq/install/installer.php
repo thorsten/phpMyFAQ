@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.8 2004-12-17 14:27:45 thorstenr Exp $
+* $Id: installer.php,v 1.9 2005-01-02 13:48:59 thorstenr Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -12,7 +12,7 @@
 * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author      Tom Rochester <tom.rochester@gmail.com>
 * @since       2002-08-20
-* @copyright   (c) 2001-2004 phpMyFAQ Team
+* @copyright   (c) 2001-2005 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -308,6 +308,10 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 <fieldset class="installation">
 <legend class="installation">LDAP information</legend>
 <p>
+<span class="text">Do you want to use LDAP?</span>
+<input type="checkbox" name="ldap_enabled" value="yes" />
+</p>
+<p>
 <span class="text">LDAP server host:</span>
 <input class="input" type="text" name="ldap_server" />
 <span class="help" title="Please enter the host of your LDAP server here.">?</span>
@@ -396,20 +400,15 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 	if (isset($_POST["sql_type"]) && $_POST["sql_type"] != "") {
 		$sql_type = $_POST["sql_type"];
 		switch ($sql_type) {
-		
-			case 'mysql':		
-											require_once(PMF_ROOT_DIR."/inc/mysql.php");
-											break;
-			case 'pgsql':
-											require_once(PMF_ROOT_DIR."/inc/pgsql.php");
-											break;
-			case 'sybase':	
-											require_once(PMF_ROOT_DIR."/inc/sybase.php");
-											break;
-			default:				
-											print '<p class="error"><strong>Error:</strong> Invalid server type.</p>';
-											HTMLFooter();
-											die();
+			case 'mysql':		require_once(PMF_ROOT_DIR."/inc/mysql.php");
+								break;
+			case 'pgsql':       require_once(PMF_ROOT_DIR."/inc/pgsql.php");
+								break;
+			case 'sybase':	    require_once(PMF_ROOT_DIR."/inc/sybase.php");
+							    break;
+			default:            print '<p class="error"><strong>Error:</strong> Invalid server type.</p>';
+								HTMLFooter();
+								die();
 		}
 	} else {
         print "<p class=\"error\"><strong>Error:</strong> There's no DB server input.</p>\n";
@@ -447,8 +446,8 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
     }
     
     // check database connection
-	$func = "db_".$sql_type;
-	$db = new $func();
+    require_once(PMF_ROOT_DIR."/inc/db.php");
+	$db = db::db_select($sql_type);
 	$db->connect($sql_server, $sql_user, $sql_passwort, $sql_db);
 	if (!$db) {
 		print "<p class=\"error\"><strong>DB Error:</strong> ".$db->error()."</p>\n";
@@ -457,7 +456,7 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
     }
     
     // check LDAP if available
-    if (extension_loaded('ldap')) {
+    if (extension_loaded('ldap') && isset($_POST['ldap_enabled']) && $_POST['ldap_enabled'] == 'yes') {
         
         // check LDAP entries
         if (isset($_POST["ldap_server"]) && $_POST["ldap_server"] != "") {
@@ -564,7 +563,7 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 	}
     
     // check LDAP if available
-    if (extension_loaded('ldap')) {
+    if (extension_loaded('ldap') && isset($_POST['ldap_enabled']) && $_POST['ldap_enabled'] == 'yes') {
         
         if ($fp = @fopen(PMF_ROOT_DIR."/inc/dataldap.php","w")) {
             @fputs($fp,"<?php\n\$PMF_LDAP[\"ldap_server\"] = '".$ldap_server."';\n\$PMF_LDAP[\"ldap_port\"] = '".$ldap_port."';\n\$PMF_LDAP[\"ldap_user\"] = '".$ldap_user."';\n\$PMF_LDAP[\"ldap_password\"] = '".$ldap_passwort."';\n\$PMF_LDAP[\"ldap_base\"] = '".$ldap_base."';\n;\n?>");
@@ -618,8 +617,8 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 	
     // connect to the database using inc/data.php
     require_once(PMF_ROOT_DIR."/inc/data.php");
-	$func = "db_".$DB["type"];
-	$db = new $func();
+    require_once(PMF_ROOT_DIR."/inc/db.php");
+	$db = db::db_select($sql_type);
 	$db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
 	if (!$db) {
 		print "<p class=\"error\"><strong>DB Error:</strong> ".$db->error()."</p>\n";
