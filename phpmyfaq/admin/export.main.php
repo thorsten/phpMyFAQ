@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: export.main.php,v 1.11 2004-11-22 20:10:36 thorstenr Exp $
+ * $Id: export.main.php,v 1.12 2004-11-30 19:27:08 thorstenr Exp $
  *
  * File:				export.main.php
  * Description:			XML, XHTML and PDF export - main page
@@ -46,11 +46,11 @@ if (isset($submit[2])) {
 	$arrThema = array();
 	$arrContent = array();
 	
-	$result = $db->query("SELECT rubrik, thema, content, datum, author FROM ".SQLPREFIX."faqdata WHERE active = 'yes' ORDER BY rubrik, id");
+	$result = $db->query('SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqdata.content, '.SQLPREFIX.'faqdata.author, '.SQLPREFIX.'faqdata.datum FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang ORDER BY '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.id');
 	if ($db->num_rows($result) > 0) {
 		$i = 0;
 		while ($row = $db->fetch_object($result)) {
-			$arrRubrik[$i] = $row->rubrik;
+			$arrRubrik[$i] = $row->category_id;
 			$arrThema[$i] = stripslashes($row->thema);
 			$arrContent[$i] = $row->content;
 			$arrDatum[$i] = $row->datum;

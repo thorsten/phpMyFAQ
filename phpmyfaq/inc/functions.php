@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.15 2004-11-29 21:15:24 thorstenr Exp $
+* $Id: functions.php,v 1.16 2004-11-30 19:27:29 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -968,11 +968,11 @@ function searchEngine($begriff, &$num)
                 $where = $where." OR ";
             }
             
-            $where = $where."(keywords LIKE '%".$keys[$i]."%')";
+            $where = $where.'('.SQLPREFIX.'faqdata.keywords LIKE "%'.$keys[$i].'%") AND '.SQLPREFIX.'faqdata.active = "yes"';
         }
         
         $where = " WHERE (".$where.") AND active = 'yes'";
-        $query = "SELECT id, lang, rubrik, thema, content FROM ".SQLPREFIX."faqdata ".$where;
+        $query = 'SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.record_id, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqdata.content FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang '.$where;
         $result = $db->query($query);
         $num = $db->num_rows($result);
     }
