@@ -5,7 +5,7 @@
  * Authors:				Thorsten Rinne <thorsten@phpmyfaq.de>
  *                      Tom Rochester <tom.rochester@gmail.com>
  * Date:				2004-09-18
- * Last Update:			2004-09-18
+ * Last Update:			2004-11-01
  * Copyright:           (c) 2001-2004 Thorsten Rinne
  * 
  * The contents of this file are subject to the Mozilla Public License
@@ -22,6 +22,7 @@
 $uninst[] = "DROP TABLE ".$sqltblpre."faqadminlog";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqadminsessions";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcategories";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqcategory";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqchanges";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcomments";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqdata";
@@ -83,6 +84,14 @@ parent_id INT(11) NOT NULL,
 name VARCHAR(255) NOT NULL,
 description VARCHAR(255) NOT NULL ,
 PRIMARY KEY (id,lang))";
+
+//faqcategories
+$query[] = "CREATE TABLE ".$sqltblpre."faqcategory (
+id INT(11) NOT NULL auto_increment,
+lang VARCHAR(5) NOT NULL default '',
+rubrik INT(11) NOT NULL default '',
+PRIMARY KEY  (id,lang,rubrik)
+)";
 
 //faqchanges
 $query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqchanges (
