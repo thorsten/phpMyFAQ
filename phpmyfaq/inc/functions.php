@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.60 2005-03-12 20:08:53 thorstenr Exp $
+* $Id: functions.php,v 1.61 2005-03-12 20:10:27 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -62,7 +62,10 @@ function selectLanguages($default)
         closedir($dir);
         
         foreach ($languageArray as $cc) {
-            $languages[strtolower($cc)] = $languageCodes[$cc];
+			// Check the file does relate to a language before using it
+			if (array_key_exists ($cc, $languageCodes)) {
+				$languages[strtolower($cc)] = $languageCodes[$cc];
+			}
         }
         
         asort($languages);
