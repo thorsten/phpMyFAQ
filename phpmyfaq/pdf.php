@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: pdf.php,v 1.5 2004-11-21 11:38:09 thorstenr Exp $
+* $Id: pdf.php,v 1.6 2004-11-21 12:27:21 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Peter Beauvain <pbeauvain@web.de>
@@ -139,11 +139,6 @@ class PDF extends FPDF
     // HTML-Parser
 	function WriteHTML($html)
     {
-        //$html = str_replace('&quot;','"',$html);
-        //$html = str_replace('&lt;','‹',$html); //sonst wird HTML-CODE innerhalb des [pre] Tags im PDF unterschlagen
-        //$html = str_replace('&gt;','›',$html); // '›' = chr155,'‹' = chr139 habe keine besseren Zeichen gefunden
-        //$html = str_replace('&nbsp;',' ',$html);
-        //$html = str_replace('&amp;','&',$html);
         $html = str_replace("\n", "<br />", $html);
         
         $a = preg_split("/<(.*)>/U", $html, -1, PREG_SPLIT_DELIM_CAPTURE);
@@ -190,91 +185,101 @@ class PDF extends FPDF
             }
     }
     
+    /**
+    * Locate the supported tags and set, what to do next
+    *
+    * @param    string
+    * @param    array
+    * @return   void
+    * @access   private
+    */
 	function OpenTag($tag, $attr)
     {
-		if ($tag == "B" or $tag == "I" or $tag == "U" or $tag == "STRONG" or $tag == "EM") {
-            if ($tag == "STRONG") {
-                $tag = "B";
-                }
-            if ($tag == "EM") {
-                $tag = "I";
-                }
-			$this->SetStyle($tag, TRUE);
-			}
-		if ($tag == "PRE") {
-			$this->SetFont("Courier", "", 10);
-			$this->SetTextColor(0,0,255);
-			}
-		if ($tag == "A") {
-			$this->HREF = $attr["HREF"];
-			}
-		if ($tag == "IMG") {
-			$this->SRC = $attr["SRC"];
-			}
-		if ($tag == "DIV") {
-            if ($attr["ALIGN"] != "justify") {
-                $this->CENTER = $attr["ALIGN"];
-                }
-			}
-         if ($tag == "UL") {
-            $this->SetLeftMargin($this->lMargin+10);
-            }
-         if ($tag == "LI") {
-            $this->Ln();
-            $this->SetX($this->GetX()-10);
-            $this->Cell(10,5,chr(149),0,0,'C');
-            }
-		if ($tag == "BR") {
-			$this->Ln(5);
-			}
-        if ($tag == "TABLE") {
-            if ($attr['BORDER'] != "") {
-                $this->tableborder = $attr['BORDER'];
-                }
-            else {
-                $this->tableborder = 0;
-                }
-            }
-        if ($tag == "TR") {
-            
-            }
-        if ($tag == "TD") {
-            if ($attr['WIDTH'] != "") {
-                $this->tdwidth = ($attr['WIDTH'] / 4);
-                }
-            else {
-                $this->tdwidth = 40;
-                }
-            if ($attr['HEIGHT'] != "") {
-                $this->tdheight = ($attr['HEIGHT'] / 6);
-                }
-            else {
-                $this->tdheight = 6;
-                }
-            if ($attr['ALIGN'] != "") {
-                $align = $attr['ALIGN'];
-                if ($align == "LEFT") {
-                    $this->tdalign = "L";
-                    }
-                if ($align == "CENTER") {
-                    $this->tdalign = "C";
-                    }
-                if ($align == "RIGHT") {
-                    $this->tdalign = "R";
-                    }
-                }
-            else {
-                $this->tdalign = "L";
-                }
-            if ($attr['BGCOLOR'] != "") {
-                $color = hex2dec($attr['BGCOLOR']);
-                $this->SetFillColor($color['R'], $color['G'], $color['B']);
-                $this->tdbgcolor = TRUE;
-                }
-            $this->tdbegin = TRUE;
-            }
-        if ($tag == "P") {
-            $this->Ln(5);
+        switch ($tag) {
+            case "STRONG":  
+            case "B":       
+                            $this->SetStyle('B', TRUE);
+                            break;
+            case "EM":      
+            case "I":       
+                            $this->SetStyle('I', TRUE);
+                            break;
+            case "U":       
+                            $this->SetStyle('U', TRUE);
+            case "PRE":     
+                            $this->SetFont("Courier", "", 10);
+			                $this->SetTextColor(0,0,255);
+                            break;
+            case "A":       
+                            $this->HREF = $attr["HREF"];
+                            break;
+            case "IMG":     
+                            $this->SRC = $attr["SRC"];
+                            break;
+    	    case "DIV":     
+                            if ($attr["ALIGN"] != "justify") {
+                                $this->CENTER = $attr["ALIGN"];
+                            }
+                            break;
+            case "UL":      
+                            $this->SetLeftMargin($this->lMargin + 10);
+                            break;
+            case "LI":      
+                            $this->Ln();
+                            $this->SetX($this->GetX() - 10);
+                            $this->Cell(10, 5, chr(149), 0, 0, 'C');
+                            break;
+            case "P":       
+            case "BR":      
+                            $this->Ln(5);
+    			            break;
+            case "TABLE":   
+                            if ($attr['BORDER'] != "") {
+                                $this->tableborder = $attr['BORDER'];
+                            } else {
+                                $this->tableborder = 0;
+                            }
+                            break;
+            case "TR":      
+                            break;
+            case "TD":      
+                            
+                            if ($attr['WIDTH'] != "") {
+                                $this->tdwidth = ($attr['WIDTH'] / 4);
+                            } else {
+                                $this->tdwidth = 40;
+                            }
+                            if ($attr['HEIGHT'] != "") {
+                                $this->tdheight = ($attr['HEIGHT'] / 6);
+                            } else {
+                                $this->tdheight = 6;
+                            }
+                            if ($attr['ALIGN'] != "") {
+                                $align = $attr['ALIGN'];
+                                if ($align == "LEFT") {
+                                    $this->tdalign = "L";
+                                }
+                                if ($align == "CENTER") {
+                                    $this->tdalign = "C";
+                                }
+                                if ($align == "RIGHT") {
+                                    $this->tdalign = "R";
+                                }
+                            } else {
+                                $this->tdalign = "L";
+                            }
+                            if ($attr['BGCOLOR'] != "") {
+                                $color = hex2dec($attr['BGCOLOR']);
+                                $this->SetFillColor($color['R'], $color['G'], $color['B']);
+                                $this->tdbgcolor = TRUE;
+                            }
+                            $this->tdbegin = TRUE;
+                            break;
+            case "HR":      
+                            $this->PutLine();
+                            break;
+            default:        
+                            break;
         }
     }
 	
