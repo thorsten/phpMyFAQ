@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.add.php,v 1.11 2005-01-08 10:14:27 thorstenr Exp $
+* $Id: record.add.php,v 1.12 2005-01-16 21:28:40 thorstenr Exp $
 *
 * Adds a record in the database
 *
@@ -22,7 +22,7 @@
 if ($permission["editbt"]) {
 	$submit = $_REQUEST["submit"];
 	
-	if (isset($submit[1]) && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "") {
+	if (isset($submit[1]) && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "" && isset($_REQUEST['rubrik']) && is_array($_REQUEST['rubrik'])) {
 		// new entry
 		adminlog("Beitragcreatesave");
         print "<h2>".$PMF_LANG["ad_entry_aor"]."</h2>\n";
@@ -60,7 +60,7 @@ if ($permission["editbt"]) {
             
             }
         }
-	} elseif (isset($submit[2]) && is_array($_REQUEST["thema"])) {
+	} elseif (isset($submit[2]) && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "" && isset($_REQUEST['rubrik']) && is_array($_REQUEST['rubrik'])) {
 		// Preview
 	    $rubrik = $_REQUEST["rubrik"];
         $cat = new Category;
