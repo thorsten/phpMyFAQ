@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: show.php,v 1.3 2004-11-22 21:12:36 thorstenr Exp $
+* $Id: show.php,v 1.4 2004-11-30 21:41:59 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-08-27
@@ -17,7 +17,7 @@
 * under the License.
 */
 
-if (isset($_REQUEST['cat']) && checkIntVar($_REQUEST['cat']) == TRUE) {
+if (isset($_REQUEST['cat']) && is_numeric($_REQUEST['cat']) == TRUE) {
 	$category = $_REQUEST['cat'];
 }
 

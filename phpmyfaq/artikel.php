@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.5 2004-11-27 10:58:10 thorstenr Exp $
+* $Id: artikel.php,v 1.6 2004-11-30 21:41:59 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Meikel Katzengreis <meikel@katzengreis.com>
@@ -18,10 +18,10 @@
 * under the License.
 */
 
-if (isset($_REQUEST['cat']) && checkIntVar($_REQUEST['cat']) == TRUE) {
+if (isset($_REQUEST['cat']) && is_numeric($_REQUEST['cat']) == TRUE) {
 	$currentCategory = $_REQUEST['cat'];
 }
-if (isset($_REQUEST['id']) && checkIntVar($_REQUEST['id']) == TRUE) {
+if (isset($_REQUEST['id']) && is_numeric($_REQUEST['id']) == TRUE) {
 	$id = $_REQUEST['id'];
 }
 if (isset($_GET["artlang"])) {

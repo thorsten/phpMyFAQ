@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.6 2004-11-22 21:07:23 thorstenr Exp $
+* $Id: index.php,v 1.7 2004-11-30 21:41:59 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2001-02-12
@@ -102,7 +102,7 @@ if (!isset($_GET["sid"]) && !isset($_COOKIE["sid"])) {
 	Tracking("NewSession", 0);
     setcookie("sid", $sid, time()+3600);
 } else {
-	if (isset($_REQUEST["sid"]) && checkIntVar($_REQUEST["sid"]) == TRUE) {
+	if (isset($_REQUEST["sid"]) && is_numeric($_REQUEST["sid"]) == TRUE) {
 		CheckSID($_REQUEST["sid"], getenv("REMOTE_ADDR"));
 	}
 }
@@ -138,7 +138,7 @@ if (isset($_GET["artlang"]) && strlen($_GET["artlang"]) <= 2 && !preg_match("=/=
 }
 
 /* found a record ID? */
-if (isset($_REQUEST["id"]) && checkIntVar($_REQUEST["id"]) == TRUE) {
+if (isset($_REQUEST["id"]) && is_numeric($_REQUEST["id"]) == TRUE) {
 	$id = $_REQUEST["id"];
     $title = " - ".stripslashes(getThema($id, $lang));
 } else {

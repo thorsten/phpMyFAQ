@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: pdf.php,v 1.10 2004-11-30 07:04:27 thorstenr Exp $
+* $Id: pdf.php,v 1.11 2004-11-30 21:41:59 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Peter Beauvain <pbeauvain@web.de>
@@ -74,10 +74,10 @@ if (isset($LANGCODE)) {
     require_once ("lang/language_en.php");
 }
 
-if (isset($_GET['cat']) && checkIntVar($_GET['cat']) == TRUE) {
+if (isset($_GET['cat']) && is_numeric($_GET['cat']) == TRUE) {
 	$currentCategory = $_REQUEST['cat'];
 }
-if (isset($_GET["id"]) && checkIntVar($_GET["id"]) == TRUE) {
+if (isset($_GET["id"]) && is_numeric($_GET["id"]) == TRUE) {
 	$id = $_GET["id"];
 	}
 if (isset($_GET["lang"]) && strlen($_GET["lang"]) <= 2 && !preg_match("=/=", $_GET["lang"])) {
