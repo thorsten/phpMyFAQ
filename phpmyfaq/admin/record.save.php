@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.save.php,v 1.16 2005-03-15 20:05:44 thorstenr Exp $
+* $Id: record.save.php,v 1.17 2005-03-15 20:13:54 thorstenr Exp $
 *
 * Save or update a FAQ record
 *
@@ -98,7 +98,7 @@ if (isset($submit[1]) && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "") 
 	// delete all the category relations and then insert the new ones
     foreach ($rubrik as $categories) {
         
-        if ($db->query('DELETE FROM '.SQLPREFIX.'faqcategoryrelations WHERE category_id = '.$categories.' AND category_lang = \''.$_REQUEST["language"].'\'')) {
+        if ($db->query('DELETE FROM '.SQLPREFIX.'faqcategoryrelations WHERE category_id = '.$categories.' AND category_lang = \''.$_REQUEST["language"].'\' ANB record_id = '.$_REQUEST["id"].' AND record_lang = "'.$_REQUEST["language"].'"')) {
             
             $db->query('INSERT INTO '.SQLPREFIX.'faqcategoryrelations VALUES ('.$categories.', "'.$_REQUEST["language"].'", '.$_REQUEST["id"].', "'.$_REQUEST["language"].'")');
         }
