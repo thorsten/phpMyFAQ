@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.show.php,v 1.11 2005-01-10 13:38:41 thorstenr Exp $
+* $Id: record.show.php,v 1.12 2005-01-10 14:32:12 thorstenr Exp $
 *
 * Shows the list of records ordered by categories
 *
@@ -48,10 +48,7 @@ if ($permission["editbt"] || $permission["delbt"]) {
         
     } else if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "accept") {
         
-        $start = 0;
-        $perpage = 10;
-        
-        $query = 'SELECT '.SQLPREFIX.'faqdata.id,'.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema,'.SQLPREFIX.'faqdata.author FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON'.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang ='.SQLPREFIX.'faqcategoryrelations.record_lang WHERE '.SQLPREFIX.'faqdata.active = "no" ORDER BY'.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.id ';
+        $query = 'SELECT '.SQLPREFIX.'faqdata.id,'.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema,'.SQLPREFIX.'faqdata.author FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang ='.SQLPREFIX.'faqcategoryrelations.record_lang WHERE '.SQLPREFIX.'faqdata.active = "no" ORDER BY '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.id';
         $laktion = "accept";
         $internalSearch = "";
     }
