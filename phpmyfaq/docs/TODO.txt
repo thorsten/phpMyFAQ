@@ -5,7 +5,7 @@ TODO list for future versions of phpMyFAQ:
 - full support for Sybase (done by Adam)
 - support for LDAP (done by Adam)
 - mod_rewrite support (done by Thorsten)
-- one entry in various categories (partly done by Thorsten)
+- one entry in various categories (done by Thorsten)
 - template engine parse PHP code (done by Thorsten)
 - better RSS support (done by Thorsten)
 - complete XML, XHTML and DocBook XML exports (done by Thorsten)

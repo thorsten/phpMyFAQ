@@ -11,6 +11,7 @@ Changes since 1.4.4:
 - full support for PostgreSQL databases
 - full support for Sybase databases
 - LDAP support
+- one entry in various categories
 - mod_rewrite support
 - template engine parses PHP code
 - rewritten PDF export
@@ -24,14 +25,15 @@ Known issues in phpMyFAQ 1.5.0:
 
 CHANGELOG:
 
-Version 1.5.0 alpha - 2004-12-xx
+Version 1.5.0 alpha - 2004-12-31
 - full support for PostgreSQL databases
 - full support for Sybase databases
 - LDAP support
+- one entry in various categories
 - mod_rewrite support
 - template engine parses PHP code
 - rewritten PDF export
-- complete XML and XHTML exports
+- complete XML, XHTML and DocBook XML exports
 - many code improvements and code cleanup
 - better RSS support
 
