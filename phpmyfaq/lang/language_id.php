@@ -569,6 +569,7 @@ $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Jumlah kabar yang dita
 $LANG_CONF["bannedIP"] = array(0 => "area", 1 => "Larang IP berikut");
 $LANG_CONF["parse_php"] = array(0 => "checkbox", 1 => "Should the template engine parse PHP code? (default: disabled)");
 $LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Activate mod_rewrite support? (default: disabled)");
+$LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "Do you want to enable LDAP support? (default: disabled)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "sebagai kategori utama baru";
 $PMF_LANG["ad_categ_paste_error"] = "Kategori ini tidak dapat dipindahkan.";
