@@ -1,4 +1,7 @@
 <h2>{msgSearch}</h2>
+    
+	<p>{printResult}</p>
+    
     <form action="{writeSendAdress}" method="post">
     <fieldset>
     <legend>{msgSearchWord}</legend>
@@ -8,5 +11,4 @@
     
     </fieldset>
 	</form>
-	<p>{printResult}</p>
 	
