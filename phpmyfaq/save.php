@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: save.php,v 1.11 2005-03-06 10:17:14 thorstenr Exp $
+* $Id: save.php,v 1.12 2005-03-07 06:36:24 thorstenr Exp $
 *
 * Saves a user FAQ record and sends an email to the user
 *
@@ -44,9 +44,9 @@ if (isset($_POST["username"]) && isset($_POST["rubrik"]) && is_numeric($_POST["r
     
 	$db->query("INSERT INTO ".SQLPREFIX."faqdata (id, lang, active, thema, content, keywords, author, email, comment, datum) VALUES (".$db->nextID(SQLPREFIX."faqdata", "id").", '".$lang."', 'no', '".$thema."', '".$content."', '".$keywords."', '".$author."', '".$usermail."', 'y', '".$datum."')");
     
-    $db->query('INSERT INTO '.SQLPREFIX.'faqcategoryrelations (category_id, category_lang, record_id, record_lang) VALUES ('.$selected_category.', "'.$lang.'", '.$db->insert_id('faqdata', 'id').', "'.$lang.'")');
+    $db->query('INSERT INTO '.SQLPREFIX.'faqcategoryrelations (category_id, category_lang, record_id, record_lang) VALUES ('.$selected_category.', "'.$lang.'", '.$db->insert_id(SQLPREFIX.'faqdata', 'id').', "'.$lang.'")');
     
-	$db->query("INSERT INTO ".SQLPREFIX."faqvisits (id, lang, visits, last_visit) VALUES (".$db->insert_id('faqdata', 'id').", '".$lang."', '1', ".time().")");
+	$db->query("INSERT INTO ".SQLPREFIX."faqvisits (id, lang, visits, last_visit) VALUES (".$db->insert_id(SQLPREFIX.'faqdata', 'id').", '".$lang."', '1', ".time().")");
     
 	mail($IDN->encode($PMF_CONF["adminmail"]), unhtmlentities($PMF_CONF["title"]), unhtmlentities($PMF_LANG["msgMailCheck"])."\n".unhtmlentities($PMF_CONF["title"]).": http://".$_SERVER["SERVER_NAME"].dirname($_SERVER["PHP_SELF"]), "From: ".$usermail);
     
