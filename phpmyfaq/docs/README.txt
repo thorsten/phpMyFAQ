@@ -9,8 +9,9 @@ Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 1.4.x:
 - full support for PostgreSQL
-- one entry in various categories
+- mod_rewrite support
 - template engine parses PHP code
+- better RSS support
 
 Known issues in phpMyFAQ 1.5.0:
 - some language files need an update
@@ -20,8 +21,9 @@ CHANGELOG:
 
 Version 1.5.0 alpha - 2004-xx-xx
 - full support for PostgreSQL
-- one entry in various categories
+- mod_rewrite support
 - template engine parses PHP code
+- better RSS support
 
 Version 1.4.3 - 2004-11-05
 - added Turkish translation
