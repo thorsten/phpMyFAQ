@@ -1,13 +1,13 @@
 <?php
 /**
-* $Id: update.php,v 1.14 2005-01-06 14:53:04 thorstenr Exp $
+* $Id: update.php,v 1.15 2005-01-09 16:37:44 thorstenr Exp $
 *
 * Main update script
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Thomas Melchinger <t.melchinger@uni.de>
 * @since        2002-01-10
-* @copyright    (c) 2001-2004 phpMyFAQ Team
+* @copyright    (c) 2001-2005 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -20,7 +20,7 @@
 * under the License.
 */
 
-define("NEWVERSION", "1.5.0 alpha2");
+define("NEWVERSION", "1.5.0 beta1");
 define("COPYRIGHT", "&copy; 2001-2005 <a href=\"http://www.phpmyfaq.de/\" target=\"_blank\">phpMyFAQ-Team</a> | All rights reserved.");
 define("PMF_ROOT_DIR", dirname(dirname(__FILE__)));
 
@@ -425,6 +425,13 @@ if ($step == 5) {
     }
     // update from version 1.4.0
     if ($version <= "140") {
+        // rewrite data.php
+        if ($fp = @fopen("../inc/data.php","w")) {
+    		@fputs($fp,"<?php\n\$DB[\"server\"] = '".$DB["server"]."';\n\$DB[\"user\"] = '".$DB["user"]."';\n\$DB[\"password\"] = '".$DB["password"]."';\n\$DB[\"db\"] = '".$DB["db"]."';\n\$DB[\"prefix\"] = '".SQLPREFIX."';\n\$DB[\"type\"] = 'mysql';\n?>");
+    		@fclose($fp);
+        } else {
+    		print "<p class=\"error\"><strong>Error:</strong> Cannot rewrite to data.php.</p>";
+        }
         $query[] = "ALTER TABLE ".SQLPREFIX."faqadminlog CHANGE user usr INT(11) DEFAULT '0' NOT NULL";
         $query[] = "ALTER TABLE ".SQLPREFIX."faqadminsessions CHANGE user usr TINYTEXT NOT NULL";
         $query[] = "ALTER TABLE ".SQLPREFIX."faqchanges CHANGE user usr INT(11) DEFAULT '0' NOT NULL";
@@ -433,13 +440,6 @@ if ($step == 5) {
     }
     // update from versions before 1.5.0
     if ($version < "150") {
-        // rewrite data.php
-        if ($fp = @fopen("../inc/data.php","w")) {
-    		@fputs($fp,"<?php\n\$DB[\"server\"] = '".$DB["server"]."';\n\$DB[\"user\"] = '".$DB["user"]."';\n\$DB[\"password\"] = '".$DB["password"]."';\n\$DB[\"db\"] = '".$DB["db"]."';\n\$DB[\"prefix\"] = '".SQLPREFIX."';\n\$DB[\"type\"] = 'mysql';\n?>");
-    		@fclose($fp);
-        } else {
-    		print "<p class=\"error\"><strong>Error:</strong> Cannot rewrite to data.php.</p>";
-        }
         // alter column faqdata.rubrik to integer
         $query[] = "ALTER TABLE ".SQLPREFIX."faqdata CHANGE rubrik rubrik INT NOT NULL";
         // create new table faqcategoryrelations
