@@ -4,7 +4,7 @@
  * Description:			show a record
  * Authors:				Thorsten Rinne <thorsten@phpmyfaq.de>
  * Date:				2003-02-23
- * Last change:			2004-11-01
+ * Last change:			2004-11-06
  * Copyright:           (c) 2001-2004 Thorsten Rinne
  * 
  * The contents of this file are subject to the Mozilla Public License
@@ -23,23 +23,16 @@ if ($permission["editbt"] || $permission["delbt"]) {
 	$tree = new Category();
     $tree->transform(0);
 	
+    $query = "SELECT id, lang, rubrik, thema, author FROM ".SQLPREFIX."faqdata WHERE active = 'no' ORDER BY rubrik, id ";
+    $laktion = 'view';
+    $internalSearch = '';
+    
     if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "accept") {
-		$query = "SELECT id, lang, rubrik, thema, author FROM ".SQLPREFIX."faqdata WHERE active = 'no' ORDER BY rubrik, id ";
-		$laktion = "accept";
-        $internalSearch = "";
-		}
-?>
-    <form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=accept" method="post">
-    <fieldset>
-    <legend><?php print $PMF_LANG["msgSearch"]; ?></legend>
-    <strong><?php print $PMF_LANG["msgSearchWord"]; ?>:</strong> <input class="admin" type="text" name="suchbegriff" size="50">&nbsp;&nbsp;<input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG["msgSearch"]; ?>">
-    </fieldset>
-    </form>
-<?php
-        $query = ("SELECT id, lang, rubrik, thema, author FROM ".SQLPREFIX."faqdata ORDER BY rubrik, id ");
-        $laktion = "view";
+        $query = "SELECT id, lang, rubrik, thema, author FROM ".SQLPREFIX."faqdata WHERE active = 'no' ORDER BY rubrik, id ";
+        $laktion = "accept";
         $internalSearch = "";
     }
+    
     if (isset($_REQUEST["suchbegriff"]) && $_REQUEST["suchbegriff"] != "") {
         $begriff = $_REQUEST["suchbegriff"];
         $query = ("SELECT id, lang, rubrik, thema, author FROM ".SQLPREFIX."faqdata WHERE MATCH (thema,content,keywords) AGAINST ('".$begriff."')  ORDER BY rubrik, id ");
@@ -53,18 +46,16 @@ if ($permission["editbt"] || $permission["delbt"]) {
 		$pages = ceil($anz / $perpage);
 		if ($pages < 1) {
 			$pages = 1;
-			}
-		}
-	else {
+        }
+    } else {
 		$pages = $_REQUEST["pages"];
-		}
+    }
 	
     if (!isset($_REQUEST["page"])) {
 		$page = 1;
-		}
-	else {
+    } else {
 		$page = $_REQUEST["page"];
-		}
+    }
 	
 	$start = ($page - 1) * $perpage;
 	$PageSpan = PageSpan("<a href=\"".$_SERVER["PHP_SELF"].$linkext."&amp;aktion=".$laktion."&amp;pages=".$pages."&amp;page=<NUM>".$internalSearch."\">", 1, $pages, $page);
@@ -76,26 +67,34 @@ if ($permission["editbt"] || $permission["delbt"]) {
 		if ($db->num_rows($resultComments) > 1) {
 			while ($row = $db->fetch_object($resultComments)) {
 				$numComments[$row->id] = $row->anz;
-				}
-			}
-		}
+            }
+        }
+    }
 	$old = 0;
 	$previousID = 0;
+    
 	if ($db->num_rows($result) > 0) {
+?>
+    <form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=accept" method="post">
+    <fieldset>
+    <legend><?php print $PMF_LANG["msgSearch"]; ?></legend>
+    <strong><?php print $PMF_LANG["msgSearchWord"]; ?>:</strong> <input class="admin" type="text" name="suchbegriff" size="50">&nbsp;&nbsp;<input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG["msgSearch"]; ?>">
+    </fieldset>
+    </form>
+<?php
         while (list($id, $lang, $rub, $topic, $author) = $db->fetch_row($result)) {
             if ($rub != $old) {
 			    if ($old == 0) {
 ?>
     <table class="list">
 <?php
-				    }
-			    else {
+                } else {
 ?>
 	</table>
 	<br />	
     <table class="list">
 <?php
-				    }
+                }
 ?>
     <thead>
         <tr>
@@ -109,33 +108,31 @@ if ($permission["editbt"] || $permission["delbt"]) {
     </tfoot>
     <tbody>
 <?php
-			    }
+            }
 ?>
         <tr>
             <td class="list"><?php print $id; ?></td>		
             <td class="list"><?php print $lang; ?></td>
             <td class="list"><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=saveentry&amp;id=<?php print $id; ?>&amp;language=<?php print $lang; ?>&amp;submit[0]=<?php print $PMF_LANG["ad_entry_delete"]; ?>" title="<?php print $PMF_LANG["ad_user_delete"]; ?> '<?php print str_replace("\"", "´", stripslashes($topic)); ?>'"><img src="images/delete.gif" width="17" height="18" alt="<?php print $PMF_LANG["ad_entry_delete"]; ?>" /></a></td>
             <td class="list"><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=editentry&amp;id=<?php print $id; ?>&amp;lang=<?php print $lang; ?>" title="<?php print $PMF_LANG["ad_user_edit"]; ?> '<?php print str_replace("\"", "´", stripslashes($topic)); ?>'"><?php print stripslashes($topic); ?></a><?php
-			    if (isset($numComments[$id])) {
-				    print " (".$numComments[$id]." ".$PMF_LANG["ad_start_comments"].")";
-				    }
+            if (isset($numComments[$id])) {
+                print " (".$numComments[$id]." ".$PMF_LANG["ad_start_comments"].")";
+            }
 ?></td>
         </tr>
 <?php
-		        $previousID = $id;
-		        $old = $rub;
-                }
+            $previousID = $id;
+            $old = $rub;
+        }
 ?>
     </tbody>
 	</table>
 	<p align="right"><strong>[ <a href="#top"><?php print $PMF_LANG["ad_gen_top"]; ?></a> ]</strong></p>
 <?php
-        }
-    else {
+    } else {
         print "n/a";
-        }
-	}
-else {
+    }
+} else {
 	print $PMF_LANG["err_NotAuth"];
-	}
+}
 ?>
