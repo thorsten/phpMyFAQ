@@ -6,12 +6,8 @@
     </div>
     
     <div id="topten">
-    <table class="topten">
-    <tr class="topten">
-        <th><a href="feed/topten/rss.php"><img src="images/rss.png" width="28" height="16" alt="RSS" title="RSS" /></a>{writeTopTenHeader}</th>
-    </tr>
+    <h3><a href="feed/topten/rss.php"><img src="images/rss.png" width="28" height="16" alt="RSS" title="RSS" /></a>{writeTopTenHeader}</h3>
     {writeTopTenRow}
-    </table>
     </div>
     
     <div id="fivenewest">
