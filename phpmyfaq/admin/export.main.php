@@ -1,25 +1,24 @@
 <?php
 /**
- * $Id: export.main.php,v 1.13 2004-12-25 06:03:37 thorstenr Exp $
- *
- * File:				export.main.php
- * Description:			XML, XHTML and PDF export - main page
- * Author:				Thorsten Rinne <thorsten@phpmyfaq.de>
- * Contributor:         Peter Beauvain <pbeauvain@web.de>
- * Date:				2003-04-17
- * Last change:			2004-11-22
- * Copyright:           (c) 2001-2004 phpMyFAQ Team
- * 
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- * 
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- ******************************************************************************/
+* $Id: export.main.php,v 1.14 2004-12-25 20:26:23 thorstenr Exp $
+*
+* XML, XML DocBook, XHTML and PDF export - main page
+*
+* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+* @author       Peter Beauvain <pbeauvain@web.de>
+* @since        2003-04-17
+* @copyright    (c) 2001-2004 phpMyFAQ Team
+* 
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
+* 
+* Software distributed under the License is distributed on an "AS IS"
+* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+* License for the specific language governing rights and limitations
+* under the License.
+*/
 ?>
 	<h2><?php print $PMF_LANG["ad_menu_export"]; ?></h2>
 <?php
@@ -28,12 +27,10 @@ if (isset($_REQUEST["submit"])) {
 }
 
 if (isset($submit[0])) {
-	// XML export
     generateXMLFile();
 }
 
 if (isset($submit[1])) {
-	// XHTML export
     generateXHTMLFile();
 }
 
@@ -63,11 +60,12 @@ if (isset($submit[2])) {
     $pdf->enableBookmarks = TRUE;
 	$pdf->Open();
 	$pdf->AliasNbPages();
-	$pdf->SetDisplayMode("real"); 
+	$pdf->SetDisplayMode("real");
 	
 	foreach ($arrContent as $key => $value) {
-		$rubrik = $arrRubrik[$key];
-		$thema = $arrThema[$key];
+		$pdf->rubrik = $arrRubrik[$key];
+		$pdf->thema = $arrThema[$key];
+        $pdf->categories = $tree->categoryName;
 		$date =  $arrDatum[$key];
 		$author = $arrAuthor[$key];
 		$pdf->AddPage();
