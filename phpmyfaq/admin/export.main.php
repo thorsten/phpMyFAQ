@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: export.main.php,v 1.12 2004-11-30 19:27:08 thorstenr Exp $
+ * $Id: export.main.php,v 1.13 2004-12-25 06:03:37 thorstenr Exp $
  *
  * File:				export.main.php
  * Description:			XML, XHTML and PDF export - main page
@@ -79,7 +79,12 @@ if (isset($submit[2])) {
 	$pdf->Output($pdfFile);
 	
 	print "<p>".$PMF_LANG["ad_export_full_faq"]."<a href=\"../pdf/faq.pdf\" target=\"_blank\">".$PMF_CONF["title"]."</a></p>";
-    }
+}
+if (isset($submit[3])) {
+	// XML DocBook export
+    generateDocBookExport();
+}
+
 if (!emptyTable(SQLPREFIX."faqdata")) {
 ?>
 	<form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>" method="post">
@@ -90,6 +95,8 @@ if (!emptyTable(SQLPREFIX."faqdata")) {
     <p align="center"><input class="submit" type="submit" name="submit[1]" value="XHTML export" /></p>
 	<p><strong><?php print $PMF_LANG["ad_export_pdf"]; ?></strong></p>
     <p align="center"><input class="submit" type="submit" name="submit[2]" value="<?php print $PMF_LANG["ad_export_generate_pdf"]; ?>" /></p>
+    <p><strong>XML DocBook export</strong></p>
+    <p align="center"><input class="submit" type="submit" name="submit[3]" value="XML DocBook export" /></p>
 	</form>
 <?php
 } else {
