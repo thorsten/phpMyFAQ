@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.save.php,v 1.4 2004-12-11 20:06:54 thorstenr Exp $
+* $Id: record.save.php,v 1.5 2004-12-11 22:40:06 thorstenr Exp $
 *
 * Save or update a FAQ record
 *
@@ -54,7 +54,7 @@ if (isset($submit[2]) && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "") 
 if (isset($submit[1]) && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "") {
 	// Wenn auf Speichern geklickt wurde...
 	adminlog("Beitragsave", $_REQUEST["id"]);
-	$db->query("INSERT INTO ".SQLPREFIX."faqchanges (id, beitrag, usr, datum, what) VALUES (".$db->insert_id(SQLPREFIX."faqchanges", "id").", '".$_REQUEST["id"]."','".$auth_user."','".time()."','".nl2br(addslashes($_REQUEST["changed"]))."')");
+	$db->query("INSERT INTO ".SQLPREFIX."faqchanges (id, beitrag, usr, datum, what) VALUES (".$db->nextID(SQLPREFIX."faqchanges", "id").", '".$_REQUEST["id"]."','".$auth_user."','".time()."','".nl2br(addslashes($_REQUEST["changed"]))."')");
 	$thema = addslashes($_REQUEST["thema"]);
 	$content = addslashes($_REQUEST["content"]);
 	$keywords = addslashes($_REQUEST["keywords"]);

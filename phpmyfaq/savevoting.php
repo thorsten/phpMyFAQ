@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * $Id: savevoting.php,v 1.3 2004-12-11 20:06:32 thorstenr Exp $
+ * $Id: savevoting.php,v 1.4 2004-12-11 22:41:30 thorstenr Exp $
  *
  * Datei:				savevoting.php
  * Autor:				Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -29,7 +29,7 @@ if (isset($_POST["vote"]) && $_POST["vote"] != "" && votingCheck($_POST["artikel
 			}
 		}
 	if ($noUser == "0" || $noUser == "") {
-		$db->query("INSERT INTO ".SQLPREFIX."faqvoting (id, artikel, vote, usr, datum, ip) VALUES (".$db->insert_id(SQLPREFIX."faqvoting", "id").", '".$_POST["artikel"]."', '".$_POST["vote"]."', '1', '".time()."', '".$_POST["userip"]."');");
+		$db->query("INSERT INTO ".SQLPREFIX."faqvoting (id, artikel, vote, usr, datum, ip) VALUES (".$db->nextID(SQLPREFIX."faqvoting", "id").", '".$_POST["artikel"]."', '".$_POST["vote"]."', '1', '".time()."', '".$_POST["userip"]."');");
 		}
     else {
 		$db->query("UPDATE ".SQLPREFIX."faqvoting SET vote = vote+'".$_POST["vote"]."', usr = user+'1', datum = '".time()."', ip = '".$_POST["userip"]."' where artikel = '".$_POST["artikel"]."';");

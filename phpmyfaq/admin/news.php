@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: news.php,v 1.2 2004-12-11 18:11:33 thorstenr Exp $
+* $Id: news.php,v 1.3 2004-12-11 22:40:06 thorstenr Exp $
 *
 * The main administration file for the news
 *
@@ -123,7 +123,7 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "save" && $permission["addnews"
 	else {
 		$target = $_REQUEST["target"];
 		}
-    $result = $db->query("INSERT INTO ".SQLPREFIX."faqnews (id, header, artikel, link, linktitel, datum, target) VALUES (".$db->insert_id(SQLPREFIX."faqnews",
+    $result = $db->query("INSERT INTO ".SQLPREFIX."faqnews (id, header, artikel, link, linktitel, datum, target) VALUES (".$db->nextID(SQLPREFIX."faqnews",
 "id").", '".$_REQUEST["header"]."', '".$artikel."', '".$_REQUEST["link"]."', '".$_REQUEST["linktitel"]."', '".$datum."', '".$target."')");
 	print "<p>".$PMF_LANG["ad_news_updatesuc"]."</p>";
 	}

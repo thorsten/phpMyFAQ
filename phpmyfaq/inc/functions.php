@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.21 2004-12-11 21:43:53 thorstenr Exp $
+* $Id: functions.php,v 1.22 2004-12-11 22:40:27 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -324,7 +324,7 @@ function Tracking($action, $id)
 			$sid = "";
         }
 		if (!isset($sid)) {
-            $sid = $db->insert_id(SQLPREFIX."faqsessions", "sid");
+            $sid = $db->nextID(SQLPREFIX."faqsessions", "sid");
 			$db->query("INSERT INTO ".SQLPREFIX."faqsessions (sid, ip, time) VALUES (".$sid.", '".$_SERVER["REMOTE_ADDR"]."', ".time().")");
         }
 		$fp = @fopen("./data/tracking".date("dmY"), "a+b");
@@ -1103,7 +1103,7 @@ function adminlog($text)
 {
     global $db, $PMF_CONF, $auth_user;
     if (isset($PMF_CONF["enableadminlog"])) {
-        $db->query('INSERT INTO '.SQLPREFIX.'faqadminlog (id, time, usr, text, ip) VALUES ('.$db->insert_id(SQLPREFIX.'faqadminlog', 'id').', '.time().', "'.$auth_user.'", "'.nl2br(addslashes($text)).'", "'.$_SERVER["REMOTE_ADDR"].'")');
+        $db->query('INSERT INTO '.SQLPREFIX.'faqadminlog (id, time, usr, text, ip) VALUES ('.$db->nextID(SQLPREFIX.'faqadminlog', 'id').', '.time().', "'.$auth_user.'", "'.nl2br(addslashes($text)).'", "'.$_SERVER["REMOTE_ADDR"].'")');
     }
 }
 

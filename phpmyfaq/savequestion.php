@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: savequestion.php,v 1.3 2004-12-11 20:06:32 thorstenr Exp $
+* $Id: savequestion.php,v 1.4 2004-12-11 22:41:30 thorstenr Exp $
 *
 * @author           Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author           David Saez Padros <david@ols.es>
@@ -39,7 +39,7 @@ if ($_REQUEST["username"] && $_REQUEST["usermail"] && $_REQUEST["content"] && IP
             $datum = date("YmdHis");
             $content  = addslashes($_REQUEST["content"]);
             
-            $result = $db->query("INSERT INTO ".SQLPREFIX."faqfragen (id, ask_username, ask_usermail, ask_rubrik, ask_content, ask_date) VALUES (".$db->insert_id(SQLPREFIX."faqfragen", "id").", '".$_REQUEST["username"]."', '".$_REQUEST["usermail"]."', '".$_REQUEST["rubrik"]."', '".$content."', '".$datum."')");
+            $result = $db->query("INSERT INTO ".SQLPREFIX."faqfragen (id, ask_username, ask_usermail, ask_rubrik, ask_content, ask_date) VALUES (".$db->nextID(SQLPREFIX."faqfragen", "id").", '".$_REQUEST["username"]."', '".$_REQUEST["usermail"]."', '".$_REQUEST["rubrik"]."', '".$content."', '".$datum."')");
             
             $questionMail = "User: ".$_REQUEST["username"].", mailto:".$_REQUEST["usermail"]."\n".$PMF_LANG["msgCategory"].":  ".$categories[$_REQUEST["rubrik"]]["name"]."\n\n".wordwrap(stripslashes($content), 72);
             

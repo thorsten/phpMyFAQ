@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * $Id: save.php,v 1.4 2004-12-11 20:06:32 thorstenr Exp $
+ * $Id: save.php,v 1.5 2004-12-11 22:41:30 thorstenr Exp $
  *
  * Datei:				save.php
  * Autor:				Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -43,8 +43,8 @@ if (isset($_REQUEST["username"]) && isset($_REQUEST["rubrik"]) && isset($_REQUES
 	$thema = safeSQL(safeHTML($_REQUEST["thema"]));
 	$keywords = safeSQL($_REQUEST["keywords"]);
 	$author = $_REQUEST["username"];
-	$db->query("INSERT INTO ".SQLPREFIX."faqdata (id, lang, active, thema, content, keywords, author, email, comment, datum) VALUES (".$db->insert_id(SQLPREFIX."faqdata", "id").", '".$lang."', 'no', '".$thema."', '".$content."', '".$keywords."', '".$author."', '".$_REQUEST["usermail"]."', 'y', '".$datum."')");
-	$db->query("INSERT INTO ".SQLPREFIX."faqvisits (id, lang, visits, last_visit) VALUES ('".$db->insert_id('faqvisits', 'id')."', '".$lang."', '1', '".time()."')");
+	$db->query("INSERT INTO ".SQLPREFIX."faqdata (id, lang, active, thema, content, keywords, author, email, comment, datum) VALUES (".$db->nextID(SQLPREFIX."faqdata", "id").", '".$lang."', 'no', '".$thema."', '".$content."', '".$keywords."', '".$author."', '".$_REQUEST["usermail"]."', 'y', '".$datum."')");
+	$db->query("INSERT INTO ".SQLPREFIX."faqvisits (id, lang, visits, last_visit) VALUES (".$db->insert_id('faqdata', 'id').", '".$lang."', '1', '".time()."')");
 	mail($IDN->encode($PMF_CONF["adminmail"]), $PMF_CONF["title"], $PMF_LANG["msgMailCheck"], "From: ".$IDN->encode($_REQUEST["usermail"]));
 	$tpl->processTemplate ("writeContent", array(
 				"msgNewContentHeader" => $PMF_LANG["msgNewContentHeader"],

@@ -41,7 +41,7 @@ if ($permission["editbt"]) {
             $category_query .= 
         }
 		
-        $result_record = $db->query("INSERT INTO ".SQLPREFIX."faqdata (id, lang, thema, content, keywords, author, active, datum, email, comment) VALUES (".$db->insert_id(SQLPREFIX."faqdata", "id").", '".$lang."', '".$thema."', '".$content."', '".$keywords."', '".$author."', '".$_REQUEST["active"]."', '".$datum."', '".$_REQUEST["email"]."', '".$comment."')");
+        $result_record = $db->query("INSERT INTO ".SQLPREFIX."faqdata (id, lang, thema, content, keywords, author, active, datum, email, comment) VALUES (".$db->nextID(SQLPREFIX."faqdata", "id").", '".$lang."', '".$thema."', '".$content."', '".$keywords."', '".$author."', '".$_REQUEST["active"]."', '".$datum."', '".$_REQUEST["email"]."', '".$comment."')");
         
         $result_categories = $db->query('INSERT INTO '.SQLPREFIX.'faqcategoryrelations (category_id, catgeory_lang, record_id, record_lang) VALUES ('', '', '.$db->insert_id(SQLPREFIX.'faqdata', 'id').', "'.$lang'"');
         
