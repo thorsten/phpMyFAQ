@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: news.php,v 1.8 2005-02-03 13:37:35 thorstenr Exp $
+* $Id: news.php,v 1.9 2005-02-04 08:13:43 thorstenr Exp $
 *
 * The main administration file for the news
 *
@@ -108,7 +108,7 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
 	print $PMF_LANG["err_NotAuth"];
 } elseif (isset($_REQUEST["do"]) && $_REQUEST["do"] == "save" && $permission["addnews"]) {
 	$datum = date("YmdHis");
-	$artikel = nl2br($db->escape_string($_REQUEST["content"]));
+	$artikel = $db->escape_string($_REQUEST["content"]);
     (!isset($_REQUEST["target"])) ? $target = "" : $target = $_POST["target"];
     $result = $db->query("INSERT INTO ".SQLPREFIX."faqnews (id, header, artikel, link, linktitel, datum, target) VALUES (".$db->nextID(SQLPREFIX."faqnews",
 "id").", '".$db->escape_string($_REQUEST["header"])."', '".$artikel."', '".$_REQUEST["link"]."', '".$_REQUEST["linktitel"]."', '".$datum."', '".$target."')");
@@ -117,7 +117,7 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
 	print $PMF_LANG["err_NotAuth"];
 } elseif (isset($_REQUEST["do"]) && $_REQUEST["do"] == "update" && $permission["editnews"]) {
 	$datum = date("YmdHis");
-	$artikel = nl2br($db->escape_string($_REQUEST["content"]));
+	$artikel = $db->escape_string($_REQUEST["content"]);
 	(!isset($_REQUEST["target"])) ? $target = "" : $target = $_POST["target"];
 	$result = $db->query("UPDATE ".SQLPREFIX."faqnews SET header = '".$db->escape_string($_REQUEST["header"])."', artikel = '".$artikel."', link = '".$_REQUEST["link"]."', linktitel = '".$_REQUEST["linktitel"]."', datum = '".$datum."', target = '".$target."' WHERE id = ".$_REQUEST["id"]);
 	print "<p>".$PMF_LANG["ad_news_updatesuc"]."</p>";
