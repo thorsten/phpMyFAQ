@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.5 2004-12-17 14:34:42 thorstenr Exp $
+* $Id: language_en.php,v 1.6 2005-03-17 07:07:59 thorstenr Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -239,7 +239,7 @@ $PMF_LANG["ad_entry_commentdelsuc"] = "The comment was <strong>successfully</str
 $PMF_LANG["ad_entry_back"] = "Back to the article";
 $PMF_LANG["ad_entry_commentdelfail"] = "The comment was <strong>not</strong> deleted.";
 $PMF_LANG["ad_entry_savedsuc"] = "The changes were saved <strong>successfully</strong>.";
-$PMF_LANG["ad_entry_savedfail 	"] = "Unfortunately, a <strong>database error</strong> occured.";
+$PMF_LANG["ad_entry_savedfail"] = "Unfortunately, a <strong>database error</strong> occured.";
 $PMF_LANG["ad_entry_del_1"] = "Are you sure that the topic";
 $PMF_LANG["ad_entry_del_2"] = "of";
 $PMF_LANG["ad_entry_del_3"] = "should be deleted?";
