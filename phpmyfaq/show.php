@@ -1,0 +1,52 @@
+<?php
+/******************************************************************************
+ * Datei:				show.php
+ * Autor:				Thorsten Rinne		thorsten@phpmyfaq.de
+ * Datum:				2002-08-27
+ * Letzte Änderung:		2004-05-31
+ * Copyright:           (c) 2001-2004 Thorsten Rinne
+ * 
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ ******************************************************************************/
+
+if (isset($_REQUEST["cat"]) && checkIntVar($_REQUEST["cat"]) == TRUE) {
+	$category = $_REQUEST["cat"];
+	}
+
+if (isset($category) && $category != 0) {
+	Tracking("rubrikview", $category);
+    $parent = $tree->categoryName[$category]["parent_id"];
+    $name = $tree->categoryName[$category]["name"];
+    
+	if ($parent != 0) {
+		$up = "<a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=show&amp;cat=".$parent."\">".$PMF_LANG["msgCategoryUp"]."</a>";
+        }
+    else {
+        $up = "";
+        }
+    
+    $tpl->processTemplate ("writeContent", array(
+				"writeCategory" => $PMF_LANG["msgEntriesIn"].$name,
+				"writeThemes" => printThemes($category),
+				"writeOneThemeBack" => $up
+				));
+	$tpl->includeTemplate("writeContent", "index");
+	}
+else {
+	Tracking("overview", 0);
+	$tpl->processTemplate ("writeContent", array(
+				"writeCategory" => $PMF_LANG["msgFullCategories"],
+				"writeThemes" => $tree->viewTree(),
+				"writeOneThemeBack" => ''
+				));
+	$tpl->includeTemplate("writeContent", "index");
+	}
+?>
