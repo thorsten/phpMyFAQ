@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: pdf.php,v 1.9 2004-11-27 10:58:10 thorstenr Exp $
+* $Id: pdf.php,v 1.10 2004-11-30 07:04:27 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Peter Beauvain <pbeauvain@web.de>
@@ -92,11 +92,10 @@ if ($db->num_rows($result) > 0) {
 		$content = $row->content;
 		$date = $row->datum;
 		$author = $row->author;
-		}
 	}
-else {
+} else {
 	print "Error!";
-	}
+}
 
 $pdf = new PDF($currentCategory, $thema, $tree->categoryName, $orientation = "P", $unit = "mm", $format = "A4");
 $pdf->Open();
@@ -128,10 +127,9 @@ if (preg_match("/MSIE/i", $_SERVER["HTTP_USER_AGENT"])) {
     header("Content-Length: ".filesize($pdfFile));
     header("Content-Disposition: Attachment; filename=".$id.".pdf" );  
     readfile($pdfFile);
-    }
-else {
+} else {
     header("Location: ".$pdfFile."");
     header("Content-Type: application/pdf");
     header("Content-Length: ".filesize($pdfFile));
     readfile($pdfFile);
-    }
+}
