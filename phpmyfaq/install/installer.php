@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.15 2005-02-06 19:58:50 thorstenr Exp $
+* $Id: installer.php,v 1.16 2005-02-26 09:10:08 thorstenr Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -25,7 +25,7 @@
 * under the License.
 */
 
-define("VERSION", "1.5.0 RC1");
+define("VERSION", "1.5.0 RC2");
 define("COPYRIGHT", "&copy; 2001-2005 <a href=\"http://www.phpmyfaq.de/\">phpMyFAQ-Team</a> | All rights reserved.");
 define("SAFEMODE", @ini_get("safe_mode"));
 define("PMF_ROOT_DIR", dirname(dirname(__FILE__)));
@@ -53,6 +53,15 @@ function php_check ($ist = "", $soll = "", $err_msg = "")
     return TRUE;
 }
 
+function db_check()
+{
+	if (!extension_loaded('mysql') && !extension_loaded('pgsql') && !extension_loaded('sybase') && !extension_loaded('mssql')) {
+		return FALSE;
+	} else {
+        return TRUE;
+    }
+}
+
 function phpmyfaq_check($file)
 {
     if (@include($file)) {
@@ -60,26 +69,28 @@ function phpmyfaq_check($file)
         // check for version 1.3.x
         if ((isset($mysql_server) && $mysql_server != "") || (isset($mysql_user) && $mysql_user != "") || (isset($mysql_passwort) && $mysql_passwort != "") || (isset($mysql_db) && $mysql_db != "")) {
             return FALSE;
-            }
+        }
         // check for version 1.4.x
         if ((isset($DB["server"]) && $DB["server"] != "") || (isset($DB["user"]) && $DB["user"] != "") || (isset($DB["password"]) && $DB["password"] != "") || (isset($DB["db"]) && $DB["db"] != "") || (isset($DB["prefix"]) && $DB["prefix"] != "")) {
             return FALSE;
-            }
-        return TRUE;
         }
+        return TRUE;
+    }
     return TRUE;
 }
 
-function uninstall() {
+function uninstall()
+{
 	global $uninst, $db;
 	while ($each_query = each($uninst)) {
 		$result = $db->query($each_query[1]);
-		}
-	}
+    }
+}
 
-function HTMLFooter() {
+function HTMLFooter()
+{
 	print "<p class=\"center\">".COPYRIGHT."</p>\n</body>\n</html>";
-	}
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -168,6 +179,11 @@ function HTMLFooter() {
 <?php
 if (php_check(phpversion(), '4.1.0') == FALSE) {
 	print "<p class=\"center\">You need PHP Version 4.1.0 or higher!</p>\n";
+	HTMLFooter();
+	die();
+}
+if (db_check() == FALSE) {
+	print "<p class=\"center\">No supported database found!</p>\n";
 	HTMLFooter();
 	die();
 }
@@ -273,9 +289,6 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 	}
 	if (extension_loaded('mssql')) {
 		print '<option value="mssql">MS SQL Server</option>';
-	}
-	if (!extension_loaded('mysql') && !extension_loaded('pgsql') && !extension_loaded('sybase') && !extension_loaded('mssql')) {
-		print '<option value="">Sorry, no supported database found in your PHP version!</option>';
 	}
 ?>	
 </select>
