@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.7 2004-12-17 10:26:55 thorstenr Exp $
+* $Id: installer.php,v 1.8 2004-12-17 14:27:45 thorstenr Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -171,13 +171,11 @@ if (php_check(phpversion(), '4.1.0') == FALSE) {
 	HTMLFooter();
 	die();
 }
-/*
 if (!phpmyfaq_check("../inc/data.php")) {
 	print "<p class=\"center\">It seems you already running a version of phpMyFAQ.<br />Please use the <a href=\"update.php\">update script</a>.</p>\n";
 	HTMLFooter();
 	die();
 }
-*/
 if (!is_dir(PMF_ROOT_DIR."/attachments")) {
     if (!mkdir (PMF_ROOT_DIR."/attachments", 0755)) {
         print "<p class=\"center\">The directory ../attachments could not be created. Please create it manually and change access to chmod 755 (or greater if necessary).</p>\n";
@@ -305,7 +303,7 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 </fieldset>
 <br />
 <?php
-    //if (extension_loaded('ldap')) {
+    if (extension_loaded('ldap')) {
 ?>
 <fieldset class="installation">
 <legend class="installation">LDAP information</legend>
@@ -315,8 +313,13 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 <span class="help" title="Please enter the host of your LDAP server here.">?</span>
 </p>
 <p>
+<span class="text">LDAP server port:</span>
+<input class="input" type="text" name="ldap_port" value="389" />
+<span class="help" title="Please enter the port of your LDAP server here.">?</span>
+</p>
+<p>
 <span class="text">Specified RDN:</span>
-<input class="input" type="text" name="ldap_username" />
+<input class="input" type="text" name="ldap_user" />
 <span class="help" title="Please enter your specified RDN username here.">?</span>
 </p>
 <p>
@@ -332,7 +335,7 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 </fieldset>
 <br />
 <?php
-    //}
+    }
 ?>
 
 <fieldset class="installation">
@@ -464,6 +467,13 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
             HTMLFooter();
             die();
         }
+        if (isset($_POST["ldap_port"]) && $_POST["ldap_port"] != "") {
+            $ldap_port = $_POST["ldap_port"];
+        } else {
+            print "<p class=\"error\"><strong>Error:</strong> There's no LDAP port input.</p>\n";
+            HTMLFooter();
+            die();
+        }
         if (isset($_POST["ldap_user"]) && $_POST["ldap_user"] != "") {
             $ldap_user = $_POST["ldap_user"];
         } else {
@@ -543,9 +553,7 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
         $email = "";
     }
     
-    /**
-     * Write the DB variables in data.php
-     */
+    // Write the DB variables in data.php
 	if ($fp = @fopen(PMF_ROOT_DIR."/inc/data.php","w")) {
 		@fputs($fp,"<?php\n\$DB[\"server\"] = '".$sql_server."';\n\$DB[\"user\"] = '".$sql_user."';\n\$DB[\"password\"] = '".$sql_passwort."';\n\$DB[\"db\"] = '".$sql_db."';\n\$DB[\"prefix\"] = '".$sqltblpre."';\n\$DB[\"type\"] = '".$sql_type."';\n?>");
 		@fclose($fp);
@@ -555,9 +563,21 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 		die();
 	}
     
-    /**
-     * Create config.php and write the language variables in the file
-     */
+    // check LDAP if available
+    if (extension_loaded('ldap')) {
+        
+        if ($fp = @fopen(PMF_ROOT_DIR."/inc/dataldap.php","w")) {
+            @fputs($fp,"<?php\n\$PMF_LDAP[\"ldap_server\"] = '".$ldap_server."';\n\$PMF_LDAP[\"ldap_port\"] = '".$ldap_port."';\n\$PMF_LDAP[\"ldap_user\"] = '".$ldap_user."';\n\$PMF_LDAP[\"ldap_password\"] = '".$ldap_passwort."';\n\$PMF_LDAP[\"ldap_base\"] = '".$ldap_base."';\n;\n?>");
+            @fclose($fp);
+        } else {
+            print "<p class=\"error\"><strong>Error:</strong> Cannot write to dataldap.php.</p>";
+            HTMLFooter();
+            die();
+        }
+        
+    }
+	
+    // Create config.php and write the language variables in the file
     if (@file_exists(PMF_ROOT_DIR."/inc/config.php")) {
     	print "<p class=\"center\">A config file was found. Please backup ../inc/config.php and remove the file.</p>\n";
     	HTMLFooter();
@@ -596,9 +616,7 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 		die();
 	}
 	
-    /**
-     * connect to the database using inc/data.php
-     */
+    // connect to the database using inc/data.php
     require_once(PMF_ROOT_DIR."/inc/data.php");
 	$func = "db_".$DB["type"];
 	$db = new $func();
@@ -640,3 +658,4 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
     }
     HTMLFooter();
 }
+?>
