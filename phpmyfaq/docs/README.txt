@@ -1,6 +1,6 @@
-$Id: README.txt,v 1.18 2005-02-24 19:29:13 thorstenr Exp $
+$Id: README.txt,v 1.19 2005-02-27 19:26:12 thorstenr Exp $
 
-phpMyFAQ 1.5.0 RC1
+phpMyFAQ 1.5.0 RC2
 Codename "Phoebe"
 
 Installation/Update:
@@ -9,11 +9,10 @@ Please read the documentation (documentation.en.html) carefully.
 Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
-Changes since 1.5.0 beta3:
-- fixed bug in update script
-- fixed some bugs in RSS feeds
-- fixed some bugs in full text search
-- updated French language file
+Changes since 1.5.0 RC1:
+- fixed bug in MS SQL class
+- fixed bug when ext/xmlrpc is installed
+- fixed some minor bugs
 
 Known issues in phpMyFAQ 1.5.0:
 - templates are not finished
