@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.29 2004-12-23 14:35:30 thorstenr Exp $
+* $Id: functions.php,v 1.30 2004-12-23 17:40:46 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -1374,12 +1374,12 @@ if (!function_exists("array_combine")) {
  * Funktion zum Zusammensetzen der zu sichernden SQL Queries | @@ Meikel, 2003-03-24
  * Last Update: @@ Thorsten, 2003-11-13
  */
-function build_insert ($query, $table)
+function build_insert($query, $table)
 {
 	global $db;
 	if (!$result = $db->query($query)) {
 		return;
-		}
+	}
 	$ret = array();
 	$ret[] = "\n# Table: ".$table;
 	while ($row = $db->fetch_assoc ($result)) {
@@ -1388,10 +1388,14 @@ function build_insert ($query, $table)
 		foreach ($row as $key => $val) {
             $val = safeSQL($val);
 			$p1[] = $key;
-			$p2[] = "'".$val."'";
-			}
-		$ret[] = "INSERT INTO ".$table." (".implode(",", $p1).") VALUES (".implode(",", $p2).");";
+            if (is_numeric($val)) {
+                $p2[] = $val;
+            } else {
+                $p2[] = "'".$val."'";
+            }
 		}
+		$ret[] = "INSERT INTO ".$table." (".implode(",", $p1).") VALUES (".implode(",", $p2).");";
+	}
 	return $ret;
 }
 
@@ -1406,10 +1410,10 @@ function safeSQL($string)
     for ($i = 0; $i < $length; $i++) {
         $char = $string[$i];
         switch ($char) {
-            case "'":    $str .= "\'"; break;
-            case "\\":    $str .= "\\\\"; break;
-            case "\n":    $str .= "\\n"; break;
-            case "\r":    $str .= "\\r"; break;
+            case "'":   $str .= "\'"; break;
+            case "\\":  $str .= "\\\\"; break;
+            case "\n":  $str .= "\\n"; break;
+            case "\r":  $str .= "\\r"; break;
             default:    $str .= $char;
             }
         }
