@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: rss.php,v 1.8 2005-02-14 13:39:03 thorstenr Exp $
+* $Id: rss.php,v 1.9 2005-03-17 07:10:24 thorstenr Exp $
 *
 * The RSS feed with the latest five records
 *
@@ -48,8 +48,8 @@ if ($num = $db->num_rows($result) > 0) {
         $counter++;
         
         $rss .= "\t<item>\n";
-        $rss .= "\t\t<title>".stripslashes(htmlspecialchars(makeShorterText($row->thema, 8)))." ...</title>\n";
-        $rss .= "\t\t<description>".stripslashes(htmlspecialchars(makeShorterText($row->thema, 8)))." (".$row->visits." ".$PMF_LANG["msgViews"].")</description>\n";
+        $rss .= "\t\t<title><![CDATA[ ".stripslashes(htmlspecialchars(makeShorterText($row->thema, 8)))." ... ]]></title>\n";
+        $rss .= "\t\t<description><![CDATA[ ".stripslashes(htmlspecialchars(makeShorterText($row->thema, 8)))." (".$row->visits." ".$PMF_LANG["msgViews"].") ]]></description>\n";
         $rss .= "\t\t<link>http://".$_SERVER["HTTP_HOST"].str_replace("feed/latest/rss.php", "index.php", $_SERVER["PHP_SELF"])."?action=artikel&amp;cat=".$row->category_id."&amp;id=".$row->id."&amp;artlang=".$row->lang."</link>\n";
         $rss .= "\t</item>\n";
         
