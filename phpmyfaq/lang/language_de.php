@@ -1,13 +1,13 @@
 <?php
 /**
- * $Id: language_de.php,v 1.3 2004-11-13 18:41:22 thorstenr Exp $
+ * $Id: language_de.php,v 1.4 2004-12-07 20:35:24 thorstenr Exp $
  *
  * File:                language_de.php
  * Description:		    German language file
  * Authors:				Thorsten Rinne <thorsten@phpmyfaq.de>
  *                      A. Neufang <B_A_F_F@gmx.de>
  * Date:				2004-02-19
- * Last Update:		    2004-11-02
+ * Last Update:		    2004-12-07
  * Copyright:           (c) 2004 phpMyFAQ Team
  * 
  * The contents of this file are subject to the Mozilla Public License
@@ -75,8 +75,8 @@ $PMF_LANG["msgYourComment"] = "Eingegebener Kommentar:";
 $PMF_LANG["msgCommentThanks"] = "<p><strong>Vielen Dank f&uuml;r den Kommentar!</strong></p>";
 $PMF_LANG["msgSeeXMLFile"] = "XML-Datei &ouml;ffnen";
 $PMF_LANG["msgSend2Friend"] = "Artikel weiterempfehlen";
-$PMF_LANG["msgS2FName"] = "Empfänger Name:";
-$PMF_LANG["msgS2FEMail"] = "Empfänger E-Mailadresse:";
+$PMF_LANG["msgS2FName"] = "Absender Name:";
+$PMF_LANG["msgS2FEMail"] = "Absender E-Mailadresse:"; 
 $PMF_LANG["msgS2FFriends"] = "Freundinnen und Freunde:";
 $PMF_LANG["msgS2FEMails"] = ". E-Mailadresse:";
 $PMF_LANG["msgS2FText"] = "Folgender Text wird gesendet:";
