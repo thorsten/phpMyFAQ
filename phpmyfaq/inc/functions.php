@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.23 2004-12-13 19:56:02 thorstenr Exp $
+* $Id: functions.php,v 1.24 2004-12-13 20:33:21 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -88,7 +88,7 @@ function selectLanguages($default)
 function getThema($id, $lang)
 {
 	global $db, $PMF_LANG;
-	$query = "SELECT ".SQLPREFIX."faqdata.thema FROM ".SQLPREFIX."faqdata WHERE id = '".$id."' AND lang = '".$lang."'";
+	$query = "SELECT ".SQLPREFIX."faqdata.thema FROM ".SQLPREFIX."faqdata WHERE id = ".$id." AND lang = '".$lang."'";
 	$result = $db->query($query);
 	if ($db->num_rows($result) > 0) {
 		while ($row = $db->fetch_object($result)) {
@@ -242,7 +242,7 @@ LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPR
 function check4Language($id)
 {
 	global $db;
-	$result = $db->query("SELECT lang FROM ".SQLPREFIX."faqdata WHERE id = '".$id."'");
+	$result = $db->query("SELECT lang FROM ".SQLPREFIX."faqdata WHERE id = ".$id);
 	if ($db->num_rows($result) > 0) {
 		while ($row = $db->fetch_object($result)) {
 			$output[] = $row->lang;
@@ -278,7 +278,7 @@ function votingCheck($id, $ip)
 {
 	global $db;
 	$timeNow = (time() - 300);
-	if ($db->num_rows($db->query("SELECT id FROM ".SQLPREFIX."faqvoting WHERE artikel = '".$id."' AND (ip = '".$ip."' AND datum > '".$timeNow."')"))) {
+	if ($db->num_rows($db->query("SELECT id FROM ".SQLPREFIX."faqvoting WHERE artikel = ".$id." AND (ip = '".$ip."' AND datum > ".$timeNow.")"))) {
 		return FALSE;
 		}
 	return TRUE;
@@ -372,7 +372,7 @@ function wait($usecs)
 function CheckSID($sid, $ip)
 {
 	global $db;
-	if ($db->num_rows($db->query("SELECT sid FROM ".SQLPREFIX."faqsessions WHERE sid='".$sid."' AND IP='".$ip."' AND time > ".(time()-86400))) < 1) {
+	if ($db->num_rows($db->query("SELECT sid FROM ".SQLPREFIX."faqsessions WHERE sid = ".$sid." AND ip = '".$ip."' AND time > ".(time()-86400))) < 1) {
 		Tracking("oldSession",$sid);
 		}
 }
@@ -386,7 +386,7 @@ function userOnline()
 	global $db, $PMF_CONF;
     if (isset($PMF_CONF["tracking"])) {
 		$timeNow = (time() - 300);
-		$result = $db->query("SELECT count(sid) FROM ".SQLPREFIX."faqsessions WHERE time > '".$timeNow."' GROUP BY ip");
+		$result = $db->query("SELECT count(sid) FROM ".SQLPREFIX."faqsessions WHERE time > ".$timeNow." GROUP BY ip");
 		if (isset($result)) {
 			return $db->num_rows($result);
 	        }
@@ -538,15 +538,15 @@ function logViews($myid, $lang)
 	global $db;
 	$nVisits = "0";
 	$heute = time();
-	if ($result = $db->query ("SELECT visits FROM ".SQLPREFIX."faqvisits WHERE id = '".$myid."' AND lang = '".$lang."'")) {
+	if ($result = $db->query ("SELECT visits FROM ".SQLPREFIX."faqvisits WHERE id = ".$myid." AND lang = '".$lang."'")) {
 		list($nVisits) = $db->fetch_row($result);
 		}
 	if ($nVisits == "0" || $nVisits == "") {
-		$db->query ("INSERT INTO ".SQLPREFIX."faqvisits (id, lang, visits, last_visit) VALUES ('".$myid."', '".$lang."', '1', '".$heute."')");
+		$db->query ("INSERT INTO ".SQLPREFIX."faqvisits (id, lang, visits, last_visit) VALUES (".$myid.", '".$lang."', '1', '".$heute."')");
 		}
 	else {
 		
-		$db->query ("UPDATE ".SQLPREFIX."faqvisits SET visits = visits+1, last_visit = '".$heute."' WHERE id = '".$myid."' AND lang = '".$lang."'");
+		$db->query ("UPDATE ".SQLPREFIX."faqvisits SET visits = visits+1, last_visit = '".$heute."' WHERE id = ".$myid." AND lang = '".$lang."'");
 		}
 }
 
@@ -569,8 +569,7 @@ function EndSlash($string)
 function generateVoting($id)
 {
 	global $db, $PMF_LANG;
-	$query = "SELECT vote, usr FROM ".SQLPREFIX."faqvoting WHERE artikel = '".$id."'";
-	$result = $db->query($query);
+	$result = $db->query("SELECT vote, usr FROM ".SQLPREFIX."faqvoting WHERE artikel = ".$id);
 	if ($db->num_rows($result) > 0) {
 		list($vote, $user) = $db->fetch_row($result);
 		return " ".round(($vote/$user),2)." ".$PMF_LANG["msgVoteFrom"]." 5 (".$user." ".$PMF_LANG["msgVotings"].")";
@@ -588,7 +587,7 @@ function generateComments($id)
 {
 	global $db, $PMF_LANG;
 	
-	$result = $db->query("SELECT usr,email,comment FROM ".SQLPREFIX."faqcomments WHERE id = '".$id."'");
+	$result = $db->query("SELECT usr, email, comment FROM ".SQLPREFIX."faqcomments WHERE id = ".$id);
 	$output = "";
 	if ($db->num_rows($result) > 0) {
 		while ($row = $db->fetch_object($result)) {
