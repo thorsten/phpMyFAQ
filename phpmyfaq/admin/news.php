@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: news.php,v 1.3 2004-12-11 22:40:06 thorstenr Exp $
+* $Id: news.php,v 1.4 2004-12-13 20:26:43 thorstenr Exp $
 *
 * The main administration file for the news
 *
@@ -82,7 +82,7 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "edit" && $permission["editnews
 <?php
 		}
 	elseif (isset($_REQUEST["id"])) {
-		$result = $db->query("select id, header, artikel, link, linktitel, target from ".SQLPREFIX."faqnews where id = '".$_REQUEST["id"]."'"); 
+		$result = $db->query("select id, header, artikel, link, linktitel, target from ".SQLPREFIX."faqnews where id = ".$_REQUEST["id"]); 
 		while ($row = $db->fetch_object($result)) {
 ?>
 	<h2><?php print $PMF_LANG["ad_news_edit"]; ?></h2>
@@ -141,7 +141,7 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "update" && $permission["editne
 	else {
 		$target = $_REQUEST["target"];
 		}
-	$result = $db->query("UPDATE ".SQLPREFIX."faqnews SET header = '".$_REQUEST["header"]."', artikel = '".$artikel."', link = '".$_REQUEST["link"]."', linktitel = '".$_REQUEST["linktitel"]."', datum = '".$datum."', target = '".$target."' WHERE id = '".$_REQUEST["id"]."'");
+	$result = $db->query("UPDATE ".SQLPREFIX."faqnews SET header = '".$_REQUEST["header"]."', artikel = '".$artikel."', link = '".$_REQUEST["link"]."', linktitel = '".$_REQUEST["linktitel"]."', datum = '".$datum."', target = '".$target."' WHERE id = ".$_REQUEST["id"]);
 	print "<p>".$PMF_LANG["ad_news_updatesuc"]."</p>";
 	}
 elseif (isset($_REQUEST["do"]) && $_REQUEST["do"] == "update" && $permission["editnews"]) {
@@ -165,7 +165,7 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "delete" && $permission["delnew
 <?php
 		}
 	elseif ($_REQUEST["really"] == "yes") {
-		$result = $db->query("DELETE FROM ".SQLPREFIX."faqnews WHERE id = '".$_REQUEST["id"]."'");
+		$result = $db->query("DELETE FROM ".SQLPREFIX."faqnews WHERE id = ".$_REQUEST["id"]);
 		print "<p>".$PMF_LANG["ad_news_delsuc"]."</p>";
 		}
 	}

@@ -1,22 +1,23 @@
 <?php
-/******************************************************************************
- * File:				record.delete.php
- * Description:			delete a record
- * Author:				Thorsten Rinne <thorsten@phpmyfaq.de>
- * Date:				2003-02-23
- * Last change:			2004-11-01
- * Copyright:           (c) 2001-2004 Thorsten Rinne
- * 
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- * 
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- ******************************************************************************/
+/**
+* $Id: record.delete.php,v 1.3 2004-12-13 20:26:43 thorstenr Exp $
+*
+* Deletes a record
+*
+* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+* @since        2003-02-23
+* @copyright    (c) 2001-2004 phpMyFAQ Team
+* 
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
+* 
+* Software distributed under the License is distributed on an "AS IS"
+* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+* License for the specific language governing rights and limitations
+* under the License.
+*/
 
 print "<h2>".$PMF_LANG["ad_entry_aor"]."</h2>\n";
 if ($permission["delbt"]) {
@@ -32,11 +33,11 @@ if ($permission["delbt"]) {
 				}
 			rmdir (PMF_ROOT_DIR."/attachments/".$_REQUEST["id"]."/");
 			}
-		$db->query("DELETE FROM ".SQLPREFIX."faqdata WHERE id = '".$_REQUEST["id"]."' AND lang = '".$_REQUEST["language"]."'");
-		$db->query("DELETE FROM ".SQLPREFIX."faqvoting WHERE artikel = '".$_REQUEST["id"]."' AND lang = '".$_REQUEST["language"]."'");
-		$db->query("DELETE FROM ".SQLPREFIX."faqcomments WHERE id = '".$_REQUEST["id"]."' AND lang = '".$_REQUEST["language"]."'");
-		$db->query("DELETE FROM ".SQLPREFIX."faqvisits WHERE id = '".$_REQUEST["id"]."' AND lang = '".$_REQUEST["language"]."'");
-		$db->query("DELETE FROM ".SQLPREFIX."faqchanges WHERE artikel = '".$_REQUEST["id"]."' AND lang = '".$_REQUEST["language"]."'");
+		$db->query("DELETE FROM ".SQLPREFIX."faqdata WHERE id = ".$_REQUEST["id"]." AND lang = '".$_REQUEST["language"]."'");
+		$db->query("DELETE FROM ".SQLPREFIX."faqvoting WHERE artikel = ".$_REQUEST["id"]." AND lang = '".$_REQUEST["language"]."'");
+		$db->query("DELETE FROM ".SQLPREFIX."faqcomments WHERE id = ".$_REQUEST["id"]." AND lang = '".$_REQUEST["language"]."'");
+		$db->query("DELETE FROM ".SQLPREFIX."faqvisits WHERE id = ".$_REQUEST["id"]." AND lang = '".$_REQUEST["language"]."'");
+		$db->query("DELETE FROM ".SQLPREFIX."faqchanges WHERE artikel = ".$_REQUEST["id"]." AND lang = '".$_REQUEST["language"]."'");
 		print "<p>".$PMF_LANG["ad_entry_delsuc"]."</p>\n";
 		}
 	if ($_REQUEST["subm"] == $PMF_LANG["ad_gen_no"]) {

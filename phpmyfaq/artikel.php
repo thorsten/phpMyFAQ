@@ -1,6 +1,9 @@
 <?php
 /**
-* $Id: artikel.php,v 1.8 2004-12-13 19:58:14 thorstenr Exp $
+* $Id: artikel.php,v 1.9 2004-12-13 20:29:18 thorstenr Exp $
+*
+* Shows the page with the FAQ record and - when available - the user
+* comments
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Meikel Katzengreis <meikel@katzengreis.com>
@@ -30,7 +33,7 @@ if (isset($_REQUEST['id']) && is_numeric($_REQUEST['id'])) {
 Tracking("artikelview", $id);
 
 $comment = '';
-$result = $db->query("SELECT id, content, datum, author, email, comment FROM ".SQLPREFIX."faqdata WHERE id = '".$id."' AND lang = '".$lang."' AND active = 'yes'");
+$result = $db->query('SELECT id, content, datum, author, email, comment FROM '.SQLPREFIX.'faqdata WHERE id = '.$id.' AND lang = "'.$lang.'" AND active = "yes"');
 while ($row = $db->fetch_object($result)) {
 	$id = $row->id;
 	$comment = $row->comment;
