@@ -4,7 +4,7 @@
  * Description:         set a new password for an existing user
  * Author:				Thorsten Rinne <thorsten@phpmyfaq.de>
  * Date:				2004-05-11
- * Last change:			2004-07-16
+ * Last change:			2004-11-01
  * Copyright:			(c) 2004 Thorsten Rinne
  * 
  * The contents of this file are subject to the Mozilla Public License
@@ -23,25 +23,26 @@
  * - TRUE	debug mode enabled
  */
 define("DEBUG", FALSE);
+define("PMF_ROOT_DIR", dirname(dirname(__FILE__)));
 
 if (DEBUG == TRUE) {
 	error_reporting(E_ALL);
 	}
 
 /* read configuration */
-require_once ("../inc/data.php");
-require_once ("../inc/config.php");
-require_once ("../inc/constants.php");
+require_once (PMF_ROOT_DIR."/inc/data.php");
+require_once (PMF_ROOT_DIR."/inc/config.php");
+require_once (PMF_ROOT_DIR."/inc/constants.php");
 
 /* include classes and functions */
-require_once ("../inc/db.php");
+require_once (PMF_ROOT_DIR."/inc/db.php");
 define("SQLPREFIX", $DB["prefix"]);
 $db = new db($DB["type"]);
 $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
-require_once ("../inc/category.php");
-require_once ("../inc/functions.php");
-require_once ("../inc/idna_convert.class.php");
-$IDN = new idna_convert();
+require_once (PMF_ROOT_DIR."/inc/category.php");
+require_once (PMF_ROOT_DIR."/inc/functions.php");
+require_once (PMF_ROOT_DIR."/inc/idna_convert.class.php");
+$IDN = new Net_IDNA;
 
 /* get language (default: english) */
 if ($PMF_CONF["detection"] && !isset($LANG) && isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) {
