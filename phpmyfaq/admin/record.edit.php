@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.edit.php,v 1.5 2004-11-25 21:04:40 thorstenr Exp $
+* $Id: record.edit.php,v 1.6 2004-11-30 20:11:24 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23
@@ -55,8 +55,14 @@ if ($permission["editbt"] && emptyTable(SQLPREFIX."faqcategory")) {
         
 		if ((!isset($rubrik) && !isset($thema)) || (isset($_REQUEST["id"]) && $_REQUEST["id"] != "")) {
 		    adminlog("Beitragedit, ".$_REQUEST["id"]);
-			$result = $db->query("SELECT id, lang, active, rubrik, keywords, thema, content, author, email, comment, datum FROM ".SQLPREFIX."faqdata WHERE id = '".$_REQUEST["id"]."' AND lang = '".$_GET["lang"]."'");
-			list($id, $lang, $active, $rubrik, $keywords, $thema, $content, $author, $email, $comment, $date) = $db->fetch_row($result);
+            // Get the category
+            $resultCategory = $db->query('');
+            while ($row = $db->fetch_object($resultCategory)) {
+                $categories[] = array('category_id' => $row->category_id, 'category_lang' => $row->category_lang);
+            }
+            // Get the record
+			$resultRecord = $db->query('SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqdata.active, '.SQLPREFIX.'faqdata.keywords, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqdata.content, '.SQLPREFIX.'faqdata.author, '.SQLPREFIX.'faqdata.email, '.SQLPREFIX.'faqdata.comment, '.SQLPREFIX.'faqdata.datum FROM '.SQLPREFIX.'faqdata WHERE id = '.$_REQUEST["id"].' AND lang = "'.$_GET["lang"]);
+			list($id, $lang, $active, $keywords, $thema, $content, $author, $email, $comment, $date) = $db->fetch_row($resultRecord);
             $content = htmlspecialchars($content);
 			$acti = "saveentry&amp;id=".$_REQUEST["id"];
 			$id = $_REQUEST["id"];
@@ -82,8 +88,8 @@ if ($permission["editbt"] && emptyTable(SQLPREFIX."faqcategory")) {
     <dl>
 
     <dt><strong><?php print $PMF_LANG["ad_entry_category"]; ?></strong></dt>
-    <dd><select name="rubrik[]" size="1" multiple="multiple">
-<?php print $tree->printCategoryOptions($rubrik); ?>
+    <dd><select name="rubrik[]" size="3" multiple="multiple">
+<?php print $tree->printCategoryOptions($categories); ?>
     </select></dd>
     
     <dt><strong><?php print $PMF_LANG["ad_entry_theme"]; ?></strong></dt>

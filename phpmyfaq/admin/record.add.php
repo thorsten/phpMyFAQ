@@ -35,7 +35,7 @@ if ($permission["editbt"]) {
 			}
 		$datum = date("YmdHis");
 		
-		if ($db->query("INSERT INTO ".SQLPREFIX."faqdata (lang, thema, content, keywords, author, rubrik, active, datum, email, comment) VALUES ('".$_REQUEST["language"]."', '".$thema."', '".$content."', '".$keywords."', '".$author."', '".$_REQUEST["rubrik"]."', '".$_REQUEST["active"]."', '".$datum."', '".$_REQUEST["email"]."', '".$comment."')")) {
+		if ($db->query("INSERT INTO ".SQLPREFIX."faqdata (lang, thema, content, keywords, author, active, datum, email, comment) VALUES ('".$_REQUEST["language"]."', '".$thema."', '".$content."', '".$keywords."', '".$author."', '".$_REQUEST["active"]."', '".$datum."', '".$_REQUEST["email"]."', '".$comment."')")) {
 			if ($db->query("INSERT INTO ".SQLPREFIX."faqvisits (id, lang, visits, last_visit) VALUES ('".$db->insert_id(SQLPREFIX."faqdata", "id")."', '".$_REQUEST["language"]."', '1', '".time()."')")) {
 				print $PMF_LANG["ad_entryins_suc"];
 				}
