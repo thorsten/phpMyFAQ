@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.18 2005-02-02 08:50:40 thorstenr Exp $
+* $Id: update.php,v 1.19 2005-02-06 19:55:33 thorstenr Exp $
 *
 * Main update script
 *
@@ -20,7 +20,7 @@
 * under the License.
 */
 
-define("NEWVERSION", "1.5.0 beta3");
+define("NEWVERSION", "1.5.0 RC1");
 define("COPYRIGHT", "&copy; 2001-2005 <a href=\"http://www.phpmyfaq.de/\" target=\"_blank\">phpMyFAQ-Team</a> | All rights reserved.");
 define("PMF_ROOT_DIR", dirname(dirname(__FILE__)));
 
@@ -236,14 +236,14 @@ if ($step == 2) {
 
 /**************************** STEP 3 OF 5 ***************************/
 if ($step == 3) {
-    $ver = version_compare("1.4.1", $_POST["version"]);
+    $version = str_replace(".", "", $_POST["version"]);
 ?>
 <form action="update.php?step=4" method="post">
 <input type="hidden" name="version" value="<?php print $_POST["version"]; ?>" />
 <fieldset class="installation">
 <legend class="installation"><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 3 of 5)</strong></legend>
 <?php
-    if ($ver > 0) {
+    if ($version < 140) {
         // Version 1.3.x
 ?>
 <input type="hidden" name="db[server]" value="<?php print $mysql_server; ?>" />
@@ -275,9 +275,15 @@ if ($step == 3) {
 <input type="hidden" name="edit[mod_rewrite]" value="" />
 <input type="hidden" name="edit[ldap_support]" value="" />
 <?php
-    } elseif ($ver == 0) {
+    } elseif ($version < 150) {
         // Version 1.4.x
 ?>
+<input type="hidden" name="db[server]" value="<?php print $DB["server"]; ?>" />
+<input type="hidden" name="db[user]" value="<?php print $DB["user"]; ?>" />
+<input type="hidden" name="db[password]" value="<?php print $DB["password"]; ?>" />
+<input type="hidden" name="db[db]" value="<?php print $DB["db"]; ?>" />
+<input type="hidden" name="db[prefix]" value="<?php print $DB["prefix"]; ?>" />
+
 <input type="hidden" name="edit[language]" value="<?php print $PMF_CONF["language"]; ?>" />
 <input type="hidden" name="edit[detection]" value="<?php print $PMF_CONF["detection"]; ?>" />
 <input type="hidden" name="edit[title]" value="<?php print $PMF_CONF["title"]; ?>" />
