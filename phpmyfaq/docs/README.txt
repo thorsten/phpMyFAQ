@@ -1,6 +1,6 @@
-$Id: README.txt,v 1.22 2005-03-19 14:36:38 thorstenr Exp $
+$Id: README.txt,v 1.23 2005-03-25 18:18:21 thorstenr Exp $
 
-phpMyFAQ 1.5.0 RC3
+phpMyFAQ 1.5.0 RC4
 Codename "Phoebe"
 
 Installation/Update:
@@ -9,20 +9,21 @@ Please read the documentation (documentation.en.html) carefully.
 Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
-Changes since 1.5.0 RC2:
+Changes since 1.5.0 RC3:
+- added experimental support for MySQL 4.1/5.0 databases
 - fixed many minor bugs
 
 Known issues in phpMyFAQ 1.5.0:
-- templates are not finished
 - some language files need an update
 - using UTF-8 will not work in the PDF files
 
 CHANGELOG:
 
-Version 1.5.0 RC3 - 2005-03-20
+Version 1.5.0 RC4 - 2005-04-
 - full support for PostgreSQL databases
 - full support for Sybase databases
 - experimental support for MS SQL databases
+- experimental support for MySQL 4.1/5.0 databases
 - LDAP support as an additional option
 - one entry in various categories
 - mod_rewrite support
