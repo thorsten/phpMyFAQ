@@ -1,5 +1,5 @@
 phpMyFAQ 1.5.0 alpha
-"Phoebe"
+Codename "Phoebe"
 
 Installation/Update:
 Please read the documentation (documentation.en.html) carefully.
@@ -7,7 +7,7 @@ Please read the documentation (documentation.en.html) carefully.
 Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
-Changes since 1.4.3:
+Changes since 1.4.x:
 - full support for PostgreSQL
 - one entry in various categories
 - template engine parses PHP code
@@ -18,14 +18,15 @@ Known issues in phpMyFAQ 1.5.0:
 
 CHANGELOG:
 
-Version 1.5.0 alpha - 2004-11-xx
+Version 1.5.0 alpha - 2004-xx-xx
 - full support for PostgreSQL
 - one entry in various categories
 - template engine parses PHP code
 
-Version 1.4.3 RC2 - 2004-10-30
+Version 1.4.3 - 2004-11-05
 - added Turkish translation
 - added Indonesian translation
+- updated German language file
 - many bugfixes
 
 Version 1.4.2 - 2004-10-10
