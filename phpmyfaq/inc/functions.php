@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.24 2004-12-13 20:33:21 thorstenr Exp $
+* $Id: functions.php,v 1.25 2004-12-14 07:26:54 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -54,7 +54,7 @@ function selectLanguages($default)
     $output = "<select class=\"language\" name=\"language\" size=\"1\">\n";
 	if ($dir = @opendir("lang/")) {
         while (FALSE !== ($file = @readdir($dir))) {
-            if ($file != "." && $file != ".." && is_file($file)) {
+            if ($file != "." && $file != ".." && !is_dir($file)) {
                 $languageArray[] = strtoupper(str_replace($search, "", trim($file)));
             }
         }
