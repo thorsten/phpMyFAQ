@@ -25,6 +25,8 @@ if ($permission["editcateg"]) {
     print "<h2>".$PMF_LANG["ad_categ_edit_1"]." <em>".$categories[$id]["name"]."</em> ".$PMF_LANG["ad_categ_edit_2"]."</h2>";
 ?>
 	<form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>" method="post">
+	<fieldset>
+	<legend><?php print $PMF_LANG["ad_categ_edit_1"]." <em>".$categories[$id]["name"]."</em> ".$PMF_LANG["ad_categ_edit_2"]; ?></legend>
 	<input type="hidden" name="aktion" value="updatecategory" />
 	<input type="hidden" name="cat" value="<?php print $id; ?>" /> 
 	<div class="row"><span class="label"><strong><?php print $PMF_LANG["ad_categ_titel"]; ?>:</strong></span>
@@ -37,6 +39,7 @@ if ($permission["editcateg"]) {
     <input class="admin" type="text" name="description" size="30" style="width: 250px;" value="<?php print $categories[$id]["description"]; ?>" /></div>
     <div class="row"><span class="label"><strong>&nbsp;</strong></span>
     <input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_updatecateg"]; ?>" /></div>
+    </fieldset>
 	</form>
 <?php
 	}
