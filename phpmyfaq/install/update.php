@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.10 2005-01-02 13:34:42 thorstenr Exp $
+* $Id: update.php,v 1.11 2005-01-03 15:11:30 thorstenr Exp $
 *
 * Main update script
 *
@@ -352,7 +352,7 @@ if ($step == 4) {
 /**************************** STEP 4 OF 5 ***************************/
 if ($step == 5) {
     require_once(PMF_ROOT_DIR."/inc/functions.php");
-    require_once(PMF_ROOT_DIR."inc/db.php");
+    require_once(PMF_ROOT_DIR."/inc/db.php");
     define("SQLPREFIX", $DB["prefix"]);
     $db = db::db_select($DB["type"]);
     $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
@@ -433,7 +433,7 @@ if ($step == 5) {
 		$query[] = 'ALTER TABLE '.SQLPREFIX.'faqvisits CHANGE id id INT(11) NOT NULL';
     }
     
-	$query[] = "OPTIMIZE TABLE ".SQLPREFIX."faqadminlog, ".SQLPREFIX."faqadminsessions, ".SQLPREFIX."faqcategories, ".SQLPREFIX."faqchanges, ".SQLPREFIX."faqcomments, ".SQLPREFIX."faqdata, ".SQLPREFIX."faqfragen, ".SQLPREFIX."faqnews, ".SQLPREFIX."faqsessions, ".SQLPREFIX."faquser, ".SQLPREFIX."faqvisits, ".SQLPREFIX."faqvoting";
+	$query[] = "OPTIMIZE TABLE ".SQLPREFIX."faqadminlog, ".SQLPREFIX."faqadminsessions, ".SQLPREFIX."faqcategories, ".SQLPREFIX."faqcategoryrelations, ".SQLPREFIX."faqchanges, ".SQLPREFIX."faqcomments, ".SQLPREFIX."faqdata, ".SQLPREFIX."faqfragen, ".SQLPREFIX."faqnews, ".SQLPREFIX."faqsessions, ".SQLPREFIX."faquser, ".SQLPREFIX."faqvisits, ".SQLPREFIX."faqvoting";
 	
 	print '<p class="center">';
     while ($each_query = each($query)) {
