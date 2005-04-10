@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: backup.import.php,v 1.6 2005-03-31 09:32:27 thorstenr Exp $
+* $Id: backup.import.php,v 1.7 2005-04-10 17:57:55 thorstenr Exp $
 *
 * The import function to import the phpMyFAQ backups
 *
@@ -72,3 +72,4 @@ if ($permission["restore"]) {
 } else {
     print $PMF_LANG["err_NotAuth"];
 }
+?>
