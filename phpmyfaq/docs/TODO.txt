@@ -3,9 +3,10 @@ TODO list for future versions of phpMyFAQ:
 1.5.1:
 - add username to a category
 - add revision system
+- Firefox/Mozilla search plugin
 - bugfixing for stability or security reasons
 
-1.5.2 and later:
+1.5.2:
 - change 'id' to 'record' for better Google compliance
 - improved Image Manager
 - bugfixing for stability or security reasons
