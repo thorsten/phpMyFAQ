@@ -4,7 +4,8 @@
  * Description:		    Korean language file
  * Authors:				YoungJoon Kim <yjkim@terracetech.com>
  * Date:				2004-02-19
- * Last Update:		    2004-07-10
+ * First Created:	    2004-07-10
+ * Last Updated:        2005-04-06
  * Copyright:           (c) 2004 phpMyFAQ Team
  * 
  * The contents of this file are subject to the Mozilla Public License
@@ -27,12 +28,12 @@ $PMF_LANG["dir"] = "ltr"; // ltr: left to right (e.g. English language); rtl: ri
 $PMF_LANG["msgCategory"] = "카테고리";
 $PMF_LANG["msgShowAllCategories"] = "모든 카테고리 보이기";
 $PMF_LANG["msgSearch"] = "검색";
-$PMF_LANG["msgAddContent"] = "FAQ 내용 제안";
+$PMF_LANG["msgAddContent"] = "FAQ 추가(제안)";
 $PMF_LANG["msgQuestion"] = "질문 하기";
 $PMF_LANG["msgOpenQuestions"] = "질문 보기";
 $PMF_LANG["msgHelp"] = "도움말";
 $PMF_LANG["msgContact"] = "문의";
-$PMF_LANG["msgHome"] = "Home";
+$PMF_LANG["msgHome"] = "FAQ 홈";
 $PMF_LANG["msgNews"] = "공지사항";
 $PMF_LANG["msgUserOnline"] = " 사용자 접속중";
 $PMF_LANG["msgXMLExport"] = "XML파일";
@@ -44,16 +45,16 @@ $PMF_LANG["msgFullCategoriesIn"] = "카테고리";
 $PMF_LANG["msgSubCategories"] = "하위 카테고리";
 $PMF_LANG["msgEntries"] = "개";
 $PMF_LANG["msgEntriesIn"] = "카테고리명: ";
-$PMF_LANG["msgViews"] = " :조회수";
+$PMF_LANG["msgViews"] = "회 열람";
 $PMF_LANG["msgPage"] = "페이지 ";
-$PMF_LANG["msgPages"] = "페이지";
+$PMF_LANG["msgPages"] = "페이지 중";
 $PMF_LANG["msgPrevious"] = "이전";
 $PMF_LANG["msgNext"] = "다음";
 $PMF_LANG["msgCategoryUp"] = "상위 카테고리로";
 $PMF_LANG["msgLastUpdateArticle"] = "마지막 수정: ";
 $PMF_LANG["msgAuthor"] = "작성자: ";
-$PMF_LANG["msgPrinterFriendly"] = "프린트용";
-$PMF_LANG["msgPrintArticle"] = "이 내용을 프린트";
+$PMF_LANG["msgPrinterFriendly"] = "인쇄용 페이지";
+$PMF_LANG["msgPrintArticle"] = "이 내용을 인쇄";
 $PMF_LANG["msgMakeXMLExport"] = "XML형식으로 내보내기";
 $PMF_LANG["msgAverageVote"] = "평점:";
 $PMF_LANG["msgVoteUseability"] = "이 내용을 평가해 주세요:";
@@ -92,7 +93,7 @@ $PMF_LANG["msgSearchCategory"] = "카테고리: ";
 $PMF_LANG["msgSearchContent"] = "내용: ";
 
 // new Content
-$PMF_LANG["msgNewContentHeader"] = "FAQ 내용 제안";
+$PMF_LANG["msgNewContentHeader"] = "FAQ 추가(제안)";
 $PMF_LANG["msgNewContentAddon"] = "제안하신 내용은 곧바로 추가되지는 않습니다. 관리자가 검토한 후에 추가될 것입니다. <strong>이름</strong>, <strong>메일주소</strong>, <strong>카테고리</strong>, <strong>제목</strong>, <strong>FAQ 내용</strong>은 필수 입력 항목입니다. 키워드에는 '스페이스(Space)'키로 분리해서 입력하십시오.";
 $PMF_LANG["msgNewContentName"] = "이름:";
 $PMF_LANG["msgNewContentMail"] = "메일주소:";
@@ -114,7 +115,7 @@ $PMF_LANG["msgAskThx4Mail"] = "<h2>질문해 주셔서 감사합니다.</h2>";
 $PMF_LANG["msgDate_User"] = "날짜 / 사용자";
 $PMF_LANG["msgQuestion2"] = "질문";
 $PMF_LANG["msg2answer"] = "답변";
-$PMF_LANG["msgQuestionText"] = "다른 사용자가 질문한 내용을 보실 수 있습니다. 질문에 답변하시면 FAQ에 추가됩니다.";
+$PMF_LANG["msgQuestionText"] = "다른 사용자가 질문한 내용을 보실 수 있습니다. 질문에 답변하시면 FAQ에 추가될 수 있습니다.";
 
 // Help
 $PMF_LANG["msgHelpText"] = "<p>FAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) 의 사용 방법은 간단합니다. <strong><a href=\"".$_SERVER["PHP_SELF"]."?action=show\">카테고리</a></strong> 에서 궁금한 내용을 항목별로 찾거나 <strong><a href=\"".$_SERVER["PHP_SELF"]."?action=search\">검색</a></strong> 에서 검색어를 입력하여 찾으실 수 있습니다.</p>";
@@ -126,10 +127,10 @@ $PMF_LANG["msgMessage"] = "메시지 내용:";
 // Startseite
 $PMF_LANG["msgNews"] = " 공지사항";
 $PMF_LANG["msgTopTen"] = "TOP 10";
-$PMF_LANG["msgHomeThereAre"] = "";
+$PMF_LANG["msgHomeThereAre"] = "총 ";
 $PMF_LANG["msgHomeArticlesOnline"] = " 개의 FAQ가 있습니다.";
 $PMF_LANG["msgNoNews"] = "새로운 소식이 없습니다.";
-$PMF_LANG["msgLatestArticles"] = "최근에 작성된 FAQ:";
+$PMF_LANG["msgLatestArticles"] = "최근에 작성된 5개의 질문:";
 
 // E-Mailbenachrichtigung
 $PMF_LANG["msgMailThanks"] = "FAQ에 제안을 해 주셔서 대단히 감사합니다.";
@@ -138,8 +139,8 @@ $PMF_LANG["msgMailContact"] = "관리자에게 메시지가 전달되었습니다.";
 
 // Fehlermeldungen
 $PMF_LANG["err_noDatabase"] = "데이터베이스에 접속할 수 없습니다.";
-$PMF_LANG["err_noHeaders"] = "카테고리가 없습니다.";
-$PMF_LANG["err_noArticles"] = "<p>일치된 검색 결과가 없습니다.</p>";
+$PMF_LANG["err_noHeaders"] = "등록된 카테고리가 없습니다.";
+$PMF_LANG["err_noArticles"] = "<p>등록된 데이터가 없습니다.</p>";
 $PMF_LANG["err_badID"] = "<p>잘못된 ID</p>";
 $PMF_LANG["err_noTopTen"] = "<p>TOP 10을 이용하실 수 없습니다.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>검색 결과가 없습니다.</p>";
@@ -175,8 +176,8 @@ $PMF_LANG["ad_menu_startpage"] = "시작 페이지";
 $PMF_LANG["ad_msg_identify"] = "로그인을 하십시오.";
 $PMF_LANG["ad_msg_passmatch"] = "비밀번호는 반드시 <strong>일치</strong>하여야 합니다.";
 $PMF_LANG["ad_msg_savedsuc_1"] = "";
-$PMF_LANG["ad_msg_savedsuc_2"] = " 의 프로파일이 성공적으로 저장되었습니다.";
-$PMF_LANG["ad_msg_mysqlerr"] = "<strong>데이터베이스 에러</strong>로 인하여 프로파일을 저장할 수 없습니다.";
+$PMF_LANG["ad_msg_savedsuc_2"] = " 의 프로필이 성공적으로 저장되었습니다.";
+$PMF_LANG["ad_msg_mysqlerr"] = "<strong>데이터베이스 에러</strong>로 인하여 프로필을 저장할 수 없습니다.";
 $PMF_LANG["ad_msg_noauth"] = "사용 권한이 없습니다.";
 
 // Allgemein
@@ -188,7 +189,7 @@ $PMF_LANG["ad_gen_save"] = "저장";
 $PMF_LANG["ad_gen_reset"] = "리셋";
 $PMF_LANG["ad_gen_yes"] = "예";
 $PMF_LANG["ad_gen_no"] = "아니오";
-$PMF_LANG["ad_gen_top"] = "탑으로";
+$PMF_LANG["ad_gen_top"] = "제일 위로";
 $PMF_LANG["ad_gen_ncf"] = "등록된 카테고리가 없습니다.";
 $PMF_LANG["ad_gen_delete"] = "삭제";
 
@@ -199,7 +200,7 @@ $PMF_LANG["ad_user_rights"] = "권한";
 $PMF_LANG["ad_user_edit"] = "수정";
 $PMF_LANG["ad_user_delete"] = "삭제";
 $PMF_LANG["ad_user_add"] = "사용자 추가";
-$PMF_LANG["ad_user_profou"] = "사용자 프로파일: ";
+$PMF_LANG["ad_user_profou"] = "사용자 프로필: ";
 $PMF_LANG["ad_user_name"] = "ID";
 $PMF_LANG["ad_user_password"] = "비밀번호";
 $PMF_LANG["ad_user_confirm"] = "비밀번호 확인";
@@ -214,7 +215,7 @@ $PMF_LANG["ad_user_checkall"] = "전체 선택";
 $PMF_LANG["ad_entry_aor"] = "FAQ 관리";
 $PMF_LANG["ad_entry_id"] = "ID";
 $PMF_LANG["ad_entry_topic"] = "Topic";
-$PMF_LANG["ad_entry_action"] = "Action";
+$PMF_LANG["ad_entry_action"] = "동작";
 $PMF_LANG["ad_entry_edit_1"] = "FAQ 추가(수정)";
 $PMF_LANG["ad_entry_edit_2"] = "";
 $PMF_LANG["ad_entry_theme"] = "제목:";
@@ -225,15 +226,15 @@ $PMF_LANG["ad_entry_category"] = "카테고리:";
 $PMF_LANG["ad_entry_active"] = "사용";
 $PMF_LANG["ad_entry_date"] = "날짜:";
 $PMF_LANG["ad_entry_changed"] = "변경?";
-$PMF_LANG["ad_entry_changelog"] = "Changelog:";
-$PMF_LANG["ad_entry_commentby 	"] = "Comment by";
+$PMF_LANG["ad_entry_changelog"] = "변경이력:";
+$PMF_LANG["ad_entry_commentby 	"] = "코멘트 작성자:";
 $PMF_LANG["ad_entry_comment"] = "코멘트:";
 $PMF_LANG["ad_entry_save"] = "저장";
 $PMF_LANG["ad_entry_delete"] = "삭제";
 $PMF_LANG["ad_entry_delcom_1"] = " ";
 $PMF_LANG["ad_entry_delcom_2"] = " 님의 코멘트를 삭제하시겠습니까?";
 $PMF_LANG["ad_entry_commentdelsuc"] = "코멘트가 <strong>성공적으로</strong> 삭제되었습니다.";
-$PMF_LANG["ad_entry_back"] = "Back to the article";
+$PMF_LANG["ad_entry_back"] = "돌아가기";
 $PMF_LANG["ad_entry_commentdelfail"] = "코멘트는 삭제 되지 않았습니다.";
 $PMF_LANG["ad_entry_savedsuc"] = "변경 내용이 <strong>성공적으로</strong> 저장되었습니다.";
 $PMF_LANG["ad_entry_savedfail 	"] = "<strong>데이터베이스 에러</strong> 가 발생하였습니다.";
@@ -324,7 +325,7 @@ $PMF_LANG["ad_adus_name"] = "ID:";
 $PMF_LANG["ad_adus_password"] = "비밀번호:";
 $PMF_LANG["ad_adus_add"] = "사용자 추가";
 $PMF_LANG["ad_adus_suc"] = "사용자가 <strong>성공적으로</strong> 추가되었습니다.";
-$PMF_LANG["ad_adus_edit"] = "프로파일 수정";
+$PMF_LANG["ad_adus_edit"] = "프로필 수정";
 $PMF_LANG["ad_adus_dberr"] = "<strong>데이터베이스 에러!</strong>";
 $PMF_LANG["ad_adus_exerr"] = "사용자명이 이미 <strong>존재</strong>합니다.";
 
@@ -454,7 +455,7 @@ $PMF_LANG["ad_log_sess"] = "세션이 종료되었습니다.";
 $PMF_LANG["ad_log_edit"] = "\"사용자 수정\"- 다음 사용자 입력폼: ";
 $PMF_LANG["ad_log_crea"] = "\"새로운 글\" 폼.";
 $PMF_LANG["ad_log_crsa"] = "새로운 글(FAQ)이 추가되었습니다.";
-$PMF_LANG["ad_log_ussa"] = "다음 사용자의 프로파일 수정: ";
+$PMF_LANG["ad_log_ussa"] = "다음 사용자의 프로필 수정: ";
 $PMF_LANG["ad_log_usde"] = "다음 사용자가 삭제됨: ";
 $PMF_LANG["ad_log_beed"] = "다음 사용자의 폼을 변경: ";
 $PMF_LANG["ad_log_bede"] = "다음 글이 삭제됨: ";
@@ -557,19 +558,19 @@ $LANG_CONF["metaKeywords"] = array(0 => "input", 1 => "검색 로봇을 위한 키워드 �
 $LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "관리자 이름");
 $LANG_CONF["adminmail"] = array(0 => "input", 1 => "관리자 메일주소");
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "문의 정보");
-$LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "시작페이지의 카피라이트 정보");
+$LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "시작페이지의 저작권 정보");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "친구에게 보내기 페이지를 위한 텍스트");
 $LANG_CONF["attmax"] = array(0 => "input", 1 => "최대 첨부 파일 사이즈(Bytes) (최대 ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["disatt"] = array(0 => "checkbox", 1 => "내용의 아래에 첨부파일 링크걸기");
-$LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "트랙킹 사용 여부");
+$LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "추적기능 사용 여부");
 $LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "관리로그 사용 여부");
 $LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "admin.php에서 UINs를 체크할 때 IP주소를 체크할지의 여부");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "페이지당 표시할 글의 수");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "공지사항 표시 개수");
-$LANG_CONF["bannedIP"] = array(0 => "area", 1 => "아래 IP주소로 부터 사용 금지");
-$LANG_CONF["parse_php"] = array(0 => "checkbox", 1 => "Should the template engine parse PHP code? (default: disabled)");
-$LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Activate mod_rewrite support? (default: disabled)");
-$LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "Do you want to enable LDAP support? (default: disabled)");
+$LANG_CONF["bannedIP"] = array(0 => "area", 1 => "해당 IP주소로 부터 사용 금지");
+$LANG_CONF["parse_php"] = array(0 => "checkbox", 1 => "템플릿 엔진에서 PHP code를 해석하게 하겠습니까?  (기본값: 사용안함)");
+$LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "mod_rewrite 기능을 사용하시겠습니까? (기본값: 사용안함)");
+$LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "LDAP을 지원하도록 하시겠습니까? (기본값: 사용안함)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "새로운 메인 카테고리로";
 $PMF_LANG["ad_categ_paste_error"] = "이 카테고리를 옮기는 것은 불가능합니다.";
