@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.19 2005-03-28 13:43:06 thorstenr Exp $
+* $Id: installer.php,v 1.20 2005-04-15 06:26:12 thorstenr Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -11,6 +11,7 @@
 *
 * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author      Tom Rochester <tom.rochester@gmail.com>
+* @author      Johannes Schlüter <johannes@php.net>
 * @since       2002-08-20
 * @copyright   (c) 2001-2005 phpMyFAQ Team
 * 
@@ -31,59 +32,63 @@ define("SAFEMODE", @ini_get("safe_mode"));
 define("PMF_ROOT_DIR", dirname(dirname(__FILE__)));
 require_once(PMF_ROOT_DIR."/inc/constants.php");
 
-function php_check ($ist = "", $soll = "", $err_msg = "")
+function php_check ($ist = '', $soll = '')
 {
     if (empty($ist) OR empty($soll)) {
-        return FALSE;
+        return false;
     }
     $ist = explode(".", $ist);
     $soll = explode(".", $soll);
     $num = count($soll);
     for ($i = 0; $i < $num; $i++) {
         if ($ist[$i] <  $soll[$i]) {
-            return FALSE;
+            return false;
         }
         if ($ist[$i] == $soll[$i]) {
             continue;
         }
         if ($ist[$i] >= $soll[$i]) {
-            return TRUE;
+            return true;
         }
     }
-    return TRUE;
+    return true;
 }
 
 function db_check()
 {
 	if (!extension_loaded('mysql') && !extension_loaded('mysqli') && !extension_loaded('pgsql') && !extension_loaded('sybase') && !extension_loaded('mssql')) {
-		return FALSE;
+		return false;
 	} else {
-        return TRUE;
+        return true;
     }
 }
 
-function phpmyfaq_check($file)
+function phpmyfaq_check()
 {
-    if (@include($file)) {
-        include($file);
+    if (@include('../inc/data.php')) {
+        include('../inc/data.php');
         // check for version 1.3.x
         if ((isset($mysql_server) && $mysql_server != "") || (isset($mysql_user) && $mysql_user != "") || (isset($mysql_passwort) && $mysql_passwort != "") || (isset($mysql_db) && $mysql_db != "")) {
-            return FALSE;
+            return false;
         }
         // check for version 1.4.x
         if ((isset($DB["server"]) && $DB["server"] != "") || (isset($DB["user"]) && $DB["user"] != "") || (isset($DB["password"]) && $DB["password"] != "") || (isset($DB["db"]) && $DB["db"] != "") || (isset($DB["prefix"]) && $DB["prefix"] != "")) {
-            return FALSE;
+            return false;
         }
-        return TRUE;
+        // check for version 1.5.x
+        if ((isset($DB["server"]) && $DB["server"] != "") || (isset($DB["user"]) && $DB["user"] != "") || (isset($DB["password"]) && $DB["password"] != "") || (isset($DB["db"]) && $DB["db"] != "") || (isset($DB["prefix"]) && $DB["prefix"] != "")  || (isset($DB["type"]) && $DB["type"] != "")) {
+            return false;
+        }
+        return true;
     }
-    return TRUE;
+    return true;
 }
 
 function uninstall()
 {
 	global $uninst, $db;
 	while ($each_query = each($uninst)) {
-		$result = $db->query($each_query[1]);
+		$db->query($each_query[1]);
     }
 }
 
@@ -177,86 +182,46 @@ function HTMLFooter()
 <h1 id="header">phpMyFAQ <?php print VERSION; ?> Installation</h1>
 
 <?php
-if (php_check(phpversion(), '4.1.0') == FALSE) {
+if (php_check(phpversion(), '4.1.0') == false) {
 	print "<p class=\"center\">You need PHP Version 4.1.0 or higher!</p>\n";
 	HTMLFooter();
 	die();
 }
-if (db_check() == FALSE) {
+if (db_check() == false) {
 	print "<p class=\"center\">No supported database found!</p>\n";
 	HTMLFooter();
 	die();
 }
-if (!phpmyfaq_check("../inc/data.php")) {
+if (!phpmyfaq_check()) {
 	print "<p class=\"center\">It seems you already running a version of phpMyFAQ.<br />Please use the <a href=\"update.php\">update script</a>.</p>\n";
 	HTMLFooter();
 	die();
 }
-if (!is_dir(PMF_ROOT_DIR."/attachments")) {
-    if (!mkdir (PMF_ROOT_DIR."/attachments", 0755)) {
-        print "<p class=\"center\">The directory ../attachments could not be created. Please create it manually and change access to chmod 755 (or greater if necessary).</p>\n";
-	    HTMLFooter();
-	    die();
-    }
-}
-if (!is_dir(PMF_ROOT_DIR."/data")) {
-    if (!mkdir (PMF_ROOT_DIR."/data", 0755)) {
-        print "<p class=\"center\">The directory ../data could not be created. Please create it manually and change access to chmod 755 (or greater if necessary).</p>\n";
-	    HTMLFooter();
-	    die();
-    }
-}
-if (!is_dir(PMF_ROOT_DIR."/images")) {
-    if (!mkdir (PMF_ROOT_DIR."/images", 0755)) {
-        print "<p class=\"center\">The directory ../images could not be created. Please create it manually and change access to chmod 755 (or greater if necessary).</p>\n";
-	    HTMLFooter();
-	    die();
+
+$dirs = array('/attachments', '/data', '/images', '/inc', '/pdf', '/xml',);
+$faileddirs = array();
+foreach ($dirs AS $dir) {
+    if (!is_dir(PMF_ROOT_DIR.$dir)) {
+        if (!mkdir (PMF_ROOT_DIR.$dir, 0755)) {
+            $faileddirs[] = $dir;
         }
-     }
-if (!is_dir(PMF_ROOT_DIR."/pdf")) {
-    if (!mkdir (PMF_ROOT_DIR."/pdf", 0755)) {
-        print "<p class=\"center\">The directory ../pdf could not be created. Please create it manually and change access to chmod 755 (or greater if necessary).</p>\n";
-	    HTMLFooter();
-	    die();
+    } else if (!is_writable(PMF_ROOT_DIR.$dir)) {
+        $faileddirs[] = $dir;
+    } else {
+        @copy("index.html", PMF_ROOT_DIR.$dir.'/index.html');
     }
 }
-if (!is_dir(PMF_ROOT_DIR."/xml")) {
-    if (!mkdir (PMF_ROOT_DIR."/xml", 0755)) {
-        print "<p class=\"center\">The directory ../xml could not be created. Please create it manually and change access to chmod 755 (or greater if necessary).</p>\n";
-	    HTMLFooter();
-	    die();
+
+if (sizeof($faileddirs)) {
+    print '<p class="center">The following dirctory/-ies could not be created or are not writable:</p><ul>';
+    foreach ($faileddirs AS $dir) {
+        print "<li>$dir</li>\n";
     }
-}
-if (!is_writeable(PMF_ROOT_DIR."/inc") || !@copy("index.html", PMF_ROOT_DIR."/inc/index.html")) {
-    print "<p class=\"center\">The directory ../inc is not writeable. Please change access to chmod 755 (or greater if necessary).</p>\n";
+    print '</ul><p class="center">Please create it manually and/or change access to chmod 755 (or greater if necessary).</p>';
     HTMLFooter();
     die();
 }
-if (!is_writeable(PMF_ROOT_DIR."/attachments") || !@copy("index.html", PMF_ROOT_DIR."/attachments/index.html")) {
-    print "<p class=\"center\">The directory ../attachments is not writeable. Please change access to chmod 755 (or greater if necessary).</p>\n";
-    HTMLFooter();
-    die();
-}
-if (!is_writeable(PMF_ROOT_DIR."/data") || !@copy("index.html", PMF_ROOT_DIR."/data/index.html")) {
-    print "<p class=\"center\">The directory ../data is not writeable. Please change access to chmod 755 (or greater if necessary).</p>\n";
-    HTMLFooter();
-    die();
-}
-if (!is_writeable(PMF_ROOT_DIR."/images") || !@copy("index.html", PMF_ROOT_DIR."/images/index.html")) {
-    print "<p class=\"center\">The directory ../images is not writeable. Please change access to chmod 755 (or greater if necessary).</p>\n";
-    HTMLFooter();
-    die();
-}
-if (!is_writeable(PMF_ROOT_DIR."/pdf") || !@copy("index.html", PMF_ROOT_DIR."/pdf/index.html")) {
-	print "<p class=\"center\">The directory ../pdf is not writeable. Please change access to chmod 755 (or greater if necessary).</p>\n";
-	HTMLFooter();
-	die();
-}
-if (!is_writeable(PMF_ROOT_DIR."/xml") || !@copy("index.html", PMF_ROOT_DIR."/xml/index.html")) {
-	print "<p class=\"center\">The directory ../xml is not writeable. Please change access to chmod 755 (or greater if necessary).</p>\n";
-	HTMLFooter();
-	die();
-}
+
 if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POST["sql_db"])) {
 ?>
 
@@ -459,9 +424,7 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
     if (isset($_POST["sql_passwort"]) && $_POST["sql_passwort"] != "") {
 		$sql_passwort = $_POST["sql_passwort"];
     } else {
-        print "<p class=\"error\"><strong>Error:</strong> There's no DB password input.</p>\n";
-		HTMLFooter();
-		die();
+        $sql_passwort = '';
     }
     if (isset($_POST["sql_db"]) && $_POST["sql_db"] != "") {
 		$sql_db = $_POST["sql_db"];
@@ -535,7 +498,7 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
     if (isset($_POST["password"]) && $_POST["password"] != "") {
         $password = $_POST["password"];
     } else {
-		print "<p class=\"error\"><strong>Error:</strong> There's no password. Please set your password.</p>\n";
+		print "<p class=\"error\"><strong>Error:</strong> There's no password for the administrator's account. Please set your password.</p>\n";
 		HTMLFooter();
 		die();
     }
