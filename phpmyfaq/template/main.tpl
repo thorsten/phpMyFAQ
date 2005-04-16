@@ -11,11 +11,7 @@
     </div>
     
     <div id="fivenewest">
-    <table class="fivenewest">
-    <tr>
-        <th colspan="3"><a href="feed/latest/rss.php"><img src="images/rss.png" width="28" height="16" alt="RSS" title="RSS" /></a>{writeNewestHeader}</th>
-    </tr>
+    <h3><a href="feed/topten/rss.php"><a href="feed/latest/rss.php"><img src="images/rss.png" width="28" height="16" alt="RSS" title="RSS" /></a>{writeNewestHeader}</h3>
     {writeNewestRow}
-    </table>
     </div>
     <!-- end news -->
