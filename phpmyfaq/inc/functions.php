@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.63 2005-03-25 18:27:33 thorstenr Exp $
+* $Id: functions.php,v 1.64 2005-04-16 12:21:47 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -536,21 +536,16 @@ function generateTopTen($language = '')
 function generateFiveNewest($language = '')
 {
 	global $PMF_LANG;
-	$result = generateNewestData ($language, 5);
+	$result = generateNewestData($language, 5);
     
 	if (count ($result) > 0) {
-		$output = "";
-		$i = 0;
+		$output = '<ol>';
 		foreach ($result as $row) {
-			$output .= "\t\t<tr>\n";
-			$output .= "\t\t\t<td nowrap=\"nowrap\">".makeDate($row['datum'])."</td>\n";
-			$output .= "\t\t\t<td><a href=\"".$row['url'] . '">' .stripslashes(makeShorterText($row['thema'], 8))."</a></td>\n";
-			$output .= "\t\t\t<td nowrap=\"nowrap\">".$row['visits']." ".$PMF_LANG["msgViews"]."</td>\n";
-			$output .= "\t\t</tr>\n";
-			$i++;
+			$output .= '<li><a href="'.$row['url'].'">'.stripslashes(makeShorterText($row['thema'], 8)).'</a> ('.makeDate($row['datum']).')</li>';
         }
+        $output .= '</ol>';
     } else {
-		$output = "<tr class=\"fivenewest\"><td>".$PMF_LANG["err_noArticles"]."</td></tr>\n";
+		$output = '<p>'.$PMF_LANG["err_noArticles"].'</p>';
     }
 	return $output;
 }
