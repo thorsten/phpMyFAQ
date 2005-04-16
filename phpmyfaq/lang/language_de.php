@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.5 2004-12-17 14:34:42 thorstenr Exp $
+ * $Id: language_de.php,v 1.6 2005-04-16 13:10:11 thorstenr Exp $
  *
  * File:                language_de.php
  * Description:		    German language file
@@ -220,7 +220,7 @@ $PMF_LANG["ad_entry_topic"] = "Thema";
 $PMF_LANG["ad_entry_action"] = "Aktion";
 $PMF_LANG["ad_entry_edit_1"] = "Beitrag";
 $PMF_LANG["ad_entry_edit_2"] = "editieren";
-$PMF_LANG["ad_entry_theme"] = "Thema:";
+$PMF_LANG["ad_entry_theme"] = "Überschrift:";
 $PMF_LANG["ad_entry_content"] = "Text:";
 $PMF_LANG["ad_entry_keywords"] = "Keywords:";
 $PMF_LANG["ad_entry_author"] = "Verfasser:";
