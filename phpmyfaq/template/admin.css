@@ -1,20 +1,23 @@
-/******************************************************************************
- * File:				admin.ss
- * Author:				Thorsten Rinne <thorsten@rinne.info>
- * Date:				2004-06-09
- * Last change:			2004-07-26
- * Copyright:			(c) 2004 Thorsten Rinne
- * 
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- * 
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- ******************************************************************************/
+/**
+* $Id: admin.css,v 1.2 2005-04-16 13:44:35 thorstenr Exp $
+*
+* This is the CSS file for the admin section of phpMyFAQ 1.5.x
+* You don't need to change enything here but feel free to do it. :-)
+*
+* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+* @since        2004-06-09
+* @copyright    (c) 2004-2005 phpMyFAQ Team
+* 
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
+* 
+* Software distributed under the License is distributed on an "AS IS"
+* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+* License for the specific language governing rights and limitations
+* under the License.
+*/
 
 /* color defintions */
 #header {
@@ -79,6 +82,15 @@ div.row span.label {
   line-height: 20px;
   padding-right: 5px;
   }
+  
+label.left {
+    vertical-align: top;
+    width: 85px;
+    margin-right: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-weight: bold;
+    }
     
 #bodyText p {
     padding-bottom: 1ex;
@@ -162,9 +174,10 @@ th.list, td.list {
     }    
 
 /* styles for input and textarea fields */
-input.admin, textarea.admin {
+input.admin, select.admin, textarea.admin {
     border: 1px solid black;
     background: White;
+    margin-bottom: 10px;
     }
 input.submit {
     border: 2px solid #696969;
