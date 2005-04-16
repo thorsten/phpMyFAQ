@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.23 2005-03-25 18:18:21 thorstenr Exp $
+$Id: README.txt,v 1.24 2005-04-16 12:30:19 thorstenr Exp $
 
 phpMyFAQ 1.5.0 RC4
 Codename "Phoebe"
@@ -34,6 +34,13 @@ Version 1.5.0 RC4 - 2005-04-
 - better RSS support
 - updated bundled htmlArea
 - PHP5 compatible
+
+Version 1.4.8 - 2005-04-11
+- fixed bug with images in PDFs
+- fixed bug with URLs in export
+- updated Japanese language file
+- updated Korean translation
+- some minor bugfixes
 
 Version 1.4.7 - 2005-03-06
 - fixed possible SQL injection bug
