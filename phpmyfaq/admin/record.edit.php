@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.edit.php,v 1.18 2005-04-16 13:06:33 thorstenr Exp $
+* $Id: record.edit.php,v 1.19 2005-04-16 13:44:00 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23
@@ -96,14 +96,14 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     <form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=<?php print $acti; ?>" method="post">
 
     <label class="left" for="rubrik"><?php print $PMF_LANG["ad_entry_category"]; ?></label>
-    <select name="rubrik[]" id="rubrik" size="7" multiple="multiple">
+    <select class="admin" name="rubrik[]" id="rubrik" size="5" multiple="multiple">
 <?php print $tree->printCategoryOptions($categories); ?>
     </select><br />
     
     <label class="left" for="thema"><?php print $PMF_LANG["ad_entry_theme"]; ?></label>
-    <textarea class="admin" name="thema" id="thema" style="width: 525px; height: 50px;" cols="2" rows="50"><?php if (isset($thema)) { print stripslashes($thema); } ?></textarea><br />
+    <textarea class="admin" name="thema" id="thema" style="width: 565px; height: 50px;" cols="2" rows="50"><?php if (isset($thema)) { print stripslashes($thema); } ?></textarea><br />
 	
-    <label for="content"><?php print $PMF_LANG["ad_entry_content"]; ?></label>
+    <label class="left" for="content"><?php print $PMF_LANG["ad_entry_content"]; ?></label>
     <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript><textarea class="admin" id="content" name="content" cols="50" rows="10"><?php if (isset($content)) { print stripslashes($content); } ?></textarea><br />
 
 <?php
@@ -146,13 +146,13 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 	</select><br />
     
 	<label class="left" for="keywords"><?php print $PMF_LANG["ad_entry_keywords"]; ?></label>
-    <input class="admin" name="keywords" id="keywords" style="width: 525px;" value="<?php if (isset($keywords)) { print htmlspecialchars(stripslashes($keywords), ENT_QUOTES); } ?>" /><br />
+    <input class="admin" name="keywords" id="keywords" style="width: 565px;" value="<?php if (isset($keywords)) { print htmlspecialchars(stripslashes($keywords), ENT_QUOTES); } ?>" /><br />
 
 	<label class="left" for="author"><?php print $PMF_LANG["ad_entry_author"]; ?></label>
-    <input class="admin" name="author" id="author" style="width: 525px;" value="<?php if (isset($author)) { print $author; } else { print $auth_realname; } ?>" /><br />
+    <input class="admin" name="author" id="author" style="width: 565px;" value="<?php if (isset($author)) { print $author; } else { print $auth_realname; } ?>" /><br />
 
     <label class="left" for="email"><?php print $PMF_LANG["ad_entry_email"]; ?></label>
-    <input class="admin" name="email" id="email" style="width: 525px;" value="<?php if (isset($email)) { print $email; } else { print $auth_email; } ?>" /><br />
+    <input class="admin" name="email" id="email" style="width: 565px;" value="<?php if (isset($email)) { print $email; } else { print $auth_email; } ?>" /><br />
 	
 <?php
 	if (isset($active) && $active == "yes") {
@@ -166,14 +166,14 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     <label class="left" for="active"><?php print $PMF_LANG["ad_entry_active"]; ?></label>
     <input type="radio" name="active" id="active" value="yes"<?php if (isset($suf)) { print $suf; } ?> /> <?php print $PMF_LANG["ad_gen_yes"]; ?> <input type="radio" name="active" id="active" value="no"<?php if (isset($sul)) { print $sul; } ?> /> <?php print $PMF_LANG["ad_gen_no"]; ?><br />
 	
-    <label class="left" for="comment">&nbsp;</label>
-    <input type="checkbox" name="comment" id="comment" value="y"<?php if (isset($comment) && $comment == "y") { print " checked"; } ?> /> <?php print $PMF_LANG["ad_entry_allowComments"]; ?><br />
+    <label class="left" for="comment"><?php print $PMF_LANG["ad_entry_allowComments"]; ?></label>
+    <input type="checkbox" name="comment" id="comment" value="y"<?php if (isset($comment) && $comment == "y") { print " checked"; } ?> /><br />
 	
-    <label><?php print $PMF_LANG["ad_entry_date"]; ?></label>
+    <label class="left"><?php print $PMF_LANG["ad_entry_date"]; ?></label>
     <?php if (isset($date)) { print makeDate($date); } else { print makeDate(date("YmdHis")); } ?><br />
 
     <label class="left" for="changed"><?php print $PMF_LANG["ad_entry_changed"]; ?></label>
-	<textarea class="admin" name="changed" id="changed" style="width: 525px; height: 50px;" cols="2" rows="50"><?php if (isset($changed)) { print $changed; } ?></textarea><br />
+	<textarea class="admin" name="changed" id="changed" style="width: 565px; height: 50px;" cols="2" rows="50"><?php if (isset($changed)) { print $changed; } ?></textarea><br />
         
     <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_entry_save"]; ?>" name="submit[1]" />
     <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_entry_preview"]; ?>" name="submit[2]" />
