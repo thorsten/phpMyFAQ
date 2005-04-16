@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: header.php,v 1.7 2005-03-30 06:49:06 thorstenr Exp $
+* $Id: header.php,v 1.8 2005-04-16 13:36:13 thorstenr Exp $
 *
 * header of the admin area
 *
@@ -54,7 +54,7 @@ if (isset($_REQUEST["aktion"]) && ($_REQUEST["aktion"] == "editentry" || $_REQUE
     HTMLArea.onload = function() {
         var editor = new HTMLArea("content");
         var config = new HTMLArea.Config();
-        config.width = "525px";
+        config.width = "565px";
         config.height = "400px";
         var phpMyFAQLinks = {
 <?php
