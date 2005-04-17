@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.20 2005-04-15 06:26:12 thorstenr Exp $
+* $Id: installer.php,v 1.21 2005-04-17 19:32:03 thorstenr Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -246,7 +246,7 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 	if (extension_loaded('mysql')) {
 		print '<option value="mysql">MySQL 3.23/4.0</option>';
 	}
-	if (extension_loaded('pgsql')) {
+	if (extension_loaded('pgsql') && php_check(phpversion(), '4.2.0')) {
 		print '<option value="pgsql">PostgreSQL</option>';
 	}
 	if (extension_loaded('sybase')) {
