@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.64 2005-04-16 12:21:47 thorstenr Exp $
+* $Id: functions.php,v 1.65 2005-04-18 19:06:49 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -1440,14 +1440,21 @@ if (!function_exists("array_combine")) {
 
 
 
-/******************************************************************************
- * Funktionen für das Backup
- ******************************************************************************/
+//
+// Functions for backup and SQL security
+//
 
-/*
- * Funktion zum Zusammensetzen der zu sichernden SQL Queries | @@ Meikel, 2003-03-24
- * Last Update: @@ Thorsten, 2003-11-13
- */
+/**
+* This function builds the the queries for the backup
+*
+* @param    string      query
+* @param    string      table name
+* @return   array
+* @access   public
+* @author   Meikel Katzengreis <meikel@katzengreis.com>
+* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+* @since    2003-03-24
+*/
 function build_insert($query, $table)
 {
 	global $db;
@@ -1455,14 +1462,14 @@ function build_insert($query, $table)
 		return;
 	}
 	$ret = array();
-	$ret[] = "\n# Table: ".$table;
+	$ret[] = "\n-- Table: ".$table;
 	while ($row = $db->fetch_assoc ($result)) {
 		$p1 = array();
 		$p2 = array();
 		foreach ($row as $key => $val) {
             $val = safeSQL($val);
 			$p1[] = $key;
-            if (is_numeric($val)) {
+            if ('rights' != $key && is_numeric($val)) {
                 $p2[] = $val;
             } else {
                 $p2[] = "'".$val."'";
@@ -1494,7 +1501,11 @@ function safeSQL($string)
     return $str;
 }
 
+
+
+//
 // LDAP functions
+//
 
 /**
 * Returns the user name from REMOTE_USER
