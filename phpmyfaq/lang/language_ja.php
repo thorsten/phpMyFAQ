@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_ja.php,v 1.6 2005-04-10 07:57:27 thorstenr Exp $
+* $Id: language_ja.php,v 1.7 2005-04-21 18:51:00 thorstenr Exp $
 *
 * The Japanese language file -
 *
@@ -29,12 +29,12 @@ $PMF_LANG["dir"] = "ltr"; // ltr: left to right (e.g. English language); rtl: ri
 $PMF_LANG["msgCategory"] = "カテゴリ";
 $PMF_LANG["msgShowAllCategories"] = "全カテゴリを表示する";
 $PMF_LANG["msgSearch"] = "検索";
-$PMF_LANG["msgAddContent"] = "FAQ追加（提案）";
+$PMF_LANG["msgAddContent"] = "FAQ の追加";
 $PMF_LANG["msgQuestion"] = "質問をする";
 $PMF_LANG["msgOpenQuestions"] = "質問を開く";
 $PMF_LANG["msgHelp"] = "ヘルプ";
 $PMF_LANG["msgContact"] = "問い合わせ";
-$PMF_LANG["msgHome"] = "FAQホーム";
+$PMF_LANG["msgHome"] = "ホーム";
 $PMF_LANG["msgNews"] = "お知らせ";
 $PMF_LANG["msgUserOnline"] = " ユーザーがオンライン";
 $PMF_LANG["msgXMLExport"] = "XML ファイル";
@@ -45,7 +45,7 @@ $PMF_LANG["msgFullCategories"] = "カテゴリ";
 $PMF_LANG["msgFullCategoriesIn"] = "カテゴリ";
 $PMF_LANG["msgSubCategories"] = "下位カテゴリ";
 $PMF_LANG["msgEntries"] = "個のエントリ";
-$PMF_LANG["msgEntriesIn"] = "カテゴリ名： ";
+$PMF_LANG["msgEntriesIn"] = "カテゴリ名: ";
 $PMF_LANG["msgViews"] = "回の閲覧";
 $PMF_LANG["msgPage"] = "ページ ";
 $PMF_LANG["msgPages"] = "ページ中";
@@ -62,13 +62,13 @@ $PMF_LANG["msgVoteUseability"] = "このエントリを評価してください:
 $PMF_LANG["msgVoteFrom"] = " - ";
 $PMF_LANG["msgVoteBad"] = "完全に役に立たない";
 $PMF_LANG["msgVoteGood"] = "最も価値がある";
-$PMF_LANG["msgVotings"] = "個の評価 ";
-$PMF_LANG["msgVoteSubmit"] = "評価";
-$PMF_LANG["msgVoteThanks"] = "評価してくれましてありがとうございます!";
-$PMF_LANG["msgYouCan"] = " ";
-$PMF_LANG["msgWriteComment"] = "このエントリにコメント";
-$PMF_LANG["msgShowCategory"] = "カテゴリ: ";
-$PMF_LANG["msgCommentBy"] = "作成者 - ";
+$PMF_LANG["msgVotings"] = "個の投票 ";
+$PMF_LANG["msgVoteSubmit"] = "投票";
+$PMF_LANG["msgVoteThanks"] = "投票を非常に感謝します!";
+$PMF_LANG["msgYouCan"] = "";
+$PMF_LANG["msgWriteComment"] = "このエントリにコメントする";
+$PMF_LANG["msgShowCategory"] = "内容の概要: ";
+$PMF_LANG["msgCommentBy"] = "コメント作成は";
 $PMF_LANG["msgCommentHeader"] = "このエントリにコメント";
 $PMF_LANG["msgYourComment "] = "あなたのコメント:";
 $PMF_LANG["msgCommentThanks"] = "コメントを非常に感謝します!";
@@ -77,9 +77,9 @@ $PMF_LANG["msgSend2Friend"] = "友達に教える";
 $PMF_LANG["msgS2FName"] = "名前:";
 $PMF_LANG["msgS2FEMail"] = "メールアドレス:";
 $PMF_LANG["msgS2FFriends"] = "あなたの友達:";
-$PMF_LANG["msgS2FEMails"] = ". メールアドレス:";
-$PMF_LANG["msgS2FText"] = "追加して送るテキストを下に入力してください。:";
-$PMF_LANG["msgS2FText2"] = "次のURLからこの内容が確認できます。:";
+$PMF_LANG["msgS2FEMails"] = ". 電子メールアドレス:";
+$PMF_LANG["msgS2FText"] = "追加して送るテキストを入力してください:";
+$PMF_LANG["msgS2FText2"] = "次の URL からこの内容が確認できます:";
 $PMF_LANG["msgS2FMessage"] = "友達への補足メッセージ:";
 $PMF_LANG["msgS2FButton"] = "メール送信";
 $PMF_LANG["msgS2FThx"] = "推薦してくれてありがとうございます!";
@@ -94,10 +94,10 @@ $PMF_LANG["msgSearchCategory"] = "カテゴリ: ";
 $PMF_LANG["msgSearchContent"] = "内容: ";
 
 // new Content
-$PMF_LANG["msgNewContentHeader"] = "FAQ追加（提案）";
-$PMF_LANG["msgNewContentAddon"] = "提案する内容は直ちに追加はされません。管理者の検討後、追加されます。 <strong>名前</strong>, <strong>メールアドレス</strong>, <strong>カテゴリ</strong>, <strong>件名</strong>, <strong>FAQ 内容</strong>は必須項目です。キーワードには'スペース(space)'キーで分離して入力してください。";
+$PMF_LANG["msgNewContentHeader"] = "FAQ を提案する";
+$PMF_LANG["msgNewContentAddon"] = "提案する内容はすぐに追加はされません。管理者の承認後、追加されます。<strong>名前</strong>、<strong>メールアドレス</strong>、<strong>カテゴリ</strong>、<strong>件名</strong>、<strong>FAQ 内容</strong>は必須項目です。キーワードには半角空白で分割して入力してください。";
 $PMF_LANG["msgNewContentName"] = "名前:";
-$PMF_LANG["msgNewContentMail"] = "メールアドレス:";
+$PMF_LANG["msgNewContentMail"] = "電子メールアドレス:";
 $PMF_LANG["msgNewContentCategory"] = "カテゴリ選択";
 $PMF_LANG["msgNewContentTheme"] = "件名:";
 $PMF_LANG["msgNewContentArticle"] = "FAQ 内容:";
@@ -105,36 +105,36 @@ $PMF_LANG["msgNewContentKeywords"] = "キーワード:";
 $PMF_LANG["msgNewContentLink"] = "関連リンク先";
 $PMF_LANG["msgNewContentSubmit"] = "送信";
 $PMF_LANG["msgInfo"] = "追加情報: ";
-$PMF_LANG["msgNewContentThanks"] = "ご提案、ありがとうございます!";
-$PMF_LANG["msgNoQuestionsAvailable"] = "処理すべき質問がありません。";
+$PMF_LANG["msgNewContentThanks"] = "ご提案ありがとうございます!";
+$PMF_LANG["msgNoQuestionsAvailable"] = "現在処理すべき質問がありません。";
 
 // ask Question
-$PMF_LANG["msgNewQuestion"] = "質問したい内容を入力してください。:";
+$PMF_LANG["msgNewQuestion"] = "質問したい内容を入力してください:";
 $PMF_LANG["msgAskCategory"] = "カテゴリ選択";
 $PMF_LANG["msgAskYourQuestion"] = "質問内容:";
 $PMF_LANG["msgAskThx4Mail"] = "<h2>ご質問、ありがとうございます!</h2>";
 $PMF_LANG["msgDate_User"] = "日付 / ユーザー";
 $PMF_LANG["msgQuestion2"] = "質問";
 $PMF_LANG["msg2answer"] = "回答";
-$PMF_LANG["msgQuestionText"] = "他のユーザーが質問した内容を確認することが出来ます。質問に答えた場合、管理者の確認後、FAQに追加されます。";
+$PMF_LANG["msgQuestionText"] = "他のユーザーが質問した内容を確認することができます。質問に答えた場合、管理者の確認後、FAQに追加されます。";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>このFAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) の利用方法が簡単です。<strong><a href=\"".$_SERVER["PHP_SELF"]."?action=show\">カテゴリ</a></strong> から関連内容を項目別に探すか <strong><a href=\"".$_SERVER["PHP_SELF"]."?action=search\">検索</a></strong> からキーワードを入力して探すことが出来ます。</p>";
+$PMF_LANG["msgHelpText"] = "<p>このFAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) の利用方法が簡単です。<strong><a href=\"".$_SERVER["PHP_SELF"]."?action=show\">カテゴリ</a></strong> から関連内容を項目別に探すか <strong><a href=\"".$_SERVER["PHP_SELF"]."?action=search\">検索</a></strong> からキーワードを入力して探すことができます。</p>";
 
 // Contact
-$PMF_LANG["msgContactEMail"] = "管理者にメール:";
+$PMF_LANG["msgContactEMail"] = "管理者に電子メール:";
 $PMF_LANG["msgMessage"] = "メッセージ:";
 
 // Startseite
 $PMF_LANG["msgNews"] = " お知らせ";
 $PMF_LANG["msgTopTen"] = "トップ 10";
-$PMF_LANG["msgHomeThereAre"] = "総 ";
-$PMF_LANG["msgHomeArticlesOnline"] = " 個のFAQがあります。";
-$PMF_LANG["msgNoNews"] = "新しいお知らせがありません。";
-$PMF_LANG["msgLatestArticles"] = "もっとも最近投稿された5つの質問:";
+$PMF_LANG["msgHomeThereAre"] = "合計 ";
+$PMF_LANG["msgHomeArticlesOnline"] = " 個の FAQ があります。";
+$PMF_LANG["msgNoNews"] = "新しいお知らせはありません。";
+$PMF_LANG["msgLatestArticles"] = "もっとも最近投稿された 5 つの質問:";
 
 // E-Mailbenachrichtigung
-$PMF_LANG["msgMailThanks"] = "FAQに提案してくれてありがとうございます。";
+$PMF_LANG["msgMailThanks"] = "FAQ に提案してくれてありがとうございます。";
 $PMF_LANG["msgMailCheck"] = "新しい質問があります。\n管理者ページを確認してください。";
 $PMF_LANG["msgMailContact"] = "メッセージは管理者に送信されました。";
 
@@ -142,12 +142,12 @@ $PMF_LANG["msgMailContact"] = "メッセージは管理者に送信されまし�
 $PMF_LANG["err_noDatabase"] = "データベース接続が有効ではありません。";
 $PMF_LANG["err_noHeaders"] = "カテゴリが見つかりません。";
 $PMF_LANG["err_noArticles"] = "<p>登録されているエントリがありません。</p>";
-$PMF_LANG["err_badID"] = "<p>間違った ID.</p>";
-$PMF_LANG["err_noTopTen"] = "<p>トップ10が利用できません。。</p>";
+$PMF_LANG["err_badID"] = "<p>間違った ID です。</p>";
+$PMF_LANG["err_noTopTen"] = "<p>トップ 10 が利用できません。</p>";
 $PMF_LANG["err_nothingFound"] = "<p>エントリが見つかりません。</p>";
 $PMF_LANG["err_SaveEntries"] = "<strong>名前</strong>、<strong>メールアドレス</strong>、<strong>カテゴリ</strong>、<strong>件名</strong>と <strong>FAQ内容</strong>は必須フィールドです!<br /><br />\n<a href=\"javascript:history.back();\">戻る</a><br /><br />\n";
 $PMF_LANG["err_SaveComment"] = "<strong>名前</strong>、<strong>メールアドレス</strong>と<strong>コメント</strong>は必須項目です!<br /><br />\n<a href=\"javascript:history.back();\">戻る</a><br /><br />\n";
-$PMF_LANG["err_VoteTooMuch"] = "<p>複数回の評価は出来ません。<a href=\"javascript:history.back();\">ここ</a>をクリックすると戻ります。</p>";
+$PMF_LANG["err_VoteTooMuch"] = "<p>複数回の評価はできません。<a href=\"javascript:history.back();\">ここ</a>をクリックすると戻ります。</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>評価点数を選択してください。</strong> 評価をするためには<a href=\"javascript:history.back();\">ここ</a>をクリックしてください。</p>";
 $PMF_LANG["err_noMailAdress"] = "メールアドレスが正しくありません。<br /><a href=\"javascript:history.back();\">戻る</a>";
 $PMF_LANG["err_sendMail"] = "<strong>名前</strong>、<strong>メールアドレス</strong>と <strong>質問</strong>は必須項目です!<br /><br />\n<a href=\"javascript:history.back();\">戻る</a><br /><br />\n";
@@ -157,28 +157,28 @@ $PMF_LANG["help_search"] = "<p><strong>内容検索：</strong><br /><strong sty
 
 // Menu
 $PMF_LANG["ad"] = "管理者ページ";
-$PMF_LANG["ad_menu_user_administration"] = "ユーザーの管理";
-$PMF_LANG["ad_menu_entry_aprove"] = "レコードの承認";
-$PMF_LANG["ad_menu_entry_edit"] = "レコードの変更";
-$PMF_LANG["ad_menu_categ_add"] = "カテゴリの追加";
-$PMF_LANG["ad_menu_categ_edit"] = "カテゴリの変更";
-$PMF_LANG["ad_menu_news_add"] = "お知らせの追加";
-$PMF_LANG["ad_menu_news_edit"] = "お知らせの変更";
+$PMF_LANG["ad_menu_user_administration"] = "ユーザーを管理";
+$PMF_LANG["ad_menu_entry_aprove"] = "レコードを承認";
+$PMF_LANG["ad_menu_entry_edit"] = "レコードを変更";
+$PMF_LANG["ad_menu_categ_add"] = "カテゴリを追加";
+$PMF_LANG["ad_menu_categ_edit"] = "カテゴリを変更";
+$PMF_LANG["ad_menu_news_add"] = "お知らせを追加";
+$PMF_LANG["ad_menu_news_edit"] = "お知らせを変更";
 $PMF_LANG["ad_menu_open"] = "質問を変更";
 $PMF_LANG["ad_menu_stat"] = "統計";
-$PMF_LANG["ad_menu_cookie"] = "クッキー設定";
-$PMF_LANG["ad_menu_session"] = "セッション閲覧";
-$PMF_LANG["ad_menu_adminlog"] = "管理ログ閲覧";
-$PMF_LANG["ad_menu_passwd"] = "パスワード変更";
+$PMF_LANG["ad_menu_cookie"] = "Cookie を設定";
+$PMF_LANG["ad_menu_session"] = "セッションを閲覧";
+$PMF_LANG["ad_menu_adminlog"] = "管理ログを閲覧";
+$PMF_LANG["ad_menu_passwd"] = "パスワードを変更";
 $PMF_LANG["ad_menu_logout"] = "ログアウト";
 $PMF_LANG["ad_menu_startpage"] = "開始ページ";
 
 // Nachrichten
 $PMF_LANG["ad_msg_identify"] = "ログインをしてください。";
-$PMF_LANG["ad_msg_passmatch"] = "パスワードは必ず <strong>一致</strong>する必要があります。";
+$PMF_LANG["ad_msg_passmatch"] = "パスワードは必ず <strong>一致</strong> する必要があります。";
 $PMF_LANG["ad_msg_savedsuc_1"] = "";
 $PMF_LANG["ad_msg_savedsuc_2"] = "　のプロファイルの保存に成功しました。";
-$PMF_LANG["ad_msg_mysqlerr"] = "<strong>データベースのエラー</strong>のため、プロファイルが保存出来ません。";
+$PMF_LANG["ad_msg_mysqlerr"] = "<strong>データベースのエラー</strong>のため、プロファイルが保存できません。";
 $PMF_LANG["ad_msg_noauth"] = "使用権限がありません。";
 
 // Allgemein
@@ -207,10 +207,10 @@ $PMF_LANG["ad_user_password"] = "パスワード";
 $PMF_LANG["ad_user_confirm"] = "パスワード確認";
 $PMF_LANG["ad_user_rights"] = "権限一覧";
 $PMF_LANG["ad_user_del_1"] = "ユーザー";
-$PMF_LANG["ad_user_del_2"] = "　を削除します。";
-$PMF_LANG["ad_user_del_3"] = "本当に削除しますか？";
+$PMF_LANG["ad_user_del_2"] = "を削除しますか?";
+$PMF_LANG["ad_user_del_3"] = "本当に削除しますか?";
 $PMF_LANG["ad_user_deleted"] = "ユーザーの削除に成功しました。";
-$PMF_LANG["ad_user_checkall"] = "全体選択";
+$PMF_LANG["ad_user_checkall"] = "すべて選択";
 
 // Beitragsverwaltung
 $PMF_LANG["ad_entry_aor"] = "レコードの管理";
@@ -224,7 +224,7 @@ $PMF_LANG["ad_entry_content"] = "内容:";
 $PMF_LANG["ad_entry_keywords"] = "キーワード:";
 $PMF_LANG["ad_entry_author"] = "作成者:";
 $PMF_LANG["ad_entry_category"] = "カテゴリ:";
-$PMF_LANG["ad_entry_active"] = "使用";
+$PMF_LANG["ad_entry_active"] = "有効にする";
 $PMF_LANG["ad_entry_date"] = "日付:";
 $PMF_LANG["ad_entry_changed"] = "変更しますか?";
 $PMF_LANG["ad_entry_changelog"] = "変更履歴:";
@@ -273,11 +273,11 @@ $PMF_LANG["ad_news_updatenews"] = "お知らせの変更";
 // Kategorieverwaltung
 $PMF_LANG["ad_categ_new"] = "カテゴリの追加";
 $PMF_LANG["ad_categ_catnum"] = "カテゴリ番号:";
-$PMF_LANG["ad_categ_subcatnum"] = "下位カテゴリ番号:";
-$PMF_LANG["ad_categ_nya"] = "<em>利用することが出来ません。!</em>";
+$PMF_LANG["ad_categ_subcatnum"] = "サブカテゴリ番号:";
+$PMF_LANG["ad_categ_nya"] = "<em>利用できません!</em>";
 $PMF_LANG["ad_categ_titel"] = "カテゴリ名:";
-$PMF_LANG["ad_categ_add"] = "カテゴリ追加";
-$PMF_LANG["ad_categ_existing"] = "登録されているカテゴリ";
+$PMF_LANG["ad_categ_add"] = "カテゴリ追加する";
+$PMF_LANG["ad_categ_existing"] = "存在するカテゴリ一覧";
 $PMF_LANG["ad_categ_id"] = "#";
 $PMF_LANG["ad_categ_categ"] = "カテゴリ";
 $PMF_LANG["ad_categ_subcateg"] = "下位カテゴリ";
@@ -299,13 +299,13 @@ $PMF_LANG["ad_categ_deletesure"] = "本当にこのカテゴリを削除しま�
 $PMF_LANG["ad_categ_deleted"] = "カテゴリを削除しました。";
 
 // Cookies
-$PMF_LANG["ad_cookie_cookiesuc 	"] = "クッキーの設定に<strong>成功</strong>しました。";
-$PMF_LANG["ad_cookie_already"] = "クッキーは既に設定されています。次のようなオプションがあります。:";
-$PMF_LANG["ad_cookie_again"] = "もう一度 クッキーを設定";
-$PMF_LANG["ad_cookie_delete"] = "クッキーを削除";
-$PMF_LANG["ad_cookie_no"] = "保存されているクッキーがありません。クッキーを持ってログインスクリプトを保存します。次のようなオプションがあります。:";
-$PMF_LANG["ad_cookie_set"] = "クッキー設定";
-$PMF_LANG["ad_cookie_deleted"] = "クッキーの削除に成功しました。";
+$PMF_LANG["ad_cookie_cookiesuc 	"] = "Cookie の設定に<strong>成功</strong>しました。";
+$PMF_LANG["ad_cookie_already"] = "Cookie は既に設定されています。現在次のオプションがあります:";
+$PMF_LANG["ad_cookie_again"] = "もう一度 Cookie を設定する";
+$PMF_LANG["ad_cookie_delete"] = "Cookie 削除する";
+$PMF_LANG["ad_cookie_no"] = "保存されてい Cookie がありません。Cookie にてログインスクリプトを保存します。再びあなたのログイン詳細を覚えることはありません。次のようなオプションがあります:";
+$PMF_LANG["ad_cookie_set"] = "Cookie 設定";
+$PMF_LANG["ad_cookie_deleted"] = "Cookie の削除に成功しました。";
 
 // Adminlog
 $PMF_LANG["ad_adminlog"] = "管理ログ";
@@ -327,7 +327,7 @@ $PMF_LANG["ad_adus_password"] = "パスワード:";
 $PMF_LANG["ad_adus_add"] = "ユーザー追加";
 $PMF_LANG["ad_adus_suc"] = "ユーザーの追加に<strong>成功</strong>しました。";
 $PMF_LANG["ad_adus_edit"] = "プロフィール変更";
-$PMF_LANG["ad_adus_dberr"] = "<strong>データベースエラー!</strong>";
+$PMF_LANG["ad_adus_dberr"] = "<strong>データベースエラーです!</strong>";
 $PMF_LANG["ad_adus_exerr"] = "ユーザーは既に<strong>存在します</strong>。";
 
 // Sessions
@@ -360,9 +360,9 @@ $PMF_LANG["ad_rs_rating_1"] = "";
 $PMF_LANG["ad_rs_rating_2"] = "ランクのユーザーを見る:";
 $PMF_LANG["ad_rs_red"] = "赤";
 $PMF_LANG["ad_rs_green"] = "緑";
-$PMF_LANG["ad_rs_altt"] = "平均２より低い";
-$PMF_LANG["ad_rs_ahtf"] = "平均４より高い";
-$PMF_LANG["ad_rs_no"] = "登録されているデータがありません。";
+$PMF_LANG["ad_rs_altt"] = "平均で 2 以下";
+$PMF_LANG["ad_rs_ahtf"] = "平均で 2 以上";
+$PMF_LANG["ad_rs_no"] = "有効な評価は有効ありません。";
 
 // Auth
 $PMF_LANG["ad_auth_insert"] = "IDとパスワードを入力してください。";
@@ -379,7 +379,7 @@ $PMF_LANG["ad_config_save"] = "保存";
 $PMF_LANG["ad_config_reset"] = "リセット";
 $PMF_LANG["ad_config_saved"] = "環境設定の保存に成功しました。";
 $PMF_LANG["ad_menu_editconfig"] = "環境設定";
-$PMF_LANG["ad_att_none"] = "ファイルの添付が出来ません。";
+$PMF_LANG["ad_att_none"] = "ファイルの添付ができません。";
 $PMF_LANG["ad_att_att"] = "添付:";
 $PMF_LANG["ad_att_add"] = "添付ファイル";
 $PMF_LANG["ad_entryins_suc"] = "保存に成功しました。";
@@ -403,7 +403,7 @@ $PMF_LANG["ad_att_fail"] = "ファイルの添付中にエラーが発生しま�
 $PMF_LANG["ad_att_close"] = "このウィンドウと閉じる";
 
 // Added v0.85 - 08.07.2001 - Bastian - Admin
-$PMF_LANG["ad_csv_restore"] = "phpMyFAQでバックアップしたデータをリストーアします。リストーアする場合、既存のデータは復元することは出来ません。 ";
+$PMF_LANG["ad_csv_restore"] = "phpMyFAQでバックアップしたデータをリストーアします。リストーアする場合、既存のデータは復元することはできません。 ";
 $PMF_LANG["ad_csv_file"] = "ファイル";
 $PMF_LANG["ad_csv_ok"] = "OK";
 $PMF_LANG["ad_csv_linklog"] = "ログバックアップ";
@@ -422,7 +422,7 @@ $PMF_LANG["ad_menu_backup"] = "バックアップ";
 $PMF_LANG["ad_logout"] = "セッションが終了されました。";
 $PMF_LANG["ad_news_add"] = "お知らせの追加";
 $PMF_LANG["ad_news_edit"] = "お知らせの変更";
-$PMF_LANG["ad_cookie"] = "クッキー";
+$PMF_LANG["ad_cookie"] = "Cookie";
 $PMF_LANG["ad_sess_head"] = "セッション閲覧";
 
 // Added v1.1 - 06.01.2002 - Bastian
@@ -447,14 +447,14 @@ $PMF_LANG["ad_sess_time"] = "時間";
 $PMF_LANG["ad_sess_sid"] = "セッション ID";
 $PMF_LANG["ad_sess_ip"] = "IP アドレス";
 
-$PMF_LANG["ad_ques_take"] = "質問の確認及び変更";
+$PMF_LANG["ad_ques_take"] = "質問と編集を受け付ける";
 $PMF_LANG["no_cats"] = "カテゴリが見つかりません。";
 
 // Added v1.1 - 17.01.2002 - Bastian
 $PMF_LANG["ad_log_lger"] = "IDまたはパスワードが正しくありません。";
 $PMF_LANG["ad_log_sess"] = "セッションは終了しました。";
-$PMF_LANG["ad_log_edit"] = "\"ユーザー変更\"-次のユーザーの入力フォーム: ";
-$PMF_LANG["ad_log_crea"] = "\"新規記事\" フォーム.";
+$PMF_LANG["ad_log_edit"] = "-次のユーザーの「ユーザー編集」フォーム: ";
+$PMF_LANG["ad_log_crea"] = "「新規記事」フォーム.";
 $PMF_LANG["ad_log_crsa"] = "新規エントリを作成しました。";
 $PMF_LANG["ad_log_ussa"] = "次のユーザーのデータを更新しました: ";
 $PMF_LANG["ad_log_usde"] = "次のユーザーを削除しました: ";
@@ -465,9 +465,11 @@ $PMF_LANG["ad_start_visits"] = "訪問数";
 $PMF_LANG["ad_start_articles"] = "記事数";
 $PMF_LANG["ad_start_comments"] = "コメント数";
 
-$PMF_LANG["ad_user_chpw"] = "使用中のユーザーのパスワードは \"".$PMF_LANG["ad_menu_passwd"]."\" から変更することが出来ます。";
-$PMF_LANG["ad_categ_paste"] = "ペースト";
-$PMF_LANG["ad_categ_cut"] = "カット";
+$PMF_LANG["ad_user_chpw"] = "現在のユーザーのパスワード変更は「".$PMF_LANG["ad_menu_passwd"]."」でできます。";
+
+// Added v1.1 - 30.01.2002 - Bastian
+$PMF_LANG["ad_categ_paste"] = "貼り付け";
+$PMF_LANG["ad_categ_cut"] = "切り取り";
 $PMF_LANG["ad_categ_copy"] = "コピー";
 $PMF_LANG["ad_categ_process"] = "カテゴリ処理中...";
 
@@ -484,51 +486,51 @@ $PMF_LANG["msgMainCategory"] = "メインカテゴリ";
 $PMF_LANG["ad_passwdsuc"] = "パスワードを変更しました。";
 
 // Added v1.3.0 - 04.03.2003 - Thorsten
-$PMF_LANG["msgPDF"] = "PDF ファイルで表示";
-$PMF_LANG["ad_xml_head"] = "XML バックアップ";
-$PMF_LANG["ad_xml_hint"] = "FAQ の全レコードを１つの XML ファイルに保存";
-$PMF_LANG["ad_xml_gen"] = "XML ファイル生成";
+$PMF_LANG["msgPDF"] = "PDF ファイルで表示する";
+$PMF_LANG["ad_xml_head"] = "XML にバックアップする";
+$PMF_LANG["ad_xml_hint"] = "FAQ の全レコードを 1 つの XML ファイルに保存する";
+$PMF_LANG["ad_xml_gen"] = "XML ファイルを生成する";
 $PMF_LANG["ad_entry_locale"] = "言語";
-$PMF_LANG["msgLangaugeSubmit"] = "言語変更";
+$PMF_LANG["msgLangaugeSubmit"] = "言語を変更する";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
 $PMF_LANG["ad_entry_preview"] = "プレビュー";
-$PMF_LANG["ad_attach_1"] = "環境設定から添付ファイルを保存するディレクトリーを先に設定してください。";
+$PMF_LANG["ad_attach_1"] = "環境設定から添付ファイルを保存するディレクトリを先に設定してください。";
 $PMF_LANG["ad_attach_2"] = "環境設定から添付ファイルのリンクを先に設定してください。";
-$PMF_LANG["ad_attach_3"] = "attachment.php ファイルを権限なしではオープン出来ません。";
+$PMF_LANG["ad_attach_3"] = "attachment.php ファイルを権限なしではオープンできません。";
 $PMF_LANG["ad_attach_4"] = "添付ファイルのサイズは ".$PMF_CONF["attmax"]." Bytes より大きくてはいけません。";
 $PMF_LANG["ad_menu_export"] = "FAQ エクスポート";
 $PMF_LANG["ad_export_1"] = "Built RSS-Feed on";
 $PMF_LANG["ad_export_2"] = ".";
-$PMF_LANG["ad_export_file"] = "エラー: ファイルの書き込みが出来ません。";
+$PMF_LANG["ad_export_file"] = "エラー: ファイルの書き込みができません。";
 $PMF_LANG["ad_export_news"] = "お知らせ RSS フィード";
 $PMF_LANG["ad_export_topten"] = "トップ 10 RSS フィード";
 $PMF_LANG["ad_export_latest"] = "最新 5 件の RSS フィード";
 $PMF_LANG["ad_export_pdf"] = "全レコードの PDF エクスポート";
 $PMF_LANG["ad_export_generate"] = "RSS フィードを構築";
 
-$PMF_LANG["rightsLanguage"][0] = "ユーザー追加";
-$PMF_LANG["rightsLanguage"][1] = "ユーザー変更";
-$PMF_LANG["rightsLanguage"][2] = "ユーザー削除";
-$PMF_LANG["rightsLanguage"][3] = "レコード追加";
-$PMF_LANG["rightsLanguage"][4] = "レコード変更";
-$PMF_LANG["rightsLanguage"][5] = "レコード削除";
-$PMF_LANG["rightsLanguage"][6] = "ログ閲覧";
-$PMF_LANG["rightsLanguage"][7] = "管理ログ閲覧";
-$PMF_LANG["rightsLanguage"][8] = "コメント削除";
-$PMF_LANG["rightsLanguage"][9] = "お知らせ追加";
-$PMF_LANG["rightsLanguage"][10] = "お知らせ変更";
-$PMF_LANG["rightsLanguage"][11] = "お知らせ削除";
-$PMF_LANG["rightsLanguage"][12] = "カテゴリ追加";
-$PMF_LANG["rightsLanguage"][13] = "カテゴリ変更";
-$PMF_LANG["rightsLanguage"][14] = "カテゴリ削除";
-$PMF_LANG["rightsLanguage"][15] = "パスワード変更";
-$PMF_LANG["rightsLanguage"][16] = "環境設定変更";
-$PMF_LANG["rightsLanguage"][17] = "添付追加";
-$PMF_LANG["rightsLanguage"][18] = "添付削除";
-$PMF_LANG["rightsLanguage"][19] = "バックアップ作成";
-$PMF_LANG["rightsLanguage"][20] = "バックアップ復元";
-$PMF_LANG["rightsLanguage"][21] = "質問削除";
+$PMF_LANG["rightsLanguage"][0] = "ユーザーの追加";
+$PMF_LANG["rightsLanguage"][1] = "ユーザーの編集";
+$PMF_LANG["rightsLanguage"][2] = "ユーザーの削除";
+$PMF_LANG["rightsLanguage"][3] = "レコードの追加";
+$PMF_LANG["rightsLanguage"][4] = "レコードの編集";
+$PMF_LANG["rightsLanguage"][5] = "レコードの削除";
+$PMF_LANG["rightsLanguage"][6] = "ログの閲覧";
+$PMF_LANG["rightsLanguage"][7] = "管理ログの閲覧";
+$PMF_LANG["rightsLanguage"][8] = "コメントの削除";
+$PMF_LANG["rightsLanguage"][9] = "ニュースの追加";
+$PMF_LANG["rightsLanguage"][10] = "ニュースの編集";
+$PMF_LANG["rightsLanguage"][11] = "ニュースの削除";
+$PMF_LANG["rightsLanguage"][12] = "カテゴリの追加";
+$PMF_LANG["rightsLanguage"][13] = "カテゴリの編集";
+$PMF_LANG["rightsLanguage"][14] = "カテゴリの削除";
+$PMF_LANG["rightsLanguage"][15] = "パスワードの編集";
+$PMF_LANG["rightsLanguage"][16] = "構成の編集";
+$PMF_LANG["rightsLanguage"][17] = "添付の追加";
+$PMF_LANG["rightsLanguage"][18] = "添付の削除";
+$PMF_LANG["rightsLanguage"][19] = "バックアップの作成";
+$PMF_LANG["rightsLanguage"][20] = "バックアップの復元";
+$PMF_LANG["rightsLanguage"][21] = "開いた質問の削除";
 
 $PMF_LANG["msgAttachedFiles"] = "添付ファイル:";
 
@@ -550,42 +552,42 @@ $PMF_LANG["ad_entry_fontsize"] = "フォントサイズ: ";
 
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias
 $LANG_CONF["language"] = array(0 => "select", 1 => "言語");
-$LANG_CONF["detection"] = array(0 => "checkbox", 1 => "言語を自動認識");
-$LANG_CONF["title"] = array(0 => "input", 1 => "FAQ のタイトル");
+$LANG_CONF["detection"] = array(0 => "checkbox", 1 => "言語の自動認識を有効にする");
+$LANG_CONF["title"] = array(0 => "input", 1 => "FAQ の題名");
 $LANG_CONF["version"] = array(0 => "print", 1 => "FAQ バージョン");
 $LANG_CONF["metaDescription"] = array(0 => "input", 1 => "ページの説明");
-$LANG_CONF["metaKeywords"] = array(0 => "input", 1 => "キーワード：検索ロボット用");
+$LANG_CONF["metaKeywords"] = array(0 => "input", 1 => "検索ロボット用キーワード");
 $LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "管理者名");
-$LANG_CONF["adminmail"] = array(0 => "input", 1 => "管理者のメールアドレス");
+$LANG_CONF["adminmail"] = array(0 => "input", 1 => "管理者の電子メールアドレス");
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "問い合わせ情報");
-$LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "スタートページのコピーライト");
+$LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "スタートページのコピーライト文");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "友達に送信ページのテキスト");
-$LANG_CONF["attmax"] = array(0 => "input", 1 => "添付ファイルの最大サイズ (最大 ".ini_get("upload_max_filesize")."バイト)");
-$LANG_CONF["disatt"] = array(0 => "checkbox", 1 => "エントリに添付のリンクを表示");
-$LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "追跡機能を使用可否");
-$LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "管理ログを使用可否");
-$LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "admin.phpでUINｓをチェック時IPアドレスのチェック可否");
+$LANG_CONF["attmax"] = array(0 => "input", 1 => "添付ファイルの最大サイズ (最大 ".ini_get("upload_max_filesize")." バイト)");
+$LANG_CONF["disatt"] = array(0 => "checkbox", 1 => "エントリの下に添付のリンクを表示する");
+$LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "追跡機能を使用する");
+$LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "管理ログを使用する");
+$LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "admin.php で UIN のチェック時に IP アドレスを確認するか");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "ページ毎に表示するトピック数");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "お知らせの表示数");
 $LANG_CONF["bannedIP"] = array(0 => "area", 1 => "拒否する IP アドレス");
-$LANG_CONF["parse_php"] = array(0 => "checkbox", 1 => "テンプレートエンジンで PHP コードの解析を可能にしますか？ (デフォルト: 不可)");
-$LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "mod_rewrite のサポートを利用可能にしますか? (デフォルト: 不可)");
-$LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "LDAP サポートを可能にしますか? (デフォルト: 不可)");
+$LANG_CONF["parse_php"] = array(0 => "checkbox", 1 => "テンプレートエンジンで PHP コードの解析を可能にしますか? (デフォルト: 無効)");
+$LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "mod_rewrite のサポートを使用しますか? (デフォルト: 無効)");
+$LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "LDAP サポートを使用にしますか? (デフォルト: 無効)");
 
-$PMF_LANG["ad_categ_new_main_cat"] = "ROOTの下位カテゴリへ";
+$PMF_LANG["ad_categ_new_main_cat"] = "ROOT の下位カテゴリへ";
 $PMF_LANG["ad_categ_paste_error"] = "このカテゴリは移動できません。";
 $PMF_LANG["ad_categ_move"] = "カテゴリ移動";
 $PMF_LANG["ad_categ_lang"] = "言語";
 $PMF_LANG["ad_categ_desc"] = "説明";
 $PMF_LANG["ad_categ_change"] = "選択したカテゴリと入れ替え";
 
-$PMF_LANG["lostPassword"] = "パスワードを忘れましたか? ここをクリックしてください。";
-$PMF_LANG["lostpwd_err_1"] = "エラー: IDとメールアドレスが見つかりません。";
-$PMF_LANG["lostpwd_err_2"] = "エラー: IDまたはメールアドレスを入力してください。";
-$PMF_LANG["lostpwd_text_1"] = "ユーザー情報を要請しました。";
-$PMF_LANG["lostpwd_text_2"] = "FAQの管理セクションの中で新しい個人のパスワードを設定してください。";
-$PMF_LANG["lostpwd_mail_okay"] = "メールを送信しました。";
+$PMF_LANG["lostPassword"] = "パスワードを忘れましたか? その時はここをクリックしてください。";
+$PMF_LANG["lostpwd_err_1"] = "エラー: ユーザー名と電子メールアドレスが見つかりません。";
+$PMF_LANG["lostpwd_err_2"] = "エラー: 不正な入力です!";
+$PMF_LANG["lostpwd_text_1"] = "アカウント情報を要求してくれてありがとうございます。";
+$PMF_LANG["lostpwd_text_2"] = "FAQ の管理セクションの中で新しい個人のパスワードを設定してください。";
+$PMF_LANG["lostpwd_mail_okay"] = "電子メールを送信しました。";
 
-$PMF_LANG["ad_xmlrpc_button"] = "最新の phpMyFAQ バージョンを確認してください。";
-$PMF_LANG["ad_xmlrpc_latest"] = "最新バージョンを次のサイトから利用することが出来ます。";
+$PMF_LANG["ad_xmlrpc_button"] = "最新の phpMyFAQ バージョンをウェブで確認する";
+$PMF_LANG["ad_xmlrpc_latest"] = "最新バージョンを次のサイトから利用することができます:";
 ?>
