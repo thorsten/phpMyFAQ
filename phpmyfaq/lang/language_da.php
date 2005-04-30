@@ -1,22 +1,24 @@
 <?php
-/******************************************************************************
- * File:				language_da.php
- * Description:		    Danish language file
- * Authors:				Max Andersen <max@militant.dk>
- * Date:				2004-06-24
- * Last Update:		    2004-06-30
- * Copyright:           (c) 2004 phpMyFAQ Team
- * 
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- * 
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- ******************************************************************************/
+/**
+* $Id: language_da.php,v 1.4 2005-04-30 11:23:38 thorstenr Exp $
+*
+* Danish language file
+*
+* @author       Max Andersen <max@militant.dk>
+* @author       Poul Melgaard <pcm@surfray.com>
+* @since        2004-06-24
+* @copyright    (c) 2004-2005 phpMyFAQ Team
+*
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
+*
+* Software distributed under the License is distributed on an "AS IS"
+* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+* License for the specific language governing rights and limitations
+* under the License.
+*/
 
 $PMF_LANG["metaCharset"] = "iso-8859-1";
 $PMF_LANG["metaLanguage"] = "da";
@@ -93,7 +95,7 @@ $PMF_LANG["msgSearchContent"] = "indhold: ";
 
 // new Content
 $PMF_LANG["msgNewContentHeader"] = "Forslag til FAQ";
-$PMF_LANG["msgNewContentAddon"] = "Dit indl&aelig;g bliver ikke offenliggjort med det samme, da det f&oslash;rst skal genneml&aelig;ses af en administrator. N&oslash;dvendige felter: <strong>dit navn</strong>, <strong>din email addresse</strong>, <strong>kategori</strong>, <strong>overskrift</strong> og <strong>dit forslag</strong>.<br />Separer venligst s&oslash;geord med mellemrum (benyt ikke komma).";
+$PMF_LANG["msgNewContentAddon"] = "Dit indl&aelig;g bliver ikke offenliggjort med det samme, da det f&oslash;rst skal genneml&aelig;ses af en administrator. <br />N&oslash;dvendige felter: <strong>dit navn</strong>, <strong>din email addresse</strong>, <strong>kategori</strong>, <strong>overskrift</strong> og <strong>dit forslag</strong>.<br />Separer venligst s&oslash;geord med mellemrum (benyt ikke komma).";
 $PMF_LANG["msgNewContentName"] = "Dit navn:";
 $PMF_LANG["msgNewContentMail"] = "Din email addresse:";
 $PMF_LANG["msgNewContentCategory"] = "V&aelig;g kategori:";
@@ -127,7 +129,7 @@ $PMF_LANG["msgMessage"] = "Din besked:";
 $PMF_LANG["msgNews"] = " Nyheder";
 $PMF_LANG["msgTopTen"] = "TOP 10";
 $PMF_LANG["msgHomeThereAre"] = "Der er ";
-$PMF_LANG["msgHomeArticlesOnline"] = " felter aktive";
+$PMF_LANG["msgHomeArticlesOnline"] = " aktive spørgsmål";
 $PMF_LANG["msgNoNews"] = "Ingen nyheder er gode nyheder.";
 $PMF_LANG["msgLatestArticles"] = "De fem seneste sp&oslash;rgsm&aring;l:";
 
@@ -156,8 +158,8 @@ $PMF_LANG["help_search"] = "<p><strong>Fundne indl&aelig;g:</strong><br /></p>";
 // MenÃ¼
 $PMF_LANG["ad"] = "ADMIN SECTION";
 $PMF_LANG["ad_menu_user_administration"] = "Bruger Administration";
-$PMF_LANG["ad_menu_entry_aprove"] = "Godkend felter";
-$PMF_LANG["ad_menu_entry_edit"] = "Ret felter";
+$PMF_LANG["ad_menu_entry_aprove"] = "Godkend ";
+$PMF_LANG["ad_menu_entry_edit"] = "Ret spørgsmål";
 $PMF_LANG["ad_menu_categ_add"] = "Tilf&oslash;j Kategori";
 $PMF_LANG["ad_menu_categ_edit"] = "Ret Kategori";
 $PMF_LANG["ad_menu_news_add"] = "Tilf&oslash;j nyheder";
@@ -210,7 +212,7 @@ $PMF_LANG["ad_user_del_3"] = "Er du sikker?";
 $PMF_LANG["ad_user_deleted"] = "Brugeren er slettet.";
 
 // Beitragsverwaltung
-$PMF_LANG["ad_entry_aor"] = "Administration af felter";
+$PMF_LANG["ad_entry_aor"] = "Administration af spørgsmål";
 $PMF_LANG["ad_entry_id"] = "ID";
 $PMF_LANG["ad_entry_topic"] = "Emne";
 $PMF_LANG["ad_entry_action"] = "Aktion";
@@ -246,7 +248,7 @@ $PMF_LANG["ad_entry_back"] = "Tilbage";
 
 // Newsverwaltung
 $PMF_LANG["ad_news_header"] = "Artikel Titel";
-$PMF_LANG["ad_news_text"] = "Feltets tekst";
+$PMF_LANG["ad_news_text"] = "Spørgsmålets tekst";
 $PMF_LANG["ad_news_link_url"] = "Link: (<strong>uden http://</strong>)!";
 $PMF_LANG["ad_news_link_title"] = "Titel p&aring; link:";
 $PMF_LANG["ad_news_link_target"] = "destination p&aring; link";
@@ -485,7 +487,7 @@ $PMF_LANG["ad_passwdsuc"] = "Dit kodeord er skiftet.";
 // Added v1.3.0 - 04.03.2003 - Thorsten
 $PMF_LANG["msgPDF"] = "Vis som PDF fil";
 $PMF_LANG["ad_xml_head"] = "XML-Sikkerhedskopi";
-$PMF_LANG["ad_xml_hint"] = "Gem alle felter i FAQ i een XML-fil.";
+$PMF_LANG["ad_xml_hint"] = "Gem alle spørgsmål i FAQ i een XML-fil.";
 $PMF_LANG["ad_xml_gen"] = "opret XML file";
 $PMF_LANG["ad_entry_locale"] = "Sprog";
 $PMF_LANG["msgLangaugeSubmit"] = "Skift sprog";
@@ -502,8 +504,8 @@ $PMF_LANG["ad_export_2"] = ".";
 $PMF_LANG["ad_export_file"] = "Fejl: Kan ikke skrive fil.";
 $PMF_LANG["ad_export_news"] = "Nyheder RSS-Feed";
 $PMF_LANG["ad_export_topten"] = "Top 10 RSS-Feed";
-$PMF_LANG["ad_export_latest"] = "5 seneste felter RSS-Feed";
-$PMF_LANG["ad_export_pdf"] = "PDF-Eksport af alle felter";
+$PMF_LANG["ad_export_latest"] = "5 seneste spørgsmål RSS-Feed";
+$PMF_LANG["ad_export_pdf"] = "PDF-Eksport af alle spørgsmål";
 $PMF_LANG["ad_export_generate"] = "byg RSS-Feed";
 
 $PMF_LANG["rightsLanguage"][0] = "tilf&oslash;j bruger";
