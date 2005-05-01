@@ -1,8 +1,8 @@
 TODO list for future versions of phpMyFAQ:
 
 1.5.1:
-- add username to a category
-- add revision system
+- multibple category links in FAQ records
+- search results orderd by relevance in MySQL
 - Firefox/Mozilla search plugin
 - bugfixing for stability or security reasons
 
@@ -15,6 +15,9 @@ TODO list for future versions of phpMyFAQ:
 - bugfixing for stability or security reasons
 
 1.6.0 "Prometheus":
+- add username to a category (done)
+- add revision system (done)
+- configurable visibility of questions (done)
 - new authentication class ?
 - glossary support ?
 - improved WYSIWYG editor and Image Manager ?
