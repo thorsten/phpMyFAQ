@@ -1,10 +1,10 @@
 <?php
 /**
-* $Id: main.php,v 1.2 2004-12-25 20:40:44 thorstenr Exp $
+* $Id: main.php,v 1.3 2005-05-13 17:35:47 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-08-23
-* @copyright    (c) 2001-2004 phpMyFAQ Team
+* @copyright    (c) 2001-2005 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the 'License'); you may not use this file except in
@@ -20,11 +20,7 @@
 $tpl->processTemplate ('writeContent', array(
                        'writeNewsHeader' => $PMF_CONF['title'].$PMF_LANG['msgNews'],
                        'writeNews' => generateNews(),
-                       'writeNumberOfArticles' => $PMF_LANG['msgHomeThereAre'].generateNumberOfArticles().$PMF_LANG['msgHomeArticlesOnline'],
-                       'writeTopTenHeader' => $PMF_LANG['msgTopTen'],
-                       'writeTopTenRow' => generateTopTen($LANGCODE),
-                       'writeNewestHeader' => $PMF_LANG['msgLatestArticles'],
-                       'writeNewestRow' => generateFiveNewest($LANGCODE)));
+                       'writeNumberOfArticles' => $PMF_LANG['msgHomeThereAre'].generateNumberOfArticles().$PMF_LANG['msgHomeArticlesOnline']));
 
 $tpl->includeTemplate('writeContent', 'index');
 ?>
