@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.66 2005-05-13 19:08:57 thorstenr Exp $
+* $Id: functions.php,v 1.67 2005-05-13 22:02:03 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -509,16 +509,16 @@ function generateTopTen($language = '')
 	global $PMF_LANG, $PMF_CONF;
     
     $result = generateTopTenData($language, 10);
-	$output = "<ol>\n";
 	if (count($result) > 0) {
+	    $output = "<ol>\n";
 		foreach ($result as $row) {
             $output .= "\t<li><strong>".$row['visits']." ".$PMF_LANG["msgViews"].":</strong><br />";
 			$output .= '<a href="'.$row['url'] . '">'.stripslashes(makeShorterText(htmlentities($row['thema']), 8))."</a></li>\n";
 		}
+        $output .= "</ol>\n";
 	} else {
-		$output = "\t<li>".$PMF_LANG["err_noTopTen"]."</li>\n";
+		$output = $PMF_LANG["err_noTopTen"];
 	}
-    $output .= "</ol>\n";
 	return $output;
 }
 
@@ -545,7 +545,7 @@ function generateFiveNewest($language = '')
         }
         $output .= '</ol>';
     } else {
-		$output = '<p>'.$PMF_LANG["err_noArticles"].'</p>';
+		$output = $PMF_LANG["err_noArticles"];
     }
 	return $output;
 }
