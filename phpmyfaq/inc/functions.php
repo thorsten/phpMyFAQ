@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.65 2005-04-18 19:06:49 thorstenr Exp $
+* $Id: functions.php,v 1.66 2005-05-13 19:08:57 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -96,7 +96,7 @@ function getThema($id, $lang)
 	$result = $db->query($query);
 	if ($db->num_rows($result) > 0) {
 		while ($row = $db->fetch_object($result)) {
-			$output = $row->thema;
+			$output = htmlentities($row->thema);
         }
     } else {
 		$output = $PMF_LANG["no_cats"];
@@ -513,7 +513,7 @@ function generateTopTen($language = '')
 	if (count($result) > 0) {
 		foreach ($result as $row) {
             $output .= "\t<li><strong>".$row['visits']." ".$PMF_LANG["msgViews"].":</strong><br />";
-			$output .= '<a href="'.$row['url'] . '">'.stripslashes(makeShorterText($row['thema'], 8))."</a></li>\n";
+			$output .= '<a href="'.$row['url'] . '">'.stripslashes(makeShorterText(htmlentities($row['thema']), 8))."</a></li>\n";
 		}
 	} else {
 		$output = "\t<li>".$PMF_LANG["err_noTopTen"]."</li>\n";
@@ -541,7 +541,7 @@ function generateFiveNewest($language = '')
 	if (count ($result) > 0) {
 		$output = '<ol>';
 		foreach ($result as $row) {
-			$output .= '<li><a href="'.$row['url'].'">'.stripslashes(makeShorterText($row['thema'], 8)).'</a> ('.makeDate($row['datum']).')</li>';
+			$output .= '<li><a href="'.$row['url'].'">'.stripslashes(makeShorterText(htmlentities($row['thema']), 8)).'</a> ('.makeDate($row['datum']).')</li>';
         }
         $output .= '</ol>';
     } else {
