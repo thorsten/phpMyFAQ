@@ -40,17 +40,15 @@
     
     <!-- start headers -->
     <div class="header" id="header">
-        <div class="headertitle">    
         <h1><a title="{header}" href="{faqHome}">{header}</a></h1>
         <ul>
-            <li>{msgSearch}</li>
-            <li>{msgAddContent}</li>
-            <li>{msgQuestion}</li>
-            <li>{msgOpenQuestions}</li>
-            <li>{msgHelp}</li>
             <li>{msgContact}</li>
+            <li>{msgHelp}</li>
+            <li>{msgOpenQuestions}</li>
+            <li>{msgQuestion}</li>
+            <li>{msgAddContent}</li>
+            <li>{msgSearch}</li>
         </ul>
-        </div>
     </div>
     <!-- end headers -->
 
@@ -63,11 +61,13 @@
                 
                 <!-- start categories -->
                 <div class="content">
+                    <div id="categories">
                     <ul>
                         <li class="home">{backToHome}</li>
                         <li>{allCategories}</li>
                         {showCategories}
                     </ul>
+                    </div>
                 </div>
                 <!-- end categories -->
         
@@ -77,7 +77,7 @@
                     <form action="{writeSendAdress}" method="post">
                     <fieldset>
                     <legend>{searchBox}</legend>
-                    <input alt="search..." class="inputfield" type="text" name="suchbegriff" size="18" />
+                    <input alt="search..." class="inputfield" type="text" name="suchbegriff" size="18" /><br />
                     <input type="submit" name="submit" value="Go" class="submit" />
                     </fieldset>
                     </form>
@@ -91,7 +91,8 @@
                     <form action="{writeLangAdress}" method="post">
                     <fieldset>
                     <legend>{languageBox}</legend>
-                    {switchLanguages}<input type="submit" name="submit" value="Go" class="submit" />
+                    {switchLanguages}<br />
+                    <input type="submit" name="submit" value="Go" class="submit" />
                     </fieldset>
                     </form>
                     </div>
@@ -112,13 +113,13 @@
             <div class="rightpadding">
             
                 <div class="content">
-                <h3><a href="feed/topten/rss.php" class="rss"><img src="images/rss.png" width="28" height="16" alt="RSS" title="RSS" class="rss" /></a>{writeTopTenHeader}</h3>
+                <h3>{writeTopTenHeader}</h3>
                 {writeTopTenRow}
                 </div>
                 
                 <div class="content">
-                <h3><a href="feed/latest/rss.php" class="rss"><img src="images/rss.png" width="28" height="16" alt="RSS" title="RSS" class="rss" /></a>{writeNewestHeader}</h3>
-    {writeNewestRow}
+                <h3>{writeNewestHeader}</h3>
+                {writeNewestRow}
                 </div>
                 
             </div>
