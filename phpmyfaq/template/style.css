@@ -1,255 +1,717 @@
 /**
-* $Id: style.css,v 1.4 2005-03-13 12:58:24 thorstenr Exp $
+* $Id: style.css,v 1.5 2005-05-13 20:36:03 thorstenr Exp $
+*
+* This is the main style sheet file for phpMyFAQ 1.5
+* If you want to change only the colours, use colors.css
 *
 * @author		Jens Grochtdreis <jens@grochtdreis.de>
 * @author		Thorsten Rinne <thorsten@rinne.info>
 * @since			2004-06-02
 * @copyright	(c) 2004-2005 phpMyFAQ Team
-* 
+*
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
 * compliance with the License. You may obtain a copy of the License at
 * http://www.mozilla.org/MPL/
-* 
+*
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
 * under the License.
-*/
+*/ 
 
 /**
-* Main definitions
+* main definitions
 *
-* Note: You can remove them if you don't need them to embed phpMyFAQ into your current layout
+* NOTE: You may remove them because they are global
 */
 body, td {
-    font-family: "Bitstream Vera Sans", "Trebuchet MS", Geneva, Arial, Helvetica, sans-serif;
-    font-size: 100.01%; 
-    }
-h2 {
-    margin-top: 5px;
-    margin-bottom: 10px;
-    font-size: 175%;
-    border-bottom: 1px solid;
-    }
-h3 {
-    padding-top: 8px;
-    font-size: 125%;
-    }
-	 
-img {
-	border: none;
+   font-family: "Bitstream Vera Sans", "Trebuchet MS", Geneva, Verdana, Arial, Helvetica, sans-serif;
+   font-size: 80.01%; 
 }
-	 
-#phpmyfaq {
-	text-align: left;
-	vertical-align: middle;
-	margin: 0 auto;
-	padding: 0;
-	width: 760px;
+body, h1, h2, h3, h4, h5, h6, div, p, table, td, ul, ol, li, dd, dt, dl, blockquote, address, hr, pre {
+   margin: 0;
+   padding: 0;
 }
-
-/* The header */
-#header {
-   margin: 0px;
-   padding: 0px;
-   border-top: 1px solid;
-   border-left: 1px solid;
-   border-right: 1px solid;
+h1, h2, h3, h4, h5, h6 {
+   font-family: "Trebuchet MS", Geneva, Verdana, Arial, Helvetica, sans-serif;
+   font-weight: normal;
+   font-size: 100%;
 }
-#header a {	
+a {
    text-decoration: none;
 }
-#header h1 {
-   margin-left: 5px;
-   font-family: "Garamond", "Times New Roman", Times, serif;
+a:hover {
+   text-decoration: underline;
+   }
+h1 {
    font-size: 200%;
-   font-variant: small-caps;
+}
+h2 {
+   font-size: 175%;
+}
+h3 {
+   font-size: 125%;
+}
+form {
+   margin: 0;
+   padding: 0;
+}
+fieldset {
+   margin-bottom: 1em;
+   padding: .5em;
+}
+img {
+   border: 0;
+}
+pre, code {
+   font-size: 11px;
+}
+hr {
+   height: 1px;
+   border: 1px solid gray;
+}
+p {
+   padding: 0;
+   margin: 0;
+   margin-bottom: 0.8em;
+}
+code {
+   white-space: pre;
 }
 
-/* the horizontal navigation */
-#horizontalnav ul {
-   margin-top: 5px;
-   margin-bottom: 10px;
-   list-style-type: none;
-   font-size: 80%;
-   padding: 0px;
+/**
+* Header definitions
+*/
+#header {
+ 	position: relative;
+  	min-height: 39px;
+  	height: 5em;
+  	padding: 0;
+  	margin: 0;
+  	margin-bottom: 1em;
+  	height: 3em;
+  	padding: 15px 0;
 }
-#horizontalnav ul li {
-   display: inline;
-   list-style-type: none;
+
+/* phpMyFAQ title */
+#header h1 {
+   padding-left: 20px;
 }
-#horizontalnav ul li a {
+#header h1 a {
    text-decoration: none;
-   margin: 0 10px; /* That's the distance between the items. */
-   padding: 1px;
-   float: left;
+}    
+
+/**
+* Main navigation
+*/
+#header ul {
+   width: auto;
+   position: absolute;
+   bottom: 0;
+   right: 0;
+   margin: 0;
+   padding: 0 15px 0 0;
+   list-style: none;
 }
-#horizontalnav ul li a:hover {
+#header li {
+   float: right;
+   padding: 0 6px 0 0;
+   margin: 0 1px 0 0;
+   display: inline;
+   white-space: nowrap;
+}
+#header ul a {
+   float: left;
+   display: block;
+   padding: 10px 4px 4px 10px;
+   font-weight: bold;
+   font-size: 110%;
+   text-decoration: none;
+}
+#header ul a:hover {
    text-decoration: underline;
 }
 
-/**************************
-The category-menu
-**************************/
+/**
+* Categories
+*/
 #categories {
-    width: 180px;
-    margin: 0px;
-    padding: 0px;
-    font-size: 80%;
-	 float: left;
-    }
+    width: 198px;
+    padding: 0;
+    font-size: 100%;
+    border: 1px solid;
+}
 #categories ul {
+    list-style: none;
     margin: 0;
     padding: 0;
-    list-style-type: none;
-    }
+    border: none;
+}
 #categories li {
-    margin: 2px 0;
-    }
-#categories a {
+    border-bottom: 1px solid;
+    margin: 0;
+}
+#categories li a {
     display: block;
-    padding: 3px 15px;
-    width: 100%;
-    text-decoration: none;
-    }
-#categories a:hover {
-    text-decoration: none;
-    }
-#categories ul ul li {
-    margin: 5px 0 5px 10px;
-    }
-#categories ul ul a {
-    display: block;
-    padding: 3px 15px;
-    width: 100%;
+    padding: 5px 5px 5px 0.5em;
     border-left: 10px solid;
     text-decoration: none;
-    }
-#categories ul ul a:hover {
-    background-color: #fb0;
-    text-decoration: none;
-    }
-a.active {
-    border: 1px solid;
-    }
-#search {
-    margin-top: 10px;
-    }
-#langform {
-    
-    }
+    width: 100%;
+}
+html>body #categories li a {
+    width: auto;
+}
+#categories li a:hover {
+    border-left: 10px solid;
+}
+
+/**
+* Search box and language selection box
+*/
+#search, #langform {
+   margin-top: 10px;
+   border: 1px solid;
+   padding: 5px;
+}
+#search fieldset, #langform fieldset {
+   display: inline;
+   border: 0;
+}
+#search input[type=text], #search .inputfield, #langform .inputfield {
+   border: 1px solid;
+   width: 170px;
+}
+#search input[type=submit], #langform input[type=submit] {
+   margin-top: 3px;
+   padding: 0;
+   border: 1px solid;
+   margin-left: 0;
+}
+
+/**
+* Number of current users
+*/
 #useronline {
-    text-align: center;
-    }
- 
-/**************************
-The content
-**************************/
-#content{
-    margin: 10px 10px 10px 220px;
-    padding: 10px;
-    font-size: 80%;
-    }
-#content h3 {
-    font-size: 140%;
-    }
-#content p {
-    padding: 10px 0 10px 0;
-    line-height: 20px;
-    }
-div#news {
-    float: left;
-    width: 55%;
-    }
-div.block {
-    padding: 2px 0px 8px 0px;
-    border-bottom: 1px dashed;
-    }
-span.date {
-    padding: 1px;
-    margin: 1px;
-    display: block;
-    }
-div#topten {
-    margin-bottom: 10px;
-    float: left;
-    width: 39%;
-    margin-left: 1%;
-    }
-table.topten, table.fivenewest, table.openquestions {
-    border: 1px solid;
-    border-collapse: collapse;
-    }
-table.topten, table.fivenewest, table.openquestions th, td {
-    padding: 2px;
-    text-align: left;
-    vertical-align: top;
-    }
-table.topten th, table.fivenewest th, table.openquestions th {
-    padding: 2px;
-    border: 1px solid;
-    }
-table.topten th {
-    text-align: center;
-    }
-div#fivenewest {
-    clear: both;
-    }
-p#copyrightnote {
-    margin-top: 10px;
-    }
-#content ul {
-    list-style-type: none;
-    }
-#content ul li {
-    border-left: 5px solid;
-    margin: 3px auto;
-    padding-left: 10px;
-    }
-#content ul li li, #content ul li li li, #content ul li li li li {
-    border: none;
-    }
-#content ol {
-    padding-left: 20px;
-    display: block;
+   margin-top: 10px;
+   text-align: center;
+}
+
+
+.main-content {
+  padding: 0;
+  margin: 0;
+  line-height: 1.3; /* value other than 'normal' needed for WinIE */
+}
+.main-content .node {
+  margin: 0 8px;
+  margin-bottom: 1.0em;
+}
+#content-title, #title, .main-content h2, .main-content h2 a {
+  color: #000;
+}
+.main-content h2 a {
+  text-decoration: none;
+}
+.main-content h2 a:link {
+  color: #000;
+}
+.main-content h2 a:visited {
+  color: #000;
+}
+.main-content h2 a:hover {
+  color: #039;
+}
+.main-content .node .content, .comment .content {
+  line-height: 150%;
+}
+.main-content .node .content {
+  padding: 5px 10px;
+  margin: 0;
+}
+.main-content .node .info {
+  margin: 0;
+  color: #777;
+  background-color: transparent;
+}
+.main-content .node .links, .main-content .comment .links {
+  padding: 5px 0;
+  margin: 1em 8px;
+  border-top: 1px dotted #ddd;
+  text-align: right;
+}
+.main-content .comment .links {
+  margin-bottom: 0;
+}
+.main-content .links .read-more {
+  background: transparent;
+}
+.main-content .breadcrumb {
+  padding: 0px;
+  margin: 0 0 10px 10px;
+  color: #6b0;
+}
+.main-content .breadcrumb a:first-letter {
+  text-transform: uppercase;
+}
+/* Box Formatting */
+.main-content .box {
+  background-color: #EDF3F9;
+  border: 1px solid #CFE4F3;
+  padding: 0;
+  margin: 0 1.0em 2.0em 1.0em;
+}
+.main-content .box h2 {
+  padding: 5px 5px 0 10px;
+  margin: 0;
+  color: #3579B2;
+  background-color: #CFE4F3;
+  border-bottom: 1px dotted #3579B2;
+}
+.main-content .box .content {
+  padding: 0.5em;
+}
+
+/**
+* Comments 
+*/
+.comment {
+  padding: 1.0em;
+  margin: 0.5em 0;
+}
+
+/**
+* Sidebar definitions
+*/
+.sidebar {
+  padding: 0;
+  margin: 0;
+}
+.sidebar table, .sidebar th, .sidebar td {
+  border: 0;
+}
+.sidebar .block h2 {
+  padding: 5px;
+  margin: 0;
+  margin-top: 1.0em;
+/*  color: #3579B2; */
+  color:  #1D9101;
+}
+.sidebar .block {
+  margin-left: 0;
+  padding: 0;
+}
+.sidebar .block .content {
+  padding: 0;
+  margin: 0 6px;
+}
+.sidebar .block .item-list li {
+  padding-left: 0;
+  margin-left: 0;
+  margin-bottom: 0.5em;
+  list-style: none;
+}
+.sidebar .block .content .xml-icon {
+  text-align: center;
+  padding: 1.0em 0;
+}
+.sidebar .block input.form-text {
+  width: 120px;
+}
+.sidebar .block-search input.form-text {
+  width: 100px;
+  padding: 1px;
+  margin-right: 5px;
+}
+.sidebar .block-search button.form-submit {
+  width: 60px;
+}
+#block-block-18 h2 {
+  display:none;
+}
+
+  /*</group>*/
+/*<group=Sidebar Right>*/
+#sidebar-right .block {
+  width: 247px;
+  background: repeat-y left top url(sidebar_box_bg.png);
+  margin: 0;
+  padding: 0;
+}
+#sidebar-right .block h2 {
+  background: no-repeat top left url(sidebar_box_top.png);
+  margin: 0;
+  width: auto;
+  padding: 0.8em 1.0em 0.5em 0.9em;
+  color: #1D9101;
+  font-weight: bold;
+  border: none;
+}
+#sidebar-right .block .content {
+  background: no-repeat bottom left url(sidebar_box_bottom.png);
+  width: auto;
+  margin: 0;
+  padding: 0 1.0em 1.5em 1.0em;
+}
+
+/**
+* Table definitions in the main content column
+*/
+.main-content table {
+  width: 99%;
+  overflow: scroll;
+  border: 1px solid #BDCEE1;
+  padding: 0;
+  margin: 0;
+  margin-bottom: 1.0em;
+}
+td, th, .main-content td {
+  border: 1px solid #BDCEE1;
+  padding: 2px;
+  margin: 0;
+  vertical-align: top;
+}
+.main-content th {
+  border: 0;
+  border-bottom: 1px solid #BDCEE1;
+  padding: 2px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+/**
+* Fieldset definitions in the main content column
+*/
+.main-content fieldset legend {
+  display: block;
+  color: #039;
+}
+.main-content fieldset {
+  color: #333;
+  border-style: solid;
+  border-color: #999;
+  border-width: 0 1px 1px 0;
+  background-color: #f7f7f7;
+  padding: 1.0em 0.5em;
+}
+
+/**
+* Form definitions in the main content column
+*/
+.main-content form .form-text,
+.main-content form textarea,
+.main-content form#node-form textarea#body,
+.main-content form textarea{
+  width: 93%;
+}
+form label:hover, form .form-item label {
+  color: #333;
+  cursor: pointer;
+}
+form label:hover {
+  color: #039;
+  border-bottom: 1px solid #039;
+}
+form #title,
+.form-text,
+.form-password,
+textarea {
+  color: #333;
+  padding: 2px 4px;
+  background-color: #fff;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #e7e7e7;
+  border-top-color: #999;
+  border-left-color: #999;
+}
+.form-radio, .form-checkbox {
+  background-color: transparent;
+  border: 0;
+}
+input[name="edit[pass1]"],
+input#pass,
+.block-user .form-submit {
+  margin-bottom: 0.25em;
+}
+select {
+  background-color: #fff;
+  color: inherit;
+}
+
+/**
+* Submit button definitions
+*/
+input[type="submit"] {
+  color: #039;
+  background: #EDF2F2;
+  border: 2px solid;
+  border-color: #fff;
+  border-bottom-color: #ddd;
+  border-right-color: #ddd;
+  padding: 2px 4px;
+  margin-left: 0;
+}
+
+a, .content a, :link {
+  color: #039;
+  text-decoration: underline;
+}
+a:visited, .path a, .path a:visited {
+  color: #636;
+}
+a:hover, .content a:hover {
+  color: #333;
+  text-decoration: underline;
+}
+a:active {
+  color: #000;
+}
+#recent-affiliate a, #recent-affiliate :link  {
+  color: #952000;
+  text-decoration: none;
+}
+#recent-affiliate :hover {
+  color: #E38422;
+  text-decoration: none;
+}
+  /*</group>*/
+
+/*<group=Utility>*/
+* html > .node_rating{
+  clear: both; /* for IE */
+}
+.accesskey {
+/*  text-decoration: underline; */
+}
+.update {
+  border: 1px solid yellow;
+  padding: 10px;
+  background: url(bg_help.gif) repeat scroll 0%;
+}
+:before {
+  color: #004D81;
+}
+
+
+/* bizarrely IE6 seems to want to shift to the right by 3px
+Could hack to shift everything else back but it looks ok */
+body
+	{
+	margin				: 0px;
+	padding				: 20px;
+	}
+* html>body
+	{
+	margin-right		: -3px; /* margin - 3px for IE */
+	}
+
+div
+	{
+	border				: 0;
+	margin				: 0px;
+	padding				: 0px;
+	}
+
+#wrapper1 {
+	min-width: 710px;
+	max-width: 1200px;
     }
 
-/**************************
-The forms
-**************************/
-div.row {
-    clear: both;
-    margin: 0px;
-    padding: 2px;
+#wrapper1, #wrapper2
+	{
+	margin				: 0px;
+	padding				: 0px;
+	}
+
+/* NN4 makes a mess of the backgrounds (positioning plus unintended inheritance) so exclude it. OmniWeb doesn't understand background positioning either - the left column can be achieved, but not the right one */
+#wrapper1
+	{
+	/*/*/
+/*	background-image	: url(bg_right.png); 
+	background-position	: right top;
+	background-repeat	: repeat-y;*/
+	/* */
+	}
+#wrapper2
+	{
+	/*/*/
+/*	background-image	: url(bg_left.png);
+	background-repeat	: repeat-y;*/
+	/* */
+	}
+
+.header
+	{
+	margin				: 0px;
+	padding				: 0px;
+	color				: #000;
+	background-color	: transparent;
+	border				: 0;
+	}
+/* IE5 needs shifting up - and #empty to clear its parsing palette */
+* html body .header
+	{
+	margin-bottom		: -19px;
+	font-family			: "\"}\"";
+	font-family			: inherit;
+	margin-bottom		: 0px;
+	}
+#empty{}
+
+/* -1px margin-top is so NN4 borders overlap */
+.columns
+	{
+	margin				: 0px;
+	margin-top			: -1px;
+	padding				: 0px;
+	border				: solid 1px #000;
+	color				: #000;
+	background-color	: #fff;
+	}
+/* reset post NN4 */
+.columns
+	{
+/*/*/
+	border				: none;
+	margin-top			: 0px;
+	background-color	: transparent;
+	background: url(bg_sidebar_bottom.png) top repeat-x;
+/* */
+	}
+
+/*
+make sure that .leftcolumn's width is equal to .centercolumn's margin-left
+-11px margin-top enables columns to lign up in NN4 rather than dropping down unacceptably
+*/
+.leftcolumn
+	{
+	float				: left;
+	left				: 0px;
+	width				: 200px;
+	margin				: 0px;
+	margin-top			: -11px;
+	padding				: 0px;
+	}
+/* reset post NN4 */
+.leftcolumn
+	{
+/*/*/
+	margin-top			: 0px;
+/* */
+	}
+
+/*
+make sure that .rightcolumn's width is equal to .centercolumn's margin-right
+*/
+.rightcolumn
+	{
+	position			: static;
+	float				: right;
+	width				: 247px;
+	margin				: 0px;
+	padding				: 0px;
+	}
+
+
+.centercolumn
+	{
+	margin				: 0px;
+	padding				: 0px;
+	}
+/* OmniWeb value - others in external css file */
+
+/* no they're not - they're here for ease of viewing for the moment */
+/* NN4 values */
+.centercolumn
+	{
+	margin-right		: 0px;
+	margin-left			: -25px;
+	}
+/* Other browsers */
+/*/*/
+.centercolumn
+	{
+	margin-right		: 255px;
+	margin-left			: 210px;
+	}
+/* */
+
+/* OmniWeb (exclude from IE5 mac) */
+/*\*/
+.fake.centercolumn
+	{
+	margin-right		: 0px;
+	margin-left			: 0px;
+	}
+/* reset IE*/
+* html body .centercolumn
+	{
+	margin-right		: 247px;
+	margin-left			: 150px;
+	}
+
+
+/* -7px margin-top enables footer/middles to lign up in NN4 rather than dropping down unacceptably */
+.footer, .middle
+	{
+	clear				: both;
+	margin				: 0px;
+	margin-top			: -7px;
+	padding				: 6px;
+	text-align			: center;
+	color				: #ddd;
+	background-color	: transparent;
+	border				: 0;
+	}
+/* reset post NN4 */
+.footer, .middle
+	{
+/*/*/
+	margin-top			: 0px;
+/* */
+	}
+
+.headerpadding, .centerpadding
+	{
+	margin				: 0px;
+	padding				: 0px;
+	}
+.leftpadding, .rightpadding
+	{
+	margin				: 0px;
+	padding				: 0px;
+	}
+.rightpadding {
+    padding-left: 0; 
     }
-div.row span.label {
-    float: left;
-    width: 150px;
-    text-align: right;
-    line-height: 20px;
-    padding-right: 5px;
-    }
-.inputfield, .inputarea, select {
-    border: 1px solid;
-    }
-.submit {
-    border: 2px solid;
+.centerpadding {
+    padding-left: 20px; 
+    padding-right: 20px; 
     }
 
-/**************************
-Template: contact.tpl
-**************************/
-#version {
-    padding: 30px 0px 2px 0px;
-    text-align: center;
-    font-weight: bold;
-    font-size: 85%;
-    line-height: 14px;
-    }
-#copyright {
-    padding: 2px 0px 2px 0px;
-    text-align: center;
-    font-size: 85%;
-    line-height: 14px;
-    }
+     /*</group>*/
+/*<group=Utility>*/
+
+br.clear {
+	clear: both;
+	}
+.clearing {
+	height: 0;
+	clear: both;
+	display: none;
+	}
+
+/**
+* Footer definitions
+*/
+#footer {
+   border-top: 1px solid #666;
+   margin: 2em 0;
+   padding: 1em 0;
+   text-align: left;
+   color: #666;
+}
+#footer p#copyrightnote {
+   text-align: right;
+}
