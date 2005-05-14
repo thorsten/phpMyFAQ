@@ -113,13 +113,17 @@
             <div class="rightpadding">
             
                 <div class="content">
-                <h3>{writeTopTenHeader}</h3>
-                {writeTopTenRow}
+                    <div id="topten">
+                    <h3>{writeTopTenHeader}</h3>
+                    {writeTopTenRow}
+                    </div>
                 </div>
                 
                 <div class="content">
-                <h3>{writeNewestHeader}</h3>
-                {writeNewestRow}
+                    <div id="latest">
+                    <h3>{writeNewestHeader}</h3>
+                    {writeNewestRow}
+                    </div>
                 </div>
                 
             </div>
@@ -138,6 +142,8 @@
 
     </div>
     <!-- end columns -->
+    
+    <div class="clearing"></div>
 		
     <!-- start footer -->
     <div id="footer" class="footer">
