@@ -1,12 +1,12 @@
 /**
-* $Id: style.css,v 1.5 2005-05-13 20:36:03 thorstenr Exp $
+* $Id: style.css,v 1.6 2005-05-14 07:14:20 thorstenr Exp $
 *
 * This is the main style sheet file for phpMyFAQ 1.5
 * If you want to change only the colours, use colors.css
 *
 * @author		Jens Grochtdreis <jens@grochtdreis.de>
 * @author		Thorsten Rinne <thorsten@rinne.info>
-* @since			2004-06-02
+* @since        2004-06-02
 * @copyright	(c) 2004-2005 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
@@ -84,16 +84,19 @@ code {
 * Header definitions
 */
 #header {
- 	position: relative;
-  	min-height: 39px;
-  	height: 5em;
-  	padding: 0;
-  	margin: 0;
-  	margin-bottom: 1em;
-  	height: 3em;
-  	padding: 15px 0;
+   position: relative;
+   min-height: 39px;
+   height: 5em;
+   padding: 0;
+   margin: 0;
+   margin-bottom: 1em;
+   height: 3em;
+   padding: 15px 0;
 }
-
+.header {
+   margin				: 0px;
+   padding				: 0px;
+}
 /* phpMyFAQ title */
 #header h1 {
    padding-left: 20px;
@@ -197,161 +200,34 @@ html>body #categories li a {
    text-align: center;
 }
 
-
+/**
+* Main content
+*/
 .main-content {
-  padding: 0;
-  margin: 0;
-  line-height: 1.3; /* value other than 'normal' needed for WinIE */
+   padding: 0;
+   margin: 0;
+   line-height: 1.3;
 }
-.main-content .node {
-  margin: 0 8px;
-  margin-bottom: 1.0em;
-}
-#content-title, #title, .main-content h2, .main-content h2 a {
-  color: #000;
-}
-.main-content h2 a {
-  text-decoration: none;
-}
-.main-content h2 a:link {
-  color: #000;
-}
-.main-content h2 a:visited {
-  color: #000;
-}
-.main-content h2 a:hover {
-  color: #039;
-}
-.main-content .node .content, .comment .content {
-  line-height: 150%;
-}
-.main-content .node .content {
-  padding: 5px 10px;
-  margin: 0;
-}
-.main-content .node .info {
-  margin: 0;
-  color: #777;
-  background-color: transparent;
-}
-.main-content .node .links, .main-content .comment .links {
-  padding: 5px 0;
-  margin: 1em 8px;
-  border-top: 1px dotted #ddd;
-  text-align: right;
-}
-.main-content .comment .links {
-  margin-bottom: 0;
-}
-.main-content .links .read-more {
-  background: transparent;
-}
-.main-content .breadcrumb {
-  padding: 0px;
-  margin: 0 0 10px 10px;
-  color: #6b0;
-}
-.main-content .breadcrumb a:first-letter {
-  text-transform: uppercase;
-}
-/* Box Formatting */
-.main-content .box {
-  background-color: #EDF3F9;
-  border: 1px solid #CFE4F3;
-  padding: 0;
-  margin: 0 1.0em 2.0em 1.0em;
-}
-.main-content .box h2 {
-  padding: 5px 5px 0 10px;
-  margin: 0;
-  color: #3579B2;
-  background-color: #CFE4F3;
-  border-bottom: 1px dotted #3579B2;
-}
-.main-content .box .content {
-  padding: 0.5em;
+.main-content h2, .main-content h3 {
+   border-bottom: 1px solid;
+   margin-bottom: 7px;
 }
 
 /**
-* Comments 
+* Main content - news section
 */
-.comment {
-  padding: 1.0em;
-  margin: 0.5em 0;
+.main-content #news h3 {
+   font-size: 135%;
+   border: 0;
+   margin-bottom: 7px;
 }
-
-/**
-* Sidebar definitions
-*/
-.sidebar {
-  padding: 0;
-  margin: 0;
+.main-content #news .block {
+   margin-top: 7px;
+   margin-bottom: 7px;
 }
-.sidebar table, .sidebar th, .sidebar td {
-  border: 0;
-}
-.sidebar .block h2 {
-  padding: 5px;
-  margin: 0;
-  margin-top: 1.0em;
-/*  color: #3579B2; */
-  color:  #1D9101;
-}
-.sidebar .block {
-  margin-left: 0;
-  padding: 0;
-}
-.sidebar .block .content {
-  padding: 0;
-  margin: 0 6px;
-}
-.sidebar .block .item-list li {
-  padding-left: 0;
-  margin-left: 0;
-  margin-bottom: 0.5em;
-  list-style: none;
-}
-.sidebar .block .content .xml-icon {
-  text-align: center;
-  padding: 1.0em 0;
-}
-.sidebar .block input.form-text {
-  width: 120px;
-}
-.sidebar .block-search input.form-text {
-  width: 100px;
-  padding: 1px;
-  margin-right: 5px;
-}
-.sidebar .block-search button.form-submit {
-  width: 60px;
-}
-#block-block-18 h2 {
-  display:none;
-}
-
-  /*</group>*/
-/*<group=Sidebar Right>*/
-#sidebar-right .block {
-  width: 247px;
-  background: repeat-y left top url(sidebar_box_bg.png);
-  margin: 0;
-  padding: 0;
-}
-#sidebar-right .block h2 {
-  background: no-repeat top left url(sidebar_box_top.png);
-  margin: 0;
-  width: auto;
-  padding: 0.8em 1.0em 0.5em 0.9em;
-  color: #1D9101;
-  font-weight: bold;
-  border: none;
-}
-#sidebar-right .block .content {
-  background: no-repeat bottom left url(sidebar_box_bottom.png);
-  width: auto;
-  margin: 0;
-  padding: 0 1.0em 1.5em 1.0em;
+.main-content #news .date {
+   font-size: 80%;
+   margin-bottom: 12px;
 }
 
 /**
@@ -383,334 +259,123 @@ td, th, .main-content td {
 * Fieldset definitions in the main content column
 */
 .main-content fieldset legend {
-  display: block;
-  color: #039;
+   display: block;
 }
 .main-content fieldset {
-  color: #333;
-  border-style: solid;
-  border-color: #999;
-  border-width: 0 1px 1px 0;
-  background-color: #f7f7f7;
-  padding: 1.0em 0.5em;
+   border: 1px solid;
+   padding: 1.0em 0.5em;
 }
 
 /**
 * Form definitions in the main content column
 */
-.main-content form .form-text,
-.main-content form textarea,
-.main-content form#node-form textarea#body,
-.main-content form textarea{
-  width: 93%;
+.main-content form textarea, .main-content form .inputfield {
+   width: 93%;
+   padding: 2px 4px;
+   border-width: 1px;
+   border-style: solid;
 }
-form label:hover, form .form-item label {
-  color: #333;
-  cursor: pointer;
-}
-form label:hover {
-  color: #039;
-  border-bottom: 1px solid #039;
-}
-form #title,
-.form-text,
-.form-password,
-textarea {
-  color: #333;
-  padding: 2px 4px;
-  background-color: #fff;
-  border-width: 1px;
-  border-style: solid;
-  border-color: #e7e7e7;
-  border-top-color: #999;
-  border-left-color: #999;
-}
-.form-radio, .form-checkbox {
-  background-color: transparent;
-  border: 0;
-}
-input[name="edit[pass1]"],
-input#pass,
-.block-user .form-submit {
-  margin-bottom: 0.25em;
-}
-select {
-  background-color: #fff;
-  color: inherit;
+.main-content form input[type=radio], .main-content form input[type=checkbox] {
+   border: 0;
 }
 
 /**
 * Submit button definitions
 */
-input[type="submit"] {
-  color: #039;
-  background: #EDF2F2;
-  border: 2px solid;
-  border-color: #fff;
-  border-bottom-color: #ddd;
-  border-right-color: #ddd;
-  padding: 2px 4px;
-  margin-left: 0;
+input[type=submit] {
+   border: 2px solid;
+   padding: 2px 4px;
+   margin-left: 0;
 }
 
-a, .content a, :link {
-  color: #039;
-  text-decoration: underline;
-}
-a:visited, .path a, .path a:visited {
-  color: #636;
-}
-a:hover, .content a:hover {
-  color: #333;
-  text-decoration: underline;
-}
-a:active {
-  color: #000;
-}
-#recent-affiliate a, #recent-affiliate :link  {
-  color: #952000;
-  text-decoration: none;
-}
-#recent-affiliate :hover {
-  color: #E38422;
-  text-decoration: none;
-}
-  /*</group>*/
-
-/*<group=Utility>*/
-* html > .node_rating{
-  clear: both; /* for IE */
-}
-.accesskey {
-/*  text-decoration: underline; */
-}
-.update {
-  border: 1px solid yellow;
-  padding: 10px;
-  background: url(bg_help.gif) repeat scroll 0%;
-}
-:before {
-  color: #004D81;
+/**
+* Comments 
+*/
+.comment {
+   padding: 1.0em;
+   margin: 0.5em 0;
 }
 
+/**
+* Left and right sidebar definitions
+*/
+.sidebar {
+  padding: 0;
+  margin: 0;
+}
 
-/* bizarrely IE6 seems to want to shift to the right by 3px
-Could hack to shift everything else back but it looks ok */
-body
-	{
-	margin				: 0px;
-	padding				: 20px;
-	}
-* html>body
-	{
-	margin-right		: -3px; /* margin - 3px for IE */
-	}
-
-div
-	{
-	border				: 0;
-	margin				: 0px;
-	padding				: 0px;
-	}
-
+body {
+   margin: 0px;
+   padding: 20px;
+}
+* html>body {
+   margin-right: -3px; /* IE hack */
+}
+div {
+   border: 0;
+   margin: 0px;
+   padding: 0px;
+}
 #wrapper1 {
-	min-width: 710px;
-	max-width: 1200px;
-    }
+   min-width: 710px;
+   max-width: 1200px;
+}
+#wrapper1, #wrapper2 {
+   margin: 0px;
+   padding: 0px;
+}
 
-#wrapper1, #wrapper2
-	{
-	margin				: 0px;
-	padding				: 0px;
-	}
-
-/* NN4 makes a mess of the backgrounds (positioning plus unintended inheritance) so exclude it. OmniWeb doesn't understand background positioning either - the left column can be achieved, but not the right one */
-#wrapper1
-	{
-	/*/*/
-/*	background-image	: url(bg_right.png); 
-	background-position	: right top;
-	background-repeat	: repeat-y;*/
-	/* */
-	}
-#wrapper2
-	{
-	/*/*/
-/*	background-image	: url(bg_left.png);
-	background-repeat	: repeat-y;*/
-	/* */
-	}
-
-.header
-	{
-	margin				: 0px;
-	padding				: 0px;
-	color				: #000;
-	background-color	: transparent;
-	border				: 0;
-	}
-/* IE5 needs shifting up - and #empty to clear its parsing palette */
-* html body .header
-	{
-	margin-bottom		: -19px;
-	font-family			: "\"}\"";
-	font-family			: inherit;
-	margin-bottom		: 0px;
-	}
-#empty{}
-
-/* -1px margin-top is so NN4 borders overlap */
-.columns
-	{
-	margin				: 0px;
-	margin-top			: -1px;
-	padding				: 0px;
-	border				: solid 1px #000;
-	color				: #000;
-	background-color	: #fff;
-	}
-/* reset post NN4 */
-.columns
-	{
-/*/*/
-	border				: none;
-	margin-top			: 0px;
-	background-color	: transparent;
-	background: url(bg_sidebar_bottom.png) top repeat-x;
-/* */
-	}
-
-/*
-make sure that .leftcolumn's width is equal to .centercolumn's margin-left
--11px margin-top enables columns to lign up in NN4 rather than dropping down unacceptably
+/**
+* Main columns definitions
 */
-.leftcolumn
-	{
-	float				: left;
-	left				: 0px;
-	width				: 200px;
-	margin				: 0px;
-	margin-top			: -11px;
-	padding				: 0px;
-	}
-/* reset post NN4 */
-.leftcolumn
-	{
-/*/*/
-	margin-top			: 0px;
-/* */
-	}
+.columns {
+   border: none;
+   margin-top: 0px;
+}
+.leftcolumn {
+   float: left;
+   left: 0px;
+   width: 200px;
+   margin: 0px;
+   padding: 0px;
+}
+.rightcolumn {
+   position: static;
+   float: right;
+   width: 247px;
+   margin: 0px;
+   padding: 0px;
+}
+.centercolumn {
+   margin: 0px;
+   padding: 0px;
+   margin-right: 255px;
+   margin-left: 210px;
+}
 
-/*
-make sure that .rightcolumn's width is equal to .centercolumn's margin-right
+/**
+* Padding definitions for the columns
 */
-.rightcolumn
-	{
-	position			: static;
-	float				: right;
-	width				: 247px;
-	margin				: 0px;
-	padding				: 0px;
-	}
-
-
-.centercolumn
-	{
-	margin				: 0px;
-	padding				: 0px;
-	}
-/* OmniWeb value - others in external css file */
-
-/* no they're not - they're here for ease of viewing for the moment */
-/* NN4 values */
-.centercolumn
-	{
-	margin-right		: 0px;
-	margin-left			: -25px;
-	}
-/* Other browsers */
-/*/*/
-.centercolumn
-	{
-	margin-right		: 255px;
-	margin-left			: 210px;
-	}
-/* */
-
-/* OmniWeb (exclude from IE5 mac) */
-/*\*/
-.fake.centercolumn
-	{
-	margin-right		: 0px;
-	margin-left			: 0px;
-	}
-/* reset IE*/
-* html body .centercolumn
-	{
-	margin-right		: 247px;
-	margin-left			: 150px;
-	}
-
-
-/* -7px margin-top enables footer/middles to lign up in NN4 rather than dropping down unacceptably */
-.footer, .middle
-	{
-	clear				: both;
-	margin				: 0px;
-	margin-top			: -7px;
-	padding				: 6px;
-	text-align			: center;
-	color				: #ddd;
-	background-color	: transparent;
-	border				: 0;
-	}
-/* reset post NN4 */
-.footer, .middle
-	{
-/*/*/
-	margin-top			: 0px;
-/* */
-	}
-
-.headerpadding, .centerpadding
-	{
-	margin				: 0px;
-	padding				: 0px;
-	}
-.leftpadding, .rightpadding
-	{
-	margin				: 0px;
-	padding				: 0px;
-	}
+.centerpadding, .leftpadding, .rightpadding {
+   margin: 0px;
+   padding: 0px;
+}
 .rightpadding {
-    padding-left: 0; 
-    }
+   padding-left: 0; 
+}
 .centerpadding {
-    padding-left: 20px; 
-    padding-right: 20px; 
-    }
-
-     /*</group>*/
-/*<group=Utility>*/
-
-br.clear {
-	clear: both;
-	}
-.clearing {
-	height: 0;
-	clear: both;
-	display: none;
-	}
+   padding-left: 20px; 
+   padding-right: 20px; 
+}
 
 /**
 * Footer definitions
 */
 #footer {
-   border-top: 1px solid #666;
+   border-top: 1px solid;
    margin: 2em 0;
    padding: 1em 0;
-   text-align: left;
-   color: #666;
+   text-align: right;
 }
 #footer p#copyrightnote {
    text-align: right;
