@@ -1,5 +1,5 @@
 /**
-* $Id: style.css,v 1.6 2005-05-14 07:14:20 thorstenr Exp $
+* $Id: style.css,v 1.7 2005-05-14 18:03:15 thorstenr Exp $
 *
 * This is the main style sheet file for phpMyFAQ 1.5
 * If you want to change only the colours, use colors.css
@@ -160,7 +160,6 @@ code {
     padding: 5px 5px 5px 0.5em;
     border-left: 10px solid;
     text-decoration: none;
-    width: 100%;
 }
 html>body #categories li a {
     width: auto;
@@ -201,6 +200,25 @@ html>body #categories li a {
 }
 
 /**
+* Top 10 and Latest areticles
+*/
+#topten, #latest {
+   margin-bottom: 10px;
+}
+#topten h3, #latest h3 {
+   font-size: 135%;
+   border-bottom: 1px solid;
+   margin-bottom: 5px;
+   padding-bottom: 2px;
+}
+#topten ol, #latest ol {
+	list-style-type: decimal;
+}
+#topten li, #latest li {
+	list-style-type: decimal;   
+}
+
+/**
 * Main content
 */
 .main-content {
@@ -234,50 +252,57 @@ html>body #categories li a {
 * Table definitions in the main content column
 */
 .main-content table {
-  width: 99%;
-  overflow: scroll;
-  border: 1px solid #BDCEE1;
-  padding: 0;
-  margin: 0;
-  margin-bottom: 1.0em;
+   float: left;
+   width: 99%;
+   overflow: scroll;
+   border: 1px solid;
+   padding: 0;
+   margin: 0;
+   margin-bottom: 1.0em;
 }
 td, th, .main-content td {
-  border: 1px solid #BDCEE1;
-  padding: 2px;
-  margin: 0;
-  vertical-align: top;
+   border: 1px solid;
+   padding: 2px;
+   margin: 0;
+   vertical-align: top;
 }
 .main-content th {
-  border: 0;
-  border-bottom: 1px solid #BDCEE1;
-  padding: 2px;
-  text-align: center;
-  vertical-align: middle;
+   border: 0;
+   border-bottom: 1px solid;
+   padding: 2px;
+   text-align: center;
+   vertical-align: middle;
 }
 
 /**
-* Fieldset definitions in the main content column
+* Form and Fieldset definitions in the main content column
 */
-.main-content fieldset legend {
+.main-content form {
+   float: left;
    display: block;
+   width: 99%;
 }
 .main-content fieldset {
    border: 1px solid;
-   padding: 1.0em 0.5em;
 }
-
-/**
-* Form definitions in the main content column
-*/
-.main-content form textarea, .main-content form .inputfield {
-   width: 93%;
-   padding: 2px 4px;
+.main-content textarea.inputarea, .main-content form .inputfield, .main-content select {
+   margin: 2px;
    border-width: 1px;
    border-style: solid;
 }
 .main-content form input[type=radio], .main-content form input[type=checkbox] {
    border: 0;
 }
+.main-content label.left {
+   float: left;
+   text-align: right;
+   width: 150px;
+   margin-right: .3em;
+}
+.main-content form br {
+   clear: both;
+}
+
 
 /**
 * Submit button definitions
@@ -316,6 +341,10 @@ div {
    margin: 0px;
    padding: 0px;
 }
+
+/**
+* Main wrapper around the div containers
+*/
 #wrapper1 {
    min-width: 710px;
    max-width: 1200px;
@@ -361,20 +390,27 @@ div {
    padding: 0px;
 }
 .rightpadding {
-   padding-left: 0; 
+   padding-left: 0;
 }
 .centerpadding {
    padding-left: 20px; 
    padding-right: 20px; 
 }
+.clearing {
+   height: 0;
+   margin: 10px;
+   clear: both;
+   display: none;
+}   
 
 /**
 * Footer definitions
 */
 #footer {
+   margin-top: 10px;
+   clear: both;
    border-top: 1px solid;
-   margin: 2em 0;
-   padding: 1em 0;
+   padding-top: 10px;
    text-align: right;
 }
 #footer p#copyrightnote {
