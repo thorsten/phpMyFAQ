@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.24 2005-04-16 12:30:19 thorstenr Exp $
+$Id: README.txt,v 1.25 2005-05-14 07:25:06 thorstenr Exp $
 
 phpMyFAQ 1.5.0 RC4
 Codename "Phoebe"
@@ -11,15 +11,17 @@ Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 1.5.0 RC3:
 - added experimental support for MySQL 4.1/5.0 databases
+- finished new default layout
 - fixed many minor bugs
 
 Known issues in phpMyFAQ 1.5.0:
+- some layout problems in IE6
 - some language files need an update
 - using UTF-8 will not work in the PDF files
 
 CHANGELOG:
 
-Version 1.5.0 RC4 - 2005-04-
+Version 1.5.0 RC4 - 2005-05-14
 - full support for PostgreSQL databases
 - full support for Sybase databases
 - experimental support for MS SQL databases
