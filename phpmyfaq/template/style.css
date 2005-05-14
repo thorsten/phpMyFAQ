@@ -1,5 +1,5 @@
 /**
-* $Id: style.css,v 1.7 2005-05-14 18:03:15 thorstenr Exp $
+* $Id: style.css,v 1.8 2005-05-14 21:48:32 thorstenr Exp $
 *
 * This is the main style sheet file for phpMyFAQ 1.5
 * If you want to change only the colours, use colors.css
@@ -230,6 +230,12 @@ html>body #categories li a {
    border-bottom: 1px solid;
    margin-bottom: 7px;
 }
+.main-content h2#article_category {
+   font-size: 145%;
+   font-style: italic;
+   margin: 5px 0 5px 0;
+   border-bottom: none;
+   }
 
 /**
 * Main content - news section

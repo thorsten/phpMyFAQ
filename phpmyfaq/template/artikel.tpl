@@ -1,4 +1,5 @@
-<h2><em>{writeRubrik}</em> {writeThema}</h2>
+<h2 id="article_category">{writeRubrik}</h2>
+<h2>{writeThema}</h2>
     <!-- Article -->
     <p>{writeContent}</p>
     <!-- /Article -->
