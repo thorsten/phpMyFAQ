@@ -3,20 +3,20 @@
 	<input type="hidden" name="id" value="{ID}" />
 	<input type="hidden" name="lang" value="{LANG}" />
 	
-    <div class="row"><span class="label">&nbsp;</span>
-    <strong><em>{writeThema}</em></strong></div>
+    <fieldset>
+    <legend>{writeThema}</legend>
 	
-    <div class="row"><span class="label">{msgNewContentName}</span>
-    <input class="inputfield" type="text" name="user" value="{defaultContentName}" size="20" /></div>
+    <label for="user" class="left">{msgNewContentName}</label>
+    <input class="inputfield" type="text" name="user" value="{defaultContentName}" size="50" /><br />
 	
-    <div class="row"><span class="label">{msgNewContentMail}</span>
-    <input class="inputfield" type="text" name="mail" value="{defaultContentMail}" size="20" /></div>
+    <label for="mail" class="left">{msgNewContentMail}</label>
+    <input class="inputfield" type="text" name="mail" value="{defaultContentMail}" size="50" /><br />
 	
-    <div class="row"><span class="label">{msgYourComment}</span>
-    <textarea class="inputarea" cols="30" rows="10" name="comment"></textarea></div>
+    <label for="comment" class="left">{msgYourComment}</label>
+    <textarea class="inputarea" cols="37" rows="10" name="comment"></textarea><br />
 	
-    <div class="row"><span class="label">&nbsp;</span>
-    <input class="submit" type="submit" name="submit" value="{msgNewContentSubmit}" /></div>
-
+    <input class="submit" type="submit" name="submit" value="{msgNewContentSubmit}" />
+    
+    </fieldset>
 	</form>
 	<p class="little">{copyright_eintrag}</p>
