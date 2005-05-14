@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.67 2005-05-13 22:02:03 thorstenr Exp $
+* $Id: functions.php,v 1.68 2005-05-14 06:41:52 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -437,11 +437,11 @@ function generateNews()
 	if ($PMF_CONF["numNewsArticles"] > 0 && $db->num_rows($result) > 0) {
 		while (($row = $db->fetch_object($result)) && $counter < $PMF_CONF["numNewsArticles"]) {
 			$counter++;
-			$output .= "<h3>".$row->header."</h3>\n<div class=\"block\"><span class=\"date\">".makeDate($row->datum)."</span>".stripslashes($row->artikel)."\n";
+			$output .= "<h3>".$row->header."</h3>\n<div class=\"block\">".stripslashes($row->artikel)."\n";
             if ($row->link != "") {
     		    $output .= "<br />Info: <a href=\"http://".$row->link."\" target=\"_".$row->target."\">".$row->linktitel."</a>\n";
     		    }
-		    $output .=  "</div>\n";
+		    $output .=  "</div><div class=\"date\">".makeDate($row->datum)."</div>\n";
 		    }
         return $output;
 	    }
