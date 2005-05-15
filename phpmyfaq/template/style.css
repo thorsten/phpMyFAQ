@@ -1,5 +1,5 @@
 /**
-* $Id: style.css,v 1.8 2005-05-14 21:48:32 thorstenr Exp $
+* $Id: style.css,v 1.9 2005-05-15 20:23:24 thorstenr Exp $
 *
 * This is the main style sheet file for phpMyFAQ 1.5
 * If you want to change only the colours, use colors.css
@@ -140,32 +140,36 @@ code {
 * Categories
 */
 #categories {
-    width: 198px;
-    padding: 0;
-    font-size: 100%;
-    border: 1px solid;
+   width: 198px;
+   padding: 0;
+   font-size: 100%;
+   border: 1px solid;
 }
 #categories ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    border: none;
+   list-style: none;
+   margin: 0;
+   padding: 0;
+   border: none;
 }
 #categories li {
-    border-bottom: 1px solid;
-    margin: 0;
+   margin: 0;
+   border-left: 10px solid;
 }
 #categories li a {
-    display: block;
-    padding: 5px 5px 5px 0.5em;
-    border-left: 10px solid;
-    text-decoration: none;
+   display: block;
+   padding: 5px 5px 5px 0.5em;
+   border-bottom: 1px solid;
+   text-decoration: none;
 }
 html>body #categories li a {
-    width: auto;
+   width: auto;
 }
-#categories li a:hover {
-    border-left: 10px solid;
+#categories li ul li {
+   margin: 0;
+   border-left: 0px
+}
+#categories li ul a {
+   padding-left: 15px;
 }
 
 /**
@@ -235,7 +239,11 @@ html>body #categories li a {
    font-style: italic;
    margin: 5px 0 5px 0;
    border-bottom: none;
-   }
+}
+.main-content ul {
+   padding-left: 1em;
+   list-style: outside;
+}
 
 /**
 * Main content - news section
