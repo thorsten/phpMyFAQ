@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.68 2005-05-14 06:41:52 thorstenr Exp $
+* $Id: functions.php,v 1.69 2005-05-15 21:31:58 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -44,10 +44,18 @@ function pmf_dump($var)
     print '</pre>';
 }
 
-/*
- * This function displays the <select> box for the available languages | @@ Thorsten 2003-12-12
- * Last update: @@ Thorsten 2004-08-21
- */
+//
+// GENERAL FUNCTIONS
+//
+
+/**
+* This function displays the <select> box for the available languages
+*
+* @param    string
+* @return   string
+* @since    2003-12-12
+* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+*/
 function selectLanguages($default)
 {
     global $languageCodes;
@@ -63,7 +71,7 @@ function selectLanguages($default)
         
         foreach ($languageArray as $cc) {
 			// Check the file does relate to a language before using it
-			if (array_key_exists ($cc, $languageCodes)) {
+			if (array_key_exists($cc, $languageCodes)) {
 				$languages[strtolower($cc)] = $languageCodes[$cc];
 			}
         }
@@ -85,15 +93,19 @@ function selectLanguages($default)
     return $output;
 }
 
-/*
- * Funktion für Umwandlung der Artikelnamen | @@ Thorsten, 2002-08-28
- * Last Update: @@ Thorsten, 2004-05-07
- */
+/**
+* Returns the FAQ record title from the ID and language
+*
+* @param    integer     record id
+* @param    string      language
+* @return   string
+* @since    2002-08-28
+* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+*/
 function getThema($id, $lang)
 {
 	global $db, $PMF_LANG;
-	$query = "SELECT ".SQLPREFIX."faqdata.thema FROM ".SQLPREFIX."faqdata WHERE id = ".$id." AND lang = '".$lang."'";
-	$result = $db->query($query);
+	$result = $db->query(sprintf("SELECT thema FROM %sfaqdata WHERE id = %d AND lang = '%s'", SQLPREFIX, $id, $lang));
 	if ($db->num_rows($result) > 0) {
 		while ($row = $db->fetch_object($result)) {
 			$output = htmlentities($row->thema);
@@ -104,10 +116,14 @@ function getThema($id, $lang)
 	return $output;
 }
 
-/*
- * Funktion für die Datumsumwandlung nach ISO 8601 | @@ Thorsten, 2001-04-30
- * Last Update: @@ Thorsten, 2004-07-27
- */
+/**
+* Converts the phpMyFAQ date format to the ISO 8601 format
+*
+* @param    string
+* @return   date
+* @since    2001-04-30
+* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+*/
 function makeDate($date)
 {
     global $PMF_CONST;
@@ -139,7 +155,7 @@ function generateNumberOfArticles()
 /**
 * This function returns all records from one category
 *
-* @param    int     the category id
+* @param    int     category id
 * @return   string
 * @access   public
 * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -236,10 +252,14 @@ LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPR
 	return $output;
 }
 
-/*
- * Check, ob eine weitere Sprache eines Artikels vorhanden ist | @@ Thorsten, 2003-03-17
- * Last Update: @@ Thorsten, 2003-03-17
- */
+/**
+* Returns an array of country codes for a specific FAQ record ID
+*
+* @param    integer
+* @return   array
+* @since    2003-03-17
+* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+*/
 function check4Language($id)
 {
 	global $db;
@@ -252,43 +272,58 @@ function check4Language($id)
 	return $output;
 }
 
-/*
- * Funktion für Umwandlung der E-Mailadressen (Spam!) | @@ Thorsten, 2003-04-17
- * Last Update: @@ Thorsten, 2003-09-22
- */
+/**
+* Converts an email address to avoid spam
+* NOTE: user@example.org -> user_AT_example_DOT_org
+*
+* @param    string
+* @return   string
+* @since    2003-04-17
+* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+*/
 function safeEmail($email)
 {
 	return str_replace(array('@', '.'), array('_AT_', '_DOT_'), $email);
 }
 
-/*
- * Funktion für Reload-Sperre beim Voting | @@ Thorsten, 2003-05-15
- * Last Update: @@ Thorsten, 2003-05-15
- */
+/**
+* Reload locking for user votings
+*
+* @param    integer     FAQ record id
+* @param    string      IP
+* @return   boolean
+* @since    2003-05-15
+* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+*/
 function votingCheck($id, $ip)
 {
-	global $db;
-	$timeNow = (time() - 300);
-	if ($db->num_rows($db->query("SELECT id FROM ".SQLPREFIX."faqvoting WHERE artikel = ".$id." AND (ip = '".$ip."' AND datum > ".$timeNow.")"))) {
-		return FALSE;
-		}
-	return TRUE;
+    global $db;
+    $timeNow = (time() - 300);
+    if ($db->num_rows($db->query("SELECT id FROM ".SQLPREFIX."faqvoting WHERE artikel = ".$id." AND (ip = '".$ip."' AND datum > ".$timeNow.")"))) {
+        return false;
+    } else {
+	    return true;
+    }
 }
 
-/*
- * Funktion für IP-Bann | @@ Thorsten, 2003-06-06
- * Last Update: @@ Thorsten, 2003-11-22
- */
+/**
+* Checks if a IP is banned
+*
+* @param    string  IP
+* @return   boolean
+* @since    2003-06-06
+* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+*/
 function IPCheck($ip)
 {
 	global $PMF_CONF;
 	$arrBannedIPs = explode(" ", $PMF_CONF["bannedIP"]);
 	foreach ($arrBannedIPs as $oneIP) {
     	if ($oneIP == $ip) {
-			return FALSE;
-			}
+			return false;
 		}
-	return TRUE;
+	}
+	return true;
 }
 
 /**
@@ -323,16 +358,20 @@ function hilight($content)
     return $string;
 }
 
+//
+// USERTRACKING FUNCTIONS
+//
 
-
-/******************************************************************************
- * Funktionen für das Usertracking
- ******************************************************************************/
-
-/*
- * Trackt den User und zeichnet die Bewegungen auf | @@ Bastian, 2001-02-18
- * Last Update: @@ Thorsten, 2004-07-18
- */
+/**
+* Trackt den User und zeichnet die Bewegungen auf
+*
+* @param    string
+* @param    integer
+* @return   void
+* @since    2001-02-18
+* @since    Bastian Pöttner <bastian@poettner.net>
+* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+*/
 function Tracking($action, $id)
 {
 	global $db, $PMF_CONF, $sid;
@@ -371,10 +410,14 @@ function Tracking($action, $id)
     }
 }
 
-/*
- * A OS independent function like usleep | @@ Thorsten 2004-05-30
- * Last Update: @@ Thorsten 2004-05-30
- */
+/**
+* An OS independent function like usleep
+*
+* @param    integer
+* @return   void
+* @since    2004-05-30
+* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+*/
 function wait($usecs)
 {
     $temp = gettimeofday();
@@ -440,14 +483,13 @@ function generateNews()
 			$output .= "<h3>".$row->header."</h3>\n<div class=\"block\">".stripslashes($row->artikel)."\n";
             if ($row->link != "") {
     		    $output .= "<br />Info: <a href=\"http://".$row->link."\" target=\"_".$row->target."\">".$row->linktitel."</a>\n";
-    		    }
+    		}
 		    $output .=  "</div><div class=\"date\">".makeDate($row->datum)."</div>\n";
-		    }
-        return $output;
-	    }
-    else {
-        return $PMF_LANG["msgNoNews"];
 		}
+        return $output;
+	} else {
+        return $PMF_LANG["msgNoNews"];
+    }
 }
 
 
@@ -461,7 +503,7 @@ function generateNews()
 * @author   Robin Wood <robin@digininja.org>
 * @since    2005-03-06
 */
-function generateTopTenData ($language = '', $count = 10)
+function generateTopTenData($language = '', $count = 10)
 {
 	global $db, $sids, $PMF_LANG, $PMF_CONF;
 	$query = 'SELECT DISTINCT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqvisits.visits FROM '.SQLPREFIX.'faqvisits, '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang WHERE ';
@@ -659,6 +701,7 @@ function EndSlash($string)
 * Calculates the rating of the user votings
 *
 * @param    integer     record id
+* @param    string
 * @access   public
 * @since    2002-08-29
 * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -670,7 +713,7 @@ function generateVoting($id)
  	$result = $db->query($query);
 	if ($db->num_rows($result) > 0) {
         list($vote, $user) = $db->fetch_row($result);
-        return " ".$vote." ".$PMF_LANG["msgVoteFrom"]." 5 (".$user." ".$PMF_LANG["msgVotings"].")";
+        return " ".round($vote, 2)." ".$PMF_LANG["msgVoteFrom"]." 5 (".$user." ".$PMF_LANG["msgVotings"].")";
 	} else {
 		return " 0 ".$PMF_LANG["msgVoteFrom"]." 5 (0 ".$PMF_LANG["msgVotings"].")";
 	}
@@ -1250,7 +1293,6 @@ function chopString($string, $words)
     return $str;
 }
 
-
 /******************************************************************************
  * Funktionen für die Offenen Fragen
  ******************************************************************************/
@@ -1501,10 +1543,8 @@ function safeSQL($string)
     return $str;
 }
 
-
-
 //
-// LDAP functions
+// LDAP FUNCTIONS
 //
 
 /**
