@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.18 2005-05-13 17:35:47 thorstenr Exp $
+* $Id: index.php,v 1.19 2005-05-16 13:31:17 thorstenr Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the 
@@ -32,20 +32,24 @@ if (DEBUG) {
 	error_reporting(E_ALL);
 }
 
-/* check if config.php and data.php exist -> if not, redirect to installer */
+// Just for security reasons - thanks to Johannes for the hint
+$_SERVER['PHP_SELF'] = str_replace('%2F', '/', rawurlencode($_SERVER['PHP_SELF']));
+$GLOBALS['PHP_SELF'] = str_replace('%2F', '/', rawurlencode($GLOBALS['PHP_SELF']));
+
+// check if config.php and data.php exist -> if not, redirect to installer
 if (!file_exists('inc/config.php') || !file_exists('inc/data.php')) {
     header("Location: http://".$_SERVER['HTTP_HOST'].dirname($_SERVER['PHP_SELF'])."/install/installer.php");
     exit();
 }
 
-/* connect to the database server, define the prefix and connect */
+// connect to the database server, define the prefix and connect
 require_once("inc/data.php");
 require_once("inc/db.php");
 define("SQLPREFIX", $DB["prefix"]);
 $db = db::db_select($DB["type"]);
 $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
 
-/* get configuration, constants, main functions, template parser, category class, IDNA class */
+// get configuration, constants, main functions, template parser, category class, IDNA class
 require_once("inc/config.php");
 require_once("inc/constants.php");
 require_once("inc/functions.php");
@@ -54,7 +58,7 @@ require_once("inc/category.php");
 require_once("inc/idna_convert.class.php");
 $IDN = new Net_IDNA;
 
-/* connect to LDAP server, when LDAP support is enabled */
+// connect to LDAP server, when LDAP support is enabled
 if (isset($PMF_CONF["ldap_support"]) && $PMF_CONF["ldap_support"] == TRUE) {
     require_once('inc/dataldap.php');
     require_once('inc/ldap.php');
@@ -63,7 +67,7 @@ if (isset($PMF_CONF["ldap_support"]) && $PMF_CONF["ldap_support"] == TRUE) {
     $ldap = null;
 }
 
-/* get language (default: english) */
+// get language (default: english)
 // TODO: write a global function for that?
 if (isset($_POST["language"]) && $_POST["language"] != "" && strlen($_POST["language"]) <= 2 && !preg_match("=/=", $_REQUEST["language"])) {
     $LANGCODE = $_POST["language"];
@@ -113,7 +117,7 @@ if (isset($LANGCODE)) {
     require_once ("lang/language_en.php");
 }
 
-/* found a session ID? */
+// found a session ID?
 if (!isset($_GET["sid"]) && !isset($_COOKIE["sid"])) {
 	Tracking("NewSession", 0);
     setcookie("sid", $sid, time()+3600);
@@ -123,7 +127,7 @@ if (!isset($_GET["sid"]) && !isset($_COOKIE["sid"])) {
 	}
 }
 
-/* is user tracking activated? */
+// is user tracking activated?
 if (isset($PMF_CONF["tracking"])) {
 	if (isset($sid)) {
         if (!isset($_COOKIE["sid"])) {
@@ -146,14 +150,14 @@ if (isset($PMF_CONF["tracking"])) {
     }
 }
 
-/* found a article language? */
+// found a article language?
 if (isset($_GET["artlang"]) && strlen($_GET["artlang"]) <= 2 && !preg_match("=/=", $_GET["artlang"])) {
 	$lang = $_GET["artlang"];
 } else {
 	$lang = $LANGCODE;
 }
 
-/* found a record ID? */
+// found a record ID?
 if (isset($_REQUEST["id"]) && is_numeric($_REQUEST["id"]) == TRUE) {
 	$id = $_REQUEST["id"];
     $title = " - ".stripslashes(getThema($id, $lang));
@@ -162,7 +166,7 @@ if (isset($_REQUEST["id"]) && is_numeric($_REQUEST["id"]) == TRUE) {
     $title = " -  powered by phpMyFAQ ".$PMF_CONF["version"];
 }
 
-/* found a category? */
+// found a category?
 if (isset($_GET["cat"])) {
     $cat = $_GET["cat"];
 } else {
@@ -175,7 +179,7 @@ if ($cat != 0) {
     $tree->expandTo($cat);
 }
 
-/* found an action request? */
+// found an action request?
 if (isset($_REQUEST["action"]) && !preg_match("=/=", $_REQUEST["action"]) && isset($allowedVariables[$_REQUEST["action"]])) {
 	$action = $_REQUEST["action"];
 } else {
@@ -193,7 +197,7 @@ if ($action != "main") {
     $writeLangAdress = $_SERVER["PHP_SELF"]."?".$sids;
 }
 
-/* load templates */
+// load templates
 $tpl = new phpmyfaqTemplate (array(
 				"index" => 'template/index.tpl',
 				"writeContent" => $inc_tpl));
@@ -246,10 +250,10 @@ if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == "TRUE") {
 				"writeSendAdress" => $_SERVER["PHP_SELF"]."?".$sids."action=search");
 }
 
-/* get main template, set main variables */
+// get main template, set main variables
 $tpl->processTemplate ("index", array_merge($main_template_vars, $links_template_vars));
 
-/* include requested PHP file */
+// include requested PHP file
 require_once($inc_php);
 
 if (DEBUG) {
@@ -257,7 +261,7 @@ if (DEBUG) {
     print "<p>".$db->sqllog()."</p>\n";
 	}
 else {
-    /* send headers and print template */
+    // send headers and print template
     @header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
     @header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
     @header("Cache-Control: no-store, no-cache, must-revalidate");
@@ -268,6 +272,6 @@ else {
     }
 $tpl->printTemplate();
 
-/* disconnect from database */
+// disconnect from database
 $db->dbclose();
 ?>
