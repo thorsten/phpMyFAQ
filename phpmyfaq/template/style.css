@@ -1,5 +1,5 @@
 /**
-* $Id: style.css,v 1.9 2005-05-15 20:23:24 thorstenr Exp $
+* $Id: style.css,v 1.10 2005-05-16 14:23:09 thorstenr Exp $
 *
 * This is the main style sheet file for phpMyFAQ 1.5
 * If you want to change only the colours, use colors.css
@@ -415,7 +415,20 @@ div {
    margin: 10px;
    clear: both;
    display: none;
-}   
+}
+
+/**
+* Definitions for version info and copyright on contact page
+*/
+#version {
+   margin-top: 20px;
+   text-align: center;
+}
+#copyright {
+   margin-top: 12px;
+   font-size: 80%;
+   text-align: center;
+}
 
 /**
 * Footer definitions
