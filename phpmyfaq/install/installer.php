@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.21 2005-04-17 19:32:03 thorstenr Exp $
+* $Id: installer.php,v 1.22 2005-05-16 14:11:21 thorstenr Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -26,7 +26,7 @@
 * under the License.
 */
 
-define("VERSION", "1.5.0 RC4");
+define("VERSION", "1.5.0");
 define("COPYRIGHT", "&copy; 2001-2005 <a href=\"http://www.phpmyfaq.de/\">phpMyFAQ-Team</a> | All rights reserved.");
 define("SAFEMODE", @ini_get("safe_mode"));
 define("PMF_ROOT_DIR", dirname(dirname(__FILE__)));
@@ -104,22 +104,24 @@ function HTMLFooter()
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
     <style type="text/css"><!--
     body {
-	    margin: 0px;
+	    margin: 10px;
 	    padding: 0px;
 	    font-size: 12px;
-	    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-	    background-color: #B0B0B0;
+	    font-family: "Bitstream Vera Sans", "Trebuchet MS", Geneva, Verdana, Arial, Helvetica, sans-serif;
+        background: #ffffff;
+        color: #000000;
     }
     #header {
 	    margin: auto;
 	    padding: 35px;
-	    background-color: #6A88B1;
+        background: #0D487A;
+        color: #ffffff;
         text-align: center;
     }
     #header h1 {
-	    font: bold 36px Garamond, times, serif;
+	    font-family: "Trebuchet MS", Geneva, Verdana, Arial, Helvetica, sans-serif;
 	    margin: auto;
-	    color: #f5f5f5;
+        color: #ffffff;
         text-align: center;
     }
     .center {
@@ -197,7 +199,6 @@ if (!phpmyfaq_check()) {
 	HTMLFooter();
 	die();
 }
-
 $dirs = array('/attachments', '/data', '/images', '/inc', '/pdf', '/xml',);
 $faileddirs = array();
 foreach ($dirs AS $dir) {

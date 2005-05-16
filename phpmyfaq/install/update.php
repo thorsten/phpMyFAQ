@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.21 2005-03-29 13:01:30 thorstenr Exp $
+* $Id: update.php,v 1.22 2005-05-16 14:11:21 thorstenr Exp $
 *
 * Main update script
 *
@@ -20,7 +20,7 @@
 * under the License.
 */
 
-define("NEWVERSION", "1.5.0 RC4");
+define("NEWVERSION", "1.5.0");
 define("COPYRIGHT", "&copy; 2001-2005 <a href=\"http://www.phpmyfaq.de/\" target=\"_blank\">phpMyFAQ Team</a> | All rights reserved.");
 define("PMF_ROOT_DIR", dirname(dirname(__FILE__)));
 
@@ -64,22 +64,24 @@ if (isset($_GET["step"]) && $_GET["step"] != "") {
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
     <style type="text/css"><!--
     body {
-	    margin: 0px;
+	    margin: 10px;
 	    padding: 0px;
 	    font-size: 12px;
-	    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-	    background-color: #B0B0B0;
+	    font-family: "Bitstream Vera Sans", "Trebuchet MS", Geneva, Verdana, Arial, Helvetica, sans-serif;
+        background: #ffffff;
+        color: #000000;
     }
     #header {
 	    margin: auto;
 	    padding: 35px;
-	    background-color: #6A88B1;
+        background: #0D487A;
+        color: #ffffff;
         text-align: center;
     }
     #header h1 {
-	    font: bold 36px Garamond, times, serif;
+	    font-family: "Trebuchet MS", Geneva, Verdana, Arial, Helvetica, sans-serif;
 	    margin: auto;
-	    color: #f5f5f5;
+        color: #ffffff;
         text-align: center;
     }
     .center {
