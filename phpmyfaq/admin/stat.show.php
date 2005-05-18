@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: stat.show.php,v 1.4 2004-12-16 12:26:24 thorstenr Exp $
+* $Id: stat.show.php,v 1.5 2005-05-18 17:59:03 thorstenr Exp $
 *
 * Show the session
 *
@@ -37,7 +37,7 @@ if ($permission["viewlog"]) {
 ?>
         <tr>
             <td class="list"><?php print date("Y-m-d H:i:s",$time); ?></td>
-            <td class="list"><?php print '-'; ?> (<?php print '-'; ?>)</td>
+            <td class="list"><?php print $lentry; ?> (<?php print $lcontent; ?>)</td>
         </tr>
 <?php
 				if ($anz == 1) {
@@ -53,32 +53,6 @@ if ($permission["viewlog"]) {
         <tr>
             <td class="list"><?php print $PMF_LANG["ad_sess_ip"]; ?>:</td>
             <td class="list"><?php print $ip; ?></td>
-        </tr>
-<?php
-					}
-				if (strtolower($para) == "rubrik") {
-					$para = $PMF_LANG["ad_sess_ai_rubrik"];
-					@$paraout = $tree->categoryName[$lcontent]["name"];
-					$paraout = "<a href=\"index.php?action=anzeigen&amp;cat=".$para."\" target=\"_blank\">".$paraout."</a>";
-					}
-				if (strtolower($para) == "artikel") {
-					$para = $PMF_LANG["ad_sess_ai_artikel"]; 
-					list($rubrik, $thema) = $db->fetch_row($db->query("SELECT rubrik, thema FROM ".SQLPREFIX."faqdata WHERE id='".$lcontent."'"));
-					$paraout = "<a href=\"index.php?action=anzeigen&amp;cat=".$rubrik."&id=".$lcontent."\" target=\"_blank\">".$thema."</a>";
-					}
-				if (strtolower($para)=="suchbegriffe") {
-					$para = $PMF_LANG["ad_sess_ai_sb"]; 
-					$paraout = $lcontent;
-					}
-				if (strtoloweR($para) == "session-id") {
-					$para = $PMF_LANG["ad_sess_ai_sid"]; 
-					$paraout = "<a href=\"".$_SERVER["PHP_SELF"].$linkext."&amp;aktion=viewsession&amp;id=".$lcontent."\">".$lcontent."</a>";
-					} 
-				if (strlen($para) > 0 && strlen($paraout) > 0) {
-?>
-        <tr>
-            <td class="list"><?php print $para; ?></td>
-            <td class="list"><?php print $paraout; ?></td>
         </tr>
 <?php
 					}
