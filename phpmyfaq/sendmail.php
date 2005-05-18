@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: sendmail.php,v 1.2 2005-01-09 12:15:24 thorstenr Exp $
+* $Id: sendmail.php,v 1.3 2005-05-18 17:51:53 thorstenr Exp $
 *
 * The 'send an email from the contact page' page
 *
@@ -19,7 +19,7 @@
 * under the License.
 */
 
-Tracking("s2fmail",0);
+Tracking("sendmail_contact",0);
 
 if (isset($_POST["name"]) && $_POST["name"] != '' && isset($_POST["email"]) && checkEmail($_POST["email"]) && isset($_POST["question"]) && $_POST["question"] != '') {
     

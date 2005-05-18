@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: save.php,v 1.12 2005-03-07 06:36:24 thorstenr Exp $
+* $Id: save.php,v 1.13 2005-05-18 17:51:53 thorstenr Exp $
 *
 * Saves a user FAQ record and sends an email to the user
 *
@@ -21,7 +21,7 @@
 
 if (isset($_POST["username"]) && isset($_POST["rubrik"]) && is_numeric($_POST["rubrik"]) && isset($_POST["thema"]) && $_POST["thema"] != "" && isset($_POST["content"]) && $_POST["content"] != "" && isset($_POST["usermail"]) && $_POST["usermail"] != "" && IPCheck($_SERVER["REMOTE_ADDR"])) {
 	
-    Tracking("savenewentry",0);
+    Tracking("save_new_entry",0);
 	$datum = date("YmdHis");
 	$content = $db->escape_string(safeSQL(safeHTML(nl2br($_POST["content"]))));
     $contentlink = $db->escape_string(safeSQL(safeHTML($_POST["contentlink"])));
@@ -61,7 +61,7 @@ if (isset($_POST["username"]) && isset($_POST["rubrik"]) && is_numeric($_POST["r
 				"Message" => $PMF_LANG["err_bannedIP"]
 				));
 	} else {
-		Tracking("entrypflichfeldfehler", 0);
+		Tracking("error_save_entry", 0);
 		$tpl->processTemplate ("writeContent", array(
 				"msgNewContentHeader" => $PMF_LANG["msgNewContentHeader"],
 				"Message" => $PMF_LANG["err_SaveEntries"]

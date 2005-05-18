@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: writecomment.php,v 1.3 2004-12-16 13:36:53 thorstenr Exp $
+* $Id: writecomment.php,v 1.4 2005-05-18 17:51:53 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-08-29
@@ -17,7 +17,7 @@
 * under the License.
 */
 
-Tracking('commentpage', $_GET['id']);
+Tracking('write_comment', $_GET['id']);
 
 $tpl->processTemplate('writeContent', array(
 				      'msgCommentHeader' => $PMF_LANG['msgWriteComment'],

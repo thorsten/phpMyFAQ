@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.69 2005-05-15 21:31:58 thorstenr Exp $
+* $Id: functions.php,v 1.70 2005-05-18 17:51:53 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -439,7 +439,7 @@ function CheckSID($sid, $ip)
 {
 	global $db;
 	if ($db->num_rows($db->query("SELECT sid FROM ".SQLPREFIX."faqsessions WHERE sid = ".$sid." AND ip = '".$ip."' AND time > ".(time()-86400))) < 1) {
-		Tracking("oldSession",$sid);
+		Tracking("old_session",$sid);
 	}
 }
 

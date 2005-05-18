@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: open.php,v 1.2 2005-01-09 12:16:46 thorstenr Exp $
+* $Id: open.php,v 1.3 2005-05-18 17:51:53 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-09-17
@@ -17,7 +17,7 @@
 * under the License.
 */
 
-Tracking('antworten', 0);
+Tracking('open_questions', 0);
 
 $tpl->processTemplate ('writeContent', array(
 				'msgOpenQuestions' => $PMF_LANG['msgOpenQuestions'],

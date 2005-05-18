@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: search.php,v 1.3 2005-02-22 19:50:04 thorstenr Exp $
+* $Id: search.php,v 1.4 2005-05-18 17:51:53 thorstenr Exp $
 *
 * The fulltext search page
 *
@@ -19,7 +19,7 @@
 * under the License.
 */
 
-Tracking("searchpage",0);
+Tracking("fulltext_search",0);
 
 if (isset($_REQUEST["suchbegriff"]) || isset($_GET["search"])) {
 	if (isset($_REQUEST["suchbegriff"])) {

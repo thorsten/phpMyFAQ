@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: show.php,v 1.4 2004-11-30 21:41:59 thorstenr Exp $
+* $Id: show.php,v 1.5 2005-05-18 17:51:53 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-08-27
@@ -22,7 +22,7 @@ if (isset($_REQUEST['cat']) && is_numeric($_REQUEST['cat']) == TRUE) {
 }
 
 if (isset($category) && $category != 0) {
-	Tracking('rubrikview', $category);
+	Tracking('show_category', $category);
     $parent = $tree->categoryName[$category]['parent_id'];
     $name = $tree->categoryName[$category]['name'];
     
@@ -38,7 +38,7 @@ if (isset($category) && $category != 0) {
 				          'writeOneThemeBack' => $up));
 	$tpl->includeTemplate('writeContent', 'index');
 } else {
-	Tracking('overview', 0);
+	Tracking('show_all_categories', 0);
 	$tpl->processTemplate('writeContent', array(
 				          'writeCategory' => $PMF_LANG['msgFullCategories'],
 				          'writeThemes' => $tree->viewTree(),

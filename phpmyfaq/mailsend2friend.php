@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mailsend2friend.php,v 1.4 2005-01-07 05:24:44 thorstenr Exp $
+* $Id: mailsend2friend.php,v 1.5 2005-05-18 17:51:53 thorstenr Exp $
 *
 * Sends the emails to your friends
 *
@@ -19,7 +19,7 @@
 * under the License.
 */
 
-Tracking("s2fmail",0);
+Tracking("sendmail_send2friend",0);
 
 if (isset($_POST["name"]) && $_POST["name"] != "" && isset($_POST["mailfrom"]) && $_POST["mailfrom"] != "" && IPCheck($_SERVER["REMOTE_ADDR"])) {
 	$mailto = $_POST["mailto"];

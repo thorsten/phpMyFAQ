@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ask.php,v 1.3 2004-12-16 12:28:06 thorstenr Exp $
+* $Id: ask.php,v 1.4 2005-05-18 17:51:53 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-09-17
@@ -17,7 +17,7 @@
 * under the License.
 */
 
-Tracking('searchpage', 0);
+Tracking('ask_question', 0);
 
 $tree->buildTree();
 

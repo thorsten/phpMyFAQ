@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: savevoting.php,v 1.8 2005-02-01 12:08:38 thorstenr Exp $
+* $Id: savevoting.php,v 1.9 2005-05-18 17:51:53 thorstenr Exp $
 *
 * Saves a user voting
 *
@@ -27,7 +27,7 @@ if (isset($vote) && $vote != "" && votingCheck($record, $userip) && intval($_POS
     
 	$noUser = "0";
 	$datum = date("YmdHis");
-	Tracking("savevoting", $record);
+	Tracking("save_voting", $record);
     
 	if ($result = $db->query("SELECT usr FROM ".SQLPREFIX."faqvoting WHERE artikel = ".$record)) {
 		while ($row = $db->fetch_object($result)) {
@@ -47,14 +47,14 @@ if (isset($vote) && $vote != "" && votingCheck($record, $userip) && intval($_POS
     
 } elseif (isset($_POST["vote"])  && !votingCheck($record, $userip)) {
     
-    Tracking("savevotingerror", $record);
+    Tracking("error_save_voting", $record);
 	$tpl->processTemplate ("writeContent", array(
 				"msgVoteThanks" => $PMF_LANG["err_VoteTooMuch"]
 				));
     
 } else {
     
-	Tracking("savevotingerror", $record);
+	Tracking("error_save_voting", $record);
 	$tpl->processTemplate ("writeContent", array(
 				"msgVoteThanks" => $PMF_LANG["err_noVote"]
 				));

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: add.php,v 1.6 2005-03-04 06:19:34 thorstenr Exp $
+* $Id: add.php,v 1.7 2005-05-18 17:51:53 thorstenr Exp $
 *
 * This is the page there a user can add a FAQ record.
 *
@@ -19,7 +19,7 @@
 * under the License.
 */
 
-Tracking("newentrypage",0);
+Tracking("new_entry",0);
 
 if (isset($_GET["question"])) {
     $question = strip_tags($_REQUEST["question"]);

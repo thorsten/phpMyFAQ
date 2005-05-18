@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.19 2005-05-16 13:31:17 thorstenr Exp $
+* $Id: index.php,v 1.20 2005-05-18 17:51:53 thorstenr Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the 
@@ -119,7 +119,7 @@ if (isset($LANGCODE)) {
 
 // found a session ID?
 if (!isset($_GET["sid"]) && !isset($_COOKIE["sid"])) {
-	Tracking("NewSession", 0);
+	Tracking("new_session", 0);
     setcookie("sid", $sid, time()+3600);
 } else {
 	if (isset($_REQUEST["sid"]) && is_numeric($_REQUEST["sid"]) == TRUE) {
