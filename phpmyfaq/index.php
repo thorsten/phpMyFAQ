@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.20 2005-05-18 17:51:53 thorstenr Exp $
+* $Id: index.php,v 1.21 2005-05-20 08:42:30 thorstenr Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the 
@@ -34,7 +34,9 @@ if (DEBUG) {
 
 // Just for security reasons - thanks to Johannes for the hint
 $_SERVER['PHP_SELF'] = str_replace('%2F', '/', rawurlencode($_SERVER['PHP_SELF']));
-$GLOBALS['PHP_SELF'] = str_replace('%2F', '/', rawurlencode($GLOBALS['PHP_SELF']));
+if (isset($GLOBALS['PHP_SELF'])) {
+    $GLOBALS['PHP_SELF'] = str_replace('%2F', '/', rawurlencode($GLOBALS['PHP_SELF']));
+}
 
 // check if config.php and data.php exist -> if not, redirect to installer
 if (!file_exists('inc/config.php') || !file_exists('inc/data.php')) {
