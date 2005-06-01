@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.save.php,v 1.23 2005-03-19 14:07:22 thorstenr Exp $
+* $Id: record.save.php,v 1.24 2005-06-01 06:29:33 tomr Exp $
 *
 * Save or update a FAQ record
 *
@@ -64,7 +64,7 @@ if (isset($submit[1]) && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "") 
 	// Wenn auf Speichern geklickt wurde...
 	adminlog("Beitragsave", $_REQUEST["id"]);
     print "<h2>".$PMF_LANG["ad_entry_aor"]."</h2>\n";
-	$db->query("INSERT INTO ".SQLPREFIX."faqchanges (id, beitrag, usr, datum, what) VALUES (".$db->nextID(SQLPREFIX."faqchanges", "id").", ".$_REQUEST["id"].",'".$auth_user."','".time()."','".nl2br(addslashes($_REQUEST["changed"]))."')");
+	$db->query("INSERT INTO ".SQLPREFIX."faqchanges (id, beitrag, usr, datum, what, lang) VALUES (".$db->nextID(SQLPREFIX."faqchanges", "id").", ".$_REQUEST["id"].",'".$auth_user."','".time()."','".nl2br(addslashes($_REQUEST["changed"]))."', '".addslashes($_REQUEST["changed"])."')");
 	$thema = $db->escape_string($_REQUEST["thema"]);
 	$content = $db->escape_string($_REQUEST["content"]);
 	$keywords = $db->escape_string($_REQUEST["keywords"]);
@@ -96,10 +96,10 @@ if (isset($submit[1]) && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "") 
     }
     
     // delete category relations
-    $db->query('DELETE FROM '.SQLPREFIX.'faqcategoryrelations WHERE record_id = '.$_REQUEST["id"].' and record_lang = "'.$_REQUEST["language"].'"');
+    $db->query("DELETE FROM ".SQLPREFIX."faqcategoryrelations WHERE record_id = ".$_REQUEST["id"]." and record_lang = '".$_REQUEST["language"]."';");
 	// save or update the category relations
     foreach ($rubrik as $categories) {
-        $db->query('INSERT INTO '.SQLPREFIX.'faqcategoryrelations VALUES ('.$categories.', "'.$_REQUEST["language"].'", '.$_REQUEST["id"].', "'.$_REQUEST["language"].'")');
+        $db->query("INSERT INTO ".SQLPREFIX."faqcategoryrelations VALUES (".$categories.", '".$_REQUEST["language"]."', ".$_REQUEST["id"].", '".$_REQUEST["language"]."');");
     }
 }
 
