@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.delete.php,v 1.4 2005-03-19 14:10:01 thorstenr Exp $
+* $Id: record.delete.php,v 1.5 2005-06-01 07:50:36 thorstenr Exp $
 *
 * Deletes a record
 *
@@ -38,6 +38,7 @@ if ($permission["delbt"]) {
 		$db->query("DELETE FROM ".SQLPREFIX."faqcomments WHERE id = ".$_REQUEST["id"]." AND lang = '".$_REQUEST["language"]."'");
 		$db->query("DELETE FROM ".SQLPREFIX."faqvisits WHERE id = ".$_REQUEST["id"]." AND lang = '".$_REQUEST["language"]."'");
 		$db->query("DELETE FROM ".SQLPREFIX."faqchanges WHERE artikel = ".$_REQUEST["id"]." AND lang = '".$_REQUEST["language"]."'");
+        $db->query("DELETE FROM ".SQLPREFIX."faqcategoryrelations WHERE record_id = '".$_REQUEST["id"]."' AND record_lang = '".$_REQUEST["language"]."'");
 		print "<p>".$PMF_LANG["ad_entry_delsuc"]."</p>\n";
 		}
 	if ($_REQUEST["subm"] == $PMF_LANG["ad_gen_no"]) {
