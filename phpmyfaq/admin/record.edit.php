@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.edit.php,v 1.19 2005-04-16 13:44:00 thorstenr Exp $
+* $Id: record.edit.php,v 1.20 2005-06-01 01:26:03 tomr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23
@@ -188,7 +188,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 ?><br />
 	</dl>
 <?php
-	if ($id) {
+	if (is_numeric($id)) {
 ?>
     <h3><?php print $PMF_LANG["ad_entry_changelog"]; ?></h3>
 <?php
@@ -199,19 +199,19 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     <div style="font-size: 10px;"><strong><?php print date("Y-m-d H:i:s",$dat).": ".$usr; ?></strong><br /><?php print $wht; ?></div>	
 <?php
 		}
-	}
 ?>
     </form>
 <?php
 	$result = $db->query("SELECT id, id_comment, usr, email, comment, datum FROM ".SQLPREFIX."faqcomments WHERE id = ".$id." ORDER BY datum DESC");
-	if ($db->num_rows($result) > 0) {
+		if ($db->num_rows($result) > 0) {
 ?>
     <p><strong><?php print $PMF_LANG["ad_entry_comment"] ?></strong></p>
 <?php
-		while(list($id,$cm_id,$usr,$eml,$cmt,$dt) = $db->fetch_row($result)) {
+			while(list($id,$cm_id,$usr,$eml,$cmt,$dt) = $db->fetch_row($result)) {
 ?>	
     <p><?php print $PMF_LANG["ad_entry_commentby"] ?> <a href="mailto:<?php print $eml; ?>"><?php print $usr; ?></a>:<br /><?php print $cmt; ?><br /><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=delcomment&amp;artid=<?php print $id; ?>&amp;cmtid=<?php print $cm_id; ?>&amp;lang=<?php print $lang; ?>"><img src="images/delete.gif" alt="<?php print $PMF_LANG["ad_entry_delete"] ?>" title="<?php print $PMF_LANG["ad_entry_delete"] ?>" border="0" width="17" height="18" align="right" /></a></p>
 <?php
+			}
 		}
 	}
 } elseif ($permission["editbt"] != 1 && !emptyTable(SQLPREFIX."faqcategories")) {
