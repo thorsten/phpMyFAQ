@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.edit.php,v 1.20 2005-06-01 01:26:03 tomr Exp $
+* $Id: record.edit.php,v 1.21 2005-06-01 07:30:15 tomr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23
@@ -37,7 +37,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
             $acti = "saveentry&amp;id=".$id;
         } else {
             $acti = "insertentry";
-			$id = "";
+			unset($id);
         }
         $lang = $_REQUEST["lang"];
         $rubrik = $_REQUEST["rubrik"];
