@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.show.php,v 1.14 2005-02-24 19:34:27 thorstenr Exp $
+* $Id: record.show.php,v 1.15 2005-06-01 08:08:17 tomr Exp $
 *
 * Shows the list of records ordered by categories
 *
@@ -62,6 +62,7 @@ if ($permission["editbt"] || $permission["delbt"]) {
     } else if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "accept") {
         
         $query = 'SELECT '.SQLPREFIX.'faqdata.id,'.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema,'.SQLPREFIX.'faqdata.author FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang ='.SQLPREFIX.'faqcategoryrelations.record_lang WHERE '.SQLPREFIX.'faqdata.active = \'no\' ORDER BY '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.id';
+    	$result = $db->query($query);
         $laktion = "accept";
         $internalSearch = "";
     }
@@ -89,8 +90,6 @@ if ($permission["editbt"] || $permission["delbt"]) {
     
 	$old = 0;
 	$previousID = 0;
-    
-    $result = $db->query($query);
     
 	if ($db->num_rows($result) > 0) {
 ?>
