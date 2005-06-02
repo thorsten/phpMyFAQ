@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.70 2005-05-18 17:51:53 thorstenr Exp $
+* $Id: functions.php,v 1.71 2005-06-02 01:33:38 tomr Exp $
 *
 * This is the main functions file!
 *
@@ -1343,7 +1343,7 @@ function printOpenQuestions()
 function adminlog($text)
 {
     global $db, $PMF_CONF, $auth_user;
-    if (isset($PMF_CONF["enableadminlog"])) {
+    if (isset($PMF_CONF["enableadminlog"]) && is_numeric($auth_user)) {
         $db->query('INSERT INTO '.SQLPREFIX.'faqadminlog (id, time, usr, text, ip) VALUES ('.$db->nextID(SQLPREFIX.'faqadminlog', 'id').', '.time().', \''.$auth_user.'\', \''.nl2br(addslashes($text)).'\', \''.$_SERVER["REMOTE_ADDR"].'\')');
     }
 }
