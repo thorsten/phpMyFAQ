@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.show.php,v 1.15 2005-06-01 08:08:17 tomr Exp $
+* $Id: record.show.php,v 1.16 2005-06-02 01:37:49 tomr Exp $
 *
 * Shows the list of records ordered by categories
 *
@@ -27,6 +27,7 @@ if ($permission["editbt"] || $permission["delbt"]) {
     if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "view" && !isset($_REQUEST["suchbegriff"])) {
         
         $query = 'SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema,'.SQLPREFIX.'faqdata.author FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang ='.SQLPREFIX.'faqcategoryrelations.record_lang WHERE '.SQLPREFIX.'faqdata.active = \'yes\' ORDER BY '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.id ';
+    	$result = $db->query($query);
         $laktion = 'view';
         $internalSearch = '';
         
