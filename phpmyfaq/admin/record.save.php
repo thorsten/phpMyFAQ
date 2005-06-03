@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.save.php,v 1.24 2005-06-01 06:29:33 tomr Exp $
+* $Id: record.save.php,v 1.25 2005-06-03 03:43:00 tomr Exp $
 *
 * Save or update a FAQ record
 *
@@ -64,7 +64,7 @@ if (isset($submit[1]) && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "") 
 	// Wenn auf Speichern geklickt wurde...
 	adminlog("Beitragsave", $_REQUEST["id"]);
     print "<h2>".$PMF_LANG["ad_entry_aor"]."</h2>\n";
-	$db->query("INSERT INTO ".SQLPREFIX."faqchanges (id, beitrag, usr, datum, what, lang) VALUES (".$db->nextID(SQLPREFIX."faqchanges", "id").", ".$_REQUEST["id"].",'".$auth_user."','".time()."','".nl2br(addslashes($_REQUEST["changed"]))."', '".addslashes($_REQUEST["changed"])."')");
+	$db->query("INSERT INTO ".SQLPREFIX."faqchanges (id, beitrag, usr, datum, what, lang) VALUES (".$db->nextID(SQLPREFIX."faqchanges", "id").", ".$_REQUEST["id"].",'".$auth_user."','".time()."','".nl2br(addslashes($_REQUEST["changed"]))."', '".addslashes($_REQUEST["language"])."')");
 	$thema = $db->escape_string($_REQUEST["thema"]);
 	$content = $db->escape_string($_REQUEST["content"]);
 	$keywords = $db->escape_string($_REQUEST["keywords"]);
