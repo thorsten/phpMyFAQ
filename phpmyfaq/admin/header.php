@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: header.php,v 1.8 2005-04-16 13:36:13 thorstenr Exp $
+* $Id: header.php,v 1.9 2005-06-05 18:30:01 thorstenr Exp $
 *
 * header of the admin area
 *
@@ -61,7 +61,7 @@ if (isset($_REQUEST["aktion"]) && ($_REQUEST["aktion"] == "editentry" || $_REQUE
     $output = "'Include internal links' : '',\n";
     $result = $db->query('SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang ORDER BY '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.id');
     while ($row = $db->fetch_object($result)) {
-        $output .= "'".safeSQL(chopString($row->thema, 8))."' : '<a href=\"index.php?action=artikel&amp;cat=".$row->category_id."&amp;id=".$row->id."&amp;artlang=".$row->lang."\">".safeSQL($row->thema)."</a>',\n";
+        $output .= "'".safeSQL(chopString($row->thema, 8))."' : '<a href=\"index.php?action=artikel&amp;cat=".$row->category_id."&amp;id=".$row->id."&amp;artlang=".$row->lang."\">".safeSQL(str_replace(array('\n', '\r'), '', $row->thema))."</a>',\n";
         };
     $output = substr($output, 0, -2);
     print $output;
