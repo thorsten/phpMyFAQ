@@ -6,7 +6,7 @@
     <p>{writeDateMsg}<br />{writeAuthor}</p>
     
     {switchLanguage}
-    <p>
+    <p id="action">
     <img src="images/print.gif" alt="{writePrintMsgTag}" title="{writePrintMsgTag}" width="16" height="16" border="0" /> {writePrintMsg}<br />
     <img src="images/email.gif" alt="{writeSend2FriendMsgTag}" title="{writeSend2FriendMsgTag}" width="16" height="16" border="0" /> {writeSend2FriendMsg}<br />
     <img src="images/pdf.gif" alt="{writePDFTag}" title="{writePDFTag}" width="16" height="16" border="0" /> {writePDF}<br />
@@ -35,3 +35,4 @@
 
     <p>{writeCommentMsg}</p>
     {writeComments}
+
