@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.edit.php,v 1.21 2005-06-01 07:30:15 tomr Exp $
+* $Id: record.edit.php,v 1.22 2005-06-06 06:23:51 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23
@@ -130,7 +130,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     		} else {
     			print "<em>".$PMF_LANG["ad_att_none"]."</em><br />";
     		}
-    		print "<a href=\"javascript:Picture('attachment.php?uin=".$uin."&amp;id=".$id."&amp;rubrik=".$rubrik."', 'Attachment', 400,80)\">".$PMF_LANG["ad_att_add"]."</a>";
+    		print "<a href=\"#\" onclick=\"Picture('attachment.php?uin=".$uin."&amp;id=".$id."&amp;rubrik=".$rubrik."', 'Attachment', 400,80)\">".$PMF_LANG["ad_att_add"]."</a>";
     	} else {
     		print $PMF_LANG["ad_att_nope"];
     	}
@@ -164,7 +164,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 	}
 ?>
     <label class="left" for="active"><?php print $PMF_LANG["ad_entry_active"]; ?></label>
-    <input type="radio" name="active" id="active" value="yes"<?php if (isset($suf)) { print $suf; } ?> /> <?php print $PMF_LANG["ad_gen_yes"]; ?> <input type="radio" name="active" id="active" value="no"<?php if (isset($sul)) { print $sul; } ?> /> <?php print $PMF_LANG["ad_gen_no"]; ?><br />
+    <input type="radio" name="active" class="active" value="yes"<?php if (isset($suf)) { print $suf; } ?> /> <?php print $PMF_LANG["ad_gen_yes"]; ?> <input type="radio" name="active" class="active" value="no"<?php if (isset($sul)) { print $sul; } ?> /> <?php print $PMF_LANG["ad_gen_no"]; ?><br />
 	
     <label class="left" for="comment"><?php print $PMF_LANG["ad_entry_allowComments"]; ?></label>
     <input type="checkbox" name="comment" id="comment" value="y"<?php if (isset($comment) && $comment == "y") { print " checked"; } ?> /><br />
@@ -186,7 +186,6 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 <?php
 	}
 ?><br />
-	</dl>
 <?php
 	if (is_numeric($id)) {
 ?>
