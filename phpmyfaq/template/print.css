@@ -1,5 +1,5 @@
 /**
-* $Id: print.css,v 1.1 2004-11-22 20:50:42 thorstenr Exp $
+* $Id: print.css,v 1.2 2005-06-06 00:43:13 tomr Exp $
 * 
 * The CSS file for printers
 *
@@ -19,7 +19,74 @@
 * under the License.
 */
 
-body, td {
-    font-family: "Bitstream Vera Sans", "Trebuchet MS", Geneva, Arial, Helvetica, sans-serif;
-    font-size: 100.01%; 
-    }
+body, td 
+{
+	font-family: "Bitstream Vera Sans", "Trebuchet MS", Geneva, Arial, Helvetica, sans-serif;
+}
+
+/**
+* Main columns definitions
+*/
+.columns 
+{
+	border: none;
+	margin-top: 0px;
+}
+.leftcolumn 
+{
+	display: none;
+}
+.rightcolumn 
+{
+	display:none;
+}
+
+/*
+* Hide forms
+*/
+
+form, fieldset, legend
+{
+	display: none;
+}
+
+/*
+* Hide other html presentation items
+*/
+
+#header
+{
+	display: none;
+}
+
+#footer
+{
+	display: none;
+}
+
+#action
+{
+	display: none;
+}
+
+
+/*
+* Show article to be printed, and append some link information
+*/
+
+.main-content
+{
+	display: block;
+	font: 10pt;
+}
+
+.main-content a
+{
+	text-decoration: none;
+}
+
+a:link:after, a:visited:after
+{
+	content: "("attr(href)")";
+}
+
