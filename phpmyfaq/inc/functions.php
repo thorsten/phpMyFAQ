@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.72 2005-06-03 04:12:57 tomr Exp $
+* $Id: functions.php,v 1.73 2005-06-20 16:08:22 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -60,7 +60,7 @@ function selectLanguages($default)
 {
     global $languageCodes;
     $search = array("language_", ".php");
-    $output = "<select class=\"language\" name=\"language\" size=\"1\">\n";
+    $output = "<select class=\"language\" name=\"language\" id=\"language\" size=\"1\">\n";
 	if ($dir = @opendir("lang/")) {
         while (FALSE !== ($file = @readdir($dir))) {
             if ($file != "." && $file != ".." && !is_dir($file)) {

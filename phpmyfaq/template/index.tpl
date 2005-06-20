@@ -59,6 +59,8 @@
         <div class="leftcolumn sidebar" id="sidebar-left">
             <div class="leftpadding">
                 
+                <h2 class="invisible">Navigation</h2>
+                
                 <!-- start categories -->
                 <div class="content">
                     <div id="categories">
@@ -75,11 +77,9 @@
                 <div class="content">
                     <div id="search">
                     <form action="{writeSendAdress}" method="post">
-                    <fieldset>
-                    <legend>{searchBox}</legend>
-                    <input alt="search..." class="inputfield" type="text" name="suchbegriff" size="18" /><br />
+                    <label for="suchbegriff">{searchBox}</label>
+                    <input alt="search..." class="inputfield" type="text" name="suchbegriff" id="suchbegriff" size="18" /><br />
                     <input type="submit" name="submit" value="Go" class="submit" />
-                    </fieldset>
                     </form>
                     </div>
                 </div>
@@ -89,11 +89,9 @@
                 <div class="content">
                     <div id="langform">
                     <form action="{writeLangAdress}" method="post">
-                    <fieldset>
-                    <legend>{languageBox}</legend>
+                    <label for="language">{languageBox}</label>
                     {switchLanguages}<br />
                     <input type="submit" name="submit" value="Go" class="submit" />
-                    </fieldset>
                     </form>
                     </div>
                 </div>
