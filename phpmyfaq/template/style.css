@@ -1,5 +1,5 @@
 /**
-* $Id: style.css,v 1.10 2005-05-16 14:23:09 thorstenr Exp $
+* $Id: style.css,v 1.11 2005-06-20 16:06:56 thorstenr Exp $
 *
 * This is the main style sheet file for phpMyFAQ 1.5
 * If you want to change only the colours, use colors.css
@@ -78,6 +78,10 @@ p {
 }
 code {
    white-space: pre;
+}
+
+.invisible {
+	display: none;
 }
 
 /**
