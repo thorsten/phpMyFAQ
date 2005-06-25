@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.edit.php,v 1.22 2005-06-06 06:23:51 thorstenr Exp $
+* $Id: record.edit.php,v 1.23 2005-06-25 12:21:15 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23
@@ -23,6 +23,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     $tree->buildTree();
     $rubrik = "";
     $thema = "";
+    $categories = array('category_id', 'category_lang');
     
     if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "takequestion") {
     
@@ -75,7 +76,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 			$acti = 'saveentry&amp;id='.$_REQUEST['id'];
 		} else {
 			$acti = 'insertentry';
-			$id = '';
+			$id = 0;
 		    $lang = $LANGCODE;
 		}
         
@@ -86,13 +87,17 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 		if (!is_array($categories)) {
             $categories = array();
 		}
-		$id = '';
+		$id = 0;
 		$lang = $LANGCODE;
         
 	}
+	
+	print '<h2>'.$PMF_LANG["ad_entry_edit_1"];
+	if (0 != $id) {
+	    print ' <span style="color: Red;">'.$id.'</span> ';
+	}
+	print $PMF_LANG["ad_entry_edit_2"].'</h2>';
 ?>
-    <h2><?php print $PMF_LANG["ad_entry_edit_1"]; ?> <span style="color: Red;"><?php print $id; ?></span> <?php print $PMF_LANG["ad_entry_edit_2"]; ?></h2>
-    
     <form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=<?php print $acti; ?>" method="post">
 
     <label class="left" for="rubrik"><?php print $PMF_LANG["ad_entry_category"]; ?></label>
@@ -109,7 +114,6 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 <?php
     if ($permission["addatt"]) {
 ?>
-
     <label class="left"><?php print $PMF_LANG["ad_att_att"]; ?></label>
 <?php
 	    if (isset($id) && $id != "") {
