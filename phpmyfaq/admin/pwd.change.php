@@ -1,39 +1,46 @@
 <?php
-/******************************************************************************
- * File:				pwd.change.php
- * Description:			change password of the current user
- * Authors:				Thorsten Rinne <thorsten@phpmyfaq.de>
- * Date:				2003-02-23
- * Last change:			2004-07-23
- * Copyright:           (c) 2001-2004 Thorsten Rinne
- * 
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- * 
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- ******************************************************************************/
+/**
+* $Id: pwd.change.php,v 1.2 2005-06-25 12:34:40 thorstenr Exp $
+*
+* Form to change password of the current user
+*
+* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+* @since        2003-02-23
+* @copyright    (c) 2001-2005 phpMyFAQ Team
+* 
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
+* 
+* Software distributed under the License is distributed on an "AS IS"
+* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+* License for the specific language governing rights and limitations
+* under the License.
+*/
+
 if ($permission["passwd"]) {
 ?>
 	<h2><?php print $PMF_LANG["ad_passwd_cop"]; ?></h2>
 	<form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>" method="post">
+	<fieldset>
+	<legend><?php print $PMF_LANG["ad_passwd_cop"]; ?></legend>
 	<input type="hidden" name="aktion" value="savepwd" />
-	<div class="row"><span class="label"><strong><?php print $PMF_LANG["ad_passwd_old"]; ?></strong></span>
-    <input class="admin" type="password" name="opass" size="30" /></div>
-	<div class="row"><span class="label"><strong><?php print $PMF_LANG["ad_passwd_new"]; ?></strong></span>
-    <input class="admin" type="password" name="npass" size="30" /></div>
-	<div class="row"><span class="label"><strong><?php print $PMF_LANG["ad_passwd_con"]; ?></strong></span>
-    <input class="admin" type="password" name="bpass" size="30" /></div>
-	<div class="row"><span class="label"><strong>&nbsp;</strong></span>
-    <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_passwd_change"]; ?>" /></div>
+	
+	<label class="left" for="opass"><?php print $PMF_LANG["ad_passwd_old"]; ?></label>
+    <input class="admin" type="password" name="opass" size="30" /><br />
+    
+	<label class="left" for="npass"><?php print $PMF_LANG["ad_passwd_new"]; ?></label>
+    <input class="admin" type="password" name="npass" size="30" /><br />
+    
+	<label class="left" for="bpass"><?php print $PMF_LANG["ad_passwd_con"]; ?></label>
+    <input class="admin" type="password" name="bpass" size="30" /><br />
+    
+	<input class="submit" type="submit" value="<?php print $PMF_LANG["ad_passwd_change"]; ?>" /></div>
+    </fieldset>
 	</form>
 <?php
-	}
-else {
-	print $PMF_LANG["err_NotAuth"];
-	}
+} else {
+    print $PMF_LANG["err_NotAuth"];
+}
 ?>
