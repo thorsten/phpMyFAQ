@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.22 2005-05-16 14:11:21 thorstenr Exp $
+* $Id: installer.php,v 1.23 2005-06-27 18:45:13 thorstenr Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -254,7 +254,7 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 		print '<option value="sybase">Sybase</option>';
 	}
 	if (extension_loaded('mssql')) {
-		print '<option value="mssql">MS SQL Server (experimental)</option>';
+		print '<option value="mssql">MS SQL Server</option>';
 	}
 	if (extension_loaded('mysqli') && php_check(phpversion(), '5.0.0')) {
 		print '<option value="mysqli">MySQL 4.1/5.0 (experimental)</option>';
