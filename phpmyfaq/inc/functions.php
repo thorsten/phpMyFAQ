@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.74 2005-06-27 16:05:42 thorstenr Exp $
+* $Id: functions.php,v 1.75 2005-06-27 16:49:55 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -1199,7 +1199,7 @@ function searchEngine($begriff)
                 $where = $where." OR ";
             }
             
-            $where = $where.'('.SQLPREFIX."faqdata.keywords LIKE '%".$keys[$i]."%' OR ".SQLPREFIX."faqdata.keywords LIKE '%".$keys[$i]."%' OR ".SQLPREFIX."faqdata.keywords LIKE '%".$keys[$i]."%') AND ".SQLPREFIX.'faqdata.active = \'yes\'';
+            $where = $where.'('.SQLPREFIX."faqdata.thema LIKE '%".$keys[$i]."%' OR ".SQLPREFIX."faqdata.contents LIKE '%".$keys[$i]."%' OR ".SQLPREFIX."faqdata.keywords LIKE '%".$keys[$i]."%') AND ".SQLPREFIX.'faqdata.active = \'yes\'';
         }
         
         $where = " WHERE (".$where.") AND active = 'yes'";
