@@ -25,6 +25,7 @@ TODO list for future versions of phpMyFAQ:
 - batch insertion script ?
 - improved category and FAQ record functions ?
 - show/edit/delete comments ?
+- add "submit translation" link ?
 - more accessibility features (WAI and Section 508) ?
 - bugfixing for stability or security reasons
 
