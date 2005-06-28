@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: rss.php,v 1.7 2005-03-17 07:10:24 thorstenr Exp $
+* $Id: rss.php,v 1.8 2005-06-28 19:06:36 thorstenr Exp $
 *
 * The RSS feed with the news
 *
@@ -32,7 +32,7 @@ require_once (PMF_ROOT_DIR."/inc/config.php");
 require_once (PMF_ROOT_DIR."/inc/constants.php");
 require_once (PMF_ROOT_DIR."/inc/category.php");
 require_once (PMF_ROOT_DIR."/inc/functions.php");
-require_once (PMF_ROOT_DIR."/lang/language_en.php");
+require_once (PMF_ROOT_DIR."/lang/".$PMF_CONF["language"]);
 
 $result = $db->query("SELECT datum, header, artikel, link, linktitel, target FROM ".SQLPREFIX."faqnews ORDER BY datum desc");
 
