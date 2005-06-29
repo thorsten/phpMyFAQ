@@ -1,6 +1,6 @@
-$Id: README.txt,v 1.27 2005-06-27 18:47:05 thorstenr Exp $
+$Id: README.txt,v 1.28 2005-06-29 17:30:42 thorstenr Exp $
 
-phpMyFAQ 1.5.0
+phpMyFAQ 1.5.0 RC5
 Codename "Phoebe"
 
 Installation/Update:
@@ -10,6 +10,7 @@ Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 1.5.0 RC4:
+- fixed serious security issue in bundled XML-RPC component
 - fixed some MS SQL bugs
 - fixed many, many minor bugs
 - fixed layout issues
@@ -21,7 +22,8 @@ Known issues in phpMyFAQ 1.5.0:
 
 CHANGELOG:
 
-Version 1.5.0 - 2005-06-
+Version 1.5.0 RC5 - 2005-06-29
+- fixed serious security issue in bundled XML-RPC component
 - full support for PostgreSQL databases
 - full support for Sybase databases
 - full support for MS SQL databases
@@ -36,6 +38,10 @@ Version 1.5.0 - 2005-06-
 - better RSS support
 - updated bundled htmlArea
 - PHP5 compatible
+
+Version 1.4.9 - 2005-06-29
+- fixed serious security issue in bundled XML-RPC component
+- some minor bugfixes
 
 Version 1.4.8 - 2005-04-11
 - fixed bug with images in PDFs
