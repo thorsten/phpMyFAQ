@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mailsend2friend.php,v 1.5 2005-05-18 17:51:53 thorstenr Exp $
+* $Id: mailsend2friend.php,v 1.6 2005-07-05 10:37:35 thorstenr Exp $
 *
 * Sends the emails to your friends
 *
@@ -31,7 +31,7 @@ if (isset($_POST["name"]) && $_POST["name"] != "" && isset($_POST["mailfrom"]) &
     if (checkEmail($mailfrom)) {
         foreach($mailto as $mail) {
             if ($mail != "") {
-                mail($IDN->encode($mail), $PMF_LANG["msgS2FMailSubject"].$name, $PMF_LANG["send2friend_text"]."\n\n".$PMF_LANG["msgS2FText2"]."\n".$link."\n\n".stripslashes($attached), "From: ".$IDN->encode($mailfrom));
+                mail($IDN->encode($mail), $PMF_LANG["msgS2FMailSubject"].$name, $PMF_CONF["send2friend_text"]."\n\n".$PMF_LANG["msgS2FText2"]."\n".$link."\n\n".stripslashes($attached), "From: ".$IDN->encode($mailfrom));
                 usleep(500);
             }
         }
