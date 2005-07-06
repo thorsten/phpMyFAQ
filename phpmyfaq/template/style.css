@@ -1,5 +1,5 @@
 /**
-* $Id: style.css,v 1.12 2005-06-24 09:16:35 thorstenr Exp $
+* $Id: style.css,v 1.13 2005-07-06 05:48:38 thorstenr Exp $
 *
 * This is the main style sheet file for phpMyFAQ 1.5
 * If you want to change only the colours, use colors.css
@@ -164,6 +164,7 @@ code {
    padding: 5px 5px 5px 0.5em;
    border-bottom: 1px solid;
    text-decoration: none;
+	height: 100%; /* stupid IE fix */
 }
 html>body #categories li a {
    width: auto;
