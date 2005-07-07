@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: pgsql.sql.php,v 1.6 2005-01-06 14:53:58 thorstenr Exp $
+* $Id: pgsql.sql.php,v 1.7 2005-07-07 13:05:15 tomr Exp $
 *
 * CREATE TABLE instruction for PostgreSQL database
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -35,7 +35,7 @@ $uninst[] = "DROP TABLE ".$sqltblpre."faqvisits";
 
 //faquser
 $query[] = "CREATE TABLE  ".$sqltblpre."faquser (
-id int4 NOT NULL,
+id SERIAL NOT NULL,
 name text NOT NULL,
 pass varchar(64)  NOT NULL,
 realname varchar(255) NOT NULL default '',
@@ -45,7 +45,7 @@ PRIMARY KEY (id))";
 
 //faqdata
 $query[] = "CREATE TABLE  ".$sqltblpre."faqdata (
-id int4 NOT NULL,
+id SERIAL NOT NULL,
 lang varchar(5) NOT NULL,
 active char(3) NOT NULL,
 keywords text NOT NULL,
@@ -59,7 +59,7 @@ PRIMARY KEY (id, lang))";
 
 //faqadminlog
 $query[] = "CREATE TABLE ".$sqltblpre."faqadminlog (
-id int4 NOT NULL,
+id SERIAL NOT NULL,
 time int4 NOT NULL,
 usr int4 NOT NULL REFERENCES ".$sqltblpre."faquser(id),
 text text NOT NULL,
@@ -76,7 +76,7 @@ time int4 NOT NULL)";
 
 //faqcategories
 $query[] = "CREATE TABLE  ".$sqltblpre."faqcategories (
-id int4 NOT NULL,
+id SERIAL NOT NULL,
 lang varchar(5) NOT NULL,
 parent_id int4 NOT NULL,
 name varchar(255) NOT NULL,
@@ -85,7 +85,7 @@ PRIMARY KEY (id, lang))";
 
 //faqcategoryrelations
 $query[] = "CREATE TABLE ".$sqltblpre."faqcategoryrelations (
-category_id int4 NOT NULL,
+category_id SERIAL NOT NULL,
 category_lang VARCHAR(5) NOT NULL,
 record_id int4 NOT NULL,
 record_lang VARCHAR(5) NOT NULL,
@@ -94,7 +94,7 @@ PRIMARY KEY  (category_id,category_lang,record_id,record_lang)
 
 //faqchanges
 $query[] = "CREATE TABLE  ".$sqltblpre."faqchanges (
-id int4 NOT NULL,
+id SERIAL NOT NULL,
 beitrag int4 NOT NULL,
 lang varchar(5) NOT NULL,
 usr int4 NOT NULL REFERENCES ".$sqltblpre."faquser(id),
@@ -104,18 +104,18 @@ PRIMARY KEY (id, lang))";
 
 //faqcomments
 $query[] = "CREATE TABLE  ".$sqltblpre."faqcomments (
-id_comment int4 NOT NULL,
+id_comment SERIAL NOT NULL,
 id int4 NOT NULL,
 usr varchar(255) NOT NULL,
 email varchar(255) NOT NULL,
 comment text NOT NULL,
-datum int8 NOT NULL,
+datum int4 NOT NULL,
 helped text NOT NULL,
 PRIMARY KEY (id_comment))";
 
 //faqfragen
 $query[] = "CREATE TABLE  ".$sqltblpre."faqfragen (
-id int4 NOT NULL,
+id SERIAL NOT NULL,
 ask_username varchar(100) NOT NULL,
 ask_usermail varchar(100) NOT NULL,
 ask_rubrik varchar(100) NOT NULL,
@@ -125,7 +125,7 @@ PRIMARY KEY (id))";
 
 //faqnews
 $query[] = "CREATE TABLE  ".$sqltblpre."faqnews (
-id int4 NOT NULL,
+id SERIAL NOT NULL,
 header varchar(255) NOT NULL,
 artikel text NOT NULL,
 datum varchar(14) NOT NULL,
@@ -136,10 +136,10 @@ PRIMARY KEY (id))";
 
 //faqvoting
 $query[] = "CREATE TABLE  ".$sqltblpre."faqvoting (
-id int4 NOT NULL,
+id SERIAL NOT NULL,
 artikel int4 NOT NULL,
 vote int4 NOT NULL,
-usr int4 NOT NULL,
+usr int4 NOT NULL REFERENCES ".$sqltblpre."faquser(id),
 datum varchar(20) NOT NULL default '',
 ip varchar(15) NOT NULL default '',
 PRIMARY KEY (id))";
@@ -153,7 +153,7 @@ PRIMARY KEY (sid))";
 
 //faqvisits
 $query[] = "CREATE TABLE  ".$sqltblpre."faqvisits (
-id int4 NOT NULL,
+id SERIAL NOT NULL,
 lang varchar(5) NOT NULL,
 visits int4 NOT NULL,
 last_visit int8 NOT NULL,
