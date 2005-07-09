@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.76 2005-06-27 17:16:32 thorstenr Exp $
+* $Id: functions.php,v 1.77 2005-07-09 09:07:26 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -108,7 +108,7 @@ function getThema($id, $lang)
 	$result = $db->query(sprintf("SELECT thema FROM %sfaqdata WHERE id = %d AND lang = '%s'", SQLPREFIX, $id, $lang));
 	if ($db->num_rows($result) > 0) {
 		while ($row = $db->fetch_object($result)) {
-			$output = htmlentities($row->thema);
+            $output = htmlentities($row->thema, ENT_NOQUOTES, $PMF_LANG['metaCharset']);
         }
     } else {
 		$output = $PMF_LANG["no_cats"];
