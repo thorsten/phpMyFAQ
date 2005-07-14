@@ -1,11 +1,12 @@
 <?php
 /**
-* $Id: language_fr.php,v 1.6 2005-02-25 16:43:50 thorstenr Exp $
+* $Id: language_fr.php,v 1.7 2005-07-14 07:01:13 thorstenr Exp $
 *
 * The French language file - try to be the best
 *
 * @author       Sylvain Corvaisier <cocky@cocky.fr>
 * @author       Thomas Bassetto <tbassetto@gmail.com> (reprise le 13/02/2005)
+* @author       Laurent J.V. Dubois <laurent.dubois@ljvd.com>
 * @since        2004-02-19
 * @copyright    (c) 2004-2005 phpMyFAQ Team
 *
@@ -80,7 +81,7 @@ $PMF_LANG["msgS2FEMail"] = "Votre adresse e-mail&nbsp;:";
 $PMF_LANG["msgS2FFriends"] = "Votre ami&nbsp;:";
 $PMF_LANG["msgS2FEMails"] = ". adresse e-mail&nbsp;:";
 $PMF_LANG["msgS2FText"] = "Le texte suivant va &ecirc;tre envoy&eacute;&nbsp;:";
-$PMF_LANG["msgS2FText2"] = "You'll find the record on the following address:"; /* a traduire */
+$PMF_LANG["msgS2FText2"] = "Vous trouverez l'enregistrement &agrave; l'adresse suivante;&nbsp;:";
 $PMF_LANG["msgS2FMessage"] = "Votre message suppl&eacute;mentaire pour votre ami&nbsp;:";
 $PMF_LANG["msgS2FButton"] = "Envoyer e-mail";
 $PMF_LANG["msgS2FThx"] = "Merci pour votre recommandation&nbsp;!";
@@ -117,10 +118,10 @@ $PMF_LANG["msgAskThx4Mail"] = "<h2>Merci pour votre question&nbsp;!</h2>";
 $PMF_LANG["msgDate_User"] = "Date / Utilisateur";
 $PMF_LANG["msgQuestion2"] = "Question";
 $PMF_LANG["msg2answer"] = "r&eacute;pondre";
-$PMF_LANG["msgQuestionText"] = "Ici, vous pouvez voir les questions pos&eacute;s par d'autres personnes. Vous pouvez y proposer une r&eacute;ponse, qui sera peut-&ecirc;tre ins&eacute;rée dans la FAQ.";
+$PMF_LANG["msgQuestionText"] = "Ici, vous pouvez voir les questions pos&eacute;es par d'autres personnes. Vous pouvez y proposer une r&eacute;ponse, qui sera peut-&ecirc;tre ins&eacute;rée dans la FAQ.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>La FAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions - Questions Fr&eacute;quement Pos&eacute;es) dispose d'une navigation simple. Vous pouvez chercher parmi les différentes <strong><a href=\"".$_SERVER["PHP_SELF"]."?sid=".isset($_GET["sid"])."&amp;action=show\">cat&eacute;gories</a></strong> ou bien laisser la <strong><a href=\"".$_SERVER["PHP_SELF"]."?sid=".isset($_GET["sid"])."&amp;action=search\">FAQ search engine</a></strong> chercher &agrave; partir de mots clefs.</p>";
+$PMF_LANG["msgHelpText"] = "<p>La FAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions - Foire Aux Questions) dispose d'une navigation simple. Vous pouvez chercher parmi les différentes <strong><a href=\"".$_SERVER["PHP_SELF"]."?sid=".isset($_GET["sid"])."&amp;action=show\">cat&eacute;gories</a></strong> ou bien laisser l'<strong><a href=\"".$_SERVER["PHP_SELF"]."?sid=".isset($_GET["sid"])."&amp;action=search\">outil de recherche</a></strong> chercher &agrave; partir de mots clefs.</p>";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "Envoyer un mail au webmaster&nbsp;:";
@@ -392,7 +393,7 @@ $PMF_LANG["ad_att_delfail"] = "Une erreur est survenue.";
 $PMF_LANG["ad_entry_add"] = "Cr&eacute;er Article";
 
 // Added v0.85 - 08.06.2001 - Bastian - Admin
-$PMF_LANG["ad_csv_make"] = "Une suavegarde est une image compl&egrave;te de la base de donn&eacute;es.";
+$PMF_LANG["ad_csv_make"] = "Une sauvegarde est une image compl&egrave;te de la base de donn&eacute;es.";
 $PMF_LANG["ad_csv_link"] = "T&eacute;l&eacute;charger la sauvegarde";
 $PMF_LANG["ad_csv_head"] = "Effectuer une sauvegarde";
 $PMF_LANG["ad_att_addto"] = "Ajouter un attachement &agrave; un article";
@@ -527,8 +528,8 @@ $PMF_LANG["rightsLanguage"][13] = "&eacute;diter cat&eacute;gorie";
 $PMF_LANG["rightsLanguage"][14] = "supprimer cat&eacute;gorie";
 $PMF_LANG["rightsLanguage"][15] = "changer mot de passe";
 $PMF_LANG["rightsLanguage"][16] = "&eacute;diter configuration";
-$PMF_LANG["rightsLanguage"][17] = "ajouter attachments";
-$PMF_LANG["rightsLanguage"][18] = "supprimer attachments";
+$PMF_LANG["rightsLanguage"][17] = "ajouter un fichier joint";
+$PMF_LANG["rightsLanguage"][18] = "supprimer un fichier joint";
 $PMF_LANG["rightsLanguage"][19] = "cr&eacute;er sauvegarde";
 $PMF_LANG["rightsLanguage"][20] = "restorer sauvegarde";
 $PMF_LANG["rightsLanguage"][21] = "supprimer questions ouvertes";
