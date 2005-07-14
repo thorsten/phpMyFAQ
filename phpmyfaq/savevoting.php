@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: savevoting.php,v 1.9 2005-05-18 17:51:53 thorstenr Exp $
+* $Id: savevoting.php,v 1.10 2005-07-14 07:03:39 thorstenr Exp $
 *
 * Saves a user voting
 *
@@ -31,7 +31,7 @@ if (isset($vote) && $vote != "" && votingCheck($record, $userip) && intval($_POS
     
 	if ($result = $db->query("SELECT usr FROM ".SQLPREFIX."faqvoting WHERE artikel = ".$record)) {
 		while ($row = $db->fetch_object($result)) {
-			$noUser = $row->user;
+			$noUser = $row->usr;
 		}
 	}
     
