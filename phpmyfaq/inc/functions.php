@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.77 2005-07-09 09:07:26 thorstenr Exp $
+* $Id: functions.php,v 1.78 2005-07-15 07:02:24 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -1203,7 +1203,7 @@ function searchEngine($begriff)
         }
         
         $where = " WHERE (".$where.") AND active = 'yes'";
-        $query = 'SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.record_id, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqdata.content FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang '.$where;
+        $query = 'SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqdata.content FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang '.$where;
         $result = $db->query($query);
         $num = $db->num_rows($result);
     }
