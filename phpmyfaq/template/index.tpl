@@ -10,7 +10,7 @@
     <meta name="publisher" content="{metaPublisher}" />
     <meta name="copyright" content="(c) 2001 - 2005 phpMyFAQ Team" />
     <meta name="Content-Language" content="{metaCharset}" />
-    <meta name="robots" content="INDEX, NOFOLLOW" />
+    <meta name="robots" content="INDEX, FOLLOW" />
     <meta name="revisit-after" content="7 days" />
     <meta name="MSSmartTagsPreventParsing" content="true" />
     <style type="text/css" media="screen">
