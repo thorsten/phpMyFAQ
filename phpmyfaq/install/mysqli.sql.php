@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mysqli.sql.php,v 1.1 2005-03-23 07:10:40 thorstenr Exp $
+* $Id: mysqli.sql.php,v 1.2 2005-07-16 21:59:25 thorstenr Exp $
 *
 * CREATE TABLE instruction for MySQL 4.1 and 5.0 database
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -56,7 +56,7 @@ email varchar(255) NOT NULL,
 comment enum('y','n') NOT NULL default 'y',
 datum varchar(15) NOT NULL,
 FULLTEXT (keywords,thema,content),
-PRIMARY KEY (id, lang)) TYPE = MYISAM";
+PRIMARY KEY (id, lang)) ENGINE = MYISAM";
 
 //faqadminlog
 $query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqadminlog (
