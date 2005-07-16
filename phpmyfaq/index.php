@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.21 2005-05-20 08:42:30 thorstenr Exp $
+* $Id: index.php,v 1.22 2005-07-16 20:33:48 thorstenr Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the 
@@ -162,10 +162,10 @@ if (isset($_GET["artlang"]) && strlen($_GET["artlang"]) <= 2 && !preg_match("=/=
 // found a record ID?
 if (isset($_REQUEST["id"]) && is_numeric($_REQUEST["id"]) == TRUE) {
 	$id = $_REQUEST["id"];
-    $title = " - ".stripslashes(getThema($id, $lang));
+    $title = ' - '.stripslashes(getThema($id, $lang));
 } else {
-	$id = "";
-    $title = " -  powered by phpMyFAQ ".$PMF_CONF["version"];
+	$id = '';
+    $title = ' -  powered by phpMyFAQ '.$PMF_CONF['version'];
 }
 
 // found a category?
@@ -179,6 +179,9 @@ $tree->transform(0);
 $tree->collapseAll();
 if ($cat != 0) {
     $tree->expandTo($cat);
+}
+if (isset($cat) && $cat != 0 && $id == '') {
+    $title = ' - '.$tree->categoryName[$cat]['name'];
 }
 
 // found an action request?
