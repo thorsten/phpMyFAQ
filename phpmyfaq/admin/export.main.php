@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: export.main.php,v 1.14 2004-12-25 20:26:23 thorstenr Exp $
+* $Id: export.main.php,v 1.15 2005-07-25 15:22:31 thorstenr Exp $
 *
 * XML, XML DocBook, XHTML and PDF export - main page
 *
@@ -80,7 +80,64 @@ if (isset($submit[2])) {
 }
 if (isset($submit[3])) {
 	// XML DocBook export
-    generateDocBookExport();
+	$parentID     = 0;
+	$rubrik       = 0;
+	$sql          = '';
+	$selectString ='';
+
+	$export = new XML_Export($DB);
+	$export->delete_file();
+
+	// Set the FAQ title
+	$faqtitel = $PMF_CONF["title"];
+
+	// Print the title of the FAQ
+	$export-> xmlContent='<?xml version="1.0" encoding="'.$PMF_LANG['metaCharset'].'"?>'
+	.'<book lang="en">'
+	.'<title> phpMyFAQ </title>'
+	.'<bookinfo>'
+	.'<title>'. $faqtitel. '</title>'
+	.'</bookinfo>';
+
+	// include the news
+	$result = $db->query("SELECT id, header, artikel, datum FROM ".SQLPREFIX."faqnews");
+
+	// Write XML file
+	$export->write_file();
+
+	// Transformation of the news entries
+	if ($db->num_rows($result) > 0 || $result <= $db->id)
+	{
+	    $export->xmlContent.='<part><title>News</title>';
+
+	    while ($row = $db->fetch_object($result)){
+
+	        $datum = $export->aktually_date($row->datum);
+	        $export->xmlContent .='<article>'
+	        .  '<title>'.$row->header.'</title>'
+	        .  '<para>'.wordwrap($datum,20).'</para>';
+	        $replacedString = ltrim(ereg_replace('<br />','',$row->artikel));
+	        $export->TableImageText($replacedString);
+	        $export->xmlContent.='</article>';
+	    }
+	    $export->xmlContent .= '</part>';
+	}
+
+	$export->write_file();
+
+	// Transformation of the articles
+	$export->xmlContent .='<part>'
+	. '<title>Artikel</title>'
+	. '<preface>'
+	. '<title>Rubriken</title>';
+
+	// Selection of the categories
+	$export->recursive_category($parentID);
+	$export->xmlContent .='</preface>'
+	. '</part>'
+	. '</book>';
+	
+	$export->write_file();
 }
 
 if (!emptyTable(SQLPREFIX."faqdata")) {
