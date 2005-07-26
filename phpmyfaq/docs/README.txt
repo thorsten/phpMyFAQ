@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.29 2005-07-25 15:25:40 thorstenr Exp $
+$Id: README.txt,v 1.30 2005-07-26 06:30:24 thorstenr Exp $
 
 phpMyFAQ 1.5.0
 Codename "Phoebe"
@@ -13,6 +13,7 @@ Changes since 1.5.0 RC5:
 - added David Sauers XML DocBook export class
 - fixed PostgreSQL sequence errors
 - fixed PHP 4.4.0 reference issues
+- improved category performance (Johann)
 - updated French language file
 
 Known issues in phpMyFAQ 1.5.0:
@@ -32,7 +33,7 @@ Version 1.5.0 - 2005-
 - faster template engine parses PHP code
 - rewritten PDF export
 - complete XML, XHTML and DocBook XML exports
-- many code improvements and code cleanup
+- many code and performance improvements and code cleanup
 - better RSS support
 - updated bundled htmlArea
 - PHP 4.4 and PHP 5.x compatible
