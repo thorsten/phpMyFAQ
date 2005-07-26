@@ -52,7 +52,7 @@ if ($permission["editcateg"]) {
         print $indent."<strong style=\"vertical-align: top;\">&middot; ".$cat["name"]."</strong> ";
         print "<a href=\"".$_SERVER["PHP_SELF"].$linkext."&amp;aktion=addcategory&amp;cat=".$cat["id"]."\" title=\"".$PMF_LANG["ad_kateg_add"]."\"><img src=\"images/add.gif\" width=\"17\" height=\"18\" alt=\"".$PMF_LANG["ad_kateg_add"]."\" title=\"".$PMF_LANG["ad_kateg_add"]."\" border=\"0\" /></a>";
         print "<a href=\"".$_SERVER["PHP_SELF"].$linkext."&amp;aktion=editcategory&amp;cat=".$cat["id"]."\" title=\"".$PMF_LANG["ad_kateg_rename"]."\"><img src=\"images/edit.gif\" width=\"18\" height=\"18\" border=\"0\" /></a>";
-        if (count($tree->getChilds($cat["id"])) == 0) {
+        if (count($tree->getChildren($cat["id"])) == 0) {
             print "<a href=\"".$_SERVER["PHP_SELF"].$linkext."&amp;aktion=deletecategory&amp;cat=".$cat["id"]."\" title=\"".$PMF_LANG["ad_categ_delete"]."\"><img src=\"images/delete.gif\" width=\"17\" height=\"18\" alt=\"".$PMF_LANG["ad_categ_delete"]."\" title=\"".$PMF_LANG["ad_categ_delete"]."\" border=\"0\" /></a>";
         }
         print "<a href=\"".$_SERVER["PHP_SELF"].$linkext."&amp;aktion=cutcategory&amp;cat=".$cat["id"]."\" title=\"".$PMF_LANG["ad_categ_cut"]."\"><img src=\"images/cut.gif\" width=\"16\" height=\"16\" alt=\"".$PMF_LANG["ad_categ_cut"]."\" border=\"0\" title=\"".$PMF_LANG["ad_categ_cut"]."\" /></a>\n";
