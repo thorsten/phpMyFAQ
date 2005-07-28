@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.18 2005-05-18 17:51:53 thorstenr Exp $
+* $Id: artikel.php,v 1.19 2005-07-28 15:21:17 thorstenr Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -71,7 +71,7 @@ $saveVotingPATH         = $_SERVER["PHP_SELF"]."?".$sids."action=savevoting";
 if (isset($_REQUEST["highlight"]) && $_REQUEST["highlight"] != "/" && $_REQUEST["highlight"] != "<" && $_REQUEST["highlight"] != ">") {
     $highlight = $_REQUEST["highlight"];
     $highlight = str_replace("/", "\/", $highlight);
-    $content = preg_replace('/(((href|src)="[^"]*)?'.$highlight.'(?(1).*"))/mies', "highlight_no_links(\"\\1\")", $content);
+    $content = preg_replace('/(((href|src)="[^"]*)?'.$highlight.'(?(1).*"))/mies', "highlight_no_links('\\1')", $content);
 	}
 
 $arrLanguage = check4Language($id);
