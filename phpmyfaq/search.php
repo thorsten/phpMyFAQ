@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: search.php,v 1.4 2005-05-18 17:51:53 thorstenr Exp $
+* $Id: search.php,v 1.5 2005-07-29 12:29:38 thorstenr Exp $
 *
 * The fulltext search page
 *
@@ -21,12 +21,12 @@
 
 Tracking("fulltext_search",0);
 
-if (isset($_REQUEST["suchbegriff"]) || isset($_GET["search"])) {
-	if (isset($_REQUEST["suchbegriff"])) {
-		$suchbegriff = safeSQL($_REQUEST["suchbegriff"]);
+if (isset($_POST["suchbegriff"]) || isset($_GET["search"])) {
+	if (isset($_POST["suchbegriff"])) {
+		$suchbegriff = safeSQL(strip_tags($_POST["suchbegriff"]));
 	}
-	if (isset($_REQUEST["search"])) {
-		$suchbegriff = safeSQL($_REQUEST["search"]);
+	if (isset($_GET["search"])) {
+		$suchbegriff = safeSQL(strip_tags($_GET["search"]));
 	}
 	$printResult = searchEngine($suchbegriff);
 } else {
