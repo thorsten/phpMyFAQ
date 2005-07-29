@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.19 2005-07-28 15:21:17 thorstenr Exp $
+* $Id: artikel.php,v 1.20 2005-07-29 12:25:42 thorstenr Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -68,11 +68,12 @@ $writeCommentMsg        = $PMF_LANG["msgYouCan"]."<a href=\"".$_SERVER["PHP_SELF
 $writeCategory          = stripslashes($categoryName)."<br />\n";
 $saveVotingPATH         = $_SERVER["PHP_SELF"]."?".$sids."action=savevoting";
 
-if (isset($_REQUEST["highlight"]) && $_REQUEST["highlight"] != "/" && $_REQUEST["highlight"] != "<" && $_REQUEST["highlight"] != ">") {
-    $highlight = $_REQUEST["highlight"];
-    $highlight = str_replace("/", "\/", $highlight);
+if (isset($_GET["highlight"]) && $_GET["highlight"] != "/" && $_GET["highlight"] != "<" && $_GET["highlight"] != ">") {
+    $highlight = strip_tags($_GET["highlight"]);
+    $highlight = str_replace("'", "´", $highlight);
+    $highlight = preg_quote($highlight, '/');
     $content = preg_replace('/(((href|src)="[^"]*)?'.$highlight.'(?(1).*"))/mies', "highlight_no_links('\\1')", $content);
-	}
+}
 
 $arrLanguage = check4Language($id);
 $switchLanguage = "";
