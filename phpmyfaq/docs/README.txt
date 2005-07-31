@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.30 2005-07-26 06:30:24 thorstenr Exp $
+$Id: README.txt,v 1.31 2005-07-31 09:38:17 thorstenr Exp $
 
 phpMyFAQ 1.5.0
 Codename "Phoebe"
@@ -13,6 +13,7 @@ Changes since 1.5.0 RC5:
 - added David Sauers XML DocBook export class
 - fixed PostgreSQL sequence errors
 - fixed PHP 4.4.0 reference issues
+- fixed update script
 - improved category performance (Johann)
 - updated French language file
 
