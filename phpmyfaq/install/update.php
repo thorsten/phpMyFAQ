@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.24 2005-07-24 11:50:40 thorstenr Exp $
+* $Id: update.php,v 1.25 2005-07-31 09:15:39 thorstenr Exp $
 *
 * Main update script
 *
@@ -181,6 +181,8 @@ if ($step == 1) {
     <option value="1.3.3">phpMyFAQ 1.3.3 or later</option>
     <option value="1.4.0">phpMyFAQ 1.4.0 alpha2 or later</option>
     <option value="1.4.1">phpMyFAQ 1.4.1 and later</option>
+    <option value="1.4.2">phpMyFAQ 1.4.2 and later</option>
+    <option value="1.4.4">phpMyFAQ 1.4.4 and later</option>
 </select>
 <?php
     }
@@ -440,6 +442,9 @@ if ($step == 5) {
         } else {
     		print "<p class=\"error\"><strong>Error:</strong> Cannot rewrite to data.php.</p>";
         }
+    }
+    // update from version 1.4.2
+    if ($version < "142") {
         $query[] = "ALTER TABLE ".SQLPREFIX."faqadminlog CHANGE user usr INT(11) DEFAULT '0' NOT NULL";
         $query[] = "ALTER TABLE ".SQLPREFIX."faqadminsessions CHANGE user usr TINYTEXT NOT NULL";
         $query[] = "ALTER TABLE ".SQLPREFIX."faqchanges CHANGE user usr INT(11) DEFAULT '0' NOT NULL";
