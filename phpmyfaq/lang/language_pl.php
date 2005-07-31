@@ -590,4 +590,6 @@ $PMF_LANG["lostpwd_mail_okay"] = "E-mail zosta³ wys³any.";
 
 $PMF_LANG["ad_xmlrpc_button"] = "Sprawd¼, jaka jest najnowsza wersja phpMyFAQ";
 $PMF_LANG["ad_xmlrpc_latest"] = "Najnowsza dostêpna wersja na";
-?>
+
+// added v1.5.0 - 2005-07-31 by Thorsten
+$PMF_LANG['ad_categ_select'] = 'Select category language';

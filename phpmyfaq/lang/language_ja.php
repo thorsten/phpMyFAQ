@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_ja.php,v 1.7 2005-04-21 18:51:00 thorstenr Exp $
+* $Id: language_ja.php,v 1.8 2005-07-31 09:34:42 thorstenr Exp $
 *
 * The Japanese language file -
 *
@@ -590,4 +590,6 @@ $PMF_LANG["lostpwd_mail_okay"] = "電子メールを送信しました。";
 
 $PMF_LANG["ad_xmlrpc_button"] = "最新の phpMyFAQ バージョンをウェブで確認する";
 $PMF_LANG["ad_xmlrpc_latest"] = "最新バージョンを次のサイトから利用することができます:";
-?>
+
+// added v1.5.0 - 2005-07-31 by Thorsten
+$PMF_LANG['ad_categ_select'] = 'Select category language';

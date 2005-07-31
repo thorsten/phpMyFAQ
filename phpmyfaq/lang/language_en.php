@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.6 2005-03-17 07:07:59 thorstenr Exp $
+* $Id: language_en.php,v 1.7 2005-07-31 09:34:42 thorstenr Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -591,4 +591,6 @@ $PMF_LANG["lostpwd_mail_okay"] = "E-Mail was sent.";
 
 $PMF_LANG["ad_xmlrpc_button"] = "Get latest phpMyFAQ version number by web service";
 $PMF_LANG["ad_xmlrpc_latest"] = "Latest version available on";
-?>
+
+// added v1.5.0 - 2005-07-31 by Thorsten
+$PMF_LANG['ad_categ_select'] = 'Select category language';

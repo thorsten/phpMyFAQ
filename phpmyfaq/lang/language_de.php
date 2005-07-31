@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.6 2005-04-16 13:10:11 thorstenr Exp $
+ * $Id: language_de.php,v 1.7 2005-07-31 09:34:42 thorstenr Exp $
  *
  * File:                language_de.php
  * Description:		    German language file
@@ -588,4 +588,6 @@ $PMF_LANG["lostpwd_mail_okay"] = "E-Mail wurde gesendet.";
 
 $PMF_LANG["ad_xmlrpc_button"] = "Aktuelle phpMyFAQ Version per Web Service abfragen";
 $PMF_LANG["ad_xmlrpc_latest"] = "Aktuelle Version auf";
-?>
+
+// added v1.5.0 - 2005-07-31 by Thorsten
+$PMF_LANG['ad_categ_select'] = 'Sprache der Kategorie';

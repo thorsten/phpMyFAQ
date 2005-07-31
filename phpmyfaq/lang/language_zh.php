@@ -614,4 +614,6 @@ $PMF_LANG["lostpwd_mail_okay"] = "电子邮件已经发送。";
 
 $PMF_LANG["ad_xmlrpc_button"] = "通过web服务获取最新的phpMyFAQ的版本编号";
 $PMF_LANG["ad_xmlrpc_latest"] = "最新可用版本在";
-?>
+
+// added v1.5.0 - 2005-07-31 by Thorsten
+$PMF_LANG['ad_categ_select'] = 'Select category language';

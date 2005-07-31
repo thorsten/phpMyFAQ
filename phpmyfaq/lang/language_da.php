@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_da.php,v 1.4 2005-04-30 11:23:38 thorstenr Exp $
+* $Id: language_da.php,v 1.5 2005-07-31 09:34:42 thorstenr Exp $
 *
 * Danish language file
 *
@@ -588,4 +588,6 @@ $PMF_LANG["lostpwd_mail_okay"] = "E-Mail was sent.";
 
 $PMF_LANG["ad_xmlrpc_button"] = "Get latest phpMyFAQ version number by web service";
 $PMF_LANG["ad_xmlrpc_latest"] = "Latest version available on";
-?>
+
+// added v1.5.0 - 2005-07-31 by Thorsten
+$PMF_LANG['ad_categ_select'] = 'Select category language';

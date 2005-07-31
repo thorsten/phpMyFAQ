@@ -589,4 +589,6 @@ $PMF_LANG["lostpwd_mail_okay"] = "הדואל נשלח.";
 
 $PMF_LANG["ad_xmlrpc_button"] = "קבל את הגירסה האחרונה של phpMyFAQ על ידי האינטרנט";
 $PMF_LANG["ad_xmlrpc_latest"] = "הגירסה החדשה ניתנת להורדה מ";
-?>
+
+// added v1.5.0 - 2005-07-31 by Thorsten
+$PMF_LANG['ad_categ_select'] = 'Select category language';
