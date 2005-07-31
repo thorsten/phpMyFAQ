@@ -1,6 +1,6 @@
-$Id: README.txt,v 1.32 2005-07-31 09:43:33 thorstenr Exp $
+$Id: README.txt,v 1.33 2005-07-31 11:56:45 thorstenr Exp $
 
-phpMyFAQ 1.5.0 RC6
+phpMyFAQ 1.5.0
 Codename "Phoebe"
 
 Installation/Update:
@@ -9,13 +9,8 @@ Please read the documentation (documentation.en.html) carefully.
 Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
-Changes since 1.5.0 RC5:
-- added David Sauers XML DocBook export class
-- fixed PostgreSQL sequence errors
-- fixed PHP 4.4.0 reference issues
-- fixed update script
-- improved category performance (Johann)
-- updated French language file
+Changes since 1.5.0 RC6:
+- added experimental support for IBM DB2 databases
 
 Known issues in phpMyFAQ 1.5.0:
 - some language files need an update
@@ -23,11 +18,12 @@ Known issues in phpMyFAQ 1.5.0:
 
 CHANGELOG:
 
-Version 1.5.0 RC6 - 2005-07-31
+Version 1.5.0 - 2005-
 - full support for PostgreSQL databases
 - full support for Sybase databases
 - full support for MS SQL databases
 - experimental support for MySQL 4.1/5.0 databases
+- experimental support for IBM DB2 databases
 - LDAP support as an additional option
 - one entry in various categories
 - mod_rewrite support

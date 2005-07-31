@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.25 2005-07-31 09:43:33 thorstenr Exp $
+* $Id: installer.php,v 1.26 2005-07-31 11:54:45 thorstenr Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -259,6 +259,9 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 	if (extension_loaded('mysqli') && php_check(phpversion(), '5.0.0')) {
 		print '<option value="mysqli">MySQL 4.1/5.0 (experimental)</option>';
 	}
+	if (extension_loaded('ibm_db2')) {
+		print '<option value="db2">IBM DB2 Universal Database (experimental)</option>';
+	}
 ?>	
 </select>
 <span class="help" title="Please enter the type of SQL server here.">?</span>
@@ -397,6 +400,8 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 			case 'sybase':	    require_once(PMF_ROOT_DIR."/inc/sybase.php");
 							    break;
             case 'mssql':		require_once(PMF_ROOT_DIR."/inc/mssql.php");
+								break;
+            case 'db2':		    require_once(PMF_ROOT_DIR."/inc/db2.php");
 								break;
 			default:            print '<p class="error"><strong>Error:</strong> Invalid server type.</p>';
 								HTMLFooter();
