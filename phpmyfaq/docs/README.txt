@@ -1,6 +1,6 @@
-$Id: README.txt,v 1.31 2005-07-31 09:38:17 thorstenr Exp $
+$Id: README.txt,v 1.32 2005-07-31 09:43:33 thorstenr Exp $
 
-phpMyFAQ 1.5.0
+phpMyFAQ 1.5.0 RC6
 Codename "Phoebe"
 
 Installation/Update:
@@ -23,7 +23,7 @@ Known issues in phpMyFAQ 1.5.0:
 
 CHANGELOG:
 
-Version 1.5.0 - 2005-
+Version 1.5.0 RC6 - 2005-07-31
 - full support for PostgreSQL databases
 - full support for Sybase databases
 - full support for MS SQL databases
@@ -37,7 +37,7 @@ Version 1.5.0 - 2005-
 - many code and performance improvements and code cleanup
 - better RSS support
 - updated bundled htmlArea
-- PHP 4.4 and PHP 5.x compatible
+- PHP 5.x compatible
 
 Version 1.4.9 - 2005-06-29
 - fixed serious security issue in bundled XML-RPC component
