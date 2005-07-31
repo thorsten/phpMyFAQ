@@ -1,22 +1,23 @@
 <?php
-/******************************************************************************
- * File:				category.main.php
- * Description:			list all categories
- * Author:				Thorsten Rinne <thorsten@phpmyfaq.de>
- * Date:				2003-12-20
- * Last change:			2004-12-10
- * Copyright:           (c) 2001-2004 Thorsten Rinne
- * 
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- * 
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- ******************************************************************************/
+/**
+* $Id: category.main.php,v 1.6 2005-07-31 09:30:27 thorstenr Exp $
+*
+* List all categories in the admin section
+*
+* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+* @since        2003-12-20
+* @copyright    (c) 2001-2005 phpMyFAQ Team
+*
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
+*
+* Software distributed under the License is distributed on an "AS IS"
+* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+* License for the specific language governing rights and limitations
+* under the License.
+*/
 
 print "<h2>".$PMF_LANG["ad_categ_existing"]."</h2>\n";
 
@@ -28,18 +29,16 @@ if ($permission["editcateg"]) {
         $lang = $LANGCODE;
     }
 ?>
-
     <form action="<?php print $_SERVER['PHP_SELF'].$linkext; ?>" enctype="multipart/form-data" method="POST">
     <input type="hidden" name="aktion" value="category" />
     <fieldset>
-    <legend>Select category language</legend>
+    <legend><?php print $PMF_LANG['ad_categ_select']; ?></legend>
     <select name="language" id="language">
     <?php print languageOptions($lang); ?>
 	</select>
 	<input type="submit" class="submit" value="OK" />
     </fieldset>
     </form>
-
 <?php
     $tree = new Category($lang);
     $tree->buildTree();
