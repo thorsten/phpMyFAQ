@@ -1,22 +1,24 @@
 <?php
-/******************************************************************************
- * File:				category.delete.php
- * Description:			deletes a category
- * Author:				Thorsten Rinne <thorsten@phpmyfaq.de>
- * Date:				2003-12-20
- * Last change:			2004-07-26
- * Copyright:           (c) 2001-2004 Thorsten Rinne
- * 
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- * 
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- ******************************************************************************/
+/**
+* $Id: category.delete.php,v 1.3 2005-08-01 20:24:55 thorstenr Exp $
+*
+* Deletes a category
+*
+* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+* @since        2003-12-20
+* @copyright    (c) 2003-2005 phpMyFAQ Team
+*
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
+*
+* Software distributed under the License is distributed on an "AS IS"
+* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+* License for the specific language governing rights and limitations
+* under the License.
+*/
+
 print "<h2>".$PMF_LANG["ad_menu_categ_edit"]."</h2>\n";
 if ($permission["delcateg"]) {
 ?>
@@ -33,8 +35,7 @@ if ($permission["delcateg"]) {
 	</form>
 	</div>
 <?php
-	}
-else {
+} else {
 	print $PMF_LANG["err_NotAuth"];
-	}
+}
 ?>

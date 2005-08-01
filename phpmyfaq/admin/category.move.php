@@ -1,22 +1,23 @@
 <?php
-/******************************************************************************
- * File:				category.move.php
- * Description:			select a category to move
- * Author:				Thorsten Rinne <thorsten@phpmyfaq.de>
- * Date:				2004-04-29
- * Last change:			2004-06-18
- * Copyright:           (c) 2004 Thorsten Rinne
- * 
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- * 
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- ******************************************************************************/
+/**
+* $Id: category.move.php,v 1.2 2005-08-01 20:24:55 thorstenr Exp $
+*
+* Select a category to move
+*
+* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+* @since        2004-04-29
+* @copyright    (c) 2004-2005 phpMyFAQ Team
+*
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
+*
+* Software distributed under the License is distributed on an "AS IS"
+* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+* License for the specific language governing rights and limitations
+* under the License.
+*/
 
 if ($permission["editcateg"]) {
     $cat = new category;
@@ -38,8 +39,7 @@ if ($permission["editcateg"]) {
     <input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_updatecateg"]; ?>" /></div>
     </form>
 <?php
-	}
-else {
-	print $PMF_LANG["err_NotAuth"];
-	}
+} else {
+    print $PMF_LANG["err_NotAuth"];
+}
 ?>
