@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.9 2005-03-19 08:36:46 thorstenr Exp $
+* $Id: index.php,v 1.10 2005-08-01 20:34:40 thorstenr Exp $
 *
 * The main admin backend index file
 *
@@ -21,24 +21,27 @@
 * under the License.
 */
 
-/* debug mode:
- * - FALSE	debug mode disabled
- * - TRUE	debug mode enabled
- */
-define("DEBUG", FALSE);
-define("PMF_ROOT_DIR", dirname(dirname(__FILE__)));
+// Debug mode:
+// - false  debug mode disabled (default)
+// - true   debug mode enabled
+define('DEBUG', false);
 
-if (DEBUG == FALSE) {
+// Define some constants
+define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
+define('IS_PMF', true);
+
+// If debug is enabled, show all PHP errors
+if (DEBUG == true) {
 	error_reporting(E_ALL);
-	}
+}
 
-/* delete cookie before sending a header */
+// delete cookie before sending a header
 if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "delcookie") {
 	setcookie("cuser", "", time()+30);
 	setcookie("cpass", "", time()+30);
-	}
+}
 
-/* read configuration, include classes and functions */
+// Read configuration, include classes and functions
 require_once (PMF_ROOT_DIR."/inc/data.php");
 require_once (PMF_ROOT_DIR."/inc/db.php");
 define("SQLPREFIX", $DB["prefix"]);
@@ -49,17 +52,17 @@ require_once (PMF_ROOT_DIR."/inc/constants.php");
 require_once (PMF_ROOT_DIR."/inc/category.php");
 require_once (PMF_ROOT_DIR."/inc/functions.php");
 
-/* set cookie before sending a header */
+// Set cookie before sending a header
 if (isset($_POST["aktion"]) && $_POST["aktion"] == "setcookie") {
 	if (isset($_POST["cuser"])) {
 		setcookie("cuser", $_POST["cuser"], time() + (86400 * $PMF_CONST["timeout"]));
-		}
+	}
 	if (isset($_POST["cpass"])) {
 		setcookie("cpass", $_POST["cpass"], time() + (86400 * $PMF_CONST["timeout"]));
-		}
 	}
+}
 
-/* get language (default: english) */
+// Get language (default: english)
 if (isset($PMF_CONF["detection"]) && isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) {
     if (@is_file(PMF_ROOT_DIR."/lang/language_".substr($_SERVER["HTTP_ACCEPT_LANGUAGE"], 0, 2).".php")) {
         require_once(PMF_ROOT_DIR."/lang/language_".substr($_SERVER["HTTP_ACCEPT_LANGUAGE"], 0, 2).".php");
@@ -79,21 +82,28 @@ if (isset($LANGCODE)) {
 
 unset($auth);
 
-/* if the cookie is set, take the data from it */
+// If the cookie is set, take the data from it
 if (isset($_COOKIE["cuser"])) {
 	$user = $_COOKIE["cuser"];
+} else {
+    unset($user);
 }
 if (isset($_COOKIE["cpass"])) {
 	$pass = $_COOKIE["cpass"];
+} else {
+    unset($pass);
 }
 
-/* delete old sessions */
-$db->query("DELETE FROM ".SQLPREFIX."faqadminsessions WHERE time < ".(time()-($PMF_CONST["timeout"] * 60)));
+// Delete old sessions
+$db->query("DELETE FROM ".SQLPREFIX."faqadminsessions WHERE time < ".(time() - ($PMF_CONST["timeout"] * 60)));
 
-/* is there an UIN? -> take it for authentication */
+// Is there an UIN? -> take it for authentication
 if (isset($_REQUEST["uin"])) {
 	$uin = $_REQUEST["uin"];
+} else {
+    unset($uin);
 }
+
 if (isset($uin)) {
 	$query = "SELECT usr, pass FROM ".SQLPREFIX."faqadminsessions WHERE uin = '".$uin."'";
 	if (isset($PMF_CONF["ipcheck"]) && $PMF_CONF["ipcheck"] == "TRUE") {
@@ -103,12 +113,12 @@ if (isset($uin)) {
 	$db->query ("UPDATE ".SQLPREFIX."faqadminsessions SET time = ".time()." WHERE uin = '".$uin."'");
 }
 
-/* authenticate the user */
-if (isset($_REQUEST["faqusername"])) {
-    $user = $_REQUEST["faqusername"];
+// Authenticate the user from login POST variables
+if (isset($_POST["faqusername"])) {
+    $user = $_POST["faqusername"];
 }
-if (isset($_REQUEST["faqpassword"])) {
-    $pass = md5($_REQUEST["faqpassword"]);
+if (isset($_POST["faqpassword"])) {
+    $pass = md5($_POST["faqpassword"]);
 }
 
 if ((isset($user) && isset($pass)) || isset($uin)) {
@@ -149,14 +159,14 @@ if ((isset($user) && isset($pass)) || isset($uin)) {
 	}
 }
 
-/* logout - delete session */
+// Logout - delete session
 if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "logout" && $auth) {
 	$db->query("DELETE FROM ".SQLPREFIX."faqadminsessions WHERE uin = '".$uin."'");
 	unset($auth);
 	unset($uid);
 }
 
-/* header of the admin page */
+// Header of the admin page
 require_once ("header.php");
 if (isset($auth)) {
 	require_once ("menue.php");
@@ -165,10 +175,10 @@ if (isset($auth)) {
 </div>
 <div id="bodyText">
 <?php
-/* user is authenticated */
+// User is authenticated
 if (isset($auth)) {
 	if (isset($_REQUEST["aktion"])) {
-    /* the various sections of the admin area */
+    // the various sections of the admin area
 		switch ($_REQUEST["aktion"]) {
 			// functions for user administration
 			case "user":					require_once ("user.list.php"); break;
@@ -234,7 +244,7 @@ if (isset($auth)) {
 			default:						print "Error"; break;
 		}
 	} else {
-        /* start page with some informations about the FAQ */
+        // start page with some informations about the FAQ
         $PMF_TABLE_INFO = $db->getTableStatus();
 ?>
 	<h2>phpMyFAQ Information</h2>
@@ -340,7 +350,7 @@ if (isset($auth)) {
 <?php
 }
 
-if (DEBUG == TRUE) {
+if (DEBUG == true) {
     print "<p>DEBUG INFORMATION:</p>\n";
 	print "<p>".$db->sqllog()."</p>";
 }
