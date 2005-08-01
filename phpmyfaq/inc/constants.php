@@ -1,22 +1,23 @@
 <?php
 /**
- * File:				constants.php
- * Description:			Constants for phpMyFAQ
- * Author:				Thorsten Rinne <thorsten@phpmyfaq.de>
- * Date:				2003-12-10
- * Last Update:			2004-10-16
- * Copyright:           (c) 2003-2004 Thorsten Rinne
- * 
- * The contents of this file are subject to the Mozilla Public License Version 
- * 1.1 (the "License"); you may not use this file except in compliance with 
- * the License. You may obtain a copy of the License at 
- * http://www.mozilla.org/MPL/
- * 
- * Software distributed under the License is distributed on an "AS IS" basis,
- * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
- * for the specific language governing rights and limitations under the
- * License.
- */
+* $Id: constants.php,v 1.3 2005-08-01 20:07:03 thorstenr Exp $
+*
+* Constants for phpMyFAQ
+*
+* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+* @since        2003-12-10
+* @copyright    (c) 2003-2005 phpMyFAQ Team
+*
+* The contents of this file are subject to the Mozilla Public License Version 
+* 1.1 (the "License"); you may not use this file except in compliance with 
+* the License. You may obtain a copy of the License at 
+* http://www.mozilla.org/MPL/
+*
+* Software distributed under the License is distributed on an "AS IS" basis,
+* WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+* for the specific language governing rights and limitations under the
+* License.
+*/
 
 /* Use this constant if you want to change your timezone */
 $PMF_CONST["timezone"] = "0"; // default: "0", example: "-0400" for 4 hours before
@@ -52,36 +53,6 @@ $faqrights = array (
         20 => "backup",
         21 => "restore",
         22 => "delquestion"
-        );
-
-/* This array sets the language variables for statistics - DO NOT CHANGE! */
-$faqstatistics = array (
-        "mainpage" => "Hauptseite",
-        "overview" => "Rubrikübersicht",
-        "rubrikview" => "Rubrikanzeige",
-        "artikelview" => "Artikelanzeige",
-        "searchpage" => "Suchseite",
-        "searchresult" => "Suchergebnis",
-        "savenewentry" => "Eintrag speichern",
-        "entrypflichfeldfehler" => "Eintrag Pflichtfeldfehler",
-        "commentpage" => "Kommentarseite",
-        "commentsave" => "Kommantarspeicherung",
-        "commentpflichtfeldfehler" => "Kommentarspeicherung Pflichtfeldfehler",
-        "newentrypage" => "Eintrageseite",
-        "faqhelp" => "Faq Hilfeseite",
-        "contact" => "Faq Kontaktseite",
-        "savevoting" => "Bewertung abgegeben",
-        "savevotingerror" => "Votingabgabe verhindert",
-        "oldSession" => "Alte Session, aber neue IP",
-        "frage" => "Seite zum Fragestellen",
-        "xml" => "XML-Ausgabe erstellt",
-        "antworten" => "Antwortseite",
-        "frageabsenden" => "Frage absenden",
-        "sendmail" => "FAQ Kontaktseite",
-        "fragen" => "Frage stellen Formular",
-        "NewSession" => "Neue Session",
-        "send2friend" => "FAQ weiterempfohlen",
-        "s2fmail" => "FAQ Empfehlung versendet"
         );
 
 /* allowed "action" varibales for GET - DO NOT CHANGE! */
