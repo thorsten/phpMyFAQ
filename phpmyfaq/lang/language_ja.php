@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_ja.php,v 1.8 2005-07-31 09:34:42 thorstenr Exp $
+* $Id: language_ja.php,v 1.9 2005-08-02 06:31:03 thorstenr Exp $
 *
 * The Japanese language file -
 *
@@ -19,6 +19,8 @@
 * License for the specific language governing rights and limitations
 * under the License.
 */
+//  Sync en from.
+//  EN-Revision: 1.7
 
 $PMF_LANG["metaCharset"] = "UTF-8";
 $PMF_LANG["metaLanguage"] = "ja";
@@ -157,19 +159,19 @@ $PMF_LANG["help_search"] = "<p><strong>内容検索：</strong><br /><strong sty
 
 // Menu
 $PMF_LANG["ad"] = "管理者ページ";
-$PMF_LANG["ad_menu_user_administration"] = "ユーザーを管理";
-$PMF_LANG["ad_menu_entry_aprove"] = "レコードを承認";
-$PMF_LANG["ad_menu_entry_edit"] = "レコードを変更";
-$PMF_LANG["ad_menu_categ_add"] = "カテゴリを追加";
-$PMF_LANG["ad_menu_categ_edit"] = "カテゴリを変更";
-$PMF_LANG["ad_menu_news_add"] = "お知らせを追加";
-$PMF_LANG["ad_menu_news_edit"] = "お知らせを変更";
-$PMF_LANG["ad_menu_open"] = "質問を変更";
+$PMF_LANG["ad_menu_user_administration"] = "ユーザーの管理";
+$PMF_LANG["ad_menu_entry_aprove"] = "レコードの承認";
+$PMF_LANG["ad_menu_entry_edit"] = "レコードの変更";
+$PMF_LANG["ad_menu_categ_add"] = "カテゴリの追加";
+$PMF_LANG["ad_menu_categ_edit"] = "カテゴリの変更";
+$PMF_LANG["ad_menu_news_add"] = "お知らせの追加";
+$PMF_LANG["ad_menu_news_edit"] = "お知らせの変更";
+$PMF_LANG["ad_menu_open"] = "質問の変更";
 $PMF_LANG["ad_menu_stat"] = "統計";
-$PMF_LANG["ad_menu_cookie"] = "Cookie を設定";
-$PMF_LANG["ad_menu_session"] = "セッションを閲覧";
-$PMF_LANG["ad_menu_adminlog"] = "管理ログを閲覧";
-$PMF_LANG["ad_menu_passwd"] = "パスワードを変更";
+$PMF_LANG["ad_menu_cookie"] = "Cookie の設定";
+$PMF_LANG["ad_menu_session"] = "セッションの閲覧";
+$PMF_LANG["ad_menu_adminlog"] = "管理ログの閲覧";
+$PMF_LANG["ad_menu_passwd"] = "パスワードの変更";
 $PMF_LANG["ad_menu_logout"] = "ログアウト";
 $PMF_LANG["ad_menu_startpage"] = "開始ページ";
 
@@ -592,4 +594,6 @@ $PMF_LANG["ad_xmlrpc_button"] = "最新の phpMyFAQ バージョンをウェブ�
 $PMF_LANG["ad_xmlrpc_latest"] = "最新バージョンを次のサイトから利用することができます:";
 
 // added v1.5.0 - 2005-07-31 by Thorsten
-$PMF_LANG['ad_categ_select'] = 'Select category language';
+$PMF_LANG['ad_categ_select'] = 'カテゴリ言語を選択する';
+
+?>
