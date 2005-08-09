@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.33 2005-07-31 11:56:45 thorstenr Exp $
+$Id: README.txt,v 1.34 2005-08-09 17:59:27 thorstenr Exp $
 
 phpMyFAQ 1.5.0
 Codename "Phoebe"
@@ -11,6 +11,7 @@ Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 1.5.0 RC6:
 - added experimental support for IBM DB2 databases
+- updated bundled NET_IDNA class to version 0.4.1
 
 Known issues in phpMyFAQ 1.5.0:
 - some language files need an update
@@ -18,7 +19,7 @@ Known issues in phpMyFAQ 1.5.0:
 
 CHANGELOG:
 
-Version 1.5.0 - 2005-
+Version 1.5.0 - 2005-08-
 - full support for PostgreSQL databases
 - full support for Sybase databases
 - full support for MS SQL databases
