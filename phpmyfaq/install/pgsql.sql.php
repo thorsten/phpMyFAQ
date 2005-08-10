@@ -1,12 +1,12 @@
 <?php
 /**
-* $Id: pgsql.sql.php,v 1.7 2005-07-07 13:05:15 tomr Exp $
+* $Id: pgsql.sql.php,v 1.8 2005-08-10 14:40:56 thorstenr Exp $
 *
 * CREATE TABLE instruction for PostgreSQL database
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Tom Rochester <tom.rochester@gmail.com>
 * @since        2004-09-18
-* @copyright    (c) 2001-2004 phpMyFAQ Team
+* @copyright    (c) 2001-2005 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -146,7 +146,7 @@ PRIMARY KEY (id))";
 
 //faqsessions
 $query[] = "CREATE TABLE  ".$sqltblpre."faqsessions (
-sid int4 NOT NULL,
+sid SERIAL NOT NULL,
 ip text NOT NULL,
 time int4 NOT NULL,
 PRIMARY KEY (sid))";
