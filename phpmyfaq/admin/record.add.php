@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.add.php,v 1.22 2005-03-19 14:05:19 thorstenr Exp $
+* $Id: record.add.php,v 1.23 2005-08-10 16:31:18 thorstenr Exp $
 *
 * Adds a record in the database
 *
@@ -53,7 +53,7 @@ if ($permission["editbt"]) {
         
         // insert the new category relations
         foreach ($rubrik as $categories) {
-            $db->query('INSERT INTO '.SQLPREFIX.'faqcategoryrelations VALUES ('.$categories.', "'.$_REQUEST["language"].'", '.$nextID.', "'.$_REQUEST["language"].'")');
+            $db->query('INSERT INTO '.SQLPREFIX.'faqcategoryrelations VALUES ('.$categories.', \''.$_REQUEST["language"].'\', '.$nextID.', \''.$_REQUEST["language"].'\')');
         }
 	} elseif (isset($submit[2]) && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "" && isset($_REQUEST['rubrik']) && is_array($_REQUEST['rubrik'])) {
 		// Preview
