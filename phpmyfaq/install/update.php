@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.26 2005-07-31 09:43:33 thorstenr Exp $
+* $Id: update.php,v 1.27 2005-08-14 09:19:42 thorstenr Exp $
 *
 * Main update script
 *
@@ -20,7 +20,7 @@
 * under the License.
 */
 
-define("NEWVERSION", "1.5.0 RC6");
+define("NEWVERSION", "1.5.0");
 define("COPYRIGHT", "&copy; 2001-2005 <a href=\"http://www.phpmyfaq.de/\" target=\"_blank\">phpMyFAQ Team</a> | All rights reserved.");
 define("PMF_ROOT_DIR", dirname(dirname(__FILE__)));
 
@@ -241,6 +241,9 @@ if ($step == 2) {
 /**************************** STEP 3 OF 5 ***************************/
 if ($step == 3) {
     $version = str_replace(".", "", $_POST["version"]);
+    if (4 == strlen($version)) {
+        $version = 149;
+    }
 ?>
 <form action="update.php?step=4" method="post">
 <input type="hidden" name="version" value="<?php print $_POST["version"]; ?>" />
@@ -355,7 +358,7 @@ if ($step == 4) {
 <?php
     require_once(PMF_ROOT_DIR."/lang/language_en.php");
     
-    if (is_array($_REQUEST["db"])) {
+    if (isset($_REQUEST["db"])) {
         $DB = $_REQUEST["db"];
         if ($fp = @fopen(PMF_ROOT_DIR."/inc/data.php","w")) {
 		    @fputs($fp,"<?php\n\$DB[\"server\"] = '".$DB["server"]."';\n\$DB[\"user\"] = '".$DB["user"]."';\n\$DB[\"password\"] = '".$DB["password"]."';\n\$DB[\"db\"] = '".$DB["db"]."';\n\$DB[\"prefix\"] = '".$DB["prefix"]."';\n\$DB[\"type\"] = 'mysql';\n?>");
@@ -395,6 +398,9 @@ if ($step == 5) {
     $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
     
     $version = str_replace(".", "", $_REQUEST["version"]);
+    if (4 == strlen($version)) {
+        $version = 149;
+    }
     
     // update from version 1.3.0
 	if ($version <= "130") {
