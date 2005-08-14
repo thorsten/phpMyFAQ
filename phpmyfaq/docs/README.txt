@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.36 2005-08-14 11:46:57 thorstenr Exp $
+$Id: README.txt,v 1.37 2005-08-14 20:01:07 thorstenr Exp $
 
 phpMyFAQ 1.6.0-dev
 Codename "Prometheus"
@@ -25,7 +25,7 @@ Version 1.5.0 - 2005-08-
 - full support for PostgreSQL databases
 - full support for Sybase databases
 - full support for MS SQL databases
-- experimental support for MySQL 4.1/5.0 databases
+- full support for MySQL 4.1/5.0 databases
 - experimental support for IBM DB2 databases
 - LDAP support as an additional option
 - one entry in various categories
