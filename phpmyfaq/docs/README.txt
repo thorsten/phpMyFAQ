@@ -1,7 +1,7 @@
-$Id: README.txt,v 1.35 2005-08-14 10:28:08 thorstenr Exp $
+$Id: README.txt,v 1.36 2005-08-14 11:46:57 thorstenr Exp $
 
-phpMyFAQ 1.5.0
-Codename "Phoebe"
+phpMyFAQ 1.6.0-dev
+Codename "Prometheus"
 
 Installation/Update:
 Please read the documentation (documentation.en.html) carefully.
@@ -9,15 +9,17 @@ Please read the documentation (documentation.en.html) carefully.
 Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
-Changes since 1.5.0 RC6:
-- added experimental support for IBM DB2 databases
-- updated bundled NET_IDNA class to version 0.4.1
+Changes since 1.5.0:
+- 
 
-Known issues in phpMyFAQ 1.5.0:
+Known issues in phpMyFAQ 1.6.0:
 - some language files need an update
 - using UTF-8 will not work in the PDF files
 
 CHANGELOG:
+
+Version 1.6.0 - n/a
+-
 
 Version 1.5.0 - 2005-08-
 - full support for PostgreSQL databases
