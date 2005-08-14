@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: export.main.php,v 1.15 2005-07-25 15:22:31 thorstenr Exp $
+* $Id: export.main.php,v 1.16 2005-08-14 15:38:52 thorstenr Exp $
 *
 * XML, XML DocBook, XHTML and PDF export - main page
 *
@@ -36,7 +36,6 @@ if (isset($submit[1])) {
 
 if (isset($submit[2])) {
 	// Full PDF Export
-    
 	require (PMF_ROOT_DIR."/inc/pdf.php");
 	$tree = new Category();
 	$arrRubrik = array();
@@ -80,12 +79,13 @@ if (isset($submit[2])) {
 }
 if (isset($submit[3])) {
 	// XML DocBook export
+	require (PMF_ROOT_DIR."/inc/docbook.php");
 	$parentID     = 0;
 	$rubrik       = 0;
 	$sql          = '';
 	$selectString ='';
-
-	$export = new XML_Export($DB);
+    
+	$export = new DocBook_XML_Export($DB);
 	$export->delete_file();
 
 	// Set the FAQ title
