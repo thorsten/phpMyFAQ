@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.34 2005-08-09 17:59:27 thorstenr Exp $
+$Id: README.txt,v 1.35 2005-08-14 10:28:08 thorstenr Exp $
 
 phpMyFAQ 1.5.0
 Codename "Phoebe"
@@ -35,6 +35,9 @@ Version 1.5.0 - 2005-08-
 - better RSS support
 - updated bundled htmlArea
 - PHP 5.x compatible
+
+Version 1.4.10 - 2005-08-01
+- compatibility to PHP 4.4.0
 
 Version 1.4.9 - 2005-06-29
 - fixed serious security issue in bundled XML-RPC component
