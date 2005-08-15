@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mysql.sql.php,v 1.8 2005-01-16 10:52:10 thorstenr Exp $
+* $Id: mysql.sql.php,v 1.9 2005-08-15 18:01:08 thorstenr Exp $
 *
 * CREATE TABLE instruction for MySQL database
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -81,7 +81,8 @@ id INT(11) NOT NULL,
 lang VARCHAR(5) NOT NULL,
 parent_id INT(11) NOT NULL,
 name VARCHAR(255) NOT NULL,
-description VARCHAR(255) NOT NULL ,
+description VARCHAR(255) NOT NULL,
+user_id int(2) NOT NULL,
 PRIMARY KEY (id,lang))";
 
 //faqcategoryrelations

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: sybase.sql.php,v 1.2 2004-12-16 13:08:35 thorstenr Exp $
+* $Id: sybase.sql.php,v 1.3 2005-08-15 18:01:08 thorstenr Exp $
 *
 * CREATE TABLE instruction for sybase database
 *
@@ -80,7 +80,8 @@ id integer NOT NULL,
 lang varchar(5) NOT NULL,
 parent_id SMALLINT NOT NULL,
 name varchar(255) NOT NULL,
-description varchar(255) NOT NULL ,
+description varchar(255) NOT NULL,
+id integer NOT NULL,
 PRIMARY KEY (id, lang))";
 
 //faqcategoryrelations

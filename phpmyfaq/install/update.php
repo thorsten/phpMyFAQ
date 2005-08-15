@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.29 2005-08-15 17:53:34 thorstenr Exp $
+* $Id: update.php,v 1.30 2005-08-15 18:01:08 thorstenr Exp $
 *
 * Main update script
 *
@@ -421,7 +421,10 @@ if ($step == 5) {
 		$query[] = 'ALTER TABLE '.SQLPREFIX.'faquser CHANGE id id INT(11) NOT NULL';
 		$query[] = 'ALTER TABLE '.SQLPREFIX.'faqvisits CHANGE id id INT(11) NOT NULL';
     }
-    
+    // update from versions before 1.6.0
+    if ($version < 160) {
+        $query[] = 'ALTER TABLE '.SQLPREFIX.'faqcategories ADD user_id INTEGER NOT NULL';
+    }
     // optimize tables
     switch($DB["type"]) {
         

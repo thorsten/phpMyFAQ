@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mssql.sql.php,v 1.1 2005-01-11 20:53:33 thorstenr Exp $
+* $Id: mssql.sql.php,v 1.2 2005-08-15 18:01:08 thorstenr Exp $
 *
 * CREATE TABLE instruction for MS SQL Server database
 *
@@ -80,7 +80,8 @@ id integer NOT NULL,
 lang varchar(5) NOT NULL,
 parent_id SMALLINT NOT NULL,
 name varchar(255) NOT NULL,
-description varchar(255) NOT NULL ,
+description varchar(255) NOT NULL,
+user_id integer NOT NULL,
 PRIMARY KEY (id, lang))";
 
 //faqcategoryrelations
