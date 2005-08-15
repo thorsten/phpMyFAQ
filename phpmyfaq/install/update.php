@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.28 2005-08-14 11:46:57 thorstenr Exp $
+* $Id: update.php,v 1.29 2005-08-15 17:53:34 thorstenr Exp $
 *
 * Main update script
 *
@@ -150,8 +150,8 @@ if ($step == 1) {
 <legend class="installation"><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 1 of 5)</strong></legend>
 <p>This update will work <strong>only</strong> for the following versions:</p>
 <ul type="square">
-	<li>phpMyFAQ 1.3.x</li>
-    <li>phpMyFAQ 1.4.0 alpha1 and later</li>
+    <li>phpMyFAQ 1.4.0 later</li>
+    <li>phpMyFAQ 1.5.0 and later</li>
 </ul>
 <p>This update will <strong>not</strong> work for the following versions:</p>
 <ul type="square">
@@ -159,8 +159,7 @@ if ($step == 1) {
 	<li>phpMyFAQ 1.0.x</li>
     <li>phpMyFAQ 1.1.x</li>
     <li>phpMyFAQ 1.2.x</li>
-    <li>phpMyFAQ 1.4.0 M1</li>
-    <li>phpMyFAQ 1.4.0 M2</li>
+    <li>phpMyFAQ 1.3.x</li>
 </ul>
 <p><strong>Please make a full backup of your SQL tables before running this update.</strong></p>
 
@@ -200,6 +199,7 @@ if ($step == 2) {
     $test2 = 0;
     $test3 = 0;
     $test4 = 0;
+    $test5 = 0;
     if (!is_writeable(PMF_ROOT_DIR."/inc/data.php")) {
 		print "<p class=\"error\"><strong>Error:</strong> The file ../inc/data.php or the directory ../inc is not writeable. Please correct this!</p>";
     } else {
@@ -220,8 +220,14 @@ if ($step == 2) {
     } else {
         $test4 = 1;
     }
+    if ('1.3.' == substr($_POST["version"], 0, 4)) {
+        print "<p class=\"error\"><strong>Error:</strong> You can't upgrade from phpMyFAQ 1.3.x to "..". Please upgrade first to the latest version of phpMyFAQ 1.5.x.</p>";
+    } else {
+        $test5 = 1;
+    }
+    
     // is everything is okay?
-    if ($test1 == 1 && $test2  == 1 && $test3  == 1 && $test4 == 1 ) {
+    if ($test1 == 1 && $test2  == 1 && $test3  == 1 && $test4 == 1 && $test5 == 1) {
 ?>
 <form action="update.php?step=3" method="post">
 <input type="hidden" name="version" value="<?php print $_POST["version"]; ?>" />
@@ -234,7 +240,9 @@ if ($step == 2) {
 </form>
 <?php
     } else {
-        print "<p class=\"error\"><strong>Error:</strong> Your version of phpMyFAQ could not updated.</p>";
+        print "<p class=\"error\"><strong>Error:</strong> Your version of phpMyFAQ could not updated.</p>\n";
+        print "<p class=\"center\">".COPYRIGHT."</p>\n</body>\n</html>";
+        die();
     }
 }
 
@@ -250,39 +258,7 @@ if ($step == 3) {
 <fieldset class="installation">
 <legend class="installation"><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 3 of 5)</strong></legend>
 <?php
-    if ($version < 140) {
-        // Version 1.3.x
-?>
-<input type="hidden" name="db[server]" value="<?php print $mysql_server; ?>" />
-<input type="hidden" name="db[user]" value="<?php print $mysql_user; ?>" />
-<input type="hidden" name="db[password]" value="<?php print $mysql_passwort; ?>" />
-<input type="hidden" name="db[db]" value="<?php print $mysql_db; ?>" />
-<input type="hidden" name="db[prefix]" value="<?php print $sqltblpre; ?>" />
-
-<input type="hidden" name="edit[language]" value="<?php print $sprache; ?>" />
-<input type="hidden" name="edit[detection]" value="TRUE" />
-<input type="hidden" name="edit[title]" value="<?php print $title; ?>" />
-<input type="hidden" name="edit[version]" value="<?php print NEWVERSION; ?>" />
-<input type="hidden" name="edit[metaDescription]" value="<?php print $metaDescription; ?>" />
-<input type="hidden" name="edit[metaKeywords]" value="<?php print $metaKeywords; ?>" />
-<input type="hidden" name="edit[metaPublisher]" value="<?php print $metaPublisher; ?>" />
-<input type="hidden" name="edit[adminmail]" value="<?php print $adminmail; ?>" />
-<input type="hidden" name="edit[msgContactOwnText]" value="<?php print $msgContactOwnText; ?>" />
-<input type="hidden" name="edit[copyright_eintrag]" value="<?php print $copyright_eintrag; ?>" />
-<input type="hidden" name="edit[send2friend_text]" value="<?php print $send2friend_text; ?>" />
-<input type="hidden" name="edit[attmax]" value="<?php print $attmax; ?>" />
-<input type="hidden" name="edit[disatt]" value="<?php print $disatt; ?>" />
-<input type="hidden" name="edit[tracking]" value="<?php print $tracking; ?>" />
-<input type="hidden" name="edit[enableadminlog]" value="<?php print $enableadminlog; ?>" />
-<input type="hidden" name="edit[ipcheck]" value="<?php print $ipcheck; ?>">
-<input type="hidden" name="edit[numRecordsPage]" value="10" />
-<input type="hidden" name="edit[numNewsArticles]" value="<?php print $numNewsArticles; ?>" />
-<input type="hidden" name="edit[bannedIP]" value="<?php print $bannedIP; ?>" />
-<input type="hidden" name="edit[parse_php]" value="" />
-<input type="hidden" name="edit[mod_rewrite]" value="" />
-<input type="hidden" name="edit[ldap_support]" value="" />
-<?php
-    } elseif ($version < 150) {
+    if ($version < 150) {
         // Version 1.4.x
 ?>
 <input type="hidden" name="db[server]" value="<?php print $DB["server"]; ?>" />
@@ -402,45 +378,8 @@ if ($step == 5) {
         $version = 149;
     }
     
-    // update from version 1.3.0
-	if ($version <= "130") {
-		$query[] = "ALTER TABLE ".SQLPREFIX."faqadminsessions CHANGE pass pass VARCHAR(64) BINARY NOT NULL";
-		$query[] = "ALTER TABLE ".SQLPREFIX."faquser CHANGE pass pass VARCHAR(64) BINARY NOT NULL";
-    }
-    // update from version 1.3.1
-	if ($version <= "131") {
-		$query[] = "ALTER TABLE ".SQLPREFIX."faqvoting ADD ip VARCHAR(15) NOT NULL";
-    }
-    // update from version 1.3.2
-	if ($version <= "132") {
-		$query[] = "ALTER TABLE ".SQLPREFIX."faqdata ADD comment ENUM('y', 'n') NOT NULL AFTER email";
-		$query[] = "ALTER TABLE ".SQLPREFIX."faquser ADD realname VARCHAR(255) NOT NULL AFTER pass, ADD email VARCHAR(255) NOT NULL AFTER realname";
-    }
-    // update from version 1.3.3
-	if ($version <= "133") {
-        $query[] = "DROP TABLE ".SQLPREFIX."faqrights";
-        $query[] = "DROP TABLE ".SQLPREFIX."faqstatistik";
-        // convert categories in table faqdata
-        $query[] = "CREATE TABLE ".SQLPREFIX."tempfaqdata (id int(11) NOT NULL auto_increment, lang varchar(5) NOT NULL, active char(3) NOT NULL, rubrik text NOT NULL, keywords text NOT NULL, thema text NOT NULL, content text NOT NULL, author varchar(255) NOT NULL, email varchar(255) NOT NULL, comment enum('y','n') NOT NULL default 'y', datum varchar(15) NOT NULL, FULLTEXT (keywords,thema,content), PRIMARY KEY (id, lang))";
-        $query[] = "INSERT INTO ".SQLPREFIX."tempfaqdata SELECT ".SQLPREFIX."faqdata.id AS id, ".SQLPREFIX."faqdata.lang AS lang, ".SQLPREFIX."faqdata.active AS active, ".SQLPREFIX."faqrubrik.id AS rubrik, ".SQLPREFIX."faqdata.keywords AS keywords, ".SQLPREFIX."faqdata.thema AS thema, ".SQLPREFIX."faqdata.content AS content, ".SQLPREFIX."faqdata.author AS author, ".SQLPREFIX."faqdata.email AS email, ".SQLPREFIX."faqdata.comment as comment, ".SQLPREFIX."faqdata.datum AS datum FROM ".SQLPREFIX."faqdata INNER JOIN ".SQLPREFIX."faqrubrik ON ".SQLPREFIX."faqdata.rubrik = ".SQLPREFIX."faqrubrik.rubrik";
-        $query[] = "ALTER TABLE ".SQLPREFIX."faqdata RENAME ".SQLPREFIX."faqdataold";
-        $query[] = "ALTER TABLE ".SQLPREFIX."tempfaqdata RENAME ".SQLPREFIX."faqdata";
-        // convert categories in table faqfragen
-        $query[] = "CREATE TABLE ".SQLPREFIX."tempfaqfragen (id int(11) unsigned NOT NULL auto_increment, ask_username varchar(100) NOT NULL, ask_usermail varchar(100) NOT NULL, ask_rubrik varchar(100) NOT NULL, ask_content text NOT NULL, ask_date varchar(20) NOT NULL, PRIMARY KEY (id))";
-        $query[] = "INSERT INTO ".SQLPREFIX."tempfaqfragen SELECT ".SQLPREFIX."faqfragen.id AS id, ".SQLPREFIX."faqfragen.ask_username AS ask_username, ".SQLPREFIX."faqfragen.ask_usermail AS ask_usermail, ".SQLPREFIX."faqrubrik.id AS ask_rubrik, ".SQLPREFIX."faqfragen.ask_content AS ask_content, ".SQLPREFIX."faqfragen.ask_date AS ask_date FROM ".SQLPREFIX."faqfragen INNER JOIN ".SQLPREFIX."faqrubrik ON ".SQLPREFIX."faqfragen.ask_rubrik = ".SQLPREFIX."faqrubrik.rubrik";
-        $query[] = "ALTER TABLE ".SQLPREFIX."faqfragen RENAME ".SQLPREFIX."faqfragenold";
-        $query[] = "ALTER TABLE ".SQLPREFIX."tempfaqfragen RENAME ".SQLPREFIX."faqfragen";
-        // convert old categories into the new table
-        $query[] = "ALTER TABLE ".SQLPREFIX."faqrubrik RENAME ".SQLPREFIX."faqcategories";
-        $query[] = "ALTER TABLE ".SQLPREFIX."faqcategories CHANGE rubrik parent_id INT(11) NOT NULL";
-        $query[] = "ALTER TABLE ".SQLPREFIX."faqcategories CHANGE titel name VARCHAR(255) NOT NULL";
-        $query[] = "ALTER TABLE ".SQLPREFIX."faqcategories CHANGE datum description VARCHAR(255) NOT NULL";
-        $query[] = "ALTER TABLE ".SQLPREFIX."faqcategories ADD lang VARCHAR(5) NOT NULL AFTER id";
-        $query[] = "UPDATE ".SQLPREFIX."faqcategories SET parent_id = 0";
-        $query[] = "UPDATE ".SQLPREFIX."faqcategories SET description = ''";
-    }
     // update from version 1.4.0
-    if ($version <= "140") {
+    if ($version <= 140) {
         // rewrite data.php
         if ($fp = @fopen("../inc/data.php","w")) {
     		@fputs($fp,"<?php\n\$DB[\"server\"] = '".$DB["server"]."';\n\$DB[\"user\"] = '".$DB["user"]."';\n\$DB[\"password\"] = '".$DB["password"]."';\n\$DB[\"db\"] = '".$DB["db"]."';\n\$DB[\"prefix\"] = '".SQLPREFIX."';\n\$DB[\"type\"] = 'mysql';\n?>");
@@ -450,7 +389,7 @@ if ($step == 5) {
         }
     }
     // update from version 1.4.2
-    if ($version < "142") {
+    if ($version < 142) {
         $query[] = "ALTER TABLE ".SQLPREFIX."faqadminlog CHANGE user usr INT(11) DEFAULT '0' NOT NULL";
         $query[] = "ALTER TABLE ".SQLPREFIX."faqadminsessions CHANGE user usr TINYTEXT NOT NULL";
         $query[] = "ALTER TABLE ".SQLPREFIX."faqchanges CHANGE user usr INT(11) DEFAULT '0' NOT NULL";
@@ -458,11 +397,11 @@ if ($step == 5) {
         $query[] = "ALTER TABLE ".SQLPREFIX."faqvoting CHANGE user usr INT(11) DEFAULT '0' NOT NULL";
     }
     // update from version 1.4.4
-    if ($version <= "144") {
+    if ($version <= 144) {
         $query[] = "ALTER TABLE ".SQLPREFIX."faqdata CHANGE content content LONGTEXT NOT NULL";
     }
     // update from versions before 1.5.0
-    if ($version < "150") {
+    if ($version < 150) {
         // alter column faqdata.rubrik to integer
         $query[] = "ALTER TABLE ".SQLPREFIX."faqdata CHANGE rubrik rubrik INT NOT NULL";
         // create new table faqcategoryrelations
