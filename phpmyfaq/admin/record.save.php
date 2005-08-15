@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.save.php,v 1.25 2005-06-03 03:43:00 tomr Exp $
+* $Id: record.save.php,v 1.26 2005-08-15 10:33:40 thorstenr Exp $
 *
 * Save or update a FAQ record
 *
@@ -60,7 +60,7 @@ if (isset($submit[2]) && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "" &
 <?php
 }
 
-if (isset($submit[1]) && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "") {
+if (isset($submit[1]) && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "" && isset($_REQUEST['rubrik']) && is_array($_REQUEST['rubrik'])) {
 	// Wenn auf Speichern geklickt wurde...
 	adminlog("Beitragsave", $_REQUEST["id"]);
     print "<h2>".$PMF_LANG["ad_entry_aor"]."</h2>\n";
