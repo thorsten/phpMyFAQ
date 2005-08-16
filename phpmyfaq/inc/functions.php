@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.79 2005-08-16 16:39:29 thorstenr Exp $
+* $Id: functions.php,v 1.80 2005-08-16 20:13:07 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -207,7 +207,7 @@ LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPR
             
             if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == "TRUE") {
                 
-                $output .= "\t<li><a href=\"".stripslashes($row->thema)."-".$row->category_id."_".$row->id."_".$row->lang.".html\">".stripslashes($row->thema)."</a> [".$row->lang."]<br /><div class=\"little\">(".$visits." ".$PMF_LANG["msgViews"].")</div></li>\n";
+                $output .= "\t<li><a href=\"".urlencode(stripslashes($row->thema))."-".$row->category_id."_".$row->id."_".$row->lang.".html\">".stripslashes($row->thema)."</a> <br /><div class=\"little\">(".$visits." ".$PMF_LANG["msgViews"].")</div></li>\n";
             } else {
                 
                 $output .= "\t<li><a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=artikel&amp;cat=".$row->category_id."&amp;id=".$row->id."&amp;artlang=".$row->lang."\">".stripslashes($row->thema)."</a> [".$row->lang."]<br /><div class=\"little\">(".$visits." ".$PMF_LANG["msgViews"].")</div></li>\n";
@@ -523,7 +523,7 @@ function generateTopTenData($language = '', $count = 10)
 		$data['thema'] = $row->thema;
 
 		if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == "TRUE") {
-			$data['url'] = stripslashes($row->thema)."-".$row->category_id."_".$row->id."_".$row->lang.".html";
+			$data['url'] = urlencode(stripslashes($row->thema))."-".$row->category_id."_".$row->id."_".$row->lang.".html";
 		} else {
 			$data['url'] = $_SERVER["PHP_SELF"]."?".$sids."action=artikel&amp;cat=".$row->category_id."&amp;id=".$row->id."&amp;artlang=".$row->lang;
 		}
@@ -623,7 +623,7 @@ function generateNewestData($language = '', $count = 5)
 		
 		$data['thema'] = $row->thema;
 		if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == "TRUE") {
-			$data['url'] = stripslashes($row->thema)."-".$row->category_id."_".$row->id."_".$row->lang.".html";
+			$data['url'] = urlencode(stripslashes($row->thema))."-".$row->category_id."_".$row->id."_".$row->lang.".html";
 		} else {
 			$data['url'] = $_SERVER["PHP_SELF"]."?".$sids."action=artikel&amp;cat=".$row->category_id."&amp;id=".$row->id."&amp;artlang=".$row->lang;
 		}
