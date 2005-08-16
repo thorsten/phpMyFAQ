@@ -24,40 +24,40 @@ RewriteEngine Off
 RewriteBase /phpmyfaq1.4/
 
 # show all categories
-RewriteCond %{REQUEST_URI}          showcat\.html$ [NC]
-RewriteRule ^(.*)$                  index.php?action=show [L,QSA]
+RewriteCond %{REQUEST_URI}              showcat\.html$ [NC]
+RewriteRule ^(.*)$                      index.php?action=show [L,QSA]
 
 # the search page
-RewriteCond %{REQUEST_URI}          search\.html$ [NC]
-RewriteRule ^(.*)$                  index.php?action=search [L,QSA]
+RewriteCond %{REQUEST_URI}              search\.html$ [NC]
+RewriteRule ^(.*)$                      index.php?action=search [L,QSA]
 
 # the add content page
-RewriteCond %{REQUEST_URI}          addcontent\.html$ [NC]
-RewriteRule ^(.*)$                  index.php?action=add [L,QSA]
+RewriteCond %{REQUEST_URI}              addcontent\.html$ [NC]
+RewriteRule ^(.*)$                      index.php?action=add [L,QSA]
 
 # the ask question page
-RewriteCond %{REQUEST_URI}          ask\.html$ [NC]
-RewriteRule ^(.*)$                  index.php?action=ask [L,QSA]
+RewriteCond %{REQUEST_URI}              ask\.html$ [NC]
+RewriteRule ^(.*)$                      index.php?action=ask [L,QSA]
 
 # the open questions page
-RewriteCond %{REQUEST_URI}          open\.html$ [NC]
-RewriteRule ^(.*)$                  index.php?action=open [L,QSA]
+RewriteCond %{REQUEST_URI}              open\.html$ [NC]
+RewriteRule ^(.*)$                      index.php?action=open [L,QSA]
 
 # the help page
-RewriteCond %{REQUEST_URI}          help\.html$ [NC]
-RewriteRule ^(.*)$                  index.php?action=help [L,QSA]
+RewriteCond %{REQUEST_URI}              help\.html$ [NC]
+RewriteRule ^(.*)$                      index.php?action=help [L,QSA]
 
 # the contact page
-RewriteCond %{REQUEST_URI}          contact\.html$ [NC]
-RewriteRule ^(.*)$                  index.php?action=contact [L,QSA]
+RewriteCond %{REQUEST_URI}              contact\.html$ [NC]
+RewriteRule ^(.*)$                      index.php?action=contact [L,QSA]
 
 # a page with a record
-RewriteCond %{REQUEST_URI}          ([0-9]+)_([0-9]+)_([a-z]+)\.html$ [NC]
-RewriteRule ^(.*)_(.*)_(.*)\.html$  index.php?action=artikel&cat=$1&id=$2&artlang=$3 [L,QSA]
+RewriteCond %{REQUEST_URI}              ([a-zA-Z0-9_]+)-([0-9]+)_([0-9]+)_([a-z]+)\.html$ [NC]
+RewriteRule ^(.*)-(.*)_(.*)_(.*)\.html$ index.php?action=artikel&cat=$2&id=$3&artlang=$4 [L,QSA]
 
 # a category page
-RewriteCond %{REQUEST_URI}              category([0-9]+)\.html$ [NC]
-RewriteRule ^category(.*)\.html$        index.php?action=show&cat=$1 [L,QSA]
+RewriteCond %{REQUEST_URI}              ([a-zA-Z0-9_]+)-([0-9]+)\.html$ [NC]
+RewriteRule ^(.*)-(.*).html$            index.php?action=show&cat=$2 [L,QSA] 
 
 # a category page with page count
 RewriteCond %{REQUEST_URI}              category([0-9]+)_([0-9]+)\.html$ [NC]
