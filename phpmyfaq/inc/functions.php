@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.81 2005-08-18 13:44:22 thorstenr Exp $
+* $Id: functions.php,v 1.82 2005-08-18 16:57:33 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -709,8 +709,7 @@ function EndSlash($string)
 function generateVoting($id)
 {
 	global $db, $PMF_LANG;
-	$query = 'SELECT AVG(vote), COUNT(*) FROM '.SQLPREFIX.'faqvoting WHERE artikel = \''.$id.'\'';
- 	$result = $db->query($query);
+ 	$result = $db->query(sprintf('SELECT (vote/usr) as voting, usr FROM %sfaqvoting WHERE artikel = %d', SQLPREFIX, $id));
 	if ($db->num_rows($result) > 0) {
         list($vote, $user) = $db->fetch_row($result);
         return " ".round($vote, 2)." ".$PMF_LANG["msgVoteFrom"]." 5 (".$user." ".$PMF_LANG["msgVotings"].")";
