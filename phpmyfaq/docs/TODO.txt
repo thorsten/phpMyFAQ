@@ -28,6 +28,7 @@ TODO list for future versions of phpMyFAQ:
 - show/edit/delete comments ?
 - add "submit translation" link ?
 - installer and update scripts merged together in a setup routine ?
+- delete parts of the adminlog ?
 - more accessibility features (WAI and Section 508) ?
 - bugfixing for stability or security reasons
 
