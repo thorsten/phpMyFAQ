@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: password.php,v 1.4 2005-01-02 13:30:16 thorstenr Exp $
+* $Id: password.php,v 1.5 2005-08-18 19:42:40 thorstenr Exp $
 *
 * Reset a forgotten password to a new one
 *
@@ -43,7 +43,7 @@ $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
 require_once (PMF_ROOT_DIR."/inc/category.php");
 require_once (PMF_ROOT_DIR."/inc/functions.php");
 require_once (PMF_ROOT_DIR."/inc/idna_convert.class.php");
-$IDN = new Net_IDNA;
+$IDN = new idna_convert;
 
 /* get language (default: english) */
 if ($PMF_CONF["detection"] && !isset($LANG) && isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) {
