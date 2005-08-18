@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.80 2005-08-16 20:13:07 thorstenr Exp $
+* $Id: functions.php,v 1.81 2005-08-18 13:44:22 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -1023,7 +1023,7 @@ function generateXMLFile()
 				else {
 					$my_xml_output .= "\t<keywords />\n";
 					}
-				$my_xml_output .= "\t<theme>".strip_tags($xml_thema)."</theme>\n";
+				$my_xml_output .= "\t<theme>".htmlentities(strip_tags($xml_thema))."</theme>\n";
 				$my_xml_output .= "\t<content xmlns=\"http://www.w3.org/TR/REC-html40\">".strip_tags($xml_content)."</content>\n";
 				if ($row->author) {
 					$my_xml_output .= "\t<author>".$row->author."</author>\n";
