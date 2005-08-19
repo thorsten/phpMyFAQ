@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.29 2005-08-18 19:38:04 thorstenr Exp $
+* $Id: installer.php,v 1.30 2005-08-19 16:37:32 thorstenr Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -102,7 +102,27 @@ function HTMLFooter()
 <head>
     <title>phpMyFAQ <?php print VERSION; ?> Installation</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-    <style type="text/css"><!--
+    <script language="javascript" type="text/javascript">
+    /*<![CDATA[*/
+    <!--
+    function select_database(field) {
+        switch (field.value) {
+            case 'sqlite':
+                document.getElementById('dbsqlite').style.display='inline';
+                document.getElementById('dbdatafull').style.display='none';
+                break;
+            default:
+                document.getElementById('dbsqlite').style.display='none';
+                document.getElementById('dbdatafull').style.display='inline';
+                break;
+        }
+    }
+    -->
+    /*]]>*/
+    </script>
+    <style media="screen" type="text/css">
+    /*<![CDATA[*/
+    <!--
     body {
 	    margin: 10px;
 	    padding: 0px;
@@ -177,7 +197,9 @@ function HTMLFooter()
         background-color: #f5f5f5;
         border: 1px solid black;
     }
-    --></style>
+    -->
+    /*]]>*/
+    </style>
 </head>
 <body>
 
@@ -241,7 +263,7 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 <legend class="installation">Database information</legend>
 <p>
 <span class="text">SQL server:</span>
-<select class="input" name="sql_type" size="1">
+<select class="input" name="sql_type" size="1" onchange="select_database(this);">
 <?php
 	// check what extensions are loaded in PHP
 	if (extension_loaded('mysql')) {
@@ -269,26 +291,35 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 </select>
 <span class="help" title="Please enter the type of SQL server here.">?</span>
 </p>
-<p>
-<span class="text">SQL server host:</span>
-<input class="input" type="text" name="sql_server" />
-<span class="help" title="Please enter the host of your SQL server here.">?</span>
-</p>
-<p>
-<span class="text">SQL username:</span>
-<input class="input" type="text" name="sql_user" />
-<span class="help" title="Please enter your SQL username here.">?</span>
-</p>
-<p>
-<span class="text">SQL password:</span>
-<input class="input" name="sql_passwort" type="password" />
-<span class="help" title="Please enter your SQL password here.">?</span>
-</p>
-<p>
-<span class="text">SQL database:</span>
-<input class="input" type="text" name="sql_db" />
-<span class="help" title="Please enter your SQL database here.">?</span>
-</p>
+<div id="dbdatafull">
+    <p>
+    <span class="text">SQL server host:</span>
+    <input class="input" type="text" name="sql_server" />
+    <span class="help" title="Please enter the host of your SQL server here.">?</span>
+    </p>
+    <p>
+    <span class="text">SQL username:</span>
+    <input class="input" type="text" name="sql_user" />
+    <span class="help" title="Please enter your SQL username here.">?</span>
+    </p>
+    <p>
+    <span class="text">SQL password:</span>
+    <input class="input" name="sql_passwort" type="password" />
+    <span class="help" title="Please enter your SQL password here.">?</span>
+    </p>
+    <p>
+    <span class="text">SQL database:</span>
+    <input class="input" type="text" name="sql_db" />
+    <span class="help" title="Please enter your SQL database here.">?</span>
+    </p>
+</div>
+<div id="dbsqlite" style="display:none;">
+    <p>
+    <span class="text">SQLite database file:</span>
+    <input class="input" type="text" name="sql_sqlitefile" />
+    <span class="help" title="Please enter the full path to your SQLite datafile which should be outside your documentation root.">?</span>
+    </p>
+</div>
 <p>
 <span class="text">Table prefix:</span>
 <input class="input" type="text" name="sqltblpre" />
@@ -418,31 +449,38 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 		die();
 	}
     
-    if (isset($_POST["sql_server"]) && $_POST["sql_server"] != "") {
+    if (isset($_POST["sql_server"]) && $_POST["sql_server"] != "" || $sql_type == 'sqlite') {
 		$sql_server = $_POST["sql_server"];
     } else {
         print "<p class=\"error\"><strong>Error:</strong> There's no DB server input.</p>\n";
 		HTMLFooter();
 		die();
     }
-	if (isset($_POST["sql_user"]) && $_POST["sql_user"] != "") {
+	if (isset($_POST["sql_user"]) && $_POST["sql_user"] != "" || $sql_type == 'sqlite') {
 		$sql_user = $_POST["sql_user"];
     } else {
         print "<p class=\"error\"><strong>Error:</strong> There's no DB username input.</p>\n";
 		HTMLFooter();
 		die();
     }
-    if (isset($_POST["sql_passwort"]) && $_POST["sql_passwort"] != "") {
+    if (isset($_POST["sql_passwort"]) && $_POST["sql_passwort"] != "" || $sql_type == 'sqlite') {
 		$sql_passwort = $_POST["sql_passwort"];
     } else {
         $sql_passwort = '';
     }
-    if (isset($_POST["sql_db"]) && $_POST["sql_db"] != "") {
+    if (isset($_POST["sql_db"]) && $_POST["sql_db"] != "" || $sql_type == 'sqlite') {
 		$sql_db = $_POST["sql_db"];
     } else {
         print "<p class=\"error\"><strong>Error:</strong> There's no DB database input.</p>\n";
 		HTMLFooter();
 		die();
+    }
+    if (isset($_POST["sql_sqlitefile"]) && $_POST["sql_sqlitefile"] != "" || $sql_type != 'sqlite') {
+        $sql_server = $_POST["sql_sqlitefile"]; // We're using $sql_server, too!
+    } else {
+        print "<p class=\"error\"><strong>Error:</strong> There's no SQLite database filename input.</p>\n";
+        HTMLFooter();
+        die();
     }
     
     // check database connection
