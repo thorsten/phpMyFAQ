@@ -1,10 +1,11 @@
 <?php
 /**
-* $Id: save.php,v 1.13 2005-05-18 17:51:53 thorstenr Exp $
+* $Id: save.php,v 1.14 2005-08-19 20:10:48 thorstenr Exp $
 *
 * Saves a user FAQ record and sends an email to the user
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+* @author       Jürgen Kuza <kig@bluewin.ch>
 * @since        2002-09-16
 * @copyright    (c) 2001-2005 phpMyFAQ Team
 * 
@@ -48,7 +49,13 @@ if (isset($_POST["username"]) && isset($_POST["rubrik"]) && is_numeric($_POST["r
     
 	$db->query("INSERT INTO ".SQLPREFIX."faqvisits (id, lang, visits, last_visit) VALUES (".$db->insert_id(SQLPREFIX.'faqdata', 'id').", '".$lang."', '1', ".time().")");
     
-	mail($IDN->encode($PMF_CONF["adminmail"]), unhtmlentities($PMF_CONF["title"]), unhtmlentities($PMF_LANG["msgMailCheck"])."\n".unhtmlentities($PMF_CONF["title"]).": http://".$_SERVER["SERVER_NAME"].dirname($_SERVER["PHP_SELF"]), "From: ".$usermail);
+    $headers = '';
+    $db->query("SELECT ".SQLPREFIX."faquser.email FROM ".SQLPREFIX."faqcategories INNER JOIN ".SQLPREFIX."faquser ON ".SQLPREFIX."faqcategories.user_id = ".SQLPREFIX."faquser.id WHERE ".SQLPREFIX."faqcategories.id = ".$selected_category);
+    while ($row = $db->fetch_object($result)) {
+        $headers .= "CC: ".$row->email."\n";
+    }
+    
+	mail($IDN->encode($PMF_CONF["adminmail"]), unhtmlentities($PMF_CONF["title"]), unhtmlentities($PMF_LANG["msgMailCheck"])."\n".unhtmlentities($PMF_CONF["title"]).": http://".$_SERVER["SERVER_NAME"].dirname($_SERVER["PHP_SELF"]), "From: ".$usermail, $headers);
     
 	$tpl->processTemplate ("writeContent", array(
 				"msgNewContentHeader" => $PMF_LANG["msgNewContentHeader"],

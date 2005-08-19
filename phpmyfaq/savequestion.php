@@ -1,9 +1,10 @@
 <?php
 /**
-* $Id: savequestion.php,v 1.11 2005-02-04 13:18:14 thorstenr Exp $
+* $Id: savequestion.php,v 1.12 2005-08-19 20:10:48 thorstenr Exp $
 *
 * @author           Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author           David Saez Padros <david@ols.es>
+* @author           Jürgen Kuza <kig@bluewin.ch>
 * @since            2002-09-17
 * @copyright        (c) 2001-2005 phpMyFAQ Team
 * 
@@ -45,7 +46,13 @@ if (isset($_REQUEST["username"]) && $_REQUEST["username"] != '' && isset($_REQUE
             
             $questionMail = "User: ".$username.", mailto:".$usermail."\n".$PMF_LANG["msgCategory"].":  ".$categories[$selected_category]["name"]."\n\n".wordwrap(stripslashes($content), 72);
             
-            mail($IDN->encode($PMF_CONF["adminmail"]), $PMF_CONF["title"], strip_tags($questionMail), "From: ".encode_iso88591($username)."<".$IDN->encode($usermail).">");
+            $headers = '';
+            $db->query("SELECT ".SQLPREFIX."faquser.email FROM ".SQLPREFIX."faqcategories INNER JOIN ".SQLPREFIX."faquser ON ".SQLPREFIX."faqcategories.user_id = ".SQLPREFIX."faquser.id WHERE ".SQLPREFIX."faqcategories.id = ".$selected_category);
+            while ($row = $db->fetch_object($result)) {
+                $headers .= "CC: ".$row->email."\n";
+            }
+            
+            mail($IDN->encode($PMF_CONF["adminmail"]), $PMF_CONF["title"], strip_tags($questionMail), "From: ".encode_iso88591($username)."<".$IDN->encode($usermail).">", $headers);
             
             $tpl->processTemplate ("writeContent", array(
                     "msgQuestion" => $PMF_LANG["msgQuestion"],
