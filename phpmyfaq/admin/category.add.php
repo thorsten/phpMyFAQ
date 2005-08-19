@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: category.add.php,v 1.2 2005-08-01 20:24:55 thorstenr Exp $
+* $Id: category.add.php,v 1.3 2005-08-19 20:02:41 thorstenr Exp $
 *
 * Adds a category
 *
@@ -43,6 +43,24 @@ if ($permission["addcateg"]) {
     </select></div>
     <div class="row"><span class="label"><strong><?php print $PMF_LANG["ad_categ_desc"]; ?>:</strong></span>
     <input class="admin" type="text" name="description" size="30" style="width: 250px;" /></div>
+    <div class="row"><span class="label"><strong><?php print $PMF_LANG["ad_categ_owner"]; ?>:</strong></span>
+    <select name="cat_owner" size="1">    
+<?php
+        $result = $db->query("SELECT id, name, realname FROM ".SQLPREFIX."faquser ORDER BY id");
+        while ($row = $db->fetch_object($result)) {
+            print '<option value="'.$row->id.'"';
+            if (strtolower($row->name) == 'admin') {
+                print ' selected="selected"';
+            }
+            print '>';
+            print $row->name;
+            if (strlen($row->realname) > 0) {
+                print ' ('.$row->realname.')';
+            }
+            print '</option>';
+        }
+?>
+    </select></div>
     <div class="row"><span class="label"><strong>&nbsp;</strong></span>
     <input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_add"]; ?>" /></div>
     </fieldset>
