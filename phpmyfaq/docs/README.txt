@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.37 2005-08-14 20:01:07 thorstenr Exp $
+$Id: README.txt,v 1.38 2005-08-19 20:17:49 thorstenr Exp $
 
 phpMyFAQ 1.6.0-dev
 Codename "Prometheus"
@@ -10,7 +10,7 @@ Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 1.5.0:
-- 
+- add user to a category
 
 Known issues in phpMyFAQ 1.6.0:
 - some language files need an update
@@ -19,9 +19,9 @@ Known issues in phpMyFAQ 1.6.0:
 CHANGELOG:
 
 Version 1.6.0 - n/a
--
+- add user to a category
 
-Version 1.5.0 - 2005-08-
+Version 1.5.0 - 2005-08-20
 - full support for PostgreSQL databases
 - full support for Sybase databases
 - full support for MS SQL databases
