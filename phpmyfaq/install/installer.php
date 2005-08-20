@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.30 2005-08-19 16:37:32 thorstenr Exp $
+* $Id: installer.php,v 1.31 2005-08-20 11:41:04 thorstenr Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -56,7 +56,7 @@ function php_check ($ist = '', $soll = '')
 
 function db_check()
 {
-	if (!extension_loaded('mysql') && !extension_loaded('mysqli') && !extension_loaded('pgsql') && !extension_loaded('sybase') && !extension_loaded('mssql')) {
+	if (!extension_loaded('mysql') && !extension_loaded('mysqli') && !extension_loaded('pgsql') && !extension_loaded('sybase') && !extension_loaded('mssql') && !extension_loaded('ibm_db2') && !extension_loaded('sqlite')) {
 		return false;
 	} else {
         return true;
@@ -206,8 +206,8 @@ function HTMLFooter()
 <h1 id="header">phpMyFAQ <?php print VERSION; ?> Installation</h1>
 
 <?php
-if (php_check(phpversion(), '4.1.0') == false) {
-	print "<p class=\"center\">You need PHP Version 4.1.0 or higher!</p>\n";
+if (php_check(phpversion(), '4.3.0') == false) {
+	print "<p class=\"center\">You need PHP Version 4.3.0 or higher!</p>\n";
 	HTMLFooter();
 	die();
 }
