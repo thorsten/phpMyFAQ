@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.add.php,v 1.23 2005-08-10 16:31:18 thorstenr Exp $
+* $Id: record.add.php,v 1.24 2005-08-22 20:32:43 thorstenr Exp $
 *
 * Adds a record in the database
 *
@@ -95,10 +95,10 @@ if ($permission["editbt"]) {
     <p align="center"><input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG["ad_entry_back"]; ?>" /></p>
     </form>
 <?php
-    } elseif (!isset($_REQUEST["thema"]) || $_REQUEST["thema"] == "") {
+    } else {
 		print "<p>".$PMF_LANG["ad_entryins_fail"]."</p>";
 		print "<p><a href=\"javascript:history.back();\">".$PMF_LANG["ad_entry_back"]."</a></p>";
-	}
+	} 
 } else {
 	print $PMF_LANG["err_NotAuth"];
 }
