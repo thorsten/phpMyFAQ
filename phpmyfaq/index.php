@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.24 2005-08-10 14:36:50 thorstenr Exp $
+* $Id: index.php,v 1.25 2005-08-22 17:19:26 thorstenr Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the 
@@ -61,7 +61,7 @@ require_once("inc/idna_convert.class.php");
 $IDN = new idna_convert;
 
 // connect to LDAP server, when LDAP support is enabled
-if (isset($PMF_CONF["ldap_support"]) && $PMF_CONF["ldap_support"] == TRUE) {
+if (isset($PMF_CONF["ldap_support"]) && $PMF_CONF["ldap_support"] == true && file_exists('inc/dataldap.php')) {
     require_once('inc/dataldap.php');
     require_once('inc/ldap.php');
     $ldap = new LDAP($PMF_LDAP['ldap_server'], $PMF_LDAP['ldap_port'], $PMF_LDAP['ldap_base'], $PMF_LDAP['ldap_user'], $PMF_LDAP['ldap_password']);
