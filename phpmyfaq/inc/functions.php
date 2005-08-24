@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.82 2005-08-18 16:57:33 thorstenr Exp $
+* $Id: functions.php,v 1.83 2005-08-24 13:35:30 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -136,15 +136,20 @@ function makeDate($date)
 /**
 * Returns the number of activated records
 *
+* @param    string
 * @return   int
 * @access   public
 * @since    2002-08-23
 * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
 */
-function generateNumberOfArticles()
+function generateNumberOfArticles($lang = '')
 {
 	global $db;
-	$num = $db->num_rows($db->query("SELECT id FROM ".SQLPREFIX."faqdata WHERE active = 'yes'"));
+    $query = "SELECT id FROM ".SQLPREFIX."faqdata WHERE active = 'yes'";
+    if (2 == strlen($lang)) {
+        $query .= " AND lang = '".$lang."'";
+    }
+	$num = $db->num_rows($db->query($query));
 	if ($num > 0) {
 		return $num;
     } else {
@@ -1602,5 +1607,3 @@ function getEmailAddress()
         return '';
     }
 }
-
-?>
