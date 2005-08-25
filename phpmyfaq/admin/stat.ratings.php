@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: stat.ratings.php,v 1.5 2005-06-01 01:12:58 tomr Exp $
+* $Id: stat.ratings.php,v 1.6 2005-08-25 18:06:29 thorstenr Exp $
 *
 * The page with the ratings of the votings
 *
@@ -25,7 +25,7 @@ if ($permission["viewlog"]) {
 	<h2><?php print $PMF_LANG["ad_rs"] ?></h2>
     <table class="list">
 <?php
-	$result = $db->query('SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqdata.active, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema, AVG('.SQLPREFIX.'faqvoting.vote) AS num, count(*) FROM '.SQLPREFIX.'faqvoting, '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang WHERE '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvoting.artikel GROUP BY '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqdata.active, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqvoting.vote, '.SQLPREFIX.'faqvoting.usr ORDER BY '.SQLPREFIX.'faqcategoryrelations.category_id');
+	$result = $db->query('SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqdata.active, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema, AVG('.SQLPREFIX.'faqvoting.vote/'.SQLPREFIX.'faqvoting.usr) AS num, '.SQLPREFIX.'faqvoting.usr FROM '.SQLPREFIX.'faqvoting, '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang WHERE '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvoting.artikel GROUP BY '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqdata.active, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqvoting.vote, '.SQLPREFIX.'faqvoting.usr ORDER BY '.SQLPREFIX.'faqcategoryrelations.category_id');
 	$anz = $db->num_rows($result);
 	$old = "";
 	while (list($id, $lang, $active, $rubrik, $thema, $num, $user) = $db->fetch_row($result)) {
