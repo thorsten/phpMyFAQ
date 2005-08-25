@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: savevoting.php,v 1.11 2005-08-24 14:48:57 thorstenr Exp $
+* $Id: savevoting.php,v 1.12 2005-08-25 16:41:01 thorstenr Exp $
 *
 * Saves a user voting
 *
@@ -38,7 +38,7 @@ if (isset($vote) && $vote != "" && votingCheck($record, $userip) && intval($_POS
 	if ($noUser == "0" || $noUser == "") {
 		$db->query("INSERT INTO ".SQLPREFIX."faqvoting (id, artikel, vote, usr, datum, ip) VALUES (".$db->nextID(SQLPREFIX."faqvoting", "id").", ".$record.", ".$vote.", '1', ".time().", '".$userip."');");
 	}  else {
-		$db->query("UPDATE ".SQLPREFIX."faqvoting SET vote = vote + ".$vote.", usr = user + 1, datum = ".time().", ip = '".$userip."' where artikel = ".$record);
+		$db->query("UPDATE ".SQLPREFIX."faqvoting SET vote = vote + ".$vote.", usr = usr + 1, datum = ".time().", ip = '".$userip."' where artikel = ".$record);
 	}
     
 	$tpl->processTemplate ("writeContent", array(
