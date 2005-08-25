@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: export.main.php,v 1.16 2005-08-14 15:38:52 thorstenr Exp $
+* $Id: export.main.php,v 1.17 2005-08-25 16:48:09 thorstenr Exp $
 *
 * XML, XML DocBook, XHTML and PDF export - main page
 *
@@ -106,7 +106,7 @@ if (isset($submit[3])) {
 	$export->write_file();
 
 	// Transformation of the news entries
-	if ($db->num_rows($result) > 0 || $result <= $db->id)
+	if ($db->num_rows($result) > 0)
 	{
 	    $export->xmlContent.='<part><title>News</title>';
 
