@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.83 2005-08-24 13:35:30 thorstenr Exp $
+* $Id: functions.php,v 1.84 2005-08-29 20:09:44 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -229,25 +229,27 @@ LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPR
         $next = $seite + 1;
         
         if ($previous != 0) {
-            
             if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == "TRUE") {
-                
                 $output .= "[ <a href=\"category".$category."_".$previous.".html\">".$PMF_LANG["msgPrevious"]."</a> ]";
             } else {
-                
                 $output .= "[ <a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=show&amp;cat=".$category."&amp;seite=".$previous."\">".$PMF_LANG["msgPrevious"]."</a> ]";
             }
         }
         
         $output .= " ";
         
-        if ($next <= $pages) {
-            
+        for ($i = 1; $i <= $pages; $i++) {
             if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == "TRUE") {
-                
+                $output .= "[ <a href=\"category".$category."_".$i.".html\">".$i."</a> ]";
+            } else {
+                $output .= "[ <a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=show&amp;cat=".$category."&amp;seite=".$i."\">".$i."</a> ] ";
+            }
+        }
+        
+        if ($next <= $pages) {
+            if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == "TRUE") {
                 $output .= "[ <a href=\"category".$category."_".$next.".html\">".$PMF_LANG["msgNext"]."</a> ]";
             } else {
-                
                 $output .= "[ <a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=show&amp;cat=".$category."&amp;seite=".$next."\">".$PMF_LANG["msgNext"]."</a> ]";
             }
         }
