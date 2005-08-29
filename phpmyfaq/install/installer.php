@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.31 2005-08-20 11:41:04 thorstenr Exp $
+* $Id: installer.php,v 1.32 2005-08-29 20:19:56 thorstenr Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -101,7 +101,7 @@ function HTMLFooter()
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
     <title>phpMyFAQ <?php print VERSION; ?> Installation</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=iso-8859-1" />
     <script language="javascript" type="text/javascript">
     /*<![CDATA[*/
     <!--
@@ -283,6 +283,9 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 	}
 	if (extension_loaded('ibm_db2')) {
 		print '<option value="db2">IBM DB2 Universal Database (experimental)</option>';
+	}
+	if (extension_loaded('sqlite')) {
+		print '<option value="sqlite">SQLite (experimental)</option>';
 	}
 	if (extension_loaded('sqlite')) {
 		print '<option value="sqlite">SQLite (experimental)</option>';
