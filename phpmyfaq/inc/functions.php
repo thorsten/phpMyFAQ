@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.84 2005-08-29 20:09:44 thorstenr Exp $
+* $Id: functions.php,v 1.85 2005-08-30 19:56:01 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -105,15 +105,20 @@ function selectLanguages($default)
 function getThema($id, $lang)
 {
 	global $db, $PMF_LANG;
-	$result = $db->query(sprintf("SELECT thema FROM %sfaqdata WHERE id = %d AND lang = '%s'", SQLPREFIX, $id, $lang));
-	if ($db->num_rows($result) > 0) {
-		while ($row = $db->fetch_object($result)) {
-            $output = htmlentities($row->thema, ENT_NOQUOTES, $PMF_LANG['metaCharset']);
+    $acceptedCharsets = array('iso-8859-1', 'iso-8859-15', 'utf-8', 'cp866', 'ibm866', '866', 'cp1251', 'windows-1251', 'win-1251', '1251', 'cp1252', 'windows-1252', '1252', 'KOI8-R', 'koi8-ru', 'koi8r', 'BIG5', '950', 'GB2312', '936', 'BIG5-HKSCS', 'Shift_JIS', 'SJIS', '932', 'EUC-JP', 'EUCJP');
+    $result = $db->query(sprintf("SELECT thema FROM %sfaqdata WHERE id = %d AND lang = '%s'", SQLPREFIX, $id, $lang));
+    if ($db->num_rows($result) > 0) {
+        while ($row = $db->fetch_object($result)) {
+            if (in_array($PMF_LANG["metaCharset"], $acceptedCharsets)) {
+                $output = htmlentities($row->thema, ENT_NOQUOTES, $PMF_LANG['metaCharset']);
+            } else {
+                $output = htmlentities($row->thema);
+            }
         }
     } else {
-		$output = $PMF_LANG["no_cats"];
+        $output = $PMF_LANG["no_cats"];
     }
-	return $output;
+    return $output;
 }
 
 /**
