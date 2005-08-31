@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.32 2005-08-29 20:19:56 thorstenr Exp $
+* $Id: installer.php,v 1.33 2005-08-31 19:24:39 thorstenr Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -284,10 +284,7 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 	if (extension_loaded('ibm_db2')) {
 		print '<option value="db2">IBM DB2 Universal Database (experimental)</option>';
 	}
-	if (extension_loaded('sqlite')) {
-		print '<option value="sqlite">SQLite (experimental)</option>';
-	}
-	if (extension_loaded('sqlite')) {
+	if (extension_loaded('sqlite') && php_check(phpversion(), '5.0.0')) {
 		print '<option value="sqlite">SQLite (experimental)</option>';
 	}
 ?>	
