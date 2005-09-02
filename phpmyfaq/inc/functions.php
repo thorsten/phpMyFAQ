@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.85 2005-08-30 19:56:01 thorstenr Exp $
+* $Id: functions.php,v 1.86 2005-09-02 06:56:29 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -1220,32 +1220,39 @@ function searchEngine($begriff)
     }
     
     $pages = ceil($num / $PMF_CONF["numRecordsPage"]);
-	$y = $seite * $PMF_CONF["numRecordsPage"]; 
-	$x = $y - $PMF_CONF["numRecordsPage"];
-	if ($y > $num) {
-		$y = $num;
+	$last = $seite * $PMF_CONF["numRecordsPage"]; 
+	$first = $last - $PMF_CONF["numRecordsPage"];
+	if ($last > $num) {
+		$last = $num;
 	}
     
 	if ($num > 0) {
 		if ($num == "1") {
 			$output .= "<p>".$num.$PMF_LANG["msgSearchAmount"]."</p>\n";
-			}
-		else {
+		} else {
 			$output .= "<p>".$num.$PMF_LANG["msgSearchAmounts"]."</p>\n";
-			}
+		}
 		if ($pages > 1) {
 			$output .= "<p><strong>".$PMF_LANG["msgPage"].$seite." ".$PMF_LANG["msgVoteFrom"]." ".$pages.$PMF_LANG["msgPages"]."</strong></p>";
-			}
+		}
 		$output .= "<ul class=\"phpmyfaq_ul\">\n";
-	    for ($i = $x; $i < $y ; $i++) {
-			list($id, $lang, $rubrik, $thema, $content) = $db->fetch_row($result);
-			$rubriktext = $tree->getPath($rubrik);
-			$thema = chopString($thema, 15);
-            $content = stripslashes(chopString(strip_tags($content), 25));
+        
+		$counter = 0;
+		$displayedCounter = 0;
+		while (($row = $db->fetch_object($result)) && $displayedCounter < $PMF_CONF['numRecordsPage']) {
+			$counter ++;
+			if ($counter <= $first) {
+				continue;
+			}
+			$displayedCounter++;
+			
+			$rubriktext = $tree->getPath($row->category_id);
+			$thema = chopString($row->thema, 15);
+            $content = stripslashes(chopString(strip_tags($row->content), 25));
             $begriff = str_replace(array('^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']'), '', $begriff);
             $thema = preg_replace('/(((href|src)="[^"]*)?'.$begriff.'(?(1).*"))/mies', "highlight_no_links(\"\\1\")", $thema);
 			$content = preg_replace('/(((href|src)="[^"]*)?'.$begriff.'(?(1).*"))/mies', "highlight_no_links(\"\\1\")", $content);
-            $output .= "<li><strong>".$rubriktext."</strong>: <a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=artikel&amp;cat=".$rubrik."&amp;id=".$id."&amp;artlang=".$lang."&amp;highlight=".$begriff."\">".stripslashes($thema)."...</a><br /><div style=\"font-size: 10px;\"><strong>".$PMF_LANG["msgSearchContent"]."</strong> ".stripslashes($content)."...</div><br /></li>\n";
+            $output .= "<li><strong>".$rubriktext."</strong>: <a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=artikel&amp;cat=".$rubrik."&amp;id=".$row->id."&amp;artlang=".$row->lang."&amp;highlight=".$begriff."\">".stripslashes($thema)."...</a><br /><div style=\"font-size: 10px;\"><strong>".$PMF_LANG["msgSearchContent"]."</strong> ".stripslashes($content)."...</div><br /></li>\n";
             }
         $output .= "</ul>\n";
         }
@@ -1259,13 +1266,13 @@ function searchEngine($begriff)
         $next = $seite + 1;
         if ($vor != 0) {
             $output .= "[ <a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=search&amp;&search=".$begriff."&amp;seite=".$vor."\">".$PMF_LANG["msgPrevious"]."</a> ]";
-            }
+        }
         $output .= " ";
         if ($next <= $pages) {
             $output .= "[ <a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=search&amp;search=".$begriff."&amp;seite=".$next."\">".$PMF_LANG["msgNext"]."</a> ]";
-            }
+        }
         $output .= "</strong></p>";
-		}
+    }
 	return $output;
 }
 
