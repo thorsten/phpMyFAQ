@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.33 2005-08-31 19:24:39 thorstenr Exp $
+* $Id: installer.php,v 1.34 2005-09-02 06:36:29 thorstenr Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -475,12 +475,14 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 		HTMLFooter();
 		die();
     }
-    if (isset($_POST["sql_sqlitefile"]) && $_POST["sql_sqlitefile"] != "" || $sql_type != 'sqlite') {
-        $sql_server = $_POST["sql_sqlitefile"]; // We're using $sql_server, too!
-    } else {
-        print "<p class=\"error\"><strong>Error:</strong> There's no SQLite database filename input.</p>\n";
-        HTMLFooter();
-        die();
+    if ($sql_type == 'sqlite') {
+        if (isset($_POST["sql_sqlitefile"]) && $_POST["sql_sqlitefile"] != "") {
+            $sql_server = $_POST["sql_sqlitefile"]; // We're using $sql_server, too!
+        } else {
+            print "<p class=\"error\"><strong>Error:</strong> There's no SQLite database filename input.</p>\n";
+            HTMLFooter();
+            die();
+        }
     }
     
     // check database connection
