@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: constants.php,v 1.3 2005-08-01 20:07:03 thorstenr Exp $
+* $Id: constants.php,v 1.4 2005-09-05 17:55:47 thorstenr Exp $
 *
 * Constants for phpMyFAQ
 *
@@ -162,7 +162,8 @@ $languageCodes = array (
         "NA" => "Nauru",
         "NE" => "Nepali",
         "NL" => "Dutch",
-        "NO" => "Norwegian",
+        "NB" => "Norwegian Bokmål",
+        "NN" => "Norwegian Nynorsk",
         "OC" => "Occitan",
         "OM" => "Oromo",
         "OR" => "Oriya",
