@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: constants.php,v 1.4 2005-09-05 17:55:47 thorstenr Exp $
+* $Id: constants.php,v 1.5 2005-09-05 18:54:24 thorstenr Exp $
 *
 * Constants for phpMyFAQ
 *
@@ -73,7 +73,8 @@ $allowedVariables = array(
         "ask" => 1,
         "open" => 1,
         "savequestion" => 1,
-        "send2friend" => 1
+        "send2friend" => 1,
+        'sitemap.php' => 1
         );
 
 /* ISO 639 language code list - DO NOT CHANGE! */

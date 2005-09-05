@@ -68,6 +68,7 @@
                         <li class="home">{backToHome}</li>
                         <li>{allCategories}</li>
                         {showCategories}
+                        <li>{showSitemap}</li>
                     </ul>
                     </div>
                 </div>

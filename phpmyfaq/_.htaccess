@@ -65,3 +65,7 @@ RewriteRule ^category(.*)_(.*)\.html$   index.php?action=show&cat=$1&seite=$2 [L
 
 # start page
 RewriteRule index.html$ index.php [PT]
+
+# sitemap
+RewriteCond %{REQUEST_URI}              sitemap-([a-zA-Z0-9הצüִצüß]*)\.html$ [NC]
+RewriteRule ^sitemap-(.*)\.html$        index.php?action=sitemap&letter=$1 [L,QSA]

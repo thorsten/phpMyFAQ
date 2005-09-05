@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.25 2005-08-22 17:19:26 thorstenr Exp $
+* $Id: index.php,v 1.26 2005-09-05 18:54:24 thorstenr Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the 
@@ -240,7 +240,9 @@ if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == "TRUE") {
 				"msgContact" => '<a href="contact.html">'.$PMF_LANG["msgContact"].'</a>',
 				"backToHome" => '<a href="index.html">'.$PMF_LANG["msgHome"].'</a>',
                 "allCategories" => '<a href="showcat.html">'.$PMF_LANG["msgShowAllCategories"].'</a>',
-				"writeSendAdress" => 'search.html');
+				"writeSendAdress" => 'search.html',
+                'showSitemap' => 'sitemap-a.html',
+                'showSitemap' => $_SERVER["PHP_SELF"].'?'.$sids.'action=sitemap');
 } else {
     $links_template_vars = array(
                 "faqHome" => $_SERVER['PHP_SELF'],
