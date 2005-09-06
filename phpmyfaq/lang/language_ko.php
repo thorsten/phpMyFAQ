@@ -591,3 +591,6 @@ $PMF_LANG["ad_xmlrpc_latest"] = "최신버전을 다음 사이트에서 이용하실 수 있습니다
 
 // added v1.5.0 - 2005-07-31 by Thorsten
 $PMF_LANG['ad_categ_select'] = 'Select category language';
+
+// added v1.5.1 - 2005-09-06 by Thorsten
+$PMF_LANG['msgSitemap'] = 'Sitemap';

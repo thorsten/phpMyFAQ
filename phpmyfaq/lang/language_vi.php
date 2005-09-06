@@ -28,15 +28,15 @@ $PMF_LANG["msgCategory"] = "Chuyên mục";
 $PMF_LANG["msgShowAllCategories"] = "Tất cả chuyên mục";
 $PMF_LANG["msgSearch"] = "Tìm kiếm";
 $PMF_LANG["msgAddContent"] = "Thêm FAQ";
-$PMF_LANG["msgQuestion"] = "Thêm Câu hỏi";
-$PMF_LANG["msgOpenQuestions"] = "Danh sách Câu hỏi";
+$PMF_LANG["msgQuestion"] = "Thêm Câu h�?i";
+$PMF_LANG["msgOpenQuestions"] = "Danh sách Câu h�?i";
 $PMF_LANG["msgHelp"] = "Trợ giúp";
 $PMF_LANG["msgContact"] = "Liên hệ";
 $PMF_LANG["msgHome"] = "Trang chủ";
 $PMF_LANG["msgNews"] = "FAQ-News";
-$PMF_LANG["msgUserOnline"] = " người dùng trực tuyến";
+$PMF_LANG["msgUserOnline"] = " ngư�?i dùng trực tuyến";
 $PMF_LANG["msgXMLExport"] = "XML-File";
-$PMF_LANG["msgBack2Home"] = "quay về trang chủ";
+$PMF_LANG["msgBack2Home"] = "quay v�? trang chủ";
 
 // Contentpages
 $PMF_LANG["msgFullCategories"] = "Danh sách các chuyên mục";
@@ -60,9 +60,9 @@ $PMF_LANG["msgVoteUseability"] = "Please rate this entry:";
 $PMF_LANG["msgVoteFrom"] = '/';
 $PMF_LANG["msgVoteBad"] = "vô ích";
 $PMF_LANG["msgVoteGood"] = "hay tuyệt";
-$PMF_LANG["msgVotings"] = "bầu chọn";
-$PMF_LANG["msgVoteSubmit"] = "Bầu chọn";
-$PMF_LANG["msgVoteThanks"] = "Cảm ơn đã bầu chọn!";
+$PMF_LANG["msgVotings"] = "bầu ch�?n";
+$PMF_LANG["msgVoteSubmit"] = "Bầu ch�?n";
+$PMF_LANG["msgVoteThanks"] = "Cảm ơn đã bầu ch�?n!";
 $PMF_LANG["msgYouCan"] = "Bạn có thể gửi ";
 $PMF_LANG["msgWriteComment"] = "Bình luận / Nhận xét";
 $PMF_LANG["msgShowCategory"] = "Chuyên mục: ";
@@ -80,8 +80,8 @@ $PMF_LANG["msgS2FText"] = "Văn bản sau đây sẽ được gửi đi:";
 $PMF_LANG["msgS2FText2"] = "You'll find the record on the following adress:";
 $PMF_LANG["msgS2FMessage"] = "Thông tin phụ cho bạn của bạn:";
 $PMF_LANG["msgS2FButton"] = "Gửi e-mail";
-$PMF_LANG["msgS2FThx"] = "Cảm ơn đề nghị của bạn!";
-$PMF_LANG["msgS2FMailSubject"] = "Đề nghị từ ";
+$PMF_LANG["msgS2FThx"] = "Cảm ơn đ�? nghị của bạn!";
+$PMF_LANG["msgS2FMailSubject"] = "�?�? nghị từ ";
 
 // Search
 $PMF_LANG["msgSearchWord"] = "Từ khoá";
@@ -92,33 +92,33 @@ $PMF_LANG["msgSearchCategory"] = "Chuyên mục: ";
 $PMF_LANG["msgSearchContent"] = "Nội dung: ";
 
 // new Content
-$PMF_LANG["msgNewContentHeader"] = "Đề nghị Câu hỏi/Trả lời cho FAQ";
-$PMF_LANG["msgNewContentAddon"] = "Câu hỏi/Trả lời mà bạn đề nghị sau đây sẽ không được chấp nhận ngay mà phải đợi sự chuẩn y của các quản trị viên.";
+$PMF_LANG["msgNewContentHeader"] = "�?�? nghị Câu h�?i/Trả l�?i cho FAQ";
+$PMF_LANG["msgNewContentAddon"] = "Câu h�?i/Trả l�?i mà bạn đ�? nghị sau đây sẽ không được chấp nhận ngay mà phải đợi sự chuẩn y của các quản trị viên.";
 $PMF_LANG["msgNewContentUBB"] = "Bạn có thể dùng các mã UBB (<a href=\"help/ubbcode.php\" target=\"_blank\">Trợ giúp</a>).";
 $PMF_LANG["msgNewContentName"] = "Tên:";
 $PMF_LANG["msgNewContentMail"] = "E-mail:";
 $PMF_LANG["msgNewContentCategory"] = "Chuyên mục";
-$PMF_LANG["msgNewContentTheme"] = "Câu hỏi";
-$PMF_LANG["msgNewContentArticle"] = "Câu trả lời";
+$PMF_LANG["msgNewContentTheme"] = "Câu h�?i";
+$PMF_LANG["msgNewContentArticle"] = "Câu trả l�?i";
 $PMF_LANG["msgNewContentKeywords"] = "Từ khoá";
 $PMF_LANG["msgNewContentLink"] = "Liên kết";
 $PMF_LANG["msgNewContentSubmit"] = "submit";
 $PMF_LANG["msgInfo"] = "Thông tin chi tiết: ";
-$PMF_LANG["msgNewContentThanks"] = "Cảm ơn câu trả lời của bạn!";
-$PMF_LANG["msgNoQuestionsAvailable"] = "Hiện tại không có câu hỏi nào!";
+$PMF_LANG["msgNewContentThanks"] = "Cảm ơn câu trả l�?i của bạn!";
+$PMF_LANG["msgNoQuestionsAvailable"] = "Hiện tại không có câu h�?i nào!";
 
 // ask Question
-$PMF_LANG["msgNewQuestion"] = "Câu hỏi của bạn";
+$PMF_LANG["msgNewQuestion"] = "Câu h�?i của bạn";
 $PMF_LANG["msgAskCategory"] = "Chuyên mục";
-$PMF_LANG["msgAskYourQuestion"] = "Câu hỏi";
+$PMF_LANG["msgAskYourQuestion"] = "Câu h�?i";
 $PMF_LANG["msgAskThx4Mail"] = "<p>Cảm ơn!</p>";
 $PMF_LANG["msgDate_User"] = "Ngày / Tên";
 $PMF_LANG["msgDate"] = "Ngày";
 $PMF_LANG["msgUser"] = "Tên";
 $PMF_LANG["msgDate_User"] = "Ngày / Tên";
-$PMF_LANG["msgQuestion2"] = "Câu hỏi";
-$PMF_LANG["msg2answer"] = "Trả lời";
-$PMF_LANG["msgQuestionText"] = "Ở đây bạn có thể thấy các câu hỏi của người khác. Nếu bạn có thể trả lời cho các câu hỏi đó thì câu trả lời của bạn có thể sẽ được thêm vào cơ sở dữ liệu.";
+$PMF_LANG["msgQuestion2"] = "Câu h�?i";
+$PMF_LANG["msg2answer"] = "Trả l�?i";
+$PMF_LANG["msgQuestionText"] = "Ở đây bạn có thể thấy các câu h�?i của ngư�?i khác. Nếu bạn có thể trả l�?i cho các câu h�?i đó thì câu trả l�?i của bạn có thể sẽ được thêm vào cơ sở dữ liệu.";
 
 // Help
 $PMF_LANG["msgHelpText"] = "<p>Cấu trúc của FAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) là rất đơb giản. You can either search the <strong><a href=\"".$_SERVER["PHP_SELF"]."?sid=".isset($_GET["sid"])."&amp;action=show\">categories</a></strong> or let the <strong><a href=\"".$_SERVER["PHP_SELF"]."?sid=".isset($_GET["sid"])."&amp;action=search\">FAQ search engine</a></strong> search for keywords.</p>";
@@ -133,10 +133,10 @@ $PMF_LANG["msgTopTen"] = "TOP 10";
 $PMF_LANG["msgHomeThereAre"] = "Có ";
 $PMF_LANG["msgHomeArticlesOnline"] = " mục.";
 $PMF_LANG["msgNoNews"] = "";
-$PMF_LANG["msgLatestArticles"] = "Năm câu hỏi mới nhất:";
+$PMF_LANG["msgLatestArticles"] = "Năm câu h�?i mới nhất:";
 
 // E-Mailbenachrichtigung
-$PMF_LANG["msgMailThanks"] = "Cảm ơn bạn rất nhiều đã có đề nghị cho FAQ.";
+$PMF_LANG["msgMailThanks"] = "Cảm ơn bạn rất nhi�?u đã có đ�? nghị cho FAQ.";
 $PMF_LANG["msgMailCheck"] = "Có dữ liệu mới trong FAQ!\nHãy kiểm tra mục quản lý!";
 $PMF_LANG["msgMailContact"] = "Thông điệp của bạn đã được gửi đến quản trị viên.";
 
@@ -147,12 +147,12 @@ $PMF_LANG["err_noArticles"] = "<p>Không có dữ liệu.</p>";
 $PMF_LANG["err_badID"] = "<p>Wrong ID.</p>";
 $PMF_LANG["err_noTopTen"] = "<p>Không có.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>Không tìm thấy.</p>";
-$PMF_LANG["err_SaveEntries"] = "Các mục cần thiết là <strong>Tên</strong>, <strong>Địa chỉ email</strong>, <strong>Chuyên mục</strong>, <strong>Tiêu đề</strong> và <strong>Nội dung</strong>!<br /><br />\n<a href=\"javascript:history.back();\">trở lại trang trước</a><br /><br />\n";
-$PMF_LANG["err_SaveComment"] = "Các mục cần thiết là <strong>Tên</strong>, <strong>Địa chỉ email</strong> và <strong>Lời bình luận</strong> của bạn!<br /><br />\n<a href=\"javascript:history.back();\">trở lại trang trước</a><br /><br />\n";
-$PMF_LANG["err_VoteTooMuch"] = "<p>Bỏ phiếu hai lần không được tính. <a href=\"javascript:history.back();\">Nhấn vào đây</a>, trở lại.</p>";
-$PMF_LANG["err_noVote"] = "<p><strong>Bạn chưa xếp hạng câu hỏi!</strong> <a href=\"javascript:history.back();\">Xin nhấn vào đây</a>, để bỏ phiếu.</p>";
-$PMF_LANG["err_noMailAdress"] = "Địa chỉ email không hợp lệ.<br /><a href=\"javascript:history.back();\">Trở lại</a>";
-$PMF_LANG["err_sendMail"] = "Các mục cần thiết là <strong>Tên</strong>, <strong>Địa chỉ email</strong> và <strong>Câu hỏi</strong> của bạn!<br /><br />\n<a href=\"javascript:history.back();\">trở lại trang trước</a><br /><br />\n";
+$PMF_LANG["err_SaveEntries"] = "Các mục cần thiết là <strong>Tên</strong>, <strong>�?ịa chỉ email</strong>, <strong>Chuyên mục</strong>, <strong>Tiêu đ�?</strong> và <strong>Nội dung</strong>!<br /><br />\n<a href=\"javascript:history.back();\">trở lại trang trước</a><br /><br />\n";
+$PMF_LANG["err_SaveComment"] = "Các mục cần thiết là <strong>Tên</strong>, <strong>�?ịa chỉ email</strong> và <strong>L�?i bình luận</strong> của bạn!<br /><br />\n<a href=\"javascript:history.back();\">trở lại trang trước</a><br /><br />\n";
+$PMF_LANG["err_VoteTooMuch"] = "<p>B�? phiếu hai lần không được tính. <a href=\"javascript:history.back();\">Nhấn vào đây</a>, trở lại.</p>";
+$PMF_LANG["err_noVote"] = "<p><strong>Bạn chưa xếp hạng câu h�?i!</strong> <a href=\"javascript:history.back();\">Xin nhấn vào đây</a>, để b�? phiếu.</p>";
+$PMF_LANG["err_noMailAdress"] = "�?ịa chỉ email không hợp lệ.<br /><a href=\"javascript:history.back();\">Trở lại</a>";
+$PMF_LANG["err_sendMail"] = "Các mục cần thiết là <strong>Tên</strong>, <strong>�?ịa chỉ email</strong> và <strong>Câu h�?i</strong> của bạn!<br /><br />\n<a href=\"javascript:history.back();\">trở lại trang trước</a><br /><br />\n";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>Tìm kiếm:</strong><br /></p>";
@@ -160,14 +160,14 @@ $PMF_LANG["help_search"] = "<p><strong>Tìm kiếm:</strong><br /></p>";
 // Menü
 $PMF_LANG["ad"] = 'ADMIN MENU';
 $PMF_LANG["ad_title"] = "Quản trị Hệ thống FAQ";
-$PMF_LANG["ad_menu_user_administration"] = "Quản lý người dùng";
+$PMF_LANG["ad_menu_user_administration"] = "Quản lý ngư�?i dùng";
 $PMF_LANG["ad_menu_entry_aprove"] = "Duyệt FAQ";
-$PMF_LANG["ad_menu_entry_edit"] = "Quản lý Câu hỏi";
+$PMF_LANG["ad_menu_entry_edit"] = "Quản lý Câu h�?i";
 $PMF_LANG["ad_menu_categ_add"] = "Thêm chuyên mục";
 $PMF_LANG["ad_menu_categ_edit"] = "Thay đổi chuyên mục";
 $PMF_LANG["ad_menu_news_add"] = "Thêm tin tức";
 $PMF_LANG["ad_menu_news_edit"] = "Quản lý tin tức";
-$PMF_LANG["ad_menu_open"] = "Câu hỏi mở";
+$PMF_LANG["ad_menu_open"] = "Câu h�?i mở";
 $PMF_LANG["ad_menu_stat"] = "Thống kê";
 $PMF_LANG["ad_menu_cookie"] = "Cookies";
 $PMF_LANG["ad_menu_session"] = "Xem Sessions";
@@ -198,31 +198,31 @@ $PMF_LANG["ad_gen_ncf"] = "Không tìm thấy chuyên mục!";
 $PMF_LANG["ad_gen_delete"] = "Xoá";
 
 // Benutzerverwaltung
-$PMF_LANG["ad_user"] = "Quản lý người dùng";
-$PMF_LANG["ad_user_username"] = "Người đã đăng kí";
-$PMF_LANG["ad_user_rights_th"] = "Xác lập các quyền quản trị";
+$PMF_LANG["ad_user"] = "Quản lý ngư�?i dùng";
+$PMF_LANG["ad_user_username"] = "Ngư�?i đã đăng kí";
+$PMF_LANG["ad_user_rights_th"] = "Xác lập các quy�?n quản trị";
 $PMF_LANG["ad_user_edit"] = "thay đổi";
 $PMF_LANG["ad_user_delete"] = "Xoá";
-$PMF_LANG["ad_user_add"] = "Thêm người dùng mới";
+$PMF_LANG["ad_user_add"] = "Thêm ngư�?i dùng mới";
 $PMF_LANG["ad_user_profou"] = "Lý lịch của ";
 $PMF_LANG["ad_user_name"] = "Tên đăng nhập";
 $PMF_LANG["ad_user_password"] = "Mật mã";
 $PMF_LANG["ad_user_confirm"] = "Xác nhận";
-$PMF_LANG["ad_user_rights"] = "Xác lập<br />các quyền <br />của người dùng";
-$PMF_LANG["ad_user_del_1"] = "Người dùng ";
+$PMF_LANG["ad_user_rights"] = "Xác lập<br />các quy�?n <br />của ngư�?i dùng";
+$PMF_LANG["ad_user_del_1"] = "Ngư�?i dùng ";
 $PMF_LANG["ad_user_del_2"] = " sẽ bị xoá?";
 $PMF_LANG["ad_user_del_3"] = "Bạn chắc chắn ?";
-$PMF_LANG["ad_user_deleted"] = "Đã xoá xong người dùng.";
+$PMF_LANG["ad_user_deleted"] = "�?ã xoá xong ngư�?i dùng.";
 
 // Beitragsverwaltung
 $PMF_LANG["ad_entry_aor"] = "Quản trị dữ liệu FAQ";
 $PMF_LANG["ad_entry_id"] = "ID";
-$PMF_LANG["ad_entry_topic"] = "Chủ đề";
+$PMF_LANG["ad_entry_topic"] = "Chủ đ�?";
 $PMF_LANG["ad_entry_action"] = "Hành động";
 $PMF_LANG["ad_entry_edit_1"] = "Thay đổi record";
 $PMF_LANG["ad_entry_edit_2"] = "thay đổi";
-$PMF_LANG["ad_entry_theme"] = "Câu hỏi";
-$PMF_LANG["ad_entry_content"] = "Trả lời";
+$PMF_LANG["ad_entry_theme"] = "Câu h�?i";
+$PMF_LANG["ad_entry_content"] = "Trả l�?i";
 $PMF_LANG["ad_entry_keywords"] = "Từ khoá";
 $PMF_LANG["ad_entry_author"] = "Tác giả";
 $PMF_LANG["ad_entry_category"] = "Chuyên mục:";
@@ -234,32 +234,32 @@ $PMF_LANG["ad_entry_commentby"] = "Bình luận bởi";
 $PMF_LANG["ad_entry_comment"] = "Bình luận:";
 $PMF_LANG["ad_entry_save"] = "Ghi lại";
 $PMF_LANG["ad_entry_delete"] = "Xoá";
-$PMF_LANG["ad_entry_delcom_1"] = "Bạn muốn các bình luận của người dùng ";
+$PMF_LANG["ad_entry_delcom_1"] = "Bạn muốn các bình luận của ngư�?i dùng ";
 $PMF_LANG["ad_entry_delcom_2"] = "sẽ bị xoá?";
 $PMF_LANG["ad_entry_commentdelsuc"] = "Bình luận/nhận xét đã được xoá";
 $PMF_LANG["ad_entry_back"] = "Back to the article";
 $PMF_LANG["ad_entry_commentdelfail"] = "Bình luận không được xoá";
 $PMF_LANG["ad_entry_savedsuc"] = "Những thay đổi đã được lưu trữ.";
 $PMF_LANG["ad_entry_savedfail"] = "Có lỗi trong cơ sở dữ liệu.";
-$PMF_LANG["ad_entry_del_1"] = "Bạn có chắc chắn rằng chủ đề: ";
+$PMF_LANG["ad_entry_del_1"] = "Bạn có chắc chắn rằng chủ đ�?: ";
 $PMF_LANG["ad_entry_del_2"] = " của ";
 $PMF_LANG["ad_entry_del_3"] = "sẽ bị xoá?";
 $PMF_LANG["ad_entry_delsuc"] = "Dữ liệu đã được xoá";
 $PMF_LANG["ad_entry_delfail"] = "Dữ liệu không được xoá";
 $PMF_LANG["ad_entry_back"] = "Trở lại";
-$PMF_LANG["ad_entry_add"] = "Thêm Câu hỏi/Trả lời";
+$PMF_LANG["ad_entry_add"] = "Thêm Câu h�?i/Trả l�?i";
 
 // Newsverwaltung
-$PMF_LANG["ad_news_header"] = "Tiêu đề";
+$PMF_LANG["ad_news_header"] = "Tiêu đ�?";
 $PMF_LANG["ad_news_text"] = "Nội dung";
 $PMF_LANG["ad_news_link_url"] = "Liên kết<br />(không có http://)";
-$PMF_LANG["ad_news_link_title"] = "Tiêu đề của liên kết:";
-$PMF_LANG["ad_news_link_target"] = "Đích của liên kết";
+$PMF_LANG["ad_news_link_title"] = "Tiêu đ�? của liên kết:";
+$PMF_LANG["ad_news_link_target"] = "�?ích của liên kết";
 $PMF_LANG["ad_news_link_window"] = "Mở cửa sổ mới";
 $PMF_LANG["ad_news_link_faq"] = "Dùng chung cửa sổ với FAQ";
 $PMF_LANG["ad_news_add"] = "Thêm tin tức";
 $PMF_LANG["ad_news_id"] = "#";
-$PMF_LANG["ad_news_headline"] = "Tiêu đề";
+$PMF_LANG["ad_news_headline"] = "Tiêu đ�?";
 $PMF_LANG["ad_news_date"] = "Ngày";
 $PMF_LANG["ad_news_action"] = "Hành động";
 $PMF_LANG["ad_news_update"] = "cập nhật";
@@ -302,10 +302,10 @@ $PMF_LANG["ad_categ_deleted"] = "Chuyên mục đã được xoá.";
 
 // Cookies
 $PMF_LANG["ad_cookie_cookiesuc"] = "Cookie đã được xác lập <strong>thành công</strong>.";
-$PMF_LANG["ad_cookie_already"] = "Cookie đã được xác lập rồi. Bây giờ bạn có các tuỳ chọn sau đây:";
+$PMF_LANG["ad_cookie_already"] = "Cookie đã được xác lập rồi. Bây gi�? bạn có các tuỳ ch�?n sau đây:";
 $PMF_LANG["ad_cookie_again"] = "Xác lập lại cookie";
 $PMF_LANG["ad_cookie_delete"] = "xoá cookie";
-$PMF_LANG["ad_cookie_no"] = "Chưa có cookie nào được lưu lại cả. Với cookie bạn có thể lưu các thông tin đăng nhập của bạn. Bây giờ bạn có các tuỳ chọn sauB:";
+$PMF_LANG["ad_cookie_no"] = "Chưa có cookie nào được lưu lại cả. Với cookie bạn có thể lưu các thông tin đăng nhập của bạn. Bây gi�? bạn có các tuỳ ch�?n sauB:";
 $PMF_LANG["ad_cookie_set"] = "Xác lập cookie";
 $PMF_LANG["ad_cookie_deleted"] = "Cookie đã được xoá.";
 
@@ -319,24 +319,24 @@ $PMF_LANG["ad_passwd_new"] = "Mật mã mới";
 $PMF_LANG["ad_passwd_con"] = "Xác nhận lại";
 $PMF_LANG["ad_passwd_change"] = "Thay đổi";
 $PMF_LANG["ad_passwd_suc"] = "Mật mã đã được thay đổi.";
-$PMF_LANG["ad_passwd_remark"] = "<strong>CHÚ Ý:</strong><br />Cookie phải được xác lập lại!";
+$PMF_LANG["ad_passwd_remark"] = "<strong>CHÚ �?:</strong><br />Cookie phải được xác lập lại!";
 $PMF_LANG["ad_passwd_fail"] = "Mật mã cũ <strong>phải</strong> được nhập vào đúng và cả hai mật mã mới phải <strong>giống ngau</strong>.";
 
 // Adduser
-$PMF_LANG["ad_adus_adduser"] = "Thêm người dùng mới";
+$PMF_LANG["ad_adus_adduser"] = "Thêm ngư�?i dùng mới";
 $PMF_LANG["ad_adus_name"] = "Tên đăng nhập:";
 $PMF_LANG["ad_adus_password"] = "Mật mã:";
 $PMF_LANG["ad_adus_add"] = "Thêm";
-$PMF_LANG["ad_adus_suc"] = "Người dùng mới đã được thêm vào hệ thống.";
+$PMF_LANG["ad_adus_suc"] = "Ngư�?i dùng mới đã được thêm vào hệ thống.";
 $PMF_LANG["ad_adus_edit"] = "Thay đổi lý lịch";
 $PMF_LANG["ad_adus_dberr"] = "<strong>lỗi cơ sở dữ liệu!</strong>";
-$PMF_LANG["ad_adus_exerr"] = "Người dùng <strong>đã có</strong> trong cơ sở dữ liệu!";
+$PMF_LANG["ad_adus_exerr"] = "Ngư�?i dùng <strong>đã có</strong> trong cơ sở dữ liệu!";
 
 // Sessions
 $PMF_LANG["ad_sess_id"] = "ID";
 $PMF_LANG["ad_sess_sid"] = "Session ID";
 $PMF_LANG["ad_sess_ip"] = "IP";
-$PMF_LANG["ad_sess_time"] = "Giờ";
+$PMF_LANG["ad_sess_time"] = "Gi�?";
 $PMF_LANG["ad_sess_pageviews"] = "PageViews";
 $PMF_LANG["ad_sess_search"] = "Tìm  kiếm";
 $PMF_LANG["ad_sess_sfs"] = "Tìm kiếm sessions";
@@ -359,8 +359,8 @@ $PMF_LANG["ad_sess_back"] = "Trở lại";
 // Statistik
 $PMF_LANG["ad_rs"] = "Thống kê Xếp hạng";
 $PMF_LANG["ad_rs_rating_1"] = "Xếp hạng của";
-$PMF_LANG["ad_rs_rating_2"] = "người dùng được hiển thị:";
-$PMF_LANG["ad_rs_red"] = "Đỏ";
+$PMF_LANG["ad_rs_rating_2"] = "ngư�?i dùng được hiển thị:";
+$PMF_LANG["ad_rs_red"] = "�?�?";
 $PMF_LANG["ad_rs_green"] = "Xanh";
 $PMF_LANG["ad_rs_altt"] = "với điểm trung bình thấp hơn 2";
 $PMF_LANG["ad_rs_ahtf"] = "với điểm trung bình cao hơn 4";
@@ -382,21 +382,21 @@ $PMF_LANG["ad_config_reset"] = "Xoá";
 $PMF_LANG["ad_config_saved"] = "Cấu hình đã được lưu.";
 $PMF_LANG["ad_menu_editconfig"] = "Thay đổi Cấu hình";
 $PMF_LANG["ad_att_none"] = "Không có file đính kèm";
-$PMF_LANG["ad_att_att"] = "Đính kèm:";
-$PMF_LANG["ad_att_add"] = "Đính kèm file";
+$PMF_LANG["ad_att_att"] = "�?ính kèm:";
+$PMF_LANG["ad_att_add"] = "�?ính kèm file";
 $PMF_LANG["ad_entryins_suc"] = "Dữ liệu đã được lưu trữ!";
 $PMF_LANG["ad_entryins_fail"] = "Có lỗi.";
 $PMF_LANG["ad_att_del"] = "Xoá";
 $PMF_LANG["ad_att_nope"] = "File đính kèm chỉ có thể được thêm khi soạn thảo.";
 $PMF_LANG["ad_att_delsuc"] = "File đính kèm đã được xoá.";
 $PMF_LANG["ad_att_delfail"] = "Có lỗi khi xoá file đính kèm.";
-$PMF_LANG["ad_entry_add"] = "Thêm câu hỏi/trả lời";
+$PMF_LANG["ad_entry_add"] = "Thêm câu h�?i/trả l�?i";
 
 // Added v0.85 - 08.06.2001 - Bastian - Admin
 $PMF_LANG["ad_csv_make"] = "Bản sao lưu trữ là bản sao toàn bộ nội dung cơ sở dữ liệu. Bản sao lưu trữ phải được tiến hành ít nhất một tháng một lần. "
-."Định dạng của bản sao lưu trữ là MySQL transaction, mà nó có thể nhập vào lại bằng cách dùng công cụ như phpMyAdmin "
+."�?ịnh dạng của bản sao lưu trữ là MySQL transaction, mà nó có thể nhập vào lại bằng cách dùng công cụ như phpMyAdmin "
 ." hoặc dòng lệnh của mysql.";
-$PMF_LANG["ad_csv_link"] = "Tải về bản sao lưu trữ";
+$PMF_LANG["ad_csv_link"] = "Tải v�? bản sao lưu trữ";
 $PMF_LANG["ad_csv_head"] = "Tạo bản sao lưu trữ";
 $PMF_LANG["ad_att_addto"] = "Thêm một file đính kèmAdd an attachment to the issue";
 $PMF_LANG["ad_att_addto_2"] = "";
@@ -404,7 +404,7 @@ $PMF_LANG["ad_att_att"] = "File:";
 $PMF_LANG["ad_att_butt"] = "OK";
 $PMF_LANG["ad_att_suc"] = "File đã được đính kèm.";
 $PMF_LANG["ad_att_fail"] = "Có lỗi khi đang đính kèm file.";
-$PMF_LANG["ad_att_close"] = "Đóng cửa sổ này";
+$PMF_LANG["ad_att_close"] = "�?óng cửa sổ này";
 
 // Added v0.85 - 08.07.2001 - Bastian - Admin
 $PMF_LANG["ad_csv_restore"] = "Với trang này bạn có thể phục hồi nội dung của cơ sở dữ liệu từ các bản sao lưu của phpmyfaq."
@@ -416,7 +416,7 @@ $PMF_LANG["ad_csv_linkdat"] = "Sao lưu số liệu";
 $PMF_LANG["ad_csv_head2"] = "Phục hồi";
 $PMF_LANG["ad_csv_no"] = "File này hình như không phải là một bản sao lưu của phpmyfaq.";
 $PMF_LANG["ad_csv_prepare"] = "Chuẩn bị kết nối cơ sở dữ liệu...";
-$PMF_LANG["ad_csv_process"] = "Đang tìm kiếm dữ liệu...";
+$PMF_LANG["ad_csv_process"] = "�?ang tìm kiếm dữ liệu...";
 $PMF_LANG["ad_csv_of"] = "của";
 $PMF_LANG["ad_csv_suc"] = "đã thành công.";
 $PMF_LANG["ad_csv_backup"] = "Sao lưu";
@@ -432,12 +432,12 @@ $PMF_LANG["ad_sess_head"] = "Xem session";
 
 // Added v1.1 - 06.01.2002 - Bastian
 $PMF_LANG["ad_menu_categ_edit"] = "Quản lý chuyên mục";
-$PMF_LANG["ad_menu_stat"] = "Thống kê/Đánh giá";
+$PMF_LANG["ad_menu_stat"] = "Thống kê/�?ánh giá";
 $PMF_LANG["ad_kateg_add"] = "Thêm";
 $PMF_LANG["ad_kateg_rename"] = "Thay đổi tên";
 $PMF_LANG["ad_adminlog_date"] = "Ngày";
-$PMF_LANG["ad_adminlog_user"] = "Người dùng";
-$PMF_LANG["ad_adminlog_ip"] = "Địa chỉ IP";
+$PMF_LANG["ad_adminlog_user"] = "Ngư�?i dùng";
+$PMF_LANG["ad_adminlog_ip"] = "�?ịa chỉ IP";
 
 $PMF_LANG["ad_stat_sess"] = "Sessions";
 $PMF_LANG["ad_stat_days"] = "Ngày";
@@ -448,36 +448,36 @@ $PMF_LANG["ad_stat_laen"] = "Last Log";
 $PMF_LANG["ad_stat_browse"] = "Duyệt Session";
 $PMF_LANG["ad_stat_ok"] = "OK";
 
-$PMF_LANG["ad_sess_time"] = "Giờ";
+$PMF_LANG["ad_sess_time"] = "Gi�?";
 $PMF_LANG["ad_sess_sid"] = "Session-ID";
-$PMF_LANG["ad_sess_ip"] = "Địa chỉ IP";
+$PMF_LANG["ad_sess_ip"] = "�?ịa chỉ IP";
 
-$PMF_LANG["ad_ques_take"] = "Lấy một câu hỏi và sửa";
+$PMF_LANG["ad_ques_take"] = "Lấy một câu h�?i và sửa";
 $PMF_LANG["no_cats"] = "Không tìm thấy chuyên mục";
 
 // Added v1.1 - 17.01.2002 - Bastian
 $PMF_LANG["ad_log_lger"] = "Tên đăng nhập hay mật mã không hợp lệ.";
 $PMF_LANG["ad_log_sess"] = "Phiên làm việc hết hiệu lực.";
-$PMF_LANG["ad_log_edit"] = "\"Sửa Người dùng\"-Mẫu cho người dùng sau đây: ";
+$PMF_LANG["ad_log_edit"] = "\"Sửa Ngư�?i dùng\"-Mẫu cho ngư�?i dùng sau đây: ";
 $PMF_LANG["ad_log_crea"] = "\"Bài mới\" form.";
 $PMF_LANG["ad_log_crsa"] = "Mục mới đã được tạo.";
-$PMF_LANG["ad_log_ussa"] = "Cập nhật dữ liệu cho người dùng sau đây:";
-$PMF_LANG["ad_log_usde"] = "Xoá người dùng sau đây:";
-$PMF_LANG["ad_log_beed"] = "Mẫu thay đổi dữ liệu cho người dùng sau đây: ";
+$PMF_LANG["ad_log_ussa"] = "Cập nhật dữ liệu cho ngư�?i dùng sau đây:";
+$PMF_LANG["ad_log_usde"] = "Xoá ngư�?i dùng sau đây:";
+$PMF_LANG["ad_log_beed"] = "Mẫu thay đổi dữ liệu cho ngư�?i dùng sau đây: ";
 $PMF_LANG["ad_log_bede"] = "Xoá các dữ liệu sau đây:";
 $PMF_LANG["ad_start_visits"] = "Lần viếng thăm";
 $PMF_LANG["ad_start_articles"] = "Bài viết";
 $PMF_LANG["ad_start_comments"] = "Bình luận";
-$PMF_LANG["ad_user_chpw"] = "Bạn chỉ có thể thay đổi mật mã của người dùng hiện tại qua \"".$PMF_LANG["ad_menu_passwd"]."\".";
+$PMF_LANG["ad_user_chpw"] = "Bạn chỉ có thể thay đổi mật mã của ngư�?i dùng hiện tại qua \"".$PMF_LANG["ad_menu_passwd"]."\".";
 
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "dán";
 $PMF_LANG["ad_categ_cut"] = "cắt";
 $PMF_LANG["ad_categ_copy"] = "copy";
-$PMF_LANG["ad_categ_process"] = "Đang xử lý các chuyên mục...";
+$PMF_LANG["ad_categ_process"] = "�?ang xử lý các chuyên mục...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten
-$PMF_LANG["err_NotAuth"] = "<p><strong>Bạn không có quyền thực hiện!</strong></p> ";
+$PMF_LANG["err_NotAuth"] = "<p><strong>Bạn không có quy�?n thực hiện!</strong></p> ";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
 $PMF_LANG["msgPreviusPage"] = "trang trước";
@@ -498,29 +498,29 @@ $PMF_LANG["msgLangaugeSubmit"] = "thay đổi ngôn ngữ";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
 $PMF_LANG["ad_entry_preview"] = "Xem trước";
-$PMF_LANG["ad_attach_1"] = "Xin chọn một thư mục cho các file đính kèm trong cấu hình";
-$PMF_LANG["ad_attach_2"] = "Xin chọn một link cho các file đính kèm trong cấu hình";
+$PMF_LANG["ad_attach_1"] = "Xin ch�?n một thư mục cho các file đính kèm trong cấu hình";
+$PMF_LANG["ad_attach_2"] = "Xin ch�?n một link cho các file đính kèm trong cấu hình";
 $PMF_LANG["ad_attach_3"] = "File attachment.php không thể mở nếu không có sự xác nhận thích hợp";
-$PMF_LANG["ad_attach_4"] = "File đính kèm phải có kích thước nhỏ hơn ".$PMF_CONF["attmax"]." Bytes.";
+$PMF_LANG["ad_attach_4"] = "File đính kèm phải có kích thước nh�? hơn ".$PMF_CONF["attmax"]." Bytes.";
 $PMF_LANG["ad_menu_export"] = "Xuất FAQ";
 $PMF_LANG["ad_export_1"] = "Tạo RSS-Feed trên";
 $PMF_LANG["ad_export_2"] = ".";
 $PMF_LANG["ad_export_file"] = "Lỗi: Không thể ghi ra file.";
 $PMF_LANG["ad_export_news"] = "Tin tức RSS-Feed";
 $PMF_LANG["ad_export_topten"] = "Top 10 RSS-Feed";
-$PMF_LANG["ad_export_latest"] = "5 Câu hỏi mới nhất RSS-Feed";
+$PMF_LANG["ad_export_latest"] = "5 Câu h�?i mới nhất RSS-Feed";
 $PMF_LANG["ad_export_pdf"] = "Xuất tất cả ra file PDF";
 $PMF_LANG["ad_export_generate"] = "tạo RSS-Feed";
 
-$PMF_LANG["rightsLanguage"][0] = "thêm người dùng";
-$PMF_LANG["rightsLanguage"][1] = "sửa người dùng";
-$PMF_LANG["rightsLanguage"][2] = "xoá người dùng";
+$PMF_LANG["rightsLanguage"][0] = "thêm ngư�?i dùng";
+$PMF_LANG["rightsLanguage"][1] = "sửa ngư�?i dùng";
+$PMF_LANG["rightsLanguage"][2] = "xoá ngư�?i dùng";
 $PMF_LANG["rightsLanguage"][3] = "thêm dữ liệu";
 $PMF_LANG["rightsLanguage"][4] = "sửa dữ liệu";
 $PMF_LANG["rightsLanguage"][5] = "xoá dữ liệu";
 $PMF_LANG["rightsLanguage"][6] = "xem log";
 $PMF_LANG["rightsLanguage"][7] = "xem admin log";
-$PMF_LANG["rightsLanguage"][8] = "xoá lời bình";
+$PMF_LANG["rightsLanguage"][8] = "xoá l�?i bình";
 $PMF_LANG["rightsLanguage"][9] = "thêm tin tức";
 $PMF_LANG["rightsLanguage"][10] = "sửa  tin tức";
 $PMF_LANG["rightsLanguage"][11] = "xoá  tin tức";
@@ -533,20 +533,20 @@ $PMF_LANG["rightsLanguage"][17] = "thêm file đính kèm";
 $PMF_LANG["rightsLanguage"][18] = "xoá file đính kèm";
 $PMF_LANG["rightsLanguage"][19] = "tạo bản lưu trữ";
 $PMF_LANG["rightsLanguage"][20] = "phục hồi bản lưu trữ";
-$PMF_LANG["rightsLanguage"][21] = "xoá câu hỏi chờ trả lời";
+$PMF_LANG["rightsLanguage"][21] = "xoá câu h�?i ch�? trả l�?i";
 
 $PMF_LANG["msgAttachedFiles"] = "File kèm theo:";
 
 // Added v1.3.3 - 27.05.2003 - Thorsten
 $PMF_LANG["ad_user_action"] = "Hành động";
-$PMF_LANG["ad_entry_email"] = "Địa chỉ e-mail:";
+$PMF_LANG["ad_entry_email"] = "�?ịa chỉ e-mail:";
 $PMF_LANG["ad_entry_allowComments"] = "Cho phép bình luận";
 $PMF_LANG["msgWriteNoComment"] = "Bạn không thể bình luận với mục này";
 $PMF_LANG["ad_user_realname"] = "Tên đầy đủ:";
 $PMF_LANG["ad_export_generate_pdf"] = "tạo file PDF";
 $PMF_LANG["ad_export_full_faq"] = "FAQ lưu với file PDF: ";
-$PMF_LANG["err_bannedIP"] = "Địa chỉ IP của bạn bị cấm.";
-$PMF_LANG["err_SaveQuestion"] = "Các số liệu cần thiết là <strong>Tên</strong>, <strong>Địa chỉ email</strong> và <strong>Câu hỏi</strong>.<br /><br /><a href=\"javascript:history.back();\">trở lại trang trước</a><br /><br />\n";
+$PMF_LANG["err_bannedIP"] = "�?ịa chỉ IP của bạn bị cấm.";
+$PMF_LANG["err_SaveQuestion"] = "Các số liệu cần thiết là <strong>Tên</strong>, <strong>�?ịa chỉ email</strong> và <strong>Câu h�?i</strong>.<br /><br /><a href=\"javascript:history.back();\">trở lại trang trước</a><br /><br />\n";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Màu chữ: ";
@@ -595,3 +595,6 @@ $PMF_LANG["ad_xmlrpc_latest"] = "Latest version available on";
 
 // added v1.5.0 - 2005-07-31 by Thorsten
 $PMF_LANG['ad_categ_select'] = 'Select category language';
+
+// added v1.5.1 - 2005-09-06 by Thorsten
+$PMF_LANG['msgSitemap'] = 'Sitemap';

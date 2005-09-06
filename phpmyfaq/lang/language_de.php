@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.7 2005-07-31 09:34:42 thorstenr Exp $
+ * $Id: language_de.php,v 1.8 2005-09-06 12:52:07 thorstenr Exp $
  *
  * File:                language_de.php
  * Description:		    German language file
@@ -591,3 +591,6 @@ $PMF_LANG["ad_xmlrpc_latest"] = "Aktuelle Version auf";
 
 // added v1.5.0 - 2005-07-31 by Thorsten
 $PMF_LANG['ad_categ_select'] = 'Sprache der Kategorie';
+
+// added v1.5.1 - 2005-09-06 by Thorsten
+$PMF_LANG['msgSitemap'] = 'Sitemap';

@@ -56,7 +56,7 @@ $PMF_LANG["msgPrinterFriendly"] = "verze pro tisk";
 $PMF_LANG["msgPrintArticle"] = "Vytiskni tento z·znam";
 $PMF_LANG["msgMakeXMLExport"] = "exportuj jako XML-Soubor";
 $PMF_LANG["msgAverageVote"] = "Pr˘mÏrnÈ hnocenÌ:";
-$PMF_LANG["msgVoteUseability"] = "ProsÌm ohodnoù tento z·znam:";
+$PMF_LANG["msgVoteUseability"] = "ProsÌm ohodno? tento z·znam:";
 $PMF_LANG["msgVoteFrom"] = "z";
 $PMF_LANG["msgVoteBad"] = "naprosto nepouûiteln˝";
 $PMF_LANG["msgVoteGood"] = "velmi uûiteËn˝";
@@ -590,3 +590,6 @@ $PMF_LANG["ad_xmlrpc_latest"] = "Latest version available on";
 
 // added v1.5.0 - 2005-07-31 by Thorsten
 $PMF_LANG['ad_categ_select'] = 'Select category language';
+
+// added v1.5.1 - 2005-09-06 by Thorsten
+$PMF_LANG['msgSitemap'] = 'Sitemap';

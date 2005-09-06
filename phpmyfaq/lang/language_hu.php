@@ -55,7 +55,7 @@ $PMF_LANG["msgAuthor"] = "Szerző: ";
 $PMF_LANG["msgPrinterFriendly"] = "nyomtatható verzió";
 $PMF_LANG["msgPrintArticle"] = "Bejegyzés nyomtatása";
 $PMF_LANG["msgMakeXMLExport"] = "exportálás XML fájlként";
-$PMF_LANG["msgAverageVote"] = "Átlagos osztályzat:";
+$PMF_LANG["msgAverageVote"] = "�?tlagos osztályzat:";
 $PMF_LANG["msgVoteUseability"] = "Kérlek osztályozd a bejegyzést:";
 $PMF_LANG["msgVoteFrom"] = "tól";
 $PMF_LANG["msgVoteBad"] = "használhatatlan";
@@ -363,7 +363,7 @@ $PMF_LANG["ad_rs_ahtf"] = "az átlaga nagyobb mint 4";
 $PMF_LANG["ad_rs_no"] = "Nincs osztályzat";
 
 // Auth
-$PMF_LANG["ad_auth_insert"] = "Írd be a neved és a jelszavadat.";
+$PMF_LANG["ad_auth_insert"] = "�?rd be a neved és a jelszavadat.";
 $PMF_LANG["ad_auth_user"] = "Név:";
 $PMF_LANG["ad_auth_passwd"] = "jelszó:";
 $PMF_LANG["ad_auth_ok"] = "OK";
@@ -590,3 +590,6 @@ $PMF_LANG["ad_xmlrpc_latest"] = "Latest version available on";
 
 // added v1.5.0 - 2005-07-31 by Thorsten
 $PMF_LANG['ad_categ_select'] = 'Select category language';
+
+// added v1.5.1 - 2005-09-06 by Thorsten
+$PMF_LANG['msgSitemap'] = 'Sitemap';

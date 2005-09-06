@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_fr.php,v 1.8 2005-07-31 09:34:42 thorstenr Exp $
+* $Id: language_fr.php,v 1.9 2005-09-06 12:52:07 thorstenr Exp $
 *
 * The French language file - try to be the best
 *
@@ -594,3 +594,6 @@ $PMF_LANG["ad_xmlrpc_latest"] = "Derni&eacute;re version disponible sur";
 
 // added v1.5.0 - 2005-07-31 by Thorsten
 $PMF_LANG['ad_categ_select'] = 'Select category language';
+
+// added v1.5.1 - 2005-09-06 by Thorsten
+$PMF_LANG['msgSitemap'] = 'Sitemap';

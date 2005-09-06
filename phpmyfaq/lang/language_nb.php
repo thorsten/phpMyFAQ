@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_nb.php,v 1.1 2005-09-05 17:56:28 thorstenr Exp $
+* $Id: language_nb.php,v 1.2 2005-09-06 12:52:07 thorstenr Exp $
 *
 * Norwegian Bokmål language file
 *
@@ -590,3 +590,6 @@ $PMF_LANG["ad_xmlrpc_latest"] = "Siste versjon tilgjengelig på";
 
 // added v1.5.0 - 2005-07-31 by Thorsten
 $PMF_LANG['ad_categ_select'] = 'Velg kategorispråk';
+
+// added v1.5.1 - 2005-09-06 by Thorsten
+$PMF_LANG['msgSitemap'] = 'Sitemap';

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_da.php,v 1.5 2005-07-31 09:34:42 thorstenr Exp $
+* $Id: language_da.php,v 1.6 2005-09-06 12:52:07 thorstenr Exp $
 *
 * Danish language file
 *
@@ -591,3 +591,6 @@ $PMF_LANG["ad_xmlrpc_latest"] = "Latest version available on";
 
 // added v1.5.0 - 2005-07-31 by Thorsten
 $PMF_LANG['ad_categ_select'] = 'Select category language';
+
+// added v1.5.1 - 2005-09-06 by Thorsten
+$PMF_LANG['msgSitemap'] = 'Sitemap';
