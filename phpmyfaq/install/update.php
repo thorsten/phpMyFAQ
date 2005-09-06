@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.30 2005-08-15 18:01:08 thorstenr Exp $
+* $Id: update.php,v 1.31 2005-09-06 18:14:16 thorstenr Exp $
 *
 * Main update script
 *
@@ -26,30 +26,6 @@ define("PMF_ROOT_DIR", dirname(dirname(__FILE__)));
 
 require_once (PMF_ROOT_DIR."/inc/data.php");
 require_once (PMF_ROOT_DIR."/inc/config.php");
-
-/**
-* A function to read the version number
-*
-* @return   string
-* @access   public
-* @since    2004-11-27
-* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-*/
-function getVersionNumber()
-{
-    global $version, $PMF_CONF;
-    
-    if (isset($version)) {
-        $oldversion = $version;
-    } elseif (isset($PMF_CONF["version"])) {
-        $oldversion = $PMF_CONF["version"];
-    } else {
-        return FALSE;
-    }
-    
-    $t = explode(' ', $oldversion);
-    return $t[0];
-}
 
 if (isset($_GET["step"]) && $_GET["step"] != "") {
     $step = $_GET["step"];
@@ -150,8 +126,8 @@ if ($step == 1) {
 <legend class="installation"><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 1 of 5)</strong></legend>
 <p>This update will work <strong>only</strong> for the following versions:</p>
 <ul type="square">
-    <li>phpMyFAQ 1.4.0 later</li>
-    <li>phpMyFAQ 1.5.0 and later</li>
+    <li>phpMyFAQ 1.4.x</li>
+    <li>phpMyFAQ 1.5.x</li>
 </ul>
 <p>This update will <strong>not</strong> work for the following versions:</p>
 <ul type="square">
@@ -163,15 +139,6 @@ if ($step == 1) {
 </ul>
 <p><strong>Please make a full backup of your SQL tables before running this update.</strong></p>
 
-<?php
-    $oldversion = getVersionNumber();
-    if ($oldversion != FALSE) {
-?>
-<p>Your detected current version: phpMyFAQ <?php print $oldversion; ?></p>
-<input type="hidden" name="version" value="<?php print $oldversion; ?>" />
-<?php
-    } else {
-?>
 <p>Please select your current version:</p>
 <select name="version" size="1">
     <option value="1.3.0">phpMyFAQ 1.3.0</option>
@@ -183,9 +150,6 @@ if ($step == 1) {
     <option value="1.4.2">phpMyFAQ 1.4.2 and later</option>
     <option value="1.4.4">phpMyFAQ 1.4.4 and later</option>
 </select>
-<?php
-    }
-?>
 
 <p class="center"><input type="submit" value="Go to step 2 of 5" class="button" /></p>
 </fieldset>
