@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_fr.php,v 1.9 2005-09-06 12:52:07 thorstenr Exp $
+* $Id: language_fr.php,v 1.10 2005-09-06 18:13:01 thorstenr Exp $
 *
 * The French language file - try to be the best
 *
@@ -575,7 +575,7 @@ $LANG_CONF["parse_php"] = array(0 => "checkbox", 1 => "Le moteur de template, de
 $LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Activ&eacute; le support du mod_rewrite&nbsp;? (d&eacute;fault&nbsp;: d&eacute;sactiv&eacute;)");
 $LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "Voulez vous activer le support de LDAP&nbsp;? (d&eacute;fault&nbsp;: d&eacute;sactiv&eacute;)");
 
-$PMF_LANG["ad_categ_new_main_cat"] = "as new main category";
+$PMF_LANG['ad_categ_new_main_cat'] = 'comme cat&eacute;gorie principale';
 $PMF_LANG["ad_categ_paste_error"] = "D&eacute;placer cette cat&eacute;gorie est impossible.";
 $PMF_LANG["ad_categ_move"] = "d&eacute;placer la cat&eacute;gorie";
 $PMF_LANG["ad_categ_lang"] = "Langue";
@@ -590,10 +590,10 @@ $PMF_LANG["lostpwd_text_2"] = "Merci de changer votre mot de passe personnel dan
 $PMF_LANG["lostpwd_mail_okay"] = "L'e-mail a &eacute;t&eacute; envoy&eacute;.";
 
 $PMF_LANG["ad_xmlrpc_button"] = "Obtenez la derni&eacute;re version de phpMyFAQ";
-$PMF_LANG["ad_xmlrpc_latest"] = "Derni&eacute;re version disponible sur";
+$PMF_LANG['ad_xmlrpc_latest'] = 'Derni&egrave;re version disponible sur';
 
 // added v1.5.0 - 2005-07-31 by Thorsten
-$PMF_LANG['ad_categ_select'] = 'Select category language';
+$PMF_LANG['ad_categ_select'] = 'Selection des cat&eacute;gories par langue';
 
 // added v1.5.1 - 2005-09-06 by Thorsten
 $PMF_LANG['msgSitemap'] = 'Sitemap';
