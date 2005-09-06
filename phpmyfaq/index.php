@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.26 2005-09-05 18:54:24 thorstenr Exp $
+* $Id: index.php,v 1.27 2005-09-06 06:20:09 thorstenr Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the 
@@ -241,8 +241,7 @@ if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == "TRUE") {
 				"backToHome" => '<a href="index.html">'.$PMF_LANG["msgHome"].'</a>',
                 "allCategories" => '<a href="showcat.html">'.$PMF_LANG["msgShowAllCategories"].'</a>',
 				"writeSendAdress" => 'search.html',
-                'showSitemap' => 'sitemap-a.html',
-                'showSitemap' => $_SERVER["PHP_SELF"].'?'.$sids.'action=sitemap');
+                'showSitemap' => '<a href="sitemap-a.html">'.$PMF_LANG['msgSitemap'].'</a>');
 } else {
     $links_template_vars = array(
                 "faqHome" => $_SERVER['PHP_SELF'],
@@ -254,7 +253,8 @@ if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == "TRUE") {
 				"msgContact" => '<a href="'.$_SERVER["PHP_SELF"].'?'.$sids.'action=contact">'.$PMF_LANG["msgContact"].'</a>',
                 "allCategories" => '<a href="'.$_SERVER["PHP_SELF"].'?'.$sids.'action=show">'.$PMF_LANG["msgShowAllCategories"].'</a>',
 				"backToHome" => '<a href="'.$_SERVER["PHP_SELF"].'?'.$sids.'">'.$PMF_LANG["msgHome"].'</a>',
-				"writeSendAdress" => $_SERVER["PHP_SELF"]."?".$sids."action=search");
+				"writeSendAdress" => $_SERVER["PHP_SELF"]."?".$sids."action=search",
+                'showSitemap' => '<a href="'.$_SERVER["PHP_SELF"].'?'.$sids.'action=sitemap">'.$PMF_LANG['msgSitemap'].'</a>');
 }
 
 // get main template, set main variables
