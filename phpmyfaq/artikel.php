@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.20 2005-07-29 12:25:42 thorstenr Exp $
+* $Id: artikel.php,v 1.21 2005-09-07 11:48:03 thorstenr Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -22,51 +22,42 @@
 */
 
 if (isset($_REQUEST['cat']) && is_numeric($_REQUEST['cat'])) {
-	$currentCategory = $_REQUEST['cat'];
+	$currentCategory = (int)$_REQUEST['cat'];
 } else {
-    $currentCategory = '';
+    $currentCategory = 0;
 }
 if (isset($_REQUEST['id']) && is_numeric($_REQUEST['id'])) {
-	$id = $_REQUEST['id'];
+	$id = (int)$_REQUEST['id'];
 }
 
 Tracking("article_view", $id);
 
 $comment = '';
-$result = $db->query('SELECT id, content, datum, author, email, comment FROM '.SQLPREFIX.'faqdata WHERE id = '.$id.' AND lang = \''.$lang.'\' AND active = \'yes\'');
+$result = $db->query(sprintf("SELECT id, content, datum, author, email, comment FROM %sfaqdata WHERE id = %d AND lang = '%s' AND active = 'yes'", SQLPREFIX, $id, $lang));
+
 while ($row = $db->fetch_object($result)) {
 	$id = $row->id;
 	$comment = $row->comment;
 	logViews($id, $lang);
 	$content = stripslashes($row->content);
-	if (is_dir('attachments/')  && is_dir('attachments/'.$id) && isset($PMF_CONF['disatt'])) {
-		$files = 0;
-		$outstr = "";
-		$dir = opendir('attachments/'.$id);
-		
-		while ($dat = readdir($dir)) {
-			if ($dat != '.' && $dat != '..') {
-				$files++;
-				$outstr .= '<a href="attachments/'.$id.'/'.$dat.'" target="_blank">'.$dat.'</a>, ';
-			}
-		}
-		if ($files > 0) {
-			$content .= '<p>'.$PMF_LANG['msgAttachedFiles'].' '.substr($outstr, 0, -2).'</p>';
-		}
-	}
 	$writeDateMsg = makeDate($row->datum);
 	$writeAuthor = $row->author;
     $categoryName = $tree->getPath($currentCategory);
 }
 
-$writePrintMsg          = '<a href="#" onclick="javascript:window.print();">'.$PMF_LANG["msgPrintArticle"].'</a>';
-$writePDF               = '<a target="_blank" href="pdf.php?cat='.$currentCategory.'&amp;id='.$id.'&amp;lang='.$lang.'">'.$PMF_LANG['msgPDF'].'</a>';
-$writeSend2FriendMsg    = '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=send2friend&amp;cat='.$currentCategory.'&amp;id='.$id.'&amp;artlang='.$lang.'">'.$PMF_LANG['msgSend2Friend'].'</a>';
-$writeXMLMsg            = "<a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=xml&amp;id=".$id."&amp;artlang=".$lang."\">".$PMF_LANG["msgMakeXMLExport"]."</a>";
+$writePrintMsg          = sprintf('<a href="#" onclick="javascript:window.print();">%s</a>', 
+                            $PMF_LANG["msgPrintArticle"]);
+$writePDF               = sprintf('<a target="_blank" href="pdf.php?cat=%s&amp;id=%d&amp;lang=%s">'.$PMF_LANG['msgPDF'].'</a>', 
+                            $currentCategory, $id, $lang);
+$writeSend2FriendMsg    = sprintf('<a href="%s?'.$sids.'action=send2friend&amp;cat=%d&amp;id=&d&amp;artlang=%s">%s</a>', 
+                            $_SERVER['PHP_SELF'], $currentCategory, $id, $lang, $PMF_LANG['msgSend2Friend']);
+$writeXMLMsg            = sprintf('<a href="%s?%daction=xml&amp;id=%d&amp;artlang=%d">%s</a>',
+                            $_SERVER["PHP_SELF"], $sids, $id, $lang, $PMF_LANG["msgMakeXMLExport"]);
 $changeLanguagePATH     = $_SERVER["PHP_SELF"]."?".$sids."action=artikel&amp;cat=".$currentCategory."&amp;id=".$id;
 $writeCommentMsg        = $PMF_LANG["msgYouCan"]."<a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=writecomment&amp;id=".$id."&amp;artlang=".$lang."\">".$PMF_LANG["msgWriteComment"]."</a>";
 $writeCategory          = stripslashes($categoryName)."<br />\n";
-$saveVotingPATH         = $_SERVER["PHP_SELF"]."?".$sids."action=savevoting";
+$saveVotingPATH         = sprintf('%s?%daction=savevoting', 
+                            $_SERVER["PHP_SELF"], $sids);
 
 if (isset($_GET["highlight"]) && $_GET["highlight"] != "/" && $_GET["highlight"] != "<" && $_GET["highlight"] != ">") {
     $highlight = strip_tags($_GET["highlight"]);
@@ -95,6 +86,22 @@ if ($num > 1) {
     $switchLanguage .= "</fieldset>\n";
 	$switchLanguage .= "</form>\n";
 	$switchLanguage .= "</p>\n";
+}
+
+if (is_dir('attachments/')  && is_dir('attachments/'.$id) && isset($PMF_CONF['disatt'])) {
+    $files = 0;
+    $outstr = "";
+    $dir = opendir('attachments/'.$id);
+
+    while ($dat = readdir($dir)) {
+        if ($dat != '.' && $dat != '..') {
+            $files++;
+            $outstr .= '<a href="attachments/'.$id.'/'.$dat.'" target="_blank">'.$dat.'</a>, ';
+        }
+    }
+    if ($files > 0) {
+        $content .= '<p>'.$PMF_LANG['msgAttachedFiles'].' '.substr($outstr, 0, -2).'</p>';
+    }
 }
 
 $tpl->processTemplate ("writeContent", array(
