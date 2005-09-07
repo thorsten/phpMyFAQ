@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.27 2005-09-06 06:20:09 thorstenr Exp $
+* $Id: index.php,v 1.28 2005-09-07 08:53:05 thorstenr Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the 
@@ -266,8 +266,7 @@ require_once($inc_php);
 if (DEBUG) {
 	print "<p>DEBUG INFORMATION:</p>\n";
     print "<p>".$db->sqllog()."</p>\n";
-	}
-else {
+} else {
     // send headers and print template
     @header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
     @header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
@@ -276,8 +275,11 @@ else {
     @header("Pragma: no-cache");
     @header("Content-type: text/html; charset=".$PMF_LANG["metaCharset"]);
     @header("Vary: Negotiate,Accept");
-    }
-$tpl->printTemplate();
+}
+
+if ('xml' != $action) {
+    $tpl->printTemplate();
+}
 
 // disconnect from database
 $db->dbclose();
