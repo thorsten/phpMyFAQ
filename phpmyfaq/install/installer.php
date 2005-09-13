@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.34 2005-09-02 06:36:29 thorstenr Exp $
+* $Id: installer.php,v 1.35 2005-09-13 21:19:52 thorstenr Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -56,7 +56,7 @@ function php_check ($ist = '', $soll = '')
 
 function db_check()
 {
-	if (!extension_loaded('mysql') && !extension_loaded('mysqli') && !extension_loaded('pgsql') && !extension_loaded('sybase') && !extension_loaded('mssql') && !extension_loaded('ibm_db2') && !extension_loaded('sqlite')) {
+	if (!extension_loaded('mysql') && !extension_loaded('mysqli') && !extension_loaded('pgsql') && !extension_loaded('sybase') && !extension_loaded('mssql') && !extension_loaded('ibm_db2') && !extension_loaded('sqlite') && !extension_loaded('maxdb')) {
 		return false;
 	} else {
         return true;
@@ -286,6 +286,9 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 	}
 	if (extension_loaded('sqlite') && php_check(phpversion(), '5.0.0')) {
 		print '<option value="sqlite">SQLite (experimental)</option>';
+	}
+	if (extension_loaded('maxdb')) {
+		print '<option value="sqlite">MaxDB (experimental)</option>';
 	}
 ?>	
 </select>
