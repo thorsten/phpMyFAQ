@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.10 2005-08-01 20:34:40 thorstenr Exp $
+* $Id: index.php,v 1.11 2005-09-14 16:01:29 thorstenr Exp $
 *
 * The main admin backend index file
 *
@@ -115,7 +115,7 @@ if (isset($uin)) {
 
 // Authenticate the user from login POST variables
 if (isset($_POST["faqusername"])) {
-    $user = $_POST["faqusername"];
+    $user = $db->escape_string($_POST["faqusername"]);
 }
 if (isset($_POST["faqpassword"])) {
     $pass = md5($_POST["faqpassword"]);
