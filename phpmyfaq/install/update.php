@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.31 2005-09-06 18:14:16 thorstenr Exp $
+* $Id: update.php,v 1.32 2005-09-15 19:59:11 thorstenr Exp $
 *
 * Main update script
 *
@@ -141,14 +141,11 @@ if ($step == 1) {
 
 <p>Please select your current version:</p>
 <select name="version" size="1">
-    <option value="1.3.0">phpMyFAQ 1.3.0</option>
-    <option value="1.3.1">phpMyFAQ 1.3.1</option>
-    <option value="1.3.2">phpMyFAQ 1.3.2</option>
-    <option value="1.3.3">phpMyFAQ 1.3.3 or later</option>
     <option value="1.4.0">phpMyFAQ 1.4.0 alpha2 or later</option>
-    <option value="1.4.1">phpMyFAQ 1.4.1 and later</option>
+    <option value="1.4.1">phpMyFAQ 1.4.1</option>
     <option value="1.4.2">phpMyFAQ 1.4.2 and later</option>
     <option value="1.4.4">phpMyFAQ 1.4.4 and later</option>
+    <option value="1.5.0">phpMyFAQ 1.5.0 and later</option>
 </select>
 
 <p class="center"><input type="submit" value="Go to step 2 of 5" class="button" /></p>
@@ -185,7 +182,7 @@ if ($step == 2) {
         $test4 = 1;
     }
     if ('1.3.' == substr($_POST["version"], 0, 4)) {
-        print "<p class=\"error\"><strong>Error:</strong> You can't upgrade from phpMyFAQ 1.3.x to "..". Please upgrade first to the latest version of phpMyFAQ 1.5.x.</p>";
+        print "<p class=\"error\"><strong>Error:</strong> You can't upgrade from phpMyFAQ 1.3.x to ".NEWVERSION.". Please upgrade first to the latest version of phpMyFAQ 1.5.x.</p>";
     } else {
         $test5 = 1;
     }
