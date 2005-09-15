@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: glossary.main.php,v 1.1 2005-09-15 20:13:26 thorstenr Exp $
+* $Id: glossary.main.php,v 1.2 2005-09-15 20:29:56 thorstenr Exp $
 *
 * The main glossary index file
 *
@@ -25,7 +25,7 @@ if ($permission['addglossary'] || $permission['editglossary'] || $permission['de
     
     
     
-    print sprintf('<p>[ <a href="%s&amp;aktion=useradd">%s</a> ]</p>', $_SERVER['PHP_SELF'].$linkext, $PMF_LANG['ad_glossary_add']);
+    print sprintf('<p>[ <a href="%s&amp;aktion=addglossary">%s</a> ]</p>', $_SERVER['PHP_SELF'].$linkext, $PMF_LANG['ad_glossary_add']);
     
 } else {
     print $PMF_LANG["err_NotAuth"];
