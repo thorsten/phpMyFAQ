@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.8 2005-09-06 12:52:07 thorstenr Exp $
+ * $Id: language_de.php,v 1.9 2005-09-15 20:32:27 thorstenr Exp $
  *
  * File:                language_de.php
  * Description:		    German language file
@@ -594,3 +594,10 @@ $PMF_LANG['ad_categ_select'] = 'Sprache der Kategorie';
 
 // added v1.5.1 - 2005-09-06 by Thorsten
 $PMF_LANG['msgSitemap'] = 'Sitemap';
+
+// added v1.6.0 - 2005-09-15 by Thorsten
+$PMF_LANG['ad_menu_glossary'] = 'Glossar';
+$PMF_LANG['ad_glossary_add'] = 'Glossar-Eintrag hinzufügen';
+$PMF_LANG['ad_glossary_item'] = 'Begriff';
+$PMF_LANG['ad_glossary_definition'] = 'Definition';
+$PMF_LANG['ad_glossary_save'] = 'Eintrag speichern';

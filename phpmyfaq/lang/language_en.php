@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.8 2005-09-06 12:52:07 thorstenr Exp $
+* $Id: language_en.php,v 1.9 2005-09-15 20:32:27 thorstenr Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -597,3 +597,10 @@ $PMF_LANG['ad_categ_select'] = 'Select category language';
 
 // added v1.5.1 - 2005-09-06 by Thorsten
 $PMF_LANG['msgSitemap'] = 'Sitemap';
+
+// added v1.6.0 - 2005-09-15 by Thorsten
+$PMF_LANG['ad_menu_glossary'] = 'Glossary';
+$PMF_LANG['ad_glossary_add'] = 'Add glossary entry';
+$PMF_LANG['ad_glossary_item'] = 'Item';
+$PMF_LANG['ad_glossary_definition'] = 'Definition';
+$PMF_LANG['ad_glossary_save'] = 'Save entry';
