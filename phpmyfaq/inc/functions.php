@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.87 2005-09-15 09:42:01 thorstenr Exp $
+* $Id: functions.php,v 1.88 2005-09-15 17:53:43 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -1276,22 +1276,32 @@ function searchEngine($begriff)
 	return $output;
 }
 
-/*
- * Funktion für das Herausfiltern von highlighting HTML aus URLs und Images | @@ Matthias Sommerfeld, 2003-07-14
- * Last Update: @@ Thorsten, 2003-12-16
- */
-function highlight_no_links($string = "")
+
+
+/**
+* Callback function for filtering HTML from URLs and images
+*
+* @param    array
+* @access   public
+* @return   string
+* @author   Matthias Sommerfeld <phlymail@phlylabs.de>
+* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+* @since    2003-07-14
+*/
+function highlight_no_links($string = '')
 {
-    if ("" == $string) {
-        return "";
+    foreach ($string as $str) {
+        if ('href=' == substr($str, 0, 5) || 'src=' == substr($str, 0, 4)) {
+            return $str;
+        } elseif ('' == $str) {
+            return '';
+        } else {
+            return '<span class="highlight">'.$str.'</span>';
         }
-    if ("href=" == substr($string, 0, 5) || "src=" == substr($string, 0, 4)) {
-        return $string;
-    }
-    else {
-        return "<span class=\"highlight\">".$string."</span>";
     }
 }
+
+
 
 /*
  * This functions chops a string | @@ Thorsten, 2003-12-16
