@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: constants.php,v 1.5 2005-09-05 18:54:24 thorstenr Exp $
+* $Id: constants.php,v 1.6 2005-09-15 19:59:50 thorstenr Exp $
 *
 * Constants for phpMyFAQ
 *
@@ -52,7 +52,10 @@ $faqrights = array (
         19 => "delatt",
         20 => "backup",
         21 => "restore",
-        22 => "delquestion"
+        22 => "delquestion",
+        23 => 'addglossary',
+        24 => 'editglossary',
+        25 => 'delglossary'
         );
 
 /* allowed "action" varibales for GET - DO NOT CHANGE! */
