@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.35 2005-09-13 21:19:52 thorstenr Exp $
+* $Id: installer.php,v 1.36 2005-09-15 18:38:18 thorstenr Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -288,7 +288,7 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 		print '<option value="sqlite">SQLite (experimental)</option>';
 	}
 	if (extension_loaded('maxdb')) {
-		print '<option value="sqlite">MaxDB (experimental)</option>';
+		print '<option value="maxdb">MaxDB (experimental)</option>';
 	}
 ?>	
 </select>
@@ -441,6 +441,8 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
             case 'db2':		    require_once(PMF_ROOT_DIR."/inc/db2.php");
 								break;
             case 'sqlite':		require_once(PMF_ROOT_DIR."/inc/sqlite.php");
+								break;
+            case 'maxdb':		require_once(PMF_ROOT_DIR."/inc/maxdb.php");
 								break;
 			default:            print '<p class="error"><strong>Error:</strong> Invalid server type.</p>';
 								HTMLFooter();
