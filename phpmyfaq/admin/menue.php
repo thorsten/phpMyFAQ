@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: menue.php,v 1.2 2005-03-10 12:16:46 thorstenr Exp $
+* $Id: menue.php,v 1.3 2005-09-15 20:00:50 thorstenr Exp $
 *
 * Navigation menue of the admin area
 *
@@ -27,42 +27,47 @@ if ($permission["adduser"] || $permission["edituser"] || $permission["deluser"])
 ?>
         <li><a href="<?php print $linkext; ?>&amp;aktion=user"><?php print $PMF_LANG["ad_menu_user_administration"]; ?></a></li>
 <?php
-    }
+}
 if ($permission["addcateg"] || $permission["editcateg"] || $permission["delcateg"]) {
 ?>
         <li><a href="<?php print $linkext; ?>&amp;aktion=category"><?php print $PMF_LANG["ad_menu_categ_edit"]; ?></a></li>
 <?php
-    }
+}
 if ($permission["addbt"]) {
 ?>
         <li><a href="<?php print $linkext; ?>&amp;aktion=editentry"><?php print $PMF_LANG["ad_entry_add"]; ?></a></li>
 <?php
-    }
+}
 if ($permission["editbt"] || $permission["delbt"]) {
 ?>
         <li><a href="<?php print $linkext; ?>&amp;aktion=accept"><?php print $PMF_LANG["ad_menu_entry_aprove"]; ?></a></li>
 <?php
-    }
+}
 if ($permission["editbt"] || $permission["delbt"]) {
 ?>
         <li><a href="<?php print $linkext; ?>&amp;aktion=view"><?php print $PMF_LANG["ad_menu_entry_edit"]; ?></a></li>
 <?php
-    }
+}
+if ($permission['addglossary'] || $permission['editglossary'] || $permission['delglossary']) {
+?>
+        <li><a href="<?php print $linkext; ?>&amp;aktion=glossary"><?php print $PMF_LANG['ad_menu_glossary']; ?></a></li>
+<?php
+}
 if ($permission["addnews"] || $permission["editnews"] || $permission["delnews"]) {
 ?>
         <li><a href="<?php print $linkext; ?>&amp;aktion=news&amp;do=edit"><?php print $PMF_LANG["ad_menu_news_edit"]; ?></a></li>
 <?php
-    }
+}
 if ($permission["delquestion"]) {
 ?>
         <li><a href="<?php print $linkext; ?>&amp;aktion=question"><?php print $PMF_LANG["ad_menu_open"]; ?></a></li>
 <?php
-    }
+}
 if ($permission["viewlog"]) {
 ?>
         <li><a href="<?php print $linkext; ?>&amp;aktion=statistik"><?php print $PMF_LANG["ad_menu_stat"]; ?></a></li>
 <?php
-    }
+}
 ?>
         <li><a href="<?php print $linkext; ?>&amp;aktion=cookies"><?php print $PMF_LANG["ad_menu_cookie"]; ?></a></li>
 <?php
@@ -70,27 +75,27 @@ if ($permission["viewlog"]) {
 ?>
         <li><a href="<?php print $linkext; ?>&amp;aktion=viewsessions"><?php print $PMF_LANG["ad_menu_session"]; ?></a></li>
 <?php
-    }
+}
 if ($permission["adminlog"]) {
 ?>
         <li><a href="<?php print $linkext; ?>&amp;aktion=adminlog"><?php print $PMF_LANG["ad_menu_adminlog"]; ?></a></li>
 <?php
-    }
+}
 if ($permission["passwd"]) {
 ?>
         <li><a href="<?php print $linkext; ?>&amp;aktion=passwd"><?php print $PMF_LANG["ad_menu_passwd"]; ?></a></li>
 <?php
-    }
+}
 if ($permission["editconfig"]) {
 ?>
         <li><a href="<?php print $linkext; ?>&amp;aktion=editconfig"><?php print $PMF_LANG["ad_menu_editconfig"]; ?></a></li>
 <?php
-    }
+}
 if ($permission["backup"] || $permission["restore"]) {
 ?>
         <li><a href="<?php print $linkext; ?>&amp;aktion=csv"><?php print $PMF_LANG["ad_menu_backup"]; ?></a></li>
 <?php
-    }
+}
 ?>
         <li><a href="<?php print $linkext; ?>&amp;aktion=export"><?php print $PMF_LANG["ad_menu_export"]; ?></a></li>
         <li><a href="<?php print $linkext; ?>&amp;aktion=logout"><?php print $PMF_LANG["ad_menu_logout"]; ?></a></li>
