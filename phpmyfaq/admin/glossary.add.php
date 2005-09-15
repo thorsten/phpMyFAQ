@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: glossary.add.php,v 1.1 2005-09-15 20:13:26 thorstenr Exp $
+* $Id: glossary.add.php,v 1.2 2005-09-15 20:30:27 thorstenr Exp $
 *
 * Displays a form to add a glossary item
 *
@@ -22,9 +22,24 @@
 print sprintf('<h2>%s</h2>', $PMF_LANG['ad_menu_glossary']);
 
 if ($permission['addglossary']) {
+?>
+<form action="<?php print $_SERVER['PHP_SELF'].$linkext; ?>" method="post">
+<fieldset>
+    <legend><?php print $PMF_LANG['ad_glossary_add']; ?></legend>
     
+    <input type="hidden" name="aktion" value="saveglossary" />
     
+    <label class="left" for="item"><?php print $PMF_LANG['ad_glossary_item']; ?>:</label>
+    <input class="admin" type="text" name="item" id="item" size="50" /><br />
+    
+    <label class="left" for="definition"><?php print $PMF_LANG['ad_glossary_definition']; ?>:</label>
+    <textarea class="admin" type="text" name="definition" id="definition" cols="50" rows="2"></textarea><br />
+    
+    <input class="submit" type="submit" value="<?php print $PMF_LANG['ad_glossary_save']; ?>" />
 
+</fieldset>
+</form>
+<?php
 } else {
     print $PMF_LANG["err_NotAuth"];
 }
