@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.11 2005-09-14 16:01:29 thorstenr Exp $
+* $Id: index.php,v 1.12 2005-09-15 20:01:20 thorstenr Exp $
 *
 * The main admin backend index file
 *
@@ -216,6 +216,13 @@ if (isset($auth)) {
             case "pastecategory":           require_once ("category.paste.php"); break;
             case "movecategory":            require_once ("category.move.php"); break;
             case "changecategory":          require_once ("category.change.php"); break;
+            // glossary
+            case 'glossary':                require_once('glossary.main.php'); break;
+            case 'addglossary':             require_once('glossary.add.php'); break;
+            case 'saveglossary':            require_once('glossary.save.php'); break;
+            case 'editglossary':            require_once('glossary.edit.php'); break;
+            case 'updateglossary':          require_once('glossary.update.php'); break;
+            case 'delglossary':             require_once('glossary.delete.php'); break;
 			// functions for cookie administration
 			case "setcookie":				require_once ("cookie.check.php"); break;
 			case "cookies":					require_once ("cookie.check.php"); break;
