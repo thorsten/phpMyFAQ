@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.32 2005-09-15 19:59:11 thorstenr Exp $
+* $Id: update.php,v 1.33 2005-09-16 19:29:09 thorstenr Exp $
 *
 * Main update script
 *
@@ -385,15 +385,17 @@ if ($step == 5) {
     // update from versions before 1.6.0
     if ($version < 160) {
         $query[] = 'ALTER TABLE '.SQLPREFIX.'faqcategories ADD user_id INTEGER NOT NULL';
+        $query[] = 'CREATE TABLE '.SQLPREFIX.'faqglossary ( id INT(11) NOT NULL , lang VARCHAR(2) NOT NULL , item VARCHAR(255) NOT NULL , definition TEXT NOT NULL, PRIMARY KEY (id, lang))';
+        
     }
     // optimize tables
     switch($DB["type"]) {
         
         case 'mysql':
-        case 'mysqli':      $query[] = "OPTIMIZE TABLE ".SQLPREFIX."faqadminlog, ".SQLPREFIX."faqadminsessions, ".SQLPREFIX."faqcategories, ".SQLPREFIX."faqcategoryrelations, ".SQLPREFIX."faqchanges, ".SQLPREFIX."faqcomments, ".SQLPREFIX."faqdata, ".SQLPREFIX."faqfragen, ".SQLPREFIX."faqnews, ".SQLPREFIX."faqsessions, ".SQLPREFIX."faquser, ".SQLPREFIX."faqvisits, ".SQLPREFIX."faqvoting";
+        case 'mysqli':      $query[] = "OPTIMIZE TABLE ".SQLPREFIX."faqadminlog, ".SQLPREFIX."faqadminsessions, ".SQLPREFIX."faqcategories, ".SQLPREFIX."faqcategoryrelations, ".SQLPREFIX."faqchanges, ".SQLPREFIX."faqcomments, ".SQLPREFIX."faqdata, ".SQLPREFIX."faqfragen, ".SQLPREFIX."faqnews, ".SQLPREFIX."faqsessions, ".SQLPREFIX."faquser, ".SQLPREFIX."faqvisits, ".SQLPREFIX."faqvoting, ".SQLPREFIX."faqglossary";
                             break;
                             
-        case 'pgsql':       $query[] = "VACUUM ANALYZE ".SQLPREFIX."faqadminlog, ".SQLPREFIX."faqadminsessions, ".SQLPREFIX."faqcategories, ".SQLPREFIX."faqcategoryrelations, ".SQLPREFIX."faqchanges, ".SQLPREFIX."faqcomments, ".SQLPREFIX."faqdata, ".SQLPREFIX."faqfragen, ".SQLPREFIX."faqnews, ".SQLPREFIX."faqsessions, ".SQLPREFIX."faquser, ".SQLPREFIX."faqvisits, ".SQLPREFIX."faqvoting";
+        case 'pgsql':       $query[] = "VACUUM ANALYZE ".SQLPREFIX."faqadminlog, ".SQLPREFIX."faqadminsessions, ".SQLPREFIX."faqcategories, ".SQLPREFIX."faqcategoryrelations, ".SQLPREFIX."faqchanges, ".SQLPREFIX."faqcomments, ".SQLPREFIX."faqdata, ".SQLPREFIX."faqfragen, ".SQLPREFIX."faqnews, ".SQLPREFIX."faqsessions, ".SQLPREFIX."faquser, ".SQLPREFIX."faqvisits, ".SQLPREFIX."faqvoting, ".SQLPREFIX."faqglossary";
                             break;
                             
         default:            break;

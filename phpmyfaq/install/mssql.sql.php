@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mssql.sql.php,v 1.2 2005-08-15 18:01:08 thorstenr Exp $
+* $Id: mssql.sql.php,v 1.3 2005-09-16 19:26:51 thorstenr Exp $
 *
 * CREATE TABLE instruction for MS SQL Server database
 *
@@ -32,6 +32,7 @@ $uninst[] = "DROP TABLE ".$sqltblpre."faqvoting";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqsessions";
 $uninst[] = "DROP TABLE ".$sqltblpre."faquser";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqvisits";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqglossary";
 
 //faquser
 $query[] = "CREATE TABLE  ".$sqltblpre."faquser (
@@ -160,4 +161,12 @@ visits SMALLINT NOT NULL,
 last_visit INTEGER NOT NULL,
 PRIMARY KEY (id, lang))";
 
-$query[] = "INSERT INTO ".$sqltblpre."faquser (id, name, pass, realname, email, rights) VALUES (1, 'admin', '".md5($password)."', '".$realname."', '".$email."', '1111111111111111111111')";
+// faqglossary
+$query[] = "CREATE TABLE ".$sqltblpre."faqglossary (
+id INTEGER NOT NULL ,
+lang VARCHAR(2) NOT NULL ,
+item VARCHAR(255) NOT NULL ,
+definition TEXT NOT NULL,
+PRIMARY KEY (id, lang))";
+
+$query[] = "INSERT INTO ".$sqltblpre."faquser (id, name, pass, realname, email, rights) VALUES (1, 'admin', '".md5($password)."', '".$realname."', '".$email."', '1111111111111111111111111')";
