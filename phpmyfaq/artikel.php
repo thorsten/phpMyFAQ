@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.22 2005-09-15 17:53:21 thorstenr Exp $
+* $Id: artikel.php,v 1.23 2005-09-18 04:53:34 thorstenr Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -63,7 +63,7 @@ if (isset($_GET["highlight"]) && $_GET["highlight"] != "/" && $_GET["highlight"]
     $highlight = strip_tags($_GET["highlight"]);
     $highlight = str_replace("'", "´", $highlight);
     $highlight = preg_quote($highlight, '/');
-    $content = preg_replace_replace('/(((href|src)="[^"]*)?'.$highlight.'(?(1).*"))/mis', "highlight_no_links", $content);
+    $content = preg_replace_replace('/(((href|src|title|alt|class|style|id|name)="[^"]*)?'.$highlight.'(?(1).*"))/mis', "highlight_no_links", $content);
 }
 
 $arrLanguage = check4Language($id);
