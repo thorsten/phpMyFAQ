@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.9 2005-09-15 20:32:27 thorstenr Exp $
+ * $Id: language_de.php,v 1.10 2005-09-18 20:07:16 thorstenr Exp $
  *
  * File:                language_de.php
  * Description:		    German language file
@@ -582,7 +582,7 @@ $PMF_LANG["ad_categ_change"] = "Austauschen mit";
 $PMF_LANG["lostPassword"] = "Passwort vergessen? Hier klicken.";
 $PMF_LANG["lostpwd_err_1"] = "Fehler: Benutzername und E-Mailadresse nicht gefunden.";
 $PMF_LANG["lostpwd_err_2"] = "Fehler: Falsche Eingaben!";
-$PMF_LANG["lostpwd_text_1"] = "Vielen Dank fuer die Abfrage deiner Account Informationen.";
+$PMF_LANG["lostpwd_text_1"] = "Vielen Dank für die Abfrage deiner Account Informationen.";
 $PMF_LANG["lostpwd_text_2"] = "Bitte ein neues Passwort im Adminbereich der FAQ setzen.";
 $PMF_LANG["lostpwd_mail_okay"] = "E-Mail wurde gesendet.";
 
@@ -601,3 +601,11 @@ $PMF_LANG['ad_glossary_add'] = 'Glossar-Eintrag hinzufügen';
 $PMF_LANG['ad_glossary_item'] = 'Begriff';
 $PMF_LANG['ad_glossary_definition'] = 'Definition';
 $PMF_LANG['ad_glossary_save'] = 'Eintrag speichern';
+$PMF_LANG['ad_glossary_save_success'] = 'Der Glossar-Eintrag wurde erfolgreich gespeichert.';
+$PMF_LANG['ad_glossary_save_error'] = 'Der Glossar-Eintrag wurde nicht gespeichert, weil ein Fehler aufgetreten ist.';
+$PMF_LANG['ad_glossary_edit'] = 'Eintrag bearbeiten';
+$PMF_LANG['ad_glossary_update_success'] = 'Der Glossar-Eintrag wurde erfolgreich aktualisiert.';
+$PMF_LANG['ad_glossary_update_error'] = 'Der Glossar-Eintrag wurde nicht aktualisiert, weil ein Fehler aufgetreten ist.';
+$PMF_LANG['ad_glossary_delete'] = 'Eintrag löschen';
+$PMF_LANG['ad_glossary_delete_success'] = 'Der Glossar-Eintrag wurde erfolgreich gelöscht.';
+$PMF_LANG['ad_glossary_delete_error'] = 'Der Glossar-Eintrag wurde nicht gelöscht, weil ein Fehler aufgetreten ist.';
