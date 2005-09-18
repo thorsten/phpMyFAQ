@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: glossary.add.php,v 1.2 2005-09-15 20:30:27 thorstenr Exp $
+* $Id: glossary.add.php,v 1.3 2005-09-18 19:56:18 thorstenr Exp $
 *
 * Displays a form to add a glossary item
 *
@@ -33,7 +33,7 @@ if ($permission['addglossary']) {
     <input class="admin" type="text" name="item" id="item" size="50" /><br />
     
     <label class="left" for="definition"><?php print $PMF_LANG['ad_glossary_definition']; ?>:</label>
-    <textarea class="admin" type="text" name="definition" id="definition" cols="50" rows="2"></textarea><br />
+    <textarea class="admin" name="definition" id="definition" cols="50" rows="3"></textarea><br />
     
     <input class="submit" type="submit" value="<?php print $PMF_LANG['ad_glossary_save']; ?>" />
 
