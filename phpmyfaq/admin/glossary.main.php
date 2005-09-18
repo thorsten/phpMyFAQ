@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: glossary.main.php,v 1.2 2005-09-15 20:29:56 thorstenr Exp $
+* $Id: glossary.main.php,v 1.3 2005-09-18 15:39:57 thorstenr Exp $
 *
 * The main glossary index file
 *
@@ -22,8 +22,21 @@
 print sprintf('<h2>%s</h2>', $PMF_LANG['ad_menu_glossary']);
 
 if ($permission['addglossary'] || $permission['editglossary'] || $permission['delglossary']) {
+
+    require_once('../inc/glossary.php');
+    $glossary = new PMF_Glossary($db, $LANGCODE);
+    $glossaryItems = $glossary->getAllGlossaryItems();
     
+    print '<table class="list">';
+    print sprintf("<tr><th class=\"list\">%s</th><th class=\"list\">%s</th></tr>", $PMF_LANG['ad_glossary_item'], $PMF_LANG['ad_glossary_definition']);
     
+    foreach ($glossaryItems as $items) {
+    	print '<tr>';
+    	print sprintf('<td class="list">%s</td>', $items['item']);
+    	print sprintf('<td class="list">%s</td>', $items['definition']);
+    	print '</tr>';
+    }
+    print '</table>';
     
     print sprintf('<p>[ <a href="%s&amp;aktion=addglossary">%s</a> ]</p>', $_SERVER['PHP_SELF'].$linkext, $PMF_LANG['ad_glossary_add']);
     
