@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.38 2005-08-19 20:17:49 thorstenr Exp $
+$Id: README.txt,v 1.39 2005-09-19 12:15:59 thorstenr Exp $
 
 phpMyFAQ 1.6.0-dev
 Codename "Prometheus"
@@ -20,6 +20,13 @@ CHANGELOG:
 
 Version 1.6.0 - n/a
 - add user to a category
+
+Version 1.5.1 - 2005-09-19
+- added experimental support for SQLite
+- added dynamic Sitemap
+- added Norwegian Bokmål translation
+- improved image handling in PDF export
+- some minor bugfixes
 
 Version 1.5.0 - 2005-08-20
 - full support for PostgreSQL databases
