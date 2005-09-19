@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: sitemap.php,v 1.3 2005-09-06 06:20:09 thorstenr Exp $
+* $Id: sitemap.php,v 1.4 2005-09-19 12:15:37 thorstenr Exp $
 *
 * Shows the whole FAQ articles
 *
@@ -23,7 +23,7 @@
 Tracking('sitemap', 0);
 
 if (isset($_REQUEST['letter']) ) {
-	$currentLetter = $_REQUEST['letter'];
+	$currentLetter = $db->escape_string($_REQUEST['letter']);
 } else {
     $currentLetter = 'A';
 }
@@ -44,7 +44,11 @@ $writeMap = '<ul>';
 $result = $db->query('SELECT a.thema, a.id, a.lang, b.category_id, a.content AS snap FROM '.SQLPREFIX.'faqdata a, '.SQLPREFIX.'faqcategoryrelations b WHERE a.id = b.record_id AND substring(thema, 1, 1) = "'.$currentLetter.'" AND lang = "'.$lang.'" AND active = "yes"');
 
 while ($row = $db->fetch_object($result)) {
-	$writeMap .= '<li><a href="'. stripslashes($row->thema).'-'.$row->category_id.'_'.$row->id.'_'.$row->lang.'.html">'. stripslashes($row->thema) ."</a><br />\n";
+    if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == "TRUE") {
+        $writeMap .= '<li><a href="'.$row->category_id.'_'.$row->id.'_'.$row->lang.'.html">'.stripslashes($row->thema) ."</a><br />\n";
+    } else {
+        $writeMap .= '<li><a href="index.php?'.$sids.'action=artikel&amp;cat='.$row->category_id.'&amp;id='.$row->id.'&amp;artlang='.$row->lang.'">'.stripslashes($row->thema) ."</a><br />\n";
+    }
 	$writeMap .= stripslashes(chopString(strip_tags($row->snap), 25)). "</li>\n";
 }
 $writeMap .= '</ul>';
