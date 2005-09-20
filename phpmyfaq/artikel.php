@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.23 2005-09-18 04:53:34 thorstenr Exp $
+* $Id: artikel.php,v 1.24 2005-09-20 05:37:38 thorstenr Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -59,7 +59,7 @@ $writeCategory          = stripslashes($categoryName)."<br />\n";
 $saveVotingPATH         = sprintf('%s?%daction=savevoting', 
                             $_SERVER["PHP_SELF"], $sids);
 
-if (isset($_GET["highlight"]) && $_GET["highlight"] != "/" && $_GET["highlight"] != "<" && $_GET["highlight"] != ">") {
+if (isset($_GET["highlight"]) && $_GET["highlight"] != "/" && $_GET["highlight"] != "<" && $_GET["highlight"] != ">" && strlen($_GET["highlight"]) > 1) {
     $highlight = strip_tags($_GET["highlight"]);
     $highlight = str_replace("'", "´", $highlight);
     $highlight = preg_quote($highlight, '/');

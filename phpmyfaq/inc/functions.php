@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.90 2005-09-18 04:53:34 thorstenr Exp $
+* $Id: functions.php,v 1.91 2005-09-20 05:37:38 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -1250,8 +1250,10 @@ function searchEngine($begriff)
 			$thema = chopString($row->thema, 15);
             $content = stripslashes(chopString(strip_tags($row->content), 25));
             $begriff = str_replace(array('^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']'), '', $begriff);
-            $thema = preg_replace_callback('/(((href|src|title|alt|class|style|id|name)="[^"]*)?'.$begriff.'(?(1).*"))/mis', "highlight_no_links", $thema);
-			$content = preg_replace_callback('/(((href|src|title|alt|class|style|id|name)="[^"]*)?'.$begriff.'(?(1).*"))/mis', "highlight_no_links", $content);
+            if ($begriff > 1) {
+                $thema = preg_replace_callback('/(((href|src|title|alt|class|style|id|name)="[^"]*)?'.$begriff.'(?(1).*"))/mis', "highlight_no_links", $thema);
+			    $content = preg_replace_callback('/(((href|src|title|alt|class|style|id|name)="[^"]*)?'.$begriff.'(?(1).*"))/mis', "highlight_no_links", $content);
+            }
             $output .= "<li><strong>".$rubriktext."</strong>: <a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=artikel&amp;cat=".$row->category_id."&amp;id=".$row->id."&amp;artlang=".$row->lang."&amp;highlight=".$begriff."\">".stripslashes($thema)."...</a><br /><div style=\"font-size: 10px;\"><strong>".$PMF_LANG["msgSearchContent"]."</strong> ".stripslashes($content)."...</div><br /></li>\n";
             }
         $output .= "</ul>\n";
