@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: main.php,v 1.4 2005-08-24 13:36:42 thorstenr Exp $
+* $Id: main.php,v 1.5 2005-09-20 11:10:25 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-08-23
@@ -20,7 +20,11 @@
 $tpl->processTemplate ('writeContent', array(
                        'writeNewsHeader' => $PMF_CONF['title'].$PMF_LANG['msgNews'],
                        'writeNews' => generateNews($LANGCODE),
-                       'writeNumberOfArticles' => $PMF_LANG['msgHomeThereAre'].generateNumberOfArticles().$PMF_LANG['msgHomeArticlesOnline']));
+                       'writeNumberOfArticles' => $PMF_LANG['msgHomeThereAre'].generateNumberOfArticles().$PMF_LANG['msgHomeArticlesOnline'],
+                        'writeTopTenHeader' => $PMF_LANG['msgTopTen'],
+                        'writeTopTenRow' => generateTopTen($LANGCODE),
+                        'writeNewestHeader' => $PMF_LANG['msgLatestArticles'],
+                        'writeNewestRow' => generateFiveNewest($LANGCODE)));
 
 $tpl->includeTemplate('writeContent', 'index');
 ?>
