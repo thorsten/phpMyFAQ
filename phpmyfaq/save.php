@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: save.php,v 1.14 2005-08-19 20:10:48 thorstenr Exp $
+* $Id: save.php,v 1.15 2005-09-21 09:16:21 thorstenr Exp $
 *
 * Saves a user FAQ record and sends an email to the user
 *
@@ -55,7 +55,19 @@ if (isset($_POST["username"]) && isset($_POST["rubrik"]) && is_numeric($_POST["r
         $headers .= "CC: ".$row->email."\n";
     }
     
-	mail($IDN->encode($PMF_CONF["adminmail"]), unhtmlentities($PMF_CONF["title"]), unhtmlentities($PMF_LANG["msgMailCheck"])."\n".unhtmlentities($PMF_CONF["title"]).": http://".$_SERVER["SERVER_NAME"].dirname($_SERVER["PHP_SELF"]), "From: ".$usermail, $headers);
+    $additional_header = array();
+    $additional_header[] = 'MIME-Version: 1.0';
+    $additional_header[] = 'Content-Type: text/plain; charset='. $PMF_LANG['metaCharset'];
+    if (strtolower($PMF_LANG['metaCharset']) == 'utf-8') {
+        $additional_header[] = 'Content-Transfer-Encoding: 8bit';
+    }
+    $additional_header[] = 'From: '.$usermail;
+    $subject = unhtmlentities($PMF_CONF["title"]);
+    if ( unction_exists('mb_encode_mimeheader')) {
+        $subject = mb_encode_mimeheader($subject);
+    }
+    $body = unhtmlentities($PMF_LANG['msgMailCheck'])."\n".unhtmlentities($PMF_CONF['title']).": http://".$_SERVER['SERVER_NAME'].dirname($_SERVER['PHP_SELF']);
+    mail($IDN->encode($PMF_CONF["adminmail"]), $subject, $body, implode("\r\n", $additional_header), "-f$headers");
     
 	$tpl->processTemplate ("writeContent", array(
 				"msgNewContentHeader" => $PMF_LANG["msgNewContentHeader"],

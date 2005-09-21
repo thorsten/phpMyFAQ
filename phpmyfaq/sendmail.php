@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: sendmail.php,v 1.3 2005-05-18 17:51:53 thorstenr Exp $
+* $Id: sendmail.php,v 1.4 2005-09-21 09:16:21 thorstenr Exp $
 *
 * The 'send an email from the contact page' page
 *
@@ -26,10 +26,23 @@ if (isset($_POST["name"]) && $_POST["name"] != '' && isset($_POST["email"]) && c
 	list($user, $host) = explode("@", $_POST["email"]);
     if (gethostbyname($host) != "64.94.110.11") {
         $question = stripslashes($_POST["question"]);
-        $name = encode_iso88591($_POST["name"]);
         $sender = $IDN->encode($_POST["email"]);
         
-        mail($IDN->encode($PMF_CONF["adminmail"]), "Feedback: ".$PMF_CONF["title"], $question, "From: ".$name. " <".$sender.">");
+        $subject = 'Feedback: '.$PMF_CONF['title'];
+        if (function_exists('mb_encode_mimeheader')) {
+            $subject = mb_encode_mimeheader($subject);
+        } else {
+            $name = encode_iso88591($_POST['name']);
+        }
+        
+        $additional_header = array();
+        $additional_header[] = 'MIME-Version: 1.0';
+        $additional_header[] = 'Content-Type: text/plain; charset='. $PMF_LANG['metaCharset'];
+        if (strtolower( $PMF_LANG['metaCharset']) == 'utf-8') {
+            $additional_header[] = 'Content-Transfer-Encoding: 8bit';
+        }
+        $additional_header[] = 'From: '.$name.' <'.$sender.'>';
+        mail($IDN->encode($PMF_CONF['adminmail']), $subject, $question, implode("\r\n", $additional_header), '-f$sender');
         
         $tpl->processTemplate ("writeContent", array(
                 "msgContact" => $PMF_LANG["msgContact"],

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.28 2005-09-07 08:53:05 thorstenr Exp $
+* $Id: index.php,v 1.29 2005-09-21 09:16:21 thorstenr Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the 
@@ -117,6 +117,12 @@ if (isset($LANGCODE)) {
 } else {
     $LANGCODE = "en";
     require_once ("lang/language_en.php");
+}
+
+// use mbstring extension if available
+if (function_exists('mb_language')) {
+    mb_language($PMF_LANG['metaLanguage']);
+    mb_internal_encoding($PMF_LANG['metaCharset']);
 }
 
 // found a session ID?

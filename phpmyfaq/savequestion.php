@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: savequestion.php,v 1.12 2005-08-19 20:10:48 thorstenr Exp $
+* $Id: savequestion.php,v 1.13 2005-09-21 09:16:21 thorstenr Exp $
 *
 * @author           Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author           David Saez Padros <david@ols.es>
@@ -52,7 +52,21 @@ if (isset($_REQUEST["username"]) && $_REQUEST["username"] != '' && isset($_REQUE
                 $headers .= "CC: ".$row->email."\n";
             }
             
-            mail($IDN->encode($PMF_CONF["adminmail"]), $PMF_CONF["title"], strip_tags($questionMail), "From: ".encode_iso88591($username)."<".$IDN->encode($usermail).">", $headers);
+            $additional_header = array();
+            $additional_header[] = 'MIME-Version: 1.0';
+            $additional_header[] = 'Content-Type: text/plain; charset='. $PMF_LANG['metaCharset'];
+            if (strtolower($PMF_LANG['metaCharset']) == 'utf-8') {
+                $additional_header[] = 'Content-Transfer-Encoding: 8bit';
+            }
+            $additional_header[] = 'From: '.'<'.$IDN->encode($usermail).'>';
+            $body = strip_tags($questionMail);
+            $body = str_replace(array("\r\n", "\r", "\n"), $body);
+            $body = str_replace(array("\r\n", "\r", "\n"), $body);
+            if (strstr(PHP_OS, 'WIN') !== NULL) {
+                // if windows, cr must "\r\n". if other must "\n".
+                $body = str_replace("\n", "\r\n", $body);
+            }
+            mail($IDN->encode($PMF_CONF['adminmail']), $PMF_CONF['title'], $body, implode("\r\n", $additional_header), "-f$headers");
             
             $tpl->processTemplate ("writeContent", array(
                     "msgQuestion" => $PMF_LANG["msgQuestion"],

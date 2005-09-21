@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.91 2005-09-20 05:37:38 thorstenr Exp $
+* $Id: functions.php,v 1.92 2005-09-21 09:16:21 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -567,7 +567,7 @@ function generateTopTen($language = '')
 	    $output = "<ol>\n";
 		foreach ($result as $row) {
             $output .= "\t<li><strong>".$row['visits']." ".$PMF_LANG["msgViews"].":</strong><br />";
-			$output .= '<a href="'.$row['url'] . '">'.stripslashes(makeShorterText(htmlentities($row['thema']), 8))."</a></li>\n";
+			$output .= '<a href="'.$row['url'] . '">'.stripslashes(makeShorterText(htmlentities($row['thema'], ENT_NOQUOTES, $PMF_LANG['metaCharset'])), 8))."</a></li>\n";
 		}
         $output .= "</ol>\n";
 	} else {
@@ -595,7 +595,7 @@ function generateFiveNewest($language = '')
 	if (count ($result) > 0) {
 		$output = '<ol>';
 		foreach ($result as $row) {
-			$output .= '<li><a href="'.$row['url'].'">'.stripslashes(makeShorterText(htmlentities($row['thema']), 8)).'</a> ('.makeDate($row['datum']).')</li>';
+			$output .= '<li><a href="'.$row['url'].'">'.stripslashes(makeShorterText(htmlentities($row['thema'], ENT_NOQUOTES, $PMF_LANG['metaCharset'])), 8)).'</a> ('.makeDate($row['datum']).')</li>';
         }
         $output .= '</ol>';
     } else {
@@ -826,17 +826,19 @@ function encode_iso88591($coded = "", $cmode = "g")
                 $coded .= "\t";
                 }
             unset ($words);
-            $words = explode(" ", $value, 2);
-            foreach ($words as $k => $word) {
-                if (preg_match("/[\x80-\xff]/", $word) && preg_match("/\(|\)/", $word)) {
-                    $words[$k] = preg_replace
-                            ("/^(\()?([^\)]+)(\))?$/ie"
-                            ,"'(=?iso-8859-1?Q?'.rtrim(quoted_printable_encode(str_replace(' ', '_', '\\2'))).'?=)'"
-                            ,$word
-                            );
+            if (function_exists('mb_encode_mimeheader')) {
+                $coded .= mb_encode_mimeheader($value)."\r\n";
+            } else {
+                $words = explode(" ", $value, 2);
+                foreach ($words as $k => $word) {
+                    if (preg_match("/[\x80-\xff]/", $word) && preg_match("/\(|\)/", $word)) {
+                        $words[$k] = preg_replace (
+                            "/^(\()?([^\)]+)(\))?$/ie",
+                            "'(=?iso-8859-1?Q?'.rtrim(quoted_printable_encode(str_replace(' ', '_', '\\2'))).'?=)'",
+                            $word);
                     }
                 }
-            $coded .= join(" ", $words)."\r\n";
+                $coded .= join(" ", $words)."\r\n";
             }
         return rtrim($coded);
         }
@@ -851,16 +853,21 @@ function encode_iso88591($coded = "", $cmode = "g")
                 $coded .= "\t";
                 }
             unset ($words);
-            $words = explode(" ", $value);
-            foreach ($words as $k => $word) {
-                if (preg_match('/[\x80-\xff]/', $word)) {
-                    $words[$k] = '=?iso-8859-1?Q?'.rtrim(quoted_printable_encode($word)).'?=';
+            if (function_exists('mb_encode_mimeheader')) {
+                $coded .= mb_encode_mimeheader( $value)."\r\n";
+            } else {
+                unset ($words);
+                $words = explode(" ", $value);
+                foreach ($words as $k => $word) {
+                    if (preg_match('/[\x80-\xff]/', $word)) {
+                        $words[$k] = '=?iso-8859-1?Q?'.rtrim(quoted_printable_encode($word)).'?=';
                     }
                 }
-            $coded .= join(' ', $words)."\r\n";
             }
-        return rtrim($coded);
+            $coded .= join(' ', $words)."\r\n";
         }
+        return rtrim($coded);
+    }
 }
 
 /*
@@ -915,7 +922,7 @@ function generateXMLExport($id, $lang = "")
 			$xml_rubrik = $categories[$row->category_id];
 			$xml_thema = wordwrap($row->thema, 60);
 			$xml_keywords = $row->keywords;
-			$xml_content = trim(htmlspecialchars(stripslashes(wordwrap($xml_content, 60))));
+			$xml_content = trim(htmlspecialchars(stripslashes(wordwrap($xml_content, 60)), ENT_NOQUOTES, $PMF_LANG['metaCharset']));
 			if (is_writeable("./xml/")) {
 				$xml_fp = @fopen("./xml/article_".$row->id."_".$row->lang.".xml","wb");
 				$my_xml_output = "<?xml version=\"1.0\" encoding=\"".$PMF_LANG["metaCharset"]."\" standalone=\"yes\" ?>\n";
@@ -923,7 +930,7 @@ function generateXMLExport($id, $lang = "")
 				$my_xml_output .= "<phpmyfaq xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:NamespaceSchemaLocation=\"http://www.phpmyfaq.de/xml/faqschema.xsd\">\n";
 				$my_xml_output .= "\t<article id=\"".$row->id."\">\n";
 				$my_xml_output .= "\t<language>".$row->lang."</language>\n";
-				$my_xml_output .= "\t<category>".strip_tags(stripslashes($xml_rubrik))."</category>\n";
+				$my_xml_output .= "\t<category>".htmlentities(strip_tags($xml_rubrik), ENT_NOQUOTES, $PMF_LANG['metaCharset'])."</category>\n";
 				if ($xml_keywords) {
 					$my_xml_output .= "\t<keywords>".$xml_keywords."</keywords>\n";
 					}
