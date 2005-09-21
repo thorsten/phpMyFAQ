@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: sitemap.php,v 1.4 2005-09-19 12:15:37 thorstenr Exp $
+* $Id: sitemap.php,v 1.5 2005-09-21 12:43:56 thorstenr Exp $
 *
 * Shows the whole FAQ articles
 *
@@ -28,8 +28,18 @@ if (isset($_REQUEST['letter']) ) {
     $currentLetter = 'A';
 }
 
+if ('sqlite' == $DB["type"]) {
+    // Queries for SQLite
+    $query_1 = "SELECT DISTINCT substr(thema, 1, 1) AS letters FROM ".SQLPREFIX."faqdata WHERE lang = '".$lang."' AND active = 'yes' ORDER BY letters";
+    $query_2 = "SELECT a.thema AS thema, a.id AS id, a.lang AS lang, b.category_id AS category_id, a.content AS snap FROM ".SQLPREFIX."faqdata a, ".SQLPREFIX."faqcategoryrelations b WHERE a.id = b.record_id AND substr(thema, 1, 1) = '".$currentLetter."' AND lang = '".$lang."' AND active = 'yes'";
+} else {
+    // Queries for all other databases
+    $query_1 = "SELECT DISTINCT substring(thema, 1, 1) AS letters FROM ".SQLPREFIX."faqdata WHERE lang = '".$lang."' AND active = 'yes' ORDER BY letters";
+    $query_2 = "SELECT a.thema AS thema, a.id AS id, a.lang AS lang, b.category_id AS category_id, a.content AS snap FROM ".SQLPREFIX."faqdata a, ".SQLPREFIX."faqcategoryrelations b WHERE a.id = b.record_id AND substring(thema, 1, 1) = '".$currentLetter."' AND lang = '".$lang."' AND active = 'yes'";
+}
+
 $writeLetters = '<p>';
-$result = $db->query("SELECT DISTINCT substring(thema, 1, 1) AS letters FROM ".SQLPREFIX."faqdata WHERE lang = '".$lang."' AND active = 'yes' ORDER BY letters");
+$result = $db->query($query_1);
 while ($row = $db->fetch_object($result)) {
 	$letters = stripslashes($row->letters);
 	if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == "TRUE") {
@@ -41,7 +51,7 @@ while ($row = $db->fetch_object($result)) {
 $writeLetters .= '</p>';
 
 $writeMap = '<ul>';
-$result = $db->query('SELECT a.thema, a.id, a.lang, b.category_id, a.content AS snap FROM '.SQLPREFIX.'faqdata a, '.SQLPREFIX.'faqcategoryrelations b WHERE a.id = b.record_id AND substring(thema, 1, 1) = "'.$currentLetter.'" AND lang = "'.$lang.'" AND active = "yes"');
+$result = $db->query($query_2);
 
 while ($row = $db->fetch_object($result)) {
     if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == "TRUE") {
