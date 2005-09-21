@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.92 2005-09-21 09:16:21 thorstenr Exp $
+* $Id: functions.php,v 1.93 2005-09-21 11:04:41 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -840,9 +840,9 @@ function encode_iso88591($coded = "", $cmode = "g")
                 }
                 $coded .= join(" ", $words)."\r\n";
             }
-        return rtrim($coded);
         }
-    else {
+        return rtrim($coded);
+    } else {
         $zeilen = explode("\r\n", $coded);
         $coded = '';
         foreach ($zeilen as $key => $value) {
@@ -1257,7 +1257,7 @@ function searchEngine($begriff)
 			$thema = chopString($row->thema, 15);
             $content = stripslashes(chopString(strip_tags($row->content), 25));
             $begriff = str_replace(array('^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']'), '', $begriff);
-            if ($begriff > 1) {
+            if (strlen($begriff) > 1) {
                 $thema = preg_replace_callback('/(((href|src|title|alt|class|style|id|name)="[^"]*)?'.$begriff.'(?(1).*"))/mis', "highlight_no_links", $thema);
 			    $content = preg_replace_callback('/(((href|src|title|alt|class|style|id|name)="[^"]*)?'.$begriff.'(?(1).*"))/mis', "highlight_no_links", $content);
             }
