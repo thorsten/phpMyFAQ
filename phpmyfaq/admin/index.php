@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.12 2005-09-15 20:01:20 thorstenr Exp $
+* $Id: index.php,v 1.13 2005-09-22 07:05:10 thorstenr Exp $
 *
 * The main admin backend index file
 *
@@ -251,10 +251,14 @@ if (isset($auth)) {
 			default:						print "Error"; break;
 		}
 	} else {
+        print '<h2>phpMyFAQ Information</h2>';
         // start page with some informations about the FAQ
-        $PMF_TABLE_INFO = $db->getTableStatus();
+        if ('sqlite' == $DB["type"]) {
+            print 'n/a';
+        } else {
+            $PMF_TABLE_INFO = $db->getTableStatus();
 ?>
-	<h2>phpMyFAQ Information</h2>
+	
     <dl class="table-display">
 	    <dt><strong><?php print $PMF_LANG["ad_start_visits"]; ?></strong></dt>
         <dd><?php print $PMF_TABLE_INFO[SQLPREFIX."faqsessions"]; ?></dd>
@@ -266,12 +270,15 @@ if (isset($auth)) {
         <dd><?php print $PMF_TABLE_INFO[SQLPREFIX."faqfragen"]; ?></dd>
     </dl>
 <?php
+        }
+        
         $rg = @ini_get("register_globals");
 		if ($rg == "1") {
 			$rg = "on";
 		} else {
 			$rg = "off";
 		}
+        
 		$sm = @ini_get("safe_mode");
 		if ($sm == "1") {
 			$sm = "on";
@@ -287,8 +294,6 @@ if (isset($auth)) {
 		<dd><?php print $_SERVER["SERVER_SOFTWARE"]; ?></dd>
 		<dt><strong>PHP Version</strong></dt>
 		<dd>PHP <?php print phpversion(); ?></dd>
-		<dt><strong>PHP Memory Limit</strong></dt>
-		<dd><?php print @ini_get("memory_limit"); ?></dd>
 		<dt><strong>Register Globals</strong></dt>
 		<dd><?php print $rg; ?></dd>
 		<dt><strong>Safe Mode</strong></dt>
