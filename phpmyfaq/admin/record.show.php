@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.show.php,v 1.16 2005-06-02 01:37:49 tomr Exp $
+* $Id: record.show.php,v 1.17 2005-09-22 19:33:06 thorstenr Exp $
 *
 * Shows the list of records ordered by categories
 *
@@ -54,8 +54,7 @@ if ($permission["editbt"] || $permission["delbt"]) {
                           array(SQLPREFIX."faqdata.thema",
                                 SQLPREFIX."faqdata.content",
                                 SQLPREFIX."faqdata.keywords"),
-                          $begriff,
-                          array(SQLPREFIX."faqdata.active"=>"yes"));
+                          $begriff);
         
         $laktion = "view";
         $internalSearch = "&amp;search=".$begriff;
