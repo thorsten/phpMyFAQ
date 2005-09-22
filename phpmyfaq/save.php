@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: save.php,v 1.15 2005-09-21 09:16:21 thorstenr Exp $
+* $Id: save.php,v 1.16 2005-09-22 18:29:08 thorstenr Exp $
 *
 * Saves a user FAQ record and sends an email to the user
 *
@@ -63,7 +63,7 @@ if (isset($_POST["username"]) && isset($_POST["rubrik"]) && is_numeric($_POST["r
     }
     $additional_header[] = 'From: '.$usermail;
     $subject = unhtmlentities($PMF_CONF["title"]);
-    if ( unction_exists('mb_encode_mimeheader')) {
+    if (function_exists('mb_encode_mimeheader')) {
         $subject = mb_encode_mimeheader($subject);
     }
     $body = unhtmlentities($PMF_LANG['msgMailCheck'])."\n".unhtmlentities($PMF_CONF['title']).": http://".$_SERVER['SERVER_NAME'].dirname($_SERVER['PHP_SELF']);
