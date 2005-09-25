@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: savequestion.php,v 1.13 2005-09-21 09:16:21 thorstenr Exp $
+* $Id: savequestion.php,v 1.14 2005-09-25 09:47:02 thorstenr Exp $
 *
 * @author           Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author           David Saez Padros <david@ols.es>
@@ -18,6 +18,11 @@
 * License for the specific language governing rights and limitations
 * under the License.
 */
+
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
+    exit();
+}
 
 if (isset($_REQUEST["username"]) && $_REQUEST["username"] != '' && isset($_REQUEST["usermail"]) && checkEmail($_REQUEST["usermail"]) && isset($_REQUEST["content"]) && $_REQUEST["content"] != '' && IPCheck($_SERVER["REMOTE_ADDR"])) {
 
@@ -110,4 +115,3 @@ if (isset($_REQUEST["username"]) && $_REQUEST["username"] != '' && isset($_REQUE
 }
 
 $tpl->includeTemplate("writeContent", "index");
-?>

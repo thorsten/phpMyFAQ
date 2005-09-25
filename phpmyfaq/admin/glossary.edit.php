@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: glossary.edit.php,v 1.2 2005-09-18 19:55:38 thorstenr Exp $
+* $Id: glossary.edit.php,v 1.3 2005-09-25 09:47:02 thorstenr Exp $
 *
 * Displays a form to edit an extisting glossary item
 *
@@ -18,6 +18,11 @@
 * License for the specific language governing rights and limitations
 * under the License.
 */
+
+if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
+    header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
+    exit();
+}
 
 print sprintf('<h2>%s</h2>', $PMF_LANG['ad_menu_glossary']);
 

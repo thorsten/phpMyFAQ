@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: pwd.save.php,v 1.2 2004-12-13 20:26:43 thorstenr Exp $
+* $Id: pwd.save.php,v 1.3 2005-09-25 09:47:02 thorstenr Exp $
 *
 * Save the password of the current user in the database
 *
@@ -18,6 +18,11 @@
 * License for the specific language governing rights and limitations
 * under the License.
 */
+
+if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
+    header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
+    exit();
+}
 
 if (md5($_REQUEST["opass"]) == $auth_pass && $_REQUEST["npass"] == $_REQUEST["bpass"]) {
 	$db->query("UPDATE ".SQLPREFIX."faquser SET pass = '".md5(addslashes($_REQUEST["bpass"]))."' WHERE id = ".$auth_user);

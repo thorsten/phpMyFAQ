@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: pdf.php,v 1.13 2005-01-02 13:29:56 thorstenr Exp $
+* $Id: pdf.php,v 1.14 2005-09-25 09:47:02 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Peter Beauvain <pbeauvain@web.de>
@@ -20,6 +20,8 @@
 * under the License.
 */
 
+require_once('inc/init.php');
+PMF_Init::cleanRequest();
 require_once ("inc/data.php");
 require_once ("inc/db.php");
 require_once ("inc/functions.php");
@@ -33,20 +35,24 @@ $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
 $tree = new Category;
 
 if (isset($_GET["lang"]) && $_GET["lang"] != "" && strlen($_GET["lang"]) <= 2 && !preg_match("=/=", $_GET["lang"])) {
-    if (@is_file("lang/language_".$_REQUEST["lang"].".php")) {
-        require_once("lang/language_".$_REQUEST["lang"].".php");
-        $LANGCODE = $_REQUEST["lang"];
-    } else {
+    $LANGCODE = $_GET["lang"];
+    if (isset($languageCodes[strtoupper($LANGCODE)])) {
+        if (@is_file("lang/language_".$LANGCODE.".php")) {
+        require_once("lang/language_".$LANGCODE.".php");
+        } else {
         unset($LANGCODE);
+        }
     }
 }
 
 if (!isset($LANGCODE) && isset($_COOKIE["lang"]) && $_COOKIE["lang"] != "" && strlen($_COOKIE["lang"]) <= 2 && !preg_match("=/=", $_COOKIE["lang"])) {
-    if (@is_file("lang/language_".$_COOKIE["lang"].".php")) {
-        require_once("lang/language_".$_COOKIE["lang"].".php");
-        $LANGCODE = $_COOKIE["lang"];
-    } else {
+    $LANGCODE = $_COOKIE["lang"];
+    if (isset($languageCodes[strtoupper($LANGCODE)])) {
+        if (@is_file("lang/language_".$LANGCODE.".php")) {
+        require_once("lang/language_".$LANGCODE.".php");
+        } else {
         unset($LANGCODE);
+        }
     }
 }
 
@@ -58,7 +64,7 @@ if (!isset($LANGCODE) && isset($PMF_CONF["detection"]) && isset($_SERVER["HTTP_A
     } else {
         unset($LANGCODE);
     }
-} elseif (!isset($PMF_CONF["detection"])) {
+} elseif (!isset($PMF_CONF["detection"]) && isset($languageCodes[strtoupper($LANGCODE)])) {
     if (@require_once("lang/".$PMF_CONF["language"])) {
         $LANGCODE = $PMF_LANG["metaLanguage"];
         @setcookie("lang", $LANGCODE, time()+3600);
@@ -67,7 +73,7 @@ if (!isset($LANGCODE) && isset($PMF_CONF["detection"]) && isset($_SERVER["HTTP_A
     }
 }
 
-if (isset($LANGCODE)) {
+if (isset($LANGCODE) && isset($languageCodes[strtoupper($LANGCODE)])) {
     require_once("lang/language_".$LANGCODE.".php");
 } else {
     $LANGCODE = "en";

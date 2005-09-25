@@ -1,23 +1,28 @@
 <?php
 /**
-* $Id: category.edit.php,v 1.4 2005-08-19 20:02:41 thorstenr Exp $
+* $Id: category.edit.php,v 1.5 2005-09-25 09:47:02 thorstenr Exp $
 *
 * Edits a category
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-03-10
 * @copyright    (c) 2003-2005 phpMyFAQ Team
-*
+* 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
 * compliance with the License. You may obtain a copy of the License at
 * http://www.mozilla.org/MPL/
-*
+* 
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
 * under the License.
 */
+
+if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
+    header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
+    exit();
+}
 
 if ($permission["editcateg"]) {
     $cat = new category;

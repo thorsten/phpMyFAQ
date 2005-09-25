@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mailsend2friend.php,v 1.6 2005-07-05 10:37:35 thorstenr Exp $
+* $Id: mailsend2friend.php,v 1.7 2005-09-25 09:47:02 thorstenr Exp $
 *
 * Sends the emails to your friends
 *
@@ -18,6 +18,11 @@
 * License for the specific language governing rights and limitations
 * under the License.
 */
+
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
+    exit();
+}
 
 Tracking("sendmail_send2friend",0);
 
@@ -60,4 +65,3 @@ if (isset($_POST["name"]) && $_POST["name"] != "" && isset($_POST["mailfrom"]) &
 }
 
 $tpl->includeTemplate("writeContent", "index");
-?>

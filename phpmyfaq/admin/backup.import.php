@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: backup.import.php,v 1.7 2005-04-10 17:57:55 thorstenr Exp $
+* $Id: backup.import.php,v 1.8 2005-09-25 09:47:02 thorstenr Exp $
 *
 * The import function to import the phpMyFAQ backups
 *
@@ -18,6 +18,11 @@
 * License for the specific language governing rights and limitations
 * under the License.
 */
+
+if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
+    header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
+    exit();
+}
 if ($permission["restore"]) {
 ?>
 	<h2><?php print $PMF_LANG["ad_csv_rest"]; ?></h2>

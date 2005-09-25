@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.13 2005-09-22 07:05:10 thorstenr Exp $
+* $Id: index.php,v 1.14 2005-09-25 09:47:02 thorstenr Exp $
 *
 * The main admin backend index file
 *
@@ -21,19 +21,15 @@
 * under the License.
 */
 
-// Debug mode:
-// - false  debug mode disabled (default)
-// - true   debug mode enabled
-define('DEBUG', false);
+require_once('../inc/init.php');
+define('IS_VALID_PHPMYFAQ_ADMIN', null);
+PMF_Init::cleanRequest();
 
-// Define some constants
+// Just for security reasons - thanks to Johannes for the hint
+$_SERVER['PHP_SELF'] = str_replace('%2F', '/', rawurlencode($_SERVER['PHP_SELF']));
+$_SERVER['HTTP_USER_AGENT'] = urlencode($_SERVER['HTTP_USER_AGENT']);
+
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
-define('IS_PMF', true);
-
-// If debug is enabled, show all PHP errors
-if (DEBUG == true) {
-	error_reporting(E_ALL);
-}
 
 // delete cookie before sending a header
 if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "delcookie") {

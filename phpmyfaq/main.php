@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: main.php,v 1.5 2005-09-20 11:10:25 thorstenr Exp $
+* $Id: main.php,v 1.6 2005-09-25 09:47:02 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-08-23
@@ -17,6 +17,11 @@
 * under the License.
 */
 
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
+    exit();
+}
+
 $tpl->processTemplate ('writeContent', array(
                        'writeNewsHeader' => $PMF_CONF['title'].$PMF_LANG['msgNews'],
                        'writeNews' => generateNews($LANGCODE),
@@ -27,4 +32,3 @@ $tpl->processTemplate ('writeContent', array(
                         'writeNewestRow' => generateFiveNewest($LANGCODE)));
 
 $tpl->includeTemplate('writeContent', 'index');
-?>

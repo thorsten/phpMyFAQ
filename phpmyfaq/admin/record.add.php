@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.add.php,v 1.24 2005-08-22 20:32:43 thorstenr Exp $
+* $Id: record.add.php,v 1.25 2005-09-25 09:47:02 thorstenr Exp $
 *
 * Adds a record in the database
 *
@@ -18,6 +18,11 @@
 * License for the specific language governing rights and limitations
 * under the License.
 */
+
+if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
+    header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
+    exit();
+}
 
 if ($permission["editbt"]) {
 	$submit = $_REQUEST["submit"];

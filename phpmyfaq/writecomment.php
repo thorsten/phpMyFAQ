@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: writecomment.php,v 1.4 2005-05-18 17:51:53 thorstenr Exp $
+* $Id: writecomment.php,v 1.5 2005-09-25 09:47:02 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-08-29
@@ -16,6 +16,11 @@
 * License for the specific language governing rights and limitations
 * under the License.
 */
+
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
+    exit();
+}
 
 Tracking('write_comment', $_GET['id']);
 
@@ -34,4 +39,3 @@ $tpl->processTemplate('writeContent', array(
                       'copyright_eintrag' => unhtmlentities($PMF_CONF['copyright_eintrag'])));
 
 $tpl->includeTemplate('writeContent', 'index');
-?>

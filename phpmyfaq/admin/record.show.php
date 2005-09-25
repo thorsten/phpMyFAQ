@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.show.php,v 1.17 2005-09-22 19:33:06 thorstenr Exp $
+* $Id: record.show.php,v 1.18 2005-09-25 09:47:02 thorstenr Exp $
 *
 * Shows the list of records ordered by categories
 *
@@ -18,6 +18,11 @@
 * License for the specific language governing rights and limitations
 * under the License.
 */
+
+if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
+    header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
+    exit();
+}
 
 print "<h2>".$PMF_LANG["ad_entry_aor"]."</h2>\n";
 if ($permission["editbt"] || $permission["delbt"]) {

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: pwd.change.php,v 1.2 2005-06-25 12:34:40 thorstenr Exp $
+* $Id: pwd.change.php,v 1.3 2005-09-25 09:47:02 thorstenr Exp $
 *
 * Form to change password of the current user
 *
@@ -18,6 +18,11 @@
 * License for the specific language governing rights and limitations
 * under the License.
 */
+
+if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
+    header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
+    exit();
+}
 
 if ($permission["passwd"]) {
 ?>

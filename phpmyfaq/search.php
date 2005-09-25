@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: search.php,v 1.5 2005-07-29 12:29:38 thorstenr Exp $
+* $Id: search.php,v 1.6 2005-09-25 09:47:02 thorstenr Exp $
 *
 * The fulltext search page
 *
@@ -18,6 +18,11 @@
 * License for the specific language governing rights and limitations
 * under the License.
 */
+
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
+    exit();
+}
 
 Tracking("fulltext_search",0);
 
@@ -43,4 +48,3 @@ $tpl->processTemplate ("writeContent", array(
 				));
 
 $tpl->includeTemplate("writeContent", "index");
-?>

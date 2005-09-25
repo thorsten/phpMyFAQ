@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: save.php,v 1.16 2005-09-22 18:29:08 thorstenr Exp $
+* $Id: save.php,v 1.17 2005-09-25 09:47:02 thorstenr Exp $
 *
 * Saves a user FAQ record and sends an email to the user
 *
@@ -19,6 +19,11 @@
 * License for the specific language governing rights and limitations
 * under the License.
 */
+
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
+    exit();
+}
 
 if (isset($_POST["username"]) && isset($_POST["rubrik"]) && is_numeric($_POST["rubrik"]) && isset($_POST["thema"]) && $_POST["thema"] != "" && isset($_POST["content"]) && $_POST["content"] != "" && isset($_POST["usermail"]) && $_POST["usermail"] != "" && IPCheck($_SERVER["REMOTE_ADDR"])) {
 	
@@ -89,4 +94,3 @@ if (isset($_POST["username"]) && isset($_POST["rubrik"]) && is_numeric($_POST["r
 }
 
 $tpl->includeTemplate("writeContent", "index");
-?>

@@ -1,10 +1,10 @@
 <?php
 /**
-* $Id: show.php,v 1.5 2005-05-18 17:51:53 thorstenr Exp $
+* $Id: show.php,v 1.6 2005-09-25 09:47:02 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-08-27
-* @copyright    (c) 2001-2004 phpMyFAQ Team
+* @copyright    (c) 2001-2005 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the 'License'); you may not use this file except in
@@ -16,6 +16,11 @@
 * License for the specific language governing rights and limitations
 * under the License.
 */
+
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
+    exit();
+}
 
 if (isset($_REQUEST['cat']) && is_numeric($_REQUEST['cat']) == TRUE) {
 	$category = $_REQUEST['cat'];
@@ -45,4 +50,3 @@ if (isset($category) && $category != 0) {
 				          'writeOneThemeBack' => ''));
 	$tpl->includeTemplate('writeContent', 'index');
 }
-?>

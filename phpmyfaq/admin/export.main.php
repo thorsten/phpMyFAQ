@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: export.main.php,v 1.17 2005-08-25 16:48:09 thorstenr Exp $
+* $Id: export.main.php,v 1.18 2005-09-25 09:47:02 thorstenr Exp $
 *
 * XML, XML DocBook, XHTML and PDF export - main page
 *
@@ -19,6 +19,11 @@
 * License for the specific language governing rights and limitations
 * under the License.
 */
+
+if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
+    header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
+    exit();
+}
 ?>
 	<h2><?php print $PMF_LANG["ad_menu_export"]; ?></h2>
 <?php

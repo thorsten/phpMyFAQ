@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: sendmail.php,v 1.4 2005-09-21 09:16:21 thorstenr Exp $
+* $Id: sendmail.php,v 1.5 2005-09-25 09:47:02 thorstenr Exp $
 *
 * The 'send an email from the contact page' page
 *
@@ -18,6 +18,11 @@
 * License for the specific language governing rights and limitations
 * under the License.
 */
+
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
+    exit();
+}
 
 Tracking("sendmail_contact",0);
 
@@ -48,20 +53,17 @@ if (isset($_POST["name"]) && $_POST["name"] != '' && isset($_POST["email"]) && c
                 "msgContact" => $PMF_LANG["msgContact"],
                 "Message" => $PMF_LANG["msgMailContact"]
                 ));
-        }
-    else {
+    } else {
         $tpl->processTemplate ("writeContent", array(
                 "msgContact" => $PMF_LANG["msgContact"],
                 "Message" => $PMF_LANG["err_noMailAdress"]
                 ));
-		}
 	}
-else {
+} else {
 	$tpl->processTemplate ("writeContent", array(
 				"msgContact" => $PMF_LANG["msgContact"],
 				"Message" => $PMF_LANG["err_sendMail"]
 				));
-	}
+}
 
 $tpl->includeTemplate("writeContent", "index");
-?>

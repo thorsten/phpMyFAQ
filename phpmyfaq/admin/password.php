@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: password.php,v 1.5 2005-08-18 19:42:40 thorstenr Exp $
+* $Id: password.php,v 1.6 2005-09-25 09:47:02 thorstenr Exp $
 *
 * Reset a forgotten password to a new one
 *
@@ -19,16 +19,15 @@
 * under the License.
 */
 
-/* debug mode:
- * - FALSE	debug mode disabled
- * - TRUE	debug mode enabled
- */
-define("DEBUG", FALSE);
-define("PMF_ROOT_DIR", dirname(dirname(__FILE__)));
+require_once('../inc/init.php');
+define('IS_VALID_PHPMYFAQ_ADMIN', null);
+PMF_Init::cleanRequest();
 
-if (DEBUG == TRUE) {
-	error_reporting(E_ALL);
-	}
+// Just for security reasons - thanks to Johannes for the hint
+$_SERVER['PHP_SELF'] = str_replace('%2F', '/', rawurlencode($_SERVER['PHP_SELF']));
+$_SERVER['HTTP_USER_AGENT'] = urlencode($_SERVER['HTTP_USER_AGENT']);
+
+define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
 /* read configuration */
 require_once (PMF_ROOT_DIR."/inc/data.php");

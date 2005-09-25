@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: stat.show.php,v 1.5 2005-05-18 17:59:03 thorstenr Exp $
+* $Id: stat.show.php,v 1.6 2005-09-25 09:47:02 thorstenr Exp $
 *
 * Show the session
 *
@@ -18,6 +18,11 @@
 * License for the specific language governing rights and limitations
 * under the License.
 */
+
+if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
+    header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
+    exit();
+}
 
 if ($permission["viewlog"]) {
 	$tree = new Category();

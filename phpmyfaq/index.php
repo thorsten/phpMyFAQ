@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.29 2005-09-21 09:16:21 thorstenr Exp $
+* $Id: index.php,v 1.30 2005-09-25 09:47:02 thorstenr Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the 
@@ -22,25 +22,17 @@
 * under the License.
 */
 
-/* debug mode:
- * - FALSE	debug mode disabled
- * - TRUE	debug mode enabled
- */
-define("DEBUG", FALSE);
-
-if (DEBUG) {
-	error_reporting(E_ALL);
-}
+require_once('inc/init.php');
+define('IS_VALID_PHPMYFAQ', null);
+PMF_Init::cleanRequest();
 
 // Just for security reasons - thanks to Johannes for the hint
 $_SERVER['PHP_SELF'] = str_replace('%2F', '/', rawurlencode($_SERVER['PHP_SELF']));
-if (isset($GLOBALS['PHP_SELF'])) {
-    $GLOBALS['PHP_SELF'] = str_replace('%2F', '/', rawurlencode($GLOBALS['PHP_SELF']));
-}
+$_SERVER['HTTP_USER_AGENT'] = urlencode($_SERVER['HTTP_USER_AGENT']);
 
 // check if config.php and data.php exist -> if not, redirect to installer
 if (!file_exists('inc/config.php') || !file_exists('inc/data.php')) {
-    header("Location: http://".$_SERVER['HTTP_HOST'].dirname($_SERVER['PHP_SELF'])."/install/installer.php");
+    header("Location: http://".$_SERVER['SERVER_NAME'].dirname($_SERVER['PHP_SELF'])."/install/installer.php");
     exit();
 }
 
@@ -71,27 +63,33 @@ if (isset($PMF_CONF["ldap_support"]) && $PMF_CONF["ldap_support"] == true && fil
 
 // get language (default: english)
 // TODO: write a global function for that?
-if (isset($_POST["language"]) && $_POST["language"] != "" && strlen($_POST["language"]) <= 2 && !preg_match("=/=", $_REQUEST["language"])) {
+if (isset($_POST["language"]) && $_POST["language"] != "" && strlen($_POST["language"]) <= 2 && !preg_match("=/=", $_POST["language"])) {
     $LANGCODE = $_POST["language"];
-    require_once("lang/language_".$_POST["language"].".php");
-    @setcookie("lang", $LANGCODE, time()+3600);
+    if (isset($languageCodes[strtoupper($LANGCODE)])) {
+        require_once("lang/language_".$LANGCODE.".php");
+        @setcookie("lang", $LANGCODE, time()+3600);
+    }
 }
 
 if (!isset($LANGCODE) && isset($_GET["lang"]) && $_GET["lang"] != "" && strlen($_GET["lang"]) <= 2 && !preg_match("=/=", $_GET["lang"])) {
-    if (@is_file("lang/language_".$_REQUEST["lang"].".php")) {
-        require_once("lang/language_".$_REQUEST["lang"].".php");
-        $LANGCODE = $_REQUEST["lang"];
-    } else {
+    $LANGCODE = $_GET["lang"];
+    if (isset($languageCodes[strtoupper($LANGCODE)])) {
+        if (@is_file("lang/language_".$LANGCODE.".php")) {
+        require_once("lang/language_".$LANGCODE.".php");
+        } else {
         unset($LANGCODE);
+        }
     }
 }
 
 if (!isset($LANGCODE) && isset($_COOKIE["lang"]) && $_COOKIE["lang"] != "" && strlen($_COOKIE["lang"]) <= 2 && !preg_match("=/=", $_COOKIE["lang"])) {
-    if (@is_file("lang/language_".$_COOKIE["lang"].".php")) {
-        require_once("lang/language_".$_COOKIE["lang"].".php");
-        $LANGCODE = $_COOKIE["lang"];
-    } else {
+    $LANGCODE = $_COOKIE["lang"];
+    if (isset($languageCodes[strtoupper($LANGCODE)])) {
+        if (@is_file("lang/language_".$LANGCODE.".php")) {
+        require_once("lang/language_".$LANGCODE.".php");
+        } else {
         unset($LANGCODE);
+        }
     }
 }
 
@@ -103,7 +101,7 @@ if (!isset($LANGCODE) && isset($PMF_CONF["detection"]) && isset($_SERVER["HTTP_A
     } else {
         unset($LANGCODE);
     }
-} elseif (!isset($PMF_CONF["detection"])) {
+} elseif (!isset($PMF_CONF["detection"]) && isset($languageCodes[strtoupper($LANGCODE)])) {
     if (@require_once("lang/".$PMF_CONF["language"])) {
         $LANGCODE = $PMF_LANG["metaLanguage"];
         @setcookie("lang", $LANGCODE, time()+3600);
@@ -112,7 +110,7 @@ if (!isset($LANGCODE) && isset($PMF_CONF["detection"]) && isset($_SERVER["HTTP_A
     }
 }
 
-if (isset($LANGCODE)) {
+if (isset($LANGCODE) && isset($languageCodes[strtoupper($LANGCODE)])) {
     require_once("lang/language_".$LANGCODE.".php");
 } else {
     $LANGCODE = "en";
@@ -181,6 +179,13 @@ if (isset($_GET["cat"])) {
     $cat = 0;
 }
 $tree = new Category($LANGCODE);
+$cat_from_id = -1;
+if (is_numeric($id) && $id > 0) {
+    $cat_from_id = $tree->getCategoryIdFromArticle($id);
+}
+if ($cat_from_id != -1 && $cat == 0) {
+    $cat = $cat_from_id;
+}
 $tree->transform(0);
 $tree->collapseAll();
 if ($cat != 0) {
@@ -263,15 +268,8 @@ if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == "TRUE") {
                 'showSitemap' => '<a href="'.$_SERVER["PHP_SELF"].'?'.$sids.'action=sitemap">'.$PMF_LANG['msgSitemap'].'</a>');
 }
 
-// get main template, set main variables
-$tpl->processTemplate ("index", array_merge($main_template_vars, $links_template_vars));
-
-// include requested PHP file
-require_once($inc_php);
-
 if (DEBUG) {
-	print "<p>DEBUG INFORMATION:</p>\n";
-    print "<p>".$db->sqllog()."</p>\n";
+    $debug_template_vars = array('debugMessages' => '<p>DEBUG INFORMATION:<br />'.$db->sqllog().'</p>');
 } else {
     // send headers and print template
     @header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
@@ -281,7 +279,14 @@ if (DEBUG) {
     @header("Pragma: no-cache");
     @header("Content-type: text/html; charset=".$PMF_LANG["metaCharset"]);
     @header("Vary: Negotiate,Accept");
+    $debug_template_vars = array('debugMessages' => '');
 }
+
+// get main template, set main variables
+$tpl->processTemplate ("index", array_merge($main_template_vars, $links_template_vars, $debug_template_vars));
+
+// include requested PHP file
+require_once($inc_php);
 
 if ('xml' != $action) {
     $tpl->printTemplate();
@@ -289,4 +294,3 @@ if ('xml' != $action) {
 
 // disconnect from database
 $db->dbclose();
-?>

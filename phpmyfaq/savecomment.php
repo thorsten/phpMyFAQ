@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: savecomment.php,v 1.8 2005-05-18 17:51:53 thorstenr Exp $
+* $Id: savecomment.php,v 1.9 2005-09-25 09:47:02 thorstenr Exp $
 *
 * Saves the posted comment
 *
@@ -19,9 +19,14 @@
 * under the License.
 */
 
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
+    exit();
+}
+
 if (isset($_POST["user"]) && $_POST["user"] != "" && isset($_POST["mail"]) && $_POST["mail"] != "" && isset($_POST["comment"]) && $_POST["comment"] != "" && IPCheck($_SERVER["REMOTE_ADDR"])) {
 
-    $id = (isset($_REQUEST["id"])) ? $_REQUEST["id"] : 0;
+    $id = (isset($_REQUEST["id"])) ? (int)$_REQUEST["id"] : 0;
 	Tracking("save_comment", $id);
 	
 	$helped = ""; // not used in this version - maybe in the future
@@ -36,22 +41,19 @@ if (isset($_POST["user"]) && $_POST["user"] != "" && isset($_POST["mail"]) && $_
 				"msgCommentHeader" => $PMF_LANG["msgWriteComment"],
 				"Message" => $PMF_LANG["msgCommentThanks"]
 				));
-	}
-else {
+} else {
 	if (IPCheck($_SERVER["REMOTE_ADDR"]) == FALSE) {
 		$tpl->processTemplate ("writeContent", array(
 				"msgCommentHeader" => $PMF_LANG["msgWriteComment"],
 				"Message" => $PMF_LANG["err_bannedIP"]
 				));
-		}
-	else {
+	} else {
 		Tracking("error_save_comment", $_GET["id"]);
 		$tpl->processTemplate ("writeContent", array(
 				"msgCommentHeader" => $PMF_LANG["msgWriteComment"],
 				"Message" => $PMF_LANG["err_SaveComment"]
 				));
-		}
 	}
+}
 
 $tpl->includeTemplate("writeContent", "index");
-?>

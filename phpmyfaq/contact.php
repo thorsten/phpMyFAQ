@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: contact.php,v 1.3 2004-12-16 12:29:30 thorstenr Exp $
+* $Id: contact.php,v 1.4 2005-09-25 09:47:02 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-09-16
@@ -16,6 +16,11 @@
 * License for the specific language governing rights and limitations
 * under the License.
 */
+
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
+    exit();
+}
 
 Tracking('contact', 0);
 
@@ -33,4 +38,3 @@ $tpl->processTemplate ('writeContent', array(
                        'version' => $PMF_CONF['version']));
 
 $tpl->includeTemplate('writeContent', 'index');
-?>

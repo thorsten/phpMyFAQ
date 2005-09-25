@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: send2friend.php,v 1.3 2005-01-09 12:15:43 thorstenr Exp $
+* $Id: send2friend.php,v 1.4 2005-09-25 09:47:02 thorstenr Exp $
 *
 * The send2friend page
 *
@@ -18,6 +18,11 @@
 * License for the specific language governing rights and limitations
 * under the License.
 */
+
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
+    exit();
+}
 
 Tracking('send2friend',0);
 
@@ -42,4 +47,3 @@ $tpl->processTemplate ('writeContent', array(
 				));
 
 $tpl->includeTemplate('writeContent', 'index');
-?>

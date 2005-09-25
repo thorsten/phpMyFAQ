@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: attachment.php,v 1.8 2005-06-06 06:24:40 thorstenr Exp $
+* $Id: attachment.php,v 1.9 2005-09-25 09:47:02 thorstenr Exp $
 *
 * Select an attachment and save it or create the SQL backup files
 *
@@ -19,16 +19,13 @@
 * under the License.
 */
 
-/* debug mode:
- * - FALSE	debug mode disabled
- * - TRUE	debug mode enabled
- */
-define("DEBUG", FALSE);
-define("PMF_ROOT_DIR", dirname(dirname(__FILE__)));
+require_once('../inc/init.php');
+define('IS_VALID_PHPMYFAQ_ADMIN', null);
+PMF_Init::cleanRequest();
 
-if (DEBUG == TRUE) {
-	error_reporting(E_ALL);
-}
+// Just for security reasons - thanks to Johannes for the hint
+$_SERVER['PHP_SELF'] = str_replace('%2F', '/', rawurlencode($_SERVER['PHP_SELF']));
+$_SERVER['HTTP_USER_AGENT'] = urlencode($_SERVER['HTTP_USER_AGENT']);
 
 if (isset($_REQUEST["aktion"]) && ($_REQUEST["aktion"] == "sicherdaten" || $_REQUEST["aktion"] == "sicherlog")) {
 	Header("Content-Type: application/octet-stream");

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: savevoting.php,v 1.12 2005-08-25 16:41:01 thorstenr Exp $
+* $Id: savevoting.php,v 1.13 2005-09-25 09:47:02 thorstenr Exp $
 *
 * Saves a user voting
 *
@@ -17,7 +17,12 @@
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
 * under the License.
-******************************************************************************/
+*/
+
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
+    exit();
+}
 
 $record = (isset($_POST["artikel"])) ? intval($_POST["artikel"]) : '';
 $vote = (isset($_POST["vote"])) ? intval($_POST["vote"]) : 0;
@@ -62,4 +67,3 @@ if (isset($vote) && $vote != "" && votingCheck($record, $userip) && intval($_POS
 }
 
 $tpl->includeTemplate("writeContent", "index");
-?>

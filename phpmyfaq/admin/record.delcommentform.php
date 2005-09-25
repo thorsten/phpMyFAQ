@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.delcommentform.php,v 1.3 2004-12-13 20:26:43 thorstenr Exp $
+* $Id: record.delcommentform.php,v 1.4 2005-09-25 09:47:02 thorstenr Exp $
 *
 * Form to delete user comment
 *
@@ -18,6 +18,11 @@
 * License for the specific language governing rights and limitations
 * under the License.
 */
+
+if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
+    header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
+    exit();
+}
 
 print "<h2>".$PMF_LANG["ad_entry_aor"]."</h2>\n";
 if ($permission["delcomment"]) {

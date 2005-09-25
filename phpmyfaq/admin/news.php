@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: news.php,v 1.9 2005-02-04 08:13:43 thorstenr Exp $
+* $Id: news.php,v 1.10 2005-09-25 09:47:02 thorstenr Exp $
 *
 * The main administration file for the news
 *
@@ -18,6 +18,11 @@
 * License for the specific language governing rights and limitations
 * under the License.
 */
+
+if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
+    header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
+    exit();
+}
 
 print '<h2>'.$PMF_LANG['ad_news_add'].'</h2>';
 if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews"]) {

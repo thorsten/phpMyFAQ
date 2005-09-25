@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: help.php,v 1.2 2004-11-22 21:03:50 thorstenr Exp $
+* $Id: help.php,v 1.3 2005-09-25 09:47:02 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-08-29
@@ -17,6 +17,11 @@
 * under the License.
 */
 
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
+    exit();
+}
+
 Tracking('faqhelp', 0);
 
 $tpl->processTemplate('writeContent', array(
@@ -24,4 +29,3 @@ $tpl->processTemplate('writeContent', array(
                       'msgHelpText' => $PMF_LANG['msgHelpText']));
 
 $tpl->includeTemplate('writeContent', 'index');
-?>

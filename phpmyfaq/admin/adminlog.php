@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: adminlog.php,v 1.5 2005-01-04 16:06:06 thorstenr Exp $
+* $Id: adminlog.php,v 1.6 2005-09-25 09:47:02 thorstenr Exp $
 *
 * Overview of actions in the admin section
 *
@@ -18,6 +18,11 @@
 * License for the specific language governing rights and limitations
 * under the License.
 */
+
+if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
+    header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
+    exit();
+}
 
 if ($permission["adminlog"]) {
 	$perpage = 15;

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: header.php,v 1.10 2005-06-06 06:19:16 thorstenr Exp $
+* $Id: header.php,v 1.11 2005-09-25 09:47:02 thorstenr Exp $
 *
 * header of the admin area
 *
@@ -18,6 +18,11 @@
 * License for the specific language governing rights and limitations
 * under the License.
 */
+
+if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
+    header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
+    exit();
+}
 
 header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
 header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
