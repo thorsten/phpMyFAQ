@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.10 2005-09-18 20:07:16 thorstenr Exp $
+ * $Id: language_de.php,v 1.11 2005-09-28 15:31:39 thorstenr Exp $
  *
  * File:                language_de.php
  * Description:		    German language file
@@ -571,6 +571,7 @@ $LANG_CONF["bannedIP"] = array(0 => "area", 1 => "Gesperrte IPs");
 $LANG_CONF["parse_php"] = array(0 => "checkbox", 1 => "Soll der Template Parser PHP ausführen? (Voreinstellung: deaktiviert)");
 $LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "mod_rewrite Support aktivieren? (Voreinstellung: deaktiviert)");
 $LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "LDAP Support aktivieren? (Voreinstellung: deaktiviert)");
+$LANG_CONF["referenceURL"] = array(0 => "input", 1 => "URL für die Linkverifizierung");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "Als neue Hauptrubrik";
 $PMF_LANG["ad_categ_paste_error"] = "Diese Rubrik kann hier nicht eingef&uuml;gt werden.";

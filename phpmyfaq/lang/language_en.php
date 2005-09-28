@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.9 2005-09-15 20:32:27 thorstenr Exp $
+* $Id: language_en.php,v 1.10 2005-09-28 15:31:39 thorstenr Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -574,6 +574,7 @@ $LANG_CONF["parse_php"] = array(0 => "checkbox", 1 => "Should the template engin
 $LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Activate mod_rewrite support? (default: disabled)");
 $LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "Do you want to enable LDAP support? (default: disabled)");
 $LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "Do you want to enable LDAP support? (default: disabled)");
+$LANG_CONF["referenceURL"] = array(0 => "input", 1 => "base URL for link verification (set to folder URL of Frontend)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "as new main category";
 $PMF_LANG["ad_categ_paste_error"] = "Moving this category isn't possible.";
@@ -598,9 +599,15 @@ $PMF_LANG['ad_categ_select'] = 'Select category language';
 // added v1.5.1 - 2005-09-06 by Thorsten
 $PMF_LANG['msgSitemap'] = 'Sitemap';
 
-// added v1.6.0 - 2005-09-15 by Thorsten
+// added v1.6.0 - 2005-09-15 by Thorsten and by Minoru TODA
 $PMF_LANG['ad_menu_glossary'] = 'Glossary';
 $PMF_LANG['ad_glossary_add'] = 'Add glossary entry';
 $PMF_LANG['ad_glossary_item'] = 'Item';
 $PMF_LANG['ad_glossary_definition'] = 'Definition';
 $PMF_LANG['ad_glossary_save'] = 'Save entry';
+$PMF_LANG['ad_linkcheck_noReferenceURL'] = 'Automatic link verification disabled (base URL for link verify not set)';
+$PMF_LANG['ad_linkcheck_noAllowUrlOpen'] = 'Automatic link verification disabled (PHP option allow_url_fopen not Enabled)';
+$PMF_LANG['ad_linkcheck_checkResult'] = 'Automatic link verification result';
+$PMF_LANG['ad_linkcheck_checkSuccess'] = 'OK';
+$PMF_LANG['ad_linkcheck_checkFailed'] = 'Failed';
+$PMF_LANG['ad_linkcheck_failReason'] = 'Reason(s) failed:';

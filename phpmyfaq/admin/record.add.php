@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.add.php,v 1.25 2005-09-25 09:47:02 thorstenr Exp $
+* $Id: record.add.php,v 1.26 2005-09-28 15:31:39 thorstenr Exp $
 *
 * Adds a record in the database
 *
@@ -52,6 +52,7 @@ if ($permission["editbt"]) {
     	
         if ($result_record) {
     		print $PMF_LANG["ad_entry_savedsuc"];
+    		print verifyArticleURL(stripslashes($content), $nextID, $lang);
         } else {
     		print $PMF_LANG["ad_entry_savedfail"].$db->error();
         }

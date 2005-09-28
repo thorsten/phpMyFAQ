@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.save.php,v 1.27 2005-09-25 09:47:02 thorstenr Exp $
+* $Id: record.save.php,v 1.28 2005-09-28 15:31:39 thorstenr Exp $
 *
 * Save or update a FAQ record
 *
@@ -96,6 +96,7 @@ if (isset($submit[1]) && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "" &
     
 	if ($db->query($query)) {
 		print $PMF_LANG["ad_entry_savedsuc"];
+		print verifyArticleURL(stripslashes($content), $_REQUEST["id"], $_REQUEST["language"]);
     } else {
 		print $PMF_LANG["ad_entry_savedfail"].$db->error();
     }

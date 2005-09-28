@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.14 2005-09-25 09:47:02 thorstenr Exp $
+* $Id: index.php,v 1.15 2005-09-28 15:31:39 thorstenr Exp $
 *
 * The main admin backend index file
 *
@@ -38,15 +38,16 @@ if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "delcookie") {
 }
 
 // Read configuration, include classes and functions
-require_once (PMF_ROOT_DIR."/inc/data.php");
-require_once (PMF_ROOT_DIR."/inc/db.php");
+require_once(PMF_ROOT_DIR."/inc/data.php");
+require_once(PMF_ROOT_DIR."/inc/db.php");
 define("SQLPREFIX", $DB["prefix"]);
 $db = db::db_select($DB["type"]);
 $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
-require_once (PMF_ROOT_DIR."/inc/config.php");
-require_once (PMF_ROOT_DIR."/inc/constants.php");
-require_once (PMF_ROOT_DIR."/inc/category.php");
-require_once (PMF_ROOT_DIR."/inc/functions.php");
+require_once(PMF_ROOT_DIR."/inc/config.php");
+require_once(PMF_ROOT_DIR."/inc/constants.php");
+require_once(PMF_ROOT_DIR."/inc/category.php");
+require_once(PMF_ROOT_DIR."/inc/functions.php");
+require_once(PMF_ROOT_DIR."/inc/linkverifier.php");
 
 // Set cookie before sending a header
 if (isset($_POST["aktion"]) && $_POST["aktion"] == "setcookie") {
