@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: save.php,v 1.17 2005-09-25 09:47:02 thorstenr Exp $
+* $Id: save.php,v 1.18 2005-09-29 06:49:32 thorstenr Exp $
 *
 * Saves a user FAQ record and sends an email to the user
 *
@@ -29,8 +29,8 @@ if (isset($_POST["username"]) && isset($_POST["rubrik"]) && is_numeric($_POST["r
 	
     Tracking("save_new_entry",0);
 	$datum = date("YmdHis");
-	$content = $db->escape_string(safeSQL(safeHTML(nl2br($_POST["content"]))));
-    $contentlink = $db->escape_string(safeSQL(safeHTML($_POST["contentlink"])));
+	$content = $db->escape_string(safeHTML(nl2br($_POST["content"])));
+    $contentlink = $db->escape_string(safeHTML($_POST["contentlink"]));
 	
     if (substr($contentlink,7) != "") {
 		$content = $content."<br />".$PMF_LANG["msgInfo"]."<a href=\"http://".substr($contentlink,7)."\" target=\"_blank\">".$contentlink."</a>";
