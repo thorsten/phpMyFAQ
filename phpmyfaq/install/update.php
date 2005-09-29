@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.33 2005-09-16 19:29:09 thorstenr Exp $
+* $Id: update.php,v 1.34 2005-09-29 06:53:29 thorstenr Exp $
 *
 * Main update script
 *
@@ -386,6 +386,7 @@ if ($step == 5) {
     if ($version < 160) {
         $query[] = 'ALTER TABLE '.SQLPREFIX.'faqcategories ADD user_id INTEGER NOT NULL';
         $query[] = 'CREATE TABLE '.SQLPREFIX.'faqglossary ( id INT(11) NOT NULL , lang VARCHAR(2) NOT NULL , item VARCHAR(255) NOT NULL , definition TEXT NOT NULL, PRIMARY KEY (id, lang))';
+        $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata ADD linkState VARCHAR(7) NOT NULL, ADD linkCheckDate INT(11) DEFAULT \'0\' NOT NULL';
         
     }
     // optimize tables
@@ -402,17 +403,19 @@ if ($step == 5) {
     }
     	
 	print '<p class="center">';
-    while ($each_query = each($query)) {
-		$result = $db->query($each_query[1]);
-		print "|&nbsp;\n";
-		if (!$result) {
-			print "<p class=\"error\"><strong>Error:</strong> ".$db->error()."</p>\n";
-            print "<p>Query:</p>\n";
-            print "<pre>".$each_query[1]."</pre>\n";
-			die();
-		}
-        wait(250);
-	}
+    if (isset($query)) {
+        while ($each_query = each($query)) {
+    		$result = $db->query($each_query[1]);
+    		print "|&nbsp;\n";
+    		if (!$result) {
+    			print "<p class=\"error\"><strong>Error:</strong> ".$db->error()."</p>\n";
+                print "<p>Query:</p>\n";
+                print "<pre>".$each_query[1]."</pre>\n";
+    			die();
+    		}
+            wait(250);
+    	}
+    }
     print "</p>\n";
     print "<p class=\"center\">The database was updated successfully.</p>";
     print "<p class=\"center\"><a href=\"../index.php\">phpMyFAQ</a></p>";
