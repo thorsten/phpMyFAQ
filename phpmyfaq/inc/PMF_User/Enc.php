@@ -16,10 +16,22 @@ if (0 > version_compare(PHP_VERSION, '4')) {
 }
 
 /**
- * This container class manages user authentication.
+ * This container class manages user authentication. 
+ *
+ * Subclasses of Auth implement the authentication functionality with different
+ * types. The class AuthLdap for expamle provides authentication functionality
+ * LDAP-database access, AuthMysql with MySQL-database access.
+ *
+ * Authentication functionality includes creation of a new login-and-password
+ * deletion of an existing login-and-password combination and validation of
+ * given by a user.
+ *
+ * Passwords are usually encrypted before stored in a database. For
+ * and security, a password encryption method may be chosen. See documentation
+ * Enc class for further details.
  *
  * @author Lars Tiedemann <php@larstiedemann.de>
- * @since 2005-09-18
+ * @since 2005-09-30
  * @version 0.1
  */
 require_once('PMF/Auth.php');

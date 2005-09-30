@@ -3,13 +3,10 @@
 error_reporting(E_ALL);
 
 /**
- * php - PMF\CurrentUser.php
+ * manages authentication process using php sessions.
  *
- * $Id: CurrentUser.php,v 1.2 2005-09-30 11:30:08 b33blebr0x Exp $
- *
- * This file is part of php.
- *
- * Automatic generated with ArgoUML 0.19.4 on 28.09.2005, 17:57:39
+ * The CurrentUser class is an extension of the User class. It provides methods
+ * manage user authentication using multiple database accesses.
  *
  * @author Lars Tiedemann, <php@larstiedemann.de>
  * @package PMF
@@ -18,15 +15,6 @@ error_reporting(E_ALL);
 if (0 > version_compare(PHP_VERSION, '4')) {
     die('This file was generated for PHP 4');
 }
-
-/**
- * This container class manages user authentication.
- *
- * @author Lars Tiedemann <php@larstiedemann.de>
- * @since 2005-09-18
- * @version 0.1
- */
-require_once('PMF/Auth.php');
 
 /**
  * Creates a new user object.
@@ -54,7 +42,10 @@ require_once('PMF/User.php');
 // section -64--88-1-12--f895d8c:106777dbaf0:-7fdd-constants end
 
 /**
- * Short description of class PMF_CurrentUser
+ * manages authentication process using php sessions.
+ *
+ * The CurrentUser class is an extension of the User class. It provides methods
+ * manage user authentication using multiple database accesses.
  *
  * @access public
  * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -65,24 +56,16 @@ class PMF_CurrentUser
 {
     // --- ATTRIBUTES ---
 
-    /**
-     * Short description of attribute auth_container
-     *
-     * @access private
-     * @var array
-     */
-    var $_auth_container = array();
-
     // --- OPERATIONS ---
 
     /**
      * Short description of method PMF_CurrentUser
      *
-     * @access private
+     * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
      * @return void
      */
-    function _PMF_CurrentUser()
+    function PMF_CurrentUser()
     {
         // section -64--88-1-12--f895d8c:106777dbaf0:-7fd8 begin
         // section -64--88-1-12--f895d8c:106777dbaf0:-7fd8 end
@@ -142,19 +125,25 @@ class PMF_CurrentUser
     }
 
     /**
-     * Short description of method addAuth
+     * Short description of method generateSessionId
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param object
-     * @return void
+     * @return string
      */
-    function addAuth($auth)
+    function generateSessionId()
     {
-        // section -64--88-1-12--f895d8c:106777dbaf0:-7fd4 begin
-        // section -64--88-1-12--f895d8c:106777dbaf0:-7fd4 end
+        $returnValue = (string) '';
+
+        // section -64--88-1-10-63632404:1069d6db002:-7fdb begin
+        // section -64--88-1-10-63632404:1069d6db002:-7fdb end
+
+        return (string) $returnValue;
     }
 
 } /* end of class PMF_CurrentUser */
 
-?>
+?>/* lost code following: 
+    // section -64--88-1-12--f895d8c:106777dbaf0:-7fd4 begin
+    // section -64--88-1-12--f895d8c:106777dbaf0:-7fd4 end
+*/

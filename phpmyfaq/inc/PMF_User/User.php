@@ -20,6 +20,27 @@ if (0 > version_compare(PHP_VERSION, '4')) {
 }
 
 /**
+ * This container class manages user authentication. 
+ *
+ * Subclasses of Auth implement the authentication functionality with different
+ * types. The class AuthLdap for expamle provides authentication functionality
+ * LDAP-database access, AuthMysql with MySQL-database access.
+ *
+ * Authentication functionality includes creation of a new login-and-password
+ * deletion of an existing login-and-password combination and validation of
+ * given by a user.
+ *
+ * Passwords are usually encrypted before stored in a database. For
+ * and security, a password encryption method may be chosen. See documentation
+ * Enc class for further details.
+ *
+ * @author Lars Tiedemann <php@larstiedemann.de>
+ * @since 2005-09-30
+ * @version 0.1
+ */
+require_once('PMF/Auth.php');
+
+/**
  * This class manages user permissions and group memberships.
  *
  * There are three possible extensions of this class: basic, medium and large
@@ -58,6 +79,10 @@ require_once('PMF/UserData.php');
 @define('SQLPREFIX', 'faq_');
 @define('PMF_USERERROR_INVALID_STATUS', 'Undefined user status. ');
 @define('PMF_USERERROR_NO_USERID', 'No user-ID found. ');
+@define('PMF_USERERROR_LOGIN_NOT_UNIQUE', 'Login is not unique. ');
+@define('PMF_LOGIN_MINLENGTH', 4);
+@define('PMF_LOGIN_INVALID_REGEXP', '/(^[^a-z]{1}|[\W])/i');
+@define('PMF_USERERROR_LOGIN_INVALID', 'The chosen login is invalid. A valid login has at least four characters. Only letters, numbers and underscore _ are allowed. The first letter must be a letter. '); 
 // section 127-0-0-1-17ec9f7:105b52d5117:-7ff0-constants end
 
 /**
@@ -136,10 +161,18 @@ class PMF_User
     /**
      * Short description of attribute allowed_status
      *
-     * @access public
+     * @access private
      * @var array
      */
-    var $allowed_status = array('active', 'blocked', 'protected');
+    var $_allowed_status = array('active', 'blocked', 'protected');
+
+    /**
+     * Short description of attribute auth_container
+     *
+     * @access private
+     * @var array
+     */
+    var $_auth_container = array();
 
     // --- OPERATIONS ---
 
@@ -168,7 +201,12 @@ class PMF_User
     function addDb($db)
     {
         // section -64--88-1-5-a522a6:106564ad215:-7ffd begin
-        $this->_db = $db;
+        if ($this->checkDb($db)) {
+        	$this->_db = $db;
+            return true;
+        }
+        $this->_db = null;
+        return false;
         // section -64--88-1-5-a522a6:106564ad215:-7ffd end
     }
 
@@ -184,11 +222,12 @@ class PMF_User
         $returnValue = (int) 0;
 
         // section -64--88-1-5-a522a6:106564ad215:-7ffb begin
-        if (isset($this->_user_id) and $this->_user_id > 0) {
+        if (isset($this->_user_id) and is_int($this->_user_id) and $this->_user_id > 0) {
             return (int) $this->_user_id;
         }
+        $this->_user_id = (int) 0;
         $this->errors[] = PMF_USERERROR_NO_USERID;
-        return 0;
+        return (int) 0;
         // section -64--88-1-5-a522a6:106564ad215:-7ffb end
 
         return (int) $returnValue;
@@ -200,14 +239,15 @@ class PMF_User
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
      * @param int
-     * @return mixed
+     * @return bool
      */
     function getUserById($user_id)
     {
-        $returnValue = null;
+        $returnValue = (bool) false;
 
         // section -64--88-1-5-15e2075:1065f4960e0:-7fc1 begin
-        if (!$this->checkDB()) {
+        if (!$this->_db) {
+        	$this->errors[] = PMF_USERERROR_NO_DB;
 		    return false;
         }
         $res = $this->_db->query("
@@ -226,13 +266,13 @@ class PMF_User
 			return false;
 		}
 		$user = $this->_db->fetch_assoc($res);
-        $this->_login = $user['login'];
-		$this->_status = $user['status'];
-		$this->_user_id = $user['id'];
+        $this->_login   = (string) $user['login'];
+		$this->_status  = (string) $user['status'];
+		$this->_user_id = (int)    $user['id'];
 		return true;
         // section -64--88-1-5-15e2075:1065f4960e0:-7fc1 end
 
-        return $returnValue;
+        return (bool) $returnValue;
     }
 
     /**
@@ -241,14 +281,15 @@ class PMF_User
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
      * @param string
-     * @return mixed
+     * @return bool
      */
     function getUserByLogin($login)
     {
-        $returnValue = null;
+        $returnValue = (bool) false;
 
         // section -64--88-1-5-15e2075:1065f4960e0:-7fbe begin
-        if (!$this->checkDB()) {
+        if (!$this->_db) {
+        	$this->errors[] = PMF_USERERROR_NO_DB;
 		    return false;
         }
         $res = $this->_db->query("
@@ -267,13 +308,13 @@ class PMF_User
 			return false;
 		}
 		$user = $this->_db->fetch_assoc($res);
-        $this->_login = $user['login'];
-		$this->_status = $user['status'];
-		$this->_user_id = $user['id'];
+        $this->_login   = (string) $user['login'];
+		$this->_status  = (string) $user['status'];
+		$this->_user_id = (int)    $user['id'];
 		return true;
         // section -64--88-1-5-15e2075:1065f4960e0:-7fbe end
 
-        return $returnValue;
+        return (bool) $returnValue;
     }
 
     /**
@@ -289,6 +330,27 @@ class PMF_User
         $returnValue = null;
 
         // section -64--88-1-5-5e0b50c5:10665348267:-7fdd begin
+        if (!$this->_db) {
+        	$this->errors[] = PMF_USERERROR_NO_DB;
+		    return false;
+        }
+        // is $login valid?
+        $login = (string) $login;
+        if (!$this->isLoginValid($login)) 
+            return false;
+        // does $login already exist?
+        $user = new PMF_User($this->_db);
+        if ($user->getUserByLogin($login)) {
+        	$this->errors[] = PMF_USERERROR_LOGIN_NOT_UNIQUE;
+            return false;
+        }
+        // 
+        $this->_db->query("
+          INSERT INTO
+            ".SQLPREFIX."user
+          SET
+            
+        ");
         // section -64--88-1-5-5e0b50c5:10665348267:-7fdd end
 
         return $returnValue;
@@ -326,13 +388,17 @@ class PMF_User
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
+     * @param object
+     * @param object
+     * @param mixed
      * @return object
      */
-    function PMF_User()
+    function PMF_User($db = null, $perm = null, $auth = array())
     {
         $returnValue = null;
 
         // section -64--88-1-5--735fceb5:106657b6b8d:-7fdb begin
+        return $this->__construct($db, $perm, $auth);
         // section -64--88-1-5--735fceb5:106657b6b8d:-7fdb end
 
         return $returnValue;
@@ -378,11 +444,15 @@ class PMF_User
         }
         // update status
         $this->_status = $status;
-        if (!$this->checkDB()) 
-            return false;
         $user_id = $this->getUserId();
-        if (!$user_id)
+        if (!$user_id) {
+			$this->errors[] = PMF_USERERROR_NO_USERID;
             return false;
+        }
+        if (!$this->_db) {
+        	$this->errors[] = PMF_USERERROR_NO_DB;
+		    return false;
+        }
         return $this->_db->query("
 		  UPDATE 
 		    ".SQLPREFIX."user 
@@ -395,25 +465,21 @@ class PMF_User
     }
 
     /**
-     * Short description of method checkDB
+     * Short description of method checkDb
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
+     * @param object
      * @return bool
      */
-    function checkDB()
+    function checkDb($db)
     {
         $returnValue = (bool) false;
 
         // section -64--88-1-10--602a52f4:106a644a5e8:-7fd4 begin
-        if (!isset($this->_db)) {
-			$this->errors[] = PMF_USERERROR_NO_DB;
-            return false;
-        }
         $methods = array('query', 'num_rows', 'fetch_assoc', 'error');
-        $returnValue = true;
         foreach ($methods as $method) {
-        	if (!method_exists($this->_db, $method)) {
+        	if (!method_exists($db, $method)) {
 				$this->errors[] = PMF_USERERROR_NO_DB;
         		return false;
         		break;
@@ -447,6 +513,126 @@ class PMF_User
         // section -64--88-1-10--602a52f4:106a644a5e8:-7fd2 end
 
         return (string) $returnValue;
+    }
+
+    /**
+     * Short description of method __construct
+     *
+     * @access public
+     * @author Lars Tiedemann, <php@larstiedemann.de>
+     * @param object
+     * @param object
+     * @param mixed
+     * @return void
+     */
+    function __construct($db = null, $perm = null, $auth = array())
+    {
+        // section -64--88-1-10--602a52f4:106a644a5e8:-7fce begin
+        if (!$this->addDb($db))
+            return false;
+        return $this; 
+        // section -64--88-1-10--602a52f4:106a644a5e8:-7fce end
+    }
+
+    /**
+     * Short description of method __destruct
+     *
+     * @access public
+     * @author Lars Tiedemann, <php@larstiedemann.de>
+     * @return void
+     */
+    function __destruct()
+    {
+        // section -64--88-1-10--602a52f4:106a644a5e8:-7fcb begin
+        // section -64--88-1-10--602a52f4:106a644a5e8:-7fcb end
+    }
+
+    /**
+     * Short description of method isValidLogin
+     *
+     * @access public
+     * @author Lars Tiedemann, <php@larstiedemann.de>
+     * @param string
+     * @return bool
+     */
+    function isValidLogin($login)
+    {
+        $returnValue = (bool) false;
+
+        // section -64--88-1-10--602a52f4:106a644a5e8:-7fc8 begin
+        $login = (string) $login;
+        if (strlen($login) < PMF_LOGIN_MINLENGTH or preg_match(PMF_LOGIN_INVALID_REGEXP, $login)) {
+        	$this->errors[] = PMF_USERERROR_LOGIN_INVALID;
+            return false;
+        }
+        return true;
+        // section -64--88-1-10--602a52f4:106a644a5e8:-7fc8 end
+
+        return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method addAuth
+     *
+     * @access public
+     * @author Lars Tiedemann, <php@larstiedemann.de>
+     * @param object
+     * @return void
+     */
+    function addAuth($auth)
+    {
+        // section -64--88-1-10-5a491889:106a7b76a96:-7fda begin
+        if ($this->checkAuth($auth)) {
+        	$this->_auth_container[] = $auth;
+            return true;
+        }
+        return false;
+        // section -64--88-1-10-5a491889:106a7b76a96:-7fda end
+    }
+
+    /**
+     * Short description of method checkAuth
+     *
+     * @access public
+     * @author Lars Tiedemann, <php@larstiedemann.de>
+     * @param object
+     * @return bool
+     */
+    function checkAuth($auth)
+    {
+        $returnValue = (bool) false;
+
+        // section -64--88-1-10-59fce530:106a800a699:-7fda begin
+        $methods = array('login');
+        foreach ($methods as $method) {
+        	if (!method_exists($auth, $method)) {
+				$this->errors[] = PMF_USERERROR_NOauth;
+        		return false;
+        		break;
+        	}
+        }
+        return true;
+        // section -64--88-1-10-59fce530:106a800a699:-7fda end
+
+        return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method checkPerm
+     *
+     * @access public
+     * @author Lars Tiedemann, <php@larstiedemann.de>
+     * @param object
+     * @return bool
+     */
+    function checkPerm($perm)
+    {
+        $returnValue = (bool) false;
+
+        // section -64--88-1-10-59fce530:106a800a699:-7fd7 begin
+        // section -64--88-1-10-59fce530:106a800a699:-7fd7 end
+
+        return (bool) $returnValue;
     }
 
 } /* end of class PMF_User */
