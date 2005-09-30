@@ -109,11 +109,15 @@ class PMF_UserData
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
+     * @param int
      * @return void
      */
-    function PMF_UserData()
+    function PMF_UserData($user_id = 0)
     {
         // section -64--88-1-5--735fceb5:106657b6b8d:-7fd3 begin
+        if ($user_id > 0) {
+        	$this->db->query("SELECT * FROM ".SQLPREFIX." WHERE user_id = $user_id");
+        }
         // section -64--88-1-5--735fceb5:106657b6b8d:-7fd3 end
     }
 

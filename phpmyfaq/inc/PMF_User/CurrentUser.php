@@ -5,7 +5,7 @@ error_reporting(E_ALL);
 /**
  * php - PMF\CurrentUser.php
  *
- * $Id: CurrentUser.php,v 1.1 2005-09-28 16:07:22 b33blebr0x Exp $
+ * $Id: CurrentUser.php,v 1.2 2005-09-30 11:30:08 b33blebr0x Exp $
  *
  * This file is part of php.
  *
@@ -47,10 +47,10 @@ require_once('PMF/User.php');
 
 /* user defined constants */
 // section -64--88-1-12--f895d8c:106777dbaf0:-7fdd-constants begin
-define('PMF_SESSION_CURRENT_USER', 'PMF_CURRENT_USER');
-define('PMF_SESSION_ID_TIMESTAMP', 'PMF_SESSION_TIMESTAMP');
-define('PMF_SESSION_ID_EXPIRES', 30);
-define('PMF_SESSION_ID_REFRESH', 10);
+@define('PMF_SESSION_CURRENT_USER', 'PMF_CURRENT_USER');
+@define('PMF_SESSION_ID_TIMESTAMP', 'PMF_SESSION_TIMESTAMP');
+@define('PMF_SESSION_ID_EXPIRES', 30);
+@define('PMF_SESSION_ID_REFRESH', 10);
 // section -64--88-1-12--f895d8c:106777dbaf0:-7fdd-constants end
 
 /**

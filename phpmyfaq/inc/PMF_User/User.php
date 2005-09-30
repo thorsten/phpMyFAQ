@@ -54,6 +54,10 @@ require_once('PMF/UserData.php');
 
 /* user defined constants */
 // section 127-0-0-1-17ec9f7:105b52d5117:-7ff0-constants begin
+@define('PMF_USERERROR_NO_DB', 'No database specified. ');
+@define('SQLPREFIX', 'faq_');
+@define('PMF_USERERROR_INVALID_STATUS', 'Undefined user status. ');
+@define('PMF_USERERROR_NO_USERID', 'No user-ID found. ');
 // section 127-0-0-1-17ec9f7:105b52d5117:-7ff0-constants end
 
 /**
@@ -113,6 +117,30 @@ class PMF_User
      */
     var $_user_id = 0;
 
+    /**
+     * Short description of attribute errors
+     *
+     * @access public
+     * @var array
+     */
+    var $errors = array();
+
+    /**
+     * Short description of attribute status
+     *
+     * @access private
+     * @var string
+     */
+    var $_status = '';
+
+    /**
+     * Short description of attribute allowed_status
+     *
+     * @access public
+     * @var array
+     */
+    var $allowed_status = array('active', 'blocked', 'protected');
+
     // --- OPERATIONS ---
 
     /**
@@ -140,6 +168,7 @@ class PMF_User
     function addDb($db)
     {
         // section -64--88-1-5-a522a6:106564ad215:-7ffd begin
+        $this->_db = $db;
         // section -64--88-1-5-a522a6:106564ad215:-7ffd end
     }
 
@@ -155,6 +184,11 @@ class PMF_User
         $returnValue = (int) 0;
 
         // section -64--88-1-5-a522a6:106564ad215:-7ffb begin
+        if (isset($this->_user_id) and $this->_user_id > 0) {
+            return (int) $this->_user_id;
+        }
+        $this->errors[] = PMF_USERERROR_NO_USERID;
+        return 0;
         // section -64--88-1-5-a522a6:106564ad215:-7ffb end
 
         return (int) $returnValue;
@@ -173,6 +207,29 @@ class PMF_User
         $returnValue = null;
 
         // section -64--88-1-5-15e2075:1065f4960e0:-7fc1 begin
+        if (!$this->checkDB()) {
+		    return false;
+        }
+        $res = $this->_db->query("
+		  SELECT 
+		    ".SQLPREFIX."userlogin.login AS login,
+		    ".SQLPREFIX."user.user_id AS id,
+		    ".SQLPREFIX."user.account_status AS status
+		  FROM
+		    ".SQLPREFIX."user,
+		    ".SQLPREFIX."userlogin
+		  WHERE 
+		    ".SQLPREFIX."user.login = ".SQLPREFIX."userlogin.login AND
+			".SQLPREFIX."user.user_id = '".$user_id."'		    
+		");
+		if ($this->_db->num_rows($res) != 1) {
+			return false;
+		}
+		$user = $this->_db->fetch_assoc($res);
+        $this->_login = $user['login'];
+		$this->_status = $user['status'];
+		$this->_user_id = $user['id'];
+		return true;
         // section -64--88-1-5-15e2075:1065f4960e0:-7fc1 end
 
         return $returnValue;
@@ -191,7 +248,29 @@ class PMF_User
         $returnValue = null;
 
         // section -64--88-1-5-15e2075:1065f4960e0:-7fbe begin
-        $this->_login = $login;
+        if (!$this->checkDB()) {
+		    return false;
+        }
+        $res = $this->_db->query("
+		  SELECT 
+		    ".SQLPREFIX."userlogin.login AS login,
+		    ".SQLPREFIX."user.user_id AS id,
+		    ".SQLPREFIX."user.account_status AS status
+		  FROM
+		    ".SQLPREFIX."user,
+		    ".SQLPREFIX."userlogin
+		  WHERE 
+		    ".SQLPREFIX."user.login = ".SQLPREFIX."userlogin.login AND
+			".SQLPREFIX."userlogin.login = '".$login."'		    
+		");
+		if ($this->_db->num_rows($res) != 1) {
+			return false;
+		}
+		$user = $this->_db->fetch_assoc($res);
+        $this->_login = $user['login'];
+		$this->_status = $user['status'];
+		$this->_user_id = $user['id'];
+		return true;
         // section -64--88-1-5-15e2075:1065f4960e0:-7fbe end
 
         return $returnValue;
@@ -259,9 +338,117 @@ class PMF_User
         return $returnValue;
     }
 
+    /**
+     * Short description of method getStatus
+     *
+     * @access public
+     * @author Lars Tiedemann, <php@larstiedemann.de>
+     * @return string
+     */
+    function getStatus()
+    {
+        $returnValue = (string) '';
+
+        // section -64--88-1-10--602a52f4:106a644a5e8:-7fd9 begin
+        if (isset($this->_status) and strlen($this->_status) > 0) {
+        	return $this->_status;
+        }
+        return false;
+        // section -64--88-1-10--602a52f4:106a644a5e8:-7fd9 end
+
+        return (string) $returnValue;
+    }
+
+    /**
+     * Short description of method setStatus
+     *
+     * @access public
+     * @author Lars Tiedemann, <php@larstiedemann.de>
+     * @param string
+     * @return void
+     */
+    function setStatus($status)
+    {
+        // section -64--88-1-10--602a52f4:106a644a5e8:-7fd7 begin
+        // is status allowed?
+        $status = strtolower($status);
+        if (!in_array($status, $this->allowed_status)) {
+            $this->errors[] = PMF_USERERROR_INVALID_STATUS;
+            return false;
+        }
+        // update status
+        $this->_status = $status;
+        if (!$this->checkDB()) 
+            return false;
+        $user_id = $this->getUserId();
+        if (!$user_id)
+            return false;
+        return $this->_db->query("
+		  UPDATE 
+		    ".SQLPREFIX."user 
+		  SET 
+		    account_status = '".$status."' 
+		  WHERE 
+		    user_id = '".$user_id."'
+		");
+        // section -64--88-1-10--602a52f4:106a644a5e8:-7fd7 end
+    }
+
+    /**
+     * Short description of method checkDB
+     *
+     * @access public
+     * @author Lars Tiedemann, <php@larstiedemann.de>
+     * @return bool
+     */
+    function checkDB()
+    {
+        $returnValue = (bool) false;
+
+        // section -64--88-1-10--602a52f4:106a644a5e8:-7fd4 begin
+        if (!isset($this->_db)) {
+			$this->errors[] = PMF_USERERROR_NO_DB;
+            return false;
+        }
+        $methods = array('query', 'num_rows', 'fetch_assoc', 'error');
+        $returnValue = true;
+        foreach ($methods as $method) {
+        	if (!method_exists($this->_db, $method)) {
+				$this->errors[] = PMF_USERERROR_NO_DB;
+        		return false;
+        		break;
+        	}
+        }
+        return true;
+        // section -64--88-1-10--602a52f4:106a644a5e8:-7fd4 end
+
+        return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method error
+     *
+     * @access public
+     * @author Lars Tiedemann, <php@larstiedemann.de>
+     * @return string
+     */
+    function error()
+    {
+        $returnValue = (string) '';
+
+        // section -64--88-1-10--602a52f4:106a644a5e8:-7fd2 begin
+        if (!is_array($this->errors)) 
+            return false;
+        $message = '';
+        foreach ($this->errors as $error) {
+        	$message .= $error."\n";
+        }
+        return $message;
+        // section -64--88-1-10--602a52f4:106a644a5e8:-7fd2 end
+
+        return (string) $returnValue;
+    }
+
 } /* end of class PMF_User */
 
-?>/* lost code following: 
-    // section -64--88-1-5-a522a6:106564ad215:-7fd2 begin
-    // section -64--88-1-5-a522a6:106564ad215:-7fd2 end
-*/
+?>
