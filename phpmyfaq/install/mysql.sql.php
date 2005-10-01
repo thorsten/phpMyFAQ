@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mysql.sql.php,v 1.10 2005-09-16 19:26:51 thorstenr Exp $
+* $Id: mysql.sql.php,v 1.11 2005-10-01 14:53:16 thorstenr Exp $
 *
 * CREATE TABLE instruction for MySQL database
 *
@@ -57,6 +57,8 @@ author varchar(255) NOT NULL,
 email varchar(255) NOT NULL,
 comment enum('y','n') NOT NULL default 'y',
 datum varchar(15) NOT NULL,
+linkState VARCHAR(7) NOT NULL,
+linkCheckDate INT(11) DEFAULT '0' NOT NULL,
 FULLTEXT (keywords,thema,content),
 PRIMARY KEY (id, lang)) TYPE = MYISAM";
 
