@@ -1,12 +1,13 @@
 <?php
 /**
-* $Id: index.php,v 1.15 2005-09-28 15:31:39 thorstenr Exp $
+* $Id: index.php,v 1.16 2005-10-01 14:40:54 thorstenr Exp $
 *
 * The main admin backend index file
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Bastian Poettner <bastian@poettner.net>
 * @author       Meikel Katzengreis <meikel@katzengreis.com>
+* @author       Minoru TODA <todam@netjapan.co.jp>
 * @since        2002-09-16
 * @copyright    (c) 2001-2005 phpMyFAQ Team
 * 
@@ -161,6 +162,21 @@ if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "logout" && $auth) {
 	$db->query("DELETE FROM ".SQLPREFIX."faqadminsessions WHERE uin = '".$uin."'");
 	unset($auth);
 	unset($uid);
+}
+
+// if performing AJAX operation, needs to branch before header.php
+if (isset($auth)) {
+    if (isset($_REQUEST["aktion"]) && isset($_REQUEST["ajax"])) {
+        if ($_REQUEST["aktion"] == "ajax") {
+            switch ($_REQUEST["ajax"]) {
+                case 'verifyURL':       require_once("ajax.verifyurl.php");
+                                        break;
+                case 'onDemandURL':     require_once("ajax.ondemandurl.php");
+                                        break;
+            }
+        exit();
+        }
+    }
 }
 
 // Header of the admin page

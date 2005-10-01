@@ -1,12 +1,13 @@
 <?php
 /**
-* $Id: record.show.php,v 1.18 2005-09-25 09:47:02 thorstenr Exp $
+* $Id: record.show.php,v 1.19 2005-10-01 14:40:54 thorstenr Exp $
 *
 * Shows the list of records ordered by categories
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+* @author       Minoru TODA <todam@netjapan.co.jp>
 * @since        2003-02-23
-* @copyright    (c) 2001 - 2005 phpMyFAQ Team
+* @copyright    (c) 2001-2005 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -28,7 +29,12 @@ print "<h2>".$PMF_LANG["ad_entry_aor"]."</h2>\n";
 if ($permission["editbt"] || $permission["delbt"]) {
 	$tree = new Category();
     $tree->transform(0);
-    
+
+    $linkverifier = new link_verifier();
+    if ($linkverifier->isReady()) {
+        link_verifier_javascript();
+    }
+
     if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "view" && !isset($_REQUEST["suchbegriff"])) {
         
         $query = 'SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema,'.SQLPREFIX.'faqdata.author FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang ='.SQLPREFIX.'faqcategoryrelations.record_lang WHERE '.SQLPREFIX.'faqdata.active = \'yes\' ORDER BY '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.id ';
@@ -130,12 +136,12 @@ if ($permission["editbt"] || $permission["delbt"]) {
 ?>
     <thead>
         <tr>
-            <th colspan="4" class="list"><?php print $tree->getPath($rub); ?></th>
+            <th colspan="5" class="list"><?php print $tree->getPath($rub); ?></th>
         </tr>
     </thead>
     <tfoot>
         <tr>
-		    <td colspan="4" class="list"><?php print $PageSpan; ?></td>
+		    <td colspan="5" class="list"><?php print $PageSpan; ?></td>
         </tr>
     </tfoot>
     <tbody>
@@ -146,6 +152,7 @@ if ($permission["editbt"] || $permission["delbt"]) {
             <td class="list"><?php print $id; ?></td>		
             <td class="list"><?php print $lang; ?></td>
             <td class="list"><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=saveentry&amp;id=<?php print $id; ?>&amp;language=<?php print $lang; ?>&amp;submit[0]=<?php print $PMF_LANG["ad_entry_delete"]; ?>" title="<?php print $PMF_LANG["ad_user_delete"]; ?> '<?php print str_replace("\"", "´", stripslashes($topic)); ?>'"><img src="images/delete.gif" width="17" height="18" alt="<?php print $PMF_LANG["ad_entry_delete"]; ?>" /></a></td>
+            <td class="list"><?php print $linkverifier->getEntryStateHTML($id, $lang); ?></td>
             <td class="list"><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=editentry&amp;id=<?php print $id; ?>&amp;lang=<?php print $lang; ?>" title="<?php print $PMF_LANG["ad_user_edit"]; ?> '<?php print str_replace("\"", "´", stripslashes($topic)); ?>'"><?php print stripslashes($topic); ?></a><?php
             if (isset($numComments[$id])) {
                 print " (".$numComments[$id]." ".$PMF_LANG["ad_start_comments"].")";
