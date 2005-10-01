@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: rss.php,v 1.10 2005-06-28 19:06:36 thorstenr Exp $
+* $Id: rss.php,v 1.11 2005-10-01 12:36:03 thorstenr Exp $
 *
 * The RSS feed with the top ten
 *
@@ -34,7 +34,7 @@ require_once (PMF_ROOT_DIR."/inc/category.php");
 require_once (PMF_ROOT_DIR."/inc/functions.php");
 require_once (PMF_ROOT_DIR."/lang/".$PMF_CONF["language"]);
 
-$query = 'SELECT DISTINCT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqvisits.visits FROM '.SQLPREFIX.'faqvisits, '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang WHERE '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvisits.id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqvisits.lang AND '.SQLPREFIX.'faqdata.active = \'yes\' ORDER BY '.SQLPREFIX.'faqvisits.visits DESC';
+$query = 'SELECT DISTINCT '.SQLPREFIX.'faqdata.id AS id, '.SQLPREFIX.'faqdata.lang AS lang, '.SQLPREFIX.'faqdata.thema AS thema, '.SQLPREFIX.'faqdata.content AS content, '.SQLPREFIX.'faqcategoryrelations.category_id AS category_id, '.SQLPREFIX.'faqvisits.visits AS visits FROM '.SQLPREFIX.'faqvisits, '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang WHERE '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvisits.id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqvisits.lang AND '.SQLPREFIX.'faqdata.active = \'yes\' ORDER BY '.SQLPREFIX.'faqvisits.visits DESC';
     
 $result = $db->query($query);
 
@@ -52,8 +52,8 @@ if ($db->num_rows($result) > 0) {
         $counter++;
         
         $rss .= "\t<item>\n";
-        $rss .= "\t\t<title>[".$i.".] ".$row->visits." ".$PMF_LANG["msgViews"].":</title>\n";
-        $rss .= "\t\t<description><![CDATA[ ".stripslashes(htmlspecialchars(makeShorterText($row->thema, 8)))." ]]></description>\n";
+        $rss .= "\t\t<title><![CDATA[ [".$i.".] ".$row->thema." (".$row->visits." ".$PMF_LANG["msgViews"].") ]]></title>\n";
+        $rss .= "\t\t<description><![CDATA[ ".stripslashes(htmlspecialchars(makeShorterText($row->content, 8)))." ]]></description>\n";
         $rss .= "\t\t<link>http://".$_SERVER["HTTP_HOST"].str_replace ("feed/topten/rss.php", "index.php", $_SERVER["PHP_SELF"])."?action=artikel&amp;cat=".$row->category_id."&amp;id=".$row->id."&amp;artlang=".$row->lang."</link>\n";
         $rss .= "\t</item>\n";
         $i++;
@@ -69,4 +69,3 @@ header("Content-Length: ".strlen($rss));
 print $rss;
 
 $db->dbclose();
-?>
