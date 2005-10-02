@@ -3,19 +3,25 @@
 error_reporting(E_ALL);
 
 /**
- * This container class manages user authentication. 
+ * manages user authentication. 
  *
- * Subclasses of Auth implement the authentication functionality with different
+ * Subclasses of Auth implement authentication functionality with different
  * types. The class AuthLdap for expamle provides authentication functionality
  * LDAP-database access, AuthMysql with MySQL-database access.
  *
  * Authentication functionality includes creation of a new login-and-password
  * deletion of an existing login-and-password combination and validation of
- * given by a user.
+ * given by a user. These functions are provided by the database-specific
+ * see documentation of the database-specific authentication classes AuthMysql,
+ * or AuthLdap for further details.
  *
  * Passwords are usually encrypted before stored in a database. For
  * and security, a password encryption method may be chosen. See documentation
  * Enc class for further details.
+ *
+ * Instead of calling the database-specific subclasses directly, the static
+ * selectDb(dbtype) may be called which returns a valid database-specific
+ * object. See documentation of the static method selectDb for further details.
  *
  * @author Lars Tiedemann <php@larstiedemann.de>
  * @package PMF
@@ -28,7 +34,11 @@ if (0 > version_compare(PHP_VERSION, '4')) {
 }
 
 /**
- * This class provides methods for password encryption.
+ * provides methods for password encryption. 
+ *
+ * Subclasses (extends) of this class provide the encrypt() method that returns
+ * encrypted string. For special encryption methods, just create a new class as
+ * extend of this class and has the method encrypt().
  *
  * @author Lars Tiedemann <php@larstiedemann.de>
  * @since 2005-09-18
@@ -55,22 +65,30 @@ require_once('PMF/User.php');
 
 /* user defined constants */
 // section 127-0-0-1-17ec9f7:105b52d5117:-7fef-constants begin
+@define('PMF_USERERROR_NO_AUTHTYPE', 'Specified authentication access class could not be found. ');
+@define('PMF_USERERROR_LOGIN_NOT_UNIQUE', 'Specified login name already exists. ');
 // section 127-0-0-1-17ec9f7:105b52d5117:-7fef-constants end
 
 /**
- * This container class manages user authentication. 
+ * manages user authentication. 
  *
- * Subclasses of Auth implement the authentication functionality with different
+ * Subclasses of Auth implement authentication functionality with different
  * types. The class AuthLdap for expamle provides authentication functionality
  * LDAP-database access, AuthMysql with MySQL-database access.
  *
  * Authentication functionality includes creation of a new login-and-password
  * deletion of an existing login-and-password combination and validation of
- * given by a user.
+ * given by a user. These functions are provided by the database-specific
+ * see documentation of the database-specific authentication classes AuthMysql,
+ * or AuthLdap for further details.
  *
  * Passwords are usually encrypted before stored in a database. For
  * and security, a password encryption method may be chosen. See documentation
  * Enc class for further details.
+ *
+ * Instead of calling the database-specific subclasses directly, the static
+ * selectDb(dbtype) may be called which returns a valid database-specific
+ * object. See documentation of the static method selectDb for further details.
  *
  * @access public
  * @author Lars Tiedemann <php@larstiedemann.de>
@@ -83,53 +101,60 @@ class PMF_Auth
     // --- ATTRIBUTES ---
 
     /**
-     * Short description of attribute enc_container
+     * private container that stores the encryption object.
      *
-     * @access public
-     * @var string
+     * @access private
+     * @var object
      */
-    var $enc_container = '';
+    var $_enc_container = null;
 
     /**
-     * Short description of attribute enc_typemap
+     * public array that contains error messages.
      *
      * @access public
      * @var array
      */
-    var $enc_typemap = array('crypt' => 'EncCrypt', 'sha' => 'EncSha', 'md5' => 'EncMd5');
+    var $errors = array();
+
+    /**
+     * authentication access methods
+     *
+     * @access private
+     * @var array
+     */
+    var $_auth_typemap = array('mysql' => 'AuthMysql', 'pgsql' => 'AuthPgsql');
 
     // --- OPERATIONS ---
 
     /**
-     * Short description of method PMF_Auth
+     * constructor
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param string
      * @return void
      */
-    function PMF_Auth($enctype)
+    function PMF_Auth()
     {
         // section -64--88-1-5--735fceb5:106657b6b8d:-7fd0 begin
+        return $this->__construct();
         // section -64--88-1-5--735fceb5:106657b6b8d:-7fd0 end
     }
 
     /**
-     * Short description of method __construct
+     * constructor
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param string
      * @return void
      */
-    function __construct($enctype)
+    function __construct()
     {
         // section -64--88-1-10-36edbf7a:106a832a030:-7fcf begin
         // section -64--88-1-10-36edbf7a:106a832a030:-7fcf end
     }
 
     /**
-     * Short description of method __destruct
+     * destructor
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -142,76 +167,112 @@ class PMF_Auth
     }
 
     /**
-     * Short description of method add
+     * instantiates a new encryption object, stores it in a private container
+     * returns it.
+     *
+     * This method instantiates a new Enc object by calling the static
+     * method. The specified encryption method enctype is passed to
+     * The result is stored in the private container variable _enc_container and
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
      * @param string
-     * @param string
-     * @return bool
+     * @return object
      */
-    function add($login, $pass)
+    function selectEncType($enctype)
     {
-        $returnValue = (bool) false;
+        $returnValue = null;
 
-        // section -64--88-1-10-36edbf7a:106a832a030:-7fcb begin
-        // section -64--88-1-10-36edbf7a:106a832a030:-7fcb end
+        // section -64--88-1-10--3f7cf10c:106abb97c17:-7fd8 begin
+        $this->_enc_container = PMF_Enc::selectEnc($enctype);
+        return $this->_enc_container;
+        /*$enctype = strtolower($enctype);
+        if (isset($this->_enc_typemap[$enctype])) {
+        	if (!file_exists("PMF/".$this->_enc_typemap[$enctype].".php"))
+        	    return false;
+        	require_once("PMF/".$this->_enc_typemap[$enctype].".php");
+        	$newclass = "PMF_".$this->_enc_typemap[$enctype];
+        	if (!class_exists($newclass)) 
+        		return false;
+        	$this->_enc_container = new $newclass();
+        	return true;
+        }
+        return false;*/
+        // section -64--88-1-10--3f7cf10c:106abb97c17:-7fd8 end
 
-        return (bool) $returnValue;
+        return $returnValue;
     }
 
     /**
-     * Short description of method changePassword
+     * Returns a string with error messages. 
+     *
+     * The string returned by error() contains messages for all errors that
+     * during object procesing. Messages are separated by new lines.
+     *
+     * Error messages are stored in the public array errors.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param string
-     * @return bool
+     * @return string
      */
-    function changePassword($pass)
+    function error()
     {
-        $returnValue = (bool) false;
+        $returnValue = (string) '';
 
-        // section -64--88-1-10-36edbf7a:106a832a030:-7fc7 begin
-        // section -64--88-1-10-36edbf7a:106a832a030:-7fc7 end
+        // section -64--88-1-10--3f7cf10c:106abb97c17:-7fd4 begin
+        if (!is_array($this->errors)) 
+        	$this->errors = array((string) $this->errors);
+        $message = '';
+        foreach ($this->errors as $error) {
+        	$message .= $error."\n";
+        }
+        $message .= $this->_enc_container->error();
+        return $message;
+        // section -64--88-1-10--3f7cf10c:106abb97c17:-7fd4 end
 
-        return (bool) $returnValue;
+        return (string) $returnValue;
     }
 
     /**
-     * Short description of method delete
+     * returns an authentication object with the specified database access. 
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @return bool
-     */
-    function delete()
-    {
-        $returnValue = (bool) false;
-
-        // section -64--88-1-10-36edbf7a:106a832a030:-7fc4 begin
-        // section -64--88-1-10-36edbf7a:106a832a030:-7fc4 end
-
-        return (bool) $returnValue;
-    }
-
-    /**
-     * Short description of method check
+     * This method is called statically. The parameter database specifies the
+     * of database access for the authentication object. Supported
+     * are 'mysql' and 'pgsql'.
+     *
+     * If the given datase-type is not supported, selectAuth() will return an
+     * object without database access and with an error message. See the
+     * of the error() method for further details.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
      * @param string
-     * @param string
-     * @return bool
+     * @return object
      */
-    function check($login, $pass)
+    function selectAuth($database)
     {
-        $returnValue = (bool) false;
+        $returnValue = null;
 
-        // section -64--88-1-10-36edbf7a:106a832a030:-7fc2 begin
-        // section -64--88-1-10-36edbf7a:106a832a030:-7fc2 end
+        // section -64--88-1-10--3f7cf10c:106abb97c17:-7fbf begin
+        // verify selected database
+        $auth = new PMF_Auth();
+        $database = strtolower($database);
+        if (!isset($auth->_auth_typemap[$database])) {
+        	$auth->errors[] = PMF_USERERROR_NO_AUTHTYPE;
+            return $auth;
+        }
+        if (!file_exists("PMF/".$auth->_auth_typemap[$database].".php")) {
+        	$auth->errors[] = PMF_USERERROR_NO_AUTHTYPE;
+        	return $auth;
+        }
+        require_once("PMF/".$auth->_auth_typemap[$database].".php");
+        // instantiate 
+        $authclass = "PMF_".$auth->_auth_typemap[$database];
+		$auth = new $authclass();
+        return $auth;
+        // section -64--88-1-10--3f7cf10c:106abb97c17:-7fbf end
 
-        return (bool) $returnValue;
+        return $returnValue;
     }
 
 } /* end of class PMF_Auth */

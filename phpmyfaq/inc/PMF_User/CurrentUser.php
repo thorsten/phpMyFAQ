@@ -80,7 +80,7 @@ class PMF_CurrentUser
      * @param string
      * @return object
      */
-    function login($login = "", $pass = "")
+    function login($login = '', $pass = '')
     {
         $returnValue = null;
 
@@ -143,7 +143,4 @@ class PMF_CurrentUser
 
 } /* end of class PMF_CurrentUser */
 
-?>/* lost code following: 
-    // section -64--88-1-12--f895d8c:106777dbaf0:-7fd4 begin
-    // section -64--88-1-12--f895d8c:106777dbaf0:-7fd4 end
-*/
+?>

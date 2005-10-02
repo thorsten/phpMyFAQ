@@ -20,19 +20,25 @@ if (0 > version_compare(PHP_VERSION, '4')) {
 }
 
 /**
- * This container class manages user authentication. 
+ * manages user authentication. 
  *
- * Subclasses of Auth implement the authentication functionality with different
+ * Subclasses of Auth implement authentication functionality with different
  * types. The class AuthLdap for expamle provides authentication functionality
  * LDAP-database access, AuthMysql with MySQL-database access.
  *
  * Authentication functionality includes creation of a new login-and-password
  * deletion of an existing login-and-password combination and validation of
- * given by a user.
+ * given by a user. These functions are provided by the database-specific
+ * see documentation of the database-specific authentication classes AuthMysql,
+ * or AuthLdap for further details.
  *
  * Passwords are usually encrypted before stored in a database. For
  * and security, a password encryption method may be chosen. See documentation
  * Enc class for further details.
+ *
+ * Instead of calling the database-specific subclasses directly, the static
+ * selectDb(dbtype) may be called which returns a valid database-specific
+ * object. See documentation of the static method selectDb for further details.
  *
  * @author Lars Tiedemann <php@larstiedemann.de>
  * @since 2005-09-30
@@ -82,7 +88,13 @@ require_once('PMF/UserData.php');
 @define('PMF_USERERROR_LOGIN_NOT_UNIQUE', 'Login is not unique. ');
 @define('PMF_LOGIN_MINLENGTH', 4);
 @define('PMF_LOGIN_INVALID_REGEXP', '/(^[^a-z]{1}|[\W])/i');
-@define('PMF_USERERROR_LOGIN_INVALID', 'The chosen login is invalid. A valid login has at least four characters. Only letters, numbers and underscore _ are allowed. The first letter must be a letter. '); 
+@define('PMF_USERERROR_LOGIN_INVALID', 'The chosen login is invalid. A valid login has at least four characters. Only letters, numbers and underscore _ are allowed. The first letter must be a letter. ');
+@define('PMF_UNDEFINED_PARAMETER', 'Following parameter must to be defined: ');
+@define('PMF_USERERROR_ADD', 'Account could not be created. ');
+@define('PMF_USERERROR_CHANGE', 'Account could not be updated. ');
+@define('PMF_USERERROR_DELETE', 'Account could not be deleted. ');
+@define('PMF_USERERROR_INCORRECT_PASSWORD', 'Specified password is not correct. '); 
+@define('PMF_USER_NOT_FOUND', 'User account could not be found. ');
 // section 127-0-0-1-17ec9f7:105b52d5117:-7ff0-constants end
 
 /**
@@ -143,7 +155,7 @@ class PMF_User
     var $_user_id = 0;
 
     /**
-     * Short description of attribute errors
+     * Public array that contains error messages.
      *
      * @access public
      * @var array
@@ -438,7 +450,7 @@ class PMF_User
         // section -64--88-1-10--602a52f4:106a644a5e8:-7fd7 begin
         // is status allowed?
         $status = strtolower($status);
-        if (!in_array($status, $this->allowed_status)) {
+        if (!in_array($status, $this->_allowed_status)) {
             $this->errors[] = PMF_USERERROR_INVALID_STATUS;
             return false;
         }
@@ -492,7 +504,12 @@ class PMF_User
     }
 
     /**
-     * Short description of method error
+     * Returns a string with error messages. 
+     *
+     * The string returned by error() contains messages for all errors that
+     * during object procesing. Messages are separated by new lines.
+     *
+     * Error messages are stored in the public array errors.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>

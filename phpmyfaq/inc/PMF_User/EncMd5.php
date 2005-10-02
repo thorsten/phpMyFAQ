@@ -3,7 +3,7 @@
 error_reporting(E_ALL);
 
 /**
- * This class provides methods for password encryption using md5.
+ * provides methods for password encryption using md5().
  *
  * @author Lars Tiedemann <php@larstiedemann.de>
  * @package PMF
@@ -16,7 +16,11 @@ if (0 > version_compare(PHP_VERSION, '4')) {
 }
 
 /**
- * This class provides methods for password encryption.
+ * provides methods for password encryption. 
+ *
+ * Subclasses (extends) of this class provide the encrypt() method that returns
+ * encrypted string. For special encryption methods, just create a new class as
+ * extend of this class and has the method encrypt().
  *
  * @author Lars Tiedemann <php@larstiedemann.de>
  * @since 2005-09-18
@@ -33,7 +37,7 @@ require_once('PMF/Enc.php');
 // section 127-0-0-1-17ec9f7:1062544275a:-7ff3-constants end
 
 /**
- * This class provides methods for password encryption using md5.
+ * provides methods for password encryption using md5().
  *
  * @access public
  * @author Lars Tiedemann <php@larstiedemann.de>
@@ -47,7 +51,7 @@ class PMF_EncMd5
     // --- ATTRIBUTES ---
 
     /**
-     * Short description of attribute enc_method
+     * Name of the encryption method.
      *
      * @access public
      * @var string
@@ -57,24 +61,26 @@ class PMF_EncMd5
     // --- OPERATIONS ---
 
     /**
-     * Short description of method encrypt
+     * encrypts the string str and returns the result.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
+     * @param string
      * @return string
      */
-    function encrypt()
+    function encrypt($str)
     {
         $returnValue = (string) '';
 
         // section 127-0-0-1-17ec9f7:1062544275a:-7fe9 begin
+        return md5($str);
         // section 127-0-0-1-17ec9f7:1062544275a:-7fe9 end
 
         return (string) $returnValue;
     }
 
     /**
-     * Short description of method PMF_EncMd5
+     * constructor
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -84,6 +90,32 @@ class PMF_EncMd5
     {
         // section -64--88-1-5--735fceb5:106657b6b8d:-7fc3 begin
         // section -64--88-1-5--735fceb5:106657b6b8d:-7fc3 end
+    }
+
+    /**
+     * constructor
+     *
+     * @access public
+     * @author Lars Tiedemann, <php@larstiedemann.de>
+     * @return void
+     */
+    function __construct()
+    {
+        // section -64--88-1-10--3f7cf10c:106abb97c17:-7fd2 begin
+        // section -64--88-1-10--3f7cf10c:106abb97c17:-7fd2 end
+    }
+
+    /**
+     * destructor
+     *
+     * @access public
+     * @author Lars Tiedemann, <php@larstiedemann.de>
+     * @return void
+     */
+    function __destruct()
+    {
+        // section -64--88-1-10--3f7cf10c:106abb97c17:-7fd0 begin
+        // section -64--88-1-10--3f7cf10c:106abb97c17:-7fd0 end
     }
 
 } /* end of class PMF_EncMd5 */
