@@ -122,7 +122,7 @@ class PMF_Auth
      * @access private
      * @var array
      */
-    var $_auth_typemap = array('mysql' => 'AuthMysql', 'pgsql' => 'AuthPgsql');
+    var $_auth_typemap = array('mysql' => 'AuthMysql', 'db' => 'AuthDb');
 
     // --- OPERATIONS ---
 
