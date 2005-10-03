@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: backup.import.php,v 1.8 2005-09-25 09:47:02 thorstenr Exp $
+* $Id: backup.import.php,v 1.9 2005-10-03 08:35:36 thorstenr Exp $
 *
 * The import function to import the phpMyFAQ backups
 *
@@ -32,25 +32,25 @@ if ($permission["restore"]) {
     	$fp = fopen($_FILES["userfile"]["tmp_name"], "r");
     	$dat = fgets($fp, 65536);
     	
-    	if (substr($dat, 0, 10) != "-- pmf1.5") {
+    	if (substr($dat, 0, 9) != '-- pmf1.6') {
     		print $PMF_LANG["ad_csv_no"];
     		$ok = 0;
         } else {
-    		$dat = substr($dat, 7, strlen($dat)-6);
-    		$tbl = explode(" ", $dat);
-    		for ($h = 0; $h <= 10; $h++) {
+    		$dat = substr($dat, 11, strlen($dat) - 9);
+    		$tbl = explode(' ', $dat);
+    		for ($h = 0; $h <= 8; $h++) {
     			if (isset($tbl[$h])) {
-    				$mquery[] = "DELETE FROM ".trim($tbl[$h]);
+    				$mquery[] = 'DELETE FROM '.trim($tbl[$h]);
                 }
             }
     		$ok = 1;
         }
     	
     	if ($ok == 1) {
-    		print "<p>".$PMF_LANG["ad_csv_prepare"]."</p>\n";
+    		print "<p>".$PMF_LANG['ad_csv_prepare']."</p>\n";
             $dat = trim($dat);
             while (($dat = fgets($fp, 65536))) {
-    			if (substr($dat, 0, 1) != "#") {
+    			if (substr($dat, 0, 2) != '--' || $dat != '') {
     				$mquery[] = trim(substr($dat, 0, -1));
                 }
             }
@@ -66,7 +66,7 @@ if ($permission["restore"]) {
     			if (!$kg) {
     				print "<div style=\"font-size: 9px;\"><b>Query</b>: \"".$mquery[$i]."\" <span style=\"color: red;\">failed (Reason: ".$db->error().")</span></div>\n";
                 } else {
-    				print "<div style=\"font-size: 9px;\"><b>Query</b>: <!-- \"".$mquery[$i]."\" --> <span style=\"color: green;\">okay</span></div>\n";
+    				print "<div style=\"font-size: 9px;\"><b>Query</b>: <!-- \"".htmlspecialchars($mquery[$i])."\" --> <span style=\"color: green;\">okay</span></div>\n";
                 }
             }
     		print "<p>".$i." ".$PMF_LANG["ad_csv_of"]." ".$anz." ".$PMF_LANG["ad_csv_suc"]."</p>\n";
@@ -77,4 +77,3 @@ if ($permission["restore"]) {
 } else {
     print $PMF_LANG["err_NotAuth"];
 }
-?>

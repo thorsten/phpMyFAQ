@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: attachment.php,v 1.9 2005-09-25 09:47:02 thorstenr Exp $
+* $Id: attachment.php,v 1.10 2005-10-03 08:35:36 thorstenr Exp $
 *
 * Select an attachment and save it or create the SQL backup files
 *
@@ -26,6 +26,8 @@ PMF_Init::cleanRequest();
 // Just for security reasons - thanks to Johannes for the hint
 $_SERVER['PHP_SELF'] = str_replace('%2F', '/', rawurlencode($_SERVER['PHP_SELF']));
 $_SERVER['HTTP_USER_AGENT'] = urlencode($_SERVER['HTTP_USER_AGENT']);
+
+define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
 if (isset($_REQUEST["aktion"]) && ($_REQUEST["aktion"] == "sicherdaten" || $_REQUEST["aktion"] == "sicherlog")) {
 	Header("Content-Type: application/octet-stream");
@@ -103,7 +105,7 @@ if ($pass == "" && $user == "") {
 	}
 
 if (isset($user) && isset($pass)) {
-	$result = $db->query("SELECT id, name, pass, rights FROM ".SQLPREFIX."faquser WHERE name = '".addslashes($user)."' AND pass = '".addslashes($pass)."'");
+	$result = $db->query("SELECT id, name, pass, rights FROM ".SQLPREFIX."faquser WHERE name = '".$user."' AND pass = '".$pass."'");
 	if ($db->num_rows($result) > 0) {
 		$auth = 1;
 		}
@@ -163,10 +165,9 @@ if (isset($_REQUEST["save"]) && $_REQUEST["save"] == TRUE && $auth && !$permissi
 }
 
 if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "sicherdaten") {
-	$text[] = "-- pmf1.5: ".SQLPREFIX."faqchanges ".SQLPREFIX."faqnews ".SQLPREFIX."faqcategories ".SQLPREFIX."faqcategoryrelations ".SQLPREFIX."faqvoting ".SQLPREFIX."faqdata ".SQLPREFIX."faqcomments ".SQLPREFIX."faquser ". SQLPREFIX."faqvisits ".SQLPREFIX."faqfragen";
+	$text[] = "-- pmf1.6: ".SQLPREFIX."faqchanges ".SQLPREFIX."faqnews ".SQLPREFIX."faqcategories ".SQLPREFIX."faqcategoryrelations ".SQLPREFIX."faqvoting ".SQLPREFIX."faqdata ".SQLPREFIX."faqcomments ".SQLPREFIX."faquser ". SQLPREFIX."faqvisits ".SQLPREFIX."faqfragen";
 	$text[] = "-- DO NOT REMOVE THE FIRST LINE!";
 	$text[] = "-- otherwise this backup will be broken";
-	$text[] = '';
 	print implode("\r\n",$text);
 	$text = build_insert ("SELECT * FROM ".SQLPREFIX."faqchanges", SQLPREFIX."faqchanges");
 	print implode("\r\n",$text);
@@ -193,10 +194,9 @@ if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "sicherdaten") {
 }
 
 if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "sicherlog") {
-	$text[] = "-- pmf-1.5: ".SQLPREFIX."faqadminlog ".SQLPREFIX."faqsessions";
+	$text[] = "-- pmf-1.6: ".SQLPREFIX."faqadminlog ".SQLPREFIX."faqsessions";
 	$text[] = "-- DO NOT REMOVE THE FIRST LINE!";
 	$text[] = "-- otherwise this backup will be broken";
-	$text[] = '';
 	print implode("\r\n",$text);
 	$text = build_insert ("SELECT * FROM ".SQLPREFIX."faqadminlog", SQLPREFIX."faqadminlog");
 	print implode("\r\n",$text);
