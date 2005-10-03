@@ -95,7 +95,7 @@ class PMF_AuthDb
     // --- OPERATIONS ---
 
     /**
-     * Short description of method PMF_AuthDb
+     * constructor
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -108,7 +108,7 @@ class PMF_AuthDb
     }
 
     /**
-     * Short description of method __destruct
+     * destructor
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -121,7 +121,11 @@ class PMF_AuthDb
     }
 
     /**
-     * Short description of method add
+     * adds a new user account to the authentication table.
+     *
+     * Returns true on success, otherwise false. 
+     *
+     * Error messages are added to the array errors.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -162,7 +166,11 @@ class PMF_AuthDb
     }
 
     /**
-     * Short description of method changePassword
+     * changes the password for the account specified by login. 
+     *
+     * Returns true on success, otherwise false. 
+     *
+     * Error messages are added to the array errors.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -198,7 +206,11 @@ class PMF_AuthDb
     }
 
     /**
-     * Short description of method delete
+     * deletes the user account specified by login. 
+     *
+     * Returns true on success, otherwise false. 
+     *
+     * Error messages are added to the array errors.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -231,7 +243,11 @@ class PMF_AuthDb
     }
 
     /**
-     * Short description of method checkPassword
+     * checks the password for the given user account. 
+     *
+     * Returns true if the given password for the user account specified by
+     * is correct, otherwise false.
+     * Error messages are added to the array errors.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -338,7 +354,14 @@ class PMF_AuthDb
     }
 
     /**
-     * Short description of method tablename
+     * sets or returns the table variable. 
+     *
+     * If this method is called without parameter, the object property table is
+     * If the property table is not set, an empty string is returned and an
+     * message is added to the array errors.
+     *
+     * If a string table is passed to this method, the object property table
+     * be updated. The previous value of the property table is returned.
      *
      * @access private
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -366,7 +389,14 @@ class PMF_AuthDb
     }
 
     /**
-     * Short description of method login_column
+     * sets or returns the login_column variable. 
+     *
+     * If this method is called without parameter, the object property
+     * is returned. If the property login_column is not set, an empty string is
+     * and an error message is added to the array errors.
+     *
+     * If a string login_column is passed to this method, the object property
+     * will be updated. The previous value of the property login_column is
      *
      * @access private
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -394,7 +424,14 @@ class PMF_AuthDb
     }
 
     /**
-     * Short description of method password_column
+     * sets or returns the password_column variable. 
+     *
+     * If this method is called without parameter, the object property
+     * is returned. If the property password_column is not set, an empty string
+     * returned and an error message is added to the array errors.
+     *
+     * If a string password_column is passed to this method, the object property
+     * will be updated. The previous value of the property password_column is
      *
      * @access private
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -422,7 +459,14 @@ class PMF_AuthDb
     }
 
     /**
-     * Short description of method db
+     * sets or returns the db variable.
+     *
+     * If this method is called without parameter, the database object db is
+     * If db is invalid, false is returned and an error message is added to the
+     * errors.
+     *
+     * If a valid database object is passed to this method, db will be updated.
+     * previous value of db is returned.
      *
      * @access private
      * @author Lars Tiedemann, <php@larstiedemann.de>
