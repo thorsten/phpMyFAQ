@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.16 2005-10-01 14:40:54 thorstenr Exp $
+* $Id: index.php,v 1.17 2005-10-03 14:06:02 thorstenr Exp $
 *
 * The main admin backend index file
 *
@@ -76,6 +76,13 @@ if (isset($LANGCODE)) {
 } else {
     require_once (PMF_ROOT_DIR."/lang/language_en.php");
     $LANGCODE = "en";
+}
+
+// use mbstring extension if available
+$valid_mb_strings = array('ja', 'en');
+if (function_exists('mb_language') && in_array($PMF_LANG['metaLanguage'], $valid_mb_strings)) {
+    mb_language($PMF_LANG['metaLanguage']);
+    mb_internal_encoding($PMF_LANG['metaCharset']);
 }
 
 unset($auth);
