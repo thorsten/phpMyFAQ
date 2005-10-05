@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.verifyurl.php,v 1.1 2005-10-01 14:40:17 thorstenr Exp $
+* $Id: ajax.verifyurl.php,v 1.2 2005-10-05 17:59:18 thorstenr Exp $
 *
 * AJAX: verifyurl
 *
@@ -51,12 +51,12 @@ if ($linkverifier->isReady() == FALSE) {
 
 $linkverifier->loadConfigurationFromDB();
 
-if (isset($_REQUEST["id"]) && is_numeric($_REQUEST["id"])) {
-    $id = $_REQUEST["id"];
+if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
+    $id = $_GET["id"];
 }
 
-if (isset($_REQUEST["lang"])) {
-    $lang = $_REQUEST["lang"];
+if (isset($_GET["lang"])) {
+    $lang = $_GET["lang"];
 }
 
 if (!(isset($id) && isset($lang))) {

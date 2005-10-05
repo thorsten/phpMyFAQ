@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.ondemandurl.php,v 1.1 2005-10-01 14:40:17 thorstenr Exp $
+* $Id: ajax.ondemandurl.php,v 1.2 2005-10-05 17:59:17 thorstenr Exp $
 *
 * AJAX: onDemandURL (not really AJAX)
 *
@@ -50,29 +50,13 @@ if ($linkverifier->isReady() == FALSE) {
 
 $linkverifier->loadConfigurationFromDB();
 
-if (isset($_REQUEST["id"]) && is_numeric($_REQUEST["id"])) {
-	$id = $_REQUEST["id"];
+if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
+	$id = $_GET["id"];
 }
 
-if (isset($_REQUEST["lang"])) {
-	$lang = $_REQUEST["lang"];
+if (isset($_GET["lang"])) {
+	$lang = $_GET["lang"];
 }
-
-if (!(isset($id) && isset($lang))) {
-	//header("X-DenyReason: id/lang bad");
-	header("HTTP/1.0 401 Unauthorized");
-	header("Status: 401 Unauthorized");
-	exit();
-}
-
-if (($content = getEntryContent($id, $lang)) === FALSE) {
-	//header("X-DenyReason: no content");
-	header("HTTP/1.0 401 Unauthorized");
-	header("Status: 401 Unauthorized");
-	exit();
-}
-
-ob_clean();
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
@@ -83,9 +67,32 @@ ob_clean();
     <meta http-equiv="Content-Type" content="text/html; charset=<?php print $PMF_LANG["metaCharset"]; ?>" />
     <style type="text/css"> @import url(../template/admin.css); </style>
 </head>
-<body id="body" dir="<?php print $PMF_LANG["dir"]; ?>">		
+<body id="body" dir="<?php print $PMF_LANG["dir"]; ?>">	
 <?php
-		print verifyArticleURL($content, $id, $lang);
+
+if (!(isset($id) && isset($lang))) {
+	// TODO: ASSIGN STRING
+	?>
+	Error: Entry ID and Language needs to be specified.
+	</body>
+	</html>
+	<?php
+	exit();
+}
+
+if (($content = getEntryContent($id, $lang)) === FALSE) {
+	// TODO: ASSIGN STRING
+	?>
+	Error: No entry for #<?php print $id; ?>(<?php print $lang; ?>) available.
+	</body>
+	</html>
+	<?php
+	exit();
+}
+
+ob_clean();
+
+print verifyArticleURL($content, $id, $artlang);
 ?>
 </body>
 </html>
