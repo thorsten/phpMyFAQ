@@ -358,8 +358,6 @@ class PMF_User
         if (!$this->isValidLogin($login)) 
             return false;
         // does $login already exist?
-        //$user = new PMF_User($this->_db);
-        //if ($user->getUserByLogin($login)) {
         if ($this->getUserByLogin($login, false)) {
         	$this->errors[] = PMF_USERERROR_LOGIN_NOT_UNIQUE;
             return false;
@@ -375,20 +373,19 @@ class PMF_User
         // create authentication entry
         if ($pass == '') 
         	$pass = $this->createPassword();
+        $success = false;
         foreach ($this->_auth_container as $name => $auth) {
         	if ($auth->read_only()) {
         		continue;
         	}
         	if (!$auth->add($login, $auth->encrypt($pass))) {
         		$this->errors[] = PMF_USERERROR_CANNOT_CREATE_USER.'in PMF_Auth '.$name;
-        		continue;
         	}
         	else {
-        		return true;
-        		break;
+        		$success = true;
         	}
         }
-        return false;
+        return $success;
         // section -64--88-1-5-5e0b50c5:10665348267:-7fdd end
 
         return $returnValue;
@@ -474,17 +471,45 @@ class PMF_User
     }
 
     /**
-     * Short description of method setPassword
+     * Short description of method changePassword
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
      * @param string
-     * @return void
+     * @return bool
      */
-    function setPassword($pass)
+    function changePassword($pass)
     {
+        $returnValue = (bool) false;
+
         // section -64--88-1-5-5e0b50c5:10665348267:-7fd8 begin
+        if (!$this->checkDb($this->_db))
+		    return false;
+        foreach ($this->_auth_container as $name => $auth) {
+        	if (!$this->checkAuth($auth)) {
+        		return false;
+        	}
+        }
+        // update authentication entry
+        $login = $this->getLogin();
+        if ($pass == '') 
+        	$pass = $this->createPassword();
+        $success = false;
+        foreach ($this->_auth_container as $name => $auth) {
+        	if ($auth->read_only()) {
+        		continue;
+        	}
+        	if (!$auth->changePassword($login, $pass)) {
+        		continue;
+        	}
+        	else {
+        		$success = true;
+        	}
+        }
+        return $success;
         // section -64--88-1-5-5e0b50c5:10665348267:-7fd8 end
+
+        return (bool) $returnValue;
     }
 
     /**
@@ -546,10 +571,12 @@ class PMF_User
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
      * @param string
-     * @return void
+     * @return bool
      */
     function setStatus($status)
     {
+        $returnValue = (bool) false;
+
         // section -64--88-1-10--602a52f4:106a644a5e8:-7fd7 begin
         // is status allowed?
         $status = strtolower($status);
@@ -557,18 +584,20 @@ class PMF_User
             $this->errors[] = PMF_USERERROR_INVALID_STATUS;
             return false;
         }
-        // update status
-        $this->_status = $status;
+        // check user-ID
         $user_id = $this->getUserId();
         if (!$user_id) {
 			$this->errors[] = PMF_USERERROR_NO_USERID;
             return false;
         }
+        // check db
         if (!$this->_db) {
         	$this->errors[] = PMF_USERERROR_NO_DB;
 		    return false;
         }
-        return $this->_db->query("
+        // update status
+        $this->_status = $status;
+        $res = $this->_db->query("
 		  UPDATE 
 		    ".SQLPREFIX."user 
 		  SET 
@@ -576,7 +605,13 @@ class PMF_User
 		  WHERE 
 		    user_id = '".$user_id."'
 		");
+		// return bool
+		if ($res)
+		    return true;
+		return false;
         // section -64--88-1-10--602a52f4:106a644a5e8:-7fd7 end
+
+        return (bool) $returnValue;
     }
 
     /**
@@ -738,23 +773,18 @@ class PMF_User
     }
 
     /**
-     * Short description of method login
+     * Short description of method getLogin
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param string
      * @return string
      */
-    function login($login = null)
+    function getLogin()
     {
         $returnValue = (string) '';
 
         // section -64--88-1-10-eb43fc:106c4f6ca50:-7fd0 begin
-        if ($login === null) 
-        	return $this->_login;
-        $old_login = $this->_login;
-        $this->_login = (string) $login;
-        return $old_login;
+        return $this->_login;
         // section -64--88-1-10-eb43fc:106c4f6ca50:-7fd0 end
 
         return (string) $returnValue;
