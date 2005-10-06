@@ -102,6 +102,9 @@ require_once('PMF/UserData.php');
 @define('PMF_USERSTATUS_BLOCKED', 'User account is blocked. ');
 @define('PMF_USERSTATUS_ACTIVE', 'User account is active. ');
 @define('PMF_USERERROR_NO_AUTH_WRITABLE', 'No authentication object is writable. ');
+@define('PMF_USERERROR_CANNOT_CREATE_USERDATA', 'Entry for user data could not be created. ');
+@define('PMF_USERERROR_CANNOT_DELETE_USERDATA', 'Entry for user data could not be deleted. ');
+@define('PMF_USERERROR_CANNOT_UPDATE_USERDATA', 'Entry for user data could not be updated. ');
 // section 127-0-0-1-17ec9f7:105b52d5117:-7ff0-constants end
 
 /**
@@ -266,8 +269,10 @@ class PMF_User
         $returnValue = (bool) false;
 
         // section -64--88-1-5-15e2075:1065f4960e0:-7fc1 begin
+        // check db
         if (!$this->checkDb($this->_db))
 		    return false;
+		// get user
         $res = $this->_db->query("
 		  SELECT 
 		    user_id,
@@ -286,6 +291,10 @@ class PMF_User
 		$this->_user_id = (int)    $user['user_id'];
         $this->_login   = (string) $user['login'];
 		$this->_status  = (string) $user['account_status'];
+		// get user-data
+        if (!$this->userdata)
+		    $this->userdata = new PMF_UserData($this->_db);
+		$this->userdata->load($this->getUserId());
 		return true;
         // section -64--88-1-5-15e2075:1065f4960e0:-7fc1 end
 
@@ -307,8 +316,10 @@ class PMF_User
         $returnValue = (bool) false;
 
         // section -64--88-1-5-15e2075:1065f4960e0:-7fbe begin
+        // check db
         if (!$this->checkDb($this->_db))
 		    return false;
+		// get user
         $res = $this->_db->query("
 		  SELECT 
 		    user_id,
@@ -328,6 +339,10 @@ class PMF_User
 		$this->_user_id = (int)    $user['user_id'];
         $this->_login   = (string) $user['login'];
 		$this->_status  = (string) $user['account_status'];
+		// get user-data
+        if (!$this->userdata)
+		    $this->userdata = new PMF_UserData($this->_db);
+		$this->userdata->load($this->getUserId());
 		return true;
         // section -64--88-1-5-15e2075:1065f4960e0:-7fbe end
 
@@ -364,14 +379,24 @@ class PMF_User
         	$this->errors[] = PMF_USERERROR_LOGIN_NOT_UNIQUE;
             return false;
         }
+        // set user-ID
+        $this->_user_id = (int) $this->_db->nextID(SQLPREFIX.'user', 'user_id');
         // create user entry
         $this->_db->query("
           INSERT INTO
             ".SQLPREFIX."user
           SET
-            user_id = '".$this->_db->nextID(SQLPREFIX.'user', 'user_id')."', 
+            user_id = '".$this->getUserId()."', 
             login   = '".$this->_db->escape_string($login)."'
         ");
+        // create user-data entry
+        if (!$this->userdata)
+		    $this->userdata = new PMF_UserData($this->_db);
+		$data = $this->userdata->add($this->getUserId());
+		if (!$data) {
+			$this->errors[] = PMF_USERERROR_CANNOT_CREATE_USERDATA;
+		    return false;
+		}
         // create authentication entry
         if ($pass == '') 
         	$pass = $this->createPassword();
@@ -433,6 +458,14 @@ class PMF_User
 		if (!$res) {
 			$this->errors[] = PMF_CANNOT_DELETE_USER . 'error(): ' . $this->_db->error();
 			return false;
+		}
+        // delete user-data entry
+        if (!$this->userdata)
+		    $this->userdata = new PMF_UserData($this->_db);
+		$data = $this->userdata->delete($this->getUserId());
+		if (!$data) {
+			$this->errors[] = PMF_USERERROR_CANNOT_DELETE_USERDATA;
+		    return false;
 		}
 		// delete authentication entry
 		$read_only = 0;
@@ -817,6 +850,51 @@ class PMF_User
         // section -64--88-1-10-eb43fc:106c4f6ca50:-7fca end
 
         return (string) $returnValue;
+    }
+
+    /**
+     * Short description of method getUserData
+     *
+     * @access public
+     * @author Lars Tiedemann, <php@larstiedemann.de>
+     * @param mixed
+     * @return mixed
+     */
+    function getUserData($field = '*')
+    {
+        $returnValue = null;
+
+        // section -64--88-1-10--7165c41e:106c72278bc:-7fd9 begin
+        // get user-data entry
+        if (!$this->userdata)
+		    $this->userdata = new PMF_UserData($this->_db);
+		return $this->userdata->get($field);
+        // section -64--88-1-10--7165c41e:106c72278bc:-7fd9 end
+
+        return $returnValue;
+    }
+
+    /**
+     * Short description of method setUserData
+     *
+     * @access public
+     * @author Lars Tiedemann, <php@larstiedemann.de>
+     * @param array
+     * @return bool
+     */
+    function setUserData($data)
+    {
+        $returnValue = (bool) false;
+
+        // section -64--88-1-10--7165c41e:106c72278bc:-7fd7 begin
+        // set user-data entry
+        if (!$this->userdata)
+		    $this->userdata = new PMF_UserData($this->_db);
+		$this->userdata->load($this->getUserId());
+		return $this->userdata->set(array_keys($data), array_values($data));
+        // section -64--88-1-10--7165c41e:106c72278bc:-7fd7 end
+
+        return (bool) $returnValue;
     }
 
 } /* end of class PMF_User */
