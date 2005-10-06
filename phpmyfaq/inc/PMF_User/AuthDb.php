@@ -99,11 +99,17 @@ class PMF_AuthDb
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
+     * @param string
+     * @param bool
+     * @param bool
      * @return void
      */
-    function PMF_AuthDb()
+    function PMF_AuthDb($enctype = 'none', $read_only = false, $account_mirror = true)
     {
         // section -64--88-1-10-36edbf7a:106a832a030:-7fd8 begin
+		$this->selectEncType($enctype);
+		$this->read_only($read_only);
+		$this->account_mirror($account_mirror);
         // section -64--88-1-10-36edbf7a:106a832a030:-7fd8 end
     }
 
@@ -215,10 +221,12 @@ class PMF_AuthDb
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
      * @param string
-     * @return void
+     * @return bool
      */
     function delete($login)
     {
+        $returnValue = (bool) false;
+
         // section -64--88-1-10--64a6e3e6:106b6331e8d:-7fd7 begin
         if (!$this->_db()) 
         	return false;
@@ -240,6 +248,8 @@ class PMF_AuthDb
 		}
 		return true;
         // section -64--88-1-10--64a6e3e6:106b6331e8d:-7fd7 end
+
+        return (bool) $returnValue;
     }
 
     /**

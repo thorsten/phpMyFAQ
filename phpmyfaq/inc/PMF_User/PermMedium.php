@@ -101,7 +101,7 @@ class PMF_PermMedium
     }
 
     /**
-     * Short description of method delGroupRight
+     * Short description of method deleteGroupRight
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -111,7 +111,7 @@ class PMF_PermMedium
      * @param int
      * @return bool
      */
-    function delGroupRight($group, $action, $object, $object_id)
+    function deleteGroupRight($group, $action, $object, $object_id)
     {
         $returnValue = (bool) false;
 

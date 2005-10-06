@@ -92,9 +92,16 @@ require_once('PMF/UserData.php');
 @define('PMF_UNDEFINED_PARAMETER', 'Following parameter must to be defined: ');
 @define('PMF_USERERROR_ADD', 'Account could not be created. ');
 @define('PMF_USERERROR_CHANGE', 'Account could not be updated. ');
-@define('PMF_USERERROR_DELETE', 'Account could not be deleted. ');
-@define('PMF_USERERROR_INCORRECT_PASSWORD', 'Specified password is not correct. '); 
+@define('PMF_USERERROR_DELETE', 'Account could not be deleted. '); 
 @define('PMF_USER_NOT_FOUND', 'User account could not be found. ');
+@define('PMF_USERERROR_NO_AUTH', 'No authentication method specified. ');
+@define('PMF_USERERROR_INCORRECT_LOGIN', 'Specified login could not be found. ');
+@define('PMF_USERERROR_CANNOT_CREATE_USER', 'User account could not be created. ');
+@define('PMF_USERERROR_CANNOT_DELETE_USER', 'User account could not be deleted. ');
+@define('PMF_USERSTATUS_PROTECTED', 'User account is protected. ');
+@define('PMF_USERSTATUS_BLOCKED', 'User account is blocked. ');
+@define('PMF_USERSTATUS_ACTIVE', 'User account is active. ');
+@define('PMF_USERERROR_NO_AUTH_WRITABLE', 'No authentication object is writable. ');
 // section 127-0-0-1-17ec9f7:105b52d5117:-7ff0-constants end
 
 /**
@@ -176,7 +183,7 @@ class PMF_User
      * @access private
      * @var array
      */
-    var $_allowed_status = array('active', 'blocked', 'protected');
+    var $_allowed_status = array('active' => PMF_USERSTATUS_ACTIVE, 'blocked' => PMF_USERSTATUS_BLOCKED, 'protected' => PMF_USERSTATUS_PROTECTED);
 
     /**
      * Short description of attribute auth_container
@@ -258,29 +265,26 @@ class PMF_User
         $returnValue = (bool) false;
 
         // section -64--88-1-5-15e2075:1065f4960e0:-7fc1 begin
-        if (!$this->_db) {
-        	$this->errors[] = PMF_USERERROR_NO_DB;
+        if (!$this->checkDb($this->_db))
 		    return false;
-        }
         $res = $this->_db->query("
 		  SELECT 
-		    ".SQLPREFIX."userlogin.login AS login,
-		    ".SQLPREFIX."user.user_id AS id,
-		    ".SQLPREFIX."user.account_status AS status
+		    user_id,
+		    login,
+		    account_status
 		  FROM
-		    ".SQLPREFIX."user,
-		    ".SQLPREFIX."userlogin
+		    ".SQLPREFIX."user
 		  WHERE 
-		    ".SQLPREFIX."user.login = ".SQLPREFIX."userlogin.login AND
-			".SQLPREFIX."user.user_id = '".$user_id."'		    
+			user_id = '".(int) $user_id."'		    
 		");
 		if ($this->_db->num_rows($res) != 1) {
+			$this->errors[] = PMF_USERERROR_NO_USERID . 'error(): ' . $this->_db->error();
 			return false;
 		}
 		$user = $this->_db->fetch_assoc($res);
+		$this->_user_id = (int)    $user['user_id'];
         $this->_login   = (string) $user['login'];
-		$this->_status  = (string) $user['status'];
-		$this->_user_id = (int)    $user['id'];
+		$this->_status  = (string) $user['account_status'];
 		return true;
         // section -64--88-1-5-15e2075:1065f4960e0:-7fc1 end
 
@@ -293,36 +297,35 @@ class PMF_User
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
      * @param string
+     * @param bool
      * @return bool
      */
-    function getUserByLogin($login)
+    function getUserByLogin($login, $raise_error = true)
     {
         $returnValue = (bool) false;
 
         // section -64--88-1-5-15e2075:1065f4960e0:-7fbe begin
-        if (!$this->_db) {
-        	$this->errors[] = PMF_USERERROR_NO_DB;
+        if (!$this->checkDb($this->_db))
 		    return false;
-        }
         $res = $this->_db->query("
 		  SELECT 
-		    ".SQLPREFIX."userlogin.login AS login,
-		    ".SQLPREFIX."user.user_id AS id,
-		    ".SQLPREFIX."user.account_status AS status
+		    user_id,
+		    login,
+		    account_status
 		  FROM
-		    ".SQLPREFIX."user,
-		    ".SQLPREFIX."userlogin
+		    ".SQLPREFIX."user
 		  WHERE 
-		    ".SQLPREFIX."user.login = ".SQLPREFIX."userlogin.login AND
-			".SQLPREFIX."userlogin.login = '".$login."'		    
+			login = '".$this->_db->escape_string($login)."'		    
 		");
 		if ($this->_db->num_rows($res) != 1) {
+			if ($raise_error)
+			    $this->errors[] = PMF_USERERROR_INCORRECT_LOGIN;
 			return false;
 		}
 		$user = $this->_db->fetch_assoc($res);
+		$this->_user_id = (int)    $user['user_id'];
         $this->_login   = (string) $user['login'];
-		$this->_status  = (string) $user['status'];
-		$this->_user_id = (int)    $user['id'];
+		$this->_status  = (string) $user['account_status'];
 		return true;
         // section -64--88-1-5-15e2075:1065f4960e0:-7fbe end
 
@@ -335,50 +338,139 @@ class PMF_User
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
      * @param string
+     * @param string
      * @return mixed
      */
-    function createUser($login)
+    function createUser($login, $pass = '')
     {
         $returnValue = null;
 
         // section -64--88-1-5-5e0b50c5:10665348267:-7fdd begin
-        if (!$this->_db) {
-        	$this->errors[] = PMF_USERERROR_NO_DB;
+        if (!$this->checkDb($this->_db))
 		    return false;
+        foreach ($this->_auth_container as $name => $auth) {
+        	if (!$this->checkAuth($auth)) {
+        		return false;
+        	}
         }
         // is $login valid?
         $login = (string) $login;
-        if (!$this->isLoginValid($login)) 
+        if (!$this->isValidLogin($login)) 
             return false;
         // does $login already exist?
-        $user = new PMF_User($this->_db);
-        if ($user->getUserByLogin($login)) {
+        //$user = new PMF_User($this->_db);
+        //if ($user->getUserByLogin($login)) {
+        if ($this->getUserByLogin($login, false)) {
         	$this->errors[] = PMF_USERERROR_LOGIN_NOT_UNIQUE;
             return false;
         }
-        // 
+        // create user entry
         $this->_db->query("
           INSERT INTO
             ".SQLPREFIX."user
           SET
-            
+            user_id = '".$this->_db->nextID(SQLPREFIX.'user', 'user_id')."', 
+            login   = '".$this->_db->escape_string($login)."'
         ");
+        // create authentication entry
+        if ($pass == '') 
+        	$pass = $this->createPassword();
+        foreach ($this->_auth_container as $name => $auth) {
+        	if ($auth->read_only()) {
+        		continue;
+        	}
+        	if (!$auth->add($login, $auth->encrypt($pass))) {
+        		$this->errors[] = PMF_USERERROR_CANNOT_CREATE_USER.'in PMF_Auth '.$name;
+        		continue;
+        	}
+        	else {
+        		return true;
+        		break;
+        	}
+        }
+        return false;
         // section -64--88-1-5-5e0b50c5:10665348267:-7fdd end
 
         return $returnValue;
     }
 
     /**
-     * Short description of method delUser
+     * Short description of method deleteUser
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @return void
+     * @return mixed
      */
-    function delUser()
+    function deleteUser()
     {
+        $returnValue = null;
+
         // section -64--88-1-5-5e0b50c5:10665348267:-7fda begin
+        // check user-ID
+        if (!isset($this->_user_id) or $this->_user_id == 0) {
+        	$this->errors[] = PMF_USERERROR_NO_USERID;
+        	return false;
+        }
+        // check login
+        if (!isset($this->_login) or strlen($this->_login) == 0) {
+        	$this->errors[] = PMF_USERERROR_LOGIN_INVALID;
+        	return false;
+        }
+        // user-account is protected
+        if (isset($this->_allowed_status[$this->_status]) and $this->_allowed_status[$this->_status] == PMF_USERSTATUS_PROTECTED) {
+			$this->errors[] = PMF_USERERROR_CANNOT_DELETE_USER . PMF_USERSTATUS_PROTECTED;
+			return false;
+        }
+        // check db
+        if (!$this->checkDb($this->_db)) 
+            return false;
+        // delete user account
+		$res = $this->_db->query("
+		  DELETE FROM
+		    ".SQLPREFIX."user
+		  WHERE
+		    user_id = '".$this->_user_id."'
+		");
+		if (!$res) {
+			$this->errors[] = PMF_CANNOT_DELETE_USER . 'error(): ' . $this->_db->error();
+			return false;
+		}
+		// delete authentication entry
+		$read_only = 0;
+		$no_account_mirror = 0;
+		$auth_count = 0;
+		$delete = array();
+		foreach ($this->_auth_container as $name => $auth) {
+			$auth_count++;
+			// auth link is not writable
+			if ($auth->read_only()) {
+				$read_only++;
+				continue;
+			}
+			// auth link is not a mirror
+			if (!$auth->account_mirror()) {
+				$no_account_mirror++;
+				continue;
+			}
+			// try to delete authentication entry
+			$delete[] = $auth->delete($this->_login);
+		}
+		// there was no writable authentication object
+		if ($read_only + $no_account_mirror == $auth_count) {
+			$this->errors[] = PMF_USERERROR_NO_AUTH_WRITABLE;
+		}
+		// deletion unsuccessful
+		if (!in_array(true, $delete)) 
+		    return false;
+		// deletion always successful
+		$deletion_success = count(array_keys($delete, true));
+		if ($deletion_success == $auth_count)
+			return true;
+		// return how many times deletion was successful
+		return $deletion_success;
         // section -64--88-1-5-5e0b50c5:10665348267:-7fda end
+
+        return $returnValue;
     }
 
     /**
@@ -403,17 +495,28 @@ class PMF_User
      * @param object
      * @param object
      * @param mixed
-     * @return object
+     * @return void
      */
     function PMF_User($db = null, $perm = null, $auth = array())
     {
-        $returnValue = null;
-
         // section -64--88-1-5--735fceb5:106657b6b8d:-7fdb begin
-        return $this->__construct($db, $perm, $auth);
+        if ($db !== null) {
+            if (!$this->addDb($db))
+                return false;
+        }
+        if ($perm !== null) { 
+            if (!$this->addPerm($perm))
+                return false;
+        }
+        if (count($auth) > 0) {
+        	foreach ($auth as $name => $auth_object) {
+        		if (!$this->addAuth($auth_object, $name)) {
+        		    return false;
+					break;
+        		}
+        	}
+        }
         // section -64--88-1-5--735fceb5:106657b6b8d:-7fdb end
-
-        return $returnValue;
     }
 
     /**
@@ -533,25 +636,6 @@ class PMF_User
     }
 
     /**
-     * Short description of method __construct
-     *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param object
-     * @param object
-     * @param mixed
-     * @return void
-     */
-    function __construct($db = null, $perm = null, $auth = array())
-    {
-        // section -64--88-1-10--602a52f4:106a644a5e8:-7fce begin
-        if (!$this->addDb($db))
-            return false;
-        return $this; 
-        // section -64--88-1-10--602a52f4:106a644a5e8:-7fce end
-    }
-
-    /**
      * Short description of method __destruct
      *
      * @access public
@@ -594,13 +678,14 @@ class PMF_User
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
      * @param object
+     * @param string
      * @return void
      */
-    function addAuth($auth)
+    function addAuth($auth, $name)
     {
         // section -64--88-1-10-5a491889:106a7b76a96:-7fda begin
         if ($this->checkAuth($auth)) {
-        	$this->_auth_container[] = $auth;
+        	$this->_auth_container[$name] = $auth;
             return true;
         }
         return false;
@@ -620,10 +705,10 @@ class PMF_User
         $returnValue = (bool) false;
 
         // section -64--88-1-10-59fce530:106a800a699:-7fda begin
-        $methods = array('login');
+        $methods = array('checkPassword');
         foreach ($methods as $method) {
-        	if (!method_exists($auth, $method)) {
-				$this->errors[] = PMF_USERERROR_NOauth;
+        	if (!method_exists($auth, strtolower($method))) {
+				$this->errors[] = PMF_USERERROR_NO_AUTH;
         		return false;
         		break;
         	}
@@ -650,6 +735,48 @@ class PMF_User
         // section -64--88-1-10-59fce530:106a800a699:-7fd7 end
 
         return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method login
+     *
+     * @access public
+     * @author Lars Tiedemann, <php@larstiedemann.de>
+     * @param string
+     * @return string
+     */
+    function login($login = null)
+    {
+        $returnValue = (string) '';
+
+        // section -64--88-1-10-eb43fc:106c4f6ca50:-7fd0 begin
+        if ($login === null) 
+        	return $this->_login;
+        $old_login = $this->_login;
+        $this->_login = (string) $login;
+        return $old_login;
+        // section -64--88-1-10-eb43fc:106c4f6ca50:-7fd0 end
+
+        return (string) $returnValue;
+    }
+
+    /**
+     * Short description of method createPassword
+     *
+     * @access public
+     * @author Lars Tiedemann, <php@larstiedemann.de>
+     * @return string
+     */
+    function createPassword()
+    {
+        $returnValue = (string) '';
+
+        // section -64--88-1-10-eb43fc:106c4f6ca50:-7fca begin
+		srand((double)microtime()*1000000);
+  		return (string) uniqid(rand());
+        // section -64--88-1-10-eb43fc:106c4f6ca50:-7fca end
+
+        return (string) $returnValue;
     }
 
 } /* end of class PMF_User */

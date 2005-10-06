@@ -124,6 +124,22 @@ class PMF_Auth
      */
     var $_auth_typemap = array('mysql' => 'AuthMysql', 'db' => 'AuthDb');
 
+    /**
+     * Short description of attribute read_only
+     *
+     * @access private
+     * @var bool
+     */
+    var $_read_only = false;
+
+    /**
+     * Short description of attribute account_mirror
+     *
+     * @access private
+     * @var bool
+     */
+    var $_account_mirror = true;
+
     // --- OPERATIONS ---
 
     /**
@@ -136,21 +152,7 @@ class PMF_Auth
     function PMF_Auth()
     {
         // section -64--88-1-5--735fceb5:106657b6b8d:-7fd0 begin
-        return $this->__construct();
         // section -64--88-1-5--735fceb5:106657b6b8d:-7fd0 end
-    }
-
-    /**
-     * constructor
-     *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @return void
-     */
-    function __construct()
-    {
-        // section -64--88-1-10-36edbf7a:106a832a030:-7fcf begin
-        // section -64--88-1-10-36edbf7a:106a832a030:-7fcf end
     }
 
     /**
@@ -186,18 +188,6 @@ class PMF_Auth
         // section -64--88-1-10--3f7cf10c:106abb97c17:-7fd8 begin
         $this->_enc_container = PMF_Enc::selectEnc($enctype);
         return $this->_enc_container;
-        /*$enctype = strtolower($enctype);
-        if (isset($this->_enc_typemap[$enctype])) {
-        	if (!file_exists("PMF/".$this->_enc_typemap[$enctype].".php"))
-        	    return false;
-        	require_once("PMF/".$this->_enc_typemap[$enctype].".php");
-        	$newclass = "PMF_".$this->_enc_typemap[$enctype];
-        	if (!class_exists($newclass)) 
-        		return false;
-        	$this->_enc_container = new $newclass();
-        	return true;
-        }
-        return false;*/
         // section -64--88-1-10--3f7cf10c:106abb97c17:-7fd8 end
 
         return $returnValue;
@@ -273,6 +263,71 @@ class PMF_Auth
         // section -64--88-1-10--3f7cf10c:106abb97c17:-7fbf end
 
         return $returnValue;
+    }
+
+    /**
+     * Short description of method read_only
+     *
+     * @access public
+     * @author Lars Tiedemann, <php@larstiedemann.de>
+     * @param bool
+     * @return bool
+     */
+    function read_only($read_only = null)
+    {
+        $returnValue = (bool) false;
+
+        // section -64--88-1-10-56ec5adf:106bcc9244c:-7fdb begin
+        if ($read_only === null)
+        	return $this->_read_only;
+        $old_read_only = $this->_read_only;
+        $this->_read_only = (bool) $read_only;
+        return $old_read_only;
+        // section -64--88-1-10-56ec5adf:106bcc9244c:-7fdb end
+
+        return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method account_mirror
+     *
+     * @access public
+     * @author Lars Tiedemann, <php@larstiedemann.de>
+     * @param bool
+     * @return bool
+     */
+    function account_mirror($account_mirror = null)
+    {
+        $returnValue = (bool) false;
+
+        // section -64--88-1-10-eb43fc:106c4f6ca50:-7fda begin
+        if ($account_mirror === null)
+        	return $this->_account_mirror;
+        $old_account_mirror = $this->_account_mirror;
+        $this->_account_mirror = (bool) $account_mirror;
+        return $old_account_mirror;
+        // section -64--88-1-10-eb43fc:106c4f6ca50:-7fda end
+
+        return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method encrypt
+     *
+     * @access public
+     * @author Lars Tiedemann, <php@larstiedemann.de>
+     * @param string
+     * @return string
+     */
+    function encrypt($str)
+    {
+        $returnValue = (string) '';
+
+        // section -64--88-1-10-eb43fc:106c4f6ca50:-7fcd begin
+        return $this->_enc_container->encrypt($str);
+        // section -64--88-1-10-eb43fc:106c4f6ca50:-7fcd end
+
+        return (string) $returnValue;
     }
 
 } /* end of class PMF_Auth */

@@ -117,7 +117,7 @@ class PMF_PermBasic
     }
 
     /**
-     * Short description of method delUserRight
+     * Short description of method deleteUserRight
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -126,7 +126,7 @@ class PMF_PermBasic
      * @param int
      * @return bool
      */
-    function delUserRight($action, $object, $object_id)
+    function deleteUserRight($action, $object, $object_id)
     {
         $returnValue = (bool) false;
 

@@ -39,6 +39,10 @@ require_once('PMF/User.php');
 @define('PMF_SESSION_ID_TIMESTAMP', 'PMF_SESSION_TIMESTAMP');
 @define('PMF_SESSION_ID_EXPIRES', 30);
 @define('PMF_SESSION_ID_REFRESH', 10);
+@define('PMF_LOGIN_BY_SESSION', true);
+@define('PMF_LOGIN_BY_SESSION_FAILED', 'Could not login user from session. ');
+@define('PMF_LOGIN_BY_AUTH_FAILED', 'Could not login with login and password. ');
+@define('PMF_USERERROR_INCORRECT_PASSWORD', 'Specified password is not correct. ');
 // section -64--88-1-12--f895d8c:106777dbaf0:-7fdd-constants end
 
 /**
@@ -85,40 +89,53 @@ class PMF_CurrentUser
         $returnValue = null;
 
         // section -64--88-1-12--f895d8c:106777dbaf0:-7fd6 begin
-        
-	    $newCurrentUser = new PMF_CurrentUser();
 		// get CurrentUser from Session
         if ($login == "" and $pass == "") {
         	// there is no user in Session
         	if (!isset($_SESSION[PMF_SESSION_CURRENT_USER])) {
         		return false;
         	}
-        	// there is something in Session
-        	else {
-	            // user in session is a valid object
-				if (get_class($_SESSION[PMF_SESSION_CURRENT_USER]) == get_class($newCurrentUser)) {
-					return $_SESSION[PMF_SESSION_CURRENT_USER];
-				}
-				// not a valid object
-				else {
-					// create an empty object
-					$_SESSION[PMF_SESSION_CURRENT_USER] = $newCurrentUser;
-					return $_SESSION[PMF_SESSION_CURRENT_USER];
-				}
-        	}
+			//$currentUser = new PMF_CurrentUser();
+	        // user in session is a valid object
+			if (get_class($_SESSION[PMF_SESSION_CURRENT_USER]) == 'pmf_currentuser') {
+				return true;
+			}
+			// create a new current user in session
+			$_SESSION[PMF_SESSION_CURRENT_USER] = $this;
+			return true;
 		}
 		// authenticate user by login and password
-		else {
-			if ($login == "lars" and $pass == "iquochi") {
-				$currentUser = new PMF_CurrentUser();
-				$currentUser->getUserByLogin($login);
-				$_SESSION[PMF_SESSION_CURRENT_USER] = $currentUser;
-				return $_SESSION[PMF_SESSION_CURRENT_USER];
+		$login_error = 0;
+		$pass_error  = 0;
+		foreach ($this->_auth_container as $name => $auth) {
+			// $auth is an invalid Auth object, so continue 
+			if (!$this->checkAuth($auth)) {
+				continue;
 			}
-			else {
-				return false;
+			// $login does not exist
+			if (!$auth->checkLogin($login)) {
+				$login_error++;
+				continue;
 			}
-		}				  	
+			// $pass is incorrect
+			echo "\$auth->checkPassword(".$login.", ".$pass.") = ".($auth->checkPassword($login, $pass) ? 'true' : 'false')."\n";
+			if (!$auth->checkPassword($login, $pass)) {
+				$pass_error++;
+				continue;
+			}
+			$this->getUserByLogin($login);
+			$_SESSION[PMF_SESSION_CURRENT_USER] = $this;
+			return true;
+			break;				
+		}
+		// raise errors
+		if ($pass_error == count(array_values($this->_auth_container))) {
+			$this->errors[] = PMF_USERERROR_INCORRECT_PASSWORD;
+		}
+		if ($login_error == count(array_values($this->_auth_container))) {
+			$this->errors[] = PMF_USERERROR_INCORRECT_LOGIN;
+		}
+		return false;				  	
         // section -64--88-1-12--f895d8c:106777dbaf0:-7fd6 end
 
         return $returnValue;
@@ -136,6 +153,8 @@ class PMF_CurrentUser
         $returnValue = (string) '';
 
         // section -64--88-1-10-63632404:1069d6db002:-7fdb begin
+		srand((double)microtime()*1000000);
+  		return (string) md5(uniqid(rand())); 
         // section -64--88-1-10-63632404:1069d6db002:-7fdb end
 
         return (string) $returnValue;
