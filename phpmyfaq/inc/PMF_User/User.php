@@ -122,7 +122,7 @@ class PMF_User
     // --- ATTRIBUTES ---
 
     /**
-     * Short description of attribute perm
+     * Permission container
      *
      * @access public
      * @var object
@@ -130,7 +130,7 @@ class PMF_User
     var $perm = null;
 
     /**
-     * Short description of attribute userdata
+     * User-data storage container
      *
      * @access public
      * @var object
@@ -138,7 +138,7 @@ class PMF_User
     var $userdata = null;
 
     /**
-     * Short description of attribute db
+     * database object
      *
      * @access private
      * @var object
@@ -146,7 +146,7 @@ class PMF_User
     var $_db = null;
 
     /**
-     * Short description of attribute login
+     * login string
      *
      * @access private
      * @var string
@@ -154,7 +154,7 @@ class PMF_User
     var $_login = '';
 
     /**
-     * Short description of attribute user_id
+     * user ID
      *
      * @access private
      * @var int
@@ -170,7 +170,7 @@ class PMF_User
     var $errors = array();
 
     /**
-     * Short description of attribute status
+     * status of user.
      *
      * @access private
      * @var string
@@ -178,7 +178,7 @@ class PMF_User
     var $_status = '';
 
     /**
-     * Short description of attribute allowed_status
+     * array of allowed values for status
      *
      * @access private
      * @var array
@@ -186,7 +186,7 @@ class PMF_User
     var $_allowed_status = array('active' => PMF_USERSTATUS_ACTIVE, 'blocked' => PMF_USERSTATUS_BLOCKED, 'protected' => PMF_USERSTATUS_PROTECTED);
 
     /**
-     * Short description of attribute auth_container
+     * authentication container
      *
      * @access private
      * @var array
@@ -196,7 +196,7 @@ class PMF_User
     // --- OPERATIONS ---
 
     /**
-     * Short description of method addPerm
+     * adds a permission object to the user.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -210,7 +210,7 @@ class PMF_User
     }
 
     /**
-     * Short description of method addDb
+     * adds a database object to the user.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -230,7 +230,7 @@ class PMF_User
     }
 
     /**
-     * Short description of method getUserId
+     * returns the user-ID of the user.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -253,7 +253,8 @@ class PMF_User
     }
 
     /**
-     * Short description of method getUserById
+     * loads basic user information from the database selecting the user with
+     * specified user-ID.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -292,7 +293,8 @@ class PMF_User
     }
 
     /**
-     * Short description of method getUserByLogin
+     * loads basic user information from the database selecting the user with
+     * specified login.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -333,7 +335,7 @@ class PMF_User
     }
 
     /**
-     * Short description of method createUser
+     * creates a new user and stores basic data in the database.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -392,7 +394,7 @@ class PMF_User
     }
 
     /**
-     * Short description of method deleteUser
+     * deletes the user from the database.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -471,7 +473,7 @@ class PMF_User
     }
 
     /**
-     * Short description of method changePassword
+     * changes the user's password.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -513,7 +515,7 @@ class PMF_User
     }
 
     /**
-     * Short description of method PMF_User
+     * constructor.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -545,7 +547,7 @@ class PMF_User
     }
 
     /**
-     * Short description of method getStatus
+     * returns the user's status.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -566,7 +568,7 @@ class PMF_User
     }
 
     /**
-     * Short description of method setStatus
+     * sets the user's status and updates the database entry.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -615,7 +617,7 @@ class PMF_User
     }
 
     /**
-     * Short description of method checkDb
+     * returns true if db is a valid database object.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -671,7 +673,7 @@ class PMF_User
     }
 
     /**
-     * Short description of method __destruct
+     * destructor
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -684,7 +686,15 @@ class PMF_User
     }
 
     /**
-     * Short description of method isValidLogin
+     * returns true if login is a valid login string. 
+     *
+     * Relevant constants:
+     *
+     * PMF_LOGIN_MINLENGTH defines the minimum length the login string must
+     * If login has more characters than allowed, false is returned.
+     *
+     * PMF_LOGIN_INVALID_REGEXP is a regular expression. If login matches this
+     * false is returned.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -708,7 +718,7 @@ class PMF_User
     }
 
     /**
-     * Short description of method addAuth
+     * adds a new authentication object to the user object.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -728,7 +738,7 @@ class PMF_User
     }
 
     /**
-     * Short description of method checkAuth
+     * returns true if auth is a valid authentication object.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -755,7 +765,7 @@ class PMF_User
     }
 
     /**
-     * Short description of method checkPerm
+     * returns true if perm is a valid permission object.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -773,7 +783,7 @@ class PMF_User
     }
 
     /**
-     * Short description of method getLogin
+     * returns the user's login.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -791,7 +801,7 @@ class PMF_User
     }
 
     /**
-     * Short description of method createPassword
+     * returns a new password.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
