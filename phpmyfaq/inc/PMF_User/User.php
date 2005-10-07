@@ -412,7 +412,9 @@ class PMF_User
         		$success = true;
         	}
         }
-        return $success;
+        if (!$success)
+            return false;
+        return $this->getUserByLogin($login);
         // section -64--88-1-5-5e0b50c5:10665348267:-7fdd end
 
         return $returnValue;
@@ -494,12 +496,9 @@ class PMF_User
 		// deletion unsuccessful
 		if (!in_array(true, $delete)) 
 		    return false;
-		// deletion always successful
-		$deletion_success = count(array_keys($delete, true));
-		if ($deletion_success == $auth_count)
-			return true;
-		// return how many times deletion was successful
-		return $deletion_success;
+		// reset object
+		$this = new PMF_User($this->_db, $this->perm, $this->_auth_container);
+		return true;
         // section -64--88-1-5-5e0b50c5:10665348267:-7fda end
 
         return $returnValue;
