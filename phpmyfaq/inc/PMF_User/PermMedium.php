@@ -77,6 +77,8 @@ class PMF_PermMedium
         $returnValue = (string) '';
 
         // section -64--88-1-5-15e2075:10637248df4:-7ffa begin
+        if (!$this->_initialized)
+        	return false;
         // get right id
         $right_id = $this->getRightId($name);
         if ($right_id <= 0) 
@@ -120,6 +122,8 @@ class PMF_PermMedium
         $returnValue = array();
 
         // section -64--88-1-5-15e2075:10637248df4:-7fbe begin
+        if (!$this->_initialized)
+        	return false;
         // get right id
         $right_id = $this->getRightId($name);
         if ($right_id <= 0) 
@@ -234,6 +238,8 @@ class PMF_PermMedium
         $returnValue = (bool) false;
 
         // section -64--88-1-10--2ab496b6:106d484ef91:-7fa5 begin
+        if (!$this->_initialized)
+        	return false;
         // get group id
         $group_id = $this->getGroupId($name);
         if ($group_id == 0) 
@@ -268,6 +274,8 @@ class PMF_PermMedium
         $returnValue = (bool) false;
 
         // section -64--88-1-10--2ab496b6:106d484ef91:-7fa3 begin
+        if (!$this->_initialized)
+        	return false;
         // get group id
         $group_id = $this->getGroupId($group_name);
         if ($group_id == 0) 
@@ -301,6 +309,8 @@ class PMF_PermMedium
         $returnValue = null;
 
         // section -64--88-1-10--2ab496b6:106d484ef91:-7f9d begin
+        if (!$this->_initialized)
+        	return false;
         // check if group already exists
         if ($this->getGroupId($group_data['name']) > 0)
             return false;
@@ -338,6 +348,8 @@ class PMF_PermMedium
         $returnValue = (bool) false;
 
         // section -64--88-1-10--2ab496b6:106d484ef91:-7f99 begin
+        if (!$this->_initialized)
+        	return false;
         // update group
         $res = $this->_db->query("
             UPDATE
@@ -370,6 +382,8 @@ class PMF_PermMedium
         $returnValue = null;
 
         // section -64--88-1-10--2ab496b6:106d484ef91:-7f8d begin
+        if (!$this->_initialized)
+        	return false;
         // delete group
         $res = $this->_db->query("
             DELETE FROM
@@ -416,6 +430,8 @@ class PMF_PermMedium
         $returnValue = (bool) false;
 
         // section -64--88-1-10--785a539b:106d9d6c253:-7fcc begin
+        if (!$this->_initialized)
+        	return false;
         $res = $this->_db->query("
             SELECT
                 ".SQLPREFIX."user.user_id AS user_id
@@ -450,6 +466,8 @@ class PMF_PermMedium
         $returnValue = array();
 
         // section -64--88-1-10--785a539b:106d9d6c253:-7fc9 begin
+        if (!$this->_initialized)
+        	return false;
         $res = $this->_db->query("
             SELECT
                 ".SQLPREFIX."user.user_id AS user_id
@@ -485,6 +503,8 @@ class PMF_PermMedium
         $returnValue = (bool) false;
 
         // section -64--88-1-10--785a539b:106d9d6c253:-7fc6 begin
+        if (!$this->_initialized)
+        	return false;
         // check group
         if (!$this->getGroupData($group_id))
         	return false;
@@ -518,6 +538,8 @@ class PMF_PermMedium
         $returnValue = (bool) false;
 
         // section -64--88-1-10--785a539b:106d9d6c253:-7fc3 begin
+        if (!$this->_initialized)
+        	return false;
         // remove user from group
         $res = $this->_db->query("
         	DELETE FROM
@@ -548,6 +570,8 @@ class PMF_PermMedium
         $returnValue = (int) 0;
 
         // section -64--88-1-10--61674be4:106dbb8e5aa:-7fcb begin
+        if (!$this->_initialized)
+        	return false;
         // get group id
         $res = $this->_db->query("
         	SELECT 
@@ -580,6 +604,8 @@ class PMF_PermMedium
         $returnValue = array();
 
         // section -64--88-1-10--61674be4:106dbb8e5aa:-7fc8 begin
+        if (!$this->_initialized)
+        	return false;
         // get group data
         $res = $this->_db->query("
         	SELECT 
@@ -613,6 +639,8 @@ class PMF_PermMedium
         $returnValue = array();
 
         // section -64--88-1-10--61674be4:106dbb8e5aa:-7fc5 begin
+        if (!$this->_initialized)
+        	return false;
         // get user groups
         $res = $this->_db->query("
             SELECT
@@ -649,6 +677,8 @@ class PMF_PermMedium
         $returnValue = array();
 
         // section -64--88-1-10--61674be4:106dbb8e5aa:-7faa begin
+        if (!$this->_initialized)
+        	return false;
         // get all groups
         $res = $this->_db->query("
             SELECT

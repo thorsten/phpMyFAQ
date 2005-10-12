@@ -80,6 +80,8 @@ class PMF_PermBasic
         $returnValue = (bool) false;
 
         // section -64--88-1-5-15e2075:10637248df4:-7ffe begin
+        if (!$this->_initialized)
+        	return false;
         // get right id
         $right_id = $this->getRightId($name);
         if ($right_id <= 0) 
@@ -119,6 +121,8 @@ class PMF_PermBasic
         $returnValue = array();
 
         // section -64--88-1-5-15e2075:10637248df4:-7fa5 begin
+        if (!$this->_initialized)
+        	return false;
         // get user rights
         $res = $this->_db->query("
             SELECT
@@ -180,6 +184,8 @@ class PMF_PermBasic
     function grantUserRight($right_id)
     {
         // section -64--88-1-10--2ab496b6:106d484ef91:-7fdc begin
+        if (!$this->_initialized)
+        	return false;
         $res = $this->_db->query("
             INSERT INTO
                 ".SQLPREFIX."user_right
@@ -204,6 +210,8 @@ class PMF_PermBasic
     function refuseUserRight($right_id)
     {
         // section -64--88-1-10--2ab496b6:106d484ef91:-7fd7 begin
+        if (!$this->_initialized)
+        	return false;
         $res = $this->_db->query("
             DELETE FROM
                 ".SQLPREFIX."user_right
@@ -246,6 +254,8 @@ class PMF_PermBasic
         $returnValue = array();
 
         // section -64--88-1-10--61674be4:106dbb8e5aa:-7fbd begin
+        if (!$this->_initialized)
+        	return false;
         // get right data
         $res = $this->_db->query("
             SELECT 
@@ -303,6 +313,8 @@ class PMF_PermBasic
         $returnValue = (int) 0;
 
         // section -64--88-1-10--61674be4:106dbb8e5aa:-7f9c begin
+        if (!$this->_initialized)
+        	return false;
         // check if right already exists
         if ($this->getRightId($right_data['name']) > 0)
             return false;
@@ -357,6 +369,8 @@ class PMF_PermBasic
         $returnValue = (bool) false;
 
         // section -64--88-1-10--61674be4:106dbb8e5aa:-7f99 begin
+        if (!$this->_initialized)
+        	return false;
         // check input
         $right_data = $this->checkRightData($right_data);
         // update right
@@ -406,6 +420,8 @@ class PMF_PermBasic
         $returnValue = (bool) false;
 
         // section -64--88-1-10--61674be4:106dbb8e5aa:-7f95 begin
+        if (!$this->_initialized)
+        	return false;
         // delete right
         $res = $this->_db->query("
             DELETE FROM
@@ -461,6 +477,8 @@ class PMF_PermBasic
         $returnValue = (int) 0;
 
         // section -64--88-1-10--61674be4:106dbb8e5aa:-7f92 begin
+        if (!$this->_initialized)
+        	return false;
         // get right id
         $res = $this->_db->query("
             SELECT
@@ -492,6 +510,8 @@ class PMF_PermBasic
         $returnValue = array();
 
         // section -64--88-1-10--61674be4:106dbb8e5aa:-7f8f begin
+        if (!$this->_initialized)
+        	return false;
         $res = $this->_db->query("
             SELECT
                 right_id

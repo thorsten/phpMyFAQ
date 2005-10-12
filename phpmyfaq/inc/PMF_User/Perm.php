@@ -8,9 +8,23 @@ error_reporting(E_ALL);
  * There are three possible extensions of this class: basic, medium and large
  * by the classes PMF_PermBasic, PMF_PermMedium and PMF_PermLarge. The classes
  * to allow for scalability. This means that PMF_PermMedium is an extend of
- * and PMF_PermLarge is an extend of PMF_PermMedium. The PMF_Perm class itself
- * not provide any methods, but a single property: the database object
- * Using this database connection, the permission-object may perform database
+ * and PMF_PermLarge is an extend of PMF_PermMedium.
+ *
+ * The permission type can be selected by calling $perm = PMF_Perm(perm_type) or
+ * static method $perm = PMF_Perm::selectPerm(perm_type) where perm_type is
+ * 'medium' or 'large'. Both ways, a PMF_PermBasic, PMF_PermMedium or
+ * is returned.
+ *
+ * Before calling any method, the object $perm needs to be initialised calling
+ * user_id, context, context_id). The parameters context and context_id are
+ * accepted, but do only matter in PMF_PermLarge. In other words, if you have a
+ * or PMF_PermMedium, it does not matter if you pass context and context_id or
+ * But in PMF_PermLarge, they do make a significant difference if passed, thus
+ * for up- and downwards-compatibility.
+ *
+ * Perhaps the most important method is $perm->checkRight(right_name). This
+ * checks whether the user having the user_id set with $perm->setPerm()
+ *
  * The permission object is added to a user using the user's addPerm() method.
  * a single permission-object is allowed for each user. The permission-object is
  * in the user's $perm variable. Permission methods are performed using the
@@ -53,9 +67,23 @@ require_once('PMF/User.php');
  * There are three possible extensions of this class: basic, medium and large
  * by the classes PMF_PermBasic, PMF_PermMedium and PMF_PermLarge. The classes
  * to allow for scalability. This means that PMF_PermMedium is an extend of
- * and PMF_PermLarge is an extend of PMF_PermMedium. The PMF_Perm class itself
- * not provide any methods, but a single property: the database object
- * Using this database connection, the permission-object may perform database
+ * and PMF_PermLarge is an extend of PMF_PermMedium.
+ *
+ * The permission type can be selected by calling $perm = PMF_Perm(perm_type) or
+ * static method $perm = PMF_Perm::selectPerm(perm_type) where perm_type is
+ * 'medium' or 'large'. Both ways, a PMF_PermBasic, PMF_PermMedium or
+ * is returned.
+ *
+ * Before calling any method, the object $perm needs to be initialised calling
+ * user_id, context, context_id). The parameters context and context_id are
+ * accepted, but do only matter in PMF_PermLarge. In other words, if you have a
+ * or PMF_PermMedium, it does not matter if you pass context and context_id or
+ * But in PMF_PermLarge, they do make a significant difference if passed, thus
+ * for up- and downwards-compatibility.
+ *
+ * Perhaps the most important method is $perm->checkRight(right_name). This
+ * checks whether the user having the user_id set with $perm->setPerm()
+ *
  * The permission object is added to a user using the user's addPerm() method.
  * a single permission-object is allowed for each user. The permission-object is
  * in the user's $perm variable. Permission methods are performed using the
@@ -94,6 +122,14 @@ class PMF_Perm
      * @var array
      */
     var $_perm_typemap = array('basic' => 'PermBasic', 'medium' => 'PermMedium', 'large' => 'PermLarge');
+
+    /**
+     * Short description of attribute initialized
+     *
+     * @access private
+     * @var bool
+     */
+    var $_initialized = false;
 
     // --- OPERATIONS ---
 
@@ -217,7 +253,7 @@ class PMF_Perm
             return false;
         $this->_db = $db;
         $this->_user_id = $user_id;
-        return;
+        $this->_initialized = true;
         // section 127-0-0-1--6945df47:106df4af666:-7fdd end
     }
 
@@ -233,6 +269,7 @@ class PMF_Perm
         // section 127-0-0-1--6945df47:106df4af666:-7fd9 begin
         $this->_db = null;
         $this->_user_id = 0;
+        $this->_initialized = false;
         // section 127-0-0-1--6945df47:106df4af666:-7fd9 end
     }
 

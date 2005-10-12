@@ -103,6 +103,8 @@ class PMF_PermLarge
         $returnValue = (int) 0;
 
         // section -64--88-1-10--77ac1b05:106d99eac38:-7fb7 begin
+        if (!$this->_initialized)
+        	return false;
         // get right id
         $res = $this->_db->query("
             SELECT
@@ -145,7 +147,26 @@ class PMF_PermLarge
         $this->_user_id    = $user_id;
         $this->_context    = $context;
         $this->_context_id = $context_id;
+        $this->_initialized = true;
         // section -64--88-1-10--61674be4:106dbb8e5aa:-7fcf end
+    }
+
+    /**
+     * Short description of method resetPerm
+     *
+     * @access public
+     * @author Lars Tiedemann, <php@larstiedemann.de>
+     * @return void
+     */
+    function resetPerm()
+    {
+        // section -64--88-1-10--73b3bdb4:106e40c6470:-7fdd begin
+        $this->_db = null;
+        $this->_user_id = 0;
+        $this->_context    = '';
+        $this->_context_id = 0;
+        $this->_initialized = false;
+        // section -64--88-1-10--73b3bdb4:106e40c6470:-7fdd end
     }
 
 } /* end of class PMF_PermLarge */
