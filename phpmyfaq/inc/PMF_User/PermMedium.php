@@ -416,6 +416,22 @@ class PMF_PermMedium
         $returnValue = (bool) false;
 
         // section -64--88-1-10--785a539b:106d9d6c253:-7fcc begin
+        $res = $this->_db->query("
+            SELECT
+                ".SQLPREFIX."user.user_id AS user_id
+            FROM
+                ".SQLPREFIX."user,
+                ".SQLPREFIX."user_group,
+                ".SQLPREFIX."group
+            WHERE
+            	".SQLPREFIX."user.user_id   = '".$this->_user_id."' AND
+            	".SQLPREFIX."user.user_id   = ".SQLPREFIX.".user_group.user_id AND
+            	".SQLPREFIX."group.group_id = ".SQLPREFIX."user_group.group_id AND
+            	".SQLPREFIX."group.group_id = '".$group_id."'
+        ");
+        if ($this->_db->num_rows($res) == 1)
+        	return true;
+        return false;
         // section -64--88-1-10--785a539b:106d9d6c253:-7fcc end
 
         return (bool) $returnValue;
@@ -434,6 +450,23 @@ class PMF_PermMedium
         $returnValue = array();
 
         // section -64--88-1-10--785a539b:106d9d6c253:-7fc9 begin
+        $res = $this->_db->query("
+            SELECT
+                ".SQLPREFIX."user.user_id AS user_id
+            FROM
+                ".SQLPREFIX."user,
+                ".SQLPREFIX."user_group,
+                ".SQLPREFIX."group
+            WHERE
+            	".SQLPREFIX."group.group_id = '".$group_id."' AND
+            	".SQLPREFIX."group.group_id = ".SQLPREFIX."user_group.group_id AND
+            	".SQLPREFIX."user.user_id   = ".SQLPREFIX.".user_group.user_id 
+        ");
+        $result = array();
+        while ($row = $this->_db->fetch_assoc($res)) {
+        	$result[] = $row['user_id'];
+        }
+        return $result;
         // section -64--88-1-10--785a539b:106d9d6c253:-7fc9 end
 
         return (array) $returnValue;
@@ -452,6 +485,21 @@ class PMF_PermMedium
         $returnValue = (bool) false;
 
         // section -64--88-1-10--785a539b:106d9d6c253:-7fc6 begin
+        // check group
+        if (!$this->getGroupData($group_id))
+        	return false;
+        // add user to group
+        $res = $this->_db->query("
+        	INSERT INTO
+        		".SQLPREFIX."user_group
+        	SET
+        		user_id  = '".$this->_user_id."',
+        		group_id = '".$group_id."'
+        ");
+        // return
+        if (!$res)
+        	return false;
+        return true;
         // section -64--88-1-10--785a539b:106d9d6c253:-7fc6 end
 
         return (bool) $returnValue;
@@ -470,6 +518,18 @@ class PMF_PermMedium
         $returnValue = (bool) false;
 
         // section -64--88-1-10--785a539b:106d9d6c253:-7fc3 begin
+        // remove user from group
+        $res = $this->_db->query("
+        	DELETE FROM
+        		".SQLPREFIX."user_group
+        	WHERE
+        		user_id  = '".$this->_user_id."' AND
+        		group_id = '".$group_id."'
+        ");
+        // return
+        if (!$res)
+        	return false;
+        return true;
         // section -64--88-1-10--785a539b:106d9d6c253:-7fc3 end
 
         return (bool) $returnValue;
@@ -488,6 +548,20 @@ class PMF_PermMedium
         $returnValue = (int) 0;
 
         // section -64--88-1-10--61674be4:106dbb8e5aa:-7fcb begin
+        // get group id
+        $res = $this->_db->query("
+        	SELECT 
+        		group_id
+        	FROM
+        		".SQLPREFIX."group
+        	WHERE
+        		name = '".$name."'
+        ");
+        // return
+        if ($this->_db->num_rows($res) != 1)
+        	return 0;
+        $row = $this->_db->fetch_assoc($res);
+        return $row['group_id'];
         // section -64--88-1-10--61674be4:106dbb8e5aa:-7fcb end
 
         return (int) $returnValue;
@@ -506,6 +580,22 @@ class PMF_PermMedium
         $returnValue = array();
 
         // section -64--88-1-10--61674be4:106dbb8e5aa:-7fc8 begin
+        // get group data
+        $res = $this->_db->query("
+        	SELECT 
+        		group_id,
+        		name,
+        		description,
+        		auto_join
+        	FROM
+        		".SQLPREFIX."group
+        	WHERE
+        		group_id = '".$group_id."'
+        ");
+        // return
+        if ($this->_db->num_rows($res) != 1)
+        	return array();
+        return $this->_db->fetch_assoc($res);
         // section -64--88-1-10--61674be4:106dbb8e5aa:-7fc8 end
 
         return (array) $returnValue;
@@ -523,6 +613,25 @@ class PMF_PermMedium
         $returnValue = array();
 
         // section -64--88-1-10--61674be4:106dbb8e5aa:-7fc5 begin
+        // get user groups
+        $res = $this->_db->query("
+            SELECT
+                ".SQLPREFIX."group.group_id AS group_id
+            FROM
+                ".SQLPREFIX."user,
+                ".SQLPREFIX."user_group,
+                ".SQLPREFIX."group
+            WHERE
+            	".SQLPREFIX."user.user_id   = '".$this->_user_id."' AND
+            	".SQLPREFIX."user.user_id   = ".SQLPREFIX.".user_group.user_id AND
+            	".SQLPREFIX."group.group_id = ".SQLPREFIX."user_group.group_id
+        ");
+        // return result
+        $result = array();
+        while ($row = $this->_db->fetch_assoc($res)) {
+        	$result[] = $row['group_id'];
+        }
+        return $result;
         // section -64--88-1-10--61674be4:106dbb8e5aa:-7fc5 end
 
         return (array) $returnValue;
@@ -540,6 +649,21 @@ class PMF_PermMedium
         $returnValue = array();
 
         // section -64--88-1-10--61674be4:106dbb8e5aa:-7faa begin
+        // get all groups
+        $res = $this->_db->query("
+            SELECT
+                group_id
+            FROM
+                ".SQLPREFIX."group
+            WHERE
+            	1
+        ");
+        // return result
+        $result = array();
+        while ($row = $this->_db->fetch_assoc($res)) {
+        	$result[] = $row['group_id'];
+        }
+        return $result;
         // section -64--88-1-10--61674be4:106dbb8e5aa:-7faa end
 
         return (array) $returnValue;

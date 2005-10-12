@@ -69,11 +69,9 @@ class PMF_PermLarge
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param object
-     * @param int
      * @return void
      */
-    function PMF_PermLarge($db, $user_id)
+    function PMF_PermLarge()
     {
         // section -64--88-1-5--efee334:10665989edf:-7fd2 begin
         // section -64--88-1-5--efee334:10665989edf:-7fd2 end
@@ -105,6 +103,23 @@ class PMF_PermLarge
         $returnValue = (int) 0;
 
         // section -64--88-1-10--77ac1b05:106d99eac38:-7fb7 begin
+        // get right id
+        $res = $this->_db->query("
+            SELECT
+                ".SQLPREFIX."right.right_id AS right_id
+            FROM
+                ".SQLPREFIX."right,
+                ".SQLPREFIX."rightcontext
+            WHERE 
+                ".SQLPREFIX."right.name              = '".$name."' AND
+                ".SQLPREFIX."rightcontext.context    = '".$this->_context."' AND
+                ".SQLPREFIX."rightcontext.context_id = '".$this->_context_id."'
+        ");
+        // return result
+        if ($this->_db->num_rows($res) != 1)
+            return 0;
+        $row = $this->_db->fetch_assoc($res);
+        return $row['right_id'];
         // section -64--88-1-10--77ac1b05:106d99eac38:-7fb7 end
 
         return (int) $returnValue;
@@ -133,66 +148,6 @@ class PMF_PermLarge
         // section -64--88-1-10--61674be4:106dbb8e5aa:-7fcf end
     }
 
-    /**
-     * Short description of method addRight
-     *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param array
-     * @param array
-     * @return int
-     */
-    function addRight($right_data, $context_data = array())
-    {
-        $returnValue = (int) 0;
-
-        // section -64--88-1-10--61674be4:106dbb8e5aa:-7fa8 begin
-        // section -64--88-1-10--61674be4:106dbb8e5aa:-7fa8 end
-
-        return (int) $returnValue;
-    }
-
-    /**
-     * Short description of method changeRight
-     *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param int
-     * @param array
-     * @param array
-     * @return bool
-     */
-    function changeRight($right_id, $right_data, $context_data = array())
-    {
-        $returnValue = (bool) false;
-
-        // section -64--88-1-10--61674be4:106dbb8e5aa:-7fa4 begin
-        // section -64--88-1-10--61674be4:106dbb8e5aa:-7fa4 end
-
-        return (bool) $returnValue;
-    }
-
-    /**
-     * Short description of method deleteRight
-     *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param int
-     * @return bool
-     */
-    function deleteRight($right_id)
-    {
-        $returnValue = (bool) false;
-
-        // section -64--88-1-10--61674be4:106dbb8e5aa:-7f9f begin
-        // section -64--88-1-10--61674be4:106dbb8e5aa:-7f9f end
-
-        return (bool) $returnValue;
-    }
-
 } /* end of class PMF_PermLarge */
 
-?>/* lost code following: 
-    // section 127-0-0-1--6945df47:106df4af666:-7fcf begin
-    // section 127-0-0-1--6945df47:106df4af666:-7fcf end
-*/
+?>

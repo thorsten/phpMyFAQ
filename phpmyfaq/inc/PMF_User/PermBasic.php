@@ -119,6 +119,7 @@ class PMF_PermBasic
         $returnValue = array();
 
         // section -64--88-1-5-15e2075:10637248df4:-7fa5 begin
+        // get user rights
         $res = $this->_db->query("
             SELECT
                 ".SQLPREFIX."right.right_id AS right_id
@@ -131,6 +132,7 @@ class PMF_PermBasic
                 ".SQLPREFIX."user.user_id   = '".$this->_user_id."' AND
                 ".SQLPREFIX."user.user_id   = ".SQLPREFIX."user_right.user_id
         ");
+        // return result
         $result = array();
         while ($row = $this->_db->fetch_assoc($res)) {
         	$result[] = $row['right_id'];
@@ -293,9 +295,10 @@ class PMF_PermBasic
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
      * @param array
+     * @param array
      * @return int
      */
-    function addRight($right_data)
+    function addRight($right_data, $context_data = array())
     {
         $returnValue = (int) 0;
 
@@ -305,7 +308,7 @@ class PMF_PermBasic
             return false;
         // get next id
 		$next_id = $this->_db->nextID(SQLPREFIX."right", "right_id");
-        // check input
+        // check right data input
         $right_data = $this->checkRightData($right_data);
         // insert right
         $res = $this->_db->query("
@@ -320,6 +323,19 @@ class PMF_PermBasic
         ");
         if (!$res) 
             return 0;
+        // insert context data
+        if (count($context_data) > 0) {
+        	$res = $this->_db->query("
+        		INSERT INTO
+        			".SQLPREFIX."rightcontext
+        		SET
+        			right_id   = '".$next_id."',
+        			context    = '".$context_data['context']."',
+        			context_id = '".$context_data['context_id']."'
+        	");
+        	if (!$res)
+        		return 0;
+        }
         return $next_id;
         // section -64--88-1-10--61674be4:106dbb8e5aa:-7f9c end
 
@@ -333,9 +349,10 @@ class PMF_PermBasic
      * @author Lars Tiedemann, <php@larstiedemann.de>
      * @param int
      * @param array
+     * @param array
      * @return bool
      */
-    function changeRight($right_id, $right_data)
+    function changeRight($right_id, $right_data, $context_data = array())
     {
         $returnValue = (bool) false;
 
@@ -356,6 +373,20 @@ class PMF_PermBasic
         ");
         if (!$res) 
             return false;
+        // change right context
+        if (count($context_data) > 0) {
+        	$res = $this->_db->query("
+        		UPDATE
+        			".SQLPREFIX."rightcontext
+        		SET
+        			context    = '".$context_data['context']."',
+        			context_id = '".$context_data['context_id']."'
+        		WHERE
+        			right_id = '".$right_id."'
+        	");
+        	if (!$res)
+        		return false;
+        }
         return true;
         // section -64--88-1-10--61674be4:106dbb8e5aa:-7f99 end
 
@@ -402,6 +433,15 @@ class PMF_PermBasic
         ");
         if (!$res) 
             return false;
+        // delete right context
+        $res = $this->_db->query("
+            DELETE FROM
+                ".SQLPREFIX."rightcontext
+            WHERE
+                right_id = '".$right_id."'
+        ");
+        if (!$res) 
+            return false;
         return true;
         // section -64--88-1-10--61674be4:106dbb8e5aa:-7f95 end
 
@@ -421,6 +461,7 @@ class PMF_PermBasic
         $returnValue = (int) 0;
 
         // section -64--88-1-10--61674be4:106dbb8e5aa:-7f92 begin
+        // get right id
         $res = $this->_db->query("
             SELECT
                 right_id
@@ -429,6 +470,7 @@ class PMF_PermBasic
             WHERE 
                 name = '".$name."'
         ");
+        // return result
         if ($this->_db->num_rows($res) != 1)
             return 0;
         $row = $this->_db->fetch_assoc($res);
@@ -452,11 +494,7 @@ class PMF_PermBasic
         // section -64--88-1-10--61674be4:106dbb8e5aa:-7f8f begin
         $res = $this->_db->query("
             SELECT
-                right_id,
-                name,
-                description,
-                for_users,
-                for_groups
+                right_id
             FROM
                 ".SQLPREFIX."right
             WHERE
@@ -464,7 +502,7 @@ class PMF_PermBasic
         ");
         $result = array();
         while ($row = $this->_db->fetch_assoc($res)) {
-        	$result[$row['name']] = $row;
+        	$result[] = $row['right_id'];
         }
         return $result;
         // section -64--88-1-10--61674be4:106dbb8e5aa:-7f8f end

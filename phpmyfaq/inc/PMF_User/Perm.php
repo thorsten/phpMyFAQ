@@ -102,11 +102,13 @@ class PMF_Perm
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
+     * @param string
      * @return void
      */
-    function PMF_Perm()
+    function PMF_Perm($perm_level)
     {
         // section -64--88-1-5-5e0b50c5:10665348267:-7fd1 begin
+        return $this->selectPerm($perm_level);
         // section -64--88-1-5-5e0b50c5:10665348267:-7fd1 end
     }
 
