@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.12 2005-10-01 14:45:58 thorstenr Exp $
+ * $Id: language_de.php,v 1.13 2005-10-14 17:13:01 thorstenr Exp $
  *
  * File:                language_de.php
  * Description:		    German language file
@@ -611,3 +611,9 @@ $PMF_LANG['ad_glossary_update_error'] = 'Der Glossar-Eintrag wurde nicht aktuali
 $PMF_LANG['ad_glossary_delete'] = 'Eintrag löschen';
 $PMF_LANG['ad_glossary_delete_success'] = 'Der Glossar-Eintrag wurde erfolgreich gelöscht.';
 $PMF_LANG['ad_glossary_delete_error'] = 'Der Glossar-Eintrag wurde nicht gelöscht, weil ein Fehler aufgetreten ist.';
+$PMF_LANG['ad_linkcheck_noReferenceURL'] = 'Automatic link verification disabled (base URL for link verify not set)';
+$PMF_LANG['ad_linkcheck_noAllowUrlOpen'] = 'Automatic link verification disabled (PHP option allow_url_fopen not Enabled)';
+$PMF_LANG['ad_linkcheck_checkResult'] = 'Automatic link verification result';
+$PMF_LANG['ad_linkcheck_checkSuccess'] = 'OK';
+$PMF_LANG['ad_linkcheck_checkFailed'] = 'Failed';
+$PMF_LANG['ad_linkcheck_failReason'] = 'Reason(s) failed:';

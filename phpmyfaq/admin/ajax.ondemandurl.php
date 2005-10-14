@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.ondemandurl.php,v 1.2 2005-10-05 17:59:17 thorstenr Exp $
+* $Id: ajax.ondemandurl.php,v 1.3 2005-10-14 17:13:01 thorstenr Exp $
 *
 * AJAX: onDemandURL (not really AJAX)
 *
@@ -12,7 +12,6 @@
 * @author           Minoru TODA <todam@netjapan.co.jp>
 * @since            2005-09-30
 * @copyright       (c) 2005 NetJapan, Inc.
-*
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -58,6 +57,7 @@ if (isset($_GET["lang"])) {
 	$lang = $_GET["lang"];
 }
 
+ob_clean();
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php print $PMF_LANG["metaLanguage"]; ?>" lang="<?php print $PMF_LANG["metaLanguage"]; ?>">
@@ -89,8 +89,6 @@ if (($content = getEntryContent($id, $lang)) === FALSE) {
 	<?php
 	exit();
 }
-
-ob_clean();
 
 print verifyArticleURL($content, $id, $artlang);
 ?>

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_ja.php,v 1.12 2005-09-28 15:31:39 thorstenr Exp $
+* $Id: language_ja.php,v 1.13 2005-10-14 17:13:01 thorstenr Exp $
 *
 * The Japanese language file -
 *
@@ -609,6 +609,19 @@ $PMF_LANG['ad_glossary_save'] = 'エントリを�?存�?�る';
 $PMF_LANG['ad_linkcheck_noReferenceURL'] = 'リンク�?�自動�?ェック機能�?�無効�?��?� (環境設定�?�基点URLを指定�?��?��??�?��?��?�)';
 $PMF_LANG['ad_linkcheck_noAllowUrlOpen'] = 'リンク�?�自動�?ェック機能�?�無効�?��?� (allow_url_fopen PHP オプション�?�設定�?�れ�?��?��?��?�ん)';
 $PMF_LANG['ad_linkcheck_checkResult'] = 'エントリ内�?�リンク確�?�?果';
-$PMF_LANG['ad_linkcheck_checkSuccess'] = '�?功';
-$PMF_LANG['ad_linkcheck_checkFailed'] = '失敗';
 $PMF_LANG['ad_linkcheck_failReason'] = 'リンク�?�確�?�?�失敗�?��?��?�由:';
+$PMF_LANG['ad_linkcheck_checkSuccess'] = '成功';
+$PMF_LANG['ad_linkcheck_checkFailed'] = '失敗';
+$PMF_LANG['ad_linkcheck_failReason'] = 'リンクの自動チェックに失敗した理由:';
+$PMF_LANG['ad_linkcheck_noLinksFound'] = '自動チェックできる種類のリンクはみつかりませんでした。';
+$PMF_LANG['ad_linkcheck_searchbadonly'] = 'リンク破損項目のみ';
+$PMF_LANG['ad_linkcheck_infoReason'] = '追加情報:';
+$PMF_LANG['ad_linkcheck_openurl_infoprefix'] = '<strong>%s</strong>の確認中に検出: ';
+$PMF_LANG['ad_linkcheck_openurl_notready'] = 'LinkVerifierの動作条件が揃っていません。';
+$PMF_LANG['ad_linkcheck_openurl_maxredirect'] = '他サイトへのリダイレクト数が上限の <strong>%d回</strong> を超えました.';
+$PMF_LANG['ad_linkcheck_openurl_urlisblank'] = 'リダイレクト先が未指定です。';
+$PMF_LANG['ad_linkcheck_openurl_tooslow'] = '<strong>%s</strong> は遅いか応答していません。';
+$PMF_LANG['ad_linkcheck_openurl_nodns'] = '<strong>%s</strong> は遅いかDNSの登録がありません。';
+$PMF_LANG['ad_linkcheck_openurl_redirected'] = 'URLは <strong>%s</strong> にリダイレクトされました。';
+$PMF_LANG['ad_linkcheck_openurl_ambiguous'] = 'サーバーは不確定な応答 <strong>%s</strong> を返しました。';
+$PMF_LANG['ad_linkcheck_protocol_unsupported'] = '%s プロトコルの自動チェックには対応していません。';

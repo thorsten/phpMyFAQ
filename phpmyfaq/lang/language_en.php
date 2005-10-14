@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.11 2005-10-01 14:45:58 thorstenr Exp $
+* $Id: language_en.php,v 1.12 2005-10-14 17:13:01 thorstenr Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -612,3 +612,15 @@ $PMF_LANG['ad_linkcheck_checkResult'] = 'Automatic link verification result';
 $PMF_LANG['ad_linkcheck_checkSuccess'] = 'OK';
 $PMF_LANG['ad_linkcheck_checkFailed'] = 'Failed';
 $PMF_LANG['ad_linkcheck_failReason'] = 'Reason(s) failed:';
+$PMF_LANG['ad_linkcheck_noLinksFound'] = 'No URLs compatible with link verifier feature found.';
+$PMF_LANG['ad_linkcheck_searchbadonly'] = 'Only with bad links';
+$PMF_LANG['ad_linkcheck_infoReason'] = 'Additional Information:';
+$PMF_LANG['ad_linkcheck_openurl_infoprefix'] = 'Found while testing <strong>%s</strong>: ';
+$PMF_LANG['ad_linkcheck_openurl_notready'] = 'LinkVerifier not ready.';
+$PMF_LANG['ad_linkcheck_openurl_maxredirect'] = 'Maximum redirect count <strong>%d</strong> exceeded.';
+$PMF_LANG['ad_linkcheck_openurl_urlisblank'] = 'Resolved to blank URL.';
+$PMF_LANG['ad_linkcheck_openurl_tooslow'] = 'Host <strong>%s</strong> is slow or not responding.';
+$PMF_LANG['ad_linkcheck_openurl_nodns'] = 'Host <strong>%s</strong> is slow or has no DNS.';
+$PMF_LANG['ad_linkcheck_openurl_redirected'] = 'URL was redirected to <strong>%s</strong>.';
+$PMF_LANG['ad_linkcheck_openurl_ambiguous'] = 'Ambiguous HTTP status <strong>%s</strong> returned.';
+$PMF_LANG['ad_linkcheck_protocol_unsupported'] = '%s protocol unsupported by Automatic link verification.';
