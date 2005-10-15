@@ -100,7 +100,7 @@ class PMF_Perm
     // --- ATTRIBUTES ---
 
     /**
-     * Short description of attribute db
+     * database object
      *
      * @access private
      * @var object
@@ -108,7 +108,7 @@ class PMF_Perm
     var $_db = null;
 
     /**
-     * Short description of attribute user_id
+     * user-ID
      *
      * @access private
      * @var int
@@ -116,7 +116,7 @@ class PMF_Perm
     var $_user_id = 0;
 
     /**
-     * Short description of attribute perm_typemap
+     * defines which objects may be returned by selectPerm
      *
      * @access private
      * @var array
@@ -124,7 +124,7 @@ class PMF_Perm
     var $_perm_typemap = array('basic' => 'PermBasic', 'medium' => 'PermMedium', 'large' => 'PermLarge');
 
     /**
-     * Short description of attribute initialized
+     * set to TRUE by setPerm(), set to FALSE by resetPerm()
      *
      * @access private
      * @var bool
@@ -134,22 +134,30 @@ class PMF_Perm
     // --- OPERATIONS ---
 
     /**
-     * Short description of method PMF_Perm
+     * constructor that returns a specialization of PMF_Perm.
+     *
+     * perm_level defines the object type which is returned. Allowed values for
+     * are set in $this->_perm_typemap. Currently, allowed values for perm_level
+     * 'basic', 'medium' or 'large'.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
      * @param string
-     * @return void
+     * @return object
      */
     function PMF_Perm($perm_level)
     {
+        $returnValue = null;
+
         // section -64--88-1-5-5e0b50c5:10665348267:-7fd1 begin
         return $this->selectPerm($perm_level);
         // section -64--88-1-5-5e0b50c5:10665348267:-7fd1 end
+
+        return $returnValue;
     }
 
     /**
-     * Short description of method __destruct
+     * destructor
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -162,7 +170,11 @@ class PMF_Perm
     }
 
     /**
-     * Short description of method selectPerm
+     * static method that returns a specialization of PMF_Perm. 
+     *
+     * perm_level defines the object type which is returned. Allowed values for
+     * are set in $this->_perm_typemap. Currently, allowed values for perm_level
+     * 'basic', 'medium' or 'large'.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -194,7 +206,10 @@ class PMF_Perm
     }
 
     /**
-     * Short description of method bool_to_int
+     * returns an integer, either 0 or 1.
+     *
+     * In the permission database, boolean values are stored as single integers.
+     * method allows for correct type setting.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -215,7 +230,10 @@ class PMF_Perm
     }
 
     /**
-     * Short description of method int_to_bool
+     * returns false if val equals 0 and true if val equals 1. 
+     *
+     * In the permission database, boolean values are stored as single integers.
+     * method allows for correct type setting.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -236,7 +254,7 @@ class PMF_Perm
     }
 
     /**
-     * Short description of method setPerm
+     * sets the permission environment.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -258,7 +276,7 @@ class PMF_Perm
     }
 
     /**
-     * Short description of method resetPerm
+     * resets the permission environment.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
