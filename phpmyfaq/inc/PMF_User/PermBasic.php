@@ -547,7 +547,7 @@ class PMF_PermBasic
             $right_data['name'] = '';
         if (!isset($right_data['description']) or !is_string($right_data['description']))
             $right_data['description'] = '';
-        if (!isset($right_data['for_users'])) {
+        if (!isset($right_data['for_users'])) 
             $right_data['for_users'] = true;
         if (!isset($right_data['for_groups']))
             $right_data['for_groups'] = true;

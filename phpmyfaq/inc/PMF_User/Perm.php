@@ -100,7 +100,7 @@ class PMF_Perm
     // --- ATTRIBUTES ---
 
     /**
-     * database object
+     * Short description of attribute db
      *
      * @access private
      * @var object
@@ -108,7 +108,7 @@ class PMF_Perm
     var $_db = null;
 
     /**
-     * user-ID
+     * Short description of attribute user_id
      *
      * @access private
      * @var int
@@ -116,7 +116,7 @@ class PMF_Perm
     var $_user_id = 0;
 
     /**
-     * defines which objects may be returned by selectPerm
+     * Short description of attribute perm_typemap
      *
      * @access private
      * @var array
@@ -124,7 +124,7 @@ class PMF_Perm
     var $_perm_typemap = array('basic' => 'PermBasic', 'medium' => 'PermMedium', 'large' => 'PermLarge');
 
     /**
-     * set to TRUE by setPerm(), set to FALSE by resetPerm()
+     * Short description of attribute initialized
      *
      * @access private
      * @var bool
@@ -134,30 +134,20 @@ class PMF_Perm
     // --- OPERATIONS ---
 
     /**
-     * constructor that returns a specialization of PMF_Perm.
-     *
-     * perm_level defines the object type which is returned. Allowed values for
-     * are set in $this->_perm_typemap. Currently, allowed values for perm_level
-     * 'basic', 'medium' or 'large'.
+     * Short description of method PMF_Perm
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param string
-     * @return object
+     * @return void
      */
-    function PMF_Perm($perm_level)
+    function PMF_Perm()
     {
-        $returnValue = null;
-
         // section -64--88-1-5-5e0b50c5:10665348267:-7fd1 begin
-        return $this->selectPerm($perm_level);
         // section -64--88-1-5-5e0b50c5:10665348267:-7fd1 end
-
-        return $returnValue;
     }
 
     /**
-     * destructor
+     * Short description of method __destruct
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -170,11 +160,7 @@ class PMF_Perm
     }
 
     /**
-     * static method that returns a specialization of PMF_Perm. 
-     *
-     * perm_level defines the object type which is returned. Allowed values for
-     * are set in $this->_perm_typemap. Currently, allowed values for perm_level
-     * 'basic', 'medium' or 'large'.
+     * Short description of method selectPerm
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -189,16 +175,16 @@ class PMF_Perm
         // verify selected database
         $perm = new PMF_Perm();
         $perm_level = strtolower($perm_level);
-        if (!isset($perm->_auth_typemap[$perm_level])) {
+        if (!isset($perm->_perm_typemap[$perm_level])) {
             return $perm;
         }
         if (!file_exists("PMF/".$perm->_perm_typemap[$perm_level].".php")) {
         	return $perm;
         }
-        require_once("PMF/".$perm->_auth_typemap[$perm_level].".php");
+        include_once("PMF/".$perm->_perm_typemap[$perm_level].".php");
         // instantiate 
-        $permclass = "PMF_".$auth->_auth_typemap[$perm_level];
-		$perm = new $permclass($db, $user_id);
+        $permclass = "PMF_".$perm->_perm_typemap[$perm_level];
+		$perm = new $permclass();
         return $perm;
         // section -64--88-1-10--77ac1b05:106d99eac38:-7fab end
 
@@ -206,10 +192,7 @@ class PMF_Perm
     }
 
     /**
-     * returns an integer, either 0 or 1.
-     *
-     * In the permission database, boolean values are stored as single integers.
-     * method allows for correct type setting.
+     * Short description of method bool_to_int
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -221,19 +204,16 @@ class PMF_Perm
         $returnValue = (int) 0;
 
         // section -64--88-1-10--785a539b:106d9d6c253:-7fc0 begin
-        if ($val === true) 
-            return (int) 1;
-        return (int) 0;
+        if (!$val) 
+            return (int) 0;
+        return (int) 1;
         // section -64--88-1-10--785a539b:106d9d6c253:-7fc0 end
 
         return (int) $returnValue;
     }
 
     /**
-     * returns false if val equals 0 and true if val equals 1. 
-     *
-     * In the permission database, boolean values are stored as single integers.
-     * method allows for correct type setting.
+     * Short description of method int_to_bool
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -245,16 +225,16 @@ class PMF_Perm
         $returnValue = (bool) false;
 
         // section -64--88-1-10--785a539b:106d9d6c253:-7fbd begin
-        if ($val == 1) 
-            return true;
-        return false;
+        if (!$val or $val == 0) 
+            return false;
+        return true;
         // section -64--88-1-10--785a539b:106d9d6c253:-7fbd end
 
         return (bool) $returnValue;
     }
 
     /**
-     * sets the permission environment.
+     * Short description of method setPerm
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -276,7 +256,7 @@ class PMF_Perm
     }
 
     /**
-     * resets the permission environment.
+     * Short description of method resetPerm
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
