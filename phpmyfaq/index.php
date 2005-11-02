@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.31 2005-09-27 14:00:10 thorstenr Exp $
+* $Id: index.php,v 1.32 2005-11-02 18:19:01 thorstenr Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the 
@@ -27,7 +27,7 @@ define('IS_VALID_PHPMYFAQ', null);
 PMF_Init::cleanRequest();
 
 // Just for security reasons - thanks to Johannes for the hint
-$_SERVER['PHP_SELF'] = str_replace('%2F', '/', rawurlencode($_SERVER['PHP_SELF']));
+$_SERVER['PHP_SELF'] = strtr(rawurlencode($_SERVER['PHP_SELF']),array( "%2F"=>"/", "%257E"=>"%7E"));
 $_SERVER['HTTP_USER_AGENT'] = urlencode($_SERVER['HTTP_USER_AGENT']);
 
 // check if config.php and data.php exist -> if not, redirect to installer

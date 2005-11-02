@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.17 2005-10-03 14:06:02 thorstenr Exp $
+* $Id: index.php,v 1.18 2005-11-02 18:19:01 thorstenr Exp $
 *
 * The main admin backend index file
 *
@@ -27,7 +27,7 @@ define('IS_VALID_PHPMYFAQ_ADMIN', null);
 PMF_Init::cleanRequest();
 
 // Just for security reasons - thanks to Johannes for the hint
-$_SERVER['PHP_SELF'] = str_replace('%2F', '/', rawurlencode($_SERVER['PHP_SELF']));
+$_SERVER['PHP_SELF'] = strtr(rawurlencode($_SERVER['PHP_SELF']),array( "%2F"=>"/", "%257E"=>"%7E"));
 $_SERVER['HTTP_USER_AGENT'] = urlencode($_SERVER['HTTP_USER_AGENT']);
 
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
