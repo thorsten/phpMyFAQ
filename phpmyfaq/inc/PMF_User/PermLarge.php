@@ -128,17 +128,15 @@ class PMF_PermLarge
     }
 
     /**
-     * Short description of method setPerm
+     * Short description of method setContext
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param object
-     * @param int
      * @param string
      * @param int
      * @return void
      */
-    function setPerm($db, $user_id = 0, $context = '', $context_id = 0)
+    function setContext($context, $context_id = 0)
     {
         // section -64--88-1-10--61674be4:106dbb8e5aa:-7fcf begin
         if (!PMF_User::checkDb($db))
@@ -152,13 +150,13 @@ class PMF_PermLarge
     }
 
     /**
-     * Short description of method resetPerm
+     * Short description of method resetContext
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
      * @return void
      */
-    function resetPerm()
+    function resetContext()
     {
         // section -64--88-1-10--73b3bdb4:106e40c6470:-7fdd begin
         $this->_db = null;

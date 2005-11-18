@@ -62,6 +62,14 @@ class PMF_PermMedium
      */
     var $_group_rights = array();
 
+    /**
+     * Short description of attribute default_group_data
+     *
+     * @access public
+     * @var array
+     */
+    var $default_group_data = array('name' => 'DEFAULT_GROUP', 'description' => 'Short group description. ', 'auto_join' => false);
+
     // --- OPERATIONS ---
 
     /**
@@ -69,19 +77,19 @@ class PMF_PermMedium
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param string
-     * @return string
+     * @param int
+     * @param int
+     * @return bool
      */
-    function checkGroupRight($name)
+    function checkGroupRight($group_id, $right_id)
     {
-        $returnValue = (string) '';
+        $returnValue = (bool) false;
 
         // section -64--88-1-5-15e2075:10637248df4:-7ffa begin
         if (!$this->_initialized)
         	return false;
-        // get right id
-        $right_id = $this->getRightId($name);
-        if ($right_id <= 0) 
+        // check input
+        if ($right_id <= 0 or $group_id <= 0)
             return false;
         // check right
         $res = $this->_db->query("
@@ -90,24 +98,20 @@ class PMF_PermMedium
             FROM
                 ".SQLPREFIX."right,
                 ".SQLPREFIX."group_right,
-                ".SQLPREFIX."group,
-                ".SQLPREFIX."user_group,
-                ".SQLPREFIX."user
+                ".SQLPREFIX."group
             WHERE
                 ".SQLPREFIX."right.right_id = '".$right_id."' AND
                 ".SQLPREFIX."right.right_id = ".SQLPREFIX."group_right.right_id AND
                 ".SQLPREFIX."group.group_id = ".SQLPREFIX."group_right.group_id AND
-                ".SQLPREFIX."group.group_id = ".SQLPREFIX."user_group.group_id AND
-                ".SQLPREFIX."user.user_id   = ".SQLPREFIX."user_group.user_id AND
-                ".SQLPREFIX."user.user_id   = '".$this->_user_id."'
+                ".SQLPREFIX."group.group_id   = '".$group_id."'
         ");
         // return result
-        if ($this->_db->num_rows($res) == 1) 
+        if ($this->_db->num_rows($res) == 1)
             return true;
         return false;
         // section -64--88-1-5-15e2075:10637248df4:-7ffa end
 
-        return (string) $returnValue;
+        return (bool) $returnValue;
     }
 
     /**
@@ -115,18 +119,17 @@ class PMF_PermMedium
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
+     * @param int
      * @return array
      */
-    function getGroupRights()
+    function getGroupRights($group_id)
     {
         $returnValue = array();
 
         // section -64--88-1-5-15e2075:10637248df4:-7fbe begin
         if (!$this->_initialized)
         	return false;
-        // get right id
-        $right_id = $this->getRightId($name);
-        if ($right_id <= 0) 
+        if ($group_id <= 0)
             return false;
         // check right
         $res = $this->_db->query("
@@ -135,13 +138,9 @@ class PMF_PermMedium
             FROM
                 ".SQLPREFIX."right,
                 ".SQLPREFIX."group_right,
-                ".SQLPREFIX."group,
-                ".SQLPREFIX."user_group,
-                ".SQLPREFIX."user
+                ".SQLPREFIX."group
             WHERE
-                ".SQLPREFIX."user.user_id   = '".$this->_user_id."' AND
-                ".SQLPREFIX."user.user_id   = ".SQLPREFIX."user_group.user_id AND
-                ".SQLPREFIX."group.group_id = ".SQLPREFIX."user_group.group_id AND
+                ".SQLPREFIX."group.group_id   = '".$group_id."' AND
                 ".SQLPREFIX."group.group_id = ".SQLPREFIX."group_right.group_id AND
                 ".SQLPREFIX."right.right_id = ".SQLPREFIX."group_right.right_id
         ");
@@ -161,41 +160,25 @@ class PMF_PermMedium
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param string
+     * @param int
+     * @param mixed
      * @return bool
      */
-    function checkRight($name)
+    function checkRight($user_id, $right)
     {
         $returnValue = (bool) false;
 
         // section -64--88-1-5-15e2075:10637248df4:-7fb4 begin
-        if ($this->checkUserRight($name) or $this->checkGroupRight($name))
+        // get right id
+        if (!is_numeric($right) and is_string($right))
+            $right = $this->getRightId($right);
+        // check user right and group right
+        if ($this->checkUserRight($user_id, $right) or $this->checkUserGroupRight($user_id, $right))
             return true;
         return false;
         // section -64--88-1-5-15e2075:10637248df4:-7fb4 end
 
         return (bool) $returnValue;
-    }
-
-    /**
-     * Short description of method getRights
-     *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @return array
-     */
-    function getRights()
-    {
-        $returnValue = array();
-
-        // section -64--88-1-5-15e2075:10637248df4:-7fa3 begin
-        $user_rights  = $this->getUserRights();
-        $group_rights = $this->getGroupRights();
-        $rights = array_merge($user_rights, $group_rights);
-        return array_unique($rights);
-        // section -64--88-1-5-15e2075:10637248df4:-7fa3 end
-
-        return (array) $returnValue;
     }
 
     /**
@@ -230,26 +213,29 @@ class PMF_PermMedium
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
      * @param int
-     * @param string
+     * @param int
      * @return bool
      */
-    function grantGroupRight($right_id, $group_name)
+    function grantGroupRight($group_id, $right_id)
     {
         $returnValue = (bool) false;
 
         // section -64--88-1-10--2ab496b6:106d484ef91:-7fa5 begin
         if (!$this->_initialized)
         	return false;
-        // get group id
-        $group_id = $this->getGroupId($name);
-        if ($group_id == 0) 
+        // check input
+        if ($right_id <= 0 or $group_id <= 0)
+            return false;
+        // is right for users?
+        $right_data = $this->getRightData($right_id);
+        if (!$right_data['for_groups'])
             return false;
         // grant right
         $res = $this->_db->query("
             INSERT INTO
                 ".SQLPREFIX."group_right
             SET
-                user_id  = '".$group_id."',
+                group_id = '".$group_id."',
                 right_id = '".$right_id."'
         ");
         if (!$res) 
@@ -266,26 +252,25 @@ class PMF_PermMedium
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
      * @param int
-     * @param string
+     * @param int
      * @return bool
      */
-    function refuseGroupRight($right_id, $group_name)
+    function refuseGroupRight($group_id, $right_id)
     {
         $returnValue = (bool) false;
 
         // section -64--88-1-10--2ab496b6:106d484ef91:-7fa3 begin
         if (!$this->_initialized)
         	return false;
-        // get group id
-        $group_id = $this->getGroupId($group_name);
-        if ($group_id == 0) 
+        // check input
+        if ($right_id <= 0 or $group_id <= 0)
             return false;
         // grant right
         $res = $this->_db->query("
             DELETE FROM
                 ".SQLPREFIX."group_right
             WHERE
-                user_id  = '".$group_id."' AND
+                group_id = '".$group_id."' AND
                 right_id = '".$right_id."'
         ");
         if (!$res) 
@@ -302,20 +287,22 @@ class PMF_PermMedium
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
      * @param array
-     * @return object
+     * @return int
      */
     function addGroup($group_data)
     {
-        $returnValue = null;
+        $returnValue = (int) 0;
 
         // section -64--88-1-10--2ab496b6:106d484ef91:-7f9d begin
         if (!$this->_initialized)
-        	return false;
+        	return 0;
         // check if group already exists
         if ($this->getGroupId($group_data['name']) > 0)
-            return false;
+            return 0;
         // get next id
 		$next_id = $this->_db->nextID(SQLPREFIX."group", "group_id");
+        // check group data input
+        $group_data = $this->checkGroupData($group_data);
         // insert group
         $res = $this->_db->query("
             INSERT INTO
@@ -331,7 +318,7 @@ class PMF_PermMedium
         return $next_id;
         // section -64--88-1-10--2ab496b6:106d484ef91:-7f9d end
 
-        return $returnValue;
+        return (int) $returnValue;
     }
 
     /**
@@ -350,14 +337,21 @@ class PMF_PermMedium
         // section -64--88-1-10--2ab496b6:106d484ef91:-7f99 begin
         if (!$this->_initialized)
         	return false;
+        // check input
+        $checked_data = $this->checkGroupData($group_data);
+        // create update SET
+        $set = "";
+        $comma = "";
+        foreach ($group_data as $key => $val) {
+            $set .= $comma.$key." = '".$checked_data[$key]."'";
+            $comma = ",\n                ";
+        }
         // update group
         $res = $this->_db->query("
             UPDATE
                 ".SQLPREFIX."group
             SET
-                name        = '".$group_data['name']."',
-                description = '".$group_data['description']."',
-                auto_join   = '".$this->bool_to_int($group_data['auto_join'])."'
+                ".$set."
             WHERE
                 group_id = '".$group_id."'
         ");
@@ -375,11 +369,11 @@ class PMF_PermMedium
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
      * @param int
-     * @return object
+     * @return bool
      */
     function deleteGroup($group_id)
     {
-        $returnValue = null;
+        $returnValue = (bool) false;
 
         // section -64--88-1-10--2ab496b6:106d484ef91:-7f8d begin
         if (!$this->_initialized)
@@ -414,7 +408,7 @@ class PMF_PermMedium
         return true;
         // section -64--88-1-10--2ab496b6:106d484ef91:-7f8d end
 
-        return $returnValue;
+        return (bool) $returnValue;
     }
 
     /**
@@ -423,9 +417,10 @@ class PMF_PermMedium
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
      * @param int
+     * @param int
      * @return bool
      */
-    function isGroupMember($group_id)
+    function isGroupMember($user_id, $group_id)
     {
         $returnValue = (bool) false;
 
@@ -440,8 +435,8 @@ class PMF_PermMedium
                 ".SQLPREFIX."user_group,
                 ".SQLPREFIX."group
             WHERE
-            	".SQLPREFIX."user.user_id   = '".$this->_user_id."' AND
-            	".SQLPREFIX."user.user_id   = ".SQLPREFIX.".user_group.user_id AND
+            	".SQLPREFIX."user.user_id   = '".$user_id."' AND
+            	".SQLPREFIX."user.user_id   = ".SQLPREFIX."user_group.user_id AND
             	".SQLPREFIX."group.group_id = ".SQLPREFIX."user_group.group_id AND
             	".SQLPREFIX."group.group_id = '".$group_id."'
         ");
@@ -478,7 +473,7 @@ class PMF_PermMedium
             WHERE
             	".SQLPREFIX."group.group_id = '".$group_id."' AND
             	".SQLPREFIX."group.group_id = ".SQLPREFIX."user_group.group_id AND
-            	".SQLPREFIX."user.user_id   = ".SQLPREFIX.".user_group.user_id 
+            	".SQLPREFIX."user.user_id   = ".SQLPREFIX."user_group.user_id
         ");
         $result = array();
         while ($row = $this->_db->fetch_assoc($res)) {
@@ -496,9 +491,10 @@ class PMF_PermMedium
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
      * @param int
+     * @param int
      * @return bool
      */
-    function addToGroup($group_id)
+    function addToGroup($user_id, $group_id)
     {
         $returnValue = (bool) false;
 
@@ -513,7 +509,7 @@ class PMF_PermMedium
         	INSERT INTO
         		".SQLPREFIX."user_group
         	SET
-        		user_id  = '".$this->_user_id."',
+        		user_id  = '".$user_id."',
         		group_id = '".$group_id."'
         ");
         // return
@@ -531,21 +527,25 @@ class PMF_PermMedium
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
      * @param int
+     * @param int
      * @return bool
      */
-    function removeFromGroup($group_id)
+    function removeFromGroup($user_id, $group_id)
     {
         $returnValue = (bool) false;
 
         // section -64--88-1-10--785a539b:106d9d6c253:-7fc3 begin
         if (!$this->_initialized)
         	return false;
+        // check input
+        if ($user_id <= 0 or $group_id <= 0)
+            return false;
         // remove user from group
         $res = $this->_db->query("
         	DELETE FROM
         		".SQLPREFIX."user_group
         	WHERE
-        		user_id  = '".$this->_user_id."' AND
+        		user_id  = '".$user_id."' AND
         		group_id = '".$group_id."'
         ");
         // return
@@ -628,13 +628,14 @@ class PMF_PermMedium
     }
 
     /**
-     * Short description of method getGroups
+     * Short description of method getUserGroups
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
+     * @param int
      * @return array
      */
-    function getGroups()
+    function getUserGroups($user_id)
     {
         $returnValue = array();
 
@@ -650,8 +651,8 @@ class PMF_PermMedium
                 ".SQLPREFIX."user_group,
                 ".SQLPREFIX."group
             WHERE
-            	".SQLPREFIX."user.user_id   = '".$this->_user_id."' AND
-            	".SQLPREFIX."user.user_id   = ".SQLPREFIX.".user_group.user_id AND
+            	".SQLPREFIX."user.user_id   = '".$user_id."' AND
+            	".SQLPREFIX."user.user_id   = ".SQLPREFIX."user_group.user_id AND
             	".SQLPREFIX."group.group_id = ".SQLPREFIX."user_group.group_id
         ");
         // return result
@@ -695,6 +696,222 @@ class PMF_PermMedium
         }
         return $result;
         // section -64--88-1-10--61674be4:106dbb8e5aa:-7faa end
+
+        return (array) $returnValue;
+    }
+
+    /**
+     * Short description of method checkUserGroupRight
+     *
+     * @access public
+     * @author Lars Tiedemann, <php@larstiedemann.de>
+     * @param int
+     * @param int
+     * @return void
+     */
+    function checkUserGroupRight($user_id, $right_id = 0)
+    {
+        // section -64--88-1-10--a35403d:1079da3e1d1:-7fd3 begin
+        if (!$this->_initialized)
+        	return false;
+        // check right id
+        if ($right_id <= 0)
+            return false;
+        // check right
+        $res = $this->_db->query("
+            SELECT
+                ".SQLPREFIX."right.right_id AS right_id
+            FROM
+                ".SQLPREFIX."right,
+                ".SQLPREFIX."group_right,
+                ".SQLPREFIX."group,
+                ".SQLPREFIX."user_group,
+                ".SQLPREFIX."user
+            WHERE
+                ".SQLPREFIX."right.right_id = '".$right_id."' AND
+                ".SQLPREFIX."right.right_id = ".SQLPREFIX."group_right.right_id AND
+                ".SQLPREFIX."group.group_id = ".SQLPREFIX."group_right.group_id AND
+                ".SQLPREFIX."group.group_id = ".SQLPREFIX."user_group.group_id AND
+                ".SQLPREFIX."user.user_id   = ".SQLPREFIX."user_group.user_id AND
+                ".SQLPREFIX."user.user_id   = '".$user_id."'
+        ");
+        // return result
+        if ($this->_db->num_rows($res) == 1)
+            return true;
+        return false;
+        // section -64--88-1-10--a35403d:1079da3e1d1:-7fd3 end
+    }
+
+    /**
+     * Short description of method checkGroupData
+     *
+     * @access public
+     * @author Lars Tiedemann, <php@larstiedemann.de>
+     * @param array
+     * @return array
+     */
+    function checkGroupData($group_data)
+    {
+        $returnValue = array();
+
+        // section -64--88-1-10--a35403d:1079da3e1d1:-7fcf begin
+        if (!isset($group_data['name']) or !is_string($group_data['name']))
+            $group_data['name'] = $this->default_group_data['name'];
+        if (!isset($group_data['description']) or !is_string($group_data['description']))
+            $group_data['description'] = $this->default_group_data['description'];
+        if (!isset($group_data['auto_join']))
+            $group_data['auto_join'] = $this->default_group_data['auto_join'];
+        $group_data['auto_join'] = $this->bool_to_int($group_data['auto_join']);
+        return $group_data;
+        // section -64--88-1-10--a35403d:1079da3e1d1:-7fcf end
+
+        return (array) $returnValue;
+    }
+
+    /**
+     * Short description of method getAllUserRights
+     *
+     * @access public
+     * @author Lars Tiedemann, <php@larstiedemann.de>
+     * @param int
+     * @return array
+     */
+    function getAllUserRights($user_id)
+    {
+        $returnValue = array();
+
+        // section -64--88-1-10--a35403d:1079da3e1d1:-7fcb begin
+        if (!$this->_initialized)
+            return false;
+        // check input
+        if ($user_id <= 0)
+            return false;
+        $user_rights  = $this->getUserRights($user_id);
+        $group_rights = $this->getUserGroupRights($user_id);
+        return array_unique(array_merge($user_rights, $group_rights));
+        // section -64--88-1-10--a35403d:1079da3e1d1:-7fcb end
+
+        return (array) $returnValue;
+    }
+
+    /**
+     * Short description of method autoJoin
+     *
+     * @access public
+     * @author Lars Tiedemann, <php@larstiedemann.de>
+     * @param int
+     * @return bool
+     */
+    function autoJoin($user_id)
+    {
+        $returnValue = (bool) false;
+
+        // section -64--88-1-10--a35403d:1079da3e1d1:-7fc7 begin
+        if (!$this->_initialized)
+            return false;
+        // check user id
+        if ($user_id <= 0)
+            return false;
+        // get auto join groups
+        $res = $this->_db->query("
+            SELECT
+                group_id
+            FROM
+                ".SQLPREFIX."group
+            WHERE
+                auto_join = '1'
+        ");
+        if (!$res)
+            return false;
+        $auto_join = array();
+        while ($row = $this->_db->fetch_assoc($res)) {
+            $auto_join[] = $row['group_id'];
+        }
+        // add to groups
+        foreach ($auto_join as $group_id) {
+            $this->addToGroup($user_id, $group_id);
+        }
+        return true;
+        // section -64--88-1-10--a35403d:1079da3e1d1:-7fc7 end
+
+        return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method removeFromAllGroups
+     *
+     * @access public
+     * @author Lars Tiedemann, <php@larstiedemann.de>
+     * @param int
+     * @return bool
+     */
+    function removeFromAllGroups($user_id)
+    {
+        $returnValue = (bool) false;
+
+        // section -64--88-1-10--a35403d:1079da3e1d1:-7fc4 begin
+        if (!$this->_initialized)
+        	return false;
+        // check input
+        if ($user_id <= 0)
+            return false;
+        // remove user from all groups
+        $res = $this->_db->query("
+        	DELETE FROM
+        		".SQLPREFIX."user_group
+        	WHERE
+        		user_id  = '".$user_id."'
+        ");
+        // return
+        if (!$res)
+        	return false;
+        return true;
+        // section -64--88-1-10--a35403d:1079da3e1d1:-7fc4 end
+
+        return (bool) $returnValue;
+    }
+
+    /**
+     * Short description of method getUserGroupRights
+     *
+     * @access public
+     * @author Lars Tiedemann, <php@larstiedemann.de>
+     * @param int
+     * @return array
+     */
+    function getUserGroupRights($user_id)
+    {
+        $returnValue = array();
+
+        // section -64--88-1-10--a35403d:1079da3e1d1:-7fc1 begin
+        if (!$this->_initialized)
+        	return false;
+        if ($user_id <= 0)
+            return false;
+        // check right
+        $res = $this->_db->query("
+            SELECT
+                ".SQLPREFIX."right.right_id AS right_id
+            FROM
+                ".SQLPREFIX."right,
+                ".SQLPREFIX."group_right,
+                ".SQLPREFIX."group,
+                ".SQLPREFIX."user_group,
+                ".SQLPREFIX."user
+            WHERE
+                ".SQLPREFIX."user.user_id   = '".$user_id."' AND
+                ".SQLPREFIX."user.user_id   = ".SQLPREFIX."user_group.user_id AND
+                ".SQLPREFIX."group.group_id = ".SQLPREFIX."user_group.group_id AND
+                ".SQLPREFIX."group.group_id = ".SQLPREFIX."group_right.group_id AND
+                ".SQLPREFIX."right.right_id = ".SQLPREFIX."group_right.right_id
+        ");
+        // return result
+        $result = array();
+        while ($row = $this->_db->fetch_assoc($res)) {
+        	$result[] = $row['right_id'];
+        }
+        return $result;
+        // section -64--88-1-10--a35403d:1079da3e1d1:-7fc1 end
 
         return (array) $returnValue;
     }

@@ -21,9 +21,23 @@ if (0 > version_compare(PHP_VERSION, '4')) {
  * There are three possible extensions of this class: basic, medium and large
  * by the classes PMF_PermBasic, PMF_PermMedium and PMF_PermLarge. The classes
  * to allow for scalability. This means that PMF_PermMedium is an extend of
- * and PMF_PermLarge is an extend of PMF_PermMedium. The PMF_Perm class itself
- * not provide any methods, but a single property: the database object
- * Using this database connection, the permission-object may perform database
+ * and PMF_PermLarge is an extend of PMF_PermMedium.
+ *
+ * The permission type can be selected by calling $perm = PMF_Perm(perm_type) or
+ * static method $perm = PMF_Perm::selectPerm(perm_type) where perm_type is
+ * 'medium' or 'large'. Both ways, a PMF_PermBasic, PMF_PermMedium or
+ * is returned.
+ *
+ * Before calling any method, the object $perm needs to be initialised calling
+ * user_id, context, context_id). The parameters context and context_id are
+ * accepted, but do only matter in PMF_PermLarge. In other words, if you have a
+ * or PMF_PermMedium, it does not matter if you pass context and context_id or
+ * But in PMF_PermLarge, they do make a significant difference if passed, thus
+ * for up- and downwards-compatibility.
+ *
+ * Perhaps the most important method is $perm->checkRight(right_name). This
+ * checks whether the user having the user_id set with $perm->setPerm()
+ *
  * The permission object is added to a user using the user's addPerm() method.
  * a single permission-object is allowed for each user. The permission-object is
  * in the user's $perm variable. Permission methods are performed using the
@@ -58,12 +72,12 @@ class PMF_PermBasic
     // --- ATTRIBUTES ---
 
     /**
-     * Short description of attribute user_rights
+     * Short description of attribute default_right_data
      *
-     * @access private
+     * @access public
      * @var array
      */
-    var $_user_rights = array();
+    var $default_right_data = array('name' => 'DEFAULT_RIGHT', 'description' => 'Short description. ', 'for_users' => true, 'for_groups' => true);
 
     // --- OPERATIONS ---
 
@@ -72,18 +86,18 @@ class PMF_PermBasic
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param string
+     * @param int
+     * @param int
      * @return bool
      */
-    function checkUserRight($name)
+    function checkUserRight($user_id, $right_id)
     {
         $returnValue = (bool) false;
 
         // section -64--88-1-5-15e2075:10637248df4:-7ffe begin
         if (!$this->_initialized)
         	return false;
-        // get right id
-        $right_id = $this->getRightId($name);
+        // check right id
         if ($right_id <= 0) 
             return false;
         // check right
@@ -97,7 +111,7 @@ class PMF_PermBasic
             WHERE
                 ".SQLPREFIX."right.right_id = '".$right_id."' AND
                 ".SQLPREFIX."right.right_id = ".SQLPREFIX."user_right.right_id AND
-                ".SQLPREFIX."user.user_id   = '".$this->_user_id."' AND
+                ".SQLPREFIX."user.user_id   = '".$user_id."' AND
                 ".SQLPREFIX."user.user_id   = ".SQLPREFIX."user_right.user_id
         ");
         // return result
@@ -114,9 +128,10 @@ class PMF_PermBasic
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
+     * @param int
      * @return array
      */
-    function getUserRights()
+    function getUserRights($user_id)
     {
         $returnValue = array();
 
@@ -133,7 +148,7 @@ class PMF_PermBasic
                 ".SQLPREFIX."user
             WHERE
                 ".SQLPREFIX."right.right_id = ".SQLPREFIX."user_right.right_id AND
-                ".SQLPREFIX."user.user_id   = '".$this->_user_id."' AND
+                ".SQLPREFIX."user.user_id   = '".$user_id."' AND
                 ".SQLPREFIX."user.user_id   = ".SQLPREFIX."user_right.user_id
         ");
         // return result
@@ -179,24 +194,34 @@ class PMF_PermBasic
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
      * @param int
-     * @return void
+     * @param int
+     * @return bool
      */
-    function grantUserRight($right_id)
+    function grantUserRight($user_id, $right_id)
     {
+        $returnValue = (bool) false;
+
         // section -64--88-1-10--2ab496b6:106d484ef91:-7fdc begin
         if (!$this->_initialized)
         	return false;
+        // is right for users?
+        $right_data = $this->getRightData($right_id);
+        if (!$right_data['for_users'])
+            return false;
+        // grant user right
         $res = $this->_db->query("
             INSERT INTO
                 ".SQLPREFIX."user_right
             SET
-                user_id  = '".$this->_user_id."',
+                user_id  = '".$user_id."',
                 right_id = '".$right_id."'
         ");
-        if (!$res) 
+        if (!$res)
             return false;
         return true;
         // section -64--88-1-10--2ab496b6:106d484ef91:-7fdc end
+
+        return (bool) $returnValue;
     }
 
     /**
@@ -205,10 +230,13 @@ class PMF_PermBasic
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
      * @param int
-     * @return void
+     * @param int
+     * @return bool
      */
-    function refuseUserRight($right_id)
+    function refuseUserRight($user_id, $right_id)
     {
+        $returnValue = (bool) false;
+
         // section -64--88-1-10--2ab496b6:106d484ef91:-7fd7 begin
         if (!$this->_initialized)
         	return false;
@@ -216,10 +244,15 @@ class PMF_PermBasic
             DELETE FROM
                 ".SQLPREFIX."user_right
             WHERE
-                user_id  = '".$this->_user_id."' AND
+                user_id  = '".$user_id."' AND
                 right_id = '".$right_id."'
         ");
+        if (!$res)
+            return false;
+        return true;
         // section -64--88-1-10--2ab496b6:106d484ef91:-7fd7 end
+
+        return (bool) $returnValue;
     }
 
     /**
@@ -227,15 +260,20 @@ class PMF_PermBasic
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param string
+     * @param int
+     * @param mixed
      * @return bool
      */
-    function checkRight($name)
+    function checkRight($user_id, $right)
     {
         $returnValue = (bool) false;
 
         // section -64--88-1-10--785a539b:106d9d6c253:-7fd8 begin
-        return $this->checkUserRight($name);
+        // get right id
+        if (!is_numeric($right) and is_string($right))
+            $right = $this->getRightId($right);
+        // check user right
+        return $this->checkUserRight($right, $user_id);
         // section -64--88-1-10--785a539b:106d9d6c253:-7fd8 end
 
         return (bool) $returnValue;
@@ -282,18 +320,19 @@ class PMF_PermBasic
     }
 
     /**
-     * Short description of method getRights
+     * Short description of method getAllUserRights
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
+     * @param int
      * @return array
      */
-    function getRights()
+    function getAllUserRights($user_id)
     {
         $returnValue = array();
 
         // section -64--88-1-10--61674be4:106dbb8e5aa:-7fb4 begin
-        return $this->getUserRights();
+        return $this->getUserRights($user_id);
         // section -64--88-1-10--61674be4:106dbb8e5aa:-7fb4 end
 
         return (array) $returnValue;
@@ -314,10 +353,10 @@ class PMF_PermBasic
 
         // section -64--88-1-10--61674be4:106dbb8e5aa:-7f9c begin
         if (!$this->_initialized)
-        	return false;
+        	return 0;
         // check if right already exists
         if ($this->getRightId($right_data['name']) > 0)
-            return false;
+            return 0;
         // get next id
 		$next_id = $this->_db->nextID(SQLPREFIX."right", "right_id");
         // check right data input
@@ -372,16 +411,20 @@ class PMF_PermBasic
         if (!$this->_initialized)
         	return false;
         // check input
-        $right_data = $this->checkRightData($right_data);
+        $checked_data = $this->checkRightData($right_data);
+        // create update SET
+        $set = "";
+        $comma = "";
+        foreach ($right_data as $key => $val) {
+            $set .= $comma.$key." = '".$checked_data[$key]."'";
+            $comma = ",\n                ";
+        }
         // update right
         $res = $this->_db->query("
             UPDATE
                 ".SQLPREFIX."right
             SET
-                name        = '".$right_data['name']."',
-                description = '".$right_data['description']."',
-                for_users   = '".$this->bool_to_int($right_data['for_users'])."',
-                for_groups  = '".$this->bool_to_int($right_data['for_groups'])."'
+                ".$set."
             WHERE
                 right_id = '".$right_id."'
         ");
@@ -543,20 +586,49 @@ class PMF_PermBasic
         $returnValue = array();
 
         // section 127-0-0-1--6945df47:106df4af666:-7fd2 begin
-        if (!isset($right_data['name']) or !is_string($right_data['description']))
-            $right_data['name'] = '';
+        if (!isset($right_data['name']) or !is_string($right_data['name']))
+            $right_data['name'] = $this->default_right_data['name'];
         if (!isset($right_data['description']) or !is_string($right_data['description']))
-            $right_data['description'] = '';
+            $right_data['description'] = $this->default_right_data['description'];
         if (!isset($right_data['for_users'])) 
-            $right_data['for_users'] = true;
+            $right_data['for_users'] = $this->default_right_data['for_users'];
         if (!isset($right_data['for_groups']))
-            $right_data['for_groups'] = true;
+            $right_data['for_groups'] = $this->default_right_data['for_groups'];
         $right_data['for_users'] = $this->bool_to_int($right_data['for_users']);
         $right_data['for_groups'] = $this->bool_to_int($right_data['for_groups']);
         return $right_data;
         // section 127-0-0-1--6945df47:106df4af666:-7fd2 end
 
         return (array) $returnValue;
+    }
+
+    /**
+     * Short description of method refuseAllUserRights
+     *
+     * @access public
+     * @author Lars Tiedemann, <php@larstiedemann.de>
+     * @param int
+     * @return bool
+     */
+    function refuseAllUserRights($user_id)
+    {
+        $returnValue = (bool) false;
+
+        // section -64--88-1-10--a35403d:1079da3e1d1:-7fbe begin
+        if (!$this->_initialized)
+        	return false;
+        $res = $this->_db->query("
+            DELETE FROM
+                ".SQLPREFIX."user_right
+            WHERE
+                user_id  = '".$user_id."'
+        ");
+        if (!$res)
+            return false;
+        return true;
+        // section -64--88-1-10--a35403d:1079da3e1d1:-7fbe end
+
+        return (bool) $returnValue;
     }
 
 } /* end of class PMF_PermBasic */

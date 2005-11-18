@@ -100,7 +100,7 @@ class PMF_Perm
     // --- ATTRIBUTES ---
 
     /**
-     * Short description of attribute db
+     * Database object created by PMF_Db
      *
      * @access private
      * @var object
@@ -108,15 +108,7 @@ class PMF_Perm
     var $_db = null;
 
     /**
-     * Short description of attribute user_id
-     *
-     * @access private
-     * @var int
-     */
-    var $_user_id = 0;
-
-    /**
-     * Short description of attribute perm_typemap
+     * Allowed classnames for subclasses for Perm::selectPerm()
      *
      * @access private
      * @var array
@@ -124,7 +116,7 @@ class PMF_Perm
     var $_perm_typemap = array('basic' => 'PermBasic', 'medium' => 'PermMedium', 'large' => 'PermLarge');
 
     /**
-     * Short description of attribute initialized
+     * Set TRUE if valid database and user-ID are given
      *
      * @access private
      * @var bool
@@ -134,7 +126,7 @@ class PMF_Perm
     // --- OPERATIONS ---
 
     /**
-     * Short description of method PMF_Perm
+     * constructor
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -147,7 +139,7 @@ class PMF_Perm
     }
 
     /**
-     * Short description of method __destruct
+     * destructor
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -160,7 +152,11 @@ class PMF_Perm
     }
 
     /**
-     * Short description of method selectPerm
+     * Selects a subclass of PMF_Perm. 
+     *
+     * selectPerm() returns an instance of a subclass of PMF_Perm. perm_level
+     * which subclass is returned. Allowed values and corresponding classnames
+     * defined in perm_typemap.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -181,7 +177,7 @@ class PMF_Perm
         if (!file_exists("PMF/".$perm->_perm_typemap[$perm_level].".php")) {
         	return $perm;
         }
-        include_once("PMF/".$perm->_perm_typemap[$perm_level].".php");
+        require_once("PMF/".$perm->_perm_typemap[$perm_level].".php");
         // instantiate 
         $permclass = "PMF_".$perm->_perm_typemap[$perm_level];
 		$perm = new $permclass();
@@ -192,7 +188,7 @@ class PMF_Perm
     }
 
     /**
-     * Short description of method bool_to_int
+     * converts a boolean into a corresponding integer: 0 or 1.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -213,7 +209,7 @@ class PMF_Perm
     }
 
     /**
-     * Short description of method int_to_bool
+     * converts an integer into the corresponding boolean value: true or false.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -234,41 +230,37 @@ class PMF_Perm
     }
 
     /**
-     * Short description of method setPerm
+     * initalizes the object. 
+     *
+     * PMF_Perm needs a database access in order to work. db must be a valid
+     * object.
+     *
+     * User specific permissions can only be checked and set, if a valid user-ID
+     * given. However, for administration purposes, user_id may be omitted.
+     *
+     * Context information context and context_id only work with
+     * See the documentation of PMF_PermLarge for context description.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
      * @param object
-     * @param int
      * @param string
      * @param int
-     * @return void
+     * @return bool
      */
-    function setPerm($db, $user_id = 0, $context = '', $context_id = 0)
+    function addDb($db, $context = '', $context_id = 0)
     {
+        $returnValue = (bool) false;
+
         // section 127-0-0-1--6945df47:106df4af666:-7fdd begin
         if (!PMF_User::checkDb($db))
             return false;
         $this->_db = $db;
-        $this->_user_id = $user_id;
         $this->_initialized = true;
+        return true;
         // section 127-0-0-1--6945df47:106df4af666:-7fdd end
-    }
 
-    /**
-     * Short description of method resetPerm
-     *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @return void
-     */
-    function resetPerm()
-    {
-        // section 127-0-0-1--6945df47:106df4af666:-7fd9 begin
-        $this->_db = null;
-        $this->_user_id = 0;
-        $this->_initialized = false;
-        // section 127-0-0-1--6945df47:106df4af666:-7fd9 end
+        return (bool) $returnValue;
     }
 
 } /* end of class PMF_Perm */
