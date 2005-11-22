@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: export.main.php,v 1.18 2005-09-25 09:47:02 thorstenr Exp $
+* $Id: export.main.php,v 1.19 2005-11-22 20:11:50 b33blebr0x Exp $
 *
 * XML, XML DocBook, XHTML and PDF export - main page
 *
@@ -33,10 +33,12 @@ if (isset($_REQUEST["submit"])) {
 
 if (isset($submit[0])) {
     generateXMLFile();
+    print "<p><a href=\"../xml/phpmyfaq.xml\" target=\"_blank\">XML File okay!</a></p>";
 }
 
 if (isset($submit[1])) {
     generateXHTMLFile();
+    print "<p><a href=\"../xml/phpmyfaq.html\" target=\"_blank\">XHTML File okay!</a></p>";
 }
 
 if (isset($submit[2])) {
@@ -47,12 +49,12 @@ if (isset($submit[2])) {
 	$arrThema = array();
 	$arrContent = array();
 	
-	$result = $db->query('SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqdata.content, '.SQLPREFIX.'faqdata.author, '.SQLPREFIX.'faqdata.datum FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang ORDER BY '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.id');
+	$result = $db->query('SELECT '.SQLPREFIX.'faqdata.id AS id, '.SQLPREFIX.'faqdata.lang AS lang, '.SQLPREFIX.'faqcategoryrelations.category_id AS category_id, '.SQLPREFIX.'faqdata.thema AS thema, '.SQLPREFIX.'faqdata.content AS content, '.SQLPREFIX.'faqdata.author AS author, '.SQLPREFIX.'faqdata.datum AS datum FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang WHERE '.SQLPREFIX.'faqdata.active = \'yes\' ORDER BY '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.id');
 	if ($db->num_rows($result) > 0) {
 		$i = 0;
 		while ($row = $db->fetch_object($result)) {
 			$arrRubrik[$i] = $row->category_id;
-			$arrThema[$i] = stripslashes($row->thema);
+			$arrThema[$i] = $row->thema;
 			$arrContent[$i] = $row->content;
 			$arrDatum[$i] = $row->datum;
 			$arrAuthor[$i] = $row->author;
@@ -74,7 +76,7 @@ if (isset($submit[2])) {
 		$author = $arrAuthor[$key];
 		$pdf->AddPage();
 		$pdf->SetFont("Arial", "", 12);
-    	$pdf->WriteHTML(unhtmlentities(stripslashes($value)));
+    	$pdf->WriteHTML(unhtmlentities($value));
     }
 	
 	$pdfFile = PMF_ROOT_DIR."/pdf/faq.pdf";
@@ -143,6 +145,7 @@ if (isset($submit[3])) {
 	. '</book>';
 	
 	$export->write_file();
+    print "<p>XML DocBook file: <a href=\"../xml/docbook/docbook.xml\" target=\"_blank\">".$PMF_CONF["title"]."</a></p>";
 }
 
 if (!emptyTable(SQLPREFIX."faqdata")) {

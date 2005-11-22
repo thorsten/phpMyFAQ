@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: category.edit.php,v 1.5 2005-09-25 09:47:02 thorstenr Exp $
+* $Id: category.edit.php,v 1.6 2005-11-22 20:11:50 b33blebr0x Exp $
 *
 * Edits a category
 *
@@ -44,9 +44,9 @@ if ($permission["editcateg"]) {
     <div class="row"><span class="label"><strong><?php print $PMF_LANG["ad_categ_desc"]; ?>:</strong></span>
     <input class="admin" type="text" name="description" size="30" style="width: 250px;" value="<?php print $categories[$id]["description"]; ?>" /></div>
     <div class="row"><span class="label"><strong><?php print $PMF_LANG["ad_categ_owner"]; ?>:</strong></span>
-    <select name="cat_owner" size="1">    
+    <!-- <select name="cat_owner" size="1"> -->
 <?php
-        $result = $db->query("SELECT id, name, realname FROM ".SQLPREFIX."faquser ORDER BY id");
+        /*$result = $db->query("SELECT id, name, realname FROM ".SQLPREFIX."faquser ORDER BY id");
         while ($row = $db->fetch_object($result)) {
             print '<option value="'.$row->id.'"';
             if ($row->id == $categories[$id]["user_id"]) {
@@ -58,9 +58,9 @@ if ($permission["editcateg"]) {
                 print ' ('.$row->realname.')';
             }
             print '</option>';
-        }
+        }*/
 ?>
-    </select></div>
+    <!-- </select></div> -->
     <div class="row"><span class="label"><strong>&nbsp;</strong></span>
     <input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_updatecateg"]; ?>" /></div>
     </fieldset>

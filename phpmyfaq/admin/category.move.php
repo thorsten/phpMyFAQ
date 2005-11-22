@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: category.move.php,v 1.3 2005-09-25 09:47:02 thorstenr Exp $
+* $Id: category.move.php,v 1.4 2005-11-22 20:11:50 b33blebr0x Exp $
 *
 * Select a category to move
 *
@@ -25,23 +25,27 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 }
 
 if ($permission["editcateg"]) {
+    $id = $_GET['cat'];
+    $parent_id = $_GET['parent_id'];
     $cat = new category;
     $categories = $cat->getAllCategories();
     unset($cat->categories);
-    $cat->getCategories(0);
-    $cat->buildTree();
-    $id = $_GET["cat"];
+    $cat->getCategories($parent_id, false);
+    $cat->buildTree($parent_id);
     print "<h2>".$PMF_LANG["ad_categ_edit_1"]." <em>".$categories[$id]["name"]."</em> ".$PMF_LANG["ad_categ_edit_2"]."</h2>\n";
 ?>
 	<form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>" method="post">
-	<input type="hidden" name="aktion" value="changecategory" />
-	<input type="hidden" name="cat" value="<?php print $id; ?>" />
-	<div class="row"><span class="label"><strong><?php print $PMF_LANG["ad_categ_change"]; ?>:</strong></span>
-    <select name="change" size="1">
-    <?php print $cat->printCategoryOptions(); ?>
-    </select></div>
-    <div class="row"><span class="label"><strong>&nbsp;</strong></span>
-    <input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_updatecateg"]; ?>" /></div>
+    <fieldset>
+        <legend><?php print $PMF_LANG["ad_categ_edit_1"]; ?></legend>
+	    <input type="hidden" name="aktion" value="changecategory" />
+	    <input type="hidden" name="cat" value="<?php print $id; ?>" />
+	    <div class="row"><span class="label"><strong><?php print $PMF_LANG["ad_categ_change"]; ?>:</strong></span>
+        <select name="change" size="1">
+        <?php print $cat->printCategoryOptions(); ?>
+        </select></div>
+        <div class="row"><span class="label"><strong>&nbsp;</strong></span>
+        <input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_updatecateg"]; ?>" /></div>
+    </fieldset>
     </form>
 <?php
 } else {

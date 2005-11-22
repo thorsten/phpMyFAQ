@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: adminlog.php,v 1.6 2005-09-25 09:47:02 thorstenr Exp $
+* $Id: adminlog.php,v 1.7 2005-11-22 20:11:50 b33blebr0x Exp $
 *
 * Overview of actions in the admin section
 *
@@ -26,7 +26,14 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 
 if ($permission["adminlog"]) {
 	$perpage = 15;
-    
+
+    $_user = array();
+
+    $_result = $db->query("SELECT id, name FROM ".SQLPREFIX."faquser");
+    while ($row = $db->fetch_object($_result)) {
+        $_user[$row->id] = $row->name;
+    }
+
 	if (!isset($_REQUEST["pages"])) {
         $pages = round(($db->num_rows($db->query("SELECT id FROM ".SQLPREFIX."faqadminlog"))+($perpage/3)) / $perpage,0);
     } else {
@@ -65,33 +72,30 @@ if ($permission["adminlog"]) {
 <?php
     $counter = 0;
     $displayedCounter = 0;
-    while ((list($id,$tim,$usr,$text,$ip) = $db->fetch_row($result)) && $displayedCounter < $perpage) {
-
+    while (($row = $db->fetch_object($result)) && $displayedCounter < $perpage) {
         $counter++;
         if ($counter <= $start) {
             continue;
         }
-        $displayedCounter++; 
-		
-        list($usr) = $db->fetch_row($db->query("SELECT NAME FROM ".SQLPREFIX."faquser WHERE id = ".$usr));
+        $displayedCounter++;
 ?>
         <tr class="cell">
-            <td class="list"><?php print $id; ?></td>
-            <td class="list"><?php print date("Y-m-d H:i:s",$tim); ?></td>
-            <td class="list"><?php print $usr; ?></td>
-            <td class="list"><?php print $ip; ?></td>
+            <td class="list"><?php print $row->id; ?></td>
+            <td class="list"><?php print date("Y-m-d H:i:s",$row->time); ?></td>
+            <td class="list"><?php print isset($_user[$row->usr]) ? $_user[$row->usr] : '&nbsp;'; ?></td>
+            <td class="list"><?php print $row->ip; ?></td>
         </tr>
         <tr class="cell">
             <td colspan="4" class="list"><?php
-		$text = str_replace("Loginerror", $PMF_LANG["ad_log_lger"], $text);
-		$text = str_replace("Session expired", $PMF_LANG["ad_log_sess"], $text);
-		$text = str_replace("Useredit, ", $PMF_LANG["ad_log_edit"], $text);
-		$text = str_replace("Beitragcreatesave", $PMF_LANG["ad_log_crsa"], $text);
-		$text = str_replace("Beitragcreate", $PMF_LANG["ad_log_crea"], $text);
-		$text = str_replace("Usersave, ", $PMF_LANG["ad_log_ussa"], $text);
-		$text = str_replace("Userdel, ", $PMF_LANG["ad_log_usde"], $text);
-		$text = str_replace("Beitragedit, ", $PMF_LANG["ad_log_beed"], $text);
-		$text = str_replace("Beitragdel, ", $PMF_LANG["ad_log_bede"], $text);
+		$text = str_replace("Loginerror", $PMF_LANG["ad_log_lger"], $row->text);
+		$text = str_replace("Session expired", $PMF_LANG["ad_log_sess"], $row->text);
+		$text = str_replace("Useredit, ", $PMF_LANG["ad_log_edit"], $row->text);
+		$text = str_replace("Beitragcreatesave", $PMF_LANG["ad_log_crsa"], $row->text);
+		$text = str_replace("Beitragcreate", $PMF_LANG["ad_log_crea"], $row->text);
+		$text = str_replace("Usersave, ", $PMF_LANG["ad_log_ussa"], $row->text);
+		$text = str_replace("Userdel, ", $PMF_LANG["ad_log_usde"], $row->text);
+		$text = str_replace("Beitragedit, ", $PMF_LANG["ad_log_beed"], $row->text);
+		$text = str_replace("Beitragdel, ", $PMF_LANG["ad_log_bede"], $row->text);
 		print $text;
 ?></td>
         </tr>

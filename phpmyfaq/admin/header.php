@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: header.php,v 1.11 2005-09-25 09:47:02 thorstenr Exp $
+* $Id: header.php,v 1.12 2005-11-22 20:11:50 b33blebr0x Exp $
 *
 * header of the admin area
 *
@@ -38,25 +38,29 @@ header("Vary: Negotiate,Accept");
     <title><?php print $PMF_CONF["title"]; ?> - powered by phpMyFAQ</title>
     <meta name="copyright" content="(c) 2001-2005 phpMyFAQ Team" />
     <meta http-equiv="Content-Type" content="text/html; charset=<?php print $PMF_LANG["metaCharset"]; ?>" />
+
+    <link rel="shortcut icon" href="../template/favicon.ico" type="image/x-icon" />
+
+    <link rel="icon" href="../template/favicon.ico" type="image/x-icon" />
     <style type="text/css"> @import url(../template/admin.css); </style>
-    <script language="JavaScript" type="text/javascript" src="../inc/functions.js"></script>
+    <script type="text/javascript" src="../inc/functions.js"></script>
 <?php
 if (isset($_REQUEST["aktion"]) && ($_REQUEST["aktion"] == "editentry" || $_REQUEST["aktion"] == "news" || $_REQUEST["aktion"] == "editpreview" || $_REQUEST["aktion"] == "takequestion") && !emptyTable(SQLPREFIX."faqcategories")) {
 ?>
     <style type="text/css"> @import url(editor/htmlarea.css); </style>
-    <script language="JavaScript" type="text/javascript">
+    <script type="text/javascript">
     //<![CDATA[
     _editor_url = "editor";
     _editor_lang = "en";
     //]]>
     </script>
-    <script language="JavaScript" type="text/javascript" src="editor/htmlarea.js"></script>
-    <script language="JavaScript" type="text/javascript" src="editor/plugins/ImageManager/image-manager.js"></script>
-    <script language="JavaScript" type="text/javascript">
+    <script type="text/javascript" src="editor/htmlarea.js"></script>
+    <script type="text/javascript" src="editor/plugins/ImageManager/image-manager.js"></script>
+    <script type="text/javascript">
     //<![CDATA[
-    HTMLArea.init();
-    HTMLArea.loadPlugin("ImageManager");
-    HTMLArea.onload = function() {
+        HTMLArea.init();
+        HTMLArea.loadPlugin("ImageManager");
+        HTMLArea.onload = function() {
         var editor = new HTMLArea("content");
         var config = new HTMLArea.Config();
         config.width = "565px";
@@ -64,9 +68,10 @@ if (isset($_REQUEST["aktion"]) && ($_REQUEST["aktion"] == "editentry" || $_REQUE
         var phpMyFAQLinks = {
 <?php
     $output = "'Include internal links' : '',\n";
-    $result = $db->query('SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang ORDER BY '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.id');
+    $result = $db->query('SELECT '.SQLPREFIX.'faqdata.id AS id, '.SQLPREFIX.'faqdata.lang AS lang, '.SQLPREFIX.'faqcategoryrelations.category_id AS category_id, '.SQLPREFIX.'faqdata.thema AS thema FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang ORDER BY '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.id');
     while ($row = $db->fetch_object($result)) {
-        $output .= "'".safeSQL(chopString($row->thema, 8))."' : '<a href=\"index.php?action=artikel&amp;cat=".$row->category_id."&amp;id=".$row->id."&amp;artlang=".$row->lang."\">".safeSQL(str_replace(array('\n', '\r'), '', $row->thema))."<\/a>',\n";
+        $_title = makeShorterText(addslashes(PMF_htmlentities(str_replace(array("\n", "\r", "\r\n"), "", $row->thema), ENT_NOQUOTES, $PMF_LANG['metaCharset'])), 8);
+        $output .= sprintf("'%s' : '<a href=\"index.php?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s\">%s<\/a>',\n", $_title, $row->category_id, $row->id, $row->lang, $_title);
         };
     $output = substr($output, 0, -2);
     print $output;
@@ -83,7 +88,7 @@ if (isset($_REQUEST["aktion"]) && ($_REQUEST["aktion"] == "editentry" || $_REQUE
                                     elem.selectedIndex = 0;
                                 },
                     refresh :   function(editor) { }
-                    };
+        };
         config.registerDropdown(internalLinks);
         config.toolbar = [ [ "fontsize", "space", "formatblock", "space", "bold", "italic", "underline", "strikethrough", "separator", "subscript", "superscript", "separator", "copy", "cut", "paste", "space", "undo", "redo", "space", "removeformat", "killword" ], [ "justifyleft", "justifycenter", "justifyright", "justifyfull", "separator", "lefttoright", "righttoleft", "separator", "orderedlist", "unorderedlist", "outdent", "indent", "separator", "forecolor", "hilitecolor", "separator", "inserthorizontalrule", "createlink", "insertimage", "inserttable", "htmlmode" ], [ "internalLinks" ] ];
         config.formatblock = {
@@ -96,15 +101,16 @@ if (isset($_REQUEST["aktion"]) && ($_REQUEST["aktion"] == "editentry" || $_REQUE
 		"Formatted": "pre",
         "Code": "code"
 	};
-        HTMLArea.replace("content", config);
-        }
+    HTMLArea.replace("content", config);
+    }
     //]]>
     </script>
 <?php
 }
+$onload = "onload=\"javascript:focusOnUsernameField()\"";
 ?>
 </head>
-<body id="body" dir="<?php print $PMF_LANG["dir"]; ?>"><a name="top"></a>
+<body id="body" dir="<?php print $PMF_LANG["dir"]; ?>" <?php print($onload); ?>><a name="top"></a>
 <!-- Header -->
 <div id="header">
     <h1>phpMyFAQ <?php print $PMF_CONF["version"]; ?></h1>

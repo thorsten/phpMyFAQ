@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: menue.php,v 1.5 2005-10-14 17:13:01 thorstenr Exp $
+* $Id: menue.php,v 1.6 2005-11-22 20:11:50 b33blebr0x Exp $
 *
 * Navigation menue of the admin area
 *
@@ -32,14 +32,14 @@ function addMenuEntry($restrictions = "", $aktion = "", $caption = "")
 	if ($aktion != '') {
 		$aktion = "&amp;aktion=".$aktion;
 	}
-	
+
 	$output = '        <li><a href="'.$linkext.$aktion.'">'.$PMF_LANG[$caption]."</a></li>\n";
-	if ($restriction == "") {
+	if ($restrictions == '') {
 		print $output;
 		return;
 	}
-	
-	foreach(explode(",",$restriction) as $_restriction) {
+
+	foreach (explode(',', $restrictions) as $_restriction) {
 		if (isset($permission[$_restriction]) && $permission[$_restriction]) {
 			print $output;
 			return;
@@ -67,6 +67,7 @@ function addMenuEntry($restrictions = "", $aktion = "", $caption = "")
 	addMenuEntry('editconfig',                           'editconfig',       'ad_menu_editconfig');
 	addMenuEntry('backup,restore',                       'csv',              'ad_menu_backup');
 	addMenuEntry('',                                     'export',           'ad_menu_export');
+    addMenuEntry('',                                     'searchplugin',     'ad_menu_searchplugin');
 	addMenuEntry('',                                     'logout',           'ad_menu_logout');
 ?>
     </ul>

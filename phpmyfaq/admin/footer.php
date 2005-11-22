@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: footer.php,v 1.3 2005-09-25 09:47:02 thorstenr Exp $
+* $Id: footer.php,v 1.4 2005-11-22 20:11:50 b33blebr0x Exp $
 *
 * Footer of the admin area
 *
@@ -29,7 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 <!-- Footer -->
 <div>
     <div id="footer">
-        <div>phpMyFAQ Version <?php print $PMF_CONF["version"]; ?> | &copy; 2001-2005 <a href="http://www.phpmyfaq.de/" target="_blank">phpMyFAQ-Team</a></div>
+        <div><a href="http://www.phpmyfaq.de/" target="_blank">phpMyFAQ</a> <?php print $PMF_CONF["version"]; ?> | &copy; 2001-2005 <a href="http://www.phpmyfaq.de/impressum.php" target="_blank">phpMyFAQ Team</a></div>
     </div>
 </div>
 

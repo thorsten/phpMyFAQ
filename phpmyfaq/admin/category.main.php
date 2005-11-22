@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: category.main.php,v 1.7 2005-09-25 09:47:02 thorstenr Exp $
+* $Id: category.main.php,v 1.8 2005-11-22 20:11:50 b33blebr0x Exp $
 *
 * List all categories in the admin section
 *
@@ -27,47 +27,43 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 print "<h2>".$PMF_LANG["ad_categ_existing"]."</h2>\n";
 
 if ($permission["editcateg"]) {
-    
     if (isset($_POST['language'])) {
         $lang = $_POST['language'];
     } else {
         $lang = $LANGCODE;
     }
+    $currentLink = $_SERVER['PHP_SELF'].$linkext;
 ?>
-    <form action="<?php print $_SERVER['PHP_SELF'].$linkext; ?>" enctype="multipart/form-data" method="POST">
+    <form action="<?php print $currentLink; ?>" enctype="multipart/form-data" method="post">
     <input type="hidden" name="aktion" value="category" />
     <fieldset>
-    <legend><?php print $PMF_LANG['ad_categ_select']; ?></legend>
-    <select name="language" id="language">
-    <?php print languageOptions($lang); ?>
-	</select>
-	<input type="submit" class="submit" value="OK" />
+        <legend><?php print $PMF_LANG['ad_categ_select']; ?></legend>
+        <?php print selectLanguages($lang); ?>
+	    <input type="submit" class="submit" value="OK" />
     </fieldset>
     </form>
 <?php
     $tree = new Category($lang);
     $tree->buildTree();
-    
+
     foreach ($tree->catTree as $cat) {
-        $indent = "";
-        for ($i = 0; $i < $cat["indent"]; $i++) {
-            $indent .= "&nbsp;&nbsp;&nbsp;";
+        $indent = '';
+        for ($i = 0; $i < $cat['indent']; $i++) {
+            $indent .= '&nbsp;&nbsp;&nbsp;';
         }
-        print $indent."<strong style=\"vertical-align: top;\">&middot; ".$cat["name"]."</strong> ";
-        print "<a href=\"".$_SERVER["PHP_SELF"].$linkext."&amp;aktion=addcategory&amp;cat=".$cat["id"]."\" title=\"".$PMF_LANG["ad_kateg_add"]."\"><img src=\"images/add.gif\" width=\"17\" height=\"18\" alt=\"".$PMF_LANG["ad_kateg_add"]."\" title=\"".$PMF_LANG["ad_kateg_add"]."\" border=\"0\" /></a>";
-        print "<a href=\"".$_SERVER["PHP_SELF"].$linkext."&amp;aktion=editcategory&amp;cat=".$cat["id"]."\" title=\"".$PMF_LANG["ad_kateg_rename"]."\"><img src=\"images/edit.gif\" width=\"18\" height=\"18\" border=\"0\" /></a>";
-        if (count($tree->getChildren($cat["id"])) == 0) {
-            print "<a href=\"".$_SERVER["PHP_SELF"].$linkext."&amp;aktion=deletecategory&amp;cat=".$cat["id"]."\" title=\"".$PMF_LANG["ad_categ_delete"]."\"><img src=\"images/delete.gif\" width=\"17\" height=\"18\" alt=\"".$PMF_LANG["ad_categ_delete"]."\" title=\"".$PMF_LANG["ad_categ_delete"]."\" border=\"0\" /></a>";
+        printf("%s<strong style=\"vertical-align: top;\">&middot; %s</strong> ", $indent, $cat["name"]);
+        printf('<a href="%s&amp;aktion=addcategory&amp;cat=%s" title="%s"><img src="images/add.gif" width="17" height="18" alt="%s" title="%s" border="0" /></a>', $currentLink, $cat['id'], $PMF_LANG['ad_kateg_add'], $PMF_LANG['ad_kateg_add'], $PMF_LANG['ad_kateg_add']);
+        printf('<a href="%s&amp;aktion=editcategory&amp;cat=%s" title="%s"><img src="images/edit.gif" width="18" height="18" border="0" title="%s" alt="%s" /></a>', $currentLink, $cat['id'], $PMF_LANG['ad_kateg_rename'], $PMF_LANG['ad_kateg_rename'], $PMF_LANG['ad_kateg_rename']);
+        if (count($tree->getChildren($cat['id'])) == 0) {
+            printf('<a href="%s&amp;aktion=deletecategory&amp;cat=%s" title="%s"><img src="images/delete.gif" width="17" height="18" alt="%s" title="%s" border="0" /></a>', $currentLink, $cat['id'], $PMF_LANG['ad_categ_delete'], $PMF_LANG['ad_categ_delete'], $PMF_LANG['ad_categ_delete']);
         }
-        print "<a href=\"".$_SERVER["PHP_SELF"].$linkext."&amp;aktion=cutcategory&amp;cat=".$cat["id"]."\" title=\"".$PMF_LANG["ad_categ_cut"]."\"><img src=\"images/cut.gif\" width=\"16\" height=\"16\" alt=\"".$PMF_LANG["ad_categ_cut"]."\" border=\"0\" title=\"".$PMF_LANG["ad_categ_cut"]."\" /></a>\n";
-        if ($cat["parent_id"] == 0) {
-            print "<a href=\"".$_SERVER["PHP_SELF"].$linkext."&amp;aktion=movecategory&amp;cat=".$cat["id"]."\" title=\"".$PMF_LANG["ad_categ_move"]."\"><img src=\"images/move.gif\" width=\"16\" height=\"16\" alt=\"".$PMF_LANG["ad_categ_move"]."\" border=\"0\" title=\"".$PMF_LANG["ad_categ_move"]."\" /></a>\n";
-        }
+        printf('<a href="%s&amp;aktion=cutcategory&amp;cat=%s" title="%s"><img src="images/cut.gif" width="16" height="16" alt="%s" border="0" title="%s" /></a>', $currentLink, $cat['id'], $PMF_LANG['ad_categ_cut'], $PMF_LANG['ad_categ_cut'], $PMF_LANG['ad_categ_cut']);
+        printf('<a href="%s&amp;aktion=movecategory&amp;cat=%s&amp;parent_id=%s" title="%s"><img src="images/move.gif" width="16" height="16" alt="%s" border="0" title="%s" /></a>', $currentLink, $cat['id'], $cat['parent_id'], $PMF_LANG['ad_categ_move'], $PMF_LANG['ad_categ_move'], $PMF_LANG['ad_categ_move']);
         print "<br />";
     }
 ?>
-	<p><img src="images/arrow.gif" width="11" height="11" alt="" border="0"> <a href="<?php print $_SERVER["PHP_SELF"].$linkext."&amp;aktion=addcategory"; ?>"><?php print $PMF_LANG["ad_kateg_add"]; ?></a></p>
-	<p><?php print $PMF_LANG["ad_categ_remark"]; ?></p>
+    <p><img src="images/arrow.gif" width="11" height="11" alt="" border="0" /> <a href="<?php print $currentLink.'&amp;aktion=addcategory'; ?>"><?php print $PMF_LANG['ad_kateg_add']; ?></a></p>
+	<p><?php print $PMF_LANG['ad_categ_remark']; ?></p>
 <?php
 } else {
 	print $PMF_LANG["err_NotAuth"];

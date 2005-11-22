@@ -26,21 +26,23 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 if ($permission["backup"]) {
 ?>
 	<h2><?php print $PMF_LANG["ad_csv_backup"]; ?></h2>
-    <p><strong><?php print $PMF_LANG["ad_csv_head"]; ?></strong></p>
-	<p><?php print $PMF_LANG["ad_csv_make"]; ?></p>
-    <p align="center"><a href="attachment.php?uin=<?php print $uin; ?>&amp;aktion=sicherdaten"><?php print $PMF_LANG["ad_csv_linkdat"]; ?></a> | <a href="attachment.php?uin=<?php print $uin; ?>&amp;aktion=sicherlog"><?php print $PMF_LANG["ad_csv_linklog"]; ?></a></p>
-    
-    <div align="center">
-    <form method="post" action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=restore" enctype="multipart/form-data">
     <fieldset>
-    <legend><?php print $PMF_LANG["ad_csv_head2"]; ?></legend>
-    <p><?php print $PMF_LANG["ad_csv_restore"]; ?></p>
-    <?php print $PMF_LANG["ad_csv_file"]; ?>:
-    <input class="admin" type="file" name="userfile" />&nbsp;
-    <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_csv_ok"]; ?>" />
+      <legend><?php print $PMF_LANG["ad_csv_head"]; ?></legend>
+      <p><?php print $PMF_LANG["ad_csv_make"]; ?></p>
+      <p align="center"><a href="attachment.php?uin=<?php print $uin; ?>&amp;aktion=sicherdaten"><?php print $PMF_LANG["ad_csv_linkdat"]; ?></a> | <a href="attachment.php?uin=<?php print $uin; ?>&amp;aktion=sicherlog"><?php print $PMF_LANG["ad_csv_linklog"]; ?></a></p>
     </fieldset>
+    <p></p>
+    <form method="post" action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=restore" enctype="multipart/form-data">
+      <fieldset>
+        <legend><?php print $PMF_LANG["ad_csv_head2"]; ?></legend>
+        <p><?php print $PMF_LANG["ad_csv_restore"]; ?></p>
+        <div align="center">
+        <?php print $PMF_LANG["ad_csv_file"]; ?>:
+          <input type="file" name="userfile" size="60" />&nbsp;
+          <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_csv_ok"]; ?>" />
+        </div>
+      </fieldset>
     </form>
-    </div>
 <?php
 } else {
 	print $PMF_LANG["err_NotAuth"];

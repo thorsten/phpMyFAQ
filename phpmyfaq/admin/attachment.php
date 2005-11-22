@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: attachment.php,v 1.10 2005-10-03 08:35:36 thorstenr Exp $
+* $Id: attachment.php,v 1.11 2005-11-22 20:11:50 b33blebr0x Exp $
 *
 * Select an attachment and save it or create the SQL backup files
 *
@@ -19,6 +19,7 @@
 * under the License.
 */
 
+require_once('../inc/functions.php');
 require_once('../inc/init.php');
 define('IS_VALID_PHPMYFAQ_ADMIN', null);
 PMF_Init::cleanRequest();
@@ -41,7 +42,6 @@ if (isset($_REQUEST["aktion"]) && ($_REQUEST["aktion"] == "sicherdaten" || $_REQ
 
 require_once (PMF_ROOT_DIR."/inc/config.php");
 require_once (PMF_ROOT_DIR."/inc/constants.php");
-require_once (PMF_ROOT_DIR."/inc/functions.php");
 require_once (PMF_ROOT_DIR."/inc/data.php");
 require_once (PMF_ROOT_DIR."/inc/db.php");
 define("SQLPREFIX", $DB["prefix"]);
@@ -73,48 +73,58 @@ if (!isset($_REQUEST["aktion"]) || isset($_REQUEST["save"])) {
     <title><?php print $PMF_CONF["title"]; ?> - powered by phpMyFAQ</title>
     <meta name="copyright" content="(c) 2001-2004 Thorsten Rinne" />
     <meta http-equiv="Content-Type" content="text/html; charset=<?php print $PMF_LANG["metaCharset"]; ?>" />
+
+    <link rel="shortcut icon" href="../template/favicon.ico" type="image/x-icon" />
+
+    <link rel="icon" href="../template/favicon.ico" type="image/x-icon" />
     <style type="text/css">
     @import url(../template/admin.css);
     body { margin: 5px; }
     </style>
-    <script language="JavaScript" type="text/javascript" src="../inc/functions.js"></script>
+    <script type="text/javascript" src="../inc/functions.js"></script>
 </head>
 <body>
 <?php
 }
 
-$db->query("DELETE FROM ".SQLPREFIX."faqadminsessions WHERE time < ".(time()-(30*60)));
+$db->query("DELETE FROM ".SQLPREFIX."faqadminsessions WHERE time < ".(time() - ($PMF_CONST["timeout"] * 60)));
 
 $user = "";
 $pass = "";
 
 if ($_REQUEST["uin"]) {
 	$uin = $_REQUEST["uin"];
-	}
+}
 if (isset($uin)) {
 	$query = "SELECT usr, pass FROM ".SQLPREFIX."faqadminsessions WHERE UIN='".$uin."'";
 	if (isset($PMF_CONF["ipcheck"])) {
 		$query .= " AND ip = '".$_SERVER["REMOTE_ADDR"]."'";
-		}
-	list($user,$pass) = $db->fetch_row($db->query($query));
-	$db->query("UPDATE ".SQLPREFIX."faqadminsessions SET time = ".time()." WHERE uin = '".$uin."'");
 	}
+    $_result = $db->query($query);
+	if ($row = $db->fetch_object($_result)) {
+        $user = $row->usr;
+        $pass = $row->pass;
+    }
+	$db->query("UPDATE ".SQLPREFIX."faqadminsessions SET time = ".time()." WHERE uin = '".$uin."'");
+}
 
 if ($pass == "" && $user == "") {
 	print $PMF_LANG["ad_attach_3"];
-	}
+}
 
 if (isset($user) && isset($pass)) {
 	$result = $db->query("SELECT id, name, pass, rights FROM ".SQLPREFIX."faquser WHERE name = '".$user."' AND pass = '".$pass."'");
 	if ($db->num_rows($result) > 0) {
 		$auth = 1;
-		}
-	else {
+	} else {
 		$auth = 0;
-		}
-	list($auth_user, $auth_name, $auth_pass, $auth_rights) = $db->fetch_row($result);
-    $permission = array_combine($faqrights, explode(",", substr(chunk_split($auth_rights,1,","), 0, -1)));
 	}
+    if ($row = $db->fetch_object($result)) {
+        $user = $row->name;
+        $pass = $row->pass;
+        $permission = array_combine($faqrights, explode(",", substr(chunk_split($row->rights,1,","), 0, -1)));
+    }
+}
 
 if (!isset($_REQUEST["aktion"]) && $auth && $permission["addatt"]) {
 ?>
@@ -167,7 +177,11 @@ if (isset($_REQUEST["save"]) && $_REQUEST["save"] == TRUE && $auth && !$permissi
 if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "sicherdaten") {
 	$text[] = "-- pmf1.6: ".SQLPREFIX."faqchanges ".SQLPREFIX."faqnews ".SQLPREFIX."faqcategories ".SQLPREFIX."faqcategoryrelations ".SQLPREFIX."faqvoting ".SQLPREFIX."faqdata ".SQLPREFIX."faqcomments ".SQLPREFIX."faquser ". SQLPREFIX."faqvisits ".SQLPREFIX."faqfragen";
 	$text[] = "-- DO NOT REMOVE THE FIRST LINE!";
-	$text[] = "-- otherwise this backup will be broken";
+	$text[] = "-- pmftableprefix: ".SQLPREFIX;
+
+	$text[] = "-- DO NOT REMOVE THE LINES ABOVE!";
+
+	$text[] = "-- Otherwise this backup will be broken.";
 	print implode("\r\n",$text);
 	$text = build_insert ("SELECT * FROM ".SQLPREFIX."faqchanges", SQLPREFIX."faqchanges");
 	print implode("\r\n",$text);
@@ -196,7 +210,11 @@ if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "sicherdaten") {
 if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "sicherlog") {
 	$text[] = "-- pmf-1.6: ".SQLPREFIX."faqadminlog ".SQLPREFIX."faqsessions";
 	$text[] = "-- DO NOT REMOVE THE FIRST LINE!";
-	$text[] = "-- otherwise this backup will be broken";
+    $text[] = "-- pmftableprefix: ".SQLPREFIX;
+
+    $text[] = "-- DO NOT REMOVE THE LINES ABOVE!";
+
+    $text[] = "-- Otherwise this backup will be broken.";
 	print implode("\r\n",$text);
 	$text = build_insert ("SELECT * FROM ".SQLPREFIX."faqadminlog", SQLPREFIX."faqadminlog");
 	print implode("\r\n",$text);

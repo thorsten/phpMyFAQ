@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: news.php,v 1.10 2005-09-25 09:47:02 thorstenr Exp $
+* $Id: news.php,v 1.11 2005-11-22 20:11:50 b33blebr0x Exp $
 *
 * The main administration file for the news
 *
@@ -95,7 +95,7 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
         <dt><strong><?php print $PMF_LANG["ad_news_header"]; ?></strong></dt>
 	    <dd><input class="admin" type="text" style="width: 525px;" name="header" value="<?php print $row->header ?>" /></dd>
         <dt><strong><?php print $PMF_LANG["ad_news_text"]; ?></strong></dt>
-        <dd><noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript><textarea class="admin" id="content" name="content"><?php if (isset($row->artikel)) { print htmlspecialchars(stripslashes($row->artikel), ENT_QUOTES); } ?></textarea></dd>
+        <dd><noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript><textarea class="admin" id="content" name="content"><?php if (isset($row->artikel)) { print htmlspecialchars($row->artikel, ENT_QUOTES); } ?></textarea></dd>
 	    <dt><strong><?php print $PMF_LANG["ad_news_link_url"]; ?></strong></dt>
         <dd><input class="admin" type="text" style="width: 525px;" name="link" value="<?php print $row->link; ?>" /></dd>
 	    <dt><strong><?php print $PMF_LANG["ad_news_link_title"]; ?></strong></dt>

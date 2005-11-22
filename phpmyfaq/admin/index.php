@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.18 2005-11-02 18:19:01 thorstenr Exp $
+* $Id: index.php,v 1.19 2005-11-22 20:11:50 b33blebr0x Exp $
 *
 * The main admin backend index file
 *
@@ -22,6 +22,7 @@
 * under the License.
 */
 
+require_once('../inc/functions.php');
 require_once('../inc/init.php');
 define('IS_VALID_PHPMYFAQ_ADMIN', null);
 PMF_Init::cleanRequest();
@@ -39,16 +40,15 @@ if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "delcookie") {
 }
 
 // Read configuration, include classes and functions
-require_once(PMF_ROOT_DIR."/inc/data.php");
-require_once(PMF_ROOT_DIR."/inc/db.php");
+require_once (PMF_ROOT_DIR."/inc/data.php");
+require_once (PMF_ROOT_DIR."/inc/db.php");
 define("SQLPREFIX", $DB["prefix"]);
 $db = db::db_select($DB["type"]);
 $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
-require_once(PMF_ROOT_DIR."/inc/config.php");
-require_once(PMF_ROOT_DIR."/inc/constants.php");
-require_once(PMF_ROOT_DIR."/inc/category.php");
-require_once(PMF_ROOT_DIR."/inc/functions.php");
-require_once(PMF_ROOT_DIR."/inc/linkverifier.php");
+require_once (PMF_ROOT_DIR."/inc/config.php");
+require_once (PMF_ROOT_DIR."/inc/constants.php");
+require_once (PMF_ROOT_DIR."/inc/category.php");
+require_once (PMF_ROOT_DIR."/inc/linkverifier.php");
 
 // Set cookie before sending a header
 if (isset($_POST["aktion"]) && $_POST["aktion"] == "setcookie") {
@@ -114,8 +114,20 @@ if (isset($uin)) {
 	if (isset($PMF_CONF["ipcheck"]) && $PMF_CONF["ipcheck"] == "TRUE") {
 		$query .= " AND ip = '".$_SERVER["REMOTE_ADDR"]."'";
 	}
-	list($user, $pass) = $db->fetch_row($db->query($query));
-	$db->query ("UPDATE ".SQLPREFIX."faqadminsessions SET time = ".time()." WHERE uin = '".$uin."'");
+    $_result = $db->query($query);
+
+    if ($row = $db->fetch_object($_result)) {
+        $user = $row->usr;
+        $pass = $row->pass;
+        $db->query ("UPDATE ".SQLPREFIX."faqadminsessions SET time = ".time()." WHERE uin = '".$uin."'");
+    }
+    else {
+        adminlog("Session expired\nUIN: ".$uin);
+        $error = $PMF_LANG["ad_auth_sess"];
+        unset($auth);
+        unset($uin);
+        $_REQUEST["aktion"] = "";
+    }
 }
 
 // Authenticate the user from login POST variables
@@ -126,20 +138,15 @@ if (isset($_POST["faqpassword"])) {
     $pass = md5($_POST["faqpassword"]);
 }
 
-if ((isset($user) && isset($pass)) || isset($uin)) {
+if (isset($user) && isset($pass)) {
 	$result = $db->query("SELECT id, name, realname, email, pass, rights FROM ".SQLPREFIX."faquser WHERE name = '".$user."' AND pass = '".$pass."'");
 	if ($db->num_rows($result) != 1) {
-		// error
-		if (!isset($uin)) {
-			adminlog("Loginerror\nLogin: ".$user."\nPass: ".$pass);
-			$error = $PMF_LANG["ad_auth_fail"]." (".$user." / *)";
-			}
-		else {
-			adminlog("Session expired\nUIN: ".$uin."\nUser: ".$user."\nPass: ******");
-			$error = $PMF_LANG["ad_auth_sess"];
-			}
-		unset($auth);
-		$_REQUEST["aktion"] = "";
+        // error
+        adminlog("Loginerror\nLogin: ".$user."\nPass: ".$pass);
+        $error = $PMF_LANG["ad_auth_fail"]." (".$user." / *)";
+        unset($auth);
+        unset($uin);
+        $_REQUEST["aktion"] = "";
 	} else {
 		// okay, write new session, if not written
 		$auth = 1;
@@ -147,7 +154,7 @@ if ((isset($user) && isset($pass)) || isset($uin)) {
 			$ok = 0;
 			while (!$ok) {
 				srand((double)microtime()*1000000);
-  				$uin = md5(uniqid(rand())); 
+  				$uin = md5(uniqid(rand()));
 				if ($db->num_rows($db->query("SELECT uin FROM ".SQLPREFIX."faqadminsessions WHERE uin = '".$uin."'")) < 1) {
 					$ok = 1;
                 } else {
@@ -157,10 +164,13 @@ if ((isset($user) && isset($pass)) || isset($uin)) {
 			$db->query("INSERT INTO ".SQLPREFIX."faqadminsessions (uin, time, ip, usr, pass) VALUES ('".$uin."',".time().",'".$_SERVER["REMOTE_ADDR"]."','".$user."','".$pass."')");
 		}
 		$linkext = "?uin=".$uin;
-		list($auth_user, $auth_name, $auth_realname, $auth_email, $auth_pass, $auth_rights) = $db->fetch_row($result);
-		$user = $auth_name;
-		$pass = $auth_pass;
-        $permission = array_combine($faqrights, explode(",", substr(chunk_split($auth_rights,1,","), 0, -1)));
+        if ($row = $db->fetch_object($result)) {
+            $auth_user = $row->name;
+		    $auth_pass = $row->pass;
+            $auth_realname = $row->realname;
+            $auth_email = $row->email;
+            $permission = array_combine($faqrights, explode(",", substr(chunk_split($row->rights,1,","), 0, -1)));
+        }
 	}
 }
 
@@ -168,7 +178,12 @@ if ((isset($user) && isset($pass)) || isset($uin)) {
 if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "logout" && $auth) {
 	$db->query("DELETE FROM ".SQLPREFIX."faqadminsessions WHERE uin = '".$uin."'");
 	unset($auth);
-	unset($uid);
+	unset($uin);
+}
+
+if ((isset($_REQUEST["aktion"])) && ($_REQUEST["aktion"] == "exportfile") && $auth) {
+    require_once("export.file.php");
+    exit();
 }
 
 // if performing AJAX operation, needs to branch before header.php
@@ -271,14 +286,13 @@ if (isset($auth)) {
 			default:						print "Error"; break;
 		}
 	} else {
-        print '<h2>phpMyFAQ Information</h2>';
         // start page with some informations about the FAQ
+        print '<h2>phpMyFAQ Information</h2>';
         if ('sqlite' == $DB["type"]) {
             print 'n/a';
         } else {
             $PMF_TABLE_INFO = $db->getTableStatus();
 ?>
-	
     <dl class="table-display">
 	    <dt><strong><?php print $PMF_LANG["ad_start_visits"]; ?></strong></dt>
         <dd><?php print $PMF_TABLE_INFO[SQLPREFIX."faqsessions"]; ?></dd>
