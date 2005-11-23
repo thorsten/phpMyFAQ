@@ -23,16 +23,21 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
+require_once('../inc/functions.php');
+require_once('../inc/init.php');
+PMF_Init::cleanRequest();
+
 header ("Content-type: image/png");
 $image = @imagecreate (50, 15) or die ("Sorry, but phpMyFAQ cannot initialize new GD image stream.");
 $backgroundColor = imagecolorallocate ($image, 211, 211, 211);
 $textColor = imagecolorallocate ($image, 0, 0, 0);
 
-if (isset($_REQUEST["num"]) && $_REQUEST["num"] != "") {
-    $num = $_REQUEST["num"];
-    $num = ceil(($num - 1) * 25);
+if (isset($_GET["num"]) && $_GET["num"] != "") {
+    $num = round(($_GET["num"] * 20));
     if ($num < 25) {
-        $textColor = imagecolorallocate ($image, 255, 0, 0);
+        $textColor = imagecolorallocate ($image, 255, 255, 255);
+        $barColor = imagecolorallocate ($image, 255, 0, 0);
+        imagefilledrectangle ($image, 0, 0, round(($num/100)*50), 15, $barColor);
         }
     elseif ($num > 75) {
         $textColor = imagecolorallocate ($image, 255, 255, 255);
@@ -40,6 +45,7 @@ if (isset($_REQUEST["num"]) && $_REQUEST["num"] != "") {
         imagefilledrectangle ($image, 0, 0, round(($num/100)*50), 15, $barColor);
         }
     elseif ($num <= 75 AND $num >= 25) {
+        $textColor = imagecolorallocate ($image, 255, 255, 255);
         $barColor = imagecolorallocate ($image, 150, 150, 150);
         imagefilledrectangle ($image, 0, 0, round(($num/100)*50), 15, $barColor);
         }

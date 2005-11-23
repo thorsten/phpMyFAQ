@@ -50,7 +50,7 @@ if ($permission["viewlog"]) {
 	$vanz = $db->num_rows($db->query("SELECT sid FROM ".SQLPREFIX."faqsessions"));
 	print $vanz; ?></dd>
         <dt><strong><?php print $PMF_LANG["ad_stat_vpd"]; ?>:</strong><dt>
-        <dd><?php print round(($vanz / $danz),2); ?></dd>
+        <dd><?php print (($danz != 0) ? round(($vanz / $danz),2) : 0); ?></dd>
         <dt><strong><?php print $PMF_LANG["ad_stat_fien"]; ?>:</strong></dt>
         <dd><?php
 	if (is_file(PMF_ROOT_DIR."/data/tracking".date("dmY", $fir))) {

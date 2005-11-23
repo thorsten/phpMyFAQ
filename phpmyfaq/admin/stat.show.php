@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: stat.show.php,v 1.6 2005-09-25 09:47:02 thorstenr Exp $
+* $Id: stat.show.php,v 1.7 2005-11-23 20:11:43 b33blebr0x Exp $
 *
 * Show the session
 *
@@ -29,14 +29,15 @@ if ($permission["viewlog"]) {
 ?>
 	<h2><?php print $PMF_LANG["ad_sess_session"]; ?> "<span style="color: Red;"><?php print $_REQUEST["id"]; ?></span>"</h2>
 <?php
-	list($time) = $db->fetch_row($db->query("SELECT TIME FROM ".SQLPREFIX."faqsessions WHERE sid = ".$_REQUEST["id"]));
+	$row = $db->fetch_object($db->query("SELECT time FROM ".SQLPREFIX."faqsessions WHERE sid = ".$_REQUEST["id"]));
+    $time = $row->time;
 	$fp = fopen(PMF_ROOT_DIR."/data/tracking".date("dmY", $time), "r");
 ?>
     <table class="list">
     <tbody>
 <?php
 		$anz = 0;
-		while(list($sid, $lentry, $lcontent, $ip, $qstring, $referer, $useragent, $time) = fgetcsv($fp, 1024, ";")) {
+		while (list($sid, $lentry, $lcontent, $ip, $qstring, $referer, $useragent, $time) = fgetcsv($fp, 1024, ";")) {
 			if ($sid == $_REQUEST["id"]) {
 				$anz++;
 ?>
@@ -60,9 +61,9 @@ if ($permission["viewlog"]) {
             <td class="list"><?php print $ip; ?></td>
         </tr>
 <?php
-					}
-				}
-			}
+                }
+            }
+        }
 ?>
     </tbody>
     <tfoot>
@@ -72,8 +73,7 @@ if ($permission["viewlog"]) {
     </tfoot>
     </table>
 <?php
-	}
-else {
+} else {
 	print $PMF_LANG["err_NotAuth"];
-	}
+}
 ?>

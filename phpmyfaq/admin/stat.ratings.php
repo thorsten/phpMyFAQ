@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: stat.ratings.php,v 1.7 2005-09-25 09:47:02 thorstenr Exp $
+* $Id: stat.ratings.php,v 1.8 2005-11-23 20:11:42 b33blebr0x Exp $
 *
 * The page with the ratings of the votings
 *
@@ -30,36 +30,35 @@ if ($permission["viewlog"]) {
 	<h2><?php print $PMF_LANG["ad_rs"] ?></h2>
     <table class="list">
 <?php
-	$result = $db->query('SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqdata.active, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema, AVG('.SQLPREFIX.'faqvoting.vote/'.SQLPREFIX.'faqvoting.usr) AS num, '.SQLPREFIX.'faqvoting.usr FROM '.SQLPREFIX.'faqvoting, '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang WHERE '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvoting.artikel GROUP BY '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqdata.active, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqvoting.vote, '.SQLPREFIX.'faqvoting.usr ORDER BY '.SQLPREFIX.'faqcategoryrelations.category_id');
+	$result = $db->query('SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqdata.active, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema, ('.SQLPREFIX.'faqvoting.vote / '.SQLPREFIX.'faqvoting.usr) AS num, '.SQLPREFIX.'faqvoting.usr FROM '.SQLPREFIX.'faqvoting, '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang WHERE '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvoting.artikel GROUP BY '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqdata.active, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqvoting.vote, '.SQLPREFIX.'faqvoting.usr ORDER BY '.SQLPREFIX.'faqcategoryrelations.category_id');
 	$anz = $db->num_rows($result);
 	$old = "";
-	while (list($id, $lang, $active, $rubrik, $thema, $num, $user) = $db->fetch_row($result)) {
-		if ($rubrik != $old) {
+	while ($row = $db->fetch_object($result)) {
+		if ($row->category_id != $old) {
 ?>
     <tr>
-        <td colspan="5" class="list"><strong><?php print $tree->categoryName[$rubrik]["name"]; ?></strong></td>
+        <td colspan="5" class="list"><strong><?php print $tree->categoryName[$row->category_id]["name"]; ?></strong></td>
     </tr>
 <?php
-			}
-?>
-    <tr>
-        <td class="list"><?php print $id; ?></td>
-        <td class="list"><?php print $lang; ?></td>
-        <td class="list"><a href="../index.php?action=artikel&amp;cat=<?php print $rubrik;?>&amp;id=<?php print $id;?>&amp;artlang=<?php print $lang; ?>"><?php print stripslashes($thema); ?></a></td>
-        <td class="list"><?php print $user; ?></td>
-        <td class="list" style="background-color: #d3d3d3;"><img src="stat.bar.php?num=<?php print $num; ?>" border="0" alt="<?php print ceil(($num - 1) * 25); ?> %" width="50" height="15" title="<?php print ceil(($num - 1) * 25); ?> %" /></td>
-    </tr>
-<?php
-		$old = $rubrik;
 		}
+?>
+    <tr>
+        <td class="list"><?php print $row->id; ?></td>
+        <td class="list"><?php print $row->lang; ?></td>
+        <td class="list"><a href="../index.php?action=artikel&amp;cat=<?php print $row->category_id;?>&amp;id=<?php print $row->id;?>&amp;artlang=<?php print $row->lang; ?>"><?php print $row->thema; ?></a></td>
+        <td class="list"><?php print $row->usr; ?></td>
+        <td class="list" style="background-color: #d3d3d3;"><img src="stat.bar.php?num=<?php print $row->num; ?>" border="0" alt="<?php print round($row->num * 20); ?> %" width="50" height="15" title="<?php print round($row->num * 20); ?> %" /></td>
+    </tr>
+<?php
+		$old = $row->category_id;
+	}
 	if ($anz > 0) {
 ?>
     <tr>
         <td colspan="5" class="list"><span style="color: green; font-weight: bold;"><?php print $PMF_LANG["ad_rs_green"] ?></span> <?php print $PMF_LANG["ad_rs_ahtf"] ?>, <span style="color: red; font-weight: bold;"><?php print $PMF_LANG["ad_rs_red"] ?></span> <?php print $PMF_LANG["ad_rs_altt"] ?></td>
     </tr>
 <?php
-		}
-	else {
+	} else {
 ?>
     </tbody>
     <tfoot>
@@ -68,12 +67,11 @@ if ($permission["viewlog"]) {
         </tr>
     </tfoot>
 <?php
-		}
+	}
 ?>
 	</table>
 <?php
-	}
-else {
-	print $PMF_LANG["err_NotAuth"];
-	}
+} else {
+    print $PMF_LANG["err_NotAuth"];
+}
 ?>
