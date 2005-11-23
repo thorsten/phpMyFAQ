@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.add.php,v 1.26 2005-09-28 15:31:39 thorstenr Exp $
+* $Id: record.add.php,v 1.27 2005-11-23 16:37:50 b33blebr0x Exp $
 *
 * Adds a record in the database
 *
@@ -75,17 +75,18 @@ if ($permission["editbt"]) {
         } else {
             $id = "";
         }
+        $content = $_POST['content'];
 ?>
 	<h3><strong><em><?php print $categorylist; ?></em>
-    <?php print stripslashes($_REQUEST["thema"]); ?></strong></h3>
-    <?php print stripslashes($content); ?>
+    <?php print $_REQUEST["thema"]; ?></strong></h3>
+    <?php print $content; ?>
     <p class="little"><?php print $PMF_LANG["msgLastUpdateArticle"].makeDate(date("YmdHis")); ?><br />
     <?php print $PMF_LANG["msgAuthor"].' '.$_REQUEST["author"]; ?></p>
     
     <form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=editpreview" method="post">
     <input type="hidden" name="id" value="<?php print $id; ?>" />
     <input type="hidden" name="thema" value="<?php print htmlspecialchars($_REQUEST["thema"]); ?>" />
-    <input type="hidden" name="content" value="<?php print htmlspecialchars($_REQUEST["content"]); ?>" />
+    <input type="hidden" name="content" value="<?php print htmlspecialchars($_POST['content']); ?>" />
     <input type="hidden" name="lang" value="<?php print $_REQUEST["language"]; ?>" />
     <input type="hidden" name="keywords" value="<?php print $_REQUEST["keywords"]; ?>" />
     <input type="hidden" name="author" value="<?php print $_REQUEST["author"]; ?>" />
@@ -102,9 +103,31 @@ if ($permission["editbt"]) {
     </form>
 <?php
     } else {
+        print "<h2>".$PMF_LANG["ad_entry_aor"]."</h2>\n";
 		print "<p>".$PMF_LANG["ad_entryins_fail"]."</p>";
-		print "<p><a href=\"javascript:history.back();\">".$PMF_LANG["ad_entry_back"]."</a></p>";
-	} 
+	    $rubrik = isset($_POST['rubrik']) ? $_POST['rubrik'] : null;
+?>
+    <form action="<?php print $_SERVER['PHP_SELF'].$linkext; ?>&amp;aktion=editpreview" method="post">
+    <input type="hidden" name="thema" value="<?php print htmlspecialchars($_POST['thema']); ?>" />
+    <input type="hidden" name="content" value="<?php print htmlspecialchars($_POST['content']); ?>" />
+    <input type="hidden" name="lang" value="<?php print $_POST['language']; ?>" />
+    <input type="hidden" name="keywords" value="<?php print $_POST['keywords']; ?>" />
+    <input type="hidden" name="author" value="<?php print $_POST['author']; ?>" />
+    <input type="hidden" name="email" value="<?php print $_POST['email']; ?>" />
+<?php
+        if (is_array($rubrik)) {
+            foreach ($rubrik as $key => $categories) {
+                print '    <input type="hidden" name="rubrik['.$key.']" value="'.$categories.'" />';
+            }
+        }
+?>
+    <input type="hidden" name="active" value="<?php print $_POST['active']; ?>" />
+    <input type="hidden" name="changed" value="<?php print $_POST['changed']; ?>" />
+    <input type="hidden" name="comment" value="<?php print $_POST['comment']; ?>" />
+    <p align="center"><input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG['ad_entry_back']; ?>" /></p>
+    </form>
+<?php
+	}
 } else {
 	print $PMF_LANG["err_NotAuth"];
 }

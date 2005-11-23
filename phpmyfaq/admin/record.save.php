@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.save.php,v 1.28 2005-09-28 15:31:39 thorstenr Exp $
+* $Id: record.save.php,v 1.29 2005-11-23 16:37:50 b33blebr0x Exp $
 *
 * Save or update a FAQ record
 *
@@ -39,8 +39,8 @@ if (isset($submit[2]) && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "" &
 	<h2><?php print $PMF_LANG["ad_entry_preview"]; ?></h2>
     
 	<h3><strong><em><?php print $categorylist; ?></em>
-    <?php print stripslashes($_REQUEST["thema"]); ?></strong></h3>
-    <?php print stripslashes($_REQUEST["content"]); ?>
+    <?php print $_REQUEST["thema"]; ?></strong></h3>
+    <?php print $_REQUEST["content"]; ?>
     <p class="little"><?php print $PMF_LANG["msgLastUpdateArticle"].makeDate(date("YmdHis")); ?><br />
     <?php print $PMF_LANG["msgAuthor"].$_REQUEST["author"]; ?></p>
 
@@ -69,7 +69,9 @@ if (isset($submit[1]) && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "" &
 	// Wenn auf Speichern geklickt wurde...
 	adminlog("Beitragsave", $_REQUEST["id"]);
     print "<h2>".$PMF_LANG["ad_entry_aor"]."</h2>\n";
-	$db->query("INSERT INTO ".SQLPREFIX."faqchanges (id, beitrag, usr, datum, what, lang) VALUES (".$db->nextID(SQLPREFIX."faqchanges", "id").", ".$_REQUEST["id"].",'".$auth_user."','".time()."','".nl2br(addslashes($_REQUEST["changed"]))."', '".addslashes($_REQUEST["language"])."')");
+    $query = sprintf("INSERT INTO %sfaqchanges (id, beitrag, usr, datum, what, lang) VALUES (%d, %d, '%s', %d, '%s', '%s')", SQLPREFIX, $db->nextID(SQLPREFIX."faqchanges", "id"), $_REQUEST["id"], $auth_user, time(), nl2br($_REQUEST["changed"]), $_REQUEST["language"]);
+	$db->query($query);
+	
 	$thema = $db->escape_string($_REQUEST["thema"]);
 	$content = $db->escape_string($_REQUEST["content"]);
 	$keywords = $db->escape_string($_REQUEST["keywords"]);
@@ -84,8 +86,8 @@ if (isset($submit[1]) && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "" &
     $datum = date("YmdHis");
     $rubrik = $_REQUEST["rubrik"];
 	
-	$result = $db->query("SELECT id, lang FROM ".SQLPREFIX."faqdata WHERE id = '".$_REQUEST["id"]."' AND lang = '".$_REQUEST["language"]."'");
-	$num = $db->num_rows($result);
+	$_result = $db->query("SELECT id, lang FROM ".SQLPREFIX."faqdata WHERE id = ".$_REQUEST["id"]." AND lang = '".$_REQUEST["language"]."'");
+	$num = $db->num_rows($_result);
 	
     // save or update the FAQ record
 	if ($num == "1") {
@@ -137,8 +139,5 @@ if (isset($submit[0])) {
     } else {
 		print $PMF_LANG["err_NotAuth"];
     }
-} elseif (!isset($_REQUEST["thema"]) || $_REQUEST["thema"] == "") {
-	print "<p>".$PMF_LANG["ad_entryins_fail"]."</p>";
-	print "<p><a href=\"javascript:history.back();\">".$PMF_LANG["ad_entry_back"]."</a></p>";
 }
 ?>

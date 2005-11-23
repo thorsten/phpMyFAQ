@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.delcommentform.php,v 1.4 2005-09-25 09:47:02 thorstenr Exp $
+* $Id: record.delcommentform.php,v 1.5 2005-11-23 16:37:50 b33blebr0x Exp $
 *
 * Form to delete user comment
 *
@@ -34,10 +34,10 @@ if ($permission["delcomment"]) {
 	<input type="hidden" name="lang" value="<?php print $_REQUEST["lang"]; ?>" />
 <?php
 	$result = $db->query("SELECT usr, email, comment FROM ".SQLPREFIX."faqcomments WHERE id = ".$_REQUEST["artid"]." AND id_comment = ".$_REQUEST["cmtid"]);
-	list($usr,$eml,$cmt) = $db->fetch_row($result);
+	$row = $db->fetch_object($result);
 ?>
-    <p align="center"><?php print $PMF_LANG["ad_entry_delcom_1"]; ?> <a href="mailto:<?php print $eml; ?>"><?php print $usr; ?></a> <?php print $PMF_LANG["ad_entry_delcom_2"]; ?></p>
-    <p align="center"><?php print $cmt; ?></p>
+    <p align="center"><?php print $PMF_LANG["ad_entry_delcom_1"]; ?> <a href="mailto:<?php print $row->email; ?>"><?php print $row->usr; ?></a> <?php print $PMF_LANG["ad_entry_delcom_2"]; ?></p>
+    <p align="center"><?php print $row->comment; ?></p>
     <p align="center"><input class="submit" type="submit" value="<?php print $PMF_LANG["ad_gen_yes"]; ?>" name="subm" /> <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_gen_no"]; ?>" name="subm" /></p>
 	</form>
 <?php

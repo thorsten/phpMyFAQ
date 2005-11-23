@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: pwd.save.php,v 1.3 2005-09-25 09:47:02 thorstenr Exp $
+* $Id: pwd.save.php,v 1.4 2005-11-23 16:37:50 b33blebr0x Exp $
 *
 * Save the password of the current user in the database
 *
@@ -25,8 +25,8 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 }
 
 if (md5($_REQUEST["opass"]) == $auth_pass && $_REQUEST["npass"] == $_REQUEST["bpass"]) {
-	$db->query("UPDATE ".SQLPREFIX."faquser SET pass = '".md5(addslashes($_REQUEST["bpass"]))."' WHERE id = ".$auth_user);
-	$db->query("UPDATE ".SQLPREFIX."faqadminsessions SET pass = '".md5(addslashes($_REQUEST["bpass"]))."' WHERE uin = '".$uin."'");
+	$db->query("UPDATE ".SQLPREFIX."faquser SET pass = '".md5($_REQUEST["bpass"])."' WHERE name = '".$auth_user."'");
+	$db->query("UPDATE ".SQLPREFIX."faqadminsessions SET pass = '".md5($_REQUEST["bpass"])."' WHERE uin = '".$uin."'");
 	print $PMF_LANG["ad_passwdsuc"]."<br />";
 	
 	if (isset($_COOKIE['cuser'])) {

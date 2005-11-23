@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: password.php,v 1.6 2005-09-25 09:47:02 thorstenr Exp $
+* $Id: password.php,v 1.7 2005-11-23 16:37:50 b33blebr0x Exp $
 *
 * Reset a forgotten password to a new one
 *
@@ -19,6 +19,7 @@
 * under the License.
 */
 
+require_once('../inc/functions.php');
 require_once('../inc/init.php');
 define('IS_VALID_PHPMYFAQ_ADMIN', null);
 PMF_Init::cleanRequest();
@@ -40,22 +41,19 @@ define("SQLPREFIX", $DB["prefix"]);
 $db = db::db_select($DB["type"]);
 $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
 require_once (PMF_ROOT_DIR."/inc/category.php");
-require_once (PMF_ROOT_DIR."/inc/functions.php");
 require_once (PMF_ROOT_DIR."/inc/idna_convert.class.php");
 $IDN = new idna_convert;
 
-/* get language (default: english) */
-if ($PMF_CONF["detection"] && !isset($LANG) && isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) {
-    require_once("../lang/language_".substr($_SERVER["HTTP_ACCEPT_LANGUAGE"], 0, 2).".php");
-    $LANGCODE = substr($_SERVER["HTTP_ACCEPT_LANGUAGE"], 0, 2);
-    }
-elseif (isset($LANGCODE)) {
+// get language (default: english)
+$pmf = new PMF_Init();
+$LANGCODE = $pmf->setLanguage((isset($PMF_CONF['detection']) ? true : false), $PMF_CONF['language']);
+
+if (isset($LANGCODE) && isset($languageCodes[strtoupper($LANGCODE)])) {
     require_once("../lang/language_".$LANGCODE.".php");
-    }
-elseif (!isset($LANGCODE)) {
-    require_once ("../lang/language_en.php");
+} else {
     $LANGCODE = "en";
-    }
+    require_once ("../lang/language_en.php");
+}
 
 /* header of the admin page */
 require_once ("header.php");
@@ -71,8 +69,8 @@ elseif (isset($_GET["action"]) && $_GET["action"] == "savenewpassword") {
     }
 elseif (isset($_GET["action"]) && $_GET["action"] == "sendmail") {
     if (isset($_POST["username"]) && $_POST["username"] != "" && isset($_POST["email"]) && $_POST["email"] != "" && checkEmail($_POST["email"])) {
-        $username = $_POST["username"];
-        $email = $_POST["email"];
+        $username = $db->escape_string($_POST["username"]);
+        $email = $db->escape_string($_POST["email"]);
         $num = $db->num_rows($db->query("SELECT name, email FROM ".SQLPREFIX."faquser WHERE name = '".$username."' AND email = '".$email."'"));
         if ($num == 1) {
             $consonants = array("b","c","d","f","g","h","j","k","l","m","n","p","r","s","t","v","w","x","y","z");

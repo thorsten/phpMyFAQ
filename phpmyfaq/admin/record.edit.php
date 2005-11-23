@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.edit.php,v 1.24 2005-09-25 09:47:02 thorstenr Exp $
+* $Id: record.edit.php,v 1.25 2005-11-23 16:37:50 b33blebr0x Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23
@@ -32,7 +32,10 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     
     if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "takequestion") {
     
-		list($rubrik, $thema) = $db->fetch_row($db->query("SELECT ask_rubrik, ask_content FROM ".SQLPREFIX."faqfragen WHERE id = ".$_REQUEST["id"]));
+        $_result = $db->query("SELECT ask_rubrik, ask_content FROM ".SQLPREFIX."faqfragen WHERE id = ".$_REQUEST["id"]);
+		$row = $db->fetch_object($_result);
+        $rubrik = $row->ask_rubrik;
+        $thema = $row->ask_content;
 		$lang = trim(strtolower(substr($_SERVER["HTTP_ACCEPT_LANGUAGE"], 0, 2)));
         $categories = array(array('category_id' => $rubrik, 'category_lang' => $lang));
     }
@@ -42,18 +45,20 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
             $id = $_REQUEST["id"];
             $acti = "saveentry&amp;id=".$id;
         } else {
+			$id = 0;
             $acti = "insertentry";
-			unset($id);
         }
         $lang = $_REQUEST["lang"];
-        $rubrik = $_REQUEST["rubrik"];
-        foreach ($rubrik as $cats) {
-            $categories[] = array('category_id' => $cats, 'category_lang' => $lang);
+        $rubrik = isset($_POST['rubrik']) ? $_POST['rubrik'] : null;
+        if (is_array($rubrik)) {
+            foreach ($rubrik as $cats) {
+                $categories[] = array('category_id' => $cats, 'category_lang' => $lang);
+            }
         }
         $active = $_REQUEST["active"];
         $keywords = $_REQUEST["keywords"];
-        $thema = stripslashes($_REQUEST["thema"]);
-        $content = stripslashes(htmlspecialchars($_REQUEST["content"]));
+        $thema = $_REQUEST["thema"];
+        $content = htmlspecialchars($_REQUEST["content"]);
         $author = $_REQUEST["author"];
         $email = $_REQUEST["email"];
         $comment = $_REQUEST["comment"];
@@ -75,9 +80,17 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
             // Get the record
 			$resultRecord = $db->query('SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqdata.active, '.SQLPREFIX.'faqdata.keywords, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqdata.content, '.SQLPREFIX.'faqdata.author, '.SQLPREFIX.'faqdata.email, '.SQLPREFIX.'faqdata.comment, '.SQLPREFIX.'faqdata.datum FROM '.SQLPREFIX.'faqdata WHERE id = '.$id.' AND lang = \''.$lang.'\'');
             
-			list($id, $lang, $active, $keywords, $thema, $content, $author, $email, $comment, $date) = $db->fetch_row($resultRecord);
-            
-            $content = htmlspecialchars($content);
+			$row = $db->fetch_object($resultRecord);
+            $id = $row->id;
+            $lang = $row->lang;
+            $active = $row->active;
+            $keywords = $row->keywords;
+            $thema = $row->thema;
+            $content = htmlspecialchars($row->content);
+            $author = $row->author;
+            $email = $row->email;
+            $comment = $row->comment;
+            $date = $row->datum;
 			$acti = 'saveentry&amp;id='.$_REQUEST['id'];
 		} else {
 			$acti = 'insertentry';
@@ -111,10 +124,10 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     </select><br />
     
     <label class="left" for="thema"><?php print $PMF_LANG["ad_entry_theme"]; ?></label>
-    <textarea class="admin" name="thema" id="thema" style="width: 565px; height: 50px;" cols="2" rows="50"><?php if (isset($thema)) { print stripslashes($thema); } ?></textarea><br />
+    <textarea class="admin" name="thema" id="thema" style="width: 565px; height: 50px;" cols="2" rows="50"><?php if (isset($thema)) { print $thema; } ?></textarea><br />
 	
     <label class="left" for="content"><?php print $PMF_LANG["ad_entry_content"]; ?></label>
-    <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript><textarea class="admin" id="content" name="content" cols="50" rows="10"><?php if (isset($content)) { print stripslashes($content); } ?></textarea><br />
+    <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript><textarea class="admin" id="content" name="content" cols="50" rows="10"><?php if (isset($content)) { print $content; } ?></textarea><br />
 
 <?php
     if ($permission["addatt"]) {
@@ -150,18 +163,16 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 ?>
 
     <label class="left" for="language"><?php print $PMF_LANG["ad_entry_locale"]; ?>:</label>
-    <select name="language" id="language">
-    <?php print languageOptions($lang); ?>
-	</select><br />
+    <?php print selectLanguages($lang); ?><br />
     
 	<label class="left" for="keywords"><?php print $PMF_LANG["ad_entry_keywords"]; ?></label>
-    <input class="admin" name="keywords" id="keywords" style="width: 565px;" value="<?php if (isset($keywords)) { print htmlspecialchars(stripslashes($keywords), ENT_QUOTES); } ?>" /><br />
+    <input class="admin" name="keywords" id="keywords" style="width: 565px;" value="<?php if (isset($keywords)) { print htmlspecialchars($keywords); } ?>" /><br />
 
 	<label class="left" for="author"><?php print $PMF_LANG["ad_entry_author"]; ?></label>
-    <input class="admin" name="author" id="author" style="width: 565px;" value="<?php if (isset($author)) { print $author; } else { print $auth_realname; } ?>" /><br />
+    <input class="admin" name="author" id="author" style="width: 565px;" value="<?php if (isset($author)) { print htmlspecialchars($author); } else { print $auth_realname; } ?>" /><br />
 
     <label class="left" for="email"><?php print $PMF_LANG["ad_entry_email"]; ?></label>
-    <input class="admin" name="email" id="email" style="width: 565px;" value="<?php if (isset($email)) { print $email; } else { print $auth_email; } ?>" /><br />
+    <input class="admin" name="email" id="email" style="width: 565px;" value="<?php if (isset($email)) { print htmlspecialchars($email); } else { print $auth_email; } ?>" /><br />
 	
 <?php
 	if (isset($active) && $active == "yes") {
@@ -201,10 +212,9 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     <h3><?php print $PMF_LANG["ad_entry_changelog"]; ?></h3>
 <?php
 		$result = $db->query("SELECT usr, datum, what FROM ".SQLPREFIX."faqchanges WHERE beitrag = ".$id." ORDER BY id DESC");
-		while (list($usr,$dat,$wht) = $db->fetch_row($result)) {
-			list($usr) = $db->fetch_row($db->query("SELECT NAME FROM ".SQLPREFIX."faquser WHERE id = ".$usr));
+		while ($row = $db->fetch_object($result)) {
 ?>
-    <div style="font-size: 10px;"><strong><?php print date("Y-m-d H:i:s",$dat).": ".$usr; ?></strong><br /><?php print $wht; ?></div>	
+    <div style="font-size: 10px;"><strong><?php print date("Y-m-d H:i:s", $row->datum).": ".$row->usr; ?></strong><br /><?php print $row->what; ?></div>
 <?php
 		}
 ?>
@@ -215,9 +225,9 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 ?>
     <p><strong><?php print $PMF_LANG["ad_entry_comment"] ?></strong></p>
 <?php
-			while(list($id,$cm_id,$usr,$eml,$cmt,$dt) = $db->fetch_row($result)) {
+            while ($row = $db->fetch_object($result)) {
 ?>	
-    <p><?php print $PMF_LANG["ad_entry_commentby"] ?> <a href="mailto:<?php print $eml; ?>"><?php print $usr; ?></a>:<br /><?php print $cmt; ?><br /><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=delcomment&amp;artid=<?php print $id; ?>&amp;cmtid=<?php print $cm_id; ?>&amp;lang=<?php print $lang; ?>"><img src="images/delete.gif" alt="<?php print $PMF_LANG["ad_entry_delete"] ?>" title="<?php print $PMF_LANG["ad_entry_delete"] ?>" border="0" width="17" height="18" align="right" /></a></p>
+    <p><?php print $PMF_LANG["ad_entry_commentby"] ?> <a href="mailto:<?php print $row->email; ?>"><?php print $row->usr; ?></a>:<br /><?php print $row->comment; ?><br /><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=delcomment&amp;artid=<?php print $row->id; ?>&amp;cmtid=<?php print $row->id_comment; ?>&amp;lang=<?php print $lang; ?>"><img src="images/delete.gif" alt="<?php print $PMF_LANG["ad_entry_delete"] ?>" title="<?php print $PMF_LANG["ad_entry_delete"] ?>" border="0" width="17" height="18" align="right" /></a></p>
 <?php
 			}
 		}

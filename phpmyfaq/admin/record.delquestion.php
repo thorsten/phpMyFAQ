@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.delquestion.php,v 1.3 2005-09-25 09:47:02 thorstenr Exp $
+* $Id: record.delquestion.php,v 1.4 2005-11-23 16:37:50 b33blebr0x Exp $
 *
 * Delete open questions
 *
@@ -48,7 +48,7 @@ if ($permission["delquestion"]) {
 ?>
         <tr>
             <td class="list"><?php print makeDate($row->ask_date); ?><br /><a href="mailto:<?php print $row->ask_usermail; ?>"><?php print $row->ask_username; ?></a></td>
-            <td class="list"><?php print $tree->categoryName[$row->ask_rubrik]["name"].":<br />".stripslashes($row->ask_content); ?></td>
+            <td class="list"><?php print $tree->categoryName[$row->ask_rubrik]["name"].":<br />".$row->ask_content; ?></td>
             <td class="list"><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=question&amp;id=<?php print $row->id; ?>&amp;delete=yes"><?php print $PMF_LANG["ad_gen_delete"]; ?>!</a><br /><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=takequestion&amp;id=<?php print $row->id; ?>"><?php print $PMF_LANG["ad_ques_take"] ?></a></td>
         </tr>
 <?php
