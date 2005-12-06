@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: constants.php,v 1.6 2005-09-15 19:59:50 thorstenr Exp $
+* $Id: constants.php,v 1.7 2005-12-06 16:16:31 b33blebr0x Exp $
 *
 * Constants for phpMyFAQ
 *
@@ -28,6 +28,22 @@ $PMF_CONST["timeout"] = "30";
 /****************************************************************************
  *                  DO NOT CHANGE ANYTHING BELOW THIS LINE!                 *
  ****************************************************************************/
+
+/**
+* Supported databases for phpMyFAQ
+*
+* @var  array
+*/
+$supported_databases = array(
+    'mysql'     => array('4.1.0', 'MySQL 3.23 / 4.0'),
+    'pgsql'     => array('4.2.0', 'PostgreSQL 7.2 or later'),
+    'sybase'    => array('4.1.0', 'Sybase'),
+    'mssql'     => array('4.1.0', 'MS SQL Server 2000'),
+    'mysqli'    => array('5.0.0', 'MySQL 4.1 / 5.0'),
+    'sqlite'    => array('5.0.0', 'SQLite'),
+    'ibm_db2'   => array('4.1.0', 'IBM DB2 Universal Database'),
+    'maxdb'     => array('4.1.0', 'MaxDB (experimental)')
+    );
 
 /* This array sets the rights for an user - DO NOT CHANGE! */
 $faqrights = array (
