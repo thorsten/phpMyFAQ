@@ -51,10 +51,11 @@ if (0 > version_compare(PHP_VERSION, '4')) {
  * @since 2005-09-17
  * @version 0.1
  */
-require_once('PMF/User.php');
+//require_once('PMF/User.php');
 
 /* user defined includes */
 // section -64--88-1-5-15e2075:10637248df4:-7fd0-includes begin
+require_once dirname(__FILE__).'/User.php';
 // section -64--88-1-5-15e2075:10637248df4:-7fd0-includes end
 
 /* user defined constants */
@@ -177,7 +178,7 @@ class PMF_Perm
         if (!file_exists("PMF/".$perm->_perm_typemap[$perm_level].".php")) {
         	return $perm;
         }
-        require_once("PMF/".$perm->_perm_typemap[$perm_level].".php");
+        require_once dirname(__FILE__)."/".$perm->_perm_typemap[$perm_level].".php";
         // instantiate 
         $permclass = "PMF_".$perm->_perm_typemap[$perm_level];
 		$perm = new $permclass();

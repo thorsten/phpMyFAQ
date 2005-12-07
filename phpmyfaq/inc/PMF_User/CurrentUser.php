@@ -27,10 +27,11 @@ if (0 > version_compare(PHP_VERSION, '4')) {
  * @since 2005-09-17
  * @version 0.1
  */
-require_once('PMF/User.php');
+//require_once('PMF/User.php');
 
 /* user defined includes */
 // section -64--88-1-12--f895d8c:106777dbaf0:-7fdd-includes begin
+require_once dirname(__FILE__).'/User.php';
 // section -64--88-1-12--f895d8c:106777dbaf0:-7fdd-includes end
 
 /* user defined constants */
@@ -72,6 +73,9 @@ class PMF_CurrentUser
     function PMF_CurrentUser()
     {
         // section -64--88-1-12--f895d8c:106777dbaf0:-7fd8 begin
+        // session not started
+        if (session_id() == "")
+            session_start();
         // section -64--88-1-12--f895d8c:106777dbaf0:-7fd8 end
     }
 
@@ -97,7 +101,7 @@ class PMF_CurrentUser
         	}
 			//$currentUser = new PMF_CurrentUser();
 	        // user in session is a valid object
-			if (get_class($_SESSION[PMF_SESSION_CURRENT_USER]) == 'pmf_currentuser') {
+			if (get_class($_SESSION[PMF_SESSION_CURRENT_USER]) == __CLASS__) {
 				return true;
 			}
 			// create a new current user in session

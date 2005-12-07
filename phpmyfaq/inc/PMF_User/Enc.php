@@ -44,10 +44,11 @@ if (0 > version_compare(PHP_VERSION, '4')) {
  * @since 2005-09-30
  * @version 0.1
  */
-require_once('PMF/Auth.php');
+//require_once('PMF/Auth.php');
 
 /* user defined includes */
 // section 127-0-0-1-17ec9f7:1062544275a:-7ffd-includes begin
+require_once dirname(__FILE__).'/Auth.php';
 // section 127-0-0-1-17ec9f7:1062544275a:-7ffd-includes end
 
 /* user defined constants */
@@ -183,7 +184,7 @@ class PMF_Enc
         	$enc->errors[] = PMF_USERERROR_NO_ENCTYPE;
         	return $enc;
         }
-        require_once("PMF/".$enc->_enc_typemap[$enctype].".php");
+        require_once dirname(__FILE__)."/".$enc->_enc_typemap[$enctype].".php";
         $newclass = "PMF_".$enc->_enc_typemap[$enctype];
         if (!class_exists($newclass)) {
         	$enc->errors[] = PMF_USERERROR_NO_ENCTYPE;

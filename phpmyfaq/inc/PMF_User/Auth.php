@@ -44,7 +44,7 @@ if (0 > version_compare(PHP_VERSION, '4')) {
  * @since 2005-09-18
  * @version 0.1
  */
-require_once('PMF/Enc.php');
+//require_once('PMF/Enc.php');
 
 /**
  * Creates a new user object.
@@ -57,10 +57,12 @@ require_once('PMF/Enc.php');
  * @since 2005-09-17
  * @version 0.1
  */
-require_once('PMF/User.php');
+//require_once('PMF/User.php');
 
 /* user defined includes */
 // section 127-0-0-1-17ec9f7:105b52d5117:-7fef-includes begin
+require_once dirname(__FILE__).'/Enc.php';
+require_once dirname(__FILE__).'/User.php';
 // section 127-0-0-1-17ec9f7:105b52d5117:-7fef-includes end
 
 /* user defined constants */
@@ -255,7 +257,7 @@ class PMF_Auth
         	$auth->errors[] = PMF_USERERROR_NO_AUTHTYPE;
         	return $auth;
         }
-        require_once("PMF/".$auth->_auth_typemap[$database].".php");
+        require_once dirname(__FILE__)."/".$auth->_auth_typemap[$database].".php";
         // instantiate 
         $authclass = "PMF_".$auth->_auth_typemap[$database];
 		$auth = new $authclass();

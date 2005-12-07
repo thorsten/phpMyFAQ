@@ -47,10 +47,11 @@ if (0 > version_compare(PHP_VERSION, '4')) {
  * @since 2005-09-17
  * @version 0.1
  */
-require_once('PMF/Perm.php');
+//require_once('PMF/Perm.php');
 
 /* user defined includes */
 // section 127-0-0-1-17ec9f7:105b52d5117:-7fe2-includes begin
+require_once dirname(__FILE__).'/Perm.php';
 // section 127-0-0-1-17ec9f7:105b52d5117:-7fe2-includes end
 
 /* user defined constants */

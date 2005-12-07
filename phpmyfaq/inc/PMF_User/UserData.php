@@ -26,10 +26,11 @@ if (0 > version_compare(PHP_VERSION, '4')) {
  * @since 2005-09-17
  * @version 0.1
  */
-require_once('PMF/User.php');
+//require_once('PMF/User.php');
 
 /* user defined includes */
 // section -64--88-1-10-1860038:10612dd0903:-7fde-includes begin
+require_once dirname(__FILE__).'/User.php';
 // section -64--88-1-10-1860038:10612dd0903:-7fde-includes end
 
 /* user defined constants */

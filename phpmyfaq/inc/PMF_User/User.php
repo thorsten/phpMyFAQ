@@ -44,7 +44,7 @@ if (0 > version_compare(PHP_VERSION, '4')) {
  * @since 2005-09-30
  * @version 0.1
  */
-require_once('PMF/Auth.php');
+//require_once('PMF/Auth.php');
 
 /**
  * This class manages user permissions and group memberships.
@@ -64,7 +64,7 @@ require_once('PMF/Auth.php');
  * @since 2005-09-17
  * @version 0.1
  */
-require_once('PMF/Perm.php');
+//require_once('PMF/Perm.php');
 
 /**
  * The userdata class provides methods to manage user information.
@@ -73,10 +73,13 @@ require_once('PMF/Perm.php');
  * @since 2005-09-18
  * @version 0.1
  */
-require_once('PMF/UserData.php');
+//require_once('PMF/UserData.php');
 
 /* user defined includes */
 // section 127-0-0-1-17ec9f7:105b52d5117:-7ff0-includes begin
+require_once dirname(__FILE__).'/Auth.php';
+require_once dirname(__FILE__).'/Perm.php';
+require_once dirname(__FILE__).'/UserData.php';
 // section 127-0-0-1-17ec9f7:105b52d5117:-7ff0-includes end
 
 /* user defined constants */

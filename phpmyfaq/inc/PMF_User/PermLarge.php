@@ -22,10 +22,11 @@ if (0 > version_compare(PHP_VERSION, '4')) {
  * @since 2005-09-18
  * @version 0.1
  */
-require_once('PMF/PermMedium.php');
+//require_once('PMF/PermMedium.php');
 
 /* user defined includes */
 // section 127-0-0-1-17ec9f7:105b52d5117:-7fdd-includes begin
+require_once dirname(__FILE__).'/PermMedium.php';
 // section 127-0-0-1-17ec9f7:105b52d5117:-7fdd-includes end
 
 /* user defined constants */

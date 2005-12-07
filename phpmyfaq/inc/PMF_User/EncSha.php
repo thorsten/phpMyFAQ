@@ -26,10 +26,11 @@ if (0 > version_compare(PHP_VERSION, '4')) {
  * @since 2005-09-18
  * @version 0.1
  */
-require_once('PMF/Enc.php');
+//require_once('PMF/Enc.php');
 
 /* user defined includes */
 // section 127-0-0-1-17ec9f7:1062544275a:-7ff1-includes begin
+require_once dirname(__FILE__).'/Enc.php';
 // section 127-0-0-1-17ec9f7:1062544275a:-7ff1-includes end
 
 /* user defined constants */

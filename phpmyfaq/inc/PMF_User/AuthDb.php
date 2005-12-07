@@ -38,10 +38,11 @@ if (0 > version_compare(PHP_VERSION, '4')) {
  * @since 2005-09-30
  * @version 0.1
  */
-require_once('PMF/Auth.php');
+//require_once('PMF/Auth.php');
 
 /* user defined includes */
 // section -64--88-1-10-36edbf7a:106a832a030:-7fdb-includes begin
+require_once dirname(__FILE__).'/Auth.php';
 // section -64--88-1-10-36edbf7a:106a832a030:-7fdb-includes end
 
 /* user defined constants */
