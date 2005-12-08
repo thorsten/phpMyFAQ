@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mysql.sql.php,v 1.11 2005-10-01 14:53:16 thorstenr Exp $
+* $Id: mysql.sql.php,v 1.12 2005-12-08 15:51:33 b33blebr0x Exp $
 *
 * CREATE TABLE instruction for MySQL database
 *
@@ -34,16 +34,6 @@ $uninst[] = "DROP TABLE ".$sqltblpre."faqsessions";
 $uninst[] = "DROP TABLE ".$sqltblpre."faquser";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqvisits";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqglossary";
-
-//faquser
-$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faquser (
-id int(2) NOT NULL,
-name text NOT NULL,
-pass varchar(64) BINARY NOT NULL,
-realname varchar(255) NOT NULL default '',
-email varchar(255) NOT NULL default '',
-rights varchar(255) NOT NULL,
-PRIMARY KEY (id))";
 
 //faqdata
 $query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqdata (
@@ -173,4 +163,77 @@ item VARCHAR(255) NOT NULL ,
 definition TEXT NOT NULL,
 PRIMARY KEY (id, lang))";
 
-$query[] = "INSERT INTO ".$sqltblpre."faquser (id, name, pass, realname, email, rights) VALUES (1, 'admin', '".md5($password)."', '".$realname."', '".$email."', '1111111111111111111111111')";
+//faquser
+/*$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faquser (
+id int(2) NOT NULL,
+name text NOT NULL,
+pass varchar(64) BINARY NOT NULL,
+realname varchar(255) NOT NULL default '',
+email varchar(255) NOT NULL default '',
+rights varchar(255) NOT NULL,
+PRIMARY KEY (id))";
+
+$query[] = "INSERT INTO ".$sqltblpre."faquser (id, name, pass, realname, email, rights) VALUES (1, 'admin', '".md5($password)."', '".$realname."', '".$email."', '1111111111111111111111111')";*/
+
+$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqgroup (
+  group_id INTEGER(10) UNSIGNED NOT NULL,
+  name VARCHAR(25) NULL,
+  description TINYTEXT NULL,
+  auto_join INTEGER(1) UNSIGNED NULL,
+  PRIMARY KEY(group_id),
+  UNIQUE INDEX name(name)
+)";
+
+$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqgroup_right (
+  group_id INTEGER(10) UNSIGNED NOT NULL,
+  right_id INTEGER(10) UNSIGNED NOT NULL,
+  PRIMARY KEY(group_id, right_id)
+)";
+
+$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqright (
+  right_id INTEGER(10) UNSIGNED NOT NULL,
+  name VARCHAR(50) NULL,
+  description TINYTEXT NULL,
+  for_users INTEGER(1) UNSIGNED NULL DEFAULT 1,
+  for_groups INTEGER(1) UNSIGNED NULL DEFAULT 1,
+  PRIMARY KEY(right_id)
+)";
+
+$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faquser (
+  user_id INTEGER(10) UNSIGNED NOT NULL,
+  login VARCHAR(25) NOT NULL,
+  session_id VARCHAR(150) NULL,
+  session_timestamp TIMESTAMP(14) NULL,
+  account_status VARCHAR(50) NULL,
+  last_login TIMESTAMP(14) NULL,
+  auth_source VARCHAR(100) NULL,
+  member_since TIMESTAMP(14) NULL,
+  PRIMARY KEY(user_id),
+  UNIQUE INDEX session(session_id),
+  UNIQUE INDEX login(login)
+)";
+
+$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faquserdata (
+  user_id INTEGER(10) UNSIGNED NOT NULL,
+  last_modified TIMESTAMP(14) NULL,
+  display_name VARCHAR(50) NULL,
+  email VARCHAR(100) NULL
+)";
+
+$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faquserlogin (
+  login VARCHAR(25) NOT NULL,
+  pass VARCHAR(150) NULL,
+  PRIMARY KEY(login)
+)";
+
+$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faquser_group (
+  user_id INTEGER(10) UNSIGNED NOT NULL,
+  group_id INTEGER(10) UNSIGNED NOT NULL,
+  PRIMARY KEY(user_id, group_id)
+)";
+
+$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faquser_right (
+  user_id INTEGER(10) UNSIGNED NOT NULL,
+  right_id INTEGER(10) UNSIGNED NOT NULL,
+  PRIMARY KEY(user_id, right_id)
+)";
