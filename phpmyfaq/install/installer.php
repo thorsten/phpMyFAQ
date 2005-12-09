@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.37 2005-12-09 16:35:37 b33blebr0x Exp $
+* $Id: installer.php,v 1.38 2005-12-09 18:30:08 b33blebr0x Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -685,6 +685,8 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 	}
 	// add admin account and rights
 	/*$query[] = "INSERT INTO ".$sqltblpre."faquser (id, name, pass, realname, email, rights) VALUES (1, 'admin', '".md5($password)."', '".$realname."', '".$email."', '1111111111111111111111111')";*/
+	if (!defined('SQLPREFIX'))
+        define('SQLPREFIX', $sqltblpre);
 	require_once dirname(dirname(__FILE__)).'/inc/PMF_User/User.php';
 	$admin = new PMF_User();
 	$admin->createUser('admin', $password);
@@ -693,6 +695,189 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 	    'email' => $email
     );
 	$admin->setUserData($adminData);
+	$adminID = $admin->getUserId();
+	// add rights
+	$rights = array(
+        //1 => "adduser",
+        array(
+            'name' => 'adduser',
+            'description' => 'Right to add user accounts',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
+        //2 => "edituser",
+        array(
+            'name' => 'edituser',
+            'description' => 'Right to edit user accounts',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
+        //3 => "deluser",
+        array(
+            'name' => 'deluser',
+            'description' => 'Right to delete user accounts',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
+        //4 => "addbt",
+        array(
+            'name' => 'addbt',
+            'description' => 'Right to add faq entries',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
+        //5 => "editbt",
+        array(
+            'name' => 'editbt',
+            'description' => 'Right to edit faq entries',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
+        //6 => "delbt",
+        array(
+            'name' => 'delbt',
+            'description' => 'Right to delete faq entries',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
+        //7 => "viewlog",
+        array(
+            'name' => 'viewlog',
+            'description' => 'Right to view logfiles',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
+        //8 => "adminlog",
+        array(
+            'name' => 'adminlog',
+            'description' => 'Right to view admin log',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
+        //9 => "delcomment",
+        array(
+            'name' => 'delcomment',
+            'description' => 'Right to delete comments',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
+        //10 => "addnews",
+        array(
+            'name' => 'addnews',
+            'description' => 'Right to add news',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
+        //11 => "editnews",
+        array(
+            'name' => 'editnews',
+            'description' => 'Right to edit news',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
+        //12 => "delnews",
+        array(
+            'name' => 'delnews',
+            'description' => 'Right to delete news',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
+        //13 => "addcateg",
+        array(
+            'name' => 'addcateg',
+            'description' => 'Right to add categories',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
+        //14 => "editcateg",
+        array(
+            'name' => 'editcateg',
+            'description' => 'Right to edit categories',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
+        //15 => "delcateg",
+        array(
+            'name' => 'delcateg',
+            'description' => 'Right to delete categories',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
+        //16 => "passwd",
+        array(
+            'name' => 'passwd',
+            'description' => 'Right to change passwords',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
+        //17 => "editconfig",
+        array(
+            'name' => 'editconfig',
+            'description' => 'Right to edit configuration',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
+        //18 => "addatt",
+        array(
+            'name' => 'addatt',
+            'description' => 'Right to add attachments',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
+        //19 => "delatt",
+        array(
+            'name' => 'delatt',
+            'description' => 'Right to delete attachments',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
+        //20 => "backup",
+        array(
+            'name' => 'backup',
+            'description' => 'Right to save backups',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
+        //21 => "restore",
+        array(
+            'name' => 'restore',
+            'description' => 'Right to load backups',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
+        //22 => "delquestion",
+        array(
+            'name' => 'delquestion',
+            'description' => 'Right to delete questions',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
+        //23 => 'addglossary',
+        array(
+            'name' => 'addglossary',
+            'description' => 'Right to add glossary entries',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
+        //24 => 'editglossary',
+        array(
+            'name' => 'editglossary',
+            'description' => 'Right to edit glossary entries',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
+        //25 => 'delglossary'
+        array(
+            'name' => 'delglossary',
+            'description' => 'Right to delete glossary entries',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
+    );
+    foreach ($rights as $right) {
+        $rightID = $admin->perm->addRight($right);
+        $admin->perm->grantUserRight($rightID, $adminID);
+    }
 	print "</strong></p>\n";
 	
     print "<p class=\"center\">All tables were created and filled with the data.</p>\n";

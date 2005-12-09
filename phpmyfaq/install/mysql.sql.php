@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mysql.sql.php,v 1.14 2005-12-09 14:58:41 b33blebr0x Exp $
+* $Id: mysql.sql.php,v 1.15 2005-12-09 18:30:08 b33blebr0x Exp $
 *
 * CREATE TABLE instruction for MySQL database
 *
@@ -31,9 +31,17 @@ $uninst[] = "DROP TABLE ".$sqltblpre."faqfragen";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqnews";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqvoting";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqsessions";
-$uninst[] = "DROP TABLE ".$sqltblpre."faquser";
+//$uninst[] = "DROP TABLE ".$sqltblpre."faquser";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqvisits";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqglossary";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqgroup";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqgroup_right";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqright";
+$uninst[] = "DROP TABLE ".$sqltblpre."faquser";
+$uninst[] = "DROP TABLE ".$sqltblpre."faquserdata";
+$uninst[] = "DROP TABLE ".$sqltblpre."faquserlogin";
+$uninst[] = "DROP TABLE ".$sqltblpre."faquser_group";
+$uninst[] = "DROP TABLE ".$sqltblpre."faquser_right";
 
 //faqdata
 $query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqdata (
