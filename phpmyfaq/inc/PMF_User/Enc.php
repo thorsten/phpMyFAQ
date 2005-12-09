@@ -180,11 +180,12 @@ class PMF_Enc
         	$enc->errors[] = PMF_USERERROR_NO_ENCTYPE;
         	return $enc;
         }
-        if (!file_exists("PMF/".$enc->_enc_typemap[$enctype].".php")) {
+        $classfile = dirname(__FILE__)."/".$enc->_enc_typemap[$enctype].".php";
+        if (!file_exists($classfile)) {
         	$enc->errors[] = PMF_USERERROR_NO_ENCTYPE;
         	return $enc;
         }
-        require_once dirname(__FILE__)."/".$enc->_enc_typemap[$enctype].".php";
+        require_once $classfile;
         $newclass = "PMF_".$enc->_enc_typemap[$enctype];
         if (!class_exists($newclass)) {
         	$enc->errors[] = PMF_USERERROR_NO_ENCTYPE;

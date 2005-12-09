@@ -73,6 +73,7 @@ class PMF_CurrentUser
     function PMF_CurrentUser()
     {
         // section -64--88-1-12--f895d8c:106777dbaf0:-7fd8 begin
+        $this->PMF_User();
         // session not started
         if (session_id() == "")
             session_start();
@@ -122,7 +123,6 @@ class PMF_CurrentUser
 				continue;
 			}
 			// $pass is incorrect
-			echo "\$auth->checkPassword(".$login.", ".$pass.") = ".($auth->checkPassword($login, $pass) ? 'true' : 'false')."\n";
 			if (!$auth->checkPassword($login, $pass)) {
 				$pass_error++;
 				continue;

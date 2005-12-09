@@ -85,6 +85,7 @@ require_once dirname(__FILE__).'/UserData.php';
 /* user defined constants */
 // section 127-0-0-1-17ec9f7:105b52d5117:-7ff0-constants begin
 @define('PMF_USERERROR_NO_DB', 'No database specified. ');
+@define('PMF_USERERROR_NO_PERM', 'No permission container specified. ');
 @define('SQLPREFIX', 'faq_');
 @define('PMF_USERERROR_INVALID_STATUS', 'Undefined user status. ');
 @define('PMF_USERERROR_NO_USERID', 'No user-ID found. ');
@@ -212,6 +213,12 @@ class PMF_User
     function addPerm($perm)
     {
         // section -64--88-1-5-15e2075:10637248df4:-7fcd begin
+        if ($this->checkPerm($perm)) {
+            $this->perm = $perm;
+            return true;
+        }
+        $this->perm = null;
+        return false;
         // section -64--88-1-5-15e2075:10637248df4:-7fcd end
     }
 
@@ -410,14 +417,13 @@ class PMF_User
         	}
         	if (!$auth->add($login, $auth->encrypt($pass))) {
         		$this->errors[] = PMF_USERERROR_CANNOT_CREATE_USER.'in PMF_Auth '.$name;
-        	}
-        	else {
+        	} else {
         		$success = true;
         	}
         }
         if (!$success)
             return false;
-        return $this->getUserByLogin($login);
+        return $this->getUserByLogin($login, false);
         // section -64--88-1-5-5e0b50c5:10665348267:-7fdd end
 
         return $returnValue;
@@ -451,8 +457,9 @@ class PMF_User
 			return false;
         }
         // check db
-        if (!$this->checkDb($this->_db)) 
+        if (!$this->checkDb($this->_db)) {
             return false;
+        }
         // delete user account
 		$res = $this->_db->query("
 		  DELETE FROM
@@ -474,7 +481,6 @@ class PMF_User
 		}
 		// delete authentication entry
 		$read_only = 0;
-		$no_account_mirror = 0;
 		$auth_count = 0;
 		$delete = array();
 		foreach ($this->_auth_container as $name => $auth) {
@@ -484,23 +490,16 @@ class PMF_User
 				$read_only++;
 				continue;
 			}
-			// auth link is not a mirror
-			if (!$auth->account_mirror()) {
-				$no_account_mirror++;
-				continue;
-			}
 			// try to delete authentication entry
 			$delete[] = $auth->delete($this->_login);
 		}
 		// there was no writable authentication object
-		if ($read_only + $no_account_mirror == $auth_count) {
+		if ($read_only == $auth_count) {
 			$this->errors[] = PMF_USERERROR_NO_AUTH_WRITABLE;
 		}
 		// deletion unsuccessful
 		if (!in_array(true, $delete)) 
 		    return false;
-		// reset object
-		$this = new PMF_User($this->_db, $this->perm, $this->_auth_container);
 		return true;
         // section -64--88-1-5-5e0b50c5:10665348267:-7fda end
 
@@ -562,14 +561,18 @@ class PMF_User
     function PMF_User($db = null, $perm = null, $auth = array())
     {
         // section -64--88-1-5--735fceb5:106657b6b8d:-7fdb begin
-        if ($db !== null) {
+        // default constructor
+        // database access
+        /*if ($db !== null) {
             if (!$this->addDb($db))
                 return false;
         }
+        // permission object
         if ($perm !== null) { 
             if (!$this->addPerm($perm))
                 return false;
         }
+        // authentication objects
         if (count($auth) > 0) {
         	foreach ($auth as $name => $auth_object) {
         		if (!$this->addAuth($auth_object, $name)) {
@@ -577,7 +580,56 @@ class PMF_User
 					break;
         		}
         	}
+        }*/
+        // phpMyFAQ constructor
+        // database access
+        if ($db !== null) {
+            // set given $db
+            if (!$this->addDb($db))
+                return false;
+        } else {
+            // or set global $db
+            global $db;
+            if (isset($db)) {
+                if (!$this->addDb($db))
+                    return false;
+            } else {
+                // no $db, no fun
+                return false;
+            }
         }
+        // permission object
+        if ($perm !== null) {
+            // set given $perm
+            if (!$this->addPerm($perm))
+                return false;
+        } else {
+            // or make a new $perm object
+            $perm = PMF_Perm::selectPerm('basic');
+            $perm->addDb($this->_db);
+            if (!$this->addPerm($perm))
+                return false;
+        }
+        // authentication objects
+        if (count($auth) > 0) {
+            // set given $auth objects
+        	foreach ($auth as $name => $auth_object) {
+        		if (!$this->addAuth($auth_object, $name)) {
+        		    return false;
+					break;
+        		}
+        	}
+        } else {
+            // make local $auth object
+            $authLocal = PMF_Auth::selectAuth('db');
+            $authLocal->selectEncType('md5');
+            $authLocal->read_only(false);
+            $authLocal->connect($this->_db, SQLPREFIX.'userlogin', 'login', 'pass');
+            if (!$this->addAuth($authLocal, 'local'))
+                return false;
+        }
+        // user data object
+        $this->userdata = new PMF_UserData($this->_db);
         // section -64--88-1-5--735fceb5:106657b6b8d:-7fdb end
     }
 
@@ -695,12 +747,11 @@ class PMF_User
         $returnValue = (string) '';
 
         // section -64--88-1-10--602a52f4:106a644a5e8:-7fd2 begin
-        if (!is_array($this->errors)) 
-            return false;
         $message = '';
         foreach ($this->errors as $error) {
         	$message .= $error."\n";
         }
+        $this->errors = array();
         return $message;
         // section -64--88-1-10--602a52f4:106a644a5e8:-7fd2 end
 
@@ -812,6 +863,10 @@ class PMF_User
         $returnValue = (bool) false;
 
         // section -64--88-1-10-59fce530:106a800a699:-7fd7 begin
+        if (is_a($perm, 'pmf_perm'))
+            return true;
+        $this->errors[] = PMF_USERERROR_NO_PERM;
+        return false;
         // section -64--88-1-10-59fce530:106a800a699:-7fd7 end
 
         return (bool) $returnValue;

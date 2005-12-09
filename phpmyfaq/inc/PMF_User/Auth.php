@@ -134,14 +134,6 @@ class PMF_Auth
      */
     var $_read_only = false;
 
-    /**
-     * Short description of attribute account_mirror
-     *
-     * @access private
-     * @var bool
-     */
-    var $_account_mirror = true;
-
     // --- OPERATIONS ---
 
     /**
@@ -253,11 +245,12 @@ class PMF_Auth
         	$auth->errors[] = PMF_USERERROR_NO_AUTHTYPE;
             return $auth;
         }
-        if (!file_exists("PMF/".$auth->_auth_typemap[$database].".php")) {
+        $classfile = dirname(__FILE__)."/".$auth->_auth_typemap[$database].".php";
+        if (!file_exists($classfile)) {
         	$auth->errors[] = PMF_USERERROR_NO_AUTHTYPE;
         	return $auth;
         }
-        require_once dirname(__FILE__)."/".$auth->_auth_typemap[$database].".php";
+        require_once $classfile;
         // instantiate 
         $authclass = "PMF_".$auth->_auth_typemap[$database];
 		$auth = new $authclass();
@@ -286,29 +279,6 @@ class PMF_Auth
         $this->_read_only = (bool) $read_only;
         return $old_read_only;
         // section -64--88-1-10-56ec5adf:106bcc9244c:-7fdb end
-
-        return (bool) $returnValue;
-    }
-
-    /**
-     * Short description of method account_mirror
-     *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param bool
-     * @return bool
-     */
-    function account_mirror($account_mirror = null)
-    {
-        $returnValue = (bool) false;
-
-        // section -64--88-1-10-eb43fc:106c4f6ca50:-7fda begin
-        if ($account_mirror === null)
-        	return $this->_account_mirror;
-        $old_account_mirror = $this->_account_mirror;
-        $this->_account_mirror = (bool) $account_mirror;
-        return $old_account_mirror;
-        // section -64--88-1-10-eb43fc:106c4f6ca50:-7fda end
 
         return (bool) $returnValue;
     }

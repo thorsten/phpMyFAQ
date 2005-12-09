@@ -175,10 +175,11 @@ class PMF_Perm
         if (!isset($perm->_perm_typemap[$perm_level])) {
             return $perm;
         }
-        if (!file_exists("PMF/".$perm->_perm_typemap[$perm_level].".php")) {
+        $classfile = dirname(__FILE__)."/".$perm->_perm_typemap[$perm_level].".php";
+        if (!file_exists($classfile)) {
         	return $perm;
         }
-        require_once dirname(__FILE__)."/".$perm->_perm_typemap[$perm_level].".php";
+        require_once $classfile;
         // instantiate 
         $permclass = "PMF_".$perm->_perm_typemap[$perm_level];
 		$perm = new $permclass();

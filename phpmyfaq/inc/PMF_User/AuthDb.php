@@ -105,12 +105,11 @@ class PMF_AuthDb
      * @param bool
      * @return void
      */
-    function PMF_AuthDb($enctype = 'none', $read_only = false, $account_mirror = true)
+    function PMF_AuthDb($enctype = 'none', $read_only = false)
     {
         // section -64--88-1-10-36edbf7a:106a832a030:-7fd8 begin
 		$this->selectEncType($enctype);
 		$this->read_only($read_only);
-		$this->account_mirror($account_mirror);
         // section -64--88-1-10-36edbf7a:106a832a030:-7fd8 end
     }
 
