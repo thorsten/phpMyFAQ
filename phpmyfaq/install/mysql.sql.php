@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mysql.sql.php,v 1.13 2005-12-09 14:19:45 b33blebr0x Exp $
+* $Id: mysql.sql.php,v 1.14 2005-12-09 14:58:41 b33blebr0x Exp $
 *
 * CREATE TABLE instruction for MySQL database
 *
@@ -175,32 +175,32 @@ PRIMARY KEY (id))";
 
 $query[] = "INSERT INTO ".$sqltblpre."faquser (id, name, pass, realname, email, rights) VALUES (1, 'admin', '".md5($password)."', '".$realname."', '".$email."', '1111111111111111111111111')";*/
 
-$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."group (
-  group_id INTEGER(10) UNSIGNED NOT NULL,
+$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqgroup (
+  group_id INT(11) UNSIGNED NOT NULL,
   name VARCHAR(25) NULL,
-  description TINYTEXT NULL,
-  auto_join INTEGER(1) UNSIGNED NULL,
+  description TEXT NULL,
+  auto_join INT(1) UNSIGNED NULL,
   PRIMARY KEY(group_id),
   UNIQUE INDEX name(name)
 )";
 
-$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."group_right (
-  group_id INTEGER(10) UNSIGNED NOT NULL,
-  right_id INTEGER(10) UNSIGNED NOT NULL,
+$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqgroup_right (
+  group_id INT(11) UNSIGNED NOT NULL,
+  right_id INT(11) UNSIGNED NOT NULL,
   PRIMARY KEY(group_id, right_id)
 )";
 
-$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."right (
-  right_id INTEGER(10) UNSIGNED NOT NULL,
+$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqright (
+  right_id INT(11) UNSIGNED NOT NULL,
   name VARCHAR(50) NULL,
-  description TINYTEXT NULL,
-  for_users INTEGER(1) UNSIGNED NULL DEFAULT 1,
-  for_groups INTEGER(1) UNSIGNED NULL DEFAULT 1,
+  description TEXT NULL,
+  for_users INT(1) UNSIGNED NULL DEFAULT 1,
+  for_groups INT(1) UNSIGNED NULL DEFAULT 1,
   PRIMARY KEY(right_id)
 )";
 
-$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."user (
-  user_id INTEGER(10) UNSIGNED NOT NULL,
+$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faquser (
+  user_id INT(11) UNSIGNED NOT NULL,
   login VARCHAR(25) NOT NULL,
   session_id VARCHAR(150) NULL,
   session_timestamp TIMESTAMP(14) NULL,
@@ -213,27 +213,27 @@ $query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."user (
   UNIQUE INDEX login(login)
 )";
 
-$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."userdata (
-  user_id INTEGER(10) UNSIGNED NOT NULL,
+$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faquserdata (
+  user_id INT(11) UNSIGNED NOT NULL,
   last_modified TIMESTAMP(14) NULL,
   display_name VARCHAR(50) NULL,
   email VARCHAR(100) NULL
 )";
 
-$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."userlogin (
+$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faquserlogin (
   login VARCHAR(25) NOT NULL,
   pass VARCHAR(150) NULL,
   PRIMARY KEY(login)
 )";
 
-$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."user_group (
-  user_id INTEGER(10) UNSIGNED NOT NULL,
-  group_id INTEGER(10) UNSIGNED NOT NULL,
+$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faquser_group (
+  user_id INT(11) UNSIGNED NOT NULL,
+  group_id INT(11) UNSIGNED NOT NULL,
   PRIMARY KEY(user_id, group_id)
 )";
 
-$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."user_right (
-  user_id INTEGER(10) UNSIGNED NOT NULL,
-  right_id INTEGER(10) UNSIGNED NOT NULL,
+$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faquser_right (
+  user_id INT(11) UNSIGNED NOT NULL,
+  right_id INT(11) UNSIGNED NOT NULL,
   PRIMARY KEY(user_id, right_id)
 )";

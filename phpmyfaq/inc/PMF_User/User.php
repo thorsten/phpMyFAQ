@@ -86,7 +86,7 @@ require_once dirname(__FILE__).'/UserData.php';
 // section 127-0-0-1-17ec9f7:105b52d5117:-7ff0-constants begin
 @define('PMF_USERERROR_NO_DB', 'No database specified. ');
 @define('PMF_USERERROR_NO_PERM', 'No permission container specified. ');
-@define('SQLPREFIX', 'faq_');
+@define('PMF_USER_SQLPREFIX', SQLPREFIX.'faq');
 @define('PMF_USERERROR_INVALID_STATUS', 'Undefined user status. ');
 @define('PMF_USERERROR_NO_USERID', 'No user-ID found. ');
 @define('PMF_USERERROR_LOGIN_NOT_UNIQUE', 'Login is not unique. ');
@@ -289,7 +289,7 @@ class PMF_User
 		    login,
 		    account_status
 		  FROM
-		    ".SQLPREFIX."user
+		    ".PMF_USER_SQLPREFIX."user
 		  WHERE 
 			user_id = '".(int) $user_id."'		    
 		");
@@ -336,7 +336,7 @@ class PMF_User
 		    login,
 		    account_status
 		  FROM
-		    ".SQLPREFIX."user
+		    ".PMF_USER_SQLPREFIX."user
 		  WHERE 
 			login = '".$this->_db->escape_string($login)."'		    
 		");
@@ -390,11 +390,11 @@ class PMF_User
             return false;
         }
         // set user-ID
-        $this->_user_id = (int) $this->_db->nextID(SQLPREFIX.'user', 'user_id');
+        $this->_user_id = (int) $this->_db->nextID(PMF_USER_SQLPREFIX.'user', 'user_id');
         // create user entry
         $this->_db->query("
           INSERT INTO
-            ".SQLPREFIX."user
+            ".PMF_USER_SQLPREFIX."user
           SET
             user_id = '".$this->getUserId()."', 
             login   = '".$this->_db->escape_string($login)."'
@@ -463,7 +463,7 @@ class PMF_User
         // delete user account
 		$res = $this->_db->query("
 		  DELETE FROM
-		    ".SQLPREFIX."user
+		    ".PMF_USER_SQLPREFIX."user
 		  WHERE
 		    user_id = '".$this->_user_id."'
 		");
@@ -611,8 +611,16 @@ class PMF_User
                 return false;
         }
         // authentication objects
+        // always make a 'local' $auth object
+        $this->_auth_container = array();
+        $authLocal = PMF_Auth::selectAuth('db');
+        $authLocal->selectEncType('md5');
+        $authLocal->read_only(false);
+        $authLocal->connect($this->_db, PMF_USER_SQLPREFIX.'userlogin', 'login', 'pass');
+        if (!$this->addAuth($authLocal, 'local'))
+            return false;
+        // additionally, set given $auth objects
         if (count($auth) > 0) {
-            // set given $auth objects
         	foreach ($auth as $name => $auth_object) {
         		if (!$this->addAuth($auth_object, $name)) {
         		    return false;
@@ -620,13 +628,6 @@ class PMF_User
         		}
         	}
         } else {
-            // make local $auth object
-            $authLocal = PMF_Auth::selectAuth('db');
-            $authLocal->selectEncType('md5');
-            $authLocal->read_only(false);
-            $authLocal->connect($this->_db, SQLPREFIX.'userlogin', 'login', 'pass');
-            if (!$this->addAuth($authLocal, 'local'))
-                return false;
         }
         // user data object
         $this->userdata = new PMF_UserData($this->_db);
@@ -688,7 +689,7 @@ class PMF_User
         $this->_status = $status;
         $res = $this->_db->query("
 		  UPDATE 
-		    ".SQLPREFIX."user 
+		    ".PMF_USER_SQLPREFIX."user 
 		  SET 
 		    account_status = '".$status."' 
 		  WHERE 

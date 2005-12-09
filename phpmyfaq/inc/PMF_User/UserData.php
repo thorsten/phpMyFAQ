@@ -103,7 +103,7 @@ class PMF_UserData
 		  SELECT
 		    ".$fields."
 		  FROM
-		    ".SQLPREFIX."userdata
+		    ".PMF_USER_SQLPREFIX."userdata
 		  WHERE 
 		    user_id = '".$this->_user_id."'
 		"); 
@@ -200,7 +200,7 @@ class PMF_UserData
           SELECT 
             last_modified, display_name, email
           FROM
-            ".SQLPREFIX."userdata
+            ".PMF_USER_SQLPREFIX."userdata
           WHERE 
             user_id = '".$this->_user_id."'
         ");
@@ -228,7 +228,7 @@ class PMF_UserData
         // update data
         $res = $this->_db->query("
           UPDATE
-            ".SQLPREFIX."userdata
+            ".PMF_USER_SQLPREFIX."userdata
           SET
             last_modified = NOW(),
             display_name = '".$this->_data['display_name']."',
@@ -265,7 +265,7 @@ class PMF_UserData
         // add entry
         $res = $this->_db->query("
           INSERT INTO
-            ".SQLPREFIX."userdata
+            ".PMF_USER_SQLPREFIX."userdata
           SET
             user_id      = '".$this->_user_id."', 
             last_modified = NOW()
@@ -299,7 +299,7 @@ class PMF_UserData
         // delete entry
         $res = $this->_db->query("
           DELETE FROM
-            ".SQLPREFIX."userdata
+            ".PMF_USER_SQLPREFIX."userdata
           WHERE
             user_id = '".$this->_user_id."'
         ");
