@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.36 2005-09-15 18:38:18 thorstenr Exp $
+* $Id: installer.php,v 1.37 2005-12-09 16:35:37 b33blebr0x Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -683,6 +683,16 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 		}
         usleep(250);
 	}
+	// add admin account and rights
+	/*$query[] = "INSERT INTO ".$sqltblpre."faquser (id, name, pass, realname, email, rights) VALUES (1, 'admin', '".md5($password)."', '".$realname."', '".$email."', '1111111111111111111111111')";*/
+	require_once dirname(dirname(__FILE__)).'/inc/PMF_User/User.php';
+	$admin = new PMF_User();
+	$admin->createUser('admin', $password);
+	$adminData = array(
+	    'display_name' => $realname,
+	    'email' => $email
+    );
+	$admin->setUserData($adminData);
 	print "</strong></p>\n";
 	
     print "<p class=\"center\">All tables were created and filled with the data.</p>\n";
