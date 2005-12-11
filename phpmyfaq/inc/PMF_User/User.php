@@ -507,14 +507,15 @@ class PMF_User
     }
 
     /**
-     * changes the user's password.
+     * changes the user's password. If $pass is omitted, a new
+     * password is generated using the createPassword() method.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
      * @param string
      * @return bool
      */
-    function changePassword($pass)
+    function changePassword($pass = '')
     {
         $returnValue = (bool) false;
 
