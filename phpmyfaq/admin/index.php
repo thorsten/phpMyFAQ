@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.21 2005-12-12 14:44:56 b33blebr0x Exp $
+* $Id: index.php,v 1.22 2005-12-12 17:50:03 b33blebr0x Exp $
 *
 * The main admin backend index file
 *
@@ -72,13 +72,14 @@ if (function_exists('mb_language') && in_array($PMF_LANG['metaLanguage'], $valid
 }
 
 // authenticate current user
-session_name('PMF_SID');
+// different session names for different intallations
+session_name('PMF_SID_'.SQLPREFIX);
 session_start();
 unset($auth);
-if (isset($_REQUEST['faqpassword']) and isset($_REQUEST['faqusername'])) {
+if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
     // login with username and password
     $user = new PMF_CurrentUser();
-    if ($user->login($db->escape_string($_REQUEST['faqusername']), $_REQUEST['faqpassword'])) {
+    if ($user->login($db->escape_string($_POST['faqusername']), $_POST['faqpassword'])) {
         $auth = true;
     } else {
         unset($user);
