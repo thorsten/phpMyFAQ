@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.20 2005-12-12 14:10:50 b33blebr0x Exp $
+* $Id: index.php,v 1.21 2005-12-12 14:44:56 b33blebr0x Exp $
 *
 * The main admin backend index file
 *
@@ -72,6 +72,7 @@ if (function_exists('mb_language') && in_array($PMF_LANG['metaLanguage'], $valid
 }
 
 // authenticate current user
+session_name('PMF_SID');
 session_start();
 unset($auth);
 if (isset($_REQUEST['faqpassword']) and isset($_REQUEST['faqusername'])) {
