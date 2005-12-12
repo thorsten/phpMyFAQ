@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: menue.php,v 1.7 2005-12-12 14:10:50 b33blebr0x Exp $
+* $Id: menue.php,v 1.8 2005-12-12 19:37:58 thorstenr Exp $
 *
 * Navigation menue of the admin area
 *
@@ -28,17 +28,23 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 function addMenuEntry($restrictions = "", $aktion = "", $caption = "")
 {
 	global $permission, $PMF_LANG;
-	
+    
 	if ($aktion != '') {
 		$aktion = "aktion=".$aktion;
 	}
-
-	$output = '        <li><a href="?'.$aktion.'">'.$PMF_LANG[$caption]."</a></li>\n";
+    
+    if (isset($PMF_LANG[$caption])) {
+        $_caption = $PMF_LANG[$caption];
+    } else {
+        $_caption = 'No string for '.$caption;
+    }
+    
+    $output = '        <li><a href="'.$linkext.$aktion.'">'.$_caption."</a></li>\n";
 	if ($restrictions == '') {
 		print $output;
 		return;
 	}
-
+    
 	foreach (explode(',', $restrictions) as $_restriction) {
 		if (isset($permission[$_restriction]) && $permission[$_restriction]) {
 			print $output;
@@ -65,6 +71,7 @@ function addMenuEntry($restrictions = "", $aktion = "", $caption = "")
 	addMenuEntry('adminlog',                             'adminlog',         'ad_menu_adminlog');
 	addMenuEntry('passwd',                               'passwd',           'ad_menu_passwd');
 	addMenuEntry('editconfig',                           'editconfig',       'ad_menu_editconfig');
+    addMenuEntry('editconfig,editbt,delbt',              'linkconfig',       'ad_menu_linkconfig');
 	addMenuEntry('backup,restore',                       'csv',              'ad_menu_backup');
 	addMenuEntry('',                                     'export',           'ad_menu_export');
     addMenuEntry('',                                     'searchplugin',     'ad_menu_searchplugin');
