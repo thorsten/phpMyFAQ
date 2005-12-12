@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mysql.sql.php,v 1.15 2005-12-09 18:30:08 b33blebr0x Exp $
+* $Id: mysql.sql.php,v 1.16 2005-12-12 14:10:51 b33blebr0x Exp $
 *
 * CREATE TABLE instruction for MySQL database
 *
@@ -211,7 +211,8 @@ $query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faquser (
   user_id INT(11) UNSIGNED NOT NULL,
   login VARCHAR(25) NOT NULL,
   session_id VARCHAR(150) NULL,
-  session_timestamp TIMESTAMP(14) NULL,
+  session_timestamp INT(11) UNSIGNED NOT NULL,
+  ip VARCHAR(15) NULL,
   account_status VARCHAR(50) NULL,
   last_login TIMESTAMP(14) NULL,
   auth_source VARCHAR(100) NULL,

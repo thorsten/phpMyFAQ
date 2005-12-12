@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: menue.php,v 1.6 2005-11-22 20:11:50 b33blebr0x Exp $
+* $Id: menue.php,v 1.7 2005-12-12 14:10:50 b33blebr0x Exp $
 *
 * Navigation menue of the admin area
 *
@@ -27,13 +27,13 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 
 function addMenuEntry($restrictions = "", $aktion = "", $caption = "")
 {
-	global $linkext, $permission, $PMF_LANG;
+	global $permission, $PMF_LANG;
 	
 	if ($aktion != '') {
-		$aktion = "&amp;aktion=".$aktion;
+		$aktion = "aktion=".$aktion;
 	}
 
-	$output = '        <li><a href="'.$linkext.$aktion.'">'.$PMF_LANG[$caption]."</a></li>\n";
+	$output = '        <li><a href="?'.$aktion.'">'.$PMF_LANG[$caption]."</a></li>\n";
 	if ($restrictions == '') {
 		print $output;
 		return;

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.38 2005-12-09 18:30:08 b33blebr0x Exp $
+* $Id: installer.php,v 1.39 2005-12-12 14:10:51 b33blebr0x Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -876,7 +876,7 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
     );
     foreach ($rights as $right) {
         $rightID = $admin->perm->addRight($right);
-        $admin->perm->grantUserRight($rightID, $adminID);
+        $admin->perm->grantUserRight($adminID, $rightID);
     }
 	print "</strong></p>\n";
 	

@@ -114,6 +114,9 @@ class PMF_CurrentUser
     {
         // section -64--88-1-12--f895d8c:106777dbaf0:-7fd8 begin
         $this->PMF_User();
+		// make sure that the session is started
+		if (session_id() == "")
+            session_start();
         // section -64--88-1-12--f895d8c:106777dbaf0:-7fd8 end
     }
 
@@ -257,35 +260,36 @@ class PMF_CurrentUser
     }
 
     /**
-     * Returns the session-ID that is stored in the user table.
-     * This session-ID may be used to identify users. But be
-     * careful with this, as the stored session-Id and the
-     * session-ID passed by url (or stored in a cookie) may not be
-     * equal.
+     * Returns an associative array with session information stored
+     * in the user table. The array has the following keys:
+     * session_id, session_timestamp and ip.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @return string
+     * @return array
      */
-    function getSessionId()
+    function getSessionInfo()
     {
         $res = $this->_db->query("
             SELECT
-                session_id
+                session_id,
+                session_timestamp,
+                ip
             FROM
                 ".PMF_USER_SQLPREFIX."user
             WHERE
                 user_id = '".$this->getUserId()."'
         ");
         if (!$res or $this->_db->num_rows($res) != 1)
-            return '';
-        $row = $this->_db->fetch_assoc($res);
-        return $row['session_id'];
+            return array();
+        return $this->_db->fetch_assoc($res);
     }
 
     /**
      * Updates the session-ID, does not care about time outs.
-     * Returns true on success, otherwise false.
+     * Stores session information in the user table: session_id,
+     * session_timestamp and ip. Returns true on success, otherwise
+     * false.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -296,13 +300,16 @@ class PMF_CurrentUser
         // renew the session-ID
         session_regenerate_id();
         // store session-ID age
-        $_SESSION[PMF_SESSION_ID_TIMESTAMP] = time();
-        // save session-ID in user table
+        $now = time();
+        $_SESSION[PMF_SESSION_ID_TIMESTAMP] = $now;
+        // save session information in user table
         $res = $this->_db->query("
             UPDATE
                 ".PMF_USER_SQLPREFIX."user
             SET
-                session_id = '".session_id()."'
+                session_id = '".session_id()."',
+                session_timestamp = '".$now."',
+                ip = '".$_SERVER['REMOTE_ADDR']."'
             WHERE
                 user_id = '".$this->getUserId()."'
         ");
@@ -359,35 +366,44 @@ class PMF_CurrentUser
 
     /**
      * This static method returns a valid CurrentUser object if
-     * there is one in the session that is not timed out. The
-     * session-ID is updated if neccessary. The CurrentUser
+     * there is one in the session that is not timed out.
+     * If the the optional parameter ip_check is true, the current
+     * user must have the same ip which is stored in the user table
+     * The session-ID is updated if neccessary. The CurrentUser
      * will be removed from the session, if it is timed out. If
-     * there is no valid CurrentUser in the session or the
-     * CurrentUser has timed out, null will be returned.
-     * If there is no user in the user table with the same
-     * session-ID, null will be returned.
+     * there is no valid CurrentUser in the session or the session
+     * is timed out, null will be returned. If the session data is
+     * correct, but there is no user found in the user table, false
+     * will be returned. On success, a valid CurrentUser object is
+     * returned.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @return object
+     * @param bool
+     * @return mixed
      */
-    function getFromSession()
+    function getFromSession($ip_check = false)
     {
 		// make sure that the session is started
-		session_start();
+		if (session_id() == "")
+            session_start();
         // there is no valid user object in session
-        if (!isset($_SESSION[PMF_SESSION_CURRENT_USER]))
+        if (!isset($_SESSION[PMF_SESSION_CURRENT_USER]) or !isset($_SESSION[PMF_SESSION_ID_TIMESTAMP]))
 			return null;
         // create a new CurrentUser object
         $user = new PMF_CurrentUser();
         $user->getUserById($_SESSION[PMF_SESSION_CURRENT_USER]);
-        // session-id not found in user table
-        $session_id = $user->getSessionId();
-        if ($session_id == '' or $session_id != session_id())
-            return null;
         // user object is timed out
         if ($user->sessionIsTimedOut())
             return null;
+        // session-id not found in user table
+        $session_info = $user->getSessionInfo();
+        $session_id = $session_info['session_id'];
+        if ($session_id == '' or $session_id != session_id())
+            return false;
+        // check ip
+        if ($ip_check and $session_info['ip'] != $_SERVER['REMOTE_ADDR'])
+            return false;
         // session-id needs to be updated
         if ($user->sessionIdIsTimedOut())
             $user->updateSessionId();
