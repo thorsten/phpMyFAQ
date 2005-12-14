@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.22 2005-12-12 17:50:03 b33blebr0x Exp $
+* $Id: index.php,v 1.23 2005-12-14 10:52:48 b33blebr0x Exp $
 *
 * The main admin backend index file
 *
@@ -82,7 +82,11 @@ if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
     if ($user->login($db->escape_string($_POST['faqusername']), $_POST['faqpassword'])) {
         $auth = true;
     } else {
+        // error
+        adminlog("Loginerror\nLogin: ".$user."\nPass: ".$pass);
+        $error = $PMF_LANG["ad_auth_fail"]." (".$user." / *)";
         unset($user);
+        $_REQUEST["aktion"] = "";
     }
 } else {
     // authenticate with session information
@@ -90,15 +94,23 @@ if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
     $user = PMF_CurrentUser::getFromSession($ip_check);
     if ($user) {
         $auth = true;
+    } else {
+        // error
+        adminlog("Session expired\nSession-ID: ".session_id());
+        $error = $PMF_LANG["ad_auth_sess"];
+        unset($user);
+        $_REQUEST["aktion"] = "";
     }
 }
 // get user rights
 $permission = array();
 if (isset($auth)) {
+    // read all rights, set them FALSE
     foreach ($user->perm->getAllRights() as $right_id) {
         $right = $user->perm->getRightData($right_id);
         $permission[$right['name']] = false;
     }
+    // read user rights, set them TRUE
     foreach ($user->perm->getAllUserRights($user->getUserId()) as $right_id) {
         $right = $user->perm->getRightData($right_id);
         $permission[$right['name']] = true;
@@ -293,6 +305,7 @@ if (isset($auth)) {
 <?php
         }
 	}
+// User is NOT authenticated
 } else {
 ?>
 	<form action="<?php print $_SERVER["PHP_SELF"]; ?>" method="post">

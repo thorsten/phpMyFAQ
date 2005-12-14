@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: menue.php,v 1.8 2005-12-12 19:37:58 thorstenr Exp $
+* $Id: menue.php,v 1.9 2005-12-14 10:52:48 b33blebr0x Exp $
 *
 * Navigation menue of the admin area
 *
@@ -39,7 +39,7 @@ function addMenuEntry($restrictions = "", $aktion = "", $caption = "")
         $_caption = 'No string for '.$caption;
     }
     
-    $output = '        <li><a href="'.$linkext.$aktion.'">'.$_caption."</a></li>\n";
+    $output = '        <li><a href="?'.$aktion.'">'.$_caption."</a></li>\n";
 	if ($restrictions == '') {
 		print $output;
 		return;

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.39 2005-12-12 14:10:51 b33blebr0x Exp $
+* $Id: installer.php,v 1.40 2005-12-14 10:52:48 b33blebr0x Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -32,37 +32,37 @@ define("SAFEMODE", @ini_get("safe_mode"));
 define("PMF_ROOT_DIR", dirname(dirname(__FILE__)));
 require_once(PMF_ROOT_DIR."/inc/constants.php");
 
-function php_check ($ist = '', $soll = '')
+/**
+* db_check()
+*
+* Lookup for installed database extensions
+*
+* If the first supported extension is enabled, return true.
+*
+* @param    array   $supported_databases
+* @return   boolean
+* @access   public
+* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+*/
+function db_check($supported_databases)
 {
-    if (empty($ist) OR empty($soll)) {
-        return false;
-    }
-    $ist = explode(".", $ist);
-    $soll = explode(".", $soll);
-    $num = count($soll);
-    for ($i = 0; $i < $num; $i++) {
-        if ($ist[$i] <  $soll[$i]) {
-            return false;
-        }
-        if ($ist[$i] == $soll[$i]) {
-            continue;
-        }
-        if ($ist[$i] >= $soll[$i]) {
+    foreach ($supported_databases as $extension => $database) {
+        if (extension_loaded($extension)) {
             return true;
         }
     }
-    return true;
+    return false;
 }
 
-function db_check()
-{
-	if (!extension_loaded('mysql') && !extension_loaded('mysqli') && !extension_loaded('pgsql') && !extension_loaded('sybase') && !extension_loaded('mssql') && !extension_loaded('ibm_db2') && !extension_loaded('sqlite') && !extension_loaded('maxdb')) {
-		return false;
-	} else {
-        return true;
-    }
-}
-
+/**
+* phpmyfaq_check()
+*
+* Checks for an installed phpMyFAQ version
+*
+* @return   boolean
+* @access   public
+* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+*/
 function phpmyfaq_check()
 {
     if (@include('../inc/data.php')) {
@@ -84,6 +84,15 @@ function phpmyfaq_check()
     return true;
 }
 
+/**
+* uninstall()
+*
+* Executes the uninstall queries
+*
+* @return   void
+* @access   public
+* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+*/
 function uninstall()
 {
 	global $uninst, $db;
@@ -92,6 +101,15 @@ function uninstall()
     }
 }
 
+/**
+* HTMLFooter()
+*
+* Executes the uninstall queries
+*
+* @return   void
+* @access   public
+* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+*/
 function HTMLFooter()
 {
 	print "<p class=\"center\">".COPYRIGHT."</p>\n</body>\n</html>";
@@ -426,34 +444,20 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 } else {
     // check database entries
 	if (isset($_POST["sql_type"]) && $_POST["sql_type"] != "") {
-		$sql_type = $_POST["sql_type"];
-		switch ($sql_type) {
-			case 'mysql':		require_once(PMF_ROOT_DIR."/inc/mysql.php");
-								break;
-			case 'mysqli':		require_once(PMF_ROOT_DIR."/inc/mysqli.php");
-								break;
-			case 'pgsql':       require_once(PMF_ROOT_DIR."/inc/pgsql.php");
-								break;
-			case 'sybase':	    require_once(PMF_ROOT_DIR."/inc/sybase.php");
-							    break;
-            case 'mssql':		require_once(PMF_ROOT_DIR."/inc/mssql.php");
-								break;
-            case 'db2':		    require_once(PMF_ROOT_DIR."/inc/db2.php");
-								break;
-            case 'sqlite':		require_once(PMF_ROOT_DIR."/inc/sqlite.php");
-								break;
-            case 'maxdb':		require_once(PMF_ROOT_DIR."/inc/maxdb.php");
-								break;
-			default:            print '<p class="error"><strong>Error:</strong> Invalid server type.</p>';
-								HTMLFooter();
-								die();
+		$sql_type = trim($_POST["sql_type"]);
+        if (file_exists(PMF_ROOT_DIR.'/inc/'.$sql_type.'.php')) {
+            require_once(PMF_ROOT_DIR.'/inc/'.$sql_type.'.php');
+        } else {
+            print '<p class="error"><strong>Error:</strong> Invalid server type.</p>';
+            HTMLFooter();
+            die();
 		}
 	} else {
         print "<p class=\"error\"><strong>Error:</strong> There's no DB server input.</p>\n";
 		HTMLFooter();
 		die();
 	}
-    
+
     if (isset($_POST["sql_server"]) && $_POST["sql_server"] != "" || $sql_type == 'sqlite') {
 		$sql_server = $_POST["sql_server"];
     } else {
@@ -461,6 +465,7 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 		HTMLFooter();
 		die();
     }
+
 	if (isset($_POST["sql_user"]) && $_POST["sql_user"] != "" || $sql_type == 'sqlite') {
 		$sql_user = $_POST["sql_user"];
     } else {
@@ -468,11 +473,13 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 		HTMLFooter();
 		die();
     }
+
     if (isset($_POST["sql_passwort"]) && $_POST["sql_passwort"] != "" || $sql_type == 'sqlite') {
 		$sql_passwort = $_POST["sql_passwort"];
     } else {
         $sql_passwort = '';
     }
+
     if (isset($_POST["sql_db"]) && $_POST["sql_db"] != "" || $sql_type == 'sqlite') {
 		$sql_db = $_POST["sql_db"];
     } else {
@@ -480,6 +487,7 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 		HTMLFooter();
 		die();
     }
+
     if ($sql_type == 'sqlite') {
         if (isset($_POST["sql_sqlitefile"]) && $_POST["sql_sqlitefile"] != "") {
             $sql_server = $_POST["sql_sqlitefile"]; // We're using $sql_server, too!
@@ -489,7 +497,7 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
             die();
         }
     }
-    
+
     // check database connection
     require_once(PMF_ROOT_DIR."/inc/db.php");
 	$db = db::db_select($sql_type);
