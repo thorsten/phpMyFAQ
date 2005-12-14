@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.23 2005-12-14 10:52:48 b33blebr0x Exp $
+* $Id: index.php,v 1.24 2005-12-14 11:10:49 thorstenr Exp $
 *
 * The main admin backend index file
 *
@@ -10,12 +10,12 @@
 * @author       Minoru TODA <todam@netjapan.co.jp>
 * @since        2002-09-16
 * @copyright    (c) 2001-2005 phpMyFAQ Team
-* 
+*
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
 * compliance with the License. You may obtain a copy of the License at
 * http://www.mozilla.org/MPL/
-* 
+*
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
@@ -79,7 +79,7 @@ unset($auth);
 if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
     // login with username and password
     $user = new PMF_CurrentUser();
-    if ($user->login($db->escape_string($_POST['faqusername']), $_POST['faqpassword'])) {
+    if ($user->login($db->escape_string($_POST['faqusername']),$db->escape_string($_POST['faqpassword']))) {
         $auth = true;
     } else {
         // error
@@ -248,14 +248,14 @@ if (isset($auth)) {
     </dl>
 <?php
         }
-        
+
         $rg = @ini_get("register_globals");
 		if ($rg == "1") {
 			$rg = "on";
 		} else {
 			$rg = "off";
 		}
-        
+
 		$sm = @ini_get("safe_mode");
 		if ($sm == "1") {
 			$sm = "on";
@@ -311,7 +311,7 @@ if (isset($auth)) {
 	<form action="<?php print $_SERVER["PHP_SELF"]; ?>" method="post">
     <fieldset class="login">
         <legend class="login">phpMyFAQ Login</legend>
-<?php 
+<?php
 	if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "logout") {
 		print "<p>".$PMF_LANG["ad_logout"]."</p>";
 	}
@@ -328,15 +328,15 @@ if (isset($auth)) {
         <div class="row"><span class="label">&nbsp;</span>
         <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_auth_ok"]; ?>" />
         <input class="submit" type="reset" value="<?php print $PMF_LANG["ad_auth_reset"]; ?>" /></div>
-        
+
         <p><img src="images/arrow.gif" width="11" height="11" alt="<?php print $PMF_LANG["lostPassword"]; ?>" border="0" /> <a href="password.php" title="<?php print $PMF_LANG["lostPassword"]; ?>">
 <?php print $PMF_LANG["lostPassword"]; ?>
 </a></p>
         <p><img src="images/arrow.gif" width="11" height="11" alt="<?php print $PMF_CONF["title"]; ?> FAQ" border="0" /> <a href="../index.php" title="<?php print $PMF_CONF["title"]; ?> FAQ"><?php print $PMF_CONF["title"]; ?> FAQ</a></p>
-        
+
     </fieldset>
 	</form>
-    
+
 <?php
 }
 
