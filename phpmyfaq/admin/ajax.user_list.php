@@ -33,15 +33,15 @@ ob_clean();
 foreach ($userList as $user_id) {
     $user_object = new PMF_User();
     $user_object->getUserById($user_id);
-    $user_data = $user_object->userdata->get(array_keys($data));
-    $id = $user_object->getUserId();
+    $user_id = $user_object->getUserId();
     $login = $user_object->getLogin();
     $class = "ad_select_user";
 ?>
-        <user id="<?php print $id; ?>">
+        <user id="<?php print $user_id; ?>">
             <login><?php print $login; ?></login>
             <user_data>
 <?php
+    $user_data = $user_object->userdata->get(array_keys($data));
     foreach ($user_data as $field => $value) {
         $field_name = $data[$field];
 ?>
@@ -51,15 +51,33 @@ foreach ($userList as $user_id) {
                     <value><?php print $value; ?></value>
                 </item>
 <?php
-    }
+    } /* end foreach ($user_data) */
 ?>
-                <display_name><?php print $user_data['display_name']; ?></display_name>
-                <last_modified><?php print $user_data['last_modified']; ?></last_modified>
-                <email><?php print $user_data['email']; ?></email>
             </user_data>
+            <user_rights>
+<?php
+    $perm = $user_object->perm;
+    $all_rights = $perm->getAllRights();
+    $user_rights = $perm->getUserRights();
+    foreach ($all_rights as $right_id) {
+        $right_data = $perm->getRightData($right_id);
+        // right is not for users!
+        if (!$right_data['for_users'])
+            continue;
+        $isUserRight = $perm->checkUserRight($user_id, $right_id) ? '1' : '0';
+?>
+                <right id="<?php print $right_id; ?>">
+                    <name><?php print $right_data['name']; ?></name>
+                    <description><?php print $right_data['description']; ?></description>
+                    <is_user_right><?php print $isUserRight; ?></is_user_right>
+                </right>
+<?php
+    } /* end foreach ($all_rights) */
+?>
+            </user_rights>
         </user>
 <?php
-}
+} /* end foreach ($userList) */
 ?>
     </userlist>
 </xml>

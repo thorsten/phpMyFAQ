@@ -274,7 +274,7 @@ class PMF_PermBasic
         if (!is_numeric($right) and is_string($right))
             $right = $this->getRightId($right);
         // check user right
-        return $this->checkUserRight($right, $user_id);
+        return $this->checkUserRight($user_id, $right);
         // section -64--88-1-10--785a539b:106d9d6c253:-7fd8 end
 
         return (bool) $returnValue;
