@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.24 2005-12-14 11:10:49 thorstenr Exp $
+* $Id: index.php,v 1.25 2005-12-15 11:45:01 b33blebr0x Exp $
 *
 * The main admin backend index file
 *
@@ -138,6 +138,12 @@ if (isset($auth)) {
                                         break;
                 case 'onDemandURL':     require_once("ajax.ondemandurl.php");
                                         break;
+                case 'user_list':
+                    require_once('ajax.user_list.php');
+                    break;
+                case 'user_data':
+                    require_once('ajax.user_data.php');
+                    break;
             }
         exit();
         }
@@ -159,13 +165,17 @@ if (isset($auth)) {
     // the various sections of the admin area
 		switch ($_REQUEST["aktion"]) {
 			// functions for user administration
+			case 'user':
+                require_once('user.php');
+                break;
+			/*case "user":					require_once ("user.list.php"); break;
 			case "user":					require_once ("user.list.php"); break;
 			case "deluser":					require_once ("user.delete.php"); break;
 			case "useredit":				require_once ("user.edit.php"); break;
 			case "usersave":				require_once ("user.save.php"); break;
 			case "userdel":					require_once ("user.question.php"); break;
 			case "useradd":					require_once ("user.add.php"); break;
-			case "addsave":					require_once ("user.addsave.php"); break;
+			case "addsave":					require_once ("user.addsave.php"); break;*/
 			// functions for record administration
 			case "view":					require_once ("record.show.php"); break;
 			case "accept":					require_once ("record.show.php"); break;

@@ -956,6 +956,33 @@ class PMF_User
         return (bool) $returnValue;
     }
 
+    /**
+     * Returns an array with the user-IDs of all users found in
+     * the database.
+     *
+     * @access public
+     * @author Lars Tiedemann, <php@larstiedemann.de>
+     * @return array
+     */
+    function getAllUsers()
+    {
+        $res = $this->_db->query("
+            SELECT
+                user_id
+            FROM
+                ".PMF_USER_SQLPREFIX."user
+            WHERE
+                1
+        ");
+        if (!$res)
+            return array();
+        $result = array();
+        while ($row = $this->_db->fetch_assoc($res)) {
+            $result[] = $row['user_id'];
+        }
+        return $result;
+    }
+
 } /* end of class PMF_User */
 
 ?>
