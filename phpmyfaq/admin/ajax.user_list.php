@@ -18,26 +18,48 @@ require_once(PMF_ROOT_DIR.'/inc/PMF_User/User.php');
 
 $user = new PMF_User();
 $userList = $user->getAllUsers();
+$data = array(
+    'display_name' => 'Name',
+    'email' => 'Email',
+    'last_modified' => 'Last modified'
+);
 
 ob_clean();
 ?>
 <xml>
-    <itemlist>
+    <userlist>
+        <select_class>ad_select_user</select_class>
 <?php
 foreach ($userList as $user_id) {
     $user_object = new PMF_User();
     $user_object->getUserById($user_id);
+    $user_data = $user_object->userdata->get(array_keys($data));
     $id = $user_object->getUserId();
     $login = $user_object->getLogin();
     $class = "ad_select_user";
 ?>
-        <item>
-            <id><?php print $id; ?></id>
-            <type><?php print $class; ?></type>
-            <name><?php print $login; ?></name>
-        </item>
+        <user id="<?php print $id; ?>">
+            <login><?php print $login; ?></login>
+            <user_data>
+<?php
+    foreach ($user_data as $field => $value) {
+        $field_name = $data[$field];
+?>
+
+                <item>
+                    <name><?php print $field_name; ?></name>
+                    <value><?php print $value; ?></value>
+                </item>
+<?php
+    }
+?>
+                <display_name><?php print $user_data['display_name']; ?></display_name>
+                <last_modified><?php print $user_data['last_modified']; ?></last_modified>
+                <email><?php print $user_data['email']; ?></email>
+            </user_data>
+        </user>
 <?php
 }
 ?>
-    </itemlist>
+    </userlist>
 </xml>

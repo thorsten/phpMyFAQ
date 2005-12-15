@@ -26,128 +26,89 @@ function getUserList() {
 function processUserList() {
     if (userList.readyState == 4) {
         if (userList.status == 200) {
-            // retrieve response
-            //var responseText = userList.responseText;
-            var responseXML  = userList.responseXML;
             // process response
-            var user_select = document.getElementById("user_list_select");
-            clearSelect(user_select);
-            var optionList = responseXML.getElementsByTagName("item");
-            var id;
-            var textNode;
-            var classAttrValue;
-            for (var i = 0; i < optionList.length; i++) {
-                textNode = document.createTextNode(getChildText("name", optionList[i]));
-                id = getChildText("id", optionList[i]);
-                classAttrValue = getChildText("type", optionList[i]);
-                addToSelect(user_select, id, textNode, classAttrValue);
-            }
+            clearUserList();
+            buildUserList();
+            clearUserData();
+            buildUserData(0);
         } else {
             alert("There was a problem retrieving the XML data: \n" +userList.statusText);
         }
     }
 }
 
-function clearSelect(select)
+function clearUserList()
 {
-    while (select.length > 0) {
-        select.remove(0);
+    select_clear(document.getElementById("user_list_select"));
+}
+
+function buildUserList()
+{
+    var users = userList.responseXML.getElementsByTagName("user");
+    var id;
+    var textNode;
+    var classAttrValue = text_getFromParent(userList.responseXML.getElementsByTagName("userlist")[0], "select_class");
+    for (var i = 0; i < users.length; i++) {
+        textNode = document.createTextNode(text_getFromParent(users[i], "login"));
+        id = users[i].getAttribute("id");
+        select_addOption(document.getElementById("user_list_select"), id, textNode, classAttrValue);
     }
 }
 
-function addToSelect(select, value, content, classValue)
+
+function clearUserData()
 {
-    var opt;
-    opt = document.createElement("option");
-    opt.value = value;
-    if (classValue) {
-        opt.className = classValue;
-    }
-    opt.appendChild(content);
-    select.appendChild(opt);
+    table_clear(document.getElementById("user_data_table"));
 }
 
-function getChildText(childElement, parentObject)
+function buildUserData(id)
 {
-    var result = "";
-    result = parentObject.getElementsByTagName(childElement)[0];
-    if (result) {
-        if (result.childNodes.length > 1) {
-            return result.childNodes[1].nodeValue;
-        } else {
-            if (result.firstChild) {
-                return result.firstChild.nodeValue;
-            } else {
-                return "";
-            }
-        }
+    var getValues = true;
+    var users = userList.responseXML.getElementsByTagName("user");
+    var user;
+    // get user with given id
+    if (id == 0) {
+        getValues = false;
+        user = users[0];
     } else {
-        return "n/a";
-    }
-}
-
-var userData = new getxmlhttp();
-
-function getUserData(user_id) {
-    userData.open('get', '?aktion=ajax&ajax=user_data&user_id=' + user_id);
-    userData.onreadystatechange = processUserData;
-    userData.send(null);
-}
-
-function processUserData() {
-    if (userData.readyState == 4) {
-        if (userData.status == 200) {
-            // retrieve response
-            //var responseText = userData.responseText;
-            var responseXML  = userData.responseXML;
-            // process response
-            var user_data_legend = document.getElementById("user_data_legend");
-            var user_data_table = document.getElementById("user_data_table");
-            var dataList = responseXML.getElementsByTagName("item");
-            clearTable(user_data_table);
-            var name;
-            var value;
-            for (var i = 0; i < dataList.length; i++) {
-                name = getChildText("name", dataList[i]);
-                value = getChildText("value", dataList[i]);
-                addRowToTable(user_data_table, i, name, value);
+        getValues = true;
+        for (var i = 0; i < users.length; i++) {
+            if (users[i].getAttribute("id") == id) {
+                user = users[i];
+                break;
             }
-        } else {
-            alert("There was a problem retrieving the XML data: \n" +userData.statusText);
         }
     }
-}
-
-function clearTable(table)
-{
-    while (table.rows.length > 0) {
-        table.deleteRow(0);
+    // build new table rows
+    var dataList = user.getElementsByTagName("user_data")[0];
+    var items = dataList.getElementsByTagName("item");
+    var user_data_table = document.getElementById("user_data_table");
+    var name;
+    var value;
+    for (var i = 0; i < items.length; i++) {
+        name = text_getFromParent(items[i], "name");
+        if (getValues) {
+            value = text_getFromParent(items[i], "value");
+        } else {
+            value = "";
+        }
+        table_addRow(user_data_table, i, name, value);
     }
 }
 
-function addRowToTable(table, rowNumber, col1, col2)
+function userSelect(evt)
 {
-    var td1, td1text;
-    var td2, td2text;
-    var tr;
-    td1 = document.createElement("td");
-    td1text = document.createTextNode(col1);
-    td1.appendChild(td1text);
-    td2 = document.createElement("td");
-    td2text = document.createTextNode(col2);
-    td2.appendChild(td2text);
-    tr = table.insertRow(rowNumber);
-    tr.appendChild(td1);
-    tr.appendChild(td2);
+    evt = (evt) ? evt : ((windows.event) ? windows.event : null);
+    if (evt) {
+        var select = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
+        if (select && select.value > 0) {
+            clearUserData();
+            buildUserData(select.value);
+        }
+    }
 }
 
 getUserList();
-getUserData(0);
-
-function updateUserData()
-{
-    getUserData(document.getElementById("user_list_select").value);
-}
 
 /* ]]> */
 </script>
@@ -157,7 +118,7 @@ function updateUserData()
         <fieldset>
             <legend>User Selection</legend>
             <form>
-                <select id="user_list_select" size="<?php print $selectSize; ?>" onchange="updateUserData">
+                <select id="user_list_select" size="<?php print $selectSize; ?>" onchange="userSelect(event)">
                     <option value="">select...</option>
                 </select>
             </form>
