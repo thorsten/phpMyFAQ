@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.40 2005-12-14 10:52:48 b33blebr0x Exp $
+* $Id: installer.php,v 1.41 2005-12-17 14:47:01 thorstenr Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -67,10 +67,6 @@ function phpmyfaq_check()
 {
     if (@include('../inc/data.php')) {
         include('../inc/data.php');
-        // check for version 1.3.x
-        if ((isset($mysql_server) && $mysql_server != "") || (isset($mysql_user) && $mysql_user != "") || (isset($mysql_passwort) && $mysql_passwort != "") || (isset($mysql_db) && $mysql_db != "")) {
-            return false;
-        }
         // check for version 1.4.x
         if ((isset($DB["server"]) && $DB["server"] != "") || (isset($DB["user"]) && $DB["user"] != "") || (isset($DB["password"]) && $DB["password"] != "") || (isset($DB["db"]) && $DB["db"] != "") || (isset($DB["prefix"]) && $DB["prefix"] != "")) {
             return false;
@@ -224,13 +220,18 @@ function HTMLFooter()
 <h1 id="header">phpMyFAQ <?php print VERSION; ?> Installation</h1>
 
 <?php
-if (php_check(phpversion(), '4.3.0') == false) {
+if (version_compare(PHP_VERSION, '4.3.0') == false) {
 	print "<p class=\"center\">You need PHP Version 4.3.0 or higher!</p>\n";
 	HTMLFooter();
 	die();
 }
-if (db_check() == false) {
-	print "<p class=\"center\">No supported database found!</p>\n";
+if (db_check($supported_databases) == false) {
+	print "<p class=\"center\">No supported database found! Please install one of the following database systems and enable the m 	corresponding PHP extension:</p>\n";
+	print "<ul>\n";
+    foreach ($supported_databases as $database) {
+	    printf('    <li>%s</li>', $database[1]);
+    }
+	print "</ul>\n";
 	HTMLFooter();
 	die();
 }
@@ -284,30 +285,11 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 <select class="input" name="sql_type" size="1" onchange="select_database(this);">
 <?php
 	// check what extensions are loaded in PHP
-	if (extension_loaded('mysql')) {
-		print '<option value="mysql">MySQL 3.23/4.0</option>';
-	}
-	if (extension_loaded('pgsql') && php_check(phpversion(), '4.2.0')) {
-		print '<option value="pgsql">PostgreSQL</option>';
-	}
-	if (extension_loaded('sybase')) {
-		print '<option value="sybase">Sybase</option>';
-	}
-	if (extension_loaded('mssql')) {
-		print '<option value="mssql">MS SQL Server</option>';
-	}
-	if (extension_loaded('mysqli') && php_check(phpversion(), '5.0.0')) {
-		print '<option value="mysqli">MySQL 4.1/5.0</option>';
-	}
-	if (extension_loaded('ibm_db2')) {
-		print '<option value="db2">IBM DB2 Universal Database (experimental)</option>';
-	}
-	if (extension_loaded('sqlite') && php_check(phpversion(), '5.0.0')) {
-		print '<option value="sqlite">SQLite (experimental)</option>';
-	}
-	if (extension_loaded('maxdb')) {
-		print '<option value="maxdb">MaxDB (experimental)</option>';
-	}
+    foreach ($supported_databases as $extension => $database) {
+        if (extension_loaded($extension) && version_compare(PHP_VERSION, $database[0]) >= 0) {
+		    printf('<option value="%s">%s</option>', $extension, $database[1]);
+	    }
+    }
 ?>	
 </select>
 <span class="help" title="Please enter the type of SQL server here.">?</span>
@@ -445,8 +427,8 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
     // check database entries
 	if (isset($_POST["sql_type"]) && $_POST["sql_type"] != "") {
 		$sql_type = trim($_POST["sql_type"]);
-        if (file_exists(PMF_ROOT_DIR.'/inc/'.$sql_type.'.php')) {
-            require_once(PMF_ROOT_DIR.'/inc/'.$sql_type.'.php');
+        if (file_exists(PMF_ROOT_DIR.'/inc/PMF_DB/'.$sql_type.'.php')) {
+            require_once(PMF_ROOT_DIR.'/inc/PMF_DB/'.$sql_type.'.php');
         } else {
             print '<p class="error"><strong>Error:</strong> Invalid server type.</p>';
             HTMLFooter();
@@ -905,4 +887,3 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
     }
     HTMLFooter();
 }
-?>
