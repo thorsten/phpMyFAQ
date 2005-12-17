@@ -1,5 +1,5 @@
 /**
-* $Id: admin.css,v 1.3 2005-09-28 15:31:40 thorstenr Exp $
+* $Id: admin.css,v 1.4 2005-12-17 19:45:06 thorstenr Exp $
 *
 * This is the CSS file for the admin section of phpMyFAQ 1.5.x
 * You don't need to change enything here but feel free to do it. :-)
@@ -183,26 +183,86 @@ input.submit {
     border: 2px solid #696969;
     background-color: #dcdcdc;
     }
-
-/* #### link verifier #### */
-	
-table.verifyArticleURL tr.urlfail td {
-	background-color:#FFF5F5;
-}
-
-table.verifyArticleURL tr.urlfail td.urlfail {
-	color: #FF0000;
-	font-weight: bold;
-}
-
-table.verifyArticleURL tr.urlsuccess td {
-
-}
-
-table.verifyArticleURL tr.urlsuccess td.urlsuccess {
-	font-weight: bold;
-}
     
+/**
+* Link configuration
+*/
+
+/* linkconfig.main.php */
+table.linkconfig#typeselection {
+	width: 100%;
+}
+
+table.linkconfig#typeselection tr td {
+	border-bottom: 1px solid #305C77;
+	padding: 0px;
+	margin: 0px;
+}
+
+table.linkconfig#typeselection tr td.selected {
+	border: 1px solid #305C77;
+	background-color: #305C77;
+	text-align: center;
+}
+
+table.linkconfig#typeselection tr td.selected a {
+	color: white;
+	text-decoration: none;
+}
+
+table.linkconfig#typeselection tr td.selected a:hover {
+	color: white;
+	text-decoration: none;
+}
+
+
+table.linkconfig#typeselection tr td.selectable {
+	text-align: center;
+	border-top: 1px solid white;
+	border-left: 1px solid white;
+	border-right: 1px solid white;
+	background-color: white;
+}
+
+table.linkconfig#typeselection tr td.selectable a {
+	color: #305C77;
+	text-decoration: none;
+}
+
+table.linkconfig#typeselection tr td.selectable a:hover {
+	color: #305C77;
+	text-decoration: underline;
+}
+
+table.linkconfig#configuration {
+	width: 100%;
+}
+
+table.linkconfig#configuration tr th {
+	border-bottom: 2px solid #305C77;
+	background-color: #9CB6C6;
+	color: black;
+}
+
+table.linkconfig#configuration tr th.selectable a {
+	text-decoration: none;
+	color: black;
+}
+
+table.linkconfig#configuration tr th.selected a {
+	text-decoration: none;
+	color: red;
+}
+
+
+table.linkconfig#configuration tr th a:hover {
+	text-decoration: underline;
+}
+
+table.linkconfig#configuration tr#lastrow td {
+	border-top: 2px solid #305C77;
+}
+
 /* ###### Footer ###### */
 #footer {
     color: white;
