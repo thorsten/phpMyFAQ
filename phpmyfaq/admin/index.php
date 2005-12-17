@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.26 2005-12-17 14:57:00 thorstenr Exp $
+* $Id: index.php,v 1.27 2005-12-17 19:30:26 thorstenr Exp $
 *
 * The main admin backend index file
 *
@@ -236,6 +236,7 @@ if (isset($auth)) {
 			case "xml":						require_once ("backup.xml.php"); break;
 			// functions for FAQ export
 			case "export":					require_once ("export.main.php"); break;
+            case "searchplugin":			require_once ("plugins.firefoxsearch.php"); break;
 			default:						print "Error"; break;
 		}
 	} else {
