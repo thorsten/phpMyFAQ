@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.25 2005-12-15 11:45:01 b33blebr0x Exp $
+* $Id: index.php,v 1.26 2005-12-17 14:57:00 thorstenr Exp $
 *
 * The main admin backend index file
 *
@@ -83,8 +83,8 @@ if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
         $auth = true;
     } else {
         // error
-        adminlog("Loginerror\nLogin: ".$user."\nPass: ".$pass);
-        $error = $PMF_LANG["ad_auth_fail"]." (".$user." / *)";
+        adminlog("Loginerror\nLogin: ".$user->getUserData('login')."\nPass: ********");
+        $error = $PMF_LANG["ad_auth_fail"]." (".$user->getUserData('login')." / *)";
         unset($user);
         $_REQUEST["aktion"] = "";
     }
