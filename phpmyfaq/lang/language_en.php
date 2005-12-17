@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.12 2005-10-14 17:13:01 thorstenr Exp $
+* $Id: language_en.php,v 1.13 2005-12-17 19:44:08 thorstenr Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -600,6 +600,19 @@ $PMF_LANG['ad_categ_select'] = 'Select category language';
 // added v1.5.1 - 2005-09-06 by Thorsten
 $PMF_LANG['msgSitemap'] = 'Sitemap';
 
+// added v1.5.2 - 2005-09-23 by Lars
+$PMF_LANG['err_inactiveArticle'] = 'This entry is in revision and can not be displayed.';
+$PMF_LANG['msgArticleCategories'] = 'Categories for this entry';
+
+// added v1.5.3 - 2005-10-04 by Thorsten and Periklis
+$PMF_LANG['ad_menu_searchplugin'] = 'Firefox search plugin';
+$PMF_LANG['ad_search_plugin_install'] = 'Install Firefox search plugin';
+$PMF_LANG['ad_search_plugin_title'] = 'Create Firefox search plugin';
+$PMF_LANG['ad_search_plugin_ttitle'] = 'Title in the Firefox search box:';
+$PMF_LANG['ad_search_plugin_tdesc'] = 'Description:';
+$PMF_LANG['ad_search_plugin_create'] = 'Create Firefox search plugin';
+$PMF_LANG['ad_search_plugin_success'] = 'The Mozilla Firefox search plugin was successfully created!';
+
 // added v1.6.0 - 2005-09-15 by Thorsten and by Minoru TODA
 $PMF_LANG['ad_menu_glossary'] = 'Glossary';
 $PMF_LANG['ad_glossary_add'] = 'Add glossary entry';
@@ -624,3 +637,17 @@ $PMF_LANG['ad_linkcheck_openurl_nodns'] = 'Host <strong>%s</strong> is slow or h
 $PMF_LANG['ad_linkcheck_openurl_redirected'] = 'URL was redirected to <strong>%s</strong>.';
 $PMF_LANG['ad_linkcheck_openurl_ambiguous'] = 'Ambiguous HTTP status <strong>%s</strong> returned.';
 $PMF_LANG['ad_linkcheck_protocol_unsupported'] = '%s protocol unsupported by Automatic link verification.';
+$PMF_LANG['ad_menu_linkconfig'] = 'Configure URL Verifier';
+$PMF_LANG['ad_linkcheck_config_title'] = 'URL Verifier Configuration';
+$PMF_LANG['ad_linkcheck_config_disabled'] = 'URL Verifier feature disabled';
+$PMF_LANG['ad_linkcheck_config_warnlist'] = 'URLs to warn';
+$PMF_LANG['ad_linkcheck_config_ignorelist'] = 'URLs to ignore';
+$PMF_LANG['ad_linkcheck_config_warnlist_description'] = 'URLs prefixed with items below will be issued warning regardless of whether it is valid.<br />Use this feature to detect soon-to-be defunct URLs';
+$PMF_LANG['ad_linkcheck_config_ignorelist_description'] = 'Exact URLs listed below will be assumed valid without validation.<br />Use this feature to omit URLs that fail to validate using URL Verifier';
+$PMF_LANG['ad_linkcheck_config_th_id'] = 'ID#';
+$PMF_LANG['ad_linkcheck_config_th_url'] = 'URL to match';
+$PMF_LANG['ad_linkcheck_config_th_reason'] = 'Match reason';
+$PMF_LANG['ad_linkcheck_config_th_owner'] = 'Entry owner';
+$PMF_LANG['ad_linkcheck_config_th_enabled'] = 'Set to enable entry';
+$PMF_LANG['ad_linkcheck_config_th_locked'] = 'Set to lock ownership';
+$PMF_LANG['ad_linkcheck_config_th_chown'] = 'Set to obtain ownership';
