@@ -112,23 +112,23 @@ if ($userAction == 'add') {
         <form name="user_create" action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=user&amp;user_action=addsave" method="post">
             <div class="input_row">
                 <label for="user_name"><?php print $PMF_LANG["ad_adus_name"]; ?></label>
-                <input type="text" name="user_name" value="<?php print $user_name; ?>" />
+                <input type="text" name="user_name" value="<?php print (isset($user_name) ? $user_name : ''); ?>" />
             </div>
             <div class="input_row">
                 <label for="user_realname"><?php print $PMF_LANG["ad_user_realname"]; ?></label>
-                <input type="text" name="user_realname" value="<?php print $user_realname; ?>" />
+                <input type="text" name="user_realname" value="<?php print (isset($user_realname) ? $user_realname : ''); ?>" />
             </div>
             <div class="input_row">
                 <label for="user_email"><?php print $PMF_LANG["ad_entry_email"]; ?></label>
-                <input type="text" name="user_email" value="<?php print $user_email; ?>" />
+                <input type="text" name="user_email" value="<?php print (isset($user_email) ? $user_email : ''); ?>" />
             </div>
             <div class="input_row">
                 <label for="password"><?php print $PMF_LANG["ad_adus_password"]; ?></label>
-                <input type="password" name="user_password" value="<?php print $user_password; ?>" />
+                <input type="password" name="user_password" value="<?php print (isset($user_password) ? $user_password : ''); ?>" />
             </div>
             <div class="input_row">
                 <label for="password_confirm"><?php print $PMF_LANG["ad_passwd_con"]; ?></label>
-                <input type="password" name="user_password_confirm" value="<?php print $user_password_confirm; ?>" />
+                <input type="password" name="user_password_confirm" value="<?php print (isset($user_password_confirm) ? $user_password_confirm : ''); ?>" />
             </div>
             <div class="button_row">
                 <input class="reset" type="button" value="cancel" onclick="location.href='<?php print $_SERVER['PHP_SELF']; ?>?aktion=user'" />
