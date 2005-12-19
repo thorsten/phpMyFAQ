@@ -1,9 +1,29 @@
 <?php
+/**
+* $Id: user.php,v 1.7 2005-12-19 19:19:24 thorstenr Exp $
+*
+* Displays the user managment frontend
+*
+* @author       Lars Tiedemann <larstiedemann@yahoo.de>
+* @since        2005-12-15
+* @copyright    (c) 2005 phpMyFAQ Team
+* 
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
+* 
+* Software distributed under the License is distributed on an "AS IS"
+* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+* License for the specific language governing rights and limitations
+* under the License.
+*/
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
+
 if (!$permission['edituser'] and !$permission['deluser'] and !$permission['adduser']) {
     exit();
 }
@@ -332,7 +352,6 @@ getUserList();
 <div id="user_message"><?php print $message; ?></div>
 <div id="user_accounts">
     <div id="user_list">
-        <a href="<?php print $_SERVER['PHP_SELF']; ?>?aktion=user&amp;user_action=add"><?php print $PMF_LANG["ad_user_add"]; ?></a>
         <fieldset>
             <legend><?php print $PMF_LANG["ad_user_username"]; ?></legend>
             <form>
@@ -341,6 +360,7 @@ getUserList();
                 </select>
             </form>
         </fieldset>
+        <p>[ <a href="<?php print $_SERVER['PHP_SELF']; ?>?aktion=user&amp;user_action=add"><?php print $PMF_LANG["ad_user_add"]; ?></a> ]</p>
     </div> <!-- end #user_list -->
 </div> <!-- end #user_accounts -->
 <div id="user_details">
