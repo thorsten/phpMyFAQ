@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.27 2005-12-17 19:30:26 thorstenr Exp $
+* $Id: index.php,v 1.28 2005-12-19 19:01:27 thorstenr Exp $
 *
 * The main admin backend index file
 *
@@ -46,22 +46,15 @@ require_once (PMF_ROOT_DIR."/inc/category.php");
 require_once (PMF_ROOT_DIR."/inc/linkverifier.php");
 require_once (PMF_ROOT_DIR."/inc/PMF_User/CurrentUser.php");
 
-// Get language (default: english)
-if (isset($PMF_CONF["detection"]) && isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) {
-    if (@is_file(PMF_ROOT_DIR."/lang/language_".substr($_SERVER["HTTP_ACCEPT_LANGUAGE"], 0, 2).".php")) {
-        require_once(PMF_ROOT_DIR."/lang/language_".substr($_SERVER["HTTP_ACCEPT_LANGUAGE"], 0, 2).".php");
-        $LANGCODE = substr($_SERVER["HTTP_ACCEPT_LANGUAGE"], 0, 2);
-        @setcookie(PMF_ROOT_DIR."/lang", $LANGCODE, time()+3600);
-    }
-} elseif (!isset($PMF_CONF["detection"])) {
-    require_once(PMF_ROOT_DIR."/lang/".$PMF_CONF["language"]);
-    $LANGCODE = $PMF_LANG["metaLanguage"];
-}
-if (isset($LANGCODE)) {
-    require_once(PMF_ROOT_DIR."/lang/language_".$LANGCODE.".php");
+// get language (default: english)
+$pmf = new PMF_Init();
+$LANGCODE = $pmf->setLanguage((isset($PMF_CONF['detection']) ? true : false), $PMF_CONF['language']);
+
+if (isset($LANGCODE) && isset($languageCodes[strtoupper($LANGCODE)])) {
+    require_once("../lang/language_".$LANGCODE.".php");
 } else {
-    require_once (PMF_ROOT_DIR."/lang/language_en.php");
     $LANGCODE = "en";
+    require_once ("../lang/language_en.php");
 }
 
 // use mbstring extension if available
@@ -230,6 +223,7 @@ if (isset($auth)) {
 			// functions for config administration
 			case "editconfig":				require_once ("config.edit.php"); break;
 			case "saveconfig":				require_once ("config.save.php"); break;
+            case 'linkconfig':              require_once ('linkconfig.main.php'); break;
 			// functions for backup administration
 			case "csv":						require_once ("backup.main.php"); break;
 			case "restore":					require_once ("backup.import.php"); break;
