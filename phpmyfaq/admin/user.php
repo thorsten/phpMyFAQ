@@ -332,9 +332,9 @@ getUserList();
 <div id="user_message"><?php print $message; ?></div>
 <div id="user_accounts">
     <div id="user_list">
-        <a href="<?php print $_SERVER['PHP_SELF']; ?>?aktion=user&amp;user_action=add">Create User</a>
+        <a href="<?php print $_SERVER['PHP_SELF']; ?>?aktion=user&amp;user_action=add"><?php print $PMF_LANG["ad_user_add"]; ?></a>
         <fieldset>
-            <legend>User Selection</legend>
+            <legend><?php print $PMF_LANG["ad_user_username"]; ?></legend>
             <form>
                 <select id="user_list_select" size="<?php print $selectSize; ?>" onchange="userSelect(event)">
                     <option value="">select...</option>
@@ -346,7 +346,7 @@ getUserList();
 <div id="user_details">
     <div id="user_data">
         <fieldset>
-            <legend id="user_data_legend">User Data</legend>
+            <legend id="user_data_legend"><?php print $PMF_LANG["ad_user_profou"]; ?></legend>
             <table id="user_data_table">
                 <tr>
                     <td>&nbsp;</td>
@@ -357,7 +357,7 @@ getUserList();
     </div> <!-- end #user_details -->
     <div id="user_rights">
         <fieldset>
-            <legend id="user_rights_legend">User Rights</legend>
+            <legend id="user_rights_legend"><?php print $PMF_LANG["ad_user_rights"]; ?></legend>
             <table id="user_rights_table">
                 <tr>
                     <td>&nbsp;</td>
