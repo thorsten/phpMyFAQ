@@ -90,8 +90,6 @@ require_once dirname(__FILE__).'/UserData.php';
 @define('PMF_USERERROR_INVALID_STATUS', 'Undefined user status. ');
 @define('PMF_USERERROR_NO_USERID', 'No user-ID found. ');
 @define('PMF_USERERROR_LOGIN_NOT_UNIQUE', 'Login is not unique. ');
-@define('PMF_LOGIN_MINLENGTH', 4);
-@define('PMF_LOGIN_INVALID_REGEXP', '/(^[^a-z]{1}|[\W])/i');
 @define('PMF_USERERROR_LOGIN_INVALID', 'The chosen login is invalid. A valid login has at least four characters. Only letters, numbers and underscore _ are allowed. The first letter must be a letter. ');
 @define('PMF_UNDEFINED_PARAMETER', 'Following parameter must to be defined: ');
 @define('PMF_USERERROR_ADD', 'Account could not be created. ');
@@ -159,6 +157,23 @@ class PMF_User
      * @var string
      */
     var $_login = '';
+
+    /**
+     * minimum length of login string (default: 4)
+     *
+     * @access private
+     * @var int
+     */
+    var $_login_minLength = 4;
+
+    /**
+     * regular expression to find invalid login strings
+     * (default: /(^[^a-z]{1}|[\W])/i )
+     *
+     * @access private
+     * @var string
+     */
+    var $_login_invalidRegExp = '/(^[^a-z]{1}|[\W])/i';
 
     /**
      * user ID
@@ -774,15 +789,13 @@ class PMF_User
     }
 
     /**
-     * returns true if login is a valid login string. 
+     * returns true if login is a valid login string.
      *
-     * Relevant constants:
-     *
-     * PMF_LOGIN_MINLENGTH defines the minimum length the login string must
-     * If login has more characters than allowed, false is returned.
-     *
-     * PMF_LOGIN_INVALID_REGEXP is a regular expression. If login matches this
+     * $this->_login_minLength defines the minimum length the
+     * login string. If login has more characters than allowed,
      * false is returned.
+     * $this->_login_invalidRegExp is a regular expression.
+     * If login matches this false is returned.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -795,7 +808,7 @@ class PMF_User
 
         // section -64--88-1-10--602a52f4:106a644a5e8:-7fc8 begin
         $login = (string) $login;
-        if (strlen($login) < PMF_LOGIN_MINLENGTH or preg_match(PMF_LOGIN_INVALID_REGEXP, $login)) {
+        if (strlen($login) < $this->_login_minLength or preg_match($this->_login_invalidRegExp, $login)) {
         	$this->errors[] = PMF_USERERROR_LOGIN_INVALID;
             return false;
         }
@@ -981,6 +994,34 @@ class PMF_User
             $result[] = $row['user_id'];
         }
         return $result;
+    }
+
+    /**
+     * sets the minimum login string length
+     *
+     * @access public
+     * @author Lars Tiedemann, <php@larstiedemann.de>
+     * @param int
+     * @return void
+     */
+    function setLoginMinLength($loginMinLength)
+    {
+        if (is_int($loginMinLength))
+            $this->_login_minLength = $loginMinLength;
+    }
+
+    /**
+     * sets the regular expression to check invalid login strings
+     *
+     * @access public
+     * @author Lars Tiedemann, <php@larstiedemann.de>
+     * @param string
+     * @return void
+     */
+    function setLoginInvalidRegExp($loginInvalidRegExp)
+    {
+        if (is_string($loginInvalidRegExp))
+            $this->_login_invalidRegExp = $loginInvalidRegExp;
     }
 
 } /* end of class PMF_User */

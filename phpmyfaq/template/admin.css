@@ -1,5 +1,5 @@
 /**
-* $Id: admin.css,v 1.4 2005-12-17 19:45:06 thorstenr Exp $
+* $Id: admin.css,v 1.5 2005-12-19 11:50:32 b33blebr0x Exp $
 *
 * This is the CSS file for the admin section of phpMyFAQ 1.5.x
 * You don't need to change enything here but feel free to do it. :-)
@@ -279,4 +279,73 @@ table.linkconfig#configuration tr#lastrow td {
 
 #footer a {
     color: white;
-    }
+  }
+  
+/* blind container clearing float:left/right couples */
+.clear {
+    clear: both;
+    display: block;
+    height: 0;
+}
+
+/* ##### User administration 1.6 ##### */
+#user_message .error {
+    color: red;
+    font-weight: bold;
+}
+#user_message .success {
+    color: green;
+    font-weight: bold;
+}
+/* create user form container */
+#user_create {
+    width: 300px;
+}
+/* container for #user_list */
+#user_accounts {
+    float: left;
+    width: 250px;
+}
+#user_list {}
+/* container for #user_data and #user_rights */
+#user_details {
+    float: right;
+    width: 250px;
+    margin: 0;
+    padding: 0;
+}
+#user_data {
+    margin: 0 0 20px 0;
+}
+#user_rights {}
+
+/* admin form */
+div.input_row {
+    margin-bottom: 10px;
+}
+div.input_row label {
+    width: 35%;
+    display: block;
+    float: left;
+    text-align: left;
+}
+div.input_row input {
+    background: White;
+    border: 1px solid black;
+}
+div.button_row {
+}
+div.button_row input.submit {
+    margin: 0 25px 0 10px;
+    display: block;
+    float: right;
+    border: 2px solid #696969;
+    background-color: #dcdcdc;
+}
+div.button_row input.reset {
+    margin: 0 10px 0 25px;
+    display: block;
+    float: left;
+    border: 2px solid #696969;
+    background-color: #dcdcdc;
+}
