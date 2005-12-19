@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.39 2005-09-19 12:15:59 thorstenr Exp $
+$Id: README.txt,v 1.40 2005-12-19 18:57:34 thorstenr Exp $
 
 phpMyFAQ 1.6.0-dev
 Codename "Prometheus"
@@ -9,7 +9,7 @@ Please read the documentation (documentation.en.html) carefully.
 Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
-Changes since 1.5.0:
+Changes since 1.5.x:
 - add user to a category
 
 Known issues in phpMyFAQ 1.6.0:
@@ -20,6 +20,43 @@ CHANGELOG:
 
 Version 1.6.0 - n/a
 - add user to a category
+
+Version 1.5.5 - 2005-12-19
+- added support for MaxDB
+- added keywords into meta keywords
+- added search by record ID
+- improved language detection and handling
+- updated Italian translation
+- fixed some minor bugs
+
+Version 1.5.4 - 2005-11-18
+- fixed security issues
+- full support for IBM DB2 databases
+- added re-ordering of sub-categories
+- added Firefox/Mozilla search plugin
+- updated Hebrew translation
+- updated Simplified Chinese translation
+- updated Spanish translation
+- updated Italian translation
+- updated Japanese translation
+- updated Danish translation
+- some minor improvements
+- many minor bugfixes
+
+Version 1.5.3 - 2005-10-15
+- added several security enhancements
+- added Greek translation
+- improved RSS support
+- improved backup/restore frontend
+- updated Indonasian translation
+- updated bundled Net_IDNA class
+- many minor bugfixes
+
+Version 1.5.2 - 2005-09-23
+- fixed serious security issues
+- full support for SQLite
+- more compliance with phpMyFAQ 1.4.x templates
+- many minor bugfixes
 
 Version 1.5.1 - 2005-09-19
 - added experimental support for SQLite
