@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: main.php,v 1.7 2005-12-20 09:28:42 thorstenr Exp $
+* $Id: main.php,v 1.8 2005-12-20 10:47:37 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-08-23
@@ -27,8 +27,8 @@ $tpl->processTemplate ('writeContent', array(
                        'writeNews' => generateNews($LANGCODE),
                        'writeNumberOfArticles' => $PMF_LANG['msgHomeThereAre'].$faq->getNumberOfRecords($LANGCODE).$PMF_LANG['msgHomeArticlesOnline'],
                        'writeTopTenHeader' => $PMF_LANG['msgTopTen'],
-                       'writeTopTenRow' => generateTopTen($LANGCODE),
+                       'writeTopTenRow' => $faq->getTopTen(),
                        'writeNewestHeader' => $PMF_LANG['msgLatestArticles'],
-                       'writeNewestRow' => generateFiveNewest($LANGCODE)));
+                       'writeNewestRow' => $faq->getFiveLatest()));
 
 $tpl->includeTemplate('writeContent', 'index');

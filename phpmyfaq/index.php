@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.33 2005-12-20 09:28:42 thorstenr Exp $
+* $Id: index.php,v 1.34 2005-12-20 10:47:37 thorstenr Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the 
@@ -71,6 +71,7 @@ if (isset($LANGCODE) && isset($languageCodes[strtoupper($LANGCODE)])) {
 } else {
     $LANGCODE = "en";
     require_once ("lang/language_en.php");
+}
 
 // use mbstring extension if available
 $valid_mb_strings = array('ja', 'en');
@@ -163,7 +164,7 @@ if (isset($_REQUEST["action"]) && !preg_match("=/=", $_REQUEST["action"]) && iss
 	$action = "main";
 }
 
-/* select the template for the requested page */
+// select the template for the requested page
 if ($action != "main") {
     $inc_tpl = "template/".trim($action).".tpl";
     $inc_php = $action.".php";
@@ -196,9 +197,9 @@ $main_template_vars = array(
                 "switchLanguages" => selectLanguages($LANGCODE),
 				"userOnline" => userOnline().$PMF_LANG["msgUserOnline"],
                 'writeTopTenHeader' => $PMF_LANG['msgTopTen'],
-                'writeTopTenRow' => generateTopTen($LANGCODE),
+                'writeTopTenRow' => $faq->getTopTen(),
                 'writeNewestHeader' => $PMF_LANG['msgLatestArticles'],
-                'writeNewestRow' => generateFiveNewest($LANGCODE),
+                'writeNewestRow' => $faq->getFiveLatest(),
 				"copyright" => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> '.$PMF_CONF["version"]);
 
 if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == "TRUE") {
@@ -233,13 +234,13 @@ if (DEBUG) {
     $debug_template_vars = array('debugMessages' => '<p>DEBUG INFORMATION:<br />'.$db->sqllog().'</p>');
 } else {
     // send headers and print template
-    @header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-    @header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
-    @header("Cache-Control: no-store, no-cache, must-revalidate");
-    @header("Cache-Control: post-check=0, pre-check=0", false);
-    @header("Pragma: no-cache");
-    @header("Content-type: text/html; charset=".$PMF_LANG["metaCharset"]);
-    @header("Vary: Negotiate,Accept");
+    header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+    header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
+    header("Cache-Control: no-store, no-cache, must-revalidate");
+    header("Cache-Control: post-check=0, pre-check=0", false);
+    header("Pragma: no-cache");
+    header("Content-type: text/html; charset=".$PMF_LANG["metaCharset"]);
+    header("Vary: Negotiate,Accept");
     $debug_template_vars = array('debugMessages' => '');
 }
 

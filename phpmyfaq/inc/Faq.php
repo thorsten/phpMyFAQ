@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.2 2005-12-20 09:28:42 thorstenr Exp $
+* $Id: Faq.php,v 1.3 2005-12-20 10:47:37 thorstenr Exp $
 *
 * The main FAQ class
 *
@@ -56,6 +56,12 @@ class FAQ
         $this->language = $language;
         $this->pmf_lang = $PMF_LANG;
 	}
+	
+	//
+	//
+	// PUBLIC METHODS
+	//
+	//
 	
 	/**
 	* showAllRecords()
@@ -276,7 +282,7 @@ class FAQ
             $nVisits = $row->visits;
         }
         if ($nVisits == "0" || $nVisits == "") {
-            $query = sprint("INSERT INTO %sfaqvisits (id, lang, visits, last_visit) VALUES (%d, '%s', 1, %d)", SQLPREFIX, $id, $lang, $today);
+            $query = sprintf("INSERT INTO %sfaqvisits (id, lang, visits, last_visit) VALUES (%d, '%s', 1, %d)", SQLPREFIX, $id, $lang, $today);
             $this->db->query($query);
         } else {
             $query = sprintf("UPDATE %sfaqvisits SET visits = visits+1, last_visit = %d WHERE id = %d AND lang = '%s'", SQLPREFIX, $today, $id, $lang);
@@ -329,6 +335,193 @@ class FAQ
             }
         }
         return $output;
+    }
+    
+    /**
+    * getTopTen()
+    *
+    * This function generates the Top Ten with the mosted viewed records
+    *
+    * @return   string
+    * @access   public
+    * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+    * @since    2002-05-07
+    */
+    function getTopTen()
+    {
+        global $PMF_CONF;
+        $result = $this->getTopTenData(10);
+        if (count($result) > 0) {
+            $output = '<ol>';
+            foreach ($result as $row) {
+                $output .= sprintf('<li><strong>%d %s:</strong><br />', $row['visits'], $this->pmf_lang['msgViews']);
+                $shortTitle = makeShorterText(PMF_htmlentities($row['thema'], ENT_NOQUOTES, $this->pmf_lang['metaCharset']), 8); 
+                $output .= sprintf('<a href="%s">%s</a></li>', $row['url'], $shortTitle);
+            }
+            $output .= '</ol>';
+        } else {
+            $output = $this->pmf_lang['err_noTopTen'];
+        }
+        return $output;
+    }
+    
+    /**
+    * getFiveLatest()
+    *
+    * This function generates the list with the five latest published records
+    *
+    * @return   string
+    * @access   public
+    * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+    * @since    2002-05-07
+    */
+    function getFiveLatest()
+    {
+        $result = $this->getFiveLatestData(5);
+        if (count ($result) > 0) {
+            $output = '<ol>';
+            foreach ($result as $row) {
+                $shortTitle = makeShorterText(PMF_htmlentities($row['thema'], ENT_NOQUOTES, $this->pmf_lang['metaCharset']), 8); 
+                $output .= sprintf('<a href="%s">%s</a> (%s)</li>', $row['url'], $shortTitle, makeDate($row['datum']));
+            }
+            $output .= '</ol>';
+        } else {
+            $output = $PMF_LANG["err_noArticles"];
+        }
+        return $output;
+    }
+    
+    //
+    //
+    // PRIVATE METHODS
+    //
+    //
+    
+    /**
+    * getTopTenData()
+    *
+    * This function generates the Top Ten data with the mosted viewed records
+    *
+    * @parem    integer     
+    * @return   array
+    * @access   private
+    * @author   Robin Wood <robin@digininja.org>
+    * @author   Thorsten Rinne <thorsten@rinne.info>
+    * @since    2005-03-06
+    */
+    function getTopTenData($count = 10)
+    {
+        global $sids, $PMF_CONF;
+        $query = 
+            'SELECT
+                DISTINCT '.SQLPREFIX.'faqdata.id AS id,
+                '.SQLPREFIX.'faqdata.lang AS lang,
+                '.SQLPREFIX.'faqdata.thema AS thema,
+                '.SQLPREFIX.'faqcategoryrelations.category_id AS category_id,
+                '.SQLPREFIX.'faqvisits.visits AS visits
+            FROM
+                '.SQLPREFIX.'faqvisits,
+                '.SQLPREFIX.'faqdata
+            LEFT JOIN
+                '.SQLPREFIX.'faqcategoryrelations
+            ON
+                '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id
+            AND
+                '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang
+            WHERE
+                '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvisits.id
+            AND
+                '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqvisits.lang
+            AND
+                '.SQLPREFIX.'faqdata.active = \'yes\'
+            ORDER BY
+                '.SQLPREFIX.'faqvisits.visits DESC';
+
+        $result = $this->db->query($query);
+        $topten = array();
+        $data = array();
+        
+        $i = 1;
+        $oldId = 0;
+        while (($row = $this->db->fetch_object($result)) && $i <= $count) {
+            if ($oldId != $row->id) {
+                $data['visits'] = $row->visits;
+                $data['thema'] = $row->thema;
+                if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == true) {
+                    $data['url'] = sprintf('%d_%d_%s.html', $row->category_id, $row->id, $row->lang);
+                } else {
+                    $data['url'] = sprintf('?%daction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s', $sids, $row->category_id, $row->id, $row->lang);
+                }
+	        $topten[] = $data;
+	        $i++;
+            }
+            $oldId = $row->id;
+        }
+        return $topten;
+    }
+
+    /**
+    * getFiveLatestData()
+    *
+    * This function generates an array with a specified number of most recent published records
+    *
+    * @param    integer
+    * @return   array
+    * @access   public
+    * @author   Robin Wood <robin@digininja.org>
+    * @since    2005-03-06
+    */
+    function getFiveLatestData($count = 5)
+    {
+        global $sids, $PMF_CONF;
+        $query = 
+            'SELECT 
+                DISTINCT '.SQLPREFIX.'faqdata.id AS id,
+                '.SQLPREFIX.'faqdata.lang AS lang,
+                '.SQLPREFIX.'faqcategoryrelations.category_id AS category_id,
+                '.SQLPREFIX.'faqdata.thema AS thema,
+                '.SQLPREFIX.'faqdata.datum AS datum,
+                '.SQLPREFIX.'faqvisits.visits AS visits
+            FROM
+                '.SQLPREFIX.'faqvisits,
+                '.SQLPREFIX.'faqdata
+            LEFT JOIN
+                '.SQLPREFIX.'faqcategoryrelations
+            ON
+                '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id
+            AND
+                '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang
+            WHERE
+                '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvisits.id
+            AND
+                '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqvisits.lang
+            AND
+                '.SQLPREFIX.'faqdata.active = \'yes\'
+            ORDER BY
+                '.SQLPREFIX.'faqdata.datum DESC';
+        
+        $result = $this->db->query($query);
+        $latest = array();
+        $data = array();
+
+        $i = 0;
+        $oldId = 0;
+        while (($row = $this->db->fetch_object($result)) && $i < $count ) {
+            if ($oldId != $row->id) {
+                $data['datum'] = $row->datum;
+                $data['thema'] = $row->thema;
+                $data['visits'] = $row->visits;
+                if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == true) {
+                    $data['url'] = sprintf('%d_%d_%s.html', $row->category_id, $row->id, $row->lang);
+                } else {
+                    $data['url'] = sprintf('?%daction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s', $sids, $row->category_id, $row->id, $row->lang);
+                }
+                $latest[] = $data;
+                $i++;
+            }
+            $oldId = $row->id;
+        }
+        return $latest;
     }
     
 }
