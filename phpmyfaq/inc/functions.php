@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.98 2005-12-06 16:16:31 b33blebr0x Exp $
+* $Id: functions.php,v 1.99 2005-12-20 09:28:42 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -94,50 +94,6 @@ function selectLanguages($default)
 }
 
 /**
-* Returns the FAQ record title from the ID and language
-*
-* @param    integer     record id
-* @param    string      language
-* @return   string
-* @since    2002-08-28
-* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-*/
-function getThema($id, $lang)
-{
-	global $db, $PMF_LANG;
-    $result = $db->query(sprintf("SELECT thema FROM %sfaqdata WHERE id = %d AND lang = '%s'", SQLPREFIX, $id, $lang));
-    if ($db->num_rows($result) > 0) {
-        while ($row = $db->fetch_object($result)) {
-            $output = PMF_htmlentities($row->thema, ENT_NOQUOTES, $PMF_LANG['metaCharset']);
-        }
-    } else {
-        $output = $PMF_LANG["no_cats"];
-    }
-    return $output;
-}
-
-/**
-* Returns the keywords of a FAQ record from the ID and language
-*
-* @param    integer     record id
-* @param    string      language
-* @return   string
-* @since    2005-11-30
-* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-*/
-function getKeywords($id, $lang)
-{
-	global $db, $PMF_LANG;
-    $result = $db->query(sprintf("SELECT keywords FROM %sfaqdata WHERE id = %d AND lang = '%s'", SQLPREFIX, $id, $lang));
-    if ($db->num_rows($result) > 0) {
-        $row = $db->fetch_object($result);
-        return PMF_htmlentities($row->keywords, ENT_NOQUOTES, $PMF_LANG['metaCharset']);
-    } else {
-        return '';
-    }
-}
-
-/**
 * Converts the phpMyFAQ date format to the ISO 8601 format
 *
 * @param    string
@@ -174,132 +130,6 @@ function makeRFC822Date($date, $phpmyfaq = true)
      }
      $timestamp = $current + $offset;
      return gmdate("D, d M Y H:i:s", $timestamp)." ".($PMF_CONST["timezone"]=="0"?"GMT":$PMF_CONST["timezone"]);
-}
-
-/**
-* Returns the number of activated records
-*
-* @param    string
-* @return   int
-* @access   public
-* @since    2002-08-23
-* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-*/
-function generateNumberOfArticles($lang = '')
-{
-	global $db;
-    $query = "SELECT id FROM ".SQLPREFIX."faqdata WHERE active = 'yes'";
-    if (2 == strlen($lang)) {
-        $query .= " AND lang = '".$lang."'";
-    }
-	$num = $db->num_rows($db->query($query));
-	if ($num > 0) {
-		return $num;
-    } else {
-        return 0;
-    }
-}
-
-/**
-* This function returns all records from one category
-*
-* @param    int     category id
-* @return   string
-* @access   public
-* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-* @since    2002-08-27
-*/
-function printThemes($category)
-{
-	global $db, $sids, $PMF_LANG, $PMF_CONF;
-	$seite = 1;
-	$output = "";
-
-	if (isset($_REQUEST["seite"])) {
-		$seite = $_REQUEST["seite"];
-	}
-
-	$result = $db->query('SELECT '.SQLPREFIX.'faqdata.id AS id, '.SQLPREFIX.'faqdata.lang AS lang, '.SQLPREFIX.'faqdata.thema AS thema, '.SQLPREFIX.'faqcategoryrelations.category_id AS category_id, '.SQLPREFIX.'faqvisits.visits AS visits FROM '.SQLPREFIX.'faqdata
-LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang LEFT JOIN '.SQLPREFIX.'faqvisits ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvisits.id AND '.SQLPREFIX.'faqvisits.lang = '.SQLPREFIX.'faqdata.lang WHERE '.SQLPREFIX.'faqdata.active = \'yes\' AND '.SQLPREFIX.'faqcategoryrelations.category_id ='.$category.' ORDER BY '.SQLPREFIX.'faqdata.id');
-
-	$num = $db->num_rows($result);
-	$pages = ceil($num / $PMF_CONF["numRecordsPage"]);
-
-	if ($seite == 1) {
-		$first = 0;
-	} else {
-		$first = ($seite * $PMF_CONF["numRecordsPage"]) - $PMF_CONF["numRecordsPage"];
-	}
-
-	if ($num > 0) {
-		if ($pages > 1) {
-			$output .= "<p><strong>".$PMF_LANG["msgPage"].$seite." ".$PMF_LANG["msgVoteFrom"]." ".$pages.$PMF_LANG["msgPages"]."</strong></p>";
-		}
-		$output .= "<ul class=\"phpmyfaq_ul\">\n";
-		$counter = 0;
-		$displayedCounter = 0;
-		while (($row = $db->fetch_object($result)) && $displayedCounter < $PMF_CONF['numRecordsPage']) {
-			$counter ++;
-			if ($counter <= $first) {
-				continue;
-			}
-			$displayedCounter++;
-
-            if (empty($row->visits)) {
-
-				$visits = "0";
-            } else {
-
-				$visits = $row->visits;
-            }
-
-            if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == "TRUE") {
-
-                $output .= "\t<li><a href=\"".$row->category_id."_".$row->id."_".$row->lang.".html\">".PMF_htmlentities($row->thema, ENT_NOQUOTES, $PMF_LANG['metaCharset'])."</a> [".$row->lang."]<br /><div class=\"little\">(".$visits." ".$PMF_LANG["msgViews"].")</div></li>\n";
-            } else {
-
-                $output .= "\t<li><a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=artikel&amp;cat=".$row->category_id."&amp;id=".$row->id."&amp;artlang=".$row->lang."\">".PMF_htmlentities($row->thema,ENT_NOQUOTES, $PMF_LANG['metaCharset'])."</a> [".$row->lang."]<br /><div class=\"little\">(".$visits." ".$PMF_LANG["msgViews"].")</div></li>\n";
-            }
-        }
-        $output .= "</ul>\n";
-    } else {
-		$output = $PMF_LANG["err_noArticles"];
-	}
-
-    if ($pages > 1) {
-        $output .= "<p align=\"center\"><strong>";
-        $previous = $seite - 1;
-        $next = $seite + 1;
-
-        if ($previous != 0) {
-            if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == "TRUE") {
-                $output .= "[ <a href=\"category".$category."_".$previous.".html\">".$PMF_LANG["msgPrevious"]."</a> ]";
-            } else {
-                $output .= "[ <a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=show&amp;cat=".$category."&amp;seite=".$previous."\">".$PMF_LANG["msgPrevious"]."</a> ]";
-            }
-        }
-
-        $output .= " ";
-
-        for ($i = 1; $i <= $pages; $i++) {
-            if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == "TRUE") {
-                $output .= "[ <a href=\"category".$category."_".$i.".html\">".$i."</a> ]";
-            } else {
-                $output .= "[ <a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=show&amp;cat=".$category."&amp;seite=".$i."\">".$i."</a> ] ";
-            }
-        }
-
-        if ($next <= $pages) {
-            if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == "TRUE") {
-                $output .= "[ <a href=\"category".$category."_".$next.".html\">".$PMF_LANG["msgNext"]."</a> ]";
-            } else {
-                $output .= "[ <a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=show&amp;cat=".$category."&amp;seite=".$next."\">".$PMF_LANG["msgNext"]."</a> ]";
-            }
-        }
-
-        $output .= "</strong></p>";
-    }
-	return $output;
 }
 
 /**
@@ -740,35 +570,6 @@ function makeShorterText($str, $char)
  * Funktionen für Artikelseiten
  ******************************************************************************/
 
-/**
-* logViews()
-*
-* Counting the views of a FAQ record
-*
-* @param    integer     id
-* @param    string      lang
-* @return   void
-* @access   public
-* @since    2001-02-15
-* @auhtor   Bastian Pöttner <bastian@poettner.net>
-* @author   Thorsten Rinne
-*/
-function logViews($myid, $lang)
-{
-    global $db;
-    $nVisits = 0;
-    $heute = time();
-    if ($result = $db->query("SELECT visits FROM ".SQLPREFIX."faqvisits WHERE id = ".$myid." AND lang = '".$lang."'")) {
-        $row = $db->fetch_object($result);
-        $nVisits = $row->visits;
-    }
-    if ($nVisits == "0" || $nVisits == "") {
-        $db->query("INSERT INTO ".SQLPREFIX."faqvisits (id, lang, visits, last_visit) VALUES (".$myid.", '".$lang."', 1, ".$heute.")");
-    } else {
-        $db->query("UPDATE ".SQLPREFIX."faqvisits SET visits = visits+1, last_visit = ".$heute." WHERE id = ".$myid." AND lang = '".$lang."'");
-    }
-}
-
 /*
  * Macht an den String nen / dran, falls keiner da ist
  * @@ Bastian, 2002-01-06
@@ -779,49 +580,6 @@ function EndSlash($string)
 		$string .= "/";
 	}
 	return $string;
-}
-
-/**
-* generateVoting()
-*
-* Calculates the rating of the user votings
-*
-* @param    integer     record id
-* @param    string
-* @access   public
-* @since    2002-08-29
-* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-*/
-function generateVoting($id)
-{
-	global $db, $PMF_LANG;
- 	$result = $db->query(sprintf('SELECT (vote/usr) as voting, usr FROM %sfaqvoting WHERE artikel = %d', SQLPREFIX, $id));
-	if ($db->num_rows($result) > 0) {
-        $row = $db->fetch_object($result);
-        return " ".round($row->voting, 2)." ".$PMF_LANG["msgVoteFrom"]." 5 (".$row->usr." ".$PMF_LANG["msgVotings"].")";
-	} else {
-		return " 0 ".$PMF_LANG["msgVoteFrom"]." 5 (0 ".$PMF_LANG["msgVotings"].")";
-	}
-}
-
-/*
- * Gibt die Kommentare zum Artikel aus | @@ Thorsten - 2002-08-29
- * Last Update: @@ Thorsten, 2004-10-22
- */
-function generateComments($id)
-{
-	global $db, $PMF_LANG;
-
-	$result = $db->query("SELECT usr, email, comment FROM ".SQLPREFIX."faqcomments WHERE id = ".$id);
-	$output = "";
-	if ($db->num_rows($result) > 0) {
-		while ($row = $db->fetch_object($result)) {
-			$output .= "<p class=\"comment\">\n";;
-			$output .= "<strong>".$PMF_LANG["msgCommentBy"]."<a href=\"mailto:".safeEmail($row->email)."\">".$row->usr."</a>:</strong>\n";
-			$output .= "<br />".safeHTML($row->comment)."\n</p>";
-		}
-	}
-	return $output;
 }
 
 /*

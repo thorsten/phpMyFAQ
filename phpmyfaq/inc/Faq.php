@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.1 2005-12-20 08:31:38 thorstenr Exp $
+* $Id: Faq.php,v 1.2 2005-12-20 09:28:42 thorstenr Exp $
 *
 * The main FAQ class
 *
@@ -35,6 +35,12 @@ class FAQ
     var $language;
     
     /**
+    * Language strings
+    *
+    */
+    var $pmf_lang;
+    
+    /**
     * Constructor
     *
     */
@@ -44,8 +50,11 @@ class FAQ
     }
     function __construct($db, $language)
     {
+        global $PMF_LANG;
+        
         $this->db = $db;
         $this->language = $language;
+        $this->pmf_lang = $PMF_LANG;
 	}
 	
 	/**
@@ -61,7 +70,7 @@ class FAQ
 	*/
     function showAllRecords($category)
     {
-        global $sids, $PMF_LANG, $PMF_CONF;
+        global $sids, $PMF_CONF;
         $page = 1;
         $output = '';
         
@@ -108,7 +117,7 @@ class FAQ
 
         if ($num > 0) {
             if ($pages > 1) {
-                $output .= sprintf('<p><strong>%s %s %s</strong></p>', $PMF_LANG['msgPage'].$page, $PMF_LANG['msgVoteFrom'], $pages.$PMF_LANG['msgPages']);
+                $output .= sprintf('<p><strong>%s %s %s</strong></p>', $PMF_LANG['msgPage'].$page, $this->pmf_lang['msgVoteFrom'], $pages.$this->pmf_lang['msgPages']);
             }
             $output .= '<ul class="phpmyfaq_ul">';
             $counter = 0;
@@ -126,12 +135,12 @@ class FAQ
                     $visits = $row->visits;
                 }
                 
-                $title = PMF_htmlentities($row->thema, ENT_NOQUOTES, $PMF_LANG['metaCharset']);
+                $title = PMF_htmlentities($row->thema, ENT_NOQUOTES, $this->pmf_lang['metaCharset']);
 
                 if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF['mod_rewrite'] == true) {
-                    $output .= sprintf('<li><a href="%d_%d_%s.html\">%s</a><br /><span class="little">(%d %s)</soan></li>', $row->category_id, $row->id, $row->lang, $title, $visits, $PMF_LANG['msgViews']);
+                    $output .= sprintf('<li><a href="%d_%d_%s.html\">%s</a><br /><span class="little">(%d %s)</soan></li>', $row->category_id, $row->id, $row->lang, $title, $visits, $this->pmf_lang['msgViews']);
                 } else {
-                    $output .= sprintf('<li><a href="?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s">%s</a><span class="little">(%d %s)</soan></li>', $sids, $row->category_id, $row->id, $row->lang, $title, $visits, $PMF_LANG['msgViews']);
+                    $output .= sprintf('<li><a href="?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s">%s</a><span class="little">(%d %s)</soan></li>', $sids, $row->category_id, $row->id, $row->lang, $title, $visits, $this->pmf_lang['msgViews']);
                 }
             }
             $output .= '</ul>';
@@ -146,9 +155,9 @@ class FAQ
 
             if ($previous != 0) {
                 if (isset($PMF_CONF['mod_rewrite']) && $PMF_CONF['mod_rewrite'] == true) {
-                    $output .= sprintf('[ <a href="category%d_%d.html">%s</a> ]', $category, $previous, $PMF_LANG['msgPrevious']);
+                    $output .= sprintf('[ <a href="category%d_%d.html">%s</a> ]', $category, $previous, $this->pmf_lang['msgPrevious']);
                 } else {
-                    $output .= sprintf('[ <a href="?%daction=show&amp;cat=%d&amp;seite=%d">%s</a> ]', $sids, $category, $previous, $PMF_LANG['msgPrevious']);
+                    $output .= sprintf('[ <a href="?%daction=show&amp;cat=%d&amp;seite=%d">%s</a> ]', $sids, $category, $previous, $this->pmf_lang['msgPrevious']);
                 }
             }
 
@@ -164,15 +173,162 @@ class FAQ
             
             if ($next <= $pages) {
                 if (isset($PMF_CONF['mod_rewrite']) && $PMF_CONF['mod_rewrite'] == true) {
-                    $output .= sprintf('[ <a href="category%d_%d.html">%s</a> ]', $category, $next, $PMF_LANG['msgNext']);
+                    $output .= sprintf('[ <a href="category%d_%d.html">%s</a> ]', $category, $next, $this->pmf_lang['msgNext']);
                 } else {
-                    $output .= sprintf('[ <a href="?%daction=show&amp;cat=%d&amp;seite=%d">%s</a> ]', $sids, $category, $next, $PMF_LANG['msgNext']);
+                    $output .= sprintf('[ <a href="?%daction=show&amp;cat=%d&amp;seite=%d">%s</a> ]', $sids, $category, $next, $this->pmf_lang['msgNext']);
                 }
             }
 
             $output .= "</strong></p>";
         }
 	   return $output;
+    }
+    
+    /**
+    * getThema()
+    *
+    * Returns the FAQ record title from the ID and language
+    *
+    * @param    integer     record id
+    * @param    string      language
+    * @return   string
+    * @since    2002-08-28
+    * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+    */
+    function getRecordTitle($id, $lang)
+    {
+        $result = $this->db->query(sprintf("SELECT thema FROM %sfaqdata WHERE id = %d AND lang = '%s'", SQLPREFIX, $id, $lang));
+        if ($this->db->num_rows($result) > 0) {
+            while ($row = $this->db->fetch_object($result)) {
+                $output = PMF_htmlentities($row->thema, ENT_NOQUOTES, $this->pmf_lang['metaCharset']);
+            }
+        } else {
+            $output = $this->pmf_lang['no_cats'];
+        }
+        return $output;
+    }
+
+    /**
+    * getKeywords()
+    *
+    * Returns the keywords of a FAQ record from the ID and language
+    *
+    * @param    integer     record id
+    * @param    string      language
+    * @return   string
+    * @since    2005-11-30
+    * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+    */
+    function getRecordKeywords($id, $lang)
+    {
+        $result = $this->db->query(sprintf("SELECT keywords FROM %sfaqdata WHERE id = %d AND lang = '%s'", SQLPREFIX, $id, $lang));
+        if ($this->db->num_rows($result) > 0) {
+            $row = $this->db->fetch_object($result);
+            return PMF_htmlentities($row->keywords, ENT_NOQUOTES, $this->pmf_lang['metaCharset']);
+        } else {
+            return '';
+        }
+    }
+    
+    /**
+    * Returns the number of activated records
+    *
+    * @param    string
+    * @return   int
+    * @access   public
+    * @since    2002-08-23
+    * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+    */
+    function getNumberOfRecords($lang = '')
+    {
+        $query = sprintf("SELECT id FROM %sfaqdata WHERE active = 'yes'", SQLPREFIX);
+        if (2 == strlen($lang)) {
+            $query .= sprintf(" AND lang = '%s'", $lang);
+        }
+        $num = $this->db->num_rows($this->db->query($query));
+        if ($num > 0) {
+            return $num;
+        } else {
+            return 0;
+        }
+    }
+    
+    /**
+    * logViews()
+    *
+    * Counting the views of a FAQ record
+    *
+    * @param    integer     id
+    * @param    string      lang
+    * @return   void
+    * @access   public
+    * @since    2001-02-15
+    * @auhtor   Bastian Pöttner <bastian@poettner.net>
+    * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+    */
+    function logViews($id, $lang)
+    {
+        $nVisits = 0;
+        $today = time();
+        $query = sprintf("SELECT visits FROM %sfaqvisits WHERE id = %d AND lang = '%s'", SQLPREFIX, $id, $lang);
+        if ($result = $this->db->query($query)) {
+            $row = $this->db->fetch_object($result);
+            $nVisits = $row->visits;
+        }
+        if ($nVisits == "0" || $nVisits == "") {
+            $query = sprint("INSERT INTO %sfaqvisits (id, lang, visits, last_visit) VALUES (%d, '%s', 1, %d)", SQLPREFIX, $id, $lang, $today);
+            $this->db->query($query);
+        } else {
+            $query = sprintf("UPDATE %sfaqvisits SET visits = visits+1, last_visit = %d WHERE id = %d AND lang = '%s'", SQLPREFIX, $today, $id, $lang);
+            $this->db->query($query);
+        }
+    }
+    
+    /**
+    * getVotingResult()
+    *
+    * Calculates the rating of the user votings
+    *
+    * @param    integer     record id
+    * @return   string
+    * @access   public
+    * @since    2002-08-29
+    * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+    */
+    function getVotingResult($id)
+    {
+ 	  $result = $this->db->query(sprintf('SELECT (vote/usr) as voting, usr FROM %sfaqvoting WHERE artikel = %d', SQLPREFIX, $id));
+	   if ($this->db->num_rows($result) > 0) {
+            $row = $this->db->fetch_object($result);
+            return sprintf(' %s %s 5 (%d %s)', round($row->voting, 2), $this->pmf_lang['msgVoteFrom'], $row->usr, $this->pmf_lang['msgVotings']);
+       } else {
+            return sprintf(' 0 %s 5 (0 %s)', $this->pmf_lang['msgVoteFrom'], $this->pmf_lang['msgVotings']);
+       }
+    }
+    
+    /**
+    * getComments()
+    *
+    * Returns all user comments from a FAQ record
+    *
+    * @param    integer     record id
+    * @return   string
+    * @access   public
+    * @since    2002-08-29
+    * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+    */
+    function getComments($id)
+    {
+        $result = $this->db->query(sprintf("SELECT usr, email, comment FROM %sfaqcomments WHERE id = %d", SQLPREFIX, $id));
+        $output = '';
+        if ($this->db->num_rows($result) > 0) {
+            while ($row = $this->db->fetch_object($result)) {
+                $output .= '<p class="comment">';
+                $output .= sprintf('<strong>%s<a href="mailto:%s">%s</a>:</strong>', $this->pmf_lang['msgCommentBy'], safeEmail($row->email), $row->usr);
+                $output .= sprintf('<br />%s</p>', $row->comment);
+            }
+        }
+        return $output;
     }
     
 }

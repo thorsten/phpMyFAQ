@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.25 2005-09-25 09:47:02 thorstenr Exp $
+* $Id: artikel.php,v 1.26 2005-12-20 09:28:42 thorstenr Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -45,7 +45,7 @@ if ($row = $db->fetch_object($result)) {
     	$writeDateMsg = makeDate($row->datum);
     	$writeAuthor = $row->author;
         $categoryName = $tree->getPath($currentCategory);
-    	logViews($id, $lang);
+    	$faq->logViews($id, $lang);
     } else {
         $id = $row->id;
         $comment = '';
@@ -122,7 +122,7 @@ foreach ($multiCats as $multiCat) {
 
 $tpl->processTemplate ("writeContent", array(
 				"writeRubrik" => $writeCategory,
-				"writeThema" => stripslashes(getThema($id, $lang)),
+				"writeThema" => stripslashes($faq->getRecordTitle($id, $lang)),
                 'writeArticleCategoryHeader' => $PMF_LANG['msgArticleCategories'],
                 'writeArticleCategories' => $writeMultiCategories,
 				"writeContent" => preg_replace_callback("/<code([^>]*)>(.*?)<\/code>/is", 'hilight', $content),
@@ -140,14 +140,14 @@ $tpl->processTemplate ("writeContent", array(
 				"saveVotingID" => $id,
 				"saveVotingIP" => $_SERVER["REMOTE_ADDR"],
 				"msgAverageVote" => $PMF_LANG["msgAverageVote"],
-				"printVotings" => generateVoting($id),
+				"printVotings" => $faq->getVotingResult($id),
 				"switchLanguage" => $switchLanguage,
 				"msgVoteUseability" => $PMF_LANG["msgVoteUseability"],
 				"msgVoteBad" => $PMF_LANG["msgVoteBad"],
 				"msgVoteGood" => $PMF_LANG["msgVoteGood"],
 				"msgVoteSubmit" => $PMF_LANG["msgVoteSubmit"],
 				"writeCommentMsg" => ($comment == 'n') ? $PMF_LANG['msgWriteNoComment'] : $writeCommentMsg,
-				"writeComments" => generateComments($id)
+				"writeComments" => $faq->getComments($id)
 				));
 
 $tpl->includeTemplate("writeContent", "index");

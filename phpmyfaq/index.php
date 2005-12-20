@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.32 2005-11-02 18:19:01 thorstenr Exp $
+* $Id: index.php,v 1.33 2005-12-20 09:28:42 thorstenr Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the 
@@ -48,7 +48,8 @@ require_once("inc/config.php");
 require_once("inc/constants.php");
 require_once("inc/functions.php");
 require_once("inc/parser.php");
-require_once("inc/category.php");
+require_once("inc/Category.php");
+require_once('inc/Faq.php');
 require_once("inc/idna_convert.class.php");
 $IDN = new idna_convert;
 
@@ -62,60 +63,14 @@ if (isset($PMF_CONF["ldap_support"]) && $PMF_CONF["ldap_support"] == true && fil
 }
 
 // get language (default: english)
-// TODO: write a global function for that?
-if (isset($_POST["language"]) && $_POST["language"] != "" && strlen($_POST["language"]) <= 2 && !preg_match("=/=", $_POST["language"])) {
-    $LANGCODE = $_POST["language"];
-    if (isset($languageCodes[strtoupper($LANGCODE)])) {
-        require_once("lang/language_".$LANGCODE.".php");
-        @setcookie("lang", $LANGCODE, time()+3600);
-    }
-}
-
-if (!isset($LANGCODE) && isset($_GET["lang"]) && $_GET["lang"] != "" && strlen($_GET["lang"]) <= 2 && !preg_match("=/=", $_GET["lang"])) {
-    $LANGCODE = $_GET["lang"];
-    if (isset($languageCodes[strtoupper($LANGCODE)])) {
-        if (@is_file("lang/language_".$LANGCODE.".php")) {
-        require_once("lang/language_".$LANGCODE.".php");
-        } else {
-        unset($LANGCODE);
-        }
-    }
-}
-
-if (!isset($LANGCODE) && isset($_COOKIE["lang"]) && $_COOKIE["lang"] != "" && strlen($_COOKIE["lang"]) <= 2 && !preg_match("=/=", $_COOKIE["lang"])) {
-    $LANGCODE = $_COOKIE["lang"];
-    if (isset($languageCodes[strtoupper($LANGCODE)])) {
-        if (@is_file("lang/language_".$LANGCODE.".php")) {
-        require_once("lang/language_".$LANGCODE.".php");
-        } else {
-        unset($LANGCODE);
-        }
-    }
-}
-
-if (!isset($LANGCODE) && isset($PMF_CONF["detection"]) && isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) {
-    if (@is_file("lang/language_".substr($_SERVER["HTTP_ACCEPT_LANGUAGE"], 0, 2).".php")) {
-        require_once("lang/language_".substr($_SERVER["HTTP_ACCEPT_LANGUAGE"], 0, 2).".php");
-        $LANGCODE = substr($_SERVER["HTTP_ACCEPT_LANGUAGE"], 0, 2);
-        @setcookie("lang", $LANGCODE, time()+3600);
-    } else {
-        unset($LANGCODE);
-    }
-} elseif (!isset($PMF_CONF["detection"]) && isset($languageCodes[strtoupper($LANGCODE)])) {
-    if (@require_once("lang/".$PMF_CONF["language"])) {
-        $LANGCODE = $PMF_LANG["metaLanguage"];
-        @setcookie("lang", $LANGCODE, time()+3600);
-    } else {
-        unset($LANGCODE);
-    }
-}
+$pmf = new PMF_Init();
+$LANGCODE = $pmf->setLanguage((isset($PMF_CONF['detection']) ? true : false), $PMF_CONF['language']);
 
 if (isset($LANGCODE) && isset($languageCodes[strtoupper($LANGCODE)])) {
     require_once("lang/language_".$LANGCODE.".php");
 } else {
     $LANGCODE = "en";
     require_once ("lang/language_en.php");
-}
 
 // use mbstring extension if available
 $valid_mb_strings = array('ja', 'en');
@@ -157,6 +112,9 @@ if (isset($PMF_CONF["tracking"])) {
     }
 }
 
+// create a new FAQ object
+$faq = new FAQ($db, $LANGCODE);
+
 // found a article language?
 if (isset($_GET["artlang"]) && strlen($_GET["artlang"]) <= 2 && !preg_match("=/=", $_GET["artlang"])) {
 	$lang = $_GET["artlang"];
@@ -165,12 +123,14 @@ if (isset($_GET["artlang"]) && strlen($_GET["artlang"]) <= 2 && !preg_match("=/=
 }
 
 // found a record ID?
-if (isset($_REQUEST["id"]) && is_numeric($_REQUEST["id"]) == TRUE) {
-	$id = $_REQUEST["id"];
-    $title = ' - '.stripslashes(getThema($id, $lang));
+if (isset($_REQUEST["id"]) && is_numeric($_REQUEST["id"]) == true) {
+	$id = (int)$_REQUEST["id"];
+    $title = ' - '.stripslashes($faq->getRecordTitle($id, $lang));
+    $keywords = ' '.stripslashes($faq->getRecordKeywords($id, $lang));
 } else {
 	$id = '';
     $title = ' -  powered by phpMyFAQ '.$PMF_CONF['version'];
+    $keywords = '';
 }
 
 // found a category?
@@ -207,11 +167,11 @@ if (isset($_REQUEST["action"]) && !preg_match("=/=", $_REQUEST["action"]) && iss
 if ($action != "main") {
     $inc_tpl = "template/".trim($action).".tpl";
     $inc_php = $action.".php";
-    $writeLangAdress = $_SERVER["PHP_SELF"]."?".str_replace("&", "&amp;",$_SERVER["QUERY_STRING"]);
+    $writeLangAdress = '?'.str_replace("&", "&amp;",$_SERVER["QUERY_STRING"]);
 } else {
     $inc_tpl = "template/main.tpl";
     $inc_php = "main.php";
-    $writeLangAdress = $_SERVER["PHP_SELF"]."?".$sids;
+    $writeLangAdress = '?'.$sids;
 }
 
 // load templates
@@ -223,7 +183,7 @@ $main_template_vars = array(
                 "title" => $PMF_CONF["title"].$title,
                 "header" => $PMF_CONF["title"],
 				"metaDescription" => $PMF_CONF["metaDescription"],
-				"metaKeywords" => $PMF_CONF["metaKeywords"],
+				'metaKeywords' => $PMF_CONF['metaKeywords'].$keywords,
 				"metaPublisher" => $PMF_CONF["metaPublisher"],
 				"metaLanguage" => $PMF_LANG["metaLanguage"],
 				"metaCharset" => $PMF_LANG["metaCharset"],

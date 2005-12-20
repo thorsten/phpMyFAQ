@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: show.php,v 1.6 2005-09-25 09:47:02 thorstenr Exp $
+* $Id: show.php,v 1.7 2005-12-20 09:28:42 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-08-27
@@ -22,24 +22,32 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-if (isset($_REQUEST['cat']) && is_numeric($_REQUEST['cat']) == TRUE) {
-	$category = $_REQUEST['cat'];
+if (isset($_REQUEST['cat']) && is_numeric($_REQUEST['cat'])) {
+	$category = (int)$_REQUEST['cat'];
 }
 
-if (isset($category) && $category != 0) {
+if (isset($category) && $category != 0 && isset($tree->categoryName[$category])) {
 	Tracking('show_category', $category);
     $parent = $tree->categoryName[$category]['parent_id'];
     $name = $tree->categoryName[$category]['name'];
-    
+
+    $records = $faq->showAllRecords($category);
+    if (!$records) {
+        $cats = new Category($LANGCODE);
+    	$cats->transform($category);
+    	$cats->collapseAll();
+    	$records = $cats->viewTree();
+    }
+
 	if ($parent != 0) {
-		$up = '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=show&amp;cat='.$parent.'">'.$PMF_LANG['msgCategoryUp'].'</a>';
+		$up = sprintf('<a href="?%daction=show&amp;cat=%d">%s</a>', $sids, $parent, $PMF_LANG['msgCategoryUp']);
     } else {
         $up = '';
     }
-    
+
     $tpl->processTemplate('writeContent', array(
 				          'writeCategory' => $PMF_LANG['msgEntriesIn'].$name,
-				          'writeThemes' => printThemes($category),
+				          'writeThemes' => $records,
 				          'writeOneThemeBack' => $up));
 	$tpl->includeTemplate('writeContent', 'index');
 } else {
