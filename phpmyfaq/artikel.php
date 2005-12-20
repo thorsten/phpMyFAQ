@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.26 2005-12-20 09:28:42 thorstenr Exp $
+* $Id: artikel.php,v 1.27 2005-12-20 13:44:28 thorstenr Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -34,38 +34,21 @@ if (isset($_REQUEST['id']) && is_numeric($_REQUEST['id'])) {
 
 Tracking("article_view", $id);
 
-$comment = '';
-$query = sprintf("SELECT * FROM %sfaqdata WHERE id = %d AND lang = '%s'", SQLPREFIX, $id, $lang);
-$result = $db->query($query);
-if ($row = $db->fetch_object($result)) {
-    if ('yes' == $row->active) {
-    	$id = $row->id;
-    	$comment = $row->comment;
-    	$content = stripslashes($row->content);
-    	$writeDateMsg = makeDate($row->datum);
-    	$writeAuthor = $row->author;
-        $categoryName = $tree->getPath($currentCategory);
-    	$faq->logViews($id, $lang);
-    } else {
-        $id = $row->id;
-        $comment = '';
-        $content = $PMF_LANG['err_inactiveArticle'];
-        $writeDateMsg = makeDate($row->datum);
-        $writeAuthor = $row->author;
-        $categoryName = $tree->getPath($currentCategory);
-    }
-} else {
-    header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
-    exit();
-}
+// Get all data from the FAQ record
+$faq->getRecord($id);
+$faq->logViews($id);
+$content = $faq->faqRecord['content'];
 
-$writePrintMsg          = sprintf('<a href="#" onclick="javascript:window.print();">%s</a>', $PMF_LANG["msgPrintArticle"]);
+// Set the path of the current category
+$categoryName = $tree->getPath($currentCategory);
+
+$writePrintMsg          = sprintf('<a href="#" onclick="javascript:window.print();">%s</a>', $PMF_LANG['msgPrintArticle']);
 $writePDF               = sprintf('<a target="_blank" href="pdf.php?cat=%s&amp;id=%d&amp;lang=%s">'.$PMF_LANG['msgPDF'].'</a>', $currentCategory, $id, $lang);
-$writeSend2FriendMsg    = sprintf('<a href="%s?'.$sids.'action=send2friend&amp;cat=%d&amp;id=&d&amp;artlang=%s">%s</a>', $_SERVER['PHP_SELF'], $currentCategory, $id, $lang, $PMF_LANG['msgSend2Friend']);
-$writeXMLMsg            = sprintf('<a href="%s?%daction=xml&amp;id=%d&amp;artlang=%d">%s</a>', $_SERVER["PHP_SELF"], $sids, $id, $lang, $PMF_LANG["msgMakeXMLExport"]);
-$changeLanguagePATH     = $_SERVER["PHP_SELF"]."?".$sids."action=artikel&amp;cat=".$currentCategory."&amp;id=".$id;
-$writeCommentMsg        = $PMF_LANG["msgYouCan"]."<a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=writecomment&amp;id=".$id."&amp;artlang=".$lang."\">".$PMF_LANG["msgWriteComment"]."</a>";
-$writeCategory          = stripslashes($categoryName)."<br />\n";
+$writeSend2FriendMsg    = sprintf('<a href="?%daction=send2friend&amp;cat=%d&amp;id=%d&amp;artlang=%s">%s</a>', $sids, $currentCategory, $id, $lang, $PMF_LANG['msgSend2Friend']);
+$writeXMLMsg            = sprintf('<a href="?%daction=xml&amp;id=%d&amp;artlang=%d">%s</a>', $sids, $id, $lang, $PMF_LANG['msgMakeXMLExport']);
+$changeLanguagePATH     = sprintf('?%daction=artikel&amp;cat=%d&amp;id=%d', $sids, $currentCategory, $id);
+$writeCommentMsg        = sprintf('%s<a href="?%daction=writecomment&amp;id=%d&amp;artlang=%s">%s</a>', $PMF_LANG['msgYouCan'], $sids, $id, $lang, $PMF_LANG['msgWriteComment']);
+$writeCategory          = $categoryName.'<br />';
 $saveVotingPATH         = sprintf('%s?%daction=savevoting', $_SERVER["PHP_SELF"], $sids);
 
 if (isset($_GET["highlight"]) && $_GET["highlight"] != "/" && $_GET["highlight"] != "<" && $_GET["highlight"] != ">" && strlen($_GET["highlight"]) > 1) {
@@ -126,8 +109,8 @@ $tpl->processTemplate ("writeContent", array(
                 'writeArticleCategoryHeader' => $PMF_LANG['msgArticleCategories'],
                 'writeArticleCategories' => $writeMultiCategories,
 				"writeContent" => preg_replace_callback("/<code([^>]*)>(.*?)<\/code>/is", 'hilight', $content),
-				"writeDateMsg" => $PMF_LANG["msgLastUpdateArticle"].$writeDateMsg,
-				"writeAuthor" => $PMF_LANG["msgAuthor"].$writeAuthor,
+				"writeDateMsg" => $PMF_LANG["msgLastUpdateArticle"].$faq->faqRecord['date'],
+				"writeAuthor" => $PMF_LANG["msgAuthor"].$faq->faqRecord['author'],
 				"writePrintMsg" => $writePrintMsg,
 				"writePDF" => $writePDF,
 				"writeSend2FriendMsg" => $writeSend2FriendMsg,
@@ -146,7 +129,7 @@ $tpl->processTemplate ("writeContent", array(
 				"msgVoteBad" => $PMF_LANG["msgVoteBad"],
 				"msgVoteGood" => $PMF_LANG["msgVoteGood"],
 				"msgVoteSubmit" => $PMF_LANG["msgVoteSubmit"],
-				"writeCommentMsg" => ($comment == 'n') ? $PMF_LANG['msgWriteNoComment'] : $writeCommentMsg,
+				"writeCommentMsg" => ($faq->faqRecord['comment'] == 'n') ? $PMF_LANG['msgWriteNoComment'] : $writeCommentMsg,
 				"writeComments" => $faq->getComments($id)
 				));
 

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.3 2005-12-20 10:47:37 thorstenr Exp $
+* $Id: Faq.php,v 1.4 2005-12-20 13:44:28 thorstenr Exp $
 *
 * The main FAQ class
 *
@@ -25,20 +25,30 @@ class FAQ
     /**
     * DB handle
     *
+    * @var  object
     */
     var $db;
     
     /**
     * Language
     *
+    * @var  string
     */
     var $language;
     
     /**
     * Language strings
     *
+    * @var  string
     */
     var $pmf_lang;
+    
+    /**
+    * The current FAQ record
+    *
+    * @var  array
+    */
+    var $faqRecord = array();
     
     /**
     * Constructor
@@ -191,19 +201,47 @@ class FAQ
     }
     
     /**
-    * getThema()
+    * getRecord()
+    *
+    * Returns an array with all data from a FAQ record
+    *
+    * @param    integer     record id
+    * @return   void
+    * @access   public
+    * @since    2005-12-20
+    * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+    */
+    function getRecord($id)
+    {
+        $result = $this->db->query(sprintf("SELECT * FROM %sfaqdata WHERE id = %d AND lang = '%s'", SQLPREFIX, $id, $this->language));
+        if ($row = $this->db->fetch_object($result)) {
+            $this->faqRecord = array(
+                'id'        => $row->id,
+                'lang'      => $row->lang,
+                'active'    => $row->active,
+                'keywords'  => $row->keywords,
+                'title'     => $row->thema,
+                'content'   => (('yes' == $row->active) ? $row->content : $this->pmf_lang['err_inactiveArticle']),
+                'author'    => $row->author,
+                'email'     => $row->email,
+                'comment'   => $row->comment,
+                'date'      => makeDate($row->datum));
+        }
+    }
+    
+    /**
+    * getRecordTitle()
     *
     * Returns the FAQ record title from the ID and language
     *
     * @param    integer     record id
-    * @param    string      language
     * @return   string
     * @since    2002-08-28
     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
     */
-    function getRecordTitle($id, $lang)
+    function getRecordTitle($id)
     {
-        $result = $this->db->query(sprintf("SELECT thema FROM %sfaqdata WHERE id = %d AND lang = '%s'", SQLPREFIX, $id, $lang));
+        $result = $this->db->query(sprintf("SELECT thema FROM %sfaqdata WHERE id = %d AND lang = '%s'", SQLPREFIX, $id, $this->language));
         if ($this->db->num_rows($result) > 0) {
             while ($row = $this->db->fetch_object($result)) {
                 $output = PMF_htmlentities($row->thema, ENT_NOQUOTES, $this->pmf_lang['metaCharset']);
@@ -220,14 +258,13 @@ class FAQ
     * Returns the keywords of a FAQ record from the ID and language
     *
     * @param    integer     record id
-    * @param    string      language
     * @return   string
     * @since    2005-11-30
     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
     */
-    function getRecordKeywords($id, $lang)
+    function getRecordKeywords($id)
     {
-        $result = $this->db->query(sprintf("SELECT keywords FROM %sfaqdata WHERE id = %d AND lang = '%s'", SQLPREFIX, $id, $lang));
+        $result = $this->db->query(sprintf("SELECT keywords FROM %sfaqdata WHERE id = %d AND lang = '%s'", SQLPREFIX, $id, $this->language));
         if ($this->db->num_rows($result) > 0) {
             $row = $this->db->fetch_object($result);
             return PMF_htmlentities($row->keywords, ENT_NOQUOTES, $this->pmf_lang['metaCharset']);
@@ -245,12 +282,9 @@ class FAQ
     * @since    2002-08-23
     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
     */
-    function getNumberOfRecords($lang = '')
+    function getNumberOfRecords()
     {
-        $query = sprintf("SELECT id FROM %sfaqdata WHERE active = 'yes'", SQLPREFIX);
-        if (2 == strlen($lang)) {
-            $query .= sprintf(" AND lang = '%s'", $lang);
-        }
+        $query = sprintf("SELECT id FROM %sfaqdata WHERE active = 'yes' AND lang = '%s'", SQLPREFIX, $this->language);
         $num = $this->db->num_rows($this->db->query($query));
         if ($num > 0) {
             return $num;
@@ -272,20 +306,20 @@ class FAQ
     * @auhtor   Bastian Pöttner <bastian@poettner.net>
     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
     */
-    function logViews($id, $lang)
+    function logViews($id)
     {
         $nVisits = 0;
         $today = time();
-        $query = sprintf("SELECT visits FROM %sfaqvisits WHERE id = %d AND lang = '%s'", SQLPREFIX, $id, $lang);
+        $query = sprintf("SELECT visits FROM %sfaqvisits WHERE id = %d AND lang = '%s'", SQLPREFIX, $id, $this->language);
         if ($result = $this->db->query($query)) {
             $row = $this->db->fetch_object($result);
             $nVisits = $row->visits;
         }
         if ($nVisits == "0" || $nVisits == "") {
-            $query = sprintf("INSERT INTO %sfaqvisits (id, lang, visits, last_visit) VALUES (%d, '%s', 1, %d)", SQLPREFIX, $id, $lang, $today);
+            $query = sprintf("INSERT INTO %sfaqvisits (id, lang, visits, last_visit) VALUES (%d, '%s', 1, %d)", SQLPREFIX, $id, $this->language, $today);
             $this->db->query($query);
         } else {
-            $query = sprintf("UPDATE %sfaqvisits SET visits = visits+1, last_visit = %d WHERE id = %d AND lang = '%s'", SQLPREFIX, $today, $id, $lang);
+            $query = sprintf("UPDATE %sfaqvisits SET visits = visits+1, last_visit = %d WHERE id = %d AND lang = '%s'", SQLPREFIX, $today, $id, $this->language);
             $this->db->query($query);
         }
     }
