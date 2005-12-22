@@ -1,5 +1,5 @@
 /**
-* $Id: admin.css,v 1.5 2005-12-19 11:50:32 b33blebr0x Exp $
+* $Id: admin.css,v 1.6 2005-12-22 13:05:28 b33blebr0x Exp $
 *
 * This is the CSS file for the admin section of phpMyFAQ 1.5.x
 * You don't need to change enything here but feel free to do it. :-)
@@ -289,6 +289,7 @@ table.linkconfig#configuration tr#lastrow td {
 }
 
 /* ##### User administration 1.6 ##### */
+/* message box */
 #user_message .error {
     color: red;
     font-weight: bold;
@@ -318,6 +319,10 @@ table.linkconfig#configuration tr#lastrow td {
     margin: 0 0 20px 0;
 }
 #user_rights {}
+/* delete confirmation */
+#user_confirmDelete {
+    width: 250px;
+}
 
 /* admin form */
 div.input_row {

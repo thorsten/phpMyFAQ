@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.41 2005-12-17 14:47:01 thorstenr Exp $
+* $Id: installer.php,v 1.42 2005-12-22 13:05:28 b33blebr0x Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -680,6 +680,7 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 	require_once dirname(dirname(__FILE__)).'/inc/PMF_User/User.php';
 	$admin = new PMF_User();
 	$admin->createUser('admin', $password);
+	$admin->setStatus('protected');
 	$adminData = array(
 	    'display_name' => $realname,
 	    'email' => $email

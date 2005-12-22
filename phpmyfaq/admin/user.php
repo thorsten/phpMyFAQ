@@ -1,10 +1,10 @@
 <?php
 /**
-* $Id: user.php,v 1.7 2005-12-19 19:19:24 thorstenr Exp $
+* $Id: user.php,v 1.8 2005-12-22 13:05:27 b33blebr0x Exp $
 *
 * Displays the user managment frontend
 *
-* @author       Lars Tiedemann <larstiedemann@yahoo.de>
+* @author       Lars Tiedemann <php@larstiedemann.de>
 * @since        2005-12-15
 * @copyright    (c) 2005 phpMyFAQ Team
 * 
@@ -42,14 +42,95 @@ $errorMessages = array(
     'addUser_loginInvalid' => "The specified user name is invalid.",
     'addUser_noEmail' => "Please enter a valid mail adress. ",
     'addUser_noRealName' => "Please enter your real name. ",
+    'delUser' => "User account could not be deleted. ",
+    'delUser_noId' => "No User-ID specified. ",
+    'delUser_protectedAccount' => "User account is protected. ",
 );
 $successMessages = array(
     'addUser' => "User account successfully created. ",
+    'delUser' => "User account successfully deleted. ",
+);
+$text = array(
+    'button_cancel' => "cancel",
+    //'header' => "User administration",
+    'header' => $PMF_LANG['ad_user'],
+    //'addUser' => "add User",
+    'addUser' => $PMF_LANG["ad_adus_adduser"],
+    'addUser_confirm' => "add",
+    'delUser' => "delete user",
+    'delUser_question' => "Really delete this account? ",
+    'delUser_confirm' => "delete",
 );
 
 // what shall we do?
+// actions defined by url: user_action=
 $userAction = isset($_GET['user_action']) ? $_GET['user_action'] : $defaultUserAction;
+// actions defined by submit button
+if (isset($_POST['user_action_deleteConfirm']))
+    $userAction = 'delete_confirm';
+if (isset($_POST['cancel']))
+    $userAction = $defaultUserAction;
 
+
+// delete user confirmation
+if ($userAction == 'delete_confirm') {
+    $message = '';
+    $user = new PMF_User();
+    $userId = isset($_POST['user_list_select']) ? $_POST['user_list_select'] : 0;
+    if ($userId == 0) {
+        $message .= '<p class="error">'.$errorMessages['delUser_noId'].'</p>';
+        $userAction = $defaultUserAction;
+    } else {
+        $user->getUserById($userId);
+        // account is protected
+        if ($user->getStatus() == 'protected') {
+            $userAction = $defaultUserAction;
+            $message .= '<p class="error">'.$errorMessages['delUser_protectedAccount'].'</p>';
+        } else {
+?>
+<h2><?php print $text['header']; ?></h2>
+<div id="user_confirmDelete">
+    <fieldset>
+        <legend><?php print $text['delUser']; ?></legend>
+        <strong><?php print $user->getLogin(); ?></strong>
+        <p><?php print $text['delUser_question']; ?></p>
+        <form action ="<?php print $_SERVER['PHP_SELF']; ?>?aktion=user&amp;user_action=delete" method="post">
+            <input type="hidden" name="user_id" value="<?php print $userId; ?>" />
+            <div class="button_row">
+                <input class="reset" type="submit" name="cancel" value="<?php print $text['button_cancel']; ?>" />
+                <input class="submit" type="submit" value="<?php print $text['delUser_confirm']; ?>" />
+            </div>
+        </form>
+    </fieldset>
+</div>
+<?php
+        }
+    }
+} // end if ($userAction == 'delete_confirm')
+// delete user
+if ($userAction == 'delete') {
+    $message = '';
+    $user = new PMF_User();
+    $userId = isset($_POST['user_id']) ? $_POST['user_id'] : 0;
+    $userAction = $defaultUserAction;
+    if ($userId == 0) {
+        $message .= '<p class="error">'.$errorMessages['delUser_noId'].'</p>';
+    } else {
+        if (!$user->getUserById($userId)) {
+            $message .= '<p class="error">'.$errorMessages['delUser_noId'].'</p>';
+        }
+        if (!$user->deleteUser()) {
+            $message .= '<p class="error">'.$errorMessages['delUser'].'</p>';
+        } else {
+            $message .= '<p class="success">'.$successMessages['delUser'].'</p>';
+        }
+        $userError = $user->error();
+        if ($userError != "") {
+            $message .= '<p>ERROR: '.$userError.'</p>';
+        }
+    }
+    
+} // end if ($userAction == 'delete')
 // save new user
 if ($userAction == 'addsave') {
     $user = new PMF_User();
@@ -124,11 +205,11 @@ if (!isset($message))
 // show new user form
 if ($userAction == 'add') {
 ?>
-<h2><?php print $PMF_LANG["ad_user"]; ?></h2>
+<h2><?php print $text['header']; ?></h2>
 <div id="user_message"><?php print $message; ?></div>
 <div id="user_create">
     <fieldset>
-        <legend><?php print $PMF_LANG["ad_adus_adduser"]; ?></legend>
+        <legend><?php print $text['addUser']; ?></legend>
         <form name="user_create" action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=user&amp;user_action=addsave" method="post">
             <div class="input_row">
                 <label for="user_name"><?php print $PMF_LANG["ad_adus_name"]; ?></label>
@@ -151,8 +232,8 @@ if ($userAction == 'add') {
                 <input type="password" name="user_password_confirm" value="<?php print (isset($user_password_confirm) ? $user_password_confirm : ''); ?>" />
             </div>
             <div class="button_row">
-                <input class="reset" type="button" value="cancel" onclick="location.href='<?php print $_SERVER['PHP_SELF']; ?>?aktion=user'" />
-                <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_adus_add"]; ?>" />
+                <input class="reset" name="cancel" type="submit" value="<?php print $text['button_cancel']; ?>" />
+                <input class="submit" type="submit" value="<?php print $text['addUser_confirm']; ?>" />
             </div>
             <div class="clear"></div>
         </form>
@@ -348,16 +429,17 @@ getUserList();
 /* ]]> */
 </script>
 
-<h2><?php print $PMF_LANG["ad_user"]; ?></h2>
+<h2><?php print $text['header']; ?></h2>
 <div id="user_message"><?php print $message; ?></div>
 <div id="user_accounts">
     <div id="user_list">
         <fieldset>
             <legend><?php print $PMF_LANG["ad_user_username"]; ?></legend>
-            <form>
-                <select id="user_list_select" size="<?php print $selectSize; ?>" onchange="userSelect(event)">
+            <form name="user_select" id="user_select" action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=user" method="post">
+                <select name="user_list_select" id="user_list_select" size="<?php print $selectSize; ?>" onchange="userSelect(event)">
                     <option value="">select...</option>
                 </select>
+                <input type="submit" name="user_action_deleteConfirm" value="<?php print $PMF_LANG['ad_user_delete']; ?>" />
             </form>
         </fieldset>
         <p>[ <a href="<?php print $_SERVER['PHP_SELF']; ?>?aktion=user&amp;user_action=add"><?php print $PMF_LANG["ad_user_add"]; ?></a> ]</p>
