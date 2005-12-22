@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.user_list.php,v 1.4 2005-12-19 19:19:24 thorstenr Exp $
+* $Id: ajax.user_list.php,v 1.5 2005-12-22 21:03:40 b33blebr0x Exp $
 *
 * AJAX: lists all registered users
 *
@@ -61,11 +61,10 @@ foreach ($userList as $user_id) {
 <?php
     $user_data = $user_object->userdata->get(array_keys($data));
     foreach ($user_data as $field => $value) {
-        $field_name = $data[$field];
 ?>
 
-                <item>
-                    <name><?php print $field_name; ?></name>
+                <item name="<?php print $field; ?>">
+                    <name><?php print $data[$field]; ?></name>
                     <value><?php print $value; ?></value>
                 </item>
 <?php
