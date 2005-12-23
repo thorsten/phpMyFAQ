@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: user.php,v 1.9 2005-12-22 21:03:40 b33blebr0x Exp $
+* $Id: user.php,v 1.10 2005-12-23 15:28:25 b33blebr0x Exp $
 *
 * Displays the user managment frontend
 *
@@ -46,6 +46,7 @@ $errorMessages = array(
     'delUser_noId' => "No User-ID specified. ",
     'delUser_protectedAccount' => "User account is protected. ",
     'updateUser_noId' => "No User-ID specified. ",
+    'updateRights_noId' => "No User-ID  specified. ",
 );
 $successMessages = array(
     'addUser' => "User account successfully created. ",
@@ -59,8 +60,9 @@ $text = array(
     'delUser' => "delete user",
     'delUser_question' => "Really delete this account? ",
     'delUser_confirm' => "delete",
-    'changeUser' => $PMF_LANG["ad_user_profou"], // "Profile of the User
-    'changeUser_submit' => "change",
+    'changeUser' => $PMF_LANG["ad_user_profou"], // "Profile of the User"
+    'changeUser_submit' => "save",
+    'changeRights_submit' => "save",
 );
 
 // what shall we do?
@@ -73,8 +75,24 @@ if (isset($_POST['cancel']))
     $userAction = $defaultUserAction;
 
 
+// update user rights
+if ($userAction == 'update_rights') {
+    $message = '';
+    $userAction = $defaultUserAction;
+    $userId = isset($_POST['user_id']) ? $_POST['user_id'] : 0;
+    if ($userId == 0) {
+        $message .= '<p class="error">'.$errorMessages['updateRights_noId'].'</p>';
+    } else {
+        $user = new PMF_User();
+        $userRights = isset($_POST['user_rights']) ? $_POST['user_rights'] : array();
+        $user->perm->refuseAllUserRights($userId);
+        foreach ($userRights as $rightId) {
+            $user->perm->grantUserRight($userId, $rightId);
+        }
+    }
+} // end if ($userAction == 'update_rights')
 // update user data
-if ($userAction == 'update') {
+if ($userAction == 'update_data') {
     $message = '';
     $userAction = $defaultUserAction;
     $userId = isset($_POST['user_id']) ? $_POST['user_id'] : 0;
@@ -390,6 +408,8 @@ function buildUserRights(id)
             }
         }
     }
+    // change user-ID
+    document.getElementById("rights_user_id").setAttribute("value", id);
     // build new table rows
     var rightsList = user.getElementsByTagName("user_rights")[0];
     var rights = rightsList.getElementsByTagName("right");
@@ -408,6 +428,8 @@ function buildUserRights(id)
         }
         checkbox = document.createElement("input");
         checkbox.setAttribute("type", "checkbox");
+        checkbox.setAttribute("name", "user_rights[]");
+        checkbox.setAttribute("value", right_id);
         if (isUserRight == "1") {
             checkbox.setAttribute("checked", "checked");
         }
@@ -463,11 +485,11 @@ getUserList();
     <div id="user_list">
         <fieldset>
             <legend><?php print $PMF_LANG["ad_user_username"]; ?></legend>
-            <form name="user_select" id="user_select" action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=user" method="post">
+            <form name="user_select" id="user_select" action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=user&amp;user_action=delete_confirm" method="post">
                 <select name="user_list_select" id="user_list_select" size="<?php print $selectSize; ?>" onchange="userSelect(event)" tabindex="1">
                     <option value="">select...</option>
                 </select>
-                <input class="admin" type="submit" name="user_action_deleteConfirm" value="<?php print $PMF_LANG['ad_user_delete']; ?>" tabindex="2" />
+                <input class="admin" type="submit" value="<?php print $PMF_LANG['ad_user_delete']; ?>" tabindex="2" />
             </form>
         </fieldset>
         <p>[ <a href="<?php print $_SERVER['PHP_SELF']; ?>?aktion=user&amp;user_action=add"><?php print $PMF_LANG["ad_user_add"]; ?></a> ]</p>
@@ -477,7 +499,7 @@ getUserList();
     <div id="user_data">
         <fieldset>
             <legend id="user_data_legend"><?php print $text['changeUser']; ?></legend>
-            <form action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=user&amp;user_action=update" method="post">
+            <form action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=user&amp;user_action=update_data" method="post">
                 <input id="update_user_id" type="hidden" name="user_id" value="0" />
                 <table id="user_data_table">
                     <tr>
@@ -494,12 +516,18 @@ getUserList();
     <div id="user_rights">
         <fieldset>
             <legend id="user_rights_legend"><?php print $PMF_LANG["ad_user_rights"]; ?></legend>
-            <table id="user_rights_table">
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-            </table>
+            <form action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=user&amp;user_action=update_rights" method="post">
+                <input id="rights_user_id" type="hidden" name="user_id" value="0" />
+                <table id="user_rights_table">
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                </table>
+                <div class="button_row">
+                    <input class="submit" type="submit" value="<?php print $text['changeRights_submit']; ?>" />
+                </div>
+            </form>
         </fieldset>
     </div> <!-- end #user_rights -->
 </div> <!-- end #user_details -->

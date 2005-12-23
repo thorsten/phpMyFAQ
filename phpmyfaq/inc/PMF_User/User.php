@@ -475,6 +475,8 @@ class PMF_User
         if (!$this->checkDb($this->_db)) {
             return false;
         }
+        // delete user rights
+        $this->perm->refuseAllUserRights($this->_user_id);
         // delete user account
 		$res = $this->_db->query("
 		  DELETE FROM
