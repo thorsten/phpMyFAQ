@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.28 2005-12-19 19:01:27 thorstenr Exp $
+* $Id: index.php,v 1.29 2005-12-25 21:41:55 thorstenr Exp $
 *
 * The main admin backend index file
 *
@@ -66,8 +66,8 @@ if (function_exists('mb_language') && in_array($PMF_LANG['metaLanguage'], $valid
 
 // authenticate current user
 // different session names for different intallations
-session_name('PMF_SID_'.SQLPREFIX);
-session_start();
+//session_name('PMF_SID_'.SQLPREFIX);
+//session_start();
 unset($auth);
 if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
     // login with username and password
@@ -122,21 +122,24 @@ if ((isset($_REQUEST["aktion"])) && ($_REQUEST["aktion"] == "exportfile") && $au
     exit();
 }
 
+//
+// Get action from _GET and _POST first
+$_action = $_REQUEST['aktion'];
+$_ajax   = $_REQUEST['ajax'];
+
 // if performing AJAX operation, needs to branch before header.php
 if (isset($auth)) {
-    if (isset($_REQUEST["aktion"]) && isset($_REQUEST["ajax"])) {
-        if ($_REQUEST["aktion"] == "ajax") {
-            switch ($_REQUEST["ajax"]) {
-                case 'verifyURL':       require_once("ajax.verifyurl.php");
-                                        break;
-                case 'onDemandURL':     require_once("ajax.ondemandurl.php");
-                                        break;
-                case 'user_list':
-                    require_once('ajax.user_list.php');
-                    break;
-                case 'user_data':
-                    require_once('ajax.user_data.php');
-                    break;
+    if (isset($_action) && isset($_REQUEST["ajax"])) {
+        if ($_action == "ajax") {
+            switch ($_ajax) {
+                
+                // Link verification
+                case 'verifyURL':       require_once('ajax.verifyurl.php'); break;
+                case 'onDemandURL':     require_once('ajax.ondemandurl.php'); break;
+                
+                // User management
+                case 'user_list':       require_once('ajax.user_list.php'); break;
+                case 'user_data':       require_once('ajax.user_data.php'); break;
             }
         exit();
         }
@@ -154,21 +157,14 @@ if (isset($auth)) {
 <?php
 // User is authenticated
 if (isset($auth)) {
-	if (isset($_REQUEST["aktion"])) {
-    // the various sections of the admin area
-		switch ($_REQUEST["aktion"]) {
+	if (isset($action)) {
+	    
+        // the various sections of the admin area
+		switch ($action) {
+		    
 			// functions for user administration
-			case 'user':
-                require_once('user.php');
-                break;
-			/*case "user":					require_once ("user.list.php"); break;
-			case "user":					require_once ("user.list.php"); break;
-			case "deluser":					require_once ("user.delete.php"); break;
-			case "useredit":				require_once ("user.edit.php"); break;
-			case "usersave":				require_once ("user.save.php"); break;
-			case "userdel":					require_once ("user.question.php"); break;
-			case "useradd":					require_once ("user.add.php"); break;
-			case "addsave":					require_once ("user.addsave.php"); break;*/
+			case 'user':                    require_once('user.php'); break;
+
 			// functions for record administration
 			case "view":					require_once ("record.show.php"); break;
 			case "accept":					require_once ("record.show.php"); break;
@@ -208,8 +204,11 @@ if (isset($auth)) {
 			case "setcookie":				require_once ("cookie.check.php"); break;
 			case "cookies":					require_once ("cookie.check.php"); break;
 			case "delcookie":				require_once ("cookie.check.php"); break;
+			
 			// adminlog administration
-			case "adminlog":				require_once ("adminlog.php"); break;
+			case 'adminlog':				
+            case 'deleteadminlog':          require_once ('adminlog.php'); break;
+			
 			// functions for password administration
 			case "passwd":					require_once ("pwd.change.php"); break;
 			case "savepwd":					require_once ("pwd.save.php"); break;

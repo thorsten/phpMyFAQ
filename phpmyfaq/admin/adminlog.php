@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: adminlog.php,v 1.7 2005-11-22 20:11:50 b33blebr0x Exp $
+* $Id: adminlog.php,v 1.8 2005-12-25 21:41:55 thorstenr Exp $
 *
 * Overview of actions in the admin section
 *
@@ -24,7 +24,12 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
-if ($permission["adminlog"]) {
+if ($permission['adminlog'] && 'adminlog' == $_action) {
+    
+    //
+    // Show the adminlog
+    //
+    
 	$perpage = 15;
 
     $_user = array();
@@ -105,6 +110,22 @@ if ($permission["adminlog"]) {
 	</tbody>
 	</table>
 <?php
+    
+    printf ('<p><a href="?aktion=deleteadminlog">%s</a></p>', $PMF_LANG['ad_adminlog_del_older_30d']);
+    
+} elseif ($permission['adminlog'] && 'deleteadminlog' == $_action) {
+    
+    //
+    // Delete logs older than 30 days
+    //
+    $30days = time() - 30 * 86400;
+    
+    if ($db->query('DELETE FROM '.SQLPREFIX.'faqadminlog WHERE time < '.$30days)) {
+        printf('<p>%s</p>', $MPF_LANG['ad_adminlog_delete_success']);
+    } else {
+        printf('<p>%s</p>', $MPF_LANG['ad_adminlog_delete_failure']);
+    }
+    
 } else {
 	print $PMF_LANG["err_NotAuth"];
 }
