@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.user_list.php,v 1.6 2005-12-23 15:28:25 b33blebr0x Exp $
+* $Id: ajax.user_list.php,v 1.7 2005-12-26 18:41:25 b33blebr0x Exp $
 *
 * AJAX: lists all registered users
 *
@@ -54,9 +54,11 @@ foreach ($userList as $user_id) {
     $user_id = $user_object->getUserId();
     $login = $user_object->getLogin();
     $class = "ad_select_user";
+    $status = $user_object->getStatus();
 ?>
         <user id="<?php print $user_id; ?>">
             <login><?php print $login; ?></login>
+            <status><?php print $status; ?></status>
             <user_data>
 <?php
     $user_data = $user_object->userdata->get(array_keys($data));

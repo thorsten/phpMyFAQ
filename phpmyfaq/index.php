@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.35 2005-12-26 15:48:12 thorstenr Exp $
+* $Id: index.php,v 1.36 2005-12-26 18:41:25 b33blebr0x Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the 
@@ -22,6 +22,12 @@
 * under the License.
 */
 
+// check if config.php and data.php exist -> if not, redirect to installer
+if (!file_exists('inc/config.php') || !file_exists('inc/data.php')) {
+    header("Location: http://".$_SERVER['SERVER_NAME'].dirname($_SERVER['PHP_SELF'])."/install/installer.php");
+    exit();
+}
+
 require_once('inc/init.php');
 define('IS_VALID_PHPMYFAQ', null);
 PMF_Init::cleanRequest();
@@ -29,12 +35,6 @@ PMF_Init::cleanRequest();
 // Just for security reasons - thanks to Johannes for the hint
 $_SERVER['PHP_SELF'] = strtr(rawurlencode($_SERVER['PHP_SELF']),array( "%2F"=>"/", "%257E"=>"%7E"));
 $_SERVER['HTTP_USER_AGENT'] = urlencode($_SERVER['HTTP_USER_AGENT']);
-
-// check if config.php and data.php exist -> if not, redirect to installer
-if (!file_exists('inc/config.php') || !file_exists('inc/data.php')) {
-    header("Location: http://".$_SERVER['SERVER_NAME'].dirname($_SERVER['PHP_SELF'])."/install/installer.php");
-    exit();
-}
 
 // Include required template parser class, category class, the main FAQ class
 // and the IDNA class

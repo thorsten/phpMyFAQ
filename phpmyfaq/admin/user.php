@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: user.php,v 1.10 2005-12-23 15:28:25 b33blebr0x Exp $
+* $Id: user.php,v 1.11 2005-12-26 18:41:25 b33blebr0x Exp $
 *
 * Displays the user managment frontend
 *
@@ -33,6 +33,7 @@ require_once(PMF_ROOT_DIR.'/inc/PMF_User/User.php');
 // set some parameters
 $selectSize = 10;
 $defaultUserAction = 'list';
+$defaultUserStatus = 'active';
 $loginMinLength = 4;
 $loginInvalidRegExp = '/(^[^a-z]{1}|[\W])/i';
 $errorMessages = array(
@@ -104,9 +105,11 @@ if ($userAction == 'update_data') {
         foreach ($dataFields as $field) {
             $userData[$field] = isset($_POST[$field]) ? $_POST[$field] : '';
         }
+        $userStatus = isset($_POST['user_status']) ? $_POST['user_status'] : $defaultUserStatus;
         $user = new PMF_User();
         $user->getUserById($userId);
         $user->userdata->set(array_keys($userData), array_values($userData));
+        $user->setStatus($userStatus);
         $message .= '<p class="success">'.$text['updateUser'].'</p>';
     }
 } // end if ($userAction == 'update')
@@ -221,6 +224,8 @@ if ($userAction == 'addsave') {
         } else {
             // set user data (realname, email)
             $user->userdata->set(array('display_name', 'email'), array($user_realname, $user_email));
+            // set user status
+            $user->setStatus($defaultUserStatus);
         }
     }
     // no errors, show list
@@ -385,6 +390,29 @@ function buildUserData(id)
 }
 
 
+function selectUserStatus(id)
+{
+    var getValues = true;
+    var users = userList.responseXML.getElementsByTagName("user");
+    var user;
+    // get user with given id
+    if (id == 0) {
+        getValues = false;
+        user = users[0];
+    } else {
+        getValues = true;
+        for (var i = 0; i < users.length; i++) {
+            if (users[i].getAttribute("id") == id) {
+                user = users[i];
+                break;
+            }
+        }
+    }
+    var status = text_getFromParent(user, "status");
+    document.getElementById("user_status_select").value = status;
+}
+
+
 function clearUserRights()
 {
     table_clear(document.getElementById("user_rights_table"));
@@ -449,6 +477,7 @@ function userSelect(evt)
             buildUserData(select.value);
             clearUserRights();
             buildUserRights(select.value);
+            selectUserStatus(select.value);
         }
     }
 }
@@ -501,6 +530,14 @@ getUserList();
             <legend id="user_data_legend"><?php print $text['changeUser']; ?></legend>
             <form action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=user&amp;user_action=update_data" method="post">
                 <input id="update_user_id" type="hidden" name="user_id" value="0" />
+                <div class="input_row">
+                    <label for="user_status_select">Status: </label>
+                    <select id="user_status_select" name="user_status" >
+                        <option value="active">active</option>
+                        <option value="blocked">blocked</option>
+                        <option value="protected">protected</option>
+                    </select>
+                </div>
                 <table id="user_data_table">
                     <tr>
                         <td>&nbsp;</td>
