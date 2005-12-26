@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.32 2005-12-26 15:03:45 thorstenr Exp $
+* $Id: index.php,v 1.33 2005-12-26 19:13:09 b33blebr0x Exp $
 *
 * The main admin backend index file
 *
@@ -73,7 +73,12 @@ if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
     // login with username and password
     $user = new PMF_CurrentUser();
     if ($user->login($db->escape_string($_POST['faqusername']),$db->escape_string($_POST['faqpassword']))) {
-        $auth = true;
+        // login, if user account is NOT blocked
+        if ($user->getStatus() != 'blocked') {
+            $auth = true;
+        } else {
+            $error = $PMF_LANG["ad_auth_fail"]." (".$user->getUserData('login')." / *)";
+        }
     } else {
         // error
         adminlog("Loginerror\nLogin: ".$user->getUserData('login')."\nPass: ********");
