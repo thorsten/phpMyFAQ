@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.34 2005-12-20 10:47:37 thorstenr Exp $
+* $Id: index.php,v 1.35 2005-12-26 15:48:12 thorstenr Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the 
@@ -36,21 +36,12 @@ if (!file_exists('inc/config.php') || !file_exists('inc/data.php')) {
     exit();
 }
 
-// connect to the database server, define the prefix and connect
-require_once("inc/data.php");
-require_once("inc/db.php");
-define("SQLPREFIX", $DB["prefix"]);
-$db = db::db_select($DB["type"]);
-$db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
-
-// get configuration, constants, main functions, template parser, category class, IDNA class
-require_once("inc/config.php");
-require_once("inc/constants.php");
-require_once("inc/functions.php");
-require_once("inc/parser.php");
-require_once("inc/Category.php");
+// Include required template parser class, category class, the main FAQ class
+// and the IDNA class
+require_once('inc/parser.php');
+require_once('inc/Category.php');
 require_once('inc/Faq.php');
-require_once("inc/idna_convert.class.php");
+require_once('inc/idna_convert.class.php');
 $IDN = new idna_convert;
 
 // connect to LDAP server, when LDAP support is enabled
