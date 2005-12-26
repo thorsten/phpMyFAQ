@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.30 2005-12-26 13:38:33 thorstenr Exp $
+* $Id: index.php,v 1.31 2005-12-26 13:50:31 thorstenr Exp $
 *
 * The main admin backend index file
 *
@@ -124,12 +124,12 @@ if ((isset($_REQUEST["aktion"])) && ($_REQUEST["aktion"] == "exportfile") && $au
 
 //
 // Get action from _GET and _POST first
-$_action = $_REQUEST['aktion'];
-$_ajax   = $_REQUEST['ajax'];
+$_action = isset($_REQUEST['aktion']) ? $_REQUEST['aktion'] : null;
+$_ajax   = isset($_REQUEST['ajax']) ? $_REQUEST['ajax'] : null;
 
 // if performing AJAX operation, needs to branch before header.php
 if (isset($auth)) {
-    if (isset($_action) && isset($_REQUEST["ajax"])) {
+    if (isset($_action) && isset($_ajax)) {
         if ($_action == "ajax") {
             switch ($_ajax) {
                 
@@ -160,10 +160,10 @@ if (isset($auth)) {
 <?php
 // User is authenticated
 if (isset($auth)) {
-	if (isset($action)) {
+	if (isset($_action)) {
 	    
         // the various sections of the admin area
-		switch ($action) {
+		switch ($_action) {
 		    
 			// functions for user administration
 			case 'user':                    require_once('user.php'); break;
@@ -222,9 +222,9 @@ if (isset($auth)) {
 			case "sessionsuche":			require_once ("stat.form.php"); break;
 			case "viewsession":				require_once ("stat.show.php"); break;
 			case "statistik":				require_once ("stat.ratings.php"); break;
+			
 			// functions for config administration
-			case "editconfig":				require_once ("config.edit.php"); break;
-			case "saveconfig":				require_once ("config.save.php"); break;
+            case 'config':                  require_once ("config.php"); break;
             case 'linkconfig':              require_once ('linkconfig.main.php'); break;
 			// functions for backup administration
 			case "csv":						require_once ("backup.main.php"); break;

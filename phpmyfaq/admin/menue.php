@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: menue.php,v 1.9 2005-12-14 10:52:48 b33blebr0x Exp $
+* $Id: menue.php,v 1.10 2005-12-26 13:50:31 thorstenr Exp $
 *
 * Navigation menue of the admin area
 *
@@ -70,7 +70,7 @@ function addMenuEntry($restrictions = "", $aktion = "", $caption = "")
 	addMenuEntry('viewlog',                              'viewsessions',     'ad_menu_session');
 	addMenuEntry('adminlog',                             'adminlog',         'ad_menu_adminlog');
 	addMenuEntry('passwd',                               'passwd',           'ad_menu_passwd');
-	addMenuEntry('editconfig',                           'editconfig',       'ad_menu_editconfig');
+	addMenuEntry('editconfig',                           'config',           'ad_menu_editconfig');
     addMenuEntry('editconfig,editbt,delbt',              'linkconfig',       'ad_menu_linkconfig');
 	addMenuEntry('backup,restore',                       'csv',              'ad_menu_backup');
 	addMenuEntry('',                                     'export',           'ad_menu_export');
