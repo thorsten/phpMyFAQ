@@ -1,25 +1,8 @@
 TODO list for future versions of phpMyFAQ:
 
-1.5.1:
-- multiple category links in FAQ records
-- search results ordered by relevance in MySQL
-- Firefox/Mozilla search plugin
-- bugfixing for stability or security reasons
-
-1.5.2:
-- change 'id' to 'record' for better Google compliance
-- SQLite support ?
-- bugfixing for stability or security reasons
-
-1.5.3 and later:
-- bugfixing for stability or security reasons
-
 1.6.0 "Prometheus":
 - add revision system (done)
-- configurable visibility of questions (done)
-- new authentication class ?
 - add spam protection ?
-- add glossary support ?
 - improved WYSIWYG editor and Image Manager ?
 - reorder records ?
 - batch insertion script ?

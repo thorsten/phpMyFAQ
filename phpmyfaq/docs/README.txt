@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.40 2005-12-19 18:57:34 thorstenr Exp $
+$Id: README.txt,v 1.41 2005-12-26 11:39:17 thorstenr Exp $
 
 phpMyFAQ 1.6.0-dev
 Codename "Prometheus"
@@ -10,7 +10,13 @@ Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 1.5.x:
-- add user to a category
+- added rewritten and enhanced user management
+- added rewritten and enhanced authorization management
+- added AJAX support
+- added user binding to a category
+- added glossary support
+- added possibility to delete admin log
+- added configurable visibility of new questions
 
 Known issues in phpMyFAQ 1.6.0:
 - some language files need an update
@@ -19,7 +25,13 @@ Known issues in phpMyFAQ 1.6.0:
 CHANGELOG:
 
 Version 1.6.0 - n/a
-- add user to a category
+- added rewritten and enhanced user management
+- added rewritten and enhanced authorization management
+- added AJAX support
+- added user binding to a category
+- added glossary support
+- added possibility to delete admin log
+- added configurable visibility of new questions
 
 Version 1.5.5 - 2005-12-19
 - added support for MaxDB

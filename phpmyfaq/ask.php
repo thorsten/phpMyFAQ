@@ -1,10 +1,10 @@
 <?php
 /**
-* $Id: ask.php,v 1.5 2005-09-25 09:47:02 thorstenr Exp $
+* $Id: ask.php,v 1.6 2005-12-26 11:39:17 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-09-17
-* @copyright    (c) 2001-2004 phpMyFAQ Team
+* @copyright    (c) 2001-2005 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the 'License'); you may not use this file except in
@@ -28,7 +28,7 @@ $tree->buildTree();
 
 $tpl->processTemplate('writeContent', array(
 				      'msgQuestion' => $PMF_LANG['msgQuestion'],
-				      'msgNewQuestion' => $PMF_LANG['msgNewQuestion'],
+				      'msgNewQuestion' => $PMF_LANG['msgNewQuestion'].(isset($PMF_CONF['enablevisibility']) ?	$PMF_LANG['msgNewQuestionVisible'] : ''),
                       'writeSendAdress' => $_SERVER['PHP_SELF'].'?'.$sids.'action=savequestion',
                       'msgNewContentName' => $PMF_LANG['msgNewContentName'],
                       'msgNewContentMail' => $PMF_LANG['msgNewContentMail'],

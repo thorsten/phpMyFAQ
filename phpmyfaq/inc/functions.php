@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.100 2005-12-20 10:47:37 thorstenr Exp $
+* $Id: functions.php,v 1.101 2005-12-26 11:39:17 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -1018,21 +1018,38 @@ function chopString($string, $words)
     return $str;
 }
 
-/******************************************************************************
- * Funktionen für die Offenen Fragen
- ******************************************************************************/
+//
+//
+// FUNCTIONS FOR THE OPEN QUESTIONS
 
-/*
- * Diese Funktion gibt die offenen Fragen aus | @@ Thorsten, 2002-09-17
- * Last Update: @@ Thorsten, 2004-07-08
- */
+/**
+* printOpenQuestions()
+*
+* Prints the open questions as a XHTML table
+*
+* @return   string
+* @access   public
+* @since    2002-09-17
+* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+*/
 function printOpenQuestions()
 {
 	global $db, $sids, $tree, $PMF_LANG;
 
-	$query = "SELECT id, ask_username, ask_usermail, ask_rubrik, ask_content, ask_date FROM ".SQLPREFIX."faqfragen ORDER BY ask_date ASC";
+    $query = "SELECT COUNT(*) AS num FROM ".SQLPREFIX."faqfragen WHERE is_visible != 'Y'";
 	$result = $db->query($query);
-	$output = "";
+
+    $row = $db->fetch_object($result);
+    $numofinvisibles = $row->num;
+
+	if ($db->num_rows($result) > 0) {
+	   $extraout = "\t<tr>\n\t\t<td colspan=\"3\"><hr>".$PMF_LANG["msgQuestionsWaiting"].$numofinvisibles."</td>\n\t</tr>\n";
+	} else {
+        $extraout = '';
+
+	$query = "SELECT id, ask_username, ask_usermail, ask_rubrik, ask_content, ask_date FROM ".SQLPREFIX."faqfragen WHERE is_visible = 'Y' ORDER BY ask_date ASC";
+	$result = $db->query($query);
+	$output = '';
 	if ($db->num_rows($result) > 0) {
 		while ($row = $db->fetch_object($result)) {
 			$output .= "\t<tr class=\"openquestions\">\n";
@@ -1045,7 +1062,7 @@ function printOpenQuestions()
 	else {
 		$output = "\t<tr>\n\t\t<td colspan=\"3\">".$PMF_LANG["msgNoQuestionsAvailable"]."</td>\n\t</tr>\n";
 		}
-	return $output;
+	return $output.$extraout;
 }
 
 //

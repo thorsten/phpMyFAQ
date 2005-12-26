@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: savequestion.php,v 1.14 2005-09-25 09:47:02 thorstenr Exp $
+* $Id: savequestion.php,v 1.15 2005-12-26 11:39:17 thorstenr Exp $
 *
 * @author           Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author           David Saez Padros <david@ols.es>
@@ -47,7 +47,13 @@ if (isset($_REQUEST["username"]) && $_REQUEST["username"] != '' && isset($_REQUE
             $datum = date("YmdHis");
             $content  = $db->escape_string(strip_tags($_REQUEST["content"]));
             
-            $result = $db->query("INSERT INTO ".SQLPREFIX."faqfragen (id, ask_username, ask_usermail, ask_rubrik, ask_content, ask_date) VALUES (".$db->nextID(SQLPREFIX."faqfragen", "id").", '".$db->escape_string($username)."', '".$db->escape_string($usermail)."', ".$selected_category.", '".$content."', '".$datum."')");
+            if (isset($PMF_CONF['enablevisibility'])) {
+                $visibility = 'N';
+            } else {
+                $visibility = 'Y';
+            }
+
+            $result = $db->query("INSERT INTO ".SQLPREFIX."faqfragen (ask_username, ask_usermail, ask_rubrik, ask_content, ask_date, is_visible) VALUES ('".$user."', '".$usermail."', '".$rubrik."', '".$content."', '".$datum."', '".$visibility."')");
             
             $questionMail = "User: ".$username.", mailto:".$usermail."\n".$PMF_LANG["msgCategory"].":  ".$categories[$selected_category]["name"]."\n\n".wordwrap(stripslashes($content), 72);
             

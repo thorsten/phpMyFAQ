@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.13 2005-12-17 19:44:08 thorstenr Exp $
+* $Id: language_en.php,v 1.14 2005-12-26 11:39:17 thorstenr Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -576,6 +576,7 @@ $LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "Do you want to enable 
 $LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "Do you want to enable LDAP support? (default: disabled)");
 $LANG_CONF["referenceURL"] = array(0 => "input", 1 => "base URL for link verification (set to folder URL of Frontend)");
 $LANG_CONF["URLValidateInterval"] = array(0 => "input", 1 => "Interval between AJAX link verification (in seconds)");
+$LANG_CONF["enablevisibility"] = array(0 => "checkbox", 1 => "Disable visibility of new questions?");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "as new main category";
 $PMF_LANG["ad_categ_paste_error"] = "Moving this category isn't possible.";
@@ -651,3 +652,6 @@ $PMF_LANG['ad_linkcheck_config_th_owner'] = 'Entry owner';
 $PMF_LANG['ad_linkcheck_config_th_enabled'] = 'Set to enable entry';
 $PMF_LANG['ad_linkcheck_config_th_locked'] = 'Set to lock ownership';
 $PMF_LANG['ad_linkcheck_config_th_chown'] = 'Set to obtain ownership';
+$PMF_LANG['msgNewQuestionVisible'] = 'The question have to be reviewed first before getting public.';
+$PMF_LANG['msgQuestionsWaiting'] = 'Waiting for publishing by the administrators:';
+$PMF_LANG['ad_entry_visibility'] = 'Publish?';

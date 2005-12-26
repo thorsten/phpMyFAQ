@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.delquestion.php,v 1.4 2005-11-23 16:37:50 b33blebr0x Exp $
+* $Id: record.delquestion.php,v 1.5 2005-12-26 11:39:17 thorstenr Exp $
 *
 * Delete open questions
 *
@@ -24,22 +24,42 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
-if ($permission["delquestion"]) {
+if ($permission['delquestion']) {
     $tree = new Category;
-    if (isset($_REQUEST["delete"]) && $_REQUEST["delete"] == "yes") {
-		$db->query("DELETE FROM ".SQLPREFIX."faqfragen WHERE id = ".$_REQUEST["id"]);
+    
+    if (isset($_REQUEST['delete']) && $_REQUEST['delete'] == 'yes') {
+		
+        $db->query("DELETE FROM ".SQLPREFIX."faqfragen WHERE id = ".$_REQUEST["id"]);
 		print $PMF_LANG["ad_entry_delsuc"];
+		
 	} else {
+	    
+        if (isset($_REQUEST['is_visible']) && $_REQUEST['is_visible'] == 'toggle') {
+            
+            $query = sprintf('SELECT is_visible FROM %sfaqfragen WHERE id = %d', SQLPREFIX, $_REQUEST['id']);
+            $result = $db->query($query);
+            if ($db->num_rows($result) == 1) {
+                $row = $db->fetch_object($result);
+                if ('Y' == $row->is_visible) {
+                    $query = sprintf("UPDATE %sfaqfragen SET is_visible = 'N' WHERE id = %d", SQLPREFIX, $_REQUEST['id']);
+                } else {
+                    $query = sprintf("UPDATE %sfaqfragen SET is_visible = 'Y' WHERE id = %d", SQLPREFIX, $_REQUEST['id']);
+                }
+                $result = $db->query($query);
+            }
+        }
+
 		print "<h2>".$PMF_LANG["msgOpenQuestions"]."</h2>";
-		$result = $db->query("SELECT id, ask_username, ask_usermail, ask_rubrik, ask_content, ask_date FROM ".SQLPREFIX."faqfragen ORDER BY ask_date ASC");
+		$result = $db->query("SELECT id, ask_username, ask_usermail, ask_rubrik, ask_content, ask_date, is_visible FROM ".SQLPREFIX."faqfragen ORDER BY ask_date ASC");
 		if ($db->num_rows($result) > 0) {
 ?>
     <table class="list">
     <thead>
         <tr>
-            <th class="list"><?php print $PMF_LANG["ad_entry_author"]; ?></th>
-            <th class="list"><?php print $PMF_LANG["ad_entry_theme"]; ?></th>
-            <th class="list"><?php print $PMF_LANG["ad_gen_delete"]; ?>?</th>
+            <th class="list"><?php print $PMF_LANG['ad_entry_author']; ?></th>
+            <th class="list"><?php print $PMF_LANG['ad_entry_theme']; ?></th>
+            <th class="list"><?php print $PMF_LANG['ad_entry_visibility']; ?>?</th>
+            <th class="list"><?php print $PMF_LANG['ad_gen_delete']; ?>?</th>
         </tr>
     </thead>
     <tbody>
@@ -48,8 +68,9 @@ if ($permission["delquestion"]) {
 ?>
         <tr>
             <td class="list"><?php print makeDate($row->ask_date); ?><br /><a href="mailto:<?php print $row->ask_usermail; ?>"><?php print $row->ask_username; ?></a></td>
-            <td class="list"><?php print $tree->categoryName[$row->ask_rubrik]["name"].":<br />".$row->ask_content; ?></td>
-            <td class="list"><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=question&amp;id=<?php print $row->id; ?>&amp;delete=yes"><?php print $PMF_LANG["ad_gen_delete"]; ?>!</a><br /><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=takequestion&amp;id=<?php print $row->id; ?>"><?php print $PMF_LANG["ad_ques_take"] ?></a></td>
+            <td class="list"><?php print $tree->categoryName[$row->ask_rubrik]['name'].":<br />".$row->ask_content; ?></td>
+            <td class="list"><a href="?aktion=question&amp;id=<?php print $row->id; ?>&amp;is_visible=toggle"><?php print (('Y' == $row->is_visible) ? $PMF_LANG["ad_gen_no"] : $PMF_LANG["ad_gen_yes"]; ?>!</a><br /></td>
+            <td class="list"><a href="?aktion=question&amp;id=<?php print $row->id; ?>&amp;delete=yes"><?php print $PMF_LANG["ad_gen_delete"]; ?>!</a><br /><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=takequestion&amp;id=<?php print $row->id; ?>"><?php print $PMF_LANG["ad_ques_take"] ?></a></td>
         </tr>
 <?php
 			}

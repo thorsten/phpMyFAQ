@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.13 2005-10-14 17:13:01 thorstenr Exp $
+ * $Id: language_de.php,v 1.14 2005-12-26 11:39:17 thorstenr Exp $
  *
  * File:                language_de.php
  * Description:		    German language file
@@ -573,6 +573,7 @@ $LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "mod_rewrite Support akt
 $LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "LDAP Support aktivieren? (Voreinstellung: deaktiviert)");
 $LANG_CONF["referenceURL"] = array(0 => "input", 1 => "base URL for link verification (set to folder URL of Frontend)");
 $LANG_CONF["URLValidateInterval"] = array(0 => "input", 1 => "Interval between AJAX link verification (in seconds)");
+$LANG_CONF["enablevisibility"] = array(0 => "checkbox", 1 => "Sichtbarkeit neuer Fragen unterdrücken?");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "Als neue Hauptrubrik";
 $PMF_LANG["ad_categ_paste_error"] = "Diese Rubrik kann hier nicht eingef&uuml;gt werden.";
@@ -597,7 +598,7 @@ $PMF_LANG['ad_categ_select'] = 'Sprache der Kategorie';
 // added v1.5.1 - 2005-09-06 by Thorsten
 $PMF_LANG['msgSitemap'] = 'Sitemap';
 
-// added v1.6.0 - 2005-09-15 by Thorsten
+// added v1.6.0 - 2005-09-15 by Thorsten and Minoru
 $PMF_LANG['ad_menu_glossary'] = 'Glossar';
 $PMF_LANG['ad_glossary_add'] = 'Glossar-Eintrag hinzufügen';
 $PMF_LANG['ad_glossary_item'] = 'Begriff';
@@ -617,3 +618,32 @@ $PMF_LANG['ad_linkcheck_checkResult'] = 'Automatic link verification result';
 $PMF_LANG['ad_linkcheck_checkSuccess'] = 'OK';
 $PMF_LANG['ad_linkcheck_checkFailed'] = 'Failed';
 $PMF_LANG['ad_linkcheck_failReason'] = 'Reason(s) failed:';
+$PMF_LANG['ad_linkcheck_noLinksFound'] = 'No URLs compatible with link verifier feature found.';
+$PMF_LANG['ad_linkcheck_searchbadonly'] = 'Only with bad links';
+$PMF_LANG['ad_linkcheck_infoReason'] = 'Additional Information:';
+$PMF_LANG['ad_linkcheck_openurl_infoprefix'] = 'Found while testing <strong>%s</strong>: ';
+$PMF_LANG['ad_linkcheck_openurl_notready'] = 'LinkVerifier not ready.';
+$PMF_LANG['ad_linkcheck_openurl_maxredirect'] = 'Maximum redirect count <strong>%d</strong> exceeded.';
+$PMF_LANG['ad_linkcheck_openurl_urlisblank'] = 'Resolved to blank URL.';
+$PMF_LANG['ad_linkcheck_openurl_tooslow'] = 'Host <strong>%s</strong> is slow or not responding.';
+$PMF_LANG['ad_linkcheck_openurl_nodns'] = 'Host <strong>%s</strong> is slow or has no DNS.';
+$PMF_LANG['ad_linkcheck_openurl_redirected'] = 'URL was redirected to <strong>%s</strong>.';
+$PMF_LANG['ad_linkcheck_openurl_ambiguous'] = 'Ambiguous HTTP status <strong>%s</strong> returned.';
+$PMF_LANG['ad_linkcheck_protocol_unsupported'] = '%s protocol unsupported by Automatic link verification.';
+$PMF_LANG['ad_menu_linkconfig'] = 'Configure URL Verifier';
+$PMF_LANG['ad_linkcheck_config_title'] = 'URL Verifier Configuration';
+$PMF_LANG['ad_linkcheck_config_disabled'] = 'URL Verifier feature disabled';
+$PMF_LANG['ad_linkcheck_config_warnlist'] = 'URLs to warn';
+$PMF_LANG['ad_linkcheck_config_ignorelist'] = 'URLs to ignore';
+$PMF_LANG['ad_linkcheck_config_warnlist_description'] = 'URLs prefixed with items below will be issued warning regardless of whether it is valid.<br />Use this feature to detect soon-to-be defunct URLs';
+$PMF_LANG['ad_linkcheck_config_ignorelist_description'] = 'Exact URLs listed below will be assumed valid without validation.<br />Use this feature to omit URLs that fail to validate using URL Verifier';
+$PMF_LANG['ad_linkcheck_config_th_id'] = 'ID#';
+$PMF_LANG['ad_linkcheck_config_th_url'] = 'URL to match';
+$PMF_LANG['ad_linkcheck_config_th_reason'] = 'Match reason';
+$PMF_LANG['ad_linkcheck_config_th_owner'] = 'Entry owner';
+$PMF_LANG['ad_linkcheck_config_th_enabled'] = 'Set to enable entry';
+$PMF_LANG['ad_linkcheck_config_th_locked'] = 'Set to lock ownership';
+$PMF_LANG['ad_linkcheck_config_th_chown'] = 'Set to obtain ownership';
+$PMF_LANG['msgNewQuestionVisible'] = 'Dazu muss der Administrator allerdings diese erst freigeben.';
+$PMF_LANG['msgQuestionsWaiting'] = 'Wartend auf die Freigabe durch den Administrator:';
+$PMF_LANG['ad_entry_visibility'] = 'Sichtbar machen?';
