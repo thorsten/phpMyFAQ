@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.config_list.php,v 1.1 2005-12-26 13:37:56 thorstenr Exp $
+* $Id: ajax.config_list.php,v 1.2 2005-12-26 21:38:09 thorstenr Exp $
 *
 * AJAX: lists the complete configuration items
 *
@@ -27,30 +27,48 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 require_once(PMF_ROOT_DIR.'/inc/config.php');
 require_once(PMF_ROOT_DIR.'/lang/language_en.php');
 
-header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
-header("Cache-Control: no-store, no-cache, must-revalidate");
-header("Cache-Control: post-check=0, pre-check=0", false);
-header("Pragma: no-cache");
-header("Content-type: text/xml");
-header("Vary: Negotiate,Accept");
-
-ob_clean();
-
-printf("<?xml version=\"1.0\" encoding=\"%s\" ?>\n", strtolower($PMF_LANG['metaCharset']));
-print "<ajax-response>\n";
-print "    <response type=\"object\" id=\"configurationDetails\">\n";
-print "        <configlist\n>";
 foreach ($LANG_CONF as $key => $value) {
-    if (isset($PMF_CONF[$key])) {
-        print "            <item>\n";
-        printf("                <xhtmltag>%s</xhtmltag>\n", $value[0]);
-        printf("                <label>%s</label>\n", $value[1]);
-        printf("                <key>%s</key>\n", $key);
-        printf("                <value>%s</value>\n", $PMF_CONF[$key]);
-        print "            </item>\n";
+?>
+<dl>
+    <dt><strong><?php print $value[1]; ?></strong></dt>
+    <dd><?php
+        
+    switch($value[0]) {
+            
+        case 'area':        printf('<textarea class="admin" name="edit[%s]" cols="50" rows="6" style="width: 400px;">%s</textarea>', $key, $PMF_CONF[$key]);
+                            break;
+            
+        case 'input':       printf('<input class="admin" type="text" name="edit[%s]" size="64" style="width: 400px;" value="%s" />', $key, $PMF_CONF[$key]);
+                            break;
+            
+        case 'select':      printf('<select name="edit[%s]" size="1">', $key);
+                            if ($dir = @opendir(PMF_ROOT_DIR.'/lang')) {
+                                while ($dat = @readdir($dir)) {
+                                    if (substr($dat, -4) == '.php') {
+                                        printf('<option value="%s"', $dat);
+            				            if ($dat == $PMF_CONF['language']) {
+                                            print ' selected="selected"';
+                                        }
+                                        printf('>%s</option>', $languageCodes[substr(strtoupper($dat), 9, 2)]);
+                                    }
+                                }
+                            } else {
+                                print '<option>English</option>';
+                            }
+                            print '</select>';
+                            break;
+            
+        case 'checkbox':    printf('<input type="checkbox" name="edit[%s]" value="true"', $key);
+                            if (isset($PMF_CONF[$key]) && true == $PMF_CONF[$key]) {
+                                print ' checked="checked"';
+                            }
+                            print ' /> '.strtolower($PMF_LANG['ad_entry_active']);
+                            break;
+            
+        case 'print':       print $PMF_CONF[$key];
+                            printf('<input class="admin" type="hidden" name="edit[%s]" size="64" style="width: 400px;" value="%s" />', $key, $PMF_CONF[$key]);
+                            break;
     }
+?></dd>
+</dl><?php
 }
-print "        </configlist>\n";
-print "    </response>\n";
-print "</ajax-response>\n";
