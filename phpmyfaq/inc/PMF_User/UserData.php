@@ -105,8 +105,8 @@ class PMF_UserData
 		  FROM
 		    ".PMF_USER_SQLPREFIX."userdata
 		  WHERE 
-		    user_id = '".$this->_user_id."'
-		"); 
+		    user_id = ".$this->_user_id
+        ); 
 		if ($this->_db->num_rows($res) != 1) 
 		    return false;
 		$arr = $this->_db->fetch_assoc($res);
@@ -202,8 +202,8 @@ class PMF_UserData
           FROM
             ".PMF_USER_SQLPREFIX."userdata
           WHERE 
-            user_id = '".$this->_user_id."'
-        ");
+            user_id = ".$this->_user_id
+        );
         if ($this->_db->num_rows($res) != 1)
         	return false;
         $this->_data = $this->_db->fetch_assoc($res);
@@ -234,8 +234,8 @@ class PMF_UserData
             display_name = '".$this->_data['display_name']."',
             email        = '".$this->_data['email']."'
           WHERE 
-            user_id = '".$this->_user_id."'
-        ");
+            user_id = ".$this->_user_id
+        ;
         if (!$res) 
             return false;
         return true;
@@ -267,7 +267,7 @@ class PMF_UserData
           INSERT INTO
             ".PMF_USER_SQLPREFIX."userdata
           SET
-            user_id      = '".$this->_user_id."', 
+            user_id      = ".$this->_user_id.", 
             last_modified = NOW()
         ");
         if (!$res) 
@@ -301,8 +301,8 @@ class PMF_UserData
           DELETE FROM
             ".PMF_USER_SQLPREFIX."userdata
           WHERE
-            user_id = '".$this->_user_id."'
-        ");
+            user_id = ".$this->_user_id
+        );
         if (!$res) 
             return false;
         $this->_data = array();

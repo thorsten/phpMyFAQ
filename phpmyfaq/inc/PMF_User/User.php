@@ -306,8 +306,8 @@ class PMF_User
 		  FROM
 		    ".PMF_USER_SQLPREFIX."user
 		  WHERE 
-			user_id = '".(int) $user_id."'		    
-		");
+			user_id = ".(int) $user_id
+        );
 		if ($this->_db->num_rows($res) != 1) {
 			$this->errors[] = PMF_USERERROR_NO_USERID . 'error(): ' . $this->_db->error();
 			return false;
@@ -411,7 +411,7 @@ class PMF_User
           INSERT INTO
             ".PMF_USER_SQLPREFIX."user
           SET
-            user_id = '".$this->getUserId()."', 
+            user_id = ".$this->getUserId().", 
             login   = '".$this->_db->escape_string($login)."'
         ");
         // create user-data entry
@@ -482,8 +482,8 @@ class PMF_User
 		  DELETE FROM
 		    ".PMF_USER_SQLPREFIX."user
 		  WHERE
-		    user_id = '".$this->_user_id."'
-		");
+		    user_id = ".$this->_user_id
+        );
 		if (!$res) {
 			$this->errors[] = PMF_CANNOT_DELETE_USER . 'error(): ' . $this->_db->error();
 			return false;
@@ -711,8 +711,8 @@ class PMF_User
 		  SET 
 		    account_status = '".$status."' 
 		  WHERE 
-		    user_id = '".$user_id."'
-		");
+		    user_id = ".$user_id
+        );
 		// return bool
 		if ($res)
 		    return true;
