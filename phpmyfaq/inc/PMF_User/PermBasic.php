@@ -110,9 +110,9 @@ class PMF_PermBasic
                 ".PMF_USER_SQLPREFIX."user_right,
                 ".PMF_USER_SQLPREFIX."user
             WHERE
-                ".PMF_USER_SQLPREFIX."right.right_id = '".$right_id."' AND
+                ".PMF_USER_SQLPREFIX."right.right_id = ".$right_id." AND
                 ".PMF_USER_SQLPREFIX."right.right_id = ".PMF_USER_SQLPREFIX."user_right.right_id AND
-                ".PMF_USER_SQLPREFIX."user.user_id   = '".$user_id."' AND
+                ".PMF_USER_SQLPREFIX."user.user_id   = ".$user_id." AND
                 ".PMF_USER_SQLPREFIX."user.user_id   = ".PMF_USER_SQLPREFIX."user_right.user_id
         ");
         // return result
@@ -149,7 +149,7 @@ class PMF_PermBasic
                 ".PMF_USER_SQLPREFIX."user
             WHERE
                 ".PMF_USER_SQLPREFIX."right.right_id = ".PMF_USER_SQLPREFIX."user_right.right_id AND
-                ".PMF_USER_SQLPREFIX."user.user_id   = '".$user_id."' AND
+                ".PMF_USER_SQLPREFIX."user.user_id   = ".$user_id." AND
                 ".PMF_USER_SQLPREFIX."user.user_id   = ".PMF_USER_SQLPREFIX."user_right.user_id
         ");
         // return result
@@ -214,9 +214,9 @@ class PMF_PermBasic
             INSERT INTO
                 ".PMF_USER_SQLPREFIX."user_right
             SET
-                user_id  = '".$user_id."',
-                right_id = '".$right_id."'
-        ");
+                user_id  = ".$user_id.",
+                right_id = ".$right_id
+        );
         if (!$res)
             return false;
         return true;
@@ -245,9 +245,9 @@ class PMF_PermBasic
             DELETE FROM
                 ".PMF_USER_SQLPREFIX."user_right
             WHERE
-                user_id  = '".$user_id."' AND
-                right_id = '".$right_id."'
-        ");
+                user_id  = ".$user_id." AND
+                right_id = ".$right_id
+        );
         if (!$res)
             return false;
         return true;
@@ -306,8 +306,8 @@ class PMF_PermBasic
             FROM
                 ".PMF_USER_SQLPREFIX."right
             WHERE
-                right_id = '".$right_id."'
-        ");
+                right_id = ".$right_id
+        );
         if ($this->_db->num_rows($res) != 1) 
             return false;
         // process right data
@@ -367,12 +367,12 @@ class PMF_PermBasic
             INSERT INTO
                 ".PMF_USER_SQLPREFIX."right
             SET
-                right_id    = '".$next_id."',
+                right_id    = ".$next_id.",
                 name        = '".$right_data['name']."',
                 description = '".$right_data['description']."',
-                for_users   = '".$this->bool_to_int($right_data['for_users'])."',
-                for_groups  = '".$this->bool_to_int($right_data['for_groups'])."'
-        ");
+                for_users   = ".$this->bool_to_int($right_data['for_users']).",
+                for_groups  = ".$this->bool_to_int($right_data['for_groups'])
+        );
         if (!$res) 
             return 0;
         // insert context data
@@ -381,10 +381,10 @@ class PMF_PermBasic
         		INSERT INTO
         			".PMF_USER_SQLPREFIX."rightcontext
         		SET
-        			right_id   = '".$next_id."',
+        			right_id   = ".$next_id.",
         			context    = '".$context_data['context']."',
-        			context_id = '".$context_data['context_id']."'
-        	");
+        			context_id = ".$context_data['context_id']
+            );
         	if (!$res)
         		return 0;
         }
@@ -427,8 +427,8 @@ class PMF_PermBasic
             SET
                 ".$set."
             WHERE
-                right_id = '".$right_id."'
-        ");
+                right_id = ".$right_id
+        );
         if (!$res) 
             return false;
         // change right context
@@ -438,10 +438,10 @@ class PMF_PermBasic
         			".PMF_USER_SQLPREFIX."rightcontext
         		SET
         			context    = '".$context_data['context']."',
-        			context_id = '".$context_data['context_id']."'
+        			context_id = ".$context_data['context_id']."
         		WHERE
-        			right_id = '".$right_id."'
-        	");
+        			right_id = ".$right_id
+            );
         	if (!$res)
         		return false;
         }
@@ -471,7 +471,7 @@ class PMF_PermBasic
             DELETE FROM
                 ".PMF_USER_SQLPREFIX."right
             WHERE
-                right_id = '".$right_id."'
+                right_id = ".$right_id."
         ");
         if (!$res) 
             return false;
@@ -480,7 +480,7 @@ class PMF_PermBasic
             DELETE FROM
                 ".PMF_USER_SQLPREFIX."user_right
             WHERE
-                right_id = '".$right_id."'
+                right_id = ".$right_id."
         ");
         if (!$res) 
             return false;
@@ -489,7 +489,7 @@ class PMF_PermBasic
             DELETE FROM
                 ".PMF_USER_SQLPREFIX."group_right
             WHERE
-                right_id = '".$right_id."'
+                right_id = ".$right_id."
         ");
         if (!$res) 
             return false;
@@ -498,7 +498,7 @@ class PMF_PermBasic
             DELETE FROM
                 ".PMF_USER_SQLPREFIX."rightcontext
             WHERE
-                right_id = '".$right_id."'
+                right_id = ".$right_id."
         ");
         if (!$res) 
             return false;
@@ -622,8 +622,8 @@ class PMF_PermBasic
             DELETE FROM
                 ".PMF_USER_SQLPREFIX."user_right
             WHERE
-                user_id  = '".$user_id."'
-        ");
+                user_id  = ".$user_id
+        );
         if (!$res)
             return false;
         return true;

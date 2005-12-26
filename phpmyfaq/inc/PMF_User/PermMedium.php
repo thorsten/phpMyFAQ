@@ -101,10 +101,10 @@ class PMF_PermMedium
                 ".PMF_USER_SQLPREFIX."group_right,
                 ".PMF_USER_SQLPREFIX."group
             WHERE
-                ".PMF_USER_SQLPREFIX."right.right_id = '".$right_id."' AND
+                ".PMF_USER_SQLPREFIX."right.right_id = ".$right_id." AND
                 ".PMF_USER_SQLPREFIX."right.right_id = ".PMF_USER_SQLPREFIX."group_right.right_id AND
                 ".PMF_USER_SQLPREFIX."group.group_id = ".PMF_USER_SQLPREFIX."group_right.group_id AND
-                ".PMF_USER_SQLPREFIX."group.group_id   = '".$group_id."'
+                ".PMF_USER_SQLPREFIX."group.group_id = '".$group_id."'
         ");
         // return result
         if ($this->_db->num_rows($res) == 1)
@@ -141,7 +141,7 @@ class PMF_PermMedium
                 ".PMF_USER_SQLPREFIX."group_right,
                 ".PMF_USER_SQLPREFIX."group
             WHERE
-                ".PMF_USER_SQLPREFIX."group.group_id   = '".$group_id."' AND
+                ".PMF_USER_SQLPREFIX."group.group_id = '".$group_id."' AND
                 ".PMF_USER_SQLPREFIX."group.group_id = ".PMF_USER_SQLPREFIX."group_right.group_id AND
                 ".PMF_USER_SQLPREFIX."right.right_id = ".PMF_USER_SQLPREFIX."group_right.right_id
         ");
@@ -236,9 +236,9 @@ class PMF_PermMedium
             INSERT INTO
                 ".PMF_USER_SQLPREFIX."group_right
             SET
-                group_id = '".$group_id."',
-                right_id = '".$right_id."'
-        ");
+                group_id = ".$group_id.",
+                right_id = ".$right_id
+        );
         if (!$res) 
             return false;
         return true;
@@ -271,9 +271,9 @@ class PMF_PermMedium
             DELETE FROM
                 ".PMF_USER_SQLPREFIX."group_right
             WHERE
-                group_id = '".$group_id."' AND
-                right_id = '".$right_id."'
-        ");
+                group_id = ".$group_id." AND
+                right_id = ".$right_id
+        );
         if (!$res) 
             return false;
         return true;
@@ -309,7 +309,7 @@ class PMF_PermMedium
             INSERT INTO
                 ".PMF_USER_SQLPREFIX."group
             SET
-                group_id    = '".$next_id."',
+                group_id    = ".$next_id.",
                 name        = '".$group_data['name']."',
                 description = '".$group_data['description']."',
                 auto_join   = '".$this->bool_to_int($group_data['auto_join'])."'
@@ -354,8 +354,8 @@ class PMF_PermMedium
             SET
                 ".$set."
             WHERE
-                group_id = '".$group_id."'
-        ");
+                group_id = ".$group_id
+        );
         if (!$res) 
             return false;
         return true;
@@ -384,8 +384,8 @@ class PMF_PermMedium
             DELETE FROM
                 ".PMF_USER_SQLPREFIX."group
             WHERE
-                group_id = '".$group_id."'
-        ");
+                group_id = ".$group_id
+        );
         if (!$res) 
             return false;
         // delete group-user links
@@ -393,8 +393,8 @@ class PMF_PermMedium
             DELETE FROM
                 ".PMF_USER_SQLPREFIX."user_group
             WHERE
-                group_id = '".$group_id."'
-        ");
+                group_id = ".$group_id
+        );
         if (!$res) 
             return false;
         // delete group-right links
@@ -402,8 +402,8 @@ class PMF_PermMedium
             DELETE FROM
                 ".PMF_USER_SQLPREFIX."group_right
             WHERE
-                group_id = '".$group_id."'
-        ");
+                group_id = ".$group_id
+        ;
         if (!$res) 
             return false;
         return true;
@@ -436,11 +436,11 @@ class PMF_PermMedium
                 ".PMF_USER_SQLPREFIX."user_group,
                 ".PMF_USER_SQLPREFIX."group
             WHERE
-            	".PMF_USER_SQLPREFIX."user.user_id   = '".$user_id."' AND
+            	".PMF_USER_SQLPREFIX."user.user_id   = ".$user_id." AND
             	".PMF_USER_SQLPREFIX."user.user_id   = ".PMF_USER_SQLPREFIX."user_group.user_id AND
             	".PMF_USER_SQLPREFIX."group.group_id = ".PMF_USER_SQLPREFIX."user_group.group_id AND
-            	".PMF_USER_SQLPREFIX."group.group_id = '".$group_id."'
-        ");
+            	".PMF_USER_SQLPREFIX."group.group_id = ".$group_id
+        );
         if ($this->_db->num_rows($res) == 1)
         	return true;
         return false;
@@ -472,7 +472,7 @@ class PMF_PermMedium
                 ".PMF_USER_SQLPREFIX."user_group,
                 ".PMF_USER_SQLPREFIX."group
             WHERE
-            	".PMF_USER_SQLPREFIX."group.group_id = '".$group_id."' AND
+            	".PMF_USER_SQLPREFIX."group.group_id = ".$group_id." AND
             	".PMF_USER_SQLPREFIX."group.group_id = ".PMF_USER_SQLPREFIX."user_group.group_id AND
             	".PMF_USER_SQLPREFIX."user.user_id   = ".PMF_USER_SQLPREFIX."user_group.user_id
         ");
@@ -510,9 +510,9 @@ class PMF_PermMedium
         	INSERT INTO
         		".PMF_USER_SQLPREFIX."user_group
         	SET
-        		user_id  = '".$user_id."',
-        		group_id = '".$group_id."'
-        ");
+        		user_id  = ".$user_id.",
+        		group_id = ".$group_id
+        );
         // return
         if (!$res)
         	return false;
@@ -546,9 +546,9 @@ class PMF_PermMedium
         	DELETE FROM
         		".PMF_USER_SQLPREFIX."user_group
         	WHERE
-        		user_id  = '".$user_id."' AND
-        		group_id = '".$group_id."'
-        ");
+        		user_id  = ".$user_id." AND
+        		group_id = ".$group_id
+        );
         // return
         if (!$res)
         	return false;
@@ -617,8 +617,8 @@ class PMF_PermMedium
         	FROM
         		".PMF_USER_SQLPREFIX."group
         	WHERE
-        		group_id = '".$group_id."'
-        ");
+        		group_id = ".$group_id
+        );
         // return
         if ($this->_db->num_rows($res) != 1)
         	return array();
@@ -652,7 +652,7 @@ class PMF_PermMedium
                 ".PMF_USER_SQLPREFIX."user_group,
                 ".PMF_USER_SQLPREFIX."group
             WHERE
-            	".PMF_USER_SQLPREFIX."user.user_id   = '".$user_id."' AND
+            	".PMF_USER_SQLPREFIX."user.user_id   = ".$user_id." AND
             	".PMF_USER_SQLPREFIX."user.user_id   = ".PMF_USER_SQLPREFIX."user_group.user_id AND
             	".PMF_USER_SQLPREFIX."group.group_id = ".PMF_USER_SQLPREFIX."user_group.group_id
         ");
@@ -729,13 +729,13 @@ class PMF_PermMedium
                 ".PMF_USER_SQLPREFIX."user_group,
                 ".PMF_USER_SQLPREFIX."user
             WHERE
-                ".PMF_USER_SQLPREFIX."right.right_id = '".$right_id."' AND
+                ".PMF_USER_SQLPREFIX."right.right_id = ".$right_id." AND
                 ".PMF_USER_SQLPREFIX."right.right_id = ".PMF_USER_SQLPREFIX."group_right.right_id AND
                 ".PMF_USER_SQLPREFIX."group.group_id = ".PMF_USER_SQLPREFIX."group_right.group_id AND
                 ".PMF_USER_SQLPREFIX."group.group_id = ".PMF_USER_SQLPREFIX."user_group.group_id AND
                 ".PMF_USER_SQLPREFIX."user.user_id   = ".PMF_USER_SQLPREFIX."user_group.user_id AND
-                ".PMF_USER_SQLPREFIX."user.user_id   = '".$user_id."'
-        ");
+                ".PMF_USER_SQLPREFIX."user.user_id   = ".$user_id
+        );
         // return result
         if ($this->_db->num_rows($res) == 1)
             return true;
@@ -820,7 +820,7 @@ class PMF_PermMedium
             FROM
                 ".PMF_USER_SQLPREFIX."group
             WHERE
-                auto_join = '1'
+                auto_join = 1
         ");
         if (!$res)
             return false;
@@ -861,8 +861,8 @@ class PMF_PermMedium
         	DELETE FROM
         		".PMF_USER_SQLPREFIX."user_group
         	WHERE
-        		user_id  = '".$user_id."'
-        ");
+        		user_id  = ".$user_id
+        );
         // return
         if (!$res)
         	return false;
@@ -900,7 +900,7 @@ class PMF_PermMedium
                 ".PMF_USER_SQLPREFIX."user_group,
                 ".PMF_USER_SQLPREFIX."user
             WHERE
-                ".PMF_USER_SQLPREFIX."user.user_id   = '".$user_id."' AND
+                ".PMF_USER_SQLPREFIX."user.user_id   = ".$user_id." AND
                 ".PMF_USER_SQLPREFIX."user.user_id   = ".PMF_USER_SQLPREFIX."user_group.user_id AND
                 ".PMF_USER_SQLPREFIX."group.group_id = ".PMF_USER_SQLPREFIX."user_group.group_id AND
                 ".PMF_USER_SQLPREFIX."group.group_id = ".PMF_USER_SQLPREFIX."group_right.group_id AND

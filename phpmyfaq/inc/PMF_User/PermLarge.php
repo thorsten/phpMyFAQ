@@ -116,8 +116,8 @@ class PMF_PermLarge
             WHERE 
                 ".PMF_USER_SQLPREFIX."right.name              = '".$name."' AND
                 ".PMF_USER_SQLPREFIX."rightcontext.context    = '".$this->_context."' AND
-                ".PMF_USER_SQLPREFIX."rightcontext.context_id = '".$this->_context_id."'
-        ");
+                ".PMF_USER_SQLPREFIX."rightcontext.context_id = ".$this->_context_id
+        );
         // return result
         if ($this->_db->num_rows($res) != 1)
             return 0;
