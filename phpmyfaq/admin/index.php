@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.29 2005-12-25 21:41:55 thorstenr Exp $
+* $Id: index.php,v 1.30 2005-12-26 13:38:33 thorstenr Exp $
 *
 * The main admin backend index file
 *
@@ -140,6 +140,9 @@ if (isset($auth)) {
                 // User management
                 case 'user_list':       require_once('ajax.user_list.php'); break;
                 case 'user_data':       require_once('ajax.user_data.php'); break;
+                
+                // Configuration management
+                case 'config_list':     require_once('ajax.config_list.php'); break;
             }
         exit();
         }
