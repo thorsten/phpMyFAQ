@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.101 2005-12-26 11:39:17 thorstenr Exp $
+* $Id: functions.php,v 1.102 2005-12-26 13:41:40 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -1046,6 +1046,7 @@ function printOpenQuestions()
 	   $extraout = "\t<tr>\n\t\t<td colspan=\"3\"><hr>".$PMF_LANG["msgQuestionsWaiting"].$numofinvisibles."</td>\n\t</tr>\n";
 	} else {
         $extraout = '';
+	}
 
 	$query = "SELECT id, ask_username, ask_usermail, ask_rubrik, ask_content, ask_date FROM ".SQLPREFIX."faqfragen WHERE is_visible = 'Y' ORDER BY ask_date ASC";
 	$result = $db->query($query);
@@ -1057,11 +1058,10 @@ function printOpenQuestions()
 			$output .= "\t\t<td valign=\"top\"><strong>".$tree->categoryName[$row->ask_rubrik]["name"].":</strong><br />".strip_tags($row->ask_content)."</td>\n";
         	$output .= "\t\t<td valign=\"top\"><a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=add&amp;question=".rawurlencode($row->ask_content)."&amp;cat=".$row->ask_rubrik."\">".$PMF_LANG["msg2answer"]."</a></td>\n";
     		$output .= "\t</tr>\n";
-			}
 		}
-	else {
+	} else {
 		$output = "\t<tr>\n\t\t<td colspan=\"3\">".$PMF_LANG["msgNoQuestionsAvailable"]."</td>\n\t</tr>\n";
-		}
+	}
 	return $output.$extraout;
 }
 
