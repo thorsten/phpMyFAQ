@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.4 2005-12-20 13:44:28 thorstenr Exp $
+* $Id: Faq.php,v 1.5 2005-12-26 15:34:43 thorstenr Exp $
 *
 * The main FAQ class
 *
@@ -49,6 +49,13 @@ class FAQ
     * @var  array
     */
     var $faqRecord = array();
+    
+    /**
+    * All current FAQ records in an array
+    *
+    * @var  array
+    */
+    var $faqRecords = array();
     
     /**
     * Constructor
@@ -230,6 +237,34 @@ class FAQ
     }
     
     /**
+    * getAllRecords()
+    *
+    * Returns an array with all data from all FAQ records
+    *
+    * @return   void
+    * @access   public
+    * @since    2005-12-26
+    * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+    */
+    function getAllRecords()
+    {
+        $result = $this->db->query(sprintf("SELECT * FROM %sfaqdata ORDER BY id", SQLPREFIX));
+        if ($row = $this->db->fetch_object($result)) {
+            $this->faqRecords[] = array(
+                'id'        => $row->id,
+                'lang'      => $row->lang,
+                'active'    => $row->active,
+                'keywords'  => $row->keywords,
+                'title'     => $row->thema,
+                'content'   => (('yes' == $row->active) ? $row->content : $this->pmf_lang['err_inactiveArticle']),
+                'author'    => $row->author,
+                'email'     => $row->email,
+                'comment'   => $row->comment,
+                'date'      => makeDate($row->datum));
+        }
+    }
+    
+    /**
     * getRecordTitle()
     *
     * Returns the FAQ record title from the ID and language
@@ -241,6 +276,9 @@ class FAQ
     */
     function getRecordTitle($id)
     {
+        if (isset($this->faqRecord[$id])) {
+            return $this->faqRecord['title'];
+        }
         $result = $this->db->query(sprintf("SELECT thema FROM %sfaqdata WHERE id = %d AND lang = '%s'", SQLPREFIX, $id, $this->language));
         if ($this->db->num_rows($result) > 0) {
             while ($row = $this->db->fetch_object($result)) {
@@ -264,6 +302,9 @@ class FAQ
     */
     function getRecordKeywords($id)
     {
+        if (isset($this->faqRecord[$id])) {
+            return $this->faqRecord['keywords'];
+        }
         $result = $this->db->query(sprintf("SELECT keywords FROM %sfaqdata WHERE id = %d AND lang = '%s'", SQLPREFIX, $id, $this->language));
         if ($this->db->num_rows($result) > 0) {
             $row = $this->db->fetch_object($result);
@@ -557,5 +598,7 @@ class FAQ
         }
         return $latest;
     }
+    
+    
     
 }
