@@ -1,11 +1,12 @@
 <?php
-/******************************************************************************
- * File:				backup.main.php
- * Description:			main page of backup
- * Authors:				Thorsten Rinne <thorsten@phpmyfaq.de>
- * Date:				2003-02-24
- * Last change:			2004-11-06
- * Copyright:           (c) 2001-2004 Thorsten Rinne
+/**
+* $Id: backup.main.php,v 1.5 2005-12-26 15:23:44 thorstenr Exp $
+*
+* Frontend for Backup and Restore
+*
+* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+* @since        2003-02-24
+* @copyright    (c) 2001-2005 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -23,28 +24,28 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
-if ($permission["backup"]) {
+printf('<h2>%s</h2>', $PMF_LANG['ad_csv_backup']);    
+
+if ($permission['backup']) {
 ?>
-	<h2><?php print $PMF_LANG["ad_csv_backup"]; ?></h2>
-    <fieldset>
-      <legend><?php print $PMF_LANG["ad_csv_head"]; ?></legend>
-      <p><?php print $PMF_LANG["ad_csv_make"]; ?></p>
-      <p align="center"><a href="attachment.php?uin=<?php print $uin; ?>&amp;aktion=sicherdaten"><?php print $PMF_LANG["ad_csv_linkdat"]; ?></a> | <a href="attachment.php?uin=<?php print $uin; ?>&amp;aktion=sicherlog"><?php print $PMF_LANG["ad_csv_linklog"]; ?></a></p>
+	<fieldset>
+        <legend><?php print $PMF_LANG["ad_csv_head"]; ?></legend>
+        <p><?php print $PMF_LANG["ad_csv_make"]; ?></p>
+        <p align="center"><a href="attachment.php?aktion=sicherdaten"><?php print $PMF_LANG["ad_csv_linkdat"]; ?></a> | <a href="attachment.php?aktion=sicherlog"><?php print $PMF_LANG["ad_csv_linklog"]; ?></a></p>
     </fieldset>
-    <p></p>
-    <form method="post" action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=restore" enctype="multipart/form-data">
-      <fieldset>
+    <p>&nbsp;</p>
+    <form method="post" action="?aktion=restore" enctype="multipart/form-data">
+    <fieldset>
         <legend><?php print $PMF_LANG["ad_csv_head2"]; ?></legend>
         <p><?php print $PMF_LANG["ad_csv_restore"]; ?></p>
         <div align="center">
         <?php print $PMF_LANG["ad_csv_file"]; ?>:
-          <input type="file" name="userfile" size="60" />&nbsp;
-          <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_csv_ok"]; ?>" />
+            <input type="file" name="userfile" size="30" />&nbsp;
+            <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_csv_ok"]; ?>" />
         </div>
-      </fieldset>
+    </fieldset>
     </form>
 <?php
 } else {
 	print $PMF_LANG["err_NotAuth"];
 }
-?>
