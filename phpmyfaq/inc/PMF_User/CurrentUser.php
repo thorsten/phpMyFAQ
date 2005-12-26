@@ -161,7 +161,7 @@ class PMF_CurrentUser
 			// $login exists, but $pass is incorrect, so stop!
 			if (!$auth->checkPassword($login, $pass)) {
 				$pass_error++;
-				print_r($auth);
+				//print_r($auth);
 				break;
 			}
 			// but hey, this must be a valid match!

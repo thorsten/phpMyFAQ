@@ -430,7 +430,7 @@ class PMF_User
         	if ($auth->read_only()) {
         		continue;
         	}
-        	if (!$auth->add($login, $auth->encrypt($pass))) {
+        	if (!$auth->add($login, $pass)) {
         		$this->errors[] = PMF_USERERROR_CANNOT_CREATE_USER.'in PMF_Auth '.$name;
         	} else {
         		$success = true;
