@@ -28,7 +28,9 @@
     -->
     /*]]>*/
     </style>
-    <link rel="shortcut icon" href="template/favicon.ico" />
+    <script type="text/javascript"  src="inc/functions.js"></script>
+    <link rel="shortcut icon" href="template/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="template/favicon.ico" type="image/x-icon" />
     <link rel="alternate" title="News RSS Feed" type="application/rss+xml" href="feed/news/rss.php" />
     <link rel="alternate" title="TopTen RSS Feed" type="application/rss+xml" href="feed/topten/rss.php" />
     <link rel="alternate" title="Latest FAQ Records RSS Feed" type="application/rss+xml" href="feed/latest/rss.php" />
@@ -113,14 +115,14 @@
             
                 <div class="content">
                     <div id="topten">
-                    <h3>{writeTopTenHeader}</h3>
+                    <h3>{writeTopTenHeader} <a href="feed/topten/rss.php" target="_blank"><img src="images/rss.png" width="28" height="16" alt="RSS" /></a></h3>
                     {writeTopTenRow}
                     </div>
                 </div>
                 
                 <div class="content">
                     <div id="latest">
-                    <h3>{writeNewestHeader}</h3>
+                    <h3>{writeNewestHeader}&nbsp;<a href="feed/latest/rss.php" target="_blank"><img src="images/rss.png" width="28" height="16" alt="RSS" /></a></h3>
                     {writeNewestRow}
                     </div>
                 </div>
@@ -143,7 +145,7 @@
     <!-- end columns -->
     
     <div class="clearing"></div>
-		
+    
     <!-- start footer -->
     <div id="footer" class="footer">
         <!-- please do not remove the following line -->
@@ -151,6 +153,10 @@
     </div>
     <!-- end footer -->
 
+    <!-- start debug messages -->
+    {debugMessages}
+    <!-- end debug messages -->
+	
     </div>
 </div>    
 
