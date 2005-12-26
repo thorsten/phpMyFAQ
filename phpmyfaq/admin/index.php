@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.33 2005-12-26 19:13:09 b33blebr0x Exp $
+* $Id: index.php,v 1.34 2005-12-26 21:41:00 thorstenr Exp $
 *
 * The main admin backend index file
 *
@@ -22,7 +22,6 @@
 * under the License.
 */
 
-require_once('../inc/functions.php');
 require_once('../inc/init.php');
 define('IS_VALID_PHPMYFAQ_ADMIN', null);
 PMF_Init::cleanRequest();
@@ -33,15 +32,7 @@ $_SERVER['HTTP_USER_AGENT'] = urlencode($_SERVER['HTTP_USER_AGENT']);
 
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
-
-// Read configuration, include classes and functions
-require_once (PMF_ROOT_DIR."/inc/data.php");
-require_once (PMF_ROOT_DIR."/inc/db.php");
-define("SQLPREFIX", $DB["prefix"]);
-$db = db::db_select($DB["type"]);
-$db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
-require_once (PMF_ROOT_DIR."/inc/config.php");
-require_once (PMF_ROOT_DIR."/inc/constants.php");
+// Include classes and functions
 require_once (PMF_ROOT_DIR."/inc/category.php");
 require_once (PMF_ROOT_DIR."/inc/linkverifier.php");
 require_once (PMF_ROOT_DIR."/inc/PMF_User/CurrentUser.php");
@@ -88,7 +79,7 @@ if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
     }
 } else {
     // authenticate with session information
-    $ip_check = $PMF_CONF['ipcheck'] == 'TRUE' ? true : false;
+    $ip_check = (isset($PMF_CONF['ipcheck']) && $PMF_CONF['ipcheck']) ? true : false;
     $user = PMF_CurrentUser::getFromSession($ip_check);
     if ($user) {
         $auth = true;
@@ -135,7 +126,7 @@ $_ajax   = isset($_REQUEST['ajax']) ? $_REQUEST['ajax'] : null;
 // if performing AJAX operation, needs to branch before header.php
 if (isset($auth)) {
     if (isset($_action) && isset($_ajax)) {
-        if ($_action == "ajax") {
+        if ($_action == 'ajax') {
             switch ($_ajax) {
                 
                 // Link verification
@@ -229,7 +220,7 @@ if (isset($auth)) {
 			case "statistik":				require_once ("stat.ratings.php"); break;
 			
 			// functions for config administration
-            case 'config':                  require_once ("config.php"); break;
+            case 'config':                  require_once ("configuration.php"); break;
             case 'linkconfig':              require_once ('linkconfig.main.php'); break;
 			// functions for backup administration
 			case "csv":						require_once ("backup.main.php"); break;
