@@ -181,8 +181,8 @@ class PMF_CurrentUser
                 SET
                     auth_source = '".$name."'
                 WHERE
-                    user_id = '".$this->getUserId()."'
-			");
+                    user_id = ".$this->getUserId()
+            );
 			if (!$res) {
                 return false;
                 break;
@@ -278,8 +278,8 @@ class PMF_CurrentUser
             FROM
                 ".PMF_USER_SQLPREFIX."user
             WHERE
-                user_id = '".$this->getUserId()."'
-        ");
+                user_id = ".$this->getUserId()
+        );
         if (!$res or $this->_db->num_rows($res) != 1)
             return array();
         return $this->_db->fetch_assoc($res);
@@ -308,11 +308,11 @@ class PMF_CurrentUser
                 ".PMF_USER_SQLPREFIX."user
             SET
                 session_id = '".session_id()."',
-                session_timestamp = '".$now."',
+                session_timestamp = ".$now.",
                 ip = '".$_SERVER['REMOTE_ADDR']."'
             WHERE
-                user_id = '".$this->getUserId()."'
-        ");
+                user_id = ".$this->getUserId()
+        );
         if (!$res) {
             $this->errors[] = $this->_db->error();
             return false;
@@ -353,10 +353,10 @@ class PMF_CurrentUser
             UPDATE
                 ".PMF_USER_SQLPREFIX."user
             SET
-                session_id = ''
+                session_id = null
             WHERE
-                user_id = '".$this->getUserId()."'
-        ");
+                user_id = ".$this->getUserId()
+        );
         if (!$res) {
             $this->errors[] = $this->_db->error();
             return false;
