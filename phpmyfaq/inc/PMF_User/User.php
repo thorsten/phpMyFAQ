@@ -688,7 +688,7 @@ class PMF_User
         // section -64--88-1-10--602a52f4:106a644a5e8:-7fd7 begin
         // is status allowed?
         $status = strtolower($status);
-        if (!in_array($status, $this->_allowed_status)) {
+        if (!in_array($status, array_keys($this->_allowed_status))) {
             $this->errors[] = PMF_USERERROR_INVALID_STATUS;
             return false;
         }
