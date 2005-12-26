@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.31 2005-12-26 13:50:31 thorstenr Exp $
+* $Id: index.php,v 1.32 2005-12-26 15:03:45 thorstenr Exp $
 *
 * The main admin backend index file
 *
@@ -305,7 +305,7 @@ if (isset($auth)) {
             }
         } else {
 ?>
-    <form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>" method="post">
+    <form action="" method="post">
     <input type="hidden" name="param" value="version" />
     <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_xmlrpc_button"]; ?>" />
     </form>
@@ -315,7 +315,7 @@ if (isset($auth)) {
 // User is NOT authenticated
 } else {
 ?>
-	<form action="<?php print $_SERVER["PHP_SELF"]; ?>" method="post">
+	<form action="" method="post">
     <fieldset class="login">
         <legend class="login">phpMyFAQ Login</legend>
 <?php
@@ -328,13 +328,14 @@ if (isset($auth)) {
 		print "<p><strong>".$PMF_LANG["ad_auth_insert"]."</strong></p>\n";
 	}
 ?>
-        <div class="row"><span class="label"><strong><?php print $PMF_LANG["ad_auth_user"]; ?></strong></span>
-        <input class="admin" type="text" name="faqusername" size="20" /></div>
-        <div class="row"><span class="label"><strong><?php print $PMF_LANG["ad_auth_passwd"]; ?></strong></span>
-        <input class="admin" type="password" size="20" name="faqpassword" /></div>
-        <div class="row"><span class="label">&nbsp;</span>
+        <label class="left" for="faqusername"><?php print $PMF_LANG["ad_auth_user"]; ?></label>
+        <input class="admin" type="text" name="faqusername" id="faqusername" size="20" /><br />
+        
+        <label class="left" for="faqpassword"><?php print $PMF_LANG["ad_auth_passwd"]; ?></label>
+        <input class="admin" type="password" size="20" name="faqpassword" id="faqpassword" /><br />
+        
         <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_auth_ok"]; ?>" />
-        <input class="submit" type="reset" value="<?php print $PMF_LANG["ad_auth_reset"]; ?>" /></div>
+        <input class="submit" type="reset" value="<?php print $PMF_LANG["ad_auth_reset"]; ?>" />
 
         <p><img src="images/arrow.gif" width="11" height="11" alt="<?php print $PMF_LANG["lostPassword"]; ?>" border="0" /> <a href="password.php" title="<?php print $PMF_LANG["lostPassword"]; ?>">
 <?php print $PMF_LANG["lostPassword"]; ?>
@@ -352,6 +353,5 @@ if (DEBUG == true) {
 	print "<p>".$db->sqllog()."</p>";
 }
 
-require_once ("footer.php");
+require_once('footer.php');
 $db->dbclose();
-?>
