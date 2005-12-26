@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: user.php,v 1.11 2005-12-26 18:41:25 b33blebr0x Exp $
+* $Id: user.php,v 1.12 2005-12-26 20:14:21 b33blebr0x Exp $
 *
 * Displays the user managment frontend
 *
@@ -56,13 +56,22 @@ $successMessages = array(
 $text = array(
     'button_cancel' => "cancel",
     'header' => $PMF_LANG['ad_user'], // "User Administration"
+    'selectUser' => $PMF_LANG["ad_user_username"], // "Registered users"
     'addUser' => $PMF_LANG["ad_adus_adduser"], // "add User"
     'addUser_confirm' => "add",
+    'addUser_link' => $PMF_LANG["ad_user_add"], // "Add User"
+    'addUser_name' => $PMF_LANG["ad_adus_name"], // "Name: "
+    'addUser_displayName' => $PMF_LANG["ad_user_realname"], // "real name:"
+    'addUser_email' => $PMF_LANG["ad_entry_email"], // "email adress:"
+    'addUser_password' => $PMF_LANG["ad_adus_password"], // Password:
+    'addUser_password2' => $PMF_LANG["ad_passwd_con"], // Confirm:
     'delUser' => "delete user",
     'delUser_question' => "Really delete this account? ",
     'delUser_confirm' => "delete",
     'changeUser' => $PMF_LANG["ad_user_profou"], // "Profile of the User"
     'changeUser_submit' => "save",
+    'changeUser_status' => "Status: ",
+    'changeRights' => $PMF_LANG["ad_user_rights"], // "Rights"
     'changeRights_submit' => "save",
 );
 
@@ -255,23 +264,23 @@ if ($userAction == 'add') {
         <legend><?php print $text['addUser']; ?></legend>
         <form name="user_create" action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=user&amp;user_action=addsave" method="post">
             <div class="input_row">
-                <label for="user_name"><?php print $PMF_LANG["ad_adus_name"]; ?></label>
+                <label for="user_name"><?php print $text['addUser_name']; ?></label>
                 <input type="text" name="user_name" value="<?php print (isset($user_name) ? $user_name : ''); ?>" tabindex="1" />
             </div>
             <div class="input_row">
-                <label for="user_realname"><?php print $PMF_LANG["ad_user_realname"]; ?></label>
+                <label for="user_realname"><?php print $text['addUser_displayName']; ?></label>
                 <input type="text" name="user_realname" value="<?php print (isset($user_realname) ? $user_realname : ''); ?>" tabindex="2" />
             </div>
             <div class="input_row">
-                <label for="user_email"><?php print $PMF_LANG["ad_entry_email"]; ?></label>
+                <label for="user_email"><?php print $text['addUser_email']; ?></label>
                 <input type="text" name="user_email" value="<?php print (isset($user_email) ? $user_email : ''); ?>" tabindex="3" />
             </div>
             <div class="input_row">
-                <label for="password"><?php print $PMF_LANG["ad_adus_password"]; ?></label>
+                <label for="password"><?php print $text['addUser_password']; ?></label>
                 <input type="password" name="user_password" value="<?php print (isset($user_password) ? $user_password : ''); ?>" tabindex="4" />
             </div>
             <div class="input_row">
-                <label for="password_confirm"><?php print $PMF_LANG["ad_passwd_con"]; ?></label>
+                <label for="password_confirm"><?php print $text['addUser_password2']; ?></label>
                 <input type="password" name="user_password_confirm" value="<?php print (isset($user_password_confirm) ? $user_password_confirm : ''); ?>" tabindex="5" />
             </div>
             <div class="button_row">
@@ -343,7 +352,8 @@ function buildUserList()
 
 function clearUserData()
 {
-    table_clear(document.getElementById("user_data_table"));
+    //table_clear(document.getElementById("user_data_table"));
+    document.getElementById("user_data_table").innerHTML = '';
 }
 
 function buildUserData(id)
@@ -366,13 +376,15 @@ function buildUserData(id)
     }
     // change user-ID
     document.getElementById("update_user_id").setAttribute("value", id);
-    // build new data rows
+    // build new data div rows
     var dataList = user.getElementsByTagName("user_data")[0];
     var items = dataList.getElementsByTagName("item");
     var user_data_table = document.getElementById("user_data_table");
     var name;
     var value;
+    var div;
     var input;
+    var label;
     for (var i = 0; i < items.length; i++) {
         name = text_getFromParent(items[i], "name");
         if (getValues) {
@@ -385,7 +397,14 @@ function buildUserData(id)
         input.setAttribute("name", items[i].getAttribute("name"));
         input.setAttribute("value", value);
         input.setAttribute("tabindex", (i + 3));
-        table_addRow(user_data_table, i, document.createTextNode(name), input);
+        label = document.createElement("label");
+        label.setAttribute("for", items[i].getAttribute("name"));
+        label.appendChild(document.createTextNode(name));
+        div = document.createElement("div");
+        div.setAttribute("class", "input_row");
+        div.appendChild(label);
+        div.appendChild(input);
+        user_data_table.appendChild(div);
     }
 }
 
@@ -482,27 +501,6 @@ function userSelect(evt)
     }
 }
 
-
-
-var addUserHTTP = new getxmlhttp();
-
-function addUser() {
-    addUserHTTP.open('get', '?aktion=ajax&ajax=user_add');
-    addUserHTTP.onreadystatechange = processAddUserHTTP;
-    addUserHTTP.send(null);
-}
-
-function processAddUserHTTP() {
-    if (addUserHTTP.readyState == 4) {
-        if (addUserHTTP.status == 200) {
-            // process response
-            
-        } else {
-            alert("There was a problem retrieving the XML data: \n" +addUserHTTP.statusText);
-        }
-    }
-}
-
 getUserList();
 
 /* ]]> */
@@ -513,15 +511,15 @@ getUserList();
 <div id="user_accounts">
     <div id="user_list">
         <fieldset>
-            <legend><?php print $PMF_LANG["ad_user_username"]; ?></legend>
+            <legend><?php print $text['selectUser']; ?></legend>
             <form name="user_select" id="user_select" action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=user&amp;user_action=delete_confirm" method="post">
                 <select name="user_list_select" id="user_list_select" size="<?php print $selectSize; ?>" onchange="userSelect(event)" tabindex="1">
                     <option value="">select...</option>
                 </select>
-                <input class="admin" type="submit" value="<?php print $PMF_LANG['ad_user_delete']; ?>" tabindex="2" />
+                <input class="admin" type="submit" value="<?php print $text['delUser_confirm']; ?>" tabindex="2" />
             </form>
         </fieldset>
-        <p>[ <a href="<?php print $_SERVER['PHP_SELF']; ?>?aktion=user&amp;user_action=add"><?php print $PMF_LANG["ad_user_add"]; ?></a> ]</p>
+        <p>[ <a href="<?php print $_SERVER['PHP_SELF']; ?>?aktion=user&amp;user_action=add"><?php print $text['addUser_link']; ?></a> ]</p>
     </div> <!-- end #user_list -->
 </div> <!-- end #user_accounts -->
 <div id="user_details">
@@ -531,19 +529,14 @@ getUserList();
             <form action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=user&amp;user_action=update_data" method="post">
                 <input id="update_user_id" type="hidden" name="user_id" value="0" />
                 <div class="input_row">
-                    <label for="user_status_select">Status: </label>
+                    <label for="user_status_select"><?php print $text['changeUser_status']; ?></label>
                     <select id="user_status_select" name="user_status" >
                         <option value="active">active</option>
                         <option value="blocked">blocked</option>
                         <option value="protected">protected</option>
                     </select>
                 </div>
-                <table id="user_data_table">
-                    <tr>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                    </tr>
-                </table>
+                <div id="user_data_table"></div><!-- end #user_data_table -->
                 <div class="button_row">
                     <input class="submit" type="submit" value="<?php print $text['changeUser_submit']; ?>" tabindex="6" />
                 </div>
@@ -552,7 +545,7 @@ getUserList();
     </div> <!-- end #user_details -->
     <div id="user_rights">
         <fieldset>
-            <legend id="user_rights_legend"><?php print $PMF_LANG["ad_user_rights"]; ?></legend>
+            <legend id="user_rights_legend"><?php print $text['changeRights']; ?></legend>
             <form action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=user&amp;user_action=update_rights" method="post">
                 <input id="rights_user_id" type="hidden" name="user_id" value="0" />
                 <table id="user_rights_table">

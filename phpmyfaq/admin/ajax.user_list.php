@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.user_list.php,v 1.7 2005-12-26 18:41:25 b33blebr0x Exp $
+* $Id: ajax.user_list.php,v 1.8 2005-12-26 20:14:21 b33blebr0x Exp $
 *
 * AJAX: lists all registered users
 *
@@ -37,9 +37,9 @@ require_once(PMF_ROOT_DIR.'/inc/PMF_User/User.php');
 $user = new PMF_User();
 $userList = $user->getAllUsers();
 $data = array(
-    'display_name' => 'Name',
-    'email' => 'Email',
-    'last_modified' => 'Last modified'
+    'display_name' => 'Name: ',
+    'email' => 'Email: ',
+    'last_modified' => 'Last modified: '
 );
 
 ob_clean();
