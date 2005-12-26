@@ -235,7 +235,7 @@ class PMF_UserData
             email        = '".$this->_data['email']."'
           WHERE 
             user_id = ".$this->_user_id
-        ;
+        );
         if (!$res) 
             return false;
         return true;
