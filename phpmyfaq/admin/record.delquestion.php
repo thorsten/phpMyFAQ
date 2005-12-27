@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.delquestion.php,v 1.5 2005-12-26 11:39:17 thorstenr Exp $
+* $Id: record.delquestion.php,v 1.6 2005-12-27 19:06:28 thorstenr Exp $
 *
 * Delete open questions
 *
@@ -36,21 +36,21 @@ if ($permission['delquestion']) {
 	    
         if (isset($_REQUEST['is_visible']) && $_REQUEST['is_visible'] == 'toggle') {
             
-            $query = sprintf('SELECT is_visible FROM %sfaqfragen WHERE id = %d', SQLPREFIX, $_REQUEST['id']);
+            $query = sprintf('SELECT is_visible FROM %sfaqquestions WHERE id = %d', SQLPREFIX, $_REQUEST['id']);
             $result = $db->query($query);
             if ($db->num_rows($result) == 1) {
                 $row = $db->fetch_object($result);
                 if ('Y' == $row->is_visible) {
-                    $query = sprintf("UPDATE %sfaqfragen SET is_visible = 'N' WHERE id = %d", SQLPREFIX, $_REQUEST['id']);
+                    $query = sprintf("UPDATE %sfaqquestions SET is_visible = 'N' WHERE id = %d", SQLPREFIX, $_REQUEST['id']);
                 } else {
-                    $query = sprintf("UPDATE %sfaqfragen SET is_visible = 'Y' WHERE id = %d", SQLPREFIX, $_REQUEST['id']);
+                    $query = sprintf("UPDATE %sfaqquestions SET is_visible = 'Y' WHERE id = %d", SQLPREFIX, $_REQUEST['id']);
                 }
                 $result = $db->query($query);
             }
         }
 
 		print "<h2>".$PMF_LANG["msgOpenQuestions"]."</h2>";
-		$result = $db->query("SELECT id, ask_username, ask_usermail, ask_rubrik, ask_content, ask_date, is_visible FROM ".SQLPREFIX."faqfragen ORDER BY ask_date ASC");
+		$result = $db->query("SELECT id, ask_username, ask_usermail, ask_rubrik, ask_content, ask_date, is_visible FROM ".SQLPREFIX."faqquestions ORDER BY ask_date ASC");
 		if ($db->num_rows($result) > 0) {
 ?>
     <table class="list">

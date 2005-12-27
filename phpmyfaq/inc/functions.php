@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.102 2005-12-26 13:41:40 thorstenr Exp $
+* $Id: functions.php,v 1.103 2005-12-27 19:06:28 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -1019,8 +1019,8 @@ function chopString($string, $words)
 }
 
 //
-//
 // FUNCTIONS FOR THE OPEN QUESTIONS
+//
 
 /**
 * printOpenQuestions()
@@ -1036,7 +1036,7 @@ function printOpenQuestions()
 {
 	global $db, $sids, $tree, $PMF_LANG;
 
-    $query = "SELECT COUNT(*) AS num FROM ".SQLPREFIX."faqfragen WHERE is_visible != 'Y'";
+    $query = "SELECT COUNT(*) AS num FROM ".SQLPREFIX."faqquestions WHERE is_visible != 'Y'";
 	$result = $db->query($query);
 
     $row = $db->fetch_object($result);
@@ -1048,7 +1048,7 @@ function printOpenQuestions()
         $extraout = '';
 	}
 
-	$query = "SELECT id, ask_username, ask_usermail, ask_rubrik, ask_content, ask_date FROM ".SQLPREFIX."faqfragen WHERE is_visible = 'Y' ORDER BY ask_date ASC";
+	$query = "SELECT id, ask_username, ask_usermail, ask_rubrik, ask_content, ask_date FROM ".SQLPREFIX."faqquestions WHERE is_visible = 'Y' ORDER BY ask_date ASC";
 	$result = $db->query($query);
 	$output = '';
 	if ($db->num_rows($result) > 0) {
