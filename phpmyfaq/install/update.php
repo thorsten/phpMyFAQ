@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.34 2005-09-29 06:53:29 thorstenr Exp $
+* $Id: update.php,v 1.35 2005-12-27 19:04:12 thorstenr Exp $
 *
 * Main update script
 *
@@ -384,10 +384,12 @@ if ($step == 5) {
     }
     // update from versions before 1.6.0
     if ($version < 160) {
+        $query[] = "ALTER TABLE ".SQLPREFIX."faqfragen RENAME ".SQLPREFIX."faqquestions";
         $query[] = 'ALTER TABLE '.SQLPREFIX.'faqcategories ADD user_id INTEGER NOT NULL';
         $query[] = 'CREATE TABLE '.SQLPREFIX.'faqglossary ( id INT(11) NOT NULL , lang VARCHAR(2) NOT NULL , item VARCHAR(255) NOT NULL , definition TEXT NOT NULL, PRIMARY KEY (id, lang))';
         $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata ADD linkState VARCHAR(7) NOT NULL, ADD linkCheckDate INT(11) DEFAULT \'0\' NOT NULL';
-        
+        // TODO: Add new user and right tables
+        // TODO: Convert existing installations
     }
     // optimize tables
     switch($DB["type"]) {
