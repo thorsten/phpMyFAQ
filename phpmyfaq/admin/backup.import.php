@@ -1,12 +1,12 @@
 <?php
 /**
-* $Id: backup.import.php,v 1.10 2005-11-22 20:11:50 b33blebr0x Exp $
+* $Id: backup.import.php,v 1.11 2006-01-02 16:51:26 thorstenr Exp $
 *
 * The import function to import the phpMyFAQ backups
 *
 * @author       Thorsten Rinne <thorsten@rinne.info>
 * @since        2003-02-24
-* @copyright    (c) 2001-2005 phpMyFAQ Team
+* @copyright    (c) 2001-2006 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in

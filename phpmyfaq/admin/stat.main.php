@@ -5,7 +5,7 @@
  * Authors:				Thorsten Rinne <thorsten@phpmyfaq.de>
  * Date:				2003-02-24
  * Last change:			2004-11-01
- * Copyright:           (c) 2001-2004 Thorsten Rinne
+ * Copyright:           (c) 2001-2006 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in

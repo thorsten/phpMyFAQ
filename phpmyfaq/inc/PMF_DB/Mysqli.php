@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Mysqli.php,v 1.1 2005-12-13 19:57:23 thorstenr Exp $
+* $Id: Mysqli.php,v 1.2 2006-01-02 16:51:29 thorstenr Exp $
 *
 * db_mysqli
 *
@@ -11,7 +11,7 @@
 * @author       David Soria Parra <dsoria@gmx.net>
 * @package      db_mysqli
 * @since        2005-02-21
-* @copyright:   (c) 2005 phpMyFAQ Team
+* @copyright:   (c) 2006 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in

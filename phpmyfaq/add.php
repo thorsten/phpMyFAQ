@@ -1,12 +1,12 @@
 <?php
 /**
-* $Id: add.php,v 1.8 2005-09-25 09:47:02 thorstenr Exp $
+* $Id: add.php,v 1.9 2006-01-02 16:51:25 thorstenr Exp $
 *
 * This is the page there a user can add a FAQ record.
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-09-16
-* @copyright    (c) 2001-2005 phpMyFAQ Team
+* @copyright    (c) 2001-2006 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in

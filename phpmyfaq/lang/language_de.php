@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.15 2006-01-02 13:34:21 b33blebr0x Exp $
+ * $Id: language_de.php,v 1.16 2006-01-02 16:51:30 thorstenr Exp $
  *
  * File:                language_de.php
  * Description:		    German language file
@@ -8,7 +8,7 @@
  *                      A. Neufang <B_A_F_F@gmx.de>
  * Date:				2004-02-19
  * Last Update:		    2004-12-07
- * Copyright:           (c) 2004 phpMyFAQ Team
+ * Copyright:           (c) 2006 phpMyFAQ Team
  * 
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in

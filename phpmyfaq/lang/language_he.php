@@ -5,7 +5,7 @@
  * Authors:				Daniel Shkuri <dan-shk@bezeqint.net>
  * Date:				2004-08-27
  * Last Update:		    2004-08-27
- * Copyright:           (c) 2004 phpMyFAQ Team
+ * Copyright:           (c) 2006 phpMyFAQ Team
  * Thanks:              Niran Shay <nirshay1@012.net.il>
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in

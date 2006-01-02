@@ -5,7 +5,7 @@
  * Authors:				Emil Kennerberg <emil@kennerberg.se>
  * Date:				2004-07-28
  * Last Update:		    2004-07-28
- * Copyright:           (c) 2004 phpMyFAQ Team
+ * Copyright:           (c) 2006 phpMyFAQ Team
  * 
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Pdf.php,v 1.1 2005-12-13 20:06:15 thorstenr Exp $
+* $Id: Pdf.php,v 1.2 2006-01-02 16:51:29 thorstenr Exp $
 *
 * Main PDF class for phpMyFAQ based on FPDF by Olivier Plathey
 *
@@ -11,7 +11,7 @@
 * @author       Krzysztof Kruszynski <thywolf@wolf.homelinux.net>
 * @since        2004-11-21
 * @license      Mozilla Public License 1.1
-* @copyright    Copyright (c) 2004-2005 phpMyFAQ Team
+* @copyright    Copyright (c) 2004-2006 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in

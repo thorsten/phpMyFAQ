@@ -5,7 +5,7 @@
  * Authors:				Karoly SIMO <skaroly@bestdomain.ro>
  * 						(pentru eventualele erori gramaticale imi asum vina :) )
  * Date:				2004-11-09
- * Copyright:           (c) 2004 phpMyFAQ Team
+ * Copyright:           (c) 2006 phpMyFAQ Team
  * 
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in

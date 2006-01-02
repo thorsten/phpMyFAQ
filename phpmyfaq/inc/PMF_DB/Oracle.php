@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Oracle.php,v 1.1 2005-12-13 19:57:23 thorstenr Exp $
+* $Id: Oracle.php,v 1.2 2006-01-02 16:51:29 thorstenr Exp $
 *
 * db_oracle
 *
@@ -10,7 +10,7 @@
 * @package      db_oracle
 * @since        2005-09-20
 *
-* Copyright:    (c) 2005 phpMyFAQ Team
+* Copyright:    (c) 2006 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in

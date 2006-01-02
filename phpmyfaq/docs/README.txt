@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.41 2005-12-26 11:39:17 thorstenr Exp $
+$Id: README.txt,v 1.42 2006-01-02 16:51:28 thorstenr Exp $
 
 phpMyFAQ 1.6.0-dev
 Codename "Prometheus"
@@ -482,4 +482,4 @@ basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 License for the specific language governing rights and limitations
 under the License.
 
-(c) 2001-2004 Thorsten Rinne
+(c) 2001-2006 phpMyFAQ Team

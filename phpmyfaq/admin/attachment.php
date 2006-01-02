@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: attachment.php,v 1.11 2005-11-22 20:11:50 b33blebr0x Exp $
+* $Id: attachment.php,v 1.12 2006-01-02 16:51:26 thorstenr Exp $
 *
 * Select an attachment and save it or create the SQL backup files
 *
@@ -71,7 +71,7 @@ if (!isset($_REQUEST["aktion"]) || isset($_REQUEST["save"])) {
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php print $PMF_LANG["metaLanguage"]; ?>" lang="<?php print $PMF_LANG["metaLanguage"]; ?>">
 <head>
     <title><?php print $PMF_CONF["title"]; ?> - powered by phpMyFAQ</title>
-    <meta name="copyright" content="(c) 2001-2004 Thorsten Rinne" />
+    <meta name="copyright" content="(c) 2001-2006 phpMyFAQ Team" />
     <meta http-equiv="Content-Type" content="text/html; charset=<?php print $PMF_LANG["metaCharset"]; ?>" />
 
     <link rel="shortcut icon" href="../template/favicon.ico" type="image/x-icon" />

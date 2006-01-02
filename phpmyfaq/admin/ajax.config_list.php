@@ -1,12 +1,12 @@
 <?php
 /**
-* $Id: ajax.config_list.php,v 1.2 2005-12-26 21:38:09 thorstenr Exp $
+* $Id: ajax.config_list.php,v 1.3 2006-01-02 16:51:26 thorstenr Exp $
 *
 * AJAX: lists the complete configuration items
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2005-12-26
-* @copyright    (c) 2005 phpMyFAQ Team
+* @copyright    (c) 2006 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Ibase.php,v 1.1 2005-12-13 19:57:23 thorstenr Exp $
+* $Id: Ibase.php,v 1.2 2006-01-02 16:51:29 thorstenr Exp $
 *
 * db_ibase
 *
@@ -11,7 +11,7 @@
 * @package      db_ibase
 * @since        2005-11-28
 *
-* Copyright:    (c) 2005 phpMyFAQ Team
+* Copyright:    (c) 2006 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in

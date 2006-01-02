@@ -1,13 +1,13 @@
 <?php
 /**
-* $Id: menue.php,v 1.11 2006-01-02 16:36:50 b33blebr0x Exp $
+* $Id: menue.php,v 1.12 2006-01-02 16:51:26 thorstenr Exp $
 *
 * Navigation menue of the admin area
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Minoru TODA <todam@netjapan.co.jp>
 * @since        2003-02-26
-* @copyright    (c) 2001-2005 phpMyFAQ Team
+* @copyright    (c) 2001-2006 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in

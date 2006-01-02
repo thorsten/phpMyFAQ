@@ -9,7 +9,7 @@
 * @author       Tom Rochester <tom.rochester@gmail.com>
 * @package      db_pgsql
 * @since        2003-02-24
-* @copyright    (c) 2003-2005 phpMyFAQ Team
+* @copyright    (c) 2003-2006 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in

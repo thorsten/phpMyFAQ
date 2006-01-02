@@ -4,7 +4,7 @@
  * Description:		    Turkish language file
  * Authors:				Zafer Gürsoy <zafergursoy@yahoo.com>
  * Date:				2004-10-20
- * Copyright:           (c) 2004 phpMyFAQ Team
+ * Copyright:           (c) 2006 phpMyFAQ Team
  * 
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in

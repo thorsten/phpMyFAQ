@@ -1,12 +1,12 @@
 <?php
 /**
-* $Id: user.php,v 1.13 2006-01-02 12:50:11 b33blebr0x Exp $
+* $Id: user.php,v 1.14 2006-01-02 16:51:27 thorstenr Exp $
 *
 * Displays the user managment frontend
 *
 * @author       Lars Tiedemann <php@larstiedemann.de>
 * @since        2005-12-15
-* @copyright    (c) 2005 phpMyFAQ Team
+* @copyright    (c) 2006 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in

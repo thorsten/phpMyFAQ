@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.18 2006-01-02 16:36:50 b33blebr0x Exp $
+* $Id: language_en.php,v 1.19 2006-01-02 16:51:30 thorstenr Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -8,7 +8,7 @@
 * @author       Matthias Sommerfeld <mso@bluebirdy.de>
 * @author       Henning Schulzrinne <hgs@cs.columbia.edu>
 * @since        2004-02-19
-* @copyright    (c) 2004 phpMyFAQ Team
+* @copyright    (c) 2006 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in

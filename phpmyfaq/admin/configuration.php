@@ -1,12 +1,12 @@
 <?php
 /**
-* $Id: configuration.php,v 1.1 2005-12-26 21:36:30 thorstenr Exp $
+* $Id: configuration.php,v 1.2 2006-01-02 16:51:26 thorstenr Exp $
 *
 * The main configuration frontend
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2005-12-26
-* @copyright    (c) 2005 phpMyFAQ Team
+* @copyright    (c) 2006 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in

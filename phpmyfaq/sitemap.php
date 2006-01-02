@@ -1,13 +1,13 @@
 <?php
 /**
-* $Id: sitemap.php,v 1.6 2005-09-25 09:47:02 thorstenr Exp $
+* $Id: sitemap.php,v 1.7 2006-01-02 16:51:26 thorstenr Exp $
 *
 * Shows the whole FAQ articles
 *
 * @author       Thomas Zeithaml <seo@annatom.de>
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2005-08-21
-* @copyright    (c) 2001-2005 phpMyFAQ Team
+* @copyright    (c) 2001-2006 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the 'License'); you may not use this file except in

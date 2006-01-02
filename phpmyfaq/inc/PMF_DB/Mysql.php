@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Mysql.php,v 1.1 2005-12-13 19:57:23 thorstenr Exp $
+* $Id: Mysql.php,v 1.2 2006-01-02 16:51:29 thorstenr Exp $
 *
 * db_mysql
 *
@@ -13,7 +13,7 @@
 * @package      db_mysql
 * @since        2003-02-24
 *
-* Copyright:    (c) 2003-2005 phpMyFAQ Team
+* Copyright:    (c) 2003-2006 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in

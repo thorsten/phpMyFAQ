@@ -1,13 +1,13 @@
 <?php
 /**
-* $Id: record.show.php,v 1.20 2005-10-03 15:04:35 thorstenr Exp $
+* $Id: record.show.php,v 1.21 2006-01-02 16:51:27 thorstenr Exp $
 *
 * Shows the list of records ordered by categories
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Minoru TODA <todam@netjapan.co.jp>
 * @since        2003-02-23
-* @copyright    (c) 2001-2005 phpMyFAQ Team
+* @copyright    (c) 2001-2006 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in

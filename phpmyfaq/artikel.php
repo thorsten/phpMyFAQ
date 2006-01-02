@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.27 2005-12-20 13:44:28 thorstenr Exp $
+* $Id: artikel.php,v 1.28 2006-01-02 16:51:25 thorstenr Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -8,7 +8,7 @@
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Lars Tiedemann <larstiedemann@yahoo.de>
 * @since        2002-08-27
-* @copyright    (c) 2001-2005 phpMyFAQ Team
+* @copyright    (c) 2001-2006 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in

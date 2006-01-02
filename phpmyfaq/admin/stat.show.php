@@ -1,12 +1,12 @@
 <?php
 /**
-* $Id: stat.show.php,v 1.7 2005-11-23 20:11:43 b33blebr0x Exp $
+* $Id: stat.show.php,v 1.8 2006-01-02 16:51:27 thorstenr Exp $
 *
 * Show the session
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-24
-* @copyright    (c) 2001-2004 Thorsten Rinne
+* @copyright    (c) 2001-2006 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in

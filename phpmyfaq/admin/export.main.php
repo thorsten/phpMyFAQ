@@ -1,13 +1,13 @@
 <?php
 /**
-* $Id: export.main.php,v 1.19 2005-11-22 20:11:50 b33blebr0x Exp $
+* $Id: export.main.php,v 1.20 2006-01-02 16:51:26 thorstenr Exp $
 *
 * XML, XML DocBook, XHTML and PDF export - main page
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Peter Beauvain <pbeauvain@web.de>
 * @since        2003-04-17
-* @copyright    (c) 2001-2004 phpMyFAQ Team
+* @copyright    (c) 2001-2006 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in

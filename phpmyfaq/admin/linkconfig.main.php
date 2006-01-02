@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: linkconfig.main.php,v 1.1 2005-12-17 19:32:55 thorstenr Exp $
+* $Id: linkconfig.main.php,v 1.2 2006-01-02 16:51:26 thorstenr Exp $
 *
 * LinkVerifier configuration
 *
@@ -9,9 +9,9 @@
 *
 * Configures link verifier
 *
-* @author           Minoru TODA <todam@netjapan.co.jp>
-* @since            2005-11-07
-* @copyright       (c) 2005 NetJapan, Inc.
+* @author       Minoru TODA <todam@netjapan.co.jp>
+* @since        2005-11-07
+* @copyright    (c) 2005-2006 NetJapan, Inc.
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in

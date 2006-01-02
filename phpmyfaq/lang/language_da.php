@@ -1,13 +1,13 @@
 <?php
 /**
-* $Id: language_da.php,v 1.7 2006-01-02 13:34:21 b33blebr0x Exp $
+* $Id: language_da.php,v 1.8 2006-01-02 16:51:30 thorstenr Exp $
 *
 * Danish language file
 *
 * @author       Max Andersen <max@militant.dk>
 * @author       Poul Melgaard <pcm@surfray.com>
 * @since        2004-06-24
-* @copyright    (c) 2004-2005 phpMyFAQ Team
+* @copyright    (c) 2004-2006 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in

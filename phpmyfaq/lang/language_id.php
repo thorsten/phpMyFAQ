@@ -12,7 +12,7 @@
 
 * Last Update:      2005-10-04
 
-* Copyright:        (c) 2004 phpMyFAQ Team
+* Copyright:        (c) 2006 phpMyFAQ Team
 
 *
 

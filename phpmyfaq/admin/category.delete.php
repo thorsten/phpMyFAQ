@@ -1,12 +1,12 @@
 <?php
 /**
-* $Id: category.delete.php,v 1.4 2005-09-25 09:47:02 thorstenr Exp $
+* $Id: category.delete.php,v 1.5 2006-01-02 16:51:26 thorstenr Exp $
 *
 * Deletes a category
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-12-20
-* @copyright    (c) 2003-2005 phpMyFAQ Team
+* @copyright    (c) 2003-2006 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in

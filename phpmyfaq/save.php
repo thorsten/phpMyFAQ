@@ -1,13 +1,13 @@
 <?php
 /**
-* $Id: save.php,v 1.18 2005-09-29 06:49:32 thorstenr Exp $
+* $Id: save.php,v 1.19 2006-01-02 16:51:26 thorstenr Exp $
 *
 * Saves a user FAQ record and sends an email to the user
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Jürgen Kuza <kig@bluewin.ch>
 * @since        2002-09-16
-* @copyright    (c) 2001-2005 phpMyFAQ Team
+* @copyright    (c) 2001-2006 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in

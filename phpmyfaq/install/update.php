@@ -1,13 +1,13 @@
 <?php
 /**
-* $Id: update.php,v 1.35 2005-12-27 19:04:12 thorstenr Exp $
+* $Id: update.php,v 1.36 2006-01-02 16:51:29 thorstenr Exp $
 *
 * Main update script
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Thomas Melchinger <t.melchinger@uni.de>
 * @since        2002-01-10
-* @copyright    (c) 2001-2005 phpMyFAQ Team
+* @copyright    (c) 2001-2006 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in

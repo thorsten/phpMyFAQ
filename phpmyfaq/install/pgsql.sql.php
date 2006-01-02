@@ -1,13 +1,13 @@
 <?php
 /**
-* $Id: pgsql.sql.php,v 1.10 2005-09-16 19:26:51 thorstenr Exp $
+* $Id: pgsql.sql.php,v 1.11 2006-01-02 16:51:29 thorstenr Exp $
 *
 * CREATE TABLE instruction for PostgreSQL database
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Tom Rochester <tom.rochester@gmail.com>
 * @since        2004-09-18
-* @copyright    (c) 2001-2005 phpMyFAQ Team
+* @copyright    (c) 2001-2006 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in

@@ -8,7 +8,7 @@
     <meta name="keywords" content="{metaKeywords}" />
     <meta name="author" content="{metaPublisher}" />
     <meta name="publisher" content="{metaPublisher}" />
-    <meta name="copyright" content="(c) 2001 - 2005 phpMyFAQ Team" />
+    <meta name="copyright" content="(c) 2001 - 2006 phpMyFAQ Team" />
     <meta name="Content-Language" content="{metaCharset}" />
     <meta name="robots" content="INDEX, FOLLOW" />
     <meta name="revisit-after" content="7 days" />
@@ -29,7 +29,7 @@
     /*]]>*/
     </style>
     <script type="text/javascript"  src="inc/functions.js"></script>
-    <link rel="shortcut icon" href="template/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="template/favicon.ico" type="image/x-icon" />
     <link rel="icon" href="template/favicon.ico" type="image/x-icon" />
     <link rel="alternate" title="News RSS Feed" type="application/rss+xml" href="feed/news/rss.php" />
     <link rel="alternate" title="TopTen RSS Feed" type="application/rss+xml" href="feed/topten/rss.php" />

@@ -1,12 +1,12 @@
 <?php
 /**
-* $Id: footer.php,v 1.4 2005-11-22 20:11:50 b33blebr0x Exp $
+* $Id: footer.php,v 1.5 2006-01-02 16:51:26 thorstenr Exp $
 *
 * Footer of the admin area
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-26
-* @copyright    (c) 2001-2005 phpMyFAQ Team
+* @copyright    (c) 2001-2006 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in

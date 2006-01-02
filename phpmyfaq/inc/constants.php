@@ -1,12 +1,12 @@
 <?php
 /**
-* $Id: constants.php,v 1.7 2005-12-06 16:16:31 b33blebr0x Exp $
+* $Id: constants.php,v 1.8 2006-01-02 16:51:28 thorstenr Exp $
 *
 * Constants for phpMyFAQ
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-12-10
-* @copyright    (c) 2003-2005 phpMyFAQ Team
+* @copyright    (c) 2003-2006 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License Version 
 * 1.1 (the "License"); you may not use this file except in compliance with 

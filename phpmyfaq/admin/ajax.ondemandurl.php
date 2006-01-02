@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.ondemandurl.php,v 1.3 2005-10-14 17:13:01 thorstenr Exp $
+* $Id: ajax.ondemandurl.php,v 1.4 2006-01-02 16:51:26 thorstenr Exp $
 *
 * AJAX: onDemandURL (not really AJAX)
 *
@@ -63,7 +63,7 @@ ob_clean();
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php print $PMF_LANG["metaLanguage"]; ?>" lang="<?php print $PMF_LANG["metaLanguage"]; ?>">
 <head>
     <title><?php print $PMF_CONF["title"]; ?> - powered by phpMyFAQ</title>
-    <meta name="copyright" content="(c) 2001-2005 phpMyFAQ Team" />
+    <meta name="copyright" content="(c) 2001-2006 phpMyFAQ Team" />
     <meta http-equiv="Content-Type" content="text/html; charset=<?php print $PMF_LANG["metaCharset"]; ?>" />
     <style type="text/css"> @import url(../template/admin.css); </style>
 </head>

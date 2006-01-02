@@ -1,12 +1,12 @@
 <?php
 /**
-* $Id: ajax.group_list.php,v 1.1 2006-01-02 16:36:50 b33blebr0x Exp $
+* $Id: ajax.group_list.php,v 1.2 2006-01-02 16:51:26 thorstenr Exp $
 *
 * AJAX: lists all registered users
 *
 * @author       Lars Tiedemann <larstiedemann@yahoo.de>
 * @since        2005-12-15
-* @copyright    (c) 2005 phpMyFAQ Team
+* @copyright    (c) 2006 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in

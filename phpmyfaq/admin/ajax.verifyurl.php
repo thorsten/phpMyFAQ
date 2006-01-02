@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.verifyurl.php,v 1.2 2005-10-05 17:59:18 thorstenr Exp $
+* $Id: ajax.verifyurl.php,v 1.3 2006-01-02 16:51:26 thorstenr Exp $
 *
 * AJAX: verifyurl
 *
@@ -11,7 +11,7 @@
 *
 * @author           Minoru TODA <todam@netjapan.co.jp>
 * @since            2005-09-30
-* @copyright        (c) 2005 NetJapan, Inc.
+* @copyright        (c) 2005-2006 NetJapan, Inc.
 *
 *
 * The contents of this file are subject to the Mozilla Public License

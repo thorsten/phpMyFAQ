@@ -1,13 +1,13 @@
 <?php
 /**
-* $Id: pdf.php,v 1.14 2005-09-25 09:47:02 thorstenr Exp $
+* $Id: pdf.php,v 1.15 2006-01-02 16:51:26 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Peter Beauvain <pbeauvain@web.de>
 * @author       Olivier Plathey <olivier@fpdf.org>
 * @author       Krzysztof Kruszynski <thywolf@wolf.homelinux.net>
 * @since        2003-02-12
-* @copyright    (c) 2001-2005 phpMyFAQ Team
+* @copyright    (c) 2001-2006 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in

@@ -2,7 +2,7 @@
 
 /**
 
-* $Id: language_fr.php,v 1.11 2006-01-02 13:34:21 b33blebr0x Exp $
+* $Id: language_fr.php,v 1.12 2006-01-02 16:51:30 thorstenr Exp $
 
 *
 
@@ -18,7 +18,7 @@
 
 * @since        2004-02-19
 
-* @copyright    (c) 2004-2005 phpMyFAQ Team
+* @copyright    (c) 2004-2006 phpMyFAQ Team
 
 *
 

@@ -1,10 +1,10 @@
 <?php
 /**
-* $Id: help.php,v 1.3 2005-09-25 09:47:02 thorstenr Exp $
+* $Id: help.php,v 1.4 2006-01-02 16:51:26 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-08-29
-* @copyright    (c) 2001-2004 phpMyFAQ Team
+* @copyright    (c) 2001-2006 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the 'License'); you may not use this file except in

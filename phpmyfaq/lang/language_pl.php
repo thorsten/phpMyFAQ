@@ -6,7 +6,7 @@
  * Authors:				S³awomir Ma³usecki <mori@online-rpg.pl>
  * Date:				2004-06-24
  * Last Update:		    2004-07-09
- * Copyright:           (c) 2004 phpMyFAQ Team
+ * Copyright:           (c) 2006 phpMyFAQ Team
  * 
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in

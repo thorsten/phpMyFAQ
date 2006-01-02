@@ -1,13 +1,13 @@
 <?php
 /**
-* $Id: sqlite.sql.php,v 1.2 2005-09-16 19:26:51 thorstenr Exp $
+* $Id: sqlite.sql.php,v 1.3 2006-01-02 16:51:29 thorstenr Exp $
 *
 * CREATE TABLE instructions for SQLite
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Johannes Schlüter <johannes@php.net>
 * @since        2005-08-18
-* @copyright    (c) 2005 phpMyFAQ Team
+* @copyright    (c) 2006 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in

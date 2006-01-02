@@ -1,12 +1,12 @@
 <?php
 /**
-* $Id: sybase.sql.php,v 1.4 2005-09-16 19:26:51 thorstenr Exp $
+* $Id: sybase.sql.php,v 1.5 2006-01-02 16:51:29 thorstenr Exp $
 *
 * CREATE TABLE instruction for sybase database
 *
 * @author       Adam Greene <phpmyfaq@skippy.fastmail.fm>
 * @since        2004-12-10
-* @copyright    (c) 2001-2004 phpMyFAQ Team
+* @copyright    (c) 2001-2006 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in

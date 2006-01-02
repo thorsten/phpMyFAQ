@@ -1,10 +1,12 @@
 <?php
-/******************************************************************************
- * File:				stat.form.php
- * Description:			form for the session search
- * Authors:				Thorsten Rinne <thorsten@phpmyfaq.de>
- * Date:				2003-02-24
- * Last change:			2004-11-01
+/**
+* $Id: stat.form.php,v 1.4 2006-01-02 16:51:27 thorstenr Exp $
+*
+* Form for the session search
+*
+* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+* @since        2003-02-24
+* @copyright    (c) 2001-12006 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in

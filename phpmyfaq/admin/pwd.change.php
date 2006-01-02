@@ -1,12 +1,12 @@
 <?php
 /**
-* $Id: pwd.change.php,v 1.3 2005-09-25 09:47:02 thorstenr Exp $
+* $Id: pwd.change.php,v 1.4 2006-01-02 16:51:26 thorstenr Exp $
 *
 * Form to change password of the current user
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23
-* @copyright    (c) 2001-2005 phpMyFAQ Team
+* @copyright    (c) 2001-2006 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in

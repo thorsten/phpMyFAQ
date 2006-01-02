@@ -1,12 +1,12 @@
 <?php
 /**
-* $Id: record.delquestion.php,v 1.6 2005-12-27 19:06:28 thorstenr Exp $
+* $Id: record.delquestion.php,v 1.7 2006-01-02 16:51:26 thorstenr Exp $
 *
 * Delete open questions
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-24
-* @copyright    (c) 2001-2004 phpMyFAQ
+* @copyright    (c) 2001-2006 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in

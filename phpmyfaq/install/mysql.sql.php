@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mysql.sql.php,v 1.18 2006-01-02 11:39:55 thorstenr Exp $
+* $Id: mysql.sql.php,v 1.19 2006-01-02 16:51:29 thorstenr Exp $
 *
 * CREATE TABLE instruction for MySQL database
 *
@@ -8,7 +8,7 @@
 * @author       Tom Rochester <tom.rochester@gmail.com>
 * @author       Lars Tiedemann <php@larstiedemann.de>
 * @since        2004-09-18
-* @copyright    (c) 2001-2005 phpMyFAQ Team
+* @copyright    (c) 2001-2006 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in

@@ -1,12 +1,12 @@
 <?php
 /**
-* $Id: category.main.php,v 1.8 2005-11-22 20:11:50 b33blebr0x Exp $
+* $Id: category.main.php,v 1.9 2006-01-02 16:51:26 thorstenr Exp $
 *
 * List all categories in the admin section
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-12-20
-* @copyright    (c) 2001-2005 phpMyFAQ Team
+* @copyright    (c) 2001-2006 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in

@@ -1,12 +1,12 @@
 <?php
 /**
-* $Id: news.php,v 1.11 2005-11-22 20:11:50 b33blebr0x Exp $
+* $Id: news.php,v 1.12 2006-01-02 16:51:26 thorstenr Exp $
 *
 * The main administration file for the news
 *
 * @author			Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since			2003-02-23
-* @copyright		(c) 2001-2005 phpMyFAQ Team
+* @copyright		(c) 2001-2006 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in

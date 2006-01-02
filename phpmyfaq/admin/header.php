@@ -1,12 +1,12 @@
 <?php
 /**
-* $Id: header.php,v 1.13 2005-12-26 12:58:49 thorstenr Exp $
+* $Id: header.php,v 1.14 2006-01-02 16:51:26 thorstenr Exp $
 *
 * header of the admin area
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-26
-* @copyright    (c) 2001-2005 phpMyFAQ Team
+* @copyright    (c) 2001-2006 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -36,7 +36,7 @@ header("Vary: Negotiate,Accept");
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php print $PMF_LANG["metaLanguage"]; ?>" lang="<?php print $PMF_LANG["metaLanguage"]; ?>">
 <head>
     <title><?php print $PMF_CONF["title"]; ?> - powered by phpMyFAQ</title>
-    <meta name="copyright" content="(c) 2001-2005 phpMyFAQ Team" />
+    <meta name="copyright" content="(c) 2001-2006 phpMyFAQ Team" />
     <meta http-equiv="Content-Type" content="text/html; charset=<?php print $PMF_LANG["metaCharset"]; ?>" />
 
     <link rel="shortcut icon" href="../template/favicon.ico" type="image/x-icon" />

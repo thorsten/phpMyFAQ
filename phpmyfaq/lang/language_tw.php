@@ -5,7 +5,7 @@
 *
 * @author       Aaron Lin <devilkintw@gmail.com>
 * @since        2004-08-01
-* @copyright    (c) 2004 - 2005 phpMyFAQ Team
+* @copyright    (c) 2004 - 2006 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
