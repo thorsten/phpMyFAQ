@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.14 2005-12-26 11:39:17 thorstenr Exp $
+ * $Id: language_de.php,v 1.15 2006-01-02 13:34:21 b33blebr0x Exp $
  *
  * File:                language_de.php
  * Description:		    German language file
@@ -508,28 +508,28 @@ $PMF_LANG["ad_export_latest"] = "RSS-Feed der f&uuml;nf neuesten Artikel";
 $PMF_LANG["ad_export_pdf"] = "PDF-Export aller Artikel";
 $PMF_LANG["ad_export_generate"] = "RSS-Feed generieren";
 
-$PMF_LANG["rightsLanguage"][0] = "Benutzer hinzuf&uuml;gen";
-$PMF_LANG["rightsLanguage"][1] = "Benutzer editieren";
-$PMF_LANG["rightsLanguage"][2] = "Benutzer l&ouml;schen";
-$PMF_LANG["rightsLanguage"][3] = "Beitrag hinzuf&uuml;gen";
-$PMF_LANG["rightsLanguage"][4] = "Beitrag editieren";
-$PMF_LANG["rightsLanguage"][5] = "Beitrag l&ouml;schen";
-$PMF_LANG["rightsLanguage"][6] = "Log ansehen";
-$PMF_LANG["rightsLanguage"][7] = "Adminlog einsehen";
-$PMF_LANG["rightsLanguage"][8] = "Kommentar l&ouml;schen";
-$PMF_LANG["rightsLanguage"][9] = "News hinzuf&uuml;gen";
-$PMF_LANG["rightsLanguage"][10] = "News editieren";
-$PMF_LANG["rightsLanguage"][11] = "News l&ouml;schen";
-$PMF_LANG["rightsLanguage"][12] = "Kategorie hinzuf&uuml;gen";
-$PMF_LANG["rightsLanguage"][13] = "Kategorie editeren";
-$PMF_LANG["rightsLanguage"][14] = "Kategorie l&ouml;schen";
-$PMF_LANG["rightsLanguage"][15] = "Kennwort &auml;ndern";
-$PMF_LANG["rightsLanguage"][16] = "Konfiguration editieren";
-$PMF_LANG["rightsLanguage"][17] = "Attachments anf&uuml;gen";
-$PMF_LANG["rightsLanguage"][18] = "Attachment l&ouml;schen";
-$PMF_LANG["rightsLanguage"][19] = "Sicherung erstellen";
-$PMF_LANG["rightsLanguage"][20] = "Sicherung wiederherstellen";
-$PMF_LANG["rightsLanguage"][21] = "Offene Fragen l&ouml;schen";
+$PMF_LANG["rightsLanguage"]['adduser'] = "Benutzer hinzuf&uuml;gen";
+$PMF_LANG["rightsLanguage"]['edituser'] = "Benutzer editieren";
+$PMF_LANG["rightsLanguage"]['deluser'] = "Benutzer l&ouml;schen";
+$PMF_LANG["rightsLanguage"]['addbt'] = "Beitrag hinzuf&uuml;gen";
+$PMF_LANG["rightsLanguage"]['editbt'] = "Beitrag editieren";
+$PMF_LANG["rightsLanguage"]['delbt'] = "Beitrag l&ouml;schen";
+$PMF_LANG["rightsLanguage"]['viewlog'] = "Log ansehen";
+$PMF_LANG["rightsLanguage"]['adminlog'] = "Adminlog einsehen";
+$PMF_LANG["rightsLanguage"]['delcomment'] = "Kommentar l&ouml;schen";
+$PMF_LANG["rightsLanguage"]['addnews'] = "News hinzuf&uuml;gen";
+$PMF_LANG["rightsLanguage"]['editnews'] = "News editieren";
+$PMF_LANG["rightsLanguage"]['delnews'] = "News l&ouml;schen";
+$PMF_LANG["rightsLanguage"]['addcateg'] = "Kategorie hinzuf&uuml;gen";
+$PMF_LANG["rightsLanguage"]['editcateg'] = "Kategorie editeren";
+$PMF_LANG["rightsLanguage"]['delcateg'] = "Kategorie l&ouml;schen";
+$PMF_LANG["rightsLanguage"]['passwd'] = "Kennwort &auml;ndern";
+$PMF_LANG["rightsLanguage"]['editconfig'] = "Konfiguration editieren";
+$PMF_LANG["rightsLanguage"]['addatt'] = "Attachments anf&uuml;gen";
+$PMF_LANG["rightsLanguage"]['delatt'] = "Attachment l&ouml;schen";
+$PMF_LANG["rightsLanguage"]['backup'] = "Sicherung erstellen";
+$PMF_LANG["rightsLanguage"]['restore'] = "Sicherung wiederherstellen";
+$PMF_LANG["rightsLanguage"]['delquestion'] = "Offene Fragen l&ouml;schen";
 
 $PMF_LANG["msgAttachedFiles"] = "angeh&auml;ngte Dateien:";
 

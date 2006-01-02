@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_nb.php,v 1.2 2005-09-06 12:52:07 thorstenr Exp $
+* $Id: language_nb.php,v 1.3 2006-01-02 13:34:21 b33blebr0x Exp $
 *
 * Norwegian Bokmål language file
 *
@@ -507,28 +507,28 @@ $PMF_LANG["ad_export_latest"] = "5 seneste spørsmål RSS-Feed";
 $PMF_LANG["ad_export_pdf"] = "PDF-Eksport av alle spørsmål";
 $PMF_LANG["ad_export_generate"] = "bygg RSS-Feed";
 
-$PMF_LANG["rightsLanguage"][0] = "legg til bruker";
-$PMF_LANG["rightsLanguage"][1] = "rediger bruker";
-$PMF_LANG["rightsLanguage"][2] = "slett bruker";
-$PMF_LANG["rightsLanguage"][3] = "legg til spørsmål/svar";
-$PMF_LANG["rightsLanguage"][4] = "rediger spørsmål/svar";
-$PMF_LANG["rightsLanguage"][5] = "slett spørsmål/svar";
-$PMF_LANG["rightsLanguage"][6] = "se logg";
-$PMF_LANG["rightsLanguage"][7] = "se adminlogg";
-$PMF_LANG["rightsLanguage"][8] = "slett kommentarer";
-$PMF_LANG["rightsLanguage"][9] = "legg til nyheter";
-$PMF_LANG["rightsLanguage"][10] = "rediger nyheter";
-$PMF_LANG["rightsLanguage"][11] = "slett nyheter";
-$PMF_LANG["rightsLanguage"][12] = "legg til kategori";
-$PMF_LANG["rightsLanguage"][13] = "rediger kategori";
-$PMF_LANG["rightsLanguage"][14] = "slett kategori";
-$PMF_LANG["rightsLanguage"][15] = "skift passord";
-$PMF_LANG["rightsLanguage"][16] = "rediger konfigurasjon";
-$PMF_LANG["rightsLanguage"][17] = "legg til vedlegg";
-$PMF_LANG["rightsLanguage"][18] = "slett vedlegg";
-$PMF_LANG["rightsLanguage"][19] = "lag sikkerhetskopi";
-$PMF_LANG["rightsLanguage"][20] = "gjennopprett sikkerhetskopi";
-$PMF_LANG["rightsLanguage"][21] = "slett åpne spørsmål";
+$PMF_LANG["rightsLanguage"]['adduser'] = "legg til bruker";
+$PMF_LANG["rightsLanguage"]['edituser'] = "rediger bruker";
+$PMF_LANG["rightsLanguage"]['deluser'] = "slett bruker";
+$PMF_LANG["rightsLanguage"]['addbt'] = "legg til spørsmål/svar";
+$PMF_LANG["rightsLanguage"]['editbt'] = "rediger spørsmål/svar";
+$PMF_LANG["rightsLanguage"]['delbt'] = "slett spørsmål/svar";
+$PMF_LANG["rightsLanguage"]['viewlog'] = "se logg";
+$PMF_LANG["rightsLanguage"]['adminlog'] = "se adminlogg";
+$PMF_LANG["rightsLanguage"]['delcomment'] = "slett kommentarer";
+$PMF_LANG["rightsLanguage"]['addnews'] = "legg til nyheter";
+$PMF_LANG["rightsLanguage"]['editnews'] = "rediger nyheter";
+$PMF_LANG["rightsLanguage"]['delnews'] = "slett nyheter";
+$PMF_LANG["rightsLanguage"]['addcateg'] = "legg til kategori";
+$PMF_LANG["rightsLanguage"]['editcateg'] = "rediger kategori";
+$PMF_LANG["rightsLanguage"]['delcateg'] = "slett kategori";
+$PMF_LANG["rightsLanguage"]['passwd'] = "skift passord";
+$PMF_LANG["rightsLanguage"]['editconfig'] = "rediger konfigurasjon";
+$PMF_LANG["rightsLanguage"]['addatt'] = "legg til vedlegg";
+$PMF_LANG["rightsLanguage"]['delatt'] = "slett vedlegg";
+$PMF_LANG["rightsLanguage"]['backup'] = "lag sikkerhetskopi";
+$PMF_LANG["rightsLanguage"]['restore'] = "gjennopprett sikkerhetskopi";
+$PMF_LANG["rightsLanguage"]['delquestion'] = "slett åpne spørsmål";
 
 $PMF_LANG["msgAttachedFiles"] = "vedlagte filer:";
 

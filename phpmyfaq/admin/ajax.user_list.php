@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.user_list.php,v 1.9 2006-01-02 13:00:02 b33blebr0x Exp $
+* $Id: ajax.user_list.php,v 1.10 2006-01-02 13:34:20 b33blebr0x Exp $
 *
 * AJAX: lists all registered users
 *
@@ -85,7 +85,7 @@ foreach ($userList as $user_id) {
         $isUserRight = $perm->checkUserRight($user_id, $right_id) ? '1' : '0';
 ?>
                 <right id="<?php print $right_id; ?>">
-                    <name><?php print $right_data['name']; ?></name>
+                    <name><?php print isset($PMF_LANG['rightsLanguage'][$right_data['name']]) ? $PMF_LANG['rightsLanguage'][$right_data['name']] : $right_data['name']; ?></name>
                     <description><?php print $right_data['description']; ?></description>
                     <is_user_right><?php print $isUserRight; ?></is_user_right>
                 </right>

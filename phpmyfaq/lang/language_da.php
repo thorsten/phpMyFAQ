@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_da.php,v 1.6 2005-09-06 12:52:07 thorstenr Exp $
+* $Id: language_da.php,v 1.7 2006-01-02 13:34:21 b33blebr0x Exp $
 *
 * Danish language file
 *
@@ -508,28 +508,28 @@ $PMF_LANG["ad_export_latest"] = "5 seneste spørgsmål RSS-Feed";
 $PMF_LANG["ad_export_pdf"] = "PDF-Eksport af alle spørgsmål";
 $PMF_LANG["ad_export_generate"] = "byg RSS-Feed";
 
-$PMF_LANG["rightsLanguage"][0] = "tilf&oslash;j bruger";
-$PMF_LANG["rightsLanguage"][1] = "ret bruger";
-$PMF_LANG["rightsLanguage"][2] = "slet bruger";
-$PMF_LANG["rightsLanguage"][3] = "tilf&oslash;j felt";
-$PMF_LANG["rightsLanguage"][4] = "ret felt";
-$PMF_LANG["rightsLanguage"][5] = "slet felt";
-$PMF_LANG["rightsLanguage"][6] = "se log";
-$PMF_LANG["rightsLanguage"][7] = "se admin log";
-$PMF_LANG["rightsLanguage"][8] = "slet kommentar";
-$PMF_LANG["rightsLanguage"][9] = "tilf&oslash;j nyheder";
-$PMF_LANG["rightsLanguage"][10] = "ret nyheder";
-$PMF_LANG["rightsLanguage"][11] = "slet nyheder";
-$PMF_LANG["rightsLanguage"][12] = "tilf&oslash;j kategori";
-$PMF_LANG["rightsLanguage"][13] = "ret kategori";
-$PMF_LANG["rightsLanguage"][14] = "slet kategori";
-$PMF_LANG["rightsLanguage"][15] = "skift kodeord";
-$PMF_LANG["rightsLanguage"][16] = "ret konfiguration";
-$PMF_LANG["rightsLanguage"][17] = "tilf&oslash;j vedh&aelig;ftninger";
-$PMF_LANG["rightsLanguage"][18] = "slet vedh&aelig;ftninger";
-$PMF_LANG["rightsLanguage"][19] = "lav sikkerhedskopi";
-$PMF_LANG["rightsLanguage"][20] = "genskab sikkerhedskopi";
-$PMF_LANG["rightsLanguage"][21] = "slet &aring;bne sp&oslash;rgsm&aring;l";
+$PMF_LANG["rightsLanguage"]['adduser'] = "tilf&oslash;j bruger";
+$PMF_LANG["rightsLanguage"]['edituser'] = "ret bruger";
+$PMF_LANG["rightsLanguage"]['deluser'] = "slet bruger";
+$PMF_LANG["rightsLanguage"]['addbt'] = "tilf&oslash;j felt";
+$PMF_LANG["rightsLanguage"]['editbt'] = "ret felt";
+$PMF_LANG["rightsLanguage"]['delbt'] = "slet felt";
+$PMF_LANG["rightsLanguage"]['viewlog'] = "se log";
+$PMF_LANG["rightsLanguage"]['adminlog'] = "se admin log";
+$PMF_LANG["rightsLanguage"]['delcomment'] = "slet kommentar";
+$PMF_LANG["rightsLanguage"]['addnews'] = "tilf&oslash;j nyheder";
+$PMF_LANG["rightsLanguage"]['editnews'] = "ret nyheder";
+$PMF_LANG["rightsLanguage"]['delnews'] = "slet nyheder";
+$PMF_LANG["rightsLanguage"]['addcateg'] = "tilf&oslash;j kategori";
+$PMF_LANG["rightsLanguage"]['editcateg'] = "ret kategori";
+$PMF_LANG["rightsLanguage"]['delcateg'] = "slet kategori";
+$PMF_LANG["rightsLanguage"]['passwd'] = "skift kodeord";
+$PMF_LANG["rightsLanguage"]['editconfig'] = "ret konfiguration";
+$PMF_LANG["rightsLanguage"]['addatt'] = "tilf&oslash;j vedh&aelig;ftninger";
+$PMF_LANG["rightsLanguage"]['delatt'] = "slet vedh&aelig;ftninger";
+$PMF_LANG["rightsLanguage"]['backup'] = "lav sikkerhedskopi";
+$PMF_LANG["rightsLanguage"]['restore'] = "genskab sikkerhedskopi";
+$PMF_LANG["rightsLanguage"]['delquestion'] = "slet &aring;bne sp&oslash;rgsm&aring;l";
 
 $PMF_LANG["msgAttachedFiles"] = "vedh&aelig;ftede filer:";
 

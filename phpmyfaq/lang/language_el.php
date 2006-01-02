@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_el.php,v 1.1 2005-10-01 09:29:01 thorstenr Exp $
+* $Id: language_el.php,v 1.2 2006-01-02 13:34:21 b33blebr0x Exp $
 *
 * The Hellenic language file 
 *
@@ -508,28 +508,28 @@ $PMF_LANG["ad_export_latest"] = "5 πιο πρόσφατες καταχωρήσει σε RSS-Feed";
 $PMF_LANG["ad_export_pdf"] = "Εξαγωγή όλων των καταχωρήσεων σε μορφή PDF";
 $PMF_LANG["ad_export_generate"] = "δημιουργία RSS-Feed";
 
-$PMF_LANG["rightsLanguage"][0] = "προσθήκη χρήστη";
-$PMF_LANG["rightsLanguage"][1] = "μεταβολή χρήστη";
-$PMF_LANG["rightsLanguage"][2] = "διαγραφή χρήστη";
-$PMF_LANG["rightsLanguage"][3] = "προσθήκη καταχώρησης";
-$PMF_LANG["rightsLanguage"][4] = "μεταβολή καταχώρησης";
-$PMF_LANG["rightsLanguage"][5] = "διαγραγή καταχωρήσεων";
-$PMF_LANG["rightsLanguage"][6] = "προβολή ημερολογίου";
-$PMF_LANG["rightsLanguage"][7] = "προβολή ημερολογίου συμβάντων";
-$PMF_LANG["rightsLanguage"][8] = "διαγραγή σχολίων";
-$PMF_LANG["rightsLanguage"][9] = "προσθήκη ειδήσεων";
-$PMF_LANG["rightsLanguage"][10] = "μεταβολή ειδήσεων";
-$PMF_LANG["rightsLanguage"][11] = "διαγραφή ειδήσεων";
-$PMF_LANG["rightsLanguage"][12] = "προσθήκη κατηγορίας";
-$PMF_LANG["rightsLanguage"][13] = "μεταβολή κατηγορίας";
-$PMF_LANG["rightsLanguage"][14] = "διαγραφή κατηγορίας";
-$PMF_LANG["rightsLanguage"][15] = "Αλλαγή κωδικού πρόσβασης";
-$PMF_LANG["rightsLanguage"][16] = "μεταβολή ρυθμίσεων";
-$PMF_LANG["rightsLanguage"][17] = "επισύναψη αρχείων";
-$PMF_LANG["rightsLanguage"][18] = "διαγραφή συνημμένων";
-$PMF_LANG["rightsLanguage"][19] = "δημιουργία αρχείου ασφαλείας";
-$PMF_LANG["rightsLanguage"][20] = "επαναφορά από αρχείο ασφαλείας";
-$PMF_LANG["rightsLanguage"][21] = "διαγραφή ανοιχτών ερωτημάτων";
+$PMF_LANG["rightsLanguage"]['adduser'] = "προσθήκη χρήστη";
+$PMF_LANG["rightsLanguage"]['edituser'] = "μεταβολή χρήστη";
+$PMF_LANG["rightsLanguage"]['deluser'] = "διαγραφή χρήστη";
+$PMF_LANG["rightsLanguage"]['addbt'] = "προσθήκη καταχώρησης";
+$PMF_LANG["rightsLanguage"]['editbt'] = "μεταβολή καταχώρησης";
+$PMF_LANG["rightsLanguage"]['delbt'] = "διαγραγή καταχωρήσεων";
+$PMF_LANG["rightsLanguage"]['viewlog'] = "προβολή ημερολογίου";
+$PMF_LANG["rightsLanguage"]['adminlog'] = "προβολή ημερολογίου συμβάντων";
+$PMF_LANG["rightsLanguage"]['delcomment'] = "διαγραγή σχολίων";
+$PMF_LANG["rightsLanguage"]['addnews'] = "προσθήκη ειδήσεων";
+$PMF_LANG["rightsLanguage"]['editnews'] = "μεταβολή ειδήσεων";
+$PMF_LANG["rightsLanguage"]['delnews'] = "διαγραφή ειδήσεων";
+$PMF_LANG["rightsLanguage"]['addcateg'] = "προσθήκη κατηγορίας";
+$PMF_LANG["rightsLanguage"]['editcateg'] = "μεταβολή κατηγορίας";
+$PMF_LANG["rightsLanguage"]['delcateg'] = "διαγραφή κατηγορίας";
+$PMF_LANG["rightsLanguage"]['passwd'] = "Αλλαγή κωδικού πρόσβασης";
+$PMF_LANG["rightsLanguage"]['editconfig'] = "μεταβολή ρυθμίσεων";
+$PMF_LANG["rightsLanguage"]['addatt'] = "επισύναψη αρχείων";
+$PMF_LANG["rightsLanguage"]['delatt'] = "διαγραφή συνημμένων";
+$PMF_LANG["rightsLanguage"]['backup'] = "δημιουργία αρχείου ασφαλείας";
+$PMF_LANG["rightsLanguage"]['restore'] = "επαναφορά από αρχείο ασφαλείας";
+$PMF_LANG["rightsLanguage"]['delquestion'] = "διαγραφή ανοιχτών ερωτημάτων";
 
 $PMF_LANG["msgAttachedFiles"] = "συνημμένα:";
 

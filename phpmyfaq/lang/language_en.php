@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.16 2006-01-02 13:00:02 b33blebr0x Exp $
+* $Id: language_en.php,v 1.17 2006-01-02 13:34:21 b33blebr0x Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -510,28 +510,28 @@ $PMF_LANG["ad_export_latest"] = "5 latest records RSS-Feed";
 $PMF_LANG["ad_export_pdf"] = "PDF-Export of all records";
 $PMF_LANG["ad_export_generate"] = "build RSS-Feed";
 
-$PMF_LANG["rightsLanguage"][0] = "add user";
-$PMF_LANG["rightsLanguage"][1] = "edit user";
-$PMF_LANG["rightsLanguage"][2] = "delete user";
-$PMF_LANG["rightsLanguage"][3] = "add record";
-$PMF_LANG["rightsLanguage"][4] = "edit record";
-$PMF_LANG["rightsLanguage"][5] = "delete record";
-$PMF_LANG["rightsLanguage"][6] = "view log";
-$PMF_LANG["rightsLanguage"][7] = "view admin log";
-$PMF_LANG["rightsLanguage"][8] = "delete comment";
-$PMF_LANG["rightsLanguage"][9] = "add news";
-$PMF_LANG["rightsLanguage"][10] = "edit news";
-$PMF_LANG["rightsLanguage"][11] = "delete news";
-$PMF_LANG["rightsLanguage"][12] = "add category";
-$PMF_LANG["rightsLanguage"][13] = "edit category";
-$PMF_LANG["rightsLanguage"][14] = "delete category";
-$PMF_LANG["rightsLanguage"][15] = "change password";
-$PMF_LANG["rightsLanguage"][16] = "edit configuration";
-$PMF_LANG["rightsLanguage"][17] = "add attachments";
-$PMF_LANG["rightsLanguage"][18] = "delete attachments";
-$PMF_LANG["rightsLanguage"][19] = "create backup";
-$PMF_LANG["rightsLanguage"][20] = "restore backup";
-$PMF_LANG["rightsLanguage"][21] = "delete open questions";
+$PMF_LANG["rightsLanguage"]['adduser'] = "add user";
+$PMF_LANG["rightsLanguage"]['edituser'] = "edit user";
+$PMF_LANG["rightsLanguage"]['deluser'] = "delete user";
+$PMF_LANG["rightsLanguage"]['addbt'] = "add record";
+$PMF_LANG["rightsLanguage"]['editbt'] = "edit record";
+$PMF_LANG["rightsLanguage"]['delbt'] = "delete record";
+$PMF_LANG["rightsLanguage"]['viewlog'] = "view log";
+$PMF_LANG["rightsLanguage"]['adminlog'] = "view admin log";
+$PMF_LANG["rightsLanguage"]['delcomment'] = "delete comment";
+$PMF_LANG["rightsLanguage"]['addnews'] = "add news";
+$PMF_LANG["rightsLanguage"]['editnews'] = "edit news";
+$PMF_LANG["rightsLanguage"]['delnews'] = "delete news";
+$PMF_LANG["rightsLanguage"]['addcateg'] = "add category";
+$PMF_LANG["rightsLanguage"]['editcateg'] = "edit category";
+$PMF_LANG["rightsLanguage"]['delcateg'] = "delete category";
+$PMF_LANG["rightsLanguage"]['passwd'] = "change password";
+$PMF_LANG["rightsLanguage"]['editconfig'] = "edit configuration";
+$PMF_LANG["rightsLanguage"]['addatt'] = "add attachments";
+$PMF_LANG["rightsLanguage"]['delatt'] = "delete attachments";
+$PMF_LANG["rightsLanguage"]['backup'] = "create backup";
+$PMF_LANG["rightsLanguage"]['restore'] = "restore backup";
+$PMF_LANG["rightsLanguage"]['delquestion'] = "delete open questions";
 
 $PMF_LANG["msgAttachedFiles"] = "attached files:";
 
@@ -669,3 +669,6 @@ $PMF_LANG['ad_user_deleteUser'] = "Delete User";
 $PMF_LANG['ad_user_status'] = "Status:";
 $PMF_LANG['ad_user_lastModified'] = "last modified:";
 $PMF_LANG['ad_gen_cancel'] = "Cancel";
+$PMF_LANG["rightsLanguage"]['addglossary'] = "add glossary item";
+$PMF_LANG["rightsLanguage"]['editglossary'] = "edit glossary item";
+$PMF_LANG["rightsLanguage"]['delglossary'] = "delete glossary item";
