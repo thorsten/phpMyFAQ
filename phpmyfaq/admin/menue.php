@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: menue.php,v 1.10 2005-12-26 13:50:31 thorstenr Exp $
+* $Id: menue.php,v 1.11 2006-01-02 16:36:50 b33blebr0x Exp $
 *
 * Navigation menue of the admin area
 *
@@ -52,12 +52,20 @@ function addMenuEntry($restrictions = "", $aktion = "", $caption = "")
 		}
 	}
 }
+
+// check for group support
+require_once(PMF_ROOT_DIR.'/inc/PMF_User/User.php');
+$user = new PMF_User();
+$groupSupport = is_a($user->perm, "PMF_PermMedium");
 ?>
 <div id="menue">
     <ul>
 <?php
 	addMenuEntry('',                                     '',                 'ad_menu_startpage');
 	addMenuEntry('adduser,edituser,deluser',             'user',             'ad_menu_user_administration');
+	if ($groupSupport) {
+	    addMenuEntry('adduser,edituser,deluser',             'group',             'ad_menu_group_administration');
+    }
 	addMenuEntry('addcateg,editcateg,delcateg',          'category',         'ad_menu_categ_edit');
 	addMenuEntry('addbt',                                'editentry',        'ad_entry_add');
 	addMenuEntry('editbt,delbt',                         'accept',           'ad_menu_entry_aprove');

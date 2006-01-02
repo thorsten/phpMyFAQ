@@ -48,7 +48,7 @@ if (0 > version_compare(PHP_VERSION, '4')) {
 
 /* user defined includes */
 // section 127-0-0-1-17ec9f7:1062544275a:-7ffd-includes begin
-require_once dirname(__FILE__).'/Auth.php';
+//require_once dirname(__FILE__).'/Auth.php';
 // section 127-0-0-1-17ec9f7:1062544275a:-7ffd-includes end
 
 /* user defined constants */

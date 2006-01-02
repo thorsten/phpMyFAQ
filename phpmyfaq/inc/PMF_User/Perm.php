@@ -55,7 +55,7 @@ if (0 > version_compare(PHP_VERSION, '4')) {
 
 /* user defined includes */
 // section -64--88-1-5-15e2075:10637248df4:-7fd0-includes begin
-require_once dirname(__FILE__).'/User.php';
+//require_once dirname(__FILE__).'/User.php';
 // section -64--88-1-5-15e2075:10637248df4:-7fd0-includes end
 
 /* user defined constants */
@@ -179,9 +179,10 @@ class PMF_Perm
         if (!file_exists($classfile)) {
         	return $perm;
         }
-        require_once $classfile;
         // instantiate 
         $permclass = "PMF_".$perm->_perm_typemap[$perm_level];
+        if (!class_exists($permclass))
+            require_once $classfile;
 		$perm = new $permclass();
         return $perm;
         // section -64--88-1-10--77ac1b05:106d99eac38:-7fab end

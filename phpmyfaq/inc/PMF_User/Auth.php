@@ -62,7 +62,7 @@ if (0 > version_compare(PHP_VERSION, '4')) {
 /* user defined includes */
 // section 127-0-0-1-17ec9f7:105b52d5117:-7fef-includes begin
 require_once dirname(__FILE__).'/Enc.php';
-require_once dirname(__FILE__).'/User.php';
+//require_once dirname(__FILE__).'/User.php';
 // section 127-0-0-1-17ec9f7:105b52d5117:-7fef-includes end
 
 /* user defined constants */

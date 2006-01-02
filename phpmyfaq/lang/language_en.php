@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.17 2006-01-02 13:34:21 b33blebr0x Exp $
+* $Id: language_en.php,v 1.18 2006-01-02 16:36:50 b33blebr0x Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -672,3 +672,4 @@ $PMF_LANG['ad_gen_cancel'] = "Cancel";
 $PMF_LANG["rightsLanguage"]['addglossary'] = "add glossary item";
 $PMF_LANG["rightsLanguage"]['editglossary'] = "edit glossary item";
 $PMF_LANG["rightsLanguage"]['delglossary'] = "delete glossary item";
+$PMF_LANG["ad_menu_group_administration"] = "Group Administration";

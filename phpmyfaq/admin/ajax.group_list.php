@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.user_list.php,v 1.11 2006-01-02 16:36:50 b33blebr0x Exp $
+* $Id: ajax.group_list.php,v 1.1 2006-01-02 16:36:50 b33blebr0x Exp $
 *
 * AJAX: lists all registered users
 *
@@ -35,67 +35,49 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 require_once(PMF_ROOT_DIR.'/inc/PMF_User/User.php');
 
 $user = new PMF_User();
-$userList = $user->getAllUsers();
+$groupList = is_a($user->perm, "PMF_PermMedium") ? $user->perm->getAllGroups() : array();
 $data = array(
-    'display_name' => $PMF_LANG["ad_user_realname"], //"real name:",
-    'email' => $PMF_LANG["ad_entry_email"], //"email adress:"
-    'last_modified' => $PMF_LANG['ad_user_lastModified'], //"last modified:",
+    'name' => "Name:",
+    'description' => "Description:",
+    'auto_join' => "Auto-join:",
 );
 
 ob_clean();
 ?>
 <xml>
-    <userlist>
-        <select_class>ad_select_user</select_class>
+    <grouplist>
+        <select_class>ad_select_group</select_class>
 <?php
-foreach ($userList as $user_id) {
-    $user_object = new PMF_User();
-    $user_object->getUserById($user_id);
-    $user_id = $user_object->getUserId();
-    $login = $user_object->getLogin();
-    $class = "ad_select_user";
-    $status = $user_object->getStatus();
+foreach ($groupList as $group_id) {
+    //$groupData = $user->perm->getGroupData($group_id);
 ?>
-        <user id="<?php print $user_id; ?>">
-            <login><?php print $login; ?></login>
-            <status><?php print $status; ?></status>
-            <user_data>
+        <group id="<?php print $groupData['group_id']; ?>">
+            <name><?php print $groupData['name']; ?></name>
+            <description><?php print $groupData['description']; ?></description>
+            <auto_join><?php print $groupData['auto_join']; ?></auto_join>
+            <group_rights>
 <?php
-    $user_data = $user_object->userdata->get(array_keys($data));
-    foreach ($user_data as $field => $value) {
-?>
-
-                <item name="<?php print $field; ?>">
-                    <name><?php print $data[$field]; ?></name>
-                    <value><?php print $value; ?></value>
-                </item>
-<?php
-    } /* end foreach ($user_data) */
-?>
-            </user_data>
-            <user_rights>
-<?php
-    $perm = $user_object->perm;
+    $perm = $user->perm;
     $all_rights = $perm->getAllRights();
     foreach ($all_rights as $right_id) {
         $right_data = $perm->getRightData($right_id);
         // right is not for users!
-        if (!$right_data['for_users'])
+        if (!$right_data['for_groups'])
             continue;
-        $isUserRight = $perm->checkUserRight($user_id, $right_id) ? '1' : '0';
+        $isGroupRight = $perm->checkGroupRight($group_id, $right_id) ? '1' : '0';
 ?>
                 <right id="<?php print $right_id; ?>">
-                    <name><?php print isset($PMF_LANG['rightsLanguage'][$right_data['name']]) ? htmlentities($PMF_LANG['rightsLanguage'][$right_data['name']], ENT_COMPAT, $PMF_LANG["metaCharset"]) : $right_data['name']; ?></name>
+                    <name><?php print isset($PMF_LANG['rightsLanguage'][$right_data['name']]) ? $PMF_LANG['rightsLanguage'][$right_data['name']] : $right_data['name']; ?></name>
                     <description><?php print $right_data['description']; ?></description>
                     <is_user_right><?php print $isUserRight; ?></is_user_right>
                 </right>
 <?php
     } /* end foreach ($all_rights) */
 ?>
-            </user_rights>
-        </user>
+            </group_rights>
+        </group>
 <?php
 } /* end foreach ($userList) */
 ?>
-    </userlist>
+    </grouplist>
 </xml>
