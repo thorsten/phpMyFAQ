@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.14 2005-12-26 11:39:17 thorstenr Exp $
+* $Id: language_en.php,v 1.15 2006-01-02 12:50:11 b33blebr0x Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -655,3 +655,16 @@ $PMF_LANG['ad_linkcheck_config_th_chown'] = 'Set to obtain ownership';
 $PMF_LANG['msgNewQuestionVisible'] = 'The question have to be reviewed first before getting public.';
 $PMF_LANG['msgQuestionsWaiting'] = 'Waiting for publishing by the administrators:';
 $PMF_LANG['ad_entry_visibility'] = 'Publish?';
+
+// added v1.6.0 - 2006-01-02 by Lars
+$PMF_LANG['ad_user_error_password'] =  "Please enter a password. ";
+$PMF_LANG['ad_user_error_passwordsDontMatch'] =  "Passwords do not match. ";
+$PMF_LANG['ad_user_error_loginInvalid'] =  "The specified user name is invalid.";
+$PMF_LANG['ad_user_error_noEmail'] =  "Please enter a valid mail adress. ";
+$PMF_LANG['ad_user_error_noRealName'] =  "Please enter your real name. ";
+$PMF_LANG['ad_user_error_delete'] =  "User account could not be deleted. ";
+$PMF_LANG['ad_user_error_noId'] =  "No User-ID specified. ";
+$PMF_LANG['ad_user_error_protectedAccount'] =  "User account is protected. ";
+$PMF_LANG['ad_user_deleteUser'] = "Delete User";
+$PMF_LANG['ad_user_status'] = "Status:";
+$PMF_LANG['ad_gen_cancel'] = "Cancel";

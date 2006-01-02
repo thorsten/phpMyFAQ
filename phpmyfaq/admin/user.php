@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: user.php,v 1.12 2005-12-26 20:14:21 b33blebr0x Exp $
+* $Id: user.php,v 1.13 2006-01-02 12:50:11 b33blebr0x Exp $
 *
 * Displays the user managment frontend
 *
@@ -37,42 +37,44 @@ $defaultUserStatus = 'active';
 $loginMinLength = 4;
 $loginInvalidRegExp = '/(^[^a-z]{1}|[\W])/i';
 $errorMessages = array(
-    'addUser_password' => "Please enter a password. ",
-    'addUser_passwordsDontMatch' => "Passwords do not match. ",
-    'addUser_loginExists' => "Specified user name already exists. ",
-    'addUser_loginInvalid' => "The specified user name is invalid.",
-    'addUser_noEmail' => "Please enter a valid mail adress. ",
-    'addUser_noRealName' => "Please enter your real name. ",
-    'delUser' => "User account could not be deleted. ",
-    'delUser_noId' => "No User-ID specified. ",
-    'delUser_protectedAccount' => "User account is protected. ",
-    'updateUser_noId' => "No User-ID specified. ",
-    'updateRights_noId' => "No User-ID  specified. ",
+    'addUser_password' => $PMF_LANG['ad_user_error_password'], //"Please enter a password. ",
+    'addUser_passwordsDontMatch' => $PMF_LANG['ad_user_error_passwordsDontMatch'], //"Passwords do not match. ",
+    'addUser_loginExists' => $PMF_LANG["ad_adus_exerr"], //"Username <strong>exists</strong> already.",
+    'addUser_loginInvalid' => $PMF_LANG['ad_user_error_loginInvalid'], //"The specified user name is invalid.",
+    'addUser_noEmail' => $PMF_LANG['ad_user_error_noEmail'], //"Please enter a valid mail adress. ",
+    'addUser_noRealName' => $PMF_LANG['ad_user_error_noRealName'], //"Please enter your real name. ",
+    'delUser' => $PMF_LANG['ad_user_error_delete'], //"User account could not be deleted. ",
+    'delUser_noId' => $PMF_LANG['ad_user_error_noId'], //"No User-ID specified. ",
+    'delUser_protectedAccount' => $PMF_LANG['ad_user_error_protectedAccount'], //"User account is protected. ",
+    'updateUser_noId' => $PMF_LANG['ad_user_error_noId'], //"No User-ID specified. ",
+    'updateRights_noId' => $PMF_LANG['ad_user_error_noId'], //"No User-ID  specified. ",
 );
 $successMessages = array(
-    'addUser' => "User account successfully created. ",
-    'delUser' => "User account successfully deleted. ",
+    'addUser' => $PMF_LANG["ad_adus_suc"], //"User <strong>successfully</strong> added.",
+    'delUser' => $PMF_LANG["ad_user_deleted"], //"The user was successfully deleted.",
 );
 $text = array(
-    'button_cancel' => "cancel",
     'header' => $PMF_LANG['ad_user'], // "User Administration"
     'selectUser' => $PMF_LANG["ad_user_username"], // "Registered users"
     'addUser' => $PMF_LANG["ad_adus_adduser"], // "add User"
-    'addUser_confirm' => "add",
+    'addUser_confirm' => $PMF_LANG["ad_gen_save"], //"Save",
+    'addUser_cancel' => $PMF_LANG['ad_gen_cancel'], //"Cancel",
     'addUser_link' => $PMF_LANG["ad_user_add"], // "Add User"
     'addUser_name' => $PMF_LANG["ad_adus_name"], // "Name: "
     'addUser_displayName' => $PMF_LANG["ad_user_realname"], // "real name:"
     'addUser_email' => $PMF_LANG["ad_entry_email"], // "email adress:"
     'addUser_password' => $PMF_LANG["ad_adus_password"], // Password:
     'addUser_password2' => $PMF_LANG["ad_passwd_con"], // Confirm:
-    'delUser' => "delete user",
-    'delUser_question' => "Really delete this account? ",
-    'delUser_confirm' => "delete",
+    'delUser' => $PMF_LANG['ad_user_deleteUser'], //"Delete User",
+    'delUser_button' => $PMF_LANG['ad_gen_delete'], //"Delete",
+    'delUser_question' => $PMF_LANG["ad_user_del_3"]." ".$PMF_LANG["ad_user_del_1"]." ".$PMF_LANG["ad_user_del_2"], //"Are you sure?"."The User"."shall be deleted?",
+    'delUser_confirm' => $PMF_LANG["ad_gen_yes"], //"Yes",
+    'delUser_cancel' => $PMF_LANG["ad_gen_no"], //"No",
     'changeUser' => $PMF_LANG["ad_user_profou"], // "Profile of the User"
-    'changeUser_submit' => "save",
-    'changeUser_status' => "Status: ",
+    'changeUser_submit' => $PMF_LANG["ad_gen_save"], //"Save",
+    'changeUser_status' => $PMF_LANG['ad_user_status'], //"Status:",
     'changeRights' => $PMF_LANG["ad_user_rights"], // "Rights"
-    'changeRights_submit' => "save",
+    'changeRights_submit' => $PMF_LANG["ad_gen_save"], //"Save",
 );
 
 // what shall we do?
@@ -147,7 +149,7 @@ if ($userAction == 'delete_confirm') {
         <form action ="<?php print $_SERVER['PHP_SELF']; ?>?aktion=user&amp;user_action=delete" method="post">
             <input type="hidden" name="user_id" value="<?php print $userId; ?>" />
             <div class="button_row">
-                <input class="reset" type="submit" name="cancel" value="<?php print $text['button_cancel']; ?>" />
+                <input class="reset" type="submit" name="cancel" value="<?php print $text['delUser_cancel']; ?>" />
                 <input class="submit" type="submit" value="<?php print $text['delUser_confirm']; ?>" />
             </div>
         </form>
@@ -285,7 +287,7 @@ if ($userAction == 'add') {
             </div>
             <div class="button_row">
                 <input class="submit" type="submit" value="<?php print $text['addUser_confirm']; ?>" tabindex="6" />
-                <input class="reset" name="cancel" type="submit" value="<?php print $text['button_cancel']; ?>" tabindex="7" />
+                <input class="reset" name="cancel" type="submit" value="<?php print $text['addUser_cancel']; ?>" tabindex="7" />
             </div>
             <div class="clear"></div>
         </form>
@@ -516,7 +518,7 @@ getUserList();
                 <select name="user_list_select" id="user_list_select" size="<?php print $selectSize; ?>" onchange="userSelect(event)" tabindex="1">
                     <option value="">select...</option>
                 </select>
-                <input class="admin" type="submit" value="<?php print $text['delUser_confirm']; ?>" tabindex="2" />
+                <input class="admin" type="submit" value="<?php print $text['delUser_button']; ?>" tabindex="2" />
             </form>
         </fieldset>
         <p>[ <a href="<?php print $_SERVER['PHP_SELF']; ?>?aktion=user&amp;user_action=add"><?php print $text['addUser_link']; ?></a> ]</p>
