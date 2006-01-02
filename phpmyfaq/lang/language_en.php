@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.15 2006-01-02 12:50:11 b33blebr0x Exp $
+* $Id: language_en.php,v 1.16 2006-01-02 13:00:02 b33blebr0x Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -667,4 +667,5 @@ $PMF_LANG['ad_user_error_noId'] =  "No User-ID specified. ";
 $PMF_LANG['ad_user_error_protectedAccount'] =  "User account is protected. ";
 $PMF_LANG['ad_user_deleteUser'] = "Delete User";
 $PMF_LANG['ad_user_status'] = "Status:";
+$PMF_LANG['ad_user_lastModified'] = "last modified:";
 $PMF_LANG['ad_gen_cancel'] = "Cancel";
