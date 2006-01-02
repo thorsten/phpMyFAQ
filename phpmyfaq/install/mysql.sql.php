@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mysql.sql.php,v 1.17 2005-12-27 19:00:44 thorstenr Exp $
+* $Id: mysql.sql.php,v 1.18 2006-01-02 11:39:55 thorstenr Exp $
 *
 * CREATE TABLE instruction for MySQL database
 *
@@ -211,7 +211,7 @@ pass VARCHAR(150) NULL,
 PRIMARY KEY(login)
 )";
 
-/faquser_group
+//Sfaquser_group
 $query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faquser_group (
 user_id INT(11) UNSIGNED NOT NULL,
 group_id INT(11) UNSIGNED NOT NULL,

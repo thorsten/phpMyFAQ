@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.42 2005-12-22 13:05:28 b33blebr0x Exp $
+* $Id: installer.php,v 1.43 2006-01-02 11:39:55 thorstenr Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -13,7 +13,7 @@
 * @author      Tom Rochester <tom.rochester@gmail.com>
 * @author      Johannes Schlüter <johannes@php.net>
 * @since       2002-08-20
-* @copyright   (c) 2001-2005 phpMyFAQ Team
+* @copyright   (c) 2001-2006 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -27,7 +27,7 @@
 */
 
 define("VERSION", "1.6.0-dev");
-define("COPYRIGHT", "&copy; 2001-2005 <a href=\"http://www.phpmyfaq.de/\">phpMyFAQ-Team</a> | All rights reserved.");
+define("COPYRIGHT", "&copy; 2001-2006 <a href=\"http://www.phpmyfaq.de/\">phpMyFAQ-Team</a> | All rights reserved.");
 define("SAFEMODE", @ini_get("safe_mode"));
 define("PMF_ROOT_DIR", dirname(dirname(__FILE__)));
 require_once(PMF_ROOT_DIR."/inc/constants.php");
@@ -220,7 +220,7 @@ function HTMLFooter()
 <h1 id="header">phpMyFAQ <?php print VERSION; ?> Installation</h1>
 
 <?php
-if (version_compare(PHP_VERSION, '4.3.0') == false) {
+if (version_compare(PHP_VERSION, '4.3.0', '<')) {
 	print "<p class=\"center\">You need PHP Version 4.3.0 or higher!</p>\n";
 	HTMLFooter();
 	die();
@@ -255,7 +255,7 @@ foreach ($dirs AS $dir) {
 }
 
 if (sizeof($faileddirs)) {
-    print '<p class="center">The following dirctory/-ies could not be created or are not writable:</p><ul>';
+    print '<p class="center">The following directory/-ies could not be created or are not writable:</p><ul>';
     foreach ($faileddirs AS $dir) {
         print "<li>$dir</li>\n";
     }
@@ -424,11 +424,19 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 <?php
     HTMLFooter();
 } else {
+    
+    // Ckeck table prefix
+    if (isset($_POST['sqltblpre']) && $_POST['sqltblpre'] != '') {
+        $sqltblpre = $_POST['sqltblpre'];
+    } else {
+        $sqltblpre = '';
+    }
+    
     // check database entries
 	if (isset($_POST["sql_type"]) && $_POST["sql_type"] != "") {
 		$sql_type = trim($_POST["sql_type"]);
-        if (file_exists(PMF_ROOT_DIR.'/inc/PMF_DB/'.$sql_type.'.php')) {
-            require_once(PMF_ROOT_DIR.'/inc/PMF_DB/'.$sql_type.'.php');
+        if (file_exists(PMF_ROOT_DIR.'/install/'.$sql_type.'.php')) {
+            require_once(PMF_ROOT_DIR.'/install/'.$sql_type.'.php');
         } else {
             print '<p class="error"><strong>Error:</strong> Invalid server type.</p>';
             HTMLFooter();
@@ -564,11 +572,6 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 		print "<p class=\"error\"><strong>Error:</strong> Your password and retyped password are not equal. Please check your password and your retyped password.</p>\n";
 		HTMLFooter();
 		die();
-    }
-    if (isset($_POST["sqltblpre"]) && $_POST["sqltblpre"] != "") {
-        $sqltblpre = $_POST["sqltblpre"];
-    } else {
-        $sqltblpre = "";
     }
     
     if (isset($_POST["language"]) && $_POST["language"] != "") {
