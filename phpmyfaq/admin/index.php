@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.37 2006-01-03 07:48:35 thorstenr Exp $
+* $Id: index.php,v 1.38 2006-01-03 13:00:56 thorstenr Exp $
 *
 * The main admin backend index file
 *
@@ -22,15 +22,12 @@
 * under the License.
 */
 
-require_once('../inc/init.php');
+define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
+require_once(PMF_ROOT_DIR.'/inc/init.php');
 define('IS_VALID_PHPMYFAQ_ADMIN', null);
 PMF_Init::cleanRequest();
 
-// Just for security reasons - thanks to Johannes for the hint
-$_SERVER['PHP_SELF'] = strtr(rawurlencode($_SERVER['PHP_SELF']),array( "%2F"=>"/", "%257E"=>"%7E"));
-$_SERVER['HTTP_USER_AGENT'] = urlencode($_SERVER['HTTP_USER_AGENT']);
 
-define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
 // Include classes and functions
 require_once (PMF_ROOT_DIR."/inc/category.php");
@@ -89,6 +86,7 @@ if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
         $_REQUEST["aktion"] = "";
     }
 }
+
 // get user rights
 $permission = array();
 if (isset($auth)) {

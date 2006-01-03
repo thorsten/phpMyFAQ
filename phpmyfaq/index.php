@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.39 2006-01-03 12:41:16 thorstenr Exp $
+* $Id: index.php,v 1.40 2006-01-03 13:00:56 thorstenr Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the 
@@ -29,14 +29,6 @@
 require_once('inc/init.php');
 define('IS_VALID_PHPMYFAQ', null);
 PMF_Init::cleanRequest();
-
-
-
-//
-// Just for security reasons - thanks to Johannes for the hint
-//
-$_SERVER['PHP_SELF'] = strtr(rawurlencode($_SERVER['PHP_SELF']),array( "%2F"=>"/", "%257E"=>"%7E"));
-$_SERVER['HTTP_USER_AGENT'] = urlencode($_SERVER['HTTP_USER_AGENT']);
 
 
 
