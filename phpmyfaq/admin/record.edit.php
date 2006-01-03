@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.edit.php,v 1.26 2006-01-02 16:51:26 thorstenr Exp $
+* $Id: record.edit.php,v 1.27 2006-01-03 11:17:33 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23
@@ -169,10 +169,10 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     <input class="admin" name="keywords" id="keywords" style="width: 565px;" value="<?php if (isset($keywords)) { print htmlspecialchars($keywords); } ?>" /><br />
 
 	<label class="left" for="author"><?php print $PMF_LANG["ad_entry_author"]; ?></label>
-    <input class="admin" name="author" id="author" style="width: 565px;" value="<?php if (isset($author)) { print htmlspecialchars($author); } else { print $auth_realname; } ?>" /><br />
+    <input class="admin" name="author" id="author" style="width: 565px;" value="<?php if (isset($author)) { print htmlspecialchars($author); } else { print $user->getUserData('display_name'); } ?>" /><br />
 
     <label class="left" for="email"><?php print $PMF_LANG["ad_entry_email"]; ?></label>
-    <input class="admin" name="email" id="email" style="width: 565px;" value="<?php if (isset($email)) { print htmlspecialchars($email); } else { print $auth_email; } ?>" /><br />
+    <input class="admin" name="email" id="email" style="width: 565px;" value="<?php if (isset($email)) { print htmlspecialchars($email); } else { print $user->getUserData('email'); } ?>" /><br />
 	
 <?php
 	if (isset($active) && $active == "yes") {
