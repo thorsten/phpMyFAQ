@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: user.php,v 1.14 2006-01-02 16:51:27 thorstenr Exp $
+* $Id: user.php,v 1.15 2006-01-03 10:37:05 thorstenr Exp $
 *
 * Displays the user managment frontend
 *
@@ -75,6 +75,7 @@ $text = array(
     'changeUser_status' => $PMF_LANG['ad_user_status'], //"Status:",
     'changeRights' => $PMF_LANG["ad_user_rights"], // "Rights"
     'changeRights_submit' => $PMF_LANG["ad_gen_save"], //"Save",
+    'updateUser' => $PMF_LANG['ad_msg_savedsuc_1'].' %s '.$PMF_LANG['ad_msg_savedsuc_2']
 );
 
 // what shall we do?
@@ -121,7 +122,7 @@ if ($userAction == 'update_data') {
         $user->getUserById($userId);
         $user->userdata->set(array_keys($userData), array_values($userData));
         $user->setStatus($userStatus);
-        $message .= '<p class="success">'.$text['updateUser'].'</p>';
+        $message .= '<p class="success">'.sprintf($text['updateUser'], $userId).'</p>';
     }
 } // end if ($userAction == 'update')
 // delete user confirmation
