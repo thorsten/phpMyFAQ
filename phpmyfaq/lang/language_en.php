@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.19 2006-01-02 16:51:30 thorstenr Exp $
+* $Id: language_en.php,v 1.20 2006-01-03 12:41:41 thorstenr Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -577,6 +577,8 @@ $LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "Do you want to enable 
 $LANG_CONF["referenceURL"] = array(0 => "input", 1 => "base URL for link verification (set to folder URL of Frontend)");
 $LANG_CONF["URLValidateInterval"] = array(0 => "input", 1 => "Interval between AJAX link verification (in seconds)");
 $LANG_CONF["enablevisibility"] = array(0 => "checkbox", 1 => "Disable visibility of new questions?");
+$LANG_CONF['permLevel'] = array(0 => "input", 1 => "Permission level");
+
 
 $PMF_LANG["ad_categ_new_main_cat"] = "as new main category";
 $PMF_LANG["ad_categ_paste_error"] = "Moving this category isn't possible.";
@@ -673,3 +675,4 @@ $PMF_LANG["rightsLanguage"]['addglossary'] = "add glossary item";
 $PMF_LANG["rightsLanguage"]['editglossary'] = "edit glossary item";
 $PMF_LANG["rightsLanguage"]['delglossary'] = "delete glossary item";
 $PMF_LANG["ad_menu_group_administration"] = "Group Administration";
+$PMF_LANG['ad_user_loggedin'] = 'You\'re logged in as ';
