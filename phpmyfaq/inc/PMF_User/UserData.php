@@ -107,6 +107,7 @@ class PMF_UserData
 		  WHERE 
 		    user_id = ".$this->_user_id
         ); 
+        
 		if ($this->_db->num_rows($res) != 1) 
 		    return false;
 		$arr = $this->_db->fetch_assoc($res);
