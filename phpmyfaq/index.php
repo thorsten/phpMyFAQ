@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.37 2006-01-02 16:51:26 thorstenr Exp $
+* $Id: index.php,v 1.38 2006-01-03 07:37:29 thorstenr Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the 
@@ -22,38 +22,48 @@
 * under the License.
 */
 
+//
+// Prepend
+//
 require_once('inc/init.php');
 define('IS_VALID_PHPMYFAQ', null);
 PMF_Init::cleanRequest();
 
+
+
+//
 // Just for security reasons - thanks to Johannes for the hint
+//
 $_SERVER['PHP_SELF'] = strtr(rawurlencode($_SERVER['PHP_SELF']),array( "%2F"=>"/", "%257E"=>"%7E"));
 $_SERVER['HTTP_USER_AGENT'] = urlencode($_SERVER['HTTP_USER_AGENT']);
 
-// check if config.php and data.php exist -> if not, redirect to installer
+
+
+//
+// Check if config.php and data.php exist -> if not, redirect to installer
+//
 if (!file_exists('inc/config.php') || !file_exists('inc/data.php')) {
     header("Location: http://".$_SERVER['SERVER_NAME'].dirname($_SERVER['PHP_SELF'])."/install/installer.php");
     exit();
 }
 
+
+
+//
 // Include required template parser class, category class, the main FAQ class
 // and the IDNA class
+//
 require_once('inc/parser.php');
 require_once('inc/Category.php');
 require_once('inc/Faq.php');
 require_once('inc/idna_convert.class.php');
 $IDN = new idna_convert;
 
-// connect to LDAP server, when LDAP support is enabled
-if (isset($PMF_CONF["ldap_support"]) && $PMF_CONF["ldap_support"] == true && file_exists('inc/dataldap.php')) {
-    require_once('inc/dataldap.php');
-    require_once('inc/ldap.php');
-    $ldap = new LDAP($PMF_LDAP['ldap_server'], $PMF_LDAP['ldap_port'], $PMF_LDAP['ldap_base'], $PMF_LDAP['ldap_user'], $PMF_LDAP['ldap_password']);
-} else {
-    $ldap = null;
-}
 
+
+//
 // get language (default: english)
+//
 $pmf = new PMF_Init();
 $LANGCODE = $pmf->setLanguage((isset($PMF_CONF['detection']) ? true : false), $PMF_CONF['language']);
 
@@ -64,14 +74,83 @@ if (isset($LANGCODE) && isset($languageCodes[strtoupper($LANGCODE)])) {
     require_once ("lang/language_en.php");
 }
 
+
+
+//
+// Authenticate current user
+//
+require_once ('inc/PMF_User/CurrentUser.php');
+unset($auth);
+if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
+    // login with username and password
+    $user = new PMF_CurrentUser();
+    if ($user->login($db->escape_string($_POST['faqusername']),$db->escape_string($_POST['faqpassword']))) {
+        // login, if user account is NOT blocked
+        if ($user->getStatus() != 'blocked') {
+            $auth = true;
+        } else {
+            $error = $PMF_LANG['ad_auth_fail'];
+        }
+    } else {
+        // error
+        $error = $PMF_LANG["ad_auth_fail"]." (".$user->getUserData('login')." / *)";
+        unset($user);
+    }
+} else {
+    // authenticate with session information
+    $ip_check = (isset($PMF_CONF['ipcheck']) && $PMF_CONF['ipcheck']) ? true : false;
+    $user = PMF_CurrentUser::getFromSession($ip_check);
+    if ($user) {
+        $auth = true;
+    }
+}
+
+
+
+//
+// Get current user rights
+//
+$permission = array();
+if (isset($auth)) {
+    // read all rights, set them FALSE
+    foreach ($user->perm->getAllRights() as $right_id) {
+        $right = $user->perm->getRightData($right_id);
+        $permission[$right['name']] = false;
+    }
+    // read user rights, set them TRUE
+    foreach ($user->perm->getAllUserRights($user->getUserId()) as $right_id) {
+        $right = $user->perm->getRightData($right_id);
+        $permission[$right['name']] = true;
+    }
+}
+
+
+
+//
+// Logout
+//
+if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'logout' && $auth) {
+    $user->deleteFromSession();
+    unset($user);
+    unset($auth);
+}
+
+
+
+//
 // use mbstring extension if available
+//
 $valid_mb_strings = array('ja', 'en');
 if (function_exists('mb_language') && in_array($PMF_LANG['metaLanguage'], $valid_mb_strings)) {
     mb_language($PMF_LANG['metaLanguage']);
     mb_internal_encoding($PMF_LANG['metaCharset']);
 }
 
+
+
+//
 // found a session ID?
+//
 if (!isset($_GET["sid"]) && !isset($_COOKIE["sid"])) {
 	Tracking("new_session", 0);
     setcookie("sid", $sid, time()+3600);
@@ -81,7 +160,11 @@ if (!isset($_GET["sid"]) && !isset($_COOKIE["sid"])) {
 	}
 }
 
+
+
+//
 // is user tracking activated?
+//
 if (isset($PMF_CONF["tracking"])) {
 	if (isset($sid)) {
         if (!isset($_COOKIE["sid"])) {
@@ -104,17 +187,28 @@ if (isset($PMF_CONF["tracking"])) {
     }
 }
 
-// create a new FAQ object
+
+
+//
+// Create a new FAQ object
+//
 $faq = new FAQ($db, $LANGCODE);
 
-// found a article language?
+
+//
+// Found a article language?
+//
 if (isset($_GET["artlang"]) && strlen($_GET["artlang"]) <= 2 && !preg_match("=/=", $_GET["artlang"])) {
 	$lang = $_GET["artlang"];
 } else {
 	$lang = $LANGCODE;
 }
 
-// found a record ID?
+
+
+//
+// Found a record ID?
+//
 if (isset($_REQUEST["id"]) && is_numeric($_REQUEST["id"]) == true) {
 	$id = (int)$_REQUEST["id"];
     $title = ' - '.stripslashes($faq->getRecordTitle($id, $lang));
@@ -125,7 +219,11 @@ if (isset($_REQUEST["id"]) && is_numeric($_REQUEST["id"]) == true) {
     $keywords = '';
 }
 
-// found a category?
+
+
+//
+// Found a category ID?
+//
 if (isset($_GET["cat"])) {
     $cat = $_GET["cat"];
 } else {
@@ -148,14 +246,22 @@ if (isset($cat) && $cat != 0 && $id == '') {
     $title = ' - '.$tree->categoryName[$cat]['name'];
 }
 
-// found an action request?
+
+
+//
+// Found an action request?
+//
 if (isset($_REQUEST["action"]) && !preg_match("=/=", $_REQUEST["action"]) && isset($allowedVariables[$_REQUEST["action"]])) {
 	$action = $_REQUEST["action"];
 } else {
 	$action = "main";
 }
 
-// select the template for the requested page
+
+
+//
+// Select the template for the requested page
+//
 if ($action != "main") {
     $inc_tpl = "template/".trim($action).".tpl";
     $inc_php = $action.".php";
@@ -165,11 +271,20 @@ if ($action != "main") {
     $inc_php = "main.php";
     $writeLangAdress = '?'.$sids;
 }
+if (isset($auth)) {
+    $login_tpl = 'template/loggedin.tpl';
+} else {
+    $login_tpl = 'template/loginbox.tpl';
+}
 
-// load templates
+
+//
+// Load template files and set template variables
+//
 $tpl = new phpmyfaqTemplate (array(
-				"index" => 'template/index.tpl',
-				"writeContent" => $inc_tpl));
+				'index'         => 'template/index.tpl',
+                'loginBox'      => $login_tpl,
+				'writeContent'  => $inc_tpl));
 
 $main_template_vars = array(
                 "title" => $PMF_CONF["title"].$title,
@@ -235,15 +350,50 @@ if (DEBUG) {
     $debug_template_vars = array('debugMessages' => '');
 }
 
-// get main template, set main variables
-$tpl->processTemplate ("index", array_merge($main_template_vars, $links_template_vars, $debug_template_vars));
 
-// include requested PHP file
+
+//
+// Get main template, set main variables
+//
+$tpl->processTemplate('index', array_merge($main_template_vars, $links_template_vars, $debug_template_vars));
+
+
+
+//
+// Show login box or logged-in user information
+//
+if (isset($auth)) {
+    $tpl->processTemplate('loginBox', array(
+                'loggedinas' => 'You\'re logged in as ',
+                'currentuser' => '',
+                'printLogoutPath' => '?action=logout',
+                'logout' => 'Logout'));
+    $tpl->includeTemplate('loginBox', 'index');
+} else {
+    $tpl->processTemplate('loginBox', array(
+                'writeLoginPath' => '',
+                'login' => 'Login',
+                'username' => 'Username:',
+                'password' => 'Password:'));
+    $tpl->includeTemplate('loginBox', 'index');
+}
+
+
+
+//
+// Include requested PHP file
+//
 require_once($inc_php);
+
+
 
 if ('xml' != $action) {
     $tpl->printTemplate();
 }
 
-// disconnect from database
+
+
+//
+// Disconnect from database
+//
 $db->dbclose();
