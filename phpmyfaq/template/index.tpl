@@ -98,13 +98,24 @@
                     </form>
                     </div>
                 </div>
-                <!-- end -->
-    
+                <!-- end language selection box -->
+                
+                <!-- start login box -->
+                <div class="content">
+                    <div id="loginform">
+                    {loginBox}
+                    </div>
+                </div>
+                <!-- end login box -->
+                
+                <!-- start user online -->
                 <div class="content">
                     <div id="useronline">
                     {userOnline}
                     </div>
                 </div>
+                <!-- end user online -->
+                
             </div>
         </div>
         <!-- end left sidebar -->

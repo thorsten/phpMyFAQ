@@ -1,5 +1,5 @@
 /**
-* $Id: style.css,v 1.14 2005-09-22 18:44:23 thorstenr Exp $
+* $Id: style.css,v 1.15 2006-01-03 06:50:07 thorstenr Exp $
 *
 * This is the main style sheet file for phpMyFAQ 1.5
 * If you want to change only the colours, use colors.css
@@ -186,20 +186,20 @@ html>body #categories li a {
 /**
 * Search box and language selection box
 */
-#search, #langform {
+#search, #langform, #loginform {
    margin-top: 10px;
    border: 1px solid;
    padding: 5px;
 }
-#search fieldset, #langform fieldset {
+#search fieldset, #langform fieldset, #loginform fieldset {
    display: inline;
    border: 0;
 }
-#search input[type=text], #search .inputfield, #langform .inputfield {
+#search input[type=text], #search .inputfield, #langform .inputfield, #loginform .inputfield {
    border: 1px solid;
    width: 170px;
 }
-#search input[type=submit], #langform input[type=submit] {
+#search input[type=submit], #langform input[type=submit], #loginform input[type=submit] {
    margin-top: 3px;
    padding: 0;
    border: 1px solid;
