@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.42 2006-01-02 16:51:28 thorstenr Exp $
+$Id: README.txt,v 1.43 2006-01-03 21:45:54 thorstenr Exp $
 
 phpMyFAQ 1.6.0-dev
 Codename "Prometheus"
@@ -17,6 +17,7 @@ Changes since 1.5.x:
 - added glossary support
 - added possibility to delete admin log
 - added configurable visibility of new questions
+- added improved and template-based XHTML export
 
 Known issues in phpMyFAQ 1.6.0:
 - some language files need an update
@@ -32,6 +33,7 @@ Version 1.6.0 - n/a
 - added glossary support
 - added possibility to delete admin log
 - added configurable visibility of new questions
+- added improved and template-based XHTML export
 
 Version 1.5.5 - 2005-12-19
 - added support for MaxDB
