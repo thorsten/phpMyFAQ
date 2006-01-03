@@ -3,7 +3,7 @@
 error_reporting(E_ALL);
 
 /**
- * The large permission class is not yet implemented.
+ * The large permission class is not yet implemented in phpMyFAQ.
  *
  * @author Lars Tiedemann <php@larstiedemann.de>
  * @package PMF
@@ -11,9 +11,7 @@ error_reporting(E_ALL);
  * @version 0.1
  */
 
-if (0 > version_compare(PHP_VERSION, '4')) {
-    die('This file was generated for PHP 4');
-}
+/* user defined includes */
 
 /**
  * The medium permission class provides group rights.
@@ -22,26 +20,10 @@ if (0 > version_compare(PHP_VERSION, '4')) {
  * @since 2005-09-18
  * @version 0.1
  */
-//require_once('PMF/PermMedium.php');
-
-/* user defined includes */
-// section 127-0-0-1-17ec9f7:105b52d5117:-7fdd-includes begin
 require_once dirname(__FILE__).'/PermMedium.php';
-// section 127-0-0-1-17ec9f7:105b52d5117:-7fdd-includes end
 
 /* user defined constants */
-// section 127-0-0-1-17ec9f7:105b52d5117:-7fdd-constants begin
-// section 127-0-0-1-17ec9f7:105b52d5117:-7fdd-constants end
 
-/**
- * The large permission class is not yet implemented.
- *
- * @access public
- * @author Lars Tiedemann <php@larstiedemann.de>
- * @package PMF
- * @since 2005-09-18
- * @version 0.1
- */
 class PMF_PermLarge
     extends PMF_PermMedium
 {
@@ -66,7 +48,9 @@ class PMF_PermLarge
     // --- OPERATIONS ---
 
     /**
-     * Short description of method PMF_PermLarge
+     * PMF_PermLarge
+     *
+     * Constructor.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -74,12 +58,12 @@ class PMF_PermLarge
      */
     function PMF_PermLarge()
     {
-        // section -64--88-1-5--efee334:10665989edf:-7fd2 begin
-        // section -64--88-1-5--efee334:10665989edf:-7fd2 end
     }
 
     /**
-     * Short description of method __destruct
+     * __destruct
+     *
+     * Destructor
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -87,12 +71,12 @@ class PMF_PermLarge
      */
     function __destruct()
     {
-        // section -64--88-1-10--2ab496b6:106d484ef91:-7f96 begin
-        // section -64--88-1-10--2ab496b6:106d484ef91:-7f96 end
     }
 
     /**
-     * Short description of method getRightId
+     * getRightId
+     *
+     * Returns the right-ID of the right with the name $name.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -101,9 +85,6 @@ class PMF_PermLarge
      */
     function getRightId($name)
     {
-        $returnValue = (int) 0;
-
-        // section -64--88-1-10--77ac1b05:106d99eac38:-7fb7 begin
         if (!$this->_initialized)
         	return false;
         // get right id
@@ -123,13 +104,12 @@ class PMF_PermLarge
             return 0;
         $row = $this->_db->fetch_assoc($res);
         return $row['right_id'];
-        // section -64--88-1-10--77ac1b05:106d99eac38:-7fb7 end
-
-        return (int) $returnValue;
     }
 
     /**
-     * Short description of method setContext
+     * setContext
+     *
+     * Sets the context.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -139,19 +119,14 @@ class PMF_PermLarge
      */
     function setContext($context, $context_id = 0)
     {
-        // section -64--88-1-10--61674be4:106dbb8e5aa:-7fcf begin
-        if (!PMF_User::checkDb($db))
-            return false;
-        $this->_db         = $db;
-        $this->_user_id    = $user_id;
         $this->_context    = $context;
         $this->_context_id = $context_id;
-        $this->_initialized = true;
-        // section -64--88-1-10--61674be4:106dbb8e5aa:-7fcf end
     }
 
     /**
-     * Short description of method resetContext
+     * resetContext
+     *
+     * Resets the context.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -159,13 +134,8 @@ class PMF_PermLarge
      */
     function resetContext()
     {
-        // section -64--88-1-10--73b3bdb4:106e40c6470:-7fdd begin
-        $this->_db = null;
-        $this->_user_id = 0;
         $this->_context    = '';
         $this->_context_id = 0;
-        $this->_initialized = false;
-        // section -64--88-1-10--73b3bdb4:106e40c6470:-7fdd end
     }
 
 } /* end of class PMF_PermLarge */

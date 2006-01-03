@@ -11,10 +11,6 @@ error_reporting(E_ALL);
  * @version 0.1
  */
 
-if (0 > version_compare(PHP_VERSION, '4')) {
-    die('This file was generated for PHP 4');
-}
-
 /**
  * This class manages user permissions and group memberships.
  *
@@ -47,16 +43,12 @@ if (0 > version_compare(PHP_VERSION, '4')) {
  * @since 2005-09-17
  * @version 0.1
  */
-//require_once('PMF/Perm.php');
+require_once('PMF/Perm.php');
 
 /* user defined includes */
-// section 127-0-0-1-17ec9f7:105b52d5117:-7fe2-includes begin
 require_once dirname(__FILE__).'/Perm.php';
-// section 127-0-0-1-17ec9f7:105b52d5117:-7fe2-includes end
 
 /* user defined constants */
-// section 127-0-0-1-17ec9f7:105b52d5117:-7fe2-constants begin
-// section 127-0-0-1-17ec9f7:105b52d5117:-7fe2-constants end
 
 /**
  * The basic permission class provides user rights.
@@ -73,17 +65,27 @@ class PMF_PermBasic
     // --- ATTRIBUTES ---
 
     /**
-     * Short description of attribute default_right_data
+     * default_right_data
+     *
+     * default right data stored when a new right is created.
      *
      * @access public
      * @var array
      */
-    var $default_right_data = array('name' => 'DEFAULT_RIGHT', 'description' => 'Short description. ', 'for_users' => true, 'for_groups' => true);
+    var $default_right_data = array(
+        'name' => 'DEFAULT_RIGHT',
+        'description' => 'Short description. ',
+        'for_users' => true,
+        'for_groups' => true
+    );
 
     // --- OPERATIONS ---
 
     /**
-     * Short description of method checkUserRight
+     * checkUserRight
+     *
+     * Returns true if the user given by user_id has the right
+     * specified by right_id, otherwise false.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -93,9 +95,6 @@ class PMF_PermBasic
      */
     function checkUserRight($user_id, $right_id)
     {
-        $returnValue = (bool) false;
-
-        // section -64--88-1-5-15e2075:10637248df4:-7ffe begin
         if (!$this->_initialized)
         	return false;
         // check right id
@@ -119,13 +118,14 @@ class PMF_PermBasic
         if ($this->_db->num_rows($res) == 1) 
             return true;
         return false;
-        // section -64--88-1-5-15e2075:10637248df4:-7ffe end
-
-        return (bool) $returnValue;
     }
 
     /**
-     * Short description of method getUserRights
+     * getUserRights
+     *
+     * Returns an array with the IDs of all user-rights the user
+     * specified by user_id owns. Group rights are not taken into
+     * account.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -134,9 +134,6 @@ class PMF_PermBasic
      */
     function getUserRights($user_id)
     {
-        $returnValue = array();
-
-        // section -64--88-1-5-15e2075:10637248df4:-7fa5 begin
         if (!$this->_initialized)
         	return false;
         // get user rights
@@ -158,13 +155,12 @@ class PMF_PermBasic
         	$result[] = $row['right_id'];
         }
         return $result;
-        // section -64--88-1-5-15e2075:10637248df4:-7fa5 end
-
-        return (array) $returnValue;
     }
 
     /**
-     * Short description of method PMF_PermBasic
+     * PMF_PermBasic
+     *
+     * Constructor.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -172,12 +168,12 @@ class PMF_PermBasic
      */
     function PMF_PermBasic()
     {
-        // section -64--88-1-5--735fceb5:106657b6b8d:-7fd7 begin
-        // section -64--88-1-5--735fceb5:106657b6b8d:-7fd7 end
     }
 
     /**
-     * Short description of method __destruct
+     * __destruct
+     *
+     * Destructor.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -185,12 +181,13 @@ class PMF_PermBasic
      */
     function __destruct()
     {
-        // section -64--88-1-10-16f8da9f:106d096e725:-7fdb begin
-        // section -64--88-1-10-16f8da9f:106d096e725:-7fdb end
     }
 
     /**
-     * Short description of method grantUserRight
+     * grantUserRight
+     *
+     * Gives the user a new user-right.
+     * Returns true on success, otherwise false.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -200,9 +197,6 @@ class PMF_PermBasic
      */
     function grantUserRight($user_id, $right_id)
     {
-        $returnValue = (bool) false;
-
-        // section -64--88-1-10--2ab496b6:106d484ef91:-7fdc begin
         if (!$this->_initialized)
         	return false;
         // is right for users?
@@ -220,13 +214,13 @@ class PMF_PermBasic
         if (!$res)
             return false;
         return true;
-        // section -64--88-1-10--2ab496b6:106d484ef91:-7fdc end
-
-        return (bool) $returnValue;
     }
 
     /**
-     * Short description of method refuseUserRight
+     * refuseUserRight
+     *
+     * Refuses the user a user-right.
+     * Returns true on succes, otherwise false.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -236,9 +230,6 @@ class PMF_PermBasic
      */
     function refuseUserRight($user_id, $right_id)
     {
-        $returnValue = (bool) false;
-
-        // section -64--88-1-10--2ab496b6:106d484ef91:-7fd7 begin
         if (!$this->_initialized)
         	return false;
         $res = $this->_db->query("
@@ -251,13 +242,15 @@ class PMF_PermBasic
         if (!$res)
             return false;
         return true;
-        // section -64--88-1-10--2ab496b6:106d484ef91:-7fd7 end
-
-        return (bool) $returnValue;
     }
 
     /**
-     * Short description of method checkRight
+     * checkRight
+     *
+     * Returns true if the user given by user_id has the right,
+     * otherwise false. Unlike checkUserRight(), right may be a
+     * right-ID or a right-name. Another difference is, that also
+     * group-rights are taken into account.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -267,21 +260,19 @@ class PMF_PermBasic
      */
     function checkRight($user_id, $right)
     {
-        $returnValue = (bool) false;
-
-        // section -64--88-1-10--785a539b:106d9d6c253:-7fd8 begin
         // get right id
         if (!is_numeric($right) and is_string($right))
             $right = $this->getRightId($right);
         // check user right
         return $this->checkUserRight($user_id, $right);
-        // section -64--88-1-10--785a539b:106d9d6c253:-7fd8 end
-
-        return (bool) $returnValue;
     }
 
     /**
-     * Short description of method getRightData
+     * getRightData
+     *
+     * Returns an associative array with all data stored for in the
+     * database for the specified right. The keys of the returned
+     * array are the fieldnames.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -290,9 +281,6 @@ class PMF_PermBasic
      */
     function getRightData($right_id)
     {
-        $returnValue = array();
-
-        // section -64--88-1-10--61674be4:106dbb8e5aa:-7fbd begin
         if (!$this->_initialized)
         	return false;
         // get right data
@@ -315,13 +303,13 @@ class PMF_PermBasic
         $right_data['for_users'] = $this->int_to_bool($right_data['for_users']);
         $right_data['for_groups'] = $this->int_to_bool($right_data['for_groups']);
         return $right_data;
-        // section -64--88-1-10--61674be4:106dbb8e5aa:-7fbd end
-
-        return (array) $returnValue;
     }
 
     /**
-     * Short description of method getAllUserRights
+     * getAllUserRights
+     *
+     * Returns an array that contains the IDs of all user-rights
+     * the user owns.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -330,17 +318,18 @@ class PMF_PermBasic
      */
     function getAllUserRights($user_id)
     {
-        $returnValue = array();
-
-        // section -64--88-1-10--61674be4:106dbb8e5aa:-7fb4 begin
         return $this->getUserRights($user_id);
-        // section -64--88-1-10--61674be4:106dbb8e5aa:-7fb4 end
-
-        return (array) $returnValue;
     }
 
     /**
-     * Short description of method addRight
+     * addRight
+     *
+     * Adds a new right into the database. Returns the ID of the
+     * new right.
+     * The associative array right_data contains the right data
+     * stored in the rights table. The associative array
+     * context_data is only for use with PMF_PermLarge and may be
+     * omitted.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -350,9 +339,6 @@ class PMF_PermBasic
      */
     function addRight($right_data, $context_data = array())
     {
-        $returnValue = (int) 0;
-
-        // section -64--88-1-10--61674be4:106dbb8e5aa:-7f9c begin
         if (!$this->_initialized)
         	return 0;
         // check if right already exists
@@ -389,13 +375,13 @@ class PMF_PermBasic
         		return 0;
         }
         return $next_id;
-        // section -64--88-1-10--61674be4:106dbb8e5aa:-7f9c end
-
-        return (int) $returnValue;
     }
 
     /**
-     * Short description of method changeRight
+     * changeRight
+     *
+     * Changes the right data.
+     * Returns true on success, otherwise false.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -406,9 +392,6 @@ class PMF_PermBasic
      */
     function changeRight($right_id, $right_data, $context_data = array())
     {
-        $returnValue = (bool) false;
-
-        // section -64--88-1-10--61674be4:106dbb8e5aa:-7f99 begin
         if (!$this->_initialized)
         	return false;
         // check input
@@ -446,13 +429,13 @@ class PMF_PermBasic
         		return false;
         }
         return true;
-        // section -64--88-1-10--61674be4:106dbb8e5aa:-7f99 end
-
-        return (bool) $returnValue;
     }
 
     /**
-     * Short description of method deleteRight
+     * deleteRight
+     *
+     * Deletes the right from the database.
+     * Returns true on success, otherwise false.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -461,9 +444,6 @@ class PMF_PermBasic
      */
     function deleteRight($right_id)
     {
-        $returnValue = (bool) false;
-
-        // section -64--88-1-10--61674be4:106dbb8e5aa:-7f95 begin
         if (!$this->_initialized)
         	return false;
         // delete right
@@ -503,13 +483,12 @@ class PMF_PermBasic
         if (!$res) 
             return false;
         return true;
-        // section -64--88-1-10--61674be4:106dbb8e5aa:-7f95 end
-
-        return (bool) $returnValue;
     }
 
     /**
-     * Short description of method getRightId
+     * getRightId
+     *
+     * Returns the right-ID of the right with the name $name.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -518,9 +497,6 @@ class PMF_PermBasic
      */
     function getRightId($name)
     {
-        $returnValue = (int) 0;
-
-        // section -64--88-1-10--61674be4:106dbb8e5aa:-7f92 begin
         if (!$this->_initialized)
         	return false;
         // get right id
@@ -537,13 +513,13 @@ class PMF_PermBasic
             return 0;
         $row = $this->_db->fetch_assoc($res);
         return $row['right_id'];
-        // section -64--88-1-10--61674be4:106dbb8e5aa:-7f92 end
-
-        return (int) $returnValue;
     }
 
     /**
-     * Short description of method getAllRights
+     * getAllRights
+     *
+     * Returns an array that contains the IDs of all rights stored
+     * in the database.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -551,9 +527,6 @@ class PMF_PermBasic
      */
     function getAllRights()
     {
-        $returnValue = array();
-
-        // section -64--88-1-10--61674be4:106dbb8e5aa:-7f8f begin
         if (!$this->_initialized)
         	return false;
         $res = $this->_db->query("
@@ -569,13 +542,56 @@ class PMF_PermBasic
         	$result[] = $row['right_id'];
         }
         return $result;
-        // section -64--88-1-10--61674be4:106dbb8e5aa:-7f8f end
-
-        return (array) $returnValue;
     }
 
     /**
-     * Short description of method checkRightData
+     * getAllRightsData
+     *
+     * Returns an array that contains all rights stored in the
+     * database. Each array element is an associative array with
+     * the complete right-data. By passing the optional parameter
+     * $order, the order of the array may be specified. Default is
+     * $order = 'right_id ASC'.
+     *
+     * @access public
+     * @author Lars Tiedemann, <php@larstiedemann.de>
+     * @param string
+     * @return array
+     */
+    function getAllRightsData($order = 'right_id ASC')
+    {
+        if (!$this->_initialized)
+        	return false;
+        $res = $this->_db->query("
+            SELECT
+                right_id,
+                name,
+                description,
+                for_users,
+                for_groups
+            FROM
+                ".PMF_USER_SQLPREFIX."right
+            WHERE
+                1
+            ORDER BY
+                ".$order."
+        ");
+        $result = array();
+        $i = 0;
+        while ($row = $this->_db->fetch_assoc($res)) {
+        	$result[$i] = $row;
+        	$i++;
+        }
+        return $result;
+    }
+
+    /**
+     * checkRightData
+     *
+     * Checks the given associative array $right_data. If a
+     * parameter is incorrect or is missing, it will be replaced
+     * by the default values in $this->default_right_data.
+     * Returns the corrected $right_data associative array.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -584,9 +600,6 @@ class PMF_PermBasic
      */
     function checkRightData($right_data)
     {
-        $returnValue = array();
-
-        // section 127-0-0-1--6945df47:106df4af666:-7fd2 begin
         if (!isset($right_data['name']) or !is_string($right_data['name']))
             $right_data['name'] = $this->default_right_data['name'];
         if (!isset($right_data['description']) or !is_string($right_data['description']))
@@ -598,13 +611,13 @@ class PMF_PermBasic
         $right_data['for_users'] = $this->bool_to_int($right_data['for_users']);
         $right_data['for_groups'] = $this->bool_to_int($right_data['for_groups']);
         return $right_data;
-        // section 127-0-0-1--6945df47:106df4af666:-7fd2 end
-
-        return (array) $returnValue;
     }
 
     /**
-     * Short description of method refuseAllUserRights
+     * refuseAllUserRights
+     *
+     * Refuses all user rights.
+     * Returns true on success, otherwise false.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -613,9 +626,6 @@ class PMF_PermBasic
      */
     function refuseAllUserRights($user_id)
     {
-        $returnValue = (bool) false;
-
-        // section -64--88-1-10--a35403d:1079da3e1d1:-7fbe begin
         if (!$this->_initialized)
         	return false;
         $res = $this->_db->query("
@@ -627,9 +637,6 @@ class PMF_PermBasic
         if (!$res)
             return false;
         return true;
-        // section -64--88-1-10--a35403d:1079da3e1d1:-7fbe end
-
-        return (bool) $returnValue;
     }
 
 } /* end of class PMF_PermBasic */

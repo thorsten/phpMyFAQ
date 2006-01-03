@@ -11,9 +11,7 @@ error_reporting(E_ALL);
  * @version 0.1
  */
 
-if (0 > version_compare(PHP_VERSION, '4')) {
-    die('This file was generated for PHP 4');
-}
+/* user defined includes */
 
 /**
  * The basic permission class provides user rights.
@@ -22,26 +20,10 @@ if (0 > version_compare(PHP_VERSION, '4')) {
  * @since 2005-09-17
  * @version 0.1
  */
-//require_once('PMF/PermBasic.php');
-
-/* user defined includes */
-// section 127-0-0-1-17ec9f7:105b52d5117:-7fde-includes begin
 require_once dirname(__FILE__).'/PermBasic.php';
-// section 127-0-0-1-17ec9f7:105b52d5117:-7fde-includes end
 
 /* user defined constants */
-// section 127-0-0-1-17ec9f7:105b52d5117:-7fde-constants begin
-// section 127-0-0-1-17ec9f7:105b52d5117:-7fde-constants end
 
-/**
- * The medium permission class provides group rights.
- *
- * @access public
- * @author Lars Tiedemann <php@larstiedemann.de>
- * @package PMF
- * @since 2005-09-18
- * @version 0.1
- */
 class PMF_PermMedium
     extends PMF_PermBasic
 {
@@ -53,7 +35,7 @@ class PMF_PermMedium
      * @access public
      * @var array
      */
-    var $groups = array();
+    //var $groups = array();
 
     /**
      * Short description of attribute group_rights
@@ -61,20 +43,29 @@ class PMF_PermMedium
      * @access private
      * @var array
      */
-    var $_group_rights = array();
+    //var $_group_rights = array();
 
     /**
-     * Short description of attribute default_group_data
+     * default_group_data
+     *
+     * Default data for new groups.
      *
      * @access public
      * @var array
      */
-    var $default_group_data = array('name' => 'DEFAULT_GROUP', 'description' => 'Short group description. ', 'auto_join' => false);
+    var $default_group_data = array(
+        'name' => 'DEFAULT_GROUP',
+        'description' => 'Short group description. ',
+        'auto_join' => false
+    );
 
     // --- OPERATIONS ---
 
     /**
-     * Short description of method checkGroupRight
+     * checkGroupRight
+     *
+     * Returns true if the group specified by $group_id owns the
+     * right given by $right_id, otherwise false.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -84,9 +75,6 @@ class PMF_PermMedium
      */
     function checkGroupRight($group_id, $right_id)
     {
-        $returnValue = (bool) false;
-
-        // section -64--88-1-5-15e2075:10637248df4:-7ffa begin
         if (!$this->_initialized)
         	return false;
         // check input
@@ -110,13 +98,13 @@ class PMF_PermMedium
         if ($this->_db->num_rows($res) == 1)
             return true;
         return false;
-        // section -64--88-1-5-15e2075:10637248df4:-7ffa end
-
-        return (bool) $returnValue;
     }
 
     /**
-     * Short description of method getGroupRights
+     * getGroupRights
+     *
+     * Returns an array that contains the right-IDs of all
+     * group-rights the group $group_id owns.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -125,9 +113,6 @@ class PMF_PermMedium
      */
     function getGroupRights($group_id)
     {
-        $returnValue = array();
-
-        // section -64--88-1-5-15e2075:10637248df4:-7fbe begin
         if (!$this->_initialized)
         	return false;
         if ($group_id <= 0)
@@ -151,13 +136,16 @@ class PMF_PermMedium
         	$result[] = $row['right_id'];
         }
         return $result;
-        // section -64--88-1-5-15e2075:10637248df4:-7fbe end
-
-        return (array) $returnValue;
     }
 
     /**
-     * Short description of method checkRight
+     * checkRight
+     *
+     * Returns true, if the user given by $user_id owns the right
+     * specified by $right. It does not matter if the user owns this
+     * right as a user-right or because of a group-membership.
+     * The parameter $right may be a right-ID (recommended for
+     * performance) or a right-name.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -167,9 +155,6 @@ class PMF_PermMedium
      */
     function checkRight($user_id, $right)
     {
-        $returnValue = (bool) false;
-
-        // section -64--88-1-5-15e2075:10637248df4:-7fb4 begin
         // get right id
         if (!is_numeric($right) and is_string($right))
             $right = $this->getRightId($right);
@@ -177,13 +162,12 @@ class PMF_PermMedium
         if ($this->checkUserRight($user_id, $right) or $this->checkUserGroupRight($user_id, $right))
             return true;
         return false;
-        // section -64--88-1-5-15e2075:10637248df4:-7fb4 end
-
-        return (bool) $returnValue;
     }
 
     /**
-     * Short description of method PMF_PermMedium
+     * PMF_PermMedium
+     *
+     * Constructor.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -191,12 +175,12 @@ class PMF_PermMedium
      */
     function PMF_PermMedium()
     {
-        // section -64--88-1-5--735fceb5:106657b6b8d:-7fd5 begin
-        // section -64--88-1-5--735fceb5:106657b6b8d:-7fd5 end
     }
 
     /**
-     * Short description of method __destruct
+     * __destruct
+     *
+     * Destructor.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -204,12 +188,13 @@ class PMF_PermMedium
      */
     function __destruct()
     {
-        // section -64--88-1-10--2ab496b6:106d484ef91:-7fa7 begin
-        // section -64--88-1-10--2ab496b6:106d484ef91:-7fa7 end
     }
 
     /**
-     * Short description of method grantGroupRight
+     * grantGroupRight
+     *
+     * Grants the group given by $group_id the right specified by
+     * $right_id.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -219,9 +204,6 @@ class PMF_PermMedium
      */
     function grantGroupRight($group_id, $right_id)
     {
-        $returnValue = (bool) false;
-
-        // section -64--88-1-10--2ab496b6:106d484ef91:-7fa5 begin
         if (!$this->_initialized)
         	return false;
         // check input
@@ -242,13 +224,13 @@ class PMF_PermMedium
         if (!$res) 
             return false;
         return true;
-        // section -64--88-1-10--2ab496b6:106d484ef91:-7fa5 end
-
-        return (bool) $returnValue;
     }
 
     /**
-     * Short description of method refuseGroupRight
+     * refuseGroupRight
+     *
+     * Refuses the group given by $group_id the right specified by
+     * $right_id.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -258,9 +240,6 @@ class PMF_PermMedium
      */
     function refuseGroupRight($group_id, $right_id)
     {
-        $returnValue = (bool) false;
-
-        // section -64--88-1-10--2ab496b6:106d484ef91:-7fa3 begin
         if (!$this->_initialized)
         	return false;
         // check input
@@ -277,13 +256,14 @@ class PMF_PermMedium
         if (!$res) 
             return false;
         return true;
-        // section -64--88-1-10--2ab496b6:106d484ef91:-7fa3 end
-
-        return (bool) $returnValue;
     }
 
     /**
-     * Short description of method addGroup
+     * addGroup
+     *
+     * Adds a new group to the database and returns the ID of the
+     * new group. The associative array $group_data contains the
+     * data for the new group.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -292,9 +272,6 @@ class PMF_PermMedium
      */
     function addGroup($group_data)
     {
-        $returnValue = (int) 0;
-
-        // section -64--88-1-10--2ab496b6:106d484ef91:-7f9d begin
         if (!$this->_initialized)
         	return 0;
         // check if group already exists
@@ -317,13 +294,12 @@ class PMF_PermMedium
         if (!$res) 
             return 0;
         return $next_id;
-        // section -64--88-1-10--2ab496b6:106d484ef91:-7f9d end
-
-        return (int) $returnValue;
     }
 
     /**
-     * Short description of method changeGroup
+     * changeGroup
+     *
+     * Changes the group data of the given group.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -333,9 +309,6 @@ class PMF_PermMedium
      */
     function changeGroup($group_id, $group_data)
     {
-        $returnValue = (bool) false;
-
-        // section -64--88-1-10--2ab496b6:106d484ef91:-7f99 begin
         if (!$this->_initialized)
         	return false;
         // check input
@@ -359,13 +332,13 @@ class PMF_PermMedium
         if (!$res) 
             return false;
         return true;
-        // section -64--88-1-10--2ab496b6:106d484ef91:-7f99 end
-
-        return (bool) $returnValue;
     }
 
     /**
-     * Short description of method deleteGroup
+     * deleteGroup
+     *
+     * Removes the group given by $group_id from the database.
+     * Returns true on success, otherwise false.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -374,9 +347,6 @@ class PMF_PermMedium
      */
     function deleteGroup($group_id)
     {
-        $returnValue = (bool) false;
-
-        // section -64--88-1-10--2ab496b6:106d484ef91:-7f8d begin
         if (!$this->_initialized)
         	return false;
         // delete group
@@ -402,18 +372,19 @@ class PMF_PermMedium
             DELETE FROM
                 ".PMF_USER_SQLPREFIX."group_right
             WHERE
-                group_id = ".$group_id
-        ;
+                group_id = ".$group_id."
+                
+        ");
         if (!$res) 
             return false;
         return true;
-        // section -64--88-1-10--2ab496b6:106d484ef91:-7f8d end
-
-        return (bool) $returnValue;
     }
 
     /**
-     * Short description of method isGroupMember
+     * isGroupMember
+     *
+     * Returns true if the user given by $user_id is a member of
+     * the group specified by $group_id, otherwise false.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -423,9 +394,6 @@ class PMF_PermMedium
      */
     function isGroupMember($user_id, $group_id)
     {
-        $returnValue = (bool) false;
-
-        // section -64--88-1-10--785a539b:106d9d6c253:-7fcc begin
         if (!$this->_initialized)
         	return false;
         $res = $this->_db->query("
@@ -444,13 +412,13 @@ class PMF_PermMedium
         if ($this->_db->num_rows($res) == 1)
         	return true;
         return false;
-        // section -64--88-1-10--785a539b:106d9d6c253:-7fcc end
-
-        return (bool) $returnValue;
     }
 
     /**
-     * Short description of method getGroupMembers
+     * getGroupMembers
+     *
+     * Returns an array that contains the user-IDs of all members
+     * of the group $group_id.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -459,9 +427,6 @@ class PMF_PermMedium
      */
     function getGroupMembers($group_id)
     {
-        $returnValue = array();
-
-        // section -64--88-1-10--785a539b:106d9d6c253:-7fc9 begin
         if (!$this->_initialized)
         	return false;
         $res = $this->_db->query("
@@ -481,13 +446,13 @@ class PMF_PermMedium
         	$result[] = $row['user_id'];
         }
         return $result;
-        // section -64--88-1-10--785a539b:106d9d6c253:-7fc9 end
-
-        return (array) $returnValue;
     }
 
     /**
-     * Short description of method addToGroup
+     * addToGroup
+     *
+     * Adds a new member $user_id to the group $group_id.
+     * Returns true on success, otherwise false.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -497,9 +462,6 @@ class PMF_PermMedium
      */
     function addToGroup($user_id, $group_id)
     {
-        $returnValue = (bool) false;
-
-        // section -64--88-1-10--785a539b:106d9d6c253:-7fc6 begin
         if (!$this->_initialized)
         	return false;
         // check group
@@ -517,13 +479,13 @@ class PMF_PermMedium
         if (!$res)
         	return false;
         return true;
-        // section -64--88-1-10--785a539b:106d9d6c253:-7fc6 end
-
-        return (bool) $returnValue;
     }
 
     /**
-     * Short description of method removeFromGroup
+     * removeFromGroup
+     *
+     * Removes a user $user_id from the group $group_id.
+     * Returns true on success, otherwise false.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -533,9 +495,6 @@ class PMF_PermMedium
      */
     function removeFromGroup($user_id, $group_id)
     {
-        $returnValue = (bool) false;
-
-        // section -64--88-1-10--785a539b:106d9d6c253:-7fc3 begin
         if (!$this->_initialized)
         	return false;
         // check input
@@ -553,13 +512,13 @@ class PMF_PermMedium
         if (!$res)
         	return false;
         return true;
-        // section -64--88-1-10--785a539b:106d9d6c253:-7fc3 end
-
-        return (bool) $returnValue;
     }
 
     /**
-     * Short description of method getGroupId
+     * getGroupId
+     *
+     * Returns the ID of the group that has the name $name. Returns
+     * 0 if the group-name cannot be found.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -568,9 +527,6 @@ class PMF_PermMedium
      */
     function getGroupId($name)
     {
-        $returnValue = (int) 0;
-
-        // section -64--88-1-10--61674be4:106dbb8e5aa:-7fcb begin
         if (!$this->_initialized)
         	return false;
         // get group id
@@ -587,13 +543,13 @@ class PMF_PermMedium
         	return 0;
         $row = $this->_db->fetch_assoc($res);
         return $row['group_id'];
-        // section -64--88-1-10--61674be4:106dbb8e5aa:-7fcb end
-
-        return (int) $returnValue;
     }
 
     /**
-     * Short description of method getGroupData
+     * getGroupData
+     *
+     * Returns an associative array with the group-data of the group
+     * $group_id.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -602,9 +558,6 @@ class PMF_PermMedium
      */
     function getGroupData($group_id)
     {
-        $returnValue = array();
-
-        // section -64--88-1-10--61674be4:106dbb8e5aa:-7fc8 begin
         if (!$this->_initialized)
         	return false;
         // get group data
@@ -623,13 +576,13 @@ class PMF_PermMedium
         if ($this->_db->num_rows($res) != 1)
         	return array();
         return $this->_db->fetch_assoc($res);
-        // section -64--88-1-10--61674be4:106dbb8e5aa:-7fc8 end
-
-        return (array) $returnValue;
     }
 
     /**
-     * Short description of method getUserGroups
+     * getUserGroups
+     *
+     * Returns an array that contains the IDs of all groups in which
+     * the user $user_id is a member.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -638,9 +591,6 @@ class PMF_PermMedium
      */
     function getUserGroups($user_id)
     {
-        $returnValue = array();
-
-        // section -64--88-1-10--61674be4:106dbb8e5aa:-7fc5 begin
         if (!$this->_initialized)
         	return false;
         // get user groups
@@ -662,13 +612,13 @@ class PMF_PermMedium
         	$result[] = $row['group_id'];
         }
         return $result;
-        // section -64--88-1-10--61674be4:106dbb8e5aa:-7fc5 end
-
-        return (array) $returnValue;
     }
 
     /**
-     * Short description of method getAllGroups
+     * getAllGroups
+     *
+     * Returns an array with the IDs of all groups stored in the
+     * database.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -676,9 +626,6 @@ class PMF_PermMedium
      */
     function getAllGroups()
     {
-        $returnValue = array();
-
-        // section -64--88-1-10--61674be4:106dbb8e5aa:-7faa begin
         if (!$this->_initialized)
         	return false;
         // get all groups
@@ -696,13 +643,13 @@ class PMF_PermMedium
         	$result[] = $row['group_id'];
         }
         return $result;
-        // section -64--88-1-10--61674be4:106dbb8e5aa:-7faa end
-
-        return (array) $returnValue;
     }
 
     /**
-     * Short description of method checkUserGroupRight
+     * checkUserGroupRight
+     *
+     * Returns true if the user $user_id owns the right $right_id
+     * because of a group-membership, otherwise false.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -710,9 +657,8 @@ class PMF_PermMedium
      * @param int
      * @return void
      */
-    function checkUserGroupRight($user_id, $right_id = 0)
+    function checkUserGroupRight($user_id, $right_id)
     {
-        // section -64--88-1-10--a35403d:1079da3e1d1:-7fd3 begin
         if (!$this->_initialized)
         	return false;
         // check right id
@@ -740,11 +686,15 @@ class PMF_PermMedium
         if ($this->_db->num_rows($res) == 1)
             return true;
         return false;
-        // section -64--88-1-10--a35403d:1079da3e1d1:-7fd3 end
     }
 
     /**
-     * Short description of method checkGroupData
+     * checkGroupData
+     *
+     * Checks the given associative array $group_data. If a
+     * parameter is incorrect or is missing, it will be replaced
+     * by the default values in $this->default_group_data.
+     * Returns the corrected $group_data associative array.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -753,9 +703,6 @@ class PMF_PermMedium
      */
     function checkGroupData($group_data)
     {
-        $returnValue = array();
-
-        // section -64--88-1-10--a35403d:1079da3e1d1:-7fcf begin
         if (!isset($group_data['name']) or !is_string($group_data['name']))
             $group_data['name'] = $this->default_group_data['name'];
         if (!isset($group_data['description']) or !is_string($group_data['description']))
@@ -764,13 +711,14 @@ class PMF_PermMedium
             $group_data['auto_join'] = $this->default_group_data['auto_join'];
         $group_data['auto_join'] = $this->bool_to_int($group_data['auto_join']);
         return $group_data;
-        // section -64--88-1-10--a35403d:1079da3e1d1:-7fcf end
-
-        return (array) $returnValue;
     }
 
     /**
-     * Short description of method getAllUserRights
+     * getAllUserRights
+     *
+     * Returns an array that contains the right-IDs of all rights
+     * the user $user_id owns. User-rights and the rights the user
+     * owns because of a group-membership are taken into account.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -779,9 +727,6 @@ class PMF_PermMedium
      */
     function getAllUserRights($user_id)
     {
-        $returnValue = array();
-
-        // section -64--88-1-10--a35403d:1079da3e1d1:-7fcb begin
         if (!$this->_initialized)
             return false;
         // check input
@@ -790,13 +735,17 @@ class PMF_PermMedium
         $user_rights  = $this->getUserRights($user_id);
         $group_rights = $this->getUserGroupRights($user_id);
         return array_unique(array_merge($user_rights, $group_rights));
-        // section -64--88-1-10--a35403d:1079da3e1d1:-7fcb end
-
-        return (array) $returnValue;
     }
 
     /**
-     * Short description of method autoJoin
+     * autoJoin
+     *
+     * Adds the user $user_id to all groups with the auto_join
+     * option. By using the auto_join option, user administration
+     * can be much easier. For example by setting this option only
+     * for a single group called 'All Users'. The autoJoin() method
+     * then has to be called every time a new user registers.
+     * Returns true on success, otherwise false.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -805,9 +754,6 @@ class PMF_PermMedium
      */
     function autoJoin($user_id)
     {
-        $returnValue = (bool) false;
-
-        // section -64--88-1-10--a35403d:1079da3e1d1:-7fc7 begin
         if (!$this->_initialized)
             return false;
         // check user id
@@ -833,13 +779,13 @@ class PMF_PermMedium
             $this->addToGroup($user_id, $group_id);
         }
         return true;
-        // section -64--88-1-10--a35403d:1079da3e1d1:-7fc7 end
-
-        return (bool) $returnValue;
     }
 
     /**
-     * Short description of method removeFromAllGroups
+     * removeFromAllGroups
+     *
+     * Removes the user $user_id from all groups.
+     * Returns true on success, otherwise false.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -848,9 +794,6 @@ class PMF_PermMedium
      */
     function removeFromAllGroups($user_id)
     {
-        $returnValue = (bool) false;
-
-        // section -64--88-1-10--a35403d:1079da3e1d1:-7fc4 begin
         if (!$this->_initialized)
         	return false;
         // check input
@@ -867,13 +810,13 @@ class PMF_PermMedium
         if (!$res)
         	return false;
         return true;
-        // section -64--88-1-10--a35403d:1079da3e1d1:-7fc4 end
-
-        return (bool) $returnValue;
     }
 
     /**
-     * Short description of method getUserGroupRights
+     * getUserGroupRights
+     *
+     * Returns an array that contains the IDs of all rights the user
+     * $user_id owns because of a group-membership.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -882,9 +825,6 @@ class PMF_PermMedium
      */
     function getUserGroupRights($user_id)
     {
-        $returnValue = array();
-
-        // section -64--88-1-10--a35403d:1079da3e1d1:-7fc1 begin
         if (!$this->_initialized)
         	return false;
         if ($user_id <= 0)
@@ -912,9 +852,6 @@ class PMF_PermMedium
         	$result[] = $row['right_id'];
         }
         return $result;
-        // section -64--88-1-10--a35403d:1079da3e1d1:-7fc1 end
-
-        return (array) $returnValue;
     }
 
 } /* end of class PMF_PermMedium */
