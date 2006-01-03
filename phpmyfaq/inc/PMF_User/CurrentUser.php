@@ -114,9 +114,6 @@ class PMF_CurrentUser
     {
         // section -64--88-1-12--f895d8c:106777dbaf0:-7fd8 begin
         $this->PMF_User();
-		// make sure that the session is started
-		if (session_id() == "")
-            session_start();
         // section -64--88-1-12--f895d8c:106777dbaf0:-7fd8 end
     }
 
@@ -165,8 +162,6 @@ class PMF_CurrentUser
 				break;
 			}
 			// but hey, this must be a valid match!
-			// make sure that the session is started
-			session_start();
 			// load user object
 			$this->getUserByLogin($login);
 			// user is now logged in
@@ -384,9 +379,6 @@ class PMF_CurrentUser
      */
     function getFromSession($ip_check = false)
     {
-		// make sure that the session is started
-		if (session_id() == "")
-            session_start();
         // there is no valid user object in session
         if (!isset($_SESSION[PMF_SESSION_CURRENT_USER]) or !isset($_SESSION[PMF_SESSION_ID_TIMESTAMP]))
 			return null;
