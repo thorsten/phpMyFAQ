@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.104 2006-01-02 16:51:28 thorstenr Exp $
+* $Id: functions.php,v 1.105 2006-01-03 21:42:56 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -650,40 +650,75 @@ function generateXHTMLFile()
 {
 	global $db, $PMF_CONF, $PMF_LANG;
 
+    require_once("../inc/parser.php"); // template support
+    
     $tree = new Category();
     $tree->transform(0);
     $old = 0;
 
+  	$newest = array();
+    
+  	//
+    // get the 5 newest entries
+    //
+    $query = "SELECT DISTINCT ".SQLPREFIX."faqdata.id FROM ".SQLPREFIX."faqdata, ".SQLPREFIX."faqvisits WHERE ".SQLPREFIX."faqdata.id = ".SQLPREFIX."faqvisits.id AND ".SQLPREFIX."faqdata.lang = ".SQLPREFIX."faqvisits.lang AND ".SQLPREFIX."faqdata.active = 'yes' ORDER BY ".SQLPREFIX."faqdata.datum desc";
+  	$result = $db->query($query);
+  	if ($num = $db->num_rows($result) > 0) {
+        $i = 1;
+        $oldId = 0;
+  		while ($row = $db->fetch_object($result) && $i <= 5) {
+  			$newest[] = $row->id;
+  			$i++;
+  		}
+  	}
+
 	$result = $db->query('SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqdata.content, '.SQLPREFIX.'faqdata.author, '.SQLPREFIX.'faqdata.datum FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang ORDER BY '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.id');
 
-    $xhtml = '<?xml version="1.0" encoding="'.$PMF_LANG['metaCharset'].'" ?>';
-    $xhtml .= '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
-    $xhtml .= '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="'.$PMF_LANG['metaLanguage'].'" lang="'.$PMF_LANG['metaLanguage'].'">';
-    $xhtml .= '<head>';
-    $xhtml .= '    <title>'.$PMF_CONF['title'].'</title>';
-    $xhtml .= '    <meta http-equiv="Content-Type" content="application/xhtml+xml; charset='.$PMF_LANG['metaCharset'].'" />';
-    $xhtml .= '    <meta name="title" content="'.$PMF_CONF['title'].'" />';
-    $xhtml .= '</head>';
-    $xhtml .= '<body dir="'.$PMF_LANG['dir'].'">';
+    $xhtml = '';
 
     if ($db->num_rows($result) > 0) {
         while ($row = $db->fetch_object($result)) {
             if ($row->category_id != $old) {
-                $xhtml .= '<h1>'.$tree->getPath($row->category_id).'</h1>';
+                if ( !empty($old) ) {
+                    $headlinks .= "\n</ul>\n";
+                    $xhtml     .= "<p><a href=\"#top\">".$PMF_LANG['to_top']."</a></p>\n";
+                }
+                /* add current line to index */
+                $headlinks .= '<p><strong>'.$PMF_LANG["html_head_cat"].' <a href="#cat'.$row->category_id.'">'.$tree->getPath($row->category_id)."</a></strong></p>\n<ul>\n";
+                $xhtml .= "\n<a name=\"cat".$row->category_id."\">&nbsp;</a><h1>".$tree->getPath($row->category_id)."</h1>\n";
             }
-            $xhtml .= '<h2>'.$row->thema.'</h2>';
+            $xhtml .= '<h2>'.$marker.'<a name="'.$row->id.'">'.$row->thema.'</h2>';
             $xhtml .= '<p>'.$row->content.'</p>';
             $xhtml .= '<p>'.$PMF_LANG["msgAuthor"].$row->author.'<br />';
             $xhtml .= $PMF_LANG["msgLastUpdateArticle"].makeDate($row->datum).'</p>';
             $xhtml .= '<hr style="width: 90%;" />';
             $old = $row->category_id;
+            /* add entry to index */
+            $headlinks .= "\t<li>$marker<a href=\"#$row->id\">$row->thema</a></li>\n";
         }
     }
-    $xhtml .= '</body>';
-    $xhtml .= '</html>';
+    
+    $tpl = new phpmyfaqTemplate(array('html' => '../template/htmlexport.tpl'));
+    
+    /* get main template, set main variables */
+    $tpl->processTemplate ('html', array(
+                'title' => $PMF_CONF['title'],
+                'header' => $PMF_CONF['title'],
+                'metaCharset' => $PMF_LANG['metaCharset'],
+                'metaDescription' => $PMF_CONF['metaDescription'],
+                'metaKeywords' => $PMF_CONF['metaKeywords'],
+                'metaPublisher' => $PMF_CONF['metaPublisher'],
+                'metaLanguage' => $PMF_LANG['metaLanguage'],
+                'metaCharset' => $PMF_LANG['metaCharset'],
+                'entrylinks' => $headlinks,
+                'writeContent' => $xhtml,
+                'copyright' => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> '.$PMF_CONF['version']
+		));
+
+    /* parse without printing */
+    $xhtml = $tpl->getTemplateContents();
 
     if ($fp = fopen("../xml/phpmyfaq.html","w")) {
-
         fputs($fp, $xhtml);
 		fclose($fp);
     }
