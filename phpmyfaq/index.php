@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.38 2006-01-03 07:37:29 thorstenr Exp $
+* $Id: index.php,v 1.39 2006-01-03 12:41:16 thorstenr Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the 
@@ -8,6 +8,7 @@
 * That's all.
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+* @author       Lars Tiedemann <php@larstiedemann.de>
 * @since        2001-02-12
 * @copyright:   (c) 2001-2006 phpMyFAQ Team
 *
@@ -68,10 +69,10 @@ $pmf = new PMF_Init();
 $LANGCODE = $pmf->setLanguage((isset($PMF_CONF['detection']) ? true : false), $PMF_CONF['language']);
 
 if (isset($LANGCODE) && isset($languageCodes[strtoupper($LANGCODE)])) {
-    require_once("lang/language_".$LANGCODE.".php");
+    require_once('lang/language_'.$LANGCODE.'.php');
 } else {
-    $LANGCODE = "en";
-    require_once ("lang/language_en.php");
+    $LANGCODE = 'en';
+    require_once ('lang/language_en.php');
 }
 
 
@@ -364,20 +365,18 @@ $tpl->processTemplate('index', array_merge($main_template_vars, $links_template_
 //
 if (isset($auth)) {
     $tpl->processTemplate('loginBox', array(
-                'loggedinas' => 'You\'re logged in as ',
-                'currentuser' => '',
+                'loggedinas' => $PMF_LANG['ad_user_loggedin'],
+                'currentuser' => $user->getUserData('display_name'),
                 'printLogoutPath' => '?action=logout',
-                'logout' => 'Logout'));
-    $tpl->includeTemplate('loginBox', 'index');
+                'logout' => $PMF_LANG['ad_menu_logout']));
 } else {
     $tpl->processTemplate('loginBox', array(
-                'writeLoginPath' => '',
-                'login' => 'Login',
-                'username' => 'Username:',
-                'password' => 'Password:'));
-    $tpl->includeTemplate('loginBox', 'index');
+                'writeLoginPath' => '?action=login',
+                'login' => $PMF_LANG['ad_auth_ok'],
+                'username' => $PMF_LANG['ad_auth_user'],
+                'password' => $PMF_LANG['ad_auth_passwd']));
 }
-
+$tpl->includeTemplate('loginBox', 'index');
 
 
 //
