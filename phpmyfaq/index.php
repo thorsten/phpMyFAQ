@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.40 2006-01-03 13:00:56 thorstenr Exp $
+* $Id: index.php,v 1.41 2006-01-04 11:45:05 b33blebr0x Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the 
@@ -23,13 +23,6 @@
 * under the License.
 */
 
-//
-// Prepend
-//
-require_once('inc/init.php');
-define('IS_VALID_PHPMYFAQ', null);
-PMF_Init::cleanRequest();
-
 
 
 //
@@ -39,6 +32,14 @@ if (!file_exists('inc/config.php') || !file_exists('inc/data.php')) {
     header("Location: http://".$_SERVER['SERVER_NAME'].dirname($_SERVER['PHP_SELF'])."/install/installer.php");
     exit();
 }
+
+
+//
+// Prepend
+//
+require_once('inc/init.php');
+define('IS_VALID_PHPMYFAQ', null);
+PMF_Init::cleanRequest();
 
 
 
