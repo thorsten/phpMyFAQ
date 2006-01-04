@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mysql.sql.php,v 1.19 2006-01-02 16:51:29 thorstenr Exp $
+* $Id: mysql.sql.php,v 1.20 2006-01-04 13:35:59 thorstenr Exp $
 *
 * CREATE TABLE instruction for MySQL database
 *
@@ -27,6 +27,7 @@ $uninst[] = "DROP TABLE ".$sqltblpre."faqcategories";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcategoryrelations";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqchanges";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcomments";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqconfig";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqdata";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqquestions";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqglossary";
@@ -99,6 +100,12 @@ comment text NOT NULL,
 datum int(15) NOT NULL,
 helped text NOT NULL,
 PRIMARY KEY (id_comment))";
+
+//faqconfig
+$query[] = "CREATE TABLE ".$sqltblpre."faqconfig (
+config_name varchar(255) NOT NULL default '',
+config_value varchar(255) NOT NULL default '',
+PRIMARY KEY (config_name))";
 
 //faqdata
 $query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqdata (
