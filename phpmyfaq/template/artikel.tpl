@@ -1,9 +1,17 @@
 <h2 id="article_category">{writeRubrik}</h2>
 <h2>{writeThema}</h2>
+    
     <!-- Article -->
     <p>{writeContent}</p>
     <!-- /Article -->
-    <p>{writeDateMsg}<br />{writeAuthor}</p>
+    
+    <!-- Article Categories Listing -->
+    {writeArticleCategories}
+    <!-- /Article Categories Listing -->
+
+    <!-- Article Info -->
+    <p>{writeDateMsg}<br />{writeAuthor}<br />{editThisEntry}</p>
+    <!-- /Article Info -->
     
     {switchLanguage}
     <p id="action">
