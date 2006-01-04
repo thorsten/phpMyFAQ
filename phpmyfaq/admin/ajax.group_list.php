@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.group_list.php,v 1.2 2006-01-02 16:51:26 thorstenr Exp $
+* $Id: ajax.group_list.php,v 1.3 2006-01-04 17:02:06 b33blebr0x Exp $
 *
 * AJAX: lists all registered users
 *
@@ -49,7 +49,7 @@ ob_clean();
         <select_class>ad_select_group</select_class>
 <?php
 foreach ($groupList as $group_id) {
-    //$groupData = $user->perm->getGroupData($group_id);
+    $groupData = $user->perm->getGroupData($group_id);
 ?>
         <group id="<?php print $groupData['group_id']; ?>">
             <name><?php print $groupData['name']; ?></name>

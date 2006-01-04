@@ -1,18 +1,18 @@
 <?php
 /**
-* $Id: group.php,v 1.2 2006-01-02 16:51:26 thorstenr Exp $
+* $Id: group.php,v 1.3 2006-01-04 17:02:06 b33blebr0x Exp $
 *
 * Displays the user managment frontend
 *
 * @author       Lars Tiedemann <php@larstiedemann.de>
 * @since        2005-12-15
 * @copyright    (c) 2006 phpMyFAQ Team
-* 
+*
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
 * compliance with the License. You may obtain a copy of the License at
 * http://www.mozilla.org/MPL/
-* 
+*
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
@@ -32,10 +32,9 @@ require_once(PMF_ROOT_DIR.'/inc/PMF_User/User.php');
 
 // set some parameters
 $selectSize = 10;
-$defaultUserAction = 'list';
-$defaultUserStatus = 'active';
-$loginMinLength = 4;
-$loginInvalidRegExp = '/(^[^a-z]{1}|[\W])/i';
+$descriptionRows = 5;
+$descriptionCols = 20;
+$defaultGroupAction = 'list';
 $errorMessages = array(
     //'addUser_password' => $PMF_LANG['ad_user_error_password'], //"Please enter a password. ",
     //'addUser_passwordsDontMatch' => $PMF_LANG['ad_user_error_passwordsDontMatch'], //"Passwords do not match. ",
@@ -43,6 +42,8 @@ $errorMessages = array(
     //'addUser_loginInvalid' => $PMF_LANG['ad_user_error_loginInvalid'], //"The specified user name is invalid.",
     //'addUser_noEmail' => $PMF_LANG['ad_user_error_noEmail'], //"Please enter a valid mail adress. ",
     //'addUser_noRealName' => $PMF_LANG['ad_user_error_noRealName'], //"Please enter your real name. ",
+    'addGroup_noName' => $PMF_LANG['ad_group_error_noName'], //"Please enter a group name. ",
+    'addGroup_db' => $PMF_LANG['ad_adus_dberr'], // "<strong>database error!</strong>"
     //'delUser' => $PMF_LANG['ad_user_error_delete'], //"User account could not be deleted. ",
     //'delUser_noId' => $PMF_LANG['ad_user_error_noId'], //"No User-ID specified. ",
     //'delUser_protectedAccount' => $PMF_LANG['ad_user_error_protectedAccount'], //"User account is protected. ",
@@ -51,47 +52,54 @@ $errorMessages = array(
 );
 $successMessages = array(
     //'addUser' => $PMF_LANG["ad_adus_suc"], //"User <strong>successfully</strong> added.",
+    'addGroup' => $PMF_LANG['ad_group_suc'], //"Group <strong>successfully</strong> added.",
     //'delUser' => $PMF_LANG["ad_user_deleted"], //"The user was successfully deleted.",
 );
 $text = array(
     'header' => "Group Administration",
-    //'selectUser' => $PMF_LANG["ad_user_username"], // "Registered users"
+    //'selectUser' => $PMF_LANG['ad_user_username'], // "Registered users"
     'selectGroup' => "Groups",
-    //'addUser' => $PMF_LANG["ad_adus_adduser"], // "add User"
-    //'addUser_confirm' => $PMF_LANG["ad_gen_save"], //"Save",
+    //'addUser' => $PMF_LANG['ad_adus_adduser'], // "add User"
+    'addGroup' => $PMF_LANG['ad_group_add'], // "Add Group"
+    //'addUser_confirm' => $PMF_LANG['ad_gen_save'], //"Save",
+    'addGroup_confirm' => $PMF_LANG['ad_gen_save'], //"Save",
     //'addUser_cancel' => $PMF_LANG['ad_gen_cancel'], //"Cancel",
-    //'addUser_link' => $PMF_LANG["ad_user_add"], // "Add User"
-    //'addUser_name' => $PMF_LANG["ad_adus_name"], // "Name: "
-    //'addUser_displayName' => $PMF_LANG["ad_user_realname"], // "real name:"
-    //'addUser_email' => $PMF_LANG["ad_entry_email"], // "email adress:"
-    //'addUser_password' => $PMF_LANG["ad_adus_password"], // Password:
-    //'addUser_password2' => $PMF_LANG["ad_passwd_con"], // Confirm:
+    'addGroup_cancel' => $PMF_LANG['ad_gen_cancel'], //"Cancel",
+    //'addUser_link' => $PMF_LANG['ad_user_add'], // "Add User"
+    'addGroup_link' => $PMF_LANG['ad_group_add_link'], // "Add Group"
+    //'addUser_name' => $PMF_LANG['ad_adus_name'], // "Name: "
+    'addGroup_name' => $PMF_LANG['ad_group_name'], // "Name: "
+    'addGroup_description' => $PMF_LANG['ad_group_description'], // "Description: "
+    'addGroup_autoJoin' => $PMF_LANG['ad_group_autoJoin'], // "Auto-join:"
     //'delUser' => $PMF_LANG['ad_user_deleteUser'], //"Delete User",
     //'delUser_button' => $PMF_LANG['ad_gen_delete'], //"Delete",
-    //'delUser_question' => $PMF_LANG["ad_user_del_3"]." ".$PMF_LANG["ad_user_del_1"]." ".$PMF_LANG["ad_user_del_2"], //"Are you sure?"."The User"."shall be deleted?",
-    //'delUser_confirm' => $PMF_LANG["ad_gen_yes"], //"Yes",
-    //'delUser_cancel' => $PMF_LANG["ad_gen_no"], //"No",
-    //'changeUser' => $PMF_LANG["ad_user_profou"], // "Profile of the User"
-    //'changeUser_submit' => $PMF_LANG["ad_gen_save"], //"Save",
+    'delGroup_button' => $PMF_LANG['ad_gen_delete'], //"Delete",
+    //'delUser_question' => $PMF_LANG['ad_user_del_3']." ".$PMF_LANG['ad_user_del_1']." ".$PMF_LANG['ad_user_del_2'], //"Are you sure?"."The User"."shall be deleted?",
+    //'delUser_confirm' => $PMF_LANG['ad_gen_yes'], //"Yes",
+    //'delUser_cancel' => $PMF_LANG['ad_gen_no'], //"No",
+    //'changeUser' => $PMF_LANG['ad_user_profou'], // "Profile of the User"
+    'changeGroup' => $PMF_LANG['ad_group_details'], // "Group Details"
+    //'changeUser_submit' => $PMF_LANG['ad_gen_save'], //"Save",
+    'changeGroup_submit' => $PMF_LANG['ad_gen_save'], //"Save",
     //'changeUser_status' => $PMF_LANG['ad_user_status'], //"Status:",
-    //'changeRights' => $PMF_LANG["ad_user_rights"], // "Rights"
-    //'changeRights_submit' => $PMF_LANG["ad_gen_save"], //"Save",
+    'changeRights' => $PMF_LANG['ad_user_rights'], // "Rights"
+    'changeRights_submit' => $PMF_LANG['ad_gen_save'], //"Save",
 );
 
 // what shall we do?
 // actions defined by url: group_action=
-$userAction = isset($_GET['group_action']) ? $_GET['group_action'] : $defaultUserAction;
+$groupAction = isset($_GET['group_action']) ? $_GET['group_action'] : $defaultGroupAction;
 // actions defined by submit button
 if (isset($_POST['group_action_deleteConfirm']))
-    $userAction = 'delete_confirm';
+    $groupAction = 'delete_confirm';
 if (isset($_POST['cancel']))
-    $userAction = $defaultUserAction;
+    $groupAction = $defaultGroupAction;
 
 
 // update group rights
-if ($userAction == 'update_rights') {
+if ($groupAction == 'update_rights') {
     $message = '';
-    $userAction = $defaultUserAction;
+    $groupAction = $defaultGroupAction;
     $groupId = isset($_POST['group_id']) ? $_POST['group_id'] : 0;
     if ($userId == 0) {
         $message .= '<p class="error">'.$errorMessages['updateRights_noId'].'</p>';
@@ -103,11 +111,11 @@ if ($userAction == 'update_rights') {
             $user->perm->grantUserRight($userId, $rightId);
         }
     }
-} // end if ($userAction == 'update_rights')
+} // end if ($groupAction == 'update_rights')
 // update user data
-if ($userAction == 'update_data') {
+if ($groupAction == 'update_data') {
     $message = '';
-    $userAction = $defaultUserAction;
+    $groupAction = $defaultGroupAction;
     $userId = isset($_POST['group_id']) ? $_POST['group_id'] : 0;
     if ($userId == 0) {
         $message .= '<p class="error">'.$errorMessages['updateUser_noId'].'</p>';
@@ -124,20 +132,20 @@ if ($userAction == 'update_data') {
         $user->setStatus($userStatus);
         $message .= '<p class="success">'.$text['updateUser'].'</p>';
     }
-} // end if ($userAction == 'update')
+} // end if ($groupAction == 'update')
 // delete user confirmation
-if ($userAction == 'delete_confirm') {
+if ($groupAction == 'delete_confirm') {
     $message = '';
     $user = new PMF_User();
     $userId = isset($_POST['group_list_select']) ? $_POST['group_list_select'] : 0;
     if ($userId == 0) {
         $message .= '<p class="error">'.$errorMessages['delUser_noId'].'</p>';
-        $userAction = $defaultUserAction;
+        $groupAction = $defaultGroupAction;
     } else {
         $user->getUserById($userId);
         // account is protected
         if ($user->getStatus() == 'protected') {
-            $userAction = $defaultUserAction;
+            $groupAction = $defaultGroupAction;
             $message .= '<p class="error">'.$errorMessages['delUser_protectedAccount'].'</p>';
         } else {
 ?>
@@ -159,13 +167,13 @@ if ($userAction == 'delete_confirm') {
 <?php
         }
     }
-} // end if ($userAction == 'delete_confirm')
+} // end if ($groupAction == 'delete_confirm')
 // delete user
-if ($userAction == 'delete') {
+if ($groupAction == 'delete') {
     $message = '';
     $user = new PMF_User();
     $userId = isset($_POST['group_id']) ? $_POST['group_id'] : 0;
-    $userAction = $defaultUserAction;
+    $groupAction = $defaultGroupAction;
     if ($userId == 0) {
         $message .= '<p class="error">'.$errorMessages['delUser_noId'].'</p>';
     } else {
@@ -182,113 +190,73 @@ if ($userAction == 'delete') {
             $message .= '<p>ERROR: '.$userError.'</p>';
         }
     }
-    
-} // end if ($userAction == 'delete')
-// save new user
-if ($userAction == 'addsave') {
+
+} // end if ($groupAction == 'delete')
+// save new group
+if ($groupAction == 'addsave') {
     $user = new PMF_User();
     $message = '';
     $messages = array();
     // check input data
     $group_name = isset($_POST['group_name']) ? $_POST['group_name'] : '';
-    $group_realname = isset($_POST['group_realname']) ? $_POST['group_realname'] : '';
-    $group_password = isset($_POST['group_password']) ? $_POST['group_password'] : '';
-    $group_email = isset($_POST['group_email']) ? $_POST['group_email'] : '';
-    $group_password = isset($_POST['group_password']) ? $_POST['group_password'] : '';
-    $group_password_confirm = isset($_POST['group_password_confirm']) ? $_POST['group_password_confirm'] : '';
-    // check password
-    if ($group_password == "") {
-        $group_password = "";
-        $group_password_confirm = "";
-        $messages[] = $errorMessages['addUser_password'];
-    }
-    if ($group_password != $group_password_confirm) {
-        $group_password = "";
-        $group_password_confirm = "";
-        $messages[] = $errorMessages['addUser_passwordsDontMatch'];
-    }
-    // check e-mail. TO DO: MAIL ADRESS VALIDATOR
-    if ($group_email == "") {
-        $group_email = "";
-        $messages[] = $errorMessages['addUser_noEmail'];
-    }
-    // check login name
-    $user->setLoginMinLength($loginMinLength);
-    $user->setLoginInvalidRegExp($loginInvalidRegExp);
-    if (!$user->isValidLogin($group_name)) {
-        $group_name = "";
-        $messages[] = $errorMessages['addUser_loginInvalid'];
-    }
-    if ($user->getUserByLogin($group_name)) {
-        $group_name = "";
-        $messages[] = $errorMessages['addUser_loginExists'];
-    }
-    // check realname
-    if ($group_realname == "") {
-        $group_realname = "";
-        $messages[] = $errorMessages['addUser_noRealName'];
+    $group_description = isset($_POST['group_description']) ? $_POST['group_description'] : '';
+    $group_auto_join = isset($_POST['group_auto_join']) ? $_POST['group_auto_join'] : '';
+    // check group name
+    if ($group_name == "") {
+        $messages[] = $errorMessages['addGroup_noName'];
     }
     // ok, let's go
     if (count($messages) == 0) {
-        // create user account (login and password)
-        if (!$user->createUser($group_name, $group_password)) {
-            $messages[] = $user->error();
-        } else {
-            // set user data (realname, email)
-            $user->userdata->set(array('display_name', 'email'), array($group_realname, $group_email));
-            // set user status
-            $user->setStatus($defaultUserStatus);
-        }
+        // create group
+        $group_data = array(
+            'name' => $group_name,
+            'description' => $group_description,
+            'auto_join' => $group_auto_join
+        );
+        if ($user->perm->addGroup($group_data) <= 0)
+            $messages[] = $errorMessages['addGroup_db'];
     }
     // no errors, show list
     if (count($messages) == 0) {
-        $userAction = $defaultUserAction;
-        $message = '<p class="success">'.$successMessages['addUser'].'</p>';
+        $groupAction = $defaultGroupAction;
+        $message = '<p class="success">'.$successMessages['addGroup'].'</p>';
     // display error messages and show form again
     } else {
-        $userAction = 'add';
+        $groupAction = 'add';
         foreach ($messages as $err) {
             $message .= '<p class="error">'.$err.'</p>';
         }
     }
-} // end if ($userAction == 'addsave')
+} // end if ($groupAction == 'addsave')
 
 
 if (!isset($message))
     $message = '';
 
-// show new user form
-if ($userAction == 'add') {
+// show new group form
+if ($groupAction == 'add') {
 ?>
 <h2><?php print $text['header']; ?></h2>
-<div id="group_message"><?php print $message; ?></div>
+<div id="user_message"><?php print $message; ?></div>
 <div id="group_create">
     <fieldset>
-        <legend><?php print $text['addUser']; ?></legend>
+        <legend><?php print $text['addGroup']; ?></legend>
         <form name="group_create" action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=group&amp;group_action=addsave" method="post">
             <div class="input_row">
-                <label for="group_name"><?php print $text['addUser_name']; ?></label>
+                <label for="group_name"><?php print $text['addGroup_name']; ?></label>
                 <input type="text" name="group_name" value="<?php print (isset($group_name) ? $group_name : ''); ?>" tabindex="1" />
             </div>
             <div class="input_row">
-                <label for="group_realname"><?php print $text['addUser_displayName']; ?></label>
-                <input type="text" name="group_realname" value="<?php print (isset($group_realname) ? $group_realname : ''); ?>" tabindex="2" />
+                <label for="group_description"><?php print $text['addGroup_description']; ?></label>
+                <textarea name="group_description" cols="<?php print $descriptionCols; ?>" rows="<?php print $descriptionRows; ?>" tabindex="2"><?php print (isset($group_description) ? $group_description : ''); ?></textarea>
             </div>
             <div class="input_row">
-                <label for="group_email"><?php print $text['addUser_email']; ?></label>
-                <input type="text" name="group_email" value="<?php print (isset($group_email) ? $group_email : ''); ?>" tabindex="3" />
-            </div>
-            <div class="input_row">
-                <label for="password"><?php print $text['addUser_password']; ?></label>
-                <input type="password" name="group_password" value="<?php print (isset($group_password) ? $group_password : ''); ?>" tabindex="4" />
-            </div>
-            <div class="input_row">
-                <label for="password_confirm"><?php print $text['addUser_password2']; ?></label>
-                <input type="password" name="group_password_confirm" value="<?php print (isset($group_password_confirm) ? $group_password_confirm : ''); ?>" tabindex="5" />
+                <label for="group_auto_join"><?php print $text['addGroup_autoJoin']; ?></label>
+                <input type="checkbox" name="group_auto_join" value="1" tabindex="3"<?php print ((isset($group_auto_join) && $group_auto_join) ? ' checked="checked"' : ''); ?> />
             </div>
             <div class="button_row">
-                <input class="submit" type="submit" value="<?php print $text['addUser_confirm']; ?>" tabindex="6" />
-                <input class="reset" name="cancel" type="submit" value="<?php print $text['addUser_cancel']; ?>" tabindex="7" />
+                <input class="submit" type="submit" value="<?php print $text['addGroup_confirm']; ?>" tabindex="6" />
+                <input class="reset" name="cancel" type="submit" value="<?php print $text['addGroup_cancel']; ?>" tabindex="7" />
             </div>
             <div class="clear"></div>
         </form>
@@ -300,170 +268,155 @@ document.group_create.group_name.focus();
 /* ]]> */
 </script>
 <?php
-} // end if ($userAction == 'add')
+} // end if ($groupAction == 'add')
 
 // show list of users
-if ($userAction == 'list') {
+if ($groupAction == 'list') {
 ?>
 <script type="text/javascript">
 /* <![CDATA[ */
 
 /* HTTP Request object */
-var groupList = new getxmlhttp();
+
+/* HTTP Request object */
+var groupList;
 
 function getGroupList() {
-    groupList.open('get', '?aktion=ajax&ajax=group_list');
-    groupList.onreadystatechange = processGroupList;
-    groupList.send(null);
+    var url = 'index.php';
+    var pars = 'aktion=ajax&ajax=group_list';
+    var myAjax = new Ajax.Request( url, {method: 'get', parameters: pars, onComplete: processGroupList} );
 }
 
-function processGroupList() {
-    if (groupList.readyState == 4) {
-        if (groupList.status == 200) {
-            // process response
-            clearGroupList();
-            buildGroupList();
-            //clearGroupData();
-            //buildGroupData(0);
-            //clearGroupRights();
-            //buildGroupRights(0);
-        } else {
-            alert("There was a problem retrieving the XML data: \n" +groupList.statusText);
-        }
-    }
+function processGroupList(XmlRequest) {
+    // process response
+    groupList = XmlRequest;
+    clearGroupList();
+    buildGroupList();
+    clearGroupData();
+    buildGroupData(0);
+    clearGroupRights();
+    buildGroupRights(0);
 }
-
 
 function clearGroupList()
 {
-    select_clear(document.getElementById("group_list_select"));
+    select_clear($('group_list_select'));
 }
 
 function buildGroupList()
 {
-    var groups = groupList.responseXML.getElementsByTagName("group");
+    var groups = groupList.responseXML.getElementsByTagName('group');
     var id;
     var textNode;
-    var classAttrValue = text_getFromParent(groupList.responseXML.getElementsByTagName("grouplist")[0], "select_class");
+    var classAttrValue = text_getFromParent(groupList.responseXML.getElementsByTagName('grouplist')[0], "select_class");
     for (var i = 0; i < groups.length; i++) {
-        textNode = document.createTextNode(text_getFromParent(groups[i], "name"));
-        id = groups[i].getAttribute("id");
-        select_addOption(document.getElementById("group_list_select"), id, textNode, classAttrValue);
+        textNode = document.createTextNode(text_getFromParent(groups[i], 'name'));
+        id = groups[i].getAttribute('id');
+        select_addOption($('group_list_select'), id, textNode, classAttrValue);
     }
 }
 
 
 function clearGroupData()
 {
-    //table_clear(document.getElementById("group_data_table"));
-    document.getElementById("group_data_table").innerHTML = '';
+    $('update_group_id').removeAttribute('value');
+    $('update_group_name').removeAttribute('value');
+    $('update_group_description').innerHTML = '';
+    if ($('update_group_auto_join').getAttribute('checked')) {
+        $('update_group_auto_join').removeAttributeNode($('update_group_auto_join').getAttributeNode('checked'));
+    }
 }
 
 function buildGroupData(id)
 {
     var getValues = true;
-    var groups = groupList.responseXML.getElementsByTagName("group");
+    var groups = groupList.responseXML.getElementsByTagName('group');
     var group;
-    // get user with given id
+    // get group with given id
     if (id == 0) {
         getValues = false;
         group = groups[0];
     } else {
         getValues = true;
-        for (var i = 0; i < users.length; i++) {
-            if (groups[i].getAttribute("id") == id) {
+        for (var i = 0; i < groups.length; i++) {
+            if (groups[i].getAttribute('id') == id) {
                 group = groups[i];
                 break;
             }
         }
     }
-    // change user-ID
-    document.getElementById("update_group_id").setAttribute("value", id);
-    // build new data div rows
-    var dataList = user.getElementsByTagName("group_data")[0];
-    var items = dataList.getElementsByTagName("item");
-    var group_data_table = document.getElementById("group_data_table");
-    var name;
-    var value;
-    var div;
-    var input;
-    var label;
-    for (var i = 0; i < items.length; i++) {
-        name = text_getFromParent(items[i], "name");
-        if (getValues) {
-            value = text_getFromParent(items[i], "value");
-        } else {
-            value = "";
+    var message = '';
+    // change group-ID
+    $('update_group_id').setAttribute('value', id);
+    var name = text_getFromParent(group, 'name');
+    $('update_group_name').setAttribute('value', name);
+    var description = text_getFromParent(group, 'description');
+    $('update_group_description').innerHTML = description;
+    var auto_join = text_getFromParent(group, 'auto_join');
+    if (auto_join == "1") {
+        $('update_group_auto_join').setAttribute('checked', "checked");
+    } else {
+        if ($('update_group_auto_join').getAttribute('checked')) {
+            $('update_group_auto_join').removeAttributeNode($('update_group_auto_join').getAttributeNode('checked'));
         }
-        input = document.createElement("input");
-        input.setAttribute("type", "text");
-        input.setAttribute("name", items[i].getAttribute("name"));
-        input.setAttribute("value", value);
-        input.setAttribute("tabindex", (i + 3));
-        label = document.createElement("label");
-        label.setAttribute("for", items[i].getAttribute("name"));
-        label.appendChild(document.createTextNode(name));
-        div = document.createElement("div");
-        div.setAttribute("class", "input_row");
-        div.appendChild(label);
-        div.appendChild(input);
-        group_data_table.appendChild(div);
     }
+    message = message + 'name = ' + name;
+    message = message + 'description = ' + description;
+    //alert(message);
 }
 
 
 function clearGroupRights()
 {
-    table_clear(document.getElementById("group_rights_table"));
+    table_clear($('group_rights_table'));
 }
 
 function buildGroupRights(id)
 {
     var getValues = true;
-    var groups = groupList.responseXML.getElementsByTagName("group");
+    var groups = groupList.responseXML.getElementsByTagName('group');
     var group;
-    // get user with given id
+    // get group with given id
     if (id == 0) {
         getValues = false;
         group = groups[0];
     } else {
         getValues = true;
-        for (var i = 0; i < users.length; i++) {
-            if (groups[i].getAttribute("id") == id) {
+        for (var i = 0; i < groups.length; i++) {
+            if (groups[i].getAttribute('id') == id) {
                 group = groups[i];
                 break;
             }
         }
     }
-    // change user-ID
-    document.getElementById("rights_group_id").setAttribute("value", id);
+    // change group-ID
+    $('rights_group_id').setAttribute('value', id);
     // build new table rows
-    var rightsList = user.getElementsByTagName("group_rights")[0];
-    var rights = rightsList.getElementsByTagName("right");
-    var group_rights_table = document.getElementById("group_rights_table");
+    var rightsList = group.getElementsByTagName('group_rights')[0];
+    var rights = rightsList.getElementsByTagName('right');
+    var group_rights_table = $('group_rights_table');
     var name;
     var isGroupRight;
     var checkbox;
     var right_id;
     for (var i = 0; i < rights.length; i++) {
-        name = text_getFromParent(rights[i], "name");
-        right_id = rights[i].getAttribute("id");
+        name = text_getFromParent(rights[i], 'name');
+        right_id = rights[i].getAttribute('id');
         if (getValues) {
-            isGroupRight = text_getFromParent(rights[i], "is_group_right");
+            isGroupRight = text_getFromParent(rights[i], 'is_group_right');
         } else {
             isGroupRight = "0";
         }
-        checkbox = document.createElement("input");
-        checkbox.setAttribute("type", "checkbox");
-        checkbox.setAttribute("name", "group_rights[]");
-        checkbox.setAttribute("value", right_id);
-        if (isUserRight == "1") {
-            checkbox.setAttribute("checked", "checked");
+        checkbox = document.createElement('input');
+        checkbox.setAttribute('type', "checkbox");
+        checkbox.setAttribute('name', "group_rights[]");
+        checkbox.setAttribute('value', right_id);
+        if (isGroupRight == "1") {
+            checkbox.setAttribute('checked', "checked");
         }
         table_addRow(group_rights_table, i, checkbox, document.createTextNode(name));
     }
 }
-
 
 
 function groupSelect(evt)
@@ -492,32 +445,37 @@ getGroupList();
         <fieldset>
             <legend><?php print $text['selectGroup']; ?></legend>
             <form name="group_select" id="group_select" action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=group&amp;group_action=delete_confirm" method="post">
-                <select name="group_list_select" id="group_list_select" size="<?php print $selectSize; ?>" onchange="userSelect(event)" tabindex="1">
+                <select name="group_list_select" id="group_list_select" size="<?php print $selectSize; ?>" onchange="groupSelect(event)" tabindex="1">
                     <option value="">select...</option>
                 </select>
-                <input class="admin" type="submit" value="<?php print $text['delUser_button']; ?>" tabindex="2" />
+                <input class="admin" type="submit" value="<?php print $text['delGroup_button']; ?>" tabindex="2" />
             </form>
         </fieldset>
-        <p>[ <a href="<?php print $_SERVER['PHP_SELF']; ?>?aktion=group&amp;group_action=add"><?php print $text['addUser_link']; ?></a> ]</p>
+        <p>[ <a href="<?php print $_SERVER['PHP_SELF']; ?>?aktion=group&amp;group_action=add"><?php print $text['addGroup_link']; ?></a> ]</p>
     </div> <!-- end #user_list -->
 </div> <!-- end #user_accounts -->
 <div id="user_details">
     <div id="user_data">
         <fieldset>
-            <legend id="group_data_legend"><?php print $text['changeUser']; ?></legend>
+            <legend id="group_data_legend"><?php print $text['changeGroup']; ?></legend>
             <form action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=group&amp;group_action=update_data" method="post">
                 <input id="update_group_id" type="hidden" name="group_id" value="0" />
-                <div class="input_row">
-                    <label for="group_status_select"><?php print $text['changeUser_status']; ?></label>
-                    <select id="group_status_select" name="group_status" >
-                        <option value="active">active</option>
-                        <option value="blocked">blocked</option>
-                        <option value="protected">protected</option>
-                    </select>
-                </div>
-                <div id="user_data_table"></div><!-- end #user_data_table -->
+                <div id="group_data_table">
+                    <div class="input_row">
+                        <label for="group_name"><?php print $text['addGroup_name']; ?></label>
+                        <input id="update_group_name" type="text" name="group_name" value="<?php print (isset($group_name) ? $group_name : ''); ?>" tabindex="1" />
+                    </div>
+                    <div class="input_row">
+                        <label for="group_description"><?php print $text['addGroup_description']; ?></label>
+                        <textarea id="update_group_description" name="group_description" cols="<?php print $descriptionCols; ?>" rows="<?php print $descriptionRows; ?>" tabindex="2"><?php print (isset($group_description) ? $group_description : ''); ?></textarea>
+                    </div>
+                    <div class="input_row">
+                        <label for="group_auto_join"><?php print $text['addGroup_autoJoin']; ?></label>
+                        <input id="update_group_auto_join" type="checkbox" name="group_auto_join" value="1" tabindex="3"<?php print ((isset($group_auto_join) && $group_auto_join) ? ' checked="checked"' : ''); ?> />
+                    </div>
+                </div><!-- end #group_data_table -->
                 <div class="button_row">
-                    <input class="submit" type="submit" value="<?php print $text['changeUser_submit']; ?>" tabindex="6" />
+                    <input class="submit" type="submit" value="<?php print $text['changeGroup_submit']; ?>" tabindex="4" />
                 </div>
             </form>
         </fieldset>
@@ -542,5 +500,5 @@ getGroupList();
 </div> <!-- end #user_details -->
 <div class="clear"></div>
 <?php
-} // end if ($userAction == 'list')
+} // end if ($groupAction == 'list')
 ?>

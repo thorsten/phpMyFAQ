@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.20 2006-01-03 12:41:41 thorstenr Exp $
+* $Id: language_en.php,v 1.21 2006-01-04 17:02:06 b33blebr0x Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -676,3 +676,12 @@ $PMF_LANG["rightsLanguage"]['editglossary'] = "edit glossary item";
 $PMF_LANG["rightsLanguage"]['delglossary'] = "delete glossary item";
 $PMF_LANG["ad_menu_group_administration"] = "Group Administration";
 $PMF_LANG['ad_user_loggedin'] = 'You\'re logged in as ';
+
+$PMF_LANG['ad_group_details'] = "Group Details";
+$PMF_LANG['ad_group_add'] = "Add Group";
+$PMF_LANG['ad_group_add_link'] = "Add Group";
+$PMF_LANG['ad_group_name'] = "Name:";
+$PMF_LANG['ad_group_description'] = "Description:";
+$PMF_LANG['ad_group_autoJoin'] = "Auto-join:";
+$PMF_LANG['ad_group_suc'] = "Group <strong>successfully</strong> added.";
+$PMF_LANG['ad_group_error_noName'] = "Please enter a group name. ";

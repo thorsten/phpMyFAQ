@@ -1,5 +1,5 @@
 /**
-* $Id: admin.css,v 1.7 2005-12-26 18:41:25 b33blebr0x Exp $
+* $Id: admin.css,v 1.8 2006-01-04 17:02:06 b33blebr0x Exp $
 *
 * This is the CSS file for the admin section of phpMyFAQ 1.5.x
 * You don't need to change enything here but feel free to do it. :-)
@@ -322,6 +322,11 @@ table.linkconfig#configuration tr#lastrow td {
 /* delete confirmation */
 #user_confirmDelete {
     width: 250px;
+}
+
+/* create group form container */
+#group_create {
+    width: 350px;
 }
 
 /* admin form */
