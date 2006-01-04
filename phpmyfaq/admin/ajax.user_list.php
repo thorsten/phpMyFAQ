@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.user_list.php,v 1.12 2006-01-02 16:51:26 thorstenr Exp $
+* $Id: ajax.user_list.php,v 1.13 2006-01-04 13:20:52 b33blebr0x Exp $
 *
 * AJAX: lists all registered users
 *
@@ -76,9 +76,9 @@ foreach ($userList as $user_id) {
             <user_rights>
 <?php
     $perm = $user_object->perm;
-    $all_rights = $perm->getAllRights();
-    foreach ($all_rights as $right_id) {
-        $right_data = $perm->getRightData($right_id);
+    $all_rights = $perm->getAllRightsData();
+    foreach ($all_rights as $right_data) {
+        $right_id = $right_data['right_id'];
         // right is not for users!
         if (!$right_data['for_users'])
             continue;

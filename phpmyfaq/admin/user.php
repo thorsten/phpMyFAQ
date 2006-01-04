@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: user.php,v 1.15 2006-01-03 10:37:05 thorstenr Exp $
+* $Id: user.php,v 1.16 2006-01-04 13:20:52 b33blebr0x Exp $
 *
 * Displays the user managment frontend
 *
@@ -309,46 +309,40 @@ if ($userAction == 'list') {
 /* <![CDATA[ */
 
 /* HTTP Request object */
-var userList = new getxmlhttp();
+var userList;
 
 function getUserList() {
-    userList.open('get', '?aktion=ajax&ajax=user_list');
-    userList.onreadystatechange = processUserList;
-    userList.send(null);
+    var url = 'index.php';
+    var pars = 'aktion=ajax&ajax=user_list';
+    var myAjax = new Ajax.Request( url, {method: 'get', parameters: pars, onComplete: processUserList} );
 }
 
-function processUserList() {
-    if (userList.readyState == 4) {
-        if (userList.status == 200) {
-            // process response
-            clearUserList();
-            buildUserList();
-            clearUserData();
-            buildUserData(0);
-            clearUserRights();
-            buildUserRights(0);
-        } else {
-            alert("There was a problem retrieving the XML data: \n" +userList.statusText);
-        }
-    }
+function processUserList(XmlRequest) {
+    // process response
+    userList = XmlRequest;
+    clearUserList();
+    buildUserList();
+    clearUserData();
+    buildUserData(0);
+    clearUserRights();
+    buildUserRights(0);
 }
-
 
 function clearUserList()
 {
-    select_clear(document.getElementById("user_list_select"));
+    select_clear($('user_list_select'));
 }
 
 function buildUserList()
 {
-    var users = userList.responseXML.getElementsByTagName("user");
+    var users = userList.responseXML.getElementsByTagName('user');
     var id;
     var textNode;
-    var classAttrValue = text_getFromParent(userList.responseXML.getElementsByTagName("userlist")[0], "select_class");
+    var classAttrValue = text_getFromParent(userList.responseXML.getElementsByTagName('userlist')[0], "select_class");
     for (var i = 0; i < users.length; i++) {
         textNode = document.createTextNode(text_getFromParent(users[i], "login"));
-        id = users[i].getAttribute("id");
-        select_addOption(document.getElementById("user_list_select"), id, textNode, classAttrValue);
+        id = users[i].getAttribute('id');
+        select_addOption($('user_list_select'), id, textNode, classAttrValue);
     }
 }
 
@@ -356,13 +350,13 @@ function buildUserList()
 function clearUserData()
 {
     //table_clear(document.getElementById("user_data_table"));
-    document.getElementById("user_data_table").innerHTML = '';
+    $('user_data_table').innerHTML = "";
 }
 
 function buildUserData(id)
 {
     var getValues = true;
-    var users = userList.responseXML.getElementsByTagName("user");
+    var users = userList.responseXML.getElementsByTagName('user');
     var user;
     // get user with given id
     if (id == 0) {
@@ -371,40 +365,40 @@ function buildUserData(id)
     } else {
         getValues = true;
         for (var i = 0; i < users.length; i++) {
-            if (users[i].getAttribute("id") == id) {
+            if (users[i].getAttribute('id') == id) {
                 user = users[i];
                 break;
             }
         }
     }
     // change user-ID
-    document.getElementById("update_user_id").setAttribute("value", id);
+    $('update_user_id').setAttribute('value', id);
     // build new data div rows
-    var dataList = user.getElementsByTagName("user_data")[0];
-    var items = dataList.getElementsByTagName("item");
-    var user_data_table = document.getElementById("user_data_table");
+    var dataList = user.getElementsByTagName('user_data')[0];
+    var items = dataList.getElementsByTagName('item');
+    var user_data_table = $('user_data_table');
     var name;
     var value;
     var div;
     var input;
     var label;
     for (var i = 0; i < items.length; i++) {
-        name = text_getFromParent(items[i], "name");
+        name = text_getFromParent(items[i], 'name');
         if (getValues) {
-            value = text_getFromParent(items[i], "value");
+            value = text_getFromParent(items[i], 'value');
         } else {
             value = "";
         }
-        input = document.createElement("input");
-        input.setAttribute("type", "text");
-        input.setAttribute("name", items[i].getAttribute("name"));
-        input.setAttribute("value", value);
-        input.setAttribute("tabindex", (i + 3));
-        label = document.createElement("label");
-        label.setAttribute("for", items[i].getAttribute("name"));
+        input = document.createElement('input');
+        input.setAttribute('type', "text");
+        input.setAttribute('name', items[i].getAttribute('name'));
+        input.setAttribute('value', value);
+        input.setAttribute('tabindex', (i + 3));
+        label = document.createElement('label');
+        label.setAttribute('for', items[i].getAttribute('name'));
         label.appendChild(document.createTextNode(name));
-        div = document.createElement("div");
-        div.setAttribute("class", "input_row");
+        div = document.createElement('div');
+        div.setAttribute('class', "input_row");
         div.appendChild(label);
         div.appendChild(input);
         user_data_table.appendChild(div);
@@ -415,7 +409,7 @@ function buildUserData(id)
 function selectUserStatus(id)
 {
     var getValues = true;
-    var users = userList.responseXML.getElementsByTagName("user");
+    var users = userList.responseXML.getElementsByTagName('user');
     var user;
     // get user with given id
     if (id == 0) {
@@ -424,26 +418,26 @@ function selectUserStatus(id)
     } else {
         getValues = true;
         for (var i = 0; i < users.length; i++) {
-            if (users[i].getAttribute("id") == id) {
+            if (users[i].getAttribute('id') == id) {
                 user = users[i];
                 break;
             }
         }
     }
-    var status = text_getFromParent(user, "status");
-    document.getElementById("user_status_select").value = status;
+    var status = text_getFromParent(user, 'status');
+    $('user_status_select').value = status;
 }
 
 
 function clearUserRights()
 {
-    table_clear(document.getElementById("user_rights_table"));
+    table_clear($('user_rights_table'));
 }
 
 function buildUserRights(id)
 {
     var getValues = true;
-    var users = userList.responseXML.getElementsByTagName("user");
+    var users = userList.responseXML.getElementsByTagName('user');
     var user;
     // get user with given id
     if (id == 0) {
@@ -452,36 +446,36 @@ function buildUserRights(id)
     } else {
         getValues = true;
         for (var i = 0; i < users.length; i++) {
-            if (users[i].getAttribute("id") == id) {
+            if (users[i].getAttribute('id') == id) {
                 user = users[i];
                 break;
             }
         }
     }
     // change user-ID
-    document.getElementById("rights_user_id").setAttribute("value", id);
+    $('rights_user_id').setAttribute('value', id);
     // build new table rows
-    var rightsList = user.getElementsByTagName("user_rights")[0];
-    var rights = rightsList.getElementsByTagName("right");
-    var user_rights_table = document.getElementById("user_rights_table");
+    var rightsList = user.getElementsByTagName('user_rights')[0];
+    var rights = rightsList.getElementsByTagName('right');
+    var user_rights_table = $('user_rights_table');
     var name;
     var isUserRight;
     var checkbox;
     var right_id;
     for (var i = 0; i < rights.length; i++) {
-        name = text_getFromParent(rights[i], "name");
-        right_id = rights[i].getAttribute("id");
+        name = text_getFromParent(rights[i], 'name');
+        right_id = rights[i].getAttribute('id');
         if (getValues) {
-            isUserRight = text_getFromParent(rights[i], "is_user_right");
+            isUserRight = text_getFromParent(rights[i], 'is_user_right');
         } else {
             isUserRight = "0";
         }
-        checkbox = document.createElement("input");
-        checkbox.setAttribute("type", "checkbox");
-        checkbox.setAttribute("name", "user_rights[]");
-        checkbox.setAttribute("value", right_id);
+        checkbox = document.createElement('input');
+        checkbox.setAttribute('type', "checkbox");
+        checkbox.setAttribute('name', "user_rights[]");
+        checkbox.setAttribute('value', right_id);
         if (isUserRight == "1") {
-            checkbox.setAttribute("checked", "checked");
+            checkbox.setAttribute('checked', "checked");
         }
         table_addRow(user_rights_table, i, checkbox, document.createTextNode(name));
     }
