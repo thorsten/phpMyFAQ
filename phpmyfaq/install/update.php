@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.36 2006-01-02 16:51:29 thorstenr Exp $
+* $Id: update.php,v 1.37 2006-01-04 14:41:54 thorstenr Exp $
 *
 * Main update script
 *
@@ -32,6 +32,7 @@ if (isset($_GET["step"]) && $_GET["step"] != "") {
 } else {
     $step = 1;
 }
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -384,10 +385,17 @@ if ($step == 5) {
     }
     // update from versions before 1.6.0
     if ($version < 160) {
+        // Alter existing tables
         $query[] = "ALTER TABLE ".SQLPREFIX."faqfragen RENAME ".SQLPREFIX."faqquestions";
         $query[] = 'ALTER TABLE '.SQLPREFIX.'faqcategories ADD user_id INTEGER NOT NULL';
         $query[] = 'CREATE TABLE '.SQLPREFIX.'faqglossary ( id INT(11) NOT NULL , lang VARCHAR(2) NOT NULL , item VARCHAR(255) NOT NULL , definition TEXT NOT NULL, PRIMARY KEY (id, lang))';
         $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata ADD linkState VARCHAR(7) NOT NULL, ADD linkCheckDate INT(11) DEFAULT \'0\' NOT NULL';
+        // Write configuration in database
+        $q = 'INSERT INTO '.SQLPREFIX.'faqconfig (config_name, config_value) VALUES ';
+        foreach($PMF_CONF as $name => $value) {
+            $q .= sprintf("('%s', '%s'), ", $name, $value);
+        }
+        $query[] = substr($q, 0, -2);
         // TODO: Add new user and right tables
         // TODO: Convert existing installations
     }
