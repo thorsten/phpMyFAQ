@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.28 2006-01-02 16:51:25 thorstenr Exp $
+* $Id: artikel.php,v 1.29 2006-01-04 16:27:24 thorstenr Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -103,6 +103,12 @@ foreach ($multiCats as $multiCat) {
     $writeMultiCategories .= "\n";
 }
 
+if ($permission["editbt"]) {
+    $editThisEntry = sprintf('<a href="admin/index.php?aktion=editentry&amp;id=%d&amp;lang=%s">%s</a>', $id, $lang, 'edit this page');
+} else {
+    $editThisEntry = '';
+}
+
 $tpl->processTemplate ("writeContent", array(
 				"writeRubrik" => $writeCategory,
 				"writeThema" => stripslashes($faq->getRecordTitle($id, $lang)),
@@ -111,6 +117,7 @@ $tpl->processTemplate ("writeContent", array(
 				"writeContent" => preg_replace_callback("/<code([^>]*)>(.*?)<\/code>/is", 'hilight', $content),
 				"writeDateMsg" => $PMF_LANG["msgLastUpdateArticle"].$faq->faqRecord['date'],
 				"writeAuthor" => $PMF_LANG["msgAuthor"].$faq->faqRecord['author'],
+                'editThisEntry' => $editThisEntry,
 				"writePrintMsg" => $writePrintMsg,
 				"writePDF" => $writePDF,
 				"writeSend2FriendMsg" => $writeSend2FriendMsg,
