@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: user.php,v 1.16 2006-01-04 13:20:52 b33blebr0x Exp $
+* $Id: user.php,v 1.17 2006-01-04 14:24:37 b33blebr0x Exp $
 *
 * Displays the user managment frontend
 *
@@ -482,7 +482,6 @@ function buildUserRights(id)
 }
 
 
-
 function userSelect(evt)
 {
     evt = (evt) ? evt : ((windows.event) ? windows.event : null);
@@ -510,7 +509,7 @@ getUserList();
         <fieldset>
             <legend><?php print $text['selectUser']; ?></legend>
             <form name="user_select" id="user_select" action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=user&amp;user_action=delete_confirm" method="post">
-                <select name="user_list_select" id="user_list_select" size="<?php print $selectSize; ?>" onchange="userSelect(event)" tabindex="1">
+                <select name="user_list_select" id="user_list_select" onchange="userSelect(event)" size="<?php print $selectSize; ?>" tabindex="1">
                     <option value="">select...</option>
                 </select>
                 <input class="admin" type="submit" value="<?php print $text['delUser_button']; ?>" tabindex="2" />
