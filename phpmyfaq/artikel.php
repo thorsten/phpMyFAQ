@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.29 2006-01-04 16:27:24 thorstenr Exp $
+* $Id: artikel.php,v 1.30 2006-01-04 16:33:18 thorstenr Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -56,6 +56,8 @@ if (isset($_GET["highlight"]) && $_GET["highlight"] != "/" && $_GET["highlight"]
     $highlight = str_replace("'", "´", $highlight);
     $highlight = preg_quote($highlight, '/');
     $content = preg_replace_callback('/(((href|src|title|alt|class|style|id|name)="[^"]*)?'.$highlight.'(?(1).*"))/mis', "highlight_no_links", $content);
+} else {
+    $highlight = '';
 }
 
 $arrLanguage = check4Language($id);
@@ -98,9 +100,18 @@ if (is_dir('attachments/')  && is_dir('attachments/'.$id) && isset($PMF_CONF['di
 $writeMultiCategories = '';
 $cat = new Category($lang);
 $multiCats = $cat->getCategoriesFromArticle($id);
-foreach ($multiCats as $multiCat) {
-    $writeMultiCategories .= sprintf('<li><a href="%s?%saction=show&amp;cat=%d">%s</a></li>', $_SERVER['PHP_SELF'], $sids, $multiCat['id'], $multiCat['name']);
-    $writeMultiCategories .= "\n";
+if (count($multiCats) > 0) {
+    $writeMultiCategories .= '        <div id="article_categories">';
+    $writeMultiCategories .= '        <fieldset>';
+    $writeMultiCategories .= '                <legend>'.$PMF_LANG['msgArticleCategories'].'</legend>';
+    $writeMultiCategories .= '            <ul>';
+    foreach ($multiCats as $multiCat) {
+        $writeMultiCategories .= sprintf('<li><a href="%s?%saction=show&amp;cat=%d">%s</a></li>', $_SERVER['PHP_SELF'], $sids, $multiCat['id'], $multiCat['name']);
+        $writeMultiCategories .= "\n";
+    }
+    $writeMultiCategories .= '            </ul>';
+    $writeMultiCategories .= '        </fieldset>';
+    $writeMultiCategories .= '    </div>';
 }
 
 if ($permission["editbt"]) {
