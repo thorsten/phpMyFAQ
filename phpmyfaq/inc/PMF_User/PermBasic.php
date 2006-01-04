@@ -43,7 +43,6 @@ error_reporting(E_ALL);
  * @since 2005-09-17
  * @version 0.1
  */
-require_once('PMF/Perm.php');
 
 /* user defined includes */
 require_once dirname(__FILE__).'/Perm.php';

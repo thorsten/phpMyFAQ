@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.43 2006-01-02 11:39:55 thorstenr Exp $
+* $Id: installer.php,v 1.44 2006-01-04 12:47:21 b33blebr0x Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -31,6 +31,12 @@ define("COPYRIGHT", "&copy; 2001-2006 <a href=\"http://www.phpmyfaq.de/\">phpMyF
 define("SAFEMODE", @ini_get("safe_mode"));
 define("PMF_ROOT_DIR", dirname(dirname(__FILE__)));
 require_once(PMF_ROOT_DIR."/inc/constants.php");
+
+// permission levels
+$permLevels = array(
+    'basic',
+    'medium'
+);
 
 /**
 * db_check()
@@ -394,6 +400,19 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 <span class="help" title="Please select your default language.">?</span>
 </p>
 <p>
+<span class="text">Permission level:</span>
+<select class="input" name="permLevel" size="1">
+<?php
+foreach ($permLevels as $level) {
+?>
+    <option value="<?php print $level; ?>"><?php print ucwords($level); ?></option>
+<?php
+}
+?>
+</select>
+<span class="help" title="Complexity of user and right administration. Basic: users may have user-rights. Medium: users may have user-rights; group administration; groups may have group-rights; user have group-rights via group-memberships. ">?</span>
+</p>
+<p>
 <span class="text">Administrator's real name:</span>
 <input class="input" type="text" name="realname" />
 <span class="help" title="Please enter your real name here.">?</span>
@@ -435,8 +454,8 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
     // check database entries
 	if (isset($_POST["sql_type"]) && $_POST["sql_type"] != "") {
 		$sql_type = trim($_POST["sql_type"]);
-        if (file_exists(PMF_ROOT_DIR.'/install/'.$sql_type.'.php')) {
-            require_once(PMF_ROOT_DIR.'/install/'.$sql_type.'.php');
+        if (file_exists(PMF_ROOT_DIR.'/install/'.$sql_type.'.sql.php')) {
+            require_once(PMF_ROOT_DIR.'/install/'.$sql_type.'.sql.php');
         } else {
             print '<p class="error"><strong>Error:</strong> Invalid server type.</p>';
             HTMLFooter();
@@ -589,6 +608,7 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
     } else {
         $email = "";
     }
+    $permLevel = (isset($_POST['permLevel']) && in_array($_POST['permLevel'], $permLevels)) ? $_POST['permLevel'] : 'basic';
     
     // Write the DB variables in data.php
 	if ($fp = @fopen(PMF_ROOT_DIR."/inc/data.php","w")) {
@@ -633,8 +653,11 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 		}
 		@fclose($fp);
 		for ($h = 1; $h <= $anz; $h++) {
-			if (str_replace("\$PMF_CONF[\"language\"] = \"en\";", "", $inp[$h]) != $inp[$h]) {
-				$inp[$h] = "\$PMF_CONF[\"language\"] = \"".$language."\";\n";
+			if (str_replace("\$PMF_CONF['language'] = 'language_en.php';", "", $inp[$h]) != $inp[$h]) {
+				$inp[$h] = "\$PMF_CONF['language'] = '".$language."';\n";
+			}
+			if (str_replace("\$PMF_CONF['permLevel'] = 'basic';", "", $inp[$h]) != $inp[$h]) {
+				$inp[$h] = "\$PMF_CONF['permLevel'] = '".$permLevel."';\n";
 			}
 		}
 		if ($fp = @fopen(PMF_ROOT_DIR."/inc/config.php","w")) {
@@ -674,7 +697,7 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 		    HTMLFooter();
 		    die();
 		}
-        usleep(250);
+        //usleep(250);
 	}
 	// add admin account and rights
 	/*$query[] = "INSERT INTO ".$sqltblpre."faquser (id, name, pass, realname, email, rights) VALUES (1, 'admin', '".md5($password)."', '".$realname."', '".$email."', '1111111111111111111111111')";*/
