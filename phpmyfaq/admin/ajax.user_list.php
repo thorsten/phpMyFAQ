@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.user_list.php,v 1.13 2006-01-04 13:20:52 b33blebr0x Exp $
+* $Id: ajax.user_list.php,v 1.14 2006-01-04 14:47:02 b33blebr0x Exp $
 *
 * AJAX: lists all registered users
 *
@@ -41,6 +41,8 @@ $data = array(
     'email' => $PMF_LANG["ad_entry_email"], //"email adress:"
     'last_modified' => $PMF_LANG['ad_user_lastModified'], //"last modified:",
 );
+$perm = $user->perm;
+$all_rights = $perm->getAllRightsData();
 
 ob_clean();
 ?>
@@ -75,8 +77,6 @@ foreach ($userList as $user_id) {
             </user_data>
             <user_rights>
 <?php
-    $perm = $user_object->perm;
-    $all_rights = $perm->getAllRightsData();
     foreach ($all_rights as $right_data) {
         $right_id = $right_data['right_id'];
         // right is not for users!

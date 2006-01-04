@@ -159,7 +159,7 @@ class PMF_PermMedium
         if (!is_numeric($right) and is_string($right))
             $right = $this->getRightId($right);
         // check user right and group right
-        if ($this->checkUserRight($user_id, $right) or $this->checkUserGroupRight($user_id, $right))
+        if ($this->checkUserGroupRight($user_id, $right) or $this->checkUserRight($user_id, $right))
             return true;
         return false;
     }

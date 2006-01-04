@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.38 2006-01-03 13:00:56 thorstenr Exp $
+* $Id: index.php,v 1.39 2006-01-04 14:47:02 b33blebr0x Exp $
 *
 * The main admin backend index file
 *
@@ -91,14 +91,15 @@ if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
 $permission = array();
 if (isset($auth)) {
     // read all rights, set them FALSE
-    foreach ($user->perm->getAllRights() as $right_id) {
-        $right = $user->perm->getRightData($right_id);
+    $allRights = $user->perm->getAllRightsData();
+    foreach ($allRights as $right) {
         $permission[$right['name']] = false;
     }
-    // read user rights, set them TRUE
-    foreach ($user->perm->getAllUserRights($user->getUserId()) as $right_id) {
-        $right = $user->perm->getRightData($right_id);
-        $permission[$right['name']] = true;
+    // check user rights, set them TRUE
+    $allUserRights = $user->perm->getAllUserRights($user->getUserId());
+    foreach ($allRights as $right) {
+        if (in_array($right['right_id'], $allUserRights))
+            $permission[$right['name']] = true;
     }
 }
 // logout
