@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: user.php,v 1.17 2006-01-04 14:24:37 b33blebr0x Exp $
+* $Id: user.php,v 1.18 2006-01-05 19:43:37 b33blebr0x Exp $
 *
 * Displays the user managment frontend
 *
@@ -46,12 +46,14 @@ $errorMessages = array(
     'delUser' => $PMF_LANG['ad_user_error_delete'], //"User account could not be deleted. ",
     'delUser_noId' => $PMF_LANG['ad_user_error_noId'], //"No User-ID specified. ",
     'delUser_protectedAccount' => $PMF_LANG['ad_user_error_protectedAccount'], //"User account is protected. ",
+    'updateUser' => $PMF_LANG['ad_msg_mysqlerr'], //"Due to a <strong>database error</strong>, the profile could not be saved."
     'updateUser_noId' => $PMF_LANG['ad_user_error_noId'], //"No User-ID specified. ",
     'updateRights_noId' => $PMF_LANG['ad_user_error_noId'], //"No User-ID  specified. ",
 );
 $successMessages = array(
     'addUser' => $PMF_LANG["ad_adus_suc"], //"User <strong>successfully</strong> added.",
     'delUser' => $PMF_LANG["ad_user_deleted"], //"The user was successfully deleted.",
+    'updateUser' => $PMF_LANG['ad_msg_savedsuc_1'].' <strong>%s</strong> '.$PMF_LANG['ad_msg_savedsuc_2'],
 );
 $text = array(
     'header' => $PMF_LANG['ad_user'], // "User Administration"
@@ -75,7 +77,6 @@ $text = array(
     'changeUser_status' => $PMF_LANG['ad_user_status'], //"Status:",
     'changeRights' => $PMF_LANG["ad_user_rights"], // "Rights"
     'changeRights_submit' => $PMF_LANG["ad_gen_save"], //"Save",
-    'updateUser' => $PMF_LANG['ad_msg_savedsuc_1'].' %s '.$PMF_LANG['ad_msg_savedsuc_2']
 );
 
 // what shall we do?
@@ -120,9 +121,11 @@ if ($userAction == 'update_data') {
         $userStatus = isset($_POST['user_status']) ? $_POST['user_status'] : $defaultUserStatus;
         $user = new PMF_User();
         $user->getUserById($userId);
-        $user->userdata->set(array_keys($userData), array_values($userData));
-        $user->setStatus($userStatus);
-        $message .= '<p class="success">'.sprintf($text['updateUser'], $userId).'</p>';
+        if (!$user->userdata->set(array_keys($userData), array_values($userData)) or !$user->setStatus($userStatus)) {
+            $message .= '<p class="error">'.$errorMessages['updateUser'].'</p>';
+        } else {
+            $message .= '<p class="success">'.sprintf($successMessages['updateUser'], $user->getLogin()).'</p>';
+        }
     }
 } // end if ($userAction == 'update')
 // delete user confirmation
@@ -268,23 +271,23 @@ if ($userAction == 'add') {
         <form name="user_create" action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=user&amp;user_action=addsave" method="post">
             <div class="input_row">
                 <label for="user_name"><?php print $text['addUser_name']; ?></label>
-                <input type="text" name="user_name" value="<?php print (isset($user_name) ? $user_name : ''); ?>" tabindex="1" />
+                <input class="admin" type="text" name="user_name" value="<?php print (isset($user_name) ? $user_name : ''); ?>" tabindex="1" />
             </div>
             <div class="input_row">
                 <label for="user_realname"><?php print $text['addUser_displayName']; ?></label>
-                <input type="text" name="user_realname" value="<?php print (isset($user_realname) ? $user_realname : ''); ?>" tabindex="2" />
+                <input class="admin" type="text" name="user_realname" value="<?php print (isset($user_realname) ? $user_realname : ''); ?>" tabindex="2" />
             </div>
             <div class="input_row">
                 <label for="user_email"><?php print $text['addUser_email']; ?></label>
-                <input type="text" name="user_email" value="<?php print (isset($user_email) ? $user_email : ''); ?>" tabindex="3" />
+                <input class="admin" type="text" name="user_email" value="<?php print (isset($user_email) ? $user_email : ''); ?>" tabindex="3" />
             </div>
             <div class="input_row">
                 <label for="password"><?php print $text['addUser_password']; ?></label>
-                <input type="password" name="user_password" value="<?php print (isset($user_password) ? $user_password : ''); ?>" tabindex="4" />
+                <input class="admin" type="password" name="user_password" value="<?php print (isset($user_password) ? $user_password : ''); ?>" tabindex="4" />
             </div>
             <div class="input_row">
                 <label for="password_confirm"><?php print $text['addUser_password2']; ?></label>
-                <input type="password" name="user_password_confirm" value="<?php print (isset($user_password_confirm) ? $user_password_confirm : ''); ?>" tabindex="5" />
+                <input class="admin" type="password" name="user_password_confirm" value="<?php print (isset($user_password_confirm) ? $user_password_confirm : ''); ?>" tabindex="5" />
             </div>
             <div class="button_row">
                 <input class="submit" type="submit" value="<?php print $text['addUser_confirm']; ?>" tabindex="6" />
@@ -509,10 +512,10 @@ getUserList();
         <fieldset>
             <legend><?php print $text['selectUser']; ?></legend>
             <form name="user_select" id="user_select" action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=user&amp;user_action=delete_confirm" method="post">
-                <select name="user_list_select" id="user_list_select" onchange="userSelect(event)" size="<?php print $selectSize; ?>" tabindex="1">
+                <select class="admin" name="user_list_select" id="user_list_select" onchange="userSelect(event)" size="<?php print $selectSize; ?>" tabindex="1">
                     <option value="">select...</option>
                 </select>
-                <input class="admin" type="submit" value="<?php print $text['delUser_button']; ?>" tabindex="2" />
+                <input class="submit" type="submit" value="<?php print $text['delUser_button']; ?>" tabindex="2" />
             </form>
         </fieldset>
         <p>[ <a href="<?php print $_SERVER['PHP_SELF']; ?>?aktion=user&amp;user_action=add"><?php print $text['addUser_link']; ?></a> ]</p>
@@ -526,7 +529,7 @@ getUserList();
                 <input id="update_user_id" type="hidden" name="user_id" value="0" />
                 <div class="input_row">
                     <label for="user_status_select"><?php print $text['changeUser_status']; ?></label>
-                    <select id="user_status_select" name="user_status" >
+                    <select class="admin" id="user_status_select" name="user_status" >
                         <option value="active">active</option>
                         <option value="blocked">blocked</option>
                         <option value="protected">protected</option>

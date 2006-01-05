@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: group.php,v 1.4 2006-01-05 18:44:45 b33blebr0x Exp $
+* $Id: group.php,v 1.5 2006-01-05 19:43:37 b33blebr0x Exp $
 *
 * Displays the user managment frontend
 *
@@ -32,8 +32,8 @@ require_once(PMF_ROOT_DIR.'/inc/PMF_User/User.php');
 
 // set some parameters
 $selectSize = 10;
-$descriptionRows = 5;
-$descriptionCols = 20;
+$descriptionRows = 3;
+$descriptionCols = 15;
 $defaultGroupAction = 'list';
 $errorMessages = array(
     //'addUser_password' => $PMF_LANG['ad_user_error_password'], //"Please enter a password. ",
@@ -49,14 +49,19 @@ $errorMessages = array(
     //'delUser_noId' => $PMF_LANG['ad_user_error_noId'], //"No User-ID specified. ",
     'delGroup_noId' => $PMF_LANG['ad_group_error_noId'], //"No Group-ID specified. ",
     //'delUser_protectedAccount' => $PMF_LANG['ad_user_error_protectedAccount'], //"User account is protected. ",
-    //'updateUser_noId' => $PMF_LANG['ad_user_error_noId'], //"No User-ID specified. ",
-    'updateRights_noId' => $PMF_LANG['ad_user_error_noId'], //"No User-ID  specified. ",
+    //'updateUser_noId' => $PMF_LANG['ad_user_error_noId'], //"No ID specified. ",
+    //'updateUser' => $PMF_LANG['ad_msg_mysqlerr'], //"Due to a <strong>database error</strong>, the profile could not be saved."
+    'updateGroup' => $PMF_LANG['ad_msg_mysqlerr'], //"Due to a <strong>database error</strong>, the profile could not be saved."
+    'updateGroup_noId' => $PMF_LANG['ad_user_error_noId'], //"No ID specified. ",
+    'updateRights_noId' => $PMF_LANG['ad_user_error_noId'], //"No ID  specified. ",
 );
 $successMessages = array(
     //'addUser' => $PMF_LANG["ad_adus_suc"], //"User <strong>successfully</strong> added.",
     'addGroup' => $PMF_LANG['ad_group_suc'], //"Group <strong>successfully</strong> added.",
     //'delUser' => $PMF_LANG["ad_user_deleted"], //"The user was successfully deleted.",
     'delGroup' => $PMF_LANG['ad_group_deleted'], //"The group was successfully deleted.",
+    //'updateUser' => $PMF_LANG['ad_msg_savedsuc_1'].' <strong>%s</strong> '.$PMF_LANG['ad_msg_savedsuc_2'],
+    'updateGroup' => $PMF_LANG['ad_msg_savedsuc_1'].' <strong>%s</strong> '.$PMF_LANG['ad_msg_savedsuc_2'],
 );
 $text = array(
     'header' => "Group Administration",
@@ -119,25 +124,27 @@ if ($groupAction == 'update_rights') {
         }
     }
 } // end if ($groupAction == 'update_rights')
-// update user data
+// update group data
 if ($groupAction == 'update_data') {
     $message = '';
     $groupAction = $defaultGroupAction;
-    $userId = isset($_POST['group_id']) ? $_POST['group_id'] : 0;
-    if ($userId == 0) {
-        $message .= '<p class="error">'.$errorMessages['updateUser_noId'].'</p>';
+    $groupId = (isset($_POST['group_id']) && $_POST['group_id'] > 0) ? $_POST['group_id'] : 0;
+    if ($groupId == 0) {
+        $message .= '<p class="error">'.$errorMessages['updateGroup_noId'].'</p>';
     } else {
-        $userData = array();
-        $dataFields = array('display_name', 'email', 'last_modified');
+        $groupData = array();
+        $dataFields = array('name', 'description', 'auto_join');
         foreach ($dataFields as $field) {
-            $userData[$field] = isset($_POST[$field]) ? $_POST[$field] : '';
+            $groupData[$field] = isset($_POST[$field]) ? $_POST[$field] : '';
         }
-        $userStatus = isset($_POST['group_status']) ? $_POST['group_status'] : $defaultUserStatus;
         $user = new PMF_User();
-        $user->getUserById($userId);
-        $user->userdata->set(array_keys($userData), array_values($userData));
-        $user->setStatus($userStatus);
-        $message .= '<p class="success">'.$text['updateUser'].'</p>';
+        $perm = $user->perm;
+        if (!$perm->changeGroup($groupId, $groupData)) {
+            $message .= '<p class="error">'.$errorMessages['updateGroup'].'</p>';
+            $message .= '<p class="error">'.$perm->_db->error().'</p>';
+        } else {
+            $message .= '<p class="success">'.sprintf($successMessages['updateGroup'], $groupData['name']).'</p>';
+        }
     }
 } // end if ($groupAction == 'update')
 // delete group confirmation
@@ -244,15 +251,15 @@ if ($groupAction == 'add') {
         <form name="group_create" action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=group&amp;group_action=addsave" method="post">
             <div class="input_row">
                 <label for="group_name"><?php print $text['addGroup_name']; ?></label>
-                <input type="text" name="group_name" value="<?php print (isset($group_name) ? $group_name : ''); ?>" tabindex="1" />
+                <input class="admin" type="text" name="group_name" value="<?php print (isset($group_name) ? $group_name : ''); ?>" tabindex="1" />
             </div>
             <div class="input_row">
                 <label for="group_description"><?php print $text['addGroup_description']; ?></label>
-                <textarea name="group_description" cols="<?php print $descriptionCols; ?>" rows="<?php print $descriptionRows; ?>" tabindex="2"><?php print (isset($group_description) ? $group_description : ''); ?></textarea>
+                <textarea class="admin" name="group_description" cols="<?php print $descriptionCols; ?>" rows="<?php print $descriptionRows; ?>" tabindex="2"><?php print (isset($group_description) ? $group_description : ''); ?></textarea>
             </div>
             <div class="input_row">
                 <label for="group_auto_join"><?php print $text['addGroup_autoJoin']; ?></label>
-                <input type="checkbox" name="group_auto_join" value="1" tabindex="3"<?php print ((isset($group_auto_join) && $group_auto_join) ? ' checked="checked"' : ''); ?> />
+                <input class="admin" type="checkbox" name="group_auto_join" value="1" tabindex="3"<?php print ((isset($group_auto_join) && $group_auto_join) ? ' checked="checked"' : ''); ?> />
             </div>
             <div class="button_row">
                 <input class="submit" type="submit" value="<?php print $text['addGroup_confirm']; ?>" tabindex="6" />
@@ -321,7 +328,7 @@ function clearGroupData()
 {
     $('update_group_id').removeAttribute('value');
     $('update_group_name').removeAttribute('value');
-    $('update_group_description').innerHTML = '';
+    $('update_group_description').value = '';
     if ($('update_group_auto_join').getAttribute('checked')) {
         $('update_group_auto_join').removeAttributeNode($('update_group_auto_join').getAttributeNode('checked'));
     }
@@ -351,7 +358,7 @@ function buildGroupData(id)
     var name = text_getFromParent(group, 'name');
     $('update_group_name').setAttribute('value', name);
     var description = text_getFromParent(group, 'description');
-    $('update_group_description').innerHTML = description;
+    $('update_group_description').value = description;
     var auto_join = text_getFromParent(group, 'auto_join');
     if (auto_join == "1") {
         $('update_group_auto_join').setAttribute('checked', "checked");
@@ -445,10 +452,10 @@ getGroupList();
         <fieldset>
             <legend><?php print $text['selectGroup']; ?></legend>
             <form name="group_select" id="group_select" action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=group&amp;group_action=delete_confirm" method="post">
-                <select name="group_list_select" id="group_list_select" size="<?php print $selectSize; ?>" onchange="groupSelect(event)" tabindex="1">
+                <select class="admin" name="group_list_select" id="group_list_select" size="<?php print $selectSize; ?>" onchange="groupSelect(event)" tabindex="1">
                     <option value="">select...</option>
                 </select>
-                <input class="admin" type="submit" value="<?php print $text['delGroup_button']; ?>" tabindex="2" />
+                <input class="submit" type="submit" value="<?php print $text['delGroup_button']; ?>" tabindex="2" />
             </form>
         </fieldset>
         <p>[ <a href="<?php print $_SERVER['PHP_SELF']; ?>?aktion=group&amp;group_action=add"><?php print $text['addGroup_link']; ?></a> ]</p>
@@ -462,16 +469,16 @@ getGroupList();
                 <input id="update_group_id" type="hidden" name="group_id" value="0" />
                 <div id="group_data_table">
                     <div class="input_row">
-                        <label for="group_name"><?php print $text['addGroup_name']; ?></label>
-                        <input id="update_group_name" type="text" name="group_name" value="<?php print (isset($group_name) ? $group_name : ''); ?>" tabindex="1" />
+                        <label for="name"><?php print $text['addGroup_name']; ?></label>
+                        <input class="admin" id="update_group_name" type="text" name="name" value="<?php print (isset($group_name) ? $group_name : ''); ?>" tabindex="1" />
                     </div>
                     <div class="input_row">
-                        <label for="group_description"><?php print $text['addGroup_description']; ?></label>
-                        <textarea id="update_group_description" name="group_description" cols="<?php print $descriptionCols; ?>" rows="<?php print $descriptionRows; ?>" tabindex="2"><?php print (isset($group_description) ? $group_description : ''); ?></textarea>
+                        <label for="description"><?php print $text['addGroup_description']; ?></label>
+                        <textarea class="admin" id="update_group_description" name="description" cols="<?php print $descriptionCols; ?>" rows="<?php print $descriptionRows; ?>" tabindex="2"><?php print (isset($group_description) ? $group_description : ''); ?></textarea>
                     </div>
                     <div class="input_row">
-                        <label for="group_auto_join"><?php print $text['addGroup_autoJoin']; ?></label>
-                        <input id="update_group_auto_join" type="checkbox" name="group_auto_join" value="1" tabindex="3"<?php print ((isset($group_auto_join) && $group_auto_join) ? ' checked="checked"' : ''); ?> />
+                        <label for="auto_join"><?php print $text['addGroup_autoJoin']; ?></label>
+                        <input class="admin" id="update_group_auto_join" type="checkbox" name="auto_join" value="1" tabindex="3"<?php print ((isset($group_auto_join) && $group_auto_join) ? ' checked="checked"' : ''); ?> />
                     </div>
                 </div><!-- end #group_data_table -->
                 <div class="button_row">
