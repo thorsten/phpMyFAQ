@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.group_list.php,v 1.3 2006-01-04 17:02:06 b33blebr0x Exp $
+* $Id: ajax.group_list.php,v 1.4 2006-01-05 18:44:45 b33blebr0x Exp $
 *
 * AJAX: lists all registered users
 *
@@ -41,6 +41,8 @@ $data = array(
     'description' => "Description:",
     'auto_join' => "Auto-join:",
 );
+$perm = $user->perm;
+$all_rights = $perm->getAllRightsData();
 
 ob_clean();
 ?>
@@ -57,11 +59,9 @@ foreach ($groupList as $group_id) {
             <auto_join><?php print $groupData['auto_join']; ?></auto_join>
             <group_rights>
 <?php
-    $perm = $user->perm;
-    $all_rights = $perm->getAllRights();
-    foreach ($all_rights as $right_id) {
-        $right_data = $perm->getRightData($right_id);
-        // right is not for users!
+    foreach ($all_rights as $right_data) {
+        $right_id = $right_data['right_id'];
+        // right is not for groups!
         if (!$right_data['for_groups'])
             continue;
         $isGroupRight = $perm->checkGroupRight($group_id, $right_id) ? '1' : '0';
@@ -77,7 +77,7 @@ foreach ($groupList as $group_id) {
             </group_rights>
         </group>
 <?php
-} /* end foreach ($userList) */
+} /* end foreach ($groupList) */
 ?>
     </grouplist>
 </xml>

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: group.php,v 1.3 2006-01-04 17:02:06 b33blebr0x Exp $
+* $Id: group.php,v 1.4 2006-01-05 18:44:45 b33blebr0x Exp $
 *
 * Displays the user managment frontend
 *
@@ -45,7 +45,9 @@ $errorMessages = array(
     'addGroup_noName' => $PMF_LANG['ad_group_error_noName'], //"Please enter a group name. ",
     'addGroup_db' => $PMF_LANG['ad_adus_dberr'], // "<strong>database error!</strong>"
     //'delUser' => $PMF_LANG['ad_user_error_delete'], //"User account could not be deleted. ",
+    'delGroup' => $PMF_LANG['ad_group_error_delete'], //"Group could not be deleted. ",
     //'delUser_noId' => $PMF_LANG['ad_user_error_noId'], //"No User-ID specified. ",
+    'delGroup_noId' => $PMF_LANG['ad_group_error_noId'], //"No Group-ID specified. ",
     //'delUser_protectedAccount' => $PMF_LANG['ad_user_error_protectedAccount'], //"User account is protected. ",
     //'updateUser_noId' => $PMF_LANG['ad_user_error_noId'], //"No User-ID specified. ",
     'updateRights_noId' => $PMF_LANG['ad_user_error_noId'], //"No User-ID  specified. ",
@@ -54,6 +56,7 @@ $successMessages = array(
     //'addUser' => $PMF_LANG["ad_adus_suc"], //"User <strong>successfully</strong> added.",
     'addGroup' => $PMF_LANG['ad_group_suc'], //"Group <strong>successfully</strong> added.",
     //'delUser' => $PMF_LANG["ad_user_deleted"], //"The user was successfully deleted.",
+    'delGroup' => $PMF_LANG['ad_group_deleted'], //"The group was successfully deleted.",
 );
 $text = array(
     'header' => "Group Administration",
@@ -72,11 +75,15 @@ $text = array(
     'addGroup_description' => $PMF_LANG['ad_group_description'], // "Description: "
     'addGroup_autoJoin' => $PMF_LANG['ad_group_autoJoin'], // "Auto-join:"
     //'delUser' => $PMF_LANG['ad_user_deleteUser'], //"Delete User",
+    'delGroup' => $PMF_LANG['ad_group_deleteGroup'], //"Delete Group",
     //'delUser_button' => $PMF_LANG['ad_gen_delete'], //"Delete",
     'delGroup_button' => $PMF_LANG['ad_gen_delete'], //"Delete",
     //'delUser_question' => $PMF_LANG['ad_user_del_3']." ".$PMF_LANG['ad_user_del_1']." ".$PMF_LANG['ad_user_del_2'], //"Are you sure?"."The User"."shall be deleted?",
+    'delGroup_question' => $PMF_LANG['ad_group_deleteQuestion'], //"Are you sure that this group shall be deleted?",
     //'delUser_confirm' => $PMF_LANG['ad_gen_yes'], //"Yes",
+    'delGroup_confirm' => $PMF_LANG['ad_gen_yes'], //"Yes",
     //'delUser_cancel' => $PMF_LANG['ad_gen_no'], //"No",
+    'delGroup_cancel' => $PMF_LANG['ad_gen_no'], //"No",
     //'changeUser' => $PMF_LANG['ad_user_profou'], // "Profile of the User"
     'changeGroup' => $PMF_LANG['ad_group_details'], // "Group Details"
     //'changeUser_submit' => $PMF_LANG['ad_gen_save'], //"Save",
@@ -133,57 +140,50 @@ if ($groupAction == 'update_data') {
         $message .= '<p class="success">'.$text['updateUser'].'</p>';
     }
 } // end if ($groupAction == 'update')
-// delete user confirmation
+// delete group confirmation
 if ($groupAction == 'delete_confirm') {
     $message = '';
     $user = new PMF_User();
-    $userId = isset($_POST['group_list_select']) ? $_POST['group_list_select'] : 0;
-    if ($userId == 0) {
-        $message .= '<p class="error">'.$errorMessages['delUser_noId'].'</p>';
+    $perm = $user->perm;
+    $groupId = (isset($_POST['group_list_select']) && $_POST['group_list_select'] > 0) ? $_POST['group_list_select'] : 0;
+    if ($groupId <= 0) {
+        $message .= '<p class="error">'.$errorMessages['delGroup_noId'].'</p>';
         $groupAction = $defaultGroupAction;
     } else {
-        $user->getUserById($userId);
-        // account is protected
-        if ($user->getStatus() == 'protected') {
-            $groupAction = $defaultGroupAction;
-            $message .= '<p class="error">'.$errorMessages['delUser_protectedAccount'].'</p>';
-        } else {
+        $group_data = $perm->getGroupData($groupId);
 ?>
 <h2><?php print $text['header']; ?></h2>
 <div id="group_confirmDelete">
     <fieldset>
-        <legend><?php print $text['delUser']; ?></legend>
-        <strong><?php print $user->getLogin(); ?></strong>
-        <p><?php print $text['delUser_question']; ?></p>
+        <legend><?php print $text['delGroup']; ?></legend>
+        <strong><?php print $group_data['name']; ?></strong>
+        <p><?php print $text['delGroup_question']; ?></p>
         <form action ="<?php print $_SERVER['PHP_SELF']; ?>?aktion=group&amp;group_action=delete" method="post">
-            <input type="hidden" name="group_id" value="<?php print $userId; ?>" />
+            <input type="hidden" name="group_id" value="<?php print $groupId; ?>" />
             <div class="button_row">
-                <input class="reset" type="submit" name="cancel" value="<?php print $text['delUser_cancel']; ?>" />
-                <input class="submit" type="submit" value="<?php print $text['delUser_confirm']; ?>" />
+                <input class="reset" type="submit" name="cancel" value="<?php print $text['delGroup_cancel']; ?>" />
+                <input class="submit" type="submit" value="<?php print $text['delGroup_confirm']; ?>" />
             </div>
         </form>
     </fieldset>
 </div>
 <?php
-        }
     }
 } // end if ($groupAction == 'delete_confirm')
-// delete user
+// delete group
 if ($groupAction == 'delete') {
     $message = '';
     $user = new PMF_User();
-    $userId = isset($_POST['group_id']) ? $_POST['group_id'] : 0;
+    $perm = $user->perm;
+    $groupId = (isset($_POST['group_id']) && $_POST['group_id'] > 0) ? (int) $_POST['group_id'] : 0;
     $groupAction = $defaultGroupAction;
-    if ($userId == 0) {
-        $message .= '<p class="error">'.$errorMessages['delUser_noId'].'</p>';
+    if ($groupId <= 0) {
+        $message .= '<p class="error">'.$errorMessages['delGroup_noId'].'</p>';
     } else {
-        if (!$user->getUserById($userId)) {
-            $message .= '<p class="error">'.$errorMessages['delUser_noId'].'</p>';
-        }
-        if (!$user->deleteUser()) {
-            $message .= '<p class="error">'.$errorMessages['delUser'].'</p>';
+        if (!$perm->deleteGroup($groupId)) {
+            $message .= '<p class="error">'.$errorMessages['delGroup'].'</p>';
         } else {
-            $message .= '<p class="success">'.$successMessages['delUser'].'</p>';
+            $message .= '<p class="success">'.$successMessages['delGroup'].'</p>';
         }
         $userError = $user->error();
         if ($userError != "") {
