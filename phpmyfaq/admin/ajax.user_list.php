@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.user_list.php,v 1.14 2006-01-04 14:47:02 b33blebr0x Exp $
+* $Id: ajax.user_list.php,v 1.15 2006-01-05 22:07:34 b33blebr0x Exp $
 *
 * AJAX: lists all registered users
 *
@@ -47,6 +47,22 @@ $all_rights = $perm->getAllRightsData();
 ob_clean();
 ?>
 <xml>
+    <rightlist>
+<?php
+foreach ($all_rights as $right_data) {
+    $right_id = $right_data['right_id'];
+    // right is not for users!
+    if (!$right_data['for_users'])
+        continue;
+?>
+        <right id="<?php print $right_id; ?>">
+            <name><?php print isset($PMF_LANG['rightsLanguage'][$right_data['name']]) ? htmlentities($PMF_LANG['rightsLanguage'][$right_data['name']]) : $right_data['name']; ?></name>
+            <description><?php print $right_data['description']; ?></description>
+        </right>
+<?php
+    } /* end foreach ($all_rights) */
+?>
+    </rightlist>
     <userlist>
         <select_class>ad_select_user</select_class>
 <?php
@@ -82,14 +98,12 @@ foreach ($userList as $user_id) {
         // right is not for users!
         if (!$right_data['for_users'])
             continue;
-        $isUserRight = $perm->checkUserRight($user_id, $right_id) ? '1' : '0';
+        // right is a user right!
+        if ($perm->checkUserRight($user_id, $right_id)) {
 ?>
-                <right id="<?php print $right_id; ?>">
-                    <name><?php print isset($PMF_LANG['rightsLanguage'][$right_data['name']]) ? htmlentities($PMF_LANG['rightsLanguage'][$right_data['name']], ENT_COMPAT, $PMF_LANG["metaCharset"]) : $right_data['name']; ?></name>
-                    <description><?php print $right_data['description']; ?></description>
-                    <is_user_right><?php print $isUserRight; ?></is_user_right>
-                </right>
+                <right id="<?php print $right_id; ?>"></right>
 <?php
+        } /* end if ($perm->checkUserRight()) */
     } /* end foreach ($all_rights) */
 ?>
             </user_rights>

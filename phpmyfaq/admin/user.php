@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: user.php,v 1.18 2006-01-05 19:43:37 b33blebr0x Exp $
+* $Id: user.php,v 1.19 2006-01-05 22:07:34 b33blebr0x Exp $
 *
 * Displays the user managment frontend
 *
@@ -48,12 +48,14 @@ $errorMessages = array(
     'delUser_protectedAccount' => $PMF_LANG['ad_user_error_protectedAccount'], //"User account is protected. ",
     'updateUser' => $PMF_LANG['ad_msg_mysqlerr'], //"Due to a <strong>database error</strong>, the profile could not be saved."
     'updateUser_noId' => $PMF_LANG['ad_user_error_noId'], //"No User-ID specified. ",
+    'updateRights' => $PMF_LANG['ad_msg_mysqlerr'], //"Due to a <strong>database error</strong>, the profile could not be saved."
     'updateRights_noId' => $PMF_LANG['ad_user_error_noId'], //"No User-ID  specified. ",
 );
 $successMessages = array(
     'addUser' => $PMF_LANG["ad_adus_suc"], //"User <strong>successfully</strong> added.",
     'delUser' => $PMF_LANG["ad_user_deleted"], //"The user was successfully deleted.",
     'updateUser' => $PMF_LANG['ad_msg_savedsuc_1'].' <strong>%s</strong> '.$PMF_LANG['ad_msg_savedsuc_2'],
+    'updateRights' => $PMF_LANG['ad_msg_savedsuc_1'].' <strong>%s</strong> '.$PMF_LANG['ad_msg_savedsuc_2'],
 );
 $text = array(
     'header' => $PMF_LANG['ad_user'], // "User Administration"
@@ -98,11 +100,15 @@ if ($userAction == 'update_rights') {
         $message .= '<p class="error">'.$errorMessages['updateRights_noId'].'</p>';
     } else {
         $user = new PMF_User();
+        $perm = $user->perm;
         $userRights = isset($_POST['user_rights']) ? $_POST['user_rights'] : array();
-        $user->perm->refuseAllUserRights($userId);
-        foreach ($userRights as $rightId) {
-            $user->perm->grantUserRight($userId, $rightId);
+        if (!$perm->refuseAllUserRights($userId)) {
+            $message .= '<p class="error">'.$errorMessages['updateRights'].'</p>';
         }
+        foreach ($userRights as $rightId) {
+            $perm->grantUserRight($userId, $rightId);
+        }
+        $message .= '<p class="success">'.sprintf($successMessages['updateRights'], $groupId).'</p>';
     }
 } // end if ($userAction == 'update_rights')
 // update user data
@@ -439,15 +445,16 @@ function clearUserRights()
 
 function buildUserRights(id)
 {
+    var user_rights_table = $('user_rights_table');
     var getValues = true;
-    var users = userList.responseXML.getElementsByTagName('user');
-    var user;
     // get user with given id
     if (id == 0) {
         getValues = false;
-        user = users[0];
     } else {
         getValues = true;
+        // loop through user-elements
+        var users = userList.responseXML.getElementsByTagName('user');
+        var user;
         for (var i = 0; i < users.length; i++) {
             if (users[i].getAttribute('id') == id) {
                 user = users[i];
@@ -457,30 +464,43 @@ function buildUserRights(id)
     }
     // change user-ID
     $('rights_user_id').setAttribute('value', id);
-    // build new table rows
-    var rightsList = user.getElementsByTagName('user_rights')[0];
-    var rights = rightsList.getElementsByTagName('right');
-    var user_rights_table = $('user_rights_table');
-    var name;
-    var isUserRight;
-    var checkbox;
     var right_id;
-    for (var i = 0; i < rights.length; i++) {
-        name = text_getFromParent(rights[i], 'name');
-        right_id = rights[i].getAttribute('id');
+    var right_name;
+    var right_description;
+    var checkbox;
+    var isUserRight = 0;
+    // loop through rightlist at beginning (all user rights)
+    var rightList = userList.responseXML.getElementsByTagName('rightlist')[0].getElementsByTagName('right');
+    for (var i = 0; i < rightList.length; i++) {
+        right_name = text_getFromParent(rightList[i], 'name');
+        right_description = text_getFromParent(rightList[i], 'description');
+        right_id = rightList[i].getAttribute('id');
+        // search for that right in user right list
+        isUserRight = 0;
         if (getValues) {
-            isUserRight = text_getFromParent(rights[i], 'is_user_right');
+            var userRights = user.getElementsByTagName('right');
+            var j = 0;
+            while (isUserRight == 0 && j < userRights.length) {
+                if (userRights[j].getAttribute('id') == right_id) {
+                    isUserRight = 1;
+                    break;
+                } else {
+                    isUserRight = 0;
+                    j++;
+                }
+            }
         } else {
-            isUserRight = "0";
+            isUserRight = 0;
         }
+        // build new table row
         checkbox = document.createElement('input');
         checkbox.setAttribute('type', "checkbox");
         checkbox.setAttribute('name', "user_rights[]");
         checkbox.setAttribute('value', right_id);
-        if (isUserRight == "1") {
+        if (isUserRight == 1) {
             checkbox.setAttribute('checked', "checked");
         }
-        table_addRow(user_rights_table, i, checkbox, document.createTextNode(name));
+        table_addRow(user_rights_table, i, checkbox, document.createTextNode(right_name));
     }
 }
 

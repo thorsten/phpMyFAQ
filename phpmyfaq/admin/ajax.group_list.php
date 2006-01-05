@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.group_list.php,v 1.4 2006-01-05 18:44:45 b33blebr0x Exp $
+* $Id: ajax.group_list.php,v 1.5 2006-01-05 22:07:34 b33blebr0x Exp $
 *
 * AJAX: lists all registered users
 *
@@ -47,6 +47,22 @@ $all_rights = $perm->getAllRightsData();
 ob_clean();
 ?>
 <xml>
+    <rightlist>
+<?php
+foreach ($all_rights as $right_data) {
+    $right_id = $right_data['right_id'];
+    // right is not for groups!
+    if (!$right_data['for_groups'])
+        continue;
+?>
+        <right id="<?php print $right_id; ?>">
+            <name><?php print isset($PMF_LANG['rightsLanguage'][$right_data['name']]) ? htmlentities($PMF_LANG['rightsLanguage'][$right_data['name']]) : $right_data['name']; ?></name>
+            <description><?php print $right_data['description']; ?></description>
+        </right>
+<?php
+    } /* end foreach ($all_rights) */
+?>
+    </rightlist>
     <grouplist>
         <select_class>ad_select_group</select_class>
 <?php
@@ -64,14 +80,12 @@ foreach ($groupList as $group_id) {
         // right is not for groups!
         if (!$right_data['for_groups'])
             continue;
-        $isGroupRight = $perm->checkGroupRight($group_id, $right_id) ? '1' : '0';
+        // right is a group right!
+        if ($perm->checkGroupRight($group_id, $right_id)) {
 ?>
-                <right id="<?php print $right_id; ?>">
-                    <name><?php print isset($PMF_LANG['rightsLanguage'][$right_data['name']]) ? $PMF_LANG['rightsLanguage'][$right_data['name']] : $right_data['name']; ?></name>
-                    <description><?php print $right_data['description']; ?></description>
-                    <is_user_right><?php print $isUserRight; ?></is_user_right>
-                </right>
+                <right id="<?php print $right_id; ?>"></right>
 <?php
+        } /* end if ($perm->checkGroupRight()) */
     } /* end foreach ($all_rights) */
 ?>
             </group_rights>

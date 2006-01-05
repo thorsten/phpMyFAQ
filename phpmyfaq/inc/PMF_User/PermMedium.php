@@ -854,6 +854,62 @@ class PMF_PermMedium
         return $result;
     }
 
+    /**
+     * refuseAllGroupRights
+     *
+     * Refuses all group rights.
+     * Returns true on success, otherwise false.
+     *
+     * @access public
+     * @author Lars Tiedemann, <php@larstiedemann.de>
+     * @param int
+     * @return bool
+     */
+    function refuseAllGroupRights($group_id)
+    {
+        if (!$this->_initialized)
+        	return false;
+        $res = $this->_db->query("
+            DELETE FROM
+                ".PMF_USER_SQLPREFIX."group_right
+            WHERE
+                group_id  = ".$group_id
+        );
+        if (!$res)
+            return false;
+        return true;
+    }
+
+    /**
+     * getGroupName
+     *
+     * Returns the name of the group $group_id.
+     *
+     * @access public
+     * @author Lars Tiedemann, <php@larstiedemann.de>
+     * @param int
+     * @return array
+     */
+    function getGroupName($group_id)
+    {
+        if (!$this->_initialized)
+        	return false;
+        // get group data
+        $res = $this->_db->query("
+        	SELECT
+        		name
+        	FROM
+        		".PMF_USER_SQLPREFIX."group
+        	WHERE
+        		group_id = ".$group_id
+        );
+        // return
+        if ($this->_db->num_rows($res) != 1)
+        	return array();
+        $row = $this->_db->fetch_assoc($res);
+        return $row['name'];
+    }
+
 } /* end of class PMF_PermMedium */
 
 ?>

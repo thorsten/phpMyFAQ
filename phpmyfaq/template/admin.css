@@ -1,5 +1,5 @@
 /**
-* $Id: admin.css,v 1.8 2006-01-04 17:02:06 b33blebr0x Exp $
+* $Id: admin.css,v 1.9 2006-01-05 22:07:34 b33blebr0x Exp $
 *
 * This is the CSS file for the admin section of phpMyFAQ 1.5.x
 * You don't need to change enything here but feel free to do it. :-)
@@ -328,6 +328,23 @@ table.linkconfig#configuration tr#lastrow td {
 #group_create {
     width: 350px;
 }
+/* container for #group_list */
+#groups {
+    float: left;
+    width: 250px;
+}
+#group_list {}
+/* container for #user_data and #user_rights */
+#group_details {
+    float: right;
+    width: 250px;
+    margin: 0;
+    padding: 0;
+}
+#group_data {
+    margin: 0 0 20px 0;
+}
+#group_rights {}
 
 /* admin form */
 div.input_row {

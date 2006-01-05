@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: group.php,v 1.5 2006-01-05 19:43:37 b33blebr0x Exp $
+* $Id: group.php,v 1.6 2006-01-05 22:07:34 b33blebr0x Exp $
 *
 * Displays the user managment frontend
 *
@@ -36,64 +36,38 @@ $descriptionRows = 3;
 $descriptionCols = 15;
 $defaultGroupAction = 'list';
 $errorMessages = array(
-    //'addUser_password' => $PMF_LANG['ad_user_error_password'], //"Please enter a password. ",
-    //'addUser_passwordsDontMatch' => $PMF_LANG['ad_user_error_passwordsDontMatch'], //"Passwords do not match. ",
-    //'addUser_loginExists' => $PMF_LANG["ad_adus_exerr"], //"Username <strong>exists</strong> already.",
-    //'addUser_loginInvalid' => $PMF_LANG['ad_user_error_loginInvalid'], //"The specified user name is invalid.",
-    //'addUser_noEmail' => $PMF_LANG['ad_user_error_noEmail'], //"Please enter a valid mail adress. ",
-    //'addUser_noRealName' => $PMF_LANG['ad_user_error_noRealName'], //"Please enter your real name. ",
     'addGroup_noName' => $PMF_LANG['ad_group_error_noName'], //"Please enter a group name. ",
     'addGroup_db' => $PMF_LANG['ad_adus_dberr'], // "<strong>database error!</strong>"
-    //'delUser' => $PMF_LANG['ad_user_error_delete'], //"User account could not be deleted. ",
     'delGroup' => $PMF_LANG['ad_group_error_delete'], //"Group could not be deleted. ",
-    //'delUser_noId' => $PMF_LANG['ad_user_error_noId'], //"No User-ID specified. ",
-    'delGroup_noId' => $PMF_LANG['ad_group_error_noId'], //"No Group-ID specified. ",
-    //'delUser_protectedAccount' => $PMF_LANG['ad_user_error_protectedAccount'], //"User account is protected. ",
-    //'updateUser_noId' => $PMF_LANG['ad_user_error_noId'], //"No ID specified. ",
-    //'updateUser' => $PMF_LANG['ad_msg_mysqlerr'], //"Due to a <strong>database error</strong>, the profile could not be saved."
+    'delGroup_noId' => $PMF_LANG['ad_user_error_noId'], //"No ID specified. ",
     'updateGroup' => $PMF_LANG['ad_msg_mysqlerr'], //"Due to a <strong>database error</strong>, the profile could not be saved."
     'updateGroup_noId' => $PMF_LANG['ad_user_error_noId'], //"No ID specified. ",
+    'updateRights' => $PMF_LANG['ad_msg_mysqlerr'], //"Due to a <strong>database error</strong>, the profile could not be saved."
     'updateRights_noId' => $PMF_LANG['ad_user_error_noId'], //"No ID  specified. ",
 );
 $successMessages = array(
-    //'addUser' => $PMF_LANG["ad_adus_suc"], //"User <strong>successfully</strong> added.",
     'addGroup' => $PMF_LANG['ad_group_suc'], //"Group <strong>successfully</strong> added.",
-    //'delUser' => $PMF_LANG["ad_user_deleted"], //"The user was successfully deleted.",
     'delGroup' => $PMF_LANG['ad_group_deleted'], //"The group was successfully deleted.",
-    //'updateUser' => $PMF_LANG['ad_msg_savedsuc_1'].' <strong>%s</strong> '.$PMF_LANG['ad_msg_savedsuc_2'],
     'updateGroup' => $PMF_LANG['ad_msg_savedsuc_1'].' <strong>%s</strong> '.$PMF_LANG['ad_msg_savedsuc_2'],
+    'updateRights' => $PMF_LANG['ad_msg_savedsuc_1'].' <strong>%s</strong> '.$PMF_LANG['ad_msg_savedsuc_2'],
 );
 $text = array(
     'header' => "Group Administration",
-    //'selectUser' => $PMF_LANG['ad_user_username'], // "Registered users"
     'selectGroup' => "Groups",
-    //'addUser' => $PMF_LANG['ad_adus_adduser'], // "add User"
     'addGroup' => $PMF_LANG['ad_group_add'], // "Add Group"
-    //'addUser_confirm' => $PMF_LANG['ad_gen_save'], //"Save",
     'addGroup_confirm' => $PMF_LANG['ad_gen_save'], //"Save",
-    //'addUser_cancel' => $PMF_LANG['ad_gen_cancel'], //"Cancel",
     'addGroup_cancel' => $PMF_LANG['ad_gen_cancel'], //"Cancel",
-    //'addUser_link' => $PMF_LANG['ad_user_add'], // "Add User"
     'addGroup_link' => $PMF_LANG['ad_group_add_link'], // "Add Group"
-    //'addUser_name' => $PMF_LANG['ad_adus_name'], // "Name: "
     'addGroup_name' => $PMF_LANG['ad_group_name'], // "Name: "
     'addGroup_description' => $PMF_LANG['ad_group_description'], // "Description: "
     'addGroup_autoJoin' => $PMF_LANG['ad_group_autoJoin'], // "Auto-join:"
-    //'delUser' => $PMF_LANG['ad_user_deleteUser'], //"Delete User",
     'delGroup' => $PMF_LANG['ad_group_deleteGroup'], //"Delete Group",
-    //'delUser_button' => $PMF_LANG['ad_gen_delete'], //"Delete",
     'delGroup_button' => $PMF_LANG['ad_gen_delete'], //"Delete",
-    //'delUser_question' => $PMF_LANG['ad_user_del_3']." ".$PMF_LANG['ad_user_del_1']." ".$PMF_LANG['ad_user_del_2'], //"Are you sure?"."The User"."shall be deleted?",
     'delGroup_question' => $PMF_LANG['ad_group_deleteQuestion'], //"Are you sure that this group shall be deleted?",
-    //'delUser_confirm' => $PMF_LANG['ad_gen_yes'], //"Yes",
     'delGroup_confirm' => $PMF_LANG['ad_gen_yes'], //"Yes",
-    //'delUser_cancel' => $PMF_LANG['ad_gen_no'], //"No",
     'delGroup_cancel' => $PMF_LANG['ad_gen_no'], //"No",
-    //'changeUser' => $PMF_LANG['ad_user_profou'], // "Profile of the User"
     'changeGroup' => $PMF_LANG['ad_group_details'], // "Group Details"
-    //'changeUser_submit' => $PMF_LANG['ad_gen_save'], //"Save",
     'changeGroup_submit' => $PMF_LANG['ad_gen_save'], //"Save",
-    //'changeUser_status' => $PMF_LANG['ad_user_status'], //"Status:",
     'changeRights' => $PMF_LANG['ad_user_rights'], // "Rights"
     'changeRights_submit' => $PMF_LANG['ad_gen_save'], //"Save",
 );
@@ -113,15 +87,19 @@ if ($groupAction == 'update_rights') {
     $message = '';
     $groupAction = $defaultGroupAction;
     $groupId = isset($_POST['group_id']) ? $_POST['group_id'] : 0;
-    if ($userId == 0) {
+    if ($groupId == 0) {
         $message .= '<p class="error">'.$errorMessages['updateRights_noId'].'</p>';
     } else {
         $user = new PMF_User();
-        $userRights = isset($_POST['group_rights']) ? $_POST['group_rights'] : array();
-        $user->perm->refuseAllUserRights($userId);
-        foreach ($userRights as $rightId) {
-            $user->perm->grantUserRight($userId, $rightId);
+        $perm = $user->perm;
+        $groupRights = isset($_POST['group_rights']) ? $_POST['group_rights'] : array();
+        if (!$perm->refuseAllGroupRights($groupId)) {
+            $message .= '<p class="error">'.$errorMessages['updateRights'].'</p>';
         }
+        foreach ($groupRights as $rightId) {
+            $perm->grantGroupRight($groupId, $rightId);
+        }
+        $message .= '<p class="success">'.sprintf($successMessages['updateRights'], $perm->getGroupName($groupId)).'</p>';
     }
 } // end if ($groupAction == 'update_rights')
 // update group data
@@ -380,15 +358,16 @@ function clearGroupRights()
 
 function buildGroupRights(id)
 {
+    var group_rights_table = $('group_rights_table');
     var getValues = true;
-    var groups = groupList.responseXML.getElementsByTagName('group');
-    var group;
     // get group with given id
     if (id == 0) {
         getValues = false;
-        group = groups[0];
     } else {
         getValues = true;
+        // loop through group-elements
+        var groups = groupList.responseXML.getElementsByTagName('group');
+        var group;
         for (var i = 0; i < groups.length; i++) {
             if (groups[i].getAttribute('id') == id) {
                 group = groups[i];
@@ -398,30 +377,43 @@ function buildGroupRights(id)
     }
     // change group-ID
     $('rights_group_id').setAttribute('value', id);
-    // build new table rows
-    var rightsList = group.getElementsByTagName('group_rights')[0];
-    var rights = rightsList.getElementsByTagName('right');
-    var group_rights_table = $('group_rights_table');
-    var name;
-    var isGroupRight;
-    var checkbox;
     var right_id;
-    for (var i = 0; i < rights.length; i++) {
-        name = text_getFromParent(rights[i], 'name');
-        right_id = rights[i].getAttribute('id');
+    var right_name;
+    var right_description;
+    var checkbox;
+    var isGroupRight = 0;
+    // loop through rightlist at beginning (all group rights)
+    var rightList = groupList.responseXML.getElementsByTagName('rightlist')[0].getElementsByTagName('right');
+    for (var i = 0; i < rightList.length; i++) {
+        right_name = text_getFromParent(rightList[i], 'name');
+        right_description = text_getFromParent(rightList[i], 'description');
+        right_id = rightList[i].getAttribute('id');
+        // search for that right in group right list
+        isGroupRight = 0;
         if (getValues) {
-            isGroupRight = text_getFromParent(rights[i], 'is_group_right');
+            var groupRights = group.getElementsByTagName('right');
+            var j = 0;
+            while (isGroupRight == 0 && j < groupRights.length) {
+                if (groupRights[j].getAttribute('id') == right_id) {
+                    isGroupRight = 1;
+                    break;
+                } else {
+                    isGroupRight = 0;
+                    j++;
+                }
+            }
         } else {
-            isGroupRight = "0";
+            isGroupRight = 0;
         }
+        // build new table row
         checkbox = document.createElement('input');
         checkbox.setAttribute('type', "checkbox");
         checkbox.setAttribute('name', "group_rights[]");
         checkbox.setAttribute('value', right_id);
-        if (isGroupRight == "1") {
+        if (isGroupRight == 1) {
             checkbox.setAttribute('checked', "checked");
         }
-        table_addRow(group_rights_table, i, checkbox, document.createTextNode(name));
+        table_addRow(group_rights_table, i, checkbox, document.createTextNode(right_name));
     }
 }
 
@@ -447,8 +439,8 @@ getGroupList();
 
 <h2><?php print $text['header']; ?></h2>
 <div id="user_message"><?php print $message; ?></div>
-<div id="user_accounts">
-    <div id="user_list">
+<div id="groups">
+    <div id="group_list">
         <fieldset>
             <legend><?php print $text['selectGroup']; ?></legend>
             <form name="group_select" id="group_select" action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=group&amp;group_action=delete_confirm" method="post">
@@ -461,8 +453,8 @@ getGroupList();
         <p>[ <a href="<?php print $_SERVER['PHP_SELF']; ?>?aktion=group&amp;group_action=add"><?php print $text['addGroup_link']; ?></a> ]</p>
     </div> <!-- end #user_list -->
 </div> <!-- end #user_accounts -->
-<div id="user_details">
-    <div id="user_data">
+<div id="group_details">
+    <div id="group_data">
         <fieldset>
             <legend id="group_data_legend"><?php print $text['changeGroup']; ?></legend>
             <form action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=group&amp;group_action=update_data" method="post">
@@ -487,7 +479,7 @@ getGroupList();
             </form>
         </fieldset>
     </div> <!-- end #user_details -->
-    <div id="user_rights">
+    <div id="group_rights">
         <fieldset>
             <legend id="group_rights_legend"><?php print $text['changeRights']; ?></legend>
             <form action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=group&amp;group_action=update_rights" method="post">
