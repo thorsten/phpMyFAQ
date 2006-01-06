@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: group.php,v 1.7 2006-01-06 10:49:52 b33blebr0x Exp $
+* $Id: group.php,v 1.8 2006-01-06 18:46:27 b33blebr0x Exp $
 *
 * Displays the user managment frontend
 *
@@ -31,7 +31,8 @@ if (!$permission['edituser'] and !$permission['deluser'] and !$permission['addus
 require_once(PMF_ROOT_DIR.'/inc/PMF_User/User.php');
 
 // set some parameters
-$selectSize = 10;
+$groupSelectSize = 10;
+$memberSelectSize = 10;
 $descriptionRows = 3;
 $descriptionCols = 15;
 $defaultGroupAction = 'list';
@@ -72,6 +73,14 @@ $text = array(
     'changeRights_submit' => $PMF_LANG['ad_gen_save'], //"Save",
     'changeRights_checkAll' => $PMF_LANG['ad_user_checkall'], //"Select All",
     'changeRights_uncheckAll' => $PMF_LANG['ad_user_uncheckall'], //"Unselect All",
+    'groupMembership' => $PMF_LANG['ad_group_membership'], //"Group Membership",
+    'groupMembership_memberList' => $PMF_LANG['ad_group_members'], //"Members",
+    'groupMembership_userList' => $PMF_LANG['ad_user_username'], //"Registered users",
+    'addMember_button' => $PMF_LANG['ad_group_addMember'], //"Add",
+    'removeMember_button' => $PMF_LANG['ad_group_removeMember'], //"Remove",
+    'updateMember_submit' => $PMF_LANG['ad_gen_save'], //"Save",
+    'groupMembership_selectAll' => $PMF_LANG['ad_user_checkall'], //"Select All",
+    'groupMembership_unselectAll' => $PMF_LANG['ad_user_uncheckall'], //"Unselect All",
 );
 
 // what shall we do?
@@ -283,7 +292,28 @@ function processGroupList(XmlRequest) {
     buildGroupData(0);
     clearGroupRights();
     buildGroupRights(0);
+    clearUserList();
+    buildUserList();
+    clearMemberList();
+    buildMemberList(0);
 }
+
+
+function getGroupNode(groupId)
+{
+    // loop through group-elements
+    var group_list = groupList.responseXML.getElementsByTagName('grouplist')[0];
+    var groups = group_list.getElementsByTagName('group');
+    var group = null;
+    for (var i = 0; i < groups.length; i++) {
+        if (groups[i].getAttribute('id') == groupId) {
+            group = groups[i];
+            break;
+        }
+    }
+    return group;
+}
+
 
 function clearGroupList()
 {
@@ -430,8 +460,79 @@ function groupSelect(evt)
             buildGroupData(select.value);
             clearGroupRights();
             buildGroupRights(select.value);
+            clearMemberList();
+            buildMemberList(select.value);
         }
     }
+}
+
+
+function clearUserList()
+{
+    select_clear($('group_user_list'));
+}
+
+function buildUserList()
+{
+    var user_list = groupList.responseXML.getElementsByTagName('userlist')[0];
+    var users = user_list.getElementsByTagName('user');
+    var id;
+    var textNode;
+    var classAttrValue = text_getFromParent(user_list, "select_class");
+    for (var i = 0; i < users.length; i++) {
+        textNode = document.createTextNode(text_getFromParent(users[i], "login"));
+        id = users[i].getAttribute('id');
+        select_addOption($('group_user_list'), id, textNode, classAttrValue);
+    }
+}
+
+
+function clearMemberList()
+{
+    select_clear($('group_member_list'));
+}
+
+function buildMemberList(groupId)
+{
+    if (groupId == 0) {
+        clearMemberList();
+        return;
+    }
+    // loop through user_list
+    var user_list = groupList.responseXML.getElementsByTagName('userlist')[0];
+    var users = user_list.getElementsByTagName('user');
+    var user_id;
+    var login;
+    var isGroupMember = false;
+    for (var i = 0; i < users.length; i++) {
+        user_id = users[i].getAttribute('id');
+        // search for user element in group
+        var group = getGroupNode(groupId);
+        var group_members = group.getElementsByTagName('group_members')[0];
+        var members = group_members.getElementsByTagName('user');
+        for (var j = 0; j < members.length; j++) {
+            if (members[j].getAttribute('id') == user_id) {
+                isGroupMember = true;
+                break;
+            } else {
+                isGroupMember = false;
+            }
+        }
+        if (isGroupMember == true) {
+            var login = text_getFromParent(users[i], 'login');
+            select_addOption($('group_member_list'), user_id, document.createTextNode(login), text_getFromParent(user_list, 'select_class'));
+        }
+    }
+}
+
+
+function addGroupMembers()
+{
+
+}
+function removeGroupMembers()
+{
+
 }
 
 getGroupList();
@@ -445,16 +546,16 @@ getGroupList();
     <div id="group_list">
         <fieldset>
             <legend><?php print $text['selectGroup']; ?></legend>
-            <form name="group_select" id="group_select" action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=group&amp;group_action=delete_confirm" method="post">
-                <select class="admin" name="group_list_select" id="group_list_select" size="<?php print $selectSize; ?>" onchange="groupSelect(event)" tabindex="1">
+            <form id="group_select" name="group_select" action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=group&amp;group_action=delete_confirm" method="post">
+                <select class="admin" name="group_list_select" id="group_list_select" size="<?php print $groupSelectSize; ?>" onchange="groupSelect(event)" tabindex="1">
                     <option value="">select...</option>
                 </select>
                 <input class="submit" type="submit" value="<?php print $text['delGroup_button']; ?>" tabindex="2" />
             </form>
         </fieldset>
         <p>[ <a href="<?php print $_SERVER['PHP_SELF']; ?>?aktion=group&amp;group_action=add"><?php print $text['addGroup_link']; ?></a> ]</p>
-    </div> <!-- end #user_list -->
-</div> <!-- end #user_accounts -->
+    </div> <!-- end #group_list -->
+</div> <!-- end #groups -->
 <div id="group_details">
     <div id="group_data">
         <fieldset>
@@ -486,9 +587,9 @@ getGroupList();
             <legend id="group_rights_legend"><?php print $text['changeRights']; ?></legend>
             <form id="rightsForm" action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=group&amp;group_action=update_rights" method="post">
                 <input id="rights_group_id" type="hidden" name="group_id" value="0" />
-                <div class="button_row">
-                    <span><a href="javascript:form_checkAll('rightsForm')"><?php print $text['changeRights_checkAll']; ?></a></span>
-                    <span><a href="javascript:form_uncheckAll('rightsForm')"><?php print $text['changeRights_uncheckAll']; ?></a></span>
+                <div>
+                    <span class="select_all"><a href="javascript:form_checkAll('rightsForm')"><?php print $text['changeRights_checkAll']; ?></a></span>
+                    <span class="unselect_all"><a href="javascript:form_uncheckAll('rightsForm')"><?php print $text['changeRights_uncheckAll']; ?></a></span>
                 </div>
                 <table id="group_rights_table">
                     <tr>
@@ -503,6 +604,41 @@ getGroupList();
         </fieldset>
     </div> <!-- end #user_rights -->
 </div> <!-- end #user_details -->
+<div id="group_membership">
+    <form id="group_membership" name="group_membership" action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=group&amp;group_action=" method="post">
+        <fieldset>
+            <legend><?php print $text['groupMembership']; ?></legend>
+            <fieldset id="group_userList">
+                <legend><?php print $text['groupMembership_userList']; ?></legend>
+                <div>
+                    <span class="select_all"><a href="javascript:select_selectAll('group_user_list')"><?php print $text['groupMembership_selectAll']; ?></a></span>
+                    <span class="unselect_all"><a href="javascript:select_unselectAll('group_user_list')"><?php print $text['groupMembership_unselectAll']; ?></a></span>
+                </div>
+                <select id="group_user_list" name="user_id" multiple="multiple" size="<?php print $memberSelectSize; ?>">
+                    <option value="0">...user list...</option>
+                </select>
+            </fieldset>
+            <fieldset id="group_memberList">
+                <legend><?php print $text['groupMembership_memberList']; ?></legend>
+                <div>
+                    <span class="select_all"><a href="javascript:"><?php print $text['groupMembership_selectAll']; ?></a></span>
+                    <span class="unselect_all"><a href="javascript:"><?php print $text['groupMembership_unselectAll']; ?></a></span>
+                </div>
+                <select id="group_member_list" name="member_id" multiple="multiple" size="<?php print $memberSelectSize; ?>">
+                    <option value="0">...user list...</option>
+                </select>
+            </fieldset>
+            <div id="group_membershipButtons">
+                <input type="button" value="<?php print $text['addMember_button']; ?>" onclick="addGroupMembers()" />
+                <input type="button" value="<?php print $text['removeMember_button']; ?>" onclick="removeGroupMembers()" />
+            </div>
+            <div class="clear"></div>
+            <div class="button_row">
+                <input class="submit" type="submit" value="<?php print $text['updateMember_submit']; ?>" />
+            </div>
+        </fieldset>
+    </form>
+</div> <!-- end #group_membership -->
 <div class="clear"></div>
 <?php
 } // end if ($groupAction == 'list')

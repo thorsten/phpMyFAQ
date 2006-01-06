@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: user.php,v 1.20 2006-01-06 10:49:52 b33blebr0x Exp $
+* $Id: user.php,v 1.21 2006-01-06 18:46:27 b33blebr0x Exp $
 *
 * Displays the user managment frontend
 *
@@ -569,7 +569,7 @@ getUserList();
             <legend id="user_rights_legend"><?php print $text['changeRights']; ?></legend>
             <form id="rightsForm" action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=user&amp;user_action=update_rights" method="post">
                 <input id="rights_user_id" type="hidden" name="user_id" value="0" />
-                <div class="button_row">
+                <div>
                     <span><a href="javascript:form_checkAll('rightsForm')"><?php print $text['changeRights_checkAll']; ?></a></span>
                     <span><a href="javascript:form_uncheckAll('rightsForm')"><?php print $text['changeRights_uncheckAll']; ?></a></span>
                 </div>

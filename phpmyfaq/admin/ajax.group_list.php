@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.group_list.php,v 1.5 2006-01-05 22:07:34 b33blebr0x Exp $
+* $Id: ajax.group_list.php,v 1.6 2006-01-06 18:46:27 b33blebr0x Exp $
 *
 * AJAX: lists all registered users
 *
@@ -35,6 +35,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 require_once(PMF_ROOT_DIR.'/inc/PMF_User/User.php');
 
 $user = new PMF_User();
+$userList = $user->getAllUsers();
 $groupList = is_a($user->perm, "PMF_PermMedium") ? $user->perm->getAllGroups() : array();
 $data = array(
     'name' => "Name:",
@@ -63,11 +64,25 @@ foreach ($all_rights as $right_data) {
     } /* end foreach ($all_rights) */
 ?>
     </rightlist>
+    <userlist>
+        <select_class>ad_select_user</select_class>
+<?php
+foreach ($userList as $user_id) {
+    $user_object = new PMF_User();
+    $user_object->getUserById($user_id);
+?>
+        <user id="<?php print $user_id; ?>">
+            <login><?php print $user_object->getLogin(); ?></login>
+        </user>
+<?php
+} /* end foreach ($userList) */
+?>
+    </userlist>
     <grouplist>
         <select_class>ad_select_group</select_class>
 <?php
 foreach ($groupList as $group_id) {
-    $groupData = $user->perm->getGroupData($group_id);
+    $groupData = $perm->getGroupData($group_id);
 ?>
         <group id="<?php print $groupData['group_id']; ?>">
             <name><?php print $groupData['name']; ?></name>
@@ -89,6 +104,18 @@ foreach ($groupList as $group_id) {
     } /* end foreach ($all_rights) */
 ?>
             </group_rights>
+            <group_members>
+                <user id="1"></user>
+<?php
+    foreach ($perm->getGroupMembers($group_id) as $member_id) {
+        $member = new PMF_User();
+        $member->getUserById($member_id);
+?>
+                <user id="<?php print $member->getUserId(); ?>"></user>
+<?php
+    } /* end $perm->getGroupMembers($group_id) as $member_id) */
+?>
+            </group_members>
         </group>
 <?php
 } /* end foreach ($groupList) */
