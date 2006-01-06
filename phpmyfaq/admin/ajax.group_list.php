@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.group_list.php,v 1.6 2006-01-06 18:46:27 b33blebr0x Exp $
+* $Id: ajax.group_list.php,v 1.7 2006-01-06 23:17:34 b33blebr0x Exp $
 *
 * AJAX: lists all registered users
 *
@@ -105,7 +105,6 @@ foreach ($groupList as $group_id) {
 ?>
             </group_rights>
             <group_members>
-                <user id="1"></user>
 <?php
     foreach ($perm->getGroupMembers($group_id) as $member_id) {
         $member = new PMF_User();

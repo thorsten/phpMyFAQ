@@ -910,6 +910,37 @@ class PMF_PermMedium
         return $row['name'];
     }
 
+    /**
+     * removeAllUsersFromGroup
+     *
+     * Removes all users from the group $group_id.
+     * Returns true on success, otherwise false.
+     *
+     * @access public
+     * @author Lars Tiedemann, <php@larstiedemann.de>
+     * @param int
+     * @return bool
+     */
+    function removeAllUsersFromGroup($group_id)
+    {
+        if (!$this->_initialized)
+        	return false;
+        // check input
+        if ($group_id <= 0)
+            return false;
+        // remove all user from group
+        $res = $this->_db->query("
+        	DELETE FROM
+        		".PMF_USER_SQLPREFIX."user_group
+        	WHERE
+        		group_id = ".$group_id
+        );
+        // return
+        if (!$res)
+        	return false;
+        return true;
+    }
+
 } /* end of class PMF_PermMedium */
 
 ?>

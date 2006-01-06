@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: group.php,v 1.8 2006-01-06 18:46:27 b33blebr0x Exp $
+* $Id: group.php,v 1.9 2006-01-06 23:17:34 b33blebr0x Exp $
 *
 * Displays the user managment frontend
 *
@@ -45,12 +45,15 @@ $errorMessages = array(
     'updateGroup_noId' => $PMF_LANG['ad_user_error_noId'], //"No ID specified. ",
     'updateRights' => $PMF_LANG['ad_msg_mysqlerr'], //"Due to a <strong>database error</strong>, the profile could not be saved."
     'updateRights_noId' => $PMF_LANG['ad_user_error_noId'], //"No ID  specified. ",
+    'updateMembers' => $PMF_LANG['ad_msg_mysqlerr'], //"Due to a <strong>database error</strong>, the profile could not be saved."
+    'updateMembers_noId' => $PMF_LANG['ad_user_error_noId'], //"No ID  specified. ",
 );
 $successMessages = array(
     'addGroup' => $PMF_LANG['ad_group_suc'], //"Group <strong>successfully</strong> added.",
     'delGroup' => $PMF_LANG['ad_group_deleted'], //"The group was successfully deleted.",
     'updateGroup' => $PMF_LANG['ad_msg_savedsuc_1'].' <strong>%s</strong> '.$PMF_LANG['ad_msg_savedsuc_2'],
     'updateRights' => $PMF_LANG['ad_msg_savedsuc_1'].' <strong>%s</strong> '.$PMF_LANG['ad_msg_savedsuc_2'],
+    'updateMembers' => $PMF_LANG['ad_msg_savedsuc_1'].' <strong>%s</strong> '.$PMF_LANG['ad_msg_savedsuc_2'],
 );
 $text = array(
     'header' => "Group Administration",
@@ -93,6 +96,28 @@ if (isset($_POST['cancel']))
     $groupAction = $defaultGroupAction;
 
 
+// update group members
+if ($groupAction == 'update_members') {
+    $message = '';
+    $groupAction = $defaultGroupAction;
+    $groupId = isset($_POST['group_id']) ? $_POST['group_id'] : 0;
+    $groupMembers = isset($_POST['group_members']) ? $_POST['group_members'] : array();
+    if ($groupId == 0) {
+        $message .= '<p class="error">'.$errorMessages['updateMembers_noId'].'</p>';
+    } else {
+        $user = new PMF_User();
+        $perm = $user->perm;
+        if (!$perm->removeAllUsersFromGroup($groupId)) {
+            $message .= '<p class="error">'.$errorMessages['updateMembers'].'</p>';
+        }
+        foreach ($groupMembers as $memberId) {
+            $perm->addToGroup($memberId, $groupId);
+            $message .= '<p>id: '.$memberId.'</p>';
+        }
+        $message .= '<p class="success">'.sprintf($successMessages['updateMembers'], $perm->getGroupName($groupId)).'</p>';
+        $message .= '<p>'.$perm->_db->error().'</p>';
+    }
+} // end if ($groupAction == 'update_members')
 // update group rights
 if ($groupAction == 'update_rights') {
     $message = '';
@@ -293,7 +318,7 @@ function processGroupList(XmlRequest) {
     clearGroupRights();
     buildGroupRights(0);
     clearUserList();
-    buildUserList();
+    //buildUserList();
     clearMemberList();
     buildMemberList(0);
 }
@@ -460,6 +485,8 @@ function groupSelect(evt)
             buildGroupData(select.value);
             clearGroupRights();
             buildGroupRights(select.value);
+            clearUserList();
+            buildUserList();
             clearMemberList();
             buildMemberList(select.value);
         }
@@ -498,6 +525,8 @@ function buildMemberList(groupId)
         clearMemberList();
         return;
     }
+    // update group-id
+    $('update_member_group_id').setAttribute('value', groupId);
     // loop through user_list
     var user_list = groupList.responseXML.getElementsByTagName('userlist')[0];
     var users = user_list.getElementsByTagName('user');
@@ -528,11 +557,50 @@ function buildMemberList(groupId)
 
 function addGroupMembers()
 {
-
+    // make sure that a group is selected
+    var group_list = $('group_list_select');
+    if (group_list.value == '') {
+        alert('Please choose a group. ');
+        return;
+    }
+    // get selected users from list
+    var users = $('group_user_list').options;
+    for (var i = 0; i < users.length; i++) {
+        if (users[i].selected == true) {
+            // check if user is already in member list
+            var members = $('group_member_list').options;
+            var isMember = false;
+            for (var j = 0; j < members.length; j++) {
+                if (members[j].value == users[i].value) {
+                    isMember = true;
+                    break;
+                } else {
+                    isMember = false;
+                }
+            }
+            // add new member
+            if (isMember == false) {
+                select_addOption($('group_member_list'), users[i].value, document.createTextNode(users[i].text), users[i].getAttribute('class'));
+            }
+        }
+    }
 }
 function removeGroupMembers()
 {
-
+    // make sure that a group is selected
+    var group_list = $('group_list_select');
+    if (group_list.value == '') {
+        alert('Please choose a group. ');
+        return;
+    }
+    // get selected members from list
+    var old_members = $('group_member_list').options;
+    var new_members = Array();
+    for (var i = 0; i < old_members.length; i++) {
+        if (old_members[i].selected == true) {
+            $('group_member_list').removeChild(old_members[i]);
+        }
+    }
 }
 
 getGroupList();
@@ -605,7 +673,8 @@ getGroupList();
     </div> <!-- end #user_rights -->
 </div> <!-- end #user_details -->
 <div id="group_membership">
-    <form id="group_membership" name="group_membership" action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=group&amp;group_action=" method="post">
+    <form id="group_membership" name="group_membership" action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=group&amp;group_action=update_members" method="post">
+        <input id="update_member_group_id" type="hidden" name="group_id" value="0" />
         <fieldset>
             <legend><?php print $text['groupMembership']; ?></legend>
             <fieldset id="group_userList">
@@ -614,7 +683,7 @@ getGroupList();
                     <span class="select_all"><a href="javascript:select_selectAll('group_user_list')"><?php print $text['groupMembership_selectAll']; ?></a></span>
                     <span class="unselect_all"><a href="javascript:select_unselectAll('group_user_list')"><?php print $text['groupMembership_unselectAll']; ?></a></span>
                 </div>
-                <select id="group_user_list" name="user_id" multiple="multiple" size="<?php print $memberSelectSize; ?>">
+                <select id="group_user_list" multiple="multiple" size="<?php print $memberSelectSize; ?>">
                     <option value="0">...user list...</option>
                 </select>
             </fieldset>
@@ -624,8 +693,8 @@ getGroupList();
                     <span class="select_all"><a href="javascript:"><?php print $text['groupMembership_selectAll']; ?></a></span>
                     <span class="unselect_all"><a href="javascript:"><?php print $text['groupMembership_unselectAll']; ?></a></span>
                 </div>
-                <select id="group_member_list" name="member_id" multiple="multiple" size="<?php print $memberSelectSize; ?>">
-                    <option value="0">...user list...</option>
+                <select id="group_member_list" name="group_members" multiple="multiple" size="<?php print $memberSelectSize; ?>">
+                    <option value="0">...member list...</option>
                 </select>
             </fieldset>
             <div id="group_membershipButtons">
