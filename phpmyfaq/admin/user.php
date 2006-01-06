@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: user.php,v 1.19 2006-01-05 22:07:34 b33blebr0x Exp $
+* $Id: user.php,v 1.20 2006-01-06 10:49:52 b33blebr0x Exp $
 *
 * Displays the user managment frontend
 *
@@ -79,6 +79,8 @@ $text = array(
     'changeUser_status' => $PMF_LANG['ad_user_status'], //"Status:",
     'changeRights' => $PMF_LANG["ad_user_rights"], // "Rights"
     'changeRights_submit' => $PMF_LANG["ad_gen_save"], //"Save",
+    'changeRights_checkAll' => $PMF_LANG['ad_user_checkall'], //"Select All",
+    'changeRights_uncheckAll' => $PMF_LANG['ad_user_uncheckall'], //"Unselect All",
 );
 
 // what shall we do?
@@ -565,8 +567,12 @@ getUserList();
     <div id="user_rights">
         <fieldset>
             <legend id="user_rights_legend"><?php print $text['changeRights']; ?></legend>
-            <form action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=user&amp;user_action=update_rights" method="post">
+            <form id="rightsForm" action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=user&amp;user_action=update_rights" method="post">
                 <input id="rights_user_id" type="hidden" name="user_id" value="0" />
+                <div class="button_row">
+                    <span><a href="javascript:form_checkAll('rightsForm')"><?php print $text['changeRights_checkAll']; ?></a></span>
+                    <span><a href="javascript:form_uncheckAll('rightsForm')"><?php print $text['changeRights_uncheckAll']; ?></a></span>
+                </div>
                 <table id="user_rights_table">
                     <tr>
                         <td>&nbsp;</td>

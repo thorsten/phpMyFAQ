@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.23 2006-01-05 19:43:37 b33blebr0x Exp $
+* $Id: language_en.php,v 1.24 2006-01-06 10:49:52 b33blebr0x Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -689,3 +689,4 @@ $PMF_LANG['ad_group_error_delete'] = "Group could not be deleted. ";
 $PMF_LANG['ad_group_deleted'] = "The group was successfully deleted.";
 $PMF_LANG['ad_group_deleteGroup'] = "Delete Group";
 $PMF_LANG['ad_group_deleteQuestion'] = "Are you sure that this group shall be deleted?";
+$PMF_LANG['ad_user_uncheckall'] = "Unselect All";
