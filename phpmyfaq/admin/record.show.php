@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.show.php,v 1.21 2006-01-02 16:51:27 thorstenr Exp $
+* $Id: record.show.php,v 1.22 2006-01-06 10:38:56 thorstenr Exp $
 *
 * Shows the list of records ordered by categories
 *
@@ -92,29 +92,43 @@ if ($permission["editbt"] || $permission["delbt"]) {
                 $numComments[$row->id] = $row->anz;
             }
         }
-    } else if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "view" && $begriff != "") {
-
-        $result = $db->search(SQLPREFIX."faqdata",
-        array(SQLPREFIX."faqdata.id",
-        SQLPREFIX."faqdata.lang",
-        SQLPREFIX."faqcategoryrelations.category_id",
-        SQLPREFIX."faqdata.thema",
-        SQLPREFIX."faqdata.content"),
-        SQLPREFIX."faqcategoryrelations",
-        array(SQLPREFIX."faqdata.id = ".SQLPREFIX."faqcategoryrelations.record_id",
-        SQLPREFIX."faqdata.lang = ".SQLPREFIX."faqcategoryrelations.record_lang"),
-        array(SQLPREFIX."faqdata.thema",
-        SQLPREFIX."faqdata.content",
-        SQLPREFIX."faqdata.keywords"),
-        $begriff,
-        $cond);
-
-        $laktion = 'view';
-        $internalSearch .= '&amp;suchbegriff='.$begriff;
-
+    } else if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "view" && isset($_REQUEST["suchbegriff"]) && $_REQUEST["suchbegriff"] != "") {
+        
+        $begriff = strip_tags($_REQUEST["suchbegriff"]);
+        if (is_numeric($begriff)) {
+            $result = $db->search(SQLPREFIX.'faqdata',
+                        array(SQLPREFIX.'faqdata.id AS id',
+                            SQLPREFIX.'faqdata.lang AS lang',
+                            SQLPREFIX.'faqcategoryrelations.category_id AS category_id',
+                            SQLPREFIX.'faqdata.thema AS thema',
+                            SQLPREFIX.'faqdata.content AS content'),
+                        SQLPREFIX.'faqcategoryrelations',
+                        array(SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id',
+                            SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang'),
+                        array(SQLPREFIX.'faqdata.id'),
+                        $begriff);
+        } else {
+            $result = $db->search(SQLPREFIX."faqdata",
+                        array(SQLPREFIX.'faqdata.id AS id',
+                            SQLPREFIX.'faqdata.lang AS lang',
+                            SQLPREFIX.'faqcategoryrelations.category_id AS category_id',
+                            SQLPREFIX.'faqdata.thema AS thema',
+                            SQLPREFIX.'faqdata.content AS content'),
+                        SQLPREFIX.'faqcategoryrelations',
+                        array(SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id',
+                            SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang'),
+                        array(SQLPREFIX.'faqdata.thema',
+                            SQLPREFIX.'faqdata.content',
+                            SQLPREFIX.'faqdata.keywords'),
+                        $begriff);
+        }
+        
+        $laktion = "view";
+        $internalSearch = "&amp;search=".$begriff;
+        
     } elseif (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "accept") {
 
-        $query = 'SELECT '.SQLPREFIX.'faqdata.id,'.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema,'.SQLPREFIX.'faqdata.author FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang ='.SQLPREFIX.'faqcategoryrelations.record_lang WHERE '.SQLPREFIX.'faqdata.active = \'no\' ORDER BY '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.id';
+        $query = 'SELECT '.SQLPREFIX.'faqdata.id AS id,'.SQLPREFIX.'faqdata.lang AS lang, '.SQLPREFIX.'faqcategoryrelations.category_id AS category_id, '.SQLPREFIX.'faqdata.thema AS thema,'.SQLPREFIX.'faqdata.author AS author FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang ='.SQLPREFIX.'faqcategoryrelations.record_lang WHERE '.SQLPREFIX.'faqdata.active = \'no\' ORDER BY '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.id';
         $result = $db->query($query);
         $laktion = "accept";
         $internalSearch = "";
@@ -139,7 +153,7 @@ if ($permission["editbt"] || $permission["delbt"]) {
 
     $start = ($page - 1) * $perpage;
 
-    $PageSpan = PageSpan("<a href=\"".$_SERVER["PHP_SELF"].$linkext."&amp;aktion=".$laktion."&amp;pages=".$pages."&amp;page=<NUM>".$internalSearch."\">", 1, $pages, $page);
+    $PageSpan = PageSpan('<a href="?aktion='.$laktion.'&amp;pages='.$pages.'&amp;page=<NUM>'.$internalSearch.'">', 1, $pages, $page);
 
     $old = 0;
     $previousID = 0;
@@ -147,7 +161,7 @@ if ($permission["editbt"] || $permission["delbt"]) {
     if ($db->num_rows($result) > 0) {
         if ($laktion == "view") {
 ?>
-    <form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=view" method="post">
+    <form action="?aktion=view" method="post">
     <fieldset>
     <legend><?php print $PMF_LANG["msgSearch"]; ?></legend>
         <table class="admin">
@@ -175,15 +189,13 @@ if ($permission["editbt"] || $permission["delbt"]) {
         }
         $counter = 0;
         $displayedCounter = 0;
-        while ((list($id, $lang, $rub, $topic, $author) = $db->fetch_row($result)) && $displayedCounter < $perpage) {
-
+        while (($row = $db->fetch_object($result)) && $displayedCounter < $perpage) {
             $counter ++;
             if ($counter <= $start) {
                 continue;
             }
             $displayedCounter++;
-
-            if ($rub != $old) {
+            if ($row->category_id != $old) {
                 if ($old == 0) {
 ?>
     <table class="list">
@@ -198,7 +210,7 @@ if ($permission["editbt"] || $permission["delbt"]) {
 ?>
     <thead>
         <tr>
-            <th colspan="5" class="list"><?php print $tree->getPath($rub); ?></th>
+            <th colspan="5" class="list"><?php print $tree->getPath($row->category_id); ?></th>
         </tr>
     </thead>
     <tfoot>
@@ -211,19 +223,19 @@ if ($permission["editbt"] || $permission["delbt"]) {
             }
 ?>
         <tr>
-            <td class="list" width="35"><?php print $id; ?></td>		
-            <td class="list" width="18"><?php print $lang; ?></td>
-            <td class="list" width="18"><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=saveentry&amp;id=<?php print $id; ?>&amp;language=<?php print $lang; ?>&amp;submit[0]=<?php print $PMF_LANG["ad_entry_delete"]; ?>" title="<?php print $PMF_LANG["ad_user_delete"]; ?> '<?php print str_replace("\"", "´", stripslashes($topic)); ?>'"><img src="images/delete.gif" width="17" height="18" alt="<?php print $PMF_LANG["ad_entry_delete"]; ?>" /></a></td>
-            <td class="list" width="50"><?php print $linkverifier->getEntryStateHTML($id, $lang); ?></td>
-            <td class="list"><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=editentry&amp;id=<?php print $id; ?>&amp;lang=<?php print $lang; ?>" title="<?php print $PMF_LANG["ad_user_edit"]; ?> '<?php print str_replace("\"", "´", stripslashes($topic)); ?>'"><?php print stripslashes($topic); ?></a><?php
-            if (isset($numComments[$id])) {
-                print " (".$numComments[$id]." ".$PMF_LANG["ad_start_comments"].")";
+            <td class="list" width="35"><?php print $row->id; ?></td>		
+            <td class="list" width="18"><?php print $row->lang; ?></td>
+            <td class="list" width="18"><a href="?aktion=saveentry&amp;id=<?php print $row->id; ?>&amp;language=<?php print $row->lang; ?>&amp;submit[0]=<?php print $PMF_LANG["ad_entry_delete"]; ?>" title="<?php print $PMF_LANG["ad_user_delete"]; ?> '<?php print str_replace("\"", "´", stripslashes($row->thema)); ?>'"><img src="images/delete.gif" width="17" height="18" alt="<?php print $PMF_LANG["ad_entry_delete"]; ?>" /></a></td>
+            <td class="list" width="50"><?php print $linkverifier->getEntryStateHTML($row->id, $row->lang); ?></td>
+            <td class="list"><a href="?aktion=editentry&amp;id=<?php print $row->id; ?>&amp;lang=<?php print $row->lang; ?>" title="<?php print $PMF_LANG["ad_user_edit"]; ?> '<?php print str_replace("\"", "´", stripslashes($row->thema)); ?>'"><?php print stripslashes($row->thema); ?></a><?php
+            if (isset($numComments[$row->id])) {
+                print " (".$numComments[$row->id]." ".$PMF_LANG["ad_start_comments"].")";
             }
 ?></td>
         </tr>
 <?php
-$previousID = $id;
-$old = $rub;
+            $previousID = $row->id;
+            $old = $row->category_id;
         }
 ?>
     </tbody>
