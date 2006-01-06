@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.edit.php,v 1.27 2006-01-03 11:17:33 thorstenr Exp $
+* $Id: record.edit.php,v 1.28 2006-01-06 10:44:58 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23
@@ -116,7 +116,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 	}
 	print $PMF_LANG["ad_entry_edit_2"].'</h2>';
 ?>
-    <form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=<?php print $acti; ?>" method="post">
+    <form action="?aktion=<?php print $acti; ?>" method="post">
 
     <label class="left" for="rubrik"><?php print $PMF_LANG["ad_entry_category"]; ?></label>
     <select class="admin" name="rubrik[]" id="rubrik" size="5" multiple="multiple">
@@ -144,7 +144,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     				if ($dat != "." && $dat != "..") {
     					print "<a href=\""."../attachments/".$id."/".$dat."\">".$dat."</a> ";
                         if ($permission["delatt"]) {
-                            print "[ <a href=\"".$_SERVER["PHP_SELF"].$linkext."&amp;aktion=delatt&amp;id=".$id."&amp;which=".rawurlencode($dat)."&amp;lang=".$lang."\">".$PMF_LANG["ad_att_del"]."</a> ]";
+                            print "[ <a href=\"".$_SERVER["PHP_SELF"]."&amp;aktion=delatt&amp;id=".$id."&amp;which=".rawurlencode($dat)."&amp;lang=".$lang."\">".$PMF_LANG["ad_att_del"]."</a> ]";
                         }
                         print "<br />\n";
     				}
@@ -152,7 +152,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     		} else {
     			print "<em>".$PMF_LANG["ad_att_none"]."</em><br />";
     		}
-    		print "<a href=\"#\" onclick=\"Picture('attachment.php?uin=".$uin."&amp;id=".$id."&amp;rubrik=".$rubrik."', 'Attachment', 400,80)\">".$PMF_LANG["ad_att_add"]."</a>";
+    		print "<a href=\"#\" onclick=\"Picture('attachment.php?id=".$id."&amp;rubrik=".$rubrik."', 'Attachment', 400,80)\">".$PMF_LANG["ad_att_add"]."</a>";
     	} else {
     		print $PMF_LANG["ad_att_nope"];
     	}
@@ -227,7 +227,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 <?php
             while ($row = $db->fetch_object($result)) {
 ?>	
-    <p><?php print $PMF_LANG["ad_entry_commentby"] ?> <a href="mailto:<?php print $row->email; ?>"><?php print $row->usr; ?></a>:<br /><?php print $row->comment; ?><br /><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=delcomment&amp;artid=<?php print $row->id; ?>&amp;cmtid=<?php print $row->id_comment; ?>&amp;lang=<?php print $lang; ?>"><img src="images/delete.gif" alt="<?php print $PMF_LANG["ad_entry_delete"] ?>" title="<?php print $PMF_LANG["ad_entry_delete"] ?>" border="0" width="17" height="18" align="right" /></a></p>
+    <p><?php print $PMF_LANG["ad_entry_commentby"] ?> <a href="mailto:<?php print $row->email; ?>"><?php print $row->usr; ?></a>:<br /><?php print $row->comment; ?><br /><a href="<?php print $_SERVER["PHP_SELF"]; ?>&amp;aktion=delcomment&amp;artid=<?php print $row->id; ?>&amp;cmtid=<?php print $row->id_comment; ?>&amp;lang=<?php print $lang; ?>"><img src="images/delete.gif" alt="<?php print $PMF_LANG["ad_entry_delete"] ?>" title="<?php print $PMF_LANG["ad_entry_delete"] ?>" border="0" width="17" height="18" align="right" /></a></p>
 <?php
 			}
 		}
