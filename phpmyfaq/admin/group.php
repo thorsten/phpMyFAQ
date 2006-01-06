@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: group.php,v 1.9 2006-01-06 23:17:34 b33blebr0x Exp $
+* $Id: group.php,v 1.10 2006-01-06 23:25:35 b33blebr0x Exp $
 *
 * Displays the user managment frontend
 *
@@ -112,10 +112,8 @@ if ($groupAction == 'update_members') {
         }
         foreach ($groupMembers as $memberId) {
             $perm->addToGroup($memberId, $groupId);
-            $message .= '<p>id: '.$memberId.'</p>';
         }
         $message .= '<p class="success">'.sprintf($successMessages['updateMembers'], $perm->getGroupName($groupId)).'</p>';
-        $message .= '<p>'.$perm->_db->error().'</p>';
     }
 } // end if ($groupAction == 'update_members')
 // update group rights
@@ -673,7 +671,7 @@ getGroupList();
     </div> <!-- end #user_rights -->
 </div> <!-- end #user_details -->
 <div id="group_membership">
-    <form id="group_membership" name="group_membership" action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=group&amp;group_action=update_members" method="post">
+    <form id="group_membership" name="group_membership" action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=group&amp;group_action=update_members" method="post" onsubmit="select_selectAll('group_member_list')">
         <input id="update_member_group_id" type="hidden" name="group_id" value="0" />
         <fieldset>
             <legend><?php print $text['groupMembership']; ?></legend>
@@ -690,10 +688,10 @@ getGroupList();
             <fieldset id="group_memberList">
                 <legend><?php print $text['groupMembership_memberList']; ?></legend>
                 <div>
-                    <span class="select_all"><a href="javascript:"><?php print $text['groupMembership_selectAll']; ?></a></span>
-                    <span class="unselect_all"><a href="javascript:"><?php print $text['groupMembership_unselectAll']; ?></a></span>
+                    <span class="select_all"><a href="javascript:select_selectAll('group_member_list')"><?php print $text['groupMembership_selectAll']; ?></a></span>
+                    <span class="unselect_all"><a href="javascript:select_unselectAll('group_member_list')"><?php print $text['groupMembership_unselectAll']; ?></a></span>
                 </div>
-                <select id="group_member_list" name="group_members" multiple="multiple" size="<?php print $memberSelectSize; ?>">
+                <select id="group_member_list" name="group_members[]" multiple="multiple" size="<?php print $memberSelectSize; ?>">
                     <option value="0">...member list...</option>
                 </select>
             </fieldset>
