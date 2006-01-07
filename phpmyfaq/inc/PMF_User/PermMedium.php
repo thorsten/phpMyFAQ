@@ -78,7 +78,7 @@ class PMF_PermMedium
         if (!$this->_initialized)
         	return false;
         // check input
-        if ($right_id <= 0 or $group_id <= 0)
+        if ($right_id <= 0 or $group_id <= 0 or !is_numeric($right_id) or !is_numeric($group_id))
             return false;
         // check right
         $res = $this->_db->query("
@@ -115,7 +115,7 @@ class PMF_PermMedium
     {
         if (!$this->_initialized)
         	return false;
-        if ($group_id <= 0)
+        if ($group_id <= 0 or !is_numeric($group_id))
             return false;
         // check right
         $res = $this->_db->query("
@@ -207,7 +207,7 @@ class PMF_PermMedium
         if (!$this->_initialized)
         	return false;
         // check input
-        if ($right_id <= 0 or $group_id <= 0)
+        if ($right_id <= 0 or $group_id <= 0 or !is_numeric($right_id) or !is_numeric($group_id))
             return false;
         // is right for users?
         $right_data = $this->getRightData($right_id);
@@ -243,7 +243,7 @@ class PMF_PermMedium
         if (!$this->_initialized)
         	return false;
         // check input
-        if ($right_id <= 0 or $group_id <= 0)
+        if ($right_id <= 0 or $group_id <= 0 or !is_numeric($right_id) or !is_numeric($group_id))
             return false;
         // grant right
         $res = $this->_db->query("
@@ -349,6 +349,9 @@ class PMF_PermMedium
     {
         if (!$this->_initialized)
         	return false;
+        if (!is_numeric($group_id))
+            return false;
+
         // delete group
         $res = $this->_db->query("
             DELETE FROM
@@ -396,6 +399,8 @@ class PMF_PermMedium
     {
         if (!$this->_initialized)
         	return false;
+        if (!is_numeric($right_id) or !is_numeric($group_id))
+            return false;
         $res = $this->_db->query("
             SELECT
                 ".PMF_USER_SQLPREFIX."user.user_id AS user_id
@@ -429,6 +434,8 @@ class PMF_PermMedium
     {
         if (!$this->_initialized)
         	return false;
+        if (!is_numeric($group_id))
+            return false;
         $res = $this->_db->query("
             SELECT
                 ".PMF_USER_SQLPREFIX."user.user_id AS user_id
@@ -464,6 +471,8 @@ class PMF_PermMedium
     {
         if (!$this->_initialized)
         	return false;
+        if (!is_numeric($right_id) or !is_numeric($group_id))
+            return false;
         // check group
         if (!$this->getGroupData($group_id))
         	return false;
@@ -498,7 +507,7 @@ class PMF_PermMedium
         if (!$this->_initialized)
         	return false;
         // check input
-        if ($user_id <= 0 or $group_id <= 0)
+        if ($user_id <= 0 or $group_id <= 0 or !is_numeric($right_id) or !is_numeric($group_id))
             return false;
         // remove user from group
         $res = $this->_db->query("
@@ -560,6 +569,8 @@ class PMF_PermMedium
     {
         if (!$this->_initialized)
         	return false;
+        if (!is_numeric($group_id))
+            return false;
         // get group data
         $res = $this->_db->query("
         	SELECT 
@@ -593,6 +604,8 @@ class PMF_PermMedium
     {
         if (!$this->_initialized)
         	return false;
+        if (!is_numeric($user_id))
+            return false;
         // get user groups
         $res = $this->_db->query("
             SELECT
@@ -662,7 +675,7 @@ class PMF_PermMedium
         if (!$this->_initialized)
         	return false;
         // check right id
-        if ($right_id <= 0)
+        if ($right_id <= 0 or !is_numeric($right_id))
             return false;
         // check right
         $res = $this->_db->query("
@@ -757,7 +770,7 @@ class PMF_PermMedium
         if (!$this->_initialized)
             return false;
         // check user id
-        if ($user_id <= 0)
+        if ($user_id <= 0 or !is_numeric($user_id))
             return false;
         // get auto join groups
         $res = $this->_db->query("
@@ -797,7 +810,7 @@ class PMF_PermMedium
         if (!$this->_initialized)
         	return false;
         // check input
-        if ($user_id <= 0)
+        if ($user_id <= 0 or !is_numeric($user_id))
             return false;
         // remove user from all groups
         $res = $this->_db->query("
@@ -827,7 +840,7 @@ class PMF_PermMedium
     {
         if (!$this->_initialized)
         	return false;
-        if ($user_id <= 0)
+        if ($user_id <= 0 or !is_numeric($user_id))
             return false;
         // check right
         $res = $this->_db->query("
@@ -869,6 +882,8 @@ class PMF_PermMedium
     {
         if (!$this->_initialized)
         	return false;
+        if (!is_numeric($group_id))
+            return false;
         $res = $this->_db->query("
             DELETE FROM
                 ".PMF_USER_SQLPREFIX."group_right
@@ -894,6 +909,8 @@ class PMF_PermMedium
     {
         if (!$this->_initialized)
         	return false;
+        if (!is_numeric($group_id))
+            return false;
         // get group data
         $res = $this->_db->query("
         	SELECT
