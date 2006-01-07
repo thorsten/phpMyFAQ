@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.25 2006-01-06 18:46:27 b33blebr0x Exp $
+* $Id: language_en.php,v 1.26 2006-01-07 16:25:23 thorstenr Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -71,7 +71,7 @@ $PMF_LANG["msgWriteComment"] = "comment on this entry";
 $PMF_LANG["msgShowCategory"] = "Content Overview: ";
 $PMF_LANG["msgCommentBy"] = "Comment of ";
 $PMF_LANG["msgCommentHeader"] = "Comment on this entry";
-$PMF_LANG["msgYourComment "] = "Your comments:";
+$PMF_LANG["msgYourComment"] = "Your comments:";
 $PMF_LANG["msgCommentThanks"] = "Thanks a lot for your comments!";
 $PMF_LANG["msgSeeXMLFile"] = "open XML-File";
 $PMF_LANG["msgSend2Friend"] = "Send to a friend";
