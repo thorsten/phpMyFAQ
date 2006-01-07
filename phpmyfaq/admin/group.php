@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: group.php,v 1.10 2006-01-06 23:25:35 b33blebr0x Exp $
+* $Id: group.php,v 1.11 2006-01-07 16:58:44 b33blebr0x Exp $
 *
 * Displays the user managment frontend
 *
@@ -592,11 +592,11 @@ function removeGroupMembers()
         return;
     }
     // get selected members from list
-    var old_members = $('group_member_list').options;
-    var new_members = Array();
-    for (var i = 0; i < old_members.length; i++) {
-        if (old_members[i].selected == true) {
-            $('group_member_list').removeChild(old_members[i]);
+    var members = $('group_member_list').options;
+    for (var i = 0; i < members.length; i++) {
+        if (members[i].selected) {
+            $('group_member_list').removeChild(members[i]);
+            i--; // members.length was reduced by removeChild
         }
     }
 }
