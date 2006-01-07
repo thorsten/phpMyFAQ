@@ -15,60 +15,11 @@ error_reporting(E_ALL);
  * @version 0.1
  */
 
-if (0 > version_compare(PHP_VERSION, '4')) {
-    die('This file was generated for PHP 4');
-}
-
-/**
- * manages user authentication. 
- *
- * Subclasses of Auth implement authentication functionality with different
- * types. The class AuthLdap for expamle provides authentication functionality
- * LDAP-database access, AuthMysql with MySQL-database access.
- *
- * Authentication functionality includes creation of a new login-and-password
- * deletion of an existing login-and-password combination and validation of
- * given by a user. These functions are provided by the database-specific
- * see documentation of the database-specific authentication classes AuthMysql,
- * or AuthLdap for further details.
- *
- * Passwords are usually encrypted before stored in a database. For
- * and security, a password encryption method may be chosen. See documentation
- * Enc class for further details.
- *
- * Instead of calling the database-specific subclasses directly, the static
- * selectDb(dbtype) may be called which returns a valid database-specific
- * object. See documentation of the static method selectDb for further details.
- *
- * @author Lars Tiedemann <php@larstiedemann.de>
- * @since 2005-09-30
- * @version 0.1
- */
-//require_once('PMF/Auth.php');
-
 /* user defined includes */
-// section 127-0-0-1-17ec9f7:1062544275a:-7ffd-includes begin
-//require_once dirname(__FILE__).'/Auth.php';
-// section 127-0-0-1-17ec9f7:1062544275a:-7ffd-includes end
 
 /* user defined constants */
-// section 127-0-0-1-17ec9f7:1062544275a:-7ffd-constants begin
 @define('PMF_USERERROR_NO_ENCTYPE', 'Specified encryption method could not be found. ');
-// section 127-0-0-1-17ec9f7:1062544275a:-7ffd-constants end
 
-/**
- * provides methods for password encryption. 
- *
- * Subclasses (extends) of this class provide the encrypt() method that returns
- * encrypted string. For special encryption methods, just create a new class as
- * extend of this class and has the method encrypt().
- *
- * @access public
- * @author Lars Tiedemann <php@larstiedemann.de>
- * @package PMF
- * @since 2005-09-18
- * @version 0.1
- */
 class PMF_Enc
 {
     // --- ATTRIBUTES ---
@@ -100,8 +51,6 @@ class PMF_Enc
      */
     function PMF_Enc()
     {
-        // section -64--88-1-5--735fceb5:106657b6b8d:-7fc9 begin
-        // section -64--88-1-5--735fceb5:106657b6b8d:-7fc9 end
     }
 
     /**
@@ -113,8 +62,6 @@ class PMF_Enc
      */
     function __construct()
     {
-        // section -64--88-1-10--3f7cf10c:106abb97c17:-7fc6 begin
-        // section -64--88-1-10--3f7cf10c:106abb97c17:-7fc6 end
     }
 
     /**
@@ -126,8 +73,6 @@ class PMF_Enc
      */
     function __destruct()
     {
-        // section -64--88-1-10--3f7cf10c:106abb97c17:-7fc4 begin
-        // section -64--88-1-10--3f7cf10c:106abb97c17:-7fc4 end
     }
 
     /**
@@ -140,13 +85,7 @@ class PMF_Enc
      */
     function encrypt($str)
     {
-        $returnValue = (string) '';
-
-        // section -64--88-1-10--3f7cf10c:106abb97c17:-7fb7 begin
         return $str;
-        // section -64--88-1-10--3f7cf10c:106abb97c17:-7fb7 end
-
-        return (string) $returnValue;
     }
 
     /**
@@ -171,9 +110,6 @@ class PMF_Enc
      */
     function selectEnc($enctype)
     {
-        $returnValue = null;
-
-        // section -64--88-1-10--3f7cf10c:106abb97c17:-7fb4 begin
         $enc = new PMF_Enc();
         $enctype = strtolower($enctype);
         if (!isset($enc->_enc_typemap[$enctype])) {
@@ -193,9 +129,6 @@ class PMF_Enc
         }
         $enc = new $newclass();
         return $enc;
-        // section -64--88-1-10--3f7cf10c:106abb97c17:-7fb4 end
-
-        return $returnValue;
     }
 
     /**
@@ -212,9 +145,6 @@ class PMF_Enc
      */
     function error()
     {
-        $returnValue = (string) '';
-
-        // section -64--88-1-10--3f7cf10c:106abb97c17:-7fb0 begin
         if (!is_array($this->errors)) 
         	$this->errors = array((string) $this->errors);
         $message = '';
@@ -222,9 +152,6 @@ class PMF_Enc
         	$message .= $error."\n";
         }
         return $message;
-        // section -64--88-1-10--3f7cf10c:106abb97c17:-7fb0 end
-
-        return (string) $returnValue;
     }
 
 } /* end of class PMF_Enc */

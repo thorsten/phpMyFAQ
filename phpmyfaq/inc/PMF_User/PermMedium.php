@@ -30,22 +30,6 @@ class PMF_PermMedium
     // --- ATTRIBUTES ---
 
     /**
-     * Short description of attribute groups
-     *
-     * @access public
-     * @var array
-     */
-    //var $groups = array();
-
-    /**
-     * Short description of attribute group_rights
-     *
-     * @access private
-     * @var array
-     */
-    //var $_group_rights = array();
-
-    /**
      * default_group_data
      *
      * Default data for new groups.

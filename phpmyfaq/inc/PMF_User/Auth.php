@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Auth.php,v 1.9 2006-01-03 14:50:37 thorstenr Exp $
+* $Id: Auth.php,v 1.10 2006-01-07 17:32:29 b33blebr0x Exp $
 *
 * manages user authentication. 
 *
@@ -38,10 +38,6 @@
 * under the License.
 */
 
-if (0 > version_compare(PHP_VERSION, '4')) {
-    die('This file was generated for PHP 4');
-}
-
 /**
 * provides methods for password encryption. 
 *
@@ -53,18 +49,6 @@ if (0 > version_compare(PHP_VERSION, '4')) {
 * @since        2005-09-18
 */
 require_once(dirname(__FILE__).'/Enc.php');
-
-/**
-* Creates a new user object.
-*
-* A user are recognized by the session-id using getUserBySessionId(), by his
-* using getUserById() or by his nickname (login) using getUserByLogin(). New
-* are created using createNewUser().
-*
-* @author       Lars Tiedemann <php@larstiedemann.de>
-* @since        2005-09-17
-*/
-//require_once('PMF/User.php');
 
 /* user defined constants */
 define('PMF_USERERROR_NO_AUTHTYPE', 'Specified authentication access class could not be found. ');

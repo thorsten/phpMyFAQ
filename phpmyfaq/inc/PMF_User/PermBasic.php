@@ -11,6 +11,8 @@ error_reporting(E_ALL);
  * @version 0.1
  */
 
+/* user defined includes */
+
 /**
  * This class manages user permissions and group memberships.
  *
@@ -43,21 +45,10 @@ error_reporting(E_ALL);
  * @since 2005-09-17
  * @version 0.1
  */
-
-/* user defined includes */
 require_once dirname(__FILE__).'/Perm.php';
 
 /* user defined constants */
 
-/**
- * The basic permission class provides user rights.
- *
- * @access public
- * @author Lars Tiedemann <php@larstiedemann.de>
- * @package PMF
- * @since 2005-09-17
- * @version 0.1
- */
 class PMF_PermBasic
     extends PMF_Perm
 {

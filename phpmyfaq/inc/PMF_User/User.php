@@ -15,9 +15,7 @@ error_reporting(E_ALL);
  * @version 0.1
  */
 
-if (0 > version_compare(PHP_VERSION, '4')) {
-    die('This file was generated for PHP 4');
-}
+/* user defined includes */
 
 /**
  * manages user authentication. 
@@ -44,7 +42,7 @@ if (0 > version_compare(PHP_VERSION, '4')) {
  * @since 2005-09-30
  * @version 0.1
  */
-//require_once('PMF/Auth.php');
+require_once dirname(__FILE__).'/Auth.php';
 
 /**
  * This class manages user permissions and group memberships.
@@ -64,7 +62,7 @@ if (0 > version_compare(PHP_VERSION, '4')) {
  * @since 2005-09-17
  * @version 0.1
  */
-//require_once('PMF/Perm.php');
+require_once dirname(__FILE__).'/Perm.php';
 
 /**
  * The userdata class provides methods to manage user information.
@@ -73,17 +71,9 @@ if (0 > version_compare(PHP_VERSION, '4')) {
  * @since 2005-09-18
  * @version 0.1
  */
-//require_once('PMF/UserData.php');
-
-/* user defined includes */
-// section 127-0-0-1-17ec9f7:105b52d5117:-7ff0-includes begin
-require_once dirname(__FILE__).'/Auth.php';
-require_once dirname(__FILE__).'/Perm.php';
 require_once dirname(__FILE__).'/UserData.php';
-// section 127-0-0-1-17ec9f7:105b52d5117:-7ff0-includes end
 
 /* user defined constants */
-// section 127-0-0-1-17ec9f7:105b52d5117:-7ff0-constants begin
 @define('PMF_USERERROR_NO_DB', 'No database specified. ');
 @define('PMF_USERERROR_NO_PERM', 'No permission container specified. ');
 @define('PMF_USER_SQLPREFIX', SQLPREFIX.'faq');
@@ -107,21 +97,7 @@ require_once dirname(__FILE__).'/UserData.php';
 @define('PMF_USERERROR_CANNOT_CREATE_USERDATA', 'Entry for user data could not be created. ');
 @define('PMF_USERERROR_CANNOT_DELETE_USERDATA', 'Entry for user data could not be deleted. ');
 @define('PMF_USERERROR_CANNOT_UPDATE_USERDATA', 'Entry for user data could not be updated. ');
-// section 127-0-0-1-17ec9f7:105b52d5117:-7ff0-constants end
 
-/**
- * Creates a new user object.
- *
- * A user are recognized by the session-id using getUserBySessionId(), by his
- * using getUserById() or by his nickname (login) using getUserByLogin(). New
- * are created using createNewUser().
- *
- * @access public
- * @author Lars Tiedemann <php@larstiedemann.de>
- * @package PMF
- * @since 2005-09-17
- * @version 0.1
- */
 class PMF_User
 {
     // --- ATTRIBUTES ---
@@ -227,14 +203,12 @@ class PMF_User
      */
     function addPerm($perm)
     {
-        // section -64--88-1-5-15e2075:10637248df4:-7fcd begin
         if ($this->checkPerm($perm)) {
             $this->perm = $perm;
             return true;
         }
         $this->perm = null;
         return false;
-        // section -64--88-1-5-15e2075:10637248df4:-7fcd end
     }
 
     /**
@@ -247,14 +221,12 @@ class PMF_User
      */
     function addDb($db)
     {
-        // section -64--88-1-5-a522a6:106564ad215:-7ffd begin
         if ($this->checkDb($db)) {
         	$this->_db = $db;
             return true;
         }
         $this->_db = null;
         return false;
-        // section -64--88-1-5-a522a6:106564ad215:-7ffd end
     }
 
     /**
@@ -266,18 +238,12 @@ class PMF_User
      */
     function getUserId()
     {
-        $returnValue = (int) 0;
-
-        // section -64--88-1-5-a522a6:106564ad215:-7ffb begin
         if (isset($this->_user_id) and is_int($this->_user_id) and $this->_user_id > 0) {
             return (int) $this->_user_id;
         }
         $this->_user_id = (int) 0;
         $this->errors[] = PMF_USERERROR_NO_USERID;
         return (int) 0;
-        // section -64--88-1-5-a522a6:106564ad215:-7ffb end
-
-        return (int) $returnValue;
     }
 
     /**
@@ -291,9 +257,6 @@ class PMF_User
      */
     function getUserById($user_id)
     {
-        $returnValue = (bool) false;
-
-        // section -64--88-1-5-15e2075:1065f4960e0:-7fc1 begin
         // check db
         if (!$this->checkDb($this->_db))
 		    return false;
@@ -321,9 +284,6 @@ class PMF_User
 		    $this->userdata = new PMF_UserData($this->_db);
 		$this->userdata->load($this->getUserId());
 		return true;
-        // section -64--88-1-5-15e2075:1065f4960e0:-7fc1 end
-
-        return (bool) $returnValue;
     }
 
     /**
@@ -338,9 +298,6 @@ class PMF_User
      */
     function getUserByLogin($login, $raise_error = true)
     {
-        $returnValue = (bool) false;
-
-        // section -64--88-1-5-15e2075:1065f4960e0:-7fbe begin
         // check db
         if (!$this->checkDb($this->_db))
 		    return false;
@@ -369,9 +326,6 @@ class PMF_User
 		    $this->userdata = new PMF_UserData($this->_db);
 		$this->userdata->load($this->getUserId());
 		return true;
-        // section -64--88-1-5-15e2075:1065f4960e0:-7fbe end
-
-        return (bool) $returnValue;
     }
 
     /**
@@ -385,9 +339,6 @@ class PMF_User
      */
     function createUser($login, $pass = '')
     {
-        $returnValue = null;
-
-        // section -64--88-1-5-5e0b50c5:10665348267:-7fdd begin
         if (!$this->checkDb($this->_db))
 		    return false;
         foreach ($this->_auth_container as $name => $auth) {
@@ -439,9 +390,6 @@ class PMF_User
         if (!$success)
             return false;
         return $this->getUserByLogin($login, false);
-        // section -64--88-1-5-5e0b50c5:10665348267:-7fdd end
-
-        return $returnValue;
     }
 
     /**
@@ -453,9 +401,6 @@ class PMF_User
      */
     function deleteUser()
     {
-        $returnValue = null;
-
-        // section -64--88-1-5-5e0b50c5:10665348267:-7fda begin
         // check user-ID
         if (!isset($this->_user_id) or $this->_user_id == 0) {
         	$this->errors[] = PMF_USERERROR_NO_USERID;
@@ -518,9 +463,6 @@ class PMF_User
 		if (!in_array(true, $delete)) 
 		    return false;
 		return true;
-        // section -64--88-1-5-5e0b50c5:10665348267:-7fda end
-
-        return $returnValue;
     }
 
     /**
@@ -534,9 +476,6 @@ class PMF_User
      */
     function changePassword($pass = '')
     {
-        $returnValue = (bool) false;
-
-        // section -64--88-1-5-5e0b50c5:10665348267:-7fd8 begin
         if (!$this->checkDb($this->_db))
 		    return false;
         foreach ($this->_auth_container as $name => $auth) {
@@ -561,9 +500,6 @@ class PMF_User
         	}
         }
         return $success;
-        // section -64--88-1-5-5e0b50c5:10665348267:-7fd8 end
-
-        return (bool) $returnValue;
     }
 
     /**
@@ -578,7 +514,6 @@ class PMF_User
      */
     function PMF_User($db = null, $perm = null, $auth = array())
     {
-        // section -64--88-1-5--735fceb5:106657b6b8d:-7fdb begin
         // default constructor
         // database access
         /*if ($db !== null) {
@@ -657,7 +592,6 @@ class PMF_User
         }
         // user data object
         $this->userdata = new PMF_UserData($this->_db);
-        // section -64--88-1-5--735fceb5:106657b6b8d:-7fdb end
     }
 
     /**
@@ -669,16 +603,10 @@ class PMF_User
      */
     function getStatus()
     {
-        $returnValue = (string) '';
-
-        // section -64--88-1-10--602a52f4:106a644a5e8:-7fd9 begin
         if (isset($this->_status) and strlen($this->_status) > 0) {
         	return $this->_status;
         }
         return false;
-        // section -64--88-1-10--602a52f4:106a644a5e8:-7fd9 end
-
-        return (string) $returnValue;
     }
 
     /**
@@ -691,9 +619,6 @@ class PMF_User
      */
     function setStatus($status)
     {
-        $returnValue = (bool) false;
-
-        // section -64--88-1-10--602a52f4:106a644a5e8:-7fd7 begin
         // is status allowed?
         $status = strtolower($status);
         if (!in_array($status, array_keys($this->_allowed_status))) {
@@ -725,9 +650,6 @@ class PMF_User
 		if ($res)
 		    return true;
 		return false;
-        // section -64--88-1-10--602a52f4:106a644a5e8:-7fd7 end
-
-        return (bool) $returnValue;
     }
 
     /**
@@ -740,9 +662,6 @@ class PMF_User
      */
     function checkDb($db)
     {
-        $returnValue = (bool) false;
-
-        // section -64--88-1-10--602a52f4:106a644a5e8:-7fd4 begin
         $methods = array('query', 'num_rows', 'fetch_assoc', 'error');
         foreach ($methods as $method) {
         	if (!method_exists($db, $method)) {
@@ -752,9 +671,6 @@ class PMF_User
         	}
         }
         return true;
-        // section -64--88-1-10--602a52f4:106a644a5e8:-7fd4 end
-
-        return (bool) $returnValue;
     }
 
     /**
@@ -771,18 +687,12 @@ class PMF_User
      */
     function error()
     {
-        $returnValue = (string) '';
-
-        // section -64--88-1-10--602a52f4:106a644a5e8:-7fd2 begin
         $message = '';
         foreach ($this->errors as $error) {
         	$message .= $error."\n";
         }
         $this->errors = array();
         return $message;
-        // section -64--88-1-10--602a52f4:106a644a5e8:-7fd2 end
-
-        return (string) $returnValue;
     }
 
     /**
@@ -794,8 +704,6 @@ class PMF_User
      */
     function __destruct()
     {
-        // section -64--88-1-10--602a52f4:106a644a5e8:-7fcb begin
-        // section -64--88-1-10--602a52f4:106a644a5e8:-7fcb end
     }
 
     /**
@@ -814,18 +722,12 @@ class PMF_User
      */
     function isValidLogin($login)
     {
-        $returnValue = (bool) false;
-
-        // section -64--88-1-10--602a52f4:106a644a5e8:-7fc8 begin
         $login = (string) $login;
         if (strlen($login) < $this->_login_minLength or preg_match($this->_login_invalidRegExp, $login)) {
         	$this->errors[] = PMF_USERERROR_LOGIN_INVALID;
             return false;
         }
         return true;
-        // section -64--88-1-10--602a52f4:106a644a5e8:-7fc8 end
-
-        return (bool) $returnValue;
     }
 
     /**
@@ -839,13 +741,11 @@ class PMF_User
      */
     function addAuth($auth, $name)
     {
-        // section -64--88-1-10-5a491889:106a7b76a96:-7fda begin
         if ($this->checkAuth($auth)) {
         	$this->_auth_container[$name] = $auth;
             return true;
         }
         return false;
-        // section -64--88-1-10-5a491889:106a7b76a96:-7fda end
     }
 
     /**
@@ -858,9 +758,6 @@ class PMF_User
      */
     function checkAuth($auth)
     {
-        $returnValue = (bool) false;
-
-        // section -64--88-1-10-59fce530:106a800a699:-7fda begin
         $methods = array('checkPassword');
         foreach ($methods as $method) {
         	if (!method_exists($auth, strtolower($method))) {
@@ -870,9 +767,6 @@ class PMF_User
         	}
         }
         return true;
-        // section -64--88-1-10-59fce530:106a800a699:-7fda end
-
-        return (bool) $returnValue;
     }
 
     /**
@@ -885,16 +779,10 @@ class PMF_User
      */
     function checkPerm($perm)
     {
-        $returnValue = (bool) false;
-
-        // section -64--88-1-10-59fce530:106a800a699:-7fd7 begin
         if (is_a($perm, 'pmf_perm'))
             return true;
         $this->errors[] = PMF_USERERROR_NO_PERM;
         return false;
-        // section -64--88-1-10-59fce530:106a800a699:-7fd7 end
-
-        return (bool) $returnValue;
     }
 
     /**
@@ -906,13 +794,7 @@ class PMF_User
      */
     function getLogin()
     {
-        $returnValue = (string) '';
-
-        // section -64--88-1-10-eb43fc:106c4f6ca50:-7fd0 begin
         return $this->_login;
-        // section -64--88-1-10-eb43fc:106c4f6ca50:-7fd0 end
-
-        return (string) $returnValue;
     }
 
     /**
@@ -924,14 +806,8 @@ class PMF_User
      */
     function createPassword()
     {
-        $returnValue = (string) '';
-
-        // section -64--88-1-10-eb43fc:106c4f6ca50:-7fca begin
 		srand((double)microtime()*1000000);
   		return (string) uniqid(rand());
-        // section -64--88-1-10-eb43fc:106c4f6ca50:-7fca end
-
-        return (string) $returnValue;
     }
 
     /**
@@ -944,16 +820,10 @@ class PMF_User
      */
     function getUserData($field = '*')
     {
-        $returnValue = null;
-
-        // section -64--88-1-10--7165c41e:106c72278bc:-7fd9 begin
         // get user-data entry
         if (!$this->userdata)
 		    $this->userdata = new PMF_UserData($this->_db);
 		return $this->userdata->get($field);
-        // section -64--88-1-10--7165c41e:106c72278bc:-7fd9 end
-
-        return $returnValue;
     }
 
     /**
@@ -966,17 +836,11 @@ class PMF_User
      */
     function setUserData($data)
     {
-        $returnValue = (bool) false;
-
-        // section -64--88-1-10--7165c41e:106c72278bc:-7fd7 begin
         // set user-data entry
         if (!$this->userdata)
 		    $this->userdata = new PMF_UserData($this->_db);
 		$this->userdata->load($this->getUserId());
 		return $this->userdata->set(array_keys($data), array_values($data));
-        // section -64--88-1-10--7165c41e:106c72278bc:-7fd7 end
-
-        return (bool) $returnValue;
     }
 
     /**

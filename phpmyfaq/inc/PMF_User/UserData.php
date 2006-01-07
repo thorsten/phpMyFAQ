@@ -11,47 +11,16 @@ error_reporting(E_ALL);
  * @version 0.1
  */
 
-if (0 > version_compare(PHP_VERSION, '4')) {
-    die('This file was generated for PHP 4');
-}
-
-/**
- * Creates a new user object.
- *
- * A user are recognized by the session-id using getUserBySessionId(), by his
- * using getUserById() or by his nickname (login) using getUserByLogin(). New
- * are created using createNewUser().
- *
- * @author Lars Tiedemann <php@larstiedemann.de>
- * @since 2005-09-17
- * @version 0.1
- */
-//require_once('PMF/User.php');
-
 /* user defined includes */
-// section -64--88-1-10-1860038:10612dd0903:-7fde-includes begin
-//require_once dirname(__FILE__).'/User.php';
-// section -64--88-1-10-1860038:10612dd0903:-7fde-includes end
 
 /* user defined constants */
-// section -64--88-1-10-1860038:10612dd0903:-7fde-constants begin
-// section -64--88-1-10-1860038:10612dd0903:-7fde-constants end
 
-/**
- * The userdata class provides methods to manage user information.
- *
- * @access public
- * @author Lars Tiedemann <php@larstiedemann.de>
- * @package PMF
- * @since 2005-09-18
- * @version 0.1
- */
 class PMF_UserData
 {
     // --- ATTRIBUTES ---
 
     /**
-     * Short description of attribute db
+     * database object
      *
      * @access private
      * @var object
@@ -59,7 +28,7 @@ class PMF_UserData
     var $_db = null;
 
     /**
-     * Short description of attribute data
+     * associative array containing user data
      *
      * @access private
      * @var array
@@ -67,7 +36,7 @@ class PMF_UserData
     var $_data = array();
 
     /**
-     * Short description of attribute user_id
+     * user-ID
      *
      * @access private
      * @var int
@@ -77,7 +46,8 @@ class PMF_UserData
     // --- OPERATIONS ---
 
     /**
-     * Short description of method get
+     * Returns the field $field of the user data. If $field is an
+     * array, an associative array will be returned.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -86,9 +56,6 @@ class PMF_UserData
      */
     function get($field)
     {
-        $returnValue = null;
-
-        // section -64--88-1-5-15e2075:1064c3e1ce5:-7ff3 begin
         // check $field
         $single_return = false;
         if (!is_array($field)) {
@@ -114,13 +81,12 @@ class PMF_UserData
 		if ($single_return and $field != '*') 
 		    return $arr[$field];
 		return $arr;
-        // section -64--88-1-5-15e2075:1064c3e1ce5:-7ff3 end
-
-        return $returnValue;
     }
 
     /**
-     * Short description of method set
+     * Sets the user data given by $field and $value. If $field
+     * and $value are arrays, all fields with the corresponding
+     * values are updated. Changes are being stored in the database.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -130,9 +96,6 @@ class PMF_UserData
      */
     function set($field, $value = null)
     {
-        $returnValue = (bool) false;
-
-        // section -64--88-1-5-15e2075:1064c3e1ce5:-7fef begin
         // check input
         if (!is_array($field))
             $field = array($field);
@@ -145,13 +108,10 @@ class PMF_UserData
         	$this->_data[$field[$i]] = $value[$i];
         }
         return $this->save();
-        // section -64--88-1-5-15e2075:1064c3e1ce5:-7fef end
-
-        return (bool) $returnValue;
     }
 
     /**
-     * Short description of method PMF_UserData
+     * Constructor. Expects a database object $db.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -160,13 +120,11 @@ class PMF_UserData
      */
     function PMF_UserData($db)
     {
-        // section -64--88-1-5--735fceb5:106657b6b8d:-7fd3 begin
         $this->_db = $db;
-        // section -64--88-1-5--735fceb5:106657b6b8d:-7fd3 end
     }
 
     /**
-     * Short description of method __destruct
+     * destructor.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -174,12 +132,11 @@ class PMF_UserData
      */
     function __destruct()
     {
-        // section -64--88-1-10-367e1977:106c6a5795d:-7fdd begin
-        // section -64--88-1-10-367e1977:106c6a5795d:-7fdd end
     }
 
     /**
-     * Short description of method load
+     * Loads the user-data from the database and returns an
+     * associative array with the fields and values.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -188,9 +145,6 @@ class PMF_UserData
      */
     function load($user_id)
     {
-        $returnValue = (bool) false;
-
-        // section -64--88-1-10--7165c41e:106c72278bc:-7fdd begin
         // check user-ID
         $user_id = (int) $user_id;
         if ($user_id <= 0) 
@@ -209,13 +163,11 @@ class PMF_UserData
         	return false;
         $this->_data = $this->_db->fetch_assoc($res);
         return true;
-        // section -64--88-1-10--7165c41e:106c72278bc:-7fdd end
-
-        return (bool) $returnValue;
     }
 
     /**
-     * Short description of method save
+     * Saves the current user-data into the database.
+     * Returns true on success, otherwise false.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -223,9 +175,6 @@ class PMF_UserData
      */
     function save()
     {
-        $returnValue = (bool) false;
-
-        // section -64--88-1-10--7165c41e:106c72278bc:-7fdb begin
         // update data
         $res = $this->_db->query("
           UPDATE
@@ -240,13 +189,11 @@ class PMF_UserData
         if (!$res) 
             return false;
         return true;
-        // section -64--88-1-10--7165c41e:106c72278bc:-7fdb end
-
-        return (bool) $returnValue;
     }
 
     /**
-     * Short description of method add
+     * Adds a new user entry for user-data in the database.
+     * Returns true on success, otherwise false.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -255,9 +202,6 @@ class PMF_UserData
      */
     function add($user_id)
     {
-        $returnValue = (bool) false;
-
-        // section -64--88-1-10--7165c41e:106c72278bc:-7fd4 begin
         // check user-ID
         $user_id = (int) $user_id;
         if ($user_id <= 0) 
@@ -274,13 +218,11 @@ class PMF_UserData
         if (!$res) 
             return false;
         return true;
-        // section -64--88-1-10--7165c41e:106c72278bc:-7fd4 end
-
-        return (bool) $returnValue;
     }
 
     /**
-     * Short description of method delete
+     * Deletes the user-data entry for the given user-ID $user_id.
+     * Returns true on success, otherwise false.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -289,9 +231,6 @@ class PMF_UserData
      */
     function delete($user_id)
     {
-        $returnValue = (bool) false;
-
-        // section -64--88-1-10--7165c41e:106c72278bc:-7fce begin
         // check user-ID
         $user_id = (int) $user_id;
         if ($user_id <= 0) 
@@ -308,9 +247,6 @@ class PMF_UserData
             return false;
         $this->_data = array();
         return true;
-        // section -64--88-1-10--7165c41e:106c72278bc:-7fce end
-
-        return (bool) $returnValue;
     }
 
 } /* end of class PMF_UserData */

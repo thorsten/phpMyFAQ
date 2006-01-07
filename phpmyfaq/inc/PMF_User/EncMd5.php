@@ -11,10 +11,6 @@ error_reporting(E_ALL);
  * @version 0.1
  */
 
-if (0 > version_compare(PHP_VERSION, '4')) {
-    die('This file was generated for PHP 4');
-}
-
 /**
  * provides methods for password encryption. 
  *
@@ -26,26 +22,12 @@ if (0 > version_compare(PHP_VERSION, '4')) {
  * @since 2005-09-18
  * @version 0.1
  */
-//require_once('PMF/Enc.php');
+require_once dirname(__FILE__).'/Enc.php';
 
 /* user defined includes */
-// section 127-0-0-1-17ec9f7:1062544275a:-7ff3-includes begin
-require_once dirname(__FILE__).'/Enc.php';
-// section 127-0-0-1-17ec9f7:1062544275a:-7ff3-includes end
 
 /* user defined constants */
-// section 127-0-0-1-17ec9f7:1062544275a:-7ff3-constants begin
-// section 127-0-0-1-17ec9f7:1062544275a:-7ff3-constants end
 
-/**
- * provides methods for password encryption using md5().
- *
- * @access public
- * @author Lars Tiedemann <php@larstiedemann.de>
- * @package PMF
- * @since 2005-09-18
- * @version 0.1
- */
 class PMF_EncMd5
     extends PMF_Enc
 {
@@ -71,13 +53,7 @@ class PMF_EncMd5
      */
     function encrypt($str)
     {
-        $returnValue = (string) '';
-
-        // section 127-0-0-1-17ec9f7:1062544275a:-7fe9 begin
         return md5($str);
-        // section 127-0-0-1-17ec9f7:1062544275a:-7fe9 end
-
-        return (string) $returnValue;
     }
 
     /**
@@ -89,8 +65,6 @@ class PMF_EncMd5
      */
     function PMF_EncMd5()
     {
-        // section -64--88-1-5--735fceb5:106657b6b8d:-7fc3 begin
-        // section -64--88-1-5--735fceb5:106657b6b8d:-7fc3 end
     }
 
     /**
@@ -102,8 +76,6 @@ class PMF_EncMd5
      */
     function __construct()
     {
-        // section -64--88-1-10--3f7cf10c:106abb97c17:-7fd2 begin
-        // section -64--88-1-10--3f7cf10c:106abb97c17:-7fd2 end
     }
 
     /**
@@ -115,8 +87,6 @@ class PMF_EncMd5
      */
     function __destruct()
     {
-        // section -64--88-1-10--3f7cf10c:106abb97c17:-7fd0 begin
-        // section -64--88-1-10--3f7cf10c:106abb97c17:-7fd0 end
     }
 
 } /* end of class PMF_EncMd5 */

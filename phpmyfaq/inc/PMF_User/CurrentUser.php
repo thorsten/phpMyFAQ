@@ -3,39 +3,29 @@
 error_reporting(E_ALL);
 
 /**
- * manages authentication process using php sessions.
- *
- * The CurrentUser class is an extension of the User class. It provides methods
- * manage user authentication using multiple database accesses.
- *
- * @author Lars Tiedemann, <php@larstiedemann.de>
- * @package PMF
+* manages authentication process using php sessions.
+*
+* The CurrentUser class is an extension of the User class. It provides methods
+* manage user authentication using multiple database accesses.
+*
+* @author Lars Tiedemann, <php@larstiedemann.de>
+* @package PMF
+*
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
+*
+* Software distributed under the License is distributed on an "AS IS"
+* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+* License for the specific language governing rights and limitations
+* under the License.
  */
-
-if (0 > version_compare(PHP_VERSION, '4')) {
-    die('This file was generated for PHP 4');
-}
-
-/**
- * Creates a new user object.
- *
- * A user are recognized by the session-id using getUserBySessionId(), by his
- * using getUserById() or by his nickname (login) using getUserByLogin(). New
- * are created using createNewUser().
- *
- * @author Lars Tiedemann <php@larstiedemann.de>
- * @since 2005-09-17
- * @version 0.1
- */
-//require_once('PMF/User.php');
 
 /* user defined includes */
-// section -64--88-1-12--f895d8c:106777dbaf0:-7fdd-includes begin
 require_once dirname(__FILE__).'/User.php';
-// section -64--88-1-12--f895d8c:106777dbaf0:-7fdd-includes end
 
 /* user defined constants */
-// section -64--88-1-12--f895d8c:106777dbaf0:-7fdd-constants begin
 @define('PMF_SESSION_CURRENT_USER', 'PMF_CURRENT_USER');
 @define('PMF_SESSION_ID_TIMESTAMP', 'PMF_SESSION_TIMESTAMP');
 @define('PMF_SESSION_ID_EXPIRES', 30);
@@ -44,21 +34,7 @@ require_once dirname(__FILE__).'/User.php';
 @define('PMF_LOGIN_BY_SESSION_FAILED', 'Could not login user from session. ');
 @define('PMF_LOGIN_BY_AUTH_FAILED', 'Could not login with login and password. ');
 @define('PMF_USERERROR_INCORRECT_PASSWORD', 'Specified password is not correct. ');
-// section -64--88-1-12--f895d8c:106777dbaf0:-7fdd-constants end
 
-/**
- * manages authentication process using php sessions.
- *
- * The CurrentUser class is an extension of the User class. It provides methods
- * manage user authentication using multiple database accesses.
- * There are three ways of making a new current user object, using
- * the login() method, getFromSession() method or manually.
- * login() and getFromSession() may be combined.
- *
- * @access public
- * @author Lars Tiedemann, <php@larstiedemann.de>
- * @package PMF
- */
 class PMF_CurrentUser
     extends PMF_User
 {
@@ -104,7 +80,7 @@ class PMF_CurrentUser
     // --- OPERATIONS ---
 
     /**
-     * Short description of method PMF_CurrentUser
+     * constructor
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
@@ -112,9 +88,7 @@ class PMF_CurrentUser
      */
     function PMF_CurrentUser()
     {
-        // section -64--88-1-12--f895d8c:106777dbaf0:-7fd8 begin
         $this->PMF_User();
-        // section -64--88-1-12--f895d8c:106777dbaf0:-7fd8 end
     }
 
     /**
@@ -136,9 +110,6 @@ class PMF_CurrentUser
      */
     function login($login, $pass)
     {
-        $returnValue = null;
-
-        // section -64--88-1-12--f895d8c:106777dbaf0:-7fd6 begin
 		// authenticate user by login and password
 		$login_error = 0;
 		$pass_error  = 0;
@@ -192,9 +163,6 @@ class PMF_CurrentUser
 		if ($pass_error > 0)
 			$this->errors[] = PMF_USERERROR_INCORRECT_PASSWORD;
 		return false;
-        // section -64--88-1-12--f895d8c:106777dbaf0:-7fd6 end
-
-        return $returnValue;
     }
 
     /**
