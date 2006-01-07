@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.31 2006-01-04 16:52:47 thorstenr Exp $
+* $Id: artikel.php,v 1.32 2006-01-07 16:26:03 thorstenr Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -118,38 +118,50 @@ if (isset($permission['editbt'])) {
 if ($faq->faqRecord['comment'] == 'n') {
     $commentMessage = $PMF_LANG['msgWriteNoComment'];
 } else {
-    $commentMessage = sprintf('%s<a href="?%daction=writecomment&amp;id=%d&amp;artlang=%s">%s</a>', $PMF_LANG['msgYouCan'], $sids, $id, $lang, $PMF_LANG['msgWriteComment']);
+    //$commentMessage = sprintf('%s<a href="?%daction=writecomment&amp;id=%d&amp;artlang=%s">%s</a>', $PMF_LANG['msgYouCan'], $sids, $id, $lang, $PMF_LANG['msgWriteComment']);
+    $commentMessage = sprintf('%s<a onclick="show(\'comment\');" href="#">%s</a>', $PMF_LANG['msgYouCan'], $PMF_LANG['msgWriteComment']);
 }
 
 // Set the template variables
 $tpl->processTemplate ("writeContent", array(
-                'writeRubrik' => $categoryName.'<br />',
-                'writeThema' => preg_replace_callback('/('.$highlight.'="[^"]*")|((href|src|title|alt|class|style|id|name)="[^"]*'.$highlight.'[^"]*")|('.$highlight.')/mis', "highlight_no_links", $faq->getRecordTitle($id, $lang)),
-                'writeArticleCategoryHeader' => $PMF_LANG['msgArticleCategories'],
-                'writeArticleCategories' => $writeMultiCategories,
-                'writeContent' => preg_replace_callback("/<code([^>]*)>(.*?)<\/code>/is", 'hilight', $content),
-                'writeDateMsg' => $PMF_LANG['msgLastUpdateArticle'].$faq->faqRecord['date'],
-                'writeAuthor' => $PMF_LANG['msgAuthor'].$faq->faqRecord['author'],
-                'editThisEntry' => $editThisEntry,
-                'writePrintMsg' => sprintf('<a href="#" onclick="javascript:window.print();">%s</a>', $PMF_LANG['msgPrintArticle']),
-                'writePDF' => sprintf('<a target="_blank" href="pdf.php?cat=%s&amp;id=%d&amp;lang=%s">'.$PMF_LANG['msgPDF'].'</a>', $currentCategory, $id, $lang),
-                'writeSend2FriendMsg' => sprintf('<a href="?%daction=send2friend&amp;cat=%d&amp;id=%d&amp;artlang=%s">%s</a>', $sids, $currentCategory, $id, $lang, $PMF_LANG['msgSend2Friend']),
-                'writeXMLMsg' => sprintf('<a href="?%daction=xml&amp;id=%d&amp;artlang=%d">%s</a>', $sids, $id, $lang, $PMF_LANG['msgMakeXMLExport']),
-                'writePrintMsgTag' => $PMF_LANG['msgPrintArticle'],
-                'writePDFTag' => $PMF_LANG['msgPDF'],
-                'writeSend2FriendMsgTag' => $PMF_LANG['msgSend2Friend'],
-                'writeXMLMsgTag' => $PMF_LANG['msgMakeXMLExport'],
-                'saveVotingPATH' => sprintf('?%daction=savevoting', $sids),
-                'saveVotingID' => $id,
-                'saveVotingIP' => $_SERVER['REMOTE_ADDR'],
-                'msgAverageVote' => $PMF_LANG['msgAverageVote'],
-                'printVotings' => $faq->getVotingResult($id),
-                'switchLanguage' => $switchLanguage,
-                'msgVoteUseability' => $PMF_LANG['msgVoteUseability'],
-                'msgVoteBad' => $PMF_LANG['msgVoteBad'],
-                'msgVoteGood' => $PMF_LANG['msgVoteGood'],
-                'msgVoteSubmit' => $PMF_LANG['msgVoteSubmit'],
-                'writeCommentMsg' => $commentMessage,
-                'writeComments' => $faq->getComments($id)));
+    'writeRubrik' => $categoryName.'<br />',
+    'writeThema' => preg_replace_callback('/('.$highlight.'="[^"]*")|((href|src|title|alt|class|style|id|name)="[^"]*'.$highlight.'[^"]*")|('.$highlight.')/mis', "highlight_no_links", $faq->getRecordTitle($id, $lang)),
+    'writeArticleCategoryHeader' => $PMF_LANG['msgArticleCategories'],
+    'writeArticleCategories' => $writeMultiCategories,
+    'writeContent' => preg_replace_callback("/<code([^>]*)>(.*?)<\/code>/is", 'hilight', $content),
+    'writeDateMsg' => $PMF_LANG['msgLastUpdateArticle'].$faq->faqRecord['date'],
+    'writeAuthor' => $PMF_LANG['msgAuthor'].$faq->faqRecord['author'],
+    'editThisEntry' => $editThisEntry,
+    'writePrintMsg' => sprintf('<a href="#" onclick="javascript:window.print();">%s</a>', $PMF_LANG['msgPrintArticle']),
+    'writePDF' => sprintf('<a target="_blank" href="pdf.php?cat=%s&amp;id=%d&amp;lang=%s">'.$PMF_LANG['msgPDF'].'</a>', $currentCategory, $id, $lang),
+    'writeSend2FriendMsg' => sprintf('<a href="?%daction=send2friend&amp;cat=%d&amp;id=%d&amp;artlang=%s">%s</a>', $sids, $currentCategory, $id, $lang, $PMF_LANG['msgSend2Friend']),
+    'writeXMLMsg' => sprintf('<a href="?%daction=xml&amp;id=%d&amp;artlang=%d">%s</a>', $sids, $id, $lang, $PMF_LANG['msgMakeXMLExport']),
+    'writePrintMsgTag' => $PMF_LANG['msgPrintArticle'],
+    'writePDFTag' => $PMF_LANG['msgPDF'],
+    'writeSend2FriendMsgTag' => $PMF_LANG['msgSend2Friend'],
+    'writeXMLMsgTag' => $PMF_LANG['msgMakeXMLExport'],
+    'saveVotingPATH' => sprintf('?%daction=savevoting', $sids),
+    'saveVotingID' => $id,
+    'saveVotingIP' => $_SERVER['REMOTE_ADDR'],
+    'msgAverageVote' => $PMF_LANG['msgAverageVote'],
+    'printVotings' => $faq->getVotingResult($id),
+    'switchLanguage' => $switchLanguage,
+    'msgVoteUseability' => $PMF_LANG['msgVoteUseability'],
+    'msgVoteBad' => $PMF_LANG['msgVoteBad'],
+    'msgVoteGood' => $PMF_LANG['msgVoteGood'],
+    'msgVoteSubmit' => $PMF_LANG['msgVoteSubmit'],
+    'writeCommentMsg' => $commentMessage,
+    'msgWriteComment' => $PMF_LANG['msgWriteComment'],
+    'writeSendAdress' => $_SERVER['PHP_SELF'].'?'.$sids.'action=savecomment',
+    'id' => $id,
+    'lang' => $lang,
+    'msgCommentHeader' => $PMF_LANG['msgCommentHeader'],
+    'msgNewContentName' => $PMF_LANG['msgNewContentName'],
+    'msgNewContentMail' => $PMF_LANG['msgNewContentMail'],
+    'defaultContentMail' => getEmailAddress(),
+    'defaultContentName' => getFullUserName(), 
+    'msgYourComment' => $PMF_LANG['msgYourComment'],
+    'msgNewContentSubmit' => $PMF_LANG['msgNewContentSubmit'],
+    'writeComments' => $faq->getComments($id)));
 
 $tpl->includeTemplate('writeContent', 'index');
