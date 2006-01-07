@@ -926,7 +926,7 @@ class PMF_PermMedium
         if (!$this->_initialized)
         	return false;
         // check input
-        if ($group_id <= 0)
+        if ($group_id <= 0 || !is_numeric($group_id))
             return false;
         // remove all user from group
         $res = $this->_db->query("
