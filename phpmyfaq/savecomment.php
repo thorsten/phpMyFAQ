@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: savecomment.php,v 1.10 2006-01-02 16:51:26 thorstenr Exp $
+* $Id: savecomment.php,v 1.11 2006-01-09 20:02:10 thorstenr Exp $
 *
 * Saves the posted comment
 *
@@ -35,7 +35,7 @@ if (isset($_POST["user"]) && $_POST["user"] != "" && isset($_POST["mail"]) && $_
     $comment_by_user = $db->escape_string(safeHTML($_REQUEST["user"]));
     $comment_by_mail = $db->escape_string(safeHTML($_REQUEST["mail"]));
 	
-	$result = $db->query("INSERT INTO ".SQLPREFIX."faqcomments (id_comment, id, usr, email, comment, datum, helped) VALUES (".$db->nextID(SQLPREFIX."faqcomments", "id_comment").", ".$id.",'".$comment_by_user."','".$comment_by_mail."','".$comment."','".$datum."','".$helped."')");
+	$result = $db->query("INSERT INTO ".SQLPREFIX."faqcomments (id_comment, id, usr, email, comment, datum, helped) VALUES (".$db->nextID(SQLPREFIX."faqcomments", "id_comment").", ".$id.", '".$comment_by_user."', '".$comment_by_mail."', '".$comment."', ".$datum.", '".$helped."')");
 	
 	$tpl->processTemplate ("writeContent", array(
 				"msgCommentHeader" => $PMF_LANG["msgWriteComment"],
