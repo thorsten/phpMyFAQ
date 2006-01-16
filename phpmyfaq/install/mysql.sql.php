@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mysql.sql.php,v 1.20 2006-01-04 13:35:59 thorstenr Exp $
+* $Id: mysql.sql.php,v 1.21 2006-01-16 18:48:29 thorstenr Exp $
 *
 * CREATE TABLE instruction for MySQL database
 *
@@ -33,6 +33,7 @@ $uninst[] = "DROP TABLE ".$sqltblpre."faqquestions";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqglossary";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqgroup";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqgroup_right";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqlinkverifyrules";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqnews";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqright";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqsessions";
@@ -147,6 +148,20 @@ $query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqgroup_right (
 group_id INT(11) UNSIGNED NOT NULL,
 right_id INT(11) UNSIGNED NOT NULL,
 PRIMARY KEY(group_id, right_id)
+)";
+
+//faqlinkverifyrules
+$query[] = "CREATE TABLE ".$sqltblpre."faqlinkverifyrules (
+id int(11) NOT NULL default '0',
+type varchar(6) NOT NULL default '',
+url varchar(255) NOT NULL default '',
+reason varchar(255) NOT NULL default '',
+enabled enum('y','n') NOT NULL default 'y',
+locked enum('y','n') NOT NULL default 'n',
+owner varchar(255) NOT NULL default '',
+dtInsertDate varchar(15) NOT NULL default '',
+dtUpdateDate varchar(15) NOT NULL default '',
+PRIMARY KEY (id)
 )";
 
 //faqnews
