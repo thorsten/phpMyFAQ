@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.user_list.php,v 1.15 2006-01-05 22:07:34 b33blebr0x Exp $
+* $Id: ajax.user_list.php,v 1.16 2006-01-16 18:51:04 thorstenr Exp $
 *
 * AJAX: lists all registered users
 *
@@ -56,7 +56,7 @@ foreach ($all_rights as $right_data) {
         continue;
 ?>
         <right id="<?php print $right_id; ?>">
-            <name><?php print isset($PMF_LANG['rightsLanguage'][$right_data['name']]) ? htmlentities($PMF_LANG['rightsLanguage'][$right_data['name']]) : $right_data['name']; ?></name>
+            <name><?php print isset($PMF_LANG['rightsLanguage'][$right_data['name']]) ? PMF_htmlentities($PMF_LANG['rightsLanguage'][$right_data['name']]) : $right_data['name']; ?></name>
             <description><?php print $right_data['description']; ?></description>
         </right>
 <?php
