@@ -1,5 +1,5 @@
 /**
-* $Id: admin.css,v 1.10 2006-01-06 18:46:27 b33blebr0x Exp $
+* $Id: admin.css,v 1.11 2006-01-16 18:52:12 thorstenr Exp $
 *
 * This is the CSS file for the admin section of phpMyFAQ 1.5.x
 * You don't need to change enything here but feel free to do it. :-)
@@ -183,10 +183,27 @@ input.submit {
     border: 2px solid #696969;
     background-color: #dcdcdc;
     }
-    
+  
 /**
 * Link configuration
 */
+
+table.verifyArticleURL tr.urlfail td {
+	background-color:#FFF5F5;
+}
+
+table.verifyArticleURL tr.urlfail td.urlfail {
+	color: #FF0000;
+	font-weight: bold;
+}
+
+table.verifyArticleURL tr.urlsuccess td {
+
+}
+
+table.verifyArticleURL tr.urlsuccess td.urlsuccess {
+	font-weight: bold;
+}
 
 /* linkconfig.main.php */
 table.linkconfig#typeselection {
