@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.37 2006-01-04 14:41:54 thorstenr Exp $
+* $Id: update.php,v 1.38 2006-01-16 18:22:47 thorstenr Exp $
 *
 * Main update script
 *
@@ -21,7 +21,7 @@
 */
 
 define("NEWVERSION", "1.6.0-dev");
-define("COPYRIGHT", "&copy; 2001-2005 <a href=\"http://www.phpmyfaq.de/\" target=\"_blank\">phpMyFAQ Team</a> | All rights reserved.");
+define("COPYRIGHT", "&copy; 2001-2006 <a href=\"http://www.phpmyfaq.de/\" target=\"_blank\">phpMyFAQ Team</a> | All rights reserved.");
 define("PMF_ROOT_DIR", dirname(dirname(__FILE__)));
 
 require_once (PMF_ROOT_DIR."/inc/data.php");
@@ -172,13 +172,13 @@ if ($step == 2) {
     } else {
         $test2 = 1;
     }
-    if (!@copy(PMF_ROOT_DIR."/inc/data.php", PMF_ROOT_DIR."/inc/data.php.bak")) {
-        print "<p class=\"error\"><strong>Error:</strong> The backup file ../inc/data.php.bak could not be written. Please correct this!</p>";
+    if (!@copy(PMF_ROOT_DIR."/inc/data.php", PMF_ROOT_DIR."/inc/data.bak.php")) {
+        print "<p class=\"error\"><strong>Error:</strong> The backup file ../inc/data.bak.php could not be written. Please correct this!</p>";
     } else {
         $test3 = 1;
     }
-    if (!@copy(PMF_ROOT_DIR."/inc/config.php", PMF_ROOT_DIR."/inc/config.php.bak")) {
-        print "<p class=\"error\"><strong>Error:</strong> The backup file ../inc/config.php.bak could not be written. Please correct this!</p>";
+    if (!@copy(PMF_ROOT_DIR."/inc/config.php", PMF_ROOT_DIR."/inc/config.bak.php")) {
+        print "<p class=\"error\"><strong>Error:</strong> The backup file ../inc/config.bak.php could not be written. Please correct this!</p>";
     } else {
         $test4 = 1;
     }
@@ -427,8 +427,10 @@ if ($step == 5) {
     	}
     }
     print "</p>\n";
-    print "<p class=\"center\">The database was updated successfully.</p>";
-    print "<p class=\"center\"><a href=\"../index.php\">phpMyFAQ</a></p>";
+    print '<p class="center\">The database was updated successfully.</p>';
+    print '<p class="center\"><a href="../index.php">phpMyFAQ</a></p>';
+    print '<p class="center">Please remove the backup (*.php.bak and *.bak.php) files located in the directory inc/.</p>';
+    
     if (@unlink(basename($_SERVER["PHP_SELF"]))) {
         print "<p class=\"center\">This file was deleted automatically.</p>\n";
     } else {
