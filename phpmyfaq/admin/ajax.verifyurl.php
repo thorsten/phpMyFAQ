@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.verifyurl.php,v 1.3 2006-01-02 16:51:26 thorstenr Exp $
+* $Id: ajax.verifyurl.php,v 1.4 2006-01-17 19:43:04 thorstenr Exp $
 *
 * AJAX: verifyurl
 *
@@ -83,13 +83,13 @@ exit();
 
 function getEntryContent($id = 0, $lang = "") {
     global $db;
-
-    $query = "SELECT content FROM ".SQLPREFIX."faqdata WHERE id = ".$id." AND lang='".$db->escape_string($lang)."'";
+	
+	$query = sprintf("SELECT content FROM %sfaqdata WHERE id = %d AND lang='%s'",SQLPREFIX,$id,$db->escape_string($lang));
     $result = $db->query($query);
     if ($db->num_rows($result) != 1) {
         return FALSE;
     }
 
-    list($content) = $db->fetch_row($result);
-    return $content;
+	$array = $db->fetch_assoc($result);
+	return $array['content'];
 }

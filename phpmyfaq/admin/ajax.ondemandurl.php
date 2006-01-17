@@ -1,11 +1,11 @@
 <?php
 /**
-* $Id: ajax.ondemandurl.php,v 1.4 2006-01-02 16:51:26 thorstenr Exp $
+* $Id: ajax.ondemandurl.php,v 1.5 2006-01-17 19:43:04 thorstenr Exp $
 *
-* AJAX: onDemandURL (not really AJAX)
+* AJAX: onDemandURL
 *
 * Usage:
-*   index.php?uin=<uin>&aktion=ajax&ajax=onDemandURL&id=<id>&lang=<lang>
+*   index.php?uin=<uin>&aktion=ajax&ajax=onDemandURL&id=<id>&lang=<lang>[&lookup=1]
 *
 * Performs link verification at demand of the user.
 *
@@ -66,8 +66,9 @@ ob_clean();
     <meta name="copyright" content="(c) 2001-2006 phpMyFAQ Team" />
     <meta http-equiv="Content-Type" content="text/html; charset=<?php print $PMF_LANG["metaCharset"]; ?>" />
     <style type="text/css"> @import url(../template/admin.css); </style>
+    <script type="text/javascript" src="../inc/prototype.js"></script>
 </head>
-<body id="body" dir="<?php print $PMF_LANG["dir"]; ?>">	
+<body id="body" dir="<?php print $PMF_LANG["dir"]; ?>" >
 <?php
 
 if (!(isset($id) && isset($lang))) {
@@ -90,8 +91,16 @@ if (($content = getEntryContent($id, $lang)) === FALSE) {
 	exit();
 }
 
-print verifyArticleURL($content, $id, $artlang);
+if (isset($_GET["lookup"])) {
+	ob_clean();
+	print verifyArticleURL($content, $id, $lang);
+	exit();
+}
+
 ?>
+<?php link_ondemand_javascript($id, $lang); ?>
+
+
 </body>
 </html>
 <?php
@@ -105,6 +114,6 @@ function getEntryContent($id = 0, $lang = "") {
 		return FALSE;
 	}
 	
-	list($content) = $db->fetch_row($result);
-	return $content;
+	$array = $db->fetch_assoc($result);
+	return $array['content'];
 }
