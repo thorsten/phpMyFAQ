@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.6 2006-01-02 16:51:28 thorstenr Exp $
+* $Id: Faq.php,v 1.7 2006-01-17 19:43:33 thorstenr Exp $
 *
 * The main FAQ class
 *
@@ -63,7 +63,7 @@ class FAQ
     */
     function FAQ($db, $language)
     {
-    	return $this->__construct();
+    	return $this->__construct($db, $language);
     }
     function __construct($db, $language)
     {
