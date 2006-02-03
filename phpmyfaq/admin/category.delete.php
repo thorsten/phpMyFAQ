@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: category.delete.php,v 1.5 2006-01-02 16:51:26 thorstenr Exp $
+* $Id: category.delete.php,v 1.6 2006-02-03 14:37:26 thorstenr Exp $
 *
 * Deletes a category
 *
@@ -33,6 +33,7 @@ if ($permission["delcateg"]) {
     <div align="center">
 	<input type="hidden" name="aktion" value="removecategory" />
 	<input type="hidden" name="cat" value="<?php print $_GET["cat"]; ?>" />
+    <input type="hidden" name="lang" value="<?php print $_GET['lang']; ?>" />
 	<input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_del_yes"]; ?>" style="color: Red;" />&nbsp;&nbsp;
 	<input class="submit" type="reset" onclick="javascript:history.back();" value="<?php print $PMF_LANG["ad_categ_del_no"]; ?>" />
     </div>
