@@ -1,6 +1,6 @@
-$Id: README.txt,v 1.43 2006-01-03 21:45:54 thorstenr Exp $
+$Id: README.txt,v 1.44 2006-02-03 11:30:13 thorstenr Exp $
 
-phpMyFAQ 1.6.0-dev
+phpMyFAQ 2.0.0-dev
 Codename "Prometheus"
 
 Installation/Update:
@@ -9,7 +9,7 @@ Please read the documentation (documentation.en.html) carefully.
 Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
-Changes since 1.5.x:
+Changes since 1.x:
 - added rewritten and enhanced user management
 - added rewritten and enhanced authorization management
 - added AJAX support
@@ -19,13 +19,13 @@ Changes since 1.5.x:
 - added configurable visibility of new questions
 - added improved and template-based XHTML export
 
-Known issues in phpMyFAQ 1.6.0:
+Known issues in phpMyFAQ 2.0.0:
 - some language files need an update
 - using UTF-8 will not work in the PDF files
 
 CHANGELOG:
 
-Version 1.6.0 - n/a
+Version 2.0.0 - n/a
 - added rewritten and enhanced user management
 - added rewritten and enhanced authorization management
 - added AJAX support
@@ -34,6 +34,11 @@ Version 1.6.0 - n/a
 - added possibility to delete admin log
 - added configurable visibility of new questions
 - added improved and template-based XHTML export
+
+Version 1.5.6 - 2006-01-27
+- added Basque translation
+- improved spam protection
+- fixed some minor bugs
 
 Version 1.5.5 - 2005-12-19
 - added support for MaxDB
