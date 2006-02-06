@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.39 2006-02-03 11:30:13 thorstenr Exp $
+* $Id: update.php,v 1.40 2006-02-06 06:38:26 thorstenr Exp $
 *
 * Main update script
 *
@@ -406,7 +406,7 @@ if ($step == 5) {
         case 'mysqli':      $query[] = "OPTIMIZE TABLE ".SQLPREFIX."faqadminlog, ".SQLPREFIX."faqadminsessions, ".SQLPREFIX."faqcategories, ".SQLPREFIX."faqcategoryrelations, ".SQLPREFIX."faqchanges, ".SQLPREFIX."faqcomments, ".SQLPREFIX."faqdata, ".SQLPREFIX."faqfragen, ".SQLPREFIX."faqnews, ".SQLPREFIX."faqsessions, ".SQLPREFIX."faquser, ".SQLPREFIX."faqvisits, ".SQLPREFIX."faqvoting, ".SQLPREFIX."faqglossary";
                             break;
                             
-        case 'pgsql':       $query[] = "VACUUM ANALYZE ".SQLPREFIX."faqadminlog, ".SQLPREFIX."faqadminsessions, ".SQLPREFIX."faqcategories, ".SQLPREFIX."faqcategoryrelations, ".SQLPREFIX."faqchanges, ".SQLPREFIX."faqcomments, ".SQLPREFIX."faqdata, ".SQLPREFIX."faqfragen, ".SQLPREFIX."faqnews, ".SQLPREFIX."faqsessions, ".SQLPREFIX."faquser, ".SQLPREFIX."faqvisits, ".SQLPREFIX."faqvoting, ".SQLPREFIX."faqglossary";
+        case 'pgsql':       $query[] = "VACUUM ANALYZE;";
                             break;
                             
         default:            break;
