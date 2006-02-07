@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.105 2006-01-03 21:42:56 thorstenr Exp $
+* $Id: functions.php,v 1.106 2006-02-07 19:59:19 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -430,14 +430,22 @@ function EndSlash($string)
 	return $string;
 }
 
-/*
- * Funktion zum Entfernen von HTML-Tags bis auf <strong>, <em>, <u>, und <a> | @@ Thorsten, 2003-02-23
- * Last Update: @@ Thorsten, 2004-10-31
+/**
+ * safeHTML()
+ *
+ * Function to remove all HTML tags but not <strong>, <em>, <u>, und <a>
+ *
+ * @param   string  $html
+ * @return  string  $html
+ * @access  public
+ * @since   2003-02-23
+ * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
  */
 function safeHTML($html)
 {
-	$html = strip_tags($html, "<strong><em><i><u><a><br>");
-	return $html;
+    $html = strip_tags($html, "<strong><em><i><u><a><br>");
+    $html = str_replace('<a ', '<a rel="nofollow" ', $html);
+    return $html;
 }
 
 /*
