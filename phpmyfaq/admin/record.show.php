@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.show.php,v 1.22 2006-01-06 10:38:56 thorstenr Exp $
+* $Id: record.show.php,v 1.23 2006-02-20 17:23:57 thorstenr Exp $
 *
 * Shows the list of records ordered by categories
 *
@@ -8,12 +8,12 @@
 * @author       Minoru TODA <todam@netjapan.co.jp>
 * @since        2003-02-23
 * @copyright    (c) 2001-2006 phpMyFAQ Team
-* 
+*
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
 * compliance with the License. You may obtain a copy of the License at
 * http://www.mozilla.org/MPL/
-* 
+*
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
@@ -85,7 +85,7 @@ if ($permission["editbt"] || $permission["delbt"]) {
         $internalSearch .= '';
 
         $resultComments = $db->query("SELECT count(id) as anz, id FROM ".SQLPREFIX."faqcomments GROUP BY id ORDER BY id;");
-        if ($db->num_rows($resultComments) > 1) {
+        if ($db->num_rows($resultComments) > 0) {
 
             while ($row = $db->fetch_object($resultComments)) {
 
@@ -93,7 +93,7 @@ if ($permission["editbt"] || $permission["delbt"]) {
             }
         }
     } else if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "view" && isset($_REQUEST["suchbegriff"]) && $_REQUEST["suchbegriff"] != "") {
-        
+
         $begriff = strip_tags($_REQUEST["suchbegriff"]);
         if (is_numeric($begriff)) {
             $result = $db->search(SQLPREFIX.'faqdata',
@@ -122,10 +122,10 @@ if ($permission["editbt"] || $permission["delbt"]) {
                             SQLPREFIX.'faqdata.keywords'),
                         $begriff);
         }
-        
+
         $laktion = "view";
         $internalSearch = "&amp;search=".$begriff;
-        
+
     } elseif (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "accept") {
 
         $query = 'SELECT '.SQLPREFIX.'faqdata.id AS id,'.SQLPREFIX.'faqdata.lang AS lang, '.SQLPREFIX.'faqcategoryrelations.category_id AS category_id, '.SQLPREFIX.'faqdata.thema AS thema,'.SQLPREFIX.'faqdata.author AS author FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang ='.SQLPREFIX.'faqcategoryrelations.record_lang WHERE '.SQLPREFIX.'faqdata.active = \'no\' ORDER BY '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.id';
@@ -203,7 +203,7 @@ if ($permission["editbt"] || $permission["delbt"]) {
                 } else {
 ?>
 	</table>
-	<br />	
+	<br />
     <table class="list">
 <?php
                 }
@@ -223,7 +223,7 @@ if ($permission["editbt"] || $permission["delbt"]) {
             }
 ?>
         <tr>
-            <td class="list" width="35"><?php print $row->id; ?></td>		
+            <td class="list" width="35"><?php print $row->id; ?></td>
             <td class="list" width="18"><?php print $row->lang; ?></td>
             <td class="list" width="18"><a href="?aktion=saveentry&amp;id=<?php print $row->id; ?>&amp;language=<?php print $row->lang; ?>&amp;submit[0]=<?php print $PMF_LANG["ad_entry_delete"]; ?>" title="<?php print $PMF_LANG["ad_user_delete"]; ?> '<?php print str_replace("\"", "´", stripslashes($row->thema)); ?>'"><img src="images/delete.gif" width="17" height="18" alt="<?php print $PMF_LANG["ad_entry_delete"]; ?>" /></a></td>
             <td class="list" width="50"><?php print $linkverifier->getEntryStateHTML($row->id, $row->lang); ?></td>
