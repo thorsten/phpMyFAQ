@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.7 2006-01-17 19:43:33 thorstenr Exp $
+* $Id: Faq.php,v 1.8 2006-03-02 11:17:12 thorstenr Exp $
 *
 * The main FAQ class
 *
@@ -8,12 +8,12 @@
 * @package      phpMyFAQ
 * @since        2005-12-20
 * @copyright    (c) 2006 phpMyFAQ Team
-* 
+*
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
 * compliance with the License. You may obtain a copy of the License at
 * http://www.mozilla.org/MPL/
-* 
+*
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
@@ -28,35 +28,35 @@ class FAQ
     * @var  object
     */
     var $db;
-    
+
     /**
     * Language
     *
     * @var  string
     */
     var $language;
-    
+
     /**
     * Language strings
     *
     * @var  string
     */
     var $pmf_lang;
-    
+
     /**
     * The current FAQ record
     *
     * @var  array
     */
     var $faqRecord = array();
-    
+
     /**
     * All current FAQ records in an array
     *
     * @var  array
     */
     var $faqRecords = array();
-    
+
     /**
     * Constructor
     *
@@ -68,18 +68,18 @@ class FAQ
     function __construct($db, $language)
     {
         global $PMF_LANG;
-        
+
         $this->db = $db;
         $this->language = $language;
         $this->pmf_lang = $PMF_LANG;
 	}
-	
+
 	//
 	//
 	// PUBLIC METHODS
 	//
 	//
-	
+
 	/**
 	* showAllRecords()
 	*
@@ -96,11 +96,11 @@ class FAQ
         global $sids, $PMF_CONF;
         $page = 1;
         $output = '';
-        
+
         if (isset($_REQUEST["seite"])) {
             $page = (int)$_REQUEST["seite"];
         }
-        
+
         $result = $this->db->query('
             SELECT
                 '.SQLPREFIX.'faqdata.id AS id,
@@ -108,9 +108,9 @@ class FAQ
                 '.SQLPREFIX.'faqdata.thema AS thema,
                 '.SQLPREFIX.'faqcategoryrelations.category_id AS category_id,
                 '.SQLPREFIX.'faqvisits.visits AS visits
-            FROM 
+            FROM
                 '.SQLPREFIX.'faqdata
-            LEFT JOIN 
+            LEFT JOIN
                 '.SQLPREFIX.'faqcategoryrelations
             ON
                 '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id
@@ -128,10 +128,10 @@ class FAQ
                 '.SQLPREFIX.'faqcategoryrelations.category_id = '.$category.'
             ORDER BY
                 '.SQLPREFIX.'faqdata.id');
-        
+
         $num = $this->db->num_rows($result);
         $pages = ceil($num / $PMF_CONF["numRecordsPage"]);
-        
+
         if ($page == 1) {
             $first = 0;
         } else {
@@ -140,7 +140,7 @@ class FAQ
 
         if ($num > 0) {
             if ($pages > 1) {
-                $output .= sprintf('<p><strong>%s %s %s</strong></p>', $PMF_LANG['msgPage'].$page, $this->pmf_lang['msgVoteFrom'], $pages.$this->pmf_lang['msgPages']);
+                $output .= sprintf('<p><strong>%s %s %s</strong></p>', $this->pmf_lang['msgPage'].$page, $this->pmf_lang['msgVoteFrom'], $pages.$this->pmf_lang['msgPages']);
             }
             $output .= '<ul class="phpmyfaq_ul">';
             $counter = 0;
@@ -157,7 +157,7 @@ class FAQ
                 } else {
                     $visits = $row->visits;
                 }
-                
+
                 $title = PMF_htmlentities($row->thema, ENT_NOQUOTES, $this->pmf_lang['metaCharset']);
 
                 if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF['mod_rewrite'] == true) {
@@ -193,7 +193,7 @@ class FAQ
                     $output .= sprintf('[ <a href="?%daction=show&amp;cat=%d&amp;seite=%d">%d</a> ] ', $sids, $category, $i, $i);
                 }
             }
-            
+
             if ($next <= $pages) {
                 if (isset($PMF_CONF['mod_rewrite']) && $PMF_CONF['mod_rewrite'] == true) {
                     $output .= sprintf('[ <a href="category%d_%d.html">%s</a> ]', $category, $next, $this->pmf_lang['msgNext']);
@@ -206,7 +206,7 @@ class FAQ
         }
 	   return $output;
     }
-    
+
     /**
     * getRecord()
     *
@@ -235,7 +235,7 @@ class FAQ
                 'date'      => makeDate($row->datum));
         }
     }
-    
+
     /**
     * getAllRecords()
     *
@@ -263,7 +263,7 @@ class FAQ
                 'date'      => makeDate($row->datum));
         }
     }
-    
+
     /**
     * getRecordTitle()
     *
@@ -313,7 +313,7 @@ class FAQ
             return '';
         }
     }
-    
+
     /**
     * Returns the number of activated records
     *
@@ -333,7 +333,7 @@ class FAQ
             return 0;
         }
     }
-    
+
     /**
     * logViews()
     *
@@ -364,7 +364,7 @@ class FAQ
             $this->db->query($query);
         }
     }
-    
+
     /**
     * getVotingResult()
     *
@@ -386,7 +386,7 @@ class FAQ
             return sprintf(' 0 %s 5 (0 %s)', $this->pmf_lang['msgVoteFrom'], $this->pmf_lang['msgVotings']);
        }
     }
-    
+
     /**
     * getComments()
     *
@@ -411,7 +411,7 @@ class FAQ
         }
         return $output;
     }
-    
+
     /**
     * getTopTen()
     *
@@ -430,7 +430,7 @@ class FAQ
             $output = '<ol>';
             foreach ($result as $row) {
                 $output .= sprintf('<li><strong>%d %s:</strong><br />', $row['visits'], $this->pmf_lang['msgViews']);
-                $shortTitle = makeShorterText(PMF_htmlentities($row['thema'], ENT_NOQUOTES, $this->pmf_lang['metaCharset']), 8); 
+                $shortTitle = makeShorterText(PMF_htmlentities($row['thema'], ENT_NOQUOTES, $this->pmf_lang['metaCharset']), 8);
                 $output .= sprintf('<a href="%s">%s</a></li>', $row['url'], $shortTitle);
             }
             $output .= '</ol>';
@@ -439,7 +439,7 @@ class FAQ
         }
         return $output;
     }
-    
+
     /**
     * getFiveLatest()
     *
@@ -456,28 +456,28 @@ class FAQ
         if (count ($result) > 0) {
             $output = '<ol>';
             foreach ($result as $row) {
-                $shortTitle = makeShorterText(PMF_htmlentities($row['thema'], ENT_NOQUOTES, $this->pmf_lang['metaCharset']), 8); 
+                $shortTitle = makeShorterText(PMF_htmlentities($row['thema'], ENT_NOQUOTES, $this->pmf_lang['metaCharset']), 8);
                 $output .= sprintf('<a href="%s">%s</a> (%s)</li>', $row['url'], $shortTitle, makeDate($row['datum']));
             }
             $output .= '</ol>';
         } else {
-            $output = $PMF_LANG["err_noArticles"];
+            $output = $this->pmf_lang["err_noArticles"];
         }
         return $output;
     }
-    
+
     //
     //
     // PRIVATE METHODS
     //
     //
-    
+
     /**
     * getTopTenData()
     *
     * This function generates the Top Ten data with the mosted viewed records
     *
-    * @parem    integer     
+    * @parem    integer
     * @return   array
     * @access   private
     * @author   Robin Wood <robin@digininja.org>
@@ -487,7 +487,7 @@ class FAQ
     function getTopTenData($count = 10)
     {
         global $sids, $PMF_CONF;
-        $query = 
+        $query =
             'SELECT
                 DISTINCT '.SQLPREFIX.'faqdata.id AS id,
                 '.SQLPREFIX.'faqdata.lang AS lang,
@@ -515,7 +515,7 @@ class FAQ
         $result = $this->db->query($query);
         $topten = array();
         $data = array();
-        
+
         $i = 1;
         $oldId = 0;
         while (($row = $this->db->fetch_object($result)) && $i <= $count) {
@@ -549,8 +549,8 @@ class FAQ
     function getFiveLatestData($count = 5)
     {
         global $sids, $PMF_CONF;
-        $query = 
-            'SELECT 
+        $query =
+            'SELECT
                 DISTINCT '.SQLPREFIX.'faqdata.id AS id,
                 '.SQLPREFIX.'faqdata.lang AS lang,
                 '.SQLPREFIX.'faqcategoryrelations.category_id AS category_id,
@@ -574,7 +574,7 @@ class FAQ
                 '.SQLPREFIX.'faqdata.active = \'yes\'
             ORDER BY
                 '.SQLPREFIX.'faqdata.datum DESC';
-        
+
         $result = $this->db->query($query);
         $latest = array();
         $data = array();
@@ -598,7 +598,7 @@ class FAQ
         }
         return $latest;
     }
-    
-    
-    
+
+
+
 }
