@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: attachment.php,v 1.12 2006-01-02 16:51:26 thorstenr Exp $
+* $Id: attachment.php,v 1.13 2006-03-02 13:57:29 thorstenr Exp $
 *
 * Select an attachment and save it or create the SQL backup files
 *
@@ -175,7 +175,7 @@ if (isset($_REQUEST["save"]) && $_REQUEST["save"] == TRUE && $auth && !$permissi
 }
 
 if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "sicherdaten") {
-	$text[] = "-- pmf1.6: ".SQLPREFIX."faqchanges ".SQLPREFIX."faqnews ".SQLPREFIX."faqcategories ".SQLPREFIX."faqcategoryrelations ".SQLPREFIX."faqvoting ".SQLPREFIX."faqdata ".SQLPREFIX."faqcomments ".SQLPREFIX."faquser ". SQLPREFIX."faqvisits ".SQLPREFIX."faqfragen";
+	$text[] = "-- pmf1.6: ".SQLPREFIX."faqchanges ".SQLPREFIX."faqnews ".SQLPREFIX."faqcategories ".SQLPREFIX."faqcategoryrelations ".SQLPREFIX."faqvoting ".SQLPREFIX."faqdata ".SQLPREFIX."faqcomments ".SQLPREFIX."faquser ". SQLPREFIX."faqvisits ".SQLPREFIX."faqquestions";
 	$text[] = "-- DO NOT REMOVE THE FIRST LINE!";
 	$text[] = "-- pmftableprefix: ".SQLPREFIX;
 
@@ -201,7 +201,7 @@ if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "sicherdaten") {
 	print implode("\r\n",$text);
 	$text = build_insert ("SELECT * FROM ".SQLPREFIX."faqvoting", SQLPREFIX."faqvoting");
     print implode("\r\n",$text);
-    $text = build_insert ("SELECT * FROM ".SQLPREFIX."faqfragen", SQLPREFIX."faqfragen");
+    $text = build_insert ("SELECT * FROM ".SQLPREFIX."faqquestions", SQLPREFIX."faqquestions");
 	print implode("\r\n",$text);
 } elseif (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "sicherdaten" && $auth && !$permission["backup"]) {
 	print $PMF_LANG["err_NotAuth"];

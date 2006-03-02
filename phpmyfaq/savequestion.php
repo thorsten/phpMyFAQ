@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: savequestion.php,v 1.16 2006-01-02 16:51:26 thorstenr Exp $
+* $Id: savequestion.php,v 1.17 2006-03-02 13:57:29 thorstenr Exp $
 *
 * @author           Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author           David Saez Padros <david@ols.es>
@@ -53,7 +53,7 @@ if (isset($_REQUEST["username"]) && $_REQUEST["username"] != '' && isset($_REQUE
                 $visibility = 'Y';
             }
 
-            $result = $db->query("INSERT INTO ".SQLPREFIX."faqfragen (ask_username, ask_usermail, ask_rubrik, ask_content, ask_date, is_visible) VALUES ('".$user."', '".$usermail."', '".$rubrik."', '".$content."', '".$datum."', '".$visibility."')");
+            $result = $db->query("INSERT INTO ".SQLPREFIX."faqquestions (ask_username, ask_usermail, ask_rubrik, ask_content, ask_date, is_visible) VALUES ('".$user."', '".$usermail."', '".$rubrik."', '".$content."', '".$datum."', '".$visibility."')");
             
             $questionMail = "User: ".$username.", mailto:".$usermail."\n".$PMF_LANG["msgCategory"].":  ".$categories[$selected_category]["name"]."\n\n".wordwrap(stripslashes($content), 72);
             

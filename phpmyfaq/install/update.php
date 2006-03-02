@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.40 2006-02-06 06:38:26 thorstenr Exp $
+* $Id: update.php,v 1.41 2006-03-02 13:57:29 thorstenr Exp $
 *
 * Main update script
 *
@@ -378,7 +378,7 @@ if ($step == 5) {
 		$query[] = 'ALTER TABLE '.SQLPREFIX.'faqchanges CHANGE id id INT(11) NOT NULL';
 		$query[] = 'ALTER TABLE '.SQLPREFIX.'faqcomments CHANGE id_comment id_comment INT(11) NOT NULL';
 		$query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata CHANGE id id INT(11) NOT NULL';
-		$query[] = 'ALTER TABLE '.SQLPREFIX.'faqfragen CHANGE id id INT(11) NOT NULL';
+		$query[] = 'ALTER TABLE '.SQLPREFIX.'faqquestions CHANGE id id INT(11) NOT NULL';
 		$query[] = 'ALTER TABLE '.SQLPREFIX.'faqnews CHANGE id id INT(11) NOT NULL';
 		$query[] = 'ALTER TABLE '.SQLPREFIX.'faquser CHANGE id id INT(11) NOT NULL';
 		$query[] = 'ALTER TABLE '.SQLPREFIX.'faqvisits CHANGE id id INT(11) NOT NULL';
@@ -386,7 +386,7 @@ if ($step == 5) {
     // update from versions before 1.6.0
     if ($version < 160) {
         // Alter existing tables
-        $query[] = "ALTER TABLE ".SQLPREFIX."faqfragen RENAME ".SQLPREFIX."faqquestions";
+        $query[] = "ALTER TABLE ".SQLPREFIX."faqquestions RENAME ".SQLPREFIX."faqquestions";
         $query[] = 'ALTER TABLE '.SQLPREFIX.'faqcategories ADD user_id INTEGER NOT NULL';
         $query[] = 'CREATE TABLE '.SQLPREFIX.'faqglossary ( id INT(11) NOT NULL , lang VARCHAR(2) NOT NULL , item VARCHAR(255) NOT NULL , definition TEXT NOT NULL, PRIMARY KEY (id, lang))';
         $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata ADD linkState VARCHAR(7) NOT NULL, ADD linkCheckDate INT(11) DEFAULT \'0\' NOT NULL';
@@ -403,7 +403,7 @@ if ($step == 5) {
     switch($DB["type"]) {
         
         case 'mysql':
-        case 'mysqli':      $query[] = "OPTIMIZE TABLE ".SQLPREFIX."faqadminlog, ".SQLPREFIX."faqadminsessions, ".SQLPREFIX."faqcategories, ".SQLPREFIX."faqcategoryrelations, ".SQLPREFIX."faqchanges, ".SQLPREFIX."faqcomments, ".SQLPREFIX."faqdata, ".SQLPREFIX."faqfragen, ".SQLPREFIX."faqnews, ".SQLPREFIX."faqsessions, ".SQLPREFIX."faquser, ".SQLPREFIX."faqvisits, ".SQLPREFIX."faqvoting, ".SQLPREFIX."faqglossary";
+        case 'mysqli':      $query[] = "OPTIMIZE TABLE ".SQLPREFIX."faqadminlog, ".SQLPREFIX."faqadminsessions, ".SQLPREFIX."faqcategories, ".SQLPREFIX."faqcategoryrelations, ".SQLPREFIX."faqchanges, ".SQLPREFIX."faqcomments, ".SQLPREFIX."faqdata, ".SQLPREFIX."faqquestions, ".SQLPREFIX."faqnews, ".SQLPREFIX."faqsessions, ".SQLPREFIX."faquser, ".SQLPREFIX."faqvisits, ".SQLPREFIX."faqvoting, ".SQLPREFIX."faqglossary";
                             break;
                             
         case 'pgsql':       $query[] = "VACUUM ANALYZE;";

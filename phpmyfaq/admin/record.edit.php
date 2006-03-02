@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.edit.php,v 1.28 2006-01-06 10:44:58 thorstenr Exp $
+* $Id: record.edit.php,v 1.29 2006-03-02 13:57:29 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23
@@ -32,7 +32,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     
     if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "takequestion") {
     
-        $_result = $db->query("SELECT ask_rubrik, ask_content FROM ".SQLPREFIX."faqfragen WHERE id = ".$_REQUEST["id"]);
+        $_result = $db->query("SELECT ask_rubrik, ask_content FROM ".SQLPREFIX."faqquestions WHERE id = ".$_REQUEST["id"]);
 		$row = $db->fetch_object($_result);
         $rubrik = $row->ask_rubrik;
         $thema = $row->ask_content;

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.delquestion.php,v 1.7 2006-01-02 16:51:26 thorstenr Exp $
+* $Id: record.delquestion.php,v 1.8 2006-03-02 13:57:29 thorstenr Exp $
 *
 * Delete open questions
 *
@@ -29,7 +29,7 @@ if ($permission['delquestion']) {
     
     if (isset($_REQUEST['delete']) && $_REQUEST['delete'] == 'yes') {
 		
-        $db->query("DELETE FROM ".SQLPREFIX."faqfragen WHERE id = ".$_REQUEST["id"]);
+        $db->query("DELETE FROM ".SQLPREFIX."faqquestions WHERE id = ".$_REQUEST["id"]);
 		print $PMF_LANG["ad_entry_delsuc"];
 		
 	} else {
