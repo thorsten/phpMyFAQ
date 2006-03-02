@@ -1,18 +1,18 @@
 <?php
 /**
-* $Id: attachment.php,v 1.13 2006-03-02 13:57:29 thorstenr Exp $
+* $Id: attachment.php,v 1.14 2006-03-02 14:03:06 thorstenr Exp $
 *
 * Select an attachment and save it or create the SQL backup files
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-09-17
 * @copyright    (c) 2001-2005 phpMyFAQ
-* 
+*
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
 * compliance with the License. You may obtain a copy of the License at
 * http://www.mozilla.org/MPL/
-* 
+*
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
@@ -139,7 +139,7 @@ if (!isset($_REQUEST["aktion"]) && $auth && $permission["addatt"]) {
 <?php print $PMF_LANG["ad_att_att"]; ?> <input name="userfile" type="file" />
 <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_att_butt"]; ?>" />
 </fieldset>
-</form> 
+</form>
 <?php
 }
 
@@ -175,7 +175,7 @@ if (isset($_REQUEST["save"]) && $_REQUEST["save"] == TRUE && $auth && !$permissi
 }
 
 if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "sicherdaten") {
-	$text[] = "-- pmf1.6: ".SQLPREFIX."faqchanges ".SQLPREFIX."faqnews ".SQLPREFIX."faqcategories ".SQLPREFIX."faqcategoryrelations ".SQLPREFIX."faqvoting ".SQLPREFIX."faqdata ".SQLPREFIX."faqcomments ".SQLPREFIX."faquser ". SQLPREFIX."faqvisits ".SQLPREFIX."faqquestions";
+	$text[] = "-- pmf2.0: ".SQLPREFIX."faqchanges ".SQLPREFIX."faqnews ".SQLPREFIX."faqcategories ".SQLPREFIX."faqcategoryrelations ".SQLPREFIX."faqvoting ".SQLPREFIX."faqdata ".SQLPREFIX."faqcomments ".SQLPREFIX."faquser ". SQLPREFIX."faqvisits ".SQLPREFIX."faqquestions";
 	$text[] = "-- DO NOT REMOVE THE FIRST LINE!";
 	$text[] = "-- pmftableprefix: ".SQLPREFIX;
 
@@ -208,7 +208,7 @@ if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "sicherdaten") {
 }
 
 if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "sicherlog") {
-	$text[] = "-- pmf-1.6: ".SQLPREFIX."faqadminlog ".SQLPREFIX."faqsessions";
+	$text[] = "-- pmf2.0: ".SQLPREFIX."faqadminlog ".SQLPREFIX."faqsessions";
 	$text[] = "-- DO NOT REMOVE THE FIRST LINE!";
     $text[] = "-- pmftableprefix: ".SQLPREFIX;
 
