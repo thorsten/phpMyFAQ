@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.32 2006-01-07 16:26:03 thorstenr Exp $
+* $Id: artikel.php,v 1.33 2006-03-09 20:42:34 thorstenr Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -40,7 +40,7 @@ $faq->logViews($id);
 $content = $faq->faqRecord['content'];
 
 // Set the path of the current category
-$categoryName = $tree->getPath($currentCategory);
+$categoryName = $tree->getPath($currentCategory, ' &raquo; ', true);
 
 $changeLanguagePATH     = sprintf('?%daction=artikel&amp;cat=%d&amp;id=%d', $sids, $currentCategory, $id);
 
