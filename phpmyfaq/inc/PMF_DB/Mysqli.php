@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Mysqli.php,v 1.2 2006-01-02 16:51:29 thorstenr Exp $
+* $Id: Mysqli.php,v 1.3 2006-03-11 21:49:21 thorstenr Exp $
 *
 * db_mysqli
 *
@@ -79,7 +79,7 @@ class db_mysqli
             print "</head>\n";
             print "<body>\n";
             print "<p align=\"center\">The connection to the MySQL server could not be established.</p>\n";
-            print "<p align=\"center\">The error message of the MySQL server:<br />".$this->conn->error()."</p>\n";
+            print "<p align=\"center\">The error message of the MySQL server:<br />".mysqli_connect_error()."</p>\n";
             print "</body>\n";
             print "</html>";
             return false;
