@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.40 2006-03-02 13:57:29 thorstenr Exp $
+* $Id: index.php,v 1.41 2006-03-12 09:10:46 thorstenr Exp $
 *
 * The main admin backend index file
 *
@@ -26,8 +26,6 @@ define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 require_once(PMF_ROOT_DIR.'/inc/init.php');
 define('IS_VALID_PHPMYFAQ_ADMIN', null);
 PMF_Init::cleanRequest();
-
-
 
 // Include classes and functions
 require_once (PMF_ROOT_DIR."/inc/category.php");
@@ -232,10 +230,7 @@ if (isset($auth)) {
 	} else {
         // start page with some informations about the FAQ
         print '<h2>phpMyFAQ Information</h2>';
-        if ('sqlite' == $DB["type"]) {
-            print 'n/a';
-        } else {
-            $PMF_TABLE_INFO = $db->getTableStatus();
+        $PMF_TABLE_INFO = $db->getTableStatus();
 ?>
     <dl class="table-display">
 	    <dt><strong><?php print $PMF_LANG["ad_start_visits"]; ?></strong></dt>
@@ -248,8 +243,6 @@ if (isset($auth)) {
         <dd><?php print $PMF_TABLE_INFO[SQLPREFIX."faqquestions"]; ?></dd>
     </dl>
 <?php
-        }
-
         $rg = @ini_get("register_globals");
 		if ($rg == "1") {
 			$rg = "on";
