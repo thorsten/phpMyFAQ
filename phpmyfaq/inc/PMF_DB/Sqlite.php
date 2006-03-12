@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Sqlite.php,v 1.2 2006-01-02 16:51:29 thorstenr Exp $
+* $Id: Sqlite.php,v 1.3 2006-03-12 09:08:41 thorstenr Exp $
 *
 * db_sqlite
 *
@@ -287,10 +287,10 @@ class db_sqlite
 	function getTableStatus() 
 	{
 		$arr = array();
-        // don't know if that works?
-		$result = $this->query("SHOW TABLE STATUS");
+		$result = $this->query('SELECT name FROM sqlite_master WHERE type='table' ORDER BY name');
 		while ($row = $this->fetch_assoc($result)) {
-            $arr[$row["Name"]] = $row["Rows"];
+            $num_result = $this->query('SELECT * FROM '.$row['name']);
+            $arr[$row['name']] = $this->num_rows($num_result);
         }
 		return $arr;
 	}
