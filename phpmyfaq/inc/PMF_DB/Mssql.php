@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Mssql.php,v 1.2 2006-01-02 16:51:29 thorstenr Exp $
+* $Id: Mssql.php,v 1.3 2006-03-15 21:37:12 thorstenr Exp $
 *
 * db_mssql
 *
@@ -11,7 +11,7 @@
 * @author       Daniel Hoechst <dhoechst@petzl.com>
 * @package      db_mssql
 * @since        2005-01-11
-* @copyright    (c) 2006 phpMyFAQ Team
+* @copyright    (c) 2005-2006 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -33,7 +33,7 @@ class db_mssql
      * @see   connect(), query(), dbclose()
      */
 	var $conn = FALSE;
-    
+
     /**
      * The query log string
      *
@@ -41,7 +41,7 @@ class db_mssql
      * @see   query()
      */
 	var $sqllog = "";
-	
+
     /**
      * Constructor
      *
@@ -52,7 +52,7 @@ class db_mssql
 	function db_mssql()
     {
     }
-    
+
     /**
      * Connects to the database.
      *
@@ -70,7 +70,7 @@ class db_mssql
 	function connect ($host, $user, $passwd, $db)
     {
 		$this->conn = mssql_pconnect($host, $user, $passwd);
-		if (empty($db) OR $this->conn == FALSE) {
+		if (empty($db) OR $this->conn == false) {
 			print "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n";
             print "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n";
             print "<head>\n";
@@ -79,14 +79,14 @@ class db_mssql
             print "</head>\n";
             print "<body>\n";
             print "<p align=\"center\">The connection to the MS SQL server could not be established.</p>\n";
-			print "<p align=\"center\">The error message of the PostgresSQL server:<br />".mssql_get_last_message()."</p>\n";
+			print "<p align=\"center\">The error message of the MS SQL server:<br />".mssql_get_last_message()."</p>\n";
 			print "</body>\n";
             print "</html>";
-            return FALSE;
+            return false;
 			}
-		return TRUE;
+		return mssql_select_db($db, $this->conn);
     }
-	
+
     /**
      * Sends a query to the database.
      *
@@ -103,7 +103,7 @@ class db_mssql
 		$this->sqllog .= $query."<br />\n";
 		return @mssql_query($query, $this->conn);
     }
-    
+
     /**
     * Escapes a string for use in a query
     *
@@ -117,7 +117,7 @@ class db_mssql
     {
         return str_replace("'", "''", $string);
     }
-	
+
     /**
      * Fetch a result row as an object
      *
@@ -133,9 +133,9 @@ class db_mssql
     {
 		return @mssql_fetch_object($result);
     }
-	
-    
-    
+
+
+
     /**
      * Fetch a result row as an object
      *
@@ -151,7 +151,7 @@ class db_mssql
     {
 		return @mssql_fetch_assoc($result);
     }
-	
+
     /**
      * Number of rows in a result
      *
@@ -165,7 +165,7 @@ class db_mssql
     {
 		return @mssql_num_rows($result);
     }
-	
+
     /**
      * Returns the ID of the latest insert
      *
@@ -179,7 +179,7 @@ class db_mssql
  		$result = $this->query('SELECT max('.$field.') AS last_id FROM '.$table);
 		return mssql_result($result, 0, 'last_id');
     }
-    
+
     /**
      * Logs the queries
      *
@@ -193,7 +193,7 @@ class db_mssql
     {
 		return $this->sqllog;
     }
-	
+
     /**
      * Closes the connection to the database.
      *
@@ -239,7 +239,7 @@ class db_mssql
         $join = '';
         $joined = '';
 		$where = '';
-        
+
 		foreach ($assoc as $field) {
             if (empty($fields)) {
                 $fields = $field;
@@ -247,22 +247,22 @@ class db_mssql
                 $fields .= ", ".$field;
             }
 		}
-        
+
         if (isset($joinedTable) && $joinedTable != '') {
             $joined .= ' LEFT JOIN '.$joinedTable.' ON ';
         }
-        
+
         if (is_array($joinAssoc)) {
             foreach ($joinAssoc as $joinedFields) {
                 $join .= $joinedFields.' AND ';
                 }
             $joined .= substr($join, 0, -4);
         }
-        
+
         $keys = preg_split("/\s+/", $string);
         $numKeys = count($keys);
 		$numMatch = count($match);
-		
+
 		for ($i = 0; $i < $numKeys; $i++) {
             if (strlen($where) != 0 ) {
                 $where = $where;
@@ -274,10 +274,10 @@ class db_mssql
 				}
 		    	$where = $where.$match[$j]." LIKE '%".$keys[$i]."%'";
 		    }
-			
+
 			$where .= ")";
 		}
-        
+
 		foreach($cond as $field => $data) {
 			if (empty($where)) {
 				$where .= $field." = '".$data."'";
@@ -285,20 +285,20 @@ class db_mssql
 				$where .= " AND ".$field." = '".$data."'";
             }
 		}
-        
+
         $query = "SELECT ".$fields." FROM ".$table.$joined." WHERE";
-        
+
 		if (!empty($where)) {
 			$query .= " (".$where.")";
         }
-        
+
         if (is_numeric($string)) {
             $query = "SELECT ".$fields." FROM ".$table.$joined." WHERE ".$match." = ".$string;
         }
-        
+
         return $this->query($query);
 	}
-	
+
 	/**
 	* Returns the next ID of a table
 	*
@@ -318,7 +318,7 @@ class db_mssql
 	    $currentID = mssql_result($result, 0, 'current_id');
 	    return ($currentID + 1);
 	}
-		
+
 	/**
     * Returns the error string.
     *
