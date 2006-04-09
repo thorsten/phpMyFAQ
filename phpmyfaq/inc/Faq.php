@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.8 2006-03-02 11:17:12 thorstenr Exp $
+* $Id: Faq.php,v 1.9 2006-04-09 09:30:58 thorstenr Exp $
 *
 * The main FAQ class
 *
@@ -62,10 +62,6 @@ class FAQ
     *
     */
     function FAQ($db, $language)
-    {
-    	return $this->__construct($db, $language);
-    }
-    function __construct($db, $language)
     {
         global $PMF_LANG;
 
@@ -223,16 +219,49 @@ class FAQ
         $result = $this->db->query(sprintf("SELECT * FROM %sfaqdata WHERE id = %d AND lang = '%s'", SQLPREFIX, $id, $this->language));
         if ($row = $this->db->fetch_object($result)) {
             $this->faqRecord = array(
-                'id'        => $row->id,
-                'lang'      => $row->lang,
-                'active'    => $row->active,
-                'keywords'  => $row->keywords,
-                'title'     => $row->thema,
-                'content'   => (('yes' == $row->active) ? $row->content : $this->pmf_lang['err_inactiveArticle']),
-                'author'    => $row->author,
-                'email'     => $row->email,
-                'comment'   => $row->comment,
-                'date'      => makeDate($row->datum));
+                'id'            => $row->id,
+                'lang'          => $row->lang,
+                'solution_id'   => $row->solution_id,
+                'revision_id'   => $row->revision_id,
+                'active'        => $row->active,
+                'keywords'      => $row->keywords,
+                'title'         => $row->thema,
+                'content'       => (('yes' == $row->active) ? $row->content : $this->pmf_lang['err_inactiveArticle']),
+                'author'        => $row->author,
+                'email'         => $row->email,
+                'comment'       => $row->comment,
+                'date'          => makeDate($row->datum));
+        }
+    }
+
+    /**
+    * getRecordBySolutionId()
+    *
+    * Returns an array with all data from a FAQ record
+    *
+    * @param    integer $solution_id
+    * @return   void
+    * @access   public
+    * @since    2005-12-20
+    * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+    */
+    function getRecordBySolutionId($solution_id)
+    {
+        $result = $this->db->query(sprintf("SELECT * FROM %sfaqdata WHERE solution_id = %s", SQLPREFIX, $solution_id));
+        if ($row = $this->db->fetch_object($result)) {
+            $this->faqRecord = array(
+                'id'            => $row->id,
+                'lang'          => $row->lang,
+                'solution_id'   => $row->solution_id,
+                'revision_id'   => $row->revision_id,
+                'active'        => $row->active,
+                'keywords'      => $row->keywords,
+                'title'         => $row->thema,
+                'content'       => (('yes' == $row->active) ? $row->content : $this->pmf_lang['err_inactiveArticle']),
+                'author'        => $row->author,
+                'email'         => $row->email,
+                'comment'       => $row->comment,
+                'date'          => makeDate($row->datum));
         }
     }
 
