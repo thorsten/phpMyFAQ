@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: writecomment.php,v 1.6 2006-01-02 16:51:26 thorstenr Exp $
+* $Id: writecomment.php,v 1.7 2006-04-09 12:22:27 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-08-29
@@ -22,6 +22,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
+$captcha = new PMF_Captcha($db, $sids, $pmf->language, $_SERVER['HTTP_USER_AGENT'], $_SERVER['REMOTE_ADDR']);
+
+if (isset($_GET['gen'])) {
+	$captcha->showCaptchaImg();
+	exit;
+}
+
 Tracking('write_comment', $_GET['id']);
 
 $tpl->processTemplate('writeContent', array(
@@ -29,13 +36,16 @@ $tpl->processTemplate('writeContent', array(
                       'writeSendAdress' => $_SERVER['PHP_SELF'].'?'.$sids.'action=savecomment',
                       'ID' => $_GET['id'],
                       'LANG' => $_GET['artlang'],
-                      'writeThema' => stripslashes(getThema($_GET['id'], $_GET['artlang'])),
+                      'writeThema' => getThema($_GET['id'], $_GET['artlang']),
                       'msgNewContentName' => $PMF_LANG['msgNewContentName'],
                       'msgNewContentMail' => $PMF_LANG['msgNewContentMail'],
                       'defaultContentMail' => getEmailAddress(),
-                      'defaultContentName' => getFullUserName(), 
+                      'defaultContentName' => getFullUserName(),
                       'msgYourComment' => $PMF_LANG['msgYourComment'],
                       'msgNewContentSubmit' => $PMF_LANG['msgNewContentSubmit'],
+                      'msgCaptcha' => $PMF_LANG['msgCaptcha'],
+                      'printCaptcha' => $captcha->printCaptcha('writecomment'),
+                      'setCaptchaCodeLength' => $captcha->caplength,
                       'copyright_eintrag' => unhtmlentities($PMF_CONF['copyright_eintrag'])));
 
 $tpl->includeTemplate('writeContent', 'index');

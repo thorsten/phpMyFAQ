@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: savequestion.php,v 1.17 2006-03-02 13:57:29 thorstenr Exp $
+* $Id: savequestion.php,v 1.18 2006-04-09 12:12:13 thorstenr Exp $
 *
 * @author           Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author           David Saez Padros <david@ols.es>
@@ -24,7 +24,14 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-if (isset($_REQUEST["username"]) && $_REQUEST["username"] != '' && isset($_REQUEST["usermail"]) && checkEmail($_REQUEST["usermail"]) && isset($_REQUEST["content"]) && $_REQUEST["content"] != '' && IPCheck($_SERVER["REMOTE_ADDR"])) {
+$captcha = new PMF_Captcha($db, $sids, $pmf->language, $_SERVER['HTTP_USER_AGENT'], $_SERVER['REMOTE_ADDR']);
+
+if (    isset($_POST['username']) && $_POST['username'] != ''
+     && isset($_POST['usermail']) && checkEmail($_POST['usermail'])
+     && isset($_POST['content']) && $_POST['content'] != ''
+     && IPCheck($_SERVER['REMOTE_ADDR'])
+     && checkBannedWord(htmlspecialchars(strip_tags($_POST['content'])))
+     && isset($_POST['captcha']) && ($captcha->validateCaptchaCode($_POST['captcha'])) ) {
 
 	if (isset($_POST['try_search'])) {
         $suchbegriff = safeSQL($_POST['content']);
@@ -92,17 +99,19 @@ if (isset($_REQUEST["username"]) && $_REQUEST["username"] != '' && isset($_REQUE
         
     } else {
         
+        $content  = $db->escape_string(strip_tags($_REQUEST["content"]));
+        
         $tpl->templates['writeContent'] = $tpl->readTemplate('template/asksearch.tpl');
         
 		$tpl->processTemplate ('writeContent', array(
 			'msgQuestion' => $PMF_LANG["msgQuestion"],
             'printResult' => $printResult,
             'msgAskYourQuestion' => $PMF_LANG['msgAskYourQuestion'],
-            'msgContent' => $_POST['content'],
-            'postUsername' => urlencode($_REQUEST['username']),
-            'postUsermail' => urlencode($_REQUEST['usermail']),
-            'postRubrik' => urlencode($_REQUEST['rubrik']),
-            'postContent' => urlencode($_REQUEST['content']),
+            'msgContent' => $content,
+            'postUsername' => urlencode($username),
+            'postUsermail' => urlencode($usermail),
+            'postRubrik' => urlencode($selected_category),
+            'postContent' => urlencode($content),
             'writeSendAdress' => $_SERVER['PHP_SELF'].'?'.$sids.'action=savequestion',
 			));
     }

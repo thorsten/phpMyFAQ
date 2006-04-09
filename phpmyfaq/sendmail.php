@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: sendmail.php,v 1.6 2006-01-02 16:51:26 thorstenr Exp $
+* $Id: sendmail.php,v 1.7 2006-04-09 12:18:49 thorstenr Exp $
 *
 * The 'send an email from the contact page' page
 *
@@ -26,44 +26,44 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 Tracking("sendmail_contact",0);
 
-if (isset($_POST["name"]) && $_POST["name"] != '' && isset($_POST["email"]) && checkEmail($_POST["email"]) && isset($_POST["question"]) && $_POST["question"] != '') {
+$captcha = new PMF_Captcha($db, $sids, $pmf->language, $_SERVER['HTTP_USER_AGENT'], $_SERVER['REMOTE_ADDR']);
+
+if (    isset($_POST["name"]) && $_POST["name"] != ''
+     && isset($_POST["email"]) && checkEmail($_POST["email"])
+     && isset($_POST["question"]) && $_POST["question"] != ''
+     && IPCheck($_SERVER['REMOTE_ADDR'])
+     && checkBannedWord(htmlspecialchars(strip_tags($_POST['question'])))
+     && isset($_POST['captcha']) && ($captcha->validateCaptchaCode($_POST['captcha'])) ) {
     
-	list($user, $host) = explode("@", $_POST["email"]);
-    if (gethostbyname($host) != "64.94.110.11") {
-        $question = stripslashes($_POST["question"]);
-        $sender = $IDN->encode($_POST["email"]);
-        
-        $subject = 'Feedback: '.$PMF_CONF['title'];
-        if (function_exists('mb_encode_mimeheader')) {
-            $subject = mb_encode_mimeheader($subject);
-        } else {
-            $name = encode_iso88591($_POST['name']);
-        }
-        
-        $additional_header = array();
-        $additional_header[] = 'MIME-Version: 1.0';
-        $additional_header[] = 'Content-Type: text/plain; charset='. $PMF_LANG['metaCharset'];
-        if (strtolower( $PMF_LANG['metaCharset']) == 'utf-8') {
-            $additional_header[] = 'Content-Transfer-Encoding: 8bit';
-        }
-        $additional_header[] = 'From: '.$name.' <'.$sender.'>';
-        mail($IDN->encode($PMF_CONF['adminmail']), $subject, $question, implode("\r\n", $additional_header), '-f$sender');
-        
-        $tpl->processTemplate ("writeContent", array(
-                "msgContact" => $PMF_LANG["msgContact"],
-                "Message" => $PMF_LANG["msgMailContact"]
-                ));
+    list($user, $host) = explode("@", $_POST["email"]);
+    $question          = htmlspecialchars($_POST["question"]);
+    $sender            = $IDN->encode($_POST["email"]);
+    $subject           = 'Feedback: '.$PMF_CONF['title'];
+    $name              = htmlspecialchars($_POST['name']);
+    if (function_exists('mb_encode_mimeheader')) {
+        $name = mb_encode_mimeheader($name);
     } else {
-        $tpl->processTemplate ("writeContent", array(
-                "msgContact" => $PMF_LANG["msgContact"],
-                "Message" => $PMF_LANG["err_noMailAdress"]
-                ));
-	}
+        $name = encode_iso88591($name);
+    }
+    $additional_header = array();
+    $additional_header[] = 'MIME-Version: 1.0';
+    $additional_header[] = 'Content-Type: text/plain; charset='. $PMF_LANG['metaCharset'];
+    if (strtolower( $PMF_LANG['metaCharset']) == 'utf-8') {
+        $additional_header[] = 'Content-Transfer-Encoding: 8bit';
+    }
+    $additional_header[] = 'From: '.$name.' <'.$sender.'>';
+
+    mail($IDN->encode($PMF_CONF['adminmail']), $subject, $question, implode("\r\n", $additional_header), '-f'.$sender);
+
+    $tpl->processTemplate ("writeContent", array(
+            "msgContact" => $PMF_LANG["msgContact"],
+            "Message" => $PMF_LANG["msgMailContact"]
+            ));
 } else {
-	$tpl->processTemplate ("writeContent", array(
-				"msgContact" => $PMF_LANG["msgContact"],
-				"Message" => $PMF_LANG["err_sendMail"]
-				));
+    $tpl->processTemplate ("writeContent", array(
+                "msgContact" => $PMF_LANG["msgContact"],
+                "Message" => $PMF_LANG["err_sendMail"]
+                ));
 }
 
 $tpl->includeTemplate("writeContent", "index");

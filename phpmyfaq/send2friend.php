@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: send2friend.php,v 1.5 2006-01-02 16:51:26 thorstenr Exp $
+* $Id: send2friend.php,v 1.6 2006-04-09 12:16:07 thorstenr Exp $
 *
 * The send2friend page
 *
@@ -24,6 +24,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
+$captcha = new PMF_Captcha($db, $sids, $pmf->language, $_SERVER['HTTP_USER_AGENT'], $_SERVER['REMOTE_ADDR']);
+
+if (isset($_GET['gen'])) {
+	$captcha->showCaptchaImg();
+	exit;
+}
+
 Tracking('send2friend',0);
 
 $send2friendLink = 'http://'.$_SERVER['SERVER_NAME'].$_SERVER['PHP_SELF'].'?action=artikel&amp;cat='.$_REQUEST['cat'].'&amp;id='.$_REQUEST['id'].'&amp;artlang='.$_REQUEST['lang'];
@@ -35,7 +42,7 @@ $tpl->processTemplate ('writeContent', array(
 				'msgS2FName' => $PMF_LANG['msgS2FName'],
 				'msgS2FEMail' => $PMF_LANG['msgS2FEMail'],
 				'defaultContentMail' => getEmailAddress(),
-                'defaultContentName' => getFullUserName(), 
+                'defaultContentName' => getFullUserName(),
 				'msgS2FFriends' => $PMF_LANG['msgS2FFriends'],
 				'msgS2FEMails' => $PMF_LANG['msgS2FEMails'],
 				'msgS2FText' => $PMF_LANG['msgS2FText'],
@@ -43,6 +50,9 @@ $tpl->processTemplate ('writeContent', array(
 				'msgS2FText2' => $PMF_LANG['msgS2FText2'],
 				'send2friendLink' => $send2friendLink,
 				'msgS2FMessage' => $PMF_LANG['msgS2FMessage'],
+                'msgCaptcha' => $PMF_LANG['msgCaptcha'],
+                'printCaptcha' => $captcha->printCaptcha('send2friend'),
+                'setCaptchaCodeLength' => $captcha->caplength,
 				'msgS2FButton' => $PMF_LANG['msgS2FButton']
 				));
 

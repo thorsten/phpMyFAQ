@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: save.php,v 1.19 2006-01-02 16:51:26 thorstenr Exp $
+* $Id: save.php,v 1.20 2006-04-09 12:05:59 thorstenr Exp $
 *
 * Saves a user FAQ record and sends an email to the user
 *
@@ -25,7 +25,17 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-if (isset($_POST["username"]) && isset($_POST["rubrik"]) && is_numeric($_POST["rubrik"]) && isset($_POST["thema"]) && $_POST["thema"] != "" && isset($_POST["content"]) && $_POST["content"] != "" && isset($_POST["usermail"]) && $_POST["usermail"] != "" && IPCheck($_SERVER["REMOTE_ADDR"])) {
+$captcha = new PMF_Captcha($db, $sids, $pmf->language, $_SERVER['HTTP_USER_AGENT'], $_SERVER['REMOTE_ADDR']);
+
+if (    isset($_POST['username']) && $_POST['username'] != ''
+     && isset($_POST['usermail']) && checkEmail($_REQUEST['usermail'])
+     && isset($_POST['rubrik']) && is_array($_POST['rubrik'])
+     && isset($_POST['thema']) && $_POST['thema'] != ''
+     && isset($_POST['content']) && $_POST['content'] != ''
+     && IPCheck($_SERVER['REMOTE_ADDR'])
+     && checkBannedWord(htmlspecialchars(strip_tags($_POST['thema'])))
+     && checkBannedWord(htmlspecialchars(strip_tags($_POST['content'])))
+     && isset($_POST['captcha']) && ($captcha->validateCaptchaCode($_POST['captcha'])) ) {
 	
     Tracking("save_new_entry",0);
 	$datum = date("YmdHis");
@@ -48,11 +58,13 @@ if (isset($_POST["username"]) && isset($_POST["rubrik"]) && is_numeric($_POST["r
 	$author = $db->escape_string(safeSQL($_REQUEST["username"]));
     $usermail = $IDN->encode($_REQUEST["usermail"]);
     
-	$db->query("INSERT INTO ".SQLPREFIX."faqdata (id, lang, active, thema, content, keywords, author, email, comment, datum) VALUES (".$db->nextID(SQLPREFIX."faqdata", "id").", '".$lang."', 'no', '".$thema."', '".$content."', '".$keywords."', '".$author."', '".$usermail."', 'y', '".$datum."')");
-    
-    $db->query('INSERT INTO '.SQLPREFIX.'faqcategoryrelations (category_id, category_lang, record_id, record_lang) VALUES ('.$selected_category.', "'.$lang.'", '.$db->insert_id(SQLPREFIX.'faqdata', 'id').', "'.$lang.'")');
-    
-	$db->query("INSERT INTO ".SQLPREFIX."faqvisits (id, lang, visits, last_visit) VALUES (".$db->insert_id(SQLPREFIX.'faqdata', 'id').", '".$lang."', '1', ".time().")");
+	$db->query(sprintf("INSERT INTO %sfaqdata (id, lang, solution_id, revision_id, active, thema, content, keywords, author, email, comment, datum) VALUES (%d, '%s', %d, %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')", SQLPREFIX, $db->nextID(SQLPREFIX."faqdata", "id"), $lang, getSolutionId(), 0, 'no', $thema, $content, $keywords, $author, $usermail, 'y', $datum));
+
+	foreach ($selected_category as $_category) {
+	    $db->query(sprintf("INSERT INTO %sfaqcategoryrelations (category_id, category_lang, record_id, record_lang) VALUES (%d, '%s', %d, '%s')", SQLPREFIX, intval($_category), $lang, $db->insert_id(SQLPREFIX.'faqdata', 'id'), $lang));
+	}
+
+	$db->query(sprintf("INSERT INTO %sfaqvisits (id, lang, visits, last_visit) VALUES (%d, '%s', %d, %d)", SQLPREFIX, $db->insert_id(SQLPREFIX.'faqdata', 'id'), $lang, 1, time()));
     
     $headers = '';
     $db->query("SELECT ".SQLPREFIX."faquser.email FROM ".SQLPREFIX."faqcategories INNER JOIN ".SQLPREFIX."faquser ON ".SQLPREFIX."faqcategories.user_id = ".SQLPREFIX."faquser.id WHERE ".SQLPREFIX."faqcategories.id = ".$selected_category);
@@ -72,7 +84,11 @@ if (isset($_POST["username"]) && isset($_POST["rubrik"]) && is_numeric($_POST["r
         $subject = mb_encode_mimeheader($subject);
     }
     $body = unhtmlentities($PMF_LANG['msgMailCheck'])."\n".unhtmlentities($PMF_CONF['title']).": http://".$_SERVER['SERVER_NAME'].dirname($_SERVER['PHP_SELF']);
-    mail($IDN->encode($PMF_CONF["adminmail"]), $subject, $body, implode("\r\n", $additional_header), "-f$headers");
+    if (ini_get('safe_mode')) {
+        mail($IDN->encode($PMF_CONF["adminmail"]), $subject, $body, implode("\r\n", $additional_header));
+    } else {
+        mail($IDN->encode($PMF_CONF["adminmail"]), $subject, $body, implode("\r\n", $additional_header), "-f$usermail");
+    }
     
 	$tpl->processTemplate ("writeContent", array(
 				"msgNewContentHeader" => $PMF_LANG["msgNewContentHeader"],

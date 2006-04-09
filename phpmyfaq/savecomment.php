@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: savecomment.php,v 1.11 2006-01-09 20:02:10 thorstenr Exp $
+* $Id: savecomment.php,v 1.12 2006-04-09 12:07:16 thorstenr Exp $
 *
 * Saves the posted comment
 *
@@ -24,36 +24,43 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-if (isset($_POST["user"]) && $_POST["user"] != "" && isset($_POST["mail"]) && $_POST["mail"] != "" && isset($_POST["comment"]) && $_POST["comment"] != "" && IPCheck($_SERVER["REMOTE_ADDR"])) {
+$captcha = new PMF_Captcha($db, $sids, $pmf->language, $_SERVER['HTTP_USER_AGENT'], $_SERVER['REMOTE_ADDR']);
 
-    $id = (isset($_REQUEST["id"])) ? (int)$_REQUEST["id"] : 0;
-	Tracking("save_comment", $id);
+if (    isset($_POST['user']) && $_POST['user'] != ''
+     && isset($_POST['mail']) && checkEmail($_POST['mail'])
+     && isset($_POST['comment']) && $_POST['comment'] != ''
+     && IPCheck($_SERVER['REMOTE_ADDR'])
+     && checkBannedWord(htmlspecialchars(strip_tags($_POST['comment'])))
+     && isset($_POST['captcha']) && ($captcha->validateCaptchaCode($_POST['captcha'])) ) {
+
+    $id = (isset($_POST["id"])) ? (int)$_POST["id"] : 0;
+    Tracking("save_comment", $id);
 	
 	$helped = ""; // not used in this version - maybe in the future
 	$datum = date("YmdHis");
-	$comment = nl2br($db->escape_string(safeHTML($_REQUEST["comment"])));
-    $comment_by_user = $db->escape_string(safeHTML($_REQUEST["user"]));
-    $comment_by_mail = $db->escape_string(safeHTML($_REQUEST["mail"]));
+    $comment = nl2br($db->escape_string(safeHTML($_POST["comment"])));
+    $comment_by_user = $db->escape_string(safeHTML($_POST["user"]));
+    $comment_by_mail = $db->escape_string(safeHTML($_POST["mail"]));
 	
-	$result = $db->query("INSERT INTO ".SQLPREFIX."faqcomments (id_comment, id, usr, email, comment, datum, helped) VALUES (".$db->nextID(SQLPREFIX."faqcomments", "id_comment").", ".$id.", '".$comment_by_user."', '".$comment_by_mail."', '".$comment."', ".$datum.", '".$helped."')");
-	
-	$tpl->processTemplate ("writeContent", array(
-				"msgCommentHeader" => $PMF_LANG["msgWriteComment"],
-				"Message" => $PMF_LANG["msgCommentThanks"]
-				));
+    $result = $db->query("INSERT INTO ".SQLPREFIX."faqcomments (id_comment, id, usr, email, comment, datum, helped) VALUES (".$db->nextID(SQLPREFIX."faqcomments", "id_comment").", ".$id.", '".$comment_by_user."', '".$comment_by_mail."', '".$comment."', ".$datum.", '".$helped."')");
+
+    $tpl->processTemplate ("writeContent", array(
+    "msgCommentHeader" => $PMF_LANG["msgWriteComment"],
+    "Message" => $PMF_LANG["msgCommentThanks"]
+    ));
 } else {
-	if (IPCheck($_SERVER["REMOTE_ADDR"]) == FALSE) {
-		$tpl->processTemplate ("writeContent", array(
-				"msgCommentHeader" => $PMF_LANG["msgWriteComment"],
-				"Message" => $PMF_LANG["err_bannedIP"]
-				));
-	} else {
-		Tracking("error_save_comment", $_GET["id"]);
-		$tpl->processTemplate ("writeContent", array(
-				"msgCommentHeader" => $PMF_LANG["msgWriteComment"],
-				"Message" => $PMF_LANG["err_SaveComment"]
-				));
-	}
+    if (IPCheck($_SERVER["REMOTE_ADDR"]) == FALSE) {
+        $tpl->processTemplate ("writeContent", array(
+        "msgCommentHeader" => $PMF_LANG["msgWriteComment"],
+        "Message" => $PMF_LANG["err_bannedIP"]
+        ));
+    } else {
+        Tracking("error_save_comment", $id);
+        $tpl->processTemplate ("writeContent", array(
+        "msgCommentHeader" => $PMF_LANG["msgWriteComment"],
+        "Message" => $PMF_LANG["err_SaveComment"]
+        ));
+    }
 }
 
 $tpl->includeTemplate("writeContent", "index");
