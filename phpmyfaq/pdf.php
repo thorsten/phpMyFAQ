@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: pdf.php,v 1.15 2006-01-02 16:51:26 thorstenr Exp $
+* $Id: pdf.php,v 1.16 2006-04-09 10:11:25 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Peter Beauvain <pbeauvain@web.de>
@@ -34,46 +34,11 @@ $db = db::db_select($DB["type"]);
 $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
 $tree = new Category;
 
-if (isset($_GET["lang"]) && $_GET["lang"] != "" && strlen($_GET["lang"]) <= 2 && !preg_match("=/=", $_GET["lang"])) {
-    $LANGCODE = $_GET["lang"];
-    if (isset($languageCodes[strtoupper($LANGCODE)])) {
-        if (@is_file("lang/language_".$LANGCODE.".php")) {
-        require_once("lang/language_".$LANGCODE.".php");
-        } else {
-        unset($LANGCODE);
-        }
-    }
-}
+// get language (default: english)
+$pmf = new PMF_Init();
+$LANGCODE = $pmf->setLanguage((isset($PMF_CONF['detection']) ? true : false), $PMF_CONF['language']);
 
-if (!isset($LANGCODE) && isset($_COOKIE["lang"]) && $_COOKIE["lang"] != "" && strlen($_COOKIE["lang"]) <= 2 && !preg_match("=/=", $_COOKIE["lang"])) {
-    $LANGCODE = $_COOKIE["lang"];
-    if (isset($languageCodes[strtoupper($LANGCODE)])) {
-        if (@is_file("lang/language_".$LANGCODE.".php")) {
-        require_once("lang/language_".$LANGCODE.".php");
-        } else {
-        unset($LANGCODE);
-        }
-    }
-}
-
-if (!isset($LANGCODE) && isset($PMF_CONF["detection"]) && isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) {
-    if (@is_file("lang/language_".substr($_SERVER["HTTP_ACCEPT_LANGUAGE"], 0, 2).".php")) {
-        require_once("lang/language_".substr($_SERVER["HTTP_ACCEPT_LANGUAGE"], 0, 2).".php");
-        $LANGCODE = substr($_SERVER["HTTP_ACCEPT_LANGUAGE"], 0, 2);
-        @setcookie("lang", $LANGCODE, time()+3600);
-    } else {
-        unset($LANGCODE);
-    }
-} elseif (!isset($PMF_CONF["detection"]) && isset($languageCodes[strtoupper($LANGCODE)])) {
-    if (@require_once("lang/".$PMF_CONF["language"])) {
-        $LANGCODE = $PMF_LANG["metaLanguage"];
-        @setcookie("lang", $LANGCODE, time()+3600);
-    } else {
-        unset($LANGCODE);
-    }
-}
-
-if (isset($LANGCODE) && isset($languageCodes[strtoupper($LANGCODE)])) {
+if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE)) {
     require_once("lang/language_".$LANGCODE.".php");
 } else {
     $LANGCODE = "en";
@@ -90,10 +55,11 @@ if (isset($_GET["lang"]) && strlen($_GET["lang"]) <= 2 && !preg_match("=/=", $_G
     $lang = $_GET["lang"];
     }
 
-$result = $db->query("SELECT id, lang, thema, content, datum, author FROM ".SQLPREFIX."faqdata WHERE id = ".$id." AND lang = '".$lang."' AND active = 'yes'");
+$result = $db->query("SELECT id, lang, solution_id, thema, content, datum, author FROM ".SQLPREFIX."faqdata WHERE id = ".$id." AND lang = '".$lang."' AND active = 'yes'");
 if ($db->num_rows($result) > 0) {
 	while ($row = $db->fetch_object($result)) {
 		$lang = $row->lang;
+        $solution_id = $row->solution_id;
 		$thema = $row->thema;
 		$content = $row->content;
 		$date = $row->datum;
@@ -111,6 +77,10 @@ $pdf->SetFont("Arial", "", 12);
 $pdf->SetDisplayMode("real");
 $pdf->WriteHTML(str_replace("../", "", stripslashes($content)));
 $pdf->Ln();
+$pdf->Ln();
+$pdf->SetStyle('I', true);
+$pdf->Write(5, unhtmlentities($PMF_LANG['ad_entry_solution_id']).': #'.$solution_id);
+$pdf->SetAuthor($author);
 $pdf->Ln();
 $pdf->Write(5,unhtmlentities($PMF_LANG["msgAuthor"]).$author);
 $pdf->Ln();
