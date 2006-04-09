@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.33 2006-03-09 20:42:34 thorstenr Exp $
+* $Id: artikel.php,v 1.34 2006-04-09 09:35:11 thorstenr Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -31,12 +31,21 @@ $currentCategory = $cat;
 if (isset($_REQUEST['id']) && is_numeric($_REQUEST['id'])) {
 	$id = (int)$_REQUEST['id'];
 }
+if (isset($_REQUEST['solution_id']) && is_numeric($_REQUEST['solution_id'])) {
+	$solution_id = $_REQUEST['solution_id'];
+} else {
+    $solution_id = 0;
+}
 
 Tracking('article_view', $id);
 
 // Get all data from the FAQ record
-$faq->getRecord($id);
-$faq->logViews($id);
+if (0 == $solution_id) {
+    $faq->getRecord($id);
+} else {
+    $faq->getRecordBySolutionId($solution_id);
+}
+$faq->logViews($faq->faqRecord['id']);
 $content = $faq->faqRecord['content'];
 
 // Set the path of the current category
