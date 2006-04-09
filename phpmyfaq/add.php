@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: add.php,v 1.9 2006-01-02 16:51:25 thorstenr Exp $
+* $Id: add.php,v 1.10 2006-04-09 09:25:23 thorstenr Exp $
 *
 * This is the page there a user can add a FAQ record.
 *
@@ -24,14 +24,21 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-Tracking("new_entry",0);
+$captcha = new PMF_Captcha($db, $sids, $pmf->language, $_SERVER['HTTP_USER_AGENT'], $_SERVER['REMOTE_ADDR']);
 
-if (isset($_GET["question"])) {
-    $question = strip_tags($_REQUEST["question"]);
-    $readonly = " readonly=\"readonly\"";
+if (isset($_GET['gen'])) {
+	$captcha->showCaptchaImg();
+	exit;
+}
+
+Tracking('new_entry', 0);
+
+if (isset($_GET['question'])) {
+    $question = strip_tags($_GET['question']);
+    $readonly = ' readonly="readonly"';
 } else {
-	$question = "";
-    $readonly = "";
+	$question = '';
+    $readonly = '';
 }
 
 if (isset($_GET["cat"]) && is_numeric($_GET["cat"])) {
@@ -43,23 +50,26 @@ if (isset($_GET["cat"]) && is_numeric($_GET["cat"])) {
 
 $tree->buildTree();
 
-$tpl->processTemplate ("writeContent", array(
-				"msgNewContentHeader" => $PMF_LANG["msgNewContentHeader"],
-                "msgNewContentAddon" => $PMF_LANG["msgNewContentAddon"],
-				"writeSendAdress" => $_SERVER["PHP_SELF"]."?".$sids."action=save",
-				"defaultContentMail" => getEmailAddress(),
-				"defaultContentName" => getFullUserName(),
-				"msgNewContentName" => $PMF_LANG["msgNewContentName"],
-				"msgNewContentMail" => $PMF_LANG["msgNewContentMail"],
-				"msgNewContentCategory" => $PMF_LANG["msgNewContentCategory"],
-				"printCategoryOptions" => $tree->printCategoryOptions($category),
-				"msgNewContentTheme" => $PMF_LANG["msgNewContentTheme"],
-                "readonly" => $readonly,
-				"printQuestion" => stripslashes(stripslashes($question)),
-				"msgNewContentArticle" => $PMF_LANG["msgNewContentArticle"],
-				"msgNewContentKeywords" => $PMF_LANG["msgNewContentKeywords"],
-				"msgNewContentLink" => $PMF_LANG["msgNewContentLink"],
-				"copyright_eintrag" => unhtmlentities($PMF_CONF["copyright_eintrag"]),
-				"msgNewContentSubmit" => $PMF_LANG["msgNewContentSubmit"],
-				));
-$tpl->includeTemplate("writeContent", "index");
+$tpl->processTemplate('writeContent', array(
+    'msgNewContentHeader'   => $PMF_LANG['msgNewContentHeader'],
+    'msgNewContentAddon'    => $PMF_LANG['msgNewContentAddon'],
+    'writeSendAdress'       => $_SERVER['PHP_SELF'].'?'.$sids.'action=save',
+    'defaultContentMail'    => getEmailAddress(),
+    'defaultContentName'    => getFullUserName(),
+    'msgNewContentName'     => $PMF_LANG['msgNewContentName'],
+    'msgNewContentMail'     => $PMF_LANG['msgNewContentMail'],
+    'msgNewContentCategory' => $PMF_LANG['msgNewContentCategory'],
+    'printCategoryOptions'  => $tree->printCategoryOptions($category),
+    'msgNewContentTheme'    => $PMF_LANG['msgNewContentTheme'],
+    'readonly'              => $readonly,
+    'printQuestion'         => $question,
+    'msgNewContentArticle'  => $PMF_LANG['msgNewContentArticle'],
+    'msgNewContentKeywords' => $PMF_LANG['msgNewContentKeywords'],
+    'msgNewContentLink'     => $PMF_LANG['msgNewContentLink'],
+    'copyright_eintrag'     => unhtmlentities($PMF_CONF['copyright_eintrag']),
+    'msgCaptcha'            => $PMF_LANG['msgCaptcha'],
+    'printCaptcha'          => $captcha->printCaptcha('add'),
+    'setCaptchaCodeLength'  => $captcha->caplength,
+    'msgNewContentSubmit'   => $PMF_LANG['msgNewContentSubmit']));
+
+$tpl->includeTemplate('writeContent', 'index');
