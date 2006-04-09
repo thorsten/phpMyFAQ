@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.45 2006-02-03 11:30:13 thorstenr Exp $
+* $Id: installer.php,v 1.46 2006-04-09 12:33:07 thorstenr Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -26,11 +26,11 @@
 * under the License.
 */
 
-define("VERSION", "2.0.0-dev");
-define("COPYRIGHT", "&copy; 2001-2006 <a href=\"http://www.phpmyfaq.de/\">phpMyFAQ-Team</a> | All rights reserved.");
-define("SAFEMODE", @ini_get("safe_mode"));
-define("PMF_ROOT_DIR", dirname(dirname(__FILE__)));
-require_once(PMF_ROOT_DIR."/inc/constants.php");
+define('VERSION', '2.0.0-dev');
+define('COPYRIGHT', '&copy; 2001-2006 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
+define('SAFEMODE', @ini_get('safe_mode'));
+define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
+require_once(PMF_ROOT_DIR.'/inc/constants.php');
 
 // permission levels
 $permLevels = array(
@@ -114,7 +114,28 @@ function uninstall()
 */
 function HTMLFooter()
 {
-	print "<p class=\"center\">".COPYRIGHT."</p>\n</body>\n</html>";
+	print '<p class="center">'.COPYRIGHT.'</p></body></html>';
+}
+
+/**
+* cleanInstallation
+*
+* Removes the config.php and data.php if an installation failed
+*
+* @param
+* @return   void
+* @access   public
+* @since    2005-12-18
+* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+*/
+function cleanInstallation()
+{
+    if (file_exists(PMF_ROOT_DIR.'/inc/config.php')) {
+        unlink(PMF_ROOT_DIR.'/inc/config.php');
+    }
+    if (file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
+        unlink(PMF_ROOT_DIR.'/inc/config.php');
+    }
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
@@ -137,7 +158,7 @@ function HTMLFooter()
                 break;
         }
     }
-    -->
+    // -->
     /*]]>*/
     </script>
     <style media="screen" type="text/css">
@@ -242,13 +263,13 @@ if (db_check($supported_databases) == false) {
 	die();
 }
 if (!phpmyfaq_check()) {
-	print "<p class=\"center\">It seems you already running a version of phpMyFAQ.<br />Please use the <a href=\"update.php\">update script</a>.</p>\n";
+	print '<p class="center">It seems you already running a version of phpMyFAQ.<br />Please use the <a href="update.php">update script</a>.</p>';
 	HTMLFooter();
 	die();
 }
 $dirs = array('/attachments', '/data', '/images', '/inc', '/pdf', '/xml',);
 $faileddirs = array();
-foreach ($dirs AS $dir) {
+foreach ($dirs as $dir) {
     if (!is_dir(PMF_ROOT_DIR.$dir)) {
         if (!mkdir (PMF_ROOT_DIR.$dir, 0755)) {
             $faileddirs[] = $dir;
@@ -273,7 +294,7 @@ if (sizeof($faileddirs)) {
 if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POST["sql_db"])) {
 ?>
 
-<p class="center">Your PHP version: <strong>PHP <?php print phpversion(); ?></strong></p>
+<p class="center">Your PHP version: <strong>PHP <?php print PHP_VERSION; ?></strong></p>
 
 <?php
     if (SAFEMODE == 1) {
@@ -283,7 +304,7 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 
 <p class="center">You should read the <a href="../docs/documentation.en.html">documentation</a> carefully before installing phpMyFAQ.</p>
 
-<form action="<?php print $_SERVER["PHP_SELF"]; ?>" method="post">
+<form action="installer.php" method="post">
 <fieldset class="installation">
 <legend class="installation">Database information</legend>
 <p>
@@ -325,7 +346,7 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 <div id="dbsqlite" style="display:none;">
     <p>
     <span class="text">SQLite database file:</span>
-    <input class="input" type="text" name="sql_sqlitefile" />
+    <input class="input" type="text" name="sql_sqlitefile" value="<?php print dirname(dirname(__FILE__)); ?>" />
     <span class="help" title="Please enter the full path to your SQLite datafile which should be outside your documentation root.">?</span>
     </p>
 </div>
