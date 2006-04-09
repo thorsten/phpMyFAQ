@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: open.php,v 1.5 2006-01-02 16:51:26 thorstenr Exp $
+* $Id: open.php,v 1.6 2006-04-09 10:06:41 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-09-17
@@ -24,12 +24,19 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 Tracking('open_questions', 0);
 
+// HACK: (re)evaluate the Category object w/o passing the user language
+//       so the result set (the Open Uqestions) will have the Category Name
+//       for any of the multilanguage categories and the Category list
+//       on the left pane will not be affected
+$tree = new Category();
+$tree->transform(0);
+
 $tpl->processTemplate ('writeContent', array(
-				'msgOpenQuestions' => $PMF_LANG['msgOpenQuestions'],
-				'msgQuestionText' => $PMF_LANG['msgQuestionText'],
-				'msgDate_User' => $PMF_LANG['msgDate_User'],
-				'msgQuestion2' => $PMF_LANG['msgQuestion2'],
-				'printOpenQuestions' => printOpenQuestions()
-				));
+                        'msgOpenQuestions' => $PMF_LANG['msgOpenQuestions'],
+                        'msgQuestionText' => $PMF_LANG['msgQuestionText'],
+                        'msgDate_User' => $PMF_LANG['msgDate_User'],
+                        'msgQuestion2' => $PMF_LANG['msgQuestion2'],
+                        'printOpenQuestions' => printOpenQuestions()
+                        ));
 
 $tpl->includeTemplate('writeContent', 'index');
