@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: sqlite.sql.php,v 1.4 2006-03-02 13:57:29 thorstenr Exp $
+* $Id: sqlite.sql.php,v 1.5 2006-04-09 16:49:42 thorstenr Exp $
 *
 * CREATE TABLE instructions for SQLite
 *
@@ -22,18 +22,29 @@
 
 $uninst[] = "DROP TABLE ".$sqltblpre."faqadminlog";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqadminsessions";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqcaptcha";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcategories";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcategoryrelations";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqchanges";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcomments";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqconfig";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqdata";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqquestions";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqdata_revisions";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqglossary";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqgroup";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqgroup_right";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqlinkverifyrules";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqnews";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqvoting";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqquestions";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqright";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqsessions";
 $uninst[] = "DROP TABLE ".$sqltblpre."faquser";
+$uninst[] = "DROP TABLE ".$sqltblpre."faquserdata";
+$uninst[] = "DROP TABLE ".$sqltblpre."faquserlogin";
+$uninst[] = "DROP TABLE ".$sqltblpre."faquser_group";
+$uninst[] = "DROP TABLE ".$sqltblpre."faquser_right";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqvisits";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqglossary";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqvoting";
 
 //faquser
 $query[] = "CREATE TABLE ".$sqltblpre."faquser (
@@ -45,10 +56,21 @@ email varchar(255) NOT NULL default '',
 rights varchar(255) NOT NULL,
 PRIMARY KEY (id))";
 
+// faqcaptcha
+$query[] = "CREATE TABLE ".$sqltblpre."faqcaptcha (
+id varchar(6) NOT NULL,
+useragent varchar(255) NOT NULL,
+language varchar(2) NOT NULL,
+ip varchar(64) NOT NULL,
+captcha_time integer NOT NULL,
+PRIMARY KEY (id))";
+
 //faqdata
 $query[] = "CREATE TABLE ".$sqltblpre."faqdata (
 id int(11) NOT NULL,
 lang varchar(5) NOT NULL,
+solution_id integer NOT NULL,
+revision_id integer NOT NULL DEFAULT 0,
 active char(3) NOT NULL,
 keywords text NOT NULL,
 thema text NOT NULL,
@@ -57,7 +79,27 @@ author varchar(255) NOT NULL,
 email varchar(255) NOT NULL,
 comment char(1) NOT NULL,
 datum varchar(15) NOT NULL,
+linkState varchar(7) NOT NULL,
+linkCheckDate integer DEFAULT 0,
 PRIMARY KEY (id, lang))";
+
+//faqdata_revisions
+$query[] = "CREATE TABLE ".$sqltblpre."faqdata_revisions (
+id integer NOT NULL,
+lang varchar(5) NOT NULL,
+solution_id integer NOT NULL,
+revision_id integer NOT NULL DEFAULT 0,
+active char(3) NOT NULL,
+keywords varchar(512) NOT NULL,
+thema varchar(512) NOT NULL,
+content text NOT NULL,
+author varchar(255) NOT NULL,
+email varchar(255) NOT NULL,
+comment char(1) default 'y',
+datum varchar(15) NOT NULL,
+linkState varchar(7) NOT NULL,
+linkCheckDate integer DEFAULT 0,
+PRIMARY KEY (id, lang, solution_id, revision_id))";
 
 //faqadminlog
 $query[] = "CREATE TABLE ".$sqltblpre."faqadminlog (

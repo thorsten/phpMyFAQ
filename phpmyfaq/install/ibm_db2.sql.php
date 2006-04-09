@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ibm_db2.sql.php,v 1.2 2006-04-09 12:29:28 thorstenr Exp $
+* $Id: ibm_db2.sql.php,v 1.3 2006-04-09 16:49:42 thorstenr Exp $
 *
 * CREATE TABLE instruction for IBM DB2 Universal Database, IBM Cloudscape,
 * and Apache Derby databases
@@ -22,19 +22,29 @@
 
 $uninst[] = "DROP TABLE ".$sqltblpre."faqadminlog";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqadminsessions";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqcaptcha";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcategories";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcategoryrelations";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqcaptcha";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqchanges";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcomments";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqconfig";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqdata";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqdata_revisions";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqfragen";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqglossary";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqgroup";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqgroup_right";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqlinkverifyrules";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqnews";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqvoting";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqquestions";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqright";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqsessions";
 $uninst[] = "DROP TABLE ".$sqltblpre."faquser";
+$uninst[] = "DROP TABLE ".$sqltblpre."faquserdata";
+$uninst[] = "DROP TABLE ".$sqltblpre."faquserlogin";
+$uninst[] = "DROP TABLE ".$sqltblpre."faquser_group";
+$uninst[] = "DROP TABLE ".$sqltblpre."faquser_right";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqvisits";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqvoting";
 
 //faquser
 $query[] = "CREATE TABLE  ".$sqltblpre."faquser (
@@ -46,7 +56,7 @@ email varchar(255) DEFAULT '',
 rights varchar(255) NOT NULL,
 PRIMARY KEY (id))";
 
-//faqcaptcha
+// faqcaptcha
 $query[] = "CREATE TABLE ".$sqltblpre."faqcaptcha (
 id varchar(6) NOT NULL,
 useragent varchar(255) NOT NULL,
@@ -69,6 +79,8 @@ author varchar(255) NOT NULL,
 email varchar(255) NOT NULL,
 comment char(1) default 'y',
 datum varchar(15) NOT NULL,
+linkState varchar(7) NOT NULL,
+linkCheckDate integer DEFAULT 0,
 PRIMARY KEY (id, lang))";
 
 //faqdata_revisions
@@ -85,6 +97,8 @@ author varchar(255) NOT NULL,
 email varchar(255) NOT NULL,
 comment char(1) default 'y',
 datum varchar(15) NOT NULL,
+linkState varchar(7) NOT NULL,
+linkCheckDate integer DEFAULT 0,
 PRIMARY KEY (id, lang, solution_id, revision_id))";
 
 //faqadminlog
