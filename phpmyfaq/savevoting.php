@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: savevoting.php,v 1.14 2006-01-02 16:51:26 thorstenr Exp $
+* $Id: savevoting.php,v 1.15 2006-04-09 12:12:47 thorstenr Exp $
 *
 * Saves a user voting
 *
@@ -26,7 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $record = (isset($_POST["artikel"])) ? intval($_POST["artikel"]) : '';
 $vote = (isset($_POST["vote"])) ? intval($_POST["vote"]) : 0;
-$userip = (isset($_POST["userip"])) ? safeSQL($_POST["userip"]) : '';
+$userip = (isset($_POST["userip"])) ? strip_tags($_POST["userip"]) : '';
 
 if (isset($vote) && $vote != "" && votingCheck($record, $userip) && intval($_POST["vote"]) > 0 && intval($_POST["vote"]) < 6) {
     
