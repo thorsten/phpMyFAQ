@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.43 2006-01-04 14:47:02 b33blebr0x Exp $
+* $Id: index.php,v 1.44 2006-04-09 09:52:56 thorstenr Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the 
@@ -48,6 +48,7 @@ PMF_Init::cleanRequest();
 // and the IDNA class
 //
 require_once('inc/parser.php');
+require_once('inc/captcha.php');
 require_once('inc/Category.php');
 require_once('inc/Faq.php');
 require_once('inc/idna_convert.class.php');
@@ -60,12 +61,14 @@ $IDN = new idna_convert;
 //
 $pmf = new PMF_Init();
 $LANGCODE = $pmf->setLanguage((isset($PMF_CONF['detection']) ? true : false), $PMF_CONF['language']);
+// Preload English strings
+require_once ('lang/language_en.php');
 
-if (isset($LANGCODE) && isset($languageCodes[strtoupper($LANGCODE)])) {
+if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE)) {
+    // Overwrite English strings with the ones we have in the current language
     require_once('lang/language_'.$LANGCODE.'.php');
 } else {
     $LANGCODE = 'en';
-    require_once ('lang/language_en.php');
 }
 
 
@@ -193,10 +196,10 @@ $faq = new FAQ($db, $LANGCODE);
 //
 // Found a article language?
 //
-if (isset($_GET["artlang"]) && strlen($_GET["artlang"]) <= 2 && !preg_match("=/=", $_GET["artlang"])) {
-	$lang = $_GET["artlang"];
+if (isset($_POST["artlang"]) && PMF_Init::isASupportedLanguage($_POST["artlang"]) ) {
+    $lang = $_POST["artlang"];
 } else {
-	$lang = $LANGCODE;
+    $lang = $LANGCODE;
 }
 
 
@@ -212,6 +215,22 @@ if (isset($_REQUEST["id"]) && is_numeric($_REQUEST["id"]) == true) {
 	$id = '';
     $title = ' -  powered by phpMyFAQ '.$PMF_CONF['version'];
     $keywords = '';
+}
+
+
+
+//
+// found a solution ID?
+//
+if (isset($_REQUEST['solution_id']) && is_numeric($_REQUEST['solution_id']) === true) {
+    $solution_id = $_REQUEST['solution_id'];
+    $title = ' -  powered by phpMyFAQ '.$PMF_CONF['version'];
+    $keywords = '';
+    $a = $faq->getIdFromSolutionId($solution_id);
+    if (is_array($a)) {
+        $id = $a['id'];
+        $lang = $a['lang'];
+    }
 }
 
 
