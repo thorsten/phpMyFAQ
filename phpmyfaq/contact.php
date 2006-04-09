@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: contact.php,v 1.5 2006-01-02 16:51:26 thorstenr Exp $
+* $Id: contact.php,v 1.6 2006-04-09 09:40:21 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-09-16
@@ -22,19 +22,29 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
+$captcha = new PMF_Captcha($db, $sids, $pmf->language, $_SERVER['HTTP_USER_AGENT'], $_SERVER['REMOTE_ADDR']);
+
+if (isset($_GET['gen'])) {
+    $captcha->showCaptchaImg();
+    exit;
+}
+
 Tracking('contact', 0);
 
 $tpl->processTemplate ('writeContent', array(
-				       'msgContact' => $PMF_LANG['msgContact'],
-                       'msgContactOwnText' => unhtmlentities($PMF_CONF['msgContactOwnText']),
-                       'msgContactEMail' => $PMF_LANG['msgContactEMail'],
-                       'writeSendAdress' => $_SERVER['PHP_SELF'].'?'.$sids.'action=sendmail',
-                       'msgNewContentName' => $PMF_LANG['msgNewContentName'],
-                       'msgNewContentMail' => $PMF_LANG['msgNewContentMail'],
-				       'defaultContentMail' => getEmailAddress(),
-				       'defaultContentName' => getFullUserName(),
-                       'msgMessage' => $PMF_LANG['msgMessage'],
-                       'msgS2FButton' => $PMF_LANG['msgS2FButton'],
-                       'version' => $PMF_CONF['version']));
+                        'msgContact' => $PMF_LANG['msgContact'],
+                        'msgContactOwnText' => unhtmlentities($PMF_CONF['msgContactOwnText']),
+                        'msgContactEMail' => $PMF_LANG['msgContactEMail'],
+                        'writeSendAdress' => $_SERVER['PHP_SELF'].'?'.$sids.'action=sendmail',
+                        'msgNewContentName' => $PMF_LANG['msgNewContentName'],
+                        'msgNewContentMail' => $PMF_LANG['msgNewContentMail'],
+                        'defaultContentMail' => getEmailAddress(),
+                        'defaultContentName' => getFullUserName(),
+                        'msgMessage' => $PMF_LANG['msgMessage'],
+                        'msgS2FButton' => $PMF_LANG['msgS2FButton'],
+                        'version' => $PMF_CONF['version'],
+                        'msgCaptcha' => $PMF_LANG['msgCaptcha'],
+                        'setCaptchaCodeLength' => $captcha->caplength,
+                        'printCaptcha' => $captcha->printCaptcha('contact') ));
 
 $tpl->includeTemplate('writeContent', 'index');

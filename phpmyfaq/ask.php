@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ask.php,v 1.7 2006-01-02 16:51:25 thorstenr Exp $
+* $Id: ask.php,v 1.8 2006-04-09 09:39:08 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-09-17
@@ -22,13 +22,20 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
+$captcha = new PMF_Captcha($db, $sids, $pmf->language, $_SERVER['HTTP_USER_AGENT'], $_SERVER['REMOTE_ADDR']);
+
+if (isset($_GET['gen'])) {
+	$captcha->showCaptchaImg();
+	exit;
+}
+
 Tracking('ask_question', 0);
 
 $tree->buildTree();
 
 $tpl->processTemplate('writeContent', array(
 				      'msgQuestion' => $PMF_LANG['msgQuestion'],
-				      'msgNewQuestion' => $PMF_LANG['msgNewQuestion'].(isset($PMF_CONF['enablevisibility']) ?	$PMF_LANG['msgNewQuestionVisible'] : ''),
+				      'msgNewQuestion' => $PMF_LANG['msgNewQuestion'],
                       'writeSendAdress' => $_SERVER['PHP_SELF'].'?'.$sids.'action=savequestion',
                       'msgNewContentName' => $PMF_LANG['msgNewContentName'],
                       'msgNewContentMail' => $PMF_LANG['msgNewContentMail'],
@@ -37,6 +44,9 @@ $tpl->processTemplate('writeContent', array(
                       'msgAskCategory' => $PMF_LANG['msgAskCategory'],
                       'printCategoryOptions' => $tree->printCategoryOptions(),
                       'msgAskYourQuestion' => $PMF_LANG['msgAskYourQuestion'],
+                      'msgCaptcha' => $PMF_LANG['msgCaptcha'],
+                      'printCaptcha' => $captcha->printCaptcha('ask'),
+                      'setCaptchaCodeLength' => $captcha->caplength,
                       'msgNewContentSubmit' => $PMF_LANG['msgNewContentSubmit']));
 
 $tpl->includeTemplate('writeContent', 'index');
