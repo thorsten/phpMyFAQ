@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mailsend2friend.php,v 1.8 2006-01-02 16:51:26 thorstenr Exp $
+* $Id: mailsend2friend.php,v 1.9 2006-04-09 10:02:01 thorstenr Exp $
 *
 * Sends the emails to your friends
 *
@@ -26,12 +26,21 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 Tracking("sendmail_send2friend",0);
 
-if (isset($_POST["name"]) && $_POST["name"] != "" && isset($_POST["mailfrom"]) && $_POST["mailfrom"] != "" && IPCheck($_SERVER["REMOTE_ADDR"])) {
-	$mailto = $_POST["mailto"];
-    $name = $_POST["name"];
-    $mailfrom = $_POST["mailfrom"];
-    $link = strip_tags($_POST["link"]);
-    $attached = strip_tags($_POST["zusatz"]);
+$captcha = new PMF_Captcha($db, $sids, $pmf->language, $_SERVER['HTTP_USER_AGENT'], $_SERVER['REMOTE_ADDR']);
+
+if (   isset($_POST['name']) && $_POST['name'] != ''
+    && isset($_POST['mailfrom']) && $_POST['mailfrom'] != ''
+    && isset($_POST['mailto']) && $_POST['mailto'] != ''
+    && IPCheck($_SERVER['REMOTE_ADDR'])
+    && checkBannedWord(htmlspecialchars(strip_tags($_POST['zusatz'])))
+    && isset($_POST['captcha']) && ($captcha->validateCaptchaCode($_POST['captcha'])) ) {
+
+    $name = $db->escape_string(strip_tags($_POST["name"]));
+    $mailfrom = $db->escape_string(strip_tags($_POST["mailfrom"]));
+    $link = $db->escape_string(strip_tags($_POST["link"]));
+    $attached = $db->escape_string(strip_tags($_POST["zusatz"]));
+    $mailto = $_POST['mailto'];
+
 	list($user, $host) = explode("@", $mailto[0]);
     if (checkEmail($mailfrom)) {
         foreach($mailto as $mail) {
