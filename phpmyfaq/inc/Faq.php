@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.9 2006-04-09 09:30:58 thorstenr Exp $
+* $Id: Faq.php,v 1.10 2006-04-09 09:50:57 thorstenr Exp $
 *
 * The main FAQ class
 *
@@ -263,6 +263,26 @@ class FAQ
                 'comment'       => $row->comment,
                 'date'          => makeDate($row->datum));
         }
+    }
+
+    /**
+     * getIdFromSolutionId()
+     *
+     * Gets the record ID from a given solution ID
+     *
+     * @param   integer
+     * @return  array
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function getIdFromSolutionId($solution_id)
+    {
+        $query = sprintf("SELECT id, lang FROM %sfaqdata WHERE solution_id = %s", SQLPREFIX, $solution_id);
+        $result = $this->db->query($query);
+        if ($row = $this->db->fetch_object($result)) {
+        	return array('id' => $row->id, 'lang' => $row->lang);
+        }
+        return null;
     }
 
     /**
