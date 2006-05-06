@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.44 2006-02-03 11:30:13 thorstenr Exp $
+$Id: README.txt,v 1.45 2006-05-06 13:33:54 thorstenr Exp $
 
 phpMyFAQ 2.0.0-dev
 Codename "Prometheus"
@@ -13,6 +13,7 @@ Changes since 1.x:
 - added rewritten and enhanced user management
 - added rewritten and enhanced authorization management
 - added AJAX support
+- added autmatic online link verification
 - added user binding to a category
 - added glossary support
 - added possibility to delete admin log
@@ -29,11 +30,40 @@ Version 2.0.0 - n/a
 - added rewritten and enhanced user management
 - added rewritten and enhanced authorization management
 - added AJAX support
+- added autmatic online link verification
 - added user binding to a category
 - added glossary support
 - added possibility to delete admin log
 - added configurable visibility of new questions
 - added improved and template-based XHTML export
+
+Version 1.6.0 - 2006-04-21
+- fixed PHP security issue
+- added unique solution id
+- added revision system
+- added support for captchas
+- added bad word list blocker
+- added search in one selected category
+- added linked breadcrumb
+- added RSS feed for open questions
+- added Brazilian Portuguese translation
+- improved record administration
+- improved spam protection
+- improved language detection and handling
+- updated Italian translation
+- updated Japanese translation
+- updated Korean translation
+- fixed some minor bugs
+
+Version 1.5.9 - 2006-04-21
+- fixed PHP security issue
+
+Version 1.5.8 - 2006-04-09
+- updated Korean translation
+- fixed some minor bugs
+
+Version 1.5.7 - 2006-03-02
+- fixed some minor bugs
 
 Version 1.5.6 - 2006-01-27
 - added Basque translation

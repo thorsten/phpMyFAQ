@@ -1,6 +1,6 @@
 TODO list for future versions of phpMyFAQ:
 
-1.6.0 "Prometheus":
+2.0.0 "Prometheus":
 - add spam protection ?
 - improved WYSIWYG editor and Image Manager ?
 - reorder records ?
@@ -12,7 +12,7 @@ TODO list for future versions of phpMyFAQ:
 - more accessibility features (WAI and Section 508) ?
 - bugfixing for stability or security reasons
 
-1.7.0 "Pandora":
+2.1.0 "Pandora":
 - add related articles [new sql table: faqrelatedentries] ?
 - subscription service for new articles ?
 - message to the user, who has posted a question and an answer is availible ?
@@ -22,7 +22,7 @@ TODO list for future versions of phpMyFAQ:
 - more accessibility features (WAI and Section 508) ?
 - bugfixing for stability or security reasons
 
-1.8.0 "Paaliaq":
+2.2.0 "Paaliaq":
 - possibility to disable multiple languages
 - SOAP interface ?
 - "sticky" records ?
@@ -31,16 +31,9 @@ TODO list for future versions of phpMyFAQ:
 - more accessibility features (WAI and Section 508) ?
 - bugfixing for stability or security reasons
 
-1.9.0 "Portia":
+2.3.0 "Portia":
 - add auto update feature ?
 - modularisation of all features ?
 - Unicode support for PDFs ?
 - directory-like listing of entries ?
-- bugfixing for stability or security reasons
-
-2.0.0 "NG":
-- PHP 5.1 ?
-- MySQL 5.0 ?
-- PDO support ?
-- XUL interface ?
 - bugfixing for stability or security reasons
