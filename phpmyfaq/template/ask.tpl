@@ -16,9 +16,13 @@
     </select><br />
 	
     <label for="content" class="left">{msgAskYourQuestion}</label>
-    <textarea class="inputarea" cols="37" rows="10" name="content" id="content"></textarea><br />
-	
-    <input class="submit" type="submit" name="submit" value="{msgNewContentSubmit}" />
-	
+    <textarea class="inputarea" cols="45" rows="10" name="content" id="content"></textarea><br />
     </fieldset>
+
+    {captchaFieldset}
+
+    <div style="text-align:center;">
+        <input class="submit" type="submit" name="submit" value="{msgNewContentSubmit}" />
+    </div>
+    <br />
     </form>

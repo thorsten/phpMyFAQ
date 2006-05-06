@@ -1,25 +1,27 @@
 <h2>{msgContact}</h2>
-	<p>{msgContactOwnText}</p>
-	<p><strong>{msgContactEMail}</strong></p>
-	<form action="{writeSendAdress}" method="post" style="display: inline">
+    <p>{msgContactOwnText}</p>
+    <p><strong>{msgContactEMail}</strong></p>
+    <form action="{writeSendAdress}" method="post" style="display: inline">
     <fieldset>
     <legend>{msgContact}</legend>
-    
-	<label for="name" class="left">{msgNewContentName}</label>
+
+    <label for="name" class="left">{msgNewContentName}</label>
     <input class="inputfield" type="text" name="name" value="{defaultContentName}" size="40" /><br />
-	
-	<label for="email" class="left">{msgNewContentMail}</label>
+
+    <label for="email" class="left">{msgNewContentMail}</label>
     <input class="inputfield" type="text" name="email" value="{defaultContentMail}" size="40" /><br />
-	
-	<label for="question" class="left">{msgMessage}</label>
+
+    <label for="question" class="left">{msgMessage}</label>
     <textarea class="inputarea" cols="37" rows="5" name="question"></textarea><br />
-	
-    <input class="submit" type="submit" name="submit" value="{msgS2FButton}" />
-	
     </fieldset>
+
+    {captchaFieldset}
+
+    <input class="submit" type="submit" name="submit" value="{msgS2FButton}" />
+
     </form>
-    
-	<!-- DO NOT REMOVE THE COPYRIGHT NOTICE -->
-	<div id="version"><a href="http://www.phpmyfaq.de"><img src="images/logo.png" width="88" height="31" alt="powered by phpMyFAQ {version}" title="powered by phpMyFAQ {version}" /></a></div>
-	<div id="copyright">&copy; 2001 - 2006 by <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> under the <a href="http://www.mozilla.org/MPL/MPL-1.1.html">Mozilla Public License</a>. All rights reserved.<br />Template/CSS by <a href="http://www.thorsten-rinne.de">Thorsten Rinne</a>, <a href="http://www.lieven.be/">Lieven Op De Beeck</a> and <a href="http://www.grochtdreis.de">Jens Grochtdreis</a><br />phpMyFAQ logo by <a href="http://www.lieven.be/">Lieven Op De Beeck</a></div>
-	<!-- DO NOT REMOVE THE COPYRIGHT NOTICE -->
+
+    <!-- DO NOT REMOVE THE COPYRIGHT NOTICE -->
+    <div id="version"><a href="http://www.phpmyfaq.de"><img src="images/logo.png" width="88" height="31" alt="powered by phpMyFAQ {version}" title="powered by phpMyFAQ {version}" /></a></div>
+    <div id="copyright">&copy; 2001 - 2006 by <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> under the <a href="http://www.mozilla.org/MPL/MPL-1.1.html">Mozilla Public License</a>. All rights reserved.<br />Template/CSS by <a href="http://www.thorsten-rinne.de">Thorsten Rinne</a>, <a href="http://www.lieven.be/">Lieven Op De Beeck</a> and <a href="http://www.grochtdreis.de">Jens Grochtdreis</a><br />phpMyFAQ logo by <a href="http://www.lieven.be/">Lieven Op De Beeck</a></div>
+    <!-- DO NOT REMOVE THE COPYRIGHT NOTICE -->
