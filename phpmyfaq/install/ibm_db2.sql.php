@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ibm_db2.sql.php,v 1.3 2006-04-09 16:49:42 thorstenr Exp $
+* $Id: ibm_db2.sql.php,v 1.4 2006-05-08 06:39:51 thorstenr Exp $
 *
 * CREATE TABLE instruction for IBM DB2 Universal Database, IBM Cloudscape,
 * and Apache Derby databases
@@ -72,8 +72,8 @@ lang varchar(5) NOT NULL,
 solution_id integer NOT NULL,
 revision_id integer NOT NULL DEFAULT 0,
 active char(3) NOT NULL,
-keywords varchar(512) NOT NULL,
-thema varchar(512) NOT NULL,
+keywords CLOB NOT NULL,
+thema CLOB NOT NULL,
 content CLOB NOT NULL,
 author varchar(255) NOT NULL,
 email varchar(255) NOT NULL,
@@ -90,8 +90,8 @@ lang varchar(5) NOT NULL,
 solution_id integer NOT NULL,
 revision_id integer NOT NULL DEFAULT 0,
 active char(3) NOT NULL,
-keywords varchar(512) NOT NULL,
-thema varchar(512) NOT NULL,
+keywords CLOB NOT NULL,
+thema CLOB NOT NULL,
 content CLOB NOT NULL,
 author varchar(255) NOT NULL,
 email varchar(255) NOT NULL,
