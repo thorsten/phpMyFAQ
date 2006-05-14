@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: pdf.php,v 1.17 2006-05-14 16:10:20 thorstenr Exp $
+* $Id: pdf.php,v 1.18 2006-05-14 16:30:17 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Peter Beauvain <pbeauvain@web.de>
@@ -62,6 +62,10 @@ if (isset($_GET["lang"]) && is_string($_GET['lang']) && PMF_Init::isASupportedLa
 } else {
     $error = true;
 }
+if ($error) {
+    print "Error!";
+    exit();
+}
 
 $result = $db->query("SELECT id, lang, solution_id, thema, content, datum, author FROM ".SQLPREFIX."faqdata WHERE id = ".$id." AND lang = '".$lang."' AND active = 'yes'");
 if ($db->num_rows($result) > 0) {
@@ -74,10 +78,6 @@ if ($db->num_rows($result) > 0) {
         $author = $row->author;
     }
 } else {
-    $error = true;
-}
-
-if ($error) {
     print "Error!";
     exit();
 }
