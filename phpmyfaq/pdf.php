@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: pdf.php,v 1.16 2006-04-09 10:11:25 thorstenr Exp $
+* $Id: pdf.php,v 1.17 2006-05-14 16:10:20 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Peter Beauvain <pbeauvain@web.de>
@@ -45,28 +45,41 @@ if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE)) {
     require_once ("lang/language_en.php");
 }
 
-if (isset($_GET['cat']) && is_numeric($_GET['cat']) == TRUE) {
-	$currentCategory = $_REQUEST['cat'];
+$error = false;
+
+if (isset($_GET['cat']) && is_numeric($_GET['cat'])) {
+    $currentCategory = (int)$_GET['cat'];
+} else {
+    $error = true;
 }
-if (isset($_GET["id"]) && is_numeric($_GET["id"]) == TRUE) {
-	$id = $_GET["id"];
-	}
-if (isset($_GET["lang"]) && strlen($_GET["lang"]) <= 2 && !preg_match("=/=", $_GET["lang"])) {
+if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
+    $id = (int)$_GET["id"];
+} else {
+    $error = true;
+}
+if (isset($_GET["lang"]) && is_string($_GET['lang']) && PMF_Init::isASupportedLanguage($_GET["lang"])) {
     $lang = $_GET["lang"];
-    }
+} else {
+    $error = true;
+}
 
 $result = $db->query("SELECT id, lang, solution_id, thema, content, datum, author FROM ".SQLPREFIX."faqdata WHERE id = ".$id." AND lang = '".$lang."' AND active = 'yes'");
 if ($db->num_rows($result) > 0) {
-	while ($row = $db->fetch_object($result)) {
-		$lang = $row->lang;
+    while ($row = $db->fetch_object($result)) {
+        $lang = $row->lang;
         $solution_id = $row->solution_id;
-		$thema = $row->thema;
-		$content = $row->content;
-		$date = $row->datum;
-		$author = $row->author;
-	}
+        $thema = $row->thema;
+        $content = $row->content;
+        $date = $row->datum;
+        $author = $row->author;
+    }
 } else {
-	print "Error!";
+    $error = true;
+}
+
+if ($error) {
+    print "Error!";
+    exit();
 }
 
 $pdf = new PDF($currentCategory, $thema, $tree->categoryName, $orientation = "P", $unit = "mm", $format = "A4");
@@ -92,7 +105,7 @@ $pdf->close($pdfFile);
 
 $file = basename($pdfFile);
 $size = filesize($pdfFile);
-session_cache_limiter('private'); 
+session_cache_limiter('private');
 header("Pragma: public");
 header("Expires: 0"); // set expiration time
 header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
@@ -101,7 +114,7 @@ if (preg_match("/MSIE/i", $_SERVER["HTTP_USER_AGENT"])) {
     header("Content-type: application/pdf");
     header("Content-Transfer-Encoding: binary");
     header("Content-Length: ".filesize($pdfFile));
-    header("Content-Disposition: Attachment; filename=".$id.".pdf" );  
+    header("Content-Disposition: Attachment; filename=".$id.".pdf" );
     readfile($pdfFile);
 } else {
     header("Location: ".$pdfFile."");
