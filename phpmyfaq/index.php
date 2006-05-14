@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.44 2006-04-09 09:52:56 thorstenr Exp $
+* $Id: index.php,v 1.45 2006-05-14 12:18:52 johannes Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the 
@@ -265,7 +265,7 @@ if (isset($cat) && $cat != 0 && $id == '') {
 //
 // Found an action request?
 //
-if (isset($_REQUEST["action"]) && !preg_match("=/=", $_REQUEST["action"]) && isset($allowedVariables[$_REQUEST["action"]])) {
+if (isset($_REQUEST["action"]) && is_string($_REQUEST["action"]) && !preg_match("=/=", $_REQUEST["action"]) && isset($allowedVariables[$_REQUEST["action"]])) {
 	$action = $_REQUEST["action"];
 } else {
 	$action = "main";
