@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.42 2006-04-09 12:38:31 thorstenr Exp $
+* $Id: update.php,v 1.43 2006-05-28 14:40:18 thorstenr Exp $
 *
 * Main update script
 *
@@ -9,12 +9,12 @@
 * @author       Matteo Scaramuccia <matteo@scaramuccia.com>
 * @since        2002-01-10
 * @copyright    (c) 2001-2006 phpMyFAQ Team
-* 
+*
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
 * compliance with the License. You may obtain a copy of the License at
 * http://www.mozilla.org/MPL/
-* 
+*
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
@@ -131,6 +131,7 @@ if ($step == 1) {
 <ul type="square">
     <li>phpMyFAQ 1.4.x</li>
     <li>phpMyFAQ 1.5.x</li>
+    <li>phpMyFAQ 1.6.x</li>
 </ul>
 <p>This update will <strong>not</strong> work for the following versions:</p>
 <ul type="square">
@@ -154,6 +155,8 @@ if ($step == 1) {
     <option value="1.5.5">phpMyFAQ 1.5.5 and later</option>
     <option value="1.6.0">phpMyFAQ 1.6.0 and later</option>
 </select>
+
+<p>Attention! This version might be broken and it's under heavy development.</p>
 
 <p class="center"><input type="submit" value="Go to step 2 of 5" class="button" /></p>
 </fieldset>
@@ -193,7 +196,7 @@ if ($step == 2) {
     } else {
         $test5 = 1;
     }
-    
+
     // is everything is okay?
     if ($test1 == 1 && $test2  == 1 && $test3  == 1 && $test4 == 1 && $test5 == 1) {
 ?>
@@ -301,7 +304,7 @@ if ($step == 4) {
 <legend class="installation"><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 4 of 5)</strong></legend>
 <?php
     require_once(PMF_ROOT_DIR."/lang/language_en.php");
-    
+
     if (isset($_REQUEST["db"])) {
         $DB = $_REQUEST["db"];
         if ($fp = @fopen(PMF_ROOT_DIR."/inc/data.php","w")) {
@@ -312,9 +315,9 @@ if ($step == 4) {
 		    print "<p class=\"error\"><strong>Error:</strong> The file ../inc/data.php could not be updated.</p>";
         }
     }
-    
+
 	$arrVar = $_REQUEST["edit"];
-    
+
     if ($fp = @fopen(PMF_ROOT_DIR."/inc/config.php", "w")) {
         @fputs($fp, "<?php \n# Created ".date("Y-m-d H:i:s")."\n\n");
         foreach ($arrVar as $key => $value) {
@@ -340,12 +343,12 @@ if ($step == 5) {
     define("SQLPREFIX", $DB["prefix"]);
     $db = db::db_select($DB["type"]);
     $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
-    
+
     $version = str_replace(".", "", $_REQUEST["version"]);
     if (4 == strlen($version)) {
         $version = 149;
     }
-    
+
     // update from version 1.4.0
     if ($version <= 140) {
         // rewrite data.php
@@ -521,20 +524,20 @@ if ($step == 5) {
             $_start += PMF_SOLUTION_ID_INCREMENT_VALUE;
         }
     }
-    
+
     // optimize tables
     switch($DB["type"]) {
-        
+
         case 'mysql':
         case 'mysqli':      $query[] = "OPTIMIZE TABLE ".SQLPREFIX."faqadminlog, ".SQLPREFIX."faqadminsessions, ".SQLPREFIX."faqcategories, ".SQLPREFIX."faqcategoryrelations, ".SQLPREFIX."faqchanges, ".SQLPREFIX."faqcomments, ".SQLPREFIX."faqdata, ".SQLPREFIX."faqquestions, ".SQLPREFIX."faqnews, ".SQLPREFIX."faqsessions, ".SQLPREFIX."faquser, ".SQLPREFIX."faqvisits, ".SQLPREFIX."faqvoting, ".SQLPREFIX."faqglossary";
                             break;
-                            
+
         case 'pgsql':       $query[] = "VACUUM ANALYZE;";
                             break;
-                            
+
         default:            break;
     }
-    	
+
 	print '<p class="center">';
     if (isset($query)) {
         while ($each_query = each($query)) {
@@ -553,7 +556,7 @@ if ($step == 5) {
     print '<p class="center\">The database was updated successfully.</p>';
     print '<p class="center\"><a href="../index.php">phpMyFAQ</a></p>';
     print '<p class="center">Please remove the backup (*.php.bak and *.bak.php) files located in the directory inc/.</p>';
-    
+
     if (@unlink(basename($_SERVER["PHP_SELF"]))) {
         print "<p class=\"center\">This file was deleted automatically.</p>\n";
     } else {
