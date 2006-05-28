@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.46 2006-05-28 20:14:49 thorstenr Exp $
+* $Id: index.php,v 1.47 2006-05-28 21:48:16 thorstenr Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the
@@ -127,7 +127,7 @@ if (isset($auth)) {
 //
 // Logout
 //
-if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'logout' && $auth) {
+if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'logout' && isset($auth)) {
     $user->deleteFromSession();
     unset($user);
     unset($auth);

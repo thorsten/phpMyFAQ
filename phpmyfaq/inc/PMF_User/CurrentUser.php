@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: CurrentUser.php,v 1.14 2006-04-17 06:21:19 thorstenr Exp $
+ * $Id: CurrentUser.php,v 1.15 2006-05-28 21:51:32 thorstenr Exp $
  *
  * manages authentication process using php sessions.
  *
@@ -164,7 +164,7 @@ class PMF_CurrentUser extends PMF_User
             }
 			// return true
 			return true;
-			break;				
+			break;
 		}
 		// raise errors and return false
 		if ($login_error == $count) {
@@ -391,15 +391,18 @@ class PMF_CurrentUser extends PMF_User
             return null;
         // session-id not found in user table
         $session_info = $user->getSessionInfo();
-        $session_id = $session_info['session_id'];
-        if ($session_id == '' or $session_id != session_id())
+        $session_id = (isset($session_info['session_id']) ? $session_info['session_id'] : '');
+        if ($session_id == '' || $session_id != session_id()) {
             return false;
+        }
         // check ip
-        if ($ip_check and $session_info['ip'] != $_SERVER['REMOTE_ADDR'])
+        if ($ip_check and $session_info['ip'] != $_SERVER['REMOTE_ADDR']) {
             return false;
+        }
         // session-id needs to be updated
-        if ($user->sessionIdIsTimedOut())
+        if ($user->sessionIdIsTimedOut()) {
             $user->updateSessionId();
+        }
         // user is now logged in
         $user->_logged_in = true;
 		// save current user to session and return the instance
