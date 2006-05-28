@@ -1,7 +1,5 @@
 <?php
 
-error_reporting(E_ALL);
-
 /**
  * The medium permission class provides group rights.
  *

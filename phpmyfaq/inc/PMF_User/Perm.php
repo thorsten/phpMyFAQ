@@ -1,7 +1,5 @@
 <?php
 
-error_reporting(E_ALL);
-
 /**
  * This class manages user permissions and group memberships.
  *

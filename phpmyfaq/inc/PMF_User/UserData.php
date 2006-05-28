@@ -1,7 +1,5 @@
 <?php
 
-error_reporting(E_ALL);
-
 /**
  * The userdata class provides methods to manage user information.
  *

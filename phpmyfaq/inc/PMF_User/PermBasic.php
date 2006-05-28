@@ -1,7 +1,5 @@
 <?php
 
-error_reporting(E_ALL);
-
 /**
  * The basic permission class provides user rights.
  *

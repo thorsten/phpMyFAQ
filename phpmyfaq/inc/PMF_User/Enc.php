@@ -1,7 +1,5 @@
 <?php
 
-error_reporting(E_ALL);
-
 /**
  * provides methods for password encryption. 
  *

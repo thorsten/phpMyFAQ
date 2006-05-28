@@ -1,7 +1,5 @@
 <?php
 
-error_reporting(E_ALL);
-
 /**
  * The large permission class is not yet implemented in phpMyFAQ.
  *
