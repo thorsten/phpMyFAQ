@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.46 2006-04-09 12:33:07 thorstenr Exp $
+* $Id: installer.php,v 1.47 2006-05-28 14:46:25 thorstenr Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -14,12 +14,12 @@
 * @author      Johannes Schlüter <johannes@php.net>
 * @since       2002-08-20
 * @copyright   (c) 2001-2006 phpMyFAQ Team
-* 
+*
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
 * compliance with the License. You may obtain a copy of the License at
 * http://www.mozilla.org/MPL/
-* 
+*
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
@@ -301,7 +301,6 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
         print "<p class=\"center\">The PHP safe mode is enabled. You may have problems when phpMyFAQ writes in some directories.</p>\n";
     }
 ?>
-
 <p class="center">You should read the <a href="../docs/documentation.en.html">documentation</a> carefully before installing phpMyFAQ.</p>
 
 <form action="installer.php" method="post">
@@ -317,7 +316,7 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 		    printf('<option value="%s">%s</option>', $extension, $database[1]);
 	    }
     }
-?>	
+?>
 </select>
 <span class="help" title="Please enter the type of SQL server here.">?</span>
 </p>
@@ -458,20 +457,23 @@ foreach ($permLevels as $level) {
 <span class="help" title="Please retype your password for checkup.">?</span>
 </p>
 <p class="center"><strong>Do not use if you're already running a version of phpMyFAQ!</strong></p>
+
+<p>Attention! This version might be broken and it's under heavy development.</p>
+
 <p class="center"><input type="submit" value="Install phpMyFAQ" class="button" /></p>
 </fieldset>
 </form>
 <?php
     HTMLFooter();
 } else {
-    
+
     // Ckeck table prefix
     if (isset($_POST['sqltblpre']) && $_POST['sqltblpre'] != '') {
         $sqltblpre = $_POST['sqltblpre'];
     } else {
         $sqltblpre = '';
     }
-    
+
     // check database entries
 	if (isset($_POST["sql_type"]) && $_POST["sql_type"] != "") {
 		$sql_type = trim($_POST["sql_type"]);
@@ -537,10 +539,10 @@ foreach ($permLevels as $level) {
 		HTMLFooter();
 		die();
     }
-    
+
     // check LDAP if available
     if (extension_loaded('ldap') && isset($_POST['ldap_enabled']) && $_POST['ldap_enabled'] == 'yes') {
-        
+
         // check LDAP entries
         if (isset($_POST["ldap_server"]) && $_POST["ldap_server"] != "") {
             $ldap_server = $_POST["ldap_server"];
@@ -577,7 +579,7 @@ foreach ($permLevels as $level) {
             HTMLFooter();
             die();
         }
-        
+
         // check LDAP connection
         require_once(PMF_ROOT_DIR."/inc/ldap.php");
         $ldap = new LDAP($ldap_server, $ldap_port, $ldap_user, $ldap_base);
@@ -587,7 +589,7 @@ foreach ($permLevels as $level) {
             die();
         }
     }
-    
+
     // check user entries
     if (isset($_POST["password"]) && $_POST["password"] != "") {
         $password = $_POST["password"];
@@ -613,7 +615,7 @@ foreach ($permLevels as $level) {
 		HTMLFooter();
 		die();
     }
-    
+
     if (isset($_POST["language"]) && $_POST["language"] != "") {
         $language = $_POST["language"];
     } else {
@@ -630,7 +632,7 @@ foreach ($permLevels as $level) {
         $email = "";
     }
     $permLevel = (isset($_POST['permLevel']) && in_array($_POST['permLevel'], $permLevels)) ? $_POST['permLevel'] : 'basic';
-    
+
     // Write the DB variables in data.php
 	if ($fp = @fopen(PMF_ROOT_DIR."/inc/data.php","w")) {
 		@fputs($fp,"<?php\n\$DB[\"server\"] = '".$sql_server."';\n\$DB[\"user\"] = '".$sql_user."';\n\$DB[\"password\"] = '".$sql_passwort."';\n\$DB[\"db\"] = '".$sql_db."';\n\$DB[\"prefix\"] = '".$sqltblpre."';\n\$DB[\"type\"] = '".$sql_type."';\n?>");
@@ -640,10 +642,10 @@ foreach ($permLevels as $level) {
         HTMLFooter();
 		die();
 	}
-    
+
     // check LDAP if available
     if (extension_loaded('ldap') && isset($_POST['ldap_enabled']) && $_POST['ldap_enabled'] == 'yes') {
-        
+
         if ($fp = @fopen(PMF_ROOT_DIR."/inc/dataldap.php","w")) {
             @fputs($fp,"<?php\n\$PMF_LDAP[\"ldap_server\"] = '".$ldap_server."';\n\$PMF_LDAP[\"ldap_port\"] = '".$ldap_port."';\n\$PMF_LDAP[\"ldap_user\"] = '".$ldap_user."';\n\$PMF_LDAP[\"ldap_password\"] = '".$ldap_passwort."';\n\$PMF_LDAP[\"ldap_base\"] = '".$ldap_base."';\n;\n?>");
             @fclose($fp);
@@ -652,9 +654,9 @@ foreach ($permLevels as $level) {
             HTMLFooter();
             die();
         }
-        
+
     }
-	
+
     // Create config.php and write the language variables in the file
     if (@file_exists(PMF_ROOT_DIR."/inc/config.php")) {
     	print "<p class=\"center\">A config file was found. Please backup ../inc/config.php and remove the file.</p>\n";
@@ -696,7 +698,7 @@ foreach ($permLevels as $level) {
         HTMLFooter();
 		die();
 	}
-	
+
     // connect to the database using inc/data.php
     require_once(PMF_ROOT_DIR."/inc/data.php");
     require_once(PMF_ROOT_DIR."/inc/db.php");
@@ -917,12 +919,12 @@ foreach ($permLevels as $level) {
         $admin->perm->grantUserRight($adminID, $rightID);
     }
 	print "</strong></p>\n";
-	
+
     print "<p class=\"center\">All tables were created and filled with the data.</p>\n";
     print "<p class=\"center\">Congratulation! Everything seems to be okay.</p>\n";
     print "<p class=\"center\">You can visit <a href=\"../index.php\">your version of phpMyFAQ</a> or</p>\n";
     print "<p class=\"center\">login into your <a href=\"../admin/index.php\">admin section</a>.</p>\n";
-    
+
     if (@unlink(basename($_SERVER["PHP_SELF"]))) {
         print "<p class=\"center\">This file was deleted automatically.</p>\n";
     } else {
