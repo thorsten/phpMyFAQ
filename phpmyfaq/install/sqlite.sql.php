@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: sqlite.sql.php,v 1.10 2006-05-28 19:21:15 thorstenr Exp $
+* $Id: sqlite.sql.php,v 1.11 2006-05-28 19:24:08 thorstenr Exp $
 *
 * CREATE TABLE instructions for SQLite
 *
@@ -134,7 +134,6 @@ comment char(1) NOT NULL default 'y',
 datum varchar(15) NOT NULL,
 linkState VARCHAR(7) NOT NULL,
 linkCheckDate INT(11) DEFAULT '0' NOT NULL,
-FULLTEXT (keywords,thema,content),
 PRIMARY KEY (id, lang))";
 
 //faqdata_revisions
