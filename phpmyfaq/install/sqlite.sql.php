@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: sqlite.sql.php,v 1.11 2006-05-28 19:24:08 thorstenr Exp $
+* $Id: sqlite.sql.php,v 1.12 2006-05-28 19:26:08 thorstenr Exp $
 *
 * CREATE TABLE instructions for SQLite
 *
@@ -164,18 +164,18 @@ PRIMARY KEY (id, lang))";
 
 //faqgroup
 $query[] = "CREATE TABLE ".$sqltblpre."faqgroup (
-group_id INT(11) UNSIGNED NOT NULL,
+group_id INT(11) NOT NULL,
 name VARCHAR(25) NULL,
 description TEXT NULL,
-auto_join INT(1) UNSIGNED NULL,
+auto_join INT(1) NULL,
 PRIMARY KEY(group_id),
 UNIQUE INDEX name(name)
 )";
 
 //faqgroup_right
 $query[] = "CREATE TABLE ".$sqltblpre."faqgroup_right (
-group_id INT(11) UNSIGNED NOT NULL,
-right_id INT(11) UNSIGNED NOT NULL,
+group_id INT(11) NOT NULL,
+right_id INT(11) NOT NULL,
 PRIMARY KEY(group_id, right_id)
 )";
 
@@ -206,7 +206,7 @@ PRIMARY KEY (id))";
 
 //faqquestions
 $query[] = "CREATE TABLE ".$sqltblpre."faqquestions (
-id int(11) unsigned NOT NULL,
+id int(11) NOT NULL,
 ask_username varchar(100) NOT NULL,
 ask_usermail varchar(100) NOT NULL,
 ask_rubrik varchar(100) NOT NULL,
@@ -216,11 +216,11 @@ PRIMARY KEY (id))";
 
 //faqright
 $query[] = "CREATE TABLE ".$sqltblpre."faqright (
-right_id INT(11) UNSIGNED NOT NULL,
+right_id INT(11) NOT NULL,
 name VARCHAR(50) NULL,
 description TEXT NULL,
-for_users INT(1) UNSIGNED NULL DEFAULT 1,
-for_groups INT(1) UNSIGNED NULL DEFAULT 1,
+for_users INT(1) NULL DEFAULT 1,
+for_groups INT(1) NULL DEFAULT 1,
 PRIMARY KEY(right_id)
 )";
 
@@ -233,10 +233,10 @@ PRIMARY KEY sid (sid))";
 
 //faquser
 $query[] = "CREATE TABLE ".$sqltblpre."faquser (
-user_id INT(11) UNSIGNED NOT NULL,
+user_id INT(11) NOT NULL,
 login VARCHAR(25) NOT NULL,
 session_id VARCHAR(150) NULL,
-session_timestamp INT(11) UNSIGNED NOT NULL,
+session_timestamp INT(11) NOT NULL,
 ip VARCHAR(15) NULL,
 account_status VARCHAR(50) NULL,
 last_login TIMESTAMP(14) NULL,
@@ -249,7 +249,7 @@ UNIQUE INDEX login(login)
 
 //faquserdata
 $query[] = "CREATE TABLE ".$sqltblpre."faquserdata (
-user_id INT(11) UNSIGNED NOT NULL,
+user_id INT(11) NOT NULL,
 last_modified TIMESTAMP(14) NULL,
 display_name VARCHAR(50) NULL,
 email VARCHAR(100) NULL
@@ -264,15 +264,15 @@ PRIMARY KEY(login)
 
 //Sfaquser_group
 $query[] = "CREATE TABLE ".$sqltblpre."faquser_group (
-user_id INT(11) UNSIGNED NOT NULL,
-group_id INT(11) UNSIGNED NOT NULL,
+user_id INT(11) NOT NULL,
+group_id INT(11) NOT NULL,
 PRIMARY KEY(user_id, group_id)
 )";
 
 //faquser_login
 $query[] = "CREATE TABLE ".$sqltblpre."faquser_right (
-user_id INT(11) UNSIGNED NOT NULL,
-right_id INT(11) UNSIGNED NOT NULL,
+user_id INT(11) NOT NULL,
+right_id INT(11) NOT NULL,
 PRIMARY KEY(user_id, right_id)
 )";
 
@@ -286,10 +286,10 @@ PRIMARY KEY (id, lang))";
 
 //faqvoting
 $query[] = "CREATE TABLE ".$sqltblpre."faqvoting (
-id int(11) unsigned NOT NULL,
-artikel int(11) unsigned NOT NULL,
-vote int(11) unsigned NOT NULL,
-usr int(11) unsigned NOT NULL,
+id int(11) NOT NULL,
+artikel int(11) NOT NULL,
+vote int(11) NOT NULL,
+usr int(11) NOT NULL,
 datum varchar(20) NOT NULL default '',
 ip varchar(15) NOT NULL default '',
 PRIMARY KEY (id))";
