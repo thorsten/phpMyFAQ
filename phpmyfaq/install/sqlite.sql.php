@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: sqlite.sql.php,v 1.12 2006-05-28 19:26:08 thorstenr Exp $
+* $Id: sqlite.sql.php,v 1.13 2006-05-28 19:28:40 thorstenr Exp $
 *
 * CREATE TABLE instructions for SQLite
 *
@@ -168,8 +168,7 @@ group_id INT(11) NOT NULL,
 name VARCHAR(25) NULL,
 description TEXT NULL,
 auto_join INT(1) NULL,
-PRIMARY KEY(group_id),
-UNIQUE INDEX name(name)
+PRIMARY KEY(group_id)
 )";
 
 //faqgroup_right
@@ -242,9 +241,7 @@ account_status VARCHAR(50) NULL,
 last_login TIMESTAMP(14) NULL,
 auth_source VARCHAR(100) NULL,
 member_since TIMESTAMP(14) NULL,
-PRIMARY KEY(user_id),
-UNIQUE INDEX session(session_id),
-UNIQUE INDEX login(login)
+PRIMARY KEY(user_id)
 )";
 
 //faquserdata
