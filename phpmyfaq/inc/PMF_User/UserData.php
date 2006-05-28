@@ -213,7 +213,7 @@ class PMF_UserData
             ".PMF_USER_SQLPREFIX."userdata
           (user_id, last_modified)
             VALUES
-          (".$this->_user_id.", ".date('Y-m-d H:i:s', time()).")"
+          (".$this->_user_id.", '".date('Y-m-d H:i:s', time())."')"
         );
         if (!$res)
             return false;
