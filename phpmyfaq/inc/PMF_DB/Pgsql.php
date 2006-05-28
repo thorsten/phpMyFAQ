@@ -30,8 +30,8 @@ class db_pgsql
      * @var   mixed
      * @see   connect(), query(), dbclose()
      */
-	var $conn = FALSE;
-    
+	var $conn = false;
+
     /**
      * The query log string
      *
@@ -39,18 +39,7 @@ class db_pgsql
      * @see   query()
      */
 	var $sqllog = "";
-	
-    /**
-     * Constructor
-     *
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2003-02-24
-     */
-	function db_pgsql()
-    {
-    }
-    
+
     /**
      * Connects to the database.
      *
@@ -60,7 +49,7 @@ class db_pgsql
      * @param   string $username
      * @param   string $password
      * @param   string $db_name
-     * @return  boolean TRUE, if connected, otherwise FALSE
+     * @return  boolean true, if connected, otherwise false
      * @access  public
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @author  Tom Rochester <tom.rochester@gmail.com>
@@ -69,10 +58,10 @@ class db_pgsql
 	function connect ($host, $user, $passwd, $db)
     {
 		/* if you use mysql_pconnect(), remove the next line: */
-        $this->conn = @pg_pconnect('host='.$host.' port=5432 dbname='.$db.' user='.$user.' password='.$passwd);
+        $this->conn = pg_pconnect('host='.$host.' port=5432 dbname='.$db.' user='.$user.' password='.$passwd);
         /* comment out for more speed with mod_php or on Windows */
         // $this->conn = @pg_pconnect("host=$host port=5432 dbname=$db user=$user password=$passwd");
-		if (empty($db) OR $this->conn == FALSE) {
+		if (empty($db) || $this->conn == false) {
 			print "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n";
             print "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n";
             print "<head>\n";
@@ -84,11 +73,11 @@ class db_pgsql
 			print "<p align=\"center\">The error message of the PostgresSQL server:<br />".pg_last_error($this->conn)."</p>\n";
 			print "</body>\n";
             print "</html>";
-            return FALSE;
+            return false;
 			}
-		return TRUE;
+		return true;
     }
-	
+
     /**
      * Sends a query to the database.
      *
@@ -104,13 +93,9 @@ class db_pgsql
 	function query($query)
     {
 		$this->sqllog .= $query."<br />\n";
-        if (function_exists('pg_query')) {
-            return @pg_query($this->conn, $query);
-        } else {
-            return @pg_exec($this->conn, $query);
-        }
+        return pg_query($this->conn, $query);
     }
-    
+
     /**
     * Escapes a string for use in a query
     *
@@ -122,13 +107,9 @@ class db_pgsql
     */
 	function escape_string($string)
     {
-        if (function_exists('pg_escape_string')) {
-            return @pg_escape_string($string);
-        } else {
-            return addslashes($string);
-        }
+        return pg_escape_string($string);
     }
-	
+
     /**
      * Fetch a result row as an object
      *
@@ -143,12 +124,11 @@ class db_pgsql
      */
 	function fetch_object($result)
     {
-		$ret = @pg_fetch_object($result);
-        return $ret;
+		return pg_fetch_object($result);
     }
-	
-	
-    
+
+
+
     /**
      * Fetch a result row as an object
      *
@@ -163,14 +143,9 @@ class db_pgsql
      */
 	function fetch_assoc($result)
     {
-		if (!function_exists('pg_fetch_assoc')) {
-     		$ret = @pg_fetch_array($result, NULL, PGSQL_ASSOC);
-        } else {
-			$ret = @pg_fetch_assoc($result);
-        }
-        return $ret;
+        return pg_fetch_array($result, NULL, PGSQL_ASSOC);
     }
-	
+
     /**
      * Number of rows in a result
      *
@@ -183,13 +158,9 @@ class db_pgsql
      */
 	function num_rows($result)
     {
-		if (function_exists('pg_num_rows')) {
-            return @pg_num_rows($result);
-        } else {
-            return @pg_numrows($result);
-        }
+        return pg_num_rows($result);
     }
-	
+
     /**
      * Returns the ID of the latest insert
      *
@@ -203,9 +174,9 @@ class db_pgsql
     {
  		$res = $this->query("SELECT last_value FROM ".$table."_".$field."_seq");
  		$row = pg_fetch_row($res, 0);
- 		return $row[0]; 
+ 		return $row[0];
     }
-    
+
     /**
      * Logs the queries
      *
@@ -217,10 +188,9 @@ class db_pgsql
      */
 	function sqllog()
     {
-		$ret = $this->sqllog;
-        return $ret;
+		return $this->sqllog;
     }
-	
+
     /**
      * Closes the connection to the database.
      *
@@ -233,8 +203,7 @@ class db_pgsql
      */
 	function dbclose()
     {
-		$ret = @pg_close($this->conn);
-        return $ret;
+		return pg_close($this->conn);
     }
 
 	/**
@@ -246,11 +215,21 @@ class db_pgsql
      * @author  Tom Rochester <tom.rochester@gmail.com>
      * @since   2004-08-06
      */
-	function fti_check() { return FALSE; }
+	function fti_check() { return false; }
 
+    /**
+    * getOne
+    *
+    * TODO: add documentation
+    *
+    * @param    string
+    * @return   string
+    * @author  Tom Rochester <tom.rochester@gmail.com>
+    * @since   2004-08-06
+    */
 	function getOne($query)
 	{
-		$row = $this->fetch_row($this->query($query));
+		$row = pg_fetch_row($this->query($query));
 		return $row[0];
 	}
 
@@ -265,7 +244,7 @@ class db_pgsql
      */
 	function getTableStatus()
 	{
-		$select = "SELECT relname FROM pg_stat_user_tables ORDER BY relname;";	
+		$select = "SELECT relname FROM pg_stat_user_tables ORDER BY relname;";
 		$arr = array();
 		$result = $this->query($select);
 		while ($row = $this->fetch_assoc($result)) {
@@ -291,56 +270,56 @@ class db_pgsql
         $joined = "";
 		$where = "";
 		foreach ($assoc as $field) {
-            
+
             if (empty($fields)) {
-				
+
                 $fields = $field;
 			} else {
-				
+
                 $fields .= ", ".$field;
             }
 		}
-        
+
         if (isset($joinedTable) && $joinedTable != '') {
-            
+
             $joined .= ' LEFT JOIN '.$joinedTable.' ON ';
         }
-        
+
         if (is_array($joinAssoc)) {
-            
+
             foreach ($joinAssoc as $joinedFields) {
                 $joined .= $joinedFields.' AND ';
                 }
             $joined = substr($joined, 0, -4);
         }
-        
-		foreach($cond as $field=>$data) {
+
+		foreach ($cond as $field => $data) {
 			if (empty($where)) {
-				$where = $field."='".pg_escape_string($data)."'";
+				$where .= $field." = ".$data;
             } else {
-				$where .= "AND ".$field."='".pg_escape_string($data)."'";
+				$where .= " AND ".$field." = ".$data;
             }
 		}
-	    
+
 		$match = implode("|| ' ' ||", $match);
-        
-		if ($this->fti_check() == FALSE)  {
+
+		if ($this->fti_check() == false)  {
 			$query = "SELECT ".$fields." FROM ".$table.$joined." WHERE (".$match.") ILIKE ('%".$string."%')";
         } else {
 			// use fti postgres extension - NOT IMPLEMENTED
 		}
-        
+
 		if (!empty($where)) {
 			$query .= " AND (".$where.")";
         }
-		
+
         if (is_numeric($string)) {
             $query = "SELECT ".$fields." FROM ".$table.$joined." WHERE ".$match." = ".$string;
         }
-        
+
 		return $this->query($query);
 	}
-	
+
 	/**
 	* Returns the next ID of a table
 	*
@@ -360,7 +339,7 @@ class db_pgsql
 	    $currentID = pg_result($result, 0, 'current_id');
 	    return ($currentID);
 	}
-		
+
 	/**
     * Returns the error string.
     *
@@ -372,8 +351,8 @@ class db_pgsql
     */
 
 	function error()
-	{ 
-	    return pg_last_error(); 
+	{
+	    return pg_last_error();
 	}
 
 	/**
@@ -424,4 +403,3 @@ class db_pgsql
         }
     }
 }
-?>

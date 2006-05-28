@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Mssql.php,v 1.3 2006-03-15 21:37:12 thorstenr Exp $
+* $Id: Mssql.php,v 1.4 2006-05-28 17:21:48 thorstenr Exp $
 *
 * db_mssql
 *
@@ -11,7 +11,7 @@
 * @author       Daniel Hoechst <dhoechst@petzl.com>
 * @package      db_mssql
 * @since        2005-01-11
-* @copyright    (c) 2005-2006 phpMyFAQ Team
+* @copyright    (c) 2006 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -41,17 +41,6 @@ class db_mssql
      * @see   query()
      */
 	var $sqllog = "";
-
-    /**
-     * Constructor
-     *
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2005-01-11
-     */
-	function db_mssql()
-    {
-    }
 
     /**
      * Connects to the database.
@@ -265,7 +254,7 @@ class db_mssql
 
 		for ($i = 0; $i < $numKeys; $i++) {
             if (strlen($where) != 0 ) {
-                $where = $where;
+                $where = $where." OR";
             }
 			$where = $where." (";
 			for ($j = 0; $j < $numMatch; $j++) {
@@ -278,11 +267,11 @@ class db_mssql
 			$where .= ")";
 		}
 
-		foreach($cond as $field => $data) {
+		foreach ($cond as $field => $data) {
 			if (empty($where)) {
-				$where .= $field." = '".$data."'";
+				$where .= $field." = ".$data;
             } else {
-				$where .= " AND ".$field." = '".$data."'";
+				$where .= " AND ".$field." = ".$data;
             }
 		}
 
@@ -369,4 +358,3 @@ class db_mssql
         }
     }
 }
-?>

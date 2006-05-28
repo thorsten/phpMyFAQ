@@ -1,11 +1,11 @@
 <?php
 /**
-* $Id: Mysqli.php,v 1.3 2006-03-11 21:49:21 thorstenr Exp $
+* $Id: Mysqli.php,v 1.4 2006-05-28 17:21:48 thorstenr Exp $
 *
 * db_mysqli
 *
-* The db_mysqli class provides methods and functions for a MySQL 4.1.x 
-* and 5.0.x database.
+* The db_mysqli class provides methods and functions for a MySQL 4.1.x,
+* 5.0.x and 5.1.x databases.
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       David Soria Parra <dsoria@gmx.net>
@@ -32,27 +32,16 @@ class db_mysqli
      * @var   mixed
      * @see   connect(), query(), dbclose()
      */
-	var $conn = false;
-    
+	private $conn = false;
+
     /**
      * The query log string
      *
      * @var   string
      * @see   query()
      */
-	var $sqllog = "";
-	
-    /**
-     * Constructor
-     *
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2005-02-21
-     */
-    function __construct()
-    {
-    }
-    
+	private $sqllog = '';
+
     /**
      * Connects to the database.
      *
@@ -67,7 +56,7 @@ class db_mysqli
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-02-21
      */
-	function connect ($host, $user, $passwd, $db)
+	public function connect($host, $user, $passwd, $db)
     {
 		$this->conn = new mysqli($host, $user, $passwd, $db);
 		if (mysqli_connect_errno()) {
@@ -86,9 +75,9 @@ class db_mysqli
         }
 		return true;
     }
-	
-    
-    
+
+
+
     /**
      * Sends a query to the database.
      *
@@ -100,14 +89,14 @@ class db_mysqli
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-02-21
      */
-	function query($query)
+	public function query($query)
     {
 		$this->sqllog .= $query."<br />\n";
 		return $this->conn->query($query);
     }
-    
-    
-	
+
+
+
     /**
     * Escapes a string for use in a query
     *
@@ -117,13 +106,13 @@ class db_mysqli
     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
     * @since   2004-12-16
     */
-	function escape_string($string)
+	public function escape_string($string)
     {
       return $this->conn->real_escape_string($string);
     }
-    
-    
-    
+
+
+
     /**
      * Fetch a result row as an object
      *
@@ -135,13 +124,13 @@ class db_mysqli
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-02-21
      */
-	function fetch_object($result)
+	public function fetch_object($result)
     {
 		return $result->fetch_object();
     }
-	
-    
-    
+
+
+
     /**
      * Fetch a result row as an object
      *
@@ -153,13 +142,13 @@ class db_mysqli
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-02-21
      */
-	function fetch_assoc($result)
+	public function fetch_assoc($result)
     {
 		return $result->fetch_assoc();
     }
-	
-    
-    
+
+
+
     /**
      * Number of rows in a result
      *
@@ -169,11 +158,11 @@ class db_mysqli
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-02-21
      */
-	function num_rows($result)
+	public function num_rows($result)
     {
 		return $result->num_rows;
     }
-	
+
     /**
      * Returns the ID of the latest insert
      *
@@ -182,12 +171,12 @@ class db_mysqli
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-02-21
      */
-	function insert_id($table, $field)
+	public function insert_id($table, $field)
     {
 		$result = $this->query('SELECT max('.$field.') AS last_id FROM '.$table);
 		return $this->fetch_object($result)->last_id;
     }
-    
+
     /**
      * Logs the queries
      *
@@ -197,13 +186,13 @@ class db_mysqli
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-02-21
      */
-	function sqllog()
+	public function sqllog()
     {
 		return $this->sqllog;
     }
-	
-    
-    
+
+
+
 	 /**
      * Generates a result based on search a search string.
      *
@@ -213,56 +202,56 @@ class db_mysqli
      * @author  Tom Rochester <tom.rochester@gmail.com>
      * @since   2005-02-21
      */
-	function search($table, $assoc, $joinedTable = '', $joinAssoc = array(), $match = array(), $string = '', $cond = array())
+	public function search($table, $assoc, $joinedTable = '', $joinAssoc = array(), $match = array(), $string = '', $cond = array())
 	{
 		$string = $this->escape_string(trim($string));
 		$fields = "";
         $joined = "";
 		$where = "";
 		foreach ($assoc as $field) {
-            
+
             if (empty($fields)) {
-				
+
                 $fields = $field;
 			} else {
-				
+
                 $fields .= ", ".$field;
             }
 		}
-        
+
         if (isset($joinedTable) && $joinedTable != '') {
-            
+
             $joined .= ' LEFT JOIN '.$joinedTable.' ON ';
         }
-        
+
         if (is_array($joinAssoc)) {
-            
+
             foreach ($joinAssoc as $joinedFields) {
                 $joined .= $joinedFields.' AND ';
                 }
             $joined = substr($joined, 0, -4);
         }
-        
+
 		foreach ($cond as $field => $data) {
 			if (empty($where)) {
-				$where = $field." = '".$this->escape_string($data)."'";
-			} else {
-				$where .= "AND ".$field." ='".$this->escape_string($data)."'";
+				$where .= $field." = ".$data;
+            } else {
+				$where .= " AND ".$field." = ".$data;
             }
 		}
-	    
+
 		$match = implode(",", $match);
-        
+
         if (is_numeric($string)) {
             $query = "SELECT ".$fields." FROM ".$table.$joined." WHERE ".$match." = ".$string;
         } else {
             $query = "SELECT ".$fields." FROM ".$table.$joined." WHERE MATCH (".$match.") AGAINST ('".$string."' IN BOOLEAN MODE)";
         }
-        
+
 		if (!empty($where)) {
 			$query .= " AND (".$where.")";
         }
-        
+
 		return $this->query($query);
 	}
 
@@ -275,7 +264,7 @@ class db_mysqli
      * @author  Tom Rochester <tom.rochester@gmail.com>
      * @since   2005-02-21
      */
-	function getTableStatus() 
+	public function getTableStatus()
 	{
 		$arr = array();
 		$result = $this->query("SHOW TABLE STATUS");
@@ -298,13 +287,13 @@ class db_mysqli
 	* @author  Thorsten Rinne <thorsten@phpmyfaq.de>
 	* @since   2005-02-21
 	*/
-	function nextID($table, $id)
+	public function nextID($table, $id)
 	{
 	    $result = $this->query('SELECT max('.$id.') as current_id FROM '.$table);
 	    $currentID = $this->fetch_object($result)->current_id;
 	    return ($currentID + 1);
 	}
-	
+
 	 /**
      * Returns the error string.
      *
@@ -314,9 +303,9 @@ class db_mysqli
      * @author  Tom Rochester <tom.rochester@gmail.com>
      * @since   2005-02-21
      */
-	function error()
+	public function error()
     {
-        return @$this->conn->error();
+        return $this->conn->error();
     }
 
     /**
@@ -328,9 +317,9 @@ class db_mysqli
      * @author  Tom Rochester <tom.rochester@gmail.com>
      * @since   2005-02-21
      */
-	function client_version()
+	public function client_version()
     {
-        return @$this->conn->get_client_info();
+        return $this->conn->get_client_info();
     }
 
     /**
@@ -342,9 +331,9 @@ class db_mysqli
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-02-21
      */
-	function server_version()
+	public function server_version()
     {
-        return @$this->conn->get_server_info();
+        return $this->conn->get_server_info();
     }
 
     /**
@@ -356,10 +345,9 @@ class db_mysqli
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-02-21
      */
-	function dbclose()
+	public function dbclose()
     {
-		return @$this->conn->close();
+		return $this->conn->close();
     }
 
 }
-?>

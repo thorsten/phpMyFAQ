@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Sybase.php,v 1.2 2006-01-02 16:51:29 thorstenr Exp $
+* $Id: Sybase.php,v 1.3 2006-05-28 17:21:48 thorstenr Exp $
 *
 * db_sybase
 *
@@ -33,7 +33,7 @@ class db_sybase
      * @see   connect(), query(), dbclose()
      */
 	var $conn = FALSE;
-    
+
     /**
      * The query log string
      *
@@ -41,7 +41,7 @@ class db_sybase
      * @see   query()
      */
 	var $sqllog = "";
-	
+
     /**
      * Constructor
      *
@@ -53,7 +53,7 @@ class db_sybase
     {
         return $this->__construct();
     }
-    
+
     function __construct()
     {
         if (function_exists('sybase_min_client_severity')) {
@@ -72,7 +72,7 @@ class db_sybase
             sybase_min_message_severity(9);
         }
     }
-    
+
     /**
      * Connects to the database.
      *
@@ -106,7 +106,7 @@ class db_sybase
         }
 		return @sybase_select_db($db, $this->conn);
     }
-	
+
     /**
      * Sends a query to the database.
      *
@@ -123,7 +123,7 @@ class db_sybase
 		$this->sqllog .= $query."<br />\n";
 		return @sybase_query($query, $this->conn);
     }
-    
+
     /**
     * Escapes a string for use in a query
     *
@@ -137,7 +137,7 @@ class db_sybase
     {
         return str_replace("'", "''", $string);
     }
-	
+
     /**
      * Fetch a result row as an object
      *
@@ -153,9 +153,9 @@ class db_sybase
     {
 		return @sybase_fetch_object($result);
     }
-	
-	
-    
+
+
+
     /**
      * Fetch a result row as an array
      *
@@ -176,7 +176,7 @@ class db_sybase
       }
 		return $rs;
     }
-	
+
     /**
      * Number of rows in a result
      *
@@ -190,10 +190,10 @@ class db_sybase
     {
 		return @sybase_num_rows($result);
     }
-	
+
     /**
      * Returns the ID of the latest insert
-     *	
+     *
      * @return  integer
      * @access  public
      * @author  Adam Greene <phpmyfaq@skippy.fastmail.fm>
@@ -210,7 +210,7 @@ class db_sybase
     }
 		return 1;
   }
-    
+
     /**
      * Logs the queries
      *
@@ -224,9 +224,9 @@ class db_sybase
     {
 		return $this->sqllog;
     }
-	
-    
-    
+
+
+
 	 /**
      * Generates a result based on search a search string.
      *
@@ -244,7 +244,7 @@ class db_sybase
         $join = '';
         $joined = '';
 		$where = '';
-        
+
 		foreach ($assoc as $field) {
             if (empty($fields)) {
                 $fields = $field;
@@ -252,25 +252,25 @@ class db_sybase
                 $fields .= ", ".$field;
             }
 		}
-        
+
         if (isset($joinedTable) && $joinedTable != '') {
             $joined .= ' LEFT JOIN '.$joinedTable.' ON ';
         }
-        
+
         if (is_array($joinAssoc)) {
             foreach ($joinAssoc as $joinedFields) {
                 $join .= $joinedFields.' AND ';
                 }
             $joined .= substr($join, 0, -4);
         }
-        
+
         $keys = preg_split("/\s+/", $string);
         $numKeys = count($keys);
 		$numMatch = count($match);
-		
+
 		for ($i = 0; $i < $numKeys; $i++) {
             if (strlen($where) != 0 ) {
-                $where = $where;
+                $where = $where." OR";
             }
 			$where = $where." (";
 			for ($j = 0; $j < $numMatch; $j++) {
@@ -279,31 +279,31 @@ class db_sybase
 				}
 		    	$where = $where.$match[$j]." LIKE '%".$keys[$i]."%'";
 		    }
-			
+
 			$where .= ")";
 		}
-        
-		foreach($cond as $field => $data) {
+
+		foreach ($cond as $field => $data) {
 			if (empty($where)) {
-				$where .= $field." = '".$data."'";
+				$where .= $field." = ".$data;
             } else {
-				$where .= " AND ".$field." = '".$data."'";
+				$where .= " AND ".$field." = ".$data;
             }
 		}
-        
+
         $query = "SELECT ".$fields." FROM ".$table.$joined." WHERE";
-        
+
 		if (!empty($where)) {
 			$query .= " (".$where.")";
         }
-        
+
         if (is_numeric($string)) {
             $query = "SELECT ".$fields." FROM ".$table.$joined." WHERE ".$match." = ".$string;
         }
-        
+
         return $this->query($query);
 	}
-    
+
 	 /**
      * Returns the error string.
      *
@@ -346,7 +346,7 @@ class db_sybase
 	    $currentID = sybase_result($result, 0, 'current_id');
 	    return ($currentID + 1);
 	}
-	
+
 	 /**
      * Returns the error string.
      *
@@ -409,4 +409,3 @@ class db_sybase
     }
 
 }
-?>
