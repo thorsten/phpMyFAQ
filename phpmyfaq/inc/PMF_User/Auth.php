@@ -1,8 +1,8 @@
 <?php
 /**
-* $Id: Auth.php,v 1.10 2006-01-07 17:32:29 b33blebr0x Exp $
+* $Id: Auth.php,v 1.11 2006-05-28 21:20:13 thorstenr Exp $
 *
-* manages user authentication. 
+* manages user authentication.
 *
 * Subclasses of Auth implement authentication functionality with different
 * types. The class AuthLdap for example provides authentication functionality
@@ -26,12 +26,12 @@
 * @package      PMF
 * @since        2005-09-30
 * @copyright    (c) 2005-2006 phpMyFAQ Team
-* 
+*
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
 * compliance with the License. You may obtain a copy of the License at
 * http://www.mozilla.org/MPL/
-* 
+*
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
@@ -39,7 +39,7 @@
 */
 
 /**
-* provides methods for password encryption. 
+* provides methods for password encryption.
 *
 * Subclasses (extends) of this class provide the encrypt() method that returns
 * encrypted string. For special encryption methods, just create a new class as
@@ -52,10 +52,9 @@ require_once(dirname(__FILE__).'/Enc.php');
 
 /* user defined constants */
 define('PMF_USERERROR_NO_AUTHTYPE', 'Specified authentication access class could not be found. ');
-define('PMF_USERERROR_LOGIN_NOT_UNIQUE', 'Specified login name already exists. ');
 
 /**
-* manages user authentication. 
+* manages user authentication.
 *
 * Subclasses of Auth implement authentication functionality with different
 * types. The class AuthLdap for expamle provides authentication functionality
@@ -162,7 +161,7 @@ class PMF_Auth
     /**
     * error()
     *
-    * Returns a string with error messages. 
+    * Returns a string with error messages.
     *
     * The string returned by error() contains messages for all errors that
     * during object procesing. Messages are separated by new lines.
@@ -189,7 +188,7 @@ class PMF_Auth
     /**
     * selectAuth()
     *
-    * Returns an authentication object with the specified database access. 
+    * Returns an authentication object with the specified database access.
     *
     * This method is called statically. The parameter database specifies the
     * of database access for the authentication object.
@@ -218,7 +217,7 @@ class PMF_Auth
         	return $auth;
         }
         require_once $classfile;
-        // instantiate 
+        // instantiate
         $authclass = "PMF_".$auth->_auth_typemap[$database];
 		$auth = new $authclass();
         return $auth;

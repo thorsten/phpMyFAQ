@@ -79,7 +79,7 @@ require_once dirname(__FILE__).'/UserData.php';
 @define('PMF_USER_SQLPREFIX', SQLPREFIX.'faq');
 @define('PMF_USERERROR_INVALID_STATUS', 'Undefined user status. ');
 @define('PMF_USERERROR_NO_USERID', 'No user-ID found. ');
-@define('PMF_USERERROR_LOGIN_NOT_UNIQUE', 'Login is not unique. ');
+@define('PMF_USERERROR_LOGIN_NOT_UNIQUE', 'Specified login name already exists. ');
 @define('PMF_USERERROR_LOGIN_INVALID', 'The chosen login is invalid. A valid login has at least four characters. Only letters, numbers and underscore _ are allowed. The first letter must be a letter. ');
 @define('PMF_UNDEFINED_PARAMETER', 'Following parameter must to be defined: ');
 @define('PMF_USERERROR_ADD', 'Account could not be created. ');
