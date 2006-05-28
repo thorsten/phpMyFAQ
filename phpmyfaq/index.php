@@ -1,9 +1,9 @@
 <?php
 /**
-* $Id: index.php,v 1.45 2006-05-14 12:18:52 johannes Exp $
+* $Id: index.php,v 1.46 2006-05-28 20:14:49 thorstenr Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
-* language, gets all cookie, post and get informations and includes the 
+* language, gets all cookie, post and get informations and includes the
 * templates we need and set all internal variables to the template variables.
 * That's all.
 *
@@ -49,7 +49,7 @@ PMF_Init::cleanRequest();
 //
 require_once('inc/parser.php');
 require_once('inc/captcha.php');
-require_once('inc/Category.php');
+require_once('inc/category.php');
 require_once('inc/Faq.php');
 require_once('inc/idna_convert.class.php');
 $IDN = new idna_convert;
