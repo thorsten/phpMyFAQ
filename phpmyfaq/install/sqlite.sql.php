@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: sqlite.sql.php,v 1.13 2006-05-28 19:28:40 thorstenr Exp $
+* $Id: sqlite.sql.php,v 1.14 2006-05-28 19:30:39 thorstenr Exp $
 *
 * CREATE TABLE instructions for SQLite
 *
@@ -228,7 +228,7 @@ $query[] = "CREATE TABLE ".$sqltblpre."faqsessions (
 sid int(11) NOT NULL,
 ip text NOT NULL,
 time int(11) NOT NULL,
-PRIMARY KEY sid (sid))";
+PRIMARY KEY (sid))";
 
 //faquser
 $query[] = "CREATE TABLE ".$sqltblpre."faquser (
