@@ -88,7 +88,7 @@ class PMF_PermBasic
         if (!$this->_initialized)
         	return false;
         // check right id
-        if ($right_id <= 0) 
+        if ($right_id <= 0)
             return false;
         // check right
         $res = $this->_db->query("
@@ -105,7 +105,7 @@ class PMF_PermBasic
                 ".PMF_USER_SQLPREFIX."user.user_id   = ".PMF_USER_SQLPREFIX."user_right.user_id
         ");
         // return result
-        if ($this->_db->num_rows($res) == 1) 
+        if ($this->_db->num_rows($res) == 1)
             return true;
         return false;
     }
@@ -197,9 +197,9 @@ class PMF_PermBasic
         $res = $this->_db->query("
             INSERT INTO
                 ".PMF_USER_SQLPREFIX."user_right
-            SET
-                user_id  = ".$user_id.",
-                right_id = ".$right_id
+            (user_id, right_id)
+                VALUES
+            (".$user_id.", ".$right_id.")"
         );
         if (!$res)
             return false;
@@ -275,7 +275,7 @@ class PMF_PermBasic
         	return false;
         // get right data
         $res = $this->_db->query("
-            SELECT 
+            SELECT
                 right_id,
                 name,
                 description,
@@ -286,7 +286,7 @@ class PMF_PermBasic
             WHERE
                 right_id = ".$right_id
         );
-        if ($this->_db->num_rows($res) != 1) 
+        if ($this->_db->num_rows($res) != 1)
             return false;
         // process right data
         $right_data = $this->_db->fetch_assoc($res);
@@ -342,14 +342,11 @@ class PMF_PermBasic
         $res = $this->_db->query("
             INSERT INTO
                 ".PMF_USER_SQLPREFIX."right
-            SET
-                right_id    = ".$next_id.",
-                name        = '".$right_data['name']."',
-                description = '".$right_data['description']."',
-                for_users   = ".$this->bool_to_int($right_data['for_users']).",
-                for_groups  = ".$this->bool_to_int($right_data['for_groups'])
+            (right_id, name, description, for_users, for_groups)
+                VALUES
+            (".$next_id.", '".$right_data['name']."', '".$right_data['description']."', ".$this->bool_to_int($right_data['for_users']).", ".$this->bool_to_int($right_data['for_groups']).")"
         );
-        if (!$res) 
+        if (!$res)
             return 0;
         // insert context data
         if (count($context_data) > 0) {
@@ -402,7 +399,7 @@ class PMF_PermBasic
             WHERE
                 right_id = ".$right_id
         );
-        if (!$res) 
+        if (!$res)
             return false;
         // change right context
         if (count($context_data) > 0) {
@@ -443,7 +440,7 @@ class PMF_PermBasic
             WHERE
                 right_id = ".$right_id."
         ");
-        if (!$res) 
+        if (!$res)
             return false;
         // delete user-right links
         $res = $this->_db->query("
@@ -452,7 +449,7 @@ class PMF_PermBasic
             WHERE
                 right_id = ".$right_id."
         ");
-        if (!$res) 
+        if (!$res)
             return false;
         // delete group-right links
         $res = $this->_db->query("
@@ -461,7 +458,7 @@ class PMF_PermBasic
             WHERE
                 right_id = ".$right_id."
         ");
-        if (!$res) 
+        if (!$res)
             return false;
         // delete right context
         $res = $this->_db->query("
@@ -470,7 +467,7 @@ class PMF_PermBasic
             WHERE
                 right_id = ".$right_id."
         ");
-        if (!$res) 
+        if (!$res)
             return false;
         return true;
     }
@@ -495,7 +492,7 @@ class PMF_PermBasic
                 right_id
             FROM
                 ".PMF_USER_SQLPREFIX."right
-            WHERE 
+            WHERE
                 name = '".$name."'
         ");
         // return result
@@ -594,7 +591,7 @@ class PMF_PermBasic
             $right_data['name'] = $this->default_right_data['name'];
         if (!isset($right_data['description']) or !is_string($right_data['description']))
             $right_data['description'] = $this->default_right_data['description'];
-        if (!isset($right_data['for_users'])) 
+        if (!isset($right_data['for_users']))
             $right_data['for_users'] = $this->default_right_data['for_users'];
         if (!isset($right_data['for_groups']))
             $right_data['for_groups'] = $this->default_right_data['for_groups'];
