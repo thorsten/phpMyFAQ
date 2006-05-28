@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: sqlite.sql.php,v 1.9 2006-05-28 19:16:26 thorstenr Exp $
+* $Id: sqlite.sql.php,v 1.10 2006-05-28 19:21:15 thorstenr Exp $
 *
 * CREATE TABLE instructions for SQLite
 *
@@ -135,7 +135,7 @@ datum varchar(15) NOT NULL,
 linkState VARCHAR(7) NOT NULL,
 linkCheckDate INT(11) DEFAULT '0' NOT NULL,
 FULLTEXT (keywords,thema,content),
-PRIMARY KEY (id, lang)) TYPE = MYISAM";
+PRIMARY KEY (id, lang))";
 
 //faqdata_revisions
 $query[] = "CREATE TABLE ".$sqltblpre."faqdata_revisions (
