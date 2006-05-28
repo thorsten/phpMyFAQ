@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: sqlite.sql.php,v 1.8 2006-05-28 19:12:10 thorstenr Exp $
+* $Id: sqlite.sql.php,v 1.9 2006-05-28 19:16:26 thorstenr Exp $
 *
 * CREATE TABLE instructions for SQLite
 *
@@ -57,9 +57,9 @@ PRIMARY KEY (id))";
 
 //faqadminsessions
 $query[] = "CREATE TABLE ".$sqltblpre."faqadminsessions (
-uin varchar(50) BINARY NOT NULL,
+uin varchar(50) NOT NULL,
 usr tinytext NOT NULL,
-pass varchar(64) BINARY NOT NULL,
+pass varchar(64) NOT NULL,
 ip text NOT NULL,
 time int(11) NOT NULL)";
 
