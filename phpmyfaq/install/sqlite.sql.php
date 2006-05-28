@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: sqlite.sql.php,v 1.7 2006-05-28 19:04:20 thorstenr Exp $
+* $Id: sqlite.sql.php,v 1.8 2006-05-28 19:12:10 thorstenr Exp $
 *
 * CREATE TABLE instructions for SQLite
 *
@@ -47,7 +47,7 @@ $uninst[] = "DROP TABLE ".$sqltblpre."faqvisits";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqvoting";
 
 //faqadminlog
-$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqadminlog (
+$query[] = "CREATE TABLE ".$sqltblpre."faqadminlog (
 id int(11) NOT NULL,
 time int(11) NOT NULL,
 usr int(11) NOT NULL,
@@ -56,7 +56,7 @@ ip text NOT NULL,
 PRIMARY KEY (id))";
 
 //faqadminsessions
-$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqadminsessions (
+$query[] = "CREATE TABLE ".$sqltblpre."faqadminsessions (
 uin varchar(50) BINARY NOT NULL,
 usr tinytext NOT NULL,
 pass varchar(64) BINARY NOT NULL,
@@ -73,7 +73,7 @@ captcha_time int(11) NOT NULL,
 PRIMARY KEY (id))";
 
 //faqcategories
-$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqcategories (
+$query[] = "CREATE TABLE ".$sqltblpre."faqcategories (
 id INT(11) NOT NULL,
 lang VARCHAR(5) NOT NULL,
 parent_id INT(11) NOT NULL,
@@ -92,7 +92,7 @@ PRIMARY KEY  (category_id,category_lang,record_id,record_lang)
 )";
 
 //faqchanges
-$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqchanges (
+$query[] = "CREATE TABLE ".$sqltblpre."faqchanges (
 id int(11) NOT NULL,
 beitrag int(11) NOT NULL,
 lang varchar(5) NOT NULL,
@@ -102,7 +102,7 @@ what text NOT NULL,
 PRIMARY KEY (id))";
 
 //faqcomments
-$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqcomments (
+$query[] = "CREATE TABLE ".$sqltblpre."faqcomments (
 id_comment int(11) NOT NULL,
 id int(11) NOT NULL,
 usr varchar(255) NOT NULL,
@@ -119,7 +119,7 @@ config_value varchar(255) NOT NULL default '',
 PRIMARY KEY (config_name))";
 
 //faqdata
-$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqdata (
+$query[] = "CREATE TABLE ".$sqltblpre."faqdata (
 id int(11) NOT NULL,
 lang varchar(5) NOT NULL,
 solution_id int(11) NOT NULL,
@@ -164,7 +164,7 @@ definition TEXT NOT NULL,
 PRIMARY KEY (id, lang))";
 
 //faqgroup
-$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqgroup (
+$query[] = "CREATE TABLE ".$sqltblpre."faqgroup (
 group_id INT(11) UNSIGNED NOT NULL,
 name VARCHAR(25) NULL,
 description TEXT NULL,
@@ -174,7 +174,7 @@ UNIQUE INDEX name(name)
 )";
 
 //faqgroup_right
-$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqgroup_right (
+$query[] = "CREATE TABLE ".$sqltblpre."faqgroup_right (
 group_id INT(11) UNSIGNED NOT NULL,
 right_id INT(11) UNSIGNED NOT NULL,
 PRIMARY KEY(group_id, right_id)
@@ -195,7 +195,7 @@ PRIMARY KEY (id)
 )";
 
 //faqnews
-$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqnews (
+$query[] = "CREATE TABLE ".$sqltblpre."faqnews (
 id int(11) NOT NULL,
 header varchar(255) NOT NULL,
 artikel text NOT NULL,
@@ -206,7 +206,7 @@ target varchar(255) NOT NULL,
 PRIMARY KEY (id))";
 
 //faqquestions
-$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqquestions (
+$query[] = "CREATE TABLE ".$sqltblpre."faqquestions (
 id int(11) unsigned NOT NULL,
 ask_username varchar(100) NOT NULL,
 ask_usermail varchar(100) NOT NULL,
@@ -216,7 +216,7 @@ ask_date varchar(20) NOT NULL,
 PRIMARY KEY (id))";
 
 //faqright
-$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqright (
+$query[] = "CREATE TABLE ".$sqltblpre."faqright (
 right_id INT(11) UNSIGNED NOT NULL,
 name VARCHAR(50) NULL,
 description TEXT NULL,
@@ -226,14 +226,14 @@ PRIMARY KEY(right_id)
 )";
 
 //faqsessions
-$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqsessions (
+$query[] = "CREATE TABLE ".$sqltblpre."faqsessions (
 sid int(11) NOT NULL,
 ip text NOT NULL,
 time int(11) NOT NULL,
 PRIMARY KEY sid (sid))";
 
 //faquser
-$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faquser (
+$query[] = "CREATE TABLE ".$sqltblpre."faquser (
 user_id INT(11) UNSIGNED NOT NULL,
 login VARCHAR(25) NOT NULL,
 session_id VARCHAR(150) NULL,
@@ -249,7 +249,7 @@ UNIQUE INDEX login(login)
 )";
 
 //faquserdata
-$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faquserdata (
+$query[] = "CREATE TABLE ".$sqltblpre."faquserdata (
 user_id INT(11) UNSIGNED NOT NULL,
 last_modified TIMESTAMP(14) NULL,
 display_name VARCHAR(50) NULL,
@@ -257,28 +257,28 @@ email VARCHAR(100) NULL
 )";
 
 //faquserlogin
-$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faquserlogin (
+$query[] = "CREATE TABLE ".$sqltblpre."faquserlogin (
 login VARCHAR(25) NOT NULL,
 pass VARCHAR(150) NULL,
 PRIMARY KEY(login)
 )";
 
 //Sfaquser_group
-$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faquser_group (
+$query[] = "CREATE TABLE ".$sqltblpre."faquser_group (
 user_id INT(11) UNSIGNED NOT NULL,
 group_id INT(11) UNSIGNED NOT NULL,
 PRIMARY KEY(user_id, group_id)
 )";
 
 //faquser_login
-$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faquser_right (
+$query[] = "CREATE TABLE ".$sqltblpre."faquser_right (
 user_id INT(11) UNSIGNED NOT NULL,
 right_id INT(11) UNSIGNED NOT NULL,
 PRIMARY KEY(user_id, right_id)
 )";
 
 //faqvisits
-$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqvisits (
+$query[] = "CREATE TABLE ".$sqltblpre."faqvisits (
 id int(11) NOT NULL,
 lang varchar(5) NOT NULL,
 visits int(11) NOT NULL,
@@ -286,7 +286,7 @@ last_visit int(15) NOT NULL,
 PRIMARY KEY (id, lang))";
 
 //faqvoting
-$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqvoting (
+$query[] = "CREATE TABLE ".$sqltblpre."faqvoting (
 id int(11) unsigned NOT NULL,
 artikel int(11) unsigned NOT NULL,
 vote int(11) unsigned NOT NULL,
