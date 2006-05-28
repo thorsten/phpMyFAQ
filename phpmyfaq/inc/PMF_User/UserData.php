@@ -71,14 +71,14 @@ class PMF_UserData
 		    ".$fields."
 		  FROM
 		    ".PMF_USER_SQLPREFIX."userdata
-		  WHERE 
+		  WHERE
 		    user_id = ".$this->_user_id
-        ); 
-        
-		if ($this->_db->num_rows($res) != 1) 
+        );
+
+		if ($this->_db->num_rows($res) != 1)
 		    return false;
 		$arr = $this->_db->fetch_assoc($res);
-		if ($single_return and $field != '*') 
+		if ($single_return and $field != '*')
 		    return $arr[$field];
 		return $arr;
     }
@@ -101,7 +101,7 @@ class PMF_UserData
             $field = array($field);
         if (!is_array($value))
             $value = array($value);
-        if (count($field) != count($value)) 
+        if (count($field) != count($value))
             return false;
         // update data
         for ($i = 0; $i < count($field); $i++) {
@@ -147,16 +147,16 @@ class PMF_UserData
     {
         // check user-ID
         $user_id = (int) $user_id;
-        if ($user_id <= 0) 
+        if ($user_id <= 0)
             return false;
         $this->_user_id = $user_id;
         // load data
         $res = $this->_db->query("
-          SELECT 
+          SELECT
             last_modified, display_name, email
           FROM
             ".PMF_USER_SQLPREFIX."userdata
-          WHERE 
+          WHERE
             user_id = ".$this->_user_id
         );
         if ($this->_db->num_rows($res) != 1)
@@ -180,13 +180,13 @@ class PMF_UserData
           UPDATE
             ".PMF_USER_SQLPREFIX."userdata
           SET
-            last_modified = NOW(),
+            last_modified = '".date('Y-m-d H:i:s', time())."',
             display_name = '".$this->_data['display_name']."',
             email        = '".$this->_data['email']."'
-          WHERE 
+          WHERE
             user_id = ".$this->_user_id
         );
-        if (!$res) 
+        if (!$res)
             return false;
         return true;
     }
@@ -204,18 +204,18 @@ class PMF_UserData
     {
         // check user-ID
         $user_id = (int) $user_id;
-        if ($user_id <= 0) 
+        if ($user_id <= 0)
             return false;
         $this->_user_id = $user_id;
         // add entry
         $res = $this->_db->query("
           INSERT INTO
             ".PMF_USER_SQLPREFIX."userdata
-          SET
-            user_id      = ".$this->_user_id.", 
-            last_modified = NOW()
-        ");
-        if (!$res) 
+          (user_id, last_modified)
+            VALUES
+          (".$this->_user_id.", ".date('Y-m-d H:i:s', time()).")"
+        );
+        if (!$res)
             return false;
         return true;
     }
@@ -233,7 +233,7 @@ class PMF_UserData
     {
         // check user-ID
         $user_id = (int) $user_id;
-        if ($user_id <= 0) 
+        if ($user_id <= 0)
             return false;
         $this->_user_id = $user_id;
         // delete entry
@@ -243,7 +243,7 @@ class PMF_UserData
           WHERE
             user_id = ".$this->_user_id
         );
-        if (!$res) 
+        if (!$res)
             return false;
         $this->_data = array();
         return true;

@@ -1,18 +1,18 @@
 <?php
 /**
-* $Id: AuthDb.php,v 1.6 2006-01-03 15:09:03 thorstenr Exp $
+* $Id: AuthDb.php,v 1.7 2006-05-28 19:58:52 thorstenr Exp $
 *
 * manages user authentication with databases.
 *
 * @author       Lars Tiedemann <php@larstiedemann.de>
 * @since        2005-09-30
 * @copyright    (c) 2005-2006 phpMyFAQ Team
-* 
+*
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
 * compliance with the License. You may obtain a copy of the License at
 * http://www.mozilla.org/MPL/
-* 
+*
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
@@ -95,7 +95,7 @@ class PMF_AuthDb extends PMF_Auth
     *
     * Adds a new user account to the authentication table.
     *
-    * Returns true on success, otherwise false. 
+    * Returns true on success, otherwise false.
     *
     * Error messages are added to the array errors.
     *
@@ -115,20 +115,20 @@ class PMF_AuthDb extends PMF_Auth
         	$this->errors[] = PMF_USERERROR_ADD . PMF_USERERROR_LOGIN_NOT_UNIQUE;
         	return false;
         }
-		// add user account to authentication table        
+		// add user account to authentication table
         $add = "
-		  INSERT INTO 
+		  INSERT INTO
 		    ".$this->_tablename()."
-		  SET
-		    ".$this->_login_column()   ." = '".$login."',
-		    ".$this->_password_column()." = '".$this->_enc_container->encrypt($pass)."' 
+		  (".$this->_login_column().", ".$this->_password_column().")
+		    VALUES
+		  ('".$login."', '".$this->_enc_container->encrypt($pass)."')
 		";
         $add = $this->_db->query($add);
         $error = $this->_db->error();
 		if (strlen($error) > 0) {
 		    $this->errors[] = PMF_USERERROR_ADD . 'error(): ' . $error;
 			return false;
-		} 
+		}
 		if (!$add) {
 			$this->errors[] = PMF_USERERROR_ADD;
 			return false;
@@ -139,9 +139,9 @@ class PMF_AuthDb extends PMF_Auth
     /**
     * changePassword()
     *
-    * changes the password for the account specified by login. 
+    * changes the password for the account specified by login.
     *
-    * Returns true on success, otherwise false. 
+    * Returns true on success, otherwise false.
     *
     * Error messages are added to the array errors.
     *
@@ -170,7 +170,7 @@ class PMF_AuthDb extends PMF_Auth
 		if (strlen($error) > 0) {
 		    $this->errors[] =  PMF_USERERROR_CHANGE . 'error(): ' . $error;
 			return false;
-		} 
+		}
 		if (!$change) {
 			$this->errors[] =  PMF_USERERROR_CHANGE;
 			return false;
@@ -181,9 +181,9 @@ class PMF_AuthDb extends PMF_Auth
     /**
     * delete()
     *
-    * Deletes the user account specified by login. 
+    * Deletes the user account specified by login.
     *
-    * Returns true on success, otherwise false. 
+    * Returns true on success, otherwise false.
     *
     * Error messages are added to the array errors.
     *
@@ -208,7 +208,7 @@ class PMF_AuthDb extends PMF_Auth
 		if (strlen($error) > 0) {
 		    $this->errors[] = PMF_USERERROR_DELETE . 'error(): ' . $error;
 			return false;
-		} 
+		}
 		if (!$delete) {
 			$this->errors[] = PMF_USERERROR_DELETE;
 			return false;
@@ -219,7 +219,7 @@ class PMF_AuthDb extends PMF_Auth
     /**
     * checkPassword()
     *
-    * checks the password for the given user account. 
+    * checks the password for the given user account.
     *
     * Returns true if the given password for the user account specified by
     * is correct, otherwise false.
@@ -237,20 +237,20 @@ class PMF_AuthDb extends PMF_Auth
         	return false;
         }
         $check = "
-          SELECT 
+          SELECT
             ".$this->_login_column().",
             ".$this->_password_column()."
           FROM
             ".$this->_tablename()."
           WHERE
-            ".$this->_login_column." = '".$login."' 
+            ".$this->_login_column." = '".$login."'
         ";
         $check = $this->_db->query($check);
         $error = $this->_db->error();
 		if (strlen($error) > 0) {
 		    $this->errors[] = PMF_USER_NOT_FOUND . 'error(): ' . $error;
 			return false;
-		} 
+		}
         $num_rows = $this->_db->num_rows($check);
 		if ($num_rows < 1) {
 			$this->errors[] = PMF_USER_NOT_FOUND;
@@ -274,7 +274,7 @@ class PMF_AuthDb extends PMF_Auth
     /**
     * connect()
     *
-    * Establishes a connection to a MySQL server using the given parameters. 
+    * Establishes a connection to a MySQL server using the given parameters.
     *
     * Selects the database and tries to connect to the specified MySQL server.
     * the MySQL link resource on success, otherwise false.
@@ -313,7 +313,7 @@ class PMF_AuthDb extends PMF_Auth
         	return false;
         }
         $check = "
-          SELECT 
+          SELECT
             ".$this->_login_column."
           FROM
             ".$this->_tablename()."
@@ -325,14 +325,14 @@ class PMF_AuthDb extends PMF_Auth
 		if (strlen($error) > 0) {
 		    $this->errors[] = $error;
 			return 0;
-		} 
+		}
         return $this->_db->num_rows($check);
     }
 
     /**
     * _tablename()
     *
-    * sets or returns the table variable. 
+    * sets or returns the table variable.
     *
     * If this method is called without parameter, the object property table is
     * If the property table is not set, an empty string is returned and an
@@ -348,7 +348,7 @@ class PMF_AuthDb extends PMF_Auth
     */
     function _tablename($table = '')
     {
-        if ($table != '') { 
+        if ($table != '') {
         	$old_table = $this->_tablename;
 		    $this->_tablename = $table;
 		    return $old_table;
@@ -363,7 +363,7 @@ class PMF_AuthDb extends PMF_Auth
     /**
     * _login_column()
     *
-    * sets or returns the login_column variable. 
+    * sets or returns the login_column variable.
     *
     * If this method is called without parameter, the object property
     * is returned. If the property login_column is not set, an empty string is
@@ -379,7 +379,7 @@ class PMF_AuthDb extends PMF_Auth
     */
     function _login_column($login_column = '')
     {
-        if ($login_column != '') { 
+        if ($login_column != '') {
         	$old_login_column = $this->_login_column;
 		    $this->_login_column = $login_column;
 		    return $old_login_column;
@@ -394,7 +394,7 @@ class PMF_AuthDb extends PMF_Auth
     /**
     * _password_column()
     *
-    * sets or returns the password_column variable. 
+    * sets or returns the password_column variable.
     *
     * If this method is called without parameter, the object property
     * is returned. If the property password_column is not set, an empty string
@@ -410,7 +410,7 @@ class PMF_AuthDb extends PMF_Auth
     */
     function _password_column($password_column = '')
     {
-        if ($password_column != '') { 
+        if ($password_column != '') {
         	$old_password_column = $this->_password_column;
 		    $this->_password_column = $password_column;
 		    return $old_password_column;

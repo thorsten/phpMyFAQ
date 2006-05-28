@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: sqlite.sql.php,v 1.14 2006-05-28 19:30:39 thorstenr Exp $
+* $Id: sqlite.sql.php,v 1.15 2006-05-28 20:02:16 thorstenr Exp $
 *
 * CREATE TABLE instructions for SQLite
 *
@@ -238,16 +238,16 @@ session_id VARCHAR(150) NULL,
 session_timestamp INT(11) NOT NULL,
 ip VARCHAR(15) NULL,
 account_status VARCHAR(50) NULL,
-last_login TIMESTAMP(14) NULL,
+last_login TIMESTAMP(14) NOT NULL,
 auth_source VARCHAR(100) NULL,
-member_since TIMESTAMP(14) NULL,
+member_since TIMESTAMP(14) NOT NULL,
 PRIMARY KEY(user_id)
 )";
 
 //faquserdata
 $query[] = "CREATE TABLE ".$sqltblpre."faquserdata (
 user_id INT(11) NOT NULL,
-last_modified TIMESTAMP(14) NULL,
+last_modified TIMESTAMP(14) NOT NULL,
 display_name VARCHAR(50) NULL,
 email VARCHAR(100) NULL
 )";

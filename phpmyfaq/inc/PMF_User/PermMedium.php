@@ -201,11 +201,11 @@ class PMF_PermMedium
         $res = $this->_db->query("
             INSERT INTO
                 ".PMF_USER_SQLPREFIX."group_right
-            SET
-                group_id = ".$group_id.",
-                right_id = ".$right_id
+            (group_id, right_id)
+                VALUES
+            (".$group_id.", ".$right_id.")"
         );
-        if (!$res) 
+        if (!$res)
             return false;
         return true;
     }
@@ -237,7 +237,7 @@ class PMF_PermMedium
                 group_id = ".$group_id." AND
                 right_id = ".$right_id
         );
-        if (!$res) 
+        if (!$res)
             return false;
         return true;
     }
@@ -269,13 +269,11 @@ class PMF_PermMedium
         $res = $this->_db->query("
             INSERT INTO
                 ".PMF_USER_SQLPREFIX."group
-            SET
-                group_id    = ".$next_id.",
-                name        = '".$group_data['name']."',
-                description = '".$group_data['description']."',
-                auto_join   = '".$this->bool_to_int($group_data['auto_join'])."'
+            (group_id, name, description, auto_join)
+                VALUES
+            (".$next_id.", '".$group_data['name']."', '".$group_data['description']."', '".$this->bool_to_int($group_data['auto_join'])."'
         ");
-        if (!$res) 
+        if (!$res)
             return 0;
         return $next_id;
     }
@@ -313,7 +311,7 @@ class PMF_PermMedium
             WHERE
                 group_id = ".$group_id
         );
-        if (!$res) 
+        if (!$res)
             return false;
         return true;
     }
@@ -343,7 +341,7 @@ class PMF_PermMedium
             WHERE
                 group_id = ".$group_id
         );
-        if (!$res) 
+        if (!$res)
             return false;
         // delete group-user links
         $res = $this->_db->query("
@@ -352,7 +350,7 @@ class PMF_PermMedium
             WHERE
                 group_id = ".$group_id
         );
-        if (!$res) 
+        if (!$res)
             return false;
         // delete group-right links
         $res = $this->_db->query("
@@ -360,9 +358,9 @@ class PMF_PermMedium
                 ".PMF_USER_SQLPREFIX."group_right
             WHERE
                 group_id = ".$group_id."
-                
+
         ");
-        if (!$res) 
+        if (!$res)
             return false;
         return true;
     }
@@ -464,9 +462,9 @@ class PMF_PermMedium
         $res = $this->_db->query("
         	INSERT INTO
         		".PMF_USER_SQLPREFIX."user_group
-        	SET
-        		user_id  = ".$user_id.",
-        		group_id = ".$group_id
+        	(user_id, group_id)
+        	   VALUES
+        	(".$user_id.", ".$group_id.")"
         );
         // return
         if (!$res)
@@ -524,7 +522,7 @@ class PMF_PermMedium
         	return false;
         // get group id
         $res = $this->_db->query("
-        	SELECT 
+        	SELECT
         		group_id
         	FROM
         		".PMF_USER_SQLPREFIX."group
@@ -557,7 +555,7 @@ class PMF_PermMedium
             return false;
         // get group data
         $res = $this->_db->query("
-        	SELECT 
+        	SELECT
         		group_id,
         		name,
         		description,

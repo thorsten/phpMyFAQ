@@ -353,10 +353,9 @@ class PMF_PermBasic
         	$res = $this->_db->query("
         		INSERT INTO
         			".PMF_USER_SQLPREFIX."rightcontext
-        		SET
-        			right_id   = ".$next_id.",
-        			context    = '".$context_data['context']."',
-        			context_id = ".$context_data['context_id']
+        		(right_id, context, context_id)
+        		  VALUES
+        		(".$next_id.", '".$context_data['context']."', ".$context_data['context_id'].")"
             );
         	if (!$res)
         		return 0;

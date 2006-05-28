@@ -18,7 +18,7 @@ error_reporting(E_ALL);
 /* user defined includes */
 
 /**
- * manages user authentication. 
+ * manages user authentication.
  *
  * Subclasses of Auth implement authentication functionality with different
  * types. The class AuthLdap for expamle provides authentication functionality
@@ -84,7 +84,7 @@ require_once dirname(__FILE__).'/UserData.php';
 @define('PMF_UNDEFINED_PARAMETER', 'Following parameter must to be defined: ');
 @define('PMF_USERERROR_ADD', 'Account could not be created. ');
 @define('PMF_USERERROR_CHANGE', 'Account could not be updated. ');
-@define('PMF_USERERROR_DELETE', 'Account could not be deleted. '); 
+@define('PMF_USERERROR_DELETE', 'Account could not be deleted. ');
 @define('PMF_USER_NOT_FOUND', 'User account could not be found. ');
 @define('PMF_USERERROR_NO_AUTH', 'No authentication method specified. ');
 @define('PMF_USERERROR_INCORRECT_LOGIN', 'Specified login could not be found. ');
@@ -262,13 +262,13 @@ class PMF_User
 		    return false;
 		// get user
         $res = $this->_db->query("
-		  SELECT 
+		  SELECT
 		    user_id,
 		    login,
 		    account_status
 		  FROM
 		    ".PMF_USER_SQLPREFIX."user
-		  WHERE 
+		  WHERE
 			user_id = ".(int) $user_id
         );
 		if ($this->_db->num_rows($res) != 1) {
@@ -303,14 +303,14 @@ class PMF_User
 		    return false;
 		// get user
         $res = $this->_db->query("
-		  SELECT 
+		  SELECT
 		    user_id,
 		    login,
 		    account_status
 		  FROM
 		    ".PMF_USER_SQLPREFIX."user
-		  WHERE 
-			login = '".$this->_db->escape_string($login)."'		    
+		  WHERE
+			login = '".$this->_db->escape_string($login)."'
 		");
 		if ($this->_db->num_rows($res) != 1) {
 			if ($raise_error)
@@ -348,7 +348,7 @@ class PMF_User
         }
         // is $login valid?
         $login = (string) $login;
-        if (!$this->isValidLogin($login)) 
+        if (!$this->isValidLogin($login))
             return false;
         // does $login already exist?
         if ($this->getUserByLogin($login, false)) {
@@ -361,9 +361,9 @@ class PMF_User
         $this->_db->query("
           INSERT INTO
             ".PMF_USER_SQLPREFIX."user
-          SET
-            user_id = ".$this->getUserId().", 
-            login   = '".$this->_db->escape_string($login)."'
+          (user_id, login)
+            VALUES
+          (".$this->getUserId().", '".$this->_db->escape_string($login)."')
         ");
         // create user-data entry
         if (!$this->userdata)
@@ -374,7 +374,7 @@ class PMF_User
 		    return false;
 		}
         // create authentication entry
-        if ($pass == '') 
+        if ($pass == '')
         	$pass = $this->createPassword();
         $success = false;
         foreach ($this->_auth_container as $name => $auth) {
@@ -460,7 +460,7 @@ class PMF_User
 			$this->errors[] = PMF_USERERROR_NO_AUTH_WRITABLE;
 		}
 		// deletion unsuccessful
-		if (!in_array(true, $delete)) 
+		if (!in_array(true, $delete))
 		    return false;
 		return true;
     }
@@ -485,7 +485,7 @@ class PMF_User
         }
         // update authentication entry
         $login = $this->getLogin();
-        if ($pass == '') 
+        if ($pass == '')
         	$pass = $this->createPassword();
         $success = false;
         foreach ($this->_auth_container as $name => $auth) {
@@ -521,7 +521,7 @@ class PMF_User
                 return false;
         }
         // permission object
-        if ($perm !== null) { 
+        if ($perm !== null) {
             if (!$this->addPerm($perm))
                 return false;
         }
@@ -639,11 +639,11 @@ class PMF_User
         // update status
         $this->_status = $status;
         $res = $this->_db->query("
-		  UPDATE 
-		    ".PMF_USER_SQLPREFIX."user 
-		  SET 
-		    account_status = '".$status."' 
-		  WHERE 
+		  UPDATE
+		    ".PMF_USER_SQLPREFIX."user
+		  SET
+		    account_status = '".$status."'
+		  WHERE
 		    user_id = ".$user_id
         );
 		// return bool
@@ -674,7 +674,7 @@ class PMF_User
     }
 
     /**
-     * Returns a string with error messages. 
+     * Returns a string with error messages.
      *
      * The string returned by error() contains messages for all errors that
      * during object procesing. Messages are separated by new lines.
