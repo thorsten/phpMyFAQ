@@ -1,18 +1,18 @@
 <?php
 /**
-* $Id: adminlog.php,v 1.9 2006-01-02 16:51:26 thorstenr Exp $
+* $Id: adminlog.php,v 1.10 2006-05-30 09:27:08 thorstenr Exp $
 *
 * Overview of actions in the admin section
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23
 * @copyright    (c) 2001-2006 phpMyFAQ Team
-* 
+*
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
 * compliance with the License. You may obtain a copy of the License at
 * http://www.mozilla.org/MPL/
-* 
+*
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
@@ -25,11 +25,11 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 }
 
 if ($permission['adminlog'] && 'adminlog' == $_action) {
-    
+
     //
     // Show the adminlog
     //
-    
+
 	$perpage = 15;
 
     $_user = array();
@@ -44,18 +44,18 @@ if ($permission['adminlog'] && 'adminlog' == $_action) {
     } else {
         $pages = $_REQUEST["pages"];
     }
-	
+
 	if (!isset($_REQUEST["page"])) {
         $page = 1;
     } else {
         $page = $_REQUEST["page"];
     }
-	
+
 	$start = ($page-1) * $perpage;
 	$ende = $start + $perpage;
-	
+
 	$PageSpan = PageSpan("<a href=\"".$_SERVER["PHP_SELF"].$linkext."&amp;aktion=adminlog&amp;pages=".$pages."&amp;page=<NUM>\">", 1, $pages, $page);
-	
+
 	$result = $db->query("SELECT id, time, usr, text, ip FROM ".SQLPREFIX."faqadminlog ORDER BY id DESC");
 ?>
 	<h2><?php print $PMF_LANG["ad_adminlog"]; ?></h2>
@@ -110,23 +110,22 @@ if ($permission['adminlog'] && 'adminlog' == $_action) {
 	</tbody>
 	</table>
 <?php
-    
+
     printf ('<p><a href="?aktion=deleteadminlog">%s</a></p>', $PMF_LANG['ad_adminlog_del_older_30d']);
-    
+
 } elseif ($permission['adminlog'] && 'deleteadminlog' == $_action) {
-    
+
     //
     // Delete logs older than 30 days
     //
-    $30days = time() - 30 * 86400;
-    
-    if ($db->query('DELETE FROM '.SQLPREFIX.'faqadminlog WHERE time < '.$30days)) {
+    $thirtydays = time() - 30 * 86400;
+
+    if ($db->query('DELETE FROM '.SQLPREFIX.'faqadminlog WHERE time < '.$thirtydays)) {
         printf('<p>%s</p>', $MPF_LANG['ad_adminlog_delete_success']);
     } else {
         printf('<p>%s</p>', $MPF_LANG['ad_adminlog_delete_failure']);
     }
-    
+
 } else {
 	print $PMF_LANG["err_NotAuth"];
 }
-?>
