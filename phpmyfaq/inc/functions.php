@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.106 2006-02-07 19:59:19 thorstenr Exp $
+* $Id: functions.php,v 1.107 2006-05-30 09:34:55 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -512,7 +512,6 @@ function encode_iso88591($coded = "", $cmode = "g")
             if ($key > 0) {
                 $coded .= "\t";
                 }
-            unset ($words);
             if (function_exists('mb_encode_mimeheader')) {
                 $coded .= mb_encode_mimeheader($value)."\r\n";
             } else {
@@ -659,13 +658,13 @@ function generateXHTMLFile()
 	global $db, $PMF_CONF, $PMF_LANG;
 
     require_once("../inc/parser.php"); // template support
-    
+
     $tree = new Category();
     $tree->transform(0);
     $old = 0;
 
   	$newest = array();
-    
+
   	//
     // get the 5 newest entries
     //
@@ -705,9 +704,9 @@ function generateXHTMLFile()
             $headlinks .= "\t<li>$marker<a href=\"#$row->id\">$row->thema</a></li>\n";
         }
     }
-    
+
     $tpl = new phpmyfaqTemplate(array('html' => '../template/htmlexport.tpl'));
-    
+
     /* get main template, set main variables */
     $tpl->processTemplate ('html', array(
                 'title' => $PMF_CONF['title'],
