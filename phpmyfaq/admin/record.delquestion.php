@@ -1,18 +1,18 @@
 <?php
 /**
-* $Id: record.delquestion.php,v 1.8 2006-03-02 13:57:29 thorstenr Exp $
+* $Id: record.delquestion.php,v 1.9 2006-05-30 09:29:41 thorstenr Exp $
 *
 * Delete open questions
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-24
 * @copyright    (c) 2001-2006 phpMyFAQ Team
-* 
+*
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
 * compliance with the License. You may obtain a copy of the License at
 * http://www.mozilla.org/MPL/
-* 
+*
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
@@ -26,16 +26,16 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 
 if ($permission['delquestion']) {
     $tree = new Category;
-    
+
     if (isset($_REQUEST['delete']) && $_REQUEST['delete'] == 'yes') {
-		
+
         $db->query("DELETE FROM ".SQLPREFIX."faqquestions WHERE id = ".$_REQUEST["id"]);
 		print $PMF_LANG["ad_entry_delsuc"];
-		
+
 	} else {
-	    
+
         if (isset($_REQUEST['is_visible']) && $_REQUEST['is_visible'] == 'toggle') {
-            
+
             $query = sprintf('SELECT is_visible FROM %sfaqquestions WHERE id = %d', SQLPREFIX, $_REQUEST['id']);
             $result = $db->query($query);
             if ($db->num_rows($result) == 1) {
@@ -69,7 +69,7 @@ if ($permission['delquestion']) {
         <tr>
             <td class="list"><?php print makeDate($row->ask_date); ?><br /><a href="mailto:<?php print $row->ask_usermail; ?>"><?php print $row->ask_username; ?></a></td>
             <td class="list"><?php print $tree->categoryName[$row->ask_rubrik]['name'].":<br />".$row->ask_content; ?></td>
-            <td class="list"><a href="?aktion=question&amp;id=<?php print $row->id; ?>&amp;is_visible=toggle"><?php print (('Y' == $row->is_visible) ? $PMF_LANG["ad_gen_no"] : $PMF_LANG["ad_gen_yes"]; ?>!</a><br /></td>
+            <td class="list"><a href="?aktion=question&amp;id=<?php print $row->id; ?>&amp;is_visible=toggle"><?php print (('Y' == $row->is_visible) ? $PMF_LANG["ad_gen_no"] : $PMF_LANG["ad_gen_yes"]); ?>!</a><br /></td>
             <td class="list"><a href="?aktion=question&amp;id=<?php print $row->id; ?>&amp;delete=yes"><?php print $PMF_LANG["ad_gen_delete"]; ?>!</a><br /><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=takequestion&amp;id=<?php print $row->id; ?>"><?php print $PMF_LANG["ad_ques_take"] ?></a></td>
         </tr>
 <?php
