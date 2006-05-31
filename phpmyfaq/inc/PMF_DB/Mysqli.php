@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Mysqli.php,v 1.4 2006-05-28 17:21:48 thorstenr Exp $
+* $Id: Mysqli.php,v 1.5 2006-05-31 08:47:00 thorstenr Exp $
 *
 * db_mysqli
 *
@@ -341,13 +341,16 @@ class db_mysqli
      *
      * This function closes the connection to the database.
      *
+     * @return	void
      * @access  public
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-02-21
      */
 	public function dbclose()
     {
-		return $this->conn->close();
+		if (is_resource($this->conn)) {
+			$this->conn->close();
+		}
     }
 
 }
