@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.107 2006-05-30 09:34:55 thorstenr Exp $
+* $Id: functions.php,v 1.108 2006-06-01 21:14:33 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -472,10 +472,10 @@ function checkEmail($sender)
                 "@".
                 "[-!\#$%&\"*+\\./\d=?A-Z^_|'a-z{|}~]+\.".
                 "[-!\#$%&\"*+\\./\d=?A-Z^_|'a-z{|}~]+$#";
-    if (isset($sender) && preg_match($pattern, $sender)) {
-        return TRUE;
+    if (preg_match($pattern, $sender)) {
+        return true;
     } else {
-        return FALSE;
+        return false;
     }
 }
 
