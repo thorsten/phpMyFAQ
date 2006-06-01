@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: pdf.php,v 1.18 2006-05-14 16:30:17 thorstenr Exp $
+* $Id: pdf.php,v 1.19 2006-06-01 10:00:57 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Peter Beauvain <pbeauvain@web.de>
@@ -22,16 +22,9 @@
 
 require_once('inc/init.php');
 PMF_Init::cleanRequest();
-require_once ("inc/data.php");
-require_once ("inc/db.php");
-require_once ("inc/functions.php");
-require_once ("inc/config.php");
-require_once ("inc/category.php");
-require_once ("inc/pdf.php");
+require_once('inc/category.php');
+require_once('inc/PMF_export/Pdf.php');
 
-define("SQLPREFIX", $DB["prefix"]);
-$db = db::db_select($DB["type"]);
-$db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
 $tree = new Category;
 
 // get language (default: english)
