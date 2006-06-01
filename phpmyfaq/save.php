@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: save.php,v 1.20 2006-04-09 12:05:59 thorstenr Exp $
+* $Id: save.php,v 1.21 2006-06-01 21:11:42 thorstenr Exp $
 *
 * Saves a user FAQ record and sends an email to the user
 *
@@ -8,12 +8,12 @@
 * @author       Jürgen Kuza <kig@bluewin.ch>
 * @since        2002-09-16
 * @copyright    (c) 2001-2006 phpMyFAQ Team
-* 
+*
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
 * compliance with the License. You may obtain a copy of the License at
 * http://www.mozilla.org/MPL/
-* 
+*
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
@@ -28,7 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $captcha = new PMF_Captcha($db, $sids, $pmf->language, $_SERVER['HTTP_USER_AGENT'], $_SERVER['REMOTE_ADDR']);
 
 if (    isset($_POST['username']) && $_POST['username'] != ''
-     && isset($_POST['usermail']) && checkEmail($_REQUEST['usermail'])
+     && isset($_POST['usermail']) && checkEmail($_POST['usermail'])
      && isset($_POST['rubrik']) && is_array($_POST['rubrik'])
      && isset($_POST['thema']) && $_POST['thema'] != ''
      && isset($_POST['content']) && $_POST['content'] != ''
@@ -36,28 +36,28 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
      && checkBannedWord(htmlspecialchars(strip_tags($_POST['thema'])))
      && checkBannedWord(htmlspecialchars(strip_tags($_POST['content'])))
      && isset($_POST['captcha']) && ($captcha->validateCaptchaCode($_POST['captcha'])) ) {
-	
+
     Tracking("save_new_entry",0);
 	$datum = date("YmdHis");
 	$content = $db->escape_string(safeHTML(nl2br($_POST["content"])));
     $contentlink = $db->escape_string(safeHTML($_POST["contentlink"]));
-	
+
     if (substr($contentlink,7) != "") {
 		$content = $content."<br />".$PMF_LANG["msgInfo"]."<a href=\"http://".substr($contentlink,7)."\" target=\"_blank\">".$contentlink."</a>";
 	}
-	
+
 	if (isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) {
 		$lang = trim(strtolower(substr($_SERVER["HTTP_ACCEPT_LANGUAGE"], 0, 2)));
 	} else {
 		$lang = "en";
 	}
-	
-	$thema = $db->escape_string(safeSQL(safeHTML($_REQUEST["thema"])));
-    $selected_category = intval($_REQUEST["rubrik"]);
-	$keywords = $db->escape_string(safeSQL($_REQUEST["keywords"]));
-	$author = $db->escape_string(safeSQL($_REQUEST["username"]));
-    $usermail = $IDN->encode($_REQUEST["usermail"]);
-    
+
+	$thema = $db->escape_string(safeSQL(safeHTML($_POST["thema"])));
+    $selected_category = intval($_POST["rubrik"]);
+	$keywords = $db->escape_string(safeSQL($_POST["keywords"]));
+	$author = $db->escape_string(safeSQL($_POST["username"]));
+    $usermail = $IDN->encode($_POST["usermail"]);
+
 	$db->query(sprintf("INSERT INTO %sfaqdata (id, lang, solution_id, revision_id, active, thema, content, keywords, author, email, comment, datum) VALUES (%d, '%s', %d, %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')", SQLPREFIX, $db->nextID(SQLPREFIX."faqdata", "id"), $lang, getSolutionId(), 0, 'no', $thema, $content, $keywords, $author, $usermail, 'y', $datum));
 
 	foreach ($selected_category as $_category) {
@@ -65,13 +65,13 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
 	}
 
 	$db->query(sprintf("INSERT INTO %sfaqvisits (id, lang, visits, last_visit) VALUES (%d, '%s', %d, %d)", SQLPREFIX, $db->insert_id(SQLPREFIX.'faqdata', 'id'), $lang, 1, time()));
-    
+
     $headers = '';
     $db->query("SELECT ".SQLPREFIX."faquser.email FROM ".SQLPREFIX."faqcategories INNER JOIN ".SQLPREFIX."faquser ON ".SQLPREFIX."faqcategories.user_id = ".SQLPREFIX."faquser.id WHERE ".SQLPREFIX."faqcategories.id = ".$selected_category);
     while ($row = $db->fetch_object($result)) {
         $headers .= "CC: ".$row->email."\n";
     }
-    
+
     $additional_header = array();
     $additional_header[] = 'MIME-Version: 1.0';
     $additional_header[] = 'Content-Type: text/plain; charset='. $PMF_LANG['metaCharset'];
@@ -89,7 +89,7 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
     } else {
         mail($IDN->encode($PMF_CONF["adminmail"]), $subject, $body, implode("\r\n", $additional_header), "-f$usermail");
     }
-    
+
 	$tpl->processTemplate ("writeContent", array(
 				"msgNewContentHeader" => $PMF_LANG["msgNewContentHeader"],
 				"Message" => $PMF_LANG["msgNewContentThanks"]
