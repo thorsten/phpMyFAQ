@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.42 2006-06-11 08:12:03 thorstenr Exp $
+* $Id: index.php,v 1.43 2006-06-11 18:09:19 matteo Exp $
 *
 * The main admin backend index file
 *
@@ -23,13 +23,13 @@
 */
 
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
-require_once(PMF_ROOT_DIR.'/inc/init.php');
+require_once(PMF_ROOT_DIR.'/inc/Init.php');
 define('IS_VALID_PHPMYFAQ_ADMIN', null);
 PMF_Init::cleanRequest();
 
 // Include classes and functions
-require_once (PMF_ROOT_DIR."/inc/category.php");
-require_once (PMF_ROOT_DIR."/inc/linkverifier.php");
+require_once (PMF_ROOT_DIR."/inc/Category.php");
+require_once (PMF_ROOT_DIR."/inc/Linkverifier.php");
 require_once (PMF_ROOT_DIR."/inc/PMF_User/CurrentUser.php");
 
 // get language (default: english)
@@ -105,6 +105,11 @@ if (isset($_REQUEST['aktion']) && $_REQUEST['aktion'] == 'logout' && $auth) {
     $user->deleteFromSession();
     unset($user);
     unset($auth);
+}
+
+// FIXME: remove this dummy declaration when the all of the pages will NOT use it for building the links
+if (isset($auth)) {
+    $linkext = '?uin=';
 }
 
 // exportfile
