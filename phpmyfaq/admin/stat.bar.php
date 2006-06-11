@@ -24,7 +24,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 }
 
 require_once('../inc/functions.php');
-require_once('../inc/init.php');
+require_once('../inc/Init.php');
 PMF_Init::cleanRequest();
 
 header ("Content-type: image/png");

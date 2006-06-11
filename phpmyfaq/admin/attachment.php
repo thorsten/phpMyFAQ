@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: attachment.php,v 1.15 2006-06-11 08:12:03 thorstenr Exp $
+* $Id: attachment.php,v 1.16 2006-06-11 15:33:21 matteo Exp $
 *
 * Select an attachment and save it or create the SQL backup files
 *
@@ -20,7 +20,7 @@
 */
 
 require_once('../inc/functions.php');
-require_once('../inc/init.php');
+require_once('../inc/Init.php');
 define('IS_VALID_PHPMYFAQ_ADMIN', null);
 PMF_Init::cleanRequest();
 
@@ -43,10 +43,10 @@ if (isset($_REQUEST["aktion"]) && ($_REQUEST["aktion"] == "sicherdaten" || $_REQ
 require_once (PMF_ROOT_DIR."/inc/config.php");
 require_once (PMF_ROOT_DIR."/inc/constants.php");
 require_once (PMF_ROOT_DIR."/inc/data.php");
-require_once (PMF_ROOT_DIR."/inc/db.php");
+require_once (PMF_ROOT_DIR."/inc/Db.php");
 define("SQLPREFIX", $DB["prefix"]);
 
-$db = db::db_select($DB["type"]);
+$db = PMF_Db::db_select($DB["type"]);
 $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
 
 /* get language (default: english) */

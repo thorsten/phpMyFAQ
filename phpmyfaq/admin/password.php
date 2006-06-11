@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: password.php,v 1.8 2006-01-02 16:51:26 thorstenr Exp $
+* $Id: password.php,v 1.9 2006-06-11 15:33:21 matteo Exp $
 *
 * Reset a forgotten password to a new one
 *
@@ -20,7 +20,7 @@
 */
 
 require_once('../inc/functions.php');
-require_once('../inc/init.php');
+require_once('../inc/Init.php');
 define('IS_VALID_PHPMYFAQ_ADMIN', null);
 PMF_Init::cleanRequest();
 
@@ -36,12 +36,12 @@ require_once (PMF_ROOT_DIR."/inc/config.php");
 require_once (PMF_ROOT_DIR."/inc/constants.php");
 
 /* include classes and functions */
-require_once (PMF_ROOT_DIR."/inc/db.php");
+require_once (PMF_ROOT_DIR."/inc/Db.php");
 define("SQLPREFIX", $DB["prefix"]);
-$db = db::db_select($DB["type"]);
+$db = PMF_Db::db_select($DB["type"]);
 $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
-require_once (PMF_ROOT_DIR."/inc/category.php");
-require_once (PMF_ROOT_DIR."/inc/idna_convert.class.php");
+require_once (PMF_ROOT_DIR."/inc/Category.php");
+require_once (PMF_ROOT_DIR."/inc/libs/idna_convert.class.php");
 $IDN = new idna_convert;
 
 // get language (default: english)
@@ -62,10 +62,10 @@ require_once ("header.php");
 <div id="bodyText">
 <?php
 if (isset($_GET["action"]) && $_GET["action"] == "newpassword") {
-    
+
     }
 elseif (isset($_GET["action"]) && $_GET["action"] == "savenewpassword") {
-    
+
     }
 elseif (isset($_GET["action"]) && $_GET["action"] == "sendmail") {
     if (isset($_POST["username"]) && $_POST["username"] != "" && isset($_POST["email"]) && $_POST["email"] != "" && checkEmail($_POST["email"])) {
