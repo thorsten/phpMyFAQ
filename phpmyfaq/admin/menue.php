@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: menue.php,v 1.12 2006-01-02 16:51:26 thorstenr Exp $
+* $Id: menue.php,v 1.13 2006-06-11 16:52:14 matteo Exp $
 *
 * Navigation menue of the admin area
 *
@@ -8,12 +8,12 @@
 * @author       Minoru TODA <todam@netjapan.co.jp>
 * @since        2003-02-26
 * @copyright    (c) 2001-2006 phpMyFAQ Team
-* 
+*
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
 * compliance with the License. You may obtain a copy of the License at
 * http://www.mozilla.org/MPL/
-* 
+*
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
@@ -25,7 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
-function addMenuEntry($restrictions = "", $aktion = "", $caption = "")
+function addMenuEntry($restrictions = '', $aktion = '', $caption = '')
 {
 	global $permission, $PMF_LANG;
     
@@ -64,7 +64,7 @@ $groupSupport = is_a($user->perm, "PMF_PermMedium");
 	addMenuEntry('',                                     '',                 'ad_menu_startpage');
 	addMenuEntry('adduser,edituser,deluser',             'user',             'ad_menu_user_administration');
 	if ($groupSupport) {
-	    addMenuEntry('adduser,edituser,deluser',             'group',             'ad_menu_group_administration');
+	    addMenuEntry('adduser,edituser,deluser',         'group',            'ad_menu_group_administration');
     }
 	addMenuEntry('addcateg,editcateg,delcateg',          'category',         'ad_menu_categ_edit');
 	addMenuEntry('addbt',                                'editentry',        'ad_entry_add');
@@ -86,4 +86,12 @@ $groupSupport = is_a($user->perm, "PMF_PermMedium");
 	addMenuEntry('',                                     'logout',           'ad_menu_logout');
 ?>
     </ul>
+</div>
+
+<div id="langform">
+    <form action="<?php print $linkext; ?>" method="post">
+    <label for="language"><?php print $PMF_LANG['msgLangaugeSubmit']; ?></label>
+    <?php print selectLanguages($LANGCODE); ?><br />
+    <input type="submit" name="submit" value="Go" class="submit" />
+    </form>
 </div>
