@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: export.main.php,v 1.20 2006-01-02 16:51:26 thorstenr Exp $
+* $Id: export.main.php,v 1.21 2006-06-11 16:07:03 matteo Exp $
 *
 * XML, XML DocBook, XHTML and PDF export - main page
 *
@@ -8,12 +8,12 @@
 * @author       Peter Beauvain <pbeauvain@web.de>
 * @since        2003-04-17
 * @copyright    (c) 2001-2006 phpMyFAQ Team
-* 
+*
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
 * compliance with the License. You may obtain a copy of the License at
 * http://www.mozilla.org/MPL/
-* 
+*
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
@@ -32,24 +32,26 @@ if (isset($_REQUEST["submit"])) {
 }
 
 if (isset($submit[0])) {
+    $tree = new PMF_Category();
     generateXMLFile();
     print "<p><a href=\"../xml/phpmyfaq.xml\" target=\"_blank\">XML File okay!</a></p>";
 }
 
 if (isset($submit[1])) {
+    $tree = new PMF_Category();
     generateXHTMLFile();
     print "<p><a href=\"../xml/phpmyfaq.html\" target=\"_blank\">XHTML File okay!</a></p>";
 }
 
 if (isset($submit[2])) {
 	// Full PDF Export
-	require (PMF_ROOT_DIR."/inc/pdf.php");
-	$tree = new Category();
+	require (PMF_ROOT_DIR."/inc/PMF_Export/Pdf.php");
+	$tree = new PMF_Category();
 	$arrRubrik = array();
 	$arrThema = array();
 	$arrContent = array();
-	
-	$result = $db->query('SELECT '.SQLPREFIX.'faqdata.id AS id, '.SQLPREFIX.'faqdata.lang AS lang, '.SQLPREFIX.'faqcategoryrelations.category_id AS category_id, '.SQLPREFIX.'faqdata.thema AS thema, '.SQLPREFIX.'faqdata.content AS content, '.SQLPREFIX.'faqdata.author AS author, '.SQLPREFIX.'faqdata.datum AS datum FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang WHERE '.SQLPREFIX.'faqdata.active = \'yes\' ORDER BY '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.id');
+
+	$result = $db->query('SELECT '.SQLPREFIX.'faqdata.id AS id, '.SQLPREFIX.'faqdata.lang AS lang, '.SQLPREFIX.'faqdata.solution_id AS solution_id, '.SQLPREFIX.'faqcategoryrelations.category_id AS category_id, '.SQLPREFIX.'faqdata.thema AS thema, '.SQLPREFIX.'faqdata.content AS content, '.SQLPREFIX.'faqdata.author AS author, '.SQLPREFIX.'faqdata.datum AS datum FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang WHERE '.SQLPREFIX.'faqdata.active = \'yes\' ORDER BY '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.id');
 	if ($db->num_rows($result) > 0) {
 		$i = 0;
 		while ($row = $db->fetch_object($result)) {
@@ -61,15 +63,15 @@ if (isset($submit[2])) {
 			$i++;
 		}
 	}
-	
+
 	$pdf = new PDF();
     $pdf->enableBookmarks = TRUE;
 	$pdf->Open();
 	$pdf->AliasNbPages();
 	$pdf->SetDisplayMode("real");
-	
+
 	foreach ($arrContent as $key => $value) {
-		$pdf->rubrik = $arrRubrik[$key];
+		$pdf->category = $arrRubrik[$key];
 		$pdf->thema = $arrThema[$key];
         $pdf->categories = $tree->categoryName;
 		$date =  $arrDatum[$key];
@@ -78,20 +80,20 @@ if (isset($submit[2])) {
 		$pdf->SetFont("Arial", "", 12);
     	$pdf->WriteHTML(unhtmlentities($value));
     }
-	
+
 	$pdfFile = PMF_ROOT_DIR."/pdf/faq.pdf";
 	$pdf->Output($pdfFile);
-	
+
 	print "<p>".$PMF_LANG["ad_export_full_faq"]."<a href=\"../pdf/faq.pdf\" target=\"_blank\">".$PMF_CONF["title"]."</a></p>";
 }
 if (isset($submit[3])) {
 	// XML DocBook export
-	require (PMF_ROOT_DIR."/inc/docbook.php");
+	require (PMF_ROOT_DIR."/inc/PMF_Export/Docbook.php");
 	$parentID     = 0;
 	$rubrik       = 0;
 	$sql          = '';
 	$selectString ='';
-    
+
 	$export = new DocBook_XML_Export($DB);
 	$export->delete_file();
 
@@ -143,7 +145,7 @@ if (isset($submit[3])) {
 	$export->xmlContent .='</preface>'
 	. '</part>'
 	. '</book>';
-	
+
 	$export->write_file();
     print "<p>XML DocBook file: <a href=\"../xml/docbook/docbook.xml\" target=\"_blank\">".$PMF_CONF["title"]."</a></p>";
 }
@@ -152,14 +154,23 @@ if (!emptyTable(SQLPREFIX."faqdata")) {
 ?>
 	<form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>" method="post">
 	<input type="hidden" name="aktion" value="export" />
-	<p><strong>XML export</strong></p>
-    <p align="center"><input class="submit" type="submit" name="submit[0]" value="XML export" /></p>
-	<p><strong>XHTML export</strong></p>
-    <p align="center"><input class="submit" type="submit" name="submit[1]" value="XHTML export" /></p>
-	<p><strong><?php print $PMF_LANG["ad_export_pdf"]; ?></strong></p>
-    <p align="center"><input class="submit" type="submit" name="submit[2]" value="<?php print $PMF_LANG["ad_export_generate_pdf"]; ?>" /></p>
-    <p><strong>XML DocBook export</strong></p>
-    <p align="center"><input class="submit" type="submit" name="submit[3]" value="XML DocBook export" /></p>
+
+    <fieldset>
+    <legend><?php print $PMF_LANG["ad_menu_export"]; ?></legend>
+
+    <label class="left">XML export</label>
+    <input class="submit" type="submit" name="submit[0]" value="XML export" /><br /><br />
+
+	<label class="left">XHTML export</label>
+    <input class="submit" type="submit" name="submit[1]" value="XHTML export" /><br /><br />
+
+	<label class="left"><?php print $PMF_LANG["ad_export_pdf"]; ?></label>
+    <input class="submit" type="submit" name="submit[2]" value="<?php print $PMF_LANG["ad_export_generate_pdf"]; ?>" /><br /><br />
+
+    <label class="left">XML DocBook export</label>
+    <input class="submit" type="submit" name="submit[3]" value="XML DocBook export" /><br />
+
+    </fieldset>
 	</form>
 <?php
 } else {
