@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: configuration.php,v 1.2 2006-01-02 16:51:26 thorstenr Exp $
+* $Id: configuration.php,v 1.3 2006-06-11 21:38:00 matteo Exp $
 *
 * The main configuration frontend
 *
@@ -66,11 +66,18 @@ if ('listConfig' == $userAction) {
 <div id="user_message"><?php print $message; ?></div>
 
 <form id="config_list" name="config_list" action="?aktion=config&amp;config_action=saveConfig" method="post">
-<fieldset>
-<legend><?php print $PMF_LANG['ad_config_edit']; ?></legend>
-<div id="configuration"></div>
-<p><input class="submit" type="submit" value="<?php print $PMF_LANG['ad_config_save']; ?>" /> <input class="submit" type="reset" value="<?php print $PMF_LANG['ad_config_reset']; ?>" /></p>
-</fieldset>
+    <fieldset>
+        <legend><?php print $PMF_LANG['ad_config_edit']; ?></legend>
+        <div id="configStd"></div>
+    </fieldset>
+    <fieldset>
+        <legend><?php print $PMF_LANG['spamControlCenter']; ?></legend>
+        <div id="configSpam"></div>
+    </fieldset>
+    <p align="center">
+        <input class="submit" type="submit" value="<?php print $PMF_LANG['ad_config_save']; ?>" />
+        <input class="submit" type="reset" value="<?php print $PMF_LANG['ad_config_reset']; ?>" />
+    </p>
 </form>
 
 <script type="text/javascript">
@@ -78,7 +85,8 @@ if ('listConfig' == $userAction) {
 
 function getConfigList()
 {
-    var ajax = new Ajax.Updater('configuration', 'index.php?aktion=ajax&ajax=config_list');
+    var ajax = new Ajax.Updater('configStd',  'index.php?aktion=ajax&ajax=config_list');
+    var ajax = new Ajax.Updater('configSpam', 'index.php?aktion=ajax&ajax=config_list&conf=spam');
 }
 
 getConfigList();

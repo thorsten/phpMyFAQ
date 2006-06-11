@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.config_list.php,v 1.3 2006-01-02 16:51:26 thorstenr Exp $
+* $Id: ajax.config_list.php,v 1.4 2006-06-11 21:38:00 matteo Exp $
 *
 * AJAX: lists the complete configuration items
 *
@@ -27,48 +27,70 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 require_once(PMF_ROOT_DIR.'/inc/config.php');
 require_once(PMF_ROOT_DIR.'/lang/language_en.php');
 
-foreach ($LANG_CONF as $key => $value) {
+$configMode = 'std';
+$availableConfigModes = array(
+        'spam' => 1
+        );
+if (isset($_GET['conf']) && is_string($_GET['conf']) && isset($availableConfigModes[$_GET['conf']])) {
+    $configMode = $_GET['conf'];
+}
+
+function printInputFieldByType($key, $type)
+{
+    global $PMF_CONF, $PMF_LANG; //$PMF_ROOT_DIR, $languageCodes;
+    switch($type) {
+        case 'area':
+            printf('<textarea name="edit[%s]" cols="60" rows="6">%s</textarea>', $key, $PMF_CONF[$key]);
+            printf("<br />\n");
+            break;
+
+        case 'input':
+            printf('<input type="text" name="edit[%s]" size="80" value="%s" />', $key, $PMF_CONF[$key]);
+            printf("<br />\n");
+            break;
+
+        case 'select':
+            printf('<select name="edit[%s]" size="1">', $key);
+            $languages = getAvailableLanguages();
+            if (count($languages) > 0) {
+                print languageOptions(str_replace(array("language_", ".php"), "", $PMF_CONF['language']), false, true);
+            } else {
+                print '<option value="language_en.php">English</option>';
+            }
+            print '</select>';
+            printf("<br />\n");
+            break;
+
+        case 'checkbox':
+            printf('<input type="checkbox" name="edit[%s]" value="TRUE"', $key);
+            if (isset($PMF_CONF[$key]) && $PMF_CONF[$key] == true) {
+                print ' checked="checked"';
+            }
+            printf(' />&nbsp;%s', $PMF_LANG["ad_entry_active"]);
+            printf("<br />\n");
+            break;
+
+        case 'print':
+            print $PMF_CONF[$key];
+            printf('<input type="hidden" name="edit[%s]" size="80" value="%s" />', $key, $PMF_CONF[$key]);
+            printf("<br />\n");
+            break;
+    }
+}
+
+    foreach ($LANG_CONF as $key => $value) {
+        $filterConfigParams = $configMode == 'std'? false === strpos($key, $configMode) : 0 === strpos($key, $configMode) ;
+        if ($filterConfigParams) {
 ?>
 <dl>
     <dt><strong><?php print $value[1]; ?></strong></dt>
-    <dd><?php
-        
-    switch($value[0]) {
-            
-        case 'area':        printf('<textarea class="admin" name="edit[%s]" cols="50" rows="6" style="width: 400px;">%s</textarea>', $key, $PMF_CONF[$key]);
-                            break;
-            
-        case 'input':       printf('<input class="admin" type="text" name="edit[%s]" size="64" style="width: 400px;" value="%s" />', $key, $PMF_CONF[$key]);
-                            break;
-            
-        case 'select':      printf('<select name="edit[%s]" size="1">', $key);
-                            if ($dir = @opendir(PMF_ROOT_DIR.'/lang')) {
-                                while ($dat = @readdir($dir)) {
-                                    if (substr($dat, -4) == '.php') {
-                                        printf('<option value="%s"', $dat);
-            				            if ($dat == $PMF_CONF['language']) {
-                                            print ' selected="selected"';
-                                        }
-                                        printf('>%s</option>', $languageCodes[substr(strtoupper($dat), 9, 2)]);
-                                    }
-                                }
-                            } else {
-                                print '<option>English</option>';
-                            }
-                            print '</select>';
-                            break;
-            
-        case 'checkbox':    printf('<input type="checkbox" name="edit[%s]" value="true"', $key);
-                            if (isset($PMF_CONF[$key]) && true == $PMF_CONF[$key]) {
-                                print ' checked="checked"';
-                            }
-                            print ' /> '.strtolower($PMF_LANG['ad_entry_active']);
-                            break;
-            
-        case 'print':       print $PMF_CONF[$key];
-                            printf('<input class="admin" type="hidden" name="edit[%s]" size="64" style="width: 400px;" value="%s" />', $key, $PMF_CONF[$key]);
-                            break;
+        <dd>
+<?php
+            printInputFieldByType($key, $value[0]);
+?>
+        </dd>
+    </dt>
+</dl>
+<?php
+        }
     }
-?></dd>
-</dl><?php
-}
