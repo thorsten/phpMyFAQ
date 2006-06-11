@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Pdf.php,v 1.2 2006-01-02 16:51:29 thorstenr Exp $
+* $Id: Pdf.php,v 1.3 2006-06-11 08:12:03 thorstenr Exp $
 *
 * Main PDF class for phpMyFAQ based on FPDF by Olivier Plathey
 *
@@ -25,7 +25,7 @@
 */
 
 define('FPDF_FONTPATH', dirname(dirname(__FILE__)).'/font/');
-require_once('fpdf.php');
+require_once(dirname(__FILE__).'/libs/fpdf.php');
 
 class PDF extends FPDF
 {
@@ -34,118 +34,118 @@ class PDF extends FPDF
     *
     * @var      string
     * @access   private
-    * @see      
+    * @see
     */
     var $B;
-    
+
     /**
     * <i> and <em> for italic strings
     *
     * @var      string
     * @access   private
-    * @see      
+    * @see
     */
     var $I;
-    
+
     /**
     * <u> for underlined strings
     *
     * @var      string
     * @access   private
-    * @see      
+    * @see
     */
     var $U;
-    
+
     /**
     * The "src" attribute inside (X)HTML tags
     *
     * @var      string
     * @access   private
-    * @see      
+    * @see
     */
     var $SRC;
-    
+
     /**
     * The "href" attribute inside (X)HTML tags
     *
     * @var      string
     * @access   private
-    * @see      
+    * @see
     */
     var $HREF;
-    
+
     /**
     * <pre> for code examples
     *
     * @var      string
     * @access   private
-    * @see      
+    * @see
     */
     var $PRE;
-    
+
     /**
     * <div align="center"> for centering text
     *
     * @var      string
     * @access   private
-    * @see      
+    * @see
     */
     var $CENTER;
-    
+
     /**
     * The border of a table
     *
     * @var      int
     * @access   private
-    * @see      
+    * @see
     */
     var $tableborder;
-    
+
     /**
     * The begin of a table
     *
     * @var      int
     * @access   private
-    * @see      
+    * @see
     */
     var $tdbegin;
-    
+
     /**
     * The width of a table
     *
     * @var      int
     * @access   private
-    * @see      
+    * @see
     */
     var $tdwidth;
-    
+
     /**
     * The heightof a table
     *
     * @var      int
     * @access   private
-    * @see      
+    * @see
     */
     var $tdheight;
-    
+
     /**
     * The alignment of a table
     *
     * @var      int
     * @access   private
-    * @see      
+    * @see
     */
     var $tdalign;
-    
+
     /**
     * The background color of a table
     *
     * @var      int
     * @access   private
-    * @see      
+    * @see
     */
     var $tdbgcolor;
-    
+
     /**
     * With or without bookmarks
     *
@@ -154,7 +154,7 @@ class PDF extends FPDF
     * @see      Bookmartk()
     */
     var $enableBookmarks = false;
-    
+
     /**
     * Array with titles
     * @var      array
@@ -213,9 +213,9 @@ class PDF extends FPDF
         $this->tdalign = "L";
         $this->tdbgcolor = false;
     }
-    
+
     // PUBLIC
-    
+
     /**
     * The main (X)HTML parser
     *
@@ -229,7 +229,7 @@ class PDF extends FPDF
         $htmlSearch = array('&quot;', '&lt;', '&gt;', '&nbsp;', '&amp;', '\n');
         $htmlReplace = array('"', '‹', '›', ' ', '&', '<br />');
         $html = str_replace($htmlSearch, $htmlReplace, $html);
-        
+
         $a = preg_split("/<(.*)>/U", $html, -1, PREG_SPLIT_DELIM_CAPTURE);
         foreach($a as $i => $e) {
             if ($i % 2 == 0) {
@@ -266,7 +266,7 @@ class PDF extends FPDF
             }
         }
     }
-    
+
     /**
     * Combines the PDF bookmarks
     *
@@ -286,9 +286,9 @@ class PDF extends FPDF
             $this->outlines[] = array("t" => $txt, "l" => $level, "y" => $y, "p" => $this->PageNo());
         }
     }
-    
+
     // PRIVATE
-    
+
     /**
     * The header of the PDF file
     *
@@ -367,13 +367,13 @@ class PDF extends FPDF
                                 $this->CENTER = $attr["ALIGN"];
                             }
                             break;
-            case 'OL':      
+            case 'OL':
             case 'UL':      $this->SetLeftMargin($this->lMargin + 10);
                             break;
             case 'LI':      $this->SetX($this->GetX() - 10);
                             $this->Cell(10, 5, chr(149), 0, 0, 'C');
                             break;
-            case "P":       
+            case "P":
             case "BR":      $this->Ln(5);
     			            break;
             case "TABLE":   if (isset($attr['BORDER']) && $attr['BORDER'] != "") {
@@ -497,7 +497,7 @@ class PDF extends FPDF
         }
 		$this->SetFont("", $style);
     }
-    
+
     /**
     * Sets a link to an URL
     *
@@ -514,7 +514,7 @@ class PDF extends FPDF
 		$this->SetStyle("U", false);
 		$this->SetTextColor(0);
     }
-    
+
     /**
     * Adds a image
     *
@@ -524,7 +524,7 @@ class PDF extends FPDF
     */
     function AddImage($image)
     {
-        
+
         // Check, if image is stored locally or not
         if ("http" != substr($image, 0, 4)) {
             // Please note that the image must be accessible by HTTP NOT ONLY by HTTPS
@@ -562,19 +562,19 @@ class PDF extends FPDF
                 $h = $w*$hw_ratio;
             }
         }
-        
+
         $x = $this->GetX();
-        
+
         if ($this->GetY() + $h > $this->h) {
             $this->AddPage();
         }
-        
+
         $y = $this->GetY();
         $this->Image($image, $x, $y, $w, $h, $type);
         $this->Write(5,' ');
         $y = $this->GetY();
         $this->Image($image, $x, $y, $w, $h, $type);
-        
+
         if ($y + $h > $this->hPt) {
             $this->AddPage();
         } else {
@@ -584,7 +584,7 @@ class PDF extends FPDF
             $this->SetX($x+$w);
         }
     }
-    
+
     /**
     * Place a string at a superscripted or subscripted position.
     *
@@ -608,7 +608,7 @@ class PDF extends FPDF
             $this->SetFontSize(12);
         }
     }
-    
+
     /**
     *
     *
@@ -643,7 +643,7 @@ class PDF extends FPDF
             $lru[$o['l']] = $i;
             $level = $o['l'];
         }
-        
+
         //Outline items
         $n = $this->n + 1;
         foreach($this->outlines as $i=>$o) {
@@ -666,7 +666,7 @@ class PDF extends FPDF
             $this->_out('/Count 0>>');
             $this->_out('endobj');
         }
-        
+
         //Outline root
         $this->_newobj();
         $this->OutlineRoot = $this->n;
@@ -674,7 +674,7 @@ class PDF extends FPDF
         $this->_out('/Last '.($n + $lru[0]).' 0 R>>');
         $this->_out('endobj');
     }
-    
+
     /**
     *
     *
@@ -686,7 +686,7 @@ class PDF extends FPDF
         parent::_putresources();
         $this->_putbookmarks();
     }
-    
+
     /**
     *
     *
@@ -701,7 +701,7 @@ class PDF extends FPDF
             $this->_out('/PageMode /UseOutlines');
         }
     }
-    
+
     /**
     * Converts hex colors to decimal rgb numbers
     *
@@ -723,6 +723,6 @@ class PDF extends FPDF
         $tbl_color['B'] = $blue;
         return $tbl_color;
     }
-    
+
 }
 ?>

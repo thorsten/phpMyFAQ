@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.41 2006-03-12 09:10:46 thorstenr Exp $
+* $Id: index.php,v 1.42 2006-06-11 08:12:03 thorstenr Exp $
 *
 * The main admin backend index file
 *
@@ -123,15 +123,15 @@ if (isset($auth)) {
     if (isset($_action) && isset($_ajax)) {
         if ($_action == 'ajax') {
             switch ($_ajax) {
-                
+
                 // Link verification
                 case 'verifyURL':       require_once('ajax.verifyurl.php'); break;
                 case 'onDemandURL':     require_once('ajax.ondemandurl.php'); break;
-                
+
                 // User management
                 case 'user_list':       require_once('ajax.user_list.php'); break;
                 case 'group_list':       require_once('ajax.group_list.php'); break;
-                
+
                 // Configuration management
                 case 'config_list':     require_once('ajax.config_list.php'); break;
             }
@@ -152,10 +152,10 @@ if (isset($auth)) {
 // User is authenticated
 if (isset($auth)) {
 	if (isset($_action)) {
-	    
+
         // the various sections of the admin area
 		switch ($_action) {
-		    
+
 			// functions for user administration
 			case 'user':                    require_once('user.php'); break;
 			case 'group':                   require_once('group.php'); break;
@@ -199,11 +199,11 @@ if (isset($auth)) {
 			case "setcookie":				require_once ("cookie.check.php"); break;
 			case "cookies":					require_once ("cookie.check.php"); break;
 			case "delcookie":				require_once ("cookie.check.php"); break;
-			
+
 			// adminlog administration
-			case 'adminlog':				
+			case 'adminlog':
             case 'deleteadminlog':          require_once ('adminlog.php'); break;
-			
+
 			// functions for password administration
 			case "passwd":					require_once ("pwd.change.php"); break;
 			case "savepwd":					require_once ("pwd.save.php"); break;
@@ -214,7 +214,7 @@ if (isset($auth)) {
 			case "sessionsuche":			require_once ("stat.form.php"); break;
 			case "viewsession":				require_once ("stat.show.php"); break;
 			case "statistik":				require_once ("stat.ratings.php"); break;
-			
+
 			// functions for config administration
             case 'config':                  require_once ("configuration.php"); break;
             case 'linkconfig':              require_once ('linkconfig.main.php'); break;
@@ -278,9 +278,9 @@ if (isset($auth)) {
     </dl>
 	<h2>Online Version Information</h2>
 <?php
-        if (isset($_POST["param"]) && $_POST["param"] == "version") {
-            require_once (PMF_ROOT_DIR."/inc/xmlrpc.php");
-            $param = $_POST["param"];
+        if (isset($_POST['param']) && $_POST['param'] === 'version') {
+            require_once (PMF_ROOT_DIR.'/inc/libs/xmlrpc.php');
+            $param = $_POST['param'];
             $xmlrpc = new xmlrpc_client("/xml/version.php", "www.phpmyfaq.de", 80);
             $msg = new xmlrpcmsg("phpmyfaq.version", array(new xmlrpcval($param, "string")));
             $answer = $xmlrpc->send($msg);
@@ -317,10 +317,10 @@ if (isset($auth)) {
 ?>
         <label class="left" for="faqusername"><?php print $PMF_LANG["ad_auth_user"]; ?></label>
         <input class="admin" type="text" name="faqusername" id="faqusername" size="20" /><br />
-        
+
         <label class="left" for="faqpassword"><?php print $PMF_LANG["ad_auth_passwd"]; ?></label>
         <input class="admin" type="password" size="20" name="faqpassword" id="faqpassword" /><br />
-        
+
         <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_auth_ok"]; ?>" />
         <input class="submit" type="reset" value="<?php print $PMF_LANG["ad_auth_reset"]; ?>" />
 

@@ -28,7 +28,7 @@
     -->
     /*]]>*/
     </style>
-    <script type="text/javascript"  src="inc/functions.js"></script>
+    <script type="text/javascript"  src="inc/js/functions.js"></script>
     <link rel="shortcut icon" href="template/favicon.ico" type="image/x-icon" />
     <link rel="icon" href="template/favicon.ico" type="image/x-icon" />
     <link rel="alternate" title="News RSS Feed" type="application/rss+xml" href="feed/news/rss.php" />
@@ -39,7 +39,7 @@
 
 <div id="wrapper1">
     <div id="wrapper2">
-    
+
     <!-- start headers -->
     <div class="header" id="header">
         <h1><a title="{header}" href="{faqHome}">{header}</a></h1>
@@ -56,13 +56,13 @@
 
     <!-- start columns -->
     <div class="columns">
-    
+
         <!-- start left sidebar -->
         <div class="leftcolumn sidebar" id="sidebar-left">
             <div class="leftpadding">
-                
+
                 <h2 class="invisible">Navigation</h2>
-                
+
                 <!-- start categories -->
                 <div class="content">
                     <div id="categories">
@@ -75,7 +75,7 @@
                     </div>
                 </div>
                 <!-- end categories -->
-        
+
                 <!-- start search box -->
                 <div class="content">
                     <div id="search">
@@ -87,7 +87,7 @@
                     </div>
                 </div>
                 <!-- end search box -->
-    
+
                 <!-- start language selection box -->
                 <div class="content">
                     <div id="langform">
@@ -99,7 +99,7 @@
                     </div>
                 </div>
                 <!-- end language selection box -->
-                
+
                 <!-- start login box -->
                 <div class="content">
                     <div id="loginform">
@@ -107,7 +107,7 @@
                     </div>
                 </div>
                 <!-- end login box -->
-                
+
                 <!-- start user online -->
                 <div class="content">
                     <div id="useronline">
@@ -115,33 +115,33 @@
                     </div>
                 </div>
                 <!-- end user online -->
-                
+
             </div>
         </div>
         <!-- end left sidebar -->
-    
+
         <!-- start right sidebar -->
         <div class="rightcolumn sidebar" id="sidebar-right">
             <div class="rightpadding">
-            
+
                 <div class="content">
                     <div id="topten">
                     <h3>{writeTopTenHeader} <a href="feed/topten/rss.php" target="_blank"><img src="images/rss.png" width="28" height="16" alt="RSS" /></a></h3>
                     {writeTopTenRow}
                     </div>
                 </div>
-                
+
                 <div class="content">
                     <div id="latest">
                     <h3>{writeNewestHeader}&nbsp;<a href="feed/latest/rss.php" target="_blank"><img src="images/rss.png" width="28" height="16" alt="RSS" /></a></h3>
                     {writeNewestRow}
                     </div>
                 </div>
-                
+
             </div>
         </div>
         <!-- end right sidebar -->
-    
+
         <!-- start main content -->
         <div class="centercolumn">
             <div class="centerpadding">
@@ -154,9 +154,9 @@
 
     </div>
     <!-- end columns -->
-    
+
     <div class="clearing"></div>
-    
+
     <!-- start footer -->
     <div id="footer" class="footer">
         <!-- please do not remove the following line -->
@@ -167,9 +167,9 @@
     <!-- start debug messages -->
     {debugMessages}
     <!-- end debug messages -->
-	
+
     </div>
-</div>    
+</div>
 
 </body>
 </html>

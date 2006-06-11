@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: header.php,v 1.15 2006-05-06 13:53:42 thorstenr Exp $
+* $Id: header.php,v 1.16 2006-06-11 08:12:03 thorstenr Exp $
 *
 * header of the admin area
 *
@@ -41,8 +41,8 @@ header("Vary: Negotiate,Accept");
     <link rel="shortcut icon" href="../template/favicon.ico" type="image/x-icon" />
     <link rel="icon" href="../template/favicon.ico" type="image/x-icon" />
     <style type="text/css"> @import url(../template/admin.css); </style>
-    <script type="text/javascript" src="../inc/functions.js"></script>
-    <script type="text/javascript" src="../inc/prototype.js"></script>
+    <script type="text/javascript" src="../inc/js/functions.js"></script>
+    <script type="text/javascript" src="../inc/js/prototype.js"></script>
 </head>
 <body id="body" dir="<?php print $PMF_LANG["dir"]; ?>" onload="javascript:focusOnUsernameField();"><a name="top"></a>
 <!-- Header -->

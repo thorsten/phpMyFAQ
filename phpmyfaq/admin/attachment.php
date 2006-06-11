@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: attachment.php,v 1.14 2006-03-02 14:03:06 thorstenr Exp $
+* $Id: attachment.php,v 1.15 2006-06-11 08:12:03 thorstenr Exp $
 *
 * Select an attachment and save it or create the SQL backup files
 *
@@ -81,7 +81,7 @@ if (!isset($_REQUEST["aktion"]) || isset($_REQUEST["save"])) {
     @import url(../template/admin.css);
     body { margin: 5px; }
     </style>
-    <script type="text/javascript" src="../inc/functions.js"></script>
+    <script type="text/javascript" src="../inc/js/functions.js"></script>
 </head>
 <body>
 <?php
