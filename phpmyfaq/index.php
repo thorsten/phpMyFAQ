@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.48 2006-06-01 09:01:52 thorstenr Exp $
+* $Id: index.php,v 1.49 2006-06-11 08:21:23 thorstenr Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the
@@ -47,7 +47,7 @@ PMF_Init::cleanRequest();
 // Include required template parser class, captcha class, category class,
 // the main FAQ class and the IDNA class
 //
-require_once('inc/parser.php');
+require_once('inc/Template.php');
 require_once('inc/captcha.php');
 require_once('inc/category.php');
 require_once('inc/Faq.php');
@@ -297,7 +297,7 @@ if (isset($auth)) {
 //
 // Load template files and set template variables
 //
-$tpl = new phpmyfaqTemplate (array(
+$tpl = new PMF_Template (array(
 	'index'         	=> 'template/index.tpl',
     'loginBox'      	=> $login_tpl,
 	'writeContent'  	=> $inc_tpl));
