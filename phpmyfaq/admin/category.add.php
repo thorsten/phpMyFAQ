@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: category.add.php,v 1.7 2006-06-11 15:26:21 matteo Exp $
+* $Id: category.add.php,v 1.8 2006-06-11 20:35:45 matteo Exp $
 *
 * Adds a category
 *
@@ -21,6 +21,7 @@
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
+
     exit();
 }
 
@@ -34,25 +35,35 @@ if ($permission["addcateg"]) {
     <input type="hidden" name="aktion" value="savecategory" />
     <input type="hidden" name="parent_id" value="<?php if (isset($_GET["cat"])) { print $_GET["cat"]; } else { print "0"; } ?>" />
 <?php
-    if (isset($_REQUEST["cat"])) {
+    if (isset($_GET["cat"])) {
 ?>
-    <p><?php print $PMF_LANG["msgMainCategory"].": ".$cat->categoryName[$_GET["cat"]]["name"]; ?></p>
+    <p><?php print $PMF_LANG["msgMainCategory"].": ".$cat->categoryName[$_GET["cat"]]["name"]." (".$languageCodes[strtoupper($cat->categoryName[$_GET["cat"]]["lang"])].")"; ?></p>
 <?php
     }
 ?>
-	<div class="row"><span class="label"><strong><?php print $PMF_LANG["ad_categ_titel"]; ?>:</strong></span>
-    <input class="admin" type="text" name="name" size="30" style="width: 250px;" /></div>
-    <div class="row"><span class="label"><strong><?php print $PMF_LANG["ad_categ_lang"]; ?>:</strong></span>
+    <label class="left"><?php print $PMF_LANG["ad_categ_titel"]; ?>:</label>
+    <input type="text" name="name" size="30" style="width: 250px;" /><br />
+
+    <label class="left"><?php print $PMF_LANG["ad_categ_lang"]; ?>:</label>
     <select name="lang" size="1">
-    <?php print languageOptions($LANGCODE); ?>
-    </select></div>
-    <div class="row"><span class="label"><strong><?php print $PMF_LANG["ad_categ_desc"]; ?>:</strong></span>
-    <input class="admin" type="text" name="description" size="30" style="width: 250px;" /></div>
-    <div class="row"><span class="label"><strong>&nbsp;</strong></span>
-    <input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_add"]; ?>" /></div>
+<?php
+    if (isset($_GET["cat"])) {
+        print languageOptions($cat->categoryName[$_GET["cat"]]["lang"], true);
+    } else {
+        print languageOptions($LANGCODE);
+    }
+?>
+    </select><br />
+
+    <label class="left"><?php print $PMF_LANG["ad_categ_desc"]; ?>:</label>
+    <input type="text" name="description" size="30" style="width: 250px;" /><br />
+
+    <input class="submit" style="margin-left: 190px;" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_add"]; ?>" />
+
     </fieldset>
-	</form>
+    </form>
 <?php
 } else {
-	print $PMF_LANG["err_NotAuth"];
+    print $PMF_LANG["err_NotAuth"];
 }
+?>
