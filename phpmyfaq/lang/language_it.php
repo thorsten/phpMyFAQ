@@ -1,23 +1,25 @@
 <?php
-/******************************************************************************
- * File:				language_it.php
- * Description:		    Italian language file
- * Authors:				Stefano Bramato <stefano@pubblideaweb.it>
- *                      Rudy <webmaster@queenarena.com>
- * Date:				2004-06-24
- * Last Update:		    2004-07-08
- * Copyright:           (c) 2006 phpMyFAQ Team
- * 
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- * 
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- ******************************************************************************/
+/**
+* $Id: language_it.php,v 1.9 2006-06-11 22:04:17 matteo Exp $
+*
+* Italian language file
+*
+* @author       Stefano Bramato <stefano@pubblideaweb.it>
+* @auhtor       Rudy <webmaster@queenarena.com>
+* @author       Matteo Scaramuccia <matteo@scaramuccia.com>
+* @since        2004-06-24
+* @copyright    (c) 2004-2006 phpMyFAQ Team
+*
+* The contents of this file are subject to the Mozilla Public License
+* Version 1.1 (the "License"); you may not use this file except in
+* compliance with the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
+*
+* Software distributed under the License is distributed on an "AS IS"
+* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+* License for the specific language governing rights and limitations
+* under the License.
+*/
 
 $PMF_LANG["metaCharset"] = "iso-8859-15";
 $PMF_LANG["metaLanguage"] = "it";
