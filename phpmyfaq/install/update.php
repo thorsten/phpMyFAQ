@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.43 2006-05-28 14:40:18 thorstenr Exp $
+* $Id: update.php,v 1.44 2006-06-11 14:57:34 matteo Exp $
 *
 * Main update script
 *
@@ -22,19 +22,18 @@
 */
 
 define('NEWVERSION', '2.0.0-dev');
-define('COPYRIGHT', '&copy; 2001-2006 <a href="http://www.phpmyfaq.de/" target="_blank">phpMyFAQ Team</a> | All rights reserved.');
+define('COPYRIGHT', '&copy; 2001-2006 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
-require_once(PMF_ROOT_DIR.'/inc/data.php');
-require_once(PMF_ROOT_DIR.'/inc/config.php');
-require_once(PMF_ROOT_DIR.'/inc/constants.php');
+require_once(PMF_ROOT_DIR."/inc/data.php");
+require_once(PMF_ROOT_DIR."/inc/config.php");
+require_once(PMF_ROOT_DIR."/inc/constants.php");
 
 if (isset($_GET["step"]) && $_GET["step"] != "") {
     $step = $_GET["step"];
 } else {
     $step = 1;
 }
-
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -135,8 +134,8 @@ if ($step == 1) {
 </ul>
 <p>This update will <strong>not</strong> work for the following versions:</p>
 <ul type="square">
-	<li>phpMyFAQ 0.x</li>
-	<li>phpMyFAQ 1.0.x</li>
+    <li>phpMyFAQ 0.x</li>
+    <li>phpMyFAQ 1.0.x</li>
     <li>phpMyFAQ 1.1.x</li>
     <li>phpMyFAQ 1.2.x</li>
     <li>phpMyFAQ 1.3.x</li>
@@ -156,7 +155,11 @@ if ($step == 1) {
     <option value="1.6.0">phpMyFAQ 1.6.0 and later</option>
 </select>
 
-<p>Attention! This version might be broken and it's under heavy development.</p>
+<p class="center">
+    <strong>Attention! This version might be broken and it's under heavy development
+    <br />
+    CURRENTLY no user migration is performed: please use a fresh installation instead of updating.</strong>
+</p>
 
 <p class="center"><input type="submit" value="Go to step 2 of 5" class="button" /></p>
 </fieldset>
@@ -166,18 +169,18 @@ if ($step == 1) {
 
 /**************************** STEP 2 OF 5 ***************************/
 if ($step == 2) {
-	$test1 = 0;
+    $test1 = 0;
     $test2 = 0;
     $test3 = 0;
     $test4 = 0;
     $test5 = 0;
     if (!is_writeable(PMF_ROOT_DIR."/inc/data.php")) {
-		print "<p class=\"error\"><strong>Error:</strong> The file ../inc/data.php or the directory ../inc is not writeable. Please correct this!</p>";
+        print "<p class=\"error\"><strong>Error:</strong> The file ../inc/data.php or the directory ../inc is not writeable. Please correct this!</p>";
     } else {
         $test1 = 1;
-	}
-	if (!is_writeable(PMF_ROOT_DIR."/inc/config.php")) {
-		print "<p class=\"error\"><strong>Error:</strong> The file ../inc/config.php is not writeable. Please correct this!</p>";
+    }
+    if (!is_writeable(PMF_ROOT_DIR."/inc/config.php")) {
+        print "<p class=\"error\"><strong>Error:</strong> The file ../inc/config.php is not writeable. Please correct this!</p>";
     } else {
         $test2 = 1;
     }
@@ -260,8 +263,18 @@ if ($step == 3) {
 <input type="hidden" name="edit[parse_php]" value="" />
 <input type="hidden" name="edit[mod_rewrite]" value="" />
 <input type="hidden" name="edit[ldap_support]" value="" />
+<input type="hidden" name="edit[spamEnableSafeEmail]" value="TRUE" />
+<input type="hidden" name="edit[spamCheckBannedWords]" value="TRUE" />
+<input type="hidden" name="edit[spamEnableCatpchaCode]" value="TRUE" />
 <?php
     } else {
+        $PMF_CONF['parse_php'] = isset($PMF_CONF['parse_php']) ? $PMF_CONF['parse_php'] : '';
+        $PMF_CONF['mod_rewrite'] = isset($PMF_CONF['mod_rewrite']) ? $PMF_CONF['mod_rewrite'] : '';
+        $PMF_CONF['ldap_support'] = isset($PMF_CONF['ldap_support']) ? $PMF_CONF['ldap_support'] : '';
+        // Version 1.6.1
+        $PMF_CONF['spamEnableSafeEmail'] = isset($PMF_CONF['spamEnableSafeEmail']) ? $PMF_CONF['spamEnableSafeEmail'] : 'TRUE';
+        $PMF_CONF['spamCheckBannedWords'] = isset($PMF_CONF['spamCheckBannedWords']) ? $PMF_CONF['spamCheckBannedWords'] : 'TRUE';
+        $PMF_CONF['spamEnableCatpchaCode'] = isset($PMF_CONF['spamEnableCatpchaCode']) ? $PMF_CONF['spamEnableCatpchaCode'] : 'TRUE';
 ?>
 <input type="hidden" name="edit[language]" value="<?php print $PMF_CONF["language"]; ?>" />
 <input type="hidden" name="edit[detection]" value="<?php print $PMF_CONF["detection"]; ?>" />
@@ -285,6 +298,9 @@ if ($step == 3) {
 <input type="hidden" name="edit[parse_php]" value="<?php print $PMF_CONF["parse_php"]; ?>" />
 <input type="hidden" name="edit[mod_rewrite]" value="<?php print $PMF_CONF["mod_rewrite"]; ?>" />
 <input type="hidden" name="edit[ldap_support]" value="<?php print $PMF_CONF["ldap_support"]; ?>" />
+<input type="hidden" name="edit[spamEnableSafeEmail]" value="<?php print $PMF_CONF["spamEnableSafeEmail"]; ?>" />
+<input type="hidden" name="edit[spamCheckBannedWords]" value="<?php print $PMF_CONF["spamCheckBannedWords"]; ?>" />
+<input type="hidden" name="edit[spamEnableCatpchaCode]" value="<?php print $PMF_CONF["spamEnableCatpchaCode"]; ?>" />
 <?php
     }
 ?>
@@ -339,9 +355,9 @@ if ($step == 4) {
 /**************************** STEP 4 OF 5 ***************************/
 if ($step == 5) {
     require_once(PMF_ROOT_DIR."/inc/functions.php");
-    require_once(PMF_ROOT_DIR."/inc/db.php");
+    require_once(PMF_ROOT_DIR."/inc/Db.php");
     define("SQLPREFIX", $DB["prefix"]);
-    $db = db::db_select($DB["type"]);
+    $db = PMF_Db::db_select($DB["type"]);
     $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
 
     $version = str_replace(".", "", $_REQUEST["version"]);
@@ -350,7 +366,7 @@ if ($step == 5) {
     }
 
     // update from version 1.4.0
-    if ($version <= 140) {
+    if ($version <= "140") {
         // rewrite data.php
         if ($fp = @fopen("../inc/data.php","w")) {
     		@fputs($fp,"<?php\n\$DB[\"server\"] = '".$DB["server"]."';\n\$DB[\"user\"] = '".$DB["user"]."';\n\$DB[\"password\"] = '".$DB["password"]."';\n\$DB[\"db\"] = '".$DB["db"]."';\n\$DB[\"prefix\"] = '".SQLPREFIX."';\n\$DB[\"type\"] = 'mysql';\n?>");
@@ -360,7 +376,7 @@ if ($step == 5) {
         }
     }
     // update from version 1.4.2
-    if ($version < 142) {
+    if ($version < "142") {
         $query[] = "ALTER TABLE ".SQLPREFIX."faqadminlog CHANGE user usr INT(11) DEFAULT '0' NOT NULL";
         $query[] = "ALTER TABLE ".SQLPREFIX."faqadminsessions CHANGE user usr TINYTEXT NOT NULL";
         $query[] = "ALTER TABLE ".SQLPREFIX."faqchanges CHANGE user usr INT(11) DEFAULT '0' NOT NULL";
@@ -368,11 +384,11 @@ if ($step == 5) {
         $query[] = "ALTER TABLE ".SQLPREFIX."faqvoting CHANGE user usr INT(11) DEFAULT '0' NOT NULL";
     }
     // update from version 1.4.4
-    if ($version <= 144) {
+    if ($version <= "144") {
         $query[] = "ALTER TABLE ".SQLPREFIX."faqdata CHANGE content content LONGTEXT NOT NULL";
     }
     // update from versions before 1.5.0
-    if ($version < 150) {
+    if ($version < "150") {
         // alter column faqdata.rubrik to integer
         $query[] = "ALTER TABLE ".SQLPREFIX."faqdata CHANGE rubrik rubrik INT NOT NULL";
         // create new table faqcategoryrelations
@@ -383,14 +399,14 @@ if ($step == 5) {
         $query[] = "ALTER TABLE ".SQLPREFIX."faqdata DROP rubrik";
         // remove all auto-increments
         $query[] = 'ALTER TABLE '.SQLPREFIX.'faqadminlog CHANGE id id INT(11) NOT NULL';
-		$query[] = 'ALTER TABLE '.SQLPREFIX.'faqcategories CHANGE id id INT(11) NOT NULL';
-		$query[] = 'ALTER TABLE '.SQLPREFIX.'faqchanges CHANGE id id INT(11) NOT NULL';
-		$query[] = 'ALTER TABLE '.SQLPREFIX.'faqcomments CHANGE id_comment id_comment INT(11) NOT NULL';
-		$query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata CHANGE id id INT(11) NOT NULL';
-		$query[] = 'ALTER TABLE '.SQLPREFIX.'faqquestions CHANGE id id INT(11) NOT NULL';
-		$query[] = 'ALTER TABLE '.SQLPREFIX.'faqnews CHANGE id id INT(11) NOT NULL';
-		$query[] = 'ALTER TABLE '.SQLPREFIX.'faquser CHANGE id id INT(11) NOT NULL';
-		$query[] = 'ALTER TABLE '.SQLPREFIX.'faqvisits CHANGE id id INT(11) NOT NULL';
+        $query[] = 'ALTER TABLE '.SQLPREFIX.'faqcategories CHANGE id id INT(11) NOT NULL';
+        $query[] = 'ALTER TABLE '.SQLPREFIX.'faqchanges CHANGE id id INT(11) NOT NULL';
+        $query[] = 'ALTER TABLE '.SQLPREFIX.'faqcomments CHANGE id_comment id_comment INT(11) NOT NULL';
+        $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata CHANGE id id INT(11) NOT NULL';
+        $query[] = 'ALTER TABLE '.SQLPREFIX.'faqfragen CHANGE id id INT(11) NOT NULL';
+        $query[] = 'ALTER TABLE '.SQLPREFIX.'faqnews CHANGE id id INT(11) NOT NULL';
+        $query[] = 'ALTER TABLE '.SQLPREFIX.'faquser CHANGE id id INT(11) NOT NULL';
+        $query[] = 'ALTER TABLE '.SQLPREFIX.'faqvisits CHANGE id id INT(11) NOT NULL';
     }
     // update from versions before 1.5.2
     if ($version < 152) {
@@ -480,10 +496,61 @@ if ($step == 5) {
 
     // update from versions before 1.6.0
     if ($version < 160) {
-        $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata ADD solution_id INTEGER NOT NULL AFTER lang';
-        $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata ADD revision_id INTEGER NOT NULL AFTER solution_id';
-        $query[] = 'ALTER TABLE '.SQLPREFIX.'faqchanges ADD revision_id INTEGER NOT NULL AFTER lang';
-
+        // add revision_id and solution_id
+        // 1/2. Fix faqdata and faqchanges tables
+        switch($DB["type"]) {
+            case 'pgsql':
+                // faqdata (NEW) from install/pgsql.sql.php
+                $query[] = "CREATE TABLE ".SQLPREFIX."faqdata_new (
+                            id SERIAL NOT NULL,
+                            lang varchar(5) NOT NULL,
+                            solution_id bigint NOT NULL,
+                            revision_id bigint NOT NULL DEFAULT 0,
+                            active char(3) NOT NULL,
+                            keywords text NOT NULL,
+                            thema text NOT NULL,
+                            content text NOT NULL,
+                            author varchar(255) NOT NULL,
+                            email varchar(255) NOT NULL,
+                            comment char(1) NOT NULL default 'y',
+                            datum varchar(15) NOT NULL,
+                            PRIMARY KEY (id, lang))";
+                // Copy data from the (old) faqdata
+                $query[] = 'INSERT INTO '.SQLPREFIX.'faqdata_new
+                            (id, lang, active, keywords, thema, content, author, email, comment, datum)
+                            SELECT id, lang, active, keywords, thema, content, author, email, comment, datum
+                            FROM '.SQLPREFIX.'faqdata';
+                // Drop the (old) faqdata and rename the new faqdata table
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata     RENAME TO '.SQLPREFIX.'faqdata_PMF155_old';
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata_new RENAME TO '.SQLPREFIX.'faqdata';
+                $query[] = 'DROP TABLE '.SQLPREFIX.'faqdata_PMF155_old';
+                // faqchanges (NEW) from install/pgsql.sql.php
+                $query[] = "CREATE TABLE ".SQLPREFIX."faqchanges_new (
+                            id SERIAL NOT NULL,
+                            beitrag bigint NOT NULL,
+                            lang varchar(5) NOT NULL,
+                            revision_id integer NOT NULL DEFAULT 0,
+                            usr bigint NOT NULL REFERENCES ".SQLPREFIX."faquser(id),
+                            datum bigint NOT NULL,
+                            what text NOT NULL,
+                            PRIMARY KEY (id, lang))";
+                // Copy data from the (old) faqchanges
+                $query[] = 'INSERT INTO '.SQLPREFIX.'faqchanges_new
+                            (id, beitrag, lang, usr, datum, what)
+                            SELECT id, beitrag, lang, usr, datum, what
+                            FROM '.SQLPREFIX.'faqchanges';
+                // Drop the (old) faqchanges and rename the new faqchanges table
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqchanges     RENAME TO '.SQLPREFIX.'faqchanges_PMF155_old';
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqchanges_new RENAME TO '.SQLPREFIX.'faqchanges';
+                $query[] = 'DROP TABLE '.SQLPREFIX.'faqchanges_PMF155_old';
+                break;
+            default:
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata ADD solution_id INTEGER NOT NULL AFTER lang';
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata ADD revision_id INTEGER NOT NULL AFTER solution_id';
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqchanges ADD revision_id INTEGER NOT NULL AFTER lang';
+                break;
+        }
+        // 2/2. Add faqdata_revisions table
         switch($DB["type"]) {
             case 'mysql':
             case 'mysqli':
@@ -524,37 +591,38 @@ if ($step == 5) {
             $_start += PMF_SOLUTION_ID_INCREMENT_VALUE;
         }
     }
+    
+    // update from versions before 2.0.0
+    if ($version < 200) {
+        // TODO: Add the complex update stage from PMF 2.x-
+    }
 
     // optimize tables
     switch($DB["type"]) {
-
         case 'mysql':
         case 'mysqli':      $query[] = "OPTIMIZE TABLE ".SQLPREFIX."faqadminlog, ".SQLPREFIX."faqadminsessions, ".SQLPREFIX."faqcategories, ".SQLPREFIX."faqcategoryrelations, ".SQLPREFIX."faqchanges, ".SQLPREFIX."faqcomments, ".SQLPREFIX."faqdata, ".SQLPREFIX."faqquestions, ".SQLPREFIX."faqnews, ".SQLPREFIX."faqsessions, ".SQLPREFIX."faquser, ".SQLPREFIX."faqvisits, ".SQLPREFIX."faqvoting, ".SQLPREFIX."faqglossary";
                             break;
-
         case 'pgsql':       $query[] = "VACUUM ANALYZE;";
                             break;
-
-        default:            break;
     }
 
-	print '<p class="center">';
+    print '<p class="center">';
     if (isset($query)) {
         while ($each_query = each($query)) {
-    		$result = $db->query($each_query[1]);
-    		print "|&nbsp;\n";
-    		if (!$result) {
-    			print "<p class=\"error\"><strong>Error:</strong> ".$db->error()."</p>\n";
+            $result = $db->query($each_query[1]);
+            print "|&nbsp;\n";
+            if (!$result) {
+                print "<p class=\"error\"><strong>Error:</strong> ".$db->error()."</p>\n";
                 print "<p>Query:</p>\n";
-                print "<pre>".$each_query[1]."</pre>\n";
-    			die();
-    		}
-            wait(250);
-    	}
+                print "<pre>".PMF_htmlentities($each_query[1])."</pre>\n";
+                die();
+            }
+            wait(25);
+        }
     }
     print "</p>\n";
-    print '<p class="center\">The database was updated successfully.</p>';
-    print '<p class="center\"><a href="../index.php">phpMyFAQ</a></p>';
+    print '<p class="center">The database was updated successfully.</p>';
+    print '<p class="center"><a href="../index.php">phpMyFAQ</a></p>';
     print '<p class="center">Please remove the backup (*.php.bak and *.bak.php) files located in the directory inc/.</p>';
 
     if (@unlink(basename($_SERVER["PHP_SELF"]))) {
