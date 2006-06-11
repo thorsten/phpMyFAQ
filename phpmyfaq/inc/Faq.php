@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.11 2006-06-11 18:11:25 matteo Exp $
+* $Id: Faq.php,v 1.12 2006-06-11 19:26:41 matteo Exp $
 *
 * The main FAQ class
 *
@@ -588,7 +588,7 @@ class FAQ
                 if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == true) {
                     $data['url'] = sprintf('%d_%d_%s.html', $row->category_id, $row->id, $row->lang);
                 } else {
-                    $data['url'] = sprintf('?%daction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s', $sids, $row->category_id, $row->id, $row->lang);
+                    $data['url'] = sprintf('?%d&amp;action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s', $sids, $row->category_id, $row->id, $row->lang);
                 }
 	        $topten[] = $data;
 	        $i++;
@@ -652,7 +652,7 @@ class FAQ
                 if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == true) {
                     $data['url'] = sprintf('%d_%d_%s.html', $row->category_id, $row->id, $row->lang);
                 } else {
-                    $data['url'] = sprintf('?%daction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s', $sids, $row->category_id, $row->id, $row->lang);
+                    $data['url'] = sprintf('?%d&amp;action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s', $sids, $row->category_id, $row->id, $row->lang);
                 }
                 $latest[] = $data;
                 $i++;
