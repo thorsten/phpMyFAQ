@@ -1,5 +1,5 @@
 /**
-* $Id: admin.css,v 1.11 2006-01-16 18:52:12 thorstenr Exp $
+* $Id: admin.css,v 1.12 2006-06-11 19:11:55 matteo Exp $
 *
 * This is the CSS file for the admin section of phpMyFAQ 1.5.x
 * You don't need to change enything here but feel free to do it. :-)
@@ -23,75 +23,80 @@
 #header {
     background-color: #9CB6C6;
     }
-
+/*
 .sideBox {
     background-color: #305C77;
     }
-
-#footer {
-    background-color: #305C77;
-    }
-
+*/
 body {
-    background-color: #f5f5f5;
+    background-color: #fff;
     color: black;
     font-family: "Bitstream Vera Sans", "Trebuchet MS", Verdana, Tahoma, sans-serif;
     font-size: 12px;
     margin: auto;
 }    
-
 h1 {
     font-weight: bold;
 	font-style: italic;
     font-size: 24px;
     padding-bottom: 0.5ex;
 }
-
 h2 {
     font-size: 18px;
 	font-style: italic;
     border-bottom: 1px solid;
 }
-
 img {
     border: 0;
 }
-
 ul {
     list-style: square;
 }
-
 fieldset {
-    border: 1px solid #000000;
+    margin-top: 15px;
+    border: 1px solid #D0D9D9;
 }
-
-legend {
+label, legend {
     font-weight: bold;
 }
+input, textarea, select {
+    font-family: "Bitstream Vera Sans", "Trebuchet MS", Verdana, Tahoma, sans-serif;
+    font-size: 12px;
+}
 
-div.row {
-  clear: both;
-  margin: 0px;
-  padding: 2px;
-  }
-
-div.row span.label {
-  float: left;
-  width: 125px;
-  text-align: right;
-  line-height: 20px;
-  padding-right: 5px;
-  }
-  
+/**
+* Forms
+*/
 label.left {
-    vertical-align: top;
-    width: 85px;
+    float: left;
+    text-align: right;
+    width: 185px;
     margin-right: 5px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    font-weight: bold;
-    }
-    
+}
+label.lefteditor {
+    float: left;
+    text-align: right;
+    width: 135px;
+    margin-right: 5px;
+}
+input[type=text], select {
+    float: left;
+    margin-bottom: 10px;
+}
+input.right {
+    float: left;
+    width: auto;
+    clear: both;
+    margin-left: 200px;
+    margin-right: 5px;
+}
+input[type=checkbox].right, input[type=radio].right, input[type=submit].right {
+    margin-left: 200px;
+}
+form br {
+    clear: both;
+}
+
 #bodyText p {
     padding-bottom: 1ex;
 }
@@ -118,9 +123,11 @@ label.left {
   margin-left: 10px;
 }
 div#menue {
-    font-size: 95%;
-	width: 180px;
-	padding: 0px;
+   font-size: 95%;
+   width: 180px;
+   padding: 0px;
+   background-color: #EDF2F2;
+   border: 1px solid #D0D9D9;
 }
 #menue ul {
 	list-style: none;
@@ -128,18 +135,27 @@ div#menue {
 	margin: 0px;
 }
 #menue ul li {
-	border-bottom: 1px solid #fff;
+	border-bottom: 1px solid #D0D9D9;
 	margin: 0px;
 }
 #menue li a {
-	color: White;
+	color: #000;
     text-decoration: none;
     display: block;
 	padding: 3px;
 }
 #menue li a:hover {
-    background-color: #1C3646;
+    background-color: #D0D9D9;
+    color: #000;
     }
+div#langform {
+   font-size: 95%;
+   width: 180px;
+   margin-top: 10px;
+   padding: 0px;
+   background-color: #EDF2F2;
+   border: 1px solid #D0D9D9;
+}
 
 /* the main body */
 #bodyText {
@@ -151,18 +167,23 @@ div#menue {
 
 /* table styles */
 table.list {
-    border: 1px solid #000000;
+    border: 1px solid #D0D9D9;
     border-collapse: collapse;
     width: 565px;
     }
+table.listrecords {
+    border: 1px solid #D0D9D9;
+    border-collapse: collapse;
+    width: 545px;
+    }
 .list thead th, tfoot td {
-    background-color: #9CB6C6;
+    background-color: #EDF2F2;
 	}
 .list tfoot td {
     text-align: right;
 	}
 th.list, td.list {
-    border: 1px solid #000000;
+    border: 1px solid #D0D9D9;
     padding: 2px;
     line-height: 20px;
     text-align: left;
@@ -174,8 +195,14 @@ th.list, td.list {
     }    
 
 /* styles for input and textarea fields */
+textarea.admin {
+    width: 555px;
+    }
 input.admin, select.admin, textarea.admin {
-    border: 1px solid black;
+    float: left;
+    width: auto;
+    clear: both;
+    border: 1px solid gray;
     background: White;
     margin-bottom: 10px;
     }
@@ -183,7 +210,21 @@ input.submit {
     border: 2px solid #696969;
     background-color: #dcdcdc;
     }
-  
+
+/* Category / Record listing styles */
+.categorylisting {
+    color: Black;
+    font-weight: bold;
+    padding-bottom: 8px;
+}
+.categorylisting a {
+    color: Black;
+    text-decoration: none;
+}
+.categorybox {
+    padding-bottom: 16px;
+}
+
 /**
 * Link configuration
 */
@@ -281,22 +322,29 @@ table.linkconfig#configuration tr#lastrow td {
 }
 
 /* ###### Footer ###### */
+.clearing {
+   height: 0;
+   margin: 10px;
+   clear: both;
+   display: none;
+}
 #footer {
-    color: white;
-    border-top: 2px solid;
-    border-bottom: 2px solid;
-    padding-top: 0.75ex;
-    padding-bottom: 0.75ex;
-    clear: left;
-    }
-
+   clear: both;
+   margin-top: 10px;
+   margin-left: 10px;
+   margin-right: 10px;
+   padding-top: 10px;
+   color: #666666;
+   border-top: 2px solid #666666;
+   padding-top: 10px;
+   text-align: right;
+}
 #footer div {
     padding-left: 3mm;
-    }
-
+}
 #footer a {
-    color: white;
-  }
+    color: #666666;
+}
   
 /* blind container clearing float:left/right couples */
 .clear {
