@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.edit.php,v 1.29 2006-03-02 13:57:29 thorstenr Exp $
+* $Id: record.edit.php,v 1.30 2006-06-11 15:26:21 matteo Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23
@@ -24,7 +24,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 }
 
 if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
-	$tree = new Category();
+	$tree = new PMF_Category();
     $tree->buildTree();
     $rubrik = "";
     $thema = "";

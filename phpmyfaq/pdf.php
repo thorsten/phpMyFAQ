@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: pdf.php,v 1.19 2006-06-01 10:00:57 thorstenr Exp $
+* $Id: pdf.php,v 1.20 2006-06-11 15:26:21 matteo Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Peter Beauvain <pbeauvain@web.de>
@@ -20,12 +20,12 @@
 * under the License.
 */
 
-require_once('inc/init.php');
+require_once('inc/Init.php');
 PMF_Init::cleanRequest();
-require_once('inc/category.php');
+require_once('inc/Category.php');
 require_once('inc/PMF_export/Pdf.php');
 
-$tree = new Category;
+$tree = new PMF_Category;
 
 // get language (default: english)
 $pmf = new PMF_Init();

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.save.php,v 1.31 2006-01-17 19:43:04 thorstenr Exp $
+* $Id: record.save.php,v 1.32 2006-06-11 15:26:21 matteo Exp $
 *
 * Save or update a FAQ record
 *
@@ -29,7 +29,7 @@ $submit = $_REQUEST["submit"];
 if (isset($submit[2]) && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "" && isset($_REQUEST['rubrik']) && is_array($_REQUEST['rubrik'])) {
 	// Preview
 	$rubrik = $_REQUEST["rubrik"];
-    $cat = new Category;
+    $cat = new PMF_Category;
     $cat->transform(0);
     $categorylist = '';
     foreach ($rubrik as $categories) {

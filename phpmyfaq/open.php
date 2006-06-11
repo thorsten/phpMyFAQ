@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: open.php,v 1.6 2006-04-09 10:06:41 thorstenr Exp $
+* $Id: open.php,v 1.7 2006-06-11 15:26:21 matteo Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-09-17
@@ -28,7 +28,7 @@ Tracking('open_questions', 0);
 //       so the result set (the Open Uqestions) will have the Category Name
 //       for any of the multilanguage categories and the Category list
 //       on the left pane will not be affected
-$tree = new Category();
+$tree = new PMF_Category();
 $tree->transform(0);
 
 $tpl->processTemplate ('writeContent', array(

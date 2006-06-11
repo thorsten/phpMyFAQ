@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.34 2006-04-09 09:35:11 thorstenr Exp $
+* $Id: artikel.php,v 1.35 2006-06-11 15:26:20 matteo Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -100,7 +100,7 @@ if (is_dir('attachments/')  && is_dir('attachments/'.$id) && isset($PMF_CONF['di
 }
 
 $writeMultiCategories = '';
-$cat = new Category($lang);
+$cat = new PMF_Category($lang);
 $multiCats = $cat->getCategoriesFromArticle($id);
 if (count($multiCats) > 0) {
     $writeMultiCategories .= '        <div id="article_categories">';

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.108 2006-06-01 21:14:33 thorstenr Exp $
+* $Id: functions.php,v 1.109 2006-06-11 15:26:21 matteo Exp $
 *
 * This is the main functions file!
 *
@@ -659,7 +659,7 @@ function generateXHTMLFile()
 
     require_once("../inc/parser.php"); // template support
 
-    $tree = new Category();
+    $tree = new PMF_Category();
     $tree->transform(0);
     $old = 0;
 

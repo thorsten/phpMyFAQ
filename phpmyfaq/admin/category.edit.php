@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: category.edit.php,v 1.7 2006-01-02 16:51:26 thorstenr Exp $
+* $Id: category.edit.php,v 1.8 2006-06-11 15:26:21 matteo Exp $
 *
 * Edits a category
 *
@@ -25,7 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 }
 
 if ($permission["editcateg"]) {
-    $cat = new category;
+    $cat = new PMF_Category;
     $categories = $cat->getAllCategories();
     $id = $_GET["cat"];
     print "<h2>".$PMF_LANG["ad_categ_edit_1"]." <em>".$categories[$id]["name"]."</em> ".$PMF_LANG["ad_categ_edit_2"]."</h2>";

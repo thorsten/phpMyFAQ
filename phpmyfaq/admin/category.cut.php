@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: category.cut.php,v 1.4 2006-01-02 16:51:26 thorstenr Exp $
+* $Id: category.cut.php,v 1.5 2006-06-11 15:26:21 matteo Exp $
 *
 * Cuts a category
 *
@@ -28,7 +28,7 @@ if ($permission["editcateg"]) {
     print "<h2>".$PMF_LANG["ad_categ_updatecateg"]."</h2>\n";
     $category = $_REQUEST["cat"];
     
-    $cat = new category;
+    $cat = new PMF_Category;
     $cat->buildTree();
     
     foreach ($cat->catTree as $cat) {

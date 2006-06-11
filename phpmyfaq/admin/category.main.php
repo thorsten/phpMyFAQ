@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: category.main.php,v 1.11 2006-02-03 14:37:26 thorstenr Exp $
+* $Id: category.main.php,v 1.12 2006-06-11 15:26:21 matteo Exp $
 *
 * List all categories in the admin section
 *
@@ -42,7 +42,7 @@ if ($permission["editcateg"]) {
     </fieldset>
     </form>
 <?php
-    $tree = new Category($lang);
+    $tree = new PMF_Category($lang);
     $tree->buildTree();
 
     foreach ($tree->catTree as $cat) {

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: search.php,v 1.8 2006-04-09 12:14:35 thorstenr Exp $
+* $Id: search.php,v 1.9 2006-06-11 15:26:21 matteo Exp $
 *
 * The fulltext search page
 *
@@ -31,7 +31,7 @@ Tracking("fulltext_search",0);
 //       so the result set of a Search will have the Category Path
 //       for any of the multilanguage faq records and the Category list
 //       on the left pane will not be affected
-$tree = new Category();
+$tree = new PMF_Category();
 $tree->transform(0);
 
 if (isset($_POST['suchbegriff']) || isset($_GET['search'])) {

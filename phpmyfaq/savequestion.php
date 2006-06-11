@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: savequestion.php,v 1.18 2006-04-09 12:12:13 thorstenr Exp $
+* $Id: savequestion.php,v 1.19 2006-06-11 15:26:21 matteo Exp $
 *
 * @author           Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author           David Saez Padros <david@ols.es>
@@ -43,7 +43,7 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
 
 	if ($numr == 0) {
         
-        $cat = new category;
+        $cat = new PMF_Category;
         $categories = $cat->getAllCategories();
         $usermail = $IDN->encode($_REQUEST["usermail"]);
         $username = strip_tags($_REQUEST["username"]);

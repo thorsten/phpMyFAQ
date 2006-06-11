@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.show.php,v 1.23 2006-02-20 17:23:57 thorstenr Exp $
+* $Id: record.show.php,v 1.24 2006-06-11 15:26:21 matteo Exp $
 *
 * Shows the list of records ordered by categories
 *
@@ -27,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 
 print "<h2>".$PMF_LANG["ad_entry_aor"]."</h2>\n";
 if ($permission["editbt"] || $permission["delbt"]) {
-    $tree = new Category();
+    $tree = new PMF_Category();
     $tree->transform(0);
     $tree->buildTree();
 

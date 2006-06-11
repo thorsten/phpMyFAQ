@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: category.add.php,v 1.6 2006-01-02 16:51:26 thorstenr Exp $
+* $Id: category.add.php,v 1.7 2006-06-11 15:26:21 matteo Exp $
 *
 * Adds a category
 *
@@ -26,7 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 
 print "<h2>".$PMF_LANG["ad_categ_new"]."</h2>\n";
 if ($permission["addcateg"]) {
-    $cat = new Category;
+    $cat = new PMF_Category;
 ?>
     <form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>" method="post">
     <fieldset>

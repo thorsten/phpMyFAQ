@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.delquestion.php,v 1.9 2006-05-30 09:29:41 thorstenr Exp $
+* $Id: record.delquestion.php,v 1.10 2006-06-11 15:26:21 matteo Exp $
 *
 * Delete open questions
 *
@@ -25,7 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 }
 
 if ($permission['delquestion']) {
-    $tree = new Category;
+    $tree = new PMF_Category;
 
     if (isset($_REQUEST['delete']) && $_REQUEST['delete'] == 'yes') {
 

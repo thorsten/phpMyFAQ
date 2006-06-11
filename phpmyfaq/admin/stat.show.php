@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: stat.show.php,v 1.8 2006-01-02 16:51:27 thorstenr Exp $
+* $Id: stat.show.php,v 1.9 2006-06-11 15:26:21 matteo Exp $
 *
 * Show the session
 *
@@ -25,7 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 }
 
 if ($permission["viewlog"]) {
-	$tree = new Category();
+	$tree = new PMF_Category();
 ?>
 	<h2><?php print $PMF_LANG["ad_sess_session"]; ?> "<span style="color: Red;"><?php print $_REQUEST["id"]; ?></span>"</h2>
 <?php
