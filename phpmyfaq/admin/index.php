@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.43 2006-06-11 18:09:19 matteo Exp $
+* $Id: index.php,v 1.44 2006-06-11 20:23:48 matteo Exp $
 *
 * The main admin backend index file
 *
@@ -321,12 +321,12 @@ if (isset($auth)) {
 	}
 ?>
         <label class="left" for="faqusername"><?php print $PMF_LANG["ad_auth_user"]; ?></label>
-        <input class="admin" type="text" name="faqusername" id="faqusername" size="20" /><br />
+        <input type="text" name="faqusername" id="faqusername" size="20" /><br />
 
         <label class="left" for="faqpassword"><?php print $PMF_LANG["ad_auth_passwd"]; ?></label>
-        <input class="admin" type="password" size="20" name="faqpassword" id="faqpassword" /><br />
+        <input type="password" size="20" name="faqpassword" id="faqpassword" /><br />
 
-        <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_auth_ok"]; ?>" />
+        <input class="submit" style="margin-left: 190px;" type="submit" value="<?php print $PMF_LANG["ad_auth_ok"]; ?>" />
         <input class="submit" type="reset" value="<?php print $PMF_LANG["ad_auth_reset"]; ?>" />
 
         <p><img src="images/arrow.gif" width="11" height="11" alt="<?php print $PMF_LANG["lostPassword"]; ?>" border="0" /> <a href="password.php" title="<?php print $PMF_LANG["lostPassword"]; ?>">
