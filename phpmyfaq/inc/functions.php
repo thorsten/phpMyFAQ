@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.109 2006-06-11 15:26:21 matteo Exp $
+* $Id: functions.php,v 1.110 2006-06-11 21:37:17 matteo Exp $
 *
 * This is the main functions file!
 *
@@ -49,47 +49,122 @@ function pmf_dump($var)
 //
 
 /**
-* This function displays the <select> box for the available languages
-*
-* @param    string
-* @return   string
-* @since    2003-12-12
-* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-*/
-function selectLanguages($default)
+ * getAvailableLanguages()
+ *
+ * This function returns the available languages
+ *
+ * @return  array
+ * @access  public
+ * @since   2006-03-21
+ * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+ */
+function getAvailableLanguages()
 {
     global $languageCodes;
+
     $search = array("language_", ".php");
-    $output = "<select class=\"language\" name=\"language\" id=\"language\" size=\"1\">\n";
-	if ($dir = @opendir(dirname(dirname(__FILE__)).'/lang/')) {
+    $languages = array();
+
+    if ($dir = @opendir(dirname(dirname(__FILE__)).'/lang/')) {
         while (FALSE !== ($file = @readdir($dir))) {
-            if ($file != "." && $file != ".." && !is_dir($file)) {
-                $languageArray[] = strtoupper(str_replace($search, "", trim($file)));
+            if (($file != ".") && ($file != "..") && (!is_dir($file))) {
+                $languageFiles[] = strtoupper(str_replace($search, "", trim($file)));
             }
         }
         closedir($dir);
-
-        foreach ($languageArray as $cc) {
-			// Check the file does relate to a language before using it
-			if (array_key_exists($cc, $languageCodes)) {
-				$languages[strtolower($cc)] = $languageCodes[$cc];
-			}
+        foreach ($languageFiles as $lang) {
+            // Check if the file is related to a (real) language before using it
+            if (array_key_exists($lang, $languageCodes)) {
+                $languages[strtolower($lang)] = $languageCodes[$lang];
+            }
         }
-
+        // Sort the languages list
         asort($languages);
         reset($languages);
+    }
 
-        foreach ($languages as $lang => $cc) {
-            $output .= "\t\t<option value=\"".$lang."\"";
+    return $languages;
+}
+
+/**
+ * selectLanguages()
+ *
+ * This function displays the <select> box for the available languages
+ *
+ * @param   string
+ * @return  string
+ * @access  public
+ * @since   2003-12-12
+ * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+ */
+function selectLanguages($default)
+{
+    global $languageCodes;
+
+    $output = "<select class=\"language\" name=\"language\" id=\"language\" size=\"1\">\n";
+    $languages = getAvailableLanguages();
+
+    if (count($languages) > 0) {
+        foreach ($languages as $lang => $value) {
+            $output .= "\t<option value=\"".$lang."\"";
             if ($lang == $default) {
-            	$output .= " selected=\"selected\"";
+                $output .= " selected=\"selected\"";
             }
-            $output .=  ">".$cc."</option>\n";
+            $output .=  ">".$value."</option>\n";
         }
     } else {
-		$output .= "\t\t<option value=\"en\">english</option>";
+        $output .= "\t<option value=\"en\">".$languageCodes["EN"]."</option>";
     }
     $output .= "</select>\n";
+
+    return $output;
+}
+
+/**
+ * languageOptions()
+ *
+ * Function for displaying all languages in <option>
+ *
+ * @param   string  the languange to be selected
+ * @param   bool    print only the passed language?
+ * @param   bool    print the <language file> instead of the <language code> as value?
+ * @return  string
+ * @access  public
+ * @since   2004-06-01
+ * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+ */
+function languageOptions($lang = "", $onlyThisLang = false, $fileLanguageValue = false)
+{
+    $output = "";
+
+    foreach (getAvailableLanguages() as $key => $value) {
+        if ($onlyThisLang) {
+            if (strtolower($key) == $lang) {
+                if ($fileLanguageValue) {
+                    $output .= "\t<option value=\"language_".strtolower($lang).".php\"";
+                } else {
+                    $output .= "\t<option value=\"".strtolower($lang)."\"";
+                }
+                $output .= " selected=\"selected\"";
+                $output .= ">".$value."</option>\n";
+                break;
+            }
+        }
+        else {
+            if ($fileLanguageValue) {
+                $output .= "\t<option value=\"language_".strtolower($key).".php\"";
+            } else {
+                $output .= "\t<option value=\"".strtolower($key)."\"";
+            }
+            if (strtolower($key) == $lang) {
+                $output .= " selected=\"selected\"";
+            }
+            $output .= ">".$value."</option>\n";
+        }
+    }
+
     return $output;
 }
 
@@ -1177,24 +1252,6 @@ function emptyTable($table)
 /******************************************************************************
  * Funktionen für den Adminbereich
  ******************************************************************************/
-
-/*
- * Function for displaying all languages in <option> | @@ Thorsten, 2004-06-01
- * Last Update: @@ Thorsten, 2004-07-09
- */
-function languageOptions($lang = "")
-{
-    global $languageCodes;
-    $output = "";
-    foreach ($languageCodes as $key => $value) {
-        $output .= "\t<option value=\"".strtolower($key)."\"";
-        if (strtolower($key) == $lang) {
-            $output .= " selected=\"selected\"";
-            }
-        $output .= ">".$value."</option>\n";
-        }
-    return $output;
-}
 
 /*
  * Funktion zum generieren vom "Umblättern" | @@ Bastian, 2002-01-03
