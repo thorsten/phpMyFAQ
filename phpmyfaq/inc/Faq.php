@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.10 2006-04-09 09:50:57 thorstenr Exp $
+* $Id: Faq.php,v 1.11 2006-06-11 18:11:25 matteo Exp $
 *
 * The main FAQ class
 *
@@ -474,7 +474,7 @@ class FAQ
     function getTopTen()
     {
         global $PMF_CONF;
-        $result = $this->getTopTenData(10);
+        $result = $this->getTopTenData(PMF_NUMBER_RECORDS_TOPTEN);
         if (count($result) > 0) {
             $output = '<ol>';
             foreach ($result as $row) {
@@ -501,7 +501,7 @@ class FAQ
     */
     function getFiveLatest()
     {
-        $result = $this->getFiveLatestData(5);
+        $result = $this->getFiveLatestData(PMF_NUMBER_RECORDS_LATEST);
         if (count ($result) > 0) {
             $output = '<ol>';
             foreach ($result as $row) {
@@ -526,14 +526,17 @@ class FAQ
     *
     * This function generates the Top Ten data with the mosted viewed records
     *
-    * @parem    integer
+    * @param    integer
+    * @param    integer
+    * @param    string
     * @return   array
     * @access   private
     * @author   Robin Wood <robin@digininja.org>
     * @author   Thorsten Rinne <thorsten@rinne.info>
+    * @author   Matteo Scaramuccia <matteo@scaramuccia.com>
     * @since    2005-03-06
     */
-    function getTopTenData($count = 10)
+    function getTopTenData($count = PMF_NUMBER_RECORDS_TOPTEN, $categoryId = 0, $language = null)
     {
         global $sids, $PMF_CONF;
         $query =
@@ -557,7 +560,18 @@ class FAQ
             AND
                 '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqvisits.lang
             AND
-                '.SQLPREFIX.'faqdata.active = \'yes\'
+                '.SQLPREFIX.'faqdata.active = \'yes\'';
+        if (isset($categoryId) && is_numeric($categoryId) && ($categoryId != 0)) {
+            $query .= '
+            AND
+                '.SQLPREFIX.'faqcategoryrelations.category_id = \''.$categoryId.'\'';
+        }
+        if (isset($language) && PMF_Init::isASupportedLanguage($language)) {
+            $query .= '
+            AND
+                '.SQLPREFIX.'faqdata.lang = \''.$language.'\'';
+        }
+        $query .= '
             ORDER BY
                 '.SQLPREFIX.'faqvisits.visits DESC';
 
@@ -595,7 +609,7 @@ class FAQ
     * @author   Robin Wood <robin@digininja.org>
     * @since    2005-03-06
     */
-    function getFiveLatestData($count = 5)
+    function getFiveLatestData($count = PMF_NUMBER_RECORDS_LATEST)
     {
         global $sids, $PMF_CONF;
         $query =
