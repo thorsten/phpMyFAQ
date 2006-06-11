@@ -1,11 +1,12 @@
 <?php
 /**
-* $Id: pdf.php,v 1.20 2006-06-11 15:26:21 matteo Exp $
+* $Id: pdf.php,v 1.21 2006-06-11 15:40:53 matteo Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Peter Beauvain <pbeauvain@web.de>
 * @author       Olivier Plathey <olivier@fpdf.org>
 * @author       Krzysztof Kruszynski <thywolf@wolf.homelinux.net>
+* @author       Matteo Scaramuccia <matteo@scaramuccia.com>
 * @since        2003-02-12
 * @copyright    (c) 2001-2006 phpMyFAQ Team
 *
@@ -77,24 +78,28 @@ if ($db->num_rows($result) > 0) {
 
 $pdf = new PDF($currentCategory, $thema, $tree->categoryName, $orientation = "P", $unit = "mm", $format = "A4");
 $pdf->Open();
+$pdf->SetAutoPageBreak(true, 2*(40/$pdf->k));
+$pdf->SetTitle($thema);
+$pdf->SetCreator($PMF_CONF["title"]." - powered by phpMyFAQ ".$PMF_CONF["version"]);
 $pdf->AliasNbPages();
 $pdf->AddPage();
 $pdf->SetFont("Arial", "", 12);
 $pdf->SetDisplayMode("real");
-$pdf->WriteHTML(str_replace("../", "", stripslashes($content)));
+$pdf->WriteHTML(str_replace("../", "", $content));
 $pdf->Ln();
 $pdf->Ln();
 $pdf->SetStyle('I', true);
 $pdf->Write(5, unhtmlentities($PMF_LANG['ad_entry_solution_id']).': #'.$solution_id);
 $pdf->SetAuthor($author);
 $pdf->Ln();
-$pdf->Write(5,unhtmlentities($PMF_LANG["msgAuthor"]).$author);
+$pdf->Write(5, unhtmlentities($PMF_LANG["msgAuthor"]).$author);
+$pdf->SetAuthor($author);
 $pdf->Ln();
-$pdf->Write(5,unhtmlentities($PMF_LANG["msgLastUpdateArticle"]).makeDate($date));
+$pdf->Write(5, unhtmlentities($PMF_LANG["msgLastUpdateArticle"]).makeDate($date));
+$pdf->SetStyle('I', false);
 
 $pdfFile = "pdf/".$id.".pdf";
 $pdf->Output($pdfFile);
-$pdf->close($pdfFile);
 
 $file = basename($pdfFile);
 $size = filesize($pdfFile);
