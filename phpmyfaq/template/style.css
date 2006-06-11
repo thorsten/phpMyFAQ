@@ -1,13 +1,13 @@
 /**
-* $Id: style.css,v 1.15 2006-01-03 06:50:07 thorstenr Exp $
+* $Id: style.css,v 1.16 2006-06-11 19:03:21 matteo Exp $
 *
 * This is the main style sheet file for phpMyFAQ 1.5
 * If you want to change only the colours, use colors.css
 *
-* @author		Jens Grochtdreis <jens@grochtdreis.de>
-* @author		Thorsten Rinne <thorsten@rinne.info>
+* @author       Jens Grochtdreis <jens@grochtdreis.de>
+* @author       Thorsten Rinne <thorsten@rinne.info>
 * @since        2004-06-02
-* @copyright	(c) 2004-2005 phpMyFAQ Team
+* @copyright	(c) 2004-2006 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -18,7 +18,7 @@
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
 * under the License.
-*/ 
+*/
 
 /**
 * main definitions
@@ -27,7 +27,7 @@
 */
 body, td {
    font-family: "Bitstream Vera Sans", "Trebuchet MS", Geneva, Verdana, Arial, Helvetica, sans-serif;
-   font-size: 80.01%; 
+   font-size: 80.01%;
 }
 body, h1, h2, h3, h4, h5, h6, div, p, table, td, ul, ol, li, dd, dt, dl, blockquote, address, hr, pre {
    margin: 0;
@@ -107,7 +107,7 @@ code {
 }
 #header h1 a {
    text-decoration: none;
-}    
+}
 
 /**
 * Main navigation
@@ -164,7 +164,7 @@ code {
    padding: 5px 5px 5px 0.5em;
    border-bottom: 1px solid;
    text-decoration: none;
-	height: 100%; /* stupid IE fix */
+    height: 100%; /* stupid IE fix */
 }
 html>body #categories li a {
    width: auto;
@@ -182,7 +182,12 @@ html>body #categories li a {
 #categories ul ul ul ul a {
    padding-left: 35px;
 }
-
+#categories .active {
+}
+#categories .subcat a {
+}
+#categories .subcat .active {
+}
 /**
 * Search box and language selection box
 */
@@ -251,12 +256,18 @@ html>body #categories li a {
    margin: 5px 0 5px 0;
    border-bottom: none;
 }
-.main-content ul {
+.main-content ul, ol {
    padding-left: 1em;
    list-style: outside;
 }
 .main-content li {
    margin-left: 20px;
+}
+.main-content #solution_id {
+   float: right;
+}
+.main-content .searchpreview {
+	font-size: 10px;
 }
 
 /**
@@ -280,23 +291,16 @@ html>body #categories li a {
 * Table definitions in the main content column
 */
 .main-content table {
-   float: left;
-   width: 99%;
    overflow: scroll;
-   border: 1px solid;
    padding: 0;
    margin: 0;
-   margin-bottom: 1.0em;
 }
 td, th, .main-content td {
-   border: 1px solid;
    padding: 2px;
    margin: 0;
-   vertical-align: top;
 }
 .main-content th {
    border: 0;
-   border-bottom: 1px solid;
    padding: 2px;
    text-align: center;
    vertical-align: middle;
@@ -329,6 +333,26 @@ td, th, .main-content td {
 }
 .main-content form br {
    clear: both;
+}
+.main-content #article_categories {
+    float: right;
+    width: 220px;
+    margin: 0 0 10px 20px;
+}
+.main-content #article_categories fieldset {
+}
+.main-content #article_categories legend {
+}
+.main-content #article_categories ul {
+    list-style: none outside;
+    margin-left: 0px;
+}
+.main-content #article_categories ul li {
+    margin: 0;
+    padding: 0;
+}
+.main-content table {
+    float: left;
 }
 
 
