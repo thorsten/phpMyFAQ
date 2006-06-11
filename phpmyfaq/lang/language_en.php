@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.26 2006-01-07 16:25:23 thorstenr Exp $
+* $Id: language_en.php,v 1.27 2006-06-11 21:48:08 matteo Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -8,7 +8,7 @@
 * @author       Matthias Sommerfeld <mso@bluebirdy.de>
 * @author       Henning Schulzrinne <hgs@cs.columbia.edu>
 * @since        2004-02-19
-* @copyright    (c) 2006 phpMyFAQ Team
+* @copyright    (c) 2004-2006 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -608,15 +608,42 @@ $PMF_LANG['err_inactiveArticle'] = 'This entry is in revision and can not be dis
 $PMF_LANG['msgArticleCategories'] = 'Categories for this entry';
 
 // added v1.5.3 - 2005-10-04 by Thorsten and Periklis
-$PMF_LANG['ad_menu_searchplugin'] = 'Firefox search plugin';
+$PMF_LANG['ad_menu_searchplugin'] = 'Search plugins';
 $PMF_LANG['ad_search_plugin_install'] = 'Install Firefox search plugin';
-$PMF_LANG['ad_search_plugin_title'] = 'Create Firefox search plugin';
+$PMF_LANG['ad_search_plugin_title'] = 'Create search plugin';
 $PMF_LANG['ad_search_plugin_ttitle'] = 'Title in the Firefox search box:';
 $PMF_LANG['ad_search_plugin_tdesc'] = 'Description:';
 $PMF_LANG['ad_search_plugin_create'] = 'Create Firefox search plugin';
 $PMF_LANG['ad_search_plugin_success'] = 'The Mozilla Firefox search plugin was successfully created!';
 
-// added v1.6.0 - 2005-09-15 by Thorsten and by Minoru TODA
+// added v1.6.0 - 2006-02-02 by Thorsten
+$PMF_LANG['ad_entry_solution_id'] = 'Unique solution ID';
+$PMF_LANG['ad_entry_faq_record'] = 'FAQ record';
+$PMF_LANG['ad_entry_new_revision'] = 'Create new revision?';
+$PMF_LANG['ad_entry_record_administration'] = 'Record administration';
+$PMF_LANG['ad_entry_changelog'] = 'Changelog';
+$PMF_LANG['ad_entry_revision'] = 'Revision';
+$PMF_LANG['ad_changerev'] = 'Select Revision';
+$PMF_LANG['msgCaptcha'] = "Please enter the characters you're reading in the image";
+$PMF_LANG['msgSelectCategories'] = 'Search in ...';
+$PMF_LANG['msgAllCategories'] = '... all categories';
+$PMF_LANG['ad_you_should_update'] = 'Your phpMyFAQ installation is outdated. You should update to the latest available version.';
+$PMF_LANG['msgAdvancedSearch'] = 'Advanced search';
+
+// added v1.6.1 - 2006-04-25 by Matteo and Thorsten
+$PMF_LANG['spamControlCenter'] = 'Spam control center';
+$LANG_CONF["spamEnableSafeEmail"] = array(0 => "checkbox", 1 => "Print user email in a safe way (default: enabled).");
+$LANG_CONF["spamCheckBannedWords"] = array(0 => "checkbox", 1 => "Check public form content against banned words (default: enabled).");
+$LANG_CONF["spamEnableCatpchaCode"] = array(0 => "checkbox", 1 => "Use a catpcha code to allow public form submission (default: enabled).");
+$PMF_LANG['ad_firefoxsearch_plugin_title'] = 'Create Firefox search plugin';
+$PMF_LANG['ad_msiesearch_plugin_install'] = 'Install Microsoft Internet Explorer 7 search plugin';
+$PMF_LANG['ad_msiesearch_plugin_title'] = 'Create Microsoft Internet Explorer 7 search plugin';
+$PMF_LANG['ad_msiesearch_plugin_ttitle'] = 'Title in the MSIE 7 search box:';
+$PMF_LANG['ad_msiesearch_plugin_create'] = 'Create Microsoft Internet Explorer 7 search plugin.';
+$PMF_LANG['ad_msiesearch_plugin_success'] = 'The Microsoft Internet Explorer 7 search plugin was successfully created!';
+$PMF_LANG['ad_session_expiring'] = 'Your session will expire in %d minutes: would you like to go on working?';
+
+// added v2.0.0 - 2005-09-15 by Thorsten and by Minoru TODA
 $PMF_LANG['ad_menu_glossary'] = 'Glossary';
 $PMF_LANG['ad_glossary_add'] = 'Add glossary entry';
 $PMF_LANG['ad_glossary_item'] = 'Item';
@@ -658,7 +685,7 @@ $PMF_LANG['msgNewQuestionVisible'] = 'The question have to be reviewed first bef
 $PMF_LANG['msgQuestionsWaiting'] = 'Waiting for publishing by the administrators:';
 $PMF_LANG['ad_entry_visibility'] = 'Publish?';
 
-// added v1.6.0 - 2006-01-02 by Lars
+// added v2.0.0 - 2006-01-02 by Lars
 $PMF_LANG['ad_user_error_password'] =  "Please enter a password. ";
 $PMF_LANG['ad_user_error_passwordsDontMatch'] =  "Passwords do not match. ";
 $PMF_LANG['ad_user_error_loginInvalid'] =  "The specified user name is invalid.";
