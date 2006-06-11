@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.49 2006-06-11 13:33:27 matteo Exp $
+* $Id: installer.php,v 1.50 2006-06-11 14:39:01 matteo Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -531,7 +531,7 @@ foreach ($permLevels as $level) {
     }
 
     // check database connection
-    require_once(PMF_ROOT_DIR."/inc/db.php");
+    require_once(PMF_ROOT_DIR."/inc/Db.php");
     $db = PMF_Db::db_select($sql_type);
     $db->connect($sql_server, $sql_user, $sql_passwort, $sql_db);
     if (!$db) {
@@ -701,7 +701,7 @@ foreach ($permLevels as $level) {
 
     // connect to the database using inc/data.php
     require_once(PMF_ROOT_DIR."/inc/data.php");
-    require_once(PMF_ROOT_DIR."/inc/db.php");
+    require_once(PMF_ROOT_DIR."/inc/Db.php");
     $db = PMF_Db::db_select($sql_type);
     $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
     if (!$db) {
@@ -924,7 +924,7 @@ foreach ($permLevels as $level) {
     print "<p class=\"center\">Congratulation! Everything seems to be okay.</p>\n";
     print "<p class=\"center\">You can visit <a href=\"../index.php\">your version of phpMyFAQ</a> or</p>\n";
     print "<p class=\"center\">login into your <a href=\"../admin/index.php\">admin section</a>.</p>\n";
-
+    
     if (@unlink(basename($_SERVER["PHP_SELF"]))) {
         print "<p class=\"center\">This file was deleted automatically.</p>\n";
     } else {
