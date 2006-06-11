@@ -1,63 +1,75 @@
 ##
-# phpMyFAQ 1.5 .htaccess file
 #
-# @author				Thorsten Rinne <thorsten@phpmyfaq.de>
-# @author				Patrick Preuster <sica@php-q.net>
+# phpMyFAQ 2.0 .htaccess file
+#
+# @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+# @author       Patrick Preuster <sica@php-q.net>
 # @since        2004-11-13
 # @copyright    (c) 2004-2006 phpMyFAQ Team
-# 
+#
 # The contents of this file are subject to the Mozilla Public License
 # Version 1.1 (the "License"); you may not use this file except in
 # compliance with the License. You may obtain a copy of the License at
 # http://www.mozilla.org/MPL/
-# 
+#
 # Software distributed under the License is distributed on an "AS IS"
 # basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 # License for the specific language governing rights and limitations
 # under the License.
 #
+##
 
 # if you want to use mod_rewrite, set this 'On'
-RewriteEngine Off
+RewriteEngine On
 
 # the path to your phpMyFAQ installation
-RewriteBase /phpmyfaq1.4/
+RewriteBase /phpmyfaq/
+
+# Maintenance Section - Uncomment the lines below according to your need
+# Write below your client IP address (e.g.: 127.0.0.1)
+# if you need to keep your web access during maintenance
+#RewriteCond %{REMOTE_ADDR}          !^127.0.0.1$
+# Choose your way of closing the access to PMF:
+# a. you can simply forbid access (HTTP 403 Error)
+#RewriteRule ^(.*)$                  underMaintenance.htm [F,L]
+# b. return the user an explanation
+#RewriteRule ^(.*)$                  underMaintenance.htm [L]
 
 # show all categories
-RewriteCond %{REQUEST_URI}              showcat\.html$ [NC]
-RewriteRule ^(.*)$                      index.php?action=show [L,QSA]
+RewriteCond %{REQUEST_URI}          showcat\.html$ [NC]
+RewriteRule ^(.*)$                  index.php?action=show [L,QSA]
 
 # the search page
-RewriteCond %{REQUEST_URI}              search\.html$ [NC]
-RewriteRule ^(.*)$                      index.php?action=search [L,QSA]
+RewriteCond %{REQUEST_URI}          search\.html$ [NC]
+RewriteRule ^(.*)$                  index.php?action=search [L,QSA]
 
 # the add content page
-RewriteCond %{REQUEST_URI}              addcontent\.html$ [NC]
-RewriteRule ^(.*)$                      index.php?action=add [L,QSA]
+RewriteCond %{REQUEST_URI}          addcontent\.html$ [NC]
+RewriteRule ^(.*)$                  index.php?action=add [L,QSA]
 
 # the ask question page
-RewriteCond %{REQUEST_URI}              ask\.html$ [NC]
-RewriteRule ^(.*)$                      index.php?action=ask [L,QSA]
+RewriteCond %{REQUEST_URI}          ask\.html$ [NC]
+RewriteRule ^(.*)$                  index.php?action=ask [L,QSA]
 
 # the open questions page
-RewriteCond %{REQUEST_URI}              open\.html$ [NC]
-RewriteRule ^(.*)$                      index.php?action=open [L,QSA]
+RewriteCond %{REQUEST_URI}          open\.html$ [NC]
+RewriteRule ^(.*)$                  index.php?action=open [L,QSA]
 
 # the help page
-RewriteCond %{REQUEST_URI}              help\.html$ [NC]
-RewriteRule ^(.*)$                      index.php?action=help [L,QSA]
+RewriteCond %{REQUEST_URI}          help\.html$ [NC]
+RewriteRule ^(.*)$                  index.php?action=help [L,QSA]
 
 # the contact page
-RewriteCond %{REQUEST_URI}              contact\.html$ [NC]
-RewriteRule ^(.*)$                      index.php?action=contact [L,QSA]
+RewriteCond %{REQUEST_URI}          contact\.html$ [NC]
+RewriteRule ^(.*)$                  index.php?action=contact [L,QSA]
 
 # a page with a record
-RewriteCond %{REQUEST_URI}              ([a-zA-Z0-9_]+)-([0-9]+)_([0-9]+)_([a-z]+)\.html$ [NC]
-RewriteRule ^(.*)-(.*)_(.*)_(.*)\.html$ index.php?action=artikel&cat=$2&id=$3&artlang=$4 [L,QSA]
+RewriteCond %{REQUEST_URI}          ([0-9]+)_([0-9]+)_([a-z\-]+)\.html$ [NC]
+RewriteRule ^(.*)_(.*)_(.*)\.html$  index.php?action=artikel&cat=$1&id=$2&artlang=$3 [L,QSA]
 
 # a category page
-RewriteCond %{REQUEST_URI}              ([a-zA-Z0-9_]+)-([0-9]+)\.html$ [NC]
-RewriteRule ^(.*)-(.*).html$            index.php?action=show&cat=$2 [L,QSA] 
+RewriteCond %{REQUEST_URI}              category([0-9]+)\.html$ [NC]
+RewriteRule ^category(.*)\.html$        index.php?action=show&cat=$1 [L,QSA]
 
 # a category page with page count
 RewriteCond %{REQUEST_URI}              category([0-9]+)_([0-9]+)\.html$ [NC]
@@ -67,5 +79,9 @@ RewriteRule ^category(.*)_(.*)\.html$   index.php?action=show&cat=$1&seite=$2 [L
 RewriteRule index.html$ index.php [PT]
 
 # sitemap
-RewriteCond %{REQUEST_URI}              sitemap-([a-zA-Z0-9‰ˆ¸ƒˆ¸ﬂ]*)\.html$ [NC]
-RewriteRule ^sitemap-(.*)\.html$        index.php?action=sitemap&letter=$1 [L,QSA]
+RewriteCond %{REQUEST_URI}              sitemap-([a-zA-Z0-9‰ˆ¸ƒ÷‹ﬂ]*)_([a-z\-]+)\.html$ [NC]
+RewriteRule ^sitemap-(.*)_(.*)\.html$   index.php?action=sitemap&letter=$1&lang=$2 [L,QSA]
+
+# a solution id page
+RewriteCond %{REQUEST_URI}              solution_id_([0-9]+)\.html$ [NC]
+RewriteRule ^solution_id_(.*)\.html$    index.php?solution_id=$1 [L,QSA]
