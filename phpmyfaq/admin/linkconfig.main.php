@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: linkconfig.main.php,v 1.2 2006-01-02 16:51:26 thorstenr Exp $
+* $Id: linkconfig.main.php,v 1.3 2006-06-11 20:47:53 matteo Exp $
 *
 * LinkVerifier configuration
 *
@@ -157,7 +157,7 @@ enumScriptParameters();
 ?>
 <h2><?php print $PMF_LANG['ad_linkcheck_config_title']; ?></h2>
 <?php
-$linkverifier = new link_verifier();		
+$linkverifier = new PMF_Linkverifier();
 if ($linkverifier->isReady() == FALSE) {
 	print $PMF_LANG['ad_linkcheck_config_disabled'];
 	return;

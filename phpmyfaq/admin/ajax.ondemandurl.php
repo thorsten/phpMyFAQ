@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.ondemandurl.php,v 1.5 2006-01-17 19:43:04 thorstenr Exp $
+* $Id: ajax.ondemandurl.php,v 1.6 2006-06-11 20:47:53 matteo Exp $
 *
 * AJAX: onDemandURL
 *
@@ -40,7 +40,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 @header("Content-type: text/html");
 @header("Vary: Negotiate,Accept");
 
-$linkverifier = new link_verifier();		
+$linkverifier = new PMF_Linkverifier();
 if ($linkverifier->isReady() == FALSE) {
 	ob_clean();
 	print "disabled";

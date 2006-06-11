@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.show.php,v 1.24 2006-06-11 15:26:21 matteo Exp $
+* $Id: record.show.php,v 1.25 2006-06-11 20:47:53 matteo Exp $
 *
 * Shows the list of records ordered by categories
 *
@@ -31,7 +31,7 @@ if ($permission["editbt"] || $permission["delbt"]) {
     $tree->transform(0);
     $tree->buildTree();
 
-    $linkverifier = new link_verifier();
+    $linkverifier = new PMF_Linkverifier();
     if ($linkverifier->isReady()) {
         link_verifier_javascript();
     }
