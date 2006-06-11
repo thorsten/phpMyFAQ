@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: glossary.main.php,v 1.6 2006-01-02 16:51:26 thorstenr Exp $
+* $Id: glossary.main.php,v 1.7 2006-06-11 20:42:47 matteo Exp $
 *
 * The main glossary index file
 *
@@ -28,7 +28,7 @@ print sprintf('<h2>%s</h2>', $PMF_LANG['ad_menu_glossary']);
 
 if ($permission['addglossary'] || $permission['editglossary'] || $permission['delglossary']) {
 
-    require_once('../inc/glossary.php');
+    require_once('../inc/Glossary.php');
     $glossary = new PMF_Glossary($db, $LANGCODE);
     $glossaryItems = $glossary->getAllGlossaryItems();
     

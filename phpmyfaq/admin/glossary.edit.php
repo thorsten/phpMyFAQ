@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: glossary.edit.php,v 1.4 2006-01-02 16:51:26 thorstenr Exp $
+* $Id: glossary.edit.php,v 1.5 2006-06-11 20:42:47 matteo Exp $
 *
 * Displays a form to edit an extisting glossary item
 *
@@ -30,22 +30,22 @@ if ($permission['editglossary']) {
     
     $id = (int)$_GET['id'];
     
-    require_once('../inc/glossary.php');
+    require_once('../inc/Glossary.php');
     $glossary = new PMF_Glossary($db, $LANGCODE);
     $glossaryItem = $glossary->getGlossaryItem($id);
 ?>
 <form action="<?php print $_SERVER['PHP_SELF'].$linkext; ?>" method="post">
 <fieldset>
     <legend><?php print $PMF_LANG['ad_glossary_edit']; ?></legend>
-    
+
     <input type="hidden" name="aktion" value="updateglossary" />
     <input type="hidden" name="id" value="<?php print $glossaryItem['id']; ?>" />
-    
+
     <label class="left" for="item"><?php print $PMF_LANG['ad_glossary_item']; ?>:</label>
-    <input class="admin" type="text" name="item" id="item" size="50" value="<?php print $glossaryItem['item']; ?>" /><br />
-    
+    <input type="text" name="item" id="item" size="50" value="<?php print $glossaryItem['item']; ?>" /><br />
+
     <label class="left" for="definition"><?php print $PMF_LANG['ad_glossary_definition']; ?>:</label>
-    <textarea class="admin" name="definition" id="definition" cols="50" rows="3"><?php print $glossaryItem['definition']; ?></textarea><br />
+    <textarea name="definition" id="definition" cols="50" rows="3"><?php print $glossaryItem['definition']; ?></textarea><br />
     
     <input class="submit" type="submit" value="<?php print $PMF_LANG['ad_glossary_save']; ?>" />
 
