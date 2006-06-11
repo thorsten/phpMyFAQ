@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.48 2006-05-28 18:13:22 thorstenr Exp $
+* $Id: installer.php,v 1.49 2006-06-11 13:33:27 matteo Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -97,9 +97,9 @@ function phpmyfaq_check()
 */
 function uninstall()
 {
-	global $uninst, $db;
-	while ($each_query = each($uninst)) {
-		$db->query($each_query[1]);
+    global $uninst, $db;
+    while ($each_query = each($uninst)) {
+        $db->query($each_query[1]);
     }
 }
 
@@ -114,7 +114,7 @@ function uninstall()
 */
 function HTMLFooter()
 {
-	print '<p class="center">'.COPYRIGHT.'</p></body></html>';
+    print '<p class="center">'.COPYRIGHT.'</p></body></html>';
 }
 
 /**
@@ -142,7 +142,7 @@ function cleanInstallation()
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
     <title>phpMyFAQ <?php print VERSION; ?> Installation</title>
-	<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=iso-8859-1" />
+    <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=iso-8859-1" />
     <script language="javascript" type="text/javascript">
     /*<![CDATA[*/
     <!--
@@ -165,23 +165,23 @@ function cleanInstallation()
     /*<![CDATA[*/
     <!--
     body {
-	    margin: 10px;
-	    padding: 0px;
-	    font-size: 12px;
-	    font-family: "Bitstream Vera Sans", "Trebuchet MS", Geneva, Verdana, Arial, Helvetica, sans-serif;
+        margin: 10px;
+        padding: 0px;
+        font-size: 12px;
+        font-family: "Bitstream Vera Sans", "Trebuchet MS", Geneva, Verdana, Arial, Helvetica, sans-serif;
         background: #ffffff;
         color: #000000;
     }
     #header {
-	    margin: auto;
-	    padding: 35px;
+        margin: auto;
+        padding: 35px;
         background: #0D487A;
         color: #ffffff;
         text-align: center;
     }
     #header h1 {
-	    font-family: "Trebuchet MS", Geneva, Verdana, Arial, Helvetica, sans-serif;
-	    margin: auto;
+        font-family: "Trebuchet MS", Geneva, Verdana, Arial, Helvetica, sans-serif;
+        margin: auto;
         color: #ffffff;
         text-align: center;
     }
@@ -248,24 +248,24 @@ function cleanInstallation()
 
 <?php
 if (version_compare(PHP_VERSION, '4.3.0', '<')) {
-	print "<p class=\"center\">You need PHP Version 4.3.0 or higher!</p>\n";
-	HTMLFooter();
-	die();
+    print "<p class=\"center\">You need PHP Version 4.3.0 or higher!</p>\n";
+    HTMLFooter();
+    die();
 }
 if (db_check($supported_databases) == false) {
-	print "<p class=\"center\">No supported database found! Please install one of the following database systems and enable the m 	corresponding PHP extension:</p>\n";
-	print "<ul>\n";
+    print "<p class=\"center\">No supported database found! Please install one of the following database systems and enable the m 	corresponding PHP extension:</p>\n";
+    print "<ul>\n";
     foreach ($supported_databases as $database) {
-	    printf('    <li>%s</li>', $database[1]);
+        printf('    <li>%s</li>', $database[1]);
     }
-	print "</ul>\n";
-	HTMLFooter();
-	die();
+    print "</ul>\n";
+    HTMLFooter();
+    die();
 }
 if (!phpmyfaq_check()) {
-	print '<p class="center">It seems you already running a version of phpMyFAQ.<br />Please use the <a href="update.php">update script</a>.</p>';
-	HTMLFooter();
-	die();
+    print '<p class="center">It seems you already running a version of phpMyFAQ.<br />Please use the <a href="update.php">update script</a>.</p>';
+    HTMLFooter();
+    die();
 }
 $dirs = array('/attachments', '/data', '/images', '/inc', '/pdf', '/xml',);
 $faileddirs = array();
@@ -310,11 +310,11 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 <span class="text">SQL server:</span>
 <select class="input" name="sql_type" size="1" onchange="select_database(this);">
 <?php
-	// check what extensions are loaded in PHP
+    // check what extensions are loaded in PHP
     foreach ($supported_databases as $extension => $database) {
         if (extension_loaded($extension) && version_compare(PHP_VERSION, $database[0]) >= 0) {
-		    printf('<option value="%s">%s</option>', $extension, $database[1]);
-	    }
+            printf('<option value="%s">%s</option>', $extension, $database[1]);
+        }
     }
 ?>
 </select>
@@ -402,18 +402,18 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 <span class="text">Default language:</span>
 <select class="input" name="language" size="1">
 <?php
-	if ($dir = @opendir(PMF_ROOT_DIR."/lang")) {
-		while ($dat = @readdir($dir)) {
-			if (substr($dat, -4) == ".php") {
-				print "\t\t<option value=\"".$dat."\"";
-				if ($dat == "language_en.php") {
-					print " selected=\"selected\"";
-				}
+    if ($dir = @opendir(PMF_ROOT_DIR."/lang")) {
+        while ($dat = @readdir($dir)) {
+            if (substr($dat, -4) == ".php") {
+                print "\t\t<option value=\"".$dat."\"";
+                if ($dat == "language_en.php") {
+                    print " selected=\"selected\"";
+                }
                 print ">".$languageCodes[substr(strtoupper($dat), 9, 2)]."</option>\n";
-			}
-		}
-	} else {
-		print "\t\t<option>english</option>";
+            }
+        }
+    } else {
+        print "\t\t<option>english</option>";
     }
 ?>
 </select>
@@ -458,7 +458,7 @@ foreach ($permLevels as $level) {
 </p>
 <p class="center"><strong>Do not use if you're already running a version of phpMyFAQ!</strong></p>
 
-<p>Attention! This version might be broken and it's under heavy development.</p>
+<p class="center"><strong>Attention! This version might be broken and it's under heavy development.</strong></p>
 
 <p class="center"><input type="submit" value="Install phpMyFAQ" class="button" /></p>
 </fieldset>
@@ -475,49 +475,49 @@ foreach ($permLevels as $level) {
     }
 
     // check database entries
-	if (isset($_POST["sql_type"]) && $_POST["sql_type"] != "") {
-		$sql_type = trim($_POST["sql_type"]);
+    if (isset($_POST["sql_type"]) && $_POST["sql_type"] != "") {
+        $sql_type = trim($_POST["sql_type"]);
         if (file_exists(PMF_ROOT_DIR.'/install/'.$sql_type.'.sql.php')) {
             require_once(PMF_ROOT_DIR.'/install/'.$sql_type.'.sql.php');
         } else {
             print '<p class="error"><strong>Error:</strong> Invalid server type.</p>';
             HTMLFooter();
             die();
-		}
-	} else {
-        print "<p class=\"error\"><strong>Error:</strong> There's no DB server input.</p>\n";
-		HTMLFooter();
-		die();
-	}
-
-    if (isset($_POST["sql_server"]) && $_POST["sql_server"] != "" || $sql_type == 'sqlite') {
-		$sql_server = $_POST["sql_server"];
+        }
     } else {
         print "<p class=\"error\"><strong>Error:</strong> There's no DB server input.</p>\n";
-		HTMLFooter();
-		die();
+        HTMLFooter();
+        die();
     }
 
-	if (isset($_POST["sql_user"]) && $_POST["sql_user"] != "" || $sql_type == 'sqlite') {
-		$sql_user = $_POST["sql_user"];
+    if (isset($_POST["sql_server"]) && $_POST["sql_server"] != "" || $sql_type == 'sqlite') {
+        $sql_server = $_POST["sql_server"];
+    } else {
+        print "<p class=\"error\"><strong>Error:</strong> There's no DB server input.</p>\n";
+        HTMLFooter();
+        die();
+    }
+
+    if (isset($_POST["sql_user"]) && $_POST["sql_user"] != "" || $sql_type == 'sqlite') {
+        $sql_user = $_POST["sql_user"];
     } else {
         print "<p class=\"error\"><strong>Error:</strong> There's no DB username input.</p>\n";
-		HTMLFooter();
-		die();
+        HTMLFooter();
+        die();
     }
 
     if (isset($_POST["sql_passwort"]) && $_POST["sql_passwort"] != "" || $sql_type == 'sqlite') {
-		$sql_passwort = $_POST["sql_passwort"];
+        $sql_passwort = $_POST["sql_passwort"];
     } else {
         $sql_passwort = '';
     }
 
     if (isset($_POST["sql_db"]) && $_POST["sql_db"] != "" || $sql_type == 'sqlite') {
-		$sql_db = $_POST["sql_db"];
+        $sql_db = $_POST["sql_db"];
     } else {
         print "<p class=\"error\"><strong>Error:</strong> There's no DB database input.</p>\n";
-		HTMLFooter();
-		die();
+        HTMLFooter();
+        die();
     }
 
     if ($sql_type == 'sqlite') {
@@ -532,12 +532,12 @@ foreach ($permLevels as $level) {
 
     // check database connection
     require_once(PMF_ROOT_DIR."/inc/db.php");
-	$db = db::db_select($sql_type);
-	$db->connect($sql_server, $sql_user, $sql_passwort, $sql_db);
-	if (!$db) {
-		print "<p class=\"error\"><strong>DB Error:</strong> ".$db->error()."</p>\n";
-		HTMLFooter();
-		die();
+    $db = PMF_Db::db_select($sql_type);
+    $db->connect($sql_server, $sql_user, $sql_passwort, $sql_db);
+    if (!$db) {
+        print "<p class=\"error\"><strong>DB Error:</strong> ".$db->error()."</p>\n";
+        HTMLFooter();
+        die();
     }
 
     // check LDAP if available
@@ -594,26 +594,26 @@ foreach ($permLevels as $level) {
     if (isset($_POST["password"]) && $_POST["password"] != "") {
         $password = $_POST["password"];
     } else {
-		print "<p class=\"error\"><strong>Error:</strong> There's no password for the administrator's account. Please set your password.</p>\n";
-		HTMLFooter();
-		die();
+        print "<p class=\"error\"><strong>Error:</strong> There's no password for the administrator's account. Please set your password.</p>\n";
+        HTMLFooter();
+        die();
     }
     if (isset($_POST["password_retyped"]) && $_POST["password_retyped"] != "") {
         $password_retyped = $_POST["password_retyped"];
     } else {
-		print "<p class=\"error\"><strong>Error:</strong> There's no retyped password. Please set your retyped password.</p>\n";
-		HTMLFooter();
-		die();
+        print "<p class=\"error\"><strong>Error:</strong> There's no retyped password. Please set your retyped password.</p>\n";
+        HTMLFooter();
+        die();
     }
     if (strlen($password) <= 5 || strlen($password_retyped) <= 5) {
-		print "<p class=\"error\"><strong>Error:</strong> Your password and retyped password are too short. Please set your password and your retyped password with a minimum of 6 characters.</p>\n";
-		HTMLFooter();
-		die();
+        print "<p class=\"error\"><strong>Error:</strong> Your password and retyped password are too short. Please set your password and your retyped password with a minimum of 6 characters.</p>\n";
+        HTMLFooter();
+        die();
     }
     if ($password != $password_retyped) {
-		print "<p class=\"error\"><strong>Error:</strong> Your password and retyped password are not equal. Please check your password and your retyped password.</p>\n";
-		HTMLFooter();
-		die();
+        print "<p class=\"error\"><strong>Error:</strong> Your password and retyped password are not equal. Please check your password and your retyped password.</p>\n";
+        HTMLFooter();
+        die();
     }
 
     if (isset($_POST["language"]) && $_POST["language"] != "") {
@@ -634,14 +634,14 @@ foreach ($permLevels as $level) {
     $permLevel = (isset($_POST['permLevel']) && in_array($_POST['permLevel'], $permLevels)) ? $_POST['permLevel'] : 'basic';
 
     // Write the DB variables in data.php
-	if ($fp = @fopen(PMF_ROOT_DIR."/inc/data.php","w")) {
-		@fputs($fp,"<?php\n\$DB[\"server\"] = '".$sql_server."';\n\$DB[\"user\"] = '".$sql_user."';\n\$DB[\"password\"] = '".$sql_passwort."';\n\$DB[\"db\"] = '".$sql_db."';\n\$DB[\"prefix\"] = '".$sqltblpre."';\n\$DB[\"type\"] = '".$sql_type."';\n?>");
-		@fclose($fp);
+    if ($fp = @fopen(PMF_ROOT_DIR."/inc/data.php","w")) {
+        @fputs($fp,"<?php\n\$DB[\"server\"] = '".$sql_server."';\n\$DB[\"user\"] = '".$sql_user."';\n\$DB[\"password\"] = '".$sql_passwort."';\n\$DB[\"db\"] = '".$sql_db."';\n\$DB[\"prefix\"] = '".$sqltblpre."';\n\$DB[\"type\"] = '".$sql_type."';\n?>");
+        @fclose($fp);
     } else {
-		print "<p class=\"error\"><strong>Error:</strong> Cannot write to data.php.</p>";
+        print "<p class=\"error\"><strong>Error:</strong> Cannot write to data.php.</p>";
         HTMLFooter();
-		die();
-	}
+        die();
+    }
 
     // check LDAP if available
     if (extension_loaded('ldap') && isset($_POST['ldap_enabled']) && $_POST['ldap_enabled'] == 'yes') {
@@ -659,85 +659,85 @@ foreach ($permLevels as $level) {
 
     // Create config.php and write the language variables in the file
     if (@file_exists(PMF_ROOT_DIR."/inc/config.php")) {
-    	print "<p class=\"center\">A config file was found. Please backup ../inc/config.php and remove the file.</p>\n";
-    	HTMLFooter();
-    	die();
+        print "<p class=\"center\">A config file was found. Please backup ../inc/config.php and remove the file.</p>\n";
+        HTMLFooter();
+        die();
     }
     if (!@copy(PMF_ROOT_DIR."/inc/config.php.original", PMF_ROOT_DIR."/inc/config.php")) {
-    	print "<p class=\"center\">Could not copy the file ../inc/config.php.original to ../inc/config.php.</p>\n";
-    	HTMLFooter();
-    	die();
-    }
-	if ($fp = @fopen(PMF_ROOT_DIR."/inc/config.php","r")) {
-		$anz = 0;
-		while($dat = fgets($fp,1024)) {
-			$anz++;
-			$inp[$anz] = $dat;
-		}
-		@fclose($fp);
-		for ($h = 1; $h <= $anz; $h++) {
-			if (str_replace("\$PMF_CONF['language'] = 'language_en.php';", "", $inp[$h]) != $inp[$h]) {
-				$inp[$h] = "\$PMF_CONF['language'] = '".$language."';\n";
-			}
-			if (str_replace("\$PMF_CONF['permLevel'] = 'basic';", "", $inp[$h]) != $inp[$h]) {
-				$inp[$h] = "\$PMF_CONF['permLevel'] = '".$permLevel."';\n";
-			}
-		}
-		if ($fp = @fopen(PMF_ROOT_DIR."/inc/config.php","w")) {
-			for ($h = 1; $h <= $anz; $h++) {
-				fputs($fp,$inp[$h]);
-			}
-			@fclose($fp);
-		} else {
-			print "<p>Cannot write to config.php.</p></td>";
-            HTMLFooter();
-		    die();
-		}
-	} else {
-		print "<p>Cannot read config.php.</p></td>";
+        print "<p class=\"center\">Could not copy the file ../inc/config.php.original to ../inc/config.php.</p>\n";
         HTMLFooter();
-		die();
-	}
+        die();
+    }
+    if ($fp = @fopen(PMF_ROOT_DIR."/inc/config.php","r")) {
+        $anz = 0;
+        while($dat = fgets($fp,1024)) {
+            $anz++;
+            $inp[$anz] = $dat;
+        }
+        @fclose($fp);
+        for ($h = 1; $h <= $anz; $h++) {
+            if (str_replace("\$PMF_CONF['language'] = 'language_en.php';", "", $inp[$h]) != $inp[$h]) {
+                $inp[$h] = "\$PMF_CONF['language'] = '".$language."';\n";
+            }
+            if (str_replace("\$PMF_CONF['permLevel'] = 'basic';", "", $inp[$h]) != $inp[$h]) {
+                $inp[$h] = "\$PMF_CONF['permLevel'] = '".$permLevel."';\n";
+            }
+        }
+        if ($fp = @fopen(PMF_ROOT_DIR."/inc/config.php","w")) {
+            for ($h = 1; $h <= $anz; $h++) {
+                fputs($fp,$inp[$h]);
+            }
+            @fclose($fp);
+        } else {
+            print "<p>Cannot write to config.php.</p></td>";
+            HTMLFooter();
+            die();
+        }
+    } else {
+        print "<p>Cannot read config.php.</p></td>";
+        HTMLFooter();
+        die();
+    }
 
     // connect to the database using inc/data.php
     require_once(PMF_ROOT_DIR."/inc/data.php");
     require_once(PMF_ROOT_DIR."/inc/db.php");
-	$db = db::db_select($sql_type);
-	$db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
-	if (!$db) {
-		print "<p class=\"error\"><strong>DB Error:</strong> ".$db->error()."</p>\n";
-		HTMLFooter();
-		die();
-	}
-	include_once($sql_type.".sql.php");
-	print "<p class=\"center\"><strong>";
-	while ($each_query = each($query)) {
-		$result = $db->query($each_query[1]);
-		print "|&nbsp;";
-		if (!$result) {
-			print "<!-- ".$each_query[1]." --><p class=\"error\"><strong>Error:</strong> Please install your version of phpMyFAQ once again or send us a <a href=\"http://bugs.phpmyfaq.de\" target=\"_blank\">bug report</a>.<br />DB error: ".$db->error()."</p>\n";
-			uninstall();
-		    HTMLFooter();
-		    die();
-		}
+    $db = PMF_Db::db_select($sql_type);
+    $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
+    if (!$db) {
+        print "<p class=\"error\"><strong>DB Error:</strong> ".$db->error()."</p>\n";
+        HTMLFooter();
+        die();
+    }
+    include_once($sql_type.".sql.php");
+    print "<p class=\"center\"><strong>";
+    while ($each_query = each($query)) {
+        $result = $db->query($each_query[1]);
+        print "|&nbsp;";
+        if (!$result) {
+            print "<!-- ".$each_query[1]." --><p class=\"error\"><strong>Error:</strong> Please install your version of phpMyFAQ once again or send us a <a href=\"http://bugs.phpmyfaq.de\" target=\"_blank\">bug report</a>.<br />DB error: ".$db->error()."</p>\n";
+            uninstall();
+            HTMLFooter();
+            die();
+        }
         //usleep(250);
-	}
-	// add admin account and rights
-	/*$query[] = "INSERT INTO ".$sqltblpre."faquser (id, name, pass, realname, email, rights) VALUES (1, 'admin', '".md5($password)."', '".$realname."', '".$email."', '1111111111111111111111111')";*/
-	if (!defined('SQLPREFIX'))
+    }
+    // add admin account and rights
+    /*$query[] = "INSERT INTO ".$sqltblpre."faquser (id, name, pass, realname, email, rights) VALUES (1, 'admin', '".md5($password)."', '".$realname."', '".$email."', '1111111111111111111111111')";*/
+    if (!defined('SQLPREFIX'))
         define('SQLPREFIX', $sqltblpre);
-	require_once dirname(dirname(__FILE__)).'/inc/PMF_User/User.php';
-	$admin = new PMF_User();
-	$admin->createUser('admin', $password);
-	$admin->setStatus('protected');
-	$adminData = array(
-	    'display_name' => $realname,
-	    'email' => $email
+    require_once dirname(dirname(__FILE__)).'/inc/PMF_User/User.php';
+    $admin = new PMF_User();
+    $admin->createUser('admin', $password);
+    $admin->setStatus('protected');
+    $adminData = array(
+        'display_name' => $realname,
+        'email' => $email
     );
-	$admin->setUserData($adminData);
-	$adminID = $admin->getUserId();
-	// add rights
-	$rights = array(
+    $admin->setUserData($adminData);
+    $adminID = $admin->getUserId();
+    // add rights
+    $rights = array(
         //1 => "adduser",
         array(
             'name' => 'adduser',
@@ -918,7 +918,7 @@ foreach ($permLevels as $level) {
         $rightID = $admin->perm->addRight($right);
         $admin->perm->grantUserRight($adminID, $rightID);
     }
-	print "</strong></p>\n";
+    print "</strong></p>\n";
 
     print "<p class=\"center\">All tables were created and filled with the data.</p>\n";
     print "<p class=\"center\">Congratulation! Everything seems to be okay.</p>\n";
@@ -935,5 +935,6 @@ foreach ($permLevels as $level) {
     } else {
         print "<p class=\"center\">Please delete the file 'update.php' manually.</p>\n";
     }
+    
     HTMLFooter();
 }
