@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.110 2006-06-11 21:37:17 matteo Exp $
+* $Id: functions.php,v 1.111 2006-06-12 22:09:26 matteo Exp $
 *
 * This is the main functions file!
 *
@@ -228,17 +228,26 @@ function check4Language($id)
 }
 
 /**
-* Converts an email address to avoid spam
-* NOTE: user@example.org -> user_AT_example_DOT_org
-*
-* @param    string
-* @return   string
-* @since    2003-04-17
-* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-*/
+ * safeEmail()
+ *
+ * If the email spam protection has been activated from the general PMF configuration
+ * this function converts an email address e.g. from "user@example.org" to "user_AT_example_DOT_org"
+ * Otherwise it will return the plain email address.
+ *
+ * @param    string
+ * @return   string
+ * @since    2003-04-17
+ * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+ */
 function safeEmail($email)
 {
-	return str_replace(array('@', '.'), array('_AT_', '_DOT_'), $email);
+    global $PMF_CONF;
+
+    if (isset($PMF_CONF['spamEnableSafeEmail']) && ($PMF_CONF['spamEnableSafeEmail'] == 'TRUE')) {
+        return str_replace(array('@', '.'), array('_AT_', '_DOT_'), $email);
+    } else {
+        return $email;
+    }
 }
 
 /**
@@ -262,23 +271,207 @@ function votingCheck($id, $ip)
 }
 
 /**
-* Checks if a IP is banned
-*
-* @param    string  IP
-* @return   boolean
-* @since    2003-06-06
-* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-*/
+ * check4AddrMatch()
+ *
+ * Checks for an address match (IP or Network)
+ *
+ * @param    string  IP Address
+ * @param    string  Network Address (e.g.: a.b.c.d/255.255.255.0 or a.b.c.d/24) or IP Address
+ * @return   boolean
+ * @since    2006-01-23
+ * @author   Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author   Kenneth Shaw <ken@expitrans.com>
+ */
+function check4AddrMatch($ip, $network)
+{
+    // See also ip2long PHP online manual: Kenneth Shaw
+    // coded a network matching function called net_match.
+    // We use here his way of doing bit-by-bit network comparison
+    $matched = false;
+
+    // Start applying the discovering of the network mask
+    $ip_arr = explode('/', $network);
+
+    $network_long = ip2long($ip_arr[0]);
+    $ip_long      = ip2long($ip);
+
+    if (!isset($ip_arr[1])) {
+        // $network seems to be a simple ip address, instead of a network address
+        $matched = ($network_long == $ip_long);
+    } else {
+        // $network seems to be a real network address
+        $x = ip2long($ip_arr[1]);
+        // Evaluate the netmask: <Network Mask> or <CIDR>
+        $mask = ( long2ip($x) == $ip_arr[1] ? $x : 0xffffffff << (32 - $ip_arr[1]));
+        $matched = ( ($ip_long & $mask) == ($network_long & $mask) );
+    }
+
+    return $matched;
+}
+
+/**
+ * Checks if a IP is banned
+ *
+ * @param    string  IP
+ * @return   boolean
+ * @since    2003-06-06
+ * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+ */
 function IPCheck($ip)
 {
 	global $PMF_CONF;
 	$arrBannedIPs = explode(" ", $PMF_CONF["bannedIP"]);
-	foreach ($arrBannedIPs as $oneIP) {
-    	if ($oneIP == $ip) {
-			return false;
-		}
-	}
+	foreach ($arrBannedIPs as $oneIPorNetwork) {
+        if (check4AddrMatch($ip, $oneIPorNetwork)) {
+            return false;
+        }
+    }
 	return true;
+}
+
+/**
+ * getBannedWords()
+ *
+ * This function returns the banned words dictionary as an array.
+ *
+ * @return  array
+ * @access  public
+ * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+ */
+function getBannedWords()
+{
+    $bannedTrimmedWords = array();
+    $bannedWordsFile = dirname(__FILE__).'/blockedwords.txt';
+    $bannedWords     = array();
+
+    // Read the dictionary
+    if (file_exists($bannedWordsFile) && is_readable($bannedWordsFile)) {
+        $bannedWords = @file($bannedWordsFile);
+    }
+    // Trim it
+    foreach ($bannedWords as $word) {
+        $bannedTrimmedWords[] = trim($word);
+    }
+
+    return $bannedTrimmedWords;
+}
+
+/**
+ * checkBannedWord()
+ *
+ * This function checks the content against a dab word list
+ * if the banned word spam protection has been activated from the general PMF configuration.
+ *
+ * @param   string  $content
+ * @return  bool
+ * @access  public
+ * @author  Katherine A. Bouton
+ * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author  Peter Beauvain <pbeauvain@web.de>
+ */
+function checkBannedWord($content)
+{
+    global $PMF_CONF;
+
+    // Sanity checks
+    $content = trim($content);
+    if (    ('' == $content)
+         || (!isset($PMF_CONF['spamCheckBannedWords']))
+         || (isset($PMF_CONF['spamCheckBannedWords']) && ($PMF_CONF['spamCheckBannedWords'] != 'TRUE')) ) {
+        return true;
+    }
+
+    $bannedWords = getBannedWords();
+    // We just search a match of, at least, one banned word into $content
+    $content = strtolower($content);
+    if (is_array($bannedWords)) {
+        foreach ($bannedWords as $bannedWord) {
+            if (strpos($content, strtolower($bannedWord)) !== false) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+/**
+ * printCaptchaFieldset
+ *
+ * Get out the HTML code for the fieldset that insert the captcha code in a (public) form
+ *
+ * @param    string  Text of the HTML Legend element
+ * @param    string  HTML code for the Captcha image
+ * @param    string  Length of the Captcha code
+ * @return   string
+ * @since    2006-04-25
+ * @author   Matteo Scaramuccia <matteo@scaramuccia.com>
+ */
+function printCaptchaFieldset($legend, $img, $length)
+{
+    global $PMF_CONF;
+
+    $html = '';
+
+    if (isset($PMF_CONF['spamEnableCatpchaCode']) && ($PMF_CONF['spamEnableCatpchaCode'] == 'TRUE')) {
+        $html .= '<fieldset><legend>'.$legend.'</legend>';
+        $html .= '<div style="text-align:center;">'.$img;
+        $html .= '<input class="inputfield" style="vertical-align: top;" type="text" name="captcha" id="captcha" value="" size="'.$length.'" />';
+        $html .= '</div></fieldset>';
+    }
+
+    return $html;
+}
+
+/**
+ * checkCaptchaCode()
+ *
+ * This function checks the provided captcha code
+ * if the captcha code spam protection has been activated from the general PMF configuration.
+ *
+ * @return  bool
+ * @access  public
+ * @since   2006-04-25
+ * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+ */
+function checkCaptchaCode()
+{
+    global $PMF_CONF, $captcha;
+
+    if (isset($PMF_CONF['spamEnableCatpchaCode']) && ($PMF_CONF['spamEnableCatpchaCode'] == 'TRUE')) {
+        return (isset($_POST['captcha']) && ($captcha->validateCaptchaCode($_POST['captcha'])));
+    } else {
+        return true;
+    }
+}
+
+/**
+ * getHighlightedBannedWords()
+ *
+ * This function returns the passed content with HTML hilighted banned words.
+ *
+ * @param   string  $content
+ * @return  string
+ * @access  public
+ * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+ */
+function getHighlightedBannedWords($content)
+{
+    $bannedHTMLHiliWords = array();
+    $bannedWords = getBannedWords();
+
+    // Build the RegExp array
+    foreach ($bannedWords as $word) {
+        $bannedHTMLHiliWords[] = "/(".quotemeta($word).")/ism";
+    }
+    // Use the CSS "highlight" class to highlight the banned words
+    if (count($bannedHTMLHiliWords)>0) {
+        return preg_replace($bannedHTMLHiliWords, "<span class=\"highlight\">\\1</span>", $content);
+    }
+    else {
+        return $content;
+    }
 }
 
 /**

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: add.php,v 1.10 2006-04-09 09:25:23 thorstenr Exp $
+* $Id: add.php,v 1.11 2006-06-12 22:09:26 matteo Exp $
 *
 * This is the page there a user can add a FAQ record.
 *
@@ -41,8 +41,8 @@ if (isset($_GET['question'])) {
     $readonly = '';
 }
 
-if (isset($_GET["cat"]) && is_numeric($_GET["cat"])) {
-    $rubrik = intval($_GET["cat"]);
+if (isset($_GET['cat']) && is_numeric($_GET['cat'])) {
+    $rubrik = intval($_GET['cat']);
 	$category = array(array('category_id' => $rubrik, 'category_lang' => $LANGCODE));
 } else {
 	$category = array();
@@ -67,9 +67,8 @@ $tpl->processTemplate('writeContent', array(
     'msgNewContentKeywords' => $PMF_LANG['msgNewContentKeywords'],
     'msgNewContentLink'     => $PMF_LANG['msgNewContentLink'],
     'copyright_eintrag'     => unhtmlentities($PMF_CONF['copyright_eintrag']),
-    'msgCaptcha'            => $PMF_LANG['msgCaptcha'],
-    'printCaptcha'          => $captcha->printCaptcha('add'),
-    'setCaptchaCodeLength'  => $captcha->caplength,
+    'captchaFieldset'       => printCaptchaFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('add'), $captcha->caplength),
     'msgNewContentSubmit'   => $PMF_LANG['msgNewContentSubmit']));
 
 $tpl->includeTemplate('writeContent', 'index');
+?>
