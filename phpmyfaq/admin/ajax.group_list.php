@@ -1,18 +1,18 @@
 <?php
 /**
-* $Id: ajax.group_list.php,v 1.8 2006-01-16 18:51:04 thorstenr Exp $
+* $Id: ajax.group_list.php,v 1.9 2006-06-12 21:23:25 matteo Exp $
 *
 * AJAX: lists all registered users
 *
 * @author       Lars Tiedemann <larstiedemann@yahoo.de>
 * @since        2005-12-15
-* @copyright    (c) 2006 phpMyFAQ Team
-* 
+* @copyright    (c) 2005-2006 phpMyFAQ Team
+*
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
 * compliance with the License. You may obtain a copy of the License at
 * http://www.mozilla.org/MPL/
-* 
+*
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
@@ -35,6 +35,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 require_once(PMF_ROOT_DIR.'/inc/PMF_User/User.php');
 
 $user = new PMF_User();
+$user->addDb($db);
 $userList = $user->getAllUsers();
 $groupList = is_a($user->perm, "PMF_PermMedium") ? $user->perm->getAllGroups() : array();
 $data = array(
@@ -45,7 +46,9 @@ $data = array(
 $perm = $user->perm;
 $all_rights = $perm->getAllRightsData();
 
-ob_clean();
+if (count(ob_list_handlers()) > 0) {
+    ob_clean();
+}
 ?>
 <xml>
     <rightlist>
