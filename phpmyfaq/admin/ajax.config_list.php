@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.config_list.php,v 1.4 2006-06-11 21:38:00 matteo Exp $
+* $Id: ajax.config_list.php,v 1.5 2006-06-12 21:32:07 matteo Exp $
 *
 * AJAX: lists the complete configuration items
 *
@@ -79,7 +79,7 @@ function printInputFieldByType($key, $type)
 }
 
     foreach ($LANG_CONF as $key => $value) {
-        $filterConfigParams = $configMode == 'std'? false === strpos($key, $configMode) : 0 === strpos($key, $configMode) ;
+        $filterConfigParams = ($configMode == 'std'? false === strpos($key, 'spam') : 0 === strpos($key, $configMode));
         if ($filterConfigParams) {
 ?>
 <dl>
