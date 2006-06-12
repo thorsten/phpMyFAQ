@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.49 2006-06-11 08:21:23 thorstenr Exp $
+* $Id: index.php,v 1.50 2006-06-12 22:34:18 matteo Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the
@@ -23,8 +23,6 @@
 * under the License.
 */
 
-
-
 //
 // Check if config.php and data.php exist -> if not, redirect to installer
 //
@@ -34,10 +32,11 @@ if (!file_exists('inc/config.php') || !file_exists('inc/data.php')) {
 }
 
 
+
 //
 // Prepend
 //
-require_once('inc/init.php');
+require_once('inc/Init.php');
 define('IS_VALID_PHPMYFAQ', null);
 PMF_Init::cleanRequest();
 
@@ -48,10 +47,10 @@ PMF_Init::cleanRequest();
 // the main FAQ class and the IDNA class
 //
 require_once('inc/Template.php');
-require_once('inc/captcha.php');
-require_once('inc/category.php');
+require_once('inc/Captcha.php');
+require_once('inc/Category.php');
 require_once('inc/Faq.php');
-require_once('inc/idna_convert.class.php');
+require_once('inc/libs/idna_convert.class.php');
 $IDN = new idna_convert;
 
 
@@ -149,15 +148,18 @@ if (function_exists('mb_language') && in_array($PMF_LANG['metaLanguage'], $valid
 
 
 //
-// found a session ID?
+// found a session ID in _GET or _COOKIE?
 //
-if (!isset($_GET["sid"]) && !isset($_COOKIE["sid"])) {
-	Tracking("new_session", 0);
-    setcookie("sid", $sid, time()+3600);
+if ((!isset($_GET['sid'])) && (!isset($_COOKIE['pmf_sid']))) {
+    // Create a per-site unique SID
+    Tracking('new_session', 0);
+    setcookie('pmf_sid', $sid, time() + 3600);
 } else {
-	if (isset($_REQUEST["sid"]) && is_numeric($_REQUEST["sid"]) == TRUE) {
-		CheckSID($_REQUEST["sid"], getenv("REMOTE_ADDR"));
-	}
+    if (isset($_COOKIE['pmf_sid']) && is_numeric($_COOKIE['pmf_sid'])) {
+        CheckSID((int)$_COOKIE['pmf_sid'], $_SERVER['REMOTE_ADDR']);
+    } else {
+        CheckSID((int)$_GET['sid'], $_SERVER['REMOTE_ADDR']);
+    }
 }
 
 
@@ -166,24 +168,24 @@ if (!isset($_GET["sid"]) && !isset($_COOKIE["sid"])) {
 // is user tracking activated?
 //
 if (isset($PMF_CONF["tracking"])) {
-	if (isset($sid)) {
-        if (!isset($_COOKIE["sid"])) {
-            $sids = "sid=".$sid."&amp;lang=".$LANGCODE."&amp;";
+    if (isset($sid)) {
+        if (!isset($_COOKIE['pmf_sid'])) {
+            $sids = 'sid='.(int)$sid.'&amp;lang='.$LANGCODE.'&amp;';
         } else {
-            $sids = "";
+            $sids = '';
         }
-	} elseif (isset($_REQUEST["sid"])) {
-        if (!isset($_COOKIE["sid"])) {
-            $sids = "sid=".$_REQUEST["sid"]."&amp;lang=".$LANGCODE."&amp;";
+    } elseif (isset($_GET['sid']) || isset($_COOKIE['pmf_sid'])) {
+        if (!isset($_COOKIE['pmf_sid'])) {
+            $sids = 'sid='.(int)$_GET['sid'].'&amp;lang='.$LANGCODE.'&amp;';
         } else {
-            $sids = "";
+            $sids = '';
         }
-	}
+    }
 } else {
-    if (!setcookie("lang", $LANGCODE, time()+3600)) {
-        $sids = "lang=".$LANGCODE."&amp;";
+    if (!setcookie('pmf_lang', $LANGCODE, time()+3600)) {
+        $sids = 'lang='.$LANGCODE.'&amp;';
     } else {
-        $sids = "";
+        $sids = '';
     }
 }
 
@@ -193,6 +195,7 @@ if (isset($PMF_CONF["tracking"])) {
 // Create a new FAQ object
 //
 $faq = new FAQ($db, $LANGCODE);
+
 
 
 //
@@ -245,7 +248,7 @@ if (isset($_GET["cat"])) {
 } else {
     $cat = 0;
 }
-$tree = new Category($LANGCODE);
+$tree = new PMF_Category($LANGCODE);
 $cat_from_id = -1;
 if (is_numeric($id) && $id > 0) {
     $cat_from_id = $tree->getCategoryIdFromArticle($id);

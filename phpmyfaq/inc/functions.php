@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.111 2006-06-12 22:09:26 matteo Exp $
+* $Id: functions.php,v 1.112 2006-06-12 22:34:18 matteo Exp $
 *
 * This is the main functions file!
 *
@@ -531,40 +531,48 @@ function hilight($content)
 * @since    2001-02-18
 * @since    Bastian Pöttner <bastian@poettner.net>
 * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+* @author   Matteo Scaramuccia <matteo@scaramuccia.com>
 */
-function Tracking($action, $id)
+function Tracking($action, $id = 0)
 {
-	global $db, $PMF_CONF, $sid;
-	if (isset($PMF_CONF["tracking"])) {
-		if (isset($_GET["sid"])) {
-			$sid = $_GET["sid"];
+    global $db, $PMF_CONF, $sid;
+    if (isset($PMF_CONF["tracking"])) {
+        if (isset($_GET["sid"])) {
+            $sid = $_GET["sid"];
         }
-		if (isset($_COOKIE['pmf_sid'])) {
-			$sid = $_COOKIE['pmf_sid'];
+        if (isset($_COOKIE['pmf_sid'])) {
+            $sid = $_COOKIE['pmf_sid'];
         }
-		if ($action == "oldSession") {
-			$sid = "";
+        if ($action == "old_session") {
+            unset($sid);
         }
-		if (!isset($sid)) {
+        if (!isset($sid)) {
             $sid = $db->nextID(SQLPREFIX."faqsessions", "sid");
-			$db->query("INSERT INTO ".SQLPREFIX."faqsessions (sid, ip, time) VALUES (".$sid.", '".$_SERVER["REMOTE_ADDR"]."', ".time().")");
-        }
-		$fp = @fopen("./data/tracking".date("dmY"), "a+b");
-        if ($fp) {
-    		$flanz = "0";
-    		while (!flock($fp, LOCK_EX) && $flanz < 6) {
-    			wait(500);
-    			$flanz++;
+            // HACK: be sure that pmf_sid cookie contains the current $sid
+            if (isset($_COOKIE["pmf_sid"]) && ((int)$_COOKIE['pmf_sid'] != $sid)) {
+                setcookie('pmf_sid', $sid, time() + 3600);
             }
-    		if ($flanz >= 6) {
-    			fclose($fp);
-            } elseif (!empty($_SERVER["HTTP_REFERER"])) {
+            $db->query("INSERT INTO ".SQLPREFIX."faqsessions (sid, ip, time) VALUES (".$sid.", '".$_SERVER["REMOTE_ADDR"]."', ".time().")");
+        }
+        $fp = @fopen("./data/tracking".date("dmY"), "a+b");
+        if ($fp) {
+            $flanz = "0";
+            while (!flock($fp, LOCK_EX) && $flanz < 6) {
+                wait(500);
+                $flanz++;
+            }
+            if ($flanz >= 6) {
+                fclose($fp);
+            } elseif ((!empty($_SERVER["HTTP_REFERER"])) || ($action == "new_session")) {
+                if (!isset($_SERVER["HTTP_REFERER"])) {
+                    $_SERVER["HTTP_REFERER"] = "";
+                }
                 if (!isset($_SERVER["QUERY_STRING"])) {
                     $_SERVER["QUERY_STRING"] = "";
                 }
-    			fputs($fp, $sid.";".str_replace(";", ",",$action).";".$id.";".$_SERVER["REMOTE_ADDR"].";".str_replace(";", ",", $_SERVER["QUERY_STRING"]).";".str_replace(";", ",", $_SERVER["HTTP_REFERER"]).";".str_replace(";", ",", urldecode($_SERVER["HTTP_USER_AGENT"])).";".time().";\n");
-    			flock($fp, LOCK_UN);
-    			fclose($fp);
+                fputs($fp, $sid.";".str_replace(";", ",",$action).";".$id.";".$_SERVER["REMOTE_ADDR"].";".str_replace(";", ",", $_SERVER["QUERY_STRING"]).";".str_replace(";", ",", $_SERVER["HTTP_REFERER"]).";".str_replace(";", ",", urldecode($_SERVER["HTTP_USER_AGENT"])).";".time().";\n");
+                flock($fp, LOCK_UN);
+                fclose($fp);
             }
         }
     }
@@ -594,31 +602,43 @@ function wait($usecs)
 /*
  * Testet ob die SID zu der IP passt |  @@ Bastian, 2001-04-07
  * Last Update: @@ Thorsten, 2003-03-06
+ * Last Update: @@ Matteo, 2006-03-13
  */
 function CheckSID($sid, $ip)
 {
-	global $db;
-	if ($db->num_rows($db->query("SELECT sid FROM ".SQLPREFIX."faqsessions WHERE sid = ".$sid." AND ip = '".$ip."' AND time > ".(time()-86400))) < 1) {
-		Tracking("old_session",$sid);
-	}
+    global $db;
+
+    if ($db->num_rows($db->query("SELECT sid FROM ".SQLPREFIX."faqsessions WHERE sid = ".$sid." AND ip = '".$ip."' AND time > ".(time()-86400))) < 1) {
+        // No sid found (maybe someone is refering to an old one): create a new one
+        Tracking("old_session", $sid);
+    }
+    else {
+        // Update the current sid in the db
+        $db->query("UPDATE ".SQLPREFIX."faqsessions SET time = ".time()." WHERE sid = ".$sid." AND ip = '".$ip."'");
+    }
 }
 
 /*
  * Funktion für Anzeige von Usern, die online sind | @@ Thorsten, 2001-05-02
  * Last Update: @@ Thorsten, 2004-07-17
+ * Last Update: @@ Matteo, 2006-03-13
  */
 function userOnline()
 {
-	global $db, $PMF_CONF;
+    global $db, $PMF_CONF;
+
     if (isset($PMF_CONF["tracking"])) {
-		$timeNow = (time() - 300);
-		$result = $db->query("SELECT count(sid) FROM ".SQLPREFIX."faqsessions WHERE time > ".$timeNow." GROUP BY ip");
-		if (isset($result)) {
-			return $db->num_rows($result);
-	    }
-    } else {
-        return 0;
+        $timeNow = (time() - 300);
+        // Count all sids within the last five minutes (300sec), that is to say
+        // the number of unique users who have perfomed some activities within the last five minutes
+        $result = $db->query("SELECT count(sid) AS activeusers FROM ".SQLPREFIX."faqsessions WHERE time > ".$timeNow);
+        if (isset($result)) {
+            $row = $db->fetch_object($result);
+            return $row->activeusers;
+        }
     }
+
+    return 0;
 }
 
 
