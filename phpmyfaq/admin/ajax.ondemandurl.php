@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.ondemandurl.php,v 1.6 2006-06-11 20:47:53 matteo Exp $
+* $Id: ajax.ondemandurl.php,v 1.7 2006-06-12 21:21:44 matteo Exp $
 *
 * AJAX: onDemandURL
 *
@@ -11,7 +11,7 @@
 *
 * @author           Minoru TODA <todam@netjapan.co.jp>
 * @since            2005-09-30
-* @copyright       (c) 2005 NetJapan, Inc.
+* @copyright        (c) 2005-2006 NetJapan, Inc.
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -41,10 +41,12 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 @header("Vary: Negotiate,Accept");
 
 $linkverifier = new PMF_Linkverifier();
-if ($linkverifier->isReady() == FALSE) {
-	ob_clean();
-	print "disabled";
-	exit();
+if ($linkverifier->isReady() == false) {
+    if (count(ob_list_handlers()) > 0) {
+        ob_clean();
+    }
+    print "disabled";
+    exit();
 }
 
 $linkverifier->loadConfigurationFromDB();
