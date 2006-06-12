@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: attachment.php,v 1.16 2006-06-11 15:33:21 matteo Exp $
+* $Id: attachment.php,v 1.17 2006-06-12 22:24:26 matteo Exp $
 *
 * Select an attachment and save it or create the SQL backup files
 *
@@ -40,23 +40,9 @@ if (isset($_REQUEST["aktion"]) && ($_REQUEST["aktion"] == "sicherdaten" || $_REQ
 	Header("Pragma: no-cache");
 }
 
-require_once (PMF_ROOT_DIR."/inc/config.php");
-require_once (PMF_ROOT_DIR."/inc/constants.php");
-require_once (PMF_ROOT_DIR."/inc/data.php");
-require_once (PMF_ROOT_DIR."/inc/Db.php");
-define("SQLPREFIX", $DB["prefix"]);
-
-$db = PMF_Db::db_select($DB["type"]);
-$db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
-
-/* get language (default: english) */
-if (isset($PMF_CONF["detection"]) && isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) {
-    require_once(PMF_ROOT_DIR."/lang/language_".substr($_SERVER["HTTP_ACCEPT_LANGUAGE"], 0, 2).".php");
-    $LANGCODE = substr($_SERVER["HTTP_ACCEPT_LANGUAGE"], 0, 2);
-} elseif (!isset($PMF_CONF["detection"])) {
-    require_once(PMF_ROOT_DIR."/lang/".$PMF_CONF["language"]);
-    $LANGCODE = $PMF_LANG["metaLanguage"];
-}
+// get language (default: english)
+$pmf = new PMF_Init();
+$LANGCODE = $pmf->setLanguage((isset($PMF_CONF['detection']) ? true : false), $PMF_CONF['language']);
 
 if (isset($LANGCODE)) {
     require_once(PMF_ROOT_DIR."/lang/language_".$LANGCODE.".php");
