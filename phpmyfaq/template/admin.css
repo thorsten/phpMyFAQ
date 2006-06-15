@@ -1,5 +1,5 @@
 /**
-* $Id: admin.css,v 1.13 2006-06-11 19:16:48 matteo Exp $
+* $Id: admin.css,v 1.14 2006-06-15 21:41:58 matteo Exp $
 *
 * This is the CSS file for the admin section of phpMyFAQ 1.5.x
 * You don't need to change enything here but feel free to do it. :-)
@@ -7,12 +7,12 @@
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2004-06-09
 * @copyright    (c) 2004-2006 phpMyFAQ Team
-* 
+*
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
 * compliance with the License. You may obtain a copy of the License at
 * http://www.mozilla.org/MPL/
-* 
+*
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
@@ -22,6 +22,7 @@
 /* color defintions */
 #header {
     background-color: #9CB6C6;
+    color: #000;
     }
 /*
 .sideBox {
@@ -34,7 +35,7 @@ body {
     font-family: "Bitstream Vera Sans", "Trebuchet MS", Verdana, Tahoma, sans-serif;
     font-size: 12px;
     margin: auto;
-}    
+}
 h1 {
     font-weight: bold;
 	font-style: italic;
@@ -103,7 +104,7 @@ form br {
 
 /* Header */
 #header {
-	height: 60px;
+	height: 50px;
 	padding: 20px;
 }
 .headerTitle {
@@ -147,7 +148,7 @@ div#menue {
 #menue li a:hover {
     background-color: #D0D9D9;
     color: #000;
-    }
+}
 div#langform {
    font-size: 95%;
    width: 180px;
@@ -155,6 +156,20 @@ div#langform {
    padding: 0px;
    background-color: #EDF2F2;
    border: 1px solid #D0D9D9;
+}
+
+div#sessionexpiration {
+   font-size: 95%;
+   width: 180px;
+   margin-top: 10px;
+   margin-bottom: 10px;
+   padding: 0px;
+   background-color: #EDF2F2;
+   border: 1px solid #D0D9D9;
+}
+div#sessioncounter {
+   font-size: 100%;
+   text-align: center;
 }
 
 /* the main body */
@@ -188,11 +203,11 @@ th.list, td.list {
     line-height: 20px;
     text-align: left;
     }
-     
+
 /* indent at user administration */
-#userrights {
+.userrights {
     padding-left: 132px;
-    }    
+    }
 
 /* styles for input and textarea fields */
 textarea.admin {

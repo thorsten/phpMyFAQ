@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: footer.php,v 1.6 2006-06-11 15:09:36 matteo Exp $
+* $Id: footer.php,v 1.7 2006-06-15 21:41:57 matteo Exp $
 *
 * Footer of the admin area
 *
@@ -32,6 +32,8 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
         <div id="copyright"><strong>phpMyFAQ <?php print $PMF_CONF["version"]; ?></strong> | &copy; 2001-2006 <a href="http://www.phpmyfaq.de/" target="_blank">phpMyFAQ Team</a></div>
     </div>
 </div>
+
+<iframe id="keepPMFSessionAlive" src="session.keepalive.php<?php print $linkext; ?>&amp;lang=<?php print $LANGCODE; ?>" frameBorder="no" width="0" height="0"></iframe>
 
 </body>
 </html>

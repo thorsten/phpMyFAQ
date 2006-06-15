@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: menue.php,v 1.13 2006-06-11 16:52:14 matteo Exp $
+* $Id: menue.php,v 1.14 2006-06-15 21:41:57 matteo Exp $
 *
 * Navigation menue of the admin area
 *
@@ -94,4 +94,9 @@ $groupSupport = is_a($user->perm, "PMF_PermMedium");
     <?php print selectLanguages($LANGCODE); ?><br />
     <input type="submit" name="submit" value="Go" class="submit" />
     </form>
+</div>
+
+<div id="sessionexpiration">
+    <label for="session">Time to your session expiration</label>
+    <div id="sessioncounter">Loading...</div>
 </div>
