@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: user.php,v 1.21 2006-01-06 18:46:27 b33blebr0x Exp $
+* $Id: user.php,v 1.22 2006-06-15 22:06:17 matteo Exp $
 *
 * Displays the user managment frontend
 *
@@ -279,23 +279,23 @@ if ($userAction == 'add') {
         <form name="user_create" action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=user&amp;user_action=addsave" method="post">
             <div class="input_row">
                 <label for="user_name"><?php print $text['addUser_name']; ?></label>
-                <input class="admin" type="text" name="user_name" value="<?php print (isset($user_name) ? $user_name : ''); ?>" tabindex="1" />
+                <input type="text" name="user_name" value="<?php print (isset($user_name) ? $user_name : ''); ?>" tabindex="1" />
             </div>
             <div class="input_row">
                 <label for="user_realname"><?php print $text['addUser_displayName']; ?></label>
-                <input class="admin" type="text" name="user_realname" value="<?php print (isset($user_realname) ? $user_realname : ''); ?>" tabindex="2" />
+                <input type="text" name="user_realname" value="<?php print (isset($user_realname) ? $user_realname : ''); ?>" tabindex="2" />
             </div>
             <div class="input_row">
                 <label for="user_email"><?php print $text['addUser_email']; ?></label>
-                <input class="admin" type="text" name="user_email" value="<?php print (isset($user_email) ? $user_email : ''); ?>" tabindex="3" />
+                <input type="text" name="user_email" value="<?php print (isset($user_email) ? $user_email : ''); ?>" tabindex="3" />
             </div>
             <div class="input_row">
                 <label for="password"><?php print $text['addUser_password']; ?></label>
-                <input class="admin" type="password" name="user_password" value="<?php print (isset($user_password) ? $user_password : ''); ?>" tabindex="4" />
+                <input type="password" name="user_password" value="<?php print (isset($user_password) ? $user_password : ''); ?>" tabindex="4" />
             </div>
             <div class="input_row">
                 <label for="password_confirm"><?php print $text['addUser_password2']; ?></label>
-                <input class="admin" type="password" name="user_password_confirm" value="<?php print (isset($user_password_confirm) ? $user_password_confirm : ''); ?>" tabindex="5" />
+                <input type="password" name="user_password_confirm" value="<?php print (isset($user_password_confirm) ? $user_password_confirm : ''); ?>" tabindex="5" />
             </div>
             <div class="button_row">
                 <input class="submit" type="submit" value="<?php print $text['addUser_confirm']; ?>" tabindex="6" />
