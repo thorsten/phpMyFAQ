@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.verifyurl.php,v 1.6 2006-06-12 21:21:44 matteo Exp $
+* $Id: ajax.verifyurl.php,v 1.7 2006-06-15 22:18:29 matteo Exp $
 *
 * AJAX: verifyurl
 *
@@ -74,7 +74,9 @@ if (($content = getEntryContent($id, $lang)) === FALSE) {
     exit();
 }
 
-ob_clean();
+if (count(ob_list_handlers()) > 0) {
+    ob_clean();
+}
 
 $linkverifier->parse_string($content);
 $linkverifier->VerifyURLs($PMF_CONF['referenceURL']);

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.ondemandurl.php,v 1.7 2006-06-12 21:21:44 matteo Exp $
+* $Id: ajax.ondemandurl.php,v 1.8 2006-06-15 22:18:29 matteo Exp $
 *
 * AJAX: onDemandURL
 *
@@ -59,7 +59,9 @@ if (isset($_GET["lang"])) {
 	$lang = $_GET["lang"];
 }
 
-ob_clean();
+if (count(ob_list_handlers()) > 0) {
+    ob_clean();
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php print $PMF_LANG["metaLanguage"]; ?>" lang="<?php print $PMF_LANG["metaLanguage"]; ?>">
