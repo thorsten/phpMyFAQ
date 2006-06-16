@@ -114,7 +114,7 @@ $PMF_LANG["msgAskThx4Mail"] = "<h2>Bedankt voor uw e-mail!</h2>";
 $PMF_LANG["msgDate_User"] = "Datum / Gebruiker";
 $PMF_LANG["msgQuestion2"] = "Vraag";
 $PMF_LANG["msg2answer"] = "antwoord";
-$PMF_LANG["msgQuestionText"] = "Hier kunt u vragen zien die gesteld zijn door andere gebruikers. Als u een van de vragen beantwoord, kan uw antwoord in de FAQ worden opgenomen.";
+$PMF_LANG["msgQuestionText"] = "Hier kunt u vragen zien die gesteld zijn door andere gebruikers. Als u een van de vragen beantwoordt, kan uw antwoord in de FAQ worden opgenomen.";
 
 // Help
 $PMF_LANG["msgHelpText"] = "<p>De structuur van de FAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) is erg simpel. U kunt of door de <strong><a href=\"".$_SERVER["PHP_SELF"]."?action=show\">categorie&euml;n</a></strong> zoeken of de <strong><a href=\"".$_SERVER["PHP_SELF"]."?action=search\">FAQ zoekmachine</a></strong> laten zoeken op sleutelwoorden.</p>";
