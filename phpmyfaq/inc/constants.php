@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: constants.php,v 1.9 2006-06-11 16:34:39 matteo Exp $
+* $Id: constants.php,v 1.10 2006-06-17 13:00:16 matteo Exp $
 *
 * Constants for phpMyFAQ
 *
@@ -31,14 +31,14 @@ define('PMF_DATETIME_TIMEZONE', '0'); // default: "0", example: "-0400" for 4 ho
  *
  * @var integer
  */
-define('PMF_AUTH_TIMEOUT', 61);
+define('PMF_AUTH_TIMEOUT', 2);
 
 /**
  * Timeout for the warning about session timeout for the admin section, in minutes
  *
  * @var integer
  */
-define('PMF_AUTH_TIMEOUT_WARNING', 5);
+define('PMF_AUTH_TIMEOUT_WARNING', 1);
 
 /**
  * Start value for the solution IDs
@@ -67,6 +67,13 @@ define('PMF_NUMBER_RECORDS_TOPTEN', 10);
  * @var const   5
  */
 define('PMF_NUMBER_RECORDS_LATEST', 5);
+
+/**
+ * This is the max number of open questions returned by the feed
+ *
+ * @var const   50
+ */
+define("PMF_RSS_OPENQUESTIONS_MAX", 50);
 
 
 
