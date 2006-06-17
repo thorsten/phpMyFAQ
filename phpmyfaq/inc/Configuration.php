@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Configuration.php,v 1.1 2006-01-04 14:27:49 thorstenr Exp $
+* $Id: Configuration.php,v 1.2 2006-06-17 22:27:21 thorstenr Exp $
 *
 * The main class for fetching the configuration, update and delete items.
 *
@@ -8,18 +8,17 @@
 * @package      phpMyFAQ
 * @since        2006-01-04
 * @copyright    (c) 2006 phpMyFAQ Team
-* 
+*
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
 * compliance with the License. You may obtain a copy of the License at
 * http://www.mozilla.org/MPL/
-* 
+*
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
 * under the License.
 */
-
 class PMF_Configuration
 {
     /**
@@ -28,14 +27,12 @@ class PMF_Configuration
     * @var  object
     */
     var $db;
-    
     /**
     * Configuration array
     *
     * @var  array
     */
     var $config = array();
-    
     /**
     * Constructor
     *
@@ -47,7 +44,6 @@ class PMF_Configuration
     {
         $this->db = $db;
     }
-    
     /**
     * getAll()
     *
@@ -64,7 +60,6 @@ class PMF_Configuration
             $this->config[$row->config_name] = $row->config_value;
         }
     } // end func fetchAll()
-    
     /**
     * get()
     *
@@ -82,7 +77,6 @@ class PMF_Configuration
         }
         return $this->config[$item];
     } // end func get()
-    
     /**
     * update()
     *
@@ -111,5 +105,4 @@ class PMF_Configuration
         }
         return false;
     } // end func update()
-    
 }
