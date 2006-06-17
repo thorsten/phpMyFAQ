@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: rss.php,v 1.8 2005-06-28 19:06:36 thorstenr Exp $
+* $Id: rss.php,v 1.9 2006-06-17 13:01:25 matteo Exp $
 *
 * The RSS feed with the news
 *
@@ -19,19 +19,11 @@
 * License for the specific language governing rights and limitations
 * under the License.
 */
+define('PMF_ROOT_DIR', dirname(dirname(dirname(__FILE__))));
+require_once(PMF_ROOT_DIR.'/inc/Init.php');
+PMF_Init::cleanRequest();
 
-define("PMF_ROOT_DIR", dirname(dirname(dirname(__FILE__))));
-
-/* read configuration, include classes and functions */
-require_once (PMF_ROOT_DIR."/inc/data.php");
-require_once (PMF_ROOT_DIR."/inc/db.php");
-define("SQLPREFIX", $DB["prefix"]);
-$db = db::db_select($DB["type"]);
-$db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
-require_once (PMF_ROOT_DIR."/inc/config.php");
-require_once (PMF_ROOT_DIR."/inc/constants.php");
-require_once (PMF_ROOT_DIR."/inc/category.php");
-require_once (PMF_ROOT_DIR."/inc/functions.php");
+require_once (PMF_ROOT_DIR."/inc/Category.php");
 require_once (PMF_ROOT_DIR."/lang/".$PMF_CONF["language"]);
 
 $result = $db->query("SELECT datum, header, artikel, link, linktitel, target FROM ".SQLPREFIX."faqnews ORDER BY datum desc");

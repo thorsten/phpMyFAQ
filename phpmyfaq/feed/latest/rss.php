@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: rss.php,v 1.10 2005-06-28 19:06:36 thorstenr Exp $
+* $Id: rss.php,v 1.11 2006-06-17 13:01:25 matteo Exp $
 *
 * The RSS feed with the latest five records
 *
@@ -20,22 +20,14 @@
 * under the License.
 */
 
-define("PMF_ROOT_DIR", dirname(dirname(dirname(__FILE__))));
+define('PMF_ROOT_DIR', dirname(dirname(dirname(__FILE__))));
+require_once(PMF_ROOT_DIR.'/inc/Init.php');
+PMF_Init::cleanRequest();
 
-/* read configuration, include classes and functions */
-require_once (PMF_ROOT_DIR."/inc/data.php");
-require_once (PMF_ROOT_DIR."/inc/db.php");
-define("SQLPREFIX", $DB["prefix"]);
-$db = db::db_select($DB["type"]);
-$db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
-require_once (PMF_ROOT_DIR."/inc/config.php");
-require_once (PMF_ROOT_DIR."/inc/constants.php");
-require_once (PMF_ROOT_DIR."/inc/category.php");
-require_once (PMF_ROOT_DIR."/inc/functions.php");
 require_once (PMF_ROOT_DIR."/lang/".$PMF_CONF["language"]);
 
 $query = 'SELECT DISTINCT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqdata.datum, '.SQLPREFIX.'faqvisits.visits FROM '.SQLPREFIX.'faqvisits, '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang WHERE '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvisits.id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqvisits.lang AND '.SQLPREFIX.'faqdata.active = \'yes\' ORDER BY '.SQLPREFIX.'faqdata.datum DESC';
-    $result = $db->query($query);
+$result = $db->query($query);
 
 $rss = "<?xml version=\"1.0\" encoding=\"".$PMF_LANG["metaCharset"]."\" standalone=\"yes\" ?>\n<rss version=\"2.0\">\n<channel>\n";
 $rss .= "<title>".$PMF_CONF["title"]."</title>\n";

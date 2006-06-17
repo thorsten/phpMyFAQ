@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: rss.php,v 1.12 2006-06-11 18:36:32 matteo Exp $
+* $Id: rss.php,v 1.13 2006-06-17 13:01:25 matteo Exp $
 *
 * The RSS feed with the top ten
 *
@@ -20,6 +20,7 @@
 * License for the specific language governing rights and limitations
 * under the License.
 */
+
 define('PMF_ROOT_DIR', dirname(dirname(dirname(__FILE__))));
 require_once(PMF_ROOT_DIR.'/inc/Init.php');
 PMF_Init::cleanRequest();
