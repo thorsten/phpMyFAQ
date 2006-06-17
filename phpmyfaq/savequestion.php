@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: savequestion.php,v 1.20 2006-06-17 13:02:44 matteo Exp $
+* $Id: savequestion.php,v 1.21 2006-06-17 13:12:24 matteo Exp $
 *
 * @author           Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author           David Saez Padros <david@ols.es>
@@ -63,7 +63,7 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
             $result = $db->query($query);
 
             $questionMail = "User: ".$username.", mailto:".$usermail."\n"
-                            .$PMF_LANG["msgCategory"].":  ".$categories[$selected_category]["name"]."\n\n"
+                            .$PMF_LANG["msgCategory"].": ".$categories[$selected_category]["name"]."\n\n"
                             .wordwrap(stripslashes($content), 72);
             $headers = '';
             $result = $db->query("SELECT ".SQLPREFIX."faquserdata.email FROM ".SQLPREFIX."faquserdata INNER JOIN ".SQLPREFIX."faqcategories ON ".SQLPREFIX."faqcategories.user_id = ".SQLPREFIX."faquserdata.user_id WHERE ".SQLPREFIX."faqcategories.id = ".$selected_category);
