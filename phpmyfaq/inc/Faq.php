@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.12 2006-06-11 19:26:41 matteo Exp $
+* $Id: Faq.php,v 1.13 2006-06-17 22:09:48 thorstenr Exp $
 *
 * The main FAQ class
 *
@@ -490,18 +490,18 @@ class FAQ
     }
 
     /**
-    * getFiveLatest()
+    * getLatest()
     *
-    * This function generates the list with the five latest published records
+    * This function generates the list with the latest published records
     *
     * @return   string
     * @access   public
     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
     * @since    2002-05-07
     */
-    function getFiveLatest()
+    function getLatest()
     {
-        $result = $this->getFiveLatestData(PMF_NUMBER_RECORDS_LATEST);
+        $result = $this->getLatestData(PMF_NUMBER_RECORDS_LATEST);
         if (count ($result) > 0) {
             $output = '<ol>';
             foreach ($result as $row) {
@@ -599,7 +599,7 @@ class FAQ
     }
 
     /**
-    * getFiveLatestData()
+    * getLatestData()
     *
     * This function generates an array with a specified number of most recent published records
     *
@@ -609,7 +609,7 @@ class FAQ
     * @author   Robin Wood <robin@digininja.org>
     * @since    2005-03-06
     */
-    function getFiveLatestData($count = PMF_NUMBER_RECORDS_LATEST)
+    function getLatestData($count = PMF_NUMBER_RECORDS_LATEST)
     {
         global $sids, $PMF_CONF;
         $query =
