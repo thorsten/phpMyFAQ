@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mysqli.sql.php,v 1.12 2006-05-08 06:39:51 thorstenr Exp $
+* $Id: mysqli.sql.php,v 1.13 2006-06-17 08:21:45 matteo Exp $
 *
 * CREATE TABLE instruction for MySQL 4.1 and 5.0 databases
 *
@@ -214,6 +214,7 @@ ask_usermail varchar(100) NOT NULL,
 ask_rubrik varchar(100) NOT NULL,
 ask_content text NOT NULL,
 ask_date varchar(20) NOT NULL,
+is_visible char(1) default 'Y',
 PRIMARY KEY (id))";
 
 //faqright

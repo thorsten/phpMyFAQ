@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ibm_db2.sql.php,v 1.4 2006-05-08 06:39:51 thorstenr Exp $
+* $Id: ibm_db2.sql.php,v 1.5 2006-06-17 08:21:44 matteo Exp $
 *
 * CREATE TABLE instruction for IBM DB2 Universal Database, IBM Cloudscape,
 * and Apache Derby databases
@@ -158,14 +158,15 @@ datum varchar(64) NOT NULL,
 helped CLOB NOT NULL,
 PRIMARY KEY (id_comment))";
 
-//faqfragen
-$query[] = "CREATE TABLE  ".$sqltblpre."faqfragen (
+//faqquestions
+$query[] = "CREATE TABLE  ".$sqltblpre."faqquestions (
 id integer NOT NULL,
 ask_username varchar(100) NOT NULL,
 ask_usermail varchar(100) NOT NULL,
 ask_rubrik integer NOT NULL,
 ask_content CLOB NOT NULL,
 ask_date varchar(20) NOT NULL,
+is_visible char(1) default 'Y',
 PRIMARY KEY (id))";
 
 //faqnews

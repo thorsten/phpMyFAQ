@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: sqlite.sql.php,v 1.16 2006-05-28 20:19:04 thorstenr Exp $
+* $Id: sqlite.sql.php,v 1.17 2006-06-17 08:21:45 matteo Exp $
 *
 * CREATE TABLE instructions for SQLite
 *
@@ -211,6 +211,7 @@ ask_usermail varchar(100) NOT NULL,
 ask_rubrik varchar(100) NOT NULL,
 ask_content text NOT NULL,
 ask_date varchar(20) NOT NULL,
+is_visible char(1) default 'Y',
 PRIMARY KEY (id))";
 
 //faqright

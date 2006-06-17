@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.44 2006-06-11 14:57:34 matteo Exp $
+* $Id: update.php,v 1.45 2006-06-17 08:21:45 matteo Exp $
 *
 * Main update script
 *
@@ -594,7 +594,14 @@ if ($step == 5) {
     
     // update from versions before 2.0.0
     if ($version < 200) {
-        // TODO: Add the complex update stage from PMF 2.x-
+        // TODO: Add/Finalize the complex update stage from PMF 2.x-
+        // 1/N. Fix the old faqfragen -> faqquestions
+        switch($DB["type"]) {
+            default:
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqfragen RENAME TO '.SQLPREFIX.'faqquestions';
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqquestions ADD is_visible CHAR NOT NULL DEFAULT \'Y\' AFTER ask_date';
+        }
+        //...
     }
 
     // optimize tables
