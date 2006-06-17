@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.27 2006-06-11 21:48:08 matteo Exp $
+* $Id: language_en.php,v 1.28 2006-06-17 13:33:46 matteo Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -29,7 +29,7 @@ $PMF_LANG["dir"] = "ltr"; // ltr: left to right (e.g. English language); rtl: ri
 // Navigation
 $PMF_LANG["msgCategory"] = "Categories";
 $PMF_LANG["msgShowAllCategories"] = "Show all categories";
-$PMF_LANG["msgSearch"] = "Search";
+$PMF_LANG["msgSearch"] = "search";
 $PMF_LANG["msgAddContent"] = "Add content";
 $PMF_LANG["msgQuestion"] = "Ask question";
 $PMF_LANG["msgOpenQuestions"] = "Open questions";
@@ -37,7 +37,7 @@ $PMF_LANG["msgHelp"] = "Help";
 $PMF_LANG["msgContact"] = "Contact";
 $PMF_LANG["msgHome"] = "Home";
 $PMF_LANG["msgNews"] = "FAQ-News";
-$PMF_LANG["msgUserOnline"] = " User online";
+$PMF_LANG["msgUserOnline"] = " Users online";
 $PMF_LANG["msgXMLExport"] = "XML-File";
 $PMF_LANG["msgBack2Home"] = "back to home page";
 
@@ -57,7 +57,7 @@ $PMF_LANG["msgLastUpdateArticle"] = "Last update: ";
 $PMF_LANG["msgAuthor"] = "Author: ";
 $PMF_LANG["msgPrinterFriendly"] = "printer-friendly version";
 $PMF_LANG["msgPrintArticle"] = "Print this record";
-$PMF_LANG["msgMakeXMLExport"] = "export as XML-File";
+$PMF_LANG["msgMakeXMLExport"] = "Export as XML-File";
 $PMF_LANG["msgAverageVote"] = "Average rating:";
 $PMF_LANG["msgVoteUseability"] = "Please rate this entry:";
 $PMF_LANG["msgVoteFrom"] = "from";
@@ -116,7 +116,7 @@ $PMF_LANG["msgAskYourQuestion"] = "Your question:";
 $PMF_LANG["msgAskThx4Mail"] = "<h2>Thanks for your question!</h2>";
 $PMF_LANG["msgDate_User"] = "Date / User";
 $PMF_LANG["msgQuestion2"] = "Question";
-$PMF_LANG["msg2answer"] = "answer";
+$PMF_LANG["msg2answer"] = "Answer";
 $PMF_LANG["msgQuestionText"] = "Here you can see questions asked by other users. If you answer these question, your answers may be inserted into the FAQ.";
 
 // Help
@@ -146,12 +146,12 @@ $PMF_LANG["err_noArticles"] = "<p>No entries available.</p>";
 $PMF_LANG["err_badID"] = "<p>Wrong ID.</p>";
 $PMF_LANG["err_noTopTen"] = "<p>No Top Ten available yet.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>No entry found.</p>";
-$PMF_LANG["err_SaveEntries"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>category</strong>, <strong>headline</strong> and <strong>your Record</strong>!<br /><br />\n<a href=\"javascript:history.back();\">one page back</a><br /><br />\n";
-$PMF_LANG["err_SaveComment"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong> and <strong>your comments</strong>!<br /><br />\n<a href=\"javascript:history.back();\">one page back</a><br /><br />\n";
+$PMF_LANG["err_SaveEntries"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>category</strong>, <strong>headline</strong>, <strong>your Record</strong> and, when requested, <strong>Captcha Code</strong>!<br /><br />\n<a href=\"javascript:history.back();\">one page back</a><br /><br />\n";
+$PMF_LANG["err_SaveComment"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>your comments</strong> and, when requested, <strong>Captcha Code</strong>!<br /><br />\n<a href=\"javascript:history.back();\">one page back</a><br /><br />\n";
 $PMF_LANG["err_VoteTooMuch"] = "<p>We do not count double votings. <a href=\"javascript:history.back();\">Click here</a>, to go back.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>You did not rate the question!</strong> <a href=\"javascript:history.back();\">Please click here</a>, to vote.</p>";
 $PMF_LANG["err_noMailAdress"] = "Your email address is not correct.<br /><a href=\"javascript:history.back();\">back</a>";
-$PMF_LANG["err_sendMail"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong> and <strong>your question</strong>!<br /><br />\n<a href=\"javascript:history.back();\">one page back</a><br /><br />\n";
+$PMF_LANG["err_sendMail"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>your question</strong> and, when requested, <strong>Captcha Code</strong>!<br /><br />\n<a href=\"javascript:history.back();\">one page back</a><br /><br />\n";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>Search for records:</strong><br />With an entry like <strong style=\"color: Red;\">word1 word2</strong> you can do a relevance descending search for two or more search criterion.</p><p><strong>Notice:</strong> Your search criterion has to be at least 4 letters long otherwise your request will be rejected.</p>";
@@ -229,7 +229,7 @@ $PMF_LANG["ad_entry_active"] = "Active?";
 $PMF_LANG["ad_entry_date"] = "Date:";
 $PMF_LANG["ad_entry_changed"] = "Changed?";
 $PMF_LANG["ad_entry_changelog"] = "Changelog:";
-$PMF_LANG["ad_entry_commentby 	"] = "Comment by";
+$PMF_LANG["ad_entry_commentby"] = "Comment by";
 $PMF_LANG["ad_entry_comment"] = "Comments:";
 $PMF_LANG["ad_entry_save"] = "Save";
 $PMF_LANG["ad_entry_delete"] = "delete";
@@ -446,7 +446,7 @@ $PMF_LANG["ad_stat_ok"] = "OK";
 
 $PMF_LANG["ad_sess_time"] = "Time";
 $PMF_LANG["ad_sess_sid"] = "Session-ID";
-$PMF_LANG["ad_sess_ip"] = "IP-Adress";
+$PMF_LANG["ad_sess_ip"] = "IP-Address";
 
 $PMF_LANG["ad_ques_take"] = "Take question and edit";
 $PMF_LANG["no_cats"] = "No Categories found.";
@@ -544,7 +544,7 @@ $PMF_LANG["ad_user_realname"] = "real name:";
 $PMF_LANG["ad_export_generate_pdf"] = "generate PDF file";
 $PMF_LANG["ad_export_full_faq"] = "Your FAQ as a PDF file: ";
 $PMF_LANG["err_bannedIP"] = "Your IP address has been banned.";
-$PMF_LANG["err_SaveQuestion"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong> and <strong>your question</strong>.<br /><br /><a href=\"javascript:history.back();\">one page back</a><br /><br />\n";
+$PMF_LANG["err_SaveQuestion"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>your question</strong> and, when requested, <strong>Captcha Code</strong>.<br /><br /><a href=\"javascript:history.back();\">one page back</a><br /><br />\n";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Font color: ";
@@ -682,7 +682,7 @@ $PMF_LANG['ad_linkcheck_config_th_enabled'] = 'Set to enable entry';
 $PMF_LANG['ad_linkcheck_config_th_locked'] = 'Set to lock ownership';
 $PMF_LANG['ad_linkcheck_config_th_chown'] = 'Set to obtain ownership';
 $PMF_LANG['msgNewQuestionVisible'] = 'The question have to be reviewed first before getting public.';
-$PMF_LANG['msgQuestionsWaiting'] = 'Waiting for publishing by the administrators:';
+$PMF_LANG['msgQuestionsWaiting'] = 'Waiting for publishing by the administrators: ';
 $PMF_LANG['ad_entry_visibility'] = 'Publish?';
 
 // added v2.0.0 - 2006-01-02 by Lars
