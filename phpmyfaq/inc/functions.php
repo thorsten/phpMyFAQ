@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.113 2006-06-13 20:32:13 matteo Exp $
+* $Id: functions.php,v 1.114 2006-06-17 13:02:43 matteo Exp $
 *
 * This is the main functions file!
 *
@@ -1429,35 +1429,46 @@ function chopString($string, $words)
 */
 function printOpenQuestions()
 {
-	global $db, $sids, $tree, $PMF_LANG;
+    global $db, $sids, $tree, $PMF_LANG;
 
-    $query = "SELECT COUNT(*) AS num FROM ".SQLPREFIX."faqquestions WHERE is_visible != 'Y'";
-	$result = $db->query($query);
-
+    $query =   'SELECT
+                    COUNT(*) AS num
+                FROM '.SQLPREFIX.'faqquestions
+                WHERE
+                    is_visible != \'Y\'';
+    $result = $db->query($query);
     $row = $db->fetch_object($result);
-    $numofinvisibles = $row->num;
+    $numOfInvisibles = $row->num;
 
-	if ($db->num_rows($result) > 0) {
-	   $extraout = "\t<tr>\n\t\t<td colspan=\"3\"><hr>".$PMF_LANG["msgQuestionsWaiting"].$numofinvisibles."</td>\n\t</tr>\n";
-	} else {
+    if ($numOfInvisibles > 0) {
+        $extraout = "\t<tr>\n\t\t<td colspan=\"3\"><hr>".$PMF_LANG['msgQuestionsWaiting'].$numOfInvisibles."</td>\n\t</tr>\n";
+    } else {
         $extraout = '';
-	}
+    }
 
-	$query = "SELECT id, ask_username, ask_usermail, ask_rubrik, ask_content, ask_date FROM ".SQLPREFIX."faqquestions WHERE is_visible = 'Y' ORDER BY ask_date ASC";
-	$result = $db->query($query);
-	$output = '';
-	if ($db->num_rows($result) > 0) {
-		while ($row = $db->fetch_object($result)) {
-			$output .= "\t<tr class=\"openquestions\">\n";
-			$output .= "\t\t<td valign=\"top\" nowrap=\"nowrap\">".makeDate($row->ask_date)."<br /><a href=\"mailto:".safeEmail($row->ask_usermail)."\">".$row->ask_username."</a></td>\n";
-			$output .= "\t\t<td valign=\"top\"><strong>".$tree->categoryName[$row->ask_rubrik]["name"].":</strong><br />".strip_tags($row->ask_content)."</td>\n";
-        	$output .= "\t\t<td valign=\"top\"><a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=add&amp;question=".rawurlencode($row->ask_content)."&amp;cat=".$row->ask_rubrik."\">".$PMF_LANG["msg2answer"]."</a></td>\n";
-    		$output .= "\t</tr>\n";
-		}
-	} else {
-		$output = "\t<tr>\n\t\t<td colspan=\"3\">".$PMF_LANG["msgNoQuestionsAvailable"]."</td>\n\t</tr>\n";
-	}
-	return $output.$extraout;
+    $query =   'SELECT
+                    id, ask_username, ask_usermail, ask_rubrik, ask_content, ask_date
+                FROM
+                    '.SQLPREFIX.'faqquestions
+                WHERE
+                    is_visible = \'Y\'
+                ORDER BY
+                    ask_date ASC';
+    $result = $db->query($query);
+    $output = '';
+    if ($db->num_rows($result) > 0) {
+        while ($row = $db->fetch_object($result)) {
+            $output .= "\t<tr class=\"openquestions\">\n";
+            $output .= "\t\t<td valign=\"top\" nowrap=\"nowrap\">".makeDate($row->ask_date)."<br /><a href=\"mailto:".safeEmail($row->ask_usermail)."\">".$row->ask_username."</a></td>\n";
+            $output .= "\t\t<td valign=\"top\"><strong>".$tree->categoryName[$row->ask_rubrik]['name'].":</strong><br />".strip_tags($row->ask_content)."</td>\n";
+            $output .= "\t\t<td valign=\"top\"><a href=\"".$_SERVER['PHP_SELF']."?".$sids."action=add&amp;question=".rawurlencode($row->ask_content)."&amp;cat=".$row->ask_rubrik."\">".$PMF_LANG['msg2answer']."</a></td>\n";
+            $output .= "\t</tr>\n";
+        }
+    } else {
+        $output = "\t<tr>\n\t\t<td colspan=\"3\">".$PMF_LANG['msgNoQuestionsAvailable']."</td>\n\t</tr>\n";
+    }
+
+    return $output.$extraout;
 }
 
 //
