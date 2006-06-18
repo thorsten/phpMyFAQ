@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: main.php,v 1.10 2006-06-01 09:22:44 thorstenr Exp $
+* $Id: main.php,v 1.11 2006-06-18 06:59:27 matteo Exp $
 *
 * The main start page with the Top10 and the latest messages
 *
@@ -25,12 +25,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 $tpl->processTemplate ('writeContent', array(
-    'writeNewsHeader' 		=> $PMF_CONF['title'].$PMF_LANG['msgNews'],
-    'writeNews' 			=> generateNews($LANGCODE),
+    'writeNewsHeader'       => $PMF_CONF['title'].$PMF_LANG['msgNews'],
+    'writeNews'             => generateNews($LANGCODE),
     'writeNumberOfArticles' => $PMF_LANG['msgHomeThereAre'].$faq->getNumberOfRecords($LANGCODE).$PMF_LANG['msgHomeArticlesOnline'],
-    'writeTopTenHeader' 	=> $PMF_LANG['msgTopTen'],
-    'writeTopTenRow' 		=> $faq->getTopTen(),
-    'writeNewestHeader' 	=> $PMF_LANG['msgLatestArticles'],
-    'writeNewestRow' 		=> $faq->getFiveLatest()));
+    'writeTopTenHeader'     => $PMF_LANG['msgTopTen'],
+    'writeTopTenRow'        => $faq->getTopTen(),
+    'writeNewestHeader'     => $PMF_LANG['msgLatestArticles'],
+    'writeNewestRow'        => $faq->getLatest()));
 
 $tpl->includeTemplate('writeContent', 'index');

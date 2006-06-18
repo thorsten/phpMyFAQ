@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.50 2006-06-12 22:34:18 matteo Exp $
+* $Id: index.php,v 1.51 2006-06-18 06:59:27 matteo Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the
@@ -31,16 +31,12 @@ if (!file_exists('inc/config.php') || !file_exists('inc/data.php')) {
     exit();
 }
 
-
-
 //
 // Prepend
 //
 require_once('inc/Init.php');
 define('IS_VALID_PHPMYFAQ', null);
 PMF_Init::cleanRequest();
-
-
 
 //
 // Include required template parser class, captcha class, category class,
@@ -52,8 +48,6 @@ require_once('inc/Category.php');
 require_once('inc/Faq.php');
 require_once('inc/libs/idna_convert.class.php');
 $IDN = new idna_convert;
-
-
 
 //
 // get language (default: english)
@@ -69,8 +63,6 @@ if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE)) {
 } else {
     $LANGCODE = 'en';
 }
-
-
 
 //
 // Authenticate current user
@@ -103,8 +95,6 @@ if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
     }
 }
 
-
-
 //
 // Get current user rights
 //
@@ -123,8 +113,6 @@ if (isset($auth)) {
     }
 }
 
-
-
 //
 // Logout
 //
@@ -134,8 +122,6 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'logout' && isset($auth
     unset($auth);
 }
 
-
-
 //
 // use mbstring extension if available
 //
@@ -144,8 +130,6 @@ if (function_exists('mb_language') && in_array($PMF_LANG['metaLanguage'], $valid
     mb_language($PMF_LANG['metaLanguage']);
     mb_internal_encoding($PMF_LANG['metaCharset']);
 }
-
-
 
 //
 // found a session ID in _GET or _COOKIE?
@@ -161,8 +145,6 @@ if ((!isset($_GET['sid'])) && (!isset($_COOKIE['pmf_sid']))) {
         CheckSID((int)$_GET['sid'], $_SERVER['REMOTE_ADDR']);
     }
 }
-
-
 
 //
 // is user tracking activated?
@@ -189,14 +171,10 @@ if (isset($PMF_CONF["tracking"])) {
     }
 }
 
-
-
 //
 // Create a new FAQ object
 //
 $faq = new FAQ($db, $LANGCODE);
-
-
 
 //
 // Found a article language?
@@ -207,22 +185,18 @@ if (isset($_POST["artlang"]) && PMF_Init::isASupportedLanguage($_POST["artlang"]
     $lang = $LANGCODE;
 }
 
-
-
 //
 // Found a record ID?
 //
 if (isset($_REQUEST["id"]) && is_numeric($_REQUEST["id"]) == true) {
-	$id = (int)$_REQUEST["id"];
+    $id = (int)$_REQUEST["id"];
     $title = ' - '.stripslashes($faq->getRecordTitle($id, $lang));
     $keywords = ' '.stripslashes($faq->getRecordKeywords($id, $lang));
 } else {
-	$id = '';
+    $id = '';
     $title = ' -  powered by phpMyFAQ '.$PMF_CONF['version'];
     $keywords = '';
 }
-
-
 
 //
 // found a solution ID?
@@ -237,8 +211,6 @@ if (isset($_REQUEST['solution_id']) && is_numeric($_REQUEST['solution_id']) === 
         $lang = $a['lang'];
     }
 }
-
-
 
 //
 // Found a category ID?
@@ -265,94 +237,95 @@ if (isset($cat) && $cat != 0 && $id == '') {
     $title = ' - '.$tree->categoryName[$cat]['name'];
 }
 
-
-
 //
 // Found an action request?
 //
 if (isset($_REQUEST["action"]) && is_string($_REQUEST["action"]) && !preg_match("=/=", $_REQUEST["action"]) && isset($allowedVariables[$_REQUEST["action"]])) {
-	$action = $_REQUEST["action"];
+    $action = trim($_REQUEST["action"]);
 } else {
-	$action = "main";
+    $action = "main";
 }
-
-
 
 //
 // Select the template for the requested page
 //
-if ($action != "main") {
-    $inc_tpl = "template/".trim($action).".tpl";
-    $inc_php = $action.".php";
-    $writeLangAdress = '?'.str_replace("&", "&amp;",$_SERVER["QUERY_STRING"]);
-} else {
-    $inc_tpl = "template/main.tpl";
-    $inc_php = "main.php";
-    $writeLangAdress = '?'.$sids;
-}
 if (isset($auth)) {
     $login_tpl = 'template/loggedin.tpl';
 } else {
     $login_tpl = 'template/loginbox.tpl';
 }
-
+if ($action != "main") {
+    $inc_tpl = "template/".$action.".tpl";
+    $inc_php = $action.".php";
+    $writeLangAdress = $_SERVER['PHP_SELF']."?".str_replace("&", "&amp;",$_SERVER["QUERY_STRING"]);
+} else {
+    if (isset($solution_id) && is_numeric($solution_id)) {
+        // show the record with the solution ID
+        $inc_tpl = 'template/artikel.tpl';
+        $inc_php = 'artikel.php';
+    } else {
+        $inc_tpl = "template/main.tpl";
+        $inc_php = "main.php";
+    }
+    $writeLangAdress = $_SERVER['PHP_SELF']."?".$sids;
+}
 
 //
 // Load template files and set template variables
 //
 $tpl = new PMF_Template (array(
-	'index'         	=> 'template/index.tpl',
-    'loginBox'      	=> $login_tpl,
-	'writeContent'  	=> $inc_tpl));
+    'index'                 => 'template/index.tpl',
+    'loginBox'              => $login_tpl,
+    'writeContent'          => $inc_tpl));
 
 $main_template_vars = array(
-    "title" 			=> $PMF_CONF["title"].$title,
-    "header" 			=> $PMF_CONF["title"],
-	"metaDescription" 	=> $PMF_CONF["metaDescription"],
-	'metaKeywords' 		=> $PMF_CONF['metaKeywords'].$keywords,
-	"metaPublisher" 	=> $PMF_CONF["metaPublisher"],
-	"metaLanguage" 		=> $PMF_LANG["metaLanguage"],
-	'metaCharset' 		=> $PMF_LANG["metaCharset"],
-    "dir" 				=> $PMF_LANG["dir"],
-	"msgCategory" 		=> $PMF_LANG["msgCategory"],
-	"showCategories" 	=> $tree->printCategories($cat),
-    "searchBox" 		=> $PMF_LANG["msgSearch"],
-    "languageBox" 		=> $PMF_LANG["msgLangaugeSubmit"],
-    "writeLangAdress" 	=> $writeLangAdress,
-    "switchLanguages" 	=> selectLanguages($LANGCODE),
-	"userOnline" 		=> userOnline().$PMF_LANG["msgUserOnline"],
-    'writeTopTenHeader' => $PMF_LANG['msgTopTen'],
-    'writeTopTenRow' 	=> $faq->getTopTen(),
-    'writeNewestHeader' => $PMF_LANG['msgLatestArticles'],
-    'writeNewestRow' 	=> $faq->getFiveLatest(),
-	"copyright" 		=> 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> '.$PMF_CONF["version"]);
+    "title"                 => $PMF_CONF["title"].$title,
+    "header"                => $PMF_CONF["title"],
+    "metaDescription"       => $PMF_CONF["metaDescription"],
+    'metaKeywords'          => $PMF_CONF['metaKeywords'].$keywords,
+    "metaPublisher"         => $PMF_CONF["metaPublisher"],
+    "metaLanguage"          => $PMF_LANG["metaLanguage"],
+    'metaCharset'           => $PMF_LANG["metaCharset"],
+    "dir"                   => $PMF_LANG["dir"],
+    "msgCategory"           => $PMF_LANG["msgCategory"],
+    "showCategories"        => $tree->printCategories($cat),
+    "searchBox"             => $PMF_LANG["msgSearch"],
+    "languageBox"           => $PMF_LANG["msgLangaugeSubmit"],
+    "writeLangAdress"       => $writeLangAdress,
+    "switchLanguages"       => selectLanguages($LANGCODE),
+    "userOnline"            => userOnline().$PMF_LANG["msgUserOnline"],
+    'writeTopTenHeader'     => $PMF_LANG['msgTopTen'],
+    'writeTopTenRow'        => $faq->getTopTen(),
+    'writeNewestHeader'     => $PMF_LANG['msgLatestArticles'],
+    'writeNewestRow'        => $faq->getLatest(),
+    "copyright"             => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> '.$PMF_CONF["version"]);
 
 if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == "TRUE") {
     $links_template_vars = array(
-		"faqHome" 		=> '',
-        "msgSearch" 	=> '<a href="search.html">'.$PMF_LANG["msgSearch"].'</a>',
-		'msgAddContent' => '<a href="addcontent.html">'.$PMF_LANG["msgAddContent"].'</a>',
-		"msgQuestion" 	=> '<a href="ask.html">'.$PMF_LANG["msgQuestion"].'</a>',
-		"msgOpenQuestions" => '<a href="open.html">'.$PMF_LANG["msgOpenQuestions"].'</a>',
-		'msgHelp' 		=> '<a href="help.html">'.$PMF_LANG["msgHelp"].'</a>',
-		"msgContact" 	=> '<a href="contact.html">'.$PMF_LANG["msgContact"].'</a>',
-		"backToHome" 	=> '<a href="index.html">'.$PMF_LANG["msgHome"].'</a>',
-        "allCategories" => '<a href="showcat.html">'.$PMF_LANG["msgShowAllCategories"].'</a>',
-		"writeSendAdress" => 'search.html',
-        'showSitemap' 	=> '<a href="sitemap-a.html">'.$PMF_LANG['msgSitemap'].'</a>');
+        "faqHome"           => '',
+        "msgSearch"         => '<a href="search.html">'.$PMF_LANG["msgSearch"].'</a>',
+        'msgAddContent'     => '<a href="addcontent.html">'.$PMF_LANG["msgAddContent"].'</a>',
+        "msgQuestion"       => '<a href="ask.html">'.$PMF_LANG["msgQuestion"].'</a>',
+        "msgOpenQuestions"  => '<a href="open.html">'.$PMF_LANG["msgOpenQuestions"].'</a>',
+        'msgHelp'           => '<a href="help.html">'.$PMF_LANG["msgHelp"].'</a>',
+        "msgContact"        => '<a href="contact.html">'.$PMF_LANG["msgContact"].'</a>',
+        "backToHome"        => '<a href="index.html">'.$PMF_LANG["msgHome"].'</a>',
+        "allCategories"     => '<a href="showcat.html">'.$PMF_LANG["msgShowAllCategories"].'</a>',
+        "writeSendAdress"   => 'search.html',
+        'showSitemap'       => '<a href="sitemap-a.html">'.$PMF_LANG['msgSitemap'].'</a>');
 } else {
     $links_template_vars = array(
-        "faqHome" 		=> $_SERVER['PHP_SELF'],
-		"msgSearch" 	=> '<a href="'.$_SERVER["PHP_SELF"].'?'.$sids.'action=search">'.$PMF_LANG["msgSearch"].'</a>',
-		"msgAddContent" => '<a href="'.$_SERVER["PHP_SELF"].'?'.$sids.'action=add">'.$PMF_LANG["msgAddContent"].'</a>',
-		"msgQuestion" 	=> '<a href="'.$_SERVER["PHP_SELF"].'?'.$sids.'action=ask">'.$PMF_LANG["msgQuestion"].'</a>',
-		"msgOpenQuestions" => '<a href="'.$_SERVER["PHP_SELF"].'?'.$sids.'action=open">'.$PMF_LANG["msgOpenQuestions"].'</a>',
-		"msgHelp" 		=> '<a href="'.$_SERVER["PHP_SELF"].'?'.$sids.'action=help">'.$PMF_LANG["msgHelp"].'</a>',
-		"msgContact" 	=> '<a href="'.$_SERVER["PHP_SELF"].'?'.$sids.'action=contact">'.$PMF_LANG["msgContact"].'</a>',
-        "allCategories" => '<a href="'.$_SERVER["PHP_SELF"].'?'.$sids.'action=show">'.$PMF_LANG["msgShowAllCategories"].'</a>',
-		"backToHome" 	=> '<a href="'.$_SERVER["PHP_SELF"].'?'.$sids.'">'.$PMF_LANG["msgHome"].'</a>',
-		"writeSendAdress" => $_SERVER["PHP_SELF"]."?".$sids."action=search",
-        'showSitemap' 	=> '<a href="'.$_SERVER["PHP_SELF"].'?'.$sids.'action=sitemap">'.$PMF_LANG['msgSitemap'].'</a>');
+        "faqHome"           => $_SERVER['PHP_SELF'],
+        "msgSearch"         => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=search">'.$PMF_LANG["msgSearch"].'</a>',
+        "msgAddContent"     => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=add">'.$PMF_LANG["msgAddContent"].'</a>',
+        "msgQuestion"       => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=ask">'.$PMF_LANG["msgQuestion"].'</a>',
+        "msgOpenQuestions"  => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=open">'.$PMF_LANG["msgOpenQuestions"].'</a>',
+        "msgHelp"           => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=help">'.$PMF_LANG["msgHelp"].'</a>',
+        "msgContact"        => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=contact">'.$PMF_LANG["msgContact"].'</a>',
+        "allCategories"     => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=show">'.$PMF_LANG["msgShowAllCategories"].'</a>',
+        "backToHome"        => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'">'.$PMF_LANG["msgHome"].'</a>',
+        "writeSendAdress"   => $_SERVER['PHP_SELF']."?".$sids."action=search",
+        'showSitemap'       => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=sitemap">'.$PMF_LANG['msgSitemap'].'</a>');
 }
 
 if (DEBUG) {
@@ -366,54 +339,45 @@ if (DEBUG) {
     header("Pragma: no-cache");
     header("Content-type: text/html; charset=".$PMF_LANG["metaCharset"]);
     header("Vary: Negotiate,Accept");
+
     $debug_template_vars = array('debugMessages' => '');
 }
-
-
 
 //
 // Get main template, set main variables
 //
 $tpl->processTemplate(
-	'index',
-	array_merge(
-		$main_template_vars,
-		$links_template_vars,
-		$debug_template_vars));
-
-
+    'index',
+    array_merge(
+        $main_template_vars,
+        $links_template_vars,
+        $debug_template_vars));
 
 //
 // Show login box or logged-in user information
 //
 if (isset($auth)) {
     $tpl->processTemplate('loginBox', array(
-		'loggedinas' 	=> $PMF_LANG['ad_user_loggedin'],
-        'currentuser' 	=> $user->getUserData('display_name'),
-        'printLogoutPath' => '?action=logout',
-        'logout' 		=> $PMF_LANG['ad_menu_logout']));
+        'loggedinas'        => $PMF_LANG['ad_user_loggedin'],
+        'currentuser'       => '',//$user->getUserData('display_name'),
+        'printLogoutPath'   => $_SERVER['PHP_SELF'].'?action=logout',
+        'logout'            => $PMF_LANG['ad_menu_logout']));
 } else {
     $tpl->processTemplate('loginBox', array(
-       	'writeLoginPath' => '?action=login',
-        'login' 		=> $PMF_LANG['ad_auth_ok'],
-        'username' 		=> $PMF_LANG['ad_auth_user'],
-        'password' 		=> $PMF_LANG['ad_auth_passwd']));
+        'writeLoginPath'    => $_SERVER['PHP_SELF'].'?action=login',
+        'login'             => $PMF_LANG['ad_auth_ok'],
+        'username'          => $PMF_LANG['ad_auth_user'],
+        'password'          => $PMF_LANG['ad_auth_passwd']));
 }
 $tpl->includeTemplate('loginBox', 'index');
-
 
 //
 // Include requested PHP file
 //
 require_once($inc_php);
-
-
-
 if ('xml' != $action) {
     $tpl->printTemplate();
 }
-
-
 
 //
 // Disconnect from database
