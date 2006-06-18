@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.18 2006-06-18 08:19:44 matteo Exp $
+* $Id: Faq.php,v 1.19 2006-06-18 09:18:29 thorstenr Exp $
 *
 * The main FAQ class
 *
@@ -136,7 +136,10 @@ class FAQ
 
         if ($num > 0) {
             if ($pages > 1) {
-                $output .= sprintf('<p><strong>%s %s %s</strong></p>', $this->pmf_lang['msgPage'].$page, $this->pmf_lang['msgVoteFrom'], $pages.$this->pmf_lang['msgPages']);
+                $output .= sprintf('<p><strong>%s %s %s</strong></p>',
+					$this->pmf_lang['msgPage'] . $page,
+					$this->pmf_lang['msgVoteFrom'],
+					$pages . $this->pmf_lang['msgPages']);
             }
             $output .= '<ul class="phpmyfaq_ul">';
             $counter = 0;
@@ -155,12 +158,23 @@ class FAQ
                 }
 
                 $title = PMF_htmlentities($row->thema, ENT_NOQUOTES, $this->pmf_lang['metaCharset']);
-
                 if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF['mod_rewrite'] == true) {
-                    $output .= sprintf('<li><a href="%d_%d_%s.html\">%s</a><br /><span class="little">(%d %s)</soan></li>', $row->category_id, $row->id, $row->lang, $title, $visits, $this->pmf_lang['msgViews']);
+                    $listItem = '<li><a href="%d_%d_%s.html\">%s</a><br />' .
+                    	'<span class="little">(%d %s)</soan></li>';
                 } else {
-                    $output .= sprintf('<li><a href="?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s">%s</a><span class="little">(%d %s)</soan></li>', $sids, $row->category_id, $row->id, $row->lang, $title, $visits, $this->pmf_lang['msgViews']);
+                    $listItem = '<li><a href="?' .
+						$sids .
+						'%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s">%s</a>' .
+						'<span class="little">(%d %s)</soan></li>';
                 }
+
+				$output .= sprintf($listItem,
+					$row->category_id,
+					$row->id,
+					$row->lang,
+					$title,
+					$visits,
+					$this->pmf_lang['msgViews']);
             }
             $output .= '</ul>';
         } else {
@@ -174,9 +188,16 @@ class FAQ
 
             if ($previous != 0) {
                 if (isset($PMF_CONF['mod_rewrite']) && $PMF_CONF['mod_rewrite'] == true) {
-                    $output .= sprintf('[ <a href="category%d_%d.html">%s</a> ]', $category, $previous, $this->pmf_lang['msgPrevious']);
+                    $output .= sprintf('[ <a href="category%d_%d.html">%s</a> ]',
+						$category,
+						$previous,
+						$this->pmf_lang['msgPrevious']);
                 } else {
-                    $output .= sprintf('[ <a href="?%saction=show&amp;cat=%d&amp;seite=%d">%s</a> ]', $sids, $category, $previous, $this->pmf_lang['msgPrevious']);
+                    $output .= sprintf('[ <a href="?%saction=show&amp;cat=%d&amp;seite=%d">%s</a> ]',
+						$sids,
+						$category,
+						$previous,
+						$this->pmf_lang['msgPrevious']);
                 }
             }
 
@@ -184,17 +205,31 @@ class FAQ
 
             for ($i = 1; $i <= $pages; $i++) {
                 if (isset($PMF_CONF['mod_rewrite']) && $PMF_CONF['mod_rewrite'] == true) {
-                    $output .= sprintf('[ <a href="category%d_%d.html">%s</a> ] ', $category, $i, $i);
+                    $output .= sprintf('[ <a href="category%d_%d.html">%s</a> ] ',
+						$category,
+						$i,
+						$i);
                 } else {
-                    $output .= sprintf('[ <a href="?%saction=show&amp;cat=%d&amp;seite=%d">%d</a> ] ', $sids, $category, $i, $i);
+                    $output .= sprintf('[ <a href="?%saction=show&amp;cat=%d&amp;seite=%d">%d</a> ] ',
+						$sids,
+						$category,
+						$i,
+						$i);
                 }
             }
 
             if ($next <= $pages) {
                 if (isset($PMF_CONF['mod_rewrite']) && $PMF_CONF['mod_rewrite'] == true) {
-                    $output .= sprintf('[ <a href="category%d_%d.html">%s</a> ]', $category, $next, $this->pmf_lang['msgNext']);
+                    $output .= sprintf('[ <a href="category%d_%d.html">%s</a> ]',
+						$category,
+						$next,
+						$this->pmf_lang['msgNext']);
                 } else {
-                    $output .= sprintf('[ <a href="?%saction=show&amp;cat=%d&amp;seite=%d">%s</a> ]', $sids, $category, $next, $this->pmf_lang['msgNext']);
+                    $output .= sprintf('[ <a href="?%saction=show&amp;cat=%d&amp;seite=%d">%s</a> ]',
+						$sids,
+						$category,
+						$next,
+						$this->pmf_lang['msgNext']);
                 }
             }
 
@@ -216,7 +251,18 @@ class FAQ
     */
     function getRecord($id)
     {
-        $result = $this->db->query(sprintf("SELECT * FROM %sfaqdata WHERE id = %d AND lang = '%s'", SQLPREFIX, $id, $this->language));
+        $query = sprintf(
+			"SELECT
+				*
+			FROM
+				%sfaqdata
+			WHERE
+				id = %d AND lang = '%s'",
+			SQLPREFIX,
+			$id,
+			$this->language);
+
+        $result = $this->db->query($query);
         if ($row = $this->db->fetch_object($result)) {
             $this->faqRecord = array(
                 'id'            => $row->id,
@@ -237,7 +283,7 @@ class FAQ
 	/**
 	 * addRecord()
 	 *
-	 * Adds a new record, the category relations and initialize visits
+	 * Adds a new record, initialize visits, and the category relations
 	 *
 	 * @param	array	$data
 	 * @param	array	$categories
@@ -252,10 +298,10 @@ class FAQ
 			return false;
 		}
 
+		// Add new entry
 		$this->db->query(sprintf(
 			"INSERT INTO
 				%sfaqdata
-				(id, lang, solution_id, revision_id, active, thema, content, keywords, author, email, comment, datum)
 			VALUES
 				(%d, '%s', %d, %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
 			SQLPREFIX,
@@ -272,31 +318,22 @@ class FAQ
 			$data['comment'],
 			$data['date']));
 
+		$newId = $this->db->insert_id(SQLPREFIX.'faqdata', 'id');
+
+
+		// Add category relations
 		foreach ($categories as $_category) {
 	    	$this->db->query(sprintf(
 				"INSERT INTO
 					%sfaqcategoryrelations
-				(category_id, category_lang, record_id, record_lang)
-					VALUES
-				(%d, '%s', %d, '%s')",
+				VALUES
+					(%d, '%s', %d, '%s')",
 				SQLPREFIX,
-				intval($_category),
+				$_category,
 				$data['lang'],
-				$this->db->insert_id(SQLPREFIX.'faqdata', 'id'),
+				$newId,
 				$data['lang']));
 		}
-
-		$this->db->query(sprintf(
-			"INSERT INTO
-				%sfaqvisits
-			(id, lang, visits, last_visit)
-				VALUES
-			(%d, '%s', %d, %d)",
-			SQLPREFIX,
-			$this->db->insert_id(SQLPREFIX.'faqdata', 'id'),
-			$lang,
-			1,
-			time()));
 
 		return true;
 	}
@@ -314,7 +351,16 @@ class FAQ
     */
     function getRecordBySolutionId($solution_id)
     {
-        $result = $this->db->query(sprintf("SELECT * FROM %sfaqdata WHERE solution_id = %s", SQLPREFIX, $solution_id));
+        $query = sprintf(
+			"SELECT
+				*
+			FROM
+				%sfaqdata
+			WHERE
+				solution_id = %d",
+			SQLPREFIX,
+			$solution_id);
+        $result = $this->db->query($query);
         if ($row = $this->db->fetch_object($result)) {
             $this->faqRecord = array(
                 'id'            => $row->id,
@@ -344,7 +390,15 @@ class FAQ
      */
     function getIdFromSolutionId($solution_id)
     {
-        $query = sprintf("SELECT id, lang FROM %sfaqdata WHERE solution_id = %s", SQLPREFIX, $solution_id);
+        $query = sprintf(
+			"SELECT
+				id, lang
+			FROM
+				%sfaqdata
+			WHERE
+				solution_id = %d",
+			SQLPREFIX,
+			$solution_id);
         $result = $this->db->query($query);
         if ($row = $this->db->fetch_object($result)) {
             return array('id' => $row->id, 'lang' => $row->lang);
@@ -364,19 +418,28 @@ class FAQ
     */
     function getAllRecords()
     {
-        $result = $this->db->query(sprintf("SELECT * FROM %sfaqdata ORDER BY id", SQLPREFIX));
+        $query = sprintf(
+			"SELECT
+				*
+			FROM
+				%sfaqdata
+			ORDER BY id",
+			SQLPREFIX);
+        $result = $this->db->query($query);
         if ($row = $this->db->fetch_object($result)) {
             $this->faqRecords[] = array(
-                'id'        => $row->id,
-                'lang'      => $row->lang,
-                'active'    => $row->active,
-                'keywords'  => $row->keywords,
-                'title'     => $row->thema,
-                'content'   => (('yes' == $row->active) ? $row->content : $this->pmf_lang['err_inactiveArticle']),
-                'author'    => $row->author,
-                'email'     => $row->email,
-                'comment'   => $row->comment,
-                'date'      => makeDate($row->datum));
+                'id'        	=> $row->id,
+                'lang'      	=> $row->lang,
+                'solution_id'	=> $row->solution_id,
+                'revision_id'	=> $row->revision_id,
+                'active'    	=> $row->active,
+                'keywords'  	=> $row->keywords,
+                'title'     	=> $row->thema,
+                'content'   	=> (('yes' == $row->active) ? $row->content : $this->pmf_lang['err_inactiveArticle']),
+                'author'    	=> $row->author,
+                'email'     	=> $row->email,
+                'comment'   	=> $row->comment,
+                'date'      	=> makeDate($row->datum));
         }
     }
 
@@ -395,7 +458,18 @@ class FAQ
         if (isset($this->faqRecord[$id])) {
             return $this->faqRecord['title'];
         }
-        $result = $this->db->query(sprintf("SELECT thema FROM %sfaqdata WHERE id = %d AND lang = '%s'", SQLPREFIX, $id, $this->language));
+
+        $query = sprintf(
+			"SELECT
+				thema
+			FROM
+				%sfaqdata
+			WHERE
+				id = %d AND lang = '%s'",
+			SQLPREFIX,
+			$id,
+			$this->language);
+        $result = $this->db->query($query);
         if ($this->db->num_rows($result) > 0) {
             while ($row = $this->db->fetch_object($result)) {
                 $output = PMF_htmlentities($row->thema, ENT_NOQUOTES, $this->pmf_lang['metaCharset']);
@@ -421,7 +495,17 @@ class FAQ
         if (isset($this->faqRecord[$id])) {
             return $this->faqRecord['keywords'];
         }
-        $result = $this->db->query(sprintf("SELECT keywords FROM %sfaqdata WHERE id = %d AND lang = '%s'", SQLPREFIX, $id, $this->language));
+
+        $query = sprintf(
+			"SELECT
+				keywords
+			FROM
+				%sfaqdata
+			WHERE id = %d AND lang = '%s'",
+			SQLPREFIX,
+			$id,
+			$this->language);
+        $result = $this->db->query($query);
         if ($this->db->num_rows($result) > 0) {
             $row = $this->db->fetch_object($result);
             return PMF_htmlentities($row->keywords, ENT_NOQUOTES, $this->pmf_lang['metaCharset']);
@@ -441,7 +525,15 @@ class FAQ
     */
     function getNumberOfRecords()
     {
-        $query = sprintf("SELECT id FROM %sfaqdata WHERE active = 'yes' AND lang = '%s'", SQLPREFIX, $this->language);
+        $query = sprintf(
+			"SELECT
+				id
+			FROM
+				%sfaqdata
+			WHERE
+				active = 'yes' AND lang = '%s'",
+			SQLPREFIX,
+			$this->language);
         $num = $this->db->num_rows($this->db->query($query));
         if ($num > 0) {
             return $num;
@@ -466,18 +558,25 @@ class FAQ
     function logViews($id)
     {
         $nVisits = 0;
-        $today = time();
-        $query = sprintf("SELECT visits FROM %sfaqvisits WHERE id = %d AND lang = '%s'", SQLPREFIX, $id, $this->language);
+        $query = sprintf(
+			"SELECT
+				visits
+			FROM
+				%sfaqvisits
+			WHERE
+				id = %d AND lang = '%s'",
+			SQLPREFIX,
+			$id,
+			$this->language);
+
         if ($result = $this->db->query($query)) {
             $row = $this->db->fetch_object($result);
             $nVisits = $row->visits;
         }
-        if ($nVisits == "0" || $nVisits == "") {
-            $query = sprintf("INSERT INTO %sfaqvisits (id, lang, visits, last_visit) VALUES (%d, '%s', 1, %d)", SQLPREFIX, $id, $this->language, $today);
-            $this->db->query($query);
+        if ($nVisits == 0 || $nVisits == '') {
+            $this->createNewVisit($id, $this->language);
         } else {
-            $query = sprintf("UPDATE %sfaqvisits SET visits = visits+1, last_visit = %d WHERE id = %d AND lang = '%s'", SQLPREFIX, $today, $id, $this->language);
-            $this->db->query($query);
+            $this->updateVisit($id);
         }
     }
 
@@ -486,7 +585,7 @@ class FAQ
     *
     * Calculates the rating of the user votings
     *
-    * @param    integer     record id
+    * @param    integer	$id
     * @return   string
     * @access   public
     * @since    2002-08-29
@@ -494,12 +593,27 @@ class FAQ
     */
     function getVotingResult($id)
     {
-       $result = $this->db->query(sprintf('SELECT (vote/usr) as voting, usr FROM %sfaqvoting WHERE artikel = %d', SQLPREFIX, $id));
+		$query = sprintf(
+			'SELECT
+				(vote/usr) as voting, usr
+			FROM
+				%sfaqvoting
+			WHERE
+				artikel = %d',
+			SQLPREFIX,
+			$id);
+       $result = $this->db->query($query);
        if ($this->db->num_rows($result) > 0) {
             $row = $this->db->fetch_object($result);
-            return sprintf(' %s %s 5 (%d %s)', round($row->voting, 2), $this->pmf_lang['msgVoteFrom'], $row->usr, $this->pmf_lang['msgVotings']);
+            return sprintf(' %s %s 5 (%d %s)',
+				round($row->voting, 2),
+				$this->pmf_lang['msgVoteFrom'],
+				$row->usr,
+				$this->pmf_lang['msgVotings']);
        } else {
-            return sprintf(' 0 %s 5 (0 %s)', $this->pmf_lang['msgVoteFrom'], $this->pmf_lang['msgVotings']);
+            return sprintf(' 0 %s 5 (0 %s)',
+				$this->pmf_lang['msgVoteFrom'],
+				$this->pmf_lang['msgVotings']);
        }
     }
 
@@ -516,13 +630,26 @@ class FAQ
     */
     function getComments($id)
     {
-        $result = $this->db->query(sprintf("SELECT usr, email, comment FROM %sfaqcomments WHERE id = %d", SQLPREFIX, $id));
+        $query = sprintf(
+			'SELECT
+				usr, email, comment
+			FROM
+				%sfaqcomments
+			WHERE
+				id = %d',
+			SQLPREFIX,
+			$id);
+        $result = $this->db->query($query);
         $output = '';
         if ($this->db->num_rows($result) > 0) {
             while ($row = $this->db->fetch_object($result)) {
                 $output .= '<p class="comment">';
-                $output .= sprintf('<strong>%s<a href="mailto:%s">%s</a>:</strong>', $this->pmf_lang['msgCommentBy'], safeEmail($row->email), $row->usr);
-                $output .= sprintf('<br />%s</p>', $row->comment);
+                $output .= sprintf('<strong>%s<a href="mailto:%s">%s</a>:</strong>',
+					$this->pmf_lang['msgCommentBy'],
+					safeEmail($row->email),
+					$row->usr);
+                $output .= sprintf('<br />%s</p>',
+					$row->comment);
             }
         }
         return $output;
@@ -545,9 +672,13 @@ class FAQ
         if (count($result) > 0) {
             $output = '<ol>';
             foreach ($result as $row) {
-                $output .= sprintf('<li><strong>%d %s:</strong><br />', $row['visits'], $this->pmf_lang['msgViews']);
+                $output .= sprintf('<li><strong>%d %s:</strong><br />',
+					$row['visits'],
+					$this->pmf_lang['msgViews']);
                 $shortTitle = makeShorterText(PMF_htmlentities($row['thema'], ENT_NOQUOTES, $this->pmf_lang['metaCharset']), 8);
-                $output .= sprintf('<a href="%s">%s</a></li>', $row['url'], $shortTitle);
+                $output .= sprintf('<a href="%s">%s</a></li>',
+					$row['url'],
+					$shortTitle);
             }
             $output .= '</ol>';
         } else {
@@ -573,7 +704,10 @@ class FAQ
             $output = '<ol>';
             foreach ($result as $row) {
                 $shortTitle = makeShorterText(PMF_htmlentities($row['thema'], ENT_NOQUOTES, $this->pmf_lang['metaCharset']), 8);
-                $output .= sprintf('<a href="%s">%s</a> (%s)</li>', $row['url'], $shortTitle, makeDate($row['datum']));
+                $output .= sprintf('<a href="%s">%s</a> (%s)</li>',
+					$row['url'],
+					$shortTitle,
+					makeDate($row['datum']));
             }
             $output .= '</ol>';
         } else {
@@ -653,9 +787,16 @@ class FAQ
                 $data['visits'] = $row->visits;
                 $data['thema'] = $row->thema;
                 if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == true) {
-                    $data['url'] = sprintf('%d_%d_%s.html', $row->category_id, $row->id, $row->lang);
+                    $data['url'] = sprintf('%d_%d_%s.html',
+						$row->category_id,
+						$row->id,
+						$row->lang);
                 } else {
-                    $data['url'] = sprintf('?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s', $sids, $row->category_id, $row->id, $row->lang);
+                    $data['url'] = sprintf('?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+						$sids,
+						$row->category_id,
+						$row->id,
+						$row->lang);
                 }
             $topten[] = $data;
             $i++;
@@ -668,7 +809,8 @@ class FAQ
     /**
     * getLatestData()
     *
-    * This function generates an array with a specified number of most recent published records
+    * This function generates an array with a specified number of most recent
+    * published records
     *
     * @param    integer
     * @return   array
@@ -719,9 +861,16 @@ class FAQ
                 $data['content'] = $row->content;
                 $data['visits'] = $row->visits;
                 if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == true) {
-                    $data['url'] = sprintf('%d_%d_%s.html', $row->category_id, $row->id, $row->lang);
+                    $data['url'] = sprintf('%d_%d_%s.html',
+						$row->category_id,
+						$row->id,
+						$row->lang);
                 } else {
-                    $data['url'] = sprintf('?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s', $sids, $row->category_id, $row->id, $row->lang);
+                    $data['url'] = sprintf('?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+						$sids,
+						$row->category_id,
+						$row->id,
+						$row->lang);
                 }
                 $latest[] = $data;
                 $i++;
@@ -729,5 +878,72 @@ class FAQ
             $oldId = $row->id;
         }
         return $latest;
+    }
+
+    /**
+     * createNewVisit()
+     *
+     * Adds a new entry in the table faqvisits
+     *
+     * @param	integer	$id
+     * @param	string	$lang
+     * @return	boolean
+     * @access	private
+     * @since	2006-06-18
+     * @author	Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function createNewVisit($id, $lang)
+    {
+    	if (!is_int($id) && !is_string($lang)) {
+    		return false;
+    	}
+
+		$query = sprintf(
+			"INSERT INTO
+				%sfaqvisits
+			VALUES
+				(%d, '%s', %d, %d)",
+			SQLPREFIX,
+			$id,
+			$lang,
+			1,
+			time());
+		$this->db->query($query);
+
+		return true;
+    }
+
+    /**
+     * updateVisit()
+     *
+     * Updates an entry in the table faqvisits
+     *
+     * @param	integer	$id
+     * @return	boolean
+     * @access	private
+     * @since	2006-06-18
+     * @author	Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function updateVisit($id)
+    {
+    	if (!is_int($id)) {
+    		return false;
+    	}
+
+		$query = sprintf(
+			"UPDATE
+				%sfaqvisits
+			SET
+				visits = visits+1,
+				last_visit = %d
+			WHERE
+				id = %d AND lang = '%s'",
+			SQLPREFIX,
+			time(),
+			$id,
+			$this->language);
+		$this->db->query($query);
+
+		return true;
     }
 }
