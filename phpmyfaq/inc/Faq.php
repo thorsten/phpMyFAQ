@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.14 2006-06-18 06:55:31 matteo Exp $
+* $Id: Faq.php,v 1.15 2006-06-18 07:35:39 matteo Exp $
 *
 * The main FAQ class
 *
@@ -618,6 +618,7 @@ class FAQ
                 '.SQLPREFIX.'faqdata.lang AS lang,
                 '.SQLPREFIX.'faqcategoryrelations.category_id AS category_id,
                 '.SQLPREFIX.'faqdata.thema AS thema,
+                '.SQLPREFIX.'faqdata.content AS content,
                 '.SQLPREFIX.'faqdata.datum AS datum,
                 '.SQLPREFIX.'faqvisits.visits AS visits
             FROM
@@ -648,6 +649,7 @@ class FAQ
             if ($oldId != $row->id) {
                 $data['datum'] = $row->datum;
                 $data['thema'] = $row->thema;
+                $data['content'] = $row->content;
                 $data['visits'] = $row->visits;
                 if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == true) {
                     $data['url'] = sprintf('%d_%d_%s.html', $row->category_id, $row->id, $row->lang);
