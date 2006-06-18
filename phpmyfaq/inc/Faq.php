@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.19 2006-06-18 09:18:29 thorstenr Exp $
+* $Id: Faq.php,v 1.20 2006-06-18 09:30:42 thorstenr Exp $
 *
 * The main FAQ class
 *
@@ -654,6 +654,41 @@ class FAQ
         }
         return $output;
     }
+
+    /**
+     * addComment()
+     *
+     * Adds a comment
+     *
+     * @param 	array 	$commentData
+     * @return	boolean
+     * @access 	public
+     * @since	2006-06-18
+     * @author	Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+	function addComment($commentData)
+	{
+		if (!is_array($commentData)) {
+			return false;
+		}
+
+		$query = sprintf(
+			"INSERT INTO
+				%sfaqcomments
+			VALUES
+				(%d, %d, '%s', '%s', '%s', %d, '%s')",
+			SQLPREFIX,
+			$this->db->nextID(SQLPREFIX.'faqcomments', 'id_comment'),
+			$commentData['record_id'],
+			$commentData['username'],
+			$commentData['usermail'],
+			$commentData['comment'],
+			$commentData['date'],
+			$commentData['helped']);
+		$this->db->query($query);
+
+		return true;
+	}
 
     /**
     * getTopTen()
