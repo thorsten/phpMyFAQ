@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.44 2006-06-11 20:23:48 matteo Exp $
+* $Id: index.php,v 1.45 2006-06-18 07:03:15 matteo Exp $
 *
 * The main admin backend index file
 *
@@ -23,8 +23,8 @@
 */
 
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
-require_once(PMF_ROOT_DIR.'/inc/Init.php');
 define('IS_VALID_PHPMYFAQ_ADMIN', null);
+require_once(PMF_ROOT_DIR.'/inc/Init.php');
 PMF_Init::cleanRequest();
 
 // Include classes and functions
@@ -128,7 +128,6 @@ if (isset($auth)) {
     if (isset($_action) && isset($_ajax)) {
         if ($_action == 'ajax') {
             switch ($_ajax) {
-
                 // Link verification
                 case 'verifyURL':       require_once('ajax.verifyurl.php'); break;
                 case 'onDemandURL':     require_once('ajax.ondemandurl.php'); break;
@@ -148,7 +147,7 @@ if (isset($auth)) {
 // Header of the admin page
 require_once ("header.php");
 if (isset($auth)) {
-	require_once ("menue.php");
+    require_once ("menue.php");
 }
 ?>
 </div>
@@ -156,33 +155,30 @@ if (isset($auth)) {
 <?php
 // User is authenticated
 if (isset($auth)) {
-	if (isset($_action)) {
-
+    if (isset($_action)) {
         // the various sections of the admin area
-		switch ($_action) {
-
-			// functions for user administration
-			case 'user':                    require_once('user.php'); break;
-			case 'group':                   require_once('group.php'); break;
-
-			// functions for record administration
-			case "view":					require_once ("record.show.php"); break;
-			case "accept":					require_once ("record.show.php"); break;
-			case "zeichan":					require_once ("record.show.php"); break;
-			case "takequestion":			require_once ("record.edit.php"); break;
-			case "editentry":				require_once ("record.edit.php"); break;
+        switch ($_action) {
+            // functions for user administration
+            case 'user':                    require_once('user.php'); break;
+            case 'group':                   require_once('group.php'); break;
+            // functions for record administration
+            case "view":                    require_once ("record.show.php"); break;
+            case "accept":                  require_once ("record.show.php"); break;
+            case "zeichan":                 require_once ("record.show.php"); break;
+            case "takequestion":            require_once ("record.edit.php"); break;
+            case "editentry":               require_once ("record.edit.php"); break;
             case "editpreview":             require_once ("record.edit.php"); break;
-			case "delcomment":				require_once ("record.delcommentform.php"); break;
-			case "deletecomment":			require_once ("record.delcomment.php"); break;
-			case "insertentry":				require_once ("record.add.php"); break;
-			case "saveentry":				require_once ("record.save.php"); break;
-			case "delentry":				require_once ("record.delete.php"); break;
-			case "delatt":					require_once ("record.delatt.php"); break;
-			case "question":				require_once ("record.delquestion.php"); break;
-			// news administraion
-			case "news":					require_once ("news.php"); break;
-			// category administration
-			case "category":				require_once ("category.main.php"); break;
+            case "delcomment":              require_once ("record.delcommentform.php"); break;
+            case "deletecomment":           require_once ("record.delcomment.php"); break;
+            case "insertentry":             require_once ("record.add.php"); break;
+            case "saveentry":               require_once ("record.save.php"); break;
+            case "delentry":                require_once ("record.delete.php"); break;
+            case "delatt":                  require_once ("record.delatt.php"); break;
+            case "question":                require_once ("record.delquestion.php"); break;
+            // news administraion
+            case "news":                    require_once ("news.php"); break;
+            // category administration
+            case "category":                require_once ("category.main.php"); break;
             case "addcategory":             require_once ("category.add.php"); break;
             case "savecategory":            require_once ("category.save.php"); break;
             case "editcategory":            require_once ("category.edit.php"); break;
@@ -200,45 +196,43 @@ if (isset($auth)) {
             case 'editglossary':            require_once('glossary.edit.php'); break;
             case 'updateglossary':          require_once('glossary.update.php'); break;
             case 'delglossary':             require_once('glossary.delete.php'); break;
-			// functions for cookie administration
-			case "setcookie":				require_once ("cookie.check.php"); break;
-			case "cookies":					require_once ("cookie.check.php"); break;
-			case "delcookie":				require_once ("cookie.check.php"); break;
-
-			// adminlog administration
-			case 'adminlog':
+            // functions for cookie administration
+            case "setcookie":                require_once ("cookie.check.php"); break;
+            case "cookies":                  require_once ("cookie.check.php"); break;
+            case "delcookie":                require_once ("cookie.check.php"); break;
+            // adminlog administration
+            case 'adminlog':
             case 'deleteadminlog':          require_once ('adminlog.php'); break;
-
-			// functions for password administration
-			case "passwd":					require_once ("pwd.change.php"); break;
-			case "savepwd":					require_once ("pwd.save.php"); break;
-			// functions for session administration
-			case "viewsessions":			require_once ("stat.main.php"); break;
-			case "sessionbrowse":			require_once ("stat.browser.php"); break;
-			case "sessionsearch":			require_once ("stat.query.php"); break;
-			case "sessionsuche":			require_once ("stat.form.php"); break;
-			case "viewsession":				require_once ("stat.show.php"); break;
-			case "statistik":				require_once ("stat.ratings.php"); break;
-
-			// functions for config administration
+            // functions for password administration
+            case "passwd":                  require_once ("pwd.change.php"); break;
+            case "savepwd":                 require_once ("pwd.save.php"); break;
+            // functions for session administration
+            case "viewsessions":            require_once ("stat.main.php"); break;
+            case "sessionbrowse":           require_once ("stat.browser.php"); break;
+            case "sessionsearch":           require_once ("stat.query.php"); break;
+            case "sessionsuche":            require_once ("stat.form.php"); break;
+            case "viewsession":             require_once ("stat.show.php"); break;
+            case "statistik":               require_once ("stat.ratings.php"); break;
+            // functions for config administration
             case 'config':                  require_once ("configuration.php"); break;
             case 'linkconfig':              require_once ('linkconfig.main.php'); break;
-			// functions for backup administration
-			case "csv":						require_once ("backup.main.php"); break;
-			case "restore":					require_once ("backup.import.php"); break;
-			case "xml":						require_once ("backup.xml.php"); break;
-			// functions for FAQ export
-			case "export":					require_once ("export.main.php"); break;
-            case "searchplugin":			require_once ("plugins.firefoxsearch.php"); break;
-			default:						print "Error"; break;
-		}
-	} else {
+            // functions for backup administration
+            case "csv":                     require_once ("backup.main.php"); break;
+            case "restore":                 require_once ("backup.import.php"); break;
+            case "xml":                     require_once ("backup.xml.php"); break;
+            // functions for FAQ export
+            case "export":                  require_once ("export.main.php"); break;
+            case "searchplugin":            require_once ("plugins.firefoxsearch.php"); break;
+
+            default:                        print "Error"; break;
+        }
+    } else {
         // start page with some informations about the FAQ
         print '<h2>phpMyFAQ Information</h2>';
         $PMF_TABLE_INFO = $db->getTableStatus();
 ?>
     <dl class="table-display">
-	    <dt><strong><?php print $PMF_LANG["ad_start_visits"]; ?></strong></dt>
+        <dt><strong><?php print $PMF_LANG["ad_start_visits"]; ?></strong></dt>
         <dd><?php print $PMF_TABLE_INFO[SQLPREFIX."faqsessions"]; ?></dd>
         <dt><strong><?php print $PMF_LANG["ad_start_articles"]; ?></strong></dt>
         <dd><?php print $PMF_TABLE_INFO[SQLPREFIX."faqdata"]; ?></dd>
@@ -249,43 +243,43 @@ if (isset($auth)) {
     </dl>
 <?php
         $rg = @ini_get("register_globals");
-		if ($rg == "1") {
-			$rg = "on";
-		} else {
-			$rg = "off";
-		}
+        if ($rg == "1") {
+            $rg = "on";
+        } else {
+            $rg = "off";
+        }
 
-		$sm = @ini_get("safe_mode");
-		if ($sm == "1") {
-			$sm = "on";
-		} else {
-			$sm = "off";
-		}
+        $sm = @ini_get("safe_mode");
+        if ($sm == "1") {
+            $sm = "on";
+        } else {
+            $sm = "off";
+        }
 ?>
-	<h2>System Information</h2>
-	<dl class="table-display">
-		<dt><strong>phpMyFAQ Version</strong></dt>
-		<dd>phpMyFAQ <?php print $PMF_CONF["version"]; ?></dd>
-		<dt><strong>Server Software</strong></dt>
-		<dd><?php print $_SERVER["SERVER_SOFTWARE"]; ?></dd>
-		<dt><strong>PHP Version</strong></dt>
-		<dd>PHP <?php print phpversion(); ?></dd>
-		<dt><strong>Register Globals</strong></dt>
-		<dd><?php print $rg; ?></dd>
-		<dt><strong>Safe Mode</strong></dt>
-		<dd><?php print $sm; ?></dd>
-		<dt><strong>Database Client Version</strong></dt>
-		<dd><?php print $db->client_version(); ?></dd>
-		<dt><strong>Database Server Version</strong></dt>
-		<dd><?php print $db->server_version(); ?></dd>
-		<dt><strong>Webserver Interface</strong></dt>
-		<dd><?php print strtoupper(@php_sapi_name()); ?></dd>
+    <h2>System Information</h2>
+    <dl class="table-display">
+        <dt><strong>phpMyFAQ Version</strong></dt>
+        <dd>phpMyFAQ <?php print $PMF_CONF["version"]; ?></dd>
+        <dt><strong>Server Software</strong></dt>
+        <dd><?php print $_SERVER["SERVER_SOFTWARE"]; ?></dd>
+        <dt><strong>PHP Version</strong></dt>
+        <dd>PHP <?php print phpversion(); ?></dd>
+        <dt><strong>Register Globals</strong></dt>
+        <dd><?php print $rg; ?></dd>
+        <dt><strong>Safe Mode</strong></dt>
+        <dd><?php print $sm; ?></dd>
+        <dt><strong>Database Client Version</strong></dt>
+        <dd><?php print $db->client_version(); ?></dd>
+        <dt><strong>Database Server Version</strong></dt>
+        <dd><?php print $db->server_version(); ?></dd>
+        <dt><strong>Webserver Interface</strong></dt>
+        <dd><?php print strtoupper(@php_sapi_name()); ?></dd>
     </dl>
-	<h2>Online Version Information</h2>
+    <h2>Online Version Information</h2>
 <?php
-        if (isset($_POST['param']) && $_POST['param'] === 'version') {
-            require_once (PMF_ROOT_DIR.'/inc/libs/xmlrpc.php');
-            $param = $_POST['param'];
+        if (isset($_POST["param"]) && $_POST["param"] == "version") {
+            require_once (PMF_ROOT_DIR."/inc/xmlrpc.php");
+            $param = $_POST["param"];
             $xmlrpc = new xmlrpc_client("/xml/version.php", "www.phpmyfaq.de", 80);
             $msg = new xmlrpcmsg("phpmyfaq.version", array(new xmlrpcval($param, "string")));
             $answer = $xmlrpc->send($msg);
@@ -293,7 +287,12 @@ if (isset($auth)) {
             if ($answer->faultCode()) {
                 print "<p>Error: ".$answer->faultCode()." (" .htmlspecialchars($answer->faultString()).")</p>";
             } else {
-                print "<p>".$PMF_LANG["ad_xmlrpc_latest"]." <a href=\"http://www.phpmyfaq.de\" target=\"_blank\">www.phpmyfaq.de</a>: phpMyFAQ ".$result->scalarval()."</p>";
+                printf('<p>%s <a href="http://www.phpmyfaq.de" target="_blank">www.phpmyfaq.de</a>: <strong>phpMyFAQ %s</strong>', $PMF_LANG['ad_xmlrpc_latest'], $result->scalarval());
+                // Installed phpMyFAQ version is outdated
+                if (-1 == version_compare($PMF_CONF["version"], $result->scalarval())) {
+                    print '<br />'.$PMF_LANG['ad_you_should_update'];
+                }
+                print '</p>';
             }
         } else {
 ?>
@@ -303,22 +302,22 @@ if (isset($auth)) {
     </form>
 <?php
         }
-	}
+    }
 // User is NOT authenticated
 } else {
 ?>
-	<form action="" method="post">
+    <form action="" method="post">
     <fieldset class="login">
         <legend class="login">phpMyFAQ Login</legend>
 <?php
-	if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "logout") {
-		print "<p>".$PMF_LANG["ad_logout"]."</p>";
-	}
-	if (isset($error)) {
-		print "<p><strong>".$error."</strong></p>\n";
-	} else {
-		print "<p><strong>".$PMF_LANG["ad_auth_insert"]."</strong></p>\n";
-	}
+    if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "logout") {
+        print "<p>".$PMF_LANG["ad_logout"]."</p>";
+    }
+    if (isset($error)) {
+        print "<p><strong>".$error."</strong></p>\n";
+    } else {
+        print "<p><strong>".$PMF_LANG["ad_auth_insert"]."</strong></p>\n";
+    }
 ?>
         <label class="left" for="faqusername"><?php print $PMF_LANG["ad_auth_user"]; ?></label>
         <input type="text" name="faqusername" id="faqusername" size="20" /><br />
@@ -333,16 +332,19 @@ if (isset($auth)) {
 <?php print $PMF_LANG["lostPassword"]; ?>
 </a></p>
         <p><img src="images/arrow.gif" width="11" height="11" alt="<?php print $PMF_CONF["title"]; ?> FAQ" border="0" /> <a href="../index.php" title="<?php print $PMF_CONF["title"]; ?> FAQ"><?php print $PMF_CONF["title"]; ?> FAQ</a></p>
-
     </fieldset>
-	</form>
-
+    </form>
 <?php
 }
 
-if (DEBUG == true) {
-    print "<p>DEBUG INFORMATION:</p>\n";
-	print "<p>".$db->sqllog()."</p>";
+if (DEBUG) {
+    print "<p>DEBUG INFORMATION:<br />\n".$db->sqllog()."</p>\n";
+    print "<p>TABLES & RECORDS:<br />\n";
+    $tableStatuses = $db->getTableStatus();
+    foreach ($tableStatuses as $key => $value) {
+        print "$key: $value<br />\n";
+    }
+    print "</p>\n";
 }
 
 require_once('footer.php');
