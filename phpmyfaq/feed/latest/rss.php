@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: rss.php,v 1.12 2006-06-17 22:21:09 thorstenr Exp $
+* $Id: rss.php,v 1.13 2006-06-18 07:38:45 matteo Exp $
 *
 * The RSS feed with the latest five records
 *
@@ -24,17 +24,19 @@ define('PMF_ROOT_DIR', dirname(dirname(dirname(__FILE__))));
 require_once(PMF_ROOT_DIR.'/inc/Init.php');
 PMF_Init::cleanRequest();
 
+require_once(PMF_ROOT_DIR.'/inc/Faq.php');
+
 //
 // get language (default: english)
 //
 $pmf = new PMF_Init();
 $LANGCODE = $pmf->setLanguage((isset($PMF_CONF['detection']) ? true : false), $PMF_CONF['language']);
 // Preload English strings
-require_once ('lang/language_en.php');
+require_once (PMF_ROOT_DIR.'/lang/language_en.php');
 
 if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE)) {
     // Overwrite English strings with the ones we have in the current language
-    require_once('lang/language_'.$LANGCODE.'.php');
+    require_once(PMF_ROOT_DIR.'/lang/language_'.$LANGCODE.'.php');
 } else {
     $LANGCODE = 'en';
 }
@@ -44,22 +46,30 @@ $rssData = $faq->getLatestData();
 $num = count($rssData);
 
 $rss =
-	"<?xml version=\"1.0\" encoding=\"".$PMF_LANG["metaCharset"]."\" standalone=\"yes\" ?>\n" .
-	"<rss version=\"2.0\">\n<channel>\n" .
-	"<title>" . $PMF_CONF["title"] . "</title>\n" .
-	"<description>" . $PMF_CONF["metaDescription"] . "</description>\n" .
-	"<link>http://" . $_SERVER["HTTP_HOST"]."</link>";
+    "<?xml version=\"1.0\" encoding=\"".$PMF_LANG["metaCharset"]."\" standalone=\"yes\" ?>\n" .
+    "<rss version=\"2.0\">\n<channel>\n" .
+    "<title>".$PMF_CONF["title"]."</title>\n" .
+    "<description>".$PMF_CONF["metaDescription"]."</description>\n" .
+    "<link>http".(isset($_SERVER['HTTPS']) ? 's' : '')."://".$_SERVER["HTTP_HOST"]."</link>";
+
 if ($num > 0) {
-	foreach ($rssData as $rssKey => $rssValue) {
+    foreach ($rssData as $rssItem) {
+        // Get the content
+        $content = $rssItem['content'];
+        // Fix the content internal image references
+        $content = str_replace("<img src=\"/", "<img src=\"http".(isset($_SERVER["HTTPS"]) ? "s" : "")."://".$_SERVER["HTTP_HOST"]."/", $content);
         $rss .= "\t<item>\n" .
-        	"\t\t<title><![CDATA[ " .
-        	stripslashes(htmlspecialchars(makeShorterText($row['thema'], 8))) .
-			" ... ]]></title>\n" .
-			"\t\t<description><![CDATA[ " .
-        	stripslashes(htmlspecialchars(makeShorterText($row['thema'], 8))) .
-			" (".$row['visits']." ".$PMF_LANG["msgViews"].") ]]></description>\n" .
-			"\t\t<link>".$row['url']."</link>\n" .
-			"\t</item>\n";
+                "\t\t<title><![CDATA[ " .
+                $rssItem['thema'] .
+                "]]></title>\n" .
+                "\t\t<description><![CDATA[ " .
+                "<p><b>".$rssItem['thema']."</b>" .
+                " <em>(".$rssItem['visits']." ".$PMF_LANG["msgViews"].")</em></p>" .
+                $content .
+                "]]></description>\n" .
+                "\t\t<link>http".(isset($_SERVER['HTTPS']) ? 's' : '')."://".$_SERVER["HTTP_HOST"].$rssItem['url']."</link>\n" .
+                "\t\t<pubDate>".makeRFC822Date($rssItem['datum'])."</pubDate>\n" .
+                "\t</item>\n";
     }
 }
 
