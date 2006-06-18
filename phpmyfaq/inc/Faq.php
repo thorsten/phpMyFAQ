@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.23 2006-06-18 10:51:14 thorstenr Exp $
+* $Id: Faq.php,v 1.24 2006-06-18 11:01:40 thorstenr Exp $
 *
 * The main FAQ class
 *
@@ -944,6 +944,37 @@ class PMF_Faq
             $oldId = $row->id;
         }
         return $latest;
+    }
+
+    /**
+     * votingCheck()
+     *
+     * Reload locking for user votings
+     *
+     * @param    integer     FAQ record id
+     * @param    string      IP
+     * @return   boolean
+     * @since    2003-05-15
+     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function votingCheck($id, $ip)
+    {
+        $check = time() - 300;
+        $query = sprintf(
+            "SELECT
+                id
+            FROM
+                %sfaqvoting
+            WHERE
+                artikel = %d AND (ip = '%s' AND datum > %d)",
+            SQLPREFIX,
+            $id,
+            $ip,
+            $check);
+        if ($db->num_rows($db->query($query))) {
+            return false;
+        }
+        return true;
     }
 
     /**

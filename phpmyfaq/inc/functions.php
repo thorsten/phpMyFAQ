@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.114 2006-06-17 13:02:43 matteo Exp $
+* $Id: functions.php,v 1.115 2006-06-18 11:01:40 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -216,15 +216,15 @@ function makeRFC822Date($date, $phpmyfaq = true)
 */
 function check4Language($id)
 {
-	global $db;
-	$output = array();
-	$result = $db->query("SELECT lang FROM ".SQLPREFIX."faqdata WHERE id = ".$id);
-	if ($db->num_rows($result) > 0) {
-		while ($row = $db->fetch_object($result)) {
-			$output[] = $row->lang;
-			}
-		}
-	return $output;
+    global $db;
+    $output = array();
+    $result = $db->query("SELECT lang FROM ".SQLPREFIX."faqdata WHERE id = ".$id);
+    if ($db->num_rows($result) > 0) {
+        while ($row = $db->fetch_object($result)) {
+            $output[] = $row->lang;
+            }
+        }
+    return $output;
 }
 
 /**
@@ -247,26 +247,6 @@ function safeEmail($email)
         return str_replace(array('@', '.'), array('_AT_', '_DOT_'), $email);
     } else {
         return $email;
-    }
-}
-
-/**
-* Reload locking for user votings
-*
-* @param    integer     FAQ record id
-* @param    string      IP
-* @return   boolean
-* @since    2003-05-15
-* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-*/
-function votingCheck($id, $ip)
-{
-    global $db;
-    $timeNow = (time() - 300);
-    if ($db->num_rows($db->query("SELECT id FROM ".SQLPREFIX."faqvoting WHERE artikel = ".$id." AND (ip = '".$ip."' AND datum > ".$timeNow.")"))) {
-        return false;
-    } else {
-	    return true;
     }
 }
 
@@ -319,14 +299,14 @@ function check4AddrMatch($ip, $network)
  */
 function IPCheck($ip)
 {
-	global $PMF_CONF;
-	$arrBannedIPs = explode(" ", $PMF_CONF["bannedIP"]);
-	foreach ($arrBannedIPs as $oneIPorNetwork) {
+    global $PMF_CONF;
+    $arrBannedIPs = explode(" ", $PMF_CONF["bannedIP"]);
+    foreach ($arrBannedIPs as $oneIPorNetwork) {
         if (check4AddrMatch($ip, $oneIPorNetwork)) {
             return false;
         }
     }
-	return true;
+    return true;
 }
 
 /**
@@ -659,21 +639,21 @@ function userOnline()
 */
 function generateNews()
 {
-	global $db, $PMF_LANG, $PMF_CONF;
-	$counter = 0;
-	$result = $db->query("SELECT id, datum, header, artikel, link, linktitel, target FROM ".SQLPREFIX."faqnews ORDER BY datum desc");
-	$output = '';
-	if ($PMF_CONF['numNewsArticles'] > 0 && $db->num_rows($result) > 0) {
-		while (($row = $db->fetch_object($result)) && $counter < $PMF_CONF['numNewsArticles']) {
-			$counter++;
-			$output .= sprintf('<h3><a name="news_%d">%s</a></h3><div class="block">%s', $row->id, $row->header, $row->artikel);
+    global $db, $PMF_LANG, $PMF_CONF;
+    $counter = 0;
+    $result = $db->query("SELECT id, datum, header, artikel, link, linktitel, target FROM ".SQLPREFIX."faqnews ORDER BY datum desc");
+    $output = '';
+    if ($PMF_CONF['numNewsArticles'] > 0 && $db->num_rows($result) > 0) {
+        while (($row = $db->fetch_object($result)) && $counter < $PMF_CONF['numNewsArticles']) {
+            $counter++;
+            $output .= sprintf('<h3><a name="news_%d">%s</a></h3><div class="block">%s', $row->id, $row->header, $row->artikel);
             if ($row->link != '') {
-    		    $output .= sprintf('<br />Info: <a href="http://%s" target="_%s">%s</a>', $row->link, $row->target, $row->linktitel);
-    		}
-		    $output .= sprintf('</div><div class="date">%s</div>', makeDate($row->datum));
-		}
+                $output .= sprintf('<br />Info: <a href="http://%s" target="_%s">%s</a>', $row->link, $row->target, $row->linktitel);
+            }
+            $output .= sprintf('</div><div class="date">%s</div>', makeDate($row->datum));
+        }
         return $output;
-	} else {
+    } else {
         return $PMF_LANG['msgNoNews'];
     }
 }
@@ -684,20 +664,20 @@ function generateNews()
  */
 function makeShorterText($str, $char)
 {
-	$str = ereg_replace("[[:space:]]+", " ", $str);
-	$arrStr = explode(" ", $str);
-	$shortStr = "";
+    $str = ereg_replace("[[:space:]]+", " ", $str);
+    $arrStr = explode(" ", $str);
+    $shortStr = "";
     $num = count($arrStr);
-	if ($num > $char) {
-		for ($j = 0; $j <= $char; $j++) {
-			$shortStr .= $arrStr[$j]." ";
-			}
-		$shortStr .= "...";
-		}
-	else {
-		$shortStr = $str;
-		}
-	return $shortStr;
+    if ($num > $char) {
+        for ($j = 0; $j <= $char; $j++) {
+            $shortStr .= $arrStr[$j]." ";
+            }
+        $shortStr .= "...";
+        }
+    else {
+        $shortStr = $str;
+        }
+    return $shortStr;
 }
 
 
@@ -712,10 +692,10 @@ function makeShorterText($str, $char)
  */
 function EndSlash($string)
 {
-	if (substr($string, strlen($string)-1, 1) != "/" ) {
-		$string .= "/";
-	}
-	return $string;
+    if (substr($string, strlen($string)-1, 1) != "/" ) {
+        $string .= "/";
+    }
+    return $string;
 }
 
 /**
@@ -742,10 +722,10 @@ function safeHTML($html)
  */
 function unhtmlentities($html)
 {
-	$translation_table = get_html_translation_table (HTML_ENTITIES);
-	$translation_table = array_flip ($translation_table);
-	$content = strtr ($html, $translation_table);
-	return preg_replace('/\&\#([0-9]+)\;/me', "chr('\\1')", $content);
+    $translation_table = get_html_translation_table (HTML_ENTITIES);
+    $translation_table = array_flip ($translation_table);
+    $content = strtr ($html, $translation_table);
+    return preg_replace('/\&\#([0-9]+)\;/me', "chr('\\1')", $content);
 }
 
 /*
@@ -887,41 +867,41 @@ function quoted_printable_encode($return = '')
  */
 function generateXMLExport($id, $lang = "")
 {
-	global $db, $tree, $PMF_LANG, $PMF_CONF;
-	$result = $db->query('SELECT '.SQLPREFIX.'faqdata.id AS id, '.SQLPREFIX.'faqdata.lang AS lang, '.SQLPREFIX.'faqdata.solution_id AS solution_id, '.SQLPREFIX.'faqdata.revision_id AS revision_id, '.SQLPREFIX.'faqcategoryrelations.category_id AS category_id, '.SQLPREFIX.'faqdata.keywords AS keywords, '.SQLPREFIX.'faqdata.thema AS thema, '.SQLPREFIX.'faqdata.content AS content, '.SQLPREFIX.'faqdata.author AS author, '.SQLPREFIX.'faqdata.datum AS datum FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang WHERE id = '.$id.' AND lang = \''.$lang.'\' AND active = \'yes\'');
+    global $db, $tree, $PMF_LANG, $PMF_CONF;
+    $result = $db->query('SELECT '.SQLPREFIX.'faqdata.id AS id, '.SQLPREFIX.'faqdata.lang AS lang, '.SQLPREFIX.'faqdata.solution_id AS solution_id, '.SQLPREFIX.'faqdata.revision_id AS revision_id, '.SQLPREFIX.'faqcategoryrelations.category_id AS category_id, '.SQLPREFIX.'faqdata.keywords AS keywords, '.SQLPREFIX.'faqdata.thema AS thema, '.SQLPREFIX.'faqdata.content AS content, '.SQLPREFIX.'faqdata.author AS author, '.SQLPREFIX.'faqdata.datum AS datum FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang WHERE id = '.$id.' AND lang = \''.$lang.'\' AND active = \'yes\'');
 
-	if ($db->num_rows($result) > 0) {
-		while ($row = $db->fetch_object($result)) {
+    if ($db->num_rows($result) > 0) {
+        while ($row = $db->fetch_object($result)) {
             $xml_content = $row->content;
-			$xml_rubrik = $tree->getPath($row->category_id);
-			$xml_thema = wordwrap($row->thema, 60);
-			$xml_keywords = $row->keywords;
-			$xml_content = trim(htmlspecialchars(wordwrap($xml_content, 60), ENT_NOQUOTES, $PMF_LANG['metaCharset']));
-			if (is_writeable("./xml/")) {
-				$xml_fp = @fopen("./xml/article_".$row->id."_".$row->lang.".xml","wb");
-				$my_xml_output = "<?xml version=\"1.0\" encoding=\"".$PMF_LANG["metaCharset"]."\" standalone=\"yes\" ?>\n";
-				$my_xml_output .= "<!-- XML-Output by phpMyFAQ ".$PMF_CONF["version"]." | Date: ".makeDate(date("YmdHis"))." -->\n";
-				$my_xml_output .= "<phpmyfaq xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:NamespaceSchemaLocation=\"http://www.phpmyfaq.de/xml/faqschema.xsd\">\n";
-				$my_xml_output .= "\t<article id=\"".$row->id."\" solution_id=\"".$row->solution_id."\" revision_id=\"1.".$row->revision_id."\">\n";
-				$my_xml_output .= "\t<language>".$row->lang."</language>\n";
-				$my_xml_output .= "\t<category>".PMF_htmlentities(strip_tags($xml_rubrik), ENT_NOQUOTES, $PMF_LANG['metaCharset'])."</category>\n";
-				if ($xml_keywords) {
-					$my_xml_output .= "\t<keywords>".$xml_keywords."</keywords>\n";
-					}
-				else {
-					$my_xml_output .= "\t<keywords />\n";
-					}
-				$my_xml_output .= "\t<theme>".PMF_htmlentities(strip_tags($xml_thema), ENT_NOQUOTES, $PMF_LANG['metaCharset'])."</theme>\n";
-				$my_xml_output .= "\t<content xmlns=\"http://www.w3.org/TR/REC-html40\">".strip_tags($xml_content)."</content>\n";
-				if ($row->author) {
-					$my_xml_output .= "\t<author>".$row->author."</author>\n";
-					}
-				else {
-					$my_xml_output .= "\t<author />\n";
-					}
-				$my_xml_output .= "\t<date>".makeDate($row->datum)."</date>\n";
-				$my_xml_output .= "\t</article>\n";
-				$my_xml_output .= "</phpmyfaq>";
+            $xml_rubrik = $tree->getPath($row->category_id);
+            $xml_thema = wordwrap($row->thema, 60);
+            $xml_keywords = $row->keywords;
+            $xml_content = trim(htmlspecialchars(wordwrap($xml_content, 60), ENT_NOQUOTES, $PMF_LANG['metaCharset']));
+            if (is_writeable("./xml/")) {
+                $xml_fp = @fopen("./xml/article_".$row->id."_".$row->lang.".xml","wb");
+                $my_xml_output = "<?xml version=\"1.0\" encoding=\"".$PMF_LANG["metaCharset"]."\" standalone=\"yes\" ?>\n";
+                $my_xml_output .= "<!-- XML-Output by phpMyFAQ ".$PMF_CONF["version"]." | Date: ".makeDate(date("YmdHis"))." -->\n";
+                $my_xml_output .= "<phpmyfaq xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:NamespaceSchemaLocation=\"http://www.phpmyfaq.de/xml/faqschema.xsd\">\n";
+                $my_xml_output .= "\t<article id=\"".$row->id."\" solution_id=\"".$row->solution_id."\" revision_id=\"1.".$row->revision_id."\">\n";
+                $my_xml_output .= "\t<language>".$row->lang."</language>\n";
+                $my_xml_output .= "\t<category>".PMF_htmlentities(strip_tags($xml_rubrik), ENT_NOQUOTES, $PMF_LANG['metaCharset'])."</category>\n";
+                if ($xml_keywords) {
+                    $my_xml_output .= "\t<keywords>".$xml_keywords."</keywords>\n";
+                    }
+                else {
+                    $my_xml_output .= "\t<keywords />\n";
+                    }
+                $my_xml_output .= "\t<theme>".PMF_htmlentities(strip_tags($xml_thema), ENT_NOQUOTES, $PMF_LANG['metaCharset'])."</theme>\n";
+                $my_xml_output .= "\t<content xmlns=\"http://www.w3.org/TR/REC-html40\">".strip_tags($xml_content)."</content>\n";
+                if ($row->author) {
+                    $my_xml_output .= "\t<author>".$row->author."</author>\n";
+                    }
+                else {
+                    $my_xml_output .= "\t<author />\n";
+                    }
+                $my_xml_output .= "\t<date>".makeDate($row->datum)."</date>\n";
+                $my_xml_output .= "\t</article>\n";
+                $my_xml_output .= "</phpmyfaq>";
                 fputs($xml_fp, $my_xml_output);
                 fclose($xml_fp);
                 }
@@ -943,7 +923,7 @@ function generateXMLExport($id, $lang = "")
 */
 function generateXHTMLFile()
 {
-	global $db, $PMF_CONF, $PMF_LANG;
+    global $db, $PMF_CONF, $PMF_LANG;
 
     require_once("../inc/parser.php"); // template support
 
@@ -951,23 +931,23 @@ function generateXHTMLFile()
     $tree->transform(0);
     $old = 0;
 
-  	$newest = array();
+      $newest = array();
 
-  	//
+      //
     // get the 5 newest entries
     //
     $query = "SELECT DISTINCT ".SQLPREFIX."faqdata.id FROM ".SQLPREFIX."faqdata, ".SQLPREFIX."faqvisits WHERE ".SQLPREFIX."faqdata.id = ".SQLPREFIX."faqvisits.id AND ".SQLPREFIX."faqdata.lang = ".SQLPREFIX."faqvisits.lang AND ".SQLPREFIX."faqdata.active = 'yes' ORDER BY ".SQLPREFIX."faqdata.datum desc";
-  	$result = $db->query($query);
-  	if ($num = $db->num_rows($result) > 0) {
+      $result = $db->query($query);
+      if ($num = $db->num_rows($result) > 0) {
         $i = 1;
         $oldId = 0;
-  		while ($row = $db->fetch_object($result) && $i <= 5) {
-  			$newest[] = $row->id;
-  			$i++;
-  		}
-  	}
+          while ($row = $db->fetch_object($result) && $i <= 5) {
+              $newest[] = $row->id;
+              $i++;
+          }
+      }
 
-	$result = $db->query('SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqdata.content, '.SQLPREFIX.'faqdata.author, '.SQLPREFIX.'faqdata.datum FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang ORDER BY '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.id');
+    $result = $db->query('SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqdata.content, '.SQLPREFIX.'faqdata.author, '.SQLPREFIX.'faqdata.datum FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang ORDER BY '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.id');
 
     $xhtml = '';
 
@@ -1010,14 +990,14 @@ function generateXHTMLFile()
                 'entrylinks' => $headlinks,
                 'writeContent' => $xhtml,
                 'copyright' => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> '.$PMF_CONF['version']
-		));
+        ));
 
     /* parse without printing */
     $xhtml = $tpl->getTemplateContents();
 
     if ($fp = fopen("../xml/phpmyfaq.html","w")) {
         fputs($fp, $xhtml);
-		fclose($fp);
+        fclose($fp);
     }
 }
 
@@ -1027,47 +1007,47 @@ function generateXHTMLFile()
  */
 function generateXMLFile()
 {
-	global $db, $tree, $PMF_CONF, $PMF_LANG;
+    global $db, $tree, $PMF_CONF, $PMF_LANG;
 
-	$result = $db->query('SELECT '.SQLPREFIX.'faqdata.id AS id, '.SQLPREFIX.'faqdata.lang AS lang, '.SQLPREFIX.'faqdata.solution_id AS solution_id, '.SQLPREFIX.'faqdata.revision_id AS revision_id, '.SQLPREFIX.'faqcategoryrelations.category_id AS category_id, '.SQLPREFIX.'faqdata.thema AS thema, '.SQLPREFIX.'faqdata.content AS content, '.SQLPREFIX.'faqdata.keywords AS keywords, '.SQLPREFIX.'faqdata.author AS author, '.SQLPREFIX.'faqdata.datum AS datum FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang ORDER BY '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.id');
+    $result = $db->query('SELECT '.SQLPREFIX.'faqdata.id AS id, '.SQLPREFIX.'faqdata.lang AS lang, '.SQLPREFIX.'faqdata.solution_id AS solution_id, '.SQLPREFIX.'faqdata.revision_id AS revision_id, '.SQLPREFIX.'faqcategoryrelations.category_id AS category_id, '.SQLPREFIX.'faqdata.thema AS thema, '.SQLPREFIX.'faqdata.content AS content, '.SQLPREFIX.'faqdata.keywords AS keywords, '.SQLPREFIX.'faqdata.author AS author, '.SQLPREFIX.'faqdata.datum AS datum FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang ORDER BY '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.id');
 
-	if ($db->num_rows($result) > 0) {
-		$my_xml_output = "<?xml version=\"1.0\" encoding=\"".$PMF_LANG["metaCharset"]."\" standalone=\"yes\" ?>\n";
-		$my_xml_output .= "<!-- XML-Output by phpMyFAQ ".$PMF_CONF["version"]." | Date: ".makeDate(date("YmdHis"))." -->\n";
-		$my_xml_output .= "<phpmyfaq xmlns=\"http://www.phpmyfaq.de/phpmyfaq\">\n";
-		$xml_fp = fopen("../xml/phpmyfaq.xml","w");
-		while ($row = $db->fetch_object($result)) {
+    if ($db->num_rows($result) > 0) {
+        $my_xml_output = "<?xml version=\"1.0\" encoding=\"".$PMF_LANG["metaCharset"]."\" standalone=\"yes\" ?>\n";
+        $my_xml_output .= "<!-- XML-Output by phpMyFAQ ".$PMF_CONF["version"]." | Date: ".makeDate(date("YmdHis"))." -->\n";
+        $my_xml_output .= "<phpmyfaq xmlns=\"http://www.phpmyfaq.de/phpmyfaq\">\n";
+        $xml_fp = fopen("../xml/phpmyfaq.xml","w");
+        while ($row = $db->fetch_object($result)) {
             $xml_content = wordwrap($row->content);
-			$xml_rubrik = $tree->categoryName[$row->category_id]['name'];
-			$xml_thema = wordwrap($row->thema, 60);
-			$xml_content = trim(htmlspecialchars(wordwrap($xml_content, 60)));
+            $xml_rubrik = $tree->categoryName[$row->category_id]['name'];
+            $xml_thema = wordwrap($row->thema, 60);
+            $xml_content = trim(htmlspecialchars(wordwrap($xml_content, 60)));
 
-			if (is_writeable("../xml/")) {
-				$my_xml_output .= "\t<article id=\"".$row->id."\" solution_id=\"".$row->solution_id."\" revision_id=\"1.".$row->revision_id."\">\n";
-				$my_xml_output .= "\t<language>".$row->lang."</language>\n";
-				$my_xml_output .= "\t<category>".PMF_htmlentities(strip_tags($xml_rubrik), ENT_NOQUOTES, $PMF_LANG['metaCharset'])."</category>\n";
-				if (isset($row->keywords) && $row->keywords != '') {
-					$my_xml_output .= "\t<keywords>".$row->keywords."</keywords>\n";
-					}
-				else {
-					$my_xml_output .= "\t<keywords />\n";
-					}
-				$my_xml_output .= "\t<theme>".PMF_htmlentities(strip_tags($xml_thema), ENT_NOQUOTES, $PMF_LANG['metaCharset'])."</theme>\n";
-				$my_xml_output .= "\t<content xmlns=\"http://www.w3.org/TR/REC-html40\">".strip_tags($xml_content)."</content>\n";
-				if ($row->author) {
-					$my_xml_output .= "\t<author>".$row->author."</author>\n";
-					}
-				else {
-					$my_xml_output .= "\t<author />\n";
-					}
-				$my_xml_output .= "\t<date>".makeDate($row->datum)."</date>\n";
-				$my_xml_output .= "\t</article>\n\n";
-				}
-			}
-		$my_xml_output .= "</phpmyfaq>";
-		fputs($xml_fp, $my_xml_output);
-		fclose($xml_fp);
-		}
+            if (is_writeable("../xml/")) {
+                $my_xml_output .= "\t<article id=\"".$row->id."\" solution_id=\"".$row->solution_id."\" revision_id=\"1.".$row->revision_id."\">\n";
+                $my_xml_output .= "\t<language>".$row->lang."</language>\n";
+                $my_xml_output .= "\t<category>".PMF_htmlentities(strip_tags($xml_rubrik), ENT_NOQUOTES, $PMF_LANG['metaCharset'])."</category>\n";
+                if (isset($row->keywords) && $row->keywords != '') {
+                    $my_xml_output .= "\t<keywords>".$row->keywords."</keywords>\n";
+                    }
+                else {
+                    $my_xml_output .= "\t<keywords />\n";
+                    }
+                $my_xml_output .= "\t<theme>".PMF_htmlentities(strip_tags($xml_thema), ENT_NOQUOTES, $PMF_LANG['metaCharset'])."</theme>\n";
+                $my_xml_output .= "\t<content xmlns=\"http://www.w3.org/TR/REC-html40\">".strip_tags($xml_content)."</content>\n";
+                if ($row->author) {
+                    $my_xml_output .= "\t<author>".$row->author."</author>\n";
+                    }
+                else {
+                    $my_xml_output .= "\t<author />\n";
+                    }
+                $my_xml_output .= "\t<date>".makeDate($row->datum)."</date>\n";
+                $my_xml_output .= "\t</article>\n\n";
+                }
+            }
+        $my_xml_output .= "</phpmyfaq>";
+        fputs($xml_fp, $my_xml_output);
+        fclose($xml_fp);
+        }
 }
 
 /**
@@ -1174,7 +1154,7 @@ function generateDocBookExport()
     // write xml file
     $xml_fp = fopen("../xml/docbook.xml","w");
     fputs($xml_fp, $output);
-	fclose($xml_fp);
+    fclose($xml_fp);
 }
 
 /**
@@ -1528,12 +1508,12 @@ function adminlog($text)
  */
 function emptyTable($table)
 {
-	global $db;
-	if ($db->num_rows($db->query("SELECT * FROM ".$table)) < 1) {
-		return TRUE;
+    global $db;
+    if ($db->num_rows($db->query("SELECT * FROM ".$table)) < 1) {
+        return TRUE;
     } else {
-		return FALSE;
-	}
+        return FALSE;
+    }
 }
 
 
@@ -1548,27 +1528,27 @@ function emptyTable($table)
  */
 function PageSpan($code, $start, $end, $akt)
 {
-	global $PMF_LANG;
-	if ($akt > $start) {
-		$out = str_replace("<NUM>", $akt-1, $code).$PMF_LANG["msgPreviusPage"]."</a> | ";
-	} else {
-		$out = "";
-	}
-	for ($h = $start; $h<=$end; $h++) {
-		if ($h > $start) {
-			$out .= ", ";
-		}
-		if ($h != $akt) {
-			$out .= str_replace("<NUM>", $h, $code).$h."</a>";
-		} else {
-			$out .= $h;
-		}
-	}
-	if ($akt < $end) {
-		$out .= " | ".str_replace("<NUM>", $akt+1, $code).$PMF_LANG["msgNextPage"]."</a>";
-	}
-	$out = $PMF_LANG["msgPageDoublePoint"].$out;
-	return $out;
+    global $PMF_LANG;
+    if ($akt > $start) {
+        $out = str_replace("<NUM>", $akt-1, $code).$PMF_LANG["msgPreviusPage"]."</a> | ";
+    } else {
+        $out = "";
+    }
+    for ($h = $start; $h<=$end; $h++) {
+        if ($h > $start) {
+            $out .= ", ";
+        }
+        if ($h != $akt) {
+            $out .= str_replace("<NUM>", $h, $code).$h."</a>";
+        } else {
+            $out .= $h;
+        }
+    }
+    if ($akt < $end) {
+        $out .= " | ".str_replace("<NUM>", $akt+1, $code).$PMF_LANG["msgNextPage"]."</a>";
+    }
+    $out = $PMF_LANG["msgPageDoublePoint"].$out;
+    return $out;
 }
 
 /*
@@ -1600,28 +1580,28 @@ function FileToDate($file, $endOfDay = false)
  */
 function mkts($datum,$zeit)
 {
-	if (strlen($datum) > 0) {
-		$tag = substr($datum,0,strpos($datum,"."));
-		$datum = substr($datum,(strpos($datum,".")+1),strlen($datum));
-		$monat = substr($datum,0,strpos($datum,"."));
-		$datum = substr($datum,(strpos($datum,".")+1),strlen($datum));
-		$jahr = $datum;
-	} else {
-		$tag = date("d");
-		$monat = date("m");
-		$jahr = date("Y");
-	} if (strlen($zeit) > 0) {
-		$stunde = substr($zeit,0,strpos($zeit,":"));
-		$zeit = substr($zeit,(strpos($zeit,":")+1),strlen($zeit));
-		$minute = substr($zeit,0,strpos($zeit,":"));
-		$zeit = substr($zeit,(strpos($zeit,":")+1),strlen($zeit));
-		$sekunde = $zeit;
-	} else {
-		$stunde = date("H");
-		$minute = date("i");
-		$sekunde = date("s");
-	}
-	return mktime($stunde, $minute, $sekunde, $monat, $tag, $jahr);
+    if (strlen($datum) > 0) {
+        $tag = substr($datum,0,strpos($datum,"."));
+        $datum = substr($datum,(strpos($datum,".")+1),strlen($datum));
+        $monat = substr($datum,0,strpos($datum,"."));
+        $datum = substr($datum,(strpos($datum,".")+1),strlen($datum));
+        $jahr = $datum;
+    } else {
+        $tag = date("d");
+        $monat = date("m");
+        $jahr = date("Y");
+    } if (strlen($zeit) > 0) {
+        $stunde = substr($zeit,0,strpos($zeit,":"));
+        $zeit = substr($zeit,(strpos($zeit,":")+1),strlen($zeit));
+        $minute = substr($zeit,0,strpos($zeit,":"));
+        $zeit = substr($zeit,(strpos($zeit,":")+1),strlen($zeit));
+        $sekunde = $zeit;
+    } else {
+        $stunde = date("H");
+        $minute = date("i");
+        $sekunde = date("s");
+    }
+    return mktime($stunde, $minute, $sekunde, $monat, $tag, $jahr);
 }
 
 
@@ -1729,27 +1709,27 @@ if (!function_exists('array_change_key_case')) {
 */
 function build_insert($query, $table)
 {
-	global $db;
-	if (!$result = $db->query($query)) {
-		return;
-	}
-	$ret = array();
-	$ret[] = "\n-- Table: ".$table;
-	while ($row = $db->fetch_assoc ($result)) {
-		$p1 = array();
-		$p2 = array();
-		foreach ($row as $key => $val) {
-			$p1[] = $key;
+    global $db;
+    if (!$result = $db->query($query)) {
+        return;
+    }
+    $ret = array();
+    $ret[] = "\n-- Table: ".$table;
+    while ($row = $db->fetch_assoc ($result)) {
+        $p1 = array();
+        $p2 = array();
+        foreach ($row as $key => $val) {
+            $p1[] = $key;
             $val = trim($val);
             if ('rights' != $key && is_numeric($val)) {
                 $p2[] = $val;
             } else {
                 $p2[] = "'".$db->escape_string($val)."'";
             }
-		}
-		$ret[] = "INSERT INTO ".$table." (".implode(",", $p1).") VALUES (".implode(",", $p2).");";
-	}
-	return $ret;
+        }
+        $ret[] = "INSERT INTO ".$table." (".implode(",", $p1).") VALUES (".implode(",", $p2).");";
+    }
+    return $ret;
 }
 
 /*

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: savevoting.php,v 1.16 2006-06-18 10:51:43 thorstenr Exp $
+* $Id: savevoting.php,v 1.17 2006-06-18 11:01:40 thorstenr Exp $
 *
 * Saves a user voting
 *
@@ -28,8 +28,8 @@ $record_id   = (isset($_POST['artikel'])) ? intval($_POST['artikel']) : '';
 $voting      = (isset($_POST['vote'])) ? intval($_POST['vote']) : 0;
 $user_ip     = (isset($_POST['userip'])) ? strip_tags($_POST['userip']) : '';
 
-if (isset($voting) && votingCheck($record_id, $user_ip) && $voting > 0 && $voting < 6) {
-    Tracking('save_voting', $record);
+if (isset($voting) && $faq->votingCheck($record_id, $user_ip) && $voting > 0 && $voting < 6) {
+    Tracking('save_voting', $record_id);
 
     $votingData = array(
         'record_id'  => $record_id,
@@ -45,13 +45,13 @@ if (isset($voting) && votingCheck($record_id, $user_ip) && $voting > 0 && $votin
     $tpl->processTemplate ('writeContent', array(
         'msgVoteThanks' => $PMF_LANG['msgVoteThanks']));
 
-} elseif (isset($voting) && !votingCheck($record, $userip)) {
-    Tracking('error_save_voting', $record);
+} elseif (isset($voting) && !$faq->votingCheck($record_id, $user_ip)) {
+    Tracking('error_save_voting', $record_id);
     $tpl->processTemplate('writeContent', array(
         'msgVoteThanks' => $PMF_LANG['err_VoteTooMuch']));
 
 } else {
-    Tracking('error_save_voting', $record);
+    Tracking('error_save_voting', $record_id);
     $tpl->processTemplate ('writeContent', array(
         'msgVoteThanks' => $PMF_LANG['err_noVote']));
 
