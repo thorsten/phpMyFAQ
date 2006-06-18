@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.16 2006-06-18 08:03:32 thorstenr Exp $
+* $Id: Faq.php,v 1.17 2006-06-18 08:05:33 thorstenr Exp $
 *
 * The main FAQ class
 *
@@ -263,13 +263,13 @@ class FAQ
 			$data['lang'],
 			getSolutionId(),
 			0,
-			'no',
+			$data['active'],
 			$data['thema'],
 			$data['content'],
 			$data['keywords'],
 			$data['author'],
 			$data['email'],
-			'y',
+			$data['comment'],
 			$data['date']));
 
 		foreach ($categories as $_category) {
