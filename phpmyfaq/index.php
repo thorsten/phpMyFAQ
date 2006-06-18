@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.52 2006-06-18 08:24:47 matteo Exp $
+* $Id: index.php,v 1.53 2006-06-18 09:54:10 thorstenr Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the
@@ -171,7 +171,7 @@ if (isset($PMF_CONF["tracking"])) {
 //
 // Create a new FAQ object
 //
-$faq = new FAQ($db, $LANGCODE);
+$faq = new PMF_Faq($db, $LANGCODE);
 
 //
 // Found a article language?
