@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.22 2006-06-18 10:09:09 thorstenr Exp $
+* $Id: Faq.php,v 1.23 2006-06-18 10:51:14 thorstenr Exp $
 *
 * The main FAQ class
 *
@@ -944,6 +944,105 @@ class PMF_Faq
             $oldId = $row->id;
         }
         return $latest;
+    }
+
+    /**
+     * getNumberOfVotings()
+     *
+     * Returns the number of users from the table faqvotings
+     *
+     * @param   integer $record_id
+     * @return  integer
+     * @access  public
+     * @since   2006-06-18
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function getNumberOfVotings($record_id)
+    {
+        $query = sprintf(
+            'SELECT
+                usr
+            FROM
+                %sfaqvoting
+            WHERE
+                artikel = %d',
+            SQLPREFIX,
+            $record_id);
+        if ($result = $this->db->query($query)) {
+            $row = $db->fetch_object($result);
+            return $row->usr;
+        }
+        return 0;
+    }
+
+    /**
+     * addVoting()
+     *
+     * Adds a new voting record
+     *
+     * @param    array    $votingData
+     * @return   boolean
+     * @access   public
+     * @since    2006-06-18
+     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function addVoting($votingData)
+    {
+        if (!is_array($votingData)) {
+            return false;
+        }
+
+        $query = sprintf(
+            "INSERT INTO
+                %sfaqvoting
+            VALUES
+                (%d, %d, %d, 1, %d, '%s')",
+            SQLPREFIX,
+            $this->db->nextID(SQLPREFIX.'faqvoting', 'id'),
+            $votingData['record_id'],
+            $votingData['vote'],
+            time(),
+            $votingData['user_ip']);
+        $this->db->query($query);
+
+        return true;
+    }
+
+    /**
+     * updateVoting()
+     *
+     * Updates an existing voting record
+     *
+     * @param    array    $votingData
+     * @return   boolean
+     * @access   public
+     * @since    2006-06-18
+     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function updateVoting($votingData)
+    {
+        if (!is_array($votingData)) {
+            return false;
+        }
+
+        $query = sprintf(
+            "UPDATE
+                %sfaqvoting
+            SET
+                vote    = vote + %d,
+                usr     = usr + 1,
+                datum   = %d,
+                ip      = '%s'
+            WHERE
+                artikel = %d",
+            SQLPREFIX,
+            $votingData['vote'],
+            time(),
+            $votingData['user_ip'],
+            $votingData['record_id']);
+        $this->db->query($query);
+
+        return true;
     }
 
     /**
