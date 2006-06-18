@@ -57,28 +57,28 @@ class PMF_UserData
         // check $field
         $single_return = false;
         if (!is_array($field)) {
-        	$single_return = true;
-        	$fields = $field;
+            $single_return = true;
+            $fields = $field;
         }
         else {
-        	$fields = implode(', ', $field);
+            $fields = implode(', ', $field);
         }
         // get data
-		$res = $this->_db->query("
-		  SELECT
-		    ".$fields."
-		  FROM
-		    ".PMF_USER_SQLPREFIX."userdata
-		  WHERE
-		    user_id = ".$this->_user_id
+        $res = $this->_db->query("
+          SELECT
+            ".$fields."
+          FROM
+            ".PMF_USER_SQLPREFIX."userdata
+          WHERE
+            user_id = ".$this->_user_id
         );
 
-		if ($this->_db->num_rows($res) != 1)
-		    return false;
-		$arr = $this->_db->fetch_assoc($res);
-		if ($single_return and $field != '*')
-		    return $arr[$field];
-		return $arr;
+        if ($this->_db->num_rows($res) != 1)
+            return false;
+        $arr = $this->_db->fetch_assoc($res);
+        if ($single_return and $field != '*')
+            return $arr[$field];
+        return $arr;
     }
 
     /**
@@ -103,7 +103,7 @@ class PMF_UserData
             return false;
         // update data
         for ($i = 0; $i < count($field); $i++) {
-        	$this->_data[$field[$i]] = $value[$i];
+            $this->_data[$field[$i]] = $value[$i];
         }
         return $this->save();
     }
@@ -116,9 +116,9 @@ class PMF_UserData
      * @param object
      * @return void
      */
-    function PMF_UserData($db)
+    function PMF_UserData(&$db)
     {
-        $this->_db = $db;
+        $this->_db = &$db;
     }
 
     /**
@@ -158,7 +158,7 @@ class PMF_UserData
             user_id = ".$this->_user_id
         );
         if ($this->_db->num_rows($res) != 1)
-        	return false;
+            return false;
         $this->_data = $this->_db->fetch_assoc($res);
         return true;
     }

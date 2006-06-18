@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Configuration.php,v 1.2 2006-06-17 22:27:21 thorstenr Exp $
+* $Id: Configuration.php,v 1.3 2006-06-18 06:55:31 matteo Exp $
 *
 * The main class for fetching the configuration, update and delete items.
 *
@@ -40,9 +40,9 @@ class PMF_Configuration
     * @return   void
     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
     */
-    function PMF_Configuration($db)
+    function PMF_Configuration(&$db)
     {
-        $this->db = $db;
+        $this->db = &$db;
     }
     /**
     * getAll()

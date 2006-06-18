@@ -1,13 +1,13 @@
 <?php
 /**
-* $Id: Glossary.php,v 1.2 2006-06-17 22:04:57 thorstenr Exp $
+* $Id: Glossary.php,v 1.3 2006-06-18 06:55:31 matteo Exp $
 *
 * The main glossary class
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @package      phpMyFAQ
 * @since        2005-09-15
-* @copyright    (c) 2006 phpMyFAQ Team
+* @copyright    (c) 2005-2006 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -25,21 +25,21 @@ class PMF_Glossary
     /**
     * DB handle
     *
-    * @var object
+    * @var  object
     */
     var $db;
 
     /**
     * Language
     *
-    * @var	string
+    * @var  string
     */
     var $language;
 
     /**
     * Item
     *
-    * @var	array
+    * @var  array
     */
     var $item;
 
@@ -50,23 +50,19 @@ class PMF_Glossary
     */
     var $definition;
 
-
     /**
     * Constructor
     *
-    * @param	object	$db
-    * @param	string	$language
-    * @return	void
+    * @param    object    $db
+    * @param    string    $language
+    * @return   void
     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
     */
-    function PMF_Glossary($db, $language)
+    function PMF_Glossary(&$db, $language)
     {
-        $this->db 		= $db;
+        $this->db         = &$db;
         $this->language = $language;
     }
-    //*/
-
-
 
     /**
     * Gets all items and definitions from the database
@@ -80,30 +76,27 @@ class PMF_Glossary
         $items = array();
 
         $result = $this->db->query(sprintf(
-			"SELECT
-				id, item, definition
-			FROM
-				%sfaqglossary
-			WHERE
-				lang = '%s'",
-			SQLPREFIX,
-			$this->language));
+            "SELECT
+                id, item, definition
+            FROM
+                %sfaqglossary
+            WHERE
+                lang = '%s'",
+            SQLPREFIX,
+            $this->language));
         while ($row = $this->db->fetch_object($result)) {
             $items[] = array(
-				'id' 			=> $row->id,
-				'item' 			=> stripslashes($row->item),
-				'definition' 	=> stripslashes($row->definition));
+                'id'            => $row->id,
+                'item'          => stripslashes($row->item),
+                'definition'    => stripslashes($row->definition));
         }
         return $items;
     }
-    //*/
-
-
 
     /**
     * Gets one item and definition from the database
     *
-    * @param    integer	$id
+    * @param    integer    $id
     * @return   array
     * @access   public
     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -113,32 +106,29 @@ class PMF_Glossary
         $item = array();
 
         $result = $this->db->query(sprintf(
-			"SELECT
-				id, item, definition
-			FROM
-				%sfaqglossary
-			WHERE
-				id = %d AND lang = '%s'",
-			SQLPREFIX,
-			(int)$id,
-			$this->language));
+            "SELECT
+                id, item, definition
+            FROM
+                %sfaqglossary
+            WHERE
+                id = %d AND lang = '%s'",
+            SQLPREFIX,
+            (int)$id,
+            $this->language));
         while ($row = $this->db->fetch_object($result)) {
             $item = array(
-				'id' 			=> $row->id,
-				'item' 			=> stripslashes($row->item),
-				'definition' 	=> stripslashes($row->definition));
+                'id'            => $row->id,
+                'item'          => stripslashes($row->item),
+                'definition'    => stripslashes($row->definition));
         }
         return $item;
     }
-    //*/
-
-
 
     /**
     * Inserts an item and definition into the database
     *
-    * @param    string	$item
-    * @param    string	$item
+    * @param    string    $item
+    * @param    string    $item
     * @return   boolean
     * @access   public
     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -149,31 +139,28 @@ class PMF_Glossary
         $this->definition = $this->db->escape_string($definition);
 
         $query = sprintf(
-			"INSERT INTO
-				%sfaqglossary
-			(id, lang, item, definition)
-				VALUES
-			(%d, '%s', '%s', '%s')",
-			SQLPREFIX,
-			$this->db->nextID(SQLPREFIX.'faqglossary', 'id'),
-			$this->language,
-			$this->item,
-			$this->definition);
+            "INSERT INTO
+                %sfaqglossary
+            (id, lang, item, definition)
+                VALUES
+            (%d, '%s', '%s', '%s')",
+            SQLPREFIX,
+            $this->db->nextID(SQLPREFIX.'faqglossary', 'id'),
+            $this->language,
+            $this->item,
+            $this->definition);
         if ($this->db->query($query)) {
             return true;
         }
-		return false;
+        return false;
     }
-    //*/
-
-
 
     /**
     * Updates an item and definition into the database
     *
-    * @param    integer	$id
-    * @param    string	$item
-    * @param    string	$definition
+    * @param    integer    $id
+    * @param    string     $item
+    * @param    string     $definition
     * @return   boolean
     * @access   public
     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -184,31 +171,28 @@ class PMF_Glossary
         $this->definition = $this->db->escape_string($definition);
 
         $query = sprintf(
-			"UPDATE
-				%sfaqglossary
-			SET
-				item = '%s',
-				definition = '%s'
-			WHERE
-				id = %d AND lang = '%s'",
-			SQLPREFIX,
-			$this->item,
-			$this->definition,
-			(int)$id,
-			$this->language);
+            "UPDATE
+                %sfaqglossary
+            SET
+                item = '%s',
+                definition = '%s'
+            WHERE
+                id = %d AND lang = '%s'",
+            SQLPREFIX,
+            $this->item,
+            $this->definition,
+            (int)$id,
+            $this->language);
         if ($this->db->query($query)) {
             return true;
         }
-		return false;
+        return false;
     }
-    //*/
-
-
 
     /**
     * Deletes an item and definition into the database
     *
-    * @param    integer	$id
+    * @param    integer    $id
     * @return   boolean
     * @access   public
     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -216,17 +200,16 @@ class PMF_Glossary
     function deleteGlossaryItem($id)
     {
         $query = sprintf(
-			"DELETE FROM
-				%sfaqglossary
-			WHERE
-				id = %d AND lang = '%s'",
-			SQLPREFIX,
-			(int)$id,
-			$this->language);
+            "DELETE FROM
+                %sfaqglossary
+            WHERE
+                id = %d AND lang = '%s'",
+            SQLPREFIX,
+            (int)$id,
+            $this->language);
         if ($this->db->query($query)) {
             return true;
         }
         return false;
     }
-    //*/
 }

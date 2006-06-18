@@ -116,13 +116,13 @@ class PMF_Perm
         }
         $classfile = dirname(__FILE__)."/".$perm->_perm_typemap[$perm_level].".php";
         if (!file_exists($classfile)) {
-        	return $perm;
+            return $perm;
         }
         // instantiate 
         $permclass = "PMF_".$perm->_perm_typemap[$perm_level];
         if (!class_exists($permclass))
             require_once $classfile;
-		$perm = new $permclass();
+        $perm = new $permclass();
         return $perm;
     }
 
@@ -175,11 +175,11 @@ class PMF_Perm
      * @param int
      * @return bool
      */
-    function addDb($db, $context = '', $context_id = 0)
+    function addDb(&$db, $context = '', $context_id = 0)
     {
-        if (!PMF_User::checkDb($db))
+        if (!PMF_User::checkDb(&$db))
             return false;
-        $this->_db = $db;
+        $this->_db = &$db;
         $this->_initialized = true;
         return true;
     }

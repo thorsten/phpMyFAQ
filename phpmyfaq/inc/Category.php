@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Category.php,v 1.1 2006-06-11 14:26:55 matteo Exp $
+* $Id: Category.php,v 1.2 2006-06-18 06:55:31 matteo Exp $
 *
 * The main category class
 *
@@ -106,12 +106,12 @@ class PMF_Category
         global $db;
 
         $this->language   = $language;
-        $this->db         = $db;
+        $this->db         = &$db;
         $this->categories = array();
         $this->lineTab    = $this->getOrderedCategories();
 
         for ($i = 0; $i < count($this->lineTab); $i++) {
-			$this->lineTab[$i]['level'] = $this->levelOf($this->lineTab[$i]['id']);
+            $this->lineTab[$i]['level'] = $this->levelOf($this->lineTab[$i]['id']);
         }
     }
 
@@ -225,7 +225,7 @@ class PMF_Category
     }
 
     /* get the level of the item id */
-	function levelOf($id)
+    function levelOf($id)
     {
         $ret = 0;
         while ((isset($this->categoryName[$id]['parent_id'])) && ($this->categoryName[$id]['parent_id'] != 0)) {
@@ -235,33 +235,33 @@ class PMF_Category
         return $ret;
     }
 
-	// Get the line number where to find the node $id
-	function getLine($id)
+    // Get the line number where to find the node $id
+    function getLine($id)
     {
         for ($i = 0; $i < count($this->lineTab); $i++) {
             if ($this->lineTab[$i]['id'] == $id) {
                 return $i;
             }
         }
-	}
+    }
 
-	/**
-	* transform()
-	*
-	* Transforms the linear array in a 1D array in the order of the tree, with the info
-	*
-	* @param   integer     $id
-	* @return  void
-	* @access  public
-	* @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-	* @since   2004-02-16
-	*/
-	function transform($id)
+    /**
+    * transform()
+    *
+    * Transforms the linear array in a 1D array in the order of the tree, with the info
+    *
+    * @param   integer     $id
+    * @return  void
+    * @access  public
+    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+    * @since   2004-02-16
+    */
+    function transform($id)
     {
         $thisParent_id = 0;
         $tree = array();
-		$tabs = isset($this->children[$id]) ? array_keys($this->children[$id]) : array();
-		$num = count($tabs);
+        $tabs = isset($this->children[$id]) ? array_keys($this->children[$id]) : array();
+        $num = count($tabs);
 
         if ($id > 0) {
             $thisLevel = $this->categoryName[$id]['level'];
@@ -270,14 +270,14 @@ class PMF_Category
             $thisdescription = $this->categoryName[$id]['description'];
         }
 
-		if ($num > 0) {
-			$symbol = 'minus';
+        if ($num > 0) {
+            $symbol = 'minus';
         } else {
-			$temp = isset($this->children[$thisParent_id]) ? array_keys($this->children[$thisParent_id]) : array();
-			if (isset($temp[count($temp)-1])) {
-			    $symbol = ($id == $temp[count($temp)-1]) ? 'angle' : 'medium';
-			}
-		}
+            $temp = isset($this->children[$thisParent_id]) ? array_keys($this->children[$thisParent_id]) : array();
+            if (isset($temp[count($temp)-1])) {
+                $symbol = ($id == $temp[count($temp)-1]) ? 'angle' : 'medium';
+            }
+        }
 
         $ascendants = $this->getNodes($id);
         $num_ascendants = count($ascendants);
@@ -289,92 +289,92 @@ class PMF_Category
             }
         }
 
-		if ($id > 0) {
+        if ($id > 0) {
             $this->treeTab[] = array('id' => $id, 'symbol' => $symbol, 'name' => $thisName, 'numChilds' => count($tabs), 'level' => $thisLevel, 'parent_id' => $thisParent_id, 'childs' => $tabs, 'tree' => $tree, 'description' => $thisdescription);
         }
 
-		foreach ($tabs as $i ) {
-			$this->transform($i);
+        foreach ($tabs as $i ) {
+            $this->transform($i);
         }
-	}
+    }
 
-	// get the id of the parent_id, i.e. where parent_id == 0
-	function getParent_id()
+    // get the id of the parent_id, i.e. where parent_id == 0
+    function getParent_id()
     {
-		for ($i = 0; $i < count($this->lineTab); $i++) {
-			if ($this->lineTab[$i]['parent_id'] == 0) {
-				return $this->lineTab[$i]['id'];
+        for ($i = 0; $i < count($this->lineTab); $i++) {
+            if ($this->lineTab[$i]['parent_id'] == 0) {
+                return $this->lineTab[$i]['id'];
             }
         }
-	}
+    }
 
-	// get the line number where to find the node $id in the category tree
-	function getLineCategory($id)
+    // get the line number where to find the node $id in the category tree
+    function getLineCategory($id)
     {
         for ($i = 0; $i < count($this->treeTab); $i++) {
-			if (isset($this->treeTab[$i]['id']) && $this->treeTab[$i]['id'] == $id) {
+            if (isset($this->treeTab[$i]['id']) && $this->treeTab[$i]['id'] == $id) {
                 return $i;
             }
         }
-	}
+    }
 
-	// list in a array of the $id of the child
-	function getChildren($id)
+    // list in a array of the $id of the child
+    function getChildren($id)
     {
-		return isset($this->children[$id]) ? array_keys($this->children[$id]) : array();
-	}
+        return isset($this->children[$id]) ? array_keys($this->children[$id]) : array();
+    }
 
-	// number of childs of the $id
-	function numChilds($id)
+    // number of childs of the $id
+    function numChilds($id)
     {
-		return count($this->getNodes($id));
-	}
+        return count($this->getNodes($id));
+    }
 
-	// list in array the root, super-root, ... of the $id
-	function getNodes($id)
+    // list in array the root, super-root, ... of the $id
+    function getNodes($id)
     {
         if (($id > 0) && (isset($this->categoryName[$id]['level']))) {
             $thisLevel = $this->categoryName[$id]['level'];
             $temp = array();
-    		for ($i = $thisLevel; $i > 0; $i--) {
-    		    $id = $this->categoryName[$id]['parent_id'];
+            for ($i = $thisLevel; $i > 0; $i--) {
+                $id = $this->categoryName[$id]['parent_id'];
                 array_unshift($temp, $id);
             }
             return $temp;
         }
-	}
+    }
 
-	// collapse the node $id
-	function collapse($id)
+    // collapse the node $id
+    function collapse($id)
     {
         if (isset($this->treeTab[$this->getLineCategory($id)]['symbol'])) {
             $this->treeTab[$this->getLineCategory($id)]['symbol'] = 'plus';
         }
-	}
+    }
 
-	// collapse the complete category tree
-	function collapseAll()
+    // collapse the complete category tree
+    function collapseAll()
     {
-		for ($i = 0; $i < count($this->treeTab); $i++) {
-			if ($this->treeTab[$i]["symbol"] == "minus") {
-				$this->treeTab[$i]["symbol"] = "plus";
+        for ($i = 0; $i < count($this->treeTab); $i++) {
+            if ($this->treeTab[$i]["symbol"] == "minus") {
+                $this->treeTab[$i]["symbol"] = "plus";
             }
         }
-	}
+    }
 
-	// expand the node $id
-	function expand($id)
+    // expand the node $id
+    function expand($id)
     {
-		$this->treeTab[$this->getLineCategory($id)]["symbol"] = "minus";
-	}
+        $this->treeTab[$this->getLineCategory($id)]["symbol"] = "minus";
+    }
 
-	// try to expand from the parent_id to the node $id
-	function expandTo($id)
+    // try to expand from the parent_id to the node $id
+    function expandTo($id)
     {
-		$this->collapseAll();
-		$ascendants = $this->getNodes($id);
-		$ascendants[] = $id;
-		for ($i = 0; $i < count($ascendants); $i++) {
+        $this->collapseAll();
+        $ascendants = $this->getNodes($id);
+        $ascendants[] = $id;
+        for ($i = 0; $i < count($ascendants); $i++) {
             $numChilds = 0;
             if (isset($this->treeTab[$this->getLineCategory($ascendants[$i])]["numChilds"])) {
                 $numChilds = $this->treeTab[$this->getLineCategory($ascendants[$i])]["numChilds"];
@@ -384,43 +384,42 @@ class PMF_Category
                     $i = count($ascendants);
                 }
             }
-		}
-	}
+        }
+    }
 
-	// expand the entire tree
-	function expandAll()
+    // expand the entire tree
+    function expandAll()
     {
-		for ($i = 0; $i < count($this->treeTab); $i++) {
-			if ($this->treeTab[$i]["symbol"] == "plus") {
-				$this->treeTab[$i]["symbol"] = "minus";
+        for ($i = 0; $i < count($this->treeTab); $i++) {
+            if ($this->treeTab[$i]["symbol"] == "plus") {
+                $this->treeTab[$i]["symbol"] = "minus";
             }
         }
-	}
+    }
 
-
-	// width of the expanded tree
-	function width()
+    // width of the expanded tree
+    function width()
     {
-		for ($x = -1, $i = 0; $i < count($this->treeTab) ; $i = $this->getNextLineTree($i)) {
-			$x = max($x,$this->treeTab[$i]["level"]);
+        for ($x = -1, $i = 0; $i < count($this->treeTab) ; $i = $this->getNextLineTree($i)) {
+            $x = max($x,$this->treeTab[$i]["level"]);
         }
-		return $x;
-	}
+        return $x;
+    }
 
-	// total height of the expanded tree
-	function height()
+    // total height of the expanded tree
+    function height()
     {
-		return count($this->treeTab);
-	}
+        return count($this->treeTab);
+    }
 
-	/**
+    /**
     * print the static tree with the number of records
     *
     * @return   string
     * @access   public
     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
     */
-	function viewTree()
+    function viewTree()
     {
         global $sids, $PMF_LANG, $PMF_CONF;
 
@@ -433,14 +432,14 @@ class PMF_Category
         $query .= " AND ".SQLPREFIX."faqdata.active = 'yes' GROUP BY ".SQLPREFIX."faqcategoryrelations.category_id";
 
         $result = $this->db->query($query);
-	    if ($this->db->num_rows($result) > 0) {
-		    while ($row = $this->db->fetch_object($result)) {
+        if ($this->db->num_rows($result) > 0) {
+            while ($row = $this->db->fetch_object($result)) {
                 $number[$row->category_id] = $row->number;
             }
         }
         $output = "<ul>\n";
         $open = 0;
-		$this->expandAll();
+        $this->expandAll();
 
         for ($y = 0 ;$y < $this->height(); $y = $this->getNextLineTree($y)) {
 
@@ -495,45 +494,45 @@ class PMF_Category
         $output .= "\t</li>\n";
         $output .= "\t</ul>\n";
         return $output;
-	}
+    }
 
     // return the three parts of a line to display: last part of tree, category name, and id of the root node
-	function getLineDisplay($y)
+    function getLineDisplay($y)
     {
-		$ret[0] = $this->symbols[$this->treeTab[$y]["symbol"]];
-		$ret[1] = $this->treeTab[$y]["name"];
-		$ret[2] = $this->treeTab[$y]["id"];
+        $ret[0] = $this->symbols[$this->treeTab[$y]["symbol"]];
+        $ret[1] = $this->treeTab[$y]["name"];
+        $ret[2] = $this->treeTab[$y]["id"];
         $ret[3] = $this->treeTab[$y]["description"];
-		return $ret;
-	}
+        return $ret;
+    }
 
     // get the next line in the array treeTab, depending of the collapse/expand node
-	function getNextLineTree($l)
+    function getNextLineTree($l)
     {
-		if ($this->treeTab[$l]["symbol"] != "plus") {
-			return $l + 1;
+        if ($this->treeTab[$l]["symbol"] != "plus") {
+            return $l + 1;
         } else {
-			for ($i = $l + 1; $i < $this->height(); $i++) {
-				if ($this->treeTab[$i]["level"]<=$this->treeTab[$l]["level"]) {
-					return $i;
+            for ($i = $l + 1; $i < $this->height(); $i++) {
+                if ($this->treeTab[$i]["level"]<=$this->treeTab[$l]["level"]) {
+                    return $i;
                 }
             }
         }
-		return $this->height();
-	}
+        return $this->height();
+    }
 
-	/**
+    /**
     * get the list of the brothers of $id (include $id)
     *
     * @param    integer
     * @return   array
     * @access   public
     */
-	function getBrothers($id)
+    function getBrothers($id)
     {
-		$ret = $this->getChildren($this->categoryName[$id]['parent_id']);
-		return $ret;
-	}
+        $ret = $this->getChildren($this->categoryName[$id]['parent_id']);
+        return $ret;
+    }
 
     /**
     * Get all categories in <option> tags
@@ -575,7 +574,6 @@ class PMF_Category
         return $categories;
     }
 
-
     /**
     * Get all categories in a unordered list
     *
@@ -604,7 +602,6 @@ class PMF_Category
         $categories .= '</ul>';
         return $categories;
     }
-
 
     /**
     * Displays the main navigation
@@ -657,22 +654,22 @@ class PMF_Category
 
                 if (isset($this->treeTab[$y]['symbol']) && $this->treeTab[$y]['symbol'] == 'plus') {
                     if (isset($PMF_CONF['mod_rewrite']) && $PMF_CONF['mod_rewrite'] == "TRUE") {
-            		    $output .= "<a title=\"".addslashes($description)."\" href=\"category".$parent.".html\"".$a.">".$categoryName." <img src=\"images/more.gif\" width=\"11\" height=\"11\" alt=\"".$categoryName."\" style=\"border: none; vertical-align: middle;\" /></a>";
+                        $output .= "<a title=\"".addslashes($description)."\" href=\"category".$parent.".html\"".$a.">".$categoryName." <img src=\"images/more.gif\" width=\"11\" height=\"11\" alt=\"".$categoryName."\" style=\"border: none; vertical-align: middle;\" /></a>";
                     } else {
                         $output .= "<a title=\"".addslashes($description)."\" href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=show&amp;cat=".$parent."\"".$a.">".$categoryName." <img src=\"images/more.gif\" width=\"11\" height=\"11\" alt=\"".$categoryName."\" style=\"border: none; vertical-align: middle;\" /></a>";
                     }
                 } else {
-            		if ($this->treeTab[$y]["symbol"] == "minus") {
+                    if ($this->treeTab[$y]["symbol"] == "minus") {
                         if (isset($PMF_CONF['mod_rewrite']) && $PMF_CONF['mod_rewrite'] == "TRUE") {
                             $output .= "<a title=\"".addslashes($description)."\" href=\"category".$this->treeTab[$y]["parent_id"].".html\"".$a.">".$categoryName."</a>";
                         } else {
-            			    $output .= "<a title=\"".addslashes($description)."\" href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=show&amp;cat=".$this->treeTab[$y]["parent_id"]."\"".$a.">".$categoryName."</a>";
+                            $output .= "<a title=\"".addslashes($description)."\" href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=show&amp;cat=".$this->treeTab[$y]["parent_id"]."\"".$a.">".$categoryName."</a>";
                         }
                     } else {
-            			if (isset($PMF_CONF['mod_rewrite']) && $PMF_CONF['mod_rewrite'] == "TRUE") {
+                        if (isset($PMF_CONF['mod_rewrite']) && $PMF_CONF['mod_rewrite'] == "TRUE") {
                             $output .= "<a title=\"".addslashes($description)."\" href=\"category".$parent.".html\"".$a.">".$categoryName."</a>";
                         } else {
-            			    $output .= "<a title=\"".addslashes($description)."\" href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=show&amp;cat=".$parent."\"".$a.">".$categoryName."</a>";
+                            $output .= "<a title=\"".addslashes($description)."\" href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=show&amp;cat=".$parent."\"".$a.">".$categoryName."</a>";
                         }
                     }
                 }
@@ -754,7 +751,7 @@ class PMF_Category
         } else {
             return implode($separator, $temp);
         }
-	}
+    }
 
     /**
     * getCategoriesFromArticle

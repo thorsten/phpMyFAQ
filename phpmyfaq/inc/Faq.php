@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.13 2006-06-17 22:09:48 thorstenr Exp $
+* $Id: Faq.php,v 1.14 2006-06-18 06:55:31 matteo Exp $
 *
 * The main FAQ class
 *
@@ -61,32 +61,32 @@ class FAQ
     * Constructor
     *
     */
-    function FAQ($db, $language)
+    function FAQ(&$db, $language)
     {
         global $PMF_LANG;
 
-        $this->db = $db;
+        $this->db = &$db;
         $this->language = $language;
         $this->pmf_lang = $PMF_LANG;
-	}
+    }
 
-	//
-	//
-	// PUBLIC METHODS
-	//
-	//
+    //
+    //
+    // PUBLIC METHODS
+    //
+    //
 
-	/**
-	* showAllRecords()
-	*
-	* This function returns all records from one category
-	*
-	* @param    int     category id
-	* @return   string
-	* @access   public
-	* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-	* @since    2002-08-27
-	*/
+    /**
+    * showAllRecords()
+    *
+    * This function returns all records from one category
+    *
+    * @param    int     category id
+    * @return   string
+    * @access   public
+    * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+    * @since    2002-08-27
+    */
     function showAllRecords($category)
     {
         global $sids, $PMF_CONF;
@@ -200,7 +200,7 @@ class FAQ
 
             $output .= "</strong></p>";
         }
-	   return $output;
+       return $output;
     }
 
     /**
@@ -280,7 +280,7 @@ class FAQ
         $query = sprintf("SELECT id, lang FROM %sfaqdata WHERE solution_id = %s", SQLPREFIX, $solution_id);
         $result = $this->db->query($query);
         if ($row = $this->db->fetch_object($result)) {
-        	return array('id' => $row->id, 'lang' => $row->lang);
+            return array('id' => $row->id, 'lang' => $row->lang);
         }
         return null;
     }
@@ -427,8 +427,8 @@ class FAQ
     */
     function getVotingResult($id)
     {
- 	  $result = $this->db->query(sprintf('SELECT (vote/usr) as voting, usr FROM %sfaqvoting WHERE artikel = %d', SQLPREFIX, $id));
-	   if ($this->db->num_rows($result) > 0) {
+       $result = $this->db->query(sprintf('SELECT (vote/usr) as voting, usr FROM %sfaqvoting WHERE artikel = %d', SQLPREFIX, $id));
+       if ($this->db->num_rows($result) > 0) {
             $row = $this->db->fetch_object($result);
             return sprintf(' %s %s 5 (%d %s)', round($row->voting, 2), $this->pmf_lang['msgVoteFrom'], $row->usr, $this->pmf_lang['msgVotings']);
        } else {
@@ -590,8 +590,8 @@ class FAQ
                 } else {
                     $data['url'] = sprintf('?%d&amp;action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s', $sids, $row->category_id, $row->id, $row->lang);
                 }
-	        $topten[] = $data;
-	        $i++;
+            $topten[] = $data;
+            $i++;
             }
             $oldId = $row->id;
         }
@@ -661,7 +661,4 @@ class FAQ
         }
         return $latest;
     }
-
-
-
 }

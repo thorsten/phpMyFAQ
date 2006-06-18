@@ -217,10 +217,10 @@ class PMF_User
      * @param object
      * @return void
      */
-    function addDb($db)
+    function addDb(&$db)
     {
         if ($this->checkDb($db)) {
-        	$this->_db = $db;
+            $this->_db = &$db;
             return true;
         }
         $this->_db = null;
@@ -257,31 +257,31 @@ class PMF_User
     {
         // check db
         if (!$this->checkDb($this->_db))
-		    return false;
-		// get user
+            return false;
+        // get user
         $res = $this->_db->query("
-		  SELECT
-		    user_id,
-		    login,
-		    account_status
-		  FROM
-		    ".PMF_USER_SQLPREFIX."user
-		  WHERE
-			user_id = ".(int) $user_id
+          SELECT
+            user_id,
+            login,
+            account_status
+          FROM
+            ".PMF_USER_SQLPREFIX."user
+          WHERE
+            user_id = ".(int) $user_id
         );
-		if ($this->_db->num_rows($res) != 1) {
-			$this->errors[] = PMF_USERERROR_NO_USERID . 'error(): ' . $this->_db->error();
-			return false;
-		}
-		$user = $this->_db->fetch_assoc($res);
-		$this->_user_id = (int)    $user['user_id'];
+        if ($this->_db->num_rows($res) != 1) {
+            $this->errors[] = PMF_USERERROR_NO_USERID . 'error(): ' . $this->_db->error();
+            return false;
+        }
+        $user = $this->_db->fetch_assoc($res);
+        $this->_user_id = (int)    $user['user_id'];
         $this->_login   = (string) $user['login'];
-		$this->_status  = (string) $user['account_status'];
-		// get user-data
+        $this->_status  = (string) $user['account_status'];
+        // get user-data
         if (!$this->userdata)
-		    $this->userdata = new PMF_UserData($this->_db);
-		$this->userdata->load($this->getUserId());
-		return true;
+            $this->userdata = new PMF_UserData($this->_db);
+        $this->userdata->load($this->getUserId());
+        return true;
     }
 
     /**
@@ -298,32 +298,32 @@ class PMF_User
     {
         // check db
         if (!$this->checkDb($this->_db))
-		    return false;
-		// get user
+            return false;
+        // get user
         $res = $this->_db->query("
-		  SELECT
-		    user_id,
-		    login,
-		    account_status
-		  FROM
-		    ".PMF_USER_SQLPREFIX."user
-		  WHERE
-			login = '".$this->_db->escape_string($login)."'
-		");
-		if ($this->_db->num_rows($res) != 1) {
-			if ($raise_error)
-			    $this->errors[] = PMF_USERERROR_INCORRECT_LOGIN;
-			return false;
-		}
-		$user = $this->_db->fetch_assoc($res);
-		$this->_user_id = (int)    $user['user_id'];
+          SELECT
+            user_id,
+            login,
+            account_status
+          FROM
+            ".PMF_USER_SQLPREFIX."user
+          WHERE
+            login = '".$this->_db->escape_string($login)."'
+        ");
+        if ($this->_db->num_rows($res) != 1) {
+            if ($raise_error)
+                $this->errors[] = PMF_USERERROR_INCORRECT_LOGIN;
+            return false;
+        }
+        $user = $this->_db->fetch_assoc($res);
+        $this->_user_id = (int)    $user['user_id'];
         $this->_login   = (string) $user['login'];
-		$this->_status  = (string) $user['account_status'];
-		// get user-data
+        $this->_status  = (string) $user['account_status'];
+        // get user-data
         if (!$this->userdata)
-		    $this->userdata = new PMF_UserData($this->_db);
-		$this->userdata->load($this->getUserId());
-		return true;
+            $this->userdata = new PMF_UserData($this->_db);
+        $this->userdata->load($this->getUserId());
+        return true;
     }
 
     /**
@@ -338,11 +338,11 @@ class PMF_User
     function createUser($login, $pass = '')
     {
         if (!$this->checkDb($this->_db))
-		    return false;
+            return false;
         foreach ($this->_auth_container as $name => $auth) {
-        	if (!$this->checkAuth($auth)) {
-        		return false;
-        	}
+            if (!$this->checkAuth($auth)) {
+                return false;
+            }
         }
         // is $login valid?
         $login = (string) $login;
@@ -350,7 +350,7 @@ class PMF_User
             return false;
         // does $login already exist?
         if ($this->getUserByLogin($login, false)) {
-        	$this->errors[] = PMF_USERERROR_LOGIN_NOT_UNIQUE;
+            $this->errors[] = PMF_USERERROR_LOGIN_NOT_UNIQUE;
             return false;
         }
         // set user-ID
@@ -365,25 +365,25 @@ class PMF_User
         ");
         // create user-data entry
         if (!$this->userdata)
-		    $this->userdata = new PMF_UserData($this->_db);
-		$data = $this->userdata->add($this->getUserId());
-		if (!$data) {
-			$this->errors[] = PMF_USERERROR_CANNOT_CREATE_USERDATA;
-		    return false;
-		}
+            $this->userdata = new PMF_UserData($this->_db);
+        $data = $this->userdata->add($this->getUserId());
+        if (!$data) {
+            $this->errors[] = PMF_USERERROR_CANNOT_CREATE_USERDATA;
+            return false;
+        }
         // create authentication entry
         if ($pass == '')
-        	$pass = $this->createPassword();
+            $pass = $this->createPassword();
         $success = false;
         foreach ($this->_auth_container as $name => $auth) {
-        	if ($auth->read_only()) {
-        		continue;
-        	}
-        	if (!$auth->add($login, $pass)) {
-        		$this->errors[] = PMF_USERERROR_CANNOT_CREATE_USER.'in PMF_Auth '.$name;
-        	} else {
-        		$success = true;
-        	}
+            if ($auth->read_only()) {
+                continue;
+            }
+            if (!$auth->add($login, $pass)) {
+                $this->errors[] = PMF_USERERROR_CANNOT_CREATE_USER.'in PMF_Auth '.$name;
+            } else {
+                $success = true;
+            }
         }
         if (!$success)
             return false;
@@ -401,18 +401,18 @@ class PMF_User
     {
         // check user-ID
         if (!isset($this->_user_id) or $this->_user_id == 0) {
-        	$this->errors[] = PMF_USERERROR_NO_USERID;
-        	return false;
+            $this->errors[] = PMF_USERERROR_NO_USERID;
+            return false;
         }
         // check login
         if (!isset($this->_login) or strlen($this->_login) == 0) {
-        	$this->errors[] = PMF_USERERROR_LOGIN_INVALID;
-        	return false;
+            $this->errors[] = PMF_USERERROR_LOGIN_INVALID;
+            return false;
         }
         // user-account is protected
         if (isset($this->_allowed_status[$this->_status]) and $this->_allowed_status[$this->_status] == PMF_USERSTATUS_PROTECTED) {
-			$this->errors[] = PMF_USERERROR_CANNOT_DELETE_USER . PMF_USERSTATUS_PROTECTED;
-			return false;
+            $this->errors[] = PMF_USERERROR_CANNOT_DELETE_USER . PMF_USERSTATUS_PROTECTED;
+            return false;
         }
         // check db
         if (!$this->checkDb($this->_db)) {
@@ -421,46 +421,46 @@ class PMF_User
         // delete user rights
         $this->perm->refuseAllUserRights($this->_user_id);
         // delete user account
-		$res = $this->_db->query("
-		  DELETE FROM
-		    ".PMF_USER_SQLPREFIX."user
-		  WHERE
-		    user_id = ".$this->_user_id
+        $res = $this->_db->query("
+          DELETE FROM
+            ".PMF_USER_SQLPREFIX."user
+          WHERE
+            user_id = ".$this->_user_id
         );
-		if (!$res) {
-			$this->errors[] = PMF_CANNOT_DELETE_USER . 'error(): ' . $this->_db->error();
-			return false;
-		}
+        if (!$res) {
+            $this->errors[] = PMF_CANNOT_DELETE_USER . 'error(): ' . $this->_db->error();
+            return false;
+        }
         // delete user-data entry
         if (!$this->userdata)
-		    $this->userdata = new PMF_UserData($this->_db);
-		$data = $this->userdata->delete($this->getUserId());
-		if (!$data) {
-			$this->errors[] = PMF_USERERROR_CANNOT_DELETE_USERDATA;
-		    return false;
-		}
-		// delete authentication entry
-		$read_only = 0;
-		$auth_count = 0;
-		$delete = array();
-		foreach ($this->_auth_container as $name => $auth) {
-			$auth_count++;
-			// auth link is not writable
-			if ($auth->read_only()) {
-				$read_only++;
-				continue;
-			}
-			// try to delete authentication entry
-			$delete[] = $auth->delete($this->_login);
-		}
-		// there was no writable authentication object
-		if ($read_only == $auth_count) {
-			$this->errors[] = PMF_USERERROR_NO_AUTH_WRITABLE;
-		}
-		// deletion unsuccessful
-		if (!in_array(true, $delete))
-		    return false;
-		return true;
+            $this->userdata = new PMF_UserData($this->_db);
+        $data = $this->userdata->delete($this->getUserId());
+        if (!$data) {
+            $this->errors[] = PMF_USERERROR_CANNOT_DELETE_USERDATA;
+            return false;
+        }
+        // delete authentication entry
+        $read_only = 0;
+        $auth_count = 0;
+        $delete = array();
+        foreach ($this->_auth_container as $name => $auth) {
+            $auth_count++;
+            // auth link is not writable
+            if ($auth->read_only()) {
+                $read_only++;
+                continue;
+            }
+            // try to delete authentication entry
+            $delete[] = $auth->delete($this->_login);
+        }
+        // there was no writable authentication object
+        if ($read_only == $auth_count) {
+            $this->errors[] = PMF_USERERROR_NO_AUTH_WRITABLE;
+        }
+        // deletion unsuccessful
+        if (!in_array(true, $delete))
+            return false;
+        return true;
     }
 
     /**
@@ -475,27 +475,27 @@ class PMF_User
     function changePassword($pass = '')
     {
         if (!$this->checkDb($this->_db))
-		    return false;
+            return false;
         foreach ($this->_auth_container as $name => $auth) {
-        	if (!$this->checkAuth($auth)) {
-        		return false;
-        	}
+            if (!$this->checkAuth($auth)) {
+                return false;
+            }
         }
         // update authentication entry
         $login = $this->getLogin();
         if ($pass == '')
-        	$pass = $this->createPassword();
+            $pass = $this->createPassword();
         $success = false;
         foreach ($this->_auth_container as $name => $auth) {
-        	if ($auth->read_only()) {
-        		continue;
-        	}
-        	if (!$auth->changePassword($login, $pass)) {
-        		continue;
-        	}
-        	else {
-        		$success = true;
-        	}
+            if ($auth->read_only()) {
+                continue;
+            }
+            if (!$auth->changePassword($login, $pass)) {
+                continue;
+            }
+            else {
+                $success = true;
+            }
         }
         return $success;
     }
@@ -525,12 +525,12 @@ class PMF_User
         }
         // authentication objects
         if (count($auth) > 0) {
-        	foreach ($auth as $name => $auth_object) {
-        		if (!$this->addAuth($auth_object, $name)) {
-        		    return false;
-					break;
-        		}
-        	}
+            foreach ($auth as $name => $auth_object) {
+                if (!$this->addAuth($auth_object, $name)) {
+                    return false;
+                    break;
+                }
+            }
         }*/
         // phpMyFAQ constructor
         // database access
@@ -580,12 +580,12 @@ class PMF_User
             return false;
         // additionally, set given $auth objects
         if (count($auth) > 0) {
-        	foreach ($auth as $name => $auth_object) {
-        		if (!$this->addAuth($auth_object, $name)) {
-        		    return false;
-					break;
-        		}
-        	}
+            foreach ($auth as $name => $auth_object) {
+                if (!$this->addAuth($auth_object, $name)) {
+                    return false;
+                    break;
+                }
+            }
         } else {
         }
         // user data object
@@ -602,7 +602,7 @@ class PMF_User
     function getStatus()
     {
         if (isset($this->_status) and strlen($this->_status) > 0) {
-        	return $this->_status;
+            return $this->_status;
         }
         return false;
     }
@@ -626,28 +626,28 @@ class PMF_User
         // check user-ID
         $user_id = $this->getUserId();
         if (!$user_id) {
-			$this->errors[] = PMF_USERERROR_NO_USERID;
+            $this->errors[] = PMF_USERERROR_NO_USERID;
             return false;
         }
         // check db
         if (!$this->_db) {
-        	$this->errors[] = PMF_USERERROR_NO_DB;
-		    return false;
+            $this->errors[] = PMF_USERERROR_NO_DB;
+            return false;
         }
         // update status
         $this->_status = $status;
         $res = $this->_db->query("
-		  UPDATE
-		    ".PMF_USER_SQLPREFIX."user
-		  SET
-		    account_status = '".$status."'
-		  WHERE
-		    user_id = ".$user_id
+          UPDATE
+            ".PMF_USER_SQLPREFIX."user
+          SET
+            account_status = '".$status."'
+          WHERE
+            user_id = ".$user_id
         );
-		// return bool
-		if ($res)
-		    return true;
-		return false;
+        // return bool
+        if ($res)
+            return true;
+        return false;
     }
 
     /**
@@ -662,11 +662,11 @@ class PMF_User
     {
         $methods = array('query', 'num_rows', 'fetch_assoc', 'error');
         foreach ($methods as $method) {
-        	if (!method_exists($db, $method)) {
-				$this->errors[] = PMF_USERERROR_NO_DB;
-        		return false;
-        		break;
-        	}
+            if (!method_exists($db, $method)) {
+                $this->errors[] = PMF_USERERROR_NO_DB;
+                return false;
+                break;
+            }
         }
         return true;
     }
@@ -687,7 +687,7 @@ class PMF_User
     {
         $message = '';
         foreach ($this->errors as $error) {
-        	$message .= $error."\n";
+            $message .= $error."\n";
         }
         $this->errors = array();
         return $message;
@@ -722,7 +722,7 @@ class PMF_User
     {
         $login = (string) $login;
         if (strlen($login) < $this->_login_minLength or preg_match($this->_login_invalidRegExp, $login)) {
-        	$this->errors[] = PMF_USERERROR_LOGIN_INVALID;
+            $this->errors[] = PMF_USERERROR_LOGIN_INVALID;
             return false;
         }
         return true;
@@ -740,7 +740,7 @@ class PMF_User
     function addAuth($auth, $name)
     {
         if ($this->checkAuth($auth)) {
-        	$this->_auth_container[$name] = $auth;
+            $this->_auth_container[$name] = $auth;
             return true;
         }
         return false;
@@ -758,11 +758,11 @@ class PMF_User
     {
         $methods = array('checkPassword');
         foreach ($methods as $method) {
-        	if (!method_exists($auth, strtolower($method))) {
-				$this->errors[] = PMF_USERERROR_NO_AUTH;
-        		return false;
-        		break;
-        	}
+            if (!method_exists($auth, strtolower($method))) {
+                $this->errors[] = PMF_USERERROR_NO_AUTH;
+                return false;
+                break;
+            }
         }
         return true;
     }
@@ -804,8 +804,8 @@ class PMF_User
      */
     function createPassword()
     {
-		srand((double)microtime()*1000000);
-  		return (string) uniqid(rand());
+        srand((double)microtime()*1000000);
+          return (string) uniqid(rand());
     }
 
     /**
@@ -820,8 +820,8 @@ class PMF_User
     {
         // get user-data entry
         if (!$this->userdata)
-		    $this->userdata = new PMF_UserData($this->_db);
-		return $this->userdata->get($field);
+            $this->userdata = new PMF_UserData($this->_db);
+        return $this->userdata->get($field);
     }
 
     /**
@@ -836,9 +836,9 @@ class PMF_User
     {
         // set user-data entry
         if (!$this->userdata)
-		    $this->userdata = new PMF_UserData($this->_db);
-		$this->userdata->load($this->getUserId());
-		return $this->userdata->set(array_keys($data), array_values($data));
+            $this->userdata = new PMF_UserData($this->_db);
+        $this->userdata->load($this->getUserId());
+        return $this->userdata->set(array_keys($data), array_values($data));
     }
 
     /**
