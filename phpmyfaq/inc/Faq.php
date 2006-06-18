@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.17 2006-06-18 08:05:33 thorstenr Exp $
+* $Id: Faq.php,v 1.18 2006-06-18 08:19:44 matteo Exp $
 *
 * The main FAQ class
 *
@@ -176,7 +176,7 @@ class FAQ
                 if (isset($PMF_CONF['mod_rewrite']) && $PMF_CONF['mod_rewrite'] == true) {
                     $output .= sprintf('[ <a href="category%d_%d.html">%s</a> ]', $category, $previous, $this->pmf_lang['msgPrevious']);
                 } else {
-                    $output .= sprintf('[ <a href="?%daction=show&amp;cat=%d&amp;seite=%d">%s</a> ]', $sids, $category, $previous, $this->pmf_lang['msgPrevious']);
+                    $output .= sprintf('[ <a href="?%saction=show&amp;cat=%d&amp;seite=%d">%s</a> ]', $sids, $category, $previous, $this->pmf_lang['msgPrevious']);
                 }
             }
 
@@ -186,7 +186,7 @@ class FAQ
                 if (isset($PMF_CONF['mod_rewrite']) && $PMF_CONF['mod_rewrite'] == true) {
                     $output .= sprintf('[ <a href="category%d_%d.html">%s</a> ] ', $category, $i, $i);
                 } else {
-                    $output .= sprintf('[ <a href="?%daction=show&amp;cat=%d&amp;seite=%d">%d</a> ] ', $sids, $category, $i, $i);
+                    $output .= sprintf('[ <a href="?%saction=show&amp;cat=%d&amp;seite=%d">%d</a> ] ', $sids, $category, $i, $i);
                 }
             }
 
@@ -194,7 +194,7 @@ class FAQ
                 if (isset($PMF_CONF['mod_rewrite']) && $PMF_CONF['mod_rewrite'] == true) {
                     $output .= sprintf('[ <a href="category%d_%d.html">%s</a> ]', $category, $next, $this->pmf_lang['msgNext']);
                 } else {
-                    $output .= sprintf('[ <a href="?%daction=show&amp;cat=%d&amp;seite=%d">%s</a> ]', $sids, $category, $next, $this->pmf_lang['msgNext']);
+                    $output .= sprintf('[ <a href="?%saction=show&amp;cat=%d&amp;seite=%d">%s</a> ]', $sids, $category, $next, $this->pmf_lang['msgNext']);
                 }
             }
 
@@ -655,7 +655,7 @@ class FAQ
                 if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == true) {
                     $data['url'] = sprintf('%d_%d_%s.html', $row->category_id, $row->id, $row->lang);
                 } else {
-                    $data['url'] = sprintf('?%d&amp;action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s', $sids, $row->category_id, $row->id, $row->lang);
+                    $data['url'] = sprintf('?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s', $sids, $row->category_id, $row->id, $row->lang);
                 }
             $topten[] = $data;
             $i++;
@@ -721,7 +721,7 @@ class FAQ
                 if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == true) {
                     $data['url'] = sprintf('%d_%d_%s.html', $row->category_id, $row->id, $row->lang);
                 } else {
-                    $data['url'] = sprintf('?%d&amp;action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s', $sids, $row->category_id, $row->id, $row->lang);
+                    $data['url'] = sprintf('?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s', $sids, $row->category_id, $row->id, $row->lang);
                 }
                 $latest[] = $data;
                 $i++;
