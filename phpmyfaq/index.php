@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.51 2006-06-18 06:59:27 matteo Exp $
+* $Id: index.php,v 1.52 2006-06-18 08:24:47 matteo Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the
@@ -149,25 +149,22 @@ if ((!isset($_GET['sid'])) && (!isset($_COOKIE['pmf_sid']))) {
 //
 // is user tracking activated?
 //
+$sids = '';
 if (isset($PMF_CONF["tracking"])) {
     if (isset($sid)) {
         if (!isset($_COOKIE['pmf_sid'])) {
             $sids = 'sid='.(int)$sid.'&amp;lang='.$LANGCODE.'&amp;';
-        } else {
-            $sids = '';
         }
     } elseif (isset($_GET['sid']) || isset($_COOKIE['pmf_sid'])) {
         if (!isset($_COOKIE['pmf_sid'])) {
-            $sids = 'sid='.(int)$_GET['sid'].'&amp;lang='.$LANGCODE.'&amp;';
-        } else {
-            $sids = '';
+            if (is_numeric($_GET['sid'])) {
+                $sids = 'sid='.(int)$_GET['sid'].'&amp;lang='.$LANGCODE.'&amp;';
+            }
         }
     }
 } else {
     if (!setcookie('pmf_lang', $LANGCODE, time()+3600)) {
         $sids = 'lang='.$LANGCODE.'&amp;';
-    } else {
-        $sids = '';
     }
 }
 
@@ -359,7 +356,7 @@ $tpl->processTemplate(
 if (isset($auth)) {
     $tpl->processTemplate('loginBox', array(
         'loggedinas'        => $PMF_LANG['ad_user_loggedin'],
-        'currentuser'       => '',//$user->getUserData('display_name'),
+        'currentuser'       => $user->getUserData('display_name'),
         'printLogoutPath'   => $_SERVER['PHP_SELF'].'?action=logout',
         'logout'            => $PMF_LANG['ad_menu_logout']));
 } else {
