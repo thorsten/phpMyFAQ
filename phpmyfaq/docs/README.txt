@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.45 2006-05-06 13:33:54 thorstenr Exp $
+$Id: README.txt,v 1.46 2006-06-18 18:38:29 thorstenr Exp $
 
 phpMyFAQ 2.0.0-dev
 Codename "Prometheus"
@@ -19,6 +19,7 @@ Changes since 1.x:
 - added possibility to delete admin log
 - added configurable visibility of new questions
 - added improved and template-based XHTML export
+- added dynamic related articles
 
 Known issues in phpMyFAQ 2.0.0:
 - some language files need an update
@@ -36,6 +37,30 @@ Version 2.0.0 - n/a
 - added possibility to delete admin log
 - added configurable visibility of new questions
 - added improved and template-based XHTML export
+- added dynamic related articles
+
+Version 1.6.2 - 2006-06-17
+- added user tracking data deletion
+- improved PHP 5 support for MySQL and SQLite
+- updated Dutch translation
+- updated French translation
+- updated Italian translation
+- updated Swedish translation
+- fixed some minor bugs
+
+Version 1.6.1 - 2006-05-13
+- added spam control center
+- added mod_rewrite support for lighttpd
+- added Microsoft Internet Explorer 7 search plugin
+- added automatic admin session expiry notice
+- improved record administration
+- improved user administration
+- improved category administration
+- improved highlighting of searched words
+- updated Italian translation
+- updated German translation
+- updated Danish translation
+- fixed some minor bugs
 
 Version 1.6.0 - 2006-04-21
 - fixed PHP security issue
@@ -358,10 +383,10 @@ Version 1.3.0 - 17.04.2003
 - english documentation
 - many bugfixes
 
-Version 1.2.5b - 24.03.2003  	
+Version 1.2.5b - 24.03.2003
 - bugfixes
 
-Version 1.2.5a - 04.03.2003 	
+Version 1.2.5a - 04.03.2003
 - UBB code bugfixes
 - top ten bugfix
 
@@ -438,8 +463,8 @@ Version 1.1.0 - 11.02.2002
 - better documention
 
 Version 1.0.1a - 15.10.2001
-- file ending .php instead of .php3 
- 
+- file ending .php instead of .php3
+
 Version 1.0.1 - 10.10.2001
 - fixed bugs in installation and update script
 
@@ -448,64 +473,64 @@ Version 1.0 - 30.09.2001
 
 Version 0.95 - 11.09.2001
 - cleaned MySQL table names
-- Documentation 
+- Documentation
 - phpMyFAQ is HTML 4.0 valid
 - minor bug fixes
- 
+
 Version 0.90 - 23.08.2001
-- added update function for version 0.80 
+- added update function for version 0.80
 - added question - answer - system
-- configurable design of the admin area 
+- configurable design of the admin area
 - minor bug fixes
- 
+
 Version 0.87 - 20.07.2001
-- Top Ten and newest records can be switched off 
+- Top Ten and newest records can be switched off
 - minor bug fixes
- 
+
 Version 0.86 - 10.07.2001
 - UBB parser fixed
 - minor bug fixes
- 
+
 Version 0.85 - 08.07.2001
-- added backup module (Import and Export) 
-- UBB-Code support 
+- added backup module (Import and Export)
+- UBB-Code support
 - records can be exported to XML
 - minor bug fixes
- 
+
 Version 0.80a - 07.06.2001
 - minor bug fixes
- 
+
 Version 0.80 - 30.05.2001
 - added form for questions
 - added Top 5 of the newest articles
-- added support fo attachments in reocrds in admin area 
+- added support fo attachments in reocrds in admin area
 - added support for adding records in admin area
 - configuration editable in admin area
 - showing number of users online
 - print function
 - better support in writing comments
 - bugfix: fixed bad output in comments with HTML
- 
+
 Version 0.70 - 27.04.2001
-- installation script 
+- installation script
 - better right management in admin area
 - free designs in configuration possible
 - added support for language files (german, english)
 - bugfix: fixed problem when deleting comments
- 
+
 Version 0.666 - 10.04.2001
 - added support for categories
 - added voting system
 - added support for deleting comments
 - minor bug fixes
- 
+
 Version 0.65 - 18.03.2001
 - added support for comments
 - added support for FAQ news
 - better search engine
- 
+
 Version 0.60 - 22.02.2001
-- first released version 
+- first released version
 
 Versions below 0.60 were developer version
 
@@ -513,7 +538,7 @@ The contents of this file are subject to the Mozilla Public License
 Version 1.1 (the "License"); you may not use this file except in
 compliance with the License. You may obtain a copy of the License at
 http://www.mozilla.org/MPL/
- 
+
 Software distributed under the License is distributed on an "AS IS"
 basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 License for the specific language governing rights and limitations

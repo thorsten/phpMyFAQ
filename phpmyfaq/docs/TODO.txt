@@ -8,12 +8,12 @@ TODO list for future versions of phpMyFAQ:
 - improved category and FAQ record functions ?
 - show/edit/delete comments ?
 - add "submit translation" link ?
+- add related articles ?
 - installer and update scripts merged together in a setup routine ?
 - more accessibility features (WAI and Section 508) ?
 - bugfixing for stability or security reasons
 
 2.1.0 "Pandora":
-- add related articles [new sql table: faqrelatedentries] ?
 - subscription service for new articles ?
 - message to the user, who has posted a question and an answer is availible ?
 - better news system with multiple pages and sticky news
