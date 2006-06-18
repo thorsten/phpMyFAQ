@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: save.php,v 1.21 2006-06-01 21:11:42 thorstenr Exp $
+* $Id: save.php,v 1.22 2006-06-18 08:06:17 thorstenr Exp $
 *
 * Saves a user FAQ record and sends an email to the user
 *
@@ -38,7 +38,6 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
      && isset($_POST['captcha']) && ($captcha->validateCaptchaCode($_POST['captcha'])) ) {
 
     Tracking("save_new_entry",0);
-	$datum = date("YmdHis");
 	$content = $db->escape_string(safeHTML(nl2br($_POST["content"])));
     $contentlink = $db->escape_string(safeHTML($_POST["contentlink"]));
 
@@ -52,19 +51,20 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
 		$lang = "en";
 	}
 
-	$thema = $db->escape_string(safeSQL(safeHTML($_POST["thema"])));
-    $selected_category = intval($_POST["rubrik"]);
-	$keywords = $db->escape_string(safeSQL($_POST["keywords"]));
-	$author = $db->escape_string(safeSQL($_POST["username"]));
-    $usermail = $IDN->encode($_POST["usermail"]);
+	$newData = array(
+		'lang'		=> $lang,
+		'thema' 	=> $db->escape_string(safeSQL(safeHTML($_POST['thema']))),
+		'active'	=> 'no',
+		'content'	=> $content,
+		'keywords' 	=> $db->escape_string(safeSQL($_POST['keywords'])),
+		'author' 	=> $db->escape_string(safeSQL($_POST['username'])),
+    	'email' 	=> $IDN->encode($_POST['usermail']),
+    	'comment'	=> 'y',
+    	'date'		=> date('YmdHis')
+		);
+	$selected_category = intval($_POST['rubrik']);
 
-	$db->query(sprintf("INSERT INTO %sfaqdata (id, lang, solution_id, revision_id, active, thema, content, keywords, author, email, comment, datum) VALUES (%d, '%s', %d, %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')", SQLPREFIX, $db->nextID(SQLPREFIX."faqdata", "id"), $lang, getSolutionId(), 0, 'no', $thema, $content, $keywords, $author, $usermail, 'y', $datum));
-
-	foreach ($selected_category as $_category) {
-	    $db->query(sprintf("INSERT INTO %sfaqcategoryrelations (category_id, category_lang, record_id, record_lang) VALUES (%d, '%s', %d, '%s')", SQLPREFIX, intval($_category), $lang, $db->insert_id(SQLPREFIX.'faqdata', 'id'), $lang));
-	}
-
-	$db->query(sprintf("INSERT INTO %sfaqvisits (id, lang, visits, last_visit) VALUES (%d, '%s', %d, %d)", SQLPREFIX, $db->insert_id(SQLPREFIX.'faqdata', 'id'), $lang, 1, time()));
+	$faq->addRecord($newData, $selected_category);
 
     $headers = '';
     $db->query("SELECT ".SQLPREFIX."faquser.email FROM ".SQLPREFIX."faqcategories INNER JOIN ".SQLPREFIX."faquser ON ".SQLPREFIX."faqcategories.user_id = ".SQLPREFIX."faquser.id WHERE ".SQLPREFIX."faqcategories.id = ".$selected_category);
