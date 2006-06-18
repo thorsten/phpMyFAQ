@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.21 2006-06-18 09:52:10 thorstenr Exp $
+* $Id: Faq.php,v 1.22 2006-06-18 10:09:09 thorstenr Exp $
 *
 * The main FAQ class
 *
@@ -685,6 +685,37 @@ class PMF_Faq
             $commentData['comment'],
             $commentData['date'],
             $commentData['helped']);
+        $this->db->query($query);
+
+        return true;
+    }
+
+    /**
+     * deleteComment()
+     *
+     * Deletes a comment
+     *
+     * @param    integer    $record_id
+     * @param    integer    $comment_id
+     * @return    boolean
+     * @access    public
+     * @since    2006-06-18
+     * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function deleteComment($record_id, $comment_id)
+    {
+        if (!is_int($record_id) && !is_int($comment_id)) {
+            return false;
+        }
+
+        $query = sprintf(
+            'DELETE FROM
+                %sfaqcomments
+            WHERE
+                id = %d AND id_comment = %d',
+            SQLPREFIX,
+            $record_id,
+            $comment_id);
         $this->db->query($query);
 
         return true;
