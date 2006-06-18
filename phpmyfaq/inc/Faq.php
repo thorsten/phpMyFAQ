@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.15 2006-06-18 07:35:39 matteo Exp $
+* $Id: Faq.php,v 1.16 2006-06-18 08:03:32 thorstenr Exp $
 *
 * The main FAQ class
 *
@@ -233,6 +233,73 @@ class FAQ
                 'date'          => makeDate($row->datum));
         }
     }
+
+	/**
+	 * addRecord()
+	 *
+	 * Adds a new record, the category relations and initialize visits
+	 *
+	 * @param	array	$data
+	 * @param	array	$categories
+	 * @return	boolean
+	 * @access	public
+	 * @since	2006-06-18
+	 * @author	Thorsten Rinne <thorsten@phpmyfaq.de>
+	 */
+	function addRecord($data, $categories)
+	{
+		if (!is_array($data)) {
+			return false;
+		}
+
+		$this->db->query(sprintf(
+			"INSERT INTO
+				%sfaqdata
+				(id, lang, solution_id, revision_id, active, thema, content, keywords, author, email, comment, datum)
+			VALUES
+				(%d, '%s', %d, %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
+			SQLPREFIX,
+			$this->db->nextID(SQLPREFIX.'faqdata', 'id'),
+			$data['lang'],
+			getSolutionId(),
+			0,
+			'no',
+			$data['thema'],
+			$data['content'],
+			$data['keywords'],
+			$data['author'],
+			$data['email'],
+			'y',
+			$data['date']));
+
+		foreach ($categories as $_category) {
+	    	$this->db->query(sprintf(
+				"INSERT INTO
+					%sfaqcategoryrelations
+				(category_id, category_lang, record_id, record_lang)
+					VALUES
+				(%d, '%s', %d, '%s')",
+				SQLPREFIX,
+				intval($_category),
+				$data['lang'],
+				$this->db->insert_id(SQLPREFIX.'faqdata', 'id'),
+				$data['lang']));
+		}
+
+		$this->db->query(sprintf(
+			"INSERT INTO
+				%sfaqvisits
+			(id, lang, visits, last_visit)
+				VALUES
+			(%d, '%s', %d, %d)",
+			SQLPREFIX,
+			$this->db->insert_id(SQLPREFIX.'faqdata', 'id'),
+			$lang,
+			1,
+			time()));
+
+		return true;
+	}
 
     /**
     * getRecordBySolutionId()
