@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: menue.php,v 1.15 2006-06-19 20:24:39 matteo Exp $
+* $Id: menue.php,v 1.16 2006-06-19 20:44:51 matteo Exp $
 *
 * Navigation menue of the admin area
 *
@@ -96,7 +96,7 @@ $groupSupport = is_a($user->perm, "PMF_PermMedium");
     </form>
 </div>
 
-<!--<div id="sessionexpiration">
+<div id="sessionexpiration">
     <label for="session">Time to your session expiration</label>
     <div id="sessioncounter">Loading...</div>
-</div>-->
+</div>
