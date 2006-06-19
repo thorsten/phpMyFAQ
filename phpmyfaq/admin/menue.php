@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: menue.php,v 1.14 2006-06-15 21:41:57 matteo Exp $
+* $Id: menue.php,v 1.15 2006-06-19 20:24:39 matteo Exp $
 *
 * Navigation menue of the admin area
 *
@@ -27,11 +27,11 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 
 function addMenuEntry($restrictions = '', $aktion = '', $caption = '')
 {
-	global $permission, $PMF_LANG;
+    global $permission, $PMF_LANG;
     
-	if ($aktion != '') {
-		$aktion = "aktion=".$aktion;
-	}
+    if ($aktion != '') {
+        $aktion = "aktion=".$aktion;
+    }
     
     if (isset($PMF_LANG[$caption])) {
         $_caption = $PMF_LANG[$caption];
@@ -40,17 +40,17 @@ function addMenuEntry($restrictions = '', $aktion = '', $caption = '')
     }
     
     $output = '        <li><a href="?'.$aktion.'">'.$_caption."</a></li>\n";
-	if ($restrictions == '') {
-		print $output;
-		return;
-	}
+    if ($restrictions == '') {
+        print $output;
+        return;
+    }
     
-	foreach (explode(',', $restrictions) as $_restriction) {
-		if (isset($permission[$_restriction]) && $permission[$_restriction]) {
-			print $output;
-			return;
-		}
-	}
+    foreach (explode(',', $restrictions) as $_restriction) {
+        if (isset($permission[$_restriction]) && $permission[$_restriction]) {
+            print $output;
+            return;
+        }
+    }
 }
 
 // check for group support
@@ -61,29 +61,29 @@ $groupSupport = is_a($user->perm, "PMF_PermMedium");
 <div id="menue">
     <ul>
 <?php
-	addMenuEntry('',                                     '',                 'ad_menu_startpage');
-	addMenuEntry('adduser,edituser,deluser',             'user',             'ad_menu_user_administration');
-	if ($groupSupport) {
-	    addMenuEntry('adduser,edituser,deluser',         'group',            'ad_menu_group_administration');
+    addMenuEntry('',                                     '',                 'ad_menu_startpage');
+    addMenuEntry('adduser,edituser,deluser',             'user',             'ad_menu_user_administration');
+    if ($groupSupport) {
+        addMenuEntry('adduser,edituser,deluser',         'group',            'ad_menu_group_administration');
     }
-	addMenuEntry('addcateg,editcateg,delcateg',          'category',         'ad_menu_categ_edit');
-	addMenuEntry('addbt',                                'editentry',        'ad_entry_add');
-	addMenuEntry('editbt,delbt',                         'accept',           'ad_menu_entry_aprove');
-	addMenuEntry('editbt,delbt',                         'view',             'ad_menu_entry_edit');
+    addMenuEntry('addcateg,editcateg,delcateg',          'category',         'ad_menu_categ_edit');
+    addMenuEntry('addbt',                                'editentry',        'ad_entry_add');
+    addMenuEntry('editbt,delbt',                         'accept',           'ad_menu_entry_aprove');
+    addMenuEntry('editbt,delbt',                         'view',             'ad_menu_entry_edit');
     addMenuEntry('addglossary,editglossary,delglossary', 'glossary',         'ad_menu_glossary');
-	addMenuEntry('addnews,editnews,delnews',             'news&amp;do=edit', 'ad_menu_news_edit');
-	addMenuEntry('delquestion',                          'question',         'ad_menu_open');
-	addMenuEntry('viewlog',                              'statistik',        'ad_menu_stat');
-	addMenuEntry('',                                     'cookies',          'ad_menu_cookie');
-	addMenuEntry('viewlog',                              'viewsessions',     'ad_menu_session');
-	addMenuEntry('adminlog',                             'adminlog',         'ad_menu_adminlog');
-	addMenuEntry('passwd',                               'passwd',           'ad_menu_passwd');
-	addMenuEntry('editconfig',                           'config',           'ad_menu_editconfig');
+    addMenuEntry('addnews,editnews,delnews',             'news&amp;do=edit', 'ad_menu_news_edit');
+    addMenuEntry('delquestion',                          'question',         'ad_menu_open');
+    addMenuEntry('viewlog',                              'statistik',        'ad_menu_stat');
+    addMenuEntry('',                                     'cookies',          'ad_menu_cookie');
+    addMenuEntry('viewlog',                              'viewsessions',     'ad_menu_session');
+    addMenuEntry('adminlog',                             'adminlog',         'ad_menu_adminlog');
+    addMenuEntry('passwd',                               'passwd',           'ad_menu_passwd');
+    addMenuEntry('editconfig',                           'config',           'ad_menu_editconfig');
     addMenuEntry('editconfig,editbt,delbt',              'linkconfig',       'ad_menu_linkconfig');
-	addMenuEntry('backup,restore',                       'csv',              'ad_menu_backup');
-	addMenuEntry('',                                     'export',           'ad_menu_export');
-    addMenuEntry('',                                     'searchplugin',     'ad_menu_searchplugin');
-	addMenuEntry('',                                     'logout',           'ad_menu_logout');
+    addMenuEntry('backup,restore',                       'csv',              'ad_menu_backup');
+    addMenuEntry('',                                     'export',           'ad_menu_export');
+    addMenuEntry('',                                     'plugins',          'ad_menu_searchplugin');
+    addMenuEntry('',                                     'logout',           'ad_menu_logout');
 ?>
     </ul>
 </div>
@@ -96,7 +96,7 @@ $groupSupport = is_a($user->perm, "PMF_PermMedium");
     </form>
 </div>
 
-<div id="sessionexpiration">
+<!--<div id="sessionexpiration">
     <label for="session">Time to your session expiration</label>
     <div id="sessioncounter">Loading...</div>
-</div>
+</div>-->
