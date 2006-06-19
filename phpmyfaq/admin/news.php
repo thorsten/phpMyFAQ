@@ -1,12 +1,12 @@
 <?php
 /**
-* $Id: news.php,v 1.12 2006-01-02 16:51:26 thorstenr Exp $
+* $Id: news.php,v 1.13 2006-06-19 20:05:18 matteo Exp $
 *
 * The main administration file for the news
 *
-* @author			Thorsten Rinne <thorsten@phpmyfaq.de>
-* @since			2003-02-23
-* @copyright		(c) 2001-2006 phpMyFAQ Team
+* @author           Thorsten Rinne <thorsten@phpmyfaq.de>
+* @since            2003-02-23
+* @copyright        (c) 2001-2006 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -27,30 +27,30 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 print '<h2>'.$PMF_LANG['ad_news_add'].'</h2>';
 if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews"]) {
 ?>
-	<form id="editRecord" name="editRecord" action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>" method="post">
-	<input type="hidden" name="aktion" value="news" />
-	<input type="hidden" name="do" value="save" />
+    <form id="editRecord" name="editRecord" action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>" method="post">
+    <input type="hidden" name="aktion" value="news" />
+    <input type="hidden" name="do" value="save" />
     <dl>
         <dt><strong><?php print $PMF_LANG["ad_news_header"]; ?></strong></dt>
-	    <dd><input class="admin" type="text" style="width: 525px;" name="header" /></dd>
+        <dd><input type="text" style="width: 525px;" name="header" /></dd>
         <dt><strong><?php print $PMF_LANG["ad_news_text"]; ?></strong></dt>
-        <dd><noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript><textarea class="admin" id="content" name="content"></textarea></dd>
-	    <dt><strong><?php print $PMF_LANG["ad_news_link_url"]; ?></strong></dt>
-        <dd><input class="admin" type="text" style="width: 525px;" name="link" /></dd>
-	    <dt><strong><?php print $PMF_LANG["ad_news_link_title"]; ?></strong></dt>
-        <dd><input class="admin" type="text" style="width: 525px;" name="linktitel" /></dd>
-	    <dt><strong><?php print $PMF_LANG["ad_news_link_target"]; ?></strong></dt>
+        <dd><textarea id="content" name="content"></textarea></dd>
+        <dt><strong><?php print $PMF_LANG["ad_news_link_url"]; ?></strong></dt>
+        <dd><input type="text" style="width: 525px;" name="link" /></dd>
+        <dt><strong><?php print $PMF_LANG["ad_news_link_title"]; ?></strong></dt>
+        <dd><input type="text" style="width: 525px;" name="linktitel" /></dd>
+        <dt><strong><?php print $PMF_LANG["ad_news_link_target"]; ?></strong></dt>
         <dd><input type="radio" name="target" value="blank" /><?php print $PMF_LANG["ad_news_link_window"]; ?><br />
         <input type="radio" name="target" value="self" /><?php print $PMF_LANG["ad_news_link_faq"]; ?></dd>
         <dt>&nbsp;</dt>
         <dd><input class="submit" type="submit" value="<?php print $PMF_LANG["ad_news_add"]; ?>" /></dd>
     </dl>
-	</form>
+    </form>
 <?php
 } elseif (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews"]) {
-	print $PMF_LANG["err_NotAuth"];
+    print $PMF_LANG["err_NotAuth"];
 } elseif (isset($_REQUEST["do"]) && $_REQUEST["do"] == "edit" && $permission["editnews"]) {
-	if (!isset($_REQUEST["id"])) {
+    if (!isset($_REQUEST["id"])) {
 ?>
     <table class="list">
     <thead>
@@ -62,10 +62,10 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
     </thead>
     <tbody>
 <?php
-		$result = $db->query("select id, datum, header from ".SQLPREFIX."faqnews order by datum desc");
-		if ($db->num_rows($result) > 0) {
-			while ($row = $db->fetch_object($result)) {
-            	$datum = makeDate($row->datum);
+        $result = $db->query("select id, datum, header from ".SQLPREFIX."faqnews order by datum desc");
+        if ($db->num_rows($result) > 0) {
+            while ($row = $db->fetch_object($result)) {
+                $datum = makeDate($row->datum);
 ?>
         <tr>
             <td class="list"><?php print $row->header; ?></td>
@@ -73,65 +73,65 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
             <td class="list"><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=news&amp;do=edit&amp;id=<?php print $row->id; ?>" title="<?php print $PMF_LANG["ad_news_update"]; ?>"><img src="images/edit.gif" width="18" height="18" alt="<?php print $PMF_LANG["ad_news_update"]; ?>" border="0" /></a>&nbsp;&nbsp;<a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=news&amp;do=delete&amp;id=<?php print $row->id; ?>" title="<?php print $PMF_LANG["ad_news_delete"]; ?>"><img src="images/delete.gif" width="17" height="18" alt="<?php print $PMF_LANG["ad_news_delete"]; ?>" border="0" /></a></td>
         </tr>
 <?php
-           	}
-		} else {
-           	print "<tr><td colspan=\"3\" class=\"list\">".$PMF_LANG["ad_news_nodata"]."</td></tr>"; 
-		}
+               }
+        } else {
+               print "<tr><td colspan=\"3\" class=\"list\">".$PMF_LANG["ad_news_nodata"]."</td></tr>"; 
+        }
 ?>
     </tbody>
     </table>
     <p><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=news&amp;do=write"><?php print $PMF_LANG["ad_menu_news_add"]; ?></a></p>
 <?php
-	} elseif (isset($_REQUEST["id"])) {
-		$result = $db->query("select id, header, artikel, link, linktitel, target from ".SQLPREFIX."faqnews where id = ".$_REQUEST["id"]); 
-		while ($row = $db->fetch_object($result)) {
+    } elseif (isset($_REQUEST["id"])) {
+        $result = $db->query("select id, header, artikel, link, linktitel, target from ".SQLPREFIX."faqnews where id = ".$_REQUEST["id"]);
+        while ($row = $db->fetch_object($result)) {
 ?>
-	<h2><?php print $PMF_LANG["ad_news_edit"]; ?></h2>
-	<form id="editRecord" name="editRecord" action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>" method="post"> 
-	<input type="hidden" name="aktion" value="news" />
-	<input type="hidden" name="do" value="update" />
-	<input type="hidden" name="id" value="<?php print $row->id ?>" />
+    <h2><?php print $PMF_LANG["ad_news_edit"]; ?></h2>
+    <form id="editRecord" name="editRecord" action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>" method="post">
+    <input type="hidden" name="aktion" value="news" />
+    <input type="hidden" name="do" value="update" />
+    <input type="hidden" name="id" value="<?php print $row->id ?>" />
     <dl>
         <dt><strong><?php print $PMF_LANG["ad_news_header"]; ?></strong></dt>
-	    <dd><input class="admin" type="text" style="width: 525px;" name="header" value="<?php print $row->header ?>" /></dd>
+        <dd><input type="text" style="width: 525px;" name="header" value="<?php print $row->header ?>" /></dd>
         <dt><strong><?php print $PMF_LANG["ad_news_text"]; ?></strong></dt>
-        <dd><noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript><textarea class="admin" id="content" name="content"><?php if (isset($row->artikel)) { print htmlspecialchars($row->artikel, ENT_QUOTES); } ?></textarea></dd>
-	    <dt><strong><?php print $PMF_LANG["ad_news_link_url"]; ?></strong></dt>
-        <dd><input class="admin" type="text" style="width: 525px;" name="link" value="<?php print $row->link; ?>" /></dd>
-	    <dt><strong><?php print $PMF_LANG["ad_news_link_title"]; ?></strong></dt>
-        <dd><input class="admin" type="text" style="width: 525px;" name="linktitel" value="<?php print $row->linktitel; ?>" /></dd>
-	    <dt><strong><?php print $PMF_LANG["ad_news_link_target"]; ?></strong></dt>
+        <dd><textarea id="content" name="content"><?php if (isset($row->artikel)) { print htmlspecialchars($row->artikel, ENT_QUOTES); } ?></textarea></dd>
+        <dt><strong><?php print $PMF_LANG["ad_news_link_url"]; ?></strong></dt>
+        <dd><input type="text" style="width: 525px;" name="link" value="<?php print $row->link; ?>" /></dd>
+        <dt><strong><?php print $PMF_LANG["ad_news_link_title"]; ?></strong></dt>
+        <dd><input type="text" style="width: 525px;" name="linktitel" value="<?php print $row->linktitel; ?>" /></dd>
+        <dt><strong><?php print $PMF_LANG["ad_news_link_target"]; ?></strong></dt>
         <dd><input type="radio" name="target" value="blank" <?php if ($row->target == "blank") { ?> checked="checked"<?php } ?> /><?php print $PMF_LANG["ad_news_link_window"] ?><br /><input type="radio" name="target" value="self" <?php if ($row->target == "self") { ?> checked="checked"<?php } ?> /><?php print $PMF_LANG["ad_news_link_faq"] ?></dd>
         <dt>&nbsp;</dt>
         <dd><input class="submit" type="submit" value="<?php print $PMF_LANG["ad_news_add"]; ?>" /></dd>
     </dl>
-	</form>
+    </form>
 <?php
-		}
-	}
+        }
+    }
 } elseif (isset($_REQUEST["do"]) && $_REQUEST["do"] == "edit" && $permission["editnews"]) {
-	print $PMF_LANG["err_NotAuth"];
+    print $PMF_LANG["err_NotAuth"];
 } elseif (isset($_REQUEST["do"]) && $_REQUEST["do"] == "save" && $permission["addnews"]) {
-	$datum = date("YmdHis");
-	$artikel = $db->escape_string($_REQUEST["content"]);
+    $datum = date("YmdHis");
+    $artikel = $db->escape_string($_REQUEST["content"]);
     (!isset($_REQUEST["target"])) ? $target = "" : $target = $_POST["target"];
     $result = $db->query("INSERT INTO ".SQLPREFIX."faqnews (id, header, artikel, link, linktitel, datum, target) VALUES (".$db->nextID(SQLPREFIX."faqnews",
 "id").", '".$db->escape_string($_REQUEST["header"])."', '".$artikel."', '".$_REQUEST["link"]."', '".$_REQUEST["linktitel"]."', '".$datum."', '".$target."')");
-	print "<p>".$PMF_LANG["ad_news_updatesuc"]."</p>";
+    print "<p>".$PMF_LANG["ad_news_updatesuc"]."</p>";
 } elseif (isset($_REQUEST["do"]) && $_REQUEST["do"] == "save" && $permission["addnews"]) {
-	print $PMF_LANG["err_NotAuth"];
+    print $PMF_LANG["err_NotAuth"];
 } elseif (isset($_REQUEST["do"]) && $_REQUEST["do"] == "update" && $permission["editnews"]) {
-	$datum = date("YmdHis");
-	$artikel = $db->escape_string($_REQUEST["content"]);
-	(!isset($_REQUEST["target"])) ? $target = "" : $target = $_POST["target"];
-	$result = $db->query("UPDATE ".SQLPREFIX."faqnews SET header = '".$db->escape_string($_REQUEST["header"])."', artikel = '".$artikel."', link = '".$_REQUEST["link"]."', linktitel = '".$_REQUEST["linktitel"]."', datum = '".$datum."', target = '".$target."' WHERE id = ".$_REQUEST["id"]);
-	print "<p>".$PMF_LANG["ad_news_updatesuc"]."</p>";
+    $datum = date("YmdHis");
+    $artikel = $db->escape_string($_REQUEST["content"]);
+    (!isset($_REQUEST["target"])) ? $target = "" : $target = $_POST["target"];
+    $result = $db->query("UPDATE ".SQLPREFIX."faqnews SET header = '".$db->escape_string($_REQUEST["header"])."', artikel = '".$artikel."', link = '".$_REQUEST["link"]."', linktitel = '".$_REQUEST["linktitel"]."', datum = '".$datum."', target = '".$target."' WHERE id = ".$_REQUEST["id"]);
+    print "<p>".$PMF_LANG["ad_news_updatesuc"]."</p>";
 } elseif (isset($_REQUEST["do"]) && $_REQUEST["do"] == "update" && $permission["editnews"]) {
-	print $PMF_LANG["err_NotAuth"];
+    print $PMF_LANG["err_NotAuth"];
 } elseif (isset($_REQUEST["do"]) && $_REQUEST["do"] == "delete" && $permission["delnews"]) {
-	if (!isset($_REQUEST["really"])) {
+    if (!isset($_REQUEST["really"])) {
 ?>
-	<p><?php print $PMF_LANG["ad_news_del"]; ?></p>
+    <p><?php print $PMF_LANG["ad_news_del"]; ?></p>
     <div align="center">
     <form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>" method="post">
     <input type="hidden" name="aktion" value="news" />
@@ -143,11 +143,11 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
     </form>
     </div>
 <?php
-	} elseif ($_REQUEST["really"] == "yes") {
-		$result = $db->query("DELETE FROM ".SQLPREFIX."faqnews WHERE id = ".$_REQUEST["id"]);
-		print "<p>".$PMF_LANG["ad_news_delsuc"]."</p>";
-	}
+    } elseif ($_REQUEST["really"] == "yes") {
+        $result = $db->query("DELETE FROM ".SQLPREFIX."faqnews WHERE id = ".$_REQUEST["id"]);
+        print "<p>".$PMF_LANG["ad_news_delsuc"]."</p>";
+    }
 } elseif (isset($_REQUEST["do"]) && $_REQUEST["do"] == "delete" && $permission["delnews"]) {
-	print $PMF_LANG["err_NotAuth"];
+    print $PMF_LANG["err_NotAuth"];
 }
 ?>
