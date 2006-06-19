@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: footer.php,v 1.7 2006-06-15 21:41:57 matteo Exp $
+* $Id: footer.php,v 1.8 2006-06-19 18:54:33 matteo Exp $
 *
 * Footer of the admin area
 *
@@ -25,6 +25,8 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 }
 ?>
 </div>
+
+<div class="clearing"></div>
 
 <!-- Footer -->
 <div>
