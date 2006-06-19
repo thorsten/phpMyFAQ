@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.28 2006-06-17 13:33:46 matteo Exp $
+* $Id: language_en.php,v 1.29 2006-06-19 21:34:03 matteo Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -146,12 +146,12 @@ $PMF_LANG["err_noArticles"] = "<p>No entries available.</p>";
 $PMF_LANG["err_badID"] = "<p>Wrong ID.</p>";
 $PMF_LANG["err_noTopTen"] = "<p>No Top Ten available yet.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>No entry found.</p>";
-$PMF_LANG["err_SaveEntries"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>category</strong>, <strong>headline</strong>, <strong>your Record</strong> and, when requested, <strong>Captcha Code</strong>!<br /><br />\n<a href=\"javascript:history.back();\">one page back</a><br /><br />\n";
-$PMF_LANG["err_SaveComment"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>your comments</strong> and, when requested, <strong>Captcha Code</strong>!<br /><br />\n<a href=\"javascript:history.back();\">one page back</a><br /><br />\n";
+$PMF_LANG["err_SaveEntries"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>category</strong>, <strong>headline</strong>, <strong>your Record</strong> and, when requested, the <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!<br /><br />\n<a href=\"javascript:history.back();\">one page back</a><br /><br />\n";
+$PMF_LANG["err_SaveComment"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>your comments</strong> and, when requested, the <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!<br /><br />\n<a href=\"javascript:history.back();\">one page back</a><br /><br />\n";
 $PMF_LANG["err_VoteTooMuch"] = "<p>We do not count double votings. <a href=\"javascript:history.back();\">Click here</a>, to go back.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>You did not rate the question!</strong> <a href=\"javascript:history.back();\">Please click here</a>, to vote.</p>";
 $PMF_LANG["err_noMailAdress"] = "Your email address is not correct.<br /><a href=\"javascript:history.back();\">back</a>";
-$PMF_LANG["err_sendMail"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>your question</strong> and, when requested, <strong>Captcha Code</strong>!<br /><br />\n<a href=\"javascript:history.back();\">one page back</a><br /><br />\n";
+$PMF_LANG["err_sendMail"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>your question</strong> and, when requested, the <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!<br /><br />\n<a href=\"javascript:history.back();\">one page back</a><br /><br />\n";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>Search for records:</strong><br />With an entry like <strong style=\"color: Red;\">word1 word2</strong> you can do a relevance descending search for two or more search criterion.</p><p><strong>Notice:</strong> Your search criterion has to be at least 4 letters long otherwise your request will be rejected.</p>";
@@ -544,7 +544,7 @@ $PMF_LANG["ad_user_realname"] = "real name:";
 $PMF_LANG["ad_export_generate_pdf"] = "generate PDF file";
 $PMF_LANG["ad_export_full_faq"] = "Your FAQ as a PDF file: ";
 $PMF_LANG["err_bannedIP"] = "Your IP address has been banned.";
-$PMF_LANG["err_SaveQuestion"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>your question</strong> and, when requested, <strong>Captcha Code</strong>.<br /><br /><a href=\"javascript:history.back();\">one page back</a><br /><br />\n";
+$PMF_LANG["err_SaveQuestion"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>your question</strong> and, when requested, the <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>.<br /><br /><a href=\"javascript:history.back();\">one page back</a><br /><br />\n";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Font color: ";
