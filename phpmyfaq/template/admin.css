@@ -1,5 +1,5 @@
 /**
-* $Id: admin.css,v 1.14 2006-06-15 21:41:58 matteo Exp $
+* $Id: admin.css,v 1.15 2006-06-21 20:33:26 matteo Exp $
 *
 * This is the CSS file for the admin section of phpMyFAQ 1.5.x
 * You don't need to change enything here but feel free to do it. :-)
@@ -21,9 +21,9 @@
 
 /* color defintions */
 #header {
-    background-color: #9CB6C6;
-    color: #000;
-    }
+    background: #0D487A;
+    color: #fff;
+}
 /*
 .sideBox {
     background-color: #305C77;
@@ -207,7 +207,7 @@ th.list, td.list {
 /* indent at user administration */
 .userrights {
     padding-left: 132px;
-    }
+}
 
 /* styles for input and textarea fields */
 textarea.admin {
