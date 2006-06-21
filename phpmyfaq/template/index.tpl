@@ -34,6 +34,7 @@
     <link rel="alternate" title="News RSS Feed" type="application/rss+xml" href="feed/news/rss.php" />
     <link rel="alternate" title="TopTen RSS Feed" type="application/rss+xml" href="feed/topten/rss.php" />
     <link rel="alternate" title="Latest FAQ Records RSS Feed" type="application/rss+xml" href="feed/latest/rss.php" />
+    <link rel="alternate" title="Open Questions RSS Feed" type="application/rss+xml" href="feed/openquestions/rss.php" />
 </head>
 <body dir="{dir}">
 
@@ -79,10 +80,11 @@
                 <!-- start search box -->
                 <div class="content">
                     <div id="search">
-                    <form action="{writeSendAdress}" method="post">
+                    <form action="{writeSendAdress}" method="get">
                     <label for="suchbegriff">{searchBox}</label>
-                    <input alt="search..." class="inputfield" type="text" name="suchbegriff" id="suchbegriff" size="18" /><br />
+                    <input alt="search..." class="inputfield" type="text" name="search" id="suchbegriff" size="18" /><br />
                     <input type="submit" name="submit" value="Go" class="submit" />
+                    <input type="hidden" name="action" value="search" />
                     </form>
                     </div>
                 </div>
