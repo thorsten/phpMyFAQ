@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.36 2006-06-21 21:27:45 matteo Exp $
+* $Id: artikel.php,v 1.37 2006-06-21 21:41:28 matteo Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -51,7 +51,7 @@ $content = $faq->faqRecord['content'];
 // Set the path of the current category
 $categoryName = $tree->getPath($currentCategory, ' &raquo; ', true);
 
-$changeLanguagePath = sprintf('?%daction=artikel&amp;cat=%d&amp;id=%d', $sids, $currentCategory, $id);
+$changeLanguagePath = sprintf('?%saction=artikel&amp;cat=%d&amp;id=%d', $sids, $currentCategory, $id);
 
 if (isset($_GET['highlight']) && $_GET['highlight'] != "/" && $_GET['highlight'] != "<" && $_GET['highlight'] != ">" && strlen($_GET['highlight']) > 1) {
     $highlight = strip_tags($_GET['highlight']);
@@ -135,7 +135,7 @@ if (isset($permission['editbt'])) {
 if ($faq->faqRecord['comment'] == 'n') {
     $commentMessage = $PMF_LANG['msgWriteNoComment'];
 } else {
-    //$commentMessage = sprintf('%s<a href="?%daction=writecomment&amp;id=%d&amp;artlang=%s">%s</a>', $PMF_LANG['msgYouCan'], $sids, $id, $lang, $PMF_LANG['msgWriteComment']);
+    //$commentMessage = sprintf('%s<a href="?%saction=writecomment&amp;id=%d&amp;artlang=%s">%s</a>', $PMF_LANG['msgYouCan'], $sids, $id, $lang, $PMF_LANG['msgWriteComment']);
     $commentMessage = sprintf('%s<a onclick="show(\'comment\');" href="#">%s</a>', $PMF_LANG['msgYouCan'], $PMF_LANG['msgWriteComment']);
 }
 
@@ -153,13 +153,13 @@ $tpl->processTemplate ("writeContent", array(
     'editThisEntry' => $editThisEntry,
     'writePrintMsg' => sprintf('<a href="#" onclick="javascript:window.print();">%s</a>', $PMF_LANG['msgPrintArticle']),
     'writePDF' => sprintf('<a target="_blank" href="pdf.php?cat=%s&amp;id=%d&amp;lang=%s">'.$PMF_LANG['msgPDF'].'</a>', $currentCategory, $id, $lang),
-    'writeSend2FriendMsg' => sprintf('<a href="?%daction=send2friend&amp;cat=%d&amp;id=%d&amp;artlang=%s">%s</a>', $sids, $currentCategory, $id, $lang, $PMF_LANG['msgSend2Friend']),
-    'writeXMLMsg' => sprintf('<a href="?%daction=xml&amp;id=%d&amp;artlang=%d">%s</a>', $sids, $id, $lang, $PMF_LANG['msgMakeXMLExport']),
+    'writeSend2FriendMsg' => sprintf('<a href="?%saction=send2friend&amp;cat=%d&amp;id=%d&amp;artlang=%s">%s</a>', $sids, $currentCategory, $id, $lang, $PMF_LANG['msgSend2Friend']),
+    'writeXMLMsg' => sprintf('<a href="?%saction=xml&amp;id=%d&amp;artlang=%d">%s</a>', $sids, $id, $lang, $PMF_LANG['msgMakeXMLExport']),
     'writePrintMsgTag' => $PMF_LANG['msgPrintArticle'],
     'writePDFTag' => $PMF_LANG['msgPDF'],
     'writeSend2FriendMsgTag' => $PMF_LANG['msgSend2Friend'],
     'writeXMLMsgTag' => $PMF_LANG['msgMakeXMLExport'],
-    'saveVotingPATH' => sprintf('?%daction=savevoting', $sids),
+    'saveVotingPATH' => sprintf('?%saction=savevoting', $sids),
     'saveVotingID' => $id,
     'saveVotingIP' => $_SERVER['REMOTE_ADDR'],
     'msgAverageVote' => $PMF_LANG['msgAverageVote'],
