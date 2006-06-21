@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: savecomment.php,v 1.13 2006-06-18 09:43:04 thorstenr Exp $
+* $Id: savecomment.php,v 1.14 2006-06-21 21:59:39 matteo Exp $
 *
 * Saves the posted comment
 *
@@ -31,19 +31,19 @@ if (    isset($_POST['user']) && $_POST['user'] != ''
      && isset($_POST['comment']) && $_POST['comment'] != ''
      && IPCheck($_SERVER['REMOTE_ADDR'])
      && checkBannedWord(htmlspecialchars(strip_tags($_POST['comment'])))
-     && isset($_POST['captcha']) && ($captcha->validateCaptchaCode($_POST['captcha'])) ) {
-
+     && checkCaptchaCode() ) {
+    
     $id = (isset($_POST["id"])) ? (int)$_POST["id"] : 0;
     Tracking("save_comment", $id);
 
-	$commentData = array(
-		'record_id'	=> $id,
-		'username'	=> $db->escape_string(safeHTML($_POST["user"])),
-		'usermail' 	=> $db->escape_string(safeHTML($_POST["mail"])),
-		'comment'	=> nl2br($db->escape_string(safeHTML($_POST["comment"]))),
-		'date'		=> date('YmdHis'),
-		'helped'	=> '');
-	$faq->addComment($commentData);
+    $commentData = array(
+        'record_id' => $id,
+        'username'  => $db->escape_string(safeHTML($_POST["user"])),
+        'usermail'  => $db->escape_string(safeHTML($_POST["mail"])),
+        'comment'   => nl2br($db->escape_string(safeHTML($_POST["comment"]))),
+        'date'      => date('YmdHis'),
+        'helped'    => '');
+    $faq->addComment($commentData);
 
     $tpl->processTemplate ("writeContent", array(
     "msgCommentHeader" => $PMF_LANG["msgWriteComment"],

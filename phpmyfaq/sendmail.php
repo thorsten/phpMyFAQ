@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: sendmail.php,v 1.7 2006-04-09 12:18:49 thorstenr Exp $
+* $Id: sendmail.php,v 1.8 2006-06-21 21:59:39 matteo Exp $
 *
 * The 'send an email from the contact page' page
 *
@@ -12,7 +12,7 @@
 * Version 1.1 (the "License"); you may not use this file except in
 * compliance with the License. You may obtain a copy of the License at
 * http://www.mozilla.org/MPL/
-* 
+*
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
@@ -33,8 +33,8 @@ if (    isset($_POST["name"]) && $_POST["name"] != ''
      && isset($_POST["question"]) && $_POST["question"] != ''
      && IPCheck($_SERVER['REMOTE_ADDR'])
      && checkBannedWord(htmlspecialchars(strip_tags($_POST['question'])))
-     && isset($_POST['captcha']) && ($captcha->validateCaptchaCode($_POST['captcha'])) ) {
-    
+     && checkCaptchaCode() ) {
+
     list($user, $host) = explode("@", $_POST["email"]);
     $question          = htmlspecialchars($_POST["question"]);
     $sender            = $IDN->encode($_POST["email"]);
