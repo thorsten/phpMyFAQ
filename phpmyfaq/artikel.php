@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.35 2006-06-11 15:26:20 matteo Exp $
+* $Id: artikel.php,v 1.36 2006-06-21 21:27:45 matteo Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -51,13 +51,21 @@ $content = $faq->faqRecord['content'];
 // Set the path of the current category
 $categoryName = $tree->getPath($currentCategory, ' &raquo; ', true);
 
-$changeLanguagePATH     = sprintf('?%daction=artikel&amp;cat=%d&amp;id=%d', $sids, $currentCategory, $id);
+$changeLanguagePath = sprintf('?%daction=artikel&amp;cat=%d&amp;id=%d', $sids, $currentCategory, $id);
 
-if (isset($_GET["highlight"]) && $_GET["highlight"] != "/" && $_GET["highlight"] != "<" && $_GET["highlight"] != ">" && strlen($_GET["highlight"]) > 1) {
-    $highlight = strip_tags($_GET["highlight"]);
+if (isset($_GET['highlight']) && $_GET['highlight'] != "/" && $_GET['highlight'] != "<" && $_GET['highlight'] != ">" && strlen($_GET['highlight']) > 1) {
+    $highlight = strip_tags($_GET['highlight']);
     $highlight = str_replace("'", "´", $highlight);
+    $highlight = str_replace(array('^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']'), '', $highlight);
     $highlight = preg_quote($highlight, '/');
-    $content = preg_replace_callback('/(((href|src|title|alt|class|style|id|name)="[^"]*)?'.$highlight.'(?(1).*"))/mis', "highlight_no_links", $content);
+    $searchItems = explode(' ', $highlight);
+    foreach ($searchItems as $item) {
+        $content = preg_replace_callback(
+            '/('.$item.
+            '="[^"]*")|((href|src|title|alt|class|style|id|name)="[^"]*'.$item.
+            '[^"]*")|('.$item.
+            ')/mis', "highlight_no_links", $content);
+    }
 } else {
     $highlight = '';
 }
@@ -73,7 +81,7 @@ if ($num > 1) {
 	$switchLanguage .= "<p>\n";
     $switchLanguage .= "<fieldset>\n";
     $switchLanguage .= "<legend>".$PMF_LANG["msgLangaugeSubmit"]."</legend>\n";
-	$switchLanguage .= "<form action=\"".$changeLanguagePATH."\" method=\"post\" style=\"display: inline;\">\n";
+	$switchLanguage .= "<form action=\"".$changeLanguagePath."\" method=\"post\" style=\"display: inline;\">\n";
 	$switchLanguage .= "<select name=\"artlang\" size=\"1\">\n";
 	$switchLanguage .= $check4Lang;
 	$switchLanguage .= "</select>\n";
@@ -102,13 +110,13 @@ if (is_dir('attachments/')  && is_dir('attachments/'.$id) && isset($PMF_CONF['di
 $writeMultiCategories = '';
 $cat = new PMF_Category($lang);
 $multiCats = $cat->getCategoriesFromArticle($id);
-if (count($multiCats) > 0) {
+if (count($multiCats) > 1) {
     $writeMultiCategories .= '        <div id="article_categories">';
     $writeMultiCategories .= '        <fieldset>';
     $writeMultiCategories .= '                <legend>'.$PMF_LANG['msgArticleCategories'].'</legend>';
     $writeMultiCategories .= '            <ul>';
     foreach ($multiCats as $multiCat) {
-        $writeMultiCategories .= sprintf('<li><a href="?%saction=show&amp;cat=%d">%s</a></li>', $sids, $multiCat['id'], $multiCat['name']);
+        $writeMultiCategories .= sprintf('<li><a href="%s?%saction=show&amp;cat=%d">%s</a></li>', $_SERVER['PHP_SELF'], $sids, $multiCat['id'], $multiCat['name']);
         $writeMultiCategories .= "\n";
     }
     $writeMultiCategories .= '            </ul>';
@@ -134,11 +142,13 @@ if ($faq->faqRecord['comment'] == 'n') {
 // Set the template variables
 $tpl->processTemplate ("writeContent", array(
     'writeRubrik' => $categoryName.'<br />',
+    'solution_id' => $faq->faqRecord['solution_id'],
     'writeThema' => preg_replace_callback('/('.$highlight.'="[^"]*")|((href|src|title|alt|class|style|id|name)="[^"]*'.$highlight.'[^"]*")|('.$highlight.')/mis', "highlight_no_links", $faq->getRecordTitle($id, $lang)),
     'writeArticleCategoryHeader' => $PMF_LANG['msgArticleCategories'],
     'writeArticleCategories' => $writeMultiCategories,
     'writeContent' => preg_replace_callback("/<code([^>]*)>(.*?)<\/code>/is", 'hilight', $content),
     'writeDateMsg' => $PMF_LANG['msgLastUpdateArticle'].$faq->faqRecord['date'],
+    'writeRevision' => $PMF_LANG['ad_entry_revision'].': 1.'.$faq->faqRecord['revision_id'],
     'writeAuthor' => $PMF_LANG['msgAuthor'].$faq->faqRecord['author'],
     'editThisEntry' => $editThisEntry,
     'writePrintMsg' => sprintf('<a href="#" onclick="javascript:window.print();">%s</a>', $PMF_LANG['msgPrintArticle']),
