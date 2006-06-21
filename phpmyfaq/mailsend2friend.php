@@ -1,18 +1,18 @@
 <?php
 /**
-* $Id: mailsend2friend.php,v 1.9 2006-04-09 10:02:01 thorstenr Exp $
+* $Id: mailsend2friend.php,v 1.10 2006-06-21 21:37:11 matteo Exp $
 *
 * Sends the emails to your friends
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-09-16
 * @copyright    (c) 2001-2006 phpMyFAQ Team
-* 
+*
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
 * compliance with the License. You may obtain a copy of the License at
 * http://www.mozilla.org/MPL/
-* 
+*
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
@@ -33,7 +33,7 @@ if (   isset($_POST['name']) && $_POST['name'] != ''
     && isset($_POST['mailto']) && $_POST['mailto'] != ''
     && IPCheck($_SERVER['REMOTE_ADDR'])
     && checkBannedWord(htmlspecialchars(strip_tags($_POST['zusatz'])))
-    && isset($_POST['captcha']) && ($captcha->validateCaptchaCode($_POST['captcha'])) ) {
+    && checkCaptchaCode() ) {
 
     $name = $db->escape_string(strip_tags($_POST["name"]));
     $mailfrom = $db->escape_string(strip_tags($_POST["mailfrom"]));
@@ -41,35 +41,36 @@ if (   isset($_POST['name']) && $_POST['name'] != ''
     $attached = $db->escape_string(strip_tags($_POST["zusatz"]));
     $mailto = $_POST['mailto'];
 
-	list($user, $host) = explode("@", $mailto[0]);
+    list($user, $host) = explode("@", $mailto[0]);
     if (checkEmail($mailfrom)) {
         foreach($mailto as $mail) {
+            $mail = $db->escape_string(strip_tags($mail));
             if ($mail != "") {
-                mail($IDN->encode($mail), $PMF_LANG["msgS2FMailSubject"].$name, $PMF_CONF["send2friend_text"]."\n\n".$PMF_LANG["msgS2FText2"]."\n".$link."\n\n".stripslashes($attached), "From: ".$IDN->encode($mailfrom));
+                mail($IDN->encode($mail), $PMF_LANG["msgS2FMailSubject"].$name, $PMF_CONF["send2friend_text"]."\n\n".$PMF_LANG["msgS2FText2"]."\n".$link."\n\n".$attached, "From: ".$IDN->encode($mailfrom));
                 usleep(500);
             }
         }
         $tpl->processTemplate ("writeContent", array(
-				"msgSend2Friend" => $PMF_LANG["msgSend2Friend"],
-				"Message" => $PMF_LANG["msgS2FThx"]
-    				));
+                "msgSend2Friend" => $PMF_LANG["msgSend2Friend"],
+                "Message" => $PMF_LANG["msgS2FThx"]
+                    ));
     } else {
-		$tpl->processTemplate ("writeContent", array(
-				"msgSend2Friend" => $PMF_LANG["msgSend2Friend"],
-				"Message" => $PMF_LANG["err_noMailAdress"]
-				));
+        $tpl->processTemplate ("writeContent", array(
+                "msgSend2Friend" => $PMF_LANG["msgSend2Friend"],
+                "Message" => $PMF_LANG["err_noMailAdress"]
+                ));
     }
 } else {
-	if (IPCheck($_SERVER["REMOTE_ADDR"]) == FALSE) {
-		$tpl->processTemplate ("writeContent", array(
-				"msgSend2Friend" => $PMF_LANG["msgSend2Friend"],
-				"Message" => $PMF_LANG["err_bannedIP"]
-				));
+    if (IPCheck($_SERVER["REMOTE_ADDR"]) == FALSE) {
+        $tpl->processTemplate ("writeContent", array(
+                "msgSend2Friend" => $PMF_LANG["msgSend2Friend"],
+                "Message" => $PMF_LANG["err_bannedIP"]
+                ));
     } else {
-		$tpl->processTemplate ("writeContent", array(
-				"msgSend2Friend" => $PMF_LANG["msgSend2Friend"],
-				"Message" => $PMF_LANG["err_sendMail"]
-				));
+        $tpl->processTemplate ("writeContent", array(
+                "msgSend2Friend" => $PMF_LANG["msgSend2Friend"],
+                "Message" => $PMF_LANG["err_sendMail"]
+                ));
     }
 }
 
