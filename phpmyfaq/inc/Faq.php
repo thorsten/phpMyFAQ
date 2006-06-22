@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.24 2006-06-18 11:01:40 thorstenr Exp $
+* $Id: Faq.php,v 1.25 2006-06-22 19:29:25 matteo Exp $
 *
 * The main FAQ class
 *
@@ -164,8 +164,8 @@ class PMF_Faq
                 } else {
                     $listItem = '<li><a href="?' .
                         $sids .
-                        '%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s">%s</a>' .
-                        '<span class="little">(%d %s)</soan></li>';
+                        'action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s">%s</a>' .
+                        '<span class="little">(%d %s)</span></li>';
                 }
 
                 $output .= sprintf($listItem,
