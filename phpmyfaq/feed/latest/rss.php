@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: rss.php,v 1.13 2006-06-18 07:38:45 matteo Exp $
+* $Id: rss.php,v 1.14 2006-06-22 19:32:53 matteo Exp $
 *
 * The RSS feed with the latest five records
 *
@@ -41,7 +41,7 @@ if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE)) {
     $LANGCODE = 'en';
 }
 
-$faq = new FAQ($db, $LANGCODE);
+$faq = new PMF_Faq($db, $LANGCODE);
 $rssData = $faq->getLatestData();
 $num = count($rssData);
 
