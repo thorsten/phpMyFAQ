@@ -30,7 +30,7 @@ class db_pgsql
      * @var   mixed
      * @see   connect(), query(), dbclose()
      */
-	var $conn = false;
+    var $conn = false;
 
     /**
      * The query log string
@@ -38,7 +38,7 @@ class db_pgsql
      * @var   string
      * @see   query()
      */
-	var $sqllog = "";
+    var $sqllog = "";
 
     /**
      * Connects to the database.
@@ -55,14 +55,14 @@ class db_pgsql
      * @author  Tom Rochester <tom.rochester@gmail.com>
      * @since   2003-02-24
      */
-	function connect ($host, $user, $passwd, $db)
+    function connect ($host, $user, $passwd, $db)
     {
-		/* if you use mysql_pconnect(), remove the next line: */
+        /* if you use mysql_pconnect(), remove the next line: */
         $this->conn = pg_pconnect('host='.$host.' port=5432 dbname='.$db.' user='.$user.' password='.$passwd);
         /* comment out for more speed with mod_php or on Windows */
         // $this->conn = @pg_pconnect("host=$host port=5432 dbname=$db user=$user password=$passwd");
-		if (empty($db) || $this->conn == false) {
-			print "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n";
+        if (empty($db) || $this->conn == false) {
+            print "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n";
             print "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n";
             print "<head>\n";
             print "    <title>phpMyFAQ Error</title>\n";
@@ -70,12 +70,12 @@ class db_pgsql
             print "</head>\n";
             print "<body>\n";
             print "<p align=\"center\">The connection to the PostgreSQL server could not be established.</p>\n";
-			print "<p align=\"center\">The error message of the PostgresSQL server:<br />".pg_last_error($this->conn)."</p>\n";
-			print "</body>\n";
+            print "<p align=\"center\">The error message of the PostgresSQL server:<br />".pg_last_error($this->conn)."</p>\n";
+            print "</body>\n";
             print "</html>";
             return false;
-			}
-		return true;
+            }
+        return true;
     }
 
     /**
@@ -90,9 +90,9 @@ class db_pgsql
      * @author  Tom Rochester <tom.rochester@gmail.com>
      * @since   2003-02-24
      */
-	function query($query)
+    function query($query)
     {
-		$this->sqllog .= $query."<br />\n";
+        $this->sqllog .= pmf_debug($query);
         return pg_query($this->conn, $query);
     }
 
@@ -105,7 +105,7 @@ class db_pgsql
     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
     * @since   2004-12-16
     */
-	function escape_string($string)
+    function escape_string($string)
     {
         return pg_escape_string($string);
     }
@@ -122,9 +122,9 @@ class db_pgsql
      * @author  Tom Rochester <tom.rochester@gmail.com>
      * @since   2003-02-24
      */
-	function fetch_object($result)
+    function fetch_object($result)
     {
-		return pg_fetch_object($result);
+        return pg_fetch_object($result);
     }
 
 
@@ -141,7 +141,7 @@ class db_pgsql
      * @author  Tom Rochester <tom.rochester@gmail.com>
      * @since   2003-02-24
      */
-	function fetch_assoc($result)
+    function fetch_assoc($result)
     {
         return pg_fetch_array($result, NULL, PGSQL_ASSOC);
     }
@@ -156,7 +156,7 @@ class db_pgsql
      * @author  Tom Rochester <tom.rochester@gmail.com>
      * @since   2003-02-24
      */
-	function num_rows($result)
+    function num_rows($result)
     {
         return pg_num_rows($result);
     }
@@ -170,11 +170,11 @@ class db_pgsql
      * @author  Tom Rochester <tom.rochester@gmail.com>
      * @since   2003-08-05
      */
-	function insert_id($table, $field)
+    function insert_id($table, $field)
     {
- 		$res = $this->query("SELECT last_value FROM ".$table."_".$field."_seq");
- 		$row = pg_fetch_row($res, 0);
- 		return $row[0];
+         $res = $this->query("SELECT last_value FROM ".$table."_".$field."_seq");
+         $row = pg_fetch_row($res, 0);
+         return $row[0];
     }
 
     /**
@@ -186,9 +186,9 @@ class db_pgsql
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2003-02-24
      */
-	function sqllog()
+    function sqllog()
     {
-		return $this->sqllog;
+        return $this->sqllog;
     }
 
     /**
@@ -201,12 +201,12 @@ class db_pgsql
      * @author  Tom Rochester <tom.rochester@gmail.com>
      * @since   2003-02-24
      */
-	function dbclose()
+    function dbclose()
     {
-		return pg_close($this->conn);
+        return pg_close($this->conn);
     }
 
-	/**
+    /**
      * fti_check.
      *
      * This function test for FULL TEXT INDEXING extension support.
@@ -215,7 +215,7 @@ class db_pgsql
      * @author  Tom Rochester <tom.rochester@gmail.com>
      * @since   2004-08-06
      */
-	function fti_check() { return false; }
+    function fti_check() { return false; }
 
     /**
     * getOne
@@ -227,13 +227,13 @@ class db_pgsql
     * @author  Tom Rochester <tom.rochester@gmail.com>
     * @since   2004-08-06
     */
-	function getOne($query)
-	{
-		$row = pg_fetch_row($this->query($query));
-		return $row[0];
-	}
+    function getOne($query)
+    {
+        $row = pg_fetch_row($this->query($query));
+        return $row[0];
+    }
 
-	/**
+    /**
      * fti_check.
      *
      * This function test for FULL TEXT INDEXING extension support.
@@ -242,19 +242,19 @@ class db_pgsql
      * @author  Tom Rochester <tom.rochester@gmail.com>
      * @since   2004-08-06
      */
-	function getTableStatus()
-	{
-		$select = "SELECT relname FROM pg_stat_user_tables ORDER BY relname;";
-		$arr = array();
-		$result = $this->query($select);
-		while ($row = $this->fetch_assoc($result)) {
-			$count = $this->getOne("SELECT count(1) FROM ".$row["relname"].";");
+    function getTableStatus()
+    {
+        $select = "SELECT relname FROM pg_stat_user_tables ORDER BY relname;";
+        $arr = array();
+        $result = $this->query($select);
+        while ($row = $this->fetch_assoc($result)) {
+            $count = $this->getOne("SELECT count(1) FROM ".$row["relname"].";");
             $arr[$row["relname"]] = $count;
         }
-		return $arr;
-	}
+        return $arr;
+    }
 
-	 /**
+     /**
      * Generates a result based on search a search string.
      *
      * This function generates a result set based on a search string.
@@ -263,22 +263,22 @@ class db_pgsql
      * @author  Tom Rochester <tom.rochester@gmail.com>
      * @since   2004-08-06
      */
-	function search($table, $assoc, $joinedTable = '', $joinAssoc = array(), $match = array(), $string = '', $cond = array())
-	{
-		$string = pg_escape_string(trim($string));
-		$fields = "";
+    function search($table, $assoc, $joinedTable = '', $joinAssoc = array(), $match = array(), $string = '', $cond = array())
+    {
+        $string = pg_escape_string(trim($string));
+        $fields = "";
         $joined = "";
-		$where = "";
-		foreach ($assoc as $field) {
+        $where = "";
+        foreach ($assoc as $field) {
 
             if (empty($fields)) {
 
                 $fields = $field;
-			} else {
+            } else {
 
                 $fields .= ", ".$field;
             }
-		}
+        }
 
         if (isset($joinedTable) && $joinedTable != '') {
 
@@ -293,54 +293,54 @@ class db_pgsql
             $joined = substr($joined, 0, -4);
         }
 
-		foreach ($cond as $field => $data) {
-			if (empty($where)) {
-				$where .= $field." = ".$data;
+        foreach ($cond as $field => $data) {
+            if (empty($where)) {
+                $where .= $field." = ".$data;
             } else {
-				$where .= " AND ".$field." = ".$data;
+                $where .= " AND ".$field." = ".$data;
             }
-		}
+        }
 
-		$match = implode("|| ' ' ||", $match);
+        $match = implode("|| ' ' ||", $match);
 
-		if ($this->fti_check() == false)  {
-			$query = "SELECT ".$fields." FROM ".$table.$joined." WHERE (".$match.") ILIKE ('%".$string."%')";
+        if ($this->fti_check() == false)  {
+            $query = "SELECT ".$fields." FROM ".$table.$joined." WHERE (".$match.") ILIKE ('%".$string."%')";
         } else {
-			// use fti postgres extension - NOT IMPLEMENTED
-		}
+            // use fti postgres extension - NOT IMPLEMENTED
+        }
 
-		if (!empty($where)) {
-			$query .= " AND (".$where.")";
+        if (!empty($where)) {
+            $query .= " AND (".$where.")";
         }
 
         if (is_numeric($string)) {
             $query = "SELECT ".$fields." FROM ".$table.$joined." WHERE ".$match." = ".$string;
         }
 
-		return $this->query($query);
-	}
+        return $this->query($query);
+    }
 
-	/**
-	* Returns the next ID of a table
-	*
-	* This function is a replacement for MySQL's auto-increment so that
-	* we don't need it anymore.
-	*
-	* @param   string      the name of the table
-	* @param   string      the name of the ID column
-	* @return  int
-	* @access  public
-	* @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-	* @since   2004-11-30
-	*/
-	function nextID($table, $id)
-	{
-	    $result = $this->query("SELECT nextval('".$table."_".$id."_seq') as current_id;");
-	    $currentID = pg_result($result, 0, 'current_id');
-	    return ($currentID);
-	}
+    /**
+    * Returns the next ID of a table
+    *
+    * This function is a replacement for MySQL's auto-increment so that
+    * we don't need it anymore.
+    *
+    * @param   string      the name of the table
+    * @param   string      the name of the ID column
+    * @return  int
+    * @access  public
+    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+    * @since   2004-11-30
+    */
+    function nextID($table, $id)
+    {
+        $result = $this->query("SELECT nextval('".$table."_".$id."_seq') as current_id;");
+        $currentID = pg_result($result, 0, 'current_id');
+        return ($currentID);
+    }
 
-	/**
+    /**
     * Returns the error string.
     *
     * This function returns the last error string.
@@ -350,12 +350,12 @@ class db_pgsql
     * @since   2004-08-06
     */
 
-	function error()
-	{
-	    return pg_last_error();
-	}
+    function error()
+    {
+        return pg_last_error();
+    }
 
-	/**
+    /**
     * Returns the client version string.
     *
     * This function returns the client version string.
@@ -365,7 +365,7 @@ class db_pgsql
     * @author  Tom Rochester <tom.rochester@gmail.com>
     * @since   2004-08-06
     */
-  	function client_version()
+      function client_version()
     {
         if (function_exists('pg_version')) {
             $pg_version = pg_version();
@@ -379,7 +379,7 @@ class db_pgsql
         }
     }
 
-	/**
+    /**
     * Returns the server version string.
     *
     * This function returns the server version string.
@@ -389,7 +389,7 @@ class db_pgsql
     * @author  Thorsten Rinne
     * @since   2004-11-12
     */
-	function server_version()
+    function server_version()
     {
         if (function_exists('pg_version')) {
             $pg_version = pg_version();

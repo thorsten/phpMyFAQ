@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Sybase.php,v 1.3 2006-05-28 17:21:48 thorstenr Exp $
+* $Id: Sybase.php,v 1.4 2006-06-24 14:09:46 thorstenr Exp $
 *
 * db_sybase
 *
@@ -32,7 +32,7 @@ class db_sybase
      * @var   mixed
      * @see   connect(), query(), dbclose()
      */
-	var $conn = FALSE;
+    var $conn = FALSE;
 
     /**
      * The query log string
@@ -40,7 +40,7 @@ class db_sybase
      * @var   string
      * @see   query()
      */
-	var $sqllog = "";
+    var $sqllog = "";
 
     /**
      * Constructor
@@ -49,7 +49,7 @@ class db_sybase
      * @author  Adam Greene <phpmyfaq@skippy.fastmail.fm>
      * @since   2003-02-24
      */
-	function db_sybase()
+    function db_sybase()
     {
         return $this->__construct();
     }
@@ -87,10 +87,10 @@ class db_sybase
      * @author  Adam Greene <phpmyfaq@skippy.fastmail.fm>
      * @since   2004-12-10
      */
-	function connect ($host, $user, $passwd, $db)
+    function connect ($host, $user, $passwd, $db)
     {
-		$this->conn = @sybase_pconnect($host, $user, $passwd);
-		if (empty($db) OR $this->conn == FALSE) {
+        $this->conn = @sybase_pconnect($host, $user, $passwd);
+        if (empty($db) OR $this->conn == FALSE) {
             print "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n";
             print "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n";
             print "<head>\n";
@@ -104,7 +104,7 @@ class db_sybase
             print "</html>";
             return FALSE;
         }
-		return @sybase_select_db($db, $this->conn);
+        return @sybase_select_db($db, $this->conn);
     }
 
     /**
@@ -118,10 +118,10 @@ class db_sybase
      * @author  Adam Greene <phpmyfaq@skippy.fastmail.fm>
      * @since   2004-12-10
      */
-	function query($query)
+    function query($query)
     {
-		$this->sqllog .= $query."<br />\n";
-		return @sybase_query($query, $this->conn);
+        $this->sqllog .= pmf_debug($query);
+        return @sybase_query($query, $this->conn);
     }
 
     /**
@@ -133,7 +133,7 @@ class db_sybase
     * @author  Adam Greene <phpmyfaq@skippy.fastmail.fm>
     * @since   2004-12-16
     */
-	function escape_string($string)
+    function escape_string($string)
     {
         return str_replace("'", "''", $string);
     }
@@ -149,9 +149,9 @@ class db_sybase
      * @author  Adam Greene <phpmyfaq@skippy.fastmail.fm>
      * @since   2004-12-10
      */
-	function fetch_object($result)
+    function fetch_object($result)
     {
-		return @sybase_fetch_object($result);
+        return @sybase_fetch_object($result);
     }
 
 
@@ -167,14 +167,14 @@ class db_sybase
      * @author  Adam Greene <phpmyfaq@skippy.fastmail.fm>
      * @since   2004-12-10
      */
-	function fetch_assoc($result)
+    function fetch_assoc($result)
     {
       if (!function_exists('sybase_fetch_assoc')){
         $rs = @sybase_fetch_array($result);
       } else {
         $rs = @sybase_fetch_assoc($result);
       }
-		return $rs;
+        return $rs;
     }
 
     /**
@@ -186,9 +186,9 @@ class db_sybase
      * @author  Adam Greene <phpmyfaq@skippy.fastmail.fm>
      * @since   2004-12-10
      */
-	function num_rows($result)
+    function num_rows($result)
     {
-		return @sybase_num_rows($result);
+        return @sybase_num_rows($result);
     }
 
     /**
@@ -200,15 +200,15 @@ class db_sybase
      * @since   2004-12-10
      */
 
-	function insert_id($table, $field)
+    function insert_id($table, $field)
   {
-		$sql = "SELECT max($field) FROM $table ";
- 		$rs=sybase_query($sql, $this->conn);
- 		$row=sybase_fetch_row($rs);
+        $sql = "SELECT max($field) FROM $table ";
+         $rs=sybase_query($sql, $this->conn);
+         $row=sybase_fetch_row($rs);
     if (isset($row[0]) && $row[0] > 0){
       return $row[0] + 1;
     }
-		return 1;
+        return 1;
   }
 
     /**
@@ -220,14 +220,14 @@ class db_sybase
      * @author  Adam Greene <phpmyfaq@skippy.fastmail.fm>
      * @since   2004-12-10
      */
-	function sqllog()
+    function sqllog()
     {
-		return $this->sqllog;
+        return $this->sqllog;
     }
 
 
 
-	 /**
+     /**
      * Generates a result based on search a search string.
      *
      * This function generates a result set based on a search string.
@@ -237,21 +237,21 @@ class db_sybase
      * @author  Adam Greene <phpmyfaq@skippy.fastmail.fm>
      * @since   2004-12-10
      */
-	function search($table, $assoc, $joinedTable = '', $joinAssoc = array(), $match = array(), $string = '', $cond = array())
-	{
-		$string = trim($string);
-		$fields = '';
+    function search($table, $assoc, $joinedTable = '', $joinAssoc = array(), $match = array(), $string = '', $cond = array())
+    {
+        $string = trim($string);
+        $fields = '';
         $join = '';
         $joined = '';
-		$where = '';
+        $where = '';
 
-		foreach ($assoc as $field) {
+        foreach ($assoc as $field) {
             if (empty($fields)) {
                 $fields = $field;
-			} else {
+            } else {
                 $fields .= ", ".$field;
             }
-		}
+        }
 
         if (isset($joinedTable) && $joinedTable != '') {
             $joined .= ' LEFT JOIN '.$joinedTable.' ON ';
@@ -266,35 +266,35 @@ class db_sybase
 
         $keys = preg_split("/\s+/", $string);
         $numKeys = count($keys);
-		$numMatch = count($match);
+        $numMatch = count($match);
 
-		for ($i = 0; $i < $numKeys; $i++) {
+        for ($i = 0; $i < $numKeys; $i++) {
             if (strlen($where) != 0 ) {
                 $where = $where." OR";
             }
-			$where = $where." (";
-			for ($j = 0; $j < $numMatch; $j++) {
-				if ($j != 0) {
-				    $where = $where." OR ";
-				}
-		    	$where = $where.$match[$j]." LIKE '%".$keys[$i]."%'";
-		    }
-
-			$where .= ")";
-		}
-
-		foreach ($cond as $field => $data) {
-			if (empty($where)) {
-				$where .= $field." = ".$data;
-            } else {
-				$where .= " AND ".$field." = ".$data;
+            $where = $where." (";
+            for ($j = 0; $j < $numMatch; $j++) {
+                if ($j != 0) {
+                    $where = $where." OR ";
+                }
+                $where = $where.$match[$j]." LIKE '%".$keys[$i]."%'";
             }
-		}
+
+            $where .= ")";
+        }
+
+        foreach ($cond as $field => $data) {
+            if (empty($where)) {
+                $where .= $field." = ".$data;
+            } else {
+                $where .= " AND ".$field." = ".$data;
+            }
+        }
 
         $query = "SELECT ".$fields." FROM ".$table.$joined." WHERE";
 
-		if (!empty($where)) {
-			$query .= " (".$where.")";
+        if (!empty($where)) {
+            $query .= " (".$where.")";
         }
 
         if (is_numeric($string)) {
@@ -302,9 +302,9 @@ class db_sybase
         }
 
         return $this->query($query);
-	}
+    }
 
-	 /**
+     /**
      * Returns the error string.
      *
      * This function returns the table status.
@@ -314,40 +314,40 @@ class db_sybase
      * @author  Adam Greene <phpmyfaq@skippy.fastmail.fm>
      * @since   2004-12-10
      */
-	function getTableStatus()
-	{
-	  $select = "SELECT SO.name, STS.rowcnt FROM sysobjects SO ".
+    function getTableStatus()
+    {
+      $select = "SELECT SO.name, STS.rowcnt FROM sysobjects SO ".
       "INNER JOIN systabstats STS ON STS.id = SO.id ".
       "WHERE SO.type = 'U'";
-		$arr = Array();
-		$result = $this->query($select);
-		while ($row = $this->fetch_assoc($result)) {
+        $arr = Array();
+        $result = $this->query($select);
+        while ($row = $this->fetch_assoc($result)) {
             $arr[$row["name"]] = intval($row["rowcnt"]);
         }
-		return $arr;
-	}
+        return $arr;
+    }
 
-	/**
-	* Returns the next ID of a table
-	*
-	* This function is a replacement for MySQL's auto-increment so that
-	* we don't need it anymore.
-	*
-	* @param   string      the name of the table
-	* @param   string      the name of the ID column
-	* @return  int
-	* @access  public
-	* @author  Adam Greene <phpmyfaq@skippy.fastmail.fm>
-	* @since   2004-12-10
-	*/
-	function nextID($table, $id)
-	{
-	    $result = $this->query('SELECT max('.$id.') as current_id FROM '.$table);
-	    $currentID = sybase_result($result, 0, 'current_id');
-	    return ($currentID + 1);
-	}
+    /**
+    * Returns the next ID of a table
+    *
+    * This function is a replacement for MySQL's auto-increment so that
+    * we don't need it anymore.
+    *
+    * @param   string      the name of the table
+    * @param   string      the name of the ID column
+    * @return  int
+    * @access  public
+    * @author  Adam Greene <phpmyfaq@skippy.fastmail.fm>
+    * @since   2004-12-10
+    */
+    function nextID($table, $id)
+    {
+        $result = $this->query('SELECT max('.$id.') as current_id FROM '.$table);
+        $currentID = sybase_result($result, 0, 'current_id');
+        return ($currentID + 1);
+    }
 
-	 /**
+     /**
      * Returns the error string.
      *
      * This function returns the last error string.
@@ -357,7 +357,7 @@ class db_sybase
      * @author  Adam Greene <phpmyfaq@skippy.fastmail.fm>
      * @since   2004-12-10
      */
-	function error()
+    function error()
     {
         return @sybase_get_last_message();
     }
@@ -371,7 +371,7 @@ class db_sybase
      * @author  Tom Rochester <tom.rochester@gmail.com>
      * @since   2004-12-10
      */
-	function client_version()
+    function client_version()
     {
         return "Sybase -- Unsupported";
     }
@@ -385,7 +385,7 @@ class db_sybase
      * @author  Adam Greene <phpmyfaq@skippy.fastmail.fm>
      * @since   2004-12-10
      */
-	function server_version()
+    function server_version()
     {
         $result = $this->query('SELECT @@version AS SERVER_VERSION');
         $errormsg = sybase_result($result, 0, 'SERVER_VERSION');
@@ -403,9 +403,9 @@ class db_sybase
      * @author  Adam Greene <phpmyfaq@skippy.fastmail.fm>
      * @since   2004-12-10
      */
-	function dbclose()
+    function dbclose()
     {
-		return @sybase_close($this->conn);
+        return @sybase_close($this->conn);
     }
 
 }

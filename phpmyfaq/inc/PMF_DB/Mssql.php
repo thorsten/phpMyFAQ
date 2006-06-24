@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Mssql.php,v 1.4 2006-05-28 17:21:48 thorstenr Exp $
+* $Id: Mssql.php,v 1.5 2006-06-24 14:09:46 thorstenr Exp $
 *
 * db_mssql
 *
@@ -32,7 +32,7 @@ class db_mssql
      * @var   mixed
      * @see   connect(), query(), dbclose()
      */
-	var $conn = FALSE;
+    var $conn = FALSE;
 
     /**
      * The query log string
@@ -40,7 +40,7 @@ class db_mssql
      * @var   string
      * @see   query()
      */
-	var $sqllog = "";
+    var $sqllog = "";
 
     /**
      * Connects to the database.
@@ -56,11 +56,11 @@ class db_mssql
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-01-11
      */
-	function connect ($host, $user, $passwd, $db)
+    function connect ($host, $user, $passwd, $db)
     {
-		$this->conn = mssql_pconnect($host, $user, $passwd);
-		if (empty($db) OR $this->conn == false) {
-			print "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n";
+        $this->conn = mssql_pconnect($host, $user, $passwd);
+        if (empty($db) OR $this->conn == false) {
+            print "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n";
             print "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n";
             print "<head>\n";
             print "    <title>phpMyFAQ Error</title>\n";
@@ -68,12 +68,12 @@ class db_mssql
             print "</head>\n";
             print "<body>\n";
             print "<p align=\"center\">The connection to the MS SQL server could not be established.</p>\n";
-			print "<p align=\"center\">The error message of the MS SQL server:<br />".mssql_get_last_message()."</p>\n";
-			print "</body>\n";
+            print "<p align=\"center\">The error message of the MS SQL server:<br />".mssql_get_last_message()."</p>\n";
+            print "</body>\n";
             print "</html>";
             return false;
-			}
-		return mssql_select_db($db, $this->conn);
+            }
+        return mssql_select_db($db, $this->conn);
     }
 
     /**
@@ -87,10 +87,10 @@ class db_mssql
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-01-11
      */
-	function query($query)
+    function query($query)
     {
-		$this->sqllog .= $query."<br />\n";
-		return @mssql_query($query, $this->conn);
+        $this->sqllog .= pmf_debug($query);
+        return @mssql_query($query, $this->conn);
     }
 
     /**
@@ -118,9 +118,9 @@ class db_mssql
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-01-11
      */
-	function fetch_object($result)
+    function fetch_object($result)
     {
-		return @mssql_fetch_object($result);
+        return @mssql_fetch_object($result);
     }
 
 
@@ -136,9 +136,9 @@ class db_mssql
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-01-11
      */
-	function fetch_assoc($result)
+    function fetch_assoc($result)
     {
-		return @mssql_fetch_assoc($result);
+        return @mssql_fetch_assoc($result);
     }
 
     /**
@@ -150,9 +150,9 @@ class db_mssql
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-01-11
      */
-	function num_rows($result)
+    function num_rows($result)
     {
-		return @mssql_num_rows($result);
+        return @mssql_num_rows($result);
     }
 
     /**
@@ -163,10 +163,10 @@ class db_mssql
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-01-11
      */
-	function insert_id($table, $field)
+    function insert_id($table, $field)
     {
- 		$result = $this->query('SELECT max('.$field.') AS last_id FROM '.$table);
-		return mssql_result($result, 0, 'last_id');
+         $result = $this->query('SELECT max('.$field.') AS last_id FROM '.$table);
+        return mssql_result($result, 0, 'last_id');
     }
 
     /**
@@ -178,9 +178,9 @@ class db_mssql
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-01-11
      */
-	function sqllog()
+    function sqllog()
     {
-		return $this->sqllog;
+        return $this->sqllog;
     }
 
     /**
@@ -192,12 +192,12 @@ class db_mssql
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-01-11
      */
-	function dbclose()
+    function dbclose()
     {
-		return @mssql_close($this->conn);
+        return @mssql_close($this->conn);
     }
 
-	/**
+    /**
      *
      *
      *
@@ -206,12 +206,12 @@ class db_mssql
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-01-11
      */
-	function getTableStatus()
-	{
-		return;
-	}
+    function getTableStatus()
+    {
+        return;
+    }
 
-	 /**
+     /**
      * Generates a result based on search a search string.
      *
      * This function generates a result set based on a search string.
@@ -222,20 +222,20 @@ class db_mssql
      * @since   2005-01-11
      */
     function search($table, $assoc, $joinedTable = '', $joinAssoc = array(), $match = array(), $string = '', $cond = array())
-	{
-		$string = trim($string);
-		$fields = '';
+    {
+        $string = trim($string);
+        $fields = '';
         $join = '';
         $joined = '';
-		$where = '';
+        $where = '';
 
-		foreach ($assoc as $field) {
+        foreach ($assoc as $field) {
             if (empty($fields)) {
                 $fields = $field;
-			} else {
+            } else {
                 $fields .= ", ".$field;
             }
-		}
+        }
 
         if (isset($joinedTable) && $joinedTable != '') {
             $joined .= ' LEFT JOIN '.$joinedTable.' ON ';
@@ -250,35 +250,35 @@ class db_mssql
 
         $keys = preg_split("/\s+/", $string);
         $numKeys = count($keys);
-		$numMatch = count($match);
+        $numMatch = count($match);
 
-		for ($i = 0; $i < $numKeys; $i++) {
+        for ($i = 0; $i < $numKeys; $i++) {
             if (strlen($where) != 0 ) {
                 $where = $where." OR";
             }
-			$where = $where." (";
-			for ($j = 0; $j < $numMatch; $j++) {
-				if ($j != 0) {
-				    $where = $where." OR ";
-				}
-		    	$where = $where.$match[$j]." LIKE '%".$keys[$i]."%'";
-		    }
-
-			$where .= ")";
-		}
-
-		foreach ($cond as $field => $data) {
-			if (empty($where)) {
-				$where .= $field." = ".$data;
-            } else {
-				$where .= " AND ".$field." = ".$data;
+            $where = $where." (";
+            for ($j = 0; $j < $numMatch; $j++) {
+                if ($j != 0) {
+                    $where = $where." OR ";
+                }
+                $where = $where.$match[$j]." LIKE '%".$keys[$i]."%'";
             }
-		}
+
+            $where .= ")";
+        }
+
+        foreach ($cond as $field => $data) {
+            if (empty($where)) {
+                $where .= $field." = ".$data;
+            } else {
+                $where .= " AND ".$field." = ".$data;
+            }
+        }
 
         $query = "SELECT ".$fields." FROM ".$table.$joined." WHERE";
 
-		if (!empty($where)) {
-			$query .= " (".$where.")";
+        if (!empty($where)) {
+            $query .= " (".$where.")";
         }
 
         if (is_numeric($string)) {
@@ -286,29 +286,29 @@ class db_mssql
         }
 
         return $this->query($query);
-	}
+    }
 
-	/**
-	* Returns the next ID of a table
-	*
-	* This function is a replacement for MySQL's auto-increment so that
-	* we don't need it anymore.
-	*
-	* @param   string      the name of the table
-	* @param   string      the name of the ID column
-	* @return  int
-	* @access  public
-	* @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-	* @since   2005-01-11
-	*/
-	function nextID($table, $id)
-	{
-	    $result = $this->query('SELECT max('.$id.') as current_id FROM '.$table);
-	    $currentID = mssql_result($result, 0, 'current_id');
-	    return ($currentID + 1);
-	}
+    /**
+    * Returns the next ID of a table
+    *
+    * This function is a replacement for MySQL's auto-increment so that
+    * we don't need it anymore.
+    *
+    * @param   string      the name of the table
+    * @param   string      the name of the ID column
+    * @return  int
+    * @access  public
+    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+    * @since   2005-01-11
+    */
+    function nextID($table, $id)
+    {
+        $result = $this->query('SELECT max('.$id.') as current_id FROM '.$table);
+        $currentID = mssql_result($result, 0, 'current_id');
+        return ($currentID + 1);
+    }
 
-	/**
+    /**
     * Returns the error string.
     *
     * This function returns the last error string.
@@ -317,7 +317,7 @@ class db_mssql
     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
     * @since   2005-01-11
     */
-	function error()
+    function error()
     {
         $result = $this->query('SELECT @@ERROR AS ErrorCode');
         $errormsg = mssql_result($result, 0, 'ErrorCode');
@@ -326,7 +326,7 @@ class db_mssql
         }
     }
 
-	/**
+    /**
     * Returns the client version string.
     *
     * This function returns the last error string.
@@ -335,12 +335,12 @@ class db_mssql
     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
     * @since   2005-01-11
     */
-	function client_version()
+    function client_version()
     {
          return;
     }
 
-	/**
+    /**
     * Returns the server version string.
     *
     * This function returns the last error string.
@@ -349,7 +349,7 @@ class db_mssql
     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
     * @since   2005-01-11
     */
-	function server_version()
+    function server_version()
     {
         $result = $this->query('SELECT @@version AS SERVER_VERSION');
         $version = mssql_result($result, 0, 'SERVER_VERSION');

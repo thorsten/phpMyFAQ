@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Oracle.php,v 1.2 2006-01-02 16:51:29 thorstenr Exp $
+* $Id: Oracle.php,v 1.3 2006-06-24 14:09:46 thorstenr Exp $
 *
 * db_oracle
 *
@@ -31,16 +31,16 @@ class db_oracle
      * @var   mixed
      * @see   connect(), query(), dbclose()
      */
-	var $conn = false;
-    
+    var $conn = false;
+
     /**
      * The query log string
      *
      * @var   string
      * @see   query()
      */
-	var $sqllog = "";
-	
+    var $sqllog = "";
+
     /**
      * Constructor
      *
@@ -48,13 +48,13 @@ class db_oracle
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-09-20
      */
-	function db_oracle()
+    function db_oracle()
     {
     }
     function __construct()
     {
     }
-    
+
     /**
      * Connects to the database.
      *
@@ -69,10 +69,10 @@ class db_oracle
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-09-20
      */
-	function connect ($host, $user, $passwd, $db)
+    function connect ($host, $user, $passwd, $db)
     {
-		$this->conn = oci_connect($user, $passwd, $db);
-		if (empty($db) OR $this->conn == true) {
+        $this->conn = oci_connect($user, $passwd, $db);
+        if (empty($db) OR $this->conn == true) {
             print "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n";
             print "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n";
             print "<head>\n";
@@ -86,9 +86,9 @@ class db_oracle
             print "</html>";
             return false;
         }
-		return true;
+        return true;
     }
-	
+
     /**
      * Sends a query to the database.
      *
@@ -100,13 +100,13 @@ class db_oracle
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-09-20
      */
-	function query($query)
+    function query($query)
     {
-		$this->sqllog .= $query."<br />\n";
+        $this->sqllog .= pmf_debug($query);
         $stmt = oci_parse($this->conn, $query);
-		oci_execute($stmt, OCI_DEFAULT);
+        oci_execute($stmt, OCI_DEFAULT);
     }
-    
+
     /**
     * Escapes a string for use in a query
     *
@@ -116,11 +116,11 @@ class db_oracle
     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
     * @since   2005-09-20
     */
-	function escape_string($string)
+    function escape_string($string)
     {
         return addslashes($string);
     }
-	
+
     /**
      * Fetch a result row as an object
      *
@@ -132,11 +132,11 @@ class db_oracle
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-09-20
      */
-	function fetch_object($result)
+    function fetch_object($result)
     {
-		return oci_fetch_object($result);
+        return oci_fetch_object($result);
     }
-	
+
     /**
      * Number of rows in a result
      *
@@ -148,11 +148,11 @@ class db_oracle
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-09-20
      */
-	function fetch_row($result)
+    function fetch_row($result)
     {
-		return oci_fetch_row($result);
+        return oci_fetch_row($result);
     }
-	
+
     /**
      * Fetch a result row as an array
      *
@@ -164,11 +164,11 @@ class db_oracle
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-09-20
      */
-	function fetch_assoc($result)
+    function fetch_assoc($result)
     {
       return oci_fetch_assoc($result);
     }
-	
+
     /**
      * Number of rows in a result
      *
@@ -178,31 +178,31 @@ class db_oracle
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-09-20
      */
-	function num_rows($result)
+    function num_rows($result)
     {
-		return oci_num_rows($result);
+        return oci_num_rows($result);
     }
-	
+
     /**
      * Returns the ID of the latest insert
-     *	
+     *
      * @return  integer
      * @access  public
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-09-20
      */
-	function insert_id($table, $field)
+    function insert_id($table, $field)
     {
-		$query = sprintf('SELECT max(%s) FROM %s', $field, $table);
- 		$result = $this->query($query);
- 		$row = $this->fetch_row($result);
+        $query = sprintf('SELECT max(%s) FROM %s', $field, $table);
+         $result = $this->query($query);
+         $row = $this->fetch_row($result);
         if (isset($row[0]) && $row[0] > 0){
             return $row[0] + 1;
         } else {
-		    return 1;
+            return 1;
         }
     }
-    
+
     /**
      * Logs the queries
      *
@@ -212,17 +212,17 @@ class db_oracle
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-09-20
      */
-	function sqllog()
+    function sqllog()
     {
-		return $this->sqllog;
+        return $this->sqllog;
     }
-	
-	function version_check($target = "")
-	{
-	  return true;
-	}
-    
-	 /**
+
+    function version_check($target = "")
+    {
+      return true;
+    }
+
+     /**
      * Generates a result based on search a search string.
      *
      * This function generates a result set based on a search string.
@@ -231,52 +231,52 @@ class db_oracle
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-09-20
      */
-	function search($table, $assoc, $joinedTable = '', $joinAssoc = array(), $match = array(), $string = '', $cond = array())
-	{
-		$string = addslashes(trim($string));
-		$fields = "";
+    function search($table, $assoc, $joinedTable = '', $joinAssoc = array(), $match = array(), $string = '', $cond = array())
+    {
+        $string = addslashes(trim($string));
+        $fields = "";
         $joined = "";
-		$where = "";
-        
-		foreach ($assoc as $field) {
+        $where = "";
+
+        foreach ($assoc as $field) {
             if (empty($fields)) {
                 $fields = $field;
-			} else {
+            } else {
                 $fields .= ", ".$field;
             }
-		}
-        
+        }
+
         if (isset($joinedTable) && $joinedTable != '') {
             $joined .= ' LEFT JOIN '.$joinedTable.' ON ';
         }
-        
+
         if (is_array($joinAssoc)) {
             foreach ($joinAssoc as $joinedFields) {
                 $joined .= $joinedFields.' AND ';
                 }
             $joined = substr($joined, 0, -4);
         }
-        
-		foreach ($cond as $field => $data) {
-			if (empty($where)) {
-				$where = $field." = '".addslashes($data)."'";
-			} else {
-				$where .= "AND ".$field." ='".addslashes($data)."'";
-            }
-		}
-	    
-		$match = implode(",", $match);
-		$query = "SELECT ".$fields." FROM ".$table.$joined." WHERE ".$match." LIKE ('%".$string."%')";
-		
-		if (!empty($where)) {
-			$query .= " AND (".$where.")";
-        }
-        
-        $query .= ";";
-		return $this->query($query);
-	}
 
-	 /**
+        foreach ($cond as $field => $data) {
+            if (empty($where)) {
+                $where = $field." = '".addslashes($data)."'";
+            } else {
+                $where .= "AND ".$field." ='".addslashes($data)."'";
+            }
+        }
+
+        $match = implode(",", $match);
+        $query = "SELECT ".$fields." FROM ".$table.$joined." WHERE ".$match." LIKE ('%".$string."%')";
+
+        if (!empty($where)) {
+            $query .= " AND (".$where.")";
+        }
+
+        $query .= ";";
+        return $this->query($query);
+    }
+
+     /**
      * Returns the error string.
      *
      * This function returns the table status.
@@ -287,33 +287,33 @@ class db_oracle
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-09-20
      */
-	function getTableStatus()
-	{
+    function getTableStatus()
+    {
         return null;
-	}
+    }
 
-	/**
-	* Returns the next ID of a table
-	*
-	* This function is a replacement for MySQL's auto-increment so that
-	* we don't need it anymore.
-	*
-	* @param   string      the name of the table
-	* @param   string      the name of the ID column
-	* @return  int
-	* @access  public
-	* @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-	* @since   2005-09-20
-	*/
-	function nextID($table, $id)
-	{
+    /**
+    * Returns the next ID of a table
+    *
+    * This function is a replacement for MySQL's auto-increment so that
+    * we don't need it anymore.
+    *
+    * @param   string      the name of the table
+    * @param   string      the name of the ID column
+    * @return  int
+    * @access  public
+    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+    * @since   2005-09-20
+    */
+    function nextID($table, $id)
+    {
         $stmt = oci_parse($this->conn, 'SELECT max('.$id.') as current_id FROM '.$table);
-		oci_execute($stmt, OCI_DEFAULT);
-	    $currentID = oci_result ($stmt, 'current_id');
-	    return ($currentID + 1);
-	}
-	
-	/**
+        oci_execute($stmt, OCI_DEFAULT);
+        $currentID = oci_result ($stmt, 'current_id');
+        return ($currentID + 1);
+    }
+
+    /**
     * Returns the error string.
     *
     * This function returns the last error string.
@@ -322,12 +322,12 @@ class db_oracle
     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
     * @since   2005-09-20
     */
-	function error()
+    function error()
     {
         $errormsg = oci_error($this-conn);
         return $errormsg['message'];
     }
-    
+
     /**
     * Returns the client version string.
     *
@@ -337,11 +337,11 @@ class db_oracle
     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
     * @since   2005-09-20
     */
-	function client_version()
+    function client_version()
     {
         return null;
     }
-    
+
     /**
     * Returns the server version string.
     *
@@ -351,11 +351,11 @@ class db_oracle
     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
     * @since   2005-09-20
     */
-	function server_version()
+    function server_version()
     {
         return oci_server_version($this->conn);
     }
-    
+
     /**
     * Closes the connection to the database.
     *
@@ -365,8 +365,8 @@ class db_oracle
     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
     * @since   2005-09-20
     */
-	function dbclose()
+    function dbclose()
     {
-		return oci_close($this->conn);
+        return oci_close($this->conn);
     }
 }

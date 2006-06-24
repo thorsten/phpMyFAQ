@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Sqlite.php,v 1.5 2006-05-28 17:21:48 thorstenr Exp $
+* $Id: Sqlite.php,v 1.6 2006-06-24 14:09:46 thorstenr Exp $
 *
 * db_sqlite
 *
@@ -32,7 +32,7 @@ class db_sqlite
      * @var   mixed
      * @see   connect(), query(), dbclose()
      */
-	private $conn = false;
+    private $conn = false;
 
     /**
      * The query log string
@@ -40,7 +40,7 @@ class db_sqlite
      * @var   string
      * @see   query()
      */
-	private $sqllog = '';
+    private $sqllog = '';
 
     /**
      * Constructor
@@ -64,10 +64,10 @@ class db_sqlite
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-06-27
      */
-	public function connect($host, $user = false, $passwd = false, $db = false)
+    public function connect($host, $user = false, $passwd = false, $db = false)
     {
-		$this->conn = sqlite_open($host, 0666);
-		if (!$this->conn) {
+        $this->conn = sqlite_open($host, 0666);
+        if (!$this->conn) {
             print "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n";
             print "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n";
             print "<head>\n";
@@ -81,7 +81,7 @@ class db_sqlite
             print "</html>";
             return false;
         }
-		return true;
+        return true;
     }
 
     /**
@@ -95,10 +95,10 @@ class db_sqlite
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-06-27
      */
-	public function query($query)
+    public function query($query)
     {
-		$this->sqllog .= $query."<br />\n";
-		return sqlite_query($this->conn, $query);
+        $this->sqllog .= pmf_debug($query);
+        return sqlite_query($this->conn, $query);
     }
 
     /**
@@ -110,7 +110,7 @@ class db_sqlite
     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
     * @since   2004-12-16
     */
-	public function escape_string($string)
+    public function escape_string($string)
     {
       return sqlite_escape_string($string);
     }
@@ -126,9 +126,9 @@ class db_sqlite
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-06-27
      */
-	public function fetch_object($result)
+    public function fetch_object($result)
     {
-		return sqlite_fetch_object($result);
+        return sqlite_fetch_object($result);
     }
 
 
@@ -144,9 +144,9 @@ class db_sqlite
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-06-27
      */
-	public function fetch_assoc($result)
+    public function fetch_assoc($result)
     {
-		return sqlite_fetch_array($result, SQLITE_ASSOC);
+        return sqlite_fetch_array($result, SQLITE_ASSOC);
     }
 
 
@@ -160,9 +160,9 @@ class db_sqlite
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-06-27
      */
-	public function num_rows($result)
+    public function num_rows($result)
     {
-		return sqlite_num_rows($result);
+        return sqlite_num_rows($result);
     }
 
     /**
@@ -173,9 +173,9 @@ class db_sqlite
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-06-27
      */
-	public function insert_id($table, $field)
+    public function insert_id($table, $field)
     {
-		return sqlite_last_insert_rowid($this->conn);
+        return sqlite_last_insert_rowid($this->conn);
     }
 
     /**
@@ -187,14 +187,14 @@ class db_sqlite
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-06-27
      */
-	public function sqllog()
+    public function sqllog()
     {
-		return $this->sqllog;
+        return $this->sqllog;
     }
 
 
 
-	/**
+    /**
     * Generates a result based on search a search string.
     *
     * This function generates a result set based on a search string.
@@ -203,21 +203,21 @@ class db_sqlite
     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
     * @since   2005-06-27
     */
-	public function search($table, $assoc, $joinedTable = '', $joinAssoc = array(), $match = array(), $string = '', $cond = array())
-	{
-		$string = trim($string);
-		$fields = '';
+    public function search($table, $assoc, $joinedTable = '', $joinAssoc = array(), $match = array(), $string = '', $cond = array())
+    {
+        $string = trim($string);
+        $fields = '';
         $join = '';
         $joined = '';
-		$where = '';
+        $where = '';
 
-		foreach ($assoc as $field) {
+        foreach ($assoc as $field) {
             if (empty($fields)) {
                 $fields = $field;
-			} else {
+            } else {
                 $fields .= ", ".$field;
             }
-		}
+        }
 
         if (isset($joinedTable) && $joinedTable != '') {
             $joined .= ' LEFT JOIN '.$joinedTable.' ON ';
@@ -232,35 +232,35 @@ class db_sqlite
 
         $keys = preg_split("/\s+/", $string);
         $numKeys = count($keys);
-		$numMatch = count($match);
+        $numMatch = count($match);
 
-		for ($i = 0; $i < $numKeys; $i++) {
+        for ($i = 0; $i < $numKeys; $i++) {
             if (strlen($where) != 0 ) {
                 $where = $where." OR";
             }
-			$where = $where." (";
-			for ($j = 0; $j < $numMatch; $j++) {
-				if ($j != 0) {
-				    $where = $where." OR ";
-				}
-		    	$where = $where.$match[$j]." LIKE '%".$keys[$i]."%'";
-		    }
-
-			$where .= ")";
-		}
-
-		foreach ($cond as $field => $data) {
-			if (empty($where)) {
-				$where .= $field." = ".$data;
-            } else {
-				$where .= " AND ".$field." = ".$data;
+            $where = $where." (";
+            for ($j = 0; $j < $numMatch; $j++) {
+                if ($j != 0) {
+                    $where = $where." OR ";
+                }
+                $where = $where.$match[$j]." LIKE '%".$keys[$i]."%'";
             }
-		}
+
+            $where .= ")";
+        }
+
+        foreach ($cond as $field => $data) {
+            if (empty($where)) {
+                $where .= $field." = ".$data;
+            } else {
+                $where .= " AND ".$field." = ".$data;
+            }
+        }
 
         $query = "SELECT ".$fields." FROM ".$table.$joined." WHERE";
 
-		if (!empty($where)) {
-			$query .= " (".$where.")";
+        if (!empty($where)) {
+            $query .= " (".$where.")";
         }
 
         if (is_numeric($string)) {
@@ -268,9 +268,9 @@ class db_sqlite
         }
 
         return $this->query($query);
-	}
+    }
 
-	/**
+    /**
     * Returns the error string.
     *
     * This function returns the table status.
@@ -280,30 +280,30 @@ class db_sqlite
     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
     * @since   2005-06-27
     */
-	public function getTableStatus()
-	{
-		$arr = array();
-		$result = $this->query("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name");
-		while ($row = $this->fetch_assoc($result)) {
+    public function getTableStatus()
+    {
+        $arr = array();
+        $result = $this->query("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name");
+        while ($row = $this->fetch_assoc($result)) {
             $num_result = $this->query('SELECT * FROM '.$row['name']);
             $arr[$row['name']] = $this->num_rows($num_result);
         }
-		return $arr;
-	}
+        return $arr;
+    }
 
-	/**
-	* Returns the next ID of a table
-	*
-	* This function is a replacement for sqlite's auto-increment so that
-	* we don't need it anymore.
-	*
-	* @param   string      the name of the table
-	* @param   string      the name of the ID column
-	* @return  int
-	* @access  public
-	* @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-	* @since   2005-06-27
-	*/
+    /**
+    * Returns the next ID of a table
+    *
+    * This function is a replacement for sqlite's auto-increment so that
+    * we don't need it anymore.
+    *
+    * @param   string      the name of the table
+    * @param   string      the name of the ID column
+    * @return  int
+    * @access  public
+    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+    * @since   2005-06-27
+    */
     public function nextID($table, $id)
     {
         $result = $this->query('SELECT max('.$id.') AS current_id FROM '.$table);
@@ -311,7 +311,7 @@ class db_sqlite
         return ($currentID + 1);
     }
 
-	/**
+    /**
     * Returns the error string.
     *
     * This function returns the last error string.
@@ -320,7 +320,7 @@ class db_sqlite
     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
     * @since   2005-06-27
     */
-	public function error()
+    public function error()
     {
         return sqlite_error_string(sqlite_last_error($this->conn));
     }
@@ -334,7 +334,7 @@ class db_sqlite
     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
     * @since   2005-06-27
     */
-	public function client_version()
+    public function client_version()
     {
         return 'SQLite '.sqlite_libversion();
     }
@@ -348,7 +348,7 @@ class db_sqlite
     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
     * @since   2005-06-27
     */
-	public function server_version()
+    public function server_version()
     {
         return $this->client_version();
     }
@@ -362,8 +362,8 @@ class db_sqlite
     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
     * @since   2005-06-27
     */
-	public function dbclose()
+    public function dbclose()
     {
-		return sqlite_close($this->conn);
+        return sqlite_close($this->conn);
     }
 }
