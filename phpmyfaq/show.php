@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: show.php,v 1.8 2006-01-02 16:51:26 thorstenr Exp $
+* $Id: show.php,v 1.9 2006-06-24 11:38:55 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-08-27
@@ -33,7 +33,7 @@ if (isset($category) && $category != 0 && isset($tree->categoryName[$category]))
 
     $records = $faq->showAllRecords($category);
     if (!$records) {
-        $cats = new Category($LANGCODE);
+        $cats = new PMF_Category($LANGCODE);
     	$cats->transform($category);
     	$cats->collapseAll();
     	$records = $cats->viewTree();
