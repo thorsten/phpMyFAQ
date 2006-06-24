@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.46 2006-06-19 20:24:39 matteo Exp $
+* $Id: index.php,v 1.47 2006-06-24 11:58:56 thorstenr Exp $
 *
 * The main admin backend index file
 *
@@ -340,7 +340,7 @@ if (isset($auth)) {
 }
 
 if (DEBUG) {
-    print "<p>DEBUG INFORMATION:<br />\n".$db->sqllog()."</p>\n";
+    print "<p>DEBUG INFORMATION:<br />\n<pre>".$db->sqllog()."</pre></p>\n";
     print "<p>TABLES & RECORDS:<br />\n";
     $tableStatuses = $db->getTableStatus();
     foreach ($tableStatuses as $key => $value) {
