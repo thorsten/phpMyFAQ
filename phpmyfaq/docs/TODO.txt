@@ -1,24 +1,23 @@
 TODO list for future versions of phpMyFAQ:
 
 2.0.0 "Prometheus":
-- add spam protection ?
-- improved WYSIWYG editor and Image Manager ?
-- reorder records ?
-- batch insertion script ?
-- improved category and FAQ record functions ?
-- show/edit/delete comments ?
-- add "submit translation" link ?
-- add related articles ?
-- installer and update scripts merged together in a setup routine ?
-- more accessibility features (WAI and Section 508) ?
+- improved URL rewrite functions
+- improved export functions
+- improved WYSIWYG editor and Image Manager
+- reorder records
+- improved category and FAQ record functions
+- show/edit/delete comments
+- add "submit translation" link
+- add related articles
+- better news system with multiple pages and sticky news
 - bugfixing for stability or security reasons
 
 2.1.0 "Pandora":
+- batch insertion script
 - subscription service for new articles ?
 - message to the user, who has posted a question and an answer is availible ?
-- better news system with multiple pages and sticky news
+- installer and update scripts merged together in a setup routine ?
 - improved category administration ?
-- search in one category
 - more accessibility features (WAI and Section 508) ?
 - bugfixing for stability or security reasons
 
@@ -37,3 +36,7 @@ TODO list for future versions of phpMyFAQ:
 - Unicode support for PDFs ?
 - directory-like listing of entries ?
 - bugfixing for stability or security reasons
+
+3.0.0 "":
+- PHP 5.x / PHP 6 only version
+- PDO support
