@@ -179,7 +179,10 @@ class PMF_User
      * @access private
      * @var array
      */
-    var $_allowed_status = array('active' => PMF_USERSTATUS_ACTIVE, 'blocked' => PMF_USERSTATUS_BLOCKED, 'protected' => PMF_USERSTATUS_PROTECTED);
+    var $_allowed_status = array(
+        'active'    => PMF_USERSTATUS_ACTIVE,
+        'blocked'   => PMF_USERSTATUS_BLOCKED,
+        'protected' => PMF_USERSTATUS_PROTECTED);
 
     /**
      * authentication container
@@ -694,17 +697,6 @@ class PMF_User
     }
 
     /**
-     * destructor
-     *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @return void
-     */
-    function __destruct()
-    {
-    }
-
-    /**
      * returns true if login is a valid login string.
      *
      * $this->_login_minLength defines the minimum length the
@@ -897,5 +889,3 @@ class PMF_User
     }
 
 } /* end of class PMF_User */
-
-?>
