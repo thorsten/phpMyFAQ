@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.115 2006-06-18 11:01:40 thorstenr Exp $
+* $Id: functions.php,v 1.116 2006-06-24 14:09:11 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -27,6 +27,10 @@
 * under the License.
 ******************************************************************************/
 
+//
+// DEBUGGING FUNCTIONS
+//
+
 /**
 * Function to get a pretty formatted output of a variable
 *
@@ -43,6 +47,25 @@ function pmf_dump($var)
     print '<pre>';
     print_r($var);
     print '</pre>';
+}
+
+/**
+ * debug_backtrace() wrapper function
+ *
+ * @param    $string
+ * @return   string
+ * @access   public
+ * @since    2006-06-24
+ * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+ */
+function pmf_debug($string)
+{
+    $debug = debug_backtrace();
+
+    $ret  = isset($debug[2]['class']) ? $debug[2]['class'].$debug[1]['type'] : '';
+    $ret .= $debug[2]['function'];
+    $ret .= ": <pre>" . $string . "</pre><br />\n";
+    return $ret;
 }
 
 //
