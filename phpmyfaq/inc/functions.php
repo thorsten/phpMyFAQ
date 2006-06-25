@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.117 2006-06-25 11:02:18 thorstenr Exp $
+* $Id: functions.php,v 1.118 2006-06-25 11:32:12 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -63,7 +63,7 @@ function pmf_debug($string)
     $debug = debug_backtrace();
 
     $ret  = isset($debug[2]['class']) ? $debug[2]['class'].$debug[1]['type'] : '';
-    $ret .= $debug[2]['function'];
+    $ret .= $debug[2]['function'] . '() in line ' . $debug[2]['line'];
     $ret .= ": <pre>" . $string . "</pre><br />\n";
     return $ret;
 }
