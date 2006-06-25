@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.118 2006-06-25 11:32:12 thorstenr Exp $
+* $Id: functions.php,v 1.119 2006-06-25 16:12:38 matteo Exp $
 *
 * This is the main functions file!
 *
@@ -1227,7 +1227,7 @@ function searchEngine($begriff, $category = '%')
     //                classified among more than 1 category
     if (is_numeric($begriff) && ($begriff > PMF_SOLUTION_ID_START_VALUE) && ($num > 0)) {
         if (isset($PMF_CONF['mod_rewrite']) && $PMF_CONF['mod_rewrite'] == 'TRUE') {
-            header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']).'solution_id_'.$begriff.'.html');
+            header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']).'/solution_id_'.$begriff.'.html');
         } else {
             header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']).'?solution_id='.$begriff);
         }
@@ -1290,25 +1290,53 @@ function searchEngine($begriff, $category = '%')
 
             if (strlen($searchItems[0]) > 1) {
                 foreach ($searchItems as $item) {
-                    $thema   = preg_replace_callback(
-                        '/('.$item.
-                        '="[^"]*")|((href|src|title|alt|class|style|id|name)="[^"]*'.$item.
-                        '[^"]*")|('.$item.
-                        ')/mis', "highlight_no_links", $thema);
-                    $content = preg_replace_callback(
-                        '/('.$item.
-                        '="[^"]*")|((href|src|title|alt|class|style|id|name)="[^"]*'.$item.
-                        '[^"]*")|('.$item.
-                        ')/mis', "highlight_no_links", $content);
+                    $thema = preg_replace_callback('/'
+                                .'('.$item.'="[^"]*")|'
+                                .'((href|src|title|alt|class|style|id|name)="[^"]*'.$item.'[^"]*")|'
+                                .'('.$item.')'
+                                .'/mis',
+                                "highlight_no_links",
+                                $thema
+                                );
+                    $content = preg_replace_callback('/'
+                                .'('.$item.'="[^"]*")|'
+                                .'((href|src|title|alt|class|style|id|name)="[^"]*'.$item.'[^"]*")|'
+                                .'('.$item.')'
+                                .'/mis',
+                                "highlight_no_links",
+                                $content
+                                );
                 }
             }
 
             // Print the link to the faq record
+            $url   = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s&amp;highlight=%s',
+                        $sids,
+                        $row->category_id,
+                        $row->id,
+                        $row->lang,
+                        $begriff
+                    );
+            $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+            $oLink->itemTitle = $row->thema;
+            $oLink->text = $thema;
+            $oLink->tooltip = $row->thema;
+            $output .= '<li><strong>'.$rubriktext.'</strong>: '.$oLink->toHtmlAnchor().'</li><br />'
+                    .'<div class="searchpreview"><strong>'.$PMF_LANG['msgSearchContent'].'</strong> '.$content.'...</div>'
+                    .'<br /></li>\n';
+/*
             if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == "TRUE") {
                 $output .= "<li><strong>".$rubriktext."</strong>: <a href=\"".$row->category_id."_".$row->id."_".$row->lang.".html?highlight=".$begriff."\">".$thema."...</a><br /><div class=\"searchpreview\"><strong>".$PMF_LANG["msgSearchContent"]."</strong> ".$content."...</div><br /></li>\n";
             } else {
-                $output .= "<li><strong>".$rubriktext."</strong>: <a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=artikel&amp;cat=".$row->category_id."&amp;id=".$row->id."&amp;artlang=".$row->lang."&amp;highlight=".$begriff."\">".$thema."...</a><br /><div class=\"searchpreview\"><strong>".$PMF_LANG["msgSearchContent"]."</strong> ".$content."...</div><br /></li>\n";
+                $output .= "<li><strong>".$rubriktext."</strong>: <a href=\"".$_SERVER["PHP_SELF"]."?"
+                .$sids."action=artikel&amp;
+                cat=".$row->category_id."&amp;
+                id=".$row->id."&amp;
+                artlang=".$row->lang."&amp;
+                highlight=".$begriff."\">".$thema."...</a>
+                <br /><div class=\"searchpreview\"><strong>".$PMF_LANG["msgSearchContent"]."</strong> ".$content."...</div><br /></li>\n";
             }
+*/
         }
         $output .= "</ul>\n";
     } else {
@@ -1355,7 +1383,15 @@ function searchEngine($begriff, $category = '%')
 function highlight_no_links($string = '')
 {
     foreach ($string as $str) {
-        if ('href='  == substr(ltrim($str), 0, 5) || 'src='   == substr(ltrim($str), 0, 4) || 'title=' == substr(ltrim($str), 0, 6) || 'alt='   == substr(ltrim($str), 0, 4) || 'class=' == substr(ltrim($str), 0, 6) || 'style=' == substr(ltrim($str), 0, 6) || 'id=' == substr(ltrim($str), 0, 3) || 'name='  == substr(ltrim($str), 0, 5) ) {
+        if (    'href=' == substr(ltrim($str), 0, 5)
+             || 'src=' == substr(ltrim($str), 0, 4)
+             || 'title=' == substr(ltrim($str), 0, 6)
+             || 'alt=' == substr(ltrim($str), 0, 4)
+             || 'class=' == substr(ltrim($str), 0, 6)
+             || 'style=' == substr(ltrim($str), 0, 6)
+             || 'id=' == substr(ltrim($str), 0, 3)
+             || 'name='  == substr(ltrim($str), 0, 5)
+            ) {
             return $str;
         } elseif ('' == $str) {
             return '';
