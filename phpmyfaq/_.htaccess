@@ -1,5 +1,5 @@
 ##
-# $Id: _.htaccess,v 1.6 2006-06-25 15:04:11 matteo Exp $
+# $Id: _.htaccess,v 1.7 2006-06-25 19:50:17 matteo Exp $
 #
 # phpMyFAQ 2.0 .htaccess file
 #
@@ -66,8 +66,8 @@ RewriteCond %{REQUEST_URI}          contact\.html$ [NC]
 RewriteRule ^(.*)$                  index.php?action=contact [L,QSA]
 
 # a page with a record
-# * http://[...]/content/1/1/en/<FAQ TOPIC>.htm
-# * http://[...]/content/1/1/en/<FAQ TOPIC>.html
+# * http://[...]/content/1/1/<LANGUAGE CODE>/<FAQ TOPIC>.htm
+# * http://[...]/content/1/1/<LANGUAGE CODE>/<FAQ TOPIC>.html
 RewriteRule content/([0-9]+)/([0-9]+)/([a-z\-]+)/(.+)\.htm(l?)$     index.php?action=artikel&cat=$1&id=$2&artlang=$3 [L,QSA]
 RewriteRule content/([0-9]+)/([0-9]+)/([a-z\-]+)/(.+)$              $4 [L,QSA]
 # a page with a record (backward compatibility)
@@ -99,6 +99,11 @@ RewriteRule ^category(.*)\.html$        index.php?action=show&cat=$1 [L,QSA]
 RewriteRule index.html$                 index.php [PT]
 
 # sitemap
+# * http://[...]/sitemap/<LETTER>/<LANGUAGE CODE>.htm
+# * http://[...]/sitemap/<LETTER>/<LANGUAGE CODE>.html
+RewriteRule sitemap/([^\/]+)/([a-z\-]+)\.htm(l?)$   index.php?action=sitemap&letter=$1&lang=$2 [L,QSA]
+RewriteRule sitemap/([^\/]+)/(.+)$                  $2 [L,QSA]
+# sitemap (backward compatibility)
 RewriteCond %{REQUEST_URI}              sitemap-([a-zA-Z0-9‰ˆ¸ƒ÷‹ﬂ]*)_([a-z\-]+)\.html$ [NC]
 RewriteRule ^sitemap-(.*)_(.*)\.html$   index.php?action=sitemap&letter=$1&lang=$2 [L,QSA]
 

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Link.php,v 1.2 2006-06-25 15:46:36 matteo Exp $
+* $Id: Link.php,v 1.3 2006-06-25 19:50:17 matteo Exp $
 *
 * Link management - Functions and Classes
 *
@@ -36,6 +36,7 @@ define('PMF_LINK_EQUAL', '=');
 define('PMF_LINK_SLASH', '/');
 define('PMF_LINK_CONTENT', 'content/');
 define('PMF_LINK_CATEGORY', 'category/');
+define('PMF_LINK_SITEMAP', 'sitemap/');
 define('PMF_LINK_HTML_MINUS', '-');
 define('PMF_LINK_HTML_UNDERSCORE', '_');
 define('PMF_LINK_HTML_SLASH', '/');
@@ -400,7 +401,16 @@ class PMF_Link
                             $url .= PMF_LINK_HTML_SEARCH;
                             break;
                         case PMF_LINK_GET_ACTION_SITEMAP:
-                            $url .= PMF_LINK_HTML_SITEMAP.PMF_LINK_HTML_MINUS.$getParams[PMF_LINK_GET_LETTER].PMF_LINK_HTML_UNDERSCORE.$getParams[PMF_LINK_GET_LANG].PMF_LINK_HTML_EXTENSION;
+                            // TODO: Remove the check below WHEN _httpd.ini will be aligned and tested.
+                            if ($this->isIISServer()) {
+                                $url .= PMF_LINK_HTML_SITEMAP.PMF_LINK_HTML_MINUS.$getParams[PMF_LINK_GET_LETTER].PMF_LINK_HTML_UNDERSCORE.$getParams[PMF_LINK_GET_LANG].PMF_LINK_HTML_EXTENSION;
+                            } else {
+                                if (isset($getParams[PMF_LINK_GET_LETTER])) {
+                                    $url .= PMF_LINK_SITEMAP.$getParams[PMF_LINK_GET_LETTER].PMF_LINK_HTML_SLASH.$getParams[PMF_LINK_GET_LANG].PMF_LINK_HTML_EXTENSION;
+                                } else {
+                                    $url .= PMF_LINK_SITEMAP.'A'.PMF_LINK_HTML_SLASH.$getParams[PMF_LINK_GET_LANG].PMF_LINK_HTML_EXTENSION;
+                                }
+                            }
                             break;
                         case PMF_LINK_GET_ACTION_SHOW:
                             if (    !isset($getParams[PMF_LINK_GET_CATEGORY])

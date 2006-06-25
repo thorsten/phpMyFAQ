@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: sitemap.php,v 1.9 2006-06-25 15:04:11 matteo Exp $
+* $Id: sitemap.php,v 1.10 2006-06-25 19:50:17 matteo Exp $
 *
 * Shows the whole FAQ articles
 *
@@ -27,14 +27,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 Tracking('sitemap', 0);
 
-if (isset($_REQUEST['letter']) ) {
-    $currentLetter = $db->escape_string($_REQUEST['letter']);
+if (isset($_REQUEST['letter']) && (is_string($_REQUEST['letter']))  && (1 == strlen($_REQUEST['letter']))) {
+    $currentLetter = strtoupper($db->escape_string($_REQUEST['letter']));
 } else {
     $currentLetter = 'A';
 }
 
 switch($DB["type"] ) {
-
     case 'db2':
         // Queries for IBM DB2
         $query_1 = "SELECT DISTINCT substr(thema, 1, 1) AS letters FROM ".SQLPREFIX."faqdata WHERE lang = '".$lang."' AND active = 'yes' ORDER BY letters";
@@ -56,7 +55,6 @@ $writeLetters = '<p>';
 $result = $db->query($query_1);
 while ($row = $db->fetch_object($result)) {
     $letters = $row->letters;
-
     if (preg_match("/^[a-z0-9]/i", $letters)) {
         $url = sprintf('%saction=sitemap&amp;letter=%s&amp;lang=%s',
                     $sids,
