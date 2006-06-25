@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: News.php,v 1.2 2006-06-25 17:30:37 thorstenr Exp $
+* $Id: News.php,v 1.3 2006-06-25 17:38:18 thorstenr Exp $
 *
 * The News class for phpMyFAQ news
 *
@@ -120,7 +120,7 @@ class PMF_News
             ORDER BY datum DESC",
             SQLPREFIX);
         $result = $this->db->query($query);
-        if ($db->num_rows($result) > 0) {
+        if ($this->db->num_rows($result) > 0) {
             while ($row = $this->db->fetch_object($result)) {
                 $headers[] = array(
                     'id'        => $row->id,
