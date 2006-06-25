@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: constants.php,v 1.11 2006-06-17 13:06:37 matteo Exp $
+* $Id: constants.php,v 1.12 2006-06-25 10:16:45 thorstenr Exp $
 *
 * Constants for phpMyFAQ
 *
@@ -96,36 +96,6 @@ $supported_databases = array(
     'ibm_db2'   => array('4.1.0', 'IBM DB2 Universal Database 8.2 / 9.0'),
     'maxdb'     => array('4.1.0', 'MaxDB 7.5 / 7.6 (experimental)')
     );
-
-/* This array sets the rights for an user - DO NOT CHANGE! */
-$faqrights = array (
-        1 =>  'adduser',
-        2 =>  'edituser',
-        3 =>  'deluser',
-        4 =>  'addbt',
-        5 =>  'editbt',
-        6 =>  'delbt',
-        7 =>  'viewlog',
-        8 =>  'adminlog',
-        9 =>  'delcomment',
-        10 => 'addnews',
-        11 => 'editnews',
-        12 => 'delnews',
-        13 => 'addcateg',
-        14 => 'editcateg',
-        15 => 'delcateg',
-        16 => 'passwd',
-        17 => 'editconfig',
-        18 => 'addatt',
-        19 => 'delatt',
-        20 => 'backup',
-        21 => 'restore',
-        22 => 'delquestion',
-        23 => 'changebtrevs',
-        24 => 'addglossary',
-        25 => 'editglossary',
-        26 => 'delglossary'
-        );
 
 /* allowed 'action' varibales for GET - DO NOT CHANGE! */
 $allowedVariables = array(
