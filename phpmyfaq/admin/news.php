@@ -1,18 +1,18 @@
 <?php
 /**
-* $Id: news.php,v 1.13 2006-06-19 20:05:18 matteo Exp $
+* $Id: news.php,v 1.14 2006-06-25 17:39:50 thorstenr Exp $
 *
 * The main administration file for the news
 *
 * @author           Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since            2003-02-23
 * @copyright        (c) 2001-2006 phpMyFAQ Team
-* 
+*
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
 * compliance with the License. You may obtain a copy of the License at
 * http://www.mozilla.org/MPL/
-* 
+*
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
@@ -23,6 +23,10 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
+
+require_once (PMF_ROOT_DIR."/inc/News.php");
+
+$news = new PMF_News($db, $LANGCODE);
 
 print '<h2>'.$PMF_LANG['ad_news_add'].'</h2>';
 if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews"]) {
@@ -62,20 +66,20 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
     </thead>
     <tbody>
 <?php
-        $result = $db->query("select id, datum, header from ".SQLPREFIX."faqnews order by datum desc");
-        if ($db->num_rows($result) > 0) {
-            while ($row = $db->fetch_object($result)) {
-                $datum = makeDate($row->datum);
+        $newsHeader = $news->getNewsHeader();
+        if (count($newsHeader)) {
+            foreach($newsHeader as $newsItem) {
 ?>
         <tr>
-            <td class="list"><?php print $row->header; ?></td>
-            <td class="list"><?php print $datum; ?></td>
-            <td class="list"><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=news&amp;do=edit&amp;id=<?php print $row->id; ?>" title="<?php print $PMF_LANG["ad_news_update"]; ?>"><img src="images/edit.gif" width="18" height="18" alt="<?php print $PMF_LANG["ad_news_update"]; ?>" border="0" /></a>&nbsp;&nbsp;<a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=news&amp;do=delete&amp;id=<?php print $row->id; ?>" title="<?php print $PMF_LANG["ad_news_delete"]; ?>"><img src="images/delete.gif" width="17" height="18" alt="<?php print $PMF_LANG["ad_news_delete"]; ?>" border="0" /></a></td>
+            <td class="list"><?php print $newsItem['header']; ?></td>
+            <td class="list"><?php print $newsItem['date']; ?></td>
+            <td class="list"><a href="<?php print $linkext; ?>&amp;aktion=news&amp;do=edit&amp;id=<?php print $newsItem['id']; ?>" title="<?php print $PMF_LANG["ad_news_update"]; ?>"><img src="images/edit.gif" width="18" height="18" alt="<?php print $PMF_LANG["ad_news_update"]; ?>" border="0" /></a>&nbsp;&nbsp;<a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=news&amp;do=delete&amp;id=<?php print $newsItem['id']; ?>" title="<?php print $PMF_LANG["ad_news_delete"]; ?>"><img src="images/delete.gif" width="17" height="18" alt="<?php print $PMF_LANG["ad_news_delete"]; ?>" border="0" /></a></td>
         </tr>
 <?php
-               }
+            }
         } else {
-               print "<tr><td colspan=\"3\" class=\"list\">".$PMF_LANG["ad_news_nodata"]."</td></tr>"; 
+            printf('<tr><td colspan="3" class="list">%s</td></tr>',
+                $PMF_LANG["ad_news_nodata"]);
         }
 ?>
     </tbody>
@@ -143,8 +147,8 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
     </form>
     </div>
 <?php
-    } elseif ($_REQUEST["really"] == "yes") {
-        $result = $db->query("DELETE FROM ".SQLPREFIX."faqnews WHERE id = ".$_REQUEST["id"]);
+    } elseif ($_POST["really"] == "yes") {
+        $news->deleteNews($_POST['id']);
         print "<p>".$PMF_LANG["ad_news_delsuc"]."</p>";
     }
 } elseif (isset($_REQUEST["do"]) && $_REQUEST["do"] == "delete" && $permission["delnews"]) {
