@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.50 2006-06-25 15:29:32 matteo Exp $
+* $Id: index.php,v 1.51 2006-06-25 17:32:16 thorstenr Exp $
 *
 * The main admin backend index file
 *
@@ -110,12 +110,6 @@ if (isset($_REQUEST['aktion']) && $_REQUEST['aktion'] == 'logout' && $auth) {
 // FIXME: remove this dummy declaration when the all of the pages will NOT use it for building the links
 $linkext = '?uin=';
 
-// exportfile
-if ((isset($_REQUEST["aktion"])) && ($_REQUEST["aktion"] == "exportfile") && $auth) {
-    require_once("export.file.php");
-    exit();
-}
-
 //
 // Get action from _GET and _POST first
 $_action = isset($_REQUEST['aktion']) ? $_REQUEST['aktion'] : null;
@@ -217,7 +211,6 @@ if (isset($auth)) {
             // functions for backup administration
             case "csv":                     require_once ("backup.main.php"); break;
             case "restore":                 require_once ("backup.import.php"); break;
-            case "xml":                     require_once ("backup.xml.php"); break;
             // functions for FAQ export
             case "export":                  require_once ("export.main.php"); break;
             case 'plugins':                 require_once ('plugins.main.php'); break;
