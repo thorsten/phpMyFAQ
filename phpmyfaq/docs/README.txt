@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.46 2006-06-18 18:38:29 thorstenr Exp $
+$Id: README.txt,v 1.47 2006-06-25 19:57:19 thorstenr Exp $
 
 phpMyFAQ 2.0.0-dev
 Codename "Prometheus"
@@ -9,17 +9,18 @@ Please read the documentation (documentation.en.html) carefully.
 Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
-Changes since 1.x:
-- added rewritten and enhanced user management
-- added rewritten and enhanced authorization management
-- added AJAX support
-- added autmatic online link verification
-- added user binding to a category
-- added glossary support
-- added possibility to delete admin log
-- added configurable visibility of new questions
-- added improved and template-based XHTML export
-- added dynamic related articles
+Changes since 1.6:
+- added rewritten and enhanced user management (Lars)
+- added rewritten and enhanced authorization management (Lars)
+- added Ajax support (Thorsten)
+- added automatic link verification (Minoru Toda)
+- added user binding to a category (Thorsten)
+- added glossary support (Thorsten)
+- added possibility to delete admin log (Thorsten)
+- added configurable visibility of new questions (Thorsten)
+- added improved and template-based XHTML export (Thorsten)
+- added dynamic related articles (Thorsten, Marco Enders)
+- improved URL rewrite functions (Matteo)
 
 Known issues in phpMyFAQ 2.0.0:
 - some language files need an update
@@ -28,16 +29,17 @@ Known issues in phpMyFAQ 2.0.0:
 CHANGELOG:
 
 Version 2.0.0 - n/a
-- added rewritten and enhanced user management
-- added rewritten and enhanced authorization management
-- added AJAX support
-- added autmatic online link verification
-- added user binding to a category
-- added glossary support
-- added possibility to delete admin log
-- added configurable visibility of new questions
-- added improved and template-based XHTML export
-- added dynamic related articles
+- added rewritten and enhanced user management (Lars)
+- added rewritten and enhanced authorization management (Lars)
+- added Ajax support (Thorsten)
+- added automatic link verification (Minoru Toda)
+- added user binding to a category (Thorsten)
+- added glossary support (Thorsten)
+- added possibility to delete admin log (Thorsten)
+- added configurable visibility of new questions (Thorsten)
+- added improved and template-based XHTML export (Thorsten)
+- added dynamic related articles (Thorsten, Marco Enders)
+- improved URL rewrite functions (Matteo)
 
 Version 1.6.2 - 2006-06-17
 - added user tracking data deletion
