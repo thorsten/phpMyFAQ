@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.48 2006-06-24 13:36:32 thorstenr Exp $
+* $Id: index.php,v 1.49 2006-06-25 15:10:26 matteo Exp $
 *
 * The main admin backend index file
 *
@@ -108,8 +108,9 @@ if (isset($_REQUEST['aktion']) && $_REQUEST['aktion'] == 'logout' && $auth) {
 }
 
 // FIXME: remove this dummy declaration when the all of the pages will NOT use it for building the links
+$linkext = '?';
 if (isset($auth)) {
-    $linkext = '?uin=';
+    $linkext = 'uin=';
 }
 
 // exportfile
