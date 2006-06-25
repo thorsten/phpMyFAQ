@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.56 2006-06-25 15:04:11 matteo Exp $
+* $Id: index.php,v 1.57 2006-06-25 15:59:55 matteo Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the
@@ -328,7 +328,7 @@ if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == "TRUE") {
 
 if (DEBUG) {
     $debug_template_vars = array(
-        'debugMessages' => '<p>DEBUG INFORMATION:<br />\n'.$db->sqllog().'</p>');
+        'debugMessages' => '<p>DEBUG INFORMATION:<br />'.$db->sqllog().'</p>');
 } else {
     // send headers and print template
     header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
