@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: main.php,v 1.11 2006-06-18 06:59:27 matteo Exp $
+* $Id: main.php,v 1.12 2006-06-25 11:02:54 thorstenr Exp $
 *
 * The main start page with the Top10 and the latest messages
 *
@@ -24,9 +24,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
+require_once('inc/News.php');
+
+$news = new PMF_News($db, $LANGCODE);
+
 $tpl->processTemplate ('writeContent', array(
     'writeNewsHeader'       => $PMF_CONF['title'].$PMF_LANG['msgNews'],
-    'writeNews'             => generateNews($LANGCODE),
+    'writeNews'             => $news->getNews(),
     'writeNumberOfArticles' => $PMF_LANG['msgHomeThereAre'].$faq->getNumberOfRecords($LANGCODE).$PMF_LANG['msgHomeArticlesOnline'],
     'writeTopTenHeader'     => $PMF_LANG['msgTopTen'],
     'writeTopTenRow'        => $faq->getTopTen(),
