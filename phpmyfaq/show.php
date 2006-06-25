@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: show.php,v 1.9 2006-06-24 11:38:55 thorstenr Exp $
+* $Id: show.php,v 1.10 2006-06-25 15:04:11 matteo Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-08-27
@@ -23,38 +23,44 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 if (isset($_REQUEST['cat']) && is_numeric($_REQUEST['cat'])) {
-	$category = (int)$_REQUEST['cat'];
+    $category = (int)$_REQUEST['cat'];
 }
 
 if (isset($category) && $category != 0 && isset($tree->categoryName[$category])) {
-	Tracking('show_category', $category);
+    Tracking('show_category', $category);
     $parent = $tree->categoryName[$category]['parent_id'];
     $name = $tree->categoryName[$category]['name'];
 
     $records = $faq->showAllRecords($category);
     if (!$records) {
         $cats = new PMF_Category($LANGCODE);
-    	$cats->transform($category);
-    	$cats->collapseAll();
-    	$records = $cats->viewTree();
+        $cats->transform($category);
+        $cats->collapseAll();
+        $records = $cats->viewTree();
     }
 
-	if ($parent != 0) {
-		$up = sprintf('<a href="?%daction=show&amp;cat=%d">%s</a>', $sids, $parent, $PMF_LANG['msgCategoryUp']);
-    } else {
-        $up = '';
+    $up = '';
+    if ($parent != 0) {
+        $url = sprintf('%saction=show&amp;cat=%d',
+                    $sids,
+                    $parent
+                );
+        $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+        $oLink->itemTitle = $tree->categoryName[$parent]['name'];
+        $oLink->text = $PMF_LANG['msgCategoryUp'];
+        $up = $oLink->toHtmlAnchor();
     }
 
     $tpl->processTemplate('writeContent', array(
-				          'writeCategory' => $PMF_LANG['msgEntriesIn'].$name,
-				          'writeThemes' => $records,
-				          'writeOneThemeBack' => $up));
-	$tpl->includeTemplate('writeContent', 'index');
+                        'writeCategory' => $PMF_LANG['msgEntriesIn'].$name,
+                        'writeThemes' => $records,
+                        'writeOneThemeBack' => $up));
+    $tpl->includeTemplate('writeContent', 'index');
 } else {
-	Tracking('show_all_categories', 0);
-	$tpl->processTemplate('writeContent', array(
-				          'writeCategory' => $PMF_LANG['msgFullCategories'],
-				          'writeThemes' => $tree->viewTree(),
-				          'writeOneThemeBack' => ''));
-	$tpl->includeTemplate('writeContent', 'index');
+    Tracking('show_all_categories', 0);
+    $tpl->processTemplate('writeContent', array(
+                          'writeCategory' => $PMF_LANG['msgFullCategories'],
+                          'writeThemes' => $tree->viewTree(),
+                          'writeOneThemeBack' => ''));
+    $tpl->includeTemplate('writeContent', 'index');
 }

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.25 2006-06-22 19:29:25 matteo Exp $
+* $Id: Faq.php,v 1.26 2006-06-25 15:04:11 matteo Exp $
 *
 * The main FAQ class
 *
@@ -19,6 +19,13 @@
 * License for the specific language governing rights and limitations
 * under the License.
 */
+
+// {{{ Includes
+/**
+ * This include is needed for accessing to mod_rewrite support configuration value
+ */
+require_once('Link.php');
+// }}}
 
 class PMF_Faq
 {
@@ -158,23 +165,23 @@ class PMF_Faq
                 }
 
                 $title = PMF_htmlentities($row->thema, ENT_NOQUOTES, $this->pmf_lang['metaCharset']);
-                if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF['mod_rewrite'] == true) {
-                    $listItem = '<li><a href="%d_%d_%s.html\">%s</a><br />' .
-                        '<span class="little">(%d %s)</soan></li>';
-                } else {
-                    $listItem = '<li><a href="?' .
-                        $sids .
-                        'action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s">%s</a>' .
-                        '<span class="little">(%d %s)</span></li>';
-                }
+                $url   = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                            $sids,
+                            $row->category_id,
+                            $row->id,
+                            $row->lang
+                        );
+                $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+                $oLink->itemTitle = $row->thema;
+                $oLink->text = sprintf('%s</a><br /><span class="little">(%d %s)</span>',
+                            $title,
+                            $visits,
+                            $this->pmf_lang['msgViews']
+                        );
+                $oLink->tooltip = $title;
+                $listItem = '<li>'.$oLink->toHtmlAnchor().'</li>';
 
-                $output .= sprintf($listItem,
-                    $row->category_id,
-                    $row->id,
-                    $row->lang,
-                    $title,
-                    $visits,
-                    $this->pmf_lang['msgViews']);
+                $output .= $listItem;
             }
             $output .= '</ul>';
         } else {
@@ -187,50 +194,49 @@ class PMF_Faq
             $next = $page + 1;
 
             if ($previous != 0) {
-                if (isset($PMF_CONF['mod_rewrite']) && $PMF_CONF['mod_rewrite'] == true) {
-                    $output .= sprintf('[ <a href="category%d_%d.html">%s</a> ]',
-                        $category,
-                        $previous,
-                        $this->pmf_lang['msgPrevious']);
-                } else {
-                    $output .= sprintf('[ <a href="?%saction=show&amp;cat=%d&amp;seite=%d">%s</a> ]',
-                        $sids,
-                        $category,
-                        $previous,
-                        $this->pmf_lang['msgPrevious']);
-                }
+                $title = $this->pmf_lang['msgPrevious'];
+                $url   = sprintf('%saction=show&amp;cat=%d&amp;seite=%d',
+                            $sids,
+                            $category,
+                            $previous
+                        );
+                $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+                $oLink->itemTitle = 'TODO: Insert here category name';
+                $oLink->text = $title;
+                $oLink->tooltip = $title;
+                $output .= '[ '.$oLink->toHtmlAnchor().' ]';
             }
 
             $output .= ' ';
 
             for ($i = 1; $i <= $pages; $i++) {
-                if (isset($PMF_CONF['mod_rewrite']) && $PMF_CONF['mod_rewrite'] == true) {
-                    $output .= sprintf('[ <a href="category%d_%d.html">%s</a> ] ',
-                        $category,
-                        $i,
-                        $i);
-                } else {
-                    $output .= sprintf('[ <a href="?%saction=show&amp;cat=%d&amp;seite=%d">%d</a> ] ',
-                        $sids,
-                        $category,
-                        $i,
-                        $i);
-                }
+                $title = $i;
+                $url   = sprintf('%saction=show&amp;cat=%d&amp;seite=%d',
+                            $sids,
+                            $category,
+                            $i
+                        );
+                $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+                $oLink->itemTitle = 'TODO: Insert here category name';
+                $oLink->text = $title;
+                $oLink->tooltip = $title;
+                $output .= '[ '.$oLink->toHtmlAnchor().' ]';
             }
 
+            $output .= ' ';
+
             if ($next <= $pages) {
-                if (isset($PMF_CONF['mod_rewrite']) && $PMF_CONF['mod_rewrite'] == true) {
-                    $output .= sprintf('[ <a href="category%d_%d.html">%s</a> ]',
-                        $category,
-                        $next,
-                        $this->pmf_lang['msgNext']);
-                } else {
-                    $output .= sprintf('[ <a href="?%saction=show&amp;cat=%d&amp;seite=%d">%s</a> ]',
-                        $sids,
-                        $category,
-                        $next,
-                        $this->pmf_lang['msgNext']);
-                }
+                $title = $this->pmf_lang['msgNext'];
+                $url   = sprintf('%saction=show&amp;cat=%d&amp;seite=%d',
+                            $sids,
+                            $category,
+                            $next
+                        );
+                $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+                $oLink->itemTitle = 'TODO: Insert here category name';
+                $oLink->text = $title;
+                $oLink->tooltip = $title;
+                $output .= '[ '.$oLink->toHtmlAnchor().' ]';
             }
 
             $output .= "</strong></p>";
@@ -770,7 +776,7 @@ class PMF_Faq
             $output = '<ol>';
             foreach ($result as $row) {
                 $shortTitle = makeShorterText(PMF_htmlentities($row['thema'], ENT_NOQUOTES, $this->pmf_lang['metaCharset']), 8);
-                $output .= sprintf('<a href="%s">%s</a> (%s)</li>',
+                $output .= sprintf('<li><a href="%s">%s</a> (%s)</li>',
                     $row['url'],
                     $shortTitle,
                     makeDate($row['datum']));
@@ -807,7 +813,7 @@ class PMF_Faq
     {
         global $sids, $PMF_CONF;
         $query =
-            'SELECT
+'            SELECT
                 DISTINCT '.SQLPREFIX.'faqdata.id AS id,
                 '.SQLPREFIX.'faqdata.lang AS lang,
                 '.SQLPREFIX.'faqdata.thema AS thema,
@@ -852,20 +858,21 @@ class PMF_Faq
             if ($oldId != $row->id) {
                 $data['visits'] = $row->visits;
                 $data['thema'] = $row->thema;
-                if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == true) {
-                    $data['url'] = sprintf('%d_%d_%s.html',
-                        $row->category_id,
-                        $row->id,
-                        $row->lang);
-                } else {
-                    $data['url'] = sprintf('?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                
+                $title = PMF_htmlentities($row->thema, ENT_NOQUOTES, $this->pmf_lang['metaCharset']);
+                $url   = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                         $sids,
                         $row->category_id,
                         $row->id,
-                        $row->lang);
-                }
-            $topten[] = $data;
-            $i++;
+                        $row->lang
+                        );
+                $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+                $oLink->itemTitle = $row->thema;
+                $oLink->tooltip = $title;
+                $data['url'] = $oLink->toString();
+
+                $topten[] = $data;
+                $i++;
             }
             $oldId = $row->id;
         }
@@ -888,7 +895,7 @@ class PMF_Faq
     {
         global $sids, $PMF_CONF;
         $query =
-            'SELECT
+'            SELECT
                 DISTINCT '.SQLPREFIX.'faqdata.id AS id,
                 '.SQLPREFIX.'faqdata.lang AS lang,
                 '.SQLPREFIX.'faqcategoryrelations.category_id AS category_id,
@@ -926,18 +933,19 @@ class PMF_Faq
                 $data['thema'] = $row->thema;
                 $data['content'] = $row->content;
                 $data['visits'] = $row->visits;
-                if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == true) {
-                    $data['url'] = sprintf('%d_%d_%s.html',
-                        $row->category_id,
-                        $row->id,
-                        $row->lang);
-                } else {
-                    $data['url'] = sprintf('?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                
+                $title = PMF_htmlentities($row->thema, ENT_NOQUOTES, $this->pmf_lang['metaCharset']);
+                $url   = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                         $sids,
                         $row->category_id,
                         $row->id,
-                        $row->lang);
-                }
+                        $row->lang
+                        );
+                $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+                $oLink->itemTitle = $row->thema;
+                $oLink->tooltip = $title;
+                $data['url'] = $oLink->toString();
+
                 $latest[] = $data;
                 $i++;
             }

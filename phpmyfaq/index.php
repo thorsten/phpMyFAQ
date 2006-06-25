@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.55 2006-06-24 13:36:33 thorstenr Exp $
+* $Id: index.php,v 1.56 2006-06-25 15:04:11 matteo Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the
@@ -42,6 +42,7 @@ PMF_Init::cleanRequest();
 // Include required template parser class, captcha class, category class,
 // the main FAQ class and the IDNA class
 //
+require_once('inc/Link.php');
 require_once('inc/Template.php');
 require_once('inc/Captcha.php');
 require_once('inc/Category.php');
@@ -299,17 +300,17 @@ $main_template_vars = array(
 
 if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == "TRUE") {
     $links_template_vars = array(
-        "faqHome"           => '',
-        "msgSearch"         => '<a href="search.html">'.$PMF_LANG["msgSearch"].'</a>',
-        'msgAddContent'     => '<a href="addcontent.html">'.$PMF_LANG["msgAddContent"].'</a>',
-        "msgQuestion"       => '<a href="ask.html">'.$PMF_LANG["msgQuestion"].'</a>',
-        "msgOpenQuestions"  => '<a href="open.html">'.$PMF_LANG["msgOpenQuestions"].'</a>',
-        'msgHelp'           => '<a href="help.html">'.$PMF_LANG["msgHelp"].'</a>',
-        "msgContact"        => '<a href="contact.html">'.$PMF_LANG["msgContact"].'</a>',
-        "backToHome"        => '<a href="index.html">'.$PMF_LANG["msgHome"].'</a>',
-        "allCategories"     => '<a href="showcat.html">'.$PMF_LANG["msgShowAllCategories"].'</a>',
-        "writeSendAdress"   => 'search.html',
-        'showSitemap'       => '<a href="sitemap-a.html">'.$PMF_LANG['msgSitemap'].'</a>');
+        "faqHome"           => $_SERVER['PHP_SELF'],
+        "msgSearch"         => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'search.html">'.$PMF_LANG["msgSearch"].'</a>',
+        'msgAddContent'     => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'addcontent.html">'.$PMF_LANG["msgAddContent"].'</a>',
+        "msgQuestion"       => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'ask.html">'.$PMF_LANG["msgQuestion"].'</a>',
+        "msgOpenQuestions"  => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'open.html">'.$PMF_LANG["msgOpenQuestions"].'</a>',
+        'msgHelp'           => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'help.html">'.$PMF_LANG["msgHelp"].'</a>',
+        "msgContact"        => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'contact.html">'.$PMF_LANG["msgContact"].'</a>',
+        "backToHome"        => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'index.html">'.$PMF_LANG["msgHome"].'</a>',
+        "allCategories"     => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'showcat.html">'.$PMF_LANG["msgShowAllCategories"].'</a>',
+        "writeSendAdress"   => PMF_Link::getSystemRelativeUri('index.php').'search.html',
+        'showSitemap'       => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'sitemap-A_'.$lang.'.html">'.$PMF_LANG['msgSitemap'].'</a>');
 } else {
     $links_template_vars = array(
         "faqHome"           => $_SERVER['PHP_SELF'],

@@ -1,9 +1,11 @@
 ##
+# $Id: _.htaccess,v 1.6 2006-06-25 15:04:11 matteo Exp $
 #
 # phpMyFAQ 2.0 .htaccess file
 #
 # @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 # @author       Patrick Preuster <sica@php-q.net>
+# @author       Matteo scaramuccia <matteo@scaramuccia.com>
 # @since        2004-11-13
 # @copyright    (c) 2004-2006 phpMyFAQ Team
 #
@@ -64,19 +66,37 @@ RewriteCond %{REQUEST_URI}          contact\.html$ [NC]
 RewriteRule ^(.*)$                  index.php?action=contact [L,QSA]
 
 # a page with a record
-RewriteCond %{REQUEST_URI}          ([0-9]+)_([0-9]+)_([a-z\-]+)\.html$ [NC]
-RewriteRule ^(.*)_(.*)_(.*)\.html$  index.php?action=artikel&cat=$1&id=$2&artlang=$3 [L,QSA]
-
-# a category page
-RewriteCond %{REQUEST_URI}              category([0-9]+)\.html$ [NC]
-RewriteRule ^category(.*)\.html$        index.php?action=show&cat=$1 [L,QSA]
+# * http://[...]/content/1/1/en/<FAQ TOPIC>.htm
+# * http://[...]/content/1/1/en/<FAQ TOPIC>.html
+RewriteRule content/([0-9]+)/([0-9]+)/([a-z\-]+)/(.+)\.htm(l?)$     index.php?action=artikel&cat=$1&id=$2&artlang=$3 [L,QSA]
+RewriteRule content/([0-9]+)/([0-9]+)/([a-z\-]+)/(.+)$              $4 [L,QSA]
+# a page with a record (backward compatibility)
+# * http://[...]/1_1_en.html
+RewriteCond %{REQUEST_URI}              ([0-9]+)_([0-9]+)_([a-z\-]+)\.html$ [NC]
+RewriteRule ^(.*)_(.*)_(.*)\.html$      index.php?action=artikel&cat=$1&id=$2&artlang=$3 [L,QSA]
 
 # a category page with page count
+# * http://[...]/category/1/<PAGE NUMBER/<CATEGORY NAME>.htm
+# * http://[...]/category/1/<PAGE NUMBER/<CATEGORY NAME>.html
+RewriteRule category/([0-9]+)/([0-9]+)/(.+)\.htm(l?)$    index.php?action=show&cat=$1&seite=$2 [L,QSA]
+RewriteRule category/([0-9]+)/([0-9]+)/(.+)$             $3 [L,QSA]
+# a category page with page count (backward compatibility)
+# * http://[...]/category1_1.html
 RewriteCond %{REQUEST_URI}              category([0-9]+)_([0-9]+)\.html$ [NC]
 RewriteRule ^category(.*)_(.*)\.html$   index.php?action=show&cat=$1&seite=$2 [L,QSA]
 
+# a category page
+# * http://[...]/category/1/<CATEGORY NAME>.htm
+# * http://[...]/category/1/<CATEGORY NAME>.html
+RewriteRule category/([0-9]+)/(.+)\.htm(l?)$    index.php?action=show&cat=$1 [L,QSA]
+RewriteRule category/([0-9]+)/(.+)$             $2 [L,QSA]
+# a category page (backward compatibility)
+# * http://[...]/category1.html
+RewriteCond %{REQUEST_URI}              category([0-9]+)\.html$ [NC]
+RewriteRule ^category(.*)\.html$        index.php?action=show&cat=$1 [L,QSA]
+
 # start page
-RewriteRule index.html$ index.php [PT]
+RewriteRule index.html$                 index.php [PT]
 
 # sitemap
 RewriteCond %{REQUEST_URI}              sitemap-([a-zA-Z0-9‰ˆ¸ƒ÷‹ﬂ]*)_([a-z\-]+)\.html$ [NC]

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Category.php,v 1.2 2006-06-18 06:55:31 matteo Exp $
+* $Id: Category.php,v 1.3 2006-06-25 15:04:11 matteo Exp $
 *
 * The main category class
 *
@@ -21,9 +21,17 @@
 * under the License.
 ******************************************************************************/
 
+// {{{ Includes
+/**
+ * This include is needed for accessing to mod_rewrite support configuration value
+ */
+require_once('Link.php');
+// }}}
+
 class PMF_Category
 {
     /**
+    *
     * The database handler
     *
     * @var  object
@@ -31,6 +39,7 @@ class PMF_Category
     var $db = null;
 
     /**
+    *
     * The categories as an array.
     *
     * @var  array
@@ -224,7 +233,11 @@ class PMF_Category
         }
     }
 
-    /* get the level of the item id */
+    /**
+    * levelOf()
+    *
+    * Get the level of the item id
+    */
     function levelOf($id)
     {
         $ret = 0;
@@ -235,7 +248,11 @@ class PMF_Category
         return $ret;
     }
 
-    // Get the line number where to find the node $id
+    /**
+    * getLine()
+    *
+    * Get the line number where to find the node $id
+    */
     function getLine($id)
     {
         for ($i = 0; $i < count($this->lineTab); $i++) {
@@ -478,12 +495,16 @@ class PMF_Category
                 $num_entries = sprintf(' (%d %s)', $number[$parent], $PMF_LANG['msgEntries']);
             }
 
-            if (isset($PMF_CONF['mod_rewrite']) && $PMF_CONF['mod_rewrite'] == "TRUE") {
-                $output .= sprintf('<a title="%s" href="category%d.html">%s</a>%s', addslashes($description), $parent, $categoryName, $num_entries);
-            } else {
-                $output .= sprintf('<a title="%s" href="?%saction=show&amp;cat=%d">%s</a>%s', addslashes($description), $sids,  $parent, $categoryName, $num_entries);
-            }
-
+            $url = sprintf('%saction=show&amp;cat=%d',
+                        $sids,
+                        $parent
+                    );
+            $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+            $oLink->itemTitle = $categoryName;
+            $oLink->text = $categoryName;
+            $oLink->tooltip = addslashes($description);
+            $output .= $oLink->toHtmlAnchor().$num_entries;
+            
             $open = $level;
         }
 
@@ -653,24 +674,37 @@ class PMF_Category
                 }
 
                 if (isset($this->treeTab[$y]['symbol']) && $this->treeTab[$y]['symbol'] == 'plus') {
-                    if (isset($PMF_CONF['mod_rewrite']) && $PMF_CONF['mod_rewrite'] == "TRUE") {
-                        $output .= "<a title=\"".addslashes($description)."\" href=\"category".$parent.".html\"".$a.">".$categoryName." <img src=\"images/more.gif\" width=\"11\" height=\"11\" alt=\"".$categoryName."\" style=\"border: none; vertical-align: middle;\" /></a>";
-                    } else {
-                        $output .= "<a title=\"".addslashes($description)."\" href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=show&amp;cat=".$parent."\"".$a.">".$categoryName." <img src=\"images/more.gif\" width=\"11\" height=\"11\" alt=\"".$categoryName."\" style=\"border: none; vertical-align: middle;\" /></a>";
-                    }
+                    $url = sprintf('%saction=show&amp;cat=%d',
+                                $sids,
+                                $parent
+                            );
+                    $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+                    $oLink->itemTitle = $categoryName;
+                    $oLink->text = $categoryName
+                                 .'<img src="images/more.gif" width="11" height="11" alt="'.$categoryName.'" style="border: none; vertical-align: middle;" />';
+                    $oLink->tooltip = addslashes($description);
+                    $output .= $oLink->toHtmlAnchor();
                 } else {
                     if ($this->treeTab[$y]["symbol"] == "minus") {
-                        if (isset($PMF_CONF['mod_rewrite']) && $PMF_CONF['mod_rewrite'] == "TRUE") {
-                            $output .= "<a title=\"".addslashes($description)."\" href=\"category".$this->treeTab[$y]["parent_id"].".html\"".$a.">".$categoryName."</a>";
-                        } else {
-                            $output .= "<a title=\"".addslashes($description)."\" href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=show&amp;cat=".$this->treeTab[$y]["parent_id"]."\"".$a.">".$categoryName."</a>";
-                        }
+                        $url = sprintf('%saction=show&amp;cat=%d',
+                                    $sids,
+                                    $this->treeTab[$y]['parent_id']
+                                );
+                        $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+                        $oLink->itemTitle = ($this->treeTab[$y]['parent_id'] == 0) ? $categoryName : $this->categoryName[$this->treeTab[$y]['parent_id']]['name'];
+                        $oLink->text = $categoryName;
+                        $oLink->tooltip = addslashes($description);
+                        $output .= $oLink->toHtmlAnchor();
                     } else {
-                        if (isset($PMF_CONF['mod_rewrite']) && $PMF_CONF['mod_rewrite'] == "TRUE") {
-                            $output .= "<a title=\"".addslashes($description)."\" href=\"category".$parent.".html\"".$a.">".$categoryName."</a>";
-                        } else {
-                            $output .= "<a title=\"".addslashes($description)."\" href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=show&amp;cat=".$parent."\"".$a.">".$categoryName."</a>";
-                        }
+                        $url = sprintf('%saction=show&amp;cat=%d',
+                                    $sids,
+                                    $parent
+                                );
+                        $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+                        $oLink->itemTitle = $categoryName;
+                        $oLink->text = $categoryName;
+                        $oLink->tooltip = addslashes($description);
+                        $output .= $oLink->toHtmlAnchor();
                     }
                 }
                 $open = $level;
@@ -739,11 +773,15 @@ class PMF_Category
         }
 
         foreach ($temp as $k => $category) {
-            if (isset($PMF_CONF['mod_rewrite']) && $PMF_CONF['mod_rewrite'] == true) {
-                $breadcrumb[] = sprintf('<a title="%s" href="category%s.html">%s</a>', $desc[$k], $catid[$k], $category);
-            } else {
-                $breadcrumb[] = sprintf('<a title="%s" href="?%saction=show&amp;cat=%s">%s</a>', $desc[$k], $sids, $catid[$k], $category);
-            }
+            $url = sprintf('%saction=show&amp;cat=%d',
+                        $sids,
+                        $catid[$k]
+                    );
+            $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+            $oLink->itemTitle = $category;
+            $oLink->text = $category;
+            $oLink->tooltip = $desc[$k];
+            $breadcrumb[] = $oLink->toHtmlAnchor();
         }
 
         if ($showlinks) {
@@ -818,11 +856,5 @@ class PMF_Category
             $arr[] = $cat['id'];
         }
         return $arr;
-    }
-
-    /* destructor */
-    function __destruct()
-    {
-
     }
 }
