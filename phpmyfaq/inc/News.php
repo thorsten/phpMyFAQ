@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: News.php,v 1.1 2006-06-25 11:01:57 thorstenr Exp $
+* $Id: News.php,v 1.2 2006-06-25 17:30:37 thorstenr Exp $
 *
 * The News class for phpMyFAQ news
 *
@@ -51,7 +51,7 @@ class PMF_News
     {
         global $PMF_LANG;
 
-        $this->db = &$db;
+        $this->db =& $db;
         $this->language = $language;
         $this->pmf_lang = $PMF_LANG;
     }
@@ -101,4 +101,101 @@ class PMF_News
         }
     }
 
+    /**
+     * Fetches all news headers
+     *
+     * @return  array
+     * @access  public
+     * @since   2006-06-25
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function getNewsHeader()
+    {
+        $headers = array();
+        $query = sprintf("
+            SELECT
+                id, datum, header
+            FROM
+                %sfaqnews
+            ORDER BY datum DESC",
+            SQLPREFIX);
+        $result = $this->db->query($query);
+        if ($db->num_rows($result) > 0) {
+            while ($row = $this->db->fetch_object($result)) {
+                $headers[] = array(
+                    'id'        => $row->id,
+                    'header'    => $row->header,
+                    'date'      => makeDate($row->datum));
+            }
+        }
+        return $headers;
+    }
+
+    /**
+     * Fetches a news entry identified by its ID
+     *
+     * @param  integer $id
+     * @return array
+     * @access public
+     * @since  2006-06-25
+     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function getNewsEntries($id)
+    {
+        $news = array();
+        return $news;
+    }
+
+    /**
+     * Adds a new news entry
+     *
+     * @param  array    $data
+     * @return boolean
+     * @access public
+     * @since  2006-06-25
+     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function addNewsEntry($data)
+    {
+
+    }
+
+    /**
+     * Updates a new news entry identified by its ID
+     *
+     * @param  integer $id
+     * @param  array   $data
+     * @return boolean
+     * @access public
+     * @since  2006-06-25
+     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function updateNewsEntry($id, $data)
+    {
+
+    }
+
+    /**
+     * Deletes a news entry identified by its ID
+     *
+     * @param  integer $id
+     * @return array
+     * @access public
+     * @since  2006-06-25
+     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function deleteNews($id)
+    {
+        $query = sprintf("
+            DELETE FROM
+                %sfaqnews
+            WHERE
+                id = %d",
+            SQLPREFIX,
+            (int)$id);
+        if (!$this->db->query($query)) {
+            return false;
+        }
+        return true;
+    }
 }
