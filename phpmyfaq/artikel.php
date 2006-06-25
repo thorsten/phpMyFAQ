@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.37 2006-06-21 21:41:28 matteo Exp $
+* $Id: artikel.php,v 1.38 2006-06-25 16:46:44 matteo Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -29,10 +29,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $currentCategory = $cat;
 
 if (isset($_REQUEST['id']) && is_numeric($_REQUEST['id'])) {
-	$id = (int)$_REQUEST['id'];
+    $id = (int)$_REQUEST['id'];
 }
 if (isset($_REQUEST['solution_id']) && is_numeric($_REQUEST['solution_id'])) {
-	$solution_id = $_REQUEST['solution_id'];
+    $solution_id = $_REQUEST['solution_id'];
 } else {
     $solution_id = 0;
 }
@@ -46,13 +46,16 @@ if (0 == $solution_id) {
     $faq->getRecordBySolutionId($solution_id);
 }
 $faq->logViews($faq->faqRecord['id']);
+
 $content = $faq->faqRecord['content'];
+$thema   = $faq->getRecordTitle($id, $lang);
 
 // Set the path of the current category
 $categoryName = $tree->getPath($currentCategory, ' &raquo; ', true);
 
 $changeLanguagePath = sprintf('?%saction=artikel&amp;cat=%d&amp;id=%d', $sids, $currentCategory, $id);
 
+$highlight = '';
 if (isset($_GET['highlight']) && $_GET['highlight'] != "/" && $_GET['highlight'] != "<" && $_GET['highlight'] != ">" && strlen($_GET['highlight']) > 1) {
     $highlight = strip_tags($_GET['highlight']);
     $highlight = str_replace("'", "´", $highlight);
@@ -60,14 +63,23 @@ if (isset($_GET['highlight']) && $_GET['highlight'] != "/" && $_GET['highlight']
     $highlight = preg_quote($highlight, '/');
     $searchItems = explode(' ', $highlight);
     foreach ($searchItems as $item) {
-        $content = preg_replace_callback(
-            '/('.$item.
-            '="[^"]*")|((href|src|title|alt|class|style|id|name)="[^"]*'.$item.
-            '[^"]*")|('.$item.
-            ')/mis', "highlight_no_links", $content);
+        $thema = preg_replace_callback('/'
+                    .'('.$item.'="[^"]*")|'
+                    .'((href|src|title|alt|class|style|id|name)="[^"]*'.$item.'[^"]*")|'
+                    .'('.$item.')'
+                    .'/mis',
+                    "highlight_no_links",
+                    $thema
+                    );
+        $content = preg_replace_callback('/'
+                    .'('.$item.'="[^"]*")|'
+                    .'((href|src|title|alt|class|style|id|name)="[^"]*'.$item.'[^"]*")|'
+                    .'('.$item.')'
+                    .'/mis',
+                    "highlight_no_links",
+                    $content
+                    );
     }
-} else {
-    $highlight = '';
 }
 
 $arrLanguage = check4Language($id);
@@ -75,21 +87,21 @@ $switchLanguage = "";
 $check4Lang = "";
 $num = count($arrLanguage);
 if ($num > 1) {
-	foreach ($arrLanguage as $language) {
-		$check4Lang .= "<option value=\"".$language."\">".$languageCodes[strtoupper($language)]."</option>\n";
-	}
-	$switchLanguage .= "<p>\n";
+    foreach ($arrLanguage as $language) {
+        $check4Lang .= "<option value=\"".$language."\">".$languageCodes[strtoupper($language)]."</option>\n";
+    }
+    $switchLanguage .= "<p>\n";
     $switchLanguage .= "<fieldset>\n";
     $switchLanguage .= "<legend>".$PMF_LANG["msgLangaugeSubmit"]."</legend>\n";
-	$switchLanguage .= "<form action=\"".$changeLanguagePath."\" method=\"post\" style=\"display: inline;\">\n";
-	$switchLanguage .= "<select name=\"artlang\" size=\"1\">\n";
-	$switchLanguage .= $check4Lang;
-	$switchLanguage .= "</select>\n";
-	$switchLanguage .= "&nbsp;\n";
-	$switchLanguage .= "<input class=\"submit\" type=\"submit\" name=\"submit\" value=\"".$PMF_LANG["msgLangaugeSubmit"]."\" />\n";
+    $switchLanguage .= "<form action=\"".$changeLanguagePath."\" method=\"post\" style=\"display: inline;\">\n";
+    $switchLanguage .= "<select name=\"artlang\" size=\"1\">\n";
+    $switchLanguage .= $check4Lang;
+    $switchLanguage .= "</select>\n";
+    $switchLanguage .= "&nbsp;\n";
+    $switchLanguage .= "<input class=\"submit\" type=\"submit\" name=\"submit\" value=\"".$PMF_LANG["msgLangaugeSubmit"]."\" />\n";
     $switchLanguage .= "</fieldset>\n";
-	$switchLanguage .= "</form>\n";
-	$switchLanguage .= "</p>\n";
+    $switchLanguage .= "</form>\n";
+    $switchLanguage .= "</p>\n";
 }
 
 if (is_dir('attachments/')  && is_dir('attachments/'.$id) && isset($PMF_CONF['disatt'])) {
@@ -143,7 +155,7 @@ if ($faq->faqRecord['comment'] == 'n') {
 $tpl->processTemplate ("writeContent", array(
     'writeRubrik' => $categoryName.'<br />',
     'solution_id' => $faq->faqRecord['solution_id'],
-    'writeThema' => preg_replace_callback('/('.$highlight.'="[^"]*")|((href|src|title|alt|class|style|id|name)="[^"]*'.$highlight.'[^"]*")|('.$highlight.')/mis', "highlight_no_links", $faq->getRecordTitle($id, $lang)),
+    'writeThema' => $thema,
     'writeArticleCategoryHeader' => $PMF_LANG['msgArticleCategories'],
     'writeArticleCategories' => $writeMultiCategories,
     'writeContent' => preg_replace_callback("/<code([^>]*)>(.*?)<\/code>/is", 'hilight', $content),
