@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.121 2006-06-25 19:01:15 matteo Exp $
+* $Id: functions.php,v 1.122 2006-06-25 20:05:16 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -921,15 +921,15 @@ function generateXHTMLFile()
 {
     global $db, $PMF_CONF, $PMF_LANG;
 
-    require_once("../inc/parser.php"); // template support
+    require_once('Template.php');
 
     $tree = new PMF_Category();
     $tree->transform(0);
     $old = 0;
 
-      $newest = array();
+    $newest = array();
 
-      //
+    //
     // get the 5 newest entries
     //
     $query = "SELECT DISTINCT ".SQLPREFIX."faqdata.id FROM ".SQLPREFIX."faqdata, ".SQLPREFIX."faqvisits WHERE ".SQLPREFIX."faqdata.id = ".SQLPREFIX."faqvisits.id AND ".SQLPREFIX."faqdata.lang = ".SQLPREFIX."faqvisits.lang AND ".SQLPREFIX."faqdata.active = 'yes' ORDER BY ".SQLPREFIX."faqdata.datum desc";
