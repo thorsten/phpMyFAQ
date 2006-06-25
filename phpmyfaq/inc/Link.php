@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Link.php,v 1.1 2006-06-25 14:59:03 matteo Exp $
+* $Id: Link.php,v 1.2 2006-06-25 15:46:36 matteo Exp $
 *
 * Link management - Functions and Classes
 *
@@ -403,7 +403,9 @@ class PMF_Link
                             $url .= PMF_LINK_HTML_SITEMAP.PMF_LINK_HTML_MINUS.$getParams[PMF_LINK_GET_LETTER].PMF_LINK_HTML_UNDERSCORE.$getParams[PMF_LINK_GET_LANG].PMF_LINK_HTML_EXTENSION;
                             break;
                         case PMF_LINK_GET_ACTION_SHOW:
-                            if (!isset($getParams[PMF_LINK_GET_CATEGORY]) || (0 == $getParams[PMF_LINK_GET_CATEGORY])) {
+                            if (    !isset($getParams[PMF_LINK_GET_CATEGORY])
+                                 || (isset($getParams[PMF_LINK_GET_CATEGORY]) && (0 == $getParams[PMF_LINK_GET_CATEGORY]))
+                                ) {
                                 $url .= PMF_LINK_HTML_SHOWCAT;
                             }
                             else {
