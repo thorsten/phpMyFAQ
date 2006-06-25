@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.119 2006-06-25 16:12:38 matteo Exp $
+* $Id: functions.php,v 1.120 2006-06-25 16:14:51 matteo Exp $
 *
 * This is the main functions file!
 *
@@ -1324,19 +1324,6 @@ function searchEngine($begriff, $category = '%')
             $output .= '<li><strong>'.$rubriktext.'</strong>: '.$oLink->toHtmlAnchor().'</li><br />'
                     .'<div class="searchpreview"><strong>'.$PMF_LANG['msgSearchContent'].'</strong> '.$content.'...</div>'
                     .'<br /></li>\n';
-/*
-            if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == "TRUE") {
-                $output .= "<li><strong>".$rubriktext."</strong>: <a href=\"".$row->category_id."_".$row->id."_".$row->lang.".html?highlight=".$begriff."\">".$thema."...</a><br /><div class=\"searchpreview\"><strong>".$PMF_LANG["msgSearchContent"]."</strong> ".$content."...</div><br /></li>\n";
-            } else {
-                $output .= "<li><strong>".$rubriktext."</strong>: <a href=\"".$_SERVER["PHP_SELF"]."?"
-                .$sids."action=artikel&amp;
-                cat=".$row->category_id."&amp;
-                id=".$row->id."&amp;
-                artlang=".$row->lang."&amp;
-                highlight=".$begriff."\">".$thema."...</a>
-                <br /><div class=\"searchpreview\"><strong>".$PMF_LANG["msgSearchContent"]."</strong> ".$content."...</div><br /></li>\n";
-            }
-*/
         }
         $output .= "</ul>\n";
     } else {
