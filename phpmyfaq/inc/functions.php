@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.116 2006-06-24 14:09:11 thorstenr Exp $
+* $Id: functions.php,v 1.117 2006-06-25 11:02:18 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -649,37 +649,6 @@ function userOnline()
 /******************************************************************************
  * Funktionen für die Startseite
  ******************************************************************************/
-
-/**
-* generateNews
-*
-* Function for generating the FAQ news
-*
-* @return   string
-* @access   public
-* @since    2002-08-23
-* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-*/
-function generateNews()
-{
-    global $db, $PMF_LANG, $PMF_CONF;
-    $counter = 0;
-    $result = $db->query("SELECT id, datum, header, artikel, link, linktitel, target FROM ".SQLPREFIX."faqnews ORDER BY datum desc");
-    $output = '';
-    if ($PMF_CONF['numNewsArticles'] > 0 && $db->num_rows($result) > 0) {
-        while (($row = $db->fetch_object($result)) && $counter < $PMF_CONF['numNewsArticles']) {
-            $counter++;
-            $output .= sprintf('<h3><a name="news_%d">%s</a></h3><div class="block">%s', $row->id, $row->header, $row->artikel);
-            if ($row->link != '') {
-                $output .= sprintf('<br />Info: <a href="http://%s" target="_%s">%s</a>', $row->link, $row->target, $row->linktitel);
-            }
-            $output .= sprintf('</div><div class="date">%s</div>', makeDate($row->datum));
-        }
-        return $output;
-    } else {
-        return $PMF_LANG['msgNoNews'];
-    }
-}
 
 /*
  * Kürzt einen String auf eine bestimmte Anzahl von Wörtern | @@ Thorsten - 2002-08-26
