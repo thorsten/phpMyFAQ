@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.26 2006-06-25 15:04:11 matteo Exp $
+* $Id: Faq.php,v 1.27 2006-06-25 16:46:04 matteo Exp $
 *
 * The main FAQ class
 *
@@ -1098,7 +1098,7 @@ class PMF_Faq
      */
     function createNewVisit($id, $lang)
     {
-        if (!is_int($id) && !is_string($lang)) {
+        if (!is_numeric($id) && !is_string($lang)) {
             return false;
         }
 
@@ -1130,7 +1130,7 @@ class PMF_Faq
      */
     function updateVisit($id)
     {
-        if (!is_int($id)) {
+        if (!is_numeric($id)) {
             return false;
         }
 
