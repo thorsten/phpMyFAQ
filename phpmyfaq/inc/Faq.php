@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.27 2006-06-25 16:46:04 matteo Exp $
+* $Id: Faq.php,v 1.28 2006-06-25 18:53:23 matteo Exp $
 *
 * The main FAQ class
 *
@@ -96,7 +96,7 @@ class PMF_Faq
     */
     function showAllRecords($category)
     {
-        global $sids, $PMF_CONF;
+        global $sids, $PMF_CONF, $tree;
         $page = 1;
         $output = '';
 
@@ -188,6 +188,12 @@ class PMF_Faq
             return false;
         }
 
+        $categoryName = 'CategoryId-'.$category;
+        // Hack: we need the Category Name for the new SEO URL schema
+        //       so we try to use the global $tree object, if it exist
+        if (isset($tree)) {
+            $categoryName = $tree->categoryName[$category]['name'];
+        }
         if ($pages > 1) {
             $output .= "<p align=\"center\"><strong>";
             $previous = $page - 1;
@@ -201,7 +207,7 @@ class PMF_Faq
                             $previous
                         );
                 $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
-                $oLink->itemTitle = 'TODO: Insert here category name';
+                $oLink->itemTitle = $categoryName;
                 $oLink->text = $title;
                 $oLink->tooltip = $title;
                 $output .= '[ '.$oLink->toHtmlAnchor().' ]';
@@ -217,7 +223,7 @@ class PMF_Faq
                             $i
                         );
                 $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
-                $oLink->itemTitle = 'TODO: Insert here category name';
+                $oLink->itemTitle = $categoryName;
                 $oLink->text = $title;
                 $oLink->tooltip = $title;
                 $output .= '[ '.$oLink->toHtmlAnchor().' ]';
@@ -233,7 +239,7 @@ class PMF_Faq
                             $next
                         );
                 $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
-                $oLink->itemTitle = 'TODO: Insert here category name';
+                $oLink->itemTitle = $categoryName;
                 $oLink->text = $title;
                 $oLink->tooltip = $title;
                 $output .= '[ '.$oLink->toHtmlAnchor().' ]';
