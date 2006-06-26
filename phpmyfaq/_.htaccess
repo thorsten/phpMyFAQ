@@ -1,5 +1,5 @@
 ##
-# $Id: _.htaccess,v 1.7 2006-06-25 19:50:17 matteo Exp $
+# $Id: _.htaccess,v 1.8 2006-06-26 21:49:06 matteo Exp $
 #
 # phpMyFAQ 2.0 .htaccess file
 #
@@ -98,14 +98,20 @@ RewriteRule ^category(.*)\.html$        index.php?action=show&cat=$1 [L,QSA]
 # start page
 RewriteRule index.html$                 index.php [PT]
 
-# sitemap
+# PMF sitemap
 # * http://[...]/sitemap/<LETTER>/<LANGUAGE CODE>.htm
 # * http://[...]/sitemap/<LETTER>/<LANGUAGE CODE>.html
 RewriteRule sitemap/([^\/]+)/([a-z\-]+)\.htm(l?)$   index.php?action=sitemap&letter=$1&lang=$2 [L,QSA]
 RewriteRule sitemap/([^\/]+)/(.+)$                  $2 [L,QSA]
-# sitemap (backward compatibility)
+# PMF sitemap (backward compatibility)
 RewriteCond %{REQUEST_URI}              sitemap-([a-zA-Z0-9‰ˆ¸ƒ÷‹ﬂ]*)_([a-z\-]+)\.html$ [NC]
 RewriteRule ^sitemap-(.*)_(.*)\.html$   index.php?action=sitemap&letter=$1&lang=$2 [L,QSA]
+
+# Google sitemap
+# * http://[...]/sitemap.xml
+# * http://[...]/sitemap.xml.gz
+RewriteRule sitemap.xml$        sitemap.google.php [L]
+RewriteRule sitemap.xml.gz$     sitemap.google.php?gz=1 [L]
 
 # a solution id page
 RewriteCond %{REQUEST_URI}              solution_id_([0-9]+)\.html$ [NC]

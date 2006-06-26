@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.122 2006-06-25 20:05:16 thorstenr Exp $
+* $Id: functions.php,v 1.123 2006-06-26 21:49:07 matteo Exp $
 *
 * This is the main functions file!
 *
@@ -197,7 +197,7 @@ function languageOptions($lang = "", $onlyThisLang = false, $fileLanguageValue =
 }
 
 /**
-* Converts the phpMyFAQ date format to the ISO 8601 format
+* Converts the phpMyFAQ date format to a format similar to ISO 8601 standard
 *
 * @param    string
 * @return   date
@@ -213,15 +213,16 @@ function makeDate($date)
 }
 
 /**
-* Converts the phpMyFAQ/Unix date format to the RFC822 format
+* Converts the phpMyFAQ/Unix date format to the format given by the PHP date format
 *
-* @param    string date
+* @param    string  date
+* @param    string  the PHP format of date
 * @param    boolean true if the passed date is in phpMyFAQ format, false if in Unix timestamp format
-* @return   string RFC 822 date
-* @since    2005-10-03
+* @return   string  date in the requested format
+* @since    2006-06-26
 * @author   Matteo Scaramuccia <matteo@scaramuccia.com>
 */
-function makeRFC822Date($date, $phpmyfaq = true)
+function makeDateByFormat($date, $type, $phpmyfaq = true)
 {
      $offset = (60 * 60) * (PMF_DATETIME_TIMEZONE / 100);
      if ($phpmyfaq) {
@@ -230,7 +231,42 @@ function makeRFC822Date($date, $phpmyfaq = true)
         $current = $date;
      }
      $timestamp = $current + $offset;
-     return gmdate("D, d M Y H:i:s", $timestamp)." ".(PMF_DATETIME_TIMEZONE == '0' ? 'GMT':PMF_DATETIME_TIMEZONE);
+
+     return gmdate($type, $timestamp);
+}
+
+/**
+* Converts the phpMyFAQ/Unix date format to the RFC 822 format
+*
+* @param    string  date
+* @param    boolean true if the passed date is in phpMyFAQ format, false if in Unix timestamp format
+* @return   string  RFC 822 date
+* @since    2005-10-03
+* @author   Matteo Scaramuccia <matteo@scaramuccia.com>
+*/
+function makeRFC822Date($date, $phpmyfaq = true)
+{
+    $rfc822TZ = ' '.(PMF_DATETIME_TIMEZONE == '0' ? 'GMT': PMF_DATETIME_TIMEZONE);
+
+    return makeDateByFormat($date, 'D, d M Y H:i:s', $phpmyfaq).$rfc822TZ;
+}
+
+/**
+* Converts the phpMyFAQ/Unix date format to the ISO 8601 format
+*
+* See the spec here: http://www.w3.org/TR/NOTE-datetime
+*
+* @param    string  date
+* @param    boolean true if the passed date is in phpMyFAQ format, false if in Unix timestamp format
+* @return   string  ISO 8601 date
+* @since    2005-10-03
+* @author   Matteo Scaramuccia <matteo@scaramuccia.com>
+*/
+function makeISO8601Date($date, $phpmyfaq = true)
+{
+    $iso8601TZD = (PMF_DATETIME_TIMEZONE == '0' ? 'Z': substr(PMF_DATETIME_TIMEZONE, 0, 3).':'.substr(PMF_DATETIME_TIMEZONE, 3));
+
+    return makeDateByFormat($date, 'Y-m-d\TH:i:s', $phpmyfaq).$iso8601TZD;
 }
 
 /**
