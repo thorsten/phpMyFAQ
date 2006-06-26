@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: rss.php,v 1.14 2006-06-22 19:32:53 matteo Exp $
+* $Id: rss.php,v 1.15 2006-06-26 21:41:59 matteo Exp $
 *
 * The RSS feed with the latest five records
 *
@@ -50,7 +50,7 @@ $rss =
     "<rss version=\"2.0\">\n<channel>\n" .
     "<title>".$PMF_CONF["title"]."</title>\n" .
     "<description>".$PMF_CONF["metaDescription"]."</description>\n" .
-    "<link>http".(isset($_SERVER['HTTPS']) ? 's' : '')."://".$_SERVER["HTTP_HOST"]."</link>";
+    "<link>".PMF_Link::getSystemUri('/feed/latest/rss.php')."</link>";
 
 if ($num > 0) {
     foreach ($rssData as $rssItem) {
@@ -67,7 +67,7 @@ if ($num > 0) {
                 " <em>(".$rssItem['visits']." ".$PMF_LANG["msgViews"].")</em></p>" .
                 $content .
                 "]]></description>\n" .
-                "\t\t<link>http".(isset($_SERVER['HTTPS']) ? 's' : '')."://".$_SERVER["HTTP_HOST"].$rssItem['url']."</link>\n" .
+                "\t\t<link>".PMF_Link::getSystemUri('/feed/latest/rss.php').str_replace($_SERVER['PHP_SELF'], '/index.php', $rssItem['url'])."</link>\n" .
                 "\t\t<pubDate>".makeRFC822Date($rssItem['datum'])."</pubDate>\n" .
                 "\t</item>\n";
     }
