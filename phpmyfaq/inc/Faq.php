@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.28 2006-06-25 18:53:23 matteo Exp $
+* $Id: Faq.php,v 1.29 2006-06-26 21:38:42 matteo Exp $
 *
 * The main FAQ class
 *
@@ -823,6 +823,7 @@ class PMF_Faq
                 DISTINCT '.SQLPREFIX.'faqdata.id AS id,
                 '.SQLPREFIX.'faqdata.lang AS lang,
                 '.SQLPREFIX.'faqdata.thema AS thema,
+                '.SQLPREFIX.'faqdata.datum AS datum,
                 '.SQLPREFIX.'faqcategoryrelations.category_id AS category_id,
                 '.SQLPREFIX.'faqvisits.visits AS visits
             FROM
@@ -864,7 +865,8 @@ class PMF_Faq
             if ($oldId != $row->id) {
                 $data['visits'] = $row->visits;
                 $data['thema'] = $row->thema;
-                
+                $data['date'] = $row->datum;
+
                 $title = PMF_htmlentities($row->thema, ENT_NOQUOTES, $this->pmf_lang['metaCharset']);
                 $url   = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                         $sids,

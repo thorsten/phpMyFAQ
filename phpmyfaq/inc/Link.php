@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Link.php,v 1.4 2006-06-25 20:01:30 matteo Exp $
+* $Id: Link.php,v 1.5 2006-06-26 21:38:42 matteo Exp $
 *
 * Link management - Functions and Classes
 *
@@ -310,7 +310,7 @@ class PMF_Link
         return str_replace('/inc/Link.php', '', $_SERVER['PHP_SELF']);
     }
 
-    function getSystemUri()
+    function getSystemUri($path = null)
     {
         // $_SERVER['HTTP_HOST'] is the name of the website or virtual host name
         $sysUri = PMF_Link::getSystemScheme().$_SERVER['HTTP_HOST'];
@@ -318,7 +318,7 @@ class PMF_Link
             $sysUri .= ':'.$_SERVER['SERVER_PORT'];
         }
 
-        return $sysUri.PMF_link::getSystemRelativeUri();
+        return $sysUri.PMF_link::getSystemRelativeUri($path);
     }
 
     function toHtmlAnchor()
