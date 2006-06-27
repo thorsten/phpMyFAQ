@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: sitemap.php,v 1.10 2006-06-25 19:50:17 matteo Exp $
+* $Id: sitemap.php,v 1.11 2006-06-27 19:13:59 matteo Exp $
 *
 * Shows the whole FAQ articles
 *
@@ -54,7 +54,7 @@ switch($DB["type"] ) {
 $writeLetters = '<p>';
 $result = $db->query($query_1);
 while ($row = $db->fetch_object($result)) {
-    $letters = $row->letters;
+    $letters = strtoupper($row->letters);
     if (preg_match("/^[a-z0-9]/i", $letters)) {
         $url = sprintf('%saction=sitemap&amp;letter=%s&amp;lang=%s',
                     $sids,
