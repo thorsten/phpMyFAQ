@@ -1,5 +1,5 @@
 ##
-# $Id: _.htaccess,v 1.8 2006-06-26 21:49:06 matteo Exp $
+# $Id: _.htaccess,v 1.9 2006-06-27 19:04:00 matteo Exp $
 #
 # phpMyFAQ 2.0 .htaccess file
 #
@@ -109,8 +109,10 @@ RewriteRule ^sitemap-(.*)_(.*)\.html$   index.php?action=sitemap&letter=$1&lang=
 
 # Google sitemap
 # * http://[...]/sitemap.xml
+# * http://[...]/sitemap.gz
 # * http://[...]/sitemap.xml.gz
 RewriteRule sitemap.xml$        sitemap.google.php [L]
+RewriteRule sitemap.gz$         sitemap.google.php?gz=1 [L]
 RewriteRule sitemap.xml.gz$     sitemap.google.php?gz=1 [L]
 
 # a solution id page
