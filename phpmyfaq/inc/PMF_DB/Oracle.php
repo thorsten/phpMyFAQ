@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Oracle.php,v 1.3 2006-06-24 14:09:46 thorstenr Exp $
+* $Id: Oracle.php,v 1.4 2006-06-29 20:52:47 matteo Exp $
 *
 * db_oracle
 *
@@ -229,9 +229,10 @@ class db_oracle
      *
      * @access  public
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @author  Matteo scaramuccia <matteo@scaramuccia.com>
      * @since   2005-09-20
      */
-    function search($table, $assoc, $joinedTable = '', $joinAssoc = array(), $match = array(), $string = '', $cond = array())
+    function search($table, $assoc, $joinedTable = '', $joinAssoc = array(), $match = array(), $string = '', $cond = array(), $orderBy = array())
     {
         $string = addslashes(trim($string));
         $fields = "";
@@ -270,6 +271,16 @@ class db_oracle
 
         if (!empty($where)) {
             $query .= " AND (".$where.")";
+        }
+        
+        $firstOrderBy = true;
+        foreach ($orderBy as $field) {
+            if ($firstOrderBy) {
+                $query .= " ORDER BY ".$field;
+                $firstOrderBy = false;
+            } else {
+                $query .= ", ".$field;
+            }
         }
 
         $query .= ";";

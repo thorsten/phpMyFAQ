@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.show.php,v 1.25 2006-06-11 20:47:53 matteo Exp $
+* $Id: record.show.php,v 1.26 2006-06-29 20:52:47 matteo Exp $
 *
 * Shows the list of records ordered by categories
 *
@@ -93,9 +93,13 @@ if ($permission["editbt"] || $permission["delbt"]) {
             }
         }
     } else if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "view" && isset($_REQUEST["suchbegriff"]) && $_REQUEST["suchbegriff"] != "") {
-
+        // Search for:
+        // a. solution id
+        // b. full text search
+        // TODO: Decide if the search will be performed upon all entries or upon the active ones.
         $begriff = strip_tags($_REQUEST["suchbegriff"]);
         if (is_numeric($begriff)) {
+            // a. solution id
             $result = $db->search(SQLPREFIX.'faqdata',
                         array(SQLPREFIX.'faqdata.id AS id',
                             SQLPREFIX.'faqdata.lang AS lang',
@@ -105,9 +109,10 @@ if ($permission["editbt"] || $permission["delbt"]) {
                         SQLPREFIX.'faqcategoryrelations',
                         array(SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id',
                             SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang'),
-                        array(SQLPREFIX.'faqdata.id'),
+                        array(SQLPREFIX.'faqdata.solution_id'),
                         $begriff);
         } else {
+            // b. full text search
             $result = $db->search(SQLPREFIX."faqdata",
                         array(SQLPREFIX.'faqdata.id AS id',
                             SQLPREFIX.'faqdata.lang AS lang',
@@ -120,23 +125,26 @@ if ($permission["editbt"] || $permission["delbt"]) {
                         array(SQLPREFIX.'faqdata.thema',
                             SQLPREFIX.'faqdata.content',
                             SQLPREFIX.'faqdata.keywords'),
-                        $begriff);
+                        $begriff,
+                        array(),
+                        array(SQLPREFIX.'faqcategoryrelations.category_id',  SQLPREFIX.'faqdata.id')
+                        );
         }
 
         $laktion = "view";
         $internalSearch = "&amp;search=".$begriff;
 
     } elseif (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "accept") {
-
         $query = 'SELECT '.SQLPREFIX.'faqdata.id AS id,'.SQLPREFIX.'faqdata.lang AS lang, '.SQLPREFIX.'faqcategoryrelations.category_id AS category_id, '.SQLPREFIX.'faqdata.thema AS thema,'.SQLPREFIX.'faqdata.author AS author FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang ='.SQLPREFIX.'faqcategoryrelations.record_lang WHERE '.SQLPREFIX.'faqdata.active = \'no\' ORDER BY '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.id';
         $result = $db->query($query);
+
         $laktion = "accept";
         $internalSearch = "";
     }
-
+    
     $perpage = 20;
     if (!isset($_REQUEST["pages"])) {
-        $anz = $db->num_rows($db->query($query));
+        $anz = $db->num_rows($result);
         $pages = ceil($anz / $perpage);
         if ($pages < 1) {
             $pages = 1;

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Mysqli.php,v 1.6 2006-06-24 14:09:46 thorstenr Exp $
+* $Id: Mysqli.php,v 1.7 2006-06-29 20:52:47 matteo Exp $
 *
 * db_mysqli
 *
@@ -193,16 +193,18 @@ class db_mysqli
 
 
 
-     /**
+    /**
      * Generates a result based on search a search string.
      *
      * This function generates a result set based on a search string.
      * FIXME: can extend to handle operands like google
+     *
      * @access  public
      * @author  Tom Rochester <tom.rochester@gmail.com>
+     * @author  Matteo scaramuccia <matteo@scaramuccia.com>
      * @since   2005-02-21
      */
-    public function search($table, $assoc, $joinedTable = '', $joinAssoc = array(), $match = array(), $string = '', $cond = array())
+    public function search($table, $assoc, $joinedTable = '', $joinAssoc = array(), $match = array(), $string = '', $cond = array(), $orderBy = array())
     {
         $string = $this->escape_string(trim($string));
         $fields = "";
@@ -250,6 +252,16 @@ class db_mysqli
 
         if (!empty($where)) {
             $query .= " AND (".$where.")";
+        }
+
+        $firstOrderBy = true;
+        foreach ($orderBy as $field) {
+            if ($firstOrderBy) {
+                $query .= " ORDER BY ".$field;
+                $firstOrderBy = false;
+            } else {
+                $query .= ", ".$field;
+            }
         }
 
         return $this->query($query);

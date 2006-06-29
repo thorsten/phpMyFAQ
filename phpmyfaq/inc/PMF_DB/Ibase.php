@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Ibase.php,v 1.3 2006-06-24 14:09:46 thorstenr Exp $
+* $Id: Ibase.php,v 1.4 2006-06-29 20:52:47 matteo Exp $
 *
 * db_ibase
 *
@@ -229,15 +229,17 @@ class db_ibase
     }
 
     /**
-    * Generates a result based on search a search string.
-    *
-    * This function generates a result set based on a search string.
-    * FIXME: can extend to handle operands like google
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since   2005-04-16
-    */
-    function search($table, $assoc, $joinedTable = '', $joinAssoc = array(), $match = array(), $string = '', $cond = array())
+     * Generates a result based on search a search string.
+     *
+     * This function generates a result set based on a search string.
+     * FIXME: can extend to handle operands like google
+     *
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @author  Matteo scaramuccia <matteo@scaramuccia.com>
+     * @since   2005-04-16
+     */
+    function search($table, $assoc, $joinedTable = '', $joinAssoc = array(), $match = array(), $string = '', $cond = array(), $orderBy = array())
     {
         $string = trim($string);
         $fields = '';
@@ -299,6 +301,16 @@ class db_ibase
 
         if (is_numeric($string)) {
             $query = "SELECT ".$fields." FROM ".$table.$joined." WHERE ".$match." = ".$string;
+        }
+
+        $firstOrderBy = true;
+        foreach ($orderBy as $field) {
+            if ($firstOrderBy) {
+                $query .= " ORDER BY ".$field;
+                $firstOrderBy = false;
+            } else {
+                $query .= ", ".$field;
+            }
         }
 
         return $this->query($query);

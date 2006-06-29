@@ -254,16 +254,18 @@ class db_pgsql
         return $arr;
     }
 
-     /**
+    /**
      * Generates a result based on search a search string.
      *
      * This function generates a result set based on a search string.
      * FIXME: can extend to handle operands like google
+     *
      * @access  public
      * @author  Tom Rochester <tom.rochester@gmail.com>
+     * @author  Matteo scaramuccia <matteo@scaramuccia.com>
      * @since   2004-08-06
      */
-    function search($table, $assoc, $joinedTable = '', $joinAssoc = array(), $match = array(), $string = '', $cond = array())
+    function search($table, $assoc, $joinedTable = '', $joinAssoc = array(), $match = array(), $string = '', $cond = array(), $orderBy = array())
     {
         $string = pg_escape_string(trim($string));
         $fields = "";
@@ -315,6 +317,16 @@ class db_pgsql
 
         if (is_numeric($string)) {
             $query = "SELECT ".$fields." FROM ".$table.$joined." WHERE ".$match." = ".$string;
+        }
+
+        $firstOrderBy = true;
+        foreach ($orderBy as $field) {
+            if ($firstOrderBy) {
+                $query .= " ORDER BY ".$field;
+                $firstOrderBy = false;
+            } else {
+                $query .= ", ".$field;
+            }
         }
 
         return $this->query($query);

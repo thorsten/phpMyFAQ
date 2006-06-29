@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Sqlite.php,v 1.6 2006-06-24 14:09:46 thorstenr Exp $
+* $Id: Sqlite.php,v 1.7 2006-06-29 20:52:47 matteo Exp $
 *
 * db_sqlite
 *
@@ -195,15 +195,16 @@ class db_sqlite
 
 
     /**
-    * Generates a result based on search a search string.
-    *
-    * This function generates a result set based on a search string.
-    *
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since   2005-06-27
-    */
-    public function search($table, $assoc, $joinedTable = '', $joinAssoc = array(), $match = array(), $string = '', $cond = array())
+     * Generates a result based on search a search string.
+     *
+     * This function generates a result set based on a search string.
+     *
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @author  Matteo scaramuccia <matteo@scaramuccia.com>
+     * @since   2005-06-27
+     */
+    public function search($table, $assoc, $joinedTable = '', $joinAssoc = array(), $match = array(), $string = '', $cond = array(), $orderBy = array())
     {
         $string = trim($string);
         $fields = '';
@@ -265,6 +266,16 @@ class db_sqlite
 
         if (is_numeric($string)) {
             $query = "SELECT ".$fields." FROM ".$table.$joined." WHERE ".$match." = ".$string;
+        }
+
+        $firstOrderBy = true;
+        foreach ($orderBy as $field) {
+            if ($firstOrderBy) {
+                $query .= " ORDER BY ".$field;
+                $firstOrderBy = false;
+            } else {
+                $query .= ", ".$field;
+            }
         }
 
         return $this->query($query);
