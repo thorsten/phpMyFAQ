@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.51 2006-06-25 17:32:16 thorstenr Exp $
+* $Id: index.php,v 1.52 2006-07-01 19:53:41 thorstenr Exp $
 *
 * The main admin backend index file
 *
@@ -271,7 +271,7 @@ if (isset($auth)) {
     <h2>Online Version Information</h2>
 <?php
         if (isset($_POST["param"]) && $_POST["param"] == "version") {
-            require_once (PMF_ROOT_DIR."/inc/xmlrpc.php");
+            require_once (PMF_ROOT_DIR."/inc/libs/xmlrpc.php");
             $param = $_POST["param"];
             $xmlrpc = new xmlrpc_client("/xml/version.php", "www.phpmyfaq.de", 80);
             $msg = new xmlrpcmsg("phpmyfaq.version", array(new xmlrpcval($param, "string")));
