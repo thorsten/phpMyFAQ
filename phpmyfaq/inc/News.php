@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: News.php,v 1.6 2006-07-01 21:15:27 thorstenr Exp $
+* $Id: News.php,v 1.7 2006-07-01 21:34:27 thorstenr Exp $
 *
 * The News class for phpMyFAQ news
 *
@@ -143,6 +143,28 @@ class PMF_News
     function getNewsEntry($id)
     {
         $news = array();
+        $query = sprintf("
+            SELECT
+                id, header, artikel, link, linktitel, target
+            FROM
+                %sfaqnews
+            WHERE
+                id = %d",
+            SQLPREFIX,
+            $id);
+        $result = $this->db->query($query);
+        if ($this->db->num_rows($result) > 0) {
+            if ($row = $this->db->fetch_object($result)) {
+                $news = array(
+                    'id'        => $row->id,
+                    'header'    => $row->header,
+                    'content'   => $row->artikel,
+                    'link'      => $row->link,
+                    'linktitle' => $row->linktitel,
+                    'target'    => $row->target
+                    );
+            }
+        }
         return $news;
     }
 
