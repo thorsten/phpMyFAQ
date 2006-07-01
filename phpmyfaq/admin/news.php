@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: news.php,v 1.17 2006-07-01 21:25:21 thorstenr Exp $
+* $Id: news.php,v 1.18 2006-07-01 21:38:36 thorstenr Exp $
 *
 * The main administration file for the news
 *
@@ -91,28 +91,37 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
     <p><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=news&amp;do=write"><?php print $PMF_LANG["ad_menu_news_add"]; ?></a></p>
 <?php
     } elseif (isset($_REQUEST["id"])) {
-        $result = $db->query("select id, header, artikel, link, linktitel, target from ".SQLPREFIX."faqnews where id = ".$_REQUEST["id"]);
-        while ($row = $db->fetch_object($result)) {
+
+        $id = (int)$_REQUEST['id'];
+        $newsData = $news->getNewsEntry($id);
 ?>
     <h2><?php print $PMF_LANG["ad_news_edit"]; ?></h2>
     <form id="editRecord" name="editRecord" action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>" method="post">
-    <input type="hidden" name="aktion" value="news" />
-    <input type="hidden" name="do" value="update" />
-    <input type="hidden" name="id" value="<?php print $row->id ?>" />
-    <dl>
+    <fieldset>
+    <legend><?php print $PMF_LANG['ad_news_edit']; ?></legend>
+
+        <input type="hidden" name="aktion" value="news" />
+        <input type="hidden" name="do" value="update" />
+        <input type="hidden" name="id" value="<?php print $newsData['id']; ?>" />
+
         <dt><strong><?php print $PMF_LANG["ad_news_header"]; ?></strong></dt>
-        <dd><input type="text" style="width: 525px;" name="header" value="<?php print $row->header ?>" /></dd>
+        <dd><input type="text" style="width: 525px;" name="header" value="<?php print $newsData['header']; ?>" /></dd>
+
         <dt><strong><?php print $PMF_LANG["ad_news_text"]; ?></strong></dt>
-        <dd><textarea id="content" name="content"><?php if (isset($row->artikel)) { print htmlspecialchars($row->artikel, ENT_QUOTES); } ?></textarea></dd>
+        <dd><textarea id="content" name="content"><?php if (isset($row->artikel)) { print htmlspecialchars($newsData['artikel'], ENT_QUOTES); } ?></textarea></dd>
+
         <dt><strong><?php print $PMF_LANG["ad_news_link_url"]; ?></strong></dt>
-        <dd><input type="text" style="width: 525px;" name="link" value="<?php print $row->link; ?>" /></dd>
+        <dd><input type="text" style="width: 525px;" name="link" value="<?php print $newsData['link']; ?>" /></dd>
+
         <dt><strong><?php print $PMF_LANG["ad_news_link_title"]; ?></strong></dt>
-        <dd><input type="text" style="width: 525px;" name="linktitel" value="<?php print $row->linktitel; ?>" /></dd>
+        <dd><input type="text" style="width: 525px;" name="linktitel" value="<?php print $newsData['linktitel']; ?>" /></dd>
+
         <dt><strong><?php print $PMF_LANG["ad_news_link_target"]; ?></strong></dt>
-        <dd><input type="radio" name="target" value="blank" <?php if ($row->target == "blank") { ?> checked="checked"<?php } ?> /><?php print $PMF_LANG["ad_news_link_window"] ?><br /><input type="radio" name="target" value="self" <?php if ($row->target == "self") { ?> checked="checked"<?php } ?> /><?php print $PMF_LANG["ad_news_link_faq"] ?></dd>
+        <dd><input type="radio" name="target" value="blank" <?php if ($newsData['target'] == "blank") { ?> checked="checked"<?php } ?> /><?php print $PMF_LANG["ad_news_link_window"] ?><br /><input type="radio" name="target" value="self" <?php if ($row->target == "self") { ?> checked="checked"<?php } ?> /><?php print $PMF_LANG["ad_news_link_faq"] ?></dd>
+
         <dt>&nbsp;</dt>
         <dd><input class="submit" type="submit" value="<?php print $PMF_LANG["ad_news_add"]; ?>" /></dd>
-    </dl>
+    </fieldset>
     </form>
 <?php
         }
@@ -164,6 +173,6 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
         $news->deleteNews($_POST['id']);
         print "<p>".$PMF_LANG["ad_news_delsuc"]."</p>";
     }
-} elseif (isset($_REQUEST["do"]) && $_REQUEST["do"] == "delete" && $permission["delnews"]) {
+} else {
     print $PMF_LANG["err_NotAuth"];
 }
