@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: news.php,v 1.15 2006-07-01 20:06:50 thorstenr Exp $
+* $Id: news.php,v 1.16 2006-07-01 21:14:01 thorstenr Exp $
 *
 * The main administration file for the news
 *
@@ -128,11 +128,19 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
     printf("<p>%s</p>", $PMF_LANG['ad_news_updatesuc']);
 
 } elseif (isset($_REQUEST["do"]) && $_REQUEST["do"] == "update" && $permission["editnews"]) {
-    $datum = date("YmdHis");
-    $artikel = $db->escape_string($_REQUEST["content"]);
-    (!isset($_REQUEST["target"])) ? $target = "" : $target = $_POST["target"];
-    $result = $db->query("UPDATE ".SQLPREFIX."faqnews SET header = '".$db->escape_string($_REQUEST["header"])."', artikel = '".$artikel."', link = '".$_REQUEST["link"]."', linktitel = '".$_REQUEST["linktitel"]."', datum = '".$datum."', target = '".$target."' WHERE id = ".$_REQUEST["id"]);
-    print "<p>".$PMF_LANG["ad_news_updatesuc"]."</p>";
+
+    $newsData = array(
+        'header'    => $db->escape_string($_POST['header']),
+        'content'   => $db->escape_string($_POST['content']),
+        'link'      => $db->escape_string($_POST['link']),
+        'linktitle' => $db->escape_string($_POST['linktitle']),
+        'date'      => date('YmdHis'),
+        'target'    => (!isset($_POST['target'])) ? '' : $db->escape_string($_POST['target'])
+        );
+    $newsId = (int)$_POST['id'];
+    $news->updateNewsEntry($newsId, $newsData);
+    printf("<p>%s</p>", $PMF_LANG['ad_news_updatesuc']);
+
 } elseif (isset($_REQUEST["do"]) && $_REQUEST["do"] == "delete" && $permission["delnews"]) {
     if (!isset($_REQUEST["really"])) {
 ?>
