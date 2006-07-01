@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: News.php,v 1.3 2006-06-25 17:38:18 thorstenr Exp $
+* $Id: News.php,v 1.4 2006-07-01 20:06:17 thorstenr Exp $
 *
 * The News class for phpMyFAQ news
 *
@@ -140,7 +140,7 @@ class PMF_News
      * @since  2006-06-25
      * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function getNewsEntries($id)
+    function getNewsEntry($id)
     {
         $news = array();
         return $news;
@@ -157,7 +157,25 @@ class PMF_News
      */
     function addNewsEntry($data)
     {
-
+        $query = sprintf("
+            INSERT INTO
+                %sfaqnews
+            (id, header, artikel, link, linktitel, datum, target)
+                VALUES
+            (%d, '%s', '%s', '%s', '%s', '%s', '%s')",
+            SQLPREFIX,
+            $this->db->nextID(SQLPREFIX.'faqnews', 'id'),
+            $data['header'],
+            $data['content'],
+            $data['link'],
+            $data['linktitle'],
+            $data['date'],
+            $data['target']
+            );
+        if (!$this->db->query($query)) {
+            return false;
+        }
+        return true;
     }
 
     /**
