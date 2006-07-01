@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: News.php,v 1.4 2006-07-01 20:06:17 thorstenr Exp $
+* $Id: News.php,v 1.5 2006-07-01 21:13:27 thorstenr Exp $
 *
 * The News class for phpMyFAQ news
 *
@@ -190,7 +190,31 @@ class PMF_News
      */
     function updateNewsEntry($id, $data)
     {
-
+        $query = sprintf("
+            UPDATE
+                ".SQLPREFIX."faqnews
+            SET
+                header = '%s',
+                artikel = '%s',
+                link = '%s',
+                linktitel = '%s',
+                datum = '%s',
+                target = '%s'
+            WHERE
+                id = %d",
+            SQLPREFIX,
+            $this->db->nextID(SQLPREFIX.'faqnews', 'id'),
+            $data['header'],
+            $data['content'],
+            $data['link'],
+            $data['linktitle'],
+            $data['date'],
+            $data['target'],
+            $id);
+        if (!$this->db->query($query)) {
+            return false;
+        }
+        return true;
     }
 
     /**
