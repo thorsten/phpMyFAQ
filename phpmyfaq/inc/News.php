@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: News.php,v 1.5 2006-07-01 21:13:27 thorstenr Exp $
+* $Id: News.php,v 1.6 2006-07-01 21:15:27 thorstenr Exp $
 *
 * The News class for phpMyFAQ news
 *
@@ -192,7 +192,7 @@ class PMF_News
     {
         $query = sprintf("
             UPDATE
-                ".SQLPREFIX."faqnews
+                %sfaqnews
             SET
                 header = '%s',
                 artikel = '%s',
