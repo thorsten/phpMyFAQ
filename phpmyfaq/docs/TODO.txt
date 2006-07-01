@@ -2,7 +2,6 @@ TODO list for future versions of phpMyFAQ:
 
 2.0.0 "Prometheus":
 - improved export functions
-- improved WYSIWYG editor and Image Manager
 - reorder records
 - improved category and FAQ record functions
 - show/edit/delete comments
