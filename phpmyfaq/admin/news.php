@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: news.php,v 1.16 2006-07-01 21:14:01 thorstenr Exp $
+* $Id: news.php,v 1.17 2006-07-01 21:25:21 thorstenr Exp $
 *
 * The main administration file for the news
 *
@@ -32,27 +32,31 @@ print '<h2>'.$PMF_LANG['ad_news_add'].'</h2>';
 if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews"]) {
 ?>
     <form id="editRecord" name="editRecord" action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>" method="post">
-    <input type="hidden" name="aktion" value="news" />
-    <input type="hidden" name="do" value="save" />
-    <dl>
-        <dt><strong><?php print $PMF_LANG["ad_news_header"]; ?></strong></dt>
-        <dd><input type="text" style="width: 525px;" name="header" /></dd>
-        <dt><strong><?php print $PMF_LANG["ad_news_text"]; ?></strong></dt>
-        <dd><textarea id="content" name="content"></textarea></dd>
-        <dt><strong><?php print $PMF_LANG["ad_news_link_url"]; ?></strong></dt>
-        <dd><input type="text" style="width: 525px;" name="link" /></dd>
-        <dt><strong><?php print $PMF_LANG["ad_news_link_title"]; ?></strong></dt>
-        <dd><input type="text" style="width: 525px;" name="linktitel" /></dd>
-        <dt><strong><?php print $PMF_LANG["ad_news_link_target"]; ?></strong></dt>
-        <dd><input type="radio" name="target" value="blank" /><?php print $PMF_LANG["ad_news_link_window"]; ?><br />
-        <input type="radio" name="target" value="self" /><?php print $PMF_LANG["ad_news_link_faq"]; ?></dd>
-        <dt>&nbsp;</dt>
-        <dd><input class="submit" type="submit" value="<?php print $PMF_LANG["ad_news_add"]; ?>" /></dd>
-    </dl>
+    <fieldset>
+    <legend><?php print $PMF_LANG['ad_news_add']; ?></legend>
+        <input type="hidden" name="aktion" value="news" />
+        <input type="hidden" name="do" value="save" />
+
+        <label class="left" for="header"><?php print $PMF_LANG["ad_news_header"]; ?></label>
+        <input type="text" style="width: 525px;" name="header" /><br />
+
+        <?php print $PMF_LANG["ad_news_text"]; ?><br />
+        <textarea id="content" name="content"></textarea><br />
+
+        <label class="left" for="link"><?php print $PMF_LANG["ad_news_link_url"]; ?></label>
+        <input type="text" style="width: 525px;" name="link" /><br />
+
+        <label class="left" for="linktitle"><?php print $PMF_LANG["ad_news_link_title"]; ?></label>
+        <input type="text" style="width: 525px;" name="linktitle" /><br />
+
+        <label class="left" for="target"><?php print $PMF_LANG["ad_news_link_target"]; ?></label>
+        <input type="radio" name="target" value="blank" /><?php print $PMF_LANG["ad_news_link_window"]; ?>
+        <input type="radio" name="target" value="self" /><?php print $PMF_LANG["ad_news_link_faq"]; ?><br />
+
+        <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_news_add"]; ?>" />
+    </fieldset>
     </form>
 <?php
-} elseif (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews"]) {
-    print $PMF_LANG["err_NotAuth"];
 } elseif (isset($_REQUEST["do"]) && $_REQUEST["do"] == "edit" && $permission["editnews"]) {
     if (!isset($_REQUEST["id"])) {
 ?>
