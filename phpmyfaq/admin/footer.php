@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: footer.php,v 1.9 2006-07-01 15:16:45 thorstenr Exp $
+* $Id: footer.php,v 1.10 2006-07-01 15:58:24 matteo Exp $
 *
 * Footer of the admin area
 *
@@ -40,7 +40,8 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 <script language="javascript" type="text/javascript" src="editor/tiny_mce.js"></script>
 <script language="javascript" type="text/javascript">
     tinyMCE.init({
-        mode : "textareas",
+        mode : "exact",
+        elements : "content",
         theme : "advanced",
         plugins : "table,save,advhr,advimage,advlink,emotions,iespell,insertdatetime,preview,zoom,flash,searchreplace,print,paste,directionality,fullscreen,noneditable,contextmenu",
         theme_advanced_buttons1_add_before : "save,newdocument,separator",
