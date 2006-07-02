@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.31 2006-07-02 09:48:58 thorstenr Exp $
+* $Id: Faq.php,v 1.32 2006-07-02 12:02:59 thorstenr Exp $
 *
 * The main FAQ class
 *
@@ -319,7 +319,7 @@ class PMF_Faq
             SQLPREFIX,
             $newId,
             $data['lang'],
-            getSolutionId(),
+            $this->getSolutionId(),
             0,
             $data['active'],
             $data['thema'],
@@ -430,6 +430,38 @@ class PMF_Faq
     }
 
     /**
+      * Gets the latest solution id for a FAQ record
+     *
+      * @return  integer
+      * @access  public
+      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+      */
+    function getSolutionId()
+    {
+        $latest_id = 0;
+        $next_solution_id = 0;
+
+        $query = sprintf('
+            SELECT
+                MAX(solution_id) AS solution_id
+            FROM
+                %sfaqdata',
+            SQLPREFIX);
+        $result = $this->db->query($query);
+
+        if ($result && $row = $this->db->fetch_object($result)) {
+            $latest_id = $row->solution_id;
+        }
+
+        if ($latest_id < PMF_SOLUTION_ID_START_VALUE) {
+            $next_solution_id = PMF_SOLUTION_ID_START_VALUE;
+        } else {
+            $next_solution_id = $latest_id + PMF_SOLUTION_ID_INCREMENT_VALUE;
+        }
+        return $next_solution_id;
+    }
+
+    /**
     * getAllRecords()
     *
     * Returns an array with all data from all FAQ records
@@ -453,8 +485,8 @@ class PMF_Faq
             $this->faqRecords[] = array(
                 'id'            => $row->id,
                 'lang'          => $row->lang,
-                'solution_id'    => $row->solution_id,
-                'revision_id'    => $row->revision_id,
+                'solution_id'   => $row->solution_id,
+                'revision_id'   => $row->revision_id,
                 'active'        => $row->active,
                 'keywords'      => $row->keywords,
                 'title'         => $row->thema,
