@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: add.php,v 1.11 2006-06-12 22:09:26 matteo Exp $
+* $Id: add.php,v 1.12 2006-07-02 12:45:43 thorstenr Exp $
 *
 * This is the page there a user can add a FAQ record.
 *
@@ -27,8 +27,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $captcha = new PMF_Captcha($db, $sids, $pmf->language, $_SERVER['HTTP_USER_AGENT'], $_SERVER['REMOTE_ADDR']);
 
 if (isset($_GET['gen'])) {
-	$captcha->showCaptchaImg();
-	exit;
+    $captcha->showCaptchaImg();
+    exit;
 }
 
 Tracking('new_entry', 0);
@@ -37,15 +37,15 @@ if (isset($_GET['question'])) {
     $question = strip_tags($_GET['question']);
     $readonly = ' readonly="readonly"';
 } else {
-	$question = '';
+    $question = '';
     $readonly = '';
 }
 
 if (isset($_GET['cat']) && is_numeric($_GET['cat'])) {
     $rubrik = intval($_GET['cat']);
-	$category = array(array('category_id' => $rubrik, 'category_lang' => $LANGCODE));
+    $category = array(array('category_id' => $rubrik, 'category_lang' => $LANGCODE));
 } else {
-	$category = array();
+    $category = array();
 }
 
 $tree->buildTree();
@@ -66,7 +66,6 @@ $tpl->processTemplate('writeContent', array(
     'msgNewContentArticle'  => $PMF_LANG['msgNewContentArticle'],
     'msgNewContentKeywords' => $PMF_LANG['msgNewContentKeywords'],
     'msgNewContentLink'     => $PMF_LANG['msgNewContentLink'],
-    'copyright_eintrag'     => unhtmlentities($PMF_CONF['copyright_eintrag']),
     'captchaFieldset'       => printCaptchaFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('add'), $captcha->caplength),
     'msgNewContentSubmit'   => $PMF_LANG['msgNewContentSubmit']));
 

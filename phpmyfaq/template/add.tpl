@@ -37,4 +37,3 @@
     <br />
 
     </form>
-    <p>{copyright_eintrag}</p>
