@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Init.php,v 1.2 2006-07-02 09:53:55 matteo Exp $
+* $Id: Init.php,v 1.3 2006-07-02 09:56:31 thorstenr Exp $
 *
 * Some functions
 *
@@ -23,8 +23,8 @@
 */
 
 //debug mode:
-// - false	debug mode disabled
-// - true	debug mode enabled
+// - false    debug mode disabled
+// - true    debug mode enabled
 define("DEBUG", true);
 
 if (DEBUG) {
@@ -58,8 +58,8 @@ if (!isset($_SESSION['pmf_initiated'])) {
 // Connect to LDAP server, when LDAP support is enabled
 //
 if (isset($PMF_CONF['ldap_support']) && $PMF_CONF['ldap_support'] == true && file_exists('inc/dataldap.php')) {
-    require_once('inc/dataldap.php');
-    require_once('inc/Ldap.php');
+    require_once(dirname(__FILE__).'dataldap.php');
+    require_once(dirname(__FILE__).'Ldap.php');
     $ldap = new LDAP($PMF_LDAP['ldap_server'], $PMF_LDAP['ldap_port'], $PMF_LDAP['ldap_base'], $PMF_LDAP['ldap_user'], $PMF_LDAP['ldap_password']);
 } else {
     $ldap = null;
@@ -108,42 +108,42 @@ class PMF_Init
     {
     }
 
-	/**
-	* cleanRequest
+    /**
+    * cleanRequest
     *
-	* Cleans the request environment from global variables, unescaped slashes and xss in the request string.
+    * Cleans the request environment from global variables, unescaped slashes and xss in the request string.
     *
-	* @return   void
+    * @return   void
     * @access   public
     * @author   Johann-Peter Hartmann <hartmann@mayflower.de>
-	*/
-	function cleanRequest()
+    */
+    function cleanRequest()
     {
         $_SERVER['PHP_SELF'] = strtr(rawurlencode($_SERVER['PHP_SELF']),array( "%2F"=>"/", "%257E"=>"%7E"));
         $_SERVER['HTTP_USER_AGENT'] = urlencode($_SERVER['HTTP_USER_AGENT']);
 
-		// remove global registered variables to avoid injections
-		if (ini_get('register_globals')) {
-			PMF_Init::unregisterGlobalVariables();
-		}
-		// clean external variables
-		$externals = array('_REQUEST', '_GET', '_POST', '_COOKIE');
-		foreach ($externals as $external) {
-			if (isset($GLOBALS[$external]) && is_array($GLOBALS[$external])) {
+        // remove global registered variables to avoid injections
+        if (ini_get('register_globals')) {
+            PMF_Init::unregisterGlobalVariables();
+        }
+        // clean external variables
+        $externals = array('_REQUEST', '_GET', '_POST', '_COOKIE');
+        foreach ($externals as $external) {
+            if (isset($GLOBALS[$external]) && is_array($GLOBALS[$external])) {
 
-				// first clean XSS issues
-				$newvalues = $GLOBALS[$external];
-				$newvalues = PMF_Init::removeXSSGPC($newvalues);
+                // first clean XSS issues
+                $newvalues = $GLOBALS[$external];
+                $newvalues = PMF_Init::removeXSSGPC($newvalues);
 
-				// then remove magic quotes
-				$newvalues = PMF_Init::removeMagicQuotesGPC($newvalues);
+                // then remove magic quotes
+                $newvalues = PMF_Init::removeMagicQuotesGPC($newvalues);
 
-				// clean old array and insert cleaned data
-				foreach (array_keys($GLOBALS[$external]) as $key) unset($GLOBALS[$external][$key]);
-				foreach (array_keys($newvalues) as $key) $GLOBALS[$external][$key] = $newvalues[$key];
-			}
-		}
-	}
+                // clean old array and insert cleaned data
+                foreach (array_keys($GLOBALS[$external]) as $key) unset($GLOBALS[$external][$key]);
+                foreach (array_keys($newvalues) as $key) $GLOBALS[$external][$key] = $newvalues[$key];
+            }
+        }
+    }
 
     /**
     * getUserAgentLanguage()
@@ -325,32 +325,32 @@ class PMF_Init
         if (strpos($string, '\0') !== false) {
             return null;
         }
-    	if (get_magic_quotes_gpc()) {
-    		$string = stripslashes($string);
-    	}
-    	$string = str_replace(array("&amp;","&lt;","&gt;"),array("&amp;amp;","&amp;lt;","&amp;gt;",),$string);
-    	// fix &entitiy\n;
-    	$string = preg_replace('#(&\#*\w+)[\x00-\x20]+;#u',"$1;",$string);
-    	$string = preg_replace('#(&\#x*)([0-9A-F]+);*#iu',"$1$2;",$string);
-    	$string = html_entity_decode($string, ENT_COMPAT);
-    	// remove any attribute starting with "on" or xmlns
-    	$string = preg_replace('#(<[^>]+[\x00-\x20\"\'])(on|xmlns)[^>]*>#iUu',"$1>",$string);
-    	// remove javascript: and vbscript: protocol
-    	$string = preg_replace('#([a-z]*)[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*)[\\x00-\x20]*j[\x00-\x20]*a[\x00-\x20]*v[\x00-\x20]*a[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iUu','$1=$2nojavascript...',$string);
-    	$string = preg_replace('#([a-z]*)[\x00-\x20]*=([\'\"]*)[\x00-\x20]*v[\x00-\x20]*b[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iUu','$1=$2novbscript...',$string);
-    	//<span style="width: expression(alert('Ping!'));"></span>
-    	// only works in ie...
-    	$string = preg_replace('#(<[^>]+)style[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*).*expression[\x00-\x20]*\([^>]*>#iU',"$1>",$string);
-    	$string = preg_replace('#(<[^>]+)style[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*).*behaviour[\x00-\x20]*\([^>]*>#iU',"$1>",$string);
-    	$string = preg_replace('#(<[^>]+)style[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*).*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:*[^>]*>#iUu',"$1>",$string);
-    	//remove namespaced elements (we do not need them...)
-    	$string = preg_replace('#</*\w+:\w[^>]*>#i',"",$string);
-    	//remove really unwanted tags
-    	do {
-    		$oldstring = $string;
-    		$string = preg_replace('#</*(applet|meta|xml|blink|link|style|script|embed|object|iframe|frame|frameset|ilayer|layer|bgsound|title|base)[^>]*>#i',"",$string);
-    	} while ($oldstring != $string);
-    	return $string;
+        if (get_magic_quotes_gpc()) {
+            $string = stripslashes($string);
+        }
+        $string = str_replace(array("&amp;","&lt;","&gt;"),array("&amp;amp;","&amp;lt;","&amp;gt;",),$string);
+        // fix &entitiy\n;
+        $string = preg_replace('#(&\#*\w+)[\x00-\x20]+;#u',"$1;",$string);
+        $string = preg_replace('#(&\#x*)([0-9A-F]+);*#iu',"$1$2;",$string);
+        $string = html_entity_decode($string, ENT_COMPAT);
+        // remove any attribute starting with "on" or xmlns
+        $string = preg_replace('#(<[^>]+[\x00-\x20\"\'])(on|xmlns)[^>]*>#iUu',"$1>",$string);
+        // remove javascript: and vbscript: protocol
+        $string = preg_replace('#([a-z]*)[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*)[\\x00-\x20]*j[\x00-\x20]*a[\x00-\x20]*v[\x00-\x20]*a[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iUu','$1=$2nojavascript...',$string);
+        $string = preg_replace('#([a-z]*)[\x00-\x20]*=([\'\"]*)[\x00-\x20]*v[\x00-\x20]*b[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iUu','$1=$2novbscript...',$string);
+        //<span style="width: expression(alert('Ping!'));"></span>
+        // only works in ie...
+        $string = preg_replace('#(<[^>]+)style[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*).*expression[\x00-\x20]*\([^>]*>#iU',"$1>",$string);
+        $string = preg_replace('#(<[^>]+)style[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*).*behaviour[\x00-\x20]*\([^>]*>#iU',"$1>",$string);
+        $string = preg_replace('#(<[^>]+)style[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*).*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:*[^>]*>#iUu',"$1>",$string);
+        //remove namespaced elements (we do not need them...)
+        $string = preg_replace('#</*\w+:\w[^>]*>#i',"",$string);
+        //remove really unwanted tags
+        do {
+            $oldstring = $string;
+            $string = preg_replace('#</*(applet|meta|xml|blink|link|style|script|embed|object|iframe|frame|frameset|ilayer|layer|bgsound|title|base)[^>]*>#i',"",$string);
+        } while ($oldstring != $string);
+        return $string;
     }
 
     /**
@@ -369,9 +369,9 @@ class PMF_Init
         foreach ($data as $key => $val) {
             $key = PMF_Init::basicXSSClean($key);
             if (is_array($val)) {
-            	$cleanData[$key] = PMF_Init::removeXSSGPC($val);
+                $cleanData[$key] = PMF_Init::removeXSSGPC($val);
             } else {
-            	$cleanData[$key] = PMF_Init::basicXSSClean($val);
+                $cleanData[$key] = PMF_Init::basicXSSClean($val);
             }
         }
         return $cleanData;
