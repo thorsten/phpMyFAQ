@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.52 2006-07-02 19:51:02 thorstenr Exp $
+* $Id: installer.php,v 1.53 2006-07-02 20:17:29 thorstenr Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -131,9 +131,6 @@ function HTMLFooter()
 */
 function cleanInstallation()
 {
-    if (file_exists(PMF_ROOT_DIR.'/inc/config.php')) {
-        unlink(PMF_ROOT_DIR.'/inc/config.php');
-    }
     if (file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
         unlink(PMF_ROOT_DIR.'/inc/config.php');
     }
@@ -250,6 +247,11 @@ function cleanInstallation()
 <?php
 if (version_compare(PHP_VERSION, '4.3.0', '<')) {
     print "<p class=\"center\">You need PHP Version 4.3.0 or higher!</p>\n";
+    HTMLFooter();
+    die();
+}
+if (!extension_loaded('gd')) {
+    print '<p class="center">You don\'t have GD support enabled in your PHP installation. Please enabled GD support in your php.ini file.</p>';
     HTMLFooter();
     die();
 }
