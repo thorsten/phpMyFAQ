@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Captcha.php,v 1.3 2006-07-02 20:21:29 thorstenr Exp $
+ * $Id: Captcha.php,v 1.4 2006-07-02 20:25:42 thorstenr Exp $
  *
  * The phpMyFAQ Captcha class
  *
@@ -189,12 +189,15 @@ class PMF_Captcha
         $this->drawlines();
         $this->generateCaptchaCode($this->caplength);
         $this->drawText();
-        if (!function_exists('imagepng')) {
-            header('Content-Type: image/jpeg');
-            imagejpeg($this->img, '', ( int )$this->quality);
-        } else {
+        if (function_exists('imagepng')) {
             header('Content-Type: image/png');
             imagepng($this->img);
+        } elseif (function_exists('imagejpeg')) {
+            header('Content-Type: image/jpeg');
+            imagejpeg($this->img, '', ( int )$this->quality);
+        } elseif (function_exists('imagegif')) {
+            header('Content-Type: image/gif');
+            imagegif($this->img);
         }
         imagedestroy($this->img);
     }
