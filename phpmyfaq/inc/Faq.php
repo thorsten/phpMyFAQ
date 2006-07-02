@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.29 2006-06-26 21:38:42 matteo Exp $
+* $Id: Faq.php,v 1.30 2006-07-02 09:07:26 thorstenr Exp $
 *
 * The main FAQ class
 *
@@ -310,6 +310,9 @@ class PMF_Faq
             return false;
         }
 
+        // Get new ID first
+        $newId = $this->db->nextID(SQLPREFIX.'faqdata', 'id');
+
         // Add new entry
         $this->db->query(sprintf(
             "INSERT INTO
@@ -317,7 +320,7 @@ class PMF_Faq
             VALUES
                 (%d, '%s', %d, %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
             SQLPREFIX,
-            $this->db->nextID(SQLPREFIX.'faqdata', 'id'),
+            $newId,
             $data['lang'],
             getSolutionId(),
             0,
@@ -329,9 +332,6 @@ class PMF_Faq
             $data['email'],
             $data['comment'],
             $data['date']));
-
-        $newId = $this->db->insert_id(SQLPREFIX.'faqdata', 'id');
-
 
         // Add category relations
         foreach ($categories as $_category) {
@@ -941,7 +941,7 @@ class PMF_Faq
                 $data['thema'] = $row->thema;
                 $data['content'] = $row->content;
                 $data['visits'] = $row->visits;
-                
+
                 $title = PMF_htmlentities($row->thema, ENT_NOQUOTES, $this->pmf_lang['metaCharset']);
                 $url   = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                         $sids,
