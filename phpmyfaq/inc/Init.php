@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Init.php,v 1.6 2006-07-02 12:28:05 thorstenr Exp $
+* $Id: Init.php,v 1.7 2006-07-02 20:13:58 thorstenr Exp $
 *
 * Some functions
 *
@@ -28,7 +28,7 @@
 define("DEBUG", true);
 
 if (DEBUG) {
-    error_reporting(E_ALL);
+    error_reporting(E_ALL & ~E_STRICT);
 }
 
 //
