@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.51 2006-07-02 12:41:31 thorstenr Exp $
+* $Id: installer.php,v 1.52 2006-07-02 19:51:02 thorstenr Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -31,6 +31,7 @@ define('COPYRIGHT', '&copy; 2001-2006 <a href="http://www.phpmyfaq.de/">phpMyFAQ
 define('SAFEMODE', @ini_get('safe_mode'));
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 require_once(PMF_ROOT_DIR.'/inc/constants.php');
+require_once(PMF_ROOT_DIR.'/inc/functions.php');
 
 // permission levels
 $permLevels = array(
