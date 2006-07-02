@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Init.php,v 1.3 2006-07-02 09:56:31 thorstenr Exp $
+* $Id: Init.php,v 1.4 2006-07-02 10:34:39 matteo Exp $
 *
 * Some functions
 *
@@ -23,8 +23,8 @@
 */
 
 //debug mode:
-// - false    debug mode disabled
-// - true    debug mode enabled
+// - false      debug mode disabled
+// - true       debug mode enabled
 define("DEBUG", true);
 
 if (DEBUG) {
@@ -47,9 +47,13 @@ $db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db']);
 // We always need a valid session!
 //
 session_name('pmf_sid_');
-session_set_cookie_params(PMF_AUTH_TIMEOUT * 60, (false === strpos($_SERVER['PHP_SELF'], '/admin/') ? '/' : '/admin/'));
+// FIXME: Init.php is included also in files different from */index.php
+$relativePath = str_replace('index.php', '', $_SERVER['PHP_SELF']);
+session_set_cookie_params(PMF_AUTH_TIMEOUT * 60, $relativePath);
 session_start();
-if (!isset($_SESSION['pmf_initiated'])) {
+if (    (!isset($_SESSION['pmf_initiated']))
+     || (!preg_match('/^[0-9a-z]{32}$/i', session_id()))
+    ) {
     session_regenerate_id();
     $_SESSION['pmf_initiated'] = true;
 }
