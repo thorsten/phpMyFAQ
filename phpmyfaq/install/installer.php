@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.50 2006-06-11 14:39:01 matteo Exp $
+* $Id: installer.php,v 1.51 2006-07-02 12:41:31 thorstenr Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -253,7 +253,7 @@ if (version_compare(PHP_VERSION, '4.3.0', '<')) {
     die();
 }
 if (db_check($supported_databases) == false) {
-    print "<p class=\"center\">No supported database found! Please install one of the following database systems and enable the m 	corresponding PHP extension:</p>\n";
+    print "<p class=\"center\">No supported database found! Please install one of the following database systems and enable the m     corresponding PHP extension:</p>\n";
     print "<ul>\n";
     foreach ($supported_databases as $database) {
         printf('    <li>%s</li>', $database[1]);
@@ -657,48 +657,6 @@ foreach ($permLevels as $level) {
 
     }
 
-    // Create config.php and write the language variables in the file
-    if (@file_exists(PMF_ROOT_DIR."/inc/config.php")) {
-        print "<p class=\"center\">A config file was found. Please backup ../inc/config.php and remove the file.</p>\n";
-        HTMLFooter();
-        die();
-    }
-    if (!@copy(PMF_ROOT_DIR."/inc/config.php.original", PMF_ROOT_DIR."/inc/config.php")) {
-        print "<p class=\"center\">Could not copy the file ../inc/config.php.original to ../inc/config.php.</p>\n";
-        HTMLFooter();
-        die();
-    }
-    if ($fp = @fopen(PMF_ROOT_DIR."/inc/config.php","r")) {
-        $anz = 0;
-        while($dat = fgets($fp,1024)) {
-            $anz++;
-            $inp[$anz] = $dat;
-        }
-        @fclose($fp);
-        for ($h = 1; $h <= $anz; $h++) {
-            if (str_replace("\$PMF_CONF['language'] = 'language_en.php';", "", $inp[$h]) != $inp[$h]) {
-                $inp[$h] = "\$PMF_CONF['language'] = '".$language."';\n";
-            }
-            if (str_replace("\$PMF_CONF['permLevel'] = 'basic';", "", $inp[$h]) != $inp[$h]) {
-                $inp[$h] = "\$PMF_CONF['permLevel'] = '".$permLevel."';\n";
-            }
-        }
-        if ($fp = @fopen(PMF_ROOT_DIR."/inc/config.php","w")) {
-            for ($h = 1; $h <= $anz; $h++) {
-                fputs($fp,$inp[$h]);
-            }
-            @fclose($fp);
-        } else {
-            print "<p>Cannot write to config.php.</p></td>";
-            HTMLFooter();
-            die();
-        }
-    } else {
-        print "<p>Cannot read config.php.</p></td>";
-        HTMLFooter();
-        die();
-    }
-
     // connect to the database using inc/data.php
     require_once(PMF_ROOT_DIR."/inc/data.php");
     require_once(PMF_ROOT_DIR."/inc/Db.php");
@@ -709,7 +667,9 @@ foreach ($permLevels as $level) {
         HTMLFooter();
         die();
     }
-    include_once($sql_type.".sql.php");
+
+    include_once($sql_type.'.sql.php');
+    include_once('config.sql.php');
     print "<p class=\"center\"><strong>";
     while ($each_query = each($query)) {
         $result = $db->query($each_query[1]);
@@ -720,10 +680,9 @@ foreach ($permLevels as $level) {
             HTMLFooter();
             die();
         }
-        //usleep(250);
     }
+
     // add admin account and rights
-    /*$query[] = "INSERT INTO ".$sqltblpre."faquser (id, name, pass, realname, email, rights) VALUES (1, 'admin', '".md5($password)."', '".$realname."', '".$email."', '1111111111111111111111111')";*/
     if (!defined('SQLPREFIX'))
         define('SQLPREFIX', $sqltblpre);
     require_once dirname(dirname(__FILE__)).'/inc/PMF_User/User.php';
@@ -924,7 +883,7 @@ foreach ($permLevels as $level) {
     print "<p class=\"center\">Congratulation! Everything seems to be okay.</p>\n";
     print "<p class=\"center\">You can visit <a href=\"../index.php\">your version of phpMyFAQ</a> or</p>\n";
     print "<p class=\"center\">login into your <a href=\"../admin/index.php\">admin section</a>.</p>\n";
-    
+
     if (@unlink(basename($_SERVER["PHP_SELF"]))) {
         print "<p class=\"center\">This file was deleted automatically.</p>\n";
     } else {
@@ -935,6 +894,6 @@ foreach ($permLevels as $level) {
     } else {
         print "<p class=\"center\">Please delete the file 'update.php' manually.</p>\n";
     }
-    
+
     HTMLFooter();
 }
