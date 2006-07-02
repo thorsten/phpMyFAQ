@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Init.php,v 1.1 2006-06-11 14:26:55 matteo Exp $
+* $Id: Init.php,v 1.2 2006-07-02 09:53:55 matteo Exp $
 *
 * Some functions
 *
@@ -47,6 +47,7 @@ $db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db']);
 // We always need a valid session!
 //
 session_name('pmf_sid_');
+session_set_cookie_params(PMF_AUTH_TIMEOUT * 60, (false === strpos($_SERVER['PHP_SELF'], '/admin/') ? '/' : '/admin/'));
 session_start();
 if (!isset($_SESSION['pmf_initiated'])) {
     session_regenerate_id();
