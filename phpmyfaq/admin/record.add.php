@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.add.php,v 1.30 2006-07-02 09:49:49 thorstenr Exp $
+* $Id: record.add.php,v 1.31 2006-07-02 20:11:49 thorstenr Exp $
 *
 * Adds a record in the database
 *
@@ -44,20 +44,20 @@ if ($permission["editbt"]) {
             'date'      => date('YmdHis')
         );
 
-        $rubrik = $_POST['rubrik'];
+        $categories = $_POST['rubrik'];
 
         // Add new record and get that ID
         $nextID = $faq->addRecord($recordData);
         if ($nextID) {
             print $PMF_LANG["ad_entry_savedsuc"];
-            link_ondemand_javascript($nextID, $lang);
+            link_ondemand_javascript($nextID, $recordData['lang']);
         } else {
             print $PMF_LANG["ad_entry_savedfail"].$db->error();
         }
         // Create the visit entry
         $faq->createNewVisit($newID, $recordData['lang']);
         // Insert the new category relations
-        $faq->addCategoryRelation($categories, $newID, $recordData['lang']);
+        $faq->addCategoryRelation($categories, $nextID, $recordData['lang']);
 
     } elseif (isset($submit[2]) && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "" && isset($_REQUEST['rubrik']) && is_array($_REQUEST['rubrik'])) {
         // Preview
