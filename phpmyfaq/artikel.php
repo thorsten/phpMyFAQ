@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.39 2006-07-02 18:59:10 matteo Exp $
+* $Id: artikel.php,v 1.40 2006-07-02 19:08:46 thorstenr Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -9,7 +9,7 @@
 * @author       Lars Tiedemann <larstiedemann@yahoo.de>
 * @since        2002-08-27
 * @copyright    (c) 2001-2006 phpMyFAQ Team
-* 
+*
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
 * compliance with the License. You may obtain a copy of the License at
@@ -108,7 +108,7 @@ if ($num > 1) {
     $switchLanguage .= "</p>\n";
 }
 
-if (is_dir('attachments/')  && is_dir('attachments/'.$id) && isset($PMF_CONF['disatt'])) {
+if (is_dir('attachments/') && is_dir('attachments/'.$id) && $faqconfig->get('disatt')) {
     $files = 0;
     $outstr = "";
     $dir = opendir('attachments/'.$id);
@@ -142,7 +142,10 @@ if (count($multiCats) > 1) {
 
 // Show link to edit the entry?
 if (isset($permission['editbt'])) {
-    $editThisEntry = sprintf('<a href="admin/index.php?aktion=editentry&amp;id=%d&amp;lang=%s">%s</a>', $id, $lang, 'edit this page');
+    $editThisEntry = sprintf('<a href="admin/index.php?aktion=editentry&amp;id=%d&amp;lang=%s">%s</a>',
+        $id,
+        $lang,
+        'edit this page');
 } else {
     $editThisEntry = '';
 }
@@ -151,52 +154,53 @@ if (isset($permission['editbt'])) {
 if ($faq->faqRecord['comment'] == 'n') {
     $commentMessage = $PMF_LANG['msgWriteNoComment'];
 } else {
-    //$commentMessage = sprintf('%s<a href="?%saction=writecomment&amp;id=%d&amp;artlang=%s">%s</a>', $PMF_LANG['msgYouCan'], $sids, $id, $lang, $PMF_LANG['msgWriteComment']);
-    $commentMessage = sprintf('%s<a onclick="show(\'comment\');" href="#">%s</a>', $PMF_LANG['msgYouCan'], $PMF_LANG['msgWriteComment']);
+    $commentMessage = sprintf('%s<a onclick="show(\'comment\');" href="#">%s</a>',
+        $PMF_LANG['msgYouCan'],
+        $PMF_LANG['msgWriteComment']);
 }
 
 // Set the template variables
 $tpl->processTemplate ("writeContent", array(
-    'writeRubrik' => $categoryName.'<br />',
-    'solution_id' => $faq->faqRecord['solution_id'],
-    'writeThema' => $thema,
-    'writeArticleCategoryHeader' => $PMF_LANG['msgArticleCategories'],
-    'writeArticleCategories' => $writeMultiCategories,
-    'writeContent' => preg_replace_callback("/<code([^>]*)>(.*?)<\/code>/is", 'hilight', $content),
-    'writeDateMsg' => $PMF_LANG['msgLastUpdateArticle'].$faq->faqRecord['date'],
-    'writeRevision' => $PMF_LANG['ad_entry_revision'].': 1.'.$faq->faqRecord['revision_id'],
-    'writeAuthor' => $PMF_LANG['msgAuthor'].$faq->faqRecord['author'],
-    'editThisEntry' => $editThisEntry,
-    'writePrintMsg' => sprintf('<a href="#" onclick="javascript:window.print();">%s</a>', $PMF_LANG['msgPrintArticle']),
-    'writePDF' => sprintf('<a target="_blank" href="pdf.php?cat=%s&amp;id=%d&amp;lang=%s">'.$PMF_LANG['msgPDF'].'</a>', $currentCategory, $id, $lang),
-    'writeSend2FriendMsg' => sprintf('<a href="?%saction=send2friend&amp;cat=%d&amp;id=%d&amp;artlang=%s">%s</a>', $sids, $currentCategory, $id, $lang, $PMF_LANG['msgSend2Friend']),
-    'writeXMLMsg' => sprintf('<a href="?%saction=xml&amp;id=%d&amp;artlang=%d">%s</a>', $sids, $id, $lang, $PMF_LANG['msgMakeXMLExport']),
-    'writePrintMsgTag' => $PMF_LANG['msgPrintArticle'],
-    'writePDFTag' => $PMF_LANG['msgPDF'],
-    'writeSend2FriendMsgTag' => $PMF_LANG['msgSend2Friend'],
-    'writeXMLMsgTag' => $PMF_LANG['msgMakeXMLExport'],
-    'saveVotingPATH' => sprintf('?%saction=savevoting', $sids),
-    'saveVotingID' => $id,
-    'saveVotingIP' => $_SERVER['REMOTE_ADDR'],
-    'msgAverageVote' => $PMF_LANG['msgAverageVote'],
-    'printVotings' => $faq->getVotingResult($id),
-    'switchLanguage' => $switchLanguage,
-    'msgVoteUseability' => $PMF_LANG['msgVoteUseability'],
-    'msgVoteBad' => $PMF_LANG['msgVoteBad'],
-    'msgVoteGood' => $PMF_LANG['msgVoteGood'],
-    'msgVoteSubmit' => $PMF_LANG['msgVoteSubmit'],
-    'writeCommentMsg' => $commentMessage,
-    'msgWriteComment' => $PMF_LANG['msgWriteComment'],
-    'writeSendAdress' => $_SERVER['PHP_SELF'].'?'.$sids.'action=savecomment',
-    'id' => $id,
-    'lang' => $lang,
-    'msgCommentHeader' => $PMF_LANG['msgCommentHeader'],
-    'msgNewContentName' => $PMF_LANG['msgNewContentName'],
-    'msgNewContentMail' => $PMF_LANG['msgNewContentMail'],
-    'defaultContentMail' => getEmailAddress(),
-    'defaultContentName' => getFullUserName(), 
-    'msgYourComment' => $PMF_LANG['msgYourComment'],
-    'msgNewContentSubmit' => $PMF_LANG['msgNewContentSubmit'],
-    'writeComments' => $faq->getComments($id)));
+    'writeRubrik'                 => $categoryName.'<br />',
+    'solution_id'                 => $faq->faqRecord['solution_id'],
+    'writeThema'                  => $thema,
+    'writeArticleCategoryHeader'  => $PMF_LANG['msgArticleCategories'],
+    'writeArticleCategories'      => $writeMultiCategories,
+    'writeContent'                => preg_replace_callback("/<code([^>]*)>(.*?)<\/code>/is", 'hilight', $content),
+    'writeDateMsg'                => $PMF_LANG['msgLastUpdateArticle'].$faq->faqRecord['date'],
+    'writeRevision'               => $PMF_LANG['ad_entry_revision'].': 1.'.$faq->faqRecord['revision_id'],
+    'writeAuthor'                 => $PMF_LANG['msgAuthor'].$faq->faqRecord['author'],
+    'editThisEntry'               => $editThisEntry,
+    'writePrintMsg'               => sprintf('<a href="#" onclick="javascript:window.print();">%s</a>', $PMF_LANG['msgPrintArticle']),
+    'writePDF'                    => sprintf('<a target="_blank" href="pdf.php?cat=%s&amp;id=%d&amp;lang=%s">'.$PMF_LANG['msgPDF'].'</a>', $currentCategory, $id, $lang),
+    'writeSend2FriendMsg'         => sprintf('<a href="?%saction=send2friend&amp;cat=%d&amp;id=%d&amp;artlang=%s">%s</a>', $sids, $currentCategory, $id, $lang, $PMF_LANG['msgSend2Friend']),
+    'writeXMLMsg'                 => sprintf('<a href="?%saction=xml&amp;id=%d&amp;artlang=%d">%s</a>', $sids, $id, $lang, $PMF_LANG['msgMakeXMLExport']),
+    'writePrintMsgTag'            => $PMF_LANG['msgPrintArticle'],
+    'writePDFTag'                 => $PMF_LANG['msgPDF'],
+    'writeSend2FriendMsgTag'      => $PMF_LANG['msgSend2Friend'],
+    'writeXMLMsgTag'              => $PMF_LANG['msgMakeXMLExport'],
+    'saveVotingPATH'              => sprintf('?%saction=savevoting', $sids),
+    'saveVotingID'                => $id,
+    'saveVotingIP'                => $_SERVER['REMOTE_ADDR'],
+    'msgAverageVote'              => $PMF_LANG['msgAverageVote'],
+    'printVotings'                => $faq->getVotingResult($id),
+    'switchLanguage'              => $switchLanguage,
+    'msgVoteUseability'           => $PMF_LANG['msgVoteUseability'],
+    'msgVoteBad'                  => $PMF_LANG['msgVoteBad'],
+    'msgVoteGood'                 => $PMF_LANG['msgVoteGood'],
+    'msgVoteSubmit'               => $PMF_LANG['msgVoteSubmit'],
+    'writeCommentMsg'             => $commentMessage,
+    'msgWriteComment'             => $PMF_LANG['msgWriteComment'],
+    'writeSendAdress'             => $_SERVER['PHP_SELF'].'?'.$sids.'action=savecomment',
+    'id'                          => $id,
+    'lang'                        => $lang,
+    'msgCommentHeader'            => $PMF_LANG['msgCommentHeader'],
+    'msgNewContentName'           => $PMF_LANG['msgNewContentName'],
+    'msgNewContentMail'           => $PMF_LANG['msgNewContentMail'],
+    'defaultContentMail'          => getEmailAddress(),
+    'defaultContentName'          => getFullUserName(),
+    'msgYourComment'              => $PMF_LANG['msgYourComment'],
+    'msgNewContentSubmit'         => $PMF_LANG['msgNewContentSubmit'],
+    'writeComments'               => $faq->getComments($id)));
 
 $tpl->includeTemplate('writeContent', 'index');

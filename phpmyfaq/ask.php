@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ask.php,v 1.9 2006-06-12 22:09:26 matteo Exp $
+* $Id: ask.php,v 1.10 2006-07-02 19:11:04 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-09-17
@@ -25,8 +25,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $captcha = new PMF_Captcha($db, $sids, $pmf->language, $_SERVER['HTTP_USER_AGENT'], $_SERVER['REMOTE_ADDR']);
 
 if (isset($_GET['gen'])) {
-	$captcha->showCaptchaImg();
-	exit;
+    $captcha->showCaptchaImg();
+    exit;
 }
 
 Tracking('ask_question', 0);
@@ -34,18 +34,18 @@ Tracking('ask_question', 0);
 $tree->buildTree();
 
 $tpl->processTemplate('writeContent', array(
-				      'msgQuestion' => $PMF_LANG['msgQuestion'],
-				      'msgNewQuestion' => $PMF_LANG['msgNewQuestion'],
-                      'writeSendAdress' => $_SERVER['PHP_SELF'].'?'.$sids.'action=savequestion',
-                      'msgNewContentName' => $PMF_LANG['msgNewContentName'],
-                      'msgNewContentMail' => $PMF_LANG['msgNewContentMail'],
-				      'defaultContentMail' => getEmailAddress(),
-				      'defaultContentName' => getFullUserName(),
-                      'msgAskCategory' => $PMF_LANG['msgAskCategory'],
-                      'printCategoryOptions' => $tree->printCategoryOptions(),
-                      'msgAskYourQuestion' => $PMF_LANG['msgAskYourQuestion'],
-                      'captchaFieldset' => printCaptchaFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('ask'), $captcha->caplength),
-                      'msgNewContentSubmit' => $PMF_LANG['msgNewContentSubmit']));
+    'msgQuestion'             => $PMF_LANG['msgQuestion'],
+    'msgNewQuestion'          => $PMF_LANG['msgNewQuestion'],
+    'writeSendAdress'         => $_SERVER['PHP_SELF'].'?'.$sids.'action=savequestion',
+    'msgNewContentName'       => $PMF_LANG['msgNewContentName'],
+    'msgNewContentMail'       => $PMF_LANG['msgNewContentMail'],
+    'defaultContentMail'      => getEmailAddress(),
+    'defaultContentName'      => getFullUserName(),
+    'msgAskCategory'          => $PMF_LANG['msgAskCategory'],
+    'printCategoryOptions'    => $tree->printCategoryOptions(),
+    'msgAskYourQuestion'      => $PMF_LANG['msgAskYourQuestion'],
+    'captchaFieldset'         => printCaptchaFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('ask'), $captcha->caplength),
+    'msgNewContentSubmit'     => $PMF_LANG['msgNewContentSubmit']));
 
 $tpl->includeTemplate('writeContent', 'index');
 ?>
