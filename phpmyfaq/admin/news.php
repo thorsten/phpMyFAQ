@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: news.php,v 1.18 2006-07-01 21:38:36 thorstenr Exp $
+* $Id: news.php,v 1.19 2006-07-02 09:02:58 thorstenr Exp $
 *
 * The main administration file for the news
 *
@@ -124,7 +124,6 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
     </fieldset>
     </form>
 <?php
-        }
     }
 } elseif (isset($_REQUEST["do"]) && $_REQUEST["do"] == "save" && $permission["addnews"]) {
 
