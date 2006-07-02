@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.58 2006-06-25 19:50:17 matteo Exp $
+* $Id: index.php,v 1.59 2006-07-02 12:46:23 thorstenr Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the
@@ -26,7 +26,7 @@
 //
 // Check if config.php and data.php exist -> if not, redirect to installer
 //
-if (!file_exists('inc/config.php') || !file_exists('inc/data.php')) {
+if (!file_exists('inc/data.php')) {
     header("Location: install/installer.php");
     exit();
 }
