@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Template.php,v 1.1 2006-06-11 08:20:21 thorstenr Exp $
+* $Id: Template.php,v 1.2 2006-07-02 17:19:29 matteo Exp $
 *
 * PMF_Template
 *
@@ -88,7 +88,7 @@ class PMF_Template
         $search  = array('#<\?php#i', '#\{$\{#', '#<\?#', '#<\%#', '#`#', '#<script[^>]+php#mi');
         $phppattern1 = "&lt;?php";
         $phppattern2 = "&lt;?";
-        if (isset($PMF_CONF['parse_php']) && $PMF_CONF['parse_php'] == true) {
+        if (isset($PMF_CONF['parse_php']) && $PMF_CONF['parse_php']) {
             $phppattern1 = "<?php";
             $phppattern2 = "<?";
         }

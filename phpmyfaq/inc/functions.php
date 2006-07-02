@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.126 2006-07-02 13:54:25 thorstenr Exp $
+* $Id: functions.php,v 1.127 2006-07-02 17:19:29 matteo Exp $
 *
 * This is the main functions file!
 *
@@ -333,7 +333,7 @@ function safeEmail($email)
 {
     global $PMF_CONF;
 
-    if (isset($PMF_CONF['spamEnableSafeEmail']) && ($PMF_CONF['spamEnableSafeEmail'] == 'TRUE')) {
+    if (isset($PMF_CONF['spamEnableSafeEmail']) && $PMF_CONF['spamEnableSafeEmail']) {
         return str_replace(array('@', '.'), array('_AT_', '_DOT_'), $email);
     } else {
         return $email;
@@ -390,7 +390,7 @@ function check4AddrMatch($ip, $network)
 function IPCheck($ip)
 {
     global $PMF_CONF;
-    $arrBannedIPs = explode(" ", $PMF_CONF["bannedIP"]);
+    $arrBannedIPs = explode(" ", $PMF_CONF['bannedIP']);
     foreach ($arrBannedIPs as $oneIPorNetwork) {
         if (check4AddrMatch($ip, $oneIPorNetwork)) {
             return false;
@@ -448,7 +448,8 @@ function checkBannedWord($content)
     $content = trim($content);
     if (    ('' == $content)
          || (!isset($PMF_CONF['spamCheckBannedWords']))
-         || (isset($PMF_CONF['spamCheckBannedWords']) && ($PMF_CONF['spamCheckBannedWords'] != true)) ) {
+         || (isset($PMF_CONF['spamCheckBannedWords']) && (!$PMF_CONF['spamCheckBannedWords']))
+         ) {
         return true;
     }
 
@@ -484,7 +485,7 @@ function printCaptchaFieldset($legend, $img, $length)
 
     $html = '';
 
-    if (isset($PMF_CONF['spamEnableCatpchaCode']) && ($PMF_CONF['spamEnableCatpchaCode'] == true)) {
+    if (isset($PMF_CONF['spamEnableCatpchaCode']) && $PMF_CONF['spamEnableCatpchaCode']) {
         $html .= '<fieldset><legend>'.$legend.'</legend>';
         $html .= '<div style="text-align:center;">'.$img;
         $html .= '<input class="inputfield" style="vertical-align: top;" type="text" name="captcha" id="captcha" value="" size="'.$length.'" />';
@@ -509,7 +510,7 @@ function checkCaptchaCode()
 {
     global $PMF_CONF, $captcha;
 
-    if (isset($PMF_CONF['spamEnableCatpchaCode']) && ($PMF_CONF['spamEnableCatpchaCode'] == true)) {
+    if (isset($PMF_CONF['spamEnableCatpchaCode']) && $PMF_CONF['spamEnableCatpchaCode']) {
         return (isset($_POST['captcha']) && ($captcha->validateCaptchaCode($_POST['captcha'])));
     } else {
         return true;
@@ -697,7 +698,7 @@ function userOnline()
 {
     global $db, $PMF_CONF;
 
-    if (isset($PMF_CONF["tracking"])) {
+    if (isset($PMF_CONF['tracking']) && $PMF_CONF['tracking']) {
         $timeNow = (time() - 300);
         // Count all sids within the last five minutes (300sec), that is to say
         // the number of unique users who have perfomed some activities within the last five minutes
@@ -1293,7 +1294,9 @@ function searchEngine($begriff, $category = '%')
     //                will measure 1: this is true ONLY if the faq is not
     //                classified among more than 1 category
     if (is_numeric($begriff) && ($begriff > PMF_SOLUTION_ID_START_VALUE) && ($num > 0)) {
-        if (isset($PMF_CONF['mod_rewrite']) && $PMF_CONF['mod_rewrite'] == 'TRUE') {
+        // Hack: before a redirection we must force the PHP session update for preventing data loss
+        session_write_close();
+        if (isset($PMF_CONF['mod_rewrite']) && $PMF_CONF['mod_rewrite']) {
             header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']).'/solution_id_'.$begriff.'.html');
         } else {
             header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']).'?solution_id='.$begriff);
@@ -1321,9 +1324,9 @@ function searchEngine($begriff, $category = '%')
         $num = $db->num_rows($result);
     }
 
-    $pages = ceil($num / $PMF_CONF["numRecordsPage"]);
-    $last = $seite * $PMF_CONF["numRecordsPage"];
-    $first = $last - $PMF_CONF["numRecordsPage"];
+    $pages = ceil($num / $PMF_CONF['numRecordsPage']);
+    $last = $seite * $PMF_CONF['numRecordsPage'];
+    $first = $last - $PMF_CONF['numRecordsPage'];
     if ($last > $num) {
         $last = $num;
     }
@@ -1390,19 +1393,19 @@ function searchEngine($begriff, $category = '%')
             $oLink->tooltip = $row->thema;
             $output .= '<li><strong>'.$rubriktext.'</strong>: '.$oLink->toHtmlAnchor().'</li><br />'
                     .'<div class="searchpreview"><strong>'.$PMF_LANG['msgSearchContent'].'</strong> '.$content.'...</div>'
-                    .'<br /></li>\n';
+                    .'<br /></li>'."\n";
         }
         $output .= "</ul>\n";
     } else {
         $output = $PMF_LANG["err_noArticles"];
     }
 
-    if ($num > $PMF_CONF["numRecordsPage"]) {
+    if ($num > $PMF_CONF['numRecordsPage']) {
         $output .= "<p align=\"center\"><strong>";
         $vor = $seite - 1;
         $next = $seite + 1;
         if ($vor != 0) {
-            if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == "TRUE") {
+            if (isset($PMF_CONF['mod_rewrite']) && $PMF_CONF['mod_rewrite']) {
                 $output .= "[ <a href=\"search.html?search=".urlencode($_begriff)."&amp;seite=".$vor."\">".$PMF_LANG["msgPrevious"]."</a> ]";
             } else {
                 $output .= "[ <a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=search&amp;search=".urlencode($_begriff)."&amp;seite=".$vor."\">".$PMF_LANG["msgPrevious"]."</a> ]";
@@ -1410,7 +1413,7 @@ function searchEngine($begriff, $category = '%')
         }
         $output .= " ";
         if ($next <= $pages) {
-            if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == "TRUE") {
+            if (isset($PMF_CONF['mod_rewrite']) && $PMF_CONF['mod_rewrite']) {
                 $output .= "[ <a href=\"search.html?search=".urlencode($_begriff)."&amp;seite=".$next."\">".$PMF_LANG["msgNext"]."</a> ]";
             } else {
                 $output .= "[ <a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=search&amp;search=".urlencode($_begriff)."&amp;seite=".$next."\">".$PMF_LANG["msgNext"]."</a> ]";
@@ -1965,7 +1968,7 @@ function getShortUserName()
 function getFullUserName()
 {
     global $PMF_CONF;
-    if (isset($PMF_CONF['ldap_support']) && $PMF_CONF['ldap_support'] == 'TRUE') {
+    if (isset($PMF_CONF['ldap_support']) && $PMF_CONF['ldap_support']) {
         global $ldap;
         return $ldap->ldap_getCompleteName(getShortUserName());
     } else {
@@ -1984,7 +1987,7 @@ function getFullUserName()
 function getEmailAddress()
 {
     global $PMF_CONF;
-    if (isset($PMF_CONF['ldap_support']) && $PMF_CONF['ldap_support'] == TRUE) {
+    if (isset($PMF_CONF['ldap_support']) && $PMF_CONF['ldap_support']) {
         global $ldap;
         return $ldap->ldap_getMail(getShortUserName());
     } else {

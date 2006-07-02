@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Link.php,v 1.6 2006-07-02 12:28:05 thorstenr Exp $
+* $Id: Link.php,v 1.7 2006-07-02 17:19:29 matteo Exp $
 *
 * Link management - Functions and Classes
 *
@@ -209,7 +209,7 @@ class PMF_Link
     {
         global $PMF_CONF;
 
-        return ((isset($PMF_CONF['mod_rewrite'])) && ($PMF_CONF['mod_rewrite'] == 'TRUE'));
+        return ((isset($PMF_CONF['mod_rewrite'])) && $PMF_CONF['mod_rewrite']);
     }
 
     function hasScheme()
