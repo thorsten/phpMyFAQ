@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.config_list.php,v 1.6 2006-07-02 16:12:30 matteo Exp $
+* $Id: ajax.config_list.php,v 1.7 2006-07-02 16:44:57 matteo Exp $
 *
 * AJAX: lists the complete configuration items
 *
@@ -37,14 +37,15 @@ if (isset($_GET['conf']) && is_string($_GET['conf']) && isset($availableConfigMo
 function printInputFieldByType($key, $type)
 {
     global $PMF_CONF, $PMF_LANG;
+
     switch($type) {
         case 'area':
-            printf('<textarea name="edit[%s]" cols="60" rows="6">%s</textarea>', $key, $PMF_CONF[$key]);
+            printf('<textarea name="edit[%s]" cols="60" rows="6">%s</textarea>', $key, htmlentities($PMF_CONF[$key]));
             printf("<br />\n");
             break;
 
         case 'input':
-            printf('<input type="text" name="edit[%s]" size="80" value="%s" />', $key, $PMF_CONF[$key]);
+            printf('<input type="text" name="edit[%s]" size="80" value="%s" />', $key, htmlentities($PMF_CONF[$key]));
             printf("<br />\n");
             break;
 

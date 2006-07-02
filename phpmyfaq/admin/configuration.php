@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: configuration.php,v 1.4 2006-07-02 16:12:30 matteo Exp $
+* $Id: configuration.php,v 1.5 2006-07-02 16:44:57 matteo Exp $
 *
 * The main configuration frontend
 *

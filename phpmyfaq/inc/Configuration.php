@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Configuration.php,v 1.6 2006-07-02 16:12:30 matteo Exp $
+* $Id: Configuration.php,v 1.7 2006-07-02 16:44:57 matteo Exp $
 *
 * The main class for fetching the configuration, update and delete items.
 *
@@ -111,8 +111,9 @@ class PMF_Configuration
                     WHERE
                         config_name = '%s'",
                     SQLPREFIX,
-                    $value,
-                    $name);
+                    $this->db->escape_string($value),
+                    $name
+                    );
                 $this->db->query($query);
             }
             return true;
