@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Category.php,v 1.3 2006-06-25 15:04:11 matteo Exp $
+* $Id: Category.php,v 1.4 2006-07-02 13:54:25 thorstenr Exp $
 *
 * The main category class
 *
@@ -125,8 +125,6 @@ class PMF_Category
     }
 
     /**
-     * getOrderedCategories()
-     *
      * Gets all categories and write them in an array with ordered IDs
      *
      * @return  array
@@ -135,7 +133,12 @@ class PMF_Category
      */
     function &getOrderedCategories()
     {
-        $query = "SELECT id, lang, parent_id, name, description FROM ".SQLPREFIX."faqcategories";
+        $query = sprintf("
+            SELECT
+                id, lang, parent_id, name, description
+            FROM
+                %sfaqcategories",
+            SQLPREFIX);
         if (isset($this->language) && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
             $query .= " WHERE lang = '".$this->language."'";
         }
@@ -150,8 +153,6 @@ class PMF_Category
     }
 
     /**
-     * getCategories()
-     *
      * Gets the main categories and write them in an array
      *
      * @param   integer $cat
@@ -163,7 +164,13 @@ class PMF_Category
     function getCategories($cat, $parent_id = true)
     {
         $_query = '';
-        $query = 'SELECT id, lang, parent_id, name, description FROM '.SQLPREFIX.'faqcategories WHERE ';
+        $query = sprintf('
+            SELECT
+                id, lang, parent_id, name, description
+            FROM
+                faqcategories
+            WHERE ',
+            SQLPREFIX);
         if (true == $parent_id) {
             $query .= 'parent_id = 0';
         }
@@ -185,8 +192,6 @@ class PMF_Category
     }
 
     /**
-     * getAllCategories()
-     *
      * Gets all categories and write them in an array
      *
      * @return  array
@@ -195,7 +200,12 @@ class PMF_Category
      */
     function getAllCategories()
     {
-        $query = "SELECT id, lang, parent_id, name, description FROM ".SQLPREFIX."faqcategories";
+        $query = sprintf("
+            SELECT
+                id, lang, parent_id, name, description
+            FROM
+                %sfaqcategories",
+            SQLPREFIX);
         if (isset($this->language) && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
             $query .= " WHERE lang = '".$this->language."'";
         }
@@ -440,14 +450,35 @@ class PMF_Category
     {
         global $sids, $PMF_LANG, $PMF_CONF;
 
-        $query = "SELECT ".SQLPREFIX."faqcategoryrelations.category_id AS category_id, count(".SQLPREFIX."faqcategoryrelations.category_id) AS number FROM ".SQLPREFIX."faqcategoryrelations, ".SQLPREFIX."faqdata WHERE ".SQLPREFIX."faqcategoryrelations.record_id = ".SQLPREFIX."faqdata.id";
+        $query = sprintf("
+            SELECT
+                %sfaqcategoryrelations.category_id AS category_id,
+                count(%sfaqcategoryrelations.category_id) AS number
+            FROM
+                %sfaqcategoryrelations,
+                %sfaqdata
+            WHERE
+                %sfaqcategoryrelations.record_id = %sfaqdata.id",
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX);
 
         if (strlen($this->language) > 0) {
-            $query .= sprintf(" AND %sfaqdata.lang = '%s'", SQLPREFIX, $this->language);
+            $query .= sprintf(" AND %sfaqdata.lang = '%s'",
+                SQLPREFIX,
+                $this->language);
         }
 
-        $query .= " AND ".SQLPREFIX."faqdata.active = 'yes' GROUP BY ".SQLPREFIX."faqcategoryrelations.category_id";
-
+        $query .= sprintf("
+            AND
+                %sfaqdata.active = 'yes'
+            GROUP BY
+                %sfaqcategoryrelations.category_id",
+            SQLPREFIX,
+            SQLPREFIX);
         $result = $this->db->query($query);
         if ($this->db->num_rows($result) > 0) {
             while ($row = $this->db->fetch_object($result)) {
@@ -504,7 +535,7 @@ class PMF_Category
             $oLink->text = $categoryName;
             $oLink->tooltip = addslashes($description);
             $output .= $oLink->toHtmlAnchor().$num_entries;
-            
+
             $open = $level;
         }
 
@@ -517,7 +548,15 @@ class PMF_Category
         return $output;
     }
 
-    // return the three parts of a line to display: last part of tree, category name, and id of the root node
+    /**
+     * Returns the three parts of a line to display: last part of tree,
+     * category name, and id of the root node
+     *
+     * @param     integer
+     * @return    array
+     * @access    private
+     * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
     function getLineDisplay($y)
     {
         $ret[0] = $this->symbols[$this->treeTab[$y]["symbol"]];
@@ -527,7 +566,15 @@ class PMF_Category
         return $ret;
     }
 
-    // get the next line in the array treeTab, depending of the collapse/expand node
+    /**
+     * Gets the next line in the array treeTab, depending of the
+     * collapse/expand node
+     *
+     * @param     integer
+     * @return    integer
+     * @access    private
+     * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
     function getNextLineTree($l)
     {
         if ($this->treeTab[$l]["symbol"] != "plus") {
@@ -543,12 +590,12 @@ class PMF_Category
     }
 
     /**
-    * get the list of the brothers of $id (include $id)
-    *
-    * @param    integer
-    * @return   array
-    * @access   public
-    */
+     * Gets the list of the brothers of $id (include $id)
+     *
+     * @param   integer
+     * @return  array
+     * @access  public
+     */
     function getBrothers($id)
     {
         $ret = $this->getChildren($this->categoryName[$id]['parent_id']);
@@ -556,12 +603,12 @@ class PMF_Category
     }
 
     /**
-    * Get all categories in <option> tags
-    *
-    * @param    mixed
-    * @return   string
-    * @access   public
-    */
+     * Get all categories in <option> tags
+     *
+     * @param   mixed
+     * @return  string
+     * @access  public
+     */
     function printCategoryOptions($catID = "")
     {
         $categories = "";
@@ -807,7 +854,27 @@ class PMF_Category
     function getCategoriesFromArticle($article_id) {
         $rel = SQLPREFIX."faqcategoryrelations";
         $cat = SQLPREFIX."faqcategories";
-        $query = "SELECT ".$cat.".id AS id, ".$cat.".lang AS lang, ".$cat.".parent_id AS parent_id, ".$cat.".name AS name, ".$cat.".description AS description FROM ".$rel.", ".$cat." WHERE ".$cat.".id=".$rel.".category_id AND ".$rel.".record_id = ".$article_id." AND ".$rel.".category_lang = '".$this->language."'";
+        $query = sprintf("
+            SELECT
+                %s.id AS id,
+                %s.lang AS lang,
+                %s.parent_id AS parent_id,
+                %s.name AS name,
+                %s.description AS description
+            FROM
+                %s,
+                %s
+            WHERE
+                %s.id = %s.category_id
+            AND
+                %s.record_id = %d
+            AND
+                %s.category_lang = '%s'",
+            $cat, $cat, $cat, $cat, $cat,
+            $rel, $cat,
+            $cat, $rel,
+            $rel, $article_id,
+            $rel, $this->language);
         $result = $this->db->query($query);
         $num = $this->db->num_rows($result);
         $this->categories = array();

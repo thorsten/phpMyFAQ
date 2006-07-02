@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Captcha.php,v 1.1 2006-06-11 14:26:55 matteo Exp $
+ * $Id: Captcha.php,v 1.2 2006-07-02 13:54:25 thorstenr Exp $
  *
  * The phpMyFAQ Captcha class
  *
@@ -128,8 +128,8 @@ class PMF_Captcha
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     function PMF_Captcha($db, $sids, $language, $userAgent, $ip, $caplength = 6)
-	{
-        $this->db           = $db;
+    {
+        $this->db           =& $db;
         if ($sids > 0) {
             $this->sids     = $sids;
         } else {
@@ -146,8 +146,8 @@ class PMF_Captcha
         $this->code          = '';
         $this->quality       = 60;
         $this->fonts         = $this->getFonts();
-        $this->width	     = 200;
-        $this->height	     = 40;
+        $this->width         = 200;
+        $this->height         = 40;
         $this->timestamp     = time();
     }
 
