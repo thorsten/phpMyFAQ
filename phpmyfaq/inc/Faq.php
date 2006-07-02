@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.30 2006-07-02 09:07:26 thorstenr Exp $
+* $Id: Faq.php,v 1.31 2006-07-02 09:48:58 thorstenr Exp $
 *
 * The main FAQ class
 *
@@ -293,18 +293,15 @@ class PMF_Faq
     }
 
     /**
-     * addRecord()
-     *
-     * Adds a new record, initialize visits, and the category relations
+     * Adds a new record
      *
      * @param    array    $data
-     * @param    array    $categories
-     * @return    boolean
-     * @access    public
+     * @return   integer
+     * @access   public
      * @since    2006-06-18
-     * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function addRecord($data, $categories)
+    function addRecord($data)
     {
         if (!is_array($data)) {
             return false;
@@ -333,7 +330,22 @@ class PMF_Faq
             $data['comment'],
             $data['date']));
 
-        // Add category relations
+        return $newId;
+    }
+
+    /**
+     * Adds a new category relation to a record
+     *
+     * @param    array    $categories
+     * @param    integer  $record_id
+     * @param    string   $language
+     * @return   integer
+     * @access   public
+     * @since    2006-07-02
+     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function addCategoryRelation($categories, $record_id, $language)
+    {
         foreach ($categories as $_category) {
             $this->db->query(sprintf(
                 "INSERT INTO
@@ -342,11 +354,10 @@ class PMF_Faq
                     (%d, '%s', %d, '%s')",
                 SQLPREFIX,
                 $_category,
-                $data['lang'],
-                $newId,
-                $data['lang']));
+                $language,
+                $record_id,
+                $language));
         }
-
         return true;
     }
 
