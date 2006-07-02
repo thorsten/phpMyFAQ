@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Pdf.php,v 1.3 2006-06-11 08:12:03 thorstenr Exp $
+* $Id: Pdf.php,v 1.4 2006-07-02 13:58:14 thorstenr Exp $
 *
 * Main PDF class for phpMyFAQ based on FPDF by Olivier Plathey
 *
@@ -24,8 +24,8 @@
 * under the License.
 */
 
-define('FPDF_FONTPATH', dirname(dirname(__FILE__)).'/font/');
-require_once(dirname(__FILE__).'/libs/fpdf.php');
+define('FPDF_FONTPATH', dirname(dirname(dirname(__FILE__))).'/font/');
+require_once(dirname(dirname(__FILE__)).'/libs/fpdf.php');
 
 class PDF extends FPDF
 {
@@ -191,10 +191,6 @@ class PDF extends FPDF
     */
     function PDF($rubrik = '', $thema = '', $categories = '', $orientation = "P", $unit = "mm", $format = "A4")
     {
-        return $this->__construct($rubrik, $thema, $categories, $orientation, $unit, $format);
-    }
-    function __construct($rubrik = '', $thema = '', $categories = '', $orientation = "P", $unit = "mm", $format = "A4")
-    {
         $this->rubrik = $rubrik;
         $this->thema = $thema;
         $this->categories = $categories;
@@ -223,7 +219,7 @@ class PDF extends FPDF
     * @access   public
     * @return   void
     */
-	function WriteHTML($html)
+    function WriteHTML($html)
     {
         // save (X)HTML and XML code ...
         $htmlSearch = array('&quot;', '&lt;', '&gt;', '&nbsp;', '&amp;', '\n');
@@ -295,7 +291,7 @@ class PDF extends FPDF
     * @return   void
     * @access   private
     */
-	function Header()
+    function Header()
     {
         $title = $this->categories[$this->rubrik]["name"].": ".$this->thema;
         $currentTextColor = $this->TextColor;
@@ -307,32 +303,32 @@ class PDF extends FPDF
             $this->Bookmark(makeShorterText($this->thema, 5));
         }
         $this->TextColor = $currentTextColor;
-	}
+    }
 
-	/**
+    /**
     * The footer of the PDF file
     *
     * @return   void
     * @access   private
     */
-	function Footer() {
-	    global $cat, $PMF_CONF, $PMF_LANG;
+    function Footer() {
+        global $cat, $PMF_CONF, $PMF_LANG;
         $currentTextColor = $this->TextColor;
         $this->SetTextColor(0,0,0);
-	    $this->SetY(-25);
-	    $this->SetFont("Arial", "I", 10);
-	    $this->Cell(0, 10, $PMF_LANG["ad_gen_page"]." ".$this->PageNo()."/{nb}",0,0,"C");
-	    $this->SetY(-20);
-	    $this->SetFont("Arial", "B", 8);
-	    $this->Cell(0, 10, "(c) ".date("Y")." ".$PMF_CONF["metaPublisher"]." <".$PMF_CONF["adminmail"].">",0,1,"C");
-	    if ($this->enableBookmarks == false) {
-	        $this->SetY(-15);
-	        $this->SetFont("Arial", "", 8);
+        $this->SetY(-25);
+        $this->SetFont("Arial", "I", 10);
+        $this->Cell(0, 10, $PMF_LANG["ad_gen_page"]." ".$this->PageNo()."/{nb}",0,0,"C");
+        $this->SetY(-20);
+        $this->SetFont("Arial", "B", 8);
+        $this->Cell(0, 10, "(c) ".date("Y")." ".$PMF_CONF["metaPublisher"]." <".$PMF_CONF["adminmail"].">",0,1,"C");
+        if ($this->enableBookmarks == false) {
+            $this->SetY(-15);
+            $this->SetFont("Arial", "", 8);
             $_url = "http".(isset($_SERVER["HTTPS"]) ? "s" : "")."://".$_SERVER["HTTP_HOST"].str_replace("pdf.php", "index.php?action=artikel&cat=".$this->categories[$this->rubrik]["id"]."&id=".$_REQUEST["id"]."&artlang=".$_REQUEST["lang"], $_SERVER["PHP_SELF"]);
-	        $this->Cell(0, 10, "URL: ".$_url, 0, 1, "C", 0, $_url);
-	    }
+            $this->Cell(0, 10, "URL: ".$_url, 0, 1, "C", 0, $_url);
+        }
         $this->TextColor = $currentTextColor;
-	}
+    }
 
     /**
     * Locate the supported tags and set, what to do next
@@ -342,7 +338,7 @@ class PDF extends FPDF
     * @return   void
     * @access   private
     */
-	function OpenTag($tag, $attr)
+    function OpenTag($tag, $attr)
     {
         switch ($tag) {
             case "STRONG":
@@ -363,7 +359,7 @@ class PDF extends FPDF
                             break;
             case "IMG":     $this->SRC = $attr["SRC"];
                             break;
-    	    case "DIV":     if (isset($attr['ALIGN']) && $attr["ALIGN"] != "justify") {
+            case "DIV":     if (isset($attr['ALIGN']) && $attr["ALIGN"] != "justify") {
                                 $this->CENTER = $attr["ALIGN"];
                             }
                             break;
@@ -375,7 +371,7 @@ class PDF extends FPDF
                             break;
             case "P":
             case "BR":      $this->Ln(5);
-    			            break;
+                            break;
             case "TABLE":   if (isset($attr['BORDER']) && $attr['BORDER'] != "") {
                                 $this->tableborder = $attr['BORDER'];
                             } else {
@@ -488,14 +484,14 @@ class PDF extends FPDF
     */
     function SetStyle($tag, $enable)
     {
-		$this->$tag += ($enable ? 1 : -1);
-		$style = "";
-		foreach (array("B", "I", "U") as $s) {
-			if ($this->$s > 0) {
-				$style .= $s;
+        $this->$tag += ($enable ? 1 : -1);
+        $style = "";
+        foreach (array("B", "I", "U") as $s) {
+            if ($this->$s > 0) {
+                $style .= $s;
             }
         }
-		$this->SetFont("", $style);
+        $this->SetFont("", $style);
     }
 
     /**
@@ -508,11 +504,11 @@ class PDF extends FPDF
     */
     function PutLink($URL, $txt)
     {
-		$this->SetTextColor(0, 0, 255);
-		$this->SetStyle("U", true);
-		$this->Write(5, $txt, $URL);
-		$this->SetStyle("U", false);
-		$this->SetTextColor(0);
+        $this->SetTextColor(0, 0, 255);
+        $this->SetStyle("U", true);
+        $this->Write(5, $txt, $URL);
+        $this->SetStyle("U", false);
+        $this->SetTextColor(0);
     }
 
     /**
