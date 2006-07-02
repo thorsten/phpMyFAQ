@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Glossary.php,v 1.3 2006-06-18 06:55:31 matteo Exp $
+* $Id: Glossary.php,v 1.4 2006-07-02 18:59:10 matteo Exp $
 *
 * The main glossary class
 *
@@ -60,7 +60,7 @@ class PMF_Glossary
     */
     function PMF_Glossary(&$db, $language)
     {
-        $this->db         = &$db;
+        $this->db       = &$db;
         $this->language = $language;
     }
 
@@ -91,6 +91,33 @@ class PMF_Glossary
                 'definition'    => stripslashes($row->definition));
         }
         return $items;
+    }
+
+    /**
+     * insertItemsIntoContent()
+     *
+     * Fill the passed string with the current Glossary items.
+     *
+     * @param   string
+     * @return  string
+     * @access  public
+     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     * @since   2006-07-02
+     */
+    function insertItemsIntoContent($content = '')
+    {
+        if ('' == $content) {
+            return '';
+        }
+        
+        foreach($this->getAllGlossaryItems() as $item) {
+            $content = preg_replace('/(^|[\s]+)('.$item['item'].')([\s,;:\!\?\.]+|$)/ism',
+                                    '\1<acronym class="glossary" title="'.$item['definition'].'">\2</acronym>\3',
+                                    $content
+                                    );
+        }
+
+        return $content;
     }
 
     /**

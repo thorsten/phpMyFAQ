@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.61 2006-07-02 14:20:49 thorstenr Exp $
+* $Id: index.php,v 1.62 2006-07-02 18:59:10 matteo Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the
@@ -39,14 +39,15 @@ define('IS_VALID_PHPMYFAQ', null);
 PMF_Init::cleanRequest();
 
 //
-// Include required template parser class, captcha class, category class,
-// the main FAQ class and the IDNA class
+// Include required the link class, the template parser class, the captcha class, the category class,
+// the main FAQ class, the glossary class and the IDNA class
 //
 require_once('inc/Link.php');
 require_once('inc/Template.php');
 require_once('inc/Captcha.php');
 require_once('inc/Category.php');
 require_once('inc/Faq.php');
+require_once('inc/Glossary.php');
 require_once('inc/libs/idna_convert.class.php');
 $IDN = new idna_convert;
 

@@ -1,23 +1,23 @@
 /**
-* $Id: admin.css,v 1.15 2006-06-21 20:33:26 matteo Exp $
-*
-* This is the CSS file for the admin section of phpMyFAQ 1.5.x
-* You don't need to change enything here but feel free to do it. :-)
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @since        2004-06-09
-* @copyright    (c) 2004-2006 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * $Id: admin.css,v 1.16 2006-07-02 18:59:10 matteo Exp $
+ *
+ * This is the CSS file for the admin section of phpMyFAQ 1.5.x
+ * You don't need to change enything here but feel free to do it. :-)
+ *
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since       2004-06-09
+ * @copyright   (c) 2004-2006 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 /* color defintions */
 #header {
@@ -27,7 +27,7 @@
 /*
 .sideBox {
     background-color: #305C77;
-    }
+}
 */
 body {
     background-color: #fff;
@@ -38,13 +38,13 @@ body {
 }
 h1 {
     font-weight: bold;
-	font-style: italic;
+    font-style: italic;
     font-size: 24px;
     padding-bottom: 0.5ex;
 }
 h2 {
     font-size: 18px;
-	font-style: italic;
+    font-style: italic;
     border-bottom: 1px solid;
 }
 img {
@@ -104,8 +104,8 @@ form br {
 
 /* Header */
 #header {
-	height: 50px;
-	padding: 20px;
+    height: 50px;
+    padding: 20px;
 }
 .headerTitle {
   font-size: 300%;
@@ -113,63 +113,63 @@ form br {
 
 /* Navigation */
 .sideBox {
-  margin-left: 5px;
-  float: left;
-  clear: left;
-  border-top: 1px solid #fff;
-  width: 180px;
-  margin-top: 10px;
+    margin-left: 5px;
+    float: left;
+    clear: left;
+    border-top: 1px solid #fff;
+    width: 180px;
+    margin-top: 10px;
 }
 [class~="sideBox"] {
-  margin-left: 10px;
+    margin-left: 10px;
 }
 div#menue {
-   font-size: 95%;
-   width: 180px;
-   padding: 0px;
-   background-color: #EDF2F2;
-   border: 1px solid #D0D9D9;
+    font-size: 95%;
+    width: 180px;
+    padding: 0px;
+    background-color: #EDF2F2;
+    border: 1px solid #D0D9D9;
 }
 #menue ul {
-	list-style: none;
-	padding: 0px;
-	margin: 0px;
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
 }
 #menue ul li {
-	border-bottom: 1px solid #D0D9D9;
-	margin: 0px;
+    border-bottom: 1px solid #D0D9D9;
+    margin: 0px;
 }
 #menue li a {
-	color: #000;
+    color: #000;
     text-decoration: none;
     display: block;
-	padding: 3px;
+    padding: 3px;
 }
 #menue li a:hover {
     background-color: #D0D9D9;
     color: #000;
 }
 div#langform {
-   font-size: 95%;
-   width: 180px;
-   margin-top: 10px;
-   padding: 0px;
-   background-color: #EDF2F2;
-   border: 1px solid #D0D9D9;
+    font-size: 95%;
+    width: 180px;
+    margin-top: 10px;
+    padding: 0px;
+    background-color: #EDF2F2;
+    border: 1px solid #D0D9D9;
 }
 
 div#sessionexpiration {
-   font-size: 95%;
-   width: 180px;
-   margin-top: 10px;
-   margin-bottom: 10px;
-   padding: 0px;
-   background-color: #EDF2F2;
-   border: 1px solid #D0D9D9;
+    font-size: 95%;
+    width: 180px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 0px;
+    background-color: #EDF2F2;
+    border: 1px solid #D0D9D9;
 }
 div#sessioncounter {
-   font-size: 100%;
-   text-align: center;
+    font-size: 100%;
+    text-align: center;
 }
 
 /* the main body */
@@ -185,24 +185,24 @@ table.list {
     border: 1px solid #D0D9D9;
     border-collapse: collapse;
     width: 565px;
-    }
+}
 table.listrecords {
     border: 1px solid #D0D9D9;
     border-collapse: collapse;
     width: 545px;
-    }
+}
 .list thead th, tfoot td {
     background-color: #EDF2F2;
-	}
+}
 .list tfoot td {
     text-align: right;
-	}
+}
 th.list, td.list {
     border: 1px solid #D0D9D9;
     padding: 2px;
     line-height: 20px;
     text-align: left;
-    }
+}
 
 /* indent at user administration */
 .userrights {
@@ -212,7 +212,7 @@ th.list, td.list {
 /* styles for input and textarea fields */
 textarea.admin {
     width: 555px;
-    }
+}
 input.admin, select.admin, textarea.admin {
     float: left;
     width: auto;
@@ -220,11 +220,11 @@ input.admin, select.admin, textarea.admin {
     border: 1px solid gray;
     background: White;
     margin-bottom: 10px;
-    }
+}
 input.submit {
     border: 2px solid #696969;
     background-color: #dcdcdc;
-    }
+}
 
 /* Category / Record listing styles */
 .categorylisting {
@@ -245,12 +245,12 @@ input.submit {
 */
 
 table.verifyArticleURL tr.urlfail td {
-	background-color:#FFF5F5;
+    background-color:#FFF5F5;
 }
 
 table.verifyArticleURL tr.urlfail td.urlfail {
-	color: #FF0000;
-	font-weight: bold;
+    color: #FF0000;
+    font-weight: bold;
 }
 
 table.verifyArticleURL tr.urlsuccess td {
@@ -258,101 +258,101 @@ table.verifyArticleURL tr.urlsuccess td {
 }
 
 table.verifyArticleURL tr.urlsuccess td.urlsuccess {
-	font-weight: bold;
+    font-weight: bold;
 }
 
 /* linkconfig.main.php */
 table.linkconfig#typeselection {
-	width: 100%;
+    width: 100%;
 }
 
 table.linkconfig#typeselection tr td {
-	border-bottom: 1px solid #305C77;
-	padding: 0px;
-	margin: 0px;
+    border-bottom: 1px solid #305C77;
+    padding: 0px;
+    margin: 0px;
 }
 
 table.linkconfig#typeselection tr td.selected {
-	border: 1px solid #305C77;
-	background-color: #305C77;
-	text-align: center;
+    border: 1px solid #305C77;
+    background-color: #305C77;
+    text-align: center;
 }
 
 table.linkconfig#typeselection tr td.selected a {
-	color: white;
-	text-decoration: none;
+    color: white;
+    text-decoration: none;
 }
 
 table.linkconfig#typeselection tr td.selected a:hover {
-	color: white;
-	text-decoration: none;
+    color: white;
+    text-decoration: none;
 }
 
 
 table.linkconfig#typeselection tr td.selectable {
-	text-align: center;
-	border-top: 1px solid white;
-	border-left: 1px solid white;
-	border-right: 1px solid white;
-	background-color: white;
+    text-align: center;
+    border-top: 1px solid white;
+    border-left: 1px solid white;
+    border-right: 1px solid white;
+    background-color: white;
 }
 
 table.linkconfig#typeselection tr td.selectable a {
-	color: #305C77;
-	text-decoration: none;
+    color: #305C77;
+    text-decoration: none;
 }
 
 table.linkconfig#typeselection tr td.selectable a:hover {
-	color: #305C77;
-	text-decoration: underline;
+    color: #305C77;
+    text-decoration: underline;
 }
 
 table.linkconfig#configuration {
-	width: 100%;
+    width: 100%;
 }
 
 table.linkconfig#configuration tr th {
-	border-bottom: 2px solid #305C77;
-	background-color: #9CB6C6;
-	color: black;
+    border-bottom: 2px solid #305C77;
+    background-color: #9CB6C6;
+    color: black;
 }
 
 table.linkconfig#configuration tr th.selectable a {
-	text-decoration: none;
-	color: black;
+    text-decoration: none;
+    color: black;
 }
 
 table.linkconfig#configuration tr th.selected a {
-	text-decoration: none;
-	color: red;
+    text-decoration: none;
+    color: red;
 }
 
 
 table.linkconfig#configuration tr th a:hover {
-	text-decoration: underline;
+    text-decoration: underline;
 }
 
 table.linkconfig#configuration tr#lastrow td {
-	border-top: 2px solid #305C77;
+    border-top: 2px solid #305C77;
 }
 
 /* ###### Footer ###### */
 .clearing {
-   height: 0;
-   margin: 10px;
-   clear: both;
-   display: none;
+    height: 0;
+    margin: 10px;
+    clear: both;
+    display: none;
 }
 #footer {
-   clear: both;
-   margin-top: 10px;
-   margin-left: 10px;
-   margin-right: 10px;
-   padding-top: 10px;
-   color: #666666;
-   border-top: 2px solid #666666;
-   padding-top: 10px;
-   text-align: right;
+    clear: both;
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding-top: 10px;
+    color: #666666;
+    border-top: 2px solid #666666;
+    padding-top: 10px;
+    text-align: right;
 }
 #footer div {
     padding-left: 3mm;
@@ -360,7 +360,7 @@ table.linkconfig#configuration tr#lastrow td {
 #footer a {
     color: #666666;
 }
-  
+
 /* blind container clearing float:left/right couples */
 .clear {
     clear: both;

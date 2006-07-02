@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.38 2006-06-25 16:46:44 matteo Exp $
+* $Id: artikel.php,v 1.39 2006-07-02 18:59:10 matteo Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -49,6 +49,10 @@ $faq->logViews($faq->faqRecord['id']);
 
 $content = $faq->faqRecord['content'];
 $thema   = $faq->getRecordTitle($id, $lang);
+// Add Glossary entries
+$oG = new PMF_Glossary($db, $LANGCODE);
+$content = $oG->insertItemsIntoContent($content);
+$thema   = $oG->insertItemsIntoContent($thema);
 
 // Set the path of the current category
 $categoryName = $tree->getPath($currentCategory, ' &raquo; ', true);
