@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.59 2006-07-02 12:46:23 thorstenr Exp $
+* $Id: index.php,v 1.60 2006-07-02 14:07:34 matteo Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the
@@ -80,11 +80,11 @@ if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
         if ($user->getStatus() != 'blocked') {
             $auth = true;
         } else {
-            $error = $PMF_LANG['ad_auth_fail'];
+            $error = $PMF_LANG["ad_auth_fail"]." (".$faqusername." / *)";
         }
     } else {
         // error
-        $error = $PMF_LANG["ad_auth_fail"]." (".$user->getUserData('login')." / *)";
+        $error = $PMF_LANG['ad_auth_fail'];
         unset($user);
     }
 } else {
@@ -93,6 +93,10 @@ if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
     $user = PMF_CurrentUser::getFromSession($ip_check);
     if ($user) {
         $auth = true;
+    } else {
+        // error
+        $error = $PMF_LANG['ad_auth_sess'];
+        unset($user);
     }
 }
 
@@ -329,8 +333,12 @@ if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == "TRUE") {
 }
 
 if (DEBUG) {
+    $cookies = '';
+    foreach($_COOKIE as $key => $value) {
+        $cookies .= $key.': '.$value.'<br />';
+    }
     $debug_template_vars = array(
-        'debugMessages' => '<p>DEBUG INFORMATION:<br />'.$db->sqllog().'</p>');
+        'debugMessages' => '<p>DEBUG INFORMATION:<br />'.$db->sqllog().'</p><p>COOKIES:<br />'.$cookies.'</p>');
 } else {
     // send headers and print template
     header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");

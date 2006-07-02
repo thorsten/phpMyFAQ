@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: CurrentUser.php,v 1.15 2006-05-28 21:51:32 thorstenr Exp $
+ * $Id: CurrentUser.php,v 1.16 2006-07-02 14:07:35 matteo Exp $
  *
  * manages authentication process using php sessions.
  *
@@ -125,6 +125,7 @@ class PMF_CurrentUser extends PMF_User
 		$count = 0;
 		foreach ($this->_auth_container as $name => $auth) {
             $count++;
+
 			// $auth is an invalid Auth object, so continue
 			if (!$this->checkAuth($auth)) {
                 $count--;
@@ -138,7 +139,6 @@ class PMF_CurrentUser extends PMF_User
 			// $login exists, but $pass is incorrect, so stop!
 			if (!$auth->checkPassword($login, $pass)) {
 				$pass_error++;
-				//print_r($auth);
 				break;
 			}
 			// but hey, this must be a valid match!

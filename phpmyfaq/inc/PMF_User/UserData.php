@@ -47,10 +47,10 @@ class PMF_UserData
      * Returns the field $field of the user data. If $field is an
      * array, an associative array will be returned.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param mixed
-     * @return mixed
+     * @param   mixed
+     * @return  mixed
+     * @access  public
+     * @author  Lars Tiedemann <php@larstiedemann.de>
      */
     function get($field)
     {
@@ -64,20 +64,21 @@ class PMF_UserData
             $fields = implode(', ', $field);
         }
         // get data
-        $res = $this->_db->query("
-          SELECT
-            ".$fields."
-          FROM
-            ".PMF_USER_SQLPREFIX."userdata
-          WHERE
-            user_id = ".$this->_user_id
-        );
-
-        if ($this->_db->num_rows($res) != 1)
+        $query = "
+            SELECT
+                ".$fields."
+            FROM
+                ".PMF_USER_SQLPREFIX."userdata
+            WHERE
+                user_id = ".$this->_user_id;
+        $res = $this->_db->query($query);
+        if ($this->_db->num_rows($res) != 1) {
             return false;
+        }
         $arr = $this->_db->fetch_assoc($res);
-        if ($single_return and $field != '*')
+        if ($single_return and $field != '*') {
             return $arr[$field];
+        }
         return $arr;
     }
 

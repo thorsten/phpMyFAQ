@@ -812,7 +812,9 @@ class PMF_User
     {
         // get user-data entry
         if (!$this->userdata)
+        {
             $this->userdata = new PMF_UserData($this->_db);
+        }
         return $this->userdata->get($field);
     }
 

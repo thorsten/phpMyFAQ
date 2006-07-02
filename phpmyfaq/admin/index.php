@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.53 2006-07-02 09:49:24 thorstenr Exp $
+* $Id: index.php,v 1.54 2006-07-02 14:07:34 matteo Exp $
 *
 * The main admin backend index file
 *
@@ -57,24 +57,26 @@ if (function_exists('mb_language') && in_array($PMF_LANG['metaLanguage'], $valid
 }
 
 // authenticate current user
-// different session names for different intallations
 unset($auth);
 if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
     // login with username and password
     $user = new PMF_CurrentUser();
-    if ($user->login($db->escape_string($_POST['faqusername']),$db->escape_string($_POST['faqpassword']))) {
+    $faqusername = $db->escape_string($_POST['faqusername']);
+    $faqpassword = $db->escape_string($_POST['faqpassword']);
+    if ($user->login($faqusername, $faqpassword)) {
         // login, if user account is NOT blocked
         if ($user->getStatus() != 'blocked') {
             $auth = true;
         } else {
-            $error = $PMF_LANG["ad_auth_fail"]." (".$user->getUserData('login')." / *)";
+            $error = $PMF_LANG['ad_auth_fail'].' ('.$faqusername.' / *)';
+            unset($user);
         }
     } else {
         // error
-        adminlog("Loginerror\nLogin: ".$user->getUserData('login')."\nPass: ********");
-        $error = $PMF_LANG["ad_auth_fail"]." (".$user->getUserData('login')." / *)";
+        adminlog('Loginerror\nLogin: '.$faqusername.'\nPass: ********');
+        $error = $PMF_LANG['ad_auth_fail'].' ('.$faqusername.' / *)';
         unset($user);
-        $_REQUEST["aktion"] = "";
+        $_REQUEST['aktion'] = '';
     }
 } else {
     // authenticate with session information
@@ -84,10 +86,10 @@ if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
         $auth = true;
     } else {
         // error
-        adminlog("Session expired\nSession-ID: ".session_id());
-        $error = $PMF_LANG["ad_auth_sess"];
+        adminlog('Session expired\nSession-ID: '.session_id());
+        $error = $PMF_LANG['ad_auth_sess'];
         unset($user);
-        $_REQUEST["aktion"] = "";
+        $_REQUEST['aktion'] = '';
     }
 }
 
@@ -106,6 +108,7 @@ if (isset($auth)) {
             $permission[$right['name']] = true;
     }
 }
+
 // logout
 if (isset($_REQUEST['aktion']) && $_REQUEST['aktion'] == 'logout' && $auth) {
     $user->deleteFromSession();
@@ -337,13 +340,18 @@ if (isset($auth)) {
 }
 
 if (DEBUG) {
-    print "<p>DEBUG INFORMATION:<br />\n".$db->sqllog()."</p>\n";
-    print "<p>TABLES & RECORDS:<br />\n";
+    print '<p>DEBUG INFORMATION:<br />'.$db->sqllog().'</p>';
+    $cookies = '';
+    foreach($_COOKIE as $key => $value) {
+        $cookies .= $key.': '.$value.'<br />';
+    }
+    print '<p>COOKIES:<br />'.$cookies.'</p>';
+    print '<p>TABLES & RECORDS:<br />';
     $tableStatuses = $db->getTableStatus();
     foreach ($tableStatuses as $key => $value) {
-        print "$key: $value<br />\n";
+        print "$key: $value<br />";
     }
-    print "</p>\n";
+    print '</p>';
 }
 
 require_once('footer.php');

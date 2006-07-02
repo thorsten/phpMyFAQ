@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: AuthDb.php,v 1.7 2006-05-28 19:58:52 thorstenr Exp $
+* $Id: AuthDb.php,v 1.8 2006-07-02 14:07:35 matteo Exp $
 *
 * manages user authentication with databases.
 *
@@ -153,7 +153,6 @@ class PMF_AuthDb extends PMF_Auth
     */
     function changePassword($login, $pass)
     {
-
         if (!$this->_db()) {
         	return false;
         }
@@ -326,6 +325,7 @@ class PMF_AuthDb extends PMF_Auth
 		    $this->errors[] = $error;
 			return 0;
 		}
+
         return $this->_db->num_rows($check);
     }
 
