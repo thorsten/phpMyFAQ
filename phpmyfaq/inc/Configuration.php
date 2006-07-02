@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Configuration.php,v 1.4 2006-07-02 12:28:05 thorstenr Exp $
+* $Id: Configuration.php,v 1.5 2006-07-02 13:32:15 thorstenr Exp $
 *
 * The main class for fetching the configuration, update and delete items.
 *
@@ -48,8 +48,6 @@ class PMF_Configuration
     }
 
     /**
-    * getAll()
-    *
     * Fetches all configuration items into an array
     *
     * @return   void
@@ -58,15 +56,19 @@ class PMF_Configuration
     */
     function getAll()
     {
-        $result = $this->db->query(sprintf("SELECT config_name, config_value FROM %sfaqconfig", SQLPREFIX));
+        $query = sprintf("
+            SELECT
+                config_name, config_value
+            FROM
+                %sfaqconfig",
+            SQLPREFIX);
+        $result = $this->db->query($query);
         while ($row = $this->db->fetch_object($result)) {
             $this->config[$row->config_name] = $row->config_value;
         }
     } // end func fetchAll()
 
     /**
-    * get()
-    *
     * Returns a configuration item
     *
     * @param    string
@@ -83,8 +85,6 @@ class PMF_Configuration
     } // end func get()
 
     /**
-    * update()
-    *
     * Updates all configuration items
     *
     * @param    mixed
@@ -103,7 +103,9 @@ class PMF_Configuration
                         config_value = '%s'
                     WHERE
                         config_name = '%s'",
-                    SQLPREFIX, $value, $name);
+                    SQLPREFIX,
+                    $value,
+                    $name);
                 $this->db->query($query);
             }
             return true;
