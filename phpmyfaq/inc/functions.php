@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.123 2006-06-26 21:49:07 matteo Exp $
+* $Id: functions.php,v 1.124 2006-07-02 11:51:06 matteo Exp $
 *
 * This is the main functions file!
 *
@@ -70,6 +70,33 @@ function pmf_debug($string)
     }
 
     return $ret;
+}
+
+//
+// UTILITIES
+//
+
+/**
+ * getAvailableLanguages()
+ *
+ * This function returns the available languages
+ *
+ * @param   mixed
+ * @return  boolean
+ * @access  public
+ * @since   2006-07-02
+ * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+ */
+function isPMFSessionID($text)
+{
+    if (null == $text) {
+        return false;
+    }
+    if (preg_match('/^[0-9a-z]{32}$/i', $text)) {
+        return true;
+    }
+
+    return false;
 }
 
 //
@@ -1551,9 +1578,22 @@ function PMF_htmlentities($string, $quote_style = ENT_COMPAT, $charset = 'iso-88
 */
 function adminlog($text)
 {
-    global $db, $PMF_CONF, $auth_user;
-    if (isset($PMF_CONF["enableadminlog"]) && is_numeric($auth_user)) {
-        $db->query('INSERT INTO '.SQLPREFIX.'faqadminlog (id, time, usr, text, ip) VALUES ('.$db->nextID(SQLPREFIX.'faqadminlog', 'id').', '.time().', \''.$auth_user.'\', \''.nl2br($text).'\', \''.$_SERVER["REMOTE_ADDR"].'\')');
+    global $db, $PMF_CONF, $auth, $user;
+
+    if (isset($PMF_CONF['enableadminlog']) && $auth && isset($user)) {
+        $query = sprintf(
+                'INSERT INTO
+                    %sfaqadminlog
+                    (id, time, usr, text, ip)
+                VALUES (%d, %d, %d, %s, %s)',
+                    SQLPREFIX,
+                    $db->nextID(SQLPREFIX.'faqadminlog', 'id'),
+                    time(),
+                    $user->userdata->get('id'),
+                    "'".nl2br($text)."'",
+                    "'".$_SERVER['REMOTE_ADDR']."'"
+                    );
+        $db->query($query);
     }
 }
 

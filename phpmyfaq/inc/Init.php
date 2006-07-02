@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Init.php,v 1.4 2006-07-02 10:34:39 matteo Exp $
+* $Id: Init.php,v 1.5 2006-07-02 11:51:06 matteo Exp $
 *
 * Some functions
 *
@@ -52,7 +52,7 @@ $relativePath = str_replace('index.php', '', $_SERVER['PHP_SELF']);
 session_set_cookie_params(PMF_AUTH_TIMEOUT * 60, $relativePath);
 session_start();
 if (    (!isset($_SESSION['pmf_initiated']))
-     || (!preg_match('/^[0-9a-z]{32}$/i', session_id()))
+     || (!isPMFSessionID(session_id()))
     ) {
     session_regenerate_id();
     $_SESSION['pmf_initiated'] = true;
