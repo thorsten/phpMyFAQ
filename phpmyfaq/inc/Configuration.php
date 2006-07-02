@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Configuration.php,v 1.5 2006-07-02 13:32:15 thorstenr Exp $
+* $Id: Configuration.php,v 1.6 2006-07-02 16:12:30 matteo Exp $
 *
 * The main class for fetching the configuration, update and delete items.
 *
@@ -64,7 +64,14 @@ class PMF_Configuration
             SQLPREFIX);
         $result = $this->db->query($query);
         while ($row = $this->db->fetch_object($result)) {
-            $this->config[$row->config_name] = $row->config_value;
+            // Fix the boolean values
+            if (    ('true' == ($row->config_value))
+                 || ('false' == ($row->config_value))
+                ) {
+                $this->config[$row->config_name] = ('true' == $row->config_value);
+            } else {
+                $this->config[$row->config_name] = $row->config_value;
+            }
         }
     } // end func fetchAll()
 

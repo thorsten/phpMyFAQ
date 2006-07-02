@@ -560,13 +560,8 @@ class PMF_User
         } else {
             // or make a new $perm object
             // check config for permission level
-            if (!isset($PMF_CONF['permLevel'])) {
-                $configFilePath = defined('PMF_ROOT_DIR') ? PMF_ROOT_DIR : dirname(dirname(__FILE__));
-                if (file_exists($configFilePath.'/inc/config.php')){
-                    include($configFilePath.'/inc/config.php');
-                }
-            }
-            $permLevel = isset($PMF_CONF['permLevel']) ? $PMF_CONF['permLevel'] : 'basic';
+            global $PMF_CONF;
+            $permLevel = isset($PMF_CONF['permLevel']) && ('' != $PMF_CONF['permLevel']) ? $PMF_CONF['permLevel'] : 'basic';
             $perm = PMF_Perm::selectPerm($permLevel);
             $perm->addDb($this->_db);
             if (!$this->addPerm($perm))

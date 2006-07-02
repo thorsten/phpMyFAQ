@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.config_list.php,v 1.5 2006-06-12 21:32:07 matteo Exp $
+* $Id: ajax.config_list.php,v 1.6 2006-07-02 16:12:30 matteo Exp $
 *
 * AJAX: lists the complete configuration items
 *
@@ -24,7 +24,6 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
-require_once(PMF_ROOT_DIR.'/inc/config.php');
 require_once(PMF_ROOT_DIR.'/lang/language_en.php');
 
 $configMode = 'std';
@@ -37,7 +36,7 @@ if (isset($_GET['conf']) && is_string($_GET['conf']) && isset($availableConfigMo
 
 function printInputFieldByType($key, $type)
 {
-    global $PMF_CONF, $PMF_LANG; //$PMF_ROOT_DIR, $languageCodes;
+    global $PMF_CONF, $PMF_LANG;
     switch($type) {
         case 'area':
             printf('<textarea name="edit[%s]" cols="60" rows="6">%s</textarea>', $key, $PMF_CONF[$key]);
@@ -62,8 +61,8 @@ function printInputFieldByType($key, $type)
             break;
 
         case 'checkbox':
-            printf('<input type="checkbox" name="edit[%s]" value="TRUE"', $key);
-            if (isset($PMF_CONF[$key]) && $PMF_CONF[$key] == true) {
+            printf('<input type="checkbox" name="edit[%s]" value="true"', $key);
+            if (isset($PMF_CONF[$key]) && $PMF_CONF[$key]) {
                 print ' checked="checked"';
             }
             printf(' />&nbsp;%s', $PMF_LANG["ad_entry_active"]);

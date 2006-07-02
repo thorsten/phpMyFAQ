@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: configuration.php,v 1.3 2006-06-11 21:38:00 matteo Exp $
+* $Id: configuration.php,v 1.4 2006-07-02 16:12:30 matteo Exp $
 *
 * The main configuration frontend
 *
@@ -27,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 if (!$permission['editconfig']) {
 	exit();
 }
-	
+
 // set some parameters
 $defaultConfigAction = 'listConfig';
 
@@ -38,22 +38,26 @@ $userAction = isset($_GET['config_action']) ? $_GET['config_action'] : $defaultC
 if ('saveConfig' == $userAction) {
     $message = '';
     $userAction = $defaultConfigAction;
-    
-    $fp = @fopen(PMF_ROOT_DIR."/inc/config.php", "w");
-    $arrVar = $_REQUEST["edit"];
-    if (isset($fp)) {
-        @fputs($fp, "<?php \n// Created ".date("Y-m-d H:i:s")."\n\n");
-        foreach ($arrVar as $key => $value) {
-            @fputs($fp, "// ".$LANG_CONF[$key][1]."\n\$PMF_CONF['".$key."'] = '".htmlspecialchars($value)."';\n\n");
-        }
-        @fputs($fp, "\n?>");
-        @fclose($fp);
-        $message = $PMF_LANG['ad_config_saved'];
-    } else {
-        $message = $PMF_LANG['ad_entryins_fail'];
-    }
-    @fclose($fp);
 
+    $arrVar = array();
+    if (isset($_REQUEST['edit'])) {
+        $arrVar = $_REQUEST['edit'];
+    }
+    
+    // Set the new values into $PMF_CONF
+    foreach ($arrVar as $key => $value) {
+        $PMF_CONF[$key] = $value;
+    }
+    // Fix checkbox values: they are not returned during the HTTP POST
+    if (is_array($arrVar)) {
+        foreach ($PMF_CONF as $key => $value) {
+            if (!array_key_exists($key, $arrVar)) {
+                $PMF_CONF[$key] = 'false';
+            }
+        }
+    }
+
+    $faqconfig->update($PMF_CONF);
 }
 // Lists the current configuration
 if ('listConfig' == $userAction) {
