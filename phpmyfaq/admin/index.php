@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.52 2006-07-01 19:53:41 thorstenr Exp $
+* $Id: index.php,v 1.53 2006-07-02 09:49:24 thorstenr Exp $
 *
 * The main admin backend index file
 *
@@ -28,9 +28,10 @@ require_once(PMF_ROOT_DIR.'/inc/Init.php');
 PMF_Init::cleanRequest();
 
 // Include classes and functions
-require_once (PMF_ROOT_DIR."/inc/Category.php");
-require_once (PMF_ROOT_DIR."/inc/Linkverifier.php");
-require_once (PMF_ROOT_DIR."/inc/PMF_User/CurrentUser.php");
+require_once(PMF_ROOT_DIR."/inc/Category.php");
+require_once(PMF_ROOT_DIR."/inc/Faq.php");
+require_once(PMF_ROOT_DIR."/inc/Linkverifier.php");
+require_once(PMF_ROOT_DIR."/inc/PMF_User/CurrentUser.php");
 
 // get language (default: english)
 $pmf = new PMF_Init();
@@ -42,6 +43,11 @@ if (isset($LANGCODE) && isset($languageCodes[strtoupper($LANGCODE)])) {
     $LANGCODE = "en";
     require_once ("../lang/language_en.php");
 }
+
+//
+// Create a new FAQ object
+//
+$faq = new PMF_Faq($db, $LANGCODE);
 
 // use mbstring extension if available
 $valid_mb_strings = array('ja', 'en');
