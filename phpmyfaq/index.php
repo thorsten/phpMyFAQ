@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.60 2006-07-02 14:07:34 matteo Exp $
+* $Id: index.php,v 1.61 2006-07-02 14:20:49 thorstenr Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the
@@ -54,7 +54,7 @@ $IDN = new idna_convert;
 // get language (default: english)
 //
 $pmf = new PMF_Init();
-$LANGCODE = $pmf->setLanguage((isset($PMF_CONF['detection']) ? true : false), $PMF_CONF['language']);
+$LANGCODE = $pmf->setLanguage($faqconfig->get('detection'), $faqconfig->get('language'));
 // Preload English strings
 require_once ('lang/language_en.php');
 
@@ -89,8 +89,7 @@ if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
     }
 } else {
     // authenticate with session information
-    $ip_check = (isset($PMF_CONF['ipcheck']) && $PMF_CONF['ipcheck']) ? true : false;
-    $user = PMF_CurrentUser::getFromSession($ip_check);
+    $user = PMF_CurrentUser::getFromSession($faqconfig->get('ipcheck'));
     if ($user) {
         $auth = true;
     } else {
@@ -155,7 +154,7 @@ if ((!isset($_GET['sid'])) && (!isset($_COOKIE['pmf_sid']))) {
 // is user tracking activated?
 //
 $sids = '';
-if (isset($PMF_CONF["tracking"])) {
+if ($faqconfig->get('tracking')) {
     if (isset($sid)) {
         if (!isset($_COOKIE['pmf_sid'])) {
             $sids = 'sid='.(int)$sid.'&amp;lang='.$LANGCODE.'&amp;';
@@ -196,7 +195,7 @@ if (isset($_REQUEST["id"]) && is_numeric($_REQUEST["id"]) == true) {
     $keywords = ' '.stripslashes($faq->getRecordKeywords($id, $lang));
 } else {
     $id = '';
-    $title = ' -  powered by phpMyFAQ '.$PMF_CONF['version'];
+    $title = ' -  powered by phpMyFAQ '.$faqconfig->get('version');
     $keywords = '';
 }
 
@@ -205,7 +204,7 @@ if (isset($_REQUEST["id"]) && is_numeric($_REQUEST["id"]) == true) {
 //
 if (isset($_REQUEST['solution_id']) && is_numeric($_REQUEST['solution_id']) === true) {
     $solution_id = $_REQUEST['solution_id'];
-    $title = ' -  powered by phpMyFAQ '.$PMF_CONF['version'];
+    $title = ' -  powered by phpMyFAQ '.$faqconfig->get('version');
     $keywords = '';
     $a = $faq->getIdFromSolutionId($solution_id);
     if (is_array($a)) {
@@ -281,13 +280,14 @@ $tpl = new PMF_Template (array(
     'writeContent'          => $inc_tpl));
 
 $main_template_vars = array(
-    "title"                 => $PMF_CONF["title"].$title,
-    "header"                => $PMF_CONF["title"],
-    "metaDescription"       => $PMF_CONF["metaDescription"],
-    'metaKeywords'          => $PMF_CONF['metaKeywords'].$keywords,
-    "metaPublisher"         => $PMF_CONF["metaPublisher"],
-    "metaLanguage"          => $PMF_LANG["metaLanguage"],
-    'metaCharset'           => $PMF_LANG["metaCharset"],
+    "title"                 => $faqconfig->get('title').$title,
+    'version'               => $faqconfig->get('version'),
+    "header"                => $faqconfig->get('title'),
+    "metaDescription"       => $faqconfig->get('metaDescription'),
+    'metaKeywords'          => $faqconfig->get('metaKeywords').$keywords,
+    "metaPublisher"         => $faqconfig->get('metaPublisher'),
+    "metaLanguage"          => $PMF_LANG['metaLanguage'],
+    'metaCharset'           => $PMF_LANG['metaCharset'],
     "dir"                   => $PMF_LANG["dir"],
     "msgCategory"           => $PMF_LANG["msgCategory"],
     "showCategories"        => $tree->printCategories($cat),
@@ -300,9 +300,9 @@ $main_template_vars = array(
     'writeTopTenRow'        => $faq->getTopTen(),
     'writeNewestHeader'     => $PMF_LANG['msgLatestArticles'],
     'writeNewestRow'        => $faq->getLatest(),
-    "copyright"             => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> '.$PMF_CONF["version"]);
+    "copyright"             => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> '.$faqconfig->get('version'));
 
-if (isset($PMF_CONF["mod_rewrite"]) && $PMF_CONF["mod_rewrite"] == "TRUE") {
+if ($faqconfig->get('mod_rewrite')) {
     $links_template_vars = array(
         "faqHome"           => $_SERVER['PHP_SELF'],
         "msgSearch"         => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'search.html">'.$PMF_LANG["msgSearch"].'</a>',
