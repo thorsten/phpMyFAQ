@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Configuration.php,v 1.3 2006-06-18 06:55:31 matteo Exp $
+* $Id: Configuration.php,v 1.4 2006-07-02 12:28:05 thorstenr Exp $
 *
 * The main class for fetching the configuration, update and delete items.
 *
@@ -27,12 +27,14 @@ class PMF_Configuration
     * @var  object
     */
     var $db;
+
     /**
     * Configuration array
     *
     * @var  array
     */
     var $config = array();
+
     /**
     * Constructor
     *
@@ -44,6 +46,7 @@ class PMF_Configuration
     {
         $this->db = &$db;
     }
+
     /**
     * getAll()
     *
@@ -60,6 +63,7 @@ class PMF_Configuration
             $this->config[$row->config_name] = $row->config_value;
         }
     } // end func fetchAll()
+
     /**
     * get()
     *
@@ -77,6 +81,7 @@ class PMF_Configuration
         }
         return $this->config[$item];
     } // end func get()
+
     /**
     * update()
     *

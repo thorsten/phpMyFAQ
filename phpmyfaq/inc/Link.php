@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Link.php,v 1.5 2006-06-26 21:38:42 matteo Exp $
+* $Id: Link.php,v 1.6 2006-07-02 12:28:05 thorstenr Exp $
 *
 * Link management - Functions and Classes
 *
@@ -18,13 +18,6 @@
 * License for the specific language governing rights and limitations
 * under the License.
 */
-
-// {{{ Includes
-/**
- * This include is needed for accessing to mod_rewrite support configuration value
- */
-require_once('config.php');
-// }}}
 
 // {{{ Constants
 /**#@+
@@ -255,7 +248,7 @@ class PMF_Link
                 }
             }
         }
-        
+
         return $parameters;
     }
 
@@ -454,7 +447,7 @@ class PMF_Link
                 $url = $this->getDefaultScheme().$this->url;
             }
         }
-        
+
         return $url;
     }
 }

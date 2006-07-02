@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Init.php,v 1.5 2006-07-02 11:51:06 matteo Exp $
+* $Id: Init.php,v 1.6 2006-07-02 12:28:05 thorstenr Exp $
 *
 * Some functions
 *
@@ -35,13 +35,20 @@ if (DEBUG) {
 // Read configuration and constants, include main classes and functions and
 // create a database connection
 require_once(dirname(__FILE__).'/data.php');
-require_once(dirname(__FILE__).'/config.php');
 require_once(dirname(__FILE__).'/constants.php');
 require_once(dirname(__FILE__).'/functions.php');
+require_once(dirname(__FILE__).'/Configuration.php');
 require_once(dirname(__FILE__).'/Db.php');
 define('SQLPREFIX', $DB['prefix']);
 $db = PMF_Db::db_select($DB['type']);
 $db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db']);
+
+//
+// Fetch the configuration
+//
+$faqconfig = new PMF_Configuration($db);
+$faqconfig->getAll();
+$PMF_CONF = $faqconfig->config;
 
 //
 // We always need a valid session!
