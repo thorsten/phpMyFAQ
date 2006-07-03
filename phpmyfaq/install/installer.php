@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.53 2006-07-02 20:17:29 thorstenr Exp $
+* $Id: installer.php,v 1.54 2006-07-03 21:30:59 matteo Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -141,6 +141,8 @@ function cleanInstallation()
 <head>
     <title>phpMyFAQ <?php print VERSION; ?> Installation</title>
     <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=iso-8859-1" />
+    <link rel="shortcut icon" href="../template/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="../template/favicon.ico" type="image/x-icon" />
     <script language="javascript" type="text/javascript">
     /*<![CDATA[*/
     <!--

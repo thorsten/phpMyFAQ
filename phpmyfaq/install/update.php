@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.49 2006-07-03 21:25:52 matteo Exp $
+* $Id: update.php,v 1.50 2006-07-03 21:31:00 matteo Exp $
 *
 * Main update script
 *
@@ -39,6 +39,8 @@ if (isset($_GET["step"]) && $_GET["step"] != "") {
 <head>
     <title>phpMyFAQ <?php print NEWVERSION; ?> Update</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="shortcut icon" href="../template/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="../template/favicon.ico" type="image/x-icon" />
     <style type="text/css"><!--
     body {
         margin: 10px;
