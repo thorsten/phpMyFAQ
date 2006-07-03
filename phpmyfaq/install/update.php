@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.47 2006-07-03 20:42:01 matteo Exp $
+* $Id: update.php,v 1.48 2006-07-03 20:49:33 matteo Exp $
 *
 * Main update script
 *
@@ -633,6 +633,7 @@ if ($step == 5) {
         }
         // 6/N. Add the new PMF 2.0.0 tables
         switch($DB["type"]) {
+            // TODO: Add the updates for the other supported DBs
             default:
                 require_once('mysql.update.sql.php');
                 break;
@@ -677,10 +678,12 @@ if ($step == 5) {
     print '<p class="center"><a href="../index.php">phpMyFAQ</a></p>';
     print '<p class="center">Please remove the backup (*.php.bak and *.bak.php) files located in the directory inc/.</p>';
 
-    if (@unlink(PMF_ROOT_DIR."/inc/config.php")) {
-        print "<p class=\"center\">The file 'inc/config.php' was deleted automatically.</p>\n";
-    } else {
-        print "<p class=\"center\">Please delete the file 'inc/config.php' manually.</p>\n";
+    if ($version < 200) {
+        if (@unlink(PMF_ROOT_DIR."/inc/config.php")) {
+            print "<p class=\"center\">The file 'inc/config.php' was deleted automatically.</p>\n";
+        } else {
+            print "<p class=\"center\">Please delete the file 'inc/config.php' manually.</p>\n";
+        }
     }
     if (@unlink(basename($_SERVER["PHP_SELF"]))) {
         print "<p class=\"center\">This file was deleted automatically.</p>\n";
