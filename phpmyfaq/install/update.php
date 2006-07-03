@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.48 2006-07-03 20:49:33 matteo Exp $
+* $Id: update.php,v 1.49 2006-07-03 21:25:52 matteo Exp $
 *
 * Main update script
 *
@@ -628,7 +628,7 @@ if ($step == 5) {
         // 5/N. Rename faquser table for preparing the users migration
         switch($DB["type"]) {
             default:
-                $query[] = 'ALTER TABLE '.$sqltblpre.'faquser RENAME TO '.$sqltblpre.'faquser_PMF16x_old';
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faquser RENAME TO '.SQLPREFIX.'faquser_PMF16x_old';
                 break;
         }
         // 6/N. Add the new PMF 2.0.0 tables
@@ -639,12 +639,23 @@ if ($step == 5) {
                 break;
         }
         // 7/N. Move the PMF configurarion: from inc/config.php to the faqconfig table
+        $PMF_CONF['permLevel'] = 'basic';
+        $PMF_CONF['enablevisibility'] = 'Y';
+        $PMF_CONF['referenceURL'] = str_replace('/install/update.php', '', $_SERVER['PHP_SELF']);
+        $PMF_CONF['URLValidateInterval'] = '86400';
+        $PMF_CONF['send2friendText'] = $PMF_CONF['send2friend_text'];
+        unset($PMF_CONF['send2friend_text']);
+        unset($PMF_CONF['copyright_eintrag']);
         foreach ($PMF_CONF as $key => $value) {
+            if ('TRUE' == $value) {
+                $PMF_CONF[$key] = 'true';
+            }
             // TODO: fill the empty values with 'false' if the key is related to a checkbox
         }
         $oPMFConf = new PMF_Configuration($db);
         $oPMFConf->update($PMF_CONF);
         // 8/N. Make the user migration and remove the faquser_PMF16x_old table
+        //      $query[] = 'DROP TABLE '.SQLPREFIX.'faquser_PMF16x_old';
 
         // TODO: Add/Finalize the complex update stage from PMF 2.x-
         //...

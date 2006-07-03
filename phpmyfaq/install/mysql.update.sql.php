@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mysql.update.sql.php,v 1.1 2006-07-03 20:42:01 matteo Exp $
+* $Id: mysql.update.sql.php,v 1.2 2006-07-03 21:25:52 matteo Exp $
 *
 * CREATE TABLE instruction for MySQL database
 *
@@ -22,13 +22,13 @@
 */
 
 //faqconfig
-$query[] = "CREATE TABLE ".$sqltblpre."faqconfig (
+$query[] = "CREATE TABLE ".SQLPREFIX."faqconfig (
 config_name varchar(255) NOT NULL default '',
 config_value varchar(255) NOT NULL default '',
 PRIMARY KEY (config_name))";
 
 //faqglossary
-$query[] = "CREATE TABLE ".$sqltblpre."faqglossary (
+$query[] = "CREATE TABLE ".SQLPREFIX."faqglossary (
 id INT(11) NOT NULL ,
 lang VARCHAR(2) NOT NULL ,
 item VARCHAR(255) NOT NULL ,
@@ -36,7 +36,7 @@ definition TEXT NOT NULL,
 PRIMARY KEY (id, lang))";
 
 //faqgroup
-$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqgroup (
+$query[] = "CREATE TABLE IF NOT EXISTS ".SQLPREFIX."faqgroup (
 group_id INT(11) UNSIGNED NOT NULL,
 name VARCHAR(25) NULL,
 description TEXT NULL,
@@ -46,14 +46,14 @@ UNIQUE INDEX name(name)
 )";
 
 //faqgroup_right
-$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqgroup_right (
+$query[] = "CREATE TABLE IF NOT EXISTS ".SQLPREFIX."faqgroup_right (
 group_id INT(11) UNSIGNED NOT NULL,
 right_id INT(11) UNSIGNED NOT NULL,
 PRIMARY KEY(group_id, right_id)
 )";
 
 //faqlinkverifyrules
-$query[] = "CREATE TABLE ".$sqltblpre."faqlinkverifyrules (
+$query[] = "CREATE TABLE ".SQLPREFIX."faqlinkverifyrules (
 id int(11) NOT NULL default '0',
 type varchar(6) NOT NULL default '',
 url varchar(255) NOT NULL default '',
@@ -67,7 +67,7 @@ PRIMARY KEY (id)
 )";
 
 //faqright
-$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqright (
+$query[] = "CREATE TABLE IF NOT EXISTS ".SQLPREFIX."faqright (
 right_id INT(11) UNSIGNED NOT NULL,
 name VARCHAR(50) NULL,
 description TEXT NULL,
@@ -77,7 +77,7 @@ PRIMARY KEY(right_id)
 )";
 
 //faquser
-$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faquser (
+$query[] = "CREATE TABLE IF NOT EXISTS ".SQLPREFIX."faquser (
 user_id INT(11) UNSIGNED NOT NULL,
 login VARCHAR(25) NOT NULL,
 session_id VARCHAR(150) NULL,
@@ -93,7 +93,7 @@ UNIQUE INDEX login(login)
 )";
 
 //faquserdata
-$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faquserdata (
+$query[] = "CREATE TABLE IF NOT EXISTS ".SQLPREFIX."faquserdata (
 user_id INT(11) UNSIGNED NOT NULL,
 last_modified TIMESTAMP(14) NULL,
 display_name VARCHAR(50) NULL,
@@ -101,21 +101,21 @@ email VARCHAR(100) NULL
 )";
 
 //faquserlogin
-$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faquserlogin (
+$query[] = "CREATE TABLE IF NOT EXISTS ".SQLPREFIX."faquserlogin (
 login VARCHAR(25) NOT NULL,
 pass VARCHAR(150) NULL,
 PRIMARY KEY(login)
 )";
 
 //faquser_group
-$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faquser_group (
+$query[] = "CREATE TABLE IF NOT EXISTS ".SQLPREFIX."faquser_group (
 user_id INT(11) UNSIGNED NOT NULL,
 group_id INT(11) UNSIGNED NOT NULL,
 PRIMARY KEY(user_id, group_id)
 )";
 
 //faquser_right
-$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faquser_right (
+$query[] = "CREATE TABLE IF NOT EXISTS ".SQLPREFIX."faquser_right (
 user_id INT(11) UNSIGNED NOT NULL,
 right_id INT(11) UNSIGNED NOT NULL,
 PRIMARY KEY(user_id, right_id)
