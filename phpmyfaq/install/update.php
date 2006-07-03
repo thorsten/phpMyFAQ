@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.46 2006-07-03 19:27:42 matteo Exp $
+* $Id: update.php,v 1.47 2006-07-03 20:42:01 matteo Exp $
 *
 * Main update script
 *
@@ -21,12 +21,11 @@
 * under the License.
 */
 
-define('NEWVERSION', '2.0.0-dev');
+define('NEWVERSION', '2.0.0-alpha0');
 define('COPYRIGHT', '&copy; 2001-2006 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
 require_once(PMF_ROOT_DIR."/inc/data.php");
-require_once(PMF_ROOT_DIR."/inc/config.php");
 require_once(PMF_ROOT_DIR."/inc/constants.php");
 
 if (isset($_GET["step"]) && $_GET["step"] != "") {
@@ -39,26 +38,26 @@ if (isset($_GET["step"]) && $_GET["step"] != "") {
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
     <title>phpMyFAQ <?php print NEWVERSION; ?> Update</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
     <style type="text/css"><!--
     body {
-	    margin: 10px;
-	    padding: 0px;
-	    font-size: 12px;
-	    font-family: "Bitstream Vera Sans", "Trebuchet MS", Geneva, Verdana, Arial, Helvetica, sans-serif;
+        margin: 10px;
+        padding: 0px;
+        font-size: 12px;
+        font-family: "Bitstream Vera Sans", "Trebuchet MS", Geneva, Verdana, Arial, Helvetica, sans-serif;
         background: #ffffff;
         color: #000000;
     }
     #header {
-	    margin: auto;
-	    padding: 35px;
+        margin: auto;
+        padding: 35px;
         background: #0D487A;
         color: #ffffff;
         text-align: center;
     }
     #header h1 {
-	    font-family: "Trebuchet MS", Geneva, Verdana, Arial, Helvetica, sans-serif;
-	    margin: auto;
+        font-family: "Trebuchet MS", Geneva, Verdana, Arial, Helvetica, sans-serif;
+        margin: auto;
         color: #ffffff;
         text-align: center;
     }
@@ -156,9 +155,10 @@ if ($step == 1) {
 </select>
 
 <p class="center">
-    <strong>Attention! This version might be broken and it's under heavy development
-    <br />
-    CURRENTLY no user migration is performed: please use a fresh installation instead of updating.</strong>
+    <strong>Attention! This version might be broken and it's under heavy development</strong>
+</p>
+<p class="center">
+    <strong>Attention! Currently no user migration is performed.<br />Please use a fresh installation instead of updating.</strong>
 </p>
 
 <p class="center"><input type="submit" value="Go to step 2 of 5" class="button" /></p>
@@ -232,6 +232,9 @@ if ($step == 3) {
 <fieldset class="installation">
 <legend class="installation"><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 3 of 5)</strong></legend>
 <?php
+    if ($version < 200) {
+        require_once(PMF_ROOT_DIR."/inc/config.php");
+    }
     if ($version < 150) {
         // Version 1.4.x
 ?>
@@ -324,15 +327,15 @@ if ($step == 4) {
     if (isset($_REQUEST["db"])) {
         $DB = $_REQUEST["db"];
         if ($fp = @fopen(PMF_ROOT_DIR."/inc/data.php","w")) {
-		    @fputs($fp,"<?php\n\$DB[\"server\"] = '".$DB["server"]."';\n\$DB[\"user\"] = '".$DB["user"]."';\n\$DB[\"password\"] = '".$DB["password"]."';\n\$DB[\"db\"] = '".$DB["db"]."';\n\$DB[\"prefix\"] = '".$DB["prefix"]."';\n\$DB[\"type\"] = 'mysql';\n?>");
-		    @fclose($fp);
+            @fputs($fp,"<?php\n\$DB[\"server\"] = '".$DB["server"]."';\n\$DB[\"user\"] = '".$DB["user"]."';\n\$DB[\"password\"] = '".$DB["password"]."';\n\$DB[\"db\"] = '".$DB["db"]."';\n\$DB[\"prefix\"] = '".$DB["prefix"]."';\n\$DB[\"type\"] = 'mysql';\n?>");
+            @fclose($fp);
             print "<p class=\"center\">The file ../inc/data.php was successfully updated.</p>";
         } else {
-		    print "<p class=\"error\"><strong>Error:</strong> The file ../inc/data.php could not be updated.</p>";
+            print "<p class=\"error\"><strong>Error:</strong> The file ../inc/data.php could not be updated.</p>";
         }
     }
 
-	$arrVar = $_REQUEST["edit"];
+    $arrVar = $_REQUEST["edit"];
 
     if ($fp = @fopen(PMF_ROOT_DIR."/inc/config.php", "w")) {
         @fputs($fp, "<?php \n# Created ".date("Y-m-d H:i:s")."\n\n");
@@ -340,7 +343,7 @@ if ($step == 4) {
             fputs($fp, "// ".$LANG_CONF[$key][1]."\n\$PMF_CONF[\"".$key."\"] = \"".htmlspecialchars(stripslashes($value))."\";\n\n");
         }
         @fputs($fp, "?>");
-	    @fclose($fp);
+        @fclose($fp);
         print "<p class=\"center\">The file ../inc/config.php was successfully updated.</p>";
     } else {
         print "<p class=\"error\"><strong>Error:</strong> The file ../inc/config.php could not be updated.</p>";
@@ -355,6 +358,7 @@ if ($step == 4) {
 /**************************** STEP 4 OF 5 ***************************/
 if ($step == 5) {
     require_once(PMF_ROOT_DIR."/inc/functions.php");
+    require_once(PMF_ROOT_DIR."/inc/Configuration.php");
     require_once(PMF_ROOT_DIR."/inc/Db.php");
     define("SQLPREFIX", $DB["prefix"]);
     $db = PMF_Db::db_select($DB["type"]);
@@ -369,10 +373,10 @@ if ($step == 5) {
     if ($version <= "140") {
         // rewrite data.php
         if ($fp = @fopen("../inc/data.php","w")) {
-    		@fputs($fp,"<?php\n\$DB[\"server\"] = '".$DB["server"]."';\n\$DB[\"user\"] = '".$DB["user"]."';\n\$DB[\"password\"] = '".$DB["password"]."';\n\$DB[\"db\"] = '".$DB["db"]."';\n\$DB[\"prefix\"] = '".SQLPREFIX."';\n\$DB[\"type\"] = 'mysql';\n?>");
-    		@fclose($fp);
+            @fputs($fp,"<?php\n\$DB[\"server\"] = '".$DB["server"]."';\n\$DB[\"user\"] = '".$DB["user"]."';\n\$DB[\"password\"] = '".$DB["password"]."';\n\$DB[\"db\"] = '".$DB["db"]."';\n\$DB[\"prefix\"] = '".SQLPREFIX."';\n\$DB[\"type\"] = 'mysql';\n?>");
+            @fclose($fp);
         } else {
-    		print "<p class=\"error\"><strong>Error:</strong> Cannot rewrite to data.php.</p>";
+            print "<p class=\"error\"><strong>Error:</strong> Cannot rewrite to data.php.</p>";
         }
     }
     // update from version 1.4.2
@@ -591,16 +595,57 @@ if ($step == 5) {
             $_start += PMF_SOLUTION_ID_INCREMENT_VALUE;
         }
     }
-    
+
     // update from versions before 2.0.0
     if ($version < 200) {
-        // TODO: Add/Finalize the complex update stage from PMF 2.x-
-        // 1/N. Fix the old faqfragen -> faqquestions
+        // 1/N. Fix faqfragen table -> faqquestions
         switch($DB["type"]) {
             default:
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqfragen RENAME TO '.SQLPREFIX.'faqquestions';
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqquestions ADD is_visible CHAR NOT NULL DEFAULT \'Y\' AFTER ask_date';
+                break;
         }
+        // 2/N. Fix faqcategories table
+        switch($DB["type"]) {
+            default:
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqcategories ADD user_id INT(2) NOT NULL AFTER description';
+                break;
+        }
+        // 3/N. Fix faqdata table
+        switch($DB["type"]) {
+            default:
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata ADD linkState VARCHAR(7) NOT NULL AFTER datum';
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata ADD linkCheckDate INT(11) NOT NULL DEFAULT 0 AFTER linkState';
+                break;
+        }
+        // 4/N. Fix faqdata_revisions table
+        switch($DB["type"]) {
+            default:
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata_revisions ADD linkState VARCHAR(7) NOT NULL AFTER datum';
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata_revisions ADD linkCheckDate INT(11) NOT NULL DEFAULT 0 AFTER linkState';
+                break;
+        }
+        // 5/N. Rename faquser table for preparing the users migration
+        switch($DB["type"]) {
+            default:
+                $query[] = 'ALTER TABLE '.$sqltblpre.'faquser RENAME TO '.$sqltblpre.'faquser_PMF16x_old';
+                break;
+        }
+        // 6/N. Add the new PMF 2.0.0 tables
+        switch($DB["type"]) {
+            default:
+                require_once('mysql.update.sql.php');
+                break;
+        }
+        // 7/N. Move the PMF configurarion: from inc/config.php to the faqconfig table
+        foreach ($PMF_CONF as $key => $value) {
+            // TODO: fill the empty values with 'false' if the key is related to a checkbox
+        }
+        $oPMFConf = new PMF_Configuration($db);
+        $oPMFConf->update($PMF_CONF);
+        // 8/N. Make the user migration and remove the faquser_PMF16x_old table
+
+        // TODO: Add/Finalize the complex update stage from PMF 2.x-
         //...
     }
 
@@ -632,6 +677,11 @@ if ($step == 5) {
     print '<p class="center"><a href="../index.php">phpMyFAQ</a></p>';
     print '<p class="center">Please remove the backup (*.php.bak and *.bak.php) files located in the directory inc/.</p>';
 
+    if (@unlink(PMF_ROOT_DIR."/inc/config.php")) {
+        print "<p class=\"center\">The file 'inc/config.php' was deleted automatically.</p>\n";
+    } else {
+        print "<p class=\"center\">Please delete the file 'inc/config.php' manually.</p>\n";
+    }
     if (@unlink(basename($_SERVER["PHP_SELF"]))) {
         print "<p class=\"center\">This file was deleted automatically.</p>\n";
     } else {
