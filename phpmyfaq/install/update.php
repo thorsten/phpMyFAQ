@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.45 2006-06-17 08:21:45 matteo Exp $
+* $Id: update.php,v 1.46 2006-07-03 19:27:42 matteo Exp $
 *
 * Main update script
 *
@@ -636,6 +636,11 @@ if ($step == 5) {
         print "<p class=\"center\">This file was deleted automatically.</p>\n";
     } else {
         print "<p class=\"center\">Please delete this file manually.</p>\n";
+    }
+    if (@unlink(dirname($_SERVER["PATH_TRANSLATED"])."/installer.php")) {
+        print "<p class=\"center\">The file 'installer.php' was deleted automatically.</p>\n";
+    } else {
+        print "<p class=\"center\">Please delete the file 'installer.php' manually.</p>\n";
     }
 }
 ?>
