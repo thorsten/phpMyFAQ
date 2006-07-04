@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.50 2006-07-03 21:31:00 matteo Exp $
+* $Id: update.php,v 1.51 2006-07-04 21:41:35 matteo Exp $
 *
 * Main update script
 *
@@ -659,6 +659,9 @@ if ($step == 5) {
         // 8/N. Make the user migration and remove the faquser_PMF16x_old table
         //      $query[] = 'DROP TABLE '.SQLPREFIX.'faquser_PMF16x_old';
 
+        // 9/N. Move each image in each of the faq content, from '/images' to '/images/Image'
+        // TODO: Cycle through the faq content and move each image from '/images' to '/images/Image'
+        
         // TODO: Add/Finalize the complex update stage from PMF 2.x-
         //...
     }
@@ -692,6 +695,7 @@ if ($step == 5) {
     print '<p class="center">Please remove the backup (*.php.bak and *.bak.php) files located in the directory inc/.</p>';
 
     if ($version < 200) {
+        // 10/N. Remove the old config file
         if (@unlink(PMF_ROOT_DIR."/inc/config.php")) {
             print "<p class=\"center\">The file 'inc/config.php' was deleted automatically.</p>\n";
         } else {
