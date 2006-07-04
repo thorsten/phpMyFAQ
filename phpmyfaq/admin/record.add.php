@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.add.php,v 1.31 2006-07-02 20:11:49 thorstenr Exp $
+* $Id: record.add.php,v 1.32 2006-07-04 21:35:15 matteo Exp $
 *
 * Adds a record in the database
 *
@@ -62,7 +62,7 @@ if ($permission["editbt"]) {
     } elseif (isset($submit[2]) && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "" && isset($_REQUEST['rubrik']) && is_array($_REQUEST['rubrik'])) {
         // Preview
         $rubrik = $_REQUEST["rubrik"];
-        $cat = new Category;
+        $cat = new PMF_Category;
         $cat->transform(0);
         $categorylist = '';
         foreach ($rubrik as $categories) {
