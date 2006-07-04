@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.54 2006-07-03 21:30:59 matteo Exp $
+* $Id: installer.php,v 1.55 2006-07-04 22:45:27 matteo Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -877,6 +877,14 @@ foreach ($permLevels as $level) {
             'for_users' => 1,
             'for_groups' => 1
         ),
+        // FIXME: 26 or, according with PMF_1_6, 23?
+        //26 => 'changebtrevs'
+        array(
+            'name' => 'changebtrevs',
+            'description' => 'Edit revisions',
+            'for_users' => 1,
+            'for_groups' => 1
+        )
     );
     foreach ($rights as $right) {
         $rightID = $admin->perm->addRight($right);
