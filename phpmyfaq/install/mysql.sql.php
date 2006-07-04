@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mysql.sql.php,v 1.25 2006-07-03 20:42:01 matteo Exp $
+* $Id: mysql.sql.php,v 1.26 2006-07-04 22:55:33 matteo Exp $
 *
 * CREATE TABLE instruction for MySQL database
 *
@@ -97,6 +97,7 @@ $query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqchanges (
 id int(11) NOT NULL,
 beitrag int(11) NOT NULL,
 lang varchar(5) NOT NULL,
+revision_id integer NOT NULL DEFAULT 0,
 usr int(11) NOT NULL,
 datum int(11) NOT NULL,
 what text NOT NULL,

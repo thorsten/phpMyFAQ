@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: pgsql.sql.php,v 1.15 2006-06-17 08:21:45 matteo Exp $
+* $Id: pgsql.sql.php,v 1.16 2006-07-04 22:55:33 matteo Exp $
 *
 * CREATE TABLE instruction for PostgreSQL database
 *
@@ -140,10 +140,11 @@ PRIMARY KEY  (category_id,category_lang,record_id,record_lang)
 //faqchanges
 $query[] = "CREATE TABLE  ".$sqltblpre."faqchanges (
 id SERIAL NOT NULL,
-beitrag int4 NOT NULL,
+beitrag bigint NOT NULL,
 lang varchar(5) NOT NULL,
-usr int4 NOT NULL REFERENCES ".$sqltblpre."faquser(id),
-datum int4 NOT NULL,
+revision_id integer NOT NULL DEFAULT 0,
+usr bigint NOT NULL REFERENCES ".$sqltblpre."faquser(id),
+datum bigint NOT NULL,
 what text NOT NULL,
 PRIMARY KEY (id, lang))";
 

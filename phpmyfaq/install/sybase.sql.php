@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: sybase.sql.php,v 1.9 2006-06-17 08:21:45 matteo Exp $
+* $Id: sybase.sql.php,v 1.10 2006-07-04 22:55:33 matteo Exp $
 *
 * CREATE TABLE instruction for sybase database
 *
@@ -141,8 +141,9 @@ $query[] = "CREATE TABLE  ".$sqltblpre."faqchanges (
 id integer NOT NULL,
 beitrag SMALLINT NOT NULL,
 lang varchar(5) NOT NULL,
+revision_id integer NOT NULL DEFAULT 0,
 usr integer NOT NULL REFERENCES ".$sqltblpre."faquser(id),
-datum SMALLINT NOT NULL,
+datum integer NOT NULL,
 what text NOT NULL,
 PRIMARY KEY (id, lang))";
 

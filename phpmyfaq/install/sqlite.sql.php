@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: sqlite.sql.php,v 1.17 2006-06-17 08:21:45 matteo Exp $
+* $Id: sqlite.sql.php,v 1.18 2006-07-04 22:55:33 matteo Exp $
 *
 * CREATE TABLE instructions for SQLite
 *
@@ -96,6 +96,7 @@ $query[] = "CREATE TABLE ".$sqltblpre."faqchanges (
 id int(11) NOT NULL,
 beitrag int(11) NOT NULL,
 lang varchar(5) NOT NULL,
+revision_id integer NOT NULL DEFAULT 0,
 usr int(11) NOT NULL,
 datum int(11) NOT NULL,
 what text NOT NULL,
