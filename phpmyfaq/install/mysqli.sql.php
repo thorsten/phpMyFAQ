@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mysqli.sql.php,v 1.14 2006-07-04 22:55:33 matteo Exp $
+* $Id: mysqli.sql.php,v 1.15 2006-07-06 19:00:42 thorstenr Exp $
 *
 * CREATE TABLE instruction for MySQL 4.1 and 5.0 databases
 *
@@ -9,12 +9,12 @@
 * @author       Lars Tiedemann <php@larstiedemann.de>
 * @since        2005-03-23
 * @copyright    (c) 2006 phpMyFAQ Team
-* 
+*
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
 * compliance with the License. You may obtain a copy of the License at
 * http://www.mozilla.org/MPL/
-* 
+*
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
@@ -26,11 +26,15 @@ $uninst[] = "DROP TABLE ".$sqltblpre."faqadminsessions";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcaptcha";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcategories";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcategoryrelations";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqcategory_group";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqcategory_user";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqchanges";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcomments";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqconfig";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqdata";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqdata_revisions";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqdata_group";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqdata_user";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqglossary";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqgroup";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqgroup_right";
@@ -91,6 +95,18 @@ record_id INT(11) NOT NULL,
 record_lang VARCHAR(5) NOT NULL default '',
 PRIMARY KEY  (category_id,category_lang,record_id,record_lang)
 )";
+
+//faqcategory_group
+$query[] = "CREATE TABLE ".$sqltblpre."faqcategory_group (
+category_id INT(11) NOT NULL,
+group_id INT(11) NOT NULL,
+PRIMARY KEY (category_id, group_id))";
+
+//faqcategory_user
+$query[] = "CREATE TABLE ".$sqltblpre."faqcategory_user (
+category_id INT(11) NOT NULL,
+user_id INT(11) NOT NULL,
+PRIMARY KEY (category_id, user_id))";
 
 //faqchanges
 $query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqchanges (
@@ -156,6 +172,18 @@ datum varchar(15) NOT NULL,
 linkState VARCHAR(7) NOT NULL,
 linkCheckDate INT(11) DEFAULT '0' NOT NULL,
 PRIMARY KEY (id, lang, solution_id, revision_id))";
+
+//faqdata_group
+$query[] = "CREATE TABLE ".$sqltblpre."faqdata_group (
+record_id INT(11) NOT NULL,
+group_id INT(11) NOT NULL,
+PRIMARY KEY (record_id, group_id))";
+
+//faqdata__user
+$query[] = "CREATE TABLE ".$sqltblpre."faqdata_user (
+record_id INT(11) NOT NULL,
+user_id INT(11) NOT NULL,
+PRIMARY KEY (record_id, user_id))";
 
 //faqglossary
 $query[] = "CREATE TABLE ".$sqltblpre."faqglossary (
