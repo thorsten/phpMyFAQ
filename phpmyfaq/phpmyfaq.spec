@@ -1,5 +1,5 @@
 #
-# $Id: phpmyfaq.spec,v 1.2 2006-07-08 11:37:04 matteo Exp $
+# $Id: phpmyfaq.spec,v 1.3 2006-07-09 16:45:02 matteo Exp $
 #
 # This is the spec file for building an RPM package of phpMyFAQ
 # for most of the different Red Hat distributions
@@ -15,8 +15,8 @@
 #
 # How this spec file is expected to work.
 # INSTALL.
-# 1. Install phpMyFAQ into /var/www/html/phpmyfaq-<version>-<release>.
-# 2. Make a symbolic link for the current install folder to '/var/www/html/phpmyfaq'.
+# 1. Install phpMyFAQ into /var/www/phpmyfaq-<version>-<release>.
+# 2. Make a symbolic link for the current install folder to '/var/www/phpmyfaq'.
 #    The use of a symbolic link will give the user an easy way
 #    of recovering the old install and/or preserve old versions
 #    w/o changing the URL mapping.
@@ -54,8 +54,18 @@
 #
 %define name        phpmyfaq
 %define version     2.0.0
-%define release     1
+%define release     2
 %define epoch       0
+
+# User and Group under which Apache is running
+# Red Hat: apache:apache
+%define httpd_user      apache
+%define httpd_group     apache
+# Suse: wwwrun:nogroup
+%if "%{_vendor}" == "suse"
+    %define httpd_user  wwwrun
+    %define httpd_group nogroup
+%endif
 
 # Apache server is packaged under the name of:
 # - apache: up to Red Hat 7.3 and Red Hat Enterprise 2.1
@@ -88,9 +98,11 @@ URL:                http://www.phpmyfaq.de
 Group:              Networking/WWW
 Packager:           Matteo Scaramuccia <matteo@scaramuccia.com>
 
-Prefix:             /var/www/html
+Prefix:             /var/www
 BuildRoot:          %{_tmppath}/%{name}-%{version}-buildroot
 BuildArchitectures: noarch
+
+AutoReq:            0
 %if %{is_apache}
 Requires:           apache
 %else
@@ -116,6 +128,11 @@ XML-support, PDF-support, a backup-system and an easy to use
 installation script.
 
 %changelog
+* Sun Jul 09 2006 Matteo Scaramuccia <matteo@scaramuccia.com> - 2.0.0-2
+- Move the deployment folder from '/var/www/html' to '/var/www'
+- Add phpmyfaq.conf, the Apache configuration file for phpMyFAQ
+- Add beta support for Suse.
+
 * Sat Jul 08 2006 Matteo Scaramuccia <matteo@scaramuccia.com> - 2.0.0-1
 - First spec release.
 
@@ -139,16 +156,26 @@ fi
 rm -rf $RPM_BUILD_ROOT
 
 %files
-%defattr(0644,apache,apache,0755)
+%defattr(0644,%{httpd_user},%{httpd_group},0755)
 %docdir %{prefix}/%{name}-%{version}-%{release}/docs
 %{prefix}/%{name}-%{version}-%{release}
 
 %pre
-#if [ $1 = 1 ]; then
-# First phpMyFAQ install
-#else
+if [ $1 = 1 ] ; then
+    # First phpMyFAQ install
+    # Create an ad hoc phpmyfaq.conf
+    /bin/cat << EOF > %{_sysconfdir}/httpd/conf.d/%{name}.conf
+# phpMyFaq - An open source FAQ system
+Alias /phpmyfaq %{prefix}/%{name}
+Alias /faq      %{prefix}/%{name}
+<Directory "%{prefix}/%{name}">
+    # Permit the use of an .htaccess file and the use of all the Apache directives
+    AllowOverride All
+</Directory>
+EOF
+fi
 if [ $1 -gt 1 ] ; then
-# phpMyFAQ upgrade
+    # phpMyFAQ upgrade
     if [ -L "%{prefix}/%{name}" ] ; then
         # Remove any 'original' template folder
         rm -rf %{prefix}/%{name}/template-*.orig
@@ -166,38 +193,40 @@ fi
 ln -s %{name}-%{version}-%{release} %{prefix}/%{name}
 echo
 if [ $1 = 1 ] ; then
-# First phpMyFAQ install
-# Prompt the user
-echo "phpMyFAQ is installed in: %{prefix}/%{name}-%{version}-%{release}"
-echo "Now you need to complete this installation launching"
-echo "the web interactive install stage:"
-echo
-echo "    http://$HOSTNAME/%{name}/install/installer.php"
-echo
-echo "You'll be asked for a MySQL database and its credentials"
-echo "and some other info."
-echo "Please first create a database in MySQL (or in one of the"
-echo "other supported DB) for phpMyFAQ."
+    # First phpMyFAQ install
+    # Reload Apache for loading phpMyFAQ configuration
+    %{_initrddir}/httpd reload &> /dev/null
+    # Prompt the user
+    echo "phpMyFAQ is installed in: %{prefix}/%{name}-%{version}-%{release}"
+    echo "Now you need to complete this installation launching"
+    echo "the web interactive install stage:"
+    echo
+    echo "    http://$HOSTNAME/%{name}/install/installer.php"
+    echo
+    echo "You'll be asked for a MySQL database and its credentials"
+    echo "and some other info."
+    echo "Please first create a database in MySQL (or in one of the"
+    echo "other supported DB) for phpMyFAQ."
 else
-# phpMyFAQ upgrade
-# Put the previous template folder on-line.
-if [ -d "%{prefix}/%{name}/template.before-%{version}-%{release}" ] ; then
-    mv %{prefix}/%{name}/template %{prefix}/%{name}/template-%{version}-%{release}.orig
-    mv %{prefix}/%{name}/template.before-%{version}-%{release} %{prefix}/%{name}/template
-fi
-# Prompt the user
-echo "phpMyFAQ is upgraded in: %{prefix}/%{name}-%{version}-%{release}"
-echo "Now you need to complete this update launching"
-echo "the web interactive update stage:"
-echo
-echo "    http://$HOSTNAME/%{name}/install/update.php"
-echo
-echo "Please remember to read the 'docs/CHANGEDFILES.txt' to check"
-echo "for modifications into the template folder files."
-echo
-echo "WARNING."
-echo "It would be wise to make a backup of your phpMyFAQ DB"
-echo "before proceeding with the web interactive update stage."
+    # phpMyFAQ upgrade
+    # Put the previous template folder on-line.
+    if [ -d "%{prefix}/%{name}/template.before-%{version}-%{release}" ] ; then
+        mv %{prefix}/%{name}/template %{prefix}/%{name}/template-%{version}-%{release}.orig
+        mv %{prefix}/%{name}/template.before-%{version}-%{release} %{prefix}/%{name}/template
+    fi
+    # Prompt the user
+    echo "phpMyFAQ is upgraded in: %{prefix}/%{name}-%{version}-%{release}"
+    echo "Now you need to complete this update launching"
+    echo "the web interactive update stage:"
+    echo
+    echo "    http://$HOSTNAME/%{name}/install/update.php"
+    echo
+    echo "Please remember to read the 'docs/CHANGEDFILES.txt' to check"
+    echo "for modifications into the template folder files."
+    echo
+    echo "WARNING."
+    echo "It would be wise to make a backup of your phpMyFAQ DB"
+    echo "before proceeding with the web interactive update stage."
 fi
 echo
 
@@ -207,6 +236,12 @@ if [ -d "%{prefix}/%{name}-%{version}-%{release}/template-%{version}-%{release}.
 fi
 if [ $1 = 0 ] ; then
 # Last phpMyFAQ uninstall
+    if [ -f "%{_sysconfdir}/httpd/conf.d/%{name}.conf" ] ; then
+        # Remove phpMyFAQ Apache configuration file
+        rm -f %{_sysconfdir}/httpd/conf.d/%{name}.conf
+        # Reload Apache for removing phpMyFAQ configuration
+        %{_initrddir}/httpd reload &> /dev/null
+    fi
     mv %{prefix}/%{name}-%{version}-%{release}/template %{prefix}/%{name}-%{version}-%{release}/template-%{version}-%{release}.custom
     if [ -L "%{prefix}/%{name}" ] ; then
         rm %{prefix}/%{name} > /dev/null 2>&1
