@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mysql.update.sql.php,v 1.2 2006-07-03 21:25:52 matteo Exp $
+* $Id: mysql.update.sql.php,v 1.3 2006-07-11 13:06:38 matteo Exp $
 *
 * CREATE TABLE instruction for MySQL database
 *
@@ -26,6 +26,30 @@ $query[] = "CREATE TABLE ".SQLPREFIX."faqconfig (
 config_name varchar(255) NOT NULL default '',
 config_value varchar(255) NOT NULL default '',
 PRIMARY KEY (config_name))";
+
+//faqcategory_group
+$query[] = "CREATE TABLE ".$sqltblpre."faqcategory_group (
+category_id INT(11) NOT NULL,
+group_id INT(11) NOT NULL,
+PRIMARY KEY (category_id, group_id))";
+
+//faqcategory_user
+$query[] = "CREATE TABLE ".$sqltblpre."faqcategory_user (
+category_id INT(11) NOT NULL,
+user_id INT(11) NOT NULL,
+PRIMARY KEY (category_id, user_id))";
+
+//faqdata_group
+$query[] = "CREATE TABLE ".$sqltblpre."faqdata_group (
+record_id INT(11) NOT NULL,
+group_id INT(11) NOT NULL,
+PRIMARY KEY (record_id, group_id))";
+
+//faqdata_user
+$query[] = "CREATE TABLE ".$sqltblpre."faqdata_user (
+record_id INT(11) NOT NULL,
+user_id INT(11) NOT NULL,
+PRIMARY KEY (record_id, user_id))";
 
 //faqglossary
 $query[] = "CREATE TABLE ".SQLPREFIX."faqglossary (
