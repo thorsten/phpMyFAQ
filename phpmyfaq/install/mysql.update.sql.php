@@ -1,8 +1,8 @@
 <?php
 /**
-* $Id: mysql.update.sql.php,v 1.4 2006-07-11 17:35:35 matteo Exp $
+* $Id: mysql.update.sql.php,v 1.5 2006-07-11 19:58:42 matteo Exp $
 *
-* CREATE TABLE instruction for MySQL database
+* CREATE TABLE instruction for MySQL database - UPDATE STAGE from 1.x to 2.0.0
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Tom Rochester <tom.rochester@gmail.com>

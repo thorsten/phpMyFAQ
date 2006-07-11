@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.52 2006-07-11 17:35:35 matteo Exp $
+* $Id: update.php,v 1.53 2006-07-11 19:58:42 matteo Exp $
 *
 * Main update script
 *
@@ -616,7 +616,7 @@ if ($step == 5) {
 
     // update from versions before 2.0.0
     if ($version < 200) {
-        // 1/10. Fix faqfragen table
+        // 1/N. Fix faqfragen table
         switch($DB["type"]) {
             case 'pgsql':
                 $query[] = "CREATE TABLE ".SQLPREFIX."faqquestions (
@@ -640,40 +640,50 @@ if ($step == 5) {
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqquestions ADD is_visible CHAR NOT NULL DEFAULT \'Y\' AFTER ask_date';
                 break;
         }
-        // 2/10. Fix faqcategories table
+        // 2/N. Fix faqcategories table
         switch($DB["type"]) {
             default:
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqcategories ADD user_id INT(2) NOT NULL AFTER description';
                 break;
         }
-        // 3/10. Fix faqdata table
+        // 3/N. Fix faqdata table
         switch($DB["type"]) {
             default:
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata ADD linkState VARCHAR(7) NOT NULL AFTER datum';
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata ADD linkCheckDate INT(11) NOT NULL DEFAULT 0 AFTER linkState';
                 break;
         }
-        // 4/10. Fix faqdata_revisions table
+        // 4/N. Fix faqdata_revisions table
         switch($DB["type"]) {
             default:
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata_revisions ADD linkState VARCHAR(7) NOT NULL AFTER datum';
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata_revisions ADD linkCheckDate INT(11) NOT NULL DEFAULT 0 AFTER linkState';
                 break;
         }
-        // 5/10. Rename faquser table for preparing the users migration
+        // 5/N. Fix news table
+        switch($DB["type"]) {
+            default:
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqnews ADD author_name VARCHAR(255) NULL AFTER datum';
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqnews ADD author_email VARCHAR(255) NULL AFTER author_name';
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqnews ADD active CHAR(1) NOT NULL default \'Y\' AFTER author_email';
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqnews ADD date_start VARCHAR(14) NOT NULL DEFAULT \'99991231235959\' AFTER active';
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqnews ADD date_end VARCHAR(14) NOT NULL DEFAULT \'00000000000000\' AFTER date_start';
+                break;
+        }
+        // 6/N. Rename faquser table for preparing the users migration
         switch($DB["type"]) {
             default:
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faquser RENAME TO '.SQLPREFIX.'faquser_PMF16x_old';
                 break;
         }
-        // 6/10. Add the new PMF 2.0.0 tables
+        // 7/N. Add the new/changed PMF 2.0.0 tables
         switch($DB["type"]) {
             // TODO: Add the updates for the other supported DBs
             default:
                 require_once('mysql.update.sql.php');
                 break;
         }
-        // 7/10. Make the user migration and remove the faquser_PMF16x_old table
+        // 8/N. Run the user migration and remove the faquser_PMF16x_old table
         // Populate faquser table
         $now = date("YmdHis", time());
         switch($DB["type"]) {
@@ -730,7 +740,7 @@ if ($step == 5) {
                 $query[] = 'DROP TABLE '.SQLPREFIX.'faquser_PMF16x_old';
                 break;
         }
-        // 8/10. Move each image in each of the faq content, from '/images' to '/images/Image'
+        // 9/N. Move each image in each of the faq content, from '/images' to '/images/Image'
         // TODO: Cycle through the faq content and move each image reference from '/images' to '/images/Image'
     }
 
@@ -759,9 +769,9 @@ if ($step == 5) {
         }
     }
 
-    // 9/10. Move each image in each of the faq content, from '/images' to '/images/Image'
+    // 10/N. Move each image in each of the faq content, from '/images' to '/images/Image'
     // TODO: Cycle through the faq content and move each file image from '/images' to '/images/Image'
-    // 10/10. Move the PMF configurarion: from inc/config.php to the faqconfig table
+    // 11/N. Move the PMF configurarion: from inc/config.php to the faqconfig table
     if ($version < 200) {
         $PMF_CONF['version'] = NEWVERSION;
         $PMF_CONF['permLevel'] = 'basic';

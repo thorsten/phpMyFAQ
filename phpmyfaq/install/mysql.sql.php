@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mysql.sql.php,v 1.27 2006-07-06 19:00:42 thorstenr Exp $
+* $Id: mysql.sql.php,v 1.28 2006-07-11 19:58:42 matteo Exp $
 *
 * CREATE TABLE instruction for MySQL database
 *
@@ -230,6 +230,11 @@ id int(11) NOT NULL,
 header varchar(255) NOT NULL,
 artikel text NOT NULL,
 datum varchar(14) NOT NULL,
+author_name  varchar(255) NULL,
+author_email varchar(255) NULL,
+active char(1) default 'Y',
+date_start varchar(14) NOT NULL DEFAULT '99991231235959',
+date_end varchar(14) NOT NULL DEFAULT '00000000000000',
 link varchar(255) NOT NULL,
 linktitel varchar(255) NOT NULL,
 target varchar(255) NOT NULL,
