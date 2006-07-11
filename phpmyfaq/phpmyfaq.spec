@@ -1,8 +1,8 @@
 #
-# $Id: phpmyfaq.spec,v 1.3 2006-07-09 16:45:02 matteo Exp $
+# $Id: phpmyfaq.spec,v 1.4 2006-07-11 10:29:24 matteo Exp $
 #
 # This is the spec file for building an RPM package of phpMyFAQ
-# for most of the different Red Hat distributions
+# for most of the different RPM-based distributions
 #
 # How to build the RPM package.
 # It depends on your rpm version:
@@ -10,8 +10,12 @@
 # b. (NEW) rpmbuild -ta path/to/phpmyfaq-<VERSION>.full.tar.gz
 #
 # Where do you find the just builded RPM packages?
-# 1. SRPM: /usr/src/redhat/SRPMS/phpmyfaq-1.6.3-<VERSION>-<PACKAGE RELEASE>.src.rpm
-# 2. RPM: /usr/src/redhat/RPMS/noarch/phpmyfaq-<VERSION>-<PACKAGE RELEASE>.noarch.rpm
+# Red Hat:
+# - SRPM: /usr/src/redhat/SRPMS/phpmyfaq-<VERSION>-<PACKAGE RELEASE>.src.rpm
+# - RPM: /usr/src/redhat/RPMS/noarch/phpmyfaq-<VERSION>-<PACKAGE RELEASE>.noarch.rpm
+# SUSE:
+# - SRPM: /usr/src/packages/SRPMS/phpmyfaq-<VERSION>-<PACKAGE RELEASE>.src.rpm
+# - RPM: /usr/src/packages/RPMS/noarch/phpmyfaq-<VERSION>-<PACKAGE RELEASE>.noarch.rpm
 #
 # How this spec file is expected to work.
 # INSTALL.
@@ -54,19 +58,20 @@
 #
 %define name        phpmyfaq
 %define version     2.0.0
-%define release     2
+%define release     3
 %define epoch       0
 
 # User and Group under which Apache is running
 # Red Hat: apache:apache
 %define httpd_user      apache
 %define httpd_group     apache
-# Suse: wwwrun:nogroup
+# SUSE: wwwrun:nogroup
 %if "%{_vendor}" == "suse"
     %define httpd_user  wwwrun
     %define httpd_group nogroup
 %endif
 
+# Red Hat
 # Apache server is packaged under the name of:
 # - apache: up to Red Hat 7.3 and Red Hat Enterprise 2.1
 # - httpd: after these releases above
@@ -103,6 +108,15 @@ BuildRoot:          %{_tmppath}/%{name}-%{version}-buildroot
 BuildArchitectures: noarch
 
 AutoReq:            0
+%if "%{_vendor}" == "suse"
+Requires:           apache2
+Requires:           php4
+Requires:           apache2-mod_php4
+Requires:           php4-gd
+# We do not require MySQL but one among the several DB supported by phpMyFAQ.
+# Here we make the strong assumption that an RPM will mostly be installed on a LAMP server.
+Requires:           mysql
+%else
 %if %{is_apache}
 Requires:           apache
 %else
@@ -111,9 +125,11 @@ Requires:           httpd
 Requires:           php >= 4.3.0
 # GD is bundle into PHP starting from PHP 4.3.0
 Requires:           php-gd
-# We do not require MySQL but one among the several supported DB by phpMyFAQ.
+# We do not require MySQL but one among the several DB supported by phpMyFAQ.
 # Here we make the strong assumption that an RPM will mostly be installed on a LAMP server.
 Requires:           mysql, mysql-server, php-mysql
+%endif
+
 Provides:           %{name}-%{version}
 
 %description
@@ -128,10 +144,13 @@ XML-support, PDF-support, a backup-system and an easy to use
 installation script.
 
 %changelog
+* Tue Jul 11 2006 Matteo Scaramuccia <matteo@scaramuccia.com> - 2.0.0-3
+- More beta support for SUSE.
+
 * Sun Jul 09 2006 Matteo Scaramuccia <matteo@scaramuccia.com> - 2.0.0-2
 - Move the deployment folder from '/var/www/html' to '/var/www'
 - Add phpmyfaq.conf, the Apache configuration file for phpMyFAQ
-- Add beta support for Suse.
+- Add beta support for SUSE.
 
 * Sat Jul 08 2006 Matteo Scaramuccia <matteo@scaramuccia.com> - 2.0.0-1
 - First spec release.
