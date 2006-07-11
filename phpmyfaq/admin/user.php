@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: user.php,v 1.22 2006-06-15 22:06:17 matteo Exp $
+* $Id: user.php,v 1.23 2006-07-11 19:06:57 matteo Exp $
 *
 * Displays the user managment frontend
 *
@@ -207,8 +207,8 @@ if ($userAction == 'addsave') {
     $user_email = isset($_POST['user_email']) ? $_POST['user_email'] : '';
     $user_password = isset($_POST['user_password']) ? $_POST['user_password'] : '';
     $user_password_confirm = isset($_POST['user_password_confirm']) ? $_POST['user_password_confirm'] : '';
-    // check password
-    if ($user_password == "") {
+    // check e-mail. TODO: MAIL ADRESS VALIDATOR
+    if ($user_email == "") {
         $user_password = "";
         $user_password_confirm = "";
         $messages[] = $errorMessages['addUser_password'];
@@ -218,8 +218,8 @@ if ($userAction == 'addsave') {
         $user_password_confirm = "";
         $messages[] = $errorMessages['addUser_passwordsDontMatch'];
     }
-    // check e-mail. TO DO: MAIL ADRESS VALIDATOR
-    if ($user_email == "") {
+    // check e-mail.
+    if (checkEmail($user_email)) {
         $user_email = "";
         $messages[] = $errorMessages['addUser_noEmail'];
     }
@@ -534,10 +534,12 @@ getUserList();
         <fieldset>
             <legend><?php print $text['selectUser']; ?></legend>
             <form name="user_select" id="user_select" action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=user&amp;user_action=delete_confirm" method="post">
-                <select class="admin" name="user_list_select" id="user_list_select" onchange="userSelect(event)" size="<?php print $selectSize; ?>" tabindex="1">
+                <select name="user_list_select" id="user_list_select" onchange="userSelect(event)" size="<?php print $selectSize; ?>" tabindex="1">
                     <option value="">select...</option>
                 </select>
-                <input class="submit" type="submit" value="<?php print $text['delUser_button']; ?>" tabindex="2" />
+                <div class="button_row">
+                    <input class="submit" type="submit" value="<?php print $text['delUser_button']; ?>" tabindex="2" />
+                </div>
             </form>
         </fieldset>
         <p>[ <a href="<?php print $_SERVER['PHP_SELF']; ?>?aktion=user&amp;user_action=add"><?php print $text['addUser_link']; ?></a> ]</p>
@@ -551,7 +553,7 @@ getUserList();
                 <input id="update_user_id" type="hidden" name="user_id" value="0" />
                 <div class="input_row">
                     <label for="user_status_select"><?php print $text['changeUser_status']; ?></label>
-                    <select class="admin" id="user_status_select" name="user_status" >
+                    <select id="user_status_select" name="user_status" >
                         <option value="active">active</option>
                         <option value="blocked">blocked</option>
                         <option value="protected">protected</option>

@@ -1,5 +1,5 @@
 /**
- * $Id: admin.css,v 1.16 2006-07-02 18:59:10 matteo Exp $
+ * $Id: admin.css,v 1.17 2006-07-11 19:06:57 matteo Exp $
  *
  * This is the CSS file for the admin section of phpMyFAQ 1.5.x
  * You don't need to change enything here but feel free to do it. :-)
@@ -368,19 +368,20 @@ table.linkconfig#configuration tr#lastrow td {
     height: 1px;
 }
 
-/* ##### User administration 1.6 ##### */
+/* ##### User administration 2.0 ##### */
 
 /* admin form */
 div.input_row {
     margin-bottom: 10px;
 }
 div.input_row label {
-    width: 35%;
+    width: 40%;
     display: block;
     float: left;
     text-align: left;
 }
 div.input_row input, div.input_row select {
+    width: 55%;
     background: White;
     border: 1px solid black;
 }
@@ -416,18 +417,18 @@ div.button_row input.reset {
 }
 /* create user form container */
 #user_create {
-    width: 300px;
+    width: 450px;
 }
 /* container for #user_list */
 #user_accounts {
     float: left;
-    width: 250px;
+    width: 200px;
 }
 #user_list {}
 /* container for #user_data and #user_rights */
 #user_details {
     float: right;
-    width: 250px;
+    width: 350px;
     margin: 0;
     padding: 0;
 }
