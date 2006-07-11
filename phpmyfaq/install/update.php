@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.51 2006-07-04 21:41:35 matteo Exp $
+* $Id: update.php,v 1.52 2006-07-11 17:35:35 matteo Exp $
 *
 * Main update script
 *
@@ -159,9 +159,6 @@ if ($step == 1) {
 <p class="center">
     <strong>Attention! This version might be broken and it's under heavy development</strong>
 </p>
-<p class="center">
-    <strong>Attention! Currently no user migration is performed.<br />Please use a fresh installation instead of updating.</strong>
-</p>
 
 <p class="center"><input type="submit" value="Go to step 2 of 5" class="button" /></p>
 </fieldset>
@@ -276,10 +273,18 @@ if ($step == 3) {
         $PMF_CONF['parse_php'] = isset($PMF_CONF['parse_php']) ? $PMF_CONF['parse_php'] : '';
         $PMF_CONF['mod_rewrite'] = isset($PMF_CONF['mod_rewrite']) ? $PMF_CONF['mod_rewrite'] : '';
         $PMF_CONF['ldap_support'] = isset($PMF_CONF['ldap_support']) ? $PMF_CONF['ldap_support'] : '';
+        $PMF_CONF['disatt'] = isset($PMF_CONF['disatt']) ? $PMF_CONF['disatt'] : '';
+        $PMF_CONF['ipcheck'] = isset($PMF_CONF['ipcheck']) ? $PMF_CONF['ipcheck'] : '';
         // Version 1.6.1
-        $PMF_CONF['spamEnableSafeEmail'] = isset($PMF_CONF['spamEnableSafeEmail']) ? $PMF_CONF['spamEnableSafeEmail'] : 'TRUE';
-        $PMF_CONF['spamCheckBannedWords'] = isset($PMF_CONF['spamCheckBannedWords']) ? $PMF_CONF['spamCheckBannedWords'] : 'TRUE';
-        $PMF_CONF['spamEnableCatpchaCode'] = isset($PMF_CONF['spamEnableCatpchaCode']) ? $PMF_CONF['spamEnableCatpchaCode'] : 'TRUE';
+        if ($version < 161) {
+            $PMF_CONF['spamEnableSafeEmail'] = isset($PMF_CONF['spamEnableSafeEmail']) ? $PMF_CONF['spamEnableSafeEmail'] : 'TRUE';
+            $PMF_CONF['spamCheckBannedWords'] = isset($PMF_CONF['spamCheckBannedWords']) ? $PMF_CONF['spamCheckBannedWords'] : 'TRUE';
+            $PMF_CONF['spamEnableCatpchaCode'] = isset($PMF_CONF['spamEnableCatpchaCode']) ? $PMF_CONF['spamEnableCatpchaCode'] : 'TRUE';
+        } else {
+            $PMF_CONF['spamEnableSafeEmail'] = isset($PMF_CONF['spamEnableSafeEmail']) ? $PMF_CONF['spamEnableSafeEmail'] : '';
+            $PMF_CONF['spamCheckBannedWords'] = isset($PMF_CONF['spamCheckBannedWords']) ? $PMF_CONF['spamCheckBannedWords'] : '';
+            $PMF_CONF['spamEnableCatpchaCode'] = isset($PMF_CONF['spamEnableCatpchaCode']) ? $PMF_CONF['spamEnableCatpchaCode'] : '';
+        }
 ?>
 <input type="hidden" name="edit[language]" value="<?php print $PMF_CONF["language"]; ?>" />
 <input type="hidden" name="edit[detection]" value="<?php print $PMF_CONF["detection"]; ?>" />
@@ -324,6 +329,14 @@ if ($step == 4) {
 <fieldset class="installation">
 <legend class="installation"><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 4 of 5)</strong></legend>
 <?php
+    $version = str_replace(".", "", $_REQUEST["version"]);
+    if (4 == strlen($version)) {
+        $version = 149;
+    }
+    
+    if ($version < 200) {
+        require_once(PMF_ROOT_DIR."/inc/config.php");
+    }
     require_once(PMF_ROOT_DIR."/lang/language_en.php");
 
     if (isset($_REQUEST["db"])) {
@@ -342,7 +355,7 @@ if ($step == 4) {
     if ($fp = @fopen(PMF_ROOT_DIR."/inc/config.php", "w")) {
         @fputs($fp, "<?php \n# Created ".date("Y-m-d H:i:s")."\n\n");
         foreach ($arrVar as $key => $value) {
-            fputs($fp, "// ".$LANG_CONF[$key][1]."\n\$PMF_CONF[\"".$key."\"] = \"".htmlspecialchars(stripslashes($value))."\";\n\n");
+            fputs($fp, "\$PMF_CONF[\"".$key."\"] = \"".htmlspecialchars(stripslashes($value))."\";\n\n");
         }
         @fputs($fp, "?>");
         @fclose($fp);
@@ -357,19 +370,22 @@ if ($step == 4) {
 <?php
 }
 
-/**************************** STEP 4 OF 5 ***************************/
+/**************************** STEP 5 OF 5 ***************************/
 if ($step == 5) {
+    $version = str_replace(".", "", $_REQUEST["version"]);
+    if (4 == strlen($version)) {
+        $version = 149;
+    }
+
+    if ($version < 200) {
+        require_once(PMF_ROOT_DIR."/inc/config.php");
+    }
     require_once(PMF_ROOT_DIR."/inc/functions.php");
     require_once(PMF_ROOT_DIR."/inc/Configuration.php");
     require_once(PMF_ROOT_DIR."/inc/Db.php");
     define("SQLPREFIX", $DB["prefix"]);
     $db = PMF_Db::db_select($DB["type"]);
     $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
-
-    $version = str_replace(".", "", $_REQUEST["version"]);
-    if (4 == strlen($version)) {
-        $version = 149;
-    }
 
     // update from version 1.4.0
     if ($version <= "140") {
@@ -600,70 +616,122 @@ if ($step == 5) {
 
     // update from versions before 2.0.0
     if ($version < 200) {
-        // 1/N. Fix faqfragen table -> faqquestions
+        // 1/10. Fix faqfragen table
         switch($DB["type"]) {
+            case 'pgsql':
+                $query[] = "CREATE TABLE ".SQLPREFIX."faqquestions (
+                            id SERIAL NOT NULL,
+                            ask_username varchar(100) NOT NULL,
+                            ask_usermail varchar(100) NOT NULL,
+                            ask_rubrik varchar(100) NOT NULL,
+                            ask_content text NOT NULL,
+                            ask_date varchar(20) NOT NULL,
+                            is_visible char(1) default 'Y',
+                            PRIMARY KEY (id))";
+                // Copy data from the faqfragen table
+                $query[] = 'INSERT INTO '.SQLPREFIX.'faqquestions_new
+                            (id, ask_username, ask_usermail, ask_rubrik, ask_content, ask_date)
+                            SELECT id, ask_username, ask_usermail, ask_rubrik, ask_content, ask_date
+                            FROM '.SQLPREFIX.'faqfragen';
+                // Drop the faqfragen table
+                $query[] = 'DROP TABLE '.SQLPREFIX.'faqfragen';
             default:
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqfragen RENAME TO '.SQLPREFIX.'faqquestions';
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqquestions ADD is_visible CHAR NOT NULL DEFAULT \'Y\' AFTER ask_date';
                 break;
         }
-        // 2/N. Fix faqcategories table
+        // 2/10. Fix faqcategories table
         switch($DB["type"]) {
             default:
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqcategories ADD user_id INT(2) NOT NULL AFTER description';
                 break;
         }
-        // 3/N. Fix faqdata table
+        // 3/10. Fix faqdata table
         switch($DB["type"]) {
             default:
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata ADD linkState VARCHAR(7) NOT NULL AFTER datum';
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata ADD linkCheckDate INT(11) NOT NULL DEFAULT 0 AFTER linkState';
                 break;
         }
-        // 4/N. Fix faqdata_revisions table
+        // 4/10. Fix faqdata_revisions table
         switch($DB["type"]) {
             default:
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata_revisions ADD linkState VARCHAR(7) NOT NULL AFTER datum';
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata_revisions ADD linkCheckDate INT(11) NOT NULL DEFAULT 0 AFTER linkState';
                 break;
         }
-        // 5/N. Rename faquser table for preparing the users migration
+        // 5/10. Rename faquser table for preparing the users migration
         switch($DB["type"]) {
             default:
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faquser RENAME TO '.SQLPREFIX.'faquser_PMF16x_old';
                 break;
         }
-        // 6/N. Add the new PMF 2.0.0 tables
+        // 6/10. Add the new PMF 2.0.0 tables
         switch($DB["type"]) {
             // TODO: Add the updates for the other supported DBs
             default:
                 require_once('mysql.update.sql.php');
                 break;
         }
-        // 7/N. Move the PMF configurarion: from inc/config.php to the faqconfig table
-        $PMF_CONF['permLevel'] = 'basic';
-        $PMF_CONF['enablevisibility'] = 'Y';
-        $PMF_CONF['referenceURL'] = str_replace('/install/update.php', '', $_SERVER['PHP_SELF']);
-        $PMF_CONF['URLValidateInterval'] = '86400';
-        $PMF_CONF['send2friendText'] = $PMF_CONF['send2friend_text'];
-        unset($PMF_CONF['send2friend_text']);
-        unset($PMF_CONF['copyright_eintrag']);
-        foreach ($PMF_CONF as $key => $value) {
-            if ('TRUE' == $value) {
-                $PMF_CONF[$key] = 'true';
-            }
-            // TODO: fill the empty values with 'false' if the key is related to a checkbox
+        // 7/10. Make the user migration and remove the faquser_PMF16x_old table
+        // Populate faquser table
+        $now = date("YmdHis", time());
+        switch($DB["type"]) {
+            default:
+                // Copy all the users
+                $query[] = 'INSERT INTO '.SQLPREFIX.'faquser
+                            (user_id, login, account_status, auth_source)
+                            SELECT id, name, \'active\', \'local\'
+                            FROM '.SQLPREFIX.'faquser_PMF16x_old';
+                // Grant the 'admin' user the 'protected' status
+                $query[] = 'UPDATE '.SQLPREFIX.'faquser
+                            SET account_status = \'protected\'
+                            WHERE login = \'admin\'';
+                $query[] = 'UPDATE '.SQLPREFIX.'faquser
+                            SET session_timestamp = 0';
+                $query[] = 'UPDATE '.SQLPREFIX.'faquser
+                            SET ip = \'127.0.0.1\'';
+                // TODO: fix last_login and member_since fields using the adminlog table
+                // Populate faquserdata table
+                $query[] = 'INSERT INTO '.SQLPREFIX.'faquserdata
+                            (user_id, display_name, email)
+                            SELECT id, realname, email
+                            FROM '.SQLPREFIX.'faquser_PMF16x_old';
+                $query[] = 'UPDATE '.SQLPREFIX.'faquserdata
+                            SET last_modified = '.$now;
+                // Populate faquserlogin table
+                $query[] = 'INSERT INTO '.SQLPREFIX.'faquserlogin
+                            (login, pass)
+                            SELECT name, pass
+                            FROM '.SQLPREFIX.'faquser_PMF16x_old';
+                // Populate faquser_right table
+                $_records = array();
+                // Read the data from the current faquser table (PMF 1.6.x)
+                $_result = $db->query('SELECT id, rights FROM '.SQLPREFIX.'faquser ORDER BY id');
+                while ($row = $db->fetch_object($_result)) {
+                    $_records[] = array('id' => $row->id, 'rights' => $row->rights);
+                }
+                foreach ($_records as $_r) {
+                    // PMF 1.6.x: # 23 rights
+                    // PMF 2.0.0: # 26 rights
+                    // addglossary, editglossary, delglossary: 23-25; id = '1' is supposed to be the 'admin' user
+                    $glossaryRights = ('1' == $_r['id']) ? '111' : '000';
+                    // changebtrevs is the 26th right in PMF 2.0.0, whilst it is the 23rd in PMF 1.6.x
+                    $userStringRights = substr($_r['rights'], 0, 22).$glossaryRights.substr($_r['rights'], 22, 1);
+                    for ($i = 0; $i < 26; $i++) {
+                        if ('1' == substr($userStringRights, $i, 1)) {
+                            $query[] = 'INSERT INTO '.SQLPREFIX.'faquser_right
+                                        (user_id, right_id)
+                                        VALUES ('.$_r['id'].','.($i+1).')';
+                        }
+                    }
+                }
+                // Remove the old faquser table
+                $query[] = 'DROP TABLE '.SQLPREFIX.'faquser_PMF16x_old';
+                break;
         }
-        $oPMFConf = new PMF_Configuration($db);
-        $oPMFConf->update($PMF_CONF);
-        // 8/N. Make the user migration and remove the faquser_PMF16x_old table
-        //      $query[] = 'DROP TABLE '.SQLPREFIX.'faquser_PMF16x_old';
-
-        // 9/N. Move each image in each of the faq content, from '/images' to '/images/Image'
-        // TODO: Cycle through the faq content and move each image from '/images' to '/images/Image'
-        
-        // TODO: Add/Finalize the complex update stage from PMF 2.x-
-        //...
+        // 8/10. Move each image in each of the faq content, from '/images' to '/images/Image'
+        // TODO: Cycle through the faq content and move each image reference from '/images' to '/images/Image'
     }
 
     // optimize tables
@@ -676,6 +744,7 @@ if ($step == 5) {
     }
 
     print '<p class="center">';
+    // Perform the queries for updating/migrating the database
     if (isset($query)) {
         while ($each_query = each($query)) {
             $result = $db->query($each_query[1]);
@@ -689,11 +758,36 @@ if ($step == 5) {
             wait(25);
         }
     }
+
+    // 9/10. Move each image in each of the faq content, from '/images' to '/images/Image'
+    // TODO: Cycle through the faq content and move each file image from '/images' to '/images/Image'
+    // 10/10. Move the PMF configurarion: from inc/config.php to the faqconfig table
+    if ($version < 200) {
+        $PMF_CONF['version'] = NEWVERSION;
+        $PMF_CONF['permLevel'] = 'basic';
+        $PMF_CONF['enablevisibility'] = 'Y';
+        $PMF_CONF['referenceURL'] = str_replace('/install/update.php', '', $_SERVER['PHP_SELF']);
+        $PMF_CONF['URLValidateInterval'] = '86400';
+        $PMF_CONF['send2friendText'] = $PMF_CONF['send2friend_text'];
+        unset($PMF_CONF['send2friend_text']);
+        unset($PMF_CONF['copyright_eintrag']);
+        foreach ($PMF_CONF as $key => $value) {
+            $PMF_CONF[$key] = html_entity_decode($value);
+            if ('TRUE' == $value) {
+                $PMF_CONF[$key] = 'true';
+            }
+            // TODO: fill the empty values with 'false' if the key is related to a checkbox
+        }
+        $oPMFConf = new PMF_Configuration($db);
+        $oPMFConf->update($PMF_CONF);
+    }
+
     print "</p>\n";
+
     print '<p class="center">The database was updated successfully.</p>';
     print '<p class="center"><a href="../index.php">phpMyFAQ</a></p>';
     print '<p class="center">Please remove the backup (*.php.bak and *.bak.php) files located in the directory inc/.</p>';
-
+    
     if ($version < 200) {
         // 10/N. Remove the old config file
         if (@unlink(PMF_ROOT_DIR."/inc/config.php")) {
@@ -701,7 +795,13 @@ if ($step == 5) {
         } else {
             print "<p class=\"center\">Please delete the file 'inc/config.php' manually.</p>\n";
         }
+        if (@unlink(PMF_ROOT_DIR."/inc/config.php.original")) {
+            print "<p class=\"center\">The file 'inc/config.php.original' was deleted automatically.</p>\n";
+        } else {
+            print "<p class=\"center\">Please delete the file 'inc/config.php.original' manually.</p>\n";
+        }
     }
+    
     if (@unlink(basename($_SERVER["PHP_SELF"]))) {
         print "<p class=\"center\">This file was deleted automatically.</p>\n";
     } else {
@@ -712,6 +812,7 @@ if ($step == 5) {
     } else {
         print "<p class=\"center\">Please delete the file 'installer.php' manually.</p>\n";
     }
+
 }
 ?>
 <p class="center"><?php print COPYRIGHT; ?></p>

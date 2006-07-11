@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.55 2006-07-04 22:45:27 matteo Exp $
+* $Id: installer.php,v 1.56 2006-07-11 17:35:35 matteo Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -877,7 +877,6 @@ foreach ($permLevels as $level) {
             'for_users' => 1,
             'for_groups' => 1
         ),
-        // FIXME: 26 or, according with PMF_1_6, 23?
         //26 => 'changebtrevs'
         array(
             'name' => 'changebtrevs',

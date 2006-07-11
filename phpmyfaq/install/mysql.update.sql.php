@@ -1,12 +1,13 @@
 <?php
 /**
-* $Id: mysql.update.sql.php,v 1.3 2006-07-11 13:06:38 matteo Exp $
+* $Id: mysql.update.sql.php,v 1.4 2006-07-11 17:35:35 matteo Exp $
 *
 * CREATE TABLE instruction for MySQL database
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Tom Rochester <tom.rochester@gmail.com>
 * @author       Lars Tiedemann <php@larstiedemann.de>
+* @author       Matteo Scaramuccia <matteo@scaramuccia.com>
 * @since        2006-07-03
 * @copyright    (c) 2001-2006 phpMyFAQ Team
 *
@@ -21,6 +22,10 @@
 * under the License.
 */
 
+//
+// TABLES
+//
+
 //faqconfig
 $query[] = "CREATE TABLE ".SQLPREFIX."faqconfig (
 config_name varchar(255) NOT NULL default '',
@@ -28,25 +33,25 @@ config_value varchar(255) NOT NULL default '',
 PRIMARY KEY (config_name))";
 
 //faqcategory_group
-$query[] = "CREATE TABLE ".$sqltblpre."faqcategory_group (
+$query[] = "CREATE TABLE ".SQLPREFIX."faqcategory_group (
 category_id INT(11) NOT NULL,
 group_id INT(11) NOT NULL,
 PRIMARY KEY (category_id, group_id))";
 
 //faqcategory_user
-$query[] = "CREATE TABLE ".$sqltblpre."faqcategory_user (
+$query[] = "CREATE TABLE ".SQLPREFIX."faqcategory_user (
 category_id INT(11) NOT NULL,
 user_id INT(11) NOT NULL,
 PRIMARY KEY (category_id, user_id))";
 
 //faqdata_group
-$query[] = "CREATE TABLE ".$sqltblpre."faqdata_group (
+$query[] = "CREATE TABLE ".SQLPREFIX."faqdata_group (
 record_id INT(11) NOT NULL,
 group_id INT(11) NOT NULL,
 PRIMARY KEY (record_id, group_id))";
 
 //faqdata_user
-$query[] = "CREATE TABLE ".$sqltblpre."faqdata_user (
+$query[] = "CREATE TABLE ".SQLPREFIX."faqdata_user (
 record_id INT(11) NOT NULL,
 user_id INT(11) NOT NULL,
 PRIMARY KEY (record_id, user_id))";
@@ -144,3 +149,61 @@ user_id INT(11) UNSIGNED NOT NULL,
 right_id INT(11) UNSIGNED NOT NULL,
 PRIMARY KEY(user_id, right_id)
 )";
+
+
+//
+// DATA
+//
+
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('adminmail', 'webmaster@example.org')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('attmax', '100000')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('bannedIP', '')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('detection', 'true')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('disatt', 'true')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('enableadminlog', 'true')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('enablevisibility', '')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('ipcheck', '')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('language', 'language_en.php')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('ldap_support', '')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('metaDescription', 'phpMyFAQ should be the answer for all questions in life')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('metaKeywords', '')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('metaPublisher', 'John Doe')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('mod_rewrite', '')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('msgContactOwnText', '')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('numNewsArticles', '3')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('numRecordsPage', '10')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('parse_php', '')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('permlevel', 'basic')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('referenceURL', '')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('send2friendText', '')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('title', 'phpMyFAQ Codename \"Prometheus\"')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('tracking', 'true')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('URLValidateInterval', '86400')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('version', '2.0.0 alpha0')";
+
+$query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (1, 'adduser', 'Right to add user accounts', 1, 1)";
+$query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (2, 'edituser', 'Right to edit user accounts', 1, 1)";
+$query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (3, 'deluser', 'Right to delete user accounts', 1, 1)";
+$query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (4, 'addbt', 'Right to add faq entries', 1, 1)";
+$query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (5, 'editbt', 'Right to edit faq entries', 1, 1)";
+$query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (6, 'delbt', 'Right to delete faq entries', 1, 1)";
+$query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (7, 'viewlog', 'Right to view logfiles', 1, 1)";
+$query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (8, 'adminlog', 'Right to view admin log', 1, 1)";
+$query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (9, 'delcomment', 'Right to delete comments', 1, 1)";
+$query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (10, 'addnews', 'Right to add news', 1, 1)";
+$query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (11, 'editnews', 'Right to edit news', 1, 1)";
+$query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (12, 'delnews', 'Right to delete news', 1, 1)";
+$query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (13, 'addcateg', 'Right to add categories', 1, 1)";
+$query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (14, 'editcateg', 'Right to edit categories', 1, 1)";
+$query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (15, 'delcateg', 'Right to delete categories', 1, 1)";
+$query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (16, 'passwd', 'Right to change passwords', 1, 1)";
+$query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (17, 'editconfig', 'Right to edit configuration', 1, 1)";
+$query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (18, 'addatt', 'Right to add attachments', 1, 1)";
+$query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (19, 'delatt', 'Right to delete attachments', 1, 1)";
+$query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (20, 'backup', 'Right to save backups', 1, 1)";
+$query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (21, 'restore', 'Right to load backups', 1, 1)";
+$query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (22, 'delquestion', 'Right to delete questions', 1, 1)";
+$query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (23, 'addglossary', 'Right to add glossary entries', 1, 1)";
+$query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (24, 'editglossary', 'Right to edit glossary entries', 1, 1)";
+$query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (25, 'delglossary', 'Right to delete glossary entries', 1, 1)";
+$query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (26, 'changebtrevs', 'Edit revisions', 1, 1)";
