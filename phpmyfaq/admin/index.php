@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.54 2006-07-02 14:07:34 matteo Exp $
+* $Id: index.php,v 1.55 2006-07-11 17:22:24 matteo Exp $
 *
 * The main admin backend index file
 *
@@ -36,12 +36,14 @@ require_once(PMF_ROOT_DIR."/inc/PMF_User/CurrentUser.php");
 // get language (default: english)
 $pmf = new PMF_Init();
 $LANGCODE = $pmf->setLanguage((isset($PMF_CONF['detection']) ? true : false), $PMF_CONF['language']);
+// Preload English strings
+require_once ('../lang/language_en.php');
 
-if (isset($LANGCODE) && isset($languageCodes[strtoupper($LANGCODE)])) {
-    require_once("../lang/language_".$LANGCODE.".php");
+if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE)) {
+    // Overwrite English strings with the ones we have in the current language
+    require_once('../lang/language_'.$LANGCODE.'.php');
 } else {
-    $LANGCODE = "en";
-    require_once ("../lang/language_en.php");
+    $LANGCODE = 'en';
 }
 
 //
