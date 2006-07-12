@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mysql.update.sql.php,v 1.5 2006-07-11 19:58:42 matteo Exp $
+* $Id: mysql.update.sql.php,v 1.6 2006-07-12 08:19:03 matteo Exp $
 *
 * CREATE TABLE instruction for MySQL database - UPDATE STAGE from 1.x to 2.0.0
 *
@@ -157,29 +157,32 @@ PRIMARY KEY(user_id, right_id)
 
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('adminmail', 'webmaster@example.org')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('attmax', '100000')";
-$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('bannedIP', '')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('bannedIP', 'false')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('detection', 'true')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('disatt', 'true')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('enableadminlog', 'true')";
-$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('enablevisibility', '')";
-$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('ipcheck', '')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('enablevisibility', 'false')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('ipcheck', 'false')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('language', 'language_en.php')";
-$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('ldap_support', '')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('ldap_support', 'false')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('metaDescription', 'phpMyFAQ should be the answer for all questions in life')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('metaKeywords', '')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('metaPublisher', 'John Doe')";
-$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('mod_rewrite', '')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('mod_rewrite', 'false')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('msgContactOwnText', '')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('numNewsArticles', '3')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('numRecordsPage', '10')";
-$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('parse_php', '')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('parse_php', 'false')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('permlevel', 'basic')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('referenceURL', '')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('send2friendText', '')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('spamCheckBannedWords', 'true')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('spamEnableCatpchaCode', 'true')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('spamEnableSafeEmail', 'true')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('title', 'phpMyFAQ Codename \"Prometheus\"')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('tracking', 'true')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('URLValidateInterval', '86400')";
-$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('version', '2.0.0 alpha0')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('version', '2.0.0')";
 
 $query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (1, 'adduser', 'Right to add user accounts', 1, 1)";
 $query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (2, 'edituser', 'Right to edit user accounts', 1, 1)";

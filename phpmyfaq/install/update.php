@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.53 2006-07-11 19:58:42 matteo Exp $
+* $Id: update.php,v 1.54 2006-07-12 08:19:03 matteo Exp $
 *
 * Main update script
 *
@@ -21,7 +21,7 @@
 * under the License.
 */
 
-define('NEWVERSION', '2.0.0-alpha0');
+define('NEWVERSION', '2.0.0.alpha0');
 define('COPYRIGHT', '&copy; 2001-2006 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
@@ -157,7 +157,10 @@ if ($step == 1) {
 </select>
 
 <p class="center">
-    <strong>Attention! This version might be broken and it's under heavy development</strong>
+    <strong>Attention! This version might be broken and it's under heavy development.</strong>
+</p>
+<p class="center">
+    <strong>Attention! The update stage is supposed to work only starting from phpMyFAQ 1.6.x (or previous versions): no update stage, even if necessary, is supported if you are starting from a 2.0.0 alpha/beta version, unless it is explicitly listed into the dropdown above.</strong>
 </p>
 
 <p class="center"><input type="submit" value="Go to step 2 of 5" class="button" /></p>
@@ -786,7 +789,6 @@ if ($step == 5) {
             if ('TRUE' == $value) {
                 $PMF_CONF[$key] = 'true';
             }
-            // TODO: fill the empty values with 'false' if the key is related to a checkbox
         }
         $oPMFConf = new PMF_Configuration($db);
         $oPMFConf->update($PMF_CONF);

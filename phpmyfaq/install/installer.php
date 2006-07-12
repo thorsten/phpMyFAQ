@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.56 2006-07-11 17:35:35 matteo Exp $
+* $Id: installer.php,v 1.57 2006-07-12 08:19:03 matteo Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -26,7 +26,7 @@
 * under the License.
 */
 
-define('VERSION', '2.0.0-dev');
+define('VERSION', '2.0.0.alpha0');
 define('COPYRIGHT', '&copy; 2001-2006 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('SAFEMODE', @ini_get('safe_mode'));
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));

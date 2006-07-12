@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: config.sql.php,v 1.3 2006-07-02 16:12:30 matteo Exp $
+* $Id: config.sql.php,v 1.4 2006-07-12 08:19:03 matteo Exp $
 *
 * INSERT instruction for configuration
 *
@@ -30,20 +30,20 @@ $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('ipcheck', 'false')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('language', '".$language."')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('ldap_support', 'false')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('metaDescription', 'phpMyFAQ should be the answer for all questions in life')";
-$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('metaKeywords', 'false')";
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('metaKeywords', '')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('metaPublisher', 'John Doe')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('mod_rewrite', 'false')";
-$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('msgContactOwnText', 'false')";
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('msgContactOwnText', '')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('numNewsArticles', '3')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('numRecordsPage', '10')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('parse_php', 'false')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('permLevel', '".$permLevel."')";
-$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('referenceURL', 'false')";
-$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('send2friendText', 'false')";
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('referenceURL', '')";
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('send2friendText', '')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('spamCheckBannedWords', 'true')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('spamEnableCatpchaCode', 'true')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('spamEnableSafeEmail', 'true')";
-$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('title', 'phpMyFAQ Codename Prometheus')";
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('title', 'phpMyFAQ Codename \"Prometheus\"')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('tracking', 'true')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('URLValidateInterval', '86400')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('version', '".VERSION."')";
