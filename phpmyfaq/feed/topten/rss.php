@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: rss.php,v 1.14 2006-07-12 14:39:03 matteo Exp $
+* $Id: rss.php,v 1.15 2006-07-12 14:48:30 matteo Exp $
 *
 * The RSS feed with the top ten
 *
@@ -19,15 +19,6 @@
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
 * under the License.
-*/
-
-// TODO: Add the 'cat' and 'lang' HTTP GET parameters features
-/*
-if (isset($_GET['cat']) && is_numeric($_GET['cat']) && ($_GET['cat'] != 0)) {
-}
-
-if (isset($_GET['lang']) && PMF_Init::isASupportedLanguage($_GET['lang'])) {
-}
 */
 
 define('PMF_ROOT_DIR', dirname(dirname(dirname(__FILE__))));
@@ -51,8 +42,17 @@ if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE)) {
     $LANGCODE = 'en';
 }
 
+$cat = null;
+$lang = null;
+if (isset($_GET['cat']) && is_numeric($_GET['cat']) && ($_GET['cat'] != 0)) {
+    $cat = $_GET['cat'];
+}
+if (isset($_GET['lang']) && PMF_Init::isASupportedLanguage($_GET['lang'])) {
+    $lang = $_GET['lang'];
+}
+
 $faq = new PMF_Faq($db, $LANGCODE);
-$rssData = $faq->getTopTenData();
+$rssData = $faq->getTopTenData(PMF_NUMBER_RECORDS_TOPTEN, $cat, $lang);
 $num = count($rssData);
 
 $rss =
