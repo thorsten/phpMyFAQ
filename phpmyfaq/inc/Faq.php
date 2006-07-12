@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.32 2006-07-02 12:02:59 thorstenr Exp $
+* $Id: Faq.php,v 1.33 2006-07-12 14:39:03 matteo Exp $
 *
 * The main FAQ class
 *
@@ -868,7 +868,8 @@ class PMF_Faq
                 '.SQLPREFIX.'faqdata.thema AS thema,
                 '.SQLPREFIX.'faqdata.datum AS datum,
                 '.SQLPREFIX.'faqcategoryrelations.category_id AS category_id,
-                '.SQLPREFIX.'faqvisits.visits AS visits
+                '.SQLPREFIX.'faqvisits.visits AS visits,
+                '.SQLPREFIX.'faqvisits.last_visit AS last_visit
             FROM
                 '.SQLPREFIX.'faqvisits,
                 '.SQLPREFIX.'faqdata
@@ -909,6 +910,7 @@ class PMF_Faq
                 $data['visits'] = $row->visits;
                 $data['thema'] = $row->thema;
                 $data['date'] = $row->datum;
+                $data['last_visit'] = $row->last_visit;
 
                 $title = PMF_htmlentities($row->thema, ENT_NOQUOTES, $this->pmf_lang['metaCharset']);
                 $url   = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',

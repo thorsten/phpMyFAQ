@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: rss.php,v 1.15 2006-06-26 21:41:59 matteo Exp $
+* $Id: rss.php,v 1.16 2006-07-12 14:39:03 matteo Exp $
 *
 * The RSS feed with the latest five records
 *
@@ -48,27 +48,36 @@ $num = count($rssData);
 $rss =
     "<?xml version=\"1.0\" encoding=\"".$PMF_LANG["metaCharset"]."\" standalone=\"yes\" ?>\n" .
     "<rss version=\"2.0\">\n<channel>\n" .
-    "<title>".$PMF_CONF["title"]."</title>\n" .
-    "<description>".$PMF_CONF["metaDescription"]."</description>\n" .
+    "<title>".htmlspecialchars($PMF_CONF['title'])." - ".htmlspecialchars($PMF_LANG['msgLatestArticles'])."</title>\n" .
+    "<description>".htmlspecialchars($PMF_CONF['metaDescription'])."</description>\n" .
     "<link>".PMF_Link::getSystemUri('/feed/latest/rss.php')."</link>";
 
 if ($num > 0) {
-    foreach ($rssData as $rssItem) {
+    foreach ($rssData as $item) {
+        // Get the url
+        $link = str_replace($_SERVER['PHP_SELF'], '/index.php', $item['url']);
+        if (PMF_RSS_USE_SEO) {
+            if (isset($item['thema'])) {
+                $oL = new PMF_Link($link);
+                $oL->itemTitle = $item['thema'];
+                $link = $oL->toString();
+            }
+        }
         // Get the content
-        $content = $rssItem['content'];
+        $content = $item['content'];
         // Fix the content internal image references
-        $content = str_replace("<img src=\"/", "<img src=\"http".(isset($_SERVER["HTTPS"]) ? "s" : "")."://".$_SERVER["HTTP_HOST"]."/", $content);
+        $content = str_replace("<img src=\"/", "<img src=\"".PMF_Link::getSystemUri('/feed/latest/rss.php')."/", $content);
         $rss .= "\t<item>\n" .
                 "\t\t<title><![CDATA[ " .
-                $rssItem['thema'] .
+                $item['thema'] .
                 "]]></title>\n" .
                 "\t\t<description><![CDATA[ " .
-                "<p><b>".$rssItem['thema']."</b>" .
-                " <em>(".$rssItem['visits']." ".$PMF_LANG["msgViews"].")</em></p>" .
+                "<p><b>".$item['thema']."</b>" .
+                " <em>(".$item['visits']." ".$PMF_LANG["msgViews"].")</em></p>" .
                 $content .
                 "]]></description>\n" .
-                "\t\t<link>".PMF_Link::getSystemUri('/feed/latest/rss.php').str_replace($_SERVER['PHP_SELF'], '/index.php', $rssItem['url'])."</link>\n" .
-                "\t\t<pubDate>".makeRFC822Date($rssItem['datum'])."</pubDate>\n" .
+                "\t\t<link>".PMF_Link::getSystemUri('/feed/latest/rss.php').$link."</link>\n" .
+                "\t\t<pubDate>".makeRFC822Date($item['datum'])."</pubDate>\n" .
                 "\t</item>\n";
     }
 }
