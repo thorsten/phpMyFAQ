@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.9 2006-06-11 22:04:17 matteo Exp $
+* $Id: language_it.php,v 1.10 2006-07-12 16:28:23 matteo Exp $
 *
 * Italian language file
 *
@@ -510,29 +510,29 @@ $PMF_LANG["ad_export_latest"] = "5 ultimi record RSS-Feed";
 $PMF_LANG["ad_export_pdf"] = "Esporta tutte le FAQ in un unico file PDF";
 $PMF_LANG["ad_export_generate"] = "Costruisci RSS-Feed";
 
-$PMF_LANG["rightsLanguage"][0] = "Aggiungi utente";
-$PMF_LANG["rightsLanguage"][1] = "Modifica utente";
-$PMF_LANG["rightsLanguage"][2] = "Cancella utente";
-$PMF_LANG["rightsLanguage"][3] = "Aggiungi FAQ";
-$PMF_LANG["rightsLanguage"][4] = "Modifica FAQ";
-$PMF_LANG["rightsLanguage"][5] = "Cancella FAQ";
-$PMF_LANG["rightsLanguage"][6] = "Vedi <em>session log</em>";
-$PMF_LANG["rightsLanguage"][7] = "Vedi <em>admin log</em>";
-$PMF_LANG["rightsLanguage"][8] = "Cancella commento";
-$PMF_LANG["rightsLanguage"][9] = "Aggiungi news";
-$PMF_LANG["rightsLanguage"][10] = "Modifica news";
-$PMF_LANG["rightsLanguage"][11] = "Cancella news";
-$PMF_LANG["rightsLanguage"][12] = "Aggiungi categoria";
-$PMF_LANG["rightsLanguage"][13] = "Modifica categoria";
-$PMF_LANG["rightsLanguage"][14] = "Cancella categoria";
-$PMF_LANG["rightsLanguage"][15] = "Cambia password";
-$PMF_LANG["rightsLanguage"][16] = "Modifica configurazione";
-$PMF_LANG["rightsLanguage"][17] = "Aggiungi allegato";
-$PMF_LANG["rightsLanguage"][18] = "Cancella allegato";
-$PMF_LANG["rightsLanguage"][19] = "Crea un backup";
-$PMF_LANG["rightsLanguage"][20] = "Ripristina un backup";
-$PMF_LANG["rightsLanguage"][21] = "Cancella domande aperte";
-$PMF_LANG["rightsLanguage"][22] = "Modifica revisione";
+$PMF_LANG["rightsLanguage"]['adduser'] = "Aggiunge utenti";
+$PMF_LANG["rightsLanguage"]['edituser'] = "Modifica utenti";
+$PMF_LANG["rightsLanguage"]['deluser'] = "Cancella utenti";
+$PMF_LANG["rightsLanguage"]['addbt'] = "Aggiunge FAQ";
+$PMF_LANG["rightsLanguage"]['editbt'] = "Modifica FAQ";
+$PMF_LANG["rightsLanguage"]['delbt'] = "Cancella FAQ";
+$PMF_LANG["rightsLanguage"]['viewlog'] = "Vede il diario delle sessioni utente";
+$PMF_LANG["rightsLanguage"]['adminlog'] = "Vedi il diario delle sessioni amministrative";
+$PMF_LANG["rightsLanguage"]['delcomment'] = "Cancella commenti";
+$PMF_LANG["rightsLanguage"]['addnews'] = "Aggiunge news";
+$PMF_LANG["rightsLanguage"]['editnews'] = "Modifica news";
+$PMF_LANG["rightsLanguage"]['delnews'] = "Cancella news";
+$PMF_LANG["rightsLanguage"]['addcateg'] = "Aggiunge categorie";
+$PMF_LANG["rightsLanguage"]['editcateg'] = "Modifica categorie";
+$PMF_LANG["rightsLanguage"]['delcateg'] = "Cancella categorie";
+$PMF_LANG["rightsLanguage"]['passwd'] = "Cambia password";
+$PMF_LANG["rightsLanguage"]['editconfig'] = "Modifica la configurazione";
+$PMF_LANG["rightsLanguage"]['addatt'] = "Aggiunge allegati";
+$PMF_LANG["rightsLanguage"]['delatt'] = "Cancella allegati";
+$PMF_LANG["rightsLanguage"]['backup'] = "Crea backup";
+$PMF_LANG["rightsLanguage"]['restore'] = "Ripristina backup";
+$PMF_LANG["rightsLanguage"]['delquestion'] = "Cancella domande aperte";
+$PMF_LANG["rightsLanguage"]['changebtrevs'] = "Modifica revisioni";
 
 $PMF_LANG["msgAttachedFiles"] = "Files allegati:";
 
@@ -636,3 +636,92 @@ $PMF_LANG['ad_msiesearch_plugin_title'] = 'Crea il plugin di ricerca per Microso
 $PMF_LANG['ad_msiesearch_plugin_ttitle'] = 'Titolo del riquadro di ricerca in MSIE 7:';
 $PMF_LANG['ad_msiesearch_plugin_create'] = 'Crea il plugin di ricerca per Microsoft Internet Explorer 7.';
 $PMF_LANG['ad_msiesearch_plugin_success'] = 'Il plugin di ricerca per Microsoft Internet Explorer 7 è stato creato con successo!';
+$PMF_LANG['ad_session_expiring'] = 'Questa sessione scadrà tra %d minuti: vuoi continuare a lavorare?';
+
+// added v1.6.2 - 2006-06-13 by Matteo
+$PMF_LANG['ad_stat_management'] = 'Gestione delle sessioni';
+$PMF_LANG['ad_stat_choose'] = 'Scegli il mese';
+$PMF_LANG['ad_stat_delete'] = 'Cancella le sessioni selezionate immediatamente';
+
+
+// added v2.0.0 - 2005-09-15 by Thorsten and by Minoru TODA
+$PMF_LANG['ad_menu_glossary'] = 'Glossario';
+$PMF_LANG['ad_glossary_add'] = 'Aggiungi una voce al Glossario';
+$PMF_LANG['ad_glossary_edit'] = 'Vodifica una voce del Glossario';
+$PMF_LANG['ad_glossary_item'] = 'Voce';
+$PMF_LANG['ad_glossary_definition'] = 'Definizione';
+$PMF_LANG['ad_glossary_save'] = 'Salva la voce';
+$PMF_LANG['ad_glossary_save_success'] = 'La voce è stata salvata con successo nel Glossario!';
+$PMF_LANG['ad_glossary_update_success'] = 'La voce è stata aggiornata con successo nel Glossario!';
+$PMF_LANG['ad_linkcheck_noReferenceURL'] = 'Automatic link verification disabled (base URL for link verify not set)';
+$PMF_LANG['ad_linkcheck_noAllowUrlOpen'] = 'Automatic link verification disabled (PHP option allow_url_fopen not Enabled)';
+$PMF_LANG['ad_linkcheck_checkResult'] = 'Automatic link verification result';
+$PMF_LANG['ad_linkcheck_checkSuccess'] = 'OK';
+$PMF_LANG['ad_linkcheck_checkFailed'] = 'Failed';
+$PMF_LANG['ad_linkcheck_failReason'] = 'Reason(s) failed:';
+$PMF_LANG['ad_linkcheck_noLinksFound'] = 'No URLs compatible with link verifier feature found.';
+$PMF_LANG['ad_linkcheck_searchbadonly'] = 'Only with bad links';
+$PMF_LANG['ad_linkcheck_infoReason'] = 'Additional Information:';
+$PMF_LANG['ad_linkcheck_openurl_infoprefix'] = 'Found while testing <strong>%s</strong>: ';
+$PMF_LANG['ad_linkcheck_openurl_notready'] = 'LinkVerifier not ready.';
+$PMF_LANG['ad_linkcheck_openurl_maxredirect'] = 'Maximum redirect count <strong>%d</strong> exceeded.';
+$PMF_LANG['ad_linkcheck_openurl_urlisblank'] = 'Resolved to blank URL.';
+$PMF_LANG['ad_linkcheck_openurl_tooslow'] = 'Host <strong>%s</strong> is slow or not responding.';
+$PMF_LANG['ad_linkcheck_openurl_nodns'] = 'Host <strong>%s</strong> is slow or has no DNS.';
+$PMF_LANG['ad_linkcheck_openurl_redirected'] = 'URL was redirected to <strong>%s</strong>.';
+$PMF_LANG['ad_linkcheck_openurl_ambiguous'] = 'Ambiguous HTTP status <strong>%s</strong> returned.';
+$PMF_LANG['ad_linkcheck_protocol_unsupported'] = '%s protocol unsupported by Automatic link verification.';
+$PMF_LANG['ad_menu_linkconfig'] = 'Configure URL Verifier';
+$PMF_LANG['ad_linkcheck_config_title'] = 'URL Verifier Configuration';
+$PMF_LANG['ad_linkcheck_config_disabled'] = 'URL Verifier feature disabled';
+$PMF_LANG['ad_linkcheck_config_warnlist'] = 'URLs to warn';
+$PMF_LANG['ad_linkcheck_config_ignorelist'] = 'URLs to ignore';
+$PMF_LANG['ad_linkcheck_config_warnlist_description'] = 'URLs prefixed with items below will be issued warning regardless of whether it is valid.<br />Use this feature to detect soon-to-be defunct URLs';
+$PMF_LANG['ad_linkcheck_config_ignorelist_description'] = 'Exact URLs listed below will be assumed valid without validation.<br />Use this feature to omit URLs that fail to validate using URL Verifier';
+$PMF_LANG['ad_linkcheck_config_th_id'] = 'ID#';
+$PMF_LANG['ad_linkcheck_config_th_url'] = 'URL to match';
+$PMF_LANG['ad_linkcheck_config_th_reason'] = 'Match reason';
+$PMF_LANG['ad_linkcheck_config_th_owner'] = 'Entry owner';
+$PMF_LANG['ad_linkcheck_config_th_enabled'] = 'Set to enable entry';
+$PMF_LANG['ad_linkcheck_config_th_locked'] = 'Set to lock ownership';
+$PMF_LANG['ad_linkcheck_config_th_chown'] = 'Set to obtain ownership';
+$PMF_LANG['msgNewQuestionVisible'] = 'La domanda deve essere verificata prima di essere pubblicata.';
+$PMF_LANG['msgQuestionsWaiting'] = 'In attesa di essere pubblicate dagli amministratori: ';
+$PMF_LANG['ad_entry_visibility'] = 'Pubblica';
+
+// added v2.0.0 - 2006-01-02 by Lars
+$PMF_LANG['ad_user_error_password'] =  "Per cortesia inserisci una password. ";
+$PMF_LANG['ad_user_error_passwordsDontMatch'] =  "Le password non corrispondono. ";
+$PMF_LANG['ad_user_error_loginInvalid'] =  "Lo pseudonimo fornito non è valido.";
+$PMF_LANG['ad_user_error_noEmail'] =  "Per cortesia inserisci un indirizzo email valido. ";
+$PMF_LANG['ad_user_error_noRealName'] =  "Per cortesia inserisci il vero nome. ";
+$PMF_LANG['ad_user_error_delete'] =  "Questo account non può essere cancellato. ";
+$PMF_LANG['ad_user_error_noId'] =  "Nessun ID specificato. ";
+$PMF_LANG['ad_user_error_protectedAccount'] =  "Questo account è \'protetto\'. ";
+$PMF_LANG['ad_user_deleteUser'] = "Cancella Utenti";
+$PMF_LANG['ad_user_status'] = "Stato:";
+$PMF_LANG['ad_user_lastModified'] = "Ultima modifica:";
+$PMF_LANG['ad_gen_cancel'] = "Torna indietro";
+$PMF_LANG["rightsLanguage"]['addglossary'] = "Aggiunge voci al Glossario";
+$PMF_LANG["rightsLanguage"]['editglossary'] = "Modifica voci del Glossario";
+$PMF_LANG["rightsLanguage"]['delglossary'] = "Cancella voci del Glossario";
+$PMF_LANG["ad_menu_group_administration"] = "Amministrazione dei Gruppi";
+$PMF_LANG['ad_user_loggedin'] = 'Sei autenticato come ';
+
+$PMF_LANG['ad_group_details'] = "Dettagli del Gruppo";
+$PMF_LANG['ad_group_add'] = "Aggiungi Gruppo";
+$PMF_LANG['ad_group_add_link'] = "Aggiungi il gruppo";
+$PMF_LANG['ad_group_name'] = "Nome:";
+$PMF_LANG['ad_group_description'] = "Descrizione:";
+$PMF_LANG['ad_group_autoJoin'] = "Autoiscrizione:";
+$PMF_LANG['ad_group_suc'] = "Il Gruppo è stato aggiunto con <strong>successo</strong>.";
+$PMF_LANG['ad_group_error_noName'] = "Per cortesia inserisci il nome del gruppo. ";
+$PMF_LANG['ad_group_error_delete'] = "Questo gruppo non può essere cancellato. ";
+$PMF_LANG['ad_group_deleted'] = "Il Gruppo è stato cancellato con <strong>successo</strong>.";
+$PMF_LANG['ad_group_deleteGroup'] = "Cancella Gruppi";
+$PMF_LANG['ad_group_deleteQuestion'] = "Sei sicuro che questo gruppo debba essere cancellato?";
+$PMF_LANG['ad_user_uncheckall'] = "Deseleziona tutto";
+$PMF_LANG['ad_group_membership'] = "Membri del Gruppo";
+$PMF_LANG['ad_group_members'] = "Membri";
+$PMF_LANG['ad_group_addMember'] = "+";
+$PMF_LANG['ad_group_removeMember'] = "-";
