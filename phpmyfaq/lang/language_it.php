@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.10 2006-07-12 16:28:23 matteo Exp $
+* $Id: language_it.php,v 1.11 2006-07-12 16:48:14 matteo Exp $
 *
 * Italian language file
 *
@@ -651,8 +651,8 @@ $PMF_LANG['ad_glossary_edit'] = 'Vodifica una voce del Glossario';
 $PMF_LANG['ad_glossary_item'] = 'Voce';
 $PMF_LANG['ad_glossary_definition'] = 'Definizione';
 $PMF_LANG['ad_glossary_save'] = 'Salva la voce';
-$PMF_LANG['ad_glossary_save_success'] = 'La voce è stata salvata con successo nel Glossario!';
-$PMF_LANG['ad_glossary_update_success'] = 'La voce è stata aggiornata con successo nel Glossario!';
+$PMF_LANG['ad_glossary_save_success'] = 'La voce è stata salvata con successo!';
+$PMF_LANG['ad_glossary_update_success'] = 'La voce è stata aggiornata con successo!';
 $PMF_LANG['ad_linkcheck_noReferenceURL'] = 'Automatic link verification disabled (base URL for link verify not set)';
 $PMF_LANG['ad_linkcheck_noAllowUrlOpen'] = 'Automatic link verification disabled (PHP option allow_url_fopen not Enabled)';
 $PMF_LANG['ad_linkcheck_checkResult'] = 'Automatic link verification result';

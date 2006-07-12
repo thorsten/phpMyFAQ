@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.62 2006-07-02 18:59:10 matteo Exp $
+* $Id: index.php,v 1.63 2006-07-12 16:48:14 matteo Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the
@@ -306,7 +306,7 @@ $main_template_vars = array(
 if ($faqconfig->get('mod_rewrite')) {
     $links_template_vars = array(
         "faqHome"           => $_SERVER['PHP_SELF'],
-        "msgSearch"         => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'search.html">'.$PMF_LANG["msgSearch"].'</a>',
+        "msgSearch"         => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'search.html">'.$PMF_LANG["msgAdvancedSearch"].'</a>',
         'msgAddContent'     => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'addcontent.html">'.$PMF_LANG["msgAddContent"].'</a>',
         "msgQuestion"       => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'ask.html">'.$PMF_LANG["msgQuestion"].'</a>',
         "msgOpenQuestions"  => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'open.html">'.$PMF_LANG["msgOpenQuestions"].'</a>',
@@ -320,7 +320,7 @@ if ($faqconfig->get('mod_rewrite')) {
 } else {
     $links_template_vars = array(
         "faqHome"           => $_SERVER['PHP_SELF'],
-        "msgSearch"         => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=search">'.$PMF_LANG["msgSearch"].'</a>',
+        "msgSearch"         => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=search">'.$PMF_LANG["msgAdvancedSearch"].'</a>',
         "msgAddContent"     => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=add">'.$PMF_LANG["msgAddContent"].'</a>',
         "msgQuestion"       => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=ask">'.$PMF_LANG["msgQuestion"].'</a>',
         "msgOpenQuestions"  => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=open">'.$PMF_LANG["msgOpenQuestions"].'</a>',
