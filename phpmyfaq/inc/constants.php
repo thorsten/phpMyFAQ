@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: constants.php,v 1.12 2006-06-25 10:16:45 thorstenr Exp $
+* $Id: constants.php,v 1.13 2006-07-12 07:40:11 matteo Exp $
 *
 * Constants for phpMyFAQ
 *
@@ -75,6 +75,12 @@ define('PMF_NUMBER_RECORDS_LATEST', 5);
  */
 define("PMF_RSS_OPENQUESTIONS_MAX", 50);
 
+/**
+ * This is the flag with which Google sitemap will be forced to use the current PMF SEO URL schema
+ *
+ * @var const   true
+ */
+define("PMF_SITEMAP_GOOGLE_USE_SEO", true);
 
 
 /****************************************************************************

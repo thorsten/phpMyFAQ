@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: sitemap.google.php,v 1.2 2006-06-27 19:04:00 matteo Exp $
+* $Id: sitemap.google.php,v 1.3 2006-07-12 07:40:11 matteo Exp $
 *
 * The dynamic Google Sitemap builder
 *
@@ -147,9 +147,18 @@ foreach ($items as $item) {
     if (($visitsMax - $visitMin) > 0) {
         $priority = sprintf('%.1f', PMF_SITEMAP_GOOGLE_PRIORITY_DEFAULT * (1 + (($item['visits'] - $visitMin)/($visitsMax - $visitMin))));
     }
+    // a. We use plain PMF urls w/o any SEO schema
+    $link = str_replace($_SERVER['PHP_SELF'], '/index.php', $item['url']);
+    // b. We use SEO PMF urls
+    if (PMF_SITEMAP_GOOGLE_USE_SEO) {
+        if (isset($item['thema'])) {
+            $oL = new PMF_Link($link);
+            $oL->itemTitle = $item['thema'];
+            $link = $oL->toString();
+        }
+    }
     $sitemap .= buildSitemapNode(
-                    // We use plain PMF urls w/o any SEO schema
-                    PMF_Link::getSystemUri('/sitemap.google.php').str_replace($_SERVER['PHP_SELF'], '/index.php', $item['url']),
+                    PMF_Link::getSystemUri('/sitemap.google.php').$link,
                     makeISO8601Date($item['date']),
                     // TODO: manage changefreq node with the info provided by faqchanges, IF this will not add a big load to the server (+1 query/faq)
                     PMF_SITEMAP_GOOGLE_CHANGEFREQ_DAILY,
