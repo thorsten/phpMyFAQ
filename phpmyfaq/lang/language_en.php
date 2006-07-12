@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.30 2006-07-02 16:12:30 matteo Exp $
+* $Id: language_en.php,v 1.31 2006-07-12 16:26:13 matteo Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -532,6 +532,7 @@ $PMF_LANG["rightsLanguage"]['delatt'] = "delete attachments";
 $PMF_LANG["rightsLanguage"]['backup'] = "create backup";
 $PMF_LANG["rightsLanguage"]['restore'] = "restore backup";
 $PMF_LANG["rightsLanguage"]['delquestion'] = "delete open questions";
+$PMF_LANG["rightsLanguage"]['changebtrevs'] = "edit revisions";
 
 $PMF_LANG["msgAttachedFiles"] = "attached files:";
 
@@ -645,9 +646,12 @@ $PMF_LANG['ad_session_expiring'] = 'Your session will expire in %d minutes: woul
 // added v2.0.0 - 2005-09-15 by Thorsten and by Minoru TODA
 $PMF_LANG['ad_menu_glossary'] = 'Glossary';
 $PMF_LANG['ad_glossary_add'] = 'Add glossary entry';
+$PMF_LANG['ad_glossary_edit'] = 'Edit glossary entry';
 $PMF_LANG['ad_glossary_item'] = 'Item';
 $PMF_LANG['ad_glossary_definition'] = 'Definition';
 $PMF_LANG['ad_glossary_save'] = 'Save entry';
+$PMF_LANG['ad_glossary_save_success'] = 'Glossary entry successfully saved!';
+$PMF_LANG['ad_glossary_update_success'] = 'Glossary entry successfully updated!';
 $PMF_LANG['ad_linkcheck_noReferenceURL'] = 'Automatic link verification disabled (base URL for link verify not set)';
 $PMF_LANG['ad_linkcheck_noAllowUrlOpen'] = 'Automatic link verification disabled (PHP option allow_url_fopen not Enabled)';
 $PMF_LANG['ad_linkcheck_checkResult'] = 'Automatic link verification result';

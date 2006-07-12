@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_eu.php,v 1.4 2006-01-07 16:45:06 thorstenr Exp $
+* $Id: language_eu.php,v 1.5 2006-07-12 16:26:13 matteo Exp $
 *
 * Euskera language file
 *
@@ -510,28 +510,28 @@ $PMF_LANG["ad_export_latest"] = "Azken 5 RSS-Feed-ak";
 $PMF_LANG["ad_export_pdf"] = "PDF-Erregistro guztiak esportatu"; 
 $PMF_LANG["ad_export_generate"] = "RSSF-Feed sortu"; 
 
-$PMF_LANG["rightsLanguage"][0] = "erabiltzailea gehitu"; 
-$PMF_LANG["rightsLanguage"][1] = "erabiltzailea editatu"; 
-$PMF_LANG["rightsLanguage"][2] = "erabiltzailea ezabatu"; 
-$PMF_LANG["rightsLanguage"][3] = "erregistroa gehitu"; 
-$PMF_LANG["rightsLanguage"][4] = "erregistroa editatu"; 
-$PMF_LANG["rightsLanguage"][5] = "erregistroa ezabatu"; 
-$PMF_LANG["rightsLanguage"][6] = "loga ikusi"; 
-$PMF_LANG["rightsLanguage"][7] = "admin-loga ikusi"; 
-$PMF_LANG["rightsLanguage"][8] = "iruzkina ezabatu"; 
-$PMF_LANG["rightsLanguage"][9] = "albisteak gehitu"; 
-$PMF_LANG["rightsLanguage"][10] = "albisteak editatu"; 
-$PMF_LANG["rightsLanguage"][11] = "albisteak ezabatu"; 
-$PMF_LANG["rightsLanguage"][12] = "atala gehitu"; 
-$PMF_LANG["rightsLanguage"][13] = "atala editatu"; 
-$PMF_LANG["rightsLanguage"][14] = "atala ezabatu"; 
-$PMF_LANG["rightsLanguage"][15] = "pasahitza aldatu"; 
-$PMF_LANG["rightsLanguage"][16] = "konfigurazioa editatu"; 
-$PMF_LANG["rightsLanguage"][17] = "eranskinak gehitu"; 
-$PMF_LANG["rightsLanguage"][18] = "eranskinak ezabatu"; 
-$PMF_LANG["rightsLanguage"][19] = "backup egin"; 
-$PMF_LANG["rightsLanguage"][20] = "backup berrezarri"; 
-$PMF_LANG["rightsLanguage"][21] = "galdera irekiak ezabatu"; 
+$PMF_LANG["rightsLanguage"]['adduser'] = "erabiltzailea gehitu"; 
+$PMF_LANG["rightsLanguage"]['edituser'] = "erabiltzailea editatu"; 
+$PMF_LANG["rightsLanguage"]['deluser'] = "erabiltzailea ezabatu"; 
+$PMF_LANG["rightsLanguage"]['addbt'] = "erregistroa gehitu"; 
+$PMF_LANG["rightsLanguage"]['editbt'] = "erregistroa editatu"; 
+$PMF_LANG["rightsLanguage"]['delbt'] = "erregistroa ezabatu"; 
+$PMF_LANG["rightsLanguage"]['viewlog'] = "loga ikusi"; 
+$PMF_LANG["rightsLanguage"]['adminlog'] = "admin-loga ikusi"; 
+$PMF_LANG["rightsLanguage"]['delcomment'] = "iruzkina ezabatu"; 
+$PMF_LANG["rightsLanguage"]['addnews'] = "albisteak gehitu"; 
+$PMF_LANG["rightsLanguage"]['editnews'] = "albisteak editatu"; 
+$PMF_LANG["rightsLanguage"]['delnews'] = "albisteak ezabatu"; 
+$PMF_LANG["rightsLanguage"]['addcateg'] = "atala gehitu"; 
+$PMF_LANG["rightsLanguage"]['editcateg'] = "atala editatu"; 
+$PMF_LANG["rightsLanguage"]['delcateg'] = "atala ezabatu"; 
+$PMF_LANG["rightsLanguage"]['passwd'] = "pasahitza aldatu"; 
+$PMF_LANG["rightsLanguage"]['editconfig'] = "konfigurazioa editatu"; 
+$PMF_LANG["rightsLanguage"]['addatt'] = "eranskinak gehitu"; 
+$PMF_LANG["rightsLanguage"]['delatt'] = "eranskinak ezabatu"; 
+$PMF_LANG["rightsLanguage"]['backup'] = "backup egin"; 
+$PMF_LANG["rightsLanguage"]['restore'] = "backup berrezarri"; 
+$PMF_LANG["rightsLanguage"]['delquestion'] = "galdera irekiak ezabatu"; 
 
 $PMF_LANG["msgAttachedFiles"] = "Fitxategi erantsiak:";   
 
