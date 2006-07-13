@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.31 2006-07-12 16:26:13 matteo Exp $
+* $Id: language_en.php,v 1.32 2006-07-13 19:09:11 matteo Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -573,12 +573,10 @@ $LANG_CONF["bannedIP"] = array(0 => "area", 1 => "Ban these IPs");
 $LANG_CONF["parse_php"] = array(0 => "checkbox", 1 => "Should the template engine parse PHP code? (default: disabled)");
 $LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Activate mod_rewrite support? (default: disabled)");
 $LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "Do you want to enable LDAP support? (default: disabled)");
-$LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "Do you want to enable LDAP support? (default: disabled)");
 $LANG_CONF["referenceURL"] = array(0 => "input", 1 => "base URL for link verification (set to folder URL of Frontend)");
 $LANG_CONF["URLValidateInterval"] = array(0 => "input", 1 => "Interval between AJAX link verification (in seconds)");
 $LANG_CONF["enablevisibility"] = array(0 => "checkbox", 1 => "Disable visibility of new questions?");
 $LANG_CONF['permLevel'] = array(0 => "input", 1 => "Permission level");
-
 
 $PMF_LANG["ad_categ_new_main_cat"] = "as new main category";
 $PMF_LANG["ad_categ_paste_error"] = "Moving this category isn't possible.";

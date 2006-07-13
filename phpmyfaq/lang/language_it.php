@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.11 2006-07-12 16:48:14 matteo Exp $
+* $Id: language_it.php,v 1.12 2006-07-13 19:09:11 matteo Exp $
 *
 * Italian language file
 *
@@ -561,8 +561,7 @@ $LANG_CONF["metaKeywords"] = array(0 => "input", 1 => "Keywords per gli Spiders"
 $LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "Nome dell'Editore");
 $LANG_CONF["adminmail"] = array(0 => "input", 1 => "Indirizzo email dell'Amministratore");
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Testo per la pagina dei <em>Contatti</em>");
-$LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Testo per il <em>copyright</em>");
-$LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Testo per la pagina <em>Invia ad un amico</em>");
+$LANG_CONF["send2friendText"] = array(0 => "area", 1 => "Testo per la pagina <em>Invia ad un amico</em>");
 $LANG_CONF["attmax"] = array(0 => "input", 1 => "Massima dimensione per gli allegati, in Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["disatt"] = array(0 => "checkbox", 1 => "Mostra il link agli allegati");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "Abilito il tracciamento per le attivit&agrave; dell'Utente?");
@@ -574,6 +573,10 @@ $LANG_CONF["bannedIP"] = array(0 => "area", 1 => "Vieta l'accesso a questi indir
 $LANG_CONF["parse_php"] = array(0 => "checkbox", 1 => "Il motore del templating HTML deve interpretare il codice PHP eventualmente inserito nei documenti? (default: disabilitato)");
 $LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Attivare il supporto a <em>mod_rewrite</em>? (default: disabilitato)");
 $LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "Attivare il supporto LDAP? (default: disabilitato)");
+$LANG_CONF["referenceURL"] = array(0 => "input", 1 => "<em>Base URL</em> dell'installazione di phpMyFAQ: es: /phpmyfaq, /faq, ... (&egrave; necessaria per la verifica dei links)");
+$LANG_CONF["URLValidateInterval"] = array(0 => "input", 1 => "Intervallo della verifica asincrona dei links (in secondi)");
+$LANG_CONF["enablevisibility"] = array(0 => "checkbox", 1 => "Disabilitare la visibilit&agrave; delle domande appena inserite?");
+$LANG_CONF['permLevel'] = array(0 => "input", 1 => "Configurazione della Permessistica");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "come nuova categoria principale";
 $PMF_LANG["ad_categ_paste_error"] = "Non &egrave; possibile spostare questa categoria.";
