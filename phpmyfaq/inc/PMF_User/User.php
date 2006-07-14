@@ -324,7 +324,7 @@ class PMF_User
         $this->_status  = (string) $user['account_status'];
         // get user-data
         if (!$this->userdata)
-            $this->userdata = new PMF_UserData($this->_db);
+            $this->userdata =& new PMF_UserData($this->_db);
         $this->userdata->load($this->getUserId());
         return true;
     }
@@ -362,9 +362,9 @@ class PMF_User
         $this->_db->query("
           INSERT INTO
             ".PMF_USER_SQLPREFIX."user
-          (user_id, login)
+          (user_id, login, session_timestamp)
             VALUES
-          (".$this->getUserId().", '".$this->_db->escape_string($login)."')
+          (".$this->getUserId().", '".$this->_db->escape_string($login)."', ".time().")
         ");
         // create user-data entry
         if (!$this->userdata)
