@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Category.php,v 1.4 2006-07-02 13:54:25 thorstenr Exp $
+* $Id: Category.php,v 1.5 2006-07-15 06:46:00 thorstenr Exp $
 *
 * The main category class
 *
@@ -135,7 +135,7 @@ class PMF_Category
     {
         $query = sprintf("
             SELECT
-                id, lang, parent_id, name, description
+                id, lang, parent_id, name, description, user_id
             FROM
                 %sfaqcategories",
             SQLPREFIX);
@@ -166,7 +166,7 @@ class PMF_Category
         $_query = '';
         $query = sprintf('
             SELECT
-                id, lang, parent_id, name, description
+                id, lang, parent_id, name, description, user_id
             FROM
                 faqcategories
             WHERE ',
@@ -202,7 +202,7 @@ class PMF_Category
     {
         $query = sprintf("
             SELECT
-                id, lang, parent_id, name, description
+                id, lang, parent_id, name, description, user_id
             FROM
                 %sfaqcategories",
             SQLPREFIX);
@@ -851,7 +851,8 @@ class PMF_Category
     * @return   array   array(array('name'=>string,'id'=>int,'lang'=>string,'parent_id'=>int,'description'=>string),...)
     * @author   Lars Tiedemann <larstiedemann@yahoo.de>
     */
-    function getCategoriesFromArticle($article_id) {
+    function getCategoriesFromArticle($article_id)
+    {
         $rel = SQLPREFIX."faqcategoryrelations";
         $cat = SQLPREFIX."faqcategories";
         $query = sprintf("
@@ -896,7 +897,8 @@ class PMF_Category
     * @return   integer
     * @author   Lars Tiedemann <larstiedemann@yahoo.de>
     */
-    function getCategoryIdFromArticle($article_id) {
+    function getCategoryIdFromArticle($article_id)
+    {
         $cats = $this->getCategoryIdsFromArticle($article_id);
         if (isset($cats[0])) {
             return $cats[0];
@@ -916,12 +918,46 @@ class PMF_Category
     * @return   array
     * @author   Lars Tiedemann <larstiedemann@yahoo.de>
     */
-    function getCategoryIdsFromArticle($article_id) {
+    function getCategoryIdsFromArticle($article_id)
+    {
         $cats = $this->getCategoriesFromArticle($article_id);
         $arr = array();
         foreach ($cats as $cat) {
             $arr[] = $cat['id'];
         }
         return $arr;
+    }
+
+    /**
+     * Adds a new category entry
+     *
+     * @param   array   $category_data
+     * @param   integer $parent_id
+     * @return  boolean
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function addCategory($category_data, $parent_id = 0)
+    {
+        if (!is_array($category_data)) {
+            return false;
+        }
+
+        $query = sprintf("
+            INSERT INTO
+                %sfaqcategories
+            (id, lang, parent_id, name, description, user_id)
+                VALUES
+            (%d, '%s', %d, '%s', '%s', %d)",
+            SQLPREFIX,
+            $this->db->nextID(SQLPREFIX.'faqcategories', 'id'),
+            $category_data['lang'],
+            $parent_id,
+            $category_data['name'],
+            $category_data['description'],
+            $category_data['user_id']);
+        $this->db->query($query);
+
+        return true;
     }
 }
