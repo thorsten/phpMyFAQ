@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.33 2006-07-12 14:39:03 matteo Exp $
+* $Id: Faq.php,v 1.34 2006-07-15 17:29:24 thorstenr Exp $
 *
 * The main FAQ class
 *
@@ -314,17 +314,18 @@ class PMF_Faq
         $this->db->query(sprintf(
             "INSERT INTO
                 %sfaqdata
-            VALUES
-                (%d, '%s', %d, %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
+             (id, lang, solution_id, revision_id, active, keywords, thema, content, author, email, comment, datum)
+                VALUES
+            (%d, '%s', %d, %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
             SQLPREFIX,
             $newId,
             $data['lang'],
             $this->getSolutionId(),
             0,
             $data['active'],
+            $data['keywords'],
             $data['thema'],
             $data['content'],
-            $data['keywords'],
             $data['author'],
             $data['email'],
             $data['comment'],
