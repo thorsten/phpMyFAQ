@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Init.php,v 1.8 2006-07-03 21:26:33 matteo Exp $
+* $Id: Init.php,v 1.9 2006-07-15 06:17:05 thorstenr Exp $
 *
 * Some functions
 *
@@ -61,12 +61,6 @@ session_name('pmf_sid_');
 $relativePath = str_replace('index.php', '', $_SERVER['PHP_SELF']);
 session_set_cookie_params(PMF_AUTH_TIMEOUT * 60, $relativePath);
 session_start();
-if (    (!isset($_SESSION['pmf_initiated']))
-     || (!isPMFSessionID(session_id()))
-    ) {
-    session_regenerate_id();
-    $_SESSION['pmf_initiated'] = true;
-}
 
 //
 // Connect to LDAP server, when LDAP support is enabled
