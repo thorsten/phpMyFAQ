@@ -1,18 +1,18 @@
 <?php
 /**
-* $Id: category.add.php,v 1.8 2006-06-11 20:35:45 matteo Exp $
+* $Id: category.add.php,v 1.9 2006-07-15 06:23:26 thorstenr Exp $
 *
 * Adds a category
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-12-20
 * @copyright    (c) 2003-2006 phpMyFAQ Team
-* 
+*
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
 * compliance with the License. You may obtain a copy of the License at
 * http://www.mozilla.org/MPL/
-* 
+*
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
@@ -57,6 +57,9 @@ if ($permission["addcateg"]) {
 
     <label class="left"><?php print $PMF_LANG["ad_categ_desc"]; ?>:</label>
     <input type="text" name="description" size="30" style="width: 250px;" /><br />
+
+    <label class="left">User-ID:</label>
+    <input type="text" name="user_id" size="30" style="width: 250px;" /><br />
 
     <input class="submit" style="margin-left: 190px;" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_add"]; ?>" />
 
