@@ -1,5 +1,5 @@
 #
-# $Id: phpmyfaq.spec,v 1.5 2006-07-12 06:50:20 matteo Exp $
+# $Id: phpmyfaq.spec,v 1.6 2006-07-16 14:57:46 matteo Exp $
 #
 # This is the spec file for building an RPM package of phpMyFAQ
 # for most of the different RPM-based distributions
@@ -58,26 +58,33 @@
 #
 %define name        phpmyfaq
 %define version     2.0.0.alpha0
-%define release     3
+%define release     4
 %define epoch       0
 
+%define httpd_name      httpd
 # User and Group under which Apache is running
 # Red Hat: apache:apache
 %define httpd_user      apache
 %define httpd_group     apache
-# SUSE: wwwrun:nogroup
+# OpenSUSE: wwwrun:www
 %if "%{_vendor}" == "suse"
+    %define httpd_name  apache2
     %define httpd_user  wwwrun
-    %define httpd_group nogroup
+    %define httpd_group www
 %endif
 
 # Red Hat
 # Apache server is packaged under the name of:
 # - apache: up to Red Hat 7.3 and Red Hat Enterprise 2.1
 # - httpd: after these releases above
-%define is_rh7 %(test -n "`cat /etc/redhat-release | grep '(Valhalla)'`" && echo 1 || echo 0)
-%define is_el2 %(test -n "`cat /etc/redhat-release | grep '(Pensacola)'`" && echo 1 || echo 0)
-%define is_centos2 %(test -n "`cat /etc/redhat-release | grep 'CentOS release 2'`" && echo 1 || echo 0)
+%define is_rh7      0
+%define is_el2      0
+%define is_centos2  0
+%if %(test -f "/etc/redhat-release" && echo 1 || echo 0)
+    %define is_rh7 %(test -n "`cat /etc/redhat-release | grep '(Valhalla)'`" && echo 1 || echo 0)
+    %define is_el2 %(test -n "`cat /etc/redhat-release | grep '(Pensacola)'`" && echo 1 || echo 0)
+    %define is_centos2 %(test -n "`cat /etc/redhat-release | grep 'CentOS release 2'`" && echo 1 || echo 0)
+%endif
 %define is_apache   0
 %if %{is_rh7}
 %define is_apache   1
@@ -103,19 +110,22 @@ URL:                http://www.phpmyfaq.de
 Group:              Networking/WWW
 Packager:           Matteo Scaramuccia <matteo@scaramuccia.com>
 
+%if "%{_vendor}" == "suse"
+Prefix:             /srv/www
+%else
 Prefix:             /var/www
+%endif
 BuildRoot:          %{_tmppath}/%{name}-%{version}-buildroot
 BuildArchitectures: noarch
 
 AutoReq:            0
 %if "%{_vendor}" == "suse"
 Requires:           apache2
-Requires:           php4
 Requires:           apache2-mod_php4
 Requires:           php4-gd
 # We do not require MySQL but one among the several DB supported by phpMyFAQ.
 # Here we make the strong assumption that an RPM will mostly be installed on a LAMP server.
-Requires:           mysql
+Requires:           mysql, php4-mysql
 %else
 %if %{is_apache}
 Requires:           apache
@@ -144,6 +154,11 @@ XML-support, PDF-support, a backup-system and an easy to use
 installation script.
 
 %changelog
+* Sun Jul 16 2006 Matteo Scaramuccia <matteo@scaramuccia.com> - 2.0.0.alphaN-4
+- Fix some minor warnings during the RPM build under OpenSUSE.
+- Fix Apache paths under OpenSUSE.
+- Fix phpmfaq.conf to better fit with different Apache configurations.
+
 * Tue Jul 11 2006 Matteo Scaramuccia <matteo@scaramuccia.com> - 2.0.0.alphaN-3
 - More beta support for SUSE.
 
@@ -183,13 +198,24 @@ rm -rf $RPM_BUILD_ROOT
 if [ $1 = 1 ] ; then
     # First phpMyFAQ install
     # Create an ad hoc phpmyfaq.conf
-    /bin/cat << EOF > %{_sysconfdir}/httpd/conf.d/%{name}.conf
+    # a. Red Hat: /etc/httpd/conf.d
+    # b. OpenSUSE: /etc/apache2/conf.d
+    /bin/cat << EOF > %{_sysconfdir}/%{httpd_name}/conf.d/%{name}.conf
 # phpMyFaq - An open source FAQ system
 Alias /phpmyfaq %{prefix}/%{name}
 Alias /faq      %{prefix}/%{name}
+# Sanity check on the Apache configuration
+<Directory "%{prefix}">
+    # Permit the use of symlinks
+    Options +FollowSymLinks
+</Directory>
+# phpMyFAQ folder configuration
 <Directory "%{prefix}/%{name}">
     # Permit the use of an .htaccess file and the use of all the Apache directives
     AllowOverride All
+    # Users that can access to the FAQ server
+    Order allow,deny
+    Allow from all
 </Directory>
 EOF
 fi
@@ -214,7 +240,7 @@ echo
 if [ $1 = 1 ] ; then
     # First phpMyFAQ install
     # Reload Apache for loading phpMyFAQ configuration
-    %{_initrddir}/httpd reload &> /dev/null
+    %{_initrddir}/%{httpd_name} reload &> /dev/null
     # Prompt the user
     echo "phpMyFAQ is installed in: %{prefix}/%{name}-%{version}-%{release}"
     echo "Now you need to complete this installation launching"
@@ -255,11 +281,11 @@ if [ -d "%{prefix}/%{name}-%{version}-%{release}/template-%{version}-%{release}.
 fi
 if [ $1 = 0 ] ; then
 # Last phpMyFAQ uninstall
-    if [ -f "%{_sysconfdir}/httpd/conf.d/%{name}.conf" ] ; then
+    if [ -f "%{_sysconfdir}/%{httpd_name}/conf.d/%{name}.conf" ] ; then
         # Remove phpMyFAQ Apache configuration file
-        rm -f %{_sysconfdir}/httpd/conf.d/%{name}.conf
+        rm -f %{_sysconfdir}/%{httpd_name}/conf.d/%{name}.conf
         # Reload Apache for removing phpMyFAQ configuration
-        %{_initrddir}/httpd reload &> /dev/null
+        %{_initrddir}/%{httpd_name} reload &> /dev/null
     fi
     mv %{prefix}/%{name}-%{version}-%{release}/template %{prefix}/%{name}-%{version}-%{release}/template-%{version}-%{release}.custom
     if [ -L "%{prefix}/%{name}" ] ; then
