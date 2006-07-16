@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.57 2006-07-12 08:19:03 matteo Exp $
+* $Id: installer.php,v 1.58 2006-07-16 07:10:49 matteo Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -275,11 +275,11 @@ if (!phpmyfaq_check()) {
 $dirs = array('/attachments', '/data', '/images', '/inc', '/pdf', '/xml',);
 $faileddirs = array();
 foreach ($dirs as $dir) {
-    if (!is_dir(PMF_ROOT_DIR.$dir)) {
-        if (!mkdir (PMF_ROOT_DIR.$dir, 0755)) {
+    if (!@is_dir(PMF_ROOT_DIR.$dir)) {
+        if (!@mkdir (PMF_ROOT_DIR.$dir, 0755)) {
             $faileddirs[] = $dir;
         }
-    } else if (!is_writable(PMF_ROOT_DIR.$dir)) {
+    } else if (!@is_writable(PMF_ROOT_DIR.$dir)) {
         $faileddirs[] = $dir;
     } else {
         @copy("index.html", PMF_ROOT_DIR.$dir.'/index.html');
@@ -896,11 +896,21 @@ foreach ($permLevels as $level) {
     print "<p class=\"center\">You can visit <a href=\"../index.php\">your version of phpMyFAQ</a> or</p>\n";
     print "<p class=\"center\">login into your <a href=\"../admin/index.php\">admin section</a>.</p>\n";
 
+    // Remove 'scripts' folder: no need of prompt anything to the user
+    if (@is_dir(PMF_ROOT_DIR."/scripts")) {
+        @rmdir(PMF_ROOT_DIR."/scripts");
+    }
+    // Remove 'phpmyfaq.spec' file: no need of prompt anything to the user
+    if (@is_file(PMF_ROOT_DIR."/phpmyfaq.spec")) {
+        @unlink(PMF_ROOT_DIR."/phpmyfaq.spec");
+    }
+    // Remove 'installer.php' file
     if (@unlink(basename($_SERVER["PHP_SELF"]))) {
         print "<p class=\"center\">This file was deleted automatically.</p>\n";
     } else {
         print "<p class=\"center\">Please delete this file manually.</p>\n";
     }
+    // Remove 'update.php' file
     if (@unlink(dirname($_SERVER["PATH_TRANSLATED"])."/update.php")) {
         print "<p class=\"center\">The file 'update.php' was deleted automatically.</p>\n";
     } else {

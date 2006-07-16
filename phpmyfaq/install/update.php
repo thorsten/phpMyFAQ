@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.54 2006-07-12 08:19:03 matteo Exp $
+* $Id: update.php,v 1.55 2006-07-16 07:10:49 matteo Exp $
 *
 * Main update script
 *
@@ -176,12 +176,12 @@ if ($step == 2) {
     $test3 = 0;
     $test4 = 0;
     $test5 = 0;
-    if (!is_writeable(PMF_ROOT_DIR."/inc/data.php")) {
+    if (!@is_writeable(PMF_ROOT_DIR."/inc/data.php")) {
         print "<p class=\"error\"><strong>Error:</strong> The file ../inc/data.php or the directory ../inc is not writeable. Please correct this!</p>";
     } else {
         $test1 = 1;
     }
-    if (!is_writeable(PMF_ROOT_DIR."/inc/config.php")) {
+    if (!@is_writeable(PMF_ROOT_DIR."/inc/config.php")) {
         print "<p class=\"error\"><strong>Error:</strong> The file ../inc/config.php is not writeable. Please correct this!</p>";
     } else {
         $test2 = 1;
@@ -813,12 +813,22 @@ if ($step == 5) {
             print "<p class=\"center\">Please delete the file 'inc/config.php.original' manually.</p>\n";
         }
     }
-    
+
+    // Remove 'scripts' folder: no need of prompt anything to the user
+    if (@is_dir(PMF_ROOT_DIR."/scripts")) {
+        @rmdir(PMF_ROOT_DIR."/scripts");
+    }
+    // Remove 'phpmyfaq.spec' file: no need of prompt anything to the user
+    if (@is_file(PMF_ROOT_DIR."/phpmyfaq.spec")) {
+        @unlink(PMF_ROOT_DIR."/phpmyfaq.spec");
+    }
+    // Remove 'update.php' file
     if (@unlink(basename($_SERVER["PHP_SELF"]))) {
         print "<p class=\"center\">This file was deleted automatically.</p>\n";
     } else {
         print "<p class=\"center\">Please delete this file manually.</p>\n";
     }
+    // Remove 'installer.php' file
     if (@unlink(dirname($_SERVER["PATH_TRANSLATED"])."/installer.php")) {
         print "<p class=\"center\">The file 'installer.php' was deleted automatically.</p>\n";
     } else {
