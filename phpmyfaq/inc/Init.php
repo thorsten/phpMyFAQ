@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Init.php,v 1.9 2006-07-15 06:17:05 thorstenr Exp $
+* $Id: Init.php,v 1.10 2006-07-16 19:59:27 johannes Exp $
 *
 * Some functions
 *
@@ -59,7 +59,7 @@ $PMF_CONF = $faqconfig->config;
 session_name('pmf_sid_');
 // FIXME: Init.php is included also in files different from */index.php
 $relativePath = str_replace('index.php', '', $_SERVER['PHP_SELF']);
-session_set_cookie_params(PMF_AUTH_TIMEOUT * 60, $relativePath);
+#session_set_cookie_params(PMF_AUTH_TIMEOUT * 60, $relativePath);
 session_start();
 
 //
