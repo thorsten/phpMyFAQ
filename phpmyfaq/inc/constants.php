@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: constants.php,v 1.13 2006-07-12 07:40:11 matteo Exp $
+* $Id: constants.php,v 1.14 2006-07-16 06:37:16 matteo Exp $
 *
 * Constants for phpMyFAQ
 *
@@ -74,6 +74,13 @@ define('PMF_NUMBER_RECORDS_LATEST', 5);
  * @var const   50
  */
 define("PMF_RSS_OPENQUESTIONS_MAX", 50);
+
+/**
+ * This is the flag with which Latest and Topten RSS feeds will be forced to use the current PMF SEO URL schema
+ *
+ * @var const   true
+ */
+define("PMF_RSS_USE_SEO", true);
 
 /**
  * This is the flag with which Google sitemap will be forced to use the current PMF SEO URL schema
