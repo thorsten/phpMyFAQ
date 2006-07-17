@@ -593,3 +593,48 @@ $PMF_LANG['ad_categ_select'] = 'Select category language';
 
 // added v1.5.1 - 2005-09-06 by Thorsten
 $PMF_LANG['msgSitemap'] = 'Sitemap';
+
+// added v1.5.2 - 2005-09-23 by Lars
+$PMF_LANG['err_inactiveArticle'] = 'This entry is in revision and can not be displayed.';
+$PMF_LANG['msgArticleCategories'] = 'Categories for this entry';
+
+// added v1.5.3 - 2005-10-04 by Thorsten and Periklis
+$PMF_LANG['ad_menu_searchplugin'] = 'Firefox search plugin';
+$PMF_LANG['ad_search_plugin_install'] = 'Install Firefox search plugin';
+$PMF_LANG['ad_search_plugin_title'] = 'Create Firefox search plugin';
+$PMF_LANG['ad_search_plugin_ttitle'] = 'Title in the Firefox search box:';
+$PMF_LANG['ad_search_plugin_tdesc'] = 'Description:';
+$PMF_LANG['ad_search_plugin_create'] = 'Create Firefox search plugin';
+$PMF_LANG['ad_search_plugin_success'] = 'The Mozilla Firefox search plugin was successfully created!';
+
+// added v1.6.0 - 2006-02-02 by Thorsten (and DaRichMan)
+$PMF_LANG['ad_entry_solution_id'] = 'Unieke solution ID';
+$PMF_LANG['ad_entry_faq_record'] = 'FAQ record';
+$PMF_LANG['ad_entry_new_revision'] = 'Creëer nieuwe revisie?';
+$PMF_LANG['ad_entry_record_administration'] = 'Record administratie';
+$PMF_LANG['ad_entry_changelog'] = 'Changelog';
+$PMF_LANG['ad_entry_revision'] = 'Revisie';
+$PMF_LANG['ad_changerev'] = 'Selecteer Revisie';
+$PMF_LANG['msgCaptcha'] = "Geef a.u.b. de karaters welke je leest in de afbeelding";
+$PMF_LANG['msgSelectCategories'] = 'Zoek in ...';
+$PMF_LANG['msgAllCategories'] = '... alle categorieën';
+$PMF_LANG['ad_you_should_update'] = 'Jouw phpMyFAQ installatie is verouderd. Je moet updaten naar de laatst bechikbare versie.';
+$PMF_LANG['msgAdvancedSearch'] = 'Geavanceerd zoeken';
+
+// added v1.6.1 - 2006-07-17 by DaRichMan
+$PMF_LANG['spamControlCenter'] = 'Spam control center';
+$LANG_CONF["spamEnableSafeEmail"] = array(0 => "checkbox", 1 => "Geef de gebruikers e-mail op een veilige manier weer (standaard: ingesteld).");
+$LANG_CONF["spamCheckBannedWords"] = array(0 => "checkbox", 1 => "Controlleer publiekelijk formulier tegen verboden woorden (standaard: ingesteld).");
+$LANG_CONF["spamEnableCatpchaCode"] = array(0 => "checkbox", 1 => "Gebruik een catpcha code om publiekelijk formulier verzending toe te staan (standaard: ingesteld).");
+$PMF_LANG['ad_firefoxsearch_plugin_title'] = 'Creëer Firefox search plugin';
+$PMF_LANG['ad_msiesearch_plugin_install'] = 'Installeer Microsoft Internet Explorer 7 search plugin';
+$PMF_LANG['ad_msiesearch_plugin_title'] = 'Creëer Microsoft Internet Explorer 7 search plugin';
+$PMF_LANG['ad_msiesearch_plugin_ttitle'] = 'Titel in de MSIE 7 search box:';
+$PMF_LANG['ad_msiesearch_plugin_create'] = 'Creëer Microsoft Internet Explorer 7 search plugin.';
+$PMF_LANG['ad_msiesearch_plugin_success'] = 'De Microsoft Internet Explorer 7 search plugin is succesvol gecreëerd!!';
+$PMF_LANG['ad_session_expiring'] = 'Jouw sessie verloop in %d minutes: zou je willen blijven werken?';
+
+// added v1.6.2 - 2006-07-17 by DaRichMan
+$PMF_LANG['ad_stat_management'] = 'Sessie management';
+$PMF_LANG['ad_stat_choose'] = 'Kies de maand';
+$PMF_LANG['ad_stat_delete'] = 'Verwijder geselecteerde sessies direct';
