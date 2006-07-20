@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Pdf.php,v 1.4 2006-07-02 13:58:14 thorstenr Exp $
+* $Id: Pdf.php,v 1.5 2006-07-20 20:39:47 matteo Exp $
 *
 * Main PDF class for phpMyFAQ based on FPDF by Olivier Plathey
 *
@@ -528,7 +528,7 @@ class PDF extends FPDF
         } else {
             $image = $image;
         }
-        if (!$info = GetImageSize($image)) {
+        if (!$info = @getimagesize($image)) {
             return;
         }
 
