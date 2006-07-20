@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: export.main.php,v 1.22 2006-07-20 21:44:45 matteo Exp $
+* $Id: export.main.php,v 1.23 2006-07-20 22:34:35 matteo Exp $
 *
 * XML, XML DocBook, XHTML and PDF export - main page
 *
@@ -46,7 +46,7 @@ if (!emptyTable(SQLPREFIX."faqdata")) {
         //       on export.php, $nCatid->$aCatid
         //       Currently the user can choose ONLY 1 category (not a big limitation)
 ?>
-        <fieldset><legend>Limit the FAQ data to be exported (optional)</legend>
+        <fieldset><legend><?php print($PMF_LANG['ad_export_which_cat']); ?></legend>
             <label class="left" for="rubrik"><?php print($PMF_LANG["ad_entry_category"]); ?></label>
             <select name="<?php print HTTP_PARAMS_GET_CATID; ?>" id="<?php print HTTP_PARAMS_GET_CATID; ?>" size="10">
 <?php
@@ -54,25 +54,25 @@ if (!emptyTable(SQLPREFIX."faqdata")) {
 ?>
             </select>
             <br />
-            <label class="left" for="<?php print HTTP_PARAMS_GET_DOWNWARDS; ?>">Downwards?</label>
-            <input type="checkbox" name="<?php print HTTP_PARAMS_GET_DOWNWARDS; ?>" value="1" checked="checked"></input>
+            <label class="left" for="<?php print(HTTP_PARAMS_GET_DOWNWARDS); ?>"><?php print($PMF_LANG['ad_export_cat_downwards']); ?></label>
+            <input type="checkbox" name="<?php print(HTTP_PARAMS_GET_DOWNWARDS); ?>" value="1" checked="checked"></input>
         </fieldset>
         <br />
 <?php
     }
 ?>
-        <fieldset><legend>Choose the format of the export</legend>
+        <fieldset><legend><?php print($PMF_LANG['ad_export_type']); ?></legend>
             <p>
-                <label for="export_type">Choose the type of the export file:</label>
-                <br /><input type="radio" name="type" value="<?php print EXPORT_TYPE_PDF; ?>" checked="checked" />&nbsp;<?php print($PMF_LANG["ad_export_generate_pdf"]); ?>
-                <br /><input type="radio" name="type" value="<?php print EXPORT_TYPE_XML; ?>" />&nbsp;<?php print($PMF_LANG["ad_xml_gen"]); ?>
-                <br /><input type="radio" name="type" value="<?php print EXPORT_TYPE_XHTML; ?>" />&nbsp;Make XHTML file
-                <br /><input type="radio" name="type" value="<?php print EXPORT_TYPE_DOCBOOK; ?>" />&nbsp;Make Docbook file
+                <label for="export_type"><?php print($PMF_LANG['ad_export_type_choose']); ?></label><br />
+                <input type="radio" name="type" value="<?php print(EXPORT_TYPE_PDF); ?>" checked="checked" />&nbsp;<?php print($PMF_LANG["ad_export_generate_pdf"]); ?><br />
+                <input type="radio" name="type" value="<?php print(EXPORT_TYPE_XML); ?>" />&nbsp;<?php print($PMF_LANG["ad_xml_gen"]); ?><br />
+                <input type="radio" name="type" value="<?php print(EXPORT_TYPE_XHTML); ?>" />&nbsp;<?php print($PMF_LANG['ad_export_gen_xhtml']); ?><br />
+                <input type="radio" name="type" value="<?php print(EXPORT_TYPE_DOCBOOK); ?>" />&nbsp;<?php print($PMF_LANG['ad_export_gen_docbook']); ?>
             </p>
             <p>
-                <label for="disposition">Download or view in-line?</label>
-                <input type="radio" name="<?php print HTTP_PARAMS_GET_DISPOSITION; ?>" value="<?php print EXPORT_DISPOSITION_ATTACHMENT; ?>" checked="checked">download</input>
-                <input type="radio" name="<?php print HTTP_PARAMS_GET_DISPOSITION; ?>" value="<?php print EXPORT_DISPOSITION_INLINE; ?>">view in-line</input>
+                <label for="disposition"><?php print($PMF_LANG['ad_export_download_view']); ?></label>
+                <input type="radio" name="<?php print(HTTP_PARAMS_GET_DISPOSITION); ?>" value="<?php print(EXPORT_DISPOSITION_ATTACHMENT); ?>" checked="checked"><?php print($PMF_LANG['ad_export_download']); ?></input>
+                <input type="radio" name="<?php print(HTTP_PARAMS_GET_DISPOSITION); ?>" value="<?php print(EXPORT_DISPOSITION_INLINE); ?>"><?php print($PMF_LANG['ad_export_view']); ?></input>
             </p>
         </fieldset>
         <div align="center">

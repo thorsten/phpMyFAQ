@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.32 2006-07-13 19:09:11 matteo Exp $
+* $Id: language_en.php,v 1.33 2006-07-20 22:34:35 matteo Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -722,3 +722,14 @@ $PMF_LANG['ad_group_membership'] = "Group Membership";
 $PMF_LANG['ad_group_members'] = "Members";
 $PMF_LANG['ad_group_addMember'] = "+";
 $PMF_LANG['ad_group_removeMember'] = "-";
+
+// added v2.0.0 - 2006-07-20 by Matteo
+$PMF_LANG['ad_export_which_cat'] = 'Limit the FAQ data to be exported (optional)';
+$PMF_LANG['ad_export_cat_downwards'] = 'Downwards?';
+$PMF_LANG['ad_export_type'] = 'Format of the export';
+$PMF_LANG['ad_export_type_choose'] = 'Choose one of the supported formats:';
+$PMF_LANG['ad_export_download_view'] = 'Download or view in-line?';
+$PMF_LANG['ad_export_download'] = 'download';
+$PMF_LANG['ad_export_view'] = 'view in-line';
+$PMF_LANG['ad_export_gen_xhtml'] = 'Make XHTML file';
+$PMF_LANG['ad_export_gen_docbook'] = 'Make Docbook file';

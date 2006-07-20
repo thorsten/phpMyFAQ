@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.12 2006-07-13 19:09:11 matteo Exp $
+* $Id: language_it.php,v 1.13 2006-07-20 22:34:35 matteo Exp $
 *
 * Italian language file
 *
@@ -728,3 +728,14 @@ $PMF_LANG['ad_group_membership'] = "Membri del Gruppo";
 $PMF_LANG['ad_group_members'] = "Membri";
 $PMF_LANG['ad_group_addMember'] = "+";
 $PMF_LANG['ad_group_removeMember'] = "-";
+
+// added v2.0.0 - 2006-07-20 by Matteo
+$PMF_LANG['ad_export_which_cat'] = 'Limita le FAQ da esportare (opzionale)';
+$PMF_LANG['ad_export_cat_downwards'] = 'Anche le sottocategorie?';
+$PMF_LANG['ad_export_type'] = 'Formato dell\'esportazione';
+$PMF_LANG['ad_export_type_choose'] = 'Scegli tra i formati supportati:';
+$PMF_LANG['ad_export_download_view'] = 'Scarichi il file o lo guardi subito?';
+$PMF_LANG['ad_export_download'] = 'scarico';
+$PMF_LANG['ad_export_view'] = 'guardo';
+$PMF_LANG['ad_export_gen_xhtml'] = 'Crea il file XHTML';
+$PMF_LANG['ad_export_gen_docbook'] = 'Crea il file Docbook';
