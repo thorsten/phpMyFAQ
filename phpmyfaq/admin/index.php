@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.55 2006-07-11 17:22:24 matteo Exp $
+* $Id: index.php,v 1.56 2006-07-20 21:44:45 matteo Exp $
 *
 * The main admin backend index file
 *
@@ -28,10 +28,13 @@ require_once(PMF_ROOT_DIR.'/inc/Init.php');
 PMF_Init::cleanRequest();
 
 // Include classes and functions
-require_once(PMF_ROOT_DIR."/inc/Category.php");
-require_once(PMF_ROOT_DIR."/inc/Faq.php");
-require_once(PMF_ROOT_DIR."/inc/Linkverifier.php");
-require_once(PMF_ROOT_DIR."/inc/PMF_User/CurrentUser.php");
+require_once(PMF_ROOT_DIR.'/inc/Utils.php');
+require_once(PMF_ROOT_DIR.'/inc/Category.php');
+require_once(PMF_ROOT_DIR.'/inc/Faq.php');
+require_once(PMF_ROOT_DIR.'/inc/Linkverifier.php');
+require_once(PMF_ROOT_DIR.'/inc/PMF_User/CurrentUser.php');
+require_once(PMF_ROOT_DIR.'/inc/libs/idna_convert.class.php');
+$IDN = new idna_convert;
 
 // get language (default: english)
 $pmf = new PMF_Init();
@@ -145,6 +148,12 @@ if (isset($auth)) {
         exit();
         }
     }
+}
+
+// are we running a PMF export file request?
+if ((isset($_REQUEST["aktion"])) && ($_REQUEST["aktion"] == "exportfile")) {
+    require_once("export.file.php");
+    exit();
 }
 
 // Header of the admin page

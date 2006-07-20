@@ -1,10 +1,11 @@
 <?php
 /**
-* $Id: Faq.php,v 1.34 2006-07-15 17:29:24 thorstenr Exp $
+* $Id: Faq.php,v 1.35 2006-07-20 21:44:45 matteo Exp $
 *
 * The main FAQ class
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+* @author       Matteo Scaramuccia <matteo@scaramuccia.com>
 * @package      phpMyFAQ
 * @since        2005-12-20
 * @copyright    (c) 2005-2006 phpMyFAQ Team
@@ -25,8 +26,35 @@
  * This include is needed for accessing to mod_rewrite support configuration value
  */
 require_once('Link.php');
+/**
+ * This include is needed in _getSQLQuery() private method
+ */
+require_once('Utils.php');
 // }}}
 
+// {{{ Constants
+/**#@+
+  * SQL constants definitions
+  */
+define("FAQ_SQL_YES", "y");
+define("FAQ_SQL_NO", "n");
+define("FAQ_SQL_ACTIVE_YES", "yes");
+define("FAQ_SQL_ACTIVE_NO", "no");
+/**#@-*/
+/**#@+
+  * Query type definitions
+  */
+define("FAQ_QUERY_TYPE_DEFAULT", "faq_default");
+define("FAQ_QUERY_TYPE_APPROVAL", "faq_approval");
+define("FAQ_QUERY_TYPE_EXPORT_DOCBOOK", "faq_export_docbook");
+define("FAQ_QUERY_TYPE_EXPORT_PDF", "faq_export_pdf");
+define("FAQ_QUERY_TYPE_EXPORT_XHTML", "faq_export_xhtml");
+define("FAQ_QUERY_TYPE_EXPORT_XML", "faq_export_xml");
+define("FAQ_QUERY_TYPE_RSS_LATEST", "faq_rss_latest");
+/**#@-*/
+// }}}
+
+// {{{ Classes
 class PMF_Faq
 {
     /**
@@ -930,6 +958,7 @@ class PMF_Faq
             }
             $oldId = $row->id;
         }
+        
         return $topten;
     }
 
@@ -1005,6 +1034,7 @@ class PMF_Faq
             }
             $oldId = $row->id;
         }
+
         return $latest;
     }
 
@@ -1204,4 +1234,218 @@ class PMF_Faq
 
         return true;
     }
+
+    /**
+     * get()
+     *
+     * Retrieve faq records according to the constraints provided
+     *
+     * @param   $QueryType
+     * @param   $nCatid
+     * @param   $bDownwards
+     * @param   $lang
+     * @param   $date
+     * @return  array
+     * @access  public
+     * @since   2005-11-02
+     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     */
+    function get($QueryType = FAQ_QUERY_TYPE_DEFAULT, $nCatid = 0, $bDownwards = true, $lang = "", $date = "")
+    {
+        $faqs = array();
+
+        $result = $this->db->query($this->_getSQLQuery($QueryType, $nCatid, $bDownwards, $lang, $date));
+        // ----------------------------------------------------------------------------------------------------------------------
+        // id | solution_id | revision_id | lang | category_id | active | keywords | thema | content | author | email | comment | datum | visits | last_visit
+        // ----------------------------------------------------------------------------------------------------------------------
+        if ($this->db->num_rows($result) > 0) {
+            $i = 0;
+            while ($row = $this->db->fetch_object($result)) {
+                $faq = array();
+                $faq['id']             = $row->id;
+                $faq['solution_id']    = $row->solution_id;
+                $faq['revision_id']    = $row->revision_id;
+                $faq['lang']           = $row->lang;
+                $faq['category_id']    = $row->category_id;
+                $faq['active']         = $row->active;
+                $faq['keywords']       = $row->keywords;
+                $faq['topic']          = $row->thema;
+                $faq['content']        = $row->content;
+                $faq['author_name']    = $row->author;
+                $faq['author_email']   = $row->email;
+                $faq['comment_enable'] = $row->comment;
+                $faq['lastmodified']   = $row->datum;
+                $faq['hits']           = $row->visits;
+                $faq['hits_last']      = $row->last_visit;
+                $faqs[$i] = $faq;
+                $i++;
+            }
+        }
+
+        return $faqs;
+    }
+
+    /**
+     * _getCatidWhereSequence()
+     *
+     * Build a logic sequence, for a WHERE statement, of those category IDs children of the provided category ID, if any
+     *
+     * @param   $nCatid
+     * @param   $logicOp
+     * @param   $oCat
+     * @return  string
+     * @access  private
+     * @since   2005-11-02
+     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     */
+    function _getCatidWhereSequence($nCatid, $logicOp = "OR", $oCat = NULL)
+    {
+        $sqlWherefilter = "";
+
+        if (!isset($oCat)) {
+            $oCat  = new PMF_Category();
+        }
+        $aChildren = array_values($oCat->getChildren($nCatid));
+
+        foreach ($aChildren as $catid) {
+            $sqlWherefilter .= " ".$logicOp." ".SQLPREFIX."faqcategoryrelations.category_id = '".$catid."'";
+            $sqlWherefilter .= $this->_getCatidWhereSequence($catid, "OR", $oCat);
+        }
+
+        return $sqlWherefilter;
+    }
+
+    /**
+     * _getSQLQuery()
+     *
+     * Build the SQL query for retrieving faq records according to the constraints provided
+     *
+     * @param   $QueryType
+     * @param   $nCatid
+     * @param   $bDownwards
+     * @param   $lang
+     * @param   $date
+     * @param   $faqid
+     * @return  array
+     * @access  private
+     * @since   2005-11-02
+     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     */
+    function _getSQLQuery($QueryType, $nCatid, $bDownwards, $lang, $date, $faqid = 0)
+    {
+        global $DB;
+
+        $sql = "";
+        // Fields selection
+        // --------------------------------------------------------------------------------------------------------------------------------------------------
+        // id | solution_id | revision_id | lang | category_id | active | keywords | thema | content | author | email | comment | datum | visits | last_visit
+        // --------------------------------------------------------------------------------------------------------------------------------------------------
+        $sql  = "SELECT ";
+        if ($QueryType == FAQ_QUERY_TYPE_RSS_LATEST) {
+            $sql .= "DISTINCT ";
+        }
+        $sql .= SQLPREFIX."faqdata.id AS id,
+              ".SQLPREFIX."faqdata.solution_id AS solution_id,
+              ".SQLPREFIX."faqdata.revision_id AS revision_id,
+              ".SQLPREFIX."faqdata.lang AS lang,
+              ".SQLPREFIX."faqcategoryrelations.category_id AS category_id,
+              ".SQLPREFIX."faqdata.active AS active,
+              ".SQLPREFIX."faqdata.keywords AS keywords,
+              ".SQLPREFIX."faqdata.thema AS thema,
+              ".SQLPREFIX."faqdata.content AS content,
+              ".SQLPREFIX."faqdata.author AS author,
+              ".SQLPREFIX."faqdata.email AS email,
+              ".SQLPREFIX."faqdata.comment AS comment,
+              ".SQLPREFIX."faqdata.datum AS datum,
+              ".SQLPREFIX."faqvisits.visits AS visits,
+              ".SQLPREFIX."faqvisits.last_visit AS last_visit
+              "."FROM ".SQLPREFIX."faqdata, ".SQLPREFIX."faqvisits";
+        // Join criteria
+        // TODO: why LEFT? Ask to Thorsten: it would be better INNER
+        $sql .= "\nLEFT JOIN ".SQLPREFIX."faqcategoryrelations
+              ON ".SQLPREFIX."faqdata.id = ".SQLPREFIX."faqcategoryrelations.record_id
+              AND ".SQLPREFIX."faqdata.lang = ".SQLPREFIX."faqcategoryrelations.record_lang";
+        // Filter criteria
+        $sql .= "\nWHERE ";
+        // faqvisits data selection
+        if (!empty($faqid)) {
+            // Select ONLY the faq with the provided $faqid
+            $sql .= SQLPREFIX."faqdata.id = '".$faqid."' AND ";
+        }
+        $sql .= SQLPREFIX."faqdata.id = ".SQLPREFIX."faqvisits.id
+              AND ".SQLPREFIX."faqdata.lang = ".SQLPREFIX."faqvisits.lang";
+        $needAndOp = true;
+        if ((!empty($nCatid)) && (PMF_Utils::isInteger($nCatid)) && ($nCatid > 0)) {
+            if ($needAndOp) {
+                $sql .= " AND";
+            }
+            $sql .= " (".SQLPREFIX."faqcategoryrelations.category_id = '".$nCatid."'";
+            if ($bDownwards) {
+                $sql .= $this->_getCatidWhereSequence($nCatid, "OR");
+            }
+            $sql .= ")";
+            $needAndOp = true;
+        }
+        if ((!empty($date)) && PMF_Utils::isLikeOnPMFDate($date)) {
+            if ($needAndOp) {
+                $sql .= " AND";
+            }
+            $sql .= " ".SQLPREFIX."faqdata.datum LIKE '".$date."'";
+            $needAndOp = true;
+        }
+        if ((!empty($lang)) && PMF_Utils::isLanguage($lang)) {
+            if ($needAndOp) {
+                $sql .= " AND";
+            }
+            $sql .= " ".SQLPREFIX."faqdata.lang = '".$lang."'";
+            $needAndOp = true;
+        }
+        switch ($QueryType) {
+            case FAQ_QUERY_TYPE_APPROVAL:
+                if ($needAndOp) {
+                    $sql .= " AND";
+                }
+                $sql .= " ".SQLPREFIX."faqdata.active = '".FAQ_SQL_ACTIVE_NO."'";
+                $needAndOp = true;
+                break;
+            case FAQ_QUERY_TYPE_EXPORT_DOCBOOK:
+            case FAQ_QUERY_TYPE_EXPORT_PDF:
+            case FAQ_QUERY_TYPE_EXPORT_XHTML:
+            case FAQ_QUERY_TYPE_EXPORT_XML:
+                if ($needAndOp) {
+                    $sql .= " AND";
+                }
+                $sql .= " ".SQLPREFIX."faqdata.active = '".FAQ_SQL_ACTIVE_YES."'";
+                $needAndOp = true;
+                break;
+            default:
+                if ($needAndOp) {
+                    $sql .= " AND";
+                }
+                $sql .= " ".SQLPREFIX."faqdata.active = '".FAQ_SQL_ACTIVE_YES."'";
+                $needAndOp = true;
+                break;
+        }
+        // Sort criteria
+        switch ($QueryType) {
+            case FAQ_QUERY_TYPE_EXPORT_DOCBOOK:
+            case FAQ_QUERY_TYPE_EXPORT_PDF:
+            case FAQ_QUERY_TYPE_EXPORT_XHTML:
+            case FAQ_QUERY_TYPE_EXPORT_XML:
+                // Preferred ordering: Sitemap-like
+                // TODO: see if this sort is compatible with the current set of indexes
+                $sql .= "\nORDER BY ".SQLPREFIX."faqdata.thema";
+                break;
+            case FAQ_QUERY_TYPE_RSS_LATEST:
+                $sql .= "\nORDER BY ".SQLPREFIX."faqdata.datum DESC";
+                break;
+            default:
+                // Normal ordering
+                $sql .= "\nORDER BY ".SQLPREFIX."faqcategoryrelations.category_id, ".SQLPREFIX."faqdata.id";
+                break;
+        }
+        
+        return $sql;
+    }
 }
+// }}}

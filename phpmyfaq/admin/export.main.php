@@ -1,10 +1,11 @@
 <?php
 /**
-* $Id: export.main.php,v 1.21 2006-06-11 16:07:03 matteo Exp $
+* $Id: export.main.php,v 1.22 2006-07-20 21:44:45 matteo Exp $
 *
 * XML, XML DocBook, XHTML and PDF export - main page
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+* @author       Matteo Scaramuccia <matteo@scaramuccia.com>
 * @author       Peter Beauvain <pbeauvain@web.de>
 * @since        2003-04-17
 * @copyright    (c) 2001-2006 phpMyFAQ Team
@@ -22,158 +23,67 @@
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
+
     exit();
 }
+// {{{ Includes
+require_once("../inc/Export.php");
+// }}}
 ?>
-	<h2><?php print $PMF_LANG["ad_menu_export"]; ?></h2>
+    <h2><?php print($PMF_LANG["ad_menu_export"]); ?></h2>
+    <form method="get">
+        <input type="hidden" name="uin" value="<?php isset($uin) ? print($uin) : '' ; ?>" />
+        <input type="hidden" name="aktion" value="exportfile" />
 <?php
-if (isset($_REQUEST["submit"])) {
-	$submit = $_REQUEST["submit"];
-}
-
-if (isset($submit[0])) {
-    $tree = new PMF_Category();
-    generateXMLFile();
-    print "<p><a href=\"../xml/phpmyfaq.xml\" target=\"_blank\">XML File okay!</a></p>";
-}
-
-if (isset($submit[1])) {
-    $tree = new PMF_Category();
-    generateXHTMLFile();
-    print "<p><a href=\"../xml/phpmyfaq.html\" target=\"_blank\">XHTML File okay!</a></p>";
-}
-
-if (isset($submit[2])) {
-	// Full PDF Export
-	require (PMF_ROOT_DIR."/inc/PMF_Export/Pdf.php");
-	$tree = new PMF_Category();
-	$arrRubrik = array();
-	$arrThema = array();
-	$arrContent = array();
-
-	$result = $db->query('SELECT '.SQLPREFIX.'faqdata.id AS id, '.SQLPREFIX.'faqdata.lang AS lang, '.SQLPREFIX.'faqdata.solution_id AS solution_id, '.SQLPREFIX.'faqcategoryrelations.category_id AS category_id, '.SQLPREFIX.'faqdata.thema AS thema, '.SQLPREFIX.'faqdata.content AS content, '.SQLPREFIX.'faqdata.author AS author, '.SQLPREFIX.'faqdata.datum AS datum FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang WHERE '.SQLPREFIX.'faqdata.active = \'yes\' ORDER BY '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.id');
-	if ($db->num_rows($result) > 0) {
-		$i = 0;
-		while ($row = $db->fetch_object($result)) {
-			$arrRubrik[$i] = $row->category_id;
-			$arrThema[$i] = $row->thema;
-			$arrContent[$i] = $row->content;
-			$arrDatum[$i] = $row->datum;
-			$arrAuthor[$i] = $row->author;
-			$i++;
-		}
-	}
-
-	$pdf = new PDF();
-    $pdf->enableBookmarks = TRUE;
-	$pdf->Open();
-	$pdf->AliasNbPages();
-	$pdf->SetDisplayMode("real");
-
-	foreach ($arrContent as $key => $value) {
-		$pdf->category = $arrRubrik[$key];
-		$pdf->thema = $arrThema[$key];
-        $pdf->categories = $tree->categoryName;
-		$date =  $arrDatum[$key];
-		$author = $arrAuthor[$key];
-		$pdf->AddPage();
-		$pdf->SetFont("Arial", "", 12);
-    	$pdf->WriteHTML(unhtmlentities($value));
-    }
-
-	$pdfFile = PMF_ROOT_DIR."/pdf/faq.pdf";
-	$pdf->Output($pdfFile);
-
-	print "<p>".$PMF_LANG["ad_export_full_faq"]."<a href=\"../pdf/faq.pdf\" target=\"_blank\">".$PMF_CONF["title"]."</a></p>";
-}
-if (isset($submit[3])) {
-	// XML DocBook export
-	require (PMF_ROOT_DIR."/inc/PMF_Export/Docbook.php");
-	$parentID     = 0;
-	$rubrik       = 0;
-	$sql          = '';
-	$selectString ='';
-
-	$export = new DocBook_XML_Export($DB);
-	$export->delete_file();
-
-	// Set the FAQ title
-	$faqtitel = $PMF_CONF["title"];
-
-	// Print the title of the FAQ
-	$export-> xmlContent='<?xml version="1.0" encoding="'.$PMF_LANG['metaCharset'].'"?>'
-	.'<book lang="en">'
-	.'<title> phpMyFAQ </title>'
-	.'<bookinfo>'
-	.'<title>'. $faqtitel. '</title>'
-	.'</bookinfo>';
-
-	// include the news
-	$result = $db->query("SELECT id, header, artikel, datum FROM ".SQLPREFIX."faqnews");
-
-	// Write XML file
-	$export->write_file();
-
-	// Transformation of the news entries
-	if ($db->num_rows($result) > 0)
-	{
-	    $export->xmlContent.='<part><title>News</title>';
-
-	    while ($row = $db->fetch_object($result)){
-
-	        $datum = $export->aktually_date($row->datum);
-	        $export->xmlContent .='<article>'
-	        .  '<title>'.$row->header.'</title>'
-	        .  '<para>'.wordwrap($datum,20).'</para>';
-	        $replacedString = ltrim(ereg_replace('<br />','',$row->artikel));
-	        $export->TableImageText($replacedString);
-	        $export->xmlContent.='</article>';
-	    }
-	    $export->xmlContent .= '</part>';
-	}
-
-	$export->write_file();
-
-	// Transformation of the articles
-	$export->xmlContent .='<part>'
-	. '<title>Artikel</title>'
-	. '<preface>'
-	. '<title>Rubriken</title>';
-
-	// Selection of the categories
-	$export->recursive_category($parentID);
-	$export->xmlContent .='</preface>'
-	. '</part>'
-	. '</book>';
-
-	$export->write_file();
-    print "<p>XML DocBook file: <a href=\"../xml/docbook/docbook.xml\" target=\"_blank\">".$PMF_CONF["title"]."</a></p>";
-}
-
 if (!emptyTable(SQLPREFIX."faqdata")) {
+
+    if (!emptyTable(SQLPREFIX."faqcategories")) {
+        $tree = new PMF_Category();
+        $tree->buildTree();
+        // TODO: ENHANCEMENT/VERY LOW PRIORITY
+        //       Give the user a multple selection and add support
+        //       for multiple category ids (multiple="multiple")
+        //       on export.php, $nCatid->$aCatid
+        //       Currently the user can choose ONLY 1 category (not a big limitation)
 ?>
-	<form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>" method="post">
-	<input type="hidden" name="aktion" value="export" />
-
-    <fieldset>
-    <legend><?php print $PMF_LANG["ad_menu_export"]; ?></legend>
-
-    <label class="left">XML export</label>
-    <input class="submit" type="submit" name="submit[0]" value="XML export" /><br /><br />
-
-	<label class="left">XHTML export</label>
-    <input class="submit" type="submit" name="submit[1]" value="XHTML export" /><br /><br />
-
-	<label class="left"><?php print $PMF_LANG["ad_export_pdf"]; ?></label>
-    <input class="submit" type="submit" name="submit[2]" value="<?php print $PMF_LANG["ad_export_generate_pdf"]; ?>" /><br /><br />
-
-    <label class="left">XML DocBook export</label>
-    <input class="submit" type="submit" name="submit[3]" value="XML DocBook export" /><br />
-
-    </fieldset>
-	</form>
+        <fieldset><legend>Limit the FAQ data to be exported (optional)</legend>
+            <label class="left" for="rubrik"><?php print($PMF_LANG["ad_entry_category"]); ?></label>
+            <select name="<?php print HTTP_PARAMS_GET_CATID; ?>" id="<?php print HTTP_PARAMS_GET_CATID; ?>" size="10">
+<?php
+        print($tree->printCategoryOptions());
+?>
+            </select>
+            <br />
+            <label class="left" for="<?php print HTTP_PARAMS_GET_DOWNWARDS; ?>">Downwards?</label>
+            <input type="checkbox" name="<?php print HTTP_PARAMS_GET_DOWNWARDS; ?>" value="1" checked="checked"></input>
+        </fieldset>
+        <br />
+<?php
+    }
+?>
+        <fieldset><legend>Choose the format of the export</legend>
+            <p>
+                <label for="export_type">Choose the type of the export file:</label>
+                <br /><input type="radio" name="type" value="<?php print EXPORT_TYPE_PDF; ?>" checked="checked" />&nbsp;<?php print($PMF_LANG["ad_export_generate_pdf"]); ?>
+                <br /><input type="radio" name="type" value="<?php print EXPORT_TYPE_XML; ?>" />&nbsp;<?php print($PMF_LANG["ad_xml_gen"]); ?>
+                <br /><input type="radio" name="type" value="<?php print EXPORT_TYPE_XHTML; ?>" />&nbsp;Make XHTML file
+                <br /><input type="radio" name="type" value="<?php print EXPORT_TYPE_DOCBOOK; ?>" />&nbsp;Make Docbook file
+            </p>
+            <p>
+                <label for="disposition">Download or view in-line?</label>
+                <input type="radio" name="<?php print HTTP_PARAMS_GET_DISPOSITION; ?>" value="<?php print EXPORT_DISPOSITION_ATTACHMENT; ?>" checked="checked">download</input>
+                <input type="radio" name="<?php print HTTP_PARAMS_GET_DISPOSITION; ?>" value="<?php print EXPORT_DISPOSITION_INLINE; ?>">view in-line</input>
+            </p>
+        </fieldset>
+        <div align="center">
+            <p>
+                <input class="submit" type="submit" name="submitExport" value="<?php print(strip_tags($PMF_LANG["ad_menu_export"])); ?>" />
+                &nbsp;<input class="submit" type="reset" name="resetExport" value="<?php print(strip_tags($PMF_LANG["ad_config_reset"])); ?>" />
+            </p>
+        </div>
+    </form>
 <?php
 } else {
-    print $PMF_LANG["err_noArticles"];
+    print($PMF_LANG["err_noArticles"]);
 }
 ?>
