@@ -1,11 +1,12 @@
 /**
- * $Id: style.css,v 1.17 2006-07-02 18:59:10 matteo Exp $
+ * $Id: style.css,v 1.18 2006-07-20 20:00:31 matteo Exp $
  *
- * This is the main style sheet file for phpMyFAQ 1.5
+ * This is the main style sheet file for phpMyFAQ 2.0
  * If you want to change only the colours, use colors.css
  *
  * @author      Jens Grochtdreis <jens@grochtdreis.de>
  * @author      Thorsten Rinne <thorsten@rinne.info>
+ * @author      Matteo scaramuccia <matteo@scaramuccia.com>
  * @since       2004-06-02
  * @copyright   (c) 2004-2006 phpMyFAQ Team
  *
@@ -164,7 +165,7 @@ code {
    padding: 5px 5px 5px 0.5em;
    border-bottom: 1px solid;
    text-decoration: none;
-    height: 100%; /* stupid IE fix */
+   height: 100%; /* stupid IE fix */
 }
 html>body #categories li a {
    width: auto;
@@ -227,9 +228,13 @@ html>body #categories li a {
 }
 #topten h3, #latest h3 {
    font-size: 135%;
-   border-bottom: 1px solid;
+   border: 1px solid;
    margin-bottom: 5px;
-   padding-bottom: 2px;
+   padding: 4px 4px 2px 4px;
+}
+#topten img, #latest img {
+    float: right;
+    margin-top: -16px;
 }
 #topten ol, #latest ol {
     list-style-type: decimal;
@@ -275,8 +280,21 @@ html>body #categories li a {
  */
 .main-content #news h3 {
    font-size: 135%;
-   border: 0;
+   border-bottom: 1px solid;
    margin-bottom: 7px;
+}
+.main-content #news h3 a {
+    text-decoration: none;
+}
+.main-content #news h2{
+    font-size: 135%;
+    border: 1px solid;
+    margin-bottom: 5px;
+    padding: 2px 4px 2px 4px;
+}
+.main-content #news img{
+    float: right;
+    margin-top: -16px;
 }
 .main-content #news .block {
    margin-top: 7px;
