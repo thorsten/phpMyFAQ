@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Comment.php,v 1.2 2006-07-23 16:44:13 matteo Exp $
+* $Id: Comment.php,v 1.3 2006-07-23 17:31:37 matteo Exp $
 *
 * The main Comment class
 *
@@ -227,8 +227,11 @@ class PMF_Comment
                     $commentData['date'],
                     $commentData['helped']
                 );
-        $this->db->query($query);
 
+        if (!$this->db->query($query)) {
+            return false;
+        }
+        
         return true;
     }
 
@@ -260,7 +263,10 @@ class PMF_Comment
                     $record_id,
                     $comment_id
                 );
-        $this->db->query($query);
+
+        if (!$this->db->query($query)) {
+            return false;
+        }
 
         return true;
     }

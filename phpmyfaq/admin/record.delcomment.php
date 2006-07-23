@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.delcomment.php,v 1.7 2006-07-23 16:40:54 matteo Exp $
+* $Id: record.delcomment.php,v 1.8 2006-07-23 17:31:37 matteo Exp $
 *
 * Deletes a user comment
 *
@@ -32,8 +32,14 @@ if (isset($_REQUEST['type']) && (PMF_COMMENT_TYPE_NEWS == $_REQUEST['type'])) {
 
 if ($permission['delcomment']) {
     if ($_REQUEST['subm'] == $PMF_LANG['ad_gen_yes']) {
-        $faq->deleteComment($_REQUEST['artid'], $_REQUEST['cmtid']);
-        $msg = $PMF_LANG['ad_entry_commentdelsuc'];
+        $recordId = (int)$_REQUEST['artid'];
+        $cmtId = (int)$_REQUEST['cmtid'];
+        $oComment = new PMF_Comment(& $db, $LANGCODE);
+        if ($oComment->deleteComment($recordId, $cmtId)) {
+            $msg = $PMF_LANG['ad_entry_commentdelsuc'];
+        } else {
+            $msg = $PMF_LANG['ad_entry_commentdelfail'];
+        }
     } else {
         $msg = $PMF_LANG['ad_entry_commentdelfail'];
     }
