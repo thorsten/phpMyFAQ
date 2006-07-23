@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: News.php,v 1.9 2006-07-23 10:34:32 matteo Exp $
+* $Id: News.php,v 1.10 2006-07-23 16:40:54 matteo Exp $
 *
 * The News class for phpMyFAQ news
 *
@@ -22,6 +22,10 @@
 */
 
 // {{{ Includes
+/**
+ * This include is needed for manipulating PMF_Comment objects
+ */
+require_once('Comment.php');
 /**
  * This include is needed for accessing to mod_rewrite support configuration value
  */
@@ -284,19 +288,56 @@ class PMF_News
         return $news;
     }
 
-    function getCommentsData($id)
-    {
-        $comments = array();
-
-        return $comments;
-    }
-
+    /**
+    * getComments()
+    *
+    * Returns all user comments from a news record
+    *
+    * @param    integer     record id
+    * @return   string
+    * @access   public
+    * @since    2002-08-29
+    * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+    */
     function getComments($id)
     {
-        $comments = $this->getCommentsData($id);
-        $html = '';
+        $oComment = new PMF_Comment(&$this->db, $this->language);
+        return $oComment->getComments($id, PMF_COMMENT_TYPE_NEWS);
+    }
 
-        return $html;
+    /**
+     * addComment()
+     *
+     * Adds a comment
+     *
+     * @param   array       $commentData
+     * @return  boolean
+     * @access  public
+     * @since   2006-06-18
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function addComment($commentData)
+    {
+        $oComment = new PMF_Comment(&$this->db, $this->language);
+        return $oComment->addComment($commentData);
+    }
+
+    /**
+     * deleteComment()
+     *
+     * Deletes a comment
+     *
+     * @param   integer     $record_id
+     * @param   integer     $comment_id
+     * @return  boolean
+     * @access  public
+     * @since   2006-06-18
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function deleteComment($record_id, $comment_id)
+    {
+        $oComment = new PMF_Comment(&$this->db, $this->language);
+        return $oComment->deleteComment($record_id, $comment_id);
     }
 
     /**

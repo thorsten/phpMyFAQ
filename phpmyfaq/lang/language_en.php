@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.34 2006-07-23 09:14:46 matteo Exp $
+* $Id: language_en.php,v 1.35 2006-07-23 16:40:54 matteo Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -749,3 +749,4 @@ $PMF_LANG['newsShowCurrent'] = 'Show current news.';
 $PMF_LANG['newsShowArchive'] = 'Show archived news.';
 $PMF_LANG['newsArchive'] = ' News archive';
 $PMF_LANG['newsWriteComment'] = 'comment on this entry';
+$PMF_LANG['newsCommentDate'] = 'Added at: ';

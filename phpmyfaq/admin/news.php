@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: news.php,v 1.20 2006-07-23 09:14:46 matteo Exp $
+* $Id: news.php,v 1.21 2006-07-23 16:40:53 matteo Exp $
 *
 * The main administration file for the news
 *
@@ -27,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 
 require_once (PMF_ROOT_DIR."/inc/News.php");
 
-$news = new PMF_News($db, $LANGCODE);
+$news = new PMF_News(& $db, $LANGCODE);
 
 // TODO: Manage authorName and authorEmail
 
@@ -177,27 +177,27 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
     <legend><?php print $PMF_LANG['ad_news_expiration_window']; ?></legend>
         <label class="lefteditor" for="from"><?php print $PMF_LANG['ad_news_from']; ?></label>
 <?php
-    $dateStartAv = isset($newsData['dateStart']) && ($newsData['dateStart'] != '00000000000000');
-    $date['YYYY'] = $dateStartAv ? substr($newsData['dateStart'],  0, 4) : '';
-    $date['MM']   = $dateStartAv ? substr($newsData['dateStart'],  4, 2) : '';
-    $date['DD']   = $dateStartAv ? substr($newsData['dateStart'],  6, 2) : '';
-    $date['HH']   = $dateStartAv ? substr($newsData['dateStart'],  8, 2) : '';
-    $date['mm']   = $dateStartAv ? substr($newsData['dateStart'], 10, 2) : '';
-    $date['ss']   = $dateStartAv ? substr($newsData['dateStart'], 12, 2) : '';
-    print(PMF_News::printDateTimeInput('dateStart', $date));
+        $dateStartAv = isset($newsData['dateStart']) && ($newsData['dateStart'] != '00000000000000');
+        $date['YYYY'] = $dateStartAv ? substr($newsData['dateStart'],  0, 4) : '';
+        $date['MM']   = $dateStartAv ? substr($newsData['dateStart'],  4, 2) : '';
+        $date['DD']   = $dateStartAv ? substr($newsData['dateStart'],  6, 2) : '';
+        $date['HH']   = $dateStartAv ? substr($newsData['dateStart'],  8, 2) : '';
+        $date['mm']   = $dateStartAv ? substr($newsData['dateStart'], 10, 2) : '';
+        $date['ss']   = $dateStartAv ? substr($newsData['dateStart'], 12, 2) : '';
+        print(PMF_News::printDateTimeInput('dateStart', $date));
 ?>
         <br />
 
         <label class="lefteditor" for="to"><?php print $PMF_LANG['ad_news_to']; ?></label>
 <?php
-    $dateEndAv = isset($newsData['dateEnd']) && ($newsData['dateEnd'] != '99991231235959');
-    $date['YYYY'] = $dateEndAv ? substr($newsData['dateEnd'],  0, 4) : '';
-    $date['MM']   = $dateEndAv ? substr($newsData['dateEnd'],  4, 2) : '';
-    $date['DD']   = $dateEndAv ? substr($newsData['dateEnd'],  6, 2) : '';
-    $date['HH']   = $dateEndAv ? substr($newsData['dateEnd'],  8, 2) : '';
-    $date['mm']   = $dateEndAv ? substr($newsData['dateEnd'], 10, 2) : '';
-    $date['ss']   = $dateEndAv ? substr($newsData['dateEnd'], 12, 2) : '';
-    print(PMF_News::printDateTimeInput('dateEnd', $date));
+        $dateEndAv = isset($newsData['dateEnd']) && ($newsData['dateEnd'] != '99991231235959');
+        $date['YYYY'] = $dateEndAv ? substr($newsData['dateEnd'],  0, 4) : '';
+        $date['MM']   = $dateEndAv ? substr($newsData['dateEnd'],  4, 2) : '';
+        $date['DD']   = $dateEndAv ? substr($newsData['dateEnd'],  6, 2) : '';
+        $date['HH']   = $dateEndAv ? substr($newsData['dateEnd'],  8, 2) : '';
+        $date['mm']   = $dateEndAv ? substr($newsData['dateEnd'], 10, 2) : '';
+        $date['ss']   = $dateEndAv ? substr($newsData['dateEnd'], 12, 2) : '';
+        print(PMF_News::printDateTimeInput('dateEnd', $date));
 ?>
     </fieldset>
     <br />
@@ -205,6 +205,19 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
     <input class="submit" type="reset" value="<?php print $PMF_LANG['ad_gen_reset']; ?>" />
     </form>
 <?php
+        $newsId = (int)$_GET['id'];
+        $oComment = new PMF_Comment(& $db, $LANGCODE);
+        $comments = $oComment->getCommentsData($newsId, PMF_COMMENT_TYPE_NEWS);
+        if (count($comments) > 0) {
+?>
+            <p><strong><?php print $PMF_LANG["ad_entry_comment"] ?></strong></p>
+<?php
+        }
+        foreach ($comments as $item) {
+?>
+    <p><?php print $PMF_LANG["ad_entry_commentby"] ?> <a href="mailto:<?php print($item['email']); ?>"><?php print($item['user']); ?></a>:<br /><?php print($item['content']); ?><br /><?php print($PMF_LANG['newsCommentDate'].makeDateByFormat($item['date'], 'Y-m-d H:i', false));?><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=delcomment&amp;artid=<?php print($newsId); ?>&amp;cmtid=<?php print($item['id']); ?>&amp;type=<?php print(PMF_COMMENT_TYPE_NEWS);?>"><img src="images/delete.gif" alt="<?php print $PMF_LANG["ad_entry_delete"] ?>" title="<?php print $PMF_LANG["ad_entry_delete"] ?>" border="0" width="17" height="18" align="right" /></a></p>
+<?php
+        }
     }
 } elseif (isset($_REQUEST["do"]) && $_REQUEST["do"] == "save" && $permission["addnews"]) {
     $dateStart = $_POST['dateStartYYYY'].$_POST['dateStartMM'].$_POST['dateStartDD'].$_POST['dateStartHH'].$_POST['dateStartmm'].$_POST['dateStartss'];
@@ -246,6 +259,7 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
         $dateEnd = '99991231235959';
     }
     $newsData = array(
+        'lang'          => $LANGCODE,
         'header'        => $db->escape_string($_POST['header']),
         'content'       => $db->escape_string($_POST['content']),
         'authorName'    => $db->escape_string($_POST['authorName']),

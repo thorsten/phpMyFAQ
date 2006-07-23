@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.delcommentform.php,v 1.6 2006-01-02 16:51:26 thorstenr Exp $
+* $Id: record.delcommentform.php,v 1.7 2006-07-23 16:40:54 matteo Exp $
 *
 * Form to delete user comment
 *
@@ -24,24 +24,31 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
-print "<h2>".$PMF_LANG["ad_entry_aor"]."</h2>\n";
+if (isset($_REQUEST['type']) && (PMF_COMMENT_TYPE_NEWS == $_REQUEST['type'])) {
+    print "<h2>".$PMF_LANG['ad_news_edit']."</h2>\n";
+} else {
+    print "<h2>".$PMF_LANG['ad_entry_aor']."</h2>\n";
+}
 if ($permission["delcomment"]) {
 ?>
-	<form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>" method="post">
-	<input type="hidden" name="aktion" value="deletecomment" />
-	<input type="hidden" name="artid" value="<?php print $_REQUEST["artid"]; ?>" />
-	<input type="hidden" name="cmtid" value="<?php print $_REQUEST["cmtid"]; ?>" />
-	<input type="hidden" name="lang" value="<?php print $_REQUEST["lang"]; ?>" />
+    <form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>" method="post">
+    <input type="hidden" name="aktion" value="deletecomment" />
+    <input type="hidden" name="artid" value="<?php print $_REQUEST["artid"]; ?>" />
+    <input type="hidden" name="cmtid" value="<?php print $_REQUEST["cmtid"]; ?>" />
+    <input type="hidden" name="lang" value="<?php isset($_REQUEST["lang"]) ? print $_REQUEST["lang"] : ''; ?>" />
+    <input type="hidden" name="type" value="<?php isset($_REQUEST["type"]) ? print $_REQUEST["type"] : ''; ?>" />
 <?php
-	$result = $db->query("SELECT usr, email, comment FROM ".SQLPREFIX."faqcomments WHERE id = ".$_REQUEST["artid"]." AND id_comment = ".$_REQUEST["cmtid"]);
-	$row = $db->fetch_object($result);
+
+    $cmtId = (int)$_GET['cmtid'];
+    $oComment = new PMF_Comment(& $db, $LANGCODE);
+    $comment = $oComment->getCommentDataById($cmtId);
 ?>
-    <p align="center"><?php print $PMF_LANG["ad_entry_delcom_1"]; ?> <a href="mailto:<?php print $row->email; ?>"><?php print $row->usr; ?></a> <?php print $PMF_LANG["ad_entry_delcom_2"]; ?></p>
-    <p align="center"><?php print $row->comment; ?></p>
+    <p align="center"><?php print $PMF_LANG["ad_entry_delcom_1"]; ?> <a href="mailto:<?php print($comment['email']); ?>"><?php print($comment['user']); ?></a> <?php print $PMF_LANG["ad_entry_delcom_2"]; ?></p>
+    <p align="center"><?php print($comment['content']); ?></p>
     <p align="center"><input class="submit" type="submit" value="<?php print $PMF_LANG["ad_gen_yes"]; ?>" name="subm" /> <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_gen_no"]; ?>" name="subm" /></p>
-	</form>
+    </form>
 <?php
 } else {
-	print $PMF_LANG["err_NotAuth"];
+    print $PMF_LANG["err_NotAuth"];
 }
 ?>

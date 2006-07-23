@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.14 2006-07-23 09:14:46 matteo Exp $
+* $Id: language_it.php,v 1.15 2006-07-23 16:40:54 matteo Exp $
 *
 * Italian language file
 *
@@ -755,3 +755,4 @@ $PMF_LANG['newsShowCurrent'] = 'Mostra le notizie attuali.';
 $PMF_LANG['newsShowArchive'] = 'Mostra le notizie archiviate.';
 $PMF_LANG['newsArchive'] = ' News - Archvio';
 $PMF_LANG['newsWriteComment'] = 'Commenta questa notizia';
+$PMF_LANG['newsCommentDate'] = 'Inserito il: ';

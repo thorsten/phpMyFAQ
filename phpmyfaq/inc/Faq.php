@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.37 2006-07-23 12:39:28 thorstenr Exp $
+* $Id: Faq.php,v 1.38 2006-07-23 16:40:54 matteo Exp $
 *
 * The main FAQ class
 *
@@ -22,6 +22,10 @@
 */
 
 // {{{ Includes
+/**
+ * This include is needed for manipulating PMF_Comment objects
+ */
+require_once('Comment.php');
 /**
  * This include is needed for accessing to mod_rewrite support configuration value
  */
@@ -714,31 +718,8 @@ class PMF_Faq
     */
     function getComments($id)
     {
-        $query = sprintf(
-            'SELECT
-                usr, email, comment
-            FROM
-                %sfaqcomments
-            WHERE
-                type = \'%s\'
-                AND id = %d',
-            SQLPREFIX,
-            'faq',
-            $id);
-        $result = $this->db->query($query);
-        $output = '';
-        if ($this->db->num_rows($result) > 0) {
-            while ($row = $this->db->fetch_object($result)) {
-                $output .= '<p class="comment">';
-                $output .= sprintf('<strong>%s<a href="mailto:%s">%s</a>:</strong>',
-                    $this->pmf_lang['msgCommentBy'],
-                    safeEmail($row->email),
-                    $row->usr);
-                $output .= sprintf('<br />%s</p>',
-                    $row->comment);
-            }
-        }
-        return $output;
+        $oComment = new PMF_Comment(&$this->db, $this->language);
+        return $oComment->getComments($id, PMF_COMMENT_TYPE_FAQ);
     }
 
     /**
@@ -746,7 +727,7 @@ class PMF_Faq
      *
      * Adds a comment
      *
-     * @param   array     $commentData
+     * @param   array       $commentData
      * @return  boolean
      * @access  public
      * @since   2006-06-18
@@ -754,27 +735,8 @@ class PMF_Faq
      */
     function addComment($commentData)
     {
-        if (!is_array($commentData)) {
-            return false;
-        }
-
-        $query = sprintf(
-            "INSERT INTO
-                %sfaqcomments
-            VALUES
-                (%d, %d, '%s', '%s', '%s', '%s', %d, '%s')",
-            SQLPREFIX,
-            $this->db->nextID(SQLPREFIX.'faqcomments', 'id_comment'),
-            $commentData['record_id'],
-            $commentData['type'],
-            $commentData['username'],
-            $commentData['usermail'],
-            $commentData['comment'],
-            $commentData['date'],
-            $commentData['helped']);
-        $this->db->query($query);
-
-        return true;
+        $oComment = new PMF_Comment(&$this->db, $this->language);
+        return $oComment->addComment($commentData);
     }
 
     /**
@@ -782,33 +744,17 @@ class PMF_Faq
      *
      * Deletes a comment
      *
-     * @param    integer    $record_id
-     * @param    integer    $comment_id
-     * @return    boolean
-     * @access    public
-     * @since    2006-06-18
-     * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param   integer     $record_id
+     * @param   integer     $comment_id
+     * @return  boolean
+     * @access  public
+     * @since   2006-06-18
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     function deleteComment($record_id, $comment_id)
     {
-        if (!is_int($record_id) && !is_int($comment_id)) {
-            return false;
-        }
-
-        $query = sprintf(
-            'DELETE FROM
-                %sfaqcomments
-            WHERE
-                type = \'%s\'
-                id = %d
-                AND id_comment = %d',
-            SQLPREFIX,
-            'faq',
-            $record_id,
-            $comment_id);
-        $this->db->query($query);
-
-        return true;
+        $oComment = new PMF_Comment(&$this->db, $this->language);
+        return $oComment->deleteComment($record_id, $comment_id);
     }
 
     /**
@@ -1179,12 +1125,12 @@ class PMF_Faq
      *
      * Adds a new entry in the table faqvisits
      *
-     * @param    integer    $id
-     * @param    string    $lang
-     * @return    boolean
-     * @access    private
-     * @since    2006-06-18
-     * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param   integer $id
+     * @param   string    $lang
+     * @return  boolean
+     * @access  private
+     * @since   2006-06-18
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     function createNewVisit($id, $lang)
     {
@@ -1346,11 +1292,8 @@ class PMF_Faq
         // --------------------------------------------------------------------------------------------------------------------------------------------------
         // id | solution_id | revision_id | lang | category_id | active | keywords | thema | content | author | email | comment | datum | visits | last_visit
         // --------------------------------------------------------------------------------------------------------------------------------------------------
-        $sql  = "SELECT ";
-        if ($QueryType == FAQ_QUERY_TYPE_RSS_LATEST) {
-            $sql .= "DISTINCT ";
-        }
-        $sql .= SQLPREFIX."faqdata.id AS id,
+        $sql  = "SELECT
+              ".SQLPREFIX."faqdata.id AS id,
               ".SQLPREFIX."faqdata.solution_id AS solution_id,
               ".SQLPREFIX."faqdata.revision_id AS revision_id,
               ".SQLPREFIX."faqdata.lang AS lang,
