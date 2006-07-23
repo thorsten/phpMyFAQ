@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Captcha.php,v 1.4 2006-07-02 20:25:42 thorstenr Exp $
+ * $Id: Captcha.php,v 1.5 2006-07-23 09:15:59 matteo Exp $
  *
  * The phpMyFAQ Captcha class
  *
@@ -166,10 +166,19 @@ class PMF_Captcha
      * @since   2006-02-02
      * @author  Thomas Zeithaml <info@spider-trap.de>
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      */
     function printCaptcha($action)
     {
-        $output = sprintf('<img src="%s?%saction=%s&amp;gen=img" height="%d" width="%d" border="0" alt="Follow the white rabbit." title="Follow the white rabbit." />', $_SERVER['PHP_SELF'], $this->sids, $action, $this->height, $this->width);
+        $output = sprintf(
+                        '<img src="%s?%saction=%s&amp;gen=img&amp;ck=%s" height="%d" width="%d" border="0" alt="Follow the white rabbit." title="Follow the white rabbit." />',
+                        $_SERVER['PHP_SELF'],
+                        $this->sids,
+                        $action,
+                        time(),
+                        $this->height,
+                        $this->width
+                    );
         return $output;
     }
 
