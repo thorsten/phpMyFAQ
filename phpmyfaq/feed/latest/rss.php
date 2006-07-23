@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: rss.php,v 1.16 2006-07-12 14:39:03 matteo Exp $
+* $Id: rss.php,v 1.17 2006-07-23 10:34:32 matteo Exp $
 *
 * The RSS feed with the latest five records
 *
@@ -68,10 +68,10 @@ if ($num > 0) {
         // Fix the content internal image references
         $content = str_replace("<img src=\"/", "<img src=\"".PMF_Link::getSystemUri('/feed/latest/rss.php')."/", $content);
         $rss .= "\t<item>\n" .
-                "\t\t<title><![CDATA[ " .
+                "\t\t<title><![CDATA[" .
                 $item['thema'] .
                 "]]></title>\n" .
-                "\t\t<description><![CDATA[ " .
+                "\t\t<description><![CDATA[" .
                 "<p><b>".$item['thema']."</b>" .
                 " <em>(".$item['visits']." ".$PMF_LANG["msgViews"].")</em></p>" .
                 $content .

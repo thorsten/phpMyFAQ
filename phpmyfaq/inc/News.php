@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: News.php,v 1.8 2006-07-23 09:14:46 matteo Exp $
+* $Id: News.php,v 1.9 2006-07-23 10:34:32 matteo Exp $
 *
 * The News class for phpMyFAQ news
 *
@@ -21,6 +21,14 @@
 * under the License.
 */
 
+// {{{ Includes
+/**
+ * This include is needed for accessing to mod_rewrite support configuration value
+ */
+require_once('Link.php');
+// }}}
+
+// {{{ Classes
 class PMF_News
 {
     /**
@@ -58,24 +66,27 @@ class PMF_News
     }
 
     /**
-     * getNews
+     * getLatestData()
      *
-     * Function for generating the FAQ news
+     * Return the latest news data
      *
      * @param   boolean $showArchive
      * @param   boolean $active
+     * @param   boolean $forceConfLimit
      * @return  string
      * @access  public
      * @since   2002-08-23
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      */
-    function getNews($showArchive = false, $active = true)
+    function getLatestData($showArchive = false, $active = true, $forceConfLimit = false)
     {
         global $PMF_CONF;
 
+        $news = array();
         $counter = 0;
         $now = date('YmdHis');
+
         $query = sprintf(
             "SELECT
                 id, datum, lang,
@@ -98,37 +109,81 @@ class PMF_News
             $active ? "AND active = 'y'" : ''
             );
         $result = $this->db->query($query);
-        
-        $output = '';
+
         if ($PMF_CONF['numNewsArticles'] > 0 && $this->db->num_rows($result) > 0) {
             while (    ($row = $this->db->fetch_object($result))
                    ) {
                 $counter++;
                 if (   ($showArchive  && ($counter > $PMF_CONF['numNewsArticles']))
-                    || ((!$showArchive) && ($counter <= $PMF_CONF['numNewsArticles']))
+                    || ((!$showArchive) && (!$forceConfLimit) && ($counter <= $PMF_CONF['numNewsArticles']))
+                    || ((!$showArchive) && $forceConfLimit)
                    ) {
-                $output .= sprintf('<h3><a name="news_%d">%s</a><a href="?action=news&amp;newsid=%d&amp;newslang=%s"> <img id="goNews" src="images/more.gif" width="11" height="11" alt="%s" /></a></h3><div class="block">%s',
-                                $row->id,
-                                $row->header,
-                                $row->id,
-                                $row->lang,
-                                $row->header,
-                                $row->artikel
-                            );
-                if ($row->link != '') {
-                    $output .= sprintf('<br />Info: <a href="http://%s" target="_%s">%s</a>',
-                                    $row->link,
-                                    $row->target,
-                                    $row->linktitel
-                                );
-                }
-                $output .= sprintf('</div><div class="date">%s</div>', makeDate($row->datum));
+                    $item = array(
+                        'id'            => $row->id,
+                        'date'          => $row->datum,
+                        'lang'          => $row->lang,
+                        'header'        => $row->header,
+                        'content'       => $row->artikel,
+                        'authorName'    => $row->author_name,
+                        'authorEmail'   => $row->author_email,
+                        'dateStart'     => $row->date_start,
+                        'dateEnd'       => $row->date_end,
+                        'active'        => ('y' == $row->active),
+                        'allowComments' => ('y' == $row->comment),
+                        'link'          => $row->link,
+                        'linkTitle'     => $row->linktitel,
+                        'target'        => $row->target
+                        );
+                    $news[] = $item;
                 }
             }
-            return $output;
-        } else {
-            return $this->pmf_lang['msgNoNews'];
         }
+
+        return $news;
+    }
+
+    /**
+     * getNews()
+     *
+     * Function for generating the HTML fro the current news
+     *
+     * @param   boolean $showArchive
+     * @param   boolean $active
+     * @return  string
+     * @access  public
+     * @since   2002-08-23
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     */
+    function getNews($showArchive = false, $active = true)
+    {
+        $output = '';
+
+        $news = $this->getLatestData($showArchive, $active);
+
+        foreach ($news as $item) {
+            $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?action=news&amp;newsid='.$item['id'].'&amp;newslang='.$item['lang']);;
+            if (isset($item['header'])) {
+                $oLink->itemTitle =$item['header'];
+            }
+            $output .= sprintf('<h3><a name="news_%d">%s</a><a href="%s"> <img id="goNews" src="images/more.gif" width="11" height="11" alt="%s" /></a></h3><div class="block">%s',
+                            $item['id'],
+                            $item['header'],
+                            $oLink->toString(),
+                            $item['header'],
+                            $item['content']
+                        );
+            if ('' != $item['link']) {
+                $output .= sprintf('<br />Info: <a href="http://%s" target="_%s">%s</a>',
+                                $item['link'],
+                                $item['target'],
+                                $item['linkTitle']
+                            );
+            }
+            $output .= sprintf('</div><div class="date">%s</div>', makeDate($item['date']));
+        }
+
+        return ('' == $output) ? $this->pmf_lang['msgNoNews'] : $output;
     }
 
     /**
@@ -144,7 +199,7 @@ class PMF_News
     function getNewsHeader($active = false)
     {
         $headers = array();
-        
+
         $now = date('YmdHis');
         $query = sprintf("
             SELECT
@@ -209,7 +264,7 @@ class PMF_News
             if ($row = $this->db->fetch_object($result)) {
                 $news = array(
                     'id'            => $row->id,
-                    'date'         => makeDate($row->datum),
+                    'date'          => makeDate($row->datum),
                     'lang'          => $row->lang,
                     'header'        => $row->header,
                     'content'       => $row->artikel,
@@ -428,3 +483,4 @@ class PMF_News
         return $html;
     }
 }
+// }}}

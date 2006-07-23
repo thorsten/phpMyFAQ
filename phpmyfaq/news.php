@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: news.php,v 1.1 2006-07-23 09:14:45 matteo Exp $
+* $Id: news.php,v 1.2 2006-07-23 10:34:32 matteo Exp $
 *
 * Shows the page with the news record and - when available - the user
 * comments
@@ -63,8 +63,10 @@ $oG = new PMF_Glossary($db, $LANGCODE);
 $content = $oG->insertItemsIntoContent($content);
 $header  = $oG->insertItemsIntoContent($header);
 
+// Is the news item expired?
+$expired = (date('YmdHis') > $news['dateEnd']);
 // Does the user have the right to add a comment?
-if ($news['allowComments'] == 'n') {
+if (('n' == $news['allowComments']) || ($expired)) {
     $commentMessage = $PMF_LANG['msgWriteNoComment'];
 } else {
     $commentMessage = sprintf('%s<a onclick="show(\'comment\');" href="#comment">%s</a>',

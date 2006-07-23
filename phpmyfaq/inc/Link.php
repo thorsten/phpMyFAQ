@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Link.php,v 1.7 2006-07-02 17:19:29 matteo Exp $
+* $Id: Link.php,v 1.8 2006-07-23 10:34:32 matteo Exp $
 *
 * Link management - Functions and Classes
 *
@@ -30,6 +30,7 @@ define('PMF_LINK_SLASH', '/');
 define('PMF_LINK_CONTENT', 'content/');
 define('PMF_LINK_CATEGORY', 'category/');
 define('PMF_LINK_SITEMAP', 'sitemap/');
+define('PMF_LINK_NEWS', 'news/');
 define('PMF_LINK_HTML_MINUS', '-');
 define('PMF_LINK_HTML_UNDERSCORE', '_');
 define('PMF_LINK_HTML_SLASH', '/');
@@ -55,6 +56,8 @@ define('PMF_LINK_GET_ID', 'id');
 define('PMF_LINK_GET_LETTER', 'letter');
 define('PMF_LINK_GET_PAGE', 'seite');
 define('PMF_LINK_GET_HIGHLIGHT', 'highlight');
+define('PMF_LINK_GET_NEWS_ID', 'newsid');
+define('PMF_LINK_GET_NEWS_LANG', 'newslang');
 /**#@-*/
 /**#@+
   * System GET values definitions
@@ -64,6 +67,7 @@ define('PMF_LINK_GET_ACTION_ARTIKEL', 'artikel');
 define('PMF_LINK_GET_ACTION_ASK', 'ask');
 define('PMF_LINK_GET_ACTION_CONTACT', 'contact');
 define('PMF_LINK_GET_ACTION_HELP', 'help');
+define('PMF_LINK_GET_ACTION_NEWS', 'news');
 define('PMF_LINK_GET_ACTION_OPEN', 'open');
 define('PMF_LINK_GET_ACTION_SEARCH', 'search');
 define('PMF_LINK_GET_ACTION_SITEMAP', 'sitemap');
@@ -427,6 +431,9 @@ class PMF_Link
                                     $url .= PMF_LINK_HTML_SLASH.$this->getSEOItemTitle().PMF_LINK_HTML_EXTENSION;
                                 }
                             }
+                            break;
+                        case PMF_LINK_GET_ACTION_NEWS:
+                            $url .= PMF_LINK_NEWS.$getParams[PMF_LINK_GET_NEWS_ID].PMF_LINK_HTML_SLASH.$getParams[PMF_LINK_GET_NEWS_LANG].PMF_LINK_SLASH.$this->getSEOItemTitle().PMF_LINK_HTML_EXTENSION;
                             break;
                         default:
                             break;

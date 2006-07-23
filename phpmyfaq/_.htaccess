@@ -1,5 +1,5 @@
 ##
-# $Id: _.htaccess,v 1.9 2006-06-27 19:04:00 matteo Exp $
+# $Id: _.htaccess,v 1.10 2006-07-23 10:34:32 matteo Exp $
 #
 # phpMyFAQ 2.0 .htaccess file
 #
@@ -118,3 +118,9 @@ RewriteRule sitemap.xml.gz$     sitemap.google.php?gz=1 [L]
 # a solution id page
 RewriteCond %{REQUEST_URI}              solution_id_([0-9]+)\.html$ [NC]
 RewriteRule ^solution_id_(.*)\.html$    index.php?solution_id=$1 [L,QSA]
+
+# PMF News
+# * http://[...]/news/<ID>/<LANGUAGE CODE>/<HEADER>.htm
+# * http://[...]/news/<ID>/<LANGUAGE CODE>/<HEADER>.html
+RewriteRule news/([0-9]+)/([a-z\-]+)/([^\/]+)\.htm(l?)$     index.php?action=news&newsid=$1&newslang=$2 [L,QSA]
+RewriteRule news/([0-9]+)/([a-z\-]+)/(.+)$                  $3 [L,QSA]
