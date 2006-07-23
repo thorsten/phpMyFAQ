@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.56 2006-07-23 09:14:46 matteo Exp $
+* $Id: update.php,v 1.57 2006-07-23 11:57:21 thorstenr Exp $
 *
 * Main update script
 *
@@ -336,7 +336,7 @@ if ($step == 4) {
     if (4 == strlen($version)) {
         $version = 149;
     }
-    
+
     if ($version < 200) {
         require_once(PMF_ROOT_DIR."/inc/config.php");
     }
@@ -664,8 +664,8 @@ if ($step == 5) {
                 break;
         }
         // 5/N. Fix faqnews table
+        $defaultLang = str_replace(array('language_', '.php'), '', $PMF_CONF['language']);
         switch($DB["type"]) {
-            $defaultLang = str_replace(array('language_', '.php'), '', $PMF_CONF['language']);
             default:
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqnews ADD lang VARCHAR(5) NULL AFTER id';
                 $query[] = 'UPDATE '.SQLPREFIX.'faqnews SET lang = \''.$defaultLang.'\'';
