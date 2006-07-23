@@ -1,15 +1,12 @@
 <?php
 /**
-* $Id: mysql.update.sql.php,v 1.8 2006-07-23 12:01:49 thorstenr Exp $
+* $Id: mysqli.update.sql.php,v 1.1 2006-07-23 12:01:49 thorstenr Exp $
 *
-* CREATE TABLE instruction for MySQL database - UPDATE STAGE from 1.x to 2.0.0
+* CREATE TABLE instruction for MySQLi database - UPDATE STAGE from 1.x to 2.0.0
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @author       Tom Rochester <tom.rochester@gmail.com>
-* @author       Lars Tiedemann <php@larstiedemann.de>
-* @author       Matteo Scaramuccia <matteo@scaramuccia.com>
-* @since        2006-07-03
-* @copyright    (c) 2001-2006 phpMyFAQ Team
+* @since        2006-07-23
+* @copyright    (c) 2006 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in

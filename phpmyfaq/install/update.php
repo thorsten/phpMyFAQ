@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.57 2006-07-23 11:57:21 thorstenr Exp $
+* $Id: update.php,v 1.58 2006-07-23 12:01:49 thorstenr Exp $
 *
 * Main update script
 *
@@ -677,6 +677,7 @@ if ($step == 5) {
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqnews ADD date_end VARCHAR(14) NOT NULL DEFAULT \'99991231235959\' AFTER date_start';
                 break;
         }
+
         // 6/N. Fix facomments table
         switch($DB["type"]) {
             default:
@@ -684,19 +685,17 @@ if ($step == 5) {
                 $query[] = 'UPDATE '.SQLPREFIX.'facomments SET type = \'faq\'';
                 break;
         }
+
         // 7/N. Rename faquser table for preparing the users migration
         switch($DB["type"]) {
             default:
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faquser RENAME TO '.SQLPREFIX.'faquser_PMF16x_old';
                 break;
         }
+
         // 8/N. Add the new/changed PMF 2.0.0 tables
-        switch($DB["type"]) {
-            // TODO: Add the updates for the other supported DBs
-            default:
-                require_once('mysql.update.sql.php');
-                break;
-        }
+        require_once($DB['type'].'.update.sql.php');
+
         // 9/N. Run the user migration and remove the faquser_PMF16x_old table
         // Populate faquser table
         $now = date("YmdHis", time());
