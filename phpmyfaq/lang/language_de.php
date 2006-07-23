@@ -1,20 +1,20 @@
 <?php
 /**
- * $Id: language_de.php,v 1.16 2006-01-02 16:51:30 thorstenr Exp $
+ * $Id: language_de.php,v 1.17 2006-07-23 12:10:14 thorstenr Exp $
  *
  * File:                language_de.php
- * Description:		    German language file
- * Authors:				Thorsten Rinne <thorsten@phpmyfaq.de>
+ * Description:            German language file
+ * Authors:                Thorsten Rinne <thorsten@phpmyfaq.de>
  *                      A. Neufang <B_A_F_F@gmx.de>
- * Date:				2004-02-19
- * Last Update:		    2004-12-07
+ * Date:                2004-02-19
+ * Last Update:            2004-12-07
  * Copyright:           (c) 2006 phpMyFAQ Team
- * 
+ *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
  * http://www.mozilla.org/MPL/
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
@@ -76,7 +76,7 @@ $PMF_LANG["msgCommentThanks"] = "<p><strong>Vielen Dank f&uuml;r den Kommentar!<
 $PMF_LANG["msgSeeXMLFile"] = "XML-Datei &ouml;ffnen";
 $PMF_LANG["msgSend2Friend"] = "Artikel weiterempfehlen";
 $PMF_LANG["msgS2FName"] = "Absender Name:";
-$PMF_LANG["msgS2FEMail"] = "Absender E-Mailadresse:"; 
+$PMF_LANG["msgS2FEMail"] = "Absender E-Mailadresse:";
 $PMF_LANG["msgS2FFriends"] = "Freundinnen und Freunde:";
 $PMF_LANG["msgS2FEMails"] = ". E-Mailadresse:";
 $PMF_LANG["msgS2FText"] = "Folgender Text wird gesendet:";
@@ -598,7 +598,7 @@ $PMF_LANG['ad_categ_select'] = 'Sprache der Kategorie';
 // added v1.5.1 - 2005-09-06 by Thorsten
 $PMF_LANG['msgSitemap'] = 'Sitemap';
 
-// added v1.6.0 - 2005-09-15 by Thorsten and Minoru
+// added v2.0.0 - 2005-09-15 by Thorsten and by Minoru
 $PMF_LANG['ad_menu_glossary'] = 'Glossar';
 $PMF_LANG['ad_glossary_add'] = 'Glossar-Eintrag hinzufügen';
 $PMF_LANG['ad_glossary_item'] = 'Begriff';
@@ -647,3 +647,66 @@ $PMF_LANG['ad_linkcheck_config_th_chown'] = 'Set to obtain ownership';
 $PMF_LANG['msgNewQuestionVisible'] = 'Dazu muss der Administrator allerdings diese erst freigeben.';
 $PMF_LANG['msgQuestionsWaiting'] = 'Wartend auf die Freigabe durch den Administrator:';
 $PMF_LANG['ad_entry_visibility'] = 'Sichtbar machen?';
+
+// added v2.0.0 - 2006-01-02 by Lars
+$PMF_LANG['ad_user_error_password'] =  "Bitte geben Sie ein Passwort ein. ";
+$PMF_LANG['ad_user_error_passwordsDontMatch'] =  "Die Passwörter stimmen nicht überein. ";
+$PMF_LANG['ad_user_error_loginInvalid'] =  "Der ausgewählte Benutzer ist ungültig.";
+$PMF_LANG['ad_user_error_noEmail'] =  "Bitte geben Sie eine korrekte E-Mailadresse ein. ";
+$PMF_LANG['ad_user_error_noRealName'] =  "Bitte geben Sie ihren Namen ein. ";
+$PMF_LANG['ad_user_error_delete'] =  "Der Benutzeraccount kann nicht gelöscht werden. ";
+$PMF_LANG['ad_user_error_noId'] =  "Keine ID ausgewählt. ";
+$PMF_LANG['ad_user_error_protectedAccount'] =  "Der Benutzeraccount ist geschützt. ";
+$PMF_LANG['ad_user_deleteUser'] = "Lösche Benutzer";
+$PMF_LANG['ad_user_status'] = "Status:";
+$PMF_LANG['ad_user_lastModified'] = "Letzte Änderung:";
+$PMF_LANG['ad_gen_cancel'] = "Abbrechen";
+$PMF_LANG["rightsLanguage"]['addglossary'] = "add glossary item";
+$PMF_LANG["rightsLanguage"]['editglossary'] = "edit glossary item";
+$PMF_LANG["rightsLanguage"]['delglossary'] = "delete glossary item";
+$PMF_LANG["ad_menu_group_administration"] = "Group Administration";
+$PMF_LANG['ad_user_loggedin'] = 'You\'re logged in as ';
+$PMF_LANG['ad_group_details'] = "Group Details";
+$PMF_LANG['ad_group_add'] = "Add Group";
+$PMF_LANG['ad_group_add_link'] = "Add Group";
+$PMF_LANG['ad_group_name'] = "Name:";
+$PMF_LANG['ad_group_description'] = "Description:";
+$PMF_LANG['ad_group_autoJoin'] = "Auto-join:";
+$PMF_LANG['ad_group_suc'] = "Group <strong>successfully</strong> added.";
+$PMF_LANG['ad_group_error_noName'] = "Please enter a group name. ";
+$PMF_LANG['ad_group_error_delete'] = "Group could not be deleted. ";
+$PMF_LANG['ad_group_deleted'] = "The group was successfully deleted.";
+$PMF_LANG['ad_group_deleteGroup'] = "Delete Group";
+$PMF_LANG['ad_group_deleteQuestion'] = "Are you sure that this group shall be deleted?";
+$PMF_LANG['ad_user_uncheckall'] = "Unselect All";
+$PMF_LANG['ad_group_membership'] = "Group Membership";
+$PMF_LANG['ad_group_members'] = "Members";
+$PMF_LANG['ad_group_addMember'] = "+";
+$PMF_LANG['ad_group_removeMember'] = "-";
+
+// added v2.0.0 - 2006-07-20 by Matteo
+$PMF_LANG['ad_export_which_cat'] = 'Limit the FAQ data to be exported (optional)';
+$PMF_LANG['ad_export_cat_downwards'] = 'Downwards?';
+$PMF_LANG['ad_export_type'] = 'Format of the export';
+$PMF_LANG['ad_export_type_choose'] = 'Choose one of the supported formats:';
+$PMF_LANG['ad_export_download_view'] = 'Download or view in-line?';
+$PMF_LANG['ad_export_download'] = 'download';
+$PMF_LANG['ad_export_view'] = 'view in-line';
+$PMF_LANG['ad_export_gen_xhtml'] = 'Make XHTML file';
+$PMF_LANG['ad_export_gen_docbook'] = 'Make Docbook file';
+
+// added v2.0.0 - 2006-07-22 by Matteo
+$PMF_LANG['ad_news_data'] = 'News data';
+$PMF_LANG['ad_news_author_name'] = 'Author name:';
+$PMF_LANG['ad_news_author_email'] = 'Author email:';
+$PMF_LANG['ad_news_set_active'] = 'Activate:';
+$PMF_LANG['ad_news_allowComments'] = 'Allow comments:';
+$PMF_LANG['ad_news_expiration_window'] = 'News expiration time window (optional)';
+$PMF_LANG['ad_news_from'] = 'From:';
+$PMF_LANG['ad_news_to'] = 'To:';
+$PMF_LANG['ad_news_insertfail'] = 'An error occured inserting the news item into the database.';
+$PMF_LANG['ad_news_updatefail'] = 'An error occured updating the news item into the database.';
+$PMF_LANG['newsShowCurrent'] = 'Show current news.';
+$PMF_LANG['newsShowArchive'] = 'Show archived news.';
+$PMF_LANG['newsArchive'] = ' News archive';
+$PMF_LANG['newsWriteComment'] = 'comment on this entry';
