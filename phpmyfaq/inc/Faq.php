@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.36 2006-07-23 09:14:46 matteo Exp $
+* $Id: Faq.php,v 1.37 2006-07-23 12:39:28 thorstenr Exp $
 *
 * The main FAQ class
 *
@@ -898,7 +898,7 @@ class PMF_Faq
         global $sids, $PMF_CONF;
         $query =
 '            SELECT
-                DISTINCT '.SQLPREFIX.'faqdata.id AS id,
+                '.SQLPREFIX.'faqdata.id AS id,
                 '.SQLPREFIX.'faqdata.lang AS lang,
                 '.SQLPREFIX.'faqdata.thema AS thema,
                 '.SQLPREFIX.'faqdata.datum AS datum,
@@ -964,7 +964,7 @@ class PMF_Faq
             }
             $oldId = $row->id;
         }
-        
+
         return $topten;
     }
 
@@ -985,7 +985,7 @@ class PMF_Faq
         global $sids, $PMF_CONF;
         $query =
 '            SELECT
-                DISTINCT '.SQLPREFIX.'faqdata.id AS id,
+                '.SQLPREFIX.'faqdata.id AS id,
                 '.SQLPREFIX.'faqdata.lang AS lang,
                 '.SQLPREFIX.'faqcategoryrelations.category_id AS category_id,
                 '.SQLPREFIX.'faqdata.thema AS thema,
@@ -1450,7 +1450,7 @@ class PMF_Faq
                 $sql .= "\nORDER BY ".SQLPREFIX."faqcategoryrelations.category_id, ".SQLPREFIX."faqdata.id";
                 break;
         }
-        
+
         return $sql;
     }
 }
