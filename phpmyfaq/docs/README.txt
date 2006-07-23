@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.48 2006-07-01 15:18:17 thorstenr Exp $
+$Id: README.txt,v 1.49 2006-07-23 10:51:10 thorstenr Exp $
 
 phpMyFAQ 2.0.0-dev
 Codename "Prometheus"
@@ -22,6 +22,7 @@ Changes since 1.6:
 - added dynamic related articles (Thorsten, Marco Enders)
 - added support for Google sitemaps (Matteo)
 - added improved WYSIWYG editor and Image Manager (Thorsten)
+- added improved News module (Matteo, Thorsten)
 - improved URL rewrite functions (Matteo)
 
 Known issues in phpMyFAQ 2.0.0:
@@ -43,6 +44,7 @@ Version 2.0.0 - n/a
 - added dynamic related articles (Thorsten, Marco Enders)
 - added support for Google sitemaps (Matteo)
 - added improved WYSIWYG editor and Image Manager (Thorsten)
+- added improved News module (Matteo, Thorsten)
 - improved URL rewrite functions (Matteo)
 
 Version 1.6.2 - 2006-06-17

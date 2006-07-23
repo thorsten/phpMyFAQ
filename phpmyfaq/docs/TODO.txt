@@ -6,7 +6,6 @@ TODO list for future versions of phpMyFAQ:
 - improved category and FAQ record functions
 - show/edit/delete comments
 - add "submit translation" link
-- better news system with multiple pages and sticky news
 - bugfixing for stability or security reasons
 
 2.1.0 "Pandora":
