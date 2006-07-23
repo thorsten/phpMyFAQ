@@ -45,10 +45,11 @@
     <p>{writeCommentMsg}</p>
     
     <!-- Comment Form -->
-    <div id="comment" style="display: none;">
+    <a name=comment"></a><div id="comment" style="display: none;">
     <form action="{writeSendAdress}" method="post">
     <input type="hidden" name="id" value="{id}" />
     <input type="hidden" name="lang" value="{lang}" />
+    <input type="hidden" name="type" value="faq" />
     <input type="hidden" name="spamid" value="{spamid}" />
     
     <fieldset>

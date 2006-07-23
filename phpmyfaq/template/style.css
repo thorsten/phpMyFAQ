@@ -1,5 +1,5 @@
 /**
- * $Id: style.css,v 1.18 2006-07-20 20:00:31 matteo Exp $
+ * $Id: style.css,v 1.19 2006-07-23 09:14:45 matteo Exp $
  *
  * This is the main style sheet file for phpMyFAQ 2.0
  * If you want to change only the colours, use colors.css
@@ -286,15 +286,26 @@ html>body #categories li a {
 .main-content #news h3 a {
     text-decoration: none;
 }
-.main-content #news h2{
+.main-content #news h2 {
     font-size: 135%;
     border: 1px solid;
     margin-bottom: 5px;
     padding: 2px 4px 2px 4px;
 }
-.main-content #news img{
+.main-content #news h2#news_header {
+    font-size: 175%;
+    background: none;
+    border: none;
+    border-bottom: 1px solid;
+    margin-top: 7px;
+    margin-bottom: 7px;
+}
+.main-content #news img#newsRSS {
     float: right;
     margin-top: -16px;
+}
+.main-content #news img#goNews {
+    border: none;
 }
 .main-content #news .block {
    margin-top: 7px;

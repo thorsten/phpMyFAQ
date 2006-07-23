@@ -1,0 +1,51 @@
+    <!-- begin news -->
+    <div id="news">
+    <h2>{writeNewsHeader}{writeNewsRSS}</h2>
+    <h2 id="news_header">{writeHeader}</h2>
+
+    <!-- News -->
+    <p>{writeContent}</p>
+    <!-- /News -->
+
+    <!-- News Info -->
+    <p>{writeDateMsg}{writeAuthor}</p>
+    <!-- /News Info -->
+
+    <p>{writeCommentMsg}</p>
+
+    <!-- Comment Form -->
+    <a name=comment"></a><div id="comment" style="display: none;">
+    <form action="{writeSendAdress}" method="post">
+    <input type="hidden" name="newsid" value="{newsId}" />
+    <input type="hidden" name="newslang" value="{newsLang}" />
+    <input type="hidden" name="type" value="news" />
+    <input type="hidden" name="spamid" value="{spamid}" />
+
+    <fieldset>
+    <legend>{msgWriteComment}</legend>
+
+        <label for="user" class="left">{msgNewContentName}</label>
+        <input class="inputfield" type="text" name="user" value="{defaultContentName}" size="50" /><br />
+
+        <label for="mail" class="left">{msgNewContentMail}</label>
+        <input class="inputfield" type="text" name="mail" value="{defaultContentMail}" size="50" /><br />
+
+        <label for="comment" class="left">{msgYourComment}</label>
+        <textarea class="inputarea" cols="37" rows="10" name="comment"></textarea><br />
+
+    </fieldset>
+
+    {captchaFieldset}
+
+    <div style="text-align:center;">
+        <input class="submit" type="submit" name="submit" value="{msgNewContentSubmit}" />
+    </div>
+    <br />
+
+    </form>
+    </div>
+    <!-- /Comment Form -->
+
+    {writeComments}
+    </div>
+

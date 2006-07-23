@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: savecomment.php,v 1.14 2006-06-21 21:59:39 matteo Exp $
+* $Id: savecomment.php,v 1.15 2006-07-23 09:14:45 matteo Exp $
 *
 * Saves the posted comment
 *
@@ -26,40 +26,50 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $captcha = new PMF_Captcha($db, $sids, $pmf->language, $_SERVER['HTTP_USER_AGENT'], $_SERVER['REMOTE_ADDR']);
 
+$id = 0;
+$msgWriteComment = $PMF_LANG['msgWriteComment'];
+
 if (    isset($_POST['user']) && $_POST['user'] != ''
      && isset($_POST['mail']) && checkEmail($_POST['mail'])
      && isset($_POST['comment']) && $_POST['comment'] != ''
      && IPCheck($_SERVER['REMOTE_ADDR'])
      && checkBannedWord(htmlspecialchars(strip_tags($_POST['comment'])))
      && checkCaptchaCode() ) {
-    
-    $id = (isset($_POST["id"])) ? (int)$_POST["id"] : 0;
+
+    if ((isset($_POST['type']) && ('faq' == $_POST['type'])) && isset($_POST["id"])) {
+        $id = (int)$_POST["id"];
+    } else if ((isset($_POST['type']) && ('news' == $_POST['type'])) && isset($_POST["newsid"])) {
+        $id = (int)$_POST["newsid"];
+        $msgWriteComment = $PMF_LANG['newsWriteComment'];
+    }
+
     Tracking("save_comment", $id);
 
     $commentData = array(
         'record_id' => $id,
+        'type'      => $db->escape_string($_POST['type']),
         'username'  => $db->escape_string(safeHTML($_POST["user"])),
         'usermail'  => $db->escape_string(safeHTML($_POST["mail"])),
         'comment'   => nl2br($db->escape_string(safeHTML($_POST["comment"]))),
-        'date'      => date('YmdHis'),
+        'date'      => time(),
         'helped'    => '');
     $faq->addComment($commentData);
 
     $tpl->processTemplate ("writeContent", array(
-    "msgCommentHeader" => $PMF_LANG["msgWriteComment"],
-    "Message" => $PMF_LANG["msgCommentThanks"]
+    "msgCommentHeader"  => $msgWriteComment,
+    "Message"           => $PMF_LANG["msgCommentThanks"]
     ));
 } else {
     if (IPCheck($_SERVER["REMOTE_ADDR"]) == FALSE) {
         $tpl->processTemplate ("writeContent", array(
-        "msgCommentHeader" => $PMF_LANG["msgWriteComment"],
-        "Message" => $PMF_LANG["err_bannedIP"]
+        "msgCommentHeader"  => $msgWriteComment,
+        "Message"           => $PMF_LANG["err_bannedIP"]
         ));
     } else {
         Tracking("error_save_comment", $id);
         $tpl->processTemplate ("writeContent", array(
-        "msgCommentHeader" => $PMF_LANG["msgWriteComment"],
-        "Message" => $PMF_LANG["err_SaveComment"]
+        "msgCommentHeader"  => $msgWriteComment,
+        "Message"           => $PMF_LANG["err_SaveComment"]
         ));
     }
 }

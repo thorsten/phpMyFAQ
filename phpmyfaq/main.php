@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: main.php,v 1.12 2006-06-25 11:02:54 thorstenr Exp $
+* $Id: main.php,v 1.13 2006-07-23 09:14:45 matteo Exp $
 *
 * The main start page with the Top10 and the latest messages
 *
@@ -28,9 +28,22 @@ require_once('inc/News.php');
 
 $news = new PMF_News($db, $LANGCODE);
 
+$archived = (isset($_GET['newsid']) && ('0' == $_GET['newsid']));
+if ($archived) {
+    $writeNewsHeader = $PMF_CONF['title'].$PMF_LANG['newsArchive'];
+    $writeNewsRSS = '';
+    $showAllNews = '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'">'.$PMF_LANG['newsShowCurrent'].'</a>';
+} else {
+    $writeNewsHeader = $PMF_CONF['title'].$PMF_LANG['msgNews'];
+    $writeNewsRSS = '<a href="feed/news/rss.php" target="_blank"><img id="newsRSS" src="images/rss.png" width="28" height="16" alt="RSS" /></a>';
+    $showAllNews = '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'newsid=0">'.$PMF_LANG['newsShowArchive'].'</a>';
+}
+
 $tpl->processTemplate ('writeContent', array(
-    'writeNewsHeader'       => $PMF_CONF['title'].$PMF_LANG['msgNews'],
-    'writeNews'             => $news->getNews(),
+    'writeNewsHeader'       => $writeNewsHeader,
+    'writeNewsRSS'          => $writeNewsRSS,
+    'writeNews'             => $news->getNews($archived),
+    'showAllNews'           => $showAllNews,
     'writeNumberOfArticles' => $PMF_LANG['msgHomeThereAre'].$faq->getNumberOfRecords($LANGCODE).$PMF_LANG['msgHomeArticlesOnline'],
     'writeTopTenHeader'     => $PMF_LANG['msgTopTen'],
     'writeTopTenRow'        => $faq->getTopTen(),

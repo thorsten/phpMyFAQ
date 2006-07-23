@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mysql.sql.php,v 1.28 2006-07-11 19:58:42 matteo Exp $
+* $Id: mysql.sql.php,v 1.29 2006-07-23 09:14:46 matteo Exp $
 *
 * CREATE TABLE instruction for MySQL database
 *
@@ -123,6 +123,7 @@ PRIMARY KEY (id))";
 $query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqcomments (
 id_comment int(11) NOT NULL,
 id int(11) NOT NULL,
+type varchar(10) NOT NULL,
 usr varchar(255) NOT NULL,
 email varchar(255) NOT NULL,
 comment text NOT NULL,
@@ -227,14 +228,16 @@ PRIMARY KEY (id)
 //faqnews
 $query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqnews (
 id int(11) NOT NULL,
+lang varchar(5) NOT NULL,
 header varchar(255) NOT NULL,
 artikel text NOT NULL,
 datum varchar(14) NOT NULL,
 author_name  varchar(255) NULL,
 author_email varchar(255) NULL,
-active char(1) default 'Y',
-date_start varchar(14) NOT NULL DEFAULT '99991231235959',
-date_end varchar(14) NOT NULL DEFAULT '00000000000000',
+active char(1) default 'y',
+comment char(1) default 'n',
+date_start varchar(14) NOT NULL DEFAULT '00000000000000',
+date_end varchar(14) NOT NULL DEFAULT '99991231235959',
 link varchar(255) NOT NULL,
 linktitel varchar(255) NOT NULL,
 target varchar(255) NOT NULL,

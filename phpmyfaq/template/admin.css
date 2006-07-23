@@ -1,7 +1,7 @@
 /**
- * $Id: admin.css,v 1.17 2006-07-11 19:06:57 matteo Exp $
+ * $Id: admin.css,v 1.18 2006-07-23 09:14:45 matteo Exp $
  *
- * This is the CSS file for the admin section of phpMyFAQ 1.5.x
+ * This is the CSS file for the admin section of phpMyFAQ 2.0.x
  * You don't need to change enything here but feel free to do it. :-)
  *
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -57,7 +57,13 @@ fieldset {
     margin-top: 15px;
     border: 1px solid #D0D9D9;
 }
-label, legend {
+legend {
+    background: #EDF2F2;
+    font-weight: bold;
+    border: 1px solid #D0D9D9;
+    padding: 2px 6px;
+}
+label {
     font-weight: bold;
 }
 input, textarea, select {

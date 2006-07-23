@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.40 2006-07-02 19:08:46 thorstenr Exp $
+* $Id: artikel.php,v 1.41 2006-07-23 09:14:45 matteo Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -23,6 +23,13 @@
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
+    exit();
+}
+
+$captcha = new PMF_Captcha($db, $sids, $pmf->language, $_SERVER['HTTP_USER_AGENT'], $_SERVER['REMOTE_ADDR']);
+
+if (isset($_GET['gen'])) {
+    $captcha->showCaptchaImg();
     exit();
 }
 
@@ -154,7 +161,7 @@ if (isset($permission['editbt'])) {
 if ($faq->faqRecord['comment'] == 'n') {
     $commentMessage = $PMF_LANG['msgWriteNoComment'];
 } else {
-    $commentMessage = sprintf('%s<a onclick="show(\'comment\');" href="#">%s</a>',
+    $commentMessage = sprintf('%s<a onclick="show(\'comment\');" href="#comment">%s</a>',
         $PMF_LANG['msgYouCan'],
         $PMF_LANG['msgWriteComment']);
 }
@@ -201,6 +208,7 @@ $tpl->processTemplate ("writeContent", array(
     'defaultContentName'          => getFullUserName(),
     'msgYourComment'              => $PMF_LANG['msgYourComment'],
     'msgNewContentSubmit'         => $PMF_LANG['msgNewContentSubmit'],
+    'captchaFieldset'             => printCaptchaFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('writecomment'), $captcha->caplength),
     'writeComments'               => $faq->getComments($id)));
 
 $tpl->includeTemplate('writeContent', 'index');

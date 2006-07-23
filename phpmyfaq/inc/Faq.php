@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.35 2006-07-20 21:44:45 matteo Exp $
+* $Id: Faq.php,v 1.36 2006-07-23 09:14:46 matteo Exp $
 *
 * The main FAQ class
 *
@@ -720,8 +720,10 @@ class PMF_Faq
             FROM
                 %sfaqcomments
             WHERE
-                id = %d',
+                type = \'%s\'
+                AND id = %d',
             SQLPREFIX,
+            'faq',
             $id);
         $result = $this->db->query($query);
         $output = '';
@@ -744,11 +746,11 @@ class PMF_Faq
      *
      * Adds a comment
      *
-     * @param     array     $commentData
-     * @return    boolean
-     * @access     public
-     * @since    2006-06-18
-     * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param   array     $commentData
+     * @return  boolean
+     * @access  public
+     * @since   2006-06-18
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     function addComment($commentData)
     {
@@ -760,10 +762,11 @@ class PMF_Faq
             "INSERT INTO
                 %sfaqcomments
             VALUES
-                (%d, %d, '%s', '%s', '%s', %d, '%s')",
+                (%d, %d, '%s', '%s', '%s', '%s', %d, '%s')",
             SQLPREFIX,
             $this->db->nextID(SQLPREFIX.'faqcomments', 'id_comment'),
             $commentData['record_id'],
+            $commentData['type'],
             $commentData['username'],
             $commentData['usermail'],
             $commentData['comment'],
@@ -796,8 +799,11 @@ class PMF_Faq
             'DELETE FROM
                 %sfaqcomments
             WHERE
-                id = %d AND id_comment = %d',
+                type = \'%s\'
+                id = %d
+                AND id_comment = %d',
             SQLPREFIX,
+            'faq',
             $record_id,
             $comment_id);
         $this->db->query($query);

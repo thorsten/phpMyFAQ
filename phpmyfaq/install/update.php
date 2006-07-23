@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.55 2006-07-16 07:10:49 matteo Exp $
+* $Id: update.php,v 1.56 2006-07-23 09:14:46 matteo Exp $
 *
 * Main update script
 *
@@ -663,30 +663,41 @@ if ($step == 5) {
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata_revisions ADD linkCheckDate INT(11) NOT NULL DEFAULT 0 AFTER linkState';
                 break;
         }
-        // 5/N. Fix news table
+        // 5/N. Fix faqnews table
         switch($DB["type"]) {
+            $defaultLang = str_replace(array('language_', '.php'), '', $PMF_CONF['language']);
             default:
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqnews ADD lang VARCHAR(5) NULL AFTER id';
+                $query[] = 'UPDATE '.SQLPREFIX.'faqnews SET lang = \''.$defaultLang.'\'';
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqnews ADD author_name VARCHAR(255) NULL AFTER datum';
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqnews ADD author_email VARCHAR(255) NULL AFTER author_name';
-                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqnews ADD active CHAR(1) NOT NULL default \'Y\' AFTER author_email';
-                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqnews ADD date_start VARCHAR(14) NOT NULL DEFAULT \'99991231235959\' AFTER active';
-                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqnews ADD date_end VARCHAR(14) NOT NULL DEFAULT \'00000000000000\' AFTER date_start';
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqnews ADD active CHAR(1) NOT NULL default \'y\' AFTER author_email';
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqnews ADD comment CHAR(1) NOT NULL default \'n\' AFTER active';
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqnews ADD date_start VARCHAR(14) NOT NULL DEFAULT \'00000000000000\' AFTER active';
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqnews ADD date_end VARCHAR(14) NOT NULL DEFAULT \'99991231235959\' AFTER date_start';
                 break;
         }
-        // 6/N. Rename faquser table for preparing the users migration
+        // 6/N. Fix facomments table
+        switch($DB["type"]) {
+            default:
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqcomments ADD type VARCHAR(10) NOT NULL AFTER id';
+                $query[] = 'UPDATE '.SQLPREFIX.'facomments SET type = \'faq\'';
+                break;
+        }
+        // 7/N. Rename faquser table for preparing the users migration
         switch($DB["type"]) {
             default:
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faquser RENAME TO '.SQLPREFIX.'faquser_PMF16x_old';
                 break;
         }
-        // 7/N. Add the new/changed PMF 2.0.0 tables
+        // 8/N. Add the new/changed PMF 2.0.0 tables
         switch($DB["type"]) {
             // TODO: Add the updates for the other supported DBs
             default:
                 require_once('mysql.update.sql.php');
                 break;
         }
-        // 8/N. Run the user migration and remove the faquser_PMF16x_old table
+        // 9/N. Run the user migration and remove the faquser_PMF16x_old table
         // Populate faquser table
         $now = date("YmdHis", time());
         switch($DB["type"]) {
@@ -743,7 +754,7 @@ if ($step == 5) {
                 $query[] = 'DROP TABLE '.SQLPREFIX.'faquser_PMF16x_old';
                 break;
         }
-        // 9/N. Move each image in each of the faq content, from '/images' to '/images/Image'
+        // 10/N. Move each image in each of the faq content, from '/images' to '/images/Image'
         // TODO: Cycle through the faq content and move each image reference from '/images' to '/images/Image'
     }
 
@@ -772,9 +783,9 @@ if ($step == 5) {
         }
     }
 
-    // 10/N. Move each image in each of the faq content, from '/images' to '/images/Image'
+    // 11/N. Move each image in each of the faq content, from '/images' to '/images/Image'
     // TODO: Cycle through the faq content and move each file image from '/images' to '/images/Image'
-    // 11/N. Move the PMF configurarion: from inc/config.php to the faqconfig table
+    // 12/N. Move the PMF configurarion: from inc/config.php to the faqconfig table
     if ($version < 200) {
         $PMF_CONF['version'] = NEWVERSION;
         $PMF_CONF['permLevel'] = 'basic';
@@ -799,9 +810,9 @@ if ($step == 5) {
     print '<p class="center">The database was updated successfully.</p>';
     print '<p class="center"><a href="../index.php">phpMyFAQ</a></p>';
     print '<p class="center">Please remove the backup (*.php.bak and *.bak.php) files located in the directory inc/.</p>';
-    
+
     if ($version < 200) {
-        // 10/N. Remove the old config file
+        // 13/N. Remove the old config file
         if (@unlink(PMF_ROOT_DIR."/inc/config.php")) {
             print "<p class=\"center\">The file 'inc/config.php' was deleted automatically.</p>\n";
         } else {

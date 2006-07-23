@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.13 2006-07-20 22:34:35 matteo Exp $
+* $Id: language_it.php,v 1.14 2006-07-23 09:14:46 matteo Exp $
 *
 * Italian language file
 *
@@ -251,11 +251,11 @@ $PMF_LANG["ad_entry_back"] = "Indietro";
 // Newsverwaltung
 $PMF_LANG["ad_news_header"] = "Titolo:";
 $PMF_LANG["ad_news_text"] = "Testo:";
-$PMF_LANG["ad_news_link_url"] = "Link: (<strong>senza <em>http://</em></strong>)!";
+$PMF_LANG["ad_news_link_url"] = "Link (<strong>senza <em>http://</em></strong>):";
 $PMF_LANG["ad_news_link_title"] = "Titolo del link:";
 $PMF_LANG["ad_news_link_target"] = "Target del link:";
 $PMF_LANG["ad_news_link_window"] = "Il link apre una nuova finestra";
-$PMF_LANG["ad_news_link_faq"] = "Il link si apre nella stessa finestra delle FAQ";
+$PMF_LANG["ad_news_link_faq"] = "Il link si apre nella stessa finestra";
 $PMF_LANG["ad_news_add"] = "Aggiungi news";
 $PMF_LANG["ad_news_id"] = "#";
 $PMF_LANG["ad_news_headline"] = "Titolo";
@@ -619,7 +619,7 @@ $PMF_LANG['ad_entry_solution_id'] = 'ID univoco';
 $PMF_LANG['ad_entry_faq_record'] = 'Dati della FAQ';
 $PMF_LANG['ad_entry_new_revision'] = 'Vuoi creare una nuova versione?';
 $PMF_LANG['ad_entry_record_administration'] = 'Gestione della FAQ';
-$PMF_LANG['ad_entry_changelog'] = 'Diario delle variazioni:';
+$PMF_LANG['ad_entry_changelog'] = 'Diario delle variazioni';
 $PMF_LANG['ad_entry_revision'] = 'Versione';
 $PMF_LANG['ad_changerev'] = 'Seleziona la versione';
 $PMF_LANG['msgCaptcha'] = "Scrivi le lettere e i numeri che leggi nella immagine";
@@ -739,3 +739,19 @@ $PMF_LANG['ad_export_download'] = 'scarico';
 $PMF_LANG['ad_export_view'] = 'guardo';
 $PMF_LANG['ad_export_gen_xhtml'] = 'Crea il file XHTML';
 $PMF_LANG['ad_export_gen_docbook'] = 'Crea il file Docbook';
+
+// added v2.0.0 - 2006-07-22 by Matteo
+$PMF_LANG['ad_news_data'] = 'Dati della notizia';
+$PMF_LANG['ad_news_author_name'] = 'Nome dell\'autore:';
+$PMF_LANG['ad_news_author_email'] = 'Email dell\'autore:';
+$PMF_LANG['ad_news_set_active'] = 'Attiva:';
+$PMF_LANG['ad_news_allowComments'] = 'Permetti commenti:';
+$PMF_LANG['ad_news_expiration_window'] = 'Validità della notizia (opzionale)';
+$PMF_LANG['ad_news_from'] = 'Dal:';
+$PMF_LANG['ad_news_to'] = 'Al:';
+$PMF_LANG['ad_news_insertfail'] = 'Inserimento della notizia fallito.';
+$PMF_LANG['ad_news_updatefail'] = 'Aggiornamento della notizia fallito.';
+$PMF_LANG['newsShowCurrent'] = 'Mostra le notizie attuali.';
+$PMF_LANG['newsShowArchive'] = 'Mostra le notizie archiviate.';
+$PMF_LANG['newsArchive'] = ' News - Archvio';
+$PMF_LANG['newsWriteComment'] = 'Commenta questa notizia';

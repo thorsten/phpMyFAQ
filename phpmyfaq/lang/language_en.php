@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.33 2006-07-20 22:34:35 matteo Exp $
+* $Id: language_en.php,v 1.34 2006-07-23 09:14:46 matteo Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -249,11 +249,11 @@ $PMF_LANG["ad_entry_back"] = "Back";
 
 
 // Newsverwaltung
-$PMF_LANG["ad_news_header"] = "Article Header";
-$PMF_LANG["ad_news_text"] = "Text of the Record";
-$PMF_LANG["ad_news_link_url"] = "Link: (<strong>without http://</strong>)!";
+$PMF_LANG["ad_news_header"] = "Article header:";
+$PMF_LANG["ad_news_text"] = "Text of the Record:";
+$PMF_LANG["ad_news_link_url"] = "Link (<strong>without http://</strong>):";
 $PMF_LANG["ad_news_link_title"] = "Title of the link:";
-$PMF_LANG["ad_news_link_target"] = "Target of the link";
+$PMF_LANG["ad_news_link_target"] = "Target of the link:";
 $PMF_LANG["ad_news_link_window"] = "Link opens new window";
 $PMF_LANG["ad_news_link_faq"] = "Link within the FAQ";
 $PMF_LANG["ad_news_add"] = "Add News";
@@ -269,7 +269,7 @@ $PMF_LANG["ad_news_del"] = "Are you sure that you want to delete this news item?
 $PMF_LANG["ad_news_yesdelete"] = "yes, delete!";
 $PMF_LANG["ad_news_nodelete"] = "no!";
 $PMF_LANG["ad_news_delsuc"] = "News item deleted.";
-$PMF_LANG["ad_news_updatenews"] = "Update news";
+$PMF_LANG["ad_news_updatenews"] = "News item updated.";
 
 // Kategorieverwaltung
 $PMF_LANG["ad_categ_new"] = "Add new category";
@@ -538,8 +538,8 @@ $PMF_LANG["msgAttachedFiles"] = "attached files:";
 
 // Added v1.3.3 - 27.05.2003 - Thorsten
 $PMF_LANG["ad_user_action"] = "action";
-$PMF_LANG["ad_entry_email"] = "email adress:";
-$PMF_LANG["ad_entry_allowComments"] = "allow comments";
+$PMF_LANG["ad_entry_email"] = "Email address:";
+$PMF_LANG["ad_entry_allowComments"] = "Allow comments:";
 $PMF_LANG["msgWriteNoComment"] = "You cannot comment on this entry";
 $PMF_LANG["ad_user_realname"] = "real name:";
 $PMF_LANG["ad_export_generate_pdf"] = "generate PDF file";
@@ -733,3 +733,19 @@ $PMF_LANG['ad_export_download'] = 'download';
 $PMF_LANG['ad_export_view'] = 'view in-line';
 $PMF_LANG['ad_export_gen_xhtml'] = 'Make XHTML file';
 $PMF_LANG['ad_export_gen_docbook'] = 'Make Docbook file';
+
+// added v2.0.0 - 2006-07-22 by Matteo
+$PMF_LANG['ad_news_data'] = 'News data';
+$PMF_LANG['ad_news_author_name'] = 'Author name:';
+$PMF_LANG['ad_news_author_email'] = 'Author email:';
+$PMF_LANG['ad_news_set_active'] = 'Activate:';
+$PMF_LANG['ad_news_allowComments'] = 'Allow comments:';
+$PMF_LANG['ad_news_expiration_window'] = 'News expiration time window (optional)';
+$PMF_LANG['ad_news_from'] = 'From:';
+$PMF_LANG['ad_news_to'] = 'To:';
+$PMF_LANG['ad_news_insertfail'] = 'An error occured inserting the news item into the database.';
+$PMF_LANG['ad_news_updatefail'] = 'An error occured updating the news item into the database.';
+$PMF_LANG['newsShowCurrent'] = 'Show current news.';
+$PMF_LANG['newsShowArchive'] = 'Show archived news.';
+$PMF_LANG['newsArchive'] = ' News archive';
+$PMF_LANG['newsWriteComment'] = 'comment on this entry';
