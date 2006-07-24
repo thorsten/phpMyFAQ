@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.39 2006-07-24 18:51:55 thorstenr Exp $
+* $Id: Faq.php,v 1.40 2006-07-24 18:57:55 thorstenr Exp $
 *
 * The main FAQ class
 *
@@ -758,7 +758,7 @@ class PMF_Faq
     */
     function getComments($id)
     {
-        $oComment = new PMF_Comment(&$this->db, $this->language);
+        $oComment = new PMF_Comment($this->db, $this->language);
         return $oComment->getComments($id, PMF_COMMENT_TYPE_FAQ);
     }
 
@@ -775,7 +775,7 @@ class PMF_Faq
      */
     function addComment($commentData)
     {
-        $oComment = new PMF_Comment(&$this->db, $this->language);
+        $oComment = new PMF_Comment($this->db, $this->language);
         return $oComment->addComment($commentData);
     }
 
@@ -793,7 +793,7 @@ class PMF_Faq
      */
     function deleteComment($record_id, $comment_id)
     {
-        $oComment = new PMF_Comment(&$this->db, $this->language);
+        $oComment = new PMF_Comment($this->db, $this->language);
         return $oComment->deleteComment($record_id, $comment_id);
     }
 
