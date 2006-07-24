@@ -1,5 +1,5 @@
 /**
-* $Id: functions.js,v 1.1 2006-06-11 08:03:12 thorstenr Exp $
+* $Id: functions.js,v 1.2 2006-07-24 21:32:56 matteo Exp $
 *
 * Some JavaScript functions used in the admin backend
 *
@@ -74,6 +74,26 @@ function focusOnUsernameField()
 {
     if (document.forms[0] && document.forms[0].elements["faqusername"]) {
         document.forms[0].elements["faqusername"].focus();
+    }
+}
+
+/**
+ * showhideCategory()
+ *
+ * Displays or hides a div block
+ *
+ * @param    string
+ * @return   void
+ * @access   public
+ * @since    2006-03-04
+ * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+ */
+function showhideCategory(id)
+{
+    if (document.getElementById(id).style.display == 'none') {
+        document.getElementById(id).style.display = 'block';
+    } else {
+        document.getElementById(id).style.display = 'none';
     }
 }
 

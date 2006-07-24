@@ -1,11 +1,12 @@
 <?php
 /**
-* $Id: Category.php,v 1.5 2006-07-15 06:46:00 thorstenr Exp $
+* $Id: Category.php,v 1.6 2006-07-24 21:32:56 matteo Exp $
 *
 * The main category class
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Lars Tiedemann <larstiedemann@yahoo.de>
+* @author       Matteo Scaramuccia <matteo@scaramuccia.com>
 * @package      Category
 * @since        2004-02-16
 * @copyright    (c) 2004-2006 phpMyFAQ Team
@@ -349,6 +350,21 @@ class PMF_Category
     function getChildren($id)
     {
         return isset($this->children[$id]) ? array_keys($this->children[$id]) : array();
+    }
+
+    // list in a array of the $id of the child
+    function getChildNodes($id)
+    {
+        $childs = array();
+
+        if (isset($this->children[$id])) {
+            foreach(array_keys($this->children[$id]) as $childId) {
+                $childs = array_merge($childs, array($childId));
+                $childs = array_merge($childs, $this->getChildNodes($childId));
+            }
+        }
+
+        return($childs);
     }
 
     // number of childs of the $id
