@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.edit.php,v 1.32 2006-07-04 22:33:25 matteo Exp $
+* $Id: record.edit.php,v 1.33 2006-07-24 18:56:39 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23
@@ -132,22 +132,18 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     print ' '.$PMF_LANG["ad_entry_edit_2"].'</h2>';
 
     if ($permission["changebtrevs"]){
-        $query = sprintf("SELECT revision_id, datum, author FROM %sfaqdata_revisions WHERE id = %d ORDER BY revision_id", SQLPREFIX, $id);
-        $result2 = $db->query($query);
-        if ($db->num_rows($result2) > 0) {
+
+        $revisions = $faq->getRevisionIds($id, $lang);
+        if (count($revisions)) {
 ?>
     <form id="selectRevision" name="selectRevision" action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=editentry&amp;id=<?php print $id; ?>&amp;lang=<?php print $lang; ?>" method="post" />
     <fieldset>
     <legend><?php print $PMF_LANG['ad_changerev']; ?></legend>
         <select name="revisionid_selected" onChange="selectRevision.submit();" />
             <option value="<?php print $revision_id; ?>"><?php print $PMF_LANG['ad_changerev']; ?></option>
-<?php
-            while ($row2 = $db->fetch_object($result2)){
-?>
-            <option value="<?php print $row2->revision_id; ?>" <?php if ($revisionid_selected == $row2->revision_id) { print 'selected="selected"'; } ?> ><?php print $PMF_LANG['ad_entry_revision'].' 1.'.$row2->revision_id.': '.makeDate($row2->datum)." - ".$row2->author; ?></option>
-<?php
-            }
-?>
+<?php foreach ($revisions as $_revision_id => $_revision_data) { ?>
+            <option value="<?php print $_revision_data['revision_id']; ?>" <?php if ($revisionid_selected == $_revision_data['revision_id']) { print 'selected="selected"'; } ?> ><?php print $PMF_LANG['ad_entry_revision'].' 1.'.$_revision_data['revision_id'].': '.makeDate($_revision_data['datum'])." - ".$_revision_data['author']; ?></option>
+<?php } ?>
         </select>
     </fieldset>
     </form>
@@ -218,7 +214,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
                 print "<br />\n";
                 print "<em>".$PMF_LANG["ad_att_none"]."</em> ";
             }
-            print "<a href=\"#\" onclick=\"Picture('attachment.php?uin=".$uin."&amp;id=".$id."&amp;rubrik=".$rubrik."', 'Attachment', 400,80)\">".$PMF_LANG["ad_att_add"]."</a>";
+            print "<a href=\"#\" onclick=\"Picture('attachment.php?id=".$id."&amp;rubrik=".$rubrik."', 'Attachment', 400,80)\">".$PMF_LANG["ad_att_add"]."</a>";
         } else {
             print "&nbsp;".$PMF_LANG["ad_att_nope"];
         }
