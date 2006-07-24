@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.38 2006-07-23 16:40:54 matteo Exp $
+* $Id: Faq.php,v 1.39 2006-07-24 18:51:55 thorstenr Exp $
 *
 * The main FAQ class
 *
@@ -569,6 +569,46 @@ class PMF_Faq
     }
 
     /**
+     * Gets all revisions from a given record ID
+     *
+     * @param    integer    $record_id
+     * @param    string    $record_lang
+     * @return   array
+     * @access   public
+     * @since    2006-07-24
+     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function getRevisionIds($record_id, $record_lang)
+    {
+        $revision_data = array();
+        $query = sprintf("
+            SELECT
+                revision_id, datum, author
+            FROM
+                %sfaqdata_revisions
+            WHERE
+                id = %d
+            and
+                lang = '%s'
+            ORDER BY
+                revision_id",
+            SQLPREFIX,
+            $record_id,
+            $record_lang);
+        $result = $this->db->query($query);
+        if ($this->db->num_rows($result) > 0) {
+            while ($row = $db->fetch_object($result)) {
+                $revision_data[] = array(
+                    'revision_id'   => $row->revision_id,
+                    'datum'         => $row->datum,
+                    'author'        => $row->author);
+            }
+        } else {
+            return $revision_data;
+        }
+    }
+
+    /**
     * getKeywords()
     *
     * Returns the keywords of a FAQ record from the ID and language
@@ -1119,6 +1159,12 @@ class PMF_Faq
 
         return true;
     }
+
+    /**
+     * Adds a new changelog entry
+     *
+     *
+     */
 
     /**
      * createNewVisit()
