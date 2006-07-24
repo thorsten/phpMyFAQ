@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.127 2006-07-02 17:19:29 matteo Exp $
+* $Id: functions.php,v 1.128 2006-07-24 20:49:53 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -221,6 +221,35 @@ function languageOptions($lang = "", $onlyThisLang = false, $fileLanguageValue =
     }
 
     return $output;
+}
+
+/**
+ * Returns the registered users in <option> tags
+ *
+ * @param   integer $user_id
+ * @return  string
+ * @since   2006-07-24
+ * @author  Tobias Lehnert <tobias.lehnert@gmx.net>
+ */
+function userOptions($user_id = 0)
+{
+		global $db;
+		$output = "";
+		print $user_id;
+    $result = $db->query("SELECT user.user_id as id, login as name, display_name as realname FROM ".SQLPREFIX."faquser as user INNER JOIN ".SQLPREFIX."faquserdata as data ON user.user_id = data.user_id ORDER BY user.user_id");
+	      while ($row = $db->fetch_object($result)) {
+            print "\t<option value=\"".$row->id."\"";
+            if ($row->id == $user_id) {
+                print ' selected="selected"';
+            }
+            print '>';
+            print $row->name;
+            if (strlen($row->realname) > 0) {
+                print ' ('.$row->realname.')';
+            }
+            print "</option>\n";
+        }
+		return $output;
 }
 
 /**
