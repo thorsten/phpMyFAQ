@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.user_list.php,v 1.17 2006-06-12 21:23:25 matteo Exp $
+* $Id: ajax.user_list.php,v 1.18 2006-07-25 20:21:05 thorstenr Exp $
 *
 * AJAX: lists all registered users
 *
@@ -24,66 +24,68 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
-@header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-@header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
-@header("Cache-Control: no-store, no-cache, must-revalidate");
-@header("Cache-Control: post-check=0, pre-check=0", false);
-@header("Pragma: no-cache");
-@header("Content-type: text/xml");
-@header("Vary: Negotiate,Accept");
+if ($permission['addbt'] || $permission['editbt'] || $permission['delbt']) {
 
-require_once(PMF_ROOT_DIR.'/inc/PMF_User/User.php');
+    header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+    header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
+    header("Cache-Control: no-store, no-cache, must-revalidate");
+    header("Cache-Control: post-check=0, pre-check=0", false);
+    header("Pragma: no-cache");
+    header("Content-type: text/xml");
+    header("Vary: Negotiate,Accept");
 
-$user = new PMF_User();
-$user->addDb($db);
-$userList = $user->getAllUsers();
-$data = array(
-    'display_name' => $PMF_LANG["ad_user_realname"], //"real name:",
-    'email' => $PMF_LANG["ad_entry_email"], //"email adress:"
-    'last_modified' => $PMF_LANG['ad_user_lastModified'], //"last modified:",
-);
-$perm = $user->perm;
-$all_rights = $perm->getAllRightsData();
+    require_once(PMF_ROOT_DIR.'/inc/PMF_User/User.php');
 
-if (count(ob_list_handlers()) > 0) {
-    ob_clean();
-}
+    $user = new PMF_User();
+    $user->addDb($db);
+    $userList = $user->getAllUsers();
+    $data = array(
+        'display_name'  => $PMF_LANG["ad_user_realname"], //"real name:",
+        'email'         => $PMF_LANG["ad_entry_email"], //"email adress:"
+        'last_modified' => $PMF_LANG['ad_user_lastModified'], //"last modified:",
+    );
+    $perm = $user->perm;
+    $all_rights = $perm->getAllRightsData();
+
+    if (count(ob_list_handlers()) > 0) {
+        ob_clean();
+    }
 ?>
 <xml>
     <rightlist>
 <?php
-foreach ($all_rights as $right_data) {
-    $right_id = $right_data['right_id'];
-    // right is not for users!
-    if (!$right_data['for_users'])
-        continue;
+    foreach ($all_rights as $right_data) {
+        $right_id = $right_data['right_id'];
+        // right is not for users!
+        if (!$right_data['for_users'])
+            continue;
 ?>
         <right id="<?php print $right_id; ?>">
             <name><?php print isset($PMF_LANG['rightsLanguage'][$right_data['name']]) ? PMF_htmlentities($PMF_LANG['rightsLanguage'][$right_data['name']]) : $right_data['name']; ?></name>
             <description><?php print $right_data['description']; ?></description>
         </right>
 <?php
-    } /* end foreach ($all_rights) */
+        } /* end foreach ($all_rights) */
 ?>
     </rightlist>
     <userlist>
         <select_class>ad_select_user</select_class>
 <?php
-foreach ($userList as $user_id) {
-    $user_object = new PMF_User();
-    $user_object->getUserById($user_id);
-    $user_id = $user_object->getUserId();
-    $login = $user_object->getLogin();
-    $class = "ad_select_user";
-    $status = $user_object->getStatus();
+    foreach ($userList as $user_id) {
+        $user_object = new PMF_User();
+        $user_object->getUserById($user_id);
+        $user_id = $user_object->getUserId();
+        $login = $user_object->getLogin();
+        $class = "ad_select_user";
+        $status = $user_object->getStatus();
 ?>
         <user id="<?php print $user_id; ?>">
             <login><?php print $login; ?></login>
             <status><?php print $status; ?></status>
             <user_data>
 <?php
-    $user_data = $user_object->userdata->get(array_keys($data));
-    foreach ($user_data as $field => $value) {
+        $user_data = $user_object->userdata->get(array_keys($data));
+        foreach ($user_data as $field => $value) {
 ?>
 
                 <item name="<?php print $field; ?>">
@@ -91,28 +93,30 @@ foreach ($userList as $user_id) {
                     <value><?php print $value; ?></value>
                 </item>
 <?php
-    } /* end foreach ($user_data) */
+        } /* end foreach ($user_data) */
 ?>
             </user_data>
             <user_rights>
 <?php
-    foreach ($all_rights as $right_data) {
-        $right_id = $right_data['right_id'];
-        // right is not for users!
-        if (!$right_data['for_users'])
-            continue;
-        // right is a user right!
-        if ($perm->checkUserRight($user_id, $right_id)) {
+        foreach ($all_rights as $right_data) {
+            $right_id = $right_data['right_id'];
+            // right is not for users!
+            if (!$right_data['for_users'])
+                continue;
+            // right is a user right!
+            if ($perm->checkUserRight($user_id, $right_id)) {
 ?>
                 <right id="<?php print $right_id; ?>"></right>
 <?php
-        } /* end if ($perm->checkUserRight()) */
-    } /* end foreach ($all_rights) */
+            } /* end if ($perm->checkUserRight()) */
+        } /* end foreach ($all_rights) */
 ?>
             </user_rights>
         </user>
 <?php
-} /* end foreach ($userList) */
+    } /* end foreach ($userList) */
 ?>
     </userlist>
 </xml>
+<?php
+}
