@@ -1,5 +1,5 @@
 /**
- * $Id: style.css,v 1.19 2006-07-23 09:14:45 matteo Exp $
+ * $Id: style.css,v 1.20 2006-07-25 18:24:23 matteo Exp $
  *
  * This is the main style sheet file for phpMyFAQ 2.0
  * If you want to change only the colours, use colors.css
@@ -30,7 +30,7 @@ body, td {
    font-family: "Bitstream Vera Sans", "Trebuchet MS", Geneva, Verdana, Arial, Helvetica, sans-serif;
    font-size: 80.01%;
 }
-body, h1, h2, h3, h4, h5, h6, div, p, table, td, ul, ol, li, dd, dt, dl, blockquote, address, hr, pre {
+body, h1, h2, h3, h4, h5, h6, div, p, table, td, ol, li, dd, dt, dl, blockquote, address, hr, pre {
    margin: 0;
    padding: 0;
 }
@@ -52,7 +52,7 @@ h2 {
    font-size: 175%;
 }
 h3 {
-   font-size: 125%;
+   font-size: 150%;
 }
 form {
    margin: 0;
@@ -379,9 +379,6 @@ td, th, .main-content td {
 .main-content #article_categories ul li {
     margin: 0;
     padding: 0;
-}
-.main-content table {
-    float: left;
 }
 
 /**
