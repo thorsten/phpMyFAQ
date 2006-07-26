@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_zh.php,v 1.8 2006-07-15 04:46:00 matteo Exp $
+* $Id: language_zh.php,v 1.9 2006-07-26 19:15:14 matteo Exp $
 *
 * Chinese (simplified) language file
 *
@@ -119,7 +119,7 @@ $PMF_LANG["msg2answer"] = "答案";
 $PMF_LANG["msgQuestionText"] = "这里你可以看到别的用户提出的问题. 如果你回答了这些问题，您的回答有可能会被加入系统.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>系统的结构(<strong>经常</strong><strong>被问</strong>的<strong>问</strong>题) 是很简单的. 你可以按照<strong><a href=\"".$_SERVER["PHP_SELF"]."?action=show\">类别</a></strong>搜索或者通过输入关键词让<strong><a href=\"".$_SERVER["PHP_SELF"]."?action=search\">搜索引擎</a></strong>来查找.</p>";
+$PMF_LANG["msgHelpText"] = "<p><strong>常见问题解答</strong>系统的结构非常简单，你可以按照<strong><a href=\"".$_SERVER["PHP_SELF"]."?action=show\">类别</a></strong>来查询，或者通过<strong><a href=\"".$_SERVER["PHP_SELF"]."?action=search\">搜索引擎</a></strong>来搜索关键词.</p>";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "给管理员发邮件:";
@@ -226,7 +226,7 @@ $PMF_LANG["ad_entry_author"] = "作者:";
 $PMF_LANG["ad_entry_category"] = "类别:";
 $PMF_LANG["ad_entry_active"] = "激活?";
 $PMF_LANG["ad_entry_date"] = "日期:";
-$PMF_LANG["ad_entry_changed"] = "修改?";
+$PMF_LANG["ad_entry_changed"] = "有改动?";
 $PMF_LANG["ad_entry_changelog"] = "修改日志:";
 $PMF_LANG["ad_entry_commentby"] = "评论来自";
 $PMF_LANG["ad_entry_comment"] = "评论:";
@@ -572,10 +572,10 @@ $LANG_CONF["bannedIP"] = array(0 => "area", 1 => "禁止这些IP地址访问");
 $LANG_CONF["parse_php"] = array(0 => "checkbox", 1 => "允许模版引擎解析PHP代码? (默认:禁止)");
 $LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "启用mod_rewrite吗?(默认:禁止)");
 $LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "启用LDAP支持吗? (默认:禁止)");
-$LANG_CONF["referenceURL"] = array(0 => "input", 1 => "base URL for link verification (set to folder URL of Frontend)");
-$LANG_CONF["URLValidateInterval"] = array(0 => "input", 1 => "Interval between AJAX link verification (in seconds)");
-$LANG_CONF["enablevisibility"] = array(0 => "checkbox", 1 => "Disable visibility of new questions?");
-$LANG_CONF['permLevel'] = array(0 => "input", 1 => "Permission level");
+$LANG_CONF["referenceURL"] = array(0 => "input", 1 => "链接验证用的基本 URL 网址 (设置为首页 URL 网址)");
+$LANG_CONF["URLValidateInterval"] = array(0 => "input", 1 => "AJAX 连接验证间隔时间 (单位：秒)");
+$LANG_CONF["enablevisibility"] = array(0 => "checkbox", 1 => "显示新问题?(默认:禁止)");
+$LANG_CONF['permLevel'] = array(0 => "input", 1 => "权限级别");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "作为一个新的类别";
 $PMF_LANG["ad_categ_paste_error"] = "此类别不能移动。";
@@ -646,83 +646,83 @@ $PMF_LANG['ad_stat_choose'] = '选择月份';
 $PMF_LANG['ad_stat_delete'] = '马上删除所选的会话(sessions)';
 
 // added v2.0.0 - 2005-09-15 by Thorsten and by Minoru TODA
-$PMF_LANG['ad_menu_glossary'] = 'Glossary';
-$PMF_LANG['ad_glossary_add'] = 'Add glossary entry';
-$PMF_LANG['ad_glossary_edit'] = 'Edit glossary entry';
-$PMF_LANG['ad_glossary_item'] = 'Item';
-$PMF_LANG['ad_glossary_definition'] = 'Definition';
-$PMF_LANG['ad_glossary_save'] = 'Save entry';
-$PMF_LANG['ad_glossary_save_success'] = 'Glossary entry successfully saved!';
-$PMF_LANG['ad_glossary_update_success'] = 'Glossary entry successfully updated!';
-$PMF_LANG['ad_linkcheck_noReferenceURL'] = 'Automatic link verification disabled (base URL for link verify not set)';
-$PMF_LANG['ad_linkcheck_noAllowUrlOpen'] = 'Automatic link verification disabled (PHP option allow_url_fopen not Enabled)';
-$PMF_LANG['ad_linkcheck_checkResult'] = 'Automatic link verification result';
+$PMF_LANG['ad_menu_glossary'] = '术语';
+$PMF_LANG['ad_glossary_add'] = '添加术语';
+$PMF_LANG['ad_glossary_edit'] = '编辑术语';
+$PMF_LANG['ad_glossary_item'] = '条目';
+$PMF_LANG['ad_glossary_definition'] = '定义';
+$PMF_LANG['ad_glossary_save'] = '保存';
+$PMF_LANG['ad_glossary_save_success'] = '术语保存成功!';
+$PMF_LANG['ad_glossary_update_success'] = '术语更新成功!';
+$PMF_LANG['ad_linkcheck_noReferenceURL'] = '自动链接验证已禁止 (验证用的基本 URL 网址未设置)';
+$PMF_LANG['ad_linkcheck_noAllowUrlOpen'] = '自动链接验证已禁止 (PHP allow_url_fopen 选项未激活)';
+$PMF_LANG['ad_linkcheck_checkResult'] = '自动链接验证结果';
 $PMF_LANG['ad_linkcheck_checkSuccess'] = 'OK';
-$PMF_LANG['ad_linkcheck_checkFailed'] = 'Failed';
-$PMF_LANG['ad_linkcheck_failReason'] = 'Reason(s) failed:';
+$PMF_LANG['ad_linkcheck_checkFailed'] = '失败';
+$PMF_LANG['ad_linkcheck_failReason'] = '失败原因是:';
 $PMF_LANG['ad_linkcheck_noLinksFound'] = 'No URLs compatible with link verifier feature found.';
 $PMF_LANG['ad_linkcheck_searchbadonly'] = 'Only with bad links';
 $PMF_LANG['ad_linkcheck_infoReason'] = 'Additional Information:';
 $PMF_LANG['ad_linkcheck_openurl_infoprefix'] = 'Found while testing <strong>%s</strong>: ';
-$PMF_LANG['ad_linkcheck_openurl_notready'] = 'LinkVerifier not ready.';
+$PMF_LANG['ad_linkcheck_openurl_notready'] = '链接验证未准备好.';
 $PMF_LANG['ad_linkcheck_openurl_maxredirect'] = 'Maximum redirect count <strong>%d</strong> exceeded.';
-$PMF_LANG['ad_linkcheck_openurl_urlisblank'] = 'Resolved to blank URL.';
-$PMF_LANG['ad_linkcheck_openurl_tooslow'] = 'Host <strong>%s</strong> is slow or not responding.';
-$PMF_LANG['ad_linkcheck_openurl_nodns'] = 'Host <strong>%s</strong> is slow or has no DNS.';
-$PMF_LANG['ad_linkcheck_openurl_redirected'] = 'URL was redirected to <strong>%s</strong>.';
-$PMF_LANG['ad_linkcheck_openurl_ambiguous'] = 'Ambiguous HTTP status <strong>%s</strong> returned.';
-$PMF_LANG['ad_linkcheck_protocol_unsupported'] = '%s protocol unsupported by Automatic link verification.';
-$PMF_LANG['ad_menu_linkconfig'] = 'Configure URL Verifier';
-$PMF_LANG['ad_linkcheck_config_title'] = 'URL Verifier Configuration';
-$PMF_LANG['ad_linkcheck_config_disabled'] = 'URL Verifier feature disabled';
-$PMF_LANG['ad_linkcheck_config_warnlist'] = 'URLs to warn';
-$PMF_LANG['ad_linkcheck_config_ignorelist'] = 'URLs to ignore';
-$PMF_LANG['ad_linkcheck_config_warnlist_description'] = 'URLs prefixed with items below will be issued warning regardless of whether it is valid.<br />Use this feature to detect soon-to-be defunct URLs';
-$PMF_LANG['ad_linkcheck_config_ignorelist_description'] = 'Exact URLs listed below will be assumed valid without validation.<br />Use this feature to omit URLs that fail to validate using URL Verifier';
+$PMF_LANG['ad_linkcheck_openurl_urlisblank'] = '解析到空的 URL 网址.';
+$PMF_LANG['ad_linkcheck_openurl_tooslow'] = '主机 <strong>%s</strong> 很慢或者没有回应.';
+$PMF_LANG['ad_linkcheck_openurl_nodns'] = '主机 <strong>%s</strong> 很慢或者没有 DNS 域名.';
+$PMF_LANG['ad_linkcheck_openurl_redirected'] = 'URL 网址解析到 <strong>%s</strong>.';
+$PMF_LANG['ad_linkcheck_openurl_ambiguous'] = '返回的 HTTP 状态 不明确：<strong>%s</strong>.';
+$PMF_LANG['ad_linkcheck_protocol_unsupported'] = '%s 协议未获自动链接验证系统支持.';
+$PMF_LANG['ad_menu_linkconfig'] = 'URL 网址验证设置';
+$PMF_LANG['ad_linkcheck_config_title'] = 'URL 网址验证设置';
+$PMF_LANG['ad_linkcheck_config_disabled'] = 'URL 网址验证功能被禁用';
+$PMF_LANG['ad_linkcheck_config_warnlist'] = '报警的 URL 网址';
+$PMF_LANG['ad_linkcheck_config_ignorelist'] = '忽略的 URLs 网址';
+$PMF_LANG['ad_linkcheck_config_warnlist_description'] = '符合下面条目的 URL 网址将发出警告信息，不论其是否真的有效.<br />使用这个功能来检测几近失效的 URL 网址';
+$PMF_LANG['ad_linkcheck_config_ignorelist_description'] = '以下列出的 URLs 网址将被认为是有效的，无须经过验证.<br />使用这个功能来忽略验证失效的 URL 网址';
 $PMF_LANG['ad_linkcheck_config_th_id'] = 'ID#';
-$PMF_LANG['ad_linkcheck_config_th_url'] = 'URL to match';
-$PMF_LANG['ad_linkcheck_config_th_reason'] = 'Match reason';
+$PMF_LANG['ad_linkcheck_config_th_url'] = '匹配的 URL 网址';
+$PMF_LANG['ad_linkcheck_config_th_reason'] = '匹配原因';
 $PMF_LANG['ad_linkcheck_config_th_owner'] = 'Entry owner';
 $PMF_LANG['ad_linkcheck_config_th_enabled'] = 'Set to enable entry';
 $PMF_LANG['ad_linkcheck_config_th_locked'] = 'Set to lock ownership';
-$PMF_LANG['ad_linkcheck_config_th_chown'] = 'Set to obtain ownership';
-$PMF_LANG['msgNewQuestionVisible'] = 'The question have to be reviewed first before getting public.';
-$PMF_LANG['msgQuestionsWaiting'] = 'Waiting for publishing by the administrators: ';
-$PMF_LANG['ad_entry_visibility'] = 'Publish?';
+$PMF_LANG['ad_linkcheck_config_th_chown'] = '设为获得所有权';
+$PMF_LANG['msgNewQuestionVisible'] = '问答必须经过审查才会被发布.';
+$PMF_LANG['msgQuestionsWaiting'] = '等待管理员发布: ';
+$PMF_LANG['ad_entry_visibility'] = '发布?';
 
 // added v2.0.0 - 2006-01-02 by Lars
-$PMF_LANG['ad_user_error_password'] =  "Please enter a password. ";
-$PMF_LANG['ad_user_error_passwordsDontMatch'] =  "Passwords do not match. ";
-$PMF_LANG['ad_user_error_loginInvalid'] =  "The specified user name is invalid.";
-$PMF_LANG['ad_user_error_noEmail'] =  "Please enter a valid mail adress. ";
-$PMF_LANG['ad_user_error_noRealName'] =  "Please enter your real name. ";
-$PMF_LANG['ad_user_error_delete'] =  "User account could not be deleted. ";
-$PMF_LANG['ad_user_error_noId'] =  "No ID specified. ";
-$PMF_LANG['ad_user_error_protectedAccount'] =  "User account is protected. ";
-$PMF_LANG['ad_user_deleteUser'] = "Delete User";
-$PMF_LANG['ad_user_status'] = "Status:";
-$PMF_LANG['ad_user_lastModified'] = "last modified:";
-$PMF_LANG['ad_gen_cancel'] = "Cancel";
-$PMF_LANG["rightsLanguage"]['addglossary'] = "add glossary item";
-$PMF_LANG["rightsLanguage"]['editglossary'] = "edit glossary item";
-$PMF_LANG["rightsLanguage"]['delglossary'] = "delete glossary item";
-$PMF_LANG["ad_menu_group_administration"] = "Group Administration";
-$PMF_LANG['ad_user_loggedin'] = 'You\'re logged in as ';
+$PMF_LANG['ad_user_error_password'] =  "请输入秘密. ";
+$PMF_LANG['ad_user_error_passwordsDontMatch'] =  "密码不对. ";
+$PMF_LANG['ad_user_error_loginInvalid'] =  "用户名无效.";
+$PMF_LANG['ad_user_error_noEmail'] =  "请输入有效的email地址. ";
+$PMF_LANG['ad_user_error_noRealName'] =  "请输入您的真实姓名. ";
+$PMF_LANG['ad_user_error_delete'] =  "用户帐号不能被删除. ";
+$PMF_LANG['ad_user_error_noId'] =  "无指定的 ID . ";
+$PMF_LANG['ad_user_error_protectedAccount'] =  "用户帐号是受保护的. ";
+$PMF_LANG['ad_user_deleteUser'] = "删除用户";
+$PMF_LANG['ad_user_status'] = "状态:";
+$PMF_LANG['ad_user_lastModified'] = "最后更改:";
+$PMF_LANG['ad_gen_cancel'] = "取消";
+$PMF_LANG["rightsLanguage"]['addglossary'] = "添加术语条目";
+$PMF_LANG["rightsLanguage"]['editglossary'] = "编辑术语条目";
+$PMF_LANG["rightsLanguage"]['delglossary'] = "删除术语条目";
+$PMF_LANG["ad_menu_group_administration"] = "群组管理";
+$PMF_LANG['ad_user_loggedin'] = '您登录的身份是 ';
 
-$PMF_LANG['ad_group_details'] = "Group Details";
-$PMF_LANG['ad_group_add'] = "Add Group";
-$PMF_LANG['ad_group_add_link'] = "Add Group";
-$PMF_LANG['ad_group_name'] = "Name:";
-$PMF_LANG['ad_group_description'] = "Description:";
+$PMF_LANG['ad_group_details'] = "群组详细资料";
+$PMF_LANG['ad_group_add'] = "新增群组";
+$PMF_LANG['ad_group_add_link'] = "新增群组";
+$PMF_LANG['ad_group_name'] = "名称:";
+$PMF_LANG['ad_group_description'] = "描述:";
 $PMF_LANG['ad_group_autoJoin'] = "Auto-join:";
-$PMF_LANG['ad_group_suc'] = "Group <strong>successfully</strong> added.";
-$PMF_LANG['ad_group_error_noName'] = "Please enter a group name. ";
-$PMF_LANG['ad_group_error_delete'] = "Group could not be deleted. ";
-$PMF_LANG['ad_group_deleted'] = "The group was successfully deleted.";
-$PMF_LANG['ad_group_deleteGroup'] = "Delete Group";
-$PMF_LANG['ad_group_deleteQuestion'] = "Are you sure that this group shall be deleted?";
-$PMF_LANG['ad_user_uncheckall'] = "Unselect All";
-$PMF_LANG['ad_group_membership'] = "Group Membership";
-$PMF_LANG['ad_group_members'] = "Members";
+$PMF_LANG['ad_group_suc'] = "群组创建<strong>成功</strong>.";
+$PMF_LANG['ad_group_error_noName'] = "请输入群组名称. ";
+$PMF_LANG['ad_group_error_delete'] = "群组不能被删除. ";
+$PMF_LANG['ad_group_deleted'] = "群组已被成功删除.";
+$PMF_LANG['ad_group_deleteGroup'] = "删除群组";
+$PMF_LANG['ad_group_deleteQuestion'] = "您确定删除此群组?";
+$PMF_LANG['ad_user_uncheckall'] = "取消全选";
+$PMF_LANG['ad_group_membership'] = "群组成员";
+$PMF_LANG['ad_group_members'] = "成员";
 $PMF_LANG['ad_group_addMember'] = "+";
 $PMF_LANG['ad_group_removeMember'] = "-";
