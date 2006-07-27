@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: News.php,v 1.10 2006-07-23 16:40:54 matteo Exp $
+* $Id: News.php,v 1.11 2006-07-27 19:59:01 matteo Exp $
 *
 * The News class for phpMyFAQ news
 *
@@ -301,7 +301,7 @@ class PMF_News
     */
     function getComments($id)
     {
-        $oComment = new PMF_Comment(&$this->db, $this->language);
+        $oComment = new PMF_Comment($this->db, $this->language);
         return $oComment->getComments($id, PMF_COMMENT_TYPE_NEWS);
     }
 
@@ -318,7 +318,7 @@ class PMF_News
      */
     function addComment($commentData)
     {
-        $oComment = new PMF_Comment(&$this->db, $this->language);
+        $oComment = new PMF_Comment($this->db, $this->language);
         return $oComment->addComment($commentData);
     }
 
@@ -336,7 +336,7 @@ class PMF_News
      */
     function deleteComment($record_id, $comment_id)
     {
-        $oComment = new PMF_Comment(&$this->db, $this->language);
+        $oComment = new PMF_Comment($this->db, $this->language);
         return $oComment->deleteComment($record_id, $comment_id);
     }
 
