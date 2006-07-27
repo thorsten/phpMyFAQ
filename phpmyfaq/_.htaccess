@@ -1,5 +1,5 @@
 ##
-# $Id: _.htaccess,v 1.10 2006-07-23 10:34:32 matteo Exp $
+# $Id: _.htaccess,v 1.11 2006-07-27 19:03:46 matteo Exp $
 #
 # phpMyFAQ 2.0 .htaccess file
 #
@@ -65,31 +65,16 @@ RewriteRule ^(.*)$                  index.php?action=help [L,QSA]
 RewriteCond %{REQUEST_URI}          contact\.html$ [NC]
 RewriteRule ^(.*)$                  index.php?action=contact [L,QSA]
 
-# a page with a record
-# * http://[...]/content/1/1/<LANGUAGE CODE>/<FAQ TOPIC>.htm
-# * http://[...]/content/1/1/<LANGUAGE CODE>/<FAQ TOPIC>.html
-RewriteRule content/([0-9]+)/([0-9]+)/([a-z\-]+)/(.+)\.htm(l?)$     index.php?action=artikel&cat=$1&id=$2&artlang=$3 [L,QSA]
-RewriteRule content/([0-9]+)/([0-9]+)/([a-z\-]+)/(.+)$              $4 [L,QSA]
 # a page with a record (backward compatibility)
 # * http://[...]/1_1_en.html
 RewriteCond %{REQUEST_URI}              ([0-9]+)_([0-9]+)_([a-z\-]+)\.html$ [NC]
 RewriteRule ^(.*)_(.*)_(.*)\.html$      index.php?action=artikel&cat=$1&id=$2&artlang=$3 [L,QSA]
 
-# a category page with page count
-# * http://[...]/category/1/<PAGE NUMBER/<CATEGORY NAME>.htm
-# * http://[...]/category/1/<PAGE NUMBER/<CATEGORY NAME>.html
-RewriteRule category/([0-9]+)/([0-9]+)/(.+)\.htm(l?)$    index.php?action=show&cat=$1&seite=$2 [L,QSA]
-RewriteRule category/([0-9]+)/([0-9]+)/(.+)$             $3 [L,QSA]
 # a category page with page count (backward compatibility)
 # * http://[...]/category1_1.html
 RewriteCond %{REQUEST_URI}              category([0-9]+)_([0-9]+)\.html$ [NC]
 RewriteRule ^category(.*)_(.*)\.html$   index.php?action=show&cat=$1&seite=$2 [L,QSA]
 
-# a category page
-# * http://[...]/category/1/<CATEGORY NAME>.htm
-# * http://[...]/category/1/<CATEGORY NAME>.html
-RewriteRule category/([0-9]+)/(.+)\.htm(l?)$    index.php?action=show&cat=$1 [L,QSA]
-RewriteRule category/([0-9]+)/(.+)$             $2 [L,QSA]
 # a category page (backward compatibility)
 # * http://[...]/category1.html
 RewriteCond %{REQUEST_URI}              category([0-9]+)\.html$ [NC]
@@ -98,16 +83,39 @@ RewriteRule ^category(.*)\.html$        index.php?action=show&cat=$1 [L,QSA]
 # start page
 RewriteRule index.html$                 index.php [PT]
 
+# sitemap (backward compatibility)
+RewriteCond %{REQUEST_URI}              sitemap-([a-zA-Z0-9‰ˆ¸ƒ÷‹ﬂ]*)_([a-z\-]+)\.html$ [NC]
+RewriteRule ^sitemap-(.*)_(.*)\.html$   index.php?action=sitemap&letter=$1&lang=$2 [L,QSA]
+
+# a solution id page
+RewriteCond %{REQUEST_URI}              solution_id_([0-9]+)\.html$ [NC]
+RewriteRule ^solution_id_(.*)\.html$    index.php?solution_id=$1 [L,QSA]
+
+# PMF faq record page
+# * http://[...]/content/1/1/<LANGUAGE CODE>/<FAQ TOPIC>.htm
+# * http://[...]/content/1/1/<LANGUAGE CODE>/<FAQ TOPIC>.html
+RewriteRule content/([0-9]+)/([0-9]+)/([a-z\-]+)/(.+)\.htm(l?)$     index.php?action=artikel&cat=$1&id=$2&artlang=$3 [L,QSA]
+RewriteRule content/([0-9]+)/([0-9]+)/([a-z\-]+)/(.+)$              $4 [L,QSA]
+
+# PMF category page with page count
+# * http://[...]/category/1/<PAGE NUMBER/<CATEGORY NAME>.htm
+# * http://[...]/category/1/<PAGE NUMBER/<CATEGORY NAME>.html
+RewriteRule category/([0-9]+)/([0-9]+)/(.+)\.htm(l?)$    index.php?action=show&cat=$1&seite=$2 [L,QSA]
+RewriteRule category/([0-9]+)/([0-9]+)/(.+)$             $3 [L,QSA]
+
+# PMF category page
+# * http://[...]/category/1/<CATEGORY NAME>.htm
+# * http://[...]/category/1/<CATEGORY NAME>.html
+RewriteRule category/([0-9]+)/(.+)\.htm(l?)$    index.php?action=show&cat=$1 [L,QSA]
+RewriteRule category/([0-9]+)/(.+)$             $2 [L,QSA]
+
 # PMF sitemap
 # * http://[...]/sitemap/<LETTER>/<LANGUAGE CODE>.htm
 # * http://[...]/sitemap/<LETTER>/<LANGUAGE CODE>.html
 RewriteRule sitemap/([^\/]+)/([a-z\-]+)\.htm(l?)$   index.php?action=sitemap&letter=$1&lang=$2 [L,QSA]
 RewriteRule sitemap/([^\/]+)/(.+)$                  $2 [L,QSA]
-# PMF sitemap (backward compatibility)
-RewriteCond %{REQUEST_URI}              sitemap-([a-zA-Z0-9‰ˆ¸ƒ÷‹ﬂ]*)_([a-z\-]+)\.html$ [NC]
-RewriteRule ^sitemap-(.*)_(.*)\.html$   index.php?action=sitemap&letter=$1&lang=$2 [L,QSA]
 
-# Google sitemap
+# PMF Google sitemap
 # * http://[...]/sitemap.xml
 # * http://[...]/sitemap.gz
 # * http://[...]/sitemap.xml.gz
@@ -115,11 +123,7 @@ RewriteRule sitemap.xml$        sitemap.google.php [L]
 RewriteRule sitemap.gz$         sitemap.google.php?gz=1 [L]
 RewriteRule sitemap.xml.gz$     sitemap.google.php?gz=1 [L]
 
-# a solution id page
-RewriteCond %{REQUEST_URI}              solution_id_([0-9]+)\.html$ [NC]
-RewriteRule ^solution_id_(.*)\.html$    index.php?solution_id=$1 [L,QSA]
-
-# PMF News
+# PMF news page
 # * http://[...]/news/<ID>/<LANGUAGE CODE>/<HEADER>.htm
 # * http://[...]/news/<ID>/<LANGUAGE CODE>/<HEADER>.html
 RewriteRule news/([0-9]+)/([a-z\-]+)/([^\/]+)\.htm(l?)$     index.php?action=news&newsid=$1&newslang=$2 [L,QSA]
