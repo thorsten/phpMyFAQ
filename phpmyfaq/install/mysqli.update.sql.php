@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mysqli.update.sql.php,v 1.1 2006-07-23 12:01:49 thorstenr Exp $
+* $Id: mysqli.update.sql.php,v 1.2 2006-07-27 18:54:04 matteo Exp $
 *
 * CREATE TABLE instruction for MySQLi database - UPDATE STAGE from 1.x to 2.0.0
 *
@@ -179,7 +179,7 @@ $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('spamEnableSafeEmail', 't
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('title', 'phpMyFAQ Codename \"Prometheus\"')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('tracking', 'true')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('URLValidateInterval', '86400')";
-$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('version', ".NEWVERSION.")";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('version', '".NEWVERSION."')";
 
 $query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (1, 'adduser', 'Right to add user accounts', 1, 1)";
 $query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (2, 'edituser', 'Right to edit user accounts', 1, 1)";

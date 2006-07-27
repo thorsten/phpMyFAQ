@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.58 2006-07-23 12:01:49 thorstenr Exp $
+* $Id: update.php,v 1.59 2006-07-27 18:54:04 matteo Exp $
 *
 * Main update script
 *
@@ -682,7 +682,7 @@ if ($step == 5) {
         switch($DB["type"]) {
             default:
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqcomments ADD type VARCHAR(10) NOT NULL AFTER id';
-                $query[] = 'UPDATE '.SQLPREFIX.'facomments SET type = \'faq\'';
+                $query[] = 'UPDATE '.SQLPREFIX.'faqcomments SET type = \'faq\'';
                 break;
         }
 
@@ -786,11 +786,9 @@ if ($step == 5) {
     // TODO: Cycle through the faq content and move each file image from '/images' to '/images/Image'
     // 12/N. Move the PMF configurarion: from inc/config.php to the faqconfig table
     if ($version < 200) {
-        $PMF_CONF['version'] = NEWVERSION;
         $PMF_CONF['permLevel'] = 'basic';
         $PMF_CONF['enablevisibility'] = 'Y';
         $PMF_CONF['referenceURL'] = str_replace('/install/update.php', '', $_SERVER['PHP_SELF']);
-        $PMF_CONF['URLValidateInterval'] = '86400';
         $PMF_CONF['send2friendText'] = $PMF_CONF['send2friend_text'];
         unset($PMF_CONF['send2friend_text']);
         unset($PMF_CONF['copyright_eintrag']);
