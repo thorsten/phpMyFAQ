@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.edit.php,v 1.33 2006-07-24 18:56:39 thorstenr Exp $
+* $Id: record.edit.php,v 1.34 2006-07-27 21:13:07 matteo Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23
@@ -22,6 +22,13 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
+
+// FIXME: Why we loose $user object? E.g.: the code below returns no user found
+/*
+print('User id '.$user->getUserId().'<br /><pre>');
+print_r($user->errors);
+print('</pre>');
+*/
 
 if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     $tree = new PMF_Category();
@@ -132,7 +139,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     print ' '.$PMF_LANG["ad_entry_edit_2"].'</h2>';
 
     if ($permission["changebtrevs"]){
-
+        
         $revisions = $faq->getRevisionIds($id, $lang);
         if (count($revisions)) {
 ?>

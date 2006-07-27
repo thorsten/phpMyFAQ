@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.128 2006-07-24 20:49:53 thorstenr Exp $
+* $Id: functions.php,v 1.129 2006-07-27 21:13:07 matteo Exp $
 *
 * This is the main functions file!
 *
@@ -1621,10 +1621,11 @@ function adminlog($text)
                     SQLPREFIX,
                     $db->nextID(SQLPREFIX.'faqadminlog', 'id'),
                     time(),
-                    $user->userdata->get('id'),
+                    $user->userdata->get('user_id'),
                     "'".nl2br($text)."'",
                     "'".$_SERVER['REMOTE_ADDR']."'"
                     );
+
         $db->query($query);
     }
 }
