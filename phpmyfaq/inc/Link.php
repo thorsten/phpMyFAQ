@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Link.php,v 1.8 2006-07-23 10:34:32 matteo Exp $
+* $Id: Link.php,v 1.9 2006-07-27 19:27:10 matteo Exp $
 *
 * Link management - Functions and Classes
 *
@@ -372,12 +372,7 @@ class PMF_Link
                             $url .= PMF_LINK_HTML_ADDCONTENT;
                             break;
                         case PMF_LINK_GET_ACTION_ARTIKEL:
-                            // TODO: Remove the check below WHEN _httpd.ini will be aligned and tested.
-                            if ($this->isIISServer()) {
-                                $url .= $getParams[PMF_LINK_GET_CATEGORY].PMF_LINK_HTML_UNDERSCORE.$getParams[PMF_LINK_GET_ID].PMF_LINK_HTML_UNDERSCORE.$getParams[PMF_LINK_GET_ARTLANG].PMF_LINK_HTML_EXTENSION;
-                            } else {
-                                $url .= PMF_LINK_CONTENT.$getParams[PMF_LINK_GET_CATEGORY].PMF_LINK_HTML_SLASH.$getParams[PMF_LINK_GET_ID].PMF_LINK_HTML_SLASH.$getParams[PMF_LINK_GET_ARTLANG].PMF_LINK_SLASH.$this->getSEOItemTitle().PMF_LINK_HTML_EXTENSION;
-                            }
+                            $url .= PMF_LINK_CONTENT.$getParams[PMF_LINK_GET_CATEGORY].PMF_LINK_HTML_SLASH.$getParams[PMF_LINK_GET_ID].PMF_LINK_HTML_SLASH.$getParams[PMF_LINK_GET_ARTLANG].PMF_LINK_SLASH.$this->getSEOItemTitle().PMF_LINK_HTML_EXTENSION;
                             if (isset($getParams[PMF_LINK_GET_HIGHLIGHT])) {
                                 $url .= PMF_LINK_SEARCHPART_SEPARATOR.PMF_LINK_GET_HIGHLIGHT.'='.$getParams[PMF_LINK_GET_HIGHLIGHT];
                             }
@@ -398,15 +393,10 @@ class PMF_Link
                             $url .= PMF_LINK_HTML_SEARCH;
                             break;
                         case PMF_LINK_GET_ACTION_SITEMAP:
-                            // TODO: Remove the check below WHEN _httpd.ini will be aligned and tested.
-                            if ($this->isIISServer()) {
-                                $url .= PMF_LINK_HTML_SITEMAP.PMF_LINK_HTML_MINUS.$getParams[PMF_LINK_GET_LETTER].PMF_LINK_HTML_UNDERSCORE.$getParams[PMF_LINK_GET_LANG].PMF_LINK_HTML_EXTENSION;
+                            if (isset($getParams[PMF_LINK_GET_LETTER])) {
+                                $url .= PMF_LINK_SITEMAP.$getParams[PMF_LINK_GET_LETTER].PMF_LINK_HTML_SLASH.$getParams[PMF_LINK_GET_LANG].PMF_LINK_HTML_EXTENSION;
                             } else {
-                                if (isset($getParams[PMF_LINK_GET_LETTER])) {
-                                    $url .= PMF_LINK_SITEMAP.$getParams[PMF_LINK_GET_LETTER].PMF_LINK_HTML_SLASH.$getParams[PMF_LINK_GET_LANG].PMF_LINK_HTML_EXTENSION;
-                                } else {
-                                    $url .= PMF_LINK_SITEMAP.'A'.PMF_LINK_HTML_SLASH.$getParams[PMF_LINK_GET_LANG].PMF_LINK_HTML_EXTENSION;
-                                }
+                                $url .= PMF_LINK_SITEMAP.'A'.PMF_LINK_HTML_SLASH.$getParams[PMF_LINK_GET_LANG].PMF_LINK_HTML_EXTENSION;
                             }
                             break;
                         case PMF_LINK_GET_ACTION_SHOW:
@@ -416,20 +406,11 @@ class PMF_Link
                                 $url .= PMF_LINK_HTML_SHOWCAT;
                             }
                             else {
-                                // TODO: Remove the check below WHEN _httpd.ini will be aligned and tested.
-                                if ($this->isIISServer()) {
-                                    $url .= PMF_LINK_HTML_CATEGORY.$getParams[PMF_LINK_GET_CATEGORY];
-                                    if (isset($getParams[PMF_LINK_GET_PAGE])) {
-                                        $url .= PMF_LINK_HTML_UNDERSCORE.$getParams[PMF_LINK_GET_PAGE];
-                                    }
-                                    $url .= PMF_LINK_HTML_EXTENSION;
-                                } else {
-                                    $url .= PMF_LINK_CATEGORY.$getParams[PMF_LINK_GET_CATEGORY];
-                                    if (isset($getParams[PMF_LINK_GET_PAGE])) {
-                                        $url .= PMF_LINK_HTML_SLASH.$getParams[PMF_LINK_GET_PAGE];
-                                    }
-                                    $url .= PMF_LINK_HTML_SLASH.$this->getSEOItemTitle().PMF_LINK_HTML_EXTENSION;
+                                $url .= PMF_LINK_CATEGORY.$getParams[PMF_LINK_GET_CATEGORY];
+                                if (isset($getParams[PMF_LINK_GET_PAGE])) {
+                                    $url .= PMF_LINK_HTML_SLASH.$getParams[PMF_LINK_GET_PAGE];
                                 }
+                                $url .= PMF_LINK_HTML_SLASH.$this->getSEOItemTitle().PMF_LINK_HTML_EXTENSION;
                             }
                             break;
                         case PMF_LINK_GET_ACTION_NEWS:
