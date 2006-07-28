@@ -1,11 +1,11 @@
 <?php
 /**
-* $Id: Mysql.php,v 1.6 2006-06-29 20:52:47 matteo Exp $
+* $Id: Mysql.php,v 1.7 2006-07-28 20:34:27 thorstenr Exp $
 *
 * db_mysql
 *
-* The db_mysql class provides methods and functions for a MySQL 3.23.x
-* and 4.0.x database.
+* The db_mysql class provides methods and functions for a MySQL 4.0.x 
+* and higher database.
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Meikel Katzengreis <meikel@katzengreis.com>
@@ -34,7 +34,7 @@ class db_mysql
      * @var   mixed
      * @see   connect(), query(), dbclose()
      */
-    var $conn = FALSE;
+    var $conn = false;
 
     /**
      * The query log string
@@ -53,15 +53,15 @@ class db_mysql
      * @param   string $username
      * @param   string $password
      * @param   string $db_name
-     * @return  boolean TRUE, if connected, otherwise FALSE
+     * @return  boolean TRUE, if connected, otherwise false
      * @access  public
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2003-02-24
      */
     function connect ($host, $user, $passwd, $db)
     {
-        $this->conn = mysql_pconnect($host, $user, $passwd);
-        if (empty($db) OR $this->conn == FALSE) {
+        $this->conn = mysql_connect($host, $user, $passwd);
+        if (empty($db) || $this->conn == false) {
             print "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n";
             print "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n";
             print "<head>\n";
@@ -73,7 +73,7 @@ class db_mysql
             print "<p align=\"center\">The error message of the MySQL server:<br />".mysql_error()."</p>\n";
             print "</body>\n";
             print "</html>";
-            return FALSE;
+            return false;
         }
         return mysql_select_db($db, $this->conn);
     }
@@ -106,11 +106,7 @@ class db_mysql
     */
     function escape_string($string)
     {
-      if (function_exists('mysql_real_escape_string')) {
-          return mysql_real_escape_string($string, $this->conn);
-      } else {
-          return mysql_escape_string($string);
-      }
+        return mysql_real_escape_string($string, $this->conn);
     }
 
     /**
@@ -242,11 +238,7 @@ class db_mysql
 
         $match = implode(",", $match);
 
-        if (version_compare($this->server_version(), '4.0.1') < 0)  {
-            $against = "('".$string."')"; // Search with MySQL 3.23.23+
-        } else {
-            $against = "('".$string."' IN BOOLEAN MODE)"; // Search with MySQL 4.0.1+
-        }
+        $against = "('".$string."' IN BOOLEAN MODE)";
 
         if (is_numeric($string)) {
             $query = "SELECT ".$fields." FROM ".$table.$joined." WHERE ".$match." = ".$string;
@@ -368,5 +360,4 @@ class db_mysql
             mysql_close($this->conn);
         }
     }
-
 }
