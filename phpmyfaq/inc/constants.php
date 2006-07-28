@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: constants.php,v 1.15 2006-07-23 09:14:46 matteo Exp $
+* $Id: constants.php,v 1.16 2006-07-28 20:31:28 thorstenr Exp $
 *
 * Constants for phpMyFAQ
 *
@@ -100,14 +100,14 @@ define("PMF_SITEMAP_GOOGLE_USE_SEO", true);
 * @var  array
 */
 $supported_databases = array(
-    'mysql'     => array('4.1.0', 'MySQL 3.23 / 4.0'),
-    'pgsql'     => array('4.2.0', 'PostgreSQL 7.x / 8.x'),
-    'sybase'    => array('4.1.0', 'Sybase'),
-    'mssql'     => array('4.1.0', 'MS SQL Server 2000 / 2005'),
+    'mysql'     => array('4.3.0', 'MySQL 4.0 / 4.1 / 5.0'),
+    'pgsql'     => array('4.3.0', 'PostgreSQL 7.x / 8.x'),
+    'sybase'    => array('4.3.0', 'Sybase'),
+    'mssql'     => array('4.3.0', 'MS SQL Server 2000 / 2005'),
     'mysqli'    => array('5.0.0', 'MySQL 4.1 / 5.0 / 5.1'),
     'sqlite'    => array('5.0.0', 'SQLite'),
-    'ibm_db2'   => array('4.1.0', 'IBM DB2 Universal Database 8.2 / 9.0'),
-    'maxdb'     => array('4.1.0', 'MaxDB 7.5 / 7.6 (experimental)')
+    'ibm_db2'   => array('4.3.0', 'IBM DB2 Universal Database 8.2 / 9.0'),
+    'maxdb'     => array('4.3.0', 'MaxDB 7.5 / 7.6 (experimental)')
     );
 
 /* allowed 'action' varibales for GET - DO NOT CHANGE! */
