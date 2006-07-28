@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.60 2006-07-28 19:42:23 matteo Exp $
+* $Id: update.php,v 1.61 2006-07-28 19:48:58 matteo Exp $
 *
 * Main update script
 *
@@ -663,8 +663,8 @@ if ($step == 5) {
             default:
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata_revisions ADD linkState VARCHAR(7) NOT NULL AFTER datum';
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata_revisions ADD linkCheckDate INT(11) NOT NULL DEFAULT 0 AFTER linkState';
-                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata ADD date_start VARCHAR(14) NOT NULL DEFAULT \'00000000000000\' AFTER linkCheckDate';
-                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata ADD date_end VARCHAR(14) NOT NULL DEFAULT \'99991231235959\' AFTER date_start';
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata_revisions ADD date_start VARCHAR(14) NOT NULL DEFAULT \'00000000000000\' AFTER linkCheckDate';
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata_revisions ADD date_end VARCHAR(14) NOT NULL DEFAULT \'99991231235959\' AFTER date_start';
                 break;
         }
         // 5/N. Fix faqnews table
