@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: rss.php,v 1.17 2006-07-23 10:34:32 matteo Exp $
+* $Id: rss.php,v 1.18 2006-07-28 19:14:55 matteo Exp $
 *
 * The RSS feed with the latest five records
 *
@@ -72,8 +72,6 @@ if ($num > 0) {
                 $item['thema'] .
                 "]]></title>\n" .
                 "\t\t<description><![CDATA[" .
-                "<p><b>".$item['thema']."</b>" .
-                " <em>(".$item['visits']." ".$PMF_LANG["msgViews"].")</em></p>" .
                 $content .
                 "]]></description>\n" .
                 "\t\t<link>".PMF_Link::getSystemUri('/feed/latest/rss.php').$link."</link>\n" .
