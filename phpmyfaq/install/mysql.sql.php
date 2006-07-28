@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mysql.sql.php,v 1.30 2006-07-28 19:10:34 thorstenr Exp $
+* $Id: mysql.sql.php,v 1.31 2006-07-28 19:42:23 matteo Exp $
 *
 * CREATE TABLE instruction for MySQL database
 *
@@ -153,6 +153,8 @@ comment enum('y','n') NOT NULL default 'y',
 datum varchar(15) NOT NULL,
 linkState VARCHAR(7) NOT NULL,
 linkCheckDate INT(11) DEFAULT '0' NOT NULL,
+date_start varchar(14) NOT NULL DEFAULT '00000000000000',
+date_end varchar(14) NOT NULL DEFAULT '99991231235959',
 FULLTEXT (keywords,thema,content),
 PRIMARY KEY (id, lang)) TYPE = MYISAM";
 
@@ -172,6 +174,8 @@ comment char(1) default 'y',
 datum varchar(15) NOT NULL,
 linkState VARCHAR(7) NOT NULL,
 linkCheckDate INT(11) DEFAULT '0' NOT NULL,
+date_start varchar(14) NOT NULL DEFAULT '00000000000000',
+date_end varchar(14) NOT NULL DEFAULT '99991231235959',
 PRIMARY KEY (id, lang, solution_id, revision_id))";
 
 //faqdata_group
