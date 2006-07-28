@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mysqli.update.sql.php,v 1.2 2006-07-27 18:54:04 matteo Exp $
+* $Id: mysqli.update.sql.php,v 1.3 2006-07-28 19:10:34 thorstenr Exp $
 *
 * CREATE TABLE instruction for MySQLi database - UPDATE STAGE from 1.x to 2.0.0
 *
@@ -107,7 +107,7 @@ $query[] = "CREATE TABLE IF NOT EXISTS ".SQLPREFIX."faquser (
 user_id INT(11) UNSIGNED NOT NULL,
 login VARCHAR(25) NOT NULL,
 session_id VARCHAR(150) NULL,
-session_timestamp INT(11) UNSIGNED NOT NULL,
+session_timestamp INT(11) UNSIGNED NULL,
 ip VARCHAR(15) NULL,
 account_status VARCHAR(50) NULL,
 last_login TIMESTAMP(14) NULL,
