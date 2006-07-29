@@ -1,18 +1,18 @@
 <?php
 /**
-* $Id: category.move.php,v 1.6 2006-06-11 15:26:21 matteo Exp $
+* $Id: category.move.php,v 1.7 2006-07-29 19:23:45 thorstenr Exp $
 *
 * Select a category to move
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2004-04-29
 * @copyright    (c) 2004-2006 phpMyFAQ Team
-* 
+*
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
 * compliance with the License. You may obtain a copy of the License at
 * http://www.mozilla.org/MPL/
-* 
+*
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
@@ -37,7 +37,7 @@ if ($permission["editcateg"]) {
 	<form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>" method="post">
     <fieldset>
         <legend><?php print $PMF_LANG["ad_categ_edit_1"]; ?></legend>
-	    <input type="hidden" name="aktion" value="changecategory" />
+	    <input type="hidden" name="action" value="changecategory" />
 	    <input type="hidden" name="cat" value="<?php print $id; ?>" />
 	    <div class="row"><span class="label"><strong><?php print $PMF_LANG["ad_categ_change"]; ?>:</strong></span>
         <select name="change" size="1">

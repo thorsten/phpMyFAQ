@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: category.add.php,v 1.9 2006-07-15 06:23:26 thorstenr Exp $
+* $Id: category.add.php,v 1.10 2006-07-29 19:23:45 thorstenr Exp $
 *
 * Adds a category
 *
@@ -21,7 +21,6 @@
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
-
     exit();
 }
 
@@ -32,7 +31,7 @@ if ($permission["addcateg"]) {
     <form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>" method="post">
     <fieldset>
     <legend><?php print $PMF_LANG["ad_categ_new"]; ?></legend>
-    <input type="hidden" name="aktion" value="savecategory" />
+    <input type="hidden" name="action" value="savecategory" />
     <input type="hidden" name="parent_id" value="<?php if (isset($_GET["cat"])) { print $_GET["cat"]; } else { print "0"; } ?>" />
 <?php
     if (isset($_GET["cat"])) {

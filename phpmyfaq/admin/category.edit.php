@@ -1,18 +1,18 @@
 <?php
 /**
-* $Id: category.edit.php,v 1.9 2006-07-24 20:49:53 thorstenr Exp $
+* $Id: category.edit.php,v 1.10 2006-07-29 19:23:45 thorstenr Exp $
 *
 * Edits a category
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-03-10
 * @copyright    (c) 2003-2006 phpMyFAQ Team
-* 
+*
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
 * compliance with the License. You may obtain a copy of the License at
 * http://www.mozilla.org/MPL/
-* 
+*
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
@@ -33,8 +33,8 @@ if ($permission["editcateg"]) {
 	<form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>" method="post">
 	<fieldset>
 	<legend><?php print $PMF_LANG["ad_categ_edit_1"]." <em>".$categories[$id]["name"]."</em> ".$PMF_LANG["ad_categ_edit_2"]; ?></legend>
-	<input type="hidden" name="aktion" value="updatecategory" />
-	<input type="hidden" name="cat" value="<?php print $id; ?>" /> 
+	<input type="hidden" name="action" value="updatecategory" />
+	<input type="hidden" name="cat" value="<?php print $id; ?>" />
 	<div class="row"><span class="label"><strong><?php print $PMF_LANG["ad_categ_titel"]; ?>:</strong></span>
     <input class="admin" type="text" name="name" size="30" style="width: 250px;" value="<?php print $categories[$id]["name"]; ?>" /></div>
     <div class="row"><span class="label"><strong><?php print $PMF_LANG["ad_categ_lang"]; ?>:</strong></span>

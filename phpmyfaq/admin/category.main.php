@@ -1,18 +1,18 @@
 <?php
 /**
-* $Id: category.main.php,v 1.13 2006-06-11 18:09:19 matteo Exp $
+* $Id: category.main.php,v 1.14 2006-07-29 19:23:45 thorstenr Exp $
 *
 * List all categories in the admin section
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-12-20
 * @copyright    (c) 2001-2006 phpMyFAQ Team
-* 
+*
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
 * compliance with the License. You may obtain a copy of the License at
 * http://www.mozilla.org/MPL/
-* 
+*
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
@@ -31,7 +31,7 @@ printf('<h2>%s</h2>', $PMF_LANG['ad_menu_categ_edit']);
 if ($permission['editcateg']) {
 
     // Save a new category
-    if (isset($_POST['aktion']) && $_POST['aktion'] == 'savecategory') {
+    if (isset($_POST['action']) && $_POST['action'] == 'savecategory') {
 
         $id = $db->nextID(SQLPREFIX.'faqcategories', 'id');
         $lang = $db->escape_string($_POST['lang']);
@@ -49,7 +49,7 @@ if ($permission['editcateg']) {
     }
 
     // Updates an existing category
-    if (isset($_POST['aktion']) && $_POST['aktion'] == 'updatecategory') {
+    if (isset($_POST['action']) && $_POST['action'] == 'updatecategory') {
 
         $id = (int)$_POST['cat'];
         $lang = $db->escape_string($_POST['lang']);
@@ -76,7 +76,7 @@ if ($permission['editcateg']) {
     }
 
     // Deletes an existing category
-    if ($permission['delcateg'] && isset($_POST['aktion']) && $_POST['aktion'] == 'removecategory') {
+    if ($permission['delcateg'] && isset($_POST['action']) && $_POST['action'] == 'removecategory') {
 
         $id = (int)$_POST['cat'];
         $lang = $db->escape_string($_POST['lang']);
@@ -108,17 +108,17 @@ if ($permission['editcateg']) {
             $indent .= '&nbsp;&nbsp;&nbsp;';
         }
         printf("%s<strong style=\"vertical-align: top;\">&middot; %s</strong> ", $indent, $cat["name"]);
-        printf('<a href="%s&amp;aktion=addcategory&amp;cat=%s" title="%s"><img src="images/add.gif" width="17" height="18" alt="%s" title="%s" border="0" /></a>', $currentLink, $cat['id'], $PMF_LANG['ad_kateg_add'], $PMF_LANG['ad_kateg_add'], $PMF_LANG['ad_kateg_add']);
-        printf('<a href="%s&amp;aktion=editcategory&amp;cat=%s" title="%s"><img src="images/edit.gif" width="18" height="18" border="0" title="%s" alt="%s" /></a>', $currentLink, $cat['id'], $PMF_LANG['ad_kateg_rename'], $PMF_LANG['ad_kateg_rename'], $PMF_LANG['ad_kateg_rename']);
+        printf('<a href="%s&amp;action=addcategory&amp;cat=%s" title="%s"><img src="images/add.gif" width="17" height="18" alt="%s" title="%s" border="0" /></a>', $currentLink, $cat['id'], $PMF_LANG['ad_kateg_add'], $PMF_LANG['ad_kateg_add'], $PMF_LANG['ad_kateg_add']);
+        printf('<a href="%s&amp;action=editcategory&amp;cat=%s" title="%s"><img src="images/edit.gif" width="18" height="18" border="0" title="%s" alt="%s" /></a>', $currentLink, $cat['id'], $PMF_LANG['ad_kateg_rename'], $PMF_LANG['ad_kateg_rename'], $PMF_LANG['ad_kateg_rename']);
         if (count($tree->getChildren($cat['id'])) == 0) {
-            printf('<a href="%s&amp;aktion=deletecategory&amp;cat=%s&amp;lang=%s" title="%s"><img src="images/delete.gif" width="17" height="18" alt="%s" title="%s" border="0" /></a>', $currentLink, $cat['id'], $cat['lang'], $PMF_LANG['ad_categ_delete'], $PMF_LANG['ad_categ_delete'], $PMF_LANG['ad_categ_delete']);
+            printf('<a href="%s&amp;action=deletecategory&amp;cat=%s&amp;lang=%s" title="%s"><img src="images/delete.gif" width="17" height="18" alt="%s" title="%s" border="0" /></a>', $currentLink, $cat['id'], $cat['lang'], $PMF_LANG['ad_categ_delete'], $PMF_LANG['ad_categ_delete'], $PMF_LANG['ad_categ_delete']);
         }
-        printf('<a href="%s&amp;aktion=cutcategory&amp;cat=%s" title="%s"><img src="images/cut.gif" width="16" height="16" alt="%s" border="0" title="%s" /></a>', $currentLink, $cat['id'], $PMF_LANG['ad_categ_cut'], $PMF_LANG['ad_categ_cut'], $PMF_LANG['ad_categ_cut']);
-        printf('<a href="%s&amp;aktion=movecategory&amp;cat=%s&amp;parent_id=%s" title="%s"><img src="images/move.gif" width="16" height="16" alt="%s" border="0" title="%s" /></a>', $currentLink, $cat['id'], $cat['parent_id'], $PMF_LANG['ad_categ_move'], $PMF_LANG['ad_categ_move'], $PMF_LANG['ad_categ_move']);
+        printf('<a href="%s&amp;action=cutcategory&amp;cat=%s" title="%s"><img src="images/cut.gif" width="16" height="16" alt="%s" border="0" title="%s" /></a>', $currentLink, $cat['id'], $PMF_LANG['ad_categ_cut'], $PMF_LANG['ad_categ_cut'], $PMF_LANG['ad_categ_cut']);
+        printf('<a href="%s&amp;action=movecategory&amp;cat=%s&amp;parent_id=%s" title="%s"><img src="images/move.gif" width="16" height="16" alt="%s" border="0" title="%s" /></a>', $currentLink, $cat['id'], $cat['parent_id'], $PMF_LANG['ad_categ_move'], $PMF_LANG['ad_categ_move'], $PMF_LANG['ad_categ_move']);
         print "<br />";
     }
 ?>
-	<p><img src="images/arrow.gif" width="11" height="11" alt="" border="0" /> <a href="<?php print $currentLink.'&amp;aktion=addcategory'; ?>"><?php print $PMF_LANG['ad_kateg_add']; ?></a></p>
+	<p><img src="images/arrow.gif" width="11" height="11" alt="" border="0" /> <a href="<?php print $currentLink.'&amp;action=addcategory'; ?>"><?php print $PMF_LANG['ad_kateg_add']; ?></a></p>
 	<p><?php print $PMF_LANG['ad_categ_remark']; ?></p>
 <?php
 } else {
