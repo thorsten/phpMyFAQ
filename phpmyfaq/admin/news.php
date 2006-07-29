@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: news.php,v 1.21 2006-07-23 16:40:53 matteo Exp $
+* $Id: news.php,v 1.22 2006-07-29 10:34:01 matteo Exp $
 *
 * The main administration file for the news
 *
@@ -27,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 
 require_once (PMF_ROOT_DIR."/inc/News.php");
 
-$news = new PMF_News(& $db, $LANGCODE);
+$news = new PMF_News($db, $LANGCODE);
 
 // TODO: Manage authorName and authorEmail
 
@@ -79,7 +79,7 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
     $date['HH']   = $dateStartAv ? substr($newsData['dateStart'],  8, 2) : '';
     $date['mm']   = $dateStartAv ? substr($newsData['dateStart'], 10, 2) : '';
     $date['ss']   = $dateStartAv ? substr($newsData['dateStart'], 12, 2) : '';
-    print(PMF_News::printDateTimeInput('dateStart', $date));
+    print(printDateTimeInput('dateStart', $date));
 ?>
         <br />
 
@@ -92,7 +92,7 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
     $date['HH']   = $dateEndAv ? substr($newsData['dateEnd'],  8, 2) : '';
     $date['mm']   = $dateEndAv ? substr($newsData['dateEnd'], 10, 2) : '';
     $date['ss']   = $dateEndAv ? substr($newsData['dateEnd'], 12, 2) : '';
-    print(PMF_News::printDateTimeInput('dateEnd', $date));
+    print(printDateTimeInput('dateEnd', $date));
 ?>
     </fieldset>
     <br />
@@ -184,7 +184,7 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
         $date['HH']   = $dateStartAv ? substr($newsData['dateStart'],  8, 2) : '';
         $date['mm']   = $dateStartAv ? substr($newsData['dateStart'], 10, 2) : '';
         $date['ss']   = $dateStartAv ? substr($newsData['dateStart'], 12, 2) : '';
-        print(PMF_News::printDateTimeInput('dateStart', $date));
+        print(printDateTimeInput('dateStart', $date));
 ?>
         <br />
 
@@ -197,7 +197,7 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
         $date['HH']   = $dateEndAv ? substr($newsData['dateEnd'],  8, 2) : '';
         $date['mm']   = $dateEndAv ? substr($newsData['dateEnd'], 10, 2) : '';
         $date['ss']   = $dateEndAv ? substr($newsData['dateEnd'], 12, 2) : '';
-        print(PMF_News::printDateTimeInput('dateEnd', $date));
+        print(printDateTimeInput('dateEnd', $date));
 ?>
     </fieldset>
     <br />
@@ -206,7 +206,7 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
     </form>
 <?php
         $newsId = (int)$_GET['id'];
-        $oComment = new PMF_Comment(& $db, $LANGCODE);
+        $oComment = new PMF_Comment($db, $LANGCODE);
         $comments = $oComment->getCommentsData($newsId, PMF_COMMENT_TYPE_NEWS);
         if (count($comments) > 0) {
 ?>

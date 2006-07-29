@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.edit.php,v 1.34 2006-07-27 21:13:07 matteo Exp $
+* $Id: record.edit.php,v 1.35 2006-07-29 10:34:01 matteo Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23
@@ -25,10 +25,12 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 
 // FIXME: Why we loose $user object? E.g.: the code below returns no user found
 /*
-print('User id '.$user->getUserId().'<br /><pre>');
+print('User id '.$user->getUserId().'<pre>');
 print_r($user->errors);
 print('</pre>');
 */
+// Re-evaluate $user
+$user = PMF_CurrentUser::getFromSession($faqconfig->get('ipcheck'));
 
 if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     $tree = new PMF_Category();
@@ -104,7 +106,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
             $author = $row->author;
             $email = $row->email;
             $comment = $row->comment;
-            $date = $row->datum;
+            $datum = $row->datum;
             $acti = 'saveentry&amp;id='.$_REQUEST['id'];
         } else {
             $acti = 'insertentry';
@@ -173,7 +175,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
             $author = $row->author;
             $email = $row->email;
             $comment = $row->comment;
-            $date = $row->datum;
+            $datum = $row->datum;
 
         }
     }
@@ -281,14 +283,41 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 <?php
     }
 ?>
+    </fieldset>
+    
+    <fieldset>
+    <legend><?php print $PMF_LANG['ad_record_expiration_window']; ?></legend>
+        <label class="lefteditor" for="from"><?php print $PMF_LANG['ad_news_from']; ?></label>
+<?php
+    $dateStartAv = isset($newsData['dateStart']) && ($newsData['dateStart'] != '00000000000000');
+    $date['YYYY'] = $dateStartAv ? substr($newsData['dateStart'],  0, 4) : '';
+    $date['MM']   = $dateStartAv ? substr($newsData['dateStart'],  4, 2) : '';
+    $date['DD']   = $dateStartAv ? substr($newsData['dateStart'],  6, 2) : '';
+    $date['HH']   = $dateStartAv ? substr($newsData['dateStart'],  8, 2) : '';
+    $date['mm']   = $dateStartAv ? substr($newsData['dateStart'], 10, 2) : '';
+    $date['ss']   = $dateStartAv ? substr($newsData['dateStart'], 12, 2) : '';
+    print(printDateTimeInput('dateStart', $date));
+?>
+        <br />
 
+        <label class="lefteditor" for="to"><?php print $PMF_LANG['ad_news_to']; ?></label>
+<?php
+    $dateEndAv = isset($newsData['dateEnd']) && ($newsData['dateEnd'] != '99991231235959');
+    $date['YYYY'] = $dateEndAv ? substr($newsData['dateEnd'],  0, 4) : '';
+    $date['MM']   = $dateEndAv ? substr($newsData['dateEnd'],  4, 2) : '';
+    $date['DD']   = $dateEndAv ? substr($newsData['dateEnd'],  6, 2) : '';
+    $date['HH']   = $dateEndAv ? substr($newsData['dateEnd'],  8, 2) : '';
+    $date['mm']   = $dateEndAv ? substr($newsData['dateEnd'], 10, 2) : '';
+    $date['ss']   = $dateEndAv ? substr($newsData['dateEnd'], 12, 2) : '';
+    print(printDateTimeInput('dateEnd', $date));
+?>
     </fieldset>
 
     <fieldset>
     <legend><?php print $PMF_LANG['ad_entry_changelog']; ?></legend>
 
     <label class="lefteditor"><?php print $PMF_LANG["ad_entry_date"]; ?></label>
-    <?php if (isset($date)) { print makeDate($date); } else { print makeDate(date("YmdHis")); } ?><br />
+    <?php if (isset($datum)) { print makeDate($datum); } else { print makeDate(date("YmdHis")); } ?><br />
 
     <label class="lefteditor" for="changed"><?php print $PMF_LANG["ad_entry_changed"]; ?></label>
     <textarea name="changed" id="changed" style="width: 390px; height: 50px;" cols="40" rows="4"><?php if (isset($changed)) { print $changed; } ?></textarea><br />

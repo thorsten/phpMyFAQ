@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Utils.php,v 1.1 2006-07-20 21:44:45 matteo Exp $
+* $Id: Utils.php,v 1.2 2006-07-29 10:34:01 matteo Exp $
 *
 * Utilities - Functions and Classes common to the whole phpMyFAQ architecture
 *
@@ -87,6 +87,36 @@ class PMF_Utils
         }
         // PMF date consists of numbers only: YYYYMMDDhhmmss
         return (PMF_Utils::isInteger($testdate));
+    }
+
+    /**
+     *
+     * getUserRights()
+     *
+     * @param   PMF_CurrentUser $user
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @author  Lars Tiedemann <php@larstiedemann.de>
+     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     * @return  array
+     */
+    function getUserRights($user)
+    {
+        $permission = array();
+
+        // read all rights, set them FALSE
+        $allRights = $user->perm->getAllRightsData();
+        foreach ($allRights as $right) {
+            $permission[$right['name']] = false;
+        }
+        // check user rights, set them TRUE
+        $allUserRights = $user->perm->getAllUserRights($user->getUserId());
+        foreach ($allRights as $right) {
+            if (in_array($right['right_id'], $allUserRights))
+                $permission[$right['name']] = true;
+        }
+
+        return $permission;
     }
 }
 // }}}
