@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.130 2006-07-29 10:34:01 matteo Exp $
+* $Id: functions.php,v 1.131 2006-07-29 15:30:32 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -1597,6 +1597,42 @@ function PMF_htmlentities($string, $quote_style = ENT_COMPAT, $charset = 'iso-88
 /******************************************************************************
  * Funktionen für die Benutzerauthentifizierung und Rechtevergabe
  ******************************************************************************/
+
+/**
+ * Adds a menu entry according to user permissions
+ *
+ * @param unknown_type $restrictions
+ * @param unknown_type $action
+ * @param unknown_type $caption
+ */
+function addMenuEntry($restrictions = '', $action = '', $caption = '')
+{
+    global $permission, $PMF_LANG;
+
+    if ($action != '') {
+        $action = "action=".$action;
+    }
+
+    if (isset($PMF_LANG[$caption])) {
+        $_caption = $PMF_LANG[$caption];
+    } else {
+        $_caption = 'No string for '.$caption;
+    }
+
+    $output = '        <li><a href="?'.$action.'">'.$_caption."</a></li>\n";
+    if ($restrictions == '') {
+        print $output;
+        return;
+    }
+
+    foreach (explode(',', $restrictions) as $_restriction) {
+        if (isset($permission[$_restriction]) && $permission[$_restriction]) {
+            print $output;
+            return;
+        }
+    }
+}
+
 
 /**
 * Administrator logging
