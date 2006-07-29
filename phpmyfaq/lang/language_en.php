@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.35 2006-07-23 16:40:54 matteo Exp $
+* $Id: language_en.php,v 1.36 2006-07-29 10:18:03 matteo Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -573,7 +573,7 @@ $LANG_CONF["bannedIP"] = array(0 => "area", 1 => "Ban these IPs");
 $LANG_CONF["parse_php"] = array(0 => "checkbox", 1 => "Should the template engine parse PHP code? (default: disabled)");
 $LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Activate mod_rewrite support? (default: disabled)");
 $LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "Do you want to enable LDAP support? (default: disabled)");
-$LANG_CONF["referenceURL"] = array(0 => "input", 1 => "base URL for link verification (set to folder URL of Frontend)");
+$LANG_CONF["referenceURL"] = array(0 => "input", 1 => "Base URL for link verification (e.g.: http://www.example.org/faq)");
 $LANG_CONF["URLValidateInterval"] = array(0 => "input", 1 => "Interval between AJAX link verification (in seconds)");
 $LANG_CONF["enablevisibility"] = array(0 => "checkbox", 1 => "Disable visibility of new questions?");
 $LANG_CONF['permLevel'] = array(0 => "input", 1 => "Permission level");
@@ -750,3 +750,6 @@ $PMF_LANG['newsShowArchive'] = 'Show archived news.';
 $PMF_LANG['newsArchive'] = ' News archive';
 $PMF_LANG['newsWriteComment'] = 'comment on this entry';
 $PMF_LANG['newsCommentDate'] = 'Added at: ';
+
+// added v2.0.0 - 2006-07-29 by Matteo
+$PMF_LANG['ad_record_expiration_window'] = 'Record expiration time window (optional)';

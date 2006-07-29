@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.15 2006-07-23 16:40:54 matteo Exp $
+* $Id: language_it.php,v 1.16 2006-07-29 10:18:03 matteo Exp $
 *
 * Italian language file
 *
@@ -573,7 +573,7 @@ $LANG_CONF["bannedIP"] = array(0 => "area", 1 => "Vieta l'accesso a questi indir
 $LANG_CONF["parse_php"] = array(0 => "checkbox", 1 => "Il motore del templating HTML deve interpretare il codice PHP eventualmente inserito nei documenti? (default: disabilitato)");
 $LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Attivare il supporto a <em>mod_rewrite</em>? (default: disabilitato)");
 $LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "Attivare il supporto LDAP? (default: disabilitato)");
-$LANG_CONF["referenceURL"] = array(0 => "input", 1 => "<em>Base URL</em> dell'installazione di phpMyFAQ: es: /phpmyfaq, /faq, ... (&egrave; necessaria per la verifica dei links)");
+$LANG_CONF["referenceURL"] = array(0 => "input", 1 => "<em>Base URL</em> dell'installazione di phpMyFAQ: es: http://www.example.org/faq (&egrave; necessaria per la verifica dei links)");
 $LANG_CONF["URLValidateInterval"] = array(0 => "input", 1 => "Intervallo della verifica asincrona dei links (in secondi)");
 $LANG_CONF["enablevisibility"] = array(0 => "checkbox", 1 => "Disabilitare la visibilit&agrave; delle domande appena inserite?");
 $LANG_CONF['permLevel'] = array(0 => "input", 1 => "Configurazione della Permessistica");
@@ -756,3 +756,6 @@ $PMF_LANG['newsShowArchive'] = 'Mostra le notizie archiviate.';
 $PMF_LANG['newsArchive'] = ' News - Archvio';
 $PMF_LANG['newsWriteComment'] = 'Commenta questa notizia';
 $PMF_LANG['newsCommentDate'] = 'Inserito il: ';
+
+// added v2.0.0 - 2006-07-29 by Matteo
+$PMF_LANG['ad_record_expiration_window'] = 'Validità della faq (opzionale)';

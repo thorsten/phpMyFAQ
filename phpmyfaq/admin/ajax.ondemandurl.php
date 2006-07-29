@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.ondemandurl.php,v 1.8 2006-06-15 22:18:29 matteo Exp $
+* $Id: ajax.ondemandurl.php,v 1.9 2006-07-29 10:18:03 matteo Exp $
 *
 * AJAX: onDemandURL
 *
@@ -52,11 +52,11 @@ if ($linkverifier->isReady() == false) {
 $linkverifier->loadConfigurationFromDB();
 
 if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
-	$id = $_GET["id"];
+    $id = $_GET["id"];
 }
 
 if (isset($_GET["lang"])) {
-	$lang = $_GET["lang"];
+    $lang = $_GET["lang"];
 }
 
 if (count(ob_list_handlers()) > 0) {
@@ -70,35 +70,37 @@ if (count(ob_list_handlers()) > 0) {
     <meta name="copyright" content="(c) 2001-2006 phpMyFAQ Team" />
     <meta http-equiv="Content-Type" content="text/html; charset=<?php print $PMF_LANG["metaCharset"]; ?>" />
     <style type="text/css"> @import url(../template/admin.css); </style>
-    <script type="text/javascript" src="../inc/prototype.js"></script>
+    <script type="text/javascript" src="../inc/js/prototype.js"></script>
 </head>
-<body id="body" dir="<?php print $PMF_LANG["dir"]; ?>" >
+<body id="body" dir="<?php print $PMF_LANG["dir"]; ?>">
 <?php
 
 if (!(isset($id) && isset($lang))) {
-	// TODO: ASSIGN STRING
-	?>
-	Error: Entry ID and Language needs to be specified.
-	</body>
-	</html>
-	<?php
-	exit();
+    // TODO: ASSIGN STRING
+    ?>
+    Error: Entry ID and Language needs to be specified.
+    </body>
+    </html>
+    <?php
+    exit();
 }
 
 if (($content = getEntryContent($id, $lang)) === FALSE) {
-	// TODO: ASSIGN STRING
-	?>
-	Error: No entry for #<?php print $id; ?>(<?php print $lang; ?>) available.
-	</body>
-	</html>
-	<?php
-	exit();
+    // TODO: ASSIGN STRING
+    ?>
+    Error: No entry for #<?php print $id; ?>(<?php print $lang; ?>) available.
+    </body>
+    </html>
+    <?php
+    exit();
 }
 
 if (isset($_GET["lookup"])) {
-	ob_clean();
-	print verifyArticleURL($content, $id, $lang);
-	exit();
+    if (count(ob_list_handlers()) > 0) {
+        ob_clean();
+    }
+    print verifyArticleURL($content, $id, $lang);
+    exit();
 }
 
 ?>
@@ -110,14 +112,14 @@ if (isset($_GET["lookup"])) {
 <?php
 
 function getEntryContent($id = 0, $lang = "") {
-	global $db;
-	
-	$query = "SELECT content FROM ".SQLPREFIX."faqdata WHERE id = ".$id." AND lang='".$db->escape_string($lang)."'";
-	$result = $db->query($query);
-	if ($db->num_rows($result) != 1) {
-		return FALSE;
-	}
-	
-	$array = $db->fetch_assoc($result);
-	return $array['content'];
+    global $db;
+    
+    $query = "SELECT content FROM ".SQLPREFIX."faqdata WHERE id = ".$id." AND lang='".$db->escape_string($lang)."'";
+    $result = $db->query($query);
+    if ($db->num_rows($result) != 1) {
+        return FALSE;
+    }
+    
+    $array = $db->fetch_assoc($result);
+    return $array['content'];
 }

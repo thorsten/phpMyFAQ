@@ -1,15 +1,15 @@
 <?php
 /**
-* $Id: Linkverifier.php,v 1.1 2006-06-11 14:26:55 matteo Exp $
+* $Id: Linkverifier.php,v 1.2 2006-07-29 10:18:02 matteo Exp $
 *
 * PMF_Linkverifier
 *
-* The link_verifier class provides methods and functions for verifying URLs
+* The PMF_Linkverifier (AKA link_verifier) class provides methods and functions for verifying URLs
 *
 * @author           Minoru TODA <todam@netjapan.co.jp>
 * @package          link_verifyer
 * @since            2005-08-01
-* @copyright        (c) 2005 NetJapan, Inc.
+* @copyright        (c) 2005-2006 NetJapan, Inc.
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -39,7 +39,7 @@ if (!defined("LINKVERIFIER_MAX_REDIRECT_COUNT")) {
  * Suggested value is 5 seconds
  */
 if (!defined("LINKVERIFIER_CONNECT_TIMEOUT")) {
-	define("LINKVERIFIER_CONNECT_TIMEOUT", 5);
+    define("LINKVERIFIER_CONNECT_TIMEOUT", 5);
 }
 
 /* Defines the number of seconds to wait for the remote server to send data
@@ -47,7 +47,7 @@ if (!defined("LINKVERIFIER_CONNECT_TIMEOUT")) {
  * Suggested value is 10 seconds
  */
 if (!defined("LINKVERIFIER_RESPONSE_TIMEOUT")) {
-	define("LINKVERIFIER_RESPONSE_TIMEOUT", 10);
+    define("LINKVERIFIER_RESPONSE_TIMEOUT", 10);
 }
 
 class PMF_Linkverifier
@@ -97,13 +97,13 @@ class PMF_Linkverifier
      */
     function PMF_Linkverifier()
     {
-		global $PMF_LANG;
+        global $PMF_LANG;
 
-		$this->addIgnoreProtocol("ftp:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "ftp"));
-		$this->addIgnoreProtocol("gopher:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "gopher"));
-		$this->addIgnoreProtocol("mailto:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "mailto"));
-		$this->addIgnoreProtocol("telnet:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "telnet"));
-		$this->addIgnoreProtocol("https:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "https"));
+        $this->addIgnoreProtocol("ftp:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "ftp"));
+        $this->addIgnoreProtocol("gopher:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "gopher"));
+        $this->addIgnoreProtocol("mailto:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "mailto"));
+        $this->addIgnoreProtocol("telnet:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "telnet"));
+        $this->addIgnoreProtocol("https:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "https"));
 
     }
 
@@ -324,7 +324,7 @@ class PMF_Linkverifier
                 return $relativeuri;
             }
         }
-
+        
         // Split reference uri into parts.
         $pathparts = parse_url($referenceuri);
 
@@ -338,11 +338,11 @@ class PMF_Linkverifier
 
         // If path is not specified in reference uri, set as blank
         if (isset($pathparts['path'])) {
-			$pathparts['path'] = str_replace("\\","/",dirname($pathparts['path']));
-			$pathparts['path'] = preg_replace("/^.*(\/)$/i","", $pathparts['path']);
-		} else {
-			$pathparts['path'] = "";
-		}
+            $pathparts['path'] = str_replace("\\","/",$pathparts['path']);
+            $pathparts['path'] = preg_replace("/^.*(\/)$/i","", $pathparts['path']);
+        } else {
+            $pathparts['path'] = "";
+        }
 
         // Recombine urls
         if (substr($relativeuri,0,1) == "/") {
@@ -396,7 +396,7 @@ class PMF_Linkverifier
 
     function openURL($url = "", $redirect = "", $redirectCount = 0)
     {
-		global $PMF_LANG;
+        global $PMF_LANG;
 
         // If prequisites fail
         if ($this->isReady() == FALSE) {
@@ -497,7 +497,7 @@ class PMF_Linkverifier
                                     break;
 
             case '200': // OK
-						$_reason = ($redirectCount > 0) ? sprintf($PMF_LANG['ad_linkcheck_openurl_redirected'],htmlspecialchars($url)) : "";
+                        $_reason = ($redirectCount > 0) ? sprintf($PMF_LANG['ad_linkcheck_openurl_redirected'],htmlspecialchars($url)) : "";
                         return array(TRUE, $redirectCount, $_reason);
                         break;
             case '300': // Multiple choices
@@ -542,7 +542,7 @@ class PMF_Linkverifier
                             $_result['valid'] = TRUE;
                         } else {
                             // See whether we can connect to this URL
-							list($_result['valid'], $_result['redirects'], $_result['reason']) = $this->openURL($_absurl);
+                            list($_result['valid'], $_result['redirects'], $_result['reason']) = $this->openURL($_absurl);
                         }
                     }
                     $this->lastResult[$_type][$_url] = $_result;
@@ -765,7 +765,7 @@ function verifyArticleURL($contents = "", $id = 0, $artlang = "") {
         return "<br /><br />".$PMF_LANG['ad_linkcheck_noReferenceURL'];
     }
 
-    $linkverifier = new link_verifier;
+    $linkverifier = new PMF_Linkverifier;
     if ($linkverifier->isReady() === FALSE) {
         return "<br /><br />".$PMF_LANG['ad_linkcheck_noAllowUrlOpen'];
     }
@@ -790,27 +790,27 @@ function verifyArticleURL($contents = "", $id = 0, $artlang = "") {
     //print str_replace("\n","<br />",htmlspecialchars(print_r($result, TRUE)));
 
     $failreasons = array();
-	$inforeasons = array();
-	$output = "    <h2>".$PMF_LANG['ad_linkcheck_checkResult']."</h2>\n";
-	$output .= '    <table class="verifyArticleURL">'."\n";
+    $inforeasons = array();
+    $output = "    <h2>".$PMF_LANG['ad_linkcheck_checkResult']."</h2>\n";
+    $output .= '    <table class="verifyArticleURL">'."\n";
     foreach ($result as $type => $_value) {
-		$output .= "        <tr><td><strong>".htmlspecialchars($type)."</strong></td></tr>\n";
+        $output .= "        <tr><td><strong>".htmlspecialchars($type)."</strong></td></tr>\n";
         foreach ($_value as $url => $value) {
 
             $_output  = '            <td /><td>'.htmlspecialchars($value['rawurl'])."</td>\n";
             $_output .= '            <td><a href="'.$value['absurl'].'" target="_blank">'.htmlspecialchars($value['absurl'])."</a></td>\n";
             $_output .= '            <td>';
-			if (isset($value['redirects']) && ($value['redirects'] > 0)) {
-				$_redirects = "(".$value['redirects'].")";
-			} else {
-				$_redirects = "";
-			}
+            if (isset($value['redirects']) && ($value['redirects'] > 0)) {
+                $_redirects = "(".$value['redirects'].")";
+            } else {
+                $_redirects = "";
+            }
             if ($value['valid'] === TRUE) {
                 $_classname = "urlsuccess";
                 $_output .= '<td class="'.$_classname.'">'.$PMF_LANG['ad_linkcheck_checkSuccess'].$_redirects.'</td>';
-				if ($value['reason'] != "") {
-					$inforeasons[] = sprintf($PMF_LANG['ad_linkcheck_openurl_infoprefix'],htmlspecialchars($value['absurl'])).$value['reason'];
-				}
+                if ($value['reason'] != "") {
+                    $inforeasons[] = sprintf($PMF_LANG['ad_linkcheck_openurl_infoprefix'],htmlspecialchars($value['absurl'])).$value['reason'];
+                }
             } else {
                 $_classname = "urlfail";
                 $_output .= '<td class="'.$_classname.'">'.$PMF_LANG['ad_linkcheck_checkFailed'].'</td>';
@@ -820,7 +820,7 @@ function verifyArticleURL($contents = "", $id = 0, $artlang = "") {
             }
             $_output .= '</td>';
             $output .= '        <tr class="'.$_classname.'">'."\n".$_output."\n";
-			$output .= "        </tr>\n";
+            $output .= "        </tr>\n";
         }
     }
     $output .= "    </table>\n";
@@ -861,16 +861,19 @@ function link_verifier_javascript() {
     //TODO: ASSIGN STRINGS FOR THE <IMG ALT="">
     $ajaxphp = $_SERVER["PHP_SELF"].'?';
 ?>
-<script language="javascript">
+<script type="text/javascript">
 <!--
 function getImageElement(id, lang) {
-	return $('imgurl_' + lang + '_' + id);
+    return $('imgurl_' + lang + '_' + id);
 }
 
 function onDemandVerifyURL(id, lang, target) {
-    var target;
-    target = getImageElement(id, lang);
-    Fenster = window.open('<?php print $ajaxphp; ?>&aktion=ajax&ajax=onDemandURL&id=' + id + '&lang=' + lang, 'onDemandURLVerification', 'toolbar=no, location=no, status=no, menubar=no, width=720, height=450, resizable=yes, scrollbars=yes');
+    var target = getImageElement(id, lang);
+    var widthPx  = 780;
+    var heigthPx = 450;
+    var leftPx   = (screen.width  - widthPx)/2;
+    var topPx    = (screen.height - heigthPx)/2;
+    Fenster = window.open('<?php print $ajaxphp; ?>&aktion=ajax&ajax=onDemandURL&id=' + id + '&lang=' + lang, 'onDemandURLVerification', 'toolbar=no, location=no, status=no, menubar=no, width=' + widthPx + ', height=' + heigthPx + ', left=' + leftPx + ', top=' + topPx + ', resizable=yes, scrollbars=yes');
     Fenster.focus();
 
     verifyEntryURL(id, lang);
@@ -880,22 +883,22 @@ function onDemandVerifyURL(id, lang, target) {
 function verifyEntryURL(id, lang) {
     var target = getImageElement(id, lang);
 
-	// !!IMPORTANT!! DISABLE ONLOAD. If you do not do this, you will get infinite loop!
+    // !!IMPORTANT!! DISABLE ONLOAD. If you do not do this, you will get infinite loop!
     target.onload="";
 
-	target.src = "images/url-checking.png";
+    target.src = "images/url-checking.png";
 
-	var url = 'index.php';
-	var pars = 'aktion=ajax&ajax=verifyURL&id=' + id + '&lang=' + lang;
-	var myAjax = new Ajax.Request( url, {method: 'get', parameters: pars, onComplete: verifyEntryURL_success, onFailure: verifyEntryURL_failure} );
+    var url = 'index.php';
+    var pars = 'aktion=ajax&ajax=verifyURL&id=' + id + '&lang=' + lang;
+    var myAjax = new Ajax.Request( url, {method: 'get', parameters: pars, onComplete: verifyEntryURL_success, onFailure: verifyEntryURL_failure} );
 
-	function verifyEntryURL_success(XmlRequest) {
-		target.src = "images/url-" + XmlRequest.responseText + ".png";
-	}
+    function verifyEntryURL_success(XmlRequest) {
+        target.src = "images/url-" + XmlRequest.responseText + ".png";
+    }
 
-	function verifyEntryURL_failure(XmlRequest) {
-		target.src = "images/url-noaccess.png";
-	}
+    function verifyEntryURL_failure(XmlRequest) {
+        target.src = "images/url-noaccess.png";
+    }
 
 }
 
@@ -915,25 +918,25 @@ function verifyEntryURL(id, lang) {
  */
 function link_ondemand_javascript($id, $lang) {
 ?>
-<script language="javascript">
+<script type="text/javascript">
 <!--
 
 function ajaxOnDemandVerify(id, lang) {
-	var target = $('onDemandVerifyResult');
-	var url = 'index.php';
-	var pars = 'aktion=ajax&ajax=onDemandURL&id=' + id + '&lang=' + lang + '&lookup=1';
-	var myAjax = new Ajax.Request( url, {method: 'get', parameters: pars, onComplete: ajaxOnDemandVerify_success, onFailure: ajaxOnDemandVerify_failure} );
-	//TODO: Assign string
-	target.innerHTML = 'Querying LinkVerifier...';
+    var target = $('onDemandVerifyResult');
+    var url = 'index.php';
+    var pars = 'aktion=ajax&ajax=onDemandURL&id=' + id + '&lang=' + lang + '&lookup=1';
+    var myAjax = new Ajax.Request( url, {method: 'get', parameters: pars, onComplete: ajaxOnDemandVerify_success, onFailure: ajaxOnDemandVerify_failure} );
+    //TODO: Assign string
+    target.innerHTML = 'Querying LinkVerifier...';
 
-	function ajaxOnDemandVerify_success(XmlRequest) {
-		target.innerHTML = XmlRequest.ResponseText;
-	}
+    function ajaxOnDemandVerify_success(XmlRequest) {
+        target.innerHTML = XmlRequest.responseText;
+    }
 
-	function ajaxOnDemandVerify_failure(XmlRequest) {
-		//TODO: Assign string
-		target.innerHTML = 'LinkVerifier failed (url probe timed out?)';
-	}
+    function ajaxOnDemandVerify_failure(XmlRequest) {
+        //TODO: Assign string
+        target.innerHTML = 'LinkVerifier failed (url probe timed out?)';
+    }
 }
 
 
@@ -945,9 +948,9 @@ function ajaxOnDemandVerify(id, lang) {
 LinkVerifier feature disabled (Reason: Javascript not enabled)
 </NOSCRIPT>
 </div>
-<script language="javascript">
+<script type="text/javascript">
 <!--
-	ajaxOnDemandVerify(<?php print $id; ?>, '<?php print $lang; ?>');
+    ajaxOnDemandVerify(<?php print $id; ?>, '<?php print $lang; ?>');
 //-->
 </script>
 <?php

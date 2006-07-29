@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.61 2006-07-28 19:48:58 matteo Exp $
+* $Id: update.php,v 1.62 2006-07-29 10:18:02 matteo Exp $
 *
 * Main update script
 *
@@ -386,6 +386,7 @@ if ($step == 5) {
     require_once(PMF_ROOT_DIR."/inc/functions.php");
     require_once(PMF_ROOT_DIR."/inc/Configuration.php");
     require_once(PMF_ROOT_DIR."/inc/Db.php");
+    require_once(PMF_ROOT_DIR."/inc/Link.php");
     define("SQLPREFIX", $DB["prefix"]);
     $db = PMF_Db::db_select($DB["type"]);
     $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
@@ -792,7 +793,7 @@ if ($step == 5) {
     if ($version < 200) {
         $PMF_CONF['permLevel'] = 'basic';
         $PMF_CONF['enablevisibility'] = 'Y';
-        $PMF_CONF['referenceURL'] = str_replace('/install/update.php', '', $_SERVER['PHP_SELF']);
+        $PMF_CONF['referenceURL'] = PMF_Link::getSystemUri('/install/update.php');
         $PMF_CONF['send2friendText'] = $PMF_CONF['send2friend_text'];
         unset($PMF_CONF['send2friend_text']);
         unset($PMF_CONF['copyright_eintrag']);
