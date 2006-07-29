@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.56 2006-07-20 21:44:45 matteo Exp $
+* $Id: index.php,v 1.57 2006-07-29 15:20:32 thorstenr Exp $
 *
 * The main admin backend index file
 *
@@ -81,7 +81,7 @@ if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
         adminlog('Loginerror\nLogin: '.$faqusername.'\nPass: ********');
         $error = $PMF_LANG['ad_auth_fail'].' ('.$faqusername.' / *)';
         unset($user);
-        $_REQUEST['aktion'] = '';
+        $_REQUEST['action'] = '';
     }
 } else {
     // authenticate with session information
@@ -94,7 +94,7 @@ if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
         adminlog('Session expired\nSession-ID: '.session_id());
         $error = $PMF_LANG['ad_auth_sess'];
         unset($user);
-        $_REQUEST['aktion'] = '';
+        $_REQUEST['action'] = '';
     }
 }
 
@@ -115,7 +115,7 @@ if (isset($auth)) {
 }
 
 // logout
-if (isset($_REQUEST['aktion']) && $_REQUEST['aktion'] == 'logout' && $auth) {
+if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'logout' && $auth) {
     $user->deleteFromSession();
     unset($user);
     unset($auth);
@@ -126,7 +126,7 @@ $linkext = '?uin=';
 
 //
 // Get action from _GET and _POST first
-$_action = isset($_REQUEST['aktion']) ? $_REQUEST['aktion'] : null;
+$_action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 $_ajax   = isset($_REQUEST['ajax']) ? $_REQUEST['ajax'] : null;
 
 // if performing AJAX operation, needs to branch before header.php
@@ -151,20 +151,14 @@ if (isset($auth)) {
 }
 
 // are we running a PMF export file request?
-if ((isset($_REQUEST["aktion"])) && ($_REQUEST["aktion"] == "exportfile")) {
+if ((isset($_REQUEST["action"])) && ($_REQUEST["action"] == "exportfile")) {
     require_once("export.file.php");
     exit();
 }
 
-// Header of the admin page
+// Header of the admin page inlcuding the navigation
 require_once ("header.php");
-if (isset($auth)) {
-    require_once ("menue.php");
-}
-?>
-</div>
-<div id="bodyText">
-<?php
+
 // User is authenticated
 if (isset($auth)) {
     if (isset($_action)) {
@@ -224,13 +218,13 @@ if (isset($auth)) {
             case "sessionsearch":           require_once ("stat.query.php"); break;
             case "sessionsuche":            require_once ("stat.form.php"); break;
             case "viewsession":             require_once ("stat.show.php"); break;
-            case "statistik":               require_once ("stat.ratings.php"); break;
+            case "statistics":              require_once ("stat.ratings.php"); break;
             // functions for config administration
             case 'config':                  require_once ("configuration.php"); break;
             case 'linkconfig':              require_once ('linkconfig.main.php'); break;
             // functions for backup administration
-            case "csv":                     require_once ("backup.main.php"); break;
-            case "restore":                 require_once ("backup.import.php"); break;
+            case 'backup':                  require_once ('backup.main.php'); break;
+            case 'restore':                 require_once ('backup.import.php'); break;
             // functions for FAQ export
             case "export":                  require_once ("export.main.php"); break;
             case 'plugins':                 require_once ('plugins.main.php'); break;
@@ -309,7 +303,7 @@ if (isset($auth)) {
             }
         } else {
 ?>
-    <form action="" method="post">
+    <form action="index.php" method="post">
     <input type="hidden" name="param" value="version" />
     <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_xmlrpc_button"]; ?>" />
     </form>
@@ -319,11 +313,11 @@ if (isset($auth)) {
 // User is NOT authenticated
 } else {
 ?>
-    <form action="" method="post">
+    <form action="index.php" method="post">
     <fieldset class="login">
         <legend class="login">phpMyFAQ Login</legend>
 <?php
-    if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "logout") {
+    if (isset($_REQUEST["action"]) && $_REQUEST["action"] == "logout") {
         print "<p>".$PMF_LANG["ad_logout"]."</p>";
     }
     if (isset($error)) {

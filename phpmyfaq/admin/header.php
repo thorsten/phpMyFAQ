@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: header.php,v 1.16 2006-06-11 08:12:03 thorstenr Exp $
+* $Id: header.php,v 1.17 2006-07-29 15:20:31 thorstenr Exp $
 *
 * header of the admin area
 *
@@ -45,10 +45,84 @@ header("Vary: Negotiate,Accept");
     <script type="text/javascript" src="../inc/js/prototype.js"></script>
 </head>
 <body id="body" dir="<?php print $PMF_LANG["dir"]; ?>" onload="javascript:focusOnUsernameField();"><a name="top"></a>
-<!-- Header -->
+
+<!-- header -->
 <div id="header">
     <h1>phpMyFAQ <?php print $PMF_CONF["version"]; ?></h1>
 </div>
 
-<!-- Navigation -->
-<div class="sideBox">
+<?php if (isset($auth)) { ?>
+<!-- administration menu -->
+<div id="navcontainer">
+    <ul id="navlist">
+    	<li><a href="index.php"><?php print $PMF_LANG['admin_mainmenu_home']; ?></a></li>
+    	<li><a href="index.php?action=user"><?php print $PMF_LANG['admin_mainmenu_users']; ?></a></li>
+    	<li><a href="index.php?action=content"><?php print $PMF_LANG['admin_mainmenu_content']; ?></a></li>
+    	<li><a href="index.php?action=statistics"><?php print $PMF_LANG['admin_mainmenu_statistics']; ?></a></li>
+    	<li><a href="index.php?action=export"><?php print $PMF_LANG['admin_mainmenu_exports']; ?></a></li>
+    	<li><a href="index.php?action=backup"><?php print $PMF_LANG['admin_mainmenu_backup']; ?></a></li>
+    	<li><a href="index.php?action=config"><?php print $PMF_LANG['admin_mainmenu_configuration']; ?></a></li>
+    	<li><a href="index.php?action=logout"><?php print $PMF_LANG['admin_mainmenu_logout']; ?></a></li>
+    </ul>
+</div>
+
+<!-- sub-administration menu -->
+<div id="subnavcontainer">
+    <ul id="subnavlist">
+<?php
+    // check for group support
+    require_once(PMF_ROOT_DIR.'/inc/PMF_User/User.php');
+    $user = new PMF_User();
+    $groupSupport = is_a($user->perm, "PMF_PermMedium");
+
+    switch ($_action) {
+        case 'user':
+        case 'passwd':
+        case 'cookies':
+            addMenuEntry('adduser,edituser,deluser',             'user',             'ad_menu_user_administration');
+            if ($groupSupport) {
+                addMenuEntry('adduser,edituser,deluser',         'group',            'ad_menu_group_administration');
+            }
+            addMenuEntry('passwd',                               'passwd',           'ad_menu_passwd');
+            addMenuEntry('',                                     'cookies',          'ad_menu_cookie');
+            break;
+        case 'content':
+        case 'category':
+        case 'editentry':
+        case 'accept':
+        case 'view':
+        case 'glossary':
+        case 'news':
+        case 'question':
+            addMenuEntry('addcateg,editcateg,delcateg',          'category',         'ad_menu_categ_edit');
+            addMenuEntry('addbt',                                'editentry',        'ad_entry_add');
+            addMenuEntry('editbt,delbt',                         'accept',           'ad_menu_entry_aprove');
+            addMenuEntry('editbt,delbt',                         'view',             'ad_menu_entry_edit');
+            addMenuEntry('delquestion',                          'question',         'ad_menu_open');
+            addMenuEntry('addglossary,editglossary,delglossary', 'glossary',         'ad_menu_glossary');
+            addMenuEntry('addnews,editnews,delnews',             'news&amp;do=edit', 'ad_menu_news_edit');
+            break;
+        case 'statistics':
+        case 'viewsessions':
+        case 'adminlog':
+            addMenuEntry('viewlog',                              'statistics',       'ad_menu_stat');
+            addMenuEntry('viewlog',                              'viewsessions',     'ad_menu_session');
+            addMenuEntry('adminlog',                             'adminlog',         'ad_menu_adminlog');
+            break;
+        case 'export':
+        case 'plugins':
+            addMenuEntry('',                                     'export',           'ad_menu_export');
+            addMenuEntry('',                                     'plugins',          'ad_menu_searchplugin');
+            break;
+        case 'config':
+        case 'linkconfig':
+            addMenuEntry('editconfig',                           'config',           'ad_menu_editconfig');
+            addMenuEntry('editconfig,editbt,delbt',              'linkconfig',       'ad_menu_linkconfig');
+            break;
+    }
+?>
+    </ul>
+</div>   
+<?php } ?>
+<!-- content of body -->
+<div id="bodyText">
