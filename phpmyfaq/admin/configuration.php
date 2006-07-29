@@ -1,18 +1,18 @@
 <?php
 /**
-* $Id: configuration.php,v 1.5 2006-07-02 16:44:57 matteo Exp $
+* $Id: configuration.php,v 1.6 2006-07-29 15:38:05 thorstenr Exp $
 *
 * The main configuration frontend
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2005-12-26
 * @copyright    (c) 2006 phpMyFAQ Team
-* 
+*
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
 * compliance with the License. You may obtain a copy of the License at
 * http://www.mozilla.org/MPL/
-* 
+*
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
@@ -43,7 +43,7 @@ if ('saveConfig' == $userAction) {
     if (isset($_REQUEST['edit'])) {
         $arrVar = $_REQUEST['edit'];
     }
-    
+
     // Set the new values into $PMF_CONF
     foreach ($arrVar as $key => $value) {
         $PMF_CONF[$key] = $value;
@@ -89,8 +89,8 @@ if ('listConfig' == $userAction) {
 
 function getConfigList()
 {
-    var ajax = new Ajax.Updater('configStd',  'index.php?aktion=ajax&ajax=config_list');
-    var ajax = new Ajax.Updater('configSpam', 'index.php?aktion=ajax&ajax=config_list&conf=spam');
+    var ajax = new Ajax.Updater('configStd',  'index.php?action=ajax&ajax=config_list');
+    var ajax = new Ajax.Updater('configSpam', 'index.php?action=ajax&ajax=config_list&conf=spam');
 }
 
 getConfigList();
