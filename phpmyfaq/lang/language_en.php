@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.36 2006-07-29 10:18:03 matteo Exp $
+* $Id: language_en.php,v 1.37 2006-07-29 14:57:41 thorstenr Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -751,5 +751,13 @@ $PMF_LANG['newsArchive'] = ' News archive';
 $PMF_LANG['newsWriteComment'] = 'comment on this entry';
 $PMF_LANG['newsCommentDate'] = 'Added at: ';
 
-// added v2.0.0 - 2006-07-29 by Matteo
+// added v2.0.0 - 2006-07-29 by Matteo & Thorsten
 $PMF_LANG['ad_record_expiration_window'] = 'Record expiration time window (optional)';
+$PMF_LANG['admin_mainmenu_home'] = 'Home';
+$PMF_LANG['admin_mainmenu_users'] = 'Users';
+$PMF_LANG['admin_mainmenu_content'] = 'Content';
+$PMF_LANG['admin_mainmenu_statistics'] = 'Statistics';
+$PMF_LANG['admin_mainmenu_exports'] = 'Exports';
+$PMF_LANG['admin_mainmenu_backup'] = 'Backup';
+$PMF_LANG['admin_mainmenu_configuration'] = 'Configuration';
+$PMF_LANG['admin_mainmenu_logout'] = 'Logout';
