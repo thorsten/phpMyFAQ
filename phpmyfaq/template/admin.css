@@ -1,5 +1,5 @@
 /**
- * $Id: admin.css,v 1.18 2006-07-23 09:14:45 matteo Exp $
+ * $Id: admin.css,v 1.19 2006-07-29 15:20:56 thorstenr Exp $
  *
  * This is the CSS file for the admin section of phpMyFAQ 2.0.x
  * You don't need to change enything here but feel free to do it. :-)
@@ -110,51 +110,113 @@ form br {
 
 /* Header */
 #header {
-    height: 50px;
+    height: 40px;
     padding: 20px;
 }
 .headerTitle {
   font-size: 300%;
 }
 
-/* Navigation */
-.sideBox {
-    margin-left: 5px;
+/* Administration Menu */
+#navcontainer {
+    margin: 0;
+    padding: 0;
+    height: 24px;
+    background-color: #4A769C;
+    border-left: 1px solid #C2D1DE;
+}
+#navcontainer ul {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    text-align: center;
+}
+#navcontainer ul li {
+    display: block;
     float: left;
-    clear: left;
-    border-top: 1px solid #fff;
-    width: 180px;
-    margin-top: 10px;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+    border-top: 1px solid #C2D1DE;
+    border-bottom: 1px solid #C2D1DE;
 }
-[class~="sideBox"] {
-    margin-left: 10px;
-}
-div#menue {
-    font-size: 95%;
-    width: 180px;
-    padding: 0px;
-    background-color: #EDF2F2;
-    border: 1px solid #D0D9D9;
-}
-#menue ul {
-    list-style: none;
-    padding: 0px;
-    margin: 0px;
-}
-#menue ul li {
-    border-bottom: 1px solid #D0D9D9;
-    margin: 0px;
-}
-#menue li a {
-    color: #000;
+#navcontainer ul li a {
+    width: 98px;
+    height: 18px;
+    border-right: 1px solid #C2D1DE;
+    padding-top: 4px;
+    margin: 0;
+    color: #C2D1DE;
     text-decoration: none;
     display: block;
-    padding: 3px;
+    text-align: center;
 }
-#menue li a:hover {
-    background-color: #D0D9D9;
-    color: #000;
+#navcontainer ul li a:hover {
+    color: #07243D;
+    background: #E7EDF2;
 }
+#navcontainer a:active {
+    background: #01070C;
+    color: #fff;
+}
+#navcontainer li#active a {
+    background: #c60;
+    border: 1px solid #c60;
+    color: #fff;
+}
+
+/* 2nd Administration Menu */
+#subnavcontainer {
+    margin-left: 20px;
+    padding: 0;
+    height: 24px;
+}
+#subnavcontainer ul {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    text-align: center;
+}
+#subnavcontainer ul li {
+    display: block;
+    float: left;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+    background-color: #87A4BD;
+    border-left: 1px solid #C2D1DE;
+    border-top: 1px solid #C2D1DE;
+    border-bottom: 1px solid #C2D1DE;
+}
+#subnavcontainer ul li a {
+    width: 98px;
+    height: 18px;
+    border-right: 1px solid #C2D1DE;
+    padding-top: 4px;
+    margin: 0;
+    color: #03121F;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+    font-size: 80%;
+}
+#subnavcontainer ul li a:hover {
+    color: #07243D;
+    background: #E7EDF2;
+}
+#subnavcontainer a:active {
+    background: #01070C;
+    color: #fff;
+}
+#subnavcontainer li#active a {
+    background: #c60;
+    border: 1px solid #c60;
+    color: #fff;
+}
+
+
 div#langform {
     font-size: 95%;
     width: 180px;
@@ -181,21 +243,21 @@ div#sessioncounter {
 /* the main body */
 #bodyText {
     line-height: 1.5em;
-    margin: 10px 0px 10px 200px;
+    margin: 10px 0px 10px 0px;
     padding: 0 10px 10px 10px;
-    width: 565px;
+    width: 785px;
 }
 
 /* table styles */
 table.list {
     border: 1px solid #D0D9D9;
     border-collapse: collapse;
-    width: 565px;
+    width: 785px;
 }
 table.listrecords {
     border: 1px solid #D0D9D9;
     border-collapse: collapse;
-    width: 545px;
+    width: 765px;
 }
 .list thead th, tfoot td {
     background-color: #EDF2F2;
@@ -217,7 +279,7 @@ th.list, td.list {
 
 /* styles for input and textarea fields */
 textarea.admin {
-    width: 555px;
+    width: 755px;
 }
 input.admin, select.admin, textarea.admin {
     float: left;
