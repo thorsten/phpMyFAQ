@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: header.php,v 1.17 2006-07-29 15:20:31 thorstenr Exp $
+* $Id: header.php,v 1.18 2006-07-29 19:24:10 thorstenr Exp $
 *
 * header of the admin area
 *
@@ -88,6 +88,16 @@ header("Vary: Negotiate,Accept");
             break;
         case 'content':
         case 'category':
+        case 'addcategory':
+        case 'savecategory':
+        case 'editcategory':
+        case 'updatecategory':
+        case 'deletecategory':
+        case 'removecategory':
+        case 'cutcategory':
+        case 'pastecategory':
+        case 'movecategory':
+        case 'changecategory':
         case 'editentry':
         case 'accept':
         case 'view':
@@ -122,7 +132,7 @@ header("Vary: Negotiate,Accept");
     }
 ?>
     </ul>
-</div>   
+</div>
 <?php } ?>
 <!-- content of body -->
 <div id="bodyText">
