@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: group.php,v 1.14 2006-07-30 07:45:53 matteo Exp $
+* $Id: group.php,v 1.15 2006-07-30 08:24:45 matteo Exp $
 *
 * Displays the user managment frontend
 *
@@ -258,28 +258,29 @@ if ($groupAction == 'add') {
 <h2><?php print $text['header']; ?></h2>
 <div id="user_message"><?php print $message; ?></div>
 <div id="group_create">
-    <fieldset>
-        <legend><?php print $text['addGroup']; ?></legend>
-        <form name="group_create" action="<?php print $_SERVER['PHP_SELF']; ?>?action=group&amp;group_action=addsave" method="post">
-            <div class="input_row">
-                <label for="group_name"><?php print $text['addGroup_name']; ?></label>
-                <input class="admin" type="text" name="group_name" value="<?php print (isset($group_name) ? $group_name : ''); ?>" tabindex="1" />
-            </div>
-            <div class="input_row">
-                <label for="group_description"><?php print $text['addGroup_description']; ?></label>
-                <textarea class="admin" name="group_description" cols="<?php print $descriptionCols; ?>" rows="<?php print $descriptionRows; ?>" tabindex="2"><?php print (isset($group_description) ? $group_description : ''); ?></textarea>
-            </div>
-            <div class="input_row">
-                <label for="group_auto_join"><?php print $text['addGroup_autoJoin']; ?></label>
-                <input class="admin" type="checkbox" name="group_auto_join" value="1" tabindex="3"<?php print ((isset($group_auto_join) && $group_auto_join) ? ' checked="checked"' : ''); ?> />
-            </div>
-            <div class="button_row">
-                <input class="submit" type="submit" value="<?php print $text['addGroup_confirm']; ?>" tabindex="6" />
-                <input class="reset" name="cancel" type="submit" value="<?php print $text['addGroup_cancel']; ?>" tabindex="7" />
-            </div>
-            <div class="clear"></div>
-        </form>
-    </fieldset>
+    <form name="group_create" action="<?php print $_SERVER['PHP_SELF']; ?>?action=group&amp;group_action=addsave" method="post">
+        <fieldset>
+            <legend><?php print $text['addGroup']; ?></legend>
+                <div class="input_row">
+                    <label for="group_name"><?php print $text['addGroup_name']; ?></label>
+                    <input type="text" name="group_name" value="<?php print (isset($group_name) ? $group_name : ''); ?>" tabindex="1" />
+                </div>
+                <div class="input_row">
+                    <label for="group_description"><?php print $text['addGroup_description']; ?></label>
+                    <textarea name="group_description" cols="<?php print $descriptionCols; ?>" rows="<?php print $descriptionRows; ?>" tabindex="2"><?php print (isset($group_description) ? $group_description : ''); ?></textarea>
+                </div>
+                <div class="input_row">
+                    <label for="group_auto_join"><?php print $text['addGroup_autoJoin']; ?></label>
+                    <input type="checkbox" name="group_auto_join" value="1" tabindex="3"<?php print ((isset($group_auto_join) && $group_auto_join) ? ' checked="checked"' : ''); ?> />
+                </div>
+        </fieldset>
+        <br />
+        <div class="button_row">
+            <input class="submit" type="submit" value="<?php print $text['addGroup_confirm']; ?>" tabindex="6" />
+            <input class="reset" name="cancel" type="submit" value="<?php print $text['addGroup_cancel']; ?>" tabindex="7" />
+        </div>
+        <div class="clear"></div>
+    </form>
 </div> <!-- end #group_create -->
 <script type="text/javascript">
 /* <![CDATA[ */

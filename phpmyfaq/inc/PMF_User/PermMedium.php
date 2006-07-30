@@ -58,7 +58,7 @@ class PMF_PermMedium
     function checkGroupRight($group_id, $right_id)
     {
         if (!$this->_initialized)
-        	return false;
+            return false;
         // check input
         if ($right_id <= 0 or $group_id <= 0 or !is_numeric($right_id) or !is_numeric($group_id))
             return false;
@@ -96,7 +96,7 @@ class PMF_PermMedium
     function getGroupRights($group_id)
     {
         if (!$this->_initialized)
-        	return false;
+            return false;
         if ($group_id <= 0 or !is_numeric($group_id))
             return false;
         // check right
@@ -115,7 +115,7 @@ class PMF_PermMedium
         // return result
         $result = array();
         while ($row = $this->_db->fetch_assoc($res)) {
-        	$result[] = $row['right_id'];
+            $result[] = $row['right_id'];
         }
         return $result;
     }
@@ -187,7 +187,7 @@ class PMF_PermMedium
     function grantGroupRight($group_id, $right_id)
     {
         if (!$this->_initialized)
-        	return false;
+            return false;
         // check input
         if ($right_id <= 0 or $group_id <= 0 or !is_numeric($right_id) or !is_numeric($group_id))
             return false;
@@ -223,7 +223,7 @@ class PMF_PermMedium
     function refuseGroupRight($group_id, $right_id)
     {
         if (!$this->_initialized)
-        	return false;
+            return false;
         // check input
         if ($right_id <= 0 or $group_id <= 0 or !is_numeric($right_id) or !is_numeric($group_id))
             return false;
@@ -255,22 +255,29 @@ class PMF_PermMedium
     function addGroup($group_data)
     {
         if (!$this->_initialized)
-        	return 0;
+            return 0;
         // check if group already exists
         if ($this->getGroupId($group_data['name']) > 0)
             return 0;
         // get next id
-		$next_id = $this->_db->nextID(PMF_USER_SQLPREFIX."group", "group_id");
+        $next_id = $this->_db->nextID(PMF_USER_SQLPREFIX."group", "group_id");
         // check group data input
         $group_data = $this->checkGroupData($group_data);
         // insert group
-        $res = $this->_db->query("
+        $query = sprintf("
             INSERT INTO
-                ".PMF_USER_SQLPREFIX."group
+                %sgroup
             (group_id, name, description, auto_join)
                 VALUES
-            (".$next_id.", '".$group_data['name']."', '".$group_data['description']."', '".$this->bool_to_int($group_data['auto_join'])."'
-        ");
+            (%d, '%s', '%s', '%s')",
+            PMF_USER_SQLPREFIX,
+            $next_id,
+            $group_data['name'],
+            $group_data['description'],
+            $this->bool_to_int($group_data['auto_join'])
+            );
+
+        $res = $this->_db->query($query);
         if (!$res)
             return 0;
         return $next_id;
@@ -290,7 +297,7 @@ class PMF_PermMedium
     function changeGroup($group_id, $group_data)
     {
         if (!$this->_initialized)
-        	return false;
+            return false;
         // check input
         $checked_data = $this->checkGroupData($group_data);
         // create update SET
@@ -328,7 +335,7 @@ class PMF_PermMedium
     function deleteGroup($group_id)
     {
         if (!$this->_initialized)
-        	return false;
+            return false;
         if ($group_id <= 0 or !is_numeric($group_id))
             return false;
 
@@ -378,7 +385,7 @@ class PMF_PermMedium
     function isGroupMember($user_id, $group_id)
     {
         if (!$this->_initialized)
-        	return false;
+            return false;
         if ($user_id <= 0 or $group_id <= 0 or !is_numeric($user_id) or !is_numeric($group_id))
             return false;
         $res = $this->_db->query("
@@ -389,13 +396,13 @@ class PMF_PermMedium
                 ".PMF_USER_SQLPREFIX."user_group,
                 ".PMF_USER_SQLPREFIX."group
             WHERE
-            	".PMF_USER_SQLPREFIX."user.user_id   = ".$user_id." AND
-            	".PMF_USER_SQLPREFIX."user.user_id   = ".PMF_USER_SQLPREFIX."user_group.user_id AND
-            	".PMF_USER_SQLPREFIX."group.group_id = ".PMF_USER_SQLPREFIX."user_group.group_id AND
-            	".PMF_USER_SQLPREFIX."group.group_id = ".$group_id
+                ".PMF_USER_SQLPREFIX."user.user_id   = ".$user_id." AND
+                ".PMF_USER_SQLPREFIX."user.user_id   = ".PMF_USER_SQLPREFIX."user_group.user_id AND
+                ".PMF_USER_SQLPREFIX."group.group_id = ".PMF_USER_SQLPREFIX."user_group.group_id AND
+                ".PMF_USER_SQLPREFIX."group.group_id = ".$group_id
         );
         if ($this->_db->num_rows($res) == 1)
-        	return true;
+            return true;
         return false;
     }
 
@@ -413,7 +420,7 @@ class PMF_PermMedium
     function getGroupMembers($group_id)
     {
         if (!$this->_initialized)
-        	return false;
+            return false;
         if ($group_id <= 0 or !is_numeric($group_id))
             return false;
         $res = $this->_db->query("
@@ -424,13 +431,13 @@ class PMF_PermMedium
                 ".PMF_USER_SQLPREFIX."user_group,
                 ".PMF_USER_SQLPREFIX."group
             WHERE
-            	".PMF_USER_SQLPREFIX."group.group_id = ".$group_id." AND
-            	".PMF_USER_SQLPREFIX."group.group_id = ".PMF_USER_SQLPREFIX."user_group.group_id AND
-            	".PMF_USER_SQLPREFIX."user.user_id   = ".PMF_USER_SQLPREFIX."user_group.user_id
+                ".PMF_USER_SQLPREFIX."group.group_id = ".$group_id." AND
+                ".PMF_USER_SQLPREFIX."group.group_id = ".PMF_USER_SQLPREFIX."user_group.group_id AND
+                ".PMF_USER_SQLPREFIX."user.user_id   = ".PMF_USER_SQLPREFIX."user_group.user_id
         ");
         $result = array();
         while ($row = $this->_db->fetch_assoc($res)) {
-        	$result[] = $row['user_id'];
+            $result[] = $row['user_id'];
         }
         return $result;
     }
@@ -450,23 +457,23 @@ class PMF_PermMedium
     function addToGroup($user_id, $group_id)
     {
         if (!$this->_initialized)
-        	return false;
+            return false;
         if ($user_id <= 0 or $group_id <= 0 or !is_numeric($user_id) or !is_numeric($group_id))
             return false;
         // check group
         if (!$this->getGroupData($group_id))
-        	return false;
+            return false;
         // add user to group
         $res = $this->_db->query("
-        	INSERT INTO
-        		".PMF_USER_SQLPREFIX."user_group
-        	(user_id, group_id)
-        	   VALUES
-        	(".$user_id.", ".$group_id.")"
+            INSERT INTO
+                ".PMF_USER_SQLPREFIX."user_group
+            (user_id, group_id)
+               VALUES
+            (".$user_id.", ".$group_id.")"
         );
         // return
         if (!$res)
-        	return false;
+            return false;
         return true;
     }
 
@@ -485,21 +492,21 @@ class PMF_PermMedium
     function removeFromGroup($user_id, $group_id)
     {
         if (!$this->_initialized)
-        	return false;
+            return false;
         // check input
         if ($user_id <= 0 or $group_id <= 0 or !is_numeric($user_id) or !is_numeric($group_id))
             return false;
         // remove user from group
         $res = $this->_db->query("
-        	DELETE FROM
-        		".PMF_USER_SQLPREFIX."user_group
-        	WHERE
-        		user_id  = ".$user_id." AND
-        		group_id = ".$group_id
+            DELETE FROM
+                ".PMF_USER_SQLPREFIX."user_group
+            WHERE
+                user_id  = ".$user_id." AND
+                group_id = ".$group_id
         );
         // return
         if (!$res)
-        	return false;
+            return false;
         return true;
     }
 
@@ -517,19 +524,19 @@ class PMF_PermMedium
     function getGroupId($name)
     {
         if (!$this->_initialized)
-        	return false;
+            return false;
         // get group id
         $res = $this->_db->query("
-        	SELECT
-        		group_id
-        	FROM
-        		".PMF_USER_SQLPREFIX."group
-        	WHERE
-        		name = '".$name."'
+            SELECT
+                group_id
+            FROM
+                ".PMF_USER_SQLPREFIX."group
+            WHERE
+                name = '".$name."'
         ");
         // return
         if ($this->_db->num_rows($res) != 1)
-        	return 0;
+            return 0;
         $row = $this->_db->fetch_assoc($res);
         return $row['group_id'];
     }
@@ -548,24 +555,24 @@ class PMF_PermMedium
     function getGroupData($group_id)
     {
         if (!$this->_initialized)
-        	return false;
+            return false;
         if ($group_id <= 0 or !is_numeric($group_id))
             return false;
         // get group data
         $res = $this->_db->query("
-        	SELECT
-        		group_id,
-        		name,
-        		description,
-        		auto_join
-        	FROM
-        		".PMF_USER_SQLPREFIX."group
-        	WHERE
-        		group_id = ".$group_id
+            SELECT
+                group_id,
+                name,
+                description,
+                auto_join
+            FROM
+                ".PMF_USER_SQLPREFIX."group
+            WHERE
+                group_id = ".$group_id
         );
         // return
         if ($this->_db->num_rows($res) != 1)
-        	return array();
+            return array();
         return $this->_db->fetch_assoc($res);
     }
 
@@ -583,7 +590,7 @@ class PMF_PermMedium
     function getUserGroups($user_id)
     {
         if (!$this->_initialized)
-        	return false;
+            return false;
         if ($user_id <= 0 or !is_numeric($user_id))
             return false;
         // get user groups
@@ -595,14 +602,14 @@ class PMF_PermMedium
                 ".PMF_USER_SQLPREFIX."user_group,
                 ".PMF_USER_SQLPREFIX."group
             WHERE
-            	".PMF_USER_SQLPREFIX."user.user_id   = ".$user_id." AND
-            	".PMF_USER_SQLPREFIX."user.user_id   = ".PMF_USER_SQLPREFIX."user_group.user_id AND
-            	".PMF_USER_SQLPREFIX."group.group_id = ".PMF_USER_SQLPREFIX."user_group.group_id
+                ".PMF_USER_SQLPREFIX."user.user_id   = ".$user_id." AND
+                ".PMF_USER_SQLPREFIX."user.user_id   = ".PMF_USER_SQLPREFIX."user_group.user_id AND
+                ".PMF_USER_SQLPREFIX."group.group_id = ".PMF_USER_SQLPREFIX."user_group.group_id
         ");
         // return result
         $result = array();
         while ($row = $this->_db->fetch_assoc($res)) {
-        	$result[] = $row['group_id'];
+            $result[] = $row['group_id'];
         }
         return $result;
     }
@@ -620,7 +627,7 @@ class PMF_PermMedium
     function getAllGroups()
     {
         if (!$this->_initialized)
-        	return false;
+            return false;
         // get all groups
         $res = $this->_db->query("
             SELECT
@@ -628,12 +635,12 @@ class PMF_PermMedium
             FROM
                 ".PMF_USER_SQLPREFIX."group
             WHERE
-            	1
+                1
         ");
         // return result
         $result = array();
         while ($row = $this->_db->fetch_assoc($res)) {
-        	$result[] = $row['group_id'];
+            $result[] = $row['group_id'];
         }
         return $result;
     }
@@ -653,7 +660,7 @@ class PMF_PermMedium
     function checkUserGroupRight($user_id, $right_id)
     {
         if (!$this->_initialized)
-        	return false;
+            return false;
         // check input
         if ($right_id <= 0 or $user_id <= 0 or !is_numeric($right_id) or !is_numeric($user_id))
             return false;
@@ -788,20 +795,20 @@ class PMF_PermMedium
     function removeFromAllGroups($user_id)
     {
         if (!$this->_initialized)
-        	return false;
+            return false;
         // check input
         if ($user_id <= 0 or !is_numeric($user_id))
             return false;
         // remove user from all groups
         $res = $this->_db->query("
-        	DELETE FROM
-        		".PMF_USER_SQLPREFIX."user_group
-        	WHERE
-        		user_id  = ".$user_id
+            DELETE FROM
+                ".PMF_USER_SQLPREFIX."user_group
+            WHERE
+                user_id  = ".$user_id
         );
         // return
         if (!$res)
-        	return false;
+            return false;
         return true;
     }
 
@@ -819,7 +826,7 @@ class PMF_PermMedium
     function getUserGroupRights($user_id)
     {
         if (!$this->_initialized)
-        	return false;
+            return false;
         if ($user_id <= 0 or !is_numeric($user_id))
             return false;
         // check right
@@ -842,7 +849,7 @@ class PMF_PermMedium
         // return result
         $result = array();
         while ($row = $this->_db->fetch_assoc($res)) {
-        	$result[] = $row['right_id'];
+            $result[] = $row['right_id'];
         }
         return $result;
     }
@@ -861,7 +868,7 @@ class PMF_PermMedium
     function refuseAllGroupRights($group_id)
     {
         if (!$this->_initialized)
-        	return false;
+            return false;
         if ($group_id <= 0 or !is_numeric($group_id))
             return false;
         $res = $this->_db->query("
@@ -888,21 +895,21 @@ class PMF_PermMedium
     function getGroupName($group_id)
     {
         if (!$this->_initialized)
-        	return false;
+            return false;
         if ($group_id <= 0 or !is_numeric($group_id))
             return false;
         // get group data
         $res = $this->_db->query("
-        	SELECT
-        		name
-        	FROM
-        		".PMF_USER_SQLPREFIX."group
-        	WHERE
-        		group_id = ".$group_id
+            SELECT
+                name
+            FROM
+                ".PMF_USER_SQLPREFIX."group
+            WHERE
+                group_id = ".$group_id
         );
         // return
         if ($this->_db->num_rows($res) != 1)
-        	return array();
+            return array();
         $row = $this->_db->fetch_assoc($res);
         return $row['name'];
     }
@@ -921,20 +928,20 @@ class PMF_PermMedium
     function removeAllUsersFromGroup($group_id)
     {
         if (!$this->_initialized)
-        	return false;
+            return false;
         // check input
         if ($group_id <= 0 or !is_numeric($group_id))
             return false;
         // remove all user from group
         $res = $this->_db->query("
-        	DELETE FROM
-        		".PMF_USER_SQLPREFIX."user_group
-        	WHERE
-        		group_id = ".$group_id
+            DELETE FROM
+                ".PMF_USER_SQLPREFIX."user_group
+            WHERE
+                group_id = ".$group_id
         );
         // return
         if (!$res)
-        	return false;
+            return false;
         return true;
     }
 
