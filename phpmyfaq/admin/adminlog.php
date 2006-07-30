@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: adminlog.php,v 1.10 2006-05-30 09:27:08 thorstenr Exp $
+* $Id: adminlog.php,v 1.11 2006-07-30 07:40:25 thorstenr Exp $
 *
 * Overview of actions in the admin section
 *
@@ -54,7 +54,7 @@ if ($permission['adminlog'] && 'adminlog' == $_action) {
 	$start = ($page-1) * $perpage;
 	$ende = $start + $perpage;
 
-	$PageSpan = PageSpan("<a href=\"".$_SERVER["PHP_SELF"].$linkext."&amp;aktion=adminlog&amp;pages=".$pages."&amp;page=<NUM>\">", 1, $pages, $page);
+	$PageSpan = PageSpan("<a href=\"".$_SERVER["PHP_SELF"].$linkext."&amp;action=adminlog&amp;pages=".$pages."&amp;page=<NUM>\">", 1, $pages, $page);
 
 	$result = $db->query("SELECT id, time, usr, text, ip FROM ".SQLPREFIX."faqadminlog ORDER BY id DESC");
 ?>
@@ -111,7 +111,7 @@ if ($permission['adminlog'] && 'adminlog' == $_action) {
 	</table>
 <?php
 
-    printf ('<p><a href="?aktion=deleteadminlog">%s</a></p>', $PMF_LANG['ad_adminlog_del_older_30d']);
+    printf ('<p><a href="?action=deleteadminlog">%s</a></p>', $PMF_LANG['ad_adminlog_del_older_30d']);
 
 } elseif ($permission['adminlog'] && 'deleteadminlog' == $_action) {
 

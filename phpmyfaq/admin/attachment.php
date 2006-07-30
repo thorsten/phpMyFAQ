@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: attachment.php,v 1.17 2006-06-12 22:24:26 matteo Exp $
+* $Id: attachment.php,v 1.18 2006-07-30 07:40:25 thorstenr Exp $
 *
 * Select an attachment and save it or create the SQL backup files
 *
@@ -30,11 +30,11 @@ $_SERVER['HTTP_USER_AGENT'] = urlencode($_SERVER['HTTP_USER_AGENT']);
 
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
-if (isset($_REQUEST["aktion"]) && ($_REQUEST["aktion"] == "sicherdaten" || $_REQUEST["aktion"] == "sicherlog")) {
+if (isset($_REQUEST["action"]) && ($_REQUEST["action"] == "sicherdaten" || $_REQUEST["action"] == "sicherlog")) {
 	Header("Content-Type: application/octet-stream");
-	if ($_REQUEST["aktion"] == "sicherdaten") {
+	if ($_REQUEST["action"] == "sicherdaten") {
 		Header("Content-Disposition: attachment; filename=\"phpmyfaq-data.".date("Y-m-d").".sql\"");
-	} elseif ($_REQUEST["aktion"] == "sicherlog") {
+	} elseif ($_REQUEST["action"] == "sicherlog") {
 		Header("Content-Disposition: attachment; filename=\"phpmyfaq-logs.".date("Y-m-d").".sql\"");
 	}
 	Header("Pragma: no-cache");
@@ -51,7 +51,7 @@ if (isset($LANGCODE)) {
     $LANGCODE = "en";
 }
 
-if (!isset($_REQUEST["aktion"]) || isset($_REQUEST["save"])) {
+if (!isset($_REQUEST["action"]) || isset($_REQUEST["save"])) {
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php print $PMF_LANG["metaLanguage"]; ?>" lang="<?php print $PMF_LANG["metaLanguage"]; ?>">
@@ -112,7 +112,7 @@ if (isset($user) && isset($pass)) {
     }
 }
 
-if (!isset($_REQUEST["aktion"]) && $auth && $permission["addatt"]) {
+if (!isset($_REQUEST["action"]) && $auth && $permission["addatt"]) {
 ?>
 <form action="<?php print $_SERVER["PHP_SELF"]; ?>" enctype="multipart/form-data" method="post">
 <fieldset>
@@ -129,7 +129,7 @@ if (!isset($_REQUEST["aktion"]) && $auth && $permission["addatt"]) {
 <?php
 }
 
-if (isset($_REQUEST["aktion"]) && $auth && !$permission["addatt"]) {
+if (isset($_REQUEST["action"]) && $auth && !$permission["addatt"]) {
 	print $PMF_LANG["err_NotAuth"];
 }
 
@@ -160,7 +160,7 @@ if (isset($_REQUEST["save"]) && $_REQUEST["save"] == TRUE && $auth && !$permissi
 	print $PMF_LANG["err_NotAuth"];
 }
 
-if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "sicherdaten") {
+if (isset($_REQUEST["action"]) && $_REQUEST["action"] == "sicherdaten") {
 	$text[] = "-- pmf2.0: ".SQLPREFIX."faqchanges ".SQLPREFIX."faqnews ".SQLPREFIX."faqcategories ".SQLPREFIX."faqcategoryrelations ".SQLPREFIX."faqvoting ".SQLPREFIX."faqdata ".SQLPREFIX."faqcomments ".SQLPREFIX."faquser ". SQLPREFIX."faqvisits ".SQLPREFIX."faqquestions";
 	$text[] = "-- DO NOT REMOVE THE FIRST LINE!";
 	$text[] = "-- pmftableprefix: ".SQLPREFIX;
@@ -189,11 +189,11 @@ if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "sicherdaten") {
     print implode("\r\n",$text);
     $text = build_insert ("SELECT * FROM ".SQLPREFIX."faqquestions", SQLPREFIX."faqquestions");
 	print implode("\r\n",$text);
-} elseif (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "sicherdaten" && $auth && !$permission["backup"]) {
+} elseif (isset($_REQUEST["action"]) && $_REQUEST["action"] == "sicherdaten" && $auth && !$permission["backup"]) {
 	print $PMF_LANG["err_NotAuth"];
 }
 
-if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "sicherlog") {
+if (isset($_REQUEST["action"]) && $_REQUEST["action"] == "sicherlog") {
 	$text[] = "-- pmf2.0: ".SQLPREFIX."faqadminlog ".SQLPREFIX."faqsessions";
 	$text[] = "-- DO NOT REMOVE THE FIRST LINE!";
     $text[] = "-- pmftableprefix: ".SQLPREFIX;
@@ -212,7 +212,7 @@ if (DEBUG == TRUE) {
 	print "<p>".$db->sqllog()."</p>";
 }
 
-if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] != "sicherdaten" && $_REQUEST["aktion"] != "sicherlog") {
+if (isset($_REQUEST["action"]) && $_REQUEST["action"] != "sicherdaten" && $_REQUEST["action"] != "sicherlog") {
 	print "</body></html>";
 }
 
