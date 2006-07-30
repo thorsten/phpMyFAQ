@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mysql.sql.php,v 1.31 2006-07-28 19:42:23 matteo Exp $
+* $Id: mysql.sql.php,v 1.32 2006-07-30 07:59:29 thorstenr Exp $
 *
 * CREATE TABLE instruction for MySQL database
 *
@@ -200,7 +200,7 @@ PRIMARY KEY (id, lang))";
 
 //faqgroup
 $query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqgroup (
-group_id INT(11) UNSIGNED NOT NULL,
+group_id INT(11) NOT NULL,
 name VARCHAR(25) NULL,
 description TEXT NULL,
 auto_join INT(1) UNSIGNED NULL,
@@ -210,7 +210,7 @@ UNIQUE INDEX name(name)
 
 //faqgroup_right
 $query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqgroup_right (
-group_id INT(11) UNSIGNED NOT NULL,
+group_id INT(11) NOT NULL,
 right_id INT(11) UNSIGNED NOT NULL,
 PRIMARY KEY(group_id, right_id)
 )";
@@ -263,8 +263,8 @@ $query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqright (
 right_id INT(11) UNSIGNED NOT NULL,
 name VARCHAR(50) NULL,
 description TEXT NULL,
-for_users INT(1) UNSIGNED NULL DEFAULT 1,
-for_groups INT(1) UNSIGNED NULL DEFAULT 1,
+for_users INT(1) NULL DEFAULT 1,
+for_groups INT(1) NULL DEFAULT 1,
 PRIMARY KEY(right_id)
 )";
 
@@ -277,7 +277,7 @@ PRIMARY KEY sid (sid))";
 
 //faquser
 $query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faquser (
-user_id INT(11) UNSIGNED NOT NULL,
+user_id INT(11) NOT NULL,
 login VARCHAR(25) NOT NULL,
 session_id VARCHAR(150) NULL,
 session_timestamp INT(11) UNSIGNED NULL,
@@ -293,7 +293,7 @@ UNIQUE INDEX login(login)
 
 //faquserdata
 $query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faquserdata (
-user_id INT(11) UNSIGNED NOT NULL,
+user_id INT(11) NOT NULL,
 last_modified TIMESTAMP(14) NULL,
 display_name VARCHAR(50) NULL,
 email VARCHAR(100) NULL
@@ -308,15 +308,15 @@ PRIMARY KEY(login)
 
 //faquser_group
 $query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faquser_group (
-user_id INT(11) UNSIGNED NOT NULL,
-group_id INT(11) UNSIGNED NOT NULL,
+user_id INT(11) NOT NULL,
+group_id INT(11) NOT NULL,
 PRIMARY KEY(user_id, group_id)
 )";
 
 //faquser_right
 $query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faquser_right (
-user_id INT(11) UNSIGNED NOT NULL,
-right_id INT(11) UNSIGNED NOT NULL,
+user_id INT(11) NOT NULL,
+right_id INT(11) NOT NULL,
 PRIMARY KEY(user_id, right_id)
 )";
 

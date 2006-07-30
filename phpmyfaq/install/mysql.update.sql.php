@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mysql.update.sql.php,v 1.10 2006-07-28 19:10:34 thorstenr Exp $
+* $Id: mysql.update.sql.php,v 1.11 2006-07-30 07:59:29 thorstenr Exp $
 *
 * CREATE TABLE instruction for MySQL database - UPDATE STAGE from 1.x to 2.0.0
 *
@@ -66,7 +66,7 @@ PRIMARY KEY (id, lang))";
 
 //faqgroup
 $query[] = "CREATE TABLE IF NOT EXISTS ".SQLPREFIX."faqgroup (
-group_id INT(11) UNSIGNED NOT NULL,
+group_id INT(11) NOT NULL,
 name VARCHAR(25) NULL,
 description TEXT NULL,
 auto_join INT(1) UNSIGNED NULL,
@@ -76,7 +76,7 @@ UNIQUE INDEX name(name)
 
 //faqgroup_right
 $query[] = "CREATE TABLE IF NOT EXISTS ".SQLPREFIX."faqgroup_right (
-group_id INT(11) UNSIGNED NOT NULL,
+group_id INT(11) NOT NULL,
 right_id INT(11) UNSIGNED NOT NULL,
 PRIMARY KEY(group_id, right_id)
 )";
@@ -100,14 +100,14 @@ $query[] = "CREATE TABLE IF NOT EXISTS ".SQLPREFIX."faqright (
 right_id INT(11) UNSIGNED NOT NULL,
 name VARCHAR(50) NULL,
 description TEXT NULL,
-for_users INT(1) UNSIGNED NULL DEFAULT 1,
-for_groups INT(1) UNSIGNED NULL DEFAULT 1,
+for_users INT(1) NULL DEFAULT 1,
+for_groups INT(1) NULL DEFAULT 1,
 PRIMARY KEY(right_id)
 )";
 
 //faquser
 $query[] = "CREATE TABLE IF NOT EXISTS ".SQLPREFIX."faquser (
-user_id INT(11) UNSIGNED NOT NULL,
+user_id INT(11) NOT NULL,
 login VARCHAR(25) NOT NULL,
 session_id VARCHAR(150) NULL,
 session_timestamp INT(11) UNSIGNED NULL,
@@ -123,7 +123,7 @@ UNIQUE INDEX login(login)
 
 //faquserdata
 $query[] = "CREATE TABLE IF NOT EXISTS ".SQLPREFIX."faquserdata (
-user_id INT(11) UNSIGNED NOT NULL,
+user_id INT(11) NOT NULL,
 last_modified TIMESTAMP(14) NULL,
 display_name VARCHAR(50) NULL,
 email VARCHAR(100) NULL
@@ -138,8 +138,8 @@ PRIMARY KEY(login)
 
 //faquser_group
 $query[] = "CREATE TABLE IF NOT EXISTS ".SQLPREFIX."faquser_group (
-user_id INT(11) UNSIGNED NOT NULL,
-group_id INT(11) UNSIGNED NOT NULL,
+user_id INT(11) NOT NULL,
+group_id INT(11) NOT NULL,
 PRIMARY KEY(user_id, group_id)
 )";
 
