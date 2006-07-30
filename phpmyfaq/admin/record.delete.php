@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.delete.php,v 1.8 2006-01-02 16:51:26 thorstenr Exp $
+* $Id: record.delete.php,v 1.9 2006-07-30 07:07:19 matteo Exp $
 *
 * Deletes a record
 *
@@ -49,7 +49,7 @@ if ($permission["delbt"]) {
 	if ($_REQUEST["subm"] == $PMF_LANG["ad_gen_no"]) {
 		print "<p>".$PMF_LANG["ad_entry_delfail"]."<br />&nbsp;<br /><a href=\"javascript:history.back()\">".$PMF_LANG["ad_entry_back"]."</p></a>\n";
 	}
-    print "<p><img src=\"images/arrow.gif\" width=\"11\" height=\"11\" alt=\"\" border=\"0\"> <a href=\"".$_SERVER["PHP_SELF"].$linkext."&amp;aktion=view\">".$PMF_LANG["ad_entry_aor"]."</a></p>\n";
+    print "<p><img src=\"images/arrow.gif\" width=\"11\" height=\"11\" alt=\"\" border=\"0\"> <a href=\"".$_SERVER["PHP_SELF"].$linkext."&amp;action=view\">".$PMF_LANG["ad_entry_aor"]."</a></p>\n";
 } else {
 	print $PMF_LANG["err_NotAuth"];
 	}

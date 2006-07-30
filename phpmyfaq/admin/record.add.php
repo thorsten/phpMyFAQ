@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.add.php,v 1.33 2006-07-04 22:34:46 matteo Exp $
+* $Id: record.add.php,v 1.34 2006-07-30 07:07:19 matteo Exp $
 *
 * Adds a record in the database
 *
@@ -87,7 +87,7 @@ if ($permission["editbt"]) {
     <p class="little"><?php print $PMF_LANG["msgLastUpdateArticle"].makeDate(date("YmdHis")); ?><br />
     <?php print $PMF_LANG["msgAuthor"].' '.$_POST["author"]; ?></p>
 
-    <form action="<?php print $_SERVER['PHP_SELF'].$linkext; ?>&amp;aktion=editpreview" method="post">
+    <form action="<?php print $_SERVER['PHP_SELF'].$linkext; ?>&amp;action=editpreview" method="post">
     <input type="hidden" name="id"       value="<?php print $id; ?>" />
     <input type="hidden" name="thema"    value="<?php print htmlspecialchars($_POST["thema"]); ?>" />
     <input type="hidden" name="content"  value="<?php print htmlspecialchars($_POST['content']); ?>" />
@@ -113,7 +113,7 @@ if ($permission["editbt"]) {
         print "<p>".$PMF_LANG["ad_entryins_fail"]."</p>";
         $rubrik = isset($_POST['rubrik']) ? $_POST['rubrik'] : null;
 ?>
-    <form action="<?php print $_SERVER['PHP_SELF'].$linkext; ?>&amp;aktion=editpreview" method="post">
+    <form action="<?php print $_SERVER['PHP_SELF'].$linkext; ?>&amp;action=editpreview" method="post">
     <input type="hidden" name="thema"    value="<?php print htmlspecialchars($_POST['thema']); ?>" />
     <input type="hidden" name="content"  value="<?php print htmlspecialchars($_POST['content']); ?>" />
     <input type="hidden" name="lang"     value="<?php print $_POST['language']; ?>" />

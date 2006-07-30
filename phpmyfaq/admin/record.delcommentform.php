@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.delcommentform.php,v 1.7 2006-07-23 16:40:54 matteo Exp $
+* $Id: record.delcommentform.php,v 1.8 2006-07-30 07:07:19 matteo Exp $
 *
 * Form to delete user comment
 *
@@ -32,7 +32,7 @@ if (isset($_REQUEST['type']) && (PMF_COMMENT_TYPE_NEWS == $_REQUEST['type'])) {
 if ($permission["delcomment"]) {
 ?>
     <form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>" method="post">
-    <input type="hidden" name="aktion" value="deletecomment" />
+    <input type="hidden" name="action" value="deletecomment" />
     <input type="hidden" name="artid" value="<?php print $_REQUEST["artid"]; ?>" />
     <input type="hidden" name="cmtid" value="<?php print $_REQUEST["cmtid"]; ?>" />
     <input type="hidden" name="lang" value="<?php isset($_REQUEST["lang"]) ? print $_REQUEST["lang"] : ''; ?>" />

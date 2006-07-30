@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Linkverifier.php,v 1.2 2006-07-29 10:18:02 matteo Exp $
+* $Id: Linkverifier.php,v 1.3 2006-07-30 07:07:19 matteo Exp $
 *
 * PMF_Linkverifier
 *
@@ -873,7 +873,7 @@ function onDemandVerifyURL(id, lang, target) {
     var heigthPx = 450;
     var leftPx   = (screen.width  - widthPx)/2;
     var topPx    = (screen.height - heigthPx)/2;
-    Fenster = window.open('<?php print $ajaxphp; ?>&aktion=ajax&ajax=onDemandURL&id=' + id + '&lang=' + lang, 'onDemandURLVerification', 'toolbar=no, location=no, status=no, menubar=no, width=' + widthPx + ', height=' + heigthPx + ', left=' + leftPx + ', top=' + topPx + ', resizable=yes, scrollbars=yes');
+    Fenster = window.open('<?php print $ajaxphp; ?>&action=ajax&ajax=onDemandURL&id=' + id + '&lang=' + lang, 'onDemandURLVerification', 'toolbar=no, location=no, status=no, menubar=no, width=' + widthPx + ', height=' + heigthPx + ', left=' + leftPx + ', top=' + topPx + ', resizable=yes, scrollbars=yes');
     Fenster.focus();
 
     verifyEntryURL(id, lang);
@@ -889,7 +889,7 @@ function verifyEntryURL(id, lang) {
     target.src = "images/url-checking.png";
 
     var url = 'index.php';
-    var pars = 'aktion=ajax&ajax=verifyURL&id=' + id + '&lang=' + lang;
+    var pars = 'action=ajax&ajax=verifyURL&id=' + id + '&lang=' + lang;
     var myAjax = new Ajax.Request( url, {method: 'get', parameters: pars, onComplete: verifyEntryURL_success, onFailure: verifyEntryURL_failure} );
 
     function verifyEntryURL_success(XmlRequest) {
@@ -924,7 +924,7 @@ function link_ondemand_javascript($id, $lang) {
 function ajaxOnDemandVerify(id, lang) {
     var target = $('onDemandVerifyResult');
     var url = 'index.php';
-    var pars = 'aktion=ajax&ajax=onDemandURL&id=' + id + '&lang=' + lang + '&lookup=1';
+    var pars = 'action=ajax&ajax=onDemandURL&id=' + id + '&lang=' + lang + '&lookup=1';
     var myAjax = new Ajax.Request( url, {method: 'get', parameters: pars, onComplete: ajaxOnDemandVerify_success, onFailure: ajaxOnDemandVerify_failure} );
     //TODO: Assign string
     target.innerHTML = 'Querying LinkVerifier...';

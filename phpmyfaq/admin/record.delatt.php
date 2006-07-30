@@ -31,7 +31,7 @@ if ($permission["delatt"]) {
 	else {
 		print "<p>".$PMF_LANG["ad_att_delfail"]."</p>\n";
 		}
-	print "<p><a href=\"".$_SERVER["PHP_SELF"].$linkext."&amp;aktion=editentry&amp;id=".$_REQUEST["id"]."&amp;lang=".$_REQUEST["lang"]."\">".$PMF_LANG["ad_entry_back"]."</a></p>";
+	print "<p><a href=\"".$_SERVER["PHP_SELF"].$linkext."&amp;action=editentry&amp;id=".$_REQUEST["id"]."&amp;lang=".$_REQUEST["lang"]."\">".$PMF_LANG["ad_entry_back"]."</a></p>";
 	}
 else {
 	print $PMF_LANG["err_NotAuth"];

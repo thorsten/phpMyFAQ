@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.delcomment.php,v 1.8 2006-07-23 17:31:37 matteo Exp $
+* $Id: record.delcomment.php,v 1.9 2006-07-30 07:07:19 matteo Exp $
 *
 * Deletes a user comment
 *
@@ -46,14 +46,14 @@ if ($permission['delcomment']) {
     if (   !isset($_REQUEST['type'])
         || (isset($_REQUEST['type']) && (PMF_COMMENT_TYPE_FAQ == $_REQUEST['type']))
        ) {
-        printf('<p align="center">%s<p><a href="?aktion=editentry&amp;id=%d&amp;lang=%s">%s</a></p>',
+        printf('<p align="center">%s<p><a href="?action=editentry&amp;id=%d&amp;lang=%s">%s</a></p>',
             $msg,
             $_REQUEST['artid'],
             $_REQUEST['lang'],
             $PMF_LANG['ad_entry_back']);
     }
     if (isset($_REQUEST['type']) && (PMF_COMMENT_TYPE_NEWS == $_REQUEST['type'])) {
-        printf('<p align="center">%s<p><a href="?aktion=news&amp;do=edit&amp;id=%d">%s</a></p>',
+        printf('<p align="center">%s<p><a href="?action=news&amp;do=edit&amp;id=%d">%s</a></p>',
             $msg,
             $_REQUEST['artid'],
             $PMF_LANG['ad_entry_back']);

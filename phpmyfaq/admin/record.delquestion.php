@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.delquestion.php,v 1.10 2006-06-11 15:26:21 matteo Exp $
+* $Id: record.delquestion.php,v 1.11 2006-07-30 07:07:19 matteo Exp $
 *
 * Delete open questions
 *
@@ -69,8 +69,8 @@ if ($permission['delquestion']) {
         <tr>
             <td class="list"><?php print makeDate($row->ask_date); ?><br /><a href="mailto:<?php print $row->ask_usermail; ?>"><?php print $row->ask_username; ?></a></td>
             <td class="list"><?php print $tree->categoryName[$row->ask_rubrik]['name'].":<br />".$row->ask_content; ?></td>
-            <td class="list"><a href="?aktion=question&amp;id=<?php print $row->id; ?>&amp;is_visible=toggle"><?php print (('Y' == $row->is_visible) ? $PMF_LANG["ad_gen_no"] : $PMF_LANG["ad_gen_yes"]); ?>!</a><br /></td>
-            <td class="list"><a href="?aktion=question&amp;id=<?php print $row->id; ?>&amp;delete=yes"><?php print $PMF_LANG["ad_gen_delete"]; ?>!</a><br /><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=takequestion&amp;id=<?php print $row->id; ?>"><?php print $PMF_LANG["ad_ques_take"] ?></a></td>
+            <td class="list"><a href="?action=question&amp;id=<?php print $row->id; ?>&amp;is_visible=toggle"><?php print (('Y' == $row->is_visible) ? $PMF_LANG["ad_gen_no"] : $PMF_LANG["ad_gen_yes"]); ?>!</a><br /></td>
+            <td class="list"><a href="?action=question&amp;id=<?php print $row->id; ?>&amp;delete=yes"><?php print $PMF_LANG["ad_gen_delete"]; ?>!</a><br /><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;action=takequestion&amp;id=<?php print $row->id; ?>"><?php print $PMF_LANG["ad_ques_take"] ?></a></td>
         </tr>
 <?php
 			}

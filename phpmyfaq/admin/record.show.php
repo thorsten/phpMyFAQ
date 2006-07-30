@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.show.php,v 1.27 2006-07-24 21:32:56 matteo Exp $
+* $Id: record.show.php,v 1.28 2006-07-30 07:07:19 matteo Exp $
 *
 * Shows the list of records ordered by categories
 *
@@ -63,7 +63,7 @@ if ($permission["editbt"] || $permission["delbt"]) {
         $begriff = "";
     }
 ?>
-    <form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=view" method="post">
+    <form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;action=view" method="post">
     <fieldset>
     <legend><?php print $PMF_LANG["msgSearch"]; ?></legend>
         <table class="admin">
@@ -88,7 +88,7 @@ if ($permission["editbt"] || $permission["delbt"]) {
     </fieldset>
 
     <fieldset>
-    <legend><?php print ((isset($_REQUEST['aktion']) && 'accept' == $_REQUEST['aktion']) ? $PMF_LANG['ad_menu_entry_aprove'] : $PMF_LANG['ad_menu_entry_edit']); ?></legend>
+    <legend><?php print ((isset($_REQUEST['action']) && 'accept' == $_REQUEST['action']) ? $PMF_LANG['ad_menu_entry_aprove'] : $PMF_LANG['ad_menu_entry_edit']); ?></legend>
 <?php
     // 1. Count the comments for each faq
     $resultComments = $db->query("SELECT count(id) as anz, id FROM ".SQLPREFIX."faqcomments GROUP BY id ORDER BY id;");
@@ -127,7 +127,7 @@ if ($permission["editbt"] || $permission["delbt"]) {
         }
 
         // 3. Count the entries
-        if (isset($_REQUEST['aktion']) && $_REQUEST['aktion'] == 'accept') {
+        if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'accept') {
             $active = 'no';
         } else {
             $active = 'yes';
@@ -146,7 +146,7 @@ if ($permission["editbt"] || $permission["delbt"]) {
         }
     }
 
-    if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "view" && !(isset($_REQUEST["suchbegriff"]) && $_REQUEST["suchbegriff"] != "")) {
+    if (isset($_REQUEST["action"]) && $_REQUEST["action"] == "view" && !(isset($_REQUEST["suchbegriff"]) && $_REQUEST["suchbegriff"] != "")) {
         // No search requested
         $where = "";
         foreach ($cond as $field => $data) {
@@ -166,9 +166,9 @@ if ($permission["editbt"] || $permission["delbt"]) {
         $query = 'SELECT '.SQLPREFIX.'faqdata.id AS id, '.SQLPREFIX.'faqdata.lang AS lang, '.SQLPREFIX.'faqcategoryrelations.category_id AS category_id, '.SQLPREFIX.'faqdata.thema AS thema FROM '.SQLPREFIX.'faqdata INNER JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang ='.SQLPREFIX.'faqcategoryrelations.record_lang AND '.SQLPREFIX.'faqdata.active = \'yes\' '.$where.' ORDER BY '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.id ';
 
         $result = $db->query($query);
-        $laktion = 'view';
+        $laction = 'view';
         $internalSearch = '';
-    } else if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "view" && isset($_REQUEST["suchbegriff"]) && $_REQUEST["suchbegriff"] != "") {
+    } else if (isset($_REQUEST["action"]) && $_REQUEST["action"] == "view" && isset($_REQUEST["suchbegriff"]) && $_REQUEST["suchbegriff"] != "") {
         // Search for:
         // a. solution id
         // b. full text search
@@ -206,14 +206,14 @@ if ($permission["editbt"] || $permission["delbt"]) {
                         array(SQLPREFIX.'faqcategoryrelations.category_id',  SQLPREFIX.'faqdata.id')
                         );
         }
-        $laktion = 'view';
+        $laction = 'view';
         $internalSearch = '&amp;search='.$begriff;
         $wasSearch = true;
 
-    } elseif (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "accept") {
+    } elseif (isset($_REQUEST["action"]) && $_REQUEST["action"] == "accept") {
         $query = 'SELECT '.SQLPREFIX.'faqdata.id AS id,'.SQLPREFIX.'faqdata.lang AS lang, '.SQLPREFIX.'faqcategoryrelations.category_id AS category_id, '.SQLPREFIX.'faqdata.thema AS thema FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang ='.SQLPREFIX.'faqcategoryrelations.record_lang WHERE '.SQLPREFIX.'faqdata.active = \'no\' ORDER BY '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.id';
         $result = $db->query($query);
-        $laktion = 'accept';
+        $laction = 'accept';
         $internalSearch = '';
     }
 
@@ -232,7 +232,7 @@ if ($permission["editbt"] || $permission["delbt"]) {
                 $catInfo .= sprintf('%d %s', $numRecordsByCat[$cid], $PMF_LANG['msgEntries']);
                 $needComma = true;
             }
-            if (isset($numCommentsByCat[$cid]) && ($numCommentsByCat[$cid] > 0) && $laktion != 'accept') {
+            if (isset($numCommentsByCat[$cid]) && ($numCommentsByCat[$cid] > 0) && $laction != 'accept') {
                 if (!$isBracketOpened) {
                     $catInfo .= ' (';
                     $isBracketOpened = true;
@@ -264,7 +264,7 @@ if ($permission["editbt"] || $permission["delbt"]) {
     <tr>
         <td class="list" style="width: 24px; text-align: right;"><?php print $row->id; ?></td>
         <td class="list" style="width: 16px;"><?php print $row->lang; ?></td>
-        <td class="list"><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=editentry&amp;id=<?php print $row->id; ?>&amp;lang=<?php print $row->lang; ?>" title="<?php print $PMF_LANG["ad_user_edit"]; ?> '<?php print str_replace("\"", "´", $row->thema); ?>'"><?php print PMF_htmlentities($row->thema, ENT_NOQUOTES, $PMF_LANG['metaCharset']); ?></a>
+        <td class="list"><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;action=editentry&amp;id=<?php print $row->id; ?>&amp;lang=<?php print $row->lang; ?>" title="<?php print $PMF_LANG["ad_user_edit"]; ?> '<?php print str_replace("\"", "´", $row->thema); ?>'"><?php print PMF_htmlentities($row->thema, ENT_NOQUOTES, $PMF_LANG['metaCharset']); ?></a>
 <?php
         if (isset($numCommentsByFaq[$row->id])) {
             print " (".$numCommentsByFaq[$row->id]." ".$PMF_LANG["ad_start_comments"].")";
@@ -272,7 +272,7 @@ if ($permission["editbt"] || $permission["delbt"]) {
 ?>
         </td>
         <td class="list" width="50"><?php print $linkverifier->getEntryStateHTML($row->id, $row->lang); ?></td>
-        <td class="list" width="17"><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=saveentry&amp;id=<?php print $row->id; ?>&amp;language=<?php print $row->lang; ?>&amp;submit[0]=<?php print $PMF_LANG["ad_entry_delete"]; ?>" title="<?php print $PMF_LANG["ad_user_delete"]; ?> '<?php print str_replace("\"", "´", $row->thema); ?>'"><img src="images/delete.gif" width="17" height="18" alt="<?php print $PMF_LANG["ad_entry_delete"]; ?>" /></a></td>
+        <td class="list" width="17"><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;action=saveentry&amp;id=<?php print $row->id; ?>&amp;language=<?php print $row->lang; ?>&amp;submit[0]=<?php print $PMF_LANG["ad_entry_delete"]; ?>" title="<?php print $PMF_LANG["ad_user_delete"]; ?> '<?php print str_replace("\"", "´", $row->thema); ?>'"><img src="images/delete.gif" width="17" height="18" alt="<?php print $PMF_LANG["ad_entry_delete"]; ?>" /></a></td>
     </tr>
 <?php
             $old = $cid;

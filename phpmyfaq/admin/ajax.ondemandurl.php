@@ -1,11 +1,11 @@
 <?php
 /**
-* $Id: ajax.ondemandurl.php,v 1.9 2006-07-29 10:18:03 matteo Exp $
+* $Id: ajax.ondemandurl.php,v 1.10 2006-07-30 07:07:19 matteo Exp $
 *
 * AJAX: onDemandURL
 *
 * Usage:
-*   index.php?uin=<uin>&aktion=ajax&ajax=onDemandURL&id=<id>&lang=<lang>[&lookup=1]
+*   index.php?uin=<uin>&action=ajax&ajax=onDemandURL&id=<id>&lang=<lang>[&lookup=1]
 *
 * Performs link verification at demand of the user.
 *

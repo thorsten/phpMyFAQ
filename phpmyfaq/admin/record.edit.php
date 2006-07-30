@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.edit.php,v 1.35 2006-07-29 10:34:01 matteo Exp $
+* $Id: record.edit.php,v 1.36 2006-07-30 07:07:19 matteo Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23
@@ -39,7 +39,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     $thema = '';
     $categories = array('category_id', 'category_lang');
 
-    if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "takequestion") {
+    if (isset($_REQUEST["action"]) && $_REQUEST["action"] == "takequestion") {
 
         $id_question = intval( $_REQUEST['id']);
         $query_questions = sprintf('SELECT ask_rubrik, ask_content FROM %sfaqquestions WHERE id = %d', SQLPREFIX, $id_question);
@@ -51,7 +51,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
         $categories = array(array('category_id' => $rubrik, 'category_lang' => $lang));
     }
 
-    if (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "editpreview") {
+    if (isset($_REQUEST["action"]) && $_REQUEST["action"] == "editpreview") {
 
         if (isset($_REQUEST["id"]) && $_REQUEST["id"] != "") {
             $id = $_REQUEST["id"];
@@ -78,7 +78,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
         $solution_id = $_REQUEST['solution_id'];
         $revision_id = isset($_REQUEST['revision_id']) ? $_REQUEST['revision_id'] : 0;
 
-    } elseif (isset($_REQUEST["aktion"]) && $_REQUEST["aktion"] == "editentry") {
+    } elseif (isset($_REQUEST["action"]) && $_REQUEST["action"] == "editentry") {
 
         if ((!isset($rubrik) && !isset($thema)) || (isset($_REQUEST["id"]) && $_REQUEST["id"] != "")) {
             adminlog("Beitragedit, ".$_REQUEST["id"]);
@@ -145,7 +145,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
         $revisions = $faq->getRevisionIds($id, $lang);
         if (count($revisions)) {
 ?>
-    <form id="selectRevision" name="selectRevision" action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=editentry&amp;id=<?php print $id; ?>&amp;lang=<?php print $lang; ?>" method="post" />
+    <form id="selectRevision" name="selectRevision" action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;action=editentry&amp;id=<?php print $id; ?>&amp;lang=<?php print $lang; ?>" method="post" />
     <fieldset>
     <legend><?php print $PMF_LANG['ad_changerev']; ?></legend>
         <select name="revisionid_selected" onChange="selectRevision.submit();" />
@@ -182,7 +182,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 
 ?>
 
-    <form style="float: left;" action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=<?php print $acti; ?>" method="post">
+    <form style="float: left;" action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;action=<?php print $acti; ?>" method="post">
     <input type="hidden" name="revision_id" id="revision_id" value="<?php print $revision_id; ?>" />
 
     <fieldset>
@@ -214,7 +214,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
                     if ($dat != "." && $dat != "..") {
                         print "<a href=\""."../attachments/".$id."/".$dat."\">".$dat."</a>";
                         if ($permission["delatt"]) {
-                            print "[&amp;<a href=\"".$_SERVER["PHP_SELF"].$linkext."&amp;aktion=delatt&amp;id=".$id."&amp;which=".rawurlencode($dat)."&amp;lang=".$lang."\">".$PMF_LANG["ad_att_del"]."</a>&amp;]";
+                            print "[&amp;<a href=\"".$_SERVER["PHP_SELF"].$linkext."&amp;action=delatt&amp;id=".$id."&amp;which=".rawurlencode($dat)."&amp;lang=".$lang."\">".$PMF_LANG["ad_att_del"]."</a>&amp;]";
                         }
                         print "<br />\n";
                     }
@@ -366,7 +366,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 <?php
             while ($row = $db->fetch_object($result)) {
 ?>
-    <p><?php print $PMF_LANG["ad_entry_commentby"] ?> <a href="mailto:<?php print $row->email; ?>"><?php print $row->usr; ?></a>:<br /><?php print $row->comment; ?><br /><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=delcomment&amp;artid=<?php print $row->id; ?>&amp;cmtid=<?php print $row->id_comment; ?>&amp;lang=<?php print $lang; ?>"><img src="images/delete.gif" alt="<?php print $PMF_LANG["ad_entry_delete"] ?>" title="<?php print $PMF_LANG["ad_entry_delete"] ?>" border="0" width="17" height="18" align="right" /></a></p>
+    <p><?php print $PMF_LANG["ad_entry_commentby"] ?> <a href="mailto:<?php print $row->email; ?>"><?php print $row->usr; ?></a>:<br /><?php print $row->comment; ?><br /><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;action=delcomment&amp;artid=<?php print $row->id; ?>&amp;cmtid=<?php print $row->id_comment; ?>&amp;lang=<?php print $lang; ?>"><img src="images/delete.gif" alt="<?php print $PMF_LANG["ad_entry_delete"] ?>" title="<?php print $PMF_LANG["ad_entry_delete"] ?>" border="0" width="17" height="18" align="right" /></a></p>
 <?php
             }
         }

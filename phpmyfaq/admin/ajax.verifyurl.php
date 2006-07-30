@@ -1,11 +1,11 @@
 <?php
 /**
-* $Id: ajax.verifyurl.php,v 1.7 2006-06-15 22:18:29 matteo Exp $
+* $Id: ajax.verifyurl.php,v 1.8 2006-07-30 07:07:19 matteo Exp $
 *
 * AJAX: verifyurl
 *
 * Usage:
-*   index.php?uin=<uin>&aktion=ajax&ajax=verifyURL&id=<id>&lang=<lang>
+*   index.php?uin=<uin>&action=ajax&ajax=verifyURL&id=<id>&lang=<lang>
 *
 * Performs link verification when entries are shown in record.show.php
 *

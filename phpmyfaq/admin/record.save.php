@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.save.php,v 1.32 2006-06-11 15:26:21 matteo Exp $
+* $Id: record.save.php,v 1.33 2006-07-30 07:07:19 matteo Exp $
 *
 * Save or update a FAQ record
 *
@@ -44,7 +44,7 @@ if (isset($submit[2]) && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "" &
     <p class="little"><?php print $PMF_LANG["msgLastUpdateArticle"].makeDate(date("YmdHis")); ?><br />
     <?php print $PMF_LANG["msgAuthor"].$_REQUEST["author"]; ?></p>
 
-    <form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=editpreview" method="post">
+    <form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;action=editpreview" method="post">
     <input type="hidden" name="id" value="<?php print $_REQUEST["id"]; ?>" />
     <input type="hidden" name="thema" value="<?php print htmlspecialchars($_REQUEST["thema"]); ?>" />
     <input type="hidden" name="content" value="<?php print htmlspecialchars($_REQUEST["content"]); ?>" />
@@ -127,7 +127,7 @@ if (isset($submit[0])) {
 	<p align="center"><?php print $PMF_LANG["ad_entry_del_1"]." ".$thema." ".$author." ".$PMF_LANG["ad_entry_del_3"]; ?></p>
 	<div align="center">
     <form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>" method="POST">
-    <input type="hidden" name="aktion" value="delentry">
+    <input type="hidden" name="action" value="delentry">
     <input type="hidden" name="referer" value="<?php print $_SERVER["HTTP_REFERER"]; ?>">
     <input type="hidden" name="id" value="<?php print $_REQUEST["id"]; ?>">
     <input type="hidden" name="language" value="<?php print $_REQUEST["language"]; ?>">
