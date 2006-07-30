@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.17 2006-07-23 12:10:14 thorstenr Exp $
+ * $Id: language_de.php,v 1.18 2006-07-30 08:27:45 thorstenr Exp $
  *
  * File:                language_de.php
  * Description:            German language file
@@ -598,6 +598,50 @@ $PMF_LANG['ad_categ_select'] = 'Sprache der Kategorie';
 // added v1.5.1 - 2005-09-06 by Thorsten
 $PMF_LANG['msgSitemap'] = 'Sitemap';
 
+// added v1.5.2 - 2005-09-23 by Lars
+$PMF_LANG['err_inactiveArticle'] = 'Der Artikel wird zur Zeit überarbeitet und kann leider nicht angezeigt werden.';
+$PMF_LANG['msgArticleCategories'] = 'Rubriken zu diesem Artikel';
+
+// added v1.5.3 - 2005-10-04 by Thorsten and Periklis
+$PMF_LANG['ad_menu_searchplugin'] = 'Suchplugins';
+$PMF_LANG['ad_search_plugin_install'] = 'Firefox Suchplugin installieren';
+$PMF_LANG['ad_search_plugin_title'] = 'Suchplugin erstellen';
+$PMF_LANG['ad_search_plugin_ttitle'] = 'Titel in der Firefox Suche:';
+$PMF_LANG['ad_search_plugin_tdesc'] = 'Beschreibung:';
+$PMF_LANG['ad_search_plugin_create'] = 'Firefox Suchplugin erstellen';
+$PMF_LANG['ad_search_plugin_success'] = 'Das Firefox Suchplugin wurde erfolgreich erstellt!';
+
+// added v1.6.0 - 2006-02-02 by Thorsten
+$PMF_LANG['ad_entry_solution_id'] = 'Eindeutige ID';
+$PMF_LANG['ad_entry_faq_record'] = 'FAQ Eintrag';
+$PMF_LANG['ad_entry_new_revision'] = 'Neue Revision erstellen?';
+$PMF_LANG['ad_entry_record_administration'] = 'Eintragsbearbeitung';
+$PMF_LANG['ad_entry_revision'] = 'Revision';
+$PMF_LANG['ad_changerev'] = 'Revisionsauswahl';
+$PMF_LANG['msgCaptcha'] = "Bitte die Zeichen der Captcha-Grafik eingeben";
+$PMF_LANG['msgSelectCategories'] = 'Suche in ...';
+$PMF_LANG['msgAllCategories'] = '... allen Kategorien';
+$PMF_LANG['ad_you_should_update'] = 'Ihre phpMyFAQ Installtion ist veraltet. Sie sollten auf die neueste Version aktualisieren.';
+$PMF_LANG['msgAdvancedSearch'] = 'Erweiterte Volltextsuche';
+
+// added v1.6.1 - 2006-04-25 by Matteo and Thorsten
+$PMF_LANG['spamControlCenter'] = 'Spam-Kontrollzentrale';
+$LANG_CONF["spamEnableSafeEmail"] = array(0 => "checkbox", 1 => "Sichere Darstellung der E-Mailadresse (Voreinstellung: aktiviert)");
+$LANG_CONF["spamCheckBannedWords"] = array(0 => "checkbox", 1 => "Testen fremder Inhalte gegen die Bad-Word-Liste (Voreinstellung: aktiviert)");
+$LANG_CONF["spamEnableCatpchaCode"] = array(0 => "checkbox", 1 => "Zeige Captcha-Grafiken für Formulare (Voreinstellung: aktiviert)");
+$PMF_LANG['ad_firefoxsearch_plugin_title'] = 'Firefox Suchplugin erstellen';
+$PMF_LANG['ad_msiesearch_plugin_install'] = 'Microsoft Internet Explorer 7 Suchplugin installieren';
+$PMF_LANG['ad_msiesearch_plugin_title'] = 'Microsoft Internet Explorer 7 Suchplugin erstellen';
+$PMF_LANG['ad_msiesearch_plugin_ttitle'] = 'Titel in der MSIE 7 Suche:';
+$PMF_LANG['ad_msiesearch_plugin_create'] = 'Microsoft Internet Explorer 7 Suchplugin erstellen';
+$PMF_LANG['ad_msiesearch_plugin_success'] = 'Das Firefox Suchplugin wurde erfolgreich erstellt!';
+$PMF_LANG['ad_session_expiring'] = 'Die Session wird in %d Minuten enden: Wollen Sie weiterarbeiten?';
+
+// added v1.6.2 - 2006-06-13 by Matteo
+$PMF_LANG['ad_stat_management'] = 'Session Management';
+$PMF_LANG['ad_stat_choose'] = 'Auswahl des Monats';
+$PMF_LANG['ad_stat_delete'] = 'Sofortiges Löschen der selektierten Sessions';
+
 // added v2.0.0 - 2005-09-15 by Thorsten and by Minoru
 $PMF_LANG['ad_menu_glossary'] = 'Glossar';
 $PMF_LANG['ad_glossary_add'] = 'Glossar-Eintrag hinzufügen';
@@ -612,17 +656,17 @@ $PMF_LANG['ad_glossary_update_error'] = 'Der Glossar-Eintrag wurde nicht aktuali
 $PMF_LANG['ad_glossary_delete'] = 'Eintrag löschen';
 $PMF_LANG['ad_glossary_delete_success'] = 'Der Glossar-Eintrag wurde erfolgreich gelöscht.';
 $PMF_LANG['ad_glossary_delete_error'] = 'Der Glossar-Eintrag wurde nicht gelöscht, weil ein Fehler aufgetreten ist.';
-$PMF_LANG['ad_linkcheck_noReferenceURL'] = 'Automatic link verification disabled (base URL for link verify not set)';
-$PMF_LANG['ad_linkcheck_noAllowUrlOpen'] = 'Automatic link verification disabled (PHP option allow_url_fopen not Enabled)';
-$PMF_LANG['ad_linkcheck_checkResult'] = 'Automatic link verification result';
+$PMF_LANG['ad_linkcheck_noReferenceURL'] = 'Automatische Linküberprüfung deaktiviert (Basis-URL ist nicht gesetzt)';
+$PMF_LANG['ad_linkcheck_noAllowUrlOpen'] = 'Automatische Linküberprüfung deaktiviert (PHP Option allow_url_fopen ist nicht aktiviert)';
+$PMF_LANG['ad_linkcheck_checkResult'] = 'Ergebnis der automatischen Linküberprüfung';
 $PMF_LANG['ad_linkcheck_checkSuccess'] = 'OK';
 $PMF_LANG['ad_linkcheck_checkFailed'] = 'Failed';
-$PMF_LANG['ad_linkcheck_failReason'] = 'Reason(s) failed:';
+$PMF_LANG['ad_linkcheck_failReason'] = 'Gründe:';
 $PMF_LANG['ad_linkcheck_noLinksFound'] = 'No URLs compatible with link verifier feature found.';
-$PMF_LANG['ad_linkcheck_searchbadonly'] = 'Only with bad links';
-$PMF_LANG['ad_linkcheck_infoReason'] = 'Additional Information:';
+$PMF_LANG['ad_linkcheck_searchbadonly'] = 'Nur mit kaputten Links';
+$PMF_LANG['ad_linkcheck_infoReason'] = 'Weitere Informationen:';
 $PMF_LANG['ad_linkcheck_openurl_infoprefix'] = 'Found while testing <strong>%s</strong>: ';
-$PMF_LANG['ad_linkcheck_openurl_notready'] = 'LinkVerifier not ready.';
+$PMF_LANG['ad_linkcheck_openurl_notready'] = 'Die Linküberprüfung ist nicht fertig.';
 $PMF_LANG['ad_linkcheck_openurl_maxredirect'] = 'Maximum redirect count <strong>%d</strong> exceeded.';
 $PMF_LANG['ad_linkcheck_openurl_urlisblank'] = 'Resolved to blank URL.';
 $PMF_LANG['ad_linkcheck_openurl_tooslow'] = 'Host <strong>%s</strong> is slow or not responding.';
@@ -685,28 +729,28 @@ $PMF_LANG['ad_group_addMember'] = "+";
 $PMF_LANG['ad_group_removeMember'] = "-";
 
 // added v2.0.0 - 2006-07-20 by Matteo
-$PMF_LANG['ad_export_which_cat'] = 'Limit the FAQ data to be exported (optional)';
-$PMF_LANG['ad_export_cat_downwards'] = 'Downwards?';
-$PMF_LANG['ad_export_type'] = 'Format of the export';
-$PMF_LANG['ad_export_type_choose'] = 'Choose one of the supported formats:';
-$PMF_LANG['ad_export_download_view'] = 'Download or view in-line?';
-$PMF_LANG['ad_export_download'] = 'download';
-$PMF_LANG['ad_export_view'] = 'view in-line';
-$PMF_LANG['ad_export_gen_xhtml'] = 'Make XHTML file';
-$PMF_LANG['ad_export_gen_docbook'] = 'Make Docbook file';
+$PMF_LANG['ad_export_which_cat'] = 'Begrenzung der exportierten FAQ-Inhalte (optional)';
+$PMF_LANG['ad_export_cat_downwards'] = 'Absteigend?';
+$PMF_LANG['ad_export_type'] = 'Exportformat';
+$PMF_LANG['ad_export_type_choose'] = 'Bitte wählen Sie eines der unterstützten Formate:';
+$PMF_LANG['ad_export_download_view'] = 'Herunterladen oder Inline ansehen?';
+$PMF_LANG['ad_export_download'] = 'Herunterladen';
+$PMF_LANG['ad_export_view'] = 'Inline ansehen';
+$PMF_LANG['ad_export_gen_xhtml'] = 'Erstelle eine XHTML Datei';
+$PMF_LANG['ad_export_gen_docbook'] = 'Erstelle eine Docbook XML Datei';
 
 // added v2.0.0 - 2006-07-22 by Matteo
-$PMF_LANG['ad_news_data'] = 'News data';
-$PMF_LANG['ad_news_author_name'] = 'Author name:';
-$PMF_LANG['ad_news_author_email'] = 'Author email:';
-$PMF_LANG['ad_news_set_active'] = 'Activate:';
-$PMF_LANG['ad_news_allowComments'] = 'Allow comments:';
-$PMF_LANG['ad_news_expiration_window'] = 'News expiration time window (optional)';
-$PMF_LANG['ad_news_from'] = 'From:';
-$PMF_LANG['ad_news_to'] = 'To:';
-$PMF_LANG['ad_news_insertfail'] = 'An error occured inserting the news item into the database.';
-$PMF_LANG['ad_news_updatefail'] = 'An error occured updating the news item into the database.';
-$PMF_LANG['newsShowCurrent'] = 'Show current news.';
-$PMF_LANG['newsShowArchive'] = 'Show archived news.';
-$PMF_LANG['newsArchive'] = ' News archive';
-$PMF_LANG['newsWriteComment'] = 'comment on this entry';
+$PMF_LANG['ad_news_data'] = 'Nachricht';
+$PMF_LANG['ad_news_author_name'] = 'Author:';
+$PMF_LANG['ad_news_author_email'] = 'E-Mail des Autors:';
+$PMF_LANG['ad_news_set_active'] = 'Aktivieren:';
+$PMF_LANG['ad_news_allowComments'] = 'Erlaube Kommentare:';
+$PMF_LANG['ad_news_expiration_window'] = 'Nachricht Abblaufdatum (optional)';
+$PMF_LANG['ad_news_from'] = 'von:';
+$PMF_LANG['ad_news_to'] = 'bis:';
+$PMF_LANG['ad_news_insertfail'] = 'Ein Fehler ist beim Speichern in die Datenbank aufgetreten.';
+$PMF_LANG['ad_news_updatefail'] = 'Ein Fehler ist beim Aktualisieren des Eintrags in die Datenbank aufgetreten.';
+$PMF_LANG['newsShowCurrent'] = 'Zeige aktuelle News.';
+$PMF_LANG['newsShowArchive'] = 'Zeige archivierte News.';
+$PMF_LANG['newsArchive'] = ' News Archiv';
+$PMF_LANG['newsWriteComment'] = 'Diesen Eintrag kommentieren';
