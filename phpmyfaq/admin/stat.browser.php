@@ -6,12 +6,12 @@
  * Date:				2003-02-24
  * Last change:			2004-06-18
  * Copyright:           (c) 2001-2006 phpMyFAQ Team
-* 
+*
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
 * compliance with the License. You may obtain a copy of the License at
 * http://www.mozilla.org/MPL/
-* 
+*
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
@@ -47,11 +47,11 @@ if ($permission["viewlog"]) {
         <tr>
             <td class="list"><?php print $row->ip; ?></td>
             <td class="list"><?php print date("Y-m-d H:i:s", $row->time); ?></td>
-            <td class="list"><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=viewsession&amp;id=<?php print $row->sid; ?>"><?php print $row->sid; ?></a></td>
+            <td class="list"><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;action=viewsession&amp;id=<?php print $row->sid; ?>"><?php print $row->sid; ?></a></td>
 	</tr>
 <?php
 		}
-?>	
+?>
     </tbody>
     </table>
 <?php

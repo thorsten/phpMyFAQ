@@ -1,11 +1,11 @@
 <?php
 /**
-* $Id: linkconfig.main.php,v 1.3 2006-06-11 20:47:53 matteo Exp $
+* $Id: linkconfig.main.php,v 1.4 2006-07-30 07:43:50 thorstenr Exp $
 *
 * LinkVerifier configuration
 *
 * Usage:
-*   index.php?aktion=linkconfig
+*   index.php?action=linkconfig
 *
 * Configures link verifier
 *
@@ -17,13 +17,13 @@
 * Version 1.1 (the "License"); you may not use this file except in
 * compliance with the License. You may obtain a copy of the License at
 * http://www.mozilla.org/MPL/
-* 
+*
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
 * under the License.
 *
-* The Initial Developer of the Original Code is released for external use 
+* The Initial Developer of the Original Code is released for external use
 * with permission from NetJapan, Inc. IT Administration Group.
 */
 
@@ -40,9 +40,9 @@ $entriesPerPage = 10;
  */
 function enumScriptParameters() {
 	global $params, $_REQUEST;
-	
+
 	$scriptParameters = array('uin' => FALSE,
-	                          'aktion' => 'linkconfig',
+	                          'action' => 'linkconfig',
                               'sortby' => 'id',
 							  'sortorder' => 'DESC',
 	                          'type' => 'WARN',
@@ -68,12 +68,12 @@ function enumScriptParameters() {
  */
 function issueURL($optparams = array()) {
 	global $params, $_SERVER;
-	
+
 	$_params = array();
 	foreach ($params as $_key => $_value) {
 		$_params[$_key] = $_value;
 	}
-	
+
 	foreach ($optparams as $_key => $_value) {
 		if ($_value === FALSE) {
 			unset($_params[$_key]);
@@ -81,15 +81,15 @@ function issueURL($optparams = array()) {
 			$_params[$_key] = $_value;
 		}
 	}
-	
+
 	$_url = $_SERVER['PHP_SELF'];
 	$_separator = '?';
-	
+
 	foreach ($_params as $_key => $_value) {
 		$_url .= $_separator.$_key.'='.urlencode($_value);
 		$_separator = '&amp;';
 	}
-	
+
 	return $_url;
 }
 
@@ -165,7 +165,7 @@ if ($linkverifier->isReady() == FALSE) {
 
 showListTypeSelection();
 
-	$_admin = (isset($permission['editconfig']) && $permission['editconfig'] ? TRUE : FALSE);		
+	$_admin = (isset($permission['editconfig']) && $permission['editconfig'] ? TRUE : FALSE);
 	if (isset($_POST['rowcount'])) {
 		for ($i = 0; $i < $_POST['rowcount']; $i++) {
 			// load form posts
@@ -178,13 +178,13 @@ showListTypeSelection();
 					$posts[$_key] = $_default;
 				}
 			}
-			
+
 			switch($posts['id']) {
 				case 'NEW':
 					addVerifyRule($params['type'], $posts['url'], $posts['reason']);
 					break;
 
-				default: 
+				default:
 					$query = sprintf("SELECT * FROM %sfaqlinkverifyrules WHERE type='%s' AND id=%d LIMIT 0,1",SQLPREFIX, $db->escape_string($params['type']), $posts['id']);
 					$row = FALSE;
 					$result = $db->query($query);
@@ -215,9 +215,9 @@ showListTypeSelection();
 							$db->query($query);
 						}
 					}
-					
-			
-			
+
+
+
 			}
 		}
 	}
@@ -229,7 +229,7 @@ showListTypeSelection();
 	$page = $params['page'] = max(1,min($pages,$params['page']));
 	$query .= sprintf(" LIMIT %d,%d",($params['page'] - 1) * $entriesPerPage, $entriesPerPage);
 	$result = $db->query($query);
-	
+
 ?>
 <form method="post" action="<?php print issueURL(); ?>">
 <table class="linkconfig" id="configuration">
@@ -247,26 +247,26 @@ showListTypeSelection();
 		<th><?php print $PMF_LANG["ad_gen_delete"]; ?></th>
 	</tr>
 
-	
+
 	<?php
 		$id = 0;
 		while ($row = $db->fetch_object($result)) {
 			$_owner = ($row->owner == $user ? TRUE : FALSE);
 
-		
+
 	?>
 	<tr>
 		<!-- ID and Enable/Disable -->
 		<input type="hidden" name="id[<?php print $id; ?>]" value="<?php print $row->id; ?>">
-		<td><input type="checkbox" name="enabled[<?php print $id; ?>]" value="y" <?php print ($row->enabled == 'y' ? 'checked' : ''); ?> title="<?php print $PMF_LANG['ad_linkcheck_config_th_enabled']; ?>" <?php print ($_owner ? '' : 'disabled'); ?> >		
+		<td><input type="checkbox" name="enabled[<?php print $id; ?>]" value="y" <?php print ($row->enabled == 'y' ? 'checked' : ''); ?> title="<?php print $PMF_LANG['ad_linkcheck_config_th_enabled']; ?>" <?php print ($_owner ? '' : 'disabled'); ?> >
 		#<?php print $row->id; ?></td>
-		
+
 		<!-- URL to match -->
 		<td><input type="text" name="url[<?php print $id; ?>]"  value="<?php print htmlspecialchars($row->url); ?>"  <?php print ($_owner ? '' : 'disabled'); ?>  ></td>
-		
+
 		<!-- Reason to warn/ignore -->
 		<td><input type="text" name="reason[<?php print $id; ?>]" value="<?php print htmlspecialchars($row->reason); ?>"  <?php print ($_owner ? '' : 'disabled'); ?>  ></td>
-		
+
 		<!-- Lock entry / chown entry -->
 		<td>
 		<?php
@@ -280,17 +280,17 @@ showListTypeSelection();
 				<img src="images/<?php print ($_owner ? 'locked.png' : 'chown.png'); ?>" />
 			<?php } ?>
 		<?php print $row->owner; ?></td>
-		
+
 		<?php if ($_owner && ($row->locked == 'n')) { ?>
 		<!-- Delete Entry -->
 		<td><input type="checkbox" value="y" name="delete[<?php print $id; ?>]" ></td>
 		<?php } ?>
-		
+
 	</tr>
 	<?php
 		$id++;
 		}
-		
+
 		for ($i = 0; $i < 3; $i++) {
 			?>
 	<tr>
@@ -300,20 +300,20 @@ showListTypeSelection();
 		<td><input type="text" name="reason[<?php print $id; ?>]" value=""></td>
 		<td><?php print $user; ?></td>
 		<td>&nbsp;</td>
-		
+
 	</tr>
-	
+
 	<?php
 		$id++;
 		}
-		
-		
+
+
 		// Handle submission and page listing
 	?>
 	<tr id="lastrow">
 		<td><input type="hidden" name="rowcount" value="<?php print $id; ?>"><input type="submit" value="<?php print $PMF_LANG["ad_gen_save"]; ?>" name="submit"></td>
 		<td colspan="4"><?php print $PMF_LANG["ad_gen_page"].' '.$page.' '.$PMF_LANG["ad_gen_of"].' '.$pages; ?>
-		<?php 
+		<?php
 			if ($page > 1) { print sprintf(' | <a href="%s">%s</a>', issueURL(array('page' => $page - 1)), $PMF_LANG['ad_gen_lastpage']); }
 			for ($i = 1; $i <= $pages; $i++) {
 				print ($i == 1 ? ' | ' : ', ');
@@ -325,13 +325,13 @@ showListTypeSelection();
 			}
 
 			if ($page < $pages) { print sprintf(' | <a href="%s">%s</a>', issueURL(array('page' => $page + 1)), $PMF_LANG['ad_gen_nextpage']); }
-		
+
 		?>
-		
+
 		</td>
 	</tr>
 
-	
-	
+
+
 </table>
 </form>

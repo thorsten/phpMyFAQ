@@ -1,18 +1,18 @@
 <?php
 /**
-* $Id: glossary.edit.php,v 1.5 2006-06-11 20:42:47 matteo Exp $
+* $Id: glossary.edit.php,v 1.6 2006-07-30 07:40:25 thorstenr Exp $
 *
 * Displays a form to edit an extisting glossary item
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2005-09-15
 * @copyright    (c) 2006 phpMyFAQ Team
-* 
+*
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
 * compliance with the License. You may obtain a copy of the License at
 * http://www.mozilla.org/MPL/
-* 
+*
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
@@ -27,9 +27,9 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 print sprintf('<h2>%s</h2>', $PMF_LANG['ad_menu_glossary']);
 
 if ($permission['editglossary']) {
-    
+
     $id = (int)$_GET['id'];
-    
+
     require_once('../inc/Glossary.php');
     $glossary = new PMF_Glossary($db, $LANGCODE);
     $glossaryItem = $glossary->getGlossaryItem($id);
@@ -38,7 +38,7 @@ if ($permission['editglossary']) {
 <fieldset>
     <legend><?php print $PMF_LANG['ad_glossary_edit']; ?></legend>
 
-    <input type="hidden" name="aktion" value="updateglossary" />
+    <input type="hidden" name="action" value="updateglossary" />
     <input type="hidden" name="id" value="<?php print $glossaryItem['id']; ?>" />
 
     <label class="left" for="item"><?php print $PMF_LANG['ad_glossary_item']; ?>:</label>
@@ -46,7 +46,7 @@ if ($permission['editglossary']) {
 
     <label class="left" for="definition"><?php print $PMF_LANG['ad_glossary_definition']; ?>:</label>
     <textarea name="definition" id="definition" cols="50" rows="3"><?php print $glossaryItem['definition']; ?></textarea><br />
-    
+
     <input class="submit" type="submit" value="<?php print $PMF_LANG['ad_glossary_save']; ?>" />
 
 </fieldset>

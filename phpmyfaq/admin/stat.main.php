@@ -6,12 +6,12 @@
  * Date:				2003-02-24
  * Last change:			2004-11-01
  * Copyright:           (c) 2001-2006 phpMyFAQ Team
-* 
+*
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
 * compliance with the License. You may obtain a copy of the License at
 * http://www.mozilla.org/MPL/
-* 
+*
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
@@ -27,10 +27,10 @@ if ($permission["viewlog"]) {
 	<h2><?php print $PMF_LANG["ad_stat_sess"]; ?></h2>
 	<dl>
         <dt><strong><?php print $PMF_LANG["ad_stat_days"]; ?>:</strong></dt>
-        <dd><?php 
+        <dd><?php
 	$danz = 0;
 	$fir = 9999999999999999999999999;
-	$las = 0;		
+	$las = 0;
 	$dir = opendir(PMF_ROOT_DIR."/data");
 	while($dat = readdir($dir)) {
 		if ($dat != "." && $dat != "..") {
@@ -42,7 +42,7 @@ if ($permission["viewlog"]) {
 		if(FileToDate($dat) < $fir && FileToDate($dat) > 0) {
 			$fir = FileToDate($dat);
 			}
-		}	
+		}
 	closedir($dir);
 	print $danz; ?></dd>
         <dt><strong><?php print $PMF_LANG["ad_stat_vis"]; ?>:</strong></dt>
@@ -56,7 +56,7 @@ if ($permission["viewlog"]) {
 	if (is_file(PMF_ROOT_DIR."/data/tracking".date("dmY", $fir))) {
 		$fp = @fopen(PMF_ROOT_DIR."/data/tracking".date("dmY", $fir), "r");
 		list($dummy, $dummy, $dummy, $dummy, $dummy, $dummy, $dummy, $qstamp) = fgetcsv($fp, 1024, ";");
-		fclose($fp);	
+		fclose($fp);
 		print date("d.m.Y H:i:s", $qstamp);
 		}
 	else {
@@ -81,7 +81,7 @@ if ($permission["viewlog"]) {
         <dt><strong><?php print $PMF_LANG["ad_stat_browse"]; ?>:</strong></dt>
         <dd>
 		<form action="<?php print $_SERVER["PHP_SELF"].$linkext ?>" method="post" style="display: inline;">
-		<input type="hidden" name="aktion" value="sessionbrowse" />
+		<input type="hidden" name="action" value="sessionbrowse" />
 		<select name="day" size="1">
 <?php
 	$dir = opendir(PMF_ROOT_DIR."/data");

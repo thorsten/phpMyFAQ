@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: attachment.php,v 1.18 2006-07-30 07:40:25 thorstenr Exp $
+* $Id: attachment.php,v 1.19 2006-07-30 07:43:50 thorstenr Exp $
 *
 * Select an attachment and save it or create the SQL backup files
 *
@@ -117,7 +117,7 @@ if (!isset($_REQUEST["action"]) && $auth && $permission["addatt"]) {
 <form action="<?php print $_SERVER["PHP_SELF"]; ?>" enctype="multipart/form-data" method="post">
 <fieldset>
 <legend><?php print $PMF_LANG["ad_att_addto"]." ".$PMF_LANG["ad_att_addto_2"]; ?></legend>
-<input type="hidden" name="aktion" value="save" />
+<input type="hidden" name="action" value="save" />
 <input type="hidden" name="uin" value="<?php print $_REQUEST["uin"]; ?>" />
 <input type="hidden" name="MAX_FILE_SIZE" value="<?php print $PMF_CONF["attmax"]; ?>" />
 <input type="hidden" name="id" value="<?php print $_REQUEST["id"]; ?>" />

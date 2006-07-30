@@ -1,18 +1,18 @@
 <?php
 /**
-* $Id: glossary.add.php,v 1.6 2006-07-11 19:06:57 matteo Exp $
+* $Id: glossary.add.php,v 1.7 2006-07-30 07:43:50 thorstenr Exp $
 *
 * Displays a form to add a glossary item
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2005-09-15
 * @copyright    (c) 2006 phpMyFAQ Team
-* 
+*
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
 * compliance with the License. You may obtain a copy of the License at
 * http://www.mozilla.org/MPL/
-* 
+*
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
@@ -31,9 +31,9 @@ if ($permission['addglossary']) {
 <form action="<?php print $_SERVER['PHP_SELF'].$linkext; ?>" method="post">
 <fieldset>
     <legend><?php print $PMF_LANG['ad_glossary_add']; ?></legend>
-    
-    <input type="hidden" name="aktion" value="saveglossary" />
-    
+
+    <input type="hidden" name="action" value="saveglossary" />
+
     <label class="left" for="item"><?php print $PMF_LANG['ad_glossary_item']; ?>:</label>
     <input type="text" name="item" id="item" size="50" /><br />
 
