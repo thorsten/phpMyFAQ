@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: header.php,v 1.18 2006-07-29 19:24:10 thorstenr Exp $
+* $Id: header.php,v 1.19 2006-07-30 07:49:41 thorstenr Exp $
 *
 * header of the admin area
 *
@@ -77,6 +77,7 @@ header("Vary: Negotiate,Accept");
 
     switch ($_action) {
         case 'user':
+        case 'group':
         case 'passwd':
         case 'cookies':
             addMenuEntry('adduser,edituser,deluser',             'user',             'ad_menu_user_administration');
