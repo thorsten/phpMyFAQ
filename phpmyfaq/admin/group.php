@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: group.php,v 1.11 2006-01-07 16:58:44 b33blebr0x Exp $
+* $Id: group.php,v 1.12 2006-07-30 07:25:45 matteo Exp $
 *
 * Displays the user managment frontend
 *
@@ -177,7 +177,7 @@ if ($groupAction == 'delete_confirm') {
         <legend><?php print $text['delGroup']; ?></legend>
         <strong><?php print $group_data['name']; ?></strong>
         <p><?php print $text['delGroup_question']; ?></p>
-        <form action ="<?php print $_SERVER['PHP_SELF']; ?>?aktion=group&amp;group_action=delete" method="post">
+        <form action ="<?php print $_SERVER['PHP_SELF']; ?>?action=group&amp;group_action=delete" method="post">
             <input type="hidden" name="group_id" value="<?php print $groupId; ?>" />
             <div class="button_row">
                 <input class="reset" type="submit" name="cancel" value="<?php print $text['delGroup_cancel']; ?>" />
@@ -260,7 +260,7 @@ if ($groupAction == 'add') {
 <div id="group_create">
     <fieldset>
         <legend><?php print $text['addGroup']; ?></legend>
-        <form name="group_create" action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=group&amp;group_action=addsave" method="post">
+        <form name="group_create" action="<?php print $_SERVER['PHP_SELF']; ?>?action=group&amp;group_action=addsave" method="post">
             <div class="input_row">
                 <label for="group_name"><?php print $text['addGroup_name']; ?></label>
                 <input class="admin" type="text" name="group_name" value="<?php print (isset($group_name) ? $group_name : ''); ?>" tabindex="1" />
@@ -302,7 +302,7 @@ var groupList;
 
 function getGroupList() {
     var url = 'index.php';
-    var pars = 'aktion=ajax&ajax=group_list';
+    var pars = 'action=ajax&ajax=group_list';
     var myAjax = new Ajax.Request( url, {method: 'get', parameters: pars, onComplete: processGroupList} );
 }
 
@@ -612,21 +612,21 @@ getGroupList();
     <div id="group_list">
         <fieldset>
             <legend><?php print $text['selectGroup']; ?></legend>
-            <form id="group_select" name="group_select" action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=group&amp;group_action=delete_confirm" method="post">
+            <form id="group_select" name="group_select" action="<?php print $_SERVER['PHP_SELF']; ?>?action=group&amp;group_action=delete_confirm" method="post">
                 <select class="admin" name="group_list_select" id="group_list_select" size="<?php print $groupSelectSize; ?>" onchange="groupSelect(event)" tabindex="1">
                     <option value="">select...</option>
                 </select>
                 <input class="submit" type="submit" value="<?php print $text['delGroup_button']; ?>" tabindex="2" />
             </form>
         </fieldset>
-        <p>[ <a href="<?php print $_SERVER['PHP_SELF']; ?>?aktion=group&amp;group_action=add"><?php print $text['addGroup_link']; ?></a> ]</p>
+        <p>[ <a href="<?php print $_SERVER['PHP_SELF']; ?>?action=group&amp;group_action=add"><?php print $text['addGroup_link']; ?></a> ]</p>
     </div> <!-- end #group_list -->
 </div> <!-- end #groups -->
 <div id="group_details">
     <div id="group_data">
         <fieldset>
             <legend id="group_data_legend"><?php print $text['changeGroup']; ?></legend>
-            <form action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=group&amp;group_action=update_data" method="post">
+            <form action="<?php print $_SERVER['PHP_SELF']; ?>?action=group&amp;group_action=update_data" method="post">
                 <input id="update_group_id" type="hidden" name="group_id" value="0" />
                 <div id="group_data_table">
                     <div class="input_row">
@@ -651,7 +651,7 @@ getGroupList();
     <div id="group_rights">
         <fieldset>
             <legend id="group_rights_legend"><?php print $text['changeRights']; ?></legend>
-            <form id="rightsForm" action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=group&amp;group_action=update_rights" method="post">
+            <form id="rightsForm" action="<?php print $_SERVER['PHP_SELF']; ?>?action=group&amp;group_action=update_rights" method="post">
                 <input id="rights_group_id" type="hidden" name="group_id" value="0" />
                 <div>
                     <span class="select_all"><a href="javascript:form_checkAll('rightsForm')"><?php print $text['changeRights_checkAll']; ?></a></span>
@@ -671,7 +671,7 @@ getGroupList();
     </div> <!-- end #user_rights -->
 </div> <!-- end #user_details -->
 <div id="group_membership">
-    <form id="group_membership" name="group_membership" action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=group&amp;group_action=update_members" method="post" onsubmit="select_selectAll('group_member_list')">
+    <form id="group_membership" name="group_membership" action="<?php print $_SERVER['PHP_SELF']; ?>?action=group&amp;group_action=update_members" method="post" onsubmit="select_selectAll('group_member_list')">
         <input id="update_member_group_id" type="hidden" name="group_id" value="0" />
         <fieldset>
             <legend><?php print $text['groupMembership']; ?></legend>
