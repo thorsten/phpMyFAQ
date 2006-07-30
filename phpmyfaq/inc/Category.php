@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Category.php,v 1.6 2006-07-24 21:32:56 matteo Exp $
+* $Id: Category.php,v 1.7 2006-07-30 18:05:12 thorstenr Exp $
 *
 * The main category class
 *
@@ -972,6 +972,42 @@ class PMF_Category
             $category_data['name'],
             $category_data['description'],
             $category_data['user_id']);
+        $this->db->query($query);
+
+        return true;
+    }
+
+    /**
+     * Updates an existent category entry
+     *
+     * @param   array   $category_data
+     * @return  boolean
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function updateCategory($category_data)
+    {
+        if (!is_array($category_data)) {
+            return false;
+        }
+
+        $query = sprintf("
+            UPDATE
+                %sfaqcategories
+            SET
+                name = '%s',
+                description = '%s',
+                user_id = %d
+            WHERE
+                id = %d
+            AND
+                lang = '%s'",
+            SQLPREFIX,
+            $category_data['name'],
+            $category_data['description'],
+            $category_data['user_id'],
+            $category_data['id'],
+            $category_data['lang']);
         $this->db->query($query);
 
         return true;
