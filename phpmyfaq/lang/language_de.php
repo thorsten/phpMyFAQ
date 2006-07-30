@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.18 2006-07-30 08:27:45 thorstenr Exp $
+ * $Id: language_de.php,v 1.19 2006-07-30 08:30:31 thorstenr Exp $
  *
  * File:                language_de.php
  * Description:            German language file
@@ -754,3 +754,14 @@ $PMF_LANG['newsShowCurrent'] = 'Zeige aktuelle News.';
 $PMF_LANG['newsShowArchive'] = 'Zeige archivierte News.';
 $PMF_LANG['newsArchive'] = ' News Archiv';
 $PMF_LANG['newsWriteComment'] = 'Diesen Eintrag kommentieren';
+
+// added v2.0.0 - 2006-07-29 by Matteo & Thorsten
+$PMF_LANG['ad_record_expiration_window'] = 'Abblaufdatum des Eintrags (optional)';
+$PMF_LANG['admin_mainmenu_home'] = 'Startseite';
+$PMF_LANG['admin_mainmenu_users'] = 'Benutzer';
+$PMF_LANG['admin_mainmenu_content'] = 'Inhalte';
+$PMF_LANG['admin_mainmenu_statistics'] = 'Statistiken';
+$PMF_LANG['admin_mainmenu_exports'] = 'Export';
+$PMF_LANG['admin_mainmenu_backup'] = 'Backup';
+$PMF_LANG['admin_mainmenu_configuration'] = 'Konfiguration';
+$PMF_LANG['admin_mainmenu_logout'] = 'Logout';
