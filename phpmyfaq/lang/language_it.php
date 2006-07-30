@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.16 2006-07-29 10:18:03 matteo Exp $
+* $Id: language_it.php,v 1.17 2006-07-30 07:58:29 matteo Exp $
 *
 * Italian language file
 *
@@ -650,7 +650,7 @@ $PMF_LANG['ad_stat_delete'] = 'Cancella le sessioni selezionate immediatamente';
 // added v2.0.0 - 2005-09-15 by Thorsten and by Minoru TODA
 $PMF_LANG['ad_menu_glossary'] = 'Glossario';
 $PMF_LANG['ad_glossary_add'] = 'Aggiungi una voce al Glossario';
-$PMF_LANG['ad_glossary_edit'] = 'Vodifica una voce del Glossario';
+$PMF_LANG['ad_glossary_edit'] = 'Modifica una voce del Glossario';
 $PMF_LANG['ad_glossary_item'] = 'Voce';
 $PMF_LANG['ad_glossary_definition'] = 'Definizione';
 $PMF_LANG['ad_glossary_save'] = 'Salva la voce';
@@ -757,5 +757,13 @@ $PMF_LANG['newsArchive'] = ' News - Archvio';
 $PMF_LANG['newsWriteComment'] = 'Commenta questa notizia';
 $PMF_LANG['newsCommentDate'] = 'Inserito il: ';
 
-// added v2.0.0 - 2006-07-29 by Matteo
+// added v2.0.0 - 2006-07-29 by Matteo & Thorsten
 $PMF_LANG['ad_record_expiration_window'] = 'Validità della faq (opzionale)';
+$PMF_LANG['admin_mainmenu_home'] = 'Home';
+$PMF_LANG['admin_mainmenu_users'] = 'Utenti';
+$PMF_LANG['admin_mainmenu_content'] = 'Contenuti';
+$PMF_LANG['admin_mainmenu_statistics'] = 'Statistiche';
+$PMF_LANG['admin_mainmenu_exports'] = 'Esportazione';
+$PMF_LANG['admin_mainmenu_backup'] = 'Backup';
+$PMF_LANG['admin_mainmenu_configuration'] = 'Configurazione';
+$PMF_LANG['admin_mainmenu_logout'] = 'Logout';
