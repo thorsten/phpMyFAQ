@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: user.php,v 1.23 2006-07-11 19:06:57 matteo Exp $
+* $Id: user.php,v 1.24 2006-07-30 06:38:52 matteo Exp $
 *
 * Displays the user managment frontend
 *
@@ -158,7 +158,7 @@ if ($userAction == 'delete_confirm') {
         <legend><?php print $text['delUser']; ?></legend>
         <strong><?php print $user->getLogin(); ?></strong>
         <p><?php print $text['delUser_question']; ?></p>
-        <form action ="<?php print $_SERVER['PHP_SELF']; ?>?aktion=user&amp;user_action=delete" method="post">
+        <form action ="<?php print $_SERVER['PHP_SELF']; ?>?action=user&amp;user_action=delete" method="post">
             <input type="hidden" name="user_id" value="<?php print $userId; ?>" />
             <div class="button_row">
                 <input class="reset" type="submit" name="cancel" value="<?php print $text['delUser_cancel']; ?>" />
@@ -276,7 +276,7 @@ if ($userAction == 'add') {
 <div id="user_create">
     <fieldset>
         <legend><?php print $text['addUser']; ?></legend>
-        <form name="user_create" action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=user&amp;user_action=addsave" method="post">
+        <form name="user_create" action="<?php print $_SERVER['PHP_SELF']; ?>?action=user&amp;user_action=addsave" method="post">
             <div class="input_row">
                 <label for="user_name"><?php print $text['addUser_name']; ?></label>
                 <input type="text" name="user_name" value="<?php print (isset($user_name) ? $user_name : ''); ?>" tabindex="1" />
@@ -324,7 +324,7 @@ var userList;
 
 function getUserList() {
     var url = 'index.php';
-    var pars = 'aktion=ajax&ajax=user_list';
+    var pars = 'action=ajax&ajax=user_list';
     var myAjax = new Ajax.Request( url, {method: 'get', parameters: pars, onComplete: processUserList} );
 }
 
@@ -533,7 +533,7 @@ getUserList();
     <div id="user_list">
         <fieldset>
             <legend><?php print $text['selectUser']; ?></legend>
-            <form name="user_select" id="user_select" action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=user&amp;user_action=delete_confirm" method="post">
+            <form name="user_select" id="user_select" action="<?php print $_SERVER['PHP_SELF']; ?>?action=user&amp;user_action=delete_confirm" method="post">
                 <select name="user_list_select" id="user_list_select" onchange="userSelect(event)" size="<?php print $selectSize; ?>" tabindex="1">
                     <option value="">select...</option>
                 </select>
@@ -542,14 +542,14 @@ getUserList();
                 </div>
             </form>
         </fieldset>
-        <p>[ <a href="<?php print $_SERVER['PHP_SELF']; ?>?aktion=user&amp;user_action=add"><?php print $text['addUser_link']; ?></a> ]</p>
+        <p>[ <a href="<?php print $_SERVER['PHP_SELF']; ?>?action=user&amp;user_action=add"><?php print $text['addUser_link']; ?></a> ]</p>
     </div> <!-- end #user_list -->
 </div> <!-- end #user_accounts -->
 <div id="user_details">
     <div id="user_data">
         <fieldset>
             <legend id="user_data_legend"><?php print $text['changeUser']; ?></legend>
-            <form action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=user&amp;user_action=update_data" method="post">
+            <form action="<?php print $_SERVER['PHP_SELF']; ?>?action=user&amp;user_action=update_data" method="post">
                 <input id="update_user_id" type="hidden" name="user_id" value="0" />
                 <div class="input_row">
                     <label for="user_status_select"><?php print $text['changeUser_status']; ?></label>
@@ -569,7 +569,7 @@ getUserList();
     <div id="user_rights">
         <fieldset>
             <legend id="user_rights_legend"><?php print $text['changeRights']; ?></legend>
-            <form id="rightsForm" action="<?php print $_SERVER['PHP_SELF']; ?>?aktion=user&amp;user_action=update_rights" method="post">
+            <form id="rightsForm" action="<?php print $_SERVER['PHP_SELF']; ?>?action=user&amp;user_action=update_rights" method="post">
                 <input id="rights_user_id" type="hidden" name="user_id" value="0" />
                 <div>
                     <span><a href="javascript:form_checkAll('rightsForm')"><?php print $text['changeRights_checkAll']; ?></a></span>

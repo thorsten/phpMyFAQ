@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: backup.main.php,v 1.6 2006-01-02 16:51:26 thorstenr Exp $
+* $Id: backup.main.php,v 1.7 2006-07-30 06:38:52 matteo Exp $
 *
 * Frontend for Backup and Restore
 *
@@ -31,10 +31,10 @@ if ($permission['backup']) {
 	<fieldset>
         <legend><?php print $PMF_LANG["ad_csv_head"]; ?></legend>
         <p><?php print $PMF_LANG["ad_csv_make"]; ?></p>
-        <p align="center"><a href="attachment.php?aktion=sicherdaten"><?php print $PMF_LANG["ad_csv_linkdat"]; ?></a> | <a href="attachment.php?aktion=sicherlog"><?php print $PMF_LANG["ad_csv_linklog"]; ?></a></p>
+        <p align="center"><a href="attachment.php?action=sicherdaten"><?php print $PMF_LANG["ad_csv_linkdat"]; ?></a> | <a href="attachment.php?action=sicherlog"><?php print $PMF_LANG["ad_csv_linklog"]; ?></a></p>
     </fieldset>
     <p>&nbsp;</p>
-    <form method="post" action="?aktion=restore" enctype="multipart/form-data">
+    <form method="post" action="?action=restore" enctype="multipart/form-data">
     <fieldset>
         <legend><?php print $PMF_LANG["ad_csv_head2"]; ?></legend>
         <p><?php print $PMF_LANG["ad_csv_restore"]; ?></p>

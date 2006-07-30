@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: news.php,v 1.22 2006-07-29 10:34:01 matteo Exp $
+* $Id: news.php,v 1.23 2006-07-30 06:38:52 matteo Exp $
 *
 * The main administration file for the news
 *
@@ -37,7 +37,7 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
     <form id="editRecord" name="editRecord" action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>" method="post">
     <fieldset>
     <legend><?php print $PMF_LANG['ad_news_data']; ?></legend>
-        <input type="hidden" name="aktion" value="news" />
+        <input type="hidden" name="action" value="news" />
         <input type="hidden" name="do" value="save" />
 
         <label class="lefteditor" for="header"><?php print $PMF_LANG['ad_news_header']; ?></label>
@@ -120,7 +120,7 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
         <tr>
             <td class="list"><?php print $newsItem['header']; ?></td>
             <td class="list"><?php print $newsItem['date']; ?></td>
-            <td class="list"><a href="<?php print $linkext; ?>&amp;aktion=news&amp;do=edit&amp;id=<?php print $newsItem['id']; ?>" title="<?php print $PMF_LANG["ad_news_update"]; ?>"><img src="images/edit.gif" width="18" height="18" alt="<?php print $PMF_LANG["ad_news_update"]; ?>" border="0" /></a>&nbsp;&nbsp;<a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=news&amp;do=delete&amp;id=<?php print $newsItem['id']; ?>" title="<?php print $PMF_LANG["ad_news_delete"]; ?>"><img src="images/delete.gif" width="17" height="18" alt="<?php print $PMF_LANG["ad_news_delete"]; ?>" border="0" /></a></td>
+            <td class="list"><a href="<?php print $linkext; ?>&amp;action=news&amp;do=edit&amp;id=<?php print $newsItem['id']; ?>" title="<?php print $PMF_LANG["ad_news_update"]; ?>"><img src="images/edit.gif" width="18" height="18" alt="<?php print $PMF_LANG["ad_news_update"]; ?>" border="0" /></a>&nbsp;&nbsp;<a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;action=news&amp;do=delete&amp;id=<?php print $newsItem['id']; ?>" title="<?php print $PMF_LANG["ad_news_delete"]; ?>"><img src="images/delete.gif" width="17" height="18" alt="<?php print $PMF_LANG["ad_news_delete"]; ?>" border="0" /></a></td>
         </tr>
 <?php
             }
@@ -131,7 +131,7 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
 ?>
     </tbody>
     </table>
-    <p><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=news&amp;do=write"><?php print $PMF_LANG["ad_menu_news_add"]; ?></a></p>
+    <p><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;action=news&amp;do=write"><?php print $PMF_LANG["ad_menu_news_add"]; ?></a></p>
 <?php
     } elseif (isset($_REQUEST["id"])) {
         $id = (int)$_REQUEST['id'];
@@ -141,7 +141,7 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
     <form  style="float: left;" id="editRecord" name="editRecord" action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>" method="post">
     <fieldset>
     <legend><?php print $PMF_LANG['ad_news_data']; ?></legend>
-        <input type="hidden" name="aktion" value="news" />
+        <input type="hidden" name="action" value="news" />
         <input type="hidden" name="do" value="update" />
         <input type="hidden" name="id" value="<?php print $newsData['id']; ?>" />
 
@@ -215,7 +215,7 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
         }
         foreach ($comments as $item) {
 ?>
-    <p><?php print $PMF_LANG["ad_entry_commentby"] ?> <a href="mailto:<?php print($item['email']); ?>"><?php print($item['user']); ?></a>:<br /><?php print($item['content']); ?><br /><?php print($PMF_LANG['newsCommentDate'].makeDateByFormat($item['date'], 'Y-m-d H:i', false));?><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=delcomment&amp;artid=<?php print($newsId); ?>&amp;cmtid=<?php print($item['id']); ?>&amp;type=<?php print(PMF_COMMENT_TYPE_NEWS);?>"><img src="images/delete.gif" alt="<?php print $PMF_LANG["ad_entry_delete"] ?>" title="<?php print $PMF_LANG["ad_entry_delete"] ?>" border="0" width="17" height="18" align="right" /></a></p>
+    <p><?php print $PMF_LANG["ad_entry_commentby"] ?> <a href="mailto:<?php print($item['email']); ?>"><?php print($item['user']); ?></a>:<br /><?php print($item['content']); ?><br /><?php print($PMF_LANG['newsCommentDate'].makeDateByFormat($item['date'], 'Y-m-d H:i', false));?><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;action=delcomment&amp;artid=<?php print($newsId); ?>&amp;cmtid=<?php print($item['id']); ?>&amp;type=<?php print(PMF_COMMENT_TYPE_NEWS);?>"><img src="images/delete.gif" alt="<?php print $PMF_LANG["ad_entry_delete"] ?>" title="<?php print $PMF_LANG["ad_entry_delete"] ?>" border="0" width="17" height="18" align="right" /></a></p>
 <?php
         }
     }
@@ -286,7 +286,7 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
     <p><?php print $PMF_LANG["ad_news_del"]; ?></p>
     <div align="center">
     <form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>" method="post">
-    <input type="hidden" name="aktion" value="news" />
+    <input type="hidden" name="action" value="news" />
     <input type="hidden" name="do" value="delete" />
     <input type="hidden" name="id" value="<?php print $_REQUEST["id"]; ?>" />
     <input type="hidden" name="really" value="yes" />

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: export.main.php,v 1.23 2006-07-20 22:34:35 matteo Exp $
+* $Id: export.main.php,v 1.24 2006-07-30 06:38:52 matteo Exp $
 *
 * XML, XML DocBook, XHTML and PDF export - main page
 *
@@ -33,7 +33,7 @@ require_once("../inc/Export.php");
     <h2><?php print($PMF_LANG["ad_menu_export"]); ?></h2>
     <form method="get">
         <input type="hidden" name="uin" value="<?php isset($uin) ? print($uin) : '' ; ?>" />
-        <input type="hidden" name="aktion" value="exportfile" />
+        <input type="hidden" name="action" value="exportfile" />
 <?php
 if (!emptyTable(SQLPREFIX."faqdata")) {
 
