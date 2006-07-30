@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: category.main.php,v 1.15 2006-07-30 16:50:06 thorstenr Exp $
+* $Id: category.main.php,v 1.16 2006-07-30 18:15:21 thorstenr Exp $
 *
 * List all categories in the admin section
 *
@@ -26,9 +26,9 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 
 printf('<h2>%s</h2>', $PMF_LANG['ad_menu_categ_edit']);
 
-
-
 if ($permission['editcateg']) {
+
+    $category = new PMF_Category($LANGCODE);
 
     // Save a new category
     if (isset($_POST['action']) && $_POST['action'] == 'savecategory') {
@@ -41,34 +41,34 @@ if ($permission['editcateg']) {
             'description'   => $db->escape_string($_POST['description']),
             'user_id'       => (int)$_POST['user_id']);
 
-        $category = new PMF_Category($LANGCODE);
         if ($category->addCategory($category_data, $parent_id)) {
-            print "<p>".$PMF_LANG["ad_categ_added"]."</p>";
+            printf('<p>%s</p>', $PMF_LANG['ad_categ_added']);
         } else {
-            print "<p>Error: ".$db->error()."</p>";
+            printf('<p>%s</p>', $db->error());
         }
     }
 
     // Updates an existing category
     if (isset($_POST['action']) && $_POST['action'] == 'updatecategory') {
 
-        $id = (int)$_POST['cat'];
-        $lang = $db->escape_string($_POST['lang']);
-        $name = $db->escape_string($_POST['name']);
-        $description = $db->escape_string($_POST['description']);
+        $parent_id = (int)$_POST['parent_id'];
 
-        // get actual language
-        $result_language = $db->query('SELECT lang FROM '.SQLPREFIX.'faqcategories WHERE id = '.$id.' AND lang = "'.$lang.'"');
-        if (0 == $db->num_rows($result_language)) {
-            $query = sprintf("INSERT INTO %sfaqcategories (id, lang, name, description) VALUES (%d, '%s', '%s', '%s')", SQLPREFIX, $id, $lang, $name, $description);
-            if ($db->query($query)) {
+        $category_data = array(
+            'id'            => (int)$_POST['id'],
+            'lang'          => $db->escape_string($_POST['lang']),
+            'parent_id'     => $parent_id,
+            'name'          => $db->escape_string($_POST['name']),
+            'description'   => $db->escape_string($_POST['description']),
+            'user_id'       => (int)$_POST['user_id']);
+
+        if ($category->checkLanguage($category_data['id'], $category_data['lang'])) {
+            if ($category->addCategory($category_data, $parent_id)) {
                 printf('<p>%s</p>', $PMF_LANG['ad_categ_added']);
             } else {
                 printf('<p>%s</p>', $db->error());
             }
         } else {
-            $query = sprintf("UPDATE %sfaqcategories SET name = '%s', description = '%s' WHERE id = %d AND lang = '%s'", SQLPREFIX, $name, $description, $id, $lang);
-            if ($db->query($query)) {
+            if ($category->updateCategory($category_data)) {
    	            printf('<p>%s</p>', $PMF_LANG['ad_categ_updated']);
             } else {
                 printf('<p>%s</p>', $db->error());
