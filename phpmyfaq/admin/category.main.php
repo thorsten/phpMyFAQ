@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: category.main.php,v 1.14 2006-07-29 19:23:45 thorstenr Exp $
+* $Id: category.main.php,v 1.15 2006-07-30 16:50:06 thorstenr Exp $
 *
 * List all categories in the admin section
 *
@@ -33,18 +33,19 @@ if ($permission['editcateg']) {
     // Save a new category
     if (isset($_POST['action']) && $_POST['action'] == 'savecategory') {
 
-        $id = $db->nextID(SQLPREFIX.'faqcategories', 'id');
-        $lang = $db->escape_string($_POST['lang']);
         $parent_id = (int)$_POST['parent_id'];
-        $name = $db->escape_string($_POST['name']);
-        $description = $db->escape_string($_POST['description']);
 
-        $query = sprintf("INSERT INTO %sfaqcategories (id, lang, parent_id, name, description) VALUES (%d, '%s', %d, '%s', '%s')", SQLPREFIX, $id, $lang, $parent_id, $name, $description);
+        $category_data = array(
+            'lang'          => $db->escape_string($_POST['lang']),
+            'name'          => $db->escape_string($_POST['name']),
+            'description'   => $db->escape_string($_POST['description']),
+            'user_id'       => (int)$_POST['user_id']);
 
-        if ($db->query($query)) {
-            printf('<p>%s</p>', $PMF_LANG['ad_categ_added']);
+        $category = new PMF_Category($LANGCODE);
+        if ($category->addCategory($category_data, $parent_id)) {
+            print "<p>".$PMF_LANG["ad_categ_added"]."</p>";
         } else {
-            printf('<p>%s</p>', $db->error());
+            print "<p>Error: ".$db->error()."</p>";
         }
     }
 
