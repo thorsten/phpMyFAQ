@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: group.php,v 1.12 2006-07-30 07:25:45 matteo Exp $
+* $Id: group.php,v 1.13 2006-07-30 07:38:41 matteo Exp $
 *
 * Displays the user managment frontend
 *
@@ -312,11 +312,12 @@ function processGroupList(XmlRequest) {
     clearGroupList();
     buildGroupList();
     clearGroupData();
-    buildGroupData(0);
+    // FIXME: buildGroupData() is broken and let the code just stop processing the other calls to the functions below
+    //buildGroupData(0);
     clearGroupRights();
     buildGroupRights(0);
     clearUserList();
-    //buildUserList();
+    buildUserList();
     clearMemberList();
     buildMemberList(0);
 }
