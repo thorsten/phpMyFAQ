@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.41 2006-07-23 09:14:45 matteo Exp $
+* $Id: artikel.php,v 1.42 2006-07-30 07:47:09 thorstenr Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -149,7 +149,7 @@ if (count($multiCats) > 1) {
 
 // Show link to edit the entry?
 if (isset($permission['editbt'])) {
-    $editThisEntry = sprintf('<a href="admin/index.php?aktion=editentry&amp;id=%d&amp;lang=%s">%s</a>',
+    $editThisEntry = sprintf('<a href="admin/index.php?action=editentry&amp;id=%d&amp;lang=%s">%s</a>',
         $id,
         $lang,
         'edit this page');

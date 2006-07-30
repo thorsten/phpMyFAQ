@@ -2,16 +2,16 @@
 /******************************************************************************
  * File:				language_ar.php
  * Description:		    Arabic language file
- * Authors:				
+ * Authors:
  * Date:				2004-06-23
  * Last Update:		    2004-06-30
  * Copyright:           (c) 2006 phpMyFAQ Team
- * 
+ *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
  * http://www.mozilla.org/MPL/
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
@@ -128,7 +128,7 @@ $PMF_LANG["msgQuestionText"] = "هنا تجد بعض الأسئلة المطرو
 // Help
 $PMF_LANG["msgHelpText"] = "<p>The structure of the FAQ (Frequently Asked Questions) is quite simple. You can either
 search the <a href=\"".$_SERVER["PHP_SELF"]."?sid=".isset($_GET["sid"])."&amp;aktion=anzeigen\">categories</a> or let the <a
-href=\"".$_SERVER["PHP_SELF"]."?sid=".isset($_GET["sid"])."&amp;aktion=search\">FAQ search engine</a> search for keywords.</p>";
+href=\"".$_SERVER["PHP_SELF"]."?sid=".isset($_GET["sid"])."&amp;action=search\">FAQ search engine</a> search for keywords.</p>";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "مراسلة المشر�?:";

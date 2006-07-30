@@ -102,7 +102,7 @@ if ($permission["viewlog"]) {
 		</form>
         </dd>
     </dl>
-    <p align="center"><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;aktion=sessionsuche&amp;statstart=<?php print $qstamp ?>&amp;statend=<?php print $stamp ?>"><?php print $PMF_LANG["ad_sess_search"]; ?></a></p>
+    <p align="center"><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;action=sessionsuche&amp;statstart=<?php print $qstamp ?>&amp;statend=<?php print $stamp ?>"><?php print $PMF_LANG["ad_sess_search"]; ?></a></p>
 <?php
 	}
 else {
