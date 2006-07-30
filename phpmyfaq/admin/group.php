@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: group.php,v 1.13 2006-07-30 07:38:41 matteo Exp $
+* $Id: group.php,v 1.14 2006-07-30 07:45:53 matteo Exp $
 *
 * Displays the user managment frontend
 *
@@ -312,8 +312,7 @@ function processGroupList(XmlRequest) {
     clearGroupList();
     buildGroupList();
     clearGroupData();
-    // FIXME: buildGroupData() is broken and let the code just stop processing the other calls to the functions below
-    //buildGroupData(0);
+    buildGroupData(0);
     clearGroupRights();
     buildGroupRights(0);
     clearUserList();
@@ -386,24 +385,27 @@ function buildGroupData(id)
             }
         }
     }
-    var message = '';
-    // change group-ID
-    $('update_group_id').setAttribute('value', id);
-    var name = text_getFromParent(group, 'name');
-    $('update_group_name').setAttribute('value', name);
-    var description = text_getFromParent(group, 'description');
-    $('update_group_description').value = description;
-    var auto_join = text_getFromParent(group, 'auto_join');
-    if (auto_join == "1") {
-        $('update_group_auto_join').setAttribute('checked', "checked");
-    } else {
-        if ($('update_group_auto_join').getAttribute('checked')) {
-            $('update_group_auto_join').removeAttributeNode($('update_group_auto_join').getAttributeNode('checked'));
+    var debugMsg = '';
+    if (group)
+    {
+        // change group-ID
+        $('update_group_id').setAttribute('value', id);
+        var name = text_getFromParent(group, 'name');
+        $('update_group_name').setAttribute('value', name);
+        var description = text_getFromParent(group, 'description');
+        $('update_group_description').value = description;
+        var auto_join = text_getFromParent(group, 'auto_join');
+        if (auto_join == "1") {
+            $('update_group_auto_join').setAttribute('checked', "checked");
+        } else {
+            if ($('update_group_auto_join').getAttribute('checked')) {
+                $('update_group_auto_join').removeAttributeNode($('update_group_auto_join').getAttributeNode('checked'));
+            }
         }
+        debugMsg += 'name = ' + name;
+        debugMsg += 'description = ' + description;
+        //alert(debugMsg);
     }
-    message = message + 'name = ' + name;
-    message = message + 'description = ' + description;
-    //alert(message);
 }
 
 
