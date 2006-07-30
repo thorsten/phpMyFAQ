@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Category.php,v 1.7 2006-07-30 18:05:12 thorstenr Exp $
+* $Id: Category.php,v 1.8 2006-07-30 18:14:24 thorstenr Exp $
 *
 * The main category class
 *
@@ -35,7 +35,7 @@ class PMF_Category
     *
     * The database handler
     *
-    * @var  object
+    * @var  object  PMF_Db
     */
     var $db = null;
 
@@ -1011,5 +1011,33 @@ class PMF_Category
         $this->db->query($query);
 
         return true;
+    }
+
+    /**
+     * Checks wether a language is already defined for a category id
+     *
+     * @param   integer $category_id
+     * @param   string  $category_lang
+     * @return  boolean
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function checkLanguage($category_id, $category_lang)
+    {
+        $query = sprintf("
+            SELECT
+                lang
+            FROM
+                %sfaqcategories
+            WHERE
+                id = %d
+            AND
+                lang = '%s'",
+            SQLPREFIX,
+            $category_id,
+            $category_lang);
+
+        $result = $this->db->query($query);
+        return $this->db->num_rows($result);
     }
 }
