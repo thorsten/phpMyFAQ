@@ -1,12 +1,15 @@
 <?php
 /**
-* $Id: mysqli.update.sql.php,v 1.4 2006-07-30 07:59:29 thorstenr Exp $
+* $Id: mysqli.update.sql.php,v 1.5 2006-07-31 18:29:39 matteo Exp $
 *
-* CREATE TABLE instruction for MySQLi database - UPDATE STAGE from 1.x to 2.0.0
+* CREATE TABLE instruction for MySQL database - UPDATE STAGE from 1.x to 2.0.0
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @since        2006-07-23
-* @copyright    (c) 2006 phpMyFAQ Team
+* @author       Tom Rochester <tom.rochester@gmail.com>
+* @author       Lars Tiedemann <php@larstiedemann.de>
+* @author       Matteo Scaramuccia <matteo@scaramuccia.com>
+* @since        2006-07-03
+* @copyright    (c) 2001-2006 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -67,15 +70,15 @@ group_id INT(11) NOT NULL,
 name VARCHAR(25) NULL,
 description TEXT NULL,
 auto_join INT(1) UNSIGNED NULL,
-PRIMARY KEY(group_id),
+PRIMARY KEY (group_id),
 UNIQUE INDEX name(name)
 )";
 
 //faqgroup_right
 $query[] = "CREATE TABLE IF NOT EXISTS ".SQLPREFIX."faqgroup_right (
-group_id INT(11) UNSIGNED NOT NULL,
-right_id INT(11) UNSIGNED NOT NULL,
-PRIMARY KEY(group_id, right_id)
+group_id INT(11) NOT NULL,
+right_id INT(11) NOT NULL,
+PRIMARY KEY (group_id, right_id)
 )";
 
 //faqlinkverifyrules
@@ -97,9 +100,9 @@ $query[] = "CREATE TABLE IF NOT EXISTS ".SQLPREFIX."faqright (
 right_id INT(11) UNSIGNED NOT NULL,
 name VARCHAR(50) NULL,
 description TEXT NULL,
-for_users INT(1) UNSIGNED NULL DEFAULT 1,
-for_groups INT(1) UNSIGNED NULL DEFAULT 1,
-PRIMARY KEY(right_id)
+for_users INT(1) NULL DEFAULT 1,
+for_groups INT(1) NULL DEFAULT 1,
+PRIMARY KEY (right_id)
 )";
 
 //faquser
@@ -113,7 +116,7 @@ account_status VARCHAR(50) NULL,
 last_login TIMESTAMP(14) NULL,
 auth_source VARCHAR(100) NULL,
 member_since TIMESTAMP(14) NULL,
-PRIMARY KEY(user_id),
+PRIMARY KEY (user_id),
 UNIQUE INDEX session(session_id),
 UNIQUE INDEX login(login)
 )";
@@ -130,20 +133,20 @@ email VARCHAR(100) NULL
 $query[] = "CREATE TABLE IF NOT EXISTS ".SQLPREFIX."faquserlogin (
 login VARCHAR(25) NOT NULL,
 pass VARCHAR(150) NULL,
-PRIMARY KEY(login)
+PRIMARY KEY (login)
 )";
 
 //faquser_group
 $query[] = "CREATE TABLE IF NOT EXISTS ".SQLPREFIX."faquser_group (
 user_id INT(11) NOT NULL,
 group_id INT(11) NOT NULL,
-PRIMARY KEY(user_id, group_id)
+PRIMARY KEY (user_id, group_id)
 )";
 
 //faquser_right
 $query[] = "CREATE TABLE IF NOT EXISTS ".SQLPREFIX."faquser_right (
 user_id INT(11) NOT NULL,
-right_id INT(11) UNSIGNED NOT NULL,
+right_id INT(11) NOT NULL,
 PRIMARY KEY(user_id, right_id)
 )";
 

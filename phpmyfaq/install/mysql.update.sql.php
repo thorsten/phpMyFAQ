@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mysql.update.sql.php,v 1.11 2006-07-30 07:59:29 thorstenr Exp $
+* $Id: mysql.update.sql.php,v 1.12 2006-07-31 18:29:40 matteo Exp $
 *
 * CREATE TABLE instruction for MySQL database - UPDATE STAGE from 1.x to 2.0.0
 *
@@ -70,15 +70,15 @@ group_id INT(11) NOT NULL,
 name VARCHAR(25) NULL,
 description TEXT NULL,
 auto_join INT(1) UNSIGNED NULL,
-PRIMARY KEY(group_id),
+PRIMARY KEY (group_id),
 UNIQUE INDEX name(name)
 )";
 
 //faqgroup_right
 $query[] = "CREATE TABLE IF NOT EXISTS ".SQLPREFIX."faqgroup_right (
 group_id INT(11) NOT NULL,
-right_id INT(11) UNSIGNED NOT NULL,
-PRIMARY KEY(group_id, right_id)
+right_id INT(11) NOT NULL,
+PRIMARY KEY (group_id, right_id)
 )";
 
 //faqlinkverifyrules
@@ -102,7 +102,7 @@ name VARCHAR(50) NULL,
 description TEXT NULL,
 for_users INT(1) NULL DEFAULT 1,
 for_groups INT(1) NULL DEFAULT 1,
-PRIMARY KEY(right_id)
+PRIMARY KEY (right_id)
 )";
 
 //faquser
@@ -116,7 +116,7 @@ account_status VARCHAR(50) NULL,
 last_login TIMESTAMP(14) NULL,
 auth_source VARCHAR(100) NULL,
 member_since TIMESTAMP(14) NULL,
-PRIMARY KEY(user_id),
+PRIMARY KEY (user_id),
 UNIQUE INDEX session(session_id),
 UNIQUE INDEX login(login)
 )";
@@ -133,20 +133,20 @@ email VARCHAR(100) NULL
 $query[] = "CREATE TABLE IF NOT EXISTS ".SQLPREFIX."faquserlogin (
 login VARCHAR(25) NOT NULL,
 pass VARCHAR(150) NULL,
-PRIMARY KEY(login)
+PRIMARY KEY (login)
 )";
 
 //faquser_group
 $query[] = "CREATE TABLE IF NOT EXISTS ".SQLPREFIX."faquser_group (
 user_id INT(11) NOT NULL,
 group_id INT(11) NOT NULL,
-PRIMARY KEY(user_id, group_id)
+PRIMARY KEY (user_id, group_id)
 )";
 
 //faquser_right
 $query[] = "CREATE TABLE IF NOT EXISTS ".SQLPREFIX."faquser_right (
-user_id INT(11) UNSIGNED NOT NULL,
-right_id INT(11) UNSIGNED NOT NULL,
+user_id INT(11) NOT NULL,
+right_id INT(11) NOT NULL,
 PRIMARY KEY(user_id, right_id)
 )";
 

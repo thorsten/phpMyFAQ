@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mysql.sql.php,v 1.32 2006-07-30 07:59:29 thorstenr Exp $
+* $Id: mysql.sql.php,v 1.33 2006-07-31 18:29:39 matteo Exp $
 *
 * CREATE TABLE instruction for MySQL database
 *
@@ -68,8 +68,8 @@ pass varchar(64) BINARY NOT NULL,
 ip text NOT NULL,
 time int(11) NOT NULL)";
 
-// faqcaptcha
-$query[] = "CREATE TABLE ".$sqltblpre."faqcaptcha (
+//faqcaptcha
+$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqcaptcha (
 id varchar(6) NOT NULL,
 useragent varchar(255) NOT NULL,
 language varchar(2) NOT NULL,
@@ -85,10 +85,10 @@ parent_id INT(11) NOT NULL,
 name VARCHAR(255) NOT NULL,
 description VARCHAR(255) NOT NULL,
 user_id int(2) NOT NULL,
-PRIMARY KEY (id,lang))";
+PRIMARY KEY (id, lang))";
 
 //faqcategoryrelations
-$query[] = "CREATE TABLE ".$sqltblpre."faqcategoryrelations (
+$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqcategoryrelations (
 category_id INT(11) NOT NULL,
 category_lang VARCHAR(5) NOT NULL default '',
 record_id INT(11) NOT NULL,
@@ -97,13 +97,13 @@ PRIMARY KEY  (category_id,category_lang,record_id,record_lang)
 )";
 
 //faqcategory_group
-$query[] = "CREATE TABLE ".$sqltblpre."faqcategory_group (
+$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqcategory_group (
 category_id INT(11) NOT NULL,
 group_id INT(11) NOT NULL,
 PRIMARY KEY (category_id, group_id))";
 
 //faqcategory_user
-$query[] = "CREATE TABLE ".$sqltblpre."faqcategory_user (
+$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqcategory_user (
 category_id INT(11) NOT NULL,
 user_id INT(11) NOT NULL,
 PRIMARY KEY (category_id, user_id))";
@@ -117,7 +117,7 @@ revision_id integer NOT NULL DEFAULT 0,
 usr int(11) NOT NULL,
 datum int(11) NOT NULL,
 what text NOT NULL,
-PRIMARY KEY (id))";
+PRIMARY KEY (id, lang))";
 
 //faqcomments
 $query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqcomments (
@@ -132,7 +132,7 @@ helped text NOT NULL,
 PRIMARY KEY (id_comment))";
 
 //faqconfig
-$query[] = "CREATE TABLE ".$sqltblpre."faqconfig (
+$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqconfig (
 config_name varchar(255) NOT NULL default '',
 config_value varchar(255) NOT NULL default '',
 PRIMARY KEY (config_name))";
@@ -152,18 +152,18 @@ email varchar(255) NOT NULL,
 comment enum('y','n') NOT NULL default 'y',
 datum varchar(15) NOT NULL,
 linkState VARCHAR(7) NOT NULL,
-linkCheckDate INT(11) DEFAULT '0' NOT NULL,
+linkCheckDate INT(11) DEFAULT 0 NOT NULL,
 date_start varchar(14) NOT NULL DEFAULT '00000000000000',
 date_end varchar(14) NOT NULL DEFAULT '99991231235959',
 FULLTEXT (keywords,thema,content),
 PRIMARY KEY (id, lang)) TYPE = MYISAM";
 
 //faqdata_revisions
-$query[] = "CREATE TABLE ".$sqltblpre."faqdata_revisions (
+$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqdata_revisions (
 id integer NOT NULL,
 lang varchar(5) NOT NULL,
 solution_id int(11) NOT NULL,
-revision_id integer(11) NOT NULL DEFAULT 0,
+revision_id int(11) NOT NULL DEFAULT 0,
 active char(3) NOT NULL,
 keywords text NOT NULL,
 thema text NOT NULL,
@@ -173,25 +173,25 @@ email varchar(255) NOT NULL,
 comment char(1) default 'y',
 datum varchar(15) NOT NULL,
 linkState VARCHAR(7) NOT NULL,
-linkCheckDate INT(11) DEFAULT '0' NOT NULL,
+linkCheckDate INT(11) DEFAULT 0 NOT NULL,
 date_start varchar(14) NOT NULL DEFAULT '00000000000000',
 date_end varchar(14) NOT NULL DEFAULT '99991231235959',
 PRIMARY KEY (id, lang, solution_id, revision_id))";
 
 //faqdata_group
-$query[] = "CREATE TABLE ".$sqltblpre."faqdata_group (
+$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqdata_group (
 record_id INT(11) NOT NULL,
 group_id INT(11) NOT NULL,
 PRIMARY KEY (record_id, group_id))";
 
 //faqdata__user
-$query[] = "CREATE TABLE ".$sqltblpre."faqdata_user (
+$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqdata_user (
 record_id INT(11) NOT NULL,
 user_id INT(11) NOT NULL,
 PRIMARY KEY (record_id, user_id))";
 
 //faqglossary
-$query[] = "CREATE TABLE ".$sqltblpre."faqglossary (
+$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqglossary (
 id INT(11) NOT NULL ,
 lang VARCHAR(2) NOT NULL ,
 item VARCHAR(255) NOT NULL ,
@@ -204,7 +204,7 @@ group_id INT(11) NOT NULL,
 name VARCHAR(25) NULL,
 description TEXT NULL,
 auto_join INT(1) UNSIGNED NULL,
-PRIMARY KEY(group_id),
+PRIMARY KEY (group_id),
 UNIQUE INDEX name(name)
 )";
 
@@ -212,11 +212,11 @@ UNIQUE INDEX name(name)
 $query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqgroup_right (
 group_id INT(11) NOT NULL,
 right_id INT(11) UNSIGNED NOT NULL,
-PRIMARY KEY(group_id, right_id)
+PRIMARY KEY (group_id, right_id)
 )";
 
 //faqlinkverifyrules
-$query[] = "CREATE TABLE ".$sqltblpre."faqlinkverifyrules (
+$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqlinkverifyrules (
 id int(11) NOT NULL default '0',
 type varchar(6) NOT NULL default '',
 url varchar(255) NOT NULL default '',
@@ -265,7 +265,7 @@ name VARCHAR(50) NULL,
 description TEXT NULL,
 for_users INT(1) NULL DEFAULT 1,
 for_groups INT(1) NULL DEFAULT 1,
-PRIMARY KEY(right_id)
+PRIMARY KEY (right_id)
 )";
 
 //faqsessions
@@ -273,7 +273,8 @@ $query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqsessions (
 sid int(11) NOT NULL,
 ip text NOT NULL,
 time int(11) NOT NULL,
-PRIMARY KEY sid (sid))";
+PRIMARY KEY (sid)
+)";
 
 //faquser
 $query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faquser (
@@ -286,7 +287,7 @@ account_status VARCHAR(50) NULL,
 last_login TIMESTAMP(14) NULL,
 auth_source VARCHAR(100) NULL,
 member_since TIMESTAMP(14) NULL,
-PRIMARY KEY(user_id),
+PRIMARY KEY (user_id),
 UNIQUE INDEX session(session_id),
 UNIQUE INDEX login(login)
 )";
@@ -303,21 +304,21 @@ email VARCHAR(100) NULL
 $query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faquserlogin (
 login VARCHAR(25) NOT NULL,
 pass VARCHAR(150) NULL,
-PRIMARY KEY(login)
+PRIMARY KEY (login)
 )";
 
 //faquser_group
 $query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faquser_group (
 user_id INT(11) NOT NULL,
 group_id INT(11) NOT NULL,
-PRIMARY KEY(user_id, group_id)
+PRIMARY KEY (user_id, group_id)
 )";
 
 //faquser_right
 $query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faquser_right (
 user_id INT(11) NOT NULL,
 right_id INT(11) NOT NULL,
-PRIMARY KEY(user_id, right_id)
+PRIMARY KEY (user_id, right_id)
 )";
 
 //faqvisits
