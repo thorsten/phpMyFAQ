@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ibm_db2.sql.php,v 1.6 2006-07-31 18:29:39 matteo Exp $
+* $Id: ibm_db2.sql.php,v 1.7 2006-08-01 19:11:37 matteo Exp $
 *
 * CREATE TABLE instruction for IBM DB2 Universal Database, IBM Cloudscape,
 * and Apache Derby databases
@@ -230,6 +230,7 @@ PRIMARY KEY (id)
 //faqnews
 $query[] = "CREATE TABLE ".$sqltblpre."faqnews (
 id integer NOT NULL,
+lang varchar(5) NOT NULL,
 header varchar(255) NOT NULL,
 artikel CLOB NOT NULL,
 datum varchar(14) NOT NULL,

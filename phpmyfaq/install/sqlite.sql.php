@@ -1,13 +1,13 @@
 <?php
 /**
-* $Id: sqlite.sql.php,v 1.18 2006-07-04 22:55:33 matteo Exp $
+* $Id: sqlite.sql.php,v 1.19 2006-08-01 19:11:37 matteo Exp $
 *
 * CREATE TABLE instructions for SQLite
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Johannes Schlüter <johannes@php.net>
 * @since        2005-08-18
-* @copyright    (c) 2006 phpMyFAQ Team
+* @copyright    (c) 2005-2006 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -25,11 +25,15 @@ $uninst[] = "DROP TABLE ".$sqltblpre."faqadminsessions";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcaptcha";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcategories";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcategoryrelations";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqcategory_group";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqcategory_user";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqchanges";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcomments";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqconfig";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqdata";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqdata_revisions";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqdata_group";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqdata_user";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqglossary";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqgroup";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqgroup_right";
@@ -63,7 +67,7 @@ pass varchar(64) NOT NULL,
 ip text NOT NULL,
 time int(11) NOT NULL)";
 
-// faqcaptcha
+//faqcaptcha
 $query[] = "CREATE TABLE ".$sqltblpre."faqcaptcha (
 id varchar(6) NOT NULL,
 useragent varchar(255) NOT NULL,
@@ -80,7 +84,7 @@ parent_id INT(11) NOT NULL,
 name VARCHAR(255) NOT NULL,
 description VARCHAR(255) NOT NULL,
 user_id int(2) NOT NULL,
-PRIMARY KEY (id,lang))";
+PRIMARY KEY (id, lang))";
 
 //faqcategoryrelations
 $query[] = "CREATE TABLE ".$sqltblpre."faqcategoryrelations (
@@ -91,6 +95,18 @@ record_lang VARCHAR(5) NOT NULL default '',
 PRIMARY KEY  (category_id,category_lang,record_id,record_lang)
 )";
 
+//faqcategory_group
+$query[] = "CREATE TABLE ".$sqltblpre."faqcategory_group (
+category_id INT(11) NOT NULL,
+group_id INT(11) NOT NULL,
+PRIMARY KEY (category_id, group_id))";
+
+//faqcategory_user
+$query[] = "CREATE TABLE ".$sqltblpre."faqcategory_user (
+category_id INT(11) NOT NULL,
+user_id INT(11) NOT NULL,
+PRIMARY KEY (category_id, user_id))";
+
 //faqchanges
 $query[] = "CREATE TABLE ".$sqltblpre."faqchanges (
 id int(11) NOT NULL,
@@ -100,12 +116,13 @@ revision_id integer NOT NULL DEFAULT 0,
 usr int(11) NOT NULL,
 datum int(11) NOT NULL,
 what text NOT NULL,
-PRIMARY KEY (id))";
+PRIMARY KEY (id, lang))";
 
 //faqcomments
 $query[] = "CREATE TABLE ".$sqltblpre."faqcomments (
 id_comment int(11) NOT NULL,
 id int(11) NOT NULL,
+type varchar(10) NOT NULL,
 usr varchar(255) NOT NULL,
 email varchar(255) NOT NULL,
 comment text NOT NULL,
@@ -134,7 +151,9 @@ email varchar(255) NOT NULL,
 comment char(1) NOT NULL default 'y',
 datum varchar(15) NOT NULL,
 linkState VARCHAR(7) NOT NULL,
-linkCheckDate INT(11) DEFAULT '0' NOT NULL,
+linkCheckDate INT(11) DEFAULT 0 NOT NULL,
+date_start varchar(14) NOT NULL DEFAULT '00000000000000',
+date_end varchar(14) NOT NULL DEFAULT '99991231235959',
 PRIMARY KEY (id, lang))";
 
 //faqdata_revisions
@@ -142,7 +161,7 @@ $query[] = "CREATE TABLE ".$sqltblpre."faqdata_revisions (
 id integer NOT NULL,
 lang varchar(5) NOT NULL,
 solution_id int(11) NOT NULL,
-revision_id integer(11) NOT NULL DEFAULT 0,
+revision_id int(11) NOT NULL DEFAULT 0,
 active char(3) NOT NULL,
 keywords text NOT NULL,
 thema text NOT NULL,
@@ -152,8 +171,22 @@ email varchar(255) NOT NULL,
 comment char(1) default 'y',
 datum varchar(15) NOT NULL,
 linkState VARCHAR(7) NOT NULL,
-linkCheckDate INT(11) DEFAULT '0' NOT NULL,
+linkCheckDate INT(11) DEFAULT 0 NOT NULL,
+date_start varchar(14) NOT NULL DEFAULT '00000000000000',
+date_end varchar(14) NOT NULL DEFAULT '99991231235959',
 PRIMARY KEY (id, lang, solution_id, revision_id))";
+
+//faqdata_group
+$query[] = "CREATE TABLE ".$sqltblpre."faqdata_group (
+record_id INT(11) NOT NULL,
+group_id INT(11) NOT NULL,
+PRIMARY KEY (record_id, group_id))";
+
+//faqdata__user
+$query[] = "CREATE TABLE ".$sqltblpre."faqdata_user (
+record_id INT(11) NOT NULL,
+user_id INT(11) NOT NULL,
+PRIMARY KEY (record_id, user_id))";
 
 //faqglossary
 $query[] = "CREATE TABLE ".$sqltblpre."faqglossary (
@@ -169,14 +202,14 @@ group_id INT(11) NOT NULL,
 name VARCHAR(25) NULL,
 description TEXT NULL,
 auto_join INT(1) NULL,
-PRIMARY KEY(group_id)
+PRIMARY KEY (group_id)
 )";
 
 //faqgroup_right
 $query[] = "CREATE TABLE ".$sqltblpre."faqgroup_right (
 group_id INT(11) NOT NULL,
 right_id INT(11) NOT NULL,
-PRIMARY KEY(group_id, right_id)
+PRIMARY KEY (group_id, right_id)
 )";
 
 //faqlinkverifyrules
@@ -196,9 +229,16 @@ PRIMARY KEY (id)
 //faqnews
 $query[] = "CREATE TABLE ".$sqltblpre."faqnews (
 id int(11) NOT NULL,
+lang varchar(5) NOT NULL,
 header varchar(255) NOT NULL,
 artikel text NOT NULL,
 datum varchar(14) NOT NULL,
+author_name  varchar(255) NULL,
+author_email varchar(255) NULL,
+active char(1) default 'y',
+comment char(1) default 'n',
+date_start varchar(14) NOT NULL DEFAULT '00000000000000',
+date_end varchar(14) NOT NULL DEFAULT '99991231235959',
 link varchar(255) NOT NULL,
 linktitel varchar(255) NOT NULL,
 target varchar(255) NOT NULL,
@@ -230,7 +270,8 @@ $query[] = "CREATE TABLE ".$sqltblpre."faqsessions (
 sid int(11) NOT NULL,
 ip text NOT NULL,
 time int(11) NOT NULL,
-PRIMARY KEY (sid))";
+PRIMARY KEY (sid)
+)";
 
 //faquser
 $query[] = "CREATE TABLE ".$sqltblpre."faquser (
@@ -240,16 +281,16 @@ session_id VARCHAR(150) NULL,
 session_timestamp INT(11) NULL,
 ip VARCHAR(15) NULL,
 account_status VARCHAR(50) NULL,
-last_login TIMESTAMP(14) NOT NULL,
+last_login TIMESTAMP(14) NULL,
 auth_source VARCHAR(100) NULL,
-member_since TIMESTAMP(14) NOT NULL,
+member_since TIMESTAMP(14) NULL,
 PRIMARY KEY(user_id)
 )";
 
 //faquserdata
 $query[] = "CREATE TABLE ".$sqltblpre."faquserdata (
 user_id INT(11) NOT NULL,
-last_modified TIMESTAMP(14) NOT NULL,
+last_modified TIMESTAMP(14) NULL,
 display_name VARCHAR(50) NULL,
 email VARCHAR(100) NULL
 )";
@@ -261,18 +302,18 @@ pass VARCHAR(150) NULL,
 PRIMARY KEY(login)
 )";
 
-//Sfaquser_group
+//faquser_group
 $query[] = "CREATE TABLE ".$sqltblpre."faquser_group (
 user_id INT(11) NOT NULL,
 group_id INT(11) NOT NULL,
-PRIMARY KEY(user_id, group_id)
+PRIMARY KEY (user_id, group_id)
 )";
 
-//faquser_login
+//faquser_right
 $query[] = "CREATE TABLE ".$sqltblpre."faquser_right (
 user_id INT(11) NOT NULL,
 right_id INT(11) NOT NULL,
-PRIMARY KEY(user_id, right_id)
+PRIMARY KEY (user_id, right_id)
 )";
 
 //faqvisits
