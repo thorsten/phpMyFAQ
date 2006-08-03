@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Link.php,v 1.9 2006-07-27 19:27:10 matteo Exp $
+* $Id: Link.php,v 1.10 2006-08-03 18:40:15 matteo Exp $
 *
 * Link management - Functions and Classes
 *
@@ -227,11 +227,20 @@ class PMF_Link
     {
         $itemTitle = $this->itemTitle;
         // Use a '_' for the words separation
-        $itemTitle = str_replace(' ', '_', $itemTitle);
-        // Hack: double slash enconding: / -> %2F -> %252F
+        $itemTitle = str_replace(array(' ', "'"),
+                                 '_', $itemTitle);
+        // Hack: remove some chars for having a better readable title
+        $itemTitle = str_replace(array(',', ';', ':', '?', '!', '"', '(', ')', '[', ']', '{', '}', '<', '>'),
+                                 '',
+                                 $itemTitle);
+        // Hack: move some chars to "similar" but plain ASCII chars
+        $itemTitle = str_replace(array('à', 'è', 'ì', 'ò', 'ù', 'È'),
+                                 array('a', 'e', 'i', 'o', 'u', 'E'),
+                                 $itemTitle);
+        // Hack: slash double enconding: / -> %2F -> %252F, for avoiding regexp match break
         $itemTitle = str_replace('/', '%252F', $itemTitle);
 
-        return urlencode($itemTitle);
+        return rawurlencode($itemTitle);
     }
 
     function getHttpGetParameters()
