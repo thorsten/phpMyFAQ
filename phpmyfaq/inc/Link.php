@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Link.php,v 1.10 2006-08-03 18:40:15 matteo Exp $
+* $Id: Link.php,v 1.11 2006-08-03 20:48:05 matteo Exp $
 *
 * Link management - Functions and Classes
 *
@@ -227,7 +227,10 @@ class PMF_Link
     {
         $itemTitle = $this->itemTitle;
         // Use a '_' for the words separation
-        $itemTitle = str_replace(array(' ', "'"),
+        // Use '_' for some other characters for:
+        // 1. avoiding regexp match break;
+        // 2. improving the reading.
+        $itemTitle = str_replace(array(' ', "'", '/'),
                                  '_', $itemTitle);
         // Hack: remove some chars for having a better readable title
         $itemTitle = str_replace(array(',', ';', ':', '?', '!', '"', '(', ')', '[', ']', '{', '}', '<', '>'),
@@ -237,8 +240,6 @@ class PMF_Link
         $itemTitle = str_replace(array('à', 'è', 'ì', 'ò', 'ù', 'È'),
                                  array('a', 'e', 'i', 'o', 'u', 'E'),
                                  $itemTitle);
-        // Hack: slash double enconding: / -> %2F -> %252F, for avoiding regexp match break
-        $itemTitle = str_replace('/', '%252F', $itemTitle);
 
         return rawurlencode($itemTitle);
     }
