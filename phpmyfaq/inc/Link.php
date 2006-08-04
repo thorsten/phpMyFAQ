@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Link.php,v 1.11 2006-08-03 20:48:05 matteo Exp $
+* $Id: Link.php,v 1.12 2006-08-04 18:26:32 matteo Exp $
 *
 * Link management - Functions and Classes
 *
@@ -225,7 +225,7 @@ class PMF_Link
 
     function getSEOItemTitle()
     {
-        $itemTitle = $this->itemTitle;
+        $itemTitle = trim($this->itemTitle);
         // Use a '_' for the words separation
         // Use '_' for some other characters for:
         // 1. avoiding regexp match break;
@@ -233,7 +233,7 @@ class PMF_Link
         $itemTitle = str_replace(array(' ', "'", '/'),
                                  '_', $itemTitle);
         // Hack: remove some chars for having a better readable title
-        $itemTitle = str_replace(array(',', ';', ':', '?', '!', '"', '(', ')', '[', ']', '{', '}', '<', '>'),
+        $itemTitle = str_replace(array(',', ';', ':', '.', '?', '!', '"', '(', ')', '[', ']', '{', '}', '<', '>'),
                                  '',
                                  $itemTitle);
         // Hack: move some chars to "similar" but plain ASCII chars
