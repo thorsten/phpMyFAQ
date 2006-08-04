@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Category.php,v 1.8 2006-07-30 18:14:24 thorstenr Exp $
+* $Id: Category.php,v 1.9 2006-08-04 19:48:38 matteo Exp $
 *
 * The main category class
 *
@@ -744,7 +744,7 @@ class PMF_Category
                     $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
                     $oLink->itemTitle = $categoryName;
                     $oLink->text = $categoryName
-                                 .'<img src="images/more.gif" width="11" height="11" alt="'.$categoryName.'" style="border: none; vertical-align: middle;" />';
+                                 .' <img src="images/more.gif" width="11" height="11" alt="'.$categoryName.'" style="border: none; vertical-align: middle;" />';
                     $oLink->tooltip = addslashes($description);
                     $output .= $oLink->toHtmlAnchor();
                 } else {
