@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.add.php,v 1.34 2006-07-30 07:07:19 matteo Exp $
+* $Id: record.add.php,v 1.35 2006-08-05 17:23:28 thorstenr Exp $
 *
 * Adds a record in the database
 *
@@ -36,15 +36,20 @@ if ($permission["editbt"]) {
         printf("<h2>%s</h2>\n", $PMF_LANG['ad_entry_aor']);
 
         $recordData = array(
-            'lang'      => $db->escape_string($_POST['language']),
-            'active'    => $db->escape_string($_POST['active']),
-            'thema'     => $db->escape_string($_POST['thema']),
-            'content'   => $db->escape_string($_POST['content']),
-            'keywords'  => $db->escape_string($_POST['keywords']),
-            'author'    => $db->escape_string($_POST['author']),
-            'email'     => $db->escape_string($_POST['active']),
-            'comment'   => (isset($_POST['comment']) ? 'y' : 'n'),
-            'date'      => date('YmdHis')
+            'lang'          => $db->escape_string($_POST['language']),
+            'active'        => $db->escape_string($_POST['active']),
+            'thema'         => $db->escape_string($_POST['thema']),
+            'content'       => $db->escape_string($_POST['content']),
+            'keywords'      => $db->escape_string($_POST['keywords']),
+            'author'        => $db->escape_string($_POST['author']),
+            'email'         => $db->escape_string($_POST['active']),
+            'comment'       => (isset($_POST['comment']) ? 'y' : 'n'),
+            'date'          => date('YmdHis'),
+            // @todo we have to fix this!
+            'linkstate'     => '',
+            'linkcheckdate' => time(),
+            'datestart'     => '',
+            'dateend'       => ''
         );
 
         $categories = $_POST['rubrik'];
