@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.40 2006-07-24 18:57:55 thorstenr Exp $
+* $Id: Faq.php,v 1.41 2006-08-05 17:07:41 thorstenr Exp $
 *
 * The main FAQ class
 *
@@ -346,9 +346,9 @@ class PMF_Faq
         $this->db->query(sprintf(
             "INSERT INTO
                 %sfaqdata
-             (id, lang, solution_id, revision_id, active, keywords, thema, content, author, email, comment, datum)
+             (id, lang, solution_id, revision_id, active, keywords, thema, content, author, email, comment, datum, linkState, linkCheckDate, date_start, date_end)
                 VALUES
-            (%d, '%s', %d, %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
+            (%d, '%s', %d, %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %d, '%s', '%s')",
             SQLPREFIX,
             $newId,
             $data['lang'],
@@ -361,7 +361,11 @@ class PMF_Faq
             $data['author'],
             $data['email'],
             $data['comment'],
-            $data['date']));
+            $data['date'],
+            $data['linkstate'],
+            $data['linkdatecheck'],
+            $data['datestart'],
+            $data['dateend']));
 
         return $newId;
     }
