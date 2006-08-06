@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Pdf.php,v 1.5 2006-07-20 20:39:47 matteo Exp $
+* $Id: Pdf.php,v 1.6 2006-08-06 20:24:48 matteo Exp $
 *
 * Main PDF class for phpMyFAQ based on FPDF by Olivier Plathey
 *
@@ -525,8 +525,6 @@ class PDF extends FPDF
         if ("http" != substr($image, 0, 4)) {
             // Please note that the image must be accessible by HTTP NOT ONLY by HTTPS
             $image = "http://".$_SERVER["SERVER_NAME"].$image;
-        } else {
-            $image = $image;
         }
         if (!$info = @getimagesize($image)) {
             return;
