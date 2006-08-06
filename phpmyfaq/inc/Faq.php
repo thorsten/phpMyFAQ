@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.41 2006-08-05 17:07:41 thorstenr Exp $
+* $Id: Faq.php,v 1.42 2006-08-06 19:55:16 matteo Exp $
 *
 * The main FAQ class
 *
@@ -813,8 +813,8 @@ class PMF_Faq
     */
     function getTopTen()
     {
-        global $PMF_CONF;
-        $result = $this->getTopTenData(PMF_NUMBER_RECORDS_TOPTEN);
+        $result = $this->getTopTenData(PMF_NUMBER_RECORDS_TOPTEN, 0, $this->language);
+        
         if (count($result) > 0) {
             $output = '<ol>';
             foreach ($result as $row) {
@@ -830,6 +830,7 @@ class PMF_Faq
         } else {
             $output = $this->pmf_lang['err_noTopTen'];
         }
+        
         return $output;
     }
 
@@ -845,7 +846,8 @@ class PMF_Faq
     */
     function getLatest()
     {
-        $result = $this->getLatestData(PMF_NUMBER_RECORDS_LATEST);
+        $result = $this->getLatestData(PMF_NUMBER_RECORDS_LATEST, $this->language);
+        
         if (count ($result) > 0) {
             $output = '<ol>';
             foreach ($result as $row) {
@@ -859,6 +861,7 @@ class PMF_Faq
         } else {
             $output = $this->pmf_lang["err_noArticles"];
         }
+        
         return $output;
     }
 
@@ -886,6 +889,7 @@ class PMF_Faq
     function getTopTenData($count = PMF_NUMBER_RECORDS_TOPTEN, $categoryId = 0, $language = null)
     {
         global $sids, $PMF_CONF;
+        
         $query =
 '            SELECT
                 '.SQLPREFIX.'faqdata.id AS id,
@@ -965,14 +969,17 @@ class PMF_Faq
     * published records
     *
     * @param    integer
+    * @param    string
     * @return   array
     * @access   public
     * @author   Robin Wood <robin@digininja.org>
+    * @author   Matteo Scaramuccia <matteo@scaramuccia.com>
     * @since    2005-03-06
     */
-    function getLatestData($count = PMF_NUMBER_RECORDS_LATEST)
+    function getLatestData($count = PMF_NUMBER_RECORDS_LATEST, $language = null)
     {
         global $sids, $PMF_CONF;
+
         $query =
 '            SELECT
                 '.SQLPREFIX.'faqdata.id AS id,
@@ -996,7 +1003,13 @@ class PMF_Faq
             AND
                 '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqvisits.lang
             AND
-                '.SQLPREFIX.'faqdata.active = \'yes\'
+                '.SQLPREFIX.'faqdata.active = \'yes\'';
+        if (isset($language) && PMF_Init::isASupportedLanguage($language)) {
+            $query .= '
+            AND
+                '.SQLPREFIX.'faqdata.lang = \''.$language.'\'';
+        }
+        $query .= '
             ORDER BY
                 '.SQLPREFIX.'faqdata.datum DESC';
 
