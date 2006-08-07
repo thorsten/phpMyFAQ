@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: news.php,v 1.23 2006-07-30 06:38:52 matteo Exp $
+* $Id: news.php,v 1.24 2006-08-07 21:26:21 matteo Exp $
 *
 * The main administration file for the news
 *
@@ -251,9 +251,9 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
     }
 } elseif (isset($_REQUEST["do"]) && $_REQUEST["do"] == "update" && $permission["editnews"]) {
     $dateStart = $_POST['dateStartYYYY'].$_POST['dateStartMM'].$_POST['dateStartDD'].$_POST['dateStartHH'].$_POST['dateStartmm'].$_POST['dateStartss'];
-    $dateStart = str_pad($dateStart, 14, "0", STR_PAD_RIGHT);
-    $dateEnd = $_POST['dateEndYYYY'].$_POST['dateEndMM'].$_POST['dateEndDD'].$_POST['dateEndHH'].$_POST['dateEndmm'].$_POST['dateEndss'];
-    $dateEnd = str_pad($dateEnd, 14, "0", STR_PAD_RIGHT);
+    $dateStart = str_pad($dateStart, 14, '0', STR_PAD_RIGHT);
+    $dateEnd   = $_POST['dateEndYYYY'].$_POST['dateEndMM'].$_POST['dateEndDD'].$_POST['dateEndHH'].$_POST['dateEndmm'].$_POST['dateEndss'];
+    $dateEnd   = str_pad($dateEnd, 14, '0', STR_PAD_RIGHT);
     // Sanity checks
     if ('00000000000000' == $dateEnd) {
         $dateEnd = '99991231235959';
