@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.58 2006-07-30 16:51:32 thorstenr Exp $
+* $Id: index.php,v 1.59 2006-08-07 21:25:29 matteo Exp $
 *
 * The main admin backend index file
 *
@@ -184,6 +184,7 @@ if (isset($auth)) {
             // news administraion
             case "news":                    require_once ("news.php"); break;
             // category administration
+            case 'content':
             case 'category':
             case 'savecategory':
             case 'updatecategory':
