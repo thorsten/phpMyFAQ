@@ -1,18 +1,18 @@
 <?php
 /**
-* $Id: record.save.php,v 1.33 2006-07-30 07:07:19 matteo Exp $
+* $Id: record.save.php,v 1.34 2006-08-07 21:31:40 matteo Exp $
 *
 * Save or update a FAQ record
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23
 * @copyright    (c) 2001-2006 phpMyFAQ Team
-* 
+*
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
 * compliance with the License. You may obtain a copy of the License at
 * http://www.mozilla.org/MPL/
-* 
+*
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
@@ -25,10 +25,15 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 }
 
 $submit = $_REQUEST["submit"];
+// Re-evaluate $user
+$user = PMF_CurrentUser::getFromSession($faqconfig->get('ipcheck'));
 
-if (isset($submit[2]) && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "" && isset($_REQUEST['rubrik']) && is_array($_REQUEST['rubrik'])) {
-	// Preview
-	$rubrik = $_REQUEST["rubrik"];
+if (    isset($submit[2])
+     && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != ""
+     && isset($_REQUEST['rubrik']) && is_array($_REQUEST['rubrik'])
+    ) {
+    // Preview
+    $rubrik = $_REQUEST["rubrik"];
     $cat = new PMF_Category;
     $cat->transform(0);
     $categorylist = '';
@@ -36,9 +41,9 @@ if (isset($submit[2]) && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "" &
         $categorylist .= $cat->getPath($categories).'<br />';
     }
 ?>
-	<h2><?php print $PMF_LANG["ad_entry_preview"]; ?></h2>
+    <h2><?php print $PMF_LANG["ad_entry_preview"]; ?></h2>
     
-	<h3><strong><em><?php print $categorylist; ?></em>
+    <h3><strong><em><?php print $categorylist; ?></em>
     <?php print $_REQUEST["thema"]; ?></strong></h3>
     <?php print $_REQUEST["content"]; ?>
     <p class="little"><?php print $PMF_LANG["msgLastUpdateArticle"].makeDate(date("YmdHis")); ?><br />
@@ -65,54 +70,67 @@ if (isset($submit[2]) && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "" &
 <?php
 }
 
-if (isset($submit[1]) && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "" && isset($_REQUEST['rubrik']) && is_array($_REQUEST['rubrik'])) {
-	// Wenn auf Speichern geklickt wurde...
-	adminlog("Beitragsave", $_REQUEST["id"]);
+if (    isset($submit[1])
+     && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != ""
+     && isset($_REQUEST['rubrik']) && is_array($_REQUEST['rubrik'])
+    ) {
+    // Wenn auf Speichern geklickt wurde...
+    adminlog("Beitragsave", $_REQUEST["id"]);
     print "<h2>".$PMF_LANG["ad_entry_aor"]."</h2>\n";
-    $query = sprintf("INSERT INTO %sfaqchanges (id, beitrag, usr, datum, what, lang) VALUES (%d, %d, '%s', %d, '%s', '%s')", SQLPREFIX, $db->nextID(SQLPREFIX."faqchanges", "id"), $_REQUEST["id"], $auth_user, time(), nl2br($_REQUEST["changed"]), $_REQUEST["language"]);
-	$db->query($query);
-	
-	$thema = $db->escape_string($_REQUEST["thema"]);
-	$content = $db->escape_string($_REQUEST["content"]);
-	$keywords = $db->escape_string($_REQUEST["keywords"]);
-	$author = $db->escape_string($_REQUEST["author"]);
+    $query = sprintf("INSERT INTO %sfaqchanges (id, beitrag, usr, datum, what, lang) VALUES (%d, %d, '%s', %d, '%s', '%s')", SQLPREFIX, $db->nextID(SQLPREFIX."faqchanges", "id"), $_REQUEST["id"], $user->getUserData('display_name'), time(), nl2br($_REQUEST["changed"]), $_REQUEST["language"]);
+    $db->query($query);
     
+    $thema     = $db->escape_string($_REQUEST["thema"]);
+    $content   = $db->escape_string($_REQUEST["content"]);
+    $keywords  = $db->escape_string($_REQUEST["keywords"]);
+    $author    = $db->escape_string($_REQUEST["author"]);
+    $dateStart = $_POST['dateStartYYYY'].$_POST['dateStartMM'].$_POST['dateStartDD'].$_POST['dateStartHH'].$_POST['dateStartmm'].$_POST['dateStartss'];
+    $dateStart = str_pad($dateStart, 14, '0', STR_PAD_RIGHT);
+    $dateEnd   = $_POST['dateEndYYYY'].$_POST['dateEndMM'].$_POST['dateEndDD'].$_POST['dateEndHH'].$_POST['dateEndmm'].$_POST['dateEndss'];
+    $dateEnd   = str_pad($dateEnd, 14, '0', STR_PAD_RIGHT);
+    // Sanity checks
+    if ('00000000000000' == $dateEnd) {
+        $dateEnd = '99991231235959';
+    }
+    $dateStart = ('' == $dateStart) ? '00000000000000' : $db->escape_string($dateStart),
+    $dateEnd   = ('' == $dateEnd)   ? '99991231235959' : $db->escape_string($dateEnd),
+
     if (isset($_REQUEST["comment"]) && $_REQUEST["comment"] != "") {
         $comment = $_REQUEST["comment"];
     } else {
         $comment = "n";
     }
-	
+    
     $datum = date("YmdHis");
     $rubrik = $_REQUEST["rubrik"];
-	
-	$_result = $db->query("SELECT id, lang FROM ".SQLPREFIX."faqdata WHERE id = ".$_REQUEST["id"]." AND lang = '".$_REQUEST["language"]."'");
-	$num = $db->num_rows($_result);
-	
+    
+    $_result = $db->query("SELECT id, lang FROM ".SQLPREFIX."faqdata WHERE id = ".$_REQUEST["id"]." AND lang = '".$_REQUEST["language"]."'");
+    $num = $db->num_rows($_result);
+    
     // save or update the FAQ record
-	if ($num == "1") {
-		$query = "UPDATE ".SQLPREFIX."faqdata SET thema = '".$thema."', content = '".$content."', keywords = '".$keywords."', author = '".$author."', active = '".$_REQUEST["active"]."', datum = '".$datum."', email = '".$db->escape_string($_REQUEST["email"])."', comment = '".$comment."' WHERE id = ".$_REQUEST["id"]." AND lang = '".$_REQUEST["language"]."'";
+    if ($num == "1") {
+        $query = "UPDATE ".SQLPREFIX."faqdata SET thema = '".$thema."', content = '".$content."', keywords = '".$keywords."', author = '".$author."', active = '".$_REQUEST["active"]."', datum = '".$datum."',  date_start = '".$dateStart."', date_end = '".$dateEnd."', email = '".$db->escape_string($_REQUEST["email"])."', comment = '".$comment."' WHERE id = ".$_REQUEST["id"]." AND lang = '".$_REQUEST["language"]."'";
     } else {
-		$query = "INSERT INTO ".SQLPREFIX."faqdata (id, lang, thema, content, keywords, author, active, datum, email, comment) VALUES (".$_REQUEST["id"].", '".$_REQUEST["language"]."', '".$thema."', '".$content."', '".$keywords."', '".$author."', '".$_REQUEST["active"]."', '".$datum."', '".$db->escape_string($_REQUEST["email"])."', '".$comment."')";
+        $query = "INSERT INTO ".SQLPREFIX."faqdata (id, lang, thema, content, keywords, author, active, datum, email, comment, date_start, date_end) VALUES (".$_REQUEST["id"].", '".$_REQUEST["language"]."', '".$thema."', '".$content."', '".$keywords."', '".$author."', '".$_REQUEST["active"]."', '".$datum."', '".$db->escape_string($_REQUEST["email"])."', '".$comment."', '".$dateStart.", '".$dateEnd.")";
     }
     
-	if ($db->query($query)) {
-		print $PMF_LANG["ad_entry_savedsuc"];
-		link_ondemand_javascript($_REQUEST["id"], $_REQUEST["language"]);
+    if ($db->query($query)) {
+        print $PMF_LANG["ad_entry_savedsuc"];
+        link_ondemand_javascript($_REQUEST["id"], $_REQUEST["language"]);
     } else {
-		print $PMF_LANG["ad_entry_savedfail"].$db->error();
+        print $PMF_LANG["ad_entry_savedfail"].$db->error();
     }
     
     // delete category relations
     $db->query("DELETE FROM ".SQLPREFIX."faqcategoryrelations WHERE record_id = ".$_REQUEST["id"]." and record_lang = '".$_REQUEST["language"]."';");
-	// save or update the category relations
+    // save or update the category relations
     foreach ($rubrik as $categories) {
         $db->query("INSERT INTO ".SQLPREFIX."faqcategoryrelations VALUES (".$categories.", '".$_REQUEST["language"]."', ".$_REQUEST["id"].", '".$_REQUEST["language"]."');");
     }
 }
 
 if (isset($submit[0])) {
-	if ($permission["delbt"])	{
+    if ($permission["delbt"])    {
         if (isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "") {
             $thema = "<strong>".$_REQUEST["thema"]."</strong>";
         } else {
@@ -124,8 +142,8 @@ if (isset($submit[0])) {
             $author = "";
         }
 ?>
-	<p align="center"><?php print $PMF_LANG["ad_entry_del_1"]." ".$thema." ".$author." ".$PMF_LANG["ad_entry_del_3"]; ?></p>
-	<div align="center">
+    <p align="center"><?php print $PMF_LANG["ad_entry_del_1"]." ".$thema." ".$author." ".$PMF_LANG["ad_entry_del_3"]; ?></p>
+    <div align="center">
     <form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>" method="POST">
     <input type="hidden" name="action" value="delentry">
     <input type="hidden" name="referer" value="<?php print $_SERVER["HTTP_REFERER"]; ?>">
@@ -137,7 +155,7 @@ if (isset($submit[0])) {
     </div>
 <?php
     } else {
-		print $PMF_LANG["err_NotAuth"];
+        print $PMF_LANG["err_NotAuth"];
     }
 }
 ?>

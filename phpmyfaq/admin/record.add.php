@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.add.php,v 1.35 2006-08-05 17:23:28 thorstenr Exp $
+* $Id: record.add.php,v 1.36 2006-08-07 21:31:40 matteo Exp $
 *
 * Adds a record in the database
 *
@@ -35,6 +35,14 @@ if ($permission["editbt"]) {
         adminlog("Beitragcreatesave");
         printf("<h2>%s</h2>\n", $PMF_LANG['ad_entry_aor']);
 
+        $dateStart = $_POST['dateStartYYYY'].$_POST['dateStartMM'].$_POST['dateStartDD'].$_POST['dateStartHH'].$_POST['dateStartmm'].$_POST['dateStartss'];
+        $dateStart = str_pad($dateStart, 14, '0', STR_PAD_RIGHT);
+        $dateEnd   = $_POST['dateEndYYYY'].$_POST['dateEndMM'].$_POST['dateEndDD'].$_POST['dateEndHH'].$_POST['dateEndmm'].$_POST['dateEndss'];
+        $dateEnd   = str_pad($dateEnd, 14, '0', STR_PAD_RIGHT);
+        // Sanity checks
+        if ('00000000000000' == $dateEnd) {
+            $dateEnd = '99991231235959';
+        }
         $recordData = array(
             'lang'          => $db->escape_string($_POST['language']),
             'active'        => $db->escape_string($_POST['active']),
@@ -45,11 +53,8 @@ if ($permission["editbt"]) {
             'email'         => $db->escape_string($_POST['active']),
             'comment'       => (isset($_POST['comment']) ? 'y' : 'n'),
             'date'          => date('YmdHis'),
-            // @todo we have to fix this!
-            'linkstate'     => '',
-            'linkcheckdate' => time(),
-            'datestart'     => '',
-            'dateend'       => ''
+            'datestart'     => ('' == $dateStart) ? '00000000000000' : $db->escape_string($dateStart),
+            'dateend'       => ('' == $dateEnd)   ? '99991231235959' : $db->escape_string($dateEnd)
         );
 
         $categories = $_POST['rubrik'];

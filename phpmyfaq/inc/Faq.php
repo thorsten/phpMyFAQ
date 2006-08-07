@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.42 2006-08-06 19:55:16 matteo Exp $
+* $Id: Faq.php,v 1.43 2006-08-07 21:31:41 matteo Exp $
 *
 * The main FAQ class
 *
@@ -129,6 +129,7 @@ class PMF_Faq
     function showAllRecords($category)
     {
         global $sids, $PMF_CONF, $tree;
+        
         $page = 1;
         $output = '';
 
@@ -136,7 +137,8 @@ class PMF_Faq
             $page = (int)$_REQUEST["seite"];
         }
 
-        $result = $this->db->query('
+        $now = date('YmdHis');
+        $query = '
             SELECT
                 '.SQLPREFIX.'faqdata.id AS id,
                 '.SQLPREFIX.'faqdata.lang AS lang,
@@ -158,11 +160,13 @@ class PMF_Faq
             AND
                 '.SQLPREFIX.'faqvisits.lang = '.SQLPREFIX.'faqdata.lang
             WHERE
-                '.SQLPREFIX.'faqdata.active = \'yes\'
-            AND
-                '.SQLPREFIX.'faqcategoryrelations.category_id = '.$category.'
+                    '.SQLPREFIX.'faqdata.date_start <= \''.$now.'\'
+                AND '.SQLPREFIX.'faqdata.date_end   >= \''.$now.'\'
+                AND '.SQLPREFIX.'faqdata.active = \'yes\'
+                AND '.SQLPREFIX.'faqcategoryrelations.category_id = '.$category.'
             ORDER BY
-                '.SQLPREFIX.'faqdata.id');
+                '.SQLPREFIX.'faqdata.id';
+        $result = $this->db->query($query);
 
         $num = $this->db->num_rows($result);
         $pages = ceil($num / $PMF_CONF["numRecordsPage"]);
@@ -283,30 +287,37 @@ class PMF_Faq
     }
 
     /**
-    * getRecord()
-    *
-    * Returns an array with all data from a FAQ record
-    *
-    * @param    integer     record id
-    * @return   void
-    * @access   public
-    * @since    2005-12-20
-    * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-    */
-    function getRecord($id)
+     * getRecord()
+     *
+     * Returns an array with all data from a FAQ record
+     *
+     * @param    integer    record id
+     * @param    integer    revision id
+     * @return   void
+     * @access   public
+     * @since    2005-12-20
+     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @author   Matteo Scaramuccia <matteo@scaramuccia.com>
+     */
+    function getRecord($id, $revision_id = null)
     {
         $query = sprintf(
             "SELECT
                 *
             FROM
-                %sfaqdata
+                %s%s
             WHERE
-                id = %d AND lang = '%s'",
+                    id = %d
+                %s
+                AND lang = '%s'",
             SQLPREFIX,
+            isset($revision_id) ? 'faqdata_revisions': 'faqdata',
             $id,
-            $this->language);
-
+            isset($revision_id) ? 'AND revision_id = \'' + $revision_id +'\'': '',
+            $this->language
+            );
         $result = $this->db->query($query);
+
         if ($row = $this->db->fetch_object($result)) {
             $this->faqRecord = array(
                 'id'            => $row->id,
@@ -320,7 +331,12 @@ class PMF_Faq
                 'author'        => $row->author,
                 'email'         => $row->email,
                 'comment'       => $row->comment,
-                'date'          => makeDate($row->datum));
+                'date'          => makeDate($row->datum),
+                'dateStart'     => $row->date_start,
+                'dateEnd'       => $row->date_end,
+                'linkState'     => $row->linkState,
+                'linkCheckDate' => $row->linkCheckDate
+                );
         }
     }
 
@@ -531,7 +547,10 @@ class PMF_Faq
                 'author'        => $row->author,
                 'email'         => $row->email,
                 'comment'       => $row->comment,
-                'date'          => makeDate($row->datum));
+                'date'          => makeDate($row->datum),
+                'dateStart'     => $row->dateStart,
+                'dateEnd'       => $row->dateEnd
+                );
         }
     }
 
@@ -576,7 +595,7 @@ class PMF_Faq
      * Gets all revisions from a given record ID
      *
      * @param    integer    $record_id
-     * @param    string    $record_lang
+     * @param    string     $record_lang
      * @return   array
      * @access   public
      * @since    2006-07-24
@@ -585,31 +604,38 @@ class PMF_Faq
     function getRevisionIds($record_id, $record_lang)
     {
         $revision_data = array();
+        $now = date('YmdHis');
+
         $query = sprintf("
             SELECT
                 revision_id, datum, author
             FROM
                 %sfaqdata_revisions
             WHERE
-                id = %d
-            and
-                lang = '%s'
+                    id = %d
+                AND lang = '%s'
+                AND date_start <= '%s'
+                AND date_end   >= '%s'
             ORDER BY
                 revision_id",
             SQLPREFIX,
             $record_id,
-            $record_lang);
+            $record_lang,
+            $now,
+            $now
+            );
         $result = $this->db->query($query);
+
         if ($this->db->num_rows($result) > 0) {
-            while ($row = $db->fetch_object($result)) {
+            while ($row = $this->db->fetch_object($result)) {
                 $revision_data[] = array(
                     'revision_id'   => $row->revision_id,
                     'datum'         => $row->datum,
                     'author'        => $row->author);
             }
-        } else {
-            return $revision_data;
         }
+
+        return $revision_data;
     }
 
     /**
@@ -657,15 +683,23 @@ class PMF_Faq
     */
     function getNumberOfRecords()
     {
+        $now = date('YmdHis');
+
         $query = sprintf(
             "SELECT
                 id
             FROM
                 %sfaqdata
             WHERE
-                active = 'yes' AND lang = '%s'",
+                    active = 'yes'
+                AND lang = '%s'
+                AND date_start <= '%s'
+                AND date_end   >= '%s'",
             SQLPREFIX,
-            $this->language);
+            $this->language,
+            $now,
+            $now
+            );
         $num = $this->db->num_rows($this->db->query($query));
         if ($num > 0) {
             return $num;
@@ -696,10 +730,12 @@ class PMF_Faq
             FROM
                 %sfaqvisits
             WHERE
-                id = %d AND lang = '%s'",
+                    id = %d
+                AND lang = '%s'",
             SQLPREFIX,
             $id,
-            $this->language);
+            $this->language
+            );
 
         if ($result = $this->db->query($query)) {
             $row = $this->db->fetch_object($result);
@@ -890,6 +926,7 @@ class PMF_Faq
     {
         global $sids, $PMF_CONF;
         
+        $now = date('YmdHis');
         $query =
 '            SELECT
                 '.SQLPREFIX.'faqdata.id AS id,
@@ -909,11 +946,11 @@ class PMF_Faq
             AND
                 '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang
             WHERE
-                '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvisits.id
-            AND
-                '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqvisits.lang
-            AND
-                '.SQLPREFIX.'faqdata.active = \'yes\'';
+                    '.SQLPREFIX.'faqdata.date_start <= \''.$now.'\'
+                AND '.SQLPREFIX.'faqdata.date_end   >= \''.$now.'\'
+                AND '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvisits.id
+                AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqvisits.lang
+                AND '.SQLPREFIX.'faqdata.active = \'yes\'';
         if (isset($categoryId) && is_numeric($categoryId) && ($categoryId != 0)) {
             $query .= '
             AND
@@ -980,6 +1017,7 @@ class PMF_Faq
     {
         global $sids, $PMF_CONF;
 
+        $now = date('YmdHis');
         $query =
 '            SELECT
                 '.SQLPREFIX.'faqdata.id AS id,
@@ -999,11 +1037,11 @@ class PMF_Faq
             AND
                 '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang
             WHERE
-                '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvisits.id
-            AND
-                '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqvisits.lang
-            AND
-                '.SQLPREFIX.'faqdata.active = \'yes\'';
+                    '.SQLPREFIX.'faqdata.date_start <= \''.$now.'\'
+                AND '.SQLPREFIX.'faqdata.date_end   >= \''.$now.'\'
+                AND '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvisits.id
+                AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqvisits.lang
+                AND '.SQLPREFIX.'faqdata.active = \'yes\'';
         if (isset($language) && PMF_Init::isASupportedLanguage($language)) {
             $query .= '
             AND
@@ -1101,7 +1139,7 @@ class PMF_Faq
             SQLPREFIX,
             $record_id);
         if ($result = $this->db->query($query)) {
-            $row = $db->fetch_object($result);
+            $row = $this->db->fetch_object($result);
             return $row->usr;
         }
         return 0;
@@ -1350,6 +1388,7 @@ class PMF_Faq
     {
         global $DB;
 
+        $now = date('YmdHis');
         $sql = "";
         // Fields selection
         // --------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1371,14 +1410,16 @@ class PMF_Faq
               ".SQLPREFIX."faqdata.datum AS datum,
               ".SQLPREFIX."faqvisits.visits AS visits,
               ".SQLPREFIX."faqvisits.last_visit AS last_visit
-              "."FROM ".SQLPREFIX."faqdata, ".SQLPREFIX."faqvisits";
+              FROM ".SQLPREFIX."faqdata, ".SQLPREFIX."faqvisits";
         // Join criteria
         // TODO: why LEFT? Ask to Thorsten: it would be better INNER
         $sql .= "\nLEFT JOIN ".SQLPREFIX."faqcategoryrelations
               ON ".SQLPREFIX."faqdata.id = ".SQLPREFIX."faqcategoryrelations.record_id
               AND ".SQLPREFIX."faqdata.lang = ".SQLPREFIX."faqcategoryrelations.record_lang";
         // Filter criteria
-        $sql .= "\nWHERE ";
+        $sql .= "\nWHERE
+                  ".SQLPREFIX."faqdata.date_start <= '".$now."'
+              AND ".SQLPREFIX."faqdata.date_end   >= '".$now."' AND ";
         // faqvisits data selection
         if (!empty($faqid)) {
             // Select ONLY the faq with the provided $faqid

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.edit.php,v 1.36 2006-07-30 07:07:19 matteo Exp $
+* $Id: record.edit.php,v 1.37 2006-08-07 21:31:40 matteo Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23
@@ -92,22 +92,24 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
             }
 
             // Get the record
-            $resultRecord = $db->query('SELECT '.SQLPREFIX.'faqdata.id AS id, '.SQLPREFIX.'faqdata.lang AS lang, '.SQLPREFIX.'faqdata.solution_id AS solution_id, '.SQLPREFIX.'faqdata.revision_id AS revision_id, '.SQLPREFIX.'faqdata.active AS active, '.SQLPREFIX.'faqdata.keywords AS keywords, '.SQLPREFIX.'faqdata.thema AS thema, '.SQLPREFIX.'faqdata.content AS content, '.SQLPREFIX.'faqdata.author AS author, '.SQLPREFIX.'faqdata.email AS email, '.SQLPREFIX.'faqdata.comment AS comment, '.SQLPREFIX.'faqdata.datum AS datum FROM '.SQLPREFIX.'faqdata WHERE id = '.$id.' AND lang = \''.$lang.'\'');
-
-            $row = $db->fetch_object($resultRecord);
-            $id = $row->id;
-            $lang = $row->lang;
-            $solution_id = $row->solution_id;
-            $revision_id = $row->revision_id;
-            $active = $row->active;
-            $keywords = $row->keywords;
-            $thema = $row->thema;
-            $content = htmlspecialchars($row->content);
-            $author = $row->author;
-            $email = $row->email;
-            $comment = $row->comment;
-            $datum = $row->datum;
+            $faq->language = $lang;
+            $faq->getRecord($id);
+            $faqData = $faq->faqRecord;
+            $id          = $faqData['id'];
+            $lang        = $faqData['lang'];
+            $solution_id = $faqData['solution_id'];
+            $revision_id = $faqData['revision_id'];
+            $active      = $faqData['active'];
+            $keywords    = $faqData['keywords'];
+            $thema       = $faqData['title'];
+            $content     = htmlspecialchars($faqData['content']);
+            $author      = $faqData['author'];
+            $email       = $faqData['email'];
+            $comment     = $faqData['comment'];
+            $datum       = $faqData['date'];
+            
             $acti = 'saveentry&amp;id='.$_REQUEST['id'];
+
         } else {
             $acti = 'insertentry';
             $id = 0;
@@ -116,7 +118,6 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
         }
 
     } else {
-
         adminlog('Beitragcreate');
         $acti = 'insertentry';
         if (!is_array($categories)) {
@@ -141,7 +142,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     print ' '.$PMF_LANG["ad_entry_edit_2"].'</h2>';
 
     if ($permission["changebtrevs"]){
-        
+
         $revisions = $faq->getRevisionIds($id, $lang);
         if (count($revisions)) {
 ?>
@@ -162,20 +163,21 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 
         if (isset($revisionid_selected) && isset($revision_id) && $revisionid_selected != $revision_id) {
 
-            $result2 = $db->query("SELECT id, lang, solution_id, revision_id, active, keywords, thema, content, comment, datum, author, email FROM ".SQLPREFIX."faqdata_revisions WHERE id = ".$id." AND lang = '".$lang."' AND revision_id = ".$revisionid_selected);
-            $row = $db->fetch_object($result2);
-            $id = $row->id;
-            $lang = $row->lang;
-            $solution_id = $row->solution_id;
-            $revision_id = $row->revision_id;
-            $active = $row->active;
-            $keywords = $row->keywords;
-            $thema = $row->thema;
-            $content = htmlspecialchars($row->content);
-            $author = $row->author;
-            $email = $row->email;
-            $comment = $row->comment;
-            $datum = $row->datum;
+            // Get the record
+            $faq->language = $lang;
+            $faqData = $faq->getRecord($id, $revisionid_selected);
+            $id          = $faqData['id'];
+            $lang        = $faqData['lang'];
+            $solution_id = $faqData['solution_id'];
+            $revision_id = $faqData['revision_id'];
+            $active      = $faqData['active'];
+            $keywords    = $faqData['keywords'];
+            $thema       = $faqData['title'];
+            $content     = htmlspecialchars($faqData['content']);
+            $author      = $faqData['author'];
+            $email       = $faqData['email'];
+            $comment     = $faqData['comment'];
+            $datum       = $faqData['date'];
 
         }
     }
@@ -289,26 +291,26 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     <legend><?php print $PMF_LANG['ad_record_expiration_window']; ?></legend>
         <label class="lefteditor" for="from"><?php print $PMF_LANG['ad_news_from']; ?></label>
 <?php
-    $dateStartAv = isset($newsData['dateStart']) && ($newsData['dateStart'] != '00000000000000');
-    $date['YYYY'] = $dateStartAv ? substr($newsData['dateStart'],  0, 4) : '';
-    $date['MM']   = $dateStartAv ? substr($newsData['dateStart'],  4, 2) : '';
-    $date['DD']   = $dateStartAv ? substr($newsData['dateStart'],  6, 2) : '';
-    $date['HH']   = $dateStartAv ? substr($newsData['dateStart'],  8, 2) : '';
-    $date['mm']   = $dateStartAv ? substr($newsData['dateStart'], 10, 2) : '';
-    $date['ss']   = $dateStartAv ? substr($newsData['dateStart'], 12, 2) : '';
+    $dateStartAv = isset($faqData['dateStart']) && ($faqData['dateStart'] != '00000000000000');
+    $date['YYYY'] = $dateStartAv ? substr($faqData['dateStart'],  0, 4) : '';
+    $date['MM']   = $dateStartAv ? substr($faqData['dateStart'],  4, 2) : '';
+    $date['DD']   = $dateStartAv ? substr($faqData['dateStart'],  6, 2) : '';
+    $date['HH']   = $dateStartAv ? substr($faqData['dateStart'],  8, 2) : '';
+    $date['mm']   = $dateStartAv ? substr($faqData['dateStart'], 10, 2) : '';
+    $date['ss']   = $dateStartAv ? substr($faqData['dateStart'], 12, 2) : '';
     print(printDateTimeInput('dateStart', $date));
 ?>
         <br />
 
         <label class="lefteditor" for="to"><?php print $PMF_LANG['ad_news_to']; ?></label>
 <?php
-    $dateEndAv = isset($newsData['dateEnd']) && ($newsData['dateEnd'] != '99991231235959');
-    $date['YYYY'] = $dateEndAv ? substr($newsData['dateEnd'],  0, 4) : '';
-    $date['MM']   = $dateEndAv ? substr($newsData['dateEnd'],  4, 2) : '';
-    $date['DD']   = $dateEndAv ? substr($newsData['dateEnd'],  6, 2) : '';
-    $date['HH']   = $dateEndAv ? substr($newsData['dateEnd'],  8, 2) : '';
-    $date['mm']   = $dateEndAv ? substr($newsData['dateEnd'], 10, 2) : '';
-    $date['ss']   = $dateEndAv ? substr($newsData['dateEnd'], 12, 2) : '';
+    $dateEndAv = isset($faqData['dateEnd']) && ($faqData['dateEnd'] != '99991231235959');
+    $date['YYYY'] = $dateEndAv ? substr($faqData['dateEnd'],  0, 4) : '';
+    $date['MM']   = $dateEndAv ? substr($faqData['dateEnd'],  4, 2) : '';
+    $date['DD']   = $dateEndAv ? substr($faqData['dateEnd'],  6, 2) : '';
+    $date['HH']   = $dateEndAv ? substr($faqData['dateEnd'],  8, 2) : '';
+    $date['mm']   = $dateEndAv ? substr($faqData['dateEnd'], 10, 2) : '';
+    $date['ss']   = $dateEndAv ? substr($faqData['dateEnd'], 12, 2) : '';
     print(printDateTimeInput('dateEnd', $date));
 ?>
     </fieldset>
