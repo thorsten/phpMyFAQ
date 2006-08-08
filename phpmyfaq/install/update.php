@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.62 2006-07-29 10:18:02 matteo Exp $
+* $Id: update.php,v 1.63 2006-08-08 21:58:54 matteo Exp $
 *
 * Main update script
 *
@@ -683,7 +683,7 @@ if ($step == 5) {
                 break;
         }
 
-        // 6/N. Fix facomments table
+        // 6/N. Fix faqcomments table
         switch($DB["type"]) {
             default:
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqcomments ADD type VARCHAR(10) NOT NULL AFTER id';
@@ -758,8 +758,75 @@ if ($step == 5) {
                 $query[] = 'DROP TABLE '.SQLPREFIX.'faquser_PMF16x_old';
                 break;
         }
-        // 10/N. Move each image in each of the faq content, from '/images' to '/images/Image'
-        // TODO: Cycle through the faq content and move each image reference from '/images' to '/images/Image'
+        // 10/N. Move each image filename in each of the faq content, from '/images' to '/images/Image'
+        $images = array();
+        require_once(PMF_ROOT_DIR.'/inc/Linkverifier.php');
+        $oLnk = new PMF_Linkverifier();
+        $_records = array();
+        // Read the data from the current faqdata table
+        $_result = $db->query('SELECT id, revision_id, lang, content FROM '.SQLPREFIX.'faqdata ORDER BY id');
+        while ($row = $db->fetch_object($_result)) {
+            $_records[] = array('id'          => $row->id,
+                                'revision_id' => $row->revision_id,
+                                'lang'        => $row->lang,
+                                'content'     => $row->content
+                                );
+        }
+        foreach ($_records as $_r) {
+            // Extract URLs from content
+            $oLnk->resetPool();
+            $oLnk->parse_string($_r['content']);
+            $fixedContent = $_r['content'];
+            // Search for src attributes only
+            if (isset($oLnk->urlpool['src'])) {
+                foreach ($oLnk->urlpool['src'] as $image) {
+                    if (!(strpos($image, '/images/') === false)) {
+                        $newImagePath = str_replace('/images/', '/images/Image/', $image);
+                        $fixedContent   = str_replace($image, $newImagePath, $fixedContent);
+                        if (!in_array($image, $images)) {
+                            $images[] = $image;
+                        }
+                    }
+                }
+                if ($_r['content'] != $fixedContent) {
+                    $query[]  = 'UPDATE '.SQLPREFIX.'faqdata
+                                SET content = \''.$fixedContent.'\'
+                                WHERE id = '.$_r['id'].' AND revision_id = '.$_r['revision_id'].' AND lang = \''.$_r['lang'].'\'';
+                }
+            }
+        }
+        // Read the data from the current faqdata_revisions table
+        $_result = $db->query('SELECT id, revision_id, lang, content FROM '.SQLPREFIX.'faqdata_revisions ORDER BY id');
+        while ($row = $db->fetch_object($_result)) {
+            $_records[] = array('id'          => $row->id,
+                                'revision_id' => $row->revision_id,
+                                'lang'        => $row->lang,
+                                'content'     => $row->content
+                                );
+        }
+        foreach ($_records as $_r) {
+            // Extract URLs from content
+            $oLnk->resetPool();
+            $oLnk->parse_string($_r['content']);
+            $fixedContent = $_r['content'];
+            // Search for src attributes only
+            if (isset($oLnk->urlpool['src'])) {
+                foreach ($oLnk->urlpool['src'] as $image) {
+                    if (!(strpos($image, '/images/') === false)) {
+                        $newImagePath = str_replace('/images/', '/images/Image/', $image);
+                        $fixedContent   = str_replace($image, $newImagePath, $fixedContent);
+                        if (!in_array($image, $images)) {
+                            $images[] = $image;
+                        }
+                    }
+                }
+                if ($_r['content'] != $fixedContent) {
+                    $query[]  = 'UPDATE '.SQLPREFIX.'faqdata_revisions
+                                SET content = \''.$fixedContent.'\'
+                                WHERE id = '.$_r['id'].' AND revision_id = '.$_r['revision_id'].' AND lang = \''.$_r['lang'].'\'';
+                }
+            }
+        }
     }
 
     // optimize tables
@@ -787,8 +854,11 @@ if ($step == 5) {
         }
     }
 
-    // 11/N. Move each image in each of the faq content, from '/images' to '/images/Image'
-    // TODO: Cycle through the faq content and move each file image from '/images' to '/images/Image'
+    // 11/N. Move each image file in each of the faq content, from '/images' to '/images/Image'
+    foreach ($images as $image) {
+        $newImagePath = str_replace('/images/', '/images/Image/', $image);
+        @rename(PMF_ROOT_DIR.$image, PMF_ROOT_DIR.$newImagePath);
+    }
     // 12/N. Move the PMF configurarion: from inc/config.php to the faqconfig table
     if ($version < 200) {
         $PMF_CONF['permLevel'] = 'basic';
