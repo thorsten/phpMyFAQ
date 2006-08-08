@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.44 2006-08-08 19:36:21 matteo Exp $
+* $Id: Faq.php,v 1.45 2006-08-08 19:58:42 matteo Exp $
 *
 * The main FAQ class
 *
@@ -532,9 +532,11 @@ class PMF_Faq
             FROM
                 %sfaqdata
             ORDER BY id",
-            SQLPREFIX);
+            SQLPREFIX
+            );
         $result = $this->db->query($query);
-        if ($row = $this->db->fetch_object($result)) {
+
+        while ($row = $this->db->fetch_object($result)) {
             $this->faqRecords[] = array(
                 'id'            => $row->id,
                 'lang'          => $row->lang,
@@ -579,8 +581,10 @@ class PMF_Faq
                 id = %d AND lang = '%s'",
             SQLPREFIX,
             $id,
-            $this->language);
+            $this->language
+            );
         $result = $this->db->query($query);
+
         if ($this->db->num_rows($result) > 0) {
             while ($row = $this->db->fetch_object($result)) {
                 $output = PMF_htmlentities($row->thema, ENT_NOQUOTES, $this->pmf_lang['metaCharset']);
@@ -588,6 +592,7 @@ class PMF_Faq
         } else {
             $output = $this->pmf_lang['no_cats'];
         }
+
         return $output;
     }
 
