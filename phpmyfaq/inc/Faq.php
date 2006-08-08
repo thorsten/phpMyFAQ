@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.43 2006-08-07 21:31:41 matteo Exp $
+* $Id: Faq.php,v 1.44 2006-08-08 19:36:21 matteo Exp $
 *
 * The main FAQ class
 *
@@ -548,8 +548,8 @@ class PMF_Faq
                 'email'         => $row->email,
                 'comment'       => $row->comment,
                 'date'          => makeDate($row->datum),
-                'dateStart'     => $row->dateStart,
-                'dateEnd'       => $row->dateEnd
+                'dateStart'     => $row->date_start,
+                'dateEnd'       => $row->date_end
                 );
         }
     }
