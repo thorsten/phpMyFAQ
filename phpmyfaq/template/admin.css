@@ -1,5 +1,5 @@
 /**
- * $Id: admin.css,v 1.19 2006-07-29 15:20:56 thorstenr Exp $
+ * $Id: admin.css,v 1.20 2006-08-09 19:36:53 matteo Exp $
  *
  * This is the CSS file for the admin section of phpMyFAQ 2.0.x
  * You don't need to change enything here but feel free to do it. :-)
@@ -443,13 +443,16 @@ div.input_row {
     margin-bottom: 10px;
 }
 div.input_row label {
-    width: 40%;
     display: block;
     float: left;
     text-align: left;
 }
-div.input_row input, div.input_row select {
-    width: 55%;
+div.input_row input {
+    background: White;
+    border: 1px solid black;
+}
+div.input_row input[type=text], div.input_row select, div.input_row textarea {
+    width: 100%;
     background: White;
     border: 1px solid black;
 }
@@ -522,7 +525,7 @@ div.button_row input.reset {
 /* container for #group_data and #group_rights */
 #group_details {
     float: right;
-    width: 200px;
+    width: 220px;
     margin: 0;
     padding: 0;
 }
@@ -533,7 +536,7 @@ div.button_row input.reset {
 /* container for #group_memberList, #group_userList, #group_membershipButtons */
 #group_membership {
     float: left;
-    width: 350px;
+    width: 340px;
 }
 #group_memberList {
     float: right;

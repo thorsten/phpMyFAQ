@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: group.php,v 1.15 2006-07-30 08:24:45 matteo Exp $
+* $Id: group.php,v 1.16 2006-08-09 19:36:53 matteo Exp $
 *
 * Displays the user managment frontend
 *
@@ -376,7 +376,7 @@ function buildGroupData(id)
     // get group with given id
     if (id == 0) {
         getValues = false;
-        group = groups[0];
+        //group = groups[0];
     } else {
         getValues = true;
         for (var i = 0; i < groups.length; i++) {
@@ -404,7 +404,7 @@ function buildGroupData(id)
             }
         }
         debugMsg += 'name = ' + name;
-        debugMsg += 'description = ' + description;
+        debugMsg += '\ndescription = ' + description;
         //alert(debugMsg);
     }
 }
@@ -635,15 +635,15 @@ getGroupList();
                 <div id="group_data_table">
                     <div class="input_row">
                         <label for="name"><?php print $text['addGroup_name']; ?></label>
-                        <input class="admin" id="update_group_name" type="text" name="name" value="<?php print (isset($group_name) ? $group_name : ''); ?>" tabindex="1" />
+                        <input id="update_group_name" type="text" name="name" value="<?php print (isset($group_name) ? $group_name : ''); ?>" tabindex="1" />
                     </div>
                     <div class="input_row">
                         <label for="description"><?php print $text['addGroup_description']; ?></label>
-                        <textarea class="admin" id="update_group_description" name="description" cols="<?php print $descriptionCols; ?>" rows="<?php print $descriptionRows; ?>" tabindex="2"><?php print (isset($group_description) ? $group_description : ''); ?></textarea>
+                        <textarea id="update_group_description" name="description" cols="<?php print $descriptionCols; ?>" rows="<?php print $descriptionRows; ?>" tabindex="2"><?php print (isset($group_description) ? $group_description : ''); ?></textarea>
                     </div>
                     <div class="input_row">
                         <label for="auto_join"><?php print $text['addGroup_autoJoin']; ?></label>
-                        <input class="admin" id="update_group_auto_join" type="checkbox" name="auto_join" value="1" tabindex="3"<?php print ((isset($group_auto_join) && $group_auto_join) ? ' checked="checked"' : ''); ?> />
+                        <input id="update_group_auto_join" type="checkbox" name="auto_join" value="1" tabindex="3"<?php print ((isset($group_auto_join) && $group_auto_join) ? ' checked="checked"' : ''); ?> />
                     </div>
                 </div><!-- end #group_data_table -->
                 <div class="button_row">
