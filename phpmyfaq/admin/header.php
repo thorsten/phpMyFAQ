@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: header.php,v 1.19 2006-07-30 07:49:41 thorstenr Exp $
+* $Id: header.php,v 1.20 2006-08-09 21:39:06 matteo Exp $
 *
 * header of the admin area
 *
@@ -49,20 +49,31 @@ header("Vary: Negotiate,Accept");
 <!-- header -->
 <div id="header">
     <h1>phpMyFAQ <?php print $PMF_CONF["version"]; ?></h1>
+    <div id="langform">
+        <form action="<?php print($linkext); ?>" method="post">
+        <label for="language"><?php print $PMF_LANG['msgLangaugeSubmit']; ?></label>
+        <?php print selectLanguages($LANGCODE, true); ?>
+        <input type="hidden" name="action" value="<?php print($_action); ?>" />
+        </form>
+    </div>
+    <div id="sessionexpiration">
+        <label for="session">Time to your session expiration</label>
+        <div id="sessioncounter">Loading...</div>
+    </div>
 </div>
 
 <?php if (isset($auth)) { ?>
 <!-- administration menu -->
 <div id="navcontainer">
     <ul id="navlist">
-    	<li><a href="index.php"><?php print $PMF_LANG['admin_mainmenu_home']; ?></a></li>
-    	<li><a href="index.php?action=user"><?php print $PMF_LANG['admin_mainmenu_users']; ?></a></li>
-    	<li><a href="index.php?action=content"><?php print $PMF_LANG['admin_mainmenu_content']; ?></a></li>
-    	<li><a href="index.php?action=statistics"><?php print $PMF_LANG['admin_mainmenu_statistics']; ?></a></li>
-    	<li><a href="index.php?action=export"><?php print $PMF_LANG['admin_mainmenu_exports']; ?></a></li>
-    	<li><a href="index.php?action=backup"><?php print $PMF_LANG['admin_mainmenu_backup']; ?></a></li>
-    	<li><a href="index.php?action=config"><?php print $PMF_LANG['admin_mainmenu_configuration']; ?></a></li>
-    	<li><a href="index.php?action=logout"><?php print $PMF_LANG['admin_mainmenu_logout']; ?></a></li>
+        <li><a href="index.php"><?php print $PMF_LANG['admin_mainmenu_home']; ?></a></li>
+        <li><a href="index.php?action=user"><?php print $PMF_LANG['admin_mainmenu_users']; ?></a></li>
+        <li><a href="index.php?action=content"><?php print $PMF_LANG['admin_mainmenu_content']; ?></a></li>
+        <li><a href="index.php?action=statistics"><?php print $PMF_LANG['admin_mainmenu_statistics']; ?></a></li>
+        <li><a href="index.php?action=export"><?php print $PMF_LANG['admin_mainmenu_exports']; ?></a></li>
+        <li><a href="index.php?action=backup"><?php print $PMF_LANG['admin_mainmenu_backup']; ?></a></li>
+        <li><a href="index.php?action=config"><?php print $PMF_LANG['admin_mainmenu_configuration']; ?></a></li>
+        <li><a href="index.php?action=logout"><?php print $PMF_LANG['admin_mainmenu_logout']; ?></a></li>
     </ul>
 </div>
 

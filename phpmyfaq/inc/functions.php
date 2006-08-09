@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.131 2006-07-29 15:30:32 thorstenr Exp $
+* $Id: functions.php,v 1.132 2006-08-09 21:39:06 matteo Exp $
 *
 * This is the main functions file!
 *
@@ -148,16 +148,18 @@ function getAvailableLanguages()
  * This function displays the <select> box for the available languages
  *
  * @param   string
+ * @param   boolean
  * @return  string
  * @access  public
  * @since   2003-12-12
  * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
  */
-function selectLanguages($default)
+function selectLanguages($default, $submitOnChange = false)
 {
     global $languageCodes;
 
-    $output = "<select class=\"language\" name=\"language\" id=\"language\" size=\"1\">\n";
+    $onChange = ($submitOnChange ? ' onchange="this.form.submit();"' : '');
+    $output = "<select class=\"language\" name=\"language\" id=\"language\" size=\"1\"".$onChange.">\n";
     $languages = getAvailableLanguages();
 
     if (count($languages) > 0) {

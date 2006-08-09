@@ -1,5 +1,5 @@
 /**
- * $Id: admin.css,v 1.20 2006-08-09 19:36:53 matteo Exp $
+ * $Id: admin.css,v 1.21 2006-08-09 21:39:05 matteo Exp $
  *
  * This is the CSS file for the admin section of phpMyFAQ 2.0.x
  * You don't need to change enything here but feel free to do it. :-)
@@ -24,11 +24,7 @@
     background: #0D487A;
     color: #fff;
 }
-/*
-.sideBox {
-    background-color: #305C77;
-}
-*/
+
 body {
     background-color: #fff;
     color: black;
@@ -113,8 +109,32 @@ form br {
     height: 40px;
     padding: 20px;
 }
-.headerTitle {
-  font-size: 300%;
+#header h1{
+    display: table-cell;
+    vertical-align: middle;
+    width: 350px;
+}
+
+div#langform {
+    display: table-cell;
+    vertical-align: middle;
+    font-size: 95%;
+    width: 230px;
+}
+
+div#sessionexpiration {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 95%;
+    width: 180px;
+    color: #000;
+    background-color: #EDF2F2;
+    border: 1px solid #D0D9D9;
+}
+div#sessioncounter {
+    font-size: 100%;
+    text-align: center;
 }
 
 /* Administration Menu */
@@ -216,29 +236,6 @@ form br {
     color: #fff;
 }
 
-
-div#langform {
-    font-size: 95%;
-    width: 180px;
-    margin-top: 10px;
-    padding: 0px;
-    background-color: #EDF2F2;
-    border: 1px solid #D0D9D9;
-}
-
-div#sessionexpiration {
-    font-size: 95%;
-    width: 180px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    padding: 0px;
-    background-color: #EDF2F2;
-    border: 1px solid #D0D9D9;
-}
-div#sessioncounter {
-    font-size: 100%;
-    text-align: center;
-}
 
 /* the main body */
 #bodyText {
