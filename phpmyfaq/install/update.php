@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.63 2006-08-08 21:58:54 matteo Exp $
+* $Id: update.php,v 1.64 2006-08-09 18:48:49 matteo Exp $
 *
 * Main update script
 *
@@ -618,9 +618,10 @@ if ($step == 5) {
         }
     }
 
+    $images = array();
     // update from versions before 2.0.0
     if ($version < 200) {
-        // 1/N. Fix faqfragen table
+        // 1/13. Fix faqfragen table
         switch($DB["type"]) {
             case 'pgsql':
                 $query[] = "CREATE TABLE ".SQLPREFIX."faqquestions (
@@ -644,13 +645,13 @@ if ($step == 5) {
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqquestions ADD is_visible CHAR NOT NULL DEFAULT \'Y\' AFTER ask_date';
                 break;
         }
-        // 2/N. Fix faqcategories table
+        // 2/13. Fix faqcategories table
         switch($DB["type"]) {
             default:
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqcategories ADD user_id INT(2) NOT NULL AFTER description';
                 break;
         }
-        // 3/N. Fix faqdata table
+        // 3/13. Fix faqdata table
         switch($DB["type"]) {
             default:
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata ADD linkState VARCHAR(7) NOT NULL AFTER datum';
@@ -659,7 +660,7 @@ if ($step == 5) {
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata ADD date_end VARCHAR(14) NOT NULL DEFAULT \'99991231235959\' AFTER date_start';
                 break;
         }
-        // 4/N. Fix faqdata_revisions table
+        // 4/13. Fix faqdata_revisions table
         switch($DB["type"]) {
             default:
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata_revisions ADD linkState VARCHAR(7) NOT NULL AFTER datum';
@@ -668,7 +669,7 @@ if ($step == 5) {
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata_revisions ADD date_end VARCHAR(14) NOT NULL DEFAULT \'99991231235959\' AFTER date_start';
                 break;
         }
-        // 5/N. Fix faqnews table
+        // 5/13. Fix faqnews table
         $defaultLang = str_replace(array('language_', '.php'), '', $PMF_CONF['language']);
         switch($DB["type"]) {
             default:
@@ -683,7 +684,7 @@ if ($step == 5) {
                 break;
         }
 
-        // 6/N. Fix faqcomments table
+        // 6/13. Fix faqcomments table
         switch($DB["type"]) {
             default:
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqcomments ADD type VARCHAR(10) NOT NULL AFTER id';
@@ -691,17 +692,17 @@ if ($step == 5) {
                 break;
         }
 
-        // 7/N. Rename faquser table for preparing the users migration
+        // 7/13. Rename faquser table for preparing the users migration
         switch($DB["type"]) {
             default:
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faquser RENAME TO '.SQLPREFIX.'faquser_PMF16x_old';
                 break;
         }
 
-        // 8/N. Add the new/changed PMF 2.0.0 tables
+        // 8/13. Add the new/changed PMF 2.0.0 tables
         require_once($DB['type'].'.update.sql.php');
 
-        // 9/N. Run the user migration and remove the faquser_PMF16x_old table
+        // 9/13. Run the user migration and remove the faquser_PMF16x_old table
         // Populate faquser table
         $now = date("YmdHis", time());
         switch($DB["type"]) {
@@ -758,8 +759,7 @@ if ($step == 5) {
                 $query[] = 'DROP TABLE '.SQLPREFIX.'faquser_PMF16x_old';
                 break;
         }
-        // 10/N. Move each image filename in each of the faq content, from '/images' to '/images/Image'
-        $images = array();
+        // 10/13. Move each image filename in each of the faq content, from '/images' to '/images/Image'
         require_once(PMF_ROOT_DIR.'/inc/Linkverifier.php');
         $oLnk = new PMF_Linkverifier();
         $_records = array();
@@ -789,6 +789,7 @@ if ($step == 5) {
                     }
                 }
                 if ($_r['content'] != $fixedContent) {
+                    $fixedContent = $db->escape_string($fixedContent);
                     $query[]  = 'UPDATE '.SQLPREFIX.'faqdata
                                 SET content = \''.$fixedContent.'\'
                                 WHERE id = '.$_r['id'].' AND revision_id = '.$_r['revision_id'].' AND lang = \''.$_r['lang'].'\'';
@@ -821,6 +822,7 @@ if ($step == 5) {
                     }
                 }
                 if ($_r['content'] != $fixedContent) {
+                    $fixedContent = $db->escape_string($fixedContent);
                     $query[]  = 'UPDATE '.SQLPREFIX.'faqdata_revisions
                                 SET content = \''.$fixedContent.'\'
                                 WHERE id = '.$_r['id'].' AND revision_id = '.$_r['revision_id'].' AND lang = \''.$_r['lang'].'\'';
@@ -854,13 +856,13 @@ if ($step == 5) {
         }
     }
 
-    // 11/N. Move each image file in each of the faq content, from '/images' to '/images/Image'
-    foreach ($images as $image) {
-        $newImagePath = str_replace('/images/', '/images/Image/', $image);
-        @rename(PMF_ROOT_DIR.$image, PMF_ROOT_DIR.$newImagePath);
-    }
-    // 12/N. Move the PMF configurarion: from inc/config.php to the faqconfig table
     if ($version < 200) {
+        // 11/13. Move each image file in each of the faq content, from '/images' to '/images/Image'
+        foreach ($images as $image) {
+            $newImagePath = str_replace('/images/', '/images/Image/', $image);
+            @rename(PMF_ROOT_DIR.$image, PMF_ROOT_DIR.$newImagePath);
+        }
+        // 12/13. Move the PMF configurarion: from inc/config.php to the faqconfig table
         $PMF_CONF['permLevel'] = 'basic';
         $PMF_CONF['enablevisibility'] = 'Y';
         $PMF_CONF['referenceURL'] = PMF_Link::getSystemUri('/install/update.php');
@@ -881,10 +883,14 @@ if ($step == 5) {
 
     print '<p class="center">The database was updated successfully.</p>';
     print '<p class="center"><a href="../index.php">phpMyFAQ</a></p>';
-    print '<p class="center">Please remove the backup (*.php.bak and *.bak.php) files located in the directory inc/.</p>';
+    foreach (glob(PMF_ROOT_DIR.'/inc/*.bak.php') as $filename) {
+        if (!@unlink($filename)) {
+            print "<p class=\"center\">Please manually remove the backup file '".$filename."'.</p>\n";
+        }
+    }
 
     if ($version < 200) {
-        // 13/N. Remove the old config file
+        // 13/13. Remove the old config file
         if (@unlink(PMF_ROOT_DIR."/inc/config.php")) {
             print "<p class=\"center\">The file 'inc/config.php' was deleted automatically.</p>\n";
         } else {
