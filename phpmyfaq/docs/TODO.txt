@@ -34,5 +34,5 @@ TODO list for future versions of phpMyFAQ:
 - bugfixing for stability or security reasons
 
 3.0.0 "":
-- PHP 5.x / PHP 6 only version
+- PHP 5.1 / PHP 6 only version
 - PDO support

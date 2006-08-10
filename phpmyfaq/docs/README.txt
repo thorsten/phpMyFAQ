@@ -1,6 +1,6 @@
-$Id: README.txt,v 1.49 2006-07-23 10:51:10 thorstenr Exp $
+$Id: README.txt,v 1.50 2006-08-10 20:20:21 thorstenr Exp $
 
-phpMyFAQ 2.0.0-dev
+phpMyFAQ 2.0.0-alpha
 Codename "Prometheus"
 
 Installation/Update:
@@ -23,6 +23,7 @@ Changes since 1.6:
 - added support for Google sitemaps (Matteo)
 - added improved WYSIWYG editor and Image Manager (Thorsten)
 - added improved News module (Matteo, Thorsten)
+- added tagging (Thorsten)
 - improved URL rewrite functions (Matteo)
 
 Known issues in phpMyFAQ 2.0.0:
@@ -31,7 +32,7 @@ Known issues in phpMyFAQ 2.0.0:
 
 CHANGELOG:
 
-Version 2.0.0 - n/a
+Version 2.0.0-alpha - n/a
 - added rewritten and enhanced user management (Lars)
 - added rewritten and enhanced authorization management (Lars)
 - added Ajax support (Thorsten)
@@ -45,7 +46,15 @@ Version 2.0.0 - n/a
 - added support for Google sitemaps (Matteo)
 - added improved WYSIWYG editor and Image Manager (Thorsten)
 - added improved News module (Matteo, Thorsten)
+- added tagging (Thorsten)
 - improved URL rewrite functions (Matteo)
+
+Version 1.6.3 - 2006-07-16
+- added German documentation
+- updated bundled NET_IDNA class to version 0.4.3
+- released a spec file for building an RPM package of phpMyFAQ
+- updated Simplified Chinese translation (also moved to utf-8)
+- fixed some minor bugs
 
 Version 1.6.2 - 2006-06-17
 - added user tracking data deletion
