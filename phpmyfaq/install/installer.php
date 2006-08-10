@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.58 2006-07-16 07:10:49 matteo Exp $
+* $Id: installer.php,v 1.59 2006-08-10 20:05:42 thorstenr Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -252,11 +252,6 @@ if (version_compare(PHP_VERSION, '4.3.0', '<')) {
     HTMLFooter();
     die();
 }
-if (!extension_loaded('gd')) {
-    print '<p class="center">You don\'t have GD support enabled in your PHP installation. Please enabled GD support in your php.ini file.</p>';
-    HTMLFooter();
-    die();
-}
 if (db_check($supported_databases) == false) {
     print "<p class=\"center\">No supported database found! Please install one of the following database systems and enable the m     corresponding PHP extension:</p>\n";
     print "<ul>\n";
@@ -304,6 +299,9 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 <?php
     if (SAFEMODE == 1) {
         print "<p class=\"center\">The PHP safe mode is enabled. You may have problems when phpMyFAQ writes in some directories.</p>\n";
+    }
+    if (!extension_loaded('gd')) {
+        print '<p class="center">You don\'t have GD support enabled in your PHP installation. Please enabled GD support in your php.ini file otherwise you can\'t use Captchas for spam protection.</p>';
     }
 ?>
 <p class="center">You should read the <a href="../docs/documentation.en.html">documentation</a> carefully before installing phpMyFAQ.</p>
