@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mssql.sql.php,v 1.10 2006-07-31 18:29:39 matteo Exp $
+* $Id: mssql.sql.php,v 1.11 2006-08-10 19:20:30 thorstenr Exp $
 *
 * CREATE TABLE instruction for MS SQL Server database
 *
@@ -32,6 +32,7 @@ $uninst[] = "DROP TABLE ".$sqltblpre."faqconfig";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqdata";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqdata_revisions";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqdata_group";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqdata_tags";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqdata_user";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqglossary";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqgroup";
@@ -41,6 +42,7 @@ $uninst[] = "DROP TABLE ".$sqltblpre."faqnews";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqquestions";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqright";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqsessions";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqtags";
 $uninst[] = "DROP TABLE ".$sqltblpre."faquser";
 $uninst[] = "DROP TABLE ".$sqltblpre."faquserdata";
 $uninst[] = "DROP TABLE ".$sqltblpre."faquserlogin";
@@ -180,6 +182,13 @@ record_id integer NOT NULL,
 group_id integer NOT NULL,
 PRIMARY KEY (record_id, group_id))";
 
+//faqdata_tags
+$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqdata_tags (
+tagging_id INTEGER NOT NULL,
+tagging_name VARCHAR(255) NOT NULL ,
+PRIMARY KEY (tagging_id, tagging_name)
+)";
+
 //faqdata__user
 $query[] = "CREATE TABLE ".$sqltblpre."faqdata_user (
 record_id integer NOT NULL,
@@ -270,6 +279,13 @@ sid integer NOT NULL,
 ip varchar(64) NOT NULL,
 time integer NOT NULL,
 PRIMARY KEY (sid)
+)";
+
+//faqtags
+$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqtags (
+record_id INTEGER NOT NULL,
+tagging_id INTEGER NOT NULL,
+PRIMARY KEY (record_id, tagging_id)
 )";
 
 //faquser

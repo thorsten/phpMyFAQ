@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mysqli.update.sql.php,v 1.5 2006-07-31 18:29:39 matteo Exp $
+* $Id: mysqli.update.sql.php,v 1.6 2006-08-10 19:20:30 thorstenr Exp $
 *
 * CREATE TABLE instruction for MySQL database - UPDATE STAGE from 1.x to 2.0.0
 *
@@ -49,6 +49,13 @@ $query[] = "CREATE TABLE ".SQLPREFIX."faqdata_group (
 record_id INT(11) NOT NULL,
 group_id INT(11) NOT NULL,
 PRIMARY KEY (record_id, group_id))";
+
+//faqdata_tags
+$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqdata_tags (
+tagging_id INT(11) NOT NULL,
+tagging_name VARCHAR(255) NOT NULL ,
+PRIMARY KEY (tagging_id, tagging_name)
+)";
 
 //faqdata_user
 $query[] = "CREATE TABLE ".SQLPREFIX."faqdata_user (
@@ -103,6 +110,13 @@ description TEXT NULL,
 for_users INT(1) NULL DEFAULT 1,
 for_groups INT(1) NULL DEFAULT 1,
 PRIMARY KEY (right_id)
+)";
+
+//faqtags
+$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqtags (
+record_id INT(11) NOT NULL,
+tagging_id INT(11) NOT NULL,
+PRIMARY KEY (record_id, tagging_id)
 )";
 
 //faquser
