@@ -1,15 +1,14 @@
 <?php
 /**
-* $Id: mysqli.update.sql.php,v 1.7 2006-08-12 15:12:40 matteo Exp $
+* $Id: pgsql.update.sql.php,v 1.1 2006-08-12 15:12:40 matteo Exp $
 *
-* CREATE TABLE instruction for MySQL database - UPDATE STAGE from 1.x to 2.0.0
+* CREATE TABLE instruction for PostgreSQL database
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Tom Rochester <tom.rochester@gmail.com>
-* @author       Lars Tiedemann <php@larstiedemann.de>
 * @author       Matteo Scaramuccia <matteo@scaramuccia.com>
-* @since        2006-07-03
-* @copyright    (c) 2001-2006 phpMyFAQ Team
+* @since        2006-08-12
+* @copyright    (c) 2006 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -28,14 +27,14 @@
 
 //faqcategory_group
 $query[] = "CREATE TABLE ".SQLPREFIX."faqcategory_group (
-category_id INT(11) NOT NULL,
-group_id INT(11) NOT NULL,
+category_id int4 NOT NULL,
+group_id int4 NOT NULL,
 PRIMARY KEY (category_id, group_id))";
 
 //faqcategory_user
 $query[] = "CREATE TABLE ".SQLPREFIX."faqcategory_user (
-category_id INT(11) NOT NULL,
-user_id INT(11) NOT NULL,
+category_id int4 NOT NULL,
+user_id int4 NOT NULL,
 PRIMARY KEY (category_id, user_id))";
 
 //faqconfig
@@ -46,56 +45,55 @@ PRIMARY KEY (config_name))";
 
 //faqdata_group
 $query[] = "CREATE TABLE ".SQLPREFIX."faqdata_group (
-record_id INT(11) NOT NULL,
-group_id INT(11) NOT NULL,
+record_id int4 NOT NULL,
+group_id int4 NOT NULL,
 PRIMARY KEY (record_id, group_id))";
 
 //faqdata_tags
-$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqdata_tags (
-tagging_id INT(11) NOT NULL,
+$query[] = "CREATE TABLE IF NOT EXISTS ".SQLPREFIX."faqdata_tags (
+tagging_id INT4 NOT NULL,
 tagging_name VARCHAR(255) NOT NULL ,
 PRIMARY KEY (tagging_id, tagging_name)
 )";
 
 //faqdata_user
 $query[] = "CREATE TABLE ".SQLPREFIX."faqdata_user (
-record_id INT(11) NOT NULL,
-user_id INT(11) NOT NULL,
+record_id int4 NOT NULL,
+user_id int4 NOT NULL,
 PRIMARY KEY (record_id, user_id))";
 
 //faqglossary
 $query[] = "CREATE TABLE ".SQLPREFIX."faqglossary (
-id INT(11) NOT NULL ,
+id int4 NOT NULL ,
 lang VARCHAR(2) NOT NULL ,
 item VARCHAR(255) NOT NULL ,
 definition TEXT NOT NULL,
 PRIMARY KEY (id, lang))";
 
 //faqgroup
-$query[] = "CREATE TABLE IF NOT EXISTS ".SQLPREFIX."faqgroup (
-group_id INT(11) NOT NULL,
+$query[] = "CREATE TABLE ".SQLPREFIX."faqgroup (
+group_id int4 NOT NULL,
 name VARCHAR(25) NULL,
 description TEXT NULL,
-auto_join INT(1) UNSIGNED NULL,
+auto_join int4 UNSIGNED NULL,
 PRIMARY KEY (group_id),
-UNIQUE INDEX name(name)
 )";
 
 //faqgroup_right
-$query[] = "CREATE TABLE IF NOT EXISTS ".SQLPREFIX."faqgroup_right (
-group_id INT(11) NOT NULL,
-right_id INT(11) NOT NULL,
+$query[] = "CREATE TABLE ".SQLPREFIX."faqgroup_right (
+group_id int4 NOT NULL,
+right_id int4 UNSIGNED NOT NULL,
 PRIMARY KEY (group_id, right_id)
 )";
 
 //faqlinkverifyrules
 $query[] = "CREATE TABLE ".SQLPREFIX."faqlinkverifyrules (
-id int(11) NOT NULL default '0',
+id int4 NOT NULL default '0',
 type varchar(6) NOT NULL default '',
 url varchar(255) NOT NULL default '',
 reason varchar(255) NOT NULL default '',
-enabled enum('y','n') NOT NULL default 'y',
-locked enum('y','n') NOT NULL default 'n',
+enabled char(1) NOT NULL default 'y',
+locked char(1) NOT NULL default 'n',
 owner varchar(255) NOT NULL default '',
 dtInsertDate varchar(15) NOT NULL default '',
 dtUpdateDate varchar(15) NOT NULL default '',
@@ -103,65 +101,63 @@ PRIMARY KEY (id)
 )";
 
 //faqright
-$query[] = "CREATE TABLE IF NOT EXISTS ".SQLPREFIX."faqright (
-right_id INT(11) UNSIGNED NOT NULL,
+$query[] = "CREATE TABLE ".SQLPREFIX."faqright (
+right_id int4 UNSIGNED NOT NULL,
 name VARCHAR(50) NULL,
 description TEXT NULL,
-for_users INT(1) NULL DEFAULT 1,
-for_groups INT(1) NULL DEFAULT 1,
+for_users int4 NULL DEFAULT 1,
+for_groups int4 NULL DEFAULT 1,
 PRIMARY KEY (right_id)
 )";
 
 //faqtags
-$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqtags (
-record_id INT(11) NOT NULL,
-tagging_id INT(11) NOT NULL,
+$query[] = "CREATE TABLE IF NOT EXISTS ".SQLPREFIX."faqtags (
+record_id INT4 NOT NULL,
+tagging_id INT4 NOT NULL,
 PRIMARY KEY (record_id, tagging_id)
 )";
 
 //faquser
-$query[] = "CREATE TABLE IF NOT EXISTS ".SQLPREFIX."faquser (
-user_id INT(11) NOT NULL,
+$query[] = "CREATE TABLE ".SQLPREFIX."faquser (
+user_id int4 NOT NULL,
 login VARCHAR(25) NOT NULL,
 session_id VARCHAR(150) NULL,
-session_timestamp INT(11) UNSIGNED NULL,
+session_timestamp int4 UNSIGNED NULL,
 ip VARCHAR(15) NULL,
 account_status VARCHAR(50) NULL,
-last_login TIMESTAMP(14) NULL,
+last_login varchar(14) NULL,
 auth_source VARCHAR(100) NULL,
-member_since TIMESTAMP(14) NULL,
-PRIMARY KEY (user_id),
-UNIQUE INDEX session(session_id),
-UNIQUE INDEX login(login)
+member_since varchar(14) NULL,
+PRIMARY KEY (user_id)
 )";
 
 //faquserdata
-$query[] = "CREATE TABLE IF NOT EXISTS ".SQLPREFIX."faquserdata (
-user_id INT(11) NOT NULL,
-last_modified TIMESTAMP(14) NULL,
+$query[] = "CREATE TABLE ".SQLPREFIX."faquserdata (
+user_id int4 NOT NULL,
+last_modified varchar(14) NULL,
 display_name VARCHAR(50) NULL,
 email VARCHAR(100) NULL
 )";
 
 //faquserlogin
-$query[] = "CREATE TABLE IF NOT EXISTS ".SQLPREFIX."faquserlogin (
+$query[] = "CREATE TABLE ".SQLPREFIX."faquserlogin (
 login VARCHAR(25) NOT NULL,
 pass VARCHAR(150) NULL,
 PRIMARY KEY (login)
 )";
 
 //faquser_group
-$query[] = "CREATE TABLE IF NOT EXISTS ".SQLPREFIX."faquser_group (
-user_id INT(11) NOT NULL,
-group_id INT(11) NOT NULL,
+$query[] = "CREATE TABLE ".SQLPREFIX."faquser_group (
+user_id int4 NOT NULL,
+group_id int4 NOT NULL,
 PRIMARY KEY (user_id, group_id)
 )";
 
 //faquser_right
-$query[] = "CREATE TABLE IF NOT EXISTS ".SQLPREFIX."faquser_right (
-user_id INT(11) NOT NULL,
-right_id INT(11) NOT NULL,
-PRIMARY KEY(user_id, right_id)
+$query[] = "CREATE TABLE ".SQLPREFIX."faquser_right (
+user_id int4 NOT NULL,
+right_id int4 NOT NULL,
+PRIMARY KEY (user_id, right_id)
 )";
 
 

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: sqlite.sql.php,v 1.20 2006-08-10 19:20:30 thorstenr Exp $
+* $Id: sqlite.sql.php,v 1.21 2006-08-12 15:12:40 matteo Exp $
 *
 * CREATE TABLE instructions for SQLite
 *
@@ -191,7 +191,7 @@ tagging_name VARCHAR(255) NOT NULL ,
 PRIMARY KEY (tagging_id, tagging_name)
 )";
 
-//faqdata__user
+//faqdata_user
 $query[] = "CREATE TABLE ".$sqltblpre."faqdata_user (
 record_id INT(11) NOT NULL,
 user_id INT(11) NOT NULL,

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mysql.update.sql.php,v 1.13 2006-08-10 19:20:30 thorstenr Exp $
+* $Id: mysql.update.sql.php,v 1.14 2006-08-12 15:12:40 matteo Exp $
 *
 * CREATE TABLE instruction for MySQL database - UPDATE STAGE from 1.x to 2.0.0
 *
@@ -26,12 +26,6 @@
 // TABLES
 //
 
-//faqconfig
-$query[] = "CREATE TABLE ".SQLPREFIX."faqconfig (
-config_name varchar(255) NOT NULL default '',
-config_value varchar(255) NOT NULL default '',
-PRIMARY KEY (config_name))";
-
 //faqcategory_group
 $query[] = "CREATE TABLE ".SQLPREFIX."faqcategory_group (
 category_id INT(11) NOT NULL,
@@ -43,6 +37,12 @@ $query[] = "CREATE TABLE ".SQLPREFIX."faqcategory_user (
 category_id INT(11) NOT NULL,
 user_id INT(11) NOT NULL,
 PRIMARY KEY (category_id, user_id))";
+
+//faqconfig
+$query[] = "CREATE TABLE ".SQLPREFIX."faqconfig (
+config_name varchar(255) NOT NULL default '',
+config_value varchar(255) NOT NULL default '',
+PRIMARY KEY (config_name))";
 
 //faqdata_group
 $query[] = "CREATE TABLE ".SQLPREFIX."faqdata_group (
