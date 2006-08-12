@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.45 2006-08-08 19:58:42 matteo Exp $
+* $Id: Faq.php,v 1.46 2006-08-12 16:16:58 matteo Exp $
 *
 * The main FAQ class
 *
@@ -118,7 +118,7 @@ class PMF_Faq
     /**
     * showAllRecords()
     *
-    * This function returns all records from one category
+    * This function returns all not expired records from one category
     *
     * @param    int     category id
     * @return   string
@@ -129,7 +129,7 @@ class PMF_Faq
     function showAllRecords($category)
     {
         global $sids, $PMF_CONF, $tree;
-        
+
         $page = 1;
         $output = '';
 
@@ -609,7 +609,6 @@ class PMF_Faq
     function getRevisionIds($record_id, $record_lang)
     {
         $revision_data = array();
-        $now = date('YmdHis');
 
         $query = sprintf("
             SELECT
@@ -619,15 +618,11 @@ class PMF_Faq
             WHERE
                     id = %d
                 AND lang = '%s'
-                AND date_start <= '%s'
-                AND date_end   >= '%s'
             ORDER BY
                 revision_id",
             SQLPREFIX,
             $record_id,
-            $record_lang,
-            $now,
-            $now
+            $record_lang
             );
         $result = $this->db->query($query);
 
@@ -678,7 +673,8 @@ class PMF_Faq
     }
 
     /**
-    * Returns the number of activated records
+    * Returns the number of activated and not expired records, optionally
+    * not limited to the current language
     *
     * @param    string
     * @return   int
@@ -686,7 +682,7 @@ class PMF_Faq
     * @since    2002-08-23
     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
     */
-    function getNumberOfRecords()
+    function getNumberOfRecords($language = null)
     {
         $now = date('YmdHis');
 
@@ -697,11 +693,11 @@ class PMF_Faq
                 %sfaqdata
             WHERE
                     active = 'yes'
-                AND lang = '%s'
+                %s
                 AND date_start <= '%s'
                 AND date_end   >= '%s'",
             SQLPREFIX,
-            $this->language,
+            null == $language ? '' : "AND lang = '".$language."'",
             $now,
             $now
             );
