@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.46 2006-08-12 16:16:58 matteo Exp $
+* $Id: Faq.php,v 1.47 2006-08-12 19:14:04 johannes Exp $
 *
 * The main FAQ class
 *
@@ -1111,7 +1111,7 @@ class PMF_Faq
             $id,
             $ip,
             $check);
-        if ($db->num_rows($db->query($query))) {
+        if ($this->db->num_rows($this->db->query($query))) {
             return false;
         }
         return true;
@@ -1140,8 +1140,9 @@ class PMF_Faq
             SQLPREFIX,
             $record_id);
         if ($result = $this->db->query($query)) {
-            $row = $this->db->fetch_object($result);
-            return $row->usr;
+            if ($row = $this->db->fetch_object($result)) {
+                return $row->usr;
+            }
         }
         return 0;
     }
