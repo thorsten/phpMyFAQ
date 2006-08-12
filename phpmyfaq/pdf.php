@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: pdf.php,v 1.21 2006-06-11 15:40:53 matteo Exp $
+* $Id: pdf.php,v 1.22 2006-08-12 19:02:16 johannes Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Peter Beauvain <pbeauvain@web.de>
@@ -24,7 +24,7 @@
 require_once('inc/Init.php');
 PMF_Init::cleanRequest();
 require_once('inc/Category.php');
-require_once('inc/PMF_export/Pdf.php');
+require_once('inc/PMF_Export/Pdf.php');
 
 $tree = new PMF_Category;
 
