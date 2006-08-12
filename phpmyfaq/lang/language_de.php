@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.19 2006-07-30 08:30:31 thorstenr Exp $
+ * $Id: language_de.php,v 1.20 2006-08-12 14:40:45 thorstenr Exp $
  *
  * File:                language_de.php
  * Description:            German language file
@@ -558,8 +558,7 @@ $LANG_CONF["metaKeywords"] = array(0 => "input", 1 => "Keywords f&uuml;r Suchmas
 $LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "Name des Ver&ouml;ffentlichers");
 $LANG_CONF["adminmail"] = array(0 => "input", 1 => "E-Mailadresse des Admins");
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Kontakt, Impressum, hier die Betreiberadresse angeben!");
-$LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Copyright-Text f&uuml;r die Eintragsseite");
-$LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Text f&uuml;r die Send2Friend-Seite");
+$LANG_CONF["send2friendText"] = array(0 => "area", 1 => "Text f&uuml;r die Send2Friend-Seite");
 $LANG_CONF["attmax"] = array(0 => "input", 1 => "Maximalgr&ouml;&szlig;e von Attachments in Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["disatt"] = array(0 => "checkbox", 1 => "Attachments unter den Beitr&auml;gen anzeigen?");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "Tracking aktiviert?");
