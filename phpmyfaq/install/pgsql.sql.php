@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: pgsql.sql.php,v 1.19 2006-08-12 15:12:40 matteo Exp $
+* $Id: pgsql.sql.php,v 1.20 2006-08-12 15:57:53 matteo Exp $
 *
 * CREATE TABLE instruction for PostgreSQL database
 *
@@ -62,7 +62,7 @@ ip text NOT NULL,
 PRIMARY KEY (id))";
 
 //faqadminsessions
-$query[] = "CREATE TABLE  ".$sqltblpre."faqadminsessions (
+$query[] = "CREATE TABLE ".$sqltblpre."faqadminsessions (
 uin varchar(50)  NOT NULL,
 usr text NOT NULL,
 pass varchar(64)  NOT NULL,
@@ -79,7 +79,7 @@ captcha_time int4 NOT NULL,
 PRIMARY KEY (id))";
 
 //faqcategories
-$query[] = "CREATE TABLE  ".$sqltblpre."faqcategories (
+$query[] = "CREATE TABLE ".$sqltblpre."faqcategories (
 id SERIAL NOT NULL,
 lang varchar(5) NOT NULL,
 parent_id int4 NOT NULL,
@@ -110,7 +110,7 @@ user_id int4 NOT NULL,
 PRIMARY KEY (category_id, user_id))";
 
 //faqchanges
-$query[] = "CREATE TABLE  ".$sqltblpre."faqchanges (
+$query[] = "CREATE TABLE ".$sqltblpre."faqchanges (
 id SERIAL NOT NULL,
 beitrag int4 NOT NULL,
 lang varchar(5) NOT NULL,
@@ -121,7 +121,7 @@ what text NOT NULL,
 PRIMARY KEY (id, lang))";
 
 //faqcomments
-$query[] = "CREATE TABLE  ".$sqltblpre."faqcomments (
+$query[] = "CREATE TABLE ".$sqltblpre."faqcomments (
 id_comment SERIAL NOT NULL,
 id int4 NOT NULL,
 type varchar(10) NOT NULL,
@@ -139,7 +139,7 @@ config_value varchar(255) NOT NULL default '',
 PRIMARY KEY (config_name))";
 
 //faqdata
-$query[] = "CREATE TABLE  ".$sqltblpre."faqdata (
+$query[] = "CREATE TABLE ".$sqltblpre."faqdata (
 id SERIAL NOT NULL,
 lang varchar(5) NOT NULL,
 solution_id int4 NOT NULL,

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.64 2006-08-09 18:48:49 matteo Exp $
+* $Id: update.php,v 1.65 2006-08-12 15:57:53 matteo Exp $
 *
 * Main update script
 *
@@ -624,6 +624,7 @@ if ($step == 5) {
         // 1/13. Fix faqfragen table
         switch($DB["type"]) {
             case 'pgsql':
+                // Create the new faqquestions table
                 $query[] = "CREATE TABLE ".SQLPREFIX."faqquestions (
                             id SERIAL NOT NULL,
                             ask_username varchar(100) NOT NULL,
@@ -647,12 +648,60 @@ if ($step == 5) {
         }
         // 2/13. Fix faqcategories table
         switch($DB["type"]) {
+            case 'pgsql':
+                // Rename the current faqcategories table
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqcategories RENAME TO '.SQLPREFIX.'faqcategories_PMF16x_old';
+                // Create the new faqcategories table
+                $query[] = "CREATE TABLE  ".SQLPREFIX."faqcategories (
+                            id SERIAL NOT NULL,
+                            lang varchar(5) NOT NULL,
+                            parent_id int4 NOT NULL,
+                            name varchar(255) NOT NULL,
+                            description varchar(255) NOT NULL,
+                            user_id int4 NOT NULL,
+                            PRIMARY KEY (id, lang))";
+                // Copy data from the faqcategories_PMF16x_old table
+                $query[] = 'INSERT INTO '.SQLPREFIX.'faqcategories
+                            (id, lang, parent_id, name, description)
+                            SELECT id, lang, parent_id, name, description
+                            FROM '.SQLPREFIX.'faqcategories_PMF16x_old';
+                // Drop the faqcategories_PMF16x_old table
+                $query[] = 'DROP TABLE '.SQLPREFIX.'faqcategories_PMF16x_old';
             default:
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqcategories ADD user_id INT(2) NOT NULL AFTER description';
                 break;
         }
         // 3/13. Fix faqdata table
         switch($DB["type"]) {
+            case 'pgsql':
+                // Rename the current faqdata table
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata RENAME TO '.SQLPREFIX.'faqdata_PMF16x_old';
+                // Create the new faqdata table
+                $query[] = "CREATE TABLE ".SQLPREFIX."faqdata (
+                            id SERIAL NOT NULL,
+                            lang varchar(5) NOT NULL,
+                            solution_id int4 NOT NULL,
+                            revision_id int4 NOT NULL DEFAULT 0,
+                            active char(3) NOT NULL,
+                            keywords text NOT NULL,
+                            thema text NOT NULL,
+                            content text NOT NULL,
+                            author varchar(255) NOT NULL,
+                            email varchar(255) NOT NULL,
+                            comment char(1) NOT NULL default 'y',
+                            datum varchar(15) NOT NULL,
+                            linkState varchar(7) NOT NULL,
+                            linkCheckDate int4 DEFAULT 0 NOT NULL,
+                            date_start varchar(14) NOT NULL DEFAULT '00000000000000',
+                            date_end varchar(14) NOT NULL DEFAULT '99991231235959',
+                            PRIMARY KEY (id, lang))";
+                // Copy data from the faqdata_PMF16x_old table
+                $query[] = 'INSERT INTO '.SQLPREFIX.'faqdata
+                            (id, lang, solution_id, revision_id, active, keywords, thema, content, author, email, comment, datum)
+                            SELECT id, lang, solution_id, revision_id, active, keywords, thema, content, author, email, comment, datum
+                            FROM '.SQLPREFIX.'faqdata_PMF16x_old';
+                // Drop the faqdata_PMF16x_old table
+                $query[] = 'DROP TABLE '.SQLPREFIX.'faqdata_PMF16x_old';
             default:
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata ADD linkState VARCHAR(7) NOT NULL AFTER datum';
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata ADD linkCheckDate INT(11) NOT NULL DEFAULT 0 AFTER linkState';
@@ -662,6 +711,35 @@ if ($step == 5) {
         }
         // 4/13. Fix faqdata_revisions table
         switch($DB["type"]) {
+            case 'pgsql':
+                // Rename the current faqdata_revisions table
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata_revisions RENAME TO '.SQLPREFIX.'faqdata_revisions_PMF16x_old';
+                // Create the new faqdata_revisions table
+                $query[] = "CREATE TABLE ".SQLPREFIX."faqdata_revisions (
+                            id int4 NOT NULL,
+                            lang varchar(5) NOT NULL,
+                            solution_id int4 NOT NULL,
+                            revision_id int4 NOT NULL DEFAULT 0,
+                            active char(3) NOT NULL,
+                            keywords text NOT NULL,
+                            thema text NOT NULL,
+                            content text NOT NULL,
+                            author varchar(255) NOT NULL,
+                            email varchar(255) NOT NULL,
+                            comment char(1) default 'y',
+                            datum varchar(15) NOT NULL,
+                            linkState varchar(7) NOT NULL,
+                            linkCheckDate int4 DEFAULT 0 NOT NULL,
+                            date_start varchar(14) NOT NULL DEFAULT '00000000000000',
+                            date_end varchar(14) NOT NULL DEFAULT '99991231235959',
+                            PRIMARY KEY (id, lang, solution_id, revision_id))";
+                // Copy data from the faqdata_revisions_PMF16x_old table
+                $query[] = 'INSERT INTO '.SQLPREFIX.'faqdata_revisions
+                            (id, lang, solution_id, revision_id, active, keywords, thema, content, author, email, comment, datum)
+                            SELECT id, lang, solution_id, revision_id, active, keywords, thema, content, author, email, comment, datum
+                            FROM '.SQLPREFIX.'faqdata_revisions_PMF16x_old';
+                // Drop the faqdata_revisions_PMF16x_old table
+                $query[] = 'DROP TABLE '.SQLPREFIX.'faqdata_revisions_PMF16x_old';
             default:
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata_revisions ADD linkState VARCHAR(7) NOT NULL AFTER datum';
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata_revisions ADD linkCheckDate INT(11) NOT NULL DEFAULT 0 AFTER linkState';
@@ -672,6 +750,34 @@ if ($step == 5) {
         // 5/13. Fix faqnews table
         $defaultLang = str_replace(array('language_', '.php'), '', $PMF_CONF['language']);
         switch($DB["type"]) {
+            case 'pgsql':
+                // Rename the current faqnews table
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqnews RENAME TO '.SQLPREFIX.'faqnews_PMF16x_old';
+                // Create the new faqnews table
+                $query[] = "CREATE TABLE ".SQLPREFIX."faqnews (
+                            id SERIAL NOT NULL,
+                            lang varchar(5) NOT NULL,
+                            header varchar(255) NOT NULL,
+                            artikel text NOT NULL,
+                            datum varchar(14) NOT NULL,
+                            author_name  varchar(255) NULL,
+                            author_email varchar(255) NULL,
+                            active char(1) default 'y',
+                            comment char(1) default 'n',
+                            date_start varchar(14) NOT NULL DEFAULT '00000000000000',
+                            date_end varchar(14) NOT NULL DEFAULT '99991231235959',
+                            link varchar(255) NOT NULL,
+                            linktitel varchar(255) NOT NULL,
+                            target varchar(255) NOT NULL,
+                            PRIMARY KEY (id))";
+                // Copy data from the faqnews_PMF16x_old table
+                $query[] = 'INSERT INTO '.SQLPREFIX.'faqnews
+                            (id, header, artikel, datum, link, linktitel, target)
+                            SELECT id, header, artikel, datum, link, linktitel, target
+                            FROM '.SQLPREFIX.'faqnews_PMF16x_old';
+                $query[] = 'UPDATE '.SQLPREFIX.'faqnews SET lang = \''.$defaultLang.'\'';
+                // Drop the faqnews_PMF16x_old table
+                $query[] = 'DROP TABLE '.SQLPREFIX.'faqnews_PMF16x_old';
             default:
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqnews ADD lang VARCHAR(5) NULL AFTER id';
                 $query[] = 'UPDATE '.SQLPREFIX.'faqnews SET lang = \''.$defaultLang.'\'';
@@ -686,6 +792,28 @@ if ($step == 5) {
 
         // 6/13. Fix faqcomments table
         switch($DB["type"]) {
+            case 'pgsql':
+                // Rename the current faqcomments table
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqcomments RENAME TO '.SQLPREFIX.'faqcomments_PMF16x_old';
+                // Create the new faqcomments table
+                $query[] = "CREATE TABLE ".SQLPREFIX."faqcomments (
+                            id_comment SERIAL NOT NULL,
+                            id int4 NOT NULL,
+                            type varchar(10) NOT NULL,
+                            usr varchar(255) NOT NULL,
+                            email varchar(255) NOT NULL,
+                            comment text NOT NULL,
+                            datum int4 NOT NULL,
+                            helped text NOT NULL,
+                            PRIMARY KEY (id_comment))";
+                // Copy data from the faqcomments_PMF16x_old table
+                $query[] = 'INSERT INTO '.SQLPREFIX.'faqcomments
+                            (id_comment, id, usr, email, comment, datum, helped)
+                            SELECT id_comment, id, usr, email, comment, datum, helped
+                            FROM '.SQLPREFIX.'faqcomments_PMF16x_old';
+                $query[] = 'UPDATE '.SQLPREFIX.'faqcomments SET type = \'faq\'';
+                // Drop the faqcomments_PMF16x_old table
+                $query[] = 'DROP TABLE '.SQLPREFIX.'faqcomments_PMF16x_old';
             default:
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqcomments ADD type VARCHAR(10) NOT NULL AFTER id';
                 $query[] = 'UPDATE '.SQLPREFIX.'faqcomments SET type = \'faq\'';
@@ -699,7 +827,7 @@ if ($step == 5) {
                 break;
         }
 
-        // 8/13. Add the new/changed PMF 2.0.0 tables
+        // 8/13. Add the new/changed tables for PMF 2.0.0
         require_once($DB['type'].'.update.sql.php');
 
         // 9/13. Run the user migration and remove the faquser_PMF16x_old table
