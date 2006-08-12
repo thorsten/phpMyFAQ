@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.59 2006-08-10 20:05:42 thorstenr Exp $
+* $Id: installer.php,v 1.60 2006-08-12 14:19:54 thorstenr Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -35,8 +35,8 @@ require_once(PMF_ROOT_DIR.'/inc/functions.php');
 
 // permission levels
 $permLevels = array(
-    'basic',
-    'medium'
+    'basic'     => 'Basic (no group support)',
+    'medium'    => 'Medium (with group support)'
 );
 
 /**
@@ -426,10 +426,8 @@ if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POS
 <span class="text">Permission level:</span>
 <select class="input" name="permLevel" size="1">
 <?php
-foreach ($permLevels as $level) {
-?>
-    <option value="<?php print $level; ?>"><?php print ucwords($level); ?></option>
-<?php
+foreach ($permLevels as $level => $desc) {
+    printf('    <option value="%s">%s</option>', $level, $desc);
 }
 ?>
 </select>
