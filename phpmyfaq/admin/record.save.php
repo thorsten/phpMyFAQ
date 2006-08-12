@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.save.php,v 1.34 2006-08-07 21:31:40 matteo Exp $
+* $Id: record.save.php,v 1.35 2006-08-12 14:55:26 thorstenr Exp $
 *
 * Save or update a FAQ record
 *
@@ -42,7 +42,7 @@ if (    isset($submit[2])
     }
 ?>
     <h2><?php print $PMF_LANG["ad_entry_preview"]; ?></h2>
-    
+
     <h3><strong><em><?php print $categorylist; ?></em>
     <?php print $_REQUEST["thema"]; ?></strong></h3>
     <?php print $_REQUEST["content"]; ?>
@@ -79,7 +79,7 @@ if (    isset($submit[1])
     print "<h2>".$PMF_LANG["ad_entry_aor"]."</h2>\n";
     $query = sprintf("INSERT INTO %sfaqchanges (id, beitrag, usr, datum, what, lang) VALUES (%d, %d, '%s', %d, '%s', '%s')", SQLPREFIX, $db->nextID(SQLPREFIX."faqchanges", "id"), $_REQUEST["id"], $user->getUserData('display_name'), time(), nl2br($_REQUEST["changed"]), $_REQUEST["language"]);
     $db->query($query);
-    
+
     $thema     = $db->escape_string($_REQUEST["thema"]);
     $content   = $db->escape_string($_REQUEST["content"]);
     $keywords  = $db->escape_string($_REQUEST["keywords"]);
@@ -92,35 +92,35 @@ if (    isset($submit[1])
     if ('00000000000000' == $dateEnd) {
         $dateEnd = '99991231235959';
     }
-    $dateStart = ('' == $dateStart) ? '00000000000000' : $db->escape_string($dateStart),
-    $dateEnd   = ('' == $dateEnd)   ? '99991231235959' : $db->escape_string($dateEnd),
+    $dateStart = ('' == $dateStart) ? '00000000000000' : $db->escape_string($dateStart);
+    $dateEnd   = ('' == $dateEnd)   ? '99991231235959' : $db->escape_string($dateEnd);
 
     if (isset($_REQUEST["comment"]) && $_REQUEST["comment"] != "") {
         $comment = $_REQUEST["comment"];
     } else {
         $comment = "n";
     }
-    
+
     $datum = date("YmdHis");
     $rubrik = $_REQUEST["rubrik"];
-    
+
     $_result = $db->query("SELECT id, lang FROM ".SQLPREFIX."faqdata WHERE id = ".$_REQUEST["id"]." AND lang = '".$_REQUEST["language"]."'");
     $num = $db->num_rows($_result);
-    
+
     // save or update the FAQ record
     if ($num == "1") {
         $query = "UPDATE ".SQLPREFIX."faqdata SET thema = '".$thema."', content = '".$content."', keywords = '".$keywords."', author = '".$author."', active = '".$_REQUEST["active"]."', datum = '".$datum."',  date_start = '".$dateStart."', date_end = '".$dateEnd."', email = '".$db->escape_string($_REQUEST["email"])."', comment = '".$comment."' WHERE id = ".$_REQUEST["id"]." AND lang = '".$_REQUEST["language"]."'";
     } else {
         $query = "INSERT INTO ".SQLPREFIX."faqdata (id, lang, thema, content, keywords, author, active, datum, email, comment, date_start, date_end) VALUES (".$_REQUEST["id"].", '".$_REQUEST["language"]."', '".$thema."', '".$content."', '".$keywords."', '".$author."', '".$_REQUEST["active"]."', '".$datum."', '".$db->escape_string($_REQUEST["email"])."', '".$comment."', '".$dateStart.", '".$dateEnd.")";
     }
-    
+
     if ($db->query($query)) {
         print $PMF_LANG["ad_entry_savedsuc"];
         link_ondemand_javascript($_REQUEST["id"], $_REQUEST["language"]);
     } else {
         print $PMF_LANG["ad_entry_savedfail"].$db->error();
     }
-    
+
     // delete category relations
     $db->query("DELETE FROM ".SQLPREFIX."faqcategoryrelations WHERE record_id = ".$_REQUEST["id"]." and record_lang = '".$_REQUEST["language"]."';");
     // save or update the category relations
