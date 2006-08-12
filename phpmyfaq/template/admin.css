@@ -1,5 +1,5 @@
 /**
- * $Id: admin.css,v 1.22 2006-08-12 14:37:31 thorstenr Exp $
+ * $Id: admin.css,v 1.23 2006-08-12 15:08:49 thorstenr Exp $
  *
  * This is the CSS file for the admin section of phpMyFAQ 2.0.x
  * You don't need to change enything here but feel free to do it. :-)
@@ -50,6 +50,7 @@ ul {
     list-style: square;
 }
 fieldset {
+    width: 765px;
     margin-top: 15px;
     border: 1px solid #D0D9D9;
 }
@@ -98,6 +99,10 @@ input[type=checkbox].right, input[type=radio].right, input[type=submit].right {
 }
 form br {
     clear: both;
+}
+textarea#content {
+    width: 755px;
+    height: 400px;
 }
 
 #bodyText p {
