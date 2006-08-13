@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.47 2006-08-12 19:14:04 johannes Exp $
+* $Id: Faq.php,v 1.48 2006-08-13 18:11:54 thorstenr Exp $
 *
 * The main FAQ class
 *
@@ -851,7 +851,7 @@ class PMF_Faq
     function getTopTen()
     {
         $result = $this->getTopTenData(PMF_NUMBER_RECORDS_TOPTEN, 0, $this->language);
-        
+
         if (count($result) > 0) {
             $output = '<ol>';
             foreach ($result as $row) {
@@ -867,7 +867,7 @@ class PMF_Faq
         } else {
             $output = $this->pmf_lang['err_noTopTen'];
         }
-        
+
         return $output;
     }
 
@@ -884,7 +884,7 @@ class PMF_Faq
     function getLatest()
     {
         $result = $this->getLatestData(PMF_NUMBER_RECORDS_LATEST, $this->language);
-        
+
         if (count ($result) > 0) {
             $output = '<ol>';
             foreach ($result as $row) {
@@ -898,8 +898,39 @@ class PMF_Faq
         } else {
             $output = $this->pmf_lang["err_noArticles"];
         }
-        
+
         return $output;
+    }
+
+    /**
+     * Returns a question for the table faquestion
+     *
+     * @param   integer $question_id
+     * @return  string
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @since   2006-08-13
+     */
+    function getQuestion($question_id)
+    {
+        $question = '';
+        $query = sprintf('
+            SELECT
+                ask_content
+            FROM
+                %sfaqquestions
+            WHERE
+                id = %d',
+            SQLPREFIX,
+            $question_id);
+
+        $result = $this->db->query($query);
+        if ($this->db->num_rows($result) > 0) {
+            $row = $this->db->fetch_object($result);
+            $question = $row->ask_content;
+        }
+
+        return $question;
     }
 
     //
@@ -926,7 +957,7 @@ class PMF_Faq
     function getTopTenData($count = PMF_NUMBER_RECORDS_TOPTEN, $categoryId = 0, $language = null)
     {
         global $sids, $PMF_CONF;
-        
+
         $now = date('YmdHis');
         $query =
 '            SELECT

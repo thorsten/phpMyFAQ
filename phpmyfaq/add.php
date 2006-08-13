@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: add.php,v 1.13 2006-08-13 17:50:03 matteo Exp $
+* $Id: add.php,v 1.14 2006-08-13 18:11:54 thorstenr Exp $
 *
 * This is the page there a user can add a FAQ record.
 *
@@ -36,11 +36,9 @@ Tracking('new_entry', 0);
 $question = '';
 $readonly = '';
 if (isset($_GET['question']) && is_numeric($_GET['question'])) {
-    $query = "SELECT ask_content FROM ".SQLPREFIX."faqquestions WHERE id = ".$_GET['question'];
-    $result = $db->query($query);
-    if (1 == $db->num_rows($result)) {
-        $row = $db->fetch_object($result);
-        $question = $row->ask_content;
+    $question_id = (int)$_GET['question'];
+    $question = $faq->getQuestion($question_id);
+    if (strlen($question)) {
         $readonly = ' readonly="readonly"';
     }
 }
@@ -74,4 +72,3 @@ $tpl->processTemplate('writeContent', array(
     'msgNewContentSubmit'   => $PMF_LANG['msgNewContentSubmit']));
 
 $tpl->includeTemplate('writeContent', 'index');
-?>
