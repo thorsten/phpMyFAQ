@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: pdf.php,v 1.22 2006-08-12 19:02:16 johannes Exp $
+* $Id: pdf.php,v 1.23 2006-08-13 18:20:01 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Peter Beauvain <pbeauvain@web.de>
@@ -24,6 +24,7 @@
 require_once('inc/Init.php');
 PMF_Init::cleanRequest();
 require_once('inc/Category.php');
+require_once('inc/Faq.php');
 require_once('inc/PMF_Export/Pdf.php');
 
 $tree = new PMF_Category;
@@ -61,41 +62,28 @@ if ($error) {
     exit();
 }
 
-$result = $db->query("SELECT id, lang, solution_id, thema, content, datum, author FROM ".SQLPREFIX."faqdata WHERE id = ".$id." AND lang = '".$lang."' AND active = 'yes'");
-if ($db->num_rows($result) > 0) {
-    while ($row = $db->fetch_object($result)) {
-        $lang = $row->lang;
-        $solution_id = $row->solution_id;
-        $thema = $row->thema;
-        $content = $row->content;
-        $date = $row->datum;
-        $author = $row->author;
-    }
-} else {
-    print "Error!";
-    exit();
-}
+$faq = new PMF_Faq($db, $LANGCODE);
+$faq->getRecord($id);
 
-$pdf = new PDF($currentCategory, $thema, $tree->categoryName, $orientation = "P", $unit = "mm", $format = "A4");
+$pdf = new PDF($currentCategory, $faq->faqRecord['title'], $tree->categoryName, $orientation = "P", $unit = "mm", $format = "A4");
 $pdf->Open();
 $pdf->SetAutoPageBreak(true, 2*(40/$pdf->k));
-$pdf->SetTitle($thema);
+$pdf->SetTitle($faq->faqRecord['title']);
 $pdf->SetCreator($PMF_CONF["title"]." - powered by phpMyFAQ ".$PMF_CONF["version"]);
 $pdf->AliasNbPages();
 $pdf->AddPage();
 $pdf->SetFont("Arial", "", 12);
 $pdf->SetDisplayMode("real");
-$pdf->WriteHTML(str_replace("../", "", $content));
+$pdf->WriteHTML(str_replace("../", "", $faq->faqRecord['content']));
 $pdf->Ln();
 $pdf->Ln();
 $pdf->SetStyle('I', true);
-$pdf->Write(5, unhtmlentities($PMF_LANG['ad_entry_solution_id']).': #'.$solution_id);
-$pdf->SetAuthor($author);
+$pdf->Write(5, unhtmlentities($PMF_LANG['ad_entry_solution_id']).': #'.$faq->faqRecord['solution_id']);
+$pdf->SetAuthor($faq->faqRecord['author']);
 $pdf->Ln();
-$pdf->Write(5, unhtmlentities($PMF_LANG["msgAuthor"]).$author);
-$pdf->SetAuthor($author);
+$pdf->Write(5, unhtmlentities($PMF_LANG["msgAuthor"]).$faq->faqRecord['author']);
 $pdf->Ln();
-$pdf->Write(5, unhtmlentities($PMF_LANG["msgLastUpdateArticle"]).makeDate($date));
+$pdf->Write(5, unhtmlentities($PMF_LANG["msgLastUpdateArticle"]).makeDate($faq->faqRecord['date']));
 $pdf->SetStyle('I', false);
 
 $pdfFile = "pdf/".$id.".pdf";
