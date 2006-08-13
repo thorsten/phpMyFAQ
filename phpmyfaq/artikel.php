@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.42 2006-07-30 07:47:09 thorstenr Exp $
+* $Id: artikel.php,v 1.43 2006-08-13 15:57:23 matteo Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -92,6 +92,38 @@ if (isset($_GET['highlight']) && $_GET['highlight'] != "/" && $_GET['highlight']
                     );
     }
 }
+
+// Hack: Apply the new SEO schema to those HTML anchors to
+//       other faq records added with PMF 1.x WYSIWYG Editor:
+//         href="index.php?action=artikel&cat=NNN&id=MMM&artlang=XYZ"
+// Search for href attribute links
+require_once('inc/Linkverifier.php');
+$oLnk = new PMF_Linkverifier();
+// Extract URLs from content
+$oLnk->resetPool();
+$oLnk->parse_string($content);
+$fixedContent = $content;
+// Search for href attributes only
+if (isset($oLnk->urlpool['href'])) {
+    foreach ($oLnk->urlpool['href'] as $_url) {
+        if (!(strpos($_url, 'index.php?action=artikel') === false)) {
+            // Get the Faq link title
+            preg_match('/id=([\d]+)/ism', $_url, $matches);
+            $_id   = $matches[1];
+            preg_match('/artlang=([a-z\-]+)$/ism', $_url, $matches);
+            $_lang = $matches[1];
+            $_title = $faq->getRecordTitle($_id, $_lang);
+            // Move the link to XHTML
+            $_link = str_replace('&', '&amp;', substr($_url, 9));
+            $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().$_link);
+            $oLink->itemTitle = $_title;
+            $oLink->tooltip = PMF_htmlentities($_title, ENT_NOQUOTES, $PMF_LANG['metaCharset']);
+            $newFaqPath = $oLink->toString();
+            $fixedContent = str_replace($_url, $newFaqPath, $fixedContent);
+        }
+    }
+}
+$content = $fixedContent;
 
 $arrLanguage = check4Language($id);
 $switchLanguage = "";
