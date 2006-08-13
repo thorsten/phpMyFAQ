@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.63 2006-07-12 16:48:14 matteo Exp $
+* $Id: index.php,v 1.64 2006-08-13 17:50:02 matteo Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the
@@ -235,7 +235,11 @@ $tree->collapseAll();
 if ($cat != 0) {
     $tree->expandTo($cat);
 }
-if (isset($cat) && $cat != 0 && $id == '') {
+if (   isset($cat)
+    && ($cat != 0)
+    && ($id == '')
+    && isset($tree->categoryName[$cat]['name'])
+    ) {
     $title = ' - '.$tree->categoryName[$cat]['name'];
 }
 

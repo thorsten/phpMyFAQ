@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: add.php,v 1.12 2006-07-02 12:45:43 thorstenr Exp $
+* $Id: add.php,v 1.13 2006-08-13 17:50:03 matteo Exp $
 *
 * This is the page there a user can add a FAQ record.
 *
@@ -33,12 +33,16 @@ if (isset($_GET['gen'])) {
 
 Tracking('new_entry', 0);
 
-if (isset($_GET['question'])) {
-    $question = strip_tags($_GET['question']);
-    $readonly = ' readonly="readonly"';
-} else {
-    $question = '';
-    $readonly = '';
+$question = '';
+$readonly = '';
+if (isset($_GET['question']) && is_numeric($_GET['question'])) {
+    $query = "SELECT ask_content FROM ".SQLPREFIX."faqquestions WHERE id = ".$_GET['question'];
+    $result = $db->query($query);
+    if (1 == $db->num_rows($result)) {
+        $row = $db->fetch_object($result);
+        $question = $row->ask_content;
+        $readonly = ' readonly="readonly"';
+    }
 }
 
 if (isset($_GET['cat']) && is_numeric($_GET['cat'])) {

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.132 2006-08-09 21:39:06 matteo Exp $
+* $Id: functions.php,v 1.133 2006-08-13 17:50:03 matteo Exp $
 *
 * This is the main functions file!
 *
@@ -1557,7 +1557,7 @@ function printOpenQuestions()
             $output .= "\t<tr class=\"openquestions\">\n";
             $output .= "\t\t<td valign=\"top\" nowrap=\"nowrap\">".makeDate($row->ask_date)."<br /><a href=\"mailto:".safeEmail($row->ask_usermail)."\">".$row->ask_username."</a></td>\n";
             $output .= "\t\t<td valign=\"top\"><strong>".$tree->categoryName[$row->ask_rubrik]['name'].":</strong><br />".strip_tags($row->ask_content)."</td>\n";
-            $output .= "\t\t<td valign=\"top\"><a href=\"".$_SERVER['PHP_SELF']."?".$sids."action=add&amp;question=".rawurlencode($row->ask_content)."&amp;cat=".$row->ask_rubrik."\">".$PMF_LANG['msg2answer']."</a></td>\n";
+            $output .= "\t\t<td valign=\"top\"><a href=\"".$_SERVER['PHP_SELF']."?".$sids."action=add&amp;question=".$row->id."&amp;cat=".$row->ask_rubrik."\">".$PMF_LANG['msg2answer']."</a></td>\n";
             $output .= "\t</tr>\n";
         }
     } else {
