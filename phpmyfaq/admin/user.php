@@ -1,18 +1,18 @@
 <?php
 /**
-* $Id: user.php,v 1.24 2006-07-30 06:38:52 matteo Exp $
+* $Id: user.php,v 1.25 2006-08-14 16:33:04 thorstenr Exp $
 *
 * Displays the user managment frontend
 *
 * @author       Lars Tiedemann <php@larstiedemann.de>
 * @since        2005-12-15
 * @copyright    (c) 2006 phpMyFAQ Team
-* 
+*
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
 * compliance with the License. You may obtain a copy of the License at
 * http://www.mozilla.org/MPL/
-* 
+*
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
@@ -36,52 +36,52 @@ $defaultUserAction = 'list';
 $defaultUserStatus = 'active';
 $loginMinLength = 4;
 $loginInvalidRegExp = '/(^[^a-z]{1}|[\W])/i';
+
 $errorMessages = array(
-    'addUser_password' => $PMF_LANG['ad_user_error_password'], //"Please enter a password. ",
-    'addUser_passwordsDontMatch' => $PMF_LANG['ad_user_error_passwordsDontMatch'], //"Passwords do not match. ",
-    'addUser_loginExists' => $PMF_LANG["ad_adus_exerr"], //"Username <strong>exists</strong> already.",
-    'addUser_loginInvalid' => $PMF_LANG['ad_user_error_loginInvalid'], //"The specified user name is invalid.",
-    'addUser_noEmail' => $PMF_LANG['ad_user_error_noEmail'], //"Please enter a valid mail adress. ",
-    'addUser_noRealName' => $PMF_LANG['ad_user_error_noRealName'], //"Please enter your real name. ",
-    'delUser' => $PMF_LANG['ad_user_error_delete'], //"User account could not be deleted. ",
-    'delUser_noId' => $PMF_LANG['ad_user_error_noId'], //"No User-ID specified. ",
-    'delUser_protectedAccount' => $PMF_LANG['ad_user_error_protectedAccount'], //"User account is protected. ",
-    'updateUser' => $PMF_LANG['ad_msg_mysqlerr'], //"Due to a <strong>database error</strong>, the profile could not be saved."
-    'updateUser_noId' => $PMF_LANG['ad_user_error_noId'], //"No User-ID specified. ",
-    'updateRights' => $PMF_LANG['ad_msg_mysqlerr'], //"Due to a <strong>database error</strong>, the profile could not be saved."
-    'updateRights_noId' => $PMF_LANG['ad_user_error_noId'], //"No User-ID  specified. ",
-);
+    'addUser_password'              => $PMF_LANG['ad_user_error_password'],
+    'addUser_passwordsDontMatch'    => $PMF_LANG['ad_user_error_passwordsDontMatch'],
+    'addUser_loginExists'           => $PMF_LANG["ad_adus_exerr"],
+    'addUser_loginInvalid'          => $PMF_LANG['ad_user_error_loginInvalid'],
+    'addUser_noEmail'               => $PMF_LANG['ad_user_error_noEmail'],
+    'addUser_noRealName'            => $PMF_LANG['ad_user_error_noRealName'],
+    'delUser'                       => $PMF_LANG['ad_user_error_delete'],
+    'delUser_noId'                  => $PMF_LANG['ad_user_error_noId'],
+    'delUser_protectedAccount'      => $PMF_LANG['ad_user_error_protectedAccount'],
+    'updateUser'                    => $PMF_LANG['ad_msg_mysqlerr'],
+    'updateUser_noId'               => $PMF_LANG['ad_user_error_noId'],
+    'updateRights'                  => $PMF_LANG['ad_msg_mysqlerr'],
+    'updateRights_noId'             => $PMF_LANG['ad_user_error_noId']);
+
 $successMessages = array(
-    'addUser' => $PMF_LANG["ad_adus_suc"], //"User <strong>successfully</strong> added.",
-    'delUser' => $PMF_LANG["ad_user_deleted"], //"The user was successfully deleted.",
-    'updateUser' => $PMF_LANG['ad_msg_savedsuc_1'].' <strong>%s</strong> '.$PMF_LANG['ad_msg_savedsuc_2'],
-    'updateRights' => $PMF_LANG['ad_msg_savedsuc_1'].' <strong>%s</strong> '.$PMF_LANG['ad_msg_savedsuc_2'],
-);
+    'addUser'                       => $PMF_LANG["ad_adus_suc"],
+    'delUser'                       => $PMF_LANG["ad_user_deleted"],
+    'updateUser'                    => $PMF_LANG['ad_msg_savedsuc_1'].' <strong>%s</strong> '.$PMF_LANG['ad_msg_savedsuc_2'],
+    'updateRights'                  => $PMF_LANG['ad_msg_savedsuc_1'].' <strong>%s</strong> '.$PMF_LANG['ad_msg_savedsuc_2']);
+
 $text = array(
-    'header' => $PMF_LANG['ad_user'], // "User Administration"
-    'selectUser' => $PMF_LANG["ad_user_username"], // "Registered users"
-    'addUser' => $PMF_LANG["ad_adus_adduser"], // "add User"
-    'addUser_confirm' => $PMF_LANG["ad_gen_save"], //"Save",
-    'addUser_cancel' => $PMF_LANG['ad_gen_cancel'], //"Cancel",
-    'addUser_link' => $PMF_LANG["ad_user_add"], // "Add User"
-    'addUser_name' => $PMF_LANG["ad_adus_name"], // "Name: "
-    'addUser_displayName' => $PMF_LANG["ad_user_realname"], // "real name:"
-    'addUser_email' => $PMF_LANG["ad_entry_email"], // "email adress:"
-    'addUser_password' => $PMF_LANG["ad_adus_password"], // Password:
-    'addUser_password2' => $PMF_LANG["ad_passwd_con"], // Confirm:
-    'delUser' => $PMF_LANG['ad_user_deleteUser'], //"Delete User",
-    'delUser_button' => $PMF_LANG['ad_gen_delete'], //"Delete",
-    'delUser_question' => $PMF_LANG["ad_user_del_3"]." ".$PMF_LANG["ad_user_del_1"]." ".$PMF_LANG["ad_user_del_2"], //"Are you sure?"."The User"."shall be deleted?",
-    'delUser_confirm' => $PMF_LANG["ad_gen_yes"], //"Yes",
-    'delUser_cancel' => $PMF_LANG["ad_gen_no"], //"No",
-    'changeUser' => $PMF_LANG["ad_user_profou"], // "Profile of the User"
-    'changeUser_submit' => $PMF_LANG["ad_gen_save"], //"Save",
-    'changeUser_status' => $PMF_LANG['ad_user_status'], //"Status:",
-    'changeRights' => $PMF_LANG["ad_user_rights"], // "Rights"
-    'changeRights_submit' => $PMF_LANG["ad_gen_save"], //"Save",
-    'changeRights_checkAll' => $PMF_LANG['ad_user_checkall'], //"Select All",
-    'changeRights_uncheckAll' => $PMF_LANG['ad_user_uncheckall'], //"Unselect All",
-);
+    'header'                        => $PMF_LANG['ad_user'],
+    'selectUser'                    => $PMF_LANG["ad_user_username"],
+    'addUser'                       => $PMF_LANG["ad_adus_adduser"],
+    'addUser_confirm'               => $PMF_LANG["ad_gen_save"],
+    'addUser_cancel'                => $PMF_LANG['ad_gen_cancel'],
+    'addUser_link'                  => $PMF_LANG["ad_user_add"],
+    'addUser_name'                  => $PMF_LANG["ad_adus_name"],
+    'addUser_displayName'           => $PMF_LANG["ad_user_realname"],
+    'addUser_email'                 => $PMF_LANG["ad_entry_email"],
+    'addUser_password'              => $PMF_LANG["ad_adus_password"],
+    'addUser_password2'             => $PMF_LANG["ad_passwd_con"],
+    'delUser'                       => $PMF_LANG['ad_user_deleteUser'],
+    'delUser_button'                => $PMF_LANG['ad_gen_delete'],
+    'delUser_question'              => $PMF_LANG["ad_user_del_3"]." ".$PMF_LANG["ad_user_del_1"]." ".$PMF_LANG["ad_user_del_2"],
+    'delUser_confirm'               => $PMF_LANG["ad_gen_yes"],
+    'delUser_cancel'                => $PMF_LANG["ad_gen_no"],
+    'changeUser'                    => $PMF_LANG["ad_user_profou"],
+    'changeUser_submit'             => $PMF_LANG["ad_gen_save"],
+    'changeUser_status'             => $PMF_LANG['ad_user_status'],
+    'changeRights'                  => $PMF_LANG["ad_user_rights"],
+    'changeRights_submit'           => $PMF_LANG["ad_gen_save"],
+    'changeRights_checkAll'         => $PMF_LANG['ad_user_checkall'],
+    'changeRights_uncheckAll'       => $PMF_LANG['ad_user_uncheckall']);
 
 // what shall we do?
 // actions defined by url: user_action=
@@ -193,7 +193,7 @@ if ($userAction == 'delete') {
             $message .= '<p>ERROR: '.$userError.'</p>';
         }
     }
-    
+
 } // end if ($userAction == 'delete')
 // save new user
 if ($userAction == 'addsave') {
@@ -277,31 +277,23 @@ if ($userAction == 'add') {
     <fieldset>
         <legend><?php print $text['addUser']; ?></legend>
         <form name="user_create" action="<?php print $_SERVER['PHP_SELF']; ?>?action=user&amp;user_action=addsave" method="post">
-            <div class="input_row">
-                <label for="user_name"><?php print $text['addUser_name']; ?></label>
-                <input type="text" name="user_name" value="<?php print (isset($user_name) ? $user_name : ''); ?>" tabindex="1" />
-            </div>
-            <div class="input_row">
-                <label for="user_realname"><?php print $text['addUser_displayName']; ?></label>
-                <input type="text" name="user_realname" value="<?php print (isset($user_realname) ? $user_realname : ''); ?>" tabindex="2" />
-            </div>
-            <div class="input_row">
-                <label for="user_email"><?php print $text['addUser_email']; ?></label>
-                <input type="text" name="user_email" value="<?php print (isset($user_email) ? $user_email : ''); ?>" tabindex="3" />
-            </div>
-            <div class="input_row">
-                <label for="password"><?php print $text['addUser_password']; ?></label>
-                <input type="password" name="user_password" value="<?php print (isset($user_password) ? $user_password : ''); ?>" tabindex="4" />
-            </div>
-            <div class="input_row">
-                <label for="password_confirm"><?php print $text['addUser_password2']; ?></label>
-                <input type="password" name="user_password_confirm" value="<?php print (isset($user_password_confirm) ? $user_password_confirm : ''); ?>" tabindex="5" />
-            </div>
-            <div class="button_row">
-                <input class="submit" type="submit" value="<?php print $text['addUser_confirm']; ?>" tabindex="6" />
-                <input class="reset" name="cancel" type="submit" value="<?php print $text['addUser_cancel']; ?>" tabindex="7" />
-            </div>
-            <div class="clear"></div>
+            <label for="user_name"><?php print $text['addUser_name']; ?></label>
+            <input type="text" name="user_name" value="<?php print (isset($user_name) ? $user_name : ''); ?>" tabindex="1" /><br />
+
+            <label for="user_realname"><?php print $text['addUser_displayName']; ?></label>
+            <input type="text" name="user_realname" value="<?php print (isset($user_realname) ? $user_realname : ''); ?>" tabindex="2" /><br />
+
+            <label for="user_email"><?php print $text['addUser_email']; ?></label>
+            <input type="text" name="user_email" value="<?php print (isset($user_email) ? $user_email : ''); ?>" tabindex="3" /><br />
+
+            <label for="password"><?php print $text['addUser_password']; ?></label>
+            <input type="password" name="user_password" value="<?php print (isset($user_password) ? $user_password : ''); ?>" tabindex="4" /><br />
+
+            <label for="password_confirm"><?php print $text['addUser_password2']; ?></label>
+            <input type="password" name="user_password_confirm" value="<?php print (isset($user_password_confirm) ? $user_password_confirm : ''); ?>" tabindex="5" /><br />
+
+            <input class="submit" type="submit" value="<?php print $text['addUser_confirm']; ?>" tabindex="6" />
+            <input class="reset" name="cancel" type="submit" value="<?php print $text['addUser_cancel']; ?>" tabindex="7" /><br />
         </form>
     </fieldset>
 </div> <!-- end #user_create -->
