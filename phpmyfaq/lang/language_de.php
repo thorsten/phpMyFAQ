@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.21 2006-08-14 19:02:36 thorstenr Exp $
+ * $Id: language_de.php,v 1.22 2006-08-14 19:40:23 thorstenr Exp $
  *
  * German language file
  *
@@ -704,9 +704,9 @@ $PMF_LANG['ad_user_deleteUser'] = "Lösche Benutzer";
 $PMF_LANG['ad_user_status'] = "Status:";
 $PMF_LANG['ad_user_lastModified'] = "Letzte Änderung:";
 $PMF_LANG['ad_gen_cancel'] = "Abbrechen";
-$PMF_LANG["rightsLanguage"]['addglossary'] = "add glossary item";
-$PMF_LANG["rightsLanguage"]['editglossary'] = "edit glossary item";
-$PMF_LANG["rightsLanguage"]['delglossary'] = "delete glossary item";
+$PMF_LANG["rightsLanguage"]['addglossary'] = "Wörterbucheinträge hinzufügen";
+$PMF_LANG["rightsLanguage"]['editglossary'] = "Wörterbucheinträge bearbeiten";
+$PMF_LANG["rightsLanguage"]['delglossary'] = "Wörterbucheinträge löschen";
 $PMF_LANG["ad_menu_group_administration"] = "Gruppenverwaltung";
 $PMF_LANG['ad_user_loggedin'] = 'Sie sind eingeloggt als ';
 $PMF_LANG['ad_group_details'] = "Details der Gruppe";
@@ -714,7 +714,7 @@ $PMF_LANG['ad_group_add'] = "Gruppe hinzufügen";
 $PMF_LANG['ad_group_add_link'] = "Gruppe hinzufügen";
 $PMF_LANG['ad_group_name'] = "Name:";
 $PMF_LANG['ad_group_description'] = "Beschreibung:";
-$PMF_LANG['ad_group_autoJoin'] = "Auto-join:";
+$PMF_LANG['ad_group_autoJoin'] = "Automatischer Eintritt:";
 $PMF_LANG['ad_group_suc'] = "Die Gruppe wurde <strong>erfolgreich</strong> hinzugefügt.";
 $PMF_LANG['ad_group_error_noName'] = "Bitte geben Sie einen Namen für die Gruppe ein.";
 $PMF_LANG['ad_group_error_delete'] = "Die Gruppe konnte nicht gelöscht werden.";
