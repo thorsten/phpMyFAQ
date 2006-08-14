@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Mysqli.php,v 1.7 2006-06-29 20:52:47 matteo Exp $
+* $Id: Mysqli.php,v 1.8 2006-08-14 16:20:02 thorstenr Exp $
 *
 * db_mysqli
 *
@@ -317,7 +317,7 @@ class db_mysqli
      */
     public function error()
     {
-        return $this->conn->error();
+        return $this->conn->error;
     }
 
     /**
