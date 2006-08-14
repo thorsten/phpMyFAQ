@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_fr.php,v 1.13 2006-08-13 17:13:24 thorstenr Exp $
+* $Id: language_fr.php,v 1.14 2006-08-14 21:41:42 thorstenr Exp $
 *
 * The French language file - try to be the best
 *
@@ -572,7 +572,7 @@ $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Nombre de topics affich
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Nombre de nouveaux articles");
 $LANG_CONF["bannedIP"] = array(0 => "area", 1 => "Bannir ces adresses IP");
 $LANG_CONF["parse_php"] = array(0 => "checkbox", 1 => "Le moteur de template, devrait-il parser le code PHP&nbsp;? (d&eacute;fault&nbsp;: d&eacute;sactiv&eacute;)");
-$LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Activ&eacute; le support du mod_rewrite&nbsp;? (d&eacute;fault&nbsp;: d&eacute;sactiv&eacute;)");
+$LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Activer le support du mod_rewrite&nbsp;? (d&eacute;fault&nbsp;: d&eacute;sactiv&eacute;)");
 $LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "Voulez vous activer le support de LDAP&nbsp;? (d&eacute;fault&nbsp;: d&eacute;sactiv&eacute;)");
 
 $PMF_LANG['ad_categ_new_main_cat'] = 'comme cat&eacute;gorie principale';
