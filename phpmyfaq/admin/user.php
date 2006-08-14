@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: user.php,v 1.25 2006-08-14 16:33:04 thorstenr Exp $
+* $Id: user.php,v 1.26 2006-08-14 17:09:25 thorstenr Exp $
 *
 * Displays the user managment frontend
 *
@@ -219,7 +219,7 @@ if ($userAction == 'addsave') {
         $messages[] = $errorMessages['addUser_passwordsDontMatch'];
     }
     // check e-mail.
-    if (checkEmail($user_email)) {
+    if (!checkEmail($user_email)) {
         $user_email = "";
         $messages[] = $errorMessages['addUser_noEmail'];
     }
