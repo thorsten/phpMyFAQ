@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.65 2006-08-12 15:57:53 matteo Exp $
+* $Id: update.php,v 1.66 2006-08-14 15:23:24 matteo Exp $
 *
 * Main update script
 *
@@ -848,7 +848,28 @@ if ($step == 5) {
                             SET session_timestamp = 0';
                 $query[] = 'UPDATE '.SQLPREFIX.'faquser
                             SET ip = \'127.0.0.1\'';
-                // TODO: fix last_login and member_since fields using the adminlog table
+                // Evaluate last_login and member_since fields using the faqadminlog table
+                $_result = $db->query('SELECT usr FROM '.SQLPREFIX.'faqadminlog GROUP BY usr');
+                while ($row = $db->fetch_object($_result)) {
+                    $_loginData[$row->usr] = array('last_login' => null, 'member_since' => null);
+                }
+                foreach ($_loginData as $_key => $_value) {
+                    $_result = $db->query('SELECT MIN(time) AS member_since, MAX(time) AS last_login FROM '.SQLPREFIX.'faqadminlog WHERE usr = '.$_key);
+                    while ($row = $db->fetch_object($_result)) {
+                        $_loginData[$_key]['last_login'] = $row->last_login;
+                        $_loginData[$_key]['member_since'] = $row->member_since;
+                    }
+                }
+                $_result = $db->query('SELECT id FROM '.SQLPREFIX.'faquser ORDER BY id');
+                while ($row = $db->fetch_object($_result)) {
+                    if (isset($_loginData[$row->id])) {
+                        $query[] = "UPDATE ".SQLPREFIX."faquser
+                                    SET
+                                        last_login = '".date('Y-m-d H:i:s', $_loginData[$row->id]['last_login'])."',
+                                        member_since = '".date('Y-m-d H:i:s', $_loginData[$row->id]['member_since'])."'
+                                    WHERE user_id = ".$row->id;
+                    }
+                }
                 // Populate faquserdata table
                 $query[] = 'INSERT INTO '.SQLPREFIX.'faquserdata
                             (user_id, display_name, email)
@@ -879,7 +900,7 @@ if ($step == 5) {
                         if ('1' == substr($userStringRights, $i, 1)) {
                             $query[] = 'INSERT INTO '.SQLPREFIX.'faquser_right
                                         (user_id, right_id)
-                                        VALUES ('.$_r['id'].','.($i+1).')';
+                                        VALUES ('.$_r['id'].', '.($i+1).')';
                         }
                     }
                 }
@@ -1024,13 +1045,14 @@ if ($step == 5) {
         } else {
             print "<p class=\"center\">Please delete the file 'inc/config.php' manually.</p>\n";
         }
+        @chmod(PMF_ROOT_DIR."/inc/config.php.original", 0666);
         if (@unlink(PMF_ROOT_DIR."/inc/config.php.original")) {
             print "<p class=\"center\">The file 'inc/config.php.original' was deleted automatically.</p>\n";
         } else {
             print "<p class=\"center\">Please delete the file 'inc/config.php.original' manually.</p>\n";
         }
     }
-
+    
     // Remove 'scripts' folder: no need of prompt anything to the user
     if (@is_dir(PMF_ROOT_DIR."/scripts")) {
         @rmdir(PMF_ROOT_DIR."/scripts");
