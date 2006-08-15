@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: category.edit.php,v 1.12 2006-08-15 08:14:37 matteo Exp $
+* $Id: category.edit.php,v 1.13 2006-08-15 15:39:24 thorstenr Exp $
 *
 * Edits a category
 *
@@ -25,7 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 }
 
 if ($permission["editcateg"]) {
-    $cat = new PMF_Category;
+    $cat = new PMF_Category($LANGCODE);
     $categories = $cat->getAllCategories();
     $id = $_GET["cat"];
     print "<h2>".$PMF_LANG["ad_categ_edit_1"]." <em>".$categories[$id]["name"]."</em> ".$PMF_LANG["ad_categ_edit_2"]."</h2>";
@@ -36,6 +36,7 @@ if ($permission["editcateg"]) {
 
         <input type="hidden" name="action" value="updatecategory" />
         <input type="hidden" name="cat" value="<?php print $id; ?>" />
+        <input type="hidden" name="parent_id" value="<?php print $categories[$id]["parent_id"]; ?>" />
 
         <label class="left"><?php print $PMF_LANG["ad_categ_titel"]; ?>:</label>
         <input type="text" name="name" size="30" style="width: 250px;" value="<?php print $categories[$id]["name"]; ?>" /><br />

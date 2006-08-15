@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: category.move.php,v 1.7 2006-07-29 19:23:45 thorstenr Exp $
+* $Id: category.move.php,v 1.8 2006-08-15 15:39:24 thorstenr Exp $
 *
 * Select a category to move
 *
@@ -27,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 if ($permission["editcateg"]) {
     $id = $_GET['cat'];
     $parent_id = $_GET['parent_id'];
-    $cat = new PMF_Category;
+    $cat = new PMF_Category($LANGCODE);
     $categories = $cat->getAllCategories();
     unset($cat->categories);
     $cat->getCategories($parent_id, false);
