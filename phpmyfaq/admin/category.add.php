@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: category.add.php,v 1.11 2006-08-15 06:30:25 thorstenr Exp $
+* $Id: category.add.php,v 1.12 2006-08-15 06:51:24 thorstenr Exp $
 *
 * Adds a category
 *
@@ -57,20 +57,9 @@ if ($permission["addcateg"]) {
     <label class="left"><?php print $PMF_LANG["ad_categ_desc"]; ?>:</label>
     <input type="text" name="description" size="30" style="width: 250px;" /><br />
 
-    <label class="left">User-ID:</label>
+    <label class="left"><?php print $PMF_LANG["ad_categ_owner"]; ?>:</label>
     <select name="user_id" size="1">
-<?php
-    $allUsers = $user->getAllUsers();
-    foreach ($allUsers as $user_id) {
-        if (-1 != $user_id) {
-            $user->getUserById($user_id);
-            printf('<option value="%d"%s>%s</option>',
-                $user_id,
-                ((1 == $user_id) ? 'selected="selected"' : ''),
-                $user->getUserData('display_name'));
-        }
-    }
-?>
+    <?php print $user->getAllUserOptions(1); ?>
     </select><br />
 
     <input class="submit" style="margin-left: 190px;" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_add"]; ?>" />

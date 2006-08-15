@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: category.edit.php,v 1.10 2006-07-29 19:23:45 thorstenr Exp $
+* $Id: category.edit.php,v 1.11 2006-08-15 06:51:24 thorstenr Exp $
 *
 * Edits a category
 *
@@ -33,22 +33,27 @@ if ($permission["editcateg"]) {
 	<form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>" method="post">
 	<fieldset>
 	<legend><?php print $PMF_LANG["ad_categ_edit_1"]." <em>".$categories[$id]["name"]."</em> ".$PMF_LANG["ad_categ_edit_2"]; ?></legend>
-	<input type="hidden" name="action" value="updatecategory" />
-	<input type="hidden" name="cat" value="<?php print $id; ?>" />
-	<div class="row"><span class="label"><strong><?php print $PMF_LANG["ad_categ_titel"]; ?>:</strong></span>
-    <input class="admin" type="text" name="name" size="30" style="width: 250px;" value="<?php print $categories[$id]["name"]; ?>" /></div>
-    <div class="row"><span class="label"><strong><?php print $PMF_LANG["ad_categ_lang"]; ?>:</strong></span>
-    <select name="lang" size="1">
-    <?php print languageOptions($categories[$id]["lang"]); ?>
-    </select></div>
-    <div class="row"><span class="label"><strong><?php print $PMF_LANG["ad_categ_desc"]; ?>:</strong></span>
-    <input class="admin" type="text" name="description" size="30" style="width: 250px;" value="<?php print $categories[$id]["description"]; ?>" /></div>
-    <div class="row"><span class="label"><strong><?php print $PMF_LANG["ad_categ_owner"]; ?>:</strong></span>
-    <select name="cat_owner" size="1">
-		<?php print userOptions($categories[$id]["user_id"]); ?>
-    </select></div>
-    <div class="row"><span class="label"><strong>&nbsp;</strong></span>
-    <input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_updatecateg"]; ?>" /></div>
+
+        <input type="hidden" name="action" value="updatecategory" />
+        <input type="hidden" name="cat" value="<?php print $id; ?>" />
+
+        <label class="left"><?php print $PMF_LANG["ad_categ_titel"]; ?>:</label>
+        <input type="text" name="name" size="30" style="width: 250px;" value="<?php print $categories[$id]["name"]; ?>" /><br />
+
+        <label class="left"><?php print $PMF_LANG["ad_categ_lang"]; ?>:</label>
+        <select name="lang" size="1">
+        <?php print languageOptions($categories[$id]["lang"]); ?>
+        </select><br />
+
+        <label class="left"><?php print $PMF_LANG["ad_categ_desc"]; ?>:</label>
+        <input type="text" name="description" size="30" style="width: 250px;" value="<?php print $categories[$id]["description"]; ?>" /><br />
+
+        <label class="left"><?php print $PMF_LANG["ad_categ_owner"]; ?>:</label>
+        <select name="cat_owner" size="1">
+		<?php print $user->getAllUserOptions($categories[$id]["user_id"]); ?>
+        </select><br />
+
+        <input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_updatecateg"]; ?>" /></div>
     </fieldset>
 	</form>
 <?php
