@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: linkconfig.main.php,v 1.6 2006-08-15 10:20:59 matteo Exp $
+* $Id: linkconfig.main.php,v 1.7 2006-08-15 12:13:02 matteo Exp $
 *
 * LinkVerifier configuration
 *
@@ -152,8 +152,8 @@ function addVerifyRule($type = '', $url = '', $reason = '') {
                     $db->escape_string($url),
                     $db->escape_string($reason),
                     $db->escape_string($user->getLogin()),
-                    $db->escape_string(date('Y-m-d H:m:s')),
-                    $db->escape_string(date('Y-m-d H:m:s'))
+                    $db->escape_string(date('YmdHis')),
+                    $db->escape_string(date('YmdHis'))
                     );
         $db->query($query);
     }
@@ -178,7 +178,14 @@ showListTypeSelection();
         for ($i = 0; $i < $_POST['rowcount']; $i++) {
             // load form posts
             $posts = array();
-            foreach (array('id' => false, 'url' => '', 'reason' => '', 'enabled' => 'n', 'locked' => 'n', 'chown' => 'n', 'delete' => 'n') as $_key => $_default) {
+            foreach (array( 'id'        => false,
+                            'url'       => '',
+                            'reason'    => '',
+                            'enabled'   => 'n',
+                            'locked'    => 'n',
+                            'chown'     => 'n',
+                            'delete'    => 'n'
+                        ) as $_key => $_default) {
 
                 if (isset($_POST[$_key][$i])) {
                     $posts[$_key] = $_POST[$_key][$i];
@@ -201,7 +208,7 @@ showListTypeSelection();
                                 WHERE
                                         type='%s'
                                     AND id=%d
-                                    LIMIT 0,1",
+                                LIMIT 0,1",
                                 SQLPREFIX,
                                 $db->escape_string($params['type']),
                                 $posts['id']
@@ -222,7 +229,7 @@ showListTypeSelection();
                                             WHERE id = %d",
                                         SQLPREFIX,
                                         $db->escape_string($user->getLogin()),
-                                        $db->escape_string(date('Y-m-d H:m:s')),
+                                        $db->escape_string(date('YmdHis')),
                                         $posts['id']
                                         );
                             $db->query($query);
@@ -262,7 +269,7 @@ showListTypeSelection();
                                         $db->escape_string($posts['reason']),
                                         $db->escape_string($posts['enabled']),
                                         $db->escape_string($posts['locked']),
-                                        $db->escape_string(date('Y-m-d H:m:s')),
+                                        $db->escape_string(date('YmdHis')),
                                         $posts['id']
                                         );
                             $db->query($query);
