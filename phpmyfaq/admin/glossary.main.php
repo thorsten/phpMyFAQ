@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: glossary.main.php,v 1.9 2006-08-15 07:28:49 thorstenr Exp $
+* $Id: glossary.main.php,v 1.10 2006-08-15 09:22:44 matteo Exp $
 *
 * The main glossary index file
 *
@@ -67,11 +67,11 @@ if ($permission['addglossary'] || $permission['editglossary'] || $permission['de
     print sprintf("<tr><th class=\"list\">%s</th><th class=\"list\">%s</th><th>&nbsp;</th></tr>", $PMF_LANG['ad_glossary_item'], $PMF_LANG['ad_glossary_definition']);
 
     foreach ($glossaryItems as $items) {
-    	print '<tr>';
-    	print sprintf('<td class="list"><a href="%s%d">%s</a></td>', $linkext.'&amp;action=editglossary&amp;id=', $items['id'], $items['item']);
-    	print sprintf('<td class="list">%s</td>', $items['definition']);
-    	print sprintf('<td class="list"><a href="%s%d"><img src="images/delete.gif" width="17" height="18" alt="%s" title="%s" border="0" /></a></td>', $linkext.'&amp;action=deleteglossary&amp;id=', $items['id'], $PMF_LANG['ad_user_del_3'], $PMF_LANG['ad_user_del_3']);
-    	print '</tr>';
+        print '<tr>';
+        print sprintf('<td class="list"><a href="%s%d">%s</a></td>', $linkext.'&amp;action=editglossary&amp;id=', $items['id'], $items['item']);
+        print sprintf('<td class="list">%s</td>', $items['definition']);
+        print sprintf('<td class="list"><a href="%s%d"><img src="images/delete.gif" width="17" height="18" alt="%s" title="%s" border="0" /></a></td>', $linkext.'&amp;action=deleteglossary&amp;id=', $items['id'], $PMF_LANG['ad_user_del_3'], $PMF_LANG['ad_user_del_3']);
+        print '</tr>';
     }
     print '</table>';
 
