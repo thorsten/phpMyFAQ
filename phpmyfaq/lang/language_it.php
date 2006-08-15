@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.18 2006-08-15 09:25:33 matteo Exp $
+* $Id: language_it.php,v 1.19 2006-08-15 10:15:26 matteo Exp $
 *
 * Italian language file
 *
@@ -686,12 +686,12 @@ $PMF_LANG['ad_linkcheck_config_ignorelist'] = 'URL da ignorare';
 $PMF_LANG['ad_linkcheck_config_warnlist_description'] = 'Le URLs che hanno come prefisso una tra le voci qui sotto verranno segnalate con un <em>warning</em> a prescindere dalla validit&agrave; del link.<br />Usa questa funzionalit&agrave; per rilevare URL da segnalare come rotte il prima possibile.';
 $PMF_LANG['ad_linkcheck_config_ignorelist_description'] = 'Le URL segnalate qui sotto verranno considerate valide a prescindere dalla validit&agrave; del link.<br />Usa questa funzionalit&agrave; per escludere quelle URL che falliscono la validazione automatica.';
 $PMF_LANG['ad_linkcheck_config_th_id'] = 'ID#';
-$PMF_LANG['ad_linkcheck_config_th_url'] = 'URL da uguagliare';
-$PMF_LANG['ad_linkcheck_config_th_reason'] = 'Motivo della accoppiamento';
+$PMF_LANG['ad_linkcheck_config_th_url'] = 'URL';
+$PMF_LANG['ad_linkcheck_config_th_reason'] = 'Motivo';
 $PMF_LANG['ad_linkcheck_config_th_owner'] = 'Responsabile della voce';
-$PMF_LANG['ad_linkcheck_config_th_enabled'] = 'Set to enable entry';
-$PMF_LANG['ad_linkcheck_config_th_locked'] = 'Set to lock ownership';
-$PMF_LANG['ad_linkcheck_config_th_chown'] = 'Set to obtain ownership';
+$PMF_LANG['ad_linkcheck_config_th_enabled'] = 'Spunta per ablitare questa URL';
+$PMF_LANG['ad_linkcheck_config_th_locked'] = 'Spunta per avere la responsabilità esclusiva.';
+$PMF_LANG['ad_linkcheck_config_th_chown'] = 'Spunta per ottenere la responsabilità.';
 $PMF_LANG['msgNewQuestionVisible'] = 'La domanda deve essere verificata prima di essere pubblicata.';
 $PMF_LANG['msgQuestionsWaiting'] = 'In attesa di essere pubblicate dagli amministratori: ';
 $PMF_LANG['ad_entry_visibility'] = 'Pubblica';
