@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: header.php,v 1.21 2006-08-09 21:47:36 matteo Exp $
+* $Id: header.php,v 1.22 2006-08-15 07:38:39 thorstenr Exp $
 *
 * header of the admin area
 *
@@ -116,6 +116,11 @@ header("Vary: Negotiate,Accept");
         case 'accept':
         case 'view':
         case 'glossary':
+        case 'saveglossary':
+        case 'updateglossary':
+        case 'deleteglossary':
+        case 'addglossary':
+        case 'editglossary':
         case 'news':
         case 'question':
             addMenuEntry('addcateg,editcateg,delcateg',          'category',         'ad_menu_categ_edit');
