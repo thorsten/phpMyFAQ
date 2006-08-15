@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.23 2006-08-15 06:54:16 thorstenr Exp $
+ * $Id: language_de.php,v 1.24 2006-08-15 10:04:54 thorstenr Exp $
  *
  * German language file
  *
@@ -767,3 +767,4 @@ $PMF_LANG['admin_mainmenu_logout'] = 'Logout';
 
 // added v2.0.0 - 2006-08-15 by Thorsten
 $PMF_LANG["ad_categ_owner"] = 'Kategorieverwalter';
+$PMF_LANG['adminSection'] = 'Administration';

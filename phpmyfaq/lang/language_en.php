@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.40 2006-08-15 09:25:33 matteo Exp $
+* $Id: language_en.php,v 1.41 2006-08-15 10:04:54 thorstenr Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -774,3 +774,4 @@ $PMF_LANG['admin_mainmenu_logout'] = 'Logout';
 
 // added v2.0.0 - 2006-08-15 by Thorsten
 $PMF_LANG["ad_categ_owner"] = 'Category owner';
+$PMF_LANG['adminSection'] = 'Administration';
