@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: glossary.main.php,v 1.8 2006-07-30 07:43:50 thorstenr Exp $
+* $Id: glossary.main.php,v 1.9 2006-08-15 07:28:49 thorstenr Exp $
 *
 * The main glossary index file
 *
@@ -30,6 +30,37 @@ if ($permission['addglossary'] || $permission['editglossary'] || $permission['de
 
     require_once('../inc/Glossary.php');
     $glossary = new PMF_Glossary($db, $LANGCODE);
+
+    if ('saveglossary' == $_action && $permission['addglossary']) {
+        if ($glossary->addGlossaryItem($_POST['item'], $_POST['definition'])) {
+            print '<p>' . $PMF_LANG['ad_glossary_save_success'] . '</p>';
+        } else {
+            print '<p>' . $PMF_LANG['ad_glossary_save_error'];
+            print '<br />'.$PMF_LANG["ad_adus_dberr"].'<br />';
+            print $db->error() . '</p>';
+        }
+    }
+
+    if ('updateglossary' == $_action && $permission['editglossary']) {
+        if ($glossary->updateGlossaryItem($_POST['id'], $_POST['item'], $_POST['definition'])) {
+            print '<p>' . $PMF_LANG['ad_glossary_update_success'] . '</p>';
+        } else {
+            print '<p>' . $PMF_LANG['ad_glossary_update_error'];
+            print '<br />'.$PMF_LANG["ad_adus_dberr"].'<br />';
+            print $db->error() . '</p>';
+        }
+    }
+
+    if ('deleteglossary' == $_action && $permission['editglossary']) {
+        if ($glossary->deleteGlossaryItem($_GET['id'])) {
+            print '<p>' . $PMF_LANG['ad_glossary_delete_success'] . '</p>';
+        } else {
+            print '<p>' . $PMF_LANG['ad_glossary_delete_error'];
+            print '<br />'.$PMF_LANG["ad_adus_dberr"].'<br />';
+            print $db->error() . '</p>';
+        }
+    }
+
     $glossaryItems = $glossary->getAllGlossaryItems();
 
     print '<table class="list">';
