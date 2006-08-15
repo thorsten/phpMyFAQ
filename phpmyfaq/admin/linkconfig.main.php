@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: linkconfig.main.php,v 1.5 2006-08-15 10:15:26 matteo Exp $
+* $Id: linkconfig.main.php,v 1.6 2006-08-15 10:20:59 matteo Exp $
 *
 * LinkVerifier configuration
 *
@@ -22,6 +22,9 @@
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
 * under the License.
+*
+* The Initial Developer of the Original Code is released for external use
+* with permission from NetJapan, Inc. IT Administration Group.
 */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
