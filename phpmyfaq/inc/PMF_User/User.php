@@ -858,6 +858,32 @@ class PMF_User
     }
 
     /**
+     * Get all users in <option> tags
+     *
+     * @param   integer $user_id
+     * @return  string
+     * @access  public
+     * @since   2006-08-15
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function getAllUserOptions($id = 1)
+    {
+        $options = '';
+        $allUsers = $this->getAllUsers();
+        foreach ($allUsers as $user_id) {
+            if (-1 != $user_id) {
+                $this->getUserById($user_id);
+                $options .= sprintf('<option value="%d"%s>%s (%s)</option>',
+                    $user_id,
+                    ((1 == $id) ? 'selected="selected"' : ''),
+                    $this->getLogin(),
+                    $this->getUserData('display_name'));
+            }
+        }
+        return $options;
+    }
+
+    /**
      * sets the minimum login string length
      *
      * @access public
