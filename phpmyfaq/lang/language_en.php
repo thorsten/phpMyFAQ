@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.39 2006-08-15 07:30:33 thorstenr Exp $
+* $Id: language_en.php,v 1.40 2006-08-15 09:25:33 matteo Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -239,7 +239,7 @@ $PMF_LANG["ad_entry_commentdelsuc"] = "The comment was <strong>successfully</str
 $PMF_LANG["ad_entry_back"] = "Back to the article";
 $PMF_LANG["ad_entry_commentdelfail"] = "The comment was <strong>not</strong> deleted.";
 $PMF_LANG["ad_entry_savedsuc"] = "The changes were saved <strong>successfully</strong>.";
-$PMF_LANG["ad_entry_savedfail"] = "Unfortunately, a <strong>database error</strong> occured.";
+$PMF_LANG["ad_entry_savedfail"] = "Unfortunately, a <strong>database error</strong> occurred.";
 $PMF_LANG["ad_entry_del_1"] = "Are you sure that the topic";
 $PMF_LANG["ad_entry_del_2"] = "of";
 $PMF_LANG["ad_entry_del_3"] = "should be deleted?";
@@ -384,11 +384,11 @@ $PMF_LANG["ad_att_none"] = "No attachments available";
 $PMF_LANG["ad_att_att"] = "Attachments:";
 $PMF_LANG["ad_att_add"] = "Attach file";
 $PMF_LANG["ad_entryins_suc"] = "Record successfully saved.";
-$PMF_LANG["ad_entryins_fail"] = "An error occured.";
+$PMF_LANG["ad_entryins_fail"] = "An error occurred.";
 $PMF_LANG["ad_att_del"] = "Delete";
 $PMF_LANG["ad_att_nope"] = "Attachments can be added only while editing.";
 $PMF_LANG["ad_att_delsuc"] = "The attachment has been deleted successfully.";
-$PMF_LANG["ad_att_delfail"] = "An error occured while deleting the attachment.";
+$PMF_LANG["ad_att_delfail"] = "An error occurred while deleting the attachment.";
 $PMF_LANG["ad_entry_add"] = "Create Entry";
 
 // Added v0.85 - 08.06.2001 - Bastian - Admin
@@ -400,7 +400,7 @@ $PMF_LANG["ad_att_addto_2"] = "";
 $PMF_LANG["ad_att_att"] = "File:";
 $PMF_LANG["ad_att_butt"] = "OK";
 $PMF_LANG["ad_att_suc"] = "The file has been attached successfully.";
-$PMF_LANG["ad_att_fail"] = "An error occured while attaching the file.";
+$PMF_LANG["ad_att_fail"] = "An error occurred while attaching the file.";
 $PMF_LANG["ad_att_close"] = "Close this window";
 
 // Added v0.85 - 08.07.2001 - Bastian - Admin
@@ -641,6 +641,11 @@ $PMF_LANG['ad_msiesearch_plugin_create'] = 'Create Microsoft Internet Explorer 7
 $PMF_LANG['ad_msiesearch_plugin_success'] = 'The Microsoft Internet Explorer 7 search plugin was successfully created!';
 $PMF_LANG['ad_session_expiring'] = 'Your session will expire in %d minutes: would you like to go on working?';
 
+// added v1.6.2 - 2006-06-13 by Matteo
+$PMF_LANG['ad_stat_management'] = 'Sessions management';
+$PMF_LANG['ad_stat_choose'] = 'Choose the month';
+$PMF_LANG['ad_stat_delete'] = 'Delete selected sessions immediately';
+
 // added v2.0.0 - 2005-09-15 by Thorsten and by Minoru TODA
 $PMF_LANG['ad_menu_glossary'] = 'Glossary';
 $PMF_LANG['ad_glossary_add'] = 'Add glossary entry';
@@ -649,12 +654,12 @@ $PMF_LANG['ad_glossary_item'] = 'Item';
 $PMF_LANG['ad_glossary_definition'] = 'Definition';
 $PMF_LANG['ad_glossary_save'] = 'Save entry';
 $PMF_LANG['ad_glossary_save_success'] = 'Glossary entry successfully saved!';
-$PMF_LANG['ad_glossary_save_error'] = 'The glossary entry could not saved because an error occured.';
+$PMF_LANG['ad_glossary_save_error'] = 'The glossary entry could not saved because an error occurred.';
 $PMF_LANG['ad_glossary_update_success'] = 'Glossary entry successfully updated!';
-$PMF_LANG['ad_glossary_update_error'] = 'The glossary entry could not updated because an error occured.';
+$PMF_LANG['ad_glossary_update_error'] = 'The glossary entry could not updated because an error occurred.';
 $PMF_LANG['ad_glossary_delete'] = 'Delete entry';
-$PMF_LANG['ad_glossary_delete_success'] = 'Glossary entry successfully delted!';
-$PMF_LANG['ad_glossary_delete_error'] = 'The glossary entry could not deleted because an error occured.';
+$PMF_LANG['ad_glossary_delete_success'] = 'Glossary entry successfully deleted!';
+$PMF_LANG['ad_glossary_delete_error'] = 'The glossary entry could not deleted because an error occurred.';
 $PMF_LANG['ad_linkcheck_noReferenceURL'] = 'Automatic link verification disabled (base URL for link verify not set)';
 $PMF_LANG['ad_linkcheck_noAllowUrlOpen'] = 'Automatic link verification disabled (PHP option allow_url_fopen not Enabled)';
 $PMF_LANG['ad_linkcheck_checkResult'] = 'Automatic link verification result';
@@ -669,7 +674,7 @@ $PMF_LANG['ad_linkcheck_openurl_notready'] = 'LinkVerifier not ready.';
 $PMF_LANG['ad_linkcheck_openurl_maxredirect'] = 'Maximum redirect count <strong>%d</strong> exceeded.';
 $PMF_LANG['ad_linkcheck_openurl_urlisblank'] = 'Resolved to blank URL.';
 $PMF_LANG['ad_linkcheck_openurl_tooslow'] = 'Host <strong>%s</strong> is slow or not responding.';
-$PMF_LANG['ad_linkcheck_openurl_nodns'] = 'Host <strong>%s</strong> is slow or has no DNS.';
+$PMF_LANG['ad_linkcheck_openurl_nodns'] = 'DNS resolution of host <strong>%s</strong> is slow or is failed due to DNS issues, local or remote.';
 $PMF_LANG['ad_linkcheck_openurl_redirected'] = 'URL was redirected to <strong>%s</strong>.';
 $PMF_LANG['ad_linkcheck_openurl_ambiguous'] = 'Ambiguous HTTP status <strong>%s</strong> returned.';
 $PMF_LANG['ad_linkcheck_protocol_unsupported'] = '%s protocol unsupported by Automatic link verification.';
@@ -748,8 +753,8 @@ $PMF_LANG['ad_news_allowComments'] = 'Allow comments:';
 $PMF_LANG['ad_news_expiration_window'] = 'News expiration time window (optional)';
 $PMF_LANG['ad_news_from'] = 'From:';
 $PMF_LANG['ad_news_to'] = 'To:';
-$PMF_LANG['ad_news_insertfail'] = 'An error occured inserting the news item into the database.';
-$PMF_LANG['ad_news_updatefail'] = 'An error occured updating the news item into the database.';
+$PMF_LANG['ad_news_insertfail'] = 'An error occurred inserting the news item into the database.';
+$PMF_LANG['ad_news_updatefail'] = 'An error occurred updating the news item into the database.';
 $PMF_LANG['newsShowCurrent'] = 'Show current news.';
 $PMF_LANG['newsShowArchive'] = 'Show archived news.';
 $PMF_LANG['newsArchive'] = ' News archive';

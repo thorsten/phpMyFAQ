@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.17 2006-07-30 07:58:29 matteo Exp $
+* $Id: language_it.php,v 1.18 2006-08-15 09:25:33 matteo Exp $
 *
 * Italian language file
 *
@@ -573,7 +573,7 @@ $LANG_CONF["bannedIP"] = array(0 => "area", 1 => "Vieta l'accesso a questi indir
 $LANG_CONF["parse_php"] = array(0 => "checkbox", 1 => "Il motore del templating HTML deve interpretare il codice PHP eventualmente inserito nei documenti? (default: disabilitato)");
 $LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Attivare il supporto a <em>mod_rewrite</em>? (default: disabilitato)");
 $LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "Attivare il supporto LDAP? (default: disabilitato)");
-$LANG_CONF["referenceURL"] = array(0 => "input", 1 => "<em>Base URL</em> dell'installazione di phpMyFAQ: es: http://www.example.org/faq (&egrave; necessaria per la verifica dei links)");
+$LANG_CONF["referenceURL"] = array(0 => "input", 1 => "<em>Base URL</em> dell'installazione di phpMyFAQ, es: http://www.example.org/faq (&egrave; necessaria per la verifica dei links)");
 $LANG_CONF["URLValidateInterval"] = array(0 => "input", 1 => "Intervallo della verifica asincrona dei links (in secondi)");
 $LANG_CONF["enablevisibility"] = array(0 => "checkbox", 1 => "Disabilitare la visibilit&agrave; delle domande appena inserite?");
 $LANG_CONF['permLevel'] = array(0 => "input", 1 => "Configurazione della Permessistica");
@@ -646,7 +646,6 @@ $PMF_LANG['ad_stat_management'] = 'Gestione delle sessioni';
 $PMF_LANG['ad_stat_choose'] = 'Scegli il mese';
 $PMF_LANG['ad_stat_delete'] = 'Cancella le sessioni selezionate immediatamente';
 
-
 // added v2.0.0 - 2005-09-15 by Thorsten and by Minoru TODA
 $PMF_LANG['ad_menu_glossary'] = 'Glossario';
 $PMF_LANG['ad_glossary_add'] = 'Aggiungi una voce al Glossario';
@@ -655,36 +654,41 @@ $PMF_LANG['ad_glossary_item'] = 'Voce';
 $PMF_LANG['ad_glossary_definition'] = 'Definizione';
 $PMF_LANG['ad_glossary_save'] = 'Salva la voce';
 $PMF_LANG['ad_glossary_save_success'] = 'La voce è stata salvata con successo!';
+$PMF_LANG['ad_glossary_save_error'] = 'Si è verificato un errore: la voce non è stata salvata.';
 $PMF_LANG['ad_glossary_update_success'] = 'La voce è stata aggiornata con successo!';
-$PMF_LANG['ad_linkcheck_noReferenceURL'] = 'Automatic link verification disabled (base URL for link verify not set)';
-$PMF_LANG['ad_linkcheck_noAllowUrlOpen'] = 'Automatic link verification disabled (PHP option allow_url_fopen not Enabled)';
-$PMF_LANG['ad_linkcheck_checkResult'] = 'Automatic link verification result';
+$PMF_LANG['ad_glossary_update_error'] = 'Si è verificato un errore: la voce non è stata aggiornata.';
+$PMF_LANG['ad_glossary_delete'] = 'Cancella la voce';
+$PMF_LANG['ad_glossary_delete_success'] = 'La voce è stata cancellata!';
+$PMF_LANG['ad_glossary_delete_error'] = 'Si è verificato un errore: la voce non può essere cancellata.';
+$PMF_LANG['ad_linkcheck_noReferenceURL'] = 'Verifica automatica dei links disabilitata (non &egrave; stata definita la <em>base URL</em>)';
+$PMF_LANG['ad_linkcheck_noAllowUrlOpen'] = 'Verifica automatica dei links disabilitata (l\'opzione PHP "allow_url_fopen" non &egrave; abilitata)';
+$PMF_LANG['ad_linkcheck_checkResult'] = 'Risultato della verifica automatica dei links';
 $PMF_LANG['ad_linkcheck_checkSuccess'] = 'OK';
-$PMF_LANG['ad_linkcheck_checkFailed'] = 'Failed';
-$PMF_LANG['ad_linkcheck_failReason'] = 'Reason(s) failed:';
-$PMF_LANG['ad_linkcheck_noLinksFound'] = 'No URLs compatible with link verifier feature found.';
-$PMF_LANG['ad_linkcheck_searchbadonly'] = 'Only with bad links';
-$PMF_LANG['ad_linkcheck_infoReason'] = 'Additional Information:';
-$PMF_LANG['ad_linkcheck_openurl_infoprefix'] = 'Found while testing <strong>%s</strong>: ';
-$PMF_LANG['ad_linkcheck_openurl_notready'] = 'LinkVerifier not ready.';
-$PMF_LANG['ad_linkcheck_openurl_maxredirect'] = 'Maximum redirect count <strong>%d</strong> exceeded.';
-$PMF_LANG['ad_linkcheck_openurl_urlisblank'] = 'Resolved to blank URL.';
-$PMF_LANG['ad_linkcheck_openurl_tooslow'] = 'Host <strong>%s</strong> is slow or not responding.';
-$PMF_LANG['ad_linkcheck_openurl_nodns'] = 'Host <strong>%s</strong> is slow or has no DNS.';
-$PMF_LANG['ad_linkcheck_openurl_redirected'] = 'URL was redirected to <strong>%s</strong>.';
-$PMF_LANG['ad_linkcheck_openurl_ambiguous'] = 'Ambiguous HTTP status <strong>%s</strong> returned.';
-$PMF_LANG['ad_linkcheck_protocol_unsupported'] = '%s protocol unsupported by Automatic link verification.';
-$PMF_LANG['ad_menu_linkconfig'] = 'Configure URL Verifier';
-$PMF_LANG['ad_linkcheck_config_title'] = 'URL Verifier Configuration';
-$PMF_LANG['ad_linkcheck_config_disabled'] = 'URL Verifier feature disabled';
-$PMF_LANG['ad_linkcheck_config_warnlist'] = 'URLs to warn';
-$PMF_LANG['ad_linkcheck_config_ignorelist'] = 'URLs to ignore';
-$PMF_LANG['ad_linkcheck_config_warnlist_description'] = 'URLs prefixed with items below will be issued warning regardless of whether it is valid.<br />Use this feature to detect soon-to-be defunct URLs';
-$PMF_LANG['ad_linkcheck_config_ignorelist_description'] = 'Exact URLs listed below will be assumed valid without validation.<br />Use this feature to omit URLs that fail to validate using URL Verifier';
+$PMF_LANG['ad_linkcheck_checkFailed'] = 'Fallito';
+$PMF_LANG['ad_linkcheck_failReason'] = 'Motivo(i) del fallimento:';
+$PMF_LANG['ad_linkcheck_noLinksFound'] = 'Non è stata trovata nessuna URL compatibile con la funzionalit&agrave; della verifica automatica dei links.';
+$PMF_LANG['ad_linkcheck_searchbadonly'] = 'Soltanto con links rotti';
+$PMF_LANG['ad_linkcheck_infoReason'] = 'Informazioni aggiuntive:';
+$PMF_LANG['ad_linkcheck_openurl_infoprefix'] = 'Trovato durante il test di <strong>%s</strong>: ';
+$PMF_LANG['ad_linkcheck_openurl_notready'] = 'LinkVerifier non pronto.';
+$PMF_LANG['ad_linkcheck_openurl_maxredirect'] = 'Superato il numero massimo di redirezioni <strong>%d</strong>.';
+$PMF_LANG['ad_linkcheck_openurl_urlisblank'] = 'Risolto come <em>Blank URL</em>.';
+$PMF_LANG['ad_linkcheck_openurl_tooslow'] = 'L\'host <strong>%s</strong> &egrave lento o non risponde.';
+$PMF_LANG['ad_linkcheck_openurl_nodns'] = 'La risoluzione DNS dell\'host <strong>%s</strong> &egrave; lenta o non &egrave; possibile effettuarla tramite i settaggi attuali del DNS, locale o remoto.';
+$PMF_LANG['ad_linkcheck_openurl_redirected'] = 'L\'URL &ègrave; stata rediretta <strong>%s</strong>.';
+$PMF_LANG['ad_linkcheck_openurl_ambiguous'] = 'E\' stato ritornato uno stato HTTP ambiguo, <strong>%s</strong>.';
+$PMF_LANG['ad_linkcheck_protocol_unsupported'] = 'Il protocollo %s non è supportato dalla verifica automatica dei links.';
+$PMF_LANG['ad_menu_linkconfig'] = 'Configura la verifica automatica delle URL';
+$PMF_LANG['ad_linkcheck_config_title'] = 'Configurazione della verifica delle URL';
+$PMF_LANG['ad_linkcheck_config_disabled'] = 'Verifica delle URL disabilita.';
+$PMF_LANG['ad_linkcheck_config_warnlist'] = 'URL per cui essere allertati';
+$PMF_LANG['ad_linkcheck_config_ignorelist'] = 'URL da ignorare';
+$PMF_LANG['ad_linkcheck_config_warnlist_description'] = 'Le URLs che hanno come prefisso una tra le voci qui sotto verranno segnalate con un <em>warning</em> a prescindere dalla validit&agrave; del link.<br />Usa questa funzionalit&agrave; per rilevare URL da segnalare come rotte il prima possibile.';
+$PMF_LANG['ad_linkcheck_config_ignorelist_description'] = 'Le URL segnalate qui sotto verranno considerate valide a prescindere dalla validit&agrave; del link.<br />Usa questa funzionalit&agrave; per escludere quelle URL che falliscono la validazione automatica.';
 $PMF_LANG['ad_linkcheck_config_th_id'] = 'ID#';
-$PMF_LANG['ad_linkcheck_config_th_url'] = 'URL to match';
-$PMF_LANG['ad_linkcheck_config_th_reason'] = 'Match reason';
-$PMF_LANG['ad_linkcheck_config_th_owner'] = 'Entry owner';
+$PMF_LANG['ad_linkcheck_config_th_url'] = 'URL da uguagliare';
+$PMF_LANG['ad_linkcheck_config_th_reason'] = 'Motivo della accoppiamento';
+$PMF_LANG['ad_linkcheck_config_th_owner'] = 'Responsabile della voce';
 $PMF_LANG['ad_linkcheck_config_th_enabled'] = 'Set to enable entry';
 $PMF_LANG['ad_linkcheck_config_th_locked'] = 'Set to lock ownership';
 $PMF_LANG['ad_linkcheck_config_th_chown'] = 'Set to obtain ownership';
@@ -746,7 +750,7 @@ $PMF_LANG['ad_news_author_name'] = 'Nome dell\'autore:';
 $PMF_LANG['ad_news_author_email'] = 'Email dell\'autore:';
 $PMF_LANG['ad_news_set_active'] = 'Attiva:';
 $PMF_LANG['ad_news_allowComments'] = 'Permetti commenti:';
-$PMF_LANG['ad_news_expiration_window'] = 'Validità della notizia (opzionale)';
+$PMF_LANG['ad_news_expiration_window'] = 'Validit&agrave; della notizia (opzionale)';
 $PMF_LANG['ad_news_from'] = 'Dal:';
 $PMF_LANG['ad_news_to'] = 'Al:';
 $PMF_LANG['ad_news_insertfail'] = 'Inserimento della notizia fallito.';
@@ -758,7 +762,7 @@ $PMF_LANG['newsWriteComment'] = 'Commenta questa notizia';
 $PMF_LANG['newsCommentDate'] = 'Inserito il: ';
 
 // added v2.0.0 - 2006-07-29 by Matteo & Thorsten
-$PMF_LANG['ad_record_expiration_window'] = 'Validità della faq (opzionale)';
+$PMF_LANG['ad_record_expiration_window'] = 'Validit&agrave; della faq (opzionale)';
 $PMF_LANG['admin_mainmenu_home'] = 'Home';
 $PMF_LANG['admin_mainmenu_users'] = 'Utenti';
 $PMF_LANG['admin_mainmenu_content'] = 'Contenuti';
@@ -767,3 +771,6 @@ $PMF_LANG['admin_mainmenu_exports'] = 'Esportazione';
 $PMF_LANG['admin_mainmenu_backup'] = 'Backup';
 $PMF_LANG['admin_mainmenu_configuration'] = 'Configurazione';
 $PMF_LANG['admin_mainmenu_logout'] = 'Logout';
+
+// added v2.0.0 - 2006-08-15 by Thorsten
+$PMF_LANG["ad_categ_owner"] = 'Responsabile della categoria';
