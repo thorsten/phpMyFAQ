@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mysql.sql.php,v 1.34 2006-08-10 19:20:30 thorstenr Exp $
+* $Id: mysql.sql.php,v 1.35 2006-08-15 16:52:21 matteo Exp $
 *
 * CREATE TABLE instruction for MySQL database
 *
@@ -300,9 +300,9 @@ session_id VARCHAR(150) NULL,
 session_timestamp INT(11) UNSIGNED NULL,
 ip VARCHAR(15) NULL,
 account_status VARCHAR(50) NULL,
-last_login TIMESTAMP(14) NULL,
+last_login VARCHAR(14) NULL,
 auth_source VARCHAR(100) NULL,
-member_since TIMESTAMP(14) NULL,
+member_since VARCHAR(14) NULL,
 PRIMARY KEY (user_id),
 UNIQUE INDEX session(session_id),
 UNIQUE INDEX login(login)

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.66 2006-08-14 15:23:24 matteo Exp $
+* $Id: update.php,v 1.67 2006-08-15 16:52:21 matteo Exp $
 *
 * Main update script
 *
@@ -848,6 +848,8 @@ if ($step == 5) {
                             SET session_timestamp = 0';
                 $query[] = 'UPDATE '.SQLPREFIX.'faquser
                             SET ip = \'127.0.0.1\'';
+                $query[] = 'UPDATE '.SQLPREFIX.'faquser
+                            SET member_since = \''.$now.'\'';
                 // Evaluate last_login and member_since fields using the faqadminlog table
                 $_result = $db->query('SELECT usr FROM '.SQLPREFIX.'faqadminlog GROUP BY usr');
                 while ($row = $db->fetch_object($_result)) {
@@ -865,8 +867,8 @@ if ($step == 5) {
                     if (isset($_loginData[$row->id])) {
                         $query[] = "UPDATE ".SQLPREFIX."faquser
                                     SET
-                                        last_login = '".date('Y-m-d H:i:s', $_loginData[$row->id]['last_login'])."',
-                                        member_since = '".date('Y-m-d H:i:s', $_loginData[$row->id]['member_since'])."'
+                                        last_login = '".date('YmdHis', $_loginData[$row->id]['last_login'])."',
+                                        member_since = '".date('YmdHis', $_loginData[$row->id]['member_since'])."'
                                     WHERE user_id = ".$row->id;
                     }
                 }

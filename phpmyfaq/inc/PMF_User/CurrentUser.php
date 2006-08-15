@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: CurrentUser.php,v 1.16 2006-07-02 14:07:35 matteo Exp $
+ * $Id: CurrentUser.php,v 1.17 2006-08-15 16:52:21 matteo Exp $
  *
  * manages authentication process using php sessions.
  *
@@ -120,37 +120,37 @@ class PMF_CurrentUser extends PMF_User
     function login($login, $pass)
     {
         // authenticate user by login and password
-		$login_error = 0;
-		$pass_error  = 0;
-		$count = 0;
-		foreach ($this->_auth_container as $name => $auth) {
+        $login_error = 0;
+        $pass_error  = 0;
+        $count = 0;
+        foreach ($this->_auth_container as $name => $auth) {
             $count++;
 
-			// $auth is an invalid Auth object, so continue
-			if (!$this->checkAuth($auth)) {
+            // $auth is an invalid Auth object, so continue
+            if (!$this->checkAuth($auth)) {
                 $count--;
-				continue;
-			}
-			// $login does not exist, so continue
-			if (!$auth->checkLogin($login)) {
-				$login_error++;
-				continue;
-			}
-			// $login exists, but $pass is incorrect, so stop!
-			if (!$auth->checkPassword($login, $pass)) {
-				$pass_error++;
-				break;
-			}
-			// but hey, this must be a valid match!
-			// load user object
-			$this->getUserByLogin($login);
-			// user is now logged in
-			$this->_logged_in = true;
-			// update session-id and save to session
-			$this->updateSessionId();
-			$this->saveToSession();
-			// remember the auth container for administration
-			$res = $this->_db->query("
+                continue;
+            }
+            // $login does not exist, so continue
+            if (!$auth->checkLogin($login)) {
+                $login_error++;
+                continue;
+            }
+            // $login exists, but $pass is incorrect, so stop!
+            if (!$auth->checkPassword($login, $pass)) {
+                $pass_error++;
+                break;
+            }
+            // but hey, this must be a valid match!
+            // load user object
+            $this->getUserByLogin($login);
+            // user is now logged in
+            $this->_logged_in = true;
+            // update last login info, session-id and save to session
+            $this->updateSessionId(true);
+            $this->saveToSession();
+            // remember the auth container for administration
+            $res = $this->_db->query("
                 UPDATE
                     ".PMF_USER_SQLPREFIX."user
                 SET
@@ -158,22 +158,22 @@ class PMF_CurrentUser extends PMF_User
                 WHERE
                     user_id = ".$this->getUserId()
             );
-			if (!$res) {
+            if (!$res) {
                 return false;
                 break;
             }
-			// return true
-			return true;
-			break;
-		}
-		// raise errors and return false
-		if ($login_error == $count) {
-			$this->errors[] = PMF_USERERROR_INCORRECT_LOGIN;
-		}
-		if ($pass_error > 0) {
-			$this->errors[] = PMF_USERERROR_INCORRECT_PASSWORD;
-		}
-		return false;
+            // return true
+            return true;
+            break;
+        }
+        // raise errors and return false
+        if ($login_error == $count) {
+            $this->errors[] = PMF_USERERROR_INCORRECT_LOGIN;
+        }
+        if ($pass_error > 0) {
+            $this->errors[] = PMF_USERERROR_INCORRECT_PASSWORD;
+        }
+        return false;
     }
 
     /**
@@ -278,14 +278,17 @@ class PMF_CurrentUser extends PMF_User
     *
     * Updates the session-ID, does not care about time outs.
     * Stores session information in the user table: session_id,
-     * session_timestamp and ip. Returns true on success, otherwise
-    * false.
+    * session_timestamp and ip.
+    * Optionally it should update the 'last login' time.
+    * Returns true on success, otherwise false.
     *
+    * @param    boolean
     * @access   public
     * @author   Lars Tiedemann, <php@larstiedemann.de>
+    * @author   Matteo Scaramuccia <matteo@scaramuccia.com>
     * @return   bool
     */
-    function updateSessionId()
+    function updateSessionId($updateLastlogin = false)
     {
         // renew the session-ID
         session_regenerate_id();
@@ -293,20 +296,29 @@ class PMF_CurrentUser extends PMF_User
         $now = time();
         $_SESSION[PMF_SESSION_ID_TIMESTAMP] = $now;
         // save session information in user table
-        $res = $this->_db->query("
-            UPDATE
-                ".PMF_USER_SQLPREFIX."user
-            SET
-                session_id = '".session_id()."',
-                session_timestamp = ".$now.",
-                ip = '".$_SERVER['REMOTE_ADDR']."'
-            WHERE
-                user_id = ".$this->getUserId()
-        );
+        $query = sprintf(
+                    "UPDATE
+                        %suser
+                    SET
+                        session_id          = '%s',
+                        session_timestamp   = %d,
+                        %s
+                        ip                  = '%s'
+                    WHERE
+                        user_id = %d",
+                    PMF_USER_SQLPREFIX,
+                    session_id(),
+                    $now,
+                    $updateLastlogin ?  "last_login = '".date('YmdHis', $now)."'," : '',
+                    $_SERVER['REMOTE_ADDR'],
+                    $this->getUserId()
+                    );
+        $res = $this->_db->query($query);
         if (!$res) {
             $this->errors[] = $this->_db->error();
             return false;
         }
+
         return true;
     }
 
@@ -382,7 +394,7 @@ class PMF_CurrentUser extends PMF_User
     {
         // there is no valid user object in session
         if (!isset($_SESSION[PMF_SESSION_CURRENT_USER]) or !isset($_SESSION[PMF_SESSION_ID_TIMESTAMP]))
-			return null;
+            return null;
         // create a new CurrentUser object
         $user = new PMF_CurrentUser();
         $user->getUserById($_SESSION[PMF_SESSION_CURRENT_USER]);
@@ -405,9 +417,9 @@ class PMF_CurrentUser extends PMF_User
         }
         // user is now logged in
         $user->_logged_in = true;
-		// save current user to session and return the instance
-		$user->saveToSession();
-		return $user;
+        // save current user to session and return the instance
+        $user->saveToSession();
+        return $user;
     }
 
     /**

@@ -359,13 +359,20 @@ class PMF_User
         // set user-ID
         $this->_user_id = (int) $this->_db->nextID(PMF_USER_SQLPREFIX.'user', 'user_id');
         // create user entry
-        $this->_db->query("
-          INSERT INTO
-            ".PMF_USER_SQLPREFIX."user
-          (user_id, login, session_timestamp)
-            VALUES
-          (".$this->getUserId().", '".$this->_db->escape_string($login)."', ".time().")
-        ");
+        $now = time();
+        $query = sprintf(
+                    "INSERT INTO
+                        %suser
+                        (user_id, login, session_timestamp, member_since)
+                    VALUES
+                        (%d, '%s', %d, %d, '%s')",
+                    PMF_USER_SQLPREFIX,
+                    $this->getUserId(),
+                    $this->_db->escape_string($login),
+                    $now,
+                    date('YmdHis', $now)
+                    );
+        $this->_db->query($query);
         // create user-data entry
         if (!$this->userdata)
             $this->userdata = new PMF_UserData($this->_db);

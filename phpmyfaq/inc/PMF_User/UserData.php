@@ -175,18 +175,26 @@ class PMF_UserData
     function save()
     {
         // update data
-        $res = $this->_db->query("
-          UPDATE
-            ".PMF_USER_SQLPREFIX."userdata
-          SET
-            last_modified = '".date('Y-m-d H:i:s', time())."',
-            display_name = '".$this->_data['display_name']."',
-            email        = '".$this->_data['email']."'
-          WHERE
-            user_id = ".$this->_user_id
-        );
-        if (!$res)
+        $query = sprintf(
+                    "UPDATE
+                        %suserdata
+                    SET
+                        last_modified = '%s',
+                        display_name  = '%s',
+                        email         = '%s'
+                    WHERE
+                        user_id = %d",
+                    PMF_USER_SQLPREFIX,
+                    date('YmdHis', time()),
+                    $this->_data['display_name'],
+                    $this->_data['email'],
+                    $this->_user_id
+                    );
+        $res = $this->_db->query($query);
+        if (!$res) {
             return false;
+        }
+
         return true;
     }
 
