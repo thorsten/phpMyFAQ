@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: category.edit.php,v 1.11 2006-08-15 06:51:24 thorstenr Exp $
+* $Id: category.edit.php,v 1.12 2006-08-15 08:14:37 matteo Exp $
 *
 * Edits a category
 *
@@ -30,9 +30,9 @@ if ($permission["editcateg"]) {
     $id = $_GET["cat"];
     print "<h2>".$PMF_LANG["ad_categ_edit_1"]." <em>".$categories[$id]["name"]."</em> ".$PMF_LANG["ad_categ_edit_2"]."</h2>";
 ?>
-	<form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>" method="post">
-	<fieldset>
-	<legend><?php print $PMF_LANG["ad_categ_edit_1"]." <em>".$categories[$id]["name"]."</em> ".$PMF_LANG["ad_categ_edit_2"]; ?></legend>
+    <form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>" method="post">
+    <fieldset>
+    <legend><?php print $PMF_LANG["ad_categ_edit_1"]." <em>".$categories[$id]["name"]."</em> ".$PMF_LANG["ad_categ_edit_2"]; ?></legend>
 
         <input type="hidden" name="action" value="updatecategory" />
         <input type="hidden" name="cat" value="<?php print $id; ?>" />
@@ -50,13 +50,13 @@ if ($permission["editcateg"]) {
 
         <label class="left"><?php print $PMF_LANG["ad_categ_owner"]; ?>:</label>
         <select name="cat_owner" size="1">
-		<?php print $user->getAllUserOptions($categories[$id]["user_id"]); ?>
+        <?php print $user->getAllUserOptions($categories[$id]["user_id"]); ?>
         </select><br />
 
-        <input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_updatecateg"]; ?>" /></div>
+        <input class="submit" style="margin-left: 190px;" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_updatecateg"]; ?>" /></div>
     </fieldset>
-	</form>
+    </form>
 <?php
 } else {
-	print $PMF_LANG["err_NotAuth"];
+    print $PMF_LANG["err_NotAuth"];
 }
