@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.38 2006-08-15 06:54:16 thorstenr Exp $
+* $Id: language_en.php,v 1.39 2006-08-15 07:30:33 thorstenr Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -649,7 +649,12 @@ $PMF_LANG['ad_glossary_item'] = 'Item';
 $PMF_LANG['ad_glossary_definition'] = 'Definition';
 $PMF_LANG['ad_glossary_save'] = 'Save entry';
 $PMF_LANG['ad_glossary_save_success'] = 'Glossary entry successfully saved!';
+$PMF_LANG['ad_glossary_save_error'] = 'The glossary entry could not saved because an error occured.';
 $PMF_LANG['ad_glossary_update_success'] = 'Glossary entry successfully updated!';
+$PMF_LANG['ad_glossary_update_error'] = 'The glossary entry could not updated because an error occured.';
+$PMF_LANG['ad_glossary_delete'] = 'Delete entry';
+$PMF_LANG['ad_glossary_delete_success'] = 'Glossary entry successfully delted!';
+$PMF_LANG['ad_glossary_delete_error'] = 'The glossary entry could not deleted because an error occured.';
 $PMF_LANG['ad_linkcheck_noReferenceURL'] = 'Automatic link verification disabled (base URL for link verify not set)';
 $PMF_LANG['ad_linkcheck_noAllowUrlOpen'] = 'Automatic link verification disabled (PHP option allow_url_fopen not Enabled)';
 $PMF_LANG['ad_linkcheck_checkResult'] = 'Automatic link verification result';
