@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.edit.php,v 1.37 2006-08-07 21:31:40 matteo Exp $
+* $Id: record.edit.php,v 1.38 2006-08-15 14:42:04 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23
@@ -33,7 +33,7 @@ print('</pre>');
 $user = PMF_CurrentUser::getFromSession($faqconfig->get('ipcheck'));
 
 if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
-    $tree = new PMF_Category();
+    $tree = new PMF_Category($LANGCODE);
     $tree->buildTree();
     $rubrik = '';
     $thema = '';
@@ -107,7 +107,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
             $email       = $faqData['email'];
             $comment     = $faqData['comment'];
             $datum       = $faqData['date'];
-            
+
             $acti = 'saveentry&amp;id='.$_REQUEST['id'];
 
         } else {
@@ -286,7 +286,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     }
 ?>
     </fieldset>
-    
+
     <fieldset>
     <legend><?php print $PMF_LANG['ad_record_expiration_window']; ?></legend>
         <label class="lefteditor" for="from"><?php print $PMF_LANG['ad_news_from']; ?></label>
