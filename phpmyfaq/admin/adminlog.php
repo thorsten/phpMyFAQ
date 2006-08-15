@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: adminlog.php,v 1.11 2006-07-30 07:40:25 thorstenr Exp $
+* $Id: adminlog.php,v 1.12 2006-08-15 16:53:10 thorstenr Exp $
 *
 * Overview of actions in the admin section
 *
@@ -24,6 +24,10 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
+require_once(PMF_ROOT_DIR.'/inc/Logging.php');
+
+$logging = new PMF_Logging($db);
+
 if ($permission['adminlog'] && 'adminlog' == $_action) {
 
     //
@@ -32,15 +36,8 @@ if ($permission['adminlog'] && 'adminlog' == $_action) {
 
 	$perpage = 15;
 
-    $_user = array();
-
-    $_result = $db->query("SELECT id, name FROM ".SQLPREFIX."faquser");
-    while ($row = $db->fetch_object($_result)) {
-        $_user[$row->id] = $row->name;
-    }
-
 	if (!isset($_REQUEST["pages"])) {
-        $pages = round(($db->num_rows($db->query("SELECT id FROM ".SQLPREFIX."faqadminlog"))+($perpage/3)) / $perpage,0);
+        $pages = round(( $logging->getNumberOfEntries() + ($perpage / 3)) / $perpage, 0);
     } else {
         $pages = $_REQUEST["pages"];
     }
@@ -51,12 +48,12 @@ if ($permission['adminlog'] && 'adminlog' == $_action) {
         $page = $_REQUEST["page"];
     }
 
-	$start = ($page-1) * $perpage;
+	$start = ($page - 1) * $perpage;
 	$ende = $start + $perpage;
 
 	$PageSpan = PageSpan("<a href=\"".$_SERVER["PHP_SELF"].$linkext."&amp;action=adminlog&amp;pages=".$pages."&amp;page=<NUM>\">", 1, $pages, $page);
 
-	$result = $db->query("SELECT id, time, usr, text, ip FROM ".SQLPREFIX."faqadminlog ORDER BY id DESC");
+	$logging_data = $logging->getAll();
 ?>
 	<h2><?php print $PMF_LANG["ad_adminlog"]; ?></h2>
     <table class="list">
@@ -77,7 +74,14 @@ if ($permission['adminlog'] && 'adminlog' == $_action) {
 <?php
     $counter = 0;
     $displayedCounter = 0;
-    while (($row = $db->fetch_object($result)) && $displayedCounter < $perpage) {
+
+    foreach ($logging_data as $logging_id => $logging_value) {
+
+        if ($displayedCounter > $perpage) {
+            $displayedCounter++;
+            continue;
+        }
+
         $counter++;
         if ($counter <= $start) {
             continue;
@@ -85,22 +89,22 @@ if ($permission['adminlog'] && 'adminlog' == $_action) {
         $displayedCounter++;
 ?>
         <tr class="cell">
-            <td class="list"><?php print $row->id; ?></td>
-            <td class="list"><?php print date("Y-m-d H:i:s",$row->time); ?></td>
-            <td class="list"><?php print isset($_user[$row->usr]) ? $_user[$row->usr] : '&nbsp;'; ?></td>
-            <td class="list"><?php print $row->ip; ?></td>
+            <td class="list"><?php print $logging_id; ?></td>
+            <td class="list"><?php print date("Y-m-d H:i:s", $logging_value['time']); ?></td>
+            <td class="list"><?php print isset($_user[$logging_value['usr']]) ? $_user[$logging_value['usr']] : '&nbsp;'; ?></td>
+            <td class="list"><?php print $logging_value['ip']; ?></td>
         </tr>
         <tr class="cell">
             <td colspan="4" class="list"><?php
-		$text = str_replace("Loginerror", $PMF_LANG["ad_log_lger"], $row->text);
-		$text = str_replace("Session expired", $PMF_LANG["ad_log_sess"], $row->text);
-		$text = str_replace("Useredit, ", $PMF_LANG["ad_log_edit"], $row->text);
-		$text = str_replace("Beitragcreatesave", $PMF_LANG["ad_log_crsa"], $row->text);
-		$text = str_replace("Beitragcreate", $PMF_LANG["ad_log_crea"], $row->text);
-		$text = str_replace("Usersave, ", $PMF_LANG["ad_log_ussa"], $row->text);
-		$text = str_replace("Userdel, ", $PMF_LANG["ad_log_usde"], $row->text);
-		$text = str_replace("Beitragedit, ", $PMF_LANG["ad_log_beed"], $row->text);
-		$text = str_replace("Beitragdel, ", $PMF_LANG["ad_log_bede"], $row->text);
+		$text = str_replace("Loginerror", $PMF_LANG["ad_log_lger"], $logging_value['text']);
+		$text = str_replace("Session expired", $PMF_LANG["ad_log_sess"], $logging_value['text']);
+		$text = str_replace("Useredit, ", $PMF_LANG["ad_log_edit"], $logging_value['text']);
+		$text = str_replace("Beitragcreatesave", $PMF_LANG["ad_log_crsa"], $logging_value['text']);
+		$text = str_replace("Beitragcreate", $PMF_LANG["ad_log_crea"], $logging_value['text']);
+		$text = str_replace("Usersave, ", $PMF_LANG["ad_log_ussa"], $logging_value['text']);
+		$text = str_replace("Userdel, ", $PMF_LANG["ad_log_usde"], $logging_value['text']);
+		$text = str_replace("Beitragedit, ", $PMF_LANG["ad_log_beed"], $logging_value['text']);
+		$text = str_replace("Beitragdel, ", $PMF_LANG["ad_log_bede"], $logging_value['text']);
 		print $text;
 ?></td>
         </tr>
@@ -115,17 +119,11 @@ if ($permission['adminlog'] && 'adminlog' == $_action) {
 
 } elseif ($permission['adminlog'] && 'deleteadminlog' == $_action) {
 
-    //
-    // Delete logs older than 30 days
-    //
-    $thirtydays = time() - 30 * 86400;
-
-    if ($db->query('DELETE FROM '.SQLPREFIX.'faqadminlog WHERE time < '.$thirtydays)) {
+    if ($logging->delete()) {
         printf('<p>%s</p>', $MPF_LANG['ad_adminlog_delete_success']);
     } else {
         printf('<p>%s</p>', $MPF_LANG['ad_adminlog_delete_failure']);
     }
-
 } else {
 	print $PMF_LANG["err_NotAuth"];
 }
