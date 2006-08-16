@@ -1,5 +1,5 @@
 /**
- * $Id: style.css,v 1.20 2006-07-25 18:24:23 matteo Exp $
+ * $Id: style.css,v 1.21 2006-08-16 10:10:38 matteo Exp $
  *
  * This is the main style sheet file for phpMyFAQ 2.0
  * If you want to change only the colours, use colors.css
@@ -30,7 +30,7 @@ body, td {
    font-family: "Bitstream Vera Sans", "Trebuchet MS", Geneva, Verdana, Arial, Helvetica, sans-serif;
    font-size: 80.01%;
 }
-body, h1, h2, h3, h4, h5, h6, div, p, table, td, ol, li, dd, dt, dl, blockquote, address, hr, pre {
+body, h1, h2, h3, h4, h5, h6, div, p, table, td, li, dd, dt, dl, blockquote, address, hr {
    margin: 0;
    padding: 0;
 }
@@ -254,6 +254,16 @@ html>body #categories li a {
 .main-content h2, .main-content h3 {
    border-bottom: 1px solid;
    margin-bottom: 7px;
+}
+.main-content pre {
+/* This hack is coming from: http://pms.colonpee.com/irc/20020517_fRy.html
+       The author is pmsyyz: http://www.experts-exchange.com/M_932246.html */
+    white-space: -moz-pre-wrap; /* Mozilla, supported since 1999 */
+    white-space: -pre-wrap;     /* Opera 4 - 6 */
+    white-space: -o-pre-wrap;   /* Opera 7 */
+    white-space: pre-wrap;      /* CSS3 - Text module (Candidate Recommendation)
+                                   http://www.w3.org/TR/css3-text/#white-space */
+    word-wrap: break-word;      /* IE 5.5+ */
 }
 .main-content h2#article_category {
    font-size: 145%;
