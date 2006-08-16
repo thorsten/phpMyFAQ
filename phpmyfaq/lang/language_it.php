@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.20 2006-08-15 10:51:12 matteo Exp $
+* $Id: language_it.php,v 1.21 2006-08-16 10:56:38 matteo Exp $
 *
 * Italian language file
 *
@@ -612,7 +612,7 @@ $PMF_LANG['ad_search_plugin_title'] = 'Crea il plugin di ricerca';
 $PMF_LANG['ad_search_plugin_ttitle'] = 'Titolo del riquadro di ricerca in Firefox:';
 $PMF_LANG['ad_search_plugin_tdesc'] = 'Descrizione:';
 $PMF_LANG['ad_search_plugin_create'] = 'Crea il plugin di ricerca per Firefox';
-$PMF_LANG['ad_search_plugin_success'] = 'Il plugin di ricerca per Mozilla Firefox è stato creato!';
+$PMF_LANG['ad_search_plugin_success'] = 'Il plugin di ricerca per Mozilla Firefox &egrave; stato creato!';
 
 // added v1.6.0 - 2006-02-02 by Thorsten
 $PMF_LANG['ad_entry_solution_id'] = 'ID univoco';
@@ -625,7 +625,7 @@ $PMF_LANG['ad_changerev'] = 'Seleziona la versione';
 $PMF_LANG['msgCaptcha'] = "Scrivi le lettere e i numeri che leggi nella immagine";
 $PMF_LANG['msgSelectCategories'] = 'Cerca in: ';
 $PMF_LANG['msgAllCategories'] = 'Tutte le categorie';
-$PMF_LANG['ad_you_should_update'] = 'La tua installazione di phpMyFAQ non è aggiornata. Dovresti aggiornarla all\'ultima versione disponibile.';
+$PMF_LANG['ad_you_should_update'] = 'La tua installazione di phpMyFAQ non &egrave; aggiornata. Dovresti aggiornarla all\'ultima versione disponibile.';
 $PMF_LANG['msgAdvancedSearch'] = 'Ricerca avanzata';
 
 // added v1.6.1 - 2006-04-25 by Matteo and Thorsten
@@ -638,7 +638,7 @@ $PMF_LANG['ad_msiesearch_plugin_install'] = 'Installa il plugin di ricerca per M
 $PMF_LANG['ad_msiesearch_plugin_title'] = 'Crea il plugin di ricerca per Microsoft Internet Explorer';
 $PMF_LANG['ad_msiesearch_plugin_ttitle'] = 'Titolo del riquadro di ricerca in MSIE 7:';
 $PMF_LANG['ad_msiesearch_plugin_create'] = 'Crea il plugin di ricerca per Microsoft Internet Explorer 7.';
-$PMF_LANG['ad_msiesearch_plugin_success'] = 'Il plugin di ricerca per Microsoft Internet Explorer 7 è stato creato con successo!';
+$PMF_LANG['ad_msiesearch_plugin_success'] = 'Il plugin di ricerca per Microsoft Internet Explorer 7 &egrave; stato creato con successo!';
 $PMF_LANG['ad_session_expiring'] = 'Questa sessione scadrà tra %d minuti: vuoi continuare a lavorare?';
 
 // added v1.6.2 - 2006-06-13 by Matteo
@@ -653,20 +653,20 @@ $PMF_LANG['ad_glossary_edit'] = 'Modifica una voce del Glossario';
 $PMF_LANG['ad_glossary_item'] = 'Voce';
 $PMF_LANG['ad_glossary_definition'] = 'Definizione';
 $PMF_LANG['ad_glossary_save'] = 'Salva la voce';
-$PMF_LANG['ad_glossary_save_success'] = 'La voce è stata salvata con successo!';
-$PMF_LANG['ad_glossary_save_error'] = 'Si è verificato un errore: la voce non è stata salvata.';
-$PMF_LANG['ad_glossary_update_success'] = 'La voce è stata aggiornata con successo!';
-$PMF_LANG['ad_glossary_update_error'] = 'Si è verificato un errore: la voce non è stata aggiornata.';
+$PMF_LANG['ad_glossary_save_success'] = 'La voce &egrave; stata salvata con successo!';
+$PMF_LANG['ad_glossary_save_error'] = 'Si &egrave; verificato un errore: la voce non &egrave; stata salvata.';
+$PMF_LANG['ad_glossary_update_success'] = 'La voce &egrave; stata aggiornata con successo!';
+$PMF_LANG['ad_glossary_update_error'] = 'Si &egrave; verificato un errore: la voce non &egrave; stata aggiornata.';
 $PMF_LANG['ad_glossary_delete'] = 'Cancella la voce';
-$PMF_LANG['ad_glossary_delete_success'] = 'La voce è stata cancellata!';
-$PMF_LANG['ad_glossary_delete_error'] = 'Si è verificato un errore: la voce non può essere cancellata.';
+$PMF_LANG['ad_glossary_delete_success'] = 'La voce &egrave; stata cancellata!';
+$PMF_LANG['ad_glossary_delete_error'] = 'Si &egrave; verificato un errore: la voce non può essere cancellata.';
 $PMF_LANG['ad_linkcheck_noReferenceURL'] = 'Verifica automatica dei links disabilitata (non &egrave; stata definita la <em>base URL</em>)';
 $PMF_LANG['ad_linkcheck_noAllowUrlOpen'] = 'Verifica automatica dei links disabilitata (l\'opzione PHP "allow_url_fopen" non &egrave; abilitata)';
 $PMF_LANG['ad_linkcheck_checkResult'] = 'Risultato della verifica automatica dei links';
 $PMF_LANG['ad_linkcheck_checkSuccess'] = 'OK';
 $PMF_LANG['ad_linkcheck_checkFailed'] = 'Fallito';
 $PMF_LANG['ad_linkcheck_failReason'] = 'Motivo(i) del fallimento:';
-$PMF_LANG['ad_linkcheck_noLinksFound'] = 'Non è stata trovata nessuna URL compatibile con la funzionalit&agrave; della verifica automatica dei links.';
+$PMF_LANG['ad_linkcheck_noLinksFound'] = 'Non &egrave; stata trovata nessuna URL compatibile con la funzionalit&agrave; della verifica automatica dei links.';
 $PMF_LANG['ad_linkcheck_searchbadonly'] = 'Soltanto con links rotti';
 $PMF_LANG['ad_linkcheck_infoReason'] = 'Informazioni aggiuntive:';
 $PMF_LANG['ad_linkcheck_openurl_infoprefix'] = 'Trovato durante il test di <strong>%s</strong>: ';
@@ -677,7 +677,7 @@ $PMF_LANG['ad_linkcheck_openurl_tooslow'] = 'L\'host <strong>%s</strong> &egrave
 $PMF_LANG['ad_linkcheck_openurl_nodns'] = 'La risoluzione DNS dell\'host <strong>%s</strong> &egrave; lenta o non &egrave; possibile effettuarla tramite i settaggi attuali del DNS, locale o remoto.';
 $PMF_LANG['ad_linkcheck_openurl_redirected'] = 'L\'URL &ègrave; stata rediretta <strong>%s</strong>.';
 $PMF_LANG['ad_linkcheck_openurl_ambiguous'] = 'E\' stato ritornato uno stato HTTP ambiguo, <strong>%s</strong>.';
-$PMF_LANG['ad_linkcheck_protocol_unsupported'] = 'Il protocollo %s non è supportato dalla verifica automatica dei links.';
+$PMF_LANG['ad_linkcheck_protocol_unsupported'] = 'Il protocollo %s non &egrave; supportato dalla verifica automatica dei links.';
 $PMF_LANG['ad_menu_linkconfig'] = 'Configura la verifica automatica delle URL';
 $PMF_LANG['ad_linkcheck_config_title'] = 'Configurazione della verifica delle URL';
 $PMF_LANG['ad_linkcheck_config_disabled'] = 'Verifica delle URL disabilita.';
@@ -699,12 +699,12 @@ $PMF_LANG['ad_entry_visibility'] = 'Pubblica';
 // added v2.0.0 - 2006-01-02 by Lars
 $PMF_LANG['ad_user_error_password'] =  "Per cortesia inserisci una password. ";
 $PMF_LANG['ad_user_error_passwordsDontMatch'] =  "Le password non corrispondono. ";
-$PMF_LANG['ad_user_error_loginInvalid'] =  "Lo pseudonimo fornito non è valido.";
+$PMF_LANG['ad_user_error_loginInvalid'] =  "Lo pseudonimo fornito non &egrave; valido.";
 $PMF_LANG['ad_user_error_noEmail'] =  "Per cortesia inserisci un indirizzo email valido. ";
 $PMF_LANG['ad_user_error_noRealName'] =  "Per cortesia inserisci il vero nome. ";
 $PMF_LANG['ad_user_error_delete'] =  "Questo account non può essere cancellato. ";
 $PMF_LANG['ad_user_error_noId'] =  "Nessun ID specificato. ";
-$PMF_LANG['ad_user_error_protectedAccount'] =  "Questo account è \'protetto\'. ";
+$PMF_LANG['ad_user_error_protectedAccount'] =  "Questo account &egrave; \'protetto\'. ";
 $PMF_LANG['ad_user_deleteUser'] = "Cancella Utenti";
 $PMF_LANG['ad_user_status'] = "Stato:";
 $PMF_LANG['ad_user_lastModified'] = "Ultima modifica:";
@@ -721,10 +721,10 @@ $PMF_LANG['ad_group_add_link'] = "Aggiungi il gruppo";
 $PMF_LANG['ad_group_name'] = "Nome:";
 $PMF_LANG['ad_group_description'] = "Descrizione:";
 $PMF_LANG['ad_group_autoJoin'] = "Autoiscrizione:";
-$PMF_LANG['ad_group_suc'] = "Il Gruppo è stato aggiunto con <strong>successo</strong>.";
+$PMF_LANG['ad_group_suc'] = "Il Gruppo &egrave; stato aggiunto con <strong>successo</strong>.";
 $PMF_LANG['ad_group_error_noName'] = "Per cortesia inserisci il nome del gruppo. ";
 $PMF_LANG['ad_group_error_delete'] = "Questo gruppo non può essere cancellato. ";
-$PMF_LANG['ad_group_deleted'] = "Il Gruppo è stato cancellato con <strong>successo</strong>.";
+$PMF_LANG['ad_group_deleted'] = "Il Gruppo &egrave; stato cancellato con <strong>successo</strong>.";
 $PMF_LANG['ad_group_deleteGroup'] = "Cancella Gruppi";
 $PMF_LANG['ad_group_deleteQuestion'] = "Sei sicuro che questo gruppo debba essere cancellato?";
 $PMF_LANG['ad_user_uncheckall'] = "Deseleziona tutto";
