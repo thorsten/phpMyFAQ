@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.edit.php,v 1.38 2006-08-15 14:42:04 thorstenr Exp $
+* $Id: record.edit.php,v 1.39 2006-08-16 10:51:03 matteo Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23
@@ -355,7 +355,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
         $result = $db->query("SELECT revision_id, usr, datum, what FROM ".SQLPREFIX."faqchanges WHERE beitrag = ".$id." ORDER BY id DESC");
         while ($row = $db->fetch_object($result)) {
 ?>
-    <div style="font-size: 10px;"><strong><?php print date("Y-m-d H:i:s", $row->datum).": ".$_user[$row->usr]; ?></strong><br /><?php print $row->what; ?><br /><?php print $PMF_LANG['ad_entry_revision'].' 1.'.$row->revision_id; ?></div>
+    <div style="font-size: 10px;"><strong><?php print date("Y-m-d H:i:s", $row->datum).": ".$_user[$row->usr]; ?></strong><br /><?php print PMF_htmlentities($row->what, ENT_NOQUOTES, $PMF_LANG['metaCharset']); ?><br /><?php print $PMF_LANG['ad_entry_revision'].' 1.'.$row->revision_id; ?></div>
 <?php
         }
 ?>
