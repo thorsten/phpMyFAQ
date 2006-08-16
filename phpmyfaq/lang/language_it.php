@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.21 2006-08-16 10:56:38 matteo Exp $
+* $Id: language_it.php,v 1.22 2006-08-16 11:08:21 matteo Exp $
 *
 * Italian language file
 *
@@ -659,7 +659,7 @@ $PMF_LANG['ad_glossary_update_success'] = 'La voce &egrave; stata aggiornata con
 $PMF_LANG['ad_glossary_update_error'] = 'Si &egrave; verificato un errore: la voce non &egrave; stata aggiornata.';
 $PMF_LANG['ad_glossary_delete'] = 'Cancella la voce';
 $PMF_LANG['ad_glossary_delete_success'] = 'La voce &egrave; stata cancellata!';
-$PMF_LANG['ad_glossary_delete_error'] = 'Si &egrave; verificato un errore: la voce non può essere cancellata.';
+$PMF_LANG['ad_glossary_delete_error'] = 'Si &egrave; verificato un errore: la voce non pu&ograve; essere cancellata.';
 $PMF_LANG['ad_linkcheck_noReferenceURL'] = 'Verifica automatica dei links disabilitata (non &egrave; stata definita la <em>base URL</em>)';
 $PMF_LANG['ad_linkcheck_noAllowUrlOpen'] = 'Verifica automatica dei links disabilitata (l\'opzione PHP "allow_url_fopen" non &egrave; abilitata)';
 $PMF_LANG['ad_linkcheck_checkResult'] = 'Risultato della verifica automatica dei links';
@@ -702,9 +702,9 @@ $PMF_LANG['ad_user_error_passwordsDontMatch'] =  "Le password non corrispondono.
 $PMF_LANG['ad_user_error_loginInvalid'] =  "Lo pseudonimo fornito non &egrave; valido.";
 $PMF_LANG['ad_user_error_noEmail'] =  "Per cortesia inserisci un indirizzo email valido. ";
 $PMF_LANG['ad_user_error_noRealName'] =  "Per cortesia inserisci il vero nome. ";
-$PMF_LANG['ad_user_error_delete'] =  "Questo account non può essere cancellato. ";
+$PMF_LANG['ad_user_error_delete'] =  "Questo account non pu&ograve; essere cancellato. ";
 $PMF_LANG['ad_user_error_noId'] =  "Nessun ID specificato. ";
-$PMF_LANG['ad_user_error_protectedAccount'] =  "Questo account &egrave; \'protetto\'. ";
+$PMF_LANG['ad_user_error_protectedAccount'] =  "Questo account &egrave; 'protetto'. ";
 $PMF_LANG['ad_user_deleteUser'] = "Cancella Utenti";
 $PMF_LANG['ad_user_status'] = "Stato:";
 $PMF_LANG['ad_user_lastModified'] = "Ultima modifica:";
@@ -723,7 +723,7 @@ $PMF_LANG['ad_group_description'] = "Descrizione:";
 $PMF_LANG['ad_group_autoJoin'] = "Autoiscrizione:";
 $PMF_LANG['ad_group_suc'] = "Il Gruppo &egrave; stato aggiunto con <strong>successo</strong>.";
 $PMF_LANG['ad_group_error_noName'] = "Per cortesia inserisci il nome del gruppo. ";
-$PMF_LANG['ad_group_error_delete'] = "Questo gruppo non può essere cancellato. ";
+$PMF_LANG['ad_group_error_delete'] = "Questo gruppo non pu&ograve; essere cancellato. ";
 $PMF_LANG['ad_group_deleted'] = "Il Gruppo &egrave; stato cancellato con <strong>successo</strong>.";
 $PMF_LANG['ad_group_deleteGroup'] = "Cancella Gruppi";
 $PMF_LANG['ad_group_deleteQuestion'] = "Sei sicuro che questo gruppo debba essere cancellato?";
