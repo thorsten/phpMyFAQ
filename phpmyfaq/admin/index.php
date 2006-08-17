@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.60 2006-08-15 07:28:49 thorstenr Exp $
+* $Id: index.php,v 1.61 2006-08-17 21:05:39 matteo Exp $
 *
 * The main admin backend index file
 *
@@ -22,6 +22,17 @@
 * under the License.
 */
 
+//
+// Check if data.php exist -> if not, redirect to installer
+//
+if (!file_exists('../inc/data.php')) {
+    header("Location: ".str_replace('admin/index.php', '', $_SERVER["PHP_SELF"])."install/installer.php");
+    exit();
+}
+
+//
+// Prepend
+//
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('IS_VALID_PHPMYFAQ_ADMIN', null);
 require_once(PMF_ROOT_DIR.'/inc/Init.php');
