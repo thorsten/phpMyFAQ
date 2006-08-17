@@ -57,9 +57,9 @@ class PMF_Perm
      * @var array
      */
     var $_perm_typemap = array(
-        'basic' => 'PermBasic',
-        'medium' => 'PermMedium',
-        'large' => 'PermLarge'
+        'basic'     => 'PermBasic',
+        'medium'    => 'PermMedium',
+        'large'     => 'PermLarge'
     );
 
     /**

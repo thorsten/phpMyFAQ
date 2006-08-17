@@ -61,10 +61,10 @@ class PMF_PermBasic
      * @var array
      */
     var $default_right_data = array(
-        'name' => 'DEFAULT_RIGHT',
-        'description' => 'Short description. ',
-        'for_users' => true,
-        'for_groups' => true
+        'name'          => 'DEFAULT_RIGHT',
+        'description'   => 'Short description.',
+        'for_users'     => true,
+        'for_groups'    => true
     );
 
     // --- OPERATIONS ---
@@ -84,7 +84,7 @@ class PMF_PermBasic
     function checkUserRight($user_id, $right_id)
     {
         if (!$this->_initialized)
-        	return false;
+            return false;
         // check right id
         if ($right_id <= 0)
             return false;
@@ -123,7 +123,7 @@ class PMF_PermBasic
     function getUserRights($user_id)
     {
         if (!$this->_initialized)
-        	return false;
+            return false;
         // get user rights
         $res = $this->_db->query("
             SELECT
@@ -140,7 +140,7 @@ class PMF_PermBasic
         // return result
         $result = array();
         while ($row = $this->_db->fetch_assoc($res)) {
-        	$result[] = $row['right_id'];
+            $result[] = $row['right_id'];
         }
         return $result;
     }
@@ -186,7 +186,7 @@ class PMF_PermBasic
     function grantUserRight($user_id, $right_id)
     {
         if (!$this->_initialized)
-        	return false;
+            return false;
         // is right for users?
         $right_data = $this->getRightData($right_id);
         if (!$right_data['for_users'])
@@ -219,7 +219,7 @@ class PMF_PermBasic
     function refuseUserRight($user_id, $right_id)
     {
         if (!$this->_initialized)
-        	return false;
+            return false;
         $res = $this->_db->query("
             DELETE FROM
                 ".PMF_USER_SQLPREFIX."user_right
@@ -270,7 +270,7 @@ class PMF_PermBasic
     function getRightData($right_id)
     {
         if (!$this->_initialized)
-        	return false;
+            return false;
         // get right data
         $res = $this->_db->query("
             SELECT
@@ -328,12 +328,12 @@ class PMF_PermBasic
     function addRight($right_data, $context_data = array())
     {
         if (!$this->_initialized)
-        	return 0;
+            return 0;
         // check if right already exists
         if ($this->getRightId($right_data['name']) > 0)
             return 0;
         // get next id
-		$next_id = $this->_db->nextID(PMF_USER_SQLPREFIX."right", "right_id");
+        $next_id = $this->_db->nextID(PMF_USER_SQLPREFIX."right", "right_id");
         // check right data input
         $right_data = $this->checkRightData($right_data);
         // insert right
@@ -348,15 +348,15 @@ class PMF_PermBasic
             return 0;
         // insert context data
         if (count($context_data) > 0) {
-        	$res = $this->_db->query("
-        		INSERT INTO
-        			".PMF_USER_SQLPREFIX."rightcontext
-        		(right_id, context, context_id)
-        		  VALUES
-        		(".$next_id.", '".$context_data['context']."', ".$context_data['context_id'].")"
+            $res = $this->_db->query("
+                INSERT INTO
+                    ".PMF_USER_SQLPREFIX."rightcontext
+                (right_id, context, context_id)
+                  VALUES
+                (".$next_id.", '".$context_data['context']."', ".$context_data['context_id'].")"
             );
-        	if (!$res)
-        		return 0;
+            if (!$res)
+                return 0;
         }
         return $next_id;
     }
@@ -377,7 +377,7 @@ class PMF_PermBasic
     function changeRight($right_id, $right_data, $context_data = array())
     {
         if (!$this->_initialized)
-        	return false;
+            return false;
         // check input
         $checked_data = $this->checkRightData($right_data);
         // create update SET
@@ -400,17 +400,17 @@ class PMF_PermBasic
             return false;
         // change right context
         if (count($context_data) > 0) {
-        	$res = $this->_db->query("
-        		UPDATE
-        			".PMF_USER_SQLPREFIX."rightcontext
-        		SET
-        			context    = '".$context_data['context']."',
-        			context_id = ".$context_data['context_id']."
-        		WHERE
-        			right_id = ".$right_id
+            $res = $this->_db->query("
+                UPDATE
+                    ".PMF_USER_SQLPREFIX."rightcontext
+                SET
+                    context    = '".$context_data['context']."',
+                    context_id = ".$context_data['context_id']."
+                WHERE
+                    right_id = ".$right_id
             );
-        	if (!$res)
-        		return false;
+            if (!$res)
+                return false;
         }
         return true;
     }
@@ -429,7 +429,7 @@ class PMF_PermBasic
     function deleteRight($right_id)
     {
         if (!$this->_initialized)
-        	return false;
+            return false;
         // delete right
         $res = $this->_db->query("
             DELETE FROM
@@ -482,7 +482,7 @@ class PMF_PermBasic
     function getRightId($name)
     {
         if (!$this->_initialized)
-        	return false;
+            return false;
         // get right id
         $res = $this->_db->query("
             SELECT
@@ -512,7 +512,7 @@ class PMF_PermBasic
     function getAllRights()
     {
         if (!$this->_initialized)
-        	return false;
+            return false;
         $res = $this->_db->query("
             SELECT
                 right_id
@@ -523,7 +523,7 @@ class PMF_PermBasic
         ");
         $result = array();
         while ($row = $this->_db->fetch_assoc($res)) {
-        	$result[] = $row['right_id'];
+            $result[] = $row['right_id'];
         }
         return $result;
     }
@@ -544,28 +544,33 @@ class PMF_PermBasic
      */
     function getAllRightsData($order = 'right_id ASC')
     {
-        if (!$this->_initialized)
-        	return false;
-        $res = $this->_db->query("
-            SELECT
-                right_id,
-                name,
-                description,
-                for_users,
-                for_groups
-            FROM
-                ".PMF_USER_SQLPREFIX."right
-            WHERE
-                1
-            ORDER BY
-                ".$order."
-        ");
+        if (!$this->_initialized) {
+            return false;
+        }
+        
+        $query = sprintf(
+                    "SELECT
+                        right_id,
+                        name,
+                        description,
+                        for_users,
+                        for_groups
+                    FROM
+                        %sright
+                    ORDER BY
+                        %s",
+                    PMF_USER_SQLPREFIX,
+                    $order
+                    );
+        $res = $this->_db->query($query);
+
         $result = array();
         $i = 0;
         while ($row = $this->_db->fetch_assoc($res)) {
-        	$result[$i] = $row;
-        	$i++;
+            $result[$i] = $row;
+            $i++;
         }
+
         return $result;
     }
 
@@ -611,7 +616,7 @@ class PMF_PermBasic
     function refuseAllUserRights($user_id)
     {
         if (!$this->_initialized)
-        	return false;
+            return false;
         $res = $this->_db->query("
             DELETE FROM
                 ".PMF_USER_SQLPREFIX."user_right
