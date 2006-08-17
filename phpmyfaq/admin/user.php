@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: user.php,v 1.26 2006-08-14 17:09:25 thorstenr Exp $
+* $Id: user.php,v 1.27 2006-08-17 21:52:18 matteo Exp $
 *
 * Displays the user managment frontend
 *
@@ -110,7 +110,8 @@ if ($userAction == 'update_rights') {
         foreach ($userRights as $rightId) {
             $perm->grantUserRight($userId, $rightId);
         }
-        $message .= '<p class="success">'.sprintf($successMessages['updateRights'], $groupId).'</p>';
+        $idUser = $user->getUserById($userId);
+        $message .= '<p class="success">'.sprintf($successMessages['updateRights'], $user->getLogin()).'</p>';
     }
 } // end if ($userAction == 'update_rights')
 // update user data
