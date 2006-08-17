@@ -370,6 +370,7 @@ class PMF_User
                     $this->getUserId(),
                     $this->_db->escape_string($login),
                     $now,
+                    $now,
                     date('YmdHis', $now)
                     );
         $this->_db->query($query);
