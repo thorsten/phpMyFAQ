@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.69 2006-08-17 20:24:45 thorstenr Exp $
+* $Id: update.php,v 1.70 2006-08-17 20:38:44 thorstenr Exp $
 *
 * Main update script
 *
@@ -154,6 +154,7 @@ if ($step == 1) {
     <option value="1.5.4">phpMyFAQ 1.5.4 and later</option>
     <option value="1.5.5">phpMyFAQ 1.5.5 and later</option>
     <option value="1.6.0">phpMyFAQ 1.6.0 and later</option>
+    <option value="2.0.0-alpha0">phpMyFAQ 2.0.0-alpha0</option>
 </select>
 
 <p class="center">
@@ -171,6 +172,7 @@ if ($step == 1) {
 
 /**************************** STEP 2 OF 5 ***************************/
 if ($step == 2) {
+    $version = $_POST["version"];
     $test1 = 0;
     $test2 = 0;
     $test3 = 0;
@@ -181,7 +183,7 @@ if ($step == 2) {
     } else {
         $test1 = 1;
     }
-    if (!@is_writeable(PMF_ROOT_DIR."/inc/config.php")) {
+    if (!@is_writeable(PMF_ROOT_DIR."/inc/config.php") && version_compare($version, NEWVERSION, '<')) {
         print "<p class=\"error\"><strong>Error:</strong> The file ../inc/config.php is not writeable. Please correct this!</p>";
     } else {
         $test2 = 1;
@@ -191,7 +193,7 @@ if ($step == 2) {
     } else {
         $test3 = 1;
     }
-    if (!@copy(PMF_ROOT_DIR."/inc/config.php", PMF_ROOT_DIR."/inc/config.bak.php")) {
+    if (!@copy(PMF_ROOT_DIR."/inc/config.php", PMF_ROOT_DIR."/inc/config.bak.php") && version_compare($version, NEWVERSION, '<')) {
         print "<p class=\"error\"><strong>Error:</strong> The backup file ../inc/config.bak.php could not be written. Please correct this!</p>";
     } else {
         $test4 = 1;
@@ -209,7 +211,7 @@ if ($step == 2) {
 <input type="hidden" name="version" value="<?php print $_POST["version"]; ?>" />
 <fieldset class="installation">
 <legend class="installation"><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 2 of 5)</strong></legend>
-<p>A backup of your configuration files (config.php and data.php) have been made.</p>
+<p>A backup of your configuration have been made.</p>
 <p>Now the configuration files will be updated.</p>
 <p class="center"><input type="submit" value="Go to step 3 of 5" class="button" /></p>
 </fieldset>
@@ -231,10 +233,10 @@ if ($step == 3) {
 <fieldset class="installation">
 <legend class="installation"><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 3 of 5)</strong></legend>
 <?php
-    if (version_compare($version, NEWVERSION), '<') {
+    if (version_compare($version, NEWVERSION, '<')) {
         require_once(PMF_ROOT_DIR."/inc/config.php");
     }
-    if (version_compare($version, '1.5.0'), '<') {
+    if (version_compare($version, '1.5.0', '<')) {
         // Version 1.4.x
 ?>
 <input type="hidden" name="db[server]" value="<?php print $DB["server"]; ?>" />
@@ -275,8 +277,7 @@ if ($step == 3) {
         $PMF_CONF['ldap_support'] = isset($PMF_CONF['ldap_support']) ? $PMF_CONF['ldap_support'] : '';
         $PMF_CONF['disatt'] = isset($PMF_CONF['disatt']) ? $PMF_CONF['disatt'] : '';
         $PMF_CONF['ipcheck'] = isset($PMF_CONF['ipcheck']) ? $PMF_CONF['ipcheck'] : '';
-        // Version 1.6.1
-        if ($version < 161) {
+        if (version_compare($version, '1.6.1', '<')) {
             $PMF_CONF['spamEnableSafeEmail'] = isset($PMF_CONF['spamEnableSafeEmail']) ? $PMF_CONF['spamEnableSafeEmail'] : 'TRUE';
             $PMF_CONF['spamCheckBannedWords'] = isset($PMF_CONF['spamCheckBannedWords']) ? $PMF_CONF['spamCheckBannedWords'] : 'TRUE';
             $PMF_CONF['spamEnableCatpchaCode'] = isset($PMF_CONF['spamEnableCatpchaCode']) ? $PMF_CONF['spamEnableCatpchaCode'] : 'TRUE';
@@ -330,10 +331,9 @@ if ($step == 4) {
 <legend class="installation"><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 4 of 5)</strong></legend>
 <?php
     $version = $_REQUEST["version"];
-    if (version_compare($version, NEWVERSION), '<') {
+    if (version_compare($version, NEWVERSION, '<')) {
         require_once(PMF_ROOT_DIR."/inc/config.php");
     }
-    require_once(PMF_ROOT_DIR."/lang/language_en.php");
 
     if (isset($_REQUEST["db"])) {
         $DB = $_REQUEST["db"];
@@ -344,20 +344,8 @@ if ($step == 4) {
         } else {
             print "<p class=\"error\"><strong>Error:</strong> The file ../inc/data.php could not be updated.</p>";
         }
-    }
-
-    $arrVar = $_REQUEST["edit"];
-
-    if ($fp = @fopen(PMF_ROOT_DIR."/inc/config.php", "w")) {
-        @fputs($fp, "<?php \n# Created ".date("Y-m-d H:i:s")."\n\n");
-        foreach ($arrVar as $key => $value) {
-            fputs($fp, "\$PMF_CONF[\"".$key."\"] = \"".htmlspecialchars(stripslashes($value))."\";\n\n");
-        }
-        @fputs($fp, "?>");
-        @fclose($fp);
-        print "<p class=\"center\">The file ../inc/config.php was successfully updated.</p>";
     } else {
-        print "<p class=\"error\"><strong>Error:</strong> The file ../inc/config.php could not be updated.</p>";
+        print '<p align="center">Nothing have to be done in this step with your version.</p>';
     }
 ?>
 <p class="center"><input type="submit" value="Go to step 5 of 5" class="button" /></p>
@@ -369,7 +357,7 @@ if ($step == 4) {
 /**************************** STEP 5 OF 5 ***************************/
 if ($step == 5) {
     $version = $_REQUEST["version"];
-    if (version_compare($version, NEWVERSION), '<') {
+    if (version_compare($version, NEWVERSION, '<')) {
         require_once(PMF_ROOT_DIR."/inc/config.php");
     }
     
@@ -381,7 +369,7 @@ if ($step == 5) {
     $db = PMF_Db::db_select($DB["type"]);
     $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
 
-    if (version_compare($version, '1.4.0'), '<=') {
+    if (version_compare($version, '1.4.0', '<=')) {
         // rewrite data.php
         if ($fp = @fopen("../inc/data.php","w")) {
             @fputs($fp,"<?php\n\$DB[\"server\"] = '".$DB["server"]."';\n\$DB[\"user\"] = '".$DB["user"]."';\n\$DB[\"password\"] = '".$DB["password"]."';\n\$DB[\"db\"] = '".$DB["db"]."';\n\$DB[\"prefix\"] = '".SQLPREFIX."';\n\$DB[\"type\"] = 'mysql';\n?>");
@@ -390,17 +378,17 @@ if ($step == 5) {
             print "<p class=\"error\"><strong>Error:</strong> Cannot rewrite to data.php.</p>";
         }
     }
-    if (version_compare($version, '1.4.2'), '<=') {
+    if (version_compare($version, '1.4.2', '<=')) {
         $query[] = "ALTER TABLE ".SQLPREFIX."faqadminlog CHANGE user usr INT(11) DEFAULT '0' NOT NULL";
         $query[] = "ALTER TABLE ".SQLPREFIX."faqadminsessions CHANGE user usr TINYTEXT NOT NULL";
         $query[] = "ALTER TABLE ".SQLPREFIX."faqchanges CHANGE user usr INT(11) DEFAULT '0' NOT NULL";
         $query[] = "ALTER TABLE ".SQLPREFIX."faqcomments CHANGE user usr VARCHAR(255) NOT NULL";
         $query[] = "ALTER TABLE ".SQLPREFIX."faqvoting CHANGE user usr INT(11) DEFAULT '0' NOT NULL";
     }
-    if (version_compare($version, '1.4.4'), '<=') {
+    if (version_compare($version, '1.4.4', '<=')) {
         $query[] = "ALTER TABLE ".SQLPREFIX."faqdata CHANGE content content LONGTEXT NOT NULL";
     }
-    if (version_compare($version, '1.5.0'), '<=') {
+    if (version_compare($version, '1.5.0', '<=')) {
         // alter column faqdata.rubrik to integer
         $query[] = "ALTER TABLE ".SQLPREFIX."faqdata CHANGE rubrik rubrik INT NOT NULL";
         // create new table faqcategoryrelations
@@ -420,7 +408,7 @@ if ($step == 5) {
         $query[] = 'ALTER TABLE '.SQLPREFIX.'faquser CHANGE id id INT(11) NOT NULL';
         $query[] = 'ALTER TABLE '.SQLPREFIX.'faqvisits CHANGE id id INT(11) NOT NULL';
     }
-    if (version_compare($version, '1.5.2'), '<=') {
+    if (version_compare($version, '1.5.2', '<=')) {
         switch($DB["type"]) {
             case 'mssql':   $query[] = 'CREATE INDEX idx_record_id_lang ON '.SQLPREFIX.'faqcategoryrelations (record_id, record_lang)';
                             break;
@@ -428,7 +416,7 @@ if ($step == 5) {
                             break;
         }
     }
-    if (version_compare($version, '1.5.5'), '<=') {
+    if (version_compare($version, '1.5.5', '<=')) {
         // Fix unuseful slashes
         // Table: faqcategories
         $faqCategoriesQuery = "SELECT * FROM ".SQLPREFIX."faqcategories"
@@ -504,7 +492,7 @@ if ($step == 5) {
         }
     }
 
-    if (version_compare($version, '1.6.0'), '<=') {
+    if (version_compare($version, '1.6.0', '<=')) {
         // add revision_id and solution_id
         // 1/2. Fix faqdata and faqchanges tables
         switch($DB["type"]) {
@@ -603,7 +591,7 @@ if ($step == 5) {
 
     $images = array();
 
-    if (version_compare($version, '2.0.0'), '<=') {
+    if (version_compare($version, '2.0.0', '<')) {
         // 1/13. Fix faqfragen table
         switch($DB["type"]) {
             case 'pgsql':
@@ -992,7 +980,7 @@ if ($step == 5) {
         }
     }
 
-if (version_compare($version, '2.0.0'), '<') {
+if (version_compare($version, '2.0.0', '<')) {
         // 11/13. Move each image file in each of the faq content, from '/images' to '/images/Image'
         foreach ($images as $image) {
             $newImagePath = str_replace('/images/', '/images/Image/', $image);
@@ -1025,7 +1013,7 @@ if (version_compare($version, '2.0.0'), '<') {
         }
     }
 
-if (version_compare($version, '2.0.0'), '<') {
+if (version_compare($version, '2.0.0', '<')) {
         // 13/13. Remove the old config file
         if (@unlink(PMF_ROOT_DIR."/inc/config.php")) {
             print "<p class=\"center\">The file 'inc/config.php' was deleted automatically.</p>\n";
