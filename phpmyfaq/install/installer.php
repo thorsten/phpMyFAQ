@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.63 2006-08-17 20:24:15 thorstenr Exp $
+* $Id: installer.php,v 1.64 2006-08-17 20:42:29 matteo Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -139,7 +139,10 @@ function HTMLFooter()
 function cleanInstallation()
 {
     if (file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
-        unlink(PMF_ROOT_DIR.'/inc/config.php');
+        @unlink(PMF_ROOT_DIR.'/inc/data.php');
+    }
+    if (file_exists(PMF_ROOT_DIR.'/inc/config.php')) {
+        @unlink(PMF_ROOT_DIR.'/inc/config.php');
     }
 }
 ?>
@@ -678,7 +681,6 @@ foreach ($permLevels as $level => $desc) {
 
     include_once($sql_type.'.sql.php');
     include_once('config.sql.php');
-    include_once('data.sql.php');
     print "<p class=\"center\">";
     while ($each_query = each($query)) {
         $result = @$db->query($each_query[1]);
