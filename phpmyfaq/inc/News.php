@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: News.php,v 1.12 2006-07-29 10:34:01 matteo Exp $
+* $Id: News.php,v 1.13 2006-08-17 23:54:25 matteo Exp $
 *
 * The News class for phpMyFAQ news
 *
@@ -266,18 +266,30 @@ class PMF_News
 
         if ($this->db->num_rows($result) > 0) {
             if ($row = $this->db->fetch_object($result)) {
+                $content        = $row->artikel;
+                $active         = ('y' == $row->active);
+                $allowComments  = ('y' == $row->comment);
+                $expired        = (date('YmdHis') > $row->date_end);
+
+                if (!$active) {
+                    $content = $this->pmf_lang['err_inactiveNews'];
+                }
+                if ($expired) {
+                    $content = $this->pmf_lang['err_expiredNews'];
+                }
+
                 $news = array(
                     'id'            => $row->id,
                     'date'          => makeDate($row->datum),
                     'lang'          => $row->lang,
                     'header'        => $row->header,
-                    'content'       => $row->artikel,
+                    'content'       => $content,
                     'authorName'    => $row->author_name,
                     'authorEmail'   => $row->author_email,
                     'dateStart'     => $row->date_start,
                     'dateEnd'       => $row->date_end,
-                    'active'        => ('y' == $row->active),
-                    'allowComments' => ('y' == $row->comment),
+                    'active'        => $active,
+                    'allowComments' => $allowComments,
                     'link'          => $row->link,
                     'linkTitle'     => $row->linktitel,
                     'target'        => $row->target

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.41 2006-08-15 10:04:54 thorstenr Exp $
+* $Id: language_en.php,v 1.42 2006-08-17 23:54:25 matteo Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -772,6 +772,9 @@ $PMF_LANG['admin_mainmenu_backup'] = 'Backup';
 $PMF_LANG['admin_mainmenu_configuration'] = 'Configuration';
 $PMF_LANG['admin_mainmenu_logout'] = 'Logout';
 
-// added v2.0.0 - 2006-08-15 by Thorsten
+// added v2.0.0 - 2006-08-15 by Thorsten and Matteo
 $PMF_LANG["ad_categ_owner"] = 'Category owner';
 $PMF_LANG['adminSection'] = 'Administration';
+$PMF_LANG['err_expiredArticle'] = 'This entry is expired and can not be displayed';
+$PMF_LANG['err_expiredNews'] = 'This news is expired and can not be displayed';
+$PMF_LANG['err_inactiveNews'] = 'This news is in revision and can not be displayed';

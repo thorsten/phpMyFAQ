@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: news.php,v 1.2 2006-07-23 10:34:32 matteo Exp $
+* $Id: news.php,v 1.3 2006-08-17 23:54:24 matteo Exp $
 *
 * Shows the page with the news record and - when available - the user
 * comments
@@ -65,8 +65,9 @@ $header  = $oG->insertItemsIntoContent($header);
 
 // Is the news item expired?
 $expired = (date('YmdHis') > $news['dateEnd']);
+
 // Does the user have the right to add a comment?
-if (('n' == $news['allowComments']) || ($expired)) {
+if ((!$news['active']) || (!$news['allowComments']) || $expired) {
     $commentMessage = $PMF_LANG['msgWriteNoComment'];
 } else {
     $commentMessage = sprintf('%s<a onclick="show(\'comment\');" href="#comment">%s</a>',
@@ -80,8 +81,8 @@ $tpl->processTemplate ("writeContent", array(
     'writeNewsRSS'              => $writeNewsRSS,
     'writeHeader'               => $header,
     'writeContent'              => $content,
-    'writeDateMsg'              => $PMF_LANG['msgLastUpdateArticle'].$news['date'],
-    'writeAuthor'               => '<br />'.$PMF_LANG['msgAuthor'].$news['authorName'],
+    'writeDateMsg'              => ($news['active'] && (!$expired)) ? $PMF_LANG['msgLastUpdateArticle'].$news['date'] : '',
+    'writeAuthor'               => ($news['active'] && (!$expired)) ? '<br />'.$PMF_LANG['msgAuthor'].$news['authorName'] : '',
     'writeCommentMsg'           => $commentMessage,
     'msgWriteComment'           => $PMF_LANG['newsWriteComment'],
     'writeSendAdress'           => $_SERVER['PHP_SELF'].'?'.$sids.'action=savecomment',

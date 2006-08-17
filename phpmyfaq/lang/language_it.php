@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.22 2006-08-16 11:08:21 matteo Exp $
+* $Id: language_it.php,v 1.23 2006-08-17 23:54:25 matteo Exp $
 *
 * Italian language file
 *
@@ -775,3 +775,6 @@ $PMF_LANG['admin_mainmenu_logout'] = 'Logout';
 // added v2.0.0 - 2006-08-15 by Thorsten
 $PMF_LANG["ad_categ_owner"] = 'Responsabile della categoria';
 $PMF_LANG['adminSection'] = 'Amministrazione';
+$PMF_LANG['err_expiredArticle'] = 'Questa FAQ &egrave; in scaduta e non pu&ograve; essere visualizzata.';
+$PMF_LANG['err_expiredNews'] = 'Questa notizia &egrave; in scaduta e non pu&ograve; essere visualizzata.';
+$PMF_LANG['err_inactiveNews'] = 'Questa notizia &egrave; in revisione e non pu&ograve; essere visualizzata.';

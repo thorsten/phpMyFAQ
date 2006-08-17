@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: news.php,v 1.24 2006-08-07 21:26:21 matteo Exp $
+* $Id: news.php,v 1.25 2006-08-17 23:54:25 matteo Exp $
 *
 * The main administration file for the news
 *
@@ -29,7 +29,8 @@ require_once (PMF_ROOT_DIR."/inc/News.php");
 
 $news = new PMF_News($db, $LANGCODE);
 
-// TODO: Manage authorName and authorEmail
+// Re-evaluate $user
+$user = PMF_CurrentUser::getFromSession($faqconfig->get('ipcheck'));
 
 if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews"]) {
 ?>
@@ -47,16 +48,16 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
         <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript><textarea id="content" name="content" cols="84" rows="5"></textarea><br />
 
         <label class="lefteditor" for="authorName"><?php print $PMF_LANG['ad_news_author_name']; ?></label>
-        <input type="text" name="authorName" style="width: 390px;" /><br />
+        <input type="text" name="authorName" style="width: 390px;" value="<?php print $user->getUserData('display_name'); ?>"/><br />
 
         <label class="lefteditor" for="authorEmail"><?php print $PMF_LANG['ad_news_author_email']; ?></label>
-        <input type="text" name="authorEmail" style="width: 390px;" /><br />
+        <input type="text" name="authorEmail" style="width: 390px;" value="<?php print $user->getUserData('email'); ?>"/><br />
 
         <label class="lefteditor" for="active"><?php print $PMF_LANG['ad_news_set_active']; ?></label>
-        <input type="checkbox" name="active" id="active" value="n" /><?php print $PMF_LANG['ad_gen_yes']; ?><br />
+        <input type="checkbox" name="active" id="active" value="y" /><?php print $PMF_LANG['ad_gen_yes']; ?><br />
 
         <label class="lefteditor" for="comment"><?php print $PMF_LANG['ad_news_allowComments']; ?></label>
-        <input type="checkbox" name="comment" id="comment" value="n" /><?php print $PMF_LANG['ad_gen_yes']; ?><br />
+        <input type="checkbox" name="comment" id="comment" value="y" /><?php print $PMF_LANG['ad_gen_yes']; ?><br />
 
         <label class="lefteditor" for="link"><?php print $PMF_LANG['ad_news_link_url']; ?></label>
         <input type="text" name="link" style="width: 390px;" /><br />
@@ -158,10 +159,10 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
         <input type="text" name="authorEmail" style="width: 390px;" value="<?php print $newsData['authorEmail']; ?>" /><br />
 
         <label class="lefteditor" for="active"><?php print $PMF_LANG['ad_news_set_active']; ?></label>
-        <input type="checkbox" name="active" id="active" value="y"<?php if (isset($newsData['active']) && ('y' == $newsData['active'])) { print " checked"; } ?> /><?php print $PMF_LANG['ad_gen_yes']; ?><br />
+        <input type="checkbox" name="active" id="active" value="y"<?php if (isset($newsData['active']) && $newsData['active']) { print " checked"; } ?> /><?php print $PMF_LANG['ad_gen_yes']; ?><br />
 
         <label class="lefteditor" for="comment"><?php print $PMF_LANG['ad_news_allowComments']; ?></label>
-        <input type="checkbox" name="comment" id="comment" value="y"<?php if (isset($newsData['comment']) && ('y' == $newsData['header'])) { print " checked"; } ?> /><?php print $PMF_LANG['ad_gen_yes']; ?><br />
+        <input type="checkbox" name="comment" id="comment" value="y"<?php if (isset($newsData['allowComments']) && $newsData['allowComments']) { print " checked"; } ?> /><?php print $PMF_LANG['ad_gen_yes']; ?><br />
 
         <label class="lefteditor" for="link"><?php print $PMF_LANG['ad_news_link_url']; ?></label>
         <input type="text" name="link" style="width: 390px;" value="<?php print $newsData['link']; ?>" /><br />
@@ -235,7 +236,7 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
         'authorName'    => $db->escape_string($_POST['authorName']),
         'authorEmail'   => $db->escape_string($_POST['authorEmail']),
         'active'        => (isset($_POST['active'])) ? $db->escape_string($_POST['active']) : 'n',
-        'comment'       => (isset($_POST['comment'])) ? $db->escape_string($_POST['comment']) : 'n',
+        'allowComments' => (isset($_POST['comment'])) ? $db->escape_string($_POST['comment']) : 'n',
         'dateStart'     => ('' == $dateStart) ? '00000000000000' : $db->escape_string($dateStart),
         'dateEnd'       => ('' == $dateEnd)   ? '99991231235959' : $db->escape_string($dateEnd),
         'link'          => $db->escape_string($_POST['link']),
