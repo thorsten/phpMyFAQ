@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: pgsql.update.sql.php,v 1.1 2006-08-12 15:12:40 matteo Exp $
+* $Id: pgsql.update.sql.php,v 1.2 2006-08-17 19:50:32 matteo Exp $
 *
 * CREATE TABLE instruction for PostgreSQL database
 *
@@ -25,16 +25,39 @@
 // TABLES
 //
 
+//faquser
+$query[] = "CREATE TABLE ".SQLPREFIX."faquser (
+user_id SERIAL NOT NULL,
+login varchar(25) NOT NULL,
+session_id varchar(150) NULL,
+session_timestamp int4 NULL,
+ip varchar(15) NULL,
+account_status varchar(50) NULL,
+last_login varchar(14) NULL,
+auth_source varchar(100) NULL,
+member_since varchar(14) NULL,
+PRIMARY KEY (user_id)
+)";
+
+//faqgroup
+$query[] = "CREATE TABLE ".SQLPREFIX."faqgroup (
+group_id SERIAL NOT NULL,
+name VARCHAR(25) NULL,
+description TEXT NULL,
+auto_join int4 NULL,
+PRIMARY KEY (group_id)
+)";
+
 //faqcategory_group
 $query[] = "CREATE TABLE ".SQLPREFIX."faqcategory_group (
 category_id int4 NOT NULL,
-group_id int4 NOT NULL,
+group_id int4 NOT NULL REFERENCES ".SQLPREFIX."faqgroup(group_id),
 PRIMARY KEY (category_id, group_id))";
 
 //faqcategory_user
 $query[] = "CREATE TABLE ".SQLPREFIX."faqcategory_user (
 category_id int4 NOT NULL,
-user_id int4 NOT NULL,
+user_id int4 NOT NULL REFERENCES ".SQLPREFIX."faquser(user_id),
 PRIMARY KEY (category_id, user_id))";
 
 //faqconfig
@@ -46,49 +69,40 @@ PRIMARY KEY (config_name))";
 //faqdata_group
 $query[] = "CREATE TABLE ".SQLPREFIX."faqdata_group (
 record_id int4 NOT NULL,
-group_id int4 NOT NULL,
+group_id int4 NOT NULL REFERENCES ".SQLPREFIX."faqgroup(group_id),
 PRIMARY KEY (record_id, group_id))";
 
 //faqdata_tags
-$query[] = "CREATE TABLE IF NOT EXISTS ".SQLPREFIX."faqdata_tags (
-tagging_id INT4 NOT NULL,
-tagging_name VARCHAR(255) NOT NULL ,
+$query[] = "CREATE TABLE ".SQLPREFIX."faqdata_tags (
+tagging_id SERIAL NOT NULL,
+tagging_name VARCHAR(255) NOT NULL,
 PRIMARY KEY (tagging_id, tagging_name)
 )";
 
 //faqdata_user
 $query[] = "CREATE TABLE ".SQLPREFIX."faqdata_user (
 record_id int4 NOT NULL,
-user_id int4 NOT NULL,
+user_id int4 NOT NULL REFERENCES ".SQLPREFIX."faquser(user_id),
 PRIMARY KEY (record_id, user_id))";
 
 //faqglossary
 $query[] = "CREATE TABLE ".SQLPREFIX."faqglossary (
-id int4 NOT NULL ,
-lang VARCHAR(2) NOT NULL ,
-item VARCHAR(255) NOT NULL ,
+id SERIAL NOT NULL,
+lang VARCHAR(2) NOT NULL,
+item VARCHAR(255) NOT NULL,
 definition TEXT NOT NULL,
 PRIMARY KEY (id, lang))";
 
-//faqgroup
-$query[] = "CREATE TABLE ".SQLPREFIX."faqgroup (
-group_id int4 NOT NULL,
-name VARCHAR(25) NULL,
-description TEXT NULL,
-auto_join int4 UNSIGNED NULL,
-PRIMARY KEY (group_id),
-)";
-
 //faqgroup_right
 $query[] = "CREATE TABLE ".SQLPREFIX."faqgroup_right (
-group_id int4 NOT NULL,
-right_id int4 UNSIGNED NOT NULL,
+group_id int4 NOT NULL REFERENCES ".SQLPREFIX."faqgroup(group_id),
+right_id int4 NOT NULL,
 PRIMARY KEY (group_id, right_id)
 )";
 
 //faqlinkverifyrules
 $query[] = "CREATE TABLE ".SQLPREFIX."faqlinkverifyrules (
-id int4 NOT NULL default '0',
+id SERIAL NOT NULL,
 type varchar(6) NOT NULL default '',
 url varchar(255) NOT NULL default '',
 reason varchar(255) NOT NULL default '',
@@ -102,7 +116,7 @@ PRIMARY KEY (id)
 
 //faqright
 $query[] = "CREATE TABLE ".SQLPREFIX."faqright (
-right_id int4 UNSIGNED NOT NULL,
+right_id SERIAL NOT NULL,
 name VARCHAR(50) NULL,
 description TEXT NULL,
 for_users int4 NULL DEFAULT 1,
@@ -111,29 +125,15 @@ PRIMARY KEY (right_id)
 )";
 
 //faqtags
-$query[] = "CREATE TABLE IF NOT EXISTS ".SQLPREFIX."faqtags (
+$query[] = "CREATE TABLE ".SQLPREFIX."faqtags (
 record_id INT4 NOT NULL,
 tagging_id INT4 NOT NULL,
 PRIMARY KEY (record_id, tagging_id)
 )";
 
-//faquser
-$query[] = "CREATE TABLE ".SQLPREFIX."faquser (
-user_id int4 NOT NULL,
-login VARCHAR(25) NOT NULL,
-session_id VARCHAR(150) NULL,
-session_timestamp int4 UNSIGNED NULL,
-ip VARCHAR(15) NULL,
-account_status VARCHAR(50) NULL,
-last_login varchar(14) NULL,
-auth_source VARCHAR(100) NULL,
-member_since varchar(14) NULL,
-PRIMARY KEY (user_id)
-)";
-
 //faquserdata
 $query[] = "CREATE TABLE ".SQLPREFIX."faquserdata (
-user_id int4 NOT NULL,
+user_id SERIAL NOT NULL,
 last_modified varchar(14) NULL,
 display_name VARCHAR(50) NULL,
 email VARCHAR(100) NULL
@@ -148,14 +148,14 @@ PRIMARY KEY (login)
 
 //faquser_group
 $query[] = "CREATE TABLE ".SQLPREFIX."faquser_group (
-user_id int4 NOT NULL,
-group_id int4 NOT NULL,
+user_id int4 NOT NULL REFERENCES ".SQLPREFIX."faquser(user_id),
+group_id int4 NOT NULL REFERENCES ".SQLPREFIX."faqgroup(group_id),
 PRIMARY KEY (user_id, group_id)
 )";
 
 //faquser_right
 $query[] = "CREATE TABLE ".SQLPREFIX."faquser_right (
-user_id int4 NOT NULL,
+user_id int4 NOT NULL REFERENCES ".SQLPREFIX."faquser(user_id),
 right_id int4 NOT NULL,
 PRIMARY KEY (user_id, right_id)
 )";
