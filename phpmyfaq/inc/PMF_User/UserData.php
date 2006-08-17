@@ -215,15 +215,21 @@ class PMF_UserData
             return false;
         $this->_user_id = $user_id;
         // add entry
-        $res = $this->_db->query("
-          INSERT INTO
-            ".PMF_USER_SQLPREFIX."userdata
-          (user_id, last_modified)
-            VALUES
-          (".$this->_user_id.", '".date('Y-m-d H:i:s', time())."')"
-        );
-        if (!$res)
+        $query = sprintf(
+                    "INSERT INTO
+                        %suserdata
+                    (user_id, last_modified)
+                    VALUES
+                        (%d, '%s')",
+                    PMF_USER_SQLPREFIX,
+                    $this->_user_id,
+                    date('YmdHis', time())
+                    );
+        $res = $this->_db->query($query);
+        if (!$res) {
             return false;
+        }
+
         return true;
     }
 

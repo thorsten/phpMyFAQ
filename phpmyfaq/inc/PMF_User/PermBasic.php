@@ -511,20 +511,24 @@ class PMF_PermBasic
      */
     function getAllRights()
     {
-        if (!$this->_initialized)
+        if (!$this->_initialized) {
             return false;
-        $res = $this->_db->query("
-            SELECT
-                right_id
-            FROM
-                ".PMF_USER_SQLPREFIX."right
-            WHERE
-                1
-        ");
+        }
+        
+        $query = sprintf(
+                    "SELECT
+                        right_id
+                    FROM
+                        %sright",
+                    PMF_USER_SQLPREFIX
+                    );
+        $res = $this->_db->query($query);
+
         $result = array();
         while ($row = $this->_db->fetch_assoc($res)) {
             $result[] = $row['right_id'];
         }
+
         return $result;
     }
 

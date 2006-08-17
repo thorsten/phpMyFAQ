@@ -370,9 +370,9 @@ class PMF_User
                     $this->getUserId(),
                     $this->_db->escape_string($login),
                     $now,
-                    $now,
                     date('YmdHis', $now)
                     );
+
         $this->_db->query($query);
         // create user-data entry
         if (!$this->userdata)
@@ -398,6 +398,7 @@ class PMF_User
         }
         if (!$success)
             return false;
+        
         return $this->getUserByLogin($login, false);
     }
 
@@ -848,20 +849,24 @@ class PMF_User
      */
     function getAllUsers()
     {
-        $res = $this->_db->query("
-            SELECT
-                user_id
-            FROM
-                ".PMF_USER_SQLPREFIX."user
-            WHERE
-                1
-        ");
-        if (!$res)
+        $query = sprintf(
+                    "SELECT
+                        user_id
+                    FROM
+                        %suser",
+                    PMF_USER_SQLPREFIX
+                    );
+
+        $res = $this->_db->query($query);
+        if (!$res) {
             return array();
+        }
+
         $result = array();
         while ($row = $this->_db->fetch_assoc($res)) {
             $result[] = $row['user_id'];
         }
+
         return $result;
     }
 
