@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.68 2006-08-17 19:34:17 matteo Exp $
+* $Id: update.php,v 1.69 2006-08-17 20:24:45 thorstenr Exp $
 *
 * Main update script
 *
@@ -21,7 +21,7 @@
 * under the License.
 */
 
-define('NEWVERSION', '2.0.0.alpha0');
+define('NEWVERSION', '2.0.0-alpha0');
 define('COPYRIGHT', '&copy; 2001-2006 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
@@ -224,20 +224,17 @@ if ($step == 2) {
 
 /**************************** STEP 3 OF 5 ***************************/
 if ($step == 3) {
-    $version = str_replace(".", "", $_POST["version"]);
-    if (4 == strlen($version)) {
-        $version = 149;
-    }
+    $version = $_POST["version"];
 ?>
 <form action="update.php?step=4" method="post">
 <input type="hidden" name="version" value="<?php print $_POST["version"]; ?>" />
 <fieldset class="installation">
 <legend class="installation"><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 3 of 5)</strong></legend>
 <?php
-    if ($version < 200) {
+    if (version_compare($version, NEWVERSION), '<') {
         require_once(PMF_ROOT_DIR."/inc/config.php");
     }
-    if ($version < 150) {
+    if (version_compare($version, '1.5.0'), '<') {
         // Version 1.4.x
 ?>
 <input type="hidden" name="db[server]" value="<?php print $DB["server"]; ?>" />
@@ -332,12 +329,8 @@ if ($step == 4) {
 <fieldset class="installation">
 <legend class="installation"><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 4 of 5)</strong></legend>
 <?php
-    $version = str_replace(".", "", $_REQUEST["version"]);
-    if (4 == strlen($version)) {
-        $version = 149;
-    }
-
-    if ($version < 200) {
+    $version = $_REQUEST["version"];
+    if (version_compare($version, NEWVERSION), '<') {
         require_once(PMF_ROOT_DIR."/inc/config.php");
     }
     require_once(PMF_ROOT_DIR."/lang/language_en.php");
@@ -375,14 +368,11 @@ if ($step == 4) {
 
 /**************************** STEP 5 OF 5 ***************************/
 if ($step == 5) {
-    $version = str_replace(".", "", $_REQUEST["version"]);
-    if (4 == strlen($version)) {
-        $version = 149;
-    }
-
-    if ($version < 200) {
+    $version = $_REQUEST["version"];
+    if (version_compare($version, NEWVERSION), '<') {
         require_once(PMF_ROOT_DIR."/inc/config.php");
     }
+    
     require_once(PMF_ROOT_DIR."/inc/functions.php");
     require_once(PMF_ROOT_DIR."/inc/Configuration.php");
     require_once(PMF_ROOT_DIR."/inc/Db.php");
@@ -391,8 +381,7 @@ if ($step == 5) {
     $db = PMF_Db::db_select($DB["type"]);
     $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
 
-    // update from version 1.4.0
-    if ($version <= "140") {
+    if (version_compare($version, '1.4.0'), '<=') {
         // rewrite data.php
         if ($fp = @fopen("../inc/data.php","w")) {
             @fputs($fp,"<?php\n\$DB[\"server\"] = '".$DB["server"]."';\n\$DB[\"user\"] = '".$DB["user"]."';\n\$DB[\"password\"] = '".$DB["password"]."';\n\$DB[\"db\"] = '".$DB["db"]."';\n\$DB[\"prefix\"] = '".SQLPREFIX."';\n\$DB[\"type\"] = 'mysql';\n?>");
@@ -401,20 +390,17 @@ if ($step == 5) {
             print "<p class=\"error\"><strong>Error:</strong> Cannot rewrite to data.php.</p>";
         }
     }
-    // update from version 1.4.2
-    if ($version < "142") {
+    if (version_compare($version, '1.4.2'), '<=') {
         $query[] = "ALTER TABLE ".SQLPREFIX."faqadminlog CHANGE user usr INT(11) DEFAULT '0' NOT NULL";
         $query[] = "ALTER TABLE ".SQLPREFIX."faqadminsessions CHANGE user usr TINYTEXT NOT NULL";
         $query[] = "ALTER TABLE ".SQLPREFIX."faqchanges CHANGE user usr INT(11) DEFAULT '0' NOT NULL";
         $query[] = "ALTER TABLE ".SQLPREFIX."faqcomments CHANGE user usr VARCHAR(255) NOT NULL";
         $query[] = "ALTER TABLE ".SQLPREFIX."faqvoting CHANGE user usr INT(11) DEFAULT '0' NOT NULL";
     }
-    // update from version 1.4.4
-    if ($version <= "144") {
+    if (version_compare($version, '1.4.4'), '<=') {
         $query[] = "ALTER TABLE ".SQLPREFIX."faqdata CHANGE content content LONGTEXT NOT NULL";
     }
-    // update from versions before 1.5.0
-    if ($version < "150") {
+    if (version_compare($version, '1.5.0'), '<=') {
         // alter column faqdata.rubrik to integer
         $query[] = "ALTER TABLE ".SQLPREFIX."faqdata CHANGE rubrik rubrik INT NOT NULL";
         // create new table faqcategoryrelations
@@ -434,8 +420,7 @@ if ($step == 5) {
         $query[] = 'ALTER TABLE '.SQLPREFIX.'faquser CHANGE id id INT(11) NOT NULL';
         $query[] = 'ALTER TABLE '.SQLPREFIX.'faqvisits CHANGE id id INT(11) NOT NULL';
     }
-    // update from versions before 1.5.2
-    if ($version < 152) {
+    if (version_compare($version, '1.5.2'), '<=') {
         switch($DB["type"]) {
             case 'mssql':   $query[] = 'CREATE INDEX idx_record_id_lang ON '.SQLPREFIX.'faqcategoryrelations (record_id, record_lang)';
                             break;
@@ -443,8 +428,7 @@ if ($step == 5) {
                             break;
         }
     }
-    // update from versions before 1.5.5
-    if ($version < 155) {
+    if (version_compare($version, '1.5.5'), '<=') {
         // Fix unuseful slashes
         // Table: faqcategories
         $faqCategoriesQuery = "SELECT * FROM ".SQLPREFIX."faqcategories"
@@ -520,8 +504,7 @@ if ($step == 5) {
         }
     }
 
-    // update from versions before 1.6.0
-    if ($version < 160) {
+    if (version_compare($version, '1.6.0'), '<=') {
         // add revision_id and solution_id
         // 1/2. Fix faqdata and faqchanges tables
         switch($DB["type"]) {
@@ -619,8 +602,8 @@ if ($step == 5) {
     }
 
     $images = array();
-    // update from versions before 2.0.0
-    if ($version < 200) {
+
+    if (version_compare($version, '2.0.0'), '<=') {
         // 1/13. Fix faqfragen table
         switch($DB["type"]) {
             case 'pgsql':
@@ -1009,7 +992,7 @@ if ($step == 5) {
         }
     }
 
-    if ($version < 200) {
+if (version_compare($version, '2.0.0'), '<') {
         // 11/13. Move each image file in each of the faq content, from '/images' to '/images/Image'
         foreach ($images as $image) {
             $newImagePath = str_replace('/images/', '/images/Image/', $image);
@@ -1042,7 +1025,7 @@ if ($step == 5) {
         }
     }
 
-    if ($version < 200) {
+if (version_compare($version, '2.0.0'), '<') {
         // 13/13. Remove the old config file
         if (@unlink(PMF_ROOT_DIR."/inc/config.php")) {
             print "<p class=\"center\">The file 'inc/config.php' was deleted automatically.</p>\n";
