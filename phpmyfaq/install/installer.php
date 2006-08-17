@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.60 2006-08-12 14:19:54 thorstenr Exp $
+* $Id: installer.php,v 1.61 2006-08-17 19:34:16 matteo Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -95,19 +95,26 @@ function phpmyfaq_check()
 * @return   void
 * @access   public
 * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+* @author   Matteo Scaramuccia <matteo@scaramuccia.com>
 */
 function uninstall()
 {
     global $uninst, $db;
+
     while ($each_query = each($uninst)) {
         $db->query($each_query[1]);
+    }
+
+    // Remove 'data.php' file: no need of prompt anything to the user
+    if (@is_file(PMF_ROOT_DIR."/inc/data.php")) {
+        @unlink(PMF_ROOT_DIR."/inc/data.php");
     }
 }
 
 /**
 * HTMLFooter()
 *
-* Executes the uninstall queries
+* Print out the HTML Footer
 *
 * @return   void
 * @access   public
@@ -582,8 +589,8 @@ foreach ($permLevels as $level => $desc) {
         }
 
         // check LDAP connection
-        require_once(PMF_ROOT_DIR."/inc/ldap.php");
-        $ldap = new LDAP($ldap_server, $ldap_port, $ldap_user, $ldap_base);
+        require_once(PMF_ROOT_DIR."/inc/Ldap.php");
+        $ldap = new PMF_Ldap($ldap_server, $ldap_port, $ldap_user, $ldap_base);
         if (!$ldap) {
             print "<p class=\"error\"><strong>LDAP Error:</strong> ".$ldap->error()."</p>\n";
             HTMLFooter();
@@ -671,12 +678,18 @@ foreach ($permLevels as $level => $desc) {
 
     include_once($sql_type.'.sql.php');
     include_once('config.sql.php');
-    print "<p class=\"center\"><strong>";
+    include_once('data.sql.php');
+    print "<p class=\"center\">";
     while ($each_query = each($query)) {
-        $result = $db->query($each_query[1]);
+        $result = @$db->query($each_query[1]);
         print "|&nbsp;";
         if (!$result) {
-            print "<!-- ".$each_query[1]." --><p class=\"error\"><strong>Error:</strong> Please install your version of phpMyFAQ once again or send us a <a href=\"http://bugs.phpmyfaq.de\" target=\"_blank\">bug report</a>.<br />DB error: ".$db->error()."</p>\n";
+            print "\n<div class=\"error\">\n";
+            print "<p><strong>Error:</strong> Please install your version of phpMyFAQ once again or send us a <a href=\"http://bugs.phpmyfaq.de\" target=\"_blank\">bug report</a>.</p>";
+            print "<p><strong>DB error:</strong> ".$db->error()."</p>\n";
+            print "<div style=\"text-align: left;\"><p>Query:\n";
+            print "<pre>".PMF_htmlentities($each_query[1])."</pre></p></div>\n";
+            print "</div>";
             uninstall();
             HTMLFooter();
             die();
@@ -684,8 +697,9 @@ foreach ($permLevels as $level => $desc) {
     }
 
     // add admin account and rights
-    if (!defined('SQLPREFIX'))
+    if (!defined('SQLPREFIX')) {
         define('SQLPREFIX', $sqltblpre);
+    }
     require_once dirname(dirname(__FILE__)).'/inc/PMF_User/User.php';
     $admin = new PMF_User();
     $admin->createUser('admin', $password);
@@ -891,7 +905,7 @@ foreach ($permLevels as $level => $desc) {
     print "<p class=\"center\">Congratulation! Everything seems to be okay.</p>\n";
     print "<p class=\"center\">You can visit <a href=\"../index.php\">your version of phpMyFAQ</a> or</p>\n";
     print "<p class=\"center\">login into your <a href=\"../admin/index.php\">admin section</a>.</p>\n";
-
+    
     // Remove 'scripts' folder: no need of prompt anything to the user
     if (@is_dir(PMF_ROOT_DIR."/scripts")) {
         @rmdir(PMF_ROOT_DIR."/scripts");
@@ -912,6 +926,6 @@ foreach ($permLevels as $level => $desc) {
     } else {
         print "<p class=\"center\">Please delete the file 'update.php' manually.</p>\n";
     }
-
+    
     HTMLFooter();
 }

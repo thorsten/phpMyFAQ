@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.67 2006-08-15 16:52:21 matteo Exp $
+* $Id: update.php,v 1.68 2006-08-17 19:34:17 matteo Exp $
 *
 * Main update script
 *
@@ -995,12 +995,14 @@ if ($step == 5) {
     // Perform the queries for updating/migrating the database
     if (isset($query)) {
         while ($each_query = each($query)) {
-            $result = $db->query($each_query[1]);
-            print "|&nbsp;\n";
+            $result = @$db->query($each_query[1]);
+            print "|&nbsp;";
             if (!$result) {
-                print "<p class=\"error\"><strong>Error:</strong> ".$db->error()."</p>\n";
-                print "<p>Query:</p>\n";
-                print "<pre>".PMF_htmlentities($each_query[1])."</pre>\n";
+                print "\n<div class=\"error\">\n";
+                print "<p><strong>DB error:</strong> ".$db->error()."</p>\n";
+                print "<div style=\"text-align: left;\"><p>Query:\n";
+                print "<pre>".PMF_htmlentities($each_query[1])."</pre></p></div>\n";
+                print "</div>";
                 die();
             }
             wait(25);
