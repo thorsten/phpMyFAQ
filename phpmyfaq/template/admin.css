@@ -1,5 +1,5 @@
 /**
- * $Id: admin.css,v 1.24 2006-08-13 17:22:50 thorstenr Exp $
+ * $Id: admin.css,v 1.25 2006-08-17 19:46:02 thorstenr Exp $
  *
  * This is the CSS file for the admin section of phpMyFAQ 2.0.x
  * You don't need to change enything here but feel free to do it. :-)
@@ -166,11 +166,12 @@ div#sessioncounter {
     border-bottom: 1px solid #C2D1DE;
 }
 #navcontainer ul li a {
+    width: 92px;
     height: 18px;
     border-right: 1px solid #C2D1DE;
     padding-top: 4px;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 3px;
+    padding-right: 3px;
     color: #C2D1DE;
     text-decoration: none;
     display: block;
@@ -215,11 +216,12 @@ div#sessioncounter {
     border-bottom: 1px solid #C2D1DE;
 }
 #subnavcontainer ul li a {
+    width: 92px;
     height: 18px;
     border-right: 1px solid #C2D1DE;
     padding-top: 4px;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 2px;
+    padding-right: 2px;
     color: #03121F;
     text-decoration: none;
     display: block;
