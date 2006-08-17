@@ -626,22 +626,26 @@ class PMF_PermMedium
      */
     function getAllGroups()
     {
-        if (!$this->_initialized)
+        if (!$this->_initialized) {
             return false;
+        }
+        
         // get all groups
-        $res = $this->_db->query("
-            SELECT
-                group_id
-            FROM
-                ".PMF_USER_SQLPREFIX."group
-            WHERE
-                1
-        ");
+        $query = sprintf(
+                    "SELECT
+                        group_id
+                    FROM
+                        %sgroup",
+                    PMF_USER_SQLPREFIX
+                    );
+        $res = $this->_db->query($query);
+
         // return result
         $result = array();
         while ($row = $this->_db->fetch_assoc($res)) {
             $result[] = $row['group_id'];
         }
+
         return $result;
     }
 
