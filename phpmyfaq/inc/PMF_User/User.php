@@ -853,7 +853,9 @@ class PMF_User
                     "SELECT
                         user_id
                     FROM
-                        %suser",
+                        %suser
+                    ORDER BY
+                        login ASC",
                     PMF_USER_SQLPREFIX
                     );
 
