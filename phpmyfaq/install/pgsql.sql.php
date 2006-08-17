@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: pgsql.sql.php,v 1.21 2006-08-17 19:50:32 matteo Exp $
+* $Id: pgsql.sql.php,v 1.22 2006-08-17 21:17:48 matteo Exp $
 *
 * CREATE TABLE instruction for PostgreSQL database
 *
@@ -21,7 +21,6 @@
 * under the License.
 */
 
-$uninst[] = "DROP TABLE ".$sqltblpre."faquser";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqadminlog";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqadminsessions";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcaptcha";
@@ -46,6 +45,7 @@ $uninst[] = "DROP TABLE ".$sqltblpre."faqquestions";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqright";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqsessions";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqtags";
+$uninst[] = "DROP TABLE ".$sqltblpre."faquser";
 $uninst[] = "DROP TABLE ".$sqltblpre."faquserdata";
 $uninst[] = "DROP TABLE ".$sqltblpre."faquserlogin";
 $uninst[] = "DROP TABLE ".$sqltblpre."faquser_group";
