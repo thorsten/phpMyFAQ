@@ -890,7 +890,7 @@ class PMF_User
                 $this->getUserById($user_id);
                 $options .= sprintf('<option value="%d"%s>%s (%s)</option>',
                     $user_id,
-                    ((1 == $id) ? 'selected="selected"' : ''),
+                    (($user_id == $id) ? ' selected="selected"' : ''),
                     $this->getLogin(),
                     $this->getUserData('display_name'));
             }
