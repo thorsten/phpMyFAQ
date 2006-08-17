@@ -365,7 +365,7 @@ class PMF_User
                         %suser
                         (user_id, login, session_timestamp, member_since)
                     VALUES
-                        (%d, '%s', %d, %d, '%s')",
+                        (%d, '%s', %d, '%s')",
                     PMF_USER_SQLPREFIX,
                     $this->getUserId(),
                     $this->_db->escape_string($login),
