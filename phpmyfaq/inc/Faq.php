@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.48 2006-08-13 18:11:54 thorstenr Exp $
+* $Id: Faq.php,v 1.49 2006-08-17 23:59:08 matteo Exp $
 *
 * The main FAQ class
 *
@@ -319,6 +319,17 @@ class PMF_Faq
         $result = $this->db->query($query);
 
         if ($row = $this->db->fetch_object($result)) {
+            $content        = $row->content;
+            $active         = ('yes' == $row->active);
+            $expired        = (date('YmdHis') > $row->date_end);
+
+            if (!$active) {
+                $content = $this->pmf_lang['err_inactiveArticle'];
+            }
+            if ($expired) {
+                $content = $this->pmf_lang['err_expiredArticle'];
+            }
+
             $this->faqRecord = array(
                 'id'            => $row->id,
                 'lang'          => $row->lang,
@@ -327,7 +338,7 @@ class PMF_Faq
                 'active'        => $row->active,
                 'keywords'      => $row->keywords,
                 'title'         => $row->thema,
-                'content'       => (('yes' == $row->active) ? $row->content : $this->pmf_lang['err_inactiveArticle']),
+                'content'       => $content,
                 'author'        => $row->author,
                 'email'         => $row->email,
                 'comment'       => $row->comment,
@@ -438,6 +449,17 @@ class PMF_Faq
             $solution_id);
         $result = $this->db->query($query);
         if ($row = $this->db->fetch_object($result)) {
+            $content        = $row->content;
+            $active         = ('yes' == $row->active);
+            $expired        = (date('YmdHis') > $row->date_end);
+
+            if (!$active) {
+                $content = $this->pmf_lang['err_inactiveArticle'];
+            }
+            if ($expired) {
+                $content = $this->pmf_lang['err_expiredArticle'];
+            }
+
             $this->faqRecord = array(
                 'id'            => $row->id,
                 'lang'          => $row->lang,
@@ -446,7 +468,7 @@ class PMF_Faq
                 'active'        => $row->active,
                 'keywords'      => $row->keywords,
                 'title'         => $row->thema,
-                'content'       => (('yes' == $row->active) ? $row->content : $this->pmf_lang['err_inactiveArticle']),
+                'content'       => $content,
                 'author'        => $row->author,
                 'email'         => $row->email,
                 'comment'       => $row->comment,
@@ -537,6 +559,17 @@ class PMF_Faq
         $result = $this->db->query($query);
 
         while ($row = $this->db->fetch_object($result)) {
+            $content        = $row->content;
+            $active         = ('yes' == $row->active);
+            $expired        = (date('YmdHis') > $row->date_end);
+
+            if (!$active) {
+                $content = $this->pmf_lang['err_inactiveArticle'];
+            }
+            if ($expired) {
+                $content = $this->pmf_lang['err_expiredArticle'];
+            }
+            
             $this->faqRecords[] = array(
                 'id'            => $row->id,
                 'lang'          => $row->lang,
@@ -545,7 +578,7 @@ class PMF_Faq
                 'active'        => $row->active,
                 'keywords'      => $row->keywords,
                 'title'         => $row->thema,
-                'content'       => (('yes' == $row->active) ? $row->content : $this->pmf_lang['err_inactiveArticle']),
+                'content'       => $content,
                 'author'        => $row->author,
                 'email'         => $row->email,
                 'comment'       => $row->comment,
@@ -1104,7 +1137,7 @@ class PMF_Faq
                         $row->lang
                         );
                 $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
-                $oLink->itemTitle = $row->thema;
+                $oLink->itemTitle = $row-getEmailAddress>thema;
                 $oLink->tooltip = $title;
                 $data['url'] = $oLink->toString();
 
@@ -1122,8 +1155,8 @@ class PMF_Faq
      *
      * Reload locking for user votings
      *
-     * @param    integer     FAQ record id
-     * @param    string      IP
+     * @param    integer    FAQ record id
+     * @param    string     IP
      * @return   boolean
      * @since    2003-05-15
      * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -1183,7 +1216,7 @@ class PMF_Faq
      *
      * Adds a new voting record
      *
-     * @param    array    $votingData
+     * @param    array  $votingData
      * @return   boolean
      * @access   public
      * @since    2006-06-18
@@ -1216,7 +1249,7 @@ class PMF_Faq
      *
      * Updates an existing voting record
      *
-     * @param    array    $votingData
+     * @param    array  $votingData
      * @return   boolean
      * @access   public
      * @since    2006-06-18
@@ -1260,7 +1293,7 @@ class PMF_Faq
      * Adds a new entry in the table faqvisits
      *
      * @param   integer $id
-     * @param   string    $lang
+     * @param   string  $lang
      * @return  boolean
      * @access  private
      * @since   2006-06-18
@@ -1292,11 +1325,11 @@ class PMF_Faq
      *
      * Updates an entry in the table faqvisits
      *
-     * @param    integer    $id
-     * @return    boolean
-     * @access    private
-     * @since    2006-06-18
-     * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param   integer $id
+     * @return  boolean
+     * @access  private
+     * @since   2006-06-18
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     function updateVisit($id)
     {
@@ -1316,6 +1349,48 @@ class PMF_Faq
             time(),
             $id,
             $this->language);
+        $this->db->query($query);
+
+        return true;
+    }
+
+    /**
+     * createChangeEntry()
+     *
+     * Adds a new entry in the table faqchanges
+     *
+     * @param   integer $id
+     * @param   string  $lang
+     * @return  boolean
+     * @access  private
+     * @since   2006-08-18
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     */
+    function createChangeEntry($id, $username, $text, $lang)
+    {
+        if (   !is_numeric($id)
+            && !is_string($username)
+            && !is_string($text)
+            && !is_string($lang)
+            ) {
+            return false;
+        }
+
+        $query = sprintf(
+            "INSERT INTO
+                %sfaqchanges
+            (id, beitrag, usr, datum, what, lang)
+            VALUES
+                (%d, %d, '%s', %d, '%s', '%s')",
+            SQLPREFIX,
+            $this->db->nextID(SQLPREFIX."faqchanges", "id"),
+            $id,
+            $username,
+            time(),
+            $text,
+            $lang
+        );
         $this->db->query($query);
 
         return true;
