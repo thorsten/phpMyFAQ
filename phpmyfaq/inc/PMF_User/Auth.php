@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Auth.php,v 1.11 2006-05-28 21:20:13 thorstenr Exp $
+* $Id: Auth.php,v 1.12 2006-08-18 11:20:51 matteo Exp $
 *
 * manages user authentication.
 *
@@ -176,10 +176,10 @@ class PMF_Auth
     {
         $message = '';
         if (!is_array($this->errors)) {
-        	$this->errors = array((string) $this->errors);
+            $this->errors = array((string) $this->errors);
         }
         foreach ($this->errors as $error) {
-        	$message .= $error."\n";
+            $message .= $error."\n";
         }
         $message .= $this->_enc_container->error();
         return $message;
@@ -193,7 +193,7 @@ class PMF_Auth
     * This method is called statically. The parameter database specifies the
     * of database access for the authentication object.
     *
-    * If the given datase-type is not supported, selectAuth() will return an
+    * If the given database-type is not supported, selectAuth() will return an
     * object without database access and with an error message. See the
     * of the error() method for further details.
     *
@@ -208,18 +208,18 @@ class PMF_Auth
         $auth = new PMF_Auth();
         $database = strtolower($database);
         if (!isset($auth->_auth_typemap[$database])) {
-        	$auth->errors[] = PMF_USERERROR_NO_AUTHTYPE;
+            $auth->errors[] = PMF_USERERROR_NO_AUTHTYPE;
             return $auth;
         }
         $classfile = dirname(__FILE__)."/".$auth->_auth_typemap[$database].".php";
         if (!file_exists($classfile)) {
-        	$auth->errors[] = PMF_USERERROR_NO_AUTHTYPE;
-        	return $auth;
+            $auth->errors[] = PMF_USERERROR_NO_AUTHTYPE;
+            return $auth;
         }
         require_once $classfile;
         // instantiate
         $authclass = "PMF_".$auth->_auth_typemap[$database];
-		$auth = new $authclass();
+        $auth = new $authclass();
         return $auth;
     }
 
@@ -236,7 +236,7 @@ class PMF_Auth
     function read_only($read_only = null)
     {
         if ($read_only === null) {
-        	return $this->_read_only;
+            return $this->_read_only;
         }
         $old_read_only = $this->_read_only;
         $this->_read_only = (bool) $read_only;

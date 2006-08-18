@@ -1,12 +1,12 @@
 <?php
 /**
-* $Id: pwd.change.php,v 1.5 2006-07-30 07:43:50 thorstenr Exp $
+* $Id: pwd.change.php,v 1.6 2006-08-18 11:20:50 matteo Exp $
 *
 * Form to change password of the current user
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23
-* @copyright    (c) 2001-2006 phpMyFAQ Team
+* @copyright    (c) 2003-2006 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -26,24 +26,24 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 
 if ($permission["passwd"]) {
 ?>
-	<h2><?php print $PMF_LANG["ad_passwd_cop"]; ?></h2>
-	<form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>" method="post">
-	<fieldset>
-	<legend><?php print $PMF_LANG["ad_passwd_cop"]; ?></legend>
-	<input type="hidden" name="action" value="savepwd" />
+    <h2><?php print $PMF_LANG["ad_passwd_cop"]; ?></h2>
+    <form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>" method="post">
+    <fieldset>
+    <legend><?php print $PMF_LANG["ad_passwd_cop"]; ?></legend>
+    <input type="hidden" name="action" value="savepwd" />
 
-	<label class="left" for="opass"><?php print $PMF_LANG["ad_passwd_old"]; ?></label>
-    <input class="admin" type="password" name="opass" size="30" /><br />
+    <label class="left" for="opass"><?php print $PMF_LANG["ad_passwd_old"]; ?></label>
+    <input type="password" name="opass" size="30" /><br />
 
-	<label class="left" for="npass"><?php print $PMF_LANG["ad_passwd_new"]; ?></label>
-    <input class="admin" type="password" name="npass" size="30" /><br />
+    <label class="left" for="npass"><?php print $PMF_LANG["ad_passwd_new"]; ?></label>
+    <input type="password" name="npass" size="30" /><br />
 
-	<label class="left" for="bpass"><?php print $PMF_LANG["ad_passwd_con"]; ?></label>
-    <input class="admin" type="password" name="bpass" size="30" /><br />
+    <label class="left" for="bpass"><?php print $PMF_LANG["ad_passwd_con"]; ?></label>
+    <input type="password" name="bpass" size="30" /><br />
 
-	<input class="submit" type="submit" value="<?php print $PMF_LANG["ad_passwd_change"]; ?>" /></div>
+    <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_passwd_change"]; ?>" /></div>
     </fieldset>
-	</form>
+    </form>
 <?php
 } else {
     print $PMF_LANG["err_NotAuth"];

@@ -1,12 +1,13 @@
 <?php
 /**
-* $Id: pwd.save.php,v 1.6 2006-07-30 07:43:50 thorstenr Exp $
+* $Id: pwd.save.php,v 1.7 2006-08-18 11:20:50 matteo Exp $
 *
 * Save the password of the current user in the database
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+* @author       Matteo Scaramuccia <matteo@scaramuccia.com>
 * @since        2003-02-23
-* @copyright    (c) 2001-2006 phpMyFAQ Team
+* @copyright    (c) 2003-2006 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -24,18 +25,30 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
-if (md5($_REQUEST["opass"]) == $auth_pass && $_REQUEST["npass"] == $_REQUEST["bpass"]) {
-	$db->query("UPDATE ".SQLPREFIX."faquser SET pass = '".md5($_REQUEST["bpass"])."' WHERE name = '".$auth_user."'");
-	$db->query("UPDATE ".SQLPREFIX."faqadminsessions SET pass = '".md5($_REQUEST["bpass"])."' WHERE uin = '".$uin."'");
-	print $PMF_LANG["ad_passwdsuc"]."<br />";
+// Re-evaluate $user
+$user = PMF_CurrentUser::getFromSession($faqconfig->get('ipcheck'));
 
-	if (isset($_COOKIE['cuser'])) {
-		if ($_COOKIE["cuser"] == $user) {
-			print $PMF_LANG["ad_passwd_remark"]."<br /><a href=\"".$_SERVER["PHP_SELF"].$linkext."&action=setcookie\">".$PMF_LANG["ad_cookie_set"]."</a>\n";
-			}
-		}
-	}
-else {
-	print $PMF_LANG["ad_passwd_fail"];
-	}
+// Define the (Local/Current) Authentication Source
+$_authSource = PMF_Auth::selectAuth($user->_auth_data['authSource']['name']);
+$_authSource->selectEncType($user->_auth_data['encType']);
+$_authSource->read_only($user->_auth_data['readOnly']);
+
+if (    ($_authSource->encrypt($_REQUEST["opass"]) == $user->_encrypted_password)
+     && ($_REQUEST["npass"] == $_REQUEST["bpass"])
+    ) {
+    if (!$user->changePassword($_REQUEST["npass"])) {
+        print $PMF_LANG["ad_passwd_fail"]."<br />";
+        exit(0);
+    }
+    print $PMF_LANG["ad_passwdsuc"]."<br />";
+
+    // TODO: Manage the 'Rembember me' Cookie also under 2.0.0.
+    if (isset($_COOKIE['cuser'])) {
+        if ($_COOKIE["cuser"] == $user) {
+            print $PMF_LANG["ad_passwd_remark"]."<br /><a href=\"".$_SERVER["PHP_SELF"].$linkext."&action=setcookie\">".$PMF_LANG["ad_cookie_set"]."</a>\n";
+        }
+    }
+} else {
+    print $PMF_LANG["ad_passwd_fail"];
+}
 ?>

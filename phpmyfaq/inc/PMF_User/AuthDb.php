@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: AuthDb.php,v 1.8 2006-07-02 14:07:35 matteo Exp $
+* $Id: AuthDb.php,v 1.9 2006-08-18 11:20:51 matteo Exp $
 *
 * manages user authentication with databases.
 *
@@ -75,8 +75,8 @@ class PMF_AuthDb extends PMF_Auth
      */
     function PMF_AuthDb($enctype = 'none', $read_only = false)
     {
-		$this->selectEncType($enctype);
-		$this->read_only($read_only);
+        $this->selectEncType($enctype);
+        $this->read_only($read_only);
     }
 
     /**
@@ -108,32 +108,32 @@ class PMF_AuthDb extends PMF_Auth
     function add($login, $pass)
     {
         if (!$this->_db()) {
-        	return false;
+            return false;
         }
         // check if $login already exists
         if ($this->checkLogin($login) > 0) {
-        	$this->errors[] = PMF_USERERROR_ADD . PMF_USERERROR_LOGIN_NOT_UNIQUE;
-        	return false;
+            $this->errors[] = PMF_USERERROR_ADD . PMF_USERERROR_LOGIN_NOT_UNIQUE;
+            return false;
         }
-		// add user account to authentication table
+        // add user account to authentication table
         $add = "
-		  INSERT INTO
-		    ".$this->_tablename()."
-		  (".$this->_login_column().", ".$this->_password_column().")
-		    VALUES
-		  ('".$login."', '".$this->_enc_container->encrypt($pass)."')
-		";
+          INSERT INTO
+            ".$this->_tablename()."
+          (".$this->_login_column().", ".$this->_password_column().")
+            VALUES
+          ('".$login."', '".$this->_enc_container->encrypt($pass)."')
+        ";
         $add = $this->_db->query($add);
         $error = $this->_db->error();
-		if (strlen($error) > 0) {
-		    $this->errors[] = PMF_USERERROR_ADD . 'error(): ' . $error;
-			return false;
-		}
-		if (!$add) {
-			$this->errors[] = PMF_USERERROR_ADD;
-			return false;
-		}
-		return true;
+        if (strlen($error) > 0) {
+            $this->errors[] = PMF_USERERROR_ADD . 'error(): ' . $error;
+            return false;
+        }
+        if (!$add) {
+            $this->errors[] = PMF_USERERROR_ADD;
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -154,7 +154,7 @@ class PMF_AuthDb extends PMF_Auth
     function changePassword($login, $pass)
     {
         if (!$this->_db()) {
-        	return false;
+            return false;
         }
         $change = "
           UPDATE
@@ -166,15 +166,15 @@ class PMF_AuthDb extends PMF_Auth
         ";
         $change = $this->_db->query($change);
         $error = $this->_db->error();
-		if (strlen($error) > 0) {
-		    $this->errors[] =  PMF_USERERROR_CHANGE . 'error(): ' . $error;
-			return false;
-		}
-		if (!$change) {
-			$this->errors[] =  PMF_USERERROR_CHANGE;
-			return false;
-		}
-		return true;
+        if (strlen($error) > 0) {
+            $this->errors[] =  PMF_USERERROR_CHANGE . 'error(): ' . $error;
+            return false;
+        }
+        if (!$change) {
+            $this->errors[] =  PMF_USERERROR_CHANGE;
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -194,7 +194,7 @@ class PMF_AuthDb extends PMF_Auth
     function delete($login)
     {
         if (!$this->_db()) {
-        	return false;
+            return false;
         }
         $delete = "
           DELETE FROM
@@ -204,15 +204,15 @@ class PMF_AuthDb extends PMF_Auth
         ";
         $delete = $this->_db->query($delete);
         $error = $this->_db->error();
-		if (strlen($error) > 0) {
-		    $this->errors[] = PMF_USERERROR_DELETE . 'error(): ' . $error;
-			return false;
-		}
-		if (!$delete) {
-			$this->errors[] = PMF_USERERROR_DELETE;
-			return false;
-		}
-		return true;
+        if (strlen($error) > 0) {
+            $this->errors[] = PMF_USERERROR_DELETE . 'error(): ' . $error;
+            return false;
+        }
+        if (!$delete) {
+            $this->errors[] = PMF_USERERROR_DELETE;
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -233,7 +233,7 @@ class PMF_AuthDb extends PMF_Auth
     function checkPassword($login, $pass)
     {
         if (!$this->_db()) {
-        	return false;
+            return false;
         }
         $check = "
           SELECT
@@ -246,28 +246,28 @@ class PMF_AuthDb extends PMF_Auth
         ";
         $check = $this->_db->query($check);
         $error = $this->_db->error();
-		if (strlen($error) > 0) {
-		    $this->errors[] = PMF_USER_NOT_FOUND . 'error(): ' . $error;
-			return false;
-		}
+        if (strlen($error) > 0) {
+            $this->errors[] = PMF_USER_NOT_FOUND . 'error(): ' . $error;
+            return false;
+        }
         $num_rows = $this->_db->num_rows($check);
-		if ($num_rows < 1) {
-			$this->errors[] = PMF_USER_NOT_FOUND;
-		    return false;
-		}
-		// if login not unique, raise an error, but continue
-		if ($num_rows > 1) {
-			$this->errors[] = PMF_USERERROR_LOGIN_NOT_UNIQUE;
-		}
-		// if multiple accounts are ok, just 1 valid required
-		while ($user = $this->_db->fetch_assoc($check)) {
-		    if ($user[$this->_password_column] == $this->_enc_container->encrypt($pass)) {
-			    return true;
-			    break;
-		    }
-		}
-		$this->errors[] = PMF_USERERROR_INCORRECT_PASSWORD;
-		return false;
+        if ($num_rows < 1) {
+            $this->errors[] = PMF_USER_NOT_FOUND;
+            return false;
+        }
+        // if login not unique, raise an error, but continue
+        if ($num_rows > 1) {
+            $this->errors[] = PMF_USERERROR_LOGIN_NOT_UNIQUE;
+        }
+        // if multiple accounts are ok, just 1 valid required
+        while ($user = $this->_db->fetch_assoc($check)) {
+            if ($user[$this->_password_column] == $this->_enc_container->encrypt($pass)) {
+                return true;
+                break;
+            }
+        }
+        $this->errors[] = PMF_USERERROR_INCORRECT_PASSWORD;
+        return false;
     }
 
     /**
@@ -309,7 +309,7 @@ class PMF_AuthDb extends PMF_Auth
     function checkLogin($login)
     {
         if (!$this->_db()) {
-        	return false;
+            return false;
         }
         $check = "
           SELECT
@@ -321,10 +321,10 @@ class PMF_AuthDb extends PMF_Auth
         ";
         $check = $this->_db->query($check);
         $error = $this->_db->error();
-		if (strlen($error) > 0) {
-		    $this->errors[] = $error;
-			return 0;
-		}
+        if (strlen($error) > 0) {
+            $this->errors[] = $error;
+            return 0;
+        }
 
         return $this->_db->num_rows($check);
     }
@@ -349,13 +349,13 @@ class PMF_AuthDb extends PMF_Auth
     function _tablename($table = '')
     {
         if ($table != '') {
-        	$old_table = $this->_tablename;
-		    $this->_tablename = $table;
-		    return $old_table;
+            $old_table = $this->_tablename;
+            $this->_tablename = $table;
+            return $old_table;
         }
         if (!$this->_tablename) {
-        	$this->errors[] = PMF_UNDEFINED_PARAMETER."PMF_AuthDb->_tablename";
-        	$this->_tablename = '';
+            $this->errors[] = PMF_UNDEFINED_PARAMETER."PMF_AuthDb->_tablename";
+            $this->_tablename = '';
         }
         return $this->_tablename;
     }
@@ -380,13 +380,13 @@ class PMF_AuthDb extends PMF_Auth
     function _login_column($login_column = '')
     {
         if ($login_column != '') {
-        	$old_login_column = $this->_login_column;
-		    $this->_login_column = $login_column;
-		    return $old_login_column;
+            $old_login_column = $this->_login_column;
+            $this->_login_column = $login_column;
+            return $old_login_column;
         }
         if (!$this->_login_column) {
-        	$this->errors[] = PMF_UNDEFINED_PARAMETER."PMF_AuthDb->_login_column";
-        	$this->_login_column = '';
+            $this->errors[] = PMF_UNDEFINED_PARAMETER."PMF_AuthDb->_login_column";
+            $this->_login_column = '';
         }
         return $this->_login_column;
     }
@@ -411,13 +411,13 @@ class PMF_AuthDb extends PMF_Auth
     function _password_column($password_column = '')
     {
         if ($password_column != '') {
-        	$old_password_column = $this->_password_column;
-		    $this->_password_column = $password_column;
-		    return $old_password_column;
+            $old_password_column = $this->_password_column;
+            $this->_password_column = $password_column;
+            return $old_password_column;
         }
         if (!$this->_password_column) {
-        	$this->errors[] = PMF_UNDEFINED_PARAMETER."PMF_AuthDb->_password_column";
-        	$this->_password_column = '';
+            $this->errors[] = PMF_UNDEFINED_PARAMETER."PMF_AuthDb->_password_column";
+            $this->_password_column = '';
         }
         return (string) $this->_password_column;
     }
@@ -442,18 +442,18 @@ class PMF_AuthDb extends PMF_Auth
     function _db($db = null)
     {
         if ($db !== null) {
-        	$old_db = $this->_db;
-        	if (!PMF_User::checkDb($db)) {
-        		$this->errors[] = PMF_USERERROR_NO_DB;
-			    return false;
-        	}
-			$this->_db = $db;
-        	return $old_db;
+            $old_db = $this->_db;
+            if (!PMF_User::checkDb($db)) {
+                $this->errors[] = PMF_USERERROR_NO_DB;
+                return false;
+            }
+            $this->_db = $db;
+            return $old_db;
         }
         if (!PMF_User::checkDb($this->_db)) {
-        	$this->_db = null;
-        	$this->errors[] = PMF_USERERROR_NO_DB;
-        	return false;
+            $this->_db = null;
+            $this->errors[] = PMF_USERERROR_NO_DB;
+            return false;
         }
         return $this->_db;
     }

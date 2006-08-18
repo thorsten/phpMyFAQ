@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: CurrentUser.php,v 1.17 2006-08-15 16:52:21 matteo Exp $
+ * $Id: CurrentUser.php,v 1.18 2006-08-18 11:20:51 matteo Exp $
  *
  * manages authentication process using php sessions.
  *
@@ -162,6 +162,11 @@ class PMF_CurrentUser extends PMF_User
                 return false;
                 break;
             }
+            // Save encrypted password just for "Change Password" convenience
+            $_authLocal = PMF_Auth::selectAuth($this->_auth_data['authSource']['name']);
+            $_authLocal->selectEncType($this->_auth_data['encType']);
+            $_authLocal->read_only($this->_auth_data['readOnly']);
+            $this->_encrypted_password = $_authLocal->encrypt($pass);
             // return true
             return true;
             break;
@@ -377,7 +382,7 @@ class PMF_CurrentUser extends PMF_User
     * there is one in the session that is not timed out.
     * If the the optional parameter ip_check is true, the current
     * user must have the same ip which is stored in the user table
-    * The session-ID is updated if neccessary. The CurrentUser
+    * The session-ID is updated if necessary. The CurrentUser
     * will be removed from the session, if it is timed out. If
     * there is no valid CurrentUser in the session or the session
     * is timed out, null will be returned. If the session data is
@@ -393,7 +398,7 @@ class PMF_CurrentUser extends PMF_User
     function getFromSession($ip_check = false)
     {
         // there is no valid user object in session
-        if (!isset($_SESSION[PMF_SESSION_CURRENT_USER]) or !isset($_SESSION[PMF_SESSION_ID_TIMESTAMP]))
+        if (!isset($_SESSION[PMF_SESSION_CURRENT_USER]) || !isset($_SESSION[PMF_SESSION_ID_TIMESTAMP]))
             return null;
         // create a new CurrentUser object
         $user = new PMF_CurrentUser();

@@ -77,6 +77,7 @@ require_once dirname(__FILE__).'/UserData.php';
 @define('PMF_USER_SQLPREFIX', SQLPREFIX.'faq');
 @define('PMF_USERERROR_INVALID_STATUS', 'Undefined user status. ');
 @define('PMF_USERERROR_NO_USERID', 'No user-ID found. ');
+@define('PMF_USERERROR_NO_USERLOGINDATA', 'No user login data found. ');
 @define('PMF_USERERROR_LOGIN_NOT_UNIQUE', 'Specified login name already exists. ');
 @define('PMF_USERERROR_LOGIN_INVALID', 'The chosen login is invalid. A valid login has at least four characters. Only letters, numbers and underscore _ are allowed. The first letter must be a letter. ');
 @define('PMF_UNDEFINED_PARAMETER', 'Following parameter must to be defined: ');
@@ -91,7 +92,7 @@ require_once dirname(__FILE__).'/UserData.php';
 @define('PMF_USERSTATUS_PROTECTED', 'User account is protected. ');
 @define('PMF_USERSTATUS_BLOCKED', 'User account is blocked. ');
 @define('PMF_USERSTATUS_ACTIVE', 'User account is active. ');
-@define('PMF_USERERROR_NO_AUTH_WRITABLE', 'No authentication object is writable. ');
+@define('PMF_USERERROR_NOWRITABLE', 'No authentication object is writable. ');
 @define('PMF_USERERROR_CANNOT_CREATE_USERDATA', 'Entry for user data could not be created. ');
 @define('PMF_USERERROR_CANNOT_DELETE_USERDATA', 'Entry for user data could not be deleted. ');
 @define('PMF_USERERROR_CANNOT_UPDATE_USERDATA', 'Entry for user data could not be updated. ');
@@ -148,6 +149,25 @@ class PMF_User
      * @var string
      */
     var $_login_invalidRegExp = '/(^[^a-z]{1}|[\W])/i';
+
+    /**
+     * Encrypted password string
+     *
+     * @access private
+     * @var string
+     */
+    var $_encrypted_password = '';
+    
+    /**
+     * Default Authentication properties
+     *
+     * @access private
+     * @var array
+     */
+    var $_auth_data = array('authSource' => array('name' => 'db', 'type' => 'local'),
+                            'encType' => 'md5',
+                            'readOnly' => false
+                            );
 
     /**
      * user ID
@@ -262,16 +282,19 @@ class PMF_User
         if (!$this->checkDb($this->_db))
             return false;
         // get user
-        $res = $this->_db->query("
-          SELECT
-            user_id,
-            login,
-            account_status
-          FROM
-            ".PMF_USER_SQLPREFIX."user
-          WHERE
-            user_id = ".(int) $user_id
-        );
+        $query = sprintf(
+                    "SELECT
+                        user_id,
+                        login,
+                        account_status
+                    FROM
+                        %suser
+                    WHERE
+                        user_id = %d",
+                    PMF_USER_SQLPREFIX,
+                    (int) $user_id
+                    );
+        $res = $this->_db->query($query);
         if ($this->_db->num_rows($res) != 1) {
             $this->errors[] = PMF_USERERROR_NO_USERID . 'error(): ' . $this->_db->error();
             return false;
@@ -280,6 +303,28 @@ class PMF_User
         $this->_user_id = (int)    $user['user_id'];
         $this->_login   = (string) $user['login'];
         $this->_status  = (string) $user['account_status'];
+        // get encrypted password
+        // TODO: Add a getAuthSource method to the User class for discovering what was the source of the (current) user authentication.
+        // TODO: Add a getEncPassword method to the Auth* classes for the (local and remote) Auth Sources.
+        if ('db' == $this->_auth_data['authSource']['name']) {
+            $query = sprintf(
+                        "SELECT
+                            pass
+                        FROM
+                            %suserlogin
+                        WHERE
+                            login = '%s'",
+                        PMF_USER_SQLPREFIX,
+                        $this->_login
+                        );
+            $res = $this->_db->query($query);
+            if ($this->_db->num_rows($res) != 1) {
+                $this->errors[] = PMF_USERERROR_NO_USERLOGINDATA . 'error(): ' . $this->_db->error();
+                return false;
+            }
+            $loginData = $this->_db->fetch_assoc($res);
+            $this->_encrypted_password = (string) $loginData['pass'];
+        }
         // get user-data
         if (!$this->userdata)
             $this->userdata = new PMF_UserData($this->_db);
@@ -577,14 +622,15 @@ class PMF_User
                 return false;
         }
         // authentication objects
-        // always make a 'local' $auth object
+        // always make a 'local' $auth object (see: $_auth_data)
         $this->_auth_container = array();
-        $authLocal = PMF_Auth::selectAuth('db');
-        $authLocal->selectEncType('md5');
-        $authLocal->read_only(false);
+        $authLocal = PMF_Auth::selectAuth($this->_auth_data['authSource']['name']);
+        $authLocal->selectEncType($this->_auth_data['encType']);
+        $authLocal->read_only($this->_auth_data['readOnly']);
         $authLocal->connect($this->_db, PMF_USER_SQLPREFIX.'userlogin', 'login', 'pass');
-        if (!$this->addAuth($authLocal, 'local'))
+        if (!$this->addAuth($authLocal, $this->_auth_data['authSource']['type'])) {
             return false;
+        }
         // additionally, set given $auth objects
         if (count($auth) > 0) {
             foreach ($auth as $name => $auth_object) {

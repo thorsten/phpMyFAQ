@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.61 2006-08-17 21:05:39 matteo Exp $
+* $Id: index.php,v 1.62 2006-08-18 11:20:50 matteo Exp $
 *
 * The main admin backend index file
 *
@@ -72,6 +72,7 @@ if (function_exists('mb_language') && in_array($PMF_LANG['metaLanguage'], $valid
     mb_internal_encoding($PMF_LANG['metaCharset']);
 }
 
+// TODO: Manage the 'Rembember me' Cookie also under 2.0.0.
 // authenticate current user
 unset($auth);
 if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
