@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.49 2006-08-17 23:59:08 matteo Exp $
+* $Id: Faq.php,v 1.50 2006-08-18 00:04:32 matteo Exp $
 *
 * The main FAQ class
 *
@@ -1137,7 +1137,7 @@ class PMF_Faq
                         $row->lang
                         );
                 $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
-                $oLink->itemTitle = $row-getEmailAddress>thema;
+                $oLink->itemTitle = $row->thema;
                 $oLink->tooltip = $title;
                 $data['url'] = $oLink->toString();
 
