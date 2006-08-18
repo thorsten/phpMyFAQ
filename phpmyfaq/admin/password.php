@@ -1,12 +1,12 @@
 <?php
 /**
-* $Id: password.php,v 1.9 2006-06-11 15:33:21 matteo Exp $
+* $Id: password.php,v 1.10 2006-08-18 12:30:53 matteo Exp $
 *
 * Reset a forgotten password to a new one
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2004-05-11
-* @copyright    (c) 2004 - 2006 phpMyFAQ Team
+* @copyright    (c) 2004-2006 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -19,40 +19,38 @@
 * under the License.
 */
 
-require_once('../inc/functions.php');
-require_once('../inc/Init.php');
+//
+// Check if data.php exist -> if not, redirect to installer
+//
+if (!file_exists('../inc/data.php')) {
+    header("Location: ".str_replace('admin/index.php', '', $_SERVER["PHP_SELF"])."install/installer.php");
+    exit();
+}
+
+//
+// Prepend
+//
+define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('IS_VALID_PHPMYFAQ_ADMIN', null);
+require_once(PMF_ROOT_DIR.'/inc/Init.php');
 PMF_Init::cleanRequest();
 
-// Just for security reasons - thanks to Johannes for the hint
-$_SERVER['PHP_SELF'] = str_replace('%2F', '/', rawurlencode($_SERVER['PHP_SELF']));
-$_SERVER['HTTP_USER_AGENT'] = urlencode($_SERVER['HTTP_USER_AGENT']);
-
-define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
-
-/* read configuration */
-require_once (PMF_ROOT_DIR."/inc/data.php");
-require_once (PMF_ROOT_DIR."/inc/config.php");
-require_once (PMF_ROOT_DIR."/inc/constants.php");
-
-/* include classes and functions */
-require_once (PMF_ROOT_DIR."/inc/Db.php");
-define("SQLPREFIX", $DB["prefix"]);
-$db = PMF_Db::db_select($DB["type"]);
-$db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
-require_once (PMF_ROOT_DIR."/inc/Category.php");
-require_once (PMF_ROOT_DIR."/inc/libs/idna_convert.class.php");
+require_once(PMF_ROOT_DIR.'/inc/PMF_User/CurrentUser.php');
+require_once(PMF_ROOT_DIR.'/inc/libs/idna_convert.class.php');
+$user = new PMF_CurrentUser();
 $IDN = new idna_convert;
 
 // get language (default: english)
 $pmf = new PMF_Init();
 $LANGCODE = $pmf->setLanguage((isset($PMF_CONF['detection']) ? true : false), $PMF_CONF['language']);
+// Preload English strings
+require_once ('../lang/language_en.php');
 
-if (isset($LANGCODE) && isset($languageCodes[strtoupper($LANGCODE)])) {
-    require_once("../lang/language_".$LANGCODE.".php");
+if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE)) {
+    // Overwrite English strings with the ones we have in the current language
+    require_once('../lang/language_'.$LANGCODE.'.php');
 } else {
-    $LANGCODE = "en";
-    require_once ("../lang/language_en.php");
+    $LANGCODE = 'en';
 }
 
 /* header of the admin page */
@@ -63,63 +61,61 @@ require_once ("header.php");
 <?php
 if (isset($_GET["action"]) && $_GET["action"] == "newpassword") {
 
-    }
-elseif (isset($_GET["action"]) && $_GET["action"] == "savenewpassword") {
+    } elseif (isset($_GET["action"]) && $_GET["action"] == "savenewpassword") {
 
-    }
-elseif (isset($_GET["action"]) && $_GET["action"] == "sendmail") {
-    if (isset($_POST["username"]) && $_POST["username"] != "" && isset($_POST["email"]) && $_POST["email"] != "" && checkEmail($_POST["email"])) {
-        $username = $db->escape_string($_POST["username"]);
-        $email = $db->escape_string($_POST["email"]);
-        $num = $db->num_rows($db->query("SELECT name, email FROM ".SQLPREFIX."faquser WHERE name = '".$username."' AND email = '".$email."'"));
-        if ($num == 1) {
-            $consonants = array("b","c","d","f","g","h","j","k","l","m","n","p","r","s","t","v","w","x","y","z");
-            $vowels = array("a","e","i","o","u");
-            $newPassword = "";
-            srand((double)microtime()*1000000);
-            for ($i = 1; $i <= 4; $i++) {
-                $newPassword .= $consonants[rand(0,19)];
-                $newPassword .= $vowels[rand(0,4)];
+    } elseif (isset($_GET["action"]) && $_GET["action"] == "sendmail") {
+        if (    isset($_POST["username"]) && $_POST["username"] != ""
+             && isset($_POST["email"]) && $_POST["email"] != "" && checkEmail($_POST["email"])
+            ) {
+            $username   = $db->escape_string($_POST["username"]);
+            $email      = $db->escape_string($_POST["email"]);
+            $loginExist = $user->getUserByLogin($username);
+            if ($loginExist && ($_POST["email"] == $user->getUserData('email'))) {
+                $consonants = array("b","c","d","f","g","h","j","k","l","m","n","p","r","s","t","v","w","x","y","z");
+                $vowels = array("a","e","i","o","u");
+                $newPassword = "";
+                srand((double)microtime()*1000000);
+                for ($i = 1; $i <= 4; $i++) {
+                    $newPassword .= $consonants[rand(0,19)];
+                    $newPassword .= $vowels[rand(0,4)];
                 }
-            $db->query("UPDATE ".SQLPREFIX."faquser SET pass = '".md5($newPassword)."' WHERE name = '".$username."' AND email = '".$email."'");
-            $text = $PMF_LANG["lostpwd_text_1"]."\nUsername: ".$username."\nNew Password: ".$newPassword."\n\n".$PMF_LANG["lostpwd_text_2"];
-            mail($IDN->encode($email), $PMF_CONF["title"].": username / password request", $text, "From: ".$IDN->encode($PMF_CONF["adminmail"]));
-            print $PMF_LANG["lostpwd_mail_okay"];
-            print "<p><img src=\"images/arrow.gif\" width=\"11\" height=\"11\" alt=\"".$PMF_LANG["ad"]."\" border=\"0\" /> <a href=\"index.php\" title=\"".$PMF_LANG["ad"]."\">".$PMF_LANG["ad"]."</a></p>";
+                $user->changePassword($newPassword);
+                $text = $PMF_LANG["lostpwd_text_1"]."\nUsername: ".$username."\nNew Password: ".$newPassword."\n\n".$PMF_LANG["lostpwd_text_2"];
+                mail($IDN->encode($email), $PMF_CONF["title"].": username / password request", $text, "From: ".$IDN->encode($PMF_CONF["adminmail"]));
+                print $PMF_LANG["lostpwd_mail_okay"];
+                print "<p><img src=\"images/arrow.gif\" width=\"11\" height=\"11\" alt=\"".$PMF_LANG["ad"]."\" border=\"0\" /> <a href=\"index.php\" title=\"".$PMF_LANG["ad"]."\">".$PMF_LANG["ad"]."</a></p>";
+            } else {
+                print $PMF_LANG["lostpwd_err_1"];
             }
-        else {
-            print $PMF_LANG["lostpwd_err_1"];
-            }
+        } else {
+            print $PMF_LANG["lostpwd_err_2"];
         }
-    else {
-        print $PMF_LANG["lostpwd_err_2"];
-        }
-    }
-else {
+    } else {
 ?>
-	<form action="<?php print $_SERVER["PHP_SELF"]; ?>?action=sendmail" method="post">
+    <form action="<?php print $_SERVER["PHP_SELF"]; ?>?action=sendmail" method="post">
     <fieldset class="login">
         <legend class="login"><?php print $PMF_LANG["ad_passwd_cop"]; ?></legend>
-        
-        <div class="row"><span class="label"><strong><?php print $PMF_LANG["ad_auth_user"]; ?></strong></span>
-        <input class="admin" type="text" name="username" size="30" /></div>
-        <div class="row"><span class="label"><strong><?php print $PMF_LANG["ad_entry_email"]; ?></strong></span>
-        <input class="admin" type="text"  name="email" size="30" /></div>
-        <div class="row"><span class="label">&nbsp;</span>
+
+        <label class="left"><?php print $PMF_LANG["ad_auth_user"]; ?></label>
+        <input type="text" name="username" size="30" /><br />
+
+        <label class="left"><?php print $PMF_LANG["ad_entry_email"]; ?></label>
+        <input type="text"  name="email" size="30" /><br />
+
         <input class="submit" type="submit" value="<?php print $PMF_LANG["msgNewContentSubmit"]; ?>" /></div>
-        
+
         <p><img src="images/arrow.gif" width="11" height="11" alt="<?php print $PMF_LANG["ad_sess_back"]; ?> FAQ" border="0" /> <a href="index.php" title="<?php print $PMF_LANG["ad_sess_back"]; ?> FAQ"><?php print $PMF_LANG["ad_sess_back"]; ?></a></p>
         <p><img src="images/arrow.gif" width="11" height="11" alt="<?php print $PMF_CONF["title"]; ?> FAQ" border="0" /> <a href="../index.php" title="<?php print $PMF_CONF["title"]; ?> FAQ"><?php print $PMF_CONF["title"]; ?> FAQ</a></p>
-        
-    </fieldset>
-	</form>
-<?php
-    }
 
-if (DEBUG == TRUE) {
+    </fieldset>
+    </form>
+<?php
+}
+
+if (DEBUG) {
     print "<p>DEBUG INFORMATION:</p>\n";
-	print "<p>".$db->sqllog()."</p>";
-	}
+    print "<p>".$db->sqllog()."</p>";
+}
 
 require_once ("footer.php");
 $db->dbclose();
