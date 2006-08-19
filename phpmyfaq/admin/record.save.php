@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.save.php,v 1.35 2006-08-12 14:55:26 thorstenr Exp $
+* $Id: record.save.php,v 1.36 2006-08-19 13:55:10 matteo Exp $
 *
 * Save or update a FAQ record
 *
@@ -77,8 +77,9 @@ if (    isset($submit[1])
     // Wenn auf Speichern geklickt wurde...
     adminlog("Beitragsave", $_REQUEST["id"]);
     print "<h2>".$PMF_LANG["ad_entry_aor"]."</h2>\n";
-    $query = sprintf("INSERT INTO %sfaqchanges (id, beitrag, usr, datum, what, lang) VALUES (%d, %d, '%s', %d, '%s', '%s')", SQLPREFIX, $db->nextID(SQLPREFIX."faqchanges", "id"), $_REQUEST["id"], $user->getUserData('display_name'), time(), nl2br($_REQUEST["changed"]), $_REQUEST["language"]);
-    $db->query($query);
+
+    // Create ChangeLog entry
+    $faq->createChangeEntry((int)$_REQUEST["id"], $user->getUserId(), nl2br($_REQUEST["changed"]), $_REQUEST["language"]);
 
     $thema     = $db->escape_string($_REQUEST["thema"]);
     $content   = $db->escape_string($_REQUEST["content"]);

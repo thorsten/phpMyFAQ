@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.51 2006-08-19 13:02:33 matteo Exp $
+* $Id: Faq.php,v 1.52 2006-08-19 13:55:11 matteo Exp $
 *
 * The main FAQ class
 *
@@ -293,13 +293,14 @@ class PMF_Faq
      *
      * @param    integer    record id
      * @param    integer    revision id
+     * @param    boolean    must be true if it is called by an admin/author context
      * @return   void
      * @access   public
      * @since    2005-12-20
      * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
      * @author   Matteo Scaramuccia <matteo@scaramuccia.com>
      */
-    function getRecord($id, $revision_id = null)
+    function getRecord($id, $revision_id = null, $admin = false)
     {
         $query = sprintf(
             "SELECT
@@ -323,11 +324,13 @@ class PMF_Faq
             $active         = ('yes' == $row->active);
             $expired        = (date('YmdHis') > $row->date_end);
 
-            if (!$active) {
-                $content = $this->pmf_lang['err_inactiveArticle'];
-            }
-            if ($expired) {
-                $content = $this->pmf_lang['err_expiredArticle'];
+            if (!$admin) {
+                if (!$active) {
+                    $content = $this->pmf_lang['err_inactiveArticle'];
+                }
+                if ($expired) {
+                    $content = $this->pmf_lang['err_expiredArticle'];
+                }
             }
 
             $this->faqRecord = array(
@@ -1282,12 +1285,6 @@ class PMF_Faq
     }
 
     /**
-     * Adds a new changelog entry
-     *
-     *
-     */
-
-    /**
      * createNewVisit()
      *
      * Adds a new entry in the table faqvisits
@@ -1357,7 +1354,7 @@ class PMF_Faq
     /**
      * createChangeEntry()
      *
-     * Adds a new entry in the table faqchanges
+     * Adds a new changelog entry in the table faqchanges
      *
      * @param   integer $id
      * @param   string  $lang

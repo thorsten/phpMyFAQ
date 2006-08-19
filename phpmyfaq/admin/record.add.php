@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.add.php,v 1.39 2006-08-19 13:02:33 matteo Exp $
+* $Id: record.add.php,v 1.40 2006-08-19 13:55:10 matteo Exp $
 *
 * Adds a record in the database
 *
@@ -66,16 +66,20 @@ if ($permission["editbt"]) {
 
         // Add new record and get that ID
         $nextID = $faq->addRecord($recordData);
+
         if ($nextID) {
+            // Create ChangeLog entry
+            $faq->createChangeEntry($nextID, $user->getUserId(), nl2br($_POST["changed"]), $recordData['lang']);
+            // Create the visit entry
+            $faq->createNewVisit($nextID, $recordData['lang']);
+            // Insert the new category relations
+            $faq->addCategoryRelation($categories, $nextID, $recordData['lang']);
             print $PMF_LANG["ad_entry_savedsuc"];
+            // Call Link Verification
             link_ondemand_javascript($nextID, $recordData['lang']);
         } else {
             print $PMF_LANG["ad_entry_savedfail"].$db->error();
         }
-        // Create the visit entry
-        $faq->createNewVisit($nextID, $recordData['lang']);
-        // Insert the new category relations
-        $faq->addCategoryRelation($categories, $nextID, $recordData['lang']);
 
     } elseif (    isset($submit[2])
                && isset($_POST["thema"]) && $_POST["thema"] != ""

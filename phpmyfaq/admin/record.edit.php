@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.edit.php,v 1.39 2006-08-16 10:51:03 matteo Exp $
+* $Id: record.edit.php,v 1.40 2006-08-19 13:55:10 matteo Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23
@@ -93,7 +93,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 
             // Get the record
             $faq->language = $lang;
-            $faq->getRecord($id);
+            $faq->getRecord($id, null, true);
             $faqData = $faq->faqRecord;
             $id          = $faqData['id'];
             $lang        = $faqData['lang'];
@@ -165,7 +165,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 
             // Get the record
             $faq->language = $lang;
-            $faqData = $faq->getRecord($id, $revisionid_selected);
+            $faqData = $faq->getRecord($id, $revisionid_selected, true);
             $id          = $faqData['id'];
             $lang        = $faqData['lang'];
             $solution_id = $faqData['solution_id'];
