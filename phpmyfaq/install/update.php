@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.70 2006-08-17 20:38:44 thorstenr Exp $
+* $Id: update.php,v 1.71 2006-08-19 11:08:05 matteo Exp $
 *
 * Main update script
 *
@@ -233,6 +233,7 @@ if ($step == 3) {
 <fieldset class="installation">
 <legend class="installation"><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 3 of 5)</strong></legend>
 <?php
+    // TODO: Move NEWVERSION to '2.0.0' when 2.0.0 will be released
     if (version_compare($version, NEWVERSION, '<')) {
         require_once(PMF_ROOT_DIR."/inc/config.php");
     }
@@ -331,6 +332,7 @@ if ($step == 4) {
 <legend class="installation"><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 4 of 5)</strong></legend>
 <?php
     $version = $_REQUEST["version"];
+    // TODO: Move NEWVERSION to '2.0.0' when 2.0.0 will be released
     if (version_compare($version, NEWVERSION, '<')) {
         require_once(PMF_ROOT_DIR."/inc/config.php");
     }
@@ -378,7 +380,7 @@ if ($step == 5) {
             print "<p class=\"error\"><strong>Error:</strong> Cannot rewrite to data.php.</p>";
         }
     }
-    if (version_compare($version, '1.4.2', '<=')) {
+    if (version_compare($version, '1.4.2', '<')) {
         $query[] = "ALTER TABLE ".SQLPREFIX."faqadminlog CHANGE user usr INT(11) DEFAULT '0' NOT NULL";
         $query[] = "ALTER TABLE ".SQLPREFIX."faqadminsessions CHANGE user usr TINYTEXT NOT NULL";
         $query[] = "ALTER TABLE ".SQLPREFIX."faqchanges CHANGE user usr INT(11) DEFAULT '0' NOT NULL";
@@ -388,7 +390,7 @@ if ($step == 5) {
     if (version_compare($version, '1.4.4', '<=')) {
         $query[] = "ALTER TABLE ".SQLPREFIX."faqdata CHANGE content content LONGTEXT NOT NULL";
     }
-    if (version_compare($version, '1.5.0', '<=')) {
+    if (version_compare($version, '1.5.0', '<')) {
         // alter column faqdata.rubrik to integer
         $query[] = "ALTER TABLE ".SQLPREFIX."faqdata CHANGE rubrik rubrik INT NOT NULL";
         // create new table faqcategoryrelations
@@ -408,7 +410,7 @@ if ($step == 5) {
         $query[] = 'ALTER TABLE '.SQLPREFIX.'faquser CHANGE id id INT(11) NOT NULL';
         $query[] = 'ALTER TABLE '.SQLPREFIX.'faqvisits CHANGE id id INT(11) NOT NULL';
     }
-    if (version_compare($version, '1.5.2', '<=')) {
+    if (version_compare($version, '1.5.2', '<')) {
         switch($DB["type"]) {
             case 'mssql':   $query[] = 'CREATE INDEX idx_record_id_lang ON '.SQLPREFIX.'faqcategoryrelations (record_id, record_lang)';
                             break;
@@ -416,7 +418,7 @@ if ($step == 5) {
                             break;
         }
     }
-    if (version_compare($version, '1.5.5', '<=')) {
+    if (version_compare($version, '1.5.5', '<')) {
         // Fix unuseful slashes
         // Table: faqcategories
         $faqCategoriesQuery = "SELECT * FROM ".SQLPREFIX."faqcategories"
@@ -492,7 +494,7 @@ if ($step == 5) {
         }
     }
 
-    if (version_compare($version, '1.6.0', '<=')) {
+    if (version_compare($version, '1.6.0', '<')) {
         // add revision_id and solution_id
         // 1/2. Fix faqdata and faqchanges tables
         switch($DB["type"]) {
@@ -980,7 +982,7 @@ if ($step == 5) {
         }
     }
 
-if (version_compare($version, '2.0.0', '<')) {
+    if (version_compare($version, '2.0.0', '<')) {
         // 11/13. Move each image file in each of the faq content, from '/images' to '/images/Image'
         foreach ($images as $image) {
             $newImagePath = str_replace('/images/', '/images/Image/', $image);
@@ -1013,7 +1015,7 @@ if (version_compare($version, '2.0.0', '<')) {
         }
     }
 
-if (version_compare($version, '2.0.0', '<')) {
+    if (version_compare($version, '2.0.0', '<')) {
         // 13/13. Remove the old config file
         if (@unlink(PMF_ROOT_DIR."/inc/config.php")) {
             print "<p class=\"center\">The file 'inc/config.php' was deleted automatically.</p>\n";
