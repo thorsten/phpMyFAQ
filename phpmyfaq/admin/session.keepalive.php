@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: session.keepalive.php,v 1.2 2006-06-15 21:41:57 matteo Exp $
+ * $Id: session.keepalive.php,v 1.3 2006-08-19 15:22:11 matteo Exp $
  *
  * A dummy page used within an IFRAME for warning the user about his next
  * session expiration and to give him the contextual possibility for
@@ -31,6 +31,8 @@ if (isset($_GET['lang']) && PMF_Init::isASupportedLanguage($_GET['lang'])) {
     require_once('../lang/language_'.$_GET['lang'].'.php');
 }
 
+$user = PMF_CurrentUser::getFromSession($faqconfig->get('ipcheck'));
+
 $refreshTime = (PMF_SESSION_ID_EXPIRES - PMF_SESSION_ID_REFRESH) * 60;
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
@@ -42,7 +44,7 @@ $refreshTime = (PMF_SESSION_ID_EXPIRES - PMF_SESSION_ID_REFRESH) * 60;
         <link rel="shortcut icon" href="../template/favicon.ico" type="image/x-icon" />
         <link rel="icon" href="../template/favicon.ico" type="image/x-icon" />
 <?php
-if ($refreshTime > 0) {
+if (isset($user) && ($refreshTime > 0)) {
 ?>
         <script type="text/javascript">
         <!--
