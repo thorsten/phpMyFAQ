@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: news.php,v 1.25 2006-08-17 23:54:25 matteo Exp $
+* $Id: news.php,v 1.26 2006-08-19 14:02:42 matteo Exp $
 *
 * The main administration file for the news
 *
@@ -136,7 +136,7 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
 <?php
     } elseif (isset($_REQUEST["id"])) {
         $id = (int)$_REQUEST['id'];
-        $newsData = $news->getNewsEntry($id);
+        $newsData = $news->getNewsEntry($id, true);
 ?>
     <h2><?php print $PMF_LANG['ad_news_edit']; ?></h2>
     <form  style="float: left;" id="editRecord" name="editRecord" action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>" method="post">

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: News.php,v 1.13 2006-08-17 23:54:25 matteo Exp $
+* $Id: News.php,v 1.14 2006-08-19 14:02:42 matteo Exp $
 *
 * The News class for phpMyFAQ news
 *
@@ -238,13 +238,14 @@ class PMF_News
      * Fetches a news entry identified by its ID
      *
      * @param   integer $id
+     * @param   boolean $admin
      * @return  array
      * @access  public
      * @since   2006-06-25
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      */
-    function getNewsEntry($id)
+    function getNewsEntry($id, $admin = false)
     {
         $news = array();
         
@@ -271,11 +272,13 @@ class PMF_News
                 $allowComments  = ('y' == $row->comment);
                 $expired        = (date('YmdHis') > $row->date_end);
 
-                if (!$active) {
-                    $content = $this->pmf_lang['err_inactiveNews'];
-                }
-                if ($expired) {
-                    $content = $this->pmf_lang['err_expiredNews'];
+                if (!$admin) {
+                    if (!$active) {
+                        $content = $this->pmf_lang['err_inactiveNews'];
+                    }
+                    if ($expired) {
+                        $content = $this->pmf_lang['err_expiredNews'];
+                    }
                 }
 
                 $news = array(
