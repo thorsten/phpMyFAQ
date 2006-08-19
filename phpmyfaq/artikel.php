@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.44 2006-08-19 15:57:31 matteo Exp $
+* $Id: artikel.php,v 1.45 2006-08-19 16:14:35 matteo Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -179,7 +179,8 @@ if (count($multiCats) > 1) {
     $writeMultiCategories .= '    </div>';
 }
 
-// Show link to edit the entry?
+// Show link to edit the faq?
+$editThisEntry = '';
 if (isset($permission['editbt'])) {
     $editThisEntry = sprintf(
                         '<a href="%sadmin/index.php?action=editentry&amp;id=%d&amp;lang=%s">%s</a>',
@@ -188,12 +189,13 @@ if (isset($permission['editbt'])) {
                         $lang,
                         $PMF_LANG['ad_entry_edit_1']
                         );
-} else {
-    $editThisEntry = '';
 }
 
+// Is the faq expired?
+$expired = (date('YmdHis') > $faq->faqRecord['dateEnd']);
+
 // Does the user have the right to add a comment?
-if ($faq->faqRecord['comment'] == 'n') {
+if (($faq->faqRecord['active'] != 'yes') || ('n' == $faq->faqRecord['comment']) || $expired) {
     $commentMessage = $PMF_LANG['msgWriteNoComment'];
 } else {
     $commentMessage = sprintf('%s<a onclick="show(\'comment\');" href="#comment">%s</a>',
