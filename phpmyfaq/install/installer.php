@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.66 2006-08-19 08:52:31 matteo Exp $
+* $Id: installer.php,v 1.67 2006-08-19 10:28:37 matteo Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -674,11 +674,12 @@ foreach ($permLevels as $level => $desc) {
     if (!$db) {
         print "<p class=\"error\"><strong>DB Error:</strong> ".$db->error()."</p>\n";
         HTMLFooter();
+        cleanInstallation();
         die();
     }
 
-    include_once($sql_type.'.sql.php');
-    include_once('config.sql.php');
+    require_once($sql_type.'.sql.php');
+    require_once('config.sql.php');
     print "<p class=\"center\">";
     while ($each_query = each($query)) {
         $result = @$db->query($each_query[1]);
@@ -701,7 +702,7 @@ foreach ($permLevels as $level => $desc) {
     if (!defined('SQLPREFIX')) {
         define('SQLPREFIX', $sqltblpre);
     }
-    require_once dirname(dirname(__FILE__)).'/inc/PMF_User/User.php';
+    require_once(PMF_ROOT_DIR.'/inc/PMF_User/User.php');
     $admin = new PMF_User();
     $admin->createUser('admin', $password);
     $admin->setStatus('protected');
@@ -900,7 +901,15 @@ foreach ($permLevels as $level => $desc) {
         $rightID = $admin->perm->addRight($right);
         $admin->perm->grantUserRight($adminID, $rightID);
     }
-    print "</strong></p>\n";
+    // set link verification base url
+    require_once(PMF_ROOT_DIR.'/inc/Configuration.php');
+    require_once(PMF_ROOT_DIR.'/inc/Link.php');
+    $oConf = new PMF_Configuration($db);
+    $oConf->getAll();
+    $configs = $oConf->config;
+    $configs['referenceURL'] = PMF_Link::getSystemUri('/install/installer.php');;
+    $oConf->update($configs);
+    print "</p>\n";
 
     print "<p class=\"center\">All tables were created and filled with the data.</p>\n";
     print "<p class=\"center\">Congratulation! Everything seems to be okay.</p>\n";
