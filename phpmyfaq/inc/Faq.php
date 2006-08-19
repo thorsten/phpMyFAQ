@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.50 2006-08-18 00:04:32 matteo Exp $
+* $Id: Faq.php,v 1.51 2006-08-19 13:02:33 matteo Exp $
 *
 * The main FAQ class
 *
@@ -345,8 +345,8 @@ class PMF_Faq
                 'date'          => makeDate($row->datum),
                 'dateStart'     => $row->date_start,
                 'dateEnd'       => $row->date_end,
-                'linkState'     => $row->linkState,
-                'linkCheckDate' => $row->linkCheckDate
+                'linkState'     => $row->links_state,
+                'linkCheckDate' => $row->links_check_date
                 );
         }
     }
@@ -373,7 +373,7 @@ class PMF_Faq
         $this->db->query(sprintf(
             "INSERT INTO
                 %sfaqdata
-             (id, lang, solution_id, revision_id, active, keywords, thema, content, author, email, comment, datum, linkState, linkCheckDate, date_start, date_end)
+             (id, lang, solution_id, revision_id, active, keywords, thema, content, author, email, comment, datum, links_state, links_check_date, date_start, date_end)
                 VALUES
             (%d, '%s', %d, %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %d, '%s', '%s')",
             SQLPREFIX,
@@ -389,10 +389,10 @@ class PMF_Faq
             $data['email'],
             $data['comment'],
             $data['date'],
-            $data['linkstate'],
-            $data['linkdatecheck'],
-            $data['datestart'],
-            $data['dateend']));
+            $data['linkState'],
+            $data['linkDateCheck'],
+            $data['dateStart'],
+            $data['dateEnd']));
 
         return $newId;
     }

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mssql.sql.php,v 1.13 2006-08-19 11:03:53 thorstenr Exp $
+* $Id: mssql.sql.php,v 1.14 2006-08-19 13:02:32 matteo Exp $
 *
 * CREATE TABLE instruction for MS SQL Server database
 *
@@ -150,8 +150,8 @@ author varchar(255) NOT NULL,
 email varchar(255) NOT NULL,
 comment char(1) default 'y',
 datum varchar(15) NOT NULL,
-linkState varchar(7) NOT NULL,
-linkCheckDate integer DEFAULT 0 NOT NULL,
+links_state varchar(7) NOT NULL,
+links_check_date integer DEFAULT 0 NOT NULL,
 date_start varchar(14) NOT NULL DEFAULT '00000000000000',
 date_end varchar(14) NOT NULL DEFAULT '99991231235959',
 PRIMARY KEY (id, lang))";
@@ -170,8 +170,8 @@ author varchar(255) NOT NULL,
 email varchar(255) NOT NULL,
 comment char(1) default 'y',
 datum varchar(15) NOT NULL,
-linkState varchar(7) NOT NULL,
-linkCheckDate integer DEFAULT 0 NOT NULL,
+links_state varchar(7) NOT NULL,
+links_check_date integer DEFAULT 0 NOT NULL,
 date_start varchar(14) NOT NULL DEFAULT '00000000000000',
 date_end varchar(14) NOT NULL DEFAULT '99991231235959',
 PRIMARY KEY (id, lang, solution_id, revision_id))";

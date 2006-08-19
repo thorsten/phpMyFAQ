@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.show.php,v 1.28 2006-07-30 07:07:19 matteo Exp $
+* $Id: record.show.php,v 1.29 2006-08-19 13:02:33 matteo Exp $
 *
 * Shows the list of records ordered by categories
 *
@@ -42,7 +42,7 @@ if ($permission["editbt"] || $permission["delbt"]) {
     $internalSearch = '';
 
     if (isset($_REQUEST["linkstate"])) {
-        $cond[SQLPREFIX."faqdata.linkState"] = "linkbad";
+        $cond[SQLPREFIX."faqdata.links_state"] = "linkbad";
         $linkState = " checked ";
         $internalSearch .= "&amp;linkstate=linkbad";
     } else {
@@ -99,7 +99,7 @@ if ($permission["editbt"] || $permission["delbt"]) {
     }
 
     // FIXME: Count "comments"/"entries" for each category also within a search context. Now the count is broken.
-    // FIXME: we are not considering 'faqdata.linkState' for filtering the faqs.
+    // FIXME: we are not considering 'faqdata.links_state' for filtering the faqs.
     if (!(isset($_REQUEST["suchbegriff"]) && $_REQUEST["suchbegriff"] != "")) {
         // 2. Count the comments for each category
         // 2.1 Create a matrix for representing categories and faq records
@@ -285,7 +285,7 @@ if ($permission["editbt"] || $permission["delbt"]) {
     </form>
 <?php
     } else {
-        print "n/a";
+        print $PMF_LANG["err_nothingFound"];
     }
 } else {
     print $PMF_LANG["err_NotAuth"];

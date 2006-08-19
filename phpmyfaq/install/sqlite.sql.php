@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: sqlite.sql.php,v 1.22 2006-08-19 10:09:53 thorstenr Exp $
+* $Id: sqlite.sql.php,v 1.23 2006-08-19 13:02:33 matteo Exp $
 *
 * CREATE TABLE instructions for SQLite
 *
@@ -152,8 +152,8 @@ author varchar(255) NOT NULL,
 email varchar(255) NOT NULL,
 comment char(1) NOT NULL default 'y',
 datum varchar(15) NOT NULL,
-linkState VARCHAR(7) NOT NULL,
-linkCheckDate INT(11) DEFAULT 0 NOT NULL,
+links_state VARCHAR(7) NOT NULL,
+links_check_date INT(11) DEFAULT 0 NOT NULL,
 date_start varchar(14) NOT NULL DEFAULT '00000000000000',
 date_end varchar(14) NOT NULL DEFAULT '99991231235959',
 PRIMARY KEY (id, lang))";
@@ -172,8 +172,8 @@ author varchar(255) NOT NULL,
 email varchar(255) NOT NULL,
 comment char(1) default 'y',
 datum varchar(15) NOT NULL,
-linkState VARCHAR(7) NOT NULL,
-linkCheckDate INT(11) DEFAULT 0 NOT NULL,
+links_state VARCHAR(7) NOT NULL,
+links_check_date INT(11) DEFAULT 0 NOT NULL,
 date_start varchar(14) NOT NULL DEFAULT '00000000000000',
 date_end varchar(14) NOT NULL DEFAULT '99991231235959',
 PRIMARY KEY (id, lang, solution_id, revision_id))";

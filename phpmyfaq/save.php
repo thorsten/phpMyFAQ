@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: save.php,v 1.23 2006-06-21 21:59:39 matteo Exp $
+* $Id: save.php,v 1.24 2006-08-19 13:02:34 matteo Exp $
 *
 * Saves a user FAQ record and sends an email to the user
 *
@@ -52,15 +52,19 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
     }
 
     $newData = array(
-        'lang'      => $lang,
-        'thema'     => $db->escape_string(safeSQL(safeHTML($_POST['thema']))),
-        'active'    => 'no',
-        'content'   => $content,
-        'keywords'  => $db->escape_string(safeSQL($_POST['keywords'])),
-        'author'    => $db->escape_string(safeSQL($_POST['username'])),
-        'email'     => $IDN->encode($_POST['usermail']),
-        'comment'   => 'y',
-        'date'      => date('YmdHis')
+        'lang'          => $lang,
+        'thema'         => $db->escape_string(safeSQL(safeHTML($_POST['thema']))),
+        'active'        => 'no',
+        'content'       => $content,
+        'keywords'      => $db->escape_string(safeSQL($_POST['keywords'])),
+        'author'        => $db->escape_string(safeSQL($_POST['username'])),
+        'email'         => $IDN->encode($_POST['usermail']),
+        'comment'       => 'y',
+        'date'          => date('YmdHis'),
+        'dateStart'     => '00000000000000',
+        'dateEnd'       => '99991231235959',
+        'linkState'     => '',
+        'linkDateCheck' => 0
         );
     $selected_category = intval($_POST['rubrik']);
 

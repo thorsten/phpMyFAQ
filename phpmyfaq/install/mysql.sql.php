@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mysql.sql.php,v 1.36 2006-08-19 11:03:53 thorstenr Exp $
+* $Id: mysql.sql.php,v 1.37 2006-08-19 13:02:32 matteo Exp $
 *
 * CREATE TABLE instruction for MySQL database
 *
@@ -153,8 +153,8 @@ author varchar(255) NOT NULL,
 email varchar(255) NOT NULL,
 comment enum('y','n') NOT NULL default 'y',
 datum varchar(15) NOT NULL,
-linkState VARCHAR(7) NOT NULL,
-linkCheckDate INT(11) DEFAULT 0 NOT NULL,
+links_state VARCHAR(7) NOT NULL,
+links_check_date INT(11) DEFAULT 0 NOT NULL,
 date_start varchar(14) NOT NULL DEFAULT '00000000000000',
 date_end varchar(14) NOT NULL DEFAULT '99991231235959',
 FULLTEXT (keywords,thema,content),
@@ -174,8 +174,8 @@ author varchar(255) NOT NULL,
 email varchar(255) NOT NULL,
 comment char(1) default 'y',
 datum varchar(15) NOT NULL,
-linkState VARCHAR(7) NOT NULL,
-linkCheckDate INT(11) DEFAULT 0 NOT NULL,
+links_state VARCHAR(7) NOT NULL,
+links_check_date INT(11) DEFAULT 0 NOT NULL,
 date_start varchar(14) NOT NULL DEFAULT '00000000000000',
 date_end varchar(14) NOT NULL DEFAULT '99991231235959',
 PRIMARY KEY (id, lang, solution_id, revision_id))";

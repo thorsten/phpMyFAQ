@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: pgsql.sql.php,v 1.23 2006-08-19 09:34:10 matteo Exp $
+* $Id: pgsql.sql.php,v 1.24 2006-08-19 13:02:33 matteo Exp $
 *
 * CREATE TABLE instruction for PostgreSQL database
 *
@@ -195,8 +195,8 @@ author varchar(255) NOT NULL,
 email varchar(255) NOT NULL,
 comment char(1) NOT NULL default 'y',
 datum varchar(15) NOT NULL,
-linkState varchar(7) NOT NULL,
-linkCheckDate int4 DEFAULT 0 NOT NULL,
+links_state varchar(7) NOT NULL,
+links_check_date int4 DEFAULT 0 NOT NULL,
 date_start varchar(14) NOT NULL DEFAULT '00000000000000',
 date_end varchar(14) NOT NULL DEFAULT '99991231235959',
 PRIMARY KEY (id, lang))";
@@ -215,8 +215,8 @@ author varchar(255) NOT NULL,
 email varchar(255) NOT NULL,
 comment char(1) default 'y',
 datum varchar(15) NOT NULL,
-linkState varchar(7) NOT NULL,
-linkCheckDate int4 DEFAULT 0 NOT NULL,
+links_state varchar(7) NOT NULL,
+links_check_date int4 DEFAULT 0 NOT NULL,
 date_start varchar(14) NOT NULL DEFAULT '00000000000000',
 date_end varchar(14) NOT NULL DEFAULT '99991231235959',
 PRIMARY KEY (id, lang, solution_id, revision_id))";

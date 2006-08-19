@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.71 2006-08-19 11:08:05 matteo Exp $
+* $Id: update.php,v 1.72 2006-08-19 13:02:33 matteo Exp $
 *
 * Main update script
 *
@@ -663,8 +663,8 @@ if ($step == 5) {
                             email varchar(255) NOT NULL,
                             comment char(1) NOT NULL default 'y',
                             datum varchar(15) NOT NULL,
-                            linkState varchar(7) NOT NULL,
-                            linkCheckDate int4 DEFAULT 0 NOT NULL,
+                            links_state varchar(7) NOT NULL,
+                            links_check_date int4 DEFAULT 0 NOT NULL,
                             date_start varchar(14) NOT NULL DEFAULT '00000000000000',
                             date_end varchar(14) NOT NULL DEFAULT '99991231235959',
                             PRIMARY KEY (id, lang))";
@@ -676,9 +676,9 @@ if ($step == 5) {
                 // Drop the faqdata_PMF16x_old table
                 $query[] = 'DROP TABLE '.SQLPREFIX.'faqdata_PMF16x_old';
             default:
-                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata ADD linkState VARCHAR(7) NOT NULL AFTER datum';
-                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata ADD linkCheckDate INT(11) NOT NULL DEFAULT 0 AFTER linkState';
-                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata ADD date_start VARCHAR(14) NOT NULL DEFAULT \'00000000000000\' AFTER linkCheckDate';
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata ADD links_state VARCHAR(7) NOT NULL AFTER datum';
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata ADD links_check_date INT(11) NOT NULL DEFAULT 0 AFTER links_state';
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata ADD date_start VARCHAR(14) NOT NULL DEFAULT \'00000000000000\' AFTER links_check_date';
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata ADD date_end VARCHAR(14) NOT NULL DEFAULT \'99991231235959\' AFTER date_start';
                 break;
         }
@@ -701,8 +701,8 @@ if ($step == 5) {
                             email varchar(255) NOT NULL,
                             comment char(1) default 'y',
                             datum varchar(15) NOT NULL,
-                            linkState varchar(7) NOT NULL,
-                            linkCheckDate int4 DEFAULT 0 NOT NULL,
+                            links_state varchar(7) NOT NULL,
+                            links_check_date int4 DEFAULT 0 NOT NULL,
                             date_start varchar(14) NOT NULL DEFAULT '00000000000000',
                             date_end varchar(14) NOT NULL DEFAULT '99991231235959',
                             PRIMARY KEY (id, lang, solution_id, revision_id))";
@@ -714,9 +714,9 @@ if ($step == 5) {
                 // Drop the faqdata_revisions_PMF16x_old table
                 $query[] = 'DROP TABLE '.SQLPREFIX.'faqdata_revisions_PMF16x_old';
             default:
-                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata_revisions ADD linkState VARCHAR(7) NOT NULL AFTER datum';
-                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata_revisions ADD linkCheckDate INT(11) NOT NULL DEFAULT 0 AFTER linkState';
-                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata_revisions ADD date_start VARCHAR(14) NOT NULL DEFAULT \'00000000000000\' AFTER linkCheckDate';
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata_revisions ADD links_state VARCHAR(7) NOT NULL AFTER datum';
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata_revisions ADD links_check_date INT(11) NOT NULL DEFAULT 0 AFTER links_state';
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata_revisions ADD date_start VARCHAR(14) NOT NULL DEFAULT \'00000000000000\' AFTER links_check_date';
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata_revisions ADD date_end VARCHAR(14) NOT NULL DEFAULT \'99991231235959\' AFTER date_start';
                 break;
         }
