@@ -1,5 +1,5 @@
 /**
- * $Id: style.css,v 1.21 2006-08-16 10:10:38 matteo Exp $
+ * $Id: style.css,v 1.22 2006-08-19 07:05:03 thorstenr Exp $
  *
  * This is the main style sheet file for phpMyFAQ 2.0
  * If you want to change only the colours, use colors.css
@@ -255,9 +255,7 @@ html>body #categories li a {
    border-bottom: 1px solid;
    margin-bottom: 7px;
 }
-.main-content pre {
-/* This hack is coming from: http://pms.colonpee.com/irc/20020517_fRy.html
-       The author is pmsyyz: http://www.experts-exchange.com/M_932246.html */
+.main-content pre, .main-content code {
     white-space: -moz-pre-wrap; /* Mozilla, supported since 1999 */
     white-space: -pre-wrap;     /* Opera 4 - 6 */
     white-space: -o-pre-wrap;   /* Opera 7 */
