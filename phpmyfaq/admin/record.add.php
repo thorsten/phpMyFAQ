@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.add.php,v 1.37 2006-08-19 09:21:09 matteo Exp $
+* $Id: record.add.php,v 1.38 2006-08-19 09:49:04 matteo Exp $
 *
 * Adds a record in the database
 *
@@ -23,6 +23,9 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
+
+// Re-evaluate $user
+$user = PMF_CurrentUser::getFromSession($faqconfig->get('ipcheck'));
 
 if ($permission["editbt"]) {
     $submit = $_POST["submit"];
@@ -50,7 +53,7 @@ if ($permission["editbt"]) {
             'content'       => $db->escape_string($_POST['content']),
             'keywords'      => $db->escape_string($_POST['keywords']),
             'author'        => $db->escape_string($_POST['author']),
-            'email'         => $db->escape_string($_POST['active']),
+            'email'         => $db->escape_string($_POST['email']),
             'comment'       => (isset($_POST['comment']) ? 'y' : 'n'),
             'date'          => date('YmdHis'),
             'datestart'     => ('' == $dateStart) ? '00000000000000' : $db->escape_string($dateStart),
