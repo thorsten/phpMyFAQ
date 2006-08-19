@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.65 2006-08-19 07:42:30 matteo Exp $
+* $Id: installer.php,v 1.66 2006-08-19 08:52:31 matteo Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -95,7 +95,6 @@ function phpmyfaq_check()
 * @return   void
 * @access   public
 * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-* @author   Matteo Scaramuccia <matteo@scaramuccia.com>
 */
 function uninstall()
 {
