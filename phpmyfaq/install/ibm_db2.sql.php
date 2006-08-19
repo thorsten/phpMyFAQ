@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ibm_db2.sql.php,v 1.9 2006-08-12 15:12:40 matteo Exp $
+* $Id: ibm_db2.sql.php,v 1.10 2006-08-19 11:03:53 thorstenr Exp $
 *
 * CREATE TABLE instruction for IBM DB2 Universal Database, IBM Cloudscape,
 * and Apache Derby databases
@@ -133,7 +133,7 @@ helped varchar(255) NOT NULL,
 PRIMARY KEY (id_comment))";
 
 //faqconfig
-$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqconfig (
+$query[] = "CREATE TABLE ".$sqltblpre."faqconfig (
 config_name varchar(255) NOT NULL default '',
 config_value varchar(255) NOT NULL default '',
 PRIMARY KEY (config_name))";
@@ -185,7 +185,7 @@ group_id INTEGER NOT NULL,
 PRIMARY KEY (record_id, group_id))";
 
 //faqdata_tags
-$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqdata_tags (
+$query[] = "CREATE TABLE ".$sqltblpre."faqdata_tags (
 tagging_id INTEGER NOT NULL,
 tagging_name VARCHAR(255) NOT NULL ,
 PRIMARY KEY (tagging_id, tagging_name)
@@ -284,7 +284,7 @@ PRIMARY KEY (sid)
 )";
 
 //faqtags
-$query[] = "CREATE TABLE IF NOT EXISTS ".$sqltblpre."faqtags (
+$query[] = "CREATE TABLE ".$sqltblpre."faqtags (
 record_id INTEGER NOT NULL,
 tagging_id INTEGER NOT NULL,
 PRIMARY KEY (record_id, tagging_id)
