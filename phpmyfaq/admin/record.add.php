@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.add.php,v 1.36 2006-08-07 21:31:40 matteo Exp $
+* $Id: record.add.php,v 1.37 2006-08-19 09:21:09 matteo Exp $
 *
 * Adds a record in the database
 *
@@ -54,7 +54,9 @@ if ($permission["editbt"]) {
             'comment'       => (isset($_POST['comment']) ? 'y' : 'n'),
             'date'          => date('YmdHis'),
             'datestart'     => ('' == $dateStart) ? '00000000000000' : $db->escape_string($dateStart),
-            'dateend'       => ('' == $dateEnd)   ? '99991231235959' : $db->escape_string($dateEnd)
+            'dateend'       => ('' == $dateEnd)   ? '99991231235959' : $db->escape_string($dateEnd),
+            'linkstate'     => '',
+            'linkdatecheck' => 0
         );
 
         $categories = $_POST['rubrik'];
