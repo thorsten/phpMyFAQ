@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ask.php,v 1.10 2006-07-02 19:11:04 thorstenr Exp $
+* $Id: ask.php,v 1.11 2006-08-19 14:35:09 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-09-17
@@ -48,4 +48,3 @@ $tpl->processTemplate('writeContent', array(
     'msgNewContentSubmit'     => $PMF_LANG['msgNewContentSubmit']));
 
 $tpl->includeTemplate('writeContent', 'index');
-?>

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: contact.php,v 1.7 2006-06-12 22:09:26 matteo Exp $
+* $Id: contact.php,v 1.8 2006-08-19 14:35:09 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-09-16
@@ -32,19 +32,17 @@ if (isset($_GET['gen'])) {
 }
 
 $tpl->processTemplate ('writeContent', array(
-                        'msgContact' => $PMF_LANG['msgContact'],
-                        'msgContactOwnText' => unhtmlentities($PMF_CONF['msgContactOwnText']),
-                        'msgContactEMail' => $PMF_LANG['msgContactEMail'],
-                        'writeSendAdress' => $_SERVER['PHP_SELF'].'?'.$sids.'action=sendmail',
-                        'msgNewContentName' => $PMF_LANG['msgNewContentName'],
-                        'msgNewContentMail' => $PMF_LANG['msgNewContentMail'],
-                        'defaultContentMail' => getEmailAddress(),
-                        'defaultContentName' => getFullUserName(),
-                        'msgMessage' => $PMF_LANG['msgMessage'],
-                        'msgS2FButton' => $PMF_LANG['msgS2FButton'],
-                        'version' => $PMF_CONF['version'],
-                        'captchaFieldset' => printCaptchaFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('contact'), $captcha->caplength)
-                        ));
+    'msgContact'            => $PMF_LANG['msgContact'],
+    'msgContactOwnText'     => unhtmlentities($PMF_CONF['msgContactOwnText']),
+    'msgContactEMail'       => $PMF_LANG['msgContactEMail'],
+    'writeSendAdress'       => $_SERVER['PHP_SELF'].'?'.$sids.'action=sendmail',
+    'msgNewContentName'     => $PMF_LANG['msgNewContentName'],
+    'msgNewContentMail'     => $PMF_LANG['msgNewContentMail'],
+    'defaultContentMail'    => getEmailAddress(),
+    'defaultContentName'    => getFullUserName(),
+    'msgMessage'            => $PMF_LANG['msgMessage'],
+    'msgS2FButton'          => $PMF_LANG['msgS2FButton'],
+    'version'               => $faqconfig->get('version'),
+    'captchaFieldset'       => printCaptchaFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('contact'), $captcha->caplength)));
 
 $tpl->includeTemplate('writeContent', 'index');
-?>
