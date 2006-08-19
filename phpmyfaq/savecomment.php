@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: savecomment.php,v 1.15 2006-07-23 09:14:45 matteo Exp $
+* $Id: savecomment.php,v 1.16 2006-08-19 15:04:11 matteo Exp $
 *
 * Saves the posted comment
 *
@@ -53,24 +53,88 @@ if (    isset($_POST['user']) && $_POST['user'] != ''
         'comment'   => nl2br($db->escape_string(safeHTML($_POST["comment"]))),
         'date'      => time(),
         'helped'    => '');
-    $faq->addComment($commentData);
+    if ($faq->addComment($commentData)) {
+        $emailTo = $PMF_CONF['adminmail'];
+        $urlToContent = '';
+        if ('faq' == $_POST['type']) {
+            $faq->getRecord($id);
+            if ($faq->faqRecord['email'] != '') {
+                $emailTo = $faq->faqRecord['email'];
+            }
+            $_faqUrl = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                            $sids,
+                            0,
+                            $faq->faqRecord['id'],
+                            $faq->faqRecord['lang']
+                            );
+            $oLink = new PMF_Link(PMF_Link::getSystemUri().'?'.$_faqUrl);
+            $oLink->itemTitle = $faq->faqRecord['title'];
+            $urlToContent = $oLink->toString();
+        } elseif ('news' == $_POST['type']) {
+            class_exists('PMF_News') || require('inc/News.php');
 
-    $tpl->processTemplate ("writeContent", array(
-    "msgCommentHeader"  => $msgWriteComment,
-    "Message"           => $PMF_LANG["msgCommentThanks"]
-    ));
-} else {
-    if (IPCheck($_SERVER["REMOTE_ADDR"]) == FALSE) {
+            $oNews = new PMF_News($db, $LANGCODE);
+            $news = $oNews->getNewsEntry($id);
+            if ($news['authorEmail'] != '') {
+                $emailTo = $news['authorEmail'];
+            }
+            $oLink = new PMF_Link(PMF_Link::getSystemUri().'?action=news&amp;newsid='.$news['id'].'&amp;newslang='.$news['lang']);
+            $oLink->itemTitle = $news['header'];
+            $urlToContent = $oLink->toString();
+        }
+        $commentMail =  "User: ".$commentData['username'].", mailto:".$commentData['usermail']."\n".
+                        "New comment posted on: ".$urlToContent.
+                        "\n\n".
+                        wordwrap($_POST["comment"], 72);
+
+        $additional_header = array();
+        $additional_header[] = 'MIME-Version: 1.0';
+        $additional_header[] = 'Content-Type: text/plain; charset='. $PMF_LANG['metaCharset'];
+        if (strtolower($PMF_LANG['metaCharset']) == 'utf-8') {
+            $additional_header[] = 'Content-Transfer-Encoding: 8bit';
+        }
+        $additional_header[] = 'From: '.'<'.$IDN->encode($commentData['usermail']).'>';
+        // Let the admin always get a copy
+        if ($emailTo != $PMF_CONF['adminmail']) {
+            $additional_header[] = 'Cc: '.'<'.$IDN->encode($PMF_CONF['adminmail']).'>';
+        }
+        $body = strip_tags($commentMail);
+        $body = str_replace(array("\r\n", "\r", "\n"), "\n", $body);
+        $body = str_replace(array("\r\n", "\r", "\n"), "\n", $body);
+        if (strstr(PHP_OS, 'WIN') !== NULL) {
+            // if windows, cr must "\r\n". if other must "\n".
+            $body = str_replace("\n", "\r\n", $body);
+        }
+        // Send the email
+        mail($IDN->encode($emailTo), $PMF_CONF['title'], $body, implode("\r\n", $additional_header), '-f'.$IDN->encode($commentData['usermail']));
+        
         $tpl->processTemplate ("writeContent", array(
-        "msgCommentHeader"  => $msgWriteComment,
-        "Message"           => $PMF_LANG["err_bannedIP"]
-        ));
+                                                "msgCommentHeader"  => $msgWriteComment,
+                                                "Message"           => $PMF_LANG["msgCommentThanks"]
+                                                )
+        );
     } else {
         Tracking("error_save_comment", $id);
         $tpl->processTemplate ("writeContent", array(
-        "msgCommentHeader"  => $msgWriteComment,
-        "Message"           => $PMF_LANG["err_SaveComment"]
-        ));
+                                                "msgCommentHeader"  => $msgWriteComment,
+                                                "Message"           => $PMF_LANG["err_SaveComment"]
+                                                )
+        );
+    }
+} else {
+    if (!IPCheck($_SERVER["REMOTE_ADDR"])) {
+        $tpl->processTemplate ("writeContent", array(
+                                                "msgCommentHeader"  => $msgWriteComment,
+                                                "Message"           => $PMF_LANG["err_bannedIP"]
+                                                )
+        );
+    } else {
+        Tracking("error_save_comment", $id);
+        $tpl->processTemplate ("writeContent", array(
+                                                "msgCommentHeader"  => $msgWriteComment,
+                                                "Message"           => $PMF_LANG["err_SaveComment"]
+                                                )
+        );
     }
 }
 
