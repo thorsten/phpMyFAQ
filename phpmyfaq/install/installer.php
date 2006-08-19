@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.64 2006-08-17 20:42:29 matteo Exp $
+* $Id: installer.php,v 1.65 2006-08-19 07:42:30 matteo Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -104,11 +104,6 @@ function uninstall()
     while ($each_query = each($uninst)) {
         $db->query($each_query[1]);
     }
-
-    // Remove 'data.php' file: no need of prompt anything to the user
-    if (@is_file(PMF_ROOT_DIR."/inc/data.php")) {
-        @unlink(PMF_ROOT_DIR."/inc/data.php");
-    }
 }
 
 /**
@@ -128,7 +123,7 @@ function HTMLFooter()
 /**
 * cleanInstallation
 *
-* Removes the config.php and data.php if an installation failed
+* Removes the data.php and the dataldap.php if an installation failed
 *
 * @param
 * @return   void
@@ -138,11 +133,13 @@ function HTMLFooter()
 */
 function cleanInstallation()
 {
+    // Remove 'data.php' file: no need of prompt anything to the user
     if (file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
         @unlink(PMF_ROOT_DIR.'/inc/data.php');
     }
-    if (file_exists(PMF_ROOT_DIR.'/inc/config.php')) {
-        @unlink(PMF_ROOT_DIR.'/inc/config.php');
+    // Remove 'dataldap.php' file: no need of prompt anything to the user
+    if (file_exists(PMF_ROOT_DIR.'/inc/dataldap.php')) {
+        @unlink(PMF_ROOT_DIR.'/inc/dataldap.php');
     }
 }
 ?>
@@ -651,6 +648,7 @@ foreach ($permLevels as $level => $desc) {
     } else {
         print "<p class=\"error\"><strong>Error:</strong> Cannot write to data.php.</p>";
         HTMLFooter();
+        cleanInstallation();
         die();
     }
 
@@ -663,6 +661,7 @@ foreach ($permLevels as $level => $desc) {
         } else {
             print "<p class=\"error\"><strong>Error:</strong> Cannot write to dataldap.php.</p>";
             HTMLFooter();
+            cleanInstallation();
             die();
         }
 
@@ -693,6 +692,7 @@ foreach ($permLevels as $level => $desc) {
             print "<pre>".PMF_htmlentities($each_query[1])."</pre></p></div>\n";
             print "</div>";
             uninstall();
+            cleanInstallation();
             HTMLFooter();
             die();
         }
@@ -909,11 +909,11 @@ foreach ($permLevels as $level => $desc) {
     print "<p class=\"center\">login into your <a href=\"../admin/index.php\">admin section</a>.</p>\n";
     
     // Remove 'scripts' folder: no need of prompt anything to the user
-    if (@is_dir(PMF_ROOT_DIR."/scripts")) {
+    if (file_exists(PMF_ROOT_DIR."/scripts") && is_dir(PMF_ROOT_DIR."/scripts")) {
         @rmdir(PMF_ROOT_DIR."/scripts");
     }
     // Remove 'phpmyfaq.spec' file: no need of prompt anything to the user
-    if (@is_file(PMF_ROOT_DIR."/phpmyfaq.spec")) {
+    if (file_exists(PMF_ROOT_DIR."/phpmyfaq.spec")) {
         @unlink(PMF_ROOT_DIR."/phpmyfaq.spec");
     }
     // Remove 'installer.php' file
