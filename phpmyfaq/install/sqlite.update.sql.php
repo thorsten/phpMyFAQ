@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: sqlite.update.sql.php,v 1.1 2006-08-12 15:12:40 matteo Exp $
+* $Id: sqlite.update.sql.php,v 1.2 2006-08-19 10:09:53 thorstenr Exp $
 *
 * CREATE TABLE instructions for SQLite
 *
@@ -50,7 +50,7 @@ group_id INT(11) NOT NULL,
 PRIMARY KEY (record_id, group_id))";
 
 //faqdata_tags
-$query[] = "CREATE TABLE IF NOT EXISTS ".SQLPREFIX."faqdata_tags (
+$query[] = "CREATE TABLE ".SQLPREFIX."faqdata_tags (
 tagging_id INT(11) NOT NULL,
 tagging_name VARCHAR(255) NOT NULL ,
 PRIMARY KEY (tagging_id, tagging_name)
@@ -111,7 +111,7 @@ PRIMARY KEY(right_id)
 )";
 
 //faqtags
-$query[] = "CREATE TABLE IF NOT EXISTS ".SQLPREFIX."faqtags (
+$query[] = "CREATE TABLE ".SQLPREFIX."faqtags (
 record_id INT(11) NOT NULL,
 tagging_id INT(11) NOT NULL,
 PRIMARY KEY (record_id, tagging_id)
