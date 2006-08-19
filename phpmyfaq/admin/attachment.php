@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: attachment.php,v 1.19 2006-07-30 07:43:50 thorstenr Exp $
+* $Id: attachment.php,v 1.20 2006-08-19 14:43:05 thorstenr Exp $
 *
 * Select an attachment and save it or create the SQL backup files
 *
@@ -24,10 +24,6 @@ require_once('../inc/Init.php');
 define('IS_VALID_PHPMYFAQ_ADMIN', null);
 PMF_Init::cleanRequest();
 
-// Just for security reasons - thanks to Johannes for the hint
-$_SERVER['PHP_SELF'] = str_replace('%2F', '/', rawurlencode($_SERVER['PHP_SELF']));
-$_SERVER['HTTP_USER_AGENT'] = urlencode($_SERVER['HTTP_USER_AGENT']);
-
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
 if (isset($_REQUEST["action"]) && ($_REQUEST["action"] == "sicherdaten" || $_REQUEST["action"] == "sicherlog")) {
@@ -43,12 +39,46 @@ if (isset($_REQUEST["action"]) && ($_REQUEST["action"] == "sicherdaten" || $_REQ
 // get language (default: english)
 $pmf = new PMF_Init();
 $LANGCODE = $pmf->setLanguage((isset($PMF_CONF['detection']) ? true : false), $PMF_CONF['language']);
+// Preload English strings
+require_once ('../lang/language_en.php');
 
-if (isset($LANGCODE)) {
-    require_once(PMF_ROOT_DIR."/lang/language_".$LANGCODE.".php");
+if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE)) {
+    // Overwrite English strings with the ones we have in the current language
+    require_once(PMF_ROOT_DIR.'/lang/language_'.$LANGCODE.'.php');
 } else {
-    require_once (PMF_ROOT_DIR."/lang/language_en.php");
-    $LANGCODE = "en";
+    $LANGCODE = 'en';
+}
+
+//
+// Authenticate current user
+//
+require_once (PMF_ROOT_DIR.'/inc/PMF_User/CurrentUser.php');
+
+$user = PMF_CurrentUser::getFromSession($faqconfig->get('ipcheck'));
+if ($user) {
+    $auth = true;
+} else {
+    // error
+    $error = $PMF_LANG['ad_auth_sess'];
+    unset($user);
+}
+
+//
+// Get current user rights
+//
+$permission = array();
+if (isset($auth)) {
+    // read all rights, set them FALSE
+    $allRights = $user->perm->getAllRightsData();
+    foreach ($allRights as $right) {
+        $permission[$right['name']] = false;
+    }
+    // check user rights, set them TRUE
+    $allUserRights = $user->perm->getAllUserRights($user->getUserId());
+    foreach ($allRights as $right) {
+        if (in_array($right['right_id'], $allUserRights))
+            $permission[$right['name']] = true;
+    }
 }
 
 if (!isset($_REQUEST["action"]) || isset($_REQUEST["save"])) {
@@ -71,45 +101,6 @@ if (!isset($_REQUEST["action"]) || isset($_REQUEST["save"])) {
 </head>
 <body>
 <?php
-}
-
-$db->query("DELETE FROM ".SQLPREFIX."faqadminsessions WHERE time < ".(time() - ($PMF_CONST["timeout"] * 60)));
-
-$user = "";
-$pass = "";
-
-if ($_REQUEST["uin"]) {
-	$uin = $_REQUEST["uin"];
-}
-if (isset($uin)) {
-	$query = "SELECT usr, pass FROM ".SQLPREFIX."faqadminsessions WHERE UIN='".$uin."'";
-	if (isset($PMF_CONF["ipcheck"])) {
-		$query .= " AND ip = '".$_SERVER["REMOTE_ADDR"]."'";
-	}
-    $_result = $db->query($query);
-	if ($row = $db->fetch_object($_result)) {
-        $user = $row->usr;
-        $pass = $row->pass;
-    }
-	$db->query("UPDATE ".SQLPREFIX."faqadminsessions SET time = ".time()." WHERE uin = '".$uin."'");
-}
-
-if ($pass == "" && $user == "") {
-	print $PMF_LANG["ad_attach_3"];
-}
-
-if (isset($user) && isset($pass)) {
-	$result = $db->query("SELECT id, name, pass, rights FROM ".SQLPREFIX."faquser WHERE name = '".$user."' AND pass = '".$pass."'");
-	if ($db->num_rows($result) > 0) {
-		$auth = 1;
-	} else {
-		$auth = 0;
-	}
-    if ($row = $db->fetch_object($result)) {
-        $user = $row->name;
-        $pass = $row->pass;
-        $permission = array_combine($faqrights, explode(",", substr(chunk_split($row->rights,1,","), 0, -1)));
-    }
 }
 
 if (!isset($_REQUEST["action"]) && $auth && $permission["addatt"]) {
@@ -161,6 +152,7 @@ if (isset($_REQUEST["save"]) && $_REQUEST["save"] == TRUE && $auth && !$permissi
 }
 
 if (isset($_REQUEST["action"]) && $_REQUEST["action"] == "sicherdaten") {
+    // @todo ad missing tables
 	$text[] = "-- pmf2.0: ".SQLPREFIX."faqchanges ".SQLPREFIX."faqnews ".SQLPREFIX."faqcategories ".SQLPREFIX."faqcategoryrelations ".SQLPREFIX."faqvoting ".SQLPREFIX."faqdata ".SQLPREFIX."faqcomments ".SQLPREFIX."faquser ". SQLPREFIX."faqvisits ".SQLPREFIX."faqquestions";
 	$text[] = "-- DO NOT REMOVE THE FIRST LINE!";
 	$text[] = "-- pmftableprefix: ".SQLPREFIX;
@@ -217,4 +209,3 @@ if (isset($_REQUEST["action"]) && $_REQUEST["action"] != "sicherdaten" && $_REQU
 }
 
 $db->dbclose();
-?>
