@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: pgsql.sql.php,v 1.22 2006-08-17 21:17:48 matteo Exp $
+* $Id: pgsql.sql.php,v 1.23 2006-08-19 09:34:10 matteo Exp $
 *
 * CREATE TABLE instruction for PostgreSQL database
 *
@@ -55,7 +55,6 @@ $uninst[] = "DROP TABLE ".$sqltblpre."faqvoting";
 // DROP SEQUENCES
 $uninst[] = "DROP SEQUENCE faqadminlog_id_seq";
 $uninst[] = "DROP SEQUENCE faqcategories_id_seq";
-$uninst[] = "DROP SEQUENCE faqcategoryrela_category_id_seq";
 $uninst[] = "DROP SEQUENCE faqchanges_id_seq";
 $uninst[] = "DROP SEQUENCE faqcomments_id_comment_seq";
 $uninst[] = "DROP SEQUENCE faqdata_id_seq";
@@ -134,7 +133,7 @@ PRIMARY KEY (id, lang))";
 
 //faqcategoryrelations
 $query[] = "CREATE TABLE ".$sqltblpre."faqcategoryrelations (
-category_id SERIAL NOT NULL,
+category_id int4 NOT NULL,
 category_lang VARCHAR(5) NOT NULL,
 record_id int4 NOT NULL,
 record_lang VARCHAR(5) NOT NULL,
