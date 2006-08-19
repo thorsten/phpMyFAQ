@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: news.php,v 1.3 2006-08-17 23:54:24 matteo Exp $
+* $Id: news.php,v 1.4 2006-08-19 16:09:23 matteo Exp $
 *
 * Shows the page with the news record and - when available - the user
 * comments
@@ -63,6 +63,17 @@ $oG = new PMF_Glossary($db, $LANGCODE);
 $content = $oG->insertItemsIntoContent($content);
 $header  = $oG->insertItemsIntoContent($header);
 
+// Show link to edit the news?
+$editThisEntry = '';
+if (isset($permission['editnews'])) {
+    $editThisEntry = sprintf(
+                        '<a href="%sadmin/index.php?action=news&amp;do=edit&amp;id=%d">%s</a>',
+                        PMF_Link::getSystemRelativeUri('index.php'),
+                        $id,
+                        $PMF_LANG['ad_menu_news_edit']
+                        );
+}
+
 // Is the news item expired?
 $expired = (date('YmdHis') > $news['dateEnd']);
 
@@ -82,7 +93,8 @@ $tpl->processTemplate ("writeContent", array(
     'writeHeader'               => $header,
     'writeContent'              => $content,
     'writeDateMsg'              => ($news['active'] && (!$expired)) ? $PMF_LANG['msgLastUpdateArticle'].$news['date'] : '',
-    'writeAuthor'               => ($news['active'] && (!$expired)) ? '<br />'.$PMF_LANG['msgAuthor'].$news['authorName'] : '',
+    'writeAuthor'               => ($news['active'] && (!$expired)) ? $PMF_LANG['msgAuthor'].$news['authorName'] : '',
+    'editThisEntry'             => $editThisEntry,
     'writeCommentMsg'           => $commentMessage,
     'msgWriteComment'           => $PMF_LANG['newsWriteComment'],
     'writeSendAdress'           => $_SERVER['PHP_SELF'].'?'.$sids.'action=savecomment',

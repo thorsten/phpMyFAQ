@@ -8,7 +8,7 @@
     <!-- /News -->
 
     <!-- News Info -->
-    <p>{writeDateMsg}{writeAuthor}</p>
+    <p>{writeDateMsg}<br />{writeAuthor}<br />{editThisEntry}</p>
     <!-- /News Info -->
 
     <p>{writeCommentMsg}</p>
