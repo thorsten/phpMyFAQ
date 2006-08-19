@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.50 2006-08-10 20:20:21 thorstenr Exp $
+$Id: README.txt,v 1.51 2006-08-19 07:11:00 thorstenr Exp $
 
 phpMyFAQ 2.0.0-alpha
 Codename "Prometheus"
@@ -48,6 +48,15 @@ Version 2.0.0-alpha - n/a
 - added improved News module (Matteo, Thorsten)
 - added tagging (Thorsten)
 - improved URL rewrite functions (Matteo)
+
+Version 1.6.4 - 2006-08-19
+- updated Brazilian Portuguese translation
+- updated Dutch translation
+- updated French translation
+- updated Italian translation
+- updated Japanese translation
+- updated Portuguese translation
+- fixed some minor bugs
 
 Version 1.6.3 - 2006-07-16
 - added German documentation
