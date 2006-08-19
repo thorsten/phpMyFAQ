@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Sqlite.php,v 1.7 2006-06-29 20:52:47 matteo Exp $
+* $Id: Sqlite.php,v 1.8 2006-08-19 10:49:14 thorstenr Exp $
 *
 * db_sqlite
 *
@@ -333,6 +333,9 @@ class db_sqlite
     */
     public function error()
     {
+        if (0 == sqlite_last_error($this->conn)) {
+            return;
+        }
         return sqlite_error_string(sqlite_last_error($this->conn));
     }
 
