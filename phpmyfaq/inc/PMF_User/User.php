@@ -485,7 +485,7 @@ class PMF_User
             user_id = ".$this->_user_id
         );
         if (!$res) {
-            $this->errors[] = PMF_CANNOT_DELETE_USER . 'error(): ' . $this->_db->error();
+            $this->errors[] = PMF_USERERROR_CANNOT_DELETE_USER . 'error(): ' . $this->_db->error();
             return false;
         }
         // delete user-data entry
