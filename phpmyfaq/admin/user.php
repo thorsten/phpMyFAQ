@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: user.php,v 1.28 2006-08-20 19:08:55 matteo Exp $
+* $Id: user.php,v 1.29 2006-08-20 20:32:31 matteo Exp $
 *
 * Displays the user managment frontend
 *
@@ -190,6 +190,14 @@ if ($userAction == 'delete') {
             // Move the categories ownership to admin (id == 1)
             $oCat = new PMF_Category($LANGCODE);
             $oCat->moveOwnership($userId, 1);
+
+            // Remove the user from groups
+            $permLevel = isset($PMF_CONF['permLevel']) && ('' != $PMF_CONF['permLevel']) ? $PMF_CONF['permLevel'] : 'basic';
+            if ('medium' == $permLevel) {
+                $oPerm = PMF_Perm::selectPerm('medium');
+                $oPerm->addDb($db);
+                $oPerm->removeFromAllGroups($userId);
+            }
 
             $message .= '<p class="success">'.$successMessages['delUser'].'</p>';
         }
