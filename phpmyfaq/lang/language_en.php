@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.42 2006-08-17 23:54:25 matteo Exp $
+* $Id: language_en.php,v 1.43 2006-08-20 07:36:31 thorstenr Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -29,7 +29,7 @@ $PMF_LANG["dir"] = "ltr"; // ltr: left to right (e.g. English language); rtl: ri
 // Navigation
 $PMF_LANG["msgCategory"] = "Categories";
 $PMF_LANG["msgShowAllCategories"] = "Show all categories";
-$PMF_LANG["msgSearch"] = "search";
+$PMF_LANG["msgSearch"] = "Search";
 $PMF_LANG["msgAddContent"] = "Add content";
 $PMF_LANG["msgQuestion"] = "Ask question";
 $PMF_LANG["msgOpenQuestions"] = "Open questions";
@@ -492,7 +492,7 @@ $PMF_LANG["ad_xml_head"] = "XML-Backup";
 $PMF_LANG["ad_xml_hint"] = "Save all records of your FAQ in one XML file.";
 $PMF_LANG["ad_xml_gen"] = "make XML file";
 $PMF_LANG["ad_entry_locale"] = "Language";
-$PMF_LANG["msgLangaugeSubmit"] = "change language";
+$PMF_LANG["msgLangaugeSubmit"] = "Change language";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
 $PMF_LANG["ad_entry_preview"] = "Preview";
