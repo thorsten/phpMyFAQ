@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Category.php,v 1.9 2006-08-04 19:48:38 matteo Exp $
+* $Id: Category.php,v 1.10 2006-08-20 19:08:56 matteo Exp $
 *
 * The main category class
 *
@@ -1008,6 +1008,38 @@ class PMF_Category
             $category_data['user_id'],
             $category_data['id'],
             $category_data['lang']);
+        $this->db->query($query);
+
+        return true;
+    }
+    
+    /**
+     * Move the categories ownership, if any.
+     *
+     * @param   integer $from
+     * @param   integer $to
+     * @return  boolean
+     * @access  public
+     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     * @since   2006-08-20
+     */
+    function moveOwnership($from, $to)
+    {
+        if (!is_numeric($from) || !is_numeric($to)) {
+            return false;
+        }
+
+        $query = sprintf("
+            UPDATE
+                %sfaqcategories
+            SET
+                user_id = %d
+            WHERE
+                user_id = %d",
+            SQLPREFIX,
+            $to,
+            $from
+            );
         $this->db->query($query);
 
         return true;

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: user.php,v 1.27 2006-08-17 21:52:18 matteo Exp $
+* $Id: user.php,v 1.28 2006-08-20 19:08:55 matteo Exp $
 *
 * Displays the user managment frontend
 *
@@ -187,6 +187,10 @@ if ($userAction == 'delete') {
         if (!$user->deleteUser()) {
             $message .= '<p class="error">'.$errorMessages['delUser'].'</p>';
         } else {
+            // Move the categories ownership to admin (id == 1)
+            $oCat = new PMF_Category($LANGCODE);
+            $oCat->moveOwnership($userId, 1);
+
             $message .= '<p class="success">'.$successMessages['delUser'].'</p>';
         }
         $userError = $user->error();
