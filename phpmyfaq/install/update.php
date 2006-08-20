@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.73 2006-08-20 18:45:49 matteo Exp $
+* $Id: update.php,v 1.74 2006-08-20 21:27:32 matteo Exp $
 *
 * Main update script
 *
@@ -962,10 +962,17 @@ if ($step == 5) {
     // optimize tables
     switch($DB["type"]) {
         case 'mysql':
-        case 'mysqli':      $query[] = "OPTIMIZE TABLE ".SQLPREFIX."faqadminlog, ".SQLPREFIX."faqadminsessions, ".SQLPREFIX."faqcategories, ".SQLPREFIX."faqcategoryrelations, ".SQLPREFIX."faqchanges, ".SQLPREFIX."faqcomments, ".SQLPREFIX."faqdata, ".SQLPREFIX."faqquestions, ".SQLPREFIX."faqnews, ".SQLPREFIX."faqsessions, ".SQLPREFIX."faquser, ".SQLPREFIX."faqvisits, ".SQLPREFIX."faqvoting, ".SQLPREFIX."faqglossary";
-                            break;
-        case 'pgsql':       $query[] = "VACUUM ANALYZE;";
-                            break;
+        case 'mysqli':
+            $tables = $db->query('SHOW TABLES');
+            while ($rows = $db->fetch_assoc($tables)) {
+                foreach ($rows as $dbName => $tableName) {
+                    $query[] = 'OPTIMIZE TABLE '.$tableName;
+                }
+            }
+            break;
+        case 'pgsql':
+            $query[] = "VACUUM ANALYZE;";
+            break;
     }
 
     print '<p class="center">';
