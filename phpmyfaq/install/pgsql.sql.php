@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: pgsql.sql.php,v 1.24 2006-08-19 13:02:33 matteo Exp $
+* $Id: pgsql.sql.php,v 1.25 2006-08-20 19:34:12 matteo Exp $
 *
 * CREATE TABLE instruction for PostgreSQL database
 *
@@ -128,7 +128,7 @@ lang varchar(5) NOT NULL,
 parent_id int4 NOT NULL,
 name varchar(255) NOT NULL,
 description varchar(255) NOT NULL,
-user_id int4 NOT NULL REFERENCES ".$sqltblpre."faquser(user_id),
+user_id int4 NOT NULL,
 PRIMARY KEY (id, lang))";
 
 //faqcategoryrelations
