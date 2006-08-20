@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mysqli.sql.php,v 1.24 2006-08-19 13:02:32 matteo Exp $
+* $Id: mysqli.sql.php,v 1.25 2006-08-20 18:45:49 matteo Exp $
 *
 * CREATE TABLE instruction for MySQL 4.1 and 5.0 databases
 *
@@ -86,7 +86,7 @@ lang VARCHAR(5) NOT NULL,
 parent_id INT(11) NOT NULL,
 name VARCHAR(255) NOT NULL,
 description VARCHAR(255) NOT NULL,
-user_id int(2) NOT NULL,
+user_id INT(11) NOT NULL,
 PRIMARY KEY (id, lang))";
 
 //faqcategoryrelations

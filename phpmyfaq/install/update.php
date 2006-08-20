@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.72 2006-08-19 13:02:33 matteo Exp $
+* $Id: update.php,v 1.73 2006-08-20 18:45:49 matteo Exp $
 *
 * Main update script
 *
@@ -638,10 +638,14 @@ if ($step == 5) {
                             (id, lang, parent_id, name, description)
                             SELECT id, lang, parent_id, name, description
                             FROM '.SQLPREFIX.'faqcategories_PMF16x_old';
+                // Set the admin (id == 1) as the owner of the pre-existing categories
+                $query[] = 'UPDATE '.SQLPREFIX.'faqcategories SET user_id = 1';
                 // Drop the faqcategories_PMF16x_old table
                 $query[] = 'DROP TABLE '.SQLPREFIX.'faqcategories_PMF16x_old';
             default:
-                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqcategories ADD user_id INT(2) NOT NULL AFTER description';
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqcategories ADD user_id INT(11) NOT NULL AFTER description';
+                // Set the admin (id == 1) as the owner of the pre-existing categories
+                $query[] = 'UPDATE '.SQLPREFIX.'faqcategories SET user_id = 1';
                 break;
         }
         // 3/13. Fix faqdata table
