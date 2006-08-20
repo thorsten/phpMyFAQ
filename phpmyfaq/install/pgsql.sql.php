@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: pgsql.sql.php,v 1.25 2006-08-20 19:34:12 matteo Exp $
+* $Id: pgsql.sql.php,v 1.26 2006-08-20 20:02:29 matteo Exp $
 *
 * CREATE TABLE instruction for PostgreSQL database
 *
@@ -99,7 +99,7 @@ PRIMARY KEY (group_id)
 $query[] = "CREATE TABLE ".$sqltblpre."faqadminlog (
 id SERIAL NOT NULL,
 time int4 NOT NULL,
-usr int4 NOT NULL REFERENCES ".$sqltblpre."faquser(user_id),
+usr int4 NOT NULL,
 text text NOT NULL,
 ip text NOT NULL,
 PRIMARY KEY (id))";
@@ -143,13 +143,13 @@ PRIMARY KEY  (category_id,category_lang,record_id,record_lang)
 //faqcategory_group
 $query[] = "CREATE TABLE ".$sqltblpre."faqcategory_group (
 category_id int4 NOT NULL,
-group_id int4 NOT NULL REFERENCES ".$sqltblpre."faqgroup(group_id),
+group_id int4 NOT NULL,
 PRIMARY KEY (category_id, group_id))";
 
 //faqcategory_user
 $query[] = "CREATE TABLE ".$sqltblpre."faqcategory_user (
 category_id int4 NOT NULL,
-user_id int4 NOT NULL REFERENCES ".$sqltblpre."faquser(user_id),
+user_id int4 NOT NULL,
 PRIMARY KEY (category_id, user_id))";
 
 //faqchanges
@@ -158,7 +158,7 @@ id SERIAL NOT NULL,
 beitrag int4 NOT NULL,
 lang varchar(5) NOT NULL,
 revision_id int4 NOT NULL DEFAULT 0,
-usr int4 NOT NULL REFERENCES ".$sqltblpre."faquser(user_id),
+usr int4 NOT NULL,
 datum int4 NOT NULL,
 what text NOT NULL,
 PRIMARY KEY (id, lang))";
@@ -224,7 +224,7 @@ PRIMARY KEY (id, lang, solution_id, revision_id))";
 //faqdata_group
 $query[] = "CREATE TABLE ".$sqltblpre."faqdata_group (
 record_id int4 NOT NULL,
-group_id int4 NOT NULL REFERENCES ".$sqltblpre."faqgroup(group_id),
+group_id int4 NOT NULL,
 PRIMARY KEY (record_id, group_id))";
 
 //faqdata_tags
@@ -237,7 +237,7 @@ PRIMARY KEY (tagging_id, tagging_name)
 //faqdata_user
 $query[] = "CREATE TABLE ".$sqltblpre."faqdata_user (
 record_id int4 NOT NULL,
-user_id int4 NOT NULL REFERENCES ".$sqltblpre."faquser(user_id),
+user_id int4 NOT NULL,
 PRIMARY KEY (record_id, user_id))";
 
 //faqglossary
@@ -250,7 +250,7 @@ PRIMARY KEY (id, lang))";
 
 //faqgroup_right
 $query[] = "CREATE TABLE ".$sqltblpre."faqgroup_right (
-group_id int4 NOT NULL REFERENCES ".$sqltblpre."faqgroup(group_id),
+group_id int4 NOT NULL,
 right_id int4 NOT NULL,
 PRIMARY KEY (group_id, right_id)
 )";
@@ -340,14 +340,14 @@ PRIMARY KEY (login)
 
 //faquser_group
 $query[] = "CREATE TABLE ".$sqltblpre."faquser_group (
-user_id int4 NOT NULL REFERENCES ".$sqltblpre."faquser(user_id),
-group_id int4 NOT NULL REFERENCES ".$sqltblpre."faqgroup(group_id),
+user_id int4 NOT NULL,
+group_id int4 NOT NULL,
 PRIMARY KEY (user_id, group_id)
 )";
 
 //faquser_right
 $query[] = "CREATE TABLE ".$sqltblpre."faquser_right (
-user_id int4 NOT NULL REFERENCES ".$sqltblpre."faquser(user_id),
+user_id int4 NOT NULL,
 right_id int4 NOT NULL,
 PRIMARY KEY (user_id, right_id)
 )";
@@ -365,7 +365,7 @@ $query[] = "CREATE TABLE ".$sqltblpre."faqvoting (
 id SERIAL NOT NULL,
 artikel int4 NOT NULL,
 vote int4 NOT NULL,
-usr int4 NOT NULL REFERENCES ".$sqltblpre."faquser(user_id),
+usr int4 NOT NULL,
 datum varchar(20) NOT NULL default '',
 ip varchar(15) NOT NULL default '',
 PRIMARY KEY (id))";

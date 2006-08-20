@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: pgsql.update.sql.php,v 1.2 2006-08-17 19:50:32 matteo Exp $
+* $Id: pgsql.update.sql.php,v 1.3 2006-08-20 20:02:29 matteo Exp $
 *
 * CREATE TABLE instruction for PostgreSQL database
 *
@@ -51,13 +51,13 @@ PRIMARY KEY (group_id)
 //faqcategory_group
 $query[] = "CREATE TABLE ".SQLPREFIX."faqcategory_group (
 category_id int4 NOT NULL,
-group_id int4 NOT NULL REFERENCES ".SQLPREFIX."faqgroup(group_id),
+group_id int4 NOT NULL,
 PRIMARY KEY (category_id, group_id))";
 
 //faqcategory_user
 $query[] = "CREATE TABLE ".SQLPREFIX."faqcategory_user (
 category_id int4 NOT NULL,
-user_id int4 NOT NULL REFERENCES ".SQLPREFIX."faquser(user_id),
+user_id int4 NOT NULL,
 PRIMARY KEY (category_id, user_id))";
 
 //faqconfig
@@ -69,7 +69,7 @@ PRIMARY KEY (config_name))";
 //faqdata_group
 $query[] = "CREATE TABLE ".SQLPREFIX."faqdata_group (
 record_id int4 NOT NULL,
-group_id int4 NOT NULL REFERENCES ".SQLPREFIX."faqgroup(group_id),
+group_id int4 NOT NULL,
 PRIMARY KEY (record_id, group_id))";
 
 //faqdata_tags
@@ -82,7 +82,7 @@ PRIMARY KEY (tagging_id, tagging_name)
 //faqdata_user
 $query[] = "CREATE TABLE ".SQLPREFIX."faqdata_user (
 record_id int4 NOT NULL,
-user_id int4 NOT NULL REFERENCES ".SQLPREFIX."faquser(user_id),
+user_id int4 NOT NULL,
 PRIMARY KEY (record_id, user_id))";
 
 //faqglossary
@@ -95,7 +95,7 @@ PRIMARY KEY (id, lang))";
 
 //faqgroup_right
 $query[] = "CREATE TABLE ".SQLPREFIX."faqgroup_right (
-group_id int4 NOT NULL REFERENCES ".SQLPREFIX."faqgroup(group_id),
+group_id int4 NOT NULL,
 right_id int4 NOT NULL,
 PRIMARY KEY (group_id, right_id)
 )";
@@ -148,14 +148,14 @@ PRIMARY KEY (login)
 
 //faquser_group
 $query[] = "CREATE TABLE ".SQLPREFIX."faquser_group (
-user_id int4 NOT NULL REFERENCES ".SQLPREFIX."faquser(user_id),
-group_id int4 NOT NULL REFERENCES ".SQLPREFIX."faqgroup(group_id),
+user_id int4 NOT NULL,
+group_id int4 NOT NULL,
 PRIMARY KEY (user_id, group_id)
 )";
 
 //faquser_right
 $query[] = "CREATE TABLE ".SQLPREFIX."faquser_right (
-user_id int4 NOT NULL REFERENCES ".SQLPREFIX."faquser(user_id),
+user_id int4 NOT NULL,
 right_id int4 NOT NULL,
 PRIMARY KEY (user_id, right_id)
 )";
