@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.75 2006-08-21 18:05:58 matteo Exp $
+* $Id: update.php,v 1.76 2006-08-21 18:10:50 matteo Exp $
 *
 * Main update script
 *
@@ -1001,7 +1001,7 @@ if ($step == 5) {
             @rename(PMF_ROOT_DIR.$image, PMF_ROOT_DIR.$newImagePath);
         }
         // 12/13. Move the PMF configurarion: from inc/config.php to the faqconfig table
-        $PMF_CONF['varsion'] = NEWVERSION;
+        $PMF_CONF['version'] = NEWVERSION;
         $PMF_CONF['permLevel'] = 'basic';
         $PMF_CONF['enablevisibility'] = 'Y';
         $PMF_CONF['referenceURL'] = PMF_Link::getSystemUri('/install/update.php');
