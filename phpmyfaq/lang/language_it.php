@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.23 2006-08-17 23:54:25 matteo Exp $
+* $Id: language_it.php,v 1.24 2006-08-21 21:04:51 matteo Exp $
 *
 * Italian language file
 *
@@ -778,3 +778,4 @@ $PMF_LANG['adminSection'] = 'Amministrazione';
 $PMF_LANG['err_expiredArticle'] = 'Questa FAQ &egrave; in scaduta e non pu&ograve; essere visualizzata.';
 $PMF_LANG['err_expiredNews'] = 'Questa notizia &egrave; in scaduta e non pu&ograve; essere visualizzata.';
 $PMF_LANG['err_inactiveNews'] = 'Questa notizia &egrave; in revisione e non pu&ograve; essere visualizzata.';
+$PMF_LANG['msgSearchOnAllLanguages'] = 'Cerca in tutte le lingue:';

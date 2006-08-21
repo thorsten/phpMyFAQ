@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: search.php,v 1.10 2006-06-12 22:53:36 matteo Exp $
+* $Id: search.php,v 1.11 2006-08-21 21:04:52 matteo Exp $
 *
 * The fulltext search page
 *
@@ -27,27 +27,35 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 Tracking("fulltext_search",0);
 
+// Search only on current language (default)
+$allLanguages = false;
+if (isset($_GET['langs'])) {
+    $allLanguages = ('all' == $_GET['langs']);
+}
+
 // HACK: (re)evaluate the Category object w/o passing the user language
 //       so the result set of a Search will have the Category Path
 //       for any of the multilanguage faq records and the Category list
 //       on the left pane will not be affected
-$tree = new PMF_Category();
-$tree->transform(0);
-
-if (isset($_GET['suchbegriff']) || isset($_GET['search'])) {
-	if (isset($_GET['suchbegriff'])) {
-		$suchbegriff = $db->escape_string(strip_tags($_GET['suchbegriff']));
-		$searchcategory = isset($_GET['searchcategory']) ? $db->escape_string(strip_tags($_GET['searchcategory'])) : '%';
-	}
-	if (isset($_GET['search'])) {
-		$suchbegriff = $db->escape_string(strip_tags($_GET['search']));
-		$searchcategory = isset($_GET['searchcategory']) ? $db->escape_string(strip_tags($_GET['searchcategory'])) : '%';
-	}
-	$printResult = searchEngine($suchbegriff, $searchcategory);
-} else {
-	$printResult = $PMF_LANG['help_search'];
-    $suchbegriff = '';
+if ($allLanguages) {
+    $tree = new PMF_Category();
+    $tree->transform(0);
 }
+
+$searchCategory = isset($_GET['searchcategory']) && is_numeric($_GET['searchcategory']) ? $_GET['searchcategory'] : '%';
+$suchbegriff = '';
+$printResult = $PMF_LANG['help_search'];
+if (isset($_GET['suchbegriff']) || isset($_GET['search'])) {
+    if (isset($_GET['suchbegriff'])) {
+        $suchbegriff = $db->escape_string(strip_tags($_GET['suchbegriff']));
+    }
+    if (isset($_GET['search'])) {
+        $suchbegriff = $db->escape_string(strip_tags($_GET['search']));
+    }
+    $printResult = searchEngine($suchbegriff, $searchCategory, $allLanguages);
+}
+// Change a little bit the $searchCategory value;
+$searchCategory = ('%' == $searchCategory) ? 0 : $searchCategory;
 
 Tracking('fulltext_search', $suchbegriff);
 
@@ -57,23 +65,28 @@ $baseUrl = 'http'.(isset($_SERVER['HTTPS']) ? 's' : '').'://'.$_SERVER["HTTP_HOS
 $firefoxPluginTitle = '';
 $MSIEPluginTitle = '';
 
-if (file_exists(dirname(__FILE__).'/'.$_SERVER['HTTP_HOST'].'.pmfsearch.src')) {
+if (@file_exists(dirname(__FILE__).'/'.$_SERVER['HTTP_HOST'].'.pmfsearch.src')) {
     $firefoxPluginTitle = '<p><a class="searchplugin" href="javascript:addEngine(\''.$baseUrl.'\', \''.$_SERVER['HTTP_HOST'].'.pmfsearch\', \'png\', \'Web\')">'.$PMF_LANG['ad_search_plugin_install'].'</a></p>';
 }
-if (file_exists(dirname(__FILE__).'/'.$_SERVER['HTTP_HOST'].'.pmfsearch.xml')) {
+if (@file_exists(dirname(__FILE__).'/'.$_SERVER['HTTP_HOST'].'.pmfsearch.xml')) {
     $MSIEPluginTitle = '<p><a class="searchplugin" href="#" onclick="window.external.AddSearchProvider(&quot;'.$baseUrl.'/'.$_SERVER['HTTP_HOST'].'.pmfsearch.xml&quot;);">'.$PMF_LANG['ad_msiesearch_plugin_install'].'</a></p>';
 }
 
-$tpl->processTemplate('writeContent', array(
-				      'msgSearch' => $PMF_LANG['msgSearch'],
-                      'searchString' => $suchbegriff,
-                      'selectCategories' => $PMF_LANG['msgSelectCategories'],
-                      'allCategories' => $PMF_LANG['msgAllCategories'],
-                      'printCategoryOptions' => $tree->printCategoryOptions(0),
-				      'writeSendAdress' => $_SERVER['PHP_SELF'].'?'.$sids.'action=search',
-				      'msgSearchWord' => $PMF_LANG['msgSearchWord'],
-				      'printResult' => $printResult,
-                      'msgFirefoxPluginTitle' => $firefoxPluginTitle,
-                      'msgMSIEPluginTitle' => $MSIEPluginTitle));
+$tpl->processTemplate('writeContent',
+                        array(
+                        'msgSearch'             => $PMF_LANG['msgSearch'],
+                        'searchString'          => $suchbegriff,
+                        'searchOnAllLanguages'  => $PMF_LANG['msgSearchOnAllLanguages'],
+                        'checkedAllLanguages'   => $allLanguages ? ' checked="checked"' : '',
+                        'selectCategories'      => $PMF_LANG['msgSelectCategories'],
+                        'allCategories'         => $PMF_LANG['msgAllCategories'],
+                        'printCategoryOptions'  => $tree->printCategoryOptions($searchCategory),
+                        'writeSendAdress'       => $_SERVER['PHP_SELF'].'?'.$sids.'action=search',
+                        'msgSearchWord'         => $PMF_LANG['msgSearchWord'],
+                        'printResult'           => $printResult,
+                        'msgFirefoxPluginTitle' => $firefoxPluginTitle,
+                        'msgMSIEPluginTitle'    => $MSIEPluginTitle
+                        )
+                    );
 
 $tpl->includeTemplate('writeContent', 'index');

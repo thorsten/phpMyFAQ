@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.135 2006-08-21 19:42:56 matteo Exp $
+* $Id: functions.php,v 1.136 2006-08-21 21:04:52 matteo Exp $
 *
 * This is the main functions file!
 *
@@ -274,11 +274,11 @@ function makeDateByFormat($date, $type, $phpmyfaq = true)
 */
 function makeCommentDate($date)
 {
-    $TZ = ' '.(PMF_DATETIME_TIMEZONE == '0' ? 'GMT': PMF_DATETIME_TIMEZONE);
     // TODO: Time is needed for studying the impact of timezone settings in the system.
     //       No issue is arised if users of a PMF service has the timezone equals to that of the server.
     //       We have the solution, makeDateByFormat(), and we'll wait also for
     //       feedbacks from the Community before applying it in all date outputs.
+    // $TZ = ' '.(PMF_DATETIME_TIMEZONE == '0' ? 'GMT': PMF_DATETIME_TIMEZONE);
     // return makeDateByFormat($date, 'Y-m-d H:i', false).$TZ;
 
     return date('Y-m-d H:i', $date);
@@ -1251,9 +1251,9 @@ function generateDocBookExport()
 * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since    2002-09-16
 */
-function searchEngine($begriff, $category = '%')
+function searchEngine($begriff, $category = '%', $allLanguages = true)
 {
-    global $db, $sids, $tree, $PMF_LANG, $PMF_CONF;
+    global $db, $sids, $tree, $PMF_LANG, $PMF_CONF, $LANGCODE;
 
     $_begriff    = $begriff;
     $seite       = '';
@@ -1266,11 +1266,12 @@ function searchEngine($begriff, $category = '%')
         $seite = 1;
     }
 
-    if ('%' == $category) {
-        $cond = array(SQLPREFIX."faqdata.active" => "'yes'");
-    } else {
-        $cond = array(SQLPREFIX."faqdata.active" => "'yes'",
-                      SQLPREFIX."faqcategoryrelations.category_id" => $category);
+    $cond = array(SQLPREFIX."faqdata.active" => "'yes'");
+    if ($category != '%') {
+        $cond = array_merge(array(SQLPREFIX."faqcategoryrelations.category_id" => $category), $cond);
+    }
+    if (!$allLanguages) {
+        $cond = array_merge(array("faqdata.lang" => $LANGCODE), $cond);
     }
 
     if (is_numeric($begriff)) {
@@ -1305,12 +1306,11 @@ function searchEngine($begriff, $category = '%')
                         $cond);
     }
 
-    if (false === $result) {
-        $output = $PMF_LANG['err_noArticles'];
-        $num = 0;
-    } else {
+    $num = 0;
+    if ($result) {
         $num = $db->num_rows($result);
     }
+
     // Show the record with the solution ID directly
     // Sanity checks: if a valid Solution ID has been provided the result set
     //                will measure 1: this is true ONLY if the faq is not
@@ -1334,17 +1334,25 @@ function searchEngine($begriff, $category = '%')
             if (strlen($where) != 0 ) {
                 $where = $where." OR ";
             }
-            $where = $where.'('.SQLPREFIX."faqdata.thema LIKE '%".$keys[$i]."%' OR ".SQLPREFIX."faqdata.content LIKE '%".$keys[$i]."%' OR ".SQLPREFIX."faqdata.keywords LIKE '%".$keys[$i]."%') AND ".SQLPREFIX.'faqdata.active = \'yes\'';
+            $where = $where.'('.SQLPREFIX."faqdata.thema LIKE '%".$keys[$i]."%' OR ".SQLPREFIX."faqdata.content LIKE '%".$keys[$i]."%' OR ".SQLPREFIX."faqdata.keywords LIKE '%".$keys[$i]."%')";
             if (is_numeric($category)) {
                 $where .= ' AND '.SQLPREFIX.'faqcategoryrelations.category_id = '.$category;
             }
+            if (!$allLanguages) {
+                $where .= ' AND '.SQLPREFIX."faqdata.lang = '".$LANGCODE."'";
+            }
         }
 
-        $where = " WHERE (".$where.") AND active = 'yes'";
+        $where = " WHERE (".$where.") AND ".SQLPREFIX."faqdata.active = 'yes'";
         $query = 'SELECT '.SQLPREFIX.'faqdata.id AS id, '.SQLPREFIX.'faqdata.lang AS lang, '.SQLPREFIX.'faqcategoryrelations.category_id AS category_id, '.SQLPREFIX.'faqdata.thema AS thema, '.SQLPREFIX.'faqdata.content AS content FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang '.$where;
         $result = $db->query($query);
         $num = $db->num_rows($result);
     }
+    
+    if (0 == $num) {
+        $output = $PMF_LANG['err_noArticles'];
+    }
+
 
     $pages = ceil($num / $PMF_CONF['numRecordsPage']);
     $last = $seite * $PMF_CONF['numRecordsPage'];

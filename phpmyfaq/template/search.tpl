@@ -1,24 +1,27 @@
     <h2>{msgSearch}</h2>
 
-	{printResult}
+    {printResult}
 
     <form action="{writeSendAdress}" method="get">
-    <fieldset>
-    <legend>{msgSearchWord}</legend>
+        <fieldset>
+            <legend>{msgSearchWord}</legend>
 
-    <input class="inputfield" type="text" name="search" size="50" value="{searchString}" />
-    <input class="submit" type="submit" name="submit" value="{msgSearch}" />
-    <input type="hidden" name="action" value="search" /><br />
+            <input class="inputfield" type="text" name="search" size="50" value="{searchString}" />
+            <input class="submit" type="submit" name="submit" value="{msgSearch}" />
+            <input type="hidden" name="action" value="search" /><br />
 
-    <label>{selectCategories}</label>
-    <select name="searchcategory" size="1">
-    <option value="%" selected="selected">{allCategories}</option>
-        {printCategoryOptions}
-    </select>
+            <label>{searchOnAllLanguages}</label>
+            <input class="inputfield" type="checkbox"{checkedAllLanguages} name="langs" value="all" />
 
-    {msgFirefoxPluginTitle}
-    {msgMSIEPluginTitle}
+            <label>{selectCategories}</label>
+            <select name="searchcategory" size="1">
+            <option value="%" selected="selected">{allCategories}</option>
+            {printCategoryOptions}
+            </select>
 
-    </fieldset>
-	</form>
+            {msgFirefoxPluginTitle}
+            {msgMSIEPluginTitle}
+
+        </fieldset>
+    </form>
 
