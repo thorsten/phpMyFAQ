@@ -1,10 +1,10 @@
 <?php
 /**
-* $Id: Mysql.php,v 1.7 2006-07-28 20:34:27 thorstenr Exp $
+* $Id: Mysql.php,v 1.8 2006-08-21 20:18:26 thorstenr Exp $
 *
 * db_mysql
 *
-* The db_mysql class provides methods and functions for a MySQL 4.0.x 
+* The db_mysql class provides methods and functions for a MySQL 4.0.x
 * and higher database.
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -43,6 +43,13 @@ class db_mysql
      * @see   query()
      */
     var $sqllog = "";
+
+    /**
+     * Tables
+     *
+     * @var     array
+     */
+    var $tableNames = array();
 
     /**
      * Connects to the database.
@@ -259,7 +266,7 @@ class db_mysql
                 $query .= ", ".$field;
             }
         }
-        
+
         return $this->query($query);
     }
 
@@ -342,6 +349,23 @@ class db_mysql
     function server_version()
     {
         return mysql_get_server_info();
+    }
+
+    /**
+     * Returns an array with all table names
+     *
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @since   2006-08-21
+     */
+    function getTableNames()
+    {
+        $result = $this->query('SHOW TABLES');
+        while ($row = $this->fetch_object($result)) {
+            foreach ($row as $tablename) {
+            	$this->tableNames[] = $tablename;
+            }
+        }
     }
 
     /**

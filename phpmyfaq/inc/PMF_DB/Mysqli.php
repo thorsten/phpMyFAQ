@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Mysqli.php,v 1.8 2006-08-14 16:20:02 thorstenr Exp $
+* $Id: Mysqli.php,v 1.9 2006-08-21 20:18:26 thorstenr Exp $
 *
 * db_mysqli
 *
@@ -41,6 +41,13 @@ class db_mysqli
      * @see   query()
      */
     private $sqllog = '';
+
+    /**
+     * Tables
+     *
+     * @var     array
+     */
+    public $tableNames = array();
 
     /**
      * Connects to the database.
@@ -346,6 +353,23 @@ class db_mysqli
     public function server_version()
     {
         return $this->conn->get_server_info();
+    }
+
+    /**
+     * Returns an array with all table names
+     *
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @since   2006-08-21
+     */
+    public function getTableNames()
+    {
+        $result = $this->query('SHOW TABLES');
+        while ($row = $this->fetch_object($result)) {
+            foreach ($row as $tablename) {
+            	$this->tableNames[] = $tablename;
+            }
+        }
     }
 
     /**
