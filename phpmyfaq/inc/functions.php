@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.134 2006-08-15 06:49:54 thorstenr Exp $
+* $Id: functions.php,v 1.135 2006-08-21 19:42:56 matteo Exp $
 *
 * This is the main functions file!
 *
@@ -244,7 +244,7 @@ function makeDate($date)
 /**
 * Converts the phpMyFAQ/Unix date format to the format given by the PHP date format
 *
-* @param    string  date
+* @param    object  date
 * @param    string  the PHP format of date
 * @param    boolean true if the passed date is in phpMyFAQ format, false if in Unix timestamp format
 * @return   string  date in the requested format
@@ -253,15 +253,35 @@ function makeDate($date)
 */
 function makeDateByFormat($date, $type, $phpmyfaq = true)
 {
-     $offset = (60 * 60) * (PMF_DATETIME_TIMEZONE / 100);
-     if ($phpmyfaq) {
+    $offset = (60 * 60) * (PMF_DATETIME_TIMEZONE / 100);
+    if ($phpmyfaq) {
         $current = strtotime(substr($date,0,4)."-".substr($date,4,2)."-".substr($date,6,2)." ".substr($date,8,2).":".substr($date,10,2).":".substr($date,12,2));
-     } else {
+    } else {
         $current = $date;
-     }
-     $timestamp = $current + $offset;
+    }
+    $timestamp = $current + $offset;
 
-     return gmdate($type, $timestamp);
+    return gmdate($type, $timestamp);
+}
+
+/**
+* Converts the Unix date format to the format needed to view a comment entry
+*
+* @param    object  date
+* @return   string  formatted date for the comment
+* @since    2006-08-21
+* @author   Matteo Scaramuccia <matteo@scaramuccia.com>
+*/
+function makeCommentDate($date)
+{
+    $TZ = ' '.(PMF_DATETIME_TIMEZONE == '0' ? 'GMT': PMF_DATETIME_TIMEZONE);
+    // TODO: Time is needed for studying the impact of timezone settings in the system.
+    //       No issue is arised if users of a PMF service has the timezone equals to that of the server.
+    //       We have the solution, makeDateByFormat(), and we'll wait also for
+    //       feedbacks from the Community before applying it in all date outputs.
+    // return makeDateByFormat($date, 'Y-m-d H:i', false).$TZ;
+
+    return date('Y-m-d H:i', $date);
 }
 
 /**
