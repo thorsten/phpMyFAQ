@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: linkconfig.main.php,v 1.7 2006-08-15 12:13:02 matteo Exp $
+* $Id: linkconfig.main.php,v 1.8 2006-08-21 18:36:54 matteo Exp $
 *
 * LinkVerifier configuration
 *
@@ -394,7 +394,7 @@ showListTypeSelection();
         // Handle submission and page listing
     ?>
     <tr id="lastrow">
-        <td><input type="hidden" name="rowcount" value="<?php print $id; ?>"><input type="submit" value="<?php print $PMF_LANG["ad_gen_save"]; ?>" name="submit"></td>
+        <td><input type="hidden" name="rowcount" value="<?php print $id; ?>"><input class="submit" type="submit" value="<?php print $PMF_LANG["ad_gen_save"]; ?>" name="submit"></td>
         <td colspan="4"><?php print $PMF_LANG["ad_gen_page"].' '.$page.(($pages > 0 )? ' '.$PMF_LANG["ad_gen_of"].' '.$pages : ''); ?>
 <?php
             if ($page > 1){
