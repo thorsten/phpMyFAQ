@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: attachment.php,v 1.20 2006-08-19 14:43:05 thorstenr Exp $
+* $Id: attachment.php,v 1.21 2006-08-21 20:31:04 thorstenr Exp $
 *
 * Select an attachment and save it or create the SQL backup files
 *
@@ -102,7 +102,6 @@ if (!isset($_REQUEST["action"]) || isset($_REQUEST["save"])) {
 <body>
 <?php
 }
-
 if (!isset($_REQUEST["action"]) && $auth && $permission["addatt"]) {
 ?>
 <form action="<?php print $_SERVER["PHP_SELF"]; ?>" enctype="multipart/form-data" method="post">
@@ -151,60 +150,55 @@ if (isset($_REQUEST["save"]) && $_REQUEST["save"] == TRUE && $auth && !$permissi
 	print $PMF_LANG["err_NotAuth"];
 }
 
-if (isset($_REQUEST["action"]) && $_REQUEST["action"] == "sicherdaten") {
-    // @todo ad missing tables
-	$text[] = "-- pmf2.0: ".SQLPREFIX."faqchanges ".SQLPREFIX."faqnews ".SQLPREFIX."faqcategories ".SQLPREFIX."faqcategoryrelations ".SQLPREFIX."faqvoting ".SQLPREFIX."faqdata ".SQLPREFIX."faqcomments ".SQLPREFIX."faquser ". SQLPREFIX."faqvisits ".SQLPREFIX."faqquestions";
+if (isset($_POST['action']) && $_POST['action'] == 'sicherdaten') {
+    // Get all table names
+    $db->getTableNames();
+    $tablenames = '';
+    foreach ($db->tableNames as $table) {
+        $tablenames .= $table . ' ';
+    }
+
+	$text[] = "-- pmf2.0: " . $tablenames;
 	$text[] = "-- DO NOT REMOVE THE FIRST LINE!";
 	$text[] = "-- pmftableprefix: ".SQLPREFIX;
-
 	$text[] = "-- DO NOT REMOVE THE LINES ABOVE!";
-
 	$text[] = "-- Otherwise this backup will be broken.";
-	print implode("\r\n",$text);
-	$text = build_insert ("SELECT * FROM ".SQLPREFIX."faqchanges", SQLPREFIX."faqchanges");
-	print implode("\r\n",$text);
-    $text = build_insert ("SELECT * FROM ".SQLPREFIX."faqcomments", SQLPREFIX."faqcomments");
-	print implode("\r\n",$text);
-	$text = build_insert ("SELECT * FROM ".SQLPREFIX."faqdata", SQLPREFIX."faqdata");
-	print implode("\r\n",$text);
-	$text = build_insert ("SELECT * FROM ".SQLPREFIX."faqnews", SQLPREFIX."faqnews");
-	print implode("\r\n",$text);
-	$text = build_insert ("SELECT * FROM ".SQLPREFIX."faqcategories", SQLPREFIX."faqcategories");
-	print implode("\r\n",$text);
-	$text = build_insert ("SELECT * FROM ".SQLPREFIX."faqcategoryrelations", SQLPREFIX."faqcategoryrelations");
-	print implode("\r\n",$text);
-	$text = build_insert ("SELECT * FROM ".SQLPREFIX."faquser", SQLPREFIX."faquser");
-	print implode("\r\n",$text);
-	$text = build_insert ("SELECT * FROM ".SQLPREFIX."faqvisits", SQLPREFIX."faqvisits");
-	print implode("\r\n",$text);
-	$text = build_insert ("SELECT * FROM ".SQLPREFIX."faqvoting", SQLPREFIX."faqvoting");
-    print implode("\r\n",$text);
-    $text = build_insert ("SELECT * FROM ".SQLPREFIX."faqquestions", SQLPREFIX."faqquestions");
-	print implode("\r\n",$text);
+	foreach ($db->tableNames as $table) {
+	   print implode("\r\n",$text);
+	   $text = build_insert ("SELECT * FROM ".$table, $table);
+	}
+
 } elseif (isset($_REQUEST["action"]) && $_REQUEST["action"] == "sicherdaten" && $auth && !$permission["backup"]) {
 	print $PMF_LANG["err_NotAuth"];
 }
 
-if (isset($_REQUEST["action"]) && $_REQUEST["action"] == "sicherlog") {
-	$text[] = "-- pmf2.0: ".SQLPREFIX."faqadminlog ".SQLPREFIX."faqsessions";
+if (isset($_POST['action']) && $_POST['action'] == 'sicherlog') {
+    // Get all table names
+    $db->getTableNames();
+    $tablenames = '';
+    foreach ($db->tableNames as $table) {
+        if (SQLPREFIX.'faqadminlog' == $table || SQLPREFIX.'faqsessions' ==  $table) {
+            $tablenames .= $table . ' ';
+        }
+    }
+	$text[] = "-- pmf2.0: " . $tablenames;
 	$text[] = "-- DO NOT REMOVE THE FIRST LINE!";
     $text[] = "-- pmftableprefix: ".SQLPREFIX;
-
     $text[] = "-- DO NOT REMOVE THE LINES ABOVE!";
-
     $text[] = "-- Otherwise this backup will be broken.";
-	print implode("\r\n",$text);
-	$text = build_insert ("SELECT * FROM ".SQLPREFIX."faqadminlog", SQLPREFIX."faqadminlog");
-	print implode("\r\n",$text);
-	$text = build_insert ("SELECT * FROM ".SQLPREFIX."faqsessions", SQLPREFIX."faqsessions");
-	print implode("\r\n",$text);
+	foreach ($db->tableNames as $table) {
+        if (SQLPREFIX.'faqadminlog' == $table || SQLPREFIX.'faqsessions' ==  $table) {
+            print implode("\r\n",$text);
+            $text = build_insert ("SELECT * FROM ".$table, $table);
+        }
+	}
 }
 
 if (DEBUG == TRUE) {
 	print "<p>".$db->sqllog()."</p>";
 }
 
-if (isset($_REQUEST["action"]) && $_REQUEST["action"] != "sicherdaten" && $_REQUEST["action"] != "sicherlog") {
+if (isset($_POST['action']) && $_POST['action'] != 'sicherdaten' && $_POST['action'] != 'sicherlog') {
 	print "</body></html>";
 }
 
