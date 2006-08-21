@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Link.php,v 1.12 2006-08-04 18:26:32 matteo Exp $
+* $Id: Link.php,v 1.13 2006-08-21 22:02:38 matteo Exp $
 *
 * Link management - Functions and Classes
 *
@@ -24,6 +24,7 @@
   * General Link definitions
   */
 define('PMF_LINK_SEARCHPART_SEPARATOR', '?');
+define('PMF_LINK_FRAGMENT_SEPARATOR', '#');
 define('PMF_LINK_AMPERSAND', '&amp;');
 define('PMF_LINK_EQUAL', '=');
 define('PMF_LINK_SLASH', '/');
@@ -58,6 +59,7 @@ define('PMF_LINK_GET_PAGE', 'seite');
 define('PMF_LINK_GET_HIGHLIGHT', 'highlight');
 define('PMF_LINK_GET_NEWS_ID', 'newsid');
 define('PMF_LINK_GET_NEWS_LANG', 'newslang');
+define('PMF_LINK_GET_SIDS', 'SIDS');
 /**#@-*/
 /**#@+
   * System GET values definitions
@@ -365,6 +367,12 @@ class PMF_Link
         return $htmlAnchor;
     }
 
+    function appendSids($url, $sids)
+    {
+        $separator = (false === strpos($url, PMF_LINK_SEARCHPART_SEPARATOR)) ? PMF_LINK_SEARCHPART_SEPARATOR : PMF_LINK_AMPERSAND ;
+        return $url.$separator.PMF_LINK_GET_SIDS.'='.$sids;
+    }
+
     function toString($forceNoModrewriteSupport = false)
     {
         $url = $this->toUri();
@@ -401,6 +409,12 @@ class PMF_Link
                             break;
                         case PMF_LINK_GET_ACTION_SEARCH:
                             $url .= PMF_LINK_HTML_SEARCH;
+                            if (isset($getParams[PMF_LINK_GET_ACTION_SEARCH])) {
+                                $url .= PMF_LINK_SEARCHPART_SEPARATOR.PMF_LINK_GET_ACTION_SEARCH.'='.$getParams[PMF_LINK_GET_ACTION_SEARCH];
+                                if (isset($getParams[PMF_LINK_GET_PAGE])) {
+                                    $url .= PMF_LINK_AMPERSAND.PMF_LINK_GET_PAGE.'='.$getParams[PMF_LINK_GET_PAGE];
+                                }
+                            }
                             break;
                         case PMF_LINK_GET_ACTION_SITEMAP:
                             if (isset($getParams[PMF_LINK_GET_LETTER])) {
@@ -428,6 +442,9 @@ class PMF_Link
                             break;
                         default:
                             break;
+                    }
+                    if (isset($getParams[PMF_LINK_GET_SIDS])) {
+                        $url = $this->appendSids($url, $getParams[PMF_LINK_GET_SIDS]);
                     }
                 }
             }

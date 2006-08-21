@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.136 2006-08-21 21:04:52 matteo Exp $
+* $Id: functions.php,v 1.137 2006-08-21 22:02:38 matteo Exp $
 *
 * This is the main functions file!
 *
@@ -1258,6 +1258,7 @@ function searchEngine($begriff, $category = '%', $allLanguages = true)
     $_begriff    = $begriff;
     $seite       = '';
     $output      = '';
+    $num = 0;
     $searchItems = array();
 
     if (isset($_REQUEST["seite"])) {
@@ -1306,7 +1307,6 @@ function searchEngine($begriff, $category = '%', $allLanguages = true)
                         $cond);
     }
 
-    $num = 0;
     if ($result) {
         $num = $db->num_rows($result);
     }
@@ -1443,11 +1443,12 @@ function searchEngine($begriff, $category = '%', $allLanguages = true)
         }
         $output .= " ";
         if ($next <= $pages) {
-            if (isset($PMF_CONF['mod_rewrite']) && $PMF_CONF['mod_rewrite']) {
-                $output .= "[ <a href=\"search.html?search=".urlencode($_begriff)."&amp;seite=".$next."\">".$PMF_LANG["msgNext"]."</a> ]";
-            } else {
-                $output .= "[ <a href=\"".$_SERVER["PHP_SELF"]."?".$sids."action=search&amp;search=".urlencode($_begriff)."&amp;seite=".$next."\">".$PMF_LANG["msgNext"]."</a> ]";
-            }
+            $url = $sids.'_sids=232323&amp;action=search&amp;search='.urlencode($_begriff).'&amp;seite='.$next;
+            $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+            $oLink->itemTitle = '';
+            $oLink->text = $PMF_LANG["msgNext"];
+            $oLink->tooltip = $PMF_LANG["msgNext"];
+            $output .= '[ '.$oLink->toHtmlAnchor().' ]';
         }
         $output .= "</strong></p>";
     }
