@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Comment.php,v 1.5 2006-08-21 19:42:56 matteo Exp $
+* $Id: Comment.php,v 1.6 2006-08-22 21:11:38 matteo Exp $
 *
 * The main Comment class
 *
@@ -187,7 +187,7 @@ class PMF_Comment
                                 $this->pmf_lang['msgCommentBy'],
                                 safeEmail($item['email']),
                                 $item['user'],
-                                PMF_htmlentities($item['content'], ENT_QUOTES, $this->pmf_lang['metaCharset']),
+                                $item['content'],
                                 $this->pmf_lang['newsCommentDate'].makeCommentDate($item['date'])
                         );
         }
