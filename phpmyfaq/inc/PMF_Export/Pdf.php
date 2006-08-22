@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Pdf.php,v 1.6 2006-08-06 20:24:48 matteo Exp $
+* $Id: Pdf.php,v 1.7 2006-08-22 19:07:53 matteo Exp $
 *
 * Main PDF class for phpMyFAQ based on FPDF by Olivier Plathey
 *
@@ -324,7 +324,7 @@ class PDF extends FPDF
         if ($this->enableBookmarks == false) {
             $this->SetY(-15);
             $this->SetFont("Arial", "", 8);
-            $_url = "http".(isset($_SERVER["HTTPS"]) ? "s" : "")."://".$_SERVER["HTTP_HOST"].str_replace("pdf.php", "index.php?action=artikel&cat=".$this->categories[$this->rubrik]["id"]."&id=".$_REQUEST["id"]."&artlang=".$_REQUEST["lang"], $_SERVER["PHP_SELF"]);
+            $_url = PMF_Link::getSystemScheme().$_SERVER["HTTP_HOST"].str_replace("pdf.php", "index.php?action=artikel&cat=".$this->categories[$this->rubrik]["id"]."&id=".$_REQUEST["id"]."&artlang=".$_REQUEST["lang"], $_SERVER["PHP_SELF"]);
             $this->Cell(0, 10, "URL: ".$_url, 0, 1, "C", 0, $_url);
         }
         $this->TextColor = $currentTextColor;

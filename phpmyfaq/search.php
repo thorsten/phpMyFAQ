@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: search.php,v 1.11 2006-08-21 21:04:52 matteo Exp $
+* $Id: search.php,v 1.12 2006-08-22 19:07:54 matteo Exp $
 *
 * The fulltext search page
 *
@@ -61,7 +61,7 @@ Tracking('fulltext_search', $suchbegriff);
 
 $tree->buildTree();
 
-$baseUrl = 'http'.(isset($_SERVER['HTTPS']) ? 's' : '').'://'.$_SERVER["HTTP_HOST"].str_replace ('/index.php', '', $_SERVER['PHP_SELF']);
+$baseUrl = PMF_Link::getSystemUri('/index.php');
 $firefoxPluginTitle = '';
 $MSIEPluginTitle = '';
 

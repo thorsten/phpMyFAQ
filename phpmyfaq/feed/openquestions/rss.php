@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: rss.php,v 1.2 2006-06-17 13:00:16 matteo Exp $
+ * $Id: rss.php,v 1.3 2006-08-22 19:07:54 matteo Exp $
  *
  * The RSS feed with the latest open questions
  *
@@ -42,7 +42,7 @@ $result = $db->query($query);
 $rss = "<?xml version=\"1.0\" encoding=\"".$PMF_LANG["metaCharset"]."\" standalone=\"yes\" ?>\n<rss version=\"2.0\">\n<channel>\n";
 $rss .= "<title>".htmlspecialchars($PMF_CONF["title"])." - ".htmlspecialchars($PMF_LANG['msgOpenQuestions'])."</title>\n";
 $rss .= "<description>".htmlspecialchars($PMF_CONF["metaDescription"])."</description>\n";
-$rss .= "<link>http".(isset($_SERVER['HTTPS']) ? 's' : '')."://".$_SERVER["HTTP_HOST"].str_replace ("/feed/openquestions/rss.php", "", $_SERVER["PHP_SELF"])."</link>";
+$rss .= "<link>".PMF_Link::getSystemUri('/feed/openquestions/rss.php')."</link>";
 
 if ($num = $db->num_rows($result) > 0) {
     $counter = 0;

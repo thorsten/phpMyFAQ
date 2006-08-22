@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Link.php,v 1.13 2006-08-21 22:02:38 matteo Exp $
+* $Id: Link.php,v 1.14 2006-08-22 19:07:54 matteo Exp $
 *
 * Link management - Functions and Classes
 *
@@ -305,7 +305,7 @@ class PMF_Link
 
     function getSystemScheme()
     {
-        $scheme = 'http'.(isset($_SERVER['HTTPS']) ? 's' : '').'://';
+        $scheme = 'http'.(isset($_SERVER['HTTPS']) || ((PMF_Link::isIISServer()) && ('on' == strtolower($_SERVER['HTTPS']))) ? 's' : '').'://';
 
         return $scheme;
     }
