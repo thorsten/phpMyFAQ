@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Ldap.php,v 1.1 2006-06-11 14:26:55 matteo Exp $
+* $Id: Ldap.php,v 1.2 2006-08-22 19:31:22 thorstenr Exp $
 *
 * PMF_Ldap
 *
@@ -10,7 +10,7 @@
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @package      LDAP
 * @since        2004-12-16
-* @copyright    (c) 2006 phpMyFAQ Team
+* @copyright    (c) 2004-2006 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -30,7 +30,7 @@ class PMF_Ldap
     * The connection handle
     *
     */
-    var $ds = NULL;
+    var $ds = null;
 
     /**
     * The LDAP base
@@ -57,7 +57,7 @@ class PMF_Ldap
         $this->base = $ldap_base;
 
         if (!isset($ldap_user) || !isset($ldap_server) || $ldap_server == "" || !isset($ldap_port) || $ldap_port == "" || !isset($ldap_base) || $ldap_base == "" || !isset($ldap_password)) {
-            return FAlSE;
+            return false;
 		}
 
         if (is_null($this->ds)) {
@@ -73,8 +73,8 @@ class PMF_Ldap
     * @param    string
     * @return   string
     * @access   public
-    * @author       Adam Greene <phpmyfaq@skippy.fastmail.fm>
-    * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+    * @author   Adam Greene <phpmyfaq@skippy.fastmail.fm>
+    * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
     */
     function ldap_getMail($username)
     {
@@ -94,8 +94,8 @@ class PMF_Ldap
     * @param    string
     * @return   string
     * @access   public
-    * @author       Adam Greene <phpmyfaq@skippy.fastmail.fm>
-    * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+    * @author   Adam Greene <phpmyfaq@skippy.fastmail.fm>
+    * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
     */
     function ldap_getCompleteName($username)
     {
@@ -120,13 +120,4 @@ class PMF_Ldap
     {
         return ldap_error($this->ds);
     }
-
-    /**
-    * Destructor
-    */
-    function __destruct()
-    {
-    }
-
 }
-?>
