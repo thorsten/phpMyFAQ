@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mssql.update.sql.php,v 1.2 2006-08-19 11:03:53 thorstenr Exp $
+* $Id: mssql.update.sql.php,v 1.3 2006-08-22 18:29:59 matteo Exp $
 *
 * CREATE TABLE instruction for MS SQL Server database
 *
@@ -88,7 +88,7 @@ PRIMARY KEY(group_id, right_id)
 
 //faqlinkverifyrules
 $query[] = "CREATE TABLE ".SQLPREFIX."faqlinkverifyrules (
-id int(11) NOT NULL default '0',
+id integer NOT NULL default '0',
 type varchar(6) NOT NULL default '',
 url varchar(255) NOT NULL default '',
 reason varchar(255) NOT NULL default '',

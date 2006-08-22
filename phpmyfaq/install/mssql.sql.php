@@ -1,10 +1,11 @@
 <?php
 /**
-* $Id: mssql.sql.php,v 1.14 2006-08-19 13:02:32 matteo Exp $
+* $Id: mssql.sql.php,v 1.15 2006-08-22 18:29:59 matteo Exp $
 *
 * CREATE TABLE instruction for MS SQL Server database
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+* @author       Matteo Scaramuccia <matteo@scaramuccia.com>
 * @since        2005-01-11
 * @copyright    (c) 2005-2006 phpMyFAQ Team
 *
@@ -51,11 +52,25 @@ $uninst[] = "DROP TABLE ".$sqltblpre."faquser_right";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqvisits";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqvoting";
 
+//faquser
+$query[] = "CREATE TABLE ".$sqltblpre."faquser (
+user_id integer NOT NULL,
+login varchar(25) NOT NULL,
+session_id varchar(150) NULL,
+session_timestamp integer NULL,
+ip varchar(15) NULL,
+account_status varchar(50) NULL,
+last_login varchar(14) NULL,
+auth_source varchar(100) NULL,
+member_since varchar(14) NULL,
+PRIMARY KEY (user_id)
+)";
+
 //faqadminlog
 $query[] = "CREATE TABLE ".$sqltblpre."faqadminlog (
 id integer NOT NULL,
 time integer NOT NULL,
-usr integer NOT NULL REFERENCES ".$sqltblpre."faquser(id),
+usr integer NOT NULL REFERENCES ".$sqltblpre."faquser(user_id),
 text text NOT NULL,
 ip varchar(64) NOT NULL,
 PRIMARY KEY (id))";
@@ -114,7 +129,7 @@ id integer NOT NULL,
 beitrag SMALLINT NOT NULL,
 lang varchar(5) NOT NULL,
 revision_id integer NOT NULL DEFAULT 0,
-usr integer NOT NULL REFERENCES ".$sqltblpre."faquser(id),
+usr integer NOT NULL REFERENCES ".$sqltblpre."faquser(user_id),
 datum integer NOT NULL,
 what text NOT NULL,
 PRIMARY KEY (id, lang))";
@@ -123,6 +138,7 @@ PRIMARY KEY (id, lang))";
 $query[] = "CREATE TABLE ".$sqltblpre."faqcomments (
 id_comment integer NOT NULL,
 id integer NOT NULL,
+type varchar(10) NOT NULL,
 usr varchar(255) NOT NULL,
 email varchar(255) NOT NULL,
 comment text NOT NULL,
@@ -209,9 +225,9 @@ group_id integer NOT NULL,
 name varchar(25) NULL,
 description text NULL,
 auto_join integer NULL,
-PRIMARY KEY(group_id),
-UNIQUE INDEX name(name)
-)";
+PRIMARY KEY(group_id)
+)
+CREATE UNIQUE INDEX idxName ON ".$sqltblpre."faqgroup (name)";
 
 //faqgroup_right
 $query[] = "CREATE TABLE ".$sqltblpre."faqgroup_right (
@@ -222,7 +238,7 @@ PRIMARY KEY(group_id, right_id)
 
 //faqlinkverifyrules
 $query[] = "CREATE TABLE ".$sqltblpre."faqlinkverifyrules (
-id int(11) NOT NULL default '0',
+id integer NOT NULL default '0',
 type varchar(6) NOT NULL default '',
 url varchar(255) NOT NULL default '',
 reason varchar(255) NOT NULL default '',
@@ -286,20 +302,6 @@ $query[] = "CREATE TABLE ".$sqltblpre."faqtags (
 record_id INTEGER NOT NULL,
 tagging_id INTEGER NOT NULL,
 PRIMARY KEY (record_id, tagging_id)
-)";
-
-//faquser
-$query[] = "CREATE TABLE ".$sqltblpre."faquser (
-user_id integer NOT NULL,
-login varchar(25) NOT NULL,
-session_id varchar(150) NULL,
-session_timestamp integer NULL,
-ip varchar(15) NULL,
-account_status varchar(50) NULL,
-last_login varchar(14) NULL,
-auth_source varchar(100) NULL,
-member_since varchar(14) NULL,
-PRIMARY KEY (user_id)
 )";
 
 //faquserdata
