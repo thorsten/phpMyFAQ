@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.76 2006-08-21 18:10:50 matteo Exp $
+* $Id: update.php,v 1.77 2006-08-23 19:38:44 matteo Exp $
 *
 * Main update script
 *
@@ -964,11 +964,10 @@ if ($step == 5) {
     switch($DB["type"]) {
         case 'mysql':
         case 'mysqli':
-            $tables = $db->query('SHOW TABLES');
-            while ($rows = $db->fetch_assoc($tables)) {
-                foreach ($rows as $dbName => $tableName) {
-                    $query[] = 'OPTIMIZE TABLE '.$tableName;
-                }
+            // Get all table names
+            $db->getTableNames(SQLPREFIX);
+            foreach ($db->tableNames as $tableName) {
+                $query[] = 'OPTIMIZE TABLE '.$tableName;
             }
             break;
         case 'pgsql':

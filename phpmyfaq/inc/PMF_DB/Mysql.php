@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Mysql.php,v 1.8 2006-08-21 20:18:26 thorstenr Exp $
+* $Id: Mysql.php,v 1.9 2006-08-23 19:38:45 matteo Exp $
 *
 * db_mysql
 *
@@ -356,14 +356,15 @@ class db_mysql
      *
      * @access  public
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      * @since   2006-08-21
      */
-    function getTableNames()
+    function getTableNames($prefix = '')
     {
-        $result = $this->query('SHOW TABLES');
+        $result = $this->query('SHOW TABLES'.(('' == $prefix) ? '' : ' LIKE \''.$prefix.'%\''));
         while ($row = $this->fetch_object($result)) {
             foreach ($row as $tablename) {
-            	$this->tableNames[] = $tablename;
+                $this->tableNames[] = $tablename;
             }
         }
     }

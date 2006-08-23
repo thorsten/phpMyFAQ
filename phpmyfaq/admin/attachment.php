@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: attachment.php,v 1.21 2006-08-21 20:31:04 thorstenr Exp $
+* $Id: attachment.php,v 1.22 2006-08-23 19:38:44 matteo Exp $
 *
 * Select an attachment and save it or create the SQL backup files
 *
@@ -27,13 +27,13 @@ PMF_Init::cleanRequest();
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
 if (isset($_REQUEST["action"]) && ($_REQUEST["action"] == "sicherdaten" || $_REQUEST["action"] == "sicherlog")) {
-	Header("Content-Type: application/octet-stream");
-	if ($_REQUEST["action"] == "sicherdaten") {
-		Header("Content-Disposition: attachment; filename=\"phpmyfaq-data.".date("Y-m-d").".sql\"");
-	} elseif ($_REQUEST["action"] == "sicherlog") {
-		Header("Content-Disposition: attachment; filename=\"phpmyfaq-logs.".date("Y-m-d").".sql\"");
-	}
-	Header("Pragma: no-cache");
+    Header("Content-Type: application/octet-stream");
+    if ($_REQUEST["action"] == "sicherdaten") {
+        Header("Content-Disposition: attachment; filename=\"phpmyfaq-data.".date("Y-m-d").".sql\"");
+    } elseif ($_REQUEST["action"] == "sicherlog") {
+        Header("Content-Disposition: attachment; filename=\"phpmyfaq-logs.".date("Y-m-d").".sql\"");
+    }
+    Header("Pragma: no-cache");
 }
 
 // get language (default: english)
@@ -120,86 +120,87 @@ if (!isset($_REQUEST["action"]) && $auth && $permission["addatt"]) {
 }
 
 if (isset($_REQUEST["action"]) && $auth && !$permission["addatt"]) {
-	print $PMF_LANG["err_NotAuth"];
+    print $PMF_LANG["err_NotAuth"];
 }
 
 if (isset($_REQUEST["save"]) && $_REQUEST["save"] == TRUE && $auth && $permission["addatt"]) {
 ?>
 <p><strong><?php print $PMF_LANG["ad_att_addto"]." ".$PMF_LANG["ad_att_addto_2"]; ?></strong></p>
 <?php
-	if (is_uploaded_file($_FILES["userfile"]["tmp_name"]) && !(@filesize($_FILES["userfile"]["tmp_name"]) > $PMF_CONF["attmax"])) {
-		if (!is_dir(PMF_ROOT_DIR."/attachments/")) {
-			mkdir(PMF_ROOT_DIR."/attachments/", 0777);
-		}
-		if (!is_dir(PMF_ROOT_DIR."/attachments/".$_REQUEST["id"])) {
-			mkdir(PMF_ROOT_DIR."/attachments/".$_REQUEST["id"], 0777);
-		}
-		if (@move_uploaded_file($_FILES["userfile"]["tmp_name"], PMF_ROOT_DIR."/attachments/".$_REQUEST["id"]."/".$_FILES["userfile"]["name"])) {
+    if (is_uploaded_file($_FILES["userfile"]["tmp_name"]) && !(@filesize($_FILES["userfile"]["tmp_name"]) > $PMF_CONF["attmax"])) {
+        if (!is_dir(PMF_ROOT_DIR."/attachments/")) {
+            mkdir(PMF_ROOT_DIR."/attachments/", 0777);
+        }
+        if (!is_dir(PMF_ROOT_DIR."/attachments/".$_REQUEST["id"])) {
+            mkdir(PMF_ROOT_DIR."/attachments/".$_REQUEST["id"], 0777);
+        }
+        if (@move_uploaded_file($_FILES["userfile"]["tmp_name"], PMF_ROOT_DIR."/attachments/".$_REQUEST["id"]."/".$_FILES["userfile"]["name"])) {
             chmod (PMF_ROOT_DIR."/attachments/".$_REQUEST["id"]."/".$_FILES["userfile"]["name"], 0644);
-			print "<p>".$PMF_LANG["ad_att_suc"]."</p>";
-		}
-		else {
-			print "<p>".$PMF_LANG["ad_att_fail"]."</p>";
-		}
-	} else {
-		print "<p>".$PMF_LANG["ad_attach_4"]."</p>";
-	}
-	print "<p align=\"center\"><a href=\"javascript:window.close()\">".$PMF_LANG["ad_att_close"]."</a></p>";
+            print "<p>".$PMF_LANG["ad_att_suc"]."</p>";
+        }
+        else {
+            print "<p>".$PMF_LANG["ad_att_fail"]."</p>";
+        }
+    } else {
+        print "<p>".$PMF_LANG["ad_attach_4"]."</p>";
+    }
+    print "<p align=\"center\"><a href=\"javascript:window.close()\">".$PMF_LANG["ad_att_close"]."</a></p>";
 }
 if (isset($_REQUEST["save"]) && $_REQUEST["save"] == TRUE && $auth && !$permission["addatt"]) {
-	print $PMF_LANG["err_NotAuth"];
+    print $PMF_LANG["err_NotAuth"];
 }
 
-if (isset($_POST['action']) && $_POST['action'] == 'sicherdaten') {
+if (isset($_GET['action']) && ('sicherdaten' == $_GET['action'])) {
     // Get all table names
-    $db->getTableNames();
+    $db->getTableNames(SQLPREFIX);
     $tablenames = '';
     foreach ($db->tableNames as $table) {
         $tablenames .= $table . ' ';
     }
 
-	$text[] = "-- pmf2.0: " . $tablenames;
-	$text[] = "-- DO NOT REMOVE THE FIRST LINE!";
-	$text[] = "-- pmftableprefix: ".SQLPREFIX;
-	$text[] = "-- DO NOT REMOVE THE LINES ABOVE!";
-	$text[] = "-- Otherwise this backup will be broken.";
-	foreach ($db->tableNames as $table) {
-	   print implode("\r\n",$text);
-	   $text = build_insert ("SELECT * FROM ".$table, $table);
-	}
-
-} elseif (isset($_REQUEST["action"]) && $_REQUEST["action"] == "sicherdaten" && $auth && !$permission["backup"]) {
-	print $PMF_LANG["err_NotAuth"];
+    $text[] = "-- pmf2.0: " . $tablenames;
+    $text[] = "-- DO NOT REMOVE THE FIRST LINE!";
+    $text[] = "-- pmftableprefix: ".SQLPREFIX;
+    $text[] = "-- DO NOT REMOVE THE LINES ABOVE!";
+    $text[] = "-- Otherwise this backup will be broken.";
+    foreach ($db->tableNames as $table) {
+       print implode("\r\n", $text);
+       $text = build_insert("SELECT * FROM ".$table, $table);
+    }
+} elseif (isset($_GET['action']) && ('sicherdaten' == $_GET['action']) && $auth && !$permission['backup']) {
+    print $PMF_LANG['err_NotAuth'];
 }
 
-if (isset($_POST['action']) && $_POST['action'] == 'sicherlog') {
+if (isset($_GET['action']) && ('sicherlog' == $_GET['action'])) {
     // Get all table names
-    $db->getTableNames();
+    $db->getTableNames(SQLPREFIX);
     $tablenames = '';
     foreach ($db->tableNames as $table) {
         if (SQLPREFIX.'faqadminlog' == $table || SQLPREFIX.'faqsessions' ==  $table) {
             $tablenames .= $table . ' ';
         }
     }
-	$text[] = "-- pmf2.0: " . $tablenames;
-	$text[] = "-- DO NOT REMOVE THE FIRST LINE!";
+    $text[] = "-- pmf2.0: " . $tablenames;
+    $text[] = "-- DO NOT REMOVE THE FIRST LINE!";
     $text[] = "-- pmftableprefix: ".SQLPREFIX;
     $text[] = "-- DO NOT REMOVE THE LINES ABOVE!";
     $text[] = "-- Otherwise this backup will be broken.";
-	foreach ($db->tableNames as $table) {
+    foreach ($db->tableNames as $table) {
         if (SQLPREFIX.'faqadminlog' == $table || SQLPREFIX.'faqsessions' ==  $table) {
-            print implode("\r\n",$text);
-            $text = build_insert ("SELECT * FROM ".$table, $table);
+            print implode("\r\n", $text);
+            $text = build_insert("SELECT * FROM ".$table, $table);
         }
-	}
+    }
+} elseif (isset($_GET['action']) && ('sicherlog' == $_GET['action']) && $auth && !$permission['backup']) {
+    print $PMF_LANG['err_NotAuth'];
 }
 
-if (DEBUG == TRUE) {
-	print "<p>".$db->sqllog()."</p>";
+if (DEBUG) {
+    print "<p>".$db->sqllog()."</p>";
 }
 
-if (isset($_POST['action']) && $_POST['action'] != 'sicherdaten' && $_POST['action'] != 'sicherlog') {
-	print "</body></html>";
+if (isset($_GET['action']) && $_GET['action'] != 'sicherdaten' && $_GET['action'] != 'sicherlog') {
+    print "</body></html>";
 }
 
 $db->dbclose();

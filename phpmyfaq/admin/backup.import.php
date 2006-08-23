@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: backup.import.php,v 1.12 2006-06-12 22:24:26 matteo Exp $
+* $Id: backup.import.php,v 1.13 2006-08-23 19:39:43 matteo Exp $
 *
 * The import function to import the phpMyFAQ backups
 *
@@ -25,31 +25,31 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 }
 if ($permission["restore"]) {
 ?>
-	<h2><?php print $PMF_LANG["ad_csv_rest"]; ?></h2>
+    <h2><?php print $PMF_LANG["ad_csv_rest"]; ?></h2>
 <?php
     if (isset($_FILES["userfile"]["type"]) && ($_FILES["userfile"]["type"] == "application/octet-stream" || $_FILES["userfile"]["type"] == "text/plain" || $_FILES["userfile"]["type"] == "text/x-sql")) {
-    	$ok = 1;
-    	$fp = fopen($_FILES["userfile"]["tmp_name"], "r");
-    	$dat = fgets($fp, 65536);
+        $ok = 1;
+        $fp = fopen($_FILES["userfile"]["tmp_name"], "r");
+        $dat = fgets($fp, 65536);
 
-    	if (substr($dat, 0, 9) != '-- pmf2.0') {
-    		print $PMF_LANG["ad_csv_no"];
-    		$ok = 0;
+        if (substr($dat, 0, 9) != '-- pmf2.0') {
+            print $PMF_LANG["ad_csv_no"];
+            $ok = 0;
         } else {
-    		$dat = substr($dat, 11);
-    		$tbl = explode(' ', $dat);
-    		$num = count($tbl);
-    		for ($h = 0; $h <= $num; $h++) {
-    			if (isset($tbl[$h])) {
-    				$mquery[] = 'DELETE FROM '.trim($tbl[$h]);
+            $dat = substr($dat, 11);
+            $tbl = explode(' ', $dat);
+            $num = count($tbl);
+            for ($h = 0; $h <= $num; $h++) {
+                if (isset($tbl[$h])) {
+                    $mquery[] = 'DELETE FROM '.trim($tbl[$h]);
                 }
             }
-    		$ok = 1;
+            $ok = 1;
         }
 
         if ($ok == 1) {
             $table_prefix = '';
-    		print "<p>".$PMF_LANG['ad_csv_prepare']."</p>\n";
+            print "<p>".$PMF_LANG['ad_csv_prepare']."</p>\n";
             while (($dat = fgets($fp, 65536))) {
                 $dat = trim($dat);
                 $backup_prefix_pattern = "-- pmftableprefix:";
@@ -57,32 +57,32 @@ if ($permission["restore"]) {
                 if (substr($dat, 0, $backup_prefix_pattern_len) == $backup_prefix_pattern) {
                     $table_prefix = trim(substr($dat, $backup_prefix_pattern_len));
                 }
-    			if ( (substr($dat, 0, 2) != '--') && ($dat != '') ) {
-    				$mquery[] = trim(substr($dat, 0, -1));
+                if ( (substr($dat, 0, 2) != '--') && ($dat != '') ) {
+                    $mquery[] = trim(substr($dat, 0, -1));
                 }
             }
-    		fclose($fp);
+            fclose($fp);
 
-    		$k = 0;
-    		$g = 0;
-    		print "<p>".$PMF_LANG["ad_csv_process"]."</p>\n";
+            $k = 0;
+            $g = 0;
+            print "<p>".$PMF_LANG["ad_csv_process"]."</p>\n";
             $anz = count($mquery);
-    		$kg = "";
-    		for ($i = 0; $i < $anz; $i++) {
+            $kg = "";
+            for ($i = 0; $i < $anz; $i++) {
                 $mquery[$i] = alignTablePrefix($mquery[$i], $table_prefix, SQLPREFIX);
-    			$kg = $db->query($mquery[$i]);
-    			if (!$kg) {
-    				print "<div style=\"font-size: 9px;\"><b>Query</b>: \"".PMF_htmlentities($mquery[$i])."\" <span style=\"color: red;\">failed (Reason: ".$db->error().")</span></div>\n";
+                $kg = $db->query($mquery[$i]);
+                if (!$kg) {
+                    print "<div style=\"font-size: 9px;\"><b>Query</b>: \"".PMF_htmlentities($mquery[$i])."\" <span style=\"color: red;\">failed (Reason: ".$db->error().")</span></div>\n";
                     $k++;
                 } else {
-    				print "<div style=\"font-size: 9px;\"><b>Query</b>: <!-- \"".PMF_htmlentities($mquery[$i])."\" --> <span style=\"color: green;\">okay</span></div>\n";
+                    print "<div style=\"font-size: 9px;\"><b>Query</b>: <!-- \"".PMF_htmlentities($mquery[$i])."\" --> <span style=\"color: green;\">okay</span></div>\n";
                     $g++;
                 }
             }
-    		print "<p>".$g." ".$PMF_LANG["ad_csv_of"]." ".$anz." ".$PMF_LANG["ad_csv_suc"]."</p>\n";
+            print "<p>".$g." ".$PMF_LANG["ad_csv_of"]." ".$anz." ".$PMF_LANG["ad_csv_suc"]."</p>\n";
         }
     } else {
-    	print "<p>".$PMF_LANG["ad_csv_no"]."</p>";
+        print "<p>".$PMF_LANG["ad_csv_no"]."</p>";
     }
 } else {
     print $PMF_LANG["err_NotAuth"];
