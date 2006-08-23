@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.77 2006-08-23 19:38:44 matteo Exp $
+* $Id: update.php,v 1.78 2006-08-23 21:33:53 matteo Exp $
 *
 * Main update script
 *
@@ -178,26 +178,31 @@ if ($step == 2) {
     $test3 = 0;
     $test4 = 0;
     $test5 = 0;
+
     if (!@is_writeable(PMF_ROOT_DIR."/inc/data.php")) {
         print "<p class=\"error\"><strong>Error:</strong> The file ../inc/data.php or the directory ../inc is not writeable. Please correct this!</p>";
     } else {
         $test1 = 1;
     }
+    // TODO: Move NEWVERSION to '2.0.0' when 2.0.0 will be released
     if (!@is_writeable(PMF_ROOT_DIR."/inc/config.php") && version_compare($version, NEWVERSION, '<')) {
         print "<p class=\"error\"><strong>Error:</strong> The file ../inc/config.php is not writeable. Please correct this!</p>";
     } else {
         $test2 = 1;
     }
+
     if (!@copy(PMF_ROOT_DIR."/inc/data.php", PMF_ROOT_DIR."/inc/data.bak.php")) {
         print "<p class=\"error\"><strong>Error:</strong> The backup file ../inc/data.bak.php could not be written. Please correct this!</p>";
     } else {
         $test3 = 1;
     }
+    // TODO: Move NEWVERSION to '2.0.0' when 2.0.0 will be released
     if (!@copy(PMF_ROOT_DIR."/inc/config.php", PMF_ROOT_DIR."/inc/config.bak.php") && version_compare($version, NEWVERSION, '<')) {
         print "<p class=\"error\"><strong>Error:</strong> The backup file ../inc/config.bak.php could not be written. Please correct this!</p>";
     } else {
         $test4 = 1;
     }
+
     if ('1.3.' == substr($_POST["version"], 0, 4)) {
         print "<p class=\"error\"><strong>Error:</strong> You can't upgrade from phpMyFAQ 1.3.x to ".NEWVERSION.". Please upgrade first to the latest version of phpMyFAQ 1.6.x.</p>";
     } else {
@@ -597,6 +602,25 @@ if ($step == 5) {
     if (version_compare($version, '2.0.0', '<')) {
         // 1/13. Fix faqfragen table
         switch($DB["type"]) {
+            case 'mssql':
+            case 'sybase':
+                // Create the new faqquestions table
+                $query[] = "CREATE TABLE ".SQLPREFIX."faqquestions (
+                            id integer NOT NULL,
+                            ask_username varchar(100) NOT NULL,
+                            ask_usermail varchar(100) NOT NULL,
+                            ask_rubrik integer NOT NULL,
+                            ask_content text NOT NULL,
+                            ask_date varchar(20) NOT NULL,
+                            is_visible char(1) default 'Y',
+                            PRIMARY KEY (id))";
+                // Copy data from the faqfragen table
+                $query[] = 'INSERT INTO '.SQLPREFIX.'faqquestions
+                            (id, ask_username, ask_usermail, ask_rubrik, ask_content, ask_date)
+                            SELECT id, ask_username, ask_usermail, ask_rubrik, ask_content, ask_date
+                            FROM '.SQLPREFIX.'faqfragen';
+                // Drop the faqfragen table
+                $query[] = 'DROP TABLE '.SQLPREFIX.'faqfragen';
             case 'pgsql':
                 // Create the new faqquestions table
                 $query[] = "CREATE TABLE ".SQLPREFIX."faqquestions (
@@ -609,7 +633,7 @@ if ($step == 5) {
                             is_visible char(1) default 'Y',
                             PRIMARY KEY (id))";
                 // Copy data from the faqfragen table
-                $query[] = 'INSERT INTO '.SQLPREFIX.'faqquestions_new
+                $query[] = 'INSERT INTO '.SQLPREFIX.'faqquestions
                             (id, ask_username, ask_usermail, ask_rubrik, ask_content, ask_date)
                             SELECT id, ask_username, ask_usermail, ask_rubrik, ask_content, ask_date
                             FROM '.SQLPREFIX.'faqfragen';
@@ -622,6 +646,27 @@ if ($step == 5) {
         }
         // 2/13. Fix faqcategories table
         switch($DB["type"]) {
+            case 'mssql':
+            case 'sybase':
+                // Rename the current faqcategories table
+                $query[] = 'EXEC sp_rename \''.SQLPREFIX.'faqcategories\', \''.SQLPREFIX.'faqcategories_PMF16x_old\'';
+                // Create the new faqcategories table
+                // Set the admin (id == 1) as the owner of the pre-existing categories
+                $query[] = "CREATE TABLE ".SQLPREFIX."faqcategories (
+                            id integer NOT NULL,
+                            lang varchar(5) NOT NULL,
+                            parent_id SMALLINT NOT NULL,
+                            name varchar(255) NOT NULL,
+                            description varchar(255) NOT NULL,
+                            user_id integer NOT NULL DEFAULT 1,
+                            PRIMARY KEY (id, lang))";
+                // Copy data from the faqcategories_PMF16x_old table
+                $query[] = 'INSERT INTO '.SQLPREFIX.'faqcategories
+                            (id, lang, parent_id, name, description)
+                            SELECT id, lang, parent_id, name, description
+                            FROM '.SQLPREFIX.'faqcategories_PMF16x_old';
+                // Drop the faqcategories_PMF16x_old table
+                $query[] = 'DROP TABLE '.SQLPREFIX.'faqcategories_PMF16x_old';
             case 'pgsql':
                 // Rename the current faqcategories table
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqcategories RENAME TO '.SQLPREFIX.'faqcategories_PMF16x_old';
@@ -651,6 +696,36 @@ if ($step == 5) {
         }
         // 3/13. Fix faqdata table
         switch($DB["type"]) {
+            case 'mssql':
+            case 'sybase':
+                // Rename the current faqdata table
+                $query[] = 'EXEC sp_rename \''.SQLPREFIX.'faqdata\', \''.SQLPREFIX.'faqdata_PMF16x_old\'';
+                // Create the new faqdata table
+                $query[] = "CREATE TABLE ".SQLPREFIX."faqdata (
+                            id integer NOT NULL,
+                            lang varchar(5) NOT NULL,
+                            solution_id integer NOT NULL,
+                            revision_id integer NOT NULL DEFAULT 0,
+                            active char(3) NOT NULL,
+                            keywords text NOT NULL,
+                            thema text NOT NULL,
+                            content text NOT NULL,
+                            author varchar(255) NOT NULL,
+                            email varchar(255) NOT NULL,
+                            comment char(1) default 'y',
+                            datum varchar(15) NOT NULL,
+                            links_state varchar(7) NOT NULL,
+                            links_check_date integer DEFAULT 0 NOT NULL,
+                            date_start varchar(14) NOT NULL DEFAULT '00000000000000',
+                            date_end varchar(14) NOT NULL DEFAULT '99991231235959',
+                            PRIMARY KEY (id, lang))";
+                // Copy data from the faqdata_PMF16x_old table
+                $query[] = 'INSERT INTO '.SQLPREFIX.'faqdata
+                            (id, lang, solution_id, revision_id, active, keywords, thema, content, author, email, comment, datum)
+                            SELECT id, lang, solution_id, revision_id, active, keywords, thema, content, author, email, comment, datum
+                            FROM '.SQLPREFIX.'faqdata_PMF16x_old';
+                // Drop the faqdata_PMF16x_old table
+                $query[] = 'DROP TABLE '.SQLPREFIX.'faqdata_PMF16x_old';
             case 'pgsql':
                 // Rename the current faqdata table
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata RENAME TO '.SQLPREFIX.'faqdata_PMF16x_old';
@@ -689,6 +764,36 @@ if ($step == 5) {
         }
         // 4/13. Fix faqdata_revisions table
         switch($DB["type"]) {
+            case 'mssql':
+            case 'sybase':
+                // Rename the current faqdata_revisions table
+                $query[] = 'EXEC sp_rename \''.SQLPREFIX.'faqdata_revisions\', \''.SQLPREFIX.'faqdata_revisions_PMF16x_old\'';
+                // Create the new faqdata_revisions table
+                $query[] = "CREATE TABLE ".SQLPREFIX."faqdata_revisions (
+                            id integer NOT NULL,
+                            lang varchar(5) NOT NULL,
+                            solution_id integer NOT NULL,
+                            revision_id integer NOT NULL DEFAULT 0,
+                            active char(3) NOT NULL,
+                            keywords text NOT NULL,
+                            thema text NOT NULL,
+                            content text NOT NULL,
+                            author varchar(255) NOT NULL,
+                            email varchar(255) NOT NULL,
+                            comment char(1) default 'y',
+                            datum varchar(15) NOT NULL,
+                            links_state varchar(7) NOT NULL,
+                            links_check_date integer DEFAULT 0 NOT NULL,
+                            date_start varchar(14) NOT NULL DEFAULT '00000000000000',
+                            date_end varchar(14) NOT NULL DEFAULT '99991231235959',
+                            PRIMARY KEY (id, lang, solution_id, revision_id))";
+                // Copy data from the faqdata_revisions_PMF16x_old table
+                $query[] = 'INSERT INTO '.SQLPREFIX.'faqdata_revisions
+                            (id, lang, solution_id, revision_id, active, keywords, thema, content, author, email, comment, datum)
+                            SELECT id, lang, solution_id, revision_id, active, keywords, thema, content, author, email, comment, datum
+                            FROM '.SQLPREFIX.'faqdata_revisions_PMF16x_old';
+                // Drop the faqdata_revisions_PMF16x_old table
+                $query[] = 'DROP TABLE '.SQLPREFIX.'faqdata_revisions_PMF16x_old';
             case 'pgsql':
                 // Rename the current faqdata_revisions table
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata_revisions RENAME TO '.SQLPREFIX.'faqdata_revisions_PMF16x_old';
@@ -728,6 +833,34 @@ if ($step == 5) {
         // 5/13. Fix faqnews table
         $defaultLang = str_replace(array('language_', '.php'), '', $PMF_CONF['language']);
         switch($DB["type"]) {
+            case 'mssql':
+            case 'sybase':
+                // Rename the current faqnews table
+                $query[] = 'EXEC sp_rename \''.SQLPREFIX.'faqnews\', \''.SQLPREFIX.'faqnews_PMF16x_old\'';
+                // Create the new faqnews table
+                $query[] = "CREATE TABLE ".SQLPREFIX."faqnews (
+                            id integer NOT NULL,
+                            lang varchar(5) NOT NULL DEFAULT '".$defaultLang."',
+                            header varchar(255) NOT NULL,
+                            artikel text NOT NULL,
+                            datum varchar(14) NOT NULL,
+                            author_name  varchar(255) NULL,
+                            author_email varchar(255) NULL,
+                            active char(1) default 'y',
+                            comment char(1) default 'n',
+                            date_start varchar(14) NOT NULL DEFAULT '00000000000000',
+                            date_end varchar(14) NOT NULL DEFAULT '99991231235959',
+                            link varchar(255) NOT NULL,
+                            linktitel varchar(255) NOT NULL,
+                            target varchar(255) NOT NULL,
+                            PRIMARY KEY (id))";
+                // Copy data from the faqnews_PMF16x_old table
+                $query[] = 'INSERT INTO '.SQLPREFIX.'faqnews
+                            (id, header, artikel, datum, link, linktitel, target)
+                            SELECT id, header, artikel, datum, link, linktitel, target
+                            FROM '.SQLPREFIX.'faqnews_PMF16x_old';
+                // Drop the faqnews_PMF16x_old table
+                $query[] = 'DROP TABLE '.SQLPREFIX.'faqnews_PMF16x_old';
             case 'pgsql':
                 // Rename the current faqnews table
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqnews RENAME TO '.SQLPREFIX.'faqnews_PMF16x_old';
@@ -770,6 +903,28 @@ if ($step == 5) {
 
         // 6/13. Fix faqcomments table
         switch($DB["type"]) {
+            case 'mssql':
+            case 'sybase':
+                // Rename the current faqcomments table
+                $query[] = 'EXEC sp_rename \''.SQLPREFIX.'faqcomments\', \''.SQLPREFIX.'faqcomments_PMF16x_old\'';
+                // Create the new faqcomments table
+                $query[] = "CREATE TABLE ".SQLPREFIX."faqcomments (
+                            id_comment integer NOT NULL,
+                            id integer NOT NULL,
+                            type varchar(10) NOT NULL DEFAULT 'faq',
+                            usr varchar(255) NOT NULL,
+                            email varchar(255) NOT NULL,
+                            comment text NOT NULL,
+                            datum varchar(64) NOT NULL,
+                            helped text NOT NULL,
+                            PRIMARY KEY (id_comment))";
+                // Copy data from the faqcomments_PMF16x_old table
+                $query[] = 'INSERT INTO '.SQLPREFIX.'faqcomments
+                            (id_comment, id, usr, email, comment, datum, helped)
+                            SELECT id_comment, id, usr, email, comment, datum, helped
+                            FROM '.SQLPREFIX.'faqcomments_PMF16x_old';
+                // Drop the faqcomments_PMF16x_old table
+                $query[] = 'DROP TABLE '.SQLPREFIX.'faqcomments_PMF16x_old';
             case 'pgsql':
                 // Rename the current faqcomments table
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqcomments RENAME TO '.SQLPREFIX.'faqcomments_PMF16x_old';
@@ -800,6 +955,10 @@ if ($step == 5) {
 
         // 7/13. Rename faquser table for preparing the users migration
         switch($DB["type"]) {
+            case 'mssql':
+            case 'sybase':
+                $query[] = 'EXEC sp_rename \''.SQLPREFIX.'faquser\', \''.SQLPREFIX.'faquser_PMF16x_old\'';
+                break;
             default:
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faquser RENAME TO '.SQLPREFIX.'faquser_PMF16x_old';
                 break;
