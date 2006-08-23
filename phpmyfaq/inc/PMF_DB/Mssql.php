@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Mssql.php,v 1.6 2006-06-29 20:52:47 matteo Exp $
+* $Id: Mssql.php,v 1.7 2006-08-23 19:50:34 matteo Exp $
 *
 * db_mssql
 *
@@ -32,7 +32,7 @@ class db_mssql
      * @var   mixed
      * @see   connect(), query(), dbclose()
      */
-    var $conn = FALSE;
+    var $conn = false;
 
     /**
      * The query log string
@@ -42,6 +42,13 @@ class db_mssql
      */
     var $sqllog = "";
 
+    /**
+     * Tables
+     *
+     * @var     array
+     */
+    var $tableNames = array();
+    
     /**
      * Connects to the database.
      *
@@ -367,6 +374,23 @@ class db_mssql
         $version = mssql_result($result, 0, 'SERVER_VERSION');
         if (isset($version)) {
             return $version;
+        }
+    }
+
+    /**
+     * Returns an array with all table names
+     *
+     * @access  public
+     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     * @since   2006-08-23
+     */
+    function getTableNames($prefix = '')
+    {
+        $result = $this->query('SELECT name FROM sysobjects WHERE type = \'u\''.(('' == $prefix) ? '' : ' AND name LIKE \''.$prefix.'%\''));
+        while ($row = $this->fetch_object($result)) {
+            foreach ($row as $tablename) {
+                $this->tableNames[] = $tablename;
+            }
         }
     }
 }
