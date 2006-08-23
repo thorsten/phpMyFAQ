@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Mysql.php,v 1.9 2006-08-23 19:38:45 matteo Exp $
+* $Id: Mysql.php,v 1.10 2006-08-23 20:57:22 matteo Exp $
 *
 * db_mysql
 *
@@ -361,10 +361,15 @@ class db_mysql
      */
     function getTableNames($prefix = '')
     {
+        // First, declare those tables that are referenced by others
+        $this->tableNames[] = $prefix.'faquser';
+
         $result = $this->query('SHOW TABLES'.(('' == $prefix) ? '' : ' LIKE \''.$prefix.'%\''));
         while ($row = $this->fetch_object($result)) {
-            foreach ($row as $tablename) {
-                $this->tableNames[] = $tablename;
+            foreach ($row as $tableName) {
+                if (!in_array($tableName, $this->tableNames)) {
+                    $this->tableNames[] = $tableName;
+                }
             }
         }
     }

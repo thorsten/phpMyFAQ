@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Sybase.php,v 1.6 2006-08-23 19:50:34 matteo Exp $
+* $Id: Sybase.php,v 1.7 2006-08-23 20:57:22 matteo Exp $
 *
 * db_sybase
 *
@@ -422,10 +422,15 @@ class db_sybase
      */
     function getTableNames($prefix = '')
     {
+        // First, declare those tables that are referenced by others
+        $this->tableNames[] = $prefix.'faquser';
+
         $result = $this->query('SELECT name FROM sysobjects WHERE type = \'u\''.(('' == $prefix) ? '' : ' AND name LIKE \''.$prefix.'%\''));
         while ($row = $this->fetch_object($result)) {
-            foreach ($row as $tablename) {
-                $this->tableNames[] = $tablename;
+            foreach ($row as $tableName) {
+                if (!in_array($tableName, $this->tableNames)) {
+                    $this->tableNames[] = $tableName;
+                }
             }
         }
     }
