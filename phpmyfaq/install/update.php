@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.79 2006-08-24 19:47:24 matteo Exp $
+* $Id: update.php,v 1.80 2006-08-24 20:38:20 matteo Exp $
 *
 * Main update script
 *
@@ -1133,6 +1133,14 @@ if ($step == 5) {
 
     // optimize tables
     switch($DB["type"]) {
+        case 'mssql':
+        case 'sybase':
+            // Get all table names
+            $db->getTableNames(SQLPREFIX);
+            foreach ($db->tableNames as $tableName) {
+                $query[] = 'DBCC DBREINDEX ('.$tableName.')';
+            }
+            break;
         case 'mysql':
         case 'mysqli':
             // Get all table names
