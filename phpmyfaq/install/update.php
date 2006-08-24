@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.78 2006-08-23 21:33:53 matteo Exp $
+* $Id: update.php,v 1.79 2006-08-24 19:47:24 matteo Exp $
 *
 * Main update script
 *
@@ -621,6 +621,7 @@ if ($step == 5) {
                             FROM '.SQLPREFIX.'faqfragen';
                 // Drop the faqfragen table
                 $query[] = 'DROP TABLE '.SQLPREFIX.'faqfragen';
+                break;
             case 'pgsql':
                 // Create the new faqquestions table
                 $query[] = "CREATE TABLE ".SQLPREFIX."faqquestions (
@@ -639,6 +640,7 @@ if ($step == 5) {
                             FROM '.SQLPREFIX.'faqfragen';
                 // Drop the faqfragen table
                 $query[] = 'DROP TABLE '.SQLPREFIX.'faqfragen';
+                break;
             default:
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqfragen RENAME TO '.SQLPREFIX.'faqquestions';
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqquestions ADD is_visible CHAR NOT NULL DEFAULT \'Y\' AFTER ask_date';
@@ -667,6 +669,7 @@ if ($step == 5) {
                             FROM '.SQLPREFIX.'faqcategories_PMF16x_old';
                 // Drop the faqcategories_PMF16x_old table
                 $query[] = 'DROP TABLE '.SQLPREFIX.'faqcategories_PMF16x_old';
+                break;
             case 'pgsql':
                 // Rename the current faqcategories table
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqcategories RENAME TO '.SQLPREFIX.'faqcategories_PMF16x_old';
@@ -688,6 +691,7 @@ if ($step == 5) {
                 $query[] = 'UPDATE '.SQLPREFIX.'faqcategories SET user_id = 1';
                 // Drop the faqcategories_PMF16x_old table
                 $query[] = 'DROP TABLE '.SQLPREFIX.'faqcategories_PMF16x_old';
+                break;
             default:
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqcategories ADD user_id INT(11) NOT NULL AFTER description';
                 // Set the admin (id == 1) as the owner of the pre-existing categories
@@ -714,7 +718,7 @@ if ($step == 5) {
                             email varchar(255) NOT NULL,
                             comment char(1) default 'y',
                             datum varchar(15) NOT NULL,
-                            links_state varchar(7) NOT NULL,
+                            links_state varchar(7) NOT NULL DEFAULT '',
                             links_check_date integer DEFAULT 0 NOT NULL,
                             date_start varchar(14) NOT NULL DEFAULT '00000000000000',
                             date_end varchar(14) NOT NULL DEFAULT '99991231235959',
@@ -726,6 +730,7 @@ if ($step == 5) {
                             FROM '.SQLPREFIX.'faqdata_PMF16x_old';
                 // Drop the faqdata_PMF16x_old table
                 $query[] = 'DROP TABLE '.SQLPREFIX.'faqdata_PMF16x_old';
+                break;
             case 'pgsql':
                 // Rename the current faqdata table
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata RENAME TO '.SQLPREFIX.'faqdata_PMF16x_old';
@@ -755,6 +760,7 @@ if ($step == 5) {
                             FROM '.SQLPREFIX.'faqdata_PMF16x_old';
                 // Drop the faqdata_PMF16x_old table
                 $query[] = 'DROP TABLE '.SQLPREFIX.'faqdata_PMF16x_old';
+                break;
             default:
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata ADD links_state VARCHAR(7) NOT NULL AFTER datum';
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata ADD links_check_date INT(11) NOT NULL DEFAULT 0 AFTER links_state';
@@ -782,7 +788,7 @@ if ($step == 5) {
                             email varchar(255) NOT NULL,
                             comment char(1) default 'y',
                             datum varchar(15) NOT NULL,
-                            links_state varchar(7) NOT NULL,
+                            links_state varchar(7) NOT NULL DEFAULT '',
                             links_check_date integer DEFAULT 0 NOT NULL,
                             date_start varchar(14) NOT NULL DEFAULT '00000000000000',
                             date_end varchar(14) NOT NULL DEFAULT '99991231235959',
@@ -794,6 +800,7 @@ if ($step == 5) {
                             FROM '.SQLPREFIX.'faqdata_revisions_PMF16x_old';
                 // Drop the faqdata_revisions_PMF16x_old table
                 $query[] = 'DROP TABLE '.SQLPREFIX.'faqdata_revisions_PMF16x_old';
+                break;
             case 'pgsql':
                 // Rename the current faqdata_revisions table
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata_revisions RENAME TO '.SQLPREFIX.'faqdata_revisions_PMF16x_old';
@@ -823,6 +830,7 @@ if ($step == 5) {
                             FROM '.SQLPREFIX.'faqdata_revisions_PMF16x_old';
                 // Drop the faqdata_revisions_PMF16x_old table
                 $query[] = 'DROP TABLE '.SQLPREFIX.'faqdata_revisions_PMF16x_old';
+                break;
             default:
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata_revisions ADD links_state VARCHAR(7) NOT NULL AFTER datum';
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata_revisions ADD links_check_date INT(11) NOT NULL DEFAULT 0 AFTER links_state';
@@ -861,6 +869,7 @@ if ($step == 5) {
                             FROM '.SQLPREFIX.'faqnews_PMF16x_old';
                 // Drop the faqnews_PMF16x_old table
                 $query[] = 'DROP TABLE '.SQLPREFIX.'faqnews_PMF16x_old';
+                break;
             case 'pgsql':
                 // Rename the current faqnews table
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqnews RENAME TO '.SQLPREFIX.'faqnews_PMF16x_old';
@@ -889,6 +898,7 @@ if ($step == 5) {
                 $query[] = 'UPDATE '.SQLPREFIX.'faqnews SET lang = \''.$defaultLang.'\'';
                 // Drop the faqnews_PMF16x_old table
                 $query[] = 'DROP TABLE '.SQLPREFIX.'faqnews_PMF16x_old';
+                break;
             default:
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqnews ADD lang VARCHAR(5) NULL AFTER id';
                 $query[] = 'UPDATE '.SQLPREFIX.'faqnews SET lang = \''.$defaultLang.'\'';
@@ -925,6 +935,7 @@ if ($step == 5) {
                             FROM '.SQLPREFIX.'faqcomments_PMF16x_old';
                 // Drop the faqcomments_PMF16x_old table
                 $query[] = 'DROP TABLE '.SQLPREFIX.'faqcomments_PMF16x_old';
+                break;
             case 'pgsql':
                 // Rename the current faqcomments table
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqcomments RENAME TO '.SQLPREFIX.'faqcomments_PMF16x_old';
@@ -947,6 +958,7 @@ if ($step == 5) {
                 $query[] = 'UPDATE '.SQLPREFIX.'faqcomments SET type = \'faq\'';
                 // Drop the faqcomments_PMF16x_old table
                 $query[] = 'DROP TABLE '.SQLPREFIX.'faqcomments_PMF16x_old';
+                break;
             default:
                 $query[] = 'ALTER TABLE '.SQLPREFIX.'faqcomments ADD type VARCHAR(10) NOT NULL AFTER id';
                 $query[] = 'UPDATE '.SQLPREFIX.'faqcomments SET type = \'faq\'';
