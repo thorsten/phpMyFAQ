@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Mssql.php,v 1.8 2006-08-23 20:57:22 matteo Exp $
+* $Id: Mssql.php,v 1.9 2006-08-24 19:39:52 matteo Exp $
 *
 * db_mssql
 *
@@ -191,31 +191,38 @@ class db_mssql
     }
 
     /**
-     * Closes the connection to the database.
-     *
-     * This function closes the connection to the database.
+     * This function returns the table status.
      *
      * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2005-01-11
-     */
-    function dbclose()
-    {
-        return @mssql_close($this->conn);
-    }
-
-    /**
-     *
-     *
-     *
-     * FIXME: implement
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2005-01-11
+     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     * @since   2006-08-24
      */
     function getTableStatus()
     {
-        return;
+        $tables = array();
+
+        $query = "
+            SELECT
+                obj.name AS table_name,
+                idx.rows AS table_rows
+            FROM
+                sysobjects obj, sysindexes idx
+            WHERE
+                    idx.id = OBJECT_ID(obj.name)
+                AND idx.indid < 2
+                AND obj.xtype = 'u'";
+        $result = $this->query($query);
+
+        while ($row = $this->fetch_object($result)) {
+            if ('dtproperties' != $row->table_name) {
+                $tables[$row->table_name] = $row->table_rows;
+            }
+        }
+        // An update from a previous PMF version, e.g. 1.6.x -> 2.0.0,
+        // may alter the tables order (~alphabetical) as expected with a fresh installation
+        ksort($tables);
+
+        return $tables;
     }
 
     /**
@@ -397,5 +404,19 @@ class db_mssql
                 }
             }
         }
+    }
+
+    /**
+     * Closes the connection to the database.
+     *
+     * This function closes the connection to the database.
+     *
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @since   2005-01-11
+     */
+    function dbclose()
+    {
+        return @mssql_close($this->conn);
     }
 }

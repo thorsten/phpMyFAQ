@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Sybase.php,v 1.7 2006-08-23 20:57:22 matteo Exp $
+* $Id: Sybase.php,v 1.8 2006-08-24 19:39:52 matteo Exp $
 *
 * db_sybase
 *
@@ -94,7 +94,7 @@ class db_sybase
      * @author  Adam Greene <phpmyfaq@skippy.fastmail.fm>
      * @since   2004-12-10
      */
-    function connect ($host, $user, $passwd, $db)
+    function connect($host, $user, $passwd, $db)
     {
         $this->conn = @sybase_pconnect($host, $user, $passwd);
         if (empty($db) OR $this->conn == FALSE) {
@@ -161,8 +161,6 @@ class db_sybase
         return @sybase_fetch_object($result);
     }
 
-
-
     /**
      * Fetch a result row as an array
      *
@@ -208,15 +206,15 @@ class db_sybase
      */
 
     function insert_id($table, $field)
-  {
+    {
         $sql = "SELECT max($field) FROM $table ";
-         $rs=sybase_query($sql, $this->conn);
-         $row=sybase_fetch_row($rs);
-    if (isset($row[0]) && $row[0] > 0){
-      return $row[0] + 1;
-    }
+        $rs = sybase_query($sql, $this->conn);
+        $row = sybase_fetch_row($rs);
+        if (isset($row[0]) && $row[0] > 0) {
+            return $row[0] + 1;
+        }
         return 1;
-  }
+    }
 
     /**
      * Logs the queries
@@ -232,7 +230,40 @@ class db_sybase
         return $this->sqllog;
     }
 
+    /**
+     * This function returns the table status.
+     *
+     * @access  public
+     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     * @since   2006-08-24
+     */
+    function getTableStatus()
+    {
+        $tables = array();
 
+        $query = "
+            SELECT
+                obj.name AS table_name,
+                idx.rows AS table_rows
+            FROM
+                sysobjects obj, sysindexes idx
+            WHERE
+                    idx.id = OBJECT_ID(obj.name)
+                AND idx.indid < 2
+                AND obj.xtype = 'u'";
+        $result = $this->query($query);
+
+        while ($row = $this->fetch_object($result)) {
+            if ('dtproperties' != $row->table_name) {
+                $tables[$row->table_name] = $row->table_rows;
+            }
+        }
+        // An update from a previous PMF version, e.g. 1.6.x -> 2.0.0,
+        // may alter the tables order (~alphabetical) as expected with a fresh installation
+        ksort($tables);
+
+        return $tables;
+    }
 
     /**
      * Generates a result based on search a search string.
