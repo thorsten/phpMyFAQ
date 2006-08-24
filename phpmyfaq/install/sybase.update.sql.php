@@ -1,8 +1,8 @@
 <?php
 /**
-* $Id: sybase.update.sql.php,v 1.2 2006-08-19 11:03:53 thorstenr Exp $
+* $Id: sybase.update.sql.php,v 1.3 2006-08-24 19:55:13 matteo Exp $
 *
-* CREATE TABLE instruction for sybase database
+* CREATE TABLE instruction for Sybase database
 *
 * @author       Adam Greene <phpmyfaq@skippy.fastmail.fm>
 * @author       Matteo Scaramuccia <matteo@scaramuccia.com>
@@ -26,14 +26,14 @@
 
 //faqcategory_group
 $query[] = "CREATE TABLE ".SQLPREFIX."faqcategory_group (
-category_id INTEGER NOT NULL,
-group_id INTEGER NOT NULL,
+category_id integer NOT NULL,
+group_id integer NOT NULL,
 PRIMARY KEY (category_id, group_id))";
 
 //faqcategory_user
 $query[] = "CREATE TABLE ".SQLPREFIX."faqcategory_user (
-category_id INTEGER NOT NULL,
-user_id INTEGER NOT NULL,
+category_id integer NOT NULL,
+user_id integer NOT NULL,
 PRIMARY KEY (category_id, user_id))";
 
 //faqconfig
@@ -44,8 +44,8 @@ PRIMARY KEY (config_name))";
 
 //faqdata_group
 $query[] = "CREATE TABLE ".SQLPREFIX."faqdata_group (
-record_id INTEGER NOT NULL,
-group_id INTEGER NOT NULL,
+record_id integer NOT NULL,
+group_id integer NOT NULL,
 PRIMARY KEY (record_id, group_id))";
 
 //faqdata_tags
@@ -57,38 +57,38 @@ PRIMARY KEY (tagging_id, tagging_name)
 
 //faqdata_user
 $query[] = "CREATE TABLE ".SQLPREFIX."faqdata_user (
-record_id INTEGER NOT NULL,
-user_id INTEGER NOT NULL,
+record_id integer NOT NULL,
+user_id integer NOT NULL,
 PRIMARY KEY (record_id, user_id))";
 
 //faqglossary
 $query[] = "CREATE TABLE ".SQLPREFIX."faqglossary (
-id INTEGER NOT NULL ,
-lang VARCHAR(2) NOT NULL ,
-item VARCHAR(255) NOT NULL ,
-definition TEXT NOT NULL,
+id integer NOT NULL ,
+lang varchar(2) NOT NULL ,
+item varchar(255) NOT NULL ,
+definition text NOT NULL,
 PRIMARY KEY (id, lang))";
 
 //faqgroup
 $query[] = "CREATE TABLE ".SQLPREFIX."faqgroup (
-group_id INTEGER NOT NULL,
-name VARCHAR(25) NULL,
-description TEXT NULL,
-auto_join INTEGER NULL,
-PRIMARY KEY (group_id),
-UNIQUE INDEX name(name)
-)";
+group_id integer NOT NULL,
+name varchar(25) NULL,
+description text NULL,
+auto_join integer NULL,
+PRIMARY KEY(group_id)
+)
+CREATE UNIQUE INDEX idxName ON ".$sqltblpre."faqgroup (name)";
 
 //faqgroup_right
 $query[] = "CREATE TABLE ".SQLPREFIX."faqgroup_right (
-group_id INT(11) NOT NULL,
-right_id INT(11) NOT NULL,
-PRIMARY KEY (group_id, right_id)
+group_id integer NOT NULL,
+right_id integer NOT NULL,
+PRIMARY KEY(group_id, right_id)
 )";
 
 //faqlinkverifyrules
 $query[] = "CREATE TABLE ".SQLPREFIX."faqlinkverifyrules (
-id INTEGER NOT NULL default '0',
+id integer NOT NULL default '0',
 type varchar(6) NOT NULL default '',
 url varchar(255) NOT NULL default '',
 reason varchar(255) NOT NULL default '',
@@ -102,11 +102,11 @@ PRIMARY KEY (id)
 
 //faqright
 $query[] = "CREATE TABLE ".SQLPREFIX."faqright (
-right_id INTEGER NOT NULL,
-name VARCHAR(50) NULL,
-description TEXT NULL,
-for_users INT(1) NULL DEFAULT 1,
-for_groups INT(1) NULL DEFAULT 1,
+right_id integer NOT NULL,
+name varchar(50) NULL,
+description text NULL,
+for_users integer NULL DEFAULT 1,
+for_groups integer NULL DEFAULT 1,
 PRIMARY KEY (right_id)
 )";
 
@@ -119,44 +119,44 @@ PRIMARY KEY (record_id, tagging_id)
 
 //faquser
 $query[] = "CREATE TABLE ".SQLPREFIX."faquser (
-user_id INTEGER NOT NULL,
-login VARCHAR(25) NOT NULL,
-session_id VARCHAR(150) NULL,
-session_timestamp INTEGER UNSIGNED NULL,
-ip VARCHAR(15) NULL,
-account_status VARCHAR(50) NULL,
-last_login VARCHAR(14) NULL,
-auth_source VARCHAR(100) NULL,
-member_since VARCHAR(14) NULL,
+user_id integer NOT NULL,
+login varchar(25) NOT NULL,
+session_id varchar(150) NULL,
+session_timestamp integer NULL,
+ip varchar(15) NULL,
+account_status varchar(50) NULL,
+last_login varchar(14) NULL,
+auth_source varchar(100) NULL,
+member_since varchar(14) NULL,
 PRIMARY KEY (user_id)
 )";
 
 //faquserdata
 $query[] = "CREATE TABLE ".SQLPREFIX."faquserdata (
-user_id INTEGER NOT NULL,
-last_modified VARCHAR(14) NULL,
-display_name VARCHAR(50) NULL,
-email VARCHAR(100) NULL
+user_id integer NOT NULL,
+last_modified varchar(14) NULL,
+display_name varchar(50) NULL,
+email varchar(100) NULL
 )";
 
 //faquserlogin
 $query[] = "CREATE TABLE ".SQLPREFIX."faquserlogin (
-login VARCHAR(25) NOT NULL,
-pass VARCHAR(150) NULL,
+login varchar(25) NOT NULL,
+pass varchar(150) NULL,
 PRIMARY KEY (login)
 )";
 
 //faquser_group
 $query[] = "CREATE TABLE ".SQLPREFIX."faquser_group (
-user_id INTEGER NOT NULL,
-group_id INTEGER NOT NULL,
+user_id integer NOT NULL,
+group_id integer NOT NULL,
 PRIMARY KEY (user_id, group_id)
 )";
 
 //faquser_right
 $query[] = "CREATE TABLE ".SQLPREFIX."faquser_right (
-user_id INTEGER NOT NULL,
-right_id INTEGER NOT NULL,
+user_id integer NOT NULL,
+right_id integer NOT NULL,
 PRIMARY KEY (user_id, right_id)
 )";
 

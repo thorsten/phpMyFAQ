@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mssql.update.sql.php,v 1.3 2006-08-22 18:29:59 matteo Exp $
+* $Id: mssql.update.sql.php,v 1.4 2006-08-24 19:55:13 matteo Exp $
 *
 * CREATE TABLE instruction for MS SQL Server database
 *
@@ -75,9 +75,9 @@ group_id integer NOT NULL,
 name varchar(25) NULL,
 description text NULL,
 auto_join integer NULL,
-PRIMARY KEY(group_id),
-UNIQUE INDEX name(name)
-)";
+PRIMARY KEY(group_id)
+)
+CREATE UNIQUE INDEX idxName ON ".$sqltblpre."faqgroup (name)";
 
 //faqgroup_right
 $query[] = "CREATE TABLE ".SQLPREFIX."faqgroup_right (
