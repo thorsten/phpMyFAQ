@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.80 2006-08-24 20:38:20 matteo Exp $
+* $Id: update.php,v 1.81 2006-08-25 16:52:08 matteo Exp $
 *
 * Main update script
 *
@@ -1131,6 +1131,24 @@ if ($step == 5) {
         }
     }
 
+    print '<p class="center">';
+    // Perform the queries for updating/migrating the database
+    if (isset($query)) {
+        while ($each_query = each($query)) {
+            $result = @$db->query($each_query[1]);
+            print "|&nbsp;";
+            if (!$result) {
+                print "\n<div class=\"error\">\n";
+                print "<p><strong>DB error:</strong> ".$db->error()."</p>\n";
+                print "<div style=\"text-align: left;\"><p>Query:\n";
+                print "<pre>".PMF_htmlentities($each_query[1])."</pre></p></div>\n";
+                print "</div>";
+                die();
+            }
+            wait(25);
+        }
+    }
+
     // optimize tables
     switch($DB["type"]) {
         case 'mssql':
@@ -1153,9 +1171,7 @@ if ($step == 5) {
             $query[] = "VACUUM ANALYZE;";
             break;
     }
-
-    print '<p class="center">';
-    // Perform the queries for updating/migrating the database
+    // Perform the queries for optimizing the database
     if (isset($query)) {
         while ($each_query = each($query)) {
             $result = @$db->query($each_query[1]);
@@ -1220,7 +1236,7 @@ if ($step == 5) {
             print "<p class=\"center\">Please delete the file 'inc/config.php.original' manually.</p>\n";
         }
     }
-    
+
     // Remove 'scripts' folder: no need of prompt anything to the user
     if (@is_dir(PMF_ROOT_DIR."/scripts")) {
         @rmdir(PMF_ROOT_DIR."/scripts");
