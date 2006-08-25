@@ -41,6 +41,13 @@ class db_pgsql
     var $sqllog = "";
 
     /**
+     * Tables
+     *
+     * @var     array
+     */
+    var $tableNames = array();
+    
+    /**
      * Connects to the database.
      *
      * This function connects to a MySQL database
@@ -234,10 +241,10 @@ class db_pgsql
     }
 
     /**
-     * fti_check.
+     * getTableStatus.
      *
-     * This function test for FULL TEXT INDEXING extension support.
-     * FIXME: implement
+     * This function returns the table status.
+     *
      * @access  public
      * @author  Tom Rochester <tom.rochester@gmail.com>
      * @since   2004-08-06
@@ -412,6 +419,29 @@ class db_pgsql
             }
         } else {
             return 'n/a';
+        }
+    }
+
+    /**
+     * Returns an array with all table names
+     *
+     * @access  public
+     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     * @author  Tom Rochester <tom.rochester@gmail.com>
+     * @since   2006-08-25
+     */
+    function getTableNames($prefix = '')
+    {
+        // First, declare those tables that are referenced by others
+        $this->tableNames[] = $prefix.'faquser';
+
+        $result = $this->query('SELECT relname FROM pg_stat_user_tables '.(('' == $prefix) ? '' : 'LIKE \''.$prefix.'%\' ').'ORDER BY relname');
+        while ($row = $this->fetch_object($result)) {
+            foreach ($row as $tableName) {
+                if (!in_array($tableName, $this->tableNames)) {
+                    $this->tableNames[] = $tableName;
+                }
+            }
         }
     }
 }
