@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Ibase.php,v 1.4 2006-06-29 20:52:47 matteo Exp $
+* $Id: Ibase.php,v 1.5 2006-08-26 07:55:41 matteo Exp $
 *
 * db_ibase
 *
@@ -41,6 +41,13 @@ class db_ibase
     * @see  query()
     */
     var $sqllog = '';
+
+    /**
+     * Tables
+     *
+     * @var     array
+     */
+    var $tableNames = array();
 
     /**
      * Constructor
@@ -389,6 +396,21 @@ class db_ibase
         return ibase_server_info();
     }
 
+    /**
+     * Returns an array with all table names
+     *
+     * FIXME: Implement it.
+     *
+     * @access  public
+     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     * @since   2006-08-26
+     */
+    function getTableNames($prefix = '')
+    {
+        // First, declare those tables that are referenced by others
+        $this->tableNames[] = $prefix.'faquser';
+    }
+    
     /**
     * Closes the connection to the database.
     *

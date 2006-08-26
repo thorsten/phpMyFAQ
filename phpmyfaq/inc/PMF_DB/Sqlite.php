@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Sqlite.php,v 1.8 2006-08-19 10:49:14 thorstenr Exp $
+* $Id: Sqlite.php,v 1.9 2006-08-26 07:55:41 matteo Exp $
 *
 * db_sqlite
 *
@@ -41,6 +41,13 @@ class db_sqlite
      * @see   query()
      */
     private $sqllog = '';
+
+    /**
+     * Tables
+     *
+     * @var     array
+     */
+    var $tableNames = array();
 
     /**
      * Constructor
@@ -365,6 +372,27 @@ class db_sqlite
     public function server_version()
     {
         return $this->client_version();
+    }
+
+    /**
+     * Returns an array with all table names
+     *
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     * @since   2006-08-26
+     */
+    function getTableNames($prefix = '')
+    {
+        // First, declare those tables that are referenced by others
+        $this->tableNames[] = $prefix.'faquser';
+
+        $result = $this->query("SELECT name FROM sqlite_master WHERE type='table' ".(('' == $prefix) ? '':  "AND name LIKE '".$prefix."%' ")."ORDER BY name");
+        while ($row = $this->fetch_object($result)) {
+            if (!in_array($row->name, $this->tableNames)) {
+                $this->tableNames[] = $row->name;
+            }
+        }
     }
 
     /**

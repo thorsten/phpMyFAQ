@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Ibm_db2.php,v 1.3 2006-06-29 20:52:47 matteo Exp $
+* $Id: Ibm_db2.php,v 1.4 2006-08-26 07:55:41 matteo Exp $
 *
 * db_db2
 *
@@ -44,6 +44,15 @@ class db_ibm_db2
     * @see  query()
     */
     var $sqllog = "";
+
+
+
+    /**
+     * Tables
+     *
+     * @var     array
+     */
+    var $tableNames = array();
 
 
 
@@ -254,6 +263,39 @@ class db_ibm_db2
 
 
     /**
+     * This function returns the table status.
+     *
+     * TODO: Test it!
+     *
+     * @access  public
+     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     * @since   2006-08-26
+     */
+    function getTableStatus()
+    {
+        $tables = array();
+
+        $query = "
+            SELECT
+                SYSTEM_TABLE_SCHEMA, SYSTEM_TABLE_NAME, ROW_LENGTH
+            FROM
+                QSYS2.SYSTABLES
+            WHERE
+                SYSTEM_TABLE_SCHEMA like 'VDR%'
+            ORDER BY
+                SYSTEM_TABLE_NAME";
+        $result = $this->query($query);
+
+        while ($row = $this->fetch_object($result)) {
+            $tables[$row->SYSTEM_TABLE_SCHEMA] = $row->ROW_LENGTH;
+        }
+
+        return $tables;
+    }
+
+
+
+    /**
      * search()
      *
      * This function generates a result set based on a search string.
@@ -427,6 +469,41 @@ class db_ibm_db2
         $server = db2_server_info($this->conn);
         $ver = $server->DBMS_NAME.' '.$server->DBMS_VER;
         return $ver;
+    }
+
+
+
+    /**
+     * Returns an array with all table names
+     *
+     * TODO: Test it!
+     *
+     * @access  public
+     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     * @since   2006-08-26
+     */
+    function getTableNames($prefix = '')
+    {
+        // First, declare those tables that are referenced by others
+        $this->tableNames[] = $prefix.'faquser';
+
+        $query = "
+            SELECT
+                SYSTEM_TABLE_SCHEMA, SYSTEM_TABLE_NAME
+            FROM
+                QSYS2.SYSTABLES
+            WHERE
+                    SYSTEM_TABLE_SCHEMA like 'VDR%'
+                AND SYSTEM_TABLE_NAME LIKE '".$prefix."%'
+            ORDER BY
+                SYSTEM_TABLE_NAME";
+        $result = $this->query($query);
+
+        while ($row = $this->fetch_object($result)) {
+            if (!in_array($tableName, $this->tableNames)) {
+                $this->tableNames[] = $row->SYSTEM_TABLE_NAME;
+            }
+        }
     }
 
 

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Mssql.php,v 1.9 2006-08-24 19:39:52 matteo Exp $
+* $Id: Mssql.php,v 1.10 2006-08-26 07:55:41 matteo Exp $
 *
 * db_mssql
 *
@@ -201,6 +201,8 @@ class db_mssql
     {
         $tables = array();
 
+        // Note: An update from a previous PMF version, e.g. 1.6.x -> 2.0.0,
+        // may alter the tables order (~alphabetical) as expected with a fresh installation
         $query = "
             SELECT
                 obj.name AS table_name,
@@ -210,7 +212,8 @@ class db_mssql
             WHERE
                     idx.id = OBJECT_ID(obj.name)
                 AND idx.indid < 2
-                AND obj.xtype = 'u'";
+                AND obj.xtype = 'u'
+            ORDER BY obj.name";
         $result = $this->query($query);
 
         while ($row = $this->fetch_object($result)) {
@@ -218,9 +221,6 @@ class db_mssql
                 $tables[$row->table_name] = $row->table_rows;
             }
         }
-        // An update from a previous PMF version, e.g. 1.6.x -> 2.0.0,
-        // may alter the tables order (~alphabetical) as expected with a fresh installation
-        ksort($tables);
 
         return $tables;
     }
@@ -395,8 +395,8 @@ class db_mssql
     {
         // First, declare those tables that are referenced by others
         $this->tableNames[] = $prefix.'faquser';
-        
-        $result = $this->query('SELECT name FROM sysobjects WHERE type = \'u\''.(('' == $prefix) ? '' : ' AND name LIKE \''.$prefix.'%\''));
+
+        $result = $this->query('SELECT name FROM sysobjects WHERE type = \'u\''.(('' == $prefix) ? '' : ' AND name LIKE \''.$prefix.'%\' ORDER BY name'));
         while ($row = $this->fetch_object($result)) {
             foreach ($row as $tableName) {
                 if (!in_array($tableName, $this->tableNames)) {
