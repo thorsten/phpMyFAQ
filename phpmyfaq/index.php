@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.67 2006-08-17 21:05:39 matteo Exp $
+* $Id: index.php,v 1.68 2006-08-27 10:09:05 thorstenr Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the
@@ -260,8 +260,8 @@ if (isset($auth)) {
 } else {
     $login_tpl = 'template/loginbox.tpl';
 }
-if ($action != "main") {
-    $inc_tpl = "template/".$action.".tpl";
+if ($action != 'main') {
+    $inc_tpl = 'template/' . $action . '.tpl';
     $inc_php = $action.".php";
     $writeLangAdress = $_SERVER['PHP_SELF']."?".str_replace("&", "&amp;",$_SERVER["QUERY_STRING"]);
 } else {
@@ -270,10 +270,19 @@ if ($action != "main") {
         $inc_tpl = 'template/artikel.tpl';
         $inc_php = 'artikel.php';
     } else {
-        $inc_tpl = "template/main.tpl";
-        $inc_php = "main.php";
+        $inc_tpl = 'template/main.tpl';
+        $inc_php = 'main.php';
     }
     $writeLangAdress = $_SERVER['PHP_SELF']."?".$sids;
+}
+
+//
+// Set right column
+//
+if ($action == 'artikel' || $action == 'show') {
+    $right_tpl = 'template/tagcloud.tpl';
+} else {
+    $right_tpl = 'template/startpage.tpl';
 }
 
 //
@@ -282,6 +291,7 @@ if ($action != "main") {
 $tpl = new PMF_Template (array(
     'index'                 => 'template/index.tpl',
     'loginBox'              => $login_tpl,
+    'rightBox'              => $right_tpl,
     'writeContent'          => $inc_tpl));
 
 $main_template_vars = array(
@@ -301,10 +311,6 @@ $main_template_vars = array(
     "writeLangAdress"       => $writeLangAdress,
     "switchLanguages"       => selectLanguages($LANGCODE),
     "userOnline"            => userOnline().$PMF_LANG["msgUserOnline"],
-    'writeTopTenHeader'     => $PMF_LANG['msgTopTen'],
-    'writeTopTenRow'        => $faq->getTopTen(),
-    'writeNewestHeader'     => $PMF_LANG['msgLatestArticles'],
-    'writeNewestRow'        => $faq->getLatest(),
     "copyright"             => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> '.$faqconfig->get('version'));
 
 if ($faqconfig->get('mod_rewrite')) {
@@ -386,6 +392,15 @@ if (isset($auth)) {
         'password'          => $PMF_LANG['ad_auth_passwd']));
 }
 $tpl->includeTemplate('loginBox', 'index');
+
+$tpl->processTemplate('rightBox', array(
+    'writeTopTenHeader'     => $PMF_LANG['msgTopTen'],
+    'writeTopTenRow'        => $faq->getTopTen(),
+    'writeNewestHeader'     => $PMF_LANG['msgLatestArticles'],
+    'writeNewestRow'        => $faq->getLatest(),
+    'writeTagCloudHeader'   => 'Tags',
+    'writeTags'             => '@todo: tags...'));
+$tpl->includeTemplate('rightBox', 'index');
 
 //
 // Include requested PHP file

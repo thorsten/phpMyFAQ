@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: main.php,v 1.13 2006-07-23 09:14:45 matteo Exp $
+* $Id: main.php,v 1.14 2006-08-27 10:09:05 thorstenr Exp $
 *
 * The main start page with the Top10 and the latest messages
 *
@@ -39,15 +39,11 @@ if ($archived) {
     $showAllNews = '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'newsid=0">'.$PMF_LANG['newsShowArchive'].'</a>';
 }
 
-$tpl->processTemplate ('writeContent', array(
+$tpl->processTemplate('writeContent', array(
     'writeNewsHeader'       => $writeNewsHeader,
     'writeNewsRSS'          => $writeNewsRSS,
     'writeNews'             => $news->getNews($archived),
     'showAllNews'           => $showAllNews,
-    'writeNumberOfArticles' => $PMF_LANG['msgHomeThereAre'].$faq->getNumberOfRecords($LANGCODE).$PMF_LANG['msgHomeArticlesOnline'],
-    'writeTopTenHeader'     => $PMF_LANG['msgTopTen'],
-    'writeTopTenRow'        => $faq->getTopTen(),
-    'writeNewestHeader'     => $PMF_LANG['msgLatestArticles'],
-    'writeNewestRow'        => $faq->getLatest()));
+    'writeNumberOfArticles' => $PMF_LANG['msgHomeThereAre'].$faq->getNumberOfRecords($LANGCODE).$PMF_LANG['msgHomeArticlesOnline']));
 
 $tpl->includeTemplate('writeContent', 'index');
