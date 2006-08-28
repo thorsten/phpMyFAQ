@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Tags.php,v 1.2 2006-08-10 19:50:20 thorstenr Exp $
+* $Id: Tags.php,v 1.3 2006-08-28 19:15:31 thorstenr Exp $
 *
 * The main Tags class
 *
@@ -25,7 +25,7 @@ class PMF_Tags
     /**
      * DB handle
      *
-     * @var object
+     * @var object PMF_Db
      */
     var $db;
 
@@ -35,7 +35,7 @@ class PMF_Tags
      * @var string
      */
     var $language;
-    
+
     /**
      * Constructor
      *
@@ -49,12 +49,39 @@ class PMF_Tags
         $this->db = &$db;
         $this->language = $language;
     }
-    
+
+    /**
+     * Returns all tags
+     *
+     * @return  array   $tags
+     * @access  public
+     * @since   2006-08-28
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function getAllTags()
+    {
+        $tags = array();
+
+        $query = sprintf("
+            SELECT
+                tagging_id, tagging_name
+            FROM
+                %faqtags",
+            SQLPREFIX);
+
+        $result = $this->db->query($query);
+        while ($row = $this->db->fetch_object($result)) {
+            $tags[$row->tagging_id] = $row->tagging_name;
+        }
+
+        return $tags;
+    }
+
     /**
      * Returns all tags for a FAQ record
      *
-     * @param   integer $reord_id
-     * @array   array   $tags
+     * @param   integer $record_id
+     * @return  array   $tags
      * @access  public
      * @since   2006-08-10
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -62,12 +89,60 @@ class PMF_Tags
     function getAllTagsById($record_id)
     {
         $tags = array();
-        
-        
-        
+
+        $query = sprintf("");
+
         return $tags;
     }
-    
+
+    /**
+     * Saves all tags from a FAQ record
+     *
+     * @param   integer $record_id
+     * @param   array   $tags
+     * @return  boolean
+     * @since   2006-08-28
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function saveTags($record_id, $tags)
+    {
+        if (!is_array($tags)) {
+            return false;
+        }
+        $current_tags = $this->getAllTags();
+
+        foreach ($tags as $tagging_name) {
+            if (!in_array($tagging_name, $current_tags)) {
+
+                $tagging_id = $this->db->nextID(SQLPREFIX.'faqtags', 'tagging_id');
+
+                $query = sprintf("
+                    INSERT INTO
+                        %faqdata_tags
+                    (record_id, tagging_id)
+                        VALUES
+                    (%d, %d)",
+                    SQLPREFIX,
+                    $record_id,
+                    $tagging_id);
+                $this->db->query($query);
+
+                $query = sprintf("
+                    INSERT INTO
+                        %faqtags
+                    (tagging_id, tagging_name)
+                        VALUES
+                    (%d, '%s')",
+                    SQLPREFIX,
+                    $tagging_id,
+                    $tagging_name);
+                $this->db->query($query);
+            }
+        }
+
+        return true;
+    }
+
     /**
      * Returns the FAQ record IDs where all tags are included
      *
@@ -82,7 +157,7 @@ class PMF_Tags
         if (!is_array($arrayOfTags)) {
             return false;
         }
-        
+
         $query = sprintf("
             SELECT
                 d.record_id AS record_id
@@ -100,13 +175,13 @@ class PMF_Tags
             SQLPREFIX,
             implode("', '", $arrayOfTags),
             count($arrayOfTags));
-        
+
         $records = array();
         $result = $this->db->query($query);
         while ($row = $this->db->fetch_object($result)) {
             $records[] = $row->record_id;
         }
-        
+
         return $records;
     }
 
@@ -124,7 +199,7 @@ class PMF_Tags
         if (!is_array($arrayOfTags)) {
             return false;
         }
-        
+
         $query = sprintf("
             SELECT
                 d.record_id AS record_id
@@ -139,14 +214,14 @@ class PMF_Tags
             SQLPREFIX,
             SQLPREFIX,
             implode("', '", $arrayOfTags));
-        
+
         $records = array();
         $result = $this->db->query($query);
         while ($row = $this->db->fetch_object($result)) {
             $records[] = $row->record_id;
         }
-        
+
         return $records;
     }
-    
+
 }
