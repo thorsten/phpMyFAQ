@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Tags.php,v 1.3 2006-08-28 19:15:31 thorstenr Exp $
+* $Id: Tags.php,v 1.4 2006-08-28 20:06:00 thorstenr Exp $
 *
 * The main Tags class
 *
@@ -70,8 +70,10 @@ class PMF_Tags
             SQLPREFIX);
 
         $result = $this->db->query($query);
-        while ($row = $this->db->fetch_object($result)) {
-            $tags[$row->tagging_id] = $row->tagging_name;
+        if ($result) {
+            while ($row = $this->db->fetch_object($result)) {
+                $tags[$row->tagging_id] = $row->tagging_name;
+            }
         }
 
         return $tags;
