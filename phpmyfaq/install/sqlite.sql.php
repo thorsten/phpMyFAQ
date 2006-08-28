@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: sqlite.sql.php,v 1.23 2006-08-19 13:02:33 matteo Exp $
+* $Id: sqlite.sql.php,v 1.24 2006-08-28 18:56:50 thorstenr Exp $
 *
 * CREATE TABLE instructions for SQLite
 *
@@ -186,9 +186,9 @@ PRIMARY KEY (record_id, group_id))";
 
 //faqdata_tags
 $query[] = "CREATE TABLE ".$sqltblpre."faqdata_tags (
+record_id INT(11) NOT NULL,
 tagging_id INT(11) NOT NULL,
-tagging_name VARCHAR(255) NOT NULL ,
-PRIMARY KEY (tagging_id, tagging_name)
+PRIMARY KEY (record_id, tagging_id)
 )";
 
 //faqdata_user
@@ -284,9 +284,9 @@ PRIMARY KEY (sid)
 
 //faqtags
 $query[] = "CREATE TABLE ".$sqltblpre."faqtags (
-record_id INT(11) NOT NULL,
 tagging_id INT(11) NOT NULL,
-PRIMARY KEY (record_id, tagging_id)
+tagging_name VARCHAR(255) NOT NULL ,
+PRIMARY KEY (tagging_id, tagging_name)
 )";
 
 //faquser

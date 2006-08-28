@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: sqlite.update.sql.php,v 1.2 2006-08-19 10:09:53 thorstenr Exp $
+* $Id: sqlite.update.sql.php,v 1.3 2006-08-28 18:56:50 thorstenr Exp $
 *
 * CREATE TABLE instructions for SQLite
 *
@@ -51,9 +51,9 @@ PRIMARY KEY (record_id, group_id))";
 
 //faqdata_tags
 $query[] = "CREATE TABLE ".SQLPREFIX."faqdata_tags (
+record_id INT(11) NOT NULL,
 tagging_id INT(11) NOT NULL,
-tagging_name VARCHAR(255) NOT NULL ,
-PRIMARY KEY (tagging_id, tagging_name)
+PRIMARY KEY (record_id, tagging_id)
 )";
 
 //faqdata_user
@@ -112,9 +112,9 @@ PRIMARY KEY(right_id)
 
 //faqtags
 $query[] = "CREATE TABLE ".SQLPREFIX."faqtags (
-record_id INT(11) NOT NULL,
 tagging_id INT(11) NOT NULL,
-PRIMARY KEY (record_id, tagging_id)
+tagging_name VARCHAR(255) NOT NULL ,
+PRIMARY KEY (tagging_id, tagging_name)
 )";
 
 //faquser

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: pgsql.sql.php,v 1.26 2006-08-20 20:02:29 matteo Exp $
+* $Id: pgsql.sql.php,v 1.27 2006-08-28 18:56:50 thorstenr Exp $
 *
 * CREATE TABLE instruction for PostgreSQL database
 *
@@ -229,9 +229,9 @@ PRIMARY KEY (record_id, group_id))";
 
 //faqdata_tags
 $query[] = "CREATE TABLE ".$sqltblpre."faqdata_tags (
-tagging_id SERIAL NOT NULL,
-tagging_name VARCHAR(255) NOT NULL,
-PRIMARY KEY (tagging_id, tagging_name)
+record_id INT4 NOT NULL,
+tagging_id INT4 NOT NULL,
+PRIMARY KEY (record_id, tagging_id)
 )";
 
 //faqdata_user
@@ -318,9 +318,9 @@ PRIMARY KEY (sid)
 
 //faqtags
 $query[] = "CREATE TABLE ".$sqltblpre."faqtags (
-record_id INT4 NOT NULL,
-tagging_id INT4 NOT NULL,
-PRIMARY KEY (record_id, tagging_id)
+tagging_id SERIAL NOT NULL,
+tagging_name VARCHAR(255) NOT NULL,
+PRIMARY KEY (tagging_id, tagging_name)
 )";
 
 //faquserdata

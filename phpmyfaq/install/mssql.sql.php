@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mssql.sql.php,v 1.15 2006-08-22 18:29:59 matteo Exp $
+* $Id: mssql.sql.php,v 1.16 2006-08-28 18:56:50 thorstenr Exp $
 *
 * CREATE TABLE instruction for MS SQL Server database
 *
@@ -200,9 +200,9 @@ PRIMARY KEY (record_id, group_id))";
 
 //faqdata_tags
 $query[] = "CREATE TABLE ".$sqltblpre."faqdata_tags (
+record_id INTEGER NOT NULL,
 tagging_id INTEGER NOT NULL,
-tagging_name VARCHAR(255) NOT NULL ,
-PRIMARY KEY (tagging_id, tagging_name)
+PRIMARY KEY (record_id, tagging_id)
 )";
 
 //faqdata_user
@@ -299,9 +299,9 @@ PRIMARY KEY (sid)
 
 //faqtags
 $query[] = "CREATE TABLE ".$sqltblpre."faqtags (
-record_id INTEGER NOT NULL,
 tagging_id INTEGER NOT NULL,
-PRIMARY KEY (record_id, tagging_id)
+tagging_name VARCHAR(255) NOT NULL ,
+PRIMARY KEY (tagging_id, tagging_name)
 )";
 
 //faquserdata

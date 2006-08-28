@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ibm_db2.update.sql.php,v 1.2 2006-08-19 11:03:53 thorstenr Exp $
+* $Id: ibm_db2.update.sql.php,v 1.3 2006-08-28 18:56:50 thorstenr Exp $
 *
 * CREATE TABLE instruction for IBM DB2 Universal Database, IBM Cloudscape,
 * and Apache Derby databases
@@ -51,9 +51,9 @@ PRIMARY KEY (record_id, group_id))";
 
 //faqdata_tags
 $query[] = "CREATE TABLE ".SQLPREFIX."faqdata_tags (
+record_id INTEGER NOT NULL,
 tagging_id INTEGER NOT NULL,
-tagging_name VARCHAR(255) NOT NULL ,
-PRIMARY KEY (tagging_id, tagging_name)
+PRIMARY KEY (record_id, tagging_id)
 )";
 
 //faqdata_user
@@ -113,9 +113,9 @@ PRIMARY KEY (right_id)
 
 //faqtags
 $query[] = "CREATE TABLE ".SQLPREFIX."faqtags (
-record_id INTEGER NOT NULL,
 tagging_id INTEGER NOT NULL,
-PRIMARY KEY (record_id, tagging_id)
+tagging_name VARCHAR(255) NOT NULL ,
+PRIMARY KEY (tagging_id, tagging_name)
 )";
 
 //faquser
