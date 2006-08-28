@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.edit.php,v 1.41 2006-08-28 19:30:15 thorstenr Exp $
+* $Id: record.edit.php,v 1.42 2006-08-28 19:55:16 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23
@@ -27,9 +27,6 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 $user = PMF_CurrentUser::getFromSession($faqconfig->get('ipcheck'));
 
 if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
-
-    require_once(PMF_ROOT_DIR.'/inc/Tags.php');
-
     $tree = new PMF_Category($LANGCODE);
     $tree->buildTree();
     $rubrik = '';
@@ -239,7 +236,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     <label class="lefteditor" for="keywords"><?php print $PMF_LANG["ad_entry_keywords"]; ?></label>
     <input name="keywords" id="keywords" style="width: 390px;" value="<?php if (isset($keywords)) { print htmlspecialchars($keywords); } ?>" /><br />
 
-    <label class="lefteditor" for="tags"><?php print $PMF_LANG['ad_entry_tags']; ?></label>
+    <label class="lefteditor" for="tags"><?php print $PMF_LANG['ad_entry_tags']; ?>:</label>
     <input name="tags" id="tags" style="width: 390px;" value="<?php if (isset($tags)) { print htmlspecialchars($tags); } ?>" /><br />
 
     <label class="lefteditor" for="author"><?php print $PMF_LANG["ad_entry_author"]; ?></label>

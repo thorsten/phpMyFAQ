@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.62 2006-08-18 11:20:50 matteo Exp $
+* $Id: index.php,v 1.63 2006-08-28 19:55:16 thorstenr Exp $
 *
 * The main admin backend index file
 *
@@ -43,6 +43,7 @@ require_once(PMF_ROOT_DIR.'/inc/Utils.php');
 require_once(PMF_ROOT_DIR.'/inc/Category.php');
 require_once(PMF_ROOT_DIR.'/inc/Faq.php');
 require_once(PMF_ROOT_DIR.'/inc/Linkverifier.php');
+require_once(PMF_ROOT_DIR.'/inc/Tags.php');
 require_once(PMF_ROOT_DIR.'/inc/PMF_User/CurrentUser.php');
 require_once(PMF_ROOT_DIR.'/inc/libs/idna_convert.class.php');
 $IDN = new idna_convert;
