@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Tags.php,v 1.4 2006-08-28 20:06:00 thorstenr Exp $
+* $Id: Tags.php,v 1.5 2006-08-28 20:16:20 thorstenr Exp $
 *
 * The main Tags class
 *
@@ -66,7 +66,7 @@ class PMF_Tags
             SELECT
                 tagging_id, tagging_name
             FROM
-                %faqtags",
+                %sfaqtags",
             SQLPREFIX);
 
         $result = $this->db->query($query);
@@ -120,7 +120,7 @@ class PMF_Tags
 
                 $query = sprintf("
                     INSERT INTO
-                        %faqdata_tags
+                        %sfaqdata_tags
                     (record_id, tagging_id)
                         VALUES
                     (%d, %d)",
@@ -131,7 +131,7 @@ class PMF_Tags
 
                 $query = sprintf("
                     INSERT INTO
-                        %faqtags
+                        %sfaqtags
                     (tagging_id, tagging_name)
                         VALUES
                     (%d, '%s')",
