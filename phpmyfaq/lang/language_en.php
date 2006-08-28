@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.44 2006-08-21 21:04:51 matteo Exp $
+* $Id: language_en.php,v 1.45 2006-08-28 19:35:38 thorstenr Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -779,3 +779,4 @@ $PMF_LANG['err_expiredArticle'] = 'This entry is expired and can not be displaye
 $PMF_LANG['err_expiredNews'] = 'This news is expired and can not be displayed';
 $PMF_LANG['err_inactiveNews'] = 'This news is in revision and can not be displayed';
 $PMF_LANG['msgSearchOnAllLanguages'] = 'Search over all languages:';
+$PMF_LANG['ad_entry_tags'] = 'Tags';

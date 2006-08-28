@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.24 2006-08-15 10:04:54 thorstenr Exp $
+ * $Id: language_de.php,v 1.25 2006-08-28 19:35:38 thorstenr Exp $
  *
  * German language file
  *
@@ -768,3 +768,8 @@ $PMF_LANG['admin_mainmenu_logout'] = 'Logout';
 // added v2.0.0 - 2006-08-15 by Thorsten
 $PMF_LANG["ad_categ_owner"] = 'Kategorieverwalter';
 $PMF_LANG['adminSection'] = 'Administration';
+$PMF_LANG['err_expiredArticle'] = 'Dieser Eintrag ist abgelaufen und kann nicht angezeigt werden';
+$PMF_LANG['err_expiredNews'] = 'Diese Nachricht ist abgelaufen und kann nicht angezeigt werden';
+$PMF_LANG['err_inactiveNews'] = 'Diese Nachricht werden überarbeitet und kann nicht angezeigt werden';
+$PMF_LANG['msgSearchOnAllLanguages'] = 'Alle Sprachen durchsuchen:';
+$PMF_LANG['ad_entry_tags'] = 'Tags';
