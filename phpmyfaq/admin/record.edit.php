@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.edit.php,v 1.40 2006-08-19 13:55:10 matteo Exp $
+* $Id: record.edit.php,v 1.41 2006-08-28 19:30:15 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23
@@ -23,21 +23,19 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
-// FIXME: Why we loose $user object? E.g.: the code below returns no user found
-/*
-print('User id '.$user->getUserId().'<pre>');
-print_r($user->errors);
-print('</pre>');
-*/
 // Re-evaluate $user
 $user = PMF_CurrentUser::getFromSession($faqconfig->get('ipcheck'));
 
 if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
+
+    require_once(PMF_ROOT_DIR.'/inc/Tags.php');
+
     $tree = new PMF_Category($LANGCODE);
     $tree->buildTree();
     $rubrik = '';
     $thema = '';
     $categories = array('category_id', 'category_lang');
+    $tagging = new PMF_Tags($db, $LANGCODE);
 
     if (isset($_REQUEST["action"]) && $_REQUEST["action"] == "takequestion") {
 
@@ -69,6 +67,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
         }
         $active = $_REQUEST["active"];
         $keywords = $_REQUEST["keywords"];
+        $tags = $_REQUEST["tags"];
         $thema = $_REQUEST["thema"];
         $content = htmlspecialchars($_REQUEST["content"]);
         $author = $_REQUEST["author"];
@@ -101,6 +100,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
             $revision_id = $faqData['revision_id'];
             $active      = $faqData['active'];
             $keywords    = $faqData['keywords'];
+            $tags        = implode(' ', $tagging->getAllTagsById($id));
             $thema       = $faqData['title'];
             $content     = htmlspecialchars($faqData['content']);
             $author      = $faqData['author'];
@@ -172,6 +172,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
             $revision_id = $faqData['revision_id'];
             $active      = $faqData['active'];
             $keywords    = $faqData['keywords'];
+            $tags        = implode(' ', $tagging->getAllTagsById($id));
             $thema       = $faqData['title'];
             $content     = htmlspecialchars($faqData['content']);
             $author      = $faqData['author'];
@@ -237,6 +238,9 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 
     <label class="lefteditor" for="keywords"><?php print $PMF_LANG["ad_entry_keywords"]; ?></label>
     <input name="keywords" id="keywords" style="width: 390px;" value="<?php if (isset($keywords)) { print htmlspecialchars($keywords); } ?>" /><br />
+
+    <label class="lefteditor" for="tags"><?php print $PMF_LANG['ad_entry_tags']; ?></label>
+    <input name="tags" id="tags" style="width: 390px;" value="<?php if (isset($tags)) { print htmlspecialchars($tags); } ?>" /><br />
 
     <label class="lefteditor" for="author"><?php print $PMF_LANG["ad_entry_author"]; ?></label>
     <input name="author" id="author" style="width: 390px;" value="<?php if (isset($author)) { print htmlspecialchars($author); } else { print $user->getUserData('display_name'); } ?>" /><br />
@@ -378,4 +382,3 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 } elseif ($permission["editbt"] && emptyTable(SQLPREFIX."faqcategories")) {
     print $PMF_LANG["no_cats"];
 }
-?>
