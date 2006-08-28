@@ -1,14 +1,13 @@
 TODO list for future versions of phpMyFAQ:
 
 2.0.0 "Prometheus":
-- improved export functions
 - reorder records
-- improved category and FAQ record functions
 - show/edit/delete comments
 - add "submit translation" link
 - bugfixing for stability or security reasons
 
 2.1.0 "Pandora":
+- add archive function
 - batch insertion script
 - subscription service for new articles ?
 - message to the user, who has posted a question and an answer is availible ?
