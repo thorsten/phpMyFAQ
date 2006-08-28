@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Configuration.php,v 1.8 2006-08-25 17:15:58 matteo Exp $
+* $Id: Configuration.php,v 1.9 2006-08-28 18:08:15 matteo Exp $
 *
 * The main class for fetching the configuration, update and delete items.
 *
@@ -42,9 +42,9 @@ class PMF_Configuration
     * @return   void
     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
     */
-    function PMF_Configuration(&$db)
+    function PMF_Configuration($db)
     {
-        $this->db = &$db;
+        $this->db = $db;
     }
 
     /**
@@ -56,6 +56,14 @@ class PMF_Configuration
     */
     function getAll()
     {
+        global $PMF_LANG, $LANG_CONF;
+        // Load the Configuration Keys
+        if (!isset($LANG_CONF)) {
+            // Hack: avoid circular reference
+            $PMF_CONF['attmax'] = 2048000;
+            require('../lang/language_en.php');
+        }
+
         $query = sprintf("
             SELECT
                 config_name, config_value
@@ -64,10 +72,14 @@ class PMF_Configuration
             SQLPREFIX);
         $result = $this->db->query($query);
         while ($row = $this->db->fetch_object($result)) {
+            // Check if this config value is a boolean one
+            $isBooleanValue = false;
+            if (isset($LANG_CONF[$row->config_name])) {
+                $isBooleanValue = ('checkbox' == $LANG_CONF[$row->config_name][0]);
+            }
             // Fix the boolean values
             $isTrueValue  = ('1' == ($row->config_value)) || ('true'  == ($row->config_value));
-            $isFalseValue = (''  == ($row->config_value)) || ('false' == ($row->config_value));
-            if ($isTrueValue || $isFalseValue) {
+            if ($isBooleanValue) {
                 $this->config[$row->config_name] = $isTrueValue;
             } else {
                 $this->config[$row->config_name] = $row->config_value;
@@ -111,7 +123,7 @@ class PMF_Configuration
                     WHERE
                         config_name = '%s'",
                     SQLPREFIX,
-                    $this->db->escape_string($value),
+                    $this->db->escape_string(trim($value)),
                     $name
                     );
                 $this->db->query($query);
