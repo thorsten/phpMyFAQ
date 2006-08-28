@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: header.php,v 1.22 2006-08-15 07:38:39 thorstenr Exp $
+* $Id: header.php,v 1.23 2006-08-28 20:23:03 thorstenr Exp $
 *
 * header of the admin area
 *
@@ -75,7 +75,7 @@ header("Vary: Negotiate,Accept");
         <li><a href="index.php?action=export"><?php print $PMF_LANG['admin_mainmenu_exports']; ?></a></li>
         <li><a href="index.php?action=backup"><?php print $PMF_LANG['admin_mainmenu_backup']; ?></a></li>
         <li><a href="index.php?action=config"><?php print $PMF_LANG['admin_mainmenu_configuration']; ?></a></li>
-        <li><a href="index.php?action=logout"><?php print $PMF_LANG['admin_mainmenu_logout']; ?></a></li>
+        <li><a id="logout" href="index.php?action=logout"><?php print $PMF_LANG['admin_mainmenu_logout']; ?></a></li>
     </ul>
 </div>
 
