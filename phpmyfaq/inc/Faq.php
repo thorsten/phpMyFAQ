@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.52 2006-08-19 13:55:11 matteo Exp $
+* $Id: Faq.php,v 1.53 2006-08-28 18:32:07 matteo Exp $
 *
 * The main FAQ class
 *
@@ -1357,6 +1357,8 @@ class PMF_Faq
      * Adds a new changelog entry in the table faqchanges
      *
      * @param   integer $id
+     * @param   integer $userId
+     * @param   string  $text
      * @param   string  $lang
      * @return  boolean
      * @access  private
@@ -1364,10 +1366,10 @@ class PMF_Faq
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      */
-    function createChangeEntry($id, $username, $text, $lang)
+    function createChangeEntry($id, $userId, $text, $lang)
     {
         if (   !is_numeric($id)
-            && !is_string($username)
+            && !is_numeric($userId)
             && !is_string($text)
             && !is_string($lang)
             ) {
@@ -1379,11 +1381,11 @@ class PMF_Faq
                 %sfaqchanges
             (id, beitrag, usr, datum, what, lang)
             VALUES
-                (%d, %d, '%s', %d, '%s', '%s')",
+                (%d, %d, %d, %d, '%s', '%s')",
             SQLPREFIX,
             $this->db->nextID(SQLPREFIX."faqchanges", "id"),
             $id,
-            $username,
+            $userId,
             time(),
             $text,
             $lang
