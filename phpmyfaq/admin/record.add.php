@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.add.php,v 1.40 2006-08-19 13:55:10 matteo Exp $
+* $Id: record.add.php,v 1.41 2006-08-28 19:56:05 thorstenr Exp $
 *
 * Adds a record in the database
 *
@@ -38,9 +38,21 @@ if ($permission["editbt"]) {
         adminlog("Beitragcreatesave");
         printf("<h2>%s</h2>\n", $PMF_LANG['ad_entry_aor']);
 
-        $dateStart = $_POST['dateStartYYYY'].$_POST['dateStartMM'].$_POST['dateStartDD'].$_POST['dateStartHH'].$_POST['dateStartmm'].$_POST['dateStartss'];
+        $tagging = new PMF_Tags($db, $LANGCODE);
+
+        $dateStart = $_POST['dateStartYYYY'] .
+                     $_POST['dateStartMM'] .
+                     $_POST['dateStartDD'] .
+                     $_POST['dateStartHH'] .
+                     $_POST['dateStartmm'] .
+                     $_POST['dateStartss'];
         $dateStart = str_pad($dateStart, 14, '0', STR_PAD_RIGHT);
-        $dateEnd   = $_POST['dateEndYYYY'].$_POST['dateEndMM'].$_POST['dateEndDD'].$_POST['dateEndHH'].$_POST['dateEndmm'].$_POST['dateEndss'];
+        $dateEnd   = $_POST['dateEndYYYY'] .
+                     $_POST['dateEndMM'] .
+                     $_POST['dateEndDD'] .
+                     $_POST['dateEndHH'] .
+                     $_POST['dateEndmm'] .
+                     $_POST['dateEndss'];
         $dateEnd   = str_pad($dateEnd, 14, '0', STR_PAD_RIGHT);
         // Sanity checks
         if ('00000000000000' == $dateEnd) {
@@ -63,18 +75,23 @@ if ($permission["editbt"]) {
         );
 
         $categories = $_POST['rubrik'];
+        $tags       = $db->escape_string($_POST['tags']);
 
         // Add new record and get that ID
         $nextID = $faq->addRecord($recordData);
 
         if ($nextID) {
             // Create ChangeLog entry
-            $faq->createChangeEntry($nextID, $user->getUserId(), nl2br($_POST["changed"]), $recordData['lang']);
+            $faq->createChangeEntry($nextID, $user->getUserId(), nl2br($db->escape_string($_POST["changed"])), $recordData['lang']);
             // Create the visit entry
             $faq->createNewVisit($nextID, $recordData['lang']);
             // Insert the new category relations
             $faq->addCategoryRelation($categories, $nextID, $recordData['lang']);
+            // Insert the tags
+            $tagging->saveTags($nextID, explode(' ',$tags));
+
             print $PMF_LANG["ad_entry_savedsuc"];
+
             // Call Link Verification
             link_ondemand_javascript($nextID, $recordData['lang']);
         } else {
