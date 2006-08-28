@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.67 2006-08-19 10:28:37 matteo Exp $
+* $Id: installer.php,v 1.68 2006-08-28 19:21:46 matteo Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -915,7 +915,7 @@ foreach ($permLevels as $level => $desc) {
     print "<p class=\"center\">Congratulation! Everything seems to be okay.</p>\n";
     print "<p class=\"center\">You can visit <a href=\"../index.php\">your version of phpMyFAQ</a> or</p>\n";
     print "<p class=\"center\">login into your <a href=\"../admin/index.php\">admin section</a>.</p>\n";
-    
+
     // Remove 'scripts' folder: no need of prompt anything to the user
     if (file_exists(PMF_ROOT_DIR."/scripts") && is_dir(PMF_ROOT_DIR."/scripts")) {
         @rmdir(PMF_ROOT_DIR."/scripts");
@@ -936,6 +936,6 @@ foreach ($permLevels as $level => $desc) {
     } else {
         print "<p class=\"center\">Please delete the file 'update.php' manually.</p>\n";
     }
-    
+
     HTMLFooter();
 }

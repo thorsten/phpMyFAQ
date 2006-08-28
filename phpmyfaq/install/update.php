@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.81 2006-08-25 16:52:08 matteo Exp $
+* $Id: update.php,v 1.82 2006-08-28 19:21:46 matteo Exp $
 *
 * Main update script
 *
@@ -600,6 +600,14 @@ if ($step == 5) {
     $images = array();
 
     if (version_compare($version, '2.0.0', '<')) {
+        // Fix old/odd errors
+        // 1/1. Fix faqchanges.usr
+        switch($DB["type"]) {
+            default:
+                $query[] = 'UPDATE '.SQLPREFIX.'faqchanges SET usr = 1 WHERE usr = 0';
+                break;
+        }
+        // Start 1.6.x -> 2.0.0 migration
         // 1/13. Fix faqfragen table
         switch($DB["type"]) {
             case 'mssql':
