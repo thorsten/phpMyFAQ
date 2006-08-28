@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.24 2006-08-21 21:04:51 matteo Exp $
+* $Id: language_it.php,v 1.25 2006-08-28 20:34:25 matteo Exp $
 *
 * Italian language file
 *
@@ -677,6 +677,7 @@ $PMF_LANG['ad_linkcheck_openurl_tooslow'] = 'L\'host <strong>%s</strong> &egrave
 $PMF_LANG['ad_linkcheck_openurl_nodns'] = 'La risoluzione DNS dell\'host <strong>%s</strong> &egrave; lenta o non &egrave; possibile effettuarla tramite i settaggi attuali del DNS, locale o remoto.';
 $PMF_LANG['ad_linkcheck_openurl_redirected'] = 'L\'URL &ègrave; stata rediretta <strong>%s</strong>.';
 $PMF_LANG['ad_linkcheck_openurl_ambiguous'] = 'E\' stato ritornato uno stato HTTP ambiguo, <strong>%s</strong>.';
+$PMF_LANG['ad_linkcheck_openurl_not_allowed'] = 'Il metodo <em>HEAD</em> non è supportato dal server <strong>%s<strong>, questi i metodi supportati: <strong>%s</strong>.';
 $PMF_LANG['ad_linkcheck_protocol_unsupported'] = 'Il protocollo %s non &egrave; supportato dalla verifica automatica dei links.';
 $PMF_LANG['ad_menu_linkconfig'] = 'Configura la verifica automatica delle URL';
 $PMF_LANG['ad_linkcheck_config_title'] = 'Configurazione della verifica delle URL';
@@ -779,3 +780,4 @@ $PMF_LANG['err_expiredArticle'] = 'Questa FAQ &egrave; in scaduta e non pu&ograv
 $PMF_LANG['err_expiredNews'] = 'Questa notizia &egrave; in scaduta e non pu&ograve; essere visualizzata.';
 $PMF_LANG['err_inactiveNews'] = 'Questa notizia &egrave; in revisione e non pu&ograve; essere visualizzata.';
 $PMF_LANG['msgSearchOnAllLanguages'] = 'Cerca in tutte le lingue:';
+$PMF_LANG['ad_entry_tags'] = '<a href="http://en.wikipedia.org/wiki/Tags" target="_blank">Tags</a>';

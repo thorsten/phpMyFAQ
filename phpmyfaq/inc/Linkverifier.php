@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Linkverifier.php,v 1.4 2006-08-19 13:02:33 matteo Exp $
+* $Id: Linkverifier.php,v 1.5 2006-08-28 20:34:25 matteo Exp $
 *
 * PMF_Linkverifier
 *
@@ -419,13 +419,14 @@ class PMF_Linkverifier
 
         // parse URL
         $urlParts = @parse_url($url);
-        foreach(array('scheme' => 'http',
-                      'host' => $_SERVER['SERVER_NAME'],
-                                    'user' => '',
-                                    'pass' => '',
-                                    'path' => '/',
-                                    'query' => '',
-                                    'fragment' => '') as $_key => $_value) {
+        foreach(array(
+                    'scheme' => 'http',
+                    'host' => $_SERVER['HTTP_HOST'],
+                    'user' => '',
+                    'pass' => '',
+                    'path' => '/',
+                    'query' => '',
+                    'fragment' => '') as $_key => $_value) {
             if (!(isset($urlParts[$_key]))) {
                 $urlParts[$_key] = $_value;
             }
@@ -478,14 +479,19 @@ class PMF_Linkverifier
 
         // parse response
         $code = 0;
+        $allowVerbs = 'n/a';
         $location = $url;
         $response = explode("\r\n", $_response);
+
         foreach ($response as $_response) {
             if (preg_match("/^HTTP\/[^ ]+ ([01-9]+) .*$/", $_response, $matches)) {
                 $code = $matches[1];
             }
             if (preg_match("/^Location: (.*)$/", $_response, $matches)) {
                 $location = $matches[1];
+            }
+            if (preg_match("/^Allow: (.*)$/", $_response, $matches)) {
+                $allowVerbs = $matches[1];
             }
         }
 
@@ -503,6 +509,13 @@ class PMF_Linkverifier
             case '300': // Multiple choices
             case '401': // Unauthorized (but it's there. right ?)
                         return array(true, $redirectCount, sprintf($PMF_LANG['ad_linkcheck_openurl_ambiguous'], $code));
+                        break;
+            case '405': // Method Not Allowed
+                        // TODO: add a fallback to use GET method?
+                        return array(true, $redirectCount, sprintf($PMF_LANG['ad_linkcheck_openurl_not_allowed'], $urlParts['host'], $allowVerbs));
+                        break;
+            default:    // All other statuses
+                        return array(false, $redirectCount, sprintf($PMF_LANG['ad_linkcheck_openurl_ambiguous'], $code));
                         break;
         }
 
@@ -683,7 +696,7 @@ class PMF_Linkverifier
             return '<img src="images/url-disabled.png">';
         }
 
-        // check if article entry exists (we should not neeed this)
+        // check if article entry exists (we should not need this)
         $src = $this->getEntryState($id, $artlang, false);
         if ($src === false) {
             return '<img src="images/url-disabled.png">';

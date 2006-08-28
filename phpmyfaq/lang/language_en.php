@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.45 2006-08-28 19:35:38 thorstenr Exp $
+* $Id: language_en.php,v 1.46 2006-08-28 20:34:25 matteo Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -677,6 +677,7 @@ $PMF_LANG['ad_linkcheck_openurl_tooslow'] = 'Host <strong>%s</strong> is slow or
 $PMF_LANG['ad_linkcheck_openurl_nodns'] = 'DNS resolution of host <strong>%s</strong> is slow or is failed due to DNS issues, local or remote.';
 $PMF_LANG['ad_linkcheck_openurl_redirected'] = 'URL was redirected to <strong>%s</strong>.';
 $PMF_LANG['ad_linkcheck_openurl_ambiguous'] = 'Ambiguous HTTP status <strong>%s</strong> returned.';
+$PMF_LANG['ad_linkcheck_openurl_not_allowed'] = 'The <em>HEAD</em> method is not supported by the host <strong>%s</strong>, allowed methods: <strong>%s</strong>.';
 $PMF_LANG['ad_linkcheck_protocol_unsupported'] = '%s protocol unsupported by Automatic link verification.';
 $PMF_LANG['ad_menu_linkconfig'] = 'Configure URL Verifier';
 $PMF_LANG['ad_linkcheck_config_title'] = 'URL Verifier Configuration';
