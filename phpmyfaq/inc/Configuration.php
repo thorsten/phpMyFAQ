@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Configuration.php,v 1.9 2006-08-28 18:08:15 matteo Exp $
+* $Id: Configuration.php,v 1.10 2006-08-28 20:12:39 thorstenr Exp $
 *
 * The main class for fetching the configuration, update and delete items.
 *
@@ -61,7 +61,7 @@ class PMF_Configuration
         if (!isset($LANG_CONF)) {
             // Hack: avoid circular reference
             $PMF_CONF['attmax'] = 2048000;
-            require('../lang/language_en.php');
+            require_once(dirname(dirname(__FILE__)).'/lang/language_en.php');
         }
 
         $query = sprintf("
