@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.45 2006-08-19 16:14:35 matteo Exp $
+* $Id: artikel.php,v 1.46 2006-08-29 19:40:21 thorstenr Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -203,6 +203,10 @@ if (($faq->faqRecord['active'] != 'yes') || ('n' == $faq->faqRecord['comment']) 
         $PMF_LANG['msgWriteComment']);
 }
 
+// Get the tags for this entry
+require_once('inc/Tags.php');
+$tagging = new PMF_Tags($db, $LANGCODE);
+
 // Set the template variables
 $tpl->processTemplate ("writeContent", array(
     'writeRubrik'                 => $categoryName.'<br />',
@@ -211,6 +215,8 @@ $tpl->processTemplate ("writeContent", array(
     'writeArticleCategoryHeader'  => $PMF_LANG['msgArticleCategories'],
     'writeArticleCategories'      => $writeMultiCategories,
     'writeContent'                => preg_replace_callback("/<code([^>]*)>(.*?)<\/code>/is", 'hilight', $content),
+    'writeTagHeader'              => ': ',
+    'writeArticleTags'            => $tagging->getAllTagsById($id),
     'writeDateMsg'                => $PMF_LANG['msgLastUpdateArticle'].$faq->faqRecord['date'],
     'writeRevision'               => $PMF_LANG['ad_entry_revision'].': 1.'.$faq->faqRecord['revision_id'],
     'writeAuthor'                 => $PMF_LANG['msgAuthor'].$faq->faqRecord['author'],
