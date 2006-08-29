@@ -11,7 +11,7 @@
     <!-- /Article Categories Listing -->
 
     <!-- Tags -->
-    <p>{writeTagHeader} {writeArticleTags}</p>
+    <p><strong>{writeTagHeader}</strong> {writeArticleTags}</p>
     <!-- /Tags -->
 
     <!-- Article Info -->
