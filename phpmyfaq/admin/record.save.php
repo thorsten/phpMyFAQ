@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.save.php,v 1.36 2006-08-19 13:55:10 matteo Exp $
+* $Id: record.save.php,v 1.37 2006-08-29 21:45:41 matteo Exp $
 *
 * Save or update a FAQ record
 *
@@ -85,16 +85,27 @@ if (    isset($submit[1])
     $content   = $db->escape_string($_REQUEST["content"]);
     $keywords  = $db->escape_string($_REQUEST["keywords"]);
     $author    = $db->escape_string($_REQUEST["author"]);
-    $dateStart = $_POST['dateStartYYYY'].$_POST['dateStartMM'].$_POST['dateStartDD'].$_POST['dateStartHH'].$_POST['dateStartmm'].$_POST['dateStartss'];
+
+    $tagging = new PMF_Tags($db, $LANGCODE);
+
+    $dateStart = $_POST['dateStartYYYY'] .
+                 $_POST['dateStartMM'] .
+                 $_POST['dateStartDD'] .
+                 $_POST['dateStartHH'] .
+                 $_POST['dateStartmm'] .
+                 $_POST['dateStartss'];
     $dateStart = str_pad($dateStart, 14, '0', STR_PAD_RIGHT);
-    $dateEnd   = $_POST['dateEndYYYY'].$_POST['dateEndMM'].$_POST['dateEndDD'].$_POST['dateEndHH'].$_POST['dateEndmm'].$_POST['dateEndss'];
+    $dateEnd   = $_POST['dateEndYYYY'] .
+                 $_POST['dateEndMM'] .
+                 $_POST['dateEndDD'] .
+                 $_POST['dateEndHH'] .
+                 $_POST['dateEndmm'] .
+                 $_POST['dateEndss'];
     $dateEnd   = str_pad($dateEnd, 14, '0', STR_PAD_RIGHT);
     // Sanity checks
     if ('00000000000000' == $dateEnd) {
         $dateEnd = '99991231235959';
     }
-    $dateStart = ('' == $dateStart) ? '00000000000000' : $db->escape_string($dateStart);
-    $dateEnd   = ('' == $dateEnd)   ? '99991231235959' : $db->escape_string($dateEnd);
 
     if (isset($_REQUEST["comment"]) && $_REQUEST["comment"] != "") {
         $comment = $_REQUEST["comment"];
@@ -102,8 +113,9 @@ if (    isset($submit[1])
         $comment = "n";
     }
 
-    $datum = date("YmdHis");
+    $datum  = date("YmdHis");
     $rubrik = $_REQUEST["rubrik"];
+    $tags   = $db->escape_string($_POST['tags']);
 
     $_result = $db->query("SELECT id, lang FROM ".SQLPREFIX."faqdata WHERE id = ".$_REQUEST["id"]." AND lang = '".$_REQUEST["language"]."'");
     $num = $db->num_rows($_result);
@@ -128,6 +140,8 @@ if (    isset($submit[1])
     foreach ($rubrik as $categories) {
         $db->query("INSERT INTO ".SQLPREFIX."faqcategoryrelations VALUES (".$categories.", '".$_REQUEST["language"]."', ".$_REQUEST["id"].", '".$_REQUEST["language"]."');");
     }
+    // Insert the tags
+    $tagging->saveTags($_REQUEST['id'], explode(' ',$tags));
 }
 
 if (isset($submit[0])) {

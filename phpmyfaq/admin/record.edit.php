@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.edit.php,v 1.42 2006-08-28 19:55:16 thorstenr Exp $
+* $Id: record.edit.php,v 1.43 2006-08-29 21:45:41 matteo Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23

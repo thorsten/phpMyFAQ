@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.add.php,v 1.41 2006-08-28 19:56:05 thorstenr Exp $
+* $Id: record.add.php,v 1.42 2006-08-29 21:45:40 matteo Exp $
 *
 * Adds a record in the database
 *
@@ -58,6 +58,7 @@ if ($permission["editbt"]) {
         if ('00000000000000' == $dateEnd) {
             $dateEnd = '99991231235959';
         }
+
         $recordData = array(
             'lang'          => $db->escape_string($_POST['language']),
             'active'        => $db->escape_string($_POST['active']),
