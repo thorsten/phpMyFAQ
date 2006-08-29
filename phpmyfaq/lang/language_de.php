@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.25 2006-08-28 19:35:38 thorstenr Exp $
+ * $Id: language_de.php,v 1.26 2006-08-29 20:12:53 thorstenr Exp $
  *
  * German language file
  *
@@ -773,3 +773,4 @@ $PMF_LANG['err_expiredNews'] = 'Diese Nachricht ist abgelaufen und kann nicht an
 $PMF_LANG['err_inactiveNews'] = 'Diese Nachricht werden überarbeitet und kann nicht angezeigt werden';
 $PMF_LANG['msgSearchOnAllLanguages'] = 'Alle Sprachen durchsuchen:';
 $PMF_LANG['ad_entry_tags'] = 'Tags';
+$PMF_LANG['msg_tags'] = 'Tags';

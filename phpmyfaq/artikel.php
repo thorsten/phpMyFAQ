@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.46 2006-08-29 19:40:21 thorstenr Exp $
+* $Id: artikel.php,v 1.47 2006-08-29 20:08:56 thorstenr Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -215,7 +215,7 @@ $tpl->processTemplate ("writeContent", array(
     'writeArticleCategoryHeader'  => $PMF_LANG['msgArticleCategories'],
     'writeArticleCategories'      => $writeMultiCategories,
     'writeContent'                => preg_replace_callback("/<code([^>]*)>(.*?)<\/code>/is", 'hilight', $content),
-    'writeTagHeader'              => ': ',
+    'writeTagHeader'              => $PMF_LANG['msg_tags'] . ': ',
     'writeArticleTags'            => $tagging->getAllTagsById($id),
     'writeDateMsg'                => $PMF_LANG['msgLastUpdateArticle'].$faq->faqRecord['date'],
     'writeRevision'               => $PMF_LANG['ad_entry_revision'].': 1.'.$faq->faqRecord['revision_id'],
