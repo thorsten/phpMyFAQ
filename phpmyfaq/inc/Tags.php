@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Tags.php,v 1.5 2006-08-28 20:16:20 thorstenr Exp $
+* $Id: Tags.php,v 1.6 2006-08-29 19:39:54 thorstenr Exp $
 *
 * The main Tags class
 *
@@ -91,10 +91,36 @@ class PMF_Tags
     function getAllTagsById($record_id)
     {
         $tags = array();
+        $taglisting = '';
 
-        $query = sprintf("");
+        $query = sprintf("
+            SELECT
+                dt.tagging_id, t.tagging_name
+            FROM
+                %sfaqdata_tags dt, %sfaqtags t
+            WHERE
+                dt.record_id = %d
+            AND
+                dt.tagging_id = t.tagging_id",
+            SQLPREFIX,
+            SQLPREFIX,
+            $record_id);
 
-        return $tags;
+        $result = $this->db->query($query);
+        if ($result) {
+            while ($row = $this->db->fetch_object($result)) {
+                $tags[$row->tagging_id] = $row->tagging_name;
+            }
+        }
+
+        foreach ($tags as $tagging_id => $tagging_name) {
+            // @todo: Add Matteos Link class
+            $taglisting .= sprintf('<a href="index.php?action=tagcloud&amp;tagging_id=%d">%s</a>, ',
+                $tagging_id,
+                $tagging_name);
+        }
+
+        return substr($taglisting, 0, -2);
     }
 
     /**
