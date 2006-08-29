@@ -10,6 +10,10 @@
     {writeArticleCategories}
     <!-- /Article Categories Listing -->
 
+    <!-- Tags -->
+    <p>{writeTagHeader} {writeArticleTags}</p>
+    <!-- /Tags -->
+
     <!-- Article Info -->
     <p>{writeDateMsg}<br />{writeAuthor}<br />{writeRevision}<br />{editThisEntry}</p>
     <!-- /Article Info -->
@@ -43,7 +47,7 @@
     <!-- /Voting Form -->
 
     <p>{writeCommentMsg}</p>
-    
+
     <!-- Comment Form -->
     <a name=comment"></a><div id="comment" style="display: none;">
     <form action="{writeSendAdress}" method="post">
@@ -51,16 +55,16 @@
     <input type="hidden" name="lang" value="{lang}" />
     <input type="hidden" name="type" value="faq" />
     <input type="hidden" name="spamid" value="{spamid}" />
-    
+
     <fieldset>
     <legend>{msgWriteComment}</legend>
-    
+
         <label for="user" class="left">{msgNewContentName}</label>
         <input class="inputfield" type="text" name="user" value="{defaultContentName}" size="50" /><br />
-        
+
         <label for="mail" class="left">{msgNewContentMail}</label>
         <input class="inputfield" type="text" name="mail" value="{defaultContentMail}" size="50" /><br />
-        
+
         <label for="comment" class="left">{msgYourComment}</label>
         <textarea class="inputarea" cols="37" rows="10" name="comment"></textarea><br />
 
