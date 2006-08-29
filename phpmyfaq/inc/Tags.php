@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Tags.php,v 1.6 2006-08-29 19:39:54 thorstenr Exp $
+* $Id: Tags.php,v 1.7 2006-08-29 20:17:12 thorstenr Exp $
 *
 * The main Tags class
 *
@@ -90,6 +90,8 @@ class PMF_Tags
      */
     function getAllTagsById($record_id)
     {
+        global $sids;
+
         $tags = array();
         $taglisting = '';
 
@@ -115,7 +117,7 @@ class PMF_Tags
 
         foreach ($tags as $tagging_id => $tagging_name) {
             // @todo: Add Matteos Link class
-            $taglisting .= sprintf('<a href="index.php?action=tagcloud&amp;tagging_id=%d">%s</a>, ',
+            $taglisting .= sprintf('<a href="index.php?'.$sids.'action=search&amp;tagging_id=%d">%s</a>, ',
                 $tagging_id,
                 $tagging_name);
         }
