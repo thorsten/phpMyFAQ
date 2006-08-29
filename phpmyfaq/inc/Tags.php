@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Tags.php,v 1.7 2006-08-29 20:17:12 thorstenr Exp $
+* $Id: Tags.php,v 1.8 2006-08-29 21:34:30 matteo Exp $
 *
 * The main Tags class
 *
@@ -90,10 +90,7 @@ class PMF_Tags
      */
     function getAllTagsById($record_id)
     {
-        global $sids;
-
         $tags = array();
-        $taglisting = '';
 
         $query = sprintf("
             SELECT
@@ -115,7 +112,24 @@ class PMF_Tags
             }
         }
 
-        foreach ($tags as $tagging_id => $tagging_name) {
+        return $tags;
+    }
+
+    /**
+     * Returns all tags for a FAQ record
+     *
+     * @param   integer $record_id
+     * @return  string
+     * @access  public
+     * @since   2006-08-29
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function getAllLinkTagsById($record_id)
+    {
+        global $sids;
+        $taglisting = '';
+
+        foreach ($this->getAllTagsById($record_id) as $tagging_id => $tagging_name) {
             // @todo: Add Matteos Link class
             $taglisting .= sprintf('<a href="index.php?'.$sids.'action=search&amp;tagging_id=%d">%s</a>, ',
                 $tagging_id,
