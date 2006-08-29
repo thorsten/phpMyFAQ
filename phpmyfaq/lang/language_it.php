@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.26 2006-08-28 21:18:20 matteo Exp $
+* $Id: language_it.php,v 1.27 2006-08-29 20:26:09 matteo Exp $
 *
 * Italian language file
 *
@@ -781,3 +781,4 @@ $PMF_LANG['err_expiredNews'] = 'Questa notizia &egrave; in scaduta e non pu&ogra
 $PMF_LANG['err_inactiveNews'] = 'Questa notizia &egrave; in revisione e non pu&ograve; essere visualizzata.';
 $PMF_LANG['msgSearchOnAllLanguages'] = 'Cerca in tutte le lingue:';
 $PMF_LANG['ad_entry_tags'] = '<a href="http://en.wikipedia.org/wiki/Tags" title="Vai alla definizione in inglese di Wikipedia" target="_blank">Tags</a>';
+$PMF_LANG['msg_tags'] = '<a href="http://en.wikipedia.org/wiki/Tags" title="Vai alla definizione in inglese di Wikipedia" target="_blank">Tags</a>';
