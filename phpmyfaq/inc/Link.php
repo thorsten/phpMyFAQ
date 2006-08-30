@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Link.php,v 1.14 2006-08-22 19:07:54 matteo Exp $
+* $Id: Link.php,v 1.15 2006-08-30 20:04:42 matteo Exp $
 *
 * Link management - Functions and Classes
 *
@@ -23,15 +23,11 @@
 /**#@+
   * General Link definitions
   */
-define('PMF_LINK_SEARCHPART_SEPARATOR', '?');
-define('PMF_LINK_FRAGMENT_SEPARATOR', '#');
 define('PMF_LINK_AMPERSAND', '&amp;');
-define('PMF_LINK_EQUAL', '=');
-define('PMF_LINK_SLASH', '/');
-define('PMF_LINK_CONTENT', 'content/');
 define('PMF_LINK_CATEGORY', 'category/');
-define('PMF_LINK_SITEMAP', 'sitemap/');
-define('PMF_LINK_NEWS', 'news/');
+define('PMF_LINK_CONTENT', 'content/');
+define('PMF_LINK_EQUAL', '=');
+define('PMF_LINK_FRAGMENT_SEPARATOR', '#');
 define('PMF_LINK_HTML_MINUS', '-');
 define('PMF_LINK_HTML_UNDERSCORE', '_');
 define('PMF_LINK_HTML_SLASH', '/');
@@ -39,6 +35,11 @@ define('PMF_LINK_HTML_TARGET_BLANK', '_blank');
 define('PMF_LINK_HTML_TARGET_PARENT', '_parent');
 define('PMF_LINK_HTML_TARGET_SELF', '_self');
 define('PMF_LINK_HTML_TARGET_TOP', '_top');
+define('PMF_LINK_NEWS', 'news/');
+define('PMF_LINK_SITEMAP', 'sitemap/');
+define('PMF_LINK_SLASH', '/');
+define('PMF_LINK_SEARCHPART_SEPARATOR', '?');
+define('PMF_LINK_TAGS', 'tags/');
 /**#@-*/
 /**#@+
   * System pages definitions
@@ -50,16 +51,17 @@ define('PMF_LINK_INDEX_HOME', '/index.php');
   * System GET keys definitions
   */
 define('PMF_LINK_GET_ACTION', 'action');
-define('PMF_LINK_GET_LANG', 'lang');
 define('PMF_LINK_GET_ARTLANG', 'artlang');
 define('PMF_LINK_GET_CATEGORY', 'cat');
-define('PMF_LINK_GET_ID', 'id');
-define('PMF_LINK_GET_LETTER', 'letter');
-define('PMF_LINK_GET_PAGE', 'seite');
 define('PMF_LINK_GET_HIGHLIGHT', 'highlight');
+define('PMF_LINK_GET_ID', 'id');
+define('PMF_LINK_GET_LANG', 'lang');
+define('PMF_LINK_GET_LETTER', 'letter');
 define('PMF_LINK_GET_NEWS_ID', 'newsid');
 define('PMF_LINK_GET_NEWS_LANG', 'newslang');
+define('PMF_LINK_GET_PAGE', 'seite');
 define('PMF_LINK_GET_SIDS', 'SIDS');
+define('PMF_LINK_GET_TAGGING_ID', 'tagging_id');
 /**#@-*/
 /**#@+
   * System GET values definitions
@@ -408,8 +410,10 @@ class PMF_Link
                             $url .= PMF_LINK_HTML_OPEN;
                             break;
                         case PMF_LINK_GET_ACTION_SEARCH:
-                            $url .= PMF_LINK_HTML_SEARCH;
-                            if (isset($getParams[PMF_LINK_GET_ACTION_SEARCH])) {
+                            if (!isset($getParams[PMF_LINK_GET_ACTION_SEARCH]) && isset($getParams[PMF_LINK_GET_TAGGING_ID])) {
+                                $url .= PMF_LINK_TAGS.$getParams[PMF_LINK_GET_TAGGING_ID].PMF_LINK_SLASH.$this->getSEOItemTitle().PMF_LINK_HTML_EXTENSION;
+                            } elseif (isset($getParams[PMF_LINK_GET_ACTION_SEARCH])) {
+                                $url .= PMF_LINK_HTML_SEARCH;
                                 $url .= PMF_LINK_SEARCHPART_SEPARATOR.PMF_LINK_GET_ACTION_SEARCH.'='.$getParams[PMF_LINK_GET_ACTION_SEARCH];
                                 if (isset($getParams[PMF_LINK_GET_PAGE])) {
                                     $url .= PMF_LINK_AMPERSAND.PMF_LINK_GET_PAGE.'='.$getParams[PMF_LINK_GET_PAGE];

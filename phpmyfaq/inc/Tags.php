@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Tags.php,v 1.8 2006-08-29 21:34:30 matteo Exp $
+* $Id: Tags.php,v 1.9 2006-08-30 20:04:42 matteo Exp $
 *
 * The main Tags class
 *
@@ -126,14 +126,21 @@ class PMF_Tags
      */
     function getAllLinkTagsById($record_id)
     {
-        global $sids;
+        global $sids, $PMF_LANG;
         $taglisting = '';
 
         foreach ($this->getAllTagsById($record_id) as $tagging_id => $tagging_name) {
             // @todo: Add Matteos Link class
-            $taglisting .= sprintf('<a href="index.php?'.$sids.'action=search&amp;tagging_id=%d">%s</a>, ',
-                $tagging_id,
-                $tagging_name);
+            $title = PMF_htmlentities($tagging_name, ENT_NOQUOTES, $PMF_LANG['metaCharset']);
+            $url = sprintf(
+                        $sids.'action=search&amp;tagging_id=%d',
+                        $tagging_id
+                        );
+            $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+            $oLink->itemTitle = $tagging_name;
+            $oLink->text = $tagging_name;
+            $oLink->tooltip = $title;
+            $taglisting .= $oLink->toHtmlAnchor().', ';
         }
 
         return substr($taglisting, 0, -2);
