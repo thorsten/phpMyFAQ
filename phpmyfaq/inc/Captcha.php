@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Captcha.php,v 1.5 2006-07-23 09:15:59 matteo Exp $
+ * $Id: Captcha.php,v 1.6 2006-08-30 05:30:26 thorstenr Exp $
  *
  * The phpMyFAQ Captcha class
  *
@@ -120,14 +120,12 @@ class PMF_Captcha
      * @param   object  $db
      * @param   string  $sids
      * @param   string  $language
-     * @param   string  $userAgent
-     * @param   string  $ip
      * @param   integer $caplength
      * @return  void
      * @author  Thomas Zeithaml <seo@annatom.de>
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function PMF_Captcha($db, $sids, $language, $userAgent, $ip, $caplength = 6)
+    function PMF_Captcha($db, $sids, $language, $caplength = 6)
     {
         $this->db           =& $db;
         if ($sids > 0) {
@@ -136,8 +134,8 @@ class PMF_Captcha
             $this->sids     = '';
         }
         $this->language     = $language;
-        $this->userAgent    = $userAgent;
-        $this->ip           = $ip;
+        $this->userAgent    = $_SERVER['HTTP_USER_AGENT'];
+        $this->ip           = $_SERVER['REMOTE_ADDR'];
         $this->caplength    = $caplength;
         $this->letters      = array('1', '2', '3', '4', '5', '6', '7', '8', '9',
                                     'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',
@@ -171,14 +169,13 @@ class PMF_Captcha
     function printCaptcha($action)
     {
         $output = sprintf(
-                        '<img src="%s?%saction=%s&amp;gen=img&amp;ck=%s" height="%d" width="%d" border="0" alt="Follow the white rabbit." title="Follow the white rabbit." />',
-                        $_SERVER['PHP_SELF'],
-                        $this->sids,
-                        $action,
-                        time(),
-                        $this->height,
-                        $this->width
-                    );
+            '<img src="%s?%saction=%s&amp;gen=img&amp;ck=%s" height="%d" width="%d" border="0" alt="Follow the white rabbit." title="Follow the white rabbit." />',
+            $_SERVER['PHP_SELF'],
+            $this->sids,
+            $action,
+            time(),
+            $this->height,
+            $this->width);
         return $output;
     }
 
@@ -508,6 +505,7 @@ class PMF_Captcha
      */
     function getFonts()
     {
+        // @todo: glob() was introduced with PHP 4.3.0
         return glob(dirname(dirname(__FILE__)).'/font/*.ttf');
     }
 

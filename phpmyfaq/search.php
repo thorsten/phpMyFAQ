@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: search.php,v 1.12 2006-08-22 19:07:54 matteo Exp $
+* $Id: search.php,v 1.13 2006-08-30 05:30:25 thorstenr Exp $
 *
 * The fulltext search page
 *
@@ -8,12 +8,12 @@
 * @author       Periklis Tsirakidis <tsirakidis@phpdevel.de>
 * @since        2002-09-16
 * @copyright    (c) 2001-2006 phpMyFAQ Team
-* 
+*
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
 * compliance with the License. You may obtain a copy of the License at
 * http://www.mozilla.org/MPL/
-* 
+*
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
@@ -45,6 +45,9 @@ if ($allLanguages) {
 $searchCategory = isset($_GET['searchcategory']) && is_numeric($_GET['searchcategory']) ? $_GET['searchcategory'] : '%';
 $suchbegriff = '';
 $printResult = $PMF_LANG['help_search'];
+
+//
+// Handle the full text search stuff
 if (isset($_GET['suchbegriff']) || isset($_GET['search'])) {
     if (isset($_GET['suchbegriff'])) {
         $suchbegriff = $db->escape_string(strip_tags($_GET['suchbegriff']));
@@ -54,6 +57,14 @@ if (isset($_GET['suchbegriff']) || isset($_GET['search'])) {
     }
     $printResult = searchEngine($suchbegriff, $searchCategory, $allLanguages);
 }
+
+//
+// Handle the Tagging ID
+//
+if (isset($_GET['tagging_id']) && is_numeric($_GET['tagging_id'])) {
+
+}
+
 // Change a little bit the $searchCategory value;
 $searchCategory = ('%' == $searchCategory) ? 0 : $searchCategory;
 

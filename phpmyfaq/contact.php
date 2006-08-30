@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: contact.php,v 1.8 2006-08-19 14:35:09 thorstenr Exp $
+* $Id: contact.php,v 1.9 2006-08-30 05:30:25 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-09-16
@@ -24,7 +24,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 Tracking('contact', 0);
 
-$captcha = new PMF_Captcha($db, $sids, $pmf->language, $_SERVER['HTTP_USER_AGENT'], $_SERVER['REMOTE_ADDR']);
+$captcha = new PMF_Captcha($db, $sids, $pmf->language);
 
 if (isset($_GET['gen'])) {
     $captcha->showCaptchaImg();

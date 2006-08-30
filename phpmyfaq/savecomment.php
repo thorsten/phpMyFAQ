@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: savecomment.php,v 1.16 2006-08-19 15:04:11 matteo Exp $
+* $Id: savecomment.php,v 1.17 2006-08-30 05:30:25 thorstenr Exp $
 *
 * Saves the posted comment
 *
@@ -24,7 +24,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$captcha = new PMF_Captcha($db, $sids, $pmf->language, $_SERVER['HTTP_USER_AGENT'], $_SERVER['REMOTE_ADDR']);
+$captcha = new PMF_Captcha($db, $sids, $pmf->language);
 
 $id = 0;
 $msgWriteComment = $PMF_LANG['msgWriteComment'];
@@ -107,7 +107,7 @@ if (    isset($_POST['user']) && $_POST['user'] != ''
         }
         // Send the email
         mail($IDN->encode($emailTo), $PMF_CONF['title'], $body, implode("\r\n", $additional_header), '-f'.$IDN->encode($commentData['usermail']));
-        
+
         $tpl->processTemplate ("writeContent", array(
                                                 "msgCommentHeader"  => $msgWriteComment,
                                                 "Message"           => $PMF_LANG["msgCommentThanks"]

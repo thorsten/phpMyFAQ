@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: savequestion.php,v 1.21 2006-06-17 13:12:24 matteo Exp $
+* $Id: savequestion.php,v 1.22 2006-08-30 05:30:25 thorstenr Exp $
 *
 * @author           Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author           David Saez Padros <david@ols.es>
@@ -24,7 +24,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$captcha = new PMF_Captcha($db, $sids, $pmf->language, $_SERVER['HTTP_USER_AGENT'], $_SERVER['REMOTE_ADDR']);
+$captcha = new PMF_Captcha($db, $sids, $pmf->language);
 
 if (    isset($_POST['username']) && $_POST['username'] != ''
      && isset($_POST['usermail']) && checkEmail($_POST['usermail'])

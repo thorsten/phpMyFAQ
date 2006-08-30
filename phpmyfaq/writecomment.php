@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: writecomment.php,v 1.8 2006-06-12 22:09:26 matteo Exp $
+* $Id: writecomment.php,v 1.9 2006-08-30 05:30:25 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-08-29
@@ -22,7 +22,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$captcha = new PMF_Captcha($db, $sids, $pmf->language, $_SERVER['HTTP_USER_AGENT'], $_SERVER['REMOTE_ADDR']);
+$captcha = new PMF_Captcha($db, $sids, $pmf->language);
 
 if (isset($_GET['gen'])) {
     $captcha->showCaptchaImg();

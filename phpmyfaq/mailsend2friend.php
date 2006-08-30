@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mailsend2friend.php,v 1.10 2006-06-21 21:37:11 matteo Exp $
+* $Id: mailsend2friend.php,v 1.11 2006-08-30 05:30:25 thorstenr Exp $
 *
 * Sends the emails to your friends
 *
@@ -26,7 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 Tracking("sendmail_send2friend",0);
 
-$captcha = new PMF_Captcha($db, $sids, $pmf->language, $_SERVER['HTTP_USER_AGENT'], $_SERVER['REMOTE_ADDR']);
+$captcha = new PMF_Captcha($db, $sids, $pmf->language);
 
 if (   isset($_POST['name']) && $_POST['name'] != ''
     && isset($_POST['mailfrom']) && $_POST['mailfrom'] != ''

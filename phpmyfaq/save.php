@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: save.php,v 1.24 2006-08-19 13:02:34 matteo Exp $
+* $Id: save.php,v 1.25 2006-08-30 05:30:25 thorstenr Exp $
 *
 * Saves a user FAQ record and sends an email to the user
 *
@@ -25,7 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$captcha = new PMF_Captcha($db, $sids, $pmf->language, $_SERVER['HTTP_USER_AGENT'], $_SERVER['REMOTE_ADDR']);
+$captcha = new PMF_Captcha($db, $sids, $pmf->language);
 
 if (    isset($_POST['username']) && $_POST['username'] != ''
      && isset($_POST['usermail']) && checkEmail($_POST['usermail'])

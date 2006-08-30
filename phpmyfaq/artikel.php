@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.48 2006-08-29 21:34:30 matteo Exp $
+* $Id: artikel.php,v 1.49 2006-08-30 05:30:25 thorstenr Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -26,7 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$captcha = new PMF_Captcha($db, $sids, $pmf->language, $_SERVER['HTTP_USER_AGENT'], $_SERVER['REMOTE_ADDR']);
+$captcha = new PMF_Captcha($db, $sids, $pmf->language);
 
 if (isset($_GET['gen'])) {
     $captcha->showCaptchaImg();

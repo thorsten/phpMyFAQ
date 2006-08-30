@@ -1,13 +1,13 @@
 <?php
 /**
-* $Id: sendmail.php,v 1.8 2006-06-21 21:59:39 matteo Exp $
+* $Id: sendmail.php,v 1.9 2006-08-30 05:30:25 thorstenr Exp $
 *
 * The 'send an email from the contact page' page
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-09-16
 * @copyright    (c) 2001-2006 phpMyFAQ Team
-* 
+*
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
 * compliance with the License. You may obtain a copy of the License at
@@ -26,7 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 Tracking("sendmail_contact",0);
 
-$captcha = new PMF_Captcha($db, $sids, $pmf->language, $_SERVER['HTTP_USER_AGENT'], $_SERVER['REMOTE_ADDR']);
+$captcha = new PMF_Captcha($db, $sids, $pmf->language);
 
 if (    isset($_POST["name"]) && $_POST["name"] != ''
      && isset($_POST["email"]) && checkEmail($_POST["email"])

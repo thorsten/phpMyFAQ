@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: add.php,v 1.14 2006-08-13 18:11:54 thorstenr Exp $
+* $Id: add.php,v 1.15 2006-08-30 05:30:24 thorstenr Exp $
 *
 * This is the page there a user can add a FAQ record.
 *
@@ -24,7 +24,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$captcha = new PMF_Captcha($db, $sids, $pmf->language, $_SERVER['HTTP_USER_AGENT'], $_SERVER['REMOTE_ADDR']);
+$captcha = new PMF_Captcha($db, $sids, $pmf->language);
 
 if (isset($_GET['gen'])) {
     $captcha->showCaptchaImg();
