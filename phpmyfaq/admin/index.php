@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.63 2006-08-28 19:55:16 thorstenr Exp $
+* $Id: index.php,v 1.64 2006-08-30 22:29:37 matteo Exp $
 *
 * The main admin backend index file
 *
@@ -157,6 +157,9 @@ if (isset($auth)) {
 
                 // Configuration management
                 case 'config_list':     require_once('ajax.config_list.php'); break;
+                
+                // Tags management
+                case 'tags_list':     require_once('ajax.tags_list.php'); break;
             }
         exit();
         }

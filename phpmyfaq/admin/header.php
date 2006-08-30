@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: header.php,v 1.23 2006-08-28 20:23:03 thorstenr Exp $
+* $Id: header.php,v 1.24 2006-08-30 22:29:37 matteo Exp $
 *
 * header of the admin area
 *
@@ -43,6 +43,8 @@ header("Vary: Negotiate,Accept");
     <style type="text/css"> @import url(../template/admin.css); </style>
     <script type="text/javascript" src="../inc/js/functions.js"></script>
     <script type="text/javascript" src="../inc/js/prototype.js"></script>
+    <script type="text/javascript" src="editor/tiny_mce.js"></script>
+    <script type="text/javascript" src="../inc/js/scriptaculous/scriptaculous.js"></script>
 </head>
 <body id="body" dir="<?php print $PMF_LANG["dir"]; ?>" onload="javascript:focusOnUsernameField();"><a name="top"></a>
 

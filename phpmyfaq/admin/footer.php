@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: footer.php,v 1.11 2006-07-01 18:12:08 thorstenr Exp $
+* $Id: footer.php,v 1.12 2006-08-30 22:29:37 matteo Exp $
 *
 * Footer of the admin area
 *
@@ -39,7 +39,6 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 <iframe id="keepPMFSessionAlive" src="session.keepalive.php<?php print $linkext; ?>&amp;lang=<?php print $LANGCODE; ?>" frameBorder="no" width="0" height="0"></iframe>
 <?php } ?>
 
-<script language="javascript" type="text/javascript" src="editor/tiny_mce.js"></script>
 <script language="javascript" type="text/javascript">
     tinyMCE.init({
         mode : "exact",

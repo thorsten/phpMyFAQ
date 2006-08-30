@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Tags.php,v 1.9 2006-08-30 20:04:42 matteo Exp $
+* $Id: Tags.php,v 1.10 2006-08-30 22:29:37 matteo Exp $
 *
 * The main Tags class
 *
@@ -58,7 +58,7 @@ class PMF_Tags
      * @since   2006-08-28
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function getAllTags()
+    function getAllTags($search = null)
     {
         $tags = array();
 
@@ -66,8 +66,11 @@ class PMF_Tags
             SELECT
                 tagging_id, tagging_name
             FROM
-                %sfaqtags",
-            SQLPREFIX);
+                %sfaqtags
+                %s",
+            SQLPREFIX,
+            (isset($search) ? "WHERE tagging_name LIKE '".$search."%'" : '')
+            );
 
         $result = $this->db->query($query);
         if ($result) {
@@ -224,8 +227,9 @@ class PMF_Tags
                 COUNT(d.record_id) = %d",
             SQLPREFIX,
             SQLPREFIX,
-            implode("', '", $arrayOfTags),
-            count($arrayOfTags));
+            substr(implode("', '", $arrayOfTags), 0, -2),
+            count($arrayOfTags)
+            );
 
         $records = array();
         $result = $this->db->query($query);
@@ -264,7 +268,46 @@ class PMF_Tags
                 d.record_id",
             SQLPREFIX,
             SQLPREFIX,
-            implode("', '", $arrayOfTags));
+            substr(implode("', '", $arrayOfTags), 0, -2)
+            );
+
+        $records = array();
+        $result = $this->db->query($query);
+        while ($row = $this->db->fetch_object($result)) {
+            $records[] = $row->record_id;
+        }
+
+        return $records;
+    }
+
+    /**
+     * Returns all FAQ record IDs where all tags are included
+     *
+     * @param   array   $arrayOfTags
+     * @return  array   $records
+     * @access  public
+     * @since   2006-08-30
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     */
+    function getRecordsByTag($tagName)
+    {
+        if (!is_string($tagName)) {
+            return false;
+        }
+
+        $query = sprintf("
+            SELECT
+                d.record_id AS record_id
+            FROM
+                %sfaqdata_tags d, %sfaqtags t
+            WHERE
+                    t.tagging_id = d.tagging_id
+                AND t.tagging_name = '%s'",
+            SQLPREFIX,
+            SQLPREFIX,
+            $tagName
+            );
 
         $records = array();
         $result = $this->db->query($query);

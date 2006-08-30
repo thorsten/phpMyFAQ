@@ -1,5 +1,5 @@
 /**
- * $Id: admin.css,v 1.26 2006-08-28 20:26:50 thorstenr Exp $
+ * $Id: admin.css,v 1.27 2006-08-30 22:29:37 matteo Exp $
  *
  * This is the CSS file for the admin section of phpMyFAQ 2.0.x
  * You don't need to change enything here but feel free to do it. :-)
@@ -560,4 +560,18 @@ div.button_row input.reset {
 }
 #group_membership .button_row {
     padding-top: 10px;
+}
+
+/* Tags */
+#tags_autocomplete_choices {
+    margin: -14px 0 0 -40px;
+}
+#tags_autocomplete_choices li {
+    list-style: none;
+    background: #FCFCFC;
+    border: 1px solid #D0D9D9;
+    padding: 2px;
+}
+#tags_autocomplete_choices li.selected {
+    background: #EDF2F2;
 }

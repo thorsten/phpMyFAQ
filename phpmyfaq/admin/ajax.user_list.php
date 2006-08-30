@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.user_list.php,v 1.18 2006-07-25 20:21:05 thorstenr Exp $
+* $Id: ajax.user_list.php,v 1.19 2006-08-30 22:29:37 matteo Exp $
 *
 * AJAX: lists all registered users
 *
@@ -24,7 +24,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
-if ($permission['addbt'] || $permission['editbt'] || $permission['delbt']) {
+if ($permission['adduser'] || $permission['edituser'] || $permission['deluser']) {
 
     header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
     header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.edit.php,v 1.43 2006-08-29 21:45:41 matteo Exp $
+* $Id: record.edit.php,v 1.44 2006-08-30 22:29:35 matteo Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23
@@ -237,7 +237,18 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     <input name="keywords" id="keywords" style="width: 390px;" value="<?php if (isset($keywords)) { print htmlspecialchars($keywords); } ?>" /><br />
 
     <label class="lefteditor" for="tags"><?php print $PMF_LANG['ad_entry_tags']; ?>:</label>
-    <input name="tags" id="tags" style="width: 390px;" value="<?php if (isset($tags)) { print htmlspecialchars($tags); } ?>" /><br />
+    <input name="tags" id="tags" style="width: 390px;" value="<?php if (isset($tags)) { print htmlspecialchars($tags); } ?>" /><img style="display: none; margin-bottom: -5px;" id="tags_autocomplete_wait" src="images/indicator.gif"></img>
+    <div id="tags_autocomplete_choices"></div><br />
+    <script type="text/javascript">
+        new Ajax.Autocompleter("tags", "tags_autocomplete_choices", "index.php?action=ajax&ajax=tags_list",
+                                {
+                                    paramName: "autocomplete",
+                                    tokens: " ",
+                                    minChars: 1,
+                                    indicator: "tags_autocomplete_wait",
+                                }
+        );
+    </script>
 
     <label class="lefteditor" for="author"><?php print $PMF_LANG["ad_entry_author"]; ?></label>
     <input name="author" id="author" style="width: 390px;" value="<?php if (isset($author)) { print htmlspecialchars($author); } else { print $user->getUserData('display_name'); } ?>" /><br />
