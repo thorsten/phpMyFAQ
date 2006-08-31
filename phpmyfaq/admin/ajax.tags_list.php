@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.tags_list.php,v 1.1 2006-08-30 22:29:37 matteo Exp $
+* $Id: ajax.tags_list.php,v 1.2 2006-08-31 20:37:50 matteo Exp $
 *
 * AJAX: searches the tags
 *
@@ -24,35 +24,40 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
-if ($permission['editbt']) {
+header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
+header("Cache-Control: no-store, no-cache, must-revalidate");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+header("Content-type: text/xml");
+header("Vary: Negotiate,Accept");
 
-    header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-    header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
-    header("Cache-Control: no-store, no-cache, must-revalidate");
-    header("Cache-Control: post-check=0, pre-check=0", false);
-    header("Pragma: no-cache");
-    header("Content-type: text/html");
-    header("Vary: Negotiate,Accept");
+require_once(PMF_ROOT_DIR.'/inc/Tags.php');
+// TODO: manage the language correctly
+$oTag = new PMF_Tags($db, 'en');
+if (isset($_POST['autocomplete']) && is_string($_POST['autocomplete'])) {
+    $tags = $oTag->getAllTags($db->escape_string($_POST['autocomplete']));
+} else {
+    $tags = $oTag->getAllTags();
+}
 
-    require_once(PMF_ROOT_DIR.'/inc/Tags.php');
-    // TODO: manage the language correctly
-    $oTag = new PMF_Tags($db, 'en');
-    if (isset($_POST['autocomplete']) && is_string($_POST['autocomplete'])) {
-        $tags = $oTag->getAllTags($db->escape_string($_POST['autocomplete']));
-    } else {
-        $tags = $oTag->getAllTags();
-    }
-
-    if (count(ob_list_handlers()) > 0) {
-        ob_clean();
-    }
+if (count(ob_list_handlers()) > 0) {
+    ob_clean();
+}
 ?>
 <ul>
 <?php
+if ($permission['editbt']) {
+    $i = 0;
     foreach ($tags as $tagName) {
-        print('<li>'.$tagName.'<span class="informal"> ('.count($oTag->getRecordsByTag($tagName)).')</span></li>');
+        $i++;
+        if ($i <= PMF_TAGS_AUTOCOMPLETE_RESULT_SET_SIZE) {
+            print('<li>'.$tagName.'<span class="informal"> ('.count($oTag->getRecordsByTag($tagName)).')</span></li>');
+        } elseif ($i == PMF_TAGS_AUTOCOMPLETE_RESULT_SET_SIZE + 1) {
+        // Manage the "More results" info
+            print('<li>'.$db->escape_string($_POST['autocomplete']).'<span class="informal">...</span></li>');
+        }
     }
+}
 ?>
 </ul>
-<?php
-}

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.save.php,v 1.37 2006-08-29 21:45:41 matteo Exp $
+* $Id: record.save.php,v 1.38 2006-08-31 20:37:50 matteo Exp $
 *
 * Save or update a FAQ record
 *
@@ -115,7 +115,7 @@ if (    isset($submit[1])
 
     $datum  = date("YmdHis");
     $rubrik = $_REQUEST["rubrik"];
-    $tags   = $db->escape_string($_POST['tags']);
+    $tags   = $db->escape_string(trim($_POST['tags']));
 
     $_result = $db->query("SELECT id, lang FROM ".SQLPREFIX."faqdata WHERE id = ".$_REQUEST["id"]." AND lang = '".$_REQUEST["language"]."'");
     $num = $db->num_rows($_result);

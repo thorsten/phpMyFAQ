@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Tags.php,v 1.10 2006-08-30 22:29:37 matteo Exp $
+* $Id: Tags.php,v 1.11 2006-08-31 20:37:50 matteo Exp $
 *
 * The main Tags class
 *
@@ -60,8 +60,18 @@ class PMF_Tags
      */
     function getAllTags($search = null)
     {
+        global $DB;
         $tags = array();
 
+        // Hack: LIKE is case sensitive under PostgreSQL
+        switch($DB['type']) {
+            case 'pgsql':
+                $like = 'ILIKE';
+                break;
+            default:
+                $like = 'LIKE';
+                break;
+        }
         $query = sprintf("
             SELECT
                 tagging_id, tagging_name
@@ -69,7 +79,7 @@ class PMF_Tags
                 %sfaqtags
                 %s",
             SQLPREFIX,
-            (isset($search) ? "WHERE tagging_name LIKE '".$search."%'" : '')
+            (isset($search) ? "WHERE tagging_name ".$like." '".$search."%'" : '')
             );
 
         $result = $this->db->query($query);
@@ -284,13 +294,14 @@ class PMF_Tags
      * Returns all FAQ record IDs where all tags are included
      *
      * @param   array   $arrayOfTags
+     * @param   boolean $limit          Limit the returned result set
      * @return  array   $records
      * @access  public
      * @since   2006-08-30
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      */
-    function getRecordsByTag($tagName)
+    function getRecordsByTag($tagName, $limit = false)
     {
         if (!is_string($tagName)) {
             return false;
@@ -311,7 +322,11 @@ class PMF_Tags
 
         $records = array();
         $result = $this->db->query($query);
-        while ($row = $this->db->fetch_object($result)) {
+        // Hack: we want to manage the "More results" info
+        $numberOfItems = PMF_TAGS_AUTOCOMPLETE_RESULT_SET_SIZE + 1;
+        $i = 0;
+        while (($row = $this->db->fetch_object($result)) && ($i < $numberOfItems)) {
+            $i++;
             $records[] = $row->record_id;
         }
 

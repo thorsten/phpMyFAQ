@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.add.php,v 1.42 2006-08-29 21:45:40 matteo Exp $
+* $Id: record.add.php,v 1.43 2006-08-31 20:37:50 matteo Exp $
 *
 * Adds a record in the database
 *
@@ -69,14 +69,14 @@ if ($permission["editbt"]) {
             'email'         => $db->escape_string($_POST['email']),
             'comment'       => (isset($_POST['comment']) ? 'y' : 'n'),
             'date'          => date('YmdHis'),
-            'dateStart'     => ('' == $dateStart) ? '00000000000000' : $db->escape_string($dateStart),
-            'dateEnd'       => ('' == $dateEnd)   ? '99991231235959' : $db->escape_string($dateEnd),
+            'dateStart'     => $db->escape_string($dateStart),
+            'dateEnd'       => $db->escape_string($dateEnd),
             'linkState'     => '',
             'linkDateCheck' => 0
         );
 
         $categories = $_POST['rubrik'];
-        $tags       = $db->escape_string($_POST['tags']);
+        $tags       = $db->escape_string(trim($_POST['tags']));
 
         // Add new record and get that ID
         $nextID = $faq->addRecord($recordData);
