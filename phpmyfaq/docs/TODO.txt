@@ -8,6 +8,8 @@ TODO list for future versions of phpMyFAQ:
 
 2.1.0 "Pandora":
 - add archive function
+- add user registration
+- add user profile page
 - batch insertion script
 - subscription service for new articles ?
 - message to the user, who has posted a question and an answer is availible ?
