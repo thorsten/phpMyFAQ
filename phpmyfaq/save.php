@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: save.php,v 1.25 2006-08-30 05:30:25 thorstenr Exp $
+* $Id: save.php,v 1.26 2006-09-01 14:17:01 thorstenr Exp $
 *
 * Saves a user FAQ record and sends an email to the user
 *
@@ -45,14 +45,8 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
         $content = $content."<br />".$PMF_LANG["msgInfo"]."<a href=\"http://".substr($contentlink,7)."\" target=\"_blank\">".$contentlink."</a>";
     }
 
-    if (isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) {
-        $lang = trim(strtolower(substr($_SERVER["HTTP_ACCEPT_LANGUAGE"], 0, 2)));
-    } else {
-        $lang = "en";
-    }
-
     $newData = array(
-        'lang'          => $lang,
+        'lang'          => $LANGCODE,
         'thema'         => $db->escape_string(safeSQL(safeHTML($_POST['thema']))),
         'active'        => 'no',
         'content'       => $content,
