@@ -37,7 +37,7 @@
     <link rel="alternate" title="Latest FAQ Records RSS Feed" type="application/rss+xml" href="feed/latest/rss.php" />
     <link rel="alternate" title="Open Questions RSS Feed" type="application/rss+xml" href="feed/openquestions/rss.php" />
 </head>
-<body dir="{dir}">
+<body dir="{dir}"onload="document.getElementById('searchfield').focus();">
 
 <div id="wrapper1">
     <div id="wrapper2">
