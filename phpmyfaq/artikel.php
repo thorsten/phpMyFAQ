@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.49 2006-08-30 05:30:25 thorstenr Exp $
+* $Id: artikel.php,v 1.50 2006-09-02 19:45:22 thorstenr Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -221,6 +221,8 @@ $tpl->processTemplate ("writeContent", array(
     'writeRevision'               => $PMF_LANG['ad_entry_revision'].': 1.'.$faq->faqRecord['revision_id'],
     'writeAuthor'                 => $PMF_LANG['msgAuthor'].$faq->faqRecord['author'],
     'editThisEntry'               => $editThisEntry,
+    'writeDiggMsgTag'             => 'Digg it!',
+    'writeDiggMsg'                => sprintf('<a target="_blank" href="http://digg.com/submit?phase=2&amp;url=http://%s?cat=%s&amp;id=%d&amp;lang=%s">Digg It!</a>', $_SERVER['SERVER_NAME'].$_SERVER['PHP_SELF'], $currentCategory, $id, $lang),
     'writePrintMsg'               => sprintf('<a href="#" onclick="javascript:window.print();">%s</a>', $PMF_LANG['msgPrintArticle']),
     'writePDF'                    => sprintf('<a target="_blank" href="pdf.php?cat=%s&amp;id=%d&amp;lang=%s">'.$PMF_LANG['msgPDF'].'</a>', $currentCategory, $id, $lang),
     'writeSend2FriendMsg'         => sprintf('<a href="?%saction=send2friend&amp;cat=%d&amp;id=%d&amp;artlang=%s">%s</a>', $sids, $currentCategory, $id, $lang, $PMF_LANG['msgSend2Friend']),
