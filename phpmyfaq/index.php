@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.68 2006-08-27 10:09:05 thorstenr Exp $
+* $Id: index.php,v 1.69 2006-09-02 09:49:31 matteo Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the
@@ -48,6 +48,7 @@ require_once('inc/Captcha.php');
 require_once('inc/Category.php');
 require_once('inc/Faq.php');
 require_once('inc/Glossary.php');
+require_once('inc/Tags.php');
 require_once('inc/libs/idna_convert.class.php');
 $IDN = new idna_convert;
 
@@ -393,13 +394,14 @@ if (isset($auth)) {
 }
 $tpl->includeTemplate('loginBox', 'index');
 
+$oTag = new PMF_Tags($db, $LANGCODE);
 $tpl->processTemplate('rightBox', array(
     'writeTopTenHeader'     => $PMF_LANG['msgTopTen'],
     'writeTopTenRow'        => $faq->getTopTen(),
     'writeNewestHeader'     => $PMF_LANG['msgLatestArticles'],
     'writeNewestRow'        => $faq->getLatest(),
     'writeTagCloudHeader'   => 'Tags',
-    'writeTags'             => '@todo: tags...'));
+    'writeTags'             => $oTag->printHTMLTagsCloud()));
 $tpl->includeTemplate('rightBox', 'index');
 
 //

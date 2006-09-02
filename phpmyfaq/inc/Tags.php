@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Tags.php,v 1.11 2006-08-31 20:37:50 matteo Exp $
+* $Id: Tags.php,v 1.12 2006-09-02 09:49:31 matteo Exp $
 *
 * The main Tags class
 *
@@ -77,7 +77,8 @@ class PMF_Tags
                 tagging_id, tagging_name
             FROM
                 %sfaqtags
-                %s",
+                %s
+            ORDER BY tagging_name",
             SQLPREFIX,
             (isset($search) ? "WHERE tagging_name ".$like." '".$search."%'" : '')
             );
@@ -143,7 +144,6 @@ class PMF_Tags
         $taglisting = '';
 
         foreach ($this->getAllTagsById($record_id) as $tagging_id => $tagging_name) {
-            // @todo: Add Matteos Link class
             $title = PMF_htmlentities($tagging_name, ENT_NOQUOTES, $PMF_LANG['metaCharset']);
             $url = sprintf(
                         $sids.'action=search&amp;tagging_id=%d',
@@ -301,7 +301,7 @@ class PMF_Tags
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      */
-    function getRecordsByTag($tagName, $limit = false)
+    function getRecordsByTagName($tagName, $limit = false)
     {
         if (!is_string($tagName)) {
             return false;
@@ -331,6 +331,64 @@ class PMF_Tags
         }
 
         return $records;
+    }
+
+    /**
+     * Returns the HTML for the Tags Cloud
+     *
+     * @return  string
+     * @access  public
+     * @since   2006-09-02
+     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     */
+    function printHTMLTagsCloud()
+    {
+        global $sids, $PMF_LANG;
+        $html = '';
+        $tags = array();
+
+        $tagList = $this->getAllTags();
+        foreach ($tagList as $tagId => $tagName) {
+            $tags[$tagName]['id']    = $tagId;
+            $tags[$tagName]['name']  = $tagName;
+            $tags[$tagName]['count'] = count($this->getRecordsByTagName($tagName));
+        }
+        $min = 0;
+        $max = 0;
+        foreach ($tags as $tag) {
+            if ($min > $tag['count']) {
+                $min = $tag['count'];
+            }
+            if ($max < $tag['count']) {
+                $max = $tag['count'];
+            }
+        }
+
+        $CSSRelevanceLevels = 5;
+        $CSSRelevanceMaxLevel = $CSSRelevanceLevels - 1;
+        $CSSRelevanceLevel = 3;
+        $html = '<div class="tagscloud">';
+        foreach ($tags as $tag) {
+            if ($max - $min > 0) {
+                $CSSRelevanceLevel = (int)(1 + $CSSRelevanceMaxLevel*($tag['count'] - $min)/($max - $min));
+            }
+            $class = 'relevance'.$CSSRelevanceLevel;
+            $html .= '<span class="'.$class.'">';
+            $title = PMF_htmlentities($tag['name'].' ('.$tag['count'].')', ENT_NOQUOTES, $PMF_LANG['metaCharset']);
+            $url = sprintf(
+                        $sids.'action=search&amp;tagging_id=%d',
+                        $tag['id']
+                        );
+            $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+            $oLink->itemTitle = $tag['name'];
+            $oLink->text = $tag['name'];
+            $oLink->tooltip = $title;
+            $html .= $oLink->toHtmlAnchor().' ';
+            $html .= '</span>';
+        }
+        $html .= '</div>';
+
+        return substr($html, 0, -1);
     }
 
 }

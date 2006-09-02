@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.tags_list.php,v 1.2 2006-08-31 20:37:50 matteo Exp $
+* $Id: ajax.tags_list.php,v 1.3 2006-09-02 09:49:31 matteo Exp $
 *
 * AJAX: searches the tags
 *
@@ -52,7 +52,7 @@ if ($permission['editbt']) {
     foreach ($tags as $tagName) {
         $i++;
         if ($i <= PMF_TAGS_AUTOCOMPLETE_RESULT_SET_SIZE) {
-            print('<li>'.$tagName.'<span class="informal"> ('.count($oTag->getRecordsByTag($tagName)).')</span></li>');
+            print('<li>'.$tagName.'<span class="informal"> ('.count($oTag->getRecordsByTagName($tagName)).')</span></li>');
         } elseif ($i == PMF_TAGS_AUTOCOMPLETE_RESULT_SET_SIZE + 1) {
         // Manage the "More results" info
             print('<li>'.$db->escape_string($_POST['autocomplete']).'<span class="informal">...</span></li>');
