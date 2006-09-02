@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.52 2006-08-28 18:13:19 thorstenr Exp $
+$Id: README.txt,v 1.53 2006-09-02 19:45:38 thorstenr Exp $
 
 phpMyFAQ 2.0.0-alpha
 Codename "Prometheus"
@@ -24,6 +24,7 @@ Changes since 1.6:
 - added improved WYSIWYG editor and Image Manager (Thorsten)
 - added improved News module (Matteo, Thorsten)
 - added tagging (Thorsten)
+- added DiggIt! link (Thorsten)
 - improved export functions (Matteo)
 - improved URL rewrite functions (Matteo)
 
@@ -48,6 +49,7 @@ Version 2.0.0-alpha - n/a
 - added improved WYSIWYG editor and Image Manager (Thorsten)
 - added improved News module (Matteo, Thorsten)
 - added tagging (Thorsten)
+- added DiggIt! link (Thorsten)
 - improved export functions (Matteo)
 - improved URL rewrite functions (Matteo)
 
