@@ -1,5 +1,5 @@
 /**
- * $Id: style.css,v 1.24 2006-09-02 17:36:02 thorstenr Exp $
+ * $Id: style.css,v 1.25 2006-09-02 19:08:39 thorstenr Exp $
  *
  * This is the main style sheet file for phpMyFAQ 2.0
  * If you want to change only the colours, use colors.css
@@ -259,6 +259,21 @@ html>body #categories li a {
 }
 #topten li, #latest li {
     list-style-type: decimal;
+}
+#tagcloud .relevance1 {
+    font-size: 80%;
+}
+#tagcloud .relevance2 {
+    font-size: 100%;
+}
+#tagcloud .relevance3 {
+    font-size: 120%;
+}
+#tagcloud .relevance4 {
+    font-size: 140%;
+}
+#tagcloud .relevance5 {
+    font-size: 160%;
 }
 
 /**
