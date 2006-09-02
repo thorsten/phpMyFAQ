@@ -1,5 +1,5 @@
 /**
- * $Id: style.css,v 1.23 2006-08-27 09:19:37 thorstenr Exp $
+ * $Id: style.css,v 1.24 2006-09-02 17:36:02 thorstenr Exp $
  *
  * This is the main style sheet file for phpMyFAQ 2.0
  * If you want to change only the colours, use colors.css
@@ -110,7 +110,7 @@ code {
 }
 
 /**
- * phpMyFAQ title 
+ * phpMyFAQ title
  */
 #header h1 {
    padding-left: 20px;
@@ -239,10 +239,10 @@ html>body #categories li a {
 /**
  * Top 10 and Latest areticles
  */
-#topten, #latest {
+#topten, #latest, #tagcloud {
    margin-bottom: 10px;
 }
-#topten h3, #latest h3 {
+#topten h3, #latest h3, #tagcloud h3 {
    font-size: 135%;
    border: 1px solid;
    margin-bottom: 5px;
