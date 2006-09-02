@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Tags.php,v 1.12 2006-09-02 09:49:31 matteo Exp $
+* $Id: Tags.php,v 1.13 2006-09-02 18:48:28 thorstenr Exp $
 *
 * The main Tags class
 *
@@ -64,7 +64,7 @@ class PMF_Tags
         $tags = array();
 
         // Hack: LIKE is case sensitive under PostgreSQL
-        switch($DB['type']) {
+        switch ($DB['type']) {
             case 'pgsql':
                 $like = 'ILIKE';
                 break;
@@ -72,6 +72,7 @@ class PMF_Tags
                 $like = 'LIKE';
                 break;
         }
+
         $query = sprintf("
             SELECT
                 tagging_id, tagging_name
@@ -175,10 +176,10 @@ class PMF_Tags
         }
         $current_tags = $this->getAllTags();
 
-        foreach ($tags as $tagging_name) {
+        foreach ($tags as $tagging_id => $tagging_name) {
             if (!in_array($tagging_name, $current_tags)) {
 
-                $tagging_id = $this->db->nextID(SQLPREFIX.'faqtags', 'tagging_id');
+                $new_tagging_id = $this->db->nextID(SQLPREFIX.'faqtags', 'tagging_id');
 
                 $query = sprintf("
                     INSERT INTO
@@ -188,7 +189,7 @@ class PMF_Tags
                     (%d, %d)",
                     SQLPREFIX,
                     $record_id,
-                    $tagging_id);
+                    $new_tagging_id);
                 $this->db->query($query);
 
                 $query = sprintf("
@@ -198,8 +199,20 @@ class PMF_Tags
                         VALUES
                     (%d, '%s')",
                     SQLPREFIX,
-                    $tagging_id,
+                    $new_tagging_id,
                     $tagging_name);
+                $this->db->query($query);
+            } else {
+
+                $query = sprintf("
+                    INSERT INTO
+                        %sfaqdata_tags
+                    (record_id, tagging_id)
+                        VALUES
+                    (%d, %d)",
+                    SQLPREFIX,
+                    $record_id,
+                    array_search($tagging_name, $current_tags));
                 $this->db->query($query);
             }
         }
