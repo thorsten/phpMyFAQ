@@ -1,5 +1,5 @@
 /**
- * $Id: admin.css,v 1.27 2006-08-30 22:29:37 matteo Exp $
+ * $Id: admin.css,v 1.28 2006-09-02 19:42:03 thorstenr Exp $
  *
  * This is the CSS file for the admin section of phpMyFAQ 2.0.x
  * You don't need to change enything here but feel free to do it. :-)
@@ -135,6 +135,8 @@ div#sessionexpiration {
     color: #000;
     background-color: #EDF2F2;
     border: 1px solid #D0D9D9;
+	-moz-border-radius: 5px 5px 5px 5px;
+	border-radius: 5px 5px 5px 5px;
 }
 div#sessioncounter {
     font-size: 100%;
