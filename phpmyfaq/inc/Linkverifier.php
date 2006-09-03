@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Linkverifier.php,v 1.6 2006-09-03 18:25:45 matteo Exp $
+* $Id: Linkverifier.php,v 1.7 2006-09-03 20:08:13 matteo Exp $
 *
 * PMF_Linkverifier
 *
@@ -969,7 +969,12 @@ function verifyEntryURL(id, lang)
         allResponses['nolinks'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-nolinks']); ?>";
         allResponses['noscript'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-noscript']); ?>";
         getDivElement(id, lang).className = "url-" + XmlRequest.responseText;
-        target.innerHTML = allResponses[XmlRequest.responseText];
+        if (typeof(allResponses[XmlRequest.responseText]) == "undefined") {
+            getDivElement(id, lang).className = "url-noajax ";
+            target.innerHTML = allResponses['noajax'];
+        } else {
+            target.innerHTML = allResponses[XmlRequest.responseText];
+        }
     }
 
     function verifyEntryURL_failure(XmlRequest)
