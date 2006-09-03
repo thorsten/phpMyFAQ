@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: save.php,v 1.26 2006-09-01 14:17:01 thorstenr Exp $
+* $Id: save.php,v 1.27 2006-09-03 19:58:55 thorstenr Exp $
 *
 * Saves a user FAQ record and sends an email to the user
 *
@@ -61,14 +61,9 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
         'linkDateCheck' => 0
         );
     $selected_category = intval($_POST['rubrik']);
-
     $faq->addRecord($newData, $selected_category);
 
-    $headers = '';
-    $db->query("SELECT ".SQLPREFIX."faquser.email FROM ".SQLPREFIX."faqcategories INNER JOIN ".SQLPREFIX."faquser ON ".SQLPREFIX."faqcategories.user_id = ".SQLPREFIX."faquser.id WHERE ".SQLPREFIX."faqcategories.id = ".$selected_category);
-    while ($row = $db->fetch_object($result)) {
-        $headers .= "CC: ".$row->email."\n";
-    }
+    $headers = "CC: ".$tree->getCategoryUser($selected_category)."\n";
 
     $additional_header = array();
     $additional_header[] = 'MIME-Version: 1.0';

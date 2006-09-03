@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Category.php,v 1.10 2006-08-20 19:08:56 matteo Exp $
+* $Id: Category.php,v 1.11 2006-09-03 19:58:55 thorstenr Exp $
 *
 * The main category class
 *
@@ -945,6 +945,20 @@ class PMF_Category
     }
 
     /**
+     * Returns the admin user of the selected category
+     *
+     * @param   integer $category_id
+     * @return  integer $user_id
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @todo    Return the name, not the ID
+     */
+    function getCategoryUser($category_id)
+    {
+        return $this->categoryName[$category_id]['user_id'];
+    }
+
+    /**
      * Adds a new category entry
      *
      * @param   array   $category_data
@@ -1012,7 +1026,7 @@ class PMF_Category
 
         return true;
     }
-    
+
     /**
      * Move the categories ownership, if any.
      *
