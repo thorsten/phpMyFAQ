@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Linkverifier.php,v 1.7 2006-09-03 20:08:13 matteo Exp $
+* $Id: Linkverifier.php,v 1.8 2006-09-03 20:53:37 matteo Exp $
 *
 * PMF_Linkverifier
 *
@@ -100,7 +100,9 @@ class PMF_Linkverifier
     {
         global $PMF_LANG;
 
-        $this->addIgnoreProtocol("https:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "https"));
+        if (!@extension_loaded('openssl')) { // PHP 4.3.0+: fsockopen needs OpenSSL
+            $this->addIgnoreProtocol("https:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "https"));
+        }
         $this->addIgnoreProtocol("ftp:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "ftp"));
 
         $this->addIgnoreProtocol("gopher:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "gopher"));
@@ -442,7 +444,7 @@ class PMF_Linkverifier
         }
 
         if (!(isset($urlParts['port']))) {
-            switch ( $urlParts['scheme'] ) {
+            switch ($urlParts['scheme']) {
                 case 'https': $urlParts['port'] = '443'; break;
                 case 'http': $urlParts['port'] = '80'; break;
                 default: $urlParts['port'] = '80'; break;
@@ -471,7 +473,12 @@ class PMF_Linkverifier
 
         $_response = "";
         // open socket for remote server with timeout (default: 5secs)
-        $fp = fsockopen($urlParts['host'], $urlParts['port'], $errno, $errstr, LINKVERIFIER_CONNECT_TIMEOUT);
+        // PHP 4.3.0+: when compiled w/ OpenSSL support, fsockopen can connect to the remote host using SSL
+        $_host = $urlParts['host'];
+        if ('https' == $urlParts['scheme']) {
+            $_host = 'ssl://'.$_host;
+        }
+        $fp = fsockopen($_host, $urlParts['port'], $errno, $errstr, LINKVERIFIER_CONNECT_TIMEOUT);
         if (!$fp) {
             // mark this host too slow to verify
             $this->slow_hosts[$urlParts['host']] = true;
@@ -489,8 +496,10 @@ class PMF_Linkverifier
         // parse response
         $code = 0;
         $allowVerbs = 'n/a';
+        $httpStatusMsg = '';
         $location = $url;
         $response = explode("\r\n", $_response);
+        $httpStatusMsg = strip_tags($response[count($response) - 1]);
 
         foreach ($response as $_response) {
             if (preg_match("/^HTTP\/[^ ]+ ([01-9]+) .*$/", $_response, $matches)) {
@@ -508,24 +517,26 @@ class PMF_Linkverifier
         switch ( $code ) {
             case '301': // Moved Permanently (go recursive ?)
             case '302': // Found (go recursive ?)
-                        return $this->openURL($url, $location, $redirectCount + 1);
-                                    break;
-
+                return $this->openURL($url, $location, $redirectCount + 1);
+                break;
             case '200': // OK
-                        $_reason = ($redirectCount > 0) ? sprintf($PMF_LANG['ad_linkcheck_openurl_redirected'],htmlspecialchars($url)) : "";
-                        return array(true, $redirectCount, $_reason);
-                        break;
+                $_reason = ($redirectCount > 0) ? sprintf($PMF_LANG['ad_linkcheck_openurl_redirected'],htmlspecialchars($url)) : "";
+                return array(true, $redirectCount, $_reason);
+                break;
+            case 400:   // Bad Request
+                return array(false, $redirectCount, sprintf($PMF_LANG['ad_linkcheck_openurl_ambiguous'].'<br />'.$httpStatusMsg, $code));
+                break;
             case '300': // Multiple choices
             case '401': // Unauthorized (but it's there. right ?)
-                        return array(true, $redirectCount, sprintf($PMF_LANG['ad_linkcheck_openurl_ambiguous'], $code));
-                        break;
+                return array(true, $redirectCount, sprintf($PMF_LANG['ad_linkcheck_openurl_ambiguous'], $code));
+                break;
             case '405': // Method Not Allowed
-                        // TODO: add a fallback to use GET method?
-                        return array(true, $redirectCount, sprintf($PMF_LANG['ad_linkcheck_openurl_not_allowed'], $urlParts['host'], $allowVerbs));
-                        break;
+                // TODO: add a fallback to use GET method?
+                return array(true, $redirectCount, sprintf($PMF_LANG['ad_linkcheck_openurl_not_allowed'], $urlParts['host'], $allowVerbs));
+                break;
             default:    // All other statuses
-                        return array(false, $redirectCount, sprintf($PMF_LANG['ad_linkcheck_openurl_ambiguous'], $code));
-                        break;
+                return array(false, $redirectCount, sprintf($PMF_LANG['ad_linkcheck_openurl_ambiguous'], $code));
+                break;
         }
 
 
