@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Linkverifier.php,v 1.5 2006-08-28 20:34:25 matteo Exp $
+* $Id: Linkverifier.php,v 1.6 2006-09-03 18:25:45 matteo Exp $
 *
 * PMF_Linkverifier
 *
@@ -93,18 +93,20 @@ class PMF_Linkverifier
      *
      * @access  public
      * @author  Minoru TODA <todam@netjapan.co.jp>
+     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      * @since   2005-08-01
      */
     function PMF_Linkverifier()
     {
         global $PMF_LANG;
 
+        $this->addIgnoreProtocol("https:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "https"));
         $this->addIgnoreProtocol("ftp:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "ftp"));
+
         $this->addIgnoreProtocol("gopher:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "gopher"));
         $this->addIgnoreProtocol("mailto:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "mailto"));
         $this->addIgnoreProtocol("telnet:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "telnet"));
-        $this->addIgnoreProtocol("https:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "https"));
-
+        $this->addIgnoreProtocol("feed:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "feed"));
     }
 
 
@@ -118,7 +120,8 @@ class PMF_Linkverifier
      * @author  Minoru TODA <todam@netjapan.co.jp>
      * @since   2005-08-01
      */
-    function isReady() {
+    function isReady()
+    {
         global $PMF_CONF;
 
         if (!(isset($PMF_CONF["referenceURL"]))) {
@@ -144,7 +147,8 @@ class PMF_Linkverifier
      * @author  Minoru TODA <todam@netjapan.co.jp>
      * @since   2005-08-01
      */
-    function resetPool() {
+    function resetPool()
+    {
         $this->urlpool = array();
         $this->lastResult = array();
     }
@@ -226,7 +230,8 @@ class PMF_Linkverifier
      * @author  Minoru TODA <todam@netjapan.co.jp>
      * @since   2005-09-29
     */
-    function loadConfigurationFromDB() {
+    function loadConfigurationFromDB()
+    {
         global $db;
 
         $query = "SELECT type, url, reason FROM ".SQLPREFIX."faqlinkverifyrules WHERE enabled = 'y'";
@@ -253,7 +258,8 @@ class PMF_Linkverifier
      * @*author Minoru TODA <todam@netjapan.co.jp>
      * @since   2005-08-01
      */
-    function checkIfIgnoreLink($url = "") {
+    function checkIfIgnoreLink($url = "")
+    {
         $url = strtolower($url);
         foreach ($this->invalid_protocols as $_protocol => $_message) {
             if (strpos($url, $_protocol) === 0) {
@@ -281,8 +287,10 @@ class PMF_Linkverifier
      * @*author Minoru TODA <todam@netjapan.co.jp>
      * @since   2005-08-01
      */
-    function checkIfForceErrorLink($url = "") {
+    function checkIfForceErrorLink($url = "")
+    {
         $url = strtolower($url);
+
         foreach ($this->warnlists as $_protocol => $_message) {
             if (strpos($url, $_protocol) === 0) {
                 return $_message;
@@ -324,7 +332,7 @@ class PMF_Linkverifier
                 return $relativeuri;
             }
         }
-        
+
         // Split reference uri into parts.
         $pathparts = parse_url($referenceuri);
 
@@ -391,6 +399,7 @@ class PMF_Linkverifier
      * @result  boolean true if connect successful. otherwise false
      * @access  private
      * @author  Minoru TODA <todam@netjapan.co.jp>
+     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      * @since   2005-08-01
      */
 
@@ -534,7 +543,8 @@ class PMF_Linkverifier
      * @since   2005-08-01
      */
 
-    function VerifyURLs($referenceuri = "") {
+    function VerifyURLs($referenceuri = "")
+    {
         $this->lastResult = array();
         foreach ($this->urlpool as $_type => $_value) {
             foreach ($_value as $_key => $_url) {
@@ -578,7 +588,8 @@ class PMF_Linkverifier
      * @since   2005-09-29
      */
 
-    function markEntry($id = 0, $artlang = "", $state = "") {
+    function markEntry($id = 0, $artlang = "", $state = "")
+    {
         global $db;
 
         if (($id < 1) || (trim($artlang) == "")) {
@@ -606,7 +617,8 @@ class PMF_Linkverifier
      * @since    2005-09-29
      */
 
-    function getURLValidateInterval() {
+    function getURLValidateInterval()
+    {
         global $PMF_CONF;
 
         if (isset($PMF_CONF['URLValidateInterval'])) {
@@ -626,7 +638,8 @@ class PMF_Linkverifier
      */
 
 
-    function getUntestedEntriesCount() {
+    function getUntestedEntriesCount()
+    {
         global $db;
 
         $interval = $this->getURLValidateInterval();
@@ -652,7 +665,8 @@ class PMF_Linkverifier
      * @since   2005-09-29
      */
 
-    function getEntryState($id = 0, $artlang = "", $checkDate = false) {
+    function getEntryState($id = 0, $artlang = "", $checkDate = false)
+    {
         global $db, $PMF_CONF;
 
         $interval = $this->getURLValidateInterval();
@@ -687,19 +701,25 @@ class PMF_Linkverifier
      * @result  string
      * @access  public
      * @author  Minoru TODA <todam@netjapan.co.jp>
+     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      * @since   2005-09-29
      */
 
-    function getEntryStateHTML($id = 0, $artlang = "") {
+    function getEntryStateHTML($id = 0, $artlang = "")
+    {
+        global $PMF_LANG;
+
         // Check if feature is disabled.
         if ($this->isReady() == false) {
-            return '<img src="images/url-disabled.png">';
+            //return '<img src="images/url-disabled.png">';
+            return '<div class="url-disabled"><span>'.$PMF_LANG['ad_linkcheck_feedback_url-disabled'].'</span></div>';
         }
 
         // check if article entry exists (we should not need this)
         $src = $this->getEntryState($id, $artlang, false);
         if ($src === false) {
-            return '<img src="images/url-disabled.png">';
+            //return '<img src="images/url-disabled.png">';
+            return '<div class="url-disabled"><span>'.$PMF_LANG['ad_linkcheck_feedback_url-disabled'].'</span></div>';
         }
 
         if ($src === true) {
@@ -707,13 +727,21 @@ class PMF_Linkverifier
         }
 
         // define name for javascripting
-        $name = "imgurl_".$artlang."_".$id;
+        $imgId  = "imgurl_".$artlang."_".$id;
+        $spanId = "spanurl_".$artlang."_".$id;
+        $divId  = "divurl_".$artlang."_".$id;
 
         if ($this->getEntryState($id, $artlang, true) === true) {
-            $onLoad = " onLoad = \"verifyEntryURL(".$id.",'".$artlang."'); \" ";
-        } else { $onLoad = ""; }
+            $onLoad = " onload=\"verifyEntryURL(".$id.",'".$artlang."');\"";
+        } else {
+            $onLoad = "";
+        }
 
-        $output = '<img src="images/url-'.$src.'.png" id="'.$name.'" '.$onLoad.' >';
+        //$output = '<img src="images/url-'.$src.'.png" id="'.$imgId.'" '.$onLoad.' />';
+        $output = '<div class="url-'.$src.'" id="'.$divId.'">'
+                 .'<span id="'.$spanId.'">'.$PMF_LANG['ad_linkcheck_feedback_url-'.$src].'</span>'
+                 .'<img src="images/null.gif" id="'.$imgId.'"'.$onLoad.' />'
+                 .'</div>';
         $output = "<a href=\"javascript:onDemandVerifyURL(".$id.",'".$artlang."');\">".$output."</a>";
         return $output;
     }
@@ -731,7 +759,8 @@ class PMF_Linkverifier
      * @since    2005-09-29
      */
 
-    function getLinkStateString() {
+    function getLinkStateString()
+    {
         $linkcount = 0;
         $errorcount = 0;
 
@@ -769,7 +798,8 @@ class PMF_Linkverifier
  * @author  Minoru TODA <todam@netjapan.co.jp>
  * @since   2005-08-01
  */
-function verifyArticleURL($contents = "", $id = 0, $artlang = "") {
+function verifyArticleURL($contents = "", $id = 0, $artlang = "")
+{
     global $PMF_CONF, $PMF_LANG;
 
     if (!(isset($PMF_CONF["referenceURL"]))) {
@@ -811,7 +841,6 @@ function verifyArticleURL($contents = "", $id = 0, $artlang = "") {
     foreach ($result as $type => $_value) {
         $output .= "        <tr><td><strong>".htmlspecialchars($type)."</strong></td></tr>\n";
         foreach ($_value as $url => $value) {
-
             $_output  = '            <td /><td>'.htmlspecialchars($value['rawurl'])."</td>\n";
             $_output .= '            <td><a href="'.$value['absurl'].'" target="_blank">'.htmlspecialchars($value['absurl'])."</a></td>\n";
             $_output .= '            <td>';
@@ -866,24 +895,38 @@ function verifyArticleURL($contents = "", $id = 0, $artlang = "") {
  *
  * @access  public
  * @author  Minoru TODA <todam@netjapan.co.jp>
+ * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
  * @since   2005-08-01
  */
 
 // Client-side Javascript needed for AJAX URL verification
-function link_verifier_javascript() {
-    global $linkext;
+function link_verifier_javascript()
+{
+    global $linkext, $PMF_LANG;
 
     //TODO: ASSIGN STRINGS FOR THE <IMG ALT="">
     $ajaxphp = $_SERVER["PHP_SELF"].'?';
 ?>
 <script type="text/javascript">
 <!--
-function getImageElement(id, lang) {
+function getImageElement(id, lang)
+{
     return $('imgurl_' + lang + '_' + id);
 }
 
-function onDemandVerifyURL(id, lang, target) {
-    var target = getImageElement(id, lang);
+function getSpanElement(id, lang)
+{
+    return $('spanurl_' + lang + '_' + id);
+}
+
+function getDivElement(id, lang)
+{
+    return $('divurl_' + lang + '_' + id);
+}
+
+function onDemandVerifyURL(id, lang, target)
+{
+    var target = getSpanElement(id, lang);
     var widthPx  = 780;
     var heigthPx = 450;
     var leftPx   = (screen.width  - widthPx)/2;
@@ -894,29 +937,49 @@ function onDemandVerifyURL(id, lang, target) {
     verifyEntryURL(id, lang);
 }
 
-
-function verifyEntryURL(id, lang) {
-    var target = getImageElement(id, lang);
+function verifyEntryURL(id, lang)
+{
+    //var target = getImageElement(id, lang);
+    var target = getSpanElement(id, lang);
 
     // !!IMPORTANT!! DISABLE ONLOAD. If you do not do this, you will get infinite loop!
-    target.onload="";
+    getImageElement(id, lang).onload = "";
 
-    target.src = "images/url-checking.png";
+    //target.src = "images/url-checking.png";
+    getDivElement(id, lang).className = "url-checking";
+    target.innerHTML = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-checking']); ?>";
 
     var url = 'index.php';
     var pars = 'action=ajax&ajax=verifyURL&id=' + id + '&lang=' + lang;
     var myAjax = new Ajax.Request( url, {method: 'get', parameters: pars, onComplete: verifyEntryURL_success, onFailure: verifyEntryURL_failure} );
 
-    function verifyEntryURL_success(XmlRequest) {
-        target.src = "images/url-" + XmlRequest.responseText + ".png";
+    function verifyEntryURL_success(XmlRequest)
+    {
+        //target.src = "images/url-" + XmlRequest.responseText + ".png";
+        var allResponses = new Array();
+        allResponses['batch1'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-batch1']); ?>";
+        allResponses['batch2'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-batch2']); ?>";
+        allResponses['batch3'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-batch3']); ?>";
+        allResponses['checking'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-checking']); ?>";
+        allResponses['disabled'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-disabled']); ?>";
+        allResponses['linkbad'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-linkbad']); ?>";
+        allResponses['linkok'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-linkok']); ?>";
+        allResponses['noaccess'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-noaccess']); ?>";
+        allResponses['noajax'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-noajax']); ?>";
+        allResponses['nolinks'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-nolinks']); ?>";
+        allResponses['noscript'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-noscript']); ?>";
+        getDivElement(id, lang).className = "url-" + XmlRequest.responseText;
+        target.innerHTML = allResponses[XmlRequest.responseText];
     }
 
-    function verifyEntryURL_failure(XmlRequest) {
-        target.src = "images/url-noaccess.png";
+    function verifyEntryURL_failure(XmlRequest)
+    {
+        //target.src = "images/url-noaccess.png";
+        getDivElement(id, lang).className = "url-noaccess";
+        target.innerHTML = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-noaccess']); ?>";
     }
 
 }
-
 //-->
 </script>
 <?php
@@ -935,8 +998,8 @@ function link_ondemand_javascript($id, $lang) {
 ?>
 <script type="text/javascript">
 <!--
-
-function ajaxOnDemandVerify(id, lang) {
+function ajaxOnDemandVerify(id, lang)
+{
     var target = $('onDemandVerifyResult');
     var url = 'index.php';
     var pars = 'action=ajax&ajax=onDemandURL&id=' + id + '&lang=' + lang + '&lookup=1';
@@ -944,11 +1007,13 @@ function ajaxOnDemandVerify(id, lang) {
     //TODO: Assign string
     target.innerHTML = 'Querying LinkVerifier...';
 
-    function ajaxOnDemandVerify_success(XmlRequest) {
+    function ajaxOnDemandVerify_success(XmlRequest)
+    {
         target.innerHTML = XmlRequest.responseText;
     }
 
-    function ajaxOnDemandVerify_failure(XmlRequest) {
+    function ajaxOnDemandVerify_failure(XmlRequest)
+    {
         //TODO: Assign string
         target.innerHTML = 'LinkVerifier failed (url probe timed out?)';
     }
@@ -959,9 +1024,7 @@ function ajaxOnDemandVerify(id, lang) {
 </script>
 
 <div id="onDemandVerifyResult">
-<NOSCRIPT>
-LinkVerifier feature disabled (Reason: Javascript not enabled)
-</NOSCRIPT>
+<NOSCRIPT>LinkVerifier feature disabled (Reason: Javascript not enabled)</NOSCRIPT>
 </div>
 <script type="text/javascript">
 <!--

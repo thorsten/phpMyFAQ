@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.27 2006-08-29 20:26:09 matteo Exp $
+* $Id: language_it.php,v 1.28 2006-09-03 18:25:45 matteo Exp $
 *
 * Italian language file
 *
@@ -782,3 +782,16 @@ $PMF_LANG['err_inactiveNews'] = 'Questa notizia &egrave; in revisione e non pu&o
 $PMF_LANG['msgSearchOnAllLanguages'] = 'Cerca in tutte le lingue:';
 $PMF_LANG['ad_entry_tags'] = '<a href="http://en.wikipedia.org/wiki/Tags" title="Vai alla definizione in inglese di Wikipedia" target="_blank">Tags</a>';
 $PMF_LANG['msg_tags'] = '<a href="http://en.wikipedia.org/wiki/Tags" title="Vai alla definizione in inglese di Wikipedia" target="_blank">Tags</a>';
+
+// added v2.0.0 - 2006-09-03 by Matteo
+$PMF_LANG['ad_linkcheck_feedback_url-batch1'] = 'In corso...';
+$PMF_LANG['ad_linkcheck_feedback_url-batch2'] = 'In corso...';
+$PMF_LANG['ad_linkcheck_feedback_url-batch3'] = 'In corso...';
+$PMF_LANG['ad_linkcheck_feedback_url-checking'] = 'In corso...';
+$PMF_LANG['ad_linkcheck_feedback_url-disabled'] = 'Disabilitato';
+$PMF_LANG['ad_linkcheck_feedback_url-linkbad'] = 'Links KO';
+$PMF_LANG['ad_linkcheck_feedback_url-linkok'] = 'Links OK';
+$PMF_LANG['ad_linkcheck_feedback_url-noaccess'] = 'Accesso KO';
+$PMF_LANG['ad_linkcheck_feedback_url-noajax'] = 'No AJAX';
+$PMF_LANG['ad_linkcheck_feedback_url-nolinks'] = 'Nessun Link';
+$PMF_LANG['ad_linkcheck_feedback_url-noscript'] = 'JS disabilitato';

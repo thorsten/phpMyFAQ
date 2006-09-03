@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.show.php,v 1.29 2006-08-19 13:02:33 matteo Exp $
+* $Id: record.show.php,v 1.30 2006-09-03 18:25:45 matteo Exp $
 *
 * Shows the list of records ordered by categories
 *
@@ -271,7 +271,7 @@ if ($permission["editbt"] || $permission["delbt"]) {
         }
 ?>
         </td>
-        <td class="list" width="50"><?php print $linkverifier->getEntryStateHTML($row->id, $row->lang); ?></td>
+        <td class="list" width="80"><?php print $linkverifier->getEntryStateHTML($row->id, $row->lang); ?></td>
         <td class="list" width="17"><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;action=saveentry&amp;id=<?php print $row->id; ?>&amp;language=<?php print $row->lang; ?>&amp;submit[0]=<?php print $PMF_LANG["ad_entry_delete"]; ?>" title="<?php print $PMF_LANG["ad_user_delete"]; ?> '<?php print str_replace("\"", "´", $row->thema); ?>'"><img src="images/delete.gif" width="17" height="18" alt="<?php print $PMF_LANG["ad_entry_delete"]; ?>" /></a></td>
     </tr>
 <?php

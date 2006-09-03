@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.47 2006-08-29 20:12:53 thorstenr Exp $
+* $Id: language_en.php,v 1.48 2006-09-03 18:25:45 matteo Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -782,3 +782,16 @@ $PMF_LANG['err_inactiveNews'] = 'This news is in revision and can not be display
 $PMF_LANG['msgSearchOnAllLanguages'] = 'Search over all languages:';
 $PMF_LANG['ad_entry_tags'] = 'Tags';
 $PMF_LANG['msg_tags'] = 'Tags';
+
+// added v2.0.0 - 2006-09-03 by Matteo
+$PMF_LANG['ad_linkcheck_feedback_url-batch1'] = 'Checking...';
+$PMF_LANG['ad_linkcheck_feedback_url-batch2'] = 'Checking...';
+$PMF_LANG['ad_linkcheck_feedback_url-batch3'] = 'Checking...';
+$PMF_LANG['ad_linkcheck_feedback_url-checking'] = 'Checking...';
+$PMF_LANG['ad_linkcheck_feedback_url-disabled'] = 'Disabled';
+$PMF_LANG['ad_linkcheck_feedback_url-linkbad'] = 'Links KO';
+$PMF_LANG['ad_linkcheck_feedback_url-linkok'] = 'Links OK';
+$PMF_LANG['ad_linkcheck_feedback_url-noaccess'] = 'No access';
+$PMF_LANG['ad_linkcheck_feedback_url-noajax'] = 'No AJAX';
+$PMF_LANG['ad_linkcheck_feedback_url-nolinks'] = 'No Links';
+$PMF_LANG['ad_linkcheck_feedback_url-noscript'] = 'No Script';
