@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.26 2006-08-29 20:12:53 thorstenr Exp $
+ * $Id: language_de.php,v 1.27 2006-09-03 19:30:13 thorstenr Exp $
  *
  * German language file
  *
@@ -774,3 +774,16 @@ $PMF_LANG['err_inactiveNews'] = 'Diese Nachricht werden überarbeitet und kann ni
 $PMF_LANG['msgSearchOnAllLanguages'] = 'Alle Sprachen durchsuchen:';
 $PMF_LANG['ad_entry_tags'] = 'Tags';
 $PMF_LANG['msg_tags'] = 'Tags';
+
+// added v2.0.0 - 2006-09-03 by Matteo
+$PMF_LANG['ad_linkcheck_feedback_url-batch1'] = 'Überprüfe ...';
+$PMF_LANG['ad_linkcheck_feedback_url-batch2'] = 'Überprüfe ...';
+$PMF_LANG['ad_linkcheck_feedback_url-batch3'] = 'Überprüfe ...';
+$PMF_LANG['ad_linkcheck_feedback_url-checking'] = 'Überprüfe ...';
+$PMF_LANG['ad_linkcheck_feedback_url-disabled'] = 'deaktiviert';
+$PMF_LANG['ad_linkcheck_feedback_url-linkbad'] = 'Links nicht okay';
+$PMF_LANG['ad_linkcheck_feedback_url-linkok'] = 'Links okay';
+$PMF_LANG['ad_linkcheck_feedback_url-noaccess'] = 'Kein Zugriff möglich!';
+$PMF_LANG['ad_linkcheck_feedback_url-noajax'] = 'Keine AJAX-Unterstützung verfügbar';
+$PMF_LANG['ad_linkcheck_feedback_url-nolinks'] = 'Keine Links gefunden';
+$PMF_LANG['ad_linkcheck_feedback_url-noscript'] = 'Keine Skript-Unterstützung verfügbar';
