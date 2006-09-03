@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Tags.php,v 1.14 2006-09-03 08:47:21 matteo Exp $
+* $Id: Tags.php,v 1.15 2006-09-03 21:20:58 matteo Exp $
 *
 * The main Tags class
 *
@@ -208,6 +208,8 @@ class PMF_Tags
                 $this->db->query($query);
             } else {
 
+                // TODO: Avoid to save an entry if already there
+                // TODO: Manage the deletion of tags within a faq
                 $query = sprintf("
                     INSERT INTO
                         %sfaqdata_tags
@@ -217,7 +219,7 @@ class PMF_Tags
                     SQLPREFIX,
                     $record_id,
                     array_search($tagging_name, $current_tags));
-                $this->db->query($query);
+                @$this->db->query($query);
             }
         }
 
