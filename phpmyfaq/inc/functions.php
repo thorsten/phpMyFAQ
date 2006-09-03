@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.139 2006-09-03 09:00:43 thorstenr Exp $
+* $Id: functions.php,v 1.140 2006-09-03 18:48:57 matteo Exp $
 *
 * This is the main functions file!
 *
@@ -1060,26 +1060,26 @@ function generateXMLFile()
                 $my_xml_output .= "\t<category>".PMF_htmlentities(strip_tags($xml_rubrik), ENT_NOQUOTES, $PMF_LANG['metaCharset'])."</category>\n";
                 if (isset($row->keywords) && $row->keywords != '') {
                     $my_xml_output .= "\t<keywords>".$row->keywords."</keywords>\n";
-                    }
+                }
                 else {
                     $my_xml_output .= "\t<keywords />\n";
-                    }
+                }
                 $my_xml_output .= "\t<theme>".PMF_htmlentities(strip_tags($xml_thema), ENT_NOQUOTES, $PMF_LANG['metaCharset'])."</theme>\n";
                 $my_xml_output .= "\t<content xmlns=\"http://www.w3.org/TR/REC-html40\">".strip_tags($xml_content)."</content>\n";
                 if ($row->author) {
-                    $my_xml_output .= "\t<author>".$row->author."</author>\n";
-                    }
+                    $my_xml_output .= "\t<author>".PMF_htmlentities(strip_tags($row->author), ENT_NOQUOTES, $PMF_LANG['metaCharset'])."</author>\n";
+                }
                 else {
                     $my_xml_output .= "\t<author />\n";
-                    }
+                }
                 $my_xml_output .= "\t<date>".makeDate($row->datum)."</date>\n";
                 $my_xml_output .= "\t</article>\n\n";
-                }
             }
+        }
         $my_xml_output .= "</phpmyfaq>";
         fputs($xml_fp, $my_xml_output);
         fclose($xml_fp);
-        }
+    }
 }
 
 /**
