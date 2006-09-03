@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Tags.php,v 1.13 2006-09-02 18:48:28 thorstenr Exp $
+* $Id: Tags.php,v 1.14 2006-09-03 08:47:21 matteo Exp $
 *
 * The main Tags class
 *
@@ -53,12 +53,13 @@ class PMF_Tags
     /**
      * Returns all tags
      *
+     * @param   boolean $limit          Limit the returned result set
      * @return  array   $tags
      * @access  public
      * @since   2006-08-28
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function getAllTags($search = null)
+    function getAllTags($search = null, $limit = false)
     {
         global $DB;
         $tags = array();
@@ -81,12 +82,15 @@ class PMF_Tags
                 %s
             ORDER BY tagging_name",
             SQLPREFIX,
-            (isset($search) ? "WHERE tagging_name ".$like." '".$search."%'" : '')
+            (isset($search) && ($search != '') ? "WHERE tagging_name ".$like." '".$search."%'" : '')
             );
 
+        $i = 0;
         $result = $this->db->query($query);
         if ($result) {
-            while ($row = $this->db->fetch_object($result)) {
+            $numberOfItems = $limit ? PMF_TAGS_CLOUD_RESULT_SET_SIZE : $this->db->num_rows($result);
+            while (($row = $this->db->fetch_object($result)) && ($i < $numberOfItems)) {
+                $i++;
                 $tags[$row->tagging_id] = $row->tagging_name;
             }
         }
@@ -307,14 +311,13 @@ class PMF_Tags
      * Returns all FAQ record IDs where all tags are included
      *
      * @param   array   $arrayOfTags
-     * @param   boolean $limit          Limit the returned result set
      * @return  array   $records
      * @access  public
      * @since   2006-08-30
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      */
-    function getRecordsByTagName($tagName, $limit = false)
+    function getRecordsByTagName($tagName)
     {
         if (!is_string($tagName)) {
             return false;
@@ -335,11 +338,7 @@ class PMF_Tags
 
         $records = array();
         $result = $this->db->query($query);
-        // Hack: we want to manage the "More results" info
-        $numberOfItems = PMF_TAGS_AUTOCOMPLETE_RESULT_SET_SIZE + 1;
-        $i = 0;
-        while (($row = $this->db->fetch_object($result)) && ($i < $numberOfItems)) {
-            $i++;
+        while ($row = $this->db->fetch_object($result)) {
             $records[] = $row->record_id;
         }
 
@@ -360,7 +359,10 @@ class PMF_Tags
         $html = '';
         $tags = array();
 
-        $tagList = $this->getAllTags();
+        // Limit the result set (see: PMF_TAGS_CLOUD_RESULT_SET_SIZE)
+        // for avoiding an 'heavy' load during the evaluation
+        // of the number of records for each tag
+        $tagList = $this->getAllTags('', true);
         foreach ($tagList as $tagId => $tagName) {
             $tags[$tagName]['id']    = $tagId;
             $tags[$tagName]['name']  = $tagName;
@@ -378,12 +380,13 @@ class PMF_Tags
         }
 
         $CSSRelevanceLevels = 5;
-        $CSSRelevanceMaxLevel = $CSSRelevanceLevels - 1;
+        $CSSRelevanceMinLevel = 1;
+        $CSSRelevanceMaxLevel = $CSSRelevanceLevels - $CSSRelevanceMinLevel;
         $CSSRelevanceLevel = 3;
         $html = '<div class="tagscloud">';
         foreach ($tags as $tag) {
             if ($max - $min > 0) {
-                $CSSRelevanceLevel = (int)(1 + $CSSRelevanceMaxLevel*($tag['count'] - $min)/($max - $min));
+                $CSSRelevanceLevel = (int)($CSSRelevanceMinLevel + $CSSRelevanceMaxLevel*($tag['count'] - $min)/($max - $min));
             }
             $class = 'relevance'.$CSSRelevanceLevel;
             $html .= '<span class="'.$class.'">';

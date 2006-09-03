@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.tags_list.php,v 1.3 2006-09-02 09:49:31 matteo Exp $
+* $Id: ajax.tags_list.php,v 1.4 2006-09-03 08:47:21 matteo Exp $
 *
 * AJAX: searches the tags
 *
@@ -35,8 +35,10 @@ header("Vary: Negotiate,Accept");
 require_once(PMF_ROOT_DIR.'/inc/Tags.php');
 // TODO: manage the language correctly
 $oTag = new PMF_Tags($db, 'en');
+$autoCompleteValue = '';
 if (isset($_POST['autocomplete']) && is_string($_POST['autocomplete'])) {
-    $tags = $oTag->getAllTags($db->escape_string($_POST['autocomplete']));
+    $autoCompleteValue = $db->escape_string($_POST['autocomplete']);
+    $tags = $oTag->getAllTags($autoCompleteValue);
 } else {
     $tags = $oTag->getAllTags();
 }
@@ -55,7 +57,7 @@ if ($permission['editbt']) {
             print('<li>'.$tagName.'<span class="informal"> ('.count($oTag->getRecordsByTagName($tagName)).')</span></li>');
         } elseif ($i == PMF_TAGS_AUTOCOMPLETE_RESULT_SET_SIZE + 1) {
         // Manage the "More results" info
-            print('<li>'.$db->escape_string($_POST['autocomplete']).'<span class="informal">...</span></li>');
+            print('<li>'.$autoCompleteValue.'<span class="informal">...</span></li>');
         }
     }
 }

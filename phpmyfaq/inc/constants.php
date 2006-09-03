@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: constants.php,v 1.17 2006-08-31 20:37:50 matteo Exp $
+* $Id: constants.php,v 1.18 2006-09-03 08:47:21 matteo Exp $
 *
 * Constants for phpMyFAQ
 *
@@ -88,6 +88,13 @@ define("PMF_RSS_USE_SEO", true);
  * @var const   true
  */
 define("PMF_SITEMAP_GOOGLE_USE_SEO", true);
+
+/**
+ * This is the flag with which the Tags Cloud list is limited to
+ *
+ * @var const   50
+ */
+define("PMF_TAGS_CLOUD_RESULT_SET_SIZE", 50);
 
 /**
  * This is the flag with which the Autocomplete list is limited to
