@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.51 2006-09-03 09:00:43 thorstenr Exp $
+* $Id: artikel.php,v 1.52 2006-09-03 09:13:35 matteo Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -207,6 +207,7 @@ if (($faq->faqRecord['active'] != 'yes') || ('n' == $faq->faqRecord['comment']) 
 require_once('inc/Tags.php');
 $tagging = new PMF_Tags($db, $LANGCODE);
 
+$diggItUrl = sprintf('http://%s?cat=%s&id=%d&lang=%s', $_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'], $currentCategory, $id, $lang);
 // Set the template variables
 $tpl->processTemplate ("writeContent", array(
     'writeRubrik'                 => $categoryName.'<br />',
@@ -222,7 +223,7 @@ $tpl->processTemplate ("writeContent", array(
     'writeAuthor'                 => $PMF_LANG['msgAuthor'].$faq->faqRecord['author'],
     'editThisEntry'               => $editThisEntry,
     'writeDiggMsgTag'             => 'Digg it!',
-    'writeDiggMsg'                => sprintf('<a target="_blank" href="http://digg.com/submit?phase=2&amp;url=http://%s?cat=%s&amp;id=%d&amp;lang=%s">Digg It!</a>', $_SERVER['SERVER_NAME'].$_SERVER['PHP_SELF'], $currentCategory, $id, $lang),
+    'writeDiggMsg'                => sprintf('<a target="_blank" href="http://digg.com/submit?phase=2&amp;url=%s">Digg It!</a>', urlencode($diggItUrl)),
     'writePrintMsg'               => sprintf('<a href="#" onclick="javascript:window.print();">%s</a>', $PMF_LANG['msgPrintArticle']),
     'writePDF'                    => sprintf('<a target="_blank" href="pdf.php?cat=%s&amp;id=%d&amp;lang=%s">'.$PMF_LANG['msgPDF'].'</a>', $currentCategory, $id, $lang),
     'writeSend2FriendMsg'         => sprintf('<a href="?%saction=send2friend&amp;cat=%d&amp;id=%d&amp;artlang=%s">%s</a>', $sids, $currentCategory, $id, $lang, $PMF_LANG['msgSend2Friend']),
