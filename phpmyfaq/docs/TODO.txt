@@ -10,6 +10,8 @@ TODO list for future versions of phpMyFAQ:
 - add archive function
 - add user registration
 - add user profile page
+- add improved revision system
+- add diff of revisions
 - batch insertion script
 - subscription service for new articles ?
 - message to the user, who has posted a question and an answer is availible ?
@@ -29,7 +31,6 @@ TODO list for future versions of phpMyFAQ:
 
 2.3.0 "Portia":
 - add auto update feature ?
-- modularisation of all features ?
 - Unicode support for PDFs ?
 - directory-like listing of entries ?
 - bugfixing for stability or security reasons
@@ -37,3 +38,4 @@ TODO list for future versions of phpMyFAQ:
 3.0.0 "":
 - PHP 5.1 / PHP 6 only version
 - PDO support
+- modularisation of all features
