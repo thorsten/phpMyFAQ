@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.69 2006-09-02 09:49:31 matteo Exp $
+* $Id: index.php,v 1.70 2006-09-03 19:37:40 matteo Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the
@@ -400,7 +400,7 @@ $tpl->processTemplate('rightBox', array(
     'writeTopTenRow'        => $faq->getTopTen(),
     'writeNewestHeader'     => $PMF_LANG['msgLatestArticles'],
     'writeNewestRow'        => $faq->getLatest(),
-    'writeTagCloudHeader'   => 'Tags',
+    'writeTagCloudHeader'   => $PMF_LANG['msg_tags'],
     'writeTags'             => $oTag->printHTMLTagsCloud()));
 $tpl->includeTemplate('rightBox', 'index');
 
