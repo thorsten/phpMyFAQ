@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.50 2006-09-02 19:45:22 thorstenr Exp $
+* $Id: artikel.php,v 1.51 2006-09-03 09:00:43 thorstenr Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -226,11 +226,9 @@ $tpl->processTemplate ("writeContent", array(
     'writePrintMsg'               => sprintf('<a href="#" onclick="javascript:window.print();">%s</a>', $PMF_LANG['msgPrintArticle']),
     'writePDF'                    => sprintf('<a target="_blank" href="pdf.php?cat=%s&amp;id=%d&amp;lang=%s">'.$PMF_LANG['msgPDF'].'</a>', $currentCategory, $id, $lang),
     'writeSend2FriendMsg'         => sprintf('<a href="?%saction=send2friend&amp;cat=%d&amp;id=%d&amp;artlang=%s">%s</a>', $sids, $currentCategory, $id, $lang, $PMF_LANG['msgSend2Friend']),
-    'writeXMLMsg'                 => sprintf('<a href="?%saction=xml&amp;id=%d&amp;artlang=%d">%s</a>', $sids, $id, $lang, $PMF_LANG['msgMakeXMLExport']),
     'writePrintMsgTag'            => $PMF_LANG['msgPrintArticle'],
     'writePDFTag'                 => $PMF_LANG['msgPDF'],
     'writeSend2FriendMsgTag'      => $PMF_LANG['msgSend2Friend'],
-    'writeXMLMsgTag'              => $PMF_LANG['msgMakeXMLExport'],
     'saveVotingPATH'              => sprintf('?%saction=savevoting', $sids),
     'saveVotingID'                => $id,
     'saveVotingIP'                => $_SERVER['REMOTE_ADDR'],

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.138 2006-09-02 07:53:17 matteo Exp $
+* $Id: functions.php,v 1.139 2006-09-03 09:00:43 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -943,56 +943,6 @@ function quoted_printable_encode($return = '')
  * Funktionen für den XML-Export
  ******************************************************************************/
 
-/*
- * Gibt die XML-Datei zum Artikel aus | @@ Thorsten - 2002-08-29
- * Last Update: @@ Thorsten, 2004-08-11
- */
-function generateXMLExport($id, $lang = "")
-{
-    global $db, $tree, $PMF_LANG, $PMF_CONF;
-    $result = $db->query('SELECT '.SQLPREFIX.'faqdata.id AS id, '.SQLPREFIX.'faqdata.lang AS lang, '.SQLPREFIX.'faqdata.solution_id AS solution_id, '.SQLPREFIX.'faqdata.revision_id AS revision_id, '.SQLPREFIX.'faqcategoryrelations.category_id AS category_id, '.SQLPREFIX.'faqdata.keywords AS keywords, '.SQLPREFIX.'faqdata.thema AS thema, '.SQLPREFIX.'faqdata.content AS content, '.SQLPREFIX.'faqdata.author AS author, '.SQLPREFIX.'faqdata.datum AS datum FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang WHERE id = '.$id.' AND lang = \''.$lang.'\' AND active = \'yes\'');
-
-    if ($db->num_rows($result) > 0) {
-        while ($row = $db->fetch_object($result)) {
-            $xml_content = $row->content;
-            $xml_rubrik = $tree->getPath($row->category_id);
-            $xml_thema = wordwrap($row->thema, 60);
-            $xml_keywords = $row->keywords;
-            $xml_content = trim(htmlspecialchars(wordwrap($xml_content, 60), ENT_NOQUOTES, $PMF_LANG['metaCharset']));
-            if (is_writeable("./xml/")) {
-                $xml_fp = @fopen("./xml/article_".$row->id."_".$row->lang.".xml","wb");
-                $my_xml_output = "<?xml version=\"1.0\" encoding=\"".$PMF_LANG["metaCharset"]."\" standalone=\"yes\" ?>\n";
-                $my_xml_output .= "<!-- XML-Output by phpMyFAQ ".$PMF_CONF["version"]." | Date: ".makeDate(date("YmdHis"))." -->\n";
-                $my_xml_output .= "<phpmyfaq xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:NamespaceSchemaLocation=\"http://www.phpmyfaq.de/xml/faqschema.xsd\">\n";
-                $my_xml_output .= "\t<article id=\"".$row->id."\" solution_id=\"".$row->solution_id."\" revision_id=\"1.".$row->revision_id."\">\n";
-                $my_xml_output .= "\t<language>".$row->lang."</language>\n";
-                $my_xml_output .= "\t<category>".PMF_htmlentities(strip_tags($xml_rubrik), ENT_NOQUOTES, $PMF_LANG['metaCharset'])."</category>\n";
-                if ($xml_keywords) {
-                    $my_xml_output .= "\t<keywords>".$xml_keywords."</keywords>\n";
-                    }
-                else {
-                    $my_xml_output .= "\t<keywords />\n";
-                    }
-                $my_xml_output .= "\t<theme>".PMF_htmlentities(strip_tags($xml_thema), ENT_NOQUOTES, $PMF_LANG['metaCharset'])."</theme>\n";
-                $my_xml_output .= "\t<content xmlns=\"http://www.w3.org/TR/REC-html40\">".strip_tags($xml_content)."</content>\n";
-                if ($row->author) {
-                    $my_xml_output .= "\t<author>".$row->author."</author>\n";
-                    }
-                else {
-                    $my_xml_output .= "\t<author />\n";
-                    }
-                $my_xml_output .= "\t<date>".makeDate($row->datum)."</date>\n";
-                $my_xml_output .= "\t</article>\n";
-                $my_xml_output .= "</phpmyfaq>";
-                fputs($xml_fp, $my_xml_output);
-                fclose($xml_fp);
-                }
-            }
-        return true;
-        }
-    return false;
-}
-
 /**
 * generateXHTMLFile()
 *
@@ -1348,7 +1298,7 @@ function searchEngine($begriff, $category = '%', $allLanguages = true)
         $result = $db->query($query);
         $num = $db->num_rows($result);
     }
-    
+
     if (0 == $num) {
         $output = $PMF_LANG['err_noArticles'];
     }

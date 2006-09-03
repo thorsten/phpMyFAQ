@@ -23,8 +23,7 @@
     <img src="images/digg.gif" alt="{writeDiggMsgTag}" title="{writeDiggMsgTag}" width="24" height="16" border="0" /> {writeDiggMsg}<br />
     <img src="images/print.gif" alt="{writePrintMsgTag}" title="{writePrintMsgTag}" width="16" height="16" border="0" /> {writePrintMsg}<br />
     <img src="images/email.gif" alt="{writeSend2FriendMsgTag}" title="{writeSend2FriendMsgTag}" width="16" height="16" border="0" /> {writeSend2FriendMsg}<br />
-    <img src="images/pdf.gif" alt="{writePDFTag}" title="{writePDFTag}" width="16" height="16" border="0" /> {writePDF}<br />
-    <img src="images/xml.gif" alt="{writeXMLMsgTag}" title="{writeXMLMsgTag}" width="24" height="16" border="0" /> {writeXMLMsg}
+    <img src="images/pdf.gif" alt="{writePDFTag}" title="{writePDFTag}" width="16" height="16" border="0" /> {writePDF}
     </p>
 
     <!-- Voting Form -->
