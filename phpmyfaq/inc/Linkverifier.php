@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Linkverifier.php,v 1.8 2006-09-03 20:53:37 matteo Exp $
+* $Id: Linkverifier.php,v 1.9 2006-09-04 17:02:31 matteo Exp $
 *
 * PMF_Linkverifier
 *
@@ -475,10 +475,10 @@ class PMF_Linkverifier
         // open socket for remote server with timeout (default: 5secs)
         // PHP 4.3.0+: when compiled w/ OpenSSL support, fsockopen can connect to the remote host using SSL
         $_host = $urlParts['host'];
-        if ('https' == $urlParts['scheme']) {
+        if (@extension_loaded('openssl') && ('https' == $urlParts['scheme'])) {
             $_host = 'ssl://'.$_host;
         }
-        $fp = fsockopen($_host, $urlParts['port'], $errno, $errstr, LINKVERIFIER_CONNECT_TIMEOUT);
+        $fp = @fsockopen($_host, $urlParts['port'], $errno, $errstr, LINKVERIFIER_CONNECT_TIMEOUT);
         if (!$fp) {
             // mark this host too slow to verify
             $this->slow_hosts[$urlParts['host']] = true;
