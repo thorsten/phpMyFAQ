@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: save.php,v 1.27 2006-09-03 19:58:55 thorstenr Exp $
+* $Id: save.php,v 1.28 2006-09-04 19:48:59 matteo Exp $
 *
 * Saves a user FAQ record and sends an email to the user
 *
@@ -45,14 +45,15 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
         $content = $content."<br />".$PMF_LANG["msgInfo"]."<a href=\"http://".substr($contentlink,7)."\" target=\"_blank\">".$contentlink."</a>";
     }
 
+    $userMail = $IDN->encode($db->escape_string($_POST["usermail"]));
     $newData = array(
         'lang'          => $LANGCODE,
-        'thema'         => $db->escape_string(safeSQL(safeHTML($_POST['thema']))),
+        'thema'         => $db->escape_string(safeHTML($_POST['thema'])),
         'active'        => 'no',
         'content'       => $content,
-        'keywords'      => $db->escape_string(safeSQL($_POST['keywords'])),
-        'author'        => $db->escape_string(safeSQL($_POST['username'])),
-        'email'         => $IDN->encode($_POST['usermail']),
+        'keywords'      => $db->escape_string($_POST['keywords']),
+        'author'        => $db->escape_string($_POST['username']),
+        'email'         => $userMail,
         'comment'       => 'y',
         'date'          => date('YmdHis'),
         'dateStart'     => '00000000000000',
@@ -63,7 +64,10 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
     $selected_category = intval($_POST['rubrik']);
     $faq->addRecord($newData, $selected_category);
 
-    $headers = "CC: ".$tree->getCategoryUser($selected_category)."\n";
+    $userId = $tree->getCategoryUser($selected_category);
+    $oUser = new PMF_User();
+    $oUser->addDb($db);
+    $oUser->getUserById($userId);
 
     $additional_header = array();
     $additional_header[] = 'MIME-Version: 1.0';
@@ -71,7 +75,11 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
     if (strtolower($PMF_LANG['metaCharset']) == 'utf-8') {
         $additional_header[] = 'Content-Transfer-Encoding: 8bit';
     }
-    $additional_header[] = 'From: '.$usermail;
+    $additional_header[] = 'From: '.$userMail;
+    // Let the category owner get a copy of the message
+    if ($IDN->encode($PMF_CONF["adminmail"]) != $oUser->getUserData('email')) {
+        $additional_header[] = "Cc: ".$oUser->getUserData('email')."\n";
+    }
     $subject = unhtmlentities($PMF_CONF["title"]);
     if (function_exists('mb_encode_mimeheader')) {
         $subject = mb_encode_mimeheader($subject);
@@ -80,7 +88,7 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
     if (ini_get('safe_mode')) {
         mail($IDN->encode($PMF_CONF["adminmail"]), $subject, $body, implode("\r\n", $additional_header));
     } else {
-        mail($IDN->encode($PMF_CONF["adminmail"]), $subject, $body, implode("\r\n", $additional_header), "-f$usermail");
+        mail($IDN->encode($PMF_CONF["adminmail"]), $subject, $body, implode("\r\n", $additional_header), "-f$userMail");
     }
 
     $tpl->processTemplate ("writeContent", array(
