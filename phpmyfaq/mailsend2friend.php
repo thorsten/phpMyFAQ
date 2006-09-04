@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mailsend2friend.php,v 1.11 2006-08-30 05:30:25 thorstenr Exp $
+* $Id: mailsend2friend.php,v 1.12 2006-09-04 20:04:05 matteo Exp $
 *
 * Sends the emails to your friends
 *
@@ -47,7 +47,7 @@ if (   isset($_POST['name']) && $_POST['name'] != ''
             $mail = $db->escape_string(strip_tags($mail));
             if ($mail != "") {
                 mail($IDN->encode($mail), $PMF_LANG["msgS2FMailSubject"].$name, $PMF_CONF["send2friend_text"]."\n\n".$PMF_LANG["msgS2FText2"]."\n".$link."\n\n".$attached, "From: ".$IDN->encode($mailfrom));
-                usleep(500);
+                usleep(250);
             }
         }
         $tpl->processTemplate ("writeContent", array(

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: savequestion.php,v 1.22 2006-08-30 05:30:25 thorstenr Exp $
+* $Id: savequestion.php,v 1.23 2006-09-04 20:04:05 matteo Exp $
 *
 * @author           Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author           David Saez Padros <david@ols.es>
@@ -84,7 +84,11 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
                 // if windows, cr must "\r\n". if other must "\n".
                 $body = str_replace("\n", "\r\n", $body);
             }
-            mail($IDN->encode($PMF_CONF['adminmail']), $PMF_CONF['title'], $body, implode("\r\n", $additional_header), '-f'.$usermail);
+            if (ini_get('safe_mode')) {
+                mail($IDN->encode($PMF_CONF['adminmail']), $PMF_CONF['title'], $body, implode("\r\n", $additional_header));
+            } else {
+                mail($IDN->encode($PMF_CONF['adminmail']), $PMF_CONF['title'], $body, implode("\r\n", $additional_header), '-f'.$usermail);
+            }
 
             $tpl->processTemplate ("writeContent", array(
                     "msgQuestion" => $PMF_LANG["msgQuestion"],

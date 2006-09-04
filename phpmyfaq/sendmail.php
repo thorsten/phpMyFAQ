@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: sendmail.php,v 1.9 2006-08-30 05:30:25 thorstenr Exp $
+* $Id: sendmail.php,v 1.10 2006-09-04 20:04:05 matteo Exp $
 *
 * The 'send an email from the contact page' page
 *
@@ -53,7 +53,11 @@ if (    isset($_POST["name"]) && $_POST["name"] != ''
     }
     $additional_header[] = 'From: '.$name.' <'.$sender.'>';
 
-    mail($IDN->encode($PMF_CONF['adminmail']), $subject, $question, implode("\r\n", $additional_header), '-f'.$sender);
+    if (ini_get('safe_mode')) {
+        mail($IDN->encode($PMF_CONF['adminmail']), $subject, $question, implode("\r\n", $additional_header));
+    } else {
+        mail($IDN->encode($PMF_CONF['adminmail']), $subject, $question, implode("\r\n", $additional_header), '-f'.$sender);
+    }
 
     $tpl->processTemplate ("writeContent", array(
             "msgContact" => $PMF_LANG["msgContact"],

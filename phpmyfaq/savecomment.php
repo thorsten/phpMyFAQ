@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: savecomment.php,v 1.17 2006-08-30 05:30:25 thorstenr Exp $
+* $Id: savecomment.php,v 1.18 2006-09-04 20:04:05 matteo Exp $
 *
 * Saves the posted comment
 *
@@ -93,10 +93,10 @@ if (    isset($_POST['user']) && $_POST['user'] != ''
         if (strtolower($PMF_LANG['metaCharset']) == 'utf-8') {
             $additional_header[] = 'Content-Transfer-Encoding: 8bit';
         }
-        $additional_header[] = 'From: '.'<'.$IDN->encode($commentData['usermail']).'>';
+        $additional_header[] = 'From: <'.$IDN->encode($commentData['usermail']).'>';
         // Let the admin always get a copy
         if ($emailTo != $PMF_CONF['adminmail']) {
-            $additional_header[] = 'Cc: '.'<'.$IDN->encode($PMF_CONF['adminmail']).'>';
+            $additional_header[] = 'Cc: <'.$IDN->encode($PMF_CONF['adminmail']).'>';
         }
         $body = strip_tags($commentMail);
         $body = str_replace(array("\r\n", "\r", "\n"), "\n", $body);
@@ -106,7 +106,11 @@ if (    isset($_POST['user']) && $_POST['user'] != ''
             $body = str_replace("\n", "\r\n", $body);
         }
         // Send the email
-        mail($IDN->encode($emailTo), $PMF_CONF['title'], $body, implode("\r\n", $additional_header), '-f'.$IDN->encode($commentData['usermail']));
+        if (ini_get('safe_mode')) {
+            mail($IDN->encode($emailTo), $PMF_CONF['title'], $body, implode("\r\n", $additional_header));
+        } else {
+            mail($IDN->encode($emailTo), $PMF_CONF['title'], $body, implode("\r\n", $additional_header), '-f'.$IDN->encode($commentData['usermail']));
+        }
 
         $tpl->processTemplate ("writeContent", array(
                                                 "msgCommentHeader"  => $msgWriteComment,
