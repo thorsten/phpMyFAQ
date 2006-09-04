@@ -1,5 +1,5 @@
 /**
-* $Id: functions.js,v 1.2 2006-07-24 21:32:56 matteo Exp $
+* $Id: functions.js,v 1.3 2006-09-04 16:59:12 matteo Exp $
 *
 * Some JavaScript functions used in the admin backend
 *
@@ -72,8 +72,15 @@ function addEngine(uri, name, ext, cat)
 
 function focusOnUsernameField()
 {
-    if (document.forms[0] && document.forms[0].elements["faqusername"]) {
-        document.forms[0].elements["faqusername"].focus();
+    if (document.getElementById('faqusername')) {
+        document.getElementById('faqusername').focus();
+    }
+}
+
+function focusOnSearchField()
+{
+    if (document.getElementById('searchfield')) {
+        document.getElementById('searchfield').focus();
     }
 }
 
