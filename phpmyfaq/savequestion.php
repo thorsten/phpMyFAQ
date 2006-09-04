@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: savequestion.php,v 1.23 2006-09-04 20:04:05 matteo Exp $
+* $Id: savequestion.php,v 1.24 2006-09-04 20:08:06 thorstenr Exp $
 *
 * @author           Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author           David Saez Padros <david@ols.es>
@@ -67,9 +67,12 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
                             .wordwrap(stripslashes($content), 72);
             $headers = '';
             $result = $db->query("SELECT ".SQLPREFIX."faquserdata.email FROM ".SQLPREFIX."faquserdata INNER JOIN ".SQLPREFIX."faqcategories ON ".SQLPREFIX."faqcategories.user_id = ".SQLPREFIX."faquserdata.user_id WHERE ".SQLPREFIX."faqcategories.id = ".$selected_category);
-            while ($row = $db->fetch_object($result)) {
-                $headers .= "CC: ".$row->email."\n";
-            }
+            
+            $userId = $tree->getCategoryUser($selected_category);
+            $oUser = new PMF_User();
+            $oUser->addDb($db);
+            $oUser->getUserById($userId);
+            
             $additional_header = array();
             $additional_header[] = 'MIME-Version: 1.0';
             $additional_header[] = 'Content-Type: text/plain; charset='. $PMF_LANG['metaCharset'];
@@ -77,6 +80,10 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
                 $additional_header[] = 'Content-Transfer-Encoding: 8bit';
             }
             $additional_header[] = 'From: "'.$username.'" <'.$usermail.'>';
+            // Let the category owner get a copy of the message
+            if ($IDN->encode($PMF_CONF["adminmail"]) != $oUser->getUserData('email')) {
+                $additional_header[] = "Cc: ".$oUser->getUserData('email')."\n";
+            }
             $body = $questionMail;
             $body = str_replace(array("\r\n", "\r", "\n"), "\n", $body);
             $body = str_replace(array("\r\n", "\r", "\n"), "\n", $body);
