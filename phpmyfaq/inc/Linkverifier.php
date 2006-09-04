@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Linkverifier.php,v 1.10 2006-09-04 17:28:11 matteo Exp $
+* $Id: Linkverifier.php,v 1.11 2006-09-04 19:02:34 matteo Exp $
 *
 * PMF_Linkverifier
 *
@@ -490,7 +490,7 @@ class PMF_Linkverifier
         $_url = $urlParts['path'].$urlParts['query'].$urlParts['fragment'];
         fputs($fp, "HEAD ".$_url." HTTP/1.0\r\nHost: ".$urlParts['host']."\r\n");
         // Be polite: let our probe declares itself
-        fputs($fp, "User-Agent: phpMyFAQ/".$faqconfig->get('version')." PHP/".phpversion()."\r\n");
+        fputs($fp, "User-Agent: phpMyFAQ Link Checker\r\n");
         fputs($fp, "\r\n");
         while (!feof($fp)) { $_response .= fread($fp, 4096); }
         fclose($fp);
@@ -518,24 +518,26 @@ class PMF_Linkverifier
         // process response code
         switch ( $code ) {
             // TODO: Add more explicit http status management
-            // FIXME: Wikipedia always returns 403
-            case '301': // Moved Permanently (go recursive ?)
-            case '302': // Found (go recursive ?)
-                return $this->openURL($url, $location, $redirectCount + 1);
-                break;
             case '200': // OK
                 $_reason = ($redirectCount > 0) ? sprintf($PMF_LANG['ad_linkcheck_openurl_redirected'],htmlspecialchars($url)) : "";
                 return array(true, $redirectCount, $_reason);
                 break;
+            case '301': // Moved Permanently (go recursive ?)
+            case '302': // Found (go recursive ?)
+                return $this->openURL($url, $location, $redirectCount + 1);
+                break;
             case 400:   // Bad Request
                 return array(false, $redirectCount, sprintf($PMF_LANG['ad_linkcheck_openurl_ambiguous'].'<br />'.$httpStatusMsg, $code));
+                break;
+            case 404:   // Not found
+                return array(false, $redirectCount, sprintf($PMF_LANG['ad_linkcheck_openurl_not_found'], $urlParts['host']));
                 break;
             case '300': // Multiple choices
             case '401': // Unauthorized (but it's there. right ?)
                 return array(true, $redirectCount, sprintf($PMF_LANG['ad_linkcheck_openurl_ambiguous'], $code));
                 break;
             case '405': // Method Not Allowed
-                // TODO: add a fallback to use GET method?
+                // TODO: Add a fallback to use GET method, otherwise this link should be marked as bad
                 return array(true, $redirectCount, sprintf($PMF_LANG['ad_linkcheck_openurl_not_allowed'], $urlParts['host'], $allowVerbs));
                 break;
             default:    // All other statuses
