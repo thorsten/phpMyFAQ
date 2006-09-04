@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Linkverifier.php,v 1.9 2006-09-04 17:02:31 matteo Exp $
+* $Id: Linkverifier.php,v 1.10 2006-09-04 17:28:11 matteo Exp $
 *
 * PMF_Linkverifier
 *
@@ -407,7 +407,7 @@ class PMF_Linkverifier
 
     function openURL($url = "", $redirect = "", $redirectCount = 0)
     {
-        global $PMF_LANG;
+        global $faqconfig, $PMF_LANG;
 
         // If prequisites fail
         if ($this->isReady() == false) {
@@ -489,6 +489,8 @@ class PMF_Linkverifier
         stream_set_timeout($fp, LINKVERIFIER_RESPONSE_TIMEOUT, 0);
         $_url = $urlParts['path'].$urlParts['query'].$urlParts['fragment'];
         fputs($fp, "HEAD ".$_url." HTTP/1.0\r\nHost: ".$urlParts['host']."\r\n");
+        // Be polite: let our probe declares itself
+        fputs($fp, "User-Agent: phpMyFAQ/".$faqconfig->get('version')." PHP/".phpversion()."\r\n");
         fputs($fp, "\r\n");
         while (!feof($fp)) { $_response .= fread($fp, 4096); }
         fclose($fp);
@@ -508,13 +510,15 @@ class PMF_Linkverifier
             if (preg_match("/^Location: (.*)$/", $_response, $matches)) {
                 $location = $matches[1];
             }
-            if (preg_match("/^Allow: (.*)$/", $_response, $matches)) {
+            if (preg_match("/^[a|A]llow: (.*)$/", $_response, $matches)) {
                 $allowVerbs = $matches[1];
             }
         }
 
         // process response code
         switch ( $code ) {
+            // TODO: Add more explicit http status management
+            // FIXME: Wikipedia always returns 403
             case '301': // Moved Permanently (go recursive ?)
             case '302': // Found (go recursive ?)
                 return $this->openURL($url, $location, $redirectCount + 1);
