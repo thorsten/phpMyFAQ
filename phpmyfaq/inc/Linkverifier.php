@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Linkverifier.php,v 1.11 2006-09-04 19:02:34 matteo Exp $
+* $Id: Linkverifier.php,v 1.12 2006-09-05 20:33:27 matteo Exp $
 *
 * PMF_Linkverifier
 *
@@ -109,6 +109,10 @@ class PMF_Linkverifier
         $this->addIgnoreProtocol("mailto:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "mailto"));
         $this->addIgnoreProtocol("telnet:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "telnet"));
         $this->addIgnoreProtocol("feed:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "feed"));
+        
+        // Hack: these below are not real scheme for defining protocols like the ones above
+        $this->addIgnoreProtocol("file:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "file"));
+        $this->addIgnoreProtocol("javascript:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "javascript"));
     }
 
 
@@ -344,7 +348,6 @@ class PMF_Linkverifier
         } else {
             $pathparts['port'] = "";
         }
-
 
         // If path is not specified in reference uri, set as blank
         if (isset($pathparts['path'])) {
