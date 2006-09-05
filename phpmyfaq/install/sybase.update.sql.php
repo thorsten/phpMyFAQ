@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: sybase.update.sql.php,v 1.4 2006-08-28 18:56:50 thorstenr Exp $
+* $Id: sybase.update.sql.php,v 1.5 2006-09-05 05:22:49 matteo Exp $
 *
 * CREATE TABLE instruction for Sybase database
 *
@@ -77,7 +77,7 @@ description text NULL,
 auto_join integer NULL,
 PRIMARY KEY(group_id)
 )
-CREATE UNIQUE INDEX idxName ON ".$sqltblpre."faqgroup (name)";
+CREATE UNIQUE INDEX ".SQLPREFIX."idxGroupName ON ".SQLPREFIX."faqgroup (name)";
 
 //faqgroup_right
 $query[] = "CREATE TABLE ".SQLPREFIX."faqgroup_right (
