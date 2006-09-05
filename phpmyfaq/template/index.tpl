@@ -29,7 +29,7 @@
     -->
     /*]]>*/
     </style>
-    <script type="text/javascript"  src="inc/js/functions.js"></script>
+    <script type="text/javascript" src="inc/js/functions.js"></script>
     <link rel="shortcut icon" href="template/favicon.ico" type="image/x-icon" />
     <link rel="icon" href="template/favicon.ico" type="image/x-icon" />
     <link rel="alternate" title="News RSS Feed" type="application/rss+xml" href="feed/news/rss.php" />
@@ -37,7 +37,7 @@
     <link rel="alternate" title="Latest FAQ Records RSS Feed" type="application/rss+xml" href="feed/latest/rss.php" />
     <link rel="alternate" title="Open Questions RSS Feed" type="application/rss+xml" href="feed/openquestions/rss.php" />
 </head>
-<body dir="{dir}" onload="focusOnSearchField();">
+<body dir="{dir}" onload="javascript:focusOnSearchField();">
 
 <div id="wrapper1">
     <div id="wrapper2">
