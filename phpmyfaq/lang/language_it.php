@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.29 2006-09-04 19:02:34 matteo Exp $
+* $Id: language_it.php,v 1.30 2006-09-05 18:55:53 matteo Exp $
 *
 * Italian language file
 *
@@ -677,8 +677,8 @@ $PMF_LANG['ad_linkcheck_openurl_tooslow'] = 'L\'host <strong>%s</strong> &egrave
 $PMF_LANG['ad_linkcheck_openurl_nodns'] = 'La risoluzione DNS dell\'host <strong>%s</strong> &egrave; lenta o non &egrave; possibile effettuarla tramite i settaggi attuali del DNS, locale o remoto.';
 $PMF_LANG['ad_linkcheck_openurl_redirected'] = 'L\'URL &egrave; stata rediretta <strong>%s</strong>.';
 $PMF_LANG['ad_linkcheck_openurl_ambiguous'] = 'E\' stato ritornato uno stato HTTP ambiguo, <strong>%s</strong>.';
-$PMF_LANG['ad_linkcheck_openurl_not_allowed'] = 'Il metodo <em>HEAD</em> non è supportato dal server <strong>%s<strong>, questi i metodi supportati: <strong>%s</strong>.';
-$PMF_LANG['ad_linkcheck_openurl_not_found'] = 'La risorsa non è stata trovata nel server <strong>%s</strong>.';
+$PMF_LANG['ad_linkcheck_openurl_not_allowed'] = 'Il metodo <em>HEAD</em> non &egrave; supportato dal server <strong>%s<strong>, questi i metodi supportati: <strong>%s</strong>.';
+$PMF_LANG['ad_linkcheck_openurl_not_found'] = 'La risorsa non &egrave; stata trovata nel server <strong>%s</strong>.';
 $PMF_LANG['ad_linkcheck_protocol_unsupported'] = 'Il protocollo %s non &egrave; supportato dalla verifica automatica dei links.';
 $PMF_LANG['ad_menu_linkconfig'] = 'Configura la verifica automatica delle URL';
 $PMF_LANG['ad_linkcheck_config_title'] = 'Configurazione della verifica delle URL';
