@@ -3,7 +3,7 @@
 <head>
     <title>{title}</title>
     <meta http-equiv="Content-Type" content="application/xhtml+xml; charset={metaCharset}" />
-    <meta name="title" content="{title}" />
+    <meta name="title" content="{metaTitle}" />
     <meta name="description" content="{metaDescription}" />
     <meta name="keywords" content="{metaKeywords}" />
     <meta name="author" content="{metaPublisher}" />
