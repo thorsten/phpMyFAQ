@@ -14,21 +14,13 @@
     <meta name="robots" content="INDEX, FOLLOW" />
     <meta name="revisit-after" content="7 days" />
     <meta name="MSSmartTagsPreventParsing" content="true" />
-    <style type="text/css" media="screen">
-    /*<![CDATA[*/
-    <!--
+    <style type="text/css" media="screen"> /*<![CDATA[*/ <!--
     @import url(template/style.css);
     @import url(template/colors.css);
-    -->
-    /*]]>*/
-    </style>
-    <style type="text/css" media="print">
-    /*<![CDATA[*/
-    <!--
+    --> /*]]>*/ </style>
+    <style type="text/css" media="print"> /*<![CDATA[*/ <!--
     @import "template/print.css";
-    -->
-    /*]]>*/
-    </style>
+    --> /*]]>*/ </style>
     <script type="text/javascript" src="inc/js/functions.js"></script>
     <link rel="shortcut icon" href="template/favicon.ico" type="image/x-icon" />
     <link rel="icon" href="template/favicon.ico" type="image/x-icon" />
@@ -36,6 +28,7 @@
     <link rel="alternate" title="TopTen RSS Feed" type="application/rss+xml" href="feed/topten/rss.php" />
     <link rel="alternate" title="Latest FAQ Records RSS Feed" type="application/rss+xml" href="feed/latest/rss.php" />
     <link rel="alternate" title="Open Questions RSS Feed" type="application/rss+xml" href="feed/openquestions/rss.php" />
+    <link rel="microsummary" type="application/x.microsummary+xml" href="/microsummary.php" />
 </head>
 <body dir="{dir}" onload="javascript:focusOnSearchField();">
 
