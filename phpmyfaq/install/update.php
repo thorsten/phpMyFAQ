@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.82 2006-08-28 19:21:46 matteo Exp $
+* $Id: update.php,v 1.83 2006-09-05 19:20:57 matteo Exp $
 *
 * Main update script
 *
@@ -25,13 +25,26 @@ define('NEWVERSION', '2.0.0-alpha0');
 define('COPYRIGHT', '&copy; 2001-2006 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
-require_once(PMF_ROOT_DIR."/inc/data.php");
 require_once(PMF_ROOT_DIR."/inc/constants.php");
 
 if (isset($_GET["step"]) && $_GET["step"] != "") {
     $step = $_GET["step"];
 } else {
     $step = 1;
+}
+
+/**
+* HTMLFooter()
+*
+* Print out the HTML Footer
+*
+* @return   void
+* @access   public
+* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+*/
+function HTMLFooter()
+{
+    print '<p class="center">'.COPYRIGHT.'</p></body></html>';
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
@@ -119,8 +132,14 @@ if (isset($_GET["step"]) && $_GET["step"] != "") {
 <body>
 
 <h1 id="header">phpMyFAQ <?php print NEWVERSION; ?> Update</h1>
-
 <?php
+if (!@is_readable(PMF_ROOT_DIR.'/inc/data.php')) {
+    print '<p class="center">It seems you never run a version of phpMyFAQ.<br />Please use the <a href="installer.php">install script</a>.</p>';
+    HTMLFooter();
+    die();
+}
+require_once(PMF_ROOT_DIR.'/inc/data.php');
+
 /**************************** STEP 1 OF 5 ***************************/
 if ($step == 1) {
 ?>
@@ -168,6 +187,7 @@ if ($step == 1) {
 </fieldset>
 </form>
 <?php
+    HTMLFooter();
 }
 
 /**************************** STEP 2 OF 5 ***************************/
@@ -222,9 +242,10 @@ if ($step == 2) {
 </fieldset>
 </form>
 <?php
+        HTMLFooter();
     } else {
         print "<p class=\"error\"><strong>Error:</strong> Your version of phpMyFAQ could not updated.</p>\n";
-        print "<p class=\"center\">".COPYRIGHT."</p>\n</body>\n</html>";
+        HTMLFooter();
         die();
     }
 }
@@ -326,6 +347,7 @@ if ($step == 3) {
 </fieldset>
 </form>
 <?php
+    HTMLFooter();
 }
 
 /**************************** STEP 4 OF 5 ***************************/
@@ -359,6 +381,7 @@ if ($step == 4) {
 </fieldset>
 </form>
 <?php
+    HTMLFooter();
 }
 
 /**************************** STEP 5 OF 5 ***************************/
@@ -1266,8 +1289,6 @@ if ($step == 5) {
         print "<p class=\"center\">Please delete the file 'installer.php' manually.</p>\n";
     }
 
+    HTMLFooter();
 }
 ?>
-<p class="center"><?php print COPYRIGHT; ?></p>
-</body>
-</html>

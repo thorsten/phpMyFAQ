@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.68 2006-08-28 19:21:46 matteo Exp $
+* $Id: installer.php,v 1.69 2006-09-05 19:20:57 matteo Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -273,7 +273,7 @@ if (!phpmyfaq_check()) {
     HTMLFooter();
     die();
 }
-$dirs = array('/attachments', '/data', '/images', '/inc', '/pdf', '/xml',);
+$dirs = array('/attachments', '/data', '/images/Image', '/inc', '/pdf', '/xml',);
 $faileddirs = array();
 foreach ($dirs as $dir) {
     if (!@is_dir(PMF_ROOT_DIR.$dir)) {
