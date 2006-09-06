@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: category.main.php,v 1.19 2006-09-06 17:55:43 thorstenr Exp $
+* $Id: category.main.php,v 1.20 2006-09-06 19:07:54 thorstenr Exp $
 *
 * List all categories in the admin section
 *
@@ -134,20 +134,51 @@ if ($permission['editcateg']) {
         for ($i = 0; $i < $cat['indent']; $i++) {
             $indent .= '&nbsp;&nbsp;&nbsp;';
         }
-        printf("%s<strong style=\"vertical-align: top;\">&middot; %s</strong> ", $indent, $cat["name"]);
-        printf('<a href="%s&amp;action=addcategory&amp;cat=%s" title="%s"><img src="images/add.gif" width="17" height="18" alt="%s" title="%s" border="0" /></a>', $currentLink, $cat['id'], $PMF_LANG['ad_kateg_add'], $PMF_LANG['ad_kateg_add'], $PMF_LANG['ad_kateg_add']);
-        printf('<a href="%s&amp;action=editcategory&amp;cat=%s" title="%s"><img src="images/edit.gif" width="18" height="18" border="0" title="%s" alt="%s" /></a>', $currentLink, $cat['id'], $PMF_LANG['ad_kateg_rename'], $PMF_LANG['ad_kateg_rename'], $PMF_LANG['ad_kateg_rename']);
+        printf("%s<strong style=\"vertical-align: top;\">&middot; %s</strong> ",
+            $indent,
+            $cat["name"]);
+        printf('<a href="%s&amp;action=addcategory&amp;cat=%s" title="%s"><img src="images/add.gif" width="17" height="18" alt="%s" title="%s" border="0" /></a>',
+            $currentLink,
+            $cat['id'],
+            $PMF_LANG['ad_kateg_add'],
+            $PMF_LANG['ad_kateg_add'],
+            $PMF_LANG['ad_kateg_add']);
+        printf('<a href="%s&amp;action=editcategory&amp;cat=%s" title="%s"><img src="images/edit.gif" width="18" height="18" border="0" title="%s" alt="%s" /></a>',
+            $currentLink,
+            $cat['id'],
+            $PMF_LANG['ad_kateg_rename'],
+            $PMF_LANG['ad_kateg_rename'],
+            $PMF_LANG['ad_kateg_rename']);
+
         if (count($tree->getChildren($cat['id'])) == 0) {
-            printf('<a href="%s&amp;action=deletecategory&amp;cat=%s&amp;lang=%s" title="%s"><img src="images/delete.gif" width="17" height="18" alt="%s" title="%s" border="0" /></a>', $currentLink, $cat['id'], $cat['lang'], $PMF_LANG['ad_categ_delete'], $PMF_LANG['ad_categ_delete'], $PMF_LANG['ad_categ_delete']);
+            printf('<a href="%s&amp;action=deletecategory&amp;cat=%s&amp;lang=%s" title="%s"><img src="images/delete.gif" width="17" height="18" alt="%s" title="%s" border="0" /></a>',
+                $currentLink,
+                $cat['id'],
+                $cat['lang'],
+                $PMF_LANG['ad_categ_delete'],
+                $PMF_LANG['ad_categ_delete'],
+                $PMF_LANG['ad_categ_delete']);
         }
-        printf('<a href="%s&amp;action=cutcategory&amp;cat=%s" title="%s"><img src="images/cut.gif" width="16" height="16" alt="%s" border="0" title="%s" /></a>', $currentLink, $cat['id'], $PMF_LANG['ad_categ_cut'], $PMF_LANG['ad_categ_cut'], $PMF_LANG['ad_categ_cut']);
-        printf('<a href="%s&amp;action=movecategory&amp;cat=%s&amp;parent_id=%s" title="%s"><img src="images/move.gif" width="16" height="16" alt="%s" border="0" title="%s" /></a>', $currentLink, $cat['id'], $cat['parent_id'], $PMF_LANG['ad_categ_move'], $PMF_LANG['ad_categ_move'], $PMF_LANG['ad_categ_move']);
+        printf('<a href="%s&amp;action=cutcategory&amp;cat=%s" title="%s"><img src="images/cut.gif" width="16" height="16" alt="%s" border="0" title="%s" /></a>',
+            $currentLink,
+            $cat['id'],
+            $PMF_LANG['ad_categ_cut'],
+            $PMF_LANG['ad_categ_cut'],
+            $PMF_LANG['ad_categ_cut']);
+        printf('<a href="%s&amp;action=movecategory&amp;cat=%s&amp;parent_id=%s" title="%s"><img src="images/move.gif" width="16" height="16" alt="%s" border="0" title="%s" /></a>',
+            $currentLink,
+            $cat['id'],
+            $cat['parent_id'],
+            $PMF_LANG['ad_categ_move'],
+            $PMF_LANG['ad_categ_move'],
+            $PMF_LANG['ad_categ_move']);
         print "<br />";
     }
-?>
-    <p><img src="images/arrow.gif" width="11" height="11" alt="" border="0" /> <a href="<?php print $currentLink.'&amp;action=addcategory'; ?>"><?php print $PMF_LANG['ad_kateg_add']; ?></a></p>
-    <p><?php print $PMF_LANG['ad_categ_remark']; ?></p>
-<?php
+
+    printf('<p><img src="images/arrow.gif" width="11" height="11" alt="" border="0" /> <a href="%s&amp;action=addcategory">%s</a></p>',
+        $currentLink,
+        $PMF_LANG['ad_kateg_add']);
+    printf('<p>%s</p>', $PMF_LANG['ad_categ_remark']);
 } else {
     print $PMF_LANG['err_NotAuth'];
 }
