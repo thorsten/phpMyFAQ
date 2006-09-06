@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Category.php,v 1.13 2006-09-06 16:32:16 thorstenr Exp $
+* $Id: Category.php,v 1.14 2006-09-06 17:47:33 thorstenr Exp $
 *
 * The main category class
 *
@@ -1137,5 +1137,35 @@ class PMF_Category
         }
 
         return $result;
+    }
+
+    /**
+     * Updates the parent category
+     *
+     * @param   integer $category_id
+     * @param   integer $parent_id
+     * @return  boolean
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function updateParentCategory($category_id, $parent_id)
+    {
+        if ((!is_numeric($category_id) || !is_numeric($parent_id)) && $category_id != $parent_id) {
+            return false;
+        }
+
+        $query = sprintf("
+            UPDATE
+                %sfaqcategories
+            SET
+                parent_id = %d
+            WHERE
+                id = %d",
+            SQLPREFIX,
+            $parent_id,
+            $category_id);
+        $this->db->query($query);
+
+        return true;
     }
 }
