@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.65 2006-09-06 16:43:53 thorstenr Exp $
+* $Id: index.php,v 1.66 2006-09-06 17:55:43 thorstenr Exp $
 *
 * The main admin backend index file
 *
@@ -205,12 +205,12 @@ if (isset($auth)) {
             case 'savecategory':
             case 'updatecategory':
             case 'removecategory':
-            case 'changecategory':          require_once ('category.main.php'); break;
+            case 'changecategory':
+            case 'pastecategory':           require_once ('category.main.php'); break;
             case "addcategory":             require_once ("category.add.php"); break;
             case "editcategory":            require_once ("category.edit.php"); break;
             case "deletecategory":          require_once ("category.delete.php"); break;
             case "cutcategory":             require_once ("category.cut.php"); break;
-            case "pastecategory":           require_once ("category.paste.php"); break;
             case "movecategory":            require_once ("category.move.php"); break;
             // glossary
             case 'glossary':
