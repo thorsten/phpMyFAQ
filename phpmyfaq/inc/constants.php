@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: constants.php,v 1.18 2006-09-03 08:47:21 matteo Exp $
+* $Id: constants.php,v 1.19 2006-09-06 21:47:23 matteo Exp $
 *
 * Constants for phpMyFAQ
 *
@@ -126,25 +126,24 @@ $supported_databases = array(
 
 /* allowed 'action' varibales for GET - DO NOT CHANGE! */
 $allowedVariables = array(
-        'add' => 1,
-        'contact' => 1,
-        'mailsend2friend' => 1,
-        'save' => 1,
-        'savevoting' => 1,
-        'sendmail' => 1,
-        'writecomment' => 1,
-        'artikel' => 1,
-        'news' => 1,
-        'help' => 1,
-        'savecomment' => 1,
-        'search' => 1,
-        'show' => 1,
-        'xml' => 1,
-        'ask' => 1,
-        'open' => 1,
-        'savequestion' => 1,
-        'send2friend' => 1,
-        'sitemap' => 1
+        'add'               => 1,
+        'artikel'           => 1,
+        'ask'               => 1,
+        'contact'           => 1,
+        'help'              => 1,
+        'mailsend2friend'   => 1,
+        'news'              => 1,
+        'open'              => 1,
+        'save'              => 1,
+        'savecomment'       => 1,
+        'savequestion'      => 1,
+        'savevoting'        => 1,
+        'search'            => 1,
+        'send2friend'       => 1,
+        'sendmail'          => 1,
+        'show'              => 1,
+        'sitemap'           => 1,
+        'writecomment'      => 1
         );
 
 /* ISO 639 language code list - DO NOT CHANGE! */

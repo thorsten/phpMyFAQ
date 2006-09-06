@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: news.php,v 1.5 2006-08-30 05:30:25 thorstenr Exp $
+* $Id: news.php,v 1.6 2006-09-06 21:47:23 matteo Exp $
 *
 * Shows the page with the news record and - when available - the user
 * comments
@@ -92,7 +92,7 @@ $tpl->processTemplate ("writeContent", array(
     'writeNewsRSS'              => $writeNewsRSS,
     'writeHeader'               => $header,
     'writeContent'              => $content,
-    'writeDateMsg'              => ($news['active'] && (!$expired)) ? $PMF_LANG['msgLastUpdateArticle'].$news['date'] : '',
+    'writeDateMsg'              => ($news['active'] && (!$expired)) ? $PMF_LANG['msgLastUpdateArticle'].'<span id="newsLastUpd">'.$news['date'].'</span>' : '',
     'writeAuthor'               => ($news['active'] && (!$expired)) ? $PMF_LANG['msgAuthor'].$news['authorName'] : '',
     'editThisEntry'             => $editThisEntry,
     'writeCommentMsg'           => $commentMessage,

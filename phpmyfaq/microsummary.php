@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: microsummary.php,v 1.1 2006-09-05 20:22:18 thorstenr Exp $
+ * $Id: microsummary.php,v 1.2 2006-09-06 21:47:23 matteo Exp $
  *
  * Microsummary backend
  *
@@ -20,7 +20,108 @@
  * under the License.
  */
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
-    exit();
+header("Expires: Mon, 06 Sep 2006 00:00:00 GMT");
+header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
+header("Cache-Control: no-store, no-cache, must-revalidate");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+header("Content-type: text/xml");
+header("Vary: Negotiate,Accept");
+
+require_once('inc/constants.php');
+require_once('inc/Link.php');
+
+//
+// Found an action reference?
+//
+if (   isset($_GET['action'])
+    && is_string($_GET['action'])
+    && !preg_match("=/=", $_GET['action'])
+    && isset($allowedVariables[$_GET['action']])
+    ) {
+    $action = trim($_GET['action']);
+} else {
+    $action = "main";
 }
+
+//
+// Define what are the actions for which a microsummary generator (microsummary.php) is defined
+//
+$microRules = array(
+                'artikel'   => 'phpMyFAQ Faq Records',
+                'main'      => 'phpMyFAQ Homepage',
+                'news'      => 'phpMyFAQ Latest News',
+                'open'      => 'phpMyFAQ Open Questions',
+                'show'      => 'phpMyFAQ Categories'
+                );
+?>
+<?xml version="1.0" encoding="UTF-8"?>
+<generator xmlns="http://www.mozilla.org/microsummaries/0.1"
+           name="<?php print($microRules[$action]); ?>">
+  <template>
+    <transform xmlns="http://www.w3.org/1999/XSL/Transform" version="1.0">
+      <output method="text"/>
+<?php
+switch($action) {
+    case 'main': // Home Page: Last News
+?>
+      <template match="/">
+        <value-of select="id('header')/h1/a"/>
+        <text>: </text>
+        <value-of select="id('news')/h3[1]/a"/>
+      </template>
+<?php
+        break;
+    case 'news': // News Record: Update date
+?>
+      <template match="/">
+        <value-of select="id('news_header')"/>
+        <text> - </text>
+        <value-of select="id('newsLastUpd')"/>
+      </template>
+<?php
+        break;
+    case 'artikel': // Faq Record: Popularity (== #visits)
+?>
+      <template match="/">
+        <value-of select="id('main')/h2[2]"/>
+        <!--
+        <text>: #</text>
+        <value-of select="id('faqPopularity')"/>
+        -->
+      </template>
+<?php
+        break;
+    case 'show': // Category Record: Number of Faq
+?>
+      <template match="/">
+        <value-of select="id('main')/h2[2]"/>
+        <!--
+        <text>: </text>
+        <value-of select="id('totFaqRecords')"/>
+        -->
+      </template>
+<?php
+        break;
+    case 'open': // Open questions: Last question
+?>
+      <template match="/">
+        <value-of select="id('main')/table/tbody/tr[last()]/td[2]"/>
+      </template>
+<?php
+        break;
+    default;
+?>
+      <template match="/">
+        <value-of select="id('header')/h1/a"/>
+      </template>
+<?php
+        break;
+}
+?>
+      <pages>
+        <include><?php print(PMF_Link::getSystemUri('/microsummary.php')); ?>/(index\.(php|htm(l)?))?</include>
+      </pages>
+    </transform>
+  </template>
+</generator>
