@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: category.main.php,v 1.17 2006-09-06 06:29:53 thorstenr Exp $
+* $Id: category.main.php,v 1.18 2006-09-06 16:43:53 thorstenr Exp $
 *
 * List all categories in the admin section
 *
@@ -89,6 +89,19 @@ if ($permission['editcateg']) {
             printf('<p>%s</p>', $PMF_LANG['ad_categ_deleted']);
         } else {
             printf('<p>%s</p>', $db->error());
+        }
+    }
+
+    // Moves a category
+    if (isset($_POST['action']) && $_POST['action'] == 'movecategory') {
+
+        $category_id_1 = (int)$_POST['cat'];
+        $category_id_2 = (int)$_POST['change'];
+
+        if ($category->swapCategories($category_id_1, $category_id_2)) {
+            printf('<p>%s</p>', $PMF_LANG['ad_categ_updated']);
+        } else {
+            printf('<p>%s</p>', $PMF_LANG['ad_categ_paste_error']);
         }
     }
 

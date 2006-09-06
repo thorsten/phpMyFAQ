@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.64 2006-08-30 22:29:37 matteo Exp $
+* $Id: index.php,v 1.65 2006-09-06 16:43:53 thorstenr Exp $
 *
 * The main admin backend index file
 *
@@ -157,7 +157,7 @@ if (isset($auth)) {
 
                 // Configuration management
                 case 'config_list':     require_once('ajax.config_list.php'); break;
-                
+
                 // Tags management
                 case 'tags_list':     require_once('ajax.tags_list.php'); break;
             }
@@ -204,14 +204,14 @@ if (isset($auth)) {
             case 'category':
             case 'savecategory':
             case 'updatecategory':
-            case 'removecategory':          require_once ('category.main.php'); break;
+            case 'removecategory':
+            case 'changecategory':          require_once ('category.main.php'); break;
             case "addcategory":             require_once ("category.add.php"); break;
             case "editcategory":            require_once ("category.edit.php"); break;
             case "deletecategory":          require_once ("category.delete.php"); break;
             case "cutcategory":             require_once ("category.cut.php"); break;
             case "pastecategory":           require_once ("category.paste.php"); break;
             case "movecategory":            require_once ("category.move.php"); break;
-            case "changecategory":          require_once ("category.change.php"); break;
             // glossary
             case 'glossary':
             case 'saveglossary':
