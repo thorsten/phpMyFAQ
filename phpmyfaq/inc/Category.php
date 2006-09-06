@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Category.php,v 1.12 2006-09-06 06:30:41 thorstenr Exp $
+* $Id: Category.php,v 1.13 2006-09-06 16:32:16 thorstenr Exp $
 *
 * The main category class
 *
@@ -1091,5 +1091,51 @@ class PMF_Category
 
         $result = $this->db->query($query);
         return $this->db->num_rows($result);
+    }
+
+    /**
+     * Swaps two categories
+     *
+     * @param   integer $category_id_1
+     * @param   integer $category_id_2
+     * @return  boolean
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function swapCategories($category_id_1, $category_id_2)
+    {
+        $temp_cat = rand(200000, 400000);
+
+        $tables = array(
+            array('faqcategories' => 'id'),
+            array('faqcategories' => 'parent_id'),
+            array('faqcategoryrelations' => 'category_id'),
+            array('faqquestions' => 'ask_rubrik'));
+
+        $result = true;
+        foreach ($tables as $pair) {
+            foreach ($pair as $_table => $_field) {
+                $result = $result && $this->db->query(sprintf("UPDATE %s SET %s = %d WHERE %s = %d",
+                    SQLPREFIX.$_table,
+                    $_field,
+                    $temp_cat,
+                    $_field,
+                    $category_id_2));
+                $result = $result && $this->db->query(sprintf("UPDATE %s SET %s = %d WHERE %s = %d",
+                    SQLPREFIX.$_table,
+                    $_field,
+                    $category_id_2,
+                    $_field,
+                    $category_id_1));
+                $result = $result && $this->db->query(sprintf("UPDATE %s SET %s = %d WHERE %s = %d",
+                    SQLPREFIX.$_table,
+                    $_field,
+                    $category_id_1,
+                    $_field,
+                    $temp_cat));
+            }
+        }
+
+        return $result;
     }
 }
