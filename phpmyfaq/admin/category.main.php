@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: category.main.php,v 1.16 2006-07-30 18:15:21 thorstenr Exp $
+* $Id: category.main.php,v 1.17 2006-09-06 06:29:53 thorstenr Exp $
 *
 * List all categories in the admin section
 *
@@ -61,15 +61,15 @@ if ($permission['editcateg']) {
             'description'   => $db->escape_string($_POST['description']),
             'user_id'       => (int)$_POST['user_id']);
 
-        if ($category->checkLanguage($category_data['id'], $category_data['lang'])) {
-            if ($category->addCategory($category_data, $parent_id)) {
+        if (!$category->checkLanguage($category_data['id'], $category_data['lang'])) {
+            if ($category->addCategory($category_data, $parent_id, $category_data['id'])) {
                 printf('<p>%s</p>', $PMF_LANG['ad_categ_added']);
             } else {
                 printf('<p>%s</p>', $db->error());
             }
         } else {
             if ($category->updateCategory($category_data)) {
-   	            printf('<p>%s</p>', $PMF_LANG['ad_categ_updated']);
+                   printf('<p>%s</p>', $PMF_LANG['ad_categ_updated']);
             } else {
                 printf('<p>%s</p>', $db->error());
             }
@@ -119,9 +119,9 @@ if ($permission['editcateg']) {
         print "<br />";
     }
 ?>
-	<p><img src="images/arrow.gif" width="11" height="11" alt="" border="0" /> <a href="<?php print $currentLink.'&amp;action=addcategory'; ?>"><?php print $PMF_LANG['ad_kateg_add']; ?></a></p>
-	<p><?php print $PMF_LANG['ad_categ_remark']; ?></p>
+    <p><img src="images/arrow.gif" width="11" height="11" alt="" border="0" /> <a href="<?php print $currentLink.'&amp;action=addcategory'; ?>"><?php print $PMF_LANG['ad_kateg_add']; ?></a></p>
+    <p><?php print $PMF_LANG['ad_categ_remark']; ?></p>
 <?php
 } else {
-	print $PMF_LANG['err_NotAuth'];
+    print $PMF_LANG['err_NotAuth'];
 }

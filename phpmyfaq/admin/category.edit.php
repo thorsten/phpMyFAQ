@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: category.edit.php,v 1.13 2006-08-15 15:39:24 thorstenr Exp $
+* $Id: category.edit.php,v 1.14 2006-09-06 06:29:53 thorstenr Exp $
 *
 * Edits a category
 *
@@ -35,7 +35,7 @@ if ($permission["editcateg"]) {
     <legend><?php print $PMF_LANG["ad_categ_edit_1"]." <em>".$categories[$id]["name"]."</em> ".$PMF_LANG["ad_categ_edit_2"]; ?></legend>
 
         <input type="hidden" name="action" value="updatecategory" />
-        <input type="hidden" name="cat" value="<?php print $id; ?>" />
+        <input type="hidden" name="id" value="<?php print $id; ?>" />
         <input type="hidden" name="parent_id" value="<?php print $categories[$id]["parent_id"]; ?>" />
 
         <label class="left"><?php print $PMF_LANG["ad_categ_titel"]; ?>:</label>
@@ -50,7 +50,7 @@ if ($permission["editcateg"]) {
         <input type="text" name="description" size="30" style="width: 250px;" value="<?php print $categories[$id]["description"]; ?>" /><br />
 
         <label class="left"><?php print $PMF_LANG["ad_categ_owner"]; ?>:</label>
-        <select name="cat_owner" size="1">
+        <select name="user_id" size="1">
         <?php print $user->getAllUserOptions($categories[$id]["user_id"]); ?>
         </select><br />
 
