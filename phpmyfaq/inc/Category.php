@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Category.php,v 1.11 2006-09-03 19:58:55 thorstenr Exp $
+* $Id: Category.php,v 1.12 2006-09-06 06:30:41 thorstenr Exp $
 *
 * The main category class
 *
@@ -963,14 +963,20 @@ class PMF_Category
      *
      * @param   array   $category_data
      * @param   integer $parent_id
+     * @param   integer $id
      * @return  boolean
      * @access  public
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function addCategory($category_data, $parent_id = 0)
+    function addCategory($category_data, $parent_id = 0, $id = null)
     {
         if (!is_array($category_data)) {
             return false;
+        }
+
+        // If we only need a new language, we don't need a new category id
+        if (is_null($id)) {
+            $id = $this->db->nextID(SQLPREFIX.'faqcategories', 'id');
         }
 
         $query = sprintf("
@@ -980,7 +986,7 @@ class PMF_Category
                 VALUES
             (%d, '%s', %d, '%s', '%s', %d)",
             SQLPREFIX,
-            $this->db->nextID(SQLPREFIX.'faqcategories', 'id'),
+            $id,
             $category_data['lang'],
             $parent_id,
             $category_data['name'],
