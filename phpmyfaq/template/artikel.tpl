@@ -15,7 +15,7 @@
     <!-- /Tags -->
 
     <!-- Article Info -->
-    <p>{writeDateMsg}<br />{writeAuthor}<br />{writeRevision}<br />{editThisEntry}</p>
+    <p><span id="popularity" style="display: none;">{writePopularity}</span>{writeDateMsg}<br />{writeAuthor}<br />{writeRevision}<br />{editThisEntry}</p>
     <!-- /Article Info -->
 
     {switchLanguage}

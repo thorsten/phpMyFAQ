@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: microsummary.php,v 1.2 2006-09-06 21:47:23 matteo Exp $
+ * $Id: microsummary.php,v 1.3 2006-09-07 21:05:50 matteo Exp $
  *
  * Microsummary backend
  *
@@ -68,7 +68,7 @@ switch($action) {
       <template match="/">
         <value-of select="id('header')/h1/a"/>
         <text>: </text>
-        <value-of select="id('news')/h3[1]/a"/>
+        <value-of select="id('news')/h3[1]/a[1]"/>
       </template>
 <?php
         break;
@@ -84,22 +84,19 @@ switch($action) {
     case 'artikel': // Faq Record: Popularity (== #visits)
 ?>
       <template match="/">
+        <value-of select="id('popularity')"/>
+        <text> - </text>
         <value-of select="id('main')/h2[2]"/>
-        <!--
-        <text>: #</text>
-        <value-of select="id('faqPopularity')"/>
-        -->
       </template>
 <?php
         break;
     case 'show': // Category Record: Number of Faq
 ?>
       <template match="/">
-        <value-of select="id('main')/h2[2]"/>
-        <!--
-        <text>: </text>
+        <text>#</text>
         <value-of select="id('totFaqRecords')"/>
-        -->
+        <text> </text>
+        <value-of select="id('main')/h2"/>
       </template>
 <?php
         break;
@@ -120,7 +117,7 @@ switch($action) {
 }
 ?>
       <pages>
-        <include><?php print(PMF_Link::getSystemUri('/microsummary.php')); ?>/(index\.(php|htm(l)?))?</include>
+        <include><?php print(PMF_Link::getSystemUri('/microsummary.php')); ?>/*</include>
       </pages>
     </transform>
   </template>

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.53 2006-08-28 18:32:07 matteo Exp $
+* $Id: Faq.php,v 1.54 2006-09-07 21:05:51 matteo Exp $
 *
 * The main FAQ class
 *
@@ -219,7 +219,7 @@ class PMF_Faq
 
                 $output .= $listItem;
             }
-            $output .= '</ul>';
+            $output .= '</ul><span id="totFaqRecords" style="display: none;">'.$num.'</span>';
         } else {
             return false;
         }
@@ -1350,6 +1350,85 @@ class PMF_Faq
 
         return true;
     }
+
+    /**
+     * getAllVisitsData()
+     *
+     * Get all the entries from the table faqvisits
+     *
+     * @return  array
+     * @access  public
+     * @since   2006-09-07
+     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     */
+    function getAllVisitsData()
+    {
+        $data = array();
+
+        $query = sprintf(
+            "SELECT
+                *
+             FROM
+                %sfaqvisits
+             ORDER BY
+                visits DESC",
+            SQLPREFIX
+            );
+        $result = $this->db->query($query);
+
+        while ($row = $this->db->fetch_object($result)) {
+            $data[] = array(
+                          'id'          => $row->id,
+                          'lang'        => $row->lang,
+                          'visits'      => $row->visits,
+                          'last_visit'  => $row->last_visit
+                      );
+        }
+
+        return $data;
+    }
+
+    /**
+     * getVisitsData()
+     *
+     * Get the entry from the table faqvisits
+     *
+     * @param   integer $id
+     * @param   string  $lang
+     * @return  boolean
+     * @access  public
+     * @since   2006-09-07
+     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     */
+    function getVisitsData($id, $lang)
+    {
+        if (!is_numeric($id) && !is_string($lang)) {
+            return false;
+        }
+        $data = array('visits' => 0, 'last_visit' => time());
+
+        $query = sprintf(
+            "SELECT
+                visits, last_visit
+             FROM
+                %sfaqvisits
+             WHERE
+                      id = %d 
+                  AND lang = '%s'",
+            SQLPREFIX,
+            $id,
+            $lang
+            );
+        $result = $this->db->query($query);
+
+        if ($row = $this->db->fetch_object($result)) {
+            $data['visits'] = $row->visits;
+            $data['last_visit'] = $row->last_visit;
+        }
+
+        return $data;
+    }
+
 
     /**
      * createChangeEntry()

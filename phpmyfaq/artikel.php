@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.52 2006-09-03 09:13:35 matteo Exp $
+* $Id: artikel.php,v 1.53 2006-09-07 21:05:50 matteo Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -208,6 +208,35 @@ require_once('inc/Tags.php');
 $tagging = new PMF_Tags($db, $LANGCODE);
 
 $diggItUrl = sprintf('http://%s?cat=%s&id=%d&lang=%s', $_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'], $currentCategory, $id, $lang);
+
+//$visitsData = $faq->getVisitsData($id, $lang);
+//$faqPopularity = $visitsData['visits'];
+$allVisitsData = $faq->getAllVisitsData();
+$faqPopularity = '';
+$maxVisits = 0;
+$minVisits = 0;
+$currVisits = 0;
+$faqVisitsCount = count($allVisitsData);
+$percentage = 0;
+if ($faqVisitsCount > 0) {
+    $percentage = 100/$faqVisitsCount;
+}
+foreach ($allVisitsData as $_r) {
+    if ($minVisits > $_r['visits']) {
+        $minVisits = $_r['visits'];
+    }
+    if ($maxVisits < $_r['visits']) {
+        $maxVisits = $_r['visits'];
+    }
+    if (($id == $_r['id']) && ($lang == $_r['lang'])) {
+        $currVisits = $_r['visits'];
+    }
+}
+if ($maxVisits - $minVisits > 0) {
+    $percentage = 100*($currVisits - $minVisits)/($maxVisits - $minVisits);
+}
+$faqPopularity = $currVisits.'/'.(int)$percentage.'%';
+
 // Set the template variables
 $tpl->processTemplate ("writeContent", array(
     'writeRubrik'                 => $categoryName.'<br />',
@@ -218,6 +247,7 @@ $tpl->processTemplate ("writeContent", array(
     'writeContent'                => preg_replace_callback("/<code([^>]*)>(.*?)<\/code>/is", 'hilight', $content),
     'writeTagHeader'              => $PMF_LANG['msg_tags'] . ': ',
     'writeArticleTags'            => $tagging->getAllLinkTagsById($id),
+    'writePopularity'             => $faqPopularity,
     'writeDateMsg'                => $PMF_LANG['msgLastUpdateArticle'].$faq->faqRecord['date'],
     'writeRevision'               => $PMF_LANG['ad_entry_revision'].': 1.'.$faq->faqRecord['revision_id'],
     'writeAuthor'                 => $PMF_LANG['msgAuthor'].$faq->faqRecord['author'],

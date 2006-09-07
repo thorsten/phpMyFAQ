@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Category.php,v 1.14 2006-09-06 17:47:33 thorstenr Exp $
+* $Id: Category.php,v 1.15 2006-09-07 21:05:51 matteo Exp $
 *
 * The main category class
 *
@@ -465,6 +465,7 @@ class PMF_Category
     function viewTree()
     {
         global $sids, $PMF_LANG, $PMF_CONF;
+        $totFaqRecords = 0;
 
         $query = sprintf("
             SELECT
@@ -539,6 +540,7 @@ class PMF_Category
             if (0 == $number[$parent] && 0 == $level) {
                 $num_entries = '';
             } else {
+                $totFaqRecords += $number[$parent];
                 $num_entries = sprintf(' (%d %s)', $number[$parent], $PMF_LANG['msgEntries']);
             }
 
@@ -560,7 +562,7 @@ class PMF_Category
         }
 
         $output .= "\t</li>\n";
-        $output .= "\t</ul>\n";
+        $output .= "\t</ul>".'<span id="totFaqRecords" style="display: none;">'.$totFaqRecords."</span>\n";
         return $output;
     }
 
