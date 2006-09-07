@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Tags.php,v 1.15 2006-09-03 21:20:58 matteo Exp $
+* $Id: Tags.php,v 1.16 2006-09-07 20:18:17 matteo Exp $
 *
 * The main Tags class
 *
@@ -404,9 +404,10 @@ class PMF_Tags
             $html .= $oLink->toHtmlAnchor().' ';
             $html .= '</span>';
         }
+        $html = substr($html, 0, -1);
         $html .= '</div>';
 
-        return substr($html, 0, -1);
+        return $html;
     }
 
 }
