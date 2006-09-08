@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: category.main.php,v 1.21 2006-09-08 16:43:38 thorstenr Exp $
+* $Id: category.main.php,v 1.22 2006-09-08 21:42:14 thorstenr Exp $
 *
 * List all categories in the admin section
 *
@@ -140,6 +140,7 @@ if ($permission['editcateg']) {
         printf('<a href="%s&amp;action=addcategory&amp;cat=%s&amp;lang=%s" title="%s"><img src="images/add.gif" width="17" height="18" alt="%s" title="%s" border="0" /></a>',
             $currentLink,
             $cat['id'],
+            $cat['lang'],
             $PMF_LANG['ad_kateg_add'],
             $PMF_LANG['ad_kateg_add'],
             $PMF_LANG['ad_kateg_add']);
