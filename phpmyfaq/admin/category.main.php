@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: category.main.php,v 1.20 2006-09-06 19:07:54 thorstenr Exp $
+* $Id: category.main.php,v 1.21 2006-09-08 16:43:38 thorstenr Exp $
 *
 * List all categories in the admin section
 *
@@ -137,7 +137,7 @@ if ($permission['editcateg']) {
         printf("%s<strong style=\"vertical-align: top;\">&middot; %s</strong> ",
             $indent,
             $cat["name"]);
-        printf('<a href="%s&amp;action=addcategory&amp;cat=%s" title="%s"><img src="images/add.gif" width="17" height="18" alt="%s" title="%s" border="0" /></a>',
+        printf('<a href="%s&amp;action=addcategory&amp;cat=%s&amp;lang=%s" title="%s"><img src="images/add.gif" width="17" height="18" alt="%s" title="%s" border="0" /></a>',
             $currentLink,
             $cat['id'],
             $PMF_LANG['ad_kateg_add'],

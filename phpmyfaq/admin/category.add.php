@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: category.add.php,v 1.12 2006-08-15 06:51:24 thorstenr Exp $
+* $Id: category.add.php,v 1.13 2006-09-08 16:43:38 thorstenr Exp $
 *
 * Adds a category
 *
@@ -26,7 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 
 print "<h2>".$PMF_LANG["ad_categ_new"]."</h2>\n";
 if ($permission["addcateg"]) {
-    $cat = new PMF_Category;
+    $cat = new PMF_Category($LANGCODE);
 ?>
     <form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>" method="post">
     <fieldset>
@@ -46,8 +46,8 @@ if ($permission["addcateg"]) {
     <label class="left"><?php print $PMF_LANG["ad_categ_lang"]; ?>:</label>
     <select name="lang" size="1">
 <?php
-    if (isset($_GET["cat"])) {
-        print languageOptions($cat->categoryName[$_GET["cat"]]["lang"], true);
+    if (isset($_GET['cat'])) {
+        print languageOptions($cat->categoryName[$_GET['cat']]['lang'], true);
     } else {
         print languageOptions($LANGCODE);
     }
