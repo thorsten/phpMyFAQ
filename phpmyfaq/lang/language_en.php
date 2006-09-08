@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.49 2006-09-04 19:02:34 matteo Exp $
+* $Id: language_en.php,v 1.50 2006-09-08 05:27:37 thorstenr Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -427,7 +427,7 @@ $PMF_LANG["ad_cookie"] = "Cookies";
 $PMF_LANG["ad_sess_head"] = "View sessions";
 
 // Added v1.1 - 06.01.2002 - Bastian
-$PMF_LANG["ad_menu_categ_edit"] = "Category Adminstration";
+$PMF_LANG["ad_menu_categ_edit"] = "Category Administration";
 $PMF_LANG["ad_menu_stat"] = "Rating Statistics";
 $PMF_LANG["ad_kateg_add"] = "add Category";
 $PMF_LANG["ad_kateg_rename"] = "Rename";
