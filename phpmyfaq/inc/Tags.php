@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Tags.php,v 1.16 2006-09-07 20:18:17 matteo Exp $
+* $Id: Tags.php,v 1.17 2006-09-08 18:02:05 matteo Exp $
 *
 * The main Tags class
 *
@@ -386,7 +386,9 @@ class PMF_Tags
         $CSSRelevanceMaxLevel = $CSSRelevanceLevels - $CSSRelevanceMinLevel;
         $CSSRelevanceLevel = 3;
         $html = '<div class="tagscloud">';
+        $i = 0;
         foreach ($tags as $tag) {
+            $i++;
             if ($max - $min > 0) {
                 $CSSRelevanceLevel = (int)($CSSRelevanceMinLevel + $CSSRelevanceMaxLevel*($tag['count'] - $min)/($max - $min));
             }
@@ -401,10 +403,9 @@ class PMF_Tags
             $oLink->itemTitle = $tag['name'];
             $oLink->text = $tag['name'];
             $oLink->tooltip = $title;
-            $html .= $oLink->toHtmlAnchor().' ';
-            $html .= '</span>';
+            $html .= $oLink->toHtmlAnchor();
+            $html .= (count($tags) == $i ? '' : ' ').'</span>';
         }
-        $html = substr($html, 0, -1);
         $html .= '</div>';
 
         return $html;
