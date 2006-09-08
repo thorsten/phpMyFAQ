@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.140 2006-09-03 18:48:57 matteo Exp $
+* $Id: functions.php,v 1.141 2006-09-08 20:49:48 matteo Exp $
 *
 * This is the main functions file!
 *
@@ -1269,9 +1269,9 @@ function searchEngine($begriff, $category = '%', $allLanguages = true)
         // Hack: before a redirection we must force the PHP session update for preventing data loss
         session_write_close();
         if (isset($PMF_CONF['mod_rewrite']) && $PMF_CONF['mod_rewrite']) {
-            header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']).'/solution_id_'.$begriff.'.html');
+            header('Location: '.PMF_Link::getSystemUri('/index.php').'/solution_id_'.$begriff.'.html');
         } else {
-            header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']).'?solution_id='.$begriff);
+            header('Location: '.PMF_Link::getSystemUri('/index.php').'/index.php?solution_id='.$begriff);
         }
         exit();
     }
@@ -1302,7 +1302,6 @@ function searchEngine($begriff, $category = '%', $allLanguages = true)
     if (0 == $num) {
         $output = $PMF_LANG['err_noArticles'];
     }
-
 
     $pages = ceil($num / $PMF_CONF['numRecordsPage']);
     $last = $seite * $PMF_CONF['numRecordsPage'];
