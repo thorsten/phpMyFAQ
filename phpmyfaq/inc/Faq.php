@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.55 2006-09-08 20:54:11 matteo Exp $
+* $Id: Faq.php,v 1.56 2006-09-09 14:30:06 thorstenr Exp $
 *
 * The main FAQ class
 *
@@ -577,7 +577,7 @@ class PMF_Faq
             if ($expired) {
                 $content = $this->pmf_lang['err_expiredArticle'];
             }
-            
+
             $this->faqRecords[] = array(
                 'id'            => $row->id,
                 'lang'          => $row->lang,
@@ -1253,6 +1253,41 @@ class PMF_Faq
     }
 
     /**
+     * addQuestion()
+     *
+     * Adds a new question
+     *
+     * @param    array  $questionData
+     * @return   boolean
+     * @access   public
+     * @since    2006-09-09
+     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function addQuestion($questionData)
+    {
+        if (!is_array($questionData)) {
+            return false;
+        }
+
+        $query = sprintf("
+            INSERT INTO
+                %sfaqquestions
+            VALUES
+                (%d, '%s', '%s', %d, '%s', '%s', '%s')",
+            SQLPREFIX,
+            $this->db->nextID(SQLPREFIX.'faqquestions', 'id'),
+            $questionData['ask_username'],
+            $questionData['ask_usermail'],
+            $questionData['ask_category'],
+            $questionData['ask_content'],
+            $questionData['ask_date'],
+            $questionData['is_visible']);
+        $this->db->query($query);
+
+        return true;
+    }
+
+    /**
      * updateVoting()
      *
      * Updates an existing voting record
@@ -1418,7 +1453,7 @@ class PMF_Faq
              FROM
                 %sfaqvisits
              WHERE
-                      id = %d 
+                      id = %d
                   AND lang = '%s'",
             SQLPREFIX,
             $id,

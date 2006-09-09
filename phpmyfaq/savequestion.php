@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: savequestion.php,v 1.25 2006-09-04 20:09:54 thorstenr Exp $
+* $Id: savequestion.php,v 1.26 2006-09-09 14:30:06 thorstenr Exp $
 *
 * @author           Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author           David Saez Padros <david@ols.es>
@@ -40,37 +40,37 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
         $numr = 0;
     }
 
-    $usermail = $IDN->encode($_POST['usermail']);
-    $username = strip_tags($_POST['username']);
-    $selected_category = intval($_POST['rubrik']);
-    $content = strip_tags($_POST['content']);
-
     if ($numr == 0) {
         $cat = new PMF_Category();
         $categories = $cat->getAllCategories();
 
         list($user, $host) = explode("@", $usermail);
         if (checkEmail($usermail)) {
-            $content = $db->escape_string($content);
-            $datum   = date("YmdHis");
             if (isset($PMF_CONF['enablevisibility'])) {
                 $visibility = 'N';
             } else {
                 $visibility = 'Y';
             }
 
-            $query = "INSERT INTO ".SQLPREFIX."faqquestions (id, ask_username, ask_usermail, ask_rubrik, ask_content, ask_date, is_visible) VALUES (".$db->nextID(SQLPREFIX."faqquestions", "id").", '".$db->escape_string($username)."', '".$db->escape_string($usermail)."', ".$selected_category.", '".$content."', '".$datum."', '".$visibility."')";
-            $result = $db->query($query);
+            $questionData = array(
+                'ask_username'  => $db->escape_string(strip_tags($_POST['username'])),
+                'ask_usermail'  => $db->escape_string($IDN->encode($_POST['usermail'])),
+                'ask_category'  => intval($_POST['rubrik']),
+                'ask_content'   => $db->escape_string(strip_tags($_POST['content'])),
+                'ask_date'      => date('YmdHis'),
+                'is_visible'    => $visibility);
+
+            $faq->addQuestion($questionData);
 
             $questionMail = "User: ".$username.", mailto:".$usermail."\n"
                             .$PMF_LANG["msgCategory"].": ".$categories[$selected_category]["name"]."\n\n"
                             .wordwrap(stripslashes($content), 72);
-            
+
             $userId = $tree->getCategoryUser($selected_category);
             $oUser = new PMF_User();
             $oUser->addDb($db);
             $oUser->getUserById($userId);
-            
+
             $additional_header = array();
             $additional_header[] = 'MIME-Version: 1.0';
             $additional_header[] = 'Content-Type: text/plain; charset='. $PMF_LANG['metaCharset'];
