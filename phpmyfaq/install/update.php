@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.83 2006-09-05 19:20:57 matteo Exp $
+* $Id: update.php,v 1.84 2006-09-10 18:06:55 matteo Exp $
 *
 * Main update script
 *
@@ -516,6 +516,25 @@ if ($step == 5) {
                         $query[] = "UPDATE ".SQLPREFIX."faqfragen SET "
                                  ." ask_username = '".$db->escape_string(fixslashes($row->ask_username))."'"
                                  .", ask_content = '".$db->escape_string(fixslashes($row->ask_content))."'"
+                                 ." WHERE id = '".$row->id."'";
+                        break;
+                }
+            }
+        }
+        // Table: faqnews
+        $faqNewsQuery = "SELECT * FROM ".SQLPREFIX."faqnews"
+                       ." WHERE header LIKE '%\\\\\\\\%'"
+                       ."   OR artikel LIKE '%\\\\\\\\%'"
+                       ." OR linktitel LIKE '%\\\\\\\\%'";
+        $faqNews = $db->query($faqNewsQuery);
+        if ($db->num_rows($faqNews) > 0) {
+            while ($row = $db->fetch_object($faqNews)) {
+                switch($DB["type"]) {
+                    default:
+                        $query[] = "UPDATE ".SQLPREFIX."faqnews SET "
+                                 ."     header = '".$db->escape_string(fixslashes($row->header))."'"
+                                 .",   artikel = '".$db->escape_string(fixslashes($row->artikel))."'"
+                                 .", linktitel = '".$db->escape_string(fixslashes($row->linktitel))."'"
                                  ." WHERE id = '".$row->id."'";
                         break;
                 }
