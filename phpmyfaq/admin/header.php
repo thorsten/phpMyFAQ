@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: header.php,v 1.24 2006-08-30 22:29:37 matteo Exp $
+* $Id: header.php,v 1.25 2006-09-11 19:23:33 thorstenr Exp $
 *
 * header of the admin area
 *
@@ -52,6 +52,7 @@ header("Vary: Negotiate,Accept");
 <div id="header">
     <h1>phpMyFAQ <?php print $PMF_CONF["version"]; ?></h1>
 <?php if (isset($auth)) { ?>
+<?php if ('' == $_action) { ?>
     <div id="langform">
         <form action="<?php print($linkext); ?>" method="post">
         <label for="language"><?php print $PMF_LANG['msgLangaugeSubmit']; ?></label>
@@ -59,6 +60,7 @@ header("Vary: Negotiate,Accept");
         <input type="hidden" name="action" value="<?php print($_action); ?>" />
         </form>
     </div>
+<?php } ?>
     <div id="sessionexpiration">
         <label for="session">Time to your session expiration</label>
         <div id="sessioncounter">Loading...</div>
