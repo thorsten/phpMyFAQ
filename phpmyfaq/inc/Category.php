@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Category.php,v 1.15 2006-09-07 21:05:51 matteo Exp $
+* $Id: Category.php,v 1.16 2006-09-11 19:56:30 thorstenr Exp $
 *
 * The main category class
 *
@@ -1166,6 +1166,60 @@ class PMF_Category
             SQLPREFIX,
             $parent_id,
             $category_id);
+        $this->db->query($query);
+
+        return true;
+    }
+
+    /**
+     * Deletes a category
+     *
+     * @param   integer $category_id
+     * @param   string  $category_lang
+     * @return  boolean
+     * @access  public
+     * @since   2006-09-11
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function deleteCategory($category_id, $category_lang)
+    {
+        $query = sprintf("
+            DELETE FROM
+                %sfaqcategories
+            WHERE
+                id = %d
+            AND
+                lang = '%s'",
+            SQLPREFIX,
+            $category_id,
+            $category_lang);
+        $this->db->query($query);
+
+        return true;
+    }
+    /**
+     * Deletes a category relation
+     *
+     * @param   integer $category_id
+     * @param   string  $category_lang
+     * @return  boolean
+     * @access  public
+     * @since   2006-09-11
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+
+    function deleteCategoryRelation($category_id, $category_lang)
+    {
+        $query = sprintf("
+            DELETE FROM
+                %sfaqcategoryrelations
+            WHERE
+                category_id = %d
+            AND
+                category_lang = '%s'",
+            SQLPREFIX,
+            $category_id,
+            $category_lang);
         $this->db->query($query);
 
         return true;
