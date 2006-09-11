@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.verifyurl.php,v 1.8 2006-07-30 07:07:19 matteo Exp $
+* $Id: ajax.verifyurl.php,v 1.9 2006-09-11 19:37:42 thorstenr Exp $
 *
 * AJAX: verifyurl
 *
@@ -17,13 +17,13 @@
 * Version 1.1 (the "License"); you may not use this file except in
 * compliance with the License. You may obtain a copy of the License at
 * http://www.mozilla.org/MPL/
-* 
+*
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
 * under the License.
 *
-* The Initial Developer of the Original Code is released for external use 
+* The Initial Developer of the Original Code is released for external use
 * with permission from NetJapan, Inc. IT Administration Group.
 */
 
@@ -67,8 +67,10 @@ if (!(isset($id) && isset($lang))) {
     exit();
 }
 
-if (($content = getEntryContent($id, $lang)) === FALSE) {
-    //header("X-DenyReason: no content");
+$faq = new PMF_Faq($lang);
+$faq->getRecord($id);
+
+if (count($faq->faqRecord['content'])) {
     header("HTTP/1.0 401 Unauthorized");
     header("Status: 401 Unauthorized");
     exit();
@@ -78,21 +80,8 @@ if (count(ob_list_handlers()) > 0) {
     ob_clean();
 }
 
-$linkverifier->parse_string($content);
+$linkverifier->parse_string($faq->faqRecord['content']);
 $linkverifier->VerifyURLs($PMF_CONF['referenceURL']);
 $linkverifier->markEntry($id, $lang);
 print $linkverifier->getLinkStateString();
 exit();
-
-function getEntryContent($id = 0, $lang = "") {
-    global $db;
-	
-	$query = sprintf("SELECT content FROM %sfaqdata WHERE id = %d AND lang='%s'",SQLPREFIX,$id,$db->escape_string($lang));
-    $result = $db->query($query);
-    if ($db->num_rows($result) != 1) {
-        return FALSE;
-    }
-
-	$array = $db->fetch_assoc($result);
-	return $array['content'];
-}

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.ondemandurl.php,v 1.10 2006-07-30 07:07:19 matteo Exp $
+* $Id: ajax.ondemandurl.php,v 1.11 2006-09-11 19:37:42 thorstenr Exp $
 *
 * AJAX: onDemandURL
 *
@@ -17,13 +17,13 @@
 * Version 1.1 (the "License"); you may not use this file except in
 * compliance with the License. You may obtain a copy of the License at
 * http://www.mozilla.org/MPL/
-* 
+*
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
 * under the License.
 *
-* The Initial Developer of the Original Code is released for external use 
+* The Initial Developer of the Original Code is released for external use
 * with permission from NetJapan, Inc. IT Administration Group.
 */
 
@@ -85,7 +85,10 @@ if (!(isset($id) && isset($lang))) {
     exit();
 }
 
-if (($content = getEntryContent($id, $lang)) === FALSE) {
+$faq = new PMF_Faq($lang);
+$faq->getRecord($id);
+
+if (count($faq->faqRecord['content'])) {
     // TODO: ASSIGN STRING
     ?>
     Error: No entry for #<?php print $id; ?>(<?php print $lang; ?>) available.
@@ -99,27 +102,12 @@ if (isset($_GET["lookup"])) {
     if (count(ob_list_handlers()) > 0) {
         ob_clean();
     }
-    print verifyArticleURL($content, $id, $lang);
+    print verifyArticleURL($faq->faqRecord['content'], $id, $lang);
     exit();
 }
 
 ?>
 <?php link_ondemand_javascript($id, $lang); ?>
 
-
 </body>
 </html>
-<?php
-
-function getEntryContent($id = 0, $lang = "") {
-    global $db;
-    
-    $query = "SELECT content FROM ".SQLPREFIX."faqdata WHERE id = ".$id." AND lang='".$db->escape_string($lang)."'";
-    $result = $db->query($query);
-    if ($db->num_rows($result) != 1) {
-        return FALSE;
-    }
-    
-    $array = $db->fetch_assoc($result);
-    return $array['content'];
-}
