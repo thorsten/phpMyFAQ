@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.141 2006-09-08 20:49:48 matteo Exp $
+* $Id: functions.php,v 1.142 2006-09-11 20:19:22 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -1420,14 +1420,16 @@ function searchEngine($begriff, $category = '%', $allLanguages = true)
 function highlight_no_links($string = '')
 {
     foreach ($string as $str) {
-        if (    'href=' == substr(ltrim($str), 0, 5)
-             || 'src=' == substr(ltrim($str), 0, 4)
-             || 'title=' == substr(ltrim($str), 0, 6)
-             || 'alt=' == substr(ltrim($str), 0, 4)
-             || 'class=' == substr(ltrim($str), 0, 6)
-             || 'style=' == substr(ltrim($str), 0, 6)
-             || 'id=' == substr(ltrim($str), 0, 3)
-             || 'name='  == substr(ltrim($str), 0, 5)
+        if (    'href='     == substr(ltrim($str), 0, 5)
+             || 'src='      == substr(ltrim($str), 0, 4)
+             || 'title='    == substr(ltrim($str), 0, 6)
+             || 'alt='      == substr(ltrim($str), 0, 4)
+             || 'class='    == substr(ltrim($str), 0, 6)
+             || 'style='    == substr(ltrim($str), 0, 6)
+             || 'id='       == substr(ltrim($str), 0, 3)
+             || 'name='     == substr(ltrim($str), 0, 5)
+             || 'face='     == substr(ltrim($str), 0, 5)
+             || 'size='     == substr(ltrim($str), 0, 5)
             ) {
             return $str;
         } elseif ('' == $str) {
