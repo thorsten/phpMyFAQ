@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: category.main.php,v 1.22 2006-09-08 21:42:14 thorstenr Exp $
+* $Id: category.main.php,v 1.23 2006-09-11 19:56:51 thorstenr Exp $
 *
 * List all categories in the admin section
 *
@@ -82,10 +82,7 @@ if ($permission['editcateg']) {
         $id = (int)$_POST['cat'];
         $lang = $db->escape_string($_POST['lang']);
 
-        $query_cateories = sprintf("DELETE FROM %sfaqcategories WHERE id = %d AND lang = '%s'", SQLPREFIX, $id, $lang);
-        $query_relations = sprintf("DELETE FROM %sfaqcategoryrelations WHERE category_id = %d AND category_lang = '%s'", SQLPREFIX, $id, $lang);
-
-        if ($db->query($query_cateories) && $db->query($query_relations)) {
+        if ($category->deleteCategory($id, $lang) && $category->deleteCategoryRelation($id, $lang)) {
             printf('<p>%s</p>', $PMF_LANG['ad_categ_deleted']);
         } else {
             printf('<p>%s</p>', $db->error());
