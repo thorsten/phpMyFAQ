@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.84 2006-09-10 18:06:55 matteo Exp $
+* $Id: update.php,v 1.85 2006-09-17 14:31:31 thorstenr Exp $
 *
 * Main update script
 *
@@ -1288,26 +1288,25 @@ if ($step == 5) {
     }
 
     // Remove 'scripts' folder: no need of prompt anything to the user
-    if (@is_dir(PMF_ROOT_DIR."/scripts")) {
+    if (file_exists(PMF_ROOT_DIR."/scripts") && is_dir(PMF_ROOT_DIR."/scripts")) {
         @rmdir(PMF_ROOT_DIR."/scripts");
     }
     // Remove 'phpmyfaq.spec' file: no need of prompt anything to the user
-    if (@is_file(PMF_ROOT_DIR."/phpmyfaq.spec")) {
+    if (file_exists(PMF_ROOT_DIR."/phpmyfaq.spec")) {
         @unlink(PMF_ROOT_DIR."/phpmyfaq.spec");
     }
-    // Remove 'update.php' file
-    if (@unlink(basename($_SERVER["PHP_SELF"]))) {
-        print "<p class=\"center\">This file was deleted automatically.</p>\n";
-    } else {
-        print "<p class=\"center\">Please delete this file manually.</p>\n";
-    }
     // Remove 'installer.php' file
-    if (@unlink(dirname($_SERVER["PATH_TRANSLATED"])."/installer.php")) {
-        print "<p class=\"center\">The file 'installer.php' was deleted automatically.</p>\n";
+    if (@unlink(basename($_SERVER["PHP_SELF"]))) {
+        print "<p class=\"center\">The file <em>./install/installer.php</em> was deleted automatically.</p>\n";
     } else {
-        print "<p class=\"center\">Please delete the file 'installer.php' manually.</p>\n";
+        print "<p class=\"center\">Please delete the file <em>./install/installer.php</em> manually.</p>\n";
+    }
+    // Remove 'update.php' file
+    if (@unlink(dirname($_SERVER["PATH_TRANSLATED"])."/update.php")) {
+        print "<p class=\"center\">The file <em>./install/update.php</em> was deleted automatically.</p>\n";
+    } else {
+        print "<p class=\"center\">Please delete the file <em>./install/update.php</em> manually.</p>\n";
     }
 
     HTMLFooter();
 }
-?>

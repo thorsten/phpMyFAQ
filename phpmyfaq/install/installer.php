@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.69 2006-09-05 19:20:57 matteo Exp $
+* $Id: installer.php,v 1.70 2006-09-17 14:31:31 thorstenr Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -289,7 +289,7 @@ foreach ($dirs as $dir) {
 
 if (sizeof($faileddirs)) {
     print '<p class="center">The following directory/-ies could not be created or are not writable:</p><ul>';
-    foreach ($faileddirs AS $dir) {
+    foreach ($faileddirs as $dir) {
         print "<li>$dir</li>\n";
     }
     print '</ul><p class="center">Please create it manually and/or change access to chmod 755 (or greater if necessary).</p>';
@@ -297,14 +297,14 @@ if (sizeof($faileddirs)) {
     die();
 }
 
-if (!isset($_POST["sql_server"]) AND !isset($_POST["sql_user"]) AND !isset($_POST["sql_db"])) {
+if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST["sql_db"])) {
 ?>
 
 <p class="center">Your PHP version: <strong>PHP <?php print PHP_VERSION; ?></strong></p>
 
 <?php
     if (SAFEMODE == 1) {
-        print "<p class=\"center\">The PHP safe mode is enabled. You may have problems when phpMyFAQ writes in some directories.</p>\n";
+        print '<p class="center">The PHP safe mode is enabled. You may have problems when phpMyFAQ writes in some directories.</p>';
     }
     if (!extension_loaded('gd')) {
         print '<p class="center">You don\'t have GD support enabled in your PHP installation. Please enabled GD support in your php.ini file otherwise you can\'t use Captchas for spam protection.</p>';
@@ -911,7 +911,7 @@ foreach ($permLevels as $level => $desc) {
     $oConf->update($configs);
     print "</p>\n";
 
-    print "<p class=\"center\">All tables were created and filled with the data.</p>\n";
+    print "<p class=\"center\">All database tables were successfully created.</p>\n";
     print "<p class=\"center\">Congratulation! Everything seems to be okay.</p>\n";
     print "<p class=\"center\">You can visit <a href=\"../index.php\">your version of phpMyFAQ</a> or</p>\n";
     print "<p class=\"center\">login into your <a href=\"../admin/index.php\">admin section</a>.</p>\n";
@@ -926,15 +926,15 @@ foreach ($permLevels as $level => $desc) {
     }
     // Remove 'installer.php' file
     if (@unlink(basename($_SERVER["PHP_SELF"]))) {
-        print "<p class=\"center\">This file was deleted automatically.</p>\n";
+        print "<p class=\"center\">The file <em>./install/installer.php</em> was deleted automatically.</p>\n";
     } else {
-        print "<p class=\"center\">Please delete this file manually.</p>\n";
+        print "<p class=\"center\">Please delete the file <em>./install/installer.php</em> manually.</p>\n";
     }
     // Remove 'update.php' file
     if (@unlink(dirname($_SERVER["PATH_TRANSLATED"])."/update.php")) {
-        print "<p class=\"center\">The file 'update.php' was deleted automatically.</p>\n";
+        print "<p class=\"center\">The file <em>./install/update.php</em> was deleted automatically.</p>\n";
     } else {
-        print "<p class=\"center\">Please delete the file 'update.php' manually.</p>\n";
+        print "<p class=\"center\">Please delete the file <em>./install/update.php</em> manually.</p>\n";
     }
 
     HTMLFooter();
