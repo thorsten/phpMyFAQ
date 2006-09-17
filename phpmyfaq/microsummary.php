@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: microsummary.php,v 1.3 2006-09-07 21:05:50 matteo Exp $
+ * $Id: microsummary.php,v 1.4 2006-09-17 07:30:38 matteo Exp $
  *
  * Microsummary backend
  *
@@ -84,8 +84,7 @@ switch($action) {
     case 'artikel': // Faq Record: Popularity (== #visits)
 ?>
       <template match="/">
-        <value-of select="id('popularity')"/>
-        <text> - </text>
+        <text><value-of select="id('popularity')/text()"/> - </text>
         <value-of select="id('main')/h2[2]"/>
       </template>
 <?php
@@ -93,9 +92,7 @@ switch($action) {
     case 'show': // Category Record: Number of Faq
 ?>
       <template match="/">
-        <text>#</text>
-        <value-of select="id('totFaqRecords')"/>
-        <text> </text>
+        <text>#<value-of select="id('totFaqRecords')/text()"/> </text>
         <value-of select="id('main')/h2"/>
       </template>
 <?php
