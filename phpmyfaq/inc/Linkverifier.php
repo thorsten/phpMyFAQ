@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Linkverifier.php,v 1.12 2006-09-05 20:33:27 matteo Exp $
+* $Id: Linkverifier.php,v 1.13 2006-09-17 20:13:03 matteo Exp $
 *
 * PMF_Linkverifier
 *
@@ -563,7 +563,7 @@ class PMF_Linkverifier
      * @since   2005-08-01
      */
 
-    function VerifyURLs($referenceuri = "")
+    function VerifyURLs($referenceuri = '')
     {
         $this->lastResult = array();
         foreach ($this->urlpool as $_type => $_value) {
@@ -810,29 +810,34 @@ class PMF_Linkverifier
 /**
  * Verifies specified article content and update links_state database entry
  *
-     * @param   string  $contents
+ * @param   string  $contents
  * @param   integer $id
  * @param   string  $artlang
- * @result  string  HTML text
+ * @param   boolean $cron
+ * @result  string  HTML text, if $cron is false (default)
  * @access  public
  * @author  Minoru TODA <todam@netjapan.co.jp>
+ * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
  * @since   2005-08-01
  */
-function verifyArticleURL($contents = "", $id = 0, $artlang = "")
+function verifyArticleURL($contents = '', $id = 0, $artlang = '', $cron = false)
 {
     global $PMF_CONF, $PMF_LANG;
 
-    if (!(isset($PMF_CONF["referenceURL"]))) {
-        return "<br /><br />".$PMF_LANG['ad_linkcheck_noReferenceURL'];
+    if (!(isset($PMF_CONF['referenceURL']))) {
+        $output = $PMF_LANG['ad_linkcheck_noReferenceURL'];
+        return ($cron ? '' : '<br /><br />'.$output);
     }
 
-    if (trim($PMF_CONF["referenceURL"] == "")) {
-        return "<br /><br />".$PMF_LANG['ad_linkcheck_noReferenceURL'];
+    if (trim('' == $PMF_CONF['referenceURL'])) {
+        $output = $PMF_LANG['ad_linkcheck_noReferenceURL'];
+        return ($cron ? '' : '<br /><br />'.$output);
     }
 
     $linkverifier = new PMF_Linkverifier;
     if ($linkverifier->isReady() === false) {
-        return "<br /><br />".$PMF_LANG['ad_linkcheck_noAllowUrlOpen'];
+        $output = $PMF_LANG['ad_linkcheck_noAllowUrlOpen'];
+        return ($cron ? '' : '<br /><br />'.$output);
     }
 
     // load list of URLs to ignore / fail
@@ -840,16 +845,15 @@ function verifyArticleURL($contents = "", $id = 0, $artlang = "")
 
     // Parse contents and verify URLs
     $linkverifier->parse_string($contents);
-    $result = $linkverifier->VerifyURLs($PMF_CONF["referenceURL"]);
+    $result = $linkverifier->VerifyURLs($PMF_CONF['referenceURL']);
     $linkverifier->markEntry($id, $artlang);
 
     // If no URLs found
     if ($result == false) {
         $output  = '<h2>'.$PMF_LANG['ad_linkcheck_checkResult'].'</h2>';
         $output .= '<br />'.$PMF_LANG['ad_linkcheck_noLinksFound'];
-        return $output;
+        return ($cron ? '' : $output);
     }
-
 
     //uncomment to see the result structure
     //print str_replace("\n","<br />",htmlspecialchars(print_r($result, true)));
@@ -905,9 +909,11 @@ function verifyArticleURL($contents = "", $id = 0, $artlang = "")
         $output .= "    </ul>\n";
     }
 
-
-    return $output;
-
+    if ($cron) {
+        return '';
+    } else {
+        return $output;
+    }
 }
 
 /**
