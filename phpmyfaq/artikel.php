@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.53 2006-09-07 21:05:50 matteo Exp $
+* $Id: artikel.php,v 1.54 2006-09-17 19:52:43 thorstenr Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -237,6 +237,10 @@ if ($maxVisits - $minVisits > 0) {
 }
 $faqPopularity = $currVisits.'/'.(int)$percentage.'%';
 
+// Get the related records for this entry
+require_once('inc/Relation.php');
+$relevant = new PMF_Relation($db, $LANGCODE);
+
 // Set the template variables
 $tpl->processTemplate ("writeContent", array(
     'writeRubrik'                 => $categoryName.'<br />',
@@ -247,6 +251,8 @@ $tpl->processTemplate ("writeContent", array(
     'writeContent'                => preg_replace_callback("/<code([^>]*)>(.*?)<\/code>/is", 'hilight', $content),
     'writeTagHeader'              => $PMF_LANG['msg_tags'] . ': ',
     'writeArticleTags'            => $tagging->getAllLinkTagsById($id),
+    'writeRelatedArticlesHeader'  => $PMF_LANG['msg_related_articles'] . ': ',
+    'writeRelatedArticles'        => $relevant->getAllRelatedById($id, $thema, $faq->faqRecord['keywords']),
     'writePopularity'             => $faqPopularity,
     'writeDateMsg'                => $PMF_LANG['msgLastUpdateArticle'].$faq->faqRecord['date'],
     'writeRevision'               => $PMF_LANG['ad_entry_revision'].': 1.'.$faq->faqRecord['revision_id'],

@@ -14,6 +14,10 @@
     <p><strong>{writeTagHeader}</strong> {writeArticleTags}</p>
     <!-- /Tags -->
 
+    <!-- Related Articles -->
+    <p><strong>{writeRelatedArticlesHeader}</strong> {writeRelatedArticles}</p>
+    <!-- / Related Articles -->
+
     <!-- Article Info -->
     <p><span id="popularity" style="display: none;">{writePopularity}</span>{writeDateMsg}<br />{writeAuthor}<br />{writeRevision}<br />{editThisEntry}</p>
     <!-- /Article Info -->
