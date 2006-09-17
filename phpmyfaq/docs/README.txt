@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.53 2006-09-02 19:45:38 thorstenr Exp $
+$Id: README.txt,v 1.54 2006-09-17 20:13:45 thorstenr Exp $
 
 phpMyFAQ 2.0.0-alpha
 Codename "Prometheus"
@@ -19,7 +19,7 @@ Changes since 1.6:
 - added possibility to delete admin log (Thorsten)
 - added configurable visibility of new questions (Thorsten)
 - added improved and template-based XHTML export (Thorsten)
-- added dynamic related articles (Thorsten, Marco Enders)
+- added dynamic related articles (Thorsten, Marco Enders, Thomas Zeithaml)
 - added support for Google sitemaps (Matteo)
 - added improved WYSIWYG editor and Image Manager (Thorsten)
 - added improved News module (Matteo, Thorsten)
@@ -44,7 +44,7 @@ Version 2.0.0-alpha - n/a
 - added possibility to delete admin log (Thorsten)
 - added configurable visibility of new questions (Thorsten)
 - added improved and template-based XHTML export (Thorsten)
-- added dynamic related articles (Thorsten, Marco Enders)
+- added dynamic related articles (Thorsten, Marco Enders, Thomas Zeithaml)
 - added support for Google sitemaps (Matteo)
 - added improved WYSIWYG editor and Image Manager (Thorsten)
 - added improved News module (Matteo, Thorsten)
