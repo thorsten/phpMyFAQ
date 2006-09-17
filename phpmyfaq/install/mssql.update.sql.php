@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mssql.update.sql.php,v 1.6 2006-09-05 05:22:49 matteo Exp $
+* $Id: mssql.update.sql.php,v 1.7 2006-09-17 20:01:52 thorstenr Exp $
 *
 * CREATE TABLE instruction for MS SQL Server database
 *
@@ -193,6 +193,7 @@ $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('title', 'phpMyFAQ Codena
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('tracking', 'true')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('URLValidateInterval', '86400')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('version', '".NEWVERSION."')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('numRelatedArticles', '5')";
 
 $query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (1, 'adduser', 'Right to add user accounts', 1, 1)";
 $query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (2, 'edituser', 'Right to edit user accounts', 1, 1)";

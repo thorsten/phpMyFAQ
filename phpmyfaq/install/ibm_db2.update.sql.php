@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ibm_db2.update.sql.php,v 1.3 2006-08-28 18:56:50 thorstenr Exp $
+* $Id: ibm_db2.update.sql.php,v 1.4 2006-09-17 20:01:52 thorstenr Exp $
 *
 * CREATE TABLE instruction for IBM DB2 Universal Database, IBM Cloudscape,
 * and Apache Derby databases
@@ -194,6 +194,7 @@ $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('title', 'phpMyFAQ Codena
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('tracking', 'true')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('URLValidateInterval', '86400')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('version', '".NEWVERSION."')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('numRelatedArticles', '5')";
 
 $query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (1, 'adduser', 'Right to add user accounts', 1, 1)";
 $query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (2, 'edituser', 'Right to edit user accounts', 1, 1)";

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.50 2006-09-08 05:27:37 thorstenr Exp $
+* $Id: language_en.php,v 1.51 2006-09-17 20:01:52 thorstenr Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -796,3 +796,7 @@ $PMF_LANG['ad_linkcheck_feedback_url-noaccess'] = 'No access';
 $PMF_LANG['ad_linkcheck_feedback_url-noajax'] = 'No AJAX';
 $PMF_LANG['ad_linkcheck_feedback_url-nolinks'] = 'No Links';
 $PMF_LANG['ad_linkcheck_feedback_url-noscript'] = 'No Script';
+
+// added v2.0.0 - 2006-09-02 by Thomas
+$PMF_LANG['msg_related_articles'] = 'Related entries';
+$LANG_CONF['numRelatedArticles'] = array(0 => "input", 1 => "Number of related entries");

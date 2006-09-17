@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Relation.php,v 1.1 2006-06-18 18:35:48 thorstenr Exp $
+* $Id: Relation.php,v 1.2 2006-09-17 20:01:51 thorstenr Exp $
 *
 * The Relation class for dynamic related record linking
 *
@@ -144,5 +144,61 @@ class PMF_Relation
         }
         return $strSource;
     }
+
+
+    /**
+     * Returns all relevant Articles for a FAQ record
+     *
+     * @param   integer $record_id
+     * @param   string  $thema
+     * @return   string
+     * @access   public
+     * @since   2006-08-29
+     * @author  Thomas Zeithaml <info@spider-trap.de>
+     */
+    function getAllRelatedById($record_id,$article_name,$keywords)
+    {
+        global $sids, $PMF_LANG, $PMF_CONF;
+        $relevantslisting = '<ul>';
+		$begriffe = str_replace('-', ' ', $article_name) . $keywords;
+        $i = 1;
+
+		$result = $this->db->search(SQLPREFIX."faqdata",
+                          array(SQLPREFIX."faqdata.id AS id",
+                                SQLPREFIX."faqdata.lang AS lang",
+                                SQLPREFIX."faqcategoryrelations.category_id AS category_id",
+                                SQLPREFIX."faqdata.thema AS thema",
+                                SQLPREFIX."faqdata.content AS content"),
+                          SQLPREFIX."faqcategoryrelations",
+                          array(SQLPREFIX."faqdata.id = ".SQLPREFIX."faqcategoryrelations.record_id",
+                                SQLPREFIX."faqdata.lang = ".SQLPREFIX."faqcategoryrelations.record_lang"),
+                          array(SQLPREFIX."faqdata.thema",
+                                SQLPREFIX."faqdata.content",
+                                SQLPREFIX."faqdata.keywords"),
+                          $begriffe,
+                          array(SQLPREFIX."faqdata.active" => "'yes'"));
+
+        while (($row = $this->db->fetch_object($result)) && $i <= $PMF_CONF['numRelatedArticles']) {
+			if ($row->id == $record_id) {
+				continue;
+			}
+			$relevantslisting .= '<li>';
+	 	    $url = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    $sids,
+                    $row->category_id,
+                    $row->id,
+                    $row->lang
+                );
+			$oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+            $oLink->itemTitle = $row->thema;
+            $oLink->text = $row->thema;
+            $oLink->tooltip = $row->thema;
+            $relevantslisting .= $oLink->toHtmlAnchor().'</li>';
+            $i++;
+        }
+
+        return $relevantslisting . "</ul>";
+    }
+
 
 }
