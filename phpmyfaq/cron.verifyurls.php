@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: cron.verifyurls.php,v 1.1 2006-09-17 20:13:04 matteo Exp $
+ * $Id: cron.verifyurls.php,v 1.2 2006-09-17 20:25:59 matteo Exp $
  *
  * Performs an Automatic Link Verification over all the faq records
  *
@@ -90,7 +90,9 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
         $output = '';
         $output .= sprintf('%0'.strlen((string)$tot).'d', $i).'/'.$tot.'. Checking '.$_r['solution_id'].' ('.strip_tags($_r['title']).')...';
         $start = pmf_microtime_float();
-        $output .= verifyArticleURL($_r['content'], $_r['id'], $_r['lang'], true);
+        if ($oLnk->getEntryState($_r['id'], $_r['lang'], true) === true) {
+            $output .= verifyArticleURL($_r['content'], $_r['id'], $_r['lang'], true);
+        }
         $end = pmf_microtime_float();
         $output .= ' done in '.round($end - $start, 4).' sec';
         $output .= ($isRequestedByWebLocalhost ? '' : "\n");
