@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Category.php,v 1.16 2006-09-11 19:56:30 thorstenr Exp $
+* $Id: Category.php,v 1.17 2006-09-17 16:17:40 matteo Exp $
 *
 * The main category class
 *
@@ -551,7 +551,7 @@ class PMF_Category
             $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
             $oLink->itemTitle = $categoryName;
             $oLink->text = $categoryName;
-            $oLink->tooltip = addslashes($description);
+            $oLink->tooltip = htmlspecialchars($description);
             $output .= $oLink->toHtmlAnchor().$num_entries;
 
             $open = $level;
@@ -747,7 +747,7 @@ class PMF_Category
                     $oLink->itemTitle = $categoryName;
                     $oLink->text = $categoryName
                                  .' <img src="images/more.gif" width="11" height="11" alt="'.$categoryName.'" style="border: none; vertical-align: middle;" />';
-                    $oLink->tooltip = addslashes($description);
+                    $oLink->tooltip = htmlspecialchars($description);
                     $output .= $oLink->toHtmlAnchor();
                 } else {
                     if ($this->treeTab[$y]["symbol"] == "minus") {
@@ -758,7 +758,7 @@ class PMF_Category
                         $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
                         $oLink->itemTitle = ($this->treeTab[$y]['parent_id'] == 0) ? $categoryName : $this->categoryName[$this->treeTab[$y]['parent_id']]['name'];
                         $oLink->text = $categoryName;
-                        $oLink->tooltip = addslashes($description);
+                        $oLink->tooltip = htmlspecialchars($description);
                         $output .= $oLink->toHtmlAnchor();
                     } else {
                         $url = sprintf('%saction=show&amp;cat=%d',
@@ -768,7 +768,7 @@ class PMF_Category
                         $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
                         $oLink->itemTitle = $categoryName;
                         $oLink->text = $categoryName;
-                        $oLink->tooltip = addslashes($description);
+                        $oLink->tooltip = htmlspecialchars($description);
                         $output .= $oLink->toHtmlAnchor();
                     }
                 }
