@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.66 2006-09-06 17:55:43 thorstenr Exp $
+* $Id: index.php,v 1.67 2006-09-17 16:04:18 thorstenr Exp $
 *
 * The main admin backend index file
 *
@@ -355,7 +355,7 @@ if (isset($auth)) {
         <p><img src="images/arrow.gif" width="11" height="11" alt="<?php print $PMF_LANG["lostPassword"]; ?>" border="0" /> <a href="password.php" title="<?php print $PMF_LANG["lostPassword"]; ?>">
 <?php print $PMF_LANG["lostPassword"]; ?>
 </a></p>
-        <p><img src="images/arrow.gif" width="11" height="11" alt="<?php print $PMF_CONF["title"]; ?> FAQ" border="0" /> <a href="../index.php" title="<?php print $PMF_CONF["title"]; ?> FAQ"><?php print $PMF_CONF["title"]; ?> FAQ</a></p>
+        <p><img src="images/arrow.gif" width="11" height="11" alt="<?php print $PMF_CONF["title"]; ?>" border="0" /> <a href="../index.php" title="<?php print $PMF_CONF["title"]; ?>"><?php print $PMF_CONF["title"]; ?></a></p>
     </fieldset>
     </form>
 <?php
