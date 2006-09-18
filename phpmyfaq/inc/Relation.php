@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Relation.php,v 1.3 2006-09-18 20:05:36 matteo Exp $
+* $Id: Relation.php,v 1.4 2006-09-18 20:45:19 matteo Exp $
 *
 * The Relation class for dynamic related record linking
 *
@@ -178,12 +178,11 @@ class PMF_Relation
                           $begriffe,
                           array(SQLPREFIX."faqdata.active" => "'yes'"));
 
-        while (($row = $this->db->fetch_object($result)) && ($i <= $PMF_CONF['numRelatedArticles'])) {
-            $i++;
+        while (($row = $this->db->fetch_object($result)) && ($i < $PMF_CONF['numRelatedArticles'])) {
             if ($row->id == $record_id) {
                 continue;
             }
-            $relevantslisting .= (1 == $i ? '<ul>' : '');
+            $relevantslisting .= ('' == $relevantslisting ? '<ul>' : '');
             $relevantslisting .= '<li>';
             $url = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                     $sids,
@@ -196,6 +195,7 @@ class PMF_Relation
             $oLink->text = $row->thema;
             $oLink->tooltip = $row->thema;
             $relevantslisting .= $oLink->toHtmlAnchor().'</li>';
+            $i++;
         }
         $relevantslisting .= ($i > 0 ? '</ul>' : '');
 
