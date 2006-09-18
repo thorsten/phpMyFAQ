@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Relation.php,v 1.2 2006-09-17 20:01:51 thorstenr Exp $
+* $Id: Relation.php,v 1.3 2006-09-18 20:05:36 matteo Exp $
 *
 * The Relation class for dynamic related record linking
 *
@@ -156,14 +156,14 @@ class PMF_Relation
      * @since   2006-08-29
      * @author  Thomas Zeithaml <info@spider-trap.de>
      */
-    function getAllRelatedById($record_id,$article_name,$keywords)
+    function getAllRelatedById($record_id, $article_name, $keywords)
     {
         global $sids, $PMF_LANG, $PMF_CONF;
-        $relevantslisting = '<ul>';
-		$begriffe = str_replace('-', ' ', $article_name) . $keywords;
-        $i = 1;
+        $relevantslisting = '';
+        $begriffe = str_replace('-', ' ', $article_name) . $keywords;
+        $i = 0;
 
-		$result = $this->db->search(SQLPREFIX."faqdata",
+        $result = $this->db->search(SQLPREFIX."faqdata",
                           array(SQLPREFIX."faqdata.id AS id",
                                 SQLPREFIX."faqdata.lang AS lang",
                                 SQLPREFIX."faqcategoryrelations.category_id AS category_id",
@@ -178,26 +178,28 @@ class PMF_Relation
                           $begriffe,
                           array(SQLPREFIX."faqdata.active" => "'yes'"));
 
-        while (($row = $this->db->fetch_object($result)) && $i <= $PMF_CONF['numRelatedArticles']) {
-			if ($row->id == $record_id) {
-				continue;
-			}
-			$relevantslisting .= '<li>';
-	 	    $url = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+        while (($row = $this->db->fetch_object($result)) && ($i <= $PMF_CONF['numRelatedArticles'])) {
+            $i++;
+            if ($row->id == $record_id) {
+                continue;
+            }
+            $relevantslisting .= (1 == $i ? '<ul>' : '');
+            $relevantslisting .= '<li>';
+            $url = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                     $sids,
                     $row->category_id,
                     $row->id,
                     $row->lang
                 );
-			$oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+            $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
             $oLink->itemTitle = $row->thema;
             $oLink->text = $row->thema;
             $oLink->tooltip = $row->thema;
             $relevantslisting .= $oLink->toHtmlAnchor().'</li>';
-            $i++;
         }
+        $relevantslisting .= ($i > 0 ? '</ul>' : '');
 
-        return $relevantslisting . "</ul>";
+        return $relevantslisting;
     }
 
 

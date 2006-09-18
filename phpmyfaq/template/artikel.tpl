@@ -15,7 +15,7 @@
     <!-- /Tags -->
 
     <!-- Related Articles -->
-    <p><strong>{writeRelatedArticlesHeader}</strong> {writeRelatedArticles}</p>
+    <p><strong>{writeRelatedArticlesHeader}</strong>{writeRelatedArticles}</p>
     <!-- / Related Articles -->
 
     <!-- Article Info -->
