@@ -1,5 +1,5 @@
 /**
- * $Id: style.css,v 1.26 2006-09-03 09:00:43 thorstenr Exp $
+ * $Id: style.css,v 1.27 2006-09-18 19:55:00 matteo Exp $
  *
  * This is the main style sheet file for phpMyFAQ 2.0
  * If you want to change only the colours, use colors.css
@@ -65,8 +65,8 @@ form {
 fieldset {
    margin-bottom: 1em;
    padding: .5em;
-	-moz-border-radius: 10px 10px 10px 10px;
-	border-radius: 10px 10px 10px 10px;
+    -moz-border-radius: 10px 10px 10px 10px;
+    border-radius: 10px 10px 10px 10px;
 }
 img {
    border: 0;
@@ -95,16 +95,16 @@ code {
  * Header definitions
  */
 #header {
-	position: relative;
-	min-height: 49px;
-	height: 5em;
-	padding: 0;
-	margin: 0;
-	margin-bottom: 1em;
-	height: 3em;
-	padding: 15px 0;
-	-moz-border-radius: 10px 10px 10px 10px;
-	border-radius: 10px 10px 10px 10px;
+    position: relative;
+    min-height: 49px;
+    height: 5em;
+    padding: 0;
+    margin: 0;
+    margin-bottom: 1em;
+    height: 3em;
+    padding: 15px 0;
+    -moz-border-radius: 10px 10px 10px 10px;
+    border-radius: 10px 10px 10px 10px;
 }
 .header {
    margin: 0px;
@@ -141,15 +141,15 @@ code {
    white-space: nowrap;
 }
 #header ul a {
-	float: left;
-	display: block;
-	padding: 6px 6px 6px 6px;
-	font-weight: bold;
-	font-size: 110%;
-	text-decoration: none;
-	border: 1px solid;
-	-moz-border-radius-topleft: 5px;
-	-moz-border-radius-topright: 5px;
+    float: left;
+    display: block;
+    padding: 6px 6px 6px 6px;
+    font-weight: bold;
+    font-size: 110%;
+    text-decoration: none;
+    border: 1px solid;
+    -moz-border-radius-topleft: 5px;
+    -moz-border-radius-topright: 5px;
 }
 #header ul a:hover {
    text-decoration: underline;
@@ -163,8 +163,8 @@ code {
    padding: 0;
    font-size: 100%;
    border: 1px solid;
-	-moz-border-radius: 5px 5px 5px 5px;
-	border-radius: 5px 5px 5px 5px;
+    -moz-border-radius: 5px 5px 5px 5px;
+    border-radius: 5px 5px 5px 5px;
 }
 #categories ul {
    list-style: none;
@@ -212,8 +212,8 @@ html>body #categories li a {
    margin-top: 10px;
    border: 1px solid;
    padding: 5px;
-	-moz-border-radius: 5px 5px 5px 5px;
-	border-radius: 5px 5px 5px 5px;
+    -moz-border-radius: 5px 5px 5px 5px;
+    border-radius: 5px 5px 5px 5px;
 }
 #search fieldset, #langform fieldset, #loginform fieldset {
    display: inline;
@@ -249,8 +249,8 @@ html>body #categories li a {
    border: 1px solid;
    margin-bottom: 5px;
    padding: 4px 4px 2px 4px;
-	-moz-border-radius: 5px 5px 5px 5px;
-	border-radius: 5px 5px 5px 5px;
+    -moz-border-radius: 5px 5px 5px 5px;
+    border-radius: 5px 5px 5px 5px;
 }
 #topten img, #latest img {
     float: right;
@@ -317,6 +317,11 @@ html>body #categories li a {
 .main-content .searchpreview {
     font-size: 10px;
 }
+#article_content {
+   padding: 0;
+   margin: 0;
+   margin-bottom: 0.8em;
+}
 
 /**
  * Main content - news section
@@ -327,8 +332,8 @@ html>body #categories li a {
     border: 1px solid;
     margin-bottom: 5px;
     padding: 2px 4px 2px 4px;
-	-moz-border-radius: 5px 5px 5px 5px;
-	border-radius: 5px 5px 5px 5px;
+    -moz-border-radius: 5px 5px 5px 5px;
+    border-radius: 5px 5px 5px 5px;
 }
 .main-content #news h3 {
    font-size: 135%;
@@ -360,6 +365,11 @@ html>body #categories li a {
 .main-content #news .date {
    font-size: 80%;
    margin-bottom: 12px;
+}
+#news_content {
+   padding: 0;
+   margin: 0;
+   margin-bottom: 0.8em;
 }
 
 /**

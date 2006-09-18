@@ -3,7 +3,7 @@
 <h2>{writeThema}</h2>
 
     <!-- Article -->
-    <p>{writeContent}</p>
+    <div id="article_content">{writeContent}</div>
     <!-- /Article -->
 
     <!-- Article Categories Listing -->
@@ -53,7 +53,7 @@
     <p>{writeCommentMsg}</p>
 
     <!-- Comment Form -->
-    <a name=comment"></a><div id="comment" style="display: none;">
+    <a name="comment"></a><div id="comment" style="display: none;">
     <form action="{writeSendAdress}" method="post">
     <input type="hidden" name="id" value="{id}" />
     <input type="hidden" name="lang" value="{lang}" />
@@ -64,13 +64,13 @@
     <legend>{msgWriteComment}</legend>
 
         <label for="user" class="left">{msgNewContentName}</label>
-        <input class="inputfield" type="text" name="user" value="{defaultContentName}" size="50" /><br />
+        <input class="inputfield" type="text" id="user" name="user" value="{defaultContentName}" size="50" /><br />
 
         <label for="mail" class="left">{msgNewContentMail}</label>
-        <input class="inputfield" type="text" name="mail" value="{defaultContentMail}" size="50" /><br />
+        <input class="inputfield" type="text" id="mail" name="mail" value="{defaultContentMail}" size="50" /><br />
 
-        <label for="comment" class="left">{msgYourComment}</label>
-        <textarea class="inputarea" cols="37" rows="10" name="comment"></textarea><br />
+        <label for="comment_text" class="left">{msgYourComment}</label>
+        <textarea class="inputarea" cols="37" rows="10" id="comment_text" name="comment"></textarea><br />
 
     </fieldset>
 
