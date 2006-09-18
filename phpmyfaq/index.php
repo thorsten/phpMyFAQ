@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.73 2006-09-06 21:47:23 matteo Exp $
+* $Id: index.php,v 1.74 2006-09-18 20:19:16 matteo Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the
@@ -352,7 +352,7 @@ if (DEBUG) {
         $cookies .= $key.': '.$value.'<br />';
     }
     $debug_template_vars = array(
-        'debugMessages' => '<p>DEBUG INFORMATION:<br />'.$db->sqllog().'</p><p>COOKIES:<br />'.$cookies.'</p>');
+        'debugMessages' => '<div id="debug_main">DEBUG INFORMATION:<br />'.$db->sqllog().'</div><div id="debug_cookies">COOKIES:<br />'.$cookies.'</div>');
 } else {
     // send headers and print template
     header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
