@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.30 2006-09-05 18:55:53 matteo Exp $
+* $Id: language_it.php,v 1.31 2006-09-18 20:23:58 matteo Exp $
 *
 * Italian language file
 *
@@ -783,6 +783,10 @@ $PMF_LANG['err_inactiveNews'] = 'Questa notizia &egrave; in revisione e non pu&o
 $PMF_LANG['msgSearchOnAllLanguages'] = 'Cerca in tutte le lingue:';
 $PMF_LANG['ad_entry_tags'] = '<a href="http://en.wikipedia.org/wiki/Tags" title="Vai alla definizione in inglese di Wikipedia" target="_blank">Tags</a>';
 $PMF_LANG['msg_tags'] = '<a href="http://en.wikipedia.org/wiki/Tags" title="Vai alla definizione in inglese di Wikipedia" target="_blank">Tags</a>';
+
+// added v2.0.0 - 2006-09-02 by Thomas
+$PMF_LANG['msg_related_articles'] = 'FAQ correlate';
+$LANG_CONF['numRelatedArticles'] = array(0 => "input", 1 => "Numero di FAQ correlate");
 
 // added v2.0.0 - 2006-09-03 by Matteo
 $PMF_LANG['ad_linkcheck_feedback_url-batch1'] = 'In corso...';
