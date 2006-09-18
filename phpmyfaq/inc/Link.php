@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Link.php,v 1.16 2006-09-04 17:07:37 matteo Exp $
+* $Id: Link.php,v 1.17 2006-09-18 20:13:38 matteo Exp $
 *
 * Link management - Functions and Classes
 *
@@ -128,12 +128,12 @@ function getLinkUri($url, $text = null, $target = null)
 class PMF_Link
 {
     // {{{ Class properties specific to an HTML link anchor
-    var $url     = '';
-    var $class   = '';
-    var $text   = '';
-    var $tooltip = '';
-    var $target  = '';
-    var $name    = '';
+    var $url        = '';
+    var $class      = '';
+    var $text       = '';
+    var $tooltip    = '';
+    var $target     = '';
+    var $name       = '';
     // }}}
     // {{{ Class properties specific to the SEO/SEF URLs
     var $itemTitle = '';
@@ -343,7 +343,7 @@ class PMF_Link
             $htmlAnchor .= ' class="'.$this->class.'"';
         }
         if (!empty($this->tooltip)) {
-            $htmlAnchor .= ' title="'.$this->tooltip.'"';
+            $htmlAnchor .= ' title="'.htmlspecialchars($this->tooltip).'"';
         }
         if (!empty($this->name)) {
                 $htmlAnchor .= ' name="'.$this->name.'"';
