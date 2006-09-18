@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.ondemandurl.php,v 1.11 2006-09-11 19:37:42 thorstenr Exp $
+* $Id: ajax.ondemandurl.php,v 1.12 2006-09-18 21:20:46 matteo Exp $
 *
 * AJAX: onDemandURL
 *
@@ -85,10 +85,10 @@ if (!(isset($id) && isset($lang))) {
     exit();
 }
 
-$faq = new PMF_Faq($lang);
+$faq->faqRecord = null;
 $faq->getRecord($id);
 
-if (count($faq->faqRecord['content'])) {
+if (!isset($faq->faqRecord['content'])) {
     // TODO: ASSIGN STRING
     ?>
     Error: No entry for #<?php print $id; ?>(<?php print $lang; ?>) available.

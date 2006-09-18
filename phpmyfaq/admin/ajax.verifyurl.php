@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.verifyurl.php,v 1.9 2006-09-11 19:37:42 thorstenr Exp $
+* $Id: ajax.verifyurl.php,v 1.10 2006-09-18 21:20:46 matteo Exp $
 *
 * AJAX: verifyurl
 *
@@ -67,10 +67,10 @@ if (!(isset($id) && isset($lang))) {
     exit();
 }
 
-$faq = new PMF_Faq($lang);
+$faq->faqRecord = null;
 $faq->getRecord($id);
 
-if (count($faq->faqRecord['content'])) {
+if (!isset($faq->faqRecord['content'])) {
     header("HTTP/1.0 401 Unauthorized");
     header("Status: 401 Unauthorized");
     exit();
