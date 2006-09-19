@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: category.delete.php,v 1.7 2006-07-29 19:23:45 thorstenr Exp $
+* $Id: category.delete.php,v 1.8 2006-09-19 19:08:27 thorstenr Exp $
 *
 * Deletes a category
 *
@@ -26,17 +26,33 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 
 print "<h2>".$PMF_LANG["ad_menu_categ_edit"]."</h2>\n";
 if ($permission["delcateg"]) {
+    $cat = new PMF_Category($LANGCODE);
+    $categories = $cat->getAllCategories();
+    $id = $_GET["cat"];
 ?>
 	<form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>" method="post">
     <fieldset>
     <legend><?php print $PMF_LANG["ad_categ_deletesure"]; ?></legend>
-    <div align="center">
+
 	<input type="hidden" name="action" value="removecategory" />
-	<input type="hidden" name="cat" value="<?php print $_GET["cat"]; ?>" />
-    <input type="hidden" name="lang" value="<?php print $_GET['lang']; ?>" />
-	<input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_del_yes"]; ?>" style="color: Red;" />&nbsp;&nbsp;
+	<input type="hidden" name="cat" value="<?php print $id; ?>" />
+        <input type="hidden" name="lang" value="<?php print $LANGCODE; ?>" />
+
+        <label class="left"><?php print $PMF_LANG["ad_categ_titel"]; ?>:</label>
+        <?php print $categories[$id]["name"]; ?> <br />
+
+        <label class="left"><?php print $PMF_LANG["ad_categ_desc"]; ?>:</label>
+        <?php print $categories[$id]["description"]; ?> <br />
+
+        <label class="left"><?php print $PMF_LANG["ad_categ_deletealllang"]; ?></label>
+        <input type="radio" checked name="deleteall" value="yes" /> <br /> 
+        <label class="left"><?php print $PMF_LANG["ad_categ_deletethislang"]; ?></label>
+        <input type="radio" name="deleteall" value="no" />  <br />           
+
+        <br />
+	<input class="submit" style="margin-left: 190px;color: Red;" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_del_yes"]; ?>" />&nbsp;&nbsp;
 	<input class="submit" type="reset" onclick="javascript:history.back();" value="<?php print $PMF_LANG["ad_categ_del_no"]; ?>" />
-    </div>
+
     </fieldset>
 	</form>
 	</div>

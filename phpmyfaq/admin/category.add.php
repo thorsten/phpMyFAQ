@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: category.add.php,v 1.13 2006-09-08 16:43:38 thorstenr Exp $
+* $Id: category.add.php,v 1.14 2006-09-19 19:08:27 thorstenr Exp $
 *
 * Adds a category
 *
@@ -32,7 +32,9 @@ if ($permission["addcateg"]) {
     <fieldset>
     <legend><?php print $PMF_LANG["ad_categ_new"]; ?></legend>
     <input type="hidden" name="action" value="savecategory" />
+    <input type="hidden" name="lang" value="<?php print $LANGCODE; ?>" />
     <input type="hidden" name="parent_id" value="<?php if (isset($_GET["cat"])) { print $_GET["cat"]; } else { print "0"; } ?>" />
+
 <?php
     if (isset($_GET["cat"])) {
 ?>
@@ -42,17 +44,6 @@ if ($permission["addcateg"]) {
 ?>
     <label class="left"><?php print $PMF_LANG["ad_categ_titel"]; ?>:</label>
     <input type="text" name="name" size="30" style="width: 250px;" /><br />
-
-    <label class="left"><?php print $PMF_LANG["ad_categ_lang"]; ?>:</label>
-    <select name="lang" size="1">
-<?php
-    if (isset($_GET['cat'])) {
-        print languageOptions($cat->categoryName[$_GET['cat']]['lang'], true);
-    } else {
-        print languageOptions($LANGCODE);
-    }
-?>
-    </select><br />
 
     <label class="left"><?php print $PMF_LANG["ad_categ_desc"]; ?>:</label>
     <input type="text" name="description" size="30" style="width: 250px;" /><br />

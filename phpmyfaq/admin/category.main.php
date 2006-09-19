@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: category.main.php,v 1.23 2006-09-11 19:56:51 thorstenr Exp $
+* $Id: category.main.php,v 1.24 2006-09-19 19:08:27 thorstenr Exp $
 *
 * List all categories in the admin section
 *
@@ -63,7 +63,7 @@ if ($permission['editcateg']) {
 
         if (!$category->checkLanguage($category_data['id'], $category_data['lang'])) {
             if ($category->addCategory($category_data, $parent_id, $category_data['id'])) {
-                printf('<p>%s</p>', $PMF_LANG['ad_categ_added']);
+                printf('<p>%s</p>', $PMF_LANG['ad_categ_translated']);
             } else {
                 printf('<p>%s</p>', $db->error());
             }
@@ -81,8 +81,9 @@ if ($permission['editcateg']) {
 
         $id = (int)$_POST['cat'];
         $lang = $db->escape_string($_POST['lang']);
+        $delete_all = strtolower($db->escape_string($_POST['deleteall'])) == 'yes' ? true : false;
 
-        if ($category->deleteCategory($id, $lang) && $category->deleteCategoryRelation($id, $lang)) {
+        if ($category->deleteCategory($id, $lang, $delete_all) && $category->deleteCategoryRelation($id, $lang, $delete_all)) {
             printf('<p>%s</p>', $PMF_LANG['ad_categ_deleted']);
         } else {
             printf('<p>%s</p>', $db->error());
@@ -123,7 +124,8 @@ if ($permission['editcateg']) {
     }
     $currentLink = $_SERVER['PHP_SELF'].$linkext;
 
-    $tree = new PMF_Category($lang);
+    $tree = new PMF_Category($lang); 
+    $tree->getMissingCategories();
     $tree->buildTree();
 
     foreach ($tree->catTree as $cat) {
@@ -131,24 +133,43 @@ if ($permission['editcateg']) {
         for ($i = 0; $i < $cat['indent']; $i++) {
             $indent .= '&nbsp;&nbsp;&nbsp;';
         }
+        // category translated in this language?
+        ($cat["lang"] == $lang) ? $catname = $cat["name"] : $catname = "n/a";
+
+        // show category name
         printf("%s<strong style=\"vertical-align: top;\">&middot; %s</strong> ",
             $indent,
-            $cat["name"]);
-        printf('<a href="%s&amp;action=addcategory&amp;cat=%s&amp;lang=%s" title="%s"><img src="images/add.gif" width="17" height="18" alt="%s" title="%s" border="0" /></a>',
-            $currentLink,
-            $cat['id'],
-            $cat['lang'],
-            $PMF_LANG['ad_kateg_add'],
-            $PMF_LANG['ad_kateg_add'],
-            $PMF_LANG['ad_kateg_add']);
-        printf('<a href="%s&amp;action=editcategory&amp;cat=%s" title="%s"><img src="images/edit.gif" width="18" height="18" border="0" title="%s" alt="%s" /></a>',
-            $currentLink,
-            $cat['id'],
-            $PMF_LANG['ad_kateg_rename'],
-            $PMF_LANG['ad_kateg_rename'],
-            $PMF_LANG['ad_kateg_rename']);
+            $catname);
 
-        if (count($tree->getChildren($cat['id'])) == 0) {
+        if ($cat["lang"] == $lang) {
+           // add sub category (if actual language)
+           printf('<a href="%s&amp;action=addcategory&amp;cat=%s&amp;lang=%s" title="%s"><img src="images/add.gif" width="17" height="18" alt="%s" title="%s" border="0" /></a>',
+               $currentLink,
+               $cat['id'],
+               $cat['lang'],
+               $PMF_LANG['ad_kateg_add'],
+               $PMF_LANG['ad_kateg_add'],
+               $PMF_LANG['ad_kateg_add']);
+
+           // rename (sub) category (if actual language)
+           printf('<a href="%s&amp;action=editcategory&amp;cat=%s" title="%s"><img src="images/edit.gif" width="18" height="18" border="0" title="%s" alt="%s" /></a>',
+               $currentLink,
+               $cat['id'],
+               $PMF_LANG['ad_kateg_rename'],
+               $PMF_LANG['ad_kateg_rename'],
+               $PMF_LANG['ad_kateg_rename']);
+        }
+
+        // translate category (always)
+        printf('<a href="%s&amp;action=translatecategory&amp;cat=%s" title="%s"><img src="images/translate.gif" width="18" height="18" border="0" title="%s" alt="%s" /></a>',
+            $currentLink,
+            $cat['id'],
+            $PMF_LANG['ad_categ_translate'],
+            $PMF_LANG['ad_categ_translate'],
+            $PMF_LANG['ad_categ_translate']);
+
+        // delete (sub) category (if actual language)
+        if (count($tree->getChildren($cat['id'])) == 0 && $cat["lang"] == $lang) {
             printf('<a href="%s&amp;action=deletecategory&amp;cat=%s&amp;lang=%s" title="%s"><img src="images/delete.gif" width="17" height="18" alt="%s" title="%s" border="0" /></a>',
                 $currentLink,
                 $cat['id'],
@@ -157,19 +178,25 @@ if ($permission['editcateg']) {
                 $PMF_LANG['ad_categ_delete'],
                 $PMF_LANG['ad_categ_delete']);
         }
-        printf('<a href="%s&amp;action=cutcategory&amp;cat=%s" title="%s"><img src="images/cut.gif" width="16" height="16" alt="%s" border="0" title="%s" /></a>',
-            $currentLink,
-            $cat['id'],
-            $PMF_LANG['ad_categ_cut'],
-            $PMF_LANG['ad_categ_cut'],
-            $PMF_LANG['ad_categ_cut']);
-        printf('<a href="%s&amp;action=movecategory&amp;cat=%s&amp;parent_id=%s" title="%s"><img src="images/move.gif" width="16" height="16" alt="%s" border="0" title="%s" /></a>',
-            $currentLink,
-            $cat['id'],
-            $cat['parent_id'],
-            $PMF_LANG['ad_categ_move'],
-            $PMF_LANG['ad_categ_move'],
-            $PMF_LANG['ad_categ_move']);
+
+        if ($cat["lang"] == $lang) {
+           // cut category (if actual language)
+           printf('<a href="%s&amp;action=cutcategory&amp;cat=%s" title="%s"><img src="images/cut.gif" width="16" height="16" alt="%s" border="0" title="%s" /></a>',
+               $currentLink,
+               $cat['id'],
+               $PMF_LANG['ad_categ_cut'],
+               $PMF_LANG['ad_categ_cut'],
+               $PMF_LANG['ad_categ_cut']);
+
+           // move category (if actual language)
+           printf('<a href="%s&amp;action=movecategory&amp;cat=%s&amp;parent_id=%s" title="%s"><img src="images/move.gif" width="16" height="16" alt="%s" border="0" title="%s" /></a>',
+               $currentLink,
+               $cat['id'],
+               $cat['parent_id'],
+               $PMF_LANG['ad_categ_move'],
+               $PMF_LANG['ad_categ_move'],
+               $PMF_LANG['ad_categ_move']);
+        }
         print "<br />";
     }
 

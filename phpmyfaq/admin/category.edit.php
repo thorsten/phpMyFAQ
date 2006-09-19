@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: category.edit.php,v 1.14 2006-09-06 06:29:53 thorstenr Exp $
+* $Id: category.edit.php,v 1.15 2006-09-19 19:08:27 thorstenr Exp $
 *
 * Edits a category
 *
@@ -36,15 +36,12 @@ if ($permission["editcateg"]) {
 
         <input type="hidden" name="action" value="updatecategory" />
         <input type="hidden" name="id" value="<?php print $id; ?>" />
+        <input type="hidden" name="lang" value="<?php print $categories[$id]["lang"]; ?>" />
         <input type="hidden" name="parent_id" value="<?php print $categories[$id]["parent_id"]; ?>" />
+
 
         <label class="left"><?php print $PMF_LANG["ad_categ_titel"]; ?>:</label>
         <input type="text" name="name" size="30" style="width: 250px;" value="<?php print $categories[$id]["name"]; ?>" /><br />
-
-        <label class="left"><?php print $PMF_LANG["ad_categ_lang"]; ?>:</label>
-        <select name="lang" size="1">
-        <?php print languageOptions($categories[$id]["lang"]); ?>
-        </select><br />
 
         <label class="left"><?php print $PMF_LANG["ad_categ_desc"]; ?>:</label>
         <input type="text" name="description" size="30" style="width: 250px;" value="<?php print $categories[$id]["description"]; ?>" /><br />
@@ -54,7 +51,7 @@ if ($permission["editcateg"]) {
         <?php print $user->getAllUserOptions($categories[$id]["user_id"]); ?>
         </select><br />
 
-        <input class="submit" style="margin-left: 190px;" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_updatecateg"]; ?>" /></div>
+        <input class="submit" style="margin-left: 190px;" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_updatecateg"]; ?>" />
     </fieldset>
     </form>
 <?php

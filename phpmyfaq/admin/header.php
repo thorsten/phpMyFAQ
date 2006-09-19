@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: header.php,v 1.25 2006-09-11 19:23:33 thorstenr Exp $
+* $Id: header.php,v 1.26 2006-09-19 19:08:27 thorstenr Exp $
 *
 * header of the admin area
 *
@@ -109,6 +109,7 @@ header("Vary: Negotiate,Accept");
         case 'addcategory':
         case 'savecategory':
         case 'editcategory':
+        case 'translatecategory':
         case 'updatecategory':
         case 'deletecategory':
         case 'removecategory':

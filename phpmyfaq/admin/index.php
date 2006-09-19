@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.68 2006-09-18 20:19:16 matteo Exp $
+* $Id: index.php,v 1.69 2006-09-19 19:08:27 thorstenr Exp $
 *
 * The main admin backend index file
 *
@@ -177,7 +177,7 @@ require_once ("header.php");
 
 // User is authenticated
 if (isset($auth)) {
-    if (isset($_action)) {
+    if (isset($_action) && ($_action)) {
         // the various sections of the admin area
         switch ($_action) {
             // functions for user administration
@@ -209,6 +209,7 @@ if (isset($auth)) {
             case 'pastecategory':           require_once ('category.main.php'); break;
             case "addcategory":             require_once ("category.add.php"); break;
             case "editcategory":            require_once ("category.edit.php"); break;
+            case "translatecategory":       require_once ("category.translate.php"); break;
             case "deletecategory":          require_once ("category.delete.php"); break;
             case "cutcategory":             require_once ("category.cut.php"); break;
             case "movecategory":            require_once ("category.move.php"); break;
@@ -362,18 +363,18 @@ if (isset($auth)) {
 }
 
 if (DEBUG) {
-    print '<div id="debug_main">DEBUG INFORMATION:<br />'.$db->sqllog().'</div>';
+    print '<p>DEBUG INFORMATION:<br />'.$db->sqllog().'</p>';
     $cookies = '';
     foreach($_COOKIE as $key => $value) {
         $cookies .= $key.': '.$value.'<br />';
     }
-    print '<div id="debug_cookies">COOKIES:<br />'.$cookies.'</div>';
-    print '<div id="debug_tables">TABLES & RECORDS:<br />';
+    print '<p>COOKIES:<br />'.$cookies.'</p>';
+    print '<p>TABLES & RECORDS:<br />';
     $tableStatuses = $db->getTableStatus();
     foreach ($tableStatuses as $key => $value) {
         print "$key: $value<br />";
     }
-    print '</div>';
+    print '</p>';
 }
 
 require_once('footer.php');
