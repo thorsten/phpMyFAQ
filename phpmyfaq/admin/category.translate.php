@@ -44,7 +44,7 @@ if ($permission["editcateg"]) {
 
         <label class="left"><?php print $PMF_LANG["ad_categ_lang"]; ?>:</label>
         <select name="lang" size="1">
-        <?php print $cat->getCatgoryLanguagesToTranslate($id, $LANGCODE); ?>
+        <?php print $cat->getCategoryLanguagesToTranslate($id, $LANGCODE); ?>
         </select><br />
 
         <label class="left"><?php print $PMF_LANG["ad_categ_desc"]; ?>:</label>
@@ -59,7 +59,7 @@ if ($permission["editcateg"]) {
         <br /><hr />
         <?php
            print '<strong>'.$PMF_LANG["ad_categ_transalready"].'</strong><br />';
-           foreach ($cat->getCatgoryLanguagesTranslated($id) as $language => $namedesc) {
+           foreach ($cat->getCategoryLanguagesTranslated($id) as $language => $namedesc) {
               print "&nbsp;&nbsp;&nbsp;<strong style=\"vertical-align: top;\">&middot; " . $language . "</strong>: " . $namedesc . "\n<br />";
            }
         ?>

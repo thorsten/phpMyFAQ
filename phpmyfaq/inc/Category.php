@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Category.php,v 1.19 2006-09-19 18:57:13 thorstenr Exp $
+ * $Id: Category.php,v 1.20 2006-09-19 20:21:30 matteo Exp $
  *
  * The main category class
  *
@@ -1236,7 +1236,7 @@ class PMF_Category
      * @since   2006-09-10
      * @author  Rudi Ferrari <bookcrossers@gmx.de>
      */
-    function getCatgoryLanguagesTranslated($category_id)
+    function getCategoryLanguagesTranslated($category_id)
     {
         global $languageCodes;
         $existcatlang = check4Language($category_id, 'faqcategories');
@@ -1257,7 +1257,7 @@ class PMF_Category
                $language);
            $result = $this->db->query($query);
            if ($row = $this->db->fetch_assoc($result)) {
-              $translated[$languageCodes[strtoupper($language)]] = $row['name'] . '  (' . $row['description'] . ')';
+              $translated[$languageCodes[strtoupper($language)]] = $row['name'].('' == $row['description'] ? '' : '  ('.$row['description'].')');
            }
         }
         ksort($translated);
@@ -1275,7 +1275,7 @@ class PMF_Category
      * @since   2006-09-10
      * @author  Rudi Ferrari <bookcrossers@gmx.de>
      */
-    function getCatgoryLanguagesToTranslate($category_id, $selected_lang)
+    function getCategoryLanguagesToTranslate($category_id, $selected_lang)
     {
         global $languageCodes;
         $output = "";

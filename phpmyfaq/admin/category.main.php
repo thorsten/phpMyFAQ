@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: category.main.php,v 1.24 2006-09-19 19:08:27 thorstenr Exp $
+* $Id: category.main.php,v 1.25 2006-09-19 20:21:30 matteo Exp $
 *
 * List all categories in the admin section
 *
@@ -124,7 +124,7 @@ if ($permission['editcateg']) {
     }
     $currentLink = $_SERVER['PHP_SELF'].$linkext;
 
-    $tree = new PMF_Category($lang); 
+    $tree = new PMF_Category($lang);
     $tree->getMissingCategories();
     $tree->buildTree();
 
@@ -134,7 +134,7 @@ if ($permission['editcateg']) {
             $indent .= '&nbsp;&nbsp;&nbsp;';
         }
         // category translated in this language?
-        ($cat["lang"] == $lang) ? $catname = $cat["name"] : $catname = "n/a";
+        ($cat['lang'] == $lang) ? $catname = $cat['name'] : $catname = $cat['name'].' ('.$languageCodes[strtoupper($cat['lang'])].')';
 
         // show category name
         printf("%s<strong style=\"vertical-align: top;\">&middot; %s</strong> ",
