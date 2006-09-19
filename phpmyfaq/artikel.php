@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.54 2006-09-17 19:52:43 thorstenr Exp $
+* $Id: artikel.php,v 1.55 2006-09-19 21:28:32 matteo Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -22,7 +22,7 @@
 */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
-    header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: http://'.$_SERVER['HTTP_HOST]'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 

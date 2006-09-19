@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: export.main.php,v 1.24 2006-07-30 06:38:52 matteo Exp $
+* $Id: export.main.php,v 1.25 2006-09-19 21:28:33 matteo Exp $
 *
 * XML, XML DocBook, XHTML and PDF export - main page
 *
@@ -22,7 +22,7 @@
 */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
-    header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: http://'.$_SERVER['HTTP_HOST]'].dirname($_SERVER['SCRIPT_NAME']));
 
     exit();
 }

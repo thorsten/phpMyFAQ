@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: header.php,v 1.26 2006-09-19 19:08:27 thorstenr Exp $
+* $Id: header.php,v 1.27 2006-09-19 21:28:33 matteo Exp $
 *
 * header of the admin area
 *
@@ -20,7 +20,7 @@
 */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
-    header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: http://'.$_SERVER['HTTP_HOST]'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 

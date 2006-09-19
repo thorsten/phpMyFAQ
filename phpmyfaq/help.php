@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: help.php,v 1.5 2006-08-19 14:35:09 thorstenr Exp $
+* $Id: help.php,v 1.6 2006-09-19 21:28:32 matteo Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-08-29
@@ -18,7 +18,7 @@
 */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
-    header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: http://'.$_SERVER['HTTP_HOST]'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 

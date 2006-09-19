@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: stat.form.php,v 1.5 2006-07-30 07:43:50 thorstenr Exp $
+* $Id: stat.form.php,v 1.6 2006-09-19 21:28:34 matteo Exp $
 *
 * Form for the session search
 *
@@ -20,7 +20,7 @@
 */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
-    header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: http://'.$_SERVER['HTTP_HOST]'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 $dir = opendir(PMF_ROOT_DIR."/data");

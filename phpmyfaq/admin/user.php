@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: user.php,v 1.29 2006-08-20 20:32:31 matteo Exp $
+* $Id: user.php,v 1.30 2006-09-19 21:28:34 matteo Exp $
 *
 * Displays the user managment frontend
 *
@@ -20,7 +20,7 @@
 */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
-    header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: http://'.$_SERVER['HTTP_HOST]'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 

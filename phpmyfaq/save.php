@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: save.php,v 1.28 2006-09-04 19:48:59 matteo Exp $
+* $Id: save.php,v 1.29 2006-09-19 21:28:32 matteo Exp $
 *
 * Saves a user FAQ record and sends an email to the user
 *
@@ -21,7 +21,7 @@
 */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
-    header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: http://'.$_SERVER['HTTP_HOST]'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -84,7 +84,7 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
     if (function_exists('mb_encode_mimeheader')) {
         $subject = mb_encode_mimeheader($subject);
     }
-    $body = unhtmlentities($PMF_LANG['msgMailCheck'])."\n".unhtmlentities($PMF_CONF['title']).": http://".$_SERVER['SERVER_NAME'].dirname($_SERVER['PHP_SELF']);
+    $body = unhtmlentities($PMF_LANG['msgMailCheck'])."\n".unhtmlentities($PMF_CONF['title']).": http://".$_SERVER['HTTP_HOST]'].dirname($_SERVER['PHP_SELF']);
     if (ini_get('safe_mode')) {
         mail($IDN->encode($PMF_CONF["adminmail"]), $subject, $body, implode("\r\n", $additional_header));
     } else {

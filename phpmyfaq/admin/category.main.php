@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: category.main.php,v 1.25 2006-09-19 20:21:30 matteo Exp $
+* $Id: category.main.php,v 1.26 2006-09-19 21:28:33 matteo Exp $
 *
 * List all categories in the admin section
 *
@@ -20,7 +20,7 @@
 */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
-    header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: http://'.$_SERVER['HTTP_HOST]'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 

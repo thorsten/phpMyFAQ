@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: menue.php,v 1.17 2006-07-29 15:53:51 thorstenr Exp $
+* $Id: menue.php,v 1.18 2006-09-19 21:28:33 matteo Exp $
 *
 * Navigation menue of the admin area
 *
@@ -21,7 +21,7 @@
 */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
-    header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: http://'.$_SERVER['HTTP_HOST]'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.delquestion.php,v 1.11 2006-07-30 07:07:19 matteo Exp $
+* $Id: record.delquestion.php,v 1.12 2006-09-19 21:28:33 matteo Exp $
 *
 * Delete open questions
 *
@@ -20,7 +20,7 @@
 */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
-    header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: http://'.$_SERVER['HTTP_HOST]'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: category.move.php,v 1.8 2006-08-15 15:39:24 thorstenr Exp $
+* $Id: category.move.php,v 1.9 2006-09-19 21:28:33 matteo Exp $
 *
 * Select a category to move
 *
@@ -20,7 +20,7 @@
 */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
-    header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: http://'.$_SERVER['HTTP_HOST]'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 

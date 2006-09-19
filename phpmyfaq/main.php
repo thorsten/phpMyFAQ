@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: main.php,v 1.14 2006-08-27 10:09:05 thorstenr Exp $
+* $Id: main.php,v 1.15 2006-09-19 21:28:32 matteo Exp $
 *
 * The main start page with the Top10 and the latest messages
 *
@@ -20,7 +20,7 @@
 */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
-    header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: http://'.$_SERVER['HTTP_HOST]'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 

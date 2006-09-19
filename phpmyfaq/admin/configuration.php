@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: configuration.php,v 1.7 2006-07-30 06:38:52 matteo Exp $
+* $Id: configuration.php,v 1.8 2006-09-19 21:28:33 matteo Exp $
 *
 * The main configuration frontend
 *
@@ -20,12 +20,12 @@
 */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
-    header('Location: http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: http://'.$_SERVER['HTTP_HOST]'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
 if (!$permission['editconfig']) {
-	exit();
+    exit();
 }
 
 // set some parameters
