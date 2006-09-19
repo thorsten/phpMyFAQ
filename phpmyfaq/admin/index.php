@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.69 2006-09-19 19:08:27 thorstenr Exp $
+* $Id: index.php,v 1.70 2006-09-19 19:42:47 matteo Exp $
 *
 * The main admin backend index file
 *
@@ -363,19 +363,23 @@ if (isset($auth)) {
 }
 
 if (DEBUG) {
-    print '<p>DEBUG INFORMATION:<br />'.$db->sqllog().'</p>';
+    print "\n";
+    print '<div id="debug_main">DEBUG INFORMATION:<br />'.$db->sqllog().'</div>';
     $cookies = '';
     foreach($_COOKIE as $key => $value) {
         $cookies .= $key.': '.$value.'<br />';
     }
-    print '<p>COOKIES:<br />'.$cookies.'</p>';
-    print '<p>TABLES & RECORDS:<br />';
+    print "\n";
+    print '<div id="debug_cookies">COOKIES:<br />'.$cookies.'</div>';
+    print "\n<br />";
+    print '<div id="debug_tables">TABLES & RECORDS:<br />';
     $tableStatuses = $db->getTableStatus();
     foreach ($tableStatuses as $key => $value) {
         print "$key: $value<br />";
     }
-    print '</p>';
+    print '</div>';
 }
 
 require_once('footer.php');
+
 $db->dbclose();
