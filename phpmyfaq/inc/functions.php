@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.143 2006-09-17 20:13:03 matteo Exp $
+* $Id: functions.php,v 1.144 2006-09-19 19:00:33 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -333,18 +333,19 @@ function makeISO8601Date($date, $phpmyfaq = true)
 }
 
 /**
-* Returns an array of country codes for a specific FAQ record ID
+* Returns an array of country codes for a specific FAQ record ID, specific category ID
 *
 * @param    integer
+* @param    string  specifies table
 * @return   array
 * @since    2003-03-17
 * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
 */
-function check4Language($id)
+function check4Language($id, $table='faqdata')
 {
     global $db;
     $output = array();
-    $result = $db->query("SELECT lang FROM ".SQLPREFIX."faqdata WHERE id = ".$id);
+    $result = $db->query("SELECT lang FROM ".SQLPREFIX.$table." WHERE id = ".$id);
     if ($db->num_rows($result) > 0) {
         while ($row = $db->fetch_object($result)) {
             $output[] = $row->lang;
