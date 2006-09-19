@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: search.php,v 1.14 2006-09-19 21:28:32 matteo Exp $
+* $Id: search.php,v 1.15 2006-09-19 21:39:38 matteo Exp $
 *
 * The fulltext search page
 *
@@ -21,7 +21,7 @@
 */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
-    header('Location: http://'.$_SERVER['HTTP_HOST]'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 

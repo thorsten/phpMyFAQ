@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: savequestion.php,v 1.27 2006-09-19 21:28:32 matteo Exp $
+* $Id: savequestion.php,v 1.28 2006-09-19 21:39:38 matteo Exp $
 *
 * @author           Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author           David Saez Padros <david@ols.es>
@@ -20,7 +20,7 @@
 */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
-    header('Location: http://'.$_SERVER['HTTP_HOST]'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: add.php,v 1.16 2006-09-19 21:28:32 matteo Exp $
+* $Id: add.php,v 1.17 2006-09-19 21:39:38 matteo Exp $
 *
 * This is the page there a user can add a FAQ record.
 *
@@ -20,7 +20,7 @@
 */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
-    header('Location: http://'.$_SERVER['HTTP_HOST]'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 

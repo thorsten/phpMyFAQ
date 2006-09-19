@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: category.edit.php,v 1.16 2006-09-19 21:28:33 matteo Exp $
+* $Id: category.edit.php,v 1.17 2006-09-19 21:39:38 matteo Exp $
 *
 * Edits a category
 *
@@ -20,7 +20,7 @@
 */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
-    header('Location: http://'.$_SERVER['HTTP_HOST]'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 

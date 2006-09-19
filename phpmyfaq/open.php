@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: open.php,v 1.8 2006-09-19 21:28:32 matteo Exp $
+* $Id: open.php,v 1.9 2006-09-19 21:39:38 matteo Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-09-17
@@ -18,7 +18,7 @@
 */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
-    header('Location: http://'.$_SERVER['HTTP_HOST]'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 

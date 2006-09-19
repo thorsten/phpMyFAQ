@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: export.file.php,v 1.2 2006-09-19 21:28:33 matteo Exp $
+* $Id: export.file.php,v 1.3 2006-09-19 21:39:39 matteo Exp $
 *
 * XML, XML DocBook, XHTML and PDF export - streamer page
 *
@@ -33,7 +33,7 @@ $type              = EXPORT_TYPE_NONE;
 
 // {{{ Main
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
-    header('Location: http://'.$_SERVER['HTTP_HOST]'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
 
     exit();
 }

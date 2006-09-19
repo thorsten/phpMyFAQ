@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: glossary.add.php,v 1.9 2006-09-19 21:28:33 matteo Exp $
+* $Id: glossary.add.php,v 1.10 2006-09-19 21:39:39 matteo Exp $
 *
 * Displays a form to add a glossary item
 *
@@ -20,7 +20,7 @@
 */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
-    header('Location: http://'.$_SERVER['HTTP_HOST]'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 

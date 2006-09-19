@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: footer.php,v 1.13 2006-09-19 21:28:33 matteo Exp $
+* $Id: footer.php,v 1.14 2006-09-19 21:39:39 matteo Exp $
 *
 * Footer of the admin area
 *
@@ -20,7 +20,7 @@
 */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
-    header('Location: http://'.$_SERVER['HTTP_HOST]'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 ?>

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.ondemandurl.php,v 1.13 2006-09-19 21:28:33 matteo Exp $
+* $Id: ajax.ondemandurl.php,v 1.14 2006-09-19 21:39:38 matteo Exp $
 *
 * AJAX: onDemandURL
 *
@@ -28,7 +28,7 @@
 */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
-    header('Location: http://'.$_SERVER['HTTP_HOST]'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 

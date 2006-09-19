@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: stat.ratings.php,v 1.11 2006-09-19 21:28:34 matteo Exp $
+* $Id: stat.ratings.php,v 1.12 2006-09-19 21:39:39 matteo Exp $
 *
 * The page with the ratings of the votings
 *
@@ -20,7 +20,7 @@
 */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
-    header('Location: http://'.$_SERVER['HTTP_HOST]'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 

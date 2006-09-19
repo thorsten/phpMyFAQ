@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: savecomment.php,v 1.19 2006-09-19 21:28:32 matteo Exp $
+* $Id: savecomment.php,v 1.20 2006-09-19 21:39:38 matteo Exp $
 *
 * Saves the posted comment
 *
@@ -20,7 +20,7 @@
 */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
-    header('Location: http://'.$_SERVER['HTTP_HOST]'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 

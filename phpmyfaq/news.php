@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: news.php,v 1.7 2006-09-19 21:28:32 matteo Exp $
+* $Id: news.php,v 1.8 2006-09-19 21:39:38 matteo Exp $
 *
 * Shows the page with the news record and - when available - the user
 * comments
@@ -22,7 +22,7 @@
 */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
-    header('Location: http://'.$_SERVER['HTTP_HOST]'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -42,7 +42,7 @@ if (isset($_REQUEST['newsid']) && is_numeric($_REQUEST['newsid'])) {
 }
 else {
     // Wrong access
-    header('Location: http://'.$_SERVER['HTTP_HOST]'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.delcomment.php,v 1.10 2006-09-19 21:28:33 matteo Exp $
+* $Id: record.delcomment.php,v 1.11 2006-09-19 21:39:39 matteo Exp $
 *
 * Deletes a user comment
 *
@@ -20,7 +20,7 @@
 */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
-    header('Location: http://'.$_SERVER['HTTP_HOST]'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 

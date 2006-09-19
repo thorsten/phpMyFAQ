@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: send2friend.php,v 1.9 2006-09-19 21:28:32 matteo Exp $
+* $Id: send2friend.php,v 1.10 2006-09-19 21:39:38 matteo Exp $
 *
 * The send2friend page
 *
@@ -20,7 +20,7 @@
 */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
-    header('Location: http://'.$_SERVER['HTTP_HOST]'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -33,7 +33,7 @@ if (isset($_GET['gen'])) {
 
 Tracking('send2friend',0);
 
-$send2friendLink = 'http://'.$_SERVER['HTTP_HOST]'].$_SERVER['PHP_SELF'].'?action=artikel&amp;cat='.$_REQUEST['cat'].'&amp;id='.$_REQUEST['id'].'&amp;artlang='.$_REQUEST['artlang'];
+$send2friendLink = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].'?action=artikel&amp;cat='.$_REQUEST['cat'].'&amp;id='.$_REQUEST['id'].'&amp;artlang='.$_REQUEST['artlang'];
 
 $tpl->processTemplate ('writeContent', array(
                 'msgSend2Friend' => $PMF_LANG['msgSend2Friend'],
