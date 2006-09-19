@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.27 2006-09-03 19:30:13 thorstenr Exp $
+ * $Id: language_de.php,v 1.28 2006-09-19 18:49:39 thorstenr Exp $
  *
  * German language file
  *
@@ -787,3 +787,17 @@ $PMF_LANG['ad_linkcheck_feedback_url-noaccess'] = 'Kein Zugriff möglich!';
 $PMF_LANG['ad_linkcheck_feedback_url-noajax'] = 'Keine AJAX-Unterstützung verfügbar';
 $PMF_LANG['ad_linkcheck_feedback_url-nolinks'] = 'Keine Links gefunden';
 $PMF_LANG['ad_linkcheck_feedback_url-noscript'] = 'Keine Skript-Unterstützung verfügbar';
+
+// added v2.0.0 - 2006-09-02 by Thomas
+$PMF_LANG['msg_related_articles'] = 'Related entries';
+$LANG_CONF['numRelatedArticles'] = array(0 => "input", 1 => "Number of related entries");
+
+// added v2.0.0 - 2006-09-09 by Rudi
+$PMF_LANG['ad_categ_trans_1'] = 'Übersetze';
+$PMF_LANG['ad_categ_trans_2'] = 'Kategorie';
+$PMF_LANG['ad_categ_translatecateg'] = 'Übersetze Kategorie';
+$PMF_LANG['ad_categ_translate'] = 'Übersetze';
+$PMF_LANG['ad_categ_transalready'] = 'Bereits übersetzt in: ';
+$PMF_LANG["ad_categ_deletealllang"] = 'In alle Sprachen löschen?';
+$PMF_LANG["ad_categ_deletethislang"] = 'Nur in diese Sprache löschen?';
+$PMF_LANG["ad_categ_translated"] = "Die Kategorie ist übersetzt.";
