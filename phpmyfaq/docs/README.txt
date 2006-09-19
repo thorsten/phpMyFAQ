@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.54 2006-09-17 20:13:45 thorstenr Exp $
+$Id: README.txt,v 1.55 2006-09-19 19:16:34 thorstenr Exp $
 
 phpMyFAQ 2.0.0-alpha
 Codename "Prometheus"
@@ -27,6 +27,7 @@ Changes since 1.6:
 - added DiggIt! link (Thorsten)
 - improved export functions (Matteo)
 - improved URL rewrite functions (Matteo)
+- improved category management (Thorsten, Rudi Ferrari)
 
 Known issues in phpMyFAQ 2.0.0:
 - some language files need an update
@@ -52,6 +53,7 @@ Version 2.0.0-alpha - n/a
 - added DiggIt! link (Thorsten)
 - improved export functions (Matteo)
 - improved URL rewrite functions (Matteo)
+- improved category management (Thorsten, Rudi Ferrari)
 
 Version 1.6.4 - 2006-08-19
 - updated Brazilian Portuguese translation
