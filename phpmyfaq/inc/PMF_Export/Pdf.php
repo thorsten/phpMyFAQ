@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Pdf.php,v 1.7 2006-08-22 19:07:53 matteo Exp $
+* $Id: Pdf.php,v 1.8 2006-09-19 21:12:37 matteo Exp $
 *
 * Main PDF class for phpMyFAQ based on FPDF by Olivier Plathey
 *
@@ -11,7 +11,7 @@
 * @author       Krzysztof Kruszynski <thywolf@wolf.homelinux.net>
 * @since        2004-11-21
 * @license      Mozilla Public License 1.1
-* @copyright    Copyright (c) 2004-2006 phpMyFAQ Team
+* @copyright    (c) 2004-2006 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -520,11 +520,10 @@ class PDF extends FPDF
     */
     function AddImage($image)
     {
-
         // Check, if image is stored locally or not
-        if ("http" != substr($image, 0, 4)) {
+        if ('http' != substr($image, 0, 4)) {
             // Please note that the image must be accessible by HTTP NOT ONLY by HTTPS
-            $image = "http://".$_SERVER["SERVER_NAME"].$image;
+            $image = 'http://'.$_SERVER['HTTP_HOST'].$image;
         }
         if (!$info = @getimagesize($image)) {
             return;
