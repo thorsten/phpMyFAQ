@@ -1,26 +1,26 @@
 <?php
 /**
-* $Id: Category.php,v 1.18 2006-09-18 20:13:38 matteo Exp $
-*
-* The main category class
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @author       Lars Tiedemann <larstiedemann@yahoo.de>
-* @author       Matteo Scaramuccia <matteo@scaramuccia.com>
-* @package      Category
-* @since        2004-02-16
-* @copyright    (c) 2004-2006 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-******************************************************************************/
+ * $Id: Category.php,v 1.19 2006-09-19 18:57:13 thorstenr Exp $
+ *
+ * The main category class
+ *
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author      Lars Tiedemann <larstiedemann@yahoo.de>
+ * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author      Rudi Ferrari <bookcrossers@gmx.de>
+ * @since       2004-02-16
+ * @copyright   (c) 2004-2006 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 // {{{ Includes
 /**
@@ -169,7 +169,7 @@ class PMF_Category
             SELECT
                 id, lang, parent_id, name, description, user_id
             FROM
-                faqcategories
+                %sfaqcategories
             WHERE ',
             SQLPREFIX);
         if (true == $parent_id) {
@@ -464,7 +464,7 @@ class PMF_Category
     */
     function viewTree()
     {
-        global $sids, $PMF_LANG, $PMF_CONF;
+        global $sids, $PMF_LANG;
         $totFaqRecords = 0;
 
         $query = sprintf("
@@ -1176,23 +1176,24 @@ class PMF_Category
      *
      * @param   integer $category_id
      * @param   string  $category_lang
+     * @param   bool    $delete_all languages?
      * @return  boolean
      * @access  public
      * @since   2006-09-11
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function deleteCategory($category_id, $category_lang)
+    function deleteCategory($category_id, $category_lang, $delete_all = false)
     {
         $query = sprintf("
             DELETE FROM
                 %sfaqcategories
             WHERE
-                id = %d
-            AND
-                lang = '%s'",
+                id = %d",
             SQLPREFIX,
-            $category_id,
-            $category_lang);
+            $category_id);
+        if (!$delete_all) {
+           $query .= " AND lang = '".$category_lang."'";
+        }
         $this->db->query($query);
 
         return true;
@@ -1202,26 +1203,124 @@ class PMF_Category
      *
      * @param   integer $category_id
      * @param   string  $category_lang
+     * @param   bool    $delete_all
      * @return  boolean
      * @access  public
      * @since   2006-09-11
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
 
-    function deleteCategoryRelation($category_id, $category_lang)
+    function deleteCategoryRelation($category_id, $category_lang, $delete_all = false)
     {
         $query = sprintf("
             DELETE FROM
                 %sfaqcategoryrelations
             WHERE
-                category_id = %d
-            AND
-                category_lang = '%s'",
+                category_id = %d",
             SQLPREFIX,
-            $category_id,
-            $category_lang);
+            $category_id);
+        if (!$delete_all) {
+           $query .= " AND category_lang = '".$category_lang."'";
+        }
         $this->db->query($query);
 
         return true;
+    }
+
+    /**
+     * Create array with translated categories
+     *
+     * @param   integer  $category_id
+     * @return  array
+     * @access  public
+     * @since   2006-09-10
+     * @author  Rudi Ferrari <bookcrossers@gmx.de>
+     */
+    function getCatgoryLanguagesTranslated($category_id)
+    {
+        global $languageCodes;
+        $existcatlang = check4Language($category_id, 'faqcategories');
+        $translated = array();
+
+        foreach ($existcatlang as $language) {
+           $query = sprintf("
+               SELECT
+                  name, description
+               FROM
+                   %sfaqcategories
+               WHERE
+                   id = %d
+               AND
+                   lang = '%s'",
+               SQLPREFIX,
+               $category_id,
+               $language);
+           $result = $this->db->query($query);
+           if ($row = $this->db->fetch_assoc($result)) {
+              $translated[$languageCodes[strtoupper($language)]] = $row['name'] . '  (' . $row['description'] . ')';
+           }
+        }
+        ksort($translated);
+
+        return $translated;
+    }
+
+    /**
+     * Create all languagess which can be used for translation as <option>
+     *
+     * @param   integer  $category_id
+     * @param   string   $selected_lang
+     * @return  string
+     * @access  public
+     * @since   2006-09-10
+     * @author  Rudi Ferrari <bookcrossers@gmx.de>
+     */
+    function getCatgoryLanguagesToTranslate($category_id, $selected_lang)
+    {
+        global $languageCodes;
+        $output = "";
+        $existcatlang = check4Language($category_id, 'faqcategories');
+
+        foreach (getAvailableLanguages() as $lang => $langname) {
+           if (!in_array(strtolower($lang),$existcatlang)) {
+              $output .= "\t<option value=\"".strtolower($lang)."\"";
+              if ($lang == $selected_lang) {
+                 $output .= " selected=\"selected\"";
+              }
+              $output .=  ">".$langname."</option>\n";
+           }
+        }
+
+        return $output;
+    }
+
+    /**
+     * Gets all categories which are not translated in actual language
+     * to add in this->categories (used in admin section)
+     *
+     * @access  public
+     * @since   2006-09-16
+     * @author  Rudi Ferrari <bookcrossers@gmx.de>
+     */
+    function getMissingCategories()
+    {
+        $query = sprintf("
+            SELECT
+                id, lang, parent_id, name, description, user_id
+            FROM
+                %sfaqcategories",
+            SQLPREFIX);
+        if (isset($this->language) && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
+            $query .= " WHERE lang != '".$this->language."'";
+        }
+        $query .= ' ORDER BY id';
+        $result = $this->db->query($query);
+        while ($row = $this->db->fetch_assoc($result)) {
+            if (!array_key_exists($row['id'],$this->categoryName)) {
+               $this->categoryName[$row['id']] = $row;
+               $this->categories[] =& $this->categoryName[$row['id']];
+               $this->children[$row['parent_id']][$row['id']] =& $this->categoryName[$row['id']];
+            }
+        }
     }
 }
