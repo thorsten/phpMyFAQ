@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.31 2006-09-18 20:23:58 matteo Exp $
+* $Id: language_it.php,v 1.32 2006-09-19 19:29:37 matteo Exp $
 *
 * Italian language file
 *
@@ -800,3 +800,13 @@ $PMF_LANG['ad_linkcheck_feedback_url-noaccess'] = 'Accesso KO';
 $PMF_LANG['ad_linkcheck_feedback_url-noajax'] = 'No AJAX';
 $PMF_LANG['ad_linkcheck_feedback_url-nolinks'] = 'Nessun Link';
 $PMF_LANG['ad_linkcheck_feedback_url-noscript'] = 'JS disabilitato';
+
+// added v2.0.0 - 2006-09-09 by Rudi
+$PMF_LANG['ad_categ_trans_1'] = 'Traduci la categoria ';
+$PMF_LANG['ad_categ_trans_2'] = '';
+$PMF_LANG['ad_categ_translatecateg'] = 'Traduci questa categoria';
+$PMF_LANG['ad_categ_translate'] = 'Traduci';
+$PMF_LANG['ad_categ_transalready'] = 'Già tradotta in: ';
+$PMF_LANG["ad_categ_deletealllang"] = 'Cancellare in tutte le lingue?';
+$PMF_LANG["ad_categ_deletethislang"] = 'Cancellare solo questa lingua?';
+$PMF_LANG["ad_categ_translated"] = "La categoria è stata tradotta.";

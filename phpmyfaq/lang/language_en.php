@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.52 2006-09-19 18:49:39 thorstenr Exp $
+* $Id: language_en.php,v 1.53 2006-09-19 19:29:37 matteo Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -809,4 +809,4 @@ $PMF_LANG['ad_categ_translate'] = 'Translate';
 $PMF_LANG['ad_categ_transalready'] = 'Already translated in: ';
 $PMF_LANG["ad_categ_deletealllang"] = 'Delete in all languages?';
 $PMF_LANG["ad_categ_deletethislang"] = 'Delete in this language only?';
-$PMF_LANG["ad_categ_translated"] = "The category is translated.";
+$PMF_LANG["ad_categ_translated"] = "The category has been translated.";
