@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: category.translate.php,v 1.5 2006-09-20 05:35:50 thorstenr Exp $
+ * $Id: category.translate.php,v 1.6 2006-09-24 12:58:39 thorstenr Exp $
  *
  * translates a category
  *
@@ -52,7 +52,7 @@ if ($permission["editcateg"]) {
 
         <label class="left"><?php print $PMF_LANG["ad_categ_owner"]; ?>:</label>
         <select name="user_id" size="1">
-        <?php print $user->getAllUserOptions($cat->categories[$id]["user_id"]); ?>
+        <?php print $user->getAllUserOptions($cat->categoryName[$id]['user_id']); ?>
         </select><br />
 
         <input class="submit" style="margin-left: 190px;" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_translatecateg"]; ?>" />
