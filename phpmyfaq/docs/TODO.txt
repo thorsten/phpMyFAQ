@@ -1,6 +1,7 @@
 TODO list for future versions of phpMyFAQ:
 
 2.0.0 "Prometheus":
+- add permission management for categories and records
 - reorder records
 - show/edit/delete comments
 - add "submit translation" link

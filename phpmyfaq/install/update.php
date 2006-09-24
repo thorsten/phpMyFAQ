@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.85 2006-09-17 14:31:31 thorstenr Exp $
+* $Id: update.php,v 1.86 2006-09-24 19:16:05 thorstenr Exp $
 *
 * Main update script
 *
@@ -21,7 +21,7 @@
 * under the License.
 */
 
-define('NEWVERSION', '2.0.0-alpha0');
+define('NEWVERSION', '2.0.0-alpha');
 define('COPYRIGHT', '&copy; 2001-2006 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 

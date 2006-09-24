@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.55 2006-09-19 19:16:34 thorstenr Exp $
+$Id: README.txt,v 1.56 2006-09-24 19:16:05 thorstenr Exp $
 
 phpMyFAQ 2.0.0-alpha
 Codename "Prometheus"
@@ -35,7 +35,7 @@ Known issues in phpMyFAQ 2.0.0:
 
 CHANGELOG:
 
-Version 2.0.0-alpha - n/a
+Version 2.0.0-alpha - 2006-10-
 - added rewritten and enhanced user management (Lars)
 - added rewritten and enhanced authorization management (Lars)
 - added Ajax support (Thorsten)
@@ -54,6 +54,12 @@ Version 2.0.0-alpha - n/a
 - improved export functions (Matteo)
 - improved URL rewrite functions (Matteo)
 - improved category management (Thorsten, Rudi Ferrari)
+
+Version 1.6.5 - 2006-09-21
+- added Welsh translation
+- added French documentation
+- updated Czech translation
+- fixed some minor bugs
 
 Version 1.6.4 - 2006-08-19
 - updated Brazilian Portuguese translation
