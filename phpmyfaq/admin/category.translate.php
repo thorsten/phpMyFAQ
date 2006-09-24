@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: category.translate.php,v 1.6 2006-09-24 12:58:39 thorstenr Exp $
+ * $Id: category.translate.php,v 1.7 2006-09-24 13:26:54 thorstenr Exp $
  *
  * translates a category
  *
@@ -29,11 +29,15 @@ if ($permission["editcateg"]) {
     $cat = new PMF_Category($LANGCODE);
     $cat->getMissingCategories();
     $id = $_GET["cat"];
-    print "<h2>".$PMF_LANG["ad_categ_trans_1"]." <em>".$cat->categoryName[$id]["name"]."</em> ".$PMF_LANG["ad_categ_trans_2"]."</h2>";
+    $header = sprintf('%s <em>%s</em> %s',
+        $PMF_LANG['ad_categ_trans_1'],
+        $cat->categoryName[$id]['name'],
+        $PMF_LANG['ad_categ_trans_2']);
+    printf('<h2>%s</h2>', $header);
 ?>
     <form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>" method="post">
     <fieldset>
-    <legend><?php print $PMF_LANG["ad_categ_trans_1"]." <em>".$cat->categoryName[$id]["name"]."</em> ".$PMF_LANG["ad_categ_trans_2"]; ?></legend>
+    <legend><?php print $header; ?></legend>
 
         <input type="hidden" name="action" value="updatecategory" />
         <input type="hidden" name="id" value="<?php print $id; ?>" />
