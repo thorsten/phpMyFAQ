@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.edit.php,v 1.46 2006-09-19 21:39:39 matteo Exp $
+* $Id: record.edit.php,v 1.47 2006-09-24 14:48:22 matteo Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23
@@ -73,6 +73,12 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
         $changed = $_REQUEST["changed"];
         $solution_id = $_REQUEST['solution_id'];
         $revision_id = isset($_REQUEST['revision_id']) ? $_REQUEST['revision_id'] : 0;
+        if (isset($_REQUEST['dateStart'])) {
+            $faqData['dateStart'] = $_REQUEST['dateStart'];
+        }
+        if (isset($_REQUEST['dateEnd'])) {
+            $faqData['dateEnd'] = $_REQUEST['dateEnd'];
+        }
 
     } elseif (isset($_REQUEST["action"]) && $_REQUEST["action"] == "editentry") {
 
@@ -331,7 +337,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     <legend><?php print $PMF_LANG['ad_entry_changelog']; ?></legend>
 
     <label class="lefteditor"><?php print $PMF_LANG["ad_entry_date"]; ?></label>
-    <?php if (isset($datum)) { print makeDate($datum); } else { print makeDate(date("YmdHis")); } ?><br />
+    <?php if (isset($datum)) { print $datum; } else { print makeDate(date("YmdHis")); } ?><br />
 
     <label class="lefteditor" for="changed"><?php print $PMF_LANG["ad_entry_changed"]; ?></label>
     <textarea name="changed" id="changed" style="width: 390px; height: 50px;" cols="40" rows="4"><?php if (isset($changed)) { print $changed; } ?></textarea><br />

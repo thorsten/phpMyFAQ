@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.save.php,v 1.40 2006-09-19 21:39:39 matteo Exp $
+* $Id: record.save.php,v 1.41 2006-09-24 14:48:22 matteo Exp $
 *
 * Save or update a FAQ record
 *
@@ -28,6 +28,25 @@ $submit = $_REQUEST["submit"];
 // Re-evaluate $user
 $user = PMF_CurrentUser::getFromSession($faqconfig->get('ipcheck'));
 
+$dateStart = $_POST['dateStartYYYY'] .
+            $_POST['dateStartMM'] .
+            $_POST['dateStartDD'] .
+            $_POST['dateStartHH'] .
+            $_POST['dateStartmm'] .
+            $_POST['dateStartss'];
+$dateStart = str_pad($dateStart, 14, '0', STR_PAD_RIGHT);
+$dateEnd   = $_POST['dateEndYYYY'] .
+            $_POST['dateEndMM'] .
+            $_POST['dateEndDD'] .
+            $_POST['dateEndHH'] .
+            $_POST['dateEndmm'] .
+            $_POST['dateEndss'];
+$dateEnd   = str_pad($dateEnd, 14, '0', STR_PAD_RIGHT);
+// Sanity checks
+if ('00000000000000' == $dateEnd) {
+    $dateEnd = '99991231235959';
+}
+
 if (    isset($submit[2])
      && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != ""
      && isset($_REQUEST['rubrik']) && is_array($_REQUEST['rubrik'])
@@ -50,21 +69,26 @@ if (    isset($submit[2])
     <?php print $PMF_LANG["msgAuthor"].$_REQUEST["author"]; ?></p>
 
     <form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;action=editpreview" method="post">
-    <input type="hidden" name="id" value="<?php print $_REQUEST["id"]; ?>" />
-    <input type="hidden" name="thema" value="<?php print htmlspecialchars($_REQUEST["thema"]); ?>" />
-    <input type="hidden" name="content" value="<?php print htmlspecialchars($_REQUEST["content"]); ?>" />
-    <input type="hidden" name="lang" value="<?php print $_REQUEST["language"]; ?>" />
-    <input type="hidden" name="keywords" value="<?php print $_REQUEST["keywords"]; ?>" />
-    <input type="hidden" name="author" value="<?php print $_REQUEST["author"]; ?>" />
-    <input type="hidden" name="email" value="<?php print $_REQUEST["email"]; ?>" />
+    <input type="hidden" name="id"          value="<?php print $_REQUEST['id']; ?>" />
+    <input type="hidden" name="thema"       value="<?php print htmlspecialchars($_REQUEST['thema']); ?>" />
+    <input type="hidden" name="content" class="mceNoEditor" value="<?php print htmlspecialchars($_REQUEST['content']); ?>" />
+    <input type="hidden" name="lang"        value="<?php print $_REQUEST['language']; ?>" />
+    <input type="hidden" name="keywords"    value="<?php print $_REQUEST['keywords']; ?>" />
+    <input type="hidden" name="tags"        value="<?php print $_REQUEST['tags']; ?>" />
+    <input type="hidden" name="author"      value="<?php print $_REQUEST['author']; ?>" />
+    <input type="hidden" name="email"       value="<?php print $_REQUEST['email']; ?>" />
 <?php
     foreach ($rubrik as $key => $categories) {
         print '    <input type="hidden" name="rubrik['.$key.']" value="'.$categories.'" />';
     }
 ?>
-    <input type="hidden" name="active" value="<?php print $_REQUEST["active"]; ?>" />
-    <input type="hidden" name="changed" value="<?php print $_REQUEST["changed"]; ?>" />
-    <input type="hidden" name="comment" value="<?php print $_REQUEST["comment"]; ?>" />
+    <input type="hidden" name="solution_id" value="<?php print $_REQUEST['solution_id']; ?>" />
+    <input type="hidden" name="revision"    value="<?php print (isset($_REQUEST['revision']) ? $_REQUEST['revision'] : '') ?>" />
+    <input type="hidden" name="active"      value="<?php print $_REQUEST['active']; ?>" />
+    <input type="hidden" name="changed"     value="<?php print $_REQUEST['changed']; ?>" />
+    <input type="hidden" name="comment"     value="<?php print (isset($_REQUEST['comment']) ? $_REQUEST['comment'] : ''); ?>" />
+    <input type="hidden" name="dateStart"   value="<?php print $dateStart; ?>" />
+    <input type="hidden" name="dateEnd"     value="<?php print $dateEnd; ?>" />
     <p align="center"><input type="submit" name="submit" value="<?php print $PMF_LANG["ad_entry_back"]; ?>" /></p>
     </form>
 <?php
@@ -87,25 +111,6 @@ if (    isset($submit[1])
     $author    = $db->escape_string($_REQUEST["author"]);
 
     $tagging = new PMF_Tags($db, $LANGCODE);
-
-    $dateStart = $_POST['dateStartYYYY'] .
-                 $_POST['dateStartMM'] .
-                 $_POST['dateStartDD'] .
-                 $_POST['dateStartHH'] .
-                 $_POST['dateStartmm'] .
-                 $_POST['dateStartss'];
-    $dateStart = str_pad($dateStart, 14, '0', STR_PAD_RIGHT);
-    $dateEnd   = $_POST['dateEndYYYY'] .
-                 $_POST['dateEndMM'] .
-                 $_POST['dateEndDD'] .
-                 $_POST['dateEndHH'] .
-                 $_POST['dateEndmm'] .
-                 $_POST['dateEndss'];
-    $dateEnd   = str_pad($dateEnd, 14, '0', STR_PAD_RIGHT);
-    // Sanity checks
-    if ('00000000000000' == $dateEnd) {
-        $dateEnd = '99991231235959';
-    }
 
     if (isset($_REQUEST["comment"]) && $_REQUEST["comment"] != "") {
         $comment = $_REQUEST["comment"];

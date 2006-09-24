@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.add.php,v 1.45 2006-09-19 21:39:39 matteo Exp $
+* $Id: record.add.php,v 1.46 2006-09-24 14:48:22 matteo Exp $
 *
 * Adds a record in the database
 *
@@ -27,6 +27,25 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 // Re-evaluate $user
 $user = PMF_CurrentUser::getFromSession($faqconfig->get('ipcheck'));
 
+$dateStart = $_POST['dateStartYYYY'] .
+            $_POST['dateStartMM'] .
+            $_POST['dateStartDD'] .
+            $_POST['dateStartHH'] .
+            $_POST['dateStartmm'] .
+            $_POST['dateStartss'];
+$dateStart = str_pad($dateStart, 14, '0', STR_PAD_RIGHT);
+$dateEnd   = $_POST['dateEndYYYY'] .
+            $_POST['dateEndMM'] .
+            $_POST['dateEndDD'] .
+            $_POST['dateEndHH'] .
+            $_POST['dateEndmm'] .
+            $_POST['dateEndss'];
+$dateEnd   = str_pad($dateEnd, 14, '0', STR_PAD_RIGHT);
+// Sanity checks
+if ('00000000000000' == $dateEnd) {
+    $dateEnd = '99991231235959';
+}
+
 if ($permission["editbt"]) {
     $submit = $_POST["submit"];
 
@@ -39,25 +58,6 @@ if ($permission["editbt"]) {
         printf("<h2>%s</h2>\n", $PMF_LANG['ad_entry_aor']);
 
         $tagging = new PMF_Tags($db, $LANGCODE);
-
-        $dateStart = $_POST['dateStartYYYY'] .
-                     $_POST['dateStartMM'] .
-                     $_POST['dateStartDD'] .
-                     $_POST['dateStartHH'] .
-                     $_POST['dateStartmm'] .
-                     $_POST['dateStartss'];
-        $dateStart = str_pad($dateStart, 14, '0', STR_PAD_RIGHT);
-        $dateEnd   = $_POST['dateEndYYYY'] .
-                     $_POST['dateEndMM'] .
-                     $_POST['dateEndDD'] .
-                     $_POST['dateEndHH'] .
-                     $_POST['dateEndmm'] .
-                     $_POST['dateEndss'];
-        $dateEnd   = str_pad($dateEnd, 14, '0', STR_PAD_RIGHT);
-        // Sanity checks
-        if ('00000000000000' == $dateEnd) {
-            $dateEnd = '99991231235959';
-        }
 
         $recordData = array(
             'lang'          => $db->escape_string($_POST['language']),
@@ -126,22 +126,25 @@ if ($permission["editbt"]) {
 
     <form action="<?php print $_SERVER['PHP_SELF'].$linkext; ?>&amp;action=editpreview" method="post">
     <input type="hidden" name="id"       value="<?php print $id; ?>" />
-    <input type="hidden" name="thema"    value="<?php print htmlspecialchars($_POST["thema"]); ?>" />
-    <input type="hidden" name="content"  value="<?php print htmlspecialchars($_POST['content']); ?>" />
-    <input type="hidden" name="lang"     value="<?php print $_POST["language"]; ?>" />
-    <input type="hidden" name="keywords" value="<?php print $_POST["keywords"]; ?>" />
-    <input type="hidden" name="author"   value="<?php print $_POST["author"]; ?>" />
-    <input type="hidden" name="email"    value="<?php print $_POST["email"]; ?>" />
+    <input type="hidden" name="thema"    value="<?php print htmlspecialchars($_POST['thema']); ?>" />
+    <input type="hidden" name="content" class="mceNoEditor" value="<?php print htmlspecialchars($_POST['content']); ?>" />
+    <input type="hidden" name="lang"     value="<?php print $_POST['language']; ?>" />
+    <input type="hidden" name="keywords" value="<?php print $_POST['keywords']; ?>" />
+    <input type="hidden" name="tags"     value="<?php print $_POST['tags']; ?>" />
+    <input type="hidden" name="author"   value="<?php print $_POST['author']; ?>" />
+    <input type="hidden" name="email"    value="<?php print $_POST['email']; ?>" />
 <?php
         foreach ($rubrik as $key => $categories) {
             print '    <input type="hidden" name="rubrik['.$key.']" value="'.$categories.'" />';
         }
 ?>
-    <input type="hidden" name="solution_id" value="<?php print $_POST["solution_id"]; ?>" />
-    <input type="hidden" name="revision"    value="<?php print $_POST["revision"]; ?>" />
-    <input type="hidden" name="active"      value="<?php print $_POST["active"]; ?>" />
-    <input type="hidden" name="changed"     value="<?php print $_POST["changed"]; ?>" />
-    <input type="hidden" name="comment"     value="<?php print $_POST["comment"]; ?>" />
+    <input type="hidden" name="solution_id" value="<?php print $_POST['solution_id']; ?>" />
+    <input type="hidden" name="revision"    value="<?php print (isset($_POST['revision']) ? $_POST['revision'] : ''); ?>" />
+    <input type="hidden" name="active"      value="<?php print $_POST['active']; ?>" />
+    <input type="hidden" name="changed"     value="<?php print $_POST['changed']; ?>" />
+    <input type="hidden" name="comment"     value="<?php print (isset($_POST['comment']) ? $_POST['comment'] : ''); ?>" />
+    <input type="hidden" name="dateStart"   value="<?php print $dateStart; ?>" />
+    <input type="hidden" name="dateEnd"     value="<?php print $dateEnd; ?>" />
     <p align="center"><input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG["ad_entry_back"]; ?>" /></p>
     </form>
 <?php
@@ -155,6 +158,7 @@ if ($permission["editbt"]) {
     <input type="hidden" name="content"  value="<?php print htmlspecialchars($_POST['content']); ?>" />
     <input type="hidden" name="lang"     value="<?php print $_POST['language']; ?>" />
     <input type="hidden" name="keywords" value="<?php print $_POST['keywords']; ?>" />
+    <input type="hidden" name="tags"     value="<?php print $_POST['tags']; ?>" />
     <input type="hidden" name="author"   value="<?php print $_POST['author']; ?>" />
     <input type="hidden" name="email"    value="<?php print $_POST['email']; ?>" />
 <?php
@@ -164,11 +168,13 @@ if ($permission["editbt"]) {
             }
         }
 ?>
-    <input type="hidden" name="solution_id" value="<?php print $_POST["solution_id"]; ?>" />
-    <input type="hidden" name="revision"    value="<?php print $_POST["revision"]; ?>" />
+    <input type="hidden" name="solution_id" value="<?php print $_POST['solution_id']; ?>" />
+    <input type="hidden" name="revision"    value="<?php print $_POST['revision']; ?>" />
     <input type="hidden" name="active"      value="<?php print $_POST['active']; ?>" />
     <input type="hidden" name="changed"     value="<?php print $_POST['changed']; ?>" />
     <input type="hidden" name="comment"     value="<?php print isset($_POST['comment']) ? $_POST['comment'] : ''; ?>" />
+    <input type="hidden" name="dateStart"   value="<?php print $dateStart; ?>" />
+    <input type="hidden" name="dateEnd"     value="<?php print $dateEnd; ?>" />
     <p align="center"><input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG['ad_entry_back']; ?>" /></p>
     </form>
 <?php

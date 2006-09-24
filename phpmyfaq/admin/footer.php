@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: footer.php,v 1.14 2006-09-19 21:39:39 matteo Exp $
+* $Id: footer.php,v 1.15 2006-09-24 14:48:22 matteo Exp $
 *
 * Footer of the admin area
 *
@@ -43,6 +43,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     tinyMCE.init({
         mode : "exact",
         elements : "content",
+        editor_deselector : "mceNoEditor",
         theme : "advanced",
         plugins : "table,save,advhr,advimage,advlink,emotions,iespell,insertdatetime,preview,zoom,flash,searchreplace,print,paste,directionality,fullscreen,noneditable,contextmenu",
         theme_advanced_buttons1_add_before : "save,newdocument,separator",
