@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Link.php,v 1.17 2006-09-18 20:13:38 matteo Exp $
+* $Id: Link.php,v 1.18 2006-09-24 19:05:04 thorstenr Exp $
 *
 * Link management - Functions and Classes
 *
@@ -241,8 +241,8 @@ class PMF_Link
                                  '',
                                  $itemTitle);
         // Hack: move some chars to "similar" but plain ASCII chars
-        $itemTitle = str_replace(array('à', 'è', 'ì', 'ò', 'ù', 'È'),
-                                 array('a', 'e', 'i', 'o', 'u', 'E'),
+        $itemTitle = str_replace(array('à', 'è', 'ì', 'ò', 'ù', 'È', 'ä', 'ö', 'ü', 'ß'),
+                                 array('a', 'e', 'i', 'o', 'u', 'E', 'ae', 'oe', 'ue', 'ss'),
                                  $itemTitle);
 
         return rawurlencode($itemTitle);
