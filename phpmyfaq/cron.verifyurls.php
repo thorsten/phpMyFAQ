@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: cron.verifyurls.php,v 1.2 2006-09-17 20:25:59 matteo Exp $
+ * $Id: cron.verifyurls.php,v 1.3 2006-09-24 09:05:15 matteo Exp $
  *
  * Performs an Automatic Link Verification over all the faq records
  *
@@ -61,9 +61,11 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
     require_once(PMF_ROOT_DIR.'/inc/Linkverifier.php');
     $oLnk = new PMF_Linkverifier();
     $_records = array();
+    $totStart = pmf_microtime_float();
 
     // Read the data directly from the faqdata table (all faq records in all languages)
     $start = pmf_microtime_float();
+    $output .= ($isRequestedByWebLocalhost ? '' : "\n");
     $output .= 'Extracting faq records...';
     $_result = $db->query('SELECT id, solution_id, revision_id, lang, thema, content FROM '.SQLPREFIX.'faqdata ORDER BY id');
     while ($row = $db->fetch_object($_result)) {
@@ -77,7 +79,8 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
     }
     $tot = count($_records);
     $end = pmf_microtime_float();
-    $output .= ' #'.$tot.', done in '.round($end - $start, 4).' sec'.($isRequestedByWebLocalhost ? '' : "\n");;
+    $output .= ' #'.$tot.', done in '.round($end - $start, 4).' sec.'.($isRequestedByWebLocalhost ? '' : "\n");;
+    $output .= ($isRequestedByWebLocalhost ? '' : "\n");
     if ($isRequestedByWebLocalhost) {
         $output = '<pre>'.$output."</pre>\n";
     }
@@ -88,13 +91,13 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
     foreach ($_records as $_r) {
         $i++;
         $output = '';
-        $output .= sprintf('%0'.strlen((string)$tot).'d', $i).'/'.$tot.'. Checking '.$_r['solution_id'].' ('.strip_tags($_r['title']).')...';
+        $output .= sprintf('%0'.strlen((string)$tot).'d', $i).'/'.$tot.'. Checking '.$_r['solution_id'].' ('.makeShorterText(strip_tags($_r['title']), 8).'):';
         $start = pmf_microtime_float();
         if ($oLnk->getEntryState($_r['id'], $_r['lang'], true) === true) {
             $output .= verifyArticleURL($_r['content'], $_r['id'], $_r['lang'], true);
         }
         $end = pmf_microtime_float();
-        $output .= ' done in '.round($end - $start, 4).' sec';
+        $output .= ' done in '.round($end - $start, 4).' sec.';
         $output .= ($isRequestedByWebLocalhost ? '' : "\n");
         if ($isRequestedByWebLocalhost) {
             $output = '<pre>'.$output."</pre>\n";
@@ -102,5 +105,16 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
         print($output);
         flush();
     }
+
+    $output = '';
+    $totEnd = pmf_microtime_float();
+    $output .= ($isRequestedByWebLocalhost ? '' : "\n");
+    $output .= 'Done in '.round($totEnd - $totStart, 4).' sec.';
+    $output .= ($isRequestedByWebLocalhost ? '' : "\n");
+    if ($isRequestedByWebLocalhost) {
+        $output = '<pre>'.$output."</pre>\n";
+    }
+    print($output);
+    flush();
 }
 ?>
