@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: category.translate.php,v 1.8 2006-09-25 05:29:19 thorstenr Exp $
+ * $Id: category.translate.php,v 1.9 2006-09-25 05:33:08 thorstenr Exp $
  *
  * translates a category
  *
@@ -51,7 +51,7 @@ if ($permission["editcateg"]) {
     <fieldset>
     <legend><?php print $header; ?></legend>
 
-        <input type="hidden" name="action" value="<? print $action; ?>" />
+        <input type="hidden" name="action" value="<?php print $action; ?>" />
         <input type="hidden" name="id" value="<?php print $id; ?>" />
         <input type="hidden" name="parent_id" value="<?php print $cat->categoryName[$id]["parent_id"]; ?>" />
         <input type="hidden" name="showcat" value="<?php print $showcat; ?>" />
