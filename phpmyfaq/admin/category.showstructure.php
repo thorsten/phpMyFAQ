@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: category.showstructure.php,v 1.1 2006-09-25 05:29:19 thorstenr Exp $
+* $Id: category.showstructure.php,v 1.2 2006-09-25 08:25:35 thorstenr Exp $
 *
 * build table of all categories in all languages
 *
@@ -98,7 +98,7 @@ if ($permission['editcateg']) {
             $desc);
         if ($cat['lang'] != $LANGCODE) {
            // translate category 
-           printf('<a href="%s&amp;action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s"><img src="images/translate2.gif" width="18" height="18" border="0" title="%s" alt="%s" /></a>',
+           printf('<a href="%s&amp;action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s"><img src="images/translate2.gif" width="13" height="16" border="0" title="%s" alt="%s" /></a>',
                $currentLink,
                $cat['id'],
                $LANGCODE,
@@ -120,11 +120,17 @@ if ($permission['editcateg']) {
               continue;
            }
            if (array_key_exists($language,$id_languages)) {
-              print "<td class=\"sscDesc\">" . preg_replace('/\(.*\)/','',$id_languages[$language]) . "</td>\n";
+              printf("<td class=\"sscDesc\" title=\"%s: %s\"><img src=\"images/ok.gif\" width=\"22\" height=\"18\" border=\"0\" title=\"%s: %s\" alt=\"%s: %s\" /></td>\n",
+                  $PMF_LANG["ad_categ_titel"],
+                  preg_replace('/\(.*\)/','',$id_languages[$language]),
+                  $PMF_LANG["ad_categ_titel"],
+                  preg_replace('/\(.*\)/','',$id_languages[$language]),
+                  $PMF_LANG["ad_categ_titel"],
+                  preg_replace('/\(.*\)/','',$id_languages[$language]));
            }
            else {
            print "<td class=\"sscDescNA\">";
-           printf('<a href="%s&amp;action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s"><img src="images/translate2.gif" width="18" height="18" border="0" title="%s" alt="%s" /></a>',
+           printf('<a href="%s&amp;action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s"><img src="images/translate2.gif" width="13" height="16" border="0" title="%s" alt="%s" /></a>',
                $currentLink,
                $cat['id'],
                $lang,
