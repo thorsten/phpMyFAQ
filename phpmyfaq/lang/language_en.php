@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.53 2006-09-19 19:29:37 matteo Exp $
+* $Id: language_en.php,v 1.54 2006-09-25 05:29:20 thorstenr Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -429,7 +429,7 @@ $PMF_LANG["ad_sess_head"] = "View sessions";
 // Added v1.1 - 06.01.2002 - Bastian
 $PMF_LANG["ad_menu_categ_edit"] = "Category Administration";
 $PMF_LANG["ad_menu_stat"] = "Rating Statistics";
-$PMF_LANG["ad_kateg_add"] = "add Category";
+$PMF_LANG["ad_kateg_add"] = "add main Category";
 $PMF_LANG["ad_kateg_rename"] = "Rename";
 $PMF_LANG["ad_adminlog_date"] = "Date";
 $PMF_LANG["ad_adminlog_user"] = "User";
@@ -810,3 +810,7 @@ $PMF_LANG['ad_categ_transalready'] = 'Already translated in: ';
 $PMF_LANG["ad_categ_deletealllang"] = 'Delete in all languages?';
 $PMF_LANG["ad_categ_deletethislang"] = 'Delete in this language only?';
 $PMF_LANG["ad_categ_translated"] = "The category has been translated.";
+
+// added v2.0.0 - 2006-09-21 by Rudi
+$PMF_LANG["ad_categ_show"] = "Overview";
+$PMF_LANG['ad_menu_categ_structure'] = "Category Overview including its languages";

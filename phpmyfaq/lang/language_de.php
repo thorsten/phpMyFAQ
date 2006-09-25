@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.28 2006-09-19 18:49:39 thorstenr Exp $
+ * $Id: language_de.php,v 1.29 2006-09-25 05:29:19 thorstenr Exp $
  *
  * German language file
  *
@@ -430,7 +430,7 @@ $PMF_LANG["ad_csv_rest"] = "Wiederherstellung";
 // Added v1.1 - 06.01.2002 - Bastian
 $PMF_LANG["ad_menu_categ_edit"] = "Kategorieverwaltung"; // Bastian, 2002-01-06
 $PMF_LANG["ad_menu_stat"] = "Bewertungsstatistik"; // Bastian, 2002-01-05
-$PMF_LANG["ad_kateg_add"] = "hinzuf&uuml;gen";
+$PMF_LANG["ad_kateg_add"] = "Hauptkategorie hinzuf&uuml;gen";
 $PMF_LANG["ad_kateg_rename"] = "umbennen";
 $PMF_LANG["ad_adminlog_date"] = "Datum";
 $PMF_LANG["ad_adminlog_user"] = "Benutzer";
@@ -801,3 +801,7 @@ $PMF_LANG['ad_categ_transalready'] = 'Bereits übersetzt in: ';
 $PMF_LANG["ad_categ_deletealllang"] = 'In alle Sprachen löschen?';
 $PMF_LANG["ad_categ_deletethislang"] = 'Nur in diese Sprache löschen?';
 $PMF_LANG["ad_categ_translated"] = "Die Kategorie ist übersetzt.";
+
+// added v2.0.0 - 2006-09-21 by Rudi
+$PMF_LANG["ad_categ_show"] = "Übersicht";
+$PMF_LANG['ad_menu_categ_structure'] = "Übersicht der Kategorien mitsamt ihre Sprachen";

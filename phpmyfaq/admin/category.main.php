@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: category.main.php,v 1.27 2006-09-19 21:39:39 matteo Exp $
+* $Id: category.main.php,v 1.28 2006-09-25 05:29:19 thorstenr Exp $
 *
 * List all categories in the admin section
 *
@@ -24,7 +24,19 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
+$currentLink = $_SERVER['PHP_SELF'].$linkext;
+
 printf('<h2>%s</h2>', $PMF_LANG['ad_menu_categ_edit']);
+
+print "<p class=\"hr\">\n";
+printf('<img src="images/arrow.gif" width="11" height="11" alt="" border="0" /> <a href="%s&amp;action=addcategory">%s</a>',
+   $currentLink,
+   $PMF_LANG['ad_kateg_add']);
+print "&nbsp;&nbsp;&nbsp;";
+printf('<img src="images/arrow.gif" width="11" height="11" alt="" border="0" /> <a href="%s&amp;action=showcategory">%s</a>',
+   $currentLink,
+   $PMF_LANG['ad_categ_show']);
+print "</p>\n";
 
 if ($permission['editcateg']) {
 
@@ -122,7 +134,6 @@ if ($permission['editcateg']) {
     } else {
         $lang = $LANGCODE;
     }
-    $currentLink = $_SERVER['PHP_SELF'].$linkext;
 
     $tree = new PMF_Category($lang);
     $tree->getMissingCategories();
@@ -200,9 +211,6 @@ if ($permission['editcateg']) {
         print "<br />";
     }
 
-    printf('<p><img src="images/arrow.gif" width="11" height="11" alt="" border="0" /> <a href="%s&amp;action=addcategory">%s</a></p>',
-        $currentLink,
-        $PMF_LANG['ad_kateg_add']);
     printf('<p>%s</p>', $PMF_LANG['ad_categ_remark']);
 } else {
     print $PMF_LANG['err_NotAuth'];

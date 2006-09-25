@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.144 2006-09-19 19:00:33 thorstenr Exp $
+* $Id: functions.php,v 1.145 2006-09-25 05:29:19 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -136,7 +136,7 @@ function getAvailableLanguages()
     $languages = array();
 
     if ($dir = @opendir(dirname(dirname(__FILE__)).'/lang/')) {
-        while (FALSE !== ($file = @readdir($dir))) {
+        while (false !== ($file = @readdir($dir))) {
             if (($file != ".") && ($file != "..") && (!is_dir($file))) {
                 $languageFiles[] = strtoupper(str_replace($search, "", trim($file)));
             }
@@ -334,6 +334,7 @@ function makeISO8601Date($date, $phpmyfaq = true)
 
 /**
 * Returns an array of country codes for a specific FAQ record ID, specific category ID
+* or all languages used by FAQ records , categories
 *
 * @param    integer
 * @param    string  specifies table
@@ -345,12 +346,38 @@ function check4Language($id, $table='faqdata')
 {
     global $db;
     $output = array();
-    $result = $db->query("SELECT lang FROM ".SQLPREFIX.$table." WHERE id = ".$id);
-    if ($db->num_rows($result) > 0) {
-        while ($row = $db->fetch_object($result)) {
-            $output[] = $row->lang;
-            }
-        }
+
+    if (isset($id)) {
+       if ($id == 0) {
+          // get languages for all ids
+          $distinct = ' DISTINCT ';
+          $where = '';
+       }
+       else {
+          // get languages for specified id
+          $distinct = '';
+          $where = " WHERE id = ".$id;
+       }
+
+       $query = sprintf("
+           SELECT %s
+              lang
+           FROM
+               %s%s
+               %s",
+           $distinct,
+           SQLPREFIX,
+           $table,
+           $where);
+       $result = $db->query($query);
+
+       if ($db->num_rows($result) > 0) {
+           while ($row = $db->fetch_object($result)) {
+               $output[] = $row->lang;
+           }
+       }
+    }
+
     return $output;
 }
 
@@ -609,7 +636,7 @@ function hilight($content)
         }
 
         $string = implode("\n", explode("<br />", $string));
-        $string = highlight_string($string, TRUE);
+        $string = highlight_string($string, true);
         $string = eregi_replace('^.*<pre>',  '', $string);
         $string = eregi_replace('</pre>.*$', '', $string);
         $string = str_replace("\n", "", $string);
@@ -1205,17 +1232,17 @@ function generateDocBookExport()
 }
 
 /**
-* searchEngine()
-*
-* The main search function for the full text search
-*
-* @param    string
-* @param    string
-* @return   string
-* @access   public
-* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-* @since    2002-09-16
-*/
+ * The main search function for the full text search
+ *
+ * TODO: add filter for (X)HTML tag names and attributes!
+ *
+ * @param    string
+ * @param    string
+ * @return   string
+ * @access   public
+ * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since    2002-09-16
+ */
 function searchEngine($begriff, $category = '%', $allLanguages = true)
 {
     global $db, $sids, $tree, $PMF_LANG, $PMF_CONF, $LANGCODE;
@@ -1642,9 +1669,9 @@ function emptyTable($table)
 {
     global $db;
     if ($db->num_rows($db->query("SELECT * FROM ".$table)) < 1) {
-        return TRUE;
+        return true;
     } else {
-        return FALSE;
+        return false;
     }
 }
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: category.translate.php,v 1.7 2006-09-24 13:26:54 thorstenr Exp $
+ * $Id: category.translate.php,v 1.8 2006-09-25 05:29:19 thorstenr Exp $
  *
  * translates a category
  *
@@ -29,26 +29,39 @@ if ($permission["editcateg"]) {
     $cat = new PMF_Category($LANGCODE);
     $cat->getMissingCategories();
     $id = $_GET["cat"];
-    $header = sprintf('%s <em>%s</em> %s',
+    $header = sprintf('%s %s: <em>%s</em>',
         $PMF_LANG['ad_categ_trans_1'],
-        $cat->categoryName[$id]['name'],
-        $PMF_LANG['ad_categ_trans_2']);
+        $PMF_LANG['ad_categ_trans_2'],
+        $cat->categoryName[$id]['name']);
+
+    if (isset($_GET["trlang"])) {
+       $selected_lang = $_GET["trlang"];
+       $action = "showcategory";
+       $showcat = "yes";
+    }
+    else {
+       $selected_lang = $LANGCODE;
+       $action = "updatecategory";
+       $showcat = "no";
+    }
+
     printf('<h2>%s</h2>', $header);
 ?>
     <form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>" method="post">
     <fieldset>
     <legend><?php print $header; ?></legend>
 
-        <input type="hidden" name="action" value="updatecategory" />
+        <input type="hidden" name="action" value="<? print $action; ?>" />
         <input type="hidden" name="id" value="<?php print $id; ?>" />
         <input type="hidden" name="parent_id" value="<?php print $cat->categoryName[$id]["parent_id"]; ?>" />
+        <input type="hidden" name="showcat" value="<?php print $showcat; ?>" />
 
         <label class="left"><?php print $PMF_LANG["ad_categ_titel"]; ?>:</label>
         <input type="text" name="name" size="30" style="width: 250px;" value="" /><br />
 
         <label class="left"><?php print $PMF_LANG["ad_categ_lang"]; ?>:</label>
         <select name="lang" size="1">
-        <?php print $cat->getCategoryLanguagesToTranslate($id, $LANGCODE); ?>
+        <?php print $cat->getCategoryLanguagesToTranslate($id, $selected_lang); ?>
         </select><br />
 
         <label class="left"><?php print $PMF_LANG["ad_categ_desc"]; ?>:</label>

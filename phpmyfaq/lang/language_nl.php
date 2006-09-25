@@ -426,7 +426,7 @@ $PMF_LANG["ad_sess_head"] = "Bekijk sessies";
 // Added v1.1 - 06.01.2002 - Bastian
 $PMF_LANG["ad_menu_categ_edit"] = "Categorie beheer";
 $PMF_LANG["ad_menu_stat"] = "Rating Statistieken";
-$PMF_LANG["ad_kateg_add"] = "toevoegen categorie";
+$PMF_LANG["ad_kateg_add"] = "toevoegen hoofdcategorie";
 $PMF_LANG["ad_kateg_rename"] = "Hernoemen";
 $PMF_LANG["ad_adminlog_date"] = "Datum";
 $PMF_LANG["ad_adminlog_user"] = "Gebruiker";
@@ -795,3 +795,7 @@ $PMF_LANG['ad_categ_transalready'] = 'Reeds vertaald in: ';
 $PMF_LANG["ad_categ_deletealllang"] = 'In all talen verwijderen?';
 $PMF_LANG["ad_categ_deletethislang"] = 'Enkel in deze taal verwijderen?';
 $PMF_LANG["ad_categ_translated"] = "De categorie is vertaald.";
+
+// added v2.0.0 - 2006-09-21 by Rudi
+$PMF_LANG["ad_categ_show"] = "Overzicht";
+$PMF_LANG['ad_menu_categ_structure'] = "Overzicht van der categori&euml;n met de talen";

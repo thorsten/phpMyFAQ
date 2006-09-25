@@ -1,5 +1,5 @@
 /**
- * $Id: admin.css,v 1.29 2006-09-03 18:25:46 matteo Exp $
+ * $Id: admin.css,v 1.30 2006-09-25 05:29:20 thorstenr Exp $
  *
  * This is the CSS file for the admin section of phpMyFAQ 2.0.x
  * You don't need to change enything here but feel free to do it. :-)
@@ -67,6 +67,11 @@ label {
 input, textarea, select {
     font-family: "Bitstream Vera Sans", "Trebuchet MS", Verdana, Tahoma, sans-serif;
     font-size: 12px;
+}
+p.hr{
+   margin-top:6px;
+   padding-bottom:8px;
+   border-bottom:1px solid #D0D9D9;
 }
 
 /**
@@ -316,6 +321,45 @@ input.submit {
 }
 .categorybox {
     padding-bottom: 16px;
+}
+
+/**
+ * Table definitions for the showstructure of categories (ssc)
+ */
+table.ssc {
+   background-color: #EDF2F2;
+   border-color: #D0D9D9;   
+   border: 1px solid;
+}
+td.sscTitle {
+   background-color:#DDF2F2;
+   border-bottom:2px groove;
+   border-top:1px solid;
+   border-left:1px solid;
+   border-right:1px solid;
+   padding-left:6px;
+   padding-right:6px;
+   vertical-align:middle;
+   /* remove commment of next line for better view in IE */
+   /* font-size:80%; */
+}
+td.sscDesc {
+   background-color:#EDF2F2;
+   padding-left:5px;
+   padding-right:5px;
+   border:1px solid;
+   vertical-align:middle;
+   /* use this line for better view in IE */
+   /* font-size:75%; */
+}
+td.sscDescNA {
+   background-color:#FF4400;
+   padding-left:5px;
+   padding-right:5px;
+   border:1px solid;
+   vertical-align:middle;
+   /* use this line for better view in IE */
+   /* font-size:75%; */
 }
 
 /**
