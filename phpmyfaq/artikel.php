@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.56 2006-09-19 21:39:38 matteo Exp $
+* $Id: artikel.php,v 1.57 2006-09-26 19:51:36 thorstenr Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -98,7 +98,7 @@ if (isset($_GET['highlight']) && $_GET['highlight'] != "/" && $_GET['highlight']
 //         href="index.php?action=artikel&cat=NNN&id=MMM&artlang=XYZ"
 // Search for href attribute links
 require_once('inc/Linkverifier.php');
-$oLnk = new PMF_Linkverifier();
+$oLnk = new PMF_Linkverifier($db);
 // Extract URLs from content
 $oLnk->resetPool();
 $oLnk->parse_string($content);

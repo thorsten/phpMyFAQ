@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: cron.verifyurls.php,v 1.3 2006-09-24 09:05:15 matteo Exp $
+ * $Id: cron.verifyurls.php,v 1.4 2006-09-26 19:52:31 thorstenr Exp $
  *
  * Performs an Automatic Link Verification over all the faq records
  *
@@ -59,7 +59,7 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
     }
 
     require_once(PMF_ROOT_DIR.'/inc/Linkverifier.php');
-    $oLnk = new PMF_Linkverifier();
+    $oLnk = new PMF_Linkverifier($db);
     $_records = array();
     $totStart = pmf_microtime_float();
 

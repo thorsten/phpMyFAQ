@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.86 2006-09-24 19:16:05 thorstenr Exp $
+* $Id: update.php,v 1.87 2006-09-26 19:51:36 thorstenr Exp $
 *
 * Main update script
 *
@@ -1111,7 +1111,7 @@ if ($step == 5) {
         }
         // 10/13. Move each image filename in each of the faq content, from '/images' to '/images/Image'
         require_once(PMF_ROOT_DIR.'/inc/Linkverifier.php');
-        $oLnk = new PMF_Linkverifier();
+        $oLnk = new PMF_Linkverifier($db);
         $_records = array();
         // Read the data from the current faqdata table
         $_result = $db->query('SELECT id, revision_id, lang, content FROM '.SQLPREFIX.'faqdata ORDER BY id');
