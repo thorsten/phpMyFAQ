@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.54 2006-09-25 05:29:20 thorstenr Exp $
+* $Id: language_en.php,v 1.55 2006-09-26 16:38:26 thorstenr Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -814,3 +814,11 @@ $PMF_LANG["ad_categ_translated"] = "The category has been translated.";
 // added v2.0.0 - 2006-09-21 by Rudi
 $PMF_LANG["ad_categ_show"] = "Overview";
 $PMF_LANG['ad_menu_categ_structure'] = "Category Overview including its languages";
+
+// added v2.0.0 - 2006-09-26 by Thorsten
+$PMF_LANG['ad_entry_userpermission'] = 'User permissions:';
+$PMF_LANG['ad_entry_grouppermission'] = 'Group permissions:';
+$PMF_LANG['ad_entry_all_users'] = 'Access for all users';
+$PMF_LANG['ad_entry_restricted_users'] = 'Restricted access to';
+$PMF_LANG['ad_entry_all_groups'] = 'Access for all groups';
+$PMF_LANG['ad_entry_restricted_groups'] = 'Restricted access to';

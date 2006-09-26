@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.29 2006-09-25 05:29:19 thorstenr Exp $
+ * $Id: language_de.php,v 1.30 2006-09-26 16:38:26 thorstenr Exp $
  *
  * German language file
  *
@@ -805,3 +805,11 @@ $PMF_LANG["ad_categ_translated"] = "Die Kategorie ist übersetzt.";
 // added v2.0.0 - 2006-09-21 by Rudi
 $PMF_LANG["ad_categ_show"] = "Übersicht";
 $PMF_LANG['ad_menu_categ_structure'] = "Übersicht der Kategorien mitsamt ihre Sprachen";
+
+// added v2.0.0 - 2006-09-26 by Thorsten
+$PMF_LANG['ad_entry_userpermission'] = 'Benutzerberechtigungen:';
+$PMF_LANG['ad_entry_grouppermission'] = 'Gruppenberechtigungen:';
+$PMF_LANG['ad_entry_all_users'] = 'Zugriff für alle Benutzer';
+$PMF_LANG['ad_entry_restricted_users'] = 'Eingeschränkter Zugrif für';
+$PMF_LANG['ad_entry_all_groups'] = 'Zugriff für alle Gruppen';
+$PMF_LANG['ad_entry_restricted_groups'] = 'Eingeschränkter Zugrif für';
