@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: stat.ratings.php,v 1.12 2006-09-19 21:39:39 matteo Exp $
+* $Id: stat.ratings.php,v 1.13 2006-09-26 19:53:28 thorstenr Exp $
 *
 * The page with the ratings of the votings
 *
@@ -37,7 +37,7 @@ if ($permission["viewlog"]) {
 		if ($row->category_id != $old) {
 ?>
     <tr>
-        <td colspan="5" class="list"><strong><?php print $tree->categoryName[$row->category_id]["name"]; ?></strong></td>
+        <th colspan="5" class="list"><strong><?php print $tree->categoryName[$row->category_id]["name"]; ?></strong></th>
     </tr>
 <?php
 		}

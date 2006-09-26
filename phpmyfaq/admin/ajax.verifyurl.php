@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.verifyurl.php,v 1.10 2006-09-18 21:20:46 matteo Exp $
+* $Id: ajax.verifyurl.php,v 1.11 2006-09-26 19:53:28 thorstenr Exp $
 *
 * AJAX: verifyurl
 *
@@ -41,7 +41,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 @header("Content-type: text/html");
 @header("Vary: Negotiate,Accept");
 
-$linkverifier = new PMF_Linkverifier();
+$linkverifier = new PMF_Linkverifier($db, $user->getLogin());
 if ($linkverifier->isReady() == false) {
     if (count(ob_list_handlers()) > 0) {
         ob_clean();

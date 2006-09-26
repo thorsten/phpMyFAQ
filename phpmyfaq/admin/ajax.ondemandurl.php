@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.ondemandurl.php,v 1.14 2006-09-19 21:39:38 matteo Exp $
+* $Id: ajax.ondemandurl.php,v 1.15 2006-09-26 19:53:28 thorstenr Exp $
 *
 * AJAX: onDemandURL
 *
@@ -40,7 +40,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 @header("Content-type: text/html");
 @header("Vary: Negotiate,Accept");
 
-$linkverifier = new PMF_Linkverifier();
+$linkverifier = new PMF_Linkverifier($db, $user->getLogin());
 if ($linkverifier->isReady() == false) {
     if (count(ob_list_handlers()) > 0) {
         ob_clean();
