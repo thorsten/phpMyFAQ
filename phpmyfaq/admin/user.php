@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: user.php,v 1.32 2006-09-26 18:17:47 thorstenr Exp $
+* $Id: user.php,v 1.33 2006-09-26 18:30:08 thorstenr Exp $
 *
 * Displays the user managment frontend
 *
@@ -148,7 +148,7 @@ if ($userAction == 'delete_confirm') {
     } else {
         $user->getUserById($userId);
         // account is protected
-        if ($user->getStatus() == 'protected') {
+        if ($user->getStatus() == 'protected' || $userId == 1) {
             $userAction = $defaultUserAction;
             $message .= '<p class="error">'.$errorMessages['delUser_protectedAccount'].'</p>';
         } else {
