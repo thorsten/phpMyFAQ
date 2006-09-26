@@ -1,5 +1,5 @@
 ##
-# $Id: _.htaccess,v 1.12 2006-08-30 20:04:42 matteo Exp $
+# $Id: _.htaccess,v 1.13 2006-09-26 19:27:25 matteo Exp $
 #
 # phpMyFAQ 2.0 .htaccess file
 #
@@ -128,6 +128,12 @@ RewriteRule sitemap/([^\/]+)/(.+)$                  $2 [L,QSA]
 RewriteRule sitemap.xml$        sitemap.google.php [L]
 RewriteRule sitemap.gz$         sitemap.google.php?gz=1 [L]
 RewriteRule sitemap.xml.gz$     sitemap.google.php?gz=1 [L]
+
+# PMF Yahoo sitemap
+# * http://[...]/urllist.txt
+# * http://[...]/urllist.txt.gz
+RewriteRule urllist.txt$        sitemap.yahoo.php [L]
+RewriteRule urllist.txt.gz$     sitemap.yahoo.php?gz=1 [L]
 
 # PMF tags page
 # * http://[...]/tags/<ID>/<HEADER>.htm

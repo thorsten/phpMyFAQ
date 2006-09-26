@@ -1,33 +1,34 @@
 <?php
 /**
-* $Id: sitemap.google.php,v 1.3 2006-07-12 07:40:11 matteo Exp $
-*
-* The dynamic Google Sitemap builder
-*
-* http://[...]/sitemap.google.php
-* http://[...]/sitemap.google.php?gz=1
-* http://[...]/sitemap.xml
-* http://[...]/sitemap.gz
-* http://[...]/sitemap.xml.gz
-*
-* The Google Sitemap protocol is described here: http://www.google.com/webmasters/sitemaps/docs/en/protocol.html
-*
-* @package      phpMyFAQ
-* @access       public
-* @author       Matteo Scaramuccia <matteo@scaramuccia.com>
-* @since        2006-06-26
-* @copyright    (c) 2006 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * $Id: sitemap.google.php,v 1.4 2006-09-26 19:27:25 matteo Exp $
+ *
+ * The dynamic Google Sitemap builder
+ *
+ * http://[...]/sitemap.google.php
+ * http://[...]/sitemap.google.php?gz=1
+ * http://[...]/sitemap.xml
+ * http://[...]/sitemap.gz
+ * http://[...]/sitemap.xml.gz
+ *
+ * The Google Sitemap protocol is described here:
+ * http://www.google.com/webmasters/sitemaps/docs/en/protocol.html
+ *
+ * @package      phpMyFAQ
+ * @access       public
+ * @author       Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @since        2006-06-26
+ * @copyright    (c) 2006 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 // {{{ Constants
 /**#@+
@@ -119,7 +120,7 @@ PMF_Init::cleanRequest();
 
 $oFaq = new PMF_Faq($db, 'en');
 // Load the faq
-$items = $oFaq->getTopTenData(PMF_SITEMAP_GOOGLE_MAX_URLS -1);
+$items = $oFaq->getTopTenData(PMF_SITEMAP_GOOGLE_MAX_URLS - 1);
 $visitsMax = 0;
 $visitMin  = 0;
 if (count($items) > 0) {

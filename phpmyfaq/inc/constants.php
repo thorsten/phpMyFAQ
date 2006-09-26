@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: constants.php,v 1.19 2006-09-06 21:47:23 matteo Exp $
+* $Id: constants.php,v 1.20 2006-09-26 19:27:25 matteo Exp $
 *
 * Constants for phpMyFAQ
 *
@@ -88,6 +88,13 @@ define("PMF_RSS_USE_SEO", true);
  * @var const   true
  */
 define("PMF_SITEMAP_GOOGLE_USE_SEO", true);
+
+/**
+ * This is the flag with which Yahoo sitemap will be forced to use the current PMF SEO URL schema
+ *
+ * @var const   true
+ */
+define("PMF_SITEMAP_YAHOO_USE_SEO", true);
 
 /**
  * This is the flag with which the Tags Cloud list is limited to
