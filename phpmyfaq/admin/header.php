@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: header.php,v 1.30 2006-09-25 05:29:19 thorstenr Exp $
+* $Id: header.php,v 1.31 2006-09-26 18:17:47 thorstenr Exp $
 *
 * header of the admin area
 *
@@ -62,7 +62,7 @@ header("Vary: Negotiate,Accept");
     </div>
 <?php } ?>
     <div id="sessionexpiration">
-        <label for="session">Time to your session expiration</label>
+        <label for="session"><?php print $PMF_LANG['ad_session_expiration']; ?></label>
         <div id="sessioncounter">Loading...</div>
     </div>
 <?php } ?>

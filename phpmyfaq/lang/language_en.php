@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.55 2006-09-26 16:38:26 thorstenr Exp $
+* $Id: language_en.php,v 1.56 2006-09-26 18:17:48 thorstenr Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -822,3 +822,7 @@ $PMF_LANG['ad_entry_all_users'] = 'Access for all users';
 $PMF_LANG['ad_entry_restricted_users'] = 'Restricted access to';
 $PMF_LANG['ad_entry_all_groups'] = 'Access for all groups';
 $PMF_LANG['ad_entry_restricted_groups'] = 'Restricted access to';
+$PMF_LANG['ad_session_expiration'] = 'Time to your session expiration';
+$PMF_LANG['ad_user_active'] = 'active';
+$PMF_LANG['ad_user_blocked'] = 'blocked';
+$PMF_LANG['ad_user_active'] = 'protected';

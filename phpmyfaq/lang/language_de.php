@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.30 2006-09-26 16:38:26 thorstenr Exp $
+ * $Id: language_de.php,v 1.31 2006-09-26 18:17:48 thorstenr Exp $
  *
  * German language file
  *
@@ -164,7 +164,7 @@ $PMF_LANG["ad_menu_entry_edit"] = "Beitr&auml;ge editieren";
 $PMF_LANG["ad_menu_categ_edit"] = "Kategorieverwaltung";
 $PMF_LANG["ad_menu_news_add"] = "News hinzuf&uuml;gen";
 $PMF_LANG["ad_menu_news_edit"] = "News editieren";
-$PMF_LANG["ad_menu_open"] = "Offene Fragen bearbeiten";
+$PMF_LANG["ad_menu_open"] = "Offene Fragen";
 $PMF_LANG["ad_menu_stat"] = "Bewertungsstatistik";
 $PMF_LANG["ad_menu_cookie"] = "Cookies";
 $PMF_LANG["ad_menu_session"] = "Sessions ansehen";
@@ -530,6 +530,7 @@ $PMF_LANG["rightsLanguage"]['delatt'] = "Attachment l&ouml;schen";
 $PMF_LANG["rightsLanguage"]['backup'] = "Sicherung erstellen";
 $PMF_LANG["rightsLanguage"]['restore'] = "Sicherung wiederherstellen";
 $PMF_LANG["rightsLanguage"]['delquestion'] = "Offene Fragen l&ouml;schen";
+$PMF_LANG["rightsLanguage"]['changebtrevs'] = "Revisionen bearbeiten";
 
 $PMF_LANG["msgAttachedFiles"] = "angeh&auml;ngte Dateien:";
 
@@ -573,6 +574,7 @@ $LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "LDAP Support aktiviere
 $LANG_CONF["referenceURL"] = array(0 => "input", 1 => "base URL for link verification (set to folder URL of Frontend)");
 $LANG_CONF["URLValidateInterval"] = array(0 => "input", 1 => "Interval between AJAX link verification (in seconds)");
 $LANG_CONF["enablevisibility"] = array(0 => "checkbox", 1 => "Sichtbarkeit neuer Fragen unterdrücken?");
+$LANG_CONF['permLevel'] = array(0 => "input", 1 => "Berechtigungsebene");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "Als neue Hauptkategorie";
 $PMF_LANG["ad_categ_paste_error"] = "Diese Kategorie kann hier nicht eingef&uuml;gt werden.";
@@ -790,7 +792,7 @@ $PMF_LANG['ad_linkcheck_feedback_url-noscript'] = 'Keine Skript-Unterstützung ve
 
 // added v2.0.0 - 2006-09-02 by Thomas
 $PMF_LANG['msg_related_articles'] = 'Related entries';
-$LANG_CONF['numRelatedArticles'] = array(0 => "input", 1 => "Number of related entries");
+$LANG_CONF['numRelatedArticles'] = array(0 => "input", 1 => "Anzahl der verwandten Artikel");
 
 // added v2.0.0 - 2006-09-09 by Rudi
 $PMF_LANG['ad_categ_trans_1'] = 'Übersetze';
@@ -813,3 +815,7 @@ $PMF_LANG['ad_entry_all_users'] = 'Zugriff für alle Benutzer';
 $PMF_LANG['ad_entry_restricted_users'] = 'Eingeschränkter Zugrif für';
 $PMF_LANG['ad_entry_all_groups'] = 'Zugriff für alle Gruppen';
 $PMF_LANG['ad_entry_restricted_groups'] = 'Eingeschränkter Zugrif für';
+$PMF_LANG['ad_session_expiration'] = 'Zeit bis zum Ablauf der Session';
+$PMF_LANG['ad_user_active'] = 'aktiv';
+$PMF_LANG['ad_user_blocked'] = 'geblockt';
+$PMF_LANG['ad_user_active'] = 'geschützt';

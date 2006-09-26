@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: user.php,v 1.31 2006-09-19 21:39:39 matteo Exp $
+* $Id: user.php,v 1.32 2006-09-26 18:17:47 thorstenr Exp $
 *
 * Displays the user managment frontend
 *
@@ -559,9 +559,9 @@ getUserList();
                 <div class="input_row">
                     <label for="user_status_select"><?php print $text['changeUser_status']; ?></label>
                     <select id="user_status_select" name="user_status" >
-                        <option value="active">active</option>
-                        <option value="blocked">blocked</option>
-                        <option value="protected">protected</option>
+                        <option value="active"><?php print $PMF_LANG['ad_user_active']; ?></option>
+                        <option value="blocked"><?php print $PMF_LANG['ad_user_blocked']; ?></option>
+                        <option value="protected"><?php print $PMF_LANG['ad_user_protected']; ?></option>
                     </select>
                 </div>
                 <div id="user_data_table"></div><!-- end #user_data_table -->
