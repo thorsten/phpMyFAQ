@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.145 2006-09-25 05:29:19 thorstenr Exp $
+* $Id: functions.php,v 1.146 2006-09-26 16:50:42 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -2070,39 +2070,39 @@ function printDateTimeInput($key, $date)
 {
     $html = '';
     // YYYY
-    $html .= '<div style="float: left;"><select name="'.$key.'YYYY"><option></option>';
+    $html .= '<div style="float: left;"><select name="'.$key.'YYYY"><option value="">----</option>';
     for ($i = 2006; $i < 2011; $i++) {
-        $html .= '<option'.( $date['YYYY'] == $i ? ' selected="selected"' : '').'>'.$i.'</option>';
+        $html .= '<option value="'.$i.'"'.( $date['YYYY'] == $i ? ' selected="selected"' : '').'>'.$i.'</option>';
     }
     $html .= '</select>&nbsp;-&nbsp;</div>';
     // MM
-    $html .= '<div style="float: left;"><select name="'.$key.'MM"><option></option>';
+    $html .= '<div style="float: left;"><select name="'.$key.'MM"><option value="">--</option>';
     for ($i = 1; $i < 13; $i++) {
-        $html .= '<option'.( ($date['MM'] == $i) && ('' != $date['YYYY']) ? ' selected="selected"' : '').'>'.str_pad($i, 2, "0", STR_PAD_LEFT).'</option>';
+        $html .= '<option value="'.$i.'"'.( ($date['MM'] == $i) && ('' != $date['YYYY']) ? ' selected="selected"' : '').'>'.str_pad($i, 2, "0", STR_PAD_LEFT).'</option>';
     }
     $html .= '</select>&nbsp;-&nbsp;</div>';
     // DD
-    $html .= '<div style="float: left;"><select name="'.$key.'DD"><option></option>';
+    $html .= '<div style="float: left;"><select name="'.$key.'DD"><option value="">--</option>';
     for ($i = 1; $i < 32; $i++) {
-        $html .= '<option'.( ($date['DD'] == $i) && ('' != $date['MM']) ? ' selected="selected"' : '').'>'.str_pad($i, 2, "0", STR_PAD_LEFT).'</option>';
+        $html .= '<option value="'.$i.'"'.( ($date['DD'] == $i) && ('' != $date['MM']) ? ' selected="selected"' : '').'>'.str_pad($i, 2, "0", STR_PAD_LEFT).'</option>';
     }
     $html .= '</select>&nbsp;&nbsp;&nbsp;</div>';
     // HH
-    $html .= '<div style="float: left;"><select name="'.$key.'HH"><option></option>';
+    $html .= '<div style="float: left;"><select name="'.$key.'HH"><option value="">--</option>';
     for ($i = 0; $i < 24; $i++) {
-        $html .= '<option'.( ($date['HH'] == $i) && ('' != $date['DD']) ? ' selected="selected"' : '').'>'.str_pad($i, 2, "0", STR_PAD_LEFT).'</option>';
+        $html .= '<option value="'.$i.'"'.( ($date['HH'] == $i) && ('' != $date['DD']) ? ' selected="selected"' : '').'>'.str_pad($i, 2, "0", STR_PAD_LEFT).'</option>';
     }
     $html .= '</select>&nbsp;:&nbsp;</div>';
     // mm
-    $html .= '<div style="float: left;"><select name="'.$key.'mm"><option></option>';
+    $html .= '<div style="float: left;"><select name="'.$key.'mm"><option value="">--</option>';
     for ($i = 0; $i < 60; $i++) {
-        $html .= '<option'.( ($date['mm'] == $i) && ('' != $date['HH']) ? ' selected="selected"' : '').'>'.str_pad($i, 2, "0", STR_PAD_LEFT).'</option>';
+        $html .= '<option value="'.$i.'"'.( ($date['mm'] == $i) && ('' != $date['HH']) ? ' selected="selected"' : '').'>'.str_pad($i, 2, "0", STR_PAD_LEFT).'</option>';
     }
     $html .= '</select>&nbsp;:&nbsp;</div>';
     // ss
-    $html .= '<div style="float: left;"><select name="'.$key.'ss"><option></option>';
+    $html .= '<div style="float: left;"><select name="'.$key.'ss"><option value="">--</option>';
     for ($i = 0; $i < 60; $i++) {
-        $html .= '<option'.( ($date['ss'] == $i) && ('' != $date['mm']) ? ' selected="selected"' : '').'>'.str_pad($i, 2, "0", STR_PAD_LEFT).'</option>';
+        $html .= '<option value="'.$i.'"'.( ($date['ss'] == $i) && ('' != $date['mm']) ? ' selected="selected"' : '').'>'.str_pad($i, 2, "0", STR_PAD_LEFT).'</option>';
     }
     $html .= '</select></div>';
 

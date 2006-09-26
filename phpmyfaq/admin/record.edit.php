@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.edit.php,v 1.48 2006-09-26 16:44:22 thorstenr Exp $
+* $Id: record.edit.php,v 1.49 2006-09-26 16:52:01 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23
@@ -243,7 +243,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     <input name="keywords" id="keywords" style="width: 390px;" value="<?php if (isset($keywords)) { print htmlspecialchars($keywords); } ?>" /><br />
 
     <label class="lefteditor" for="tags"><?php print $PMF_LANG['ad_entry_tags']; ?>:</label>
-    <input name="tags" id="tags" style="width: 390px;" value="<?php if (isset($tags)) { print htmlspecialchars($tags); } ?>" /><img style="display: none; margin-bottom: -5px;" id="tags_autocomplete_wait" src="images/indicator.gif"></img>
+    <input name="tags" id="tags" style="width: 390px;" value="<?php if (isset($tags)) { print htmlspecialchars($tags); } ?>" /><img style="display: none; margin-bottom: -5px;" id="tags_autocomplete_wait" src="images/indicator.gif" alt="waiting..."></img>
     <div id="tags_autocomplete_choices"></div><br />
     <script type="text/javascript">
         new Ajax.Autocompleter("tags", "tags_autocomplete_choices", "index.php?action=ajax&ajax=tags_list",
