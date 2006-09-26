@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.ondemandurl.php,v 1.15 2006-09-26 19:53:28 thorstenr Exp $
+* $Id: ajax.ondemandurl.php,v 1.16 2006-09-26 21:25:35 matteo Exp $
 *
 * AJAX: onDemandURL
 *
@@ -102,7 +102,7 @@ if (isset($_GET["lookup"])) {
     if (count(ob_list_handlers()) > 0) {
         ob_clean();
     }
-    print verifyArticleURL($faq->faqRecord['content'], $id, $lang);
+    print $linkverifier->verifyArticleURL($faq->faqRecord['content'], $id, $lang);
     exit();
 }
 

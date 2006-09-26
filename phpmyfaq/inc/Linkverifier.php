@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Linkverifier.php,v 1.14 2006-09-26 19:51:07 thorstenr Exp $
+* $Id: Linkverifier.php,v 1.15 2006-09-26 21:25:35 matteo Exp $
 *
 * PMF_Linkverifier
 *
@@ -113,7 +113,7 @@ class PMF_Linkverifier
     function PMF_Linkverifier($db, $user = null)
     {
         global $PMF_LANG;
-        
+
         $this->db   = $db;
         $this->user = $user;
 
@@ -126,10 +126,13 @@ class PMF_Linkverifier
         $this->addIgnoreProtocol("mailto:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "mailto"));
         $this->addIgnoreProtocol("telnet:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "telnet"));
         $this->addIgnoreProtocol("feed:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "feed"));
-        
+
         // Hack: these below are not real scheme for defining protocols like the ones above
         $this->addIgnoreProtocol("file:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "file"));
         $this->addIgnoreProtocol("javascript:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "javascript"));
+
+        // load list of URLs to ignore / fail
+        $this->loadConfigurationFromDB();
     }
 
 
@@ -397,13 +400,15 @@ class PMF_Linkverifier
         $urlcount = 0;
         $types = array("href", "src", "url");
 
+        // Clean $this->urlpool
+        $this->urlpool = array();
         while(list(,$type) = each($types)) {
-        preg_match_all("|[^?&]$type\=\"?'?`?([[:alnum:]\:%?=;&@/\.\_\-\{\}]+)\"?'?`?|i", $string, $matches);
-            $sz = sizeof($matches[1]);
-            for ($i=0;$i < $sz;$i++) {
-                $this->urlpool[$type][] = $matches[1][$i];
-                $urlcount++;
-            }
+            preg_match_all("|[^?&]$type\=\"?'?`?([[:alnum:]\:%?=;&@/\.\_\-\{\}]+)\"?'?`?|i", $string, $matches);
+                $sz = sizeof($matches[1]);
+                for ($i=0;$i < $sz;$i++) {
+                    $this->urlpool[$type][] = $matches[1][$i];
+                    $urlcount++;
+                }
         }
 
         return ($urlcount == 0) ? false : $urlcount;
@@ -581,6 +586,7 @@ class PMF_Linkverifier
     function VerifyURLs($referenceuri = '')
     {
         $this->lastResult = array();
+
         foreach ($this->urlpool as $_type => $_value) {
             foreach ($_value as $_key => $_url) {
                 if (!(isset($result[$_type][$_url]))) {
@@ -815,117 +821,113 @@ class PMF_Linkverifier
         }
     }
 
+    /**
+    * Verifies specified article content and update links_state database entry
+    *
+    * @param   string  $contents
+    * @param   integer $id
+    * @param   string  $artlang
+    * @param   boolean $cron
+    * @result  string  HTML text, if $cron is false (default)
+    * @access  public
+    * @author  Minoru TODA <todam@netjapan.co.jp>
+    * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+    * @since   2005-08-01
+    */
+    function verifyArticleURL($contents = '', $id = 0, $artlang = '', $cron = false)
+    {
+        global $PMF_CONF, $PMF_LANG;
+
+        if (!(isset($PMF_CONF['referenceURL']))) {
+            $output = $PMF_LANG['ad_linkcheck_noReferenceURL'];
+            return ($cron ? '' : '<br /><br />'.$output);
+        }
+
+        if (trim('' == $PMF_CONF['referenceURL'])) {
+            $output = $PMF_LANG['ad_linkcheck_noReferenceURL'];
+            return ($cron ? '' : '<br /><br />'.$output);
+        }
+
+        if ($this->isReady() === false) {
+            $output = $PMF_LANG['ad_linkcheck_noAllowUrlOpen'];
+            return ($cron ? '' : '<br /><br />'.$output);
+        }
+
+        // Parse contents and verify URLs
+        $this->parse_string($contents);
+        $result = $this->VerifyURLs($PMF_CONF['referenceURL']);
+        $this->markEntry($id, $artlang);
+
+        // If no URLs found
+        if ($result == false) {
+            $output  = '<h2>'.$PMF_LANG['ad_linkcheck_checkResult'].'</h2>';
+            $output .= '<br />'.$PMF_LANG['ad_linkcheck_noLinksFound'];
+            return ($cron ? '' : $output);
+        }
+
+        //uncomment to see the result structure
+        //print str_replace("\n","<br />",htmlspecialchars(print_r($result, true)));
+
+        $failreasons = array();
+        $inforeasons = array();
+        $output = "    <h2>".$PMF_LANG['ad_linkcheck_checkResult']."</h2>\n";
+        $output .= '    <table class="verifyArticleURL">'."\n";
+        foreach ($result as $type => $_value) {
+            $output .= "        <tr><td><strong>".htmlspecialchars($type)."</strong></td></tr>\n";
+            foreach ($_value as $url => $value) {
+                $_output  = '            <td /><td>'.htmlspecialchars($value['rawurl'])."</td>\n";
+                $_output .= '            <td><a href="'.$value['absurl'].'" target="_blank">'.htmlspecialchars($value['absurl'])."</a></td>\n";
+                $_output .= '            <td>';
+                if (isset($value['redirects']) && ($value['redirects'] > 0)) {
+                    $_redirects = "(".$value['redirects'].")";
+                } else {
+                    $_redirects = "";
+                }
+                if ($value['valid'] === true) {
+                    $_classname = "urlsuccess";
+                    $_output .= '<td class="'.$_classname.'">'.$PMF_LANG['ad_linkcheck_checkSuccess'].$_redirects.'</td>';
+                    if ($value['reason'] != "") {
+                        $inforeasons[] = sprintf($PMF_LANG['ad_linkcheck_openurl_infoprefix'],htmlspecialchars($value['absurl'])).$value['reason'];
+                    }
+                } else {
+                    $_classname = "urlfail";
+                    $_output .= '<td class="'.$_classname.'">'.$PMF_LANG['ad_linkcheck_checkFailed'].'</td>';
+                    if ($value['reason'] != "") {
+                        $failreasons[] = $value['reason'];
+                    }
+                }
+                $_output .= '</td>';
+                $output .= '        <tr class="'.$_classname.'">'."\n".$_output."\n";
+                $output .= "        </tr>\n";
+            }
+        }
+        $output .= "    </table>\n";
+
+        if (count($failreasons) > 0) {
+            $output .= "    <br />\n    <strong>".$PMF_LANG['ad_linkcheck_failReason']."</strong>\n    <ul>\n";
+            foreach ($failreasons as $reason) {
+                $output .= "        <li>".$reason."</li>\n";
+            }
+            $output .= "    </ul>\n";
+        }
+
+        if (count($inforeasons) > 0) {
+            $output .= "    <br />\n    <strong>".$PMF_LANG['ad_linkcheck_infoReason']."</strong>\n    <ul>\n";
+            foreach ($inforeasons as $reason) {
+                $output .= "        <li>".$reason."</li>\n";
+            }
+            $output .= "    </ul>\n";
+        }
+
+        if ($cron) {
+            return '';
+        } else {
+            return $output;
+        }
+    }
+
 }
 
-
-/**
- * Verifies specified article content and update links_state database entry
- *
- * @param   string  $contents
- * @param   integer $id
- * @param   string  $artlang
- * @param   boolean $cron
- * @result  string  HTML text, if $cron is false (default)
- * @access  public
- * @author  Minoru TODA <todam@netjapan.co.jp>
- * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
- * @since   2005-08-01
- */
-function verifyArticleURL($contents = '', $id = 0, $artlang = '', $cron = false)
-{
-    global $PMF_CONF, $PMF_LANG;
-
-    if (!(isset($PMF_CONF['referenceURL']))) {
-        $output = $PMF_LANG['ad_linkcheck_noReferenceURL'];
-        return ($cron ? '' : '<br /><br />'.$output);
-    }
-
-    if (trim('' == $PMF_CONF['referenceURL'])) {
-        $output = $PMF_LANG['ad_linkcheck_noReferenceURL'];
-        return ($cron ? '' : '<br /><br />'.$output);
-    }
-
-    $linkverifier = new PMF_Linkverifier;
-    if ($linkverifier->isReady() === false) {
-        $output = $PMF_LANG['ad_linkcheck_noAllowUrlOpen'];
-        return ($cron ? '' : '<br /><br />'.$output);
-    }
-
-    // load list of URLs to ignore / fail
-    $linkverifier->loadConfigurationFromDB();
-
-    // Parse contents and verify URLs
-    $linkverifier->parse_string($contents);
-    $result = $linkverifier->VerifyURLs($PMF_CONF['referenceURL']);
-    $linkverifier->markEntry($id, $artlang);
-
-    // If no URLs found
-    if ($result == false) {
-        $output  = '<h2>'.$PMF_LANG['ad_linkcheck_checkResult'].'</h2>';
-        $output .= '<br />'.$PMF_LANG['ad_linkcheck_noLinksFound'];
-        return ($cron ? '' : $output);
-    }
-
-    //uncomment to see the result structure
-    //print str_replace("\n","<br />",htmlspecialchars(print_r($result, true)));
-
-    $failreasons = array();
-    $inforeasons = array();
-    $output = "    <h2>".$PMF_LANG['ad_linkcheck_checkResult']."</h2>\n";
-    $output .= '    <table class="verifyArticleURL">'."\n";
-    foreach ($result as $type => $_value) {
-        $output .= "        <tr><td><strong>".htmlspecialchars($type)."</strong></td></tr>\n";
-        foreach ($_value as $url => $value) {
-            $_output  = '            <td /><td>'.htmlspecialchars($value['rawurl'])."</td>\n";
-            $_output .= '            <td><a href="'.$value['absurl'].'" target="_blank">'.htmlspecialchars($value['absurl'])."</a></td>\n";
-            $_output .= '            <td>';
-            if (isset($value['redirects']) && ($value['redirects'] > 0)) {
-                $_redirects = "(".$value['redirects'].")";
-            } else {
-                $_redirects = "";
-            }
-            if ($value['valid'] === true) {
-                $_classname = "urlsuccess";
-                $_output .= '<td class="'.$_classname.'">'.$PMF_LANG['ad_linkcheck_checkSuccess'].$_redirects.'</td>';
-                if ($value['reason'] != "") {
-                    $inforeasons[] = sprintf($PMF_LANG['ad_linkcheck_openurl_infoprefix'],htmlspecialchars($value['absurl'])).$value['reason'];
-                }
-            } else {
-                $_classname = "urlfail";
-                $_output .= '<td class="'.$_classname.'">'.$PMF_LANG['ad_linkcheck_checkFailed'].'</td>';
-                if ($value['reason'] != "") {
-                    $failreasons[] = $value['reason'];
-                }
-            }
-            $_output .= '</td>';
-            $output .= '        <tr class="'.$_classname.'">'."\n".$_output."\n";
-            $output .= "        </tr>\n";
-        }
-    }
-    $output .= "    </table>\n";
-
-    if (count($failreasons) > 0) {
-        $output .= "    <br />\n    <strong>".$PMF_LANG['ad_linkcheck_failReason']."</strong>\n    <ul>\n";
-        foreach ($failreasons as $reason) {
-            $output .= "        <li>".$reason."</li>\n";
-        }
-        $output .= "    </ul>\n";
-    }
-
-    if (count($inforeasons) > 0) {
-        $output .= "    <br />\n    <strong>".$PMF_LANG['ad_linkcheck_infoReason']."</strong>\n    <ul>\n";
-        foreach ($inforeasons as $reason) {
-            $output .= "        <li>".$reason."</li>\n";
-        }
-        $output .= "    </ul>\n";
-    }
-
-    if ($cron) {
-        return '';
-    } else {
-        return $output;
-    }
-}
 
 /**
  * Prints javascripts needed for AJAX linkverification in record listing
