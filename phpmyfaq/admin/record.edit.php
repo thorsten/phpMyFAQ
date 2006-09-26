@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.edit.php,v 1.47 2006-09-24 14:48:22 matteo Exp $
+* $Id: record.edit.php,v 1.48 2006-09-26 16:44:22 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23
@@ -300,6 +300,19 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 ?>
     <label class="left" for="revision"><?php print $PMF_LANG['ad_entry_new_revision']; ?></label>
     <input type="radio" name="revision" class="active" value="yes"<?php print isset($rev_yes) ? $rev_yes : ''; ?>/> <?php print $PMF_LANG["ad_gen_yes"]; ?> <input type="radio" name="revision" class="active" value="no"<?php print isset($rev_no) ? $rev_no : ''; ?>/> <?php print $PMF_LANG["ad_gen_no"]; ?><br />
+<?php
+    }
+?>
+
+    <label class="left" for="userpermission"><?php print $PMF_LANG['ad_entry_userpermission']; ?></label>
+    <input type="radio" name="userpermission" class="active" value="all"<?php print isset($userpermission_all) ? $userpermission_all : ''; ?>/> <?php print $PMF_LANG['ad_entry_all_users']; ?> <input type="radio" name="userpermission" class="active" value="restricted"<?php print isset($userpermission_restricted) ? $userpermission_restricted : ''; ?>/> <?php print $PMF_LANG['ad_entry_restricted_users']; ?> <select name="restricted_users" size="1"><?php print $user->getAllUserOptions(1); ?></select><br />
+
+<?php
+    if ($groupSupport) {
+?>    
+    <label class="left" for="grouppermission"><?php print $PMF_LANG['ad_entry_grouppermission']; ?></label>
+    <input type="radio" name="grouppermission" class="active" value="all"<?php print isset($grouppermission_all) ? $grouppermission_all : ''; ?>/> <?php print $PMF_LANG['ad_entry_all_groups']; ?> <input type="radio" name="grouppermission" class="active" value="restricted"<?php print isset($grouppermission_restricted) ? $grouppermission_restricted : ''; ?>/> <?php print $PMF_LANG['ad_entry_restricted_groups']; ?> <select name="restricted_groups" size="1"><?php print $user->getAllUserOptions(1); ?></select><br />
+
 <?php
     }
 ?>
