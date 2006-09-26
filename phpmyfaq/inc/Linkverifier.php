@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Linkverifier.php,v 1.13 2006-09-17 20:13:03 matteo Exp $
+* $Id: Linkverifier.php,v 1.14 2006-09-26 19:51:07 thorstenr Exp $
 *
 * PMF_Linkverifier
 *
@@ -89,6 +89,20 @@ class PMF_Linkverifier
     var $slow_hosts = array();
 
     /**
+    * DB handle
+    *
+    * @var  object
+    */
+    var $db = null;
+
+    /**
+     * User
+     *
+     * @var integer
+     */
+    var $user = null;
+    
+    /**
      * Constructor
      *
      * @access  public
@@ -96,9 +110,12 @@ class PMF_Linkverifier
      * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      * @since   2005-08-01
      */
-    function PMF_Linkverifier()
+    function PMF_Linkverifier($db, $user = null)
     {
         global $PMF_LANG;
+        
+        $this->db   = $db;
+        $this->user = $user;
 
         if (!@extension_loaded('openssl')) { // PHP 4.3.0+: fsockopen needs OpenSSL
             $this->addIgnoreProtocol("https:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "https"));
@@ -238,11 +255,9 @@ class PMF_Linkverifier
     */
     function loadConfigurationFromDB()
     {
-        global $db;
-
         $query = "SELECT type, url, reason FROM ".SQLPREFIX."faqlinkverifyrules WHERE enabled = 'y'";
-        $result = $db->query($query);
-        while ($row = $db->fetch_object($result)) {
+        $result = $this->db->query($query);
+        while ($row = $this->db->fetch_object($result)) {
             switch (strtolower($row->type)) {
             case 'ignore':      $this->addIgnoreList($row->url, $row->reason);
                                 break;
@@ -610,8 +625,6 @@ class PMF_Linkverifier
 
     function markEntry($id = 0, $artlang = "", $state = "")
     {
-        global $db;
-
         if (($id < 1) || (trim($artlang) == "")) {
             return false;
         }
@@ -621,7 +634,7 @@ class PMF_Linkverifier
         }
 
         $query = "UPDATE ".SQLPREFIX."faqdata SET links_state = '".$state."', links_check_date = ".time()." WHERE id = ".$id." AND lang='".$artlang."'";
-        if ($db->query($query)) {
+        if ($this->db->query($query)) {
             return true;
         } else {
             return false;
@@ -660,14 +673,12 @@ class PMF_Linkverifier
 
     function getUntestedEntriesCount()
     {
-        global $db;
-
         $interval = $this->getURLValidateInterval();
 
         $query = "SELECT COUNT(*) FROM ".SQLPREFIX."faqdata WHERE links_check_date < ".$interval;
-        $result = $db->query($query);
+        $result = $this->db->query($query);
         $untestedCount = 0;
-        while ($row = $db->fetch_row($result)) {
+        while ($row = $this->db->fetch_row($result)) {
             list($untestedCount) = $row;
         }
         return $untestedCount;
@@ -687,12 +698,12 @@ class PMF_Linkverifier
 
     function getEntryState($id = 0, $artlang = "", $checkDate = false)
     {
-        global $db, $PMF_CONF;
+        global $PMF_CONF;
 
         $interval = $this->getURLValidateInterval();
         $query = "SELECT links_state, links_check_date FROM ".SQLPREFIX."faqdata WHERE id = ".$id." AND lang='".$artlang."'";
-        if ($result = $db->query($query)) {
-            while ($row = $db->fetch_object($result)) {
+        if ($result = $this->db->query($query)) {
+            while ($row = $this->db->fetch_object($result)) {
                 $_linkState = $row->links_state;
                 if (trim($_linkState) == "") {
                     $_linkState = true;
@@ -1064,4 +1075,3 @@ function ajaxOnDemandVerify(id, lang)
 </script>
 <?php
 }
-?>
