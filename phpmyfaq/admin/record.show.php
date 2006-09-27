@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.show.php,v 1.34 2006-09-26 19:53:28 thorstenr Exp $
+* $Id: record.show.php,v 1.35 2006-09-27 18:51:28 thorstenr Exp $
 *
 * Shows the list of records ordered by categories
 *
@@ -101,6 +101,7 @@ if ($permission["editbt"] || $permission["delbt"]) {
     // FIXME: Count "comments"/"entries" for each category also within a search context. Now the count is broken.
     // FIXME: we are not considering 'faqdata.links_state' for filtering the faqs.
     if (!(isset($_REQUEST["suchbegriff"]) && $_REQUEST["suchbegriff"] != "")) {
+        $matrix = array();
         // 2. Count the comments for each category
         // 2.1 Create a matrix for representing categories and faq records
         $query  = 'SELECT '.SQLPREFIX.'faqcategoryrelations.category_id AS id_cat, '.SQLPREFIX.'faqdata.id AS id'
