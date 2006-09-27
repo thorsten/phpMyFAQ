@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.config_list.php,v 1.9 2006-09-19 21:39:38 matteo Exp $
+* $Id: ajax.config_list.php,v 1.10 2006-09-27 19:00:31 thorstenr Exp $
 *
 * AJAX: lists the complete configuration items
 *
@@ -78,9 +78,11 @@ function printInputFieldByType($key, $type)
     }
 }
 
-    foreach ($LANG_CONF as $key => $value) {
-        $filterConfigParams = ($configMode == 'std'? false === strpos($key, 'spam') : 0 === strpos($key, $configMode));
-        if ($filterConfigParams) {
+header("Content-type: text/html; charset=".$PMF_LANG['metaCharset']);
+
+foreach ($LANG_CONF as $key => $value) {
+    $filterConfigParams = ($configMode == 'std'? false === strpos($key, 'spam') : 0 === strpos($key, $configMode));
+    if ($filterConfigParams) {
 ?>
 <dl>
     <dt><strong><?php print $value[1]; ?></strong></dt>
@@ -92,5 +94,5 @@ function printInputFieldByType($key, $type)
     </dt>
 </dl>
 <?php
-        }
     }
+}
