@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.32 2006-09-19 19:29:37 matteo Exp $
+* $Id: language_it.php,v 1.33 2006-09-27 19:20:57 matteo Exp $
 *
 * Italian language file
 *
@@ -810,3 +810,19 @@ $PMF_LANG['ad_categ_transalready'] = 'Già tradotta in: ';
 $PMF_LANG["ad_categ_deletealllang"] = 'Cancellare in tutte le lingue?';
 $PMF_LANG["ad_categ_deletethislang"] = 'Cancellare solo questa lingua?';
 $PMF_LANG["ad_categ_translated"] = "La categoria è stata tradotta.";
+
+// added v2.0.0 - 2006-09-21 by Rudi
+$PMF_LANG["ad_categ_show"] = "Sommario";
+$PMF_LANG['ad_menu_categ_structure'] = "Sommario delle Categorie e delle lingue presenti";
+
+// added v2.0.0 - 2006-09-26 by Thorsten
+$PMF_LANG['ad_entry_userpermission'] = 'Permessi dell\'utente:';
+$PMF_LANG['ad_entry_grouppermission'] = 'Permessi del gruppo:';
+$PMF_LANG['ad_entry_all_users'] = 'Accesso per tutti gli utenti';
+$PMF_LANG['ad_entry_restricted_users'] = 'Accesso ristretto a';
+$PMF_LANG['ad_entry_all_groups'] = 'Accesso per tutti i gruppi';
+$PMF_LANG['ad_entry_restricted_groups'] = 'Accesso ristretto a';
+$PMF_LANG['ad_session_expiration'] = 'La sessione scadr&agrave; entro';
+$PMF_LANG['ad_user_active'] = 'attivo';
+$PMF_LANG['ad_user_blocked'] = 'bloccato';
+$PMF_LANG['ad_user_protected'] = 'protetto';
