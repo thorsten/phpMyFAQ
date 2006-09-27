@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.31 2006-09-26 18:17:48 thorstenr Exp $
+ * $Id: language_de.php,v 1.32 2006-09-27 17:22:04 thorstenr Exp $
  *
  * German language file
  *
@@ -571,8 +571,8 @@ $LANG_CONF["bannedIP"] = array(0 => "area", 1 => "Gesperrte IPs");
 $LANG_CONF["parse_php"] = array(0 => "checkbox", 1 => "Soll der Template Parser PHP ausführen? (Voreinstellung: deaktiviert)");
 $LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "mod_rewrite Support aktivieren? (Voreinstellung: deaktiviert)");
 $LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "LDAP Support aktivieren? (Voreinstellung: deaktiviert)");
-$LANG_CONF["referenceURL"] = array(0 => "input", 1 => "base URL for link verification (set to folder URL of Frontend)");
-$LANG_CONF["URLValidateInterval"] = array(0 => "input", 1 => "Interval between AJAX link verification (in seconds)");
+$LANG_CONF["referenceURL"] = array(0 => "input", 1 => "Basis-Adresse für die Linküberprüfung (Adresse der Startseite)");
+$LANG_CONF["URLValidateInterval"] = array(0 => "input", 1 => "Zeitintervall zwischen den Ajax-Linküberprüfungen (in Sekunden)");
 $LANG_CONF["enablevisibility"] = array(0 => "checkbox", 1 => "Sichtbarkeit neuer Fragen unterdrücken?");
 $LANG_CONF['permLevel'] = array(0 => "input", 1 => "Berechtigungsebene");
 
@@ -675,20 +675,20 @@ $PMF_LANG['ad_linkcheck_openurl_nodns'] = 'Host <strong>%s</strong> is slow or h
 $PMF_LANG['ad_linkcheck_openurl_redirected'] = 'URL was redirected to <strong>%s</strong>.';
 $PMF_LANG['ad_linkcheck_openurl_ambiguous'] = 'Ambiguous HTTP status <strong>%s</strong> returned.';
 $PMF_LANG['ad_linkcheck_protocol_unsupported'] = '%s protocol unsupported by Automatic link verification.';
-$PMF_LANG['ad_menu_linkconfig'] = 'Configure URL Verifier';
-$PMF_LANG['ad_linkcheck_config_title'] = 'URL Verifier Configuration';
-$PMF_LANG['ad_linkcheck_config_disabled'] = 'URL Verifier feature disabled';
-$PMF_LANG['ad_linkcheck_config_warnlist'] = 'URLs to warn';
-$PMF_LANG['ad_linkcheck_config_ignorelist'] = 'URLs to ignore';
-$PMF_LANG['ad_linkcheck_config_warnlist_description'] = 'URLs prefixed with items below will be issued warning regardless of whether it is valid.<br />Use this feature to detect soon-to-be defunct URLs';
-$PMF_LANG['ad_linkcheck_config_ignorelist_description'] = 'Exact URLs listed below will be assumed valid without validation.<br />Use this feature to omit URLs that fail to validate using URL Verifier';
+$PMF_LANG['ad_menu_linkconfig'] = 'Linküberprüfung';
+$PMF_LANG['ad_linkcheck_config_title'] = 'Konfiguration der Linküberprüfung';
+$PMF_LANG['ad_linkcheck_config_disabled'] = 'Linküberprüfung deaktiviert';
+$PMF_LANG['ad_linkcheck_config_warnlist'] = 'Warnen bei diesen Adressen';
+$PMF_LANG['ad_linkcheck_config_ignorelist'] = 'Ignorieren dieser Adressen';
+$PMF_LANG['ad_linkcheck_config_warnlist_description'] = 'Adressen mit den vorangestellten Elementen generieren einen Warnhinweis, auch wenn sie erreichbar und valide sind.<br />Nutzen Sie dieses Feature, um bald gelöschte Adressen zu erkennen';
+$PMF_LANG['ad_linkcheck_config_ignorelist_description'] = 'Diese Adressen werden nicht auf Erreichbarkeit überprüft.<br />Nutzen Sie dieses Feature, um Adressen, die Sie nicht überprüfen können, von der Linküberprüfung auszuschließen.';
 $PMF_LANG['ad_linkcheck_config_th_id'] = 'ID#';
-$PMF_LANG['ad_linkcheck_config_th_url'] = 'URL to match';
-$PMF_LANG['ad_linkcheck_config_th_reason'] = 'Match reason';
-$PMF_LANG['ad_linkcheck_config_th_owner'] = 'Entry owner';
+$PMF_LANG['ad_linkcheck_config_th_url'] = 'Übereinstimmung';
+$PMF_LANG['ad_linkcheck_config_th_reason'] = 'Grund';
+$PMF_LANG['ad_linkcheck_config_th_owner'] = 'Eigentümer des Artikels';
 $PMF_LANG['ad_linkcheck_config_th_enabled'] = 'Set to enable entry';
-$PMF_LANG['ad_linkcheck_config_th_locked'] = 'Set to lock ownership';
-$PMF_LANG['ad_linkcheck_config_th_chown'] = 'Set to obtain ownership';
+$PMF_LANG['ad_linkcheck_config_th_locked'] = 'Sperre der Eigentümerschaft';
+$PMF_LANG['ad_linkcheck_config_th_chown'] = 'Erhalten der Eigentümerschaft';
 $PMF_LANG['msgNewQuestionVisible'] = 'Dazu muss der Administrator allerdings diese erst freigeben.';
 $PMF_LANG['msgQuestionsWaiting'] = 'Wartend auf die Freigabe durch den Administrator:';
 $PMF_LANG['ad_entry_visibility'] = 'Sichtbar machen?';
@@ -818,4 +818,4 @@ $PMF_LANG['ad_entry_restricted_groups'] = 'Eingeschränkter Zugrif für';
 $PMF_LANG['ad_session_expiration'] = 'Zeit bis zum Ablauf der Session';
 $PMF_LANG['ad_user_active'] = 'aktiv';
 $PMF_LANG['ad_user_blocked'] = 'geblockt';
-$PMF_LANG['ad_user_active'] = 'geschützt';
+$PMF_LANG['ad_user_protected'] = 'geschützt';
