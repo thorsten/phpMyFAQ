@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Link.php,v 1.18 2006-09-24 19:05:04 thorstenr Exp $
+* $Id: Link.php,v 1.19 2006-09-27 19:32:47 matteo Exp $
 *
 * Link management - Functions and Classes
 *
@@ -230,19 +230,22 @@ class PMF_Link
     function getSEOItemTitle()
     {
         $itemTitle = trim($this->itemTitle);
-        // Use a '_' for the words separation
+        // Lower the case (aesthetic)
+        $itemTitle = strtolower($this->itemTitle);
         // Use '_' for some other characters for:
         // 1. avoiding regexp match break;
         // 2. improving the reading.
-        $itemTitle = str_replace(array(' ', "'", '/'),
+        $itemTitle = str_replace(array('-', "'", '/'),
                                  '_', $itemTitle);
+        // Use a '-' for the words separation
+        $itemTitle = str_replace(' ', '-', $itemTitle);
         // Hack: remove some chars for having a better readable title
         $itemTitle = str_replace(array(',', ';', ':', '.', '?', '!', '"', '(', ')', '[', ']', '{', '}', '<', '>'),
                                  '',
                                  $itemTitle);
         // Hack: move some chars to "similar" but plain ASCII chars
-        $itemTitle = str_replace(array('à', 'è', 'ì', 'ò', 'ù', 'È', 'ä', 'ö', 'ü', 'ß'),
-                                 array('a', 'e', 'i', 'o', 'u', 'E', 'ae', 'oe', 'ue', 'ss'),
+        $itemTitle = str_replace(array('à', 'è', 'é', 'ì', 'ò', 'ù', 'ä', 'ö', 'ü', 'ß'),
+                                 array('a', 'e', 'e', 'i', 'o', 'u', 'ae', 'oe', 'ue', 'ss'),
                                  $itemTitle);
 
         return rawurlencode($itemTitle);
