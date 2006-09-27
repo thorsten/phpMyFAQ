@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.87 2006-09-26 19:51:36 thorstenr Exp $
+* $Id: update.php,v 1.88 2006-09-27 18:34:10 thorstenr Exp $
 *
 * Main update script
 *
@@ -614,7 +614,7 @@ if ($step == 5) {
 
         // add the new "edit revisions" right to the existing user rights profiles
         // 1/2. Fix admin/id=1 user rights
-        $query[] = "UPDATE ".SQLPREFIX."faquser SET rights = '11111111111111111111111' WHERE id = 1";
+        $query[] = "UPDATE ".SQLPREFIX."faquser SET rights = '11111111111111111111111111' WHERE id = 1";
         // 2/2. Fix normal user rights
         $_records = array();
         $_result = $db->query('SELECT id, rights FROM '.SQLPREFIX.'faquser WHERE id <> 1 ORDER BY id');
@@ -1093,8 +1093,9 @@ if ($step == 5) {
                 foreach ($_records as $_r) {
                     // PMF 1.6.x: # 23 rights
                     // PMF 2.0.0: # 26 rights
-                    // addglossary, editglossary, delglossary: 23-25; id = '1' is supposed to be the 'admin' user
-                    $glossaryRights = ('1' == $_r['id']) ? '111' : '000';
+                    // addglossary, editglossary, delglossary, addgroup, editgroup, delgroup: 
+                    // 23-29; id = '1' is supposed to be the 'admin' user
+                    $glossaryRights = ('1' == $_r['id']) ? '111111' : '0000000';
                     // changebtrevs is the 26th right in PMF 2.0.0, whilst it is the 23rd in PMF 1.6.x
                     $userStringRights = substr($_r['rights'], 0, 22).$glossaryRights.substr($_r['rights'], 22, 1);
                     for ($i = 0; $i < 26; $i++) {

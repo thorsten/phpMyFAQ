@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.71 2006-09-24 19:16:05 thorstenr Exp $
+* $Id: installer.php,v 1.72 2006-09-27 18:30:45 thorstenr Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -895,7 +895,28 @@ foreach ($permLevels as $level => $desc) {
             'description' => 'Edit revisions',
             'for_users' => 1,
             'for_groups' => 1
-        )
+        ),
+        //27 => "addgroup",
+        array(
+            'name' => 'addgroup',
+            'description' => 'Right to add group accounts',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
+        //28 => "editgroup",
+        array(
+            'name' => 'editgroup',
+            'description' => 'Right to edit group accounts',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
+        //29 => "delgroup",
+        array(
+            'name' => 'delgroup',
+            'description' => 'Right to delete group accounts',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
     );
     foreach ($rights as $right) {
         $rightID = $admin->perm->addRight($right);
