@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Link.php,v 1.19 2006-09-27 19:32:47 matteo Exp $
+* $Id: Link.php,v 1.20 2006-09-27 19:41:13 matteo Exp $
 *
 * Link management - Functions and Classes
 *
@@ -240,7 +240,7 @@ class PMF_Link
         // Use a '-' for the words separation
         $itemTitle = str_replace(' ', '-', $itemTitle);
         // Hack: remove some chars for having a better readable title
-        $itemTitle = str_replace(array(',', ';', ':', '.', '?', '!', '"', '(', ')', '[', ']', '{', '}', '<', '>'),
+        $itemTitle = str_replace(array('+', ',', ';', ':', '.', '?', '!', '"', '(', ')', '[', ']', '{', '}', '<', '>'),
                                  '',
                                  $itemTitle);
         // Hack: move some chars to "similar" but plain ASCII chars
