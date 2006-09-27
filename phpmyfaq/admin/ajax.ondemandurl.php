@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.ondemandurl.php,v 1.16 2006-09-26 21:25:35 matteo Exp $
+* $Id: ajax.ondemandurl.php,v 1.17 2006-09-27 18:21:29 thorstenr Exp $
 *
 * AJAX: onDemandURL
 *
@@ -32,13 +32,13 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
-@header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-@header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
-@header("Cache-Control: no-store, no-cache, must-revalidate");
-@header("Cache-Control: post-check=0, pre-check=0", false);
-@header("Pragma: no-cache");
-@header("Content-type: text/html");
-@header("Vary: Negotiate,Accept");
+header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
+header("Cache-Control: no-store, no-cache, must-revalidate");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+header("Content-type: text/html");
+header("Vary: Negotiate,Accept");
 
 $linkverifier = new PMF_Linkverifier($db, $user->getLogin());
 if ($linkverifier->isReady() == false) {

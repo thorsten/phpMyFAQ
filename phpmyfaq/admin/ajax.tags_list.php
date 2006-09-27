@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.tags_list.php,v 1.6 2006-09-19 21:39:38 matteo Exp $
+* $Id: ajax.tags_list.php,v 1.7 2006-09-27 18:21:29 thorstenr Exp $
 *
 * AJAX: searches the tags
 *
@@ -31,6 +31,7 @@ header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
 header("Content-type: text/xml");
 header("Vary: Negotiate,Accept");
+header("Content-type: text/xml; charset=".$PMF_LANG['metaCharset']);
 
 require_once(PMF_ROOT_DIR.'/inc/Tags.php');
 // TODO: manage the language correctly

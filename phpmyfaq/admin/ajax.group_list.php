@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.group_list.php,v 1.11 2006-09-19 21:39:38 matteo Exp $
+* $Id: ajax.group_list.php,v 1.12 2006-09-27 18:21:29 thorstenr Exp $
 *
 * AJAX: lists all registered users
 *
@@ -24,13 +24,14 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
-@header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-@header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
-@header("Cache-Control: no-store, no-cache, must-revalidate");
-@header("Cache-Control: post-check=0, pre-check=0", false);
-@header("Pragma: no-cache");
-@header("Content-type: text/xml");
-@header("Vary: Negotiate,Accept");
+header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
+header("Cache-Control: no-store, no-cache, must-revalidate");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+header("Content-type: text/xml");
+header("Vary: Negotiate,Accept");
+header("Content-type: text/xml; charset=".$PMF_LANG['metaCharset']);
 
 require_once(PMF_ROOT_DIR.'/inc/PMF_User/User.php');
 

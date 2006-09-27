@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.user_list.php,v 1.21 2006-09-19 21:39:38 matteo Exp $
+* $Id: ajax.user_list.php,v 1.22 2006-09-27 18:21:29 thorstenr Exp $
 *
 * AJAX: lists all registered users
 *
@@ -33,6 +33,7 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
     header("Pragma: no-cache");
     header("Content-type: text/xml");
     header("Vary: Negotiate,Accept");
+    header("Content-type: text/xml; charset=".$PMF_LANG['metaCharset']);
 
     require_once(PMF_ROOT_DIR.'/inc/PMF_User/User.php');
 
