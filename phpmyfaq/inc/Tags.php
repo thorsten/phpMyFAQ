@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Tags.php,v 1.17 2006-09-08 18:02:05 matteo Exp $
+* $Id: Tags.php,v 1.18 2006-09-27 20:17:42 matteo Exp $
 *
 * The main Tags class
 *
@@ -146,7 +146,7 @@ class PMF_Tags
     function getAllLinkTagsById($record_id)
     {
         global $sids, $PMF_LANG;
-        $taglisting = '';
+        $taglisting = '-, ';
 
         foreach ($this->getAllTagsById($record_id) as $tagging_id => $tagging_name) {
             $title = PMF_htmlentities($tagging_name, ENT_NOQUOTES, $PMF_LANG['metaCharset']);

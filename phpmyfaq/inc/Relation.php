@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Relation.php,v 1.4 2006-09-18 20:45:19 matteo Exp $
+* $Id: Relation.php,v 1.5 2006-09-27 20:17:42 matteo Exp $
 *
 * The Relation class for dynamic related record linking
 *
@@ -199,7 +199,7 @@ class PMF_Relation
         }
         $relevantslisting .= ($i > 0 ? '</ul>' : '');
 
-        return $relevantslisting;
+        return ('' == $relevantslisting ? '-' : $relevantslisting);
     }
 
 
