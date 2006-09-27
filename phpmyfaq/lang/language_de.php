@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.33 2006-09-27 18:23:37 thorstenr Exp $
+ * $Id: language_de.php,v 1.34 2006-09-27 18:46:30 thorstenr Exp $
  *
  * German language file
  *
@@ -159,16 +159,16 @@ $PMF_LANG["help_search"] = "<p><strong>Artikel finden:</strong><br />Mit der Ein
 // Menü
 $PMF_LANG["ad"] = "ADMIN-BEREICH";
 $PMF_LANG["ad_menu_user_administration"] = "Benutzerverwaltung";
-$PMF_LANG["ad_menu_entry_aprove"] = "Beiträge genehmigen";
-$PMF_LANG["ad_menu_entry_edit"] = "Beiträge editieren";
+$PMF_LANG["ad_menu_entry_aprove"] = "FAQs freischalten";
+$PMF_LANG["ad_menu_entry_edit"] = "FAQs bearbeiten";
 $PMF_LANG["ad_menu_categ_edit"] = "Kategorieverwaltung";
 $PMF_LANG["ad_menu_news_add"] = "News hinzufügen";
-$PMF_LANG["ad_menu_news_edit"] = "News editieren";
+$PMF_LANG["ad_menu_news_edit"] = "News";
 $PMF_LANG["ad_menu_open"] = "Offene Fragen";
 $PMF_LANG["ad_menu_stat"] = "Bewertungsstatistik";
 $PMF_LANG["ad_menu_cookie"] = "Cookies";
-$PMF_LANG["ad_menu_session"] = "Sessions ansehen";
-$PMF_LANG["ad_menu_adminlog"] = "Adminlog ansehen";
+$PMF_LANG["ad_menu_session"] = "Benutzer-Sessions";
+$PMF_LANG["ad_menu_adminlog"] = "Admin-Sessions";
 $PMF_LANG["ad_menu_passwd"] = "Passwort ändern";
 $PMF_LANG["ad_menu_logout"] = "Logout";
 $PMF_LANG["ad_menu_startpage"] = "Startseite";
@@ -199,7 +199,7 @@ $PMF_LANG["ad_gen_or"] = "oder";
 $PMF_LANG["ad_user"] = "Benutzerverwaltung";
 $PMF_LANG["ad_user_username"] = "Benutzername";
 $PMF_LANG["ad_user_rights"] = "Rechte";
-$PMF_LANG["ad_user_edit"] = "editieren";
+$PMF_LANG["ad_user_edit"] = "bearbeiten";
 $PMF_LANG["ad_user_delete"] = "löschen";
 $PMF_LANG["ad_user_add"] = "Benutzer hinzufügen";
 $PMF_LANG["ad_user_profou"] = "Profil des Benutzers";
@@ -219,7 +219,7 @@ $PMF_LANG["ad_entry_id"] = "ID";
 $PMF_LANG["ad_entry_topic"] = "Thema";
 $PMF_LANG["ad_entry_action"] = "Aktion";
 $PMF_LANG["ad_entry_edit_1"] = "Beitrag";
-$PMF_LANG["ad_entry_edit_2"] = "editieren";
+$PMF_LANG["ad_entry_edit_2"] = "bearbeiten";
 $PMF_LANG["ad_entry_theme"] = "Frage:";
 $PMF_LANG["ad_entry_content"] = "Antwort:";
 $PMF_LANG["ad_entry_keywords"] = "Keywords:";
@@ -261,7 +261,7 @@ $PMF_LANG["ad_news_id"] = "#";
 $PMF_LANG["ad_news_headline"] = "Überschrift";
 $PMF_LANG["ad_news_date"] = "Datum";
 $PMF_LANG["ad_news_action"] = "Aktion";
-$PMF_LANG["ad_news_update"] = "editieren";
+$PMF_LANG["ad_news_update"] = "bearbeiten";
 $PMF_LANG["ad_news_delete"] = "löschen";
 $PMF_LANG["ad_news_nodata"] = "Keine Daten in der Datenbank gefunden.";
 $PMF_LANG["ad_news_updatesuc"] = "Die News wurde <strong>erfolgreich</strong> geupdated.";
@@ -269,7 +269,7 @@ $PMF_LANG["ad_news_del"] = "Sicher, dass  die News <strong>gelöscht</strong> wer
 $PMF_LANG["ad_news_yesdelete"] = "Ja, löschen!";
 $PMF_LANG["ad_news_nodelete"] = "Nein!";
 $PMF_LANG["ad_news_delsuc"] = "Die News wurde <strong>erfolgreich gelöscht</strong>.";
-$PMF_LANG["ad_news_updatenews"] = "News editieren";
+$PMF_LANG["ad_news_updatenews"] = "News bearbeiten";
 
 // Kategorieverwaltung
 $PMF_LANG["ad_categ_new"] = "Neue Kategorie hinzufügen";
@@ -327,7 +327,7 @@ $PMF_LANG["ad_adus_name"] = "Name:";
 $PMF_LANG["ad_adus_password"] = "Passwort:";
 $PMF_LANG["ad_adus_add"] = "Hinzufügen";
 $PMF_LANG["ad_adus_suc"] = "Der Benutzer wurde <strong>erfolgreich</strong> hinzugefügt.";
-$PMF_LANG["ad_adus_edit"] = "Profil editieren";
+$PMF_LANG["ad_adus_edit"] = "Profil bearbeiten";
 $PMF_LANG["ad_adus_dberr"] = "<strong>Datenbankfehler!</strong>";
 $PMF_LANG["ad_adus_exerr"] = "Der Benutzername <strong>existiert</strong> bereits.";
 
@@ -376,27 +376,27 @@ $PMF_LANG["ad_auth_fail"] = "Keine solche Loginkombination gefunden.";
 $PMF_LANG["ad_auth_sess"] = "Diese Session-ID ist ungültig/ausgelaufen.";
 
 // Added v0.8 - 24.05.2001 - Bastian - Admin
-$PMF_LANG["ad_config_edit"] = "Konfiguration editieren";
+$PMF_LANG["ad_config_edit"] = "Konfiguration bearbeiten";
 $PMF_LANG["ad_config_save"] = "Konfiguration speichern";
 $PMF_LANG["ad_config_reset"] = "Zurücksetzen";
 $PMF_LANG["ad_config_saved"] = "Die Konfiguration wurde erfolgreich gespeichert.";
-$PMF_LANG["ad_menu_editconfig"] = "Konfiguration ändern";
+$PMF_LANG["ad_menu_editconfig"] = "FAQ-Konfiguration";
 $PMF_LANG["ad_att_none"] = "Keine Attachments vorhanden";
 $PMF_LANG["ad_att_att"] = "Anhang:";
 $PMF_LANG["ad_att_add"] = "Attachment anhängen";
 $PMF_LANG["ad_entryins_suc"] = "Eintrag erfolgreich erstellt.";
 $PMF_LANG["ad_entryins_fail"] = "Leider ist ein Fehler aufgetreten.";
 $PMF_LANG["ad_att_del"] = "Löschen";
-$PMF_LANG["ad_att_nope"] = "Attachments sind erst beim Editieren möglich.";
+$PMF_LANG["ad_att_nope"] = "Attachments sind erst beim bearbeiten möglich.";
 $PMF_LANG["ad_att_delsuc"] = "Das Attachment wurde erfolgreich gelöscht.";
 $PMF_LANG["ad_att_delfail"] = "Leider ist ein Fehler beim Löschen des Attachments aufgetreten.";
-$PMF_LANG["ad_entry_add"] = "Beitrag erstellen";
+$PMF_LANG["ad_entry_add"] = "FAQ erstellen";
 
 // Added v0.8 - 25.05.2001 - Bastian - Admin
 $PMF_LANG["ad_menu_backup"] = "Backup";
 $PMF_LANG["ad_logout"] = "Session wurde erfolgreich beendet.";
 $PMF_LANG["ad_news_add"] = "News hinzufügen";
-$PMF_LANG["ad_news_edit"] = "News editieren";
+$PMF_LANG["ad_news_edit"] = "News bearbeiten";
 $PMF_LANG["ad_cookie"] = "Cookies";
 $PMF_LANG["ad_sess_head"] = "Sessions ansehen";
 
@@ -428,8 +428,8 @@ $PMF_LANG["ad_csv_rest"] = "Wiederherstellung";
 
 
 // Added v1.1 - 06.01.2002 - Bastian
-$PMF_LANG["ad_menu_categ_edit"] = "Kategorieverwaltung"; // Bastian, 2002-01-06
-$PMF_LANG["ad_menu_stat"] = "Bewertungsstatistik"; // Bastian, 2002-01-05
+$PMF_LANG["ad_menu_categ_edit"] = "Kategorien"; // Bastian, 2002-01-06
+$PMF_LANG["ad_menu_stat"] = "Bewertungen"; // Bastian, 2002-01-05
 $PMF_LANG["ad_kateg_add"] = "Hauptkategorie hinzufügen";
 $PMF_LANG["ad_kateg_rename"] = "umbennen";
 $PMF_LANG["ad_adminlog_date"] = "Datum";
@@ -452,7 +452,7 @@ $PMF_LANG["no_cats"] = "Keine Kategorien gefunden!";
 // Added v1.1 - 17.01.2002 - Bastian
 $PMF_LANG["ad_log_lger"] = "Es ist eine ungültige Loginkombination versucht worden.";
 $PMF_LANG["ad_log_sess"] = "Es ist eine Session ausgelaufen.";
-$PMF_LANG["ad_log_edit"] = "Es ist das \"Benutzer editieren\"-Formular für den folgenden Benutzer aufgerufen worden: ";
+$PMF_LANG["ad_log_edit"] = "Es ist das \"Benutzer bearbeiten\"-Formular für den folgenden Benutzer aufgerufen worden: ";
 $PMF_LANG["ad_log_crea"] = "Es ist das \"neuer Beitrag\" Formular aufgerufen worden.";
 $PMF_LANG["ad_log_crsa"] = "Es ist ein neuer Beitrag erstellt worden.";
 $PMF_LANG["ad_log_ussa"] = "Die Daten des folgenden Users sind geupdated worden: ";
@@ -509,22 +509,22 @@ $PMF_LANG["ad_export_pdf"] = "PDF-Export aller Artikel";
 $PMF_LANG["ad_export_generate"] = "RSS-Feed generieren";
 
 $PMF_LANG["rightsLanguage"]['adduser'] = "Benutzer hinzufügen";
-$PMF_LANG["rightsLanguage"]['edituser'] = "Benutzer editieren";
+$PMF_LANG["rightsLanguage"]['edituser'] = "Benutzer bearbeiten";
 $PMF_LANG["rightsLanguage"]['deluser'] = "Benutzer löschen";
 $PMF_LANG["rightsLanguage"]['addbt'] = "Beitrag hinzufügen";
-$PMF_LANG["rightsLanguage"]['editbt'] = "Beitrag editieren";
+$PMF_LANG["rightsLanguage"]['editbt'] = "Beitrag bearbeiten";
 $PMF_LANG["rightsLanguage"]['delbt'] = "Beitrag löschen";
 $PMF_LANG["rightsLanguage"]['viewlog'] = "Log ansehen";
 $PMF_LANG["rightsLanguage"]['adminlog'] = "Adminlog einsehen";
 $PMF_LANG["rightsLanguage"]['delcomment'] = "Kommentar löschen";
 $PMF_LANG["rightsLanguage"]['addnews'] = "News hinzufügen";
-$PMF_LANG["rightsLanguage"]['editnews'] = "News editieren";
+$PMF_LANG["rightsLanguage"]['editnews'] = "News bearbeiten";
 $PMF_LANG["rightsLanguage"]['delnews'] = "News löschen";
 $PMF_LANG["rightsLanguage"]['addcateg'] = "Kategorie hinzufügen";
 $PMF_LANG["rightsLanguage"]['editcateg'] = "Kategorie editeren";
 $PMF_LANG["rightsLanguage"]['delcateg'] = "Kategorie löschen";
 $PMF_LANG["rightsLanguage"]['passwd'] = "Passwort ändern";
-$PMF_LANG["rightsLanguage"]['editconfig'] = "Konfiguration editieren";
+$PMF_LANG["rightsLanguage"]['editconfig'] = "Konfiguration bearbeiten";
 $PMF_LANG["rightsLanguage"]['addatt'] = "Attachments anfügen";
 $PMF_LANG["rightsLanguage"]['delatt'] = "Attachment löschen";
 $PMF_LANG["rightsLanguage"]['backup'] = "Sicherung erstellen";
