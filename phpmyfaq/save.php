@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: save.php,v 1.30 2006-09-19 21:39:38 matteo Exp $
+* $Id: save.php,v 1.31 2006-09-28 20:14:25 matteo Exp $
 *
 * Saves a user FAQ record and sends an email to the user
 *
@@ -84,7 +84,7 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
     if (function_exists('mb_encode_mimeheader')) {
         $subject = mb_encode_mimeheader($subject);
     }
-    $body = unhtmlentities($PMF_LANG['msgMailCheck'])."\n".unhtmlentities($PMF_CONF['title']).": http://".$_SERVER['HTTP_HOST'].dirname($_SERVER['PHP_SELF']);
+    $body = unhtmlentities($PMF_LANG['msgMailCheck'])."\n".unhtmlentities($PMF_CONF['title']).": ".PMF_Link::getSystemUri('/save.php');
     if (ini_get('safe_mode')) {
         mail($IDN->encode($PMF_CONF["adminmail"]), $subject, $body, implode("\r\n", $additional_header));
     } else {
