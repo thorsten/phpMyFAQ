@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: savequestion.php,v 1.28 2006-09-19 21:39:38 matteo Exp $
+* $Id: savequestion.php,v 1.29 2006-09-28 18:45:15 matteo Exp $
 *
 * @author           Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author           David Saez Padros <david@ols.es>
@@ -44,46 +44,48 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
         $cat = new PMF_Category();
         $categories = $cat->getAllCategories();
 
-        list($user, $host) = explode("@", $usermail);
-        if (checkEmail($usermail)) {
-            if (isset($PMF_CONF['enablevisibility'])) {
-                $visibility = 'N';
-            } else {
-                $visibility = 'Y';
-            }
+        if (isset($PMF_CONF['enablevisibility'])) {
+            $visibility = 'N';
+        } else {
+            $visibility = 'Y';
+        }
 
-            $questionData = array(
-                'ask_username'  => $db->escape_string(strip_tags($_POST['username'])),
-                'ask_usermail'  => $db->escape_string($IDN->encode($_POST['usermail'])),
-                'ask_category'  => intval($_POST['rubrik']),
-                'ask_content'   => $db->escape_string(strip_tags($_POST['content'])),
-                'ask_date'      => date('YmdHis'),
-                'is_visible'    => $visibility);
+        $content = strip_tags($_POST['content']);
+        $questionData = array(
+            'ask_username'  => $db->escape_string(strip_tags($_POST['username'])),
+            'ask_usermail'  => $db->escape_string($IDN->encode($_POST['usermail'])),
+            'ask_category'  => intval($_POST['rubrik']),
+            'ask_content'   => $db->escape_string($content),
+            'ask_date'      => date('YmdHis'),
+            'is_visible'    => $visibility
+            );
+
+        list($user, $host) = explode("@", $questionData['ask_usermail']);
+        if (checkEmail($questionData['ask_usermail'])) {
 
             $faq->addQuestion($questionData);
 
-            $questionMail = "User: ".$username.", mailto:".$usermail."\n"
-                            .$PMF_LANG["msgCategory"].": ".$categories[$selected_category]["name"]."\n\n"
-                            .wordwrap(stripslashes($content), 72);
+            $questionMail = "User: ".$questionData['ask_username'].", mailto:".$questionData['ask_usermail']."\n"
+                            .$PMF_LANG["msgCategory"].": ".$categories[$questionData['ask_category']]["name"]."\n\n"
+                            .wordwrap($content, 72);
 
-            $userId = $tree->getCategoryUser($selected_category);
+            $userId = $tree->getCategoryUser($questionData['ask_category']);
             $oUser = new PMF_User();
             $oUser->addDb($db);
             $oUser->getUserById($userId);
 
             $additional_header = array();
             $additional_header[] = 'MIME-Version: 1.0';
-            $additional_header[] = 'Content-Type: text/plain; charset='. $PMF_LANG['metaCharset'];
+            $additional_header[] = 'Content-Type: text/plain; charset='.$PMF_LANG['metaCharset'];
             if (strtolower($PMF_LANG['metaCharset']) == 'utf-8') {
                 $additional_header[] = 'Content-Transfer-Encoding: 8bit';
             }
-            $additional_header[] = 'From: "'.$username.'" <'.$usermail.'>';
+            $additional_header[] = 'From: "'.$questionData['ask_username'].'" <'.$questionData['ask_usermail'].'>';
             // Let the category owner get a copy of the message
             if ($IDN->encode($PMF_CONF["adminmail"]) != $oUser->getUserData('email')) {
                 $additional_header[] = "Cc: ".$oUser->getUserData('email')."\n";
             }
             $body = $questionMail;
-            $body = str_replace(array("\r\n", "\r", "\n"), "\n", $body);
             $body = str_replace(array("\r\n", "\r", "\n"), "\n", $body);
             if (strstr(PHP_OS, 'WIN') !== NULL) {
                 // if windows, cr must "\r\n". if other must "\n".
@@ -92,7 +94,7 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
             if (ini_get('safe_mode')) {
                 mail($IDN->encode($PMF_CONF['adminmail']), $PMF_CONF['title'], $body, implode("\r\n", $additional_header));
             } else {
-                mail($IDN->encode($PMF_CONF['adminmail']), $PMF_CONF['title'], $body, implode("\r\n", $additional_header), '-f'.$usermail);
+                mail($IDN->encode($PMF_CONF['adminmail']), $PMF_CONF['title'], $body, implode("\r\n", $additional_header), '-f'.$questionData['ask_usermail']);
             }
 
             $tpl->processTemplate ("writeContent", array(
@@ -111,11 +113,11 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
             'msgQuestion' => $PMF_LANG["msgQuestion"],
             'printResult' => $printResult,
             'msgAskYourQuestion' => $PMF_LANG['msgAskYourQuestion'],
-            'msgContent' => $content,
-            'postUsername' => urlencode($username),
-            'postUsermail' => urlencode($usermail),
-            'postRubrik' => urlencode($selected_category),
-            'postContent' => urlencode($content),
+            'msgContent' => $questionData['ask_content'],
+            'postUsername' => urlencode($questionData['ask_username']),
+            'postUsermail' => urlencode($questionData['ask_usermail']),
+            'postRubrik' => urlencode($questionData['ask_category']),
+            'postContent' => urlencode($questionData['ask_content']),
             'writeSendAdress' => $_SERVER['PHP_SELF'].'?'.$sids.'action=savequestion',
             ));
     }
