@@ -1,5 +1,5 @@
 /**
-* $Id: functions.js,v 1.3 2006-09-04 16:59:12 matteo Exp $
+* $Id: functions.js,v 1.4 2006-10-01 13:44:59 matteo Exp $
 *
 * Some JavaScript functions used in the admin backend
 *
@@ -36,29 +36,6 @@ function checkAll(checkBox)
             f.elements[i].checked = v;
             }
         }
-}
-
-function getxmlhttp()
-{
-    var xmlhttp = false;
-
-    // Try to get XMLHTTP in Microsoft environment
-    try {
-        xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
-    } catch (e) {
-        try {
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        } catch (e) {
-            xmlhttp = false;
-        }
-    }
-
-    // Try to get standard XML HTTP
-    if (!xmlhttp && typeof XMLHttpRequest!='undefined') {
-        xmlhttp = new XMLHttpRequest();
-    }
-
-    return xmlhttp;
 }
 
 function addEngine(uri, name, ext, cat)
