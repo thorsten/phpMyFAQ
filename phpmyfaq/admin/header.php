@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: header.php,v 1.32 2006-10-01 13:09:18 matteo Exp $
+* $Id: header.php,v 1.33 2006-10-01 15:52:50 matteo Exp $
 *
 * header of the admin area
 *
@@ -157,6 +157,8 @@ if (isset($_action)) {
             break;
         case 'statistics':
         case 'viewsessions':
+        case 'sessionbrowse':
+        case 'sessionsuche':
         case 'adminlog':
             addMenuEntry('viewlog',                              'statistics',       'ad_menu_stat');
             addMenuEntry('viewlog',                              'viewsessions',     'ad_menu_session');
