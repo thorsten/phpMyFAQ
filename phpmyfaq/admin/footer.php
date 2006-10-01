@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: footer.php,v 1.15 2006-09-24 14:48:22 matteo Exp $
+* $Id: footer.php,v 1.16 2006-10-01 14:52:38 matteo Exp $
 *
 * Footer of the admin area
 *
@@ -44,6 +44,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
         mode : "exact",
         elements : "content",
         editor_deselector : "mceNoEditor",
+        document_base_url : "<?php print(PMF_Link::getSystemRelativeUri('admin/index.php')); ?>",
         theme : "advanced",
         plugins : "table,save,advhr,advimage,advlink,emotions,iespell,insertdatetime,preview,zoom,flash,searchreplace,print,paste,directionality,fullscreen,noneditable,contextmenu",
         theme_advanced_buttons1_add_before : "save,newdocument,separator",
