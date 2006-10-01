@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Tags.php,v 1.18 2006-09-27 20:17:42 matteo Exp $
+* $Id: Tags.php,v 1.19 2006-10-01 13:07:38 matteo Exp $
 *
 * The main Tags class
 *
@@ -179,23 +179,25 @@ class PMF_Tags
             return false;
         }
         $current_tags = $this->getAllTags();
+        
+        // Delete all tag references for the faq record
+        if (count($tags) > 0) {
+            $query = sprintf("
+                DELETE FROM
+                    %sfaqdata_tags
+                WHERE
+                    record_id = %d",
+                SQLPREFIX,
+                $record_id
+                );
+            $this->db->query($query);
+        }
 
+        // Store tags and references for the faq record
         foreach ($tags as $tagging_id => $tagging_name) {
             if (!in_array($tagging_name, $current_tags)) {
-
+                // Create the new tag
                 $new_tagging_id = $this->db->nextID(SQLPREFIX.'faqtags', 'tagging_id');
-
-                $query = sprintf("
-                    INSERT INTO
-                        %sfaqdata_tags
-                    (record_id, tagging_id)
-                        VALUES
-                    (%d, %d)",
-                    SQLPREFIX,
-                    $record_id,
-                    $new_tagging_id);
-                $this->db->query($query);
-
                 $query = sprintf("
                     INSERT INTO
                         %sfaqtags
@@ -204,12 +206,10 @@ class PMF_Tags
                     (%d, '%s')",
                     SQLPREFIX,
                     $new_tagging_id,
-                    $tagging_name);
+                    $tagging_name
+                    );
                 $this->db->query($query);
-            } else {
-
-                // TODO: Avoid to save an entry if already there
-                // TODO: Manage the deletion of tags within a faq
+                // Add the tag reference for the faq record
                 $query = sprintf("
                     INSERT INTO
                         %sfaqdata_tags
@@ -218,7 +218,21 @@ class PMF_Tags
                     (%d, %d)",
                     SQLPREFIX,
                     $record_id,
-                    array_search($tagging_name, $current_tags));
+                    $new_tagging_id
+                    );
+                $this->db->query($query);
+            } else {
+                // Add the tag reference for the faq record
+                $query = sprintf("
+                    INSERT INTO
+                        %sfaqdata_tags
+                    (record_id, tagging_id)
+                        VALUES
+                    (%d, %d)",
+                    SQLPREFIX,
+                    $record_id,
+                    array_search($tagging_name, $current_tags)
+                    );
                 @$this->db->query($query);
             }
         }
