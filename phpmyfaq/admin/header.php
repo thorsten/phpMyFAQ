@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: header.php,v 1.31 2006-09-26 18:17:47 thorstenr Exp $
+* $Id: header.php,v 1.32 2006-10-01 13:09:18 matteo Exp $
 *
 * header of the admin area
 *
@@ -44,7 +44,24 @@ header("Vary: Negotiate,Accept");
     <script type="text/javascript" src="../inc/js/functions.js"></script>
     <script type="text/javascript" src="../inc/js/prototype.js"></script>
     <script type="text/javascript" src="editor/tiny_mce.js"></script>
+<?php
+    // Add the script.aculo.us libraries only if needed:
+    // - Edit faq tags;
+    // to minimize possible IE memory leaks
+
+    // @todo: rewrite the AJAX Suggestion and Autocomplete Behaviours using ONLY the Prototype library
+if (isset($_action)) {
+    switch ($_action) {
+        case 'takequestion':
+        case 'editentry':
+        case 'editpreview':
+?>
     <script type="text/javascript" src="../inc/js/scriptaculous/scriptaculous.js"></script>
+<?php
+        break;
+    }
+}
+?>
 </head>
 <body id="body" dir="<?php print $PMF_LANG["dir"]; ?>" onload="javascript:focusOnUsernameField();"><a name="top"></a>
 
