@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.57 2006-09-27 19:21:53 matteo Exp $
+* $Id: language_en.php,v 1.58 2006-10-02 04:44:15 thorstenr Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -158,16 +158,16 @@ $PMF_LANG["help_search"] = "<p><strong>Search for records:</strong><br />With an
 
 // Menü
 $PMF_LANG["ad"] = "ADMIN SECTION";
-$PMF_LANG["ad_menu_user_administration"] = "User Administration";
-$PMF_LANG["ad_menu_entry_aprove"] = "Approve Records";
-$PMF_LANG["ad_menu_entry_edit"] = "Edit Records";
+$PMF_LANG["ad_menu_user_administration"] = "Users";
+$PMF_LANG["ad_menu_entry_aprove"] = "Approve FAQs";
+$PMF_LANG["ad_menu_entry_edit"] = "Edit FAQs";
 $PMF_LANG["ad_menu_categ_add"] = "Add Category";
 $PMF_LANG["ad_menu_categ_edit"] = "Edit Category";
 $PMF_LANG["ad_menu_news_add"] = "Add News";
 $PMF_LANG["ad_menu_news_edit"] = "Edit News";
-$PMF_LANG["ad_menu_open"] = "Edit open questions";
+$PMF_LANG["ad_menu_open"] = "Open questions";
 $PMF_LANG["ad_menu_stat"] = "Statistics";
-$PMF_LANG["ad_menu_cookie"] = "Cookies";
+$PMF_LANG["ad_menu_cookie"] = "Set cookies";
 $PMF_LANG["ad_menu_session"] = "View Sessions";
 $PMF_LANG["ad_menu_adminlog"] = "View Adminlog";
 $PMF_LANG["ad_menu_passwd"] = "Change Password";
@@ -220,8 +220,8 @@ $PMF_LANG["ad_entry_topic"] = "Topic";
 $PMF_LANG["ad_entry_action"] = "Action";
 $PMF_LANG["ad_entry_edit_1"] = "Edit Record";
 $PMF_LANG["ad_entry_edit_2"] = "";
-$PMF_LANG["ad_entry_theme"] = "Theme:";
-$PMF_LANG["ad_entry_content"] = "Content:";
+$PMF_LANG["ad_entry_theme"] = "Question:";
+$PMF_LANG["ad_entry_content"] = "Answer:";
 $PMF_LANG["ad_entry_keywords"] = "Keywords:";
 $PMF_LANG["ad_entry_author"] = "Author:";
 $PMF_LANG["ad_entry_category"] = "Category:";
@@ -389,7 +389,7 @@ $PMF_LANG["ad_att_del"] = "Delete";
 $PMF_LANG["ad_att_nope"] = "Attachments can be added only while editing.";
 $PMF_LANG["ad_att_delsuc"] = "The attachment has been deleted successfully.";
 $PMF_LANG["ad_att_delfail"] = "An error occurred while deleting the attachment.";
-$PMF_LANG["ad_entry_add"] = "Create Entry";
+$PMF_LANG["ad_entry_add"] = "Add FAQ";
 
 // Added v0.85 - 08.06.2001 - Bastian - Admin
 $PMF_LANG["ad_csv_make"] = "> A backup is a complete image of the database content. The format of the backup is a SQL transaction file, which can be imported using tools like phpMyAdmin or the commandline sql client. A backup should be performed at least once a month.";
@@ -427,7 +427,7 @@ $PMF_LANG["ad_cookie"] = "Cookies";
 $PMF_LANG["ad_sess_head"] = "View sessions";
 
 // Added v1.1 - 06.01.2002 - Bastian
-$PMF_LANG["ad_menu_categ_edit"] = "Category Administration";
+$PMF_LANG["ad_menu_categ_edit"] = "Categories";
 $PMF_LANG["ad_menu_stat"] = "Rating Statistics";
 $PMF_LANG["ad_kateg_add"] = "add main Category";
 $PMF_LANG["ad_kateg_rename"] = "Rename";
@@ -680,7 +680,7 @@ $PMF_LANG['ad_linkcheck_openurl_ambiguous'] = 'Ambiguous HTTP status <strong>%s<
 $PMF_LANG['ad_linkcheck_openurl_not_allowed'] = 'The <em>HEAD</em> method is not supported by the host <strong>%s</strong>, allowed methods: <strong>%s</strong>.';
 $PMF_LANG['ad_linkcheck_openurl_not_found'] = 'This resource cannot be found at host <strong>%s</strong>.';
 $PMF_LANG['ad_linkcheck_protocol_unsupported'] = '%s protocol unsupported by Automatic link verification.';
-$PMF_LANG['ad_menu_linkconfig'] = 'Configure URL Verifier';
+$PMF_LANG['ad_menu_linkconfig'] = 'URL Verifier';
 $PMF_LANG['ad_linkcheck_config_title'] = 'URL Verifier Configuration';
 $PMF_LANG['ad_linkcheck_config_disabled'] = 'URL Verifier feature disabled';
 $PMF_LANG['ad_linkcheck_config_warnlist'] = 'URLs to warn';
@@ -714,7 +714,7 @@ $PMF_LANG['ad_gen_cancel'] = "Cancel";
 $PMF_LANG["rightsLanguage"]['addglossary'] = "add glossary item";
 $PMF_LANG["rightsLanguage"]['editglossary'] = "edit glossary item";
 $PMF_LANG["rightsLanguage"]['delglossary'] = "delete glossary item";
-$PMF_LANG["ad_menu_group_administration"] = "Group Administration";
+$PMF_LANG["ad_menu_group_administration"] = "Groups";
 $PMF_LANG['ad_user_loggedin'] = 'You\'re logged in as ';
 
 $PMF_LANG['ad_group_details'] = "Group Details";
