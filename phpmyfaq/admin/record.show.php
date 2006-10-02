@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.show.php,v 1.35 2006-09-27 18:51:28 thorstenr Exp $
+* $Id: record.show.php,v 1.36 2006-10-02 04:54:41 thorstenr Exp $
 *
 * Shows the list of records ordered by categories
 *
@@ -134,11 +134,13 @@ if ($permission["editbt"] || $permission["delbt"]) {
             $active = 'yes';
         }
 
-        $query = "SELECT ".SQLPREFIX."faqcategoryrelations.category_id AS category_id, count(".SQLPREFIX."faqcategoryrelations.category_id) AS number"
+        $query = "SELECT ".SQLPREFIX."faqcategoryrelations.category_id AS category_id, count(".SQLPREFIX."faqcategoryrelations.record_id) AS number"
             ." FROM ".SQLPREFIX."faqcategoryrelations, ".SQLPREFIX."faqdata"
             ." WHERE ".SQLPREFIX."faqcategoryrelations.record_id = ".SQLPREFIX."faqdata.id"
+            ." AND ".SQLPREFIX."faqcategoryrelations.record_lang = ".SQLPREFIX."faqdata.lang"
             ." AND ".SQLPREFIX."faqdata.active = '".$active."'"
             ." GROUP BY ".SQLPREFIX."faqcategoryrelations.category_id";
+        
         $result = $db->query($query);
         if ($db->num_rows($result) > 0) {
             while ($row = $db->fetch_object($result)) {
