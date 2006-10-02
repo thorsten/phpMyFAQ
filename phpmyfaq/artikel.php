@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.57 2006-09-26 19:51:36 thorstenr Exp $
+* $Id: artikel.php,v 1.58 2006-10-02 18:31:19 matteo Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -207,7 +207,7 @@ if (($faq->faqRecord['active'] != 'yes') || ('n' == $faq->faqRecord['comment']) 
 require_once('inc/Tags.php');
 $tagging = new PMF_Tags($db, $LANGCODE);
 
-$diggItUrl = sprintf('http://%s?cat=%s&id=%d&lang=%s', $_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'], $currentCategory, $id, $lang);
+$diggItUrl = sprintf('%s?cat=%s&id=%d&lang=%s', PMF_Link::getSystemUri(), $currentCategory, $id, $lang);
 
 //$visitsData = $faq->getVisitsData($id, $lang);
 //$faqPopularity = $visitsData['visits'];
@@ -262,7 +262,7 @@ $tpl->processTemplate ("writeContent", array(
     'writeDiggMsg'                => sprintf('<a target="_blank" href="http://digg.com/submit?phase=2&amp;url=%s">Digg It!</a>', urlencode($diggItUrl)),
     'writePrintMsg'               => sprintf('<a href="#" onclick="javascript:window.print();">%s</a>', $PMF_LANG['msgPrintArticle']),
     'writePDF'                    => sprintf('<a target="_blank" href="pdf.php?cat=%s&amp;id=%d&amp;lang=%s">'.$PMF_LANG['msgPDF'].'</a>', $currentCategory, $id, $lang),
-    'writeSend2FriendMsg'         => sprintf('<a href="?%saction=send2friend&amp;cat=%d&amp;id=%d&amp;artlang=%s">%s</a>', $sids, $currentCategory, $id, $lang, $PMF_LANG['msgSend2Friend']),
+    'writeSend2FriendMsg'         => sprintf('<a href="index.php?%saction=send2friend&amp;cat=%d&amp;id=%d&amp;artlang=%s">%s</a>', $sids, $currentCategory, $id, $lang, $PMF_LANG['msgSend2Friend']),
     'writePrintMsgTag'            => $PMF_LANG['msgPrintArticle'],
     'writePDFTag'                 => $PMF_LANG['msgPDF'],
     'writeSend2FriendMsgTag'      => $PMF_LANG['msgSend2Friend'],
