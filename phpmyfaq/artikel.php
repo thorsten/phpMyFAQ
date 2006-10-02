@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.58 2006-10-02 18:31:19 matteo Exp $
+* $Id: artikel.php,v 1.59 2006-10-02 20:19:01 matteo Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -252,7 +252,7 @@ $tpl->processTemplate ("writeContent", array(
     'writeTagHeader'              => $PMF_LANG['msg_tags'] . ': ',
     'writeArticleTags'            => $tagging->getAllLinkTagsById($id),
     'writeRelatedArticlesHeader'  => $PMF_LANG['msg_related_articles'] . ': ',
-    'writeRelatedArticles'        => $relevant->getAllRelatedById($id, $thema, $faq->faqRecord['keywords']),
+    'writeRelatedArticles'        => $relevant->getAllRelatedById($id, $faq->faqRecord['title'], $faq->faqRecord['keywords']),
     'writePopularity'             => $faqPopularity,
     'writeDateMsg'                => $PMF_LANG['msgLastUpdateArticle'].$faq->faqRecord['date'],
     'writeRevision'               => $PMF_LANG['ad_entry_revision'].': 1.'.$faq->faqRecord['revision_id'],
