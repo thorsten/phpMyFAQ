@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.57 2006-09-26 19:33:35 thorstenr Exp $
+$Id: README.txt,v 1.58 2006-10-07 08:32:03 thorstenr Exp $
 
 phpMyFAQ 2.0.0-alpha
 Codename "Prometheus"
@@ -29,9 +29,7 @@ Changes since 1.6:
 - improved URL rewrite functions (Matteo)
 - improved category management (Thorsten, Rudi Ferrari)
 
-Known issues in phpMyFAQ 2.0.0:
-- some language files need an update
-- using UTF-8 will not work in the PDF files
+Known issues in phpMyFAQ 2.0.0: please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
