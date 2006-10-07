@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.save.php,v 1.41 2006-09-24 14:48:22 matteo Exp $
+* $Id: record.save.php,v 1.42 2006-10-07 15:47:49 matteo Exp $
 *
 * Save or update a FAQ record
 *
@@ -146,7 +146,9 @@ if (    isset($submit[1])
         $db->query("INSERT INTO ".SQLPREFIX."faqcategoryrelations VALUES (".$categories.", '".$_REQUEST["language"]."', ".$_REQUEST["id"].", '".$_REQUEST["language"]."');");
     }
     // Insert the tags
-    $tagging->saveTags($_REQUEST['id'], explode(' ',$tags));
+    if ($tags != '') {
+        $tagging->saveTags($_REQUEST['id'], explode(' ', $tags));
+    }
 }
 
 if (isset($submit[0])) {

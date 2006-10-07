@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.add.php,v 1.46 2006-09-24 14:48:22 matteo Exp $
+* $Id: record.add.php,v 1.47 2006-10-07 15:47:49 matteo Exp $
 *
 * Adds a record in the database
 *
@@ -89,7 +89,9 @@ if ($permission["editbt"]) {
             // Insert the new category relations
             $faq->addCategoryRelation($categories, $nextID, $recordData['lang']);
             // Insert the tags
-            $tagging->saveTags($nextID, explode(' ',$tags));
+            if ($tags != '') {
+                $tagging->saveTags($nextID, explode(' ',$tags));
+            }
 
             print $PMF_LANG["ad_entry_savedsuc"];
 
