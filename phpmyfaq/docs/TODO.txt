@@ -2,41 +2,36 @@ TODO list for future versions of phpMyFAQ:
 
 2.0.0 "Prometheus":
 - add permission management for categories and records
-- reorder records
+- simple reordering of records
 - show/edit/delete comments
 - add "submit translation" link
 - bugfixing for stability or security reasons
 
 2.1.0 "Pandora":
+- add full unicode support
+- add random list of records
 - add archive function
 - add user registration
 - add user profile page
 - add improved revision system
 - add diff of revisions
-- batch insertion script
 - subscription service for new articles ?
 - message to the user, who has posted a question and an answer is availible ?
 - installer and update scripts merged together in a setup routine ?
-- improved category administration ?
 - more accessibility features (WAI and Section 508) ?
 - bugfixing for stability or security reasons
 
-2.2.0 "Paaliaq":
+2.2.0 "Portia":
+- add auto update feature ?
 - possibility to disable multiple languages
 - SOAP interface ?
 - "sticky" records ?
 - PDF2Mail ?
 - users can request a record changing ?
-- more accessibility features (WAI and Section 508) ?
-- bugfixing for stability or security reasons
-
-2.3.0 "Portia":
-- add auto update feature ?
-- Unicode support for PDFs ?
 - directory-like listing of entries ?
 - bugfixing for stability or security reasons
 
-3.0.0 "":
-- PHP 5.1 / PHP 6 only version
+3.0.0 "Poseidon":
+- PHP 5 / PHP 6 only version
 - PDO support
 - modularisation of all features
