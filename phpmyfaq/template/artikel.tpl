@@ -15,7 +15,7 @@
     <!-- /Tags -->
 
     <!-- Related Articles -->
-    <p><strong>{writeRelatedArticlesHeader}</strong>{writeRelatedArticles}</p>
+    <div id="article_related"><strong>{writeRelatedArticlesHeader}</strong>{writeRelatedArticles}</div>
     <!-- / Related Articles -->
 
     <!-- Article Info -->
