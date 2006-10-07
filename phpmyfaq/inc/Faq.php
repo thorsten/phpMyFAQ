@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.58 2006-10-07 14:53:15 matteo Exp $
+* $Id: Faq.php,v 1.59 2006-10-07 15:23:00 matteo Exp $
 *
 * The main FAQ class
 *
@@ -632,7 +632,7 @@ class PMF_Faq
                 'revision_id'   => $row->revision_id,
                 'active'        => $row->active,
                 'keywords'      => $row->keywords,
-                'title'         => $row->thema,
+                'title'         => PMF_htmlentities($row->thema, ENT_NOQUOTES, $this->pmf_lang['metaCharset']),
                 'content'       => $content,
                 'author'        => $row->author,
                 'email'         => $row->email,
@@ -650,14 +650,15 @@ class PMF_Faq
     * Returns the FAQ record title from the ID and language
     *
     * @param    integer     record id
+    * @param    bool        Fix html special chars? (default, true)
     * @return   string
     * @since    2002-08-28
     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
     */
-    function getRecordTitle($id)
+    function getRecordTitle($id, $encode = true)
     {
-        if (isset($this->faqRecord[$id])) {
-            return $this->faqRecord['title'];
+        if (isset($this->faqRecord['id']) && ($this->faqRecord['id'] == $id)) {
+            return ($encode ? PMF_htmlentities($this->faqRecord['title'], ENT_NOQUOTES, $this->pmf_lang['metaCharset']) : $this->faqRecord['title']);
         }
 
         $query = sprintf(
@@ -675,7 +676,11 @@ class PMF_Faq
 
         if ($this->db->num_rows($result) > 0) {
             while ($row = $this->db->fetch_object($result)) {
-                $output = PMF_htmlentities($row->thema, ENT_NOQUOTES, $this->pmf_lang['metaCharset']);
+                if ($encode) {
+                    $output = PMF_htmlentities($row->thema, ENT_NOQUOTES, $this->pmf_lang['metaCharset']);
+                } else {
+                    $output = $row->thema;
+                }
             }
         } else {
             $output = $this->pmf_lang['no_cats'];
@@ -738,7 +743,7 @@ class PMF_Faq
     */
     function getRecordKeywords($id)
     {
-        if (isset($this->faqRecord[$id])) {
+        if (isset($this->faqRecord['id']) && ($this->faqRecord['id'] == $id)) {
             return $this->faqRecord['keywords'];
         }
 

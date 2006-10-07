@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.61 2006-10-07 14:53:15 matteo Exp $
+* $Id: artikel.php,v 1.62 2006-10-07 15:23:00 matteo Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -55,7 +55,7 @@ if (0 == $solution_id) {
 $faq->logViews($faq->faqRecord['id']);
 
 $content = $faq->faqRecord['content'];
-$thema   = $faq->getRecordTitle($id, $lang);
+$thema   = $faq->getRecordTitle($id);
 // Add Glossary entries
 $oG = new PMF_Glossary($db, $LANGCODE);
 $content = $oG->insertItemsIntoContent($content);
@@ -112,7 +112,7 @@ if (isset($oLnk->urlpool['href'])) {
             $_id   = $matches[1];
             preg_match('/artlang=([a-z\-]+)$/ism', $_url, $matches);
             $_lang = $matches[1];
-            $_title = $faq->getRecordTitle($_id, $_lang);
+            $_title = $faq->getRecordTitle($_id, false);
             $_link = substr($_url, 9);
             // Move the link to XHTML
             if (strpos($_url, '&amp;') === false) {
