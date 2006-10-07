@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.56 2006-09-09 14:30:06 thorstenr Exp $
+* $Id: Faq.php,v 1.57 2006-10-07 10:31:22 thorstenr Exp $
 *
 * The main FAQ class
 *
@@ -116,16 +116,16 @@ class PMF_Faq
     //
 
     /**
-    * showAllRecords()
-    *
-    * This function returns all not expired records from one category
-    *
-    * @param    int     category id
-    * @return   string
-    * @access   public
-    * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since    2002-08-27
-    */
+     * showAllRecords()
+     *
+     * This function returns all not expired records from one category
+     *
+     * @param   int     category id
+     * @return  string
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @since   2002-08-27
+     */
     function showAllRecords($category)
     {
         global $sids, $PMF_CONF, $tree;
@@ -373,7 +373,7 @@ class PMF_Faq
         $newId = $this->db->nextID(SQLPREFIX.'faqdata', 'id');
 
         // Add new entry
-        $this->db->query(sprintf(
+        $query = sprintf(
             "INSERT INTO
                 %sfaqdata
              (id, lang, solution_id, revision_id, active, keywords, thema, content, author, email, comment, datum, links_state, links_check_date, date_start, date_end)
@@ -395,8 +395,9 @@ class PMF_Faq
             $data['linkState'],
             $data['linkDateCheck'],
             $data['dateStart'],
-            $data['dateEnd']));
-
+            $data['dateEnd']);
+        
+        $this->db->query($query);
         return $newId;
     }
 
