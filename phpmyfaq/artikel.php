@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.60 2006-10-07 08:24:24 matteo Exp $
+* $Id: artikel.php,v 1.61 2006-10-07 14:53:15 matteo Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -94,7 +94,7 @@ if (isset($_GET['highlight']) && $_GET['highlight'] != "/" && $_GET['highlight']
 }
 
 // Hack: Apply the new SEO schema to those HTML anchors to
-//       other faq records added with PMF 1.x WYSIWYG Editor:
+//       other faq records (Internal Links) added with WYSIWYG Editor:
 //         href="index.php?action=artikel&cat=NNN&id=MMM&artlang=XYZ"
 // Search for href attribute links
 require_once('inc/Linkverifier.php');
@@ -113,8 +113,11 @@ if (isset($oLnk->urlpool['href'])) {
             preg_match('/artlang=([a-z\-]+)$/ism', $_url, $matches);
             $_lang = $matches[1];
             $_title = $faq->getRecordTitle($_id, $_lang);
+            $_link = substr($_url, 9);
             // Move the link to XHTML
-            $_link = str_replace('&', '&amp;', substr($_url, 9));
+            if (strpos($_url, '&amp;') === false) {
+                $_link = str_replace('&', '&amp;', $link);
+            }
             $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().$_link);
             $oLink->itemTitle = $_title;
             $oLink->tooltip = PMF_htmlentities($_title, ENT_NOQUOTES, $PMF_LANG['metaCharset']);

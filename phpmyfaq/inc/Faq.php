@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.57 2006-10-07 10:31:22 thorstenr Exp $
+* $Id: Faq.php,v 1.58 2006-10-07 14:53:15 matteo Exp $
 *
 * The main FAQ class
 *
@@ -557,12 +557,57 @@ class PMF_Faq
     */
     function getAllRecords()
     {
-        $query = sprintf(
-            "SELECT
-                *
-            FROM
-                %sfaqdata
-            ORDER BY id",
+
+        $query = sprintf("
+            SELECT
+                %sfaqdata.id AS id,
+                %sfaqdata.lang AS lang,
+                %sfaqcategoryrelations.category_id AS category_id,
+                %sfaqdata.solution_id AS solution_id,
+                %sfaqdata.revision_id AS revision_id,
+                %sfaqdata.active AS active,
+                %sfaqdata.keywords AS keywords,
+                %sfaqdata.thema AS thema,
+                %sfaqdata.content AS content,
+                %sfaqdata.author AS author,
+                %sfaqdata.email AS email,
+                %sfaqdata.comment AS comment,
+                %sfaqdata.datum AS datum,
+                %sfaqdata.links_state AS links_state,
+                %sfaqdata.links_check_date AS links_check_date,
+                %sfaqdata.date_start AS date_start,
+                %sfaqdata.date_end AS date_end
+            FROM %sfaqdata
+            LEFT JOIN %sfaqcategoryrelations
+                ON %sfaqdata.id = %sfaqcategoryrelations.record_id
+                AND %sfaqdata.lang = %sfaqcategoryrelations.record_lang
+            ORDER BY
+                %sfaqcategoryrelations.category_id,
+                %sfaqdata.id",
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
             SQLPREFIX
             );
         $result = $this->db->query($query);
@@ -581,6 +626,7 @@ class PMF_Faq
 
             $this->faqRecords[] = array(
                 'id'            => $row->id,
+                'category_id'   => $row->category_id,
                 'lang'          => $row->lang,
                 'solution_id'   => $row->solution_id,
                 'revision_id'   => $row->revision_id,

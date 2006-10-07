@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.58 2006-10-02 04:44:15 thorstenr Exp $
+* $Id: language_en.php,v 1.59 2006-10-07 14:53:16 matteo Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -826,3 +826,6 @@ $PMF_LANG['ad_session_expiration'] = 'Time to your session expiration';
 $PMF_LANG['ad_user_active'] = 'active';
 $PMF_LANG['ad_user_blocked'] = 'blocked';
 $PMF_LANG['ad_user_protected'] = 'protected';
+
+// added v2.0.0 - 2006-10-07 by Matteo
+$PMF_LANG['ad_entry_intlink'] = 'Select a FAQ record to insert it as a link...';

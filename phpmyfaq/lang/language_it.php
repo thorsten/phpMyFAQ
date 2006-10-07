@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.33 2006-09-27 19:20:57 matteo Exp $
+* $Id: language_it.php,v 1.34 2006-10-07 14:53:16 matteo Exp $
 *
 * Italian language file
 *
@@ -826,3 +826,6 @@ $PMF_LANG['ad_session_expiration'] = 'La sessione scadr&agrave; entro';
 $PMF_LANG['ad_user_active'] = 'attivo';
 $PMF_LANG['ad_user_blocked'] = 'bloccato';
 $PMF_LANG['ad_user_protected'] = 'protetto';
+
+// added v2.0.0 - 2006-10-07 by Matteo
+$PMF_LANG['ad_entry_intlink'] = 'Seleziona una FAQ per aggiungerla come link...';
