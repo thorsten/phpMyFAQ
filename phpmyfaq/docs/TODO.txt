@@ -1,6 +1,7 @@
 TODO list for future versions of phpMyFAQ:
 
 2.0.0 "Prometheus":
+- (re)add FAQ external links in the WYSIWYG editor
 - add permission management for categories and records
 - simple reordering of records
 - show/edit/delete comments
