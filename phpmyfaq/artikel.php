@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.59 2006-10-02 20:19:01 matteo Exp $
+* $Id: artikel.php,v 1.60 2006-10-07 08:24:24 matteo Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -64,7 +64,7 @@ $thema   = $oG->insertItemsIntoContent($thema);
 // Set the path of the current category
 $categoryName = $tree->getPath($currentCategory, ' &raquo; ', true);
 
-$changeLanguagePath = sprintf('?%saction=artikel&amp;cat=%d&amp;id=%d', $sids, $currentCategory, $id);
+$changeLanguagePath = sprintf('index.php?%saction=artikel&amp;cat=%d&amp;id=%d', $sids, $currentCategory, $id);
 
 $highlight = '';
 if (isset($_GET['highlight']) && $_GET['highlight'] != "/" && $_GET['highlight'] != "<" && $_GET['highlight'] != ">" && strlen($_GET['highlight']) > 1) {
@@ -266,7 +266,7 @@ $tpl->processTemplate ("writeContent", array(
     'writePrintMsgTag'            => $PMF_LANG['msgPrintArticle'],
     'writePDFTag'                 => $PMF_LANG['msgPDF'],
     'writeSend2FriendMsgTag'      => $PMF_LANG['msgSend2Friend'],
-    'saveVotingPATH'              => sprintf('?%saction=savevoting', $sids),
+    'saveVotingPATH'              => sprintf('index.php?%saction=savevoting', $sids),
     'saveVotingID'                => $id,
     'saveVotingIP'                => $_SERVER['REMOTE_ADDR'],
     'msgAverageVote'              => $PMF_LANG['msgAverageVote'],
