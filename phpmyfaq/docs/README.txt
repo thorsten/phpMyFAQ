@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.58 2006-10-07 08:32:03 thorstenr Exp $
+$Id: README.txt,v 1.59 2006-10-08 16:15:38 thorstenr Exp $
 
 phpMyFAQ 2.0.0-alpha
 Codename "Prometheus"
@@ -33,7 +33,7 @@ Known issues in phpMyFAQ 2.0.0: please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.0.0-alpha - 2006-10-
+Version 2.0.0-alpha - 2006-10-08
 - added rewritten and enhanced user management (Lars)
 - added rewritten and enhanced authorization management (Lars)
 - added Ajax support (Thorsten)
