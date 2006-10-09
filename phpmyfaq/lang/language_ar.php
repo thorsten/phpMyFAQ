@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_ar.php,v 1.9 2006-09-30 09:24:00 thorstenr Exp $
+* $Id: language_ar.php,v 1.10 2006-10-09 18:49:47 thorstenr Exp $
 *
 * Arabic language file
 *
@@ -347,7 +347,7 @@ $PMF_LANG["ad_passwd_fail"] = "كلمة المرور القديمة يجب أن 
 
 // Adduser
 $PMF_LANG["ad_adus_adduser"] = "إضافة مستخدم";
-$PMF_LANG["ad_adus_name"] = "الإسم:";
+$PMF_LANG["ad_adus_name"] = "الإسم";
 $PMF_LANG["ad_adus_password"] = "كلمة المرور:";
 $PMF_LANG["ad_adus_add"] = "إضـــــافة";
 $PMF_LANG["ad_adus_suc"] = "تمت عمليةإضافة المستخدم بنجاح.";
@@ -362,8 +362,8 @@ $PMF_LANG["ad_sess_ip"] = "IP";
 $PMF_LANG["ad_sess_time"] = "الوقت";
 $PMF_LANG["ad_sess_pageviews"] = "عدد الزيارات";
 $PMF_LANG["ad_sess_search"] = "بحث";
-$PMF_LANG["ad_sess_sfs"] = "بحث عن جلسات";
-$PMF_LANG["ad_sess_s_ip"] = "IP:";
+$PMF_LANG["ad_sess_sfs"] = "بحث عن الجلسات";
+$PMF_LANG["ad_sess_s_ip"] = "رقم الأي بي :";
 $PMF_LANG["ad_sess_s_minct"] = "min. actions:";
 $PMF_LANG["ad_sess_s_date"] = "التاريخ";
 $PMF_LANG["ad_sess_s_after"] = "بعد";
@@ -371,18 +371,18 @@ $PMF_LANG["ad_sess_s_before"] = "قبل";
 $PMF_LANG["ad_sess_s_search"] = "بحث";
 $PMF_LANG["ad_sess_session"] = "الجلسة";
 $PMF_LANG["ad_sess_r"] = "نتائج البحث عن";
-$PMF_LANG["ad_sess_referer"] = "محوّل:";
-$PMF_LANG["ad_sess_browser"] = "مستعرض:";
+$PMF_LANG["ad_sess_referer"] = "محوّل";
+$PMF_LANG["ad_sess_browser"] = "مستعرض";
 $PMF_LANG["ad_sess_ai_rubrik"] = "التصنيف";
 $PMF_LANG["ad_sess_ai_artikel"] = "السؤال";
-$PMF_LANG["ad_sess_ai_sb"] = "كلمات البحث :";
-$PMF_LANG["ad_sess_ai_sid"] = "رقم الجلسة كود";
+$PMF_LANG["ad_sess_ai_sb"] = "كلمات البحث ";
+$PMF_LANG["ad_sess_ai_sid"] = "رقم كود الجلسة";
 $PMF_LANG["ad_sess_back"] = "عودة";
 
 // Statistik
 $PMF_LANG["ad_rs"] = "إحصائيات التقييم";
 $PMF_LANG["ad_rs_rating_1"] = "تقييم";
-$PMF_LANG["ad_rs_rating_2"] = "عرض المستخدمين :";
+$PMF_LANG["ad_rs_rating_2"] = "عرض المستخدمين ";
 $PMF_LANG["ad_rs_red"] = "الأحمر";
 $PMF_LANG["ad_rs_green"] = "الأخضر";
 $PMF_LANG["ad_rs_altt"] = "يدلّ على أن متوسط التقييم أقل من 2";
@@ -390,12 +390,12 @@ $PMF_LANG["ad_rs_ahtf"] = "يدلّ على أن متوسط التقييم أكث
 $PMF_LANG["ad_rs_no"] = "لا يوجد تقييمات بعد";
 
 // Auth
-$PMF_LANG["ad_auth_insert"] = "فضلاً ادخل المعرّف وكلمة المرور";
-$PMF_LANG["ad_auth_user"] = "المعرّف:";
-$PMF_LANG["ad_auth_passwd"] = "كلمة المرور:";
+$PMF_LANG["ad_auth_insert"] = "فضلاً ادخل إسم المستخدم وكلمة المرور";
+$PMF_LANG["ad_auth_user"] = "إسم المستخدم ";
+$PMF_LANG["ad_auth_passwd"] = "كلمة المرور";
 $PMF_LANG["ad_auth_ok"] = "تنفيــــــذ";
 $PMF_LANG["ad_auth_reset"] = "تراجـع";
-$PMF_LANG["ad_auth_fail"] = "المعرّف أو كلمة المرور أو كليهما غير صحيح";
+$PMF_LANG["ad_auth_fail"] = " إسم المستخدم أو كلمة المرور أو كليهما غير صحيح";
 $PMF_LANG["ad_auth_sess"] = "لقد إنقضى الوقت المسموح به لخمول تصفح الإدارة
 .. فضلاً قم بتسجيل الدخول مرة أخرى";
 
@@ -645,7 +645,7 @@ $PMF_LANG['ad_search_plugin_install'] = 'Firefoxتثبيت ملحقات بحث �
 $PMF_LANG['ad_search_plugin_title'] = 'Firefox إنشاء إضافة بحث للـ';
 $PMF_LANG['ad_search_plugin_ttitle'] = 'Firefox عنوان صندوق بحث ';
 $PMF_LANG['ad_search_plugin_tdesc'] = 'الوصف : ';
-$PMF_LANG['ad_search_plugin_create'] = 'Create Firefox search plugin';
+$PMF_LANG['ad_search_plugin_create'] = 'Firefox إنشاء إضافة بحث للـ';
 $PMF_LANG['ad_search_plugin_success'] = 'The Mozilla Firefox search plugin تم إنشائها بنجاح ';
 
 // added v1.6.0 - 2006-02-02 by Thorsten
@@ -656,207 +656,207 @@ $PMF_LANG['ad_entry_record_administration'] = 'إدارة المدخلة ';
 $PMF_LANG['ad_entry_changelog'] = 'سجل التعديلات';
 $PMF_LANG['ad_entry_revision'] = 'تعديل';
 $PMF_LANG['ad_changerev'] = 'إختار تعديل';
-$PMF_LANG['msgCaptcha'] = "Please enter the characters you're reading in the image";
-$PMF_LANG['msgSelectCategories'] = 'Search in ...';
-$PMF_LANG['msgAllCategories'] = '... all categories';
-$PMF_LANG['ad_you_should_update'] = 'Your phpMyFAQ installation is outdated. You should update to the latest available version.';
-$PMF_LANG['msgAdvancedSearch'] = 'Advanced search';
+$PMF_LANG['msgCaptcha'] = "من فضلك أدخل الحروف التي تراها في هذة الصورة";
+$PMF_LANG['msgSelectCategories'] = 'بحث في ..';
+$PMF_LANG['msgAllCategories'] = '...جميع التصنيفات';
+$PMF_LANG['ad_you_should_update'] = 'نسختك التي تستعملها من البرنامج قديمة . يفضل أن تقوم بتحديثها بأخر إصدار متوفر من البرنامج';
+$PMF_LANG['msgAdvancedSearch'] = 'بحث متقدم';
 
-// added v1.6.1 - 2006-04-25 by Matteo�and�Thorsten
-$PMF_LANG['spamControlCenter'] = 'Spam control center';
-$LANG_CONF["spamEnableSafeEmail"] = array(0 => "checkbox", 1 => "Print user email in a safe way (default: enabled).");
-$LANG_CONF["spamCheckBannedWords"] = array(0 => "checkbox", 1 => "Check public form content against banned words (default: enabled).");
-$LANG_CONF["spamEnableCatpchaCode"] = array(0 => "checkbox", 1 => "Use a catpcha code to allow public form submission (default: enabled).");
-$PMF_LANG['ad_firefoxsearch_plugin_title'] = 'Create Firefox search plugin';
-$PMF_LANG['ad_msiesearch_plugin_install'] = 'Install Microsoft Internet Explorer 7 search plugin';
-$PMF_LANG['ad_msiesearch_plugin_title'] = 'Create Microsoft Internet Explorer 7 search plugin';
-$PMF_LANG['ad_msiesearch_plugin_ttitle'] = 'Title in the MSIE 7 search box:';
-$PMF_LANG['ad_msiesearch_plugin_create'] = 'Create Microsoft Internet Explorer 7 search plugin.';
-$PMF_LANG['ad_msiesearch_plugin_success'] = 'The Microsoft Internet Explorer 7 search plugin was successfully created!';
-$PMF_LANG['ad_session_expiring'] = 'Your session will expire in %d minutes: would you like to go on working?';
+// added v1.6.1 - 2006-04-25 by MatteoandThorsten
+$PMF_LANG['spamControlCenter'] = 'Spamمركز التحكم في ال ';
+$LANG_CONF["spamEnableSafeEmail"] = array(0 => "checkbox", 1 => "اكتب بريد المستخدم بصورة آمنة(الأصل : نشط). ");
+$LANG_CONF["spamCheckBannedWords"] = array(0 => "checkbox", 1 => "فحص محتويات النماذج العامة ضد الكلمات الممنوعة(الأصل : نشط) ");
+$LANG_CONF["spamEnableCatpchaCode"] = array(0 => "checkbox", 1 => "استخدم كود ال catpcha  للسماح بإرسال النماذج العامة .");
+$PMF_LANG['ad_firefoxsearch_plugin_title'] = 'Firefox إنشاء إضافة بحث للـ';
+$PMF_LANG['ad_msiesearch_plugin_install'] = 'إعداد ملحقة بحث لمتصفح انترنت مايكروسوفت 7';
+$PMF_LANG['ad_msiesearch_plugin_title'] = 'إنشاء ملحقة بحث لمتصفح إنترنت اكسبلورر 7';
+$PMF_LANG['ad_msiesearch_plugin_ttitle'] = 'العنوان في ملحقة البحث :';
+$PMF_LANG['ad_msiesearch_plugin_create'] = 'إنشاء ملحقة بحث لمتصفح إنترنت اكسبلورر 7';
+$PMF_LANG['ad_msiesearch_plugin_success'] = ' ملحقة بحث لمتصفح إنترنت اكسبلورر 7 تم إنشائها بنجاح';
+$PMF_LANG['ad_session_expiring'] = ' جلستك الحالية ستنتهي خلال%dدقيقة : حل تحب مدها وتكملة العمل ؟ ';
 
 // added v1.6.2 - 2006-06-13 by Matteo
-$PMF_LANG['ad_stat_management'] = 'Sessions management';
-$PMF_LANG['ad_stat_choose'] = 'Choose the month';
-$PMF_LANG['ad_stat_delete'] = 'Delete selected sessions immediately';
+$PMF_LANG['ad_stat_management'] = 'إدارة الجلسات والزيارات';
+$PMF_LANG['ad_stat_choose'] = 'اختار الشهر';
+$PMF_LANG['ad_stat_delete'] = 'إحذف الجلسات (الزيارات) المختارة فوراً';
 
 // added v2.0.0 - 2005-09-15 by Thorsten and by Minoru TODA
-$PMF_LANG['ad_menu_glossary'] = 'Glossary';
-$PMF_LANG['ad_glossary_add'] = 'Add glossary entry';
-$PMF_LANG['ad_glossary_edit'] = 'Edit glossary entry';
-$PMF_LANG['ad_glossary_item'] = 'Item';
-$PMF_LANG['ad_glossary_definition'] = 'Definition';
-$PMF_LANG['ad_glossary_save'] = 'Save entry';
-$PMF_LANG['ad_glossary_save_success'] = 'Glossary entry successfully saved!';
-$PMF_LANG['ad_glossary_save_error'] = 'The glossary entry could not saved because an error occurred.';
-$PMF_LANG['ad_glossary_update_success'] = 'Glossary entry successfully updated!';
-$PMF_LANG['ad_glossary_update_error'] = 'The glossary entry could not updated because an error occurred.';
-$PMF_LANG['ad_glossary_delete'] = 'Delete entry';
-$PMF_LANG['ad_glossary_delete_success'] = 'Glossary entry successfully deleted!';
-$PMF_LANG['ad_glossary_delete_error'] = 'The glossary entry could not deleted because an error occurred.';
-$PMF_LANG['ad_linkcheck_noReferenceURL'] = 'Automatic link verification disabled (base URL for link verify not set)';
-$PMF_LANG['ad_linkcheck_noAllowUrlOpen'] = 'Automatic link verification disabled (PHP option allow_url_fopen not Enabled)';
-$PMF_LANG['ad_linkcheck_checkResult'] = 'Automatic link verification result';
-$PMF_LANG['ad_linkcheck_checkSuccess'] = 'OK';
-$PMF_LANG['ad_linkcheck_checkFailed'] = 'Failed';
-$PMF_LANG['ad_linkcheck_failReason'] = 'Reason(s) failed:';
-$PMF_LANG['ad_linkcheck_noLinksFound'] = 'No URLs compatible with link verifier feature found.';
-$PMF_LANG['ad_linkcheck_searchbadonly'] = 'Only with bad links';
-$PMF_LANG['ad_linkcheck_infoReason'] = 'Additional Information:';
-$PMF_LANG['ad_linkcheck_openurl_infoprefix'] = 'Found while testing <strong>%s</strong>: ';
-$PMF_LANG['ad_linkcheck_openurl_notready'] = 'LinkVerifier not ready.';
-$PMF_LANG['ad_linkcheck_openurl_maxredirect'] = 'Maximum redirect count <strong>%d</strong> exceeded.';
+$PMF_LANG['ad_menu_glossary'] = 'أرشيف';
+$PMF_LANG['ad_glossary_add'] = 'إضافة أرشيف';
+$PMF_LANG['ad_glossary_edit'] = 'تعديل أرشيف';
+$PMF_LANG['ad_glossary_item'] = ' بند ';
+$PMF_LANG['ad_glossary_definition'] = 'تعريف';
+$PMF_LANG['ad_glossary_save'] = 'حفظ';
+$PMF_LANG['ad_glossary_save_success'] = 'تم الحفظ بنجاح';
+$PMF_LANG['ad_glossary_save_error'] = 'لا يمكن إتمام عمليه الحفظ بسبب حدوث خطأ ما';
+$PMF_LANG['ad_glossary_update_success'] = ' تم التعديل بنجاح';
+$PMF_LANG['ad_glossary_update_error'] = 'لا يمكن التعديل بسبب حدوث خطأ ما';
+$PMF_LANG['ad_glossary_delete'] = 'حذف';
+$PMF_LANG['ad_glossary_delete_success'] = 'تم حذف الأرشيف بنجاح';
+$PMF_LANG['ad_glossary_delete_error'] = 'لا يمكن إتمام عمليه الحذف بسبب حدوث خطا ما';
+$PMF_LANG['ad_linkcheck_noReferenceURL'] = ' الإختبار التلقائي للوصلات معطل(base URL for link verify not set)';
+$PMF_LANG['ad_linkcheck_noAllowUrlOpen'] = 'الإختبار التلقائي للوصلات معطل(PHP option allow_url_fopen not Enabled)';
+$PMF_LANG['ad_linkcheck_checkResult'] = 'نتيجة إختبارات الوصلات التلقائية :';
+$PMF_LANG['ad_linkcheck_checkSuccess'] = 'موافق';
+$PMF_LANG['ad_linkcheck_checkFailed'] = 'فشلت العملية';
+$PMF_LANG['ad_linkcheck_failReason'] = 'أسباب الفشل :';
+$PMF_LANG['ad_linkcheck_noLinksFound'] = 'لا توجد وصلات متوافقة مع خاصية مختبر الوصلات';
+$PMF_LANG['ad_linkcheck_searchbadonly'] = 'فقط مع الوصلات العاطلة';
+$PMF_LANG['ad_linkcheck_infoReason'] = 'معلومات إضافية :';
+$PMF_LANG['ad_linkcheck_openurl_infoprefix'] = ' :<strong>%s</strong> وجد أثناء الإختبار ';
+$PMF_LANG['ad_linkcheck_openurl_notready'] = 'مختبر الوصلات غير جاهز .';
+$PMF_LANG['ad_linkcheck_openurl_maxredirect'] = ' تم تعدى أقصى رقم للتحويلات <strong>%d</strong> exceeded.';
 $PMF_LANG['ad_linkcheck_openurl_urlisblank'] = 'Resolved to blank URL.';
-$PMF_LANG['ad_linkcheck_openurl_tooslow'] = 'Host <strong>%s</strong> is slow or not responding.';
-$PMF_LANG['ad_linkcheck_openurl_nodns'] = 'DNS resolution of host <strong>%s</strong> is slow or is failed due to DNS issues, local or remote.';
-$PMF_LANG['ad_linkcheck_openurl_redirected'] = 'URL was redirected to <strong>%s</strong>.';
+$PMF_LANG['ad_linkcheck_openurl_tooslow'] = 'بطىء أو لا يستجيب <strong>%s</strong>الجهاز ';
+$PMF_LANG['ad_linkcheck_openurl_nodns'] ='   بطىء أو فشل نتيجة مشاكل فى ال DNS <strong>%s</strong> الحصول على عنوان الDNS للجهاز ';
+$PMF_LANG['ad_linkcheck_openurl_redirected'] = '<strong>%s</strong>الوصلة تم تحويلها إلى';
 $PMF_LANG['ad_linkcheck_openurl_ambiguous'] = 'Ambiguous HTTP status <strong>%s</strong> returned.';
 $PMF_LANG['ad_linkcheck_openurl_not_allowed'] = 'The <em>HEAD</em> method is not supported by the host <strong>%s</strong>, allowed methods: <strong>%s</strong>.';
-$PMF_LANG['ad_linkcheck_openurl_not_found'] = 'This resource cannot be found at host <strong>%s</strong>.';
-$PMF_LANG['ad_linkcheck_protocol_unsupported'] = '%s protocol unsupported by Automatic link verification.';
-$PMF_LANG['ad_menu_linkconfig'] = 'Configure URL Verifier';
-$PMF_LANG['ad_linkcheck_config_title'] = 'URL Verifier Configuration';
-$PMF_LANG['ad_linkcheck_config_disabled'] = 'URL Verifier feature disabled';
+$PMF_LANG['ad_linkcheck_openurl_not_found'] = ' <strong>%s</strong>غير موجودة على الجهاز ';
+$PMF_LANG['ad_linkcheck_protocol_unsupported'] = 'البرتوكول غير مدعوم بخاصية إختبار الوصلات تلقائياً %s ';
+$PMF_LANG['ad_menu_linkconfig'] = 'إعداد مختبر الوصلات';
+$PMF_LANG['ad_linkcheck_config_title'] = 'إعدادات مختبر الوصلات';
+$PMF_LANG['ad_linkcheck_config_disabled'] = 'خاصية إختبار الوصلات معطلة';
 $PMF_LANG['ad_linkcheck_config_warnlist'] = 'URLs to warn';
-$PMF_LANG['ad_linkcheck_config_ignorelist'] = 'URLs to ignore';
+$PMF_LANG['ad_linkcheck_config_ignorelist'] = 'تجاهل الوصلات التالية';
 $PMF_LANG['ad_linkcheck_config_warnlist_description'] = 'URLs prefixed with items below will be issued warning regardless of whether it is valid.<br />Use this feature to detect soon-to-be defunct URLs';
-$PMF_LANG['ad_linkcheck_config_ignorelist_description'] = 'Exact URLs listed below will be assumed valid without validation.<br />Use this feature to omit URLs that fail to validate using URL Verifier';
+$PMF_LANG['ad_linkcheck_config_ignorelist_description'] = 'الوصلات التالية سيتم إعتبارها صحيحة بدون إختبارها بواسطة مختبر الوصلات<br />استخدم هذة الخاصية لتمرير الوصلات التى تفشل فى إختبار مختبر الوصلات ';
 $PMF_LANG['ad_linkcheck_config_th_id'] = 'ID#';
-$PMF_LANG['ad_linkcheck_config_th_url'] = 'URL to match';
-$PMF_LANG['ad_linkcheck_config_th_reason'] = 'Match reason';
-$PMF_LANG['ad_linkcheck_config_th_owner'] = 'Entry owner';
-$PMF_LANG['ad_linkcheck_config_th_enabled'] = 'Set to enable entry';
-$PMF_LANG['ad_linkcheck_config_th_locked'] = 'Set to lock ownership';
-$PMF_LANG['ad_linkcheck_config_th_chown'] = 'Set to obtain ownership';
-$PMF_LANG['msgNewQuestionVisible'] = 'The question have to be reviewed first before getting public.';
-$PMF_LANG['msgQuestionsWaiting'] = 'Waiting for publishing by the administrators: ';
-$PMF_LANG['ad_entry_visibility'] = 'Publish?';
+$PMF_LANG['ad_linkcheck_config_th_url'] = 'وصلات للمشابهة';
+$PMF_LANG['ad_linkcheck_config_th_reason'] = 'سبب التشابة';
+$PMF_LANG['ad_linkcheck_config_th_owner'] = 'صاحب المداخلة';
+$PMF_LANG['ad_linkcheck_config_th_enabled'] = 'اختار لتفعيل المداخلة';
+$PMF_LANG['ad_linkcheck_config_th_locked'] = 'اختار لغلق الملكية';
+$PMF_LANG['ad_linkcheck_config_th_chown'] = 'اختار للحصول علي الملكية';
+$PMF_LANG['msgNewQuestionVisible'] = 'السؤال يجب أن تتم مراجعتةأولاً قبل أن ينشر .';
+$PMF_LANG['msgQuestionsWaiting'] = 'انتظار النشر بواسطة المشرفين :';
+$PMF_LANG['ad_entry_visibility'] = 'انشر ؟';
 
 // added v2.0.0 - 2006-01-02 by Lars
-$PMF_LANG['ad_user_error_password'] =  "Please enter a password. ";
-$PMF_LANG['ad_user_error_passwordsDontMatch'] =  "Passwords do not match. ";
-$PMF_LANG['ad_user_error_loginInvalid'] =  "The specified user name is invalid.";
-$PMF_LANG['ad_user_error_noEmail'] =  "Please enter a valid mail adress. ";
-$PMF_LANG['ad_user_error_noRealName'] =  "Please enter your real name. ";
-$PMF_LANG['ad_user_error_delete'] =  "User account could not be deleted. ";
-$PMF_LANG['ad_user_error_noId'] =  "No ID specified. ";
-$PMF_LANG['ad_user_error_protectedAccount'] =  "User account is protected. ";
-$PMF_LANG['ad_user_deleteUser'] = "Delete User";
-$PMF_LANG['ad_user_status'] = "Status:";
-$PMF_LANG['ad_user_lastModified'] = "last modified:";
-$PMF_LANG['ad_gen_cancel'] = "Cancel";
-$PMF_LANG["rightsLanguage"]['addglossary'] = "add glossary item";
-$PMF_LANG["rightsLanguage"]['editglossary'] = "edit glossary item";
-$PMF_LANG["rightsLanguage"]['delglossary'] = "delete glossary item";
-$PMF_LANG["ad_menu_group_administration"] = "Group Administration";
-$PMF_LANG['ad_user_loggedin'] = 'You\'re logged in as ';
+$PMF_LANG['ad_user_error_password'] =  "من فضلك ادخل كلمة السر ";
+$PMF_LANG['ad_user_error_passwordsDontMatch'] =  "كلمات السر غير متماثلة ";
+$PMF_LANG['ad_user_error_loginInvalid'] =  "إسم المستخدم غير صحيح";
+$PMF_LANG['ad_user_error_noEmail'] =  "من فضلك أدخل بريد إلكتروني صحيح ";
+$PMF_LANG['ad_user_error_noRealName'] =  "من فضلك أدخل إسمك الحقيقي ";
+$PMF_LANG['ad_user_error_delete'] =  "حساب المستخدم لا يمكن حذفة ";
+$PMF_LANG['ad_user_error_noId'] =  "IDلم يتم تحديد ال  ";
+$PMF_LANG['ad_user_error_protectedAccount'] =  "حساب المسخدم عليه حماية ";
+$PMF_LANG['ad_user_deleteUser'] = "احذف مستخدم";
+$PMF_LANG['ad_user_status'] = "الحالة :";
+$PMF_LANG['ad_user_lastModified'] = "أخر تعديل :";
+$PMF_LANG['ad_gen_cancel'] = "إلغاء";
+$PMF_LANG["rightsLanguage"]['addglossary'] = "إضافة أرشيف";
+$PMF_LANG["rightsLanguage"]['editglossary'] = "تعديل أرشيف";
+$PMF_LANG["rightsLanguage"]['delglossary'] = "حذف أرشيف";
+$PMF_LANG["ad_menu_group_administration"] = "إدارة المجموعات";
+$PMF_LANG['ad_user_loggedin'] = 'أنت دخلت كـ ';
 
-$PMF_LANG['ad_group_details'] = "Group Details";
-$PMF_LANG['ad_group_add'] = "Add Group";
-$PMF_LANG['ad_group_add_link'] = "Add Group";
-$PMF_LANG['ad_group_name'] = "Name:";
-$PMF_LANG['ad_group_description'] = "Description:";
-$PMF_LANG['ad_group_autoJoin'] = "Auto-join:";
-$PMF_LANG['ad_group_suc'] = "Group <strong>successfully</strong> added.";
-$PMF_LANG['ad_group_error_noName'] = "Please enter a group name. ";
-$PMF_LANG['ad_group_error_delete'] = "Group could not be deleted. ";
-$PMF_LANG['ad_group_deleted'] = "The group was successfully deleted.";
-$PMF_LANG['ad_group_deleteGroup'] = "Delete Group";
-$PMF_LANG['ad_group_deleteQuestion'] = "Are you sure that this group shall be deleted?";
-$PMF_LANG['ad_user_uncheckall'] = "Unselect All";
-$PMF_LANG['ad_group_membership'] = "Group Membership";
-$PMF_LANG['ad_group_members'] = "Members";
+$PMF_LANG['ad_group_details'] = "تفاصيل المجموعة";
+$PMF_LANG['ad_group_add'] = "أضف مجموعة";
+$PMF_LANG['ad_group_add_link'] = "أضف مجموعة";
+$PMF_LANG['ad_group_name'] = "الإسم :";
+$PMF_LANG['ad_group_description'] = "الوصف :";
+$PMF_LANG['ad_group_autoJoin'] = "الإشتراك التلقائي :";
+$PMF_LANG['ad_group_suc'] = "المجموعة أضيفت<strong>بنجاح</strong>";
+$PMF_LANG['ad_group_error_noName'] = "من فضلك أدخل إسم المجموعة  ";
+$PMF_LANG['ad_group_error_delete'] = "المجموعة قد لا يمكن حذفها . ";
+$PMF_LANG['ad_group_deleted'] = "تم حذف المجموعة بنجاح";
+$PMF_LANG['ad_group_deleteGroup'] = "حذف مجموعة";
+$PMF_LANG['ad_group_deleteQuestion'] = "هل انت متأكد من أن هذة المجموعة سيتم حذفها ؟";
+$PMF_LANG['ad_user_uncheckall'] = "إلغاء إختيار الكل";
+$PMF_LANG['ad_group_membership'] = "عضوية المجموعة";
+$PMF_LANG['ad_group_members'] = "الأعضاء";
 $PMF_LANG['ad_group_addMember'] = "+";
 $PMF_LANG['ad_group_removeMember'] = "-";
 
 // added v2.0.0 - 2006-07-20 by Matteo
-$PMF_LANG['ad_export_which_cat'] = 'Limit the FAQ data to be exported (optional)';
-$PMF_LANG['ad_export_cat_downwards'] = 'Downwards?';
-$PMF_LANG['ad_export_type'] = 'Format of the export';
-$PMF_LANG['ad_export_type_choose'] = 'Choose one of the supported formats:';
-$PMF_LANG['ad_export_download_view'] = 'Download or view in-line?';
-$PMF_LANG['ad_export_download'] = 'download';
+$PMF_LANG['ad_export_which_cat'] = 'حدد البيانات التى يمكن تصديرها (اختياري)';
+$PMF_LANG['ad_export_cat_downwards'] = 'الرجوع للنسخة القديمة';
+$PMF_LANG['ad_export_type'] = 'تنسيق الصادرات';
+$PMF_LANG['ad_export_type_choose'] = 'إختار واحد من التنسيقات الأتية :';
+$PMF_LANG['ad_export_download_view'] = 'تحميل أو فتحها مباشرة ؟';
+$PMF_LANG['ad_export_download'] = 'تحميل';
 $PMF_LANG['ad_export_view'] = 'view in-line';
-$PMF_LANG['ad_export_gen_xhtml'] = 'Make XHTML file';
-$PMF_LANG['ad_export_gen_docbook'] = 'Make Docbook file';
+$PMF_LANG['ad_export_gen_xhtml'] = ' XHTML إنشاء ملف ';
+$PMF_LANG['ad_export_gen_docbook'] = 'Docbook إنشاء ملف ';
 
 // added v2.0.0 - 2006-07-22 by Matteo
-$PMF_LANG['ad_news_data'] = 'News data';
-$PMF_LANG['ad_news_author_name'] = 'Author name:';
-$PMF_LANG['ad_news_author_email'] = 'Author email:';
-$PMF_LANG['ad_news_set_active'] = 'Activate:';
-$PMF_LANG['ad_news_allowComments'] = 'Allow comments:';
-$PMF_LANG['ad_news_expiration_window'] = 'News expiration time window (optional)';
-$PMF_LANG['ad_news_from'] = 'From:';
-$PMF_LANG['ad_news_to'] = 'To:';
-$PMF_LANG['ad_news_insertfail'] = 'An error occurred inserting the news item into the database.';
-$PMF_LANG['ad_news_updatefail'] = 'An error occurred updating the news item into the database.';
-$PMF_LANG['newsShowCurrent'] = 'Show current news.';
-$PMF_LANG['newsShowArchive'] = 'Show archived news.';
-$PMF_LANG['newsArchive'] = ' News archive';
-$PMF_LANG['newsWriteComment'] = 'comment on this entry';
-$PMF_LANG['newsCommentDate'] = 'Added at: ';
+$PMF_LANG['ad_news_data'] = 'بيانات الأخبار';
+$PMF_LANG['ad_news_author_name'] = 'اسم الكاتب :';
+$PMF_LANG['ad_news_author_email'] = 'البريد الإلكتروني للكاتب :';
+$PMF_LANG['ad_news_set_active'] = 'تفعيل :';
+$PMF_LANG['ad_news_allowComments'] = 'السماح بالتعليقات :';
+$PMF_LANG['ad_news_expiration_window'] = 'نافذة إنتهاء صلاحية الخبر (اختياري)';
+$PMF_LANG['ad_news_from'] = 'من :';
+$PMF_LANG['ad_news_to'] = 'إلى';
+$PMF_LANG['ad_news_insertfail'] = 'حدث خطأ أثناء إدخال الأخبار لقاعدة البيانات';
+$PMF_LANG['ad_news_updatefail'] = 'حدث خطأ أثناء تحديث الأخبار في قاعدة البيانات';
+$PMF_LANG['newsShowCurrent'] = 'عرض الأخبار الحالية';
+$PMF_LANG['newsShowArchive'] = 'عرض أرشيف الأخبار';
+$PMF_LANG['newsArchive'] = ' أرشيف الأخبار';
+$PMF_LANG['newsWriteComment'] = 'التعليق على هذة المداخلة';
+$PMF_LANG['newsCommentDate'] = 'أضيفت إلي :';
 
 // added v2.0.0 - 2006-07-29 by Matteo & Thorsten
-$PMF_LANG['ad_record_expiration_window'] = 'Record expiration time window (optional)';
-$PMF_LANG['admin_mainmenu_home'] = 'Home';
-$PMF_LANG['admin_mainmenu_users'] = 'Users';
-$PMF_LANG['admin_mainmenu_content'] = 'Content';
-$PMF_LANG['admin_mainmenu_statistics'] = 'Statistics';
-$PMF_LANG['admin_mainmenu_exports'] = 'Exports';
-$PMF_LANG['admin_mainmenu_backup'] = 'Backup';
-$PMF_LANG['admin_mainmenu_configuration'] = 'Configuration';
-$PMF_LANG['admin_mainmenu_logout'] = 'Logout';
+$PMF_LANG['ad_record_expiration_window'] = ' نافذة تسجيل وقت الإنتهاء (اختياري)';
+$PMF_LANG['admin_mainmenu_home'] = 'الرئيسية';
+$PMF_LANG['admin_mainmenu_users'] = 'المستخدمين';
+$PMF_LANG['admin_mainmenu_content'] = 'المحتوى';
+$PMF_LANG['admin_mainmenu_statistics'] = 'إحصائيات';
+$PMF_LANG['admin_mainmenu_exports'] = 'تصدير';
+$PMF_LANG['admin_mainmenu_backup'] = 'أخذ نسخة إحتياطية';
+$PMF_LANG['admin_mainmenu_configuration'] = 'الإعدادات';
+$PMF_LANG['admin_mainmenu_logout'] = 'خروج';
 
 // added v2.0.0 - 2006-08-15 by Thorsten and Matteo
-$PMF_LANG["ad_categ_owner"] = 'Category owner';
-$PMF_LANG['adminSection'] = 'Administration';
-$PMF_LANG['err_expiredArticle'] = 'This entry is expired and can not be displayed';
-$PMF_LANG['err_expiredNews'] = 'This news is expired and can not be displayed';
-$PMF_LANG['err_inactiveNews'] = 'This news is in revision and can not be displayed';
-$PMF_LANG['msgSearchOnAllLanguages'] = 'Search over all languages:';
+$PMF_LANG["ad_categ_owner"] = 'مالك التصنيف';
+$PMF_LANG['adminSection'] = 'الإدارة';
+$PMF_LANG['err_expiredArticle'] = 'هذة المداخلة قديمة ولا يمكن عرضها';
+$PMF_LANG['err_expiredNews'] = 'هذة الأخبار قديمة ولا يمكن عرضها';
+$PMF_LANG['err_inactiveNews'] = 'هذة الأخبار مازالت تحت المراجعة ولا يمكن عرضها الأن';
+$PMF_LANG['msgSearchOnAllLanguages'] = 'البحث بجميع اللغات :';
 $PMF_LANG['ad_entry_tags'] = 'Tags';
 $PMF_LANG['msg_tags'] = 'Tags';
 
 // added v2.0.0 - 2006-09-03 by Matteo
-$PMF_LANG['ad_linkcheck_feedback_url-batch1'] = 'Checking...';
-$PMF_LANG['ad_linkcheck_feedback_url-batch2'] = 'Checking...';
-$PMF_LANG['ad_linkcheck_feedback_url-batch3'] = 'Checking...';
-$PMF_LANG['ad_linkcheck_feedback_url-checking'] = 'Checking...';
-$PMF_LANG['ad_linkcheck_feedback_url-disabled'] = 'Disabled';
-$PMF_LANG['ad_linkcheck_feedback_url-linkbad'] = 'Links KO';
-$PMF_LANG['ad_linkcheck_feedback_url-linkok'] = 'Links OK';
-$PMF_LANG['ad_linkcheck_feedback_url-noaccess'] = 'No access';
+$PMF_LANG['ad_linkcheck_feedback_url-batch1'] = 'فحص ...';
+$PMF_LANG['ad_linkcheck_feedback_url-batch2'] = 'فحص ...';
+$PMF_LANG['ad_linkcheck_feedback_url-batch3'] = 'فحص ...';
+$PMF_LANG['ad_linkcheck_feedback_url-checking'] = 'فحص ...';
+$PMF_LANG['ad_linkcheck_feedback_url-disabled'] = 'معطلة';
+$PMF_LANG['ad_linkcheck_feedback_url-linkbad'] = 'الروابط تمام';
+$PMF_LANG['ad_linkcheck_feedback_url-linkok'] = 'الروابط تمام';
+$PMF_LANG['ad_linkcheck_feedback_url-noaccess'] = 'لا يوجد دخول';
 $PMF_LANG['ad_linkcheck_feedback_url-noajax'] = 'No AJAX';
-$PMF_LANG['ad_linkcheck_feedback_url-nolinks'] = 'No Links';
-$PMF_LANG['ad_linkcheck_feedback_url-noscript'] = 'No Script';
+$PMF_LANG['ad_linkcheck_feedback_url-nolinks'] = 'لا توجد روابط';
+$PMF_LANG['ad_linkcheck_feedback_url-noscript'] = 'لا يوجد إسكربتات';
 
 // added v2.0.0 - 2006-09-02 by Thomas
-$PMF_LANG['msg_related_articles'] = 'Related entries';
-$LANG_CONF['numRelatedArticles'] = array(0 => "input", 1 => "Number of related entries");
+$PMF_LANG['msg_related_articles'] = 'مداخلات ذات صلة';
+$LANG_CONF['numRelatedArticles'] = array(0 => "input", 1 => "عدد المداخلات ذات الصلة");
 
 // added v2.0.0 - 2006-09-09 by Rudi
-$PMF_LANG['ad_categ_trans_1'] = 'Translate';
-$PMF_LANG['ad_categ_trans_2'] = 'Category';
-$PMF_LANG['ad_categ_translatecateg'] = 'Translate Category';
-$PMF_LANG['ad_categ_translate'] = 'Translate';
-$PMF_LANG['ad_categ_transalready'] = 'Already translated in: ';
-$PMF_LANG["ad_categ_deletealllang"] = 'Delete in all languages?';
-$PMF_LANG["ad_categ_deletethislang"] = 'Delete in this language only?';
-$PMF_LANG["ad_categ_translated"] = "The category has been translated.";
+$PMF_LANG['ad_categ_trans_1'] = 'ترجم';
+$PMF_LANG['ad_categ_trans_2'] = 'تصنيف';
+$PMF_LANG['ad_categ_translatecateg'] = 'ترجم تصنيف';
+$PMF_LANG['ad_categ_translate'] = 'ترجم';
+$PMF_LANG['ad_categ_transalready'] = 'تمت الترجمة إلي :';
+$PMF_LANG["ad_categ_deletealllang"] = 'احذف لكل اللغات ؟';
+$PMF_LANG["ad_categ_deletethislang"] = 'احذف في هذة اللغة فقط ؟';
+$PMF_LANG["ad_categ_translated"] = "التصنيف تم ترجمته";
 
 // added v2.0.0 - 2006-09-21 by Rudi
-$PMF_LANG["ad_categ_show"] = "Overview";
-$PMF_LANG['ad_menu_categ_structure'] = "Category Overview including its languages";
+$PMF_LANG["ad_categ_show"] = "الخلاصة";
+$PMF_LANG['ad_menu_categ_structure'] = "ملخص عن التصنيف يتضمن اللغات";
 
 // added v2.0.0 - 2006-09-26 by Thorsten
-$PMF_LANG['ad_entry_userpermission'] = 'User permissions:';
-$PMF_LANG['ad_entry_grouppermission'] = 'Group permissions:';
-$PMF_LANG['ad_entry_all_users'] = 'Access for all users';
-$PMF_LANG['ad_entry_restricted_users'] = 'Restricted access to';
-$PMF_LANG['ad_entry_all_groups'] = 'Access for all groups';
-$PMF_LANG['ad_entry_restricted_groups'] = 'Restricted access to';
-$PMF_LANG['ad_session_expiration'] = 'Time to your session expiration';
-$PMF_LANG['ad_user_active'] = 'active';
-$PMF_LANG['ad_user_blocked'] = 'blocked';
-$PMF_LANG['ad_user_protected'] = 'protected';
+$PMF_LANG['ad_entry_userpermission'] = 'صلاحيات المستخدم :';
+$PMF_LANG['ad_entry_grouppermission'] = 'صلاحيات المجموعة :';
+$PMF_LANG['ad_entry_all_users'] = 'الدخول لكل المستخدمين';
+$PMF_LANG['ad_entry_restricted_users'] = 'الدخول محجوب لـ ';
+$PMF_LANG['ad_entry_all_groups'] = 'الدخول لكل المجموعات';
+$PMF_LANG['ad_entry_restricted_groups'] = 'الدخول محجوب لـ';
+$PMF_LANG['ad_session_expiration'] = 'وقت إنتهاء الجلسة';
+$PMF_LANG['ad_user_active'] = 'نشط';
+$PMF_LANG['ad_user_blocked'] = 'محجوب';
+$PMF_LANG['ad_user_protected'] = 'محمي';
