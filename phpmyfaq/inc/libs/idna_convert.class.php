@@ -3,7 +3,7 @@
 /* idna_convert.class.php - Encode / Decode Internationalized Domain Names   */
 /* (c) 2004-2006 phlyLabs, Berlin (http://phlylabs.de)                       */
 /* All rights reserved                                                       */
-/* v0.4.3                                                                    */
+/* v0.4.4                                                                    */
 /* ------------------------------------------------------------------------- */
 
 // {{{ license
@@ -877,7 +877,9 @@ class idna_convert
     function _ucs4_to_utf8($input)
     {
         $output = '';
+        $k = 0;
         foreach ($input as $v) {
+            ++$k;
             // $v = ord($v);
             if ($v < 128) { // 7bit are transferred literally
                 $output .= chr($v);
