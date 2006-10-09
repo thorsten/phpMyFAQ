@@ -1,6 +1,6 @@
-$Id: README.txt,v 1.59 2006-10-08 16:15:38 thorstenr Exp $
+$Id: README.txt,v 1.60 2006-10-09 18:54:34 thorstenr Exp $
 
-phpMyFAQ 2.0.0-alpha
+phpMyFAQ 2.0.0-alpha2
 Codename "Prometheus"
 
 Installation/Update:
@@ -9,31 +9,15 @@ Please read the documentation (documentation.en.html) carefully.
 Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
-Changes since 1.6:
-- added rewritten and enhanced user management (Lars)
-- added rewritten and enhanced authorization management (Lars)
-- added Ajax support (Thorsten)
-- added automatic link verification (Minoru Toda)
-- added user binding to a category (Thorsten)
-- added glossary support (Thorsten)
-- added possibility to delete admin log (Thorsten)
-- added configurable visibility of new questions (Thorsten)
-- added improved and template-based XHTML export (Thorsten)
-- added dynamic related articles (Thorsten, Marco Enders, Thomas Zeithaml)
-- added support for Google and Yahoo! sitemaps (Matteo)
-- added improved WYSIWYG editor and Image Manager (Thorsten)
-- added improved News module (Matteo, Thorsten)
-- added tagging (Thorsten)
-- added DiggIt! link (Thorsten)
-- improved export functions (Matteo)
-- improved URL rewrite functions (Matteo)
-- improved category management (Thorsten, Rudi Ferrari)
+Changes since 2.0.0-alpha:
+- updated bundled Net_IDNA to version 0.4.4
+- updated Arabic translation
 
 Known issues in phpMyFAQ 2.0.0: please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.0.0-alpha - 2006-10-08
+Version 2.0.0-alpha2 - 2006-11-
 - added rewritten and enhanced user management (Lars)
 - added rewritten and enhanced authorization management (Lars)
 - added Ajax support (Thorsten)
@@ -52,6 +36,8 @@ Version 2.0.0-alpha - 2006-10-08
 - improved export functions (Matteo)
 - improved URL rewrite functions (Matteo)
 - improved category management (Thorsten, Rudi Ferrari)
+- updated bundled Net_IDNA to version 0.4.4 (Thorsten)
+- updated Arabic translation (Ahmed Shalaby)
 
 Version 1.6.5 - 2006-09-21
 - added Welsh translation
