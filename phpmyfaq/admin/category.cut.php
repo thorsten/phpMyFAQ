@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: category.cut.php,v 1.9 2006-09-19 21:39:38 matteo Exp $
+* $Id: category.cut.php,v 1.10 2006-10-10 16:48:59 thorstenr Exp $
 *
 * Cuts a category
 *
@@ -25,23 +25,44 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 }
 
 if ($permission["editcateg"]) {
-    print "<h2>".$PMF_LANG["ad_categ_updatecateg"]."</h2>\n";
-    $category = $_REQUEST["cat"];
 
     $cat = new PMF_Category($LANGCODE);
     $cat->buildTree();
+    $id = $_GET["cat"];
+    $parent_id = $cat->categoryName[$id]['parent_id'];
+    
+    $header = sprintf('%s: <em>%s</em>',
+        $PMF_LANG['ad_categ_move'],
+        $cat->categoryName[$id]['name']);
 
-    foreach ($cat->catTree as $cat) {
-        $indent = "";
-        for ($i = 0; $i < $cat["indent"]; $i++) {
-            $indent .= "&nbsp;&nbsp;&nbsp;";
-        }
-        print $indent."<strong style=\"vertical-align: top;\">&middot; ".$cat["name"]."</strong> ";
-        print "<a href=\"".$_SERVER["PHP_SELF"].$linkext."&amp;action=pastecategory&amp;cat=".$category."&amp;after=".$cat["id"]."\" title=\"".$PMF_LANG["ad_categ_paste"]."\"><img src=\"images/paste.gif\" width=\"16\" height=\"16\" alt=\"".$PMF_LANG["ad_categ_paste"]."\" border=\"0\" title=\"".$PMF_LANG["ad_categ_paste"]."\" /></a>\n";
-        print "<br />";
-    }
+    printf('<h2>%s</h2>', $header);
+?>
 
-    print $PMF_LANG["ad_categ_new_main_cat"]." <a href=\"".$_SERVER["PHP_SELF"].$linkext."&amp;action=pastecategory&amp;cat=".$category."&amp;after=0\" title=\"".$PMF_LANG["ad_categ_paste"]."\"><img src=\"images/paste.gif\" width=\"16\" height=\"16\" alt=\"".$PMF_LANG["ad_categ_paste"]."\" border=\"0\" title=\"".$PMF_LANG["ad_categ_paste"]."\" /></a>\n";
+    <form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>" method="post">
+    <fieldset>
+        <legend><?php print $PMF_LANG["ad_categ_paste2"]; ?></legend>
+	    <input type="hidden" name="action" value="pastecategory" />
+	    <input type="hidden" name="cat" value="<?php print $id; ?>" />
+	    <div class="row">
+               <select name="after" size="1">
+<?php
+                   foreach ($cat->catTree as $cat) {
+                       if ($id != $cat["id"]) {
+                          printf("<option value=\"%s\">%s%s</option>",$cat["id"],$indent,$cat["name"]);
+                       }
+                   }
+                   if ($parent_id != 0) {
+                       printf("<option value=\"0\">%s</option>",$PMF_LANG["ad_categ_new_main_cat"]);
+                   }
+?>
+               </select>&nbsp;&nbsp;
+               <input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_updatecateg"]; ?>" />
+            </div>
+    </fieldset>
+    </form>
+
+<?php
+
 } else {
 	print $PMF_LANG["err_NotAuth"];
 }

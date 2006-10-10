@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: category.move.php,v 1.10 2006-09-19 21:39:39 matteo Exp $
+* $Id: category.move.php,v 1.11 2006-10-10 16:48:59 thorstenr Exp $
 *
 * Select a category to move
 *
@@ -32,22 +32,35 @@ if ($permission["editcateg"]) {
     unset($cat->categories);
     $cat->getCategories($parent_id, false);
     $cat->buildTree($parent_id);
-    print "<h2>".$PMF_LANG["ad_categ_edit_1"]." <em>".$categories[$id]["name"]."</em> ".$PMF_LANG["ad_categ_edit_2"]."</h2>\n";
+    
+    $header = sprintf('%s: <em>%s</em>',
+        $PMF_LANG['ad_categ_move'],
+        $cat->categoryName[$id]['name']);
+
+    printf('<h2>%s</h2>', $header);
 ?>
 	<form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>" method="post">
     <fieldset>
-        <legend><?php print $PMF_LANG["ad_categ_edit_1"]; ?></legend>
+        <legend><?php print $PMF_LANG["ad_categ_change"]; ?></legend>
 	    <input type="hidden" name="action" value="changecategory" />
 	    <input type="hidden" name="cat" value="<?php print $id; ?>" />
-	    <div class="row"><span class="label"><strong><?php print $PMF_LANG["ad_categ_change"]; ?>:</strong></span>
-        <select name="change" size="1">
-        <?php print $cat->printCategoryOptions(); ?>
-        </select></div>
-        <div class="row"><span class="label"><strong>&nbsp;</strong></span>
-        <input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_updatecateg"]; ?>" /></div>
+	    <div class="row">
+               <select name="change" size="1">
+<?php
+                    foreach ($cat->catTree as $cat) {
+                       if ($id != $cat["id"]) {
+                          printf("<option value=\"%s\">%s%s</option>",$cat["id"],$indent,$cat["name"]);
+                       }
+                   }
+?>
+               </select>&nbsp;&nbsp;
+               <input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_updatecateg"]; ?>" />
+            </div>
     </fieldset>
     </form>
+
 <?php
+    printf('<p>%s</p>', $PMF_LANG['ad_categ_remark_move']);
 } else {
     print $PMF_LANG["err_NotAuth"];
 }

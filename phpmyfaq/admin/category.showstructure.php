@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: category.showstructure.php,v 1.2 2006-09-25 08:25:35 thorstenr Exp $
+* $Id: category.showstructure.php,v 1.3 2006-10-10 16:48:59 thorstenr Exp $
 *
 * build table of all categories in all languages
 *
@@ -145,7 +145,7 @@ if ($permission['editcateg']) {
     }
  
     print "</table>\n";
-
+    printf('<p>%s</p>', $PMF_LANG['ad_categ_remark_overview']);
 } else {
     print $PMF_LANG['err_NotAuth'];
 }

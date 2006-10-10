@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: category.main.php,v 1.28 2006-09-25 05:29:19 thorstenr Exp $
+* $Id: category.main.php,v 1.29 2006-10-10 16:48:59 thorstenr Exp $
 *
 * List all categories in the admin section
 *
@@ -103,7 +103,7 @@ if ($permission['editcateg']) {
     }
 
     // Moves a category
-    if (isset($_POST['action']) && $_POST['action'] == 'movecategory') {
+    if (isset($_POST['action']) && $_POST['action'] == 'changecategory') {
 
         $category_id_1 = (int)$_POST['cat'];
         $category_id_2 = (int)$_POST['change'];
@@ -116,11 +116,10 @@ if ($permission['editcateg']) {
     }
 
     // Pastes a category
-    if (isset($_POST['action']) && $_POST['action'] == 'movecategory') {
+    if (isset($_POST['action']) && $_POST['action'] == 'pastecategory') {
 
-        $category_id = $_GET['cat'];
-        $parent_id = $_GET['after'];
-
+        $category_id = $_POST['cat'];
+        $parent_id = $_POST['after'];
         if ($category->updateParentCategory($category_id, $parent_id)) {
             printf('<p>%s</p>', $PMF_LANG['ad_categ_updated']);
         } else {
@@ -198,15 +197,17 @@ if ($permission['editcateg']) {
                $PMF_LANG['ad_categ_cut'],
                $PMF_LANG['ad_categ_cut'],
                $PMF_LANG['ad_categ_cut']);
-
-           // move category (if actual language)
-           printf('<a href="%s&amp;action=movecategory&amp;cat=%s&amp;parent_id=%s" title="%s"><img src="images/move.gif" width="16" height="16" alt="%s" border="0" title="%s" /></a>',
-               $currentLink,
-               $cat['id'],
-               $cat['parent_id'],
-               $PMF_LANG['ad_categ_move'],
-               $PMF_LANG['ad_categ_move'],
-               $PMF_LANG['ad_categ_move']);
+          
+           if ($tree->numParent($cat['parent_id']) > 1) {
+              // move category (if actual language) AND more than 1 category at the same level)
+              printf('<a href="%s&amp;action=movecategory&amp;cat=%s&amp;parent_id=%s" title="%s"><img src="images/move.gif" width="16" height="16" alt="%s" border="0" title="%s" /></a>',
+                  $currentLink,
+                  $cat['id'],
+                  $cat['parent_id'],
+                  $PMF_LANG['ad_categ_move'],
+                  $PMF_LANG['ad_categ_move'],
+                  $PMF_LANG['ad_categ_move']);
+           }
         }
         print "<br />";
     }
