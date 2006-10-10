@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.89 2006-10-09 18:56:04 thorstenr Exp $
+* $Id: update.php,v 1.90 2006-10-10 20:13:12 thorstenr Exp $
 *
 * Main update script
 *
@@ -21,7 +21,7 @@
 * under the License.
 */
 
-define('NEWVERSION', '2.0.0-alpha2');
+define('NEWVERSION', '2.0.0-beta');
 define('COPYRIGHT', '&copy; 2001-2006 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
@@ -151,6 +151,7 @@ if ($step == 1) {
     <li>phpMyFAQ 1.4.x</li>
     <li>phpMyFAQ 1.5.x</li>
     <li>phpMyFAQ 1.6.x</li>
+    <li>phpMyFAQ 2.0.x</li>
 </ul>
 <p>This update will <strong>not</strong> work for the following versions:</p>
 <ul type="square">
@@ -173,7 +174,7 @@ if ($step == 1) {
     <option value="1.5.4">phpMyFAQ 1.5.4 and later</option>
     <option value="1.5.5">phpMyFAQ 1.5.5 and later</option>
     <option value="1.6.0">phpMyFAQ 1.6.0 and later</option>
-    <option value="2.0.0-alpha0">phpMyFAQ 2.0.0-alpha0</option>
+    <option value="2.0.0-alpha">phpMyFAQ 2.0.0-alpha</option>
 </select>
 
 <p class="center">
@@ -204,20 +205,17 @@ if ($step == 2) {
     } else {
         $test1 = 1;
     }
-    // TODO: Move NEWVERSION to '2.0.0' when 2.0.0 will be released
-    if (!@is_writeable(PMF_ROOT_DIR."/inc/config.php") && version_compare($version, NEWVERSION, '<')) {
+    if (!@is_writeable(PMF_ROOT_DIR."/inc/config.php") && version_compare($version, NEWVERSION, '>')) {
         print "<p class=\"error\"><strong>Error:</strong> The file ../inc/config.php is not writeable. Please correct this!</p>";
     } else {
         $test2 = 1;
     }
-
     if (!@copy(PMF_ROOT_DIR."/inc/data.php", PMF_ROOT_DIR."/inc/data.bak.php")) {
         print "<p class=\"error\"><strong>Error:</strong> The backup file ../inc/data.bak.php could not be written. Please correct this!</p>";
     } else {
         $test3 = 1;
     }
-    // TODO: Move NEWVERSION to '2.0.0' when 2.0.0 will be released
-    if (!@copy(PMF_ROOT_DIR."/inc/config.php", PMF_ROOT_DIR."/inc/config.bak.php") && version_compare($version, NEWVERSION, '<')) {
+    if (!@copy(PMF_ROOT_DIR."/inc/config.php", PMF_ROOT_DIR."/inc/config.bak.php") && version_compare($version, NEWVERSION, '>')) {
         print "<p class=\"error\"><strong>Error:</strong> The backup file ../inc/config.bak.php could not be written. Please correct this!</p>";
     } else {
         $test4 = 1;
@@ -259,8 +257,7 @@ if ($step == 3) {
 <fieldset class="installation">
 <legend class="installation"><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 3 of 5)</strong></legend>
 <?php
-    // TODO: Move NEWVERSION to '2.0.0' when 2.0.0 will be released
-    if (version_compare($version, NEWVERSION, '<')) {
+    if (version_compare($version, NEWVERSION, '>')) {
         require_once(PMF_ROOT_DIR."/inc/config.php");
     }
     if (version_compare($version, '1.5.0', '<')) {
@@ -359,8 +356,7 @@ if ($step == 4) {
 <legend class="installation"><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 4 of 5)</strong></legend>
 <?php
     $version = $_REQUEST["version"];
-    // TODO: Move NEWVERSION to '2.0.0' when 2.0.0 will be released
-    if (version_compare($version, NEWVERSION, '<')) {
+    if (version_compare($version, NEWVERSION, '>')) {
         require_once(PMF_ROOT_DIR."/inc/config.php");
     }
 
@@ -387,8 +383,7 @@ if ($step == 4) {
 /**************************** STEP 5 OF 5 ***************************/
 if ($step == 5) {
     $version = $_REQUEST["version"];
-    // TODO: Move NEWVERSION to '2.0.0' when 2.0.0 will be released
-    if (version_compare($version, NEWVERSION, '<')) {
+    if (version_compare($version, NEWVERSION, '>')) {
         require_once(PMF_ROOT_DIR."/inc/config.php");
     }
     
@@ -641,7 +636,7 @@ if ($step == 5) {
 
     $images = array();
 
-    if (version_compare($version, '2.0.0', '<')) {
+    if (version_compare($version, '2.0.0', '>')) {
         // Fix old/odd errors
         // 1/1. Fix faqchanges.usr
         switch($DB["type"]) {
@@ -1239,7 +1234,7 @@ if ($step == 5) {
         }
     }
 
-    if (version_compare($version, '2.0.0', '<')) {
+    if (version_compare($version, '2.0.0', '>')) {
         // 11/13. Move each image file in each of the faq content, from '/images' to '/images/Image'
         foreach ($images as $image) {
             $newImagePath = str_replace('/images/', '/images/Image/', $image);
