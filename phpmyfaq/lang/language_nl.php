@@ -786,6 +786,10 @@ $PMF_LANG['ad_linkcheck_feedback_url-noajax'] = 'Geen AJAX-ondersteuning voorzie
 $PMF_LANG['ad_linkcheck_feedback_url-nolinks'] = 'Geen links gevonden';
 $PMF_LANG['ad_linkcheck_feedback_url-noscript'] = 'Geen script-ondersteuning voorzien';
 
+// added v2.0.0 - 2006-09-02 by Thomas
+$PMF_LANG['msg_related_articles'] = 'verwandte artikelen';
+$LANG_CONF['numRelatedArticles'] = array(0 => "input", 1 => "aantal verwandte artikelen");
+
 // added v2.0.0 - 2006-09-09 by Rudi
 $PMF_LANG['ad_categ_trans_1'] = 'Vertaal'; 
 $PMF_LANG['ad_categ_trans_2'] = 'Categorie';
@@ -799,3 +803,23 @@ $PMF_LANG["ad_categ_translated"] = "De categorie is vertaald.";
 // added v2.0.0 - 2006-09-21 by Rudi
 $PMF_LANG["ad_categ_show"] = "Overzicht";
 $PMF_LANG['ad_menu_categ_structure'] = "Overzicht van der categori&euml;n met de talen";
+
+// added v2.0.0 - 2006-09-26 by Thorsten
+$PMF_LANG['ad_entry_userpermission'] = 'Gebruikersvergunningen:';
+$PMF_LANG['ad_entry_grouppermission'] = 'Groepenvergunningen:';
+$PMF_LANG['ad_entry_all_users'] = 'Toegang voor alle gebruikers';
+$PMF_LANG['ad_entry_restricted_users'] = 'Beperkte toegang voor';
+$PMF_LANG['ad_entry_all_groups'] = 'Toegang voor alle groepen';
+$PMF_LANG['ad_entry_restricted_groups'] = 'Beperkte toegang voor';
+$PMF_LANG['ad_session_expiration'] = 'Tijd tot je sessie is afgelopen';
+$PMF_LANG['ad_user_active'] = 'aktief';
+$PMF_LANG['ad_user_blocked'] = 'geblokkeerd';
+$PMF_LANG['ad_user_protected'] = 'beveiligd';
+
+// added v2.0.0 - 2006-10-07 by Matteo
+$PMF_LANG['ad_entry_intlink'] = 'Selecteer een FAQ record om deze als link toe te voegen...';
+
+//added 2.0.0 - 2006-10-10 by Rudi
+$PMF_LANG["ad_categ_paste2"] = "Plakken achter";
+$PMF_LANG["ad_categ_remark_move"] = "Het omwisselen van 2 categoriën is enkel mogelijk op hetzelfde level.";
+$PMF_LANG["ad_categ_remark_overview"] = "De juiste volgore van de categoriën wordt zichtbaar, als alle categoriën van de actuele taal (eerste kolom) gedefiniëerd zijn.";

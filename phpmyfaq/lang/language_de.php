@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.34 2006-09-27 18:46:30 thorstenr Exp $
+ * $Id: language_de.php,v 1.35 2006-10-10 16:47:29 thorstenr Exp $
  *
  * German language file
  *
@@ -819,3 +819,8 @@ $PMF_LANG['ad_session_expiration'] = 'Zeit bis zum Ablauf der Session';
 $PMF_LANG['ad_user_active'] = 'aktiv';
 $PMF_LANG['ad_user_blocked'] = 'geblockt';
 $PMF_LANG['ad_user_protected'] = 'geschützt';
+
+//added 2.0.0 - 2006-10-10 by Rudi
+$PMF_LANG["ad_categ_paste2"] = "Einfügen hinter";
+$PMF_LANG["ad_categ_remark_move"] = "Das Austauschen zweier Kategorien ist nur innerhalb der gleichen Ebene vorgesehen.";
+$PMF_LANG["ad_categ_remark_overview"] = "Die richtige Reihenfolge der Kategorien zeigt sich wenn alle Kategorien in der aktuelle Sprache (erste Spalte) definiert sind.";
