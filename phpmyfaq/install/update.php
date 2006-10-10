@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.90 2006-10-10 20:13:12 thorstenr Exp $
+* $Id: update.php,v 1.91 2006-10-10 20:28:10 thorstenr Exp $
 *
 * Main update script
 *
@@ -1283,6 +1283,12 @@ if ($step == 5) {
         }
     }
 
+    // Update version number
+    if (version_compare($version, NEWVERSION, '<')) {
+        $oPMFConf = new PMF_Configuration($db);
+        $oPMFConf->update(array('version' => NEWVERSION));
+    }
+
     // Remove 'scripts' folder: no need of prompt anything to the user
     if (file_exists(PMF_ROOT_DIR."/scripts") && is_dir(PMF_ROOT_DIR."/scripts")) {
         @rmdir(PMF_ROOT_DIR."/scripts");
@@ -1303,6 +1309,5 @@ if ($step == 5) {
     } else {
         print "<p class=\"center\">Please delete the file <em>./install/update.php</em> manually.</p>\n";
     }
-
     HTMLFooter();
 }
