@@ -1,5 +1,5 @@
 #
-# $Id: phpmyfaq.spec,v 1.8 2006-10-09 19:27:43 matteo Exp $
+# $Id: phpmyfaq.spec,v 1.9 2006-10-10 21:36:07 matteo Exp $
 #
 # This is the spec file for building an RPM package of phpMyFAQ
 # for most of the different RPM-based distributions
@@ -57,8 +57,8 @@
 # phpMyFAQ
 #
 %define name        phpmyfaq
-%define version     2.0.0-alpha2
-%define release     4
+%define version     2.0.0.beta
+%define release     1
 %define epoch       0
 
 %define httpd_name      httpd
@@ -154,6 +154,9 @@ XML-support, PDF-support, a backup-system and an easy to use
 installation script.
 
 %changelog
+* Tue Oct 10 2006 Matteo Scaramuccia <matteo@scaramuccia.com> - 2.0.0.betaN-1
+- New upstream version 2.0.0.beta.
+
 * Sun Jul 16 2006 Matteo Scaramuccia <matteo@scaramuccia.com> - 2.0.0.alphaN-4
 - Fix some minor warnings during the RPM build under OpenSUSE.
 - Fix Apache paths under OpenSUSE.
