@@ -1,6 +1,6 @@
-$Id: README.txt,v 1.60 2006-10-09 18:54:34 thorstenr Exp $
+$Id: README.txt,v 1.61 2006-10-10 20:14:52 thorstenr Exp $
 
-phpMyFAQ 2.0.0-alpha2
+phpMyFAQ 2.0.0-beta
 Codename "Prometheus"
 
 Installation/Update:
@@ -13,11 +13,11 @@ Changes since 2.0.0-alpha:
 - updated bundled Net_IDNA to version 0.4.4
 - updated Arabic translation
 
-Known issues in phpMyFAQ 2.0.0: please take a look at KNOWNBUGS.txt
+For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.0.0-alpha2 - 2006-11-
+Version 2.0.0-beta - 2006-11-
 - added rewritten and enhanced user management (Lars)
 - added rewritten and enhanced authorization management (Lars)
 - added Ajax support (Thorsten)

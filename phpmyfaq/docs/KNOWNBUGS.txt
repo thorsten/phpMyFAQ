@@ -1,6 +1,6 @@
-$Id: KNOWNBUGS.txt,v 1.1 2006-10-07 10:30:21 thorstenr Exp $
+$Id: KNOWNBUGS.txt,v 1.2 2006-10-10 20:14:52 thorstenr Exp $
 
-MISSING FEATURES in phpMyFAQ 2.0.0-alpha
+MISSING FEATURES in phpMyFAQ 2.0.0-beta
 
 - permission management for categories and records
 - simple reordering of records
@@ -8,13 +8,13 @@ MISSING FEATURES in phpMyFAQ 2.0.0-alpha
 - "submit translation" link
 
 
-KNOWN ISSUES in phpMyFAQ 2.0.0-alpha
+KNOWN ISSUES in phpMyFAQ 2.0.0-beta
 
 - some language files need an update
 - using UTF-8 will not work in the PDF files
 
 
-KNOWN BUGS AND ISSUES in phpMyFAQ 2.0.0-alpha
+KNOWN BUGS AND ISSUES in phpMyFAQ 2.0.0-beta
 
 - update from 2.0.0-alpha to 2.0.0-alpha fails
 - IBM DB2 support untested
