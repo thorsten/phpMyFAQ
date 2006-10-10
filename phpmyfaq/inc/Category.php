@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Category.php,v 1.20 2006-09-19 20:21:30 matteo Exp $
+ * $Id: Category.php,v 1.21 2006-10-10 16:47:52 thorstenr Exp $
  *
  * The main category class
  *
@@ -1322,5 +1322,30 @@ class PMF_Category
                $this->children[$row['parent_id']][$row['id']] =& $this->categoryName[$row['id']];
             }
         }
+    }
+    
+    /**
+     * Get number of nodes at the same parent_id level
+     *
+     * @param   integer  $parent_id
+     * @return  integer
+     * @access  public
+     * @since   2006-10-10
+     * @author  Rudi Ferrari <bookcrossers@gmx.de>
+     */
+    function numParent($parent_id)
+    {
+        $query = sprintf("
+            SELECT distinct 
+                id
+            FROM
+                %sfaqcategories
+            WHERE
+                parent_id = %d",
+            SQLPREFIX,
+            $parent_id);
+        $result = $this->db->query($query);
+        
+        return $this->db->num_rows($result);
     }
 }
