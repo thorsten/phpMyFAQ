@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Link.php,v 1.20 2006-09-27 19:41:13 matteo Exp $
+* $Id: Link.php,v 1.21 2006-10-11 21:59:11 matteo Exp $
 *
 * Link management - Functions and Classes
 *
@@ -231,14 +231,15 @@ class PMF_Link
     {
         $itemTitle = trim($this->itemTitle);
         // Lower the case (aesthetic)
-        $itemTitle = strtolower($this->itemTitle);
+        $itemTitle = strtolower($itemTitle);
         // Use '_' for some other characters for:
         // 1. avoiding regexp match break;
         // 2. improving the reading.
         $itemTitle = str_replace(array('-', "'", '/'),
                                  '_', $itemTitle);
-        // Use a '-' for the words separation
-        $itemTitle = str_replace(' ', '-', $itemTitle);
+        // 1. Remove any CR LF sequence
+        // 2. Use a '-' for the words separation
+        $itemTitle = preg_replace('/\s/m', '-', $itemTitle);
         // Hack: remove some chars for having a better readable title
         $itemTitle = str_replace(array('+', ',', ';', ':', '.', '?', '!', '"', '(', ')', '[', ']', '{', '}', '<', '>'),
                                  '',
@@ -247,6 +248,8 @@ class PMF_Link
         $itemTitle = str_replace(array('à', 'è', 'é', 'ì', 'ò', 'ù', 'ä', 'ö', 'ü', 'ß'),
                                  array('a', 'e', 'e', 'i', 'o', 'u', 'ae', 'oe', 'ue', 'ss'),
                                  $itemTitle);
+        // Clean up
+        $itemTitle = preg_replace('/-[\-]+/m', '-', $itemTitle);
 
         return rawurlencode($itemTitle);
     }
