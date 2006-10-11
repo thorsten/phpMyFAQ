@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: footer.php,v 1.18 2006-10-07 14:53:16 matteo Exp $
+* $Id: footer.php,v 1.19 2006-10-11 19:07:10 matteo Exp $
 *
 * Footer of the admin area
 *
@@ -39,6 +39,21 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 if (isset($auth)) {
 ?>
 <iframe id="keepPMFSessionAlive" src="session.keepalive.php<?php print $linkext; ?>&amp;lang=<?php print $LANGCODE; ?>" frameBorder="no" width="0" height="0"></iframe>
+
+<?php
+}
+
+if (    isset($auth) &&
+    (
+        // FAQ
+        ('takequestion' == $_action)
+     || ('editentry'    == $_action)
+     || ('editpreview'  == $_action)
+        // News
+     || ('news'         == $_action)
+    )
+    ) {
+?>
 <!-- tinyMCE -->
 <script type="text/javascript">
 <!--
@@ -48,7 +63,7 @@ if (isset($auth)) {
         editor_deselector : "mceNoEditor",
         document_base_url : "<?php print(PMF_Link::getSystemRelativeUri('admin/index.php')); ?>",
         theme : "advanced",
-        plugins : "PMFIntFaqLink,table,save,advhr,advimage,advlink,emotions,iespell,insertdatetime,preview,zoom,flash,searchreplace,print,paste,directionality,fullscreen,noneditable,contextmenu",
+        plugins : "table,save,advhr,advimage,advlink,emotions,iespell,insertdatetime,preview,zoom,flash,searchreplace,print,paste,directionality,fullscreen,noneditable,contextmenu",
         theme_advanced_disable : "styleselect",
         theme_advanced_buttons1_add_before : "save,newdocument,separator",
         theme_advanced_buttons1_add : "fontselect,fontsizeselect",
