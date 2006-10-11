@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.71 2006-09-25 05:29:19 thorstenr Exp $
+* $Id: index.php,v 1.72 2006-10-11 19:41:35 matteo Exp $
 *
 * The main admin backend index file
 *
@@ -22,10 +22,12 @@
 * under the License.
 */
 
+define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
+
 //
 // Check if data.php exist -> if not, redirect to installer
 //
-if (!file_exists('../inc/data.php')) {
+if (!file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
     header("Location: ".str_replace('admin/index.php', '', $_SERVER["PHP_SELF"])."install/installer.php");
     exit();
 }
@@ -33,7 +35,6 @@ if (!file_exists('../inc/data.php')) {
 //
 // Prepend
 //
-define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('IS_VALID_PHPMYFAQ_ADMIN', null);
 require_once(PMF_ROOT_DIR.'/inc/Init.php');
 PMF_Init::cleanRequest();
