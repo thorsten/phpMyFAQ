@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.62 2006-10-07 15:23:00 matteo Exp $
+* $Id: artikel.php,v 1.63 2006-10-11 22:06:40 matteo Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -116,7 +116,7 @@ if (isset($oLnk->urlpool['href'])) {
             $_link = substr($_url, 9);
             // Move the link to XHTML
             if (strpos($_url, '&amp;') === false) {
-                $_link = str_replace('&', '&amp;', $link);
+                $_link = str_replace('&', '&amp;', $_link);
             }
             $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().$_link);
             $oLink->itemTitle = $_title;
