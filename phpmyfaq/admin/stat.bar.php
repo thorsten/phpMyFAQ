@@ -1,30 +1,27 @@
 <?php
-/******************************************************************************
- * File:				stat.bar.php
- * Description:			generates a graphical bar
- * Author:				Thorsten Rinne <thorsten@phpmyfaq.de>
- * Date:				2003-10-26
- * Last change:			2003-10-26
- * Copyright:           (c) 2001-2006 phpMyFAQ Team
-* 
+/**
+* $Id: stat.bar.php,v 1.8 2006-10-11 19:29:01 matteo Exp $
+*
+* Generates a graphical bar
+*
+* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+* @since        2003-10-26
+* @copyright    (c) 2001-2006 phpMyFAQ Team
+*
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
 * compliance with the License. You may obtain a copy of the License at
 * http://www.mozilla.org/MPL/
-* 
+*
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
 * under the License.
 */
 
-if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
-    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
-    exit();
-}
+define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
-require_once('../inc/functions.php');
-require_once('../inc/Init.php');
+require_once(PMF_ROOT_DIR.'/inc/Init.php');
 PMF_Init::cleanRequest();
 
 header ("Content-type: image/png");
@@ -38,23 +35,20 @@ if (isset($_GET["num"]) && $_GET["num"] != "") {
         $textColor = imagecolorallocate ($image, 255, 255, 255);
         $barColor = imagecolorallocate ($image, 255, 0, 0);
         imagefilledrectangle ($image, 0, 0, round(($num/100)*50), 15, $barColor);
-        }
-    elseif ($num > 75) {
+    } elseif ($num > 75) {
         $textColor = imagecolorallocate ($image, 255, 255, 255);
         $barColor = imagecolorallocate ($image, 0, 128, 0);
         imagefilledrectangle ($image, 0, 0, round(($num/100)*50), 15, $barColor);
-        }
-    elseif ($num <= 75 AND $num >= 25) {
+    } elseif ($num <= 75 AND $num >= 25) {
         $textColor = imagecolorallocate ($image, 255, 255, 255);
         $barColor = imagecolorallocate ($image, 150, 150, 150);
         imagefilledrectangle ($image, 0, 0, round(($num/100)*50), 15, $barColor);
-        }
+    }
     imagestring ($image, 2, 1, 1, $num."%", $textColor);
-    }
-else {
+} else {
     imagestring ($image, 1, 5, 5, "n/a", $textColor);
-    }
+}
 
-ImagePNG ($image);
+imagepng($image);
 ?>
 
