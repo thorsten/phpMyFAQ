@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.63 2006-10-11 22:06:40 matteo Exp $
+* $Id: artikel.php,v 1.64 2006-10-12 21:51:08 matteo Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -64,7 +64,10 @@ $thema   = $oG->insertItemsIntoContent($thema);
 // Set the path of the current category
 $categoryName = $tree->getPath($currentCategory, ' &raquo; ', true);
 
-$changeLanguagePath = sprintf('index.php?%saction=artikel&amp;cat=%d&amp;id=%d', $sids, $currentCategory, $id);
+$changeLanguagePath = PMF_Link::getSystemRelativeUri().sprintf('?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s', $sids, $currentCategory, $id, $LANGCODE);
+$oLink = new PMF_Link($changeLanguagePath);
+$oLink->itemTitle = $faq->getRecordTitle($id, false);
+$changeLanguagePath = $oLink->toString();
 
 $highlight = '';
 if (isset($_GET['highlight']) && $_GET['highlight'] != "/" && $_GET['highlight'] != "<" && $_GET['highlight'] != ">" && strlen($_GET['highlight']) > 1) {
@@ -129,12 +132,14 @@ if (isset($oLnk->urlpool['href'])) {
 $content = $fixedContent;
 
 $arrLanguage = check4Language($id);
-$switchLanguage = "";
-$check4Lang = "";
+$switchLanguage = '';
+$check4Lang = '';
 $num = count($arrLanguage);
 if ($num > 1) {
     foreach ($arrLanguage as $language) {
-        $check4Lang .= "<option value=\"".$language."\">".$languageCodes[strtoupper($language)]."</option>\n";
+        $check4Lang .= "<option value=\"".$language."\"";
+        $check4Lang .= ($lang == $language ? ' selected="selected"' : '');
+        $check4Lang .= ">".$languageCodes[strtoupper($language)]."</option>\n";
     }
     $switchLanguage .= "<p>\n";
     $switchLanguage .= "<fieldset>\n";

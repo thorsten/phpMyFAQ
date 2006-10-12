@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.75 2006-10-12 19:05:16 matteo Exp $
+* $Id: index.php,v 1.76 2006-10-12 21:51:08 matteo Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the
@@ -189,6 +189,16 @@ if (isset($_POST["artlang"]) && PMF_Init::isASupportedLanguage($_POST["artlang"]
 $faq = new PMF_Faq($db, $lang);
 
 //
+// Create a new Category object
+//
+$tree = new PMF_Category($LANGCODE);
+
+//
+// Create a new Tags object
+//
+$oTag = new PMF_Tags($db, $LANGCODE);
+
+//
 // Found a record ID?
 //
 if (isset($_REQUEST["id"]) && is_numeric($_REQUEST["id"]) == true) {
@@ -223,7 +233,6 @@ if (isset($_GET["cat"])) {
 } else {
     $cat = 0;
 }
-$tree = new PMF_Category($LANGCODE);
 $cat_from_id = -1;
 if (is_numeric($id) && $id > 0) {
     $cat_from_id = $tree->getCategoryIdFromArticle($id);
@@ -396,7 +405,6 @@ if (isset($auth)) {
 }
 $tpl->includeTemplate('loginBox', 'index');
 
-$oTag = new PMF_Tags($db, $LANGCODE);
 $tpl->processTemplate('rightBox', array(
     'writeTopTenHeader'     => $PMF_LANG['msgTopTen'],
     'writeTopTenRow'        => $faq->getTopTen(),
