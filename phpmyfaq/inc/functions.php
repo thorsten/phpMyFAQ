@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.146 2006-09-26 16:50:42 thorstenr Exp $
+* $Id: functions.php,v 1.147 2006-10-12 19:02:21 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -1264,7 +1264,7 @@ function searchEngine($begriff, $category = '%', $allLanguages = true)
         $cond = array_merge(array(SQLPREFIX."faqcategoryrelations.category_id" => $category), $cond);
     }
     if (!$allLanguages) {
-        $cond = array_merge(array("faqdata.lang" => "'".$LANGCODE."'"), $cond);
+        $cond = array_merge(array(SQLPREFIX."faqdata.lang" => "'".$LANGCODE."'"), $cond);
     }
 
     if (is_numeric($begriff)) {
@@ -1298,7 +1298,7 @@ function searchEngine($begriff, $category = '%', $allLanguages = true)
                         $begriff,
                         $cond);
     }
-
+    
     if ($result) {
         $num = $db->num_rows($result);
     }
