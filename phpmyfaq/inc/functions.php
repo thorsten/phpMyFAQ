@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.147 2006-10-12 19:02:21 thorstenr Exp $
+* $Id: functions.php,v 1.148 2006-10-12 19:05:54 thorstenr Exp $
 *
 * This is the main functions file!
 *
@@ -1307,7 +1307,7 @@ function searchEngine($begriff, $category = '%', $allLanguages = true)
     // Sanity checks: if a valid Solution ID has been provided the result set
     //                will measure 1: this is true ONLY if the faq is not
     //                classified among more than 1 category
-    if (is_numeric($begriff) && ($begriff > PMF_SOLUTION_ID_START_VALUE) && ($num > 0)) {
+    if (is_numeric($begriff) && ($begriff >= PMF_SOLUTION_ID_START_VALUE) && ($num == 1)) {
         // Hack: before a redirection we must force the PHP session update for preventing data loss
         session_write_close();
         if (isset($PMF_CONF['mod_rewrite']) && $PMF_CONF['mod_rewrite']) {
