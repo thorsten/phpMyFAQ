@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.save.php,v 1.43 2006-10-12 18:40:26 matteo Exp $
+* $Id: record.save.php,v 1.44 2006-10-12 22:02:13 matteo Exp $
 *
 * Save or update a FAQ record
 *
@@ -129,7 +129,7 @@ if (    isset($submit[1])
     if ($num == "1") {
         $query = "UPDATE ".SQLPREFIX."faqdata SET thema = '".$thema."', content = '".$content."', keywords = '".$keywords."', author = '".$author."', active = '".$_REQUEST["active"]."', datum = '".$datum."',  date_start = '".$dateStart."', date_end = '".$dateEnd."', email = '".$db->escape_string($_REQUEST["email"])."', comment = '".$comment."' WHERE id = ".$_REQUEST["id"]." AND lang = '".$_REQUEST["language"]."'";
     } else {
-        $query = "INSERT INTO ".SQLPREFIX."faqdata (id, lang, thema, content, keywords, author, active, datum, email, comment, date_start, date_end) VALUES (".$_REQUEST["id"].", '".$_REQUEST["language"]."', '".$thema."', '".$content."', '".$keywords."', '".$author."', '".$_REQUEST["active"]."', '".$datum."', '".$db->escape_string($_REQUEST["email"])."', '".$comment."', '".$dateStart."', '".$dateEnd."')";
+        $query = "INSERT INTO ".SQLPREFIX."faqdata (id, solution_id, lang, thema, content, keywords, author, active, datum, email, comment, date_start, date_end) VALUES (".$_REQUEST["id"].", ".$_REQUEST["solution_id"].", '".$_REQUEST["language"]."', '".$thema."', '".$content."', '".$keywords."', '".$author."', '".$_REQUEST["active"]."', '".$datum."', '".$db->escape_string($_REQUEST["email"])."', '".$comment."', '".$dateStart."', '".$dateEnd."')";
     }
 
     if ($db->query($query)) {
