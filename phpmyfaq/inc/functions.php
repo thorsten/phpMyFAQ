@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.149 2006-10-12 20:59:53 matteo Exp $
+* $Id: functions.php,v 1.150 2006-10-12 21:20:33 matteo Exp $
 *
 * This is the main functions file!
 *
@@ -1277,7 +1277,8 @@ function searchEngine($begriff, $category = '%', $allLanguages = true)
                               SQLPREFIX.'faqdata.thema AS thema',
                               SQLPREFIX.'faqdata.content AS content'),
                         SQLPREFIX.'faqcategoryrelations',
-                        array(SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id'),
+                        array(SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id',
+                              SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang'),
                         array(SQLPREFIX.'faqdata.solution_id'),
                         $begriff,
                         $cond);
