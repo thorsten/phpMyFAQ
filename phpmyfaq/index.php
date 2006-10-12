@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.74 2006-09-18 20:19:16 matteo Exp $
+* $Id: index.php,v 1.75 2006-10-12 19:05:16 matteo Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the
@@ -175,11 +175,6 @@ if ($faqconfig->get('tracking')) {
 }
 
 //
-// Create a new FAQ object
-//
-$faq = new PMF_Faq($db, $LANGCODE);
-
-//
 // Found a article language?
 //
 if (isset($_POST["artlang"]) && PMF_Init::isASupportedLanguage($_POST["artlang"]) ) {
@@ -189,12 +184,17 @@ if (isset($_POST["artlang"]) && PMF_Init::isASupportedLanguage($_POST["artlang"]
 }
 
 //
+// Create a new FAQ object
+//
+$faq = new PMF_Faq($db, $lang);
+
+//
 // Found a record ID?
 //
 if (isset($_REQUEST["id"]) && is_numeric($_REQUEST["id"]) == true) {
     $id = (int)$_REQUEST["id"];
-    $title = ' - '.stripslashes($faq->getRecordTitle($id, $lang));
-    $keywords = ' '.stripslashes($faq->getRecordKeywords($id, $lang));
+    $title = ' - '.$faq->getRecordTitle($id);
+    $keywords = ' '.$faq->getRecordKeywords($id);
 } else {
     $id = '';
     $title = ' -  powered by phpMyFAQ '.$faqconfig->get('version');
