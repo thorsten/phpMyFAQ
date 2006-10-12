@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.148 2006-10-12 19:05:54 thorstenr Exp $
+* $Id: functions.php,v 1.149 2006-10-12 20:59:53 matteo Exp $
 *
 * This is the main functions file!
 *
@@ -1263,7 +1263,7 @@ function searchEngine($begriff, $category = '%', $allLanguages = true)
     if ($category != '%') {
         $cond = array_merge(array(SQLPREFIX."faqcategoryrelations.category_id" => $category), $cond);
     }
-    if (!$allLanguages) {
+    if ((!$allLanguages) && (!is_numeric($begriff))) {
         $cond = array_merge(array(SQLPREFIX."faqdata.lang" => "'".$LANGCODE."'"), $cond);
     }
 
@@ -1277,8 +1277,7 @@ function searchEngine($begriff, $category = '%', $allLanguages = true)
                               SQLPREFIX.'faqdata.thema AS thema',
                               SQLPREFIX.'faqdata.content AS content'),
                         SQLPREFIX.'faqcategoryrelations',
-                        array(SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id',
-                              SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang'),
+                        array(SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id'),
                         array(SQLPREFIX.'faqdata.solution_id'),
                         $begriff,
                         $cond);
@@ -1307,7 +1306,7 @@ function searchEngine($begriff, $category = '%', $allLanguages = true)
     // Sanity checks: if a valid Solution ID has been provided the result set
     //                will measure 1: this is true ONLY if the faq is not
     //                classified among more than 1 category
-    if (is_numeric($begriff) && ($begriff >= PMF_SOLUTION_ID_START_VALUE) && ($num == 1)) {
+    if (is_numeric($begriff) && ($begriff >= PMF_SOLUTION_ID_START_VALUE) && ($num > 0)) {
         // Hack: before a redirection we must force the PHP session update for preventing data loss
         session_write_close();
         if (isset($PMF_CONF['mod_rewrite']) && $PMF_CONF['mod_rewrite']) {
