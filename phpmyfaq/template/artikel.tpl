@@ -58,7 +58,6 @@
     <input type="hidden" name="id" value="{id}" />
     <input type="hidden" name="lang" value="{lang}" />
     <input type="hidden" name="type" value="faq" />
-    <input type="hidden" name="spamid" value="{spamid}" />
 
     <fieldset>
     <legend>{msgWriteComment}</legend>
