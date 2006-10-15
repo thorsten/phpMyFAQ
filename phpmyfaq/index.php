@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.76 2006-10-12 21:51:08 matteo Exp $
+* $Id: index.php,v 1.77 2006-10-15 20:54:13 matteo Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the
@@ -304,6 +304,8 @@ $tpl = new PMF_Template (array(
     'rightBox'              => $right_tpl,
     'writeContent'          => $inc_tpl));
 
+$usersOnLine = getUsersOnline();
+$totUsersOnLine = $usersOnLine[0] + $usersOnLine[1];
 $main_template_vars = array(
     "title"                 => $faqconfig->get('title').$title,
     'version'               => $faqconfig->get('version'),
@@ -322,7 +324,9 @@ $main_template_vars = array(
     "languageBox"           => $PMF_LANG["msgLangaugeSubmit"],
     "writeLangAdress"       => $writeLangAdress,
     "switchLanguages"       => selectLanguages($LANGCODE),
-    "userOnline"            => userOnline().$PMF_LANG["msgUserOnline"],
+    "userOnline"            => $totUsersOnLine.$PMF_LANG['msgUserOnline'].sprintf($PMF_LANG['msgUsersOnline'],
+                                    $usersOnLine[0],
+                                    $usersOnLine[1]),
     "copyright"             => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> '.$faqconfig->get('version'));
 
 if ($faqconfig->get('mod_rewrite')) {

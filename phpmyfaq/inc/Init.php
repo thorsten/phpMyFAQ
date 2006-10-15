@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Init.php,v 1.11 2006-07-17 21:03:19 matteo Exp $
+* $Id: Init.php,v 1.12 2006-10-15 20:54:13 matteo Exp $
 *
 * Some functions
 *
@@ -56,9 +56,7 @@ $PMF_CONF = $faqconfig->config;
 //
 // We always need a valid session!
 //
-session_name('pmf_sid_');
-// TODO: Avoid to manage the PMF auth session expiration by simply setting the lifetime to the PHP session cookie. Hint: faquser table, fields session_id and session_timestamp
-session_set_cookie_params(PMF_AUTH_TIMEOUT * 60);
+session_name('pmf_auth');
 session_start();
 
 //

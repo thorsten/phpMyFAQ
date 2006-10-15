@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.150 2006-10-12 21:20:33 matteo Exp $
+* $Id: functions.php,v 1.151 2006-10-15 20:54:12 matteo Exp $
 *
 * This is the main functions file!
 *
@@ -754,26 +754,46 @@ function CheckSID($sid, $ip)
 }
 
 /*
- * Funktion für Anzeige von Usern, die online sind | @@ Thorsten, 2001-05-02
- * Last Update: @@ Thorsten, 2004-07-17
- * Last Update: @@ Matteo, 2006-03-13
+ * Returns the number of anonymous users and registered ones.
+ * These are the numbers of unique users who have perfomed
+ * some activities within the last five minutes
+ *
+ * @param    integer    Optionally set the time window size in sec. Default: 300sec, 5 minutes
+ * @return   array
+ * @access   public
+ * @since    2004-07-17
+ * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author   Matteo Scaramuccia <matteo@scaramuccia.com>
  */
-function userOnline()
+function getUsersOnline($activityTimeWindow = 300)
 {
     global $db, $PMF_CONF;
+    $users = array(0 ,0);
 
     if (isset($PMF_CONF['tracking']) && $PMF_CONF['tracking']) {
-        $timeNow = (time() - 300);
-        // Count all sids within the last five minutes (300sec), that is to say
-        // the number of unique users who have perfomed some activities within the last five minutes
-        $result = $db->query("SELECT count(sid) AS activeusers FROM ".SQLPREFIX."faqsessions WHERE time > ".$timeNow);
+        $timeNow = (time() - $activityTimeWindow);
+        // Count all sids within the time window
+        // TODO: add a new field in faqsessions in order to find out only sids of anonymous users
+        $result = $db->query("
+                    SELECT
+                        count(sid) AS anonymous_users
+                    FROM ".SQLPREFIX."faqsessions WHERE time > ".$timeNow);
         if (isset($result)) {
             $row = $db->fetch_object($result);
-            return $row->activeusers;
+            $users[0] = $row->anonymous_users;
+        }
+        // Count all faquser records within the time window
+        $result = $db->query("
+                    SELECT
+                        count(session_id) AS registered_users
+                    FROM ".SQLPREFIX."faquser WHERE session_timestamp > ".$timeNow);
+        if (isset($result)) {
+            $row = $db->fetch_object($result);
+            $users[1] = $row->registered_users;
         }
     }
 
-    return 0;
+    return $users;
 }
 
 

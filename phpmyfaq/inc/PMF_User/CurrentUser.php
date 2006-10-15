@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: CurrentUser.php,v 1.18 2006-08-18 11:20:51 matteo Exp $
+ * $Id: CurrentUser.php,v 1.19 2006-10-15 20:54:13 matteo Exp $
  *
  * manages authentication process using php sessions.
  *
@@ -27,8 +27,8 @@ require_once dirname(__FILE__).'/User.php';
 /* user defined constants */
 @define('PMF_SESSION_CURRENT_USER', 'PMF_CURRENT_USER');
 @define('PMF_SESSION_ID_TIMESTAMP', 'PMF_SESSION_TIMESTAMP');
-@define('PMF_SESSION_ID_EXPIRES', 30);
-@define('PMF_SESSION_ID_REFRESH', 10);
+@define('PMF_SESSION_ID_EXPIRES', PMF_AUTH_TIMEOUT);
+@define('PMF_SESSION_ID_REFRESH', PMF_AUTH_TIMEOUT_WARNING);
 @define('PMF_LOGIN_BY_SESSION', true);
 @define('PMF_LOGIN_BY_SESSION_FAILED', 'Could not login user from session. ');
 @define('PMF_LOGIN_BY_AUTH_FAILED', 'Could not login with login and password. ');
@@ -69,7 +69,7 @@ class PMF_CurrentUser extends PMF_User
     * @access private
     * @var int
     */
-    var $_session_timeout = 60;
+    var $_session_timeout = PMF_SESSION_ID_EXPIRES;
 
     /**
     * Session-ID timeout
@@ -404,8 +404,10 @@ class PMF_CurrentUser extends PMF_User
         $user = new PMF_CurrentUser();
         $user->getUserById($_SESSION[PMF_SESSION_CURRENT_USER]);
         // user object is timed out
-        if ($user->sessionIsTimedOut())
+        if ($user->sessionIsTimedOut()) {
+            $user->deleteFromSession();
             return null;
+        }
         // session-id not found in user table
         $session_info = $user->getSessionInfo();
         $session_id = (isset($session_info['session_id']) ? $session_info['session_id'] : '');

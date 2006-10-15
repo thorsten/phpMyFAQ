@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.35 2006-10-10 18:51:19 matteo Exp $
+* $Id: language_it.php,v 1.36 2006-10-15 20:54:13 matteo Exp $
 *
 * Italian language file
 *
@@ -834,3 +834,6 @@ $PMF_LANG['ad_entry_intlink'] = 'Seleziona una FAQ per aggiungerla come link...'
 $PMF_LANG["ad_categ_paste2"] = 'Incolla dopo';
 $PMF_LANG["ad_categ_remark_move"] = 'Lo scambio di due categorie è possibile solo con elementi dello stesso livello.';
 $PMF_LANG["ad_categ_remark_overview"] = "Viene mostrato l'ordine corretto delle categorie se sono state definite tutte le categorie per la lingua corrente (vedi prima colonna).";
+
+// added v2.0.0 - 2006-10-15 by Matteo
+$PMF_LANG['msgUsersOnline'] = ' :: %d Ospiti e %d Registrati';

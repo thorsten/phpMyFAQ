@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.60 2006-10-10 16:47:29 thorstenr Exp $
+* $Id: language_en.php,v 1.61 2006-10-15 20:54:13 matteo Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -834,3 +834,6 @@ $PMF_LANG['ad_entry_intlink'] = 'Select a FAQ record to insert it as a link...';
 $PMF_LANG["ad_categ_paste2"] = "Paste after";
 $PMF_LANG["ad_categ_remark_move"] = "The exchange of 2 categories is only possible at the same level.";
 $PMF_LANG["ad_categ_remark_overview"] = "The correct order of categories will be shown, if all categories are defined for the actual language (first column).";
+
+// added v2.0.0 - 2006-10-15 by Matteo
+$PMF_LANG['msgUsersOnline'] = ' :: %d Guests and %d Registered';
