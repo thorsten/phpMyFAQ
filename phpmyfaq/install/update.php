@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.91 2006-10-10 20:28:10 thorstenr Exp $
+* $Id: update.php,v 1.92 2006-10-18 21:16:33 thorstenr Exp $
 *
 * Main update script
 *
@@ -1283,7 +1283,20 @@ if ($step == 5) {
         }
     }
 
-    // Update version number
+    if (version_compare($version, '2.0.0-beta', '<')) {
+        // Add missing anonymous user account in 2.0.0-alpha
+        require_once(PMF_ROOT_DIR.'/inc/PMF_User/User.php');
+        $anonymous = new PMF_User();
+        $anonymous->createUser('anonymous user', null, -1);
+        $anonymous->setStatus('protected');
+        $anonymousData = array(
+            'display_name' => 'Anonymous User',
+            'email' => null
+        );
+        $anonymous->setUserData($anonymousData);
+    }
+    
+    // Always the last step: Update version number
     if (version_compare($version, NEWVERSION, '<')) {
         $oPMFConf = new PMF_Configuration($db);
         $oPMFConf->update(array('version' => NEWVERSION));
