@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.74 2006-10-10 20:14:52 thorstenr Exp $
+* $Id: installer.php,v 1.75 2006-10-18 21:10:48 thorstenr Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -922,6 +922,15 @@ foreach ($permLevels as $level => $desc) {
         $rightID = $admin->perm->addRight($right);
         $admin->perm->grantUserRight($adminID, $rightID);
     }
+    // Add anonymous user account
+    $anonymous = new PMF_User();
+    $anonymous->createUser('anonymous user', null, -1);
+    $anonymous->setStatus('protected');
+    $anonymousData = array(
+        'display_name' => 'Anonymous User',
+        'email' => null
+    );
+    $anonymous->setUserData($anonymousData);
     // set link verification base url
     require_once(PMF_ROOT_DIR.'/inc/Configuration.php');
     require_once(PMF_ROOT_DIR.'/inc/Link.php');
