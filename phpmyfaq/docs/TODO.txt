@@ -1,6 +1,6 @@
 TODO list for future versions of phpMyFAQ:
 
-2.0.0 "Prometheus":
+2.0.0 "Prometheus" (CVS branch: PMF_2_0):
 - (re)add FAQ external links in the WYSIWYG editor
 - add permission management for categories and records
 - simple reordering of records
@@ -8,7 +8,7 @@ TODO list for future versions of phpMyFAQ:
 - add "submit translation" link
 - bugfixing for stability or security reasons
 
-2.1.0 "Pandora":
+2.1.0 "Pandora" (CVS branch: PMF_2_1):
 - add full unicode support
 - add random list of records
 - add archive function
@@ -19,10 +19,11 @@ TODO list for future versions of phpMyFAQ:
 - subscription service for new articles ?
 - message to the user, who has posted a question and an answer is availible ?
 - installer and update scripts merged together in a setup routine ?
+- update only possible from versions 1.6 and 2.0
 - more accessibility features (WAI and Section 508) ?
 - bugfixing for stability or security reasons
 
-2.2.0 "Portia":
+2.2.0 "Portia" (CVS branch: PMF_2_2):
 - add auto update feature ?
 - possibility to disable multiple languages
 - SOAP interface ?
@@ -30,9 +31,11 @@ TODO list for future versions of phpMyFAQ:
 - PDF2Mail ?
 - users can request a record changing ?
 - directory-like listing of entries ?
+- update only possible from versions 2.0 and 2.1
 - bugfixing for stability or security reasons
 
-3.0.0 "Poseidon":
+3.0.0 "Poseidon" (CVS branch: PMF_3_0):
 - PHP 5 / PHP 6 only version
 - PDO support
 - modularisation of all features
+- update only possible from versions 2.0, 2.1, and 2.2
