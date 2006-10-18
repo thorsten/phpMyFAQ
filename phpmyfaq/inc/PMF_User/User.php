@@ -259,12 +259,12 @@ class PMF_User
      */
     function getUserId()
     {
-        if (isset($this->_user_id) and is_int($this->_user_id) and $this->_user_id > 0) {
-            return (int) $this->_user_id;
+        if (isset($this->_user_id) && is_int($this->_user_id)) {
+            return (int)$this->_user_id;
         }
-        $this->_user_id = (int) 0;
+        $this->_user_id = 0;
         $this->errors[] = PMF_USERERROR_NO_USERID;
-        return (int) 0;
+        return 0;
     }
 
     /**
@@ -377,13 +377,15 @@ class PMF_User
     /**
      * creates a new user and stores basic data in the database.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param string
-     * @param string
-     * @return mixed
+     * @access  public
+     * @author  Lars Tiedemann, <php@larstiedemann.de>
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param   string
+     * @param   string
+     * @param   integer
+     * @return  mixed
      */
-    function createUser($login, $pass = '')
+    function createUser($login, $pass = '', $user_id = 0)
     {
         if (!$this->checkDb($this->_db))
             return false;
@@ -402,7 +404,11 @@ class PMF_User
             return false;
         }
         // set user-ID
-        $this->_user_id = (int) $this->_db->nextID(PMF_USER_SQLPREFIX.'user', 'user_id');
+        if (0 != $user_id) {
+            $this->_user_id = (int) $this->_db->nextID(PMF_USER_SQLPREFIX.'user', 'user_id');
+        } else {
+            $this->_user_id = -1;
+        }
         // create user entry
         $now = time();
         $query = sprintf(
