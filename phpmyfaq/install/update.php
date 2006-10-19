@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.92 2006-10-18 21:16:33 thorstenr Exp $
+* $Id: update.php,v 1.93 2006-10-19 17:29:17 matteo Exp $
 *
 * Main update script
 *
@@ -205,7 +205,7 @@ if ($step == 2) {
     } else {
         $test1 = 1;
     }
-    if (!@is_writeable(PMF_ROOT_DIR."/inc/config.php") && version_compare($version, NEWVERSION, '>')) {
+    if (!@is_writeable(PMF_ROOT_DIR."/inc/config.php") && version_compare($version, '2.0.0-alpha', '<')) {
         print "<p class=\"error\"><strong>Error:</strong> The file ../inc/config.php is not writeable. Please correct this!</p>";
     } else {
         $test2 = 1;
@@ -215,7 +215,7 @@ if ($step == 2) {
     } else {
         $test3 = 1;
     }
-    if (!@copy(PMF_ROOT_DIR."/inc/config.php", PMF_ROOT_DIR."/inc/config.bak.php") && version_compare($version, NEWVERSION, '>')) {
+    if (!@copy(PMF_ROOT_DIR."/inc/config.php", PMF_ROOT_DIR."/inc/config.bak.php") && version_compare($version, '2.0.0-alpha', '<')) {
         print "<p class=\"error\"><strong>Error:</strong> The backup file ../inc/config.bak.php could not be written. Please correct this!</p>";
     } else {
         $test4 = 1;
@@ -257,7 +257,7 @@ if ($step == 3) {
 <fieldset class="installation">
 <legend class="installation"><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 3 of 5)</strong></legend>
 <?php
-    if (version_compare($version, NEWVERSION, '>')) {
+    if (version_compare($version, '2.0.0-alpha', '<')) {
         require_once(PMF_ROOT_DIR."/inc/config.php");
     }
     if (version_compare($version, '1.5.0', '<')) {
@@ -356,7 +356,7 @@ if ($step == 4) {
 <legend class="installation"><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 4 of 5)</strong></legend>
 <?php
     $version = $_REQUEST["version"];
-    if (version_compare($version, NEWVERSION, '>')) {
+    if (version_compare($version, '2.0.0-alpha', '<')) {
         require_once(PMF_ROOT_DIR."/inc/config.php");
     }
 
@@ -383,7 +383,7 @@ if ($step == 4) {
 /**************************** STEP 5 OF 5 ***************************/
 if ($step == 5) {
     $version = $_REQUEST["version"];
-    if (version_compare($version, NEWVERSION, '>')) {
+    if (version_compare($version, '2.0.0-alpha', '<')) {
         require_once(PMF_ROOT_DIR."/inc/config.php");
     }
     
@@ -636,7 +636,7 @@ if ($step == 5) {
 
     $images = array();
 
-    if (version_compare($version, '2.0.0', '>')) {
+    if (version_compare($version, '2.0.0-alpha', '<')) {
         // Fix old/odd errors
         // 1/1. Fix faqchanges.usr
         switch($DB["type"]) {
@@ -1234,7 +1234,7 @@ if ($step == 5) {
         }
     }
 
-    if (version_compare($version, '2.0.0', '>')) {
+    if (version_compare($version, '2.0.0-alpha', '<')) {
         // 11/13. Move each image file in each of the faq content, from '/images' to '/images/Image'
         foreach ($images as $image) {
             $newImagePath = str_replace('/images/', '/images/Image/', $image);
@@ -1258,31 +1258,6 @@ if ($step == 5) {
         $oPMFConf->update($PMF_CONF);
     }
 
-    print "</p>\n";
-
-    print '<p class="center">The database was updated successfully.</p>';
-    print '<p class="center"><a href="../index.php">phpMyFAQ</a></p>';
-    foreach (glob(PMF_ROOT_DIR.'/inc/*.bak.php') as $filename) {
-        if (!@unlink($filename)) {
-            print "<p class=\"center\">Please manually remove the backup file '".$filename."'.</p>\n";
-        }
-    }
-
-    if (version_compare($version, '2.0.0', '<')) {
-        // 13/13. Remove the old config file
-        if (@unlink(PMF_ROOT_DIR."/inc/config.php")) {
-            print "<p class=\"center\">The file 'inc/config.php' was deleted automatically.</p>\n";
-        } else {
-            print "<p class=\"center\">Please delete the file 'inc/config.php' manually.</p>\n";
-        }
-        @chmod(PMF_ROOT_DIR."/inc/config.php.original", 0666);
-        if (@unlink(PMF_ROOT_DIR."/inc/config.php.original")) {
-            print "<p class=\"center\">The file 'inc/config.php.original' was deleted automatically.</p>\n";
-        } else {
-            print "<p class=\"center\">Please delete the file 'inc/config.php.original' manually.</p>\n";
-        }
-    }
-
     if (version_compare($version, '2.0.0-beta', '<')) {
         // Add missing anonymous user account in 2.0.0-alpha
         require_once(PMF_ROOT_DIR.'/inc/PMF_User/User.php');
@@ -1295,11 +1270,36 @@ if ($step == 5) {
         );
         $anonymous->setUserData($anonymousData);
     }
-    
+
     // Always the last step: Update version number
     if (version_compare($version, NEWVERSION, '<')) {
         $oPMFConf = new PMF_Configuration($db);
         $oPMFConf->update(array('version' => NEWVERSION));
+    }
+
+    print "</p>\n";
+
+    print '<p class="center">The database was updated successfully.</p>';
+    print '<p class="center"><a href="../index.php">phpMyFAQ</a></p>';
+    foreach (glob(PMF_ROOT_DIR.'/inc/*.bak.php') as $filename) {
+        if (!@unlink($filename)) {
+            print "<p class=\"center\">Please manually remove the backup file '".$filename."'.</p>\n";
+        }
+    }
+
+    if (version_compare($version, '2.0.0-alpha', '<')) {
+        // 13/13. Remove the old config file
+        if (@unlink(PMF_ROOT_DIR."/inc/config.php")) {
+            print "<p class=\"center\">The file 'inc/config.php' was deleted automatically.</p>\n";
+        } else {
+            print "<p class=\"center\">Please delete the file 'inc/config.php' manually.</p>\n";
+        }
+        @chmod(PMF_ROOT_DIR."/inc/config.php.original", 0666);
+        if (@unlink(PMF_ROOT_DIR."/inc/config.php.original")) {
+            print "<p class=\"center\">The file 'inc/config.php.original' was deleted automatically.</p>\n";
+        } else {
+            print "<p class=\"center\">Please delete the file 'inc/config.php.original' manually.</p>\n";
+        }
     }
 
     // Remove 'scripts' folder: no need of prompt anything to the user
