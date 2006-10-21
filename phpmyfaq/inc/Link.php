@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Link.php,v 1.21 2006-10-11 21:59:11 matteo Exp $
+* $Id: Link.php,v 1.22 2006-10-21 10:08:37 thorstenr Exp $
 *
 * Link management - Functions and Classes
 *
@@ -18,6 +18,12 @@
 * License for the specific language governing rights and limitations
 * under the License.
 */
+
+/**
+ * PHP 6 script encoding
+ *
+ */
+declare(encoding='latin1');
 
 // {{{ Constants
 /**#@+

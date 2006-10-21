@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: constants.php,v 1.20 2006-09-26 19:27:25 matteo Exp $
+* $Id: constants.php,v 1.21 2006-10-21 10:08:37 thorstenr Exp $
 *
 * Constants for phpMyFAQ
 *
@@ -18,6 +18,12 @@
 * for the specific language governing rights and limitations under the
 * License.
 */
+
+/**
+ * PHP 6 script encoding
+ *
+ */
+declare(encoding='latin1');
 
 /**
  * Use this constant if you want to change your timezone
