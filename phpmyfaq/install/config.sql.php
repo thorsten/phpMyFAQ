@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: config.sql.php,v 1.5 2006-09-17 20:01:51 thorstenr Exp $
+* $Id: config.sql.php,v 1.6 2006-10-21 09:52:45 thorstenr Exp $
 *
 * INSERT instruction for configuration
 *
@@ -38,6 +38,7 @@ $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('numNewsArticles', '3')"
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('numRecordsPage', '10')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('parse_php', 'false')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('permLevel', '".$permLevel."')";
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('phpMyFAQToken', '')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('referenceURL', '')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('send2friendText', '')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('spamCheckBannedWords', 'true')";
