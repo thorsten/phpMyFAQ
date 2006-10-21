@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.93 2006-10-19 17:29:17 matteo Exp $
+* $Id: update.php,v 1.94 2006-10-21 09:59:32 thorstenr Exp $
 *
 * Main update script
 *
@@ -1269,6 +1269,8 @@ if ($step == 5) {
             'email' => null
         );
         $anonymous->setUserData($anonymousData);
+        $oPMFConf = new PMF_Configuration($db);
+        $oPMFConf->update(array('phpMyFAQToken' => md5(uniqid(rand()))));
     }
 
     // Always the last step: Update version number

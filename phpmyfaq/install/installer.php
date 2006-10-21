@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.75 2006-10-18 21:10:48 thorstenr Exp $
+* $Id: installer.php,v 1.76 2006-10-21 09:59:32 thorstenr Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -937,7 +937,8 @@ foreach ($permLevels as $level => $desc) {
     $oConf = new PMF_Configuration($db);
     $oConf->getAll();
     $configs = $oConf->config;
-    $configs['referenceURL'] = PMF_Link::getSystemUri('/install/installer.php');;
+    $configs['referenceURL'] = PMF_Link::getSystemUri('/install/installer.php');
+    $configs['phpMyFAQToken'] = md5(uniqid(rand()));
     $oConf->update($configs);
     print "</p>\n";
 

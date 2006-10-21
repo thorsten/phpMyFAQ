@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Init.php,v 1.12 2006-10-15 20:54:13 matteo Exp $
+* $Id: Init.php,v 1.13 2006-10-21 10:01:31 thorstenr Exp $
 *
 * Some functions
 *
@@ -56,7 +56,7 @@ $PMF_CONF = $faqconfig->config;
 //
 // We always need a valid session!
 //
-session_name('pmf_auth');
+session_name('pmf_auth_'.$faqconfig->get('phpMyFAQToken'));
 session_start();
 
 //
