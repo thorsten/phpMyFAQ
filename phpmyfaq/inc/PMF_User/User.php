@@ -404,7 +404,7 @@ class PMF_User
             return false;
         }
         // set user-ID
-        if (0 != $user_id) {
+        if (0 == $user_id) {
             $this->_user_id = (int) $this->_db->nextID(PMF_USER_SQLPREFIX.'user', 'user_id');
         } else {
             $this->_user_id = -1;
