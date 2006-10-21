@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: config.sql.php,v 1.6 2006-10-21 09:52:45 thorstenr Exp $
+* $Id: config.sql.php,v 1.7 2006-10-21 11:13:34 thorstenr Exp $
 *
 * INSERT instruction for configuration
 *
@@ -21,7 +21,7 @@
 
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('adminmail', 'webmaster@example.org')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('attmax', '100000')";
-$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('bannedIP', 'false')";
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('bannedIP', '')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('detection', 'true')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('disatt', 'true')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('enableadminlog', 'true')";
