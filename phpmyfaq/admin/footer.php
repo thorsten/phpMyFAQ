@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: footer.php,v 1.20 2006-10-29 06:45:09 thorstenr Exp $
+* $Id: footer.php,v 1.21 2006-10-29 06:47:31 thorstenr Exp $
 *
 * Footer of the admin area
 *
@@ -169,7 +169,9 @@ if (    isset($auth) &&
                         makeShorterText($_title, 8)
                         );
         }
-        $output = substr($output, 0, -2);
+        if (count($faq->faqRecords) > 0) {
+            $output = substr($output, 0, -2);
+        }
         $output .= '</select>';
 
         print "return '".$output."'\n";
