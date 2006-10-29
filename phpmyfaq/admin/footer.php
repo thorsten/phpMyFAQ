@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: footer.php,v 1.19 2006-10-11 19:07:10 matteo Exp $
+* $Id: footer.php,v 1.20 2006-10-29 06:45:09 thorstenr Exp $
 *
 * Footer of the admin area
 *
@@ -181,7 +181,7 @@ if (    isset($auth) &&
 
         handleNodeChange : function(editor_id, node, undo_index, undo_levels, visual_aid, any_selection) {
             return true;
-        },
+        }
     };
 
     // Adds the plugin class to the list of available TinyMCE plugins
