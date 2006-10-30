@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.59 2006-10-07 15:23:00 matteo Exp $
+* $Id: Faq.php,v 1.60 2006-10-30 11:10:22 thorstenr Exp $
 *
 * The main FAQ class
 *
@@ -1777,6 +1777,41 @@ class PMF_Faq
         }
 
         return $sql;
+    }
+    
+    /**
+     * Adds the record permissions for users and groups
+     *
+     * @param   string  $mode           'group' or 'user'
+     * @param   integer $record_id      ID of the current record
+     * @param   integer $id             group ID or user ID
+     * @return  boolean
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function addPermission($mode, $category_id, $id)
+    {
+        if ('user' != $mode || 'group' != $mode) {
+            return false;
+        }
+        if (!is_int($record_id) && !is_int($id)) {
+            return false;
+        }
+
+        $query = sprintf("
+            INSERT INTO
+                %sfaqdata_%s
+            (record_id, %s_id)
+                VALUES
+            (%d, %d)",
+            SQLPREFIX,
+            $mode,
+            $mode,
+            $record_id,
+            $id);
+        $this->db->query($query);
+
+        return true;
     }
 }
 // }}}

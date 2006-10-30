@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Category.php,v 1.21 2006-10-10 16:47:52 thorstenr Exp $
+ * $Id: Category.php,v 1.22 2006-10-30 11:10:22 thorstenr Exp $
  *
  * The main category class
  *
@@ -1347,5 +1347,40 @@ class PMF_Category
         $result = $this->db->query($query);
         
         return $this->db->num_rows($result);
+    }
+    
+    /**
+     * Adds the category permissions for users and groups
+     *
+     * @param   string  $mode           'group' or 'user'
+     * @param   integer $category_id    ID of the current category
+     * @param   integer $id             group ID or user ID
+     * @return  boolean
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function addPermission($mode, $category_id, $id)
+    {
+        if ('user' != $mode || 'group' != $mode) {
+            return false;
+        }
+        if (!is_int($category_id) && !is_int($id)) {
+            return false;
+        }
+
+        $query = sprintf("
+            INSERT INTO
+                %sfaqcategory_%s
+            (category_id, %s_id)
+                VALUES
+            (%d, %d)",
+            SQLPREFIX,
+            $mode,
+            $mode,
+            $category_id,
+            $id);
+        $this->db->query($query);
+
+        return true;
     }
 }
