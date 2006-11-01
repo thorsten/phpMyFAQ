@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.save.php,v 1.45 2006-11-01 17:05:27 thorstenr Exp $
+* $Id: record.save.php,v 1.46 2006-11-01 19:26:53 thorstenr Exp $
 *
 * Save or update a FAQ record
 *
@@ -102,62 +102,68 @@ if (    isset($submit[1])
     adminlog("Beitragsave", $_REQUEST["id"]);
     print "<h2>".$PMF_LANG["ad_entry_aor"]."</h2>\n";
     
-    $revision = $_POST['revision'];
-
-    // Create ChangeLog entry
-    $faq->createChangeEntry((int)$_REQUEST["id"], $user->getUserId(), nl2br($_REQUEST["changed"]), $_REQUEST["language"]);
-
-    $record_id   = intval($_REQUEST["id"]);
-    $record_lang = $db->escape_string($_POST["language"]);
-    $solution_id = intval($_POST['solution_id']);
-    $revision_id = intval($_POST['revision_id']);
-    $thema       = $db->escape_string($_REQUEST["thema"]);
-    $content     = $db->escape_string($_REQUEST["content"]);
-    $keywords    = $db->escape_string($_REQUEST["keywords"]);
-    $author      = $db->escape_string($_REQUEST["author"]);
-
     $tagging = new PMF_Tags($db, $LANGCODE);
-
-    if (isset($_REQUEST["comment"]) && $_REQUEST["comment"] != "") {
-        $comment = $_REQUEST["comment"];
-    } else {
-        $comment = "n";
-    }
-
-    $datum  = date("YmdHis");
-    $rubrik = $_REQUEST["rubrik"];
-    $tags   = $db->escape_string(trim($_POST['tags']));
-
-    $_result = $db->query("SELECT id, lang FROM ".SQLPREFIX."faqdata WHERE id = ".$_REQUEST["id"]." AND lang = '".$_REQUEST["language"]."'");
-    $num = $db->num_rows($_result);
-
+    
+    $record_id   = intval($_REQUEST['id']);
+    $record_lang = $db->escape_string($_POST['language']);
+    $revision    = $db->escape_string($_POST['revision']);
+    $revision_id = intval($_POST['revision_id']);
+    
 	if ('yes' == $revision) {
         // Add current version into revision table
         $faq->addNewRevision($record_id, $record_lang);
         $revision_id += 1;
 	}
     
+    $recordData = array(
+        'id'            => $record_id,
+        'lang'          => $record_lang,
+        'solution_id'   => intval($_POST['solution_id']),
+        'revision_id'   => $revision_id,
+        'active'        => $db->escape_string($_POST['active']),
+        'thema'         => $db->escape_string($_POST['thema']),
+        'content'       => $db->escape_string($_POST['content']),
+        'keywords'      => $db->escape_string($_POST['keywords']),
+        'author'        => $db->escape_string($_POST['author']),
+        'email'         => $db->escape_string($_POST['email']),
+        'comment'       => (isset($_POST['comment']) ? 'y' : 'n'),
+        'date'          => date('YmdHis'),
+        'dateStart'     => $db->escape_string($dateStart),
+        'dateEnd'       => $db->escape_string($dateEnd),
+        'linkState'     => '',
+        'linkDateCheck' => 0
+    );
+
+    // Create ChangeLog entry
+    $faq->createChangeEntry(($record_id, $user->getUserId(), nl2br($db->escape_string($_POST["changed"])), $record_lang);
+
+    // TODO: move that query into class PMF_Faq
+    $_result = $db->query("SELECT id, lang FROM ".SQLPREFIX."faqdata WHERE id = ".$_REQUEST["id"]." AND lang = '".$_REQUEST["language"]."'");
+    $num = $db->num_rows($_result);
+
     // save or update the FAQ record
     if ($num == "1") {
-        $query = "UPDATE ".SQLPREFIX."faqdata SET revision_id = ".$revision_id.", thema = '".$thema."', content = '".$content."', keywords = '".$keywords."', author = '".$author."', active = '".$_REQUEST["active"]."', datum = '".$datum."',  date_start = '".$dateStart."', date_end = '".$dateEnd."', email = '".$db->escape_string($_REQUEST["email"])."', comment = '".$comment."' WHERE id = ".$_REQUEST["id"]." AND lang = '".$_REQUEST["language"]."'";
+        $faq->updateRecord($recordData);
     } else {
-        $query = "INSERT INTO ".SQLPREFIX."faqdata (id, solution_id, revision_id, lang, thema, content, keywords, author, active, datum, email, comment, date_start, date_end) VALUES (".$record_id.", ".$solution_id.", ".$revision_id.", '".$record_lang."', '".$thema."', '".$content."', '".$keywords."', '".$author."', '".$_REQUEST["active"]."', '".$datum."', '".$db->escape_string($_REQUEST["email"])."', '".$comment."', '".$dateStart."', '".$dateEnd."')";
+        $faq->addRecord($recordData, false);
     }
 
     if ($db->query($query)) {
-        print $PMF_LANG["ad_entry_savedsuc"];
-        link_ondemand_javascript($_REQUEST["id"], $_REQUEST["language"]);
+        print $PMF_LANG['ad_entry_savedsuc'];
+        link_ondemand_javascript($record_id, $record_lang);
     } else {
-        print $PMF_LANG["ad_entry_savedfail"].$db->error();
+        print $PMF_LANG['ad_entry_savedfail'].$db->error();
     }
 
     // delete category relations
-    $db->query("DELETE FROM ".SQLPREFIX."faqcategoryrelations WHERE record_id = ".$_REQUEST["id"]." and record_lang = '".$_REQUEST["language"]."';");
+    $faq->deleteCategoryRelations($record_id, $record_lang);
     // save or update the category relations
     foreach ($rubrik as $categories) {
-        $db->query("INSERT INTO ".SQLPREFIX."faqcategoryrelations VALUES (".$categories.", '".$_REQUEST["language"]."', ".$_REQUEST["id"].", '".$_REQUEST["language"]."');");
+        $faq->addCategoryRelation($categories, $record_id, $record_lang);
     }
+    
     // Insert the tags
+    $tags = $db->escape_string(trim($_POST['tags']));
     if ($tags != '') {
         $tagging->saveTags($_REQUEST['id'], explode(' ', $tags));
     }
