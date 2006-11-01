@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.61 2006-11-01 10:41:50 thorstenr Exp $
+* $Id: Faq.php,v 1.62 2006-11-01 17:06:11 thorstenr Exp $
 *
 * The main FAQ class
 *
@@ -730,6 +730,37 @@ class PMF_Faq
 
         return $revision_data;
     }
+
+    /**
+     * Adds a new revision from a given record ID
+     *
+     * @param    integer    $record_id
+     * @param    string     $record_lang
+     * @return   array
+     * @access   public
+     * @since    2006-07-24
+     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function addNewRevision($record_id, $record_lang)
+    {
+        $query = sprintf("
+            INSERT INTO 
+                %sfaqdata_revisions 
+            SELECT * FROM 
+                %sfaqdata 
+            WHERE 
+                id = %d 
+            AND 
+                lang = '%s'",
+            SQLPREFIX,
+            SQLPREFIX,
+            $record_id,
+            $record_lang);
+        $this->db->query($query);
+
+        return true;
+    }
+
 
     /**
     * getKeywords()
