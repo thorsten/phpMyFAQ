@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.save.php,v 1.44 2006-10-12 22:02:13 matteo Exp $
+* $Id: record.save.php,v 1.45 2006-11-01 17:05:27 thorstenr Exp $
 *
 * Save or update a FAQ record
 *
@@ -101,14 +101,20 @@ if (    isset($submit[1])
     // Wenn auf Speichern geklickt wurde...
     adminlog("Beitragsave", $_REQUEST["id"]);
     print "<h2>".$PMF_LANG["ad_entry_aor"]."</h2>\n";
+    
+    $revision = $_POST['revision'];
 
     // Create ChangeLog entry
     $faq->createChangeEntry((int)$_REQUEST["id"], $user->getUserId(), nl2br($_REQUEST["changed"]), $_REQUEST["language"]);
 
-    $thema     = $db->escape_string($_REQUEST["thema"]);
-    $content   = $db->escape_string($_REQUEST["content"]);
-    $keywords  = $db->escape_string($_REQUEST["keywords"]);
-    $author    = $db->escape_string($_REQUEST["author"]);
+    $record_id   = intval($_REQUEST["id"]);
+    $record_lang = $db->escape_string($_POST["language"]);
+    $solution_id = intval($_POST['solution_id']);
+    $revision_id = intval($_POST['revision_id']);
+    $thema       = $db->escape_string($_REQUEST["thema"]);
+    $content     = $db->escape_string($_REQUEST["content"]);
+    $keywords    = $db->escape_string($_REQUEST["keywords"]);
+    $author      = $db->escape_string($_REQUEST["author"]);
 
     $tagging = new PMF_Tags($db, $LANGCODE);
 
@@ -125,11 +131,17 @@ if (    isset($submit[1])
     $_result = $db->query("SELECT id, lang FROM ".SQLPREFIX."faqdata WHERE id = ".$_REQUEST["id"]." AND lang = '".$_REQUEST["language"]."'");
     $num = $db->num_rows($_result);
 
+	if ('yes' == $revision) {
+        // Add current version into revision table
+        $faq->addNewRevision($record_id, $record_lang);
+        $revision_id += 1;
+	}
+    
     // save or update the FAQ record
     if ($num == "1") {
-        $query = "UPDATE ".SQLPREFIX."faqdata SET thema = '".$thema."', content = '".$content."', keywords = '".$keywords."', author = '".$author."', active = '".$_REQUEST["active"]."', datum = '".$datum."',  date_start = '".$dateStart."', date_end = '".$dateEnd."', email = '".$db->escape_string($_REQUEST["email"])."', comment = '".$comment."' WHERE id = ".$_REQUEST["id"]." AND lang = '".$_REQUEST["language"]."'";
+        $query = "UPDATE ".SQLPREFIX."faqdata SET revision_id = ".$revision_id.", thema = '".$thema."', content = '".$content."', keywords = '".$keywords."', author = '".$author."', active = '".$_REQUEST["active"]."', datum = '".$datum."',  date_start = '".$dateStart."', date_end = '".$dateEnd."', email = '".$db->escape_string($_REQUEST["email"])."', comment = '".$comment."' WHERE id = ".$_REQUEST["id"]." AND lang = '".$_REQUEST["language"]."'";
     } else {
-        $query = "INSERT INTO ".SQLPREFIX."faqdata (id, solution_id, lang, thema, content, keywords, author, active, datum, email, comment, date_start, date_end) VALUES (".$_REQUEST["id"].", ".$_REQUEST["solution_id"].", '".$_REQUEST["language"]."', '".$thema."', '".$content."', '".$keywords."', '".$author."', '".$_REQUEST["active"]."', '".$datum."', '".$db->escape_string($_REQUEST["email"])."', '".$comment."', '".$dateStart."', '".$dateEnd."')";
+        $query = "INSERT INTO ".SQLPREFIX."faqdata (id, solution_id, revision_id, lang, thema, content, keywords, author, active, datum, email, comment, date_start, date_end) VALUES (".$record_id.", ".$solution_id.", ".$revision_id.", '".$record_lang."', '".$thema."', '".$content."', '".$keywords."', '".$author."', '".$_REQUEST["active"]."', '".$datum."', '".$db->escape_string($_REQUEST["email"])."', '".$comment."', '".$dateStart."', '".$dateEnd."')";
     }
 
     if ($db->query($query)) {
