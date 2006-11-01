@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.62 2006-11-01 17:06:11 thorstenr Exp $
+* $Id: Faq.php,v 1.63 2006-11-01 19:20:21 thorstenr Exp $
 *
 * The main FAQ class
 *
@@ -358,19 +358,23 @@ class PMF_Faq
      * Adds a new record
      *
      * @param    array    $data
+     * @param    boolean  $new_record
      * @return   integer
      * @access   public
      * @since    2006-06-18
      * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function addRecord($data)
+    function addRecord($data, $new_record = true)
     {
         if (!is_array($data)) {
             return false;
         }
 
-        // Get new ID first
-        $newId = $this->db->nextID(SQLPREFIX.'faqdata', 'id');
+        if ($new_record) {
+            $record_id = $this->db->nextID(SQLPREFIX.'faqdata', 'id');
+        } else {
+            $record_id = $data['id'];
+        }
 
         // Add new entry
         $query = sprintf(
@@ -380,7 +384,7 @@ class PMF_Faq
                 VALUES
             (%d, '%s', %d, %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %d, '%s', '%s')",
             SQLPREFIX,
-            $newId,
+            $record_id,
             $data['lang'],
             $this->getSolutionId(),
             0,
@@ -398,9 +402,66 @@ class PMF_Faq
             $data['dateEnd']);
         
         $this->db->query($query);
-        return $newId;
+        return $record_id;
     }
 
+    /**
+     * Updates a record
+     *
+     * @param    array    $data
+     * @return   integer
+     * @access   public
+     * @since    2006-06-18
+     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function updateRecord($data)
+    {
+        if (!is_array($data)) {
+            return false;
+        }
+
+        // Update entry
+        $query = sprintf("
+            UPDATE
+                %sfaqdata
+            SET 
+                revision_id = %d,
+                active = '%s',
+                keywords = '%s',
+                thema = '%s',
+                content = '%s',
+                author = '%s',
+                email = '%s',
+                comment = '%s',
+                datum = '%s',
+                links_state = '%s',
+                links_check_date = %d,
+                date_start = '%s',
+                date_end = '%s'
+            WHERE 
+                id = %d
+            AND
+                lang = '%s'",
+            SQLPREFIX,
+            $data['revision_id'],
+            $data['active'],
+            $data['keywords'],
+            $data['thema'],
+            $data['content'],
+            $data['author'],
+            $data['email'],
+            $data['comment'],
+            $data['date'],
+            $data['linkState'],
+            $data['linkDateCheck'],
+            $data['dateStart'],
+            $data['dateEnd'],
+            $data['id'],
+            $data['lang']);
+        
+        $this->db->query($query);
+        return $record_id;
+    }
     /**
      * Adds a new category relation to a record
      *
@@ -426,6 +487,33 @@ class PMF_Faq
                 $record_id,
                 $language));
         }
+        return true;
+    }
+
+    /**
+     * Deletes a category relations to a record
+     *
+     * @param    integer  $record_id
+     * @param    string   $language
+     * @return   integer
+     * @access   public
+     * @since    2006-11-01
+     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function deleteCategoryRelations($record_id, $record_lang)
+    {
+        $query = sprintf("
+            DELETE FROM
+                %sfaqcategoryrelations
+            WHERE
+                record_id = %d
+            AND
+                record_lang = '%s'",
+            SQLPREFIX,
+            $record_id,
+            $record_lang);
+        $this->db->query($query);
+        
         return true;
     }
 
