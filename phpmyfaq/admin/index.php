@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.72 2006-10-11 19:41:35 matteo Exp $
+* $Id: index.php,v 1.73 2006-11-01 16:40:02 thorstenr Exp $
 *
 * The main admin backend index file
 *
@@ -374,7 +374,7 @@ if (DEBUG) {
     print "\n";
     print '<div id="debug_cookies">COOKIES:<br />'.$cookies.'</div>';
     print "\n<br />";
-    print '<div id="debug_tables">TABLES & RECORDS:<br />';
+    print '<div id="debug_tables">TABLES &nbsp; RECORDS:<br />';
     $tableStatuses = $db->getTableStatus();
     foreach ($tableStatuses as $key => $value) {
         print "$key: $value<br />";
