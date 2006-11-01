@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Category.php,v 1.22 2006-10-30 11:10:22 thorstenr Exp $
+ * $Id: Category.php,v 1.23 2006-11-01 10:41:50 thorstenr Exp $
  *
  * The main category class
  *
@@ -1379,6 +1379,37 @@ class PMF_Category
             $mode,
             $category_id,
             $id);
+        $this->db->query($query);
+
+        return true;
+    }
+    
+    /**
+     * Deletes the category permissions for users and groups
+     *
+     * @param   string  $mode           'group' or 'user'
+     * @param   integer $category_id    ID of the current category
+     * @return  boolean
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function deletePermission($mode, $category_id)
+    {
+        if ('user' != $mode || 'group' != $mode) {
+            return false;
+        }
+        if (!is_int($category_id)) {
+            return false;
+        }
+
+        $query = sprintf("
+            DELETE FROM
+                %sfaqcategory_%s
+            WHERE
+                category_id = %d",
+            SQLPREFIX,
+            $mode,
+            $category_id);
         $this->db->query($query);
 
         return true;

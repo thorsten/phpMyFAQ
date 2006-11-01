@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.60 2006-10-30 11:10:22 thorstenr Exp $
+* $Id: Faq.php,v 1.61 2006-11-01 10:41:50 thorstenr Exp $
 *
 * The main FAQ class
 *
@@ -1809,6 +1809,37 @@ class PMF_Faq
             $mode,
             $record_id,
             $id);
+        $this->db->query($query);
+
+        return true;
+    }
+    
+    /**
+     * Deletes the record permissions for users and groups
+     *
+     * @param   string  $mode           'group' or 'user'
+     * @param   integer $record_id      ID of the current record
+     * @return  boolean
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function deletePermission($mode, $category_id)
+    {
+        if ('user' != $mode || 'group' != $mode) {
+            return false;
+        }
+        if (!is_int($record_id)) {
+            return false;
+        }
+
+        $query = sprintf("
+            DELETE FROM
+                %sfaqdata_%s
+            WHERE
+                record_id = %d",
+            SQLPREFIX,
+            $mode,
+            $record_id);
         $this->db->query($query);
 
         return true;
