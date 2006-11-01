@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.edit.php,v 1.49 2006-09-26 16:52:01 thorstenr Exp $
+* $Id: record.edit.php,v 1.50 2006-11-01 18:54:56 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23
@@ -190,6 +190,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 
     <form style="float: left;" action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;action=<?php print $acti; ?>" method="post">
     <input type="hidden" name="revision_id" id="revision_id" value="<?php print $revision_id; ?>" />
+    <input type="hidden" name="record_id" id="record_id" value="<?php print $id; ?>" />
 
     <fieldset>
     <legend><?php print $PMF_LANG['ad_entry_faq_record']; ?></legend>
