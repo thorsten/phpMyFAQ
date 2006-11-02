@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.94 2006-10-21 09:59:32 thorstenr Exp $
+* $Id: update.php,v 1.95 2006-11-02 23:00:45 matteo Exp $
 *
 * Main update script
 *
@@ -1259,7 +1259,55 @@ if ($step == 5) {
     }
 
     if (version_compare($version, '2.0.0-beta', '<')) {
-        // Add missing anonymous user account in 2.0.0-alpha
+        // 1/3. Fix faqsessions table
+        switch($DB["type"]) {
+            case 'mssql':
+            case 'sybase':
+                // Rename the current faqsessions table
+                $query[] = 'EXEC sp_rename \''.SQLPREFIX.'faqsessions\', \''.SQLPREFIX.'faqsessions_PMF200_old\'';
+                // Create the new faqsessions table
+                $query[] = 'CREATE TABLE '.SQLPREFIX.'faqsessions (
+                            sid integer NOT NULL,
+                            user_id integer NOT NULL DEFAULT \'-1\',
+                            ip varchar(64) NOT NULL,
+                            time integer NOT NULL,
+                            PRIMARY KEY (sid)
+                            )';
+                // Copy data from the faqsessions_PMF200_old table
+                $query[] = 'INSERT INTO '.SQLPREFIX.'faqsessions
+                            (sid, ip, time)
+                            SELECT sid, ip, time
+                            FROM '.SQLPREFIX.'faqsessions_PMF200_old';
+                // Drop the faqsessions_PMF200_old table
+                $query[] = 'DROP TABLE '.SQLPREFIX.'faqsessions_PMF200_old';
+                break;
+            case 'pgsql':
+                // Rename the current faqsessions table
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqsessions RENAME TO '.SQLPREFIX.'faqsessions_PMF200_old';
+                // Create the new faqsessions table
+                $query[] = 'CREATE TABLE '.SQLPREFIX.'faqsessions (
+                            sid SERIAL NOT NULL,
+                            user_id int4 NOT NULL,
+                            ip text NOT NULL,
+                            time int4 NOT NULL,
+                            PRIMARY KEY (sid)
+                            )';
+                // Copy data from the faqsessions_PMF200_old table
+                $query[] = 'INSERT INTO '.SQLPREFIX.'faqsessions
+                            (sid, ip, time)
+                            SELECT sid, ip, time
+                            FROM '.SQLPREFIX.'faqsessions_PMF200_old';
+                $query[] = 'UPDATE '.SQLPREFIX.'faqsessions SET user_id = -1';
+                // Drop the faqsessions_PMF200_old table
+                $query[] = 'DROP TABLE '.SQLPREFIX.'faqsessions_PMF200_old';
+                break;
+            default:
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqsessions ADD user_id INT(11) NOT NULL AFTER sid';
+                $query[] = 'UPDATE '.SQLPREFIX.'faqsessions SET user_id = -1';
+                break;
+        }
+
+        // 2/3. Add missing anonymous user account in 2.0.0-alpha
         require_once(PMF_ROOT_DIR.'/inc/PMF_User/User.php');
         $anonymous = new PMF_User();
         $anonymous->createUser('anonymous user', null, -1);
@@ -1269,8 +1317,16 @@ if ($step == 5) {
             'email' => null
         );
         $anonymous->setUserData($anonymousData);
-        $oPMFConf = new PMF_Configuration($db);
-        $oPMFConf->update(array('phpMyFAQToken' => md5(uniqid(rand()))));
+
+        // 3/3. Add new config key, 'phpMyFAQToken', into the faqconfig table
+        switch($DB["type"]) {
+            default:
+                $query[] = 'INSERT INTO '.SQLPREFIX.'faqconfig
+                                (config_name, config_value)
+                            VALUES
+                                (\'phpMyFAQToken\', \''.md5(uniqid(rand())).'\')';
+                break;
+        }
     }
 
     // Always the last step: Update version number

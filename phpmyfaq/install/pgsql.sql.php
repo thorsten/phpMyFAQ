@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: pgsql.sql.php,v 1.27 2006-08-28 18:56:50 thorstenr Exp $
+* $Id: pgsql.sql.php,v 1.28 2006-11-02 23:00:45 matteo Exp $
 *
 * CREATE TABLE instruction for PostgreSQL database
 *
@@ -311,6 +311,7 @@ PRIMARY KEY (right_id)
 //faqsessions
 $query[] = "CREATE TABLE ".$sqltblpre."faqsessions (
 sid SERIAL NOT NULL,
+user_id int4 NOT NULL,
 ip text NOT NULL,
 time int4 NOT NULL,
 PRIMARY KEY (sid)

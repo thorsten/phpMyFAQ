@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: functions.php,v 1.151 2006-10-15 20:54:12 matteo Exp $
+* $Id: functions.php,v 1.152 2006-11-02 23:00:45 matteo Exp $
 *
 * This is the main functions file!
 *
@@ -658,19 +658,20 @@ function hilight($content)
 //
 
 /**
-* Trackt den User und zeichnet die Bewegungen auf
-*
-* @param    string
-* @param    integer
-* @return   void
-* @since    2001-02-18
-* @since    Bastian Pöttner <bastian@poettner.net>
-* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-* @author   Matteo Scaramuccia <matteo@scaramuccia.com>
-*/
+ * Trackt den User und zeichnet die Bewegungen auf
+ *
+ * @param    string
+ * @param    integer
+ * @return   void
+ * @since    2001-02-18
+ * @since    Bastian Pöttner <bastian@poettner.net>
+ * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author   Matteo Scaramuccia <matteo@scaramuccia.com>
+ */
 function Tracking($action, $id = 0)
 {
-    global $db, $PMF_CONF, $sid;
+    global $db, $PMF_CONF, $sid, $user;
+
     if (isset($PMF_CONF["tracking"])) {
         if (isset($_GET["sid"])) {
             $sid = $_GET["sid"];
@@ -687,7 +688,13 @@ function Tracking($action, $id = 0)
             if (isset($_COOKIE["pmf_sid"]) && ((int)$_COOKIE['pmf_sid'] != $sid)) {
                 setcookie('pmf_sid', $sid, time() + 3600);
             }
-            $db->query("INSERT INTO ".SQLPREFIX."faqsessions (sid, ip, time) VALUES (".$sid.", '".$_SERVER["REMOTE_ADDR"]."', ".time().")");
+            $db->query("
+                    INSERT INTO
+                        ".SQLPREFIX."faqsessions
+                        (sid, user_id, ip, time)
+                    VALUES
+                        (".$sid.", ".($user ? $user->getUserId() : '-1').", '".$_SERVER["REMOTE_ADDR"]."', ".time().")"
+                    );
         }
         $fp = @fopen("./data/tracking".date("dmY"), "a+b");
         if ($fp) {
@@ -714,13 +721,13 @@ function Tracking($action, $id = 0)
 }
 
 /**
-* An OS independent function like usleep
-*
-* @param    integer
-* @return   void
-* @since    2004-05-30
-* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-*/
+ * An OS independent function like usleep
+ *
+ * @param    integer
+ * @return   void
+ * @since    2004-05-30
+ * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+ */
 function wait($usecs)
 {
     $temp = gettimeofday();
@@ -730,8 +737,8 @@ function wait($usecs)
         $stop = (int)$temp["usec"];
         if ($stop - $start >= $usecs) {
             break;
-            }
         }
+    }
 }
 
 /*
@@ -741,15 +748,33 @@ function wait($usecs)
  */
 function CheckSID($sid, $ip)
 {
-    global $db;
+    global $db, $user;
 
-    if ($db->num_rows($db->query("SELECT sid FROM ".SQLPREFIX."faqsessions WHERE sid = ".$sid." AND ip = '".$ip."' AND time > ".(time()-86400))) < 1) {
+    if ($db->num_rows($db->query("
+                            SELECT
+                                sid
+                            FROM
+                                ".SQLPREFIX."faqsessions
+                            WHERE
+                                    sid = ".$sid."
+                                AND ip = '".$ip."'
+                                AND time > ".(time()-86400))) < 1
+                            ) {
         // No sid found (maybe someone is refering to an old one): create a new one
         Tracking("old_session", $sid);
     }
     else {
-        // Update the current sid in the db
-        $db->query("UPDATE ".SQLPREFIX."faqsessions SET time = ".time()." WHERE sid = ".$sid." AND ip = '".$ip."'");
+        // Update the current sid in the db according also to the current user authentication status
+        $db->query("
+                UPDATE
+                    ".SQLPREFIX."faqsessions
+                SET
+                    time = ".time().",
+                    user_id = ".($user ? $user->getUserId() : '-1')."
+                WHERE
+                        sid = ".$sid."
+                    AND ip = '".$ip."'"
+                );
     }
 }
 
@@ -777,7 +802,11 @@ function getUsersOnline($activityTimeWindow = 300)
         $result = $db->query("
                     SELECT
                         count(sid) AS anonymous_users
-                    FROM ".SQLPREFIX."faqsessions WHERE time > ".$timeNow);
+                    FROM
+                        ".SQLPREFIX."faqsessions
+                    WHERE
+                            user_id = -1
+                        AND time > ".$timeNow);
         if (isset($result)) {
             $row = $db->fetch_object($result);
             $users[0] = $row->anonymous_users;
@@ -786,7 +815,10 @@ function getUsersOnline($activityTimeWindow = 300)
         $result = $db->query("
                     SELECT
                         count(session_id) AS registered_users
-                    FROM ".SQLPREFIX."faquser WHERE session_timestamp > ".$timeNow);
+                    FROM
+                        ".SQLPREFIX."faquser
+                    WHERE
+                        session_timestamp > ".$timeNow);
         if (isset($result)) {
             $row = $db->fetch_object($result);
             $users[1] = $row->registered_users;

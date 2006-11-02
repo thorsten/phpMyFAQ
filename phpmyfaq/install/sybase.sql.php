@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: sybase.sql.php,v 1.17 2006-08-28 18:56:50 thorstenr Exp $
+* $Id: sybase.sql.php,v 1.18 2006-11-02 23:00:45 matteo Exp $
 *
 * CREATE TABLE instruction for Sybase database
 *
@@ -292,6 +292,7 @@ PRIMARY KEY (right_id)
 //faqsessions
 $query[] = "CREATE TABLE ".$sqltblpre."faqsessions (
 sid integer NOT NULL,
+user_id integer NOT NULL,
 ip varchar(64) NOT NULL,
 time integer NOT NULL,
 PRIMARY KEY (sid)
