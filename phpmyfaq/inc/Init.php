@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Init.php,v 1.13 2006-10-21 10:01:31 thorstenr Exp $
+* $Id: Init.php,v 1.14 2006-11-02 23:08:02 matteo Exp $
 *
 * Some functions
 *
@@ -56,6 +56,11 @@ $PMF_CONF = $faqconfig->config;
 //
 // We always need a valid session!
 //
+// Avoid any PHP version to move sessions on URLs
+ini_set('session.use_only_cookies', 1);
+ini_set('session.use_trans_sid', 0);
+ini_set('url_rewriter.tags', '');
+// Start the PHP session
 session_name('pmf_auth_'.$faqconfig->get('phpMyFAQToken'));
 session_start();
 
