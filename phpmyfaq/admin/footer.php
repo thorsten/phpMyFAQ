@@ -1,10 +1,11 @@
 <?php
 /**
-* $Id: footer.php,v 1.21 2006-10-29 06:47:31 thorstenr Exp $
+* $Id: footer.php,v 1.22 2006-11-02 23:03:17 matteo Exp $
 *
 * Footer of the admin area
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+* @author       Matteo Scaramuccia <matteo@scaramuccia.com>
 * @since        2003-02-26
 * @copyright    (c) 2001-2006 phpMyFAQ Team
 *
@@ -150,32 +151,32 @@ if (    isset($auth) &&
         getControlHTML : function(cn) {
             switch (cn) {
                 case 'PMFIntFaqLink':
-    <?php
-        $output = '';
+<?php
+    $output = '';
 
-        $output .= '<select id="intfaqlink" name="intfaqlink" onchange="insertFaqLink()" title="'.$PMF_LANG['ad_entry_intlink'].'">';
-        $output .= '<option value="">'.$PMF_LANG['ad_entry_intlink'].'<option>';
+    $output .= '<select id="intfaqlink" name="intfaqlink" onchange="insertFaqLink()" title="'.$PMF_LANG['ad_entry_intlink'].'">';
+    $output .= '<option value="">'.$PMF_LANG['ad_entry_intlink'].'<option>';
 
-        $faq->getAllRecords();
-        foreach ($faq->faqRecords as $record) {
-            $_title = htmlspecialchars(str_replace(array("\n", "\r", "\r\n"), '', $record['title']), ENT_QUOTES, $PMF_LANG['metaCharset']);
-            $output .= sprintf(
-                        '<option value="%d_%d_%s_%s">%s</option>',
-                        $record['category_id'],
-                        $record['id'],
-                        $record['lang'],
-                        // FAQ title could contains < and >
-                        htmlspecialchars($_title, ENT_NOQUOTES, $PMF_LANG['metaCharset']),
-                        makeShorterText($_title, 8)
-                        );
-        }
-        if (count($faq->faqRecords) > 0) {
-            $output = substr($output, 0, -2);
-        }
-        $output .= '</select>';
+    $faq->getAllRecords();
+    foreach ($faq->faqRecords as $record) {
+        $_title = htmlspecialchars(str_replace(array("\n", "\r", "\r\n"), '', $record['title']), ENT_QUOTES, $PMF_LANG['metaCharset']);
+        $output .= sprintf(
+                    '<option value="%d_%d_%s_%s">%s</option>',
+                    $record['category_id'],
+                    $record['id'],
+                    $record['lang'],
+                    // FAQ title could contains < and >
+                    htmlspecialchars($_title, ENT_NOQUOTES, $PMF_LANG['metaCharset']),
+                    makeShorterText($_title, 8)
+                    );
+    }
+    if (count($faq->faqRecords) > 0) {
+        $output = substr($output, 0, -2);
+    }
+    $output .= '</select>';
 
-        print "return '".$output."'\n";
-    ?>
+    print "return '".$output."'\n";
+?>
             }
 
             return '';
