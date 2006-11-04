@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.save.php,v 1.46 2006-11-01 19:26:53 thorstenr Exp $
+* $Id: record.save.php,v 1.47 2006-11-04 08:49:41 thorstenr Exp $
 *
 * Save or update a FAQ record
 *
@@ -137,12 +137,8 @@ if (    isset($submit[1])
     // Create ChangeLog entry
     $faq->createChangeEntry(($record_id, $user->getUserId(), nl2br($db->escape_string($_POST["changed"])), $record_lang);
 
-    // TODO: move that query into class PMF_Faq
-    $_result = $db->query("SELECT id, lang FROM ".SQLPREFIX."faqdata WHERE id = ".$_REQUEST["id"]." AND lang = '".$_REQUEST["language"]."'");
-    $num = $db->num_rows($_result);
-
     // save or update the FAQ record
-    if ($num == "1") {
+    if ($faq->isAlreadyTranslated($record_id, $record_lang)) {
         $faq->updateRecord($recordData);
     } else {
         $faq->addRecord($recordData, false);
@@ -165,7 +161,7 @@ if (    isset($submit[1])
     // Insert the tags
     $tags = $db->escape_string(trim($_POST['tags']));
     if ($tags != '') {
-        $tagging->saveTags($_REQUEST['id'], explode(' ', $tags));
+        $tagging->saveTags($record_id, explode(' ', $tags));
     }
 }
 
