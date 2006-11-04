@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.64 2006-11-04 08:49:07 thorstenr Exp $
+* $Id: Faq.php,v 1.65 2006-11-04 09:03:37 thorstenr Exp $
 *
 * The main FAQ class
 *
@@ -461,6 +461,37 @@ class PMF_Faq
         
         $this->db->query($query);
         return $record_id;
+    }
+    
+    /**
+     * Deletes a record and all the dependencies
+     *
+     * @param   integer $record_id
+     * @param   string  $record_lang
+     * @return  boolean
+     * @access  public
+     * @since   2006-11-04
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function deleteRecord($record_id, $record_lang)
+    {
+        $queries = array(
+            sprintf("DELETE FROM %sfaqchanges WHERE beitrag = %d AND lang = '%s'",
+                SQLPREFIX, $record_id, $record_lang),
+            sprintf("DELETE FROM %sfaqcategoryrelations WHERE record_id = %d AND record_lang = '%s'",
+                SQLPREFIX, $record_id, $record_lang),
+            sprintf("DELETE FROM %sfaqdata WHERE id = %d AND lang = '%s'",
+                SQLPREFIX, $record_id, $record_lang),
+            sprintf("DELETE FROM %sfaqdata_revisions WHERE id = %d AND lang = '%s'",
+                SQLPREFIX, $record_id, $record_lang),
+            sprintf("DELETE FROM %sfaqvisits WHERE id = %d AND lang = '%s'",
+                SQLPREFIX, $record_id, $record_lang));
+         
+         foreach($queries as $query) {
+            $this->db->query($query);
+         }
+         
+         return true;
     }
     
     /**

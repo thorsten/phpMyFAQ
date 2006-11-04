@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.delete.php,v 1.11 2006-09-19 21:39:39 matteo Exp $
+* $Id: record.delete.php,v 1.12 2006-11-04 09:03:37 thorstenr Exp $
 *
 * Deletes a record
 *
@@ -26,31 +26,31 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 
 print "<h2>".$PMF_LANG["ad_entry_aor"]."</h2>\n";
 if ($permission["delbt"]) {
-	if ($_REQUEST["subm"] == $PMF_LANG["ad_gen_yes"]) {
+	
+    if ($_REQUEST["subm"] == $PMF_LANG["ad_gen_yes"]) {
 		// "yes" -> delete it
-		adminlog("Beitragdel, ".$_REQUEST["id"]);
-		if (@is_dir(PMF_ROOT_DIR."/attachments/".$_REQUEST["id"]."/")) {
-			$do = dir(PMF_ROOT_DIR."/attachments/".$_REQUEST["id"]."/");
+        $record_id   = (int)$_REQUEST['id'];
+        $record_lang = $db->escape_string($_REQUEST['language']);
+		adminlog("Beitragdel, ".$record_id);
+		if (@is_dir(PMF_ROOT_DIR."/attachments/".$record_id."/")) {
+			$do = dir(PMF_ROOT_DIR."/attachments/".$record_id."/");
 			while ($dat = $do->read()) {
 				if ($dat != "." && $dat != "..") {
-					unlink(PMF_ROOT_DIR."/attachments/".$_REQUEST["id"]."/".$dat);
+					unlink(PMF_ROOT_DIR."/attachments/".$record_id."/".$dat);
 				}
 			}
-			rmdir (PMF_ROOT_DIR."/attachments/".$_REQUEST["id"]."/");
+			rmdir (PMF_ROOT_DIR."/attachments/".$record_id."/");
 		}
-		$db->query(sprintf("DELETE FROM %sfaqdata WHERE id = %d AND lang = '%s'", SQLPREFIX, $_POST["id"], $_POST["language"]));
-		$db->query(sprintf("DELETE FROM %sfaqvoting WHERE artikel = %d", SQLPREFIX, $_POST["id"]));
-		$db->query(sprintf("DELETE FROM %sfaqcomments WHERE id = %d", SQLPREFIX, $_POST["id"]));
-		$db->query(sprintf("DELETE FROM %sfaqvisits WHERE id = %d AND lang = '%s'", SQLPREFIX, $_POST["id"], $_POST["language"]));
-		$db->query(sprintf("DELETE FROM %sfaqchanges WHERE beitrag = %d AND lang = '%s'", SQLPREFIX, $_POST["id"], $_POST["language"]));
-        $db->query(sprintf("DELETE FROM %sfaqcategoryrelations WHERE record_id = %d AND record_lang = '%s'", SQLPREFIX, $_POST["id"], $_POST["language"]));
+		$faq->deleteRecord($record_id, $record_lang);
 		print "<p>".$PMF_LANG["ad_entry_delsuc"]."</p>\n";
-		}
-	if ($_REQUEST["subm"] == $PMF_LANG["ad_gen_no"]) {
+	}
+	
+    if ($_REQUEST["subm"] == $PMF_LANG["ad_gen_no"]) {
 		print "<p>".$PMF_LANG["ad_entry_delfail"]."<br />&nbsp;<br /><a href=\"javascript:history.back()\">".$PMF_LANG["ad_entry_back"]."</p></a>\n";
 	}
+    
     print "<p><img src=\"images/arrow.gif\" width=\"11\" height=\"11\" alt=\"\" border=\"0\"> <a href=\"".$_SERVER["PHP_SELF"].$linkext."&amp;action=view\">".$PMF_LANG["ad_entry_aor"]."</a></p>\n";
+
 } else {
-	print $PMF_LANG["err_NotAuth"];
-	}
-?>
+    print $PMF_LANG["err_NotAuth"];
+}
