@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.66 2006-11-04 11:04:31 thorstenr Exp $
+* $Id: Faq.php,v 1.67 2006-11-04 11:11:40 thorstenr Exp $
 *
 * The main FAQ class
 *
@@ -1283,7 +1283,7 @@ class PMF_Faq
             WHERE
                 id = %d",
             SQLPREFIX,
-            $is_visible
+            $is_visible,
             $question_id);
         
         $this->db->query($query);
