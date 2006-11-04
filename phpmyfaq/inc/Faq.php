@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.63 2006-11-01 19:20:21 thorstenr Exp $
+* $Id: Faq.php,v 1.64 2006-11-04 08:49:07 thorstenr Exp $
 *
 * The main FAQ class
 *
@@ -462,6 +462,41 @@ class PMF_Faq
         $this->db->query($query);
         return $record_id;
     }
+    
+    /**
+     * Checks if a record is already translated
+     *
+     * @param   integer $record_id
+     * @param   string  $record_lang
+     * @return  boolean
+     * @access  public
+     * @since   2006-11-04
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function isAlreadyTranslated($record_id, $record_lang)
+    {
+        $query = sprintf("
+            SELECT
+                id, lang
+            FROM
+                %sfaqdata
+            WHERE
+                id = %d
+            AND
+                lang = '%s'",
+            SQLPREFIX,
+            $record_id,
+            $record_lang);
+        
+        $result = $this->db->query($query);
+        
+        if ($this->db->num_rows($result)) {
+            return true;
+        }
+        
+        return false;
+    }
+    
     /**
      * Adds a new category relation to a record
      *
