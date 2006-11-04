@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.65 2006-11-04 09:03:37 thorstenr Exp $
+* $Id: Faq.php,v 1.66 2006-11-04 11:04:31 thorstenr Exp $
 *
 * The main FAQ class
 *
@@ -1210,6 +1210,85 @@ class PMF_Faq
 
         return $question;
     }
+    
+    /**
+     * Deletes a question for the table faquestion
+     *
+     * @param   integer $question_id
+     * @return  boolean
+     * @access  public
+     * @since   2006-11-04
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function deleteQuestion($question_id)
+    {
+        $query = sprintf('
+            DELETE FROM
+                %sfaqquestions
+            WHERE
+                id = %d',
+            SQLPREFIX,
+            $question_id);
+        
+        $this->db->query($query);
+        return true;
+    }
+    
+    /**
+     * Returns the visibilty of a question
+     *
+     * @param   integer $question_id
+     * @return  string
+     * @access  public
+     * @since   2006-11-04
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+     function getVisibilityOfQuestion($question_id)
+     {
+        $query = sprintf('
+            SELECT
+                is_visible
+            FROM
+                %sfaqquestions
+            WHERE
+                id = %d',
+            SQLPREFIX,
+            $question_id);
+        
+        $result = $this->db->query($query);
+        if ($this->db->num_rows($result) > 0) {
+            $row = $this->db->fetch_object($result);
+            return $row->is_visbible;
+        }
+        return null;
+     }
+     
+    /**
+     * Sets the visibilty of a question
+     *
+     * @param   integer $question_id
+     * @param   string  $is_visible
+     * @return  boolean
+     * @access  public
+     * @since   2006-11-04
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+     function setVisibilityOfQuestion($question_id, $is_visible)
+     {
+        $query = sprintf("
+            UPDATE
+                %sfaqquestions
+            SET
+                is_visible = '%s'
+            WHERE
+                id = %d",
+            SQLPREFIX,
+            $is_visible
+            $question_id);
+        
+        $this->db->query($query);
+        return true;
+     }
 
     //
     //
