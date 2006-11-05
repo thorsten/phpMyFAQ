@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Category.php,v 1.24 2006-11-05 13:57:27 thorstenr Exp $
+ * $Id: Category.php,v 1.25 2006-11-05 14:27:25 thorstenr Exp $
  *
  * The main category class
  *
@@ -1361,10 +1361,10 @@ class PMF_Category
      */
     function addPermission($mode, $categories, $id)
     {
-        if ('user' != $mode || 'group' != $mode) {
+        if (!($mode == "user" || $mode == "group")) {
             return false;
         }
-        if (!is_array($categories) && !is_int($id)) {
+        if (!(is_array($categories) && is_int($id))) {
             return false;
         }
 
@@ -1380,6 +1380,7 @@ class PMF_Category
                 $mode,
                 $category_id,
                 $id);
+            
             $this->db->query($query);
         }
         
@@ -1397,7 +1398,7 @@ class PMF_Category
      */
     function deletePermission($mode, $category_id)
     {
-        if ('user' != $mode || 'group' != $mode) {
+        if (!($mode == "user" || $mode == "group")) {
             return false;
         }
         if (!is_array($categories)) {

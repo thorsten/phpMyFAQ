@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.68 2006-11-05 13:56:46 thorstenr Exp $
+* $Id: Faq.php,v 1.69 2006-11-05 14:27:26 thorstenr Exp $
 *
 * The main FAQ class
 *
@@ -2055,10 +2055,10 @@ class PMF_Faq
      */
     function addPermission($mode, $record_id, $id)
     {
-        if ('user' != $mode || 'group' != $mode) {
+        if (!($mode == "user" || $mode == "group")) {
             return false;
         }
-        if (!is_int($record_id) && !is_int($id)) {
+        if (!(is_int($record_id) && is_int($id))) {
             return false;
         }
 
@@ -2089,7 +2089,7 @@ class PMF_Faq
      */
     function deletePermission($mode, $record_id)
     {
-        if ('user' != $mode || 'group' != $mode) {
+        if (!($mode == "user" || $mode == "group")) {
             return false;
         }
         if (!is_int($record_id)) {
