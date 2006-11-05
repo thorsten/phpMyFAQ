@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.67 2006-11-04 11:11:40 thorstenr Exp $
+* $Id: Faq.php,v 1.68 2006-11-05 13:56:46 thorstenr Exp $
 *
 * The main FAQ class
 *
@@ -2053,7 +2053,7 @@ class PMF_Faq
      * @access  public
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function addPermission($mode, $category_id, $id)
+    function addPermission($mode, $record_id, $id)
     {
         if ('user' != $mode || 'group' != $mode) {
             return false;
@@ -2087,7 +2087,7 @@ class PMF_Faq
      * @access  public
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function deletePermission($mode, $category_id)
+    function deletePermission($mode, $record_id)
     {
         if ('user' != $mode || 'group' != $mode) {
             return false;
