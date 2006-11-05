@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.77 2006-10-15 20:54:13 matteo Exp $
+* $Id: index.php,v 1.78 2006-11-05 11:37:52 thorstenr Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the
@@ -126,6 +126,15 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'logout' && isset($auth
     $user->deleteFromSession();
     unset($user);
     unset($auth);
+}
+
+//
+// Get current user id - default: -1 (anonymous user)
+//
+if (isset($user) && is_object($user)) {
+    $current_user = $user->getUserId();
+} else {
+    $current_user = -1;
 }
 
 //
