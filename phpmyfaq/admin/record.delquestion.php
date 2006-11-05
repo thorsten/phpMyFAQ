@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.delquestion.php,v 1.13 2006-09-19 21:39:39 matteo Exp $
+* $Id: record.delquestion.php,v 1.14 2006-11-05 13:21:46 thorstenr Exp $
 *
 * Delete open questions
 *
@@ -25,27 +25,18 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 }
 
 if ($permission['delquestion']) {
+    
     $tree = new PMF_Category;
-
-    if (isset($_REQUEST['delete']) && $_REQUEST['delete'] == 'yes') {
-
-        $db->query("DELETE FROM ".SQLPREFIX."faqquestions WHERE id = ".$_REQUEST["id"]);
-		print $PMF_LANG["ad_entry_delsuc"];
-
+    $question_id = (int)$_GET['id'];
+    
+    if (isset($_GET['delete']) && $_$_GET['delete'] == 'yes') {
+        $faq->deleteQuestion($question_id);
+		print $PMF_LANG['ad_entry_delsuc'];
 	} else {
-
-        if (isset($_REQUEST['is_visible']) && $_REQUEST['is_visible'] == 'toggle') {
-
-            $query = sprintf('SELECT is_visible FROM %sfaqquestions WHERE id = %d', SQLPREFIX, $_REQUEST['id']);
-            $result = $db->query($query);
-            if ($db->num_rows($result) == 1) {
-                $row = $db->fetch_object($result);
-                if ('Y' == $row->is_visible) {
-                    $query = sprintf("UPDATE %sfaqquestions SET is_visible = 'N' WHERE id = %d", SQLPREFIX, $_REQUEST['id']);
-                } else {
-                    $query = sprintf("UPDATE %sfaqquestions SET is_visible = 'Y' WHERE id = %d", SQLPREFIX, $_REQUEST['id']);
-                }
-                $result = $db->query($query);
+        if (isset($_GET['is_visible']) && $_GET['is_visible'] == 'toggle') {
+            $is_visible = $faq->getVisibilityOfQuestion($question_id);
+            if (!is_null($is_visible)) {
+                $faq->setVisibilityOfQuestion($question_id, $is_visible);
             }
         }
 
@@ -79,10 +70,9 @@ if ($permission['delquestion']) {
 	</table>
 <?php
 		} else {
-			print $PMF_LANG["msgNoQuestionsAvailable"];
+			print $PMF_LANG['msgNoQuestionsAvailable'];
 		}
 	}
 } else {
     print $PMF_LANG["err_NotAuth"];
 }
-?>
