@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: installer.php,v 1.76 2006-10-21 09:59:32 thorstenr Exp $
+* $Id: installer.php,v 1.77 2006-11-05 11:43:45 thorstenr Exp $
 *
 * The main phpMyFAQ Installer
 *
@@ -308,6 +308,9 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     }
     if (!extension_loaded('gd')) {
         print '<p class="center">You don\'t have GD support enabled in your PHP installation. Please enabled GD support in your php.ini file otherwise you can\'t use Captchas for spam protection.</p>';
+    }
+    if (!function_exists('imagettftext')) {
+        print '<p class="center">You don\'t have Freetype support enabled in the GD extension of your PHP installation. Please enabled Freetype support in GD extension otherwise the Captchas for spam protection are quite easy to break.</p>';
     }
 ?>
 <p class="center">You should read the <a href="../docs/documentation.en.html">documentation</a> carefully before installing phpMyFAQ.</p>
