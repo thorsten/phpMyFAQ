@@ -1,30 +1,28 @@
 <?php
 /**
-* $Id: installer.php,v 1.77 2006-11-05 11:43:45 thorstenr Exp $
-*
-* The main phpMyFAQ Installer
-*
-* This script tests the complete environment, writes the database connection
-* paramters into the file data.php and the configuration into the file
-* config.php. After that the script creates all MySQL tables and inserts the
-* admin user.
-*
-* @author      Thorsten Rinne <thorsten@phpmyfaq.de>
-* @author      Tom Rochester <tom.rochester@gmail.com>
-* @author      Johannes Schlueter <johannes@php.net>
-* @since       2002-08-20
-* @copyright   (c) 2001-2006 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * $Id: installer.php,v 1.78 2006-11-05 13:20:54 thorstenr Exp $
+ *
+ * The main phpMyFAQ Installer
+ *
+ * This script tests the complete environment, writes the database connection
+ * parameters into the file data.php and the configuration into the database.
+ *
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author      Tom Rochester <tom.rochester@gmail.com>
+ * @author      Johannes Schlueter <johannes@php.net>
+ * @since       2002-08-20
+ * @copyright   (c) 2001-2006 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 define('VERSION', '2.0.0-beta');
 define('COPYRIGHT', '&copy; 2001-2006 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
@@ -40,17 +38,14 @@ $permLevels = array(
 );
 
 /**
-* db_check()
-*
-* Lookup for installed database extensions
-*
-* If the first supported extension is enabled, return true.
-*
-* @param    array   $supported_databases
-* @return   boolean
-* @access   public
-* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-*/
+ * Lookup for installed database extensions
+ * If the first supported extension is enabled, return true.
+ *
+ * @param   array   $supported_databases
+ * @return  boolean
+ * @access  public
+ * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+ */
 function db_check($supported_databases)
 {
     foreach ($supported_databases as $extension => $database) {
@@ -62,14 +57,12 @@ function db_check($supported_databases)
 }
 
 /**
-* phpmyfaq_check()
-*
-* Checks for an installed phpMyFAQ version
-*
-* @return   boolean
-* @access   public
-* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-*/
+ * Checks for an installed phpMyFAQ version
+ *
+ * @return  boolean
+ * @access  public
+ * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+ */
 function phpmyfaq_check()
 {
     if (@include('../inc/data.php')) {
@@ -88,14 +81,12 @@ function phpmyfaq_check()
 }
 
 /**
-* uninstall()
-*
-* Executes the uninstall queries
-*
-* @return   void
-* @access   public
-* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-*/
+ * Executes the uninstall queries
+ *
+ * @return  void
+ * @access  public
+ * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+ */
 function uninstall()
 {
     global $uninst, $db;
@@ -106,30 +97,25 @@ function uninstall()
 }
 
 /**
-* HTMLFooter()
-*
-* Print out the HTML Footer
-*
-* @return   void
-* @access   public
-* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-*/
+ * Print out the XHTML Footer
+ *
+ * @return  void
+ * @access  public
+ * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+ */
 function HTMLFooter()
 {
     print '<p class="center">'.COPYRIGHT.'</p></body></html>';
 }
 
 /**
-* cleanInstallation
-*
-* Removes the data.php and the dataldap.php if an installation failed
-*
-* @param
-* @return   void
-* @access   public
-* @since    2005-12-18
-* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-*/
+ * Removes the data.php and the dataldap.php if an installation failed
+ *
+ * @return  void
+ * @access  public
+ * @since   2005-12-18
+ * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+ */
 function cleanInstallation()
 {
     // Remove 'data.php' file: no need of prompt anything to the user
@@ -253,11 +239,13 @@ function cleanInstallation()
 <h1 id="header">phpMyFAQ <?php print VERSION; ?> Installation</h1>
 
 <?php
+
 if (version_compare(PHP_VERSION, '4.3.0', '<')) {
     print "<p class=\"center\">You need PHP Version 4.3.0 or higher!</p>\n";
     HTMLFooter();
     die();
 }
+
 if (db_check($supported_databases) == false) {
     print "<p class=\"center\">No supported database found! Please install one of the following database systems and enable the m     corresponding PHP extension:</p>\n";
     print "<ul>\n";
@@ -268,11 +256,13 @@ if (db_check($supported_databases) == false) {
     HTMLFooter();
     die();
 }
+
 if (!phpmyfaq_check()) {
     print '<p class="center">It seems you already running a version of phpMyFAQ.<br />Please use the <a href="update.php">update script</a>.</p>';
     HTMLFooter();
     die();
 }
+
 $dirs = array('/attachments', '/data', '/images/Image', '/inc', '/pdf', '/xml',);
 $faileddirs = array();
 foreach ($dirs as $dir) {

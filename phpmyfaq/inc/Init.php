@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Init.php,v 1.14 2006-11-02 23:08:02 matteo Exp $
+* $Id: Init.php,v 1.15 2006-11-05 13:20:54 thorstenr Exp $
 *
 * Some functions
 *
@@ -37,11 +37,12 @@ if (DEBUG) {
 //
 // Read configuration and constants, include main classes and functions and
 // create a database connection
-require_once(dirname(__FILE__).'/data.php');
-require_once(dirname(__FILE__).'/constants.php');
-require_once(dirname(__FILE__).'/functions.php');
-require_once(dirname(__FILE__).'/Configuration.php');
-require_once(dirname(__FILE__).'/Db.php');
+define('PMF_INCLUDE_DIR', dirname(__FILE__));
+require_once(PMF_INCLUDE_DIR.'/data.php');
+require_once(PMF_INCLUDE_DIR.'/constants.php');
+require_once(PMF_INCLUDE_DIR.'/functions.php');
+require_once(PMF_INCLUDE_DIR.'/Configuration.php');
+require_once(PMF_INCLUDE_DIR.'/Db.php');
 define('SQLPREFIX', $DB['prefix']);
 $db = PMF_Db::db_select($DB['type']);
 $db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db']);
@@ -67,9 +68,9 @@ session_start();
 //
 // Connect to LDAP server, when LDAP support is enabled
 //
-if (isset($PMF_CONF['ldap_support']) && $PMF_CONF['ldap_support'] == true && file_exists('inc/dataldap.php')) {
-    require_once(dirname(__FILE__).'dataldap.php');
-    require_once(dirname(__FILE__).'Ldap.php');
+if ($faqconfig->get('ldap_support') && file_exists('inc/dataldap.php')) {
+    require_once(PMF_INCLUDE_DIR.'dataldap.php');
+    require_once(PMF_INCLUDE_DIR.'Ldap.php');
     $ldap = new LDAP($PMF_LDAP['ldap_server'], $PMF_LDAP['ldap_port'], $PMF_LDAP['ldap_base'], $PMF_LDAP['ldap_user'], $PMF_LDAP['ldap_password']);
 } else {
     $ldap = null;
