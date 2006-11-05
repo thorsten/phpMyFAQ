@@ -1,31 +1,31 @@
 <?php
 /**
-* $Id: functions.php,v 1.152 2006-11-02 23:00:45 matteo Exp $
-*
-* This is the main functions file!
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @author       Matthias Sommerfeld <phlymail@phlylabs.de>
-* @author       Bastian Pöttner <bastian@poettner.net>
-* @author       Meikel Katzengreis <meikel@katzengreis.com>
-* @author       Robin Wood <robin@digininja.org>
-* @author       Matteo Scaramuccia <matteo@scaramuccia.com>
-* @since        2001-02-18
-* @copyright    (c) 2001-2006 phpMyFAQ Team
-*
-* Portions created by Matthias Sommerfeld are Copyright (c) 2001-2004 blue
-* birdy, Berlin (http://bluebirdy.de). All Rights Reserved.
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-******************************************************************************/
+ * $Id: functions.php,v 1.153 2006-11-05 11:28:34 thorstenr Exp $
+ *
+ * This is the main functions file!
+ *
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author      Matthias Sommerfeld <phlymail@phlylabs.de>
+ * @author      Bastian Poettner <bastian@poettner.net>
+ * @author      Meikel Katzengreis <meikel@katzengreis.com>
+ * @author      Robin Wood <robin@digininja.org>
+ * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @since       2001-02-18
+ * @copyright   (c) 2001-2006 phpMyFAQ Team
+ *
+ * Portions created by Matthias Sommerfeld are Copyright (c) 2001-2004 blue
+ * birdy, Berlin (http://bluebirdy.de). All Rights Reserved.
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 //
 // DEBUGGING FUNCTIONS
@@ -664,7 +664,7 @@ function hilight($content)
  * @param    integer
  * @return   void
  * @since    2001-02-18
- * @since    Bastian Pöttner <bastian@poettner.net>
+ * @since    Bastian Poettner <bastian@poettner.net>
  * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author   Matteo Scaramuccia <matteo@scaramuccia.com>
  */
@@ -831,11 +831,11 @@ function getUsersOnline($activityTimeWindow = 300)
 
 
 /******************************************************************************
- * Funktionen für die Startseite
+ * Funktionen fuer die Startseite
  ******************************************************************************/
 
 /*
- * Kürzt einen String auf eine bestimmte Anzahl von Wörtern | @@ Thorsten - 2002-08-26
+ * Kuerzt einen String auf eine bestimmte Anzahl von Woertern | @@ Thorsten - 2002-08-26
  * Last Update: @@ Thorsten, 2004-06-09
  */
 function makeShorterText($str, $char)
@@ -859,7 +859,7 @@ function makeShorterText($str, $char)
 
 
 /******************************************************************************
- * Funktionen für Artikelseiten
+ * Funktionen fuer Artikelseiten
  ******************************************************************************/
 
 /*
@@ -893,7 +893,7 @@ function safeHTML($html)
 }
 
 /*
- * Funktion wandelt HTML Entities zurück | @@ Thorsten, 2003-03-27
+ * Funktion wandelt HTML Entities zurueck | @@ Thorsten, 2003-03-27
  * Last Update: @@ Thorsten, 2003-03-27
  */
 function unhtmlentities($html)
@@ -1008,10 +1008,10 @@ function encode_iso88591($coded = "", $cmode = "g")
  */
 function quoted_printable_encode($return = '')
 {
-    // Ersetzen der lt. RFC 1521 nötigen Zeichen
+    // Ersetzen der lt. RFC 1521 noetigen Zeichen
     $return = preg_replace('/([^\t\x20\x2E\041-\074\076-\176])/ie', "sprintf('=%2X',ord('\\1'))", $return);
     $return = preg_replace('!=\ ([A-F0-9])!', '=0\\1', $return);
-    // Einfügen von QP-Breaks (=\r\n)
+    // Einfuegen von QP-Breaks (=\r\n)
     if (strlen($return) > 75) {
         $length = strlen($return); $offset = 0;
         do {
@@ -1034,7 +1034,7 @@ function quoted_printable_encode($return = '')
 
 
 /******************************************************************************
- * Funktionen für den XML-Export
+ * Funktionen fuer den XML-Export
  ******************************************************************************/
 
 /**
@@ -1642,7 +1642,7 @@ function PMF_htmlentities($string, $quote_style = ENT_COMPAT, $charset = 'iso-88
 
 
 /******************************************************************************
- * Funktionen für die Benutzerauthentifizierung und Rechtevergabe
+ * Funktionen fuer die Benutzerauthentifizierung und Rechtevergabe
  ******************************************************************************/
 
 /**
@@ -1730,11 +1730,11 @@ function emptyTable($table)
 
 
 /******************************************************************************
- * Funktionen für den Adminbereich
+ * Funktionen fuer den Adminbereich
  ******************************************************************************/
 
 /*
- * Funktion zum generieren vom "Umblättern" | @@ Bastian, 2002-01-03
+ * Funktion zum generieren vom "Umblaettern" | @@ Bastian, 2002-01-03
  * Last Update: @@ Thorsten, 2004-05-07
  */
 function PageSpan($code, $start, $end, $akt)
