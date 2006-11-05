@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Category.php,v 1.23 2006-11-01 10:41:50 thorstenr Exp $
+ * $Id: Category.php,v 1.24 2006-11-05 13:57:27 thorstenr Exp $
  *
  * The main category class
  *
@@ -1353,34 +1353,36 @@ class PMF_Category
      * Adds the category permissions for users and groups
      *
      * @param   string  $mode           'group' or 'user'
-     * @param   integer $category_id    ID of the current category
+     * @param   array   $categories     ID of the current category
      * @param   integer $id             group ID or user ID
      * @return  boolean
      * @access  public
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function addPermission($mode, $category_id, $id)
+    function addPermission($mode, $categories, $id)
     {
         if ('user' != $mode || 'group' != $mode) {
             return false;
         }
-        if (!is_int($category_id) && !is_int($id)) {
+        if (!is_array($categories) && !is_int($id)) {
             return false;
         }
 
-        $query = sprintf("
-            INSERT INTO
-                %sfaqcategory_%s
-            (category_id, %s_id)
-                VALUES
-            (%d, %d)",
-            SQLPREFIX,
-            $mode,
-            $mode,
-            $category_id,
-            $id);
-        $this->db->query($query);
-
+        foreach ($categories as $category_id) {
+            $query = sprintf("
+                INSERT INTO
+                    %sfaqcategory_%s
+                (category_id, %s_id)
+                    VALUES
+                (%d, %d)",
+                SQLPREFIX,
+                $mode,
+                $mode,
+                $category_id,
+                $id);
+            $this->db->query($query);
+        }
+        
         return true;
     }
     
@@ -1388,7 +1390,7 @@ class PMF_Category
      * Deletes the category permissions for users and groups
      *
      * @param   string  $mode           'group' or 'user'
-     * @param   integer $category_id    ID of the current category
+     * @param   array   $categories     ID of the current category
      * @return  boolean
      * @access  public
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -1398,20 +1400,22 @@ class PMF_Category
         if ('user' != $mode || 'group' != $mode) {
             return false;
         }
-        if (!is_int($category_id)) {
+        if (!is_array($categories)) {
             return false;
         }
 
-        $query = sprintf("
-            DELETE FROM
-                %sfaqcategory_%s
-            WHERE
-                category_id = %d",
-            SQLPREFIX,
-            $mode,
-            $category_id);
-        $this->db->query($query);
-
+        foreach ($categories as $category_id) {
+            $query = sprintf("
+                DELETE FROM
+                    %sfaqcategory_%s
+                WHERE
+                    category_id = %d",
+                SQLPREFIX,
+                $mode,
+                $category_id);
+            $this->db->query($query);
+        }
+        
         return true;
     }
 }
