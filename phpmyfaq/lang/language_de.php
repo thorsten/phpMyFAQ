@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.35 2006-10-10 16:47:29 thorstenr Exp $
+ * $Id: language_de.php,v 1.36 2006-11-07 09:26:07 thorstenr Exp $
  *
  * German language file
  *
@@ -66,7 +66,7 @@ $PMF_LANG["msgVoteGood"] = "sehr wertvoll";
 $PMF_LANG["msgVotings"] = "Bewertungen";
 $PMF_LANG["msgVoteSubmit"] = "Artikel bewerten";
 $PMF_LANG["msgVoteThanks"] = "<p><strong>Vielen Dank für die Bewertung!</strong></p>";
-$PMF_LANG["msgYouCan"] = "Es ist mölich diesen ";
+$PMF_LANG["msgYouCan"] = "Es ist möglich, diesen ";
 $PMF_LANG["msgWriteComment"] = "Artikel kommentieren";
 $PMF_LANG["msgShowCategory"] = "Inhaltsübersicht: ";
 $PMF_LANG["msgCommentBy"] = "Kommentar von ";
