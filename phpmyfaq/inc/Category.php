@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Category.php,v 1.25 2006-11-05 14:27:25 thorstenr Exp $
+ * $Id: Category.php,v 1.26 2006-11-07 08:18:25 thorstenr Exp $
  *
  * The main category class
  *
@@ -1323,7 +1323,7 @@ class PMF_Category
             }
         }
     }
-    
+
     /**
      * Get number of nodes at the same parent_id level
      *
@@ -1336,7 +1336,7 @@ class PMF_Category
     function numParent($parent_id)
     {
         $query = sprintf("
-            SELECT distinct 
+            SELECT distinct
                 id
             FROM
                 %sfaqcategories
@@ -1345,10 +1345,10 @@ class PMF_Category
             SQLPREFIX,
             $parent_id);
         $result = $this->db->query($query);
-        
+
         return $this->db->num_rows($result);
     }
-    
+
     /**
      * Adds the category permissions for users and groups
      *
@@ -1380,13 +1380,13 @@ class PMF_Category
                 $mode,
                 $category_id,
                 $id);
-            
+
             $this->db->query($query);
         }
-        
+
         return true;
     }
-    
+
     /**
      * Deletes the category permissions for users and groups
      *
@@ -1396,7 +1396,7 @@ class PMF_Category
      * @access  public
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function deletePermission($mode, $category_id)
+    function deletePermission($mode, $categories)
     {
         if (!($mode == "user" || $mode == "group")) {
             return false;
@@ -1416,7 +1416,46 @@ class PMF_Category
                 $category_id);
             $this->db->query($query);
         }
-        
+
         return true;
+    }
+
+    /**
+     * Returns the category permissions for users and groups
+     *
+     * @param   string  $mode           'group' or 'user'
+     * @param   integer $categories
+     * @return  array
+     * @access  boolean
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function getPermissions($mode, $categories)
+    {
+        $permissions = array();
+        if (!($mode == "user" || $mode == "group")) {
+            return false;
+        }
+        if (!is_array($categories)) {
+            return false;
+        }
+
+        $query = sprintf("
+            SELECT
+                %s_id AS permission
+            FROM
+                %s_faqcategory_%s
+            WHERE
+                category_id IN (%s)",
+            $mode,
+            SQLPREFIX,
+            $mode,
+            implode(', ', $categories)
+            );
+
+        $result = $this->db->query($query);
+        while ($row = $this->db->fetch_object($result)) {
+            $permissions = $row->permission;
+        }
+        return $permissions;
     }
 }
