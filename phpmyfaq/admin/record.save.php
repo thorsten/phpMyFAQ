@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.save.php,v 1.47 2006-11-04 08:49:41 thorstenr Exp $
+* $Id: record.save.php,v 1.48 2006-11-07 09:27:55 thorstenr Exp $
 *
 * Save or update a FAQ record
 *
@@ -101,20 +101,20 @@ if (    isset($submit[1])
     // Wenn auf Speichern geklickt wurde...
     adminlog("Beitragsave", $_REQUEST["id"]);
     print "<h2>".$PMF_LANG["ad_entry_aor"]."</h2>\n";
-    
+
     $tagging = new PMF_Tags($db, $LANGCODE);
-    
+
     $record_id   = intval($_REQUEST['id']);
     $record_lang = $db->escape_string($_POST['language']);
     $revision    = $db->escape_string($_POST['revision']);
     $revision_id = intval($_POST['revision_id']);
-    
+
 	if ('yes' == $revision) {
         // Add current version into revision table
         $faq->addNewRevision($record_id, $record_lang);
         $revision_id += 1;
 	}
-    
+
     $recordData = array(
         'id'            => $record_id,
         'lang'          => $record_lang,
@@ -135,7 +135,7 @@ if (    isset($submit[1])
     );
 
     // Create ChangeLog entry
-    $faq->createChangeEntry(($record_id, $user->getUserId(), nl2br($db->escape_string($_POST["changed"])), $record_lang);
+    $faq->createChangeEntry($record_id, $user->getUserId(), nl2br($db->escape_string($_POST["changed"])), $record_lang);
 
     // save or update the FAQ record
     if ($faq->isAlreadyTranslated($record_id, $record_lang)) {
@@ -157,7 +157,7 @@ if (    isset($submit[1])
     foreach ($rubrik as $categories) {
         $faq->addCategoryRelation($categories, $record_id, $record_lang);
     }
-    
+
     // Insert the tags
     $tags = $db->escape_string(trim($_POST['tags']));
     if ($tags != '') {
