@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: glossary.main.php,v 1.12 2006-09-19 21:39:39 matteo Exp $
+* $Id: glossary.main.php,v 1.13 2006-11-08 09:15:24 thorstenr Exp $
 *
 * The main glossary index file
 *
@@ -62,6 +62,8 @@ if ($permission['addglossary'] || $permission['editglossary'] || $permission['de
     }
 
     $glossaryItems = $glossary->getAllGlossaryItems();
+
+    print sprintf('<p>[ <a href="%s&amp;action=addglossary">%s</a> ]</p>', $_SERVER['PHP_SELF'].$linkext, $PMF_LANG['ad_glossary_add']);
 
     print '<table class="list">';
     print sprintf("<tr><th class=\"list\">%s</th><th class=\"list\">%s</th><th>&nbsp;</th></tr>", $PMF_LANG['ad_glossary_item'], $PMF_LANG['ad_glossary_definition']);
