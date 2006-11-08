@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.69 2006-11-05 14:27:26 thorstenr Exp $
+* $Id: Faq.php,v 1.70 2006-11-08 11:28:59 thorstenr Exp $
 *
 * The main FAQ class
 *
@@ -400,7 +400,7 @@ class PMF_Faq
             $data['linkDateCheck'],
             $data['dateStart'],
             $data['dateEnd']);
-        
+
         $this->db->query($query);
         return $record_id;
     }
@@ -424,7 +424,7 @@ class PMF_Faq
         $query = sprintf("
             UPDATE
                 %sfaqdata
-            SET 
+            SET
                 revision_id = %d,
                 active = '%s',
                 keywords = '%s',
@@ -438,7 +438,7 @@ class PMF_Faq
                 links_check_date = %d,
                 date_start = '%s',
                 date_end = '%s'
-            WHERE 
+            WHERE
                 id = %d
             AND
                 lang = '%s'",
@@ -458,11 +458,11 @@ class PMF_Faq
             $data['dateEnd'],
             $data['id'],
             $data['lang']);
-        
+
         $this->db->query($query);
         return $record_id;
     }
-    
+
     /**
      * Deletes a record and all the dependencies
      *
@@ -486,14 +486,14 @@ class PMF_Faq
                 SQLPREFIX, $record_id, $record_lang),
             sprintf("DELETE FROM %sfaqvisits WHERE id = %d AND lang = '%s'",
                 SQLPREFIX, $record_id, $record_lang));
-         
+
          foreach($queries as $query) {
             $this->db->query($query);
          }
-         
+
          return true;
     }
-    
+
     /**
      * Checks if a record is already translated
      *
@@ -518,16 +518,16 @@ class PMF_Faq
             SQLPREFIX,
             $record_id,
             $record_lang);
-        
+
         $result = $this->db->query($query);
-        
+
         if ($this->db->num_rows($result)) {
             return true;
         }
-        
+
         return false;
     }
-    
+
     /**
      * Adds a new category relation to a record
      *
@@ -579,7 +579,7 @@ class PMF_Faq
             $record_id,
             $record_lang);
         $this->db->query($query);
-        
+
         return true;
     }
 
@@ -898,13 +898,13 @@ class PMF_Faq
     function addNewRevision($record_id, $record_lang)
     {
         $query = sprintf("
-            INSERT INTO 
-                %sfaqdata_revisions 
-            SELECT * FROM 
-                %sfaqdata 
-            WHERE 
-                id = %d 
-            AND 
+            INSERT INTO
+                %sfaqdata_revisions
+            SELECT * FROM
+                %sfaqdata
+            WHERE
+                id = %d
+            AND
                 lang = '%s'",
             SQLPREFIX,
             SQLPREFIX,
@@ -1210,7 +1210,7 @@ class PMF_Faq
 
         return $question;
     }
-    
+
     /**
      * Deletes a question for the table faquestion
      *
@@ -1229,11 +1229,11 @@ class PMF_Faq
                 id = %d',
             SQLPREFIX,
             $question_id);
-        
+
         $this->db->query($query);
         return true;
     }
-    
+
     /**
      * Returns the visibilty of a question
      *
@@ -1254,7 +1254,7 @@ class PMF_Faq
                 id = %d',
             SQLPREFIX,
             $question_id);
-        
+
         $result = $this->db->query($query);
         if ($this->db->num_rows($result) > 0) {
             $row = $this->db->fetch_object($result);
@@ -1262,7 +1262,7 @@ class PMF_Faq
         }
         return null;
      }
-     
+
     /**
      * Sets the visibilty of a question
      *
@@ -1285,7 +1285,7 @@ class PMF_Faq
             SQLPREFIX,
             $is_visible,
             $question_id);
-        
+
         $this->db->query($query);
         return true;
      }
@@ -2042,7 +2042,7 @@ class PMF_Faq
 
         return $sql;
     }
-    
+
     /**
      * Adds the record permissions for users and groups
      *
@@ -2077,7 +2077,7 @@ class PMF_Faq
 
         return true;
     }
-    
+
     /**
      * Deletes the record permissions for users and groups
      *
@@ -2107,6 +2107,46 @@ class PMF_Faq
         $this->db->query($query);
 
         return true;
+    }
+
+    /**
+     * Returns the record permissions for users and groups
+     *
+     * @param   string  $mode           'group' or 'user'
+     * @param   integer $record_id
+     * @return  array
+     * @access  boolean
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function getPermission($mode, $record_id)
+    {
+        $permissions = null;
+        if (!($mode == "user" || $mode == "group")) {
+            return false;
+        }
+        if (!is_int($record_id)) {
+            return false;
+        }
+
+        $query = sprintf("
+            SELECT
+                %s_id AS permission
+            FROM
+                %s_faqdata_%s
+            WHERE
+                record_id = %d",
+            $mode,
+            SQLPREFIX,
+            $mode,
+            $record_id
+            );
+
+        $result = $this->db->query($query);
+        if ($this->db->num_rows($result) > 0) {
+            $row = $this->db->fetch_object($result);
+            $permissions = $row->permission;
+        }
+        return $permissions;
     }
 }
 // }}}
