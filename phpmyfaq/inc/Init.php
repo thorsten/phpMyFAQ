@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Init.php,v 1.15 2006-11-05 13:20:54 thorstenr Exp $
+* $Id: Init.php,v 1.16 2006-11-08 11:26:59 thorstenr Exp $
 *
 * Some functions
 *
@@ -25,7 +25,7 @@
 //debug mode:
 // - false      debug mode disabled
 // - true       debug mode enabled
-define("DEBUG", true);
+define('DEBUG', true);
 
 if (DEBUG) {
     error_reporting(E_ALL);
@@ -107,17 +107,6 @@ class PMF_Init
     * @see
     */
     var $language;
-
-
-
-    /**
-    * PMF_Init()
-    *
-    * Constructor
-    */
-    function PMF_Init()
-    {
-    }
 
     /**
     * cleanRequest
@@ -268,14 +257,12 @@ class PMF_Init
     }
 
     /**
-    * unregisterGlobalVariables
-    *
-    * This function deregisters the global variables when register_globals = on
-    *
-    * @return   void
-    * @access   private
-    * @author   Stefan Esser <sesser@php.net>
-    */
+     * This function deregisters the global variables when register_globals = on
+     *
+     * @return  void
+     * @access  private
+     * @author  Stefan Esser <sesser@php.net>
+     */
     function unregisterGlobalVariables()
     {
         if (!ini_get('register_globals')) {
@@ -290,21 +277,20 @@ class PMF_Init
         $input = array_merge($_GET, $_POST, $_COOKIE, $_SERVER, $_ENV, $_FILES, isset($_SESSION) && is_array($_SESSION) ? $_SESSION : array());
         foreach (array_keys($input) as $k) {
             if (!in_array($k, $noUnset) && isset($GLOBALS[$k])) {
+                $GLOBALS[$k] = null;
                 unset($GLOBALS[$k]);
             }
         }
     }
 
     /**
-    * removeMagicQuotesGPC
-    *
-    * This function removes the magic quotes if they enabled
-    *
-    * @param    array
-    * @return   array
-    * @access   private
-    * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-    */
+     * This function removes the magic quotes if they enabled
+     *
+     * @param   array
+     * @return  array
+     * @access  private
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
     function removeMagicQuotesGPC($data)
     {
         if (get_magic_quotes_gpc()) {
