@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Logging.php,v 1.1 2006-08-15 16:34:07 thorstenr Exp $
+* $Id: Logging.php,v 1.2 2006-11-10 15:47:47 matteo Exp $
 *
 * The main Logging class
 *
@@ -81,11 +81,11 @@ class PMF_Logging
 
         $result = $this->db->query($query);
         while ($row = $this->db->fetch_object($result)) {
-        	$data[$row->id] = array(
-        	   'time'  => $row->time,
-        	   'usr'   => $row->usr,
-        	   'text'  => $row->text,
-        	   'ip'    => $row->ip);
+            $data[$row->id] = array(
+               'time'  => $row->time,
+               'usr'   => $row->usr,
+               'text'  => $row->text,
+               'ip'    => $row->ip);
         }
 
         return $data;
@@ -114,3 +114,4 @@ class PMF_Logging
         return false;
     }
 }
+

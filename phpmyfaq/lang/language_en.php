@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.61 2006-10-15 20:54:13 matteo Exp $
+* $Id: language_en.php,v 1.62 2006-11-10 15:47:48 matteo Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -644,7 +644,7 @@ $PMF_LANG['ad_session_expiring'] = 'Your session will expire in %d minutes: woul
 // added v1.6.2 - 2006-06-13 by Matteo
 $PMF_LANG['ad_stat_management'] = 'Sessions management';
 $PMF_LANG['ad_stat_choose'] = 'Choose the month';
-$PMF_LANG['ad_stat_delete'] = 'Delete selected sessions immediately';
+$PMF_LANG['ad_stat_delete'] = 'Delete immediately the selected sessions';
 
 // added v2.0.0 - 2005-09-15 by Thorsten and by Minoru TODA
 $PMF_LANG['ad_menu_glossary'] = 'Glossary';
@@ -837,3 +837,6 @@ $PMF_LANG["ad_categ_remark_overview"] = "The correct order of categories will be
 
 // added v2.0.0 - 2006-10-15 by Matteo
 $PMF_LANG['msgUsersOnline'] = ' :: %d Guests and %d Registered';
+$PMF_LANG['ad_adminlog_del_older_30d'] = 'Delete immediately logs older than 30 days';
+$PMF_LANG['ad_adminlog_delete_success'] = 'Older logs successfully deleted.';
+$PMF_LANG['ad_adminlog_delete_failure'] = 'No logs deleted: an error occurred performing the request.';

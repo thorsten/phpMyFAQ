@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.36 2006-10-15 20:54:13 matteo Exp $
+* $Id: language_it.php,v 1.37 2006-11-10 15:47:48 matteo Exp $
 *
 * Italian language file
 *
@@ -644,7 +644,7 @@ $PMF_LANG['ad_session_expiring'] = 'Questa sessione scadrà tra %d minuti: vuoi c
 // added v1.6.2 - 2006-06-13 by Matteo
 $PMF_LANG['ad_stat_management'] = 'Gestione delle sessioni';
 $PMF_LANG['ad_stat_choose'] = 'Scegli il mese';
-$PMF_LANG['ad_stat_delete'] = 'Cancella le sessioni selezionate immediatamente';
+$PMF_LANG['ad_stat_delete'] = 'Cancella immediatamente le sessioni selezionate';
 
 // added v2.0.0 - 2005-09-15 by Thorsten and by Minoru TODA
 $PMF_LANG['ad_menu_glossary'] = 'Glossario';
@@ -837,3 +837,6 @@ $PMF_LANG["ad_categ_remark_overview"] = "Viene mostrato l'ordine corretto delle 
 
 // added v2.0.0 - 2006-10-15 by Matteo
 $PMF_LANG['msgUsersOnline'] = ' :: %d Ospiti e %d Registrati';
+$PMF_LANG['ad_adminlog_del_older_30d'] = 'Cancella immediatamente i dati pi&ugrave; vecchi di 30 giorni';
+$PMF_LANG['ad_adminlog_delete_success'] = 'I dati sono stati cancellati.';
+$PMF_LANG['ad_adminlog_delete_failure'] = 'I dati non sono stati cancellati: si &egrave; verificato un errore.';
