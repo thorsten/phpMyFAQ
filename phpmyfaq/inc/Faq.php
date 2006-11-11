@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.70 2006-11-08 11:28:59 thorstenr Exp $
+* $Id: Faq.php,v 1.71 2006-11-11 19:12:14 thorstenr Exp $
 *
 * The main FAQ class
 *
@@ -1569,8 +1569,6 @@ class PMF_Faq
     }
 
     /**
-     * addQuestion()
-     *
      * Adds a new question
      *
      * @param    array  $questionData
@@ -1601,6 +1599,51 @@ class PMF_Faq
         $this->db->query($query);
 
         return true;
+    }
+
+    
+    /**
+     * Returns a new question
+     *
+     * @param    integer    $question_id
+     * @return   array
+     * @access   public
+     * @since    2006-11-11
+     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function getQuestion($question_id)
+    {
+        if (!is_int($question_id)) {
+            return null;
+        }
+        
+        $question = array();
+        
+        $query = sprintf('
+            SELECT 
+                 id, ask_username, ask_usermail, ask_rubrik, ask_content, ask_date, is_visible
+            FROM 
+                %sfaqquestions 
+            WHERE 
+                id = %d',
+            SQLPREFIX,
+            $id_question);
+        
+        if ($result = $this->db->query($query)) {
+            if ($row = $this->db->fetch_object($result)) {
+                $question = array(
+                    'id'            => $row->id,
+                    'user'          => $row->ask_username,
+                    'email'         => $row->ask_usermail,
+                    'category'      => $row->ask_rubrik,
+                    'question'      => $row->ask_content,
+                    'date'          => $row->ask_date,
+                    'is_visible'    => $row->is_visible
+                    );
+            }
+        }
+        
+        return $question;
     }
 
     /**
