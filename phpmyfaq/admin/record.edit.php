@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.edit.php,v 1.52 2006-11-11 09:26:08 thorstenr Exp $
+* $Id: record.edit.php,v 1.53 2006-11-11 19:20:33 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23
@@ -40,14 +40,13 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     $tagging = new PMF_Tags($db, $LANGCODE);
 
     if (isset($_REQUEST["action"]) && $_REQUEST["action"] == "takequestion") {
-
-        $id_question = intval( $_REQUEST['id']);
-        $query_questions = sprintf('SELECT ask_rubrik, ask_content FROM %sfaqquestions WHERE id = %d', SQLPREFIX, $id_question);
-        $result_questions = $db->query($query_questions);
-        $row = $db->fetch_object($result_questions);
-        $current_category = $row->ask_rubrik;
-        $faqData['title'] = $row->ask_content;
-        $categories = array(array('category_id' => $current_category, 'category_lang' => $faqData['lang']));
+        $question_id = intval( $_REQUEST['id']);
+        $question = $faq->getQuestion($question_id);
+        $current_category = $question['category'];
+        $faqData['title'] = $question['question'];
+        $categories = array(array(
+            'category_id'   => $current_category,
+            'category_lang' => $faqData['lang']));
     }
 
     if (isset($_REQUEST["action"]) && $_REQUEST["action"] == "editpreview") {
