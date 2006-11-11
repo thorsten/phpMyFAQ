@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.156 2006-11-11 14:21:44 thorstenr Exp $
+ * $Id: functions.php,v 1.157 2006-11-11 16:20:38 matteo Exp $
  *
  * This is the main functions file!
  *
@@ -1518,10 +1518,11 @@ function highlight_no_links($string)
     static $attributes = array(
         'href', 'src', 'title', 'alt', 'class', 'style', 'id', 'name',
         'face', 'size', 'dir', 'onclick', 'ondblclick', 'onmousedown',
-        'onmouseup', 'onmouseover', 'onmousemove', 'onmouseout', 
-        'onkeypress', 'onkeydown', 'onkeyup');
+        'onmouseup', 'onmouseover', 'onmousemove', 'onmouseout',
+        'onkeypress', 'onkeydown', 'onkeyup'
+        );
     foreach ($string as $str) {
-        $_str = explode('=', strtolower(ltrim($str)), 1)
+        $_str = explode('=', strtolower(ltrim($str)), 1);
         if (in_array($_str, $attributes)) {
             return $_str;
         } elseif ('' == $str) {
