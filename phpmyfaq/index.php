@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.79 2006-11-11 09:26:09 thorstenr Exp $
+* $Id: index.php,v 1.80 2006-11-11 13:31:26 thorstenr Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the
@@ -354,7 +354,8 @@ if ($faqconfig->get('mod_rewrite')) {
         "backToHome"        => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'index.html">'.$PMF_LANG["msgHome"].'</a>',
         "allCategories"     => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'showcat.html">'.$PMF_LANG["msgShowAllCategories"].'</a>',
         "writeSendAdress"   => PMF_Link::getSystemRelativeUri('index.php').'search.html',
-        'showSitemap'       => getLinkHtmlAnchor($_SERVER['PHP_SELF'].'?'.$sids.'action=sitemap&amp;lang='.$LANGCODE, $PMF_LANG['msgSitemap'])
+        'showSitemap'       => getLinkHtmlAnchor($_SERVER['PHP_SELF'].'?'.$sids.'action=sitemap&amp;lang='.$LANGCODE, $PMF_LANG['msgSitemap']),
+        'opensearch'        => PMF_Link::getSystemRelativeUri('index.php').'search.html'
         );
 } else {
     $links_template_vars = array(
@@ -368,7 +369,8 @@ if ($faqconfig->get('mod_rewrite')) {
         "allCategories"     => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=show">'.$PMF_LANG["msgShowAllCategories"].'</a>',
         "backToHome"        => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'">'.$PMF_LANG["msgHome"].'</a>',
         "writeSendAdress"   => $_SERVER['PHP_SELF'].'?'.$sids.'action=search',
-        'showSitemap'       => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=sitemap&amp;lang='.$LANGCODE.'">'.$PMF_LANG['msgSitemap'].'</a>'
+        'showSitemap'       => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=sitemap&amp;lang='.$LANGCODE.'">'.$PMF_LANG['msgSitemap'].'</a>',
+        'opensearch'        => $_SERVER['PHP_SELF'].'?'.$sids.'action=search',
         );
 }
 
