@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: microsummary.php,v 1.4 2006-09-17 07:30:38 matteo Exp $
+ * $Id: microsummary.php,v 1.5 2006-11-11 13:41:04 thorstenr Exp $
  *
  * Microsummary backend
  *
@@ -54,8 +54,8 @@ $microRules = array(
                 'open'      => 'phpMyFAQ Open Questions',
                 'show'      => 'phpMyFAQ Categories'
                 );
+print '<?xml version="1.0" encoding="UTF-8"?>';
 ?>
-<?xml version="1.0" encoding="UTF-8"?>
 <generator xmlns="http://www.mozilla.org/microsummaries/0.1"
            name="<?php print($microRules[$action]); ?>">
   <template>
