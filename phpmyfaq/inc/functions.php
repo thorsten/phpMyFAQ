@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.154 2006-11-11 09:26:09 thorstenr Exp $
+ * $Id: functions.php,v 1.155 2006-11-11 14:19:03 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -1427,7 +1427,7 @@ function searchEngine($begriff, $category = '%', $allLanguages = true)
             $rubriktext = $tree->getPath($row->category_id);
             $thema = PMF_htmlentities(chopString($row->thema, 15),ENT_NOQUOTES, $PMF_LANG['metaCharset']);
             $content = chopString(strip_tags($row->content), 25);
-            $begriff = str_replace(array('^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']'), '', $begriff);
+            $begriff = str_replace(array('^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']', '"'), '', $begriff);
             $begriff = preg_quote($begriff, '/');
             $searchItems = explode(' ', $begriff);
 
@@ -1435,7 +1435,8 @@ function searchEngine($begriff, $category = '%', $allLanguages = true)
                 foreach ($searchItems as $item) {
                     $thema = preg_replace_callback('/'
                                 .'('.$item.'="[^"]*")|'
-                                .'((href|src|title|alt|class|style|id|name)="[^"]*'.$item.'[^"]*")|'
+                                .'((href|src|title|alt|class|style|id|name|dir|onclick|ondblclick|onmousedown|onmouseup|onmouseover|onmousemove|onmouseout|onkeypress|onkeydown|onkeyup)="[^"]*'.$item.'[^"]*")|'
+                                
                                 .'('.$item.')'
                                 .'/mis',
                                 "highlight_no_links",
@@ -1443,7 +1444,7 @@ function searchEngine($begriff, $category = '%', $allLanguages = true)
                                 );
                     $content = preg_replace_callback('/'
                                 .'('.$item.'="[^"]*")|'
-                                .'((href|src|title|alt|class|style|id|name)="[^"]*'.$item.'[^"]*")|'
+                                .'((href|src|title|alt|class|style|id|name|dir|onclick|ondblclick|onmousedown|onmouseup|onmouseover|onmousemove|onmouseout|onkeypress|onkeydown|onkeyup)="[^"]*'.$item.'[^"]*")|'
                                 .'('.$item.')'
                                 .'/mis',
                                 "highlight_no_links",
@@ -1502,30 +1503,26 @@ function searchEngine($begriff, $category = '%', $allLanguages = true)
 
 
 /**
-* Callback function for filtering HTML from URLs and images
-*
-* @param    array
-* @access   public
-* @return   string
-* @author   Matthias Sommerfeld <phlymail@phlylabs.de>
-* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-* @since    2003-07-14
-*/
-function highlight_no_links($string = '')
+ * Callback function for filtering HTML from URLs and images
+ *
+ * @param   array
+ * @access  public
+ * @return  string
+ * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author  Matthias Sommerfeld <phlymail@phlylabs.de>
+ * @since   2003-07-14
+ */
+function highlight_no_links($string)
 {
+    static $attributes = array(
+        'href', 'src', 'title', 'alt', 'class', 'style', 'id', 'name',
+        'face', 'size', 'dir', 'onclick', 'ondblclick', 'onmousedown',
+        'onmouseup', 'onmouseover', 'onmousemove', 'onmouseout', 
+        'onkeypress', 'onkeydown', 'onkeyup');
     foreach ($string as $str) {
-        if (    'href='     == substr(ltrim($str), 0, 5)
-             || 'src='      == substr(ltrim($str), 0, 4)
-             || 'title='    == substr(ltrim($str), 0, 6)
-             || 'alt='      == substr(ltrim($str), 0, 4)
-             || 'class='    == substr(ltrim($str), 0, 6)
-             || 'style='    == substr(ltrim($str), 0, 6)
-             || 'id='       == substr(ltrim($str), 0, 3)
-             || 'name='     == substr(ltrim($str), 0, 5)
-             || 'face='     == substr(ltrim($str), 0, 5)
-             || 'size='     == substr(ltrim($str), 0, 5)
-            ) {
-            return $str;
+        $_str = explode('=', strtolower(ltrim($str)), 1)
+        if (in_array($_str, $attributes)) {
+            return $_str;
         } elseif ('' == $str) {
             return '';
         } else {
