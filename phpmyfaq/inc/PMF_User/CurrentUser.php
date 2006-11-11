@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: CurrentUser.php,v 1.19 2006-10-15 20:54:13 matteo Exp $
+ * $Id: CurrentUser.php,v 1.20 2006-11-11 09:26:09 thorstenr Exp $
  *
  * manages authentication process using php sessions.
  *
@@ -356,7 +356,8 @@ class PMF_CurrentUser extends PMF_User
     function deleteFromSession()
     {
         // delete CurrentUser object from session
-        unset ($_SESSION[PMF_SESSION_CURRENT_USER]);
+        $_SESSION[PMF_SESSION_CURRENT_USER] = null;
+        unset($_SESSION[PMF_SESSION_CURRENT_USER]);
         // log CurrentUser out
         $this->_logged_in = false;
         // delete session-ID

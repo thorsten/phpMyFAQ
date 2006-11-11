@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: linkconfig.main.php,v 1.11 2006-09-26 19:53:28 thorstenr Exp $
+* $Id: linkconfig.main.php,v 1.12 2006-11-11 09:26:08 thorstenr Exp $
 *
 * LinkVerifier configuration
 *
@@ -79,6 +79,7 @@ function issueURL($optparams = array()) {
 
     foreach ($optparams as $_key => $_value) {
         if ($_value === false) {
+            $_params[$_key] = null;
             unset($_params[$_key]);
         } else {
             $_params[$_key] = $_value;

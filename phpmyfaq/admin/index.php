@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.74 2006-11-02 23:05:13 matteo Exp $
+* $Id: index.php,v 1.75 2006-11-11 09:26:08 thorstenr Exp $
 *
 * The main admin backend index file
 *
@@ -76,7 +76,7 @@ if (function_exists('mb_language') && in_array($PMF_LANG['metaLanguage'], $valid
 
 // TODO: Manage the 'Rembember me' Cookie also under 2.0.0.
 // authenticate current user
-unset($auth);
+$auth = null;
 if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
     // login with username and password
     $user = new PMF_CurrentUser();
@@ -88,12 +88,14 @@ if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
             $auth = true;
         } else {
             $error = $PMF_LANG['ad_auth_fail'].' ('.$faqusername.' / *)';
+            $user = null;
             unset($user);
         }
     } else {
         // error
         adminlog('Loginerror\nLogin: '.$faqusername.'\nPass: ********');
         $error = $PMF_LANG['ad_auth_fail'].' ('.$faqusername.' / *)';
+        $user = null;
         unset($user);
         $_REQUEST['action'] = '';
     }
@@ -107,6 +109,7 @@ if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
         // error
         adminlog('Session expired\nSession-ID: '.session_id());
         $error = $PMF_LANG['ad_auth_sess'];
+        $user = null;
         unset($user);
         $_REQUEST['action'] = '';
     }
@@ -131,7 +134,9 @@ if (isset($auth)) {
 // logout
 if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'logout' && $auth) {
     $user->deleteFromSession();
+    $user = null;
     unset($user);
+    $auth = null;
     unset($auth);
 }
 

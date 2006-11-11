@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.153 2006-11-05 11:28:34 thorstenr Exp $
+ * $Id: functions.php,v 1.154 2006-11-11 09:26:09 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -680,7 +680,7 @@ function Tracking($action, $id = 0)
             $sid = $_COOKIE['pmf_sid'];
         }
         if ($action == "old_session") {
-            unset($sid);
+            $sid = null;
         }
         if (!isset($sid)) {
             $sid = $db->nextID(SQLPREFIX."faqsessions", "sid");
@@ -982,11 +982,11 @@ function encode_iso88591($coded = "", $cmode = "g")
             if ($key > 0) {
                 $coded .= "\t";
                 }
-            unset ($words);
+            $words = null;
             if (function_exists('mb_encode_mimeheader')) {
                 $coded .= mb_encode_mimeheader( $value)."\r\n";
             } else {
-                unset ($words);
+                $words = null;
                 $words = explode(" ", $value);
                 foreach ($words as $k => $word) {
                     if (preg_match('/[\x80-\xff]/', $word)) {

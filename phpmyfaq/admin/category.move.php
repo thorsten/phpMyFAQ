@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: category.move.php,v 1.11 2006-10-10 16:48:59 thorstenr Exp $
+* $Id: category.move.php,v 1.12 2006-11-11 09:26:08 thorstenr Exp $
 *
 * Select a category to move
 *
@@ -29,6 +29,7 @@ if ($permission["editcateg"]) {
     $parent_id = $_GET['parent_id'];
     $cat = new PMF_Category($LANGCODE);
     $categories = $cat->getAllCategories();
+    $cat->categories = null;
     unset($cat->categories);
     $cat->getCategories($parent_id, false);
     $cat->buildTree($parent_id);

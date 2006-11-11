@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.edit.php,v 1.51 2006-11-10 22:38:55 thorstenr Exp $
+* $Id: record.edit.php,v 1.52 2006-11-11 09:26:08 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23
@@ -246,9 +246,9 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 <?php
     if (isset($faqData['active']) && $faqData['active'] == 'yes') {
         $suf = ' checked="checked"';
-        unset($sul);
+        $sul = null;
     } else {
-        unset($suf);
+        $suf = null;
         $sul = ' checked="checked"';
     }
 ?>
@@ -260,11 +260,11 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 <?php
     if ($url_variables != 'insertentry') {
         $rev_yes = ' checked="checked"';
-        unset($rev_no);
+        $rev_no = null;
     }
     if (isset($faqData['active']) && $faqData['active'] == 'no') {
         $rev_no = ' checked="checked"';
-        unset($rev_yes);
+        $rev_yes = null;
     }
     if ($url_variables != 'insertentry') {
 ?>

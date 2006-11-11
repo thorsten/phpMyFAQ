@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.78 2006-11-05 11:37:52 thorstenr Exp $
+* $Id: index.php,v 1.79 2006-11-11 09:26:09 thorstenr Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the
@@ -71,7 +71,7 @@ if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE)) {
 // Authenticate current user
 //
 require_once ('inc/PMF_User/CurrentUser.php');
-unset($auth);
+$auth = null;
 if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
     // login with username and password
     $user = new PMF_CurrentUser();
@@ -87,6 +87,7 @@ if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
     } else {
         // error
         $error = $PMF_LANG['ad_auth_fail'];
+        $user = null;
         unset($user);
     }
 } else {
@@ -97,6 +98,7 @@ if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
     } else {
         // error
         $error = $PMF_LANG['ad_auth_sess'];
+        $user = null;
         unset($user);
     }
 }
@@ -124,7 +126,9 @@ if (isset($auth)) {
 //
 if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'logout' && isset($auth)) {
     $user->deleteFromSession();
+    $user = null;
     unset($user);
+    $auth = null;
     unset($auth);
 }
 

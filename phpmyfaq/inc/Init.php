@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Init.php,v 1.16 2006-11-08 11:26:59 thorstenr Exp $
+* $Id: Init.php,v 1.17 2006-11-11 09:26:09 thorstenr Exp $
 *
 * Some functions
 *
@@ -139,8 +139,13 @@ class PMF_Init
                 $newvalues = PMF_Init::removeMagicQuotesGPC($newvalues);
 
                 // clean old array and insert cleaned data
-                foreach (array_keys($GLOBALS[$external]) as $key) unset($GLOBALS[$external][$key]);
-                foreach (array_keys($newvalues) as $key) $GLOBALS[$external][$key] = $newvalues[$key];
+                foreach (array_keys($GLOBALS[$external]) as $key) {
+                    $GLOBALS[$external][$key] = null;
+                    unset($GLOBALS[$external][$key]);
+                }
+                foreach (array_keys($newvalues) as $key) {
+                    $GLOBALS[$external][$key] = $newvalues[$key];
+                }
             }
         }
     }
@@ -235,19 +240,23 @@ class PMF_Init
         // Select the language
         if (isset($_lang['post'])) {
             $this->language = $_lang['post'];
+            $_lang = null;
             unset($_lang);
             setcookie('pmf_lang', $this->language, time() + 3600);
         } elseif (isset($_lang['get'])) {
             $this->language = $_lang['get'];
         } elseif (isset($_lang['cookie'])) {
             $this->language = $_lang['cookie'];
+            $_lang = null;
             unset($_lang);
         } elseif (isset($_lang['config'])) {
             $this->language = $_lang['config'];
+            $_lang = null;
             unset($_lang);
             setcookie('pmf_lang', $this->language, time() + 3600);
         } elseif (isset($_lang['detection'])) {
             $this->language = $_lang['detection'];
+            $_lang = null;
             unset($_lang);
             setcookie('pmf_lang', $this->language, time() + 3600);
         } else {

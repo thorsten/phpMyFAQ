@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: constants.php,v 1.21 2006-10-21 10:08:37 thorstenr Exp $
+* $Id: constants.php,v 1.22 2006-11-11 09:26:09 thorstenr Exp $
 *
 * Constants for phpMyFAQ
 *
@@ -37,7 +37,7 @@ define('PMF_DATETIME_TIMEZONE', '0'); // default: "0", example: "-0400" for 4 ho
  *
  * @var integer
  */
-define('PMF_AUTH_TIMEOUT', 30);
+define('PMF_AUTH_TIMEOUT', 300);
 
 /**
  * Timeout for the warning about session timeout for the admin section, in minutes

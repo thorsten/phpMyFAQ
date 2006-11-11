@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: attachment.php,v 1.22 2006-08-23 19:38:44 matteo Exp $
+* $Id: attachment.php,v 1.23 2006-11-11 09:26:08 thorstenr Exp $
 *
 * Select an attachment and save it or create the SQL backup files
 *
@@ -60,6 +60,7 @@ if ($user) {
 } else {
     // error
     $error = $PMF_LANG['ad_auth_sess'];
+    $user = null;
     unset($user);
 }
 
