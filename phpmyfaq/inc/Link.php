@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Link.php,v 1.22 2006-10-21 10:08:37 thorstenr Exp $
+* $Id: Link.php,v 1.23 2006-11-11 16:22:24 matteo Exp $
 *
 * Link management - Functions and Classes
 *
@@ -165,7 +165,10 @@ class PMF_Link
 
     function isIISServer()
     {
-        return (isset($_SERVER['ALL_HTTP']));
+        return (
+                   isset($_SERVER['ALL_HTTP'])      // IIS 5.x
+                || isset($_SERVER['APP_POOL_ID'])   // IIS 6.0
+                );
     }
 
     function isAdminIndex()
