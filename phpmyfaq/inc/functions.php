@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.155 2006-11-11 14:19:03 thorstenr Exp $
+ * $Id: functions.php,v 1.156 2006-11-11 14:21:44 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -1510,6 +1510,7 @@ function searchEngine($begriff, $category = '%', $allLanguages = true)
  * @return  string
  * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author  Matthias Sommerfeld <phlymail@phlylabs.de>
+ * @author  Johannes Schlueter <johannes@php.net>
  * @since   2003-07-14
  */
 function highlight_no_links($string)
