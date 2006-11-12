@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Tags.php,v 1.21 2006-11-10 19:20:53 thorstenr Exp $
+* $Id: Tags.php,v 1.22 2006-11-12 21:01:24 thorstenr Exp $
 *
 * The main Tags class
 *
@@ -115,7 +115,7 @@ class PMF_Tags
             SELECT
                 dt.tagging_id, t.tagging_name
             FROM
-                %sfaqtags dt, %sfaqdata_tags t
+                %sfaqdata_tags dt, %sfaqtags t
             WHERE
                 dt.record_id = %d
             AND
@@ -200,7 +200,7 @@ class PMF_Tags
                 $new_tagging_id = $this->db->nextID(SQLPREFIX.'faqtags', 'tagging_id');
                 $query = sprintf("
                     INSERT INTO
-                        %sfaqdata_tags
+                        %sfaqtags
                     (tagging_id, tagging_name)
                         VALUES
                     (%d, '%s')",
@@ -212,7 +212,7 @@ class PMF_Tags
                 // Add the tag reference for the faq record
                 $query = sprintf("
                     INSERT INTO
-                        %sfaqtags
+                        %sfaqdata_tags
                     (record_id, tagging_id)
                         VALUES
                     (%d, %d)",
@@ -225,7 +225,7 @@ class PMF_Tags
                 // Add the tag reference for the faq record
                 $query = sprintf("
                     INSERT INTO
-                        %sfaqtags
+                        %sfaqdata_tags
                     (record_id, tagging_id)
                         VALUES
                     (%d, %d)",
@@ -233,7 +233,7 @@ class PMF_Tags
                     $record_id,
                     array_search($tagging_name, $current_tags)
                     );
-                $this->db->query($query);
+                @$this->db->query($query);
             }
         }
 
