@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mysqli.update.sql.php,v 1.13 2006-11-12 20:45:15 thorstenr Exp $
+* $Id: mysqli.update.sql.php,v 1.14 2006-11-12 20:54:17 thorstenr Exp $
 *
 * CREATE TABLE instruction for MySQL database - UPDATE STAGE from 1.x to 2.0.0
 *
@@ -52,9 +52,9 @@ PRIMARY KEY (record_id, group_id))";
 
 //faqdata_tags
 $query[] = "CREATE TABLE ".SQLPREFIX."faqdata_tags (
+record_id INT(11) NOT NULL,
 tagging_id INT(11) NOT NULL,
-tagging_name VARCHAR(255) NOT NULL ,
-PRIMARY KEY (tagging_id, tagging_name)
+PRIMARY KEY (record_id, tagging_id)
 )";
 
 //faqdata_user
@@ -114,9 +114,9 @@ PRIMARY KEY (right_id)
 
 //faqtags
 $query[] = "CREATE TABLE ".SQLPREFIX."faqtags (
-record_id INT(11) NOT NULL,
 tagging_id INT(11) NOT NULL,
-PRIMARY KEY (record_id, tagging_id)
+tagging_name VARCHAR(255) NOT NULL ,
+PRIMARY KEY (tagging_id, tagging_name)
 )";
 
 //faquser

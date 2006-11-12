@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mysqli.sql.php,v 1.29 2006-11-12 20:45:15 thorstenr Exp $
+* $Id: mysqli.sql.php,v 1.30 2006-11-12 20:54:17 thorstenr Exp $
 *
 * CREATE TABLE instruction for MySQL 4.1 and 5.0 databases
 *
@@ -169,7 +169,7 @@ revision_id int(11) NOT NULL DEFAULT 0,
 active char(3) NOT NULL,
 keywords text NOT NULL,
 thema text NOT NULL,
-content longtext NOT NULL,
+content text NOT NULL,
 author varchar(255) NOT NULL,
 email varchar(255) NOT NULL,
 comment char(1) default 'y',
@@ -188,9 +188,9 @@ PRIMARY KEY (record_id, group_id))";
 
 //faqdata_tags
 $query[] = "CREATE TABLE ".$sqltblpre."faqdata_tags (
+record_id INT(11) NOT NULL,
 tagging_id INT(11) NOT NULL,
-tagging_name VARCHAR(255) NOT NULL ,
-PRIMARY KEY (tagging_id, tagging_name)
+PRIMARY KEY (record_id, tagging_id)
 )";
 
 //faqdata_user
@@ -280,7 +280,7 @@ PRIMARY KEY (right_id)
 //faqsessions
 $query[] = "CREATE TABLE ".$sqltblpre."faqsessions (
 sid int(11) NOT NULL,
-user_id INT(11) NOT NULL,
+user_id int(11) NOT NULL,
 ip text NOT NULL,
 time int(11) NOT NULL,
 PRIMARY KEY (sid)
@@ -288,9 +288,9 @@ PRIMARY KEY (sid)
 
 //faqtags
 $query[] = "CREATE TABLE ".$sqltblpre."faqtags (
-record_id INT(11) NOT NULL,
 tagging_id INT(11) NOT NULL,
-PRIMARY KEY (record_id, tagging_id)
+tagging_name VARCHAR(255) NOT NULL ,
+PRIMARY KEY (tagging_id, tagging_name)
 )";
 
 //faquser
