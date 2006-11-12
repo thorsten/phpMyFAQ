@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.edit.php,v 1.53 2006-11-11 19:20:33 thorstenr Exp $
+* $Id: record.edit.php,v 1.54 2006-11-12 20:37:34 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23
@@ -31,7 +31,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     $category->buildTree();
     
     $current_category   = '';
-    $categories         = array('category_id', 'category_lang');
+    $categories         = array();
     $faqData = array(
         'id'            => 0,
         'lang'          => $LANGCODE,
@@ -44,9 +44,9 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
         $question = $faq->getQuestion($question_id);
         $current_category = $question['category'];
         $faqData['title'] = $question['question'];
-        $categories = array(array(
+        $categories = array(
             'category_id'   => $current_category,
-            'category_lang' => $faqData['lang']));
+            'category_lang' => $faqData['lang']);
     }
 
     if (isset($_REQUEST["action"]) && $_REQUEST["action"] == "editpreview") {
@@ -86,22 +86,14 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 
         if ((!isset($current_category) && !isset($faqData['title'])) || (isset($_GET['id']) && $_GET['id'] != '')) {
             adminlog("Beitragedit, ".$_GET['id']);
-            $faqData['id'] = (int)$_GET['id'];
-            $faqData['lang'] = $_GET["lang"];
-
-            // Get the category
-            $resultCategory = $db->query('SELECT category_id, category_lang FROM '.SQLPREFIX.'faqcategoryrelations WHERE record_id = '.$faqData['id'].' AND record_lang = \''.$faqData['lang'].'\'');
-            while ($row = $db->fetch_object($resultCategory)) {
-                $categories[] = array('category_id' => $row->category_id, 'category_lang' => $row->category_lang);
-            }
-
-            // Get the record
-            $faq->language = $faqData['lang'];
+            $faqData['id']      = (int)$_GET['id'];
+            $faqData['lang']    = $_GET["lang"];
+            $faq->language      = $faqData['lang'];
+            $categories         = $category->getCategoryRelationsFromArticle($faqData['id'], $faqData['lang']);
             $faq->getRecord($faqData['id'], null, true);
             $faqData = $faq->faqRecord;
             $tags = implode(' ', $tagging->getAllTagsById($faqData['id']));
             $url_variables = 'saveentry&amp;id='.$_REQUEST['id'];
-
         } else {
             $url_variables = 'insertentry';
         }
