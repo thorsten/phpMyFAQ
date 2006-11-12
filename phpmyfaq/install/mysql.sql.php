@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mysql.sql.php,v 1.43 2006-11-12 20:54:17 thorstenr Exp $
+* $Id: mysql.sql.php,v 1.44 2006-11-12 20:56:30 thorstenr Exp $
 *
 * CREATE TABLE instruction for MySQL database
 *
@@ -169,7 +169,7 @@ revision_id int(11) NOT NULL DEFAULT 0,
 active char(3) NOT NULL,
 keywords text NOT NULL,
 thema text NOT NULL,
-content text NOT NULL,
+content longtext NOT NULL,
 author varchar(255) NOT NULL,
 email varchar(255) NOT NULL,
 comment char(1) default 'y',
