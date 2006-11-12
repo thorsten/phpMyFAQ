@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mysqli.sql.php,v 1.28 2006-11-10 22:00:41 thorstenr Exp $
+* $Id: mysqli.sql.php,v 1.29 2006-11-12 20:45:15 thorstenr Exp $
 *
 * CREATE TABLE instruction for MySQL 4.1 and 5.0 databases
 *
@@ -188,9 +188,9 @@ PRIMARY KEY (record_id, group_id))";
 
 //faqdata_tags
 $query[] = "CREATE TABLE ".$sqltblpre."faqdata_tags (
-record_id INT(11) NOT NULL,
 tagging_id INT(11) NOT NULL,
-PRIMARY KEY (record_id, tagging_id)
+tagging_name VARCHAR(255) NOT NULL ,
+PRIMARY KEY (tagging_id, tagging_name)
 )";
 
 //faqdata_user
@@ -288,9 +288,9 @@ PRIMARY KEY (sid)
 
 //faqtags
 $query[] = "CREATE TABLE ".$sqltblpre."faqtags (
+record_id INT(11) NOT NULL,
 tagging_id INT(11) NOT NULL,
-tagging_name VARCHAR(255) NOT NULL ,
-PRIMARY KEY (tagging_id, tagging_name)
+PRIMARY KEY (record_id, tagging_id)
 )";
 
 //faquser
