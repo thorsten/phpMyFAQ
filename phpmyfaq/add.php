@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: add.php,v 1.17 2006-09-19 21:39:38 matteo Exp $
+* $Id: add.php,v 1.18 2006-11-12 17:30:31 matteo Exp $
 *
 * This is the page there a user can add a FAQ record.
 *
@@ -37,7 +37,8 @@ $question = '';
 $readonly = '';
 if (isset($_GET['question']) && is_numeric($_GET['question'])) {
     $question_id = (int)$_GET['question'];
-    $question = $faq->getQuestion($question_id);
+    $oQuestion = $faq->getQuestion($question_id);
+    $question = $oQuestion['question'];
     if (strlen($question)) {
         $readonly = ' readonly="readonly"';
     }

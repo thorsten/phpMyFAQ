@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.71 2006-11-11 19:12:14 thorstenr Exp $
+* $Id: Faq.php,v 1.72 2006-11-12 17:30:31 matteo Exp $
 *
 * The main FAQ class
 *
@@ -1181,37 +1181,6 @@ class PMF_Faq
     }
 
     /**
-     * Returns a question for the table faquestion
-     *
-     * @param   integer $question_id
-     * @return  string
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2006-08-13
-     */
-    function getQuestion($question_id)
-    {
-        $question = '';
-        $query = sprintf('
-            SELECT
-                ask_content
-            FROM
-                %sfaqquestions
-            WHERE
-                id = %d',
-            SQLPREFIX,
-            $question_id);
-
-        $result = $this->db->query($query);
-        if ($this->db->num_rows($result) > 0) {
-            $row = $this->db->fetch_object($result);
-            $question = $row->ask_content;
-        }
-
-        return $question;
-    }
-
-    /**
      * Deletes a question for the table faquestion
      *
      * @param   integer $question_id
@@ -1611,24 +1580,34 @@ class PMF_Faq
      * @since    2006-11-11
      * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function getQuestion($question_id)
+    function getQuestion($id_question)
     {
-        if (!is_int($question_id)) {
-            return null;
+        $question = array(
+            'id'            => 0,
+            'user'          => '',
+            'email'         => '',
+            'category'      => '',
+            'question'      => '',
+            'date'          => '',
+            'is_visible'    => ''
+            );
+
+        if (!is_int($id_question)) {
+            return $question;
         }
-        
+
         $question = array();
-        
+
         $query = sprintf('
-            SELECT 
+            SELECT
                  id, ask_username, ask_usermail, ask_rubrik, ask_content, ask_date, is_visible
-            FROM 
-                %sfaqquestions 
-            WHERE 
+            FROM
+                %sfaqquestions
+            WHERE
                 id = %d',
             SQLPREFIX,
             $id_question);
-        
+
         if ($result = $this->db->query($query)) {
             if ($row = $this->db->fetch_object($result)) {
                 $question = array(
