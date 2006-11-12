@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Linkverifier.php,v 1.15 2006-09-26 21:25:35 matteo Exp $
+* $Id: Linkverifier.php,v 1.16 2006-11-12 21:26:53 matteo Exp $
 *
 * PMF_Linkverifier
 *
@@ -10,6 +10,9 @@
 * @package          link_verifyer
 * @since            2005-08-01
 * @copyright        (c) 2005-2006 NetJapan, Inc.
+*
+* Note: The package has been improved and fixed by Matteo Scaramuccia <matteo@scaramuccia.com>
+* to best fit with PMF 1.6.x+
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -30,24 +33,37 @@
  * Suggested value is above 10 redirects
  */
 
-if (!defined("LINKVERIFIER_MAX_REDIRECT_COUNT")) {
-    define("LINKVERIFIER_MAX_REDIRECT_COUNT", 10);
+if (!defined('LINKVERIFIER_MAX_REDIRECT_COUNT')) {
+    define('LINKVERIFIER_MAX_REDIRECT_COUNT', 10);
 }
 
 /* Defines the number of seconds to wait for the remote server to respond
  *
  * Suggested value is 5 seconds
  */
-if (!defined("LINKVERIFIER_CONNECT_TIMEOUT")) {
-    define("LINKVERIFIER_CONNECT_TIMEOUT", 5);
+if (!defined('LINKVERIFIER_CONNECT_TIMEOUT')) {
+    define('LINKVERIFIER_CONNECT_TIMEOUT', 5);
 }
 
 /* Defines the number of seconds to wait for the remote server to send data
  *
  * Suggested value is 10 seconds
  */
-if (!defined("LINKVERIFIER_RESPONSE_TIMEOUT")) {
-    define("LINKVERIFIER_RESPONSE_TIMEOUT", 10);
+if (!defined('LINKVERIFIER_RESPONSE_TIMEOUT')) {
+    define('LINKVERIFIER_RESPONSE_TIMEOUT', 10);
+}
+
+/* Defines the behaviour when a user click "Edit FAQs" in the backend.
+ * Do you want an automatic links verification
+ * with live update of each links verification status?
+ *
+ * Suggested value is:
+ * a. false, if you don't use a cron/at entry to call 'cron.verifyurls.php' during each night.
+ *           This will avoid browser high load (100% CPU)
+ * b. true, if you use a cron/at entry to call 'cron.verifyurls.php' during each night
+ */
+if (!defined('LINKVERIFIER_AUTOMATIC_CALL_ON_EDIT_FAQ')) {
+    define('LINKVERIFIER_AUTOMATIC_CALL_ON_EDIT_FAQ', false);
 }
 
 class PMF_Linkverifier
@@ -768,10 +784,11 @@ class PMF_Linkverifier
         $spanId = "spanurl_".$artlang."_".$id;
         $divId  = "divurl_".$artlang."_".$id;
 
+        $onLoad = '';
         if ($this->getEntryState($id, $artlang, true) === true) {
-            $onLoad = " onload=\"verifyEntryURL(".$id.",'".$artlang."');\"";
-        } else {
-            $onLoad = "";
+            if (LINKVERIFIER_AUTOMATIC_CALL_ON_EDIT_FAQ) {
+                $onLoad = " onload=\"verifyEntryURL(".$id.",'".$artlang."');\"";
+            }
         }
 
         //$output = '<img src="images/url-'.$src.'.png" id="'.$imgId.'" '.$onLoad.' />';
