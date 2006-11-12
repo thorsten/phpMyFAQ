@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.add.php,v 1.48 2006-11-05 14:28:33 thorstenr Exp $
+ * $Id: record.add.php,v 1.49 2006-11-12 21:07:50 thorstenr Exp $
  *
  * Adds a record in the database, handles the preview and checks for missing
  * category entries.
@@ -64,10 +64,12 @@ if ($permission["editbt"]) {
         // Get the data
         $categories     = $_POST['rubrik'];
         $tags           = $db->escape_string(trim($_POST['tags']));
-        $userperm       = $db->escape_string($_POST['userpermission']);
+        $userperm       = isset($db->escape_string($_POST['userpermission'])) ? 
+                          $db->escape_string($_POST['userpermission']) : 'all';
         $user_allowed   = ('all' == $userperm) ? -1 : $db->escape_string($_POST['restricted_users']);
-        $groupperm      = $db->escape_string($_POST['grouppermission']);
-        $group_allowed  = ('all' == $groupperm) ? -1 : $db->escape_string($_POST['restricted_group']);
+        $groupperm      = isset($db->escape_string($_POST['grouppermission'])) ? 
+                          $db->escape_string($_POST['grouppermission']) : 'all';
+        $group_allowed  = ('all' == $groupperm) ? -1 : $db->escape_string($_POST['restricted_groups']);
         $recordData     = array(
             'lang'          => $db->escape_string($_POST['language']),
             'active'        => $db->escape_string($_POST['active']),
@@ -108,30 +110,30 @@ if ($permission["editbt"]) {
                 $category->addPermission('group', $categories, $group_allowed);
             }
 
-            print $PMF_LANG["ad_entry_savedsuc"];
+            print $PMF_LANG['ad_entry_savedsuc'];
 
             // Call Link Verification
             link_ondemand_javascript($record_id, $recordData['lang']);
         } else {
-            print $PMF_LANG["ad_entry_savedfail"].$db->error();
+            print $PMF_LANG['ad_entry_savedfail'].$db->error();
         }
 
     } elseif (    isset($submit[2])
-               && isset($_POST["thema"]) && $_POST["thema"] != ""
+               && isset($_POST['thema']) && $_POST['thema'] != ""
                && isset($_POST['rubrik']) && is_array($_POST['rubrik'])
              ) {
         // Preview
-        $rubrik = $_POST["rubrik"];
+        $rubrik = $_POST['rubrik'];
         $cat = new PMF_Category;
         $cat->transform(0);
         $categorylist = '';
         foreach ($rubrik as $categories) {
             $categorylist .= $cat->getPath($categories).'<br />';
         }
-        if (isset($_REQUEST["id"]) && $_REQUEST["id"] != "") {
-            $id = $_REQUEST["id"];
+        if (isset($_REQUEST['id']) && $_REQUEST['id'] != '') {
+            $id = $_REQUEST['id'];
         } else {
-            $id = "";
+            $id = '';
         }
         $content = $_POST['content'];
 ?>
