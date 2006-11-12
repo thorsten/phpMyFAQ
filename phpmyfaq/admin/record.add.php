@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.add.php,v 1.49 2006-11-12 21:07:50 thorstenr Exp $
+ * $Id: record.add.php,v 1.50 2006-11-12 21:11:25 thorstenr Exp $
  *
  * Adds a record in the database, handles the preview and checks for missing
  * category entries.
@@ -64,10 +64,10 @@ if ($permission["editbt"]) {
         // Get the data
         $categories     = $_POST['rubrik'];
         $tags           = $db->escape_string(trim($_POST['tags']));
-        $userperm       = isset($db->escape_string($_POST['userpermission'])) ? 
+        $userperm       = isset($_POST['userpermission']) ? 
                           $db->escape_string($_POST['userpermission']) : 'all';
         $user_allowed   = ('all' == $userperm) ? -1 : $db->escape_string($_POST['restricted_users']);
-        $groupperm      = isset($db->escape_string($_POST['grouppermission'])) ? 
+        $groupperm      = isset($_POST['grouppermission']) ? 
                           $db->escape_string($_POST['grouppermission']) : 'all';
         $group_allowed  = ('all' == $groupperm) ? -1 : $db->escape_string($_POST['restricted_groups']);
         $recordData     = array(
@@ -172,8 +172,8 @@ if ($permission["editbt"]) {
     </form>
 <?php
     } else {
-        print "<h2>".$PMF_LANG["ad_entry_aor"]."</h2>\n";
-        print "<p>".$PMF_LANG["ad_entryins_fail"]."</p>";
+        printf("<h2>%s</h2>\n", $PMF_LANG['ad_entry_aor']);
+        printf("<p>%s</p>", $PMF_LANG['ad_entryins_fail']);
         $rubrik = isset($_POST['rubrik']) ? $_POST['rubrik'] : null;
 ?>
     <form action="<?php print $_SERVER['PHP_SELF'].$linkext; ?>&amp;action=editpreview" method="post">
@@ -207,5 +207,5 @@ if ($permission["editbt"]) {
 <?php
     }
 } else {
-    print $PMF_LANG["err_NotAuth"];
+    print $PMF_LANG['err_NotAuth'];
 }
