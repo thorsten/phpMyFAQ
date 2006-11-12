@@ -1,32 +1,33 @@
 <?php
 /**
-* $Id: Init.php,v 1.17 2006-11-11 09:26:09 thorstenr Exp $
-*
-* Some functions
-*
-* @author       Johann-Peter Hartmann <hartmann@mayflower.de>
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @author       Stefan Esser <sesser@php.net>
-* @author       Matteo Scaramuccia <matteo@scaramuccia.com>
-* @since        2005-09-24
-* @copyright    (c) 2005-2006 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * $Id: Init.php,v 1.18 2006-11-12 19:50:45 matteo Exp $
+ *
+ * Some functions
+ *
+ * @author      Johann-Peter Hartmann <hartmann@mayflower.de>
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author      Stefan Esser <sesser@php.net>
+ * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @since       2005-09-24
+ * @copyright   (c) 2005-2006 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
-//debug mode:
+//
+// Debug mode:
 // - false      debug mode disabled
 // - true       debug mode enabled
+//
 define('DEBUG', true);
-
 if (DEBUG) {
     error_reporting(E_ALL);
     if (defined('E_STRICT')) {
@@ -35,8 +36,25 @@ if (DEBUG) {
 }
 
 //
-// Read configuration and constants, include main classes and functions and
-// create a database connection
+// Fix the include path if PMF is running under a "strange" PHP configuration
+//
+$foundCurrPath = false;
+$includePaths = split(PATH_SEPARATOR, ini_get('include_path'));
+$i = 0;
+while((!$foundCurrPath) && ($i < count($includePaths))) {
+    if ('.' == $includePaths[$i]) {
+        $foundCurrPath = true;
+    }
+    $i++;
+}
+if (!$foundCurrPath) {
+    ini_set('include_path', '.'.PATH_SEPARATOR.ini_get('include_path'));
+}
+
+//
+// Read configuration and constants, include main classes and functions
+// and create a database connection
+//
 define('PMF_INCLUDE_DIR', dirname(__FILE__));
 require_once(PMF_INCLUDE_DIR.'/data.php');
 require_once(PMF_INCLUDE_DIR.'/constants.php');
@@ -77,46 +95,46 @@ if ($faqconfig->get('ldap_support') && file_exists('inc/dataldap.php')) {
 }
 
 /**
-* PMF_Init
-*
-* This class provides methods to clean the request environment from global
-* variables, unescaped slashes and XSS in the request string. It also detects
-* and sets the current language.
-*
-* @access       public
-* @since        2005-09-24
-* @author       Johann-Peter Hartmann <hartmann@mayflower.de>
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @author       Stefan Esser <sesser@php.net>
-* @author       Christian Stocker <chregu@bitflux.ch>
-*/
+ * PMF_Init
+ *
+ * This class provides methods to clean the request environment from global
+ * variables, unescaped slashes and XSS in the request string. It also detects
+ * and sets the current language.
+ *
+ * @access      public
+ * @since       2005-09-24
+ * @author      Johann-Peter Hartmann <hartmann@mayflower.de>
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author      Stefan Esser <sesser@php.net>
+ * @author      Christian Stocker <chregu@bitflux.ch>
+ */
 class PMF_Init
 {
     /**
-    * The accepted language of the user agend
-    *
-    * @var  string
-    * @see
-    */
+     * The accepted language of the user agend
+     *
+     * @var  string
+     * @see
+     */
     var $acceptedLanguage;
 
     /**
-    * The current language
-    *
-    * @var  string
-    * @see
-    */
+     * The current language
+     *
+     * @var  string
+     * @see
+     */
     var $language;
 
     /**
-    * cleanRequest
-    *
-    * Cleans the request environment from global variables, unescaped slashes and xss in the request string.
-    *
-    * @return   void
-    * @access   public
-    * @author   Johann-Peter Hartmann <hartmann@mayflower.de>
-    */
+     * cleanRequest
+     *
+     * Cleans the request environment from global variables, unescaped slashes and xss in the request string.
+     *
+     * @return  void
+     * @access  public
+     * @author  Johann-Peter Hartmann <hartmann@mayflower.de>
+     */
     function cleanRequest()
     {
         $_SERVER['PHP_SELF'] = strtr(rawurlencode($_SERVER['PHP_SELF']),array( "%2F"=>"/", "%257E"=>"%7E"));
@@ -151,15 +169,15 @@ class PMF_Init
     }
 
     /**
-    * getUserAgentLanguage()
-    *
-    * Gets the accepted language from the user agent
-    *
-    * @return   void
-    * @access   private
-    * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @author   Matteo Scaramuccia <matteo@scaramuccia.com>
-    */
+     * getUserAgentLanguage()
+     *
+     * Gets the accepted language from the user agent
+     *
+     * @return  void
+     * @access  private
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     */
     function getUserAgentLanguage()
     {
         $this->acceptedLanguage = '';
@@ -177,15 +195,15 @@ class PMF_Init
     }
 
     /**
-    * isASupportedLanguage()
-    *
-    * True if the language is supported by the current phpMyFAQ installation
-    *
-    * @param    string  $langcode
-    * @return   bool
-    * @access   public
-    * @author   Matteo scaramuccia <matteo@scaramuccia.com>
-    */
+     * isASupportedLanguage()
+     *
+     * True if the language is supported by the current phpMyFAQ installation
+     *
+     * @param   string  $langcode
+     * @return  bool
+     * @access  public
+     * @author  Matteo scaramuccia <matteo@scaramuccia.com>
+     */
     function isASupportedLanguage($langcode)
     {
         global $languageCodes;
@@ -193,17 +211,17 @@ class PMF_Init
     }
 
     /**
-    * setLanguage()
-    *
-    * Sets the current language for phpMyFAQ user session
-    *
-    * @param    bool    $config_detection
-    * @param    string  $config_language
-    * @return   string  $language
-    * @access   public
-    * @author   Thorsten Rinne <rinne@mayflower.de>
-    * @author   Matteo scaramuccia <matteo@scaramuccia.com>
-    */
+     * setLanguage()
+     *
+     * Sets the current language for phpMyFAQ user session
+     *
+     * @param   bool    $config_detection
+     * @param   string  $config_language
+     * @return  string  $language
+     * @access  public
+     * @author  Thorsten Rinne <rinne@mayflower.de>
+     * @author  Matteo scaramuccia <matteo@scaramuccia.com>
+     */
     function setLanguage($config_detection, $config_language)
     {
         $_lang = array();
@@ -318,14 +336,14 @@ class PMF_Init
     }
 
     /**
-    * Cleans a html string from some xss issues
-    *
-    * @param       string  $string
-    * @return      string
-    * @access      private
-    * @author      Christian Stocker <chregu@bitflux.ch>
-    * @copyright   Bitflux (c) 2001-2005 Bitflux GmbH
-    */
+     * Cleans a html string from some xss issues
+     *
+     * @param       string  $string
+     * @return      string
+     * @access      private
+     * @author      Christian Stocker <chregu@bitflux.ch>
+     * @copyright   Bitflux (c) 2001-2005 Bitflux GmbH
+     */
     function basicXSSClean($string)
     {
         if (strpos($string, '\0') !== false) {
@@ -360,16 +378,16 @@ class PMF_Init
     }
 
     /**
-    * removeXSSGPC
-    *
-    * Removes xss from an array
-    *
-    * @param    array   $data
-    * @return   array
-    * @acces    private
-    * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @author   Johann-Peter Hartmann <hartmann@mayflower.de>
-    */
+     * removeXSSGPC
+     *
+     * Removes xss from an array
+     *
+     * @param   array   $data
+     * @return  array
+     * @acces   private
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @author  Johann-Peter Hartmann <hartmann@mayflower.de>
+     */
     function removeXSSGPC($data) {
         $cleanData = array();
         foreach ($data as $key => $val) {
