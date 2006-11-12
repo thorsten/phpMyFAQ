@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Category.php,v 1.26 2006-11-07 08:18:25 thorstenr Exp $
+ * $Id: Category.php,v 1.27 2006-11-12 20:37:16 thorstenr Exp $
  *
  * The main category class
  *
@@ -855,20 +855,54 @@ class PMF_Category
             return implode($separator, $temp);
         }
     }
+    
+    /**
+     * Returns the categories from a record id and language
+     *
+     * @param   integer $record_id
+     * @param   integer $record_lang
+     * @return  array
+     * @access  public
+     * @since   2006-11-12
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function getCategoryRelationsFromArticle($record_id, $record_lang)
+    {
+        $categories = array();
+        
+        $query = sprintf("
+            SELECT
+                category_id, category_lang
+            FROM
+                %sfaqcategoryrelations
+            WHERE
+                record_id = %d 
+            AND
+                record_lang = '%s'",
+            SQLPREFIX,
+            $record_id,
+            $record_lang);
+        $result = $this->db->query($query);
+        while ($row = $this->db->fetch_object($result)) {
+            $categories[] = array(
+                'category_id' => $row->category_id,
+                'category_lang' => $row->category_lang);
+        }
+        
+        return $categories;
+    }
 
     /**
-    * getCategoriesFromArticle
-    *
-    * Returns all categories that are related to the given article-id and
-    * the current language $this->language in an unsorted array which consists
-    * of associative arrays with the keys 'name', 'id', 'lang',
-    * 'parent_id' and 'description'.
-    *
-    * @access   public
-    * @param    integer   $article_id
-    * @return   array   array(array('name'=>string,'id'=>int,'lang'=>string,'parent_id'=>int,'description'=>string),...)
-    * @author   Lars Tiedemann <larstiedemann@yahoo.de>
-    */
+     * Returns all categories that are related to the given article-id and
+     * the current language $this->language in an unsorted array which consists
+     * of associative arrays with the keys 'name', 'id', 'lang',
+     * 'parent_id' and 'description'.
+     *
+     * @access  public
+     * @param   integer   $article_id
+     * @return  array   array(array('name'=>string,'id'=>int,'lang'=>string,'parent_id'=>int,'description'=>string),...)
+     * @author  Lars Tiedemann <larstiedemann@yahoo.de>
+     */
     function getCategoriesFromArticle($article_id)
     {
         $rel = SQLPREFIX."faqcategoryrelations";
