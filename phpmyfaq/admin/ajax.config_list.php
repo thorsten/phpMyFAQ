@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.config_list.php,v 1.10 2006-09-27 19:00:31 thorstenr Exp $
+* $Id: ajax.config_list.php,v 1.11 2006-11-14 22:15:15 matteo Exp $
 *
 * AJAX: lists the complete configuration items
 *
@@ -40,12 +40,18 @@ function printInputFieldByType($key, $type)
 
     switch($type) {
         case 'area':
-            printf('<textarea name="edit[%s]" cols="60" rows="6">%s</textarea>', $key, htmlentities($PMF_CONF[$key]));
+            printf('<textarea name="edit[%s]" cols="60" rows="6">%s</textarea>',
+                    $key,
+                    str_replace('<', '&lt;', str_replace('>', '&gt;', $PMF_CONF[$key]))
+                    );
             printf("<br />\n");
             break;
 
         case 'input':
-            printf('<input type="text" name="edit[%s]" size="80" value="%s" />', $key, htmlentities($PMF_CONF[$key]));
+            printf('<input type="text" name="edit[%s]" size="80" value="%s" />',
+                    $key,
+                    str_replace('"', '&quot;', $PMF_CONF[$key])
+                    );
             printf("<br />\n");
             break;
 
@@ -72,7 +78,10 @@ function printInputFieldByType($key, $type)
 
         case 'print':
             print $PMF_CONF[$key];
-            printf('<input type="hidden" name="edit[%s]" size="80" value="%s" />', $key, $PMF_CONF[$key]);
+            printf('<input type="hidden" name="edit[%s]" size="80" value="%s" />',
+                    $key,
+                    str_replace('"', '&quot;', $PMF_CONF[$key])
+                    );
             printf("<br />\n");
             break;
     }
