@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.73 2006-11-15 20:54:41 thorstenr Exp $
+* $Id: Faq.php,v 1.74 2006-11-15 21:43:30 thorstenr Exp $
 *
 * The main FAQ class
 *
@@ -287,8 +287,6 @@ class PMF_Faq
     }
 
     /**
-     * getRecord()
-     *
      * Returns an array with all data from a FAQ record
      *
      * @param    integer    record id
@@ -302,6 +300,8 @@ class PMF_Faq
      */
     function getRecord($id, $revision_id = null, $admin = false)
     {
+        global $PMF_LANG;
+        
         $query = sprintf(
             "SELECT
                 *
@@ -350,6 +350,25 @@ class PMF_Faq
                 'dateEnd'       => $row->date_end,
                 'linkState'     => $row->links_state,
                 'linkCheckDate' => $row->links_check_date
+                );
+        } else {
+            $this->faqRecord = array(
+                'id'            => $id,
+                'lang'          => $this->language,
+                'solution_id'   => null,
+                'revision_id'   => null,
+                'active'        => '',
+                'keywords'      => '',
+                'title'         => '',
+                'content'       => $PMF_LANG['err_inactiveArticle'],
+                'author'        => '',
+                'email'         => '',
+                'comment'       => '',
+                'date'          => makeDate(date('YmdHis')),
+                'dateStart'     => '',
+                'dateEnd'       => '',
+                'linkState'     => '',
+                'linkCheckDate' => ''
                 );
         }
     }
