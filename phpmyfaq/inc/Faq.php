@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.72 2006-11-12 17:30:31 matteo Exp $
+* $Id: Faq.php,v 1.73 2006-11-15 20:54:41 thorstenr Exp $
 *
 * The main FAQ class
 *
@@ -409,7 +409,7 @@ class PMF_Faq
      * Updates a record
      *
      * @param    array    $data
-     * @return   integer
+     * @return   boolean
      * @access   public
      * @since    2006-06-18
      * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -460,7 +460,7 @@ class PMF_Faq
             $data['lang']);
 
         $this->db->query($query);
-        return $record_id;
+        return true;
     }
 
     /**
