@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.save.php,v 1.50 2006-11-15 21:01:36 thorstenr Exp $
+* $Id: record.save.php,v 1.51 2006-11-15 21:06:48 thorstenr Exp $
 *
 * Save or update a FAQ record
 *
@@ -23,8 +23,6 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
-
-pmf_dump($_POST);
 
 $submit = $_REQUEST["submit"];
 // Re-evaluate $user
