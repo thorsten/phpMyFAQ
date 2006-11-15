@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.save.php,v 1.49 2006-11-15 20:56:32 thorstenr Exp $
+* $Id: record.save.php,v 1.50 2006-11-15 21:01:36 thorstenr Exp $
 *
 * Save or update a FAQ record
 *
@@ -23,6 +23,8 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
+
+pmf_dump($_POST);
 
 $submit = $_REQUEST["submit"];
 // Re-evaluate $user
@@ -104,6 +106,7 @@ if (    isset($submit[1])
 
     $tagging = new PMF_Tags($db, $LANGCODE);
 
+    $categories  = $_REQUEST['rubrik'];
     $record_id   = intval($_REQUEST['id']);
     $record_lang = $db->escape_string($_POST['language']);
     $revision    = $db->escape_string($_POST['revision']);
@@ -154,8 +157,8 @@ if (    isset($submit[1])
     // delete category relations
     $faq->deleteCategoryRelations($record_id, $record_lang);
     // save or update the category relations
-    foreach ($rubrik as $categories) {
-        $faq->addCategoryRelation($categories, $record_id, $record_lang);
+    foreach ($categories as $category) {
+        $faq->addCategoryRelation($category, $record_id, $record_lang);
     }
 
     // Insert the tags
