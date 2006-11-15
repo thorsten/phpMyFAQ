@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.save.php,v 1.48 2006-11-07 09:27:55 thorstenr Exp $
+* $Id: record.save.php,v 1.49 2006-11-15 20:56:32 thorstenr Exp $
 *
 * Save or update a FAQ record
 *
@@ -141,10 +141,10 @@ if (    isset($submit[1])
     if ($faq->isAlreadyTranslated($record_id, $record_lang)) {
         $faq->updateRecord($recordData);
     } else {
-        $faq->addRecord($recordData, false);
+        $record_id = $faq->addRecord($recordData, false);
     }
 
-    if ($db->query($query)) {
+    if ($record_id) {
         print $PMF_LANG['ad_entry_savedsuc'];
         link_ondemand_javascript($record_id, $record_lang);
     } else {
