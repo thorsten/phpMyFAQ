@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: installer.php,v 1.78 2006-11-05 13:20:54 thorstenr Exp $
+ * $Id: installer.php,v 1.79 2006-11-16 19:10:15 matteo Exp $
  *
  * The main phpMyFAQ Installer
  *
@@ -917,7 +917,7 @@ foreach ($permLevels as $level => $desc) {
     }
     // Add anonymous user account
     $anonymous = new PMF_User();
-    $anonymous->createUser('anonymous user', null, -1);
+    $anonymous->createUser('anonymous', null, -1);
     $anonymous->setStatus('protected');
     $anonymousData = array(
         'display_name' => 'Anonymous User',

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.95 2006-11-02 23:00:45 matteo Exp $
+* $Id: update.php,v 1.96 2006-11-16 19:10:15 matteo Exp $
 *
 * Main update script
 *
@@ -1310,7 +1310,7 @@ if ($step == 5) {
         // 2/3. Add missing anonymous user account in 2.0.0-alpha
         require_once(PMF_ROOT_DIR.'/inc/PMF_User/User.php');
         $anonymous = new PMF_User();
-        $anonymous->createUser('anonymous user', null, -1);
+        $anonymous->createUser('anonymous', null, -1);
         $anonymous->setStatus('protected');
         $anonymousData = array(
             'display_name' => 'Anonymous User',
