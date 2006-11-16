@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: installer.php,v 1.79 2006-11-16 19:10:15 matteo Exp $
+ * $Id: installer.php,v 1.80 2006-11-16 22:05:31 matteo Exp $
  *
  * The main phpMyFAQ Installer
  *
@@ -924,13 +924,17 @@ foreach ($permLevels as $level => $desc) {
         'email' => null
     );
     $anonymous->setUserData($anonymousData);
-    // set link verification base url
+    
     require_once(PMF_ROOT_DIR.'/inc/Configuration.php');
     require_once(PMF_ROOT_DIR.'/inc/Link.php');
     $oConf = new PMF_Configuration($db);
     $oConf->getAll();
     $configs = $oConf->config;
+    // Disable Captcha if GD is not available
+    $configs['spamEnableCatpchaCode'] = (extension_loaded('gd') ? 'true' : 'false');
+    // Set link verification base url
     $configs['referenceURL'] = PMF_Link::getSystemUri('/install/installer.php');
+    // Create a unique identifier
     $configs['phpMyFAQToken'] = md5(uniqid(rand()));
     $oConf->update($configs);
     print "</p>\n";
