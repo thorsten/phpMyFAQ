@@ -146,7 +146,7 @@ class PMF_UserData
     {
         // check user-ID
         $user_id = (int) $user_id;
-        if ($user_id <= 0)
+        if (($user_id <= 0) && ($user_id != -1))
             return false;
         $this->_user_id = $user_id;
         // load data
@@ -211,7 +211,7 @@ class PMF_UserData
     {
         // check user-ID
         $user_id = (int) $user_id;
-        if ($user_id <= 0)
+        if (($user_id <= 0) && ($user_id != -1))
             return false;
         $this->_user_id = $user_id;
         // add entry
@@ -246,7 +246,7 @@ class PMF_UserData
     {
         // check user-ID
         $user_id = (int) $user_id;
-        if ($user_id <= 0)
+        if (($user_id <= 0) && ($user_id != -1))
             return false;
         $this->_user_id = $user_id;
         // delete entry
