@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: password.php,v 1.11 2006-10-02 05:57:42 thorstenr Exp $
+* $Id: password.php,v 1.12 2006-11-16 23:29:27 matteo Exp $
 *
 * Reset a forgotten password to a new one
 *
@@ -102,10 +102,10 @@ if (isset($_GET["action"]) && $_GET["action"] == "newpassword") {
         <label class="left"><?php print $PMF_LANG["ad_entry_email"]; ?></label>
         <input type="text"  name="email" size="30" /><br />
 
-        <input class="submit" type="submit" value="<?php print $PMF_LANG["msgNewContentSubmit"]; ?>" />
+        <input class="submit" style="margin-left: 190px;" type="submit" value="<?php print $PMF_LANG["msgNewContentSubmit"]; ?>" />
 
         <p><img src="images/arrow.gif" width="11" height="11" alt="<?php print $PMF_LANG["ad_sess_back"]; ?> FAQ" border="0" /> <a href="index.php" title="<?php print $PMF_LANG["ad_sess_back"]; ?> FAQ"><?php print $PMF_LANG["ad_sess_back"]; ?></a></p>
-        <p><img src="images/arrow.gif" width="11" height="11" alt="<?php print $PMF_CONF["title"]; ?> FAQ" border="0" /> <a href="../index.php" title="<?php print $PMF_CONF["title"]; ?> FAQ"><?php print $PMF_CONF["title"]; ?> FAQ</a></p>
+        <p><img src="images/arrow.gif" width="11" height="11" alt="<?php print htmlentities($PMF_CONF["title"]); ?> FAQ" border="0" /> <a href="../index.php" title="<?php print htmlentities($PMF_CONF["title"]); ?> FAQ"><?php print htmlentities($PMF_CONF["title"]); ?> FAQ</a></p>
 
     </fieldset>
     </form>

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.96 2006-11-16 19:10:15 matteo Exp $
+* $Id: update.php,v 1.97 2006-11-16 23:29:27 matteo Exp $
 *
 * Main update script
 *
@@ -271,15 +271,15 @@ if ($step == 3) {
 
 <input type="hidden" name="edit[language]" value="<?php print $PMF_CONF["language"]; ?>" />
 <input type="hidden" name="edit[detection]" value="<?php print $PMF_CONF["detection"]; ?>" />
-<input type="hidden" name="edit[title]" value="<?php print $PMF_CONF["title"]; ?>" />
+<input type="hidden" name="edit[title]" value="<?php print str_replace('"', '&quot;', $PMF_CONF["title"]); ?>" />
 <input type="hidden" name="edit[version]" value="<?php print NEWVERSION; ?>" />
-<input type="hidden" name="edit[metaDescription]" value="<?php print $PMF_CONF["metaDescription"]; ?>" />
-<input type="hidden" name="edit[metaKeywords]" value="<?php print $PMF_CONF["metaKeywords"]; ?>" />
-<input type="hidden" name="edit[metaPublisher]" value="<?php print $PMF_CONF["metaPublisher"]; ?>" />
+<input type="hidden" name="edit[metaDescription]" value="<?php print str_replace('"', '&quot;', $PMF_CONF["metaDescription"]); ?>" />
+<input type="hidden" name="edit[metaKeywords]" value="<?php print str_replace('"', '&quot;', $PMF_CONF["metaKeywords"]); ?>" />
+<input type="hidden" name="edit[metaPublisher]" value="<?php print str_replace('"', '&quot;', $PMF_CONF["metaPublisher"]); ?>" />
 <input type="hidden" name="edit[adminmail]" value="<?php print $PMF_CONF["adminmail"]; ?>" />
-<input type="hidden" name="edit[msgContactOwnText]" value="<?php print $PMF_CONF["msgContactOwnText"]; ?>" />
-<input type="hidden" name="edit[copyright_eintrag]" value="<?php print $PMF_CONF["copyright_eintrag"]; ?>" />
-<input type="hidden" name="edit[send2friend_text]" value="<?php print $PMF_CONF["send2friend_text"]; ?>" />
+<input type="hidden" name="edit[msgContactOwnText]" value="<?php print str_replace('"', '&quot;', $PMF_CONF["msgContactOwnText"]); ?>" />
+<input type="hidden" name="edit[copyright_eintrag]" value="<?php print str_replace('"', '&quot;', $PMF_CONF["copyright_eintrag"]); ?>" />
+<input type="hidden" name="edit[send2friend_text]" value="<?php print str_replace('"', '&quot;', $PMF_CONF["send2friend_text"]); ?>" />
 <input type="hidden" name="edit[attmax]" value="<?php print $PMF_CONF["attmax"]; ?>" />
 <input type="hidden" name="edit[disatt]" value="<?php print $PMF_CONF["disatt"]; ?>" />
 <input type="hidden" name="edit[tracking]" value="<?php print $PMF_CONF["tracking"]; ?>" />
@@ -313,15 +313,15 @@ if ($step == 3) {
 ?>
 <input type="hidden" name="edit[language]" value="<?php print $PMF_CONF["language"]; ?>" />
 <input type="hidden" name="edit[detection]" value="<?php print $PMF_CONF["detection"]; ?>" />
-<input type="hidden" name="edit[title]" value="<?php print $PMF_CONF["title"]; ?>" />
+<input type="hidden" name="edit[title]" value="<?php print str_replace('"', '&quot;', $PMF_CONF["title"]); ?>" />
 <input type="hidden" name="edit[version]" value="<?php print NEWVERSION; ?>" />
-<input type="hidden" name="edit[metaDescription]" value="<?php print $PMF_CONF["metaDescription"]; ?>" />
-<input type="hidden" name="edit[metaKeywords]" value="<?php print $PMF_CONF["metaKeywords"]; ?>" />
-<input type="hidden" name="edit[metaPublisher]" value="<?php print $PMF_CONF["metaPublisher"]; ?>" />
+<input type="hidden" name="edit[metaDescription]" value="<?php print str_replace('"', '&quot;', $PMF_CONF["metaDescription"]); ?>" />
+<input type="hidden" name="edit[metaKeywords]" value="<?php print str_replace('"', '&quot;', $PMF_CONF["metaKeywords"]); ?>" />
+<input type="hidden" name="edit[metaPublisher]" value="<?php print str_replace('"', '&quot;', $PMF_CONF["metaPublisher"]); ?>" />
 <input type="hidden" name="edit[adminmail]" value="<?php print $PMF_CONF["adminmail"]; ?>" />
-<input type="hidden" name="edit[msgContactOwnText]" value="<?php print $PMF_CONF["msgContactOwnText"]; ?>" />
-<input type="hidden" name="edit[copyright_eintrag]" value="<?php print $PMF_CONF["copyright_eintrag"]; ?>" />
-<input type="hidden" name="edit[send2friend_text]" value="<?php print $PMF_CONF["send2friend_text"]; ?>" />
+<input type="hidden" name="edit[msgContactOwnText]" value="<?php print str_replace('"', '&quot;', $PMF_CONF["msgContactOwnText"]); ?>" />
+<input type="hidden" name="edit[copyright_eintrag]" value="<?php print str_replace('"', '&quot;', $PMF_CONF["copyright_eintrag"]); ?>" />
+<input type="hidden" name="edit[send2friend_text]" value="<?php print str_replace('"', '&quot;', $PMF_CONF["send2friend_text"]); ?>" />
 <input type="hidden" name="edit[attmax]" value="<?php print $PMF_CONF["attmax"]; ?>" />
 <input type="hidden" name="edit[disatt]" value="<?php print $PMF_CONF["disatt"]; ?>" />
 <input type="hidden" name="edit[tracking]" value="<?php print $PMF_CONF["tracking"]; ?>" />

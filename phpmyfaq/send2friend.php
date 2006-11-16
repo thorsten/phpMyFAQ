@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: send2friend.php,v 1.11 2006-10-02 18:23:41 matteo Exp $
+* $Id: send2friend.php,v 1.12 2006-11-16 23:29:26 matteo Exp $
 *
 * The send2friend page
 *
@@ -46,7 +46,7 @@ $tpl->processTemplate ('writeContent', array(
                 'msgS2FFriends' => $PMF_LANG['msgS2FFriends'],
                 'msgS2FEMails' => $PMF_LANG['msgS2FEMails'],
                 'msgS2FText' => $PMF_LANG['msgS2FText'],
-                'send2friend_text' => $PMF_CONF['send2friendText'],
+                'send2friend_text' => htmlentities($PMF_CONF['send2friendText']),
                 'msgS2FText2' => $PMF_LANG['msgS2FText2'],
                 'send2friendLink' => $send2friendLink,
                 'msgS2FMessage' => $PMF_LANG['msgS2FMessage'],

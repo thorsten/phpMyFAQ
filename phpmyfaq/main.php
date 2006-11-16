@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: main.php,v 1.16 2006-09-19 21:39:38 matteo Exp $
+* $Id: main.php,v 1.17 2006-11-16 23:29:26 matteo Exp $
 *
 * The main start page with the Top10 and the latest messages
 *
@@ -30,11 +30,11 @@ $news = new PMF_News($db, $LANGCODE);
 
 $archived = (isset($_GET['newsid']) && ('0' == $_GET['newsid']));
 if ($archived) {
-    $writeNewsHeader = $PMF_CONF['title'].$PMF_LANG['newsArchive'];
+    $writeNewsHeader = htmlentities($PMF_CONF['title']).$PMF_LANG['newsArchive'];
     $writeNewsRSS = '';
     $showAllNews = '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'">'.$PMF_LANG['newsShowCurrent'].'</a>';
 } else {
-    $writeNewsHeader = $PMF_CONF['title'].$PMF_LANG['msgNews'];
+    $writeNewsHeader = htmlentities($PMF_CONF['title']).$PMF_LANG['msgNews'];
     $writeNewsRSS = '<a href="feed/news/rss.php" target="_blank"><img id="newsRSS" src="images/rss.png" width="28" height="16" alt="RSS" /></a>';
     $showAllNews = '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'newsid=0">'.$PMF_LANG['newsShowArchive'].'</a>';
 }

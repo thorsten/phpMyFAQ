@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.157 2006-11-11 16:20:38 matteo Exp $
+ * $Id: functions.php,v 1.158 2006-11-16 23:29:27 matteo Exp $
  *
  * This is the main functions file!
  *
@@ -1105,17 +1105,17 @@ function generateXHTMLFile()
 
     /* get main template, set main variables */
     $tpl->processTemplate ('html', array(
-                'title' => $PMF_CONF['title'],
-                'header' => $PMF_CONF['title'],
-                'metaCharset' => $PMF_LANG['metaCharset'],
-                'metaDescription' => $PMF_CONF['metaDescription'],
-                'metaKeywords' => $PMF_CONF['metaKeywords'],
-                'metaPublisher' => $PMF_CONF['metaPublisher'],
-                'metaLanguage' => $PMF_LANG['metaLanguage'],
-                'metaCharset' => $PMF_LANG['metaCharset'],
-                'entrylinks' => $headlinks,
-                'writeContent' => $xhtml,
-                'copyright' => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> '.$PMF_CONF['version']
+                'title'             => htmlentities($PMF_CONF['title']),
+                'header'            => htmlentities($PMF_CONF['title']),
+                'metaCharset'       => htmlentities($PMF_LANG['metaCharset']),
+                'metaDescription'   => htmlentities($PMF_CONF['metaDescription']),
+                'metaKeywords'      => htmlentities($PMF_CONF['metaKeywords']),
+                'metaPublisher'     => htmlentities($PMF_CONF['metaPublisher']),
+                'metaLanguage'      => $PMF_LANG['metaLanguage'],
+                'metaCharset'       => $PMF_LANG['metaCharset'],
+                'entrylinks'        => $headlinks,
+                'writeContent'      => $xhtml,
+                'copyright'         => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> '.$PMF_CONF['version']
         ));
 
     /* parse without printing */
@@ -1193,14 +1193,14 @@ function generateDocBookExport()
 <!DOCTYPE book PUBLIC "-//Norman Walsh//DTD DocBk XML V3.1.4//EN" "http://nwalsh.com/docbook/xml/3.1.4/db3xml.dtd">
 <book id="phpmyfaq" lang="'.$PMF_LANG['metaLanguage'].'">
     <bookinfo>
-        <title>'.$PMF_CONF['title'].'</title>
+        <title>'.htmlspecialchars($PMF_CONF['title']).'</title>
         <author>
             <firstname></firstname>
             <surname></surname>
         </author>
         <date>'.makeDate('Y-m-d', time()).'</date>
         <abstract>
-            <para>'.$PMF_CONF['metaDescription'].'</para>
+            <para>'.htmlspecialchars($PMF_CONF['metaDescription']).'</para>
         </abstract>
     </bookinfo>
 ';
@@ -2051,13 +2051,13 @@ function fixslashes($text)
 //
 
 /**
-* Returns the user name from REMOTE_USER
-*
-* @return   string
-* @access   public
-* @author   Adam Greene <phpmyfaq@skippy.fastmail.fm>
-* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-*/
+ * Returns the user name from REMOTE_USER
+ *
+ * @return   string
+ * @access   public
+ * @author   Adam Greene <phpmyfaq@skippy.fastmail.fm>
+ * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+ */
 function getShortUserName()
 {
     if (isset($_ENV['REMOTE_USER'])) {
@@ -2070,13 +2070,13 @@ function getShortUserName()
 }
 
 /**
-* Returns the full user name from LDAP if available
-*
-* @return   string
-* @access   public
-* @author   Adam Greene <phpmyfaq@skippy.fastmail.fm>
-* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-*/
+ * Returns the full user name from LDAP if available
+ *
+ * @return   string
+ * @access   public
+ * @author   Adam Greene <phpmyfaq@skippy.fastmail.fm>
+ * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+ */
 function getFullUserName()
 {
     global $PMF_CONF;
@@ -2089,13 +2089,13 @@ function getFullUserName()
 }
 
 /**
-* Returns the full user name from LDAP if available
-*
-* @return   string
-* @access   public
-* @author   Adam Greene <phpmyfaq@skippy.fastmail.fm>
-* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-*/
+ * Returns the full user name from LDAP if available
+ *
+ * @return   string
+ * @access   public
+ * @author   Adam Greene <phpmyfaq@skippy.fastmail.fm>
+ * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+ */
 function getEmailAddress()
 {
     global $PMF_CONF;
@@ -2108,15 +2108,15 @@ function getEmailAddress()
 }
 
 /**
-* Print the HTML for the date time window
-*
-* @param   string  $key
-* @param   array   $date
-* @return  array
-* @access  public
-* @since   2006-07-23
-* @author  Matteo Scaramuccia <matteo@scaramuccia.com>
-*/
+ * Print the HTML for the date time window
+ *
+ * @param   string  $key
+ * @param   array   $date
+ * @return  array
+ * @access  public
+ * @since   2006-07-23
+ * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+ */
 function printDateTimeInput($key, $date)
 {
     $html = '';

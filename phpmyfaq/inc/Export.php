@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Export.php,v 1.1 2006-07-20 21:44:45 matteo Exp $
+* $Id: Export.php,v 1.2 2006-11-16 23:29:27 matteo Exp $
 *
 * XML, XML DocBook, XHTML and PDF export - Classes and Functions
 *
@@ -157,9 +157,9 @@ class PMF_Export
         $xhtml .= '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
         $xhtml .= '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="'.$PMF_LANG['metaLanguage'].'" lang="'.$PMF_LANG['metaLanguage'].'">';
         $xhtml .= '<head>';
-        $xhtml .= '    <title>'.$PMF_CONF['title'].'</title>';
+        $xhtml .= '    <title>'.htmlentities($PMF_CONF['title']).'</title>';
         $xhtml .= '    <meta http-equiv="Content-Type" content="application/xhtml+xml; charset='.$PMF_LANG['metaCharset'].'" />';
-        $xhtml .= '    <meta name="title" content="'.$PMF_CONF['title'].'" />';
+        $xhtml .= '    <meta name="title" content="'.htmlspecialchars($PMF_CONF['title']).'" />';
         $xhtml .= '</head>';
         $xhtml .= '<body dir="'.$PMF_LANG['dir'].'">';
 
@@ -271,7 +271,7 @@ class PMF_Export
         $export->delete_file();
 
         // Set the FAQ title
-        $faqtitel = $PMF_CONF["title"];
+        $faqtitel = htmlspecialchars($PMF_CONF["title"]);
 
         // Print the title of the FAQ
         $export-> xmlContent='<?xml version="1.0" encoding="'.$PMF_LANG['metaCharset'].'"?>'
