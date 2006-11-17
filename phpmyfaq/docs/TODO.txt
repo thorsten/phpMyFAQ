@@ -9,14 +9,13 @@ TODO list for future versions of phpMyFAQ:
 - bugfixing for stability or security reasons
 
 2.1.0 "Pandora" (CVS branch: PMF_2_1):
-- add full unicode support
 - add random list of records
 - add archive function
 - add user registration
 - add user profile page
 - add improved revision system
 - add diff of revisions
-- subscription service for new articles ?
+- add RTF export
 - message to the user, who has posted a question and an answer is availible ?
 - installer and update scripts merged together in a setup routine ?
 - update only possible from versions 1.6 and 2.0
@@ -37,5 +36,6 @@ TODO list for future versions of phpMyFAQ:
 3.0.0 "Poseidon" (CVS branch: PMF_3_0):
 - PHP 5 / PHP 6 only version
 - PDO support
+- Unicode support
 - modularisation of all features
 - update only possible from versions 2.0, 2.1, and 2.2

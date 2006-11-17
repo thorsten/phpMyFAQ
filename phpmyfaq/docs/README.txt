@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.61 2006-10-10 20:14:52 thorstenr Exp $
+$Id: README.txt,v 1.62 2006-11-17 18:00:50 thorstenr Exp $
 
 phpMyFAQ 2.0.0-beta
 Codename "Prometheus"
@@ -28,11 +28,12 @@ Version 2.0.0-beta - 2006-11-
 - added configurable visibility of new questions (Thorsten)
 - added improved and template-based XHTML export (Thorsten)
 - added dynamic related articles (Thorsten, Marco Enders, Thomas Zeithaml)
-- added support for Google and Yahoo! sitemaps (Matteo)
+- added support for Google, Yahoo!, and MSN sitemaps (Matteo)
 - added improved WYSIWYG editor and Image Manager (Thorsten)
 - added improved News module (Matteo, Thorsten)
 - added tagging (Thorsten)
 - added DiggIt! link (Thorsten)
+- added Microsummaries (Matteo)
 - improved export functions (Matteo)
 - improved URL rewrite functions (Matteo)
 - improved category management (Thorsten, Rudi Ferrari)
