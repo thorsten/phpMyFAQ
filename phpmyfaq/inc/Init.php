@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Init.php,v 1.18 2006-11-12 19:50:45 matteo Exp $
+ * $Id: Init.php,v 1.19 2006-11-18 10:53:20 matteo Exp $
  *
  * Some functions
  *
@@ -49,6 +49,15 @@ while((!$foundCurrPath) && ($i < count($includePaths))) {
 }
 if (!$foundCurrPath) {
     ini_set('include_path', '.'.PATH_SEPARATOR.ini_get('include_path'));
+}
+
+//
+// Tweak some PHP configuration values
+//
+// Since PHP 5.2.0 there are some values for tuning PCRE behaviour
+if (version_compare(PHP_VERSION, '5.2.0', '>=')) {
+    // Warning: be sure the server has enough memory and stack for PHP
+    ini_set('pcre.backtrack_limit', -1);
 }
 
 //
