@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: footer.php,v 1.22 2006-11-02 23:03:17 matteo Exp $
+* $Id: footer.php,v 1.23 2006-11-18 10:41:11 matteo Exp $
 *
 * Footer of the admin area
 *
@@ -157,7 +157,7 @@ if (    isset($auth) &&
     $output .= '<select id="intfaqlink" name="intfaqlink" onchange="insertFaqLink()" title="'.$PMF_LANG['ad_entry_intlink'].'">';
     $output .= '<option value="">'.$PMF_LANG['ad_entry_intlink'].'<option>';
 
-    $faq->getAllRecords();
+    $faq->getAllRecords(FAQ_SORTING_TYPE_FAQTITLE_FAQID);
     foreach ($faq->faqRecords as $record) {
         $_title = htmlspecialchars(str_replace(array("\n", "\r", "\r\n"), '', $record['title']), ENT_QUOTES, $PMF_LANG['metaCharset']);
         $output .= sprintf(

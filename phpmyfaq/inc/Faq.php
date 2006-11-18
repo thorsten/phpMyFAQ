@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.74 2006-11-15 21:43:30 thorstenr Exp $
+* $Id: Faq.php,v 1.75 2006-11-18 10:41:11 matteo Exp $
 *
 * The main FAQ class
 *
@@ -40,21 +40,28 @@ require_once('Utils.php');
 /**#@+
   * SQL constants definitions
   */
-define("FAQ_SQL_YES", "y");
-define("FAQ_SQL_NO", "n");
-define("FAQ_SQL_ACTIVE_YES", "yes");
-define("FAQ_SQL_ACTIVE_NO", "no");
+define('FAQ_SQL_YES', 'y');
+define('FAQ_SQL_NO', 'n');
+define('FAQ_SQL_ACTIVE_YES', 'yes');
+define('FAQ_SQL_ACTIVE_NO', 'no');
 /**#@-*/
 /**#@+
   * Query type definitions
   */
-define("FAQ_QUERY_TYPE_DEFAULT", "faq_default");
-define("FAQ_QUERY_TYPE_APPROVAL", "faq_approval");
-define("FAQ_QUERY_TYPE_EXPORT_DOCBOOK", "faq_export_docbook");
-define("FAQ_QUERY_TYPE_EXPORT_PDF", "faq_export_pdf");
-define("FAQ_QUERY_TYPE_EXPORT_XHTML", "faq_export_xhtml");
-define("FAQ_QUERY_TYPE_EXPORT_XML", "faq_export_xml");
-define("FAQ_QUERY_TYPE_RSS_LATEST", "faq_rss_latest");
+define('FAQ_QUERY_TYPE_DEFAULT', 'faq_default');
+define('FAQ_QUERY_TYPE_APPROVAL', 'faq_approval');
+define('FAQ_QUERY_TYPE_EXPORT_DOCBOOK', 'faq_export_docbook');
+define('FAQ_QUERY_TYPE_EXPORT_PDF', 'faq_export_pdf');
+define('FAQ_QUERY_TYPE_EXPORT_XHTML', 'faq_export_xhtml');
+define('FAQ_QUERY_TYPE_EXPORT_XML', 'faq_export_xml');
+define('FAQ_QUERY_TYPE_RSS_LATEST', 'faq_rss_latest');
+/**#@-*/
+/**#@+
+  * Sorting type definitions
+  */
+define('FAQ_SORTING_TYPE_NONE', 0);
+define('FAQ_SORTING_TYPE_CATID_FAQID', 1);
+define('FAQ_SORTING_TYPE_FAQTITLE_FAQID', 2);
 /**#@-*/
 // }}}
 
@@ -728,8 +735,30 @@ class PMF_Faq
     * @since    2005-12-26
     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
     */
-    function getAllRecords()
+    function getAllRecords($sortType = FAQ_SORTING_TYPE_CATID_FAQID)
     {
+        $orderBy = '';
+        switch($sortType)
+        {
+            case FAQ_SORTING_TYPE_CATID_FAQID:
+                $orderBy = sprintf("
+            ORDER BY
+                %sfaqcategoryrelations.category_id,
+                %sfaqdata.id",
+                                SQLPREFIX,
+                                SQLPREFIX
+                            );
+                break;
+            case FAQ_SORTING_TYPE_FAQTITLE_FAQID:
+                $orderBy = sprintf("
+            ORDER BY
+                %sfaqdata.thema,
+                %sfaqdata.id",
+                                SQLPREFIX,
+                                SQLPREFIX
+                            );
+                break;
+        }
 
         $query = sprintf("
             SELECT
@@ -754,9 +783,7 @@ class PMF_Faq
             LEFT JOIN %sfaqcategoryrelations
                 ON %sfaqdata.id = %sfaqcategoryrelations.record_id
                 AND %sfaqdata.lang = %sfaqcategoryrelations.record_lang
-            ORDER BY
-                %sfaqcategoryrelations.category_id,
-                %sfaqdata.id",
+            %s",
             SQLPREFIX,
             SQLPREFIX,
             SQLPREFIX,
@@ -780,8 +807,7 @@ class PMF_Faq
             SQLPREFIX,
             SQLPREFIX,
             SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX
+            $orderBy
             );
         $result = $this->db->query($query);
 
