@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.64 2006-11-19 01:27:49 thorstenr Exp $
+* $Id: language_en.php,v 1.65 2006-11-19 10:55:09 thorstenr Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -828,3 +828,8 @@ $PMF_LANG['ad_adminlog_delete_failure'] = 'No logs deleted: an error occurred pe
 
 // added 2.0.0 - 2006-11-19 by Thorsten
 $PMF_LANG['opensearch_plugin_install'] = 'add search plugin';
+$PMF_LANG['ad_quicklinks'] = 'Quicklinks';
+$PMF_LANG['ad_quick_category'] = 'Add new catgory';
+$PMF_LANG['ad_quick_record'] = 'Add new FAQ record';
+$PMF_LANG['ad_quick_user'] = 'Add new user';
+$PMF_LANG['ad_quick_group'] = 'Add new group';
