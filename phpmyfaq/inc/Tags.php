@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Tags.php,v 1.22 2006-11-12 21:01:24 thorstenr Exp $
+* $Id: Tags.php,v 1.23 2006-11-19 10:15:44 thorstenr Exp $
 *
 * The main Tags class
 *
@@ -333,32 +333,27 @@ class PMF_Tags
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      */
-    function getRecordsByTagName($tagName)
+    function getRecordsByTagName($tagId)
     {
-        if (!is_string($tagName)) {
-            return false;
+        if (!is_numeric($tagId)) {
+            return null;
         }
 
         $query = sprintf("
             SELECT
-                d.record_id AS record_id
+                tagging_name
             FROM
-                %sfaqdata_tags d, %sfaqtags t
+                %sfaqtags
             WHERE
-                    t.tagging_id = d.tagging_id
-                AND t.tagging_name = '%s'",
+                tagging_id = %d",
             SQLPREFIX,
-            SQLPREFIX,
-            $tagName
+            $tagId
             );
 
-        $records = array();
         $result = $this->db->query($query);
-        while ($row = $this->db->fetch_object($result)) {
-            $records[] = $row->record_id;
+        if ($row = $this->db->fetch_object($result)) {
+            return $row->tagging_name;
         }
-
-        return $records;
     }
 
     /**
@@ -424,5 +419,44 @@ class PMF_Tags
 
         return $html;
     }
+
+
+    /**
+     * Returns the tagged item
+     *
+     * @param   integer
+     * @return  string
+     * @access  public
+     * @since   2006-11-19
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function getTagNameById($tagName)
+    {
+        if (!is_string($tagName)) {
+            return false;
+        }
+
+        $query = sprintf("
+            SELECT
+                d.record_id AS record_id
+            FROM
+                %sfaqdata_tags d, %sfaqtags t
+            WHERE
+                    t.tagging_id = d.tagging_id
+                AND t.tagging_name = '%s'",
+            SQLPREFIX,
+            SQLPREFIX,
+            $tagName
+            );
+
+        $records = array();
+        $result = $this->db->query($query);
+        while ($row = $this->db->fetch_object($result)) {
+            $records[] = $row->record_id;
+        }
+
+        return $records;
+    }
+
 
 }
