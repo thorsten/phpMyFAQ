@@ -1,5 +1,5 @@
 /**
- * $Id: admin.css,v 1.31 2006-11-01 16:39:02 thorstenr Exp $
+ * $Id: admin.css,v 1.32 2006-11-19 10:57:00 thorstenr Exp $
  *
  * This is the CSS file for the admin section of phpMyFAQ 2.0.x
  * You don't need to change enything here but feel free to do it. :-)
@@ -261,6 +261,10 @@ div#sessioncounter {
     margin: 10px 0px 10px 0px;
     padding: 0 10px 10px 10px;
     width: 785px;
+}
+#quicklinks {
+    width: 300px;
+    float: right;
 }
 
 /* table styles */
