@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: header.php,v 1.34 2006-11-16 23:29:27 matteo Exp $
+* $Id: header.php,v 1.35 2006-11-19 01:11:20 thorstenr Exp $
 *
 * header of the admin area
 *
@@ -167,7 +167,6 @@ if (isset($_action)) {
         case 'export':
         case 'plugins':
             addMenuEntry('',                                     'export',           'ad_menu_export');
-            addMenuEntry('',                                     'plugins',          'ad_menu_searchplugin');
             break;
         case 'config':
         case 'linkconfig':
