@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: pwd.change.php,v 1.8 2006-09-19 21:39:39 matteo Exp $
+* $Id: pwd.change.php,v 1.9 2006-11-19 07:41:32 matteo Exp $
 *
 * Form to change password of the current user
 *
@@ -41,7 +41,7 @@ if ($permission["passwd"]) {
     <label class="left" for="bpass"><?php print $PMF_LANG["ad_passwd_con"]; ?></label>
     <input type="password" name="bpass" size="30" /><br />
 
-    <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_passwd_change"]; ?>" /></div>
+    <input class="submit" style="margin-left: 190px;" type="submit" value="<?php print $PMF_LANG["ad_passwd_change"]; ?>" /></div>
     </fieldset>
     </form>
 <?php
