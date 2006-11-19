@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: search.php,v 1.16 2006-11-19 01:09:21 thorstenr Exp $
+* $Id: search.php,v 1.17 2006-11-19 01:28:24 thorstenr Exp $
 *
 * The fulltext search page
 *
@@ -74,7 +74,7 @@ $tree->buildTree();
 
 $openSearchLink = sprintf('<p><a class="searchplugin" href="#" onclick="window.external.AddSearchProvider(&quot;%s/opensearch.php&quot;);">%s</a></p>',
     PMF_Link::getSystemUri('/index.php'),
-    $PMF_LANG['ad_msiesearch_plugin_install']);
+    $PMF_LANG['opensearch_plugin_install']);
 
 $tpl->processTemplate('writeContent',
                         array(

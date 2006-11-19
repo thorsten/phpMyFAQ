@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.37 2006-11-19 01:19:13 thorstenr Exp $
+ * $Id: language_de.php,v 1.38 2006-11-19 01:27:49 thorstenr Exp $
  *
  * German language file
  *
@@ -805,7 +805,16 @@ $PMF_LANG['ad_user_active'] = 'aktiv';
 $PMF_LANG['ad_user_blocked'] = 'geblockt';
 $PMF_LANG['ad_user_protected'] = 'geschützt';
 
-//added 2.0.0 - 2006-10-10 by Rudi
+// added 2.0.0 - 2006-10-10 by Rudi
 $PMF_LANG["ad_categ_paste2"] = "Einfügen hinter";
 $PMF_LANG["ad_categ_remark_move"] = "Das Austauschen zweier Kategorien ist nur innerhalb der gleichen Ebene vorgesehen.";
 $PMF_LANG["ad_categ_remark_overview"] = "Die richtige Reihenfolge der Kategorien zeigt sich wenn alle Kategorien in der aktuelle Sprache (erste Spalte) definiert sind.";
+
+// added v2.0.0 - 2006-10-15 by Matteo
+$PMF_LANG['msgUsersOnline'] = ' :: %d Gäste und %d Angemeldete';
+$PMF_LANG['ad_adminlog_del_older_30d'] = 'Automatisches Löschen von Logs älter als 30 Tage';
+$PMF_LANG['ad_adminlog_delete_success'] = 'Die alten Logdateien wurden erfolgreich gelöscht.';
+$PMF_LANG['ad_adminlog_delete_failure'] = 'Es wurden keine Logs gelöscht, da ein Fehler aufgfetreten ist.';
+
+// added 2.0.0 - 2006-11-19 by Thorsten
+$PMF_LANG['opensearch_plugin_install'] = 'Suchplugin installeren';
