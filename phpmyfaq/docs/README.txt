@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.62 2006-11-17 18:00:50 thorstenr Exp $
+$Id: README.txt,v 1.63 2006-11-19 01:30:52 thorstenr Exp $
 
 phpMyFAQ 2.0.0-beta
 Codename "Prometheus"
@@ -34,11 +34,19 @@ Version 2.0.0-beta - 2006-11-
 - added tagging (Thorsten)
 - added DiggIt! link (Thorsten)
 - added Microsummaries (Matteo)
+- added OpenSearch support (Thorsten)
 - improved export functions (Matteo)
 - improved URL rewrite functions (Matteo)
 - improved category management (Thorsten, Rudi Ferrari)
 - updated bundled Net_IDNA to version 0.4.4 (Thorsten)
 - updated Arabic translation (Ahmed Shalaby)
+- updated German translation (Thorsten)
+- updated Italian translation (Matteo)
+
+Version 1.6.6 - 2006-10-28
+- updated Arabic translation (also moved to UTF-8)
+- updated bundled Net_IDNA to version 0.4.4
+- fixed some minor bugs
 
 Version 1.6.5 - 2006-09-21
 - added Welsh translation
