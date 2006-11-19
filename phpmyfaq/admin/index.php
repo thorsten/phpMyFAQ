@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.76 2006-11-16 23:29:27 matteo Exp $
+* $Id: index.php,v 1.77 2006-11-19 10:54:25 thorstenr Exp $
 *
 * The main admin backend index file
 *
@@ -262,7 +262,23 @@ if (isset($auth)) {
         // start page with some informations about the FAQ
         print '<h2>phpMyFAQ Information</h2>';
         $PMF_TABLE_INFO = $db->getTableStatus();
+?>    
+    <div id="quicklinks">
+    <fieldset>
+        <legend><?php print $PMF_LANG['ad_quicklinks']; ?></legend>
+        <ul>
+<?php
+        addMenuEntry('addcateg,editcateg,delcateg',     'addcategory',                  'ad_quick_category');
+        addMenuEntry('addbt',                           'editentry',                    'ad_quick_record');
+        addMenuEntry('adduser,edituser,deluser',        'user&amp;user_action=add',     'ad_quick_user');
+        if ($groupSupport) {
+            addMenuEntry('adduser,edituser,deluser',    'group&amp;group_action=add',   'ad_quick_group');
+        }
 ?>
+        </ul>
+    </fieldset>
+    </div>
+    
     <dl class="table-display">
         <dt><strong><?php print $PMF_LANG["ad_start_visits"]; ?></strong></dt>
         <dd><?php print $PMF_TABLE_INFO[SQLPREFIX."faqsessions"]; ?></dd>
