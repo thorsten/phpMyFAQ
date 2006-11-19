@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_pt-br.php,v 1.3 2006-07-31 19:02:12 thorstenr Exp $
+ * $Id: language_pt-br.php,v 1.4 2006-11-19 01:19:13 thorstenr Exp $
  *
  * Brazilian Portuguese language file
  *
@@ -600,16 +600,6 @@ $PMF_LANG['msgSitemap'] = 'Mapa do Site';
 // added v1.5.2 - 2005-09-23 by Lars
 $PMF_LANG['err_inactiveArticle'] = 'Esta entrada est&aacute; sendo revisada e n&atilde;o pode ser mostrada.';
 $PMF_LANG['msgArticleCategories'] = 'Categorias para esta entrada';
-
-// added v1.5.3 - 2005-10-04 by Thorsten and Periklis
-$PMF_LANG['ad_menu_searchplugin'] = 'Plugin de pesquisa do Firefox';
-$PMF_LANG['ad_search_plugin_install'] = 'Install Firefox search plugin';
-$PMF_LANG['ad_search_plugin_install'] = 'Instala o plugin de pesquisa do  Firefox';
-$PMF_LANG['ad_search_plugin_title'] = 'Criar o plugin de pesquisa do Firefox';
-$PMF_LANG['ad_search_plugin_ttitle'] = 'T&iacute;tulo na caixa de pesquisa do Firefox:';
-$PMF_LANG['ad_search_plugin_tdesc'] = 'Descri&ccedil;&atilde;o:';
-$PMF_LANG['ad_search_plugin_create'] = 'Criar o plugin de pesquisa do Firefox';
-$PMF_LANG['ad_search_plugin_success'] = 'Plugin de pesquisa do Mozilla Firefox foi criado com sucesso!';
 
 // added v1.6.0 - 2006-02-02 by Thorsten
 $PMF_LANG['ad_entry_solution_id'] = 'ID de solu&ccedil;&atilde;o &uacute;nico';

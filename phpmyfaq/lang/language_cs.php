@@ -598,15 +598,6 @@ $PMF_LANG['msgSitemap'] = 'Sitemap';
 $PMF_LANG['err_inactiveArticle'] = 'This entry is in revision and can not be displayed.';
 $PMF_LANG['msgArticleCategories'] = 'Categories for this entry';
 
-// added v1.5.3 - 2005-10-04 by Thorsten and Periklis
-$PMF_LANG['ad_menu_searchplugin'] = 'Search plugins';
-$PMF_LANG['ad_search_plugin_install'] = 'Install Firefox search plugin';
-$PMF_LANG['ad_search_plugin_title'] = 'Create search plugin';
-$PMF_LANG['ad_search_plugin_ttitle'] = 'Title in the Firefox search box:';
-$PMF_LANG['ad_search_plugin_tdesc'] = 'Description:';
-$PMF_LANG['ad_search_plugin_create'] = 'Create Firefox search plugin';
-$PMF_LANG['ad_search_plugin_success'] = 'The Mozilla Firefox search plugin was successfully created!';
-
 // added v1.6.0 - 2006-02-02 by Thorsten
 $PMF_LANG['ad_entry_solution_id'] = 'Unique solution ID';
 $PMF_LANG['ad_entry_faq_record'] = 'FAQ record';
@@ -626,12 +617,6 @@ $PMF_LANG['spamControlCenter'] = 'Spam control center';
 $LANG_CONF["spamEnableSafeEmail"] = array(0 => "checkbox", 1 => "Print user email in a safe way (default: enabled).");
 $LANG_CONF["spamCheckBannedWords"] = array(0 => "checkbox", 1 => "Check public form content against banned words (default: enabled).");
 $LANG_CONF["spamEnableCatpchaCode"] = array(0 => "checkbox", 1 => "Use a catpcha code to allow public form submission (default: enabled).");
-$PMF_LANG['ad_firefoxsearch_plugin_title'] = 'Create Firefox search plugin';
-$PMF_LANG['ad_msiesearch_plugin_install'] = 'Install Microsoft Internet Explorer 7 search plugin';
-$PMF_LANG['ad_msiesearch_plugin_title'] = 'Create Microsoft Internet Explorer 7 search plugin';
-$PMF_LANG['ad_msiesearch_plugin_ttitle'] = 'Title in the MSIE 7 search box:';
-$PMF_LANG['ad_msiesearch_plugin_create'] = 'Create Microsoft Internet Explorer 7 search plugin.';
-$PMF_LANG['ad_msiesearch_plugin_success'] = 'The Microsoft Internet Explorer 7 search plugin was successfully created!';
 $PMF_LANG['ad_session_expiring'] = 'Your session will expire in %d minutes: would you like to go on working?';
 
 // added v1.6.2 - 2006-06-13 by Matteo

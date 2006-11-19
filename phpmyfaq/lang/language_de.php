@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.36 2006-11-07 09:26:07 thorstenr Exp $
+ * $Id: language_de.php,v 1.37 2006-11-19 01:19:13 thorstenr Exp $
  *
  * German language file
  *
@@ -603,15 +603,6 @@ $PMF_LANG['msgSitemap'] = 'Sitemap';
 $PMF_LANG['err_inactiveArticle'] = 'Der Artikel wird zur Zeit überarbeitet und kann leider nicht angezeigt werden.';
 $PMF_LANG['msgArticleCategories'] = 'Kategorien zu diesem Artikel';
 
-// added v1.5.3 - 2005-10-04 by Thorsten and Periklis
-$PMF_LANG['ad_menu_searchplugin'] = 'Suchplugins';
-$PMF_LANG['ad_search_plugin_install'] = 'Firefox Suchplugin installieren';
-$PMF_LANG['ad_search_plugin_title'] = 'Suchplugin erstellen';
-$PMF_LANG['ad_search_plugin_ttitle'] = 'Titel in der Firefox Suche:';
-$PMF_LANG['ad_search_plugin_tdesc'] = 'Beschreibung:';
-$PMF_LANG['ad_search_plugin_create'] = 'Firefox Suchplugin erstellen';
-$PMF_LANG['ad_search_plugin_success'] = 'Das Firefox Suchplugin wurde erfolgreich erstellt!';
-
 // added v1.6.0 - 2006-02-02 by Thorsten
 $PMF_LANG['ad_entry_solution_id'] = 'Eindeutige ID';
 $PMF_LANG['ad_entry_faq_record'] = 'FAQ Eintrag';
@@ -630,12 +621,6 @@ $PMF_LANG['spamControlCenter'] = 'Spam-Kontrollzentrale';
 $LANG_CONF["spamEnableSafeEmail"] = array(0 => "checkbox", 1 => "Sichere Darstellung der E-Mailadresse (Voreinstellung: aktiviert)");
 $LANG_CONF["spamCheckBannedWords"] = array(0 => "checkbox", 1 => "Testen fremder Inhalte gegen die Bad-Word-Liste (Voreinstellung: aktiviert)");
 $LANG_CONF["spamEnableCatpchaCode"] = array(0 => "checkbox", 1 => "Zeige Captcha-Grafiken für Formulare (Voreinstellung: aktiviert)");
-$PMF_LANG['ad_firefoxsearch_plugin_title'] = 'Firefox Suchplugin erstellen';
-$PMF_LANG['ad_msiesearch_plugin_install'] = 'Microsoft Internet Explorer 7 Suchplugin installieren';
-$PMF_LANG['ad_msiesearch_plugin_title'] = 'Microsoft Internet Explorer 7 Suchplugin erstellen';
-$PMF_LANG['ad_msiesearch_plugin_ttitle'] = 'Titel in der MSIE 7 Suche:';
-$PMF_LANG['ad_msiesearch_plugin_create'] = 'Microsoft Internet Explorer 7 Suchplugin erstellen';
-$PMF_LANG['ad_msiesearch_plugin_success'] = 'Das Firefox Suchplugin wurde erfolgreich erstellt!';
 $PMF_LANG['ad_session_expiring'] = 'Die Session wird in %d Minuten enden: Wollen Sie weiterarbeiten?';
 
 // added v1.6.2 - 2006-06-13 by Matteo

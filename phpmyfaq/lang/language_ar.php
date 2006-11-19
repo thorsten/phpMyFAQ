@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_ar.php,v 1.10 2006-10-09 18:49:47 thorstenr Exp $
+* $Id: language_ar.php,v 1.11 2006-11-19 01:19:13 thorstenr Exp $
 *
 * Arabic language file
 *
@@ -639,15 +639,6 @@ $PMF_LANG['msgSitemap'] = 'خريطة الموقع';
 $PMF_LANG['err_inactiveArticle'] = 'هذة المداخلة مازالت تحت المراجعة ولا يمكن عرضها الأن';
 $PMF_LANG['msgArticleCategories'] = 'التصنيفات لهذة المداخلة';
 
-// added v1.5.3 - 2005-10-04 by Thorsten and Periklis
-$PMF_LANG['ad_menu_searchplugin'] = 'Firefox ملحقات بحث للـ ';
-$PMF_LANG['ad_search_plugin_install'] = 'Firefoxتثبيت ملحقات بحث للـ ';
-$PMF_LANG['ad_search_plugin_title'] = 'Firefox إنشاء إضافة بحث للـ';
-$PMF_LANG['ad_search_plugin_ttitle'] = 'Firefox عنوان صندوق بحث ';
-$PMF_LANG['ad_search_plugin_tdesc'] = 'الوصف : ';
-$PMF_LANG['ad_search_plugin_create'] = 'Firefox إنشاء إضافة بحث للـ';
-$PMF_LANG['ad_search_plugin_success'] = 'The Mozilla Firefox search plugin تم إنشائها بنجاح ';
-
 // added v1.6.0 - 2006-02-02 by Thorsten
 $PMF_LANG['ad_entry_solution_id'] = 'كود';
 $PMF_LANG['ad_entry_faq_record'] = 'FAQ مداخلات';
@@ -667,12 +658,6 @@ $PMF_LANG['spamControlCenter'] = 'Spamمركز التحكم في ال ';
 $LANG_CONF["spamEnableSafeEmail"] = array(0 => "checkbox", 1 => "اكتب بريد المستخدم بصورة آمنة(الأصل : نشط). ");
 $LANG_CONF["spamCheckBannedWords"] = array(0 => "checkbox", 1 => "فحص محتويات النماذج العامة ضد الكلمات الممنوعة(الأصل : نشط) ");
 $LANG_CONF["spamEnableCatpchaCode"] = array(0 => "checkbox", 1 => "استخدم كود ال catpcha  للسماح بإرسال النماذج العامة .");
-$PMF_LANG['ad_firefoxsearch_plugin_title'] = 'Firefox إنشاء إضافة بحث للـ';
-$PMF_LANG['ad_msiesearch_plugin_install'] = 'إعداد ملحقة بحث لمتصفح انترنت مايكروسوفت 7';
-$PMF_LANG['ad_msiesearch_plugin_title'] = 'إنشاء ملحقة بحث لمتصفح إنترنت اكسبلورر 7';
-$PMF_LANG['ad_msiesearch_plugin_ttitle'] = 'العنوان في ملحقة البحث :';
-$PMF_LANG['ad_msiesearch_plugin_create'] = 'إنشاء ملحقة بحث لمتصفح إنترنت اكسبلورر 7';
-$PMF_LANG['ad_msiesearch_plugin_success'] = ' ملحقة بحث لمتصفح إنترنت اكسبلورر 7 تم إنشائها بنجاح';
 $PMF_LANG['ad_session_expiring'] = ' جلستك الحالية ستنتهي خلال%dدقيقة : حل تحب مدها وتكملة العمل ؟ ';
 
 // added v1.6.2 - 2006-06-13 by Matteo

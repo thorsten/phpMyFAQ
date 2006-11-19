@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_cy.php,v 1.2 2006-08-24 19:10:06 matteo Exp $
+* $Id: language_cy.php,v 1.3 2006-11-19 01:19:13 thorstenr Exp $
 *
 * The Cymraeg language file - Welsh (Cymraeg) translation
 *
@@ -597,15 +597,6 @@ $PMF_LANG['msgSitemap'] = 'Map or safle';
 $PMF_LANG['err_inactiveArticle'] = 'Maer cofnod hwn yn cael ei adolygu ac nid oes modd ei ddangos.';
 $PMF_LANG['msgArticleCategories'] = 'Categorïau ar gyfer y cofnod hwn';
 
-// added v1.5.3 - 2005-10-04 by Thorsten and Periklis
-$PMF_LANG['ad_menu_searchplugin'] = 'Chwilio am ategion';
-$PMF_LANG['ad_search_plugin_install'] = 'Gosod chwiliad ategion Firefox';
-$PMF_LANG['ad_search_plugin_title'] = 'Creu chwiliad ategion';
-$PMF_LANG['ad_search_plugin_ttitle'] = 'Teitl yn y blwch chwilio Firefox:';
-$PMF_LANG['ad_search_plugin_tdesc'] = 'Disgrifiad:';
-$PMF_LANG['ad_search_plugin_create'] = 'Creu chwiliad ategion Firefox';
-$PMF_LANG['ad_search_plugin_success'] = 'Crëwyd y chwiliad ategion Mozilla Firefox yn llwyddiannus!';
-
 // added v1.6.0 - 2006-02-02 by Thorsten
 $PMF_LANG['ad_entry_solution_id'] = 'Gwybodaeth adnabod ateb unigryw';
 $PMF_LANG['ad_entry_faq_record'] = 'Cofnod Cwestiynau Cyffredin';
@@ -625,12 +616,6 @@ $PMF_LANG['spamControlCenter'] = 'Canolfan rheoli sbam';
 $LANG_CONF["spamEnableSafeEmail"] = array(0 => "checkbox", 1 => " Argraffu e-bost defnyddiwr mewn ffordd ddiogel (default: enabled).");
 $LANG_CONF["spamCheckBannedWords"] = array(0 => "checkbox", 1 => " Cynnwys ffurflen gyhoeddus yn erbyn geiriau a waharddwyd (default: enabled).");
 $LANG_CONF["spamEnableCatpchaCode"] = array(0 => "checkbox", 1 => " Defnyddio côd catpcha i gyflwyno ffurflen gyhoeddus (default: enabled).");
-$PMF_LANG['ad_firefoxsearch_plugin_title'] = 'Creu chwiliad ategion Firefox';
-$PMF_LANG['ad_msiesearch_plugin_install'] = 'Gosod chwiliad ategion Microsoft Internet Explorer 7 ';
-$PMF_LANG['ad_msiesearch_plugin_title'] = 'Creu chwiliad ategion Microsoft Internet Explorer 7 ';
-$PMF_LANG['ad_msiesearch_plugin_ttitle'] = 'Teitl yn y blwch chwilio MSIE 7:';
-$PMF_LANG['ad_msiesearch_plugin_create'] = 'Creu chwiliad ategion Microsoft Internet Explorer 7 .';
-$PMF_LANG['ad_msiesearch_plugin_success'] = 'Crëwyd y chwiliad ategion Microsoft Internet Explorer 7 yn llwyddiannus!';
 $PMF_LANG['ad_session_expiring'] = 'Bydd eich sesiwn yn dod i ben mewn %d munud: hoffech chi barhau i weithio?';
 
 // added v1.6.2 - 2006-06-13 by Matteo

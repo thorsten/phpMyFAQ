@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_eu.php,v 1.5 2006-07-12 16:26:13 matteo Exp $
+* $Id: language_eu.php,v 1.6 2006-11-19 01:19:13 thorstenr Exp $
 *
 * Euskera language file
 *
@@ -600,12 +600,3 @@ $PMF_LANG['msgSitemap'] = 'Gunearen mapa';
 // added v1.5.2 - 2005-09-23 by Lars
 $PMF_LANG['err_inactiveArticle'] = 'Artikulu hau aztertzen ari dira eta ezin da une honetan ikusi.';
 $PMF_LANG['msgArticleCategories'] = 'Artikulu honentzat atalak'; 
-
-// added v1.5.3 - 2005-10-04 by Thorsten and Periklis
-$PMF_LANG['ad_menu_searchplugin'] = 'Firefox-en bilatzeko plugin-a';
-$PMF_LANG['ad_search_plugin_install'] = 'Firefox-en bilatzeko plugin-a instalatu';
-$PMF_LANG['ad_search_plugin_title'] = 'Firefox-en bilatzeko plugin bat sortu';
-$PMF_LANG['ad_search_plugin_ttitle'] = 'Firefox-en bilatzeko izenburua:';
-$PMF_LANG['ad_search_plugin_tdesc'] = 'Deskribapena:';
-$PMF_LANG['ad_search_plugin_create'] = 'Firefox-en bilatzeko plugina sortu';
-$PMF_LANG['ad_search_plugin_success'] = 'Mozilla Firefox-en bilatzeko plugin-a ongi sortu da!'; 

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.37 2006-11-10 15:47:48 matteo Exp $
+* $Id: language_it.php,v 1.38 2006-11-19 01:19:13 thorstenr Exp $
 *
 * Italian language file
 *
@@ -605,15 +605,6 @@ $PMF_LANG['msgSitemap'] = 'Mappa del sito';
 $PMF_LANG['err_inactiveArticle'] = 'Questa FAQ &egrave; in revisione e non pu&ograve; essere visualizzata.';
 $PMF_LANG['msgArticleCategories'] = 'Categorie per questa FAQ';
 
-// added v1.5.3 - 2005-10-04 by Thorsten and Periklis
-$PMF_LANG['ad_menu_searchplugin'] = 'Plugin di ricerca';
-$PMF_LANG['ad_search_plugin_install'] = 'Installa il plugin di ricerca per Firefox';
-$PMF_LANG['ad_search_plugin_title'] = 'Crea il plugin di ricerca';
-$PMF_LANG['ad_search_plugin_ttitle'] = 'Titolo del riquadro di ricerca in Firefox:';
-$PMF_LANG['ad_search_plugin_tdesc'] = 'Descrizione:';
-$PMF_LANG['ad_search_plugin_create'] = 'Crea il plugin di ricerca per Firefox';
-$PMF_LANG['ad_search_plugin_success'] = 'Il plugin di ricerca per Mozilla Firefox &egrave; stato creato!';
-
 // added v1.6.0 - 2006-02-02 by Thorsten
 $PMF_LANG['ad_entry_solution_id'] = 'ID univoco';
 $PMF_LANG['ad_entry_faq_record'] = 'Dati della FAQ';
@@ -633,12 +624,6 @@ $PMF_LANG['spamControlCenter'] = 'Centro di controllo contro lo Spam';
 $LANG_CONF['spamEnableSafeEmail'] = array(0 => 'checkbox', 1 => 'Stampa l\'email dell\'utente in maniera sicura (default: abilitato).');
 $LANG_CONF['spamCheckBannedWords'] = array(0 => 'checkbox', 1 => 'Controlla se il testo delle form pubbliche contenga parole vietate (default: abilitato).');
 $LANG_CONF['spamEnableCatpchaCode'] = array(0 => 'checkbox', 1 => 'Usa un codice <a href="http://it.wikipedia.org/wiki/Captcha" title="Vai alla definizione di Wikipedia" target="_blank">captcha</a> per permettere la sottomissione delle form pubbliche (default: abilitato).');
-$PMF_LANG['ad_firefoxsearch_plugin_title'] = 'Crea il plugin di ricerca per Firefox';
-$PMF_LANG['ad_msiesearch_plugin_install'] = 'Installa il plugin di ricerca per Microsoft Internet Explorer 7';
-$PMF_LANG['ad_msiesearch_plugin_title'] = 'Crea il plugin di ricerca per Microsoft Internet Explorer';
-$PMF_LANG['ad_msiesearch_plugin_ttitle'] = 'Titolo del riquadro di ricerca in MSIE 7:';
-$PMF_LANG['ad_msiesearch_plugin_create'] = 'Crea il plugin di ricerca per Microsoft Internet Explorer 7.';
-$PMF_LANG['ad_msiesearch_plugin_success'] = 'Il plugin di ricerca per Microsoft Internet Explorer 7 &egrave; stato creato con successo!';
 $PMF_LANG['ad_session_expiring'] = 'Questa sessione scadrà tra %d minuti: vuoi continuare a lavorare?';
 
 // added v1.6.2 - 2006-06-13 by Matteo

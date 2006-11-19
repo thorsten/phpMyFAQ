@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_zh.php,v 1.9 2006-07-26 19:15:14 matteo Exp $
+* $Id: language_zh.php,v 1.10 2006-11-19 01:19:13 thorstenr Exp $
 *
 * Chinese (simplified) language file
 *
@@ -604,15 +604,6 @@ $PMF_LANG['msgSitemap'] = '站点地图';
 $PMF_LANG['err_inactiveArticle'] = '该内容正被修订，不能显示.';
 $PMF_LANG['msgArticleCategories'] = '类别';
 
-// added v1.5.3 - 2005-10-04 by Thorsten and Periklis
-$PMF_LANG['ad_menu_searchplugin'] = '搜索插件';
-$PMF_LANG['ad_search_plugin_install'] = '安装Firefox搜索插件';
-$PMF_LANG['ad_search_plugin_title'] = '创建搜索插件';
-$PMF_LANG['ad_search_plugin_ttitle'] = 'Firefox搜索框标题:';
-$PMF_LANG['ad_search_plugin_tdesc'] = '描述:';
-$PMF_LANG['ad_search_plugin_create'] = '创建Firefox搜索插件';
-$PMF_LANG['ad_search_plugin_success'] = 'Firefox搜索插件创建成功!';
-
 // added v1.6.0 - 2006-02-02 by Thorsten
 $PMF_LANG['ad_entry_solution_id'] = '(唯一的)问答 ID';
 $PMF_LANG['ad_entry_faq_record'] = '问答记录';
@@ -632,12 +623,6 @@ $PMF_LANG['spamControlCenter'] = '垃圾过滤控制中心';
 $LANG_CONF["spamEnableSafeEmail"] = array(0 => "checkbox", 1 => "安全方式显示用户 Email (默认: 激活).");
 $LANG_CONF["spamCheckBannedWords"] = array(0 => "checkbox", 1 => "检查公共表单内容以防止禁用单词 (默认: 激活).");
 $LANG_CONF["spamEnableCatpchaCode"] = array(0 => "checkbox", 1 => "使用 catpcha 验证码来验证公共表单的提交 (默认: 激活).");
-$PMF_LANG['ad_firefoxsearch_plugin_title'] = '创建 Firefox 搜索插件';
-$PMF_LANG['ad_msiesearch_plugin_install'] = '安装 Microsoft Internet Explorer 7 搜索插件';
-$PMF_LANG['ad_msiesearch_plugin_title'] = '创建 Microsoft Internet Explorer 7 搜索插件';
-$PMF_LANG['ad_msiesearch_plugin_ttitle'] = 'MSIE 7 搜索框标题:';
-$PMF_LANG['ad_msiesearch_plugin_create'] = '创建 Microsoft Internet Explorer 7 搜索插件.';
-$PMF_LANG['ad_msiesearch_plugin_success'] = 'Microsoft Internet Explorer 7 搜索插件创建成功!';
 $PMF_LANG['ad_session_expiring'] = '您的会话(session)连接将在 %d 分钟后终止: 您希望继续工作么?';
 
 // added v1.6.2 - 2006-06-13 by Matteo

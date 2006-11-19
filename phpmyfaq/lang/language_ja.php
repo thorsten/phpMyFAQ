@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_ja.php,v 1.17 2006-08-08 18:58:19 thorstenr Exp $
+* $Id: language_ja.php,v 1.18 2006-11-19 01:19:13 thorstenr Exp $
 *
 * The Japanese language file -
 *
@@ -602,15 +602,6 @@ $PMF_LANG['msgSitemap'] = 'サイトマップ';
 $PMF_LANG['err_inactiveArticle'] = 'このエントリは改訂中で、表示することができません。';
 $PMF_LANG['msgArticleCategories'] = 'このエントリのカテゴリ';
 
-// added v1.5.3 - 2005-10-04 by Thorsten and Periklis
-$PMF_LANG['ad_menu_searchplugin'] = '検索プラグイン';
-$PMF_LANG['ad_search_plugin_install'] = 'Firefox 検索プラグインのインストール';
-$PMF_LANG['ad_search_plugin_title'] = '検索プラグインの作成';
-$PMF_LANG['ad_search_plugin_ttitle'] = 'Firefox 検索ボックスの題名:';
-$PMF_LANG['ad_search_plugin_tdesc'] = '説明:';
-$PMF_LANG['ad_search_plugin_create'] = 'Firefox 検索プラグインを作成する';
-$PMF_LANG['ad_search_plugin_success'] = 'Mozilla Firefox 検索プラグインの作成は成功しました!';
-
 // added v1.6.0 - 2006-02-02 by Thorsten
 $PMF_LANG['ad_entry_solution_id'] = '一意的回答 ID';
 $PMF_LANG['ad_entry_faq_record'] = 'FAQ の内容';
@@ -630,12 +621,6 @@ $PMF_LANG['spamControlCenter'] = 'スパム制御センター';
 $LANG_CONF["spamEnableSafeEmail"] = array(0 => "checkbox", 1 => "安全にユーザーの電子メールを表示する (デフォルト: 有効)");
 $LANG_CONF["spamCheckBannedWords"] = array(0 => "checkbox", 1 => "公開フォームの内容に対して禁止された単語を確認する (デフォルト: 有効)");
 $LANG_CONF["spamEnableCatpchaCode"] = array(0 => "checkbox", 1 => "公開フォームの送信の許可に Catpcha コードを使用する (デフォルト: 有効)");
-$PMF_LANG['ad_firefoxsearch_plugin_title'] = 'Firefox 検索プラグインの作成';
-$PMF_LANG['ad_msiesearch_plugin_install'] = 'Microsoft Internet Explorer 7 検索プラグインのインストール';
-$PMF_LANG['ad_msiesearch_plugin_title'] = 'Microsoft Internet Explorer 7 検索プラグインの作成';
-$PMF_LANG['ad_msiesearch_plugin_ttitle'] = 'MSIE 7 検索ボックスの題名:';
-$PMF_LANG['ad_msiesearch_plugin_create'] = 'Microsoft Internet Explorer 7 検索プラグインを作成します。';
-$PMF_LANG['ad_msiesearch_plugin_success'] = 'Microsoft Internet Explorer 7 検索プラグインの作成に成功しました!';
 $PMF_LANG['ad_session_expiring'] = 'セッションは %d d 期限切れになるでしょう。作業をし続けますか?';
 
 // added v1.6.2 - 2006-06-13 by Matteo

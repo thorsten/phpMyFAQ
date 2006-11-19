@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_fr.php,v 1.14 2006-08-14 21:41:42 thorstenr Exp $
+* $Id: language_fr.php,v 1.15 2006-11-19 01:19:13 thorstenr Exp $
 *
 * The French language file - try to be the best
 *
@@ -602,15 +602,6 @@ $PMF_LANG['msgSitemap'] = 'Sitemap';
 $PMF_LANG['err_inactiveArticle'] = 'Cet article est en r&eacute;vision et ne peut &ecirc;tre affich&eacute;.';
 $PMF_LANG['msgArticleCategories'] = 'Cat&eacute;gories de cet article';
 
-// added v1.5.3 - 2005-10-04 by Thorsten and Periklis
-$PMF_LANG['ad_menu_searchplugin'] = 'Firefox search plugin';
-$PMF_LANG['ad_search_plugin_install'] = 'Install Firefox search plugin';
-$PMF_LANG['ad_search_plugin_title'] = 'Create Firefox search plugin';
-$PMF_LANG['ad_search_plugin_ttitle'] = 'Title in the Firefox search box:';
-$PMF_LANG['ad_search_plugin_tdesc'] = 'Description:';
-$PMF_LANG['ad_search_plugin_create'] = 'Create Firefox search plugin';
-$PMF_LANG['ad_search_plugin_success'] = 'The Mozilla Firefox search plugin was successfully created!';
-
 // added v1.6.0 - 2006-02-02 by Thorsten
 $PMF_LANG['ad_entry_solution_id'] = 'R&eacute;f&eacute;rence ID de l\'article';
 $PMF_LANG['ad_entry_faq_record'] = 'Enregistrement FAQ';
@@ -630,10 +621,4 @@ $PMF_LANG['spamControlCenter'] = 'Centre de contr&ocirc;le Spam';
 $LANG_CONF["spamEnableSafeEmail"] = array(0 => "checkbox", 1 => "Affichage s&eacute;curis&eacute; de l'e-mail utilisateur (d&eacute;faut: activ&eacute;).");
 $LANG_CONF["spamCheckBannedWords"] = array(0 => "checkbox", 1 => "Analyser le contenu des formulaires publics pour &eacute;viter les termes prohib&eacute;s (d&eacute;faut: activ&eacute;).");
 $LANG_CONF["spamEnableCatpchaCode"] = array(0 => "checkbox", 1 => "Utiliser un code variable de s&eacute;curit&eacute; pour autoriser la soumission d'un formulaire public (d&eacute;faut: activ&eacute;).");
-$PMF_LANG['ad_firefoxsearch_plugin_title'] = 'Cr&eacute;er un plugin recherche pour Firefox';
-$PMF_LANG['ad_msiesearch_plugin_install'] = 'Installer le plugin recherche pour Internet Explorer 7';
-$PMF_LANG['ad_msiesearch_plugin_title'] = 'Cr&eacute;er un plugin recherche Internet Explorer 7';
-$PMF_LANG['ad_msiesearch_plugin_ttitle'] = 'Titre dans la bo&icirc;te de recherche pour Internet Explorer 7:';
-$PMF_LANG['ad_msiesearch_plugin_create'] = 'Cr&eacute;er un plugin recherche pour Internet Explorer 7.';
-$PMF_LANG['ad_msiesearch_plugin_success'] = 'Le plugin recherche pour IE7 a &eacute;t&eacute; correctement cr&eacute;&eacute; !';
 $PMF_LANG['ad_session_expiring'] = 'Votre session va expirer dans %d minutes. Souhaitez-vous continuer à travailler ?';

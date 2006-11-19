@@ -598,15 +598,6 @@ $PMF_LANG['msgSitemap'] = 'Sitemap';
 $PMF_LANG['err_inactiveArticle'] = 'De record wordt momenteel bewerkt en kan niet aangetoond worden.';
 $PMF_LANG['msgArticleCategories'] = 'Categorie&euml;n voor deze record';
 
-// added v1.5.3 - 2005-10-04 by Thorsten and Periklis
-$PMF_LANG['ad_menu_searchplugin'] = 'Firefox search plugin';
-$PMF_LANG['ad_search_plugin_install'] = 'Installeer Firefox search plugin';
-$PMF_LANG['ad_search_plugin_title'] = 'Cre&euml;er Firefox search plugin';
-$PMF_LANG['ad_search_plugin_ttitle'] = 'Titel in de Firefox search box:';
-$PMF_LANG['ad_search_plugin_tdesc'] = 'Beschrijving:';
-$PMF_LANG['ad_search_plugin_create'] = 'Cre&euml;er Firefox search plugin';
-$PMF_LANG['ad_search_plugin_success'] = 'De Mozilla Firefox search plugin is succesvol gecre&euml;erd!';
-
 // added v1.6.0 - 2006-02-02 by Thorsten (and DaRichMan)
 $PMF_LANG['ad_entry_solution_id'] = 'Unieke solution ID';
 $PMF_LANG['ad_entry_faq_record'] = 'FAQ record';
@@ -626,12 +617,6 @@ $PMF_LANG['spamControlCenter'] = 'Spam control center';
 $LANG_CONF["spamEnableSafeEmail"] = array(0 => "checkbox", 1 => "Geef de gebruikers e-mail op een veilige manier weer (standaard: ingesteld).");
 $LANG_CONF["spamCheckBannedWords"] = array(0 => "checkbox", 1 => "Controlleer publiekelijk formulier tegen verboden woorden (standaard: ingesteld).");
 $LANG_CONF["spamEnableCatpchaCode"] = array(0 => "checkbox", 1 => "Gebruik een catpcha code om publiekelijk formulier verzending toe te staan (standaard: ingesteld).");
-$PMF_LANG['ad_firefoxsearch_plugin_title'] = 'Cre&euml;er Firefox search plugin';
-$PMF_LANG['ad_msiesearch_plugin_install'] = 'Installeer Microsoft Internet Explorer 7 search plugin';
-$PMF_LANG['ad_msiesearch_plugin_title'] = 'Cre&euml;er Microsoft Internet Explorer 7 search plugin';
-$PMF_LANG['ad_msiesearch_plugin_ttitle'] = 'Titel in de MSIE 7 search box:';
-$PMF_LANG['ad_msiesearch_plugin_create'] = 'Cre&euml;er Microsoft Internet Explorer 7 search plugin.';
-$PMF_LANG['ad_msiesearch_plugin_success'] = 'De Microsoft Internet Explorer 7 search plugin is succesvol gecre&euml;erd!!';
 $PMF_LANG['ad_session_expiring'] = 'Jouw sessie verloop in %d minutes: zou je willen blijven werken?';
 
 // added v1.6.2 - 2006-07-17 by DaRichMan
