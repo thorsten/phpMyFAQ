@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: search.php,v 1.15 2006-09-19 21:39:38 matteo Exp $
+* $Id: search.php,v 1.16 2006-11-19 01:09:21 thorstenr Exp $
 *
 * The fulltext search page
 *
@@ -72,16 +72,9 @@ Tracking('fulltext_search', $suchbegriff);
 
 $tree->buildTree();
 
-$baseUrl = PMF_Link::getSystemUri('/index.php');
-$firefoxPluginTitle = '';
-$MSIEPluginTitle = '';
-
-if (@file_exists(dirname(__FILE__).'/'.$_SERVER['HTTP_HOST'].'.pmfsearch.src')) {
-    $firefoxPluginTitle = '<p><a class="searchplugin" href="javascript:addEngine(\''.$baseUrl.'\', \''.$_SERVER['HTTP_HOST'].'.pmfsearch\', \'png\', \'Web\')">'.$PMF_LANG['ad_search_plugin_install'].'</a></p>';
-}
-if (@file_exists(dirname(__FILE__).'/'.$_SERVER['HTTP_HOST'].'.pmfsearch.xml')) {
-    $MSIEPluginTitle = '<p><a class="searchplugin" href="#" onclick="window.external.AddSearchProvider(&quot;'.$baseUrl.'/'.$_SERVER['HTTP_HOST'].'.pmfsearch.xml&quot;);">'.$PMF_LANG['ad_msiesearch_plugin_install'].'</a></p>';
-}
+$openSearchLink = sprintf('<p><a class="searchplugin" href="#" onclick="window.external.AddSearchProvider(&quot;%s/opensearch.php&quot;);">%s</a></p>',
+    PMF_Link::getSystemUri('/index.php'),
+    $PMF_LANG['ad_msiesearch_plugin_install']);
 
 $tpl->processTemplate('writeContent',
                         array(
@@ -95,8 +88,7 @@ $tpl->processTemplate('writeContent',
                         'writeSendAdress'       => $_SERVER['PHP_SELF'].'?'.$sids.'action=search',
                         'msgSearchWord'         => $PMF_LANG['msgSearchWord'],
                         'printResult'           => $printResult,
-                        'msgFirefoxPluginTitle' => $firefoxPluginTitle,
-                        'msgMSIEPluginTitle'    => $MSIEPluginTitle
+                        'openSearchLink'        => $openSearchLink
                         )
                     );
 

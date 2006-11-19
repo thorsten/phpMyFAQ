@@ -19,8 +19,7 @@
             {printCategoryOptions}
             </select>
 
-            {msgFirefoxPluginTitle}
-            {msgMSIEPluginTitle}
+            <p>{openSearchLink}</p>
 
         </fieldset>
     </form>
