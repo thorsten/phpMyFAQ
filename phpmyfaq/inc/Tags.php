@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Tags.php,v 1.23 2006-11-19 10:15:44 thorstenr Exp $
+* $Id: Tags.php,v 1.24 2006-11-19 10:21:08 thorstenr Exp $
 *
 * The main Tags class
 *
@@ -319,21 +319,19 @@ class PMF_Tags
         while ($row = $this->db->fetch_object($result)) {
             $records[] = $row->record_id;
         }
-
         return $records;
     }
 
     /**
-     * Returns all FAQ record IDs where all tags are included
+     * Returns the tagged item
      *
-     * @param   array   $arrayOfTags
-     * @return  array   $records
+     * @param   integer
+     * @return  string
      * @access  public
-     * @since   2006-08-30
+     * @since   2006-11-19
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      */
-    function getRecordsByTagName($tagId)
+    function getTagNameById($tagId)
     {
         if (!is_numeric($tagId)) {
             return null;
@@ -420,17 +418,17 @@ class PMF_Tags
         return $html;
     }
 
-
     /**
-     * Returns the tagged item
+     * Returns all FAQ record IDs where all tags are included
      *
-     * @param   integer
-     * @return  string
+     * @param   array   $arrayOfTags
+     * @return  array   $records
      * @access  public
-     * @since   2006-11-19
+     * @since   2006-08-30
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      */
-    function getTagNameById($tagName)
+    function getRecordsByTagName($tagName)
     {
         if (!is_string($tagName)) {
             return false;

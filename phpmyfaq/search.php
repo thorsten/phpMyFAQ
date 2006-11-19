@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: search.php,v 1.18 2006-11-19 10:16:07 thorstenr Exp $
+* $Id: search.php,v 1.19 2006-11-19 10:21:08 thorstenr Exp $
 *
 * The fulltext search page
 *
@@ -52,7 +52,7 @@ $printResult = $PMF_LANG['help_search'];
 if (isset($_GET['tagging_id']) && is_numeric($_GET['tagging_id'])) {
     $tag_id = (int)$_GET['tagging_id'];
     $tagging = new PMF_Tags($db, $LANGCODE);
-    $suchbegriff = $tagging->getRecordsByTagName($tag_id);
+    $suchbegriff = $tagging->getTagNameById($tag_id);
     $printResult = searchEngine($suchbegriff, $searchCategory, $allLanguages);
 }
 
