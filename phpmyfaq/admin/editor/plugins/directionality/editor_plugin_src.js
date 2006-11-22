@@ -1,20 +1,18 @@
 /**
- * $RCSfile: editor_plugin_src.js,v $
- * $Revision: 1.1 $
- * $Date: 2006-07-01 15:12:57 $
+ * $Id: editor_plugin_src.js,v 1.2 2006-11-22 21:40:17 thorstenr Exp $
  *
  * @author Moxiecode
  * @copyright Copyright © 2004-2006, Moxiecode Systems AB, All rights reserved.
  */
 
 /* Import plugin specific language pack */
-tinyMCE.importPluginLanguagePack('directionality', 'en,tr,sv,fr_ca,zh_cn,cs,da,he,nb,de,hu,ru,ru_KOI8-R,ru_UTF-8,nn,es,cy,is,pl,nl,fr,pt_br');
+tinyMCE.importPluginLanguagePack('directionality');
 
 var TinyMCE_DirectionalityPlugin = {
 	getInfo : function() {
 		return {
 			longname : 'Directionality',
-			author : 'Moxiecode Systems',
+			author : 'Moxiecode Systems AB',
 			authorurl : 'http://tinymce.moxiecode.com',
 			infourl : 'http://tinymce.moxiecode.com/tinymce/docs/plugin_directionality.html',
 			version : tinyMCE.majorVersion + "." + tinyMCE.minorVersion

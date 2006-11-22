@@ -94,7 +94,7 @@ FCKXml.prototype.SelectNodes = function( xpath )
 
 FCKXml.prototype.SelectSingleNode = function( xpath ) 
 {
-	if ( document.all )		// IE
+	if (document.all && !(navigator.userAgent.indexOf('Opera') != -1))
 		return this.DOMDocument.selectSingleNode( xpath ) ;
 	else					// Gecko
 	{

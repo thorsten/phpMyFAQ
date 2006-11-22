@@ -1,20 +1,18 @@
 /**
- * $RCSfile: editor_plugin_src.js,v $
- * $Revision: 1.1 $
- * $Date: 2006-07-01 15:13:03 $
+ * $Id: editor_plugin_src.js,v 1.2 2006-11-22 21:40:20 thorstenr Exp $
  *
  * @author Moxiecode
  * @copyright Copyright © 2004-2006, Moxiecode Systems AB, All rights reserved.
  */
 
 /* Import theme	specific language pack */
-tinyMCE.importPluginLanguagePack('print', 'en,tr,sv,zh_cn,fa,fr_ca,fr,de,pl,pt_br,cs,nl,da,he,nb,hu,ru,ru_KOI8-R,ru_UTF-8,nn,fi,es,cy,is,zh_tw,zh_tw_utf8,sk');
+tinyMCE.importPluginLanguagePack('print');
 
 var TinyMCE_PrintPlugin = {
 	getInfo : function() {
 		return {
 			longname : 'Print',
-			author : 'Moxiecode Systems',
+			author : 'Moxiecode Systems AB',
 			authorurl : 'http://tinymce.moxiecode.com',
 			infourl : 'http://tinymce.moxiecode.com/tinymce/docs/plugin_print.html',
 			version : tinyMCE.majorVersion + "." + tinyMCE.minorVersion

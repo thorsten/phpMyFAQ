@@ -1,7 +1,5 @@
 /**
- * $RCSfile: editor_plugin_src.js,v $
- * $Revision: 1.1 $
- * $Date: 2006-07-01 15:12:56 $
+ * $Id: editor_plugin_src.js,v 1.2 2006-11-22 21:40:16 thorstenr Exp $
  *
  * Experimental plugin for new Cleanup routine, this logic will be moved into the core ones it's stable enougth.
  *
