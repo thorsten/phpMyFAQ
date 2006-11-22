@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Init.php,v 1.20 2006-11-22 20:55:32 matteo Exp $
+ * $Id: Init.php,v 1.21 2006-11-22 22:10:44 matteo Exp $
  *
  * Some functions
  *
@@ -361,28 +361,64 @@ class PMF_Init
         if (get_magic_quotes_gpc()) {
             $string = stripslashes($string);
         }
+
+        // Since PHP 5.2.0 PCRE behaviour has changed and now its behaviour
+        // is more correct according to the modifiers used in the pattern.
+        // That said, we are in need to add a fallback if any UTF-8 error is arised
+        $canCheckUTF8Error = defined('PREG_BAD_UTF8_ERROR') && function_exist('preg_last_error');
+
         $string = str_replace(array("&amp;","&lt;","&gt;"),array("&amp;amp;","&amp;lt;","&amp;gt;",),$string);
         // fix &entitiy\n;
-        $string = preg_replace('#(&\#*\w+)[\x00-\x20]+;#u',"$1;",$string);
-        $string = preg_replace('#(&\#x*)([0-9A-F]+);*#iu',"$1$2;",$string);
+        $tmp = preg_replace('#(&\#*\w+)[\x00-\x20]+;#u',"$1;",$string);
+        if ($canCheckUTF8Error && (PREG_BAD_UTF8_ERROR == preg_last_error())) {
+            $tmp = preg_replace('#(&\#*\w+)[\x00-\x20]+;#',"$1;",$string);
+        }
+        $string = $tmp;
+        $tmp = preg_replace('#(&\#x*)([0-9A-F]+);*#iu',"$1$2;",$string);
+        if ($canCheckUTF8Error && (PREG_BAD_UTF8_ERROR == preg_last_error())) {
+            $tmp = preg_replace('#(&\#x*)([0-9A-F]+);*#i',"$1$2;",$string);
+        }
+        $string = $tmp;
         $string = html_entity_decode($string, ENT_COMPAT);
+
         // remove any attribute starting with "on" or xmlns
-        $string = preg_replace('#(<[^>]+[\x00-\x20\"\'])(on|xmlns)[^>]*>#iUu',"$1>",$string);
+        $tmp = preg_replace('#(<[^>]+[\x00-\x20\"\'])(on|xmlns)[^>]*>#iUu',"$1>",$string);
+        if ($canCheckUTF8Error && (PREG_BAD_UTF8_ERROR == preg_last_error())) {
+            $tmp = preg_replace('#(<[^>]+[\x00-\x20\"\'])(on|xmlns)[^>]*>#iU',"$1>",$string);
+        }
+        $string = $tmp;
+
         // remove javascript: and vbscript: protocol
-        $string = preg_replace('#([a-z]*)[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*)[\x00-\x20]*j[\x00-\x20]*a[\x00-\x20]*v[\x00-\x20]*a[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iUu','$1=$2nojavascript...',$string);
-        $string = preg_replace('#([a-z]*)[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*)[\x00-\x20]*v[\x00-\x20]*b[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iUu','$1=$2novbscript...',$string);
-        //<span style="width: expression(alert('Ping!'));"></span>
+        $tmp = preg_replace('#([a-z]*)[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*)[\x00-\x20]*j[\x00-\x20]*a[\x00-\x20]*v[\x00-\x20]*a[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iUu','$1=$2nojavascript...',$string);
+        if ($canCheckUTF8Error && (PREG_BAD_UTF8_ERROR == preg_last_error())) {
+            $tmp = preg_replace('#([a-z]*)[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*)[\x00-\x20]*j[\x00-\x20]*a[\x00-\x20]*v[\x00-\x20]*a[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iU','$1=$2nojavascript...',$string);
+        }
+        $string = $tmp;
+        $tmp = preg_replace('#([a-z]*)[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*)[\x00-\x20]*v[\x00-\x20]*b[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iUu','$1=$2novbscript...',$string);
+        if ($canCheckUTF8Error && (PREG_BAD_UTF8_ERROR == preg_last_error())) {
+            $tmp = preg_replace('#([a-z]*)[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*)[\x00-\x20]*v[\x00-\x20]*b[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iU','$1=$2novbscript...',$string);
+        }
+        $string = $tmp;
+
+        // <span style="width: expression(alert('Ping!'));"></span>
         // only works in ie...
         $string = preg_replace('#(<[^>]+)style[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*).*expression[\x00-\x20]*\([^>]*>#iU',"$1>",$string);
         $string = preg_replace('#(<[^>]+)style[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*).*behaviour[\x00-\x20]*\([^>]*>#iU',"$1>",$string);
         $string = preg_replace('#(<[^>]+)style[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*).*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:*[^>]*>#iUu',"$1>",$string);
-        //remove namespaced elements (we do not need them...)
+        if ($canCheckUTF8Error && (PREG_BAD_UTF8_ERROR == preg_last_error())) {
+            $tmp = preg_replace('#(<[^>]+)style[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*).*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:*[^>]*>#iU',"$1>",$string);
+        }
+        $string = $tmp;
+
+        // remove namespaced elements (we do not need them...)
         $string = preg_replace('#</*\w+:\w[^>]*>#i',"",$string);
-        //remove really unwanted tags
+
+        // remove really unwanted tags
         do {
             $oldstring = $string;
             $string = preg_replace('#</*(applet|meta|xml|blink|link|style|script|embed|object|iframe|frame|frameset|ilayer|layer|bgsound|title|base)[^>]*>#i',"",$string);
         } while ($oldstring != $string);
+
         return $string;
     }
 
