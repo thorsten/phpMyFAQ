@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Init.php,v 1.21 2006-11-22 22:10:44 matteo Exp $
+ * $Id: Init.php,v 1.22 2006-11-23 19:06:03 matteo Exp $
  *
  * Some functions
  *
@@ -55,9 +55,11 @@ if (!$foundCurrPath) {
 // Tweak some PHP configuration values
 //
 // Since PHP 5.2.0 there are some values for tuning PCRE behaviour
+// and avoid high resources consumption
 if (version_compare(PHP_VERSION, '5.2.0', '>=')) {
     // Warning: be sure the server has enough memory and stack for PHP
-    ini_set('pcre.backtrack_limit', -1);
+    ini_set('pcre.backtrack_limit', 100000000);
+    ini_set('pcre.recursion_limit', 100000000);
 }
 
 //
@@ -362,10 +364,10 @@ class PMF_Init
             $string = stripslashes($string);
         }
 
-        // Since PHP 5.2.0 PCRE behaviour has changed and now its behaviour
-        // is more correct according to the modifiers used in the pattern.
+        // Since PHP 5.2.0 PCRE behaviour has been changed and now its behaviour
+        // is more correct e.g. according to the modifiers used in the pattern.
         // That said, we are in need to add a fallback if any UTF-8 error is arised
-        $canCheckUTF8Error = defined('PREG_BAD_UTF8_ERROR') && function_exist('preg_last_error');
+        $canCheckUTF8Error = defined('PREG_BAD_UTF8_ERROR') && function_exists('preg_last_error');
 
         $string = str_replace(array("&amp;","&lt;","&gt;"),array("&amp;amp;","&amp;lt;","&amp;gt;",),$string);
         // fix &entitiy\n;
@@ -404,7 +406,7 @@ class PMF_Init
         // only works in ie...
         $string = preg_replace('#(<[^>]+)style[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*).*expression[\x00-\x20]*\([^>]*>#iU',"$1>",$string);
         $string = preg_replace('#(<[^>]+)style[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*).*behaviour[\x00-\x20]*\([^>]*>#iU',"$1>",$string);
-        $string = preg_replace('#(<[^>]+)style[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*).*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:*[^>]*>#iUu',"$1>",$string);
+        $tmp = preg_replace('#(<[^>]+)style[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*).*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:*[^>]*>#iUu',"$1>",$string);
         if ($canCheckUTF8Error && (PREG_BAD_UTF8_ERROR == preg_last_error())) {
             $tmp = preg_replace('#(<[^>]+)style[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*).*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:*[^>]*>#iU',"$1>",$string);
         }
