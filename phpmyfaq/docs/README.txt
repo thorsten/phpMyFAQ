@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.63 2006-11-19 01:30:52 thorstenr Exp $
+$Id: README.txt,v 1.64 2006-11-25 14:55:58 thorstenr Exp $
 
 phpMyFAQ 2.0.0-beta
 Codename "Prometheus"
@@ -10,8 +10,10 @@ Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.0.0-alpha:
-- updated bundled Net_IDNA to version 0.4.4
-- updated Arabic translation
+- added OpenSearch support (Thorsten)
+- updated bundled Net_IDNA to version 0.4.4 (Thorsten)
+- updated Arabic translation (Ahmed Shalaby)
+- fixed tons of bugs (Matteo, Thorsten)
 
 For known issues please take a look at KNOWNBUGS.txt
 
