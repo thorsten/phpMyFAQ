@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_fa.php,v 1.2 2006-11-25 14:46:07 thorstenr Exp $
+* $Id: language_fa.php,v 1.3 2006-11-26 10:20:34 thorstenr Exp $
 *
 * farsi language file
 *
@@ -43,9 +43,9 @@ $PMF_LANG["msgBack2Home"] = "برگرد به صفحه اول";
 $PMF_LANG["msgFullCategories"] = "موضوعات دارای محتوا";
 $PMF_LANG["msgFullCategoriesIn"] = "موضوعات دارای محتوای اضافه شده";
 $PMF_LANG["msgSubCategories"] = "موضوعات زیرشاخه";
-$PMF_LANG["msgEntries"] = "سئوال";
+$PMF_LANG["msgEntries"] = "مطلب";
 $PMF_LANG["msgEntriesIn"] = "مطرح شده در";
-$PMF_LANG["msgViews"] = "نمایشها";
+$PMF_LANG["msgViews"] = "نمایش";
 $PMF_LANG["msgPage"] = "صفحه ";
 $PMF_LANG["msgPages"] = " صفحه‌ها";
 $PMF_LANG["msgPrevious"] = "قبلی";
@@ -218,7 +218,7 @@ $PMF_LANG["ad_entry_topic"] = "موضوع";
 $PMF_LANG["ad_entry_action"] = "عمل";
 $PMF_LANG["ad_entry_edit_1"] = "اصلاح رکورد";
 $PMF_LANG["ad_entry_edit_2"] = "";
-$PMF_LANG["ad_entry_theme"] = "پوسته:";
+$PMF_LANG["ad_entry_theme"] = "تیتر مطلب:";
 $PMF_LANG["ad_entry_content"] = "محتوا:";
 $PMF_LANG["ad_entry_keywords"] = "کلیدواژه:";
 $PMF_LANG["ad_entry_author"] = "نویسنده:";
