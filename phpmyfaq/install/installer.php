@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: installer.php,v 1.80 2006-11-16 22:05:31 matteo Exp $
+ * $Id: installer.php,v 1.81 2006-11-29 14:51:54 johannes Exp $
  *
  * The main phpMyFAQ Installer
  *
@@ -315,6 +315,11 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     // check what extensions are loaded in PHP
     foreach ($supported_databases as $extension => $database) {
         if (extension_loaded($extension) && version_compare(PHP_VERSION, $database[0]) >= 0) {
+            // prevent MySQLi with zend.ze1_compatibility_mode enabled due to a few cloning isssues
+            if ($extension = 'mysqli' && ini_get('zend.ze1_compatibility_mode')) {
+                continue;
+            }
+
             printf('<option value="%s">%s</option>', $extension, $database[1]);
         }
     }
