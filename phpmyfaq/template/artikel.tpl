@@ -35,7 +35,6 @@
     <fieldset>
     <legend>{msgVoteUseability}</legend>
     <input type="hidden" name="artikel" value="{saveVotingID}" />
-    <input type="hidden" name="userip" value="{saveVotingIP}" />
     <p align="center"><strong>{msgAverageVote}</strong> {printVotings}</p>
     <p align="center">{msgVoteBad}
     <input class="radio" type="radio" name="vote" value="1" /> 1

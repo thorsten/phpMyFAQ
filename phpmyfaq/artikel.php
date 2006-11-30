@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.64 2006-10-12 21:51:08 matteo Exp $
+* $Id: artikel.php,v 1.65 2006-11-30 21:09:03 thorstenr Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -276,7 +276,6 @@ $tpl->processTemplate ("writeContent", array(
     'writeSend2FriendMsgTag'      => $PMF_LANG['msgSend2Friend'],
     'saveVotingPATH'              => sprintf('index.php?%saction=savevoting', $sids),
     'saveVotingID'                => $id,
-    'saveVotingIP'                => $_SERVER['REMOTE_ADDR'],
     'msgAverageVote'              => $PMF_LANG['msgAverageVote'],
     'printVotings'                => $faq->getVotingResult($id),
     'switchLanguage'              => $switchLanguage,
