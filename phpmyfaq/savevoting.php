@@ -1,23 +1,23 @@
 <?php
 /**
-* $Id: savevoting.php,v 1.21 2006-11-30 20:27:05 thorstenr Exp $
-*
-* Saves a user voting
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @since        2002-09-16
-* @copyright    (c) 2001-2006 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * $Id: savevoting.php,v 1.22 2006-11-30 21:11:13 thorstenr Exp $
+ *
+ * Saves a user voting
+ *
+ * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since        2002-09-16
+ * @copyright    (c) 2001-2006 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
@@ -26,7 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $record_id   = (isset($_POST['artikel'])) ? intval($_POST['artikel']) : '';
 $voting      = (isset($_POST['vote'])) ? intval($_POST['vote']) : 0;
-$user_ip     = (isset($_POST['userip'])) ? strip_tags($_POST['userip']) : '';
+$user_ip     = (isset($_SERVER['REMOTE_ADDR'])) ? strip_tags($_SERVER['REMOTE_ADDR']) : '';
 
 if (isset($voting) && $faq->votingCheck($record_id, $user_ip) && $voting > 0 && $voting < 6) {
     Tracking('save_voting', $record_id);
