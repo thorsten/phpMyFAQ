@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: savevoting.php,v 1.20 2006-09-19 21:39:38 matteo Exp $
+* $Id: savevoting.php,v 1.21 2006-11-30 20:27:05 thorstenr Exp $
 *
 * Saves a user voting
 *
@@ -34,7 +34,7 @@ if (isset($voting) && $faq->votingCheck($record_id, $user_ip) && $voting > 0 && 
     $votingData = array(
         'record_id'  => $record_id,
         'vote'       => $voting,
-        'user_ip'    => $user_ip);
+        'user_ip'    => $db->escape_string($user_ip));
 
     if ($faq->getNumberOfVotings($record_id)) {
         $faq->addVoting($votingData);
