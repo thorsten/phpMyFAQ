@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: configuration.php,v 1.9 2006-09-19 21:39:39 matteo Exp $
+* $Id: configuration.php,v 1.10 2006-11-30 20:28:12 thorstenr Exp $
 *
 * The main configuration frontend
 *
@@ -45,8 +45,9 @@ if ('saveConfig' == $userAction) {
     }
 
     // Set the new values into $PMF_CONF
+    $forbidden_values = array('{', '}', '$');
     foreach ($arrVar as $key => $value) {
-        $PMF_CONF[$key] = $value;
+        $PMF_CONF[$key] = str_replace($forbidden_values, '', $value);
     }
     // Fix checkbox values: they are not returned during the HTTP POST
     if (is_array($arrVar)) {
