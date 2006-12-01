@@ -1,24 +1,24 @@
 <?php
 /**
-* $Id: save.php,v 1.32 2006-11-16 23:29:26 matteo Exp $
-*
-* Saves a user FAQ record and sends an email to the user
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @author       Jürgen Kuza <kig@bluewin.ch>
-* @since        2002-09-16
-* @copyright    (c) 2001-2006 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * $Id: save.php,v 1.33 2006-12-01 11:11:19 thorstenr Exp $
+ *
+ * Saves a user FAQ record and sends an email to the user
+ *
+ * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author       Jürgen Kuza <kig@bluewin.ch>
+ * @since        2002-09-16
+ * @copyright    (c) 2001-2006 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/ 
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
@@ -84,7 +84,7 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
     if (function_exists('mb_encode_mimeheader')) {
         $subject = mb_encode_mimeheader($subject);
     }
-    $body = unhtmlentities($PMF_LANG['msgMailCheck'])."\n".$PMF_CONF['title'].": ".PMF_Link::getSystemUri('/save.php');
+    $body = unhtmlentities($PMF_LANG['msgMailCheck'])."\n".$PMF_CONF['title'].": ".PMF_Link::getSystemUri('/admin/index.php');
     if (ini_get('safe_mode')) {
         mail($IDN->encode($PMF_CONF["adminmail"]), $subject, $body, implode("\r\n", $additional_header));
     } else {
