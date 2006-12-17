@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: attachment.php,v 1.24 2006-11-16 23:29:27 matteo Exp $
+* $Id: attachment.php,v 1.25 2006-12-17 15:07:22 johannes Exp $
 *
 * Select an attachment and save it or create the SQL backup files
 *
@@ -122,9 +122,11 @@ if (!isset($_REQUEST["action"]) && $auth && $permission["addatt"]) {
 
 if (isset($_REQUEST["action"]) && $auth && !$permission["addatt"]) {
     print $PMF_LANG["err_NotAuth"];
+    die();
 }
 
 if (isset($_REQUEST["save"]) && $_REQUEST["save"] == TRUE && $auth && $permission["addatt"]) {
+    $_REQUEST["id"] = (int)$_REQUEST["id"];
 ?>
 <p><strong><?php print $PMF_LANG["ad_att_addto"]." ".$PMF_LANG["ad_att_addto_2"]; ?></strong></p>
 <?php
@@ -149,6 +151,7 @@ if (isset($_REQUEST["save"]) && $_REQUEST["save"] == TRUE && $auth && $permissio
 }
 if (isset($_REQUEST["save"]) && $_REQUEST["save"] == TRUE && $auth && !$permission["addatt"]) {
     print $PMF_LANG["err_NotAuth"];
+    die();
 }
 
 if (isset($_GET['action']) && ('sicherdaten' == $_GET['action'])) {
@@ -170,6 +173,7 @@ if (isset($_GET['action']) && ('sicherdaten' == $_GET['action'])) {
     }
 } elseif (isset($_GET['action']) && ('sicherdaten' == $_GET['action']) && $auth && !$permission['backup']) {
     print $PMF_LANG['err_NotAuth'];
+    die();
 }
 
 if (isset($_GET['action']) && ('sicherlog' == $_GET['action'])) {
@@ -194,6 +198,7 @@ if (isset($_GET['action']) && ('sicherlog' == $_GET['action'])) {
     }
 } elseif (isset($_GET['action']) && ('sicherlog' == $_GET['action']) && $auth && !$permission['backup']) {
     print $PMF_LANG['err_NotAuth'];
+    die();
 }
 
 if (DEBUG) {
