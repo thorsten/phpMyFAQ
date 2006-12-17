@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.delatt.php,v 1.9 2006-11-10 21:02:36 thorstenr Exp $
+ * $Id: record.delatt.php,v 1.10 2006-12-17 18:32:58 johannes Exp $
  *
  * Deletes an attachment
  *
@@ -30,9 +30,13 @@ if ($permission["delatt"]) {
     
     $record_id   = (int)$_GET['id'];
     $record_lang = $_GET['lang'];
-    $which_file  = $_GET['which'];
-    
-    if (@unlink(PMF_ROOT_DIR."/attachments/".$record_id."/".$which_file)) {
+
+    $filename = realpath(PMF_ROOT_DIR."/attachments/".$record_id."/".$_REQUEST["which"]);
+    if (!$filename || strpos($filename, realpath(PMF_ROOT_DIR."/attachments/".$record_id)) !== 0) {
+        print $PMF_LANG["ad_att_delfail"];
+        die();
+    }
+    if (@unlink($filename)) {
         printf("<p>%s</p>\n", $PMF_LANG['ad_att_delsuc']);
     } else {
         printf("<p>%s</p>\n", $PMF_LANG['ad_att_delfail']);
