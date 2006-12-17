@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.delete.php,v 1.12 2006-11-04 09:03:37 thorstenr Exp $
+* $Id: record.delete.php,v 1.13 2006-12-17 19:37:12 johannes Exp $
 *
 * Deletes a record
 *
@@ -23,6 +23,9 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
+
+
+$_REQUEST["id"] = (int)$_REQUEST["id"];
 
 print "<h2>".$PMF_LANG["ad_entry_aor"]."</h2>\n";
 if ($permission["delbt"]) {
