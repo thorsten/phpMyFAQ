@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: attachment.php,v 1.25 2006-12-17 15:07:22 johannes Exp $
+* $Id: attachment.php,v 1.26 2006-12-17 18:09:08 matteo Exp $
 *
 * Select an attachment and save it or create the SQL backup files
 *
@@ -54,6 +54,7 @@ if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE)) {
 //
 require_once (PMF_ROOT_DIR.'/inc/PMF_User/CurrentUser.php');
 
+$auth = false;
 $user = PMF_CurrentUser::getFromSession($faqconfig->get('ipcheck'));
 if ($user) {
     $auth = true;
@@ -68,7 +69,7 @@ if ($user) {
 // Get current user rights
 //
 $permission = array();
-if (isset($auth)) {
+if ($auth === true) {
     // read all rights, set them FALSE
     $allRights = $user->perm->getAllRightsData();
     foreach ($allRights as $right) {
@@ -154,7 +155,7 @@ if (isset($_REQUEST["save"]) && $_REQUEST["save"] == TRUE && $auth && !$permissi
     die();
 }
 
-if (isset($_GET['action']) && ('sicherdaten' == $_GET['action'])) {
+if (isset($_GET['action']) && ('sicherdaten' == $_GET['action']) && $auth && $permission['backup']) {
     // Get all table names
     $db->getTableNames(SQLPREFIX);
     $tablenames = '';
@@ -176,7 +177,7 @@ if (isset($_GET['action']) && ('sicherdaten' == $_GET['action'])) {
     die();
 }
 
-if (isset($_GET['action']) && ('sicherlog' == $_GET['action'])) {
+if (isset($_GET['action']) && ('sicherlog' == $_GET['action']) && $auth && $permission['backup']) {
     // Get all table names
     $db->getTableNames(SQLPREFIX);
     $tablenames = '';
