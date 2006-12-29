@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.65 2006-11-30 21:09:03 thorstenr Exp $
+* $Id: artikel.php,v 1.66 2006-12-29 22:53:28 matteo Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -162,7 +162,7 @@ if (is_dir('attachments/') && is_dir('attachments/'.$id) && $faqconfig->get('dis
     while ($dat = readdir($dir)) {
         if ($dat != '.' && $dat != '..') {
             $files++;
-            $outstr .= '<a href="attachments/'.$id.'/'.$dat.'" target="_blank">'.$dat.'</a>, ';
+            $outstr .= '<a href="attachments/'.$id.'/'.rawurlencode($dat).'" target="_blank">'.$dat.'</a>, ';
         }
     }
     if ($files > 0) {

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.edit.php,v 1.55 2006-12-29 19:56:44 matteo Exp $
+* $Id: record.edit.php,v 1.56 2006-12-29 22:53:28 matteo Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23
@@ -179,7 +179,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
                 $do = dir(PMF_ROOT_DIR."/attachments/".$faqData['id']."/");
                 while ($dat = $do->read()) {
                     if ($dat != "." && $dat != "..") {
-                        print "<a href=\""."../attachments/".$faqData['id']."/".$dat."\">".$dat."</a>";
+                        print "<a href=\""."../attachments/".$faqData['id']."/".rawurlencode($dat)."\">".$dat."</a>";
                         if ($permission["delatt"]) {
                             print "&nbsp;[&nbsp;<a href=\"".$_SERVER["PHP_SELF"].$linkext."&amp;action=delatt&amp;id=".$faqData['id']."&amp;which=".rawurlencode($dat)."&amp;lang=".$faqData['lang']."\">".$PMF_LANG["ad_att_del"]."</a>&nbsp;]";
                         }
