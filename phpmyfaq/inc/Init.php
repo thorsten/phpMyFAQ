@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Init.php,v 1.22 2006-11-23 19:06:03 matteo Exp $
+ * $Id: Init.php,v 1.23 2006-12-29 22:47:19 matteo Exp $
  *
  * Some functions
  *
@@ -140,7 +140,11 @@ class PMF_Init
     /**
      * cleanRequest
      *
-     * Cleans the request environment from global variables, unescaped slashes and xss in the request string.
+     * Cleans the request environment from:
+     * - global variables,
+     * - unescaped slashes,
+     * - xss in the request string,
+     * - uncorrect filenames when file are uploaded.
      *
      * @return  void
      * @access  public
@@ -155,6 +159,7 @@ class PMF_Init
         if (ini_get('register_globals')) {
             PMF_Init::unregisterGlobalVariables();
         }
+        
         // clean external variables
         $externals = array('_REQUEST', '_GET', '_POST', '_COOKIE');
         foreach ($externals as $external) {
@@ -177,6 +182,108 @@ class PMF_Init
                 }
             }
         }
+
+        // clean external filenames (uploaded files)
+        PMF_Init::cleanFilenames();
+    }
+
+    /**
+     * basicFilenameClean()
+     *
+     * Clean up a filename: if anything goes wrong, an empty string will be returned
+     *
+     * @param   string  $filename
+     * @return  string
+     * @access  private
+     * @since   2006-12-29
+     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     */
+    function basicFilenameClean($filename)
+    {
+        global $denyUploadExts;
+
+        // Remove the magic quotes if enabled
+        $filename = (get_magic_quotes_gpc() ? stripslashes($filename) : $filename);
+
+        $path_parts = pathinfo($filename);
+        // We need a filename without any path info
+        if ($path_parts['basename'] !== $filename) {
+            return '';
+        }
+        //  We need a filename with at least 1 chars plus the optional extension
+        if (isset($path_parts['extension']) && ($path_parts['basename'] == '.'.$path_parts['extension'])) {
+            return '';
+        }
+        if (!isset($path_parts['extension']) && (strlen($path_parts['basename']) == 0)) {
+            return '';
+        }
+
+        // Deny some extensions (see inc/constants.php), if any
+        if (!isset($path_parts['extension'])) {
+            $path_parts['extension'] = '';
+        }
+        if (count($denyUploadExts) > 0) {
+            if (in_array(strtolower($path_parts['extension']), $denyUploadExts)) {
+                return '';
+            }
+        }
+
+        // Clean the file to remove some chars depending on the server OS
+        // 1. Besides \/ on Windows: :*?"<>|
+        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+            $reservedChars = array(':', '*', '?', '"', '<', '>', "'", '|');
+            $filename = str_replace($reservedChars, '_', $filename);
+        }
+
+        return $filename;
+    }
+
+   /**
+    * cleanFilenames()
+    *
+    * Clean the filename of any uploaded file by the user and force an error
+    * when calling is_uploaded_file($_FILES[key]['tmp_name']) if the cleanup goes wrong
+    *
+    * @access  private
+    * @since   2006-12-29
+    * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+    */
+   function cleanFilenames()
+   {
+        reset($_FILES);
+        while (list($key, $value) = each($_FILES)) {
+            if (is_array($_FILES[$key]['name'])) {
+                reset($_FILES[$key]['name']);
+                // We have a multiple upload with the same name for <input />
+                while (list($idx, $value2) = each($_FILES[$key]['name'])) {
+                    $_FILES[$key]['name'][$idx] = PMF_Init::basicFilenameClean($_FILES[$key]['name'][$idx]);
+                    if ('' == $_FILES[$key]['name'][$idx]) {
+                        $_FILES[$key]['type'][$idx] = '';
+                        $_FILES[$key]['tmp_name'][$idx] = '';
+                        $_FILES[$key]['size'][$idx] = 0;
+                        // Since PHP 4.2.0
+                        if (isset($_FILES[$key]['error'][$idx])) {
+                            // Set an error
+                            $_FILES[$key]['error'][$idx] = UPLOAD_ERR_NO_FILE;
+                        }
+                    }
+                }
+                reset($_FILES[$key]['name']);
+            } else {
+                $_FILES[$key]['name'] = PMF_Init::basicFilenameClean($_FILES[$key]['name']);
+                if ('' == $_FILES[$key]['name']) {
+                    $_FILES[$key]['type'] = '';
+                    $_FILES[$key]['tmp_name'] = '';
+                    $_FILES[$key]['size'] = 0;
+                    // Since PHP 4.2.0
+                    if (isset($_FILES[$key]['error'])) {
+                        // Set an error
+                        $_FILES[$key]['error'] = UPLOAD_ERR_NO_FILE;
+                    }
+                }
+            }
+        }
+        reset($_FILES);
     }
 
     /**

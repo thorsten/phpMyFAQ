@@ -1,10 +1,11 @@
 <?php
 /**
-* $Id: constants.php,v 1.23 2006-11-11 09:28:27 thorstenr Exp $
+* $Id: constants.php,v 1.24 2006-12-29 22:47:19 matteo Exp $
 *
 * Constants for phpMyFAQ
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+* @author       Matteo Scaramuccia <matteo@scaramuccia.com>
 * @since        2003-12-10
 * @copyright    (c) 2003-2006 phpMyFAQ Team
 *
@@ -115,6 +116,26 @@ define("PMF_TAGS_CLOUD_RESULT_SET_SIZE", 50);
  * @var const   20
  */
 define("PMF_TAGS_AUTOCOMPLETE_RESULT_SET_SIZE", 20);
+
+/**
+ * List of denied extensions when uploading a file.
+ * Here is an example:
+ * <code>
+ * $denyUploadExts = array(
+ *                 '',         // Files with no extension not allowed
+ *                 'shtml',    // SSI files not allowed
+ *                 'php',      // PHP files not allowed
+ *                 'php3',
+ *                 'php4',
+ *                 'cgi',      // CGI not allowed
+ *                 'pl',
+ *                 'exe'       // Win executables not allowed
+ *                 );
+ * </code>
+ *
+ * @var array
+ */
+$denyUploadExts = array();
 
 
 /****************************************************************************
