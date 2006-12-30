@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.158 2006-11-16 23:29:27 matteo Exp $
+ * $Id: functions.php,v 1.159 2006-12-30 16:47:50 matteo Exp $
  *
  * This is the main functions file!
  *
@@ -160,15 +160,18 @@ function getAvailableLanguages()
  * selectLanguages()
  *
  * This function displays the <select> box for the available languages
+ * optionally filtered by excluding some provided languages
  *
  * @param   string
  * @param   boolean
+ * @param   array
  * @return  string
  * @access  public
  * @since   2003-12-12
  * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
  */
-function selectLanguages($default, $submitOnChange = false)
+function selectLanguages($default, $submitOnChange = false, $excludedLanguages = array())
 {
     global $languageCodes;
 
@@ -178,11 +181,13 @@ function selectLanguages($default, $submitOnChange = false)
 
     if (count($languages) > 0) {
         foreach ($languages as $lang => $value) {
-            $output .= "\t<option value=\"".$lang."\"";
-            if ($lang == $default) {
-                $output .= " selected=\"selected\"";
+            if (!in_array($lang, $excludedLanguages)) {
+                $output .= "\t<option value=\"".$lang."\"";
+                if ($lang == $default) {
+                    $output .= " selected=\"selected\"";
+                }
+                $output .=  ">".$value."</option>\n";
             }
-            $output .=  ">".$value."</option>\n";
         }
     } else {
         $output .= "\t<option value=\"en\">".$languageCodes["EN"]."</option>";
@@ -1616,17 +1621,17 @@ function printOpenQuestions()
 //
 
 /**
-* PMF_htmlentities
-*
-* This is a wrapper for htmlentities() with a check on valid charsets.
-*
-* @param    string
-* @param    string
-* @param    string
-* @return   return
-* @access   private
-* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-*/
+ * PMF_htmlentities
+ *
+ * This is a wrapper for htmlspecialchars() with a check on valid charsets.
+ *
+ * @param   string
+ * @param   string
+ * @param   string
+ * @return  string
+ * @access  private
+ * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+ */
 function PMF_htmlentities($string, $quote_style = ENT_COMPAT, $charset = 'iso-8859-1')
 {
     $acceptedCharsets = array('iso-8859-1', 'iso-8859-15', 'utf-8', 'cp866', 'ibm866', '866', 'cp1251', 'windows-1251', 'win-1251', '1251', 'cp1252', 'windows-1252', '1252', 'koi8-r', 'koi8-ru', 'koi8r', 'big5', '950', 'gb2312', '936', 'big5-hkscs', 'shift_jis', 'sjis', '932', 'euc-jp', 'eucjp');
@@ -1637,8 +1642,6 @@ function PMF_htmlentities($string, $quote_style = ENT_COMPAT, $charset = 'iso-88
         return htmlspecialchars($string);
     }
 }
-//*/
-
 
 /******************************************************************************
  * Funktionen fuer die Benutzerauthentifizierung und Rechtevergabe

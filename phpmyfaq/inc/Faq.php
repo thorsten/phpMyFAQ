@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.75 2006-11-18 10:41:11 matteo Exp $
+* $Id: Faq.php,v 1.76 2006-12-30 16:47:50 matteo Exp $
 *
 * The main FAQ class
 *
@@ -555,7 +555,7 @@ class PMF_Faq
     }
 
     /**
-     * Adds a new category relation to a record
+     * Adds new category relations to a record
      *
      * @param    array    $categories
      * @param    integer  $record_id
@@ -583,7 +583,7 @@ class PMF_Faq
     }
 
     /**
-     * Deletes a category relations to a record
+     * Deletes category relations to a record
      *
      * @param    integer  $record_id
      * @param    string   $language

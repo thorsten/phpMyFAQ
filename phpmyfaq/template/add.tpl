@@ -6,10 +6,10 @@
     <legend>{msgNewContentHeader}</legend>
 
     <label for="username" class="left">{msgNewContentName}</label>
-    <input class="inputfield" type="text" name="username" id="username" value="{defaultContentName}" size="50" /><br />
+    <input class="inputfield" type="text" name="username" id="username" value="{defaultContentName}" size="37" /><br />
 
     <label for="usermail" class="left">{msgNewContentMail}</label>
-    <input class="inputfield" type="text" name="usermail" id="usermail" value="{defaultContentMail}" size="50" /><br />
+    <input class="inputfield" type="text" name="usermail" id="usermail" value="{defaultContentMail}" size="37" /><br />
 
     <label for="rubrik" class="left">{msgNewContentCategory}</label>
     <select name="rubrik[]" id="rubrik" multiple="multiple" size="3">
@@ -23,10 +23,10 @@
     <textarea class="inputarea" cols="37" rows="10" name="content" id="content"></textarea><br />
 
     <label for="keywords" class="left">{msgNewContentKeywords}</label>
-    <input class="inputfield" type="text" name="keywords" id="keywords" size="50" /><br />
+    <input class="inputfield" type="text" name="keywords" id="keywords" size="37" /><br />
 
     <label for="contentlink" class="left">{msgNewContentLink}</label>
-    <input class="inputfield" type="text" name="contentlink" id="contentlink" size="50" value="http://" /><br />
+    <input class="inputfield" type="text" name="contentlink" id="contentlink" size="37" value="http://" /><br />
     </fieldset>
 
     {captchaFieldset}

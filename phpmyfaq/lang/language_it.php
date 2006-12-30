@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.38 2006-11-19 01:19:13 thorstenr Exp $
+* $Id: language_it.php,v 1.39 2006-12-30 16:47:48 matteo Exp $
 *
 * Italian language file
 *
@@ -825,3 +825,24 @@ $PMF_LANG['msgUsersOnline'] = ' :: %d Ospiti e %d Registrati';
 $PMF_LANG['ad_adminlog_del_older_30d'] = 'Cancella immediatamente i dati pi&ugrave; vecchi di 30 giorni';
 $PMF_LANG['ad_adminlog_delete_success'] = 'I dati sono stati cancellati.';
 $PMF_LANG['ad_adminlog_delete_failure'] = 'I dati non sono stati cancellati: si &egrave; verificato un errore.';
+
+// added 2.0.0 - 2006-11-19 by Thorsten
+$PMF_LANG['opensearch_plugin_install'] = 'Aggiungi il plugin di ricerca';
+$PMF_LANG['ad_quicklinks'] = 'Links veloci';
+$PMF_LANG['ad_quick_category'] = 'Aggiungi una nuova categoria';
+$PMF_LANG['ad_quick_record'] = 'Aggiungi una nuova FAQ';
+$PMF_LANG['ad_quick_user'] = 'Aggiungi un nuovo utente';
+$PMF_LANG['ad_quick_group'] = 'Aggiungi un nuovo gruppo';
+
+// added v2.0.0 - 2006-12-30 by Matteo
+$PMF_LANG['msgNewTranslationHeader'] = 'Proposta per una traduzione';
+$PMF_LANG['msgNewTranslationAddon'] = 'La tua proposta non sar&agrave; pubblicata immediatamente ma sar&agrave; pubblicata dall\'amministratore dopo la sua validazione.<br />I campi richiesti sono il <strong>tuo Nome</strong>, il <strong>tuo indirizzo email</strong>, la <strong>categoria</strong>, la <strong>traduzione del titolo</strong> e la <strong>traduzione del testo</strong> della faq.<br />Ricordati di separare le parole chiave con lo spazio.';
+$PMF_LANG['msgNewTransSourcePane'] = 'Faq originale';
+$PMF_LANG['msgNewTranslationPane'] = 'La tua traduzione';
+$PMF_LANG['msgNewTranslationName'] = $PMF_LANG['msgNewContentName'];
+$PMF_LANG['msgNewTranslationMail'] = $PMF_LANG['msgNewContentMail'];
+$PMF_LANG['msgNewTranslationKeywords'] = $PMF_LANG['msgNewContentKeywords'];
+$PMF_LANG['msgNewTranslationSubmit'] = 'Invia la tua proposta';
+$PMF_LANG['msgTranslate'] = 'Proponi una traduzione per';
+$PMF_LANG['msgTranslateSubmit'] = 'Inizia a tradurre...';
+$PMF_LANG['msgNewTranslationThanks'] = "Grazie per aver proposto la tua traduzione!";

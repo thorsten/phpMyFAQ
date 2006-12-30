@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.66 2006-12-29 22:53:28 matteo Exp $
+* $Id: artikel.php,v 1.67 2006-12-30 16:47:49 matteo Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -131,6 +131,7 @@ if (isset($oLnk->urlpool['href'])) {
 }
 $content = $fixedContent;
 
+// Check for the languages for a faq
 $arrLanguage = check4Language($id);
 $switchLanguage = '';
 $check4Lang = '';
@@ -155,6 +156,7 @@ if ($num > 1) {
     $switchLanguage .= "</p>\n";
 }
 
+// List all faq attachments
 if (is_dir('attachments/') && is_dir('attachments/'.$id) && $faqconfig->get('disatt')) {
     $files = 0;
     $outstr = "";
@@ -170,6 +172,7 @@ if (is_dir('attachments/') && is_dir('attachments/'.$id) && $faqconfig->get('dis
     }
 }
 
+// List all categories for this faq
 $writeMultiCategories = '';
 $cat = new PMF_Category($lang);
 $multiCats = $cat->getCategoriesFromArticle($id);
@@ -215,10 +218,10 @@ if (($faq->faqRecord['active'] != 'yes') || ('n' == $faq->faqRecord['comment']) 
 require_once('inc/Tags.php');
 $tagging = new PMF_Tags($db, $LANGCODE);
 
+// Build Digg it! URL
 $diggItUrl = sprintf('%s?cat=%s&id=%d&lang=%s', PMF_Link::getSystemUri(), $currentCategory, $id, $lang);
 
-//$visitsData = $faq->getVisitsData($id, $lang);
-//$faqPopularity = $visitsData['visits'];
+// Create commented out HTML for microsummary
 $allVisitsData = $faq->getAllVisitsData();
 $faqPopularity = '';
 $maxVisits = 0;
@@ -251,51 +254,57 @@ $relevant = new PMF_Relation($db, $LANGCODE);
 
 // Set the template variables
 $tpl->processTemplate ("writeContent", array(
-    'writeRubrik'                 => $categoryName.'<br />',
-    'solution_id'                 => $faq->faqRecord['solution_id'],
-    'writeThema'                  => $thema,
-    'writeArticleCategoryHeader'  => $PMF_LANG['msgArticleCategories'],
-    'writeArticleCategories'      => $writeMultiCategories,
-    'writeContent'                => preg_replace_callback("/<code([^>]*)>(.*?)<\/code>/is", 'hilight', $content),
-    'writeTagHeader'              => $PMF_LANG['msg_tags'] . ': ',
-    'writeArticleTags'            => $tagging->getAllLinkTagsById($id),
-    'writeRelatedArticlesHeader'  => $PMF_LANG['msg_related_articles'] . ': ',
-    'writeRelatedArticles'        => $relevant->getAllRelatedById($id, $faq->faqRecord['title'], $faq->faqRecord['keywords']),
-    'writePopularity'             => $faqPopularity,
-    'writeDateMsg'                => $PMF_LANG['msgLastUpdateArticle'].$faq->faqRecord['date'],
-    'writeRevision'               => $PMF_LANG['ad_entry_revision'].': 1.'.$faq->faqRecord['revision_id'],
-    'writeAuthor'                 => $PMF_LANG['msgAuthor'].$faq->faqRecord['author'],
-    'editThisEntry'               => $editThisEntry,
-    'writeDiggMsgTag'             => 'Digg it!',
-    'writeDiggMsg'                => sprintf('<a target="_blank" href="http://digg.com/submit?phase=2&amp;url=%s">Digg It!</a>', urlencode($diggItUrl)),
-    'writePrintMsg'               => sprintf('<a href="#" onclick="javascript:window.print();">%s</a>', $PMF_LANG['msgPrintArticle']),
-    'writePDF'                    => sprintf('<a target="_blank" href="pdf.php?cat=%s&amp;id=%d&amp;lang=%s">'.$PMF_LANG['msgPDF'].'</a>', $currentCategory, $id, $lang),
-    'writeSend2FriendMsg'         => sprintf('<a href="index.php?%saction=send2friend&amp;cat=%d&amp;id=%d&amp;artlang=%s">%s</a>', $sids, $currentCategory, $id, $lang, $PMF_LANG['msgSend2Friend']),
-    'writePrintMsgTag'            => $PMF_LANG['msgPrintArticle'],
-    'writePDFTag'                 => $PMF_LANG['msgPDF'],
-    'writeSend2FriendMsgTag'      => $PMF_LANG['msgSend2Friend'],
-    'saveVotingPATH'              => sprintf('index.php?%saction=savevoting', $sids),
-    'saveVotingID'                => $id,
-    'msgAverageVote'              => $PMF_LANG['msgAverageVote'],
-    'printVotings'                => $faq->getVotingResult($id),
-    'switchLanguage'              => $switchLanguage,
-    'msgVoteUseability'           => $PMF_LANG['msgVoteUseability'],
-    'msgVoteBad'                  => $PMF_LANG['msgVoteBad'],
-    'msgVoteGood'                 => $PMF_LANG['msgVoteGood'],
-    'msgVoteSubmit'               => $PMF_LANG['msgVoteSubmit'],
-    'writeCommentMsg'             => $commentMessage,
-    'msgWriteComment'             => $PMF_LANG['msgWriteComment'],
-    'writeSendAdress'             => $_SERVER['PHP_SELF'].'?'.$sids.'action=savecomment',
-    'id'                          => $id,
-    'lang'                        => $lang,
-    'msgCommentHeader'            => $PMF_LANG['msgCommentHeader'],
-    'msgNewContentName'           => $PMF_LANG['msgNewContentName'],
-    'msgNewContentMail'           => $PMF_LANG['msgNewContentMail'],
-    'defaultContentMail'          => getEmailAddress(),
-    'defaultContentName'          => getFullUserName(),
-    'msgYourComment'              => $PMF_LANG['msgYourComment'],
-    'msgNewContentSubmit'         => $PMF_LANG['msgNewContentSubmit'],
-    'captchaFieldset'             => printCaptchaFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('writecomment'), $captcha->caplength),
-    'writeComments'               => $faq->getComments($id)));
+    'writeRubrik'                   => $categoryName.'<br />',
+    'solution_id'                   => $faq->faqRecord['solution_id'],
+    'writeThema'                    => $thema,
+    'writeArticleCategoryHeader'    => $PMF_LANG['msgArticleCategories'],
+    'writeArticleCategories'        => $writeMultiCategories,
+    'writeContent'                  => preg_replace_callback("/<code([^>]*)>(.*?)<\/code>/is", 'hilight', $content),
+    'writeTagHeader'                => $PMF_LANG['msg_tags'] . ': ',
+    'writeArticleTags'              => $tagging->getAllLinkTagsById($id),
+    'writeRelatedArticlesHeader'    => $PMF_LANG['msg_related_articles'] . ': ',
+    'writeRelatedArticles'          => $relevant->getAllRelatedById($id, $faq->faqRecord['title'], $faq->faqRecord['keywords']),
+    'writePopularity'               => $faqPopularity,
+    'writeDateMsg'                  => $PMF_LANG['msgLastUpdateArticle'].$faq->faqRecord['date'],
+    'writeRevision'                 => $PMF_LANG['ad_entry_revision'].': 1.'.$faq->faqRecord['revision_id'],
+    'writeAuthor'                   => $PMF_LANG['msgAuthor'].$faq->faqRecord['author'],
+    'editThisEntry'                 => $editThisEntry,
+    'writeDiggMsgTag'               => 'Digg it!',
+    'writeDiggMsg'                  => sprintf('<a target="_blank" href="http://digg.com/submit?phase=2&amp;url=%s">Digg It!</a>', urlencode($diggItUrl)),
+    'writePrintMsg'                 => sprintf('<a href="#" onclick="javascript:window.print();">%s</a>', $PMF_LANG['msgPrintArticle']),
+    'writePDF'                      => sprintf('<a target="_blank" href="'.PMF_Link::getSystemRelativeUri('index.php').'pdf.php?cat=%s&amp;id=%d&amp;lang=%s">'.$PMF_LANG['msgPDF'].'</a>', $currentCategory, $id, $lang),
+    'writeSend2FriendMsg'           => sprintf('<a href="'.PMF_Link::getSystemRelativeUri('index.php').'index.php?%saction=send2friend&amp;cat=%d&amp;id=%d&amp;artlang=%s">%s</a>', $sids, $currentCategory, $id, $lang, $PMF_LANG['msgSend2Friend']),
+    'writePDFTag'                   => $PMF_LANG['msgPDF'],
+    'writePrintMsgTag'              => $PMF_LANG['msgPrintArticle'],
+    'writeSend2FriendMsgTag'        => $PMF_LANG['msgSend2Friend'],
+    'writeTranslateTag'             => $PMF_LANG['msgTranslate'],
+    'writeTranslate'                => $PMF_LANG['msgTranslate'].' '.selectLanguages($LANGCODE, false, $arrLanguage),
+    'msgTranslateSubmit'            => $PMF_LANG['msgTranslateSubmit'],
+    'writeTranslationUrl'           => sprintf(PMF_Link::getSystemRelativeUri('index.php').'index.php?%saction=translate&amp;cat=%s&amp;id=%d&amp;srclang=%s', $sids, $currentCategory, $id, $lang),
+    'saveVotingPATH'                => sprintf(PMF_Link::getSystemRelativeUri('index.php').'index.php?%saction=savevoting', $sids),
+    'saveVotingID'                  => $id,
+    'saveVotingIP'                  => $_SERVER['REMOTE_ADDR'],
+    'msgAverageVote'                => $PMF_LANG['msgAverageVote'],
+    'printVotings'                  => $faq->getVotingResult($id),
+    'switchLanguage'                => $switchLanguage,
+    'msgVoteUseability'             => $PMF_LANG['msgVoteUseability'],
+    'msgVoteBad'                    => $PMF_LANG['msgVoteBad'],
+    'msgVoteGood'                   => $PMF_LANG['msgVoteGood'],
+    'msgVoteSubmit'                 => $PMF_LANG['msgVoteSubmit'],
+    'writeCommentMsg'               => $commentMessage,
+    'msgWriteComment'               => $PMF_LANG['msgWriteComment'],
+    'writeSendAdress'               => $_SERVER['PHP_SELF'].'?'.$sids.'action=savecomment',
+    'id'                            => $id,
+    'lang'                          => $lang,
+    'msgCommentHeader'              => $PMF_LANG['msgCommentHeader'],
+    'msgNewContentName'             => $PMF_LANG['msgNewContentName'],
+    'msgNewContentMail'             => $PMF_LANG['msgNewContentMail'],
+    'defaultContentMail'            => getEmailAddress(),
+    'defaultContentName'            => getFullUserName(),
+    'msgYourComment'                => $PMF_LANG['msgYourComment'],
+    'msgNewContentSubmit'           => $PMF_LANG['msgNewContentSubmit'],
+    'captchaFieldset'               => printCaptchaFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('writecomment'), $captcha->caplength),
+    'writeComments'                 => $faq->getComments($id))
+    );
 
 $tpl->includeTemplate('writeContent', 'index');

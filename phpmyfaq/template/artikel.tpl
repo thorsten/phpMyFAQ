@@ -30,6 +30,14 @@
     <img src="images/pdf.gif" alt="{writePDFTag}" title="{writePDFTag}" width="16" height="16" border="0" /> {writePDF}
     </p>
 
+    <!-- Translation Form -->
+    <p>
+    <form action="{writeTranslationUrl}" method="post" style="display: inline;">
+        <img src="images/translate.gif" alt="{writeTranslateTag}" title="{writeTranslateTag}" width="16" height="16" border="0" /> {writeTranslate} <input class="submit" type="submit" name="submit" value="{msgTranslateSubmit}" />
+    </form>
+    </p>
+    <!-- /Translation Form -->
+
     <!-- Voting Form -->
     <form action="{saveVotingPATH}" method="post" style="display: inline;">
     <fieldset>

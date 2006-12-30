@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.66 2006-11-23 21:27:25 matteo Exp $
+* $Id: language_en.php,v 1.67 2006-12-30 16:47:48 matteo Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -96,7 +96,7 @@ $PMF_LANG["msgSearchContent"] = "Content: ";
 
 // new Content
 $PMF_LANG["msgNewContentHeader"] = "Proposal for FAQ";
-$PMF_LANG["msgNewContentAddon"] = "Your proposal will not be published right away, but will be released by the administrator upon receipt. Required  fields are <strong>your Name</strong>, <strong>your email address</strong>, <strong>category</strong>, <strong>headline</strong> and <strong>your record</strong>. Please separate the keywords with space tab only.";
+$PMF_LANG["msgNewContentAddon"] = "Your proposal will not be published right away, but will be released by the administrator upon receipt. Required  fields are <strong>your Name</strong>, <strong>your email address</strong>, <strong>category</strong>, <strong>headline</strong> and <strong>your record</strong>. Please separate the keywords with space only.";
 $PMF_LANG["msgNewContentName"] = "Your Name:";
 $PMF_LANG["msgNewContentMail"] = "Your email address:";
 $PMF_LANG["msgNewContentCategory"] = "Which category to choose?";
@@ -833,3 +833,16 @@ $PMF_LANG['ad_quick_category'] = 'Add new category';
 $PMF_LANG['ad_quick_record'] = 'Add new FAQ record';
 $PMF_LANG['ad_quick_user'] = 'Add new user';
 $PMF_LANG['ad_quick_group'] = 'Add new group';
+
+// added v2.0.0 - 2006-12-30 by Matteo
+$PMF_LANG['msgNewTranslationHeader'] = 'Translation proposal';
+$PMF_LANG['msgNewTranslationAddon'] = 'Your proposal will not be published right away, but will be released by the administrator upon receipt. Required  fields are <strong>your Name</strong>, <strong>your email address</strong>, <strong>your headline translation</strong> and <strong>your faq translation</strong>. Please separate the keywords with space only.';
+$PMF_LANG['msgNewTransSourcePane'] = 'Source pane';
+$PMF_LANG['msgNewTranslationPane'] = 'Translation pane';
+$PMF_LANG['msgNewTranslationName'] = $PMF_LANG['msgNewContentName'];
+$PMF_LANG['msgNewTranslationMail'] = $PMF_LANG['msgNewContentMail'];
+$PMF_LANG['msgNewTranslationKeywords'] = $PMF_LANG['msgNewContentKeywords'];
+$PMF_LANG['msgNewTranslationSubmit'] = 'Submit your proposal';
+$PMF_LANG['msgTranslate'] = 'Propose a translation for';
+$PMF_LANG['msgTranslateSubmit'] = 'Start translation...';
+$PMF_LANG['msgNewTranslationThanks'] = "Thank you for your translation proposal!";
