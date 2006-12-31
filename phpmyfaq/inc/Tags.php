@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Tags.php,v 1.25 2006-12-31 09:08:48 matteo Exp $
+* $Id: Tags.php,v 1.26 2006-12-31 10:16:00 matteo Exp $
 *
 * The main Tags class
 *
@@ -54,11 +54,13 @@ class PMF_Tags
     /**
      * Returns all tags
      *
-     * @param   boolean $limit          Limit the returned result set
+     * @param   string  $search     Move the returned result set to be the result of a start-with search
+     * @param   boolean $limit      Limit the returned result set
      * @return  array   $tags
      * @access  public
      * @since   2006-08-28
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      */
     function getAllTags($search = null, $limit = false)
     {
@@ -460,4 +462,21 @@ class PMF_Tags
         return $records;
     }
 
+    /**
+     * Check if at least one faq has been tagged with a tag
+     *
+     * @return  bool
+     * @access  public
+     * @since   2006-12-31
+     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     */
+    function existTagRelations()
+    {
+        $oTables = $this->db->getTableStatus(SQLPREFIX);
+        if (isset($oTables[SQLPREFIX.'faqtags']) && isset($oTables[SQLPREFIX.'faqdata_tags'])) {
+            return (($oTables[SQLPREFIX.'faqtags'] > 0) && ($oTables[SQLPREFIX.'faqdata_tags'] > 0));
+        }
+        
+        return false;
+    }
 }

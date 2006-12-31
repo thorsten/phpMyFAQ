@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.80 2006-11-11 13:31:26 thorstenr Exp $
+* $Id: index.php,v 1.81 2006-12-31 10:16:00 matteo Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the
@@ -302,7 +302,9 @@ if ($action != 'main') {
 //
 // Set right column
 //
-if ($action == 'artikel' || $action == 'show') {
+// Check in any tags with at leat one entry exist
+$hasTags = $oTag->existTagRelations();
+if ($hasTags && (($action == 'artikel') || ($action == 'show'))) {
     $right_tpl = 'template/tagcloud.tpl';
 } else {
     $right_tpl = 'template/startpage.tpl';
