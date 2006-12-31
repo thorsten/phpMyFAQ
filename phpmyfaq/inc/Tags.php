@@ -1,11 +1,12 @@
 <?php
 /**
-* $Id: Tags.php,v 1.24 2006-11-19 10:21:08 thorstenr Exp $
+* $Id: Tags.php,v 1.25 2006-12-31 09:08:48 matteo Exp $
 *
 * The main Tags class
 *
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @package      phpMyFAQ
+* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+* @author       Matteo Scaramuccia <matteo@scaramuccia.com>
 * @since        2006-08-10
 * @copyright    (c) 2006 phpMyFAQ Team
 *
@@ -373,9 +374,12 @@ class PMF_Tags
         // of the number of records for each tag
         $tagList = $this->getAllTags('', true);
         foreach ($tagList as $tagId => $tagName) {
-            $tags[$tagName]['id']    = $tagId;
-            $tags[$tagName]['name']  = $tagName;
-            $tags[$tagName]['count'] = count($this->getRecordsByTagName($tagName));
+            $totFaqByTag = count($this->getRecordsByTagName($tagName));
+            if ($totFaqByTag > 0) {
+                $tags[$tagName]['id']    = $tagId;
+                $tags[$tagName]['name']  = $tagName;
+                $tags[$tagName]['count'] = $totFaqByTag;
+            }
         }
         $min = 0;
         $max = 0;
@@ -455,6 +459,5 @@ class PMF_Tags
 
         return $records;
     }
-
 
 }
