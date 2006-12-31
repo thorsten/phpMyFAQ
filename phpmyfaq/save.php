@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: save.php,v 1.35 2006-12-30 16:47:49 matteo Exp $
+ * $Id: save.php,v 1.36 2006-12-31 08:52:51 matteo Exp $
  *
  * Saves a user FAQ record and sends an email to the user
  *
@@ -83,7 +83,7 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
     }
     
     $recordId = $faq->addRecord($newData, $isNew);
-    $faq->addCategoryRelation($categories, $recordId, $newData['lang']);
+    $faq->addCategoryRelations($categories, $recordId, $newData['lang']);
 
     // Let the PMF Administrator and the Category Owner to be informed by email of this new entry
     foreach($categories as $category) {

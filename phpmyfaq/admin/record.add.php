@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.add.php,v 1.50 2006-11-12 21:11:25 thorstenr Exp $
+ * $Id: record.add.php,v 1.51 2006-12-31 08:52:50 matteo Exp $
  *
  * Adds a record in the database, handles the preview and checks for missing
  * category entries.
@@ -96,7 +96,7 @@ if ($permission["editbt"]) {
             // Create the visit entry
             $faq->createNewVisit($record_id, $recordData['lang']);
             // Insert the new category relations
-            $faq->addCategoryRelation($categories, $record_id, $recordData['lang']);
+            $faq->addCategoryRelations($categories, $record_id, $recordData['lang']);
             // Insert the tags
             if ($tags != '') {
                 $tagging->saveTags($record_id, explode(' ',$tags));

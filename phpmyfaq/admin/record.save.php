@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.save.php,v 1.51 2006-11-15 21:06:48 thorstenr Exp $
+* $Id: record.save.php,v 1.52 2006-12-31 08:52:50 matteo Exp $
 *
 * Save or update a FAQ record
 *
@@ -155,9 +155,7 @@ if (    isset($submit[1])
     // delete category relations
     $faq->deleteCategoryRelations($record_id, $record_lang);
     // save or update the category relations
-    foreach ($categories as $category) {
-        $faq->addCategoryRelation($category, $record_id, $record_lang);
-    }
+    $faq->addCategoryRelations($categories, $record_id, $record_lang);
 
     // Insert the tags
     $tags = $db->escape_string(trim($_POST['tags']));

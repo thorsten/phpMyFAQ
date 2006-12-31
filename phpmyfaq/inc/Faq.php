@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.76 2006-12-30 16:47:50 matteo Exp $
+* $Id: Faq.php,v 1.77 2006-12-31 08:52:52 matteo Exp $
 *
 * The main FAQ class
 *
@@ -557,16 +557,21 @@ class PMF_Faq
     /**
      * Adds new category relations to a record
      *
-     * @param    array    $categories
-     * @param    integer  $record_id
-     * @param    string   $language
-     * @return   integer
-     * @access   public
-     * @since    2006-07-02
-     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param   array   $categories
+     * @param   integer $record_id
+     * @param   string  $language
+     * @return  integer
+     * @access  public
+     * @since   2006-12-31
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      */
-    function addCategoryRelation($categories, $record_id, $language)
+    function addCategoryRelations($categories, $record_id, $language)
     {
+        if (!is_array($categories)) {
+            return false;
+        }
+
         foreach ($categories as $_category) {
             $this->db->query(sprintf(
                 "INSERT INTO
@@ -579,7 +584,32 @@ class PMF_Faq
                 $record_id,
                 $language));
         }
+
         return true;
+    }
+
+    /**
+     * Adds new category relation to a record
+     *
+     * @param   mixed   $categories
+     * @param   integer $record_id
+     * @param   string  $language
+     * @return  integer
+     * @access  public
+     * @since   2006-07-02
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     */
+    function addCategoryRelation($category, $record_id, $language)
+    {
+        // Just a fallback when (wrong case) $category is an array
+        if (is_array($category)) {
+            addCategoryRelations($category, $record_id, $language);
+        }
+        
+        $categories[] = $category;
+
+        return addCategoryRelations($categories, $record_id, $language);
     }
 
     /**
