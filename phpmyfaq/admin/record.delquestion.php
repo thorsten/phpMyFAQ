@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.delquestion.php,v 1.14 2006-11-05 13:21:46 thorstenr Exp $
+* $Id: record.delquestion.php,v 1.15 2007-01-02 20:44:33 matteo Exp $
 *
 * Delete open questions
 *
@@ -29,10 +29,10 @@ if ($permission['delquestion']) {
     $tree = new PMF_Category;
     $question_id = (int)$_GET['id'];
     
-    if (isset($_GET['delete']) && $_$_GET['delete'] == 'yes') {
+    if (isset($_GET['delete']) && $_GET['delete'] == 'yes') {
         $faq->deleteQuestion($question_id);
-		print $PMF_LANG['ad_entry_delsuc'];
-	} else {
+        print $PMF_LANG['ad_entry_delsuc'];
+    } else {
         if (isset($_GET['is_visible']) && $_GET['is_visible'] == 'toggle') {
             $is_visible = $faq->getVisibilityOfQuestion($question_id);
             if (!is_null($is_visible)) {
@@ -40,9 +40,9 @@ if ($permission['delquestion']) {
             }
         }
 
-		print "<h2>".$PMF_LANG["msgOpenQuestions"]."</h2>";
-		$result = $db->query("SELECT id, ask_username, ask_usermail, ask_rubrik, ask_content, ask_date, is_visible FROM ".SQLPREFIX."faqquestions ORDER BY ask_date ASC");
-		if ($db->num_rows($result) > 0) {
+        print "<h2>".$PMF_LANG["msgOpenQuestions"]."</h2>";
+        $result = $db->query("SELECT id, ask_username, ask_usermail, ask_rubrik, ask_content, ask_date, is_visible FROM ".SQLPREFIX."faqquestions ORDER BY ask_date ASC");
+        if ($db->num_rows($result) > 0) {
 ?>
     <table class="list">
     <thead>
@@ -55,7 +55,7 @@ if ($permission['delquestion']) {
     </thead>
     <tbody>
 <?php
-			while ($row = $db->fetch_object($result)) {
+            while ($row = $db->fetch_object($result)) {
 ?>
         <tr>
             <td class="list"><?php print makeDate($row->ask_date); ?><br /><a href="mailto:<?php print $row->ask_usermail; ?>"><?php print $row->ask_username; ?></a></td>
@@ -64,15 +64,15 @@ if ($permission['delquestion']) {
             <td class="list"><a href="?action=question&amp;id=<?php print $row->id; ?>&amp;delete=yes"><?php print $PMF_LANG["ad_gen_delete"]; ?>!</a><br /><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;action=takequestion&amp;id=<?php print $row->id; ?>"><?php print $PMF_LANG["ad_ques_take"] ?></a></td>
         </tr>
 <?php
-			}
+            }
 ?>
     </tbody>
-	</table>
+    </table>
 <?php
-		} else {
-			print $PMF_LANG['msgNoQuestionsAvailable'];
-		}
-	}
+        } else {
+            print $PMF_LANG['msgNoQuestionsAvailable'];
+        }
+    }
 } else {
     print $PMF_LANG["err_NotAuth"];
 }
