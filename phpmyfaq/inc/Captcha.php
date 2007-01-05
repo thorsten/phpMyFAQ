@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Captcha.php,v 1.6 2006-08-30 05:30:26 thorstenr Exp $
+ * $Id: Captcha.php,v 1.7 2007-01-05 17:38:13 matteo Exp $
  *
  * The phpMyFAQ Captcha class
  *
@@ -85,6 +85,13 @@ class PMF_Captcha
      * @var integer
      */
     var $quality;
+
+    /**
+     * Random background color RGB components
+     *
+     * @var array
+     */
+    var $_backgroundColor;
 
     /**
      * Generated image
@@ -283,6 +290,7 @@ class PMF_Captcha
      * @access  private
      * @since   2006-02-02
      * @author  Thomas Zeithaml <info@spider-trap.de>
+     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      */
     function drawText()
     {
@@ -300,12 +308,29 @@ class PMF_Captcha
             $y   = rand($size + 3, $this->height-5);
             // $w1 += rand(- $this->width / 90, $this->width / 40 );
             $x   = $w1 + $w2*$p;
-            $r = mt_rand(30, 199);
-            $g = mt_rand(30, 199);
-            $b = mt_rand(30, 199);
-            $c1 = imagecolorallocate($this->img, $r * 1, $g * 1, $b * 1);
-            $c2 = imagecolorallocate($this->img, $r * 2, $g * 2, $b * 2);
-
+            $c1 = array(); // fore char color
+            $c2 = array(); // back char color
+            do {
+                $c1['r'] = mt_rand(30, 199);
+            } while ($c1['r'] == $this->_backgroundColor['r']);
+            do {
+                $c1['g'] = mt_rand(30, 199);
+            } while ($c1['g'] == $this->_backgroundColor['g']);
+            do {
+                $c1['b'] = mt_rand(30, 199);
+            } while ($c1['b'] == $this->_backgroundColor['b']);
+            do {
+                $c2['r'] = ($c1['r'] < 100 ? $c1['r'] * 2 : mt_rand(30, 199));
+            } while (($c2['r'] == $this->_backgroundColor['r']) && ($c2['r'] == $c1['r']));
+            do {
+                $c2['g'] = ($c1['g'] < 100 ? $c1['g'] * 2 : mt_rand(30, 199));
+            } while (($c2['g'] == $this->_backgroundColor['g']) && ($c2['g'] == $c1['g']));
+            do {
+                $c2['b'] = ($c1['b'] < 100 ? $c1['b'] * 2 : mt_rand(30, 199));
+            } while (($c2['b'] == $this->_backgroundColor['b']) && ($c2['b'] == $c1['b']));
+            $c1 = imagecolorallocate($this->img, $c1['r'], $c1['g'], $c1['b']);
+            $c2 = imagecolorallocate($this->img, $c2['r'], $c2['g'], $c2['b']);
+            // Add the letter
             if (function_exists('imagettftext') && (count($this->fonts) > 0)) {
                 imagettftext($this->img, $size, $rotation, $x + 2, $y,     $c2, $font, $letter);
                 imagettftext($this->img, $size, $rotation, $x + 1, $y + 1, $c2, $font, $letter);
@@ -337,7 +362,10 @@ class PMF_Captcha
     function createBackground()
     {
         $this->img = imagecreate($this->width, $this->height);
-        $colorallocate = imagecolorallocate($this->img, rand(220, 255), rand(220, 255), rand(220, 255));
+        $this->_backgroundColor['r'] = rand(220, 255);
+        $this->_backgroundColor['g'] = rand(220, 255);
+        $this->_backgroundColor['b'] = rand(220, 255);
+        $colorallocate = imagecolorallocate($this->img, $this->_backgroundColor['r'], $this->_backgroundColor['g'], $this->_backgroundColor['b']);
         imagefilledrectangle($this->img, 0, 0, $this->width, $this->height, $colorallocate);
         return $this->img;
     }
