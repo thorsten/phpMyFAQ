@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.67 2006-12-30 16:47:48 matteo Exp $
+* $Id: language_en.php,v 1.68 2007-01-08 20:51:05 matteo Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -60,7 +60,7 @@ $PMF_LANG["msgPrintArticle"] = "Print this record";
 $PMF_LANG["msgMakeXMLExport"] = "Export as XML-File";
 $PMF_LANG["msgAverageVote"] = "Average rating:";
 $PMF_LANG["msgVoteUseability"] = "Please rate this entry:";
-$PMF_LANG["msgVoteFrom"] = "from";
+$PMF_LANG["msgVoteFrom"] = "out of";
 $PMF_LANG["msgVoteBad"] = "completely useless";
 $PMF_LANG["msgVoteGood"] = "most valuable";
 $PMF_LANG["msgVotings"] = "Votes ";
