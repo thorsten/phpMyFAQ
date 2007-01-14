@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Init.php,v 1.23 2006-12-29 22:47:19 matteo Exp $
+ * $Id: Init.php,v 1.24 2007-01-14 07:44:14 matteo Exp $
  *
  * Some functions
  *
@@ -229,6 +229,7 @@ class PMF_Init
         }
 
         // Clean the file to remove some chars depending on the server OS
+        // 0. main/rfc1867.c: rfc1867_post_handler removes any char before the last occurence of \/
         // 1. Besides \/ on Windows: :*?"<>|
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
             $reservedChars = array(':', '*', '?', '"', '<', '>', "'", '|');
