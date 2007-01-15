@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Category.php,v 1.27 2006-11-12 20:37:16 thorstenr Exp $
+ * $Id: Category.php,v 1.28 2007-01-15 21:15:03 thorstenr Exp $
  *
  * The main category class
  *
@@ -32,69 +32,83 @@ require_once('Link.php');
 class PMF_Category
 {
     /**
-    *
-    * The database handler
-    *
-    * @var  object  PMF_Db
-    */
+     *
+     * The database handler
+     *
+     * @var  object  PMF_Db
+     */
     var $db = null;
+    
+    /**
+     * Users
+     *
+     * @var array
+     */
+    var $users = array();
 
     /**
-    *
-    * The categories as an array.
-    *
-    * @var  array
-    */
+     * Groupd
+     *
+     * @var array
+     */
+    var $groups = array();
+
+    /**
+     *
+     * The categories as an array.
+     *
+     * @var  array
+     */
     var $categories = array();
 
     /**
-    * The category names as an array.
-    *
-    * @var  array
-    */
+     * The category names as an array.
+     *
+     * @var  array
+     */
     var $categoryName = array();
 
     /**
-    * The category tree
-    *
-    * @var  array
-    */
+     * The category tree
+     *
+     * @var  array
+     */
     var $catTree = array();
 
     /**
-    * The children nodes
-    *
-    * @var  array
-    */
+     * The children nodes
+     *
+     * @var  array
+     */
     var $children = array();
 
     /**
-    * The current language
-    *
-    * @var  string
-    */
+     * The current language
+     *
+     * @var  string
+     */
     var $language = null;
 
     /**
-    * The lines of tabs
-    *
-    * @var  array
-    */
+     * The lines of tabs
+     *
+     * @var  array
+     */
     var $lineTab = array();
 
     /**
-    * The tree with the tabs
-    *
-    * @var  array
-    */
+     * The tree with the tabs
+     *
+     * @var  array
+     */
     var $treeTab = array();
 
     /**
-    * Symbol for each item
-    * NOTE: We do not use this currently
-    *
-    * @var  array
-    */
+     * Symbol for each item
+     * NOTE: We do not use this currently
+     *
+     * @var  array
+     */
     var $symbols = array(
         'vertical' => '|',
         'plus'     => '+',
@@ -104,25 +118,39 @@ class PMF_Category
         'medium'   => '|-');
 
     /**
-    * Constructor
-    *
-    * @param    string
-    * @return   void
-    * @access   public
-    * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-    */
-    function PMF_Category ($language = '')
+     * Constructor
+     *
+     * @param   string  $language
+     * @param   integer $users
+     * @param   integer $groups
+     * @return  void
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function PMF_Category ($language = '', $users = null, $groups = null)
     {
         global $db;
-
+        
         $this->language   = $language;
         $this->db         = &$db;
         $this->categories = array();
         $this->lineTab    = $this->getOrderedCategories();
-
+        
         for ($i = 0; $i < count($this->lineTab); $i++) {
             $this->lineTab[$i]['level'] = $this->levelOf($this->lineTab[$i]['id']);
         }
+        
+        if (is_null($users)) {
+            $this->users  = array(-1);
+        } else {
+            $this->users  = $users;
+        }
+        if (is_null($groups)) {
+            $this->groups = array(-1);
+        } else {
+            $this->groups = $groups;
+        }
+
     }
 
     /**
