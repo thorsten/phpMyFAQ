@@ -893,22 +893,24 @@ class PMF_User
 
     /**
      * Returns an array with the user-IDs of all users found in
-     * the database.
+     * the database. By default, the Anonymous User will not be returned.
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
      * @return array
      */
-    function getAllUsers()
+    function getAllUsers($withoutAnonymous = true)
     {
-        $query = sprintf(
-                    "SELECT
+        $query = sprintf("
+                    SELECT
                         user_id
                     FROM
                         %suser
+                    %s
                     ORDER BY
                         login ASC",
-                    PMF_USER_SQLPREFIX
+                    PMF_USER_SQLPREFIX,
+                    ($withoutAnonymous ? 'WHERE user_id <> -1' : '')
                     );
 
         $res = $this->_db->query($query);
