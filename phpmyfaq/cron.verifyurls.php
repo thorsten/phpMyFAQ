@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: cron.verifyurls.php,v 1.5 2006-09-26 21:25:35 matteo Exp $
+ * $Id: cron.verifyurls.php,v 1.6 2007-01-21 14:48:37 thorstenr Exp $
  *
  * Performs an Automatic Link Verification over all the faq records
  *
@@ -49,6 +49,8 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
     require_once(PMF_ROOT_DIR.'/inc/Init.php');
     define('IS_VALID_PHPMYFAQ', null);
     PMF_Init::cleanRequest();
+    session_name('pmf_auth_'.$faqconfig->get('phpMyFAQToken'));
+    session_start();
 
     // Preload English strings
     require_once(PMF_ROOT_DIR.'/lang/language_en.php');

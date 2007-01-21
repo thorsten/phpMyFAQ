@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: sitemap.yahoo.php,v 1.1 2006-09-26 19:27:25 matteo Exp $
+ * $Id: sitemap.yahoo.php,v 1.2 2007-01-21 14:48:37 thorstenr Exp $
  *
  * The dynamic Yahoo Sitemap builder
  *
@@ -78,6 +78,8 @@ function printHTTPStatus404()
 // }}}
 
 PMF_Init::cleanRequest();
+session_name('pmf_auth_'.$faqconfig->get('phpMyFAQToken'));
+session_start();
 
 $oFaq = new PMF_Faq($db, 'en');
 // Load the faq

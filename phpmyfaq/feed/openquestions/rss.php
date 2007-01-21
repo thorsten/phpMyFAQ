@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: rss.php,v 1.3 2006-08-22 19:07:54 matteo Exp $
+ * $Id: rss.php,v 1.4 2007-01-21 14:48:37 thorstenr Exp $
  *
  * The RSS feed with the latest open questions
  *
@@ -24,6 +24,8 @@
 define('PMF_ROOT_DIR', dirname(dirname(dirname(__FILE__))));
 require_once(PMF_ROOT_DIR.'/inc/Init.php');
 PMF_Init::cleanRequest();
+session_name('pmf_auth_'.$faqconfig->get('phpMyFAQToken'));
+session_start();
 
 require_once (PMF_ROOT_DIR."/inc/Category.php");
 require_once (PMF_ROOT_DIR."/lang/".$PMF_CONF["language"]);
