@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.81 2006-12-31 10:16:00 matteo Exp $
+* $Id: index.php,v 1.82 2007-01-21 11:43:34 thorstenr Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the
@@ -10,7 +10,7 @@
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Lars Tiedemann <php@larstiedemann.de>
 * @since        2001-02-12
-* @copyright:   (c) 2001-2006 phpMyFAQ Team
+* @copyright:   (c) 2001-2007 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -32,11 +32,13 @@ if (!file_exists('inc/data.php')) {
 }
 
 //
-// Prepend
+// Prepend and start the PHP session
 //
 require_once('inc/Init.php');
 define('IS_VALID_PHPMYFAQ', null);
 PMF_Init::cleanRequest();
+session_name('pmf_auth_'.$faqconfig->get('phpMyFAQToken'));
+session_start();
 
 //
 // Include required the link class, the template parser class, the captcha class, the category class,

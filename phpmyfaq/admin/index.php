@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.77 2006-11-19 10:54:25 thorstenr Exp $
+* $Id: index.php,v 1.78 2007-01-21 11:43:34 thorstenr Exp $
 *
 * The main admin backend index file
 *
@@ -9,7 +9,7 @@
 * @author       Meikel Katzengreis <meikel@katzengreis.com>
 * @author       Minoru TODA <todam@netjapan.co.jp>
 * @since        2002-09-16
-* @copyright    (c) 2001-2006 phpMyFAQ Team
+* @copyright    (c) 2001-2007 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -33,11 +33,13 @@ if (!file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
 }
 
 //
-// Prepend
+// Prepend and start the PHP session
 //
 define('IS_VALID_PHPMYFAQ_ADMIN', null);
 require_once(PMF_ROOT_DIR.'/inc/Init.php');
 PMF_Init::cleanRequest();
+session_name('pmf_auth_'.$faqconfig->get('phpMyFAQToken'));
+session_start();
 
 // Include classes and functions
 require_once(PMF_ROOT_DIR.'/inc/Utils.php');
