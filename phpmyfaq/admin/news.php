@@ -1,13 +1,13 @@
 <?php
 /**
-* $Id: news.php,v 1.29 2006-09-19 21:39:39 matteo Exp $
+* $Id: news.php,v 1.30 2007-01-21 14:40:35 thorstenr Exp $
 *
 * The main administration file for the news
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Matteo Scaramuccia <matteo@scaramuccia.com>
 * @since        2003-02-23
-* @copyright    (c) 2001-2006 phpMyFAQ Team
+* @copyright    (c) 2001-2007 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -67,7 +67,8 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
 
         <label class="lefteditor" for="linkTarget"><?php print $PMF_LANG['ad_news_link_target']; ?></label>
         <input type="radio" name="target" value="blank" /><?php print $PMF_LANG['ad_news_link_window'] ?>
-        <input type="radio" name="target" value="self" /><?php print $PMF_LANG['ad_news_link_faq'] ?><br />
+        <input type="radio" name="target" value="self" /><?php print $PMF_LANG['ad_news_link_faq'] ?>
+        <input type="radio" name="target" value="parent" /><?php print $PMF_LANG['ad_news_link_parent'] ?><br />
     </fieldset>
     <fieldset>
     <legend><?php print $PMF_LANG['ad_news_expiration_window']; ?></legend>
@@ -172,7 +173,8 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
 
         <label class="lefteditor" for="linkTarget"><?php print $PMF_LANG['ad_news_link_target']; ?></label>
         <input type="radio" name="target" value="blank" <?php if ('blank' == $newsData['target']) { ?> checked="checked"<?php } ?> /><?php print $PMF_LANG['ad_news_link_window'] ?>
-        <input type="radio" name="target" value="self" <?php if ('self' == $newsData['target']) { ?> checked="checked"<?php } ?> /><?php print $PMF_LANG['ad_news_link_faq'] ?><br />
+        <input type="radio" name="target" value="self" <?php if ('self' == $newsData['target']) { ?> checked="checked"<?php } ?> /><?php print $PMF_LANG['ad_news_link_faq'] ?>
+        <input type="radio" name="target" value="parent" <?php if ('parent' == $newsData['target']) { ?> checked="checked"<?php } ?> /><?php print $PMF_LANG['ad_news_link_parent'] ?><br />
     </fieldset>
     <fieldset>
     <legend><?php print $PMF_LANG['ad_news_expiration_window']; ?></legend>
