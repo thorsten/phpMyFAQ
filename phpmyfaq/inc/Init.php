@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Init.php,v 1.24 2007-01-14 07:44:14 matteo Exp $
+ * $Id: Init.php,v 1.25 2007-01-21 11:42:27 thorstenr Exp $
  *
  * Some functions
  *
@@ -9,7 +9,7 @@
  * @author      Stefan Esser <sesser@php.net>
  * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
  * @since       2005-09-24
- * @copyright   (c) 2005-2006 phpMyFAQ Team
+ * @copyright   (c) 2005-2007 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -90,9 +90,6 @@ $PMF_CONF = $faqconfig->config;
 ini_set('session.use_only_cookies', 1);
 ini_set('session.use_trans_sid', 0);
 ini_set('url_rewriter.tags', '');
-// Start the PHP session
-session_name('pmf_auth_'.$faqconfig->get('phpMyFAQToken'));
-session_start();
 
 //
 // Connect to LDAP server, when LDAP support is enabled
