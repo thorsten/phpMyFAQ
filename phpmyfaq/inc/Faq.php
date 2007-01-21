@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Faq.php,v 1.77 2006-12-31 08:52:52 matteo Exp $
+* $Id: Faq.php,v 1.78 2007-01-21 11:51:28 thorstenr Exp $
 *
 * The main FAQ class
 *
@@ -102,6 +102,20 @@ class PMF_Faq
     * @var  array
     */
     var $faqRecords = array();
+    
+    /**
+     * Users
+     *
+     * @var array
+     */
+    var $users = array();
+
+    /**
+     * Groups
+     *
+     * @var array
+     */
+    var $groups = array();
 
     /**
     * Constructor
