@@ -1,18 +1,18 @@
 <?php
 /**
-* $Id: password.php,v 1.12 2006-11-16 23:29:27 matteo Exp $
+* $Id: password.php,v 1.13 2007-01-21 14:37:43 thorstenr Exp $
 *
 * Reset a forgotten password to a new one
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2004-05-11
 * @copyright    (c) 2004-2006 phpMyFAQ Team
-* 
+*
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
 * compliance with the License. You may obtain a copy of the License at
 * http://www.mozilla.org/MPL/
-* 
+*
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
@@ -34,6 +34,8 @@ define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('IS_VALID_PHPMYFAQ_ADMIN', null);
 require_once(PMF_ROOT_DIR.'/inc/Init.php');
 PMF_Init::cleanRequest();
+session_name('pmf_auth_'.$faqconfig->get('phpMyFAQToken'));
+session_start();
 
 require_once(PMF_ROOT_DIR.'/inc/PMF_User/CurrentUser.php');
 require_once(PMF_ROOT_DIR.'/inc/libs/idna_convert.class.php');
