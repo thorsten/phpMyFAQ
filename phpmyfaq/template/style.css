@@ -1,5 +1,5 @@
 /**
- * $Id: style.css,v 1.27 2006-09-18 19:55:00 matteo Exp $
+ * $Id: style.css,v 1.28 2007-01-22 21:11:01 thorstenr Exp $
  *
  * This is the main style sheet file for phpMyFAQ 2.0
  * If you want to change only the colours, use colors.css
@@ -12,7 +12,7 @@
  * @author      Thorsten Rinne <thorsten@rinne.info>
  * @author      Matteo scaramuccia <matteo@scaramuccia.com>
  * @since       2004-06-02
- * @copyright   (c) 2004-2006 phpMyFAQ Team
+ * @copyright   (c) 2004-2007 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -316,6 +316,9 @@ html>body #categories li a {
 }
 .main-content .searchpreview {
     font-size: 10px;
+}
+.main-content div#action {
+    text-align: center;
 }
 #article_content {
    padding: 0;

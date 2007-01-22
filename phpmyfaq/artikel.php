@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: artikel.php,v 1.67 2006-12-30 16:47:49 matteo Exp $
+* $Id: artikel.php,v 1.68 2007-01-22 21:11:01 thorstenr Exp $
 *
 * Shows the page with the FAQ record and - when available - the user
 * comments
@@ -8,7 +8,7 @@
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Lars Tiedemann <larstiedemann@yahoo.de>
 * @since        2002-08-27
-* @copyright    (c) 2001-2006 phpMyFAQ Team
+* @copyright    (c) 2001-2007 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -270,10 +270,9 @@ $tpl->processTemplate ("writeContent", array(
     'writeAuthor'                   => $PMF_LANG['msgAuthor'].$faq->faqRecord['author'],
     'editThisEntry'                 => $editThisEntry,
     'writeDiggMsgTag'               => 'Digg it!',
-    'writeDiggMsg'                  => sprintf('<a target="_blank" href="http://digg.com/submit?phase=2&amp;url=%s">Digg It!</a>', urlencode($diggItUrl)),
-    'writePrintMsg'                 => sprintf('<a href="#" onclick="javascript:window.print();">%s</a>', $PMF_LANG['msgPrintArticle']),
-    'writePDF'                      => sprintf('<a target="_blank" href="'.PMF_Link::getSystemRelativeUri('index.php').'pdf.php?cat=%s&amp;id=%d&amp;lang=%s">'.$PMF_LANG['msgPDF'].'</a>', $currentCategory, $id, $lang),
-    'writeSend2FriendMsg'           => sprintf('<a href="'.PMF_Link::getSystemRelativeUri('index.php').'index.php?%saction=send2friend&amp;cat=%d&amp;id=%d&amp;artlang=%s">%s</a>', $sids, $currentCategory, $id, $lang, $PMF_LANG['msgSend2Friend']),
+    'link_digg'                     => sprintf('http://digg.com/submit?phase=2&amp;url=%s', urlencode($diggItUrl)),
+    'link_email'                    => sprintf(PMF_Link::getSystemRelativeUri('index.php').'index.php?%saction=send2friend&amp;cat=%d&amp;id=%d&amp;artlang=%s', $sids, $currentCategory, $id, $lang),
+    'link_pdf'                      => sprintf(PMF_Link::getSystemRelativeUri('index.php').'pdf.php?cat=%s&amp;id=%d&amp;lang=%s', $currentCategory, $id, $lang),
     'writePDFTag'                   => $PMF_LANG['msgPDF'],
     'writePrintMsgTag'              => $PMF_LANG['msgPrintArticle'],
     'writeSend2FriendMsgTag'        => $PMF_LANG['msgSend2Friend'],

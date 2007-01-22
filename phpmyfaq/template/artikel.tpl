@@ -23,19 +23,14 @@
     <!-- /Article Info -->
 
     {switchLanguage}
-    <p id="action">
-    <img src="images/digg.gif" alt="{writeDiggMsgTag}" title="{writeDiggMsgTag}" width="24" height="16" border="0" /> {writeDiggMsg}<br />
-    <img src="images/print.gif" alt="{writePrintMsgTag}" title="{writePrintMsgTag}" width="16" height="16" border="0" /> {writePrintMsg}<br />
-    <img src="images/email.gif" alt="{writeSend2FriendMsgTag}" title="{writeSend2FriendMsgTag}" width="16" height="16" border="0" /> {writeSend2FriendMsg}<br />
-    <img src="images/pdf.gif" alt="{writePDFTag}" title="{writePDFTag}" width="16" height="16" border="0" /> {writePDF}
-    </p>
+    <div id="action">
+    <a target="_blank" href="{link_digg}"><img src="images/digg.gif" alt="{writeDiggMsgTag}" title="{writeDiggMsgTag}" width="24" height="16" border="0" class="recordIcons" /></a> <a href="#" onclick="javascript:window.print();"><img src="images/print.gif" alt="{writePrintMsgTag}" title="{writePrintMsgTag}" width="16" height="16" border="0" class="recordIcons" /></a> <a target="_blank" href="{link_email}"><img src="images/email.gif" alt="{writeSend2FriendMsgTag}" title="{writeSend2FriendMsgTag}" width="16" height="16" border="0" class="recordIcons" /></a> <a target="_blank" href="{link_pdf}"><img src="images/pdf.gif" alt="{writePDFTag}" title="{writePDFTag}" width="16" height="16" border="0" class="recordIcons" /></a>
+    </div>
 
     <!-- Translation Form -->
-    <p>
     <form action="{writeTranslationUrl}" method="post" style="display: inline;">
         <img src="images/translate.gif" alt="{writeTranslateTag}" title="{writeTranslateTag}" width="16" height="16" border="0" /> {writeTranslate} <input class="submit" type="submit" name="submit" value="{msgTranslateSubmit}" />
     </form>
-    </p>
     <!-- /Translation Form -->
 
     <!-- Voting Form -->
