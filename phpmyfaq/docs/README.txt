@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.64 2006-11-25 14:55:58 thorstenr Exp $
+$Id: README.txt,v 1.65 2007-01-22 21:18:37 thorstenr Exp $
 
 phpMyFAQ 2.0.0-beta
 Codename "Prometheus"
@@ -11,7 +11,7 @@ Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.0.0-alpha:
 - added OpenSearch support (Thorsten)
-- updated bundled Net_IDNA to version 0.4.4 (Thorsten)
+- added "submit translation" link (Matteo)
 - updated Arabic translation (Ahmed Shalaby)
 - fixed tons of bugs (Matteo, Thorsten)
 
@@ -19,10 +19,10 @@ For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.0.0-beta - 2006-11-
+Version 2.0.0-beta - 2007-
 - added rewritten and enhanced user management (Lars)
 - added rewritten and enhanced authorization management (Lars)
-- added Ajax support (Thorsten)
+- added Ajax support (Thorsten, Matteo)
 - added automatic link verification (Minoru Toda)
 - added user binding to a category (Thorsten)
 - added glossary support (Thorsten)
@@ -40,10 +40,19 @@ Version 2.0.0-beta - 2006-11-
 - improved export functions (Matteo)
 - improved URL rewrite functions (Matteo)
 - improved category management (Thorsten, Rudi Ferrari)
-- updated bundled Net_IDNA to version 0.4.4 (Thorsten)
 - updated Arabic translation (Ahmed Shalaby)
 - updated German translation (Thorsten)
 - updated Italian translation (Matteo)
+
+Version 1.6.8 - 2006-12-15
+- fixed a possible security issue
+- fixed the blank dropdown in the installer
+- fixed some minor bugs
+
+Version 1.6.7 - 2006-11-27
+- added Persian (Farsi) translation
+- fixed PHP 5.2.0 related issues
+- fixed some minor bugs
 
 Version 1.6.6 - 2006-10-28
 - updated Arabic translation (also moved to UTF-8)
@@ -577,4 +586,4 @@ basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 License for the specific language governing rights and limitations
 under the License.
 
-(c) 2001-2006 phpMyFAQ Team
+(c) 2001-2007 phpMyFAQ Team

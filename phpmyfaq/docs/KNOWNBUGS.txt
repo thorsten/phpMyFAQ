@@ -1,11 +1,10 @@
-$Id: KNOWNBUGS.txt,v 1.4 2006-11-25 14:55:58 thorstenr Exp $
+$Id: KNOWNBUGS.txt,v 1.5 2007-01-22 21:18:37 thorstenr Exp $
 
 MISSING FEATURES in phpMyFAQ 2.0.0-beta
 
 - permission management for categories and records
 - simple reordering of records
 - show/edit/delete comments
-- "submit translation" link
 - editable default values for record configuration
 - sort by date for records in admin backend
 - show records per category in admin backend

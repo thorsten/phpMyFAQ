@@ -1,11 +1,9 @@
 TODO list for future versions of phpMyFAQ:
 
 2.0.0 "Prometheus" (CVS branch: PMF_2_0):
-- (re)add FAQ external links in the WYSIWYG editor
 - add permission management for categories and records
 - simple reordering of records
 - show/edit/delete comments
-- add "submit translation" link
 - bugfixing for stability or security reasons
 
 2.1.0 "Pandora" (CVS branch: PMF_2_1):
@@ -34,7 +32,7 @@ TODO list for future versions of phpMyFAQ:
 - bugfixing for stability or security reasons
 
 3.0.0 "Poseidon" (CVS branch: PMF_3_0):
-- PHP 5 / PHP 6 only version
+- PHP5 / PHP6 only version
 - PDO support
 - Unicode support
 - modularisation of all features
