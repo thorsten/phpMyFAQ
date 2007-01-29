@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Pdf.php,v 1.8 2006-09-19 21:12:37 matteo Exp $
+* $Id: Pdf.php,v 1.9 2007-01-29 23:13:08 matteo Exp $
 *
 * Main PDF class for phpMyFAQ based on FPDF by Olivier Plathey
 *
@@ -525,6 +525,9 @@ class PDF extends FPDF
             // Please note that the image must be accessible by HTTP NOT ONLY by HTTPS
             $image = 'http://'.$_SERVER['HTTP_HOST'].$image;
         }
+        // Set a friendly User Agent
+        $ua = ini_get('user_agent');
+        ini_set('user_agent', 'phpMyFAQ PDF Builder');
         if (!$info = @getimagesize($image)) {
             return;
         }
@@ -576,6 +579,9 @@ class PDF extends FPDF
             }
             $this->SetX($x+$w);
         }
+
+        // Unset the friendly User Agent restoring the original UA
+        ini_set('user_agent', $ua);
     }
 
     /**
