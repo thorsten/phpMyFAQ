@@ -1,25 +1,25 @@
 <?php
 /**
-* $Id: Faq.php,v 1.78 2007-01-21 11:51:28 thorstenr Exp $
-*
-* The main FAQ class
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @author       Matteo Scaramuccia <matteo@scaramuccia.com>
-* @package      phpMyFAQ
-* @since        2005-12-20
-* @copyright    (c) 2005-2006 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * $Id: Faq.php,v 1.79 2007-02-04 21:00:32 thorstenr Exp $
+ *
+ * The main FAQ class
+ *
+ * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author       Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @package      phpMyFAQ
+ * @since        2005-12-20
+ * @copyright    (c) 2005-2007 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 // {{{ Includes
 /**
@@ -108,7 +108,7 @@ class PMF_Faq
      *
      * @var array
      */
-    var $users = array();
+    var $user = null;
 
     /**
      * Groups
@@ -118,16 +118,31 @@ class PMF_Faq
     var $groups = array();
 
     /**
-    * Constructor
-    *
-    */
-    function PMF_Faq(&$db, $language)
+     * Constructor
+     *
+     * @param   object  $db
+     * @param   string  $language
+     * @param   integer $user
+     * @param   array   $groups
+     */
+    function PMF_Faq(&$db, $language, $user = null, $groups = null)
     {
         global $PMF_LANG;
-
+        
         $this->db = &$db;
         $this->language = $language;
         $this->pmf_lang = $PMF_LANG;
+        
+        if (is_null($user)) {
+            $this->user  = -1;
+        } else {
+            $this->user  = $user;
+        }
+        if (is_null($groups)) {
+            $this->groups = array(-1);
+        } else {
+            $this->groups = $groups;
+        }
     }
 
     //
@@ -137,8 +152,6 @@ class PMF_Faq
     //
 
     /**
-     * showAllRecords()
-     *
      * This function returns all not expired records from one category
      *
      * @param   int     category id
