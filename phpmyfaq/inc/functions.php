@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.160 2007-02-04 19:29:18 thorstenr Exp $
+ * $Id: functions.php,v 1.161 2007-02-04 21:10:16 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -1300,7 +1300,7 @@ function generateDocBookExport()
  * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since    2002-09-16
  */
-function searchEngine($begriff, $category = '%', $allLanguages = true)
+function searchEngine($begriff, $cat = '%', $allLanguages = true)
 {
     global $db, $sids, $category, $PMF_LANG, $PMF_CONF, $LANGCODE;
 
@@ -1317,8 +1317,8 @@ function searchEngine($begriff, $category = '%', $allLanguages = true)
     }
 
     $cond = array(SQLPREFIX."faqdata.active" => "'yes'");
-    if ($category != '%') {
-        $cond = array_merge(array(SQLPREFIX."faqcategoryrelations.category_id" => $category), $cond);
+    if ($cat != '%') {
+        $cond = array_merge(array(SQLPREFIX."faqcategoryrelations.category_id" => $cat), $cond);
     }
     if ((!$allLanguages) && (!is_numeric($begriff))) {
         $cond = array_merge(array(SQLPREFIX."faqdata.lang" => "'".$LANGCODE."'"), $cond);
@@ -1384,8 +1384,8 @@ function searchEngine($begriff, $category = '%', $allLanguages = true)
                 $where = $where." OR ";
             }
             $where = $where.'('.SQLPREFIX."faqdata.thema LIKE '%".$keys[$i]."%' OR ".SQLPREFIX."faqdata.content LIKE '%".$keys[$i]."%' OR ".SQLPREFIX."faqdata.keywords LIKE '%".$keys[$i]."%')";
-            if (is_numeric($category)) {
-                $where .= ' AND '.SQLPREFIX.'faqcategoryrelations.category_id = '.$category;
+            if (is_numeric($cat)) {
+                $where .= ' AND '.SQLPREFIX.'faqcategoryrelations.category_id = '.$cat;
             }
             if (!$allLanguages) {
                 $where .= ' AND '.SQLPREFIX."faqdata.lang = '".$LANGCODE."'";
