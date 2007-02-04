@@ -1,13 +1,17 @@
-$Id: KNOWNBUGS.txt,v 1.6 2007-02-04 11:48:53 thorstenr Exp $
+$Id: KNOWNBUGS.txt,v 1.7 2007-02-04 20:48:36 thorstenr Exp $
 
 MISSING FEATURES in phpMyFAQ 2.0.0-beta
 
-- permission management for categories and records
+- permission management for records
+
+MISSING FEATURES in phpMyFAQ 2.0.0-rc
+
 - simple reordering of records
 - show/edit/delete comments
 - editable default values for record configuration
 - sort by date for records in admin backend
 - show records per category in admin backend
+- finish the new admin backend layout
 
 
 KNOWN ISSUES in phpMyFAQ 2.0.0-beta
