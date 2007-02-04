@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Category.php,v 1.28 2007-01-15 21:15:03 thorstenr Exp $
+ * $Id: Category.php,v 1.29 2007-02-04 15:33:32 thorstenr Exp $
  *
  * The main category class
  *
@@ -1028,7 +1028,7 @@ class PMF_Category
      * @param   array   $category_data
      * @param   integer $parent_id
      * @param   integer $id
-     * @return  boolean
+     * @return  integer
      * @access  public
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
@@ -1057,8 +1057,8 @@ class PMF_Category
             $category_data['description'],
             $category_data['user_id']);
         $this->db->query($query);
-
-        return true;
+        
+        return $id;
     }
 
     /**
@@ -1174,7 +1174,9 @@ class PMF_Category
             array('faqcategories' => 'id'),
             array('faqcategories' => 'parent_id'),
             array('faqcategoryrelations' => 'category_id'),
-            array('faqquestions' => 'ask_rubrik'));
+            array('faqquestions' => 'ask_rubrik'),
+            array('faqcategory_group' => 'category_id'),
+            array('faqcategory_user' => 'category_id'));
 
         $result = true;
         foreach ($tables as $pair) {
