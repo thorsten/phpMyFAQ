@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: constants.php,v 1.26 2007-02-04 11:44:36 thorstenr Exp $
+* $Id: constants.php,v 1.27 2007-02-04 12:18:22 thorstenr Exp $
 *
 * Constants for phpMyFAQ
 *
@@ -154,10 +154,10 @@ $supported_databases = array(
     'mssql'     => array('4.3.0', 'MS SQL Server 2000 / 2005'),
     'mysqli'    => array('5.0.0', 'MySQL 4.1 / 5.0 / 5.1'),
     'sqlite'    => array('5.0.0', 'SQLite'),
-    'ibm_db2'   => array('4.3.0', 'IBM DB2 Universal Database 8.2 / 9.0')
+    'ibm_db2'   => array('4.3.0', 'IBM DB2 Universal Database 8.2 / 9.0'),
     'oracle'    => array('5.0.0', 'Oracle (experimental)'),
     'ibase'     => array('4.3.0', 'Interbase/Firebird (experimental)'),
-    'maxdb'     => array('4.3.0', 'MaxDB 7.5 / 7.6 (experimental)'),
+    'maxdb'     => array('4.3.0', 'MaxDB 7.5 / 7.6 (experimental)')
     );
 
 /* allowed 'action' varibales for GET - DO NOT CHANGE! */
