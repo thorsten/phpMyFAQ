@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: category.edit.php,v 1.17 2006-09-19 21:39:38 matteo Exp $
+* $Id: category.edit.php,v 1.18 2007-02-04 12:46:09 thorstenr Exp $
 *
 * Edits a category
 *
@@ -50,6 +50,18 @@ if ($permission["editcateg"]) {
         <select name="user_id" size="1">
         <?php print $user->getAllUserOptions($categories[$id]["user_id"]); ?>
         </select><br />
+        
+        <label class="left" for="userpermission"><?php print $PMF_LANG['ad_entry_userpermission']; ?></label>
+        <input type="radio" name="userpermission" class="active" value="all"<?php print isset($userpermission_all) ? $userpermission_all : ''; ?>/> <?php print $PMF_LANG['ad_entry_all_users']; ?> <input type="radio" name="userpermission" class="active" value="restricted"<?php print isset($userpermission_restricted) ? $userpermission_restricted : ''; ?>/> <?php print $PMF_LANG['ad_entry_restricted_users']; ?> <select name="restricted_users" size="1"><?php print $user->getAllUserOptions(1); ?></select><br />
+    
+<?php
+    if ($groupSupport) {
+?>    
+        <label class="left" for="grouppermission"><?php print $PMF_LANG['ad_entry_grouppermission']; ?></label>
+        <input type="radio" name="grouppermission" class="active" value="all"<?php print isset($grouppermission_all) ? $grouppermission_all : ''; ?>/> <?php print $PMF_LANG['ad_entry_all_groups']; ?> <input type="radio" name="grouppermission" class="active" value="restricted"<?php print isset($grouppermission_restricted) ? $grouppermission_restricted : ''; ?>/> <?php print $PMF_LANG['ad_entry_restricted_groups']; ?> <select name="restricted_groups" size="1"><?php print $user->getAllUserOptions(1); ?></select><br />
+<?php
+    }
+?>
 
         <input class="submit" style="margin-left: 190px;" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_updatecateg"]; ?>" />
     </fieldset>
