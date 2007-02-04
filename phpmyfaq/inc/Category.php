@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Category.php,v 1.30 2007-02-04 17:20:38 thorstenr Exp $
+ * $Id: Category.php,v 1.31 2007-02-04 19:20:11 thorstenr Exp $
  *
  * The main category class
  *
@@ -134,11 +134,6 @@ class PMF_Category
         $this->language   = $language;
         $this->db         = &$db;
         $this->categories = array();
-        $this->lineTab    = $this->getOrderedCategories();
-        
-        for ($i = 0; $i < count($this->lineTab); $i++) {
-            $this->lineTab[$i]['level'] = $this->levelOf($this->lineTab[$i]['id']);
-        }
         
         if (is_null($users)) {
             $this->users  = array(-1);
@@ -150,28 +145,49 @@ class PMF_Category
         } else {
             $this->groups = $groups;
         }
-
+        
+        $this->lineTab    = $this->getOrderedCategories();
+        for ($i = 0; $i < count($this->lineTab); $i++) {
+            $this->lineTab[$i]['level'] = $this->levelOf($this->lineTab[$i]['id']);
+        }
     }
 
     /**
      * Gets all categories and write them in an array with ordered IDs
      *
      * @return  array
-     * @access  public
+     * @access  private
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     function &getOrderedCategories()
     {
         $query = sprintf("
             SELECT
-                id, lang, parent_id, name, description, user_id
+                id, lang, parent_id, name, description
             FROM
-                %sfaqcategories",
-            SQLPREFIX);
+                %sfaqcategories fc
+            LEFT JOIN
+                %sfaqcategory_group fg
+            ON
+                fc.id = fg.category_id
+            LEFT JOIN
+                %sfaqcategory_user fu
+            ON
+                fc.id = fu.category_id
+            WHERE 
+                ( fu.user_id IN (%s)
+            OR
+                fg.group_id IN (%s) )",
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            implode(', ', $this->users),
+            implode(', ', $this->groups));
         if (isset($this->language) && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
-            $query .= " WHERE lang = '".$this->language."'";
+            $query .= " AND lang = '".$this->language."'";
         }
         $query .= ' ORDER BY id';
+        
         $result = $this->db->query($query);
         while ($row = $this->db->fetch_assoc($result)) {
             $this->categoryName[$row['id']] = $row;
@@ -1428,7 +1444,7 @@ class PMF_Category
         if (!($mode == "user" || $mode == "group")) {
             return false;
         }
-        if (!(is_array($categories) && is_int($id))) {
+        if (!is_array($categories) && !is_int($id)) {
             return false;
         }
 
