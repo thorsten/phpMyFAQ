@@ -1,25 +1,25 @@
 <?php
 /**
-* $Id: pdf.php,v 1.24 2007-01-21 14:48:37 thorstenr Exp $
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @author       Peter Beauvain <pbeauvain@web.de>
-* @author       Olivier Plathey <olivier@fpdf.org>
-* @author       Krzysztof Kruszynski <thywolf@wolf.homelinux.net>
-* @author       Matteo Scaramuccia <matteo@scaramuccia.com>
-* @since        2003-02-12
-* @copyright    (c) 2001-2006 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * $Id: pdf.php,v 1.25 2007-02-04 19:27:50 thorstenr Exp $
+ *
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author      Peter Beauvain <pbeauvain@web.de>
+ * @author      Olivier Plathey <olivier@fpdf.org>
+ * @author      Krzysztof Kruszynski <thywolf@wolf.homelinux.net>
+ * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @since       2003-02-12
+ * @copyright   (c) 2001-2007 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 require_once('inc/Init.php');
 PMF_Init::cleanRequest();
@@ -29,7 +29,7 @@ require_once('inc/Category.php');
 require_once('inc/Faq.php');
 require_once('inc/PMF_Export/Pdf.php');
 
-$tree = new PMF_Category;
+$category = new PMF_Category;
 
 // get language (default: english)
 $pmf = new PMF_Init();
@@ -67,7 +67,7 @@ if ($error) {
 $faq = new PMF_Faq($db, $LANGCODE);
 $faq->getRecord($id);
 
-$pdf = new PDF($currentCategory, $faq->faqRecord['title'], $tree->categoryName, $orientation = "P", $unit = "mm", $format = "A4");
+$pdf = new PDF($currentCategory, $faq->faqRecord['title'], $category->categoryName, $orientation = "P", $unit = "mm", $format = "A4");
 $pdf->Open();
 $pdf->SetAutoPageBreak(true, 2*(40/$pdf->k));
 $pdf->SetTitle($faq->faqRecord['title']);

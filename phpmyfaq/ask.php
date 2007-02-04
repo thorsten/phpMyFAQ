@@ -1,10 +1,10 @@
 <?php
 /**
-* $Id: ask.php,v 1.14 2006-09-19 21:39:38 matteo Exp $
+* $Id: ask.php,v 1.15 2007-02-04 19:27:50 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-09-17
-* @copyright    (c) 2001-2006 phpMyFAQ Team
+* @copyright    (c) 2001-2007 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -31,7 +31,7 @@ if (isset($_GET['gen'])) {
 
 Tracking('ask_question', 0);
 
-$tree->buildTree();
+$category->buildTree();
 
 $tpl->processTemplate('writeContent', array(
     'msgQuestion'             => $PMF_LANG['msgQuestion'],
@@ -42,7 +42,7 @@ $tpl->processTemplate('writeContent', array(
     'defaultContentMail'      => getEmailAddress(),
     'defaultContentName'      => getFullUserName(),
     'msgAskCategory'          => $PMF_LANG['msgAskCategory'],
-    'printCategoryOptions'    => $tree->printCategoryOptions(),
+    'printCategoryOptions'    => $category->printCategoryOptions(),
     'msgAskYourQuestion'      => $PMF_LANG['msgAskYourQuestion'],
     'captchaFieldset'         => printCaptchaFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('ask'), $captcha->caplength),
     'msgNewContentSubmit'     => $PMF_LANG['msgNewContentSubmit']));

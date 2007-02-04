@@ -1,13 +1,13 @@
 <?php
 /**
-* $Id: search.php,v 1.19 2006-11-19 10:21:08 thorstenr Exp $
+* $Id: search.php,v 1.20 2007-02-04 19:27:50 thorstenr Exp $
 *
 * The fulltext search page
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Periklis Tsirakidis <tsirakidis@phpdevel.de>
 * @since        2002-09-16
-* @copyright    (c) 2001-2006 phpMyFAQ Team
+* @copyright    (c) 2001-2007 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -38,8 +38,8 @@ if (isset($_GET['langs'])) {
 //       for any of the multilanguage faq records and the Category list
 //       on the left pane will not be affected
 if ($allLanguages) {
-    $tree = new PMF_Category();
-    $tree->transform(0);
+    $category = new PMF_Category();
+    $category->transform(0);
 }
 
 $searchCategory = isset($_GET['searchcategory']) && is_numeric($_GET['searchcategory']) ? $_GET['searchcategory'] : '%';
@@ -75,7 +75,7 @@ $searchCategory = ('%' == $searchCategory) ? 0 : $searchCategory;
 
 Tracking('fulltext_search', $suchbegriff);
 
-$tree->buildTree();
+$category->buildTree();
 
 $openSearchLink = sprintf('<p><a class="searchplugin" href="#" onclick="window.external.AddSearchProvider(&quot;%s/opensearch.php&quot;);">%s</a></p>',
     PMF_Link::getSystemUri('/index.php'),
@@ -89,7 +89,7 @@ $tpl->processTemplate('writeContent',
                         'checkedAllLanguages'   => $allLanguages ? ' checked="checked"' : '',
                         'selectCategories'      => $PMF_LANG['msgSelectCategories'],
                         'allCategories'         => $PMF_LANG['msgAllCategories'],
-                        'printCategoryOptions'  => $tree->printCategoryOptions($searchCategory),
+                        'printCategoryOptions'  => $category->printCategoryOptions($searchCategory),
                         'writeSendAdress'       => $_SERVER['PHP_SELF'].'?'.$sids.'action=search',
                         'msgSearchWord'         => $PMF_LANG['msgSearchWord'],
                         'printResult'           => $printResult,

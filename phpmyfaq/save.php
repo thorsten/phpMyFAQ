@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: save.php,v 1.36 2006-12-31 08:52:51 matteo Exp $
+ * $Id: save.php,v 1.37 2007-02-04 19:27:50 thorstenr Exp $
  *
  * Saves a user FAQ record and sends an email to the user
  *
@@ -8,7 +8,7 @@
  * @author       Jürgen Kuza <kig@bluewin.ch>
  * @author       Matteo Scaramuccia <matteo@scaramuccia.com>
  * @since        2002-09-16
- * @copyright    (c) 2001-2006 phpMyFAQ Team
+ * @copyright    (c) 2001-2007 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -78,8 +78,8 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
         // Fix data with correct values
         $newData['id'] = intval($_POST['faqid']);
         // Set categories equal to the faq source of the translation
-        $tree = new PMF_Category($_POST['faqlanguage']);
-        $categories = $tree->getCategoryIdsFromArticle($newData['id']);
+        $category = new PMF_Category($_POST['faqlanguage']);
+        $categories = $category->getCategoryIdsFromArticle($newData['id']);
     }
     
     $recordId = $faq->addRecord($newData, $isNew);
@@ -87,7 +87,7 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
 
     // Let the PMF Administrator and the Category Owner to be informed by email of this new entry
     foreach($categories as $category) {
-        $userId = $tree->getCategoryUser($category);
+        $userId = $category->getCategoryUser($category);
         // Avoid to send multiple emails to the same owner
         if (!isset($sent[$userId])) {
             // TODO: Move this code to Category.php and let the email contains the faq article both as plain text and as HTML

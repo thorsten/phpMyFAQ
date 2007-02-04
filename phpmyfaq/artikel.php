@@ -1,25 +1,25 @@
 <?php
 /**
-* $Id: artikel.php,v 1.68 2007-01-22 21:11:01 thorstenr Exp $
-*
-* Shows the page with the FAQ record and - when available - the user
-* comments
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @author       Lars Tiedemann <larstiedemann@yahoo.de>
-* @since        2002-08-27
-* @copyright    (c) 2001-2007 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * $Id: artikel.php,v 1.69 2007-02-04 19:27:50 thorstenr Exp $
+ *
+ * Shows the page with the FAQ record and - when available - the user
+ * comments
+ *
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author      Lars Tiedemann <larstiedemann@yahoo.de>
+ * @since       2002-08-27
+ * @copyright   (c) 2001-2007 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
@@ -62,7 +62,7 @@ $content = $oG->insertItemsIntoContent($content);
 $thema   = $oG->insertItemsIntoContent($thema);
 
 // Set the path of the current category
-$categoryName = $tree->getPath($currentCategory, ' &raquo; ', true);
+$categoryName = $category->getPath($currentCategory, ' &raquo; ', true);
 
 $changeLanguagePath = PMF_Link::getSystemRelativeUri().sprintf('?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s', $sids, $currentCategory, $id, $LANGCODE);
 $oLink = new PMF_Link($changeLanguagePath);

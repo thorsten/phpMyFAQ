@@ -1,12 +1,12 @@
 <?php
 /**
-* $Id: savequestion.php,v 1.29 2006-09-28 18:45:15 matteo Exp $
+* $Id: savequestion.php,v 1.30 2007-02-04 19:27:50 thorstenr Exp $
 *
 * @author           Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author           David Saez Padros <david@ols.es>
 * @author           Jürgen Kuza <kig@bluewin.ch>
 * @since            2002-09-17
-* @copyright        (c) 2001-2006 phpMyFAQ Team
+* @copyright        (c) 2001-2007 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -69,7 +69,7 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
                             .$PMF_LANG["msgCategory"].": ".$categories[$questionData['ask_category']]["name"]."\n\n"
                             .wordwrap($content, 72);
 
-            $userId = $tree->getCategoryUser($questionData['ask_category']);
+            $userId = $category->getCategoryUser($questionData['ask_category']);
             $oUser = new PMF_User();
             $oUser->addDb($db);
             $oUser->getUserById($userId);

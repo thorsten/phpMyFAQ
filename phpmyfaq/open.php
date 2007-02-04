@@ -1,10 +1,10 @@
 <?php
 /**
-* $Id: open.php,v 1.9 2006-09-19 21:39:38 matteo Exp $
+* $Id: open.php,v 1.10 2007-02-04 19:27:50 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-09-17
-* @copyright    (c) 2001-2006 phpMyFAQ Team
+* @copyright    (c) 2001-2007 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the 'License'); you may not use this file except in
@@ -28,8 +28,8 @@ Tracking('open_questions', 0);
 //       so the result set (the Open Uqestions) will have the Category Name
 //       for any of the multilanguage categories and the Category list
 //       on the left pane will not be affected
-$tree = new PMF_Category();
-$tree->transform(0);
+$category = new PMF_Category();
+$category->transform(0);
 
 $tpl->processTemplate ('writeContent', array(
                         'msgOpenQuestions' => $PMF_LANG['msgOpenQuestions'],

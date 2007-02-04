@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.159 2006-12-30 16:47:50 matteo Exp $
+ * $Id: functions.php,v 1.160 2007-02-04 19:29:18 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -11,7 +11,7 @@
  * @author      Robin Wood <robin@digininja.org>
  * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
  * @since       2001-02-18
- * @copyright   (c) 2001-2006 phpMyFAQ Team
+ * @copyright   (c) 2001-2007 phpMyFAQ Team
  *
  * Portions created by Matthias Sommerfeld are Copyright (c) 2001-2004 blue
  * birdy, Berlin (http://bluebirdy.de). All Rights Reserved.
@@ -1058,8 +1058,8 @@ function generateXHTMLFile()
 
     require_once('Template.php');
 
-    $tree = new PMF_Category();
-    $tree->transform(0);
+    $category = new PMF_Category();
+    $category->transform(0);
     $old = 0;
 
     $newest = array();
@@ -1090,8 +1090,8 @@ function generateXHTMLFile()
                     $xhtml     .= "<p><a href=\"#top\">".$PMF_LANG['to_top']."</a></p>\n";
                 }
                 /* add current line to index */
-                $headlinks .= '<p><strong>'.$PMF_LANG["html_head_cat"].' <a href="#cat'.$row->category_id.'">'.$tree->getPath($row->category_id)."</a></strong></p>\n<ul>\n";
-                $xhtml .= "\n<a name=\"cat".$row->category_id."\">&nbsp;</a><h1>".$tree->getPath($row->category_id)."</h1>\n";
+                $headlinks .= '<p><strong>'.$PMF_LANG["html_head_cat"].' <a href="#cat'.$row->category_id.'">'.$category->getPath($row->category_id)."</a></strong></p>\n<ul>\n";
+                $xhtml .= "\n<a name=\"cat".$row->category_id."\">&nbsp;</a><h1>".$category->getPath($row->category_id)."</h1>\n";
             }
             $xhtml .= '<h2>'.$marker.'<a name="'.$row->id.'">'.$row->thema.'</h2>';
             $xhtml .= '<p>'.$row->content.'</p>';
@@ -1138,7 +1138,7 @@ function generateXHTMLFile()
  */
 function generateXMLFile()
 {
-    global $db, $tree, $PMF_CONF, $PMF_LANG;
+    global $db, $category, $PMF_CONF, $PMF_LANG;
 
     $result = $db->query('SELECT '.SQLPREFIX.'faqdata.id AS id, '.SQLPREFIX.'faqdata.lang AS lang, '.SQLPREFIX.'faqdata.solution_id AS solution_id, '.SQLPREFIX.'faqdata.revision_id AS revision_id, '.SQLPREFIX.'faqcategoryrelations.category_id AS category_id, '.SQLPREFIX.'faqdata.thema AS thema, '.SQLPREFIX.'faqdata.content AS content, '.SQLPREFIX.'faqdata.keywords AS keywords, '.SQLPREFIX.'faqdata.author AS author, '.SQLPREFIX.'faqdata.datum AS datum FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang ORDER BY '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.id');
 
@@ -1149,7 +1149,7 @@ function generateXMLFile()
         $xml_fp = fopen("../xml/phpmyfaq.xml","w");
         while ($row = $db->fetch_object($result)) {
             $xml_content = wordwrap($row->content);
-            $xml_rubrik = $tree->categoryName[$row->category_id]['name'];
+            $xml_rubrik = $category->categoryName[$row->category_id]['name'];
             $xml_thema = wordwrap($row->thema, 60);
             $xml_content = trim(htmlspecialchars(wordwrap($xml_content, 60)));
 
@@ -1192,7 +1192,7 @@ function generateXMLFile()
 */
 function generateDocBookExport()
 {
-    global $db, $tree, $PMF_CONF, $PMF_LANG;
+    global $db, $category, $PMF_CONF, $PMF_LANG;
 
     $output = '<?xml version="1.0"?>
 <!DOCTYPE book PUBLIC "-//Norman Walsh//DTD DocBk XML V3.1.4//EN" "http://nwalsh.com/docbook/xml/3.1.4/db3xml.dtd">
@@ -1302,7 +1302,7 @@ function generateDocBookExport()
  */
 function searchEngine($begriff, $category = '%', $allLanguages = true)
 {
-    global $db, $sids, $tree, $PMF_LANG, $PMF_CONF, $LANGCODE;
+    global $db, $sids, $category, $PMF_LANG, $PMF_CONF, $LANGCODE;
 
     $_begriff    = $begriff;
     $seite       = '';
@@ -1429,7 +1429,7 @@ function searchEngine($begriff, $category = '%', $allLanguages = true)
             }
             $displayedCounter++;
 
-            $rubriktext = $tree->getPath($row->category_id);
+            $rubriktext = $category->getPath($row->category_id);
             $thema = PMF_htmlentities(chopString($row->thema, 15),ENT_NOQUOTES, $PMF_LANG['metaCharset']);
             $content = chopString(strip_tags($row->content), 25);
             $begriff = str_replace(array('^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']', '"'), '', $begriff);
@@ -1574,7 +1574,7 @@ function chopString($string, $words)
 */
 function printOpenQuestions()
 {
-    global $db, $sids, $tree, $PMF_LANG;
+    global $db, $sids, $category, $PMF_LANG;
 
     $query =   'SELECT
                     COUNT(*) AS num
@@ -1605,7 +1605,7 @@ function printOpenQuestions()
         while ($row = $db->fetch_object($result)) {
             $output .= "\t<tr class=\"openquestions\">\n";
             $output .= "\t\t<td valign=\"top\" nowrap=\"nowrap\">".makeDate($row->ask_date)."<br /><a href=\"mailto:".safeEmail($row->ask_usermail)."\">".$row->ask_username."</a></td>\n";
-            $output .= "\t\t<td valign=\"top\"><strong>".$tree->categoryName[$row->ask_rubrik]['name'].":</strong><br />".strip_tags($row->ask_content)."</td>\n";
+            $output .= "\t\t<td valign=\"top\"><strong>".$category->categoryName[$row->ask_rubrik]['name'].":</strong><br />".strip_tags($row->ask_content)."</td>\n";
             $output .= "\t\t<td valign=\"top\"><a href=\"".$_SERVER['PHP_SELF']."?".$sids."action=add&amp;question=".$row->id."&amp;cat=".$row->ask_rubrik."\">".$PMF_LANG['msg2answer']."</a></td>\n";
             $output .= "\t</tr>\n";
         }

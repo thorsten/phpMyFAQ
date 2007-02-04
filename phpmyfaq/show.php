@@ -1,10 +1,10 @@
 <?php
 /**
-* $Id: show.php,v 1.12 2006-09-19 21:39:38 matteo Exp $
+* $Id: show.php,v 1.13 2007-02-04 19:27:50 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-08-27
-* @copyright    (c) 2001-2006 phpMyFAQ Team
+* @copyright    (c) 2001-2007 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the 'License'); you may not use this file except in
@@ -23,20 +23,20 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 if (isset($_REQUEST['cat']) && is_numeric($_REQUEST['cat'])) {
-    $category = (int)$_REQUEST['cat'];
+    $_cat = (int)$_REQUEST['cat'];
 }
 
-if (isset($category) && $category != 0 && isset($tree->categoryName[$category])) {
-    Tracking('show_category', $category);
-    $parent = $tree->categoryName[$category]['parent_id'];
-    $name = $tree->categoryName[$category]['name'];
+if (isset($_cat) && $_cat != 0 && isset($category->categoryName[$_cat])) {
+    Tracking('show_category', $_cat);
+    $parent = $category->categoryName[$_cat]['parent_id'];
+    $name = $category->categoryName[$_cat]['name'];
 
-    $records = $faq->showAllRecords($category);
+    $records = $faq->showAllRecords($_cat);
     if (!$records) {
-        $cats = new PMF_Category($LANGCODE);
-        $cats->transform($category);
-        $cats->collapseAll();
-        $records = $cats->viewTree();
+        $categories = new PMF_Category($LANGCODE);
+        $categories->transform($_cat);
+        $categories->collapseAll();
+        $records = $categories->viewTree();
     }
 
     $up = '';
@@ -46,7 +46,7 @@ if (isset($category) && $category != 0 && isset($tree->categoryName[$category]))
                     $parent
                 );
         $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
-        $oLink->itemTitle = $tree->categoryName[$parent]['name'];
+        $oLink->itemTitle = $category->categoryName[$parent]['name'];
         $oLink->text = $PMF_LANG['msgCategoryUp'];
         $up = $oLink->toHtmlAnchor();
     }
@@ -60,7 +60,7 @@ if (isset($category) && $category != 0 && isset($tree->categoryName[$category]))
     Tracking('show_all_categories', 0);
     $tpl->processTemplate('writeContent', array(
                           'writeCategory' => $PMF_LANG['msgFullCategories'],
-                          'writeThemes' => $tree->viewTree(),
+                          'writeThemes' => $category->viewTree(),
                           'writeOneThemeBack' => ''));
     $tpl->includeTemplate('writeContent', 'index');
 }
