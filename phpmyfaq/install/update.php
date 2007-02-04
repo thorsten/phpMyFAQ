@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.97 2006-11-16 23:29:27 matteo Exp $
+* $Id: update.php,v 1.98 2007-02-04 12:13:49 thorstenr Exp $
 *
 * Main update script
 *
@@ -8,7 +8,7 @@
 * @author       Thomas Melchinger <t.melchinger@uni.de>
 * @author       Matteo Scaramuccia <matteo@scaramuccia.com>
 * @since        2002-01-10
-* @copyright    (c) 2001-2006 phpMyFAQ Team
+* @copyright    (c) 2001-2007 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -22,7 +22,7 @@
 */
 
 define('NEWVERSION', '2.0.0-beta');
-define('COPYRIGHT', '&copy; 2001-2006 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
+define('COPYRIGHT', '&copy; 2001-2007 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
 require_once(PMF_ROOT_DIR."/inc/constants.php");
@@ -1259,7 +1259,7 @@ if ($step == 5) {
     }
 
     if (version_compare($version, '2.0.0-beta', '<')) {
-        // 1/3. Fix faqsessions table
+        // 1/4. Fix faqsessions table
         switch($DB["type"]) {
             case 'mssql':
             case 'sybase':
@@ -1307,7 +1307,7 @@ if ($step == 5) {
                 break;
         }
 
-        // 2/3. Add missing anonymous user account in 2.0.0-alpha
+        // 2/4. Add missing anonymous user account in 2.0.0-alpha
         require_once(PMF_ROOT_DIR.'/inc/PMF_User/User.php');
         $anonymous = new PMF_User();
         $anonymous->createUser('anonymous', null, -1);
@@ -1318,7 +1318,7 @@ if ($step == 5) {
         );
         $anonymous->setUserData($anonymousData);
 
-        // 3/3. Add new config key, 'phpMyFAQToken', into the faqconfig table
+        // 3/4. Add new config key, 'phpMyFAQToken', into the faqconfig table
         switch($DB["type"]) {
             default:
                 $query[] = 'INSERT INTO '.SQLPREFIX.'faqconfig
@@ -1327,6 +1327,16 @@ if ($step == 5) {
                                 (\'phpMyFAQToken\', \''.md5(uniqid(rand())).'\')';
                 break;
         }
+        
+        // 4/4. Fill the new tables for user and group permissions
+        $query[] = 'INSERT INTO '.SQLPREFIX.'faqcategory_group (category_id) SELECT DISTINCT id FROM '.SQLPREFIX.'faqcategories';
+        $query[] = 'UPDATE '.SQLPREFIX.'faqcategory_group SET group_id = -1 WHERE group_id = 0';
+        $query[] = 'INSERT INTO '.SQLPREFIX.'faqcategory_user (category_id) SELECT DISTINCT id FROM '.SQLPREFIX.'faqcategories';
+        $query[] = 'UPDATE '.SQLPREFIX.'faqcategory_user SET user_id = -1 WHERE user_id = 0';
+        $query[] = 'INSERT INTO '.SQLPREFIX.'faqdata_group (record_id) SELECT DISTINCT id FROM '.SQLPREFIX.'faqdata';
+        $query[] = 'UPDATE '.SQLPREFIX.'faqdata_group SET group_id = -1 WHERE group_id = 0';
+        $query[] = 'INSERT INTO '.SQLPREFIX.'faqdata_user (record_id) SELECT DISTINCT id FROM '.SQLPREFIX.'faqdata';
+        $query[] = 'UPDATE '.SQLPREFIX.'faqdata_user SET user_id = -1 WHERE user_id = 0';
     }
 
     // Always the last step: Update version number
