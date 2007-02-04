@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: category.add.php,v 1.17 2007-02-04 12:46:09 thorstenr Exp $
+* $Id: category.add.php,v 1.18 2007-02-04 15:33:52 thorstenr Exp $
 *
 * Adds a category
 *
@@ -26,19 +26,24 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 
 print "<h2>".$PMF_LANG["ad_categ_new"]."</h2>\n";
 if ($permission["addcateg"]) {
-    $cat = new PMF_Category($LANGCODE);
+    $category = new PMF_Category($LANGCODE);
+    $parent_id = isset($_GET['cat']) ? (int)$_GET['cat'] : 0;
 ?>
     <form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>" method="post">
     <fieldset>
     <legend><?php print $PMF_LANG["ad_categ_new"]; ?></legend>
     <input type="hidden" name="action" value="savecategory" />
     <input type="hidden" name="lang" value="<?php print $LANGCODE; ?>" />
-    <input type="hidden" name="parent_id" value="<?php if (isset($_GET["cat"])) { print $_GET["cat"]; } else { print "0"; } ?>" />
-
+    <input type="hidden" name="parent_id" value="<?php print $parent_id; ?>" />
 <?php
-    if (isset($_GET["cat"])) {
+    if ($parent_id > 0) {
+        $user_allowed   = $category->getPermissions('user', array($parent_id));
+        $group_allowed  = $category->getPermissions('group', array($parent_id));
 ?>
-    <p><?php print $PMF_LANG["msgMainCategory"].": ".$cat->categoryName[$_GET["cat"]]["name"]." (".$languageCodes[strtoupper($cat->categoryName[$_GET["cat"]]["lang"])].")"; ?></p>
+    <input type="hidden" name="userpermission" value="<?php print $user_allowed; ?>" />
+    <input type="hidden" name="grouppermission" value="<?php print $group_allowed; ?>" />
+    
+    <p><?php print $PMF_LANG["msgMainCategory"].": ".$category->categoryName[$parent_id]["name"]." (".$languageCodes[strtoupper($category->categoryName[$parent_id]["lang"])].")"; ?></p>
 <?php
     }
 ?>

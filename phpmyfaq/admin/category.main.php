@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: category.main.php,v 1.29 2006-10-10 16:48:59 thorstenr Exp $
+* $Id: category.main.php,v 1.30 2007-02-04 15:33:52 thorstenr Exp $
 *
 * List all categories in the admin section
 *
@@ -46,14 +46,23 @@ if ($permission['editcateg']) {
     if (isset($_POST['action']) && $_POST['action'] == 'savecategory') {
 
         $parent_id = (int)$_POST['parent_id'];
-
         $category_data = array(
             'lang'          => $db->escape_string($_POST['lang']),
             'name'          => $db->escape_string($_POST['name']),
             'description'   => $db->escape_string($_POST['description']),
             'user_id'       => (int)$_POST['user_id']);
-
-        if ($category->addCategory($category_data, $parent_id)) {
+        
+        $userperm       = isset($_POST['userpermission']) ? 
+                          $db->escape_string($_POST['userpermission']) : 'all';
+        $user_allowed   = ('all' == $userperm) ? -1 : $db->escape_string($_POST['restricted_users']);
+        $groupperm      = isset($_POST['grouppermission']) ? 
+                          $db->escape_string($_POST['grouppermission']) : 'all';
+        $group_allowed  = ('all' == $groupperm) ? -1 : $db->escape_string($_POST['restricted_groups']);
+        
+        $category_id = $category->addCategory($category_data, $parent_id);
+        if ($category_id) {
+            $category->addPermission('user', array($category_id), $user_allowed);
+            $category->addPermission('group', array($category_id), $group_allowed);
             printf('<p>%s</p>', $PMF_LANG['ad_categ_added']);
         } else {
             printf('<p>%s</p>', $db->error());
@@ -64,7 +73,6 @@ if ($permission['editcateg']) {
     if (isset($_POST['action']) && $_POST['action'] == 'updatecategory') {
 
         $parent_id = (int)$_POST['parent_id'];
-
         $category_data = array(
             'id'            => (int)$_POST['id'],
             'lang'          => $db->escape_string($_POST['lang']),
@@ -72,16 +80,29 @@ if ($permission['editcateg']) {
             'name'          => $db->escape_string($_POST['name']),
             'description'   => $db->escape_string($_POST['description']),
             'user_id'       => (int)$_POST['user_id']);
-
+        
+        $userperm       = isset($_POST['userpermission']) ? 
+                          $db->escape_string($_POST['userpermission']) : 'all';
+        $user_allowed   = ('all' == $userperm) ? -1 : $db->escape_string($_POST['restricted_users']);
+        $groupperm      = isset($_POST['grouppermission']) ? 
+                          $db->escape_string($_POST['grouppermission']) : 'all';
+        $group_allowed  = ('all' == $groupperm) ? -1 : $db->escape_string($_POST['restricted_groups']);
+        
         if (!$category->checkLanguage($category_data['id'], $category_data['lang'])) {
-            if ($category->addCategory($category_data, $parent_id, $category_data['id'])) {
+            if ($category->addCategory($category_data, $parent_id, $category_data['id']) &&
+                $category->addPermission('user', array($category_data['id']), $user_allowed) &&
+                $category->addPermission('group', array($category_data['id']), $group_allowed)) {
                 printf('<p>%s</p>', $PMF_LANG['ad_categ_translated']);
             } else {
                 printf('<p>%s</p>', $db->error());
             }
         } else {
             if ($category->updateCategory($category_data)) {
-                   printf('<p>%s</p>', $PMF_LANG['ad_categ_updated']);
+                $category->deletePermission('user', array($category_data['id']));
+                $category->deletePermission('group', array($category_data['id']));
+                $category->addPermission('user', array($category_data['id']), $user_allowed);
+                $category->addPermission('group', array($category_data['id']), $group_allowed);
+                printf('<p>%s</p>', $PMF_LANG['ad_categ_updated']);
             } else {
                 printf('<p>%s</p>', $db->error());
             }
