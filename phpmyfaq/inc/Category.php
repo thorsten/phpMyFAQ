@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Category.php,v 1.31 2007-02-04 19:20:11 thorstenr Exp $
+ * $Id: Category.php,v 1.32 2007-02-04 20:39:19 thorstenr Exp $
  *
  * The main category class
  *
@@ -40,11 +40,11 @@ class PMF_Category
     var $db = null;
     
     /**
-     * Users
+     * User ID
      *
-     * @var array
+     * @var integer
      */
-    var $users = array();
+    var $user = null;
 
     /**
      * Groupd
@@ -121,13 +121,13 @@ class PMF_Category
      * Constructor
      *
      * @param   string  $language
-     * @param   integer $users
-     * @param   integer $groups
+     * @param   integer $user
+     * @param   array   $groups
      * @return  void
      * @access  public
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function PMF_Category ($language = '', $users = null, $groups = null)
+    function PMF_Category ($language = '', $user = null, $groups = null)
     {
         global $db;
         
@@ -135,10 +135,10 @@ class PMF_Category
         $this->db         = &$db;
         $this->categories = array();
         
-        if (is_null($users)) {
-            $this->users  = array(-1);
+        if (is_null($user)) {
+            $this->user  = -1;
         } else {
-            $this->users  = $users;
+            $this->user  = $user;
         }
         if (is_null($groups)) {
             $this->groups = array(-1);
@@ -153,7 +153,8 @@ class PMF_Category
     }
 
     /**
-     * Gets all categories and write them in an array with ordered IDs
+     * Returns all categories with ordered category IDs according to the user
+     * and group permissions
      *
      * @return  array
      * @access  private
@@ -175,13 +176,13 @@ class PMF_Category
             ON
                 fc.id = fu.category_id
             WHERE 
-                ( fu.user_id IN (%s)
+                ( fu.user_id = %d
             OR
                 fg.group_id IN (%s) )",
             SQLPREFIX,
             SQLPREFIX,
             SQLPREFIX,
-            implode(', ', $this->users),
+            $this->user,
             implode(', ', $this->groups));
         if (isset($this->language) && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
             $query .= " AND lang = '".$this->language."'";
