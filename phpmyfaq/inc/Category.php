@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Category.php,v 1.29 2007-02-04 15:33:32 thorstenr Exp $
+ * $Id: Category.php,v 1.30 2007-02-04 17:20:38 thorstenr Exp $
  *
  * The main category class
  *
@@ -9,7 +9,7 @@
  * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author      Rudi Ferrari <bookcrossers@gmx.de>
  * @since       2004-02-16
- * @copyright   (c) 2004-2006 phpMyFAQ Team
+ * @copyright   (c) 2004-2007 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -1507,7 +1507,7 @@ class PMF_Category
             SELECT
                 %s_id AS permission
             FROM
-                %s_faqcategory_%s
+                %sfaqcategory_%s
             WHERE
                 category_id IN (%s)",
             $mode,
