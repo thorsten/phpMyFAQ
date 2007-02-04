@@ -1,29 +1,27 @@
 <?php
 /**
-* $Id: Ibm_db2.php,v 1.4 2006-08-26 07:55:41 matteo Exp $
-*
-* db_db2
-*
-* The db_db2 class provides methods and functions for a IBM DB2 Version 8.2
-* database. This will only work with the PECL extension.
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @author       Helmut Tessarek <tessus@evermeet.cx>
-* @package      db_db2
-* @since        2005-04-16
-*
-* Copyright:    (c) 2006 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * $Id: Ibm_db2.php,v 1.5 2007-02-04 13:51:06 thorstenr Exp $
+ *
+ * db_ibm_db2
+ *
+ * The db_db2 class provides methods and functions for a IBM DB2 Version 8.2
+ * database. This will only work with the PECL extension.
+ *
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author      Helmut Tessarek <tessus@evermeet.cx>
+ * @since       2005-04-16
+ * @copyright   (c) 2005-2007 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 class db_ibm_db2
 {
@@ -110,13 +108,17 @@ class db_ibm_db2
             print "<head>\n";
             print "    <title>phpMyFAQ Error</title>\n";
             print "    <meta http-equiv=\"content-type\" content=\"application/xhtml+xml; charset=utf-8\" />\n";
+            print "    <style type=\"text/css\" media=\"screen\"> /*<![CDATA[*/ <!--\n";
+            print "    @import url(template/style.css);\n";
+            print "    @import url(template/colors.css);\n";
+            print "    --> /*]]>*/ </style>\n";
             print "</head>\n";
             print "<body>\n";
-            print "<p align=\"center\">The connection to the DB2 server could not be established.</p>\n";
-            print "<p align=\"center\">The error message of the DB2 server:<br />".db2_conn_errormsg()."</p>\n";
+            print "<p align=\"center\">The connection to the database server could not be established.</p>\n";
+            print "<p align=\"center\">The error message of the database server:<br />".db2_conn_errormsg()."</p>\n";
             print "</body>\n";
             print "</html>";
-            return false;
+            die();
         }
         return true;
     }

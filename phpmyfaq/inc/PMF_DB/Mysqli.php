@@ -1,28 +1,28 @@
 <?php
 /**
-* $Id: Mysqli.php,v 1.11 2006-08-23 20:57:22 matteo Exp $
-*
-* db_mysqli
-*
-* The db_mysqli class provides methods and functions for a MySQL 4.1.x,
-* 5.0.x and 5.1.x databases.
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @author       David Soria Parra <dsoria@gmx.net>
-* @package      db_mysqli
-* @since        2005-02-21
-* @copyright:   (c) 2006 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * $Id: Mysqli.php,v 1.12 2007-02-04 13:51:06 thorstenr Exp $
+ *
+ * db_mysqli
+ *
+ * The db_mysqli class provides methods and functions for a MySQL 4.1.x,
+ * 5.0.x, 5.1.x, and 5.2.x databases.
+ *
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author      David Soria Parra <dsoria@gmx.net>
+ * @package     db_mysqli
+ * @since       2005-02-21
+ * @copyright   (c) 2005-2007 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 class db_mysqli
 {
@@ -72,13 +72,17 @@ class db_mysqli
             print "<head>\n";
             print "    <title>phpMyFAQ Error</title>\n";
             print "    <meta http-equiv=\"content-type\" content=\"application/xhtml+xml; charset=utf-8\" />\n";
+            print "    <style type=\"text/css\" media=\"screen\"> /*<![CDATA[*/ <!--\n";
+            print "    @import url(template/style.css);\n";
+            print "    @import url(template/colors.css);\n";
+            print "    --> /*]]>*/ </style>\n";
             print "</head>\n";
             print "<body>\n";
-            print "<p align=\"center\">The connection to the MySQL server could not be established.</p>\n";
-            print "<p align=\"center\">The error message of the MySQL server:<br />".mysqli_connect_error()."</p>\n";
+            print "<p align=\"center\">The connection to the database server could not be established.</p>\n";
+            print "<p align=\"center\">The error message of the database server:<br />".mysqli_connect_error()."</p>\n";
             print "</body>\n";
             print "</html>";
-            return false;
+            die();
         }
         return true;
     }

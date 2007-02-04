@@ -1,26 +1,26 @@
 <?php
 /**
-* db_pgsql
-*
-* The db_pgsql class provides methods and functions for a PostgreSQL
-* database.
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @author       Tom Rochester <tom.rochester@gmail.com>
-* @package      db_pgsql
-* @since        2003-02-24
-* @copyright    (c) 2003-2006 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * db_pgsql
+ *
+ * The db_pgsql class provides methods and functions for a PostgreSQL
+ * database.
+ *
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author      Tom Rochester <tom.rochester@gmail.com>
+ * @package     db_pgsql
+ * @since       2003-02-24
+ * @copyright   (c) 2003-2007 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 class db_pgsql
 {
@@ -74,14 +74,18 @@ class db_pgsql
             print "<head>\n";
             print "    <title>phpMyFAQ Error</title>\n";
             print "    <meta http-equiv=\"content-type\" content=\"application/xhtml+xml; charset=utf-8\" />\n";
+            print "    <style type=\"text/css\" media=\"screen\"> /*<![CDATA[*/ <!--\n";
+            print "    @import url(template/style.css);\n";
+            print "    @import url(template/colors.css);\n";
+            print "    --> /*]]>*/ </style>\n";
             print "</head>\n";
             print "<body>\n";
-            print "<p align=\"center\">The connection to the PostgreSQL server could not be established.</p>\n";
-            print "<p align=\"center\">The error message of the PostgresSQL server:<br />".pg_last_error($this->conn)."</p>\n";
+            print "<p align=\"center\">The connection to the database server could not be established.</p>\n";
+            print "<p align=\"center\">The error message of the database server:<br />".pg_last_error($this->conn)."</p>\n";
             print "</body>\n";
             print "</html>";
-            return false;
-            }
+            die();
+        }
         return true;
     }
 

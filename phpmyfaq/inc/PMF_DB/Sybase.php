@@ -1,28 +1,27 @@
 <?php
 /**
-* $Id: Sybase.php,v 1.8 2006-08-24 19:39:52 matteo Exp $
-*
-* db_sybase
-*
-* The db_sybase class provides methods and functions for a Sybase database
-*
-* @author       Adam Greene <phpmyfaq@skippy.fastmail.fm>
-* @package      db_sybase
-* @since        2004-12-10
-* @version      2004-12-10
-*
-* Copyright:    (c) 2003-2006 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * $Id: Sybase.php,v 1.9 2007-02-04 13:51:06 thorstenr Exp $
+ *
+ * db_sybase
+ *
+ * The db_sybase class provides methods and functions for a Sybase database
+ *
+ * @author      Adam Greene <phpmyfaq@skippy.fastmail.fm>
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package     db_sybase
+ * @since       2004-12-10
+ * @copyright   (c) 2004-2007 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 class db_sybase
 {
@@ -57,11 +56,6 @@ class db_sybase
      * @since   2003-02-24
      */
     function db_sybase()
-    {
-        return $this->__construct();
-    }
-
-    function __construct()
     {
         if (function_exists('sybase_min_client_severity')) {
             sybase_min_client_severity(100);
@@ -103,13 +97,17 @@ class db_sybase
             print "<head>\n";
             print "    <title>phpMyFAQ Error</title>\n";
             print "    <meta http-equiv=\"content-type\" content=\"application/xhtml+xml; charset=utf-8\" />\n";
+            print "    <style type=\"text/css\" media=\"screen\"> /*<![CDATA[*/ <!--\n";
+            print "    @import url(template/style.css);\n";
+            print "    @import url(template/colors.css);\n";
+            print "    --> /*]]>*/ </style>\n";
             print "</head>\n";
             print "<body>\n";
-            print "<p align=\"center\">The connection to the Sybase server could not be established.</p>\n";
-            print "<p align=\"center\">The error message of the Sybase server:<br />".error()."</p>\n";
+            print "<p align=\"center\">The connection to the database server could not be established.</p>\n";
+            print "<p align=\"center\">The error message of the database server:<br />".error()."</p>\n";
             print "</body>\n";
             print "</html>";
-            return FALSE;
+            die();
         }
         return @sybase_select_db($db, $this->conn);
     }

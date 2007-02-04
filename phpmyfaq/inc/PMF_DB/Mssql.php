@@ -1,28 +1,28 @@
 <?php
 /**
-* $Id: Mssql.php,v 1.10 2006-08-26 07:55:41 matteo Exp $
-*
-* db_mssql
-*
-* The db_mssql class provides methods and functions for a Microsoft SQL Server
-* database.
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @author       Daniel Hoechst <dhoechst@petzl.com>
-* @package      db_mssql
-* @since        2005-01-11
-* @copyright    (c) 2006 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * $Id: Mssql.php,v 1.11 2007-02-04 13:51:06 thorstenr Exp $
+ *
+ * db_mssql
+ *
+ * The db_mssql class provides methods and functions for a Microsoft SQL Server
+ * database.
+ *
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author      Daniel Hoechst <dhoechst@petzl.com>
+ * @package     db_mssql
+ * @since       2005-01-11
+ * @copyright   (c) 2005-2007 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 class db_mssql
 {
@@ -72,14 +72,18 @@ class db_mssql
             print "<head>\n";
             print "    <title>phpMyFAQ Error</title>\n";
             print "    <meta http-equiv=\"content-type\" content=\"application/xhtml+xml; charset=utf-8\" />\n";
+            print "    <style type=\"text/css\" media=\"screen\"> /*<![CDATA[*/ <!--\n";
+            print "    @import url(template/style.css);\n";
+            print "    @import url(template/colors.css);\n";
+            print "    --> /*]]>*/ </style>\n";
             print "</head>\n";
             print "<body>\n";
-            print "<p align=\"center\">The connection to the MS SQL server could not be established.</p>\n";
-            print "<p align=\"center\">The error message of the MS SQL server:<br />".mssql_get_last_message()."</p>\n";
+            print "<p align=\"center\">The connection to the database server could not be established.</p>\n";
+            print "<p align=\"center\">The error message of the database server:<br />".mssql_get_last_message()."</p>\n";
             print "</body>\n";
             print "</html>";
-            return false;
-            }
+            die();
+        }
         return mssql_select_db($db, $this->conn);
     }
 

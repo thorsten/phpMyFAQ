@@ -1,30 +1,29 @@
 <?php
 /**
-* $Id: Mysql.php,v 1.10 2006-08-23 20:57:22 matteo Exp $
-*
-* db_mysql
-*
-* The db_mysql class provides methods and functions for a MySQL 4.0.x
-* and higher database.
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @author       Meikel Katzengreis <meikel@katzengreis.com>
-* @author       Tom Rochester <tom.rochester@gmail.com>
-* @package      db_mysql
-* @since        2003-02-24
-*
-* Copyright:    (c) 2003-2006 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * $Id: Mysql.php,v 1.11 2007-02-04 13:51:06 thorstenr Exp $
+ *
+ * db_mysql
+ *
+ * The db_mysql class provides methods and functions for a MySQL 4.0.x
+ * and higher database.
+ *
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author      Meikel Katzengreis <meikel@katzengreis.com>
+ * @author      Tom Rochester <tom.rochester@gmail.com>
+ * @package     db_mysql
+ * @since       2003-02-24
+ * @copyright   (c) 2003-2007 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 class db_mysql
 {
@@ -74,13 +73,17 @@ class db_mysql
             print "<head>\n";
             print "    <title>phpMyFAQ Error</title>\n";
             print "    <meta http-equiv=\"content-type\" content=\"application/xhtml+xml; charset=utf-8\" />\n";
+            print "    <style type=\"text/css\" media=\"screen\"> /*<![CDATA[*/ <!--\n";
+            print "    @import url(template/style.css);\n";
+            print "    @import url(template/colors.css);\n";
+            print "    --> /*]]>*/ </style>\n";
             print "</head>\n";
             print "<body>\n";
-            print "<p align=\"center\">The connection to the MySQL server could not be established.</p>\n";
-            print "<p align=\"center\">The error message of the MySQL server:<br />".mysql_error()."</p>\n";
+            print "<p align=\"center\">The connection to the database server could not be established.</p>\n";
+            print "<p align=\"center\">The error message of the database server:<br />".mysql_error()."</p>\n";
             print "</body>\n";
             print "</html>";
-            return false;
+            die();
         }
         return mysql_select_db($db, $this->conn);
     }
