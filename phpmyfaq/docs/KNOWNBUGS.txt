@@ -1,4 +1,4 @@
-$Id: KNOWNBUGS.txt,v 1.5 2007-01-22 21:18:37 thorstenr Exp $
+$Id: KNOWNBUGS.txt,v 1.6 2007-02-04 11:48:53 thorstenr Exp $
 
 MISSING FEATURES in phpMyFAQ 2.0.0-beta
 
@@ -20,3 +20,5 @@ KNOWN BUGS AND ISSUES in phpMyFAQ 2.0.0-beta
 
 - update from 2.0.0-alpha to 2.0.0-alpha fails
 - IBM DB2 support untested
+- Oracle support untested
+- Interbase/Firebird support untested

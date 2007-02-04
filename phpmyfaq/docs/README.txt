@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.65 2007-01-22 21:18:37 thorstenr Exp $
+$Id: README.txt,v 1.66 2007-02-04 11:48:53 thorstenr Exp $
 
 phpMyFAQ 2.0.0-beta
 Codename "Prometheus"
@@ -12,6 +12,8 @@ Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 Changes since 2.0.0-alpha:
 - added OpenSearch support (Thorsten)
 - added "submit translation" link (Matteo)
+- added experimental support for Oracle (Thorsten)
+- added experimental support for Interbase/Firebird (Thorsten)
 - updated Arabic translation (Ahmed Shalaby)
 - fixed tons of bugs (Matteo, Thorsten)
 
@@ -37,6 +39,8 @@ Version 2.0.0-beta - 2007-
 - added DiggIt! link (Thorsten)
 - added Microsummaries (Matteo)
 - added OpenSearch support (Thorsten)
+- added experimental support for Oracle (Thorsten)
+- added experimental support for Interbase/Firebird (Thorsten)
 - improved export functions (Matteo)
 - improved URL rewrite functions (Matteo)
 - improved category management (Thorsten, Rudi Ferrari)
