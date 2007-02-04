@@ -1,12 +1,12 @@
 <?php
 /**
-* $Id: category.add.php,v 1.19 2007-02-04 17:19:37 thorstenr Exp $
+* $Id: category.add.php,v 1.20 2007-02-04 17:20:13 thorstenr Exp $
 *
 * Adds a category
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-12-20
-* @copyright    (c) 2003-2006 phpMyFAQ Team
+* @copyright    (c) 2003-2007 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
