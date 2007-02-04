@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.82 2007-01-21 11:43:34 thorstenr Exp $
+* $Id: index.php,v 1.83 2007-02-04 19:06:23 thorstenr Exp $
 *
 * This is the main public frontend page of phpMyFAQ. It detects the browser's
 * language, gets all cookie, post and get informations and includes the
@@ -135,12 +135,17 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'logout' && isset($auth
 }
 
 //
-// Get current user id - default: -1 (anonymous user)
+// Get current user and group id - default: -1
 //
 if (isset($user) && is_object($user)) {
-    $current_user = $user->getUserId();
+    $current_user   = $user->getUserId();
+    $current_groups = $user->perm->getUserGroups($current_user);
+    if (0 == count($current_groups)) {
+        $current_groups = array(-1);
+    }
 } else {
-    $current_user = -1;
+    $current_user   = -1;
+    $current_groups = array(-1);
 }
 
 //
@@ -206,7 +211,7 @@ $faq = new PMF_Faq($db, $lang);
 //
 // Create a new Category object
 //
-$tree = new PMF_Category($LANGCODE);
+$category = new PMF_Category($LANGCODE, array($current_user), $current_groups);
 
 //
 // Create a new Tags object
@@ -250,22 +255,22 @@ if (isset($_GET["cat"])) {
 }
 $cat_from_id = -1;
 if (is_numeric($id) && $id > 0) {
-    $cat_from_id = $tree->getCategoryIdFromArticle($id);
+    $cat_from_id = $category->getCategoryIdFromArticle($id);
 }
 if ($cat_from_id != -1 && $cat == 0) {
     $cat = $cat_from_id;
 }
-$tree->transform(0);
-$tree->collapseAll();
+$category->transform(0);
+$category->collapseAll();
 if ($cat != 0) {
-    $tree->expandTo($cat);
+    $category->expandTo($cat);
 }
 if (   isset($cat)
     && ($cat != 0)
     && ($id == '')
-    && isset($tree->categoryName[$cat]['name'])
+    && isset($category->categoryName[$cat]['name'])
     ) {
-    $title = ' - '.$tree->categoryName[$cat]['name'];
+    $title = ' - '.$category->categoryName[$cat]['name'];
 }
 
 //
@@ -336,7 +341,7 @@ $main_template_vars = array(
     'action'                => $action,
     "dir"                   => $PMF_LANG["dir"],
     "msgCategory"           => $PMF_LANG["msgCategory"],
-    "showCategories"        => $tree->printCategories($cat),
+    "showCategories"        => $category->printCategories($cat),
     "searchBox"             => $PMF_LANG["msgSearch"],
     "languageBox"           => $PMF_LANG["msgLangaugeSubmit"],
     "writeLangAdress"       => $writeLangAdress,
