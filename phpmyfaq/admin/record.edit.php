@@ -1,22 +1,22 @@
 <?php
 /**
-* $Id: record.edit.php,v 1.56 2006-12-29 22:53:28 matteo Exp $
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @since        2003-02-23
-* @license      Mozilla Public License 1.1
-* @copyright    (c) 2001-2006 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * $Id: record.edit.php,v 1.57 2007-02-10 21:52:35 thorstenr Exp $
+ *
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since       2003-02-23
+ * @license     Mozilla Public License 1.1
+ * @copyright   (c) 2003-2007 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
@@ -72,7 +72,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
         $faqData['email']       = $_REQUEST["email"];
         $faqData['comment']     = $_REQUEST["comment"];
         $faqData['solution_id'] = (int)$_REQUEST['solution_id'];
-        $faqData['revision_id'] = isset($_REQUEST['revision_id']) ? $_REQUEST['revision_id'] : 0;
+        $faqData['revision_id'] = isset($_REQUEST['revision_id']) ? (int)$_REQUEST['revision_id'] : 0;
         $tags                   = $_REQUEST["tags"];
         $changed                = $_REQUEST["changed"];
         if (isset($_REQUEST['dateStart'])) {
@@ -112,6 +112,25 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     } elseif (isset($faqData['revision_id'])) {
         $revisionid_selected = $faqData['revision_id'];
     }
+    
+    // Permissions
+    $user_permission = $faq->getPermission('user', array($faqData['id']));
+    if ($user_permission[0] == -1) {
+        $all_users = true;
+        $restricted_users = false;
+    } else {
+        $all_users = false;
+        $restricted_users = true;
+    }
+
+    $group_permission = $faq->getPermission('group', array($faqData['id']));
+    if ($group_permission[0] == -1) {
+        $all_groups = true;
+        $restricted_groups = false;
+    } else {
+        $all_groups = false;
+        $restricted_groups = true;
+    }
 
     print '<h2>'.$PMF_LANG["ad_entry_edit_1"];
     if (0 != $faqData['id']) {
@@ -138,14 +157,12 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     <br />
 <?php
         }
-
         if (isset($revisionid_selected) && isset($faqData['revision_id']) && $revisionid_selected != $faqData['revision_id']) {
             $faq->language = $faqData['lang'];
             $faqData = $faq->getRecord($faqData['id'], $revisionid_selected, true);
             $tags = implode(' ', $tagging->getAllTagsById($faqData['id']));
         }
     }
-
 ?>
 
     <form style="float: left;" action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;action=<?php print $url_variables; ?>" method="post">
@@ -266,14 +283,13 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 ?>
 
     <label class="left" for="userpermission"><?php print $PMF_LANG['ad_entry_userpermission']; ?></label>
-    <input type="radio" name="userpermission" class="active" value="all"<?php print isset($userpermission_all) ? $userpermission_all : ''; ?>/> <?php print $PMF_LANG['ad_entry_all_users']; ?> <input type="radio" name="userpermission" class="active" value="restricted"<?php print isset($userpermission_restricted) ? $userpermission_restricted : ''; ?>/> <?php print $PMF_LANG['ad_entry_restricted_users']; ?> <select name="restricted_users" size="1"><?php print $user->getAllUserOptions(1); ?></select><br />
-
+    <input type="radio" name="userpermission" class="active" value="all" <?php print ($all_users ? 'checked="checked"' : ''); ?>/> <?php print $PMF_LANG['ad_entry_all_users']; ?> <input type="radio" name="userpermission" class="active" value="restricted" <?php print ($restricted_users ? 'checked="checked"' : ''); ?>/> <?php print $PMF_LANG['ad_entry_restricted_users']; ?> <select name="restricted_users" size="1"><?php print $user->getAllUserOptions($user_permission[0]); ?></select><br />
+    
 <?php
     if ($groupSupport) {
 ?>    
     <label class="left" for="grouppermission"><?php print $PMF_LANG['ad_entry_grouppermission']; ?></label>
-    <input type="radio" name="grouppermission" class="active" value="all"<?php print isset($grouppermission_all) ? $grouppermission_all : ''; ?>/> <?php print $PMF_LANG['ad_entry_all_groups']; ?> <input type="radio" name="grouppermission" class="active" value="restricted"<?php print isset($grouppermission_restricted) ? $grouppermission_restricted : ''; ?>/> <?php print $PMF_LANG['ad_entry_restricted_groups']; ?> <select name="restricted_groups" size="1"><?php print $user->getAllUserOptions(1); ?></select><br />
-
+    <input type="radio" name="grouppermission" class="active" value="all" <?php print ($all_groups ? 'checked="checked"' : ''); ?>/> <?php print $PMF_LANG['ad_entry_all_groups']; ?> <input type="radio" name="grouppermission" class="active" value="restricted" <?php print ($restricted_groups ? 'checked="checked"' : ''); ?>/> <?php print $PMF_LANG['ad_entry_restricted_groups']; ?> <select name="restricted_groups" size="1"><?php print $user->perm->getAllGroupsOptions($group_permission); ?></select><br />
 <?php
     }
 ?>
