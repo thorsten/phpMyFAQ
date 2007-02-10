@@ -1,12 +1,23 @@
 <?php
-
 /**
+ * $Id: PermMedium.php,v 1.22 2007-02-10 21:37:12 thorstenr Exp $
+ *
  * The medium permission class provides group rights.
  *
- * @author Lars Tiedemann <php@larstiedemann.de>
- * @package PMF
- * @since 2005-09-18
- * @version 0.1
+ * @since       2005-09-18
+ * @author      Lars Tiedemann <php@larstiedemann.de>
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright   (c) 2005-2007 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
  */
 
 /* user defined includes */
@@ -144,32 +155,6 @@ class PMF_PermMedium
         if ($this->checkUserGroupRight($user_id, $right) or $this->checkUserRight($user_id, $right))
             return true;
         return false;
-    }
-
-    /**
-     * PMF_PermMedium
-     *
-     * Constructor.
-     *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @return void
-     */
-    function PMF_PermMedium()
-    {
-    }
-
-    /**
-     * __destruct
-     *
-     * Destructor.
-     *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @return void
-     */
-    function __destruct()
-    {
     }
 
     /**
@@ -647,6 +632,30 @@ class PMF_PermMedium
         }
 
         return $result;
+    }
+
+    /**
+     * Get all groups in <option> tags
+     *
+     * @param   array   $groups
+     * @return  string
+     * @access  public
+     * @since   2007-02-10
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function getAllGroupsOptions($groups = -1)
+    {
+        $options = '';
+        $allGroups = $this->getAllGroups();
+        foreach ($allGroups as $group_id) {
+            if (-1 != $group_id) {
+                $options .= sprintf('<option value="%d"%s>%s</option>',
+                    $group_id,
+                    ((in_array($group_id, $groups)) ? ' selected="selected"' : ''),
+                    $this->getGroupName($group_id));
+            }
+        }
+        return $options;
     }
 
     /**
