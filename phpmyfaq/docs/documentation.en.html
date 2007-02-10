@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<!-- $Id: documentation.en.html,v 1.22 2006-08-12 10:16:52 thorstenr Exp $ -->
+<!-- $Id: documentation.en.html,v 1.23 2007-02-10 00:10:14 thorstenr Exp $ -->
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<title>Documentation for phpMyFAQ 2.0.x</title>
@@ -26,7 +26,6 @@
             <li><a href="#1a">License</a></li>
             <li><a href="#1b">Support</a></li>
             <li><a href="#1c">Copyright</a></li>
-            <li><a href="#1d">Donations</a></li>
         </ol></li>
         <li><strong><a href="#2">Installation</a></strong>
         <ol class="alpha">
@@ -56,20 +55,14 @@
         <li><strong><a href="#4">Administration</a></strong>
         <ol class="alpha"">
             <li><a href="#4a">User Administration</a></li>
-            <li><a href="#4b">Category Administration</a></li>
-            <li><a href="#4c">Record Administration</a></li>
-            <li><a href="#4d">News Administration</a></li>
-            <li><a href="#4e">Edit open questions</a></li>
-            <li><a href="#4f">Rating Statistics</a></li>
-            <li><a href="#4g">Cookies</a></li>
-            <li><a href="#4h">View Sessions</a></li>
-            <li><a href="#4i">View Adminlog</a></li>
-            <li><a href="#4j">Change passwords</a></li>
-            <li><a href="#4k">Edit configuration</a></li>
-            <li><a href="#4l">Backups</a></li>
-            <li><a href="#4m">Export your FAQ</a></li>
-            <li><a href="#4n">Firefox search plugin</a></li>
-            <li><a href="#4o">Logout</a></li>
+            <li><a href="#4b">Group Administration</a></li>
+            <li><a href="#4c">Category Administration</a></li>
+            <li><a href="#4d">Record Administration</a></li>
+            <li><a href="#4e">News Administration</a></li>
+            <li><a href="#4f">Statistics</a></li>
+            <li><a href="#4g">Exports</a></li>
+            <li><a href="#4h">Backup</a></li>
+            <li><a href="#4i">Configuration</a></li>
         </ol></li>
         <li><strong><a href="#5">Customising phpMyFAQ 2.0.x</a></strong>
         <ol class="alpha"">
@@ -82,7 +75,7 @@
 
     <hr style="width: 90%; height: 1px;"  />
     <p><a name="1"></a><strong>1. Introduction</strong></p>
-    <p>phpMyFAQ is a multilingual, completely database-driven FAQ-system. It supports various databases to store all data, PHP 4.1.0 (or higher) is needed in order to access this data. phpMyFAQ also offers a multi-language Content Management-System with a WYSIWYG editor and an Image Manager, flexible multi-user support with LDAP support, a wiki-like revision feature, a news-system, user-tracking, language modules, enhanced automatic content negotiation, templates, extensive XML-support, PDF-support, a backup-system, a dynamic sitemap, built-in spam protection systems, and an easy to use installation script.</p>
+    <p>phpMyFAQ is a multilingual, completely database-driven FAQ-system. It supports various databases to store all data, PHP 4.3.0 (or higher) is needed in order to access this data. phpMyFAQ also offers a multi-language Content Management-System with a WYSIWYG editor and an Image Manager, flexible multi-user support with user and group based permissions on categories and records, a wiki-like revision feature, a news system, user-tracking, language modules, enhanced automatic content negotiation, templates, extensive XML-support, PDF-support, a backup-system, a dynamic sitemap, related articles, tagging, RSS feeds, built-in spam protection systems, LDAP support, and an easy to use installation script.</p>
     <p>This documentation should help you with installing and administrating phpMyFAQ.</p>
     <p><a href="#top">back to top</a></p>
 
@@ -111,24 +104,7 @@
 
     <hr style="width: 90%; height: 1px;"  />
     <p><a name="1c"></a><strong>1.c. Copyright</strong></p>
-    <p>&copy; 2001-2006 by Thorsten Rinne and phpMyFAQ Team under the <a href="http://www.mozilla.org/MPL/MPL-1.1.html">Mozilla Public License</a>. All rights reserved.</p>
-    <p><a href="#top">back to top</a></p>
-
-
-    <hr style="width: 90%; height: 1px;"  />
-    <p><a name="1d"></a><strong>1.d. Donations</strong></p>
-    <p> If you find phpMyFAQ useful and want to express your appreciation, have a look at Thorsten's <a href="http://www.amazon.de/exec/obidos/registry/UQQJEX7BCHPZ/">amazon.de Wishlist</a>. We also accept online donations through PayPal. Please use the button below to make a donation online:</p>
-    <p align="center">
-    <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-    <input type="hidden" name="cmd" value="_xclick" />
-    <input type="hidden" name="business" value="thorsten@phpmyfaq.de" />
-    <input type="hidden" name="item_name" value="phpMyFAQ" />
-    <input type="hidden" name="no_note" value="1" />
-    <input type="hidden" name="currency_code" value="EUR" />
-    <input type="hidden" name="tax" value="0" />
-    <input type="image" src="https://www.paypal.com/en_US/i/btn/x-click-but21.gif" name="submit" alt="Make payments with PayPal - it's fast, free and secure!" />
-    </form>
-    </p>
+    <p>&copy; 2001-2007 by Thorsten Rinne and phpMyFAQ Team under the <a href="http://www.mozilla.org/MPL/MPL-1.1.html">Mozilla Public License</a>. All rights reserved.</p>
     <p><a href="#top">back to top</a></p>
 
 
@@ -139,20 +115,22 @@
 	<ul type="square">
         <li><a href="http://www.php.net">PHP</a>
         <ul type="circle">
-            <li>from version 4.3.0 (recommended: PHP 4.4.3 or PHP 5.1.4)</li>
+            <li>from version 4.3.0 (recommended: PHP 4.4.5 or PHP 5.2.1)</li>
             <li>register_globals = off (recommended)</li>
             <li>safe_mode = off</li>
         </ul></li>
         <li>Webserver (<a href="http://httpd.apache.org">Apache</a> 1.3.x/2.0.x/2.2.x or <a href="http://www.lighttpd.net">lighttpd</a> or <a href="http://www.microsoft.com/">IIS</a>)</li>
         <li>Database server
         <ul>
-            <li><a href="http://www.mysql.com">MySQL</a> 4.0.x, 4.1.x, 5.0.x, 5.1.x (recommended: 4.1.x)</li>
+            <li><a href="http://www.mysql.com">MySQL</a> 4.0.x, 4.1.x, 5.0.x, 5.1.x (recommended: 5.0.x)</li>
             <li><a href="http://www.mysql.com">MySQL</a> 4.1.x, 5.0.x, 5.1.x with the PHP5 MySQLi extension (recommended: 5.0.x)</li>
             <li><a href="http://www.postgresql.org">PostgreSQL</a> 7.2.x, 7.3.x, 7.4.x, 8.0.x, 8.1.x (recommended: 8.1.x)</li>
             <li><a href="http://www.sybase.com">Sybase</a></li>
             <li><a href="http://www.microsoft.com/sql/">Microsoft SQL Server</a> 2000, 2005</li>
             <li><a href="http://www-306.ibm.com/software/data/db2/">IBM DB2 Universal Database</a> 8.2.x, 9.1.x, <a href="http://www-306.ibm.com/software/data/cloudscape/">IBM Cloudscape</a>, and <a href="http://db.apache.org/derby/">Apache Derby</a></li>
             <li><a href="http://www.sqlite.org">SQLite</a> with PHP5</li>
+            <li>Oracle with PHP5</li>
+            <li>Interbase/Firebird</li>
             <li><a href="http://www.mysql.com/products/maxdb/">MaxDB</a> 7.5 or later (experimental)</li>
         </ul></li>
         <li>correctly set: access permissions, owner, group</li>
@@ -163,7 +141,7 @@
     <pre>&lt;?php phpinfo(); ?&gt;</pre>
     <p>Upload this file to your webspace and open it using your browser.  The installation-script  checks which version of PHP is installed on your server. Should you not meet the requirements, you cannot start the installation process.</p>
     <p>In case you have PHP below 4.3.0 or PHP 6.0.0-dev installed you cannot use phpMyFAQ.</p>
-    <p>phpMyFAQ uses a WYSIWYG online editor. It uses a non-standard feature based on JavaScript implemented in Mozilla Firefox 0.7+ (any platform), Mozilla 1.3+ (any platform), Opera 9.0+ (any platform) and Internet Explorer 5.5+ for Windows, therefore the editor will only work in one of these browsers. You have to enable JavaScript. Safari, and Konquerer aren't supported by this time but future versions may work. </p>
+    <p>phpMyFAQ uses a WYSIWYG online editor. It uses a non-standard feature based on JavaScript implemented in Mozilla Firefox 0.7+ (any platform), Mozilla 1.3+ (any platform), Opera 9.0+ (any platform) and Internet Explorer 5.5+ for Windows, therefore the editor will only work in one of these browsers. You have to enable JavaScript for the Ajax based functions as well.</p>
     <p><a href="#top">back to top</a></p>
 
 
@@ -173,9 +151,9 @@
     <p>You can modify the layout of phpMyFAQ using templates. A description of how this is done can be found <a href="#5">below</a>. Copy all unzipped files to your webserver in a directory using FTP. A good choice would be the directory <strong>faq/</strong>.<br />
     <strong>Important:</strong><br />
     Writing permission for your script is needed in this directory to be able to configure the files <strong>data.php</strong> and <strong>config.php</strong> during installation. This is the case if you're running PHP as CGI or as mod_php with disabled safe-mode. The installation script will stop when your webserver isn't configured as needed.</p>
-    <p>It might help to set chmod 777 to the whole phpMyFAQ directory to avoid problems during the installation. If you're running a very restrictive mod_php installation you should keep the chmod 777 for the following files and directories even after the succesful installation:</p>
+    <p>It might help to set chmod 766 to the whole phpMyFAQ directory to avoid problems during the installation. If you're running a very restrictive mod_php installation you should keep the chmod 766 for the following files and directories even after the succesful installation:</p>
     <ul>
-      <li>the files <strong>data.php</strong> and <strong>config.php</strong> in the directory <strong>inc/</strong> </li>
+      <li>the files <strong>data.php</strong> in the directory <strong>inc/</strong> </li>
       <li>the directory <strong>attachments/</strong></li>
       <li>the directory <strong>data/</strong></li>
       <li>the directory <strong>images/</strong></li>
@@ -218,7 +196,7 @@
 
     <hr style="width: 90%; height: 1px;" />
     <p><strong><a name="2e"></a>2.e. Notes regarding the search-function</strong></p>
-    <p>The boolean fulltext-search will only work with MySQL and if there are some entries in the database (5 or more). The term you are looking for should also not be in more than 50% of all your entries, or it will automatically be excluded from search. This is not a bug, but rather a feature of MySQL. Please remember that you need MySQL 4.1 to use the boolean fulltext search for languages like Arabic, Chinese, Hebrew, Korean or Japanese.</p>
+    <p>The boolean fulltext-search will only work with MySQL and if there are some entries in the database (5 or more). The term you are looking for should also not be in more than 50% of all your entries, or it will automatically be excluded from search. This is not a bug, but rather a feature of MySQL. Please remember that you need MySQL 4.1 or later to use the boolean fulltext search for languages like Arabic, Chinese, Hebrew, Korean or Japanese.</p>
     <p><a href="#top">back to top</a></p>
 
 
@@ -276,7 +254,7 @@
 
     <hr style="width: 90%; height: 1px;" />
     <p><strong><a name="2k"></a>2.k. Firefox and IE7 search plugins</strong></p>
-    <p>phpMyFAQ 2.0.x provides search plugins for Mozilla Firefox and Microsoft Internet Explorer 7. This plugins can be created in the admin section and every user in the frontend can install it. With an installed search plugin you can search through the phpMyFAQ installation with the search box in upper right corner of Mozilla Firefox or Microsoft Internet Explorer 7. We recommend to use Mozilla Firefox. For further informations about Mozilla Firefox, please visit the homepage of the <a href="http://www.mozilla.org/products/firefox/">Mozilla Foundation</a>.</p>
+    <p>phpMyFAQ 2.0.x provides search plugins for Mozilla Firefox and Microsoft Internet Explorer 7. This plugins can be created in the admin section and every user in the frontend can install it. With an installed search plugin you can search through the phpMyFAQ installation with the search box in upper right corner of Mozilla Firefox or Microsoft Internet Explorer 7.</p>
     <p><a href="#top">back to top</a></p>
 
 
@@ -288,7 +266,7 @@
 
     <hr style="width: 90%; height: 1px;" />
     <p><strong><a name="2m"></a>2.m. Spam protection</strong></p>
-    <p>phpMyFAQ 1.6.0 and later perform these three checks on public forms:</p>
+    <p>phpMyFAQ 2.0 performs these three checks on public forms:</p>
     <ol>
         <li>Check against IP/Network address</li>
         <li>Check against banned words</li>
@@ -313,7 +291,7 @@
 
     <hr style="width: 90%; height: 1px;"  />
     <p><a name="3a"></a><strong>3.a. Upgrading from phpMyFAQ 1.4.x</strong></p>
-    <p>Upgrading from 1.4.x to 2.0.x is a really major upgrade. Please make a full backup before you run the upgrade! Nevertheless the update from phpMyFAQ 2.0.x to the current release is fairly simple. First you have to delete all files <strong>except</strong>:</p>
+    <p>Upgrading from 1.4.x to 2.0.x is a really major upgrade. Please make a full backup before you run the upgrade! Nevertheless the update from phpMyFAQ 1.4.x to the current release is fairly simple. First you have to delete all files <strong>except</strong>:</p>
     <ul>
         <li>the files <strong>data.php</strong> and <strong>config.php</strong> in the directory <strong>inc/</strong> </li>
         <li>the directory <strong>attachments/</strong></li>
@@ -330,7 +308,7 @@
 
     <hr style="width: 90%; height: 1px;"  />
     <p><a name="3b"></a><strong>3.b. Upgrading from phpMyFAQ 1.5.x</strong></p>
-    <p>Upgrading from 1.5.x to 2.0.x is a really major upgrade. Please make a full backup before you run the upgrade! Nevertheless the update from phpMyFAQ 2.0.x to the current release is fairly simple. First you have to delete all files <strong>except</strong>:</p>
+    <p>Upgrading from 1.5.x to 2.0.x is a really major upgrade. Please make a full backup before you run the upgrade! Nevertheless the update from phpMyFAQ 1.5.x to the current release is fairly simple. First you have to delete all files <strong>except</strong>:</p>
     <ul>
         <li>the files <strong>data.php</strong> and <strong>config.php</strong> in the directory <strong>inc/</strong> </li>
         <li>all files in the <strong>template/</strong> directory</li>
@@ -344,7 +322,7 @@
 
     <hr style="width: 90%; height: 1px;"  />
     <p><a name="3c"></a><strong>3.c. Upgrading from phpMyFAQ 1.6.x</strong></p>
-    <p>Upgrading from 1.6.x to 2.0.x is a really major upgrade. Please make a full backup before you run the upgrade! Nevertheless the update from phpMyFAQ 2.0.x to the current release is fairly simple. First you have to delete all files <strong>except</strong>:</p>
+    <p>Upgrading from 1.6.x to 2.0.x is a really major upgrade. Please make a full backup before you run the upgrade! Nevertheless the update from phpMyFAQ 1.6.x to the current release is fairly simple. First you have to delete all files <strong>except</strong>:</p>
     <ul>
         <li>the files <strong>data.php</strong> and <strong>config.php</strong> in the directory <strong>inc/</strong> </li>
         <li>all files in the <strong>template/</strong> directory</li>
@@ -378,41 +356,22 @@
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><a name="3d"></a><strong>3.d. Upgrading phpMyFAQ 1.6.x</strong></p>
-    <p>Updating phpMyFAQ 1.6.x is fairly simple. Via FTP copy all new files from the phpMyFAQ package <strong>except</strong>:</p>
+    <p><a name="3d"></a><strong>3.d. Upgrading phpMyFAQ 2.0.x</strong></p>
+    <p>Updating phpMyFAQ 2.0.x is fairly simple. Via FTP copy all new files from the phpMyFAQ package <strong>except</strong>:</p>
     <ul>
-        <li>the files <strong>data.php</strong> and <strong>config.php</strong> in the directory <strong>inc/</strong> </li>
+        <li>the files <strong>data.php</strong> in the directory <strong>inc/</strong> </li>
         <li>all files in the <strong>template/</strong> directory</li>
     </ul>
     <p>Open the following URL in your browser:</p>
     <pre>http://www.example.com/faq/install/update.php</pre>
     <p>Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be updated.</p>
-    <p>If you update from a version prior to phpMyFAQ 1.6.1 you have to add the following string into the file <strong>template/search.tpl</strong>:</p>
-    <pre>{msgMSIEPluginTitle}</pre>
-    <p>You also have to change in index.tpl the following code from</p>
-    <pre>
-&lt;form action="{writeSendAdress}" method="post"&gt;
-&lt;label for="suchbegriff"&gt;{searchBox}&lt;/label&gt;
-&lt;input alt="search..." class="inputfield" type="text" name="suchbegriff" id="suchbegriff" size="18" /&gt;&lt;br /&gt;
-&lt;input type="submit" name="submit" value="Go" class="submit" /&gt;
-&lt;/form&gt;
-    </pre>
-    <p>to</p>
-    <pre>
-&lt;form action="{writeSendAdress}" method="get"&gt;
-&lt;label for="suchbegriff"&gt;{searchBox}&lt;/label&gt;
-&lt;input alt="search..." class="inputfield" type="text" name="search" id="suchbegriff" size="18" /&gt;&lt;br /&gt;
-&lt;input type="submit" name="submit" value="Go" class="submit" /&gt;
-&lt;input type="hidden" name="action" value="search" /&gt;
-&lt;/form&gt;
-    </pre>
-    <p>You can find the changed files between the 1.6.x version in the file <em>docs/CHANGEDFILES.txt</em>.</p>
+    <p>You can find the changed files between the 2.0.x version in the file <em>docs/CHANGEDFILES.txt</em>.</p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
     <p><a name="3e"></a><strong>3.e. Modifying templates for phpMyFAQ 2.0.x</strong></p>
-    <p>The 1.4.x templates are not compatible with phpMyFAQ 2.6.x, so please take the default XHTML templates from the package. The 1.4.x templates are partly compatible with phpMyFAQ 1.6.x, so you have to edit them and add some new placeholders for the captcha support. The 1.5.x templates are mostly compatible with phpMyFAQ 1.6.x, if your layout is completly based on CSS, you only have to change the .tpl files listed in <em>docs/CHANGEDFILES.txt</em>. If you need help to integrate phpMyFAQ into your website feel free to contact us.</p>
+    <p>The 1.4.x templates are partly compatible with phpMyFAQ 2.0.x, so you have to edit them and add some new placeholders for the captcha support. The 1.5.x and 1.6.x templates are mostly compatible with phpMyFAQ 2.0, if your layout is completly based on CSS, you only have to change the .tpl files listed in <em>docs/CHANGEDFILES.txt</em>. If you need help to integrate phpMyFAQ into your website feel free to contact us.</p>
     <p><a href="#top">back to top</a></p>
 
 
@@ -449,29 +408,8 @@
     <p><strong><a name="4"></a>4. Administration</strong></p>
     <p>The administration of phpMyFAQ is completely browser-based. The admin area can be found under this URL:</p>
     <pre>http://www.example.com/faq/admin/index.php</pre>
-    <p>If you have lost your password, there you can reset it. A new random password will be generated and sent to you via e-mail. Please change it after your successful login with the generated password.</p>
+    <p>If you have lost your password you can reset it. A new random password will be generated and sent to you via e-mail. Please change it after your successful login with the generated password.</p>
     <p>After entering your username and password you can log into the system. On the startpage you can see the admin menu on the left, some statistics about visits, entries and comments on the right. At the bottom of the main admin page you'll see a button for version information. If you click on that button your version of phpMyFAQ will check the latest version number from our website www.phpmyfaq.de. We do not log anything in this process!</p>
-    <p>The menu contains the following sections:</p>
-    <ul>
-        <li><strong>User Administration</strong></li>
-        <li><strong>Create Records</strong></li>
-        <li><strong>Approve Records</strong></li>
-        <li><strong>Edit Records</strong></li>
-        <li><strong>Category Administration</strong></li>
-        <li><strong>Add News</strong></li>
-        <li><strong>Edit News</strong></li>
-        <li><strong>Edit open questions</strong></li>
-        <li><strong>Rating Statistics</strong></li>
-        <li><strong>Cookies</strong></li>
-        <li><strong>View Sessions</strong></li>
-        <li><strong>View Adminlog</strong></li>
-        <li><strong>Change Password</strong></li>
-        <li><strong>Edit configuration</strong></li>
-        <li><strong>Backups</strong></li>
-        <li><strong>Export your FAQ</strong></li>
-        <li><strong>Logout</strong></li>
-        <li><strong>Startpage</strong></li>
-    </ul>
     <p><a href="#top">back to top</a></p>
 
 
@@ -645,8 +583,8 @@
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="5"></a>5. Customising phpMyFAQ 1.6.x</strong></p>
-    <p>In phpMyFAQ 1.6.0 code and layout are almost completely seperated. The layout is based on several templates, that you can modify to suit your own needs. The most important files for phpMyFAQ's layout can be found in the directory <em>template/</em>. All original templates are valid XHTML 1.0 Transitional and we don't use tables for layout reasons.</p>
+    <p><strong><a name="5"></a>5. Customising phpMyFAQ 2.0.x</strong></p>
+    <p>In phpMyFAQ 2.0.x code and layout are seperated. The layout is based on several templates, that you can modify to suit your own needs. The most important files for phpMyFAQ's layout can be found in the directory <em>template/</em>. All original templates are valid XHTML 1.0 Transitional and we don't use tables for layout reasons.</p>
     <p><strong>Note:</strong> You can change the layout of the admin area using the CSS file <em>admin.css</em>.</p>
     <p><a href="#top">back to top</a></p>
 
@@ -675,8 +613,8 @@
     <p>
     Author: Thorsten Rinne<br />
     Co-Authors: <a href="mailto:stephan AT yauh DOT de">Stephan Hochhaus</a>, <a href="mailto:mgl-mail AT t-online DOT de">Markus Gläser</a><br />
-    Last Change: 2006-06-13</p>
-    <p>&copy; 2001-2006 phpMyFAQ Team</p>
+    Last Change: 2007-02-10</p>
+    <p>&copy; 2001-2007 phpMyFAQ Team</p>
     <p>This documentation is licensed under a <a href="http://creativecommons.org/licenses/by/2.0/" class="subfoot">Creative Commons License</a>.</p>
     <p><a href="#top">back to top</a></p>
 </div>
