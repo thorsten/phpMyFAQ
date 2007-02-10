@@ -1,23 +1,23 @@
 <?php
 /**
-* $Id: category.edit.php,v 1.18 2007-02-04 12:46:09 thorstenr Exp $
-*
-* Edits a category
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @since        2003-03-10
-* @copyright    (c) 2003-2006 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * $Id: category.edit.php,v 1.19 2007-02-10 21:01:02 thorstenr Exp $
+ *
+ * Edits a category
+ *
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since       2003-03-10
+ * @copyright   (c) 2003-2007 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
@@ -25,8 +25,8 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 }
 
 if ($permission["editcateg"]) {
-    $cat = new PMF_Category($LANGCODE);
-    $categories = $cat->getAllCategories();
+    $category = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups);
+    $categories = $category->getAllCategories();
     $id = $_GET["cat"];
     print "<h2>".$PMF_LANG["ad_categ_edit_1"]." <em>".$categories[$id]["name"]."</em> ".$PMF_LANG["ad_categ_edit_2"]."</h2>";
 ?>

@@ -1,13 +1,13 @@
 <?php
 /**
- * $Id: category.translate.php,v 1.9 2006-09-25 05:33:08 thorstenr Exp $
+ * $Id: category.translate.php,v 1.10 2007-02-10 21:01:02 thorstenr Exp $
  *
- * translates a category
+ * Translates a category
  *
  * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author       Rudi Ferrari <bookcrossers@gmx.de>
  * @since        2006-09-10
- * @copyright    (c) 2006 phpMyFAQ Team
+ * @copyright    (c) 2006-2007 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -26,13 +26,13 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 }
 
 if ($permission["editcateg"]) {
-    $cat = new PMF_Category($LANGCODE);
-    $cat->getMissingCategories();
-    $id = $_GET["cat"];
+    $category = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups);
+    $category->getMissingCategories();
+    $id = (int)$_GET["cat"];
     $header = sprintf('%s %s: <em>%s</em>',
         $PMF_LANG['ad_categ_trans_1'],
         $PMF_LANG['ad_categ_trans_2'],
-        $cat->categoryName[$id]['name']);
+        $category->categoryName[$id]['name']);
 
     if (isset($_GET["trlang"])) {
        $selected_lang = $_GET["trlang"];
@@ -47,13 +47,12 @@ if ($permission["editcateg"]) {
 
     printf('<h2>%s</h2>', $header);
 ?>
-    <form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>" method="post">
+    <form action="?action=<?php print $action; ?>" method="post">
     <fieldset>
     <legend><?php print $header; ?></legend>
 
-        <input type="hidden" name="action" value="<?php print $action; ?>" />
         <input type="hidden" name="id" value="<?php print $id; ?>" />
-        <input type="hidden" name="parent_id" value="<?php print $cat->categoryName[$id]["parent_id"]; ?>" />
+        <input type="hidden" name="parent_id" value="<?php print $category->categoryName[$id]["parent_id"]; ?>" />
         <input type="hidden" name="showcat" value="<?php print $showcat; ?>" />
 
         <label class="left"><?php print $PMF_LANG["ad_categ_titel"]; ?>:</label>
@@ -61,7 +60,7 @@ if ($permission["editcateg"]) {
 
         <label class="left"><?php print $PMF_LANG["ad_categ_lang"]; ?>:</label>
         <select name="lang" size="1">
-        <?php print $cat->getCategoryLanguagesToTranslate($id, $selected_lang); ?>
+        <?php print $category->getCategoryLanguagesToTranslate($id, $selected_lang); ?>
         </select><br />
 
         <label class="left"><?php print $PMF_LANG["ad_categ_desc"]; ?>:</label>
@@ -74,12 +73,12 @@ if ($permission["editcateg"]) {
 
         <input class="submit" style="margin-left: 190px;" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_translatecateg"]; ?>" />
         <br /><hr />
-        <?php
+<?php
            print '<strong>'.$PMF_LANG["ad_categ_transalready"].'</strong><br />';
-           foreach ($cat->getCategoryLanguagesTranslated($id) as $language => $namedesc) {
+           foreach ($category->getCategoryLanguagesTranslated($id) as $language => $namedesc) {
               print "&nbsp;&nbsp;&nbsp;<strong style=\"vertical-align: top;\">&middot; " . $language . "</strong>: " . $namedesc . "\n<br />";
            }
-        ?>
+?>
     </fieldset>
     </form>
 <?php

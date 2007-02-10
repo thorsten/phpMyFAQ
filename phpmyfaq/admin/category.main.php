@@ -1,23 +1,23 @@
 <?php
 /**
-* $Id: category.main.php,v 1.30 2007-02-04 15:33:52 thorstenr Exp $
-*
-* List all categories in the admin section
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @since        2003-12-20
-* @copyright    (c) 2001-2006 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * $Id: category.main.php,v 1.31 2007-02-10 21:01:02 thorstenr Exp $
+ *
+ * List all categories in the admin section
+ *
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since       2003-12-20
+ * @copyright   (c) 2003-2007 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
@@ -40,7 +40,7 @@ print "</p>\n";
 
 if ($permission['editcateg']) {
 
-    $category = new PMF_Category($LANGCODE);
+    $category = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups);
 
     // Save a new category
     if (isset($_POST['action']) && $_POST['action'] == 'savecategory') {
@@ -155,11 +155,10 @@ if ($permission['editcateg']) {
         $lang = $LANGCODE;
     }
 
-    $tree = new PMF_Category($lang);
-    $tree->getMissingCategories();
-    $tree->buildTree();
+    $category->getMissingCategories();
+    $category->buildTree();
 
-    foreach ($tree->catTree as $cat) {
+    foreach ($category->catTree as $cat) {
         $indent = '';
         for ($i = 0; $i < $cat['indent']; $i++) {
             $indent .= '&nbsp;&nbsp;&nbsp;';
@@ -200,7 +199,7 @@ if ($permission['editcateg']) {
             $PMF_LANG['ad_categ_translate']);
 
         // delete (sub) category (if actual language)
-        if (count($tree->getChildren($cat['id'])) == 0 && $cat["lang"] == $lang) {
+        if (count($category->getChildren($cat['id'])) == 0 && $cat["lang"] == $lang) {
             printf('<a href="%s&amp;action=deletecategory&amp;cat=%s&amp;lang=%s" title="%s"><img src="images/delete.gif" width="17" height="18" alt="%s" title="%s" border="0" /></a>',
                 $currentLink,
                 $cat['id'],
@@ -219,7 +218,7 @@ if ($permission['editcateg']) {
                $PMF_LANG['ad_categ_cut'],
                $PMF_LANG['ad_categ_cut']);
           
-           if ($tree->numParent($cat['parent_id']) > 1) {
+           if ($category->numParent($cat['parent_id']) > 1) {
               // move category (if actual language) AND more than 1 category at the same level)
               printf('<a href="%s&amp;action=movecategory&amp;cat=%s&amp;parent_id=%s" title="%s"><img src="images/move.gif" width="16" height="16" alt="%s" border="0" title="%s" /></a>',
                   $currentLink,

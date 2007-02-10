@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.78 2007-01-21 11:43:34 thorstenr Exp $
+* $Id: index.php,v 1.79 2007-02-10 21:01:02 thorstenr Exp $
 *
 * The main admin backend index file
 *
@@ -140,6 +140,17 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'logout' && $auth) {
     unset($user);
     $auth = null;
     unset($auth);
+}
+
+//
+// Get current admin user and group id - default: -1
+//
+if (isset($user) && is_object($user)) {
+    $current_admin_user   = $user->getUserId();
+    $current_admin_groups = $user->perm->getUserGroups($current_admin_user);
+    if (0 == count($current_admin_groups)) {
+        $current_admin_groups = array(-1);
+    }
 }
 
 // FIXME: remove this dummy declaration when the all of the pages will NOT use it for building the links
