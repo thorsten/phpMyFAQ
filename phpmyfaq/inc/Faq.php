@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.80 2007-02-10 08:10:31 thorstenr Exp $
+ * $Id: Faq.php,v 1.81 2007-02-10 21:08:23 thorstenr Exp $
  *
  * The main FAQ class
  *
@@ -2257,7 +2257,7 @@ class PMF_Faq
         $result = $this->db->query($query);
         if ($this->db->num_rows($result) > 0) {
             $row = $this->db->fetch_object($result);
-            $permissions = $row->permission;
+            $permissions[] = $row->permission;
         }
         return $permissions;
     }

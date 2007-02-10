@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Category.php,v 1.33 2007-02-10 14:25:21 thorstenr Exp $
+ * $Id: Category.php,v 1.34 2007-02-10 21:08:23 thorstenr Exp $
  *
  * The main category class
  *
@@ -1536,7 +1536,7 @@ class PMF_Category
 
         $result = $this->db->query($query);
         while ($row = $this->db->fetch_object($result)) {
-            $permissions = $row->permission;
+            $permissions[] = $row->permission;
         }
         return $permissions;
     }
