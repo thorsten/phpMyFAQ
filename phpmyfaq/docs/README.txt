@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.67 2007-02-04 20:48:36 thorstenr Exp $
+$Id: README.txt,v 1.68 2007-02-10 08:13:12 thorstenr Exp $
 
 phpMyFAQ 2.0.0-beta
 Codename "Prometheus"
@@ -10,7 +10,7 @@ Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.0.0-alpha:
-- added user and group based permissions for categories (Thorsten)
+- added user and group based permissions for categories and records (Thorsten)
 - added OpenSearch support (Thorsten)
 - added "submit translation" link (Matteo)
 - added experimental support for Oracle (Thorsten)
@@ -25,7 +25,7 @@ CHANGELOG:
 Version 2.0.0-beta - 2007-
 - added rewritten and enhanced user management (Lars)
 - added rewritten and enhanced authorization management (Lars)
-- added user and group based permissions for categories (Thorsten)
+- added user and group based permissions for categories and records (Thorsten)
 - added Ajax support (Thorsten, Matteo)
 - added automatic link verification (Minoru Toda)
 - added user binding to a category (Thorsten)

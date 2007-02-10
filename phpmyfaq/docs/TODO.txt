@@ -1,7 +1,6 @@
 TODO list for future versions of phpMyFAQ:
 
 2.0.0 "Prometheus" (CVS branch: PMF_2_0):
-- permission management for records
 - simple reordering of records
 - show/edit/delete comments
 - editable default values for record configuration
@@ -17,19 +16,21 @@ TODO list for future versions of phpMyFAQ:
 - add public user profile page ?
 - add improved revision system with diff of revisions ?
 - add RTF export ?
+- improve permission management ?
 - message to the user, who has posted a question and an answer is availible ?
-- update only possible from versions 1.6 and 2.0
+- update only possible from versions 1.6 and 2.0 !
 - more accessibility features (WAI and Section 508) ?
 - bugfixing for stability or security reasons
 
 2.2.0 "Portia" (CVS branch: PMF_2_2):
-- possibility to disable multiple languages
+- improve permission management ?
+- possibility to disable multiple languages ?
 - SOAP interface ?
 - "sticky" records ?
 - PDF2Mail ?
 - users can request a record changing ?
 - directory-like listing of entries ?
-- update only possible from versions 2.0 and 2.1
+- update only possible from versions 2.0 and 2.1 !
 - bugfixing for stability or security reasons
 
 3.0.0 "Poseidon" (CVS branch: PMF_3_0):

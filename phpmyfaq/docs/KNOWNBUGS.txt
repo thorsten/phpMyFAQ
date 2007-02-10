@@ -1,8 +1,4 @@
-$Id: KNOWNBUGS.txt,v 1.8 2007-02-10 07:50:43 thorstenr Exp $
-
-MISSING FEATURES in phpMyFAQ 2.0.0-beta
-
-- permission management for records
+$Id: KNOWNBUGS.txt,v 1.9 2007-02-10 08:13:12 thorstenr Exp $
 
 MISSING FEATURES in phpMyFAQ 2.0.0-beta2
 
