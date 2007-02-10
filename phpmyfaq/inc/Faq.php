@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.79 2007-02-04 21:00:32 thorstenr Exp $
+ * $Id: Faq.php,v 1.80 2007-02-10 08:10:31 thorstenr Exp $
  *
  * The main FAQ class
  *
@@ -193,6 +193,14 @@ class PMF_Faq
                 '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvisits.id
             AND
                 '.SQLPREFIX.'faqvisits.lang = '.SQLPREFIX.'faqdata.lang
+            LEFT JOIN
+                '.SQLPREFIX.'faqdata_group
+            ON
+                '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqdata_group.record_id
+            LEFT JOIN
+                '.SQLPREFIX.'faqdata_user
+            ON
+                '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqdata_user.record_id
             WHERE
                     '.SQLPREFIX.'faqdata.date_start <= \''.$now.'\'
                 AND '.SQLPREFIX.'faqdata.date_end   >= \''.$now.'\'
@@ -200,6 +208,7 @@ class PMF_Faq
                 AND '.SQLPREFIX.'faqcategoryrelations.category_id = '.$category.'
             ORDER BY
                 '.SQLPREFIX.'faqdata.id';
+        
         $result = $this->db->query($query);
 
         $num = $this->db->num_rows($result);
@@ -341,12 +350,27 @@ class PMF_Faq
                 *
             FROM
                 %s%s
+            LEFT JOIN
+                %sfaqdata_group
+            ON
+                %sfaqdata.id = %sfaqdata_group.record_id
+            LEFT JOIN
+                %sfaqdata_user
+            ON
+                %sfaqdata.id = %sfaqdata_user.record_id
             WHERE
-                    id = %d
-                %s
-                AND lang = '%s'",
+                id = %d
+            %s
+            AND
+                lang = '%s'",
             SQLPREFIX,
             isset($revision_id) ? 'faqdata_revisions': 'faqdata',
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
             $id,
             isset($revision_id) ? 'AND revision_id = \'' + $revision_id +'\'': '',
             $this->language
@@ -633,7 +657,6 @@ class PMF_Faq
         if (is_array($category)) {
             addCategoryRelations($category, $record_id, $language);
         }
-        
         $categories[] = $category;
 
         return addCategoryRelations($categories, $record_id, $language);
@@ -684,8 +707,22 @@ class PMF_Faq
                 *
             FROM
                 %sfaqdata
+            LEFT JOIN
+                %sfaqdata_group
+            ON
+                %sfaqdata.id = %sfaqdata_group.record_id
+            LEFT JOIN
+                %sfaqdata_user
+            ON
+                %sfaqdata.id = %sfaqdata_user.record_id
             WHERE
                 solution_id = %d",
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
             SQLPREFIX,
             $solution_id);
         $result = $this->db->query($query);
@@ -723,8 +760,6 @@ class PMF_Faq
     }
 
     /**
-     * getIdFromSolutionId()
-     *
      * Gets the record ID from a given solution ID
      *
      * @param   integer
@@ -752,7 +787,7 @@ class PMF_Faq
 
     /**
       * Gets the latest solution id for a FAQ record
-     *
+      *
       * @return  integer
       * @access  public
       * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -783,15 +818,13 @@ class PMF_Faq
     }
 
     /**
-    * getAllRecords()
-    *
-    * Returns an array with all data from all FAQ records
-    *
-    * @return   void
-    * @access   public
-    * @since    2005-12-26
-    * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-    */
+     * Returns an array with all data from all FAQ records
+     *
+     * @return  void
+     * @access  public
+     * @since   2005-12-26
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
     function getAllRecords($sortType = FAQ_SORTING_TYPE_CATID_FAQID)
     {
         $orderBy = '';
@@ -901,16 +934,14 @@ class PMF_Faq
     }
 
     /**
-    * getRecordTitle()
-    *
-    * Returns the FAQ record title from the ID and language
-    *
-    * @param    integer     record id
-    * @param    bool        Fix html special chars? (default, true)
-    * @return   string
-    * @since    2002-08-28
-    * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-    */
+     * Returns the FAQ record title from the ID and language
+     *
+     * @param   integer     record id
+     * @param   bool        Fix html special chars? (default, true)
+     * @return  string
+     * @since   2002-08-28
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
     function getRecordTitle($id, $encode = true)
     {
         if (isset($this->faqRecord['id']) && ($this->faqRecord['id'] == $id)) {
@@ -1019,15 +1050,13 @@ class PMF_Faq
 
 
     /**
-    * getKeywords()
-    *
-    * Returns the keywords of a FAQ record from the ID and language
-    *
-    * @param    integer     record id
-    * @return   string
-    * @since    2005-11-30
-    * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-    */
+     * Returns the keywords of a FAQ record from the ID and language
+     *
+     * @param   integer     record id
+     * @return  string
+     * @since   2005-11-30
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
     function getRecordKeywords($id)
     {
         if (isset($this->faqRecord['id']) && ($this->faqRecord['id'] == $id)) {
@@ -1053,15 +1082,15 @@ class PMF_Faq
     }
 
     /**
-    * Returns the number of activated and not expired records, optionally
-    * not limited to the current language
-    *
-    * @param    string
-    * @return   int
-    * @access   public
-    * @since    2002-08-23
-    * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-    */
+     * Returns the number of activated and not expired records, optionally
+     * not limited to the current language
+     *
+     * @param   string
+     * @return  int
+     * @access  public
+     * @since   2002-08-23
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
     function getNumberOfRecords($language = null)
     {
         $now = date('YmdHis');
@@ -1090,18 +1119,16 @@ class PMF_Faq
     }
 
     /**
-    * logViews()
-    *
-    * Counting the views of a FAQ record
-    *
-    * @param    integer     id
-    * @param    string      lang
-    * @return   void
-    * @access   public
-    * @since    2001-02-15
-    * @auhtor   Bastian Pöttner <bastian@poettner.net>
-    * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-    */
+     * Counting the views of a FAQ record
+     *
+     * @param   integer     id
+     * @param   string      lang
+     * @return  void
+     * @access  public
+     * @since   2001-02-15
+     * @auhtor  Bastian Pöttner <bastian@poettner.net>
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
     function logViews($id)
     {
         $nVisits = 0;
@@ -1130,16 +1157,14 @@ class PMF_Faq
     }
 
     /**
-    * getVotingResult()
-    *
-    * Calculates the rating of the user votings
-    *
-    * @param    integer    $id
-    * @return   string
-    * @access   public
-    * @since    2002-08-29
-    * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-    */
+     * Calculates the rating of the user votings
+     *
+     * @param   integer    $id
+     * @return  string
+     * @access  public
+     * @since   2002-08-29
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
     function getVotingResult($id)
     {
         $query = sprintf(
@@ -1167,16 +1192,14 @@ class PMF_Faq
     }
 
     /**
-    * getComments()
-    *
-    * Returns all user comments from a FAQ record
-    *
-    * @param    integer     record id
-    * @return   string
-    * @access   public
-    * @since    2002-08-29
-    * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-    */
+     * Returns all user comments from a FAQ record
+     *
+     * @param   integer     record id
+     * @return  string
+     * @access  public
+     * @since   2002-08-29
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
     function getComments($id)
     {
         $oComment = new PMF_Comment($this->db, $this->language);
@@ -1184,8 +1207,6 @@ class PMF_Faq
     }
 
     /**
-     * addComment()
-     *
      * Adds a comment
      *
      * @param   array       $commentData
@@ -1201,8 +1222,6 @@ class PMF_Faq
     }
 
     /**
-     * deleteComment()
-     *
      * Deletes a comment
      *
      * @param   integer     $record_id
@@ -1219,15 +1238,13 @@ class PMF_Faq
     }
 
     /**
-    * getTopTen()
-    *
-    * This function generates the Top Ten with the mosted viewed records
-    *
-    * @return   string
-    * @access   public
-    * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since    2002-05-07
-    */
+     * This function generates the Top Ten with the mosted viewed records
+     *
+     * @return  string
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @since   2002-05-07
+     */
     function getTopTen()
     {
         $result = $this->getTopTenData(PMF_NUMBER_RECORDS_TOPTEN, 0, $this->language);
@@ -1252,15 +1269,13 @@ class PMF_Faq
     }
 
     /**
-    * getLatest()
-    *
-    * This function generates the list with the latest published records
-    *
-    * @return   string
-    * @access   public
-    * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since    2002-05-07
-    */
+     * This function generates the list with the latest published records
+     *
+     * @return  string
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @since   2002-05-07
+     */
     function getLatest()
     {
         $result = $this->getLatestData(PMF_NUMBER_RECORDS_LATEST, $this->language);
@@ -1368,20 +1383,18 @@ class PMF_Faq
     //
 
     /**
-    * getTopTenData()
-    *
-    * This function generates the Top Ten data with the mosted viewed records
-    *
-    * @param    integer
-    * @param    integer
-    * @param    string
-    * @return   array
-    * @access   private
-    * @author   Robin Wood <robin@digininja.org>
-    * @author   Thorsten Rinne <thorsten@rinne.info>
-    * @author   Matteo Scaramuccia <matteo@scaramuccia.com>
-    * @since    2005-03-06
-    */
+     * This function generates the Top Ten data with the mosted viewed records
+     *
+     * @param   integer
+     * @param   integer
+     * @param   string
+     * @return  array
+     * @access  private
+     * @author  Robin Wood <robin@digininja.org>
+     * @author  Thorsten Rinne <thorsten@rinne.info>
+     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     * @since   2005-03-06
+     */
     function getTopTenData($count = PMF_NUMBER_RECORDS_TOPTEN, $categoryId = 0, $language = null)
     {
         global $sids, $PMF_CONF;
@@ -1460,19 +1473,17 @@ class PMF_Faq
     }
 
     /**
-    * getLatestData()
-    *
-    * This function generates an array with a specified number of most recent
-    * published records
-    *
-    * @param    integer
-    * @param    string
-    * @return   array
-    * @access   public
-    * @author   Robin Wood <robin@digininja.org>
-    * @author   Matteo Scaramuccia <matteo@scaramuccia.com>
-    * @since    2005-03-06
-    */
+     * This function generates an array with a specified number of most recent
+     * published records
+     *
+     * @param   integer
+     * @param   string
+     * @return  array
+     * @access  public
+     * @author  Robin Wood <robin@digininja.org>
+     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     * @since   2005-03-06
+     */
     function getLatestData($count = PMF_NUMBER_RECORDS_LATEST, $language = null)
     {
         global $sids, $PMF_CONF;
@@ -1546,8 +1557,6 @@ class PMF_Faq
     }
 
     /**
-     * votingCheck()
-     *
      * Reload locking for user votings
      *
      * @param    integer    FAQ record id
@@ -1577,8 +1586,6 @@ class PMF_Faq
     }
 
     /**
-     * getNumberOfVotings()
-     *
      * Returns the number of users from the table faqvotings
      *
      * @param   integer $record_id
@@ -1607,8 +1614,6 @@ class PMF_Faq
     }
 
     /**
-     * addVoting()
-     *
      * Adds a new voting record
      *
      * @param    array  $votingData
@@ -1765,8 +1770,6 @@ class PMF_Faq
     }
 
     /**
-     * createNewVisit()
-     *
      * Adds a new entry in the table faqvisits
      *
      * @param   integer $id
@@ -1798,8 +1801,6 @@ class PMF_Faq
     }
 
     /**
-     * updateVisit()
-     *
      * Updates an entry in the table faqvisits
      *
      * @param   integer $id
@@ -1832,8 +1833,6 @@ class PMF_Faq
     }
 
     /**
-     * getAllVisitsData()
-     *
      * Get all the entries from the table faqvisits
      *
      * @return  array
@@ -1869,8 +1868,6 @@ class PMF_Faq
     }
 
     /**
-     * getVisitsData()
-     *
      * Get the entry from the table faqvisits
      *
      * @param   integer $id
@@ -1911,8 +1908,6 @@ class PMF_Faq
 
 
     /**
-     * createChangeEntry()
-     *
      * Adds a new changelog entry in the table faqchanges
      *
      * @param   integer $id
@@ -1955,8 +1950,6 @@ class PMF_Faq
     }
 
     /**
-     * get()
-     *
      * Retrieve faq records according to the constraints provided
      *
      * @param   $QueryType
@@ -2005,8 +1998,6 @@ class PMF_Faq
     }
 
     /**
-     * _getCatidWhereSequence()
-     *
      * Build a logic sequence, for a WHERE statement, of those category IDs children of the provided category ID, if any
      *
      * @param   $nCatid
@@ -2035,8 +2026,6 @@ class PMF_Faq
     }
 
     /**
-     * _getSQLQuery()
-     *
      * Build the SQL query for retrieving faq records according to the constraints provided
      *
      * @param   $QueryType
