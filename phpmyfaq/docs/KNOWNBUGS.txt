@@ -1,10 +1,10 @@
-$Id: KNOWNBUGS.txt,v 1.7 2007-02-04 20:48:36 thorstenr Exp $
+$Id: KNOWNBUGS.txt,v 1.8 2007-02-10 07:50:43 thorstenr Exp $
 
 MISSING FEATURES in phpMyFAQ 2.0.0-beta
 
 - permission management for records
 
-MISSING FEATURES in phpMyFAQ 2.0.0-rc
+MISSING FEATURES in phpMyFAQ 2.0.0-beta2
 
 - simple reordering of records
 - show/edit/delete comments
