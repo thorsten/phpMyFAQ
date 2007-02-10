@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id: add.php,v 1.19 2007-02-04 19:27:50 thorstenr Exp $
+ * $Id: add.php,v 1.20 2007-02-10 22:05:29 thorstenr Exp $
  *
  * This is the page there a user can add a FAQ record.
  *
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since       2002-09-16
- * @copyright   (c) 2001-2007 phpMyFAQ Team
+ * @copyright   (c) 2002-2007 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -45,10 +45,11 @@ if (isset($_GET['question']) && is_numeric($_GET['question'])) {
 }
 
 if (isset($_GET['cat']) && is_numeric($_GET['cat'])) {
-    $rubrik = intval($_GET['cat']);
-    $category = array(array('category_id' => $rubrik, 'category_lang' => $LANGCODE));
+    $categories = array(array(
+        'category_id' => (int)$_GET['cat'], 
+        'category_lang' => $LANGCODE));
 } else {
-    $category = array();
+    $categories = array();
 }
 
 $category->buildTree();
@@ -62,7 +63,7 @@ $tpl->processTemplate('writeContent', array(
     'msgNewContentName'     => $PMF_LANG['msgNewContentName'],
     'msgNewContentMail'     => $PMF_LANG['msgNewContentMail'],
     'msgNewContentCategory' => $PMF_LANG['msgNewContentCategory'],
-    'printCategoryOptions'  => $category->printCategoryOptions($category),
+    'printCategoryOptions'  => $category->printCategoryOptions($categories),
     'msgNewContentTheme'    => $PMF_LANG['msgNewContentTheme'],
     'readonly'              => $readonly,
     'printQuestion'         => $question,
