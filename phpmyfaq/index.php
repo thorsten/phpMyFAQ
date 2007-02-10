@@ -1,27 +1,27 @@
 <?php
 /**
-* $Id: index.php,v 1.84 2007-02-04 20:39:19 thorstenr Exp $
-*
-* This is the main public frontend page of phpMyFAQ. It detects the browser's
-* language, gets all cookie, post and get informations and includes the
-* templates we need and set all internal variables to the template variables.
-* That's all.
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @author       Lars Tiedemann <php@larstiedemann.de>
-* @since        2001-02-12
-* @copyright:   (c) 2001-2007 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * $Id: index.php,v 1.85 2007-02-10 20:57:17 thorstenr Exp $
+ *
+ * This is the main public frontend page of phpMyFAQ. It detects the browser's
+ * language, gets and sets all cookie, post and get informations and includes 
+ * the templates we need and set all internal variables to the template 
+ * variables. That's all.
+ *
+ * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author       Lars Tiedemann <php@larstiedemann.de>
+ * @since        2001-02-12
+ * @copyright:   (c) 2001-2007 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 //
 // Check if data.php exist -> if not, redirect to installer
@@ -206,7 +206,7 @@ if (isset($_POST["artlang"]) && PMF_Init::isASupportedLanguage($_POST["artlang"]
 //
 // Create a new FAQ object
 //
-$faq = new PMF_Faq($db, $lang);
+$faq = new PMF_Faq($db, $lang, $current_user, $current_groups);
 
 //
 // Create a new Category object
@@ -329,27 +329,28 @@ $tpl = new PMF_Template (array(
 $usersOnLine = getUsersOnline();
 $totUsersOnLine = $usersOnLine[0] + $usersOnLine[1];
 $main_template_vars = array(
-    "title"                 => $faqconfig->get('title').$title,
-    'version'               => $faqconfig->get('version'),
-    'header'                => str_replace('"', '', $faqconfig->get('title')),
-    'metaTitle'             => str_replace('"', '', $faqconfig->get('title')),
-    "metaDescription"       => $faqconfig->get('metaDescription'),
-    'metaKeywords'          => $faqconfig->get('metaKeywords').$keywords,
-    "metaPublisher"         => $faqconfig->get('metaPublisher'),
-    "metaLanguage"          => $PMF_LANG['metaLanguage'],
-    'metaCharset'           => $PMF_LANG['metaCharset'],
-    'action'                => $action,
-    "dir"                   => $PMF_LANG["dir"],
-    "msgCategory"           => $PMF_LANG["msgCategory"],
-    "showCategories"        => $category->printCategories($cat),
-    "searchBox"             => $PMF_LANG["msgSearch"],
-    "languageBox"           => $PMF_LANG["msgLangaugeSubmit"],
-    "writeLangAdress"       => $writeLangAdress,
-    "switchLanguages"       => selectLanguages($LANGCODE),
-    "userOnline"            => $totUsersOnLine.$PMF_LANG['msgUserOnline'].sprintf($PMF_LANG['msgUsersOnline'],
-                                    $usersOnLine[0],
-                                    $usersOnLine[1]),
-    "copyright"             => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> '.$faqconfig->get('version'));
+    'title'             => $faqconfig->get('title').$title,
+    'version'           => $faqconfig->get('version'),
+    'header'            => str_replace('"', '', $faqconfig->get('title')),
+    'metaTitle'         => str_replace('"', '', $faqconfig->get('title')),
+    'metaDescription'   => $faqconfig->get('metaDescription'),
+    'metaKeywords'      => $faqconfig->get('metaKeywords').$keywords,
+    'metaPublisher'     => $faqconfig->get('metaPublisher'),
+    'metaLanguage'      => $PMF_LANG['metaLanguage'],
+    'metaCharset'       => $PMF_LANG['metaCharset'],
+    'action'            => $action,
+    'dir'               => $PMF_LANG['dir'],
+    'msgCategory'       => $PMF_LANG['msgCategory'],
+    'showCategories'    => $category->printCategories($cat),
+    'searchBox'         => $PMF_LANG['msgSearch'],
+    'languageBox'       => $PMF_LANG['msgLangaugeSubmit'],
+    'writeLangAdress'   => $writeLangAdress,
+    'switchLanguages'   => selectLanguages($LANGCODE),
+    'userOnline'        => $totUsersOnLine.$PMF_LANG['msgUserOnline'].
+                                sprintf($PMF_LANG['msgUsersOnline'],
+                                $usersOnLine[0],
+                                $usersOnLine[1]),
+    'copyright'         => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> '.$faqconfig->get('version'));
 
 if ($faqconfig->get('mod_rewrite')) {
     $links_template_vars = array(
@@ -397,9 +398,8 @@ if (DEBUG) {
     header("Cache-Control: no-store, no-cache, must-revalidate");
     header("Cache-Control: post-check=0, pre-check=0", false);
     header("Pragma: no-cache");
-    header("Content-type: text/html; charset=".$PMF_LANG["metaCharset"]);
+    header("Content-type: text/html; charset=".$PMF_LANG['metaCharset']);
     header("Vary: Negotiate,Accept");
-
     $debug_template_vars = array('debugMessages' => '');
 }
 
