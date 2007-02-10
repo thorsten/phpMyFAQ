@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Captcha.php,v 1.7 2007-01-05 17:38:13 matteo Exp $
+ * $Id: Captcha.php,v 1.8 2007-02-10 21:59:02 thorstenr Exp $
  *
  * The phpMyFAQ Captcha class
  *
@@ -8,7 +8,7 @@
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
  * @since       2006-02-04
- * @copyright   (c) 2006 phpMyFAQ Team
+ * @copyright   (c) 2006-2007 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -176,7 +176,7 @@ class PMF_Captcha
     function printCaptcha($action)
     {
         $output = sprintf(
-            '<img src="%s?%saction=%s&amp;gen=img&amp;ck=%s" height="%d" width="%d" border="0" alt="Follow the white rabbit." title="Follow the white rabbit." />',
+            '<img src="%s?%saction=%s&amp;gen=img&amp;ck=%s" height="%d" width="%d" border="0" alt="Chuck Norris has counted to infinity. Twice." title="Chuck Norris has counted to infinity. Twice." />',
             $_SERVER['PHP_SELF'],
             $this->sids,
             $action,
