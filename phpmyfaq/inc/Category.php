@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Category.php,v 1.32 2007-02-04 20:39:19 thorstenr Exp $
+ * $Id: Category.php,v 1.33 2007-02-10 14:25:21 thorstenr Exp $
  *
  * The main category class
  *
@@ -745,18 +745,18 @@ class PMF_Category
     function printCategories($activeCat = 0)
     {
         global $sids, $PMF_LANG, $PMF_CONF;
+        
         $open = 0;
-        $output = "";
+        $output = '';
+        
         if ($this->height() > 0) {
-
             for ($y = 0 ;$y < $this->height(); $y = $this->getNextLineTree($y)) {
-
                 list($symbol, $categoryName, $parent, $description) = $this->getLineDisplay($y);
 
                 if ($activeCat == $parent) {
-                    $a = " class=\"active\"";
+                    $a = ' class="active"';
                 } else {
-                    $a = "";
+                    $a = '';
                 }
 
                 $level = $this->treeTab[$y]["level"];
@@ -784,37 +784,13 @@ class PMF_Category
                 }
 
                 if (isset($this->treeTab[$y]['symbol']) && $this->treeTab[$y]['symbol'] == 'plus') {
-                    $url = sprintf('%saction=show&amp;cat=%d',
-                                $sids,
-                                $parent
-                            );
-                    $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
-                    $oLink->itemTitle = $categoryName;
-                    $oLink->text = $categoryName
-                                 .' <img src="images/more.gif" width="11" height="11" alt="'.$categoryName.'" style="border: none; vertical-align: middle;" />';
-                    $oLink->tooltip = $description;
-                    $output .= $oLink->toHtmlAnchor();
+                    $output .= $this->addCategoryLink($sids, $parent, $categoryName, $description, true);
                 } else {
                     if ($this->treeTab[$y]["symbol"] == "minus") {
-                        $url = sprintf('%saction=show&amp;cat=%d',
-                                    $sids,
-                                    $this->treeTab[$y]['parent_id']
-                                );
-                        $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
-                        $oLink->itemTitle = ($this->treeTab[$y]['parent_id'] == 0) ? $categoryName : $this->categoryName[$this->treeTab[$y]['parent_id']]['name'];
-                        $oLink->text = $categoryName;
-                        $oLink->tooltip = $description;
-                        $output .= $oLink->toHtmlAnchor();
+                        $name = ($this->treeTab[$y]['parent_id'] == 0) ? $categoryName : $this->categoryName[$this->treeTab[$y]['parent_id']]['name'];
+                        $output .= $this->addCategoryLink($sids, $this->treeTab[$y]['parent_id'], $name, $description);
                     } else {
-                        $url = sprintf('%saction=show&amp;cat=%d',
-                                    $sids,
-                                    $parent
-                                );
-                        $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
-                        $oLink->itemTitle = $categoryName;
-                        $oLink->text = $categoryName;
-                        $oLink->tooltip = $description;
-                        $output .= $oLink->toHtmlAnchor();
+                        $output .= $this->addCategoryLink($sids, $parent, $categoryName, $description);
                     }
                 }
                 $open = $level;
@@ -829,6 +805,33 @@ class PMF_Category
             $output = '<li><a href="#">'.$PMF_LANG['no_cats'].'</a></li>';
         }
         return $output;
+    }
+    
+    /**
+     * Private method to create a category link
+     *
+     * @param   string  $sids
+     * @param   integer $parent
+     * @param   string  $categoryName
+     * @param   string  $description
+     * @param   boolean $hasChildren
+     * @return  string
+     * @access  private
+     * @since   2007-02-10
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function addCategoryLink($sids, $parent, $categoryName, $description, $hasChildren = false)
+    {
+        $url = sprintf('%saction=show&amp;cat=%d', $sids, $parent);
+        $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+        $oLink->itemTitle = $categoryName;
+        $oLink->text = $categoryName;
+        if ($hasChildren) {
+            $oLink->text .= sprintf(' <img src="images/more.gif" width="11" height="11" alt="%s" style="border: none; vertical-align: middle;" />',
+                $categoryName);
+        } 
+        $oLink->tooltip = $description;
+        return $oLink->toHtmlAnchor();
     }
 
     /* checks if a category is a child node */
@@ -848,8 +851,6 @@ class PMF_Category
     }
 
     /**
-     * getPath()
-     *
      * Gets the path from root to child as breadcrumb
      *
      * @param   integer $id
