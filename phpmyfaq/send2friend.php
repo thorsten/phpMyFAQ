@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: send2friend.php,v 1.12 2006-11-16 23:29:26 matteo Exp $
+* $Id: send2friend.php,v 1.13 2007-02-11 16:54:33 johannes Exp $
 *
 * The send2friend page
 *
@@ -33,7 +33,7 @@ if (isset($_GET['gen'])) {
 
 Tracking('send2friend',0);
 
-$send2friendLink = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].'?action=artikel&amp;cat='.$_REQUEST['cat'].'&amp;id='.$_REQUEST['id'].'&amp;artlang='.$_REQUEST['artlang'];
+$send2friendLink = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].'?action=artikel&amp;cat='.(int)$_REQUEST['cat'].'&amp;id='.(int)$_REQUEST['id'].'&amp;artlang='.urlencode($_REQUEST['artlang']);
 
 $tpl->processTemplate ('writeContent', array(
                 'msgSend2Friend' => $PMF_LANG['msgSend2Friend'],
