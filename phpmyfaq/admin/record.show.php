@@ -1,13 +1,13 @@
 <?php
 /**
-* $Id: record.show.php,v 1.36 2006-10-02 04:54:41 thorstenr Exp $
+* $Id: record.show.php,v 1.37 2007-02-11 13:59:26 thorstenr Exp $
 *
 * Shows the list of records ordered by categories
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Minoru TODA <todam@netjapan.co.jp>
 * @since        2003-02-23
-* @copyright    (c) 2001-2006 phpMyFAQ Team
+* @copyright    (c) 2001-2007 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -25,7 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
-print "<h2>".$PMF_LANG["ad_entry_aor"]."</h2>\n";
+printf("<h2>%s</h2>\n", $PMF_LANG['ad_entry_aor']);
 
 if ($permission["editbt"] || $permission["delbt"]) {
     // (re)evaluate the Category object w/o passing the user language
@@ -249,6 +249,13 @@ if ($permission["editbt"] || $permission["delbt"]) {
     <!--<a name="cat_<?php print $cid; ?>" />--><div class="categorylisting"><a href="#cat_<?php print $cid; ?>" onclick="showhideCategory('category_<?php print $cid; ?>');"><img src="../images/more.gif" width="11" height="11" alt="" /> <?php print $tree->getPath($cid); ?></a><?php print $catInfo;?></div>
     <div id="category_<?php print $cid; ?>" class="categorybox" style="display: none;">
     <table class="listrecords">
+    <thead>
+        <th class="listhead"><a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=id&amp;sortby=desc">&uarr;</a>&nbsp;<a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=id&amp;sortby=asc">&darr;</a></th>
+        <th class="listhead"><a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=lang&amp;sortby=desc">&uarr;</a>&nbsp;<a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=lang&amp;sortby=asc">&darr;</a></th>
+        <th class="listhead"><a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=title&amp;sortby=desc">&uarr;</a>&nbsp;<a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=title&amp;sortby=asc">&darr;</a></th>
+        <th class="listhead"><a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=date&amp;sortby=desc">&uarr;</a>&nbsp;<a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=date&amp;sortby=asc">&darr;</a></th>
+        <th class="listhead" colspan="2">&nbsp;</th>
+    </thead>
 <?php
                 } else {
 ?>
@@ -267,15 +274,16 @@ if ($permission["editbt"] || $permission["delbt"]) {
     <tr>
         <td class="list" style="width: 24px; text-align: right;"><?php print $row->id; ?></td>
         <td class="list" style="width: 16px;"><?php print $row->lang; ?></td>
-        <td class="list"><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;action=editentry&amp;id=<?php print $row->id; ?>&amp;lang=<?php print $row->lang; ?>" title="<?php print $PMF_LANG["ad_user_edit"]; ?> '<?php print str_replace("\"", "´", $row->thema); ?>'"><?php print PMF_htmlentities($row->thema, ENT_NOQUOTES, $PMF_LANG['metaCharset']); ?></a>
+        <td class="list"><a href="?action=editentry&amp;id=<?php print $row->id; ?>&amp;lang=<?php print $row->lang; ?>" title="<?php print $PMF_LANG["ad_user_edit"]; ?> '<?php print str_replace("\"", "´", $row->thema); ?>'"><?php print PMF_htmlentities($row->thema, ENT_NOQUOTES, $PMF_LANG['metaCharset']); ?></a>
 <?php
         if (isset($numCommentsByFaq[$row->id])) {
             print " (".$numCommentsByFaq[$row->id]." ".$PMF_LANG["ad_start_comments"].")";
         }
 ?>
         </td>
+        <td class="list"></td>
         <td class="list" width="100"><?php print $linkverifier->getEntryStateHTML($row->id, $row->lang); ?></td>
-        <td class="list" width="17"><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;action=saveentry&amp;id=<?php print $row->id; ?>&amp;language=<?php print $row->lang; ?>&amp;submit[0]=<?php print $PMF_LANG["ad_entry_delete"]; ?>" title="<?php print $PMF_LANG["ad_user_delete"]; ?> '<?php print str_replace("\"", "´", $row->thema); ?>'"><img src="images/delete.gif" width="17" height="18" alt="<?php print $PMF_LANG["ad_entry_delete"]; ?>" /></a></td>
+        <td class="list" width="17"><a href="?action=saveentry&amp;id=<?php print $row->id; ?>&amp;language=<?php print $row->lang; ?>&amp;submit[0]=<?php print $PMF_LANG["ad_entry_delete"]; ?>" title="<?php print $PMF_LANG["ad_user_delete"]; ?> '<?php print str_replace("\"", "´", $row->thema); ?>'"><img src="images/delete.gif" width="17" height="18" alt="<?php print $PMF_LANG["ad_entry_delete"]; ?>" /></a></td>
     </tr>
 <?php
             $old = $cid;
