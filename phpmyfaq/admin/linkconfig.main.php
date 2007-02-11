@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: linkconfig.main.php,v 1.12 2006-11-11 09:26:08 thorstenr Exp $
+* $Id: linkconfig.main.php,v 1.13 2007-02-11 13:58:57 thorstenr Exp $
 *
 * LinkVerifier configuration
 *
@@ -130,36 +130,6 @@ function showListTypeSelection()
     print $_description;
 }
 
-/**
- * Add new entry into faqlinkverifyrules table
- *
- * @param   string $type
- * @param   string $url
- * @param   string $reason
- */
-function addVerifyRule($type = '', $url = '', $reason = '') {
-    global $db, $user;
-
-    if ($type != '' && $url != '') {
-        $query = sprintf(
-                    "INSERT INTO
-                        %sfaqlinkverifyrules
-                        (id, type, url, reason, enabled, locked, owner, dtInsertDate, dtUpdateDate)
-                    VALUES
-                        (%d, '%s', '%s', '%s', 'y', 'n', '%s', '%s', '%s')",
-                    SQLPREFIX,
-                    $db->nextID(SQLPREFIX."faqlinkverifyrules", "id"),
-                    $db->escape_string($type),
-                    $db->escape_string($url),
-                    $db->escape_string($reason),
-                    $db->escape_string($user->getLogin()),
-                    $db->escape_string(date('YmdHis')),
-                    $db->escape_string(date('YmdHis'))
-                    );
-        $db->query($query);
-    }
-}
-
 // load parameters into array
 enumScriptParameters();
 
@@ -197,7 +167,7 @@ showListTypeSelection();
 
             switch($posts['id']) {
                 case 'NEW':
-                    addVerifyRule($params['type'], $posts['url'], $posts['reason']);
+                    $linkverifier->addVerifyRule($params['type'], $posts['url'], $posts['reason']);
                     break;
 
                 default:
@@ -289,9 +259,6 @@ showListTypeSelection();
                             $db->query($query);
                         }
                     }
-
-
-
             }
         }
     }
