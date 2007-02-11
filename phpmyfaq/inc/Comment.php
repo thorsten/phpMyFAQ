@@ -1,24 +1,23 @@
 <?php
 /**
-* $Id: Comment.php,v 1.7 2007-02-11 20:29:06 thorstenr Exp $
-*
-* The main Comment class
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @package      phpMyFAQ
-* @since        2006-07-23
-* @copyright    (c) 2006 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * $Id: Comment.php,v 1.8 2007-02-11 20:38:08 thorstenr Exp $
+ *
+ * The main Comment class
+ *
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since       2006-07-23
+ * @copyright   (c) 2006-2007 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 // {{{ Constants
 /**#@+
@@ -33,30 +32,32 @@ define('PMF_COMMENT_TYPE_NEWS', 'news');
 class PMF_Comment
 {
     /**
-    * DB handle
-    *
-    * @var  object
-    */
+     * DB handle
+     *
+     * @var object
+     */
     var $db;
 
     /**
-    * Language
-    *
-    * @var  string
-    */
+     * Language
+     *
+     * @var string
+     */
     var $language;
 
     /**
-    * Language strings
-    *
-    * @var  string
-    */
+     * Language strings
+     *
+     * @var string
+     */
     var $pmf_lang;
 
     /**
-    * Constructor
-    *
-    */
+     * Constructor
+     *
+     * @param   object
+     * @param   string
+     */
     function PMF_Comment(&$db, $language)
     {
         global $PMF_LANG;
@@ -67,23 +68,19 @@ class PMF_Comment
     }
 
     //
-    //
     // PUBLIC METHODS
-    //
     //
 
     /**
-    * getCommentDataById()
-    *
-    * Returns a user comment
-    *
-    * @param    integer     comment id
-    * @return   string
-    * @access   public
-    * @since    2006-07-13
-    * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @author   Matteo Scaramuccia <matteo@scaramuccia.com>
-    */
+     * Returns a user comment
+     *
+     * @param   integer     comment id
+     * @return  string
+     * @access  public
+     * @since   2006-07-13
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     */
     function getCommentDataById($id)
     {
         $item = array();
@@ -117,18 +114,16 @@ class PMF_Comment
     }
 
     /**
-    * getCommentsData()
-    *
-    * Returns all user comments from a record by type
-    *
-    * @param    integer     record id
-    * @param    integer     record type: {faq|news}
-    * @return   string
-    * @access   public
-    * @since    2002-08-29
-    * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @author   Matteo Scaramuccia <matteo@scaramuccia.com>
-    */
+     * Returns all user comments from a record by type
+     *
+     * @param   integer     record id
+     * @param   integer     record type: {faq|news}
+     * @return  string
+     * @access  public
+     * @since   2002-08-29
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     */
     function getCommentsData($id, $type)
     {
         $comments = array();
@@ -165,17 +160,15 @@ class PMF_Comment
     }
 
     /**
-    * getComments()
-    *
-    * Returns all user comments (HTML formatted) from a record by type
-    *
-    * @param    integer     record id
-    * @param    integer     record type: {faq|news}
-    * @return   string
-    * @access   public
-    * @since    2002-08-29
-    * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-    */
+     * Returns all user comments (HTML formatted) from a record by type
+     *
+     * @param   integer     record id
+     * @param   integer     record type: {faq|news}
+     * @return  string
+     * @access  public
+     * @since   2002-08-29
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
     function getComments($id, $type)
     {
         $comments = $this->getCommentsData($id, $type);
