@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: installer.php,v 1.83 2007-02-04 12:16:32 thorstenr Exp $
+ * $Id: installer.php,v 1.84 2007-02-11 13:38:41 thorstenr Exp $
  *
  * The main phpMyFAQ Installer
  *
@@ -30,6 +30,9 @@ define('SAFEMODE', @ini_get('safe_mode'));
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 require_once(PMF_ROOT_DIR.'/inc/constants.php');
 require_once(PMF_ROOT_DIR.'/inc/functions.php');
+
+$query  = array();
+$uninst = array();
 
 // permission levels
 $permLevels = array(

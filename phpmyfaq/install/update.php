@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.98 2007-02-04 12:13:49 thorstenr Exp $
+* $Id: update.php,v 1.99 2007-02-11 13:38:41 thorstenr Exp $
 *
 * Main update script
 *
@@ -32,6 +32,8 @@ if (isset($_GET["step"]) && $_GET["step"] != "") {
 } else {
     $step = 1;
 }
+
+$query  = array();
 
 /**
 * HTMLFooter()
