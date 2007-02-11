@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Category.php,v 1.34 2007-02-10 21:08:23 thorstenr Exp $
+ * $Id: Category.php,v 1.35 2007-02-11 14:15:14 thorstenr Exp $
  *
  * The main category class
  *
@@ -1508,7 +1508,7 @@ class PMF_Category
      * @param   string  $mode           'group' or 'user'
      * @param   integer $categories
      * @return  array
-     * @access  boolean
+     * @access  public
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     function getPermissions($mode, $categories)
@@ -1539,5 +1539,44 @@ class PMF_Category
             $permissions[] = $row->permission;
         }
         return $permissions;
+    }
+    
+    /**
+     * Returns the number of records in each category
+     *
+     * @param   string  $active
+     * @return  array
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function getNumberOfRecordsOfCategory($active = 'yes')
+    {
+        $numRecordsByCat = array();
+        
+        $query = sprintf("
+            SELECT
+                fcr.category_id AS category_id,
+                COUNT(fcr.record_id) AS number
+            FROM
+                %sfaqcategoryrelations fcr, %sfaqdata fd
+            WHERE
+                fcr.record_id = fd.id
+            AND 
+                fcr.record_lang = fd.lang
+            AND 
+                fd.active = '%s'
+            GROUP BY fcr.category_id",
+            SQLPREFIX,
+            SQLPREFIX,
+            $active);
+        
+        $result = $this->db->query($query);
+        if ($this->db->num_rows($result) > 0) {
+            while ($row = $this->db->fetch_object($result)) {
+                $numRecordsByCat[$row->category_id] = $row->number;
+            }
+        }
+        
+        return $numRecordsByCat;
     }
 }
