@@ -1,5 +1,5 @@
 /**
- * $Id: admin.css,v 1.32 2006-11-19 10:57:00 thorstenr Exp $
+ * $Id: admin.css,v 1.33 2007-02-11 13:48:22 thorstenr Exp $
  *
  * This is the CSS file for the admin section of phpMyFAQ 2.0.x
  * You don't need to change enything here but feel free to do it. :-)
@@ -289,6 +289,16 @@ th.list, td.list {
     padding: 2px;
     line-height: 20px;
     text-align: left;
+}
+th.listhead {
+    border: 1px solid #D0D9D9;
+    padding: 2px;
+    line-height: 20px;
+    text-align: center;
+}
+th.listhead a {
+    text-decoration: none;
+    font-weight: bold;
 }
 
 /* indent at user administration */
