@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Comment.php,v 1.6 2006-08-22 21:11:38 matteo Exp $
+* $Id: Comment.php,v 1.7 2007-02-11 20:29:06 thorstenr Exp $
 *
 * The main Comment class
 *
@@ -254,21 +254,53 @@ class PMF_Comment
         }
 
         $query = sprintf(
-                    'DELETE FROM
-                        %sfaqcomments
-                    WHERE
-                        id = %d
-                        AND id_comment = %d',
-                    SQLPREFIX,
-                    $record_id,
-                    $comment_id
-                );
+            'DELETE FROM
+                %sfaqcomments
+            WHERE
+                id = %d
+            AND 
+            id_comment = %d',
+            SQLPREFIX,
+            $record_id,
+            $comment_id);
 
         if (!$this->db->query($query)) {
             return false;
         }
 
         return true;
+    }
+    
+    /**
+     * Returns the number of comments of each FAQ record as an array
+     *
+     * @return  array
+     * @access  public
+     * @since   2007-02-11
+     * @author  Thorsten Rinne <thorsten@rinne.info>
+     */
+    function getNumberOfComments()
+    {
+        $num = array();
+        
+        $query = sprintf("
+            SELECT
+                COUNT(id) AS anz,
+                id 
+            FROM 
+                %sfaqcomments
+            GROUP BY id
+            ORDER BY id",
+            SQLPREFIX);
+        
+        $result = $this->db->query($query);
+        if ($this->db->num_rows($result) > 0) {
+            while ($row = $this->db->fetch_object($result)) {
+                $num[$row->id] = $row->anz;
+            }
+        }
+        
+        return $num;
     }
 }
 // }}}
