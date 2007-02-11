@@ -1,32 +1,33 @@
 <?php
 /**
-* $Id: Linkverifier.php,v 1.16 2006-11-12 21:26:53 matteo Exp $
-*
-* PMF_Linkverifier
-*
-* The PMF_Linkverifier (AKA link_verifier) class provides methods and functions for verifying URLs
-*
-* @author           Minoru TODA <todam@netjapan.co.jp>
-* @package          link_verifyer
-* @since            2005-08-01
-* @copyright        (c) 2005-2006 NetJapan, Inc.
-*
-* Note: The package has been improved and fixed by Matteo Scaramuccia <matteo@scaramuccia.com>
-* to best fit with PMF 1.6.x+
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*
-* The Initial Developer of the Original Code is released for external use
-* with permission from NetJapan, Inc. IT Administration Group.
-*/
+ * $Id: Linkverifier.php,v 1.17 2007-02-11 12:00:21 thorstenr Exp $
+ *
+ * PMF_Linkverifier
+ *
+ * The PMF_Linkverifier class provides methods and functions for verifying URLs
+ *
+ * @author      Minoru TODA <todam@netjapan.co.jp>
+ * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since       2005-08-01
+ * @copyright   (c) 2005-2007 NetJapan, Inc. and phpMyFAQ Team
+ *
+ * Note: The package has been improved and fixed by Matteo Scaramuccia <matteo@scaramuccia.com>
+ * to best fit with PMF 1.6.x+
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at 
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations 
+ * under the License.
+ *
+ * The Initial Developer of the Original Code is released for external use
+ * with permission from NetJapan, Inc. IT Administration Group.
+ */
 
 /* Defines number of times linkverifier follows 302 response before failing.
  *
@@ -153,8 +154,6 @@ class PMF_Linkverifier
 
 
     /**
-     * isReady
-     *
      * returns whether linkverifier is ready to verify URLs.
      *
      * @result  boolean true if ready to verify URLs, otherwise false
@@ -174,15 +173,12 @@ class PMF_Linkverifier
             return false;
         }
 
-        //return (bool) ini_get('allow_url_fopen');
         return true;
     }
 
 
 
     /**
-     * resetPool
-     *
      * Resets url pool for next batch of processing.
      *
      * @access  public
@@ -196,8 +192,6 @@ class PMF_Linkverifier
     }
 
     /**
-     * addWarnlist
-     *
      * This function adds entry to the internal warnlists.
      * Use this if you want to mark certain URLs unsable (like internal links of a dev-site).
      *
@@ -208,7 +202,6 @@ class PMF_Linkverifier
      * @author  Minoru TODA <todam@netjapan.co.jp>
      * @since   2005-08-01
      */
-
     function addWarnlist($urlprefix = "", $message = "")
     {
         if ($urlprefix != "") {
@@ -220,8 +213,6 @@ class PMF_Linkverifier
     }
 
     /**
-     * addIgnoreList
-     *
      * This function adds entry to the internal ignore list.
      * Some URL/sites makes PHP report 'connection failed', even when browsers can access them.
      * URLs on ignore lists always reports as successful connect.
@@ -233,7 +224,6 @@ class PMF_Linkverifier
      * @author  Minoru TODA <todam@netjapan.co.jp>
      * @since   2005-08-01
      */
-
     function addIgnorelist($url = "", $message = "")
     {
         if ($url != "") {
@@ -245,8 +235,6 @@ class PMF_Linkverifier
     }
 
     /**
-     * addIgnoreProtocol
-     *
      * @param   string $protocol
      * @param   string $message
      * @return  boolean true, if successfully added, otherwise false
@@ -254,7 +242,6 @@ class PMF_Linkverifier
      * @author  Minoru TODA <todam@netjapan.co.jp>
      * @since   2005-08-01
      */
-
     function addIgnoreProtocol($protocol = "", $message = "")
     {
         if ($protocol != "") {
@@ -286,10 +273,7 @@ class PMF_Linkverifier
         }
     }
 
-
     /**
-     * checkIfIgnoreLink
-     *
      * This function verifies whether a URL is in IgnoreList.
      *
      * @param   string $url
@@ -317,8 +301,6 @@ class PMF_Linkverifier
     }
 
     /**
-     * checkIfForceErrorLink
-     *
      * This function verifies whether a URL should be forced as error (warnlist).
      *
      * @param   string $url
@@ -342,8 +324,6 @@ class PMF_Linkverifier
 
 
     /**
-     * makeAbsoluteURL
-     *
      * This function converts relative uri into absolute uri using specific reference point.
      * For example,
      *   $relativeuri = "test/foo.html"
@@ -400,8 +380,6 @@ class PMF_Linkverifier
     }
 
     /**
-     * parse_string
-     *
      * This function parses HTML and extracts urls
      *
      * @param   string $string
@@ -410,7 +388,6 @@ class PMF_Linkverifier
      * @author  Minoru TODA <todam@netjapan.co.jp>
      * @since   2005-08-01
      */
-
     function parse_string($string = "")
     {
         $urlcount = 0;
@@ -429,6 +406,7 @@ class PMF_Linkverifier
 
         return ($urlcount == 0) ? false : $urlcount;
     }
+
     /**
      * Checks whether a URL can be opened.
      *
@@ -584,13 +562,11 @@ class PMF_Linkverifier
                 break;
         }
 
-
         return array(false, $redirectCount, '');
     }
 
     /**
      * Perform link validation to each URLs found
-     *
      *
      * @param   string $referenceuri
      * @result  mixed  array of [protocol][url][info] = value
@@ -598,7 +574,6 @@ class PMF_Linkverifier
      * @author  Minoru TODA <todam@netjapan.co.jp>
      * @since   2005-08-01
      */
-
     function VerifyURLs($referenceuri = '')
     {
         $this->lastResult = array();
@@ -644,7 +619,6 @@ class PMF_Linkverifier
      * @author  Minoru TODA <todam@netjapan.co.jp>
      * @since   2005-09-29
      */
-
     function markEntry($id = 0, $artlang = "", $state = "")
     {
         if (($id < 1) || (trim($artlang) == "")) {
@@ -671,7 +645,6 @@ class PMF_Linkverifier
      * @author   Minoru TODA <todam@netjapan.co.jp>
      * @since    2005-09-29
      */
-
     function getURLValidateInterval()
     {
         global $PMF_CONF;
@@ -691,8 +664,6 @@ class PMF_Linkverifier
      * @author  Minoru TODA <todam@netjapan.co.jp>
      * @since   2005-09-29
      */
-
-
     function getUntestedEntriesCount()
     {
         $interval = $this->getURLValidateInterval();
@@ -717,7 +688,6 @@ class PMF_Linkverifier
      * @author  Minoru TODA <todam@netjapan.co.jp>
      * @since   2005-09-29
      */
-
     function getEntryState($id = 0, $artlang = "", $checkDate = false)
     {
         global $PMF_CONF;
@@ -757,7 +727,6 @@ class PMF_Linkverifier
      * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      * @since   2005-09-29
      */
-
     function getEntryStateHTML($id = 0, $artlang = "")
     {
         global $PMF_LANG;
@@ -812,7 +781,6 @@ class PMF_Linkverifier
      * @access   public
      * @since    2005-09-29
      */
-
     function getLinkStateString()
     {
         $linkcount = 0;
@@ -942,8 +910,40 @@ class PMF_Linkverifier
             return $output;
         }
     }
-
+    
+    /**
+     * Add new entry into faqlinkverifyrules table
+     *
+     * @param   string $type
+     * @param   string $url
+     * @param   string $reason
+     * @return  void
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function addVerifyRule($type = '', $url = '', $reason = '')
+    {
+        if ($type != '' && $url != '') {
+            $query = sprintf(
+                        "INSERT INTO
+                            %sfaqlinkverifyrules
+                            (id, type, url, reason, enabled, locked, owner, dtInsertDate, dtUpdateDate)
+                        VALUES
+                            (%d, '%s', '%s', '%s', 'y', 'n', '%s', '%s', '%s')",
+                        SQLPREFIX,
+                        $this->db->nextID(SQLPREFIX."faqlinkverifyrules", "id"),
+                        $this->db->escape_string($type),
+                        $this->db->escape_string($url),
+                        $this->db->escape_string($reason),
+                        $this->db->escape_string($this->user->getLogin()),
+                        $this->db->escape_string(date('YmdHis')),
+                        $this->db->escape_string(date('YmdHis'))
+                        );
+            $this->db->query($query);
+        }
+    }
 }
+
 
 
 /**
