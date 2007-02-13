@@ -1,4 +1,4 @@
-$Id: KNOWNBUGS.txt,v 1.9 2007-02-10 08:13:12 thorstenr Exp $
+$Id: KNOWNBUGS.txt,v 1.10 2007-02-13 21:22:41 thorstenr Exp $
 
 MISSING FEATURES in phpMyFAQ 2.0.0-beta2
 
@@ -8,6 +8,7 @@ MISSING FEATURES in phpMyFAQ 2.0.0-beta2
 - sort by date for records in admin backend
 - show records per category in admin backend
 - finish the new admin backend layout
+- unfinished documentation
 
 
 KNOWN ISSUES in phpMyFAQ 2.0.0-beta
