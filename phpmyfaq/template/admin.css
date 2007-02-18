@@ -1,5 +1,5 @@
 /**
- * $Id: admin.css,v 1.34 2007-02-11 13:49:13 thorstenr Exp $
+ * $Id: admin.css,v 1.35 2007-02-18 18:43:02 thorstenr Exp $
  *
  * This is the CSS file for the admin section of phpMyFAQ 2.0.x
  * You don't need to change enything here but feel free to do it. :-)
@@ -342,7 +342,7 @@ input.submit {
  */
 table.ssc {
    background-color: #EDF2F2;
-   border-color: #D0D9D9;   
+   border-color: #D0D9D9;
    border: 1px solid;
 }
 td.sscTitle {
@@ -507,6 +507,11 @@ table.linkconfig#configuration tr#lastrow td {
     font-weight: bold;
     -moz-border-radius: 5px 5px 5px 5px;
     border-radius: 5px 5px 5px 5px;
+}
+a.linkverifier {
+    font-size: 10px;
+    color: Black;
+    text-decoration: none;
 }
 
 /* ###### Footer ###### */

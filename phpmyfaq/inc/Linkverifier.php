@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Linkverifier.php,v 1.18 2007-02-18 15:11:57 thorstenr Exp $
+ * $Id: Linkverifier.php,v 1.19 2007-02-18 18:42:44 thorstenr Exp $
  *
  * PMF_Linkverifier
  *
@@ -762,7 +762,7 @@ class PMF_Linkverifier
 
         $output = sprintf('<div class="url-%s" id="%s">'
                  .'<span id="%s">'
-                 .'<a href="javascript:onDemandVerifyURL(%d,\'%s\');">'
+                 .'<a class="linkverifier" href="javascript:onDemandVerifyURL(%d,\'%s\');">'
                  .$PMF_LANG['ad_linkcheck_feedback_url-'.$src].'</a></span>'
                  .'<img src="images/null.gif" id="%s"%s alt="" />'
                  .'</div>',
