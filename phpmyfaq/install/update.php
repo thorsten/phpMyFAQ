@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.102 2007-02-18 20:29:20 thorstenr Exp $
+* $Id: update.php,v 1.103 2007-02-18 21:57:49 matteo Exp $
 *
 * Main update script
 *
@@ -1177,46 +1177,7 @@ if ($step == 5) {
     }
 
     print '<p class="center">';
-    // Perform the queries for updating/migrating the database
-    if (isset($query)) {
-        while ($each_query = each($query)) {
-            $result = @$db->query($each_query[1]);
-            print "|&nbsp;";
-            if (!$result) {
-                print "\n<div class=\"error\">\n";
-                print "<p><strong>DB error:</strong> ".$db->error()."</p>\n";
-                print "<div style=\"text-align: left;\"><p>Query:\n";
-                print "<pre>".PMF_htmlentities($each_query[1])."</pre></p></div>\n";
-                print "</div>";
-                die();
-            }
-            wait(25);
-        }
-    }
-
-    // optimize tables
-    switch($DB["type"]) {
-        case 'mssql':
-        case 'sybase':
-            // Get all table names
-            $db->getTableNames(SQLPREFIX);
-            foreach ($db->tableNames as $tableName) {
-                $query[] = 'DBCC DBREINDEX ('.$tableName.')';
-            }
-            break;
-        case 'mysql':
-        case 'mysqli':
-            // Get all table names
-            $db->getTableNames(SQLPREFIX);
-            foreach ($db->tableNames as $tableName) {
-                $query[] = 'OPTIMIZE TABLE '.$tableName;
-            }
-            break;
-        case 'pgsql':
-            $query[] = "VACUUM ANALYZE;";
-            break;
-    }
-    // Perform the queries for optimizing the database
+    // Perform the queries for updating/migrating the database from 1.x
     if (isset($query)) {
         while ($each_query = each($query)) {
             $result = @$db->query($each_query[1]);
@@ -1331,10 +1292,66 @@ if ($step == 5) {
         $query[] = 'UPDATE '.SQLPREFIX.'faqdata_user SET user_id = -1 WHERE user_id = 0';
     }
 
+    // Perform the queries for updating/migrating the database from 2.x
+    if (isset($query)) {
+        while ($each_query = each($query)) {
+            $result = @$db->query($each_query[1]);
+            print "|&nbsp;";
+            if (!$result) {
+                print "\n<div class=\"error\">\n";
+                print "<p><strong>DB error:</strong> ".$db->error()."</p>\n";
+                print "<div style=\"text-align: left;\"><p>Query:\n";
+                print "<pre>".PMF_htmlentities($each_query[1])."</pre></p></div>\n";
+                print "</div>";
+                die();
+            }
+            wait(25);
+        }
+    }
+
     // Always the last step: Update version number
     if (version_compare($version, NEWVERSION, '<')) {
         $oPMFConf = new PMF_Configuration($db);
         $oPMFConf->update(array('version' => NEWVERSION));
+    }
+
+    // optimize tables
+    switch($DB["type"]) {
+        case 'mssql':
+        case 'sybase':
+            // Get all table names
+            $db->getTableNames(SQLPREFIX);
+            foreach ($db->tableNames as $tableName) {
+                $query[] = 'DBCC DBREINDEX ('.$tableName.')';
+            }
+            break;
+        case 'mysql':
+        case 'mysqli':
+            // Get all table names
+            $db->getTableNames(SQLPREFIX);
+            foreach ($db->tableNames as $tableName) {
+                $query[] = 'OPTIMIZE TABLE '.$tableName;
+            }
+            break;
+        case 'pgsql':
+            $query[] = "VACUUM ANALYZE;";
+            break;
+    }
+    // Perform the queries for optimizing the database
+    if (isset($query)) {
+        while ($each_query = each($query)) {
+            $result = @$db->query($each_query[1]);
+            print "|&nbsp;";
+            if (!$result) {
+                print "\n<div class=\"error\">\n";
+                print "<p><strong>DB error:</strong> ".$db->error()."</p>\n";
+                print "<div style=\"text-align: left;\"><p>Query:\n";
+                print "<pre>".PMF_htmlentities($each_query[1])."</pre></p></div>\n";
+                print "</div>";
+                die();
+            }
+            wait(25);
+        }
     }
 
     print "</p>\n";
