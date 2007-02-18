@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: session.keepalive.php,v 1.3 2006-08-19 15:22:11 matteo Exp $
+ * $Id: session.keepalive.php,v 1.4 2007-02-18 14:49:16 thorstenr Exp $
  *
  * A dummy page used within an IFRAME for warning the user about his next
  * session expiration and to give him the contextual possibility for
@@ -11,7 +11,7 @@
  * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since       2006-05-08
- * @copyright   (c) 2006 phpMyFAQ Team
+ * @copyright   (c) 2006-2007 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -24,12 +24,18 @@
  * under the License.
  */
 
-require_once('../inc/Init.php');
-require_once('../inc/PMF_User/CurrentUser.php');
-require_once('../lang/language_en.php');
+define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
+
+require_once(PMF_ROOT_DIR.'/inc/Init.php');
+require_once(PMF_ROOT_DIR.'/inc/PMF_User/CurrentUser.php');
+require_once(PMF_ROOT_DIR.'/lang/language_en.php');
 if (isset($_GET['lang']) && PMF_Init::isASupportedLanguage($_GET['lang'])) {
-    require_once('../lang/language_'.$_GET['lang'].'.php');
+    require_once(PMF_ROOT_DIR.'/lang/language_'.$_GET['lang'].'.php');
 }
+
+PMF_Init::cleanRequest();
+session_name('pmf_auth_'.$faqconfig->get('phpMyFAQToken'));
+session_start();
 
 $user = PMF_CurrentUser::getFromSession($faqconfig->get('ipcheck'));
 
@@ -39,7 +45,7 @@ $refreshTime = (PMF_SESSION_ID_EXPIRES - PMF_SESSION_ID_REFRESH) * 60;
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php print $PMF_LANG["metaLanguage"]; ?>" lang="<?php print $PMF_LANG["metaLanguage"]; ?>">
     <head>
         <title>phpMyFAQ - "Welcome to the real world."</title>
-        <meta name="copyright" content="(c) 2001-2006 phpMyFAQ Team" />
+        <meta name="copyright" content="(c) 2001-2007 phpMyFAQ Team" />
         <meta http-equiv="Content-Type" content="text/html; charset=<?php print $PMF_LANG["metaCharset"]; ?>" />
         <link rel="shortcut icon" href="../template/favicon.ico" type="image/x-icon" />
         <link rel="icon" href="../template/favicon.ico" type="image/x-icon" />
@@ -81,7 +87,7 @@ if (isset($user) && ($refreshTime > 0)) {
 <?php
 }
 ?>
-    </head>
-    <body>
-    </body>
+</head>
+<body>
+</body>
 </html>
