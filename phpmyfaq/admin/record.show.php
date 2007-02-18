@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.show.php,v 1.38 2007-02-18 15:46:27 thorstenr Exp $
+ * $Id: record.show.php,v 1.39 2007-02-18 18:56:28 thorstenr Exp $
  *
  * Shows the list of records ordered by categories
  *
@@ -40,12 +40,15 @@ if ($permission["editbt"] || $permission["delbt"]) {
 
     $comment = new PMF_Comment($db, $LANGCODE);
 
+    $faq = new PMF_Faq($db, $LANGCODE);
+
     $cond             = array();
     $numCommentsByFaq = array();
+    $active           = 'yes';
     $internalSearch   = '';
     $linkState        = '';
-    $searchcat        = 0;
     $searchterm       = '';
+    $searchcat        = 0;
 
     if (isset($_REQUEST['linkstate'])) {
         $cond[SQLPREFIX.'faqdata.links_state'] = 'linkbad';
@@ -61,6 +64,10 @@ if ($permission["editbt"] || $permission["delbt"]) {
 
     if (isset($_POST['searchterm'])) {
         $searchterm = safeSQL($_POST['searchterm']);
+    }
+
+    if (isset($_GET['action']) && $_GET['action'] == 'accept') {
+        $active = 'no';
     }
 ?>
     <form action="?action=view" method="post">
@@ -90,12 +97,11 @@ if ($permission["editbt"] || $permission["delbt"]) {
     <fieldset>
     <legend><?php print ((isset($_REQUEST['action']) && 'accept' == $_REQUEST['action']) ? $PMF_LANG['ad_menu_entry_aprove'] : $PMF_LANG['ad_menu_entry_edit']); ?></legend>
 <?php
-    // 1. Count the comments for each faq
     $numCommentsByFaq = $comment->getNumberOfComments();
 
     // FIXME: Count "comments"/"entries" for each category also within a search context. Now the count is broken.
     // FIXME: we are not considering 'faqdata.links_state' for filtering the faqs.
-    if (!(isset($_POST["searchterm"]) && $_REQUEST["searchterm"] != "")) {
+    if (!(isset($_POST['searchterm']) && $_POST['searchterm'] != '')) {
 
         $matrix = $category->getCategoryRecordsMatrix();
         foreach ($matrix as $catkey => $value) {
@@ -107,29 +113,11 @@ if ($permission["editbt"] || $permission["delbt"]) {
             }
         }
 
-        // 3. Count the entries
-        if (isset($_GET['action']) && $_GET['action'] == 'accept') {
-            $active = 'no';
-        } else {
-            $active = 'yes';
-        }
-
-        $query = "SELECT ".SQLPREFIX."faqcategoryrelations.category_id AS category_id, count(".SQLPREFIX."faqcategoryrelations.record_id) AS number"
-            ." FROM ".SQLPREFIX."faqcategoryrelations, ".SQLPREFIX."faqdata"
-            ." WHERE ".SQLPREFIX."faqcategoryrelations.record_id = ".SQLPREFIX."faqdata.id"
-            ." AND ".SQLPREFIX."faqcategoryrelations.record_lang = ".SQLPREFIX."faqdata.lang"
-            ." AND ".SQLPREFIX."faqdata.active = '".$active."'"
-            ." GROUP BY ".SQLPREFIX."faqcategoryrelations.category_id";
-
-        $result = $db->query($query);
-        if ($db->num_rows($result) > 0) {
-            while ($row = $db->fetch_object($result)) {
-                $numRecordsByCat[$row->category_id] = $row->number;
-            }
-        }
+        $numRecordsByCat = $category->getNumberOfRecordsOfCategory($active);
     }
 
     if (isset($_REQUEST["action"]) && $_REQUEST["action"] == "view" && !(isset($_REQUEST["searchterm"]) && $_REQUEST["searchterm"] != "")) {
+
         // No search requested
         $where = "";
         foreach ($cond as $field => $data) {
@@ -149,6 +137,9 @@ if ($permission["editbt"] || $permission["delbt"]) {
         $query = 'SELECT '.SQLPREFIX.'faqdata.id AS id, '.SQLPREFIX.'faqdata.lang AS lang, '.SQLPREFIX.'faqcategoryrelations.category_id AS category_id, '.SQLPREFIX.'faqdata.thema AS thema FROM '.SQLPREFIX.'faqdata INNER JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang ='.SQLPREFIX.'faqcategoryrelations.record_lang AND '.SQLPREFIX.'faqdata.active = \'yes\' '.$where.' ORDER BY '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.id ';
 
         $result = $db->query($query);
+
+        //$allRecords = $faq->getAllRecords();
+
         $laction = 'view';
         $internalSearch = '';
     } else if (isset($_REQUEST["action"]) && $_REQUEST["action"] == "view" && isset($_REQUEST["searchterm"]) && $_REQUEST["searchterm"] != "") {
