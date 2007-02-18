@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: export.main.php,v 1.26 2006-09-19 21:39:39 matteo Exp $
+* $Id: export.main.php,v 1.27 2007-02-18 21:33:43 matteo Exp $
 *
 * XML, XML DocBook, XHTML and PDF export - main page
 *
@@ -38,8 +38,8 @@ require_once("../inc/Export.php");
 if (!emptyTable(SQLPREFIX."faqdata")) {
 
     if (!emptyTable(SQLPREFIX."faqcategories")) {
-        $tree = new PMF_Category();
-        $tree->buildTree();
+        $category = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups);
+        $category->buildTree();
         // TODO: ENHANCEMENT/VERY LOW PRIORITY
         //       Give the user a multple selection and add support
         //       for multiple category ids (multiple="multiple")
@@ -50,7 +50,7 @@ if (!emptyTable(SQLPREFIX."faqdata")) {
             <label class="left" for="rubrik"><?php print($PMF_LANG["ad_entry_category"]); ?></label>
             <select name="<?php print HTTP_PARAMS_GET_CATID; ?>" id="<?php print HTTP_PARAMS_GET_CATID; ?>" size="10">
 <?php
-        print($tree->printCategoryOptions());
+        print($category->printCategoryOptions());
 ?>
             </select>
             <br />
