@@ -1,10 +1,10 @@
 <?php
 /**
- * $Id: index.php,v 1.85 2007-02-10 20:57:17 thorstenr Exp $
+ * $Id: index.php,v 1.86 2007-02-18 18:07:17 thorstenr Exp $
  *
  * This is the main public frontend page of phpMyFAQ. It detects the browser's
- * language, gets and sets all cookie, post and get informations and includes 
- * the templates we need and set all internal variables to the template 
+ * language, gets and sets all cookie, post and get informations and includes
+ * the templates we need and set all internal variables to the template
  * variables. That's all.
  *
  * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -74,6 +74,7 @@ if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE)) {
 //
 require_once ('inc/PMF_User/CurrentUser.php');
 $auth = null;
+$error = '';
 if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
     // login with username and password
     $user = new PMF_CurrentUser();
@@ -98,8 +99,6 @@ if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
     if ($user) {
         $auth = true;
     } else {
-        // error
-        $error = $PMF_LANG['ad_auth_sess'];
         $user = null;
         unset($user);
     }
@@ -429,7 +428,8 @@ if (isset($auth)) {
         'writeLoginPath'    => $_SERVER['PHP_SELF'].'?action=login',
         'login'             => $PMF_LANG['ad_auth_ok'],
         'username'          => $PMF_LANG['ad_auth_user'],
-        'password'          => $PMF_LANG['ad_auth_passwd']));
+        'password'          => $PMF_LANG['ad_auth_passwd'],
+        'msgLoginFailed'    => $error));
 }
 $tpl->includeTemplate('loginBox', 'index');
 
