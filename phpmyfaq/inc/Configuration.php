@@ -1,13 +1,13 @@
 <?php
 /**
-* $Id: Configuration.php,v 1.10 2006-08-28 20:12:39 thorstenr Exp $
+* $Id: Configuration.php,v 1.11 2007-02-18 20:45:16 matteo Exp $
 *
 * The main class for fetching the configuration, update and delete items.
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @package      phpMyFAQ
 * @since        2006-01-04
-* @copyright    (c) 2006 phpMyFAQ Team
+* @copyright    (c) 2006-2007 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -127,6 +127,7 @@ class PMF_Configuration
                     $name
                     );
                 $this->db->query($query);
+                unset($this->config[$name]);
             }
             return true;
         }
