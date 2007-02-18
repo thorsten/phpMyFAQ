@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Configuration.php,v 1.11 2007-02-18 20:45:16 matteo Exp $
+* $Id: Configuration.php,v 1.12 2007-02-18 21:51:29 matteo Exp $
 *
 * The main class for fetching the configuration, update and delete items.
 *
@@ -127,7 +127,9 @@ class PMF_Configuration
                     $name
                     );
                 $this->db->query($query);
-                unset($this->config[$name]);
+                if (isset($this->config[$name])) {
+                    unset($this->config[$name]);
+                }
             }
             return true;
         }
