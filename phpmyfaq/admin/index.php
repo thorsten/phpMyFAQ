@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.79 2007-02-10 21:01:02 thorstenr Exp $
+* $Id: index.php,v 1.80 2007-02-18 18:20:36 thorstenr Exp $
 *
 * The main admin backend index file
 *
@@ -147,7 +147,11 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'logout' && $auth) {
 //
 if (isset($user) && is_object($user)) {
     $current_admin_user   = $user->getUserId();
-    $current_admin_groups = $user->perm->getUserGroups($current_admin_user);
+    if (is_a($user->perm, "PMF_PermMedium")) {
+        $current_admin_groups = $user->perm->getUserGroups($current_admin_user);
+    } else {
+        $current_admin_groups = 0;
+    }
     if (0 == count($current_admin_groups)) {
         $current_admin_groups = array(-1);
     }
@@ -275,7 +279,7 @@ if (isset($auth)) {
         // start page with some informations about the FAQ
         print '<h2>phpMyFAQ Information</h2>';
         $PMF_TABLE_INFO = $db->getTableStatus();
-?>    
+?>
     <div id="quicklinks">
     <fieldset>
         <legend><?php print $PMF_LANG['ad_quicklinks']; ?></legend>
@@ -291,7 +295,7 @@ if (isset($auth)) {
         </ul>
     </fieldset>
     </div>
-    
+
     <dl class="table-display">
         <dt><strong><?php print $PMF_LANG["ad_start_visits"]; ?></strong></dt>
         <dd><?php print $PMF_TABLE_INFO[SQLPREFIX."faqsessions"]; ?></dd>
