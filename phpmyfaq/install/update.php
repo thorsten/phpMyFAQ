@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.101 2007-02-18 19:03:36 thorstenr Exp $
+* $Id: update.php,v 1.102 2007-02-18 20:29:20 thorstenr Exp $
 *
 * Main update script
 *
@@ -8,7 +8,7 @@
 * @author       Thomas Melchinger <t.melchinger@uni.de>
 * @author       Matteo Scaramuccia <matteo@scaramuccia.com>
 * @since        2002-01-10
-* @copyright    (c) 2001-2007 phpMyFAQ Team
+* @copyright    (c) 2002-2007 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -182,9 +182,6 @@ if ($step == 1) {
 <p class="center">
     <strong>Attention! This version might be broken and it's under heavy development.</strong>
 </p>
-<p class="center">
-    <strong>Attention! The update stage is supposed to work only starting from phpMyFAQ 1.6.x (or previous versions): no update stage, even if necessary, is supported if you are starting from a 2.0.0 alpha/beta version, unless it is explicitly listed into the dropdown above.</strong>
-</p>
 
 <p class="center"><input type="submit" value="Go to step 2 of 5" class="button" /></p>
 </fieldset>
@@ -236,7 +233,7 @@ if ($step == 2) {
 <input type="hidden" name="version" value="<?php print $_POST["version"]; ?>" />
 <fieldset class="installation">
 <legend class="installation"><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 2 of 5)</strong></legend>
-<p>A backup of your configuration have been made.</p>
+<p>A backup of your database configuration have been made.</p>
 <p>Now the configuration files will be updated.</p>
 <p class="center"><input type="submit" value="Go to step 3 of 5" class="button" /></p>
 </fieldset>
@@ -341,7 +338,7 @@ if ($step == 3) {
 <?php
     }
 ?>
-<p class="center">The configuration files will be updated after the next step.</p>
+<p class="center">The configuration will be updated after the next step.</p>
 <p class="center"><input type="submit" value="Go to step 4 of 5" class="button" /></p>
 </fieldset>
 </form>
@@ -1374,13 +1371,13 @@ if ($step == 5) {
         @unlink(PMF_ROOT_DIR."/phpmyfaq.spec");
     }
     // Remove 'installer.php' file
-    if (@unlink(basename($_SERVER["PHP_SELF"]))) {
+    if (@unlink(dirname($_SERVER['PATH_TRANSLATED']).'/installer.php')) {
         print "<p class=\"center\">The file <em>./install/installer.php</em> was deleted automatically.</p>\n";
     } else {
         print "<p class=\"center\">Please delete the file <em>./install/installer.php</em> manually.</p>\n";
     }
     // Remove 'update.php' file
-    if (@unlink(dirname($_SERVER["PATH_TRANSLATED"])."/update.php")) {
+    if (@unlink(dirname($_SERVER['PATH_TRANSLATED']).'/update.php')) {
         print "<p class=\"center\">The file <em>./install/update.php</em> was deleted automatically.</p>\n";
     } else {
         print "<p class=\"center\">Please delete the file <em>./install/update.php</em> manually.</p>\n";
