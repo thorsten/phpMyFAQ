@@ -1,23 +1,23 @@
 <?php
 /**
-* $Id: record.save.php,v 1.52 2006-12-31 08:52:50 matteo Exp $
-*
-* Save or update a FAQ record
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @since        2003-02-23
-* @copyright    (c) 2001-2006 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * $Id: record.save.php,v 1.53 2007-02-18 21:50:40 thorstenr Exp $
+ *
+ * Save or delete a FAQ record
+ *
+ * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since        2003-02-23
+ * @copyright    (c) 2003-2007 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
@@ -52,12 +52,12 @@ if (    isset($submit[2])
      && isset($_REQUEST['rubrik']) && is_array($_REQUEST['rubrik'])
     ) {
     // Preview
-    $rubrik = $_REQUEST["rubrik"];
-    $cat = new PMF_Category;
-    $cat->transform(0);
+    $rubrik = $_REQUEST['rubrik'];
+    $category = new PMF_Category;
+    $category->transform(0);
     $categorylist = '';
     foreach ($rubrik as $categories) {
-        $categorylist .= $cat->getPath($categories).'<br />';
+        $categorylist .= $category->getPath($categories).'<br />';
     }
 ?>
     <h2><?php print $PMF_LANG["ad_entry_preview"]; ?></h2>
@@ -69,26 +69,30 @@ if (    isset($submit[2])
     <?php print $PMF_LANG["msgAuthor"].$_REQUEST["author"]; ?></p>
 
     <form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;action=editpreview" method="post">
-    <input type="hidden" name="id"          value="<?php print $_REQUEST['id']; ?>" />
-    <input type="hidden" name="thema"       value="<?php print htmlspecialchars($_REQUEST['thema']); ?>" />
+    <input type="hidden" name="id"                  value="<?php print (int)$_REQUEST['id']; ?>" />
+    <input type="hidden" name="thema"               value="<?php print htmlspecialchars($_REQUEST['thema']); ?>" />
     <input type="hidden" name="content" class="mceNoEditor" value="<?php print htmlspecialchars($_REQUEST['content']); ?>" />
-    <input type="hidden" name="lang"        value="<?php print $_REQUEST['language']; ?>" />
-    <input type="hidden" name="keywords"    value="<?php print $_REQUEST['keywords']; ?>" />
-    <input type="hidden" name="tags"        value="<?php print $_REQUEST['tags']; ?>" />
-    <input type="hidden" name="author"      value="<?php print $_REQUEST['author']; ?>" />
-    <input type="hidden" name="email"       value="<?php print $_REQUEST['email']; ?>" />
+    <input type="hidden" name="lang"                value="<?php print $_REQUEST['language']; ?>" />
+    <input type="hidden" name="keywords"            value="<?php print $_REQUEST['keywords']; ?>" />
+    <input type="hidden" name="tags"                value="<?php print $_REQUEST['tags']; ?>" />
+    <input type="hidden" name="author"              value="<?php print $_REQUEST['author']; ?>" />
+    <input type="hidden" name="email"               value="<?php print $_REQUEST['email']; ?>" />
 <?php
     foreach ($rubrik as $key => $categories) {
         print '    <input type="hidden" name="rubrik['.$key.']" value="'.$categories.'" />';
     }
 ?>
-    <input type="hidden" name="solution_id" value="<?php print $_REQUEST['solution_id']; ?>" />
-    <input type="hidden" name="revision"    value="<?php print (isset($_REQUEST['revision']) ? $_REQUEST['revision'] : '') ?>" />
-    <input type="hidden" name="active"      value="<?php print $_REQUEST['active']; ?>" />
-    <input type="hidden" name="changed"     value="<?php print $_REQUEST['changed']; ?>" />
-    <input type="hidden" name="comment"     value="<?php print (isset($_REQUEST['comment']) ? $_REQUEST['comment'] : ''); ?>" />
-    <input type="hidden" name="dateStart"   value="<?php print $dateStart; ?>" />
-    <input type="hidden" name="dateEnd"     value="<?php print $dateEnd; ?>" />
+    <input type="hidden" name="solution_id"         value="<?php print (int)$_REQUEST['solution_id']; ?>" />
+    <input type="hidden" name="revision"            value="<?php print (isset($_REQUEST['revision']) ? (int)$_REQUEST['revision'] : '') ?>" />
+    <input type="hidden" name="active"              value="<?php print $_REQUEST['active']; ?>" />
+    <input type="hidden" name="changed"             value="<?php print $_REQUEST['changed']; ?>" />
+    <input type="hidden" name="comment"             value="<?php print (isset($_REQUEST['comment']) ? $_REQUEST['comment'] : ''); ?>" />
+    <input type="hidden" name="dateStart"           value="<?php print $dateStart; ?>" />
+    <input type="hidden" name="dateEnd"             value="<?php print $dateEnd; ?>" />
+    <input type="hidden" name="userpermission"      value="<?php print $_POST['userpermission']; ?>" />
+    <input type="hidden" name="restricted_users"    value="<?php print $_POST['restricted_users']; ?>" />
+    <input type="hidden" name="grouppermission"     value="<?php print $_POST['grouppermission']; ?>" />
+    <input type="hidden" name="restricted_group"    value="<?php print $_POST['restricted_group']; ?>" />
     <p align="center"><input type="submit" name="submit" value="<?php print $PMF_LANG["ad_entry_back"]; ?>" /></p>
     </form>
 <?php
@@ -99,16 +103,16 @@ if (    isset($submit[1])
      && isset($_REQUEST['rubrik']) && is_array($_REQUEST['rubrik'])
     ) {
     // Wenn auf Speichern geklickt wurde...
-    adminlog("Beitragsave", $_REQUEST["id"]);
+    adminlog("Beitragsave", (int)$_REQUEST['id']);
     print "<h2>".$PMF_LANG["ad_entry_aor"]."</h2>\n";
 
     $tagging = new PMF_Tags($db, $LANGCODE);
 
     $categories  = $_REQUEST['rubrik'];
-    $record_id   = intval($_REQUEST['id']);
+    $record_id   = (int)$_REQUEST['id'];
     $record_lang = $db->escape_string($_POST['language']);
     $revision    = $db->escape_string($_POST['revision']);
-    $revision_id = intval($_POST['revision_id']);
+    $revision_id = (int)$_POST['revision_id'];
 
 	if ('yes' == $revision) {
         // Add current version into revision table
@@ -169,23 +173,22 @@ if (isset($submit[0])) {
         if (isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "") {
             $thema = "<strong>".$_REQUEST["thema"]."</strong>";
         } else {
-            $thema = "";
+            $thema = '';
         }
         if (isset($_REQUEST["author"]) && $_REQUEST["author"] != "") {
             $author = $PMF_LANG["ad_entry_del_2"]."<strong>".$_REQUEST["author"]."</strong>";
         } else {
-            $author = "";
+            $author = '';
         }
 ?>
     <p align="center"><?php print $PMF_LANG["ad_entry_del_1"]." ".$thema." ".$author." ".$PMF_LANG["ad_entry_del_3"]; ?></p>
     <div align="center">
-    <form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>" method="POST">
-    <input type="hidden" name="action" value="delentry">
-    <input type="hidden" name="referer" value="<?php print $_SERVER["HTTP_REFERER"]; ?>">
-    <input type="hidden" name="id" value="<?php print $_REQUEST["id"]; ?>">
-    <input type="hidden" name="language" value="<?php print $_REQUEST["language"]; ?>">
-    <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_gen_yes"] ?>" name="subm">
-    <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_gen_no"] ?>" name="subm">
+    <form action="?action=delentry" method="post">
+        <input type="hidden" name="referer" value="<?php print $_SERVER["HTTP_REFERER"]; ?>">
+        <input type="hidden" name="id" value="<?php print (int)$_REQUEST["id"]; ?>">
+        <input type="hidden" name="language" value="<?php print $_REQUEST["language"]; ?>">
+        <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_gen_yes"] ?>" name="subm">
+        <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_gen_no"] ?>" name="subm">
     </form>
     </div>
 <?php
@@ -193,4 +196,3 @@ if (isset($submit[0])) {
         print $PMF_LANG["err_NotAuth"];
     }
 }
-?>

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.add.php,v 1.51 2006-12-31 08:52:50 matteo Exp $
+ * $Id: record.add.php,v 1.52 2007-02-18 21:50:40 thorstenr Exp $
  *
  * Adds a record in the database, handles the preview and checks for missing
  * category entries.
@@ -57,17 +57,17 @@ if ($permission["editbt"]) {
         // new entry
         adminlog("Beitragcreatesave");
         printf("<h2>%s</h2>\n", $PMF_LANG['ad_entry_aor']);
-        
+
         $category   = new PMF_Category($LANGCODE);
         $tagging    = new PMF_Tags($db, $LANGCODE);
-        
+
         // Get the data
         $categories     = $_POST['rubrik'];
         $tags           = $db->escape_string(trim($_POST['tags']));
-        $userperm       = isset($_POST['userpermission']) ? 
+        $userperm       = isset($_POST['userpermission']) ?
                           $db->escape_string($_POST['userpermission']) : 'all';
         $user_allowed   = ('all' == $userperm) ? -1 : $db->escape_string($_POST['restricted_users']);
-        $groupperm      = isset($_POST['grouppermission']) ? 
+        $groupperm      = isset($_POST['grouppermission']) ?
                           $db->escape_string($_POST['grouppermission']) : 'all';
         $group_allowed  = ('all' == $groupperm) ? -1 : $db->escape_string($_POST['restricted_groups']);
         $recordData     = array(
@@ -157,8 +157,8 @@ if ($permission["editbt"]) {
             print '    <input type="hidden" name="rubrik['.$key.']" value="'.$categories.'" />';
         }
 ?>
-    <input type="hidden" name="solution_id"         value="<?php print $_POST['solution_id']; ?>" />
-    <input type="hidden" name="revision"            value="<?php print (isset($_POST['revision']) ? $_POST['revision'] : ''); ?>" />
+    <input type="hidden" name="solution_id"         value="<?php print (int)$_POST['solution_id']; ?>" />
+    <input type="hidden" name="revision"            value="<?php print (isset($_POST['revision']) ? (int)$_POST['revision'] : ''); ?>" />
     <input type="hidden" name="active"              value="<?php print $_POST['active']; ?>" />
     <input type="hidden" name="changed"             value="<?php print $_POST['changed']; ?>" />
     <input type="hidden" name="comment"             value="<?php print (isset($_POST['comment']) ? $_POST['comment'] : ''); ?>" />
