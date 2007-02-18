@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.99 2007-02-11 13:38:41 thorstenr Exp $
+* $Id: update.php,v 1.100 2007-02-18 11:57:28 thorstenr Exp $
 *
 * Main update script
 *
@@ -388,7 +388,7 @@ if ($step == 5) {
     if (version_compare($version, '2.0.0-alpha', '<')) {
         require_once(PMF_ROOT_DIR."/inc/config.php");
     }
-    
+
     require_once(PMF_ROOT_DIR."/inc/functions.php");
     require_once(PMF_ROOT_DIR."/inc/Configuration.php");
     require_once(PMF_ROOT_DIR."/inc/Db.php");
@@ -438,7 +438,7 @@ if ($step == 5) {
     }
     if (version_compare($version, '1.5.2', '<')) {
         switch($DB["type"]) {
-            case 'mssql':   $query[] = 'CREATE INDEX idx_record_id_lang ON '.SQLPREFIX.'faqcategoryrelations (record_id, record_lang)';
+            case 'mssql':   $query[] = 'CREATE INDEX idx_record ON '.SQLPREFIX.'faqcategoryrelations (record_id, record_lang)';
                             break;
             default:        $query[] = 'ALTER TABLE '.SQLPREFIX.'faqcategoryrelations ADD INDEX idx_record_id_lang (record_id, record_lang)';
                             break;
@@ -1090,7 +1090,7 @@ if ($step == 5) {
                 foreach ($_records as $_r) {
                     // PMF 1.6.x: # 23 rights
                     // PMF 2.0.0: # 26 rights
-                    // addglossary, editglossary, delglossary, addgroup, editgroup, delgroup: 
+                    // addglossary, editglossary, delglossary, addgroup, editgroup, delgroup:
                     // 23-29; id = '1' is supposed to be the 'admin' user
                     $glossaryRights = ('1' == $_r['id']) ? '111111' : '0000000';
                     // changebtrevs is the 26th right in PMF 2.0.0, whilst it is the 23rd in PMF 1.6.x
@@ -1329,7 +1329,7 @@ if ($step == 5) {
                                 (\'phpMyFAQToken\', \''.md5(uniqid(rand())).'\')';
                 break;
         }
-        
+
         // 4/4. Fill the new tables for user and group permissions
         $query[] = 'INSERT INTO '.SQLPREFIX.'faqcategory_group (category_id) SELECT DISTINCT id FROM '.SQLPREFIX.'faqcategories';
         $query[] = 'UPDATE '.SQLPREFIX.'faqcategory_group SET group_id = -1 WHERE group_id = 0';
