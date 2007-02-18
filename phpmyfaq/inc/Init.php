@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Init.php,v 1.26 2007-02-18 16:46:00 thorstenr Exp $
+ * $Id: Init.php,v 1.27 2007-02-18 18:01:20 matteo Exp $
  *
  * Some functions
  *
@@ -403,7 +403,10 @@ class PMF_Init
     }
 
     /**
-     * This function deregisters the global variables when register_globals = on
+     * This function deregisters the global variables only when 'register_globals = On'.
+     * Note: you must assure that 'session_start()' is called AFTER this function and not BEFORE,
+     *       otherwise each $_SESSION key will be set to NULL because $GLOBALS
+     *       has an entry, as copy-by-ref, for each $_SESSION key when 'register_globals = On'.
      *
      * @return  void
      * @access  private
