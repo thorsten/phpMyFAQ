@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.80 2007-02-18 18:20:36 thorstenr Exp $
+* $Id: index.php,v 1.81 2007-02-18 18:27:03 thorstenr Exp $
 *
 * The main admin backend index file
 *
@@ -150,7 +150,7 @@ if (isset($user) && is_object($user)) {
     if (is_a($user->perm, "PMF_PermMedium")) {
         $current_admin_groups = $user->perm->getUserGroups($current_admin_user);
     } else {
-        $current_admin_groups = 0;
+        $current_admin_groups = array(-1);
     }
     if (0 == count($current_admin_groups)) {
         $current_admin_groups = array(-1);
