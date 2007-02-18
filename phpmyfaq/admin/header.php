@@ -1,23 +1,23 @@
 <?php
 /**
-* $Id: header.php,v 1.35 2006-11-19 01:11:20 thorstenr Exp $
-*
-* header of the admin area
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @since        2003-02-26
-* @copyright    (c) 2001-2006 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * $Id: header.php,v 1.36 2007-02-18 18:39:51 thorstenr Exp $
+ *
+ * Header of the admin area
+ *
+ * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since        2003-02-26
+ * @copyright    (c) 2003-2007 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
@@ -36,7 +36,7 @@ header("Vary: Negotiate,Accept");
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php print $PMF_LANG["metaLanguage"]; ?>" lang="<?php print $PMF_LANG["metaLanguage"]; ?>">
 <head>
     <title><?php print htmlentities($PMF_CONF["title"]); ?> - powered by phpMyFAQ</title>
-    <meta name="copyright" content="(c) 2001-2006 phpMyFAQ Team" />
+    <meta name="copyright" content="(c) 2001-2007 phpMyFAQ Team" />
     <meta http-equiv="Content-Type" content="text/html; charset=<?php print $PMF_LANG["metaCharset"]; ?>" />
     <link rel="shortcut icon" href="../template/favicon.ico" type="image/x-icon" />
     <link rel="icon" href="../template/favicon.ico" type="image/x-icon" />
@@ -149,8 +149,8 @@ if (isset($_action)) {
         case 'question':
             addMenuEntry('addcateg,editcateg,delcateg',          'category',         'ad_menu_categ_edit');
             addMenuEntry('addbt',                                'editentry',        'ad_entry_add');
-            addMenuEntry('editbt,delbt',                         'accept',           'ad_menu_entry_aprove');
             addMenuEntry('editbt,delbt',                         'view',             'ad_menu_entry_edit');
+            addMenuEntry('editbt,delbt',                         'accept',           'ad_menu_entry_aprove');
             addMenuEntry('delquestion',                          'question',         'ad_menu_open');
             addMenuEntry('addglossary,editglossary,delglossary', 'glossary',         'ad_menu_glossary');
             addMenuEntry('addnews,editnews,delnews',             'news&amp;do=edit', 'ad_menu_news_edit');
