@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: CurrentUser.php,v 1.20 2006-11-11 09:26:09 thorstenr Exp $
+ * $Id: CurrentUser.php,v 1.21 2007-02-18 18:52:19 matteo Exp $
  *
  * manages authentication process using php sessions.
  *
@@ -296,7 +296,20 @@ class PMF_CurrentUser extends PMF_User
     function updateSessionId($updateLastlogin = false)
     {
         // renew the session-ID
-        session_regenerate_id();
+        if (function_exists('session_regenerate_id')) {
+            if (session_regenerate_id()) {
+                if (version_compare(phpversion(),'4.3.3', '<')) {
+                    setcookie(
+                        session_name(),
+                        session_id(),
+                        0 == ini_get('session.cookie_lifetime') ? 0 : time() + ini_get('session.cookie_lifetime'),
+                        ini_get('session.cookie_path')
+                    );
+                }
+            }
+        } else {
+            // TODO: implement.
+        }
         // store session-ID age
         $now = time();
         $_SESSION[PMF_SESSION_ID_TIMESTAMP] = $now;
