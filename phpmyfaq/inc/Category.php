@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Category.php,v 1.35 2007-02-11 14:15:14 thorstenr Exp $
+ * $Id: Category.php,v 1.36 2007-02-18 15:43:30 thorstenr Exp $
  *
  * The main category class
  *
@@ -38,7 +38,7 @@ class PMF_Category
      * @var  object  PMF_Db
      */
     var $db = null;
-    
+
     /**
      * User ID
      *
@@ -130,11 +130,11 @@ class PMF_Category
     function PMF_Category ($language = '', $user = null, $groups = null)
     {
         global $db;
-        
+
         $this->language   = $language;
         $this->db         = &$db;
         $this->categories = array();
-        
+
         if (is_null($user)) {
             $this->user  = -1;
         } else {
@@ -145,7 +145,7 @@ class PMF_Category
         } else {
             $this->groups = $groups;
         }
-        
+
         $this->lineTab    = $this->getOrderedCategories();
         for ($i = 0; $i < count($this->lineTab); $i++) {
             $this->lineTab[$i]['level'] = $this->levelOf($this->lineTab[$i]['id']);
@@ -175,7 +175,7 @@ class PMF_Category
                 %sfaqcategory_user fu
             ON
                 fc.id = fu.category_id
-            WHERE 
+            WHERE
                 ( fu.user_id = %d
             OR
                 fg.group_id IN (%s) )",
@@ -188,7 +188,7 @@ class PMF_Category
             $query .= " AND lang = '".$this->language."'";
         }
         $query .= ' ORDER BY id';
-        
+
         $result = $this->db->query($query);
         while ($row = $this->db->fetch_assoc($result)) {
             $this->categoryName[$row['id']] = $row;
@@ -745,10 +745,10 @@ class PMF_Category
     function printCategories($activeCat = 0)
     {
         global $sids, $PMF_LANG, $PMF_CONF;
-        
+
         $open = 0;
         $output = '';
-        
+
         if ($this->height() > 0) {
             for ($y = 0 ;$y < $this->height(); $y = $this->getNextLineTree($y)) {
                 list($symbol, $categoryName, $parent, $description) = $this->getLineDisplay($y);
@@ -806,7 +806,7 @@ class PMF_Category
         }
         return $output;
     }
-    
+
     /**
      * Private method to create a category link
      *
@@ -829,7 +829,7 @@ class PMF_Category
         if ($hasChildren) {
             $oLink->text .= sprintf(' <img src="images/more.gif" width="11" height="11" alt="%s" style="border: none; vertical-align: middle;" />',
                 $categoryName);
-        } 
+        }
         $oLink->tooltip = $description;
         return $oLink->toHtmlAnchor();
     }
@@ -901,7 +901,7 @@ class PMF_Category
             return implode($separator, $temp);
         }
     }
-    
+
     /**
      * Returns the categories from a record id and language
      *
@@ -915,14 +915,14 @@ class PMF_Category
     function getCategoryRelationsFromArticle($record_id, $record_lang)
     {
         $categories = array();
-        
+
         $query = sprintf("
             SELECT
                 category_id, category_lang
             FROM
                 %sfaqcategoryrelations
             WHERE
-                record_id = %d 
+                record_id = %d
             AND
                 record_lang = '%s'",
             SQLPREFIX,
@@ -934,7 +934,7 @@ class PMF_Category
                 'category_id' => $row->category_id,
                 'category_lang' => $row->category_lang);
         }
-        
+
         return $categories;
     }
 
@@ -1075,7 +1075,7 @@ class PMF_Category
             $category_data['description'],
             $category_data['user_id']);
         $this->db->query($query);
-        
+
         return $id;
     }
 
@@ -1540,7 +1540,7 @@ class PMF_Category
         }
         return $permissions;
     }
-    
+
     /**
      * Returns the number of records in each category
      *
@@ -1552,7 +1552,7 @@ class PMF_Category
     function getNumberOfRecordsOfCategory($active = 'yes')
     {
         $numRecordsByCat = array();
-        
+
         $query = sprintf("
             SELECT
                 fcr.category_id AS category_id,
@@ -1561,22 +1561,69 @@ class PMF_Category
                 %sfaqcategoryrelations fcr, %sfaqdata fd
             WHERE
                 fcr.record_id = fd.id
-            AND 
+            AND
                 fcr.record_lang = fd.lang
-            AND 
+            AND
                 fd.active = '%s'
             GROUP BY fcr.category_id",
             SQLPREFIX,
             SQLPREFIX,
             $active);
-        
+
         $result = $this->db->query($query);
         if ($this->db->num_rows($result) > 0) {
             while ($row = $this->db->fetch_object($result)) {
                 $numRecordsByCat[$row->category_id] = $row->number;
             }
         }
-        
+
         return $numRecordsByCat;
+    }
+
+    /**
+     * Create a matrix for representing categories and faq records
+     *
+     * @return  array   $matrix
+     * @access  public
+     * @since   2007-02-18
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function getCategoryRecordsMatrix()
+    {
+        $matrix = array();
+
+        $query = sprintf('
+            SELECT
+                %sfaqcategoryrelations.category_id AS id_cat,
+                %sfaqdata.id AS id
+            FROM
+                %sfaqdata
+            INNER JOIN
+                %sfaqcategoryrelations
+            ON
+                %sfaqdata.id = %sfaqcategoryrelations.record_id
+            AND
+                %sfaqdata.lang = %sfaqcategoryrelations.category_lang
+            ORDER BY
+                %sfaqcategoryrelations.category_id, %sfaqdata.id',
+             SQLPREFIX,
+             SQLPREFIX,
+             SQLPREFIX,
+             SQLPREFIX,
+             SQLPREFIX,
+             SQLPREFIX,
+             SQLPREFIX,
+             SQLPREFIX,
+             SQLPREFIX,
+             SQLPREFIX);
+        $result = $this->db->query($query);
+
+        if ($this->db->num_rows($result) > 0) {
+            while ($row = $this->db->fetch_object($result)) {
+                $matrix[$row->id_cat][$row->id] = true;
+            }
+        }
+
+        return $matrix;
     }
 }
