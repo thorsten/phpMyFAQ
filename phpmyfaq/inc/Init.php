@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Init.php,v 1.25 2007-01-21 11:42:27 thorstenr Exp $
+ * $Id: Init.php,v 1.26 2007-02-18 16:46:00 thorstenr Exp $
  *
  * Some functions
  *
@@ -33,6 +33,9 @@ if (DEBUG) {
     if (defined('E_STRICT')) {
        error_reporting(E_ALL & ~E_STRICT);
     }
+    ini_set('display_errors', 1);
+} else {
+    ini_set('display_errors', 0);
 }
 
 //
@@ -156,7 +159,7 @@ class PMF_Init
         if (ini_get('register_globals')) {
             PMF_Init::unregisterGlobalVariables();
         }
-        
+
         // clean external variables
         $externals = array('_REQUEST', '_GET', '_POST', '_COOKIE');
         foreach ($externals as $external) {
