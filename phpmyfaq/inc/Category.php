@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Category.php,v 1.36 2007-02-18 15:43:30 thorstenr Exp $
+ * $Id: Category.php,v 1.37 2007-02-18 17:08:42 matteo Exp $
  *
  * The main category class
  *
@@ -227,7 +227,7 @@ class PMF_Category
             $query .= substr($_query, 4);
         }
         if (isset($this->language) && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
-            $query .= ' AND lang = "'.$this->language.'"';
+            $query .= " AND lang = '".$this->language."'";
         }
         $query .= " ORDER BY id";
         $result = $this->db->query($query);
