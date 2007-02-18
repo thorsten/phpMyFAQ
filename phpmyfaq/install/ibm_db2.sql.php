@@ -1,13 +1,13 @@
 <?php
 /**
-* $Id: ibm_db2.sql.php,v 1.13 2006-11-02 23:00:45 matteo Exp $
+* $Id: ibm_db2.sql.php,v 1.14 2007-02-18 11:38:12 thorstenr Exp $
 *
 * CREATE TABLE instruction for IBM DB2 Universal Database, IBM Cloudscape,
 * and Apache Derby databases
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2005-07-31
-* @copyright    (c) 2005-2006 phpMyFAQ Team
+* @copyright    (c) 2005-2007 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -94,7 +94,8 @@ category_id INTEGER NOT NULL,
 category_lang VARCHAR(5) NOT NULL default '',
 record_id INTEGER NOT NULL,
 record_lang VARCHAR(5) NOT NULL default '',
-PRIMARY KEY  (category_id,category_lang,record_id,record_lang)
+PRIMARY KEY  (category_id, category_lang, record_id, record_lang),
+KEY idx_records (record_id, record_lang)
 )";
 
 //faqcategory_group

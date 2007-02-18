@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: pgsql.sql.php,v 1.28 2006-11-02 23:00:45 matteo Exp $
+* $Id: pgsql.sql.php,v 1.29 2007-02-18 11:38:12 thorstenr Exp $
 *
 * CREATE TABLE instruction for PostgreSQL database
 *
@@ -8,7 +8,7 @@
 * @author       Tom Rochester <tom.rochester@gmail.com>
 * @author       Matteo Scaramuccia <matteo@scaramuccia.com>
 * @since        2004-09-18
-* @copyright    (c) 2004-2006 phpMyFAQ Team
+* @copyright    (c) 2004-2007 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -137,7 +137,8 @@ category_id int4 NOT NULL,
 category_lang VARCHAR(5) NOT NULL,
 record_id int4 NOT NULL,
 record_lang VARCHAR(5) NOT NULL,
-PRIMARY KEY  (category_id,category_lang,record_id,record_lang)
+PRIMARY KEY  (category_id, category_lang, record_id, record_lang),
+KEY idx_records (record_id, record_lang)
 )";
 
 //faqcategory_group

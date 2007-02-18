@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mysql.sql.php,v 1.44 2006-11-12 20:56:30 thorstenr Exp $
+* $Id: mysql.sql.php,v 1.45 2007-02-18 11:38:12 thorstenr Exp $
 *
 * CREATE TABLE instruction for MySQL database
 *
@@ -8,7 +8,7 @@
 * @author       Tom Rochester <tom.rochester@gmail.com>
 * @author       Lars Tiedemann <php@larstiedemann.de>
 * @since        2004-09-18
-* @copyright    (c) 2001-2006 phpMyFAQ Team
+* @copyright    (c) 2004-2007 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -95,7 +95,8 @@ category_id INT(11) NOT NULL,
 category_lang VARCHAR(5) NOT NULL default '',
 record_id INT(11) NOT NULL,
 record_lang VARCHAR(5) NOT NULL default '',
-PRIMARY KEY  (category_id,category_lang,record_id,record_lang)
+PRIMARY KEY  (category_id, category_lang, record_id, record_lang),
+KEY idx_records (record_id, record_lang)
 )";
 
 //faqcategory_group

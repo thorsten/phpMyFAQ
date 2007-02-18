@@ -1,13 +1,13 @@
 <?php
 /**
-* $Id: mssql.sql.php,v 1.17 2006-11-02 23:00:45 matteo Exp $
+* $Id: mssql.sql.php,v 1.18 2007-02-18 11:38:12 thorstenr Exp $
 *
 * CREATE TABLE instruction for MS SQL Server database
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Matteo Scaramuccia <matteo@scaramuccia.com>
 * @since        2005-01-11
-* @copyright    (c) 2005-2006 phpMyFAQ Team
+* @copyright    (c) 2005-20076 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -108,7 +108,8 @@ category_id integer NOT NULL,
 category_lang varchar(5) NOT NULL,
 record_id integer NOT NULL,
 record_lang varchar(5) NOT NULL,
-PRIMARY KEY  (category_id,category_lang,record_id,record_lang)
+PRIMARY KEY  (category_id, category_lang, record_id, record_lang),
+KEY idx_records (record_id, record_lang)
 )";
 
 //faqcategory_group
