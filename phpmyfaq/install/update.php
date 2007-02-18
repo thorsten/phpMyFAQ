@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.100 2007-02-18 11:57:28 thorstenr Exp $
+* $Id: update.php,v 1.101 2007-02-18 19:03:36 thorstenr Exp $
 *
 * Main update script
 *
@@ -1321,14 +1321,7 @@ if ($step == 5) {
         $anonymous->setUserData($anonymousData);
 
         // 3/4. Add new config key, 'phpMyFAQToken', into the faqconfig table
-        switch($DB["type"]) {
-            default:
-                $query[] = 'INSERT INTO '.SQLPREFIX.'faqconfig
-                                (config_name, config_value)
-                            VALUES
-                                (\'phpMyFAQToken\', \''.md5(uniqid(rand())).'\')';
-                break;
-        }
+        $query[] = 'INSERT INTO '.SQLPREFIX.'faqconfig (config_name, config_value) VALUES (\'phpMyFAQToken\', \''.md5(uniqid(rand())).'\')';
 
         // 4/4. Fill the new tables for user and group permissions
         $query[] = 'INSERT INTO '.SQLPREFIX.'faqcategory_group (category_id) SELECT DISTINCT id FROM '.SQLPREFIX.'faqcategories';
