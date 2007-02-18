@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Linkverifier.php,v 1.17 2007-02-11 12:00:21 thorstenr Exp $
+ * $Id: Linkverifier.php,v 1.18 2007-02-18 15:11:57 thorstenr Exp $
  *
  * PMF_Linkverifier
  *
@@ -17,12 +17,12 @@
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at 
+ * compliance with the License. You may obtain a copy of the License at
  * http://www.mozilla.org/MPL/
  *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations 
+ * License for the specific language governing rights and limitations
  * under the License.
  *
  * The Initial Developer of the Original Code is released for external use
@@ -118,7 +118,7 @@ class PMF_Linkverifier
      * @var integer
      */
     var $user = null;
-    
+
     /**
      * Constructor
      *
@@ -760,12 +760,19 @@ class PMF_Linkverifier
             }
         }
 
-        //$output = '<img src="images/url-'.$src.'.png" id="'.$imgId.'" '.$onLoad.' />';
-        $output = '<div class="url-'.$src.'" id="'.$divId.'">'
-                 .'<span id="'.$spanId.'">'.$PMF_LANG['ad_linkcheck_feedback_url-'.$src].'</span>'
-                 .'<img src="images/null.gif" id="'.$imgId.'"'.$onLoad.' />'
-                 .'</div>';
-        $output = "<a href=\"javascript:onDemandVerifyURL(".$id.",'".$artlang."');\">".$output."</a>";
+        $output = sprintf('<div class="url-%s" id="%s">'
+                 .'<span id="%s">'
+                 .'<a href="javascript:onDemandVerifyURL(%d,\'%s\');">'
+                 .$PMF_LANG['ad_linkcheck_feedback_url-'.$src].'</a></span>'
+                 .'<img src="images/null.gif" id="%s"%s alt="" />'
+                 .'</div>',
+                 $src,
+                 $divId,
+                 $spanId,
+                 $id,
+                 $artlang,
+                 $imgId,
+                 $onLoad);
         return $output;
     }
 
@@ -910,7 +917,7 @@ class PMF_Linkverifier
             return $output;
         }
     }
-    
+
     /**
      * Add new entry into faqlinkverifyrules table
      *
