@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.81 2007-02-10 21:08:23 thorstenr Exp $
+ * $Id: Faq.php,v 1.82 2007-02-19 20:54:03 thorstenr Exp $
  *
  * The main FAQ class
  *
@@ -102,7 +102,7 @@ class PMF_Faq
     * @var  array
     */
     var $faqRecords = array();
-    
+
     /**
      * Users
      *
@@ -128,11 +128,11 @@ class PMF_Faq
     function PMF_Faq(&$db, $language, $user = null, $groups = null)
     {
         global $PMF_LANG;
-        
+
         $this->db = &$db;
         $this->language = $language;
         $this->pmf_lang = $PMF_LANG;
-        
+
         if (is_null($user)) {
             $this->user  = -1;
         } else {
@@ -208,7 +208,7 @@ class PMF_Faq
                 AND '.SQLPREFIX.'faqcategoryrelations.category_id = '.$category.'
             ORDER BY
                 '.SQLPREFIX.'faqdata.id';
-        
+
         $result = $this->db->query($query);
 
         $num = $this->db->num_rows($result);
@@ -344,7 +344,7 @@ class PMF_Faq
     function getRecord($id, $revision_id = null, $admin = false)
     {
         global $PMF_LANG;
-        
+
         $query = sprintf(
             "SELECT
                 *
@@ -820,13 +820,33 @@ class PMF_Faq
     /**
      * Returns an array with all data from all FAQ records
      *
+     * @param   integer $sortType
+     * @param   array   $condition
      * @return  void
      * @access  public
      * @since   2005-12-26
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function getAllRecords($sortType = FAQ_SORTING_TYPE_CATID_FAQID)
+    function getAllRecords($sortType = FAQ_SORTING_TYPE_CATID_FAQID, $condition = null)
     {
+        $where = '';
+        if (!is_null($condition)) {
+            foreach ($condition as $field => $data) {
+                $where .= " AND ".$field;
+                if (is_array($data)) {
+                    $where .= " IN (";
+                    $separator = "";
+                    foreach ($data as $value) {
+                        $where .= $separator."'".$db->escape_string($value)."'";
+                        $separator = ", ";
+                    }
+                    $where .= ")";
+                } else {
+                    $where .= " = '".$db->escape_string($data)."'";
+                }
+            }
+        }
+
         $orderBy = '';
         switch($sortType)
         {
@@ -873,6 +893,7 @@ class PMF_Faq
             LEFT JOIN %sfaqcategoryrelations
                 ON %sfaqdata.id = %sfaqcategoryrelations.record_id
                 AND %sfaqdata.lang = %sfaqcategoryrelations.record_lang
+            %s
             %s",
             SQLPREFIX,
             SQLPREFIX,
@@ -897,6 +918,7 @@ class PMF_Faq
             SQLPREFIX,
             SQLPREFIX,
             SQLPREFIX,
+            $where,
             $orderBy
             );
         $result = $this->db->query($query);
@@ -1677,7 +1699,7 @@ class PMF_Faq
         return true;
     }
 
-    
+
     /**
      * Returns a new question
      *
@@ -1728,7 +1750,7 @@ class PMF_Faq
                     );
             }
         }
-        
+
         return $question;
     }
 
