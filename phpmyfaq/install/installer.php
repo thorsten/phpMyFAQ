@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: installer.php,v 1.84 2007-02-11 13:38:41 thorstenr Exp $
+ * $Id: installer.php,v 1.85 2007-02-20 21:06:46 thorstenr Exp $
  *
  * The main phpMyFAQ Installer
  *
@@ -169,15 +169,20 @@ function cleanInstallation()
     }
     #header {
         margin: auto;
-        padding: 35px;
-        background: #0D487A;
-        color: #ffffff;
+        padding: 25px;
+        background: #E1F0A6;
+        color: #234361;
+        font-size: 36px;
+        font-weight: bold;
         text-align: center;
+        border-right: 3px solid silver;
+        border-bottom: 3px solid silver;
+        -moz-border-radius: 20px 20px 20px 20px;
+        border-radius: 20px 20px 20px 20px;
     }
     #header h1 {
         font-family: "Trebuchet MS", Geneva, Verdana, Arial, Helvetica, sans-serif;
         margin: auto;
-        color: #ffffff;
         text-align: center;
     }
     .center {
@@ -192,16 +197,26 @@ function cleanInstallation()
     }
     legend.installation {
         border: 1px solid black;
-        background-color: #FCE397;
-        padding: 4px 4px 4px 4px;
+        background-color: #D5EDFF;
+        padding: 4px 8px 4px 8px;
+        font-size: 14px;
+        font-weight: bold;
+        -moz-border-radius: 5px 5px 5px 5px;
+        border-radius: 5px 5px 5px 5px;
     }
     .input {
         width: 200px;
         background-color: #f5f5f5;
         border: 1px solid black;
+        margin-bottom: 8px;
     }
-    span.text {
-        width: 250px;
+    .checkbox {
+        background-color: #f5f5f5;
+        border: 1px solid black;
+        margin-bottom: 8px;
+    }
+    label.left {
+        width: 200px;
         float: left;
         text-align: right;
         padding-right: 10px;
@@ -210,18 +225,17 @@ function cleanInstallation()
     #admin {
         line-height: 20px;
         font-weight: bold;
-    }
-    .help {
-        cursor: help;
-        border-bottom: 1px dotted Black;
-        font-size: 14px;
-        font-weight: bold;
-        padding-left: 5px;
+        margin-bottom: 10px;
     }
     .button {
-        background-color: #ff7f50;
-        border: 1px solid #000000;
+        background-color: #89AC15;
+        border: 3px solid #000000;
         color: #ffffff;
+        font-weight: bold;
+        font-size: 24px;
+        padding: 10px 30px 10px 30px;
+        -moz-border-radius: 10px 10px 10px 10px;
+        border-radius: 10px 10px 10px 10px;
     }
     .error {
         margin: auto;
@@ -261,7 +275,7 @@ if (db_check($supported_databases) == false) {
 }
 
 if (!phpmyfaq_check()) {
-    print '<p class="center">It seems you already running a version of phpMyFAQ.<br />Please use the <a href="update.php">update script</a>.</p>';
+    print '<p class="center">It seems you\'re already running a version of phpMyFAQ.<br />Please use the <a href="update.php">update script</a>.</p>';
     HTMLFooter();
     die();
 }
@@ -311,9 +325,9 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 <form action="installer.php" method="post">
 <fieldset class="installation">
 <legend class="installation">Database information</legend>
-<p>
-<span class="text">SQL server:</span>
-<select class="input" name="sql_type" size="1" onchange="select_database(this);">
+
+    <label class="left">SQL server:</label>
+    <select class="input" name="sql_type" size="1" onchange="select_database(this);">
 <?php
     // check what extensions are loaded in PHP
     foreach ($supported_databases as $extension => $database) {
@@ -327,43 +341,30 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         }
     }
 ?>
-</select>
-<span class="help" title="Please enter the type of SQL server here.">?</span>
-</p>
-<div id="dbdatafull">
-    <p>
-    <span class="text">SQL server host:</span>
-    <input class="input" type="text" name="sql_server" />
-    <span class="help" title="Please enter the host of your SQL server here.">?</span>
-    </p>
-    <p>
-    <span class="text">SQL username:</span>
-    <input class="input" type="text" name="sql_user" />
-    <span class="help" title="Please enter your SQL username here.">?</span>
-    </p>
-    <p>
-    <span class="text">SQL password:</span>
-    <input class="input" name="sql_passwort" type="password" />
-    <span class="help" title="Please enter your SQL password here.">?</span>
-    </p>
-    <p>
-    <span class="text">SQL database:</span>
-    <input class="input" type="text" name="sql_db" />
-    <span class="help" title="Please enter your SQL database here.">?</span>
-    </p>
-</div>
-<div id="dbsqlite" style="display:none;">
-    <p>
-    <span class="text">SQLite database file:</span>
-    <input class="input" type="text" name="sql_sqlitefile" value="<?php print dirname(dirname(__FILE__)); ?>" />
-    <span class="help" title="Please enter the full path to your SQLite datafile which should be outside your documentation root.">?</span>
-    </p>
-</div>
-<p>
-<span class="text">Table prefix:</span>
-<input class="input" type="text" name="sqltblpre" />
-<span class="help" title="Please enter a table prefix here if you want to install more phpMyFAQ installations on one database.">?</span>
-</p>
+    </select><br />
+    
+    <div id="dbdatafull">
+    <label class="left">SQL server host:</label>
+    <input class="input" type="text" name="sql_server" title="Please enter the host of your SQL server here." /><br />
+
+    <label class="left">SQL username:</label>
+    <input class="input" type="text" name="sql_user" title="Please enter your SQL username here." /><br />
+
+    <label class="left">SQL password:</label>
+    <input class="input" name="sql_passwort" type="password" title="Please enter your SQL password here." /><br />
+
+    <label class="left">SQL database:</label>
+    <input class="input" type="text" name="sql_db" title="Please enter your SQL database name here." /><br />
+    </div>
+    
+    <div id="dbsqlite" style="display: none;">
+    <label class="left">SQLite database file:</label>
+    <input class="input" type="text" name="sql_sqlitefile" value="<?php print dirname(dirname(__FILE__)); ?>" title="Please enter the full path to your SQLite datafile which should be outside your documentation root." /><br />
+    </div>
+
+    <label class="left">Table prefix:</label>
+    <input class="input" type="text" name="sqltblpre" title="Please enter a table prefix here if you want to install more phpMyFAQ installations on one database." />
+
 </fieldset>
 <br />
 <?php
@@ -371,35 +372,25 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 ?>
 <fieldset class="installation">
 <legend class="installation">LDAP information</legend>
-<p>
-<span class="text">Do you want to use LDAP?</span>
-<input type="checkbox" name="ldap_enabled" value="yes" />
-</p>
-<p>
-<span class="text">LDAP server host:</span>
-<input class="input" type="text" name="ldap_server" />
-<span class="help" title="Please enter the host of your LDAP server here.">?</span>
-</p>
-<p>
-<span class="text">LDAP server port:</span>
-<input class="input" type="text" name="ldap_port" value="389" />
-<span class="help" title="Please enter the port of your LDAP server here.">?</span>
-</p>
-<p>
-<span class="text">LDAP username:</span>
-<input class="input" type="text" name="ldap_user" />
-<span class="help" title="Please enter your specified RDN username here.">?</span>
-</p>
-<p>
-<span class="text">LDAP password:</span>
-<input class="input" name="ldap_password" type="password" />
-<span class="help" title="Please enter your LDAP password here.">?</span>
-</p>
-<p>
-<span class="text">Distinguished name (dn):</span>
-<input class="input" type="text" name="ldap_base" />
-<span class="help" title="Please enter your distinguished name, e.g. 'cn=John Smith,ou=Accounts,o=My Company,c=US' here.">?</span>
-</p>
+    
+    <label class="left">Do you want to use LDAP?</label>
+    <input type="checkbox" name="ldap_enabled" value="yes" /><br />
+    
+    <label class="left">LDAP server host:</label>
+    <input class="input" type="text" name="ldap_server" title="Please enter the host of your LDAP server here." /><br />
+        
+    <label class="left">LDAP server port:</label>
+    <input class="input" type="text" name="ldap_port" value="389" title="Please enter the port of your LDAP server here." /><br />
+    
+    <label class="left">LDAP username:</label>
+    <input class="input" type="text" name="ldap_user" title="Please enter your specified RDN username here." /><br />
+    
+    <label class="left">LDAP password:</label>
+    <input class="input" name="ldap_password" type="password" title="Please enter your LDAP password here." /><br />
+    
+    <label class="left">Distinguished name (dn):</label>
+    <input class="input" type="text" name="ldap_base" title="Please enter your distinguished name, e.g. 'cn=John Smith,ou=Accounts,o=My Company,c=US' here." />
+
 </fieldset>
 <br />
 <?php
@@ -408,9 +399,9 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 
 <fieldset class="installation">
 <legend class="installation">phpMyFAQ information</legend>
-<p>
-<span class="text">Default language:</span>
-<select class="input" name="language" size="1">
+    
+    <label class="left">Default language:</label>
+    <select class="input" name="language" size="1" title="Please select your default language.">
 <?php
     if ($dir = @opendir(PMF_ROOT_DIR."/lang")) {
         while ($dat = @readdir($dir)) {
@@ -426,49 +417,35 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         print "\t\t<option>english</option>";
     }
 ?>
-</select>
-<span class="help" title="Please select your default language.">?</span>
-</p>
-<p>
-<span class="text">Permission level:</span>
-<select class="input" name="permLevel" size="1">
+    </select><br />
+    
+    <label class="left">Permission level:</label>
+    <select class="input" name="permLevel" size="1" title="Complexity of user and right administration. Basic: users may have user-rights. Medium: users may have user-rights; group administration; groups may have group-rights; user have group-rights via group-memberships.">
 <?php
 foreach ($permLevels as $level => $desc) {
     printf('    <option value="%s">%s</option>', $level, $desc);
 }
 ?>
-</select>
-<span class="help" title="Complexity of user and right administration. Basic: users may have user-rights. Medium: users may have user-rights; group administration; groups may have group-rights; user have group-rights via group-memberships. ">?</span>
-</p>
-<p>
-<span class="text">Administrator's real name:</span>
-<input class="input" type="text" name="realname" />
-<span class="help" title="Please enter your real name here.">?</span>
-</p>
-<p>
-<span class="text">Administrator's e-mail address:</span>
-<input class="input" type="text" name="email" />
-<span class="help" title="Please enter your email adress here.">?</span>
-</p>
-<p>
-<span class="text">Administrator's username:</span>
-<span id="admin">admin</span>
-</p>
-<p>
-<span class="text">Administrator's password:</span>
-<input class="input" type="password" name="password" />
-<span class="help" title="Please enter your password for the admin area.">?</span>
-</p>
-<p>
-<span class="text">Retype password:</span>
-<input class="input" type="password" name="password_retyped" />
-<span class="help" title="Please retype your password for checkup.">?</span>
-</p>
+    </select><br />
+    
+    <label class="left">Administrator's real name:</label>
+    <input class="input" type="text" name="realname" title="Please enter your real name here." /><br />
+        
+    <label class="left">Administrator's e-mail address:</label>
+    <input class="input" type="text" name="email" title="Please enter your email adress here." /><br />
+    
+    <label class="left">Administrator's username:</label>
+    <span id="admin">admin</span><br />
+    
+    <label class="left">Administrator's password:</label>
+    <input class="input" type="password" name="password" title="Please enter your password for the admin area." /><br />
+    
+    <label class="left">Retype password:</label>
+    <input class="input" type="password" name="password_retyped" title="Please retype your password for checkup." /><br />
+
 <p class="center"><strong>Do not use if you're already running a version of phpMyFAQ!</strong></p>
 
-<p class="center"><strong>Attention! This version might be broken and it's under heavy development.</strong></p>
-
-<p class="center"><input type="submit" value="Install phpMyFAQ" class="button" /></p>
+<p class="center"><input type="submit" value="Install phpMyFAQ <?php print VERSION; ?> now!" class="button" /></p>
 </fieldset>
 </form>
 <?php
