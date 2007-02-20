@@ -1,12 +1,12 @@
 <?php
 /**
-* $Id: Db.php,v 1.1 2006-06-11 14:26:55 matteo Exp $
+* $Id: Db.php,v 1.2 2007-02-20 20:05:27 thorstenr Exp $
 *
 * The database abstraction factory
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-24
-* @copyright:   (c) 2003-2006 phpMyFAQ Team
+* @copyright:   (c) 2003-2007 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -24,6 +24,7 @@ class PMF_Db
     /**
      * Database factory
      *
+     * @return  void
      * @access  static
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-01-02
@@ -41,5 +42,32 @@ class PMF_Db
         } else {
             trigger_error('Invalid Database Type', E_USER_ERROR);
         }
+    }
+    
+    /**
+     * Error page
+     *
+     * @return  void
+     * @access  static
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @since   2007-02-20
+     */
+    function errorPage($method)
+    {
+        print "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n";
+        print "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n";
+        print "<head>\n";
+        print "    <title>phpMyFAQ Error</title>\n";
+        print "    <meta http-equiv=\"content-type\" content=\"application/xhtml+xml; charset=utf-8\" />\n";
+        print "    <style type=\"text/css\" media=\"screen\"> /*<![CDATA[*/ <!--\n";
+        print "    @import url(template/style.css);\n";
+        print "    @import url(template/colors.css);\n";
+        print "    --> /*]]>*/ </style>\n";
+        print "</head>\n";
+        print "<body>\n";
+        print "<p align=\"center\">The connection to the database server could not be established.</p>\n";
+        print "<p align=\"center\">The error message of the database server:<br />".$method."</p>\n";
+        print "</body>\n";
+        print "</html>";
     }
 }
