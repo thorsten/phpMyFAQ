@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Sqlite.php,v 1.10 2007-02-04 13:51:06 thorstenr Exp $
+ * $Id: Sqlite.php,v 1.11 2007-02-20 20:11:15 thorstenr Exp $
  *
  * db_sqlite
  *
@@ -63,21 +63,7 @@ class db_sqlite
     {
         $this->conn = sqlite_open($host, 0666);
         if (!$this->conn) {
-            print "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n";
-            print "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n";
-            print "<head>\n";
-            print "    <title>phpMyFAQ Error</title>\n";
-            print "    <meta http-equiv=\"content-type\" content=\"application/xhtml+xml; charset=utf-8\" />\n";
-            print "    <style type=\"text/css\" media=\"screen\"> /*<![CDATA[*/ <!--\n";
-            print "    @import url(template/style.css);\n";
-            print "    @import url(template/colors.css);\n";
-            print "    --> /*]]>*/ </style>\n";
-            print "</head>\n";
-            print "<body>\n";
-            print "<p align=\"center\">The connection to the database server could not be established.</p>\n";
-            print "<p align=\"center\">The error message of the database server:<br />".sqlite_error_string(sqlite_last_error($this->conn))."</p>\n";
-            print "</body>\n";
-            print "</html>";
+            PMF_Db::errorPage(sqlite_error_string(sqlite_last_error($this->conn)));
             die();
         }
         return true;

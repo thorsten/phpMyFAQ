@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Ibm_db2.php,v 1.5 2007-02-04 13:51:06 thorstenr Exp $
+ * $Id: Ibm_db2.php,v 1.6 2007-02-20 20:11:15 thorstenr Exp $
  *
  * db_ibm_db2
  *
@@ -103,21 +103,7 @@ class db_ibm_db2
     {
         $this->conn = db2_pconnect($db, $user, $passwd, $this->options);
         if (false == $this->conn) {
-            print "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n";
-            print "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n";
-            print "<head>\n";
-            print "    <title>phpMyFAQ Error</title>\n";
-            print "    <meta http-equiv=\"content-type\" content=\"application/xhtml+xml; charset=utf-8\" />\n";
-            print "    <style type=\"text/css\" media=\"screen\"> /*<![CDATA[*/ <!--\n";
-            print "    @import url(template/style.css);\n";
-            print "    @import url(template/colors.css);\n";
-            print "    --> /*]]>*/ </style>\n";
-            print "</head>\n";
-            print "<body>\n";
-            print "<p align=\"center\">The connection to the database server could not be established.</p>\n";
-            print "<p align=\"center\">The error message of the database server:<br />".db2_conn_errormsg()."</p>\n";
-            print "</body>\n";
-            print "</html>";
+            PMF_Db::errorPage(db2_conn_errormsg());
             die();
         }
         return true;

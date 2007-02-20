@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Sybase.php,v 1.9 2007-02-04 13:51:06 thorstenr Exp $
+ * $Id: Sybase.php,v 1.10 2007-02-20 20:11:15 thorstenr Exp $
  *
  * db_sybase
  *
@@ -91,22 +91,8 @@ class db_sybase
     function connect($host, $user, $passwd, $db)
     {
         $this->conn = @sybase_pconnect($host, $user, $passwd);
-        if (empty($db) OR $this->conn == FALSE) {
-            print "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n";
-            print "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n";
-            print "<head>\n";
-            print "    <title>phpMyFAQ Error</title>\n";
-            print "    <meta http-equiv=\"content-type\" content=\"application/xhtml+xml; charset=utf-8\" />\n";
-            print "    <style type=\"text/css\" media=\"screen\"> /*<![CDATA[*/ <!--\n";
-            print "    @import url(template/style.css);\n";
-            print "    @import url(template/colors.css);\n";
-            print "    --> /*]]>*/ </style>\n";
-            print "</head>\n";
-            print "<body>\n";
-            print "<p align=\"center\">The connection to the database server could not be established.</p>\n";
-            print "<p align=\"center\">The error message of the database server:<br />".error()."</p>\n";
-            print "</body>\n";
-            print "</html>";
+        if (empty($db) || $this->conn === false) {
+            PMF_Db::errorPage('An unspecified error occurred.');
             die();
         }
         return @sybase_select_db($db, $this->conn);
