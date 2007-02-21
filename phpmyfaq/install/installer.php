@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: installer.php,v 1.85 2007-02-20 21:06:46 thorstenr Exp $
+ * $Id: installer.php,v 1.86 2007-02-21 20:13:55 thorstenr Exp $
  *
  * The main phpMyFAQ Installer
  *
@@ -374,7 +374,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 <legend class="installation">LDAP information</legend>
     
     <label class="left">Do you want to use LDAP?</label>
-    <input type="checkbox" name="ldap_enabled" value="yes" /><br />
+    <input class="checkbox" type="checkbox" name="ldap_enabled" value="yes" /><br />
     
     <label class="left">LDAP server host:</label>
     <input class="input" type="text" name="ldap_server" title="Please enter the host of your LDAP server here." /><br />
