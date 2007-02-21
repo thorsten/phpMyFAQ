@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.68 2007-02-10 08:13:12 thorstenr Exp $
+$Id: README.txt,v 1.69 2007-02-21 19:25:41 thorstenr Exp $
 
 phpMyFAQ 2.0.0-beta
 Codename "Prometheus"
@@ -49,6 +49,7 @@ Version 2.0.0-beta - 2007-
 - updated Arabic translation (Ahmed Shalaby)
 - updated German translation (Thorsten)
 - updated Italian translation (Matteo)
+- updated Japanese translation (Tadashi Jokagi)
 
 Version 1.6.9 - 2007-01-28
 - updated bundled PHP XMLRPC to version 2.1
