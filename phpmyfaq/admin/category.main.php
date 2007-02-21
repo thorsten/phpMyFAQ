@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: category.main.php,v 1.31 2007-02-10 21:01:02 thorstenr Exp $
+ * $Id: category.main.php,v 1.32 2007-02-21 20:14:13 thorstenr Exp $
  *
  * List all categories in the admin section
  *
@@ -177,9 +177,9 @@ if ($permission['editcateg']) {
                $currentLink,
                $cat['id'],
                $cat['lang'],
-               $PMF_LANG['ad_kateg_add'],
-               $PMF_LANG['ad_kateg_add'],
-               $PMF_LANG['ad_kateg_add']);
+               $PMF_LANG['ad_quick_category'],
+               $PMF_LANG['ad_quick_category'],
+               $PMF_LANG['ad_quick_category']);
 
            // rename (sub) category (if actual language)
            printf('<a href="%s&amp;action=editcategory&amp;cat=%s" title="%s"><img src="images/edit.gif" width="18" height="18" border="0" title="%s" alt="%s" /></a>',
