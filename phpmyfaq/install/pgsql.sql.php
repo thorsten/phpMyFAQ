@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: pgsql.sql.php,v 1.29 2007-02-18 11:38:12 thorstenr Exp $
+* $Id: pgsql.sql.php,v 1.30 2007-02-22 16:37:29 thorstenr Exp $
 *
 * CREATE TABLE instruction for PostgreSQL database
 *
@@ -137,9 +137,10 @@ category_id int4 NOT NULL,
 category_lang VARCHAR(5) NOT NULL,
 record_id int4 NOT NULL,
 record_lang VARCHAR(5) NOT NULL,
-PRIMARY KEY  (category_id, category_lang, record_id, record_lang),
-KEY idx_records (record_id, record_lang)
+PRIMARY KEY  (category_id, category_lang, record_id, record_lang)
 )";
+$query[] = "CREATE INDEX idx_records ON ".$sqltblpre."faqcategoryrelations
+(record_id, record_lang)";
 
 //faqcategory_group
 $query[] = "CREATE TABLE ".$sqltblpre."faqcategory_group (
