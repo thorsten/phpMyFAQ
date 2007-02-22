@@ -1,24 +1,24 @@
 <?php
 /**
-* $Id: news.php,v 1.30 2007-01-21 14:40:35 thorstenr Exp $
-*
-* The main administration file for the news
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @author       Matteo Scaramuccia <matteo@scaramuccia.com>
-* @since        2003-02-23
-* @copyright    (c) 2001-2007 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * $Id: news.php,v 1.31 2007-02-22 16:33:22 thorstenr Exp $
+ *
+ * The main administration file for the news
+ *
+ * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author       Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @since        2003-02-23
+ * @copyright    (c) 2001-2007 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
@@ -238,7 +238,7 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
         'authorName'    => $db->escape_string($_POST['authorName']),
         'authorEmail'   => $db->escape_string($_POST['authorEmail']),
         'active'        => (isset($_POST['active'])) ? $db->escape_string($_POST['active']) : 'n',
-        'allowComments' => (isset($_POST['comment'])) ? $db->escape_string($_POST['comment']) : 'n',
+        'comment'       => (isset($_POST['comment'])) ? $db->escape_string($_POST['comment']) : 'n',
         'dateStart'     => ('' == $dateStart) ? '00000000000000' : $db->escape_string($dateStart),
         'dateEnd'       => ('' == $dateEnd)   ? '99991231235959' : $db->escape_string($dateEnd),
         'link'          => $db->escape_string($_POST['link']),
