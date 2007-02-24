@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: installer.php,v 1.86 2007-02-21 20:13:55 thorstenr Exp $
+ * $Id: installer.php,v 1.87 2007-02-24 07:21:44 thorstenr Exp $
  *
  * The main phpMyFAQ Installer
  *
@@ -257,8 +257,8 @@ function cleanInstallation()
 
 <?php
 
-if (version_compare(PHP_VERSION, '4.3.0', '<')) {
-    print "<p class=\"center\">You need PHP Version 4.3.0 or higher!</p>\n";
+if (version_compare(PHP_VERSION, '4.3.3', '<')) {
+    print "<p class=\"center\">You need PHP 4.3.3 or later!</p>\n";
     HTMLFooter();
     die();
 }

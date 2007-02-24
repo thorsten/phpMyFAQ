@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.82 2007-02-19 20:54:03 thorstenr Exp $
+ * $Id: Faq.php,v 1.83 2007-02-24 07:21:42 thorstenr Exp $
  *
  * The main FAQ class
  *
@@ -1755,8 +1755,21 @@ class PMF_Faq
     }
 
     /**
-     * updateVoting()
+     * Returns all open questions
      *
+     * @return  array
+     * @access  public
+     * @since   2007-02-11
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+     function getAllOpenQuestions()
+     {
+        $questions = array();
+        
+        return $questions;
+     }
+
+    /**
      * Updates an existing voting record
      *
      * @param    array  $votingData

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.161 2007-02-04 21:10:16 thorstenr Exp $
+ * $Id: functions.php,v 1.162 2007-02-24 07:21:43 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -615,45 +615,35 @@ function getHighlightedBannedWords($content)
 }
 
 /**
-* hilight()
-*
-* Adds PHP syntax highlighting to your pre tags
-*
-* @param    string
-* @return   string
-* @access   public
-* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-* @since    2004-12-25
-*/
+ * Adds PHP syntax highlighting to your pre tags
+ *
+ * @param   string  $content
+ * @return  string
+ * @access  public
+ * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since   2004-12-25
+ */
 function hilight($content)
 {
     $string = $content[2];
 
-    if (version_compare(PHP_VERSION, "4.2.0", ">=")) {
-        // We're on 4.2.0 or later
-        //   mixed highlight_string ( string str [, bool return] )
-        //   The return parameter became available in PHP 4.2.0
-        $string = str_replace("&lt;?php", " ", $string);
-        $string = str_replace("?&gt;", " ", $string);
+    $string = str_replace("&lt;?php", " ", $string);
+    $string = str_replace("?&gt;", " ", $string);
 
-        if (!ereg('^<\\?', $string) || !ereg('^&lt;\\?', $string)) {
-            $string = "<?php\n".$string."\n?>";
-        }
-
-        $string = implode("\n", explode("<br />", $string));
-        $string = highlight_string($string, true);
-        $string = eregi_replace('^.*<pre>',  '', $string);
-        $string = eregi_replace('</pre>.*$', '', $string);
-        $string = str_replace("\n", "", $string);
-        $string = str_replace("&nbsp;", " ", $string);
-
-        // Making the PHP generated stuff XHTML compatible
-        $string = preg_replace('/<FONT COLOR="/i', '<span style="color:', $string);
-        $string = preg_replace('/<\/FONT>/i', '</span>', $string);
-    } else {
-        // We're under 4.2.0
-        // Do nothing
+    if (!ereg('^<\\?', $string) || !ereg('^&lt;\\?', $string)) {
+        $string = "<?php\n".$string."\n?>";
     }
+
+    $string = implode("\n", explode("<br />", $string));
+    $string = highlight_string($string, true);
+    $string = eregi_replace('^.*<pre>',  '', $string);
+    $string = eregi_replace('</pre>.*$', '', $string);
+    $string = str_replace("\n", "", $string);
+    $string = str_replace("&nbsp;", " ", $string);
+
+    // Making the PHP generated stuff XHTML compatible
+    $string = preg_replace('/<FONT COLOR="/i', '<span style="color:', $string);
+    $string = preg_replace('/<\/FONT>/i', '</span>', $string);
 
     return $string;
 }
@@ -1820,7 +1810,7 @@ function mkts($datum,$zeit)
 
 
 //
-// Add re-built PHP functions, which we need and not included in PHP 4.1.0
+// Add re-built PHP functions, which we need and not included in PHP 4.3.0
 //
 
 /**
@@ -1848,59 +1838,6 @@ if (!function_exists("array_combine")) {
     }
 }
 
-/**
-* Convert all HTML entities to their applicable characters
-* NOTE: This function is included since PHP 4.3.0 and later
-*
-* @param    string
-* @param    string
-* @param    string
-* @return   string
-* @access   public
-* @since    2005-09-25
-* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-*/
-if (!function_exists('html_entity_decode')) {
-    function html_entity_decode($given_html, $quote_style = ENT_QUOTES, $charset = 'UTF-8')
-    {
-        $trans_table = array_flip(get_html_translation_table(HTML_SPECIALCHARS, $quote_style));
-        $trans_table['&#39;'] = "'";
-        return (strtr($given_html, $trans_table));
-    }
-}
-
-/**
-* Returns an array with all string keys lowercased or uppercased
-* NOTE: This function is included since PHP 4.2.0 and later
-*
-* @param    array
-* @param    const
-* @return   array
-* @access   public
-* @since    2005-10-03
-* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-*/
-if (!function_exists('array_change_key_case')) {
-    if (!defined('CASE_LOWER')) {
-        define('CASE_LOWER', 0);
-    }
-    if (!defined('CASE_UPPER')) {
-        define('CASE_UPPER', 1);
-    }
-    function array_change_key_case($input, $case = CASE_LOWER)
-    {
-        $output = array();
-        $inputKeys = array_keys($input);
-        foreach ($inputKeys as $key) {
-            if (CASE_LOWER == $case) {
-                $output[strtolower($key)] = $input[$key];
-            } else {
-                $output[strtoupper($key)] = $input[$key];
-            }
-        }
-        return $output;
-    }
-}
 
 
 //

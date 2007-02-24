@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Captcha.php,v 1.8 2007-02-10 21:59:02 thorstenr Exp $
+ * $Id: Captcha.php,v 1.9 2007-02-24 07:21:42 thorstenr Exp $
  *
  * The phpMyFAQ Captcha class
  *
@@ -533,7 +533,6 @@ class PMF_Captcha
      */
     function getFonts()
     {
-        // @todo: glob() was introduced with PHP 4.3.0
         return glob(dirname(dirname(__FILE__)).'/font/*.ttf');
     }
 

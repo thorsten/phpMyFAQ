@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: CurrentUser.php,v 1.22 2007-02-18 19:15:47 matteo Exp $
+ * $Id: CurrentUser.php,v 1.23 2007-02-24 07:21:43 thorstenr Exp $
  *
  * manages authentication process using php sessions.
  *
@@ -306,14 +306,6 @@ class PMF_CurrentUser extends PMF_User
                     if (@file_exists($sessionFilename)) {
                         @unlink($sessionFilename);
                     }
-                }
-                if (version_compare(phpversion(),'4.3.3', '<')) {
-                    setcookie(
-                        session_name(),
-                        session_id(),
-                        0 == ini_get('session.cookie_lifetime') ? 0 : time() + ini_get('session.cookie_lifetime'),
-                        ini_get('session.cookie_path')
-                    );
                 }
             }
         } else {
