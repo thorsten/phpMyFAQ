@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.83 2007-02-24 07:21:42 thorstenr Exp $
+ * $Id: Faq.php,v 1.84 2007-02-25 12:09:57 thorstenr Exp $
  *
  * The main FAQ class
  *
@@ -837,12 +837,12 @@ class PMF_Faq
                     $where .= " IN (";
                     $separator = "";
                     foreach ($data as $value) {
-                        $where .= $separator."'".$db->escape_string($value)."'";
+                        $where .= $separator."'".$this->db->escape_string($value)."'";
                         $separator = ", ";
                     }
                     $where .= ")";
                 } else {
-                    $where .= " = '".$db->escape_string($data)."'";
+                    $where .= " = '".$this->db->escape_string($data)."'";
                 }
             }
         }
