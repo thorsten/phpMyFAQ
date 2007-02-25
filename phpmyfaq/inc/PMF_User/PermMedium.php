@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: PermMedium.php,v 1.22 2007-02-10 21:37:12 thorstenr Exp $
+ * $Id: PermMedium.php,v 1.23 2007-02-25 11:39:50 thorstenr Exp $
  *
  * The medium permission class provides group rights.
  *
@@ -562,15 +562,13 @@ class PMF_PermMedium
     }
 
     /**
-     * getUserGroups
-     *
      * Returns an array that contains the IDs of all groups in which
      * the user $user_id is a member.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param int
-     * @return array
+     * @param   integer $user_id
+     * @access  public
+     * @author  Lars Tiedemann <php@larstiedemann.de>
+     * @return  array
      */
     function getUserGroups($user_id)
     {
@@ -592,7 +590,7 @@ class PMF_PermMedium
                 ".PMF_USER_SQLPREFIX."group.group_id = ".PMF_USER_SQLPREFIX."user_group.group_id
         ");
         // return result
-        $result = array();
+        $result = array(-1);
         while ($row = $this->_db->fetch_assoc($res)) {
             $result[] = $row['group_id'];
         }
