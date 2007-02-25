@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: category.translate.php,v 1.10 2007-02-10 21:01:02 thorstenr Exp $
+ * $Id: category.translate.php,v 1.11 2007-02-25 11:33:02 thorstenr Exp $
  *
  * Translates a category
  *
@@ -26,7 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 }
 
 if ($permission["editcateg"]) {
-    $category = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups);
+    $category = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
     $category->getMissingCategories();
     $id = (int)$_GET["cat"];
     $header = sprintf('%s %s: <em>%s</em>',

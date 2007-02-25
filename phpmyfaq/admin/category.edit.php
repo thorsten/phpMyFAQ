@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: category.edit.php,v 1.20 2007-02-10 21:44:18 thorstenr Exp $
+ * $Id: category.edit.php,v 1.21 2007-02-25 11:33:02 thorstenr Exp $
  *
  * Edits a category
  *
@@ -27,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 if ($permission['editcateg']) {
     
     $id = (int)$_GET['cat'];
-    $category = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups);
+    $category = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
     $categories = $category->getAllCategories();
     $user_permission = $category->getPermissions('user', array($id));
     
