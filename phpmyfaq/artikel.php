@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: artikel.php,v 1.69 2007-02-04 19:27:50 thorstenr Exp $
+ * $Id: artikel.php,v 1.70 2007-02-25 12:19:16 thorstenr Exp $
  *
  * Shows the page with the FAQ record and - when available - the user
  * comments
@@ -174,16 +174,14 @@ if (is_dir('attachments/') && is_dir('attachments/'.$id) && $faqconfig->get('dis
 
 // List all categories for this faq
 $writeMultiCategories = '';
-$cat = new PMF_Category($lang);
-$multiCats = $cat->getCategoriesFromArticle($id);
-if (count($multiCats) > 1) {
+$multiCategories = $category->getCategoriesFromArticle($id);
+if (count($multiCategories) > 1) {
     $writeMultiCategories .= '        <div id="article_categories">';
     $writeMultiCategories .= '        <fieldset>';
     $writeMultiCategories .= '                <legend>'.$PMF_LANG['msgArticleCategories'].'</legend>';
     $writeMultiCategories .= '            <ul>';
-    foreach ($multiCats as $multiCat) {
-        $writeMultiCategories .= sprintf('<li><a href="%s?%saction=show&amp;cat=%d">%s</a></li>', $_SERVER['PHP_SELF'], $sids, $multiCat['id'], $multiCat['name']);
-        $writeMultiCategories .= "\n";
+    foreach ($multiCategories as $multiCat) {
+        $writeMultiCategories .= sprintf("<li>%s</li>\n", $category->getPath($multiCat['id'], ' &raquo; ', true));
     }
     $writeMultiCategories .= '            </ul>';
     $writeMultiCategories .= '        </fieldset>';
