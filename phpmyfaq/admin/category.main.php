@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: category.main.php,v 1.33 2007-02-22 22:13:49 thorstenr Exp $
+ * $Id: category.main.php,v 1.34 2007-02-25 11:16:07 thorstenr Exp $
  *
  * List all categories in the admin section
  *
@@ -40,7 +40,7 @@ print "</p>\n";
 
 if ($permission['editcateg']) {
 
-    $category = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups);
+    $category = new PMF_Category($LANGCODE);
 
     // Save a new category
     if (isset($_POST['action']) && $_POST['action'] == 'savecategory') {
