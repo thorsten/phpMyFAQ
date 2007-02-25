@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Category.php,v 1.38 2007-02-25 11:34:05 thorstenr Exp $
+ * $Id: Category.php,v 1.39 2007-02-25 12:01:29 thorstenr Exp $
  *
  * The main category class
  *
@@ -166,7 +166,9 @@ class PMF_Category
     {
         $where = '';
         if ($withperm) {
-            $where = sprintf("( fu.user_id = %d
+            $where = sprintf("
+            WHERE
+                ( fu.user_id = %d
             OR
                 fg.group_id IN (%s) ) AND",
             $this->user,
@@ -186,13 +188,12 @@ class PMF_Category
                 %sfaqcategory_user fu
             ON
                 fc.id = fu.category_id
-            WHERE
-                %s",
+            %s",
             SQLPREFIX,
             SQLPREFIX,
             SQLPREFIX,
             $where);
-        if (isset($this->language) && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
+        if ($withperm && isset($this->language) && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
             $query .= " lang = '".$this->language."'";
         }
         $query .= ' ORDER BY id';
