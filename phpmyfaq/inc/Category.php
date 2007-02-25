@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Category.php,v 1.37 2007-02-18 17:08:42 matteo Exp $
+ * $Id: Category.php,v 1.38 2007-02-25 11:34:05 thorstenr Exp $
  *
  * The main category class
  *
@@ -123,11 +123,12 @@ class PMF_Category
      * @param   string  $language
      * @param   integer $user
      * @param   array   $groups
+     * @param   boolean $withperm
      * @return  void
      * @access  public
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function PMF_Category ($language = '', $user = null, $groups = null)
+    function PMF_Category ($language = '', $user = null, $groups = null, $withperm = true)
     {
         global $db;
 
@@ -146,7 +147,7 @@ class PMF_Category
             $this->groups = $groups;
         }
 
-        $this->lineTab    = $this->getOrderedCategories();
+        $this->lineTab    = $this->getOrderedCategories($withperm);
         for ($i = 0; $i < count($this->lineTab); $i++) {
             $this->lineTab[$i]['level'] = $this->levelOf($this->lineTab[$i]['id']);
         }
@@ -156,12 +157,22 @@ class PMF_Category
      * Returns all categories with ordered category IDs according to the user
      * and group permissions
      *
+     * @param   boolean $withperm
      * @return  array
      * @access  private
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function &getOrderedCategories()
+    function &getOrderedCategories($withperm = true)
     {
+        $where = '';
+        if ($withperm) {
+            $where = sprintf("( fu.user_id = %d
+            OR
+                fg.group_id IN (%s) ) AND",
+            $this->user,
+            implode(', ', $this->groups));
+        }
+        
         $query = sprintf("
             SELECT
                 id, lang, parent_id, name, description
@@ -176,16 +187,13 @@ class PMF_Category
             ON
                 fc.id = fu.category_id
             WHERE
-                ( fu.user_id = %d
-            OR
-                fg.group_id IN (%s) )",
+                %s",
             SQLPREFIX,
             SQLPREFIX,
             SQLPREFIX,
-            $this->user,
-            implode(', ', $this->groups));
+            $where);
         if (isset($this->language) && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
-            $query .= " AND lang = '".$this->language."'";
+            $query .= " lang = '".$this->language."'";
         }
         $query .= ' ORDER BY id';
 
