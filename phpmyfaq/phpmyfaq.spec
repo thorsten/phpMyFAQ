@@ -1,5 +1,5 @@
 #
-# $Id: phpmyfaq.spec,v 1.9 2006-10-10 21:36:07 matteo Exp $
+# $Id: phpmyfaq.spec,v 1.10 2007-02-25 10:24:27 matteo Exp $
 #
 # This is the spec file for building an RPM package of phpMyFAQ
 # for most of the different RPM-based distributions
@@ -41,7 +41,7 @@
 #
 # @author       Matteo Scaramuccia <matteo@scaramuccia.com>
 # @since        2006-07-05
-# @copyright:   (c) 2006 phpMyFAQ Team
+# @copyright:   (c) 2006-2007 phpMyFAQ Team
 #
 # The contents of this file are subject to the Mozilla Public License
 # Version 1.1 (the "License"); you may not use this file except in
@@ -132,7 +132,7 @@ Requires:           apache
 %else
 Requires:           httpd
 %endif
-Requires:           php >= 4.3.0
+Requires:           php >= 4.3.3
 # GD is bundle into PHP starting from PHP 4.3.0
 Requires:           php-gd
 # We do not require MySQL but one among the several DB supported by phpMyFAQ.
@@ -144,7 +144,7 @@ Provides:           %{name}-%{version}
 
 %description
 phpMyFAQ is a multilingual, completely database-driven FAQ-system.
-It supports various databases to store all data, PHP 4.3.0 (or higher)
+It supports various databases to store all data, PHP 4.3.3 (or higher)
 is needed in order to access this data.
 phpMyFAQ also offers a Content Management-System with a WYSIWYG editor
 and an Image Manager, flexible multi-user support with LDAP support,
@@ -154,6 +154,9 @@ XML-support, PDF-support, a backup-system and an easy to use
 installation script.
 
 %changelog
+* Sun Feb 25 2007 Matteo Scaramuccia <matteo@scaramuccia.com> - 2.0.0.betaN-1
+- Updated the PHP version requirement to be '4.3.3'.
+
 * Tue Oct 10 2006 Matteo Scaramuccia <matteo@scaramuccia.com> - 2.0.0.betaN-1
 - New upstream version 2.0.0.beta.
 
