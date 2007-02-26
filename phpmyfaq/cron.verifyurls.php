@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: cron.verifyurls.php,v 1.6 2007-01-21 14:48:37 thorstenr Exp $
+ * $Id: cron.verifyurls.php,v 1.7 2007-02-26 23:38:46 matteo Exp $
  *
  * Performs an Automatic Link Verification over all the faq records
  *
@@ -84,9 +84,11 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
     $output .= ' #'.$tot.', done in '.round($end - $start, 4).' sec.'.($isRequestedByWebLocalhost ? '' : "\n");;
     $output .= ($isRequestedByWebLocalhost ? '' : "\n");
     if ($isRequestedByWebLocalhost) {
-        $output = '<pre>'.$output."</pre>\n";
+        print '<pre>';
     }
+    $output = $output."\n";
     print($output);
+    @ob_flush();
     flush();
 
     $i = 0;
@@ -102,9 +104,10 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
         $output .= ' done in '.round($end - $start, 4).' sec.';
         $output .= ($isRequestedByWebLocalhost ? '' : "\n");
         if ($isRequestedByWebLocalhost) {
-            $output = '<pre>'.$output."</pre>\n";
+            $output = $output."\n";
         }
         print($output);
+        @ob_flush();
         flush();
     }
 
@@ -114,9 +117,14 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
     $output .= 'Done in '.round($totEnd - $totStart, 4).' sec.';
     $output .= ($isRequestedByWebLocalhost ? '' : "\n");
     if ($isRequestedByWebLocalhost) {
-        $output = '<pre>'.$output."</pre>\n";
+        $output = $output."\n";
     }
     print($output);
+
+    if ($isRequestedByWebLocalhost) {
+        print '</pre>';
+    }
+    @ob_flush();
     flush();
 }
 
