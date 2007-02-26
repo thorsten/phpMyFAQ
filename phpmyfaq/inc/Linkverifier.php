@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Linkverifier.php,v 1.19 2007-02-18 18:42:44 thorstenr Exp $
+ * $Id: Linkverifier.php,v 1.20 2007-02-26 21:37:23 matteo Exp $
  *
  * PMF_Linkverifier
  *
@@ -263,7 +263,7 @@ class PMF_Linkverifier
     {
         $query = "SELECT type, url, reason FROM ".SQLPREFIX."faqlinkverifyrules WHERE enabled = 'y'";
         $result = $this->db->query($query);
-        while ($row = $this->db->fetch_object($result)) {
+        while ($row = @$this->db->fetch_object($result)) {
             switch (strtolower($row->type)) {
             case 'ignore':      $this->addIgnoreList($row->url, $row->reason);
                                 break;
