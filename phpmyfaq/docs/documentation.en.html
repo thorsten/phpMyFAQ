@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<!-- $Id: documentation.en.html,v 1.23 2007-02-10 00:10:14 thorstenr Exp $ -->
+<!-- $Id: documentation.en.html,v 1.24 2007-02-26 20:52:19 thorstenr Exp $ -->
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<title>Documentation for phpMyFAQ 2.0.x</title>
@@ -48,29 +48,33 @@
             <li><a href="#3a">Upgrading from phpMyFAQ 1.4.x</a></li>
             <li><a href="#3b">Upgrading from phpMyFAQ 1.5.x</a></li>
             <li><a href="#3c">Upgrading from phpMyFAQ 1.6.x</a></li>
-            <li><a href="#3d">Upgrading phpMyFAQ 2.0.x</a></li>
+            <li><a href="#3d">Upgrading phpMyFAQ 2.0.x versions</a></li>
             <li><a href="#3e">Modifying templates for phpMyFAQ 2.0.x</a></li>
             <li><a href="#3f">Migration</a></li>
         </ol></li>
-        <li><strong><a href="#4">Administration</a></strong>
+        <li><strong><a href="#4">Frontend</a></strong>
         <ol class="alpha"">
-            <li><a href="#4a">User Administration</a></li>
-            <li><a href="#4b">Group Administration</a></li>
-            <li><a href="#4c">Category Administration</a></li>
-            <li><a href="#4d">Record Administration</a></li>
-            <li><a href="#4e">News Administration</a></li>
-            <li><a href="#4f">Statistics</a></li>
-            <li><a href="#4g">Exports</a></li>
-            <li><a href="#4h">Backup</a></li>
-            <li><a href="#4i">Configuration</a></li>
+            <li></li>
         </ol></li>
-        <li><strong><a href="#5">Customising phpMyFAQ 2.0.x</a></strong>
+        <li><strong><a href="#5">Administration</a></strong>
+        <ol class="alpha"">
+            <li><a href="#5a">User Administration</a></li>
+            <li><a href="#5b">Group Administration</a></li>
+            <li><a href="#5c">Category Administration</a></li>
+            <li><a href="#5d">Record Administration</a></li>
+            <li><a href="#5e">News Administration</a></li>
+            <li><a href="#5f">Statistics</a></li>
+            <li><a href="#5g">Exports</a></li>
+            <li><a href="#5h">Backup</a></li>
+            <li><a href="#5i">Configuration</a></li>
+        </ol></li>
+        <li><strong><a href="#6">Customising phpMyFAQ 2.0.x</a></strong>
         <ol class="alpha"">
             <li><a href="#5a">The file template/index.tpl</a></li>
             <li><a href="#5b">The file template/style.css</a></li>
             <li><a href="#5c">More Templates</a></li>
         </ol></li>
-        <li><strong><a href="#6">One more thing</a></strong></li>
+        <li><strong><a href="#7">One more thing</a></strong></li>
     </ol>
 
     <hr style="width: 90%; height: 1px;"  />
@@ -112,26 +116,26 @@
     <p><strong><a name="2"></a>2.Installation</strong></p>
     <p><strong><a name="2a"></a>2.a. Requirements for phpMyFAQ</strong></p>
     <p>phpMyFAQ addresses a database system via PHP. In order to install it you will need a webserver that meets the following requirements:</p>
-	<ul type="square">
-        <li><a href="http://www.php.net">PHP</a>
-        <ul type="circle">
-            <li>from version 4.3.0 (recommended: PHP 4.4.5 or PHP 5.2.1)</li>
+    <ul type="square">
+        <li><strong><a href="http://www.php.net">PHP</a></strong>
+        <ul type="circle">    
+            <li>from version 4.3.3 (recommended: latest PHP 4.4 or latest PHP 5.2)</li>
             <li>register_globals = off (recommended)</li>
-            <li>safe_mode = off</li>
+            <li>safe_mode = off (recommended)</li>
         </ul></li>
-        <li>Webserver (<a href="http://httpd.apache.org">Apache</a> 1.3.x/2.0.x/2.2.x or <a href="http://www.lighttpd.net">lighttpd</a> or <a href="http://www.microsoft.com/">IIS</a>)</li>
-        <li>Database server
+        <li><strong>Webserver</strong> (<a href="http://httpd.apache.org">Apache</a> 1.3/2.0/2.2 or <a href="http://www.lighttpd.net">lighttpd</a> 1.0+ or <a href="http://www.microsoft.com/">IIS</a> 5.0+)</li>
+        <li><strong>Database server</strong>
         <ul>
-            <li><a href="http://www.mysql.com">MySQL</a> 4.0.x, 4.1.x, 5.0.x, 5.1.x (recommended: 5.0.x)</li>
-            <li><a href="http://www.mysql.com">MySQL</a> 4.1.x, 5.0.x, 5.1.x with the PHP5 MySQLi extension (recommended: 5.0.x)</li>
-            <li><a href="http://www.postgresql.org">PostgreSQL</a> 7.2.x, 7.3.x, 7.4.x, 8.0.x, 8.1.x (recommended: 8.1.x)</li>
+            <li><a href="http://www.mysql.com">MySQL</a> 4.x, 5.x with the PHP4 MySQL extension  (recommended: 5.0.x)</li>
+            <li><a href="http://www.mysql.com">MySQL</a> 4.1.x, 5.x with the PHP5 MySQLi extension (recommended: 5.0.x)</li>
+            <li><a href="http://www.postgresql.org">PostgreSQL</a> 7.2+, 8.x (recommended: 8.1.x)</li>
             <li><a href="http://www.sybase.com">Sybase</a></li>
             <li><a href="http://www.microsoft.com/sql/">Microsoft SQL Server</a> 2000, 2005</li>
             <li><a href="http://www-306.ibm.com/software/data/db2/">IBM DB2 Universal Database</a> 8.2.x, 9.1.x, <a href="http://www-306.ibm.com/software/data/cloudscape/">IBM Cloudscape</a>, and <a href="http://db.apache.org/derby/">Apache Derby</a></li>
             <li><a href="http://www.sqlite.org">SQLite</a> with PHP5</li>
-            <li>Oracle with PHP5</li>
-            <li>Interbase/Firebird</li>
             <li><a href="http://www.mysql.com/products/maxdb/">MaxDB</a> 7.5 or later (experimental)</li>
+            <li><a href="http://www.oracle.com">Oracle</a> 8i or later (experimental)</li>
+            <li><a href="http://www.firebirdsql.org">Firebird</a> / <a href="http://www.codegear.com/products/interbase">Interbase</a> (experimental)</li>
         </ul></li>
         <li>correctly set: access permissions, owner, group</li>
 	</ul>
@@ -140,7 +144,7 @@
     <p>You can determine which versions your webserver is running by creating a file called <strong>info.php</strong> with the following content:</p>
     <pre>&lt;?php phpinfo(); ?&gt;</pre>
     <p>Upload this file to your webspace and open it using your browser.  The installation-script  checks which version of PHP is installed on your server. Should you not meet the requirements, you cannot start the installation process.</p>
-    <p>In case you have PHP below 4.3.0 or PHP 6.0.0-dev installed you cannot use phpMyFAQ.</p>
+    <p>In case you have PHP below 4.3.3 or PHP 6.0.0-dev installed you cannot use phpMyFAQ.</p>
     <p>phpMyFAQ uses a WYSIWYG online editor. It uses a non-standard feature based on JavaScript implemented in Mozilla Firefox 0.7+ (any platform), Mozilla 1.3+ (any platform), Opera 9.0+ (any platform) and Internet Explorer 5.5+ for Windows, therefore the editor will only work in one of these browsers. You have to enable JavaScript for the Ajax based functions as well.</p>
     <p><a href="#top">back to top</a></p>
 
@@ -254,7 +258,7 @@
 
     <hr style="width: 90%; height: 1px;" />
     <p><strong><a name="2k"></a>2.k. Firefox and IE7 search plugins</strong></p>
-    <p>phpMyFAQ 2.0.x provides search plugins for Mozilla Firefox and Microsoft Internet Explorer 7. This plugins can be created in the admin section and every user in the frontend can install it. With an installed search plugin you can search through the phpMyFAQ installation with the search box in upper right corner of Mozilla Firefox or Microsoft Internet Explorer 7.</p>
+    <p>phpMyFAQ 2.0.x provides search plugins for Mozilla Firefox 2 and Microsoft Internet Explorer 7 based on the OpenSearch specification. Every user in the frontend can install it. With an installed search plugin you can search through the phpMyFAQ installation with the search box in upper right corner of Mozilla Firefox 2 or Microsoft Internet Explorer 7.</p>
     <p><a href="#top">back to top</a></p>
 
 
