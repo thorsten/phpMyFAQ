@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.40 2007-02-26 23:50:19 matteo Exp $
+* $Id: language_it.php,v 1.41 2007-02-26 23:58:47 matteo Exp $
 *
 * Italian language file
 *
@@ -517,7 +517,7 @@ $PMF_LANG["rightsLanguage"]['addbt'] = "Aggiunge FAQ";
 $PMF_LANG["rightsLanguage"]['editbt'] = "Modifica FAQ";
 $PMF_LANG["rightsLanguage"]['delbt'] = "Cancella FAQ";
 $PMF_LANG["rightsLanguage"]['viewlog'] = "Vede il diario delle sessioni utente";
-$PMF_LANG["rightsLanguage"]['adminlog'] = "Vedi il diario delle sessioni amministrative";
+$PMF_LANG["rightsLanguage"]['adminlog'] = "Vede il diario delle sessioni amministrative";
 $PMF_LANG["rightsLanguage"]['delcomment'] = "Cancella commenti";
 $PMF_LANG["rightsLanguage"]['addnews'] = "Aggiunge news";
 $PMF_LANG["rightsLanguage"]['editnews'] = "Modifica news";
