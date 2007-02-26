@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.104 2007-02-26 22:02:49 matteo Exp $
+* $Id: update.php,v 1.105 2007-02-26 22:50:53 matteo Exp $
 *
 * Main update script
 *
@@ -1100,15 +1100,15 @@ if ($step == 5) {
                     $_records[] = array('id' => $row->id, 'rights' => $row->rights);
                 }
                 foreach ($_records as $_r) {
-                    // PMF 1.6.x: # 23 rights
+                    // PMF 1.6.x: # 23 rights (it ends with changebtrevs)
                     // PMF 2.0.0: # 29 rights
-                    // addglossary, editglossary, delglossary, addgroup, editgroup, delgroup:
-                    // 23-29; id = '1' is supposed to be the 'admin' user
-                    $glossaryRights = ('1' == $_r['id']) ? '111111' : '0000000';
-                    // changebtrevs is the 29th right in PMF 2.0.0, whilst it is the 23rd in PMF 1.6.x
-                    $userStringRights = substr($_r['rights'], 0, 22).$glossaryRights.substr($_r['rights'], 22, 1);
+                    // 23-29: addglossary, editglossary, delglossary, changebtrevs, addgroup, editgroup, delgroup:
+                    // - id = '1' is supposed to be the 'admin' user
+                    // - changebtrevs is the 26th right in PMF 2.0.0, whilst it is the 23rd in PMF 1.6.x
+                    $newRights = ('1' == $_r['id']) ? '1111111' : '000'.substr($_r['rights'], 22, 1).'000';
+                    $userStringRights = substr($_r['rights'], 0, 22).$newRights;
                     for ($i = 0; $i < 29; $i++) {
-                        if ('1' == substr($userStringRights, $i, 1)) {
+                        if ('1' == $userStringRights[$i]) {
                             $query[] = 'INSERT INTO '.SQLPREFIX.'faquser_right
                                         (user_id, right_id)
                                         VALUES ('.$_r['id'].', '.($i+1).')';
@@ -1194,6 +1194,9 @@ if ($step == 5) {
     print '<p class="center">';
     // Perform the queries for updating/migrating the database from 1.x
     if (isset($query)) {
+        @ob_flush();
+        flush();
+        $count = 0;
         while ($each_query = each($query)) {
             $result = @$db->query($each_query[1]);
             print "| ";
@@ -1206,7 +1209,14 @@ if ($step == 5) {
                 die();
             }
             wait(25);
+            $count++;
+            if (!($count % 10)) {
+                @ob_flush();
+                flush();
+            }
         }
+        @ob_flush();
+        flush();
     }
 
     if (version_compare($version, '2.0.0-alpha', '<')) {
@@ -1309,6 +1319,9 @@ if ($step == 5) {
 
     // Perform the queries for updating/migrating the database from 2.x
     if (isset($query)) {
+        @ob_flush();
+        flush();
+        $count = 0;
         while ($each_query = each($query)) {
             $result = @$db->query($each_query[1]);
             print "| ";
@@ -1321,7 +1334,14 @@ if ($step == 5) {
                 die();
             }
             wait(25);
+            $count++;
+            if (!($count % 10)) {
+                @ob_flush();
+                flush();
+            }
         }
+        @ob_flush();
+        flush();
     }
 
     // Always the last step: Update version number
@@ -1381,13 +1401,13 @@ if ($step == 5) {
 
     if (version_compare($version, '2.0.0-alpha', '<')) {
         // 13/13. Remove the old config file
-        if (@unlink(PMF_ROOT_DIR."/inc/config.php")) {
+        if (@unlink(PMF_ROOT_DIR.'/inc/config.php')) {
             print "<p class=\"center\">The file 'inc/config.php' was deleted automatically.</p>\n";
         } else {
             print "<p class=\"center\">Please delete the file 'inc/config.php' manually.</p>\n";
         }
-        @chmod(PMF_ROOT_DIR."/inc/config.php.original", 0666);
-        if (@unlink(PMF_ROOT_DIR."/inc/config.php.original")) {
+        @chmod(PMF_ROOT_DIR.'/inc/config.php.original', 0600);
+        if (@unlink(PMF_ROOT_DIR.'/inc/config.php.original')) {
             print "<p class=\"center\">The file 'inc/config.php.original' was deleted automatically.</p>\n";
         } else {
             print "<p class=\"center\">Please delete the file 'inc/config.php.original' manually.</p>\n";
@@ -1395,12 +1415,12 @@ if ($step == 5) {
     }
 
     // Remove 'scripts' folder: no need of prompt anything to the user
-    if (file_exists(PMF_ROOT_DIR."/scripts") && is_dir(PMF_ROOT_DIR."/scripts")) {
-        @rmdir(PMF_ROOT_DIR."/scripts");
+    if (file_exists(PMF_ROOT_DIR.'/scripts') && is_dir(PMF_ROOT_DIR.'/scripts')) {
+        @rmdir(PMF_ROOT_DIR.'/scripts');
     }
     // Remove 'phpmyfaq.spec' file: no need of prompt anything to the user
-    if (file_exists(PMF_ROOT_DIR."/phpmyfaq.spec")) {
-        @unlink(PMF_ROOT_DIR."/phpmyfaq.spec");
+    if (file_exists(PMF_ROOT_DIR.'/phpmyfaq.spec')) {
+        @unlink(PMF_ROOT_DIR.'/phpmyfaq.spec');
     }
     // Remove 'installer.php' file
     if (@unlink(dirname($_SERVER['PATH_TRANSLATED']).'/installer.php')) {
