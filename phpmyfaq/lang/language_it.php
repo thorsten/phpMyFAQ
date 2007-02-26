@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.39 2006-12-30 16:47:48 matteo Exp $
+* $Id: language_it.php,v 1.40 2007-02-26 23:50:19 matteo Exp $
 *
 * Italian language file
 *
@@ -846,3 +846,8 @@ $PMF_LANG['msgNewTranslationSubmit'] = 'Invia la tua proposta';
 $PMF_LANG['msgTranslate'] = 'Proponi una traduzione per';
 $PMF_LANG['msgTranslateSubmit'] = 'Inizia a tradurre...';
 $PMF_LANG['msgNewTranslationThanks'] = "Grazie per aver proposto la tua traduzione!";
+
+// added v2.0.0 - 2007-02-27 by Matteo
+$PMF_LANG["rightsLanguage"]['addgroup'] = "Aggiunge gruppi";
+$PMF_LANG["rightsLanguage"]['editgroup'] = "Modifica gruppi";
+$PMF_LANG["rightsLanguage"]['delgroup'] = "Cancella gruppi";

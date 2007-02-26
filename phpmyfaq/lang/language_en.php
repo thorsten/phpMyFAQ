@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.68 2007-01-08 20:51:05 matteo Exp $
+* $Id: language_en.php,v 1.69 2007-02-26 23:50:19 matteo Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -846,3 +846,8 @@ $PMF_LANG['msgNewTranslationSubmit'] = 'Submit your proposal';
 $PMF_LANG['msgTranslate'] = 'Propose a translation for';
 $PMF_LANG['msgTranslateSubmit'] = 'Start translation...';
 $PMF_LANG['msgNewTranslationThanks'] = "Thank you for your translation proposal!";
+
+// added v2.0.0 - 2007-02-27 by Matteo
+$PMF_LANG["rightsLanguage"]['addgroup'] = "add group accounts";
+$PMF_LANG["rightsLanguage"]['editgroup'] = "edit group accounts";
+$PMF_LANG["rightsLanguage"]['delgroup'] = "delete group accounts";
