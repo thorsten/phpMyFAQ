@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: sqlite.update.sql.php,v 1.5 2007-02-26 21:53:23 matteo Exp $
+ * $Id: sqlite.update.sql.php,v 1.6 2007-02-26 22:11:09 matteo Exp $
  *
  * CREATE TABLE instructions for SQLite
  *
@@ -220,7 +220,7 @@ $query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (22, 'delquestion', 'Right 
 $query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (23, 'addglossary', 'Right to add glossary entries', 1, 1)";
 $query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (24, 'editglossary', 'Right to edit glossary entries', 1, 1)";
 $query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (25, 'delglossary', 'Right to delete glossary entries', 1, 1)";
-$query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (26, 'addgroup', 'Right to add groups', 1, 1)";
-$query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (27, 'editgroup', 'Right to edit groups', 1, 1)";
-$query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (28, 'delgroup', 'Right to delete groups', 1, 1)";
-$query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (29, 'changebtrevs', 'Edit revisions', 1, 1)";
+$query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (26, 'changebtrevs', 'Edit revisions', 1, 1)";
+$query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (27, 'addgroup', 'Right to add group accounts', 1, 1)";
+$query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (28, 'editgroup', 'Right to edit group accounts', 1, 1)";
+$query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (29, 'delgroup', 'Right to delete group accounts', 1, 1)";
