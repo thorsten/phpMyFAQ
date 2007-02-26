@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.103 2007-02-18 21:57:49 matteo Exp $
+* $Id: update.php,v 1.104 2007-02-26 22:02:49 matteo Exp $
 *
 * Main update script
 *
@@ -67,15 +67,20 @@ function HTMLFooter()
     }
     #header {
         margin: auto;
-        padding: 35px;
-        background: #0D487A;
-        color: #ffffff;
+        padding: 25px;
+        background: #E1F0A6;
+        color: #234361;
+        font-size: 36px;
+        font-weight: bold;
         text-align: center;
+        border-right: 3px solid silver;
+        border-bottom: 3px solid silver;
+        -moz-border-radius: 20px 20px 20px 20px;
+        border-radius: 20px 20px 20px 20px;
     }
     #header h1 {
         font-family: "Trebuchet MS", Geneva, Verdana, Arial, Helvetica, sans-serif;
         margin: auto;
-        color: #ffffff;
         text-align: center;
     }
     .center {
@@ -89,13 +94,18 @@ function HTMLFooter()
     }
     legend.installation {
         border: 1px solid black;
-        background-color: #FCE397;
-        padding: 4px 4px 4px 4px;
+        background-color: #D5EDFF;
+        padding: 4px 8px 4px 8px;
+        font-size: 14px;
+        font-weight: bold;
+        -moz-border-radius: 5px 5px 5px 5px;
+        border-radius: 5px 5px 5px 5px;
     }
     .input {
         width: 200px;
         background-color: #f5f5f5;
         border: 1px solid black;
+        margin-bottom: 8px;
     }
     span.text {
         width: 250px;
@@ -115,9 +125,14 @@ function HTMLFooter()
         padding-left: 5px;
     }
     .button {
-        background-color: #ff7f50;
-        border: 1px solid #000000;
+        background-color: #89AC15;
+        border: 3px solid #000000;
         color: #ffffff;
+        font-weight: bold;
+        font-size: 24px;
+        padding: 10px 30px 10px 30px;
+        -moz-border-radius: 10px 10px 10px 10px;
+        border-radius: 10px 10px 10px 10px;
     }
     .error {
         margin: auto;
@@ -179,7 +194,7 @@ if ($step == 1) {
     <option value="2.0.0-alpha">phpMyFAQ 2.0.0-alpha</option>
 </select>
 
-<p class="center">
+<p class="center" style="color: #f00;">
     <strong>Attention! This version might be broken and it's under heavy development.</strong>
 </p>
 
@@ -233,7 +248,7 @@ if ($step == 2) {
 <input type="hidden" name="version" value="<?php print $_POST["version"]; ?>" />
 <fieldset class="installation">
 <legend class="installation"><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 2 of 5)</strong></legend>
-<p>A backup of your database configuration have been made.</p>
+<p>A backup of your database configuration file have been made.</p>
 <p>Now the configuration files will be updated.</p>
 <p class="center"><input type="submit" value="Go to step 3 of 5" class="button" /></p>
 </fieldset>
@@ -1086,13 +1101,13 @@ if ($step == 5) {
                 }
                 foreach ($_records as $_r) {
                     // PMF 1.6.x: # 23 rights
-                    // PMF 2.0.0: # 26 rights
+                    // PMF 2.0.0: # 29 rights
                     // addglossary, editglossary, delglossary, addgroup, editgroup, delgroup:
                     // 23-29; id = '1' is supposed to be the 'admin' user
                     $glossaryRights = ('1' == $_r['id']) ? '111111' : '0000000';
-                    // changebtrevs is the 26th right in PMF 2.0.0, whilst it is the 23rd in PMF 1.6.x
+                    // changebtrevs is the 29th right in PMF 2.0.0, whilst it is the 23rd in PMF 1.6.x
                     $userStringRights = substr($_r['rights'], 0, 22).$glossaryRights.substr($_r['rights'], 22, 1);
-                    for ($i = 0; $i < 26; $i++) {
+                    for ($i = 0; $i < 29; $i++) {
                         if ('1' == substr($userStringRights, $i, 1)) {
                             $query[] = 'INSERT INTO '.SQLPREFIX.'faquser_right
                                         (user_id, right_id)
@@ -1181,7 +1196,7 @@ if ($step == 5) {
     if (isset($query)) {
         while ($each_query = each($query)) {
             $result = @$db->query($each_query[1]);
-            print "|&nbsp;";
+            print "| ";
             if (!$result) {
                 print "\n<div class=\"error\">\n";
                 print "<p><strong>DB error:</strong> ".$db->error()."</p>\n";
@@ -1296,7 +1311,7 @@ if ($step == 5) {
     if (isset($query)) {
         while ($each_query = each($query)) {
             $result = @$db->query($each_query[1]);
-            print "|&nbsp;";
+            print "| ";
             if (!$result) {
                 print "\n<div class=\"error\">\n";
                 print "<p><strong>DB error:</strong> ".$db->error()."</p>\n";
@@ -1341,7 +1356,7 @@ if ($step == 5) {
     if (isset($query)) {
         while ($each_query = each($query)) {
             $result = @$db->query($each_query[1]);
-            print "|&nbsp;";
+            print "| ";
             if (!$result) {
                 print "\n<div class=\"error\">\n";
                 print "<p><strong>DB error:</strong> ".$db->error()."</p>\n";
@@ -1399,5 +1414,6 @@ if ($step == 5) {
     } else {
         print "<p class=\"center\">Please delete the file <em>./install/update.php</em> manually.</p>\n";
     }
+
     HTMLFooter();
 }
