@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: category.main.php,v 1.35 2007-02-25 11:33:02 thorstenr Exp $
+ * $Id: category.main.php,v 1.36 2007-02-26 18:51:47 thorstenr Exp $
  *
  * List all categories in the admin section
  *
@@ -54,10 +54,10 @@ if ($permission['editcateg']) {
         
         $userperm       = isset($_POST['userpermission']) ? 
                           $db->escape_string($_POST['userpermission']) : 'all';
-        $user_allowed   = ('all' == $userperm) ? -1 : $db->escape_string($_POST['restricted_users']);
+        $user_allowed   = ('all' == $userperm) ? -1 : $db->escape_string($_POST['userpermission']);
         $groupperm      = isset($_POST['grouppermission']) ? 
                           $db->escape_string($_POST['grouppermission']) : 'all';
-        $group_allowed  = ('all' == $groupperm) ? -1 : $db->escape_string($_POST['restricted_groups']);
+        $group_allowed  = ('all' == $groupperm) ? -1 : $db->escape_string($_POST['grouppermission']);
         
         $category_id = $category->addCategory($category_data, $parent_id);
         if ($category_id) {
