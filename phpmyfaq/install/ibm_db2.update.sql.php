@@ -1,25 +1,25 @@
 <?php
 /**
-* $Id: ibm_db2.update.sql.php,v 1.4 2006-09-17 20:01:52 thorstenr Exp $
-*
-* CREATE TABLE instruction for IBM DB2 Universal Database, IBM Cloudscape,
-* and Apache Derby databases
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @author       Matteo Scaramuccia <matteo@scaramuccia.com>
-* @since        2006-08-12
-* @copyright    (c) 2006 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * $Id: ibm_db2.update.sql.php,v 1.5 2007-02-26 21:53:23 matteo Exp $
+ *
+ * CREATE TABLE instruction for IBM DB2 Universal Database, IBM Cloudscape,
+ * and Apache Derby databases
+ *
+ * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author       Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @since        2006-08-12
+ * @copyright    (c) 2006-2007 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 //
 // TABLES
@@ -221,4 +221,7 @@ $query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (22, 'delquestion', 'Right 
 $query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (23, 'addglossary', 'Right to add glossary entries', 1, 1)";
 $query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (24, 'editglossary', 'Right to edit glossary entries', 1, 1)";
 $query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (25, 'delglossary', 'Right to delete glossary entries', 1, 1)";
-$query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (26, 'changebtrevs', 'Edit revisions', 1, 1)";
+$query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (26, 'addgroup', 'Right to add groups', 1, 1)";
+$query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (27, 'editgroup', 'Right to edit groups', 1, 1)";
+$query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (28, 'delgroup', 'Right to delete groups', 1, 1)";
+$query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (29, 'changebtrevs', 'Edit revisions', 1, 1)";
