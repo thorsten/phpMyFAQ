@@ -1,5 +1,5 @@
 /**
- * $Id: admin.css,v 1.35 2007-02-18 18:43:02 thorstenr Exp $
+ * $Id: admin.css,v 1.36 2007-02-26 23:28:57 matteo Exp $
  *
  * This is the CSS file for the admin section of phpMyFAQ 2.0.x
  * You don't need to change enything here but feel free to do it. :-)
@@ -475,42 +475,53 @@ table.linkconfig#configuration tr#lastrow td {
 .url-batch1, .url-batch2, .url-batch3, .url-checking
 {
     background-color: #ff0;
-    color: #000;
     text-align: center;
     font-weight: bold;
     -moz-border-radius: 5px 5px 5px 5px;
     border-radius: 5px 5px 5px 5px;
+}
+.url-batch1 span a, .url-batch2 span a, .url-batch3 span a, .url-checking span a
+{
+    color: #000;
+    text-decoration: none;
 }
 .url-disabled, .url-noaccess, .url-noajax, .url-noscript
 {
     background-color: #000;
-    color: #fff;
     text-align: center;
     font-weight: bold;
     -moz-border-radius: 5px 5px 5px 5px;
     border-radius: 5px 5px 5px 5px;
+}
+a.url-disabled span a, a.url-noaccess span a, a.url-noajax span a, .url-noscript span a
+{
+    color: #fff;
+    text-decoration: none;
 }
 .url-linkbad
 {
     background-color: #f00;
-    color: #fff;
     text-align: center;
     font-weight: bold;
     -moz-border-radius: 5px 5px 5px 5px;
     border-radius: 5px 5px 5px 5px;
+}
+.url-linkbad span a
+{
+    color: #fff;
+    text-decoration: none;
 }
 .url-linkok, .url-nolinks
 {
     background-color: #0f0;
-    color: #000;
     text-align: center;
     font-weight: bold;
     -moz-border-radius: 5px 5px 5px 5px;
     border-radius: 5px 5px 5px 5px;
 }
-a.linkverifier {
-    font-size: 10px;
-    color: Black;
+.url-linkok span a, .url-nolinks span a
+{
+    color: #000;
     text-decoration: none;
 }
 
