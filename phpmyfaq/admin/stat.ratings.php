@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: stat.ratings.php,v 1.15 2007-02-27 19:08:14 thorstenr Exp $
+ * $Id: stat.ratings.php,v 1.16 2007-02-27 22:27:12 matteo Exp $
  *
  * The page with the ratings of the votings
  *
@@ -25,7 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 }
 
 if ($permission["viewlog"]) {
-    $category = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
+    $category = new PMF_Category('', $current_admin_user, $current_admin_groups, false);
 ?>
     <h2><?php print $PMF_LANG["ad_rs"] ?></h2>
     <table class="list">
