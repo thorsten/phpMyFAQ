@@ -1,23 +1,23 @@
 <?php
 /**
-* $Id: record.delquestion.php,v 1.15 2007-01-02 20:44:33 matteo Exp $
-*
-* Delete open questions
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @since        2003-02-24
-* @copyright    (c) 2001-2006 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * $Id: record.delquestion.php,v 1.16 2007-02-27 19:49:25 thorstenr Exp $
+ *
+ * Delete open questions
+ *
+ * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since        2003-02-24
+ * @copyright    (c) 2003-2007 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
@@ -26,7 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 
 if ($permission['delquestion']) {
     
-    $tree = new PMF_Category;
+    $category = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
     $question_id = (int)$_GET['id'];
     
     if (isset($_GET['delete']) && $_GET['delete'] == 'yes') {
@@ -59,7 +59,7 @@ if ($permission['delquestion']) {
 ?>
         <tr>
             <td class="list"><?php print makeDate($row->ask_date); ?><br /><a href="mailto:<?php print $row->ask_usermail; ?>"><?php print $row->ask_username; ?></a></td>
-            <td class="list"><?php print $tree->categoryName[$row->ask_rubrik]['name'].":<br />".$row->ask_content; ?></td>
+            <td class="list"><?php print $category->categoryName[$row->ask_rubrik]['name'].":<br />".$row->ask_content; ?></td>
             <td class="list"><a href="?action=question&amp;id=<?php print $row->id; ?>&amp;is_visible=toggle"><?php print (('Y' == $row->is_visible) ? $PMF_LANG["ad_gen_no"] : $PMF_LANG["ad_gen_yes"]); ?>!</a><br /></td>
             <td class="list"><a href="?action=question&amp;id=<?php print $row->id; ?>&amp;delete=yes"><?php print $PMF_LANG["ad_gen_delete"]; ?>!</a><br /><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;action=takequestion&amp;id=<?php print $row->id; ?>"><?php print $PMF_LANG["ad_ques_take"] ?></a></td>
         </tr>

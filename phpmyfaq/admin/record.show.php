@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.show.php,v 1.39 2007-02-18 18:56:28 thorstenr Exp $
+ * $Id: record.show.php,v 1.40 2007-02-27 19:46:59 thorstenr Exp $
  *
  * Shows the list of records ordered by categories
  *
@@ -29,7 +29,7 @@ printf("<h2>%s</h2>\n", $PMF_LANG['ad_entry_aor']);
 
 if ($permission["editbt"] || $permission["delbt"]) {
     // (re)evaluate the Category object w/o passing the user language
-    $category = new PMF_Category();
+    $category = new PMF_Category('', $current_admin_user, $current_admin_groups, false);
     $category->transform(0);
     $category->buildTree();
 
