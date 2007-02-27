@@ -1,23 +1,23 @@
 <?php
 /**
-* $Id: stat.ratings.php,v 1.14 2006-10-11 18:11:09 matteo Exp $
-*
-* The page with the ratings of the votings
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @since        2003-02-24
-* @copyright    (c) 2001-2006 phpMyFAQ Team
-* 
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-* 
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * $Id: stat.ratings.php,v 1.15 2007-02-27 19:08:14 thorstenr Exp $
+ *
+ * The page with the ratings of the votings
+ *
+ * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since        2003-02-24
+ * @copyright    (c) 2001-2007 phpMyFAQ Team
+ * 
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
@@ -25,7 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 }
 
 if ($permission["viewlog"]) {
-    $tree = new PMF_Category();
+    $category = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
 ?>
     <h2><?php print $PMF_LANG["ad_rs"] ?></h2>
     <table class="list">
@@ -102,7 +102,7 @@ if ($permission["viewlog"]) {
         if ($row->category_id != $old) {
 ?>
     <tr>
-        <th colspan="5" class="list"><strong><?php print $tree->categoryName[$row->category_id]["name"]; ?></strong></th>
+        <th colspan="5" class="list"><strong><?php print $category->categoryName[$row->category_id]["name"]; ?></strong></th>
     </tr>
 <?php
         }
