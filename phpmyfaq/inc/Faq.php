@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.84 2007-02-25 12:09:57 thorstenr Exp $
+ * $Id: Faq.php,v 1.85 2007-02-27 19:58:11 thorstenr Exp $
  *
  * The main FAQ class
  *
@@ -206,6 +206,7 @@ class PMF_Faq
                 AND '.SQLPREFIX.'faqdata.date_end   >= \''.$now.'\'
                 AND '.SQLPREFIX.'faqdata.active = \'yes\'
                 AND '.SQLPREFIX.'faqcategoryrelations.category_id = '.$category.'
+                AND '.SQLPREFIX.'faqdata.lang = \''.$this->language.'\'
             ORDER BY
                 '.SQLPREFIX.'faqdata.id';
 
