@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Category.php,v 1.39 2007-02-25 12:01:29 thorstenr Exp $
+ * $Id: Category.php,v 1.40 2007-02-27 19:23:36 matteo Exp $
  *
  * The main category class
  *
@@ -170,11 +170,18 @@ class PMF_Category
             WHERE
                 ( fu.user_id = %d
             OR
-                fg.group_id IN (%s) ) AND",
+                fg.group_id IN (%s) )",
             $this->user,
             implode(', ', $this->groups));
         }
-        
+        if (isset($this->language) && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
+            $where .= empty($where) ? '
+            WHERE' : '
+            AND';
+            $where .= "
+                lang = '".$this->language."'";
+        }
+
         $query = sprintf("
             SELECT
                 id, lang, parent_id, name, description
@@ -187,16 +194,14 @@ class PMF_Category
             LEFT JOIN
                 %sfaqcategory_user fu
             ON
-                fc.id = fu.category_id
-            %s",
+                fc.id = fu.category_id%s
+            ORDER BY
+                id",
             SQLPREFIX,
             SQLPREFIX,
             SQLPREFIX,
-            $where);
-        if ($withperm && isset($this->language) && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
-            $query .= " lang = '".$this->language."'";
-        }
-        $query .= ' ORDER BY id';
+            $where
+        );
 
         $result = $this->db->query($query);
         while ($row = $this->db->fetch_assoc($result)) {
@@ -204,6 +209,7 @@ class PMF_Category
             $this->categories[] =& $this->categoryName[$row['id']];
             $this->children[$row['parent_id']][$row['id']] =& $this->categoryName[$row['id']];
         }
+
         return $this->categories;
     }
 
