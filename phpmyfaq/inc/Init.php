@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Init.php,v 1.27 2007-02-18 18:01:20 matteo Exp $
+ * $Id: Init.php,v 1.28 2007-02-27 20:05:12 thorstenr Exp $
  *
  * Some functions
  *
@@ -386,13 +386,13 @@ class PMF_Init
             $this->language = $_lang['cookie'];
             $_lang = null;
             unset($_lang);
-        } elseif (isset($_lang['config'])) {
-            $this->language = $_lang['config'];
+        } elseif (isset($_lang['detection'])) {
+            $this->language = $_lang['detection'];
             $_lang = null;
             unset($_lang);
             setcookie('pmf_lang', $this->language, time() + 3600);
-        } elseif (isset($_lang['detection'])) {
-            $this->language = $_lang['detection'];
+        } elseif (isset($_lang['config'])) {
+            $this->language = $_lang['config'];
             $_lang = null;
             unset($_lang);
             setcookie('pmf_lang', $this->language, time() + 3600);
