@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.41 2007-02-26 23:58:47 matteo Exp $
+* $Id: language_it.php,v 1.42 2007-02-27 19:33:11 matteo Exp $
 *
 * Italian language file
 *
@@ -851,3 +851,6 @@ $PMF_LANG['msgNewTranslationThanks'] = "Grazie per aver proposto la tua traduzio
 $PMF_LANG["rightsLanguage"]['addgroup'] = "Aggiunge gruppi";
 $PMF_LANG["rightsLanguage"]['editgroup'] = "Modifica gruppi";
 $PMF_LANG["rightsLanguage"]['delgroup'] = "Cancella gruppi";
+
+// added v2.0.0 - 2007-02-27 by Thorsten
+$PMF_LANG['ad_news_link_parent'] = 'Il link si apre nella finestra padre';
