@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: category.delete.php,v 1.12 2007-02-25 11:33:02 thorstenr Exp $
+ * $Id: category.delete.php,v 1.13 2007-02-27 19:53:08 thorstenr Exp $
  *
  * Deletes a category
  *
@@ -30,7 +30,7 @@ if ($permission['delcateg']) {
     $categories = $category->getAllCategories();
     $id = $_GET['cat'];
 ?>
-	<form action="<?php print $_SERVER['PHP_SELF'].$linkext; ?>" method="post">
+	<form action="<?php print $_SERVER['PHP_SELF']; ?>" method="post">
     <fieldset>
     <legend><?php print $PMF_LANG['ad_categ_deletesure']; ?></legend>
 

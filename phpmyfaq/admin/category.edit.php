@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: category.edit.php,v 1.21 2007-02-25 11:33:02 thorstenr Exp $
+ * $Id: category.edit.php,v 1.22 2007-02-27 19:53:08 thorstenr Exp $
  *
  * Edits a category
  *
@@ -53,7 +53,8 @@ if ($permission['editcateg']) {
         $categories[$id]['name'],
         $PMF_LANG['ad_categ_edit_2']);
 ?>
-    <form action="?action=updatecategory" method="post">
+    <form action="<?php print $_SERVER['PHP_SELF']; ?>" method="post">
+    <input type="hidden" name="action" value="updatecategory" />
     <input type="hidden" name="id" value="<?php print $id; ?>" />
     <input type="hidden" name="lang" value="<?php print $categories[$id]['lang']; ?>" />
     <input type="hidden" name="parent_id" value="<?php print $categories[$id]['parent_id']; ?>" />
