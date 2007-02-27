@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Category.php,v 1.40 2007-02-27 19:23:36 matteo Exp $
+ * $Id: Category.php,v 1.41 2007-02-27 20:02:50 thorstenr Exp $
  *
  * The main category class
  *
@@ -535,7 +535,11 @@ class PMF_Category
                 %sfaqcategoryrelations,
                 %sfaqdata
             WHERE
-                %sfaqcategoryrelations.record_id = %sfaqdata.id",
+                %sfaqcategoryrelations.record_id = %sfaqdata.id
+            AND
+                %sfaqcategoryrelations.record_lang = %sfaqdata.lang",
+            SQLPREFIX,
+            SQLPREFIX,
             SQLPREFIX,
             SQLPREFIX,
             SQLPREFIX,
