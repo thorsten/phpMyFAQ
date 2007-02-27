@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.39 2006-11-19 10:55:09 thorstenr Exp $
+ * $Id: language_de.php,v 1.40 2007-02-27 19:17:27 thorstenr Exp $
  *
  * German language file
  *
@@ -96,7 +96,7 @@ $PMF_LANG["msgSearchContent"] = "Inhalt: ";
 
 // new Content
 $PMF_LANG["msgNewContentHeader"] = "Vorschlag für FAQ-Eintrag";
-$PMF_LANG["msgNewContentAddon"] = "Der Eintrag erscheint nicht sofort, sondern wird vor der Veröffentlichung von uns überprüft. Pflichtfelder sind <strong>Name</strong>, <strong>E-Mail-Adresse</strong>, <strong>Kategorie</strong>, <strong>Themenüberschrift</strong> und <strong>Artikel</strong>. Die Keywords bitte nur mit Leerzeichen trennen.";
+$PMF_LANG["msgNewContentAddon"] = "Der Eintrag erscheint nicht sofort, sondern wird vor der Veröffentlichung von uns überprüft. Pflichtfelder sind <strong>Name</strong>, <strong>E-Mail-Adresse</strong>, <strong>Kategorie</strong>, <strong>Frage</strong> und <strong>Antwort</strong>. Die Keywords bitte nur mit Leerzeichen trennen.";
 $PMF_LANG["msgNewContentName"] = "Name:";
 $PMF_LANG["msgNewContentMail"] = "E-Mail-Adresse:";
 $PMF_LANG["msgNewContentCategory"] = "Zu welcher Kategorie gehört dieser Eintrag?";
@@ -823,3 +823,24 @@ $PMF_LANG['ad_quick_category'] = 'Neue Kategorie hinzufügen';
 $PMF_LANG['ad_quick_record'] = 'Neuen FAQ-Eintrag hinzufügen';
 $PMF_LANG['ad_quick_user'] = 'Neuen Benutzer anlegen';
 $PMF_LANG['ad_quick_group'] = 'Neue Benutzergruppe anlegen';
+
+// added v2.0.0 - 2006-12-30 by Matteo
+$PMF_LANG['msgNewTranslationHeader'] = 'Übersetzung vorschlagen';
+$PMF_LANG['msgNewTranslationAddon'] = 'Die Übersetzung erscheint nicht sofort, sondern wird vor der Veröffentlichung von uns überprüft. Pflichtfelder sind <strong>Name</strong>, <strong>E-Mail-Adresse</strong>, <strong>Kategorie</strong>, <strong>Frage</strong> und <strong>Antwort</strong>. Die Keywords bitte nur mit Leerzeichen trennen.';
+$PMF_LANG['msgNewTransSourcePane'] = 'Ursprungsbeitrag';
+$PMF_LANG['msgNewTranslationPane'] = 'Übersetzung';
+$PMF_LANG['msgNewTranslationName'] = $PMF_LANG['msgNewContentName'];
+$PMF_LANG['msgNewTranslationMail'] = $PMF_LANG['msgNewContentMail'];
+$PMF_LANG['msgNewTranslationKeywords'] = $PMF_LANG['msgNewContentKeywords'];
+$PMF_LANG['msgNewTranslationSubmit'] = 'Vorschlag absenden';
+$PMF_LANG['msgTranslate'] = 'Übersetzungsvorschlag für';
+$PMF_LANG['msgTranslateSubmit'] = 'Beginne die Übersetzung ...';
+$PMF_LANG['msgNewTranslationThanks'] = "Danke für den Übersetzungsvorschlag!";
+
+// added v2.0.0 - 2007-02-27 by Matteo
+$PMF_LANG["rightsLanguage"]['addgroup'] = "Gruppen hinzufügen";
+$PMF_LANG["rightsLanguage"]['editgroup'] = "Gruppen bearbeiten";
+$PMF_LANG["rightsLanguage"]['delgroup'] = "Gruppen löschen";
+
+// added v2.0.0 - 2007-02-27 by Thorsten
+$PMF_LANG['ad_news_link_parent'] = 'Link öffnet im gleichen Fenster';
