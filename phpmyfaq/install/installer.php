@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: installer.php,v 1.87 2007-02-24 07:21:44 thorstenr Exp $
+ * $Id: installer.php,v 1.88 2007-02-28 21:47:05 matteo Exp $
  *
  * The main phpMyFAQ Installer
  *
@@ -372,22 +372,22 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 ?>
 <fieldset class="installation">
 <legend class="installation">LDAP information</legend>
-    
+
     <label class="left">Do you want to use LDAP?</label>
     <input class="checkbox" type="checkbox" name="ldap_enabled" value="yes" /><br />
-    
+
     <label class="left">LDAP server host:</label>
     <input class="input" type="text" name="ldap_server" title="Please enter the host of your LDAP server here." /><br />
-        
+
     <label class="left">LDAP server port:</label>
     <input class="input" type="text" name="ldap_port" value="389" title="Please enter the port of your LDAP server here." /><br />
-    
+
     <label class="left">LDAP username:</label>
     <input class="input" type="text" name="ldap_user" title="Please enter your specified RDN username here." /><br />
-    
+
     <label class="left">LDAP password:</label>
     <input class="input" name="ldap_password" type="password" title="Please enter your LDAP password here." /><br />
-    
+
     <label class="left">Distinguished name (dn):</label>
     <input class="input" type="text" name="ldap_base" title="Please enter your distinguished name, e.g. 'cn=John Smith,ou=Accounts,o=My Company,c=US' here." />
 
@@ -399,7 +399,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 
 <fieldset class="installation">
 <legend class="installation">phpMyFAQ information</legend>
-    
+
     <label class="left">Default language:</label>
     <select class="input" name="language" size="1" title="Please select your default language.">
 <?php
@@ -439,7 +439,7 @@ foreach ($permLevels as $level => $desc) {
     
     <label class="left">Administrator's password:</label>
     <input class="input" type="password" name="password" title="Please enter your password for the admin area." /><br />
-    
+
     <label class="left">Retype password:</label>
     <input class="input" type="password" name="password_retyped" title="Please retype your password for checkup." /><br />
 
@@ -616,7 +616,7 @@ foreach ($permLevels as $level => $desc) {
     } else {
         $email = "";
     }
-    $permLevel = (isset($_POST['permLevel']) && in_array($_POST['permLevel'], $permLevels)) ? $_POST['permLevel'] : 'basic';
+    $permLevel = (isset($_POST['permLevel']) && in_array($_POST['permLevel'], array_keys($permLevels))) ? $_POST['permLevel'] : 'basic';
 
     // Write the DB variables in data.php
     if ($fp = @fopen(PMF_ROOT_DIR."/inc/data.php","w")) {
@@ -659,9 +659,12 @@ foreach ($permLevels as $level => $desc) {
     require_once($sql_type.'.sql.php');
     require_once('config.sql.php');
     print "<p class=\"center\">";
+    @ob_flush();
+    flush();
+    $count = 0;
     while ($each_query = each($query)) {
         $result = @$db->query($each_query[1]);
-        print "|&nbsp;";
+        print "| ";
         if (!$result) {
             print "\n<div class=\"error\">\n";
             print "<p><strong>Error:</strong> Please install your version of phpMyFAQ once again or send us a <a href=\"http://bugs.phpmyfaq.de\" target=\"_blank\">bug report</a>.</p>";
@@ -674,7 +677,15 @@ foreach ($permLevels as $level => $desc) {
             HTMLFooter();
             die();
         }
+        wait(25);
+        $count++;
+        if (!($count % 10)) {
+            @ob_flush();
+            flush();
+        }
     }
+    @ob_flush();
+    flush();
 
     // add admin account and rights
     if (!defined('SQLPREFIX')) {
@@ -915,11 +926,13 @@ foreach ($permLevels as $level => $desc) {
     $oConf = new PMF_Configuration($db);
     $oConf->getAll();
     $configs = $oConf->config;
+    // Set the permission level
+    $configs['permLevel'] = $permLevel;
     // Disable Captcha if GD is not available
     $configs['spamEnableCatpchaCode'] = (extension_loaded('gd') ? 'true' : 'false');
-    // Set link verification base url
+    // Set the link verification base url
     $configs['referenceURL'] = PMF_Link::getSystemUri('/install/installer.php');
-    // Create a unique identifier
+    // Create a unique identifier for this installation
     $configs['phpMyFAQToken'] = md5(uniqid(rand()));
     $oConf->update($configs);
     print "</p>\n";
