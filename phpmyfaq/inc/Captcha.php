@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Captcha.php,v 1.9 2007-02-24 07:21:42 thorstenr Exp $
+ * $Id: Captcha.php,v 1.10 2007-02-28 20:03:48 thorstenr Exp $
  *
  * The phpMyFAQ Captcha class
  *
@@ -319,6 +319,7 @@ class PMF_Captcha
             do {
                 $c1['b'] = mt_rand(30, 199);
             } while ($c1['b'] == $this->_backgroundColor['b']);
+            $c1 = imagecolorallocate($this->img, $c1['r'], $c1['g'], $c1['b']);
             do {
                 $c2['r'] = ($c1['r'] < 100 ? $c1['r'] * 2 : mt_rand(30, 199));
             } while (($c2['r'] == $this->_backgroundColor['r']) && ($c2['r'] == $c1['r']));
@@ -328,7 +329,6 @@ class PMF_Captcha
             do {
                 $c2['b'] = ($c1['b'] < 100 ? $c1['b'] * 2 : mt_rand(30, 199));
             } while (($c2['b'] == $this->_backgroundColor['b']) && ($c2['b'] == $c1['b']));
-            $c1 = imagecolorallocate($this->img, $c1['r'], $c1['g'], $c1['b']);
             $c2 = imagecolorallocate($this->img, $c2['r'], $c2['g'], $c2['b']);
             // Add the letter
             if (function_exists('imagettftext') && (count($this->fonts) > 0)) {
@@ -339,7 +339,7 @@ class PMF_Captcha
                 $size = 5;
                 $c3 = imagecolorallocate($this->img, 0, 0, 255);
                 $x = 20;
-                $y = 13;
+                $y = 12;
                 $s = 30;
                 imagestring($this->img, $size, $x + 1 + ($s * $p), $y+1, $letter, $c3);
                 imagestring($this->img, $size, $x + ($s * $p),     $y,   $letter, $c1);
