@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: config.sql.php,v 1.8 2007-02-28 20:11:38 thorstenr Exp $
+ * $Id: config.sql.php,v 1.9 2007-02-28 22:04:59 matteo Exp $
  *
  * INSERT instruction for configuration
  *
@@ -36,6 +36,7 @@ $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('mod_rewrite', 'false')"
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('msgContactOwnText', '')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('numNewsArticles', '3')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('numRecordsPage', '10')";
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('numRelatedArticles', '5')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('permLevel', '".$permLevel."')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('phpMyFAQToken', '')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('referenceURL', '')";
@@ -47,4 +48,3 @@ $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('title', 'phpMyFAQ Coden
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('tracking', 'true')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('URLValidateInterval', '86400')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('version', '".VERSION."')";
-$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('numRelatedArticles', '5')";
