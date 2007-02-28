@@ -1,30 +1,29 @@
 <?php
 /**
-* $Id: Template.php,v 1.2 2006-07-02 17:19:29 matteo Exp $
-*
-* PMF_Template
-*
-* The PMF_Template class provides methods and functions for the
-* template parser
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @author       Eden Akhavi <eden.akhavi@ltt.com>
-* @author       Bianka Martinovic <blackbird@webbird.de>
-* @package      phpmyfaqTemplate
-* @since        2002-08-22
-*
-* Copyright:    (c) 2002-2006 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * $Id: Template.php,v 1.3 2007-02-28 20:10:41 thorstenr Exp $
+ *
+ * PMF_Template
+ *
+ * The PMF_Template class provides methods and functions for the
+ * template parser
+ *
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author      Eden Akhavi <eden.akhavi@ltt.com>
+ * @author      Bianka Martinovic <blackbird@webbird.de>
+ * @package     phpmyfaqTemplate
+ * @since       2002-08-22
+ * @copyright   (c) 2002-2007 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 class PMF_Template
 {
@@ -73,15 +72,16 @@ class PMF_Template
 	}
 
     /**
-    *
-    * @param    string
-    * @param    array
-    * @access   public
-    */
+     * Parses the template
+     *
+     * @param   string
+     * @param   array
+     * @return  void
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de
+     */
 	function processTemplate($templateName, $myTemplate)
     {
-		global $PMF_CONF;
-
         $tmp = $this->templates[$templateName];
 
         // Security measure: avoid the injection of php/shell-code
@@ -102,25 +102,6 @@ class PMF_Template
             $tmp = str_replace('{'.$var.'}', $val, $tmp);
         }
 
-        if (isset($PMF_CONF['parse_php']) && $PMF_CONF['parse_php'] == 'TRUE') {
-
-        	$phpstart = '<?php';
-        	$phpstop = '?>';
-
-            while ($strstart = strpos($tmp, $phpstart)) {
-                $substr = substr($tmp, $strstart + strlen($phpstart));
-            	$strstop = strpos($substr, $phpstop);
-            	$phpcode = substr($substr,0,$strstop);
-
-                ob_start();
-                eval($phpcode);
-                $phpcodecontent = ob_get_contents();
-                ob_end_clean();
-
-            	$output = substr($tmp, 0, $strstart).$phpcodecontent.substr($tmp, $strstart + strlen($phpstart) + $strstop + strlen($strstop));
-        	    $tmp = $output;
-            }
-        }
         // Hack: Backtick Fix
         $tmp = str_replace('&acute;', '`', $tmp);
 

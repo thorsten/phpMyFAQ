@@ -1,23 +1,23 @@
 <?php
 /**
-* $Id: config.sql.php,v 1.7 2006-10-21 11:13:34 thorstenr Exp $
-*
-* INSERT instruction for configuration
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @since        2006-07-02
-* @copyright    (c) 2006 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * $Id: config.sql.php,v 1.8 2007-02-28 20:11:38 thorstenr Exp $
+ *
+ * INSERT instruction for configuration
+ *
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since       2006-07-02
+ * @copyright   (c) 2006-2007 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('adminmail', 'webmaster@example.org')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('attmax', '100000')";
@@ -36,7 +36,6 @@ $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('mod_rewrite', 'false')"
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('msgContactOwnText', '')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('numNewsArticles', '3')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('numRecordsPage', '10')";
-$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('parse_php', 'false')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('permLevel', '".$permLevel."')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('phpMyFAQToken', '')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('referenceURL', '')";
