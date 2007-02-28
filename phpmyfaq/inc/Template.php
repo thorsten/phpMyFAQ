@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Template.php,v 1.3 2007-02-28 20:10:41 thorstenr Exp $
+ * $Id: Template.php,v 1.4 2007-02-28 20:19:58 thorstenr Exp $
  *
  * PMF_Template
  *
@@ -31,7 +31,7 @@ class PMF_Template
      * The template array
      *
      * @var   mixed
-     * @see   __construct(), processTemplate()
+     * @see   PMF_Template(), processTemplate()
      */
     var $templates = array();
 
@@ -44,13 +44,14 @@ class PMF_Template
 	var $outputs = array();
 
     /**
-    * Constructor
-    *
-    * Combine all template files into the main templates array
-    *
-    * @param    array
-    * @access   public
-    */
+     * Constructor
+     *
+     * Combine all template files into the main templates array
+     *
+     * @param   array
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
 	function PMF_Template($myTemplate)
     {
 		foreach ($myTemplate as $templateName => $filename) {
@@ -59,12 +60,14 @@ class PMF_Template
     }
 
     /**
-    * This function merges two templates
-    *
-    * @param    string
-    * @param    string
-    * @access   public
-    */
+     * This function merges two templates
+     *
+     * @param   string  $name
+     * @param   string  $toname
+     * @return  void
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
     function includeTemplate($name, $toname)
     {
         $this->outputs[$toname] = str_replace('{'.$name.'}', $this->outputs[$name], $this->outputs[$toname]);
@@ -88,10 +91,6 @@ class PMF_Template
         $search  = array('#<\?php#i', '#\{$\{#', '#<\?#', '#<\%#', '#`#', '#<script[^>]+php#mi');
         $phppattern1 = "&lt;?php";
         $phppattern2 = "&lt;?";
-        if (isset($PMF_CONF['parse_php']) && $PMF_CONF['parse_php']) {
-            $phppattern1 = "<?php";
-            $phppattern2 = "<?";
-        }
         $replace = array($phppattern1, '', $phppattern2, '', '' );
 
         // Hack: Backtick Fix
@@ -113,10 +112,12 @@ class PMF_Template
     }
 
     /**
-    * This function prints the whole parsed template file.
-    *
-    * @access   public
-    */
+     * This function prints the whole parsed template file.
+     *
+     * @return  void
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
 	function printTemplate()
     {
 		foreach ($this->outputs as $val) {
@@ -125,15 +126,13 @@ class PMF_Template
 	}
 
     /**
-    * getTemplateContents()
-    *
-    * Returns the parsed template, but don't print
-    *
-    * @return   string
-    * @access   public
-    * @since    2006-01-03
-    * @author   Bianka Martinovic <blackbird@webbird.de>
-    */
+     * Returns the parsed template, but don't print
+     *
+     * @return  string
+     * @access  public
+     * @since   2006-01-03
+     * @author  Bianka Martinovic <blackbird@webbird.de>
+     */
 	function getTemplateContents()
 	{
 		foreach ($this->outputs as $val) {
@@ -143,12 +142,13 @@ class PMF_Template
 	}
 
     /**
-    * This function adds two template outputs.
-    *
-    * @param    array
-    * @param    array
-    * @access   public
-    */
+     * This function adds two template outputs.
+     *
+     * @param   array
+     * @param   array
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
 	function addTemplate($name, $toname)
     {
 		$this->outputs[$toname] .= $this->outputs[$name];
@@ -156,16 +156,17 @@ class PMF_Template
 	}
 
     /**
-    * This function reads a template file.
-    *
-    * @param    string $filename
-    * @return   string
-    * @access   private
-    */
+     * This function reads a template file.
+     *
+     * @param   string $filename
+     * @return  string
+     * @access  private
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
 	function readTemplate($filename)
     {
-		if (file_exists($filename)) {
-			return file_get_contents($filename);
+        if (file_exists($filename)) {
+            return file_get_contents($filename);
         } else {
              return '<p><span style="color: red;">Error:</span> Cannot open the file '.$filename.'.</p>';
         }
