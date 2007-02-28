@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: installer.php,v 1.88 2007-02-28 21:47:05 matteo Exp $
+ * $Id: installer.php,v 1.89 2007-02-28 21:54:52 matteo Exp $
  *
  * The main phpMyFAQ Installer
  *
@@ -926,8 +926,6 @@ foreach ($permLevels as $level => $desc) {
     $oConf = new PMF_Configuration($db);
     $oConf->getAll();
     $configs = $oConf->config;
-    // Set the permission level
-    $configs['permLevel'] = $permLevel;
     // Disable Captcha if GD is not available
     $configs['spamEnableCatpchaCode'] = (extension_loaded('gd') ? 'true' : 'false');
     // Set the link verification base url
