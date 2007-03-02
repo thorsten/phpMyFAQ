@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Db.php,v 1.2 2007-02-20 20:05:27 thorstenr Exp $
+* $Id: Db.php,v 1.3 2007-03-02 16:34:01 thorstenr Exp $
 *
 * The database abstraction factory
 *
@@ -43,7 +43,27 @@ class PMF_Db
             trigger_error('Invalid Database Type', E_USER_ERROR);
         }
     }
-    
+
+    /**
+     * Returns the single instance
+     *
+     * @return  object
+     * @access  static
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @since   2007-03-02
+     */
+    function &singleton()
+    {
+        static $obj;
+
+        if (!isset($obj)) {
+            $class = __CLASS__;
+            $obj = new $class();
+        }
+
+        return $obj;
+    }
+
     /**
      * Error page
      *
