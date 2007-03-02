@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.162 2007-02-24 07:21:43 thorstenr Exp $
+ * $Id: functions.php,v 1.163 2007-03-02 13:45:54 johannes Exp $
  *
  * This is the main functions file!
  *
@@ -692,6 +692,9 @@ function Tracking($action, $id = 0)
                     );
         }
         $fp = @fopen("./data/tracking".date("dmY"), "a+b");
+        if (function_exists("stream_encoding")) {
+            stream_encoding($fp, "iso-8859-1");
+        }
         if ($fp) {
             $flanz = "0";
             while (!flock($fp, LOCK_EX) && $flanz < 6) {
