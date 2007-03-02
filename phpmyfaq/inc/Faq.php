@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.85 2007-02-27 19:58:11 thorstenr Exp $
+ * $Id: Faq.php,v 1.86 2007-03-02 14:25:01 thorstenr Exp $
  *
  * The main FAQ class
  *
@@ -348,7 +348,9 @@ class PMF_Faq
 
         $query = sprintf(
             "SELECT
-                *
+                 id, lang, solution_id, revision_id, active, keywords, thema,
+                 content, author, email, comment, datum, links_state,
+                 links_check_date, date_start, date_end
             FROM
                 %s%s
             LEFT JOIN
@@ -1766,7 +1768,7 @@ class PMF_Faq
      function getAllOpenQuestions()
      {
         $questions = array();
-        
+
         return $questions;
      }
 
