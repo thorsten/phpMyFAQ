@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.40 2007-02-27 19:17:27 thorstenr Exp $
+ * $Id: language_de.php,v 1.41 2007-03-02 14:09:33 thorstenr Exp $
  *
  * German language file
  *
@@ -264,7 +264,7 @@ $PMF_LANG["ad_news_action"] = "Aktion";
 $PMF_LANG["ad_news_update"] = "bearbeiten";
 $PMF_LANG["ad_news_delete"] = "löschen";
 $PMF_LANG["ad_news_nodata"] = "Keine Daten in der Datenbank gefunden.";
-$PMF_LANG["ad_news_updatesuc"] = "Die News wurde <strong>erfolgreich</strong> geupdated.";
+$PMF_LANG["ad_news_updatesuc"] = "Die News wurde <strong>erfolgreich</strong> gespeichert.";
 $PMF_LANG["ad_news_del"] = "Sicher, dass  die News <strong>gelöscht</strong> werden sollen?";
 $PMF_LANG["ad_news_yesdelete"] = "Ja, löschen!";
 $PMF_LANG["ad_news_nodelete"] = "Nein!";
