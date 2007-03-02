@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: category.main.php,v 1.37 2007-03-02 12:21:49 thorstenr Exp $
+ * $Id: category.main.php,v 1.38 2007-03-02 22:54:28 thorstenr Exp $
  *
  * List all categories in the admin section
  *
@@ -62,9 +62,9 @@ if ($permission['editcateg']) {
         if ($category_id) {
             $category->addPermission('user', array($category_id), $user_allowed);
             $category->addPermission('group', array($category_id), $group_allowed);
-            printf('<p>%s</p>', $PMF_LANG['ad_categ_added']);
+            printf('<p class="message">%s</p>', $PMF_LANG['ad_categ_added']);
         } else {
-            printf('<p>%s</p>', $db->error());
+            printf('<p class="error">%s</p>', $db->error());
         }
     }
 
@@ -92,9 +92,9 @@ if ($permission['editcateg']) {
             if ($category->addCategory($category_data, $parent_id, $category_data['id']) &&
                 $category->addPermission('user', array($category_data['id']), $user_allowed) &&
                 $category->addPermission('group', array($category_data['id']), $group_allowed)) {
-                printf('<p>%s</p>', $PMF_LANG['ad_categ_translated']);
+                printf('<p class="message">%s</p>', $PMF_LANG['ad_categ_translated']);
             } else {
-                printf('<p>%s</p>', $db->error());
+                printf('<p class="error">%s</p>', $db->error());
             }
         } else {
             if ($category->updateCategory($category_data)) {
@@ -102,9 +102,9 @@ if ($permission['editcateg']) {
                 $category->deletePermission('group', array($category_data['id']));
                 $category->addPermission('user', array($category_data['id']), $user_allowed);
                 $category->addPermission('group', array($category_data['id']), $group_allowed);
-                printf('<p>%s</p>', $PMF_LANG['ad_categ_updated']);
+                printf('<p class="message">%s</p>', $PMF_LANG['ad_categ_updated']);
             } else {
-                printf('<p>%s</p>', $db->error());
+                printf('<p class="error">%s</p>', $db->error());
             }
         }
     }
@@ -118,9 +118,9 @@ if ($permission['editcateg']) {
         $delete_all = strtolower($db->escape_string($_POST['deleteall'])) == 'yes' ? true : false;
 
         if ($category->deleteCategory($id, $lang, $delete_all) && $category->deleteCategoryRelation($id, $lang, $delete_all)) {
-            printf('<p>%s</p>', $PMF_LANG['ad_categ_deleted']);
+            printf('<p class="message">%s</p>', $PMF_LANG['ad_categ_deleted']);
         } else {
-            printf('<p>%s</p>', $db->error());
+            printf('<p class="error">%s</p>', $db->error());
         }
     }
 
@@ -132,9 +132,9 @@ if ($permission['editcateg']) {
         $category_id_2 = (int)$_POST['change'];
 
         if ($category->swapCategories($category_id_1, $category_id_2)) {
-            printf('<p>%s</p>', $PMF_LANG['ad_categ_updated']);
+            printf('<p class="message">%s</p>', $PMF_LANG['ad_categ_updated']);
         } else {
-            printf('<p>%s<br />%s</p>', $PMF_LANG['ad_categ_paste_error'], $db->error());
+            printf('<p class="error">%s<br />%s</p>', $PMF_LANG['ad_categ_paste_error'], $db->error());
         }
     }
 
@@ -145,9 +145,9 @@ if ($permission['editcateg']) {
         $category_id = $_POST['cat'];
         $parent_id = $_POST['after'];
         if ($category->updateParentCategory($category_id, $parent_id)) {
-            printf('<p>%s</p>', $PMF_LANG['ad_categ_updated']);
+            printf('<p class="message">%s</p>', $PMF_LANG['ad_categ_updated']);
         } else {
-            printf('<p>%s<br />%s</p>', $PMF_LANG['ad_categ_paste_error'], $db->error());
+            printf('<p class="error">%s<br />%s</p>', $PMF_LANG['ad_categ_paste_error'], $db->error());
         }
     }
 
