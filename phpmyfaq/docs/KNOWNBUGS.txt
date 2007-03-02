@@ -1,25 +1,25 @@
-$Id: KNOWNBUGS.txt,v 1.10 2007-02-13 21:22:41 thorstenr Exp $
+$Id: KNOWNBUGS.txt,v 1.11 2007-03-02 23:07:55 thorstenr Exp $
 
-MISSING FEATURES in phpMyFAQ 2.0.0-beta2
+MISSING FEATURES in phpMyFAQ 2.0.0-beta
 
-- simple reordering of records
-- show/edit/delete comments
-- editable default values for record configuration
-- sort by date for records in admin backend
-- show records per category in admin backend
-- finish the new admin backend layout
-- unfinished documentation
+- simple reordering of records (blocker for beta2)
+- show/edit/delete comments (blocker for beta2)
+- editable default values for record configuration (blocker for beta2)
+- sort by date for records in admin backend (blocker for beta2)
+- show records per category in admin backend (blocker for beta2)
+- finish the new admin backend layout (blocker for rc1)
+- unfinished documentation (blocker for final)
 
 
 KNOWN ISSUES in phpMyFAQ 2.0.0-beta
 
+- phpMyFAQ 2.0.0-beta is very buggy
 - some language files need an update
 - using UTF-8 will not work in the PDF files
 
 
 KNOWN BUGS AND ISSUES in phpMyFAQ 2.0.0-beta
 
-- update from 2.0.0-alpha to 2.0.0-alpha fails
 - IBM DB2 support untested
 - Oracle support untested
 - Interbase/Firebird support untested

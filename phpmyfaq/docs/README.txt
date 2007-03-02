@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.69 2007-02-21 19:25:41 thorstenr Exp $
+$Id: README.txt,v 1.70 2007-03-02 23:07:55 thorstenr Exp $
 
 phpMyFAQ 2.0.0-beta
 Codename "Prometheus"
@@ -22,7 +22,7 @@ For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.0.0-beta - 2007-
+Version 2.0.0-beta - 2007-03-03
 - added rewritten and enhanced user management (Lars)
 - added rewritten and enhanced authorization management (Lars)
 - added user and group based permissions for categories and records (Thorsten)
@@ -41,6 +41,7 @@ Version 2.0.0-beta - 2007-
 - added DiggIt! link (Thorsten)
 - added Microsummaries (Matteo)
 - added OpenSearch support (Thorsten)
+- added "submit translation" link (Matteo)
 - added experimental support for Oracle (Thorsten)
 - added experimental support for Interbase/Firebird (Thorsten)
 - improved export functions (Matteo)
@@ -50,6 +51,11 @@ Version 2.0.0-beta - 2007-
 - updated German translation (Thorsten)
 - updated Italian translation (Matteo)
 - updated Japanese translation (Tadashi Jokagi)
+
+Version 1.6.10 - 2007-02-18
+- fixed a serious security issue
+- improved performance
+- fixed some minor bugs
 
 Version 1.6.9 - 2007-01-28
 - updated bundled PHP XMLRPC to version 2.1

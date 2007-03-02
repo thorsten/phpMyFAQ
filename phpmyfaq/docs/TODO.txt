@@ -1,6 +1,6 @@
 TODO list for future versions of phpMyFAQ:
 
-2.0.0 "Prometheus" (CVS branch: PMF_2_0):
+2.0.0 "Prometheus" (planned CVS branch: PMF_2_0):
 - simple reordering of records
 - show/edit/delete comments
 - editable default values for record configuration
@@ -8,7 +8,7 @@ TODO list for future versions of phpMyFAQ:
 - show records per category in admin backend
 - finish the new admin backend layout
 
-2.1.0 "Pandora" (CVS branch: PMF_2_1):
+2.1.0 "Pandora" (planned CVS branch: PMF_2_1):
 - add new setup routine (Johannes)
 - add random list of records (XHTML and RSS) ?
 - add archive function ?
@@ -22,7 +22,7 @@ TODO list for future versions of phpMyFAQ:
 - more accessibility features (WAI and Section 508) ?
 - bugfixing for stability or security reasons
 
-2.2.0 "Portia" (CVS branch: PMF_2_2):
+2.2.0 "Portia" (planned CVS branch: PMF_2_2):
 - improve permission management ?
 - possibility to disable multiple languages ?
 - SOAP interface ?
@@ -33,7 +33,7 @@ TODO list for future versions of phpMyFAQ:
 - update only possible from versions 2.0 and 2.1 !
 - bugfixing for stability or security reasons
 
-3.0.0 "Poseidon" (CVS branch: PMF_3_0):
+3.0.0 "Poseidon" (planned CVS branch: PMF_3_0):
 - PHP5 / PHP6 only version
 - PDO support
 - Unicode support
