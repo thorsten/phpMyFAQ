@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: category.main.php,v 1.36 2007-02-26 18:51:47 thorstenr Exp $
+ * $Id: category.main.php,v 1.37 2007-03-02 12:21:49 thorstenr Exp $
  *
  * List all categories in the admin section
  *
@@ -40,25 +40,24 @@ print "</p>\n";
 
 if ($permission['editcateg']) {
 
-    $category = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
-
     // Save a new category
     if (isset($_POST['action']) && $_POST['action'] == 'savecategory') {
 
+        $category = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
         $parent_id = (int)$_POST['parent_id'];
         $category_data = array(
             'lang'          => $db->escape_string($_POST['lang']),
             'name'          => $db->escape_string($_POST['name']),
             'description'   => $db->escape_string($_POST['description']),
             'user_id'       => (int)$_POST['user_id']);
-        
-        $userperm       = isset($_POST['userpermission']) ? 
+
+        $userperm       = isset($_POST['userpermission']) ?
                           $db->escape_string($_POST['userpermission']) : 'all';
         $user_allowed   = ('all' == $userperm) ? -1 : $db->escape_string($_POST['userpermission']);
-        $groupperm      = isset($_POST['grouppermission']) ? 
+        $groupperm      = isset($_POST['grouppermission']) ?
                           $db->escape_string($_POST['grouppermission']) : 'all';
         $group_allowed  = ('all' == $groupperm) ? -1 : $db->escape_string($_POST['grouppermission']);
-        
+
         $category_id = $category->addCategory($category_data, $parent_id);
         if ($category_id) {
             $category->addPermission('user', array($category_id), $user_allowed);
@@ -72,6 +71,7 @@ if ($permission['editcateg']) {
     // Updates an existing category
     if (isset($_POST['action']) && $_POST['action'] == 'updatecategory') {
 
+        $category = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
         $parent_id = (int)$_POST['parent_id'];
         $category_data = array(
             'id'            => (int)$_POST['id'],
@@ -80,14 +80,14 @@ if ($permission['editcateg']) {
             'name'          => $db->escape_string($_POST['name']),
             'description'   => $db->escape_string($_POST['description']),
             'user_id'       => (int)$_POST['user_id']);
-        
-        $userperm       = isset($_POST['userpermission']) ? 
+
+        $userperm       = isset($_POST['userpermission']) ?
                           $db->escape_string($_POST['userpermission']) : 'all';
         $user_allowed   = ('all' == $userperm) ? -1 : $db->escape_string($_POST['userpermission']);
-        $groupperm      = isset($_POST['grouppermission']) ? 
+        $groupperm      = isset($_POST['grouppermission']) ?
                           $db->escape_string($_POST['grouppermission']) : 'all';
         $group_allowed  = ('all' == $groupperm) ? -1 : $db->escape_string($_POST['grouppermission']);
-        
+
         if (!$category->checkLanguage($category_data['id'], $category_data['lang'])) {
             if ($category->addCategory($category_data, $parent_id, $category_data['id']) &&
                 $category->addPermission('user', array($category_data['id']), $user_allowed) &&
@@ -112,6 +112,7 @@ if ($permission['editcateg']) {
     // Deletes an existing category
     if ($permission['delcateg'] && isset($_POST['action']) && $_POST['action'] == 'removecategory') {
 
+        $category = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
         $id = (int)$_POST['cat'];
         $lang = $db->escape_string($_POST['lang']);
         $delete_all = strtolower($db->escape_string($_POST['deleteall'])) == 'yes' ? true : false;
@@ -126,6 +127,7 @@ if ($permission['editcateg']) {
     // Moves a category
     if (isset($_POST['action']) && $_POST['action'] == 'changecategory') {
 
+        $category = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
         $category_id_1 = (int)$_POST['cat'];
         $category_id_2 = (int)$_POST['change'];
 
@@ -139,6 +141,7 @@ if ($permission['editcateg']) {
     // Pastes a category
     if (isset($_POST['action']) && $_POST['action'] == 'pastecategory') {
 
+        $category = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
         $category_id = $_POST['cat'];
         $parent_id = $_POST['after'];
         if ($category->updateParentCategory($category_id, $parent_id)) {
@@ -155,6 +158,11 @@ if ($permission['editcateg']) {
         $lang = $LANGCODE;
     }
 
+    // If we changed the category tree, unset the object
+    if (isset($category)) {
+        unset($category);
+    }
+    $category = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
     $category->getMissingCategories();
     $category->buildTree();
 
@@ -217,7 +225,7 @@ if ($permission['editcateg']) {
                $PMF_LANG['ad_categ_cut'],
                $PMF_LANG['ad_categ_cut'],
                $PMF_LANG['ad_categ_cut']);
-          
+
            if ($category->numParent($cat['parent_id']) > 1) {
               // move category (if actual language) AND more than 1 category at the same level)
               printf('<a href="%s&amp;action=movecategory&amp;cat=%s&amp;parent_id=%s" title="%s"><img src="images/move.gif" width="16" height="16" alt="%s" border="0" title="%s" /></a>',
