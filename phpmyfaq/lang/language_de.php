@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.41 2007-03-02 14:09:33 thorstenr Exp $
+ * $Id: language_de.php,v 1.42 2007-03-02 16:18:18 thorstenr Exp $
  *
  * German language file
  *
@@ -568,7 +568,6 @@ $LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "Soll die IP zum Check der U
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Anzahl der angezeigten Themen pro Seite");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Anzahl der angezeigten News");
 $LANG_CONF["bannedIP"] = array(0 => "area", 1 => "Gesperrte IPs");
-$LANG_CONF["parse_php"] = array(0 => "checkbox", 1 => "Soll der Template Parser PHP ausführen? (Voreinstellung: deaktiviert)");
 $LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "mod_rewrite Support aktivieren? (Voreinstellung: deaktiviert)");
 $LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "LDAP Support aktivieren? (Voreinstellung: deaktiviert)");
 $LANG_CONF["referenceURL"] = array(0 => "input", 1 => "Basis-Adresse für die Linküberprüfung (Adresse der Startseite)");

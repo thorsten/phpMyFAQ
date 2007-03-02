@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_id.php,v 1.9 2006-07-01 13:15:51 thorstenr Exp $
+ * $Id: language_id.php,v 1.10 2007-03-02 16:18:19 thorstenr Exp $
  *
  * Indonesian language file
  *
@@ -663,8 +663,6 @@ ditampilkan per halaman");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Jumlah kabar yang
 ditampilkan");
 $LANG_CONF["bannedIP"] = array(0 => "area", 1 => "Larang IP berikut");
-$LANG_CONF["parse_php"] = array(0 => "checkbox", 1 => "aruskah system
-menguraikan kode PHP? (awal: tidak aktif)");
 $LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Aktifkan dukungan
 untuk mod_rewrite? (awal: tidak aktif)");
 $LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "Apakah anda ingin

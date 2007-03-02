@@ -6,12 +6,12 @@
  * @author      Andreas <hq6830@yahoo.no>
  * @since       2004-07-28
  * @copyright   (c) 2004-2007 phpMyFAQ Team
- * 
+ *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
  * http://www.mozilla.org/MPL/
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
@@ -569,7 +569,6 @@ $LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "Kolla IP:n n&auml;r UIN kol
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Antal visade rubriker per sida");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Antal nyhetsartiklar");
 $LANG_CONF["bannedIP"] = array(0 => "area", 1 => "Blocka dessa IP-adresser");
-$LANG_CONF["parse_php"] = array(0 => "checkbox", 1 => "Should the template engine parse PHP code? (default: disabled)");
 $LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Activate mod_rewrite support? (default: disabled)");
 $LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "Do you want to enable LDAP support? (default: disabled)");
 

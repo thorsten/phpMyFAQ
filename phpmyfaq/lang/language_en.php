@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.70 2007-02-27 19:17:27 thorstenr Exp $
+* $Id: language_en.php,v 1.71 2007-03-02 16:18:18 thorstenr Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -570,7 +570,6 @@ $LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "Do you want the IP to be ch
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Number of displayed topics per page");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Number of news articles");
 $LANG_CONF["bannedIP"] = array(0 => "area", 1 => "Ban these IPs");
-$LANG_CONF["parse_php"] = array(0 => "checkbox", 1 => "Should the template engine parse PHP code? (default: disabled)");
 $LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Activate mod_rewrite support? (default: disabled)");
 $LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "Do you want to enable LDAP support? (default: disabled)");
 $LANG_CONF["referenceURL"] = array(0 => "input", 1 => "Base URL for link verification (e.g.: http://www.example.org/faq)");

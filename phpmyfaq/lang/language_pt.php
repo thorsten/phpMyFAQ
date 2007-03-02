@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_pt.php,v 1.9 2006-11-19 01:19:13 thorstenr Exp $
+ * $Id: language_pt.php,v 1.10 2007-03-02 16:18:19 thorstenr Exp $
  *
  * Portuguese language file
  *
@@ -570,7 +570,6 @@ $LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "Conferir o IP ao verificar 
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "N&uacute;mero de t&oacute;picos mostrados por p&aacute;gina");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "N&uacute;ero de artigos de not&iacute;cias");
 $LANG_CONF["bannedIP"] = array(0 => "area", 1 => "Banir estes IPs");
-$LANG_CONF["parse_php"] = array(0 => "checkbox", 1 => "O template deve analisar sintaxe de c&oacute;digo PHP? (por defeito: desactivado)");
 $LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Activar suporte de  mod_rewrite? (por defeito: desactivado)");
 $LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "Activar o suporte LDAP? (por defeito: desactivado)");
 

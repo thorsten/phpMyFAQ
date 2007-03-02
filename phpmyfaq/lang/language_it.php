@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.42 2007-02-27 19:33:11 matteo Exp $
+* $Id: language_it.php,v 1.43 2007-03-02 16:18:19 thorstenr Exp $
 *
 * Italian language file
 *
@@ -570,7 +570,6 @@ $LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "Vuoi controllare l'IP quand
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Numero di elementi visualizzati per pagina");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Numero di elementi visualizzati per la sezione News");
 $LANG_CONF["bannedIP"] = array(0 => "area", 1 => "Vieta l'accesso a questi indirizzi IP");
-$LANG_CONF["parse_php"] = array(0 => "checkbox", 1 => "Il motore del templating HTML deve interpretare il codice PHP eventualmente inserito nei documenti? (default: disabilitato)");
 $LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Attivare il supporto a <em>mod_rewrite</em>? (default: disabilitato)");
 $LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "Attivare il supporto LDAP? (default: disabilitato)");
 $LANG_CONF["referenceURL"] = array(0 => "input", 1 => "<em>Base URL</em> dell'installazione di phpMyFAQ, es: http://www.example.org/faq (&egrave; necessaria per la verifica dei links)");

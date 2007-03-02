@@ -6,12 +6,12 @@
 * @author       Aaron Lin <devilkintw@gmail.com>
 * @since        2004-08-01
 * @copyright    (c) 2004 - 2006 phpMyFAQ Team
-* 
+*
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
 * compliance with the License. You may obtain a copy of the License at
 * http://www.mozilla.org/MPL/
-* 
+*
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
@@ -153,7 +153,7 @@ $PMF_LANG["err_sendMail"] = "必須輸入的字段是 <strong>姓�??</strong>, <
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>�?�尋記錄:</strong><br />包�?� <strong style=\"color: Red;\">word1 word2</strong> 你�?�以進行兩個或兩個以上�?件的關�?��?�?查詢.</p><p><strong>注�?:</strong> 你的�?�尋�?件必須至少包�?�4個字符, �?�則將�?能進行查詢.</p>";
 
-// Men  
+// Men
 $PMF_LANG["ad"] = "管�?�員界�?�";
 $PMF_LANG["ad_menu_user_administration"] = "用戶管�?�";
 $PMF_LANG["ad_menu_entry_aprove"] = "核準記錄";
@@ -567,9 +567,7 @@ $LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "你希望admin.php在檢查
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "�?�?顯示主題數目");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "新文章數�?");
 $LANG_CONF["bannedIP"] = array(0 => "area", 1 => "�?止這些IP�?�?�訪�?");
-$LANG_CONF["parse_php"] = array(0 => "checkbox", 1 => "佈景引擎需�?符�?�PHP碼嗎? (�?設: 關閉)");
 $LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "你希望開啟mod_rewrite支�?�嗎? (�?設: 關閉)");
-$LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "你希望開啟LDAP支�?�嗎? (�?設: 關閉)");
 $LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "你希望開啟LDAP支�?�嗎? (�?設: 關閉)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "作為一個新的類別";

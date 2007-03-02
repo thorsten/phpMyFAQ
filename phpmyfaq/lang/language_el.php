@@ -1,8 +1,8 @@
 <?php
 /**
-* $Id: language_el.php,v 1.3 2006-01-02 16:51:30 thorstenr Exp $
+* $Id: language_el.php,v 1.4 2007-03-02 16:18:18 thorstenr Exp $
 *
-* The Hellenic language file 
+* The Hellenic language file
 *
 * @author       Sakis Efthimiadis <sakis@my-zone2.com>
 * @since        2005-09-30
@@ -568,7 +568,6 @@ $LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "Θέλετε να γίνεται έλεγχος τ
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Αριθμός εμφανιζόμενων άρθρων ανά σελίδα");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Αριθμός ειδήσεων");
 $LANG_CONF["bannedIP"] = array(0 => "area", 1 => "Απαγόρευση πρόσβασης των παρακάτω διευθύνσεων IP");
-$LANG_CONF["parse_php"] = array(0 => "checkbox", 1 => "Η μηχανή των Template να μεταφράζει PHP κώδικα; (Προεπιλογή: απενεργοποιημένο)");
 $LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Ενεργοποίηση της υποστήριξης mod_rewrite; (Προεπιλογή: απενεργοποιημένο)");
 $LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "Θέλετε να ενεργοποιήσετε την υποστήριξη LDAP; (Προεπιλογή: απενεργοποιημένο)");
 $LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "Θέλετε να ενεργοποιήσετε την υποστήριξη LDAP; (Προεπιλογή: απενεργοποιημένο)");

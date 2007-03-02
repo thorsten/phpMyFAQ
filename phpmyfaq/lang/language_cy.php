@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_cy.php,v 1.3 2006-11-19 01:19:13 thorstenr Exp $
+* $Id: language_cy.php,v 1.4 2007-03-02 16:18:18 thorstenr Exp $
 *
 * The Cymraeg language file - Welsh (Cymraeg) translation
 *
@@ -566,7 +566,6 @@ $LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => " Ydych chi am i’r IP gael e
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => " Nifer y pynciau a ddangosir fesul tudalen");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => " Nifer yr erthyglau newyddion");
 $LANG_CONF["bannedIP"] = array(0 => "area", 1 => " Gwahardd yr Ips hyn");
-$LANG_CONF["parse_php"] = array(0 => "checkbox", 1 => " A ddylai’r peiriant temppled ddosrannu côd PHP? (default: disabled)");
 $LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => " Actifadu mod_ailysgrifennu’r gefnogaeth? (diofyn: analluogi)");
 $LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => " Hoffech chi osod cefnogaeth LDAP? (default: disabled)");
 

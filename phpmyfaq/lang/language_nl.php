@@ -6,12 +6,12 @@
  * Date:				2004-07-09
  * Last Update:		    2004-07-28
  * Copyright:           (c) 2006 phpMyFAQ Team
- * 
+ *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
  * http://www.mozilla.org/MPL/
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
@@ -150,7 +150,7 @@ $PMF_LANG["err_noVote"] = "<p><strong>Er werd geen beoordeling afgegeven!</stron
 $PMF_LANG["err_noMailAdress"] = "Uw emailadres is niet correct.<br /><a href=\"javascript:history.back();\">terug</a>";
 $PMF_LANG["err_sendMail"] = "Verplichte velden zijn <strong>uw naam</strong>, <strong>uw emailadres</strong> en <strong>uw vraag</strong>!<br /><br />\n<a href=\"javascript:history.back();\">&eacute;&eacute;n pagina terug</a><br /><br />\n";
 
-// Hilfe zur Suche 
+// Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>Zoek naar records:</strong><br />Met een ingave als <strong style=\"color: Red;\">woord1 woord2</strong> kunt u een zoekactie doen voor twee of meer zoekcriteria met aflopende relevantie.</p><p><strong>Let op:</strong> Uw zoekcriteria moet minstens uit 4 karakters bestaan, anders wordt uw zoekactie gewijgerd.</p>";
 
 // Menü
@@ -567,7 +567,6 @@ $LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "Wilt u dat het IP wordt gec
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Aantal weergegeven onderwerpen per pagina");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Aantal nieuws artikelen");
 $LANG_CONF["bannedIP"] = array(0 => "area", 1 => "Blokkeer deze IPs");
-$LANG_CONF["parse_php"] = array(0 => "checkbox", 1 => "Moet de temmplate engine PHP code analyseren? (standaard: gedeactiveerd)");
 $LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "mod_rewrite ondersteuning activeren? (standaard: gedeactiveerd)");
 $LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "LDAP ondersteuning activeren? (standaard: gedeactiveerd)");
 
@@ -776,7 +775,7 @@ $PMF_LANG['msg_related_articles'] = 'verwandte artikelen';
 $LANG_CONF['numRelatedArticles'] = array(0 => "input", 1 => "aantal verwandte artikelen");
 
 // added v2.0.0 - 2006-09-09 by Rudi
-$PMF_LANG['ad_categ_trans_1'] = 'Vertaal'; 
+$PMF_LANG['ad_categ_trans_1'] = 'Vertaal';
 $PMF_LANG['ad_categ_trans_2'] = 'Categorie';
 $PMF_LANG['ad_categ_translatecateg'] = 'Vertaal Categorie';
 $PMF_LANG['ad_categ_translate'] = 'Vertaal';
