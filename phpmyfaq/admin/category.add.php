@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: category.add.php,v 1.22 2007-02-25 11:33:02 thorstenr Exp $
+ * $Id: category.add.php,v 1.23 2007-03-02 23:00:41 thorstenr Exp $
  *
  * Adds a category
  *
@@ -40,9 +40,9 @@ if ($permission["addcateg"]) {
         $user_allowed   = $category->getPermissions('user', array($parent_id));
         $group_allowed  = $category->getPermissions('group', array($parent_id));
 ?>
-    <input type="hidden" name="userpermission" value="<?php print $user_allowed; ?>" />
-    <input type="hidden" name="grouppermission" value="<?php print $group_allowed; ?>" />
-    
+    <input type="hidden" name="userpermission" value="<?php print $user_allowed[0]; ?>" />
+    <input type="hidden" name="grouppermission" value="<?php print $group_allowed[0]; ?>" />
+
     <p><?php print $PMF_LANG["msgMainCategory"].": ".$category->categoryName[$parent_id]["name"]." (".$languageCodes[strtoupper($category->categoryName[$parent_id]["lang"])].")"; ?></p>
 <?php
     }
@@ -57,7 +57,7 @@ if ($permission["addcateg"]) {
     <select name="user_id" size="1">
     <?php print $user->getAllUserOptions(1); ?>
     </select><br />
-    
+
 <?php
     if ($parent_id == 0) {
 ?>
@@ -66,7 +66,7 @@ if ($permission["addcateg"]) {
 
 <?php
         if ($groupSupport) {
-?>    
+?>
     <label class="left" for="grouppermission"><?php print $PMF_LANG['ad_entry_grouppermission']; ?></label>
     <input type="radio" name="grouppermission" class="active" value="all" checked="checked" /> <?php print $PMF_LANG['ad_entry_all_groups']; ?> <input type="radio" name="grouppermission" class="active" value="restricted" /> <?php print $PMF_LANG['ad_entry_restricted_groups']; ?> <select name="restricted_groups" size="1"><?php print $user->getAllUserOptions(1); ?></select><br />
 
