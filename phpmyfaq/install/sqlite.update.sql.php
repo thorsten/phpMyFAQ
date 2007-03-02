@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: sqlite.update.sql.php,v 1.6 2007-02-26 22:11:09 matteo Exp $
+ * $Id: sqlite.update.sql.php,v 1.7 2007-03-02 16:11:55 thorstenr Exp $
  *
  * CREATE TABLE instructions for SQLite
  *
@@ -182,7 +182,6 @@ $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('mod_rewrite', 'false')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('msgContactOwnText', '')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('numNewsArticles', '3')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('numRecordsPage', '10')";
-$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('parse_php', 'false')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('permLevel', 'basic')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('referenceURL', '')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('send2friendText', '')";

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.105 2007-02-26 22:50:53 matteo Exp $
+* $Id: update.php,v 1.106 2007-03-02 16:11:55 thorstenr Exp $
 *
 * Main update script
 *
@@ -302,7 +302,6 @@ if ($step == 3) {
 <input type="hidden" name="edit[numRecordsPage]" value="<?php print $PMF_CONF["numRecordsPage"]; ?>" />
 <input type="hidden" name="edit[numNewsArticles]" value="<?php print $PMF_CONF["numNewsArticles"]; ?>" />
 <input type="hidden" name="edit[bannedIP]" value="<?php print $PMF_CONF["bannedIP"]; ?>" />
-<input type="hidden" name="edit[parse_php]" value="" />
 <input type="hidden" name="edit[mod_rewrite]" value="" />
 <input type="hidden" name="edit[ldap_support]" value="" />
 <input type="hidden" name="edit[spamEnableSafeEmail]" value="TRUE" />
@@ -310,7 +309,6 @@ if ($step == 3) {
 <input type="hidden" name="edit[spamEnableCatpchaCode]" value="TRUE" />
 <?php
     } else {
-        $PMF_CONF['parse_php'] = isset($PMF_CONF['parse_php']) ? $PMF_CONF['parse_php'] : '';
         $PMF_CONF['mod_rewrite'] = isset($PMF_CONF['mod_rewrite']) ? $PMF_CONF['mod_rewrite'] : '';
         $PMF_CONF['ldap_support'] = isset($PMF_CONF['ldap_support']) ? $PMF_CONF['ldap_support'] : '';
         $PMF_CONF['disatt'] = isset($PMF_CONF['disatt']) ? $PMF_CONF['disatt'] : '';
@@ -344,7 +342,6 @@ if ($step == 3) {
 <input type="hidden" name="edit[numRecordsPage]" value="<?php print $PMF_CONF["numRecordsPage"]; ?>" />
 <input type="hidden" name="edit[numNewsArticles]" value="<?php print $PMF_CONF["numNewsArticles"]; ?>" />
 <input type="hidden" name="edit[bannedIP]" value="<?php print $PMF_CONF["bannedIP"]; ?>" />
-<input type="hidden" name="edit[parse_php]" value="<?php print $PMF_CONF["parse_php"]; ?>" />
 <input type="hidden" name="edit[mod_rewrite]" value="<?php print $PMF_CONF["mod_rewrite"]; ?>" />
 <input type="hidden" name="edit[ldap_support]" value="<?php print $PMF_CONF["ldap_support"]; ?>" />
 <input type="hidden" name="edit[spamEnableSafeEmail]" value="<?php print $PMF_CONF["spamEnableSafeEmail"]; ?>" />
