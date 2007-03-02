@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.delquestion.php,v 1.16 2007-02-27 19:49:25 thorstenr Exp $
+ * $Id: record.delquestion.php,v 1.17 2007-03-02 13:58:02 thorstenr Exp $
  *
  * Delete open questions
  *
@@ -25,11 +25,11 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 }
 
 if ($permission['delquestion']) {
-    
+
     $category = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
-    $question_id = (int)$_GET['id'];
-    
+
     if (isset($_GET['delete']) && $_GET['delete'] == 'yes') {
+        $question_id = (int)$_GET['id'];
         $faq->deleteQuestion($question_id);
         print $PMF_LANG['ad_entry_delsuc'];
     } else {
