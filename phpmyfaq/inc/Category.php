@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Category.php,v 1.41 2007-02-27 20:02:50 thorstenr Exp $
+ * $Id: Category.php,v 1.42 2007-03-02 13:47:00 thorstenr Exp $
  *
  * The main category class
  *
@@ -184,7 +184,7 @@ class PMF_Category
 
         $query = sprintf("
             SELECT
-                id, lang, parent_id, name, description
+                id, lang, parent_id, name, description, user_id
             FROM
                 %sfaqcategories fc
             LEFT JOIN
