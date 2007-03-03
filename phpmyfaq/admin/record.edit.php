@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.edit.php,v 1.59 2007-03-03 16:23:19 thorstenr Exp $
+ * $Id: record.edit.php,v 1.60 2007-03-03 16:55:31 thorstenr Exp $
  *
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since       2003-02-23
@@ -366,14 +366,15 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     </div>
     </form>
 <?php
-    $result = $db->query("SELECT id, id_comment, usr, email, comment, datum FROM ".SQLPREFIX."faqcomments WHERE id = ".$faqData['id']." ORDER BY datum DESC");
-        if ($db->num_rows($result) > 0) {
+        $comment = new PMF_Comment($db, $LANGCODE);
+        $comments = $comment->getCommentsData($faqData['id'], 'faq');
+        if (count($comments) > 0) {
 ?>
     <p><strong><?php print $PMF_LANG["ad_entry_comment"] ?></strong></p>
 <?php
-            while ($row = $db->fetch_object($result)) {
+            foreach ($comments as $co) {
 ?>
-    <p><?php print $PMF_LANG["ad_entry_commentby"] ?> <a href="mailto:<?php print $row->email; ?>"><?php print $row->usr; ?></a>:<br /><?php print $row->comment; ?><br /><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;action=delcomment&amp;artid=<?php print $row->id; ?>&amp;cmtid=<?php print $row->id_comment; ?>&amp;lang=<?php print $faqData['lang']; ?>"><img src="images/delete.gif" alt="<?php print $PMF_LANG["ad_entry_delete"] ?>" title="<?php print $PMF_LANG["ad_entry_delete"] ?>" border="0" width="17" height="18" align="right" /></a></p>
+    <p><?php print $PMF_LANG["ad_entry_commentby"] ?> <a href="mailto:<?php print $co['email']; ?>"><?php print $co['user']; ?></a>:<br /><?php print $co['content']; ?><br /><a href="?action=delcomment&amp;artid=<?php print $faqData['id']; ?>&amp;cmtid=<?php print $co['id']; ?>&amp;lang=<?php print $faqData['lang']; ?>"><img src="images/delete.gif" alt="<?php print $PMF_LANG["ad_entry_delete"] ?>" title="<?php print $PMF_LANG["ad_entry_delete"] ?>" border="0" width="17" height="18" align="right" /></a></p>
 <?php
             }
         }
