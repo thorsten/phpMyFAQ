@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.edit.php,v 1.58 2007-03-03 11:34:19 thorstenr Exp $
+ * $Id: record.edit.php,v 1.59 2007-03-03 16:23:19 thorstenr Exp $
  *
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since       2003-02-23
@@ -353,15 +353,17 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     if (is_numeric($faqData['id'])) {
 ?>
     <h3><?php print $PMF_LANG["ad_entry_changelog"]; ?></h3>
+    <div id="changelog">
 <?php
-        $result = $db->query("SELECT revision_id, usr, datum, what FROM ".SQLPREFIX."faqchanges WHERE beitrag = ".$faqData['id']." ORDER BY id DESC");
-        while ($row = $db->fetch_object($result)) {
-            $user->getUserById($row->usr);
+        $changeEntries = $faq->getChangeEntries($faqData['id']);
+        foreach ($changeEntries as $entry) {
+            $user->getUserById($entry['user']);
 ?>
-    <div style="font-size: 10px;"><strong><?php print date("Y-m-d H:i:s", $row->datum).": ".$user->getUserData('display_name'); ?></strong><br /><?php print PMF_htmlentities($row->what, ENT_NOQUOTES, $PMF_LANG['metaCharset']); ?><br /><?php print $PMF_LANG['ad_entry_revision'].' 1.'.$row->revision_id; ?></div>
+    <div style="font-size: 10px;"><strong><?php print date("Y-m-d H:i:s", $entry['date']).": ".$user->getUserData('display_name'); ?></strong><br /><?php print PMF_htmlentities($entry['changelog'], ENT_NOQUOTES, $PMF_LANG['metaCharset']); ?><br /><?php print $PMF_LANG['ad_entry_revision'].' 1.'.$entry['revision_id']; ?></div>
 <?php
         }
 ?>
+    </div>
     </form>
 <?php
     $result = $db->query("SELECT id, id_comment, usr, email, comment, datum FROM ".SQLPREFIX."faqcomments WHERE id = ".$faqData['id']." ORDER BY datum DESC");
