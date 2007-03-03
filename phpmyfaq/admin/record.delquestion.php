@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.delquestion.php,v 1.17 2007-03-02 13:58:02 thorstenr Exp $
+ * $Id: record.delquestion.php,v 1.18 2007-03-03 11:06:28 thorstenr Exp $
  *
  * Delete open questions
  *
@@ -40,9 +40,11 @@ if ($permission['delquestion']) {
             }
         }
 
-        print "<h2>".$PMF_LANG["msgOpenQuestions"]."</h2>";
-        $result = $db->query("SELECT id, ask_username, ask_usermail, ask_rubrik, ask_content, ask_date, is_visible FROM ".SQLPREFIX."faqquestions ORDER BY ask_date ASC");
-        if ($db->num_rows($result) > 0) {
+        printf("<h2>%s</h2>", $PMF_LANG['msgOpenQuestions']);
+
+        $openquestions = $faq->getAllOpenQuestions();
+
+        if (count($openquestions) > 0) {
 ?>
     <table class="list">
     <thead>
@@ -55,13 +57,13 @@ if ($permission['delquestion']) {
     </thead>
     <tbody>
 <?php
-            while ($row = $db->fetch_object($result)) {
+            foreach ($openquestions as $question) {
 ?>
         <tr>
-            <td class="list"><?php print makeDate($row->ask_date); ?><br /><a href="mailto:<?php print $row->ask_usermail; ?>"><?php print $row->ask_username; ?></a></td>
-            <td class="list"><?php print $category->categoryName[$row->ask_rubrik]['name'].":<br />".$row->ask_content; ?></td>
-            <td class="list"><a href="?action=question&amp;id=<?php print $row->id; ?>&amp;is_visible=toggle"><?php print (('Y' == $row->is_visible) ? $PMF_LANG["ad_gen_no"] : $PMF_LANG["ad_gen_yes"]); ?>!</a><br /></td>
-            <td class="list"><a href="?action=question&amp;id=<?php print $row->id; ?>&amp;delete=yes"><?php print $PMF_LANG["ad_gen_delete"]; ?>!</a><br /><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;action=takequestion&amp;id=<?php print $row->id; ?>"><?php print $PMF_LANG["ad_ques_take"] ?></a></td>
+            <td class="list"><?php print makeDate($question['ask_date']); ?><br /><a href="mailto:<?php print $question['ask_usermail']; ?>"><?php print $question['ask_username']; ?></a></td>
+            <td class="list"><?php print $category->categoryName[$question['ask_rubrik']]['name'].":<br />".$question['ask_content']; ?></td>
+            <td class="list"><a href="?action=question&amp;id=<?php print $question['id']; ?>&amp;is_visible=toggle"><?php print (('Y' == $question['is_visible']) ? $PMF_LANG['ad_gen_no'] : $PMF_LANG['ad_gen_yes']); ?>!</a><br /></td>
+            <td class="list"><a href="?action=question&amp;id=<?php print $question['id']; ?>&amp;delete=yes"><?php print $PMF_LANG['ad_gen_delete']; ?>!</a><br /><a href="?action=takequestion&amp;id=<?php print $question['id']; ?>"><?php print $PMF_LANG['ad_ques_take']; ?></a></td>
         </tr>
 <?php
             }
@@ -74,5 +76,5 @@ if ($permission['delquestion']) {
         }
     }
 } else {
-    print $PMF_LANG["err_NotAuth"];
+    print $PMF_LANG['err_NotAuth'];
 }
