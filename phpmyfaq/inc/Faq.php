@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.87 2007-03-03 11:04:55 thorstenr Exp $
+ * $Id: Faq.php,v 1.88 2007-03-03 16:21:23 thorstenr Exp $
  *
  * The main FAQ class
  *
@@ -2005,6 +2005,44 @@ class PMF_Faq
         $this->db->query($query);
 
         return true;
+    }
+
+    /**
+     * Returns the changelog of a FAQ record
+     *
+     * @param   integer $record_id
+     * @return  array
+     * @access  public
+     * @since   2007-03-03
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function getChangeEntries($record_id)
+    {
+        $entries = array();
+
+        $query = sprintf("
+            SELECT
+                revision_id, usr, datum, what
+            FROM
+                %sfaqchanges
+            WHERE
+                beitrag = %d
+            ORDER BY id DESC",
+            SQLPREFIX,
+            $record_id
+            );
+
+       if ($result = $this->db->query($query)) {
+            while ($row = $this->db->fetch_object($result)) {
+                $entries[] = array(
+                    'revision_id'   => $row->revision_id,
+                    'user'          => $row->usr,
+                    'date'          => $row->datum,
+                    'changelog'     => $row->what);
+            }
+        }
+
+        return $entries;
     }
 
     /**
