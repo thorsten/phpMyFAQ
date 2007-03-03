@@ -1,10 +1,10 @@
 <?php
 /**
- * $Id: Sqlite.php,v 1.11 2007-02-20 20:11:15 thorstenr Exp $
- *
- * db_sqlite
+ * $Id: Sqlite.php,v 1.12 2007-03-03 08:29:43 thorstenr Exp $
  *
  * The db_sqlite class provides methods and functions for a sqlite database.
+ *
+ * NOTE: PHP5 only!
  *
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author      Johannes Schlüter <johannes@php.net>
@@ -46,7 +46,7 @@ class db_sqlite
      *
      * @var     array
      */
-    var $tableNames = array();
+    public $tableNames = array();
 
     /**
      * Connects to the database.
@@ -360,7 +360,7 @@ class db_sqlite
      * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      * @since   2006-08-26
      */
-    function getTableNames($prefix = '')
+    public function getTableNames($prefix = '')
     {
         // First, declare those tables that are referenced by others
         $this->tableNames[] = $prefix.'faquser';
