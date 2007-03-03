@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.86 2007-03-02 14:25:01 thorstenr Exp $
+ * $Id: Faq.php,v 1.87 2007-03-03 11:04:55 thorstenr Exp $
  *
  * The main FAQ class
  *
@@ -1769,6 +1769,26 @@ class PMF_Faq
      {
         $questions = array();
 
+        $query = sprintf("
+            SELECT
+                id, ask_username, ask_usermail, ask_rubrik, ask_content, ask_date, is_visible
+            FROM
+                %sfaqquestions
+            ORDER BY ask_date ASC",
+            SQLPREFIX);
+
+        if ($result = $this->db->query($query)) {
+            if ($row = $this->db->fetch_object($result)) {
+                $question[] = array(
+                    'id'            => $row->id,
+                    'user'          => $row->ask_username,
+                    'email'         => $row->ask_usermail,
+                    'category'      => $row->ask_rubrik,
+                    'question'      => $row->ask_content,
+                    'date'          => $row->ask_date,
+                    'is_visible'    => $row->is_visible);
+            }
+        }
         return $questions;
      }
 
