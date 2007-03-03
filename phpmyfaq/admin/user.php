@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: user.php,v 1.33 2006-09-26 18:30:08 thorstenr Exp $
+* $Id: user.php,v 1.34 2007-03-03 08:52:37 thorstenr Exp $
 *
 * Displays the user managment frontend
 *
@@ -289,24 +289,24 @@ if ($userAction == 'add') {
 <div id="user_create">
     <fieldset>
         <legend><?php print $text['addUser']; ?></legend>
-        <form name="user_create" action="<?php print $_SERVER['PHP_SELF']; ?>?action=user&amp;user_action=addsave" method="post">
-            <label for="user_name"><?php print $text['addUser_name']; ?></label>
+        <form action="<?php print $_SERVER['PHP_SELF']; ?>?action=user&amp;user_action=addsave" method="post">
+            <label class="left" for="user_name"><?php print $text['addUser_name']; ?></label>
             <input type="text" name="user_name" value="<?php print (isset($user_name) ? $user_name : ''); ?>" tabindex="1" /><br />
 
-            <label for="user_realname"><?php print $text['addUser_displayName']; ?></label>
+            <label class="left" for="user_realname"><?php print $text['addUser_displayName']; ?></label>
             <input type="text" name="user_realname" value="<?php print (isset($user_realname) ? $user_realname : ''); ?>" tabindex="2" /><br />
 
-            <label for="user_email"><?php print $text['addUser_email']; ?></label>
+            <label class="left" for="user_email"><?php print $text['addUser_email']; ?></label>
             <input type="text" name="user_email" value="<?php print (isset($user_email) ? $user_email : ''); ?>" tabindex="3" /><br />
 
-            <label for="password"><?php print $text['addUser_password']; ?></label>
+            <label class="left" for="password"><?php print $text['addUser_password']; ?></label>
             <input type="password" name="user_password" value="<?php print (isset($user_password) ? $user_password : ''); ?>" tabindex="4" /><br />
 
-            <label for="password_confirm"><?php print $text['addUser_password2']; ?></label>
+            <label class="left" for="password_confirm"><?php print $text['addUser_password2']; ?></label>
             <input type="password" name="user_password_confirm" value="<?php print (isset($user_password_confirm) ? $user_password_confirm : ''); ?>" tabindex="5" /><br />
 
-            <input class="submit" type="submit" value="<?php print $text['addUser_confirm']; ?>" tabindex="6" />
-            <input class="reset" name="cancel" type="submit" value="<?php print $text['addUser_cancel']; ?>" tabindex="7" /><br />
+            <input style="margin-left: 190px;" class="submit" type="submit" value="<?php print $text['addUser_confirm']; ?>" tabindex="6" />
+            <input class="submit" name="cancel" type="submit" value="<?php print $text['addUser_cancel']; ?>" tabindex="7" /><br />
         </form>
     </fieldset>
 </div> <!-- end #user_create -->
