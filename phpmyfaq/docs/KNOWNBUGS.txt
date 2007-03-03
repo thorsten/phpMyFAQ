@@ -1,6 +1,6 @@
-$Id: KNOWNBUGS.txt,v 1.11 2007-03-02 23:07:55 thorstenr Exp $
+$Id: KNOWNBUGS.txt,v 1.12 2007-03-03 08:40:39 thorstenr Exp $
 
-MISSING FEATURES in phpMyFAQ 2.0.0-beta
+MISSING FEATURES in phpMyFAQ 2.0.0-beta2
 
 - simple reordering of records (blocker for beta2)
 - show/edit/delete comments (blocker for beta2)
@@ -11,14 +11,14 @@ MISSING FEATURES in phpMyFAQ 2.0.0-beta
 - unfinished documentation (blocker for final)
 
 
-KNOWN ISSUES in phpMyFAQ 2.0.0-beta
+KNOWN ISSUES in phpMyFAQ 2.0.0-beta2
 
 - phpMyFAQ 2.0.0-beta is very buggy
 - some language files need an update
 - using UTF-8 will not work in the PDF files
 
 
-KNOWN BUGS AND ISSUES in phpMyFAQ 2.0.0-beta
+KNOWN BUGS AND ISSUES in phpMyFAQ 2.0.0-beta2
 
 - IBM DB2 support untested
 - Oracle support untested

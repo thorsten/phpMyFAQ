@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: installer.php,v 1.89 2007-02-28 21:54:52 matteo Exp $
+ * $Id: installer.php,v 1.90 2007-03-03 08:40:39 thorstenr Exp $
  *
  * The main phpMyFAQ Installer
  *
@@ -24,7 +24,7 @@
  * under the License.
  */
 
-define('VERSION', '2.0.0-beta');
+define('VERSION', '2.0.0-beta2');
 define('COPYRIGHT', '&copy; 2001-2007 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('SAFEMODE', @ini_get('safe_mode'));
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
@@ -342,7 +342,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     }
 ?>
     </select><br />
-    
+
     <div id="dbdatafull">
     <label class="left">SQL server host:</label>
     <input class="input" type="text" name="sql_server" title="Please enter the host of your SQL server here." /><br />
@@ -356,7 +356,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     <label class="left">SQL database:</label>
     <input class="input" type="text" name="sql_db" title="Please enter your SQL database name here." /><br />
     </div>
-    
+
     <div id="dbsqlite" style="display: none;">
     <label class="left">SQLite database file:</label>
     <input class="input" type="text" name="sql_sqlitefile" value="<?php print dirname(dirname(__FILE__)); ?>" title="Please enter the full path to your SQLite datafile which should be outside your documentation root." /><br />
@@ -418,7 +418,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     }
 ?>
     </select><br />
-    
+
     <label class="left">Permission level:</label>
     <select class="input" name="permLevel" size="1" title="Complexity of user and right administration. Basic: users may have user-rights. Medium: users may have user-rights; group administration; groups may have group-rights; user have group-rights via group-memberships.">
 <?php
@@ -427,16 +427,16 @@ foreach ($permLevels as $level => $desc) {
 }
 ?>
     </select><br />
-    
+
     <label class="left">Administrator's real name:</label>
     <input class="input" type="text" name="realname" title="Please enter your real name here." /><br />
-        
+
     <label class="left">Administrator's e-mail address:</label>
     <input class="input" type="text" name="email" title="Please enter your email adress here." /><br />
-    
+
     <label class="left">Administrator's username:</label>
     <span id="admin">admin</span><br />
-    
+
     <label class="left">Administrator's password:</label>
     <input class="input" type="password" name="password" title="Please enter your password for the admin area." /><br />
 
@@ -920,7 +920,7 @@ foreach ($permLevels as $level => $desc) {
         'email' => null
     );
     $anonymous->setUserData($anonymousData);
-    
+
     require_once(PMF_ROOT_DIR.'/inc/Configuration.php');
     require_once(PMF_ROOT_DIR.'/inc/Link.php');
     $oConf = new PMF_Configuration($db);

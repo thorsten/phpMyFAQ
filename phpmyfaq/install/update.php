@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.106 2007-03-02 16:11:55 thorstenr Exp $
+* $Id: update.php,v 1.107 2007-03-03 08:40:39 thorstenr Exp $
 *
 * Main update script
 *
@@ -21,7 +21,7 @@
 * under the License.
 */
 
-define('NEWVERSION', '2.0.0-beta');
+define('NEWVERSION', '2.0.0-beta2');
 define('COPYRIGHT', '&copy; 2001-2007 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
@@ -192,11 +192,8 @@ if ($step == 1) {
     <option value="1.5.5">phpMyFAQ 1.5.5 and later</option>
     <option value="1.6.0">phpMyFAQ 1.6.0 and later</option>
     <option value="2.0.0-alpha">phpMyFAQ 2.0.0-alpha</option>
+    <option value="2.0.0-beta">phpMyFAQ 2.0.0-beta</option>
 </select>
-
-<p class="center" style="color: #f00;">
-    <strong>Attention! This version might be broken and it's under heavy development.</strong>
-</p>
 
 <p class="center"><input type="submit" value="Go to step 2 of 5" class="button" /></p>
 </fieldset>
@@ -207,7 +204,7 @@ if ($step == 1) {
 
 /**************************** STEP 2 OF 5 ***************************/
 if ($step == 2) {
-    $version = $_POST["version"];
+    $version = $_POST['version'];
     $test1 = 0;
     $test2 = 0;
     $test3 = 0;
@@ -235,7 +232,7 @@ if ($step == 2) {
         $test4 = 1;
     }
 
-    if ('1.3.' == substr($_POST["version"], 0, 4)) {
+    if ('1.3.' == substr($_POST['version'], 0, 4)) {
         print "<p class=\"error\"><strong>Error:</strong> You can't upgrade from phpMyFAQ 1.3.x to ".NEWVERSION.". Please upgrade first to the latest version of phpMyFAQ 1.6.x.</p>";
     } else {
         $test5 = 1;
@@ -245,12 +242,12 @@ if ($step == 2) {
     if ($test1 == 1 && $test2  == 1 && $test3  == 1 && $test4 == 1 && $test5 == 1) {
 ?>
 <form action="update.php?step=3" method="post">
-<input type="hidden" name="version" value="<?php print $_POST["version"]; ?>" />
+<input type="hidden" name="version" value="<?php print $_POST['version']; ?>" />
 <fieldset class="installation">
-<legend class="installation"><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 2 of 5)</strong></legend>
-<p>A backup of your database configuration file have been made.</p>
-<p>Now the configuration files will be updated.</p>
-<p class="center"><input type="submit" value="Go to step 3 of 5" class="button" /></p>
+    <legend class="installation"><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 2 of 5)</strong></legend>
+    <p>A backup of your database configuration file has been made.</p>
+    <p>Now the configuration files will be updated.</p>
+    <p class="center"><input type="submit" value="Go to step 3 of 5" class="button" /></p>
 </fieldset>
 </form>
 <?php
@@ -264,10 +261,10 @@ if ($step == 2) {
 
 /**************************** STEP 3 OF 5 ***************************/
 if ($step == 3) {
-    $version = $_POST["version"];
+    $version = $_POST['version'];
 ?>
 <form action="update.php?step=4" method="post">
-<input type="hidden" name="version" value="<?php print $_POST["version"]; ?>" />
+<input type="hidden" name="version" value="<?php print $_POST['version']; ?>" />
 <fieldset class="installation">
 <legend class="installation"><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 3 of 5)</strong></legend>
 <?php
@@ -362,7 +359,7 @@ if ($step == 3) {
 if ($step == 4) {
 ?>
 <form action="update.php?step=5" method="post">
-<input type="hidden" name="version" value="<?php print $_POST["version"]; ?>" />
+<input type="hidden" name="version" value="<?php print $_POST['version']; ?>" />
 <fieldset class="installation">
 <legend class="installation"><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 4 of 5)</strong></legend>
 <?php
@@ -406,6 +403,9 @@ if ($step == 5) {
     $db = PMF_Db::db_select($DB["type"]);
     $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
 
+    //
+    // UPDATES FROM 1.4
+    //
     if (version_compare($version, '1.4.0', '<=')) {
         // rewrite data.php
         if ($fp = @fopen("../inc/data.php","w")) {
@@ -425,6 +425,10 @@ if ($step == 5) {
     if (version_compare($version, '1.4.4', '<=')) {
         $query[] = "ALTER TABLE ".SQLPREFIX."faqdata CHANGE content content LONGTEXT NOT NULL";
     }
+
+    //
+    // UPDATES FROM 1.5
+    //
     if (version_compare($version, '1.5.0', '<')) {
         // alter column faqdata.rubrik to integer
         $query[] = "ALTER TABLE ".SQLPREFIX."faqdata CHANGE rubrik rubrik INT NOT NULL";
@@ -548,6 +552,9 @@ if ($step == 5) {
         }
     }
 
+    //
+    // UPDATES FROM 1.6
+    //
     if (version_compare($version, '1.6.0', '<')) {
         // add revision_id and solution_id
         // 1/2. Fix faqdata and faqchanges tables
@@ -647,6 +654,9 @@ if ($step == 5) {
 
     $images = array();
 
+    //
+    // UPDATES FROM 2.0-ALPHA
+    //
     if (version_compare($version, '2.0.0-alpha', '<')) {
         // Fix old/odd errors
         // 1/1. Fix faqchanges.usr
@@ -1240,6 +1250,9 @@ if ($step == 5) {
         $oPMFConf->update($PMF_CONF);
     }
 
+    //
+    // UPDATES FROM 2.0-BETA
+    //
     if (version_compare($version, '2.0.0-beta', '<')) {
         // 1/4. Fix faqsessions table
         switch($DB["type"]) {
