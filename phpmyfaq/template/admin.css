@@ -1,5 +1,5 @@
 /**
- * $Id: admin.css,v 1.38 2007-03-03 08:53:07 thorstenr Exp $
+ * $Id: admin.css,v 1.39 2007-03-03 16:30:53 thorstenr Exp $
  *
  * This is the CSS file for the admin section of phpMyFAQ 2.0.x
  * You don't need to change enything here but feel free to do it. :-)
@@ -335,6 +335,14 @@ input.submit {
 }
 .categorybox {
     padding-bottom: 16px;
+}
+#changelog {
+	border: 1ps solid darkgray;
+	background-color: #F8F8FF;
+	padding: 3px;
+	margin-bottom: 10px;
+	height: 130px;
+	overflow: auto;
 }
 
 /**
