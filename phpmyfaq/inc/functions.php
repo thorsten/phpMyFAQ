@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.163 2007-03-02 13:45:54 johannes Exp $
+ * $Id: functions.php,v 1.164 2007-03-03 11:45:04 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -1348,7 +1348,7 @@ function searchEngine($begriff, $cat = '%', $allLanguages = true)
                         $begriff,
                         $cond);
     }
-    
+
     if ($result) {
         $num = $db->num_rows($result);
     }
@@ -1434,7 +1434,7 @@ function searchEngine($begriff, $cat = '%', $allLanguages = true)
                     $thema = preg_replace_callback('/'
                                 .'('.$item.'="[^"]*")|'
                                 .'((href|src|title|alt|class|style|id|name|dir|onclick|ondblclick|onmousedown|onmouseup|onmouseover|onmousemove|onmouseout|onkeypress|onkeydown|onkeyup)="[^"]*'.$item.'[^"]*")|'
-                                
+
                                 .'('.$item.')'
                                 .'/mis',
                                 "highlight_no_links",
@@ -1848,18 +1848,16 @@ if (!function_exists("array_combine")) {
 //
 
 /**
-* build_insert()
-
-* This function builds the the queries for the backup
-*
-* @param    string      query
-* @param    string      table name
-* @return   array
-* @access   public
-* @author   Meikel Katzengreis <meikel@katzengreis.com>
-* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-* @since    2003-03-24
-*/
+ * This function builds the the queries for the backup
+ *
+ * @param    string      query
+ * @param    string      table name
+ * @return   array
+ * @access   public
+ * @author   Meikel Katzengreis <meikel@katzengreis.com>
+ * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since    2003-03-24
+ */
 function build_insert($query, $table)
 {
     global $db;
@@ -1877,7 +1875,11 @@ function build_insert($query, $table)
             if ('rights' != $key && is_numeric($val)) {
                 $p2[] = $val;
             } else {
-                $p2[] = "'".$db->escape_string($val)."'";
+                if (strlen($val) == 0) {
+                    $p2[] = 'NULL';
+                } else {
+                    $p2[] = sprintf("'%s'", $db->escape_string($val));
+                }
             }
         }
         $ret[] = "INSERT INTO ".$table." (".implode(",", $p1).") VALUES (".implode(",", $p2).");";
