@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# $Id: cvs2package.sh,v 1.3 2006-10-10 21:36:08 matteo Exp $
+# $Id: cvs2package.sh,v 1.4 2007-03-03 07:18:07 thorstenr Exp $
 #
 # This is the shell script for building:
 # 1. a TAR.GZ package;
@@ -24,7 +24,7 @@
 #
 # @author       Matteo Scaramuccia <matteo@scaramuccia.com>
 # @since        2005-11-22
-# @copyright:   (c) 2005-2006 phpMyFAQ Team
+# @copyright:   (c) 2005-2007 phpMyFAQ Team
 #
 # The contents of this file are subject to the Mozilla Public License
 # Version 1.1 (the "License"); you may not use this file except in
@@ -39,7 +39,7 @@
 # CVS tag
 CVS_TAG="HEAD"
 # PMF Version
-PMF_VERSION="2.0.0.beta"
+PMF_VERSION="2.0.0-beta"
 
 # Build folder
 PMF_BUILD_FOLDER="PMFBUILD_${CVS_TAG}_${PMF_VERSION}"
@@ -75,12 +75,12 @@ cd ..
 mv phpmyfaq "${PMF_PACKAGE_FOLDER}"
 
 # Build TAR.GZ Package
-tar zcf "${PMF_PACKAGE_FOLDER}.full.tar.gz" "${PMF_PACKAGE_FOLDER}"
-md5sum "${PMF_PACKAGE_FOLDER}.full.tar.gz" > "${PMF_PACKAGE_FOLDER}.full.tar.gz.md5"
+tar zcf "${PMF_PACKAGE_FOLDER}.tar.gz" "${PMF_PACKAGE_FOLDER}"
+md5sum "${PMF_PACKAGE_FOLDER}.tar.gz" > "${PMF_PACKAGE_FOLDER}.tar.gz.md5"
 
 # Build ZIP Package
-zip -r "${PMF_PACKAGE_FOLDER}.full.zip" "${PMF_PACKAGE_FOLDER}"
-md5sum "${PMF_PACKAGE_FOLDER}.full.zip" > "${PMF_PACKAGE_FOLDER}.full.zip.md5"
+zip -r "${PMF_PACKAGE_FOLDER}.zip" "${PMF_PACKAGE_FOLDER}"
+md5sum "${PMF_PACKAGE_FOLDER}.zip" > "${PMF_PACKAGE_FOLDER}.zip.md5"
 
 # Remove the code folder
 rm -rf "${PMF_PACKAGE_FOLDER}"
