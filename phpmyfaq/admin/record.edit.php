@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.edit.php,v 1.57 2007-02-10 21:52:35 thorstenr Exp $
+ * $Id: record.edit.php,v 1.58 2007-03-03 11:34:19 thorstenr Exp $
  *
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since       2003-02-23
@@ -29,7 +29,7 @@ $user = PMF_CurrentUser::getFromSession($faqconfig->get('ipcheck'));
 if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     $category = new PMF_Category($LANGCODE);
     $category->buildTree();
-    
+
     $current_category   = '';
     $categories         = array();
     $faqData = array(
@@ -112,7 +112,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     } elseif (isset($faqData['revision_id'])) {
         $revisionid_selected = $faqData['revision_id'];
     }
-    
+
     // Permissions
     $user_permission = $faq->getPermission('user', array($faqData['id']));
     if ($user_permission[0] == -1) {
@@ -284,10 +284,10 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 
     <label class="left" for="userpermission"><?php print $PMF_LANG['ad_entry_userpermission']; ?></label>
     <input type="radio" name="userpermission" class="active" value="all" <?php print ($all_users ? 'checked="checked"' : ''); ?>/> <?php print $PMF_LANG['ad_entry_all_users']; ?> <input type="radio" name="userpermission" class="active" value="restricted" <?php print ($restricted_users ? 'checked="checked"' : ''); ?>/> <?php print $PMF_LANG['ad_entry_restricted_users']; ?> <select name="restricted_users" size="1"><?php print $user->getAllUserOptions($user_permission[0]); ?></select><br />
-    
+
 <?php
     if ($groupSupport) {
-?>    
+?>
     <label class="left" for="grouppermission"><?php print $PMF_LANG['ad_entry_grouppermission']; ?></label>
     <input type="radio" name="grouppermission" class="active" value="all" <?php print ($all_groups ? 'checked="checked"' : ''); ?>/> <?php print $PMF_LANG['ad_entry_all_groups']; ?> <input type="radio" name="grouppermission" class="active" value="restricted" <?php print ($restricted_groups ? 'checked="checked"' : ''); ?>/> <?php print $PMF_LANG['ad_entry_restricted_groups']; ?> <select name="restricted_groups" size="1"><?php print $user->perm->getAllGroupsOptions($group_permission); ?></select><br />
 <?php
@@ -351,19 +351,14 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 <br />
 <?php
     if (is_numeric($faqData['id'])) {
-
-        $_user = array(0 => 'n/a');
-        $_result = $db->query("SELECT user_id, display_name FROM ".SQLPREFIX."faquserdata");
-        while ($row = $db->fetch_object($_result)) {
-            $_user[$row->user_id] = $row->display_name;
-        }
 ?>
     <h3><?php print $PMF_LANG["ad_entry_changelog"]; ?></h3>
 <?php
         $result = $db->query("SELECT revision_id, usr, datum, what FROM ".SQLPREFIX."faqchanges WHERE beitrag = ".$faqData['id']." ORDER BY id DESC");
         while ($row = $db->fetch_object($result)) {
+            $user->getUserById($row->usr);
 ?>
-    <div style="font-size: 10px;"><strong><?php print date("Y-m-d H:i:s", $row->datum).": ".$_user[$row->usr]; ?></strong><br /><?php print PMF_htmlentities($row->what, ENT_NOQUOTES, $PMF_LANG['metaCharset']); ?><br /><?php print $PMF_LANG['ad_entry_revision'].' 1.'.$row->revision_id; ?></div>
+    <div style="font-size: 10px;"><strong><?php print date("Y-m-d H:i:s", $row->datum).": ".$user->getUserData('display_name'); ?></strong><br /><?php print PMF_htmlentities($row->what, ENT_NOQUOTES, $PMF_LANG['metaCharset']); ?><br /><?php print $PMF_LANG['ad_entry_revision'].' 1.'.$row->revision_id; ?></div>
 <?php
         }
 ?>
