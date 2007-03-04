@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.43 2007-03-04 14:14:53 thorstenr Exp $
+ * $Id: language_de.php,v 1.44 2007-03-04 20:33:50 thorstenr Exp $
  *
  * German language file
  *
@@ -849,3 +849,4 @@ $PMF_LANG['ad_menu_comments'] = 'Kommentare';
 $PMF_LANG['ad_comment_administration'] = 'Kommentarverwaltung';
 $PMF_LANG['ad_comment_faqs'] = 'Kommentare in FAQ-Artikeln:';
 $PMF_LANG['ad_comment_news'] = 'Kommentare in News-Artikeln:';
+$PMF_LANG['ad_groups'] = 'Gruppen';

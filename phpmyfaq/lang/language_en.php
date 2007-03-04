@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.72 2007-03-04 14:14:53 thorstenr Exp $
+* $Id: language_en.php,v 1.73 2007-03-04 20:33:50 thorstenr Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -859,3 +859,4 @@ $PMF_LANG['ad_menu_comments'] = 'Comments';
 $PMF_LANG['ad_comment_administration'] = 'Comments administration';
 $PMF_LANG['ad_comment_faqs'] = 'Comments in FAQ records:';
 $PMF_LANG['ad_comment_news'] = 'Comments in News records:';
+$PMF_LANG['ad_groups'] = 'Groups';
