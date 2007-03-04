@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.71 2007-03-03 08:40:39 thorstenr Exp $
+$Id: README.txt,v 1.72 2007-03-04 12:37:38 thorstenr Exp $
 
 phpMyFAQ 2.0.0-beta2
 Codename "Prometheus"
@@ -10,7 +10,7 @@ Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.0.0-beta:
--
+- added sorting by id, title and date for records in admin backend (Thorsten)
 - fixed tons of bugs (Matteo, Thorsten)
 
 For known issues please take a look at KNOWNBUGS.txt
@@ -39,6 +39,7 @@ Version 2.0.0-beta2 - 2007-
 - added "submit translation" link (Matteo)
 - added experimental support for Oracle (Thorsten)
 - added experimental support for Interbase/Firebird (Thorsten)
+- added sorting by id, title and date for records in admin backend (Thorsten)
 - improved export functions (Matteo)
 - improved URL rewrite functions (Matteo)
 - improved category management (Thorsten, Rudi Ferrari)

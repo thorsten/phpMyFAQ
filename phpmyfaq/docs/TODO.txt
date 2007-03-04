@@ -4,8 +4,6 @@ TODO list for future versions of phpMyFAQ:
 - simple reordering of records
 - show/edit/delete comments
 - editable default values for record configuration
-- sort by date for records in admin backend
-- show records per category in admin backend
 - finish the new admin backend layout
 
 2.1.0 "Pandora" (planned CVS branch: PMF_2_1):
