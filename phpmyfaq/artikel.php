@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: artikel.php,v 1.70 2007-02-25 12:19:16 thorstenr Exp $
+ * $Id: artikel.php,v 1.71 2007-03-04 20:55:47 thorstenr Exp $
  *
  * Shows the page with the FAQ record and - when available - the user
  * comments
@@ -8,7 +8,7 @@
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author      Lars Tiedemann <larstiedemann@yahoo.de>
  * @since       2002-08-27
- * @copyright   (c) 2001-2007 phpMyFAQ Team
+ * @copyright   (c) 2002-2007 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -192,12 +192,11 @@ if (count($multiCategories) > 1) {
 $editThisEntry = '';
 if (isset($permission['editbt'])) {
     $editThisEntry = sprintf(
-                        '<a href="%sadmin/index.php?action=editentry&amp;id=%d&amp;lang=%s">%s</a>',
-                        PMF_Link::getSystemRelativeUri('index.php'),
-                        $id,
-                        $lang,
-                        $PMF_LANG['ad_entry_edit_1']
-                        );
+        '<a href="%sadmin/index.php?action=editentry&amp;id=%d&amp;lang=%s">%s</a>',
+        PMF_Link::getSystemRelativeUri('index.php'),
+        $id,
+        $lang,
+        $PMF_LANG['ad_entry_edit_1'].$PMF_LANG['ad_entry_edit_2']);
 }
 
 // Is the faq expired?
