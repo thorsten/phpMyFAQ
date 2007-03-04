@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.89 2007-03-04 10:03:53 thorstenr Exp $
+ * $Id: Faq.php,v 1.90 2007-03-04 11:10:58 thorstenr Exp $
  *
  * The main FAQ class
  *
@@ -834,8 +834,11 @@ class PMF_Faq
     {
         $where = '';
         if (!is_null($condition)) {
+            $num = count($condition);
+            $where = 'WHERE ';
             foreach ($condition as $field => $data) {
-                $where .= " AND ".$field;
+                $num--;
+                $where .= $field;
                 if (is_array($data)) {
                     $where .= " IN (";
                     $separator = "";
@@ -846,6 +849,9 @@ class PMF_Faq
                     $where .= ")";
                 } else {
                     $where .= " = '".$this->db->escape_string($data)."'";
+                }
+                if ($num > 0) {
+                    $where .= " AND ";
                 }
             }
         }
