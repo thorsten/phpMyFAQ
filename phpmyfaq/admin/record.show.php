@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.show.php,v 1.40 2007-02-27 19:46:59 thorstenr Exp $
+ * $Id: record.show.php,v 1.41 2007-03-04 11:36:39 thorstenr Exp $
  *
  * Shows the list of records ordered by categories
  *
@@ -116,32 +116,12 @@ if ($permission["editbt"] || $permission["delbt"]) {
         $numRecordsByCat = $category->getNumberOfRecordsOfCategory($active);
     }
 
-    if (isset($_REQUEST["action"]) && $_REQUEST["action"] == "view" && !(isset($_REQUEST["searchterm"]) && $_REQUEST["searchterm"] != "")) {
+    if (isset($_REQUEST["action"]) && $_REQUEST["action"] == 'view' && !(isset($_REQUEST["searchterm"]) && $_REQUEST["searchterm"] != "")) {
 
-        // No search requested
-        $where = "";
-        foreach ($cond as $field => $data) {
-            $where .= " AND ".$field;
-            if (is_array($data)) {
-                $where .= " IN (";
-                $separator = "";
-                foreach ($data as $value) {
-                    $where .= $separator."'".$db->escape_string($value)."'";
-                    $separator = ", ";
-                }
-                $where .= ")";
-            } else {
-                $where .= " = '".$db->escape_string($data)."'";
-            }
-        }
-        $query = 'SELECT '.SQLPREFIX.'faqdata.id AS id, '.SQLPREFIX.'faqdata.lang AS lang, '.SQLPREFIX.'faqcategoryrelations.category_id AS category_id, '.SQLPREFIX.'faqdata.thema AS thema FROM '.SQLPREFIX.'faqdata INNER JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang ='.SQLPREFIX.'faqcategoryrelations.record_lang AND '.SQLPREFIX.'faqdata.active = \'yes\' '.$where.' ORDER BY '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.id ';
-
-        $result = $db->query($query);
-
-        //$allRecords = $faq->getAllRecords();
-
+        $faq->getAllRecords();
         $laction = 'view';
         $internalSearch = '';
+
     } else if (isset($_REQUEST["action"]) && $_REQUEST["action"] == "view" && isset($_REQUEST["searchterm"]) && $_REQUEST["searchterm"] != "") {
         // Search for:
         // a. solution id
@@ -184,20 +164,24 @@ if ($permission["editbt"] || $permission["delbt"]) {
         $internalSearch = '&amp;search='.$searchterm;
         $wasSearch = true;
 
-    } elseif (isset($_REQUEST["action"]) && $_REQUEST["action"] == "accept") {
-        $query = 'SELECT '.SQLPREFIX.'faqdata.id AS id,'.SQLPREFIX.'faqdata.lang AS lang, '.SQLPREFIX.'faqcategoryrelations.category_id AS category_id, '.SQLPREFIX.'faqdata.thema AS thema FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang ='.SQLPREFIX.'faqcategoryrelations.record_lang WHERE '.SQLPREFIX.'faqdata.active = \'no\' ORDER BY '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.id';
-        $result = $db->query($query);
+    } elseif (isset($_REQUEST['action']) && $_REQUEST['action'] == 'accept') {
+
+        $cond[SQLPREFIX.'faqdata.active'] = 'no';
+        $faq->getAllRecords(1, $cond);
         $laction = 'accept';
         $internalSearch = '';
+
     }
 
-    if ($db->num_rows($result) > 0) {
+    $num = count($faq->faqRecords);
+
+    if ($num > 0) {
         $old = 0;
-        while ($row = $db->fetch_object($result)) {
+        foreach ($faq->faqRecords as $record) {
             $catInfo =  '';
             $isBracketOpened = false;
             $needComma = false;
-            $cid = $row->category_id;
+            $cid = $record['category_id'];
             if (isset($numRecordsByCat[$cid]) && ($numRecordsByCat[$cid] > 0)) {
                 if (!$isBracketOpened) {
                     $catInfo .= ' (';
@@ -254,18 +238,18 @@ if ($permission["editbt"] || $permission["delbt"]) {
             }
 ?>
     <tr>
-        <td class="list" style="width: 24px; text-align: right;"><?php print $row->id; ?></td>
-        <td class="list" style="width: 16px;"><?php print $row->lang; ?></td>
-        <td class="list"><a href="?action=editentry&amp;id=<?php print $row->id; ?>&amp;lang=<?php print $row->lang; ?>" title="<?php print $PMF_LANG["ad_user_edit"]; ?> '<?php print str_replace("\"", "´", $row->thema); ?>'"><?php print PMF_htmlentities($row->thema, ENT_NOQUOTES, $PMF_LANG['metaCharset']); ?></a>
+        <td class="list" style="width: 24px; text-align: right;"><?php print $record['id']; ?></td>
+        <td class="list" style="width: 16px;"><?php print $record['lang']; ?></td>
+        <td class="list"><a href="?action=editentry&amp;id=<?php print $record['id']; ?>&amp;lang=<?php print $record['lang']; ?>" title="<?php print $PMF_LANG["ad_user_edit"]; ?> '<?php print str_replace("\"", "´", $record['title']); ?>'"><?php print PMF_htmlentities($record['title'], ENT_NOQUOTES, $PMF_LANG['metaCharset']); ?></a>
 <?php
-        if (isset($numCommentsByFaq[$row->id])) {
-            print " (".$numCommentsByFaq[$row->id]." ".$PMF_LANG["ad_start_comments"].")";
+        if (isset($numCommentsByFaq[$record['id']])) {
+            print " (".$numCommentsByFaq[$record['id']]." ".$PMF_LANG["ad_start_comments"].")";
         }
 ?>
         </td>
         <td class="list"></td>
-        <td class="list" width="100"><?php print $linkverifier->getEntryStateHTML($row->id, $row->lang); ?></td>
-        <td class="list" width="17"><a href="?action=saveentry&amp;id=<?php print $row->id; ?>&amp;language=<?php print $row->lang; ?>&amp;submit%5B0%5D=<?php print urlencode($PMF_LANG["ad_entry_delete"]); ?>" title="<?php print $PMF_LANG["ad_user_delete"]; ?> '<?php print str_replace("\"", "´", $row->thema); ?>'"><img src="images/delete.gif" width="17" height="18" alt="<?php print $PMF_LANG["ad_entry_delete"]; ?>" /></a></td>
+        <td class="list" width="100"><?php print $linkverifier->getEntryStateHTML($record['id'], $record['lang']); ?></td>
+        <td class="list" width="17"><a href="?action=saveentry&amp;id=<?php print $record['id']; ?>&amp;language=<?php print $record['lang']; ?>&amp;submit%5B0%5D=<?php print urlencode($PMF_LANG["ad_entry_delete"]); ?>" title="<?php print $PMF_LANG["ad_user_delete"]; ?> '<?php print str_replace("\"", "´", $record['title']); ?>'"><img src="images/delete.gif" width="17" height="18" alt="<?php print $PMF_LANG["ad_entry_delete"]; ?>" /></a></td>
     </tr>
 <?php
             $old = $cid;
