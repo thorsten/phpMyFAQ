@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.44 2007-03-04 18:30:53 matteo Exp $
+* $Id: language_it.php,v 1.45 2007-03-04 21:13:20 matteo Exp $
 *
 * Italian language file
 *
@@ -859,3 +859,4 @@ $PMF_LANG['ad_menu_comments'] = 'Commenti';
 $PMF_LANG['ad_comment_administration'] = 'Amministrazione dei commenti';
 $PMF_LANG['ad_comment_faqs'] = 'Commenti introdotti nelle FAQ:';
 $PMF_LANG['ad_comment_news'] = 'Commenti introdotti nelle Notizie:';
+$PMF_LANG['ad_groups'] = 'Gruppi';
