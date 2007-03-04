@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.42 2007-03-02 16:18:18 thorstenr Exp $
+ * $Id: language_de.php,v 1.43 2007-03-04 14:14:53 thorstenr Exp $
  *
  * German language file
  *
@@ -8,7 +8,7 @@
  * @author      A. Neufang <B_A_F_F@gmx.de>
  * @author      René-Roger Ziesack <rr-phpmyfaq.de@inf99.de>
  * @since       2004-02-19
- * @copyright   (c) 2004-2006 phpMyFAQ Team
+ * @copyright   (c) 2004-2007 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -843,3 +843,9 @@ $PMF_LANG["rightsLanguage"]['delgroup'] = "Gruppen löschen";
 
 // added v2.0.0 - 2007-02-27 by Thorsten
 $PMF_LANG['ad_news_link_parent'] = 'Link öffnet im gleichen Fenster';
+
+// added v2.0.0 - 2007-03-04 by Thorsten
+$PMF_LANG['ad_menu_comments'] = 'Kommentare';
+$PMF_LANG['ad_comment_administration'] = 'Kommentarverwaltung';
+$PMF_LANG['ad_comment_faqs'] = 'Kommentare in FAQ-Artikeln:';
+$PMF_LANG['ad_comment_news'] = 'Kommentare in News-Artikeln:';

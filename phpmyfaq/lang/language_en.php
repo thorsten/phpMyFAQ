@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.71 2007-03-02 16:18:18 thorstenr Exp $
+* $Id: language_en.php,v 1.72 2007-03-04 14:14:53 thorstenr Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -8,7 +8,7 @@
 * @author       Matthias Sommerfeld <mso@bluebirdy.de>
 * @author       Henning Schulzrinne <hgs@cs.columbia.edu>
 * @since        2004-02-19
-* @copyright    (c) 2004-2006 phpMyFAQ Team
+* @copyright    (c) 2004-2007 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -853,3 +853,9 @@ $PMF_LANG["rightsLanguage"]['delgroup'] = "delete group accounts";
 
 // added v2.0.0 - 2007-02-27 by Thorsten
 $PMF_LANG['ad_news_link_parent'] = 'Link opens in parent window';
+
+// added v2.0.0 - 2007-03-04 by Thorsten
+$PMF_LANG['ad_menu_comments'] = 'Comments';
+$PMF_LANG['ad_comment_administration'] = 'Comments administration';
+$PMF_LANG['ad_comment_faqs'] = 'Comments in FAQ records:';
+$PMF_LANG['ad_comment_news'] = 'Comments in News records:';
