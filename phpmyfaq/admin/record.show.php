@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.show.php,v 1.41 2007-03-04 11:36:39 thorstenr Exp $
+ * $Id: record.show.php,v 1.42 2007-03-04 12:33:31 thorstenr Exp $
  *
  * Shows the list of records ordered by categories
  *
@@ -49,6 +49,9 @@ if ($permission["editbt"] || $permission["delbt"]) {
     $linkState        = '';
     $searchterm       = '';
     $searchcat        = 0;
+    $currentcategory  = 0;
+    $orderby          = 1;
+    $sortby           = null;
 
     if (isset($_REQUEST['linkstate'])) {
         $cond[SQLPREFIX.'faqdata.links_state'] = 'linkbad';
@@ -68,6 +71,31 @@ if ($permission["editbt"] || $permission["delbt"]) {
 
     if (isset($_GET['action']) && $_GET['action'] == 'accept') {
         $active = 'no';
+    }
+
+    if (isset($_GET['category']) && is_numeric($_GET['category'])) {
+        $currentcategory = (int)$_GET['category'];
+    }
+
+    if (isset($_GET['orderby'])) {
+        switch ($db->escape_string($_GET['orderby'])) {
+            case 'id':
+                $orderby = 1;
+                break;
+            case 'title':
+                $orderby = 2;
+                break;
+            case 'date':
+                $orderby = 3;
+                break;
+            default:
+                $orderby = 1;
+                break;
+        }
+    }
+
+    if (isset($_GET['sortby'])) {
+        $sortby = $db->escape_string($_GET['sortby']);
     }
 ?>
     <form action="?action=view" method="post">
@@ -116,9 +144,9 @@ if ($permission["editbt"] || $permission["delbt"]) {
         $numRecordsByCat = $category->getNumberOfRecordsOfCategory($active);
     }
 
-    if (isset($_REQUEST["action"]) && $_REQUEST["action"] == 'view' && !(isset($_REQUEST["searchterm"]) && $_REQUEST["searchterm"] != "")) {
+    if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'view' && !(isset($_REQUEST["searchterm"]) && $_REQUEST["searchterm"] != "")) {
 
-        $faq->getAllRecords();
+        $faq->getAllRecords($orderby, null, $sortby);
         $laction = 'view';
         $internalSearch = '';
 
@@ -167,7 +195,7 @@ if ($permission["editbt"] || $permission["delbt"]) {
     } elseif (isset($_REQUEST['action']) && $_REQUEST['action'] == 'accept') {
 
         $cond[SQLPREFIX.'faqdata.active'] = 'no';
-        $faq->getAllRecords(1, $cond);
+        $faq->getAllRecords($orderby, $cond, $sortby);
         $laction = 'accept';
         $internalSearch = '';
 
@@ -201,13 +229,14 @@ if ($permission["editbt"] || $permission["delbt"]) {
             if ($cid != $old) {
                 if ($old == 0) {
 ?>
-    <!--<a name="cat_<?php print $cid; ?>" />--><div class="categorylisting"><a href="#cat_<?php print $cid; ?>" onclick="showhideCategory('category_<?php print $cid; ?>');"><img src="../images/more.gif" width="11" height="11" alt="" /> <?php print $category->getPath($cid); ?></a><?php print $catInfo;?></div>
-    <div id="category_<?php print $cid; ?>" class="categorybox" style="display: none;">
+    <a name="cat_<?php print $cid; ?>"></a>
+    <div class="categorylisting"><a href="#cat_<?php print $cid; ?>" onclick="showhideCategory('category_<?php print $cid; ?>');"><img src="../images/more.gif" width="11" height="11" alt="" /> <?php print $category->getPath($cid); ?></a><?php print $catInfo;?></div>
+    <div id="category_<?php print $cid; ?>" class="categorybox" style="display: <?php print ($currentcategory == $cid) ? 'block' : 'none'; ?>;">
     <table class="listrecords">
     <thead>
     <tr>
         <th class="listhead"><a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=id&amp;sortby=desc">&uarr;</a>&nbsp;<a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=id&amp;sortby=asc">&darr;</a></th>
-        <th class="listhead"><a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=lang&amp;sortby=desc">&uarr;</a>&nbsp;<a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=lang&amp;sortby=asc">&darr;</a></th>
+        <th class="listhead">&nbsp;</th>
         <th class="listhead"><a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=title&amp;sortby=desc">&uarr;</a>&nbsp;<a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=title&amp;sortby=asc">&darr;</a></th>
         <th class="listhead"><a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=date&amp;sortby=desc">&uarr;</a>&nbsp;<a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=date&amp;sortby=asc">&darr;</a></th>
         <th class="listhead" colspan="2">&nbsp;</th>
@@ -219,12 +248,12 @@ if ($permission["editbt"] || $permission["delbt"]) {
     </table>
     </div>
     <!--<a name="cat_<?php print $cid; ?>" />--><div class="categorylisting"><a href="#cat_<?php print $cid; ?>" onclick="showhideCategory('category_<?php print $cid; ?>');"><img src="../images/more.gif" width="11" height="11" alt="" /> <?php print $category->getPath($cid); ?></a><?php print $catInfo;?></div>
-    <div id="category_<?php print $cid; ?>" class="categorybox" style="display: none;">
+    <div id="category_<?php print $cid; ?>" class="categorybox" style="display: <?php print ($currentcategory == $cid) ? 'block' : 'none'; ?>;">
     <table class="listrecords">
     <thead>
     <tr>
         <th class="listhead"><a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=id&amp;sortby=desc">&uarr;</a>&nbsp;<a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=id&amp;sortby=asc">&darr;</a></th>
-        <th class="listhead"><a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=lang&amp;sortby=desc">&uarr;</a>&nbsp;<a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=lang&amp;sortby=asc">&darr;</a></th>
+        <th class="listhead">&nbsp;</th>
         <th class="listhead"><a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=title&amp;sortby=desc">&uarr;</a>&nbsp;<a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=title&amp;sortby=asc">&darr;</a></th>
         <th class="listhead"><a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=date&amp;sortby=desc">&uarr;</a>&nbsp;<a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=date&amp;sortby=asc">&darr;</a></th>
         <th class="listhead" colspan="2">&nbsp;</th>
@@ -247,7 +276,7 @@ if ($permission["editbt"] || $permission["delbt"]) {
         }
 ?>
         </td>
-        <td class="list"></td>
+        <td class="list" width="50"><?php print substr($record['date'], 0, 10); ?></td>
         <td class="list" width="100"><?php print $linkverifier->getEntryStateHTML($record['id'], $record['lang']); ?></td>
         <td class="list" width="17"><a href="?action=saveentry&amp;id=<?php print $record['id']; ?>&amp;language=<?php print $record['lang']; ?>&amp;submit%5B0%5D=<?php print urlencode($PMF_LANG["ad_entry_delete"]); ?>" title="<?php print $PMF_LANG["ad_user_delete"]; ?> '<?php print str_replace("\"", "´", $record['title']); ?>'"><img src="images/delete.gif" width="17" height="18" alt="<?php print $PMF_LANG["ad_entry_delete"]; ?>" /></a></td>
     </tr>
