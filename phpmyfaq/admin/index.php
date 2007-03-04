@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.81 2007-02-18 18:27:03 thorstenr Exp $
+* $Id: index.php,v 1.82 2007-03-04 14:12:41 thorstenr Exp $
 *
 * The main admin backend index file
 *
@@ -220,6 +220,7 @@ if (isset($auth)) {
             case "delentry":                require_once ("record.delete.php"); break;
             case "delatt":                  require_once ("record.delatt.php"); break;
             case "question":                require_once ("record.delquestion.php"); break;
+            case 'comments':                require_once ('record.comments.php'); break;
             // news administraion
             case "news":                    require_once ("news.php"); break;
             // category administration

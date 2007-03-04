@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: header.php,v 1.36 2007-02-18 18:39:51 thorstenr Exp $
+ * $Id: header.php,v 1.37 2007-03-04 14:12:41 thorstenr Exp $
  *
  * Header of the admin area
  *
@@ -147,10 +147,12 @@ if (isset($_action)) {
         case 'editglossary':
         case 'news':
         case 'question':
+        case 'comments':
             addMenuEntry('addcateg,editcateg,delcateg',          'category',         'ad_menu_categ_edit');
             addMenuEntry('addbt',                                'editentry',        'ad_entry_add');
             addMenuEntry('editbt,delbt',                         'view',             'ad_menu_entry_edit');
             addMenuEntry('editbt,delbt',                         'accept',           'ad_menu_entry_aprove');
+            addMenuEntry('delcomment',                           'comments',         'ad_menu_comments');
             addMenuEntry('delquestion',                          'question',         'ad_menu_open');
             addMenuEntry('addglossary,editglossary,delglossary', 'glossary',         'ad_menu_glossary');
             addMenuEntry('addnews,editnews,delnews',             'news&amp;do=edit', 'ad_menu_news_edit');
