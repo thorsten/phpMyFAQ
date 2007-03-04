@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.43 2007-03-02 16:18:19 thorstenr Exp $
+* $Id: language_it.php,v 1.44 2007-03-04 18:30:53 matteo Exp $
 *
 * Italian language file
 *
@@ -8,7 +8,7 @@
 * @auhtor       Rudy <webmaster@queenarena.com>
 * @author       Matteo Scaramuccia <matteo@scaramuccia.com>
 * @since        2004-06-24
-* @copyright    (c) 2004-2006 phpMyFAQ Team
+* @copyright    (c) 2004-2007 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -853,3 +853,9 @@ $PMF_LANG["rightsLanguage"]['delgroup'] = "Cancella gruppi";
 
 // added v2.0.0 - 2007-02-27 by Thorsten
 $PMF_LANG['ad_news_link_parent'] = 'Il link si apre nella finestra padre';
+
+// added v2.0.0 - 2007-03-04 by Thorsten
+$PMF_LANG['ad_menu_comments'] = 'Commenti';
+$PMF_LANG['ad_comment_administration'] = 'Amministrazione dei commenti';
+$PMF_LANG['ad_comment_faqs'] = 'Commenti introdotti nelle FAQ:';
+$PMF_LANG['ad_comment_news'] = 'Commenti introdotti nelle Notizie:';
