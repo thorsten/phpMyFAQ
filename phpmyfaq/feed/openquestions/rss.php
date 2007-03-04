@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: rss.php,v 1.4 2007-01-21 14:48:37 thorstenr Exp $
+ * $Id: rss.php,v 1.5 2007-03-04 07:22:41 thorstenr Exp $
  *
  * The RSS feed with the latest open questions
  *
@@ -8,7 +8,7 @@
  * @access      public
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
- * @copyright   c) 2006 phpMyFAQ Team
+ * @copyright   (c) 2006-2007 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -27,41 +27,45 @@ PMF_Init::cleanRequest();
 session_name('pmf_auth_'.$faqconfig->get('phpMyFAQToken'));
 session_start();
 
-require_once (PMF_ROOT_DIR."/inc/Category.php");
-require_once (PMF_ROOT_DIR."/lang/".$PMF_CONF["language"]);
+require_once(PMF_ROOT_DIR.'/inc/Faq.php');
 
-// Get the open questions result set with a time descedant order (the first is the last entered)
-$query =   'SELECT
-                id, ask_username, ask_usermail, ask_rubrik, ask_content, ask_date
-            FROM
-                '.SQLPREFIX.'faqquestions
-            WHERE
-                is_visible = \'Y\'
-            ORDER BY
-                ask_date DESC';
-$result = $db->query($query);
+//
+// get language (default: english)
+//
+$pmf = new PMF_Init();
+$LANGCODE = $pmf->setLanguage((isset($PMF_CONF['detection']) ? true : false), $PMF_CONF['language']);
+// Preload English strings
+require_once (PMF_ROOT_DIR.'/lang/language_en.php');
 
-$rss = "<?xml version=\"1.0\" encoding=\"".$PMF_LANG["metaCharset"]."\" standalone=\"yes\" ?>\n<rss version=\"2.0\">\n<channel>\n";
-$rss .= "<title>".htmlspecialchars($PMF_CONF["title"])." - ".htmlspecialchars($PMF_LANG['msgOpenQuestions'])."</title>\n";
-$rss .= "<description>".htmlspecialchars($PMF_CONF["metaDescription"])."</description>\n";
-$rss .= "<link>".PMF_Link::getSystemUri('/feed/openquestions/rss.php')."</link>";
+if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE)) {
+    // Overwrite English strings with the ones we have in the current language
+    require_once(PMF_ROOT_DIR.'/lang/language_'.$LANGCODE.'.php');
+} else {
+    $LANGCODE = 'en';
+}
 
-if ($num = $db->num_rows($result) > 0) {
+$rss = "<?xml version=\"1.0\" encoding=\"".$PMF_LANG['metaCharset']."\" standalone=\"yes\" ?>\n<rss version=\"2.0\">\n<channel>\n";
+$rss .= "<title>".htmlspecialchars($PMF_CONF['title'])." - ".htmlspecialchars($PMF_LANG['msgOpenQuestions'])."</title>\n";
+$rss .= "<description>".htmlspecialchars($PMF_CONF['metaDescription'])."</description>\n";
+$rss .= "<link>".PMF_Link::getSystemUri('/feed/openquestions/rss.php')."</link>\n";
+
+$faq = new PMF_Faq($db, $LANGCODE);
+$rssData = $faq->getAllOpenQuestions();
+$num = count($rssData);
+
+if ($num > 0) {
     $counter = 0;
-    while (($row = $db->fetch_object($result)) && $counter < PMF_RSS_OPENQUESTIONS_MAX) {
-        $counter++;
-        $rss .= "\t<item>\n";
-        // Get the content
-        $content = $row->ask_content;
-        $rss .= "\t\t<title><![CDATA[".makeShorterText($row->ask_content, 8)." (".$row->ask_username.")]]></title>\n";
-        $rss .= "\t\t<description><![CDATA[".$content."]]></description>\n";
-        // Let the PMF administrator manually choose between (1) (default) and (2)
-        // 1. This link below goes to the "Open questions page"
-        $rss .= "\t\t<link>http".(isset($_SERVER['HTTPS']) ? 's' : '')."://".$_SERVER["HTTP_HOST"].str_replace("feed/openquestions/rss.php", "index.php", $_SERVER["PHP_SELF"])."?action=open#openq_".$row->id."</link>\n";
-        // 2. This link below is a shortcut for a fast reply ("Add content" page within the context of the current question)
-        //$rss .= "\t\t<link><![CDATA[http".(isset($_SERVER['HTTPS']) ? 's' : '')."://".$_SERVER["HTTP_HOST"].str_replace("feed/openquestions/rss.php", "index.php", $_SERVER["PHP_SELF"])."?action=add&amp;question=".rawurlencode($content)."&amp;cat=".$row->ask_rubrik."]]></link>\n";
-        $rss .= "\t\t<pubDate>".makeRFC822Date($row->ask_date)."</pubDate>\n";
-        $rss .= "\t</item>\n";
+    foreach ($rssData as $item) {
+        if ($counter < PMF_RSS_OPENQUESTIONS_MAX) {
+            $counter++;
+            $rss .= "\t<item>\n";
+            $content = $item['question'];
+            $rss .= "\t\t<title><![CDATA[".makeShorterText($item['question'], 8)." (".$item['user'].")]]></title>\n";
+            $rss .= "\t\t<description><![CDATA[".$content."]]></description>\n";
+            $rss .= "\t\t<link>http".(isset($_SERVER['HTTPS']) ? 's' : '')."://".$_SERVER["HTTP_HOST"].str_replace("feed/openquestions/rss.php", "index.php", $_SERVER["PHP_SELF"])."?action=open#openq_".$item['id']."</link>\n";
+            $rss .= "\t\t<pubDate>".makeRFC822Date($item['date'])."</pubDate>\n";
+            $rss .= "\t</item>\n";
+        }
     }
 }
 
@@ -70,5 +74,4 @@ $rss .= "</channel>\n</rss>";
 header("Content-Type: text/xml");
 header("Content-Length: ".strlen($rss));
 print $rss;
-
-$db->dbclose();
+exit();
