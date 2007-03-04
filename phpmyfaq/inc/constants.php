@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: constants.php,v 1.28 2007-02-24 07:33:36 thorstenr Exp $
+* $Id: constants.php,v 1.29 2007-03-04 10:03:15 thorstenr Exp $
 *
 * Constants for phpMyFAQ
 *
@@ -148,11 +148,11 @@ $denyUploadExts = array();
  * @var  array
  */
 $supported_databases = array(
-    'mysql'     => array('4.3.0', 'MySQL 4.x / 5.x'),
+    'mysql'     => array('4.3.0', 'MySQL 4.x / 5.x (PHP4 / PHP5)'),
     'pgsql'     => array('4.3.0', 'PostgreSQL 7.x / 8.x'),
     'sybase'    => array('4.3.0', 'Sybase'),
     'mssql'     => array('4.3.0', 'MS SQL Server 2000 / 2005'),
-    'mysqli'    => array('5.0.0', 'MySQL 4.1 / 5.x'),
+    'mysqli'    => array('5.0.0', 'MySQL 4.1 / 5.x (PHP5)'),
     'sqlite'    => array('5.0.0', 'SQLite'),
     'ibm_db2'   => array('4.3.0', 'IBM DB2 Universal Database 8.2 / 9.1'),
     'oracle'    => array('5.0.0', 'Oracle 8i and later (experimental)'),
