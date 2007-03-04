@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Comment.php,v 1.8 2007-02-11 20:38:08 thorstenr Exp $
+ * $Id: Comment.php,v 1.9 2007-03-04 13:27:16 thorstenr Exp $
  *
  * The main Comment class
  *
@@ -224,7 +224,7 @@ class PMF_Comment
         if (!$this->db->query($query)) {
             return false;
         }
-        
+
         return true;
     }
 
@@ -251,7 +251,7 @@ class PMF_Comment
                 %sfaqcomments
             WHERE
                 id = %d
-            AND 
+            AND
             id_comment = %d',
             SQLPREFIX,
             $record_id,
@@ -263,7 +263,7 @@ class PMF_Comment
 
         return true;
     }
-    
+
     /**
      * Returns the number of comments of each FAQ record as an array
      *
@@ -275,25 +275,77 @@ class PMF_Comment
     function getNumberOfComments()
     {
         $num = array();
-        
+
         $query = sprintf("
             SELECT
                 COUNT(id) AS anz,
-                id 
-            FROM 
+                id
+            FROM
                 %sfaqcomments
             GROUP BY id
             ORDER BY id",
             SQLPREFIX);
-        
+
         $result = $this->db->query($query);
         if ($this->db->num_rows($result) > 0) {
             while ($row = $this->db->fetch_object($result)) {
                 $num[$row->id] = $row->anz;
             }
         }
-        
+
         return $num;
+    }
+
+    /**
+     * Returns all comments with their categories
+     *
+     * @param   $type
+     * @return  array
+     * @access  public
+     * @since   2007-03-04
+     * @author  Thorsten Rinne <thorsten@rinne.info>
+     */
+    function getAllComments($type = PMF_COMMENT_TYPE_FAQ)
+    {
+        $comments = array();
+
+        $query = sprintf("
+            SELECT
+                fc.id_comment AS comment_id,
+                fc.id AS record_id,
+                %s
+                fc.usr AS user,
+                fc.email AS email,
+                fc.comment AS comment,
+                fc.datum AS comment_date
+            FROM
+                %sfaqcomments fc
+            %s
+            WHERE
+                type = '%s'",
+            ($type == PMF_COMMENT_TYPE_FAQ) ? "fcg.category_id,\n" : '',
+            SQLPREFIX,
+            ($type == PMF_COMMENT_TYPE_FAQ) ? "LEFT JOIN
+                ".SQLPREFIX."faqcategoryrelations fcg
+            ON
+                fc.id = fcg.record_id\n" : '',
+            $type);
+
+        $result = $this->db->query($query);
+        if ($this->db->num_rows($result) > 0) {
+            while ($row = $this->db->fetch_object($result)) {
+                $comments[] = array(
+                    'comment_id'  => $row->comment_id,
+                    'record_id'   => $row->record_id,
+                    'category_id' => (isset($row->category_id) ? $row->category_id : null),
+                    'content'     => $row->comment,
+                    'date'        => $row->comment_date,
+                    'user'        => $row->user,
+                    'email'       => $row->email);
+            }
+        }
+
+        return $comments;
     }
 }
 // }}}
