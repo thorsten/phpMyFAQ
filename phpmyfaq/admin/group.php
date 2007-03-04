@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: group.php,v 1.18 2006-09-19 21:39:39 matteo Exp $
+* $Id: group.php,v 1.19 2007-03-04 20:33:20 thorstenr Exp $
 *
 * Displays the user managment frontend
 *
@@ -57,7 +57,7 @@ $successMessages = array(
 );
 $text = array(
     'header' => "Group Administration",
-    'selectGroup' => "Groups",
+    'selectGroup' => $PMF_LANG['ad_groups'],
     'addGroup' => $PMF_LANG['ad_group_add'], // "Add Group"
     'addGroup_confirm' => $PMF_LANG['ad_gen_save'], //"Save",
     'addGroup_cancel' => $PMF_LANG['ad_gen_cancel'], //"Cancel",
