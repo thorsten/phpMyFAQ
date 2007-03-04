@@ -1,23 +1,24 @@
 <?php
 /**
-* $Id: group.php,v 1.19 2007-03-04 20:33:20 thorstenr Exp $
-*
-* Displays the user managment frontend
-*
-* @author       Lars Tiedemann <php@larstiedemann.de>
-* @since        2005-12-15
-* @copyright    (c) 2006 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * $Id: group.php,v 1.20 2007-03-04 20:52:07 thorstenr Exp $
+ *
+ * Displays the user managment frontend
+ *
+ * @author      Lars Tiedemann <php@larstiedemann.de>
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since       2005-12-15
+ * @copyright   (c) 2006-2007 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
@@ -36,71 +37,72 @@ $memberSelectSize = 10;
 $descriptionRows = 3;
 $descriptionCols = 15;
 $defaultGroupAction = 'list';
+
 $errorMessages = array(
-    'addGroup_noName' => $PMF_LANG['ad_group_error_noName'], //"Please enter a group name. ",
-    'addGroup_db' => $PMF_LANG['ad_adus_dberr'], // "<strong>database error!</strong>"
-    'delGroup' => $PMF_LANG['ad_group_error_delete'], //"Group could not be deleted. ",
-    'delGroup_noId' => $PMF_LANG['ad_user_error_noId'], //"No ID specified. ",
-    'updateGroup' => $PMF_LANG['ad_msg_mysqlerr'], //"Due to a <strong>database error</strong>, the profile could not be saved."
-    'updateGroup_noId' => $PMF_LANG['ad_user_error_noId'], //"No ID specified. ",
-    'updateRights' => $PMF_LANG['ad_msg_mysqlerr'], //"Due to a <strong>database error</strong>, the profile could not be saved."
-    'updateRights_noId' => $PMF_LANG['ad_user_error_noId'], //"No ID  specified. ",
-    'updateMembers' => $PMF_LANG['ad_msg_mysqlerr'], //"Due to a <strong>database error</strong>, the profile could not be saved."
-    'updateMembers_noId' => $PMF_LANG['ad_user_error_noId'], //"No ID  specified. ",
-);
+    'addGroup_noName' => $PMF_LANG['ad_group_error_noName'],
+    'addGroup_db' => $PMF_LANG['ad_adus_dberr'],
+    'delGroup' => $PMF_LANG['ad_group_error_delete'],
+    'delGroup_noId' => $PMF_LANG['ad_user_error_noId'],
+    'updateGroup' => $PMF_LANG['ad_msg_mysqlerr'],
+    'updateGroup_noId' => $PMF_LANG['ad_user_error_noId'],
+    'updateRights' => $PMF_LANG['ad_msg_mysqlerr'],
+    'updateRights_noId' => $PMF_LANG['ad_user_error_noId'],
+    'updateMembers' => $PMF_LANG['ad_msg_mysqlerr'],
+    'updateMembers_noId' => $PMF_LANG['ad_user_error_noId']);
+
 $successMessages = array(
-    'addGroup' => $PMF_LANG['ad_group_suc'], //"Group <strong>successfully</strong> added.",
-    'delGroup' => $PMF_LANG['ad_group_deleted'], //"The group was successfully deleted.",
+    'addGroup' => $PMF_LANG['ad_group_suc'],
+    'delGroup' => $PMF_LANG['ad_group_deleted'],
     'updateGroup' => $PMF_LANG['ad_msg_savedsuc_1'].' <strong>%s</strong> '.$PMF_LANG['ad_msg_savedsuc_2'],
     'updateRights' => $PMF_LANG['ad_msg_savedsuc_1'].' <strong>%s</strong> '.$PMF_LANG['ad_msg_savedsuc_2'],
-    'updateMembers' => $PMF_LANG['ad_msg_savedsuc_1'].' <strong>%s</strong> '.$PMF_LANG['ad_msg_savedsuc_2'],
-);
+    'updateMembers' => $PMF_LANG['ad_msg_savedsuc_1'].' <strong>%s</strong> '.$PMF_LANG['ad_msg_savedsuc_2']);
+
 $text = array(
     'header' => "Group Administration",
     'selectGroup' => $PMF_LANG['ad_groups'],
-    'addGroup' => $PMF_LANG['ad_group_add'], // "Add Group"
-    'addGroup_confirm' => $PMF_LANG['ad_gen_save'], //"Save",
-    'addGroup_cancel' => $PMF_LANG['ad_gen_cancel'], //"Cancel",
-    'addGroup_link' => $PMF_LANG['ad_group_add_link'], // "Add Group"
-    'addGroup_name' => $PMF_LANG['ad_group_name'], // "Name: "
-    'addGroup_description' => $PMF_LANG['ad_group_description'], // "Description: "
-    'addGroup_autoJoin' => $PMF_LANG['ad_group_autoJoin'], // "Auto-join:"
-    'delGroup' => $PMF_LANG['ad_group_deleteGroup'], //"Delete Group",
-    'delGroup_button' => $PMF_LANG['ad_gen_delete'], //"Delete",
-    'delGroup_question' => $PMF_LANG['ad_group_deleteQuestion'], //"Are you sure that this group shall be deleted?",
-    'delGroup_confirm' => $PMF_LANG['ad_gen_yes'], //"Yes",
-    'delGroup_cancel' => $PMF_LANG['ad_gen_no'], //"No",
-    'changeGroup' => $PMF_LANG['ad_group_details'], // "Group Details"
-    'changeGroup_submit' => $PMF_LANG['ad_gen_save'], //"Save",
-    'changeRights' => $PMF_LANG['ad_user_rights'], // "Rights"
-    'changeRights_submit' => $PMF_LANG['ad_gen_save'], //"Save",
-    'changeRights_checkAll' => $PMF_LANG['ad_user_checkall'], //"Select All",
-    'changeRights_uncheckAll' => $PMF_LANG['ad_user_uncheckall'], //"Unselect All",
-    'groupMembership' => $PMF_LANG['ad_group_membership'], //"Group Membership",
-    'groupMembership_memberList' => $PMF_LANG['ad_group_members'], //"Members",
-    'groupMembership_userList' => $PMF_LANG['ad_user_username'], //"Registered users",
-    'addMember_button' => $PMF_LANG['ad_group_addMember'], //"Add",
-    'removeMember_button' => $PMF_LANG['ad_group_removeMember'], //"Remove",
+    'addGroup' => $PMF_LANG['ad_group_add'],
+    'addGroup_confirm' => $PMF_LANG['ad_gen_save'],
+    'addGroup_cancel' => $PMF_LANG['ad_gen_cancel'],
+    'addGroup_link' => $PMF_LANG['ad_group_add_link'],
+    'addGroup_name' => $PMF_LANG['ad_group_name'],
+    'addGroup_description' => $PMF_LANG['ad_group_description'],
+    'addGroup_autoJoin' => $PMF_LANG['ad_group_autoJoin'],
+    'delGroup' => $PMF_LANG['ad_group_deleteGroup'],
+    'delGroup_button' => $PMF_LANG['ad_gen_delete'],
+    'delGroup_question' => $PMF_LANG['ad_group_deleteQuestion'],
+    'delGroup_confirm' => $PMF_LANG['ad_gen_yes'],
+    'delGroup_cancel' => $PMF_LANG['ad_gen_no'],
+    'changeGroup' => $PMF_LANG['ad_group_details'],
+    'changeGroup_submit' => $PMF_LANG['ad_gen_save'],
+    'changeRights' => $PMF_LANG['ad_user_rights'],
+    'changeRights_submit' => $PMF_LANG['ad_gen_save'],
+    'changeRights_checkAll' => $PMF_LANG['ad_user_checkall'],
+    'changeRights_uncheckAll' => $PMF_LANG['ad_user_uncheckall'],
+    'groupMembership' => $PMF_LANG['ad_group_membership'],
+    'groupMembership_memberList' => $PMF_LANG['ad_group_members'],
+    'groupMembership_userList' => $PMF_LANG['ad_user_username'],
+    'addMember_button' => $PMF_LANG['ad_group_addMember'],
+    'removeMember_button' => $PMF_LANG['ad_group_removeMember'],
     'updateMember_submit' => $PMF_LANG['ad_gen_save'], //"Save",
-    'groupMembership_selectAll' => $PMF_LANG['ad_user_checkall'], //"Select All",
-    'groupMembership_unselectAll' => $PMF_LANG['ad_user_uncheckall'], //"Unselect All",
-);
+    'groupMembership_selectAll' => $PMF_LANG['ad_user_checkall'],
+    'groupMembership_unselectAll' => $PMF_LANG['ad_user_uncheckall']);
 
 // what shall we do?
 // actions defined by url: group_action=
 $groupAction = isset($_GET['group_action']) ? $_GET['group_action'] : $defaultGroupAction;
 // actions defined by submit button
-if (isset($_POST['group_action_deleteConfirm']))
+if (isset($_POST['group_action_deleteConfirm'])) {
     $groupAction = 'delete_confirm';
-if (isset($_POST['cancel']))
+}
+if (isset($_POST['cancel'])) {
     $groupAction = $defaultGroupAction;
-
+}
 
 // update group members
 if ($groupAction == 'update_members') {
     $message = '';
     $groupAction = $defaultGroupAction;
-    $groupId = isset($_POST['group_id']) ? $_POST['group_id'] : 0;
+    $groupId = isset($_POST['group_id']) ? (int)$_POST['group_id'] : 0;
     $groupMembers = isset($_POST['group_members']) ? $_POST['group_members'] : array();
     if ($groupId == 0) {
         $message .= '<p class="error">'.$errorMessages['updateMembers_noId'].'</p>';
@@ -111,7 +113,7 @@ if ($groupAction == 'update_members') {
             $message .= '<p class="error">'.$errorMessages['updateMembers'].'</p>';
         }
         foreach ($groupMembers as $memberId) {
-            $perm->addToGroup($memberId, $groupId);
+            $perm->addToGroup((int)$memberId, $groupId);
         }
         $message .= '<p class="success">'.sprintf($successMessages['updateMembers'], $perm->getGroupName($groupId)).'</p>';
     }
@@ -120,7 +122,7 @@ if ($groupAction == 'update_members') {
 if ($groupAction == 'update_rights') {
     $message = '';
     $groupAction = $defaultGroupAction;
-    $groupId = isset($_POST['group_id']) ? $_POST['group_id'] : 0;
+    $groupId = isset($_POST['group_id']) ? (int)$_POST['group_id'] : 0;
     if ($groupId == 0) {
         $message .= '<p class="error">'.$errorMessages['updateRights_noId'].'</p>';
     } else {
@@ -131,7 +133,7 @@ if ($groupAction == 'update_rights') {
             $message .= '<p class="error">'.$errorMessages['updateRights'].'</p>';
         }
         foreach ($groupRights as $rightId) {
-            $perm->grantGroupRight($groupId, $rightId);
+            $perm->grantGroupRight($groupId, (int)$rightId);
         }
         $message .= '<p class="success">'.sprintf($successMessages['updateRights'], $perm->getGroupName($groupId)).'</p>';
     }
@@ -140,7 +142,7 @@ if ($groupAction == 'update_rights') {
 if ($groupAction == 'update_data') {
     $message = '';
     $groupAction = $defaultGroupAction;
-    $groupId = (isset($_POST['group_id']) && $_POST['group_id'] > 0) ? $_POST['group_id'] : 0;
+    $groupId = (isset($_POST['group_id']) && $_POST['group_id'] > 0) ? (int)$_POST['group_id'] : 0;
     if ($groupId == 0) {
         $message .= '<p class="error">'.$errorMessages['updateGroup_noId'].'</p>';
     } else {
@@ -177,7 +179,7 @@ if ($groupAction == 'delete_confirm') {
         <legend><?php print $text['delGroup']; ?></legend>
         <strong><?php print $group_data['name']; ?></strong>
         <p><?php print $text['delGroup_question']; ?></p>
-        <form action ="<?php print $_SERVER['PHP_SELF']; ?>?action=group&amp;group_action=delete" method="post">
+        <form action ="?action=group&amp;group_action=delete" method="post">
             <input type="hidden" name="group_id" value="<?php print $groupId; ?>" />
             <div class="button_row">
                 <input class="reset" type="submit" name="cancel" value="<?php print $text['delGroup_cancel']; ?>" />
@@ -258,7 +260,7 @@ if ($groupAction == 'add') {
 <h2><?php print $text['header']; ?></h2>
 <div id="user_message"><?php print $message; ?></div>
 <div id="group_create">
-    <form name="group_create" action="<?php print $_SERVER['PHP_SELF']; ?>?action=group&amp;group_action=addsave" method="post">
+    <form name="group_create" action="?action=group&amp;group_action=addsave" method="post">
         <fieldset>
             <legend><?php print $text['addGroup']; ?></legend>
                 <div class="input_row">
@@ -295,8 +297,6 @@ if ($groupAction == 'list') {
 ?>
 <script type="text/javascript">
 /* <![CDATA[ */
-
-/* HTTP Request object */
 
 /* HTTP Request object */
 var groupList;
@@ -376,7 +376,6 @@ function buildGroupData(id)
     // get group with given id
     if (id == 0) {
         getValues = false;
-        //group = groups[0];
     } else {
         getValues = true;
         for (var i = 0; i < groups.length; i++) {
@@ -405,7 +404,6 @@ function buildGroupData(id)
         }
         debugMsg += 'name = ' + name;
         debugMsg += '\ndescription = ' + description;
-        //alert(debugMsg);
     }
 }
 
@@ -616,7 +614,7 @@ getGroupList();
     <div id="group_list">
         <fieldset>
             <legend><?php print $text['selectGroup']; ?></legend>
-            <form id="group_select" name="group_select" action="<?php print $_SERVER['PHP_SELF']; ?>?action=group&amp;group_action=delete_confirm" method="post">
+            <form id="group_select" name="group_select" action="?action=group&amp;group_action=delete_confirm" method="post">
                 <select class="admin" name="group_list_select" id="group_list_select" size="<?php print $groupSelectSize; ?>" onchange="groupSelect(event)" tabindex="1">
                     <option value="">select...</option>
                 </select>
@@ -655,7 +653,7 @@ getGroupList();
     <div id="group_rights">
         <fieldset>
             <legend id="group_rights_legend"><?php print $text['changeRights']; ?></legend>
-            <form id="rightsForm" action="<?php print $_SERVER['PHP_SELF']; ?>?action=group&amp;group_action=update_rights" method="post">
+            <form id="rightsForm" action="?action=group&amp;group_action=update_rights" method="post">
                 <input id="rights_group_id" type="hidden" name="group_id" value="0" />
                 <div>
                     <span class="select_all"><a href="javascript:form_checkAll('rightsForm')"><?php print $text['changeRights_checkAll']; ?></a></span>
@@ -675,7 +673,7 @@ getGroupList();
     </div> <!-- end #user_rights -->
 </div> <!-- end #user_details -->
 <div id="group_membership">
-    <form id="group_membership" name="group_membership" action="<?php print $_SERVER['PHP_SELF']; ?>?action=group&amp;group_action=update_members" method="post" onsubmit="select_selectAll('group_member_list')">
+    <form id="group_membership" name="group_membership" action="?action=group&amp;group_action=update_members" method="post" onsubmit="select_selectAll('group_member_list')">
         <input id="update_member_group_id" type="hidden" name="group_id" value="0" />
         <fieldset>
             <legend><?php print $text['groupMembership']; ?></legend>
@@ -712,5 +710,4 @@ getGroupList();
 </div> <!-- end #group_membership -->
 <div class="clear"></div>
 <?php
-} // end if ($groupAction == 'list')
-?>
+}
