@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: group.php,v 1.20 2007-03-04 20:52:07 thorstenr Exp $
+ * $Id: group.php,v 1.21 2007-03-05 19:51:13 thorstenr Exp $
  *
  * Displays the user managment frontend
  *
@@ -58,7 +58,7 @@ $successMessages = array(
     'updateMembers' => $PMF_LANG['ad_msg_savedsuc_1'].' <strong>%s</strong> '.$PMF_LANG['ad_msg_savedsuc_2']);
 
 $text = array(
-    'header' => "Group Administration",
+    'header' => $PMF_LANG["ad_menu_group_administration"],
     'selectGroup' => $PMF_LANG['ad_groups'],
     'addGroup' => $PMF_LANG['ad_group_add'],
     'addGroup_confirm' => $PMF_LANG['ad_gen_save'],
@@ -83,7 +83,7 @@ $text = array(
     'groupMembership_userList' => $PMF_LANG['ad_user_username'],
     'addMember_button' => $PMF_LANG['ad_group_addMember'],
     'removeMember_button' => $PMF_LANG['ad_group_removeMember'],
-    'updateMember_submit' => $PMF_LANG['ad_gen_save'], //"Save",
+    'updateMember_submit' => $PMF_LANG['ad_gen_save'],
     'groupMembership_selectAll' => $PMF_LANG['ad_user_checkall'],
     'groupMembership_unselectAll' => $PMF_LANG['ad_user_uncheckall']);
 
