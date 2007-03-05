@@ -1,11 +1,12 @@
 <?php
-/******************************************************************************
- * File:				language_nl.php
- * Description:		    Dutch language file
- * Authors:				René de Kat <rdkat@home.nl>
- * Date:				2004-07-09
- * Last Update:		    2004-07-28
- * Copyright:           (c) 2006 phpMyFAQ Team
+/**
+ * $Id: language_nl.php,v 1.15 2007-03-05 20:07:28 thorstenr Exp $
+ *
+ * Dutch language file
+ *
+ * @author      René de Kat <rdkat@home.nl>
+ * @since       2004-07-09
+ * @copyright   (c) 2004-2007 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -16,7 +17,7 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
- ******************************************************************************/
+ */
 
 $PMF_LANG["metaCharset"] = "iso-8859-1";
 $PMF_LANG["metaLanguage"] = "nl";
@@ -605,7 +606,7 @@ $PMF_LANG['ad_entry_record_administration'] = 'Record administratie';
 $PMF_LANG['ad_entry_changelog'] = 'Changelog';
 $PMF_LANG['ad_entry_revision'] = 'Revisie';
 $PMF_LANG['ad_changerev'] = 'Selecteer Revisie';
-$PMF_LANG['msgCaptcha'] = "Geef a.u.b. de karaters welke je leest in de afbeelding";
+$PMF_LANG['msgCaptcha'] = "Geef a.u.b. de karaKters welke je leest in de afbeelding";
 $PMF_LANG['msgSelectCategories'] = 'Zoek in ...';
 $PMF_LANG['msgAllCategories'] = '... alle categorie&euml;n';
 $PMF_LANG['ad_you_should_update'] = 'Jouw phpMyFAQ installatie is verouderd. Je moet updaten naar de laatst bechikbare versie.';
@@ -690,8 +691,8 @@ $PMF_LANG["rightsLanguage"]['addglossary'] = "Glossarium-records toevoegen";
 $PMF_LANG["rightsLanguage"]['editglossary'] = "Glossarium-records bewerken";
 $PMF_LANG["rightsLanguage"]['delglossary'] = "Glossarium-records verwijderen";
 $PMF_LANG["ad_menu_group_administration"] = "Groepenbeheer";
-$PMF_LANG['ad_user_loggedin'] = 'U bent aangemeld al';
-$PMF_LANG['ad_group_details'] = "Details van de groe";
+$PMF_LANG['ad_user_loggedin'] = 'U bent aangemeld alS';
+$PMF_LANG['ad_group_details'] = "Details van de groeP";
 $PMF_LANG['ad_group_add'] = "Groep toevoegen";
 $PMF_LANG['ad_group_add_link'] = "Groep toevoegen";
 $PMF_LANG['ad_group_name'] = "Groepnaam:";
@@ -806,4 +807,4 @@ $PMF_LANG['ad_entry_intlink'] = 'Selecteer een FAQ record om deze als link toe t
 //added 2.0.0 - 2006-10-10 by Rudi
 $PMF_LANG["ad_categ_paste2"] = "Plakken achter";
 $PMF_LANG["ad_categ_remark_move"] = "Het omwisselen van 2 categoriën is enkel mogelijk op hetzelfde level.";
-$PMF_LANG["ad_categ_remark_overview"] = "De juiste volgore van de categoriën wordt zichtbaar, als alle categoriën van de actuele taal (eerste kolom) gedefiniëerd zijn.";
+$PMF_LANG["ad_categ_remark_overview"] = "De juiste volgorde van de categoriën wordt zichtbaar, als alle categoriën van de actuele taal (eerste kolom) gedefiniëerd zijn.";
