@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.91 2007-03-04 12:14:01 thorstenr Exp $
+ * $Id: Faq.php,v 1.92 2007-03-05 20:00:16 thorstenr Exp $
  *
  * The main FAQ class
  *
@@ -1388,7 +1388,7 @@ class PMF_Faq
         $result = $this->db->query($query);
         if ($this->db->num_rows($result) > 0) {
             $row = $this->db->fetch_object($result);
-            return $row->is_visbible;
+            return $row->is_visible;
         }
         return null;
      }
