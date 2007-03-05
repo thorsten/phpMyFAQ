@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.92 2007-03-05 20:00:16 thorstenr Exp $
+ * $Id: Faq.php,v 1.93 2007-03-05 20:08:30 thorstenr Exp $
  *
  * The main FAQ class
  *
@@ -1797,7 +1797,7 @@ class PMF_Faq
             SQLPREFIX);
 
         if ($result = $this->db->query($query)) {
-            if ($row = $this->db->fetch_object($result)) {
+            while ($row = $this->db->fetch_object($result)) {
                 $questions[] = array(
                     'id'            => $row->id,
                     'user'          => $row->ask_username,
