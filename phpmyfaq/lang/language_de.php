@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.44 2007-03-04 20:33:50 thorstenr Exp $
+ * $Id: language_de.php,v 1.45 2007-03-05 19:50:48 thorstenr Exp $
  *
  * German language file
  *
@@ -707,7 +707,7 @@ $PMF_LANG['ad_group_error_delete'] = "Die Gruppe konnte nicht gelöscht werden.";
 $PMF_LANG['ad_group_deleted'] = "Die Gruppe wurde erfolgreich gelöscht.";
 $PMF_LANG['ad_group_deleteGroup'] = "Lösche Gruppe";
 $PMF_LANG['ad_group_deleteQuestion'] = "Sind Sie sicher, dass Sie diese Gruppe löschen wollen?";
-$PMF_LANG['ad_user_uncheckall'] = "Unselect All";
+$PMF_LANG['ad_user_uncheckall'] = "alle deselektieren";
 $PMF_LANG['ad_group_membership'] = "Gruppenmitgliedschaft";
 $PMF_LANG['ad_group_members'] = "Mitglieder";
 $PMF_LANG['ad_group_addMember'] = "+";
@@ -775,7 +775,7 @@ $PMF_LANG['ad_linkcheck_feedback_url-nolinks'] = 'Keine Links gefunden';
 $PMF_LANG['ad_linkcheck_feedback_url-noscript'] = 'Keine Skript-Unterstützung verfügbar';
 
 // added v2.0.0 - 2006-09-02 by Thomas
-$PMF_LANG['msg_related_articles'] = 'Related entries';
+$PMF_LANG['msg_related_articles'] = 'Verwandte Artikel';
 $LANG_CONF['numRelatedArticles'] = array(0 => "input", 1 => "Anzahl der verwandten Artikel");
 
 // added v2.0.0 - 2006-09-09 by Rudi
