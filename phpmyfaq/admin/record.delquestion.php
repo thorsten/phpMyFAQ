@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.delquestion.php,v 1.18 2007-03-03 11:06:28 thorstenr Exp $
+ * $Id: record.delquestion.php,v 1.19 2007-03-05 20:19:04 thorstenr Exp $
  *
  * Delete open questions
  *
@@ -28,15 +28,15 @@ if ($permission['delquestion']) {
 
     $category = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
 
+    $question_id = (int)$_GET['id'];
     if (isset($_GET['delete']) && $_GET['delete'] == 'yes') {
-        $question_id = (int)$_GET['id'];
         $faq->deleteQuestion($question_id);
         print $PMF_LANG['ad_entry_delsuc'];
     } else {
         if (isset($_GET['is_visible']) && $_GET['is_visible'] == 'toggle') {
             $is_visible = $faq->getVisibilityOfQuestion($question_id);
             if (!is_null($is_visible)) {
-                $faq->setVisibilityOfQuestion($question_id, $is_visible);
+                $faq->setVisibilityOfQuestion($question_id, ($is_visible == 'N' ? 'Y' : 'N'));
             }
         }
 
@@ -60,8 +60,8 @@ if ($permission['delquestion']) {
             foreach ($openquestions as $question) {
 ?>
         <tr>
-            <td class="list"><?php print makeDate($question['ask_date']); ?><br /><a href="mailto:<?php print $question['ask_usermail']; ?>"><?php print $question['ask_username']; ?></a></td>
-            <td class="list"><?php print $category->categoryName[$question['ask_rubrik']]['name'].":<br />".$question['ask_content']; ?></td>
+            <td class="list"><?php print makeDate($question['date']); ?><br /><a href="mailto:<?php print $question['email']; ?>"><?php print $question['user']; ?></a></td>
+            <td class="list"><?php print $category->categoryName[$question['category']]['name'].":<br />".$question['question']; ?></td>
             <td class="list"><a href="?action=question&amp;id=<?php print $question['id']; ?>&amp;is_visible=toggle"><?php print (('Y' == $question['is_visible']) ? $PMF_LANG['ad_gen_no'] : $PMF_LANG['ad_gen_yes']); ?>!</a><br /></td>
             <td class="list"><a href="?action=question&amp;id=<?php print $question['id']; ?>&amp;delete=yes"><?php print $PMF_LANG['ad_gen_delete']; ?>!</a><br /><a href="?action=takequestion&amp;id=<?php print $question['id']; ?>"><?php print $PMF_LANG['ad_ques_take']; ?></a></td>
         </tr>
