@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Init.php,v 1.29 2007-03-02 15:17:15 thorstenr Exp $
+ * $Id: Init.php,v 1.30 2007-03-05 20:49:03 matteo Exp $
  *
  * Some functions
  *
@@ -27,7 +27,7 @@
 // - false      debug mode disabled
 // - true       debug mode enabled
 //
-define('DEBUG', false);
+define('DEBUG', true);
 if (DEBUG) {
     error_reporting(E_ALL);
     if (defined('E_STRICT')) {
@@ -419,7 +419,7 @@ class PMF_Init
         }
 
         if (isset($_REQUEST['GLOBALS']) || isset($_FILES['GLOBALS'])) {
-            die('GLOBALS overwrite attempt detected' );
+            die('GLOBALS overwrite attempt detected.');
         }
 
         $noUnset = array('GLOBALS', '_GET', '_POST', '_COOKIE', '_REQUEST', '_SERVER', '_ENV', '_FILES');
@@ -433,7 +433,7 @@ class PMF_Init
     }
 
     /**
-     * This function removes the magic quotes if they enabled
+     * This function removes the magic quotes if they are enabled.
      *
      * @param   array
      * @return  array
@@ -442,11 +442,19 @@ class PMF_Init
      */
     function removeMagicQuotesGPC($data)
     {
+        static $recursionCounter = 0;
+        // Avoid webserver crashes. For any detail, see: http://www.php-security.org/MOPB/MOPB-02-2007.html
+        // Note: 1000 is an heuristic value, large enough to be "transparent" to PMF.
+        if ($recursionCounter > 1000) {
+            die('Deep recursion attack detected.');
+        }
+
         if (get_magic_quotes_gpc()) {
             $addedData = array();
             foreach ($data as $key => $val) {
                 $key = addslashes($key);
                 if (is_array($val)) {
+                    $recursionCounter++;
                     $addedData[$key] = PMF_Init::removeMagicQuotesGPC($val);
                 } else {
                     $addedData[$key] = $val;
@@ -546,11 +554,20 @@ class PMF_Init
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @author  Johann-Peter Hartmann <hartmann@mayflower.de>
      */
-    function removeXSSGPC($data) {
+    function removeXSSGPC($data)
+    {
+        static $recursionCounter = 0;
+        // Avoid webserver crashes. For any detail, see: http://www.php-security.org/MOPB/MOPB-02-2007.html
+        // Note: 1000 is an heuristic value, large enough to be "transparent" to PMF.
+        if ($recursionCounter > 1000) {
+            die('Deep recursion attack detected.');
+        }
+
         $cleanData = array();
         foreach ($data as $key => $val) {
             $key = PMF_Init::basicXSSClean($key);
             if (is_array($val)) {
+                $recursionCounter++;
                 $cleanData[$key] = PMF_Init::removeXSSGPC($val);
             } else {
                 $cleanData[$key] = PMF_Init::basicXSSClean($val);
