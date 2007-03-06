@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: index.php,v 1.89 2007-02-23 16:52:41 thorstenr Exp $
+ * $Id: index.php,v 1.90 2007-03-06 22:05:15 matteo Exp $
  *
  * This is the main public frontend page of phpMyFAQ. It detects the browser's
  * language, gets and sets all cookie, post and get informations and includes
@@ -333,6 +333,7 @@ $usersOnLine = getUsersOnline();
 $totUsersOnLine = $usersOnLine[0] + $usersOnLine[1];
 $main_template_vars = array(
     'title'             => $faqconfig->get('title').$title,
+    'baseHref'          => PMF_Link::getSystemUri('index.php'),
     'version'           => $faqconfig->get('version'),
     'header'            => str_replace('"', '', $faqconfig->get('title')),
     'metaTitle'         => str_replace('"', '', $faqconfig->get('title')),
