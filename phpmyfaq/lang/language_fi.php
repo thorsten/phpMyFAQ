@@ -1,11 +1,13 @@
 <?php
-/******************************************************************************
- * File:                    language_fi.php
- * Description:             Finnish language file
- * Authors:                 Juha Tuomala <tuomala@iki.fi>
- * Date:                    2004-02-19
- * Last Update:	            2004-08-21
- * Copyright:               (c) 2006 phpMyFAQ Team
+/**
+ * $Id: language_fi.php,v 1.9 2007-03-06 21:01:49 thorstenr Exp $
+ *
+ * Finnish language file
+ *
+ * @author      Juha Tuomala <tuomala@iki.fi>
+ * @author      Matti Kröger <matti.kroger@hotmail.com>
+ * @since       2004-02-19
+ * @copyright   (c) 2006-2007 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -16,7 +18,7 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
- ******************************************************************************/
+ */
 
 $PMF_LANG["metaCharset"] = "iso-8859-1";
 $PMF_LANG["metaLanguage"] = "fi";
@@ -68,7 +70,7 @@ $PMF_LANG["msgWriteComment"] = "kommentoi tätä tietuetta";
 $PMF_LANG["msgShowCategory"] = "Sisällön näkymä: ";
 $PMF_LANG["msgCommentBy"] = "Kommentoija ";
 $PMF_LANG["msgCommentHeader"] = "Kommentti tästä tietueesta";
-$PMF_LANG["msgYourComment "] = "Sinun kommentit:";
+$PMF_LANG["msgYourComment"] = "Sinun kommentit:";
 $PMF_LANG["msgCommentThanks"] = "Kiitoksia paljon kommenteistasi!";
 $PMF_LANG["msgSeeXMLFile"] = "avaa XML-tiedosto";
 $PMF_LANG["msgSend2Friend"] = "Lähetä tuttavalle";
@@ -91,9 +93,9 @@ $PMF_LANG["msgSearchAmounts"] = " hakutulokset";
 $PMF_LANG["msgSearchCategory"] = "Kategoria: ";
 $PMF_LANG["msgSearchContent"] = "Sisältö: ";
 
-// new Content
+/* new Content - Correction to msgNewContentAddon & msgNoQuestionsAvailable msg by Matti Kröger*/
 $PMF_LANG["msgNewContentHeader"] = "FAQ ehdotus";
-$PMF_LANG["msgNewContentAddon"] = "Ehdotustasi ei tulla julkaisemaan heti, vaan kunnes ylläpitäjä on sen t will be released by the administrator upon receipt. Vaadittavat kentät ovat <strong>Nimesi</strong>, <strong>sähköposti osoitteesi</strong>, <strong>kategoria</strong>, <strong>otsikko</strong> and <strong>kysymyksesi</strong>. Ole ystävällinen ja eroita avainsanat vain välilyönnillä.";
+$PMF_LANG["msgNewContentAddon"] = "Ehdotustasi ei tulla julkaisemaan heti, vaan vasta sitten kun ylläpitäjä on sen tarkistanut. Vaadittavat kentät ovat <strong>Nimesi</strong>, <strong>sähköposti osoitteesi</strong>, <strong>kategoria</strong>, <strong>otsikko</strong> and <strong>kysymyksesi</strong>. Ole ystävällinen ja eroita avainsanat vain välilyönnillä.";
 $PMF_LANG["msgNewContentName"] = "Nimesi:";
 $PMF_LANG["msgNewContentMail"] = "Sähköposti osoitteesi:";
 $PMF_LANG["msgNewContentCategory"] = "Valittava kategoria?";
@@ -104,7 +106,7 @@ $PMF_LANG["msgNewContentLink"] = "Linkki tähän tietueeseen";
 $PMF_LANG["msgNewContentSubmit"] = "tallenna";
 $PMF_LANG["msgInfo"] = "Lisää tietoa: ";
 $PMF_LANG["msgNewContentThanks"] = "Kiitoksia ehdotuksestasi!";
-$PMF_LANG["msgNoQuestionsAvailable"] = "Tällä hetkellä ei ole avoimia kysmyksiä.";
+$PMF_LANG["msgNoQuestionsAvailable"] = "Tällä hetkellä ei ole avoimia kysymyksiä.";
 
 // ask Question
 $PMF_LANG["msgNewQuestion"] = "Kysy kysymyksesi alhaalla:";
@@ -123,13 +125,13 @@ $PMF_LANG["msgHelpText"] = "<p>FAQ:n (<strong>F</strong>requently <strong>A</str
 $PMF_LANG["msgContactEMail"] = "sähköposti ylläpitäjälle:";
 $PMF_LANG["msgMessage"] = "Viestisi:";
 
-// Startseite
+// Startseite - Correction to msgLatestArticles msg by Matti Kröger
 $PMF_LANG["msgNews"] = " Uutiset";
 $PMF_LANG["msgTopTen"] = "Kymmenen suosituinta";
 $PMF_LANG["msgHomeThereAre"] = "Tällä hetkellä  ";
 $PMF_LANG["msgHomeArticlesOnline"] = " tietuetta aktiivisena";
 $PMF_LANG["msgNoNews"] = "Hyvät uutiset ovat, että ei ole uutisia.";
-$PMF_LANG["msgLatestArticles"] = "Viisi yleisintä kysymystä:";
+$PMF_LANG["msgLatestArticles"] = "Viisi uusinta kysymystä:"; 
 
 // E-Mailbenachrichtigung
 $PMF_LANG["msgMailThanks"] = "Monet kiitokset FAQ ehdotuksestasi.";
@@ -318,12 +320,12 @@ $PMF_LANG["ad_passwd_suc"] = "Salasana vaihdettu onnistuneesti.";
 $PMF_LANG["ad_passwd_remark"] = "<strong>HUOMIO:</strong><br />Keksi täytyy tallentaa uudelleen!";
 $PMF_LANG["ad_passwd_fail"] = "Vanha salasana <strong>täytyy</strong> syöttää oikein ja kummankin uuden tulee <strong>vastata</strong> toisiaan.";
 
-// Adduser
+// Adduser - Correction to ad_adus_suc msg by Matti Kröger
 $PMF_LANG["ad_adus_adduser"] = "Lisää käyttäjä";
 $PMF_LANG["ad_adus_name"] = "Nimi:";
 $PMF_LANG["ad_adus_password"] = "Salasana:";
 $PMF_LANG["ad_adus_add"] = "Lisää käyttäjä";
-$PMF_LANG["ad_adus_suc"] = "Käyttäjä <strong>onnistuneesti</strong> lisätty.";
+$PMF_LANG["ad_adus_suc"] = "Käyttäjä lisätty <strong>onnistuneesti</strong>.";
 $PMF_LANG["ad_adus_edit"] = "Muokkaa profiilia";
 $PMF_LANG["ad_adus_dberr"] = "<strong>tietokanta virhe!</strong>";
 $PMF_LANG["ad_adus_exerr"] = "Käyttäjätunnus jo <strong>olemassa</strong>.";
@@ -352,8 +354,8 @@ $PMF_LANG["ad_sess_ai_sb"] = "Haetut merkkijonot:";
 $PMF_LANG["ad_sess_ai_sid"] = "Istunnon ID:";
 $PMF_LANG["ad_sess_back"] = "Takaisin";
 
-// Statistik
-$PMF_LANG["ad_rs"] = "Arvostelu Statistiikkas";
+// Statistik - Correction to ad_rs msg by Matti Kröger
+$PMF_LANG["ad_rs"] = "Arvostelu Statistiikat";
 $PMF_LANG["ad_rs_rating_1"] = "Tietueelle ";
 $PMF_LANG["ad_rs_rating_2"] = "käyttäjät arvostelevat:";
 $PMF_LANG["ad_rs_red"] = "Punainen";
@@ -478,7 +480,7 @@ $PMF_LANG["err_NotAuth"] = "<strong>Et ole oikeutettu.</strong>";
 $PMF_LANG["msgPreviusPage"] = "edellinen sivu";
 $PMF_LANG["msgNextPage"] = "seuraava sivu";
 $PMF_LANG["msgPageDoublePoint"] = "Sivu: ";
-$PMF_LANG["msgMainCategory"] = "Pää kategoria";
+$PMF_LANG["msgMainCategory"] = "Pääkategoria";
 
 // Added v1.2.4 - 30.01.2003 - Thorsten
 $PMF_LANG["ad_passwdsuc"] = "Salasanasi on vaihdettu.";
@@ -507,28 +509,28 @@ $PMF_LANG["ad_export_latest"] = "Viiden viimeisimmän RSS-lähde";
 $PMF_LANG["ad_export_pdf"] = "PDF-kooste kaikista tietueista";
 $PMF_LANG["ad_export_generate"] = "luo RSS-lähde";
 
-$PMF_LANG["rightsLanguage"]['adduser'] = "lisää käyttäjä";
-$PMF_LANG["rightsLanguage"]['edituser'] = "muokkaa käyttäjää";
-$PMF_LANG["rightsLanguage"]['deluser'] = "tuhoa käyttäjä";
-$PMF_LANG["rightsLanguage"]['addbt'] = "lisää tietue";
-$PMF_LANG["rightsLanguage"]['editbt'] = "muokkaa tietuetta";
-$PMF_LANG["rightsLanguage"]['delbt'] = "tuhoa tietue";
-$PMF_LANG["rightsLanguage"]['viewlog'] = "selaa lokia";
-$PMF_LANG["rightsLanguage"]['adminlog'] = "selaa admin lokia";
-$PMF_LANG["rightsLanguage"]['delcomment'] = "tuhoa kommentti";
-$PMF_LANG["rightsLanguage"]['addnews'] = "lisää uutinen";
-$PMF_LANG["rightsLanguage"]['editnews'] = "muokkaa uutisia";
-$PMF_LANG["rightsLanguage"]['delnews'] = "tuhoa uutinen";
-$PMF_LANG["rightsLanguage"]['addcateg'] = "lisää kategoria";
-$PMF_LANG["rightsLanguage"]['editcateg'] = "muokkaa kategoriaa";
-$PMF_LANG["rightsLanguage"]['delcateg'] = "tuhoa kategoria";
-$PMF_LANG["rightsLanguage"]['passwd'] = "vaihda salasana";
-$PMF_LANG["rightsLanguage"]['editconfig'] = "muokkaa asetuksia";
-$PMF_LANG["rightsLanguage"]['addatt'] = "lisää liitteitä";
-$PMF_LANG["rightsLanguage"]['delatt'] = "tuhoa liitteitä";
-$PMF_LANG["rightsLanguage"]['backup'] = "luo varmuuskopio";
-$PMF_LANG["rightsLanguage"]['restore'] = "palauta varmuuskopio";
-$PMF_LANG["rightsLanguage"]['delquestion'] = "tuhoa avoimia kysymyksiä";
+$PMF_LANG["rightsLanguage"][0] = "lisää käyttäjä";
+$PMF_LANG["rightsLanguage"][1] = "muokkaa käyttäjää";
+$PMF_LANG["rightsLanguage"][2] = "tuhoa käyttäjä";
+$PMF_LANG["rightsLanguage"][3] = "lisää tietue";
+$PMF_LANG["rightsLanguage"][4] = "muokkaa tietuetta";
+$PMF_LANG["rightsLanguage"][5] = "tuhoa tietue";
+$PMF_LANG["rightsLanguage"][6] = "selaa lokia";
+$PMF_LANG["rightsLanguage"][7] = "selaa admin lokia";
+$PMF_LANG["rightsLanguage"][8] = "tuhoa kommentti";
+$PMF_LANG["rightsLanguage"][9] = "lisää uutinen";
+$PMF_LANG["rightsLanguage"][10] = "muokkaa uutisia";
+$PMF_LANG["rightsLanguage"][11] = "tuhoa uutinen";
+$PMF_LANG["rightsLanguage"][12] = "lisää kategoria";
+$PMF_LANG["rightsLanguage"][13] = "muokkaa kategoriaa";
+$PMF_LANG["rightsLanguage"][14] = "tuhoa kategoria";
+$PMF_LANG["rightsLanguage"][15] = "vaihda salasana";
+$PMF_LANG["rightsLanguage"][16] = "muokkaa asetuksia";
+$PMF_LANG["rightsLanguage"][17] = "lisää liitteitä";
+$PMF_LANG["rightsLanguage"][18] = "tuhoa liitteitä";
+$PMF_LANG["rightsLanguage"][19] = "luo varmuuskopio";
+$PMF_LANG["rightsLanguage"][20] = "palauta varmuuskopio";
+$PMF_LANG["rightsLanguage"][21] = "tuhoa avoimia kysymyksiä";
 
 $PMF_LANG["msgAttachedFiles"] = "liitetyt tiedostot:";
 
@@ -547,13 +549,13 @@ $PMF_LANG["err_SaveQuestion"] = "Vaadittavat kentät ovat <strong>nimesi</strong>
 $PMF_LANG["ad_entry_fontcolor"] = "Tekstin väri: ";
 $PMF_LANG["ad_entry_fontsize"] = "Tekstin koko: ";
 
-// added v1.4.0 - 2003-12-04 by Thorsten / Mathias
+/* added v1.4.0 - 2003-12-04 by Thorsten / Mathias - Translation of metaKeywords, mod_rewrite & ldap_support msg by Matti Kröger*/
 $LANG_CONF["language"] = array(0 => "select", 1 => "Kieli-Tiedosto");
 $LANG_CONF["detection"] = array(0 => "checkbox", 1 => "Salli automaattinen sisällön kätteleminen");
 $LANG_CONF["title"] = array(0 => "input", 1 => "FAQ Otsikko");
 $LANG_CONF["version"] = array(0 => "print", 1 => "FAQ Versio");
 $LANG_CONF["metaDescription"] = array(0 => "input", 1 => "Sivun Kuvaus");
-$LANG_CONF["metaKeywords"] = array(0 => "input", 1 => "Keywords for Spiders");
+$LANG_CONF["metaKeywords"] = array(0 => "input", 1 => "Avainsanat hakukoneille");
 $LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "Julkaisijan nimi");
 $LANG_CONF["adminmail"] = array(0 => "input", 1 => "Ylläpitäjän sähköposti osoite");
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Yhteystiedot");
@@ -567,28 +569,76 @@ $LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "Haluatko, että admin.php:ss
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Näytettyjen tietueiden määrä per sivu");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Uutisten määrä");
 $LANG_CONF["bannedIP"] = array(0 => "area", 1 => "Estä käyttö näistä IP-osoitteista");
-$LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Activate mod_rewrite support? (default: disabled)");
-$LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "Do you want to enable LDAP support? (default: disabled)");
+$LANG_CONF["parse_php"] = array(0 => "checkbox", 1 => "Should the template engine parse PHP code? (oletus: ei käytössä)");
+$LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Aktivoi mod_rewrite tuki? (oletus: ei käytössä)");
+$LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "Haluatko laittaa LDAP tuen päälle(enabled)? (oletus: ei käytössä)");
 
+/*Correction to ad_categ_desc & ad_categ_paste_error msg by Matti Kröger*/
 $PMF_LANG["ad_categ_new_main_cat"] = "uutena pää-kategoriana";
-$PMF_LANG["ad_categ_paste_error"] = "Tämän kategorian siiro ei ole mahdollista.";
+$PMF_LANG["ad_categ_paste_error"] = "Tämän kategorian siirto ei ole mahdollista.";
 $PMF_LANG["ad_categ_move"] = "siirrä kategoriaa";
 $PMF_LANG["ad_categ_lang"] = "Kieli";
-$PMF_LANG["ad_categ_desc"] = "Kuvauas";
+$PMF_LANG["ad_categ_desc"] = "Kuvaus";
 $PMF_LANG["ad_categ_change"] = "Vaihda kanssa ";
 
+//Correction to lostpwd_mail_okay msg by Matti Kröger
 $PMF_LANG["lostPassword"] = "Unohtuiko salasana? Klikkaa tästä.";
 $PMF_LANG["lostpwd_err_1"] = "Virhe: Käyttäjää ja sähköposti osoitetta ei löydy.";
 $PMF_LANG["lostpwd_err_2"] = "Virhe: Väärät syötteet!";
 $PMF_LANG["lostpwd_text_1"] = "Kiitokset käyttöoikeuksesi tietojen pyytämisestä.";
 $PMF_LANG["lostpwd_text_2"] = "Ole hyvä ja aseta uusi henkilökohtainen salasanasi FAQ:n ylläptio osiolle.";
-$PMF_LANG["lostpwd_mail_okay"] = "Sähöposti on lähetetty.";
+$PMF_LANG["lostpwd_mail_okay"] = "Sähköposti on lähetetty.";
 
 $PMF_LANG["ad_xmlrpc_button"] = "Saa viimeisin phpMyFAQ versio numero webistä";
 $PMF_LANG["ad_xmlrpc_latest"] = "Viimeisin saatavilla oleva versio on";
 
-// added v1.5.0 - 2005-07-31 by Thorsten
-$PMF_LANG['ad_categ_select'] = 'Select category language';
+/* added v1.5.0 - 2005-07-31 by Thorsten - Translation of ad_categ_select msg by Matti Kröger*/
+$PMF_LANG['ad_categ_select'] = 'Valitse kategorian kieli';
 
-// added v1.5.1 - 2005-09-06 by Thorsten
-$PMF_LANG['msgSitemap'] = 'Sitemap';
+/* added v1.5.1 - 2005-09-06 by Thorsten - Translation of msgSitemap msg by Matti Kröger*/
+$PMF_LANG['msgSitemap'] = 'Sivukartta';
+
+// added v1.5.2 - 2005-09-23 by Lars - Translation to Finnish by Matti Kröger
+$PMF_LANG['err_inactiveArticle'] = 'Tämä artikkeli on päivityksen alaisena ja sitä ei voida näyttää tällä hetkellä';
+$PMF_LANG['msgArticleCategories'] = 'Kategoriat tälle artikkelille';
+
+/* added v1.5.3 - 2005-10-04 by Thorsten and Periklis - Translation to Finnish by Matti Kröger*/
+$PMF_LANG['ad_menu_searchplugin'] = 'Firefox haku -lisäosa';
+$PMF_LANG['ad_search_plugin_install'] = 'Asenna Firefox haku -lisäosa';
+$PMF_LANG['ad_search_plugin_title'] = 'Luo Firefoxin haun lisäosa';
+$PMF_LANG['ad_search_plugin_ttitle'] = 'Otsikko Firefoxin hakukentälle';
+$PMF_LANG['ad_search_plugin_tdesc'] = 'Kuvaus';
+$PMF_LANG['ad_search_plugin_create'] = 'Luo Firefoxin haun lisäosa';
+$PMF_LANG['ad_search_plugin_success'] = 'Mozilla Firefox haku -lisäosa luotu onnistuneesti!';
+
+/* added v1.6.0 - 2006-02-02 by Thorsten - Translation to Finnish by Matti Kröger*/
+$PMF_LANG['ad_entry_solution_id'] = 'Ainutkertainen ratkaisu ID';
+$PMF_LANG['ad_entry_faq_record'] = 'FAQ tietue';
+$PMF_LANG['ad_entry_new_revision'] = 'Luo uusi tarkistettu versio, revisio?';
+$PMF_LANG['ad_entry_record_administration'] = 'Tietueen ylläpito';
+$PMF_LANG['ad_entry_changelog'] = 'Muutosrekisteri';
+$PMF_LANG['ad_entry_revision'] = 'Revisio';
+$PMF_LANG['ad_changerev'] = 'Valitse revisio';
+$PMF_LANG['msgCaptcha'] = 'Kirjoita merkit kuvassa'; 
+$PMF_LANG['msgSelectCategories'] = 'Etsi...';
+$PMF_LANG['msgAllCategories'] = '... kaikissa kategorioissa';
+$PMF_LANG['ad_you_should_update'] = 'Teidän phpMyFAQ-asennuksenne on vanhentunut. Teidän tulisi päivittää uusimpaan versioon';
+$PMF_LANG['msgAdvancedSearch'] = 'Tarkennettu haku';
+
+/* added v1.6.1 - 2006-04-25 by Matteo and Thorsten - Translation to Finnish by Matti Kröger*/
+$PMF_LANG['spamControlCenter'] = 'Roskapostin hallinta keskus';
+$LANG_CONF["spamEnableSafeEmail"] = array(0 => "checkbox", 1 => "Tulosta käyttäjän email turvallisessa muodossa (oletus: aktiivinen).");
+$LANG_CONF["spamCheckBannedWords"] = array(0 => "checkbox", 1 => "Tarkista julkaistavien lomakkeiden sisältö kiellettyjen sanojen listaan (oletus: aktiivinen).");
+$LANG_CONF["spamEnableCatpchaCode"] = array(0 => "checkbox", 1 => "Käytä captcha koodia julkisten lomakkeiden t&#228;ytön yhteydessä varmistamaan henkilön aitous (oletus: aktiivinen).");
+$PMF_LANG['ad_firefoxsearch_plugin_title'] = 'Luo Firefoxin haun lisäosa';
+$PMF_LANG['ad_msiesearch_plugin_install'] = 'Asenna Microsoft Internet Explorer 7 haun lisäosa';
+$PMF_LANG['ad_msiesearch_plugin_title'] = 'Luo Microsoft Internet Explorer 7 haun lisäosa';
+$PMF_LANG['ad_msiesearch_plugin_ttitle'] = 'Otsikko MSIE 7 hakukentälle:';
+$PMF_LANG['ad_msiesearch_plugin_create'] = 'Luo Microsoft Internet Explorer 7 haun lisäosa.';
+$PMF_LANG['ad_msiesearch_plugin_success'] = 'Microsoft Internet Explorer 7 haun lisäosa luotiin onnistuneesti!';
+$PMF_LANG['ad_session_expiring'] = 'Istuntosi er&#228;&#228;ntyy %d minuutin p&#228;&#228;st&#228;: haluatko kuitenkin jatkaa ty&#246;skentely&#228;?';
+
+// added v1.6.2 - 2006-06-13 by Matteo
+$PMF_LANG['ad_stat_management'] = 'Istuntojen hallinta';
+$PMF_LANG['ad_stat_choose'] = 'Valitse kuukaus';
+$PMF_LANG['ad_stat_delete'] = 'Tuhoa valitut istunnot välittömästi';
