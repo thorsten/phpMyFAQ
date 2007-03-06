@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: cron.verifyurls.php,v 1.7 2007-02-26 23:38:46 matteo Exp $
+ * $Id: cron.verifyurls.php,v 1.8 2007-03-06 21:13:05 thorstenr Exp $
  *
  * Performs an Automatic Link Verification over all the faq records
  *
@@ -9,8 +9,9 @@
  * b. using a Web Hit to this file
  *
  * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since       2006-09-17
- * @copyright   (c) 2006 phpMyFAQ Team
+ * @copyright   (c) 2006-2007 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -29,7 +30,6 @@
  * @var const   en
  */
 define('LANGCODE', 'en');
-
 
 // Do not change anything below this line!
 define('PMF_ROOT_DIR', dirname(__FILE__));
@@ -61,24 +61,16 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
     }
 
     require_once(PMF_ROOT_DIR.'/inc/Linkverifier.php');
+    require_once(PMF_ROOT_DIR.'/inc/Faq.php');
     $oLnk = new PMF_Linkverifier($db);
-    $_records = array();
+    $faq = new PMF_Faq($db, LANGCODE);
     $totStart = pmf_microtime_float();
 
     // Read the data directly from the faqdata table (all faq records in all languages)
     $start = pmf_microtime_float();
     $output .= ($isRequestedByWebLocalhost ? '' : "\n");
     $output .= 'Extracting faq records...';
-    $_result = $db->query('SELECT id, solution_id, revision_id, lang, thema, content FROM '.SQLPREFIX.'faqdata ORDER BY id');
-    while ($row = $db->fetch_object($_result)) {
-        $_records[] = array('id'            => $row->id,
-                            'solution_id'   => $row->solution_id,
-                            'revision_id'   => $row->revision_id,
-                            'lang'          => $row->lang,
-                            'title'         => $row->thema,
-                            'content'       => $row->content
-                            );
-    }
+    $_records = $faq->getAllRecords();
     $tot = count($_records);
     $end = pmf_microtime_float();
     $output .= ' #'.$tot.', done in '.round($end - $start, 4).' sec.'.($isRequestedByWebLocalhost ? '' : "\n");;
@@ -132,4 +124,3 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
 // Disconnect from database
 //
 $db->dbclose();
-?>
