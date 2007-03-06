@@ -21,7 +21,11 @@
 global $Config ;
 
 // SECURITY: You must explicitelly enable this "connector". (Set it to "true").
-$Config['Enabled'] = true ;
+/*** Start PMF custom code ***/
+// $Id: config.php,v 1.5 2007-03-06 23:17:24 matteo Exp $
+
+$Config['Enabled'] = isset($permission['addatt']) ? $permission['addatt'] : false;
+/**** End PMF custom code ****/
 
 // Path to user files relative to the document root.
 $Config['UserFilesPath'] = str_replace('/admin/editor/filemanager/connectors/php/connector.php', '', $_SERVER['PHP_SELF']).'/images/';

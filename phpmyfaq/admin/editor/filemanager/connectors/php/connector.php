@@ -1,4 +1,4 @@
-<?php 
+<?php
 /*
  * FCKeditor - The text editor for internet
  * Copyright (C) 2003-2005 Frederico Caldeira Knabben
@@ -17,6 +17,41 @@
  * File Authors:
  * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
  */
+
+/*** Start PMF custom code ***/
+// $Id: connector.php,v 1.2 2007-03-06 23:17:24 matteo Exp $
+
+//
+// Prepend and start the PHP session
+//
+$pmfIncludeDir = dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))));
+require_once($pmfIncludeDir.'/inc/Init.php');
+require_once($pmfIncludeDir.'/inc/PMF_User/CurrentUser.php');
+
+PMF_Init::cleanRequest();
+session_name('pmf_auth_'.$faqconfig->get('phpMyFAQToken'));
+session_start();
+
+//
+// Get current user rights
+//
+$permission = array();
+$user = PMF_CurrentUser::getFromSession($faqconfig->get('ipcheck'));
+
+if ($user) {
+    // read all rights, set them FALSE
+    $allRights = $user->perm->getAllRightsData();
+    foreach ($allRights as $right) {
+        $permission[$right['name']] = false;
+    }
+    // check user rights, set them TRUE
+    $allUserRights = $user->perm->getAllUserRights($user->getUserId());
+    foreach ($allRights as $right) {
+        if (in_array($right['right_id'], $allUserRights))
+            $permission[$right['name']] = true;
+    }
+}
+/**** End PMF custom code ****/
 
 include('config.php') ;
 include('util.php') ;
