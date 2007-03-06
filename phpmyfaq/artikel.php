@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: artikel.php,v 1.71 2007-03-04 20:55:47 thorstenr Exp $
+ * $Id: artikel.php,v 1.72 2007-03-06 18:30:10 thorstenr Exp $
  *
  * Shows the page with the FAQ record and - when available - the user
  * comments
@@ -196,7 +196,7 @@ if (isset($permission['editbt'])) {
         PMF_Link::getSystemRelativeUri('index.php'),
         $id,
         $lang,
-        $PMF_LANG['ad_entry_edit_1'].$PMF_LANG['ad_entry_edit_2']);
+        $PMF_LANG['ad_entry_edit_1'].' '.$PMF_LANG['ad_entry_edit_2']);
 }
 
 // Is the faq expired?
