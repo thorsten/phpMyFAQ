@@ -1,12 +1,12 @@
 <?php
 /**
-* $Id: record.delete.php,v 1.13 2006-12-17 19:37:12 johannes Exp $
+* $Id: record.delete.php,v 1.14 2007-03-07 21:01:30 matteo Exp $
 *
 * Deletes a record
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2003-02-23
-* @copyright    (c) 2001-2006 phpMyFAQ Team
+* @copyright    (c) 2001-2007 phpMyFAQ Team
 * 
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -29,28 +29,28 @@ $_REQUEST["id"] = (int)$_REQUEST["id"];
 
 print "<h2>".$PMF_LANG["ad_entry_aor"]."</h2>\n";
 if ($permission["delbt"]) {
-	
+    
     if ($_REQUEST["subm"] == $PMF_LANG["ad_gen_yes"]) {
-		// "yes" -> delete it
+        // "yes" -> delete it
         $record_id   = (int)$_REQUEST['id'];
         $record_lang = $db->escape_string($_REQUEST['language']);
-		adminlog("Beitragdel, ".$record_id);
-		if (@is_dir(PMF_ROOT_DIR."/attachments/".$record_id."/")) {
-			$do = dir(PMF_ROOT_DIR."/attachments/".$record_id."/");
-			while ($dat = $do->read()) {
-				if ($dat != "." && $dat != "..") {
-					unlink(PMF_ROOT_DIR."/attachments/".$record_id."/".$dat);
-				}
-			}
-			rmdir (PMF_ROOT_DIR."/attachments/".$record_id."/");
-		}
-		$faq->deleteRecord($record_id, $record_lang);
-		print "<p>".$PMF_LANG["ad_entry_delsuc"]."</p>\n";
-	}
-	
+        adminlog("Beitragdel, ".$record_id);
+        if (@is_dir(PMF_ROOT_DIR."/attachments/".$record_id."/")) {
+            $do = dir(PMF_ROOT_DIR."/attachments/".$record_id."/");
+            while ($dat = $do->read()) {
+                if ($dat != "." && $dat != "..") {
+                    unlink(PMF_ROOT_DIR."/attachments/".$record_id."/".$dat);
+                }
+            }
+            rmdir (PMF_ROOT_DIR."/attachments/".$record_id."/");
+        }
+        $faq->deleteRecord($record_id, $record_lang);
+        print "<p>".$PMF_LANG["ad_entry_delsuc"]."</p>\n";
+    }
+    
     if ($_REQUEST["subm"] == $PMF_LANG["ad_gen_no"]) {
-		print "<p>".$PMF_LANG["ad_entry_delfail"]."<br />&nbsp;<br /><a href=\"javascript:history.back()\">".$PMF_LANG["ad_entry_back"]."</p></a>\n";
-	}
+        print "<p>".$PMF_LANG["ad_entry_delfail"]."<br />&nbsp;<br /><a href=\"javascript:history.back()\">".$PMF_LANG["ad_entry_back"]."</p></a>\n";
+    }
     
     print "<p><img src=\"images/arrow.gif\" width=\"11\" height=\"11\" alt=\"\" border=\"0\"> <a href=\"".$_SERVER["PHP_SELF"].$linkext."&amp;action=view\">".$PMF_LANG["ad_entry_aor"]."</a></p>\n";
 

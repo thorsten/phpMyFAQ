@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.show.php,v 1.42 2007-03-04 12:33:31 thorstenr Exp $
+ * $Id: record.show.php,v 1.43 2007-03-07 21:01:30 matteo Exp $
  *
  * Shows the list of records ordered by categories
  *
