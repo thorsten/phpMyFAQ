@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: cron.verifyurls.php,v 1.8 2007-03-06 21:13:05 thorstenr Exp $
+ * $Id: cron.verifyurls.php,v 1.9 2007-03-07 20:25:48 matteo Exp $
  *
  * Performs an Automatic Link Verification over all the faq records
  *
@@ -70,7 +70,8 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
     $start = pmf_microtime_float();
     $output .= ($isRequestedByWebLocalhost ? '' : "\n");
     $output .= 'Extracting faq records...';
-    $_records = $faq->getAllRecords();
+    $faq->getAllRecords();
+    $_records = $faq->faqRecords;
     $tot = count($_records);
     $end = pmf_microtime_float();
     $output .= ' #'.$tot.', done in '.round($end - $start, 4).' sec.'.($isRequestedByWebLocalhost ? '' : "\n");;
