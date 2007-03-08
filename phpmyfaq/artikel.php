@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: artikel.php,v 1.72 2007-03-06 18:30:10 thorstenr Exp $
+ * $Id: artikel.php,v 1.73 2007-03-08 21:08:04 matteo Exp $
  *
  * Shows the page with the FAQ record and - when available - the user
  * comments
@@ -249,6 +249,15 @@ $faqPopularity = $currVisits.'/'.(int)$percentage.'%';
 require_once('inc/Relation.php');
 $relevant = new PMF_Relation($db, $LANGCODE);
 
+$translationForm = '';
+if (count($arrLanguage) < count(getAvailableLanguages())) {
+    $translationUrl = sprintf(PMF_Link::getSystemRelativeUri('index.php').'index.php?%saction=translate&amp;cat=%s&amp;id=%d&amp;srclang=%s', $sids, $currentCategory, $id, $lang);
+    $translationForm = '
+        <form action="'.$translationUrl.'" method="post" style="display: inline;">
+            <img src="images/translate.gif" alt="'.$PMF_LANG['msgTranslate'].'" title="'.$PMF_LANG['msgTranslate'].'" width="16" height="16" border="0" /> '.$PMF_LANG['msgTranslate'].' '.selectLanguages($LANGCODE, false, $arrLanguage).' <input class="submit" type="submit" name="submit" value="'.$PMF_LANG['msgTranslateSubmit'].'" />
+        </form>';
+}
+
 // Set the template variables
 $tpl->processTemplate ("writeContent", array(
     'writeRubrik'                   => $categoryName.'<br />',
@@ -273,10 +282,7 @@ $tpl->processTemplate ("writeContent", array(
     'writePDFTag'                   => $PMF_LANG['msgPDF'],
     'writePrintMsgTag'              => $PMF_LANG['msgPrintArticle'],
     'writeSend2FriendMsgTag'        => $PMF_LANG['msgSend2Friend'],
-    'writeTranslateTag'             => $PMF_LANG['msgTranslate'],
-    'writeTranslate'                => $PMF_LANG['msgTranslate'].' '.selectLanguages($LANGCODE, false, $arrLanguage),
-    'msgTranslateSubmit'            => $PMF_LANG['msgTranslateSubmit'],
-    'writeTranslationUrl'           => sprintf(PMF_Link::getSystemRelativeUri('index.php').'index.php?%saction=translate&amp;cat=%s&amp;id=%d&amp;srclang=%s', $sids, $currentCategory, $id, $lang),
+    'translationForm'               => $translationForm,
     'saveVotingPATH'                => sprintf(PMF_Link::getSystemRelativeUri('index.php').'index.php?%saction=savevoting', $sids),
     'saveVotingID'                  => $id,
     'saveVotingIP'                  => $_SERVER['REMOTE_ADDR'],

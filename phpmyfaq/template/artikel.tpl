@@ -28,9 +28,9 @@
     </div>
 
     <!-- Translation Form -->
-    <form action="{writeTranslationUrl}" method="post" style="display: inline;">
-        <img src="images/translate.gif" alt="{writeTranslateTag}" title="{writeTranslateTag}" width="16" height="16" border="0" /> {writeTranslate} <input class="submit" type="submit" name="submit" value="{msgTranslateSubmit}" />
-    </form>
+    <div id="translation">
+    {translationForm}
+    </div>
     <!-- /Translation Form -->
 
     <!-- Voting Form -->
