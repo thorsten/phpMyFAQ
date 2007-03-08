@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: news.php,v 1.9 2006-11-16 23:29:26 matteo Exp $
+* $Id: news.php,v 1.10 2007-03-08 21:54:59 matteo Exp $
 *
 * Shows the page with the news record and - when available - the user
 * comments
@@ -8,7 +8,7 @@
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Matteo Scaramuccia <matteo@scaramuccia.com>
 * @since        2006-07-23
-* @copyright    (c) 2006 phpMyFAQ Team
+* @copyright    (c) 2006-2007 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -81,9 +81,15 @@ $expired = (date('YmdHis') > $news['dateEnd']);
 if ((!$news['active']) || (!$news['allowComments']) || $expired) {
     $commentMessage = $PMF_LANG['msgWriteNoComment'];
 } else {
-    $commentMessage = sprintf('%s<a onclick="show(\'comment\');" href="#comment">%s</a>',
+    $oLink = new PMF_Link($_SERVER['PHP_SELF'].'?'.str_replace('&', '&amp;',$_SERVER['QUERY_STRING']));
+    $oLink->itemTitle = $header;
+    $commentHref = $oLink->toString().'#comment';
+    $commentMessage = sprintf(
+        '%s<a onclick="show(\'comment\');" href="%s">%s</a>',
         $PMF_LANG['msgYouCan'],
-        $PMF_LANG['newsWriteComment']);
+        $commentHref,
+        $PMF_LANG['newsWriteComment']
+    );
 }
 
 // Set the template variables

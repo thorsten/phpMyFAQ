@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: artikel.php,v 1.73 2007-03-08 21:08:04 matteo Exp $
+ * $Id: artikel.php,v 1.74 2007-03-08 21:54:59 matteo Exp $
  *
  * Shows the page with the FAQ record and - when available - the user
  * comments
@@ -206,9 +206,15 @@ $expired = (date('YmdHis') > $faq->faqRecord['dateEnd']);
 if (($faq->faqRecord['active'] != 'yes') || ('n' == $faq->faqRecord['comment']) || $expired) {
     $commentMessage = $PMF_LANG['msgWriteNoComment'];
 } else {
-    $commentMessage = sprintf('%s<a onclick="show(\'comment\');" href="#comment">%s</a>',
+    $oLink = new PMF_Link($_SERVER['PHP_SELF'].'?'.str_replace('&', '&amp;',$_SERVER['QUERY_STRING']));
+    $oLink->itemTitle = $thema;
+    $commentHref = $oLink->toString().'#comment';
+    $commentMessage = sprintf(
+        '%s<a onclick="show(\'comment\');" href="%s">%s</a>',
         $PMF_LANG['msgYouCan'],
-        $PMF_LANG['msgWriteComment']);
+        $commentHref,
+        $PMF_LANG['msgWriteComment']
+    );
 }
 
 // Get the tags for this entry
