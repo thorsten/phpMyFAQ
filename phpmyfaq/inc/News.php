@@ -1,25 +1,25 @@
 <?php
 /**
-* $Id: News.php,v 1.14 2006-08-19 14:02:42 matteo Exp $
-*
-* The News class for phpMyFAQ news
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @author       Matteo Scaramuccia <matteo@scaramuccia.com>
-* @package      phpMyFAQ
-* @since        2006-06-25
-* @copyright    (c) 2006 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * $Id: News.php,v 1.15 2007-03-08 20:03:20 thorstenr Exp $
+ *
+ * The News class for phpMyFAQ news
+ *
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @package     phpMyFAQ
+ * @since       2006-06-25
+ * @copyright   (c) 2006-2007 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 // {{{ Includes
 /**
@@ -170,10 +170,10 @@ class PMF_News
             if (isset($item['header'])) {
                 $oLink->itemTitle =$item['header'];
             }
-            $output .= sprintf('<h3><a name="news_%d">%s</a><a href="%s"> <img id="goNews" src="images/more.gif" width="11" height="11" alt="%s" /></a></h3><div class="block">%s',
+            $output .= sprintf('<h3><a name="news_%d" href="%s">%s <img id="goNews" src="images/more.gif" width="11" height="11" alt="%s" /></a></h3><div class="block">%s',
                             $item['id'],
-                            $item['header'],
                             $oLink->toString(),
+                            $item['header'],
                             $item['header'],
                             $item['content']
                         );
