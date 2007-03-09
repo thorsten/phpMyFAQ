@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.93 2007-03-05 20:08:30 thorstenr Exp $
+ * $Id: Faq.php,v 1.94 2007-03-09 17:09:00 thorstenr Exp $
  *
  * The main FAQ class
  *
@@ -154,61 +154,74 @@ class PMF_Faq
     /**
      * This function returns all not expired records from one category
      *
-     * @param   int     category id
+     * @param   int     $category id
+     * @param   string  $orderby
+     * @param   string  $sortby
      * @return  string
      * @access  public
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2002-08-27
      */
-    function showAllRecords($category)
+    function showAllRecords($category_id, $orderby = 'id', $sortby = 'ASC')
     {
-        global $sids, $PMF_CONF, $tree;
+        global $sids, $PMF_CONF, $category;
 
         $page = 1;
         $output = '';
 
-        if (isset($_REQUEST["seite"])) {
-            $page = (int)$_REQUEST["seite"];
+        if (isset($_REQUEST['seite'])) {
+            $page = (int)$_REQUEST['seite'];
         }
 
         $now = date('YmdHis');
-        $query = '
+        $query = sprintf("
             SELECT
-                '.SQLPREFIX.'faqdata.id AS id,
-                '.SQLPREFIX.'faqdata.lang AS lang,
-                '.SQLPREFIX.'faqdata.thema AS thema,
-                '.SQLPREFIX.'faqcategoryrelations.category_id AS category_id,
-                '.SQLPREFIX.'faqvisits.visits AS visits
+                fd.id AS id,
+                fd.lang AS lang,
+                fd.thema AS thema,
+                fcr.category_id AS category_id,
+                fv.visits AS visits
             FROM
-                '.SQLPREFIX.'faqdata
+                %sfaqdata AS fd
             LEFT JOIN
-                '.SQLPREFIX.'faqcategoryrelations
+                %sfaqcategoryrelations AS fcr
             ON
-                '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id
+                fd.id = fcr.record_id
             AND
-                '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang
+                fd.lang = fcr.record_lang
             LEFT JOIN
-                '.SQLPREFIX.'faqvisits
+                %sfaqvisits AS fv
             ON
-                '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvisits.id
+                fd.id = fv.id
             AND
-                '.SQLPREFIX.'faqvisits.lang = '.SQLPREFIX.'faqdata.lang
+                fv.lang = fd.lang
             LEFT JOIN
-                '.SQLPREFIX.'faqdata_group
+                %sfaqdata_group AS fdg
             ON
-                '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqdata_group.record_id
+                fd.id = fdg.record_id
             LEFT JOIN
-                '.SQLPREFIX.'faqdata_user
+                %sfaqdata_user AS fdu
             ON
-                '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqdata_user.record_id
+                fd.id = fdu.record_id
             WHERE
-                    '.SQLPREFIX.'faqdata.date_start <= \''.$now.'\'
-                AND '.SQLPREFIX.'faqdata.date_end   >= \''.$now.'\'
-                AND '.SQLPREFIX.'faqdata.active = \'yes\'
-                AND '.SQLPREFIX.'faqcategoryrelations.category_id = '.$category.'
-                AND '.SQLPREFIX.'faqdata.lang = \''.$this->language.'\'
+                    fd.date_start <= '%s'
+                AND fd.date_end   >= '%s'
+                AND fd.active = 'yes'
+                AND fcr.category_id = %d
+                AND fd.lang = '%s'
             ORDER BY
-                '.SQLPREFIX.'faqdata.id';
+                fd.%s %s",
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            $now,
+            $now,
+            $category_id,
+            $this->language,
+            $orderby,
+            $sortby);
 
         $result = $this->db->query($query);
 
@@ -268,11 +281,9 @@ class PMF_Faq
             return false;
         }
 
-        $categoryName = 'CategoryId-'.$category;
-        // Hack: we need the Category Name for the new SEO URL schema
-        //       so we try to use the global $tree object, if it exist
-        if (isset($tree)) {
-            $categoryName = $tree->categoryName[$category]['name'];
+        $categoryName = 'CategoryId-'.$category_id;
+        if (isset($category)) {
+            $categoryName = $category->categoryName[$category_id]['name'];
         }
         if ($pages > 1) {
             $output .= "<p align=\"center\"><strong>";
@@ -283,9 +294,8 @@ class PMF_Faq
                 $title = $this->pmf_lang['msgPrevious'];
                 $url   = sprintf('%saction=show&amp;cat=%d&amp;seite=%d',
                             $sids,
-                            $category,
-                            $previous
-                        );
+                            $category_id,
+                            $previous);
                 $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
                 $oLink->itemTitle = $categoryName;
                 $oLink->text = $title;
@@ -299,9 +309,8 @@ class PMF_Faq
                 $title = $i;
                 $url   = sprintf('%saction=show&amp;cat=%d&amp;seite=%d',
                             $sids,
-                            $category,
-                            $i
-                        );
+                            $category_id,
+                            $i);
                 $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
                 $oLink->itemTitle = $categoryName;
                 $oLink->text = $title;
@@ -315,7 +324,7 @@ class PMF_Faq
                 $title = $this->pmf_lang['msgNext'];
                 $url   = sprintf('%saction=show&amp;cat=%d&amp;seite=%d',
                             $sids,
-                            $category,
+                            $category_id,
                             $next
                         );
                 $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
