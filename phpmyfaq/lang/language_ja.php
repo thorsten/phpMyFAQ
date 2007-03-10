@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_ja.php,v 1.20 2007-03-02 16:18:19 thorstenr Exp $
+ * $Id: language_ja.php,v 1.21 2007-03-10 22:07:36 thorstenr Exp $
  *
  * The Japanese language file
  *
@@ -559,7 +559,7 @@ $LANG_CONF["version"] = array(0 => "print", 1 => "FAQ ãƒ?ãƒ¼ã‚¸ãƒ§ãƒ³");
 $LANG_CONF["metaDescription"] = array(0 => "input", 1 => "ãƒšãƒ¼ã‚¸ã?®èª¬æ˜Ž");
 $LANG_CONF["metaKeywords"] = array(0 => "input", 1 => "æ¤œç´¢ãƒ­ãƒœãƒƒãƒˆç”¨ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰");
 $LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "ç®¡ç?†è€…å??");
-$LANG_CONF["adminmail"] = array(0 => "input", 1 => "ç®¡ç?†è€…ã?®é›»å­?ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹");
+$LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "ç®¡ç?†è€…ã?®é›»å­?ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹");
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "å•?ã?„å?ˆã‚?ã?›æƒ…å ±");
 $LANG_CONF["send2friendText"] = array(0 => "area", 1 => "å?‹é?”ã?«é€?ä¿¡ãƒšãƒ¼ã‚¸ã?®ãƒ†ã‚­ã‚¹ãƒˆ");
 $LANG_CONF["attmax"] = array(0 => "input", 1 => "æ·»ä»˜ãƒ•ã‚¡ã‚¤ãƒ«ã?®æœ€å¤§ã‚µã‚¤ã‚º (æœ€å¤§ ".ini_get("upload_max_filesize")." ãƒ?ã‚¤ãƒˆ)");

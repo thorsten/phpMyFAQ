@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: save.php,v 1.37 2007-02-04 19:27:50 thorstenr Exp $
+ * $Id: save.php,v 1.38 2007-03-10 22:07:34 thorstenr Exp $
  *
  * Saves a user FAQ record and sends an email to the user
  *
@@ -81,7 +81,7 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
         $category = new PMF_Category($_POST['faqlanguage']);
         $categories = $category->getCategoryIdsFromArticle($newData['id']);
     }
-    
+
     $recordId = $faq->addRecord($newData, $isNew);
     $faq->addCategoryRelations($categories, $recordId, $newData['lang']);
 
@@ -104,7 +104,7 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
             }
             $additional_header[] = 'From: '.$userMail;
             // Let the category owner get a copy of the message
-            if ($IDN->encode($PMF_CONF["adminmail"]) != $catOwnerEmail) {
+            if ($IDN->encode($faqconfig->get('main.administrationMail')) != $catOwnerEmail) {
                 $additional_header[] = "Cc: ".$catOwnerEmail."\n";
             }
             $subject = $PMF_CONF['title'];
@@ -113,9 +113,15 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
             }
             $body = unhtmlentities($PMF_LANG['msgMailCheck'])."\n".$PMF_CONF['title'].": ".PMF_Link::getSystemUri('/index.php').'/admin';
             if (ini_get('safe_mode')) {
-                mail($IDN->encode($PMF_CONF["adminmail"]), $subject, $body, implode("\r\n", $additional_header));
+                mail($IDN->encode($faqconfig->get('main.administrationMail')),
+                                  $subject,
+                                  $body,
+                                  implode("\r\n", $additional_header));
             } else {
-                mail($IDN->encode($PMF_CONF["adminmail"]), $subject, $body, implode("\r\n", $additional_header), "-f$userMail");
+                mail($IDN->encode($faqconfig->get('main.administrationMail')),
+                                  $subject, $body,
+                                  implode("\r\n", $additional_header),
+                                  "-f$userMail");
             }
             $sent[$userId] = $catOwnerEmail;
         }

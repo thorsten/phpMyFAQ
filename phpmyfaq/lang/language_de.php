@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.47 2007-03-10 11:19:57 thorstenr Exp $
+ * $Id: language_de.php,v 1.48 2007-03-10 22:07:35 thorstenr Exp $
  *
  * German language file
  *
@@ -557,7 +557,7 @@ $LANG_CONF["version"] = array(0 => "print", 1 => "Version der FAQ");
 $LANG_CONF["metaDescription"] = array(0 => "input", 1 => "Beschreibung der Seite");
 $LANG_CONF["metaKeywords"] = array(0 => "input", 1 => "Keywords für Suchmaschinen");
 $LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "Name des Veröffentlichers");
-$LANG_CONF["adminmail"] = array(0 => "input", 1 => "E-Mailadresse des Admins");
+$LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "E-Mailadresse des Administrators");
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Kontakt, Impressum, hier die Betreiberadresse angeben!");
 $LANG_CONF["send2friendText"] = array(0 => "area", 1 => "Text für die Send2Friend-Seite");
 $LANG_CONF["attmax"] = array(0 => "input", 1 => "Maximalgröße von Attachments in Bytes (max. ".ini_get("upload_max_filesize")."Byte)");

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: sqlite.update.sql.php,v 1.7 2007-03-02 16:11:55 thorstenr Exp $
+ * $Id: sqlite.update.sql.php,v 1.8 2007-03-10 22:07:35 thorstenr Exp $
  *
  * CREATE TABLE instructions for SQLite
  *
@@ -165,7 +165,7 @@ PRIMARY KEY (user_id, right_id)
 // DATA
 //
 
-$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('adminmail', 'webmaster@example.org')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.administrationMail', 'webmaster@example.org')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('attmax', '100000')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('bannedIP', 'false')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('detection', 'true')";

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: password.php,v 1.13 2007-01-21 14:37:43 thorstenr Exp $
+* $Id: password.php,v 1.14 2007-03-10 22:07:34 thorstenr Exp $
 *
 * Reset a forgotten password to a new one
 *
@@ -83,7 +83,7 @@ if (isset($_GET["action"]) && $_GET["action"] == "newpassword") {
                 }
                 $user->changePassword($newPassword);
                 $text = $PMF_LANG["lostpwd_text_1"]."\nUsername: ".$username."\nNew Password: ".$newPassword."\n\n".$PMF_LANG["lostpwd_text_2"];
-                mail($IDN->encode($email), $PMF_CONF["title"].": username / password request", $text, "From: ".$IDN->encode($PMF_CONF["adminmail"]));
+                mail($IDN->encode($email), $PMF_CONF["title"].": username / password request", $text, "From: ".$IDN->encode($PMF_CONF['main.administrationMail']));
                 print $PMF_LANG["lostpwd_mail_okay"];
                 print "<p><img src=\"images/arrow.gif\" width=\"11\" height=\"11\" alt=\"".$PMF_LANG["ad"]."\" border=\"0\" /> <a href=\"index.php\" title=\"".$PMF_LANG["ad"]."\">".$PMF_LANG["ad"]."</a></p>";
             } else {

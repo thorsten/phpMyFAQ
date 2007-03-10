@@ -557,7 +557,7 @@ $LANG_CONF["version"] = array(0 => "print", 1 => "גירסאת השאלה הנפוצה");
 $LANG_CONF["metaDescription"] = array(0 => "input", 1 => "תיאור העמוד");
 $LANG_CONF["metaKeywords"] = array(0 => "input", 1 => "מילות מפתח למנועי חיפוש");
 $LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "שם היוצר");
-$LANG_CONF["adminmail"] = array(0 => "input", 1 => "כתובת הדואל של המנהל");
+$LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "כתובת הדואל של המנהל");
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "מידע ליצירת קשר");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "זכויות יוצרים לעמוד הראשי");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "טקסט לעמוד שלח לחבר");

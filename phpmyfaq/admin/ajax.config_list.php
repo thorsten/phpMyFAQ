@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.config_list.php,v 1.12 2007-03-10 08:12:39 thorstenr Exp $
+* $Id: ajax.config_list.php,v 1.13 2007-03-10 22:07:34 thorstenr Exp $
 *
 * AJAX: lists the complete configuration items
 *
@@ -28,7 +28,8 @@ require_once(PMF_ROOT_DIR.'/lang/language_en.php');
 
 $configMode = 'std';
 $availableConfigModes = array(
-        'spam' => 1
+        'records'   => 1,
+        'spam'      => 1
         );
 if (isset($_GET['conf']) && is_string($_GET['conf']) && isset($availableConfigModes[$_GET['conf']])) {
     $configMode = $_GET['conf'];

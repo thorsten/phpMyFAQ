@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: savequestion.php,v 1.30 2007-02-04 19:27:50 thorstenr Exp $
+* $Id: savequestion.php,v 1.31 2007-03-10 22:07:34 thorstenr Exp $
 *
 * @author           Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author           David Saez Padros <david@ols.es>
@@ -82,7 +82,7 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
             }
             $additional_header[] = 'From: "'.$questionData['ask_username'].'" <'.$questionData['ask_usermail'].'>';
             // Let the category owner get a copy of the message
-            if ($IDN->encode($PMF_CONF["adminmail"]) != $oUser->getUserData('email')) {
+            if ($IDN->encode($faqconfig->get('main.administrationMail')) != $oUser->getUserData('email')) {
                 $additional_header[] = "Cc: ".$oUser->getUserData('email')."\n";
             }
             $body = $questionMail;
@@ -92,9 +92,16 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
                 $body = str_replace("\n", "\r\n", $body);
             }
             if (ini_get('safe_mode')) {
-                mail($IDN->encode($PMF_CONF['adminmail']), $PMF_CONF['title'], $body, implode("\r\n", $additional_header));
+                mail($IDN->encode($faqconfig->get('main.administrationMail')),
+                    $PMF_CONF['title'],
+                    $body,
+                    implode("\r\n", $additional_header));
             } else {
-                mail($IDN->encode($PMF_CONF['adminmail']), $PMF_CONF['title'], $body, implode("\r\n", $additional_header), '-f'.$questionData['ask_usermail']);
+                mail($IDN->encode($faqconfig->get('main.administrationMail')),
+                    $PMF_CONF['title'],
+                    $body,
+                    implode("\r\n", $additional_header),
+                    '-f'.$questionData['ask_usermail']);
             }
 
             $tpl->processTemplate ("writeContent", array(

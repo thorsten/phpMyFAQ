@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_ar.php,v 1.12 2007-03-02 16:18:18 thorstenr Exp $
+* $Id: language_ar.php,v 1.13 2007-03-10 22:07:35 thorstenr Exp $
 *
 * Arabic language file
 *
@@ -596,7 +596,7 @@ $LANG_CONF["version"] = array(0 => "print", 1 => "نسخة البرنامج");
 $LANG_CONF["metaDescription"] = array(0 => "input", 1 => "وص�? الص�?حة");
 $LANG_CONF["metaKeywords"] = array(0 => "input", 1 => "كلمات البحث لمحركات البحث");
 $LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "إسم الناشر");
-$LANG_CONF["adminmail"] = array(0 => "input", 1 => "البريد الإلكتروني للمشر�?");
+$LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "البريد الإلكتروني للمشر�?");
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "معلومات الإتصال");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "حقوق النشر �?ي ص�?حة البداية");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "نص لص�?حة أرسل إلي صديق");

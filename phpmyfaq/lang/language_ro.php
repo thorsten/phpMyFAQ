@@ -555,7 +555,7 @@ $LANG_CONF["version"] = array(0 => "print", 1 => "Versiunea FAQ");
 $LANG_CONF["metaDescription"] = array(0 => "input", 1 => "Descrierea paginii");
 $LANG_CONF["metaKeywords"] = array(0 => "input", 1 => "Cuvinte cheie pentru motoare de cautare");
 $LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "Numele autorului");
-$LANG_CONF["adminmail"] = array(0 => "input", 1 => "Adresa de email a administratorului");
+$LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Adresa de email a administratorului");
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Informatii de contact");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Text de copyright");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Text pentru pagina de recomandare");

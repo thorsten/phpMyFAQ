@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_el.php,v 1.4 2007-03-02 16:18:18 thorstenr Exp $
+* $Id: language_el.php,v 1.5 2007-03-10 22:07:35 thorstenr Exp $
 *
 * The Hellenic language file
 *
@@ -556,7 +556,7 @@ $LANG_CONF["version"] = array(0 => "print", 1 => "Έκδοση FAQ");
 $LANG_CONF["metaDescription"] = array(0 => "input", 1 => "Περιγραφή ιστοσελίδας");
 $LANG_CONF["metaKeywords"] = array(0 => "input", 1 => "Λέξεις κλειδιά για μηχανές αναζήτησης");
 $LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "Όνομα εκδότη");
-$LANG_CONF["adminmail"] = array(0 => "input", 1 => "Ηλεκτρονική διεύθυνση του διαχειριστή");
+$LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Ηλεκτρονική διεύθυνση του διαχειριστή");
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Πληροφορίες επικοινωνίας");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Κείμενο για τα copyrights στην αρχική σελίδα");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Κείμενο για τη σελίδα αποστολής μηνυμάτων (send2friend)");

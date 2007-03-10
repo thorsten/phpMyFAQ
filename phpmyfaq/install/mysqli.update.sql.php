@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: mysqli.update.sql.php,v 1.17 2007-03-02 16:11:55 thorstenr Exp $
+ * $Id: mysqli.update.sql.php,v 1.18 2007-03-10 22:07:35 thorstenr Exp $
  *
  * CREATE TABLE instruction for MySQL database - UPDATE STAGE from 1.x to 2.0.0
  *
@@ -169,7 +169,7 @@ PRIMARY KEY(user_id, right_id)
 // DATA
 //
 
-$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('adminmail', 'webmaster@example.org')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.administrationMail', 'webmaster@example.org')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('attmax', '100000')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('bannedIP', 'false')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('detection', 'true')";

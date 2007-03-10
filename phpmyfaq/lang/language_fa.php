@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_fa.php,v 1.4 2007-03-02 16:18:19 thorstenr Exp $
+* $Id: language_fa.php,v 1.5 2007-03-10 22:07:36 thorstenr Exp $
 *
 * farsi language file
 *
@@ -557,7 +557,7 @@ $LANG_CONF["version"] = array(0 => "print", 1 => "FAQ Version");
 $LANG_CONF["metaDescription"] = array(0 => "input", 1 => "Describtion of the Page");
 $LANG_CONF["metaKeywords"] = array(0 => "input", 1 => "Keywords for Spiders");
 $LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "Name of the Publisher");
-$LANG_CONF["adminmail"] = array(0 => "input", 1 => "Email address of the Admin");
+$LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Email address of the Admin");
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Contact information");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Copyright text for the startpage");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Text for the send2friend page");

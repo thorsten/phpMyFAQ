@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_fi.php,v 1.9 2007-03-06 21:01:49 thorstenr Exp $
+ * $Id: language_fi.php,v 1.10 2007-03-10 22:07:36 thorstenr Exp $
  *
  * Finnish language file
  *
@@ -131,7 +131,7 @@ $PMF_LANG["msgTopTen"] = "Kymmenen suosituinta";
 $PMF_LANG["msgHomeThereAre"] = "T‰ll‰ hetkell‰  ";
 $PMF_LANG["msgHomeArticlesOnline"] = " tietuetta aktiivisena";
 $PMF_LANG["msgNoNews"] = "Hyv‰t uutiset ovat, ett‰ ei ole uutisia.";
-$PMF_LANG["msgLatestArticles"] = "Viisi uusinta kysymyst‰:"; 
+$PMF_LANG["msgLatestArticles"] = "Viisi uusinta kysymyst‰:";
 
 // E-Mailbenachrichtigung
 $PMF_LANG["msgMailThanks"] = "Monet kiitokset FAQ ehdotuksestasi.";
@@ -557,7 +557,7 @@ $LANG_CONF["version"] = array(0 => "print", 1 => "FAQ Versio");
 $LANG_CONF["metaDescription"] = array(0 => "input", 1 => "Sivun Kuvaus");
 $LANG_CONF["metaKeywords"] = array(0 => "input", 1 => "Avainsanat hakukoneille");
 $LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "Julkaisijan nimi");
-$LANG_CONF["adminmail"] = array(0 => "input", 1 => "Yll‰pit‰j‰n s‰hkˆposti osoite");
+$LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Yll‰pit‰j‰n s‰hkˆposti osoite");
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Yhteystiedot");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Kopiointioikeudet aloitussivulle");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Teksti l‰het‰ tuttavalle sivulle");
@@ -619,7 +619,7 @@ $PMF_LANG['ad_entry_record_administration'] = 'Tietueen yll‰pito';
 $PMF_LANG['ad_entry_changelog'] = 'Muutosrekisteri';
 $PMF_LANG['ad_entry_revision'] = 'Revisio';
 $PMF_LANG['ad_changerev'] = 'Valitse revisio';
-$PMF_LANG['msgCaptcha'] = 'Kirjoita merkit kuvassa'; 
+$PMF_LANG['msgCaptcha'] = 'Kirjoita merkit kuvassa';
 $PMF_LANG['msgSelectCategories'] = 'Etsi...';
 $PMF_LANG['msgAllCategories'] = '... kaikissa kategorioissa';
 $PMF_LANG['ad_you_should_update'] = 'Teid‰n phpMyFAQ-asennuksenne on vanhentunut. Teid‰n tulisi p‰ivitt‰‰ uusimpaan versioon';

@@ -1,12 +1,12 @@
 <?php
 /**
-* $Id: opensearch.php,v 1.1 2006-11-19 01:04:18 thorstenr Exp $
+* $Id: opensearch.php,v 1.2 2007-03-10 22:07:34 thorstenr Exp $
 *
 * This is XML code for OpenSearch
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2006-11-19
-* @copyright:   (c) 2006 phpMyFAQ Team
+* @copyright:   (c) 2006-2007 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -36,7 +36,7 @@ $opensearch     = "<?xml version=\"1.0\" encoding=\"".$PMF_LANG['metaCharset']."
 <Url type=\"text/html\" template=\"".$search_url."&amp;search={searchTerms}\" />
 <Language>".$PMF_LANG['metaLanguage']."</Language>
 <OutputEncoding>".$PMF_LANG['metaCharset']."</OutputEncoding>
-<Contact>".$faqconfig->get('adminmail')."</Contact>
+<Contact>".$faqconfig->get('main.administrationMail')."</Contact>
 <Image height=\"16\" width=\"16\" type=\"image/png\">".$baseUrl."/images/".$plugin_icon."</Image>
 </OpenSearchDescription>";
 

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: savecomment.php,v 1.20 2006-09-19 21:39:38 matteo Exp $
+* $Id: savecomment.php,v 1.21 2007-03-10 22:07:34 thorstenr Exp $
 *
 * Saves the posted comment
 *
@@ -54,7 +54,7 @@ if (    isset($_POST['user']) && $_POST['user'] != ''
         'date'      => time(),
         'helped'    => '');
     if ($faq->addComment($commentData)) {
-        $emailTo = $PMF_CONF['adminmail'];
+        $emailTo = $faqconfig->get('main.administrationMail');
         $urlToContent = '';
         if ('faq' == $_POST['type']) {
             $faq->getRecord($id);
@@ -95,8 +95,8 @@ if (    isset($_POST['user']) && $_POST['user'] != ''
         }
         $additional_header[] = 'From: <'.$IDN->encode($commentData['usermail']).'>';
         // Let the admin always get a copy
-        if ($emailTo != $PMF_CONF['adminmail']) {
-            $additional_header[] = 'Cc: <'.$IDN->encode($PMF_CONF['adminmail']).'>';
+        if ($emailTo != $faqconfig->get('main.administrationMail')) {
+            $additional_header[] = 'Cc: <'.$IDN->encode($faqconfig->get('main.administrationMail')).'>';
         }
         $body = strip_tags($commentMail);
         $body = str_replace(array("\r\n", "\r", "\n"), "\n", $body);

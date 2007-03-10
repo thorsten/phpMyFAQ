@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_zh.php,v 1.11 2007-03-02 16:18:20 thorstenr Exp $
+* $Id: language_zh.php,v 1.12 2007-03-10 22:07:36 thorstenr Exp $
 *
 * Chinese (simplified) language file
 *
@@ -558,7 +558,7 @@ $LANG_CONF["version"] = array(0 => "print", 1 => "ç¨‹åº?ç‰ˆæœ¬");
 $LANG_CONF["metaDescription"] = array(0 => "input", 1 => "é¡µé?¢æ??è¿°");
 $LANG_CONF["metaKeywords"] = array(0 => "input", 1 => "ç”¨æˆ·Metaï¼ˆç½‘é¡µè‡ªåŠ¨æ?œç´¢ç¨‹åº?ï¼‰çš„å…³é”®è¯?");
 $LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "ç®¡ç?†å‘˜å§“å??");
-$LANG_CONF["adminmail"] = array(0 => "input", 1 => "ç®¡ç?†å‘˜Email");
+$LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "ç®¡ç?†å‘˜Email");
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "è?”ç³»æˆ‘ä»¬");
 $LANG_CONF["send2friendText"] = array(0 => "area", 1 => "å?‘é€?åˆ°æœ‹å?‹é¡µé?¢çš„æ–‡å­—");
 $LANG_CONF["attmax"] = array(0 => "input", 1 => "é™„ä»¶æœ€å¤§é™?åˆ¶æ˜¯ (. ".ini_get("upload_max_filesize")."å­—èŠ‚)");

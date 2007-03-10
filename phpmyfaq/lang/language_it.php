@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.46 2007-03-10 16:44:38 matteo Exp $
+* $Id: language_it.php,v 1.47 2007-03-10 22:07:36 thorstenr Exp $
 *
 * Italian language file
 *
@@ -559,7 +559,7 @@ $LANG_CONF["version"] = array(0 => "print", 1 => "Versione di phpMyFAQ");
 $LANG_CONF["metaDescription"] = array(0 => "input", 1 => "Descrizione della pagina");
 $LANG_CONF["metaKeywords"] = array(0 => "input", 1 => "Keywords per gli Spiders");
 $LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "Nome dell'Editore");
-$LANG_CONF["adminmail"] = array(0 => "input", 1 => "Indirizzo email dell'Amministratore");
+$LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Indirizzo email dell'Amministratore");
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Testo per la pagina dei <em>Contatti</em>");
 $LANG_CONF["send2friendText"] = array(0 => "area", 1 => "Testo per la pagina <em>Invia ad un amico</em>");
 $LANG_CONF["attmax"] = array(0 => "input", 1 => "Massima dimensione per gli allegati, in Bytes (max. ".ini_get("upload_max_filesize")."Byte)");

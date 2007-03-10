@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: configuration.php,v 1.10 2006-11-30 20:28:12 thorstenr Exp $
+* $Id: configuration.php,v 1.11 2007-03-10 22:07:34 thorstenr Exp $
 *
 * The main configuration frontend
 *
@@ -72,8 +72,12 @@ if ('listConfig' == $userAction) {
 
 <form id="config_list" name="config_list" action="?action=config&amp;config_action=saveConfig" method="post">
     <fieldset>
-        <legend><?php print $PMF_LANG['ad_config_edit']; ?></legend>
+        <legend><?php print $PMF_LANG['mainControlCenter']; ?></legend>
         <div id="configStd"></div>
+    </fieldset>
+    <fieldset>
+        <legend><?php print $PMF_LANG['recordsControlCenter']; ?></legend>
+        <div id="configRecords"></div>
     </fieldset>
     <fieldset>
         <legend><?php print $PMF_LANG['spamControlCenter']; ?></legend>

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.75 2007-03-10 11:19:57 thorstenr Exp $
+* $Id: language_en.php,v 1.76 2007-03-10 22:07:35 thorstenr Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -559,7 +559,7 @@ $LANG_CONF["version"] = array(0 => "print", 1 => "FAQ Version");
 $LANG_CONF["metaDescription"] = array(0 => "input", 1 => "Describtion of the Page");
 $LANG_CONF["metaKeywords"] = array(0 => "input", 1 => "Keywords for Spiders");
 $LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "Name of the Publisher");
-$LANG_CONF["adminmail"] = array(0 => "input", 1 => "Email address of the Admin");
+$LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Email address of the Admin");
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Contact information");
 $LANG_CONF["send2friendText"] = array(0 => "area", 1 => "Text for the send2friend page");
 $LANG_CONF["attmax"] = array(0 => "input", 1 => "maximum Size for attachments in Bytes (max. ".ini_get("upload_max_filesize")."Byte)");

@@ -557,7 +557,7 @@ $LANG_CONF["version"] = array(0 => "print", 1 => "FAQ Version");
 $LANG_CONF["metaDescription"] = array(0 => "input", 1 => "Beskrivning av sidan");
 $LANG_CONF["metaKeywords"] = array(0 => "input", 1 => "Nyckelord f&ouml;r spiders");
 $LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "Namn p&aring; ansvarig");
-$LANG_CONF["adminmail"] = array(0 => "input", 1 => "Emailadress till admin");
+$LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Emailadress till admin");
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Kontaktinformation");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Text p&aring; l&auml;gg-till-fr&aring;ga-sidan om att ej l&auml;gga in r&auml;ttighetsskyddat material");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Text f&ouml;r skicka-till-en-v&auml;n-sidan");
