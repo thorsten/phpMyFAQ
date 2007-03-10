@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.165 2007-03-07 21:01:30 matteo Exp $
+ * $Id: functions.php,v 1.166 2007-03-10 08:12:39 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -239,6 +239,32 @@ function languageOptions($lang = "", $onlyThisLang = false, $fileLanguageValue =
             }
             $output .= ">".$value."</option>\n";
         }
+    }
+
+    return $output;
+}
+
+/**
+ * Returns all sorting possibilities for FAQ records
+ *
+ * @param   string  $current
+ * @return  string
+ * @access  public
+ * @since   2007-03-10
+ * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+ */
+function sortingOptions($current)
+{
+    global $PMF_LANG;
+
+    $options = array('id', 'thema', 'visits', 'datum', 'author');
+    $output = '';
+
+    foreach ($options as $value) {
+        printf('<option value="%s"%s>%s</option>',
+            $value,
+            ($value == $current) ? ' selected="selected"' : '',
+            $PMF_LANG['ad_conf_order_'.$value]);
     }
 
     return $output;

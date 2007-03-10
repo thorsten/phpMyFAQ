@@ -1,18 +1,18 @@
 <?php
 /**
-* $Id: ajax.config_list.php,v 1.11 2006-11-14 22:15:15 matteo Exp $
+* $Id: ajax.config_list.php,v 1.12 2007-03-10 08:12:39 thorstenr Exp $
 *
 * AJAX: lists the complete configuration items
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2005-12-26
-* @copyright    (c) 2006 phpMyFAQ Team
-* 
+* @copyright    (c) 2005-2007 phpMyFAQ Team
+*
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
 * compliance with the License. You may obtain a copy of the License at
 * http://www.mozilla.org/MPL/
-* 
+*
 * Software distributed under the License is distributed on an "AS IS"
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
@@ -40,34 +40,47 @@ function printInputFieldByType($key, $type)
 
     switch($type) {
         case 'area':
+
             printf('<textarea name="edit[%s]" cols="60" rows="6">%s</textarea>',
                     $key,
-                    str_replace('<', '&lt;', str_replace('>', '&gt;', $PMF_CONF[$key]))
-                    );
+                    str_replace('<', '&lt;', str_replace('>', '&gt;', $PMF_CONF[$key])));
             printf("<br />\n");
             break;
 
         case 'input':
+
             printf('<input type="text" name="edit[%s]" size="80" value="%s" />',
                     $key,
-                    str_replace('"', '&quot;', $PMF_CONF[$key])
-                    );
+                    str_replace('"', '&quot;', $PMF_CONF[$key]));
             printf("<br />\n");
             break;
 
         case 'select':
+
             printf('<select name="edit[%s]" size="1">', $key);
-            $languages = getAvailableLanguages();
-            if (count($languages) > 0) {
-                print languageOptions(str_replace(array("language_", ".php"), "", $PMF_CONF['language']), false, true);
-            } else {
-                print '<option value="language_en.php">English</option>';
+            if ('language' == $key) {
+                $languages = getAvailableLanguages();
+                if (count($languages) > 0) {
+                    print languageOptions(str_replace(array("language_", ".php"), "", $PMF_CONF['language']), false, true);
+                } else {
+                    print '<option value="language_en.php">English</option>';
+                }
+            } else if ('recordsOrderby' == $key) {
+                    print sortingOptions($PMF_CONF[$key]);
+            } elseif ('recordsSortby' == $key) {
+                    printf('<option value="DESC"%s>%s</option>',
+                        ('DESC' == $PMF_CONF[$key]) ? ' selected="selected"' : '',
+                        $PMF_LANG['ad_conf_desc']);
+                    printf('<option value="ASC"%s>%s</option>',
+                        ('ASC' == $PMF_CONF[$key]) ? ' selected="selected"' : '',
+                        $PMF_LANG['ad_conf_asc']);
             }
             print '</select>';
             printf("<br />\n");
             break;
 
         case 'checkbox':
+
             printf('<input type="checkbox" name="edit[%s]" value="true"', $key);
             if (isset($PMF_CONF[$key]) && $PMF_CONF[$key]) {
                 print ' checked="checked"';
@@ -77,11 +90,11 @@ function printInputFieldByType($key, $type)
             break;
 
         case 'print':
+
             print $PMF_CONF[$key];
             printf('<input type="hidden" name="edit[%s]" size="80" value="%s" />',
                     $key,
-                    str_replace('"', '&quot;', $PMF_CONF[$key])
-                    );
+                    str_replace('"', '&quot;', $PMF_CONF[$key]));
             printf("<br />\n");
             break;
     }
