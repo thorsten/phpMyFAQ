@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.73 2007-03-04 20:33:50 thorstenr Exp $
+* $Id: language_en.php,v 1.74 2007-03-10 08:11:49 thorstenr Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -860,3 +860,14 @@ $PMF_LANG['ad_comment_administration'] = 'Comments administration';
 $PMF_LANG['ad_comment_faqs'] = 'Comments in FAQ records:';
 $PMF_LANG['ad_comment_news'] = 'Comments in News records:';
 $PMF_LANG['ad_groups'] = 'Groups';
+
+// added v2.0.0 - 2007-03-10 by Thorsten
+$LANG_CONF['recordsOrderby'] = array(0 => 'select', 1 => 'Record sorting (according to property)');
+$LANG_CONF['recordsSortby'] = array(0 => 'select', 1 => 'Record sorting (descending or ascending)');
+$PMF_LANG['ad_conf_order_id'] = 'ID (default)';
+$PMF_LANG['ad_conf_order_thema'] = 'Title';
+$PMF_LANG['ad_conf_order_visits'] = 'Number of visitors';
+$PMF_LANG['ad_conf_order_datum'] = 'Date';
+$PMF_LANG['ad_conf_order_author'] = 'Author';
+$PMF_LANG['ad_conf_desc'] = 'descending';
+$PMF_LANG['ad_conf_asc'] = 'ascending';

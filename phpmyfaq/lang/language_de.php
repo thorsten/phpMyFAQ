@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.45 2007-03-05 19:50:48 thorstenr Exp $
+ * $Id: language_de.php,v 1.46 2007-03-10 08:11:49 thorstenr Exp $
  *
  * German language file
  *
@@ -850,3 +850,14 @@ $PMF_LANG['ad_comment_administration'] = 'Kommentarverwaltung';
 $PMF_LANG['ad_comment_faqs'] = 'Kommentare in FAQ-Artikeln:';
 $PMF_LANG['ad_comment_news'] = 'Kommentare in News-Artikeln:';
 $PMF_LANG['ad_groups'] = 'Gruppen';
+
+// added v2.0.0 - 2007-03-10 by Thorsten
+$LANG_CONF['recordsOrderby'] = array(0 => 'select', 1 => 'Artikelsortierung (nach Eigenschaft)');
+$LANG_CONF['recordsSortby'] = array(0 => 'select', 1 => 'Artikelsortierung (absteigend oder aufsteigend)');
+$PMF_LANG['ad_conf_order_id'] = 'ID (Standard)';
+$PMF_LANG['ad_conf_order_thema'] = 'Titel';
+$PMF_LANG['ad_conf_order_visits'] = 'Anzahl der Besucher';
+$PMF_LANG['ad_conf_order_datum'] = 'Datum';
+$PMF_LANG['ad_conf_order_author'] = 'Verfasser';
+$PMF_LANG['ad_conf_desc'] = 'absteigend';
+$PMF_LANG['ad_conf_asc'] = 'aufsteigend';
