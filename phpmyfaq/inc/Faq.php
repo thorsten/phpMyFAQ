@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.94 2007-03-09 17:09:00 thorstenr Exp $
+ * $Id: Faq.php,v 1.95 2007-03-10 08:30:17 thorstenr Exp $
  *
  * The main FAQ class
  *
@@ -210,7 +210,7 @@ class PMF_Faq
                 AND fcr.category_id = %d
                 AND fd.lang = '%s'
             ORDER BY
-                fd.%s %s",
+                %s %s",
             SQLPREFIX,
             SQLPREFIX,
             SQLPREFIX,
