@@ -497,7 +497,7 @@ $PMF_LANG["ad_entry_preview"] = "F&ouml;rhandsgranskning";
 $PMF_LANG["ad_attach_1"] = "V&auml;lj en katalog f&ouml;r bilagor i inst&auml;llningar f&ouml;rst.";
 $PMF_LANG["ad_attach_2"] = "V&auml;l en l&auml;nk f&ouml;r bilagor i inst&auml;llningar f&ouml;rst.";
 $PMF_LANG["ad_attach_3"] = "Filen attachment.php kan inte &ouml;ppnas utan korrekt beh&ouml;righet.";
-$PMF_LANG["ad_attach_4"] = "Den bifogade filen m&aring;ste vara mindre &auml;n ".$PMF_CONF["attmax"]." Bytes.";
+$PMF_LANG["ad_attach_4"] = "Den bifogade filen m&aring;ste vara mindre &auml;n ".$PMF_CONF['main.maxAttachmentSize']." Bytes.";
 $PMF_LANG["ad_menu_export"] = "Exportera phpMyFAQ";
 $PMF_LANG["ad_export_1"] = "Skapat RSS-Feed den";
 $PMF_LANG["ad_export_2"] = ".";
@@ -561,7 +561,7 @@ $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Emailadress ti
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Kontaktinformation");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Text p&aring; l&auml;gg-till-fr&aring;ga-sidan om att ej l&auml;gga in r&auml;ttighetsskyddat material");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Text f&ouml;r skicka-till-en-v&auml;n-sidan");
-$LANG_CONF["attmax"] = array(0 => "input", 1 => "Maximal storlek p&aring; bilagor (max. ".ini_get("upload_max_filesize")."Byte)");
+$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Maximal storlek p&aring; bilagor (max. ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["disatt"] = array(0 => "checkbox", 1 => "L&auml;nka bilagorna under fr&aring;gorna?");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "Sp&aring;rning?");
 $LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "Adminlogg?");

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_eu.php,v 1.8 2007-03-10 22:07:36 thorstenr Exp $
+* $Id: language_eu.php,v 1.9 2007-03-10 22:26:44 thorstenr Exp $
 *
 * Euskera language file
 *
@@ -499,7 +499,7 @@ $PMF_LANG["ad_entry_preview"] = "Aurreikusi";
 $PMF_LANG["ad_attach_1"] = "Lehendabizi eranskinentzat direktorio bat aukeratu konfiurazioan, mesedez.";
 $PMF_LANG["ad_attach_2"] = "Lehendabizi eranskinentzat esteka bat aukeratu konfigurazioan, mesedez.";
 $PMF_LANG["ad_attach_3"] = "attachment.php fitxategia ezin da ireki baimen egokirik gabe.";
-$PMF_LANG["ad_attach_4"] = "Fitxategi erantsiak ".$PMF_CONF["attmax"]." byte-ekoa baino txikiagoa izan behar du.";
+$PMF_LANG["ad_attach_4"] = "Fitxategi erantsiak ".$PMF_CONF['main.maxAttachmentSize']." byte-ekoa baino txikiagoa izan behar du.";
 $PMF_LANG["ad_menu_export"] = "Zure FAQa esportatu";
 $PMF_LANG["ad_export_1"] = "RSS-Feed-a sortu";
 $PMF_LANG["ad_export_2"] = ".";
@@ -562,7 +562,7 @@ $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Administratzai
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Harremanetarako informazioa");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Konfirmazio orriko copyright-eko testua");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "<em>Lagun bati bidali</em> orrirako testua");
-$LANG_CONF["attmax"] = array(0 => "input", 1 => "Eranskinetako gehieneko tamaina byte-etan (max. ".ini_get("upload_max_filesize")."Byte)");
+$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Eranskinetako gehieneko tamaina byte-etan (max. ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["disatt"] = array(0 => "checkbox", 1 => "Sarrera azpian eranskinei estekaren bat ipini?");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "Monitorizazioa erabili?");
 $LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "Adminlog-a erabili?");

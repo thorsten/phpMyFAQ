@@ -496,7 +496,7 @@ $PMF_LANG["ad_entry_preview"] = "Vezi cum va arata";
 $PMF_LANG["ad_attach_1"] = "Te rog sa setezi mai intai un director pentru atasamente in sectiunea de configurare.";
 $PMF_LANG["ad_attach_2"] = "Te rog alege mai intai un link pentru atasamente in sectiunea de configurare.";
 $PMF_LANG["ad_attach_3"] = "Atasamentul de tip .php nu poate fi deschi fara o autorizare prealabila.";
-$PMF_LANG["ad_attach_4"] = "Fisierul atasat trebuie sa fie mai mic de ".$PMF_CONF["attmax"]." Bytes.";
+$PMF_LANG["ad_attach_4"] = "Fisierul atasat trebuie sa fie mai mic de ".$PMF_CONF['main.maxAttachmentSize']." Bytes.";
 $PMF_LANG["ad_menu_export"] = "Exporta baza ta de date FAQ";
 $PMF_LANG["ad_export_1"] = "Construieste un RSS-Feed";
 $PMF_LANG["ad_export_2"] = ".";
@@ -559,7 +559,7 @@ $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Adresa de emai
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Informatii de contact");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Text de copyright");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Text pentru pagina de recomandare");
-$LANG_CONF["attmax"] = array(0 => "input", 1 => "marimea maxima a fisierelor care pot fi uploadate in Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
+$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "marimea maxima a fisierelor care pot fi uploadate in Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["disatt"] = array(0 => "checkbox", 1 => "Link the attachments below the entries?");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "utilizeaza monitorizarea?");
 $LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "utilizeaza monitorizarea activitatii de admin?");

@@ -497,7 +497,7 @@ $PMF_LANG["ad_entry_preview"] = "미리 보기";
 $PMF_LANG["ad_attach_1"] = "환경설정에서 첨부파일을 저장하기 위한 디렉터리를 먼저 설정하여 주시기 바랍니다.";
 $PMF_LANG["ad_attach_2"] = "환경설정에서 첨부파일을 위한 링크를 먼저 설정하여 주시기 바랍니다.";
 $PMF_LANG["ad_attach_3"] = "attachment.php 파일은 권한 없이 열수 없습니다.";
-$PMF_LANG["ad_attach_4"] = "첨부파일의 사이즈는 ".$PMF_CONF["attmax"]." Bytes 보다 작아야 합니다.";
+$PMF_LANG["ad_attach_4"] = "첨부파일의 사이즈는 ".$PMF_CONF['main.maxAttachmentSize']." Bytes 보다 작아야 합니다.";
 $PMF_LANG["ad_menu_export"] = "FAQ 내보내기";
 $PMF_LANG["ad_export_1"] = "Built RSS-Feed on";
 $PMF_LANG["ad_export_2"] = ".";
@@ -560,7 +560,7 @@ $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "관리자 메일주�
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "문의 정보");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "시작페이지의 저작권 정보");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "친구에게 보내기 페이지를 위한 텍스트");
-$LANG_CONF["attmax"] = array(0 => "input", 1 => "최대 첨부 파일 사이즈(Bytes) (최대 ".ini_get("upload_max_filesize")."Byte)");
+$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "최대 첨부 파일 사이즈(Bytes) (최대 ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["disatt"] = array(0 => "checkbox", 1 => "내용의 아래에 첨부파일 링크걸기");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "추적기능 사용 여부");
 $LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "관리로그 사용 여부");

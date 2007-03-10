@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_fa.php,v 1.5 2007-03-10 22:07:36 thorstenr Exp $
+* $Id: language_fa.php,v 1.6 2007-03-10 22:26:44 thorstenr Exp $
 *
 * farsi language file
 *
@@ -497,7 +497,7 @@ $PMF_LANG["ad_entry_preview"] = "پیش‌نمایش";
 $PMF_LANG["ad_attach_1"] = "لط�?اً در تنظیمات یک شاخه برای الصاقی‌ها انتخاب کنید.";
 $PMF_LANG["ad_attach_2"] = "لط�?اً در تنظیمات یک لینک برای الصاقی‌ها انتخاب کنید.";
 $PMF_LANG["ad_attach_3"] = "�?ایل attachment.php بدون مجوزهای لازم اجرا نمیشود.";
-$PMF_LANG["ad_attach_4"] = "�?ایل الصاقی باید از ".$PMF_CONF["attmax"]." بایت کوچکتر باشد.";
+$PMF_LANG["ad_attach_4"] = "�?ایل الصاقی باید از ".$PMF_CONF['main.maxAttachmentSize']." بایت کوچکتر باشد.";
 $PMF_LANG["ad_menu_export"] = "اکسپورت FAQ";
 $PMF_LANG["ad_export_1"] = "ساخت RSS-Feed روی";
 $PMF_LANG["ad_export_2"] = ".";
@@ -561,7 +561,7 @@ $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Email address 
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Contact information");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Copyright text for the startpage");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Text for the send2friend page");
-$LANG_CONF["attmax"] = array(0 => "input", 1 => "maximum Size for attachments in Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
+$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "maximum Size for attachments in Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["disatt"] = array(0 => "checkbox", 1 => "Link the attachments below the entries?");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "use Tracking?");
 $LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "use Adminlog?");

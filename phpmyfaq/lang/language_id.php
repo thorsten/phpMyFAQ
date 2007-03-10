@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_id.php,v 1.11 2007-03-10 22:07:36 thorstenr Exp $
+ * $Id: language_id.php,v 1.12 2007-03-10 22:26:44 thorstenr Exp $
  *
  * Indonesian language file
  *
@@ -571,8 +571,7 @@ $PMF_LANG["ad_attach_2"] = "Silahkan pilih dahulu sebuah link untuk berkas
 tambahan di dalam konfigurasi.";
 $PMF_LANG["ad_attach_3"] = "Berkas attachment.php tidak dapat dibuka tanpa
 hak yang sesuai.";
-$PMF_LANG["ad_attach_4"] = "Berkas tambahan harus lebih kecil dari
-".$PMF_CONF["attmax"]." Bytes.";
+$PMF_LANG["ad_attach_4"] = "Berkas tambahan harus lebih kecil dari ".$PMF_CONF['main.maxAttachmentSize']." Bytes.";
 $PMF_LANG["ad_menu_export"] = "Ekspor FAQ";
 $PMF_LANG["ad_export_1"] = "Buat RSS-Feed pada";
 $PMF_LANG["ad_export_2"] = ".";
@@ -646,8 +645,7 @@ $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Naskah hak cipta
 untuk halaman utama");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Naskah untuk
 pengiriman ke teman");
-$LANG_CONF["attmax"] = array(0 => "input", 1 => "Ukuran maksimum file berkas
-dalam Bytes (maksimum. ".ini_get("upload_max_filesize")."Byte)");
+$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Ukuran maksimum file berkas dalam Bytes (maksimum. ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["disatt"] = array(0 => "checkbox", 1 => "Sediakan hubungkan ke
 file berkas di bawah materi?");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "Aktifkan

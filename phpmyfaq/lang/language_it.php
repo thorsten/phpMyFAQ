@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.47 2007-03-10 22:07:36 thorstenr Exp $
+* $Id: language_it.php,v 1.48 2007-03-10 22:26:44 thorstenr Exp $
 *
 * Italian language file
 *
@@ -499,7 +499,7 @@ $PMF_LANG["ad_entry_preview"] = "Anteprima";
 $PMF_LANG["ad_attach_1"] = "Scegli una cartella per gli allegati innanzitutto nella configurazione.";
 $PMF_LANG["ad_attach_2"] = "Scegli un link per gli allegati innanzitutto nella configurazione.";
 $PMF_LANG["ad_attach_3"] = "Il file <em>attachment.php</em> non pu&ograve; essere aperto senza una autenticazione.";
-$PMF_LANG["ad_attach_4"] = "Il file in allegato non deve essere pi&ugrave; grande di ".$PMF_CONF["attmax"]." Bytes.";
+$PMF_LANG["ad_attach_4"] = "Il file in allegato non deve essere pi&ugrave; grande di ".$PMF_CONF['main.maxAttachmentSize']." Bytes.";
 $PMF_LANG["ad_menu_export"] = "Esporta le <em>FAQ</em>";
 $PMF_LANG["ad_export_1"] = "Costruisci un Feed RSS";
 $PMF_LANG["ad_export_2"] = ".";
@@ -562,7 +562,7 @@ $LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "Nome dell'Editore");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Indirizzo email dell'Amministratore");
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Testo per la pagina dei <em>Contatti</em>");
 $LANG_CONF["send2friendText"] = array(0 => "area", 1 => "Testo per la pagina <em>Invia ad un amico</em>");
-$LANG_CONF["attmax"] = array(0 => "input", 1 => "Massima dimensione per gli allegati, in Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
+$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Massima dimensione per gli allegati, in Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["disatt"] = array(0 => "checkbox", 1 => "Mostra il link agli allegati");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "Abilito il tracciamento per le attivit&agrave; dell'Utente?");
 $LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "Abilito il tracciamento per le attivit&agrave; di Amministrazione?");

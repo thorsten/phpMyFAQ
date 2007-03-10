@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_fr.php,v 1.17 2007-03-10 22:07:36 thorstenr Exp $
+* $Id: language_fr.php,v 1.18 2007-03-10 22:26:44 thorstenr Exp $
 *
 * The French language file - try to be the best
 *
@@ -500,7 +500,7 @@ $PMF_LANG["ad_entry_preview"] = "Pr&eacute;visualisation";
 $PMF_LANG["ad_attach_1"] = "Veuillez d'abord choisir un r&eacute;pertoire pour les attachments dans la configuration.";
 $PMF_LANG["ad_attach_2"] = "Veuillez d'abord choisir un r&eacute;pertoire pour le lien dans la configuration.";
 $PMF_LANG["ad_attach_3"] = "Le fichier attachment.php ne peut &ecirc;tre ouvert sans authentification pr&eacute;alable.";
-$PMF_LANG["ad_attach_4"] = "Le fichier attach&eacute; doit &ecirc;tre inf&eacute;rieur &agrave; ".$PMF_CONF["attmax"]." Bytes.";
+$PMF_LANG["ad_attach_4"] = "Le fichier attach&eacute; doit &ecirc;tre inf&eacute;rieur &agrave; ".$PMF_CONF['main.maxAttachmentSize']." Bytes.";
 $PMF_LANG["ad_menu_export"] = "Exporter votre FAQ";
 $PMF_LANG["ad_export_1"] = "Cr&eacute;ation RSS-Feed activ&eacute;e";
 $PMF_LANG["ad_export_2"] = ".";
@@ -563,7 +563,7 @@ $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Adresse Email 
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Informations de contact");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Texte de Copyright pour la page d'entrée");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Texte pour la page send2friend");
-$LANG_CONF["attmax"] = array(0 => "input", 1 => "Taille maximum des attachements en Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
+$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Taille maximum des attachements en Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["disatt"] = array(0 => "checkbox", 1 => "Afficher le lien des attachements en bas de page&nbsp;?");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "Utiliser le Tracking&nbsp;?");
 $LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "Utiliser l'Adminlog&nbsp;?");

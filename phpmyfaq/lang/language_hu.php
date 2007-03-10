@@ -496,7 +496,7 @@ $PMF_LANG["ad_entry_preview"] = "Előnézet";
 $PMF_LANG["ad_attach_1"] = "Először add meg a csatolt fájlok helyét a beállításokban.";
 $PMF_LANG["ad_attach_2"] = "Először állítsd be a linkeket a beállításokban.";
 $PMF_LANG["ad_attach_3"] = "Az attachment.php nem nyitható meg.";
-$PMF_LANG["ad_attach_4"] = "A csatolt fájlnak kisebbnek kell lennie mint ".$PMF_CONF["attmax"]." byte.";
+$PMF_LANG["ad_attach_4"] = "A csatolt fájlnak kisebbnek kell lennie mint ".$PMF_CONF['main.maxAttachmentSize']." byte.";
 $PMF_LANG["ad_menu_export"] = "GYIK exportálása";
 $PMF_LANG["ad_export_1"] = "RSS készítése";
 $PMF_LANG["ad_export_2"] = ".";
@@ -559,7 +559,7 @@ $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Emailadress of
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Contactinformation");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Copyrighttext for the startpage");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Text for the send2friend page");
-$LANG_CONF["attmax"] = array(0 => "input", 1 => "maximum Size for attachments in Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
+$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "maximum Size for attachments in Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["disatt"] = array(0 => "checkbox", 1 => "Link the attachments below the entries?");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "use Tracking?");
 $LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "use Adminlog?");

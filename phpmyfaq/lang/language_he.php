@@ -498,7 +498,7 @@ $PMF_LANG["ad_entry_preview"] = "תצוגה מקדימה";
 $PMF_LANG["ad_attach_1"] = "אתה צריך לבחור תיקייה לקבצים המצורפים באזור ההגדרות.";
 $PMF_LANG["ad_attach_2"] = "אתה צריך לבחור קישור לתיקיית הקבצים המצורפים באזור ההגדרות.";
 $PMF_LANG["ad_attach_3"] = "הקובץ attachment.php בלי בדיקת אוטנטיות.";
-$PMF_LANG["ad_attach_4"] = "הקובץ המצורף חייב להיות קטן מ ".$PMF_CONF["attmax"]." Bytes.";
+$PMF_LANG["ad_attach_4"] = "הקובץ המצורף חייב להיות קטן מ ".$PMF_CONF['main.maxAttachmentSize']." Bytes.";
 $PMF_LANG["ad_menu_export"] = "יצא את הFAQ שלך";
 $PMF_LANG["ad_export_1"] = "בנה RSS-Feed";
 $PMF_LANG["ad_export_2"] = ".";
@@ -561,7 +561,7 @@ $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "כתובת הדואל של
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "מידע ליצירת קשר");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "זכויות יוצרים לעמוד הראשי");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "טקסט לעמוד שלח לחבר");
-$LANG_CONF["attmax"] = array(0 => "input", 1 => "גודל מקסימלי של קובץ מצורף ב- Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
+$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "גודל מקסימלי של קובץ מצורף ב- Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["disatt"] = array(0 => "checkbox", 1 => "קשר לקובץ המצורף הנל את הרשומה?");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "צור מעקב?");
 $LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "עשה ?");

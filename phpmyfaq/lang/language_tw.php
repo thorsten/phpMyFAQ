@@ -496,7 +496,7 @@ $PMF_LANG["ad_entry_preview"] = "�?覽";
 $PMF_LANG["ad_attach_1"] = "請在目�?設置中指定儲存附件的目錄.";
 $PMF_LANG["ad_attach_2"] = "請在目�?設置中指定附件的連�?.";
 $PMF_LANG["ad_attach_3"] = "沒有足夠的權�?打開attachment.php.";
-$PMF_LANG["ad_attach_4"] = "附件大�?必須�?於".$PMF_CONF["attmax"]." �?元組.";
+$PMF_LANG["ad_attach_4"] = "附件大�?必須�?於".$PMF_CONF['main.maxAttachmentSize']." �?元組.";
 $PMF_LANG["ad_menu_export"] = "導出你的FAQ";
 $PMF_LANG["ad_export_1"] = "建立 RSS-Feed";
 $PMF_LANG["ad_export_2"] = ".";
@@ -559,7 +559,7 @@ $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "管�?�員電�
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "�?�絡資料");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "�?始�?�?�的版權�?護�?�明文字");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "傳�?到朋�?��?�?�的文字");
-$LANG_CONF["attmax"] = array(0 => "input", 1 => "附件最大�?制是 (. ".ini_get("upload_max_filesize")."�?元組)");
+$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "附件最大�?制是 (. ".ini_get("upload_max_filesize")."�?元組)");
 $LANG_CONF["disatt"] = array(0 => "checkbox", 1 => "連接記錄下的附件？");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "啟用跟蹤？");
 $LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "啟用管�?�員日誌？");

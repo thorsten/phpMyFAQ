@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Configuration.php,v 1.12 2007-02-18 21:51:29 matteo Exp $
+* $Id: Configuration.php,v 1.13 2007-03-10 22:26:43 thorstenr Exp $
 *
 * The main class for fetching the configuration, update and delete items.
 *
@@ -60,7 +60,7 @@ class PMF_Configuration
         // Load the Configuration Keys
         if (!isset($LANG_CONF)) {
             // Hack: avoid circular reference
-            $PMF_CONF['attmax'] = 2048000;
+            $PMF_CONF['main.maxAttachmentSize'] = 2048000;
             require_once(dirname(dirname(__FILE__)).'/lang/language_en.php');
         }
 

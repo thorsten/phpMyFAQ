@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.48 2007-03-10 22:07:35 thorstenr Exp $
+ * $Id: language_de.php,v 1.49 2007-03-10 22:26:43 thorstenr Exp $
  *
  * German language file
  *
@@ -497,7 +497,7 @@ $PMF_LANG["ad_entry_preview"] = "Vorschau";
 $PMF_LANG["ad_attach_1"] = "Zuerst muss in der Konfiguration ein Verzeichnis für die Attachments angegeben werden.";
 $PMF_LANG["ad_attach_2"] = "Zuerst muss in der Konfiguration ein Link für die Attachments angegeben werden.";
 $PMF_LANG["ad_attach_3"] = "Die Datei attachment.php kann nur über den Admin-Bereich nach vorheriger Authentifikation aufgerufen werden.";
-$PMF_LANG["ad_attach_4"] = "Bitte eine Datei auswählen die innerhalb der Maximalgröße von ".$PMF_CONF["attmax"]." Bytes für Attachments liegt.";
+$PMF_LANG["ad_attach_4"] = "Bitte eine Datei auswählen die innerhalb der Maximalgröße von ".$PMF_CONF['main.maxAttachmentSize']." Bytes für Attachments liegt.";
 $PMF_LANG["ad_menu_export"] = "FAQ exportieren";
 $PMF_LANG["ad_export_1"] = "RSS-Feed unter";
 $PMF_LANG["ad_export_2"] = "generiert.";
@@ -560,7 +560,7 @@ $LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "Name des Veröffentlicher
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "E-Mailadresse des Administrators");
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Kontakt, Impressum, hier die Betreiberadresse angeben!");
 $LANG_CONF["send2friendText"] = array(0 => "area", 1 => "Text für die Send2Friend-Seite");
-$LANG_CONF["attmax"] = array(0 => "input", 1 => "Maximalgröße von Attachments in Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
+$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Maximalgröße von Attachments in Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["disatt"] = array(0 => "checkbox", 1 => "Attachments unter den Beiträgen anzeigen?");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "Tracking aktiviert?");
 $LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "Adminlog aktiviert?");

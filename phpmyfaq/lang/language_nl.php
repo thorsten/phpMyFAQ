@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_nl.php,v 1.16 2007-03-10 22:07:36 thorstenr Exp $
+ * $Id: language_nl.php,v 1.17 2007-03-10 22:26:44 thorstenr Exp $
  *
  * Dutch language file
  *
@@ -497,7 +497,7 @@ $PMF_LANG["ad_entry_preview"] = "Voorvertoning";
 $PMF_LANG["ad_attach_1"] = "Kies eerst in de configuratie voor een map voor de bijlagen.";
 $PMF_LANG["ad_attach_2"] = "Kies eerst in de configuratie voor een link voor de bijlagen.";
 $PMF_LANG["ad_attach_3"] = "Het bestand attachment.php kan niet worden geopend zonder de juiste authentificatie.";
-$PMF_LANG["ad_attach_4"] = "De bijlage moet kleiner zijn dan ".$PMF_CONF["attmax"]." Bytes.";
+$PMF_LANG["ad_attach_4"] = "De bijlage moet kleiner zijn dan ".$PMF_CONF['main.maxAttachmentSize']." Bytes.";
 $PMF_LANG["ad_menu_export"] = "Exporteer uw FAQ";
 $PMF_LANG["ad_export_1"] = "Maak RSS-Feed voor";
 $PMF_LANG["ad_export_2"] = ".";
@@ -560,7 +560,7 @@ $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Emailadres van
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Contact informatie");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Copyright tekst voor op de startpagina");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Tekst voor de send2friend pagina");
-$LANG_CONF["attmax"] = array(0 => "input", 1 => "maximum grootte van bijlagen in Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
+$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "maximum grootte van bijlagen in Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["disatt"] = array(0 => "checkbox", 1 => "De bijlagen onder de records aantonen?");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "Tracking activeren?");
 $LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "Beheerlog activeren?");

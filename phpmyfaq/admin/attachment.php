@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: attachment.php,v 1.27 2007-01-21 14:37:43 thorstenr Exp $
+* $Id: attachment.php,v 1.28 2007-03-10 22:26:43 thorstenr Exp $
 *
 * Select an attachment and save it or create the SQL backup files
 *
@@ -113,7 +113,7 @@ if (!isset($_REQUEST["action"]) && $auth && $permission["addatt"]) {
 <legend><?php print $PMF_LANG["ad_att_addto"]." ".$PMF_LANG["ad_att_addto_2"]; ?></legend>
 <input type="hidden" name="action" value="save" />
 <input type="hidden" name="uin" value="<?php print $_REQUEST["uin"]; ?>" />
-<input type="hidden" name="MAX_FILE_SIZE" value="<?php print $PMF_CONF["attmax"]; ?>" />
+<input type="hidden" name="MAX_FILE_SIZE" value="<?php print $faqconfig->get('main.maxAttachmentSize'); ?>" />
 <input type="hidden" name="id" value="<?php print $_REQUEST["id"]; ?>" />
 <input type="hidden" name="save" value="TRUE" />
 <?php print $PMF_LANG["ad_att_att"]; ?> <input name="userfile" type="file" />
@@ -133,7 +133,7 @@ if (isset($_REQUEST["save"]) && $_REQUEST["save"] == TRUE && $auth && $permissio
 ?>
 <p><strong><?php print $PMF_LANG["ad_att_addto"]." ".$PMF_LANG["ad_att_addto_2"]; ?></strong></p>
 <?php
-    if (is_uploaded_file($_FILES["userfile"]["tmp_name"]) && !(@filesize($_FILES["userfile"]["tmp_name"]) > $PMF_CONF["attmax"])) {
+    if (is_uploaded_file($_FILES["userfile"]["tmp_name"]) && !(@filesize($_FILES["userfile"]["tmp_name"]) > $faqconfig->get('main.maxAttachmentSize'))) {
         if (!is_dir(PMF_ROOT_DIR."/attachments/")) {
             mkdir(PMF_ROOT_DIR."/attachments/", 0777);
         }

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: sybase.update.sql.php,v 1.10 2007-03-10 22:07:35 thorstenr Exp $
+ * $Id: sybase.update.sql.php,v 1.11 2007-03-10 22:26:43 thorstenr Exp $
  *
  * CREATE TABLE instruction for Sybase database
  *
@@ -166,7 +166,7 @@ PRIMARY KEY (user_id, right_id)
 //
 
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.administrationMail', 'webmaster@example.org')";
-$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('attmax', '100000')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.maxAttachmentSize', '100000')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('bannedIP', 'false')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('detection', 'true')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('disatt', 'true')";

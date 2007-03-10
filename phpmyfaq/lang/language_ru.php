@@ -495,7 +495,7 @@ $PMF_LANG["ad_entry_preview"] = "Предпросмотр";
 $PMF_LANG["ad_attach_1"] = "Неверно указана директория для прикрепленных файлов в панели управления.";
 $PMF_LANG["ad_attach_2"] = "Неверно указана ссылка для прикрепленных файлов в панели управления.";
 $PMF_LANG["ad_attach_3"] = "Файл attachment.php нельзя открыть без прав на это, выполните вход в систему.";
-$PMF_LANG["ad_attach_4"] = "Файл должен быть не больше ".$PMF_CONF["attmax"]." байт.";
+$PMF_LANG["ad_attach_4"] = "Файл должен быть не больше ".$PMF_CONF['main.maxAttachmentSize']." байт.";
 $PMF_LANG["ad_menu_export"] = "Экспорт данных";
 $PMF_LANG["ad_export_1"] = "RSS файл созздан";
 $PMF_LANG["ad_export_2"] = ".";
@@ -558,7 +558,7 @@ $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Emailadress of
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Contactinformation");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Copyrighttext for the startpage");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Text for the send2friend page");
-$LANG_CONF["attmax"] = array(0 => "input", 1 => "maximum Size for attachments in Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
+$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "maximum Size for attachments in Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["disatt"] = array(0 => "checkbox", 1 => "Link the attachments below the entries?");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "use Tracking?");
 $LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "use Adminlog?");

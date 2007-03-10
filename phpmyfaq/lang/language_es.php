@@ -498,7 +498,7 @@ $PMF_LANG["ad_entry_preview"] = "Previsualizar";
 $PMF_LANG["ad_attach_1"] = "Por favor, primero escoge un directorio para los adjuntos en la configuración.";
 $PMF_LANG["ad_attach_2"] = "Por favor, escoge primero un link para los adjuntos en la configuración.";
 $PMF_LANG["ad_attach_3"] = "El fichero attachment.php no puede abrirse sin la autentificación apropiada.";
-$PMF_LANG["ad_attach_4"] = "El fichero adjunto debe ser menor de ".$PMF_CONF["attmax"]." Bytes.";
+$PMF_LANG["ad_attach_4"] = "El fichero adjunto debe ser menor de ".$PMF_CONF['main.maxAttachmentSize']." Bytes.";
 $PMF_LANG["ad_menu_export"] = "Exportar tu FAQ";
 $PMF_LANG["ad_export_1"] = "Construir RSS-Feed";
 $PMF_LANG["ad_export_2"] = ".";
@@ -561,7 +561,7 @@ $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Dirección de e
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Informaciones de contacto");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Texto del copyright de la página de confirmación");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Texto para la página de enviar a un amigo");
-$LANG_CONF["attmax"] = array(0 => "input", 1 => "Tamaño máximo para los adjuntos en Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
+$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Tamaño máximo para los adjuntos en Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["disatt"] = array(0 => "checkbox", 1 => "¿Poner un link a los adjuntos bajo las entradas?");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "¿Usar monitorización?");
 $LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "¿Usar el Adminlog?");

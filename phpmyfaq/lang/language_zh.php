@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_zh.php,v 1.12 2007-03-10 22:07:36 thorstenr Exp $
+* $Id: language_zh.php,v 1.13 2007-03-10 22:26:44 thorstenr Exp $
 *
 * Chinese (simplified) language file
 *
@@ -498,7 +498,7 @@ $PMF_LANG["ad_entry_preview"] = "预览";
 $PMF_LANG["ad_attach_1"] = "请现在设置中指定�?存附件的目录。";
 $PMF_LANG["ad_attach_2"] = "请现在设置中指定附件的链接。";
 $PMF_LANG["ad_attach_3"] = "没有足够的�?��?打开文件attachment.php。";
-$PMF_LANG["ad_attach_4"] = "附件大�?必须�?于".$PMF_CONF["attmax"]." 字节。";
+$PMF_LANG["ad_attach_4"] = "附件大�?必须�?于".$PMF_CONF['main.maxAttachmentSize']." 字节。";
 $PMF_LANG["ad_menu_export"] = "导出问答数�?�";
 $PMF_LANG["ad_export_1"] = "建立 RSS-Feed";
 $PMF_LANG["ad_export_2"] = ".";
@@ -561,7 +561,7 @@ $LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "管�?�员姓�??");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "管�?�员Email");
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "�?�系我们");
 $LANG_CONF["send2friendText"] = array(0 => "area", 1 => "�?��?到朋�?�页�?�的文字");
-$LANG_CONF["attmax"] = array(0 => "input", 1 => "附件最大�?制是 (. ".ini_get("upload_max_filesize")."字节)");
+$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "附件最大�?制是 (. ".ini_get("upload_max_filesize")."字节)");
 $LANG_CONF["disatt"] = array(0 => "checkbox", 1 => "显示内容附件？");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "�?�用跟踪？");
 $LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "�?�用�?作日志？");

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_el.php,v 1.5 2007-03-10 22:07:35 thorstenr Exp $
+* $Id: language_el.php,v 1.6 2007-03-10 22:26:43 thorstenr Exp $
 *
 * The Hellenic language file
 *
@@ -497,7 +497,7 @@ $PMF_LANG["ad_entry_preview"] = "Προεπισκόπιση";
 $PMF_LANG["ad_attach_1"] = "Παρακαλούμε επιλέξτε πρώτα τον κατάλογο των συνημμένων από τις ρυθμίσεις της σελίδας.";
 $PMF_LANG["ad_attach_2"] = "Παρακαλούμε επιλέξτε πρώτα κάποιο σύνδεσμο για τα συνημμένα στις ρυθμίσεις της σελίδας.";
 $PMF_LANG["ad_attach_3"] = "Η σελίδα attachment.php δε μπορεί να ανοιχτεί χωρίς την απαιτούμενη πιστοποίηση.";
-$PMF_LANG["ad_attach_4"] = "Το συνημμένο αρχείο πρέπει να είναι μικρότερο από ".$PMF_CONF["attmax"]." Bytes.";
+$PMF_LANG["ad_attach_4"] = "Το συνημμένο αρχείο πρέπει να είναι μικρότερο από ".$PMF_CONF['main.maxAttachmentSize']." Bytes.";
 $PMF_LANG["ad_menu_export"] = "Εξαγωγή του FAQ";
 $PMF_LANG["ad_export_1"] = "Δημιουργήθηκε RSS-Feed στη κατηγορία";
 $PMF_LANG["ad_export_2"] = ".";
@@ -560,7 +560,7 @@ $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Ηλεκτρονική δι
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Πληροφορίες επικοινωνίας");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Κείμενο για τα copyrights στην αρχική σελίδα");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Κείμενο για τη σελίδα αποστολής μηνυμάτων (send2friend)");
-$LANG_CONF["attmax"] = array(0 => "input", 1 => "Μέγιστο μέγεθος συνημμένων (Μεγιστο. ".ini_get("upload_max_filesize")."Byte)");
+$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Μέγιστο μέγεθος συνημμένων (Μεγιστο. ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["disatt"] = array(0 => "checkbox", 1 => "Σύνδεση των συνημμένων κάτω από την καταχώρηση των άρθρων");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "Να γίνεται παρακολούθηση με τη μέθοδο του tracking;");
 $LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "Να γίνει χρήση του ημερολογίου συμβάντων;");

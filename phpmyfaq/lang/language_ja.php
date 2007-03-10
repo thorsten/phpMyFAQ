@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_ja.php,v 1.21 2007-03-10 22:07:36 thorstenr Exp $
+ * $Id: language_ja.php,v 1.22 2007-03-10 22:26:44 thorstenr Exp $
  *
  * The Japanese language file
  *
@@ -498,7 +498,7 @@ $PMF_LANG["ad_entry_preview"] = "ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼";
 $PMF_LANG["ad_attach_1"] = "ç’°å¢ƒè¨­å®šã?‹ã‚‰æ·»ä»˜ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä¿?å­˜ã?™ã‚‹ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’å…ˆã?«è¨­å®šã?—ã?¦ã??ã? ã?•ã?„ã€‚";
 $PMF_LANG["ad_attach_2"] = "ç’°å¢ƒè¨­å®šã?‹ã‚‰æ·»ä»˜ãƒ•ã‚¡ã‚¤ãƒ«ã?®ãƒªãƒ³ã‚¯ã‚’å…ˆã?«è¨­å®šã?—ã?¦ã??ã? ã?•ã?„ã€‚";
 $PMF_LANG["ad_attach_3"] = "attachment.php ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ¨©é™?ã?ªã?—ã?§ã?¯ã‚ªãƒ¼ãƒ—ãƒ³ã?§ã??ã?¾ã?›ã‚“ã€‚";
-$PMF_LANG["ad_attach_4"] = "æ·»ä»˜ãƒ•ã‚¡ã‚¤ãƒ«ã?®ã‚µã‚¤ã‚ºã?¯ ".$PMF_CONF["attmax"]." Bytes ã‚ˆã‚Šå¤§ã??ã??ã?¦ã?¯ã?„ã?‘ã?¾ã?›ã‚“ã€‚";
+$PMF_LANG["ad_attach_4"] = "æ·»ä»˜ãƒ•ã‚¡ã‚¤ãƒ«ã?®ã‚µã‚¤ã‚ºã?¯ ".$PMF_CONF['main.maxAttachmentSize']." Bytes ã‚ˆã‚Šå¤§ã??ã??ã?¦ã?¯ã?„ã?‘ã?¾ã?›ã‚“ã€‚";
 $PMF_LANG["ad_menu_export"] = "FAQ ã‚¨ã‚¯ã‚¹ãƒ?ãƒ¼ãƒˆ";
 $PMF_LANG["ad_export_1"] = "Built RSS-Feed on";
 $PMF_LANG["ad_export_2"] = ".";
@@ -562,7 +562,7 @@ $LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "ç®¡ç?†è€…å??");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "ç®¡ç?†è€…ã?®é›»å­?ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹");
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "å•?ã?„å?ˆã‚?ã?›æƒ…å ±");
 $LANG_CONF["send2friendText"] = array(0 => "area", 1 => "å?‹é?”ã?«é€?ä¿¡ãƒšãƒ¼ã‚¸ã?®ãƒ†ã‚­ã‚¹ãƒˆ");
-$LANG_CONF["attmax"] = array(0 => "input", 1 => "æ·»ä»˜ãƒ•ã‚¡ã‚¤ãƒ«ã?®æœ€å¤§ã‚µã‚¤ã‚º (æœ€å¤§ ".ini_get("upload_max_filesize")." ãƒ?ã‚¤ãƒˆ)");
+$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "æ·»ä»˜ãƒ•ã‚¡ã‚¤ãƒ«ã?®æœ€å¤§ã‚µã‚¤ã‚º (æœ€å¤§ ".ini_get("upload_max_filesize")." ãƒ?ã‚¤ãƒˆ)");
 $LANG_CONF["disatt"] = array(0 => "checkbox", 1 => "ã‚¨ãƒ³ãƒˆãƒªã?®ä¸‹ã?«æ·»ä»˜ã?®ãƒªãƒ³ã‚¯ã‚’è¡¨ç¤ºã?™ã‚‹");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "è¿½è·¡æ©Ÿèƒ½ã‚’ä½¿ç”¨ã?™ã‚‹");
 $LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "ç®¡ç?†ãƒ­ã‚°ã‚’ä½¿ç”¨ã?™ã‚‹");

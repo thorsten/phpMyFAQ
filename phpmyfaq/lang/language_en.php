@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.76 2007-03-10 22:07:35 thorstenr Exp $
+* $Id: language_en.php,v 1.77 2007-03-10 22:26:44 thorstenr Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -499,7 +499,7 @@ $PMF_LANG["ad_entry_preview"] = "Preview";
 $PMF_LANG["ad_attach_1"] = "Please choose a directory for attachments first in configuration.";
 $PMF_LANG["ad_attach_2"] = "Please choose a link for attachments first in configuration.";
 $PMF_LANG["ad_attach_3"] = "The file attachment.php cannot be opened without proper authentification.";
-$PMF_LANG["ad_attach_4"] = "The attached file must be smaller than ".$PMF_CONF["attmax"]." Bytes.";
+$PMF_LANG["ad_attach_4"] = "The attached file must be smaller than ".$PMF_CONF['main.maxAttachmentSize']." Bytes.";
 $PMF_LANG["ad_menu_export"] = "Export your FAQ";
 $PMF_LANG["ad_export_1"] = "Built RSS-Feed on";
 $PMF_LANG["ad_export_2"] = ".";
@@ -562,7 +562,7 @@ $LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "Name of the Publisher");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Email address of the Admin");
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Contact information");
 $LANG_CONF["send2friendText"] = array(0 => "area", 1 => "Text for the send2friend page");
-$LANG_CONF["attmax"] = array(0 => "input", 1 => "maximum Size for attachments in Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
+$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "maximum Size for attachments in Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["disatt"] = array(0 => "checkbox", 1 => "Link the attachments below the entries?");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "use Tracking?");
 $LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "use Adminlog?");

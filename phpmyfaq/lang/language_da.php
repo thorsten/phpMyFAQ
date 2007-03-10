@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_da.php,v 1.10 2007-03-10 22:07:35 thorstenr Exp $
+* $Id: language_da.php,v 1.11 2007-03-10 22:26:43 thorstenr Exp $
 *
 * Danish language file
 *
@@ -497,7 +497,7 @@ $PMF_LANG["ad_entry_preview"] = "Preview";
 $PMF_LANG["ad_attach_1"] = "V&aelig;lg venligst f&oslash;rst et bibliotek for vedh&aelig;ftninger i konfiguration.";
 $PMF_LANG["ad_attach_2"] = "V&aelig;lg venligst f&oslash;rst et link til vedh&aelig;ftninger.";
 $PMF_LANG["ad_attach_3"] = "Filen attachment.php kan ikke &aring;bnes uden kr&aelig;vede rettigheder.";
-$PMF_LANG["ad_attach_4"] = "Den vedh&aelig;ftede fil skal v&aelig;re mindre end ".$PMF_CONF["attmax"]." Bytes.";
+$PMF_LANG["ad_attach_4"] = "Den vedh&aelig;ftede fil skal v&aelig;re mindre end ".$PMF_CONF['main.maxAttachmentSize']." Bytes.";
 $PMF_LANG["ad_menu_export"] = "Eksporter din FAQ";
 $PMF_LANG["ad_export_1"] = "Byg RSS-Feed til";
 $PMF_LANG["ad_export_2"] = ".";
@@ -560,7 +560,7 @@ $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Emailadress of
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Contactinformation");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Copyrighttext for the startpage");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Text for the send2friend page");
-$LANG_CONF["attmax"] = array(0 => "input", 1 => "maximum Size for attachments in Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
+$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "maximum Size for attachments in Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["disatt"] = array(0 => "checkbox", 1 => "Link the attachments below the entries?");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "use Tracking?");
 $LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "use Adminlog?");

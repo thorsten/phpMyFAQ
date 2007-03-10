@@ -499,7 +499,7 @@ $PMF_LANG["ad_entry_preview"] = "Pogdl±d";
 $PMF_LANG["ad_attach_1"] = "Najpierw nale¿y w konfiguracji wskazaæ katalog dla za³±czników.";
 $PMF_LANG["ad_attach_2"] = "Najpierw nale¿y w konfiguracji wybraæ link do za³±czników.";
 $PMF_LANG["ad_attach_3"] = "Do otwarcia skryptu attachment.php konieczna jest autoryzacja.";
-$PMF_LANG["ad_attach_4"] = "Do³±czany plik musi byæ mniejszy ni¿  ".$PMF_CONF["attmax"]." Bitów.";
+$PMF_LANG["ad_attach_4"] = "Do³±czany plik musi byæ mniejszy ni¿  ".$PMF_CONF['main.maxAttachmentSize']." Bitów.";
 $PMF_LANG["ad_menu_export"] = "Eksportuj FAQ";
 $PMF_LANG["ad_export_1"] = "Budowanie RSS-Feed w³±czone";
 $PMF_LANG["ad_export_2"] = ".";
@@ -562,7 +562,7 @@ $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Adres e-mail a
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Informacje kontaktowe");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Tekst copyright na stronie g³ównej");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Tekst na stronie wy¶lij do znajomego");
-$LANG_CONF["attmax"] = array(0 => "input", 1 => "maksymalny rozmiar za³±cznika w bajtach (maks. ".ini_get("upload_max_filesize")."bajtów)");
+$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "maksymalny rozmiar za³±cznika w bajtach (maks. ".ini_get("upload_max_filesize")."bajtów)");
 $LANG_CONF["disatt"] = array(0 => "checkbox", 1 => "Linkuj za³aczniki pod wpisami?");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "u¿ywaj statystyk?");
 $LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "u¿ywaj logowania dzia³añ administratora?");

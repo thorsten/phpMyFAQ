@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_fi.php,v 1.10 2007-03-10 22:07:36 thorstenr Exp $
+ * $Id: language_fi.php,v 1.11 2007-03-10 22:26:44 thorstenr Exp $
  *
  * Finnish language file
  *
@@ -498,7 +498,7 @@ $PMF_LANG["ad_entry_preview"] = "Esikatsele";
 $PMF_LANG["ad_attach_1"] = "Valitse ensin asetuksista hakemisto liitetiedostoille.";
 $PMF_LANG["ad_attach_2"] = "Valitse ensin asetuksista linkki liitetiedostoille.";
 $PMF_LANG["ad_attach_3"] = "Tiedostoa attachment.php ei voida avata ilman riittäviä oikeuksia.";
-$PMF_LANG["ad_attach_4"] = "Liitettävän tiedoston tulee olla pienempi kuin ".$PMF_CONF["attmax"]." tavua.";
+$PMF_LANG["ad_attach_4"] = "Liitettävän tiedoston tulee olla pienempi kuin ".$PMF_CONF['main.maxAttachmentSize']." tavua.";
 $PMF_LANG["ad_menu_export"] = "Export your FAQ";
 $PMF_LANG["ad_export_1"] = "Luo RSS-lähde ";
 $PMF_LANG["ad_export_2"] = " lähteestä.";
@@ -561,7 +561,7 @@ $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Ylläpitäjän sä
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Yhteystiedot");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Kopiointioikeudet aloitussivulle");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Teksti lähetä tuttavalle sivulle");
-$LANG_CONF["attmax"] = array(0 => "input", 1 => "suurin sallittu koko liitetiedostoille tavuina on  (max. ".ini_get("upload_max_filesize")."tavua)");
+$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "suurin sallittu koko liitetiedostoille tavuina on  (max. ".ini_get("upload_max_filesize")."tavua)");
 $LANG_CONF["disatt"] = array(0 => "checkbox", 1 => "Linkitä liitteet tietueiden alpuolelle?");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "käytä lokia?");
 $LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "käytä ylläpitolokia?");

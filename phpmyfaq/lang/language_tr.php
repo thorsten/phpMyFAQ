@@ -495,7 +495,7 @@ $PMF_LANG["ad_entry_preview"] = "Önizleme";
 $PMF_LANG["ad_attach_1"] = "Eklerin ayarlamalarý için önce bir yol seçin.";
 $PMF_LANG["ad_attach_2"] = "Eklerin ayarlamalarý için önce bir link seçin.";
 $PMF_LANG["ad_attach_3"] = "Dosya eklendi.php uygun yetkilendirme olmadan açýlamaz.";
-$PMF_LANG["ad_attach_4"] = "Ek dosya ".$PMF_CONF["attmax"]." Byte 'tan küçük olmalýdýr.";
+$PMF_LANG["ad_attach_4"] = "Ek dosya ".$PMF_CONF['main.maxAttachmentSize']." Byte 'tan küçük olmalýdýr.";
 $PMF_LANG["ad_menu_export"] = "FAQ'nuzu ihraç edin";
 $PMF_LANG["ad_export_1"] = "RSS-Feed üzerine kur";
 $PMF_LANG["ad_export_2"] = ".";
@@ -558,7 +558,7 @@ $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Emailadress of
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Contactinformation");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Copyrighttext for the startpage");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Text for the send2friend page");
-$LANG_CONF["attmax"] = array(0 => "input", 1 => "maximum Size for attachments in Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
+$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "maximum Size for attachments in Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["disatt"] = array(0 => "checkbox", 1 => "Link the attachments below the entries?");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "use Tracking?");
 $LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "use Adminlog?");

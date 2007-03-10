@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_nb.php,v 1.6 2007-03-10 22:07:36 thorstenr Exp $
+* $Id: language_nb.php,v 1.7 2007-03-10 22:26:44 thorstenr Exp $
 *
 * Norwegian Bokmål language file
 *
@@ -496,7 +496,7 @@ $PMF_LANG["ad_entry_preview"] = "Forhåndsvisning";
 $PMF_LANG["ad_attach_1"] = "Velg først et bibliotek for vedlegg i konfigurasjon.";
 $PMF_LANG["ad_attach_2"] = "Velg først en lenke til vedlegg.";
 $PMF_LANG["ad_attach_3"] = "Filen attachment.php kan ikke åpnes uten krevde rettigheter.";
-$PMF_LANG["ad_attach_4"] = "Den vedlagte filen skal være mindre enn ".$PMF_CONF["attmax"]." bytes.";
+$PMF_LANG["ad_attach_4"] = "Den vedlagte filen skal være mindre enn ".$PMF_CONF['main.maxAttachmentSize']." bytes.";
 $PMF_LANG["ad_menu_export"] = "Eksporter dine OSS";
 $PMF_LANG["ad_export_1"] = "Bygg RSS-strøm til";
 $PMF_LANG["ad_export_2"] = ".";
@@ -559,7 +559,7 @@ $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Administrators
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Kontaktinformasjon");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Tekst for opphavsrett på startsiden");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Tekst for send2friend-siden");
-$LANG_CONF["attmax"] = array(0 => "input", 1 => "maksimum størrelse for vedlegg i byte (maks. ".ini_get("upload_max_filesize")."Byte)");
+$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "maksimum størrelse for vedlegg i byte (maks. ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["disatt"] = array(0 => "checkbox", 1 => "Lenke til vedlegg under oppføringene?");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "bruk Tracking?");
 $LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "bruk adminlogg?");

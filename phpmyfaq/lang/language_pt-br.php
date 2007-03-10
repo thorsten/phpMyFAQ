@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_pt-br.php,v 1.6 2007-03-10 22:07:36 thorstenr Exp $
+ * $Id: language_pt-br.php,v 1.7 2007-03-10 22:26:44 thorstenr Exp $
  *
  * Brazilian Portuguese language file
  *
@@ -499,7 +499,7 @@ $PMF_LANG["ad_entry_preview"] = "Prever";
 $PMF_LANG["ad_attach_1"] = "Escolha um diret&oacute;rio para anexos na configura&ccedil;&atilde;o";
 $PMF_LANG["ad_attach_2"] = "Escolha um link para anexos na configura&ccedil;&atilde;o.";
 $PMF_LANG["ad_attach_3"] = "O arquivo attachment.php n&atilde;o pode ser acessado sem autentica&ccedil;&atilde;o.";
-$PMF_LANG["ad_attach_4"] = "O anexo deve ser inferior a ".$PMF_CONF["attmax"]." Bytes.";
+$PMF_LANG["ad_attach_4"] = "O anexo deve ser inferior a ".$PMF_CONF['main.maxAttachmentSize']." Bytes.";
 $PMF_LANG["ad_menu_export"] = "Exportar o seu FAQ";
 $PMF_LANG["ad_export_1"] = "Criado arquivo RSS em ";
 $PMF_LANG["ad_export_2"] = ".";
@@ -562,7 +562,7 @@ $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "E-mail do Admi
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Contato");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Texto de Copyright para p&aacute;gina inicial");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Texto para p&aacute;gina send2friend");
-$LANG_CONF["attmax"] = array(0 => "input", 1 => "Tamanho m&aacute;ximo para anexos em Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
+$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Tamanho m&aacute;ximo para anexos em Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["disatt"] = array(0 => "checkbox", 1 => "P&otilde;e os links dos anexos abaixo das entradas?");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "usa Tracking?");
 $LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "usa Adminlog?");

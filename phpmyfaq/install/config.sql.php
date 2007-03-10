@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: config.sql.php,v 1.11 2007-03-10 22:07:35 thorstenr Exp $
+ * $Id: config.sql.php,v 1.12 2007-03-10 22:26:43 thorstenr Exp $
  *
  * INSERT instruction for configuration
  *
@@ -20,7 +20,7 @@
  */
 
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.administrationMail', 'webmaster@example.org')";
-$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('attmax', '100000')";
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.maxAttachmentSize', '100000')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('bannedIP', '')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('detection', 'true')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('disatt', 'true')";

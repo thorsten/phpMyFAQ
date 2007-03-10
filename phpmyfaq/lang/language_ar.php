@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_ar.php,v 1.13 2007-03-10 22:07:35 thorstenr Exp $
+* $Id: language_ar.php,v 1.14 2007-03-10 22:26:43 thorstenr Exp $
 *
 * Arabic language file
 *
@@ -534,7 +534,7 @@ $PMF_LANG["ad_attach_1"] = "�?ضلاً قم بتحديد مسار المجلد �
 $PMF_LANG["ad_attach_2"] = "�?ضلاً قم بتحديد وصلة عنوان المجلد الذي سيتم
 �?يه ح�?ظ المر�?قات وذلك من خلال إعدادات البرنامج.";
 $PMF_LANG["ad_attach_3"] = "مل�? attachment.php لا يمكن �?تحه بدون صلاحية .";
-$PMF_LANG["ad_attach_4"] = "يجب أن يكون حجم المل�? المر�?ق أقل من ".$PMF_CONF["attmax"]."
+$PMF_LANG["ad_attach_4"] = "يجب أن يكون حجم المل�? المر�?ق أقل من ".$PMF_CONF['main.maxAttachmentSize']."
 بايت.";
 $PMF_LANG["ad_menu_export"] = "تصدير الأسئلة";
 $PMF_LANG["ad_export_1"] = " RSS-Feed بناء ";
@@ -600,7 +600,7 @@ $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "البريد �
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "معلومات الإتصال");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "حقوق النشر �?ي ص�?حة البداية");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "نص لص�?حة أرسل إلي صديق");
-$LANG_CONF["attmax"] = array(0 => "input", 1 => "أقصى حجم للمر�?قات بالبايت (max. ".ini_get("upload_max_filesize")."بايت)");
+$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "أقصى حجم للمر�?قات بالبايت (max. ".ini_get("upload_max_filesize")."بايت)");
 $LANG_CONF["disatt"] = array(0 => "checkbox", 1 => "ضع روابط المر�?قات أس�?ل المداخلات ؟");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "استخدم خاصية التتبع ؟");
 $LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "استخدم خاصية سجل المشر�?ين ؟");
