@@ -1,16 +1,16 @@
 <?php
 /**
-* $Id: show.php,v 1.13 2007-02-04 19:27:50 thorstenr Exp $
+* $Id: show.php,v 1.14 2007-03-10 08:16:59 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-08-27
-* @copyright    (c) 2001-2007 phpMyFAQ Team
-* 
+* @copyright    (c) 2002-2007 phpMyFAQ Team
+*
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the 'License'); you may not use this file except in
 * compliance with the License. You may obtain a copy of the License at
 * http://www.mozilla.org/MPL/
-* 
+*
 * Software distributed under the License is distributed on an 'AS IS'
 * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 * License for the specific language governing rights and limitations
@@ -23,18 +23,19 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 if (isset($_REQUEST['cat']) && is_numeric($_REQUEST['cat'])) {
-    $_cat = (int)$_REQUEST['cat'];
+    $currentCategory = (int)$_REQUEST['cat'];
 }
 
-if (isset($_cat) && $_cat != 0 && isset($category->categoryName[$_cat])) {
-    Tracking('show_category', $_cat);
-    $parent = $category->categoryName[$_cat]['parent_id'];
-    $name = $category->categoryName[$_cat]['name'];
+if (isset($currentCategory) && $currentCategory != 0 && isset($category->categoryName[$currentCategory])) {
 
-    $records = $faq->showAllRecords($_cat);
+    Tracking('show_category', $currentCategory);
+    $parent = $category->categoryName[$currentCategory]['parent_id'];
+    $name = $category->categoryName[$currentCategory]['name'];
+
+    $records = $faq->showAllRecords($currentCategory, $faqconfig->get('recordsOrderby'), $faqconfig->get('recordsSortby'));
     if (!$records) {
         $categories = new PMF_Category($LANGCODE);
-        $categories->transform($_cat);
+        $categories->transform($currentCategory);
         $categories->collapseAll();
         $records = $categories->viewTree();
     }
@@ -43,8 +44,7 @@ if (isset($_cat) && $_cat != 0 && isset($category->categoryName[$_cat])) {
     if ($parent != 0) {
         $url = sprintf('%saction=show&amp;cat=%d',
                     $sids,
-                    $parent
-                );
+                    $parent);
         $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
         $oLink->itemTitle = $category->categoryName[$parent]['name'];
         $oLink->text = $PMF_LANG['msgCategoryUp'];
@@ -56,11 +56,14 @@ if (isset($_cat) && $_cat != 0 && isset($category->categoryName[$_cat])) {
                         'writeThemes' => $records,
                         'writeOneThemeBack' => $up));
     $tpl->includeTemplate('writeContent', 'index');
+
 } else {
+
     Tracking('show_all_categories', 0);
     $tpl->processTemplate('writeContent', array(
                           'writeCategory' => $PMF_LANG['msgFullCategories'],
                           'writeThemes' => $category->viewTree(),
                           'writeOneThemeBack' => ''));
     $tpl->includeTemplate('writeContent', 'index');
+
 }
