@@ -1,8 +1,7 @@
-$Id: KNOWNBUGS.txt,v 1.14 2007-03-04 14:17:34 thorstenr Exp $
+$Id: KNOWNBUGS.txt,v 1.15 2007-03-10 08:23:40 thorstenr Exp $
 
 MISSING FEATURES in phpMyFAQ 2.0.0-beta2
 
-- simple reordering of records (blocker for beta2)
 - editable default values for record configuration (blocker for beta2)
 - finish the new admin backend layout (blocker for rc1)
 - unfinished documentation (blocker for final)
@@ -10,7 +9,6 @@ MISSING FEATURES in phpMyFAQ 2.0.0-beta2
 
 KNOWN ISSUES in phpMyFAQ 2.0.0-beta2
 
-- phpMyFAQ 2.0.0-beta is very buggy
 - some language files need an update
 - using UTF-8 will not work in the PDF files
 
