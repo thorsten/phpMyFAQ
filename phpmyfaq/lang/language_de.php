@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.46 2007-03-10 08:11:49 thorstenr Exp $
+ * $Id: language_de.php,v 1.47 2007-03-10 11:19:57 thorstenr Exp $
  *
  * German language file
  *
@@ -616,7 +616,7 @@ $PMF_LANG['ad_you_should_update'] = 'Ihre phpMyFAQ Installtion ist veraltet. Sie
 $PMF_LANG['msgAdvancedSearch'] = 'Erweiterte Volltextsuche';
 
 // added v1.6.1 - 2006-04-25 by Matteo and Thorsten
-$PMF_LANG['spamControlCenter'] = 'Spam-Kontrollzentrale';
+$PMF_LANG['spamControlCenter'] = 'Spamschutz-Konfiguration';
 $LANG_CONF["spamEnableSafeEmail"] = array(0 => "checkbox", 1 => "Sichere Darstellung der E-Mailadresse (Voreinstellung: aktiviert)");
 $LANG_CONF["spamCheckBannedWords"] = array(0 => "checkbox", 1 => "Testen fremder Inhalte gegen die Bad-Word-Liste (Voreinstellung: aktiviert)");
 $LANG_CONF["spamEnableCatpchaCode"] = array(0 => "checkbox", 1 => "Zeige Captcha-Grafiken für Formulare (Voreinstellung: aktiviert)");
@@ -861,3 +861,5 @@ $PMF_LANG['ad_conf_order_datum'] = 'Datum';
 $PMF_LANG['ad_conf_order_author'] = 'Verfasser';
 $PMF_LANG['ad_conf_desc'] = 'absteigend';
 $PMF_LANG['ad_conf_asc'] = 'aufsteigend';
+$PMF_LANG['mainControlCenter'] = 'Allgemeine Konfiguration';
+$PMF_LANG['recordsControlCenter'] = 'Artikel-Konfiguration';

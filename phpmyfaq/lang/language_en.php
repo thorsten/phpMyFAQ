@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.74 2007-03-10 08:11:49 thorstenr Exp $
+* $Id: language_en.php,v 1.75 2007-03-10 11:19:57 thorstenr Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -871,3 +871,5 @@ $PMF_LANG['ad_conf_order_datum'] = 'Date';
 $PMF_LANG['ad_conf_order_author'] = 'Author';
 $PMF_LANG['ad_conf_desc'] = 'descending';
 $PMF_LANG['ad_conf_asc'] = 'ascending';
+$PMF_LANG['mainControlCenter'] = 'Main configuration';
+$PMF_LANG['recordsControlCenter'] = 'FAQ records configuration';
