@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.45 2007-03-04 21:13:20 matteo Exp $
+* $Id: language_it.php,v 1.46 2007-03-10 16:44:38 matteo Exp $
 *
 * Italian language file
 *
@@ -844,12 +844,12 @@ $PMF_LANG['msgNewTranslationKeywords'] = $PMF_LANG['msgNewContentKeywords'];
 $PMF_LANG['msgNewTranslationSubmit'] = 'Invia la tua proposta';
 $PMF_LANG['msgTranslate'] = 'Proponi una traduzione per';
 $PMF_LANG['msgTranslateSubmit'] = 'Inizia a tradurre...';
-$PMF_LANG['msgNewTranslationThanks'] = "Grazie per aver proposto la tua traduzione!";
+$PMF_LANG['msgNewTranslationThanks'] = 'Grazie per aver proposto la tua traduzione!';
 
 // added v2.0.0 - 2007-02-27 by Matteo
-$PMF_LANG["rightsLanguage"]['addgroup'] = "Aggiunge gruppi";
-$PMF_LANG["rightsLanguage"]['editgroup'] = "Modifica gruppi";
-$PMF_LANG["rightsLanguage"]['delgroup'] = "Cancella gruppi";
+$PMF_LANG['rightsLanguage']['addgroup'] = 'Aggiunge gruppi';
+$PMF_LANG['rightsLanguage']['editgroup'] = 'Modifica gruppi';
+$PMF_LANG['rightsLanguage']['delgroup'] = 'Cancella gruppi';
 
 // added v2.0.0 - 2007-02-27 by Thorsten
 $PMF_LANG['ad_news_link_parent'] = 'Il link si apre nella finestra padre';
@@ -860,3 +860,16 @@ $PMF_LANG['ad_comment_administration'] = 'Amministrazione dei commenti';
 $PMF_LANG['ad_comment_faqs'] = 'Commenti introdotti nelle FAQ:';
 $PMF_LANG['ad_comment_news'] = 'Commenti introdotti nelle Notizie:';
 $PMF_LANG['ad_groups'] = 'Gruppi';
+
+// added v2.0.0 - 2007-03-10 by Thorsten
+$LANG_CONF['recordsOrderby'] = array(0 => 'select', 1 => 'Ordinamento delle FAQ (voce)');
+$LANG_CONF['recordsSortby'] = array(0 => 'select', 1 => 'Ordinamento delle FAQ (decrescente o crescente)');
+$PMF_LANG['ad_conf_order_id'] = 'Identificativo (predefinito)';
+$PMF_LANG['ad_conf_order_thema'] = 'Titolo';
+$PMF_LANG['ad_conf_order_visits'] = 'Numero di visitatori';
+$PMF_LANG['ad_conf_order_datum'] = 'Data';
+$PMF_LANG['ad_conf_order_author'] = 'Autore';
+$PMF_LANG['ad_conf_desc'] = 'Decrescente';
+$PMF_LANG['ad_conf_asc'] = 'Crescente';
+$PMF_LANG['mainControlCenter'] = 'Configurazione principale';
+$PMF_LANG['recordsControlCenter'] = 'Configurazione delle FAQ';
