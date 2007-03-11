@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_id.php,v 1.12 2007-03-10 22:26:44 thorstenr Exp $
+ * $Id: language_id.php,v 1.13 2007-03-11 21:09:55 thorstenr Exp $
  *
  * Indonesian language file
  *
@@ -659,7 +659,7 @@ $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Jumlah materi yang
 ditampilkan per halaman");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Jumlah kabar yang
 ditampilkan");
-$LANG_CONF["bannedIP"] = array(0 => "area", 1 => "Larang IP berikut");
+$LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Larang IP berikut");
 $LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Aktifkan dukungan
 untuk mod_rewrite? (awal: tidak aktif)");
 $LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "Apakah anda ingin

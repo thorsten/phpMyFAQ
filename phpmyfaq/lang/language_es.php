@@ -568,7 +568,7 @@ $LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "¿Usar el Adminlog?")
 $LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "¿Quieres que las IP sean chequeadas cuando se comprueben las UINs");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Number of displayed topics per page");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Número de nuevos artículos");
-$LANG_CONF["bannedIP"] = array(0 => "area", 1 => "Bloquear estas IPs");
+$LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Bloquear estas IPs");
 $LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Activate mod_rewrite support? (default: disabled)");
 $LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "Do you want to enable LDAP support? (default: disabled)");
 

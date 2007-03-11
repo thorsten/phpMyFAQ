@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_eu.php,v 1.9 2007-03-10 22:26:44 thorstenr Exp $
+* $Id: language_eu.php,v 1.10 2007-03-11 21:09:55 thorstenr Exp $
 *
 * Euskera language file
 *
@@ -569,7 +569,7 @@ $LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "Adminlog-a erabili?"
 $LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "Nahi al duzu IP-ak aztertzea UIN-ak egiaztatzean?");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Erakutsitako item-en kopurua orriko");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Artikulu berrien kopurua");
-$LANG_CONF["bannedIP"] = array(0 => "area", 1 => "IP hauek blokeatu");
+$LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "IP hauek blokeatu");
 $LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Mod_rewrite-rentzat euskarria aktibatu? (besterik esan ezean, desaktibatua)");
 $LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "LDAPrentzat euskarria gaitu nahi al duzu? (besterik esan ezean, desaktibatua)");
 

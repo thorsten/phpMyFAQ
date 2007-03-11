@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_el.php,v 1.6 2007-03-10 22:26:43 thorstenr Exp $
+* $Id: language_el.php,v 1.7 2007-03-11 21:09:55 thorstenr Exp $
 *
 * The Hellenic language file
 *
@@ -567,7 +567,7 @@ $LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "Να γίνει χρήση του η
 $LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "Θέλετε να γίνεται έλεγχος της διεύθυνσης IP όταν ελέγχεται ο αριθμός UIN στη σελίδα admin.php;");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Αριθμός εμφανιζόμενων άρθρων ανά σελίδα");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Αριθμός ειδήσεων");
-$LANG_CONF["bannedIP"] = array(0 => "area", 1 => "Απαγόρευση πρόσβασης των παρακάτω διευθύνσεων IP");
+$LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Απαγόρευση πρόσβασης των παρακάτω διευθύνσεων IP");
 $LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Ενεργοποίηση της υποστήριξης mod_rewrite; (Προεπιλογή: απενεργοποιημένο)");
 $LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "Θέλετε να ενεργοποιήσετε την υποστήριξη LDAP; (Προεπιλογή: απενεργοποιημένο)");
 $LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "Θέλετε να ενεργοποιήσετε την υποστήριξη LDAP; (Προεπιλογή: απενεργοποιημένο)");

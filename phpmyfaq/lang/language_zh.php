@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_zh.php,v 1.13 2007-03-10 22:26:44 thorstenr Exp $
+* $Id: language_zh.php,v 1.14 2007-03-11 21:09:55 thorstenr Exp $
 *
 * Chinese (simplified) language file
 *
@@ -568,7 +568,7 @@ $LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "�?�用�?作日志�
 $LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "你希望admin.php在检查UIN的时候也检查IP地�?�么？");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "�?页显示主题数目");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "新内容数�?");
-$LANG_CONF["bannedIP"] = array(0 => "area", 1 => "�?止这些IP地�?�访问");
+$LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "�?止这些IP地�?�访问");
 $LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "�?�用mod_rewrite�?�?(默认:�?止)");
 $LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "�?�用LDAP支�?�?�? (默认:�?止)");
 $LANG_CONF["referenceURL"] = array(0 => "input", 1 => "链接验�?用的基本 URL 网�?� (设置为首页 URL 网�?�)");

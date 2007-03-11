@@ -567,7 +567,7 @@ $LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "관리로그 사용 여부")
 $LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "admin.php에서 UINs를 체크할 때 IP주소를 체크할지의 여부");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "페이지당 표시할 글의 수");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "공지사항 표시 개수");
-$LANG_CONF["bannedIP"] = array(0 => "area", 1 => "해당 IP주소로 부터 사용 금지");
+$LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "해당 IP주소로 부터 사용 금지");
 $LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "mod_rewrite 기능을 사용하시겠습니까? (기본값: 사용안함)");
 $LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "LDAP을 지원하도록 하시겠습니까? (기본값: 사용안함)");
 

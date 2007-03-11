@@ -568,7 +568,7 @@ $LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "עשה ?");
 $LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "האם הנך רוצה שהIP יבדק כאשר נבדקים פרטי המשתמשים בadmin.php?");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "מספר עמודים מוצגים בכל עמוד");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "מספר כתבות חדשות");
-$LANG_CONF["bannedIP"] = array(0 => "area", 1 => "חסום את IP זה");
+$LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "חסום את IP זה");
 $LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Activate mod_rewrite support? (default: disabled)");
 $LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "Do you want to enable LDAP support? (default: disabled)");
 

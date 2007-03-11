@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_pt.php,v 1.12 2007-03-10 22:26:44 thorstenr Exp $
+ * $Id: language_pt.php,v 1.13 2007-03-11 21:09:55 thorstenr Exp $
  *
  * Portuguese language file
  *
@@ -569,7 +569,7 @@ $LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "usar Adminlog?");
 $LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "Conferir o IP ao verificar o UINs no admin.php?");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "N&uacute;mero de t&oacute;picos mostrados por p&aacute;gina");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "N&uacute;ero de artigos de not&iacute;cias");
-$LANG_CONF["bannedIP"] = array(0 => "area", 1 => "Banir estes IPs");
+$LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Banir estes IPs");
 $LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Activar suporte de  mod_rewrite? (por defeito: desactivado)");
 $LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "Activar o suporte LDAP? (por defeito: desactivado)");
 

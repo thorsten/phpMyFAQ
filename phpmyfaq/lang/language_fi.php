@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_fi.php,v 1.11 2007-03-10 22:26:44 thorstenr Exp $
+ * $Id: language_fi.php,v 1.12 2007-03-11 21:09:55 thorstenr Exp $
  *
  * Finnish language file
  *
@@ -568,7 +568,7 @@ $LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "käytä ylläpitolokia?
 $LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "Haluatko, että admin.php:ssa IP tarkastetaan samalla kun UIN?");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Näytettyjen tietueiden määrä per sivu");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Uutisten määrä");
-$LANG_CONF["bannedIP"] = array(0 => "area", 1 => "Estä käyttö näistä IP-osoitteista");
+$LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Estä käyttö näistä IP-osoitteista");
 $LANG_CONF["parse_php"] = array(0 => "checkbox", 1 => "Should the template engine parse PHP code? (oletus: ei käytössä)");
 $LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Aktivoi mod_rewrite tuki? (oletus: ei käytössä)");
 $LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "Haluatko laittaa LDAP tuen päälle(enabled)? (oletus: ei käytössä)");

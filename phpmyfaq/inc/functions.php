@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.166 2007-03-10 08:12:39 thorstenr Exp $
+ * $Id: functions.php,v 1.167 2007-03-11 21:09:54 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -475,18 +475,20 @@ function check4AddrMatch($ip, $network)
 }
 
 /**
- * Checks if a IP is banned
+ * Performs a check if an IP is banned
  *
- * @param    string  IP
- * @return   boolean
- * @since    2003-06-06
- * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @param   string  IP
+ * @return  boolean
+ * @since   2003-06-06
+ * @access  public
+ * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
  */
 function IPCheck($ip)
 {
-    global $PMF_CONF;
-    $arrBannedIPs = explode(" ", $PMF_CONF['bannedIP']);
-    foreach ($arrBannedIPs as $oneIPorNetwork) {
+    global $faqconfig;
+
+    $bannedIPs = explode(' ', $faqconfig->get('main.bannedIPs'));
+    foreach ($bannedIPs as $oneIPorNetwork) {
         if (check4AddrMatch($ip, $oneIPorNetwork)) {
             return false;
         }

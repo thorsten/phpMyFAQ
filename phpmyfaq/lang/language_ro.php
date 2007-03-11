@@ -566,7 +566,7 @@ $LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "utilizeaza monitoriz
 $LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "Vrei sa fie verificat IP-ul cand se verifica  UIN in admin.php?");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Numarul topicurilor afisate per pagina");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Numarul stirilor per pagina");
-$LANG_CONF["bannedIP"] = array(0 => "area", 1 => "Restrictioneaza urmatoarele IP-uri");
+$LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Restrictioneaza urmatoarele IP-uri");
 $LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Activate mod_rewrite support? (default: disabled)");
 $LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "Do you want to enable LDAP support? (default: disabled)");
 

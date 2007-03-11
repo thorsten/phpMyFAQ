@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Mysql.php,v 1.12 2007-02-20 20:11:15 thorstenr Exp $
+ * $Id: Mysql.php,v 1.13 2007-03-11 21:09:54 thorstenr Exp $
  *
  * db_mysql
  *
@@ -87,7 +87,7 @@ class db_mysql
      */
     function query($query)
     {
-        $this->sqllog .= pmf_debug($query);
+        //$this->sqllog .= pmf_debug($query);
         return mysql_query($query, $this->conn);
     }
 

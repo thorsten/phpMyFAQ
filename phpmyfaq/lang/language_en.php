@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.77 2007-03-10 22:26:44 thorstenr Exp $
+* $Id: language_en.php,v 1.78 2007-03-11 21:09:55 thorstenr Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -569,7 +569,7 @@ $LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "use Adminlog?");
 $LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "Do you want the IP to be checked when checking the UINs in admin.php?");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Number of displayed topics per page");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Number of news articles");
-$LANG_CONF["bannedIP"] = array(0 => "area", 1 => "Ban these IPs");
+$LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Ban these IPs");
 $LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Activate mod_rewrite support? (default: disabled)");
 $LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "Do you want to enable LDAP support? (default: disabled)");
 $LANG_CONF["referenceURL"] = array(0 => "input", 1 => "Base URL for link verification (e.g.: http://www.example.org/faq)");

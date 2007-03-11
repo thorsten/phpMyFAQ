@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_da.php,v 1.11 2007-03-10 22:26:43 thorstenr Exp $
+* $Id: language_da.php,v 1.12 2007-03-11 21:09:55 thorstenr Exp $
 *
 * Danish language file
 *
@@ -567,7 +567,7 @@ $LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "use Adminlog?");
 $LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "Do you want the IP to be checked when checking the UINs in admin.php?");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Number of displayed topics per page");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Number of news articles");
-$LANG_CONF["bannedIP"] = array(0 => "area", 1 => "Ban these IPs");
+$LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Ban these IPs");
 $LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Activate mod_rewrite support? (default: disabled)");
 $LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "Do you want to enable LDAP support? (default: disabled)");
 

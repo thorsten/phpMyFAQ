@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.110 2007-03-10 22:26:43 thorstenr Exp $
+* $Id: update.php,v 1.111 2007-03-11 21:09:54 thorstenr Exp $
 *
 * Main update script
 *
@@ -1336,6 +1336,7 @@ if ($step == 5) {
         $query[] = "INSERT INTO ".SQLPREFIX."faqconfig (config_name, config_value) VALUES ('records.Sortby', 'DESC')";
         $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.administrationMail' WHERE config_name = 'adminmail'";
         $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.maxAttachmentSize' WHERE config_name = 'attmax'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.bannedIPs' WHERE config_name = 'bannedIP'";
     }
 
     // Perform the queries for updating/migrating the database from 2.x
@@ -1345,7 +1346,7 @@ if ($step == 5) {
         $count = 0;
         while ($each_query = each($query)) {
             $result = @$db->query($each_query[1]);
-            print "| ";
+            print '| ';
             if (!$result) {
                 print "\n<div class=\"error\">\n";
                 print "<p><strong>DB error:</strong> ".$db->error()."</p>\n";
