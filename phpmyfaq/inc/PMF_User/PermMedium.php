@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: PermMedium.php,v 1.23 2007-02-25 11:39:50 thorstenr Exp $
+ * $Id: PermMedium.php,v 1.24 2007-03-11 09:09:16 thorstenr Exp $
  *
  * The medium permission class provides group rights.
  *
@@ -612,7 +612,7 @@ class PMF_PermMedium
         if (!$this->_initialized) {
             return false;
         }
-        
+
         // get all groups
         $query = sprintf(
                     "SELECT
@@ -649,7 +649,7 @@ class PMF_PermMedium
             if (-1 != $group_id) {
                 $options .= sprintf('<option value="%d"%s>%s</option>',
                     $group_id,
-                    ((in_array($group_id, $groups)) ? ' selected="selected"' : ''),
+                    ($group_id == $groups) ? ' selected="selected"' : '',
                     $this->getGroupName($group_id));
             }
         }
