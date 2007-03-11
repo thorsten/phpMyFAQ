@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.95 2007-03-10 08:30:17 thorstenr Exp $
+ * $Id: Faq.php,v 1.96 2007-03-11 07:03:58 thorstenr Exp $
  *
  * The main FAQ class
  *
@@ -574,6 +574,14 @@ class PMF_Faq
             sprintf("DELETE FROM %sfaqdata_revisions WHERE id = %d AND lang = '%s'",
                 SQLPREFIX, $record_id, $record_lang),
             sprintf("DELETE FROM %sfaqvisits WHERE id = %d AND lang = '%s'",
+                SQLPREFIX, $record_id, $record_lang),
+            sprintf("DELETE FROM %faqcategory_user WHERE record_id = %d and record_lang = '%s'",
+                SQLPREFIX, $record_id, $record_lang),
+            sprintf("DELETE FROM %faqcategory_group WHERE record_id = %d and record_lang = '%s'",
+                SQLPREFIX, $record_id, $record_lang),
+            sprintf("DELETE FROM %faqdata_user WHERE record_id = %d and record_lang = '%s'",
+                SQLPREFIX, $record_id, $record_lang),
+            sprintf("DELETE FROM %faqdata_group WHERE record_id = %d and record_lang = '%s'",
                 SQLPREFIX, $record_id, $record_lang));
 
          foreach($queries as $query) {
