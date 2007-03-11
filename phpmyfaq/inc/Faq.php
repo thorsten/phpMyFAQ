@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.96 2007-03-11 07:03:58 thorstenr Exp $
+ * $Id: Faq.php,v 1.97 2007-03-11 07:21:14 thorstenr Exp $
  *
  * The main FAQ class
  *
@@ -575,14 +575,20 @@ class PMF_Faq
                 SQLPREFIX, $record_id, $record_lang),
             sprintf("DELETE FROM %sfaqvisits WHERE id = %d AND lang = '%s'",
                 SQLPREFIX, $record_id, $record_lang),
-            sprintf("DELETE FROM %faqcategory_user WHERE record_id = %d and record_lang = '%s'",
+            sprintf("DELETE FROM %faqcategory_user WHERE record_id = %d AND record_lang = '%s'",
                 SQLPREFIX, $record_id, $record_lang),
-            sprintf("DELETE FROM %faqcategory_group WHERE record_id = %d and record_lang = '%s'",
+            sprintf("DELETE FROM %faqcategory_group WHERE record_id = %d AND record_lang = '%s'",
                 SQLPREFIX, $record_id, $record_lang),
-            sprintf("DELETE FROM %faqdata_user WHERE record_id = %d and record_lang = '%s'",
+            sprintf("DELETE FROM %faqdata_user WHERE record_id = %d AND record_lang = '%s'",
                 SQLPREFIX, $record_id, $record_lang),
-            sprintf("DELETE FROM %faqdata_group WHERE record_id = %d and record_lang = '%s'",
-                SQLPREFIX, $record_id, $record_lang));
+            sprintf("DELETE FROM %faqdata_group WHERE record_id = %d AND record_lang = '%s'",
+                SQLPREFIX, $record_id, $record_lang),
+            sprintf("DELETE FROM %faqdata_tags WHERE record_id = %d",
+                SQLPREFIX, $record_id),
+            sprintf("DELETE FROM %faqcomments WHERE id = %d",
+                SQLPREFIX, $record_id),
+            sprintf("DELETE FROM %faqvoting WHERE artikel = %d",
+                SQLPREFIX, $record_id));
 
          foreach($queries as $query) {
             $this->db->query($query);
