@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: config.sql.php,v 1.13 2007-03-11 21:09:54 thorstenr Exp $
+ * $Id: config.sql.php,v 1.14 2007-03-13 18:43:33 thorstenr Exp $
  *
  * INSERT instruction for configuration
  *
@@ -39,8 +39,8 @@ $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('numRecordsPage', '10')"
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('numRelatedArticles', '5')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('permLevel', '".$permLevel."')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('phpMyFAQToken', '')";
-$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('recordsOrderby', 'id')";
-$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('recordsSortby', 'DESC')";
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('records.orderby', 'id')";
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('records.sortby', 'DESC')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('referenceURL', '')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('send2friendText', '')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('spamCheckBannedWords', 'true')";

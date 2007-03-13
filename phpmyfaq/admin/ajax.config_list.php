@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.config_list.php,v 1.13 2007-03-10 22:07:34 thorstenr Exp $
+* $Id: ajax.config_list.php,v 1.14 2007-03-13 18:43:33 thorstenr Exp $
 *
 * AJAX: lists the complete configuration items
 *
@@ -66,9 +66,9 @@ function printInputFieldByType($key, $type)
                 } else {
                     print '<option value="language_en.php">English</option>';
                 }
-            } else if ('recordsOrderby' == $key) {
+            } else if ('records.Orderby' == $key) {
                     print sortingOptions($PMF_CONF[$key]);
-            } elseif ('recordsSortby' == $key) {
+            } elseif ('records.Sortby' == $key) {
                     printf('<option value="DESC"%s>%s</option>',
                         ('DESC' == $PMF_CONF[$key]) ? ' selected="selected"' : '',
                         $PMF_LANG['ad_conf_desc']);

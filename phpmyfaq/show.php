@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: show.php,v 1.14 2007-03-10 08:16:59 thorstenr Exp $
+* $Id: show.php,v 1.15 2007-03-13 18:43:32 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-08-27
@@ -32,7 +32,7 @@ if (isset($currentCategory) && $currentCategory != 0 && isset($category->categor
     $parent = $category->categoryName[$currentCategory]['parent_id'];
     $name = $category->categoryName[$currentCategory]['name'];
 
-    $records = $faq->showAllRecords($currentCategory, $faqconfig->get('recordsOrderby'), $faqconfig->get('recordsSortby'));
+    $records = $faq->showAllRecords($currentCategory, $faqconfig->get('records.orderby'), $faqconfig->get('records.sortby'));
     if (!$records) {
         $categories = new PMF_Category($LANGCODE);
         $categories->transform($currentCategory);

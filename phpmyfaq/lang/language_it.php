@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.49 2007-03-11 21:09:55 thorstenr Exp $
+* $Id: language_it.php,v 1.50 2007-03-13 18:43:33 thorstenr Exp $
 *
 * Italian language file
 *
@@ -862,8 +862,8 @@ $PMF_LANG['ad_comment_news'] = 'Commenti introdotti nelle Notizie:';
 $PMF_LANG['ad_groups'] = 'Gruppi';
 
 // added v2.0.0 - 2007-03-10 by Thorsten
-$LANG_CONF['recordsOrderby'] = array(0 => 'select', 1 => 'Ordinamento delle FAQ (voce)');
-$LANG_CONF['recordsSortby'] = array(0 => 'select', 1 => 'Ordinamento delle FAQ (decrescente o crescente)');
+$LANG_CONF['records.orderby'] = array(0 => 'select', 1 => 'Ordinamento delle FAQ (voce)');
+$LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'Ordinamento delle FAQ (decrescente o crescente)');
 $PMF_LANG['ad_conf_order_id'] = 'Identificativo (predefinito)';
 $PMF_LANG['ad_conf_order_thema'] = 'Titolo';
 $PMF_LANG['ad_conf_order_visits'] = 'Numero di visitatori';
