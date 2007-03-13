@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: save.php,v 1.38 2007-03-10 22:07:34 thorstenr Exp $
+ * $Id: save.php,v 1.39 2007-03-13 18:31:40 thorstenr Exp $
  *
  * Saves a user FAQ record and sends an email to the user
  *
@@ -29,18 +29,15 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $captcha = new PMF_Captcha($db, $sids, $pmf->language);
 
 if (    isset($_POST['username']) && $_POST['username'] != ''
-     && isset($_POST['usermail']) && checkEmail($_POST['usermail'])
-     && (
-               (!isset($_POST['faqid']) && isset($_POST['rubrik']) && is_array($_POST['rubrik']))
-            || (isset($_POST['faqid']) && is_numeric($_POST['faqid']) && (intval($_POST['faqid']) > 0) && isset($_POST['faqlanguage']) && PMF_Init::isASupportedLanguage($_POST['faqlanguage']))
-        )
-     && isset($_POST['thema']) && $_POST['thema'] != ''
-     && isset($_POST['content']) && $_POST['content'] != ''
-     && IPCheck($_SERVER['REMOTE_ADDR'])
-     && checkBannedWord(htmlspecialchars(strip_tags($_POST['thema'])))
-     && checkBannedWord(htmlspecialchars(strip_tags($_POST['content'])))
-     && checkCaptchaCode()
-     ) {
+    && isset($_POST['usermail']) && checkEmail($_POST['usermail'])
+    && ((!isset($_POST['faqid']) && isset($_POST['rubrik']) && is_array($_POST['rubrik']))
+        || (isset($_POST['faqid']) && is_numeric($_POST['faqid']) && (intval($_POST['faqid']) > 0) && isset($_POST['faqlanguage']) && PMF_Init::isASupportedLanguage($_POST['faqlanguage'])))
+    && isset($_POST['thema']) && $_POST['thema'] != ''
+    && isset($_POST['content']) && $_POST['content'] != ''
+    && IPCheck($_SERVER['REMOTE_ADDR'])
+    && checkBannedWord(htmlspecialchars(strip_tags($_POST['thema'])))
+    && checkBannedWord(htmlspecialchars(strip_tags($_POST['content'])))
+    && checkCaptchaCode()) {
 
     $isNew = true;
     if (isset($_POST['faqid'])) {
@@ -70,8 +67,8 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
         'dateStart'     => '00000000000000',
         'dateEnd'       => '99991231235959',
         'linkState'     => '',
-        'linkDateCheck' => 0
-        );
+        'linkDateCheck' => 0);
+
     if ($isNew) {
         $categories = $_POST['rubrik'];
     } else {
@@ -85,9 +82,13 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
     $recordId = $faq->addRecord($newData, $isNew);
     $faq->addCategoryRelations($categories, $recordId, $newData['lang']);
 
+    $sent = array();
+
     // Let the PMF Administrator and the Category Owner to be informed by email of this new entry
     foreach($categories as $category) {
+
         $userId = $category->getCategoryUser($category);
+
         // Avoid to send multiple emails to the same owner
         if (!isset($sent[$userId])) {
             // TODO: Move this code to Category.php and let the email contains the faq article both as plain text and as HTML
@@ -114,39 +115,37 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
             $body = unhtmlentities($PMF_LANG['msgMailCheck'])."\n".$PMF_CONF['title'].": ".PMF_Link::getSystemUri('/index.php').'/admin';
             if (ini_get('safe_mode')) {
                 mail($IDN->encode($faqconfig->get('main.administrationMail')),
-                                  $subject,
-                                  $body,
-                                  implode("\r\n", $additional_header));
+                $subject,
+                $body,
+                implode("\r\n", $additional_header));
             } else {
                 mail($IDN->encode($faqconfig->get('main.administrationMail')),
-                                  $subject, $body,
-                                  implode("\r\n", $additional_header),
-                                  "-f$userMail");
+                $subject, $body,
+                implode("\r\n", $additional_header),
+                "-f$userMail");
             }
             $sent[$userId] = $catOwnerEmail;
         }
     }
 
     $tpl->processTemplate ("writeContent", array(
-                "msgNewContentHeader" => $PMF_LANG["msgNewContentHeader"],
-                'Message' => ($isNew ? $PMF_LANG['msgNewContentThanks'] : $PMF_LANG['msgNewTranslationThanks'])
-                ));
+    "msgNewContentHeader" => $PMF_LANG["msgNewContentHeader"],
+    'Message' => ($isNew ? $PMF_LANG['msgNewContentThanks'] : $PMF_LANG['msgNewTranslationThanks'])
+    ));
 } else {
-    if (IPCheck($_SERVER["REMOTE_ADDR"]) == FALSE) {
+    if (IPCheck($_SERVER['REMOTE_ADDR']) == FALSE) {
         $tpl->processTemplate ("writeContent", array(
-                "msgNewContentHeader" => $PMF_LANG["msgNewContentHeader"],
-                "Message" => $PMF_LANG["err_bannedIP"]
-                ));
+            'msgNewContentHeader'   => $PMF_LANG['msgNewContentHeader'],
+            'Message'               => $PMF_LANG['err_bannedIP']));
     } else {
-        if ($isNew) {
-            Tracking("error_save_entry", 0);
+        if (!isset($_POST['faqid'])) {
+            Tracking('error_save_entry', 0);
         } else {
-            Tracking("error_save_translation_entry", 0);
+            Tracking('error_save_translation_entry', 0);
         }
-        $tpl->processTemplate ("writeContent", array(
-                "msgNewContentHeader" => $PMF_LANG["msgNewContentHeader"],
-                "Message" => $PMF_LANG["err_SaveEntries"]
-                ));
+        $tpl->processTemplate ('writeContent', array(
+            'msgNewContentHeader'   => $PMF_LANG['msgNewContentHeader'],
+            'Message'               => $PMF_LANG['err_SaveEntries']));
     }
 }
 
