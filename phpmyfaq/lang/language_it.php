@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.51 2007-03-14 19:55:32 thorstenr Exp $
+* $Id: language_it.php,v 1.52 2007-03-14 20:32:41 thorstenr Exp $
 *
 * Italian language file
 *
@@ -563,9 +563,9 @@ $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Indirizzo emai
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Testo per la pagina dei <em>Contatti</em>");
 $LANG_CONF["send2friendText"] = array(0 => "area", 1 => "Testo per la pagina <em>Invia ad un amico</em>");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Massima dimensione per gli allegati, in Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
-$LANG_CONF["disatt"] = array(0 => "checkbox", 1 => "Mostra il link agli allegati");
+$LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Mostra il link agli allegati");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "Abilito il tracciamento per le attivit&agrave; dell'Utente?");
-$LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "Abilito il tracciamento per le attivit&agrave; di Amministrazione?");
+$LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Abilito il tracciamento per le attivit&agrave; di Amministrazione?");
 $LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "Vuoi controllare l'IP quando verifico l'<em>UIN</em> in <em>admin.php</em>?");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Numero di elementi visualizzati per pagina");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Numero di elementi visualizzati per la sezione News");

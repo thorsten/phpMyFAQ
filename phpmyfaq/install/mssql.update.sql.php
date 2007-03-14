@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: mssql.update.sql.php,v 1.14 2007-03-14 19:55:31 thorstenr Exp $
+ * $Id: mssql.update.sql.php,v 1.15 2007-03-14 20:32:41 thorstenr Exp $
  *
  * CREATE TABLE instruction for MS SQL Server database
  *
@@ -169,8 +169,8 @@ $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.administrationMail'
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.maxAttachmentSize', '100000')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.bannedIPs', 'false')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.languageDetection', 'true')";
-$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('disatt', 'true')";
-$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('enableadminlog', 'true')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.disableAttachments', 'true')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.enableAdminLog', 'true')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('enablevisibility', 'false')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('ipcheck', 'false')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('language', 'language_en.php')";

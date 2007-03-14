@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_eu.php,v 1.11 2007-03-14 19:55:32 thorstenr Exp $
+* $Id: language_eu.php,v 1.12 2007-03-14 20:32:41 thorstenr Exp $
 *
 * Euskera language file
 *
@@ -563,9 +563,9 @@ $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Harremanetarako infor
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Konfirmazio orriko copyright-eko testua");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "<em>Lagun bati bidali</em> orrirako testua");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Eranskinetako gehieneko tamaina byte-etan (max. ".ini_get("upload_max_filesize")."Byte)");
-$LANG_CONF["disatt"] = array(0 => "checkbox", 1 => "Sarrera azpian eranskinei estekaren bat ipini?");
+$LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Sarrera azpian eranskinei estekaren bat ipini?");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "Monitorizazioa erabili?");
-$LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "Adminlog-a erabili?");
+$LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Adminlog-a erabili?");
 $LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "Nahi al duzu IP-ak aztertzea UIN-ak egiaztatzean?");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Erakutsitako item-en kopurua orriko");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Artikulu berrien kopurua");

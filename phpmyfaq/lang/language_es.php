@@ -562,9 +562,9 @@ $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Informaciones de cont
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Texto del copyright de la página de confirmación");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Texto para la página de enviar a un amigo");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Tamaño máximo para los adjuntos en Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
-$LANG_CONF["disatt"] = array(0 => "checkbox", 1 => "¿Poner un link a los adjuntos bajo las entradas?");
+$LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "¿Poner un link a los adjuntos bajo las entradas?");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "¿Usar monitorización?");
-$LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "¿Usar el Adminlog?");
+$LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "¿Usar el Adminlog?");
 $LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "¿Quieres que las IP sean chequeadas cuando se comprueben las UINs");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Number of displayed topics per page");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Número de nuevos artículos");

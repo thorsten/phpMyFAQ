@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_ar.php,v 1.16 2007-03-14 19:55:32 thorstenr Exp $
+* $Id: language_ar.php,v 1.17 2007-03-14 20:32:41 thorstenr Exp $
 *
 * Arabic language file
 *
@@ -601,9 +601,9 @@ $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "معلومات الإ
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "حقوق النشر �?ي ص�?حة البداية");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "نص لص�?حة أرسل إلي صديق");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "أقصى حجم للمر�?قات بالبايت (max. ".ini_get("upload_max_filesize")."بايت)");
-$LANG_CONF["disatt"] = array(0 => "checkbox", 1 => "ضع روابط المر�?قات أس�?ل المداخلات ؟");
+$LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "ضع روابط المر�?قات أس�?ل المداخلات ؟");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "استخدم خاصية التتبع ؟");
-$LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "استخدم خاصية سجل المشر�?ين ؟");
+$LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "استخدم خاصية سجل المشر�?ين ؟");
 $LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "Do you want the IP to be checked when checking the UINs in admin.php?");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "عدد المواضيع المعروضة بالص�?حة الواحدة");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "عدد مقالات الأخبار");

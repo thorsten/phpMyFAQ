@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_pt.php,v 1.14 2007-03-14 19:55:32 thorstenr Exp $
+ * $Id: language_pt.php,v 1.15 2007-03-14 20:32:42 thorstenr Exp $
  *
  * Portuguese language file
  *
@@ -563,9 +563,9 @@ $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Informa&ccedil;&atild
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Texto de Copyright para p&aacute;gina inicial");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Texto para p&aacute;gina send2friend");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Tamanho m&aacute;ximo para anexos em Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
-$LANG_CONF["disatt"] = array(0 => "checkbox", 1 => "Colocar hiperliga&ccedil;&otilde;es para anexos abaixo das entradas?");
+$LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Colocar hiperliga&ccedil;&otilde;es para anexos abaixo das entradas?");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "usar Tracking?");
-$LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "usar Adminlog?");
+$LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "usar Adminlog?");
 $LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "Conferir o IP ao verificar o UINs no admin.php?");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "N&uacute;mero de t&oacute;picos mostrados por p&aacute;gina");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "N&uacute;ero de artigos de not&iacute;cias");

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.52 2007-03-14 19:55:32 thorstenr Exp $
+ * $Id: language_de.php,v 1.53 2007-03-14 20:32:41 thorstenr Exp $
  *
  * German language file
  *
@@ -561,9 +561,9 @@ $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "E-Mailadresse 
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Kontakt, Impressum, hier die Betreiberadresse angeben!");
 $LANG_CONF["send2friendText"] = array(0 => "area", 1 => "Text für die Send2Friend-Seite");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Maximalgröße von Attachments in Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
-$LANG_CONF["disatt"] = array(0 => "checkbox", 1 => "Attachments unter den Beiträgen anzeigen?");
+$LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Attachments unter den Beiträgen anzeigen?");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "Tracking aktiviert?");
-$LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "Adminlog aktiviert?");
+$LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Adminlog aktiviert?");
 $LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "Soll die IP zum Check der UINs im Administrationsbereich herangezogen werden?");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Anzahl der angezeigten Themen pro Seite");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Anzahl der angezeigten News");

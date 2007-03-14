@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_ja.php,v 1.24 2007-03-14 19:55:32 thorstenr Exp $
+ * $Id: language_ja.php,v 1.25 2007-03-14 20:32:41 thorstenr Exp $
  *
  * The Japanese language file
  *
@@ -563,9 +563,9 @@ $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "ç®¡ç?†è€…ã?®é›
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "å•?ã?„å?ˆã‚?ã?›æƒ…å ±");
 $LANG_CONF["send2friendText"] = array(0 => "area", 1 => "å?‹é?”ã?«é€?ä¿¡ãƒšãƒ¼ã‚¸ã?®ãƒ†ã‚­ã‚¹ãƒˆ");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "æ·»ä»˜ãƒ•ã‚¡ã‚¤ãƒ«ã?®æœ€å¤§ã‚µã‚¤ã‚º (æœ€å¤§ ".ini_get("upload_max_filesize")." ãƒ?ã‚¤ãƒˆ)");
-$LANG_CONF["disatt"] = array(0 => "checkbox", 1 => "ã‚¨ãƒ³ãƒˆãƒªã?®ä¸‹ã?«æ·»ä»˜ã?®ãƒªãƒ³ã‚¯ã‚’è¡¨ç¤ºã?™ã‚‹");
+$LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "ã‚¨ãƒ³ãƒˆãƒªã?®ä¸‹ã?«æ·»ä»˜ã?®ãƒªãƒ³ã‚¯ã‚’è¡¨ç¤ºã?™ã‚‹");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "è¿½è·¡æ©Ÿèƒ½ã‚’ä½¿ç”¨ã?™ã‚‹");
-$LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "ç®¡ç?†ãƒ­ã‚°ã‚’ä½¿ç”¨ã?™ã‚‹");
+$LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "ç®¡ç?†ãƒ­ã‚°ã‚’ä½¿ç”¨ã?™ã‚‹");
 $LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "admin.php ã?§ UIN ã?®ãƒ?ã‚§ãƒƒã‚¯æ™‚ã?« IP ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’ç¢ºèª?ã?™ã‚‹ã?‹");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "ãƒšãƒ¼ã‚¸æ¯Žã?«è¡¨ç¤ºã?™ã‚‹ãƒˆãƒ”ãƒƒã‚¯æ•°");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "ã?ŠçŸ¥ã‚‰ã?›ã?®è¡¨ç¤ºæ•°");

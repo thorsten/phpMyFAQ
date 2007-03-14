@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_fi.php,v 1.13 2007-03-14 19:55:32 thorstenr Exp $
+ * $Id: language_fi.php,v 1.14 2007-03-14 20:32:41 thorstenr Exp $
  *
  * Finnish language file
  *
@@ -562,9 +562,9 @@ $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Yhteystiedot");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Kopiointioikeudet aloitussivulle");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Teksti lähetä tuttavalle sivulle");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "suurin sallittu koko liitetiedostoille tavuina on  (max. ".ini_get("upload_max_filesize")."tavua)");
-$LANG_CONF["disatt"] = array(0 => "checkbox", 1 => "Linkitä liitteet tietueiden alpuolelle?");
+$LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Linkitä liitteet tietueiden alpuolelle?");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "käytä lokia?");
-$LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "käytä ylläpitolokia?");
+$LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "käytä ylläpitolokia?");
 $LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "Haluatko, että admin.php:ssa IP tarkastetaan samalla kun UIN?");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Näytettyjen tietueiden määrä per sivu");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Uutisten määrä");

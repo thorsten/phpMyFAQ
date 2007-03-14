@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.167 2007-03-11 21:09:54 thorstenr Exp $
+ * $Id: functions.php,v 1.168 2007-03-14 20:32:41 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -1705,20 +1705,20 @@ function addMenuEntry($restrictions = '', $action = '', $caption = '')
 
 
 /**
-* Administrator logging
-*
-* @param    string
-* @return   void
-* @access   public
-* @since    2001-02-18
-* @author   Bastian Poettner <bastian@poettner.net>
-* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-*/
+ * Administrator logging
+ *
+ * @param   string
+ * @return  void
+ * @access  public
+ * @since   2001-02-18
+ * @author  Bastian Poettner <bastian@poettner.net>
+ * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+ */
 function adminlog($text)
 {
     global $db, $PMF_CONF, $auth, $user;
 
-    if (isset($PMF_CONF['enableadminlog']) && $auth && isset($user)) {
+    if (isset($PMF_CONF['main.enableAdminLog']) && $auth && isset($user)) {
         $query = sprintf(
                 'INSERT INTO
                     %sfaqadminlog

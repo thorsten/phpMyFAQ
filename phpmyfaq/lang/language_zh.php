@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_zh.php,v 1.15 2007-03-14 19:55:33 thorstenr Exp $
+* $Id: language_zh.php,v 1.16 2007-03-14 20:32:42 thorstenr Exp $
 *
 * Chinese (simplified) language file
 *
@@ -562,9 +562,9 @@ $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "管�?�员Email
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "�?�系我们");
 $LANG_CONF["send2friendText"] = array(0 => "area", 1 => "�?��?到朋�?�页�?�的文字");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "附件最大�?制是 (. ".ini_get("upload_max_filesize")."字节)");
-$LANG_CONF["disatt"] = array(0 => "checkbox", 1 => "显示内容附件？");
+$LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "显示内容附件？");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "�?�用跟踪？");
-$LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "�?�用�?作日志？");
+$LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "�?�用�?作日志？");
 $LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "你希望admin.php在检查UIN的时候也检查IP地�?�么？");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "�?页显示主题数目");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "新内容数�?");

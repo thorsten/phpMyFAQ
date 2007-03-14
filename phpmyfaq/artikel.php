@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: artikel.php,v 1.74 2007-03-08 21:54:59 matteo Exp $
+ * $Id: artikel.php,v 1.75 2007-03-14 20:32:40 thorstenr Exp $
  *
  * Shows the page with the FAQ record and - when available - the user
  * comments
@@ -157,7 +157,7 @@ if ($num > 1) {
 }
 
 // List all faq attachments
-if (is_dir('attachments/') && is_dir('attachments/'.$id) && $faqconfig->get('disatt')) {
+if (is_dir('attachments/') && is_dir('attachments/'.$id) && $faqconfig->get('main.disableAttachments')) {
     $files = 0;
     $outstr = "";
     $dir = opendir('attachments/'.$id);

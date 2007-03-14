@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_fr.php,v 1.20 2007-03-14 19:55:32 thorstenr Exp $
+* $Id: language_fr.php,v 1.21 2007-03-14 20:32:41 thorstenr Exp $
 *
 * The French language file - try to be the best
 *
@@ -564,9 +564,9 @@ $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Informations de conta
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Texte de Copyright pour la page d'entrée");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Texte pour la page send2friend");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Taille maximum des attachements en Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
-$LANG_CONF["disatt"] = array(0 => "checkbox", 1 => "Afficher le lien des attachements en bas de page&nbsp;?");
+$LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Afficher le lien des attachements en bas de page&nbsp;?");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "Utiliser le Tracking&nbsp;?");
-$LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "Utiliser l'Adminlog&nbsp;?");
+$LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Utiliser l'Adminlog&nbsp;?");
 $LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "Désirez vous vérifier l'adresse IP afin d'identifier le UINs dans admin.php&nbsp;?");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Nombre de topics affichés par page");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Nombre de nouveaux articles");

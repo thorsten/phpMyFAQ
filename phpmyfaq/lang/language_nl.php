@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_nl.php,v 1.19 2007-03-14 19:55:32 thorstenr Exp $
+ * $Id: language_nl.php,v 1.20 2007-03-14 20:32:42 thorstenr Exp $
  *
  * Dutch language file
  *
@@ -561,9 +561,9 @@ $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Contact informatie");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Copyright tekst voor op de startpagina");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Tekst voor de send2friend pagina");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "maximum grootte van bijlagen in Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
-$LANG_CONF["disatt"] = array(0 => "checkbox", 1 => "De bijlagen onder de records aantonen?");
+$LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "De bijlagen onder de records aantonen?");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "Tracking activeren?");
-$LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "Beheerlog activeren?");
+$LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Beheerlog activeren?");
 $LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "Wilt u dat het IP wordt gecontroleerd wanneer de UINs in admin.php worden gecontroleerd?");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Aantal weergegeven onderwerpen per pagina");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Aantal nieuws artikelen");

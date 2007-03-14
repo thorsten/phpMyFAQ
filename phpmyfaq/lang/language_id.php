@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_id.php,v 1.14 2007-03-14 19:55:32 thorstenr Exp $
+ * $Id: language_id.php,v 1.15 2007-03-14 20:32:41 thorstenr Exp $
  *
  * Indonesian language file
  *
@@ -646,11 +646,11 @@ untuk halaman utama");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Naskah untuk
 pengiriman ke teman");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Ukuran maksimum file berkas dalam Bytes (maksimum. ".ini_get("upload_max_filesize")."Byte)");
-$LANG_CONF["disatt"] = array(0 => "checkbox", 1 => "Sediakan hubungkan ke
+$LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Sediakan hubungkan ke
 file berkas di bawah materi?");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "Aktifkan
 penelusuran?");
-$LANG_CONF["enableadminlog"] = array(0 => "checkbox", 1 => "Aktifkan catatan
+$LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Aktifkan catatan
 administrasi?");
 $LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "Apakah anda ingin
 pemeriksaan terhadap alamat IP ketika pemeriksaan terhadap UIN dilakukan di
