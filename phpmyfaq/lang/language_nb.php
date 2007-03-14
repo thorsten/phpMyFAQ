@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_nb.php,v 1.8 2007-03-11 21:09:55 thorstenr Exp $
+* $Id: language_nb.php,v 1.9 2007-03-14 19:55:32 thorstenr Exp $
 *
 * Norwegian Bokmål language file
 *
@@ -549,7 +549,7 @@ $PMF_LANG["ad_entry_fontsize"] = "Skrifttype størrelse: ";
 
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias
 $LANG_CONF["language"] = array(0 => "select", 1 => "Språkfil");
-$LANG_CONF["detection"] = array(0 => "checkbox", 1 => "Aktiver automatisk forhandling av tegnsett");
+$LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Aktiver automatisk forhandling av tegnsett");
 $LANG_CONF["title"] = array(0 => "input", 1 => "Tittel for OSS/FAQ");
 $LANG_CONF["version"] = array(0 => "print", 1 => "FAQ versjon");
 $LANG_CONF["metaDescription"] = array(0 => "input", 1 => "Beskrivelse av siden");

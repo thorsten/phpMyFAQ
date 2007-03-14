@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_eu.php,v 1.10 2007-03-11 21:09:55 thorstenr Exp $
+* $Id: language_eu.php,v 1.11 2007-03-14 19:55:32 thorstenr Exp $
 *
 * Euskera language file
 *
@@ -552,7 +552,7 @@ $PMF_LANG["ad_entry_fontsize"] = "Letraren tamaina: ";
 
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias
 $LANG_CONF["language"] = array(0 => "select", 1 => "Fitxategientzat lehenetsitako hizkuntza");
-$LANG_CONF["detection"] = array(0 => "checkbox", 1 => "Edukien kudeaketa automatikoa gaitu");
+$LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Edukien kudeaketa automatikoa gaitu");
 $LANG_CONF["title"] = array(0 => "input", 1 => "FAQaren izenburua");
 $LANG_CONF["version"] = array(0 => "print", 1 => "phpMyFAQ bertsioa");
 $LANG_CONF["metaDescription"] = array(0 => "input", 1 => "Orriaren deskribapena");

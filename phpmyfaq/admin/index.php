@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.82 2007-03-04 14:12:41 thorstenr Exp $
+* $Id: index.php,v 1.83 2007-03-14 19:55:30 thorstenr Exp $
 *
 * The main admin backend index file
 *
@@ -53,7 +53,7 @@ $IDN = new idna_convert;
 
 // get language (default: english)
 $pmf = new PMF_Init();
-$LANGCODE = $pmf->setLanguage((isset($PMF_CONF['detection']) ? true : false), $PMF_CONF['language']);
+$LANGCODE = $pmf->setLanguage((isset($PMF_CONF['main.languageDetection']) ? true : false), $PMF_CONF['language']);
 // Preload English strings
 require_once ('../lang/language_en.php');
 

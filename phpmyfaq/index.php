@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: index.php,v 1.90 2007-03-06 22:05:15 matteo Exp $
+ * $Id: index.php,v 1.91 2007-03-14 19:55:31 thorstenr Exp $
  *
  * This is the main public frontend page of phpMyFAQ. It detects the browser's
  * language, gets and sets all cookie, post and get informations and includes
@@ -58,7 +58,7 @@ $IDN = new idna_convert;
 // get language (default: english)
 //
 $pmf = new PMF_Init();
-$LANGCODE = $pmf->setLanguage($faqconfig->get('detection'), $faqconfig->get('language'));
+$LANGCODE = $pmf->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('language'));
 // Preload English strings
 require_once ('lang/language_en.php');
 

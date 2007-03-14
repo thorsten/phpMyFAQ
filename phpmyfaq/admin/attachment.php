@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: attachment.php,v 1.28 2007-03-10 22:26:43 thorstenr Exp $
+* $Id: attachment.php,v 1.29 2007-03-14 19:55:30 thorstenr Exp $
 *
 * Select an attachment and save it or create the SQL backup files
 *
@@ -40,7 +40,7 @@ if (isset($_REQUEST["action"]) && ($_REQUEST["action"] == "sicherdaten" || $_REQ
 
 // get language (default: english)
 $pmf = new PMF_Init();
-$LANGCODE = $pmf->setLanguage((isset($PMF_CONF['detection']) ? true : false), $PMF_CONF['language']);
+$LANGCODE = $pmf->setLanguage((isset($PMF_CONF['main.languageDetection']) ? true : false), $PMF_CONF['language']);
 // Preload English strings
 require_once ('../lang/language_en.php');
 

@@ -550,7 +550,7 @@ $PMF_LANG["ad_entry_fontsize"] = "크기: ";
 
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias
 $LANG_CONF["language"] = array(0 => "select", 1 => "언어");
-$LANG_CONF["detection"] = array(0 => "checkbox", 1 => "언어 자동 인식");
+$LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "언어 자동 인식");
 $LANG_CONF["title"] = array(0 => "input", 1 => "홈페이지 타이틀");
 $LANG_CONF["version"] = array(0 => "print", 1 => "FAQ 버전");
 $LANG_CONF["metaDescription"] = array(0 => "input", 1 => "페이지 설명");

@@ -549,7 +549,7 @@ $PMF_LANG["ad_entry_fontsize"] = "字體大�?: ";
 
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias
 $LANG_CONF["language"] = array(0 => "select", 1 => "語言文件");
-$LANG_CONF["detection"] = array(0 => "checkbox", 1 => "啟用內容自動�?�商功能");
+$LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "啟用內容自動�?�商功能");
 $LANG_CONF["title"] = array(0 => "input", 1 => "FAQ的標題");
 $LANG_CONF["version"] = array(0 => "print", 1 => "FAQ的版本");
 $LANG_CONF["metaDescription"] = array(0 => "input", 1 => "�?�?��??述");

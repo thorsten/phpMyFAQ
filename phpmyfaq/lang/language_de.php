@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.51 2007-03-13 18:43:33 thorstenr Exp $
+ * $Id: language_de.php,v 1.52 2007-03-14 19:55:32 thorstenr Exp $
  *
  * German language file
  *
@@ -551,7 +551,7 @@ $PMF_LANG["ad_entry_fontsize"] = "Schriftgröße: ";
 
 // added v1.4.0 - 2003-12-04 by Thorsten
 $LANG_CONF["language"] = array(0 => "select", 1 => "Sprachdatei");
-$LANG_CONF["detection"] = array(0 => "checkbox", 1 => "Automatische Spracherkennung");
+$LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Automatische Spracherkennung");
 $LANG_CONF["title"] = array(0 => "input", 1 => "Titel der FAQ");
 $LANG_CONF["version"] = array(0 => "print", 1 => "Version der FAQ");
 $LANG_CONF["metaDescription"] = array(0 => "input", 1 => "Beschreibung der Seite");

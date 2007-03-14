@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: rss.php,v 1.5 2007-03-04 07:22:41 thorstenr Exp $
+ * $Id: rss.php,v 1.6 2007-03-14 19:55:30 thorstenr Exp $
  *
  * The RSS feed with the latest open questions
  *
@@ -33,7 +33,7 @@ require_once(PMF_ROOT_DIR.'/inc/Faq.php');
 // get language (default: english)
 //
 $pmf = new PMF_Init();
-$LANGCODE = $pmf->setLanguage((isset($PMF_CONF['detection']) ? true : false), $PMF_CONF['language']);
+$LANGCODE = $pmf->setLanguage((isset($PMF_CONF['main.languageDetection']) ? true : false), $PMF_CONF['language']);
 // Preload English strings
 require_once (PMF_ROOT_DIR.'/lang/language_en.php');
 

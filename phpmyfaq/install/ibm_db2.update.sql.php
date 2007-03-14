@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: ibm_db2.update.sql.php,v 1.10 2007-03-11 21:09:54 thorstenr Exp $
+ * $Id: ibm_db2.update.sql.php,v 1.11 2007-03-14 19:55:31 thorstenr Exp $
  *
  * CREATE TABLE instruction for IBM DB2 Universal Database, IBM Cloudscape,
  * and Apache Derby databases
@@ -169,7 +169,7 @@ PRIMARY KEY (user_id, right_id)
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.administrationMail', 'webmaster@example.org')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.maxAttachmentSize', '100000')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.bannedIPs', 'false')";
-$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('detection', 'true')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.languageDetection', 'true')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('disatt', 'true')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('enableadminlog', 'true')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('enablevisibility', 'false')";

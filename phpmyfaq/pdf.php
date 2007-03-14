@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: pdf.php,v 1.25 2007-02-04 19:27:50 thorstenr Exp $
+ * $Id: pdf.php,v 1.26 2007-03-14 19:55:31 thorstenr Exp $
  *
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author      Peter Beauvain <pbeauvain@web.de>
@@ -33,7 +33,7 @@ $category = new PMF_Category;
 
 // get language (default: english)
 $pmf = new PMF_Init();
-$LANGCODE = $pmf->setLanguage((isset($PMF_CONF['detection']) ? true : false), $PMF_CONF['language']);
+$LANGCODE = $pmf->setLanguage((isset($PMF_CONF['main.languageDetection']) ? true : false), $PMF_CONF['language']);
 
 if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE)) {
     require_once("lang/language_".$LANGCODE.".php");
