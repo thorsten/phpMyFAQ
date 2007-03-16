@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: installer.php,v 1.90 2007-03-03 08:40:39 thorstenr Exp $
+ * $Id: installer.php,v 1.91 2007-03-16 23:53:07 johannes Exp $
  *
  * The main phpMyFAQ Installer
  *
@@ -30,6 +30,7 @@ define('SAFEMODE', @ini_get('safe_mode'));
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 require_once(PMF_ROOT_DIR.'/inc/constants.php');
 require_once(PMF_ROOT_DIR.'/inc/functions.php');
+require_once('./questionnaire.php');
 
 $query  = array();
 $uninst = array();
@@ -937,9 +938,98 @@ foreach ($permLevels as $level => $desc) {
 
     print "<p class=\"center\">All database tables were successfully created.</p>\n";
     print "<p class=\"center\">Congratulation! Everything seems to be okay.</p>\n";
-    print "<p class=\"center\">You can visit <a href=\"../index.php\">your version of phpMyFAQ</a> or</p>\n";
-    print "<p class=\"center\">login into your <a href=\"../admin/index.php\">admin section</a>.</p>\n";
+?>
+<script type="text/javascript">
+//<![CDATA[
+var iframect = 0;
 
+function iframeUpdated() {
+    if (iframect++ == 0) {
+        return;
+    }
+    hide("questionnaireForm");
+    show("questionnaireThanks");
+}
+
+function hide(item) {
+    document.getElementById(item).style.display = "none";
+}
+
+function show(item) {
+    document.getElementById(item).style.display = "block";
+}
+//]]>
+</script>
+<iframe onload="iframeUpdated();" name="blubb" style="display:none"></iframe>
+<form action="http://www.phpmyfaq.de" method="post" target="blubb" id="questionnaireForm">
+    <p class="center">For further development we would like to get some feedback from our users. Therefore
+    we'd ask you to spend us a few minutes from your time and answer a few questions. If you don't want to 
+    you can directly visit <a href="../index.php">your version of phpMyFAQ</a> or</p>
+    <p class="center">login into your <a href="../admin/index.php">admin section</a>.</p>
+    <fieldset>
+        <legend>General questions</legend>
+        <label>Are you acting as individual person or for your comapny?</label>
+        <select name="q[individual]">
+            <option>individual</option>
+            <option>organisation</option>
+        </select><br/>
+
+        <label>What kind of organisation is that?</label>
+        <select name="q[organisation]">
+             <option>private held</option>
+             <option>public held</option>
+             <option>government organisation</option>
+             <option>foundation</option>
+             <option>other</option>
+         </select><br />
+     </fieldset>
+     <fieldset>
+         <legend>Technical questions</legend>
+         <label>Where are you installing the software?</label>
+         <select name="q[server]">
+             <option>On a server run by a hosting company</option>
+             <option>On a public server run by you/your organisation</option>
+             <option>On a private server run by you/your organisation</option>
+             <option>Don't know</option>
+         </select><br />
+     </fieldset>
+     <fieldset>
+         <legend>beyond our own nose</legend>
+         <label>Are you using other PHP driven software? Which?</label>
+         <input name="q[other]" /><br />
+
+         <label>Are you running web-based applicatios using other technologies?</label>
+         <input type="checkbox" name="q[other][]" value="ASP" />ASP
+         <input type="checkbox" name="q[other][]" value="ASP.NET" />ASP.NET
+         <input type="checkbox" name="q[other][]" value="jsp" />JAVA JSP
+         <input type="checkbox" name="q[other][]" value="perl" />Perl
+         <input type="checkbox" name="q[other][]" value="ruby" />Ruby / Ruby on Rails
+         <input type="checkbox" name="q[other][]" value="python" />Python
+         <br />
+     </fieldset>
+
+    <p class="center">Additional to your input we're going to submit some information about your system setup for statstic purpose.</p>
+    <p class="center">We are not storing any personal information. You can see the data by clicking <a href="javascript:show('configliste');">here</a>.</p>
+
+    <div class="center"  id="configliste" style="display:none;">
+        <a href="javascript:hide('configliste');">hide again</a>
+        <dl>
+<?php
+$q = new PMF_Questionnaire_Data($oConf->config);
+$options = $q->get();
+array_walk($options, 'data_printer');
+echo '</dl><input type="hidden" name="systemdata" value="'.htmlspecialchars(serialize($q->get()), ENT_QUOTES).'" />';
+?>
+        </dl>
+    </div>
+    <p class="center"><input type="submit" value="Click here to submit the data and fnish the installation process" /></p>
+</form>
+<div id="questionnaireThanks" style="display:none;">
+    <p class="center"><b>Thank you for giving your feedback!</b></p>
+    <p class="center">You can visit <a href="../index.php">your version of phpMyFAQ</a> or</p>
+    <p class="center">login into your <a href="../admin/index.php">admin section</a>.</p>
+</div>
+<?php
     // Remove 'scripts' folder: no need of prompt anything to the user
     if (file_exists(PMF_ROOT_DIR."/scripts") && is_dir(PMF_ROOT_DIR."/scripts")) {
         @rmdir(PMF_ROOT_DIR."/scripts");
