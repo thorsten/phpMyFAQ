@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: index.php,v 1.91 2007-03-14 19:55:31 thorstenr Exp $
+ * $Id: index.php,v 1.92 2007-03-17 07:51:09 thorstenr Exp $
  *
  * This is the main public frontend page of phpMyFAQ. It detects the browser's
  * language, gets and sets all cookie, post and get informations and includes
@@ -358,33 +358,35 @@ $main_template_vars = array(
 
 if ($faqconfig->get('mod_rewrite')) {
     $links_template_vars = array(
-        "faqHome"           => $_SERVER['PHP_SELF'],
-        "msgSearch"         => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'search.html">'.$PMF_LANG["msgAdvancedSearch"].'</a>',
-        'msgAddContent'     => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'addcontent.html">'.$PMF_LANG["msgAddContent"].'</a>',
-        "msgQuestion"       => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'ask.html">'.$PMF_LANG["msgQuestion"].'</a>',
-        "msgOpenQuestions"  => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'open.html">'.$PMF_LANG["msgOpenQuestions"].'</a>',
-        'msgHelp'           => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'help.html">'.$PMF_LANG["msgHelp"].'</a>',
-        "msgContact"        => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'contact.html">'.$PMF_LANG["msgContact"].'</a>',
-        "backToHome"        => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'index.html">'.$PMF_LANG["msgHome"].'</a>',
-        "allCategories"     => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'showcat.html">'.$PMF_LANG["msgShowAllCategories"].'</a>',
-        "writeSendAdress"   => PMF_Link::getSystemRelativeUri('index.php').'search.html',
-        'showSitemap'       => getLinkHtmlAnchor($_SERVER['PHP_SELF'].'?'.$sids.'action=sitemap&amp;lang='.$LANGCODE, $PMF_LANG['msgSitemap']),
-        'opensearch'        => PMF_Link::getSystemRelativeUri('index.php').'search.html'
+        "faqHome"               => $_SERVER['PHP_SELF'],
+        "msgSearch"             => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'search.html">'.$PMF_LANG["msgAdvancedSearch"].'</a>',
+        'msgAddContent'         => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'addcontent.html">'.$PMF_LANG["msgAddContent"].'</a>',
+        "msgQuestion"           => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'ask.html">'.$PMF_LANG["msgQuestion"].'</a>',
+        "msgOpenQuestions"      => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'open.html">'.$PMF_LANG["msgOpenQuestions"].'</a>',
+        'msgHelp'               => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'help.html">'.$PMF_LANG["msgHelp"].'</a>',
+        "msgContact"            => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'contact.html">'.$PMF_LANG["msgContact"].'</a>',
+        "backToHome"            => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'index.html">'.$PMF_LANG["msgHome"].'</a>',
+        "allCategories"         => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'showcat.html">'.$PMF_LANG["msgShowAllCategories"].'</a>',
+        "writeSendAdress"       => PMF_Link::getSystemRelativeUri('index.php').'search.html',
+        'showInstantResponse'   => PMF_Link::getSystemRelativeUri('index.php').'instantresponse.html',
+        'showSitemap'           => getLinkHtmlAnchor($_SERVER['PHP_SELF'].'?'.$sids.'action=sitemap&amp;lang='.$LANGCODE, $PMF_LANG['msgSitemap']),
+        'opensearch'            => PMF_Link::getSystemRelativeUri('index.php').'search.html'
         );
 } else {
     $links_template_vars = array(
-        "faqHome"           => $_SERVER['PHP_SELF'],
-        "msgSearch"         => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=search">'.$PMF_LANG["msgAdvancedSearch"].'</a>',
-        "msgAddContent"     => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=add">'.$PMF_LANG["msgAddContent"].'</a>',
-        "msgQuestion"       => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=ask">'.$PMF_LANG["msgQuestion"].'</a>',
-        "msgOpenQuestions"  => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=open">'.$PMF_LANG["msgOpenQuestions"].'</a>',
-        "msgHelp"           => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=help">'.$PMF_LANG["msgHelp"].'</a>',
-        "msgContact"        => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=contact">'.$PMF_LANG["msgContact"].'</a>',
-        "allCategories"     => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=show">'.$PMF_LANG["msgShowAllCategories"].'</a>',
-        "backToHome"        => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'">'.$PMF_LANG["msgHome"].'</a>',
-        "writeSendAdress"   => $_SERVER['PHP_SELF'].'?'.$sids.'action=search',
-        'showSitemap'       => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=sitemap&amp;lang='.$LANGCODE.'">'.$PMF_LANG['msgSitemap'].'</a>',
-        'opensearch'        => $_SERVER['PHP_SELF'].'?'.$sids.'action=search',
+        "faqHome"               => $_SERVER['PHP_SELF'],
+        "msgSearch"             => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=search">'.$PMF_LANG["msgAdvancedSearch"].'</a>',
+        "msgAddContent"         => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=add">'.$PMF_LANG["msgAddContent"].'</a>',
+        "msgQuestion"           => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=ask">'.$PMF_LANG["msgQuestion"].'</a>',
+        "msgOpenQuestions"      => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=open">'.$PMF_LANG["msgOpenQuestions"].'</a>',
+        "msgHelp"               => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=help">'.$PMF_LANG["msgHelp"].'</a>',
+        "msgContact"            => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=contact">'.$PMF_LANG["msgContact"].'</a>',
+        "allCategories"         => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=show">'.$PMF_LANG["msgShowAllCategories"].'</a>',
+        "backToHome"            => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'">'.$PMF_LANG["msgHome"].'</a>',
+        "writeSendAdress"       => $_SERVER['PHP_SELF'].'?'.$sids.'action=search',
+        'showInstantResponse'   => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=instantresponse">'.$PMF_LANG['msgInstantReponse'].'</a>',
+        'showSitemap'           => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=sitemap&amp;lang='.$LANGCODE.'">'.$PMF_LANG['msgSitemap'].'</a>',
+        'opensearch'            => $_SERVER['PHP_SELF'].'?'.$sids.'action=search',
         );
 }
 
