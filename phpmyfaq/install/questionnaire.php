@@ -10,10 +10,12 @@ class PMF_Questionnaire_Data
 {
     var $data = null;
     var $config;
+    var $oldversion;
 
-    function PMF_Questionnaire_Data($config)
+    function PMF_Questionnaire_Data($config, $oldversion = 0)
     {
         $this->config = $config;
+        $this->config['oldversion'] = $oldversion;
     }
 
     function get()
@@ -39,7 +41,8 @@ class PMF_Questionnaire_Data
     */
     function getPMFInfo()
     {
-        $settings = array('version', 'language', 'permLevel', 'main.languageDetection', 'ldap_support');
+        // oldversion isn't a real pmf config option and jsut used by this class
+        $settings = array('version', 'oldversion', 'language', 'permLevel', 'main.languageDetection', 'ldap_support');
         return array_intersect_key($this->config, array_flip($settings));
     }
 
@@ -52,15 +55,22 @@ class PMF_Questionnaire_Data
             'sapi'              => PHP_SAPI,
             'int_size'          => defined('PHP_INT_SIZE') ? PHP_INT_SIZE : '',
             'safe_mode'         => (int)ini_get('safe_mode'),
-            'open_basedir'      => (int)ini_get('safe_mode'),
+            'open_basedir'      => (int)ini_get('open_basedir'),
             'memory_limit'      => ini_get('memory_limit'),
             'allow_url_fopen'   => (int)ini_get('allow_url_fopen'),
             'allow_url_include' => (int)ini_get('allow_url_include'),
+            'file_uploads'      => (int)ini_get('file_uploads'),
+            'upload_max_filesize' => ini_get('upload_max_filesize'),
+            'post_max_size'     => ini_get('post_max_size'),
             'disable_functions' => ini_get('disable_functions'),
             'disable_classes'   => ini_get('disable_classes'),
+            'enable_dl'         => (int)ini_get('enable_dl'),
             'magic_quotes_gpc'  => (int)ini_get('magic_quotes_gpc'),
             'register_globals'  => (int)ini_get('register_globals'),
             'filter.default'    => ini_get('filter.default'),
+            'zend.ze1_compatibility_mode' => (int)ini_get('zend.ze1_compatibility_mode'),
+            'unicode.sematics'  => (int)ini_get('unicode.semantics'),
+            'zend_thread_safty' => (int)function_exists('zend_thread_id'),
             'extensions'        => get_loaded_extensions(),
         );
     }
@@ -71,7 +81,7 @@ class PMF_Questionnaire_Data
     function getSystemInfo() {
         return array(
             'os' => PHP_OS,
-            // we don'T want the real IP adress (privacy!) but only the IP range to see whether it'S a private natwork or public
+            // we don't want the real IP adress (privacy!) but only the IP range to see whether it'S a private natwork or public
             'ip' => substr_replace($_SERVER["SERVER_ADDR"], '.XXX', strrpos($_SERVER["SERVER_ADDR"], '.')),
         );
     }
