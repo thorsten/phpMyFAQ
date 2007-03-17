@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.53 2007-03-14 20:32:41 thorstenr Exp $
+ * $Id: language_de.php,v 1.54 2007-03-17 07:54:53 thorstenr Exp $
  *
  * German language file
  *
@@ -863,3 +863,6 @@ $PMF_LANG['ad_conf_desc'] = 'absteigend';
 $PMF_LANG['ad_conf_asc'] = 'aufsteigend';
 $PMF_LANG['mainControlCenter'] = 'Allgemeine Konfiguration';
 $PMF_LANG['recordsControlCenter'] = 'Artikel-Konfiguration';
+
+// added v2.0.0 - 2007-03-17 by Thorsten
+$PMF_LANG['msgInstantResponse'] = 'Sofortantwort';

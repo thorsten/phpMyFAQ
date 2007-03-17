@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.81 2007-03-14 20:32:41 thorstenr Exp $
+* $Id: language_en.php,v 1.82 2007-03-17 07:54:53 thorstenr Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -873,3 +873,6 @@ $PMF_LANG['ad_conf_desc'] = 'descending';
 $PMF_LANG['ad_conf_asc'] = 'ascending';
 $PMF_LANG['mainControlCenter'] = 'Main configuration';
 $PMF_LANG['recordsControlCenter'] = 'FAQ records configuration';
+
+// added v2.0.0 - 2007-03-17 by Thorsten
+$PMF_LANG['msgInstantResponse'] = 'Instant Response';
