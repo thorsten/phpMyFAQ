@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: index.php,v 1.92 2007-03-17 07:51:09 thorstenr Exp $
+ * $Id: index.php,v 1.93 2007-03-17 07:54:21 thorstenr Exp $
  *
  * This is the main public frontend page of phpMyFAQ. It detects the browser's
  * language, gets and sets all cookie, post and get informations and includes
@@ -368,7 +368,7 @@ if ($faqconfig->get('mod_rewrite')) {
         "backToHome"            => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'index.html">'.$PMF_LANG["msgHome"].'</a>',
         "allCategories"         => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'showcat.html">'.$PMF_LANG["msgShowAllCategories"].'</a>',
         "writeSendAdress"       => PMF_Link::getSystemRelativeUri('index.php').'search.html',
-        'showInstantResponse'   => PMF_Link::getSystemRelativeUri('index.php').'instantresponse.html',
+        'showInstantResponse'   => getLinkHtmlAnchor($_SERVER['PHP_SELF'].'?'.$sids.'action=instantresponse', $PMF_LANG['msgInstantReponse']),
         'showSitemap'           => getLinkHtmlAnchor($_SERVER['PHP_SELF'].'?'.$sids.'action=sitemap&amp;lang='.$LANGCODE, $PMF_LANG['msgSitemap']),
         'opensearch'            => PMF_Link::getSystemRelativeUri('index.php').'search.html'
         );
