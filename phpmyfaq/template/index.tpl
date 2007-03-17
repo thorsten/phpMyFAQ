@@ -67,6 +67,7 @@
                         <li class="home">{backToHome}</li>
                         <li>{allCategories}</li>
                         {showCategories}
+                        <li>{showInstantResponse}</li>
                         <li>{showSitemap}</li>
                     </ul>
                     </div>
