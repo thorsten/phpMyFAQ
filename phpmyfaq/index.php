@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: index.php,v 1.93 2007-03-17 07:54:21 thorstenr Exp $
+ * $Id: index.php,v 1.94 2007-03-17 08:10:05 thorstenr Exp $
  *
  * This is the main public frontend page of phpMyFAQ. It detects the browser's
  * language, gets and sets all cookie, post and get informations and includes
@@ -368,7 +368,7 @@ if ($faqconfig->get('mod_rewrite')) {
         "backToHome"            => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'index.html">'.$PMF_LANG["msgHome"].'</a>',
         "allCategories"         => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'showcat.html">'.$PMF_LANG["msgShowAllCategories"].'</a>',
         "writeSendAdress"       => PMF_Link::getSystemRelativeUri('index.php').'search.html',
-        'showInstantResponse'   => getLinkHtmlAnchor($_SERVER['PHP_SELF'].'?'.$sids.'action=instantresponse', $PMF_LANG['msgInstantReponse']),
+        'showInstantResponse'   => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'instantresponse.html">'.$PMF_LANG['msgInstantResponse'].'</a>',
         'showSitemap'           => getLinkHtmlAnchor($_SERVER['PHP_SELF'].'?'.$sids.'action=sitemap&amp;lang='.$LANGCODE, $PMF_LANG['msgSitemap']),
         'opensearch'            => PMF_Link::getSystemRelativeUri('index.php').'search.html'
         );
@@ -384,7 +384,7 @@ if ($faqconfig->get('mod_rewrite')) {
         "allCategories"         => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=show">'.$PMF_LANG["msgShowAllCategories"].'</a>',
         "backToHome"            => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'">'.$PMF_LANG["msgHome"].'</a>',
         "writeSendAdress"       => $_SERVER['PHP_SELF'].'?'.$sids.'action=search',
-        'showInstantResponse'   => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=instantresponse">'.$PMF_LANG['msgInstantReponse'].'</a>',
+        'showInstantResponse'   => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=instantresponse">'.$PMF_LANG['msgInstantResponse'].'</a>',
         'showSitemap'           => '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=sitemap&amp;lang='.$LANGCODE.'">'.$PMF_LANG['msgSitemap'].'</a>',
         'opensearch'            => $_SERVER['PHP_SELF'].'?'.$sids.'action=search',
         );
