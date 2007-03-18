@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.add.php,v 1.53 2007-03-07 21:01:30 matteo Exp $
+ * $Id: record.add.php,v 1.54 2007-03-18 10:29:51 thorstenr Exp $
  *
  * Adds a record in the database, handles the preview and checks for missing
  * category entries.
@@ -44,7 +44,7 @@ $dateEnd =
     (isset($_POST['dateEndmm']) && !empty($_POST['dateEndmm']) ? str_pad((int)$_POST['dateEndmm'], 2, '0', STR_PAD_LEFT) : '00') .
     (isset($_POST['dateEndss']) && !empty($_POST['dateEndss']) ? str_pad((int)$_POST['dateEndss'], 2, '0', STR_PAD_LEFT) : '00');
 // Sanity checks
-if ('00010101000000' == $dateEnd) {
+if ('00000101000000' == $dateEnd) {
     $dateEnd = '99991231235959';
 }
 
