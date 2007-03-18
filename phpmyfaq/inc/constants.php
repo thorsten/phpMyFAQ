@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: constants.php,v 1.29 2007-03-04 10:03:15 thorstenr Exp $
+* $Id: constants.php,v 1.30 2007-03-18 18:07:12 thorstenr Exp $
 *
 * Constants for phpMyFAQ
 *
@@ -167,6 +167,7 @@ $allowedVariables = array(
         'ask'               => 1,
         'contact'           => 1,
         'help'              => 1,
+        'instantresponse'   => 1,
         'mailsend2friend'   => 1,
         'news'              => 1,
         'open'              => 1,
