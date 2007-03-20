@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Category.php,v 1.44 2007-03-20 18:06:39 thorstenr Exp $
+ * $Id: Category.php,v 1.45 2007-03-20 18:11:06 thorstenr Exp $
  *
  * The main category class
  *
@@ -810,8 +810,8 @@ class PMF_Category
                 if (isset($this->treeTab[$y]['symbol']) && $this->treeTab[$y]['symbol'] == 'plus') {
                     $output .= $this->addCategoryLink($sids, $parent, $categoryName, $description, true);
                 } else {
-                    if ($this->treeTab[$y]["symbol"] == "minus") {
-                        $name = ($this->treeTab[$y]['parent_id'] == 0) ? $categoryName : $this->categoryName[$this->treeTab[$y]['parent_id']]['name'];
+                    if ($this->treeTab[$y]['symbol'] == 'minus') {
+                        $name = ($this->treeTab[$y]['parent_id'] == 0) ? $categoryName : $this->categoryName[$this->treeTab[$y]['id']]['name'];
                         $output .= $this->addCategoryLink($sids, $this->treeTab[$y]['parent_id'], $name, $description);
                     } else {
                         $output .= $this->addCategoryLink($sids, $parent, $categoryName, $description);
