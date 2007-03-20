@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Category.php,v 1.43 2007-03-02 13:54:27 thorstenr Exp $
+ * $Id: Category.php,v 1.44 2007-03-20 18:06:39 thorstenr Exp $
  *
  * The main category class
  *
@@ -992,12 +992,15 @@ class PMF_Category
             AND
                 %s.record_id = %d
             AND
-                %s.category_lang = '%s'",
+                %s.category_lang = '%s'
+            AND
+                %s.lang = '%s'",
             $cat, $cat, $cat, $cat, $cat,
             $rel, $cat,
             $cat, $rel,
             $rel, $article_id,
-            $rel, $this->language);
+            $rel, $this->language,
+            $cat, $this->language);
         $result = $this->db->query($query);
         $num = $this->db->num_rows($result);
         $this->categories = array();
