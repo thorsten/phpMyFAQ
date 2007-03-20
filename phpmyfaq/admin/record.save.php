@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.save.php,v 1.54 2007-03-07 21:01:30 matteo Exp $
+ * $Id: record.save.php,v 1.55 2007-03-20 18:07:51 thorstenr Exp $
  *
  * Save or delete a FAQ record
  *
@@ -44,7 +44,7 @@ $dateEnd =
     (isset($_POST['dateEndmm']) && !empty($_POST['dateEndmm']) ? str_pad((int)$_POST['dateEndmm'], 2, '0', STR_PAD_LEFT) : '00') .
     (isset($_POST['dateEndss']) && !empty($_POST['dateEndss']) ? str_pad((int)$_POST['dateEndss'], 2, '0', STR_PAD_LEFT) : '00');
 // Sanity checks
-if ('00010101000000' == $dateEnd) {
+if ('00000101000000' == $dateEnd) {
     $dateEnd = '99991231235959';
 }
 
