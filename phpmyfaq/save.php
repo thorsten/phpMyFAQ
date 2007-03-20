@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: save.php,v 1.39 2007-03-13 18:31:40 thorstenr Exp $
+ * $Id: save.php,v 1.40 2007-03-20 18:02:43 thorstenr Exp $
  *
  * Saves a user FAQ record and sends an email to the user
  *
@@ -8,7 +8,7 @@
  * @author       Jürgen Kuza <kig@bluewin.ch>
  * @author       Matteo Scaramuccia <matteo@scaramuccia.com>
  * @since        2002-09-16
- * @copyright    (c) 2001-2007 phpMyFAQ Team
+ * @copyright    (c) 2002-2007 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -85,9 +85,9 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
     $sent = array();
 
     // Let the PMF Administrator and the Category Owner to be informed by email of this new entry
-    foreach($categories as $category) {
+    foreach($categories as $_category) {
 
-        $userId = $category->getCategoryUser($category);
+        $userId = $category->getCategoryUser($_category);
 
         // Avoid to send multiple emails to the same owner
         if (!isset($sent[$userId])) {
