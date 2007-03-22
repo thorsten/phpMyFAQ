@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: category.move.php,v 1.14 2007-02-25 11:33:02 thorstenr Exp $
+ * $Id: category.move.php,v 1.15 2007-03-22 17:51:57 thorstenr Exp $
  *
  * Select a category to move
  *
@@ -40,7 +40,8 @@ if ($permission["editcateg"]) {
 
     printf('<h2>%s</h2>', $header);
 ?>
-	<form action="?action=changecategory" method="post">
+	<form action="<?php print $_SERVER['PHP_SELF']; ?>" method="post">
+    <input type="hidden" name="action" value="changecategory" />
     <fieldset>
         <legend><?php print $PMF_LANG["ad_categ_change"]; ?></legend>
 	    <input type="hidden" name="cat" value="<?php print $id; ?>" />

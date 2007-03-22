@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: category.translate.php,v 1.11 2007-02-25 11:33:02 thorstenr Exp $
+ * $Id: category.translate.php,v 1.12 2007-03-22 17:51:58 thorstenr Exp $
  *
  * Translates a category
  *
@@ -47,7 +47,8 @@ if ($permission["editcateg"]) {
 
     printf('<h2>%s</h2>', $header);
 ?>
-    <form action="?action=<?php print $action; ?>" method="post">
+    <form action="<?php print $_SERVER['PHP_SELF']; ?>" method="post">
+    <input type="hidden" name="action" value="updatecategory" />
     <fieldset>
     <legend><?php print $header; ?></legend>
 

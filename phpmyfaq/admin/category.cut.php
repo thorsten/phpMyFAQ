@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: category.cut.php,v 1.12 2007-02-25 11:33:02 thorstenr Exp $
+ * $Id: category.cut.php,v 1.13 2007-03-22 17:51:57 thorstenr Exp $
  *
  * Cuts out a category
  *
@@ -37,7 +37,7 @@ if ($permission["editcateg"]) {
     printf('<h2>%s</h2>', $header);
 ?>
 
-    <form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>" method="post">
+    <form action="<?php print $_SERVER['PHP_SELF']; ?>" method="post">
     <fieldset>
         <legend><?php print $PMF_LANG["ad_categ_paste2"]; ?></legend>
 	    <input type="hidden" name="action" value="pastecategory" />
