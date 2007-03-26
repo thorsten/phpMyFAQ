@@ -1,6 +1,6 @@
 <?php
 /*
- * $Id: questionnaire.php,v 1.4 2007-03-26 22:12:31 matteo Exp $
+ * $Id: questionnaire.php,v 1.5 2007-03-26 23:03:24 johannes Exp $
  *
  * This class collects data which is used to create some usage statistics.
  *
@@ -144,7 +144,7 @@ class PMF_Questionnaire_Data
             'register_globals'              => (int)ini_get('register_globals'),
             'filter.default'                => ini_get('filter.default'),
             'zend.ze1_compatibility_mode'   => (int)ini_get('zend.ze1_compatibility_mode'),
-            'unicode.sematics'              => (int)ini_get('unicode.semantics'),
+            'unicode.semantics'             => (int)ini_get('unicode.semantics'),
             'zend_thread_safty'             => (int)function_exists('zend_thread_id'),
             'extensions'                    => get_loaded_extensions()
         );
