@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: installer.php,v 1.93 2007-03-26 17:27:20 johannes Exp $
+ * $Id: installer.php,v 1.94 2007-03-26 22:05:40 matteo Exp $
  *
  * The main phpMyFAQ Installer
  *
@@ -30,7 +30,7 @@ define('SAFEMODE', @ini_get('safe_mode'));
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 require_once(PMF_ROOT_DIR.'/inc/constants.php');
 require_once(PMF_ROOT_DIR.'/inc/functions.php');
-require_once('./questionnaire.php');
+require_once(PMF_ROOT_DIR.'/install/questionnaire.php');
 
 $query  = array();
 $uninst = array();
@@ -57,6 +57,7 @@ function db_check($supported_databases)
             return true;
         }
     }
+    
     return false;
 }
 
@@ -69,8 +70,8 @@ function db_check($supported_databases)
  */
 function phpmyfaq_check()
 {
-    if (@include('../inc/data.php')) {
-        include('../inc/data.php');
+    if (@include(PMF_ROOT_DIR.'/inc/data.php')) {
+        include(PMF_ROOT_DIR.'/inc/data.php');
         // check for version 1.4.x
         if ((isset($DB["server"]) && $DB["server"] != "") || (isset($DB["user"]) && $DB["user"] != "") || (isset($DB["password"]) && $DB["password"] != "") || (isset($DB["db"]) && $DB["db"] != "") || (isset($DB["prefix"]) && $DB["prefix"] != "")) {
             return false;
@@ -79,8 +80,8 @@ function phpmyfaq_check()
         if ((isset($DB["server"]) && $DB["server"] != "") || (isset($DB["user"]) && $DB["user"] != "") || (isset($DB["password"]) && $DB["password"] != "") || (isset($DB["db"]) && $DB["db"] != "") || (isset($DB["prefix"]) && $DB["prefix"] != "")  || (isset($DB["type"]) && $DB["type"] != "")) {
             return false;
         }
-        return true;
     }
+
     return true;
 }
 
@@ -206,7 +207,7 @@ function cleanInstallation()
         border-radius: 5px 5px 5px 5px;
     }
     .input {
-        width: 200px;
+        width: 250px;
         background-color: #f5f5f5;
         border: 1px solid black;
         margin-bottom: 8px;
@@ -247,6 +248,18 @@ function cleanInstallation()
         line-height: 20px;
         background-color: #f5f5f5;
         border: 1px solid black;
+    }
+    #configliste {
+        position: relative;
+        left: 350px;
+    }
+    dt {
+        font-weight: normal;
+        font-style: italic;
+    }
+    dd {
+        font-weight: bold;
+        font-style: normal;
     }
     -->
     /*]]>*/
@@ -318,7 +331,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         print '<p class="center">You don\'t have GD support enabled in your PHP installation. Please enabled GD support in your php.ini file otherwise you can\'t use Captchas for spam protection.</p>';
     }
     if (!function_exists('imagettftext')) {
-        print '<p class="center">You don\'t have Freetype support enabled in the GD extension of your PHP installation. Please enabled Freetype support in GD extension otherwise the Captchas for spam protection are quite easy to break.</p>';
+        print '<p class="center">You don\'t have Freetype support enabled in the GD extension of your PHP installation. Please enabled Freetype support in GD extension otherwise the Captchas for spam protection will be quite easy to break.</p>';
     }
 ?>
 <p class="center">You should read the <a href="../docs/documentation.en.html">documentation</a> carefully before installing phpMyFAQ.</p>
@@ -444,7 +457,7 @@ foreach ($permLevels as $level => $desc) {
     <label class="left">Retype password:</label>
     <input class="input" type="password" name="password_retyped" title="Please retype your password for checkup." /><br />
 
-<p class="center"><strong>Do not use if you're already running a version of phpMyFAQ!</strong></p>
+<p class="center"><strong>Do not use it if you're already running a version of phpMyFAQ!</strong></p>
 
 <p class="center"><input type="submit" value="Install phpMyFAQ <?php print VERSION; ?> now!" class="button" /></p>
 </fieldset>
@@ -947,6 +960,7 @@ function iframeUpdated() {
     if (iframect++ == 0) {
         return;
     }
+
     hide("questionnaireForm");
     show("questionnaireThanks");
 }
@@ -962,18 +976,16 @@ function show(item) {
 </script>
 <iframe onload="iframeUpdated();" name="questionaireResult" style="display:none"></iframe>
 <form action="http://www.phpmyfaq.de/stats/getstatdata.php" method="post" target="questionaireResult" id="questionnaireForm">
-    <p class="center">For further development we would like to get some feedback from our users. Therefore
-    we'd ask you to spend us a few minutes from your time and answer a few questions. If you don't want to 
-    you can directly visit <a href="../index.php">your version of phpMyFAQ</a> or</p>
-    <p class="center">login into your <a href="../admin/index.php">admin section</a>.</p>
+    <p class="center">For further development we would like to get some feedback from our users. Therefore we'd ask you to spend us a few minutes from your time and answer a few questions.</p>
+    <p class="center">If you don't want to you can directly visit <a href="../index.php">your version of phpMyFAQ</a> or login into your <a href="../admin/index.php">admin section</a>.</p>
     <fieldset>
         <legend>General questions</legend>
         <label>Are you acting as individual person or for your comapny?</label>
         <select name="q[individual]">
             <option>individual</option>
             <option>organisation</option>
-        </select><br/>
-
+        </select>
+        <br/>
         <label>What kind of organisation is that?</label>
         <select name="q[organisation]">
              <option>private held</option>
@@ -981,8 +993,9 @@ function show(item) {
              <option>government organisation</option>
              <option>foundation</option>
              <option>other</option>
-         </select><br />
+         </select>
      </fieldset>
+     <br />
      <fieldset>
          <legend>Technical questions</legend>
          <label>Where are you installing the software?</label>
@@ -991,8 +1004,9 @@ function show(item) {
              <option>On a public server run by you/your organisation</option>
              <option>On a private server run by you/your organisation</option>
              <option>Don't know</option>
-         </select><br />
+         </select>
      </fieldset>
+     <br />
      <fieldset>
          <legend>beyond our own nose</legend>
          <label>Are you using other PHP driven software? Which?</label>
@@ -1005,13 +1019,13 @@ function show(item) {
          <input type="checkbox" name="q[other][]" value="perl" />Perl
          <input type="checkbox" name="q[other][]" value="ruby" />Ruby / Ruby on Rails
          <input type="checkbox" name="q[other][]" value="python" />Python
-         <br />
      </fieldset>
+    <br />
 
     <p class="center">Additional to your input we're going to submit some information about your system setup for statstic purpose.</p>
     <p class="center">We are not storing any personal information. You can see the data by clicking <a href="javascript:show('configliste');">here</a>.</p>
 
-    <div class="center"  id="configliste" style="display:none;">
+    <div id="configliste" style="display:none;">
         <a href="javascript:hide('configliste');">hide again</a>
         <dl>
 <?php
@@ -1020,7 +1034,6 @@ $options = $q->get();
 array_walk($options, 'data_printer');
 echo '</dl><input type="hidden" name="systemdata" value="'.htmlspecialchars(serialize($q->get()), ENT_QUOTES).'" />';
 ?>
-        </dl>
     </div>
     <p class="center"><input type="submit" value="Click here to submit the data and fnish the installation process" /></p>
 </form>
@@ -1029,7 +1042,9 @@ echo '</dl><input type="hidden" name="systemdata" value="'.htmlspecialchars(seri
     <p class="center">You can visit <a href="../index.php">your version of phpMyFAQ</a> or</p>
     <p class="center">login into your <a href="../admin/index.php">admin section</a>.</p>
 </div>
+<br />
 <?php
+
     // Remove 'scripts' folder: no need of prompt anything to the user
     if (file_exists(PMF_ROOT_DIR."/scripts") && is_dir(PMF_ROOT_DIR."/scripts")) {
         @rmdir(PMF_ROOT_DIR."/scripts");
