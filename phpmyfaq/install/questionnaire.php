@@ -1,6 +1,6 @@
 <?php
 /*
- * $Id: questionnaire.php,v 1.3 2007-03-26 22:08:57 matteo Exp $
+ * $Id: questionnaire.php,v 1.4 2007-03-26 22:12:31 matteo Exp $
  *
  * This class collects data which is used to create some usage statistics.
  *
@@ -86,11 +86,19 @@ class PMF_Questionnaire_Data
      * @access  public
      * @since   2007-03-17
      * @author  Johannes Schlueter <johannes@php.net>
+     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      */
     function getPMFInfo()
     {
-        // oldversion isn't a real pmf config option and jsut used by this class
-        $settings = array('version', 'oldversion', 'language', 'permLevel', 'main.languageDetection', 'ldap_support');
+        // oldversion isn't a real PMF config option and it is just used by this class
+        $settings = array(
+            'version',
+            'oldversion',
+            'language',
+            'permLevel',
+            'main.languageDetection',
+            'ldap_support'
+        );
 
         if (function_exists('array_intersect_key')) {
             return array_intersect_key($this->config, array_flip($settings));
