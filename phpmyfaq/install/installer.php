@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: installer.php,v 1.91 2007-03-16 23:53:07 johannes Exp $
+ * $Id: installer.php,v 1.92 2007-03-26 17:24:39 johannes Exp $
  *
  * The main phpMyFAQ Installer
  *
@@ -960,8 +960,8 @@ function show(item) {
 }
 //]]>
 </script>
-<iframe onload="iframeUpdated();" name="blubb" style="display:none"></iframe>
-<form action="http://www.phpmyfaq.de" method="post" target="blubb" id="questionnaireForm">
+<iframe onload="iframeUpdated();" name="questionaireResult" style="display:none"></iframe>
+<form action="http://www.phpmyfaq.de/getstatdata.php" method="post" target="questionaireResult" id="questionnaireForm">
     <p class="center">For further development we would like to get some feedback from our users. Therefore
     we'd ask you to spend us a few minutes from your time and answer a few questions. If you don't want to 
     you can directly visit <a href="../index.php">your version of phpMyFAQ</a> or</p>
@@ -1015,7 +1015,7 @@ function show(item) {
         <a href="javascript:hide('configliste');">hide again</a>
         <dl>
 <?php
-$q = new PMF_Questionnaire_Data($oConf->config);
+$q = new PMF_Questionnaire_Data($configs);
 $options = $q->get();
 array_walk($options, 'data_printer');
 echo '</dl><input type="hidden" name="systemdata" value="'.htmlspecialchars(serialize($q->get()), ENT_QUOTES).'" />';
