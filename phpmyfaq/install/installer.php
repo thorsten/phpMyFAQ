@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: installer.php,v 1.92 2007-03-26 17:24:39 johannes Exp $
+ * $Id: installer.php,v 1.93 2007-03-26 17:27:20 johannes Exp $
  *
  * The main phpMyFAQ Installer
  *
@@ -961,7 +961,7 @@ function show(item) {
 //]]>
 </script>
 <iframe onload="iframeUpdated();" name="questionaireResult" style="display:none"></iframe>
-<form action="http://www.phpmyfaq.de/getstatdata.php" method="post" target="questionaireResult" id="questionnaireForm">
+<form action="http://www.phpmyfaq.de/stats/getstatdata.php" method="post" target="questionaireResult" id="questionnaireForm">
     <p class="center">For further development we would like to get some feedback from our users. Therefore
     we'd ask you to spend us a few minutes from your time and answer a few questions. If you don't want to 
     you can directly visit <a href="../index.php">your version of phpMyFAQ</a> or</p>
