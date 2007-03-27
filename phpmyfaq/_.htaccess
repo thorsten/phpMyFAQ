@@ -1,5 +1,5 @@
 ##
-# $Id: _.htaccess,v 1.15 2007-03-06 22:05:15 matteo Exp $
+# $Id: _.htaccess,v 1.16 2007-03-27 18:57:05 thorstenr Exp $
 #
 # phpMyFAQ 2.0 .htaccess file
 #
@@ -133,3 +133,7 @@ RewriteRule urllist.txt.gz$     sitemap.yahoo.php?gz=1 [L]
 # PMF tags page
 # * http://[...]/tags/<ID>/<HEADER>.htm
 RewriteRule tags/([0-9]+)/([^\/]+)\.htm(l?)$     index.php?action=search&tagging_id=$1 [L,QSA]
+
+# the instant response page
+RewriteCond %{REQUEST_URI}          instantresponse\.html$ [NC]
+RewriteRule ^(.*)$                  index.php?action=instantresponse [L,QSA]
