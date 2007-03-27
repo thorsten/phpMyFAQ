@@ -26,19 +26,16 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 Tracking('instantresponse', 0);
 
-
+$searchString           = '';
+$printInstantResponse   = '';
 
 $tpl->processTemplate(
     'writeContent', array(
         'msgInstantResponse'    => $PMF_LANG['msgInstantResponse'],
-        'searchString'          => $suchbegriff,
-        'searchOnAllLanguages'  => $PMF_LANG['msgSearchOnAllLanguages'],
-        'checkedAllLanguages'   => $allLanguages ? ' checked="checked"' : '',
-        'selectCategories'      => $PMF_LANG['msgSelectCategories'],
-        'allCategories'         => $PMF_LANG['msgAllCategories'],
-        'printCategoryOptions'  => $category->printCategoryOptions($searchCategory),
-        'writeSendAdress'       => $_SERVER['PHP_SELF'].'?'.$sids.'action=search',
+        'searchString'          => $searchString,
+        'writeSendAdress'       => $_SERVER['PHP_SELF'].'?'.$sids.'action=instantresponse',
         'msgSearchWord'         => $PMF_LANG['msgSearchWord'],
+        'msgInstanResponse'     => $PMF_LANG['msgSearch'],
         'printInstantResponse'  => $printInstantResponse));
 
 $tpl->includeTemplate('writeContent', 'index');
