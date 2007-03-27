@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Category.php,v 1.45 2007-03-20 18:11:06 thorstenr Exp $
+ * $Id: Category.php,v 1.46 2007-03-27 18:21:17 thorstenr Exp $
  *
  * The main category class
  *
@@ -200,6 +200,8 @@ class PMF_Category
                 %sfaqcategory_user fu
             ON
                 fc.id = fu.category_id%s
+            GROUP BY
+                id
             ORDER BY
                 id",
             SQLPREFIX,
