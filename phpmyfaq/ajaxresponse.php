@@ -47,6 +47,7 @@ if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE)) {
 }
 
 $category = new PMF_Category($LANGCODE);
+$category->transform(0);
 $category->buildTree();
 
 //
