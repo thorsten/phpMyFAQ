@@ -2,7 +2,7 @@
 
     <script type="text/javascript" src="inc/js/prototype.js"></script>
 
-    <form action="?action=instantresponse" method="post" onkeydown="new Ajax.Updater('instantresponse', 'ajaxresponse.php', {asynchronous:true, parameters:Form.serialize(this)}); return false;">
+    <form action="?action=instantresponse" method="post" onkeyup="new Ajax.Updater('instantresponse', 'ajaxresponse.php', {asynchronous:true, parameters:Form.serialize(this)}); return false;">
         <fieldset>
             <legend>{msgSearchWord}</legend>
 
