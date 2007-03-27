@@ -1,16 +1,26 @@
 <?php
-
 /**
+ * $Id: Enc.php,v 1.9 2007-03-27 16:11:52 thorstenr Exp $
+ *
  * provides methods for password encryption. 
  *
  * Subclasses (extends) of this class provide the encrypt() method that returns
  * encrypted string. For special encryption methods, just create a new class as
  * extend of this class and has the method encrypt().
  *
- * @author Lars Tiedemann <php@larstiedemann.de>
- * @package PMF
- * @since 2005-09-18
- * @version 0.1
+ * @author      Lars Tiedemann <php@larstiedemann.de>
+ * @since       2005-09-18
+ * @copyright   (c) 2005-2007 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
  */
 
 /* user defined includes */
@@ -20,8 +30,6 @@
 
 class PMF_Enc
 {
-    // --- ATTRIBUTES ---
-
     /**
      * Encryption methods
      *
@@ -37,41 +45,6 @@ class PMF_Enc
      * @var array
      */
     var $errors = array();
-
-    // --- OPERATIONS ---
-
-    /**
-     * constructor
-     *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @return void
-     */
-    function PMF_Enc()
-    {
-    }
-
-    /**
-     * constructor
-     *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @return void
-     */
-    function __construct()
-    {
-    }
-
-    /**
-     * destructor
-     *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @return void
-     */
-    function __destruct()
-    {
-    }
 
     /**
      * encrypts the string str and returns the result.
@@ -151,7 +124,4 @@ class PMF_Enc
         }
         return $message;
     }
-
-} /* end of class PMF_Enc */
-
-?>
+}

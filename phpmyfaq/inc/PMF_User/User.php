@@ -369,7 +369,7 @@ class PMF_User
         $this->_status  = (string) $user['account_status'];
         // get user-data
         if (!$this->userdata)
-            $this->userdata =& new PMF_UserData($this->_db);
+            $this->userdata = new PMF_UserData($this->_db);
         $this->userdata->load($this->getUserId());
         return true;
     }
