@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: index.php,v 1.97 2007-03-28 10:47:07 thorstenr Exp $
+ * $Id: index.php,v 1.98 2007-03-28 11:35:38 thorstenr Exp $
  *
  * This is the main public frontend page of phpMyFAQ. It detects the browser's
  * language, gets and sets all cookie, post and get informations and includes
@@ -89,7 +89,8 @@ if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
         }
     } else {
         // error
-        $error = $PMF_LANG['ad_auth_fail'];
+        $error = sprintf('%s<br /><a href="admin/password.php" title="%s">%s</a>',
+            $PMF_LANG['ad_auth_fail'], $PMF_LANG['lostPassword'], $PMF_LANG['lostPassword']);
         $user = null;
         unset($user);
     }
