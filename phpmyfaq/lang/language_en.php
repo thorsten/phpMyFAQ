@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.87 2007-03-28 10:47:03 thorstenr Exp $
+* $Id: language_en.php,v 1.88 2007-03-28 21:11:37 matteo Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -876,3 +876,4 @@ $PMF_LANG['recordsControlCenter'] = 'FAQ records configuration';
 
 // added v2.0.0 - 2007-03-17 by Thorsten
 $PMF_LANG['msgInstantResponse'] = 'Instant Response';
+$PMF_LANG['msgInstantResponseMaxRecords'] = '. Find below the first %d records.';

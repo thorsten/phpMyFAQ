@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.57 2007-03-28 10:47:03 thorstenr Exp $
+* $Id: language_it.php,v 1.58 2007-03-28 21:11:37 matteo Exp $
 *
 * Italian language file
 *
@@ -873,3 +873,7 @@ $PMF_LANG['ad_conf_desc'] = 'Decrescente';
 $PMF_LANG['ad_conf_asc'] = 'Crescente';
 $PMF_LANG['mainControlCenter'] = 'Configurazione principale';
 $PMF_LANG['recordsControlCenter'] = 'Configurazione delle FAQ';
+
+// added v2.0.0 - 2007-03-17 by Thorsten
+$PMF_LANG['msgInstantResponse'] = 'Ricerca a risposta immediata';
+$PMF_LANG['msgInstantResponseMaxRecords'] = '. Qui sotto trovi le prime %d faq.';

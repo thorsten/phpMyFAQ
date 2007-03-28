@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.172 2007-03-28 10:47:07 thorstenr Exp $
+ * $Id: functions.php,v 1.173 2007-03-28 21:11:37 matteo Exp $
  *
  * This is the main functions file!
  *
@@ -1314,14 +1314,17 @@ function generateDocBookExport()
  *
  * TODO: add filter for (X)HTML tag names and attributes!
  *
- * @param    string
- * @param    string
+ * @param    string     Text/Number (solution id)
+ * @param    string     '%' to avoid any category filtering
+ * @param    boolean    True to search over all languages
+ * @param    boolean    True to disable the results paging
  * @return   string
  * @access   public
  * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author   Matteo Scaramuccia <matteo@scaramuccia.com>
  * @since    2002-09-16
  */
-function searchEngine($begriff, $cat = '%', $allLanguages = true)
+function searchEngine($begriff, $cat = '%', $allLanguages = true, $hasMore = false)
 {
     global $db, $sids, $category, $PMF_LANG, $PMF_CONF, $LANGCODE;
 
@@ -1432,11 +1435,18 @@ function searchEngine($begriff, $cat = '%', $allLanguages = true)
 
     if ($num > 0) {
         if ($num == "1") {
-            $output .= "<p>".$num.$PMF_LANG["msgSearchAmount"]."</p>\n";
+            $output .= '<p>'.$num.$PMF_LANG["msgSearchAmount"]."</p>\n";
         } else {
-            $output .= "<p>".$num.$PMF_LANG["msgSearchAmounts"]."</p>\n";
+            $output .= '<p>'.$num.$PMF_LANG["msgSearchAmounts"];
+            if ($hasMore && ($pages > 1)) {
+                $output .= sprintf(
+                    $PMF_LANG['msgInstantResponseMaxRecords'],
+                    $PMF_CONF['numRecordsPage']
+                );
+            }
+            $output .= "</p>\n";
         }
-        if ($pages > 1) {
+        if (!$hasMore && ($pages > 1)) {
             $output .= "<p><strong>".$PMF_LANG["msgPage"].$seite." ".$PMF_LANG["msgVoteFrom"]." ".$pages." ".$PMF_LANG["msgPages"]."</strong></p>";
         }
         $output .= "<ul class=\"phpmyfaq_ul\">\n";
@@ -1460,47 +1470,49 @@ function searchEngine($begriff, $cat = '%', $allLanguages = true)
             if (strlen($searchItems[0]) > 1) {
                 foreach ($searchItems as $item) {
                     $thema = preg_replace_callback('/'
-                                .'('.$item.'="[^"]*")|'
-                                .'((href|src|title|alt|class|style|id|name|dir|onclick|ondblclick|onmousedown|onmouseup|onmouseover|onmousemove|onmouseout|onkeypress|onkeydown|onkeyup)="[^"]*'.$item.'[^"]*")|'
-
-                                .'('.$item.')'
-                                .'/mis',
-                                "highlight_no_links",
-                                $thema
-                                );
+                        .'('.$item.'="[^"]*")|'
+                        .'((href|src|title|alt|class|style|id|name|dir|onclick|ondblclick|onmousedown|onmouseup|onmouseover|onmousemove|onmouseout|onkeypress|onkeydown|onkeyup)="[^"]*'.$item.'[^"]*")|'
+                        .'('.$item.')'
+                        .'/mis',
+                        "highlight_no_links",
+                        $thema
+                    );
                     $content = preg_replace_callback('/'
-                                .'('.$item.'="[^"]*")|'
-                                .'((href|src|title|alt|class|style|id|name|dir|onclick|ondblclick|onmousedown|onmouseup|onmouseover|onmousemove|onmouseout|onkeypress|onkeydown|onkeyup)="[^"]*'.$item.'[^"]*")|'
-                                .'('.$item.')'
-                                .'/mis',
-                                "highlight_no_links",
-                                $content
-                                );
+                        .'('.$item.'="[^"]*")|'
+                        .'((href|src|title|alt|class|style|id|name|dir|onclick|ondblclick|onmousedown|onmouseup|onmouseover|onmousemove|onmouseout|onkeypress|onkeydown|onkeyup)="[^"]*'.$item.'[^"]*")|'
+                        .'('.$item.')'
+                        .'/mis',
+                        "highlight_no_links",
+                        $content
+                    );
                 }
             }
 
             // Print the link to the faq record
-            $url   = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s&amp;highlight=%s',
-                        $sids,
-                        $row->category_id,
-                        $row->id,
-                        $row->lang,
-                        $begriff);
+            $url = sprintf(
+                '%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s&amp;highlight=%s',
+                $sids,
+                $row->category_id,
+                $row->id,
+                $row->lang,
+                $begriff
+            );
             // kick out ajaxresponse.php
             $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri('ajaxresponse.php').'?'.$url);
             $oLink->itemTitle = $row->thema;
             $oLink->text = $thema;
             $oLink->tooltip = $row->thema;
-            $output .= '<li><strong>'.$rubriktext.'</strong>: '.$oLink->toHtmlAnchor().'</li><br />'
-                    .'<div class="searchpreview"><strong>'.$PMF_LANG['msgSearchContent'].'</strong> '.$content.'...</div>'
-                    .'<br /></li>'."\n";
+            $output .=
+                '<li><strong>'.$rubriktext.'</strong>: '.$oLink->toHtmlAnchor().'</li><br />'
+                .'<div class="searchpreview"><strong>'.$PMF_LANG['msgSearchContent'].'</strong> '.$content.'...</div>'
+                .'<br /></li>'."\n";
         }
         $output .= "</ul>\n";
     } else {
         $output = $PMF_LANG["err_noArticles"];
     }
 
-    if ($num > $PMF_CONF['numRecordsPage']) {
+    if (!$hasMore && ($num > $PMF_CONF['numRecordsPage'])) {
         $output .= "<p align=\"center\"><strong>";
         $vor = $seite - 1;
         $next = $seite + 1;
