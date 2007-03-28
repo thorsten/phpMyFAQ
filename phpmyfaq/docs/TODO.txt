@@ -1,7 +1,6 @@
 TODO list for future versions of phpMyFAQ:
 
 2.0.0 "Prometheus" (planned CVS branch: PMF_2_0):
-- simple reordering of records
 - editable default values for record configuration
 - finish the new admin backend layout
 
