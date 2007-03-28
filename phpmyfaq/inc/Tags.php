@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Tags.php,v 1.26 2006-12-31 10:16:00 matteo Exp $
+* $Id: Tags.php,v 1.27 2007-03-28 22:28:24 matteo Exp $
 *
 * The main Tags class
 *
@@ -86,7 +86,7 @@ class PMF_Tags
             ORDER BY tagging_name",
             SQLPREFIX,
             (isset($search) && ($search != '') ? "WHERE tagging_name ".$like." '".$search."%'" : '')
-            );
+        );
 
         $i = 0;
         $result = $this->db->query($query);
@@ -125,7 +125,8 @@ class PMF_Tags
                 dt.tagging_id = t.tagging_id",
             SQLPREFIX,
             SQLPREFIX,
-            $record_id);
+            $record_id
+        );
 
         $result = $this->db->query($query);
         if ($result) {
@@ -154,9 +155,9 @@ class PMF_Tags
         foreach ($this->getAllTagsById($record_id) as $tagging_id => $tagging_name) {
             $title = PMF_htmlentities($tagging_name, ENT_NOQUOTES, $PMF_LANG['metaCharset']);
             $url = sprintf(
-                        $sids.'action=search&amp;tagging_id=%d',
-                        $tagging_id
-                        );
+                $sids.'action=search&amp;tagging_id=%d',
+                $tagging_id
+            );
             $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
             $oLink->itemTitle = $tagging_name;
             $oLink->text = $tagging_name;
@@ -192,7 +193,7 @@ class PMF_Tags
                     record_id = %d",
                 SQLPREFIX,
                 $record_id
-                );
+            );
             $this->db->query($query);
         }
 
@@ -210,7 +211,7 @@ class PMF_Tags
                     SQLPREFIX,
                     $new_tagging_id,
                     $tagging_name
-                    );
+                );
                 $this->db->query($query);
                 // Add the tag reference for the faq record
                 $query = sprintf("
@@ -222,7 +223,7 @@ class PMF_Tags
                     SQLPREFIX,
                     $record_id,
                     $new_tagging_id
-                    );
+                );
                 $this->db->query($query);
             } else {
                 // Add the tag reference for the faq record
@@ -235,7 +236,7 @@ class PMF_Tags
                     SQLPREFIX,
                     $record_id,
                     array_search($tagging_name, $current_tags)
-                    );
+                );
                 @$this->db->query($query);
             }
         }
@@ -275,7 +276,7 @@ class PMF_Tags
             SQLPREFIX,
             substr(implode("', '", $arrayOfTags), 0, -2),
             count($arrayOfTags)
-            );
+        );
 
         $records = array();
         $result = $this->db->query($query);
@@ -315,7 +316,7 @@ class PMF_Tags
             SQLPREFIX,
             SQLPREFIX,
             substr(implode("', '", $arrayOfTags), 0, -2)
-            );
+        );
 
         $records = array();
         $result = $this->db->query($query);
@@ -349,7 +350,7 @@ class PMF_Tags
                 tagging_id = %d",
             SQLPREFIX,
             $tagId
-            );
+        );
 
         $result = $this->db->query($query);
         if ($row = $this->db->fetch_object($result)) {
@@ -451,7 +452,7 @@ class PMF_Tags
             SQLPREFIX,
             SQLPREFIX,
             $tagName
-            );
+        );
 
         $records = array();
         $result = $this->db->query($query);
@@ -472,11 +473,19 @@ class PMF_Tags
      */
     function existTagRelations()
     {
-        $oTables = $this->db->getTableStatus(SQLPREFIX);
-        if (isset($oTables[SQLPREFIX.'faqtags']) && isset($oTables[SQLPREFIX.'faqdata_tags'])) {
-            return (($oTables[SQLPREFIX.'faqtags'] > 0) && ($oTables[SQLPREFIX.'faqdata_tags'] > 0));
+        $query = sprintf('
+            SELECT
+                COUNT(record_id) AS n
+            FROM
+                %sfaqdata_tags',
+            SQLPREFIX
+        );
+
+        $result = $this->db->query($query);
+        if ($row = $this->db->fetch_object($result)) {
+            return ($row->n > 0);
         }
-        
+
         return false;
     }
 }
