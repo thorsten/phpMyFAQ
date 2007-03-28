@@ -1,10 +1,11 @@
 <?php
 /**
- * $Id: search.php,v 1.20 2007/02/04 19:27:50 thorstenr Exp $
+ * $Id$
  *
- * The Ajax powered instant response page
+ * The Ajax powered instant response page.
  *
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
  * @since       2007-03-18
  * @copyright   (c) 2007 phpMyFAQ Team
  *
@@ -30,12 +31,14 @@ $searchString           = '';
 $printInstantResponse   = '';
 
 $tpl->processTemplate(
-    'writeContent', array(
+    'writeContent',
+    array(
         'msgInstantResponse'    => $PMF_LANG['msgInstantResponse'],
         'searchString'          => $searchString,
         'writeSendAdress'       => $_SERVER['PHP_SELF'].'?'.$sids.'action=instantresponse',
         'msgSearchWord'         => $PMF_LANG['msgSearchWord'],
-        'msgInstanResponse'     => $PMF_LANG['msgSearch'],
-        'printInstantResponse'  => $printInstantResponse));
+        'printInstantResponse'  => $printInstantResponse
+    )
+);
 
 $tpl->includeTemplate('writeContent', 'index');
