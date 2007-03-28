@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_el.php,v 1.10 2007-03-28 08:47:29 thorstenr Exp $
+* $Id: language_el.php,v 1.11 2007-03-28 08:55:37 thorstenr Exp $
 *
 * The Hellenic language file
 *
@@ -569,8 +569,7 @@ $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Αριθμός εμφανιζόμενων ά
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Αριθμός ειδήσεων");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Απαγόρευση πρόσβασης των παρακάτω διευθύνσεων IP");
 $LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Ενεργοποίηση της υποστήριξης mod_rewrite; (Προεπιλογή: απενεργοποιημένο)");
-$LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "Θέλετε να ενεργοποιήσετε την υποστήριξη LDAP; (Προεπιλογή: απενεργοποιημένο)");
-$LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "Θέλετε να ενεργοποιήσετε την υποστήριξη LDAP; (Προεπιλογή: απενεργοποιημένο)");
+$LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Θέλετε να ενεργοποιήσετε την υποστήριξη LDAP; (Προεπιλογή: απενεργοποιημένο)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "ως νέα κύρια κατηγορία";
 $PMF_LANG["ad_categ_paste_error"] = "Δεν ήταν δυνατή η μετακίνηση αυτής της κατηγορίας.";

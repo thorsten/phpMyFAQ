@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_fr.php,v 1.22 2007-03-28 08:47:29 thorstenr Exp $
+* $Id: language_fr.php,v 1.23 2007-03-28 08:55:37 thorstenr Exp $
 *
 * The French language file - try to be the best
 *
@@ -572,7 +572,7 @@ $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Nombre de topics affich
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Nombre de nouveaux articles");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Bannir ces adresses IP");
 $LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Activer le support du mod_rewrite&nbsp;? (d&eacute;fault&nbsp;: d&eacute;sactiv&eacute;)");
-$LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "Voulez vous activer le support de LDAP&nbsp;? (d&eacute;fault&nbsp;: d&eacute;sactiv&eacute;)");
+$LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Voulez vous activer le support de LDAP&nbsp;? (d&eacute;fault&nbsp;: d&eacute;sactiv&eacute;)");
 
 $PMF_LANG['ad_categ_new_main_cat'] = 'comme cat&eacute;gorie principale';
 $PMF_LANG["ad_categ_paste_error"] = "D&eacute;placer cette cat&eacute;gorie est impossible.";

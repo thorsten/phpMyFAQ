@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Init.php,v 1.30 2007-03-05 20:49:03 matteo Exp $
+ * $Id: Init.php,v 1.31 2007-03-28 08:55:39 thorstenr Exp $
  *
  * Some functions
  *
@@ -97,7 +97,7 @@ ini_set('url_rewriter.tags', '');
 //
 // Connect to LDAP server, when LDAP support is enabled
 //
-if ($faqconfig->get('ldap_support') && file_exists('inc/dataldap.php')) {
+if ($faqconfig->get('main.ldapSupport') && file_exists('inc/dataldap.php')) {
     require_once(PMF_INCLUDE_DIR.'dataldap.php');
     require_once(PMF_INCLUDE_DIR.'Ldap.php');
     $ldap = new LDAP($PMF_LDAP['ldap_server'], $PMF_LDAP['ldap_port'], $PMF_LDAP['ldap_base'], $PMF_LDAP['ldap_user'], $PMF_LDAP['ldap_password']);

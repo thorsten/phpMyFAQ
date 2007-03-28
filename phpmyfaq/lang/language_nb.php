@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_nb.php,v 1.11 2007-03-28 08:47:29 thorstenr Exp $
+* $Id: language_nb.php,v 1.12 2007-03-28 08:55:38 thorstenr Exp $
 *
 * Norwegian Bokmål language file
 *
@@ -568,7 +568,7 @@ $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Antall oppføringer per 
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Antall nyhetsartikler");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Steng ute disse IP-ene");
 $LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Aktiver mod_rewrite støtte? (standard: deaktivert)");
-$LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "Vil du aktivere LDAP-støtte? (standard: deaktivert)");
+$LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Vil du aktivere LDAP-støtte? (standard: deaktivert)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "som ny hovedkategori";
 $PMF_LANG["ad_categ_paste_error"] = "Flytting av denne kategorien er ikke mulig.";

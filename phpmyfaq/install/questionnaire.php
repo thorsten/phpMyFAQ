@@ -1,6 +1,6 @@
 <?php
 /*
- * $Id: questionnaire.php,v 1.5 2007-03-26 23:03:24 johannes Exp $
+ * $Id: questionnaire.php,v 1.6 2007-03-28 08:55:36 thorstenr Exp $
  *
  * This class collects data which is used to create some usage statistics.
  *
@@ -97,7 +97,7 @@ class PMF_Questionnaire_Data
             'language',
             'permLevel',
             'main.languageDetection',
-            'ldap_support'
+            'main.ldapSupport'
         );
 
         if (function_exists('array_intersect_key')) {

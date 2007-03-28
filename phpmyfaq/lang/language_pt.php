@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_pt.php,v 1.16 2007-03-28 08:47:29 thorstenr Exp $
+ * $Id: language_pt.php,v 1.17 2007-03-28 08:55:38 thorstenr Exp $
  *
  * Portuguese language file
  *
@@ -571,7 +571,7 @@ $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "N&uacute;mero de t&oacu
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "N&uacute;ero de artigos de not&iacute;cias");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Banir estes IPs");
 $LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Activar suporte de  mod_rewrite? (por defeito: desactivado)");
-$LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "Activar o suporte LDAP? (por defeito: desactivado)");
+$LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Activar o suporte LDAP? (por defeito: desactivado)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "como a nova categoria principal";
 $PMF_LANG["ad_categ_paste_error"] = "Mover esta categoria &eacute; imposs&iacute;vel.";

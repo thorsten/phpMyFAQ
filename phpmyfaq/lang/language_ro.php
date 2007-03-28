@@ -568,7 +568,7 @@ $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Numarul topicurilor afi
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Numarul stirilor per pagina");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Restrictioneaza urmatoarele IP-uri");
 $LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Activate mod_rewrite support? (default: disabled)");
-$LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "Do you want to enable LDAP support? (default: disabled)");
+$LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Do you want to enable LDAP support? (default: disabled)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "ca si o noua categorie principala";
 $PMF_LANG["ad_categ_paste_error"] = "Nu poti sa muti aceasta categorie.";

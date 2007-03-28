@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: ibm_db2.update.sql.php,v 1.14 2007-03-28 08:47:28 thorstenr Exp $
+ * $Id: ibm_db2.update.sql.php,v 1.15 2007-03-28 08:55:36 thorstenr Exp $
  *
  * CREATE TABLE instruction for IBM DB2 Universal Database, IBM Cloudscape,
  * and Apache Derby databases
@@ -175,7 +175,7 @@ $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.enableAdminLog', 't
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('records.enableVisibilityQuestions', 'false')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.ipCheck', 'false')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('language', 'language_en.php')";
-$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('ldap_support', 'false')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.ldapSupport', 'false')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('metaDescription', 'phpMyFAQ should be the answer for all questions in life')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('metaKeywords', '')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('metaPublisher', 'John Doe')";

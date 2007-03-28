@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.84 2007-03-28 08:47:28 thorstenr Exp $
+* $Id: language_en.php,v 1.85 2007-03-28 08:55:37 thorstenr Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -571,7 +571,7 @@ $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Number of displayed top
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Number of news articles");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Ban these IPs");
 $LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Activate mod_rewrite support? (default: disabled)");
-$LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "Do you want to enable LDAP support? (default: disabled)");
+$LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Do you want to enable LDAP support? (default: disabled)");
 $LANG_CONF["referenceURL"] = array(0 => "input", 1 => "Base URL for link verification (e.g.: http://www.example.org/faq)");
 $LANG_CONF["URLValidateInterval"] = array(0 => "input", 1 => "Interval between AJAX link verification (in seconds)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Disable visibility of new questions?");

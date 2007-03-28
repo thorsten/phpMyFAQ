@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_fi.php,v 1.15 2007-03-28 08:47:29 thorstenr Exp $
+ * $Id: language_fi.php,v 1.16 2007-03-28 08:55:37 thorstenr Exp $
  *
  * Finnish language file
  *
@@ -549,7 +549,7 @@ $PMF_LANG["err_SaveQuestion"] = "Vaadittavat kentät ovat <strong>nimesi</strong>
 $PMF_LANG["ad_entry_fontcolor"] = "Tekstin väri: ";
 $PMF_LANG["ad_entry_fontsize"] = "Tekstin koko: ";
 
-/* added v1.4.0 - 2003-12-04 by Thorsten / Mathias - Translation of metaKeywords, mod_rewrite & ldap_support msg by Matti Kröger*/
+/* added v1.4.0 - 2003-12-04 by Thorsten / Mathias - Translation of metaKeywords, mod_rewrite & main.ldapSupport msg by Matti Kröger*/
 $LANG_CONF["language"] = array(0 => "select", 1 => "Kieli-Tiedosto");
 $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Salli automaattinen sisällön kätteleminen");
 $LANG_CONF["title"] = array(0 => "input", 1 => "FAQ Otsikko");
@@ -571,7 +571,7 @@ $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Uutisten määrä");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Estä käyttö näistä IP-osoitteista");
 $LANG_CONF["parse_php"] = array(0 => "checkbox", 1 => "Should the template engine parse PHP code? (oletus: ei käytössä)");
 $LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Aktivoi mod_rewrite tuki? (oletus: ei käytössä)");
-$LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "Haluatko laittaa LDAP tuen päälle(enabled)? (oletus: ei käytössä)");
+$LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Haluatko laittaa LDAP tuen päälle(enabled)? (oletus: ei käytössä)");
 
 /*Correction to ad_categ_desc & ad_categ_paste_error msg by Matti Kröger*/
 $PMF_LANG["ad_categ_new_main_cat"] = "uutena pää-kategoriana";
