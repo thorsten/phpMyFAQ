@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_eu.php,v 1.15 2007-03-28 10:32:00 thorstenr Exp $
+* $Id: language_eu.php,v 1.16 2007-03-28 10:47:04 thorstenr Exp $
 *
 * Euskera language file
 *
@@ -556,7 +556,7 @@ $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Edukien kude
 $LANG_CONF["title"] = array(0 => "input", 1 => "FAQaren izenburua");
 $LANG_CONF["version"] = array(0 => "print", 1 => "phpMyFAQ bertsioa");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Orriaren deskribapena");
-$LANG_CONF["metaKeywords"] = array(0 => "input", 1 => "Bilatzaileentzat (Goolge, Yahoo...) hitz klabeak");
+$LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Bilatzaileentzat (Goolge, Yahoo...) hitz klabeak");
 $LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "Administratzailearen izena");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Administratzailearen posta elektronikoa");
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Harremanetarako informazioa");

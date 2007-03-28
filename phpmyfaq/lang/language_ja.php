@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_ja.php,v 1.28 2007-03-28 10:32:01 thorstenr Exp $
+ * $Id: language_ja.php,v 1.29 2007-03-28 10:47:06 thorstenr Exp $
  *
  * The Japanese language file
  *
@@ -557,7 +557,7 @@ $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "言語�?�自
 $LANG_CONF["title"] = array(0 => "input", 1 => "FAQ �?�題�??");
 $LANG_CONF["version"] = array(0 => "print", 1 => "FAQ �?ージョン");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "ページ�?�説明");
-$LANG_CONF["metaKeywords"] = array(0 => "input", 1 => "検索ロボット用キーワード");
+$LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "検索ロボット用キーワード");
 $LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "管�?�者�??");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "管�?�者�?�電�?メールアドレス");
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "�?�?��?��?�?�情報");

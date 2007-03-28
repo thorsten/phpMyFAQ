@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.58 2007-03-28 10:32:00 thorstenr Exp $
+ * $Id: language_de.php,v 1.59 2007-03-28 10:47:03 thorstenr Exp $
  *
  * German language file
  *
@@ -555,7 +555,7 @@ $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Automatische
 $LANG_CONF["title"] = array(0 => "input", 1 => "Titel der FAQ");
 $LANG_CONF["version"] = array(0 => "print", 1 => "Version der FAQ");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Beschreibung der Seite");
-$LANG_CONF["metaKeywords"] = array(0 => "input", 1 => "Keywords für Suchmaschinen");
+$LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Keywords für Suchmaschinen");
 $LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "Name des Veröffentlichers");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "E-Mailadresse des Administrators");
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Kontakt, Impressum, hier die Betreiberadresse angeben!");

@@ -553,7 +553,7 @@ $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Detectare au
 $LANG_CONF["title"] = array(0 => "input", 1 => "Titlul paginii FAQ");
 $LANG_CONF["version"] = array(0 => "print", 1 => "Versiunea FAQ");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Descrierea paginii");
-$LANG_CONF["metaKeywords"] = array(0 => "input", 1 => "Cuvinte cheie pentru motoare de cautare");
+$LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Cuvinte cheie pentru motoare de cautare");
 $LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "Numele autorului");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Adresa de email a administratorului");
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Informatii de contact");

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_fa.php,v 1.12 2007-03-28 10:32:00 thorstenr Exp $
+* $Id: language_fa.php,v 1.13 2007-03-28 10:47:04 thorstenr Exp $
 *
 * farsi language file
 *
@@ -555,7 +555,7 @@ $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Enable autom
 $LANG_CONF["title"] = array(0 => "input", 1 => "Title of the FAQ");
 $LANG_CONF["version"] = array(0 => "print", 1 => "FAQ Version");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Describtion of the Page");
-$LANG_CONF["metaKeywords"] = array(0 => "input", 1 => "Keywords for Spiders");
+$LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Keywords for Spiders");
 $LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "Name of the Publisher");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Email address of the Admin");
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Contact information");

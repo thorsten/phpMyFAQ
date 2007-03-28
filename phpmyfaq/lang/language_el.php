@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_el.php,v 1.12 2007-03-28 10:32:00 thorstenr Exp $
+* $Id: language_el.php,v 1.13 2007-03-28 10:47:04 thorstenr Exp $
 *
 * The Hellenic language file
 *
@@ -554,7 +554,7 @@ $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Ενεργοποίηση
 $LANG_CONF["title"] = array(0 => "input", 1 => "Τίτλος του FAQ");
 $LANG_CONF["version"] = array(0 => "print", 1 => "Έκδοση FAQ");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Περιγραφή ιστοσελίδας");
-$LANG_CONF["metaKeywords"] = array(0 => "input", 1 => "Λέξεις κλειδιά για μηχανές αναζήτησης");
+$LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Λέξεις κλειδιά για μηχανές αναζήτησης");
 $LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "Όνομα εκδότη");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Ηλεκτρονική διεύθυνση του διαχειριστή");
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Πληροφορίες επικοινωνίας");

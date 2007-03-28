@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: index.php,v 1.96 2007-03-28 10:32:05 thorstenr Exp $
+ * $Id: index.php,v 1.97 2007-03-28 10:47:07 thorstenr Exp $
  *
  * This is the main public frontend page of phpMyFAQ. It detects the browser's
  * language, gets and sets all cookie, post and get informations and includes
@@ -338,7 +338,7 @@ $main_template_vars = array(
     'header'            => str_replace('"', '', $faqconfig->get('title')),
     'metaTitle'         => str_replace('"', '', $faqconfig->get('title')),
     'metaDescription'   => $faqconfig->get('main.metaDescription'),
-    'metaKeywords'      => $faqconfig->get('metaKeywords').$keywords,
+    'metaKeywords'      => $faqconfig->get('main.metaKeywords').$keywords,
     'metaPublisher'     => $faqconfig->get('metaPublisher'),
     'metaLanguage'      => $PMF_LANG['metaLanguage'],
     'metaCharset'       => $PMF_LANG['metaCharset'],

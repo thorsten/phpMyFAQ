@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_cy.php,v 1.12 2007-03-28 10:32:00 thorstenr Exp $
+* $Id: language_cy.php,v 1.13 2007-03-28 10:47:04 thorstenr Exp $
 *
 * The Cymraeg language file - Welsh (Cymraeg) translation
 *
@@ -552,7 +552,7 @@ $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => " Galluogi tr
 $LANG_CONF["title"] = array(0 => "input", 1 => " Teitl y CC");
 $LANG_CONF["version"] = array(0 => "print", 1 => " Fersiwn y CC");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => " Disgrifiad o’r Dudalen");
-$LANG_CONF["metaKeywords"] = array(0 => "input", 1 => " Geiriau allweddol ar gyfer Corynod");
+$LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => " Geiriau allweddol ar gyfer Corynod");
 $LANG_CONF["metaPublisher"] = array(0 => "input", 1 => " Enw’r Cyhoeddwr");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => " Cyfeiriad e-bost Gweinyddol");
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => " Gwybodaeth gyswllt");

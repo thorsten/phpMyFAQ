@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_pt-br.php,v 1.13 2007-03-28 10:32:01 thorstenr Exp $
+ * $Id: language_pt-br.php,v 1.14 2007-03-28 10:47:05 thorstenr Exp $
  *
  * Brazilian Portuguese language file
  *
@@ -556,7 +556,7 @@ $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Habilita neg
 $LANG_CONF["title"] = array(0 => "input", 1 => "T&iacute;tulo do FAQ");
 $LANG_CONF["version"] = array(0 => "print", 1 => "Vers&atilde;o do FAQ");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Descri&ccedil;&atilde;o da p&aacute;gina");
-$LANG_CONF["metaKeywords"] = array(0 => "input", 1 => "Keywords for Spiders");
+$LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Keywords for Spiders");
 $LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "Nome do Editor");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "E-mail do Administrador");
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Contato");

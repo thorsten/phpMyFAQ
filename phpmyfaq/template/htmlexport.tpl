@@ -9,7 +9,7 @@
     <meta name="keywords" content="{metaKeywords}" />
     <meta name="author" content="{metaPublisher}" />
     <meta name="publisher" content="{metaPublisher}" />
-    <meta name="copyright" content="(c) 2001 - 2006 phpMyFAQ Team" />
+    <meta name="copyright" content="(c) 2001 - 2007 phpMyFAQ Team" />
     <meta name="Content-Language" content="{metaCharset}" />
     <meta name="robots" content="INDEX, NOFOLLOW" />
     <meta name="revisit-after" content="7 days" />
@@ -20,7 +20,7 @@
 <body dir="{dir}">
 
 <div id="content">
-  
+
     <a name="top">&nbsp;</a>
 
     {entrylinks}
@@ -28,6 +28,7 @@
     {writeContent}
 
     <!-- please do not remove the following line -->
+
     <p id="copyrightnote">{copyright}</p>
 
 </div>

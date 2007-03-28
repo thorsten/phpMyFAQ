@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_nb.php,v 1.13 2007-03-28 10:32:01 thorstenr Exp $
+* $Id: language_nb.php,v 1.14 2007-03-28 10:47:05 thorstenr Exp $
 *
 * Norwegian Bokmål language file
 *
@@ -553,7 +553,7 @@ $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Aktiver auto
 $LANG_CONF["title"] = array(0 => "input", 1 => "Tittel for OSS/FAQ");
 $LANG_CONF["version"] = array(0 => "print", 1 => "FAQ versjon");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Beskrivelse av siden");
-$LANG_CONF["metaKeywords"] = array(0 => "input", 1 => "Nøkkel for søkemaskiner");
+$LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Nøkkel for søkemaskiner");
 $LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "Utgiversnavn");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Administrators e-postadresse");
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Kontaktinformasjon");

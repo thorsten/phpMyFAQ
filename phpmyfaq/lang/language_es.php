@@ -555,7 +555,7 @@ $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Enable autom
 $LANG_CONF["title"] = array(0 => "input", 1 => "Título del FAQ");
 $LANG_CONF["version"] = array(0 => "print", 1 => "Versión FAQ");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Descripción de página");
-$LANG_CONF["metaKeywords"] = array(0 => "input", 1 => "Palabras clave para Spiders");
+$LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Palabras clave para Spiders");
 $LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "Nombre del editor");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Dirección de e-mail del administrador");
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Informaciones de contacto");
