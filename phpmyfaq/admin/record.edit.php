@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.edit.php,v 1.60 2007-03-03 16:55:31 thorstenr Exp $
+ * $Id: record.edit.php,v 1.61 2007-03-28 08:47:31 thorstenr Exp $
  *
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since       2003-02-23
@@ -24,7 +24,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 }
 
 // Re-evaluate $user
-$user = PMF_CurrentUser::getFromSession($faqconfig->get('ipcheck'));
+$user = PMF_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
 
 if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     $category = new PMF_Category($LANGCODE);

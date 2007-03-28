@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.83 2007-03-28 08:30:42 thorstenr Exp $
+* $Id: language_en.php,v 1.84 2007-03-28 08:47:28 thorstenr Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -566,7 +566,7 @@ $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "maximum Size fo
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Link the attachments below the entries?");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "use Tracking?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "use Adminlog?");
-$LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "Do you want the IP to be checked when checking the UINs in admin.php?");
+$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Do you want the IP to be checked when checking the UINs in admin.php?");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Number of displayed topics per page");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Number of news articles");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Ban these IPs");

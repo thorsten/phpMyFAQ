@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_eu.php,v 1.12 2007-03-14 20:32:41 thorstenr Exp $
+* $Id: language_eu.php,v 1.13 2007-03-28 08:47:29 thorstenr Exp $
 *
 * Euskera language file
 *
@@ -566,7 +566,7 @@ $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Eranskinetako g
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Sarrera azpian eranskinei estekaren bat ipini?");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "Monitorizazioa erabili?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Adminlog-a erabili?");
-$LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "Nahi al duzu IP-ak aztertzea UIN-ak egiaztatzean?");
+$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Nahi al duzu IP-ak aztertzea UIN-ak egiaztatzean?");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Erakutsitako item-en kopurua orriko");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Artikulu berrien kopurua");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "IP hauek blokeatu");

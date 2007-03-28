@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.55 2007-03-28 08:30:42 thorstenr Exp $
+ * $Id: language_de.php,v 1.56 2007-03-28 08:47:28 thorstenr Exp $
  *
  * German language file
  *
@@ -564,7 +564,7 @@ $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Maximalgröße vo
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Attachments unter den Beiträgen anzeigen?");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "Tracking aktiviert?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Adminlog aktiviert?");
-$LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "Soll die IP zum Check der UINs im Administrationsbereich herangezogen werden?");
+$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Soll die IP zum Check der UINs im Administrationsbereich herangezogen werden?");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Anzahl der angezeigten Themen pro Seite");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Anzahl der angezeigten News");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Gesperrte IPs (Bitte mit Leerzeichen trennen)");

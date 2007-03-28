@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: session.keepalive.php,v 1.4 2007-02-18 14:49:16 thorstenr Exp $
+ * $Id: session.keepalive.php,v 1.5 2007-03-28 08:47:31 thorstenr Exp $
  *
  * A dummy page used within an IFRAME for warning the user about his next
  * session expiration and to give him the contextual possibility for
@@ -37,7 +37,7 @@ PMF_Init::cleanRequest();
 session_name('pmf_auth_'.$faqconfig->get('phpMyFAQToken'));
 session_start();
 
-$user = PMF_CurrentUser::getFromSession($faqconfig->get('ipcheck'));
+$user = PMF_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
 
 $refreshTime = (PMF_SESSION_ID_EXPIRES - PMF_SESSION_ID_REFRESH) * 60;
 ?>

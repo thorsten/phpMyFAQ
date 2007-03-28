@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_nl.php,v 1.20 2007-03-14 20:32:42 thorstenr Exp $
+ * $Id: language_nl.php,v 1.21 2007-03-28 08:47:29 thorstenr Exp $
  *
  * Dutch language file
  *
@@ -564,7 +564,7 @@ $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "maximum grootte
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "De bijlagen onder de records aantonen?");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "Tracking activeren?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Beheerlog activeren?");
-$LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "Wilt u dat het IP wordt gecontroleerd wanneer de UINs in admin.php worden gecontroleerd?");
+$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Wilt u dat het IP wordt gecontroleerd wanneer de UINs in admin.php worden gecontroleerd?");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Aantal weergegeven onderwerpen per pagina");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Aantal nieuws artikelen");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Blokkeer deze IPs");

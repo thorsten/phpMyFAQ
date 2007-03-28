@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_zh.php,v 1.17 2007-03-28 08:30:42 thorstenr Exp $
+* $Id: language_zh.php,v 1.18 2007-03-28 08:47:28 thorstenr Exp $
 *
 * Chinese (simplified) language file
 *
@@ -565,7 +565,7 @@ $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "附件最大�?
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "显示内容附件？");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "�?�用跟踪？");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "�?�用�?作日志？");
-$LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "你希望admin.php在检查UIN的时候也检查IP地�?�么？");
+$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "你希望admin.php在检查UIN的时候也检查IP地�?�么？");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "�?页显示主题数目");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "新内容数�?");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "�?止这些IP地�?�访问");

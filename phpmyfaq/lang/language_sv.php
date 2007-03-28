@@ -6,12 +6,12 @@
  * @author      Andreas <hq6830@yahoo.no>
  * @since       2004-07-28
  * @copyright   (c) 2004-2007 phpMyFAQ Team
- * 
+ *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
  * http://www.mozilla.org/MPL/
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
@@ -565,7 +565,7 @@ $LANG_CONF["attmax"] = array(0 => "input", 1 => "Maximal storlek på bilagor (max
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Länka bilagorna under frågorna?");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "Spårning?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Adminlogg?");
-$LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "Kolla IP:n när UIN kollas i admin.php?");
+$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Kolla IP:n när UIN kollas i admin.php?");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Antal visade rubriker per sida");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Antal nyhetsartiklar");
 $LANG_CONF["bannedIP"] = array(0 => "area", 1 => "Blocka dessa IP-adresser");
@@ -667,7 +667,7 @@ $PMF_LANG['ad_linkcheck_config_disabled'] = 'Länkverifiering avslagen';
 $PMF_LANG['ad_linkcheck_config_warnlist'] = 'Länkar att varna för';
 $PMF_LANG['ad_linkcheck_config_ignorelist'] = 'Länkar att ignorera';
 
-$PMF_LANG['ad_linkcheck_config_warnlist_description'] = 'Länkar som inleds med poster nedan kommer att ge varning oberoende om de är giltiga.<br />Använd denna funktion för att detektera länkar som snart kommer att sluta fungera.'; 
+$PMF_LANG['ad_linkcheck_config_warnlist_description'] = 'Länkar som inleds med poster nedan kommer att ge varning oberoende om de är giltiga.<br />Använd denna funktion för att detektera länkar som snart kommer att sluta fungera.';
 $PMF_LANG['ad_linkcheck_config_ignorelist_description'] = 'Länkar listade nedan kommer att antas vara giltiga utan verifiering.<br />Använd denna funktion för att ignorera länkar som inte går att validera med länk-verifieraren.';
 $PMF_LANG['ad_linkcheck_config_th_id'] = 'ID#';
 $PMF_LANG['ad_linkcheck_config_th_url'] = 'URL att validera';

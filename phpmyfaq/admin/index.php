@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.83 2007-03-14 19:55:30 thorstenr Exp $
+* $Id: index.php,v 1.84 2007-03-28 08:47:31 thorstenr Exp $
 *
 * The main admin backend index file
 *
@@ -103,7 +103,7 @@ if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
     }
 } else {
     // authenticate with session information
-    $ip_check = (isset($PMF_CONF['ipcheck']) && $PMF_CONF['ipcheck']) ? true : false;
+    $ip_check = (isset($faqconfig->get('main.ipCheck')) && $faqconfig->get('main.ipCheck')) ? true : false;
     $user = PMF_CurrentUser::getFromSession($ip_check);
     if ($user) {
         $auth = true;

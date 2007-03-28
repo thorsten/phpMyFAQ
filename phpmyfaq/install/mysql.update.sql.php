@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: mysql.update.sql.php,v 1.30 2007-03-28 08:30:41 thorstenr Exp $
+ * $Id: mysql.update.sql.php,v 1.31 2007-03-28 08:47:28 thorstenr Exp $
  *
  * CREATE TABLE instruction for MySQL database - UPDATE STAGE from 1.x to 2.0.0
  *
@@ -176,7 +176,7 @@ $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.languageDetection',
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.disableAttachments', 'true')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.enableAdminLog', 'true')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('records.enableVisibilityQuestions', 'false')";
-$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('ipcheck', 'false')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.ipCheck', 'false')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('language', 'language_en.php')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('ldap_support', 'false')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('metaDescription', 'phpMyFAQ should be the answer for all questions in life')";

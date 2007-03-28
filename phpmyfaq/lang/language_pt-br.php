@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_pt-br.php,v 1.10 2007-03-14 20:32:42 thorstenr Exp $
+ * $Id: language_pt-br.php,v 1.11 2007-03-28 08:47:29 thorstenr Exp $
  *
  * Brazilian Portuguese language file
  *
@@ -566,7 +566,7 @@ $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Tamanho m&aacut
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "P&otilde;e os links dos anexos abaixo das entradas?");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "usa Tracking?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "usa Adminlog?");
-$LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "Faz checagem do IP quando verificando os UINs no admin.php?");
+$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Faz checagem do IP quando verificando os UINs no admin.php?");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "N&uacute;mero de t&oacute;picos mostrados por p&aacute;gina");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "N&uacute;mero de artigos novos");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Banir estes IPs");

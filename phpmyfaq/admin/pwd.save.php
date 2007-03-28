@@ -1,24 +1,24 @@
 <?php
 /**
-* $Id: pwd.save.php,v 1.9 2006-09-19 21:39:39 matteo Exp $
-*
-* Save the password of the current user in the database
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @author       Matteo Scaramuccia <matteo@scaramuccia.com>
-* @since        2003-02-23
-* @copyright    (c) 2003-2006 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * $Id: pwd.save.php,v 1.10 2007-03-28 08:47:31 thorstenr Exp $
+ *
+ * Save the password of the current user in the database
+ *
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @since       2003-02-23
+ * @copyright   (c) 2003-2007 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
@@ -26,7 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 }
 
 // Re-evaluate $user
-$user = PMF_CurrentUser::getFromSession($faqconfig->get('ipcheck'));
+$user = PMF_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
 
 // Define the (Local/Current) Authentication Source
 $_authSource = PMF_Auth::selectAuth($user->_auth_data['authSource']['name']);

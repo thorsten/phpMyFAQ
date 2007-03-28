@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_id.php,v 1.15 2007-03-14 20:32:41 thorstenr Exp $
+ * $Id: language_id.php,v 1.16 2007-03-28 08:47:29 thorstenr Exp $
  *
  * Indonesian language file
  *
@@ -652,9 +652,7 @@ $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "Aktifkan
 penelusuran?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Aktifkan catatan
 administrasi?");
-$LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "Apakah anda ingin
-pemeriksaan terhadap alamat IP ketika pemeriksaan terhadap UIN dilakukan di
-admin.php?");
+$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Apakah anda ingin pemeriksaan terhadap alamat IP ketika pemeriksaan terhadap UIN dilakukan di admin.php?");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Jumlah materi yang
 ditampilkan per halaman");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Jumlah kabar yang

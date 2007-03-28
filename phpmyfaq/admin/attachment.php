@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: attachment.php,v 1.29 2007-03-14 19:55:30 thorstenr Exp $
+* $Id: attachment.php,v 1.30 2007-03-28 08:47:31 thorstenr Exp $
 *
 * Select an attachment and save it or create the SQL backup files
 *
@@ -57,7 +57,7 @@ if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE)) {
 require_once (PMF_ROOT_DIR.'/inc/PMF_User/CurrentUser.php');
 
 $auth = false;
-$user = PMF_CurrentUser::getFromSession($faqconfig->get('ipcheck'));
+$user = PMF_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
 if ($user) {
     $auth = true;
 } else {

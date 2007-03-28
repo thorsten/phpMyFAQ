@@ -565,7 +565,7 @@ $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Tamaño máximo p
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "¿Poner un link a los adjuntos bajo las entradas?");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "¿Usar monitorización?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "¿Usar el Adminlog?");
-$LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "¿Quieres que las IP sean chequeadas cuando se comprueben las UINs");
+$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "¿Quieres que las IP sean chequeadas cuando se comprueben las UINs");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Number of displayed topics per page");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Número de nuevos artículos");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Bloquear estas IPs");

@@ -2,24 +2,24 @@
 /*
  * FCKeditor - The text editor for internet
  * Copyright (C) 2003-2005 Frederico Caldeira Knabben
- * 
+ *
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
- * 
+ *
  * For further information visit:
  * 		http://www.fckeditor.net/
- * 
+ *
  * "Support Open Source software. What about a donation today?"
- * 
+ *
  * File Name: connector.php
  * 	This is the File Manager Connector for PHP.
- * 
+ *
  * File Authors:
  * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
  */
 
 /*** Start PMF custom code ***/
-// $Id: connector.php,v 1.2 2007-03-06 23:17:24 matteo Exp $
+// $Id: connector.php,v 1.3 2007-03-28 08:47:31 thorstenr Exp $
 
 //
 // Prepend and start the PHP session
@@ -36,7 +36,7 @@ session_start();
 // Get current user rights
 //
 $permission = array();
-$user = PMF_CurrentUser::getFromSession($faqconfig->get('ipcheck'));
+$user = PMF_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
 
 if ($user) {
     // read all rights, set them FALSE
@@ -75,7 +75,7 @@ else
 if ( ! ereg( '/$', $GLOBALS["UserFilesPath"] ) )
 	$GLOBALS["UserFilesPath"] .= '/' ;
 
-if ( strlen( $Config['UserFilesAbsolutePath'] ) > 0 ) 
+if ( strlen( $Config['UserFilesAbsolutePath'] ) > 0 )
 {
 	$GLOBALS["UserFilesDirectory"] = $Config['UserFilesAbsolutePath'] ;
 
@@ -107,7 +107,7 @@ function DoResponse()
 	// Check the current folder syntax (must begin and start with a slash).
 	if ( ! ereg( '/$', $sCurrentFolder ) ) $sCurrentFolder .= '/' ;
 	if ( strpos( $sCurrentFolder, '/' ) !== 0 ) $sCurrentFolder = '/' . $sCurrentFolder ;
-	
+
 	// Check for invalid folder paths (..)
 	if ( strpos( $sCurrentFolder, '..' ) )
 		SendError( 102, "" ) ;

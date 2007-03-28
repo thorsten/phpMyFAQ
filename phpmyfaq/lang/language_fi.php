@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_fi.php,v 1.14 2007-03-14 20:32:41 thorstenr Exp $
+ * $Id: language_fi.php,v 1.15 2007-03-28 08:47:29 thorstenr Exp $
  *
  * Finnish language file
  *
@@ -565,7 +565,7 @@ $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "suurin sallittu
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Linkitä liitteet tietueiden alpuolelle?");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "käytä lokia?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "käytä ylläpitolokia?");
-$LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "Haluatko, että admin.php:ssa IP tarkastetaan samalla kun UIN?");
+$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Haluatko, että admin.php:ssa IP tarkastetaan samalla kun UIN?");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Näytettyjen tietueiden määrä per sivu");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Uutisten määrä");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Estä käyttö näistä IP-osoitteista");

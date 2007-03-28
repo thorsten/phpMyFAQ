@@ -565,7 +565,7 @@ $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "גודל מקסימלי של
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "קשר לקובץ המצורף הנל את הרשומה?");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "צור מעקב?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "עשה ?");
-$LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "האם הנך רוצה שהIP יבדק כאשר נבדקים פרטי המשתמשים בadmin.php?");
+$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "האם הנך רוצה שהIP יבדק כאשר נבדקים פרטי המשתמשים בadmin.php?");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "מספר עמודים מוצגים בכל עמוד");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "מספר כתבות חדשות");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "חסום את IP זה");

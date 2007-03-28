@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_cy.php,v 1.9 2007-03-14 20:32:41 thorstenr Exp $
+* $Id: language_cy.php,v 1.10 2007-03-28 08:47:28 thorstenr Exp $
 *
 * The Cymraeg language file - Welsh (Cymraeg) translation
 *
@@ -562,7 +562,7 @@ $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => " Uchafswm maint
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => " Cysylltu’r atodiadau islaw’r cofnodion?");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => " Defnyddio tracio?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => " defnyddio cofnod gweinyddol?");
-$LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => " Ydych chi am i’r IP gael ei wirio wrth wirio UINs yn admin.php?");
+$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => " Ydych chi am i’r IP gael ei wirio wrth wirio UINs yn admin.php?");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => " Nifer y pynciau a ddangosir fesul tudalen");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => " Nifer yr erthyglau newyddion");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => " Gwahardd yr Ips hyn");

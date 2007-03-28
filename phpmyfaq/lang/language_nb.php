@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_nb.php,v 1.10 2007-03-14 20:32:42 thorstenr Exp $
+* $Id: language_nb.php,v 1.11 2007-03-28 08:47:29 thorstenr Exp $
 *
 * Norwegian Bokmål language file
 *
@@ -563,7 +563,7 @@ $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "maksimum større
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Lenke til vedlegg under oppføringene?");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "bruk Tracking?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "bruk adminlogg?");
-$LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "Vil du at IP-en skal sjekkes når man sjekket UIN-en i admin.php?");
+$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Vil du at IP-en skal sjekkes når man sjekket UIN-en i admin.php?");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Antall oppføringer per side");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Antall nyhetsartikler");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Steng ute disse IP-ene");

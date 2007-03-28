@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: news.php,v 1.31 2007-02-22 16:33:22 thorstenr Exp $
+ * $Id: news.php,v 1.32 2007-03-28 08:47:31 thorstenr Exp $
  *
  * The main administration file for the news
  *
@@ -30,7 +30,7 @@ require_once (PMF_ROOT_DIR."/inc/News.php");
 $news = new PMF_News($db, $LANGCODE);
 
 // Re-evaluate $user
-$user = PMF_CurrentUser::getFromSession($faqconfig->get('ipcheck'));
+$user = PMF_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
 
 if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews"]) {
 ?>

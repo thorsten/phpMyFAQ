@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.add.php,v 1.54 2007-03-18 10:29:51 thorstenr Exp $
+ * $Id: record.add.php,v 1.55 2007-03-28 08:47:31 thorstenr Exp $
  *
  * Adds a record in the database, handles the preview and checks for missing
  * category entries.
@@ -26,7 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 }
 
 // Re-evaluate $user
-$user = PMF_CurrentUser::getFromSession($faqconfig->get('ipcheck'));
+$user = PMF_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
 
 // Evaluate the passed validity range, if any
 $dateStart =

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.115 2007-03-28 08:30:41 thorstenr Exp $
+* $Id: update.php,v 1.116 2007-03-28 08:47:28 thorstenr Exp $
 *
 * Main update script
 *
@@ -1341,6 +1341,7 @@ if ($step == 5) {
         $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.disableAttachments' WHERE config_name = 'disatt'";
         $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.enableAdminLog' WHERE config_name = 'enableadminlog'";
         $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'records.enableVisibilityQuestions' WHERE config_name = 'enablevisibility'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.ipCheck' WHERE config_name = 'ipcheck'";
 
     }
 

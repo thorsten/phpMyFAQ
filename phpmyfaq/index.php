@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: index.php,v 1.94 2007-03-17 08:10:05 thorstenr Exp $
+ * $Id: index.php,v 1.95 2007-03-28 08:47:31 thorstenr Exp $
  *
  * This is the main public frontend page of phpMyFAQ. It detects the browser's
  * language, gets and sets all cookie, post and get informations and includes
@@ -95,7 +95,7 @@ if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
     }
 } else {
     // authenticate with session information
-    $user = PMF_CurrentUser::getFromSession($faqconfig->get('ipcheck'));
+    $user = PMF_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
     if ($user) {
         $auth = true;
     } else {

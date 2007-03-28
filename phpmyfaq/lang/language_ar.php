@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_ar.php,v 1.17 2007-03-14 20:32:41 thorstenr Exp $
+* $Id: language_ar.php,v 1.18 2007-03-28 08:47:28 thorstenr Exp $
 *
 * Arabic language file
 *
@@ -604,7 +604,7 @@ $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "أقصى حجم
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "ضع روابط المر�?قات أس�?ل المداخلات ؟");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "استخدم خاصية التتبع ؟");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "استخدم خاصية سجل المشر�?ين ؟");
-$LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "Do you want the IP to be checked when checking the UINs in admin.php?");
+$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Do you want the IP to be checked when checking the UINs in admin.php?");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "عدد المواضيع المعروضة بالص�?حة الواحدة");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "عدد مقالات الأخبار");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "حجب ومنع هذة العناوين");

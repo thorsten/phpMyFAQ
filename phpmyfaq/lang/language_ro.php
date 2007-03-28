@@ -563,7 +563,7 @@ $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "marimea maxima 
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Link the attachments below the entries?");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "utilizeaza monitorizarea?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "utilizeaza monitorizarea activitatii de admin?");
-$LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "Vrei sa fie verificat IP-ul cand se verifica  UIN in admin.php?");
+$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Vrei sa fie verificat IP-ul cand se verifica  UIN in admin.php?");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Numarul topicurilor afisate per pagina");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Numarul stirilor per pagina");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Restrictioneaza urmatoarele IP-uri");

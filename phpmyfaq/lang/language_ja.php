@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_ja.php,v 1.26 2007-03-28 08:30:42 thorstenr Exp $
+ * $Id: language_ja.php,v 1.27 2007-03-28 08:47:28 thorstenr Exp $
  *
  * The Japanese language file
  *
@@ -566,7 +566,7 @@ $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "æ·»ä»˜ãƒ•ã‚¡ã‚¤
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "ã‚¨ãƒ³ãƒˆãƒªã?®ä¸‹ã?«æ·»ä»˜ã?®ãƒªãƒ³ã‚¯ã‚’è¡¨ç¤ºã?™ã‚‹");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "è¿½è·¡æ©Ÿèƒ½ã‚’ä½¿ç”¨ã?™ã‚‹");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "ç®¡ç?†ãƒ­ã‚°ã‚’ä½¿ç”¨ã?™ã‚‹");
-$LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "admin.php ã?§ UIN ã?®ãƒ?ã‚§ãƒƒã‚¯æ™‚ã?« IP ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’ç¢ºèª?ã?™ã‚‹ã?‹");
+$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "admin.php ã?§ UIN ã?®ãƒ?ã‚§ãƒƒã‚¯æ™‚ã?« IP ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’ç¢ºèª?ã?™ã‚‹ã?‹");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "ãƒšãƒ¼ã‚¸æ¯Žã?«è¡¨ç¤ºã?™ã‚‹ãƒˆãƒ”ãƒƒã‚¯æ•°");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "ã?ŠçŸ¥ã‚‰ã?›ã?®è¡¨ç¤ºæ•°");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "æ‹’å?¦ã?™ã‚‹ IP ã‚¢ãƒ‰ãƒ¬ã‚¹");

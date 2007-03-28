@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: linkconfig.main.php,v 1.13 2007-02-11 13:58:57 thorstenr Exp $
+* $Id: linkconfig.main.php,v 1.14 2007-03-28 08:47:31 thorstenr Exp $
 *
 * LinkVerifier configuration
 *
@@ -33,7 +33,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 }
 
 // Re-evaluate $user
-$user = PMF_CurrentUser::getFromSession($faqconfig->get('ipcheck'));
+$user = PMF_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
 
 // Define number of entries per page
 $entriesPerPage = 10;

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.53 2007-03-28 08:30:42 thorstenr Exp $
+* $Id: language_it.php,v 1.54 2007-03-28 08:47:28 thorstenr Exp $
 *
 * Italian language file
 *
@@ -566,7 +566,7 @@ $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Massima dimensi
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Mostra il link agli allegati");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "Abilito il tracciamento per le attivit&agrave; dell'Utente?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Abilito il tracciamento per le attivit&agrave; di Amministrazione?");
-$LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "Vuoi controllare l'IP quando verifico l'<em>UIN</em> in <em>admin.php</em>?");
+$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Vuoi controllare l'IP quando verifico l'<em>UIN</em> in <em>admin.php</em>?");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Numero di elementi visualizzati per pagina");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Numero di elementi visualizzati per la sezione News");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Vieta l'accesso a questi indirizzi IP");

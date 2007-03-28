@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_el.php,v 1.9 2007-03-14 20:32:41 thorstenr Exp $
+* $Id: language_el.php,v 1.10 2007-03-28 08:47:29 thorstenr Exp $
 *
 * The Hellenic language file
 *
@@ -564,7 +564,7 @@ $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Μέγιστο μέγεθος
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Σύνδεση των συνημμένων κάτω από την καταχώρηση των άρθρων");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "Να γίνεται παρακολούθηση με τη μέθοδο του tracking;");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Να γίνει χρήση του ημερολογίου συμβάντων;");
-$LANG_CONF["ipcheck"] = array(0 => "checkbox", 1 => "Θέλετε να γίνεται έλεγχος της διεύθυνσης IP όταν ελέγχεται ο αριθμός UIN στη σελίδα admin.php;");
+$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Θέλετε να γίνεται έλεγχος της διεύθυνσης IP όταν ελέγχεται ο αριθμός UIN στη σελίδα admin.php;");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Αριθμός εμφανιζόμενων άρθρων ανά σελίδα");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Αριθμός ειδήσεων");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Απαγόρευση πρόσβασης των παρακάτω διευθύνσεων IP");
