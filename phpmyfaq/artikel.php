@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: artikel.php,v 1.75 2007-03-14 20:32:40 thorstenr Exp $
+ * $Id: artikel.php,v 1.76 2007-03-28 19:24:30 johannes Exp $
  *
  * Shows the page with the FAQ record and - when available - the user
  * comments
@@ -257,7 +257,7 @@ $relevant = new PMF_Relation($db, $LANGCODE);
 
 $translationForm = '';
 if (count($arrLanguage) < count(getAvailableLanguages())) {
-    $translationUrl = sprintf(PMF_Link::getSystemRelativeUri('index.php').'index.php?%saction=translate&amp;cat=%s&amp;id=%d&amp;srclang=%s', $sids, $currentCategory, $id, $lang);
+    $translationUrl = sprintf(str_replace('%', '%%', PMF_Link::getSystemRelativeUri('index.php')).'index.php?%saction=translate&amp;cat=%s&amp;id=%d&amp;srclang=%s', $sids, $currentCategory, $id, $lang);
     $translationForm = '
         <form action="'.$translationUrl.'" method="post" style="display: inline;">
             <img src="images/translate.gif" alt="'.$PMF_LANG['msgTranslate'].'" title="'.$PMF_LANG['msgTranslate'].'" width="16" height="16" border="0" /> '.$PMF_LANG['msgTranslate'].' '.selectLanguages($LANGCODE, false, $arrLanguage).' <input class="submit" type="submit" name="submit" value="'.$PMF_LANG['msgTranslateSubmit'].'" />
@@ -283,13 +283,13 @@ $tpl->processTemplate ("writeContent", array(
     'editThisEntry'                 => $editThisEntry,
     'writeDiggMsgTag'               => 'Digg it!',
     'link_digg'                     => sprintf('http://digg.com/submit?phase=2&amp;url=%s', urlencode($diggItUrl)),
-    'link_email'                    => sprintf(PMF_Link::getSystemRelativeUri('index.php').'index.php?%saction=send2friend&amp;cat=%d&amp;id=%d&amp;artlang=%s', $sids, $currentCategory, $id, $lang),
-    'link_pdf'                      => sprintf(PMF_Link::getSystemRelativeUri('index.php').'pdf.php?cat=%s&amp;id=%d&amp;lang=%s', $currentCategory, $id, $lang),
+    'link_email'                    => sprintf(str_replace('%', '%%', PMF_Link::getSystemRelativeUri('index.php')).'index.php?%saction=send2friend&amp;cat=%d&amp;id=%d&amp;artlang=%s', $sids, $currentCategory, $id, $lang),
+    'link_pdf'                      => sprintf(str_replace('%', '%%', PMF_Link::getSystemRelativeUri('index.php')).'pdf.php?cat=%s&amp;id=%d&amp;lang=%s', $currentCategory, $id, $lang),
     'writePDFTag'                   => $PMF_LANG['msgPDF'],
     'writePrintMsgTag'              => $PMF_LANG['msgPrintArticle'],
     'writeSend2FriendMsgTag'        => $PMF_LANG['msgSend2Friend'],
     'translationForm'               => $translationForm,
-    'saveVotingPATH'                => sprintf(PMF_Link::getSystemRelativeUri('index.php').'index.php?%saction=savevoting', $sids),
+    'saveVotingPATH'                => sprintf(str_replace('%', '%%', PMF_Link::getSystemRelativeUri('index.php')).'index.php?%saction=savevoting', $sids),
     'saveVotingID'                  => $id,
     'saveVotingIP'                  => $_SERVER['REMOTE_ADDR'],
     'msgAverageVote'                => $PMF_LANG['msgAverageVote'],
