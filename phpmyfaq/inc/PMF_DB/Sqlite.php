@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Sqlite.php,v 1.12 2007-03-03 08:29:43 thorstenr Exp $
+ * $Id: Sqlite.php,v 1.13 2007-03-28 23:25:55 matteo Exp $
  *
  * The db_sqlite class provides methods and functions for a sqlite database.
  *
@@ -87,14 +87,14 @@ class db_sqlite
     }
 
     /**
-    * Escapes a string for use in a query
-    *
-    * @param   string
-    * @return  string
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since   2004-12-16
-    */
+     * Escapes a string for use in a query
+     *
+     * @param   string
+     * @return  string
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @since   2004-12-16
+     */
     public function escape_string($string)
     {
       return sqlite_escape_string($string);
@@ -267,39 +267,48 @@ class db_sqlite
     }
 
     /**
-    * Returns the error string.
-    *
-    * This function returns the table status.
-    *
-    * @access  public
-    * @return  array
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since   2005-06-27
-    */
+     * Returns the error string.
+     *
+     * This function returns the table status.
+     *
+     * @access  public
+     * @return  array
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     * @since   2005-06-27
+     */
     public function getTableStatus()
     {
         $arr = array();
-        $result = $this->query("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name");
+
+        $result = $this->query("SELECT name, sql FROM sqlite_master WHERE type='table' ORDER BY name");
         while ($row = $this->fetch_assoc($result)) {
-            $num_result = $this->query('SELECT * FROM '.$row['name']);
-            $arr[$row['name']] = $this->num_rows($num_result);
+            // Get the first column of the table which is supposed to be the primary key
+            preg_match('/^CREATE\s+TABLE\s+'.$row['name'].'\s*\(\s*([^\s]+)\s+/im', $row['sql'], $matches);
+            if (isset($matches[1])) { // It would be really strange if the regexp misses the match
+                $pk = $matches[1];
+                // Count the records evaluating the SQL COUNT only over the primary key
+                $num_result = $this->query('SELECT COUNT('.$pk.') FROM '.$row['name']);
+                $arr[$row['name']] = sqlite_fetch_single($num_result);
+            }
         }
+
         return $arr;
     }
 
     /**
-    * Returns the next ID of a table
-    *
-    * This function is a replacement for sqlite's auto-increment so that
-    * we don't need it anymore.
-    *
-    * @param   string      the name of the table
-    * @param   string      the name of the ID column
-    * @return  int
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since   2005-06-27
-    */
+     * Returns the next ID of a table
+     *
+     * This function is a replacement for sqlite's auto-increment so that
+     * we don't need it anymore.
+     *
+     * @param   string      the name of the table
+     * @param   string      the name of the ID column
+     * @return  int
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @since   2005-06-27
+     */
     public function nextID($table, $id)
     {
         $result = $this->query('SELECT max('.$id.') AS current_id FROM '.$table);
@@ -308,14 +317,14 @@ class db_sqlite
     }
 
     /**
-    * Returns the error string.
-    *
-    * This function returns the last error string.
-    *
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since   2005-06-27
-    */
+     * Returns the error string.
+     *
+     * This function returns the last error string.
+     *
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @since   2005-06-27
+     */
     public function error()
     {
         if (0 == sqlite_last_error($this->conn)) {
@@ -325,28 +334,28 @@ class db_sqlite
     }
 
     /**
-    * Returns the libary version string.
-    *
-    * This function returns the version string.
-    *
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since   2005-06-27
-    */
+     * Returns the libary version string.
+     *
+     * This function returns the version string.
+     *
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @since   2005-06-27
+     */
     public function client_version()
     {
         return 'SQLite '.sqlite_libversion();
     }
 
     /**
-    * Returns the libary version string.
-    *
-    * This function returns the version string.
-    *
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since   2005-06-27
-    */
+     * Returns the libary version string.
+     *
+     * This function returns the version string.
+     *
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @since   2005-06-27
+     */
     public function server_version()
     {
         return $this->client_version();
@@ -374,14 +383,14 @@ class db_sqlite
     }
 
     /**
-    * Closes the connection to the database.
-    *
-    * This function closes the connection to the database.
-    *
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since   2005-06-27
-    */
+     * Closes the connection to the database.
+     *
+     * This function closes the connection to the database.
+     *
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @since   2005-06-27
+     */
     public function dbclose()
     {
         return sqlite_close($this->conn);
