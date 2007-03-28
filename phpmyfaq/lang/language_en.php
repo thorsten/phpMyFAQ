@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.85 2007-03-28 08:55:37 thorstenr Exp $
+* $Id: language_en.php,v 1.86 2007-03-28 10:32:00 thorstenr Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -556,7 +556,7 @@ $LANG_CONF["language"] = array(0 => "select", 1 => "Language-File");
 $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Enable automatic content negotiation");
 $LANG_CONF["title"] = array(0 => "input", 1 => "Title of the FAQ");
 $LANG_CONF["version"] = array(0 => "print", 1 => "FAQ Version");
-$LANG_CONF["metaDescription"] = array(0 => "input", 1 => "Describtion of the Page");
+$LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Describtion of the Page");
 $LANG_CONF["metaKeywords"] = array(0 => "input", 1 => "Keywords for Spiders");
 $LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "Name of the Publisher");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Email address of the Admin");

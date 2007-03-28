@@ -555,7 +555,7 @@ $LANG_CONF["language"] = array(0 => "select", 1 => "Plik jêzykowy");
 $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Enable automatic content negotiation");
 $LANG_CONF["title"] = array(0 => "input", 1 => "Tytu³ FAQ");
 $LANG_CONF["version"] = array(0 => "print", 1 => "Wersja FAQ");
-$LANG_CONF["metaDescription"] = array(0 => "input", 1 => "Opis strony");
+$LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Opis strony");
 $LANG_CONF["metaKeywords"] = array(0 => "input", 1 => "S³owa kluczowe dla wyszukiwarek");
 $LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "Imiê autora");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Adres e-mail administraotra");

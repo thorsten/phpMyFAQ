@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_fi.php,v 1.16 2007-03-28 08:55:37 thorstenr Exp $
+ * $Id: language_fi.php,v 1.17 2007-03-28 10:32:00 thorstenr Exp $
  *
  * Finnish language file
  *
@@ -554,7 +554,7 @@ $LANG_CONF["language"] = array(0 => "select", 1 => "Kieli-Tiedosto");
 $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Salli automaattinen sisällön kätteleminen");
 $LANG_CONF["title"] = array(0 => "input", 1 => "FAQ Otsikko");
 $LANG_CONF["version"] = array(0 => "print", 1 => "FAQ Versio");
-$LANG_CONF["metaDescription"] = array(0 => "input", 1 => "Sivun Kuvaus");
+$LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Sivun Kuvaus");
 $LANG_CONF["metaKeywords"] = array(0 => "input", 1 => "Avainsanat hakukoneille");
 $LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "Julkaisijan nimi");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Ylläpitäjän sähköposti osoite");

@@ -554,7 +554,7 @@ $LANG_CONF["language"] = array(0 => "checkbox", 1 => "קובץ שפה");
 $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "אפשר העברת נתונים אוטומטית");
 $LANG_CONF["title"] = array(0 => "input", 1 => "כותרת השאלה הנפוצה");
 $LANG_CONF["version"] = array(0 => "print", 1 => "גירסאת השאלה הנפוצה");
-$LANG_CONF["metaDescription"] = array(0 => "input", 1 => "תיאור העמוד");
+$LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "תיאור העמוד");
 $LANG_CONF["metaKeywords"] = array(0 => "input", 1 => "מילות מפתח למנועי חיפוש");
 $LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "שם היוצר");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "כתובת הדואל של המנהל");

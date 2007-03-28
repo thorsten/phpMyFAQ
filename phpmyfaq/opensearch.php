@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: opensearch.php,v 1.2 2007-03-10 22:07:34 thorstenr Exp $
+* $Id: opensearch.php,v 1.3 2007-03-28 10:32:05 thorstenr Exp $
 *
 * This is XML code for OpenSearch
 *
@@ -32,7 +32,7 @@ $src_url        = $baseUrl;
 $opensearch     = "<?xml version=\"1.0\" encoding=\"".$PMF_LANG['metaCharset']."\"?>
 <OpenSearchDescription xmlns=\"http://a9.com/-/spec/opensearch/1.1/\">
 <ShortName>".$faqconfig->get('title')."</ShortName>
-<Description>".$faqconfig->get('metaDescription')."</Description>
+<Description>".$faqconfig->get('main.metaDescription')."</Description>
 <Url type=\"text/html\" template=\"".$search_url."&amp;search={searchTerms}\" />
 <Language>".$PMF_LANG['metaLanguage']."</Language>
 <OutputEncoding>".$PMF_LANG['metaCharset']."</OutputEncoding>

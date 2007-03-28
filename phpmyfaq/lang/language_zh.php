@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_zh.php,v 1.19 2007-03-28 08:55:37 thorstenr Exp $
+* $Id: language_zh.php,v 1.20 2007-03-28 10:32:00 thorstenr Exp $
 *
 * Chinese (simplified) language file
 *
@@ -555,7 +555,7 @@ $LANG_CONF["language"] = array(0 => "select", 1 => "选择语言");
 $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "自动选择系统语言");
 $LANG_CONF["title"] = array(0 => "input", 1 => "系统�??称");
 $LANG_CONF["version"] = array(0 => "print", 1 => "程�?版本");
-$LANG_CONF["metaDescription"] = array(0 => "input", 1 => "页�?��??述");
+$LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "页�?��??述");
 $LANG_CONF["metaKeywords"] = array(0 => "input", 1 => "用户Meta（网页自动�?�索程�?）的关键�?");
 $LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "管�?�员姓�??");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "管�?�员Email");

@@ -552,7 +552,7 @@ $LANG_CONF["language"] = array(0 => "select", 1 => "語言文件");
 $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "啟用內容自動�?�商功能");
 $LANG_CONF["title"] = array(0 => "input", 1 => "FAQ的標題");
 $LANG_CONF["version"] = array(0 => "print", 1 => "FAQ的版本");
-$LANG_CONF["metaDescription"] = array(0 => "input", 1 => "�?�?��??述");
+$LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "�?�?��??述");
 $LANG_CONF["metaKeywords"] = array(0 => "input", 1 => "用戶Spiders（網�?自動�?�尋程�?）的關�?�字");
 $LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "發布者姓�??");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "管�?�員電郵");

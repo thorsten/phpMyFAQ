@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: rss.php,v 1.18 2007-03-14 19:55:30 thorstenr Exp $
+* $Id: rss.php,v 1.19 2007-03-28 10:32:05 thorstenr Exp $
 *
 * The RSS feed with the top ten
 *
@@ -61,7 +61,7 @@ $rss =
     "<?xml version=\"1.0\" encoding=\"".$PMF_LANG['metaCharset']."\" standalone=\"yes\" ?>\n" .
     "<rss version=\"2.0\">\n<channel>\n" .
     "<title>".htmlspecialchars($PMF_CONF['title'])." - ".htmlspecialchars($PMF_LANG['msgTopTen'])."</title>\n" .
-    "<description>".htmlspecialchars($PMF_CONF['metaDescription'])."</description>\n" .
+    "<description>".htmlspecialchars($PMF_CONF['main.metaDescription'])."</description>\n" .
     "<link>".PMF_Link::getSystemUri('/feed/topten/rss.php')."</link>";
 
 if ($num > 0) {

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: rss.php,v 1.6 2007-03-14 19:55:30 thorstenr Exp $
+ * $Id: rss.php,v 1.7 2007-03-28 10:32:05 thorstenr Exp $
  *
  * The RSS feed with the latest open questions
  *
@@ -46,7 +46,7 @@ if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE)) {
 
 $rss = "<?xml version=\"1.0\" encoding=\"".$PMF_LANG['metaCharset']."\" standalone=\"yes\" ?>\n<rss version=\"2.0\">\n<channel>\n";
 $rss .= "<title>".htmlspecialchars($PMF_CONF['title'])." - ".htmlspecialchars($PMF_LANG['msgOpenQuestions'])."</title>\n";
-$rss .= "<description>".htmlspecialchars($PMF_CONF['metaDescription'])."</description>\n";
+$rss .= "<description>".htmlspecialchars($PMF_CONF['main.metaDescription'])."</description>\n";
 $rss .= "<link>".PMF_Link::getSystemUri('/feed/openquestions/rss.php')."</link>\n";
 
 $faq = new PMF_Faq($db, $LANGCODE);

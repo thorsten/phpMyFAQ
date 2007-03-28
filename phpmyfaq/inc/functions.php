@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.170 2007-03-28 08:55:39 thorstenr Exp $
+ * $Id: functions.php,v 1.171 2007-03-28 10:32:05 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -1134,7 +1134,7 @@ function generateXHTMLFile()
                 'title'             => htmlentities($PMF_CONF['title']),
                 'header'            => htmlentities($PMF_CONF['title']),
                 'metaCharset'       => htmlentities($PMF_LANG['metaCharset']),
-                'metaDescription'   => htmlentities($PMF_CONF['metaDescription']),
+                'metaDescription'   => htmlentities($PMF_CONF['main.metaDescription']),
                 'metaKeywords'      => htmlentities($PMF_CONF['metaKeywords']),
                 'metaPublisher'     => htmlentities($PMF_CONF['metaPublisher']),
                 'metaLanguage'      => $PMF_LANG['metaLanguage'],
@@ -1226,7 +1226,7 @@ function generateDocBookExport()
         </author>
         <date>'.makeDate('Y-m-d', time()).'</date>
         <abstract>
-            <para>'.htmlspecialchars($PMF_CONF['metaDescription']).'</para>
+            <para>'.htmlspecialchars($PMF_CONF['main.metaDescription']).'</para>
         </abstract>
     </bookinfo>
 ';

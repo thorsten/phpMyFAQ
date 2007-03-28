@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.117 2007-03-28 08:55:36 thorstenr Exp $
+* $Id: update.php,v 1.118 2007-03-28 10:31:59 thorstenr Exp $
 *
 * Main update script
 *
@@ -1343,7 +1343,7 @@ if ($step == 5) {
         $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'records.enableVisibilityQuestions' WHERE config_name = 'enablevisibility'";
         $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.ipCheck' WHERE config_name = 'ipcheck'";
         $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.ldapSupport' WHERE config_name = 'ldap_support'";
-
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.metaDescription' WHERE config_name = 'metaDescription'";
     }
 
     // Perform the queries for updating/migrating the database from 2.x
