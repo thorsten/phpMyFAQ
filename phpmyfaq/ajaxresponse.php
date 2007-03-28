@@ -54,8 +54,6 @@ $category->buildTree();
 // Handle the full text search stuff
 //
 if (isset($_REQUEST['search'])) {
-    if (isset($_REQUEST['search'])) {
-        $searchString = $db->escape_string(strip_tags($_REQUEST['search']));
-    }
+    $searchString = $db->escape_string(strip_tags($_REQUEST['search']));
     print searchEngine($searchString);
 }
