@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.52 2007-03-14 20:32:41 thorstenr Exp $
+* $Id: language_it.php,v 1.53 2007-03-28 08:30:42 thorstenr Exp $
 *
 * Italian language file
 *
@@ -574,7 +574,7 @@ $LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Attivare il supporto a 
 $LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "Attivare il supporto LDAP? (default: disabilitato)");
 $LANG_CONF["referenceURL"] = array(0 => "input", 1 => "<em>Base URL</em> dell'installazione di phpMyFAQ, es: http://www.example.org/faq (&egrave; necessaria per la verifica dei links)");
 $LANG_CONF["URLValidateInterval"] = array(0 => "input", 1 => "Intervallo della verifica asincrona dei links (in secondi)");
-$LANG_CONF["enablevisibility"] = array(0 => "checkbox", 1 => "Disabilitare la visibilit&agrave; delle domande appena inserite?");
+$LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Disabilitare la visibilit&agrave; delle domande appena inserite?");
 $LANG_CONF['permLevel'] = array(0 => "input", 1 => "Configurazione della Permessistica");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "come nuova categoria principale";

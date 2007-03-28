@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.114 2007-03-20 18:28:52 thorstenr Exp $
+* $Id: update.php,v 1.115 2007-03-28 08:30:41 thorstenr Exp $
 *
 * Main update script
 *
@@ -1339,6 +1339,9 @@ if ($step == 5) {
         $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.bannedIPs' WHERE config_name = 'bannedIP'";
         $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.languageDetection' WHERE config_name = 'detection'";
         $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.disableAttachments' WHERE config_name = 'disatt'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.enableAdminLog' WHERE config_name = 'enableadminlog'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'records.enableVisibilityQuestions' WHERE config_name = 'enablevisibility'";
+
     }
 
     // Perform the queries for updating/migrating the database from 2.x

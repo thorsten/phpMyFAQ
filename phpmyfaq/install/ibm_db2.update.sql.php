@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: ibm_db2.update.sql.php,v 1.12 2007-03-14 20:32:41 thorstenr Exp $
+ * $Id: ibm_db2.update.sql.php,v 1.13 2007-03-28 08:30:41 thorstenr Exp $
  *
  * CREATE TABLE instruction for IBM DB2 Universal Database, IBM Cloudscape,
  * and Apache Derby databases
@@ -172,7 +172,7 @@ $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.bannedIPs', 'false'
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.languageDetection', 'true')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.disableAttachments', 'true')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.enableAdminLog', 'true')";
-$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('enablevisibility', 'false')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('records.enableVisibilityQuestions', 'false')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('ipcheck', 'false')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('language', 'language_en.php')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('ldap_support', 'false')";

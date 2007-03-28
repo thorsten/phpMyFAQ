@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_zh.php,v 1.16 2007-03-14 20:32:42 thorstenr Exp $
+* $Id: language_zh.php,v 1.17 2007-03-28 08:30:42 thorstenr Exp $
 *
 * Chinese (simplified) language file
 *
@@ -573,7 +573,7 @@ $LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "�?�用mod_rewrite�?�?(�
 $LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "�?�用LDAP支�?�?�? (默认:�?止)");
 $LANG_CONF["referenceURL"] = array(0 => "input", 1 => "链接验�?用的基本 URL 网�?� (设置为首页 URL 网�?�)");
 $LANG_CONF["URLValidateInterval"] = array(0 => "input", 1 => "AJAX 连接验�?间隔时间 (�?��?：秒)");
-$LANG_CONF["enablevisibility"] = array(0 => "checkbox", 1 => "显示新问题?(默认:�?止)");
+$LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "显示新问题?(默认:�?止)");
 $LANG_CONF['permLevel'] = array(0 => "input", 1 => "�?��?级别");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "作为一个新的类别";

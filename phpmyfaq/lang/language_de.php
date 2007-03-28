@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.54 2007-03-17 07:54:53 thorstenr Exp $
+ * $Id: language_de.php,v 1.55 2007-03-28 08:30:42 thorstenr Exp $
  *
  * German language file
  *
@@ -572,7 +572,7 @@ $LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "mod_rewrite Support akt
 $LANG_CONF["ldap_support"] = array(0 => "checkbox", 1 => "LDAP Support aktivieren? (Voreinstellung: deaktiviert)");
 $LANG_CONF["referenceURL"] = array(0 => "input", 1 => "Basis-Adresse für die Linküberprüfung (Adresse der Startseite)");
 $LANG_CONF["URLValidateInterval"] = array(0 => "input", 1 => "Zeitintervall zwischen den Ajax-Linküberprüfungen (in Sekunden)");
-$LANG_CONF["enablevisibility"] = array(0 => "checkbox", 1 => "Sichtbarkeit neuer Fragen unterdrücken?");
+$LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Sichtbarkeit neuer Fragen unterdrücken?");
 $LANG_CONF['permLevel'] = array(0 => "input", 1 => "Berechtigungsebene");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "Als neue Hauptkategorie";
