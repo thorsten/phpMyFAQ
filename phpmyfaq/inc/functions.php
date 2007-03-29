@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.180 2007-03-29 18:33:26 thorstenr Exp $
+ * $Id: functions.php,v 1.181 2007-03-29 18:37:09 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -428,7 +428,7 @@ function safeEmail($email)
 {
     global $PMF_CONF;
 
-    if (isset($PMF_CONF['spamEnableSafeEmail']) && $PMF_CONF['spamEnableSafeEmail']) {
+    if (isset($PMF_CONF['spam.enableSafeEmail']) && $PMF_CONF['spam.enableSafeEmail']) {
         return str_replace(array('@', '.'), array('_AT_', '_DOT_'), $email);
     } else {
         return $email;

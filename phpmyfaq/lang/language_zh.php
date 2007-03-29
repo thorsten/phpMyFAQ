@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_zh.php,v 1.31 2007-03-29 18:33:25 thorstenr Exp $
+* $Id: language_zh.php,v 1.32 2007-03-29 18:37:09 thorstenr Exp $
 *
 * Chinese (simplified) language file
 *
@@ -619,7 +619,7 @@ $PMF_LANG['msgAdvancedSearch'] = '高级�?�索';
 
 // added v1.6.1 - 2006-04-25 by Matteo and Thorsten
 $PMF_LANG['spamControlCenter'] = '垃圾过滤控制中心';
-$LANG_CONF["spamEnableSafeEmail"] = array(0 => "checkbox", 1 => "安全方�?显示用户 Email (默认: 激活).");
+$LANG_CONF["spam.enableSafeEmail"] = array(0 => "checkbox", 1 => "安全方�?显示用户 Email (默认: 激活).");
 $LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "检查公共表�?�内容以防止�?用�?��? (默认: 激活).");
 $LANG_CONF["spam.enableCatpchaCode"] = array(0 => "checkbox", 1 => "使用 catpcha 验�?�?�?�验�?公共表�?�的�??交 (默认: 激活).");
 $PMF_LANG['ad_session_expiring'] = '您的会�?(session)连接将在 %d 分钟�?�终止: 您希望继续工作么?';

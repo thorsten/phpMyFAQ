@@ -616,7 +616,7 @@ $PMF_LANG['msgAdvancedSearch'] = 'Avancerad sökning';
 
 // added v1.6.1 - 2006-04-25 by Matteo and Thorsten
 $PMF_LANG['spamControlCenter'] = 'Spam-skyddsinställningar';
-$LANG_CONF["spamEnableSafeEmail"] = array(0 => "checkbox", 1 => "Visa epost-adresser säkert (standard: på).");
+$LANG_CONF["spam.enableSafeEmail"] = array(0 => "checkbox", 1 => "Visa epost-adresser säkert (standard: på).");
 $LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "Kontrollera det publika formuläret mot listan på förbjudna ord (standard: på).");
 $LANG_CONF["spam.enableCatpchaCode"] = array(0 => "checkbox", 1 => "Använd grafisk kod (catpcha ) för det publika formuläret (standard: på).");
 $PMF_LANG['ad_session_expiring'] = 'Din session går ut om %d minuter: vill du fortsätta arbeta?';

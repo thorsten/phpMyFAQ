@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_cy.php,v 1.20 2007-03-29 18:33:25 thorstenr Exp $
+* $Id: language_cy.php,v 1.21 2007-03-29 18:37:09 thorstenr Exp $
 *
 * The Cymraeg language file - Welsh (Cymraeg) translation
 *
@@ -612,7 +612,7 @@ $PMF_LANG['msgAdvancedSearch'] = 'Chwiliad manwl';
 
 // added v1.6.1 - 2006-04-25 by Matteo and Thorsten
 $PMF_LANG['spamControlCenter'] = 'Canolfan rheoli sbam';
-$LANG_CONF["spamEnableSafeEmail"] = array(0 => "checkbox", 1 => " Argraffu e-bost defnyddiwr mewn ffordd ddiogel (default: enabled).");
+$LANG_CONF["spam.enableSafeEmail"] = array(0 => "checkbox", 1 => " Argraffu e-bost defnyddiwr mewn ffordd ddiogel (default: enabled).");
 $LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => " Cynnwys ffurflen gyhoeddus yn erbyn geiriau a waharddwyd (default: enabled).");
 $LANG_CONF["spam.enableCatpchaCode"] = array(0 => "checkbox", 1 => " Defnyddio côd catpcha i gyflwyno ffurflen gyhoeddus (default: enabled).");
 $PMF_LANG['ad_session_expiring'] = 'Bydd eich sesiwn yn dod i ben mewn %d munud: hoffech chi barhau i weithio?';

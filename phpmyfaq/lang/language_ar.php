@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_ar.php,v 1.29 2007-03-29 18:33:25 thorstenr Exp $
+* $Id: language_ar.php,v 1.30 2007-03-29 18:37:09 thorstenr Exp $
 *
 * Arabic language file
 *
@@ -654,7 +654,7 @@ $PMF_LANG['msgAdvancedSearch'] = 'بحث متقدم';
 
 // added v1.6.1 - 2006-04-25 by MatteoandThorsten
 $PMF_LANG['spamControlCenter'] = 'Spamمركز التحكم �?ي ال ';
-$LANG_CONF["spamEnableSafeEmail"] = array(0 => "checkbox", 1 => "اكتب بريد المستخدم بصورة آمنة(الأصل : نشط). ");
+$LANG_CONF["spam.enableSafeEmail"] = array(0 => "checkbox", 1 => "اكتب بريد المستخدم بصورة آمنة(الأصل : نشط). ");
 $LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "�?حص محتويات النماذج العامة ضد الكلمات الممنوعة(الأصل : نشط) ");
 $LANG_CONF["spam.enableCatpchaCode"] = array(0 => "checkbox", 1 => "استخدم كود ال catpcha  للسماح بإرسال النماذج العامة .");
 $PMF_LANG['ad_session_expiring'] = ' جلستك الحالية ستنتهي خلال%dدقيقة : حل تحب مدها وتكملة العمل ؟ ';

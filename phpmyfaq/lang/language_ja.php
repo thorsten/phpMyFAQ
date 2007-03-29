@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_ja.php,v 1.40 2007-03-29 18:33:25 thorstenr Exp $
+ * $Id: language_ja.php,v 1.41 2007-03-29 18:37:09 thorstenr Exp $
  *
  * The Japanese language file
  *
@@ -619,7 +619,7 @@ $PMF_LANG['msgAdvancedSearch'] = '高度�?�検索';
 
 // added v1.6.1 - 2006-04-25 by Matteo and Thorsten
 $PMF_LANG['spamControlCenter'] = 'スパム制御センター';
-$LANG_CONF["spamEnableSafeEmail"] = array(0 => "checkbox", 1 => "安全�?�ユーザー�?�電�?メールを表示�?�る (デフォルト: 有効)");
+$LANG_CONF["spam.enableSafeEmail"] = array(0 => "checkbox", 1 => "安全�?�ユーザー�?�電�?メールを表示�?�る (デフォルト: 有効)");
 $LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "公開フォーム�?�内容�?�対�?�る�?止�?�語を確�?�?�る (デフォルト: 有効)");
 $LANG_CONF["spam.enableCatpchaCode"] = array(0 => "checkbox", 1 => "公開フォーム�?��?信を許�?��?�る�?��?�?� captcha を使用�?�る (デフォルト: 有効)");
 $PMF_LANG['ad_session_expiring'] = 'セッション�?�期�?切れ�?� %d 分�?��?�: would you like to go on working?';

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: sqlite.update.sql.php,v 1.27 2007-03-29 18:33:25 thorstenr Exp $
+ * $Id: sqlite.update.sql.php,v 1.28 2007-03-29 18:37:08 thorstenr Exp $
  *
  * CREATE TABLE instructions for SQLite
  *
@@ -187,7 +187,7 @@ $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.referenceURL', '')"
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('send2friendText', '')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('spam.checkBannedWords', 'true')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('spam.enableCatpchaCode', 'true')";
-$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('spamEnableSafeEmail', 'true')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('spam.enableSafeEmail', 'true')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('title', 'phpMyFAQ Codename \"Prometheus\"')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('tracking', 'true')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('URLValidateInterval', '86400')";
