@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_fa.php,v 1.16 2007-03-29 12:18:16 thorstenr Exp $
+* $Id: language_fa.php,v 1.17 2007-03-29 12:24:22 thorstenr Exp $
 *
 * farsi language file
 *
@@ -558,7 +558,7 @@ $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Describtion of th
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Keywords for Spiders");
 $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Name of the Publisher");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Email address of the Admin");
-$LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Contact information");
+$LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Contact information");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Copyright text for the startpage");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Text for the send2friend page");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "maximum Size for attachments in Bytes (max. ".ini_get("upload_max_filesize")."Byte)");

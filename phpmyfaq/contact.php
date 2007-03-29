@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: contact.php,v 1.12 2006-11-16 23:29:26 matteo Exp $
+* $Id: contact.php,v 1.13 2007-03-29 12:24:26 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-09-16
@@ -33,7 +33,7 @@ if (isset($_GET['gen'])) {
 
 $tpl->processTemplate ('writeContent', array(
     'msgContact'            => $PMF_LANG['msgContact'],
-    'msgContactOwnText'     => htmlentities($faqconfig->get('msgContactOwnText')),
+    'msgContactOwnText'     => htmlentities($faqconfig->get('main.contactInformations')),
     'msgContactEMail'       => $PMF_LANG['msgContactEMail'],
     'writeSendAdress'       => $_SERVER['PHP_SELF'].'?'.$sids.'action=sendmail',
     'msgNewContentName'     => $PMF_LANG['msgNewContentName'],

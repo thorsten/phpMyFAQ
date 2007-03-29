@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_fi.php,v 1.21 2007-03-29 12:18:16 thorstenr Exp $
+ * $Id: language_fi.php,v 1.22 2007-03-29 12:24:22 thorstenr Exp $
  *
  * Finnish language file
  *
@@ -558,7 +558,7 @@ $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Sivun Kuvaus");
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Avainsanat hakukoneille");
 $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Julkaisijan nimi");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Ylläpitäjän sähköposti osoite");
-$LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Yhteystiedot");
+$LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Yhteystiedot");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Kopiointioikeudet aloitussivulle");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Teksti lähetä tuttavalle sivulle");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "suurin sallittu koko liitetiedostoille tavuina on  (max. ".ini_get("upload_max_filesize")."tavua)");

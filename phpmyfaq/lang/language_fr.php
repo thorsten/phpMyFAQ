@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_fr.php,v 1.28 2007-03-29 12:18:16 thorstenr Exp $
+* $Id: language_fr.php,v 1.29 2007-03-29 12:24:22 thorstenr Exp $
 *
 * The French language file - try to be the best
 *
@@ -560,7 +560,7 @@ $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Description de la
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Mots-clef pour les moteurs de recherche");
 $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Nom du publieur");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Adresse Email de l'administrateur");
-$LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Informations de contact");
+$LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Informations de contact");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Texte de Copyright pour la page d'entrée");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Texte pour la page send2friend");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Taille maximum des attachements en Bytes (max. ".ini_get("upload_max_filesize")."Byte)");

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.61 2007-03-29 12:18:16 thorstenr Exp $
+* $Id: language_it.php,v 1.62 2007-03-29 12:24:23 thorstenr Exp $
 *
 * Italian language file
 *
@@ -560,7 +560,7 @@ $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Descrizione della
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Keywords per gli Spiders");
 $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Nome dell'Editore");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Indirizzo email dell'Amministratore");
-$LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Testo per la pagina dei <em>Contatti</em>");
+$LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Testo per la pagina dei <em>Contatti</em>");
 $LANG_CONF["send2friendText"] = array(0 => "area", 1 => "Testo per la pagina <em>Invia ad un amico</em>");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Massima dimensione per gli allegati, in Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Mostra il link agli allegati");

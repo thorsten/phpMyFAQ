@@ -559,7 +559,7 @@ $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Opis strony");
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "S³owa kluczowe dla wyszukiwarek");
 $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Imiê autora");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Adres e-mail administraotra");
-$LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Informacje kontaktowe");
+$LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Informacje kontaktowe");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Tekst copyright na stronie g³ównej");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Tekst na stronie wy¶lij do znajomego");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "maksymalny rozmiar za³±cznika w bajtach (maks. ".ini_get("upload_max_filesize")."bajtów)");

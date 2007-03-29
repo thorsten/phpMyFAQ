@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_eu.php,v 1.19 2007-03-29 12:18:16 thorstenr Exp $
+* $Id: language_eu.php,v 1.20 2007-03-29 12:24:22 thorstenr Exp $
 *
 * Euskera language file
 *
@@ -559,7 +559,7 @@ $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Orriaren deskriba
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Bilatzaileentzat (Goolge, Yahoo...) hitz klabeak");
 $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Administratzailearen izena");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Administratzailearen posta elektronikoa");
-$LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Harremanetarako informazioa");
+$LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Harremanetarako informazioa");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Konfirmazio orriko copyright-eko testua");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "<em>Lagun bati bidali</em> orrirako testua");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Eranskinetako gehieneko tamaina byte-etan (max. ".ini_get("upload_max_filesize")."Byte)");

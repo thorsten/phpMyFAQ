@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_nb.php,v 1.17 2007-03-29 12:18:16 thorstenr Exp $
+* $Id: language_nb.php,v 1.18 2007-03-29 12:24:23 thorstenr Exp $
 *
 * Norwegian Bokmål language file
 *
@@ -556,7 +556,7 @@ $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Beskrivelse av si
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Nøkkel for søkemaskiner");
 $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Utgiversnavn");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Administrators e-postadresse");
-$LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Kontaktinformasjon");
+$LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Kontaktinformasjon");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Tekst for opphavsrett på startsiden");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Tekst for send2friend-siden");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "maksimum størrelse for vedlegg i byte (maks. ".ini_get("upload_max_filesize")."Byte)");

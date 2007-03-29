@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_es.php,v 1.20 2007-03-29 12:18:15 thorstenr Exp $
+ * $Id: language_es.php,v 1.21 2007-03-29 12:24:22 thorstenr Exp $
  *
  * Spanish language file
  *
@@ -559,7 +559,7 @@ $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Descripción de pá
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Palabras clave para Spiders");
 $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Nombre del editor");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Dirección de e-mail del administrador");
-$LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Informaciones de contacto");
+$LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Informaciones de contacto");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Texto del copyright de la página de confirmación");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Texto para la página de enviar a un amigo");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Tamaño máximo para los adjuntos en Bytes (max. ".ini_get("upload_max_filesize")."Byte)");

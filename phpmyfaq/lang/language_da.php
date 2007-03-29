@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_da.php,v 1.21 2007-03-29 12:18:15 thorstenr Exp $
+* $Id: language_da.php,v 1.22 2007-03-29 12:24:22 thorstenr Exp $
 *
 * Danish language file
 *
@@ -557,7 +557,7 @@ $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Describtion of th
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Keywords for Spiders");
 $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Name of the Publisher");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Emailadress of the Admin");
-$LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Contactinformation");
+$LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Contactinformation");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Copyrighttext for the startpage");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Text for the send2friend page");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "maximum Size for attachments in Bytes (max. ".ini_get("upload_max_filesize")."Byte)");

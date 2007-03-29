@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_zh.php,v 1.24 2007-03-29 12:18:17 thorstenr Exp $
+* $Id: language_zh.php,v 1.25 2007-03-29 12:24:24 thorstenr Exp $
 *
 * Chinese (simplified) language file
 *
@@ -559,7 +559,7 @@ $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "é¡µé?¢æ??è¿°");
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "ç”¨æˆ·Metaï¼ˆç½‘é¡µè‡ªåŠ¨æ?œç´¢ç¨‹åº?ï¼‰çš„å…³é”®è¯?");
 $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "ç®¡ç?†å‘˜å§“å??");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "ç®¡ç?†å‘˜Email");
-$LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "è?”ç³»æˆ‘ä»¬");
+$LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "è?”ç³»æˆ‘ä»¬");
 $LANG_CONF["send2friendText"] = array(0 => "area", 1 => "å?‘é€?åˆ°æœ‹å?‹é¡µé?¢çš„æ–‡å­—");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "é™„ä»¶æœ€å¤§é™?åˆ¶æ˜¯ (. ".ini_get("upload_max_filesize")."å­—èŠ‚)");
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "æ˜¾ç¤ºå†…å®¹é™„ä»¶ï¼Ÿ");

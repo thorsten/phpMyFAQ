@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_ar.php,v 1.24 2007-03-29 12:18:15 thorstenr Exp $
+* $Id: language_ar.php,v 1.25 2007-03-29 12:24:22 thorstenr Exp $
 *
 * Arabic language file
 *
@@ -597,7 +597,7 @@ $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "وص�? الص�?ح
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "كلمات البحث لمحركات البحث");
 $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "إسم الناشر");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "البريد الإلكتروني للمشر�?");
-$LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "معلومات الإتصال");
+$LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "معلومات الإتصال");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "حقوق النشر �?ي ص�?حة البداية");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "نص لص�?حة أرسل إلي صديق");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "أقصى حجم للمر�?قات بالبايت (max. ".ini_get("upload_max_filesize")."بايت)");

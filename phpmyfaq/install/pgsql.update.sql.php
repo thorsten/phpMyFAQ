@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: pgsql.update.sql.php,v 1.21 2007-03-29 12:18:18 thorstenr Exp $
+ * $Id: pgsql.update.sql.php,v 1.22 2007-03-29 12:24:25 thorstenr Exp $
  *
  * CREATE TABLE instruction for PostgreSQL database
  *
@@ -179,7 +179,7 @@ $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.metaDescription', '
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.metaKeywords', '')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.metaPublisher', 'John Doe')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.enableRewriteRules', 'false')";
-$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('msgContactOwnText', '')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.contactInformations', '')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('numNewsArticles', '3')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('numRecordsPage', '10')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('permLevel', 'basic')";

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_cy.php,v 1.16 2007-03-29 12:18:15 thorstenr Exp $
+* $Id: language_cy.php,v 1.17 2007-03-29 12:24:22 thorstenr Exp $
 *
 * The Cymraeg language file - Welsh (Cymraeg) translation
 *
@@ -555,7 +555,7 @@ $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => " Disgrifiad o’r D
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => " Geiriau allweddol ar gyfer Corynod");
 $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => " Enw’r Cyhoeddwr");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => " Cyfeiriad e-bost Gweinyddol");
-$LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => " Gwybodaeth gyswllt");
+$LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => " Gwybodaeth gyswllt");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => " Testun hawlfraint ar gyfer y dudalen gyntaf");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => " Testun ar gyfer y dudalen anfonatffrind");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => " Uchafswm maint ar gyfer atodiadau mewn Beitiau(max. ".ini_get("upload_max_filesize")."Byte)");

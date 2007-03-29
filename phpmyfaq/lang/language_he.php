@@ -558,7 +558,7 @@ $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "תיאור העמוד");
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "מילות מפתח למנועי חיפוש");
 $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "שם היוצר");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "כתובת הדואל של המנהל");
-$LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "מידע ליצירת קשר");
+$LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "מידע ליצירת קשר");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "זכויות יוצרים לעמוד הראשי");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "טקסט לעמוד שלח לחבר");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "גודל מקסימלי של קובץ מצורף ב- Bytes (max. ".ini_get("upload_max_filesize")."Byte)");

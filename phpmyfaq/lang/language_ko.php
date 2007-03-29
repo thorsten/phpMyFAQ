@@ -557,7 +557,7 @@ $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "페이지 설명");
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "검색 로봇을 위한 키워드 설정");
 $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "관리자 이름");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "관리자 메일주소");
-$LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "문의 정보");
+$LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "문의 정보");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "시작페이지의 저작권 정보");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "친구에게 보내기 페이지를 위한 텍스트");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "최대 첨부 파일 사이즈(Bytes) (최대 ".ini_get("upload_max_filesize")."Byte)");

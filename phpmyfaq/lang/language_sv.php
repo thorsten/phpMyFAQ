@@ -558,7 +558,7 @@ $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Beskrivning av si
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Nyckelord för spiders");
 $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Namn på ansvarig");
 $LANG_CONF["adminmail"] = array(0 => "input", 1 => "Emailadress till admin");
-$LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Kontaktinformation");
+$LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Kontaktinformation");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Text på lägg-till-fråga-sidan om att ej lägga in rättighetsskyddat material");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Text för skicka-till-en-vän-sidan");
 $LANG_CONF["attmax"] = array(0 => "input", 1 => "Maximal storlek på bilagor (max. ".ini_get("upload_max_filesize")."Byte)");

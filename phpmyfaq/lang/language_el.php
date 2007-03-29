@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_el.php,v 1.16 2007-03-29 12:18:15 thorstenr Exp $
+* $Id: language_el.php,v 1.17 2007-03-29 12:24:22 thorstenr Exp $
 *
 * The Hellenic language file
 *
@@ -557,7 +557,7 @@ $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Περιγραφή ιστοσελ
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Λέξεις κλειδιά για μηχανές αναζήτησης");
 $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Όνομα εκδότη");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Ηλεκτρονική διεύθυνση του διαχειριστή");
-$LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Πληροφορίες επικοινωνίας");
+$LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Πληροφορίες επικοινωνίας");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Κείμενο για τα copyrights στην αρχική σελίδα");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Κείμενο για τη σελίδα αποστολής μηνυμάτων (send2friend)");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Μέγιστο μέγεθος συνημμένων (Μεγιστο. ".ini_get("upload_max_filesize")."Byte)");

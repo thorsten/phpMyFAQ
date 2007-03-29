@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.64 2007-03-29 12:18:15 thorstenr Exp $
+ * $Id: language_de.php,v 1.65 2007-03-29 12:24:22 thorstenr Exp $
  *
  * German language file
  *
@@ -558,7 +558,7 @@ $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Beschreibung der 
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Keywords für Suchmaschinen");
 $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Name des Veröffentlichers");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "E-Mailadresse des Administrators");
-$LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Kontakt, Impressum, hier die Betreiberadresse angeben!");
+$LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Kontakt, Impressum, hier die Betreiberadresse angeben!");
 $LANG_CONF["send2friendText"] = array(0 => "area", 1 => "Text für die Send2Friend-Seite");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Maximalgröße von Attachments in Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Attachments unter den Beiträgen anzeigen?");

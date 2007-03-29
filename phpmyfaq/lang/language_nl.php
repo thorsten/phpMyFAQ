@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_nl.php,v 1.27 2007-03-29 12:18:16 thorstenr Exp $
+ * $Id: language_nl.php,v 1.28 2007-03-29 12:24:23 thorstenr Exp $
  *
  * Dutch language file
  *
@@ -557,7 +557,7 @@ $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Beschrijving van 
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Sleutelwoorden voor Spiders");
 $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Naam van de uitgever");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Emailadres van de beheerder");
-$LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Contact informatie");
+$LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Contact informatie");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Copyright tekst voor op de startpagina");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Tekst voor de send2friend pagina");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "maximum grootte van bijlagen in Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
