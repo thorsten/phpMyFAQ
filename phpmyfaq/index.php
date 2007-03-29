@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: index.php,v 1.102 2007-03-29 18:01:27 thorstenr Exp $
+ * $Id: index.php,v 1.103 2007-03-29 19:03:24 thorstenr Exp $
  *
  * This is the main public frontend page of phpMyFAQ. It detects the browser's
  * language, gets and sets all cookie, post and get informations and includes
@@ -180,7 +180,7 @@ if ((!isset($_GET['sid'])) && (!isset($_COOKIE['pmf_sid']))) {
 // is user tracking activated?
 //
 $sids = '';
-if ($faqconfig->get('tracking')) {
+if ($faqconfig->get('main.enableUserTracking')) {
     if (isset($sid)) {
         if (!isset($_COOKIE['pmf_sid'])) {
             $sids = 'sid='.(int)$sid.'&amp;lang='.$LANGCODE.'&amp;';

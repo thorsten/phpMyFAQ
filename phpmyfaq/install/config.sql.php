@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: config.sql.php,v 1.36 2007-03-29 19:03:22 thorstenr Exp $
+ * $Id: config.sql.php,v 1.37 2007-03-29 19:06:44 thorstenr Exp $
  *
  * INSERT instruction for configuration
  *
@@ -48,5 +48,5 @@ $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('spam.enableCatpchaCode'
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('spam.enableSafeEmail', 'true')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.titleFAQ', 'phpMyFAQ Codename \"Prometheus\"')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.enableUserTracking', 'true')";
-$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('URLValidateInterval', '86400')";
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.urlValidateInterval', '86400')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('version', '".VERSION."')";

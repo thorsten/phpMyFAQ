@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: pgsql.update.sql.php,v 1.32 2007-03-29 19:03:22 thorstenr Exp $
+ * $Id: pgsql.update.sql.php,v 1.33 2007-03-29 19:06:44 thorstenr Exp $
  *
  * CREATE TABLE instruction for PostgreSQL database
  *
@@ -190,7 +190,7 @@ $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('spam.enableCatpchaCode',
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('spam.enableSafeEmail', 'true')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.titleFAQ', 'phpMyFAQ Codename \"Prometheus\"')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.enableUserTracking', 'true')";
-$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('URLValidateInterval', '86400')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.urlValidateInterval', '86400')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('version', '".NEWVERSION."')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('records.numberOfRelatedArticles', '5')";
 

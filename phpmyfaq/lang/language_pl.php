@@ -564,7 +564,7 @@ $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Tekst copyright na st
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Tekst na stronie wy¶lij do znajomego");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "maksymalny rozmiar za³±cznika w bajtach (maks. ".ini_get("upload_max_filesize")."bajtów)");
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Linkuj za³aczniki pod wpisami?");
-$LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "u¿ywaj statystyk?");
+$LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "u¿ywaj statystyk?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "u¿ywaj logowania dzia³añ administratora?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Chcesz, by IP by³o sprawdzane podczas sprawdzania UIN-ów w admin.php?");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Liczba wyswietlanych tematów na stronê");

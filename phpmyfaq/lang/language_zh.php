@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_zh.php,v 1.34 2007-03-29 19:03:22 thorstenr Exp $
+* $Id: language_zh.php,v 1.35 2007-03-29 19:06:45 thorstenr Exp $
 *
 * Chinese (simplified) language file
 *
@@ -572,7 +572,7 @@ $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "ç¦?æ­¢è¿™äº›IPåœ°å?€è®¿é
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "å?¯ç”¨mod_rewriteå?—?(é»˜è®¤:ç¦?æ­¢)");
 $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "å?¯ç”¨LDAPæ”¯æŒ?å?—? (é»˜è®¤:ç¦?æ­¢)");
 $LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "é“¾æŽ¥éªŒè¯?ç”¨çš„åŸºæœ¬ URL ç½‘å?€ (è®¾ç½®ä¸ºé¦–é¡µ URL ç½‘å?€)");
-$LANG_CONF["URLValidateInterval"] = array(0 => "input", 1 => "AJAX è¿žæŽ¥éªŒè¯?é—´éš”æ—¶é—´ (å?•ä½?ï¼šç§’)");
+$LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "AJAX è¿žæŽ¥éªŒè¯?é—´éš”æ—¶é—´ (å?•ä½?ï¼šç§’)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "æ˜¾ç¤ºæ–°é—®é¢˜?(é»˜è®¤:ç¦?æ­¢)");
 $LANG_CONF['main.permLevel'] = array(0 => "input", 1 => "æ?ƒé™?çº§åˆ«");
 

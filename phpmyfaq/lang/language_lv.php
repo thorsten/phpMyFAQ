@@ -556,7 +556,7 @@ $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Copyrighttext for the
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Text for the send2friend page");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "maximum Size for attachments in Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Link the attachments below the entries?");
-$LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "use Tracking?");
+$LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "use Tracking?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "use Adminlog?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Do you want the IP to be checked when checking the UINs in admin.php?");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Number of displayed topics per page");

@@ -561,7 +561,7 @@ $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Text de copyright");
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Text pentru pagina de recomandare");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "marimea maxima a fisierelor care pot fi uploadate in Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Link the attachments below the entries?");
-$LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "utilizeaza monitorizarea?");
+$LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "utilizeaza monitorizarea?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "utilizeaza monitorizarea activitatii de admin?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Vrei sa fie verificat IP-ul cand se verifica  UIN in admin.php?");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Numarul topicurilor afisate per pagina");

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_nb.php,v 1.20 2007-03-29 18:47:38 thorstenr Exp $
+* $Id: language_nb.php,v 1.21 2007-03-29 19:03:23 thorstenr Exp $
 *
 * Norwegian Bokmål language file
 *
@@ -561,7 +561,7 @@ $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Tekst for opphavsrett
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Tekst for send2friend-siden");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "maksimum størrelse for vedlegg i byte (maks. ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Lenke til vedlegg under oppføringene?");
-$LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "bruk Tracking?");
+$LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "bruk Tracking?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "bruk adminlogg?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Vil du at IP-en skal sjekkes når man sjekket UIN-en i admin.php?");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Antall oppføringer per side");

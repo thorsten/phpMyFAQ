@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.75 2007-03-29 19:03:22 thorstenr Exp $
+ * $Id: language_de.php,v 1.76 2007-03-29 19:06:44 thorstenr Exp $
  *
  * German language file
  *
@@ -571,7 +571,7 @@ $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Gesperrte IPs (Bitte mit
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "mod_rewrite Support aktivieren? (Voreinstellung: deaktiviert)");
 $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "LDAP Support aktivieren? (Voreinstellung: deaktiviert)");
 $LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "Basis-Adresse für die Linküberprüfung (Adresse der Startseite)");
-$LANG_CONF["URLValidateInterval"] = array(0 => "input", 1 => "Zeitintervall zwischen den Ajax-Linküberprüfungen (in Sekunden)");
+$LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "Zeitintervall zwischen den Ajax-Linküberprüfungen (in Sekunden)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Sichtbarkeit neuer Fragen unterdrücken?");
 $LANG_CONF['main.permLevel'] = array(0 => "input", 1 => "Berechtigungsebene");
 
