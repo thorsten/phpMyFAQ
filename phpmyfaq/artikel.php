@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: artikel.php,v 1.76 2007-03-28 19:24:30 johannes Exp $
+ * $Id: artikel.php,v 1.77 2007-03-29 11:39:03 thorstenr Exp $
  *
  * Shows the page with the FAQ record and - when available - the user
  * comments
@@ -106,9 +106,11 @@ $oLnk = new PMF_Linkverifier($db);
 $oLnk->resetPool();
 $oLnk->parse_string($content);
 $fixedContent = $content;
+
 // Search for href attributes only
 if (isset($oLnk->urlpool['href'])) {
-    foreach ($oLnk->urlpool['href'] as $_url) {
+    $linkArray = array_unique($oLnk->urlpool['href']);
+    foreach ($linkArray as $_url) {
         if (!(strpos($_url, 'index.php?action=artikel') === false)) {
             // Get the Faq link title
             preg_match('/id=([\d]+)/ism', $_url, $matches);
