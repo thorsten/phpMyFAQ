@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.178 2007-03-29 17:49:51 thorstenr Exp $
+ * $Id: functions.php,v 1.179 2007-03-29 18:28:43 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -544,8 +544,8 @@ function checkBannedWord($content)
     // Sanity checks
     $content = trim($content);
     if (    ('' == $content)
-         || (!isset($PMF_CONF['spamCheckBannedWords']))
-         || (isset($PMF_CONF['spamCheckBannedWords']) && (!$PMF_CONF['spamCheckBannedWords']))
+         || (!isset($PMF_CONF['spam.checkBannedWords']))
+         || (isset($PMF_CONF['spam.checkBannedWords']) && (!$PMF_CONF['spam.checkBannedWords']))
          ) {
         return true;
     }

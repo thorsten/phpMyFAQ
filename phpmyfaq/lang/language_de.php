@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.70 2007-03-29 18:19:13 thorstenr Exp $
+ * $Id: language_de.php,v 1.71 2007-03-29 18:28:41 thorstenr Exp $
  *
  * German language file
  *
@@ -618,7 +618,7 @@ $PMF_LANG['msgAdvancedSearch'] = 'Erweiterte Volltextsuche';
 // added v1.6.1 - 2006-04-25 by Matteo and Thorsten
 $PMF_LANG['spamControlCenter'] = 'Spamschutz-Konfiguration';
 $LANG_CONF["spamEnableSafeEmail"] = array(0 => "checkbox", 1 => "Sichere Darstellung der E-Mailadresse (Voreinstellung: aktiviert)");
-$LANG_CONF["spamCheckBannedWords"] = array(0 => "checkbox", 1 => "Testen fremder Inhalte gegen die Bad-Word-Liste (Voreinstellung: aktiviert)");
+$LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "Testen fremder Inhalte gegen die Bad-Word-Liste (Voreinstellung: aktiviert)");
 $LANG_CONF["spamEnableCatpchaCode"] = array(0 => "checkbox", 1 => "Zeige Captcha-Grafiken für Formulare (Voreinstellung: aktiviert)");
 $PMF_LANG['ad_session_expiring'] = 'Die Session wird in %d Minuten enden: Wollen Sie weiterarbeiten?';
 

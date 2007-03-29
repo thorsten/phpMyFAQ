@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.97 2007-03-29 18:19:13 thorstenr Exp $
+* $Id: language_en.php,v 1.98 2007-03-29 18:28:41 thorstenr Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -621,7 +621,7 @@ $PMF_LANG['msgAdvancedSearch'] = 'Advanced search';
 // added v1.6.1 - 2006-04-25 by Matteo and Thorsten
 $PMF_LANG['spamControlCenter'] = 'Spam control center';
 $LANG_CONF["spamEnableSafeEmail"] = array(0 => "checkbox", 1 => "Print user email in a safe way (default: enabled).");
-$LANG_CONF["spamCheckBannedWords"] = array(0 => "checkbox", 1 => "Check public form content against banned words (default: enabled).");
+$LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "Check public form content against banned words (default: enabled).");
 $LANG_CONF["spamEnableCatpchaCode"] = array(0 => "checkbox", 1 => "Use a catpcha code to allow public form submission (default: enabled).");
 $PMF_LANG['ad_session_expiring'] = 'Your session will expire in %d minutes: would you like to go on working?';
 

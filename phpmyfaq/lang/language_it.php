@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.67 2007-03-29 18:19:13 thorstenr Exp $
+* $Id: language_it.php,v 1.68 2007-03-29 18:28:41 thorstenr Exp $
 *
 * Italian language file
 *
@@ -621,7 +621,7 @@ $PMF_LANG['msgAdvancedSearch'] = 'Ricerca avanzata';
 // added v1.6.1 - 2006-04-25 by Matteo and Thorsten
 $PMF_LANG['spamControlCenter'] = 'Centro di controllo contro lo Spam';
 $LANG_CONF['spamEnableSafeEmail'] = array(0 => 'checkbox', 1 => 'Stampa l\'email dell\'utente in maniera sicura (default: abilitato).');
-$LANG_CONF['spamCheckBannedWords'] = array(0 => 'checkbox', 1 => 'Controlla se il testo delle form pubbliche contenga parole vietate (default: abilitato).');
+$LANG_CONF['spam.checkBannedWords'] = array(0 => 'checkbox', 1 => 'Controlla se il testo delle form pubbliche contenga parole vietate (default: abilitato).');
 $LANG_CONF['spamEnableCatpchaCode'] = array(0 => 'checkbox', 1 => 'Usa un codice <a href="http://it.wikipedia.org/wiki/Captcha" title="Vai alla definizione di Wikipedia" target="_blank">captcha</a> per permettere la sottomissione delle form pubbliche (default: abilitato).');
 $PMF_LANG['ad_session_expiring'] = 'Questa sessione scadrà tra %d minuti: vuoi continuare a lavorare?';
 

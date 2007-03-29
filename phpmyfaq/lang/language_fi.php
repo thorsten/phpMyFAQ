@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_fi.php,v 1.23 2007-03-29 12:44:26 thorstenr Exp $
+ * $Id: language_fi.php,v 1.24 2007-03-29 18:28:42 thorstenr Exp $
  *
  * Finnish language file
  *
@@ -628,7 +628,7 @@ $PMF_LANG['msgAdvancedSearch'] = 'Tarkennettu haku';
 /* added v1.6.1 - 2006-04-25 by Matteo and Thorsten - Translation to Finnish by Matti Kröger*/
 $PMF_LANG['spamControlCenter'] = 'Roskapostin hallinta keskus';
 $LANG_CONF["spamEnableSafeEmail"] = array(0 => "checkbox", 1 => "Tulosta käyttäjän email turvallisessa muodossa (oletus: aktiivinen).");
-$LANG_CONF["spamCheckBannedWords"] = array(0 => "checkbox", 1 => "Tarkista julkaistavien lomakkeiden sisältö kiellettyjen sanojen listaan (oletus: aktiivinen).");
+$LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "Tarkista julkaistavien lomakkeiden sisältö kiellettyjen sanojen listaan (oletus: aktiivinen).");
 $LANG_CONF["spamEnableCatpchaCode"] = array(0 => "checkbox", 1 => "Käytä captcha koodia julkisten lomakkeiden t&#228;ytön yhteydessä varmistamaan henkilön aitous (oletus: aktiivinen).");
 $PMF_LANG['ad_firefoxsearch_plugin_title'] = 'Luo Firefoxin haun lisäosa';
 $PMF_LANG['ad_msiesearch_plugin_install'] = 'Asenna Microsoft Internet Explorer 7 haun lisäosa';

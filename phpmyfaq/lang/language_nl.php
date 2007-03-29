@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_nl.php,v 1.30 2007-03-29 17:49:52 thorstenr Exp $
+ * $Id: language_nl.php,v 1.31 2007-03-29 18:28:41 thorstenr Exp $
  *
  * Dutch language file
  *
@@ -615,7 +615,7 @@ $PMF_LANG['msgAdvancedSearch'] = 'Geavanceerd zoeken';
 // added v1.6.1 - 2006-07-17 by DaRichMan
 $PMF_LANG['spamControlCenter'] = 'Spam control center';
 $LANG_CONF["spamEnableSafeEmail"] = array(0 => "checkbox", 1 => "Geef de gebruikers e-mail op een veilige manier weer (standaard: ingesteld).");
-$LANG_CONF["spamCheckBannedWords"] = array(0 => "checkbox", 1 => "Controlleer publiekelijk formulier tegen verboden woorden (standaard: ingesteld).");
+$LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "Controlleer publiekelijk formulier tegen verboden woorden (standaard: ingesteld).");
 $LANG_CONF["spamEnableCatpchaCode"] = array(0 => "checkbox", 1 => "Gebruik een catpcha code om publiekelijk formulier verzending toe te staan (standaard: ingesteld).");
 $PMF_LANG['ad_session_expiring'] = 'Jouw sessie verloop in %d minutes: zou je willen blijven werken?';
 

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_fr.php,v 1.30 2007-03-29 12:44:26 thorstenr Exp $
+* $Id: language_fr.php,v 1.31 2007-03-29 18:28:42 thorstenr Exp $
 *
 * The French language file - try to be the best
 *
@@ -618,6 +618,6 @@ $PMF_LANG['msgAdvancedSearch'] = 'Recherche avanc&eacute;e';
 // added v1.6.1 - 2006-04-25 by Matteo and Thorsten
 $PMF_LANG['spamControlCenter'] = 'Centre de contr&ocirc;le Spam';
 $LANG_CONF["spamEnableSafeEmail"] = array(0 => "checkbox", 1 => "Affichage s&eacute;curis&eacute; de l'e-mail utilisateur (d&eacute;faut: activ&eacute;).");
-$LANG_CONF["spamCheckBannedWords"] = array(0 => "checkbox", 1 => "Analyser le contenu des formulaires publics pour &eacute;viter les termes prohib&eacute;s (d&eacute;faut: activ&eacute;).");
+$LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "Analyser le contenu des formulaires publics pour &eacute;viter les termes prohib&eacute;s (d&eacute;faut: activ&eacute;).");
 $LANG_CONF["spamEnableCatpchaCode"] = array(0 => "checkbox", 1 => "Utiliser un code variable de s&eacute;curit&eacute; pour autoriser la soumission d'un formulaire public (d&eacute;faut: activ&eacute;).");
 $PMF_LANG['ad_session_expiring'] = 'Votre session va expirer dans %d minutes. Souhaitez-vous continuer à travailler ?';

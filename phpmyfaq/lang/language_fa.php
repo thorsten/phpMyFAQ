@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_fa.php,v 1.18 2007-03-29 12:44:26 thorstenr Exp $
+* $Id: language_fa.php,v 1.19 2007-03-29 18:28:42 thorstenr Exp $
 *
 * farsi language file
 *
@@ -625,7 +625,7 @@ $PMF_LANG['msgAdvancedSearch'] = 'جستجوی پیشر�?ته';
 // added v1.6.1 - 2006-04-25 by Matteo and Thorsten
 $PMF_LANG['spamControlCenter'] = 'Spam control center';
 $LANG_CONF["spamEnableSafeEmail"] = array(0 => "checkbox", 1 => "Print user email in a safe way (default: enabled).");
-$LANG_CONF["spamCheckBannedWords"] = array(0 => "checkbox", 1 => "Check public form content against banned words (default: enabled).");
+$LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "Check public form content against banned words (default: enabled).");
 $LANG_CONF["spamEnableCatpchaCode"] = array(0 => "checkbox", 1 => "Use a catpcha code to allow public form submission (default: enabled).");
 $PMF_LANG['ad_firefoxsearch_plugin_title'] = 'Create Firefox search plugin';
 $PMF_LANG['ad_msiesearch_plugin_install'] = 'Install Microsoft Internet Explorer 7 search plugin';
