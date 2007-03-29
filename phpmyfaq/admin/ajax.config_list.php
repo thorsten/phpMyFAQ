@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.config_list.php,v 1.15 2007-03-29 12:03:50 thorstenr Exp $
+* $Id: ajax.config_list.php,v 1.16 2007-03-29 19:55:58 thorstenr Exp $
 *
 * AJAX: lists the complete configuration items
 *
@@ -26,11 +26,12 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 
 require_once(PMF_ROOT_DIR.'/lang/language_en.php');
 
-$configMode = 'std';
+$configMode = 'main';
 $availableConfigModes = array(
+        'main'      => 1,
         'records'   => 1,
-        'spam'      => 1
-        );
+        'spam'      => 1);
+
 if (isset($_GET['conf']) && is_string($_GET['conf']) && isset($availableConfigModes[$_GET['conf']])) {
     $configMode = $_GET['conf'];
 }
@@ -66,9 +67,9 @@ function printInputFieldByType($key, $type)
                 } else {
                     print '<option value="language_en.php">English</option>';
                 }
-            } else if ('records.Orderby' == $key) {
+            } else if ('records.orderby' == $key) {
                     print sortingOptions($PMF_CONF[$key]);
-            } elseif ('records.Sortby' == $key) {
+            } elseif ('records.sortby' == $key) {
                     printf('<option value="DESC"%s>%s</option>',
                         ('DESC' == $PMF_CONF[$key]) ? ' selected="selected"' : '',
                         $PMF_LANG['ad_conf_desc']);
@@ -103,8 +104,10 @@ function printInputFieldByType($key, $type)
 
 header("Content-type: text/html; charset=".$PMF_LANG['metaCharset']);
 
+ksort($LANG_CONF);
+
 foreach ($LANG_CONF as $key => $value) {
-    $filterConfigParams = ($configMode == 'std'? false === strpos($key, 'spam') : 0 === strpos($key, $configMode));
+    $filterConfigParams = ($configMode == 'main'? false === strpos($key, 'spam') : 0 === strpos($key, $configMode));
     if ($filterConfigParams) {
 ?>
 <dl>

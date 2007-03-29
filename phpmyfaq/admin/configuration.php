@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: configuration.php,v 1.11 2007-03-10 22:07:34 thorstenr Exp $
+* $Id: configuration.php,v 1.12 2007-03-29 19:55:58 thorstenr Exp $
 *
 * The main configuration frontend
 *
@@ -73,7 +73,7 @@ if ('listConfig' == $userAction) {
 <form id="config_list" name="config_list" action="?action=config&amp;config_action=saveConfig" method="post">
     <fieldset>
         <legend><?php print $PMF_LANG['mainControlCenter']; ?></legend>
-        <div id="configStd"></div>
+        <div id="configMain"></div>
     </fieldset>
     <fieldset>
         <legend><?php print $PMF_LANG['recordsControlCenter']; ?></legend>
@@ -94,7 +94,8 @@ if ('listConfig' == $userAction) {
 
 function getConfigList()
 {
-    var ajax = new Ajax.Updater('configStd',  'index.php?action=ajax&ajax=config_list');
+    var ajax = new Ajax.Updater('configMain',  'index.php?action=ajax&ajax=config_list&conf=main');
+    var ajax = new Ajax.Updater('configRecords', 'index.php?action=ajax&ajax=config_list&conf=records');
     var ajax = new Ajax.Updater('configSpam', 'index.php?action=ajax&ajax=config_list&conf=spam');
 }
 
