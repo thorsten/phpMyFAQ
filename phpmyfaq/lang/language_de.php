@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.60 2007-03-29 07:03:06 thorstenr Exp $
+ * $Id: language_de.php,v 1.61 2007-03-29 07:05:49 thorstenr Exp $
  *
  * German language file
  *
@@ -866,4 +866,4 @@ $PMF_LANG['recordsControlCenter'] = 'Artikel-Konfiguration';
 
 // added v2.0.0 - 2007-03-17 by Thorsten
 $PMF_LANG['msgInstantResponse'] = 'Sofortantwort';
-$PMF_LANG['msgInstantResponseMaxRecords'] = '. Nachfolgend werden die ersten %d Einträge aufgelistet.';
+$PMF_LANG['msgInstantResponseMaxRecords'] = '. Nachfolgend werden die ersten %d Eintr&auml;ge aufgelistet.';
