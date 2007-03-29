@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_ja.php,v 1.37 2007-03-29 18:06:16 thorstenr Exp $
+ * $Id: language_ja.php,v 1.38 2007-03-29 18:19:13 thorstenr Exp $
  *
  * The Japanese language file
  *
@@ -561,7 +561,7 @@ $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "æ¤œç´¢ãƒ­ãƒœãƒƒãƒˆç”
 $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "ç®¡ç?†è€…å??");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "ç®¡ç?†è€…ã?®é›»å­?ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹");
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "å•?ã?„å?ˆã‚?ã?›æƒ…å ±");
-$LANG_CONF["send2friendText"] = array(0 => "area", 1 => "å?‹é?”ã?«é€?ä¿¡ãƒšãƒ¼ã‚¸ã?®ãƒ†ã‚­ã‚¹ãƒˆ");
+$LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "å?‹é?”ã?«é€?ä¿¡ãƒšãƒ¼ã‚¸ã?®ãƒ†ã‚­ã‚¹ãƒˆ");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "æ·»ä»˜ãƒ•ã‚¡ã‚¤ãƒ«ã?®æœ€å¤§ã‚µã‚¤ã‚º (æœ€å¤§ ".ini_get("upload_max_filesize")." ãƒ?ã‚¤ãƒˆ)");
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "ã‚¨ãƒ³ãƒˆãƒªã?®ä¸‹ã?«æ·»ä»˜ã?®ãƒªãƒ³ã‚¯ã‚’è¡¨ç¤ºã?™ã‚‹");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "è¿½è·¡æ©Ÿèƒ½ã‚’ä½¿ç”¨ã?™ã‚‹");

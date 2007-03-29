@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.96 2007-03-29 18:06:16 thorstenr Exp $
+* $Id: language_en.php,v 1.97 2007-03-29 18:19:13 thorstenr Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -561,7 +561,7 @@ $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Keywords for Spiders
 $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Name of the Publisher");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Email address of the Admin");
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Contact information");
-$LANG_CONF["send2friendText"] = array(0 => "area", 1 => "Text for the send2friend page");
+$LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Text for the send2friend page");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "maximum Size for attachments in Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Link the attachments below the entries?");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "use Tracking?");

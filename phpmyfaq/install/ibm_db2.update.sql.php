@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: ibm_db2.update.sql.php,v 1.25 2007-03-29 18:06:15 thorstenr Exp $
+ * $Id: ibm_db2.update.sql.php,v 1.26 2007-03-29 18:19:13 thorstenr Exp $
  *
  * CREATE TABLE instruction for IBM DB2 Universal Database, IBM Cloudscape,
  * and Apache Derby databases
@@ -185,7 +185,7 @@ $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.numberOfShownNewsEn
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('numRecordsPage', '10')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.permLevel', 'basic')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.referenceURL', '')";
-$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('send2friendText', '')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.send2friendText', '')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('spamCheckBannedWords', 'true')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('spamEnableCatpchaCode', 'true')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('spamEnableSafeEmail', 'true')";

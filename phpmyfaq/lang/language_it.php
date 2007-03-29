@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.66 2007-03-29 18:06:16 thorstenr Exp $
+* $Id: language_it.php,v 1.67 2007-03-29 18:19:13 thorstenr Exp $
 *
 * Italian language file
 *
@@ -561,7 +561,7 @@ $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Keywords per gli Spi
 $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Nome dell'Editore");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Indirizzo email dell'Amministratore");
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Testo per la pagina dei <em>Contatti</em>");
-$LANG_CONF["send2friendText"] = array(0 => "area", 1 => "Testo per la pagina <em>Invia ad un amico</em>");
+$LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Testo per la pagina <em>Invia ad un amico</em>");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Massima dimensione per gli allegati, in Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Mostra il link agli allegati");
 $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "Abilito il tracciamento per le attivit&agrave; dell'Utente?");

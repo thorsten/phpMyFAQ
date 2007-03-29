@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: config.sql.php,v 1.30 2007-03-29 18:06:15 thorstenr Exp $
+ * $Id: config.sql.php,v 1.31 2007-03-29 18:19:12 thorstenr Exp $
  *
  * INSERT instruction for configuration
  *
@@ -42,7 +42,7 @@ $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.phpMyFAQToken', ''
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('records.orderby', 'id')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('records.sortby', 'DESC')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.referenceURL', '')";
-$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('send2friendText', '')";
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.send2friendText', '')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('spamCheckBannedWords', 'true')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('spamEnableCatpchaCode', 'true')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('spamEnableSafeEmail', 'true')";
