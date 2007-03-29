@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_ja.php,v 1.36 2007-03-29 17:54:47 thorstenr Exp $
+ * $Id: language_ja.php,v 1.37 2007-03-29 18:06:16 thorstenr Exp $
  *
  * The Japanese language file
  *
@@ -571,12 +571,10 @@ $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "ãƒšãƒ¼ã‚¸æ¯Žã?«è¡¨ç¤ºã?
 $LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "ã?ŠçŸ¥ã‚‰ã?›ã?®è¡¨ç¤ºæ•°");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "æ‹’å?¦ã?™ã‚‹ IP ã‚¢ãƒ‰ãƒ¬ã‚¹");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "mod_rewrite ã?®ã‚µãƒ?ãƒ¼ãƒˆã‚’ä½¿ç”¨ã?—ã?¾ã?™ã?‹? (ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ: ç„¡åŠ¹)");
-$LANG_CONF["referenceURL"] = array(0 => "input", 1 => "ãƒªãƒ³ã‚¯ç¢ºèª?ã?®åŸºæº– URL (ä¾‹: http://www.example.org/faq)");
+$LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "ãƒªãƒ³ã‚¯ç¢ºèª?ã?®åŸºæº– URL (ä¾‹: http://www.example.org/faq)");
 $LANG_CONF["URLValidateInterval"] = array(0 => "input", 1 => "AJAX ãƒªãƒ³ã‚¯ã?®ç¢ºèª?é–“éš” (ç§’å?˜ä½?)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "æ–°ã?—ã?„è³ªå•?ã?®è¡¨ç¤ºã‚’ç„¡åŠ¹ã?«ã?—ã?¾ã?™ã?‹?");
 $LANG_CONF['main.permLevel'] = array(0 => "input", 1 => "æ¨©é™?ãƒ¬ãƒ™ãƒ«");
-$LANG_CONF["referenceURL"] = array(0 => "input", 1 => "å¤–éƒ¨å…¬é–‹ç”¨ã?® index.php ã?¸ã?® URL (ãƒªãƒ³ã‚¯æ¤œè¨¼ç”¨)");
-$LANG_CONF["URLValidateInterval"] = array(0 => "input", 1 => "AJAX ã?§ãƒªãƒ³ã‚¯ã‚’è‡ªå‹•æ¤œè¨¼ã?™ã‚‹é–“éš” (ç§’)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "ROOT ã?®ä¸‹ä½?ã‚«ãƒ†ã‚´ãƒªã?¸";
 $PMF_LANG["ad_categ_paste_error"] = "ã?“ã?®ã‚«ãƒ†ã‚´ãƒªã?¯ç§»å‹•ã?§ã??ã?¾ã?›ã‚“ã€‚";

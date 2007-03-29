@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: pdf.php,v 1.27 2007-03-29 12:03:50 thorstenr Exp $
+ * $Id: pdf.php,v 1.28 2007-03-29 18:01:27 thorstenr Exp $
  *
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author      Peter Beauvain <pbeauvain@web.de>
@@ -23,7 +23,7 @@
 
 require_once('inc/Init.php');
 PMF_Init::cleanRequest();
-session_name('pmf_auth_'.$faqconfig->get('phpMyFAQToken'));
+session_name('pmf_auth_'.$faqconfig->get('main.phpMyFAQToken'));
 session_start();
 require_once('inc/Category.php');
 require_once('inc/Faq.php');

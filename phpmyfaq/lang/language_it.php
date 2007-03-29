@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.65 2007-03-29 17:54:47 thorstenr Exp $
+* $Id: language_it.php,v 1.66 2007-03-29 18:06:16 thorstenr Exp $
 *
 * Italian language file
 *
@@ -572,7 +572,7 @@ $LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Numero d
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Vieta l'accesso a questi indirizzi IP");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Attivare il supporto a <em>mod_rewrite</em>? (default: disabilitato)");
 $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Attivare il supporto LDAP? (default: disabilitato)");
-$LANG_CONF["referenceURL"] = array(0 => "input", 1 => "<em>Base URL</em> dell'installazione di phpMyFAQ, es: http://www.example.org/faq (&egrave; necessaria per la verifica dei links)");
+$LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "<em>Base URL</em> dell'installazione di phpMyFAQ, es: http://www.example.org/faq (&egrave; necessaria per la verifica dei links)");
 $LANG_CONF["URLValidateInterval"] = array(0 => "input", 1 => "Intervallo della verifica asincrona dei links (in secondi)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Disabilitare la visibilit&agrave; delle domande appena inserite?");
 $LANG_CONF['main.permLevel'] = array(0 => "input", 1 => "Configurazione della Permessistica");

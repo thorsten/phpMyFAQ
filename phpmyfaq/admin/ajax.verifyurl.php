@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.verifyurl.php,v 1.12 2006-09-27 18:21:29 thorstenr Exp $
+* $Id: ajax.verifyurl.php,v 1.13 2007-03-29 18:06:17 thorstenr Exp $
 *
 * AJAX: verifyurl
 *
@@ -82,7 +82,7 @@ if (count(ob_list_handlers()) > 0) {
 }
 
 $linkverifier->parse_string($faq->faqRecord['content']);
-$linkverifier->VerifyURLs($PMF_CONF['referenceURL']);
+$linkverifier->VerifyURLs($PMF_CONF['main.referenceURL']);
 $linkverifier->markEntry($id, $lang);
 print $linkverifier->getLinkStateString();
 exit();

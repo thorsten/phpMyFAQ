@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: sitemap.google.php,v 1.5 2007-01-21 14:48:37 thorstenr Exp $
+ * $Id: sitemap.google.php,v 1.6 2007-03-29 18:01:27 thorstenr Exp $
  *
  * The dynamic Google Sitemap builder
  *
@@ -117,7 +117,7 @@ function printHTTPStatus404()
 //
 
 PMF_Init::cleanRequest();
-session_name('pmf_auth_'.$faqconfig->get('phpMyFAQToken'));
+session_name('pmf_auth_'.$faqconfig->get('main.phpMyFAQToken'));
 session_start();
 
 $oFaq = new PMF_Faq($db, 'en');

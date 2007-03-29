@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: index.php,v 1.101 2007-03-29 12:18:18 thorstenr Exp $
+ * $Id: index.php,v 1.102 2007-03-29 18:01:27 thorstenr Exp $
  *
  * This is the main public frontend page of phpMyFAQ. It detects the browser's
  * language, gets and sets all cookie, post and get informations and includes
@@ -37,7 +37,7 @@ if (!file_exists('inc/data.php')) {
 require_once('inc/Init.php');
 define('IS_VALID_PHPMYFAQ', null);
 PMF_Init::cleanRequest();
-session_name('pmf_auth_'.$faqconfig->get('phpMyFAQToken'));
+session_name('pmf_auth_'.$faqconfig->get('main.phpMyFAQToken'));
 session_start();
 
 //

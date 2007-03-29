@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Linkverifier.php,v 1.21 2007-02-26 23:28:56 matteo Exp $
+ * $Id: Linkverifier.php,v 1.22 2007-03-29 18:06:17 thorstenr Exp $
  *
  * PMF_Linkverifier
  *
@@ -165,11 +165,11 @@ class PMF_Linkverifier
     {
         global $PMF_CONF;
 
-        if (!(isset($PMF_CONF["referenceURL"]))) {
+        if (!(isset($PMF_CONF["main.referenceURL"]))) {
             return false;
         }
 
-        if ($PMF_CONF["referenceURL"] == "") {
+        if ($PMF_CONF["main.referenceURL"] == "") {
             return false;
         }
 
@@ -830,12 +830,12 @@ class PMF_Linkverifier
     {
         global $PMF_CONF, $PMF_LANG;
 
-        if (!(isset($PMF_CONF['referenceURL']))) {
+        if (!(isset($PMF_CONF['main.referenceURL']))) {
             $output = $PMF_LANG['ad_linkcheck_noReferenceURL'];
             return ($cron ? '' : '<br /><br />'.$output);
         }
 
-        if (trim('' == $PMF_CONF['referenceURL'])) {
+        if (trim('' == $PMF_CONF['main.referenceURL'])) {
             $output = $PMF_LANG['ad_linkcheck_noReferenceURL'];
             return ($cron ? '' : '<br /><br />'.$output);
         }
@@ -847,7 +847,7 @@ class PMF_Linkverifier
 
         // Parse contents and verify URLs
         $this->parse_string($contents);
-        $result = $this->VerifyURLs($PMF_CONF['referenceURL']);
+        $result = $this->VerifyURLs($PMF_CONF['main.referenceURL']);
         $this->markEntry($id, $artlang);
 
         // If no URLs found

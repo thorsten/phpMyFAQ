@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: rss.php,v 1.14 2007-03-29 12:03:51 thorstenr Exp $
+* $Id: rss.php,v 1.15 2007-03-29 18:01:27 thorstenr Exp $
 *
 * The RSS feed with the news
 *
@@ -24,7 +24,7 @@
 define('PMF_ROOT_DIR', dirname(dirname(dirname(__FILE__))));
 require_once(PMF_ROOT_DIR.'/inc/Init.php');
 PMF_Init::cleanRequest();
-session_name('pmf_auth_'.$faqconfig->get('phpMyFAQToken'));
+session_name('pmf_auth_'.$faqconfig->get('main.phpMyFAQToken'));
 session_start();
 
 require_once(PMF_ROOT_DIR.'/inc/News.php');

@@ -26,7 +26,7 @@ require_once('inc/Init.php');
 require_once('inc/Category.php');
 define('IS_VALID_PHPMYFAQ', null);
 PMF_Init::cleanRequest();
-session_name('pmf_auth_'.$faqconfig->get('phpMyFAQToken'));
+session_name('pmf_auth_'.$faqconfig->get('main.phpMyFAQToken'));
 session_start();
 
 $searchString = '';
