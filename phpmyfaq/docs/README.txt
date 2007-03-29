@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.76 2007-03-27 20:55:56 thorstenr Exp $
+$Id: README.txt,v 1.77 2007-03-29 21:18:14 thorstenr Exp $
 
 phpMyFAQ 2.0.0-beta2
 Codename "Prometheus"
@@ -15,6 +15,7 @@ Changes since 2.0.0-beta:
 - added comment administration frontend (Thorsten)
 - added questionnaire for statistics in installer (Johannes)
 - added Ajax-powered Instant Response (Thorsten)
+- added editable default values for record configuration (Thorsten)
 - fixed tons of bugs (Matteo, Thorsten)
 
 For known issues please take a look at KNOWNBUGS.txt
@@ -48,6 +49,7 @@ Version 2.0.0-beta2 - 2007-
 - added configurable simple reordering of records (Thorsten)
 - added questionnaire for statistics in installer (Johannes)
 - added Ajax-powered Instant Response (Thorsten)
+- added editable default values for record configuration (Thorsten)
 - improved export functions (Matteo)
 - improved URL rewrite functions (Matteo)
 - improved category management (Thorsten, Rudi Ferrari)

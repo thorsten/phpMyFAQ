@@ -1,8 +1,7 @@
-$Id: KNOWNBUGS.txt,v 1.17 2007-03-28 08:32:41 thorstenr Exp $
+$Id: KNOWNBUGS.txt,v 1.18 2007-03-29 21:18:14 thorstenr Exp $
 
 MISSING FEATURES in phpMyFAQ 2.0.0-beta2
 
-- editable default values for record configuration (blocker for beta2)
 - finish the new admin backend layout (blocker for rc1)
 - unfinished documentation (blocker for final)
 
