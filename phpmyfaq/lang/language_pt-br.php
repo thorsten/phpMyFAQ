@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_pt-br.php,v 1.14 2007-03-28 10:47:05 thorstenr Exp $
+ * $Id: language_pt-br.php,v 1.15 2007-03-29 12:03:47 thorstenr Exp $
  *
  * Brazilian Portuguese language file
  *
@@ -551,7 +551,7 @@ $PMF_LANG["ad_entry_fontcolor"] = "Cor da fonte: ";
 $PMF_LANG["ad_entry_fontsize"] = "Tamanho da fonte: ";
 
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias
-$LANG_CONF["language"] = array(0 => "select", 1 => "Arquivo de linguagem");
+$LANG_CONF['main.language'] = array(0 => "select", 1 => "Arquivo de linguagem");
 $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Habilita negocia&ccedil;&atilde;o autom&aacute;tica de conte&uacute;do");
 $LANG_CONF["title"] = array(0 => "input", 1 => "T&iacute;tulo do FAQ");
 $LANG_CONF["version"] = array(0 => "print", 1 => "Vers&atilde;o do FAQ");

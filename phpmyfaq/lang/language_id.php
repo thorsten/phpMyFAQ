@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_id.php,v 1.19 2007-03-28 10:47:05 thorstenr Exp $
+ * $Id: language_id.php,v 1.20 2007-03-29 12:03:47 thorstenr Exp $
  *
  * Indonesian language file
  *
@@ -628,7 +628,7 @@ $PMF_LANG["ad_entry_fontcolor"] = "Warna huruf: ";
 $PMF_LANG["ad_entry_fontsize"] = "Ukuran huruf: ";
 
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias
-$LANG_CONF["language"] = array(0 => "select", 1 => "Berkas-Bahasa");
+$LANG_CONF['main.language'] = array(0 => "select", 1 => "Berkas-Bahasa");
 $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Aktifkan 'automatic
 content negotiation'");
 $LANG_CONF["title"] = array(0 => "input", 1 => "Judul FAQ");

@@ -1,6 +1,6 @@
 <?php
 /*
- * $Id: questionnaire.php,v 1.6 2007-03-28 08:55:36 thorstenr Exp $
+ * $Id: questionnaire.php,v 1.7 2007-03-29 12:03:52 thorstenr Exp $
  *
  * This class collects data which is used to create some usage statistics.
  *
@@ -94,7 +94,7 @@ class PMF_Questionnaire_Data
         $settings = array(
             'version',
             'oldversion',
-            'language',
+            'main.language',
             'permLevel',
             'main.languageDetection',
             'main.ldapSupport'

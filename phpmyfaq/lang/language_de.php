@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.61 2007-03-29 07:05:49 thorstenr Exp $
+ * $Id: language_de.php,v 1.62 2007-03-29 12:03:46 thorstenr Exp $
  *
  * German language file
  *
@@ -550,7 +550,7 @@ $PMF_LANG["ad_entry_fontcolor"] = "Schriftfarbe: ";
 $PMF_LANG["ad_entry_fontsize"] = "Schriftgröße: ";
 
 // added v1.4.0 - 2003-12-04 by Thorsten
-$LANG_CONF["language"] = array(0 => "select", 1 => "Sprachdatei");
+$LANG_CONF['main.language'] = array(0 => "select", 1 => "Sprachdatei");
 $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Automatische Spracherkennung");
 $LANG_CONF["title"] = array(0 => "input", 1 => "Titel der FAQ");
 $LANG_CONF["version"] = array(0 => "print", 1 => "Version der FAQ");

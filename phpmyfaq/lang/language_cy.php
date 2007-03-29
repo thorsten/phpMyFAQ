@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_cy.php,v 1.13 2007-03-28 10:47:04 thorstenr Exp $
+* $Id: language_cy.php,v 1.14 2007-03-29 12:03:46 thorstenr Exp $
 *
 * The Cymraeg language file - Welsh (Cymraeg) translation
 *
@@ -547,7 +547,7 @@ $PMF_LANG["ad_entry_fontcolor"] = "Lliw'r ffont : ";
 $PMF_LANG["ad_entry_fontsize"] = "Maint y ffont: ";
 
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias
-$LANG_CONF["language"] = array(0 => "select", 1 => " Iaith-Ffeil");
+$LANG_CONF['main.language'] = array(0 => "select", 1 => " Iaith-Ffeil");
 $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => " Galluogi trafod cynnwys awtomatig");
 $LANG_CONF["title"] = array(0 => "input", 1 => " Teitl y CC");
 $LANG_CONF["version"] = array(0 => "print", 1 => " Fersiwn y CC");

@@ -547,7 +547,7 @@ $PMF_LANG["ad_entry_fontcolor"] = "Font rengi: ";
 $PMF_LANG["ad_entry_fontsize"] = "Font boyutu: ";
 
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias
-$LANG_CONF["language"] = array(0 => "select", 1 => "Language-File");
+$LANG_CONF['main.language'] = array(0 => "select", 1 => "Language-File");
 $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Enable automatic content negotiation");
 $LANG_CONF["title"] = array(0 => "input", 1 => "Title of the FAQ");
 $LANG_CONF["version"] = array(0 => "print", 1 => "FAQ Version");

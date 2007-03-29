@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: password.php,v 1.15 2007-03-14 19:55:30 thorstenr Exp $
+* $Id: password.php,v 1.16 2007-03-29 12:03:51 thorstenr Exp $
 *
 * Reset a forgotten password to a new one
 *
@@ -44,7 +44,7 @@ $IDN = new idna_convert;
 
 // get language (default: english)
 $pmf = new PMF_Init();
-$LANGCODE = $pmf->setLanguage((isset($PMF_CONF['main.languageDetection']) ? true : false), $PMF_CONF['language']);
+$LANGCODE = $pmf->setLanguage((isset($PMF_CONF['main.languageDetection']) ? true : false), $PMF_CONF['main.language']);
 // Preload English strings
 require_once ('../lang/language_en.php');
 

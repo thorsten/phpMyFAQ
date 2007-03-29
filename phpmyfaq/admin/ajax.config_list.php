@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.config_list.php,v 1.14 2007-03-13 18:43:33 thorstenr Exp $
+* $Id: ajax.config_list.php,v 1.15 2007-03-29 12:03:50 thorstenr Exp $
 *
 * AJAX: lists the complete configuration items
 *
@@ -59,10 +59,10 @@ function printInputFieldByType($key, $type)
         case 'select':
 
             printf('<select name="edit[%s]" size="1">', $key);
-            if ('language' == $key) {
+            if ('main.language' == $key) {
                 $languages = getAvailableLanguages();
                 if (count($languages) > 0) {
-                    print languageOptions(str_replace(array("language_", ".php"), "", $PMF_CONF['language']), false, true);
+                    print languageOptions(str_replace(array("language_", ".php"), "", $PMF_CONF['main.language']), false, true);
                 } else {
                     print '<option value="language_en.php">English</option>';
                 }

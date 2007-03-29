@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_fr.php,v 1.25 2007-03-28 10:47:05 thorstenr Exp $
+* $Id: language_fr.php,v 1.26 2007-03-29 12:03:47 thorstenr Exp $
 *
 * The French language file - try to be the best
 *
@@ -552,7 +552,7 @@ $PMF_LANG["ad_entry_fontcolor"] = "Couleur de police&nbsp;&nbsp;: ";
 $PMF_LANG["ad_entry_fontsize"] = "Taille de police&nbsp;&nbsp;: ";
 
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias
-$LANG_CONF["language"] = array(0 => "select", 1 => "Langue de fichier");
+$LANG_CONF['main.language'] = array(0 => "select", 1 => "Langue de fichier");
 $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Active la négociation de contenu automatique");
 $LANG_CONF["title"] = array(0 => "input", 1 => "Titre de la FAQ");
 $LANG_CONF["version"] = array(0 => "print", 1 => "Version de la FAQ");

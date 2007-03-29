@@ -35,7 +35,7 @@ $searchString = '';
 // get language (default: english)
 //
 $pmf = new PMF_Init();
-$LANGCODE = $pmf->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('language'));
+$LANGCODE = $pmf->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
 // Preload English strings
 require_once ('lang/language_en.php');
 

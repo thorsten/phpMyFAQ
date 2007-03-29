@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_ar.php,v 1.21 2007-03-28 10:47:03 thorstenr Exp $
+* $Id: language_ar.php,v 1.22 2007-03-29 12:03:46 thorstenr Exp $
 *
 * Arabic language file
 *
@@ -589,7 +589,7 @@ $PMF_LANG["ad_entry_fontcolor"] = "لون الخط : ";
 $PMF_LANG["ad_entry_fontsize"] = "حجم الخط : ";
 
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias
-$LANG_CONF["language"] = array(0 => "select", 1 => "مل�? اللغة");
+$LANG_CONF["main.language"] = array(0 => "select", 1 => "مل�? اللغة");
 $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "ت�?عيل خاصية تبادل المحتوى التلقائي ؟");
 $LANG_CONF["title"] = array(0 => "input", 1 => "عنوان البرنامج ");
 $LANG_CONF["version"] = array(0 => "print", 1 => "نسخة البرنامج");

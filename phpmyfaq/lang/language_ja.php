@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_ja.php,v 1.29 2007-03-28 10:47:06 thorstenr Exp $
+ * $Id: language_ja.php,v 1.30 2007-03-29 12:03:47 thorstenr Exp $
  *
  * The Japanese language file
  *
@@ -552,7 +552,7 @@ $PMF_LANG["ad_entry_fontcolor"] = "フォント色: ";
 $PMF_LANG["ad_entry_fontsize"] = "フォントサイズ: ";
 
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias
-$LANG_CONF["language"] = array(0 => "select", 1 => "言語");
+$LANG_CONF['main.language'] = array(0 => "select", 1 => "言語");
 $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "言語�?�自動�?識を有効�?��?�る");
 $LANG_CONF["title"] = array(0 => "input", 1 => "FAQ �?�題�??");
 $LANG_CONF["version"] = array(0 => "print", 1 => "FAQ �?ージョン");

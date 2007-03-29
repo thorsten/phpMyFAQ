@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: config.sql.php,v 1.21 2007-03-28 10:47:03 thorstenr Exp $
+ * $Id: config.sql.php,v 1.22 2007-03-29 12:03:52 thorstenr Exp $
  *
  * INSERT instruction for configuration
  *
@@ -27,7 +27,7 @@ $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.disableAttachments
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.enableAdminLog', 'true')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('records.enableVisibilityQuestions', 'false')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.ipCheck', 'false')";
-$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('language', '".$language."')";
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.language', '".$language."')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.ldapSupport', 'false')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.metaDescription', 'phpMyFAQ should be the answer for all questions in life')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.metaKeywords', '')";

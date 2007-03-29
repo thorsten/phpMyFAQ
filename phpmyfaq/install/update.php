@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.119 2007-03-28 10:47:03 thorstenr Exp $
+* $Id: update.php,v 1.120 2007-03-29 12:03:52 thorstenr Exp $
 *
 * Main update script
 *
@@ -905,7 +905,7 @@ if ($step == 5) {
                 break;
         }
         // 5/13. Fix faqnews table
-        $defaultLang = str_replace(array('language_', '.php'), '', $PMF_CONF['language']);
+        $defaultLang = str_replace(array('language_', '.php'), '', $PMF_CONF['main.language']);
         switch($DB["type"]) {
             case 'mssql':
             case 'sybase':

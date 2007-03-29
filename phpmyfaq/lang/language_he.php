@@ -550,7 +550,7 @@ $PMF_LANG["ad_entry_fontcolor"] = "צבע פונט: ";
 $PMF_LANG["ad_entry_fontsize"] = "גודל פונט: ";
 
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias
-$LANG_CONF["language"] = array(0 => "checkbox", 1 => "קובץ שפה");
+$LANG_CONF['main.language'] = array(0 => "checkbox", 1 => "קובץ שפה");
 $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "אפשר העברת נתונים אוטומטית");
 $LANG_CONF["title"] = array(0 => "input", 1 => "כותרת השאלה הנפוצה");
 $LANG_CONF["version"] = array(0 => "print", 1 => "גירסאת השאלה הנפוצה");
