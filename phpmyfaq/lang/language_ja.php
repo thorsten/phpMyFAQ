@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_ja.php,v 1.35 2007-03-29 17:49:52 thorstenr Exp $
+ * $Id: language_ja.php,v 1.36 2007-03-29 17:54:47 thorstenr Exp $
  *
  * The Japanese language file
  *
@@ -574,7 +574,7 @@ $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "mod_rewrite
 $LANG_CONF["referenceURL"] = array(0 => "input", 1 => "ãƒªãƒ³ã‚¯ç¢ºèª?ã?®åŸºæº– URL (ä¾‹: http://www.example.org/faq)");
 $LANG_CONF["URLValidateInterval"] = array(0 => "input", 1 => "AJAX ãƒªãƒ³ã‚¯ã?®ç¢ºèª?é–“éš” (ç§’å?˜ä½?)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "æ–°ã?—ã?„è³ªå•?ã?®è¡¨ç¤ºã‚’ç„¡åŠ¹ã?«ã?—ã?¾ã?™ã?‹?");
-$LANG_CONF['permLevel'] = array(0 => "input", 1 => "æ¨©é™?ãƒ¬ãƒ™ãƒ«");
+$LANG_CONF['main.permLevel'] = array(0 => "input", 1 => "æ¨©é™?ãƒ¬ãƒ™ãƒ«");
 $LANG_CONF["referenceURL"] = array(0 => "input", 1 => "å¤–éƒ¨å…¬é–‹ç”¨ã?® index.php ã?¸ã?® URL (ãƒªãƒ³ã‚¯æ¤œè¨¼ç”¨)");
 $LANG_CONF["URLValidateInterval"] = array(0 => "input", 1 => "AJAX ã?§ãƒªãƒ³ã‚¯ã‚’è‡ªå‹•æ¤œè¨¼ã?™ã‚‹é–“éš” (ç§’)");
 

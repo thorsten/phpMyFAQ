@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: user.php,v 1.34 2007-03-03 08:52:37 thorstenr Exp $
+* $Id: user.php,v 1.35 2007-03-29 17:54:47 thorstenr Exp $
 *
 * Displays the user managment frontend
 *
@@ -192,7 +192,7 @@ if ($userAction == 'delete') {
             $oCat->moveOwnership($userId, 1);
 
             // Remove the user from groups
-            $permLevel = isset($PMF_CONF['permLevel']) && ('' != $PMF_CONF['permLevel']) ? $PMF_CONF['permLevel'] : 'basic';
+            $permLevel = isset($PMF_CONF['main.permLevel']) && ('' != $PMF_CONF['main.permLevel']) ? $PMF_CONF['main.permLevel'] : 'basic';
             if ('medium' == $permLevel) {
                 $oPerm = PMF_Perm::selectPerm('medium');
                 $oPerm->addDb($db);

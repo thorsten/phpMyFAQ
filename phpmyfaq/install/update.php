@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.125 2007-03-29 17:49:52 thorstenr Exp $
+* $Id: update.php,v 1.126 2007-03-29 17:54:46 thorstenr Exp $
 *
 * Main update script
 *
@@ -1352,6 +1352,7 @@ if ($step == 5) {
         $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.numberOfShownNewsEntries' WHERE config_name = 'numNewsArticles'";
         $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.numberOfRecordsPerPage' WHERE config_name = 'numRecordsPage'";
         $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'records.numberOfRelatedArticles' WHERE config_name = 'numRelatedArticles'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.permLevel' WHERE config_name = 'permLevel'";
 
     }
 

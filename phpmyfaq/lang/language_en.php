@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.94 2007-03-29 17:49:52 thorstenr Exp $
+* $Id: language_en.php,v 1.95 2007-03-29 17:54:47 thorstenr Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -575,7 +575,7 @@ $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Do you want to ena
 $LANG_CONF["referenceURL"] = array(0 => "input", 1 => "Base URL for link verification (e.g.: http://www.example.org/faq)");
 $LANG_CONF["URLValidateInterval"] = array(0 => "input", 1 => "Interval between AJAX link verification (in seconds)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Disable visibility of new questions?");
-$LANG_CONF['permLevel'] = array(0 => "input", 1 => "Permission level");
+$LANG_CONF['main.permLevel'] = array(0 => "input", 1 => "Permission level");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "as new main category";
 $PMF_LANG["ad_categ_paste_error"] = "Moving this category isn't possible.";

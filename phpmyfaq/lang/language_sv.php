@@ -781,7 +781,7 @@ $PMF_LANG['ad_linkcheck_feedback_url-noscript'] = 'Inget script';
 
 // added v2.0.0 - 2006-09-02 by Thomas
 $PMF_LANG['msg_related_articles'] = 'Relaterade poster';
-$LANG_CONF['numRelatedArticles'] = array(0 => "input", 1 => "Antal relaterade poster");
+$LANG_CONF['records.numberOfRelatedArticles'] = array(0 => "input", 1 => "Antal relaterade poster");
 
 // added v2.0.0 - 2006-09-09 by Rudi
 $PMF_LANG['ad_categ_trans_1'] = 'Översätt';

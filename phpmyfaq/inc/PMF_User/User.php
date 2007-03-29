@@ -157,7 +157,7 @@ class PMF_User
      * @var string
      */
     var $_encrypted_password = '';
-    
+
     /**
      * Default Authentication properties
      *
@@ -449,7 +449,7 @@ class PMF_User
         }
         if (!$success)
             return false;
-        
+
         return $this->getUserByLogin($login, false);
     }
 
@@ -621,7 +621,7 @@ class PMF_User
             // or make a new $perm object
             // check config for permission level
             global $PMF_CONF;
-            $permLevel = isset($PMF_CONF['permLevel']) && ('' != $PMF_CONF['permLevel']) ? $PMF_CONF['permLevel'] : 'basic';
+            $permLevel = isset($PMF_CONF['main.permLevel']) && ('' != $PMF_CONF['main.permLevel']) ? $PMF_CONF['main.permLevel'] : 'basic';
             $perm = PMF_Perm::selectPerm($permLevel);
             $perm->addDb($this->_db);
             if (!$this->addPerm($perm))

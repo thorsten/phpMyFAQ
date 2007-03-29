@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.64 2007-03-29 17:49:52 thorstenr Exp $
+* $Id: language_it.php,v 1.65 2007-03-29 17:54:47 thorstenr Exp $
 *
 * Italian language file
 *
@@ -575,7 +575,7 @@ $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Attivare il suppor
 $LANG_CONF["referenceURL"] = array(0 => "input", 1 => "<em>Base URL</em> dell'installazione di phpMyFAQ, es: http://www.example.org/faq (&egrave; necessaria per la verifica dei links)");
 $LANG_CONF["URLValidateInterval"] = array(0 => "input", 1 => "Intervallo della verifica asincrona dei links (in secondi)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Disabilitare la visibilit&agrave; delle domande appena inserite?");
-$LANG_CONF['permLevel'] = array(0 => "input", 1 => "Configurazione della Permessistica");
+$LANG_CONF['main.permLevel'] = array(0 => "input", 1 => "Configurazione della Permessistica");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "come nuova categoria principale";
 $PMF_LANG["ad_categ_paste_error"] = "Non &egrave; possibile spostare questa categoria.";
