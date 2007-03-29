@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: header.php,v 1.41 2007-03-29 19:31:53 thorstenr Exp $
+ * $Id: header.php,v 1.42 2007-03-29 20:06:20 thorstenr Exp $
  *
  * Header of the admin area
  *
@@ -79,7 +79,7 @@ if (isset($_action)) {
     </div>
 <?php } ?>
     <div id="sessionexpiration">
-        <label for="session"><?php print $PMF_LANG['ad_session_expiration']; ?></label>
+        <label for="sessioncounter"><?php print $PMF_LANG['ad_session_expiration']; ?></label>
         <div id="sessioncounter">Loading...</div>
     </div>
 <?php } ?>
