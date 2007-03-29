@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.99 2007-03-29 17:49:51 thorstenr Exp $
+ * $Id: Faq.php,v 1.100 2007-03-29 20:49:38 thorstenr Exp $
  *
  * The main FAQ class
  *
@@ -220,8 +220,8 @@ class PMF_Faq
             $now,
             $category_id,
             $this->language,
-            $orderby,
-            $sortby);
+            $this->db->escape_string($orderby),
+            $this->db->escape_string($sortby));
 
         $result = $this->db->query($query);
 
