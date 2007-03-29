@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.71 2007-03-29 18:47:37 thorstenr Exp $
+* $Id: language_it.php,v 1.72 2007-03-29 19:03:22 thorstenr Exp $
 *
 * Italian language file
 *
@@ -564,7 +564,7 @@ $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Testo per la p
 $LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Testo per la pagina <em>Invia ad un amico</em>");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Massima dimensione per gli allegati, in Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Mostra il link agli allegati");
-$LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "Abilito il tracciamento per le attivit&agrave; dell'Utente?");
+$LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "Abilito il tracciamento per le attivit&agrave; dell'Utente?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Abilito il tracciamento per le attivit&agrave; di Amministrazione?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Vuoi controllare l'IP quando verifico l'<em>UIN</em> in <em>admin.php</em>?");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Numero di elementi visualizzati per pagina");

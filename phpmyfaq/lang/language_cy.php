@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_cy.php,v 1.22 2007-03-29 18:47:37 thorstenr Exp $
+* $Id: language_cy.php,v 1.23 2007-03-29 19:03:22 thorstenr Exp $
 *
 * The Cymraeg language file - Welsh (Cymraeg) translation
 *
@@ -560,7 +560,7 @@ $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => " Testun hawlfraint ar
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => " Testun ar gyfer y dudalen anfonatffrind");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => " Uchafswm maint ar gyfer atodiadau mewn Beitiau(max. ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => " Cysylltu’r atodiadau islaw’r cofnodion?");
-$LANG_CONF["tracking"] = array(0 => "checkbox", 1 => " Defnyddio tracio?");
+$LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => " Defnyddio tracio?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => " defnyddio cofnod gweinyddol?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => " Ydych chi am i’r IP gael ei wirio wrth wirio UINs yn admin.php?");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => " Nifer y pynciau a ddangosir fesul tudalen");

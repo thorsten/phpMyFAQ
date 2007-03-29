@@ -563,7 +563,7 @@ $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "זכויות יוצרים לעמוד ה
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "טקסט לעמוד שלח לחבר");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "גודל מקסימלי של קובץ מצורף ב- Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "קשר לקובץ המצורף הנל את הרשומה?");
-$LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "צור מעקב?");
+$LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "צור מעקב?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "עשה ?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "האם הנך רוצה שהIP יבדק כאשר נבדקים פרטי המשתמשים בadmin.php?");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "מספר עמודים מוצגים בכל עמוד");

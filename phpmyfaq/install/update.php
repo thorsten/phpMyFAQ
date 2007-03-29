@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.133 2007-03-29 18:47:37 thorstenr Exp $
+* $Id: update.php,v 1.134 2007-03-29 19:03:21 thorstenr Exp $
 *
 * Main update script
 *
@@ -1360,6 +1360,7 @@ if ($step == 5) {
         $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'spam.enableCatpchaCode' WHERE config_name = 'spamEnableCatpchaCode'";
         $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'spam.enableSafeEmail' WHERE config_name = 'spamEnableSafeEmail'";
         $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.titleFAQ' WHERE config_name = 'title'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.enableUserTracking' WHERE config_name = 'tracking'";
 
     }
 

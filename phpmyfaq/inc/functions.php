@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.182 2007-03-29 18:47:40 thorstenr Exp $
+ * $Id: functions.php,v 1.183 2007-03-29 19:03:23 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -695,7 +695,7 @@ function Tracking($action, $id = 0)
 {
     global $db, $PMF_CONF, $sid, $user;
 
-    if (isset($PMF_CONF["tracking"])) {
+    if (isset($PMF_CONF["main.enableUserTracking"])) {
         if (isset($_GET["sid"])) {
             $sid = $_GET["sid"];
         }
@@ -821,7 +821,7 @@ function getUsersOnline($activityTimeWindow = 300)
     global $db, $PMF_CONF;
     $users = array(0 ,0);
 
-    if (isset($PMF_CONF['tracking']) && $PMF_CONF['tracking']) {
+    if (isset($PMF_CONF['main.enableUserTracking']) && $PMF_CONF['main.enableUserTracking']) {
         $timeNow = (time() - $activityTimeWindow);
         // Count all sids within the time window
         // TODO: add a new field in faqsessions in order to find out only sids of anonymous users

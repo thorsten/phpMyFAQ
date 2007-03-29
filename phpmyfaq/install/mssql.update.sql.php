@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: mssql.update.sql.php,v 1.33 2007-03-29 18:47:37 thorstenr Exp $
+ * $Id: mssql.update.sql.php,v 1.34 2007-03-29 19:03:22 thorstenr Exp $
  *
  * CREATE TABLE instruction for MS SQL Server database
  *
@@ -189,7 +189,7 @@ $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('spam.checkBannedWords', 
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('spam.enableCatpchaCode', 'true')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('spam.enableSafeEmail', 'true')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.titleFAQ', 'phpMyFAQ Codename \"Prometheus\"')";
-$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('tracking', 'true')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.enableUserTracking', 'true')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('URLValidateInterval', '86400')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('version', '".NEWVERSION."')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('records.numberOfRelatedArticles', '5')";

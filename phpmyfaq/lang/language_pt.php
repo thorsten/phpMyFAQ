@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_pt.php,v 1.28 2007-03-29 18:47:38 thorstenr Exp $
+ * $Id: language_pt.php,v 1.29 2007-03-29 19:03:22 thorstenr Exp $
  *
  * Portuguese language file
  *
@@ -564,7 +564,7 @@ $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Texto de Copyright pa
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Texto para p&aacute;gina send2friend");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Tamanho m&aacute;ximo para anexos em Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Colocar hiperliga&ccedil;&otilde;es para anexos abaixo das entradas?");
-$LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "usar Tracking?");
+$LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "usar Tracking?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "usar Adminlog?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Conferir o IP ao verificar o UINs no admin.php?");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "N&uacute;mero de t&oacute;picos mostrados por p&aacute;gina");

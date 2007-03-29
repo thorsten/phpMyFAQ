@@ -563,7 +563,7 @@ $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Text på lägg-till-frå
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Text för skicka-till-en-vän-sidan");
 $LANG_CONF["attmax"] = array(0 => "input", 1 => "Maximal storlek på bilagor (max. ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Länka bilagorna under frågorna?");
-$LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "Spårning?");
+$LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "Spårning?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Adminlogg?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Kolla IP:n när UIN kollas i admin.php?");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Antal visade rubriker per sida");

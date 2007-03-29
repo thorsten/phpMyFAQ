@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_id.php,v 1.25 2007-03-29 18:47:38 thorstenr Exp $
+ * $Id: language_id.php,v 1.26 2007-03-29 19:03:22 thorstenr Exp $
  *
  * Indonesian language file
  *
@@ -647,8 +647,7 @@ pengiriman ke teman");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Ukuran maksimum file berkas dalam Bytes (maksimum. ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Sediakan hubungkan ke
 file berkas di bawah materi?");
-$LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "Aktifkan
-penelusuran?");
+$LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "Aktifkan penelusuran?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Aktifkan catatan
 administrasi?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Apakah anda ingin pemeriksaan terhadap alamat IP ketika pemeriksaan terhadap UIN dilakukan di admin.php?");

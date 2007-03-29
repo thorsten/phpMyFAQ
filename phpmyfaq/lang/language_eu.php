@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_eu.php,v 1.22 2007-03-29 18:47:38 thorstenr Exp $
+* $Id: language_eu.php,v 1.23 2007-03-29 19:03:22 thorstenr Exp $
 *
 * Euskera language file
 *
@@ -564,7 +564,7 @@ $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Konfirmazio orriko co
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "<em>Lagun bati bidali</em> orrirako testua");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Eranskinetako gehieneko tamaina byte-etan (max. ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Sarrera azpian eranskinei estekaren bat ipini?");
-$LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "Monitorizazioa erabili?");
+$LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "Monitorizazioa erabili?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Adminlog-a erabili?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Nahi al duzu IP-ak aztertzea UIN-ak egiaztatzean?");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Erakutsitako item-en kopurua orriko");

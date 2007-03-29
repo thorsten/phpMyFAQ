@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_es.php,v 1.27 2007-03-29 18:47:37 thorstenr Exp $
+ * $Id: language_es.php,v 1.28 2007-03-29 19:03:22 thorstenr Exp $
  *
  * Spanish language file
  *
@@ -564,7 +564,7 @@ $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Texto del copyright d
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Texto para la página de enviar a un amigo");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Tamaño máximo para los adjuntos en Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "¿Poner un link a los adjuntos bajo las entradas?");
-$LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "¿Usar monitorización?");
+$LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "¿Usar monitorización?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "¿Usar el Adminlog?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "¿Quieres que las IP sean chequeadas cuando se comprueben las UINs");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Number of displayed topics per page");

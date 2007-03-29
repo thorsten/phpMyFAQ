@@ -562,7 +562,7 @@ $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "시작페이지의 저작권 �
 $LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "친구에게 보내기 페이지를 위한 텍스트");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "최대 첨부 파일 사이즈(Bytes) (최대 ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "내용의 아래에 첨부파일 링크걸기");
-$LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "추적기능 사용 여부");
+$LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "추적기능 사용 여부");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "관리로그 사용 여부");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "admin.php에서 UINs를 체크할 때 IP주소를 체크할지의 여부");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "페이지당 표시할 글의 수");
