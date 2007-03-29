@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: index.php,v 1.103 2007-03-29 19:03:24 thorstenr Exp $
+ * $Id: index.php,v 1.104 2007-03-29 19:31:52 thorstenr Exp $
  *
  * This is the main public frontend page of phpMyFAQ. It detects the browser's
  * language, gets and sets all cookie, post and get informations and includes
@@ -231,7 +231,7 @@ if (isset($_REQUEST["id"]) && is_numeric($_REQUEST["id"]) == true) {
     $keywords = ' '.$faq->getRecordKeywords($id);
 } else {
     $id = '';
-    $title = ' -  powered by phpMyFAQ '.$faqconfig->get('version');
+    $title = ' -  powered by phpMyFAQ '.$faqconfig->get('main.currentVersion');
     $keywords = '';
 }
 
@@ -240,7 +240,7 @@ if (isset($_REQUEST["id"]) && is_numeric($_REQUEST["id"]) == true) {
 //
 if (isset($_REQUEST['solution_id']) && is_numeric($_REQUEST['solution_id']) === true) {
     $solution_id = $_REQUEST['solution_id'];
-    $title = ' -  powered by phpMyFAQ '.$faqconfig->get('version');
+    $title = ' -  powered by phpMyFAQ '.$faqconfig->get('main.currentVersion');
     $keywords = '';
     $a = $faq->getIdFromSolutionId($solution_id);
     if (is_array($a)) {
@@ -335,7 +335,7 @@ $totUsersOnLine = $usersOnLine[0] + $usersOnLine[1];
 $main_template_vars = array(
     'title'             => $faqconfig->get('title').$title,
     'baseHref'          => PMF_Link::getSystemUri('index.php'),
-    'version'           => $faqconfig->get('version'),
+    'version'           => $faqconfig->get('main.currentVersion'),
     'header'            => str_replace('"', '', $faqconfig->get('title')),
     'metaTitle'         => str_replace('"', '', $faqconfig->get('title')),
     'metaDescription'   => $faqconfig->get('main.metaDescription'),
@@ -355,7 +355,7 @@ $main_template_vars = array(
                                 sprintf($PMF_LANG['msgUsersOnline'],
                                 $usersOnLine[0],
                                 $usersOnLine[1]),
-    'copyright'         => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> '.$faqconfig->get('version'));
+    'copyright'         => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> '.$faqconfig->get('main.currentVersion'));
 
 if ($faqconfig->get('main.enableRewriteRules')) {
     $links_template_vars = array(

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: contact.php,v 1.15 2007-03-29 15:57:51 thorstenr Exp $
+* $Id: contact.php,v 1.16 2007-03-29 19:31:52 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-09-16
@@ -42,7 +42,7 @@ $tpl->processTemplate ('writeContent', array(
     'defaultContentName'    => getFullUserName(),
     'msgMessage'            => $PMF_LANG['msgMessage'],
     'msgS2FButton'          => $PMF_LANG['msgS2FButton'],
-    'version'               => $faqconfig->get('version'),
+    'version'               => $faqconfig->get('main.currentVersion'),
     'captchaFieldset'       => printCaptchaFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('contact'), $captcha->caplength)));
 
 $tpl->includeTemplate('writeContent', 'index');
