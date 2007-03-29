@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: session.keepalive.php,v 1.6 2007-03-29 18:01:26 thorstenr Exp $
+ * $Id: session.keepalive.php,v 1.7 2007-03-29 20:22:31 thorstenr Exp $
  *
  * A dummy page used within an IFRAME for warning the user about his next
  * session expiration and to give him the contextual possibility for
@@ -53,7 +53,7 @@ $refreshTime = (PMF_SESSION_ID_EXPIRES - PMF_SESSION_ID_REFRESH) * 60;
 if (isset($user) && ($refreshTime > 0)) {
 ?>
         <script type="text/javascript">
-        <!--
+        /*<![CDATA[*/ <!--
             function _PMFSessionTimeoutWarning()
             {
                 if (window.confirm('<?php printf($PMF_LANG['ad_session_expiring'], PMF_SESSION_ID_REFRESH); ?>')) {
@@ -82,7 +82,7 @@ if (isset($user) && ($refreshTime > 0)) {
             var _PMFSessionTimeoutSeconds = <?php print PMF_SESSION_ID_EXPIRES?> * 60;
             window.setTimeout("_PMFSessionTimeoutWarning()", <?php print $refreshTime; ?> * 1000);
             window.setTimeout("_PMFSessionTimeoutClock()", 500);
-        //-->
+        // --> /*]]>*/
         </script>
 <?php
 }

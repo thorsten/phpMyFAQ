@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id: stat.ratings.php,v 1.17 2007-03-29 15:57:54 thorstenr Exp $
+ * $Id: stat.ratings.php,v 1.18 2007-03-29 20:26:14 thorstenr Exp $
  *
  * The page with the ratings of the votings
  *
  * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since        2003-02-24
- * @copyright    (c) 2001-2007 phpMyFAQ Team
+ * @copyright    (c) 2003-2007 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -125,12 +125,9 @@ if ($permission["viewlog"]) {
 <?php
     } else {
 ?>
-    </tbody>
-    <tfoot>
-        <tr>
-            <td colspan="5" class="list"><?php print $PMF_LANG["ad_rs_no"] ?></td>
-        </tr>
-    </tfoot>
+    <tr>
+        <td colspan="5" class="list"><?php print $PMF_LANG["ad_rs_no"] ?></td>
+    </tr>
 <?php
     }
 ?>

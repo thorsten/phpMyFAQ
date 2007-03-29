@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: footer.php,v 1.25 2007-03-29 19:31:53 thorstenr Exp $
+* $Id: footer.php,v 1.26 2007-03-29 20:22:31 thorstenr Exp $
 *
 * Footer of the admin area
 *
@@ -39,7 +39,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 <?php
 if (isset($auth)) {
 ?>
-<iframe id="keepPMFSessionAlive" src="session.keepalive.php<?php print $linkext; ?>&amp;lang=<?php print $LANGCODE; ?>" frameBorder="no" width="0" height="0"></iframe>
+<iframe id="keepPMFSessionAlive" src="session.keepalive.php<?php print $linkext; ?>&amp;lang=<?php print $LANGCODE; ?>" style="border: none;" width="0" height="0"></iframe>
 
 <?php
 }
@@ -57,7 +57,7 @@ if (    isset($auth) &&
 ?>
 <!-- tinyMCE -->
 <script type="text/javascript">
-<!--
+/*<![CDATA[*/ <!--
     tinyMCE.init({
         mode : "exact",
         elements : "content",
@@ -113,12 +113,12 @@ if (    isset($auth) &&
 
         window.open(connector, "tinyfck", "modal,width=600,height=400");
     }
-//-->
+// --> /*]]>*/
 </script>
 <!-- /tinyMCE -->
 <!-- tinyMCE PMFIntFaqLink Plugin -->
 <script type="text/javascript">
-<!--
+/*<![CDATA[*/ <!--
     function insertFaqLink() {
         var sHTML = document.forms[0].intfaqlink.value;
         aParams = sHTML.split('_');
@@ -189,7 +189,7 @@ if (    isset($auth) &&
 
     // Adds the plugin class to the list of available TinyMCE plugins
     tinyMCE.addPlugin("PMFIntFaqLink", TinyMCE_PMFIntFaqLinkPlugin);
-//-->
+// --> /*]]>*/
 </script>
 <!-- /TinyMCE PMFIntFaqLink Plugin -->
 <?php

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: header.php,v 1.42 2007-03-29 20:06:20 thorstenr Exp $
+ * $Id: header.php,v 1.43 2007-03-29 20:22:31 thorstenr Exp $
  *
  * Header of the admin area
  *
@@ -174,6 +174,9 @@ if (isset($_action)) {
         case 'linkconfig':
             addMenuEntry('editconfig',                           'config',           'ad_menu_editconfig');
             addMenuEntry('editconfig,editbt,delbt',              'linkconfig',       'ad_menu_linkconfig');
+            break;
+        default:
+            print '<li></li>';
             break;
     }
 ?>
