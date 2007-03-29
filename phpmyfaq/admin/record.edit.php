@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.edit.php,v 1.62 2007-03-29 15:57:53 thorstenr Exp $
+ * $Id: record.edit.php,v 1.63 2007-03-29 20:55:39 thorstenr Exp $
  *
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since       2003-02-23
@@ -255,16 +255,28 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     if (isset($faqData['active']) && $faqData['active'] == 'yes') {
         $suf = ' checked="checked"';
         $sul = null;
+    } elseif ($faqconfig->get('records.defaultActivation')) {
+        $suf = ' checked="checked"';
+        $sul = null;
     } else {
         $suf = null;
         $sul = ' checked="checked"';
     }
 ?>
     <label class="left" for="active"><?php print $PMF_LANG["ad_entry_active"]; ?></label>
-    <input type="radio" name="active" class="active" value="yes"<?php if (isset($suf)) { print $suf; } ?> /> <?php print $PMF_LANG["ad_gen_yes"]; ?> <input type="radio" name="active" class="active" value="no"<?php if (isset($sul)) { print $sul; } ?> /> <?php print $PMF_LANG["ad_gen_no"]; ?><br />
+    <input type="radio" name="active" class="active" value="yes"<?php if (isset($suf)) { print $suf; } ?> /> <?php print $PMF_LANG['ad_gen_yes']; ?> <input type="radio" name="active" class="active" value="no"<?php if (isset($sul)) { print $sul; } ?> /> <?php print $PMF_LANG['ad_gen_no']; ?><br />
 
+<?php
+    if (isset($faqData['comment']) && $faqData['comment'] == 'y') {
+        $suf = ' checked="checked"';
+    } elseif ($faqconfig->get('records.defaultAllowComments')) {
+        $suf = ' checked="checked"';
+    } else {
+        $suf = null;
+    }
+?>
     <label class="left" for="comment"><?php print $PMF_LANG["ad_entry_allowComments"]; ?></label>
-    <input type="checkbox" name="comment" id="comment" value="y"<?php if (isset($faqData['comment']) && $faqData['comment'] == "y") { print " checked"; } ?> /> <?php print $PMF_LANG["ad_gen_yes"]; ?><br />
+    <input type="checkbox" name="comment" id="comment" value="y"<?php if (isset($suf)) { print $suf; } ?> /> <?php print $PMF_LANG['ad_gen_yes']; ?><br />
 <?php
     if ($url_variables != 'insertentry') {
         $rev_yes = ' checked="checked"';
