@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.73 2007-03-29 18:37:08 thorstenr Exp $
+ * $Id: language_de.php,v 1.74 2007-03-29 18:47:37 thorstenr Exp $
  *
  * German language file
  *
@@ -131,12 +131,12 @@ $PMF_LANG["msgNews"] = " News";
 $PMF_LANG["msgTopTen"] = "TOP 10";
 $PMF_LANG["msgHomeThereAre"] = "Es sind ";
 $PMF_LANG["msgHomeArticlesOnline"] = " Artikel online";
-$PMF_LANG["msgNoNews"] = "Es gibt derzeit keine ".$PMF_CONF["title"]."-News.";
+$PMF_LANG["msgNoNews"] = "Es gibt derzeit keine ".$PMF_CONF['main.titleFAQ']."-News.";
 $PMF_LANG["msgLatestArticles"] = "Die fünf neuesten Artikel:";
 
 // E-Mailbenachrichtigung
-$PMF_LANG["msgMailThanks"] = "Vielen Dank fuer den Vorschlag zur ".$PMF_CONF["title"];
-$PMF_LANG["msgMailCheck"] = "Neuer Eintrag fuer die ".$PMF_CONF["title"]." vorhanden!\nBitte im Adminbereich der FAQ checken!";
+$PMF_LANG["msgMailThanks"] = "Vielen Dank fuer den Vorschlag zur ".$PMF_CONF['main.titleFAQ'];
+$PMF_LANG["msgMailCheck"] = "Neuer Eintrag fuer die ".$PMF_CONF['main.titleFAQ']." vorhanden!\nBitte im Adminbereich der FAQ checken!";
 $PMF_LANG["msgMailContact"] = "Die Anfrage wurde an den Administrator versendet!";
 
 // Fehlermeldungen
@@ -552,7 +552,7 @@ $PMF_LANG["ad_entry_fontsize"] = "Schriftgröße: ";
 // added v1.4.0 - 2003-12-04 by Thorsten
 $LANG_CONF['main.language'] = array(0 => "select", 1 => "Sprachdatei");
 $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Automatische Spracherkennung");
-$LANG_CONF["title"] = array(0 => "input", 1 => "Titel der FAQ");
+$LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => "Titel der FAQ");
 $LANG_CONF["version"] = array(0 => "print", 1 => "Version der FAQ");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Beschreibung der Seite");
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Keywords für Suchmaschinen");

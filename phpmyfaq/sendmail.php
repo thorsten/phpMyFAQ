@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: sendmail.php,v 1.13 2007-03-10 22:07:34 thorstenr Exp $
+ * $Id: sendmail.php,v 1.14 2007-03-29 18:47:40 thorstenr Exp $
  *
  * The 'send an email from the contact page' page
  *
@@ -38,7 +38,7 @@ if (    isset($_POST['name']) && $_POST['name'] != ''
     list($user, $host) = explode("@", strip_tags($_POST['email']));
     $question          = strip_tags($_POST['question']);
     $sender            = $IDN->encode(strip_tags($_POST['email']));
-    $subject           = 'Feedback: '.$PMF_CONF['title'];
+    $subject           = 'Feedback: '.$PMF_CONF['main.titleFAQ'];
     $name              = strip_tags($_POST['name']);
 
     if (function_exists('mb_encode_mimeheader')) {

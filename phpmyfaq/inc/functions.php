@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.181 2007-03-29 18:37:09 thorstenr Exp $
+ * $Id: functions.php,v 1.182 2007-03-29 18:47:40 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -1132,7 +1132,7 @@ function generateXHTMLFile()
     /* get main template, set main variables */
     $tpl->processTemplate ('html', array(
                 'title'             => PMF_htmlentities($PMF_CONF['title'], ENT_QUOTES, $PMF_LANG['metaCharset']),
-                'header'            => PMF_htmlentities($PMF_CONF['title'], ENT_QUOTES, $PMF_LANG['metaCharset']),
+                'header'            => PMF_htmlentities($PMF_CONF['main.titleFAQ'], ENT_QUOTES, $PMF_LANG['metaCharset']),
                 'metaCharset'       => PMF_htmlentities($PMF_LANG['metaCharset'], ENT_QUOTES, $PMF_LANG['metaCharset']),
                 'metaDescription'   => PMF_htmlentities($PMF_CONF['main.metaDescription'], ENT_QUOTES, $PMF_LANG['metaCharset']),
                 'metaKeywords'      => PMF_htmlentities($PMF_CONF['main.metaKeywords'], ENT_QUOTES, $PMF_LANG['metaCharset']),
@@ -1219,7 +1219,7 @@ function generateDocBookExport()
 <!DOCTYPE book PUBLIC "-//Norman Walsh//DTD DocBk XML V3.1.4//EN" "http://nwalsh.com/docbook/xml/3.1.4/db3xml.dtd">
 <book id="phpmyfaq" lang="'.$PMF_LANG['metaLanguage'].'">
     <bookinfo>
-        <title>'.htmlspecialchars($PMF_CONF['title']).'</title>
+        <title>'.htmlspecialchars($PMF_CONF['main.titleFAQ']).'</title>
         <author>
             <firstname></firstname>
             <surname></surname>

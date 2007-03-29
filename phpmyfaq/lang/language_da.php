@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_da.php,v 1.23 2007-03-29 12:44:25 thorstenr Exp $
+* $Id: language_da.php,v 1.24 2007-03-29 18:47:38 thorstenr Exp $
 *
 * Danish language file
 *
@@ -551,7 +551,7 @@ $PMF_LANG["ad_entry_fontsize"] = "Skrifttype st&oslash;rrelse: ";
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias
 $LANG_CONF['main.language'] = array(0 => "select", 1 => "Language-File");
 $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Enable automatic content negotiation");
-$LANG_CONF["title"] = array(0 => "input", 1 => "Title of the FAQ");
+$LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => "Title of the FAQ");
 $LANG_CONF["version"] = array(0 => "print", 1 => "FAQ Version");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Describtion of the Page");
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Keywords for Spiders");

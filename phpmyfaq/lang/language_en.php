@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.100 2007-03-29 18:37:08 thorstenr Exp $
+* $Id: language_en.php,v 1.101 2007-03-29 18:47:37 thorstenr Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -554,7 +554,7 @@ $PMF_LANG["ad_entry_fontsize"] = "Font size: ";
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias
 $LANG_CONF['main.language'] = array(0 => "select", 1 => "Language-File");
 $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Enable automatic content negotiation");
-$LANG_CONF["title"] = array(0 => "input", 1 => "Title of the FAQ");
+$LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => "Title of the FAQ");
 $LANG_CONF["version"] = array(0 => "print", 1 => "FAQ Version");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Describtion of the Page");
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Keywords for Spiders");

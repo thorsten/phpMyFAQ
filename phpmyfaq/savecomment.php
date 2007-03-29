@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: savecomment.php,v 1.21 2007-03-10 22:07:34 thorstenr Exp $
+* $Id: savecomment.php,v 1.22 2007-03-29 18:47:40 thorstenr Exp $
 *
 * Saves the posted comment
 *
@@ -107,9 +107,9 @@ if (    isset($_POST['user']) && $_POST['user'] != ''
         }
         // Send the email
         if (ini_get('safe_mode')) {
-            mail($IDN->encode($emailTo), $PMF_CONF['title'], $body, implode("\r\n", $additional_header));
+            mail($IDN->encode($emailTo), $PMF_CONF['main.titleFAQ'], $body, implode("\r\n", $additional_header));
         } else {
-            mail($IDN->encode($emailTo), $PMF_CONF['title'], $body, implode("\r\n", $additional_header), '-f'.$IDN->encode($commentData['usermail']));
+            mail($IDN->encode($emailTo), $PMF_CONF['main.titleFAQ'], $body, implode("\r\n", $additional_header), '-f'.$IDN->encode($commentData['usermail']));
         }
 
         $tpl->processTemplate ("writeContent", array(

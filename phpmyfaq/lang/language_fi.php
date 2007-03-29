@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_fi.php,v 1.26 2007-03-29 18:37:09 thorstenr Exp $
+ * $Id: language_fi.php,v 1.27 2007-03-29 18:47:37 thorstenr Exp $
  *
  * Finnish language file
  *
@@ -552,7 +552,7 @@ $PMF_LANG["ad_entry_fontsize"] = "Tekstin koko: ";
 /* added v1.4.0 - 2003-12-04 by Thorsten / Mathias - Translation of main.metaKeywords, mod_rewrite & main.ldapSupport msg by Matti Kröger*/
 $LANG_CONF['main.language'] = array(0 => "select", 1 => "Kieli-Tiedosto");
 $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Salli automaattinen sisällön kätteleminen");
-$LANG_CONF["title"] = array(0 => "input", 1 => "FAQ Otsikko");
+$LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => "FAQ Otsikko");
 $LANG_CONF["version"] = array(0 => "print", 1 => "FAQ Versio");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Sivun Kuvaus");
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Avainsanat hakukoneille");

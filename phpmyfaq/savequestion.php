@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: savequestion.php,v 1.32 2007-03-28 08:30:41 thorstenr Exp $
+* $Id: savequestion.php,v 1.33 2007-03-29 18:47:40 thorstenr Exp $
 *
 * @author           Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author           David Saez Padros <david@ols.es>
@@ -93,12 +93,12 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
             }
             if (ini_get('safe_mode')) {
                 mail($IDN->encode($faqconfig->get('main.administrationMail')),
-                    $PMF_CONF['title'],
+                    $PMF_CONF['main.titleFAQ'],
                     $body,
                     implode("\r\n", $additional_header));
             } else {
                 mail($IDN->encode($faqconfig->get('main.administrationMail')),
-                    $PMF_CONF['title'],
+                    $PMF_CONF['main.titleFAQ'],
                     $body,
                     implode("\r\n", $additional_header),
                     '-f'.$questionData['ask_usermail']);

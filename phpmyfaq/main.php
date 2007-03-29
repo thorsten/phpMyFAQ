@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: main.php,v 1.20 2007-03-29 16:04:44 thorstenr Exp $
+ * $Id: main.php,v 1.21 2007-03-29 18:47:40 thorstenr Exp $
  *
  * The main start page with the Top10 and the latest messages
  *
@@ -29,7 +29,7 @@ require_once('inc/News.php');
 $news = new PMF_News($db, $LANGCODE);
 
 $archived        = (isset($_GET['newsid']) && ('0' == $_GET['newsid']));
-$writeNewsHeader = PMF_htmlentities($PMF_CONF['title'], ENT_QUOTES, $PMF_LANG['metaCharset']);
+$writeNewsHeader = PMF_htmlentities($PMF_CONF['main.titleFAQ'], ENT_QUOTES, $PMF_LANG['metaCharset']);
 
 if ($archived) {
     $writeNewsHeader .= $PMF_LANG['newsArchive'];

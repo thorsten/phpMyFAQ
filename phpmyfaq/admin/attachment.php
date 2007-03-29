@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: attachment.php,v 1.34 2007-03-29 18:01:26 thorstenr Exp $
+* $Id: attachment.php,v 1.35 2007-03-29 18:47:40 thorstenr Exp $
 *
 * Select an attachment and save it or create the SQL backup files
 *
@@ -90,7 +90,7 @@ if (!isset($_REQUEST["action"]) || isset($_REQUEST["save"])) {
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php print $PMF_LANG["metaLanguage"]; ?>" lang="<?php print $PMF_LANG["metaLanguage"]; ?>">
 <head>
-    <title><?php print PMF_htmlentities($PMF_CONF["title"], ENT_QUOTES, $PMF_LANG['metaCharset']); ?> - powered by phpMyFAQ</title>
+    <title><?php print PMF_htmlentities($PMF_CONF['main.titleFAQ'], ENT_QUOTES, $PMF_LANG['metaCharset']); ?> - powered by phpMyFAQ</title>
     <meta name="copyright" content="(c) 2001-2007 phpMyFAQ Team" />
     <meta http-equiv="Content-Type" content="text/html; charset=<?php print $PMF_LANG["metaCharset"]; ?>" />
 

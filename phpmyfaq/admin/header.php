@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: header.php,v 1.39 2007-03-29 15:57:53 thorstenr Exp $
+ * $Id: header.php,v 1.40 2007-03-29 18:47:40 thorstenr Exp $
  *
  * Header of the admin area
  *
@@ -35,7 +35,7 @@ header("Vary: Negotiate,Accept");
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php print $PMF_LANG["metaLanguage"]; ?>" lang="<?php print $PMF_LANG["metaLanguage"]; ?>">
 <head>
-    <title><?php print PMF_htmlentities($PMF_CONF["title"], ENT_QUOTES, $PMF_LANG['metaCharset']); ?> - powered by phpMyFAQ</title>
+    <title><?php print PMF_htmlentities($PMF_CONF['main.titleFAQ'], ENT_QUOTES, $PMF_LANG['metaCharset']); ?> - powered by phpMyFAQ</title>
     <meta name="copyright" content="(c) 2001-2007 phpMyFAQ Team" />
     <meta http-equiv="Content-Type" content="text/html; charset=<?php print $PMF_LANG["metaCharset"]; ?>" />
     <link rel="shortcut icon" href="../template/favicon.ico" type="image/x-icon" />

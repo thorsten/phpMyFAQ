@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: password.php,v 1.19 2007-03-29 18:01:26 thorstenr Exp $
+* $Id: password.php,v 1.20 2007-03-29 18:47:40 thorstenr Exp $
 *
 * Reset a forgotten password to a new one
 *
@@ -83,7 +83,7 @@ if (isset($_GET["action"]) && $_GET["action"] == "newpassword") {
                 }
                 $user->changePassword($newPassword);
                 $text = $PMF_LANG["lostpwd_text_1"]."\nUsername: ".$username."\nNew Password: ".$newPassword."\n\n".$PMF_LANG["lostpwd_text_2"];
-                mail($IDN->encode($email), $PMF_CONF["title"].": username / password request", $text, "From: ".$IDN->encode($PMF_CONF['main.administrationMail']));
+                mail($IDN->encode($email), $PMF_CONF['main.titleFAQ'].": username / password request", $text, "From: ".$IDN->encode($PMF_CONF['main.administrationMail']));
                 print $PMF_LANG["lostpwd_mail_okay"];
                 print "<p><img src=\"images/arrow.gif\" width=\"11\" height=\"11\" alt=\"".$PMF_LANG["ad"]."\" border=\"0\" /> <a href=\"index.php\" title=\"".$PMF_LANG["ad"]."\">".$PMF_LANG["ad"]."</a></p>";
             } else {
@@ -107,7 +107,7 @@ if (isset($_GET["action"]) && $_GET["action"] == "newpassword") {
         <input class="submit" style="margin-left: 190px;" type="submit" value="<?php print $PMF_LANG["msgNewContentSubmit"]; ?>" />
 
         <p><img src="images/arrow.gif" width="11" height="11" alt="<?php print $PMF_LANG["ad_sess_back"]; ?> FAQ" border="0" /> <a href="index.php" title="<?php print $PMF_LANG["ad_sess_back"]; ?> FAQ"><?php print $PMF_LANG["ad_sess_back"]; ?></a></p>
-        <p><img src="images/arrow.gif" width="11" height="11" alt="<?php print PMF_htmlentities($PMF_CONF["title"], ENT_QUOTES, $PMF_LANG['metaCharset']); ?> FAQ" border="0" /> <a href="../index.php" title="<?php print PMF_htmlentities($PMF_CONF["title"], ENT_QUOTES, $PMF_LANG['metaCharset']); ?> FAQ"><?php print PMF_htmlentities($PMF_CONF["title"], ENT_QUOTES, $PMF_LANG['metaCharset']); ?> FAQ</a></p>
+        <p><img src="images/arrow.gif" width="11" height="11" alt="<?php print PMF_htmlentities($PMF_CONF['main.titleFAQ'], ENT_QUOTES, $PMF_LANG['metaCharset']); ?> FAQ" border="0" /> <a href="../index.php" title="<?php print PMF_htmlentities($PMF_CONF['main.titleFAQ'], ENT_QUOTES, $PMF_LANG['metaCharset']); ?> FAQ"><?php print PMF_htmlentities($PMF_CONF['main.titleFAQ'], ENT_QUOTES, $PMF_LANG['metaCharset']); ?> FAQ</a></p>
 
     </fieldset>
     </form>

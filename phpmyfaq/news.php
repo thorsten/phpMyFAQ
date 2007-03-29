@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: news.php,v 1.12 2007-03-29 15:57:51 thorstenr Exp $
+* $Id: news.php,v 1.13 2007-03-29 18:47:40 thorstenr Exp $
 *
 * Shows the page with the news record and - when available - the user
 * comments
@@ -49,7 +49,7 @@ else {
 Tracking('news_view', $id);
 
 // Define the header of the page
-$writeNewsHeader = PMF_htmlentities($PMF_CONF['title'], ENT_QUOTES, $PMF_LANG['metaCharset']).$PMF_LANG['msgNews'];
+$writeNewsHeader = PMF_htmlentities($PMF_CONF['main.titleFAQ'], ENT_QUOTES, $PMF_LANG['metaCharset']).$PMF_LANG['msgNews'];
 $writeNewsRSS = '<a href="feed/news/rss.php" target="_blank"><img id="newsRSS" src="images/rss.png" width="28" height="16" alt="RSS" /></a>';
 
 // Get all data from the news record

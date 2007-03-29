@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: mysqli.update.sql.php,v 1.39 2007-03-29 18:37:08 thorstenr Exp $
+ * $Id: mysqli.update.sql.php,v 1.40 2007-03-29 18:47:37 thorstenr Exp $
  *
  * CREATE TABLE instruction for MySQL database - UPDATE STAGE from 1.x to 2.0.0
  *
@@ -192,7 +192,7 @@ $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.send2friendText', '
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('spam.checkBannedWords', 'true')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('spam.enableCatpchaCode', 'true')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('spam.enableSafeEmail', 'true')";
-$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('title', 'phpMyFAQ Codename \"Prometheus\"')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.titleFAQ', 'phpMyFAQ Codename \"Prometheus\"')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('tracking', 'true')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('URLValidateInterval', '86400')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('version', '".NEWVERSION."')";

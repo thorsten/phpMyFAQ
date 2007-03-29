@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_id.php,v 1.24 2007-03-29 12:44:26 thorstenr Exp $
+ * $Id: language_id.php,v 1.25 2007-03-29 18:47:38 thorstenr Exp $
  *
  * Indonesian language file
  *
@@ -631,7 +631,7 @@ $PMF_LANG["ad_entry_fontsize"] = "Ukuran huruf: ";
 $LANG_CONF['main.language'] = array(0 => "select", 1 => "Berkas-Bahasa");
 $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Aktifkan 'automatic
 content negotiation'");
-$LANG_CONF["title"] = array(0 => "input", 1 => "Judul FAQ");
+$LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => "Judul FAQ");
 $LANG_CONF["version"] = array(0 => "print", 1 => "Versi FAQ");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Penjelasan halaman");
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Kata kunci untuk

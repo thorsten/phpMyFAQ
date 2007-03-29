@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_es.php,v 1.26 2007-03-29 18:37:09 thorstenr Exp $
+ * $Id: language_es.php,v 1.27 2007-03-29 18:47:37 thorstenr Exp $
  *
  * Spanish language file
  *
@@ -553,7 +553,7 @@ $PMF_LANG["ad_entry_fontsize"] = "Font size: ";
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias
 $LANG_CONF['main.language'] = array(0 => "select", 1 => "Fichero de Idioma");
 $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Enable automatic content negotiation");
-$LANG_CONF["title"] = array(0 => "input", 1 => "Título del FAQ");
+$LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => "Título del FAQ");
 $LANG_CONF["version"] = array(0 => "print", 1 => "Versión FAQ");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Descripción de página");
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Palabras clave para Spiders");

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_zh.php,v 1.32 2007-03-29 18:37:09 thorstenr Exp $
+* $Id: language_zh.php,v 1.33 2007-03-29 18:47:37 thorstenr Exp $
 *
 * Chinese (simplified) language file
 *
@@ -553,7 +553,7 @@ $PMF_LANG["ad_entry_fontsize"] = "字体大�?: ";
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias
 $LANG_CONF['main.language'] = array(0 => "select", 1 => "选择语言");
 $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "自动选择系统语言");
-$LANG_CONF["title"] = array(0 => "input", 1 => "系统�??称");
+$LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => "系统�??称");
 $LANG_CONF["version"] = array(0 => "print", 1 => "程�?版本");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "页�?��??述");
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "用户Meta（网页自动�?�索程�?）的关键�?");

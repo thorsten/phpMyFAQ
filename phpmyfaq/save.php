@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: save.php,v 1.40 2007-03-20 18:02:43 thorstenr Exp $
+ * $Id: save.php,v 1.41 2007-03-29 18:47:40 thorstenr Exp $
  *
  * Saves a user FAQ record and sends an email to the user
  *
@@ -108,11 +108,11 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
             if ($IDN->encode($faqconfig->get('main.administrationMail')) != $catOwnerEmail) {
                 $additional_header[] = "Cc: ".$catOwnerEmail."\n";
             }
-            $subject = $PMF_CONF['title'];
+            $subject = $PMF_CONF['main.titleFAQ'];
             if (function_exists('mb_encode_mimeheader')) {
                 $subject = mb_encode_mimeheader($subject);
             }
-            $body = unhtmlentities($PMF_LANG['msgMailCheck'])."\n".$PMF_CONF['title'].": ".PMF_Link::getSystemUri('/index.php').'/admin';
+            $body = unhtmlentities($PMF_LANG['msgMailCheck'])."\n".$PMF_CONF['main.titleFAQ'].": ".PMF_Link::getSystemUri('/index.php').'/admin';
             if (ini_get('safe_mode')) {
                 mail($IDN->encode($faqconfig->get('main.administrationMail')),
                 $subject,
