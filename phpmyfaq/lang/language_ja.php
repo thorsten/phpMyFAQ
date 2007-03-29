@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_ja.php,v 1.33 2007-03-29 12:24:23 thorstenr Exp $
+ * $Id: language_ja.php,v 1.34 2007-03-29 12:44:26 thorstenr Exp $
  *
  * The Japanese language file
  *
@@ -568,7 +568,7 @@ $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "è¿½è·¡æ©Ÿèƒ½ã‚’ä½¿ç”¨ã?™ã‚
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "ç®¡ç?†ãƒ­ã‚°ã‚’ä½¿ç”¨ã?™ã‚‹");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "admin.php ã?§ UIN ã?®ãƒ?ã‚§ãƒƒã‚¯æ™‚ã?« IP ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’ç¢ºèª?ã?™ã‚‹ã?‹");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "ãƒšãƒ¼ã‚¸æ¯Žã?«è¡¨ç¤ºã?™ã‚‹ãƒˆãƒ”ãƒƒã‚¯æ•°");
-$LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "ã?ŠçŸ¥ã‚‰ã?›ã?®è¡¨ç¤ºæ•°");
+$LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "ã?ŠçŸ¥ã‚‰ã?›ã?®è¡¨ç¤ºæ•°");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "æ‹’å?¦ã?™ã‚‹ IP ã‚¢ãƒ‰ãƒ¬ã‚¹");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "mod_rewrite ã?®ã‚µãƒ?ãƒ¼ãƒˆã‚’ä½¿ç”¨ã?—ã?¾ã?™ã?‹? (ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ: ç„¡åŠ¹)");
 $LANG_CONF["referenceURL"] = array(0 => "input", 1 => "ãƒªãƒ³ã‚¯ç¢ºèª?ã?®åŸºæº– URL (ä¾‹: http://www.example.org/faq)");

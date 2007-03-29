@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_id.php,v 1.23 2007-03-29 12:24:23 thorstenr Exp $
+ * $Id: language_id.php,v 1.24 2007-03-29 12:44:26 thorstenr Exp $
  *
  * Indonesian language file
  *
@@ -654,7 +654,7 @@ administrasi?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Apakah anda ingin pemeriksaan terhadap alamat IP ketika pemeriksaan terhadap UIN dilakukan di admin.php?");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Jumlah materi yang
 ditampilkan per halaman");
-$LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Jumlah kabar yang
+$LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Jumlah kabar yang
 ditampilkan");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Larang IP berikut");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Aktifkan dukungan untuk mod_rewrite? (awal: tidak aktif)");

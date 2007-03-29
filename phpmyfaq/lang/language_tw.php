@@ -565,7 +565,7 @@ $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "啟用跟蹤？");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "啟用管�?�員日誌？");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "你希望admin.php在檢查UIN的時候也檢查IP�?�?�嗎？");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "�?�?顯示主題數目");
-$LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "新文章數�?");
+$LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "新文章數�?");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "�?止這些IP�?�?�訪�?");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "你希望開啟mod_rewrite支�?�嗎? (�?設: 關閉)");
 $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "你希望開啟LDAP支�?�嗎? (�?設: 關閉)");

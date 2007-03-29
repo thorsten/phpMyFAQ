@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_pt.php,v 1.23 2007-03-29 12:24:24 thorstenr Exp $
+ * $Id: language_pt.php,v 1.24 2007-03-29 12:44:26 thorstenr Exp $
  *
  * Portuguese language file
  *
@@ -568,7 +568,7 @@ $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "usar Tracking?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "usar Adminlog?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Conferir o IP ao verificar o UINs no admin.php?");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "N&uacute;mero de t&oacute;picos mostrados por p&aacute;gina");
-$LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "N&uacute;ero de artigos de not&iacute;cias");
+$LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "N&uacute;ero de artigos de not&iacute;cias");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Banir estes IPs");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Activar suporte de  mod_rewrite? (por defeito: desactivado)");
 $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Activar o suporte LDAP? (por defeito: desactivado)");

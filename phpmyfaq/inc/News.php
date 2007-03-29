@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: News.php,v 1.15 2007-03-08 20:03:20 thorstenr Exp $
+ * $Id: News.php,v 1.16 2007-03-29 12:44:29 thorstenr Exp $
  *
  * The News class for phpMyFAQ news
  *
@@ -114,12 +114,12 @@ class PMF_News
             );
         $result = $this->db->query($query);
 
-        if ($PMF_CONF['numNewsArticles'] > 0 && $this->db->num_rows($result) > 0) {
+        if ($PMF_CONF['main.numberOfShownNewsEntries'] > 0 && $this->db->num_rows($result) > 0) {
             while (    ($row = $this->db->fetch_object($result))
                    ) {
                 $counter++;
-                if (   ($showArchive  && ($counter > $PMF_CONF['numNewsArticles']))
-                    || ((!$showArchive) && (!$forceConfLimit) && ($counter <= $PMF_CONF['numNewsArticles']))
+                if (   ($showArchive  && ($counter > $PMF_CONF['main.numberOfShownNewsEntries']))
+                    || ((!$showArchive) && (!$forceConfLimit) && ($counter <= $PMF_CONF['main.numberOfShownNewsEntries']))
                     || ((!$showArchive) && $forceConfLimit)
                    ) {
                     $item = array(
@@ -230,7 +230,7 @@ class PMF_News
                     'expired'   => $expired);
             }
         }
-        
+
         return $headers;
     }
 
@@ -248,7 +248,7 @@ class PMF_News
     function getNewsEntry($id, $admin = false)
     {
         $news = array();
-        
+
         $query = sprintf(
             "SELECT
                 id, datum, lang,

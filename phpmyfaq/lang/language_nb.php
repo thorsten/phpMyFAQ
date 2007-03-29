@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_nb.php,v 1.18 2007-03-29 12:24:23 thorstenr Exp $
+* $Id: language_nb.php,v 1.19 2007-03-29 12:44:26 thorstenr Exp $
 *
 * Norwegian Bokmål language file
 *
@@ -565,7 +565,7 @@ $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "bruk Tracking?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "bruk adminlogg?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Vil du at IP-en skal sjekkes når man sjekket UIN-en i admin.php?");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Antall oppføringer per side");
-$LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Antall nyhetsartikler");
+$LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Antall nyhetsartikler");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Steng ute disse IP-ene");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Aktiver mod_rewrite støtte? (standard: deaktivert)");
 $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Vil du aktivere LDAP-støtte? (standard: deaktivert)");

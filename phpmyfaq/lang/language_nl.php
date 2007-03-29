@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_nl.php,v 1.28 2007-03-29 12:24:23 thorstenr Exp $
+ * $Id: language_nl.php,v 1.29 2007-03-29 12:44:26 thorstenr Exp $
  *
  * Dutch language file
  *
@@ -566,7 +566,7 @@ $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "Tracking activeren?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Beheerlog activeren?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Wilt u dat het IP wordt gecontroleerd wanneer de UINs in admin.php worden gecontroleerd?");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Aantal weergegeven onderwerpen per pagina");
-$LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Aantal nieuws artikelen");
+$LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Aantal nieuws artikelen");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Blokkeer deze IPs");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "mod_rewrite ondersteuning activeren? (standaard: gedeactiveerd)");
 $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "LDAP ondersteuning activeren? (standaard: gedeactiveerd)");

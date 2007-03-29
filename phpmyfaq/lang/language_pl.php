@@ -568,7 +568,7 @@ $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "u¿ywaj statystyk?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "u¿ywaj logowania dzia³añ administratora?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Chcesz, by IP by³o sprawdzane podczas sprawdzania UIN-ów w admin.php?");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Liczba wyswietlanych tematów na stronê");
-$LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Liczba newsów");
+$LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Liczba newsów");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Zbanuj te adresy IP");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Activate mod_rewrite support? (default: disabled)");
 $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Do you want to enable LDAP support? (default: disabled)");

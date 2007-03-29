@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_fi.php,v 1.22 2007-03-29 12:24:22 thorstenr Exp $
+ * $Id: language_fi.php,v 1.23 2007-03-29 12:44:26 thorstenr Exp $
  *
  * Finnish language file
  *
@@ -567,7 +567,7 @@ $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "käytä lokia?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "käytä ylläpitolokia?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Haluatko, että admin.php:ssa IP tarkastetaan samalla kun UIN?");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Näytettyjen tietueiden määrä per sivu");
-$LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Uutisten määrä");
+$LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Uutisten määrä");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Estä käyttö näistä IP-osoitteista");
 $LANG_CONF["parse_php"] = array(0 => "checkbox", 1 => "Should the template engine parse PHP code? (oletus: ei käytössä)");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Aktivoi mod_rewrite tuki? (oletus: ei käytössä)");

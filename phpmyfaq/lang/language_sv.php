@@ -567,7 +567,7 @@ $LANG_CONF["tracking"] = array(0 => "checkbox", 1 => "Spårning?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Adminlogg?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Kolla IP:n när UIN kollas i admin.php?");
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Antal visade rubriker per sida");
-$LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Antal nyhetsartiklar");
+$LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Antal nyhetsartiklar");
 $LANG_CONF["bannedIP"] = array(0 => "area", 1 => "Blocka dessa IP-adresser");
 $LANG_CONF["parse_php"] = array(0 => "checkbox", 1 => "Ska template engine parsa PHP-kod? (förvalt: inaktivt)");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Aktivera stöd för mod_rewrite? (förvalt: inaktivt)");
