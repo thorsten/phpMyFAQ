@@ -55,5 +55,5 @@ $category->buildTree();
 //
 if (isset($_POST['search'])) {
     $searchString = $db->escape_string(trim(strip_tags($_POST['search'])));
-    print searchEngine($searchString, '%', false, true);
+    print utf8_encode(searchEngine($searchString, '%', false, true));
 }
