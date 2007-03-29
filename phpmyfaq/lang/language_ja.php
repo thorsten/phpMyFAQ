@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_ja.php,v 1.30 2007-03-29 12:03:47 thorstenr Exp $
+ * $Id: language_ja.php,v 1.31 2007-03-29 12:09:33 thorstenr Exp $
  *
  * The Japanese language file
  *
@@ -558,7 +558,7 @@ $LANG_CONF["title"] = array(0 => "input", 1 => "FAQ ã?®é¡Œå??");
 $LANG_CONF["version"] = array(0 => "print", 1 => "FAQ ãƒ?ãƒ¼ã‚¸ãƒ§ãƒ³");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "ãƒšãƒ¼ã‚¸ã?®èª¬æ˜Ž");
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "æ¤œç´¢ãƒ­ãƒœãƒƒãƒˆç”¨ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰");
-$LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "ç®¡ç?†è€…å??");
+$LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "ç®¡ç?†è€…å??");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "ç®¡ç?†è€…ã?®é›»å­?ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹");
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "å•?ã?„å?ˆã‚?ã?›æƒ…å ±");
 $LANG_CONF["send2friendText"] = array(0 => "area", 1 => "å?‹é?”ã?«é€?ä¿¡ãƒšãƒ¼ã‚¸ã?®ãƒ†ã‚­ã‚¹ãƒˆ");

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_zh.php,v 1.22 2007-03-29 12:03:48 thorstenr Exp $
+* $Id: language_zh.php,v 1.23 2007-03-29 12:09:34 thorstenr Exp $
 *
 * Chinese (simplified) language file
 *
@@ -557,7 +557,7 @@ $LANG_CONF["title"] = array(0 => "input", 1 => "ç³»ç»Ÿå??ç§°");
 $LANG_CONF["version"] = array(0 => "print", 1 => "ç¨‹åº?ç‰ˆæœ¬");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "é¡µé?¢æ??è¿°");
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "ç”¨æˆ·Metaï¼ˆç½‘é¡µè‡ªåŠ¨æ?œç´¢ç¨‹åº?ï¼‰çš„å…³é”®è¯?");
-$LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "ç®¡ç?†å‘˜å§“å??");
+$LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "ç®¡ç?†å‘˜å§“å??");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "ç®¡ç?†å‘˜Email");
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "è?”ç³»æˆ‘ä»¬");
 $LANG_CONF["send2friendText"] = array(0 => "area", 1 => "å?‘é€?åˆ°æœ‹å?‹é¡µé?¢çš„æ–‡å­—");

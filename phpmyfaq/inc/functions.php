@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.173 2007-03-28 21:11:37 matteo Exp $
+ * $Id: functions.php,v 1.174 2007-03-29 12:09:37 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -1136,7 +1136,7 @@ function generateXHTMLFile()
                 'metaCharset'       => htmlentities($PMF_LANG['metaCharset']),
                 'metaDescription'   => htmlentities($PMF_CONF['main.metaDescription']),
                 'metaKeywords'      => htmlentities($PMF_CONF['main.metaKeywords']),
-                'metaPublisher'     => htmlentities($PMF_CONF['metaPublisher']),
+                'metaPublisher'     => htmlentities($PMF_CONF['main.metaPublisher']),
                 'metaLanguage'      => $PMF_LANG['metaLanguage'],
                 'metaCharset'       => $PMF_LANG['metaCharset'],
                 'entrylinks'        => $headlinks,

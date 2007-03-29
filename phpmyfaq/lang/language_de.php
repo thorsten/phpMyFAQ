@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.62 2007-03-29 12:03:46 thorstenr Exp $
+ * $Id: language_de.php,v 1.63 2007-03-29 12:09:32 thorstenr Exp $
  *
  * German language file
  *
@@ -556,7 +556,7 @@ $LANG_CONF["title"] = array(0 => "input", 1 => "Titel der FAQ");
 $LANG_CONF["version"] = array(0 => "print", 1 => "Version der FAQ");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Beschreibung der Seite");
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Keywords für Suchmaschinen");
-$LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "Name des Veröffentlichers");
+$LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Name des Veröffentlichers");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "E-Mailadresse des Administrators");
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Kontakt, Impressum, hier die Betreiberadresse angeben!");
 $LANG_CONF["send2friendText"] = array(0 => "area", 1 => "Text für die Send2Friend-Seite");

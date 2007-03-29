@@ -554,7 +554,7 @@ $LANG_CONF["title"] = array(0 => "input", 1 => "FAQçš„æ¨™é¡Œ");
 $LANG_CONF["version"] = array(0 => "print", 1 => "FAQçš„ç‰ˆæœ¬");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "é ?é?¢æ??è¿°");
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "ç”¨æˆ¶Spidersï¼ˆç¶²é ?è‡ªå‹•æ?œå°‹ç¨‹å¼?ï¼‰çš„é—œé?µå­—");
-$LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "ç™¼å¸ƒè€…å§“å??");
+$LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "ç™¼å¸ƒè€…å§“å??");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "ç®¡ç?†å“¡é›»éƒµ");
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "è?¯çµ¡è³‡æ–™");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "åˆ?å§‹é ?é?¢çš„ç‰ˆæ¬Šä¿?è­·è?²æ˜Žæ–‡å­—");

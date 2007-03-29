@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.59 2007-03-29 12:03:47 thorstenr Exp $
+* $Id: language_it.php,v 1.60 2007-03-29 12:09:33 thorstenr Exp $
 *
 * Italian language file
 *
@@ -558,7 +558,7 @@ $LANG_CONF["title"] = array(0 => "input", 1 => "Titolo del sistema");
 $LANG_CONF["version"] = array(0 => "print", 1 => "Versione di phpMyFAQ");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Descrizione della pagina");
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Keywords per gli Spiders");
-$LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "Nome dell'Editore");
+$LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Nome dell'Editore");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Indirizzo email dell'Amministratore");
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Testo per la pagina dei <em>Contatti</em>");
 $LANG_CONF["send2friendText"] = array(0 => "area", 1 => "Testo per la pagina <em>Invia ad un amico</em>");

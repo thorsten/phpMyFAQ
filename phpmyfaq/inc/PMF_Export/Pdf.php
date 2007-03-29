@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Pdf.php,v 1.11 2007-03-29 11:45:07 thorstenr Exp $
+* $Id: Pdf.php,v 1.12 2007-03-29 12:09:37 thorstenr Exp $
 *
 * Main PDF class for phpMyFAQ based on FPDF by Olivier Plathey
 *
@@ -320,7 +320,7 @@ class PDF extends FPDF
         $this->Cell(0, 10, $PMF_LANG["ad_gen_page"]." ".$this->PageNo()."/{nb}",0,0,"C");
         $this->SetY(-20);
         $this->SetFont("Arial", "B", 8);
-        $this->Cell(0, 10, "(c) ".date("Y")." ".$PMF_CONF["metaPublisher"]." <".$PMF_CONF['main.administrationMail'].">",0,1,"C");
+        $this->Cell(0, 10, "(c) ".date("Y")." ".$PMF_CONF["main.metaPublisher"]." <".$PMF_CONF['main.administrationMail'].">",0,1,"C");
         if ($this->enableBookmarks == false) {
             $this->SetY(-15);
             $this->SetFont("Arial", "", 8);

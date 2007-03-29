@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_pt.php,v 1.20 2007-03-29 12:03:47 thorstenr Exp $
+ * $Id: language_pt.php,v 1.21 2007-03-29 12:09:33 thorstenr Exp $
  *
  * Portuguese language file
  *
@@ -557,7 +557,7 @@ $LANG_CONF["title"] = array(0 => "input", 1 => "T&iacute;tulo do FAQ");
 $LANG_CONF["version"] = array(0 => "print", 1 => "Vers&atilde;o do FAQ");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Descri&ccedil;&atilde;o da p&aacute;gina");
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Palavras-Chave para Rob&ocirc;s de Indexa&ccedil;&atilde;o");
-$LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "Nome do Editor");
+$LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Nome do Editor");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Email do Administrador");
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Informa&ccedil;&atilde;o do contacto");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Texto de Copyright para p&aacute;gina inicial");

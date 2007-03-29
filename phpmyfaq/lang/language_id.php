@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_id.php,v 1.20 2007-03-29 12:03:47 thorstenr Exp $
+ * $Id: language_id.php,v 1.21 2007-03-29 12:09:33 thorstenr Exp $
  *
  * Indonesian language file
  *
@@ -636,7 +636,7 @@ $LANG_CONF["version"] = array(0 => "print", 1 => "Versi FAQ");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Penjelasan halaman");
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Kata kunci untuk
 spiders");
-$LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "Nama Penulis");
+$LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Nama Penulis");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Alamat e-mail Administrator");
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Informasi
 Hubungan");

@@ -555,7 +555,7 @@ $LANG_CONF["title"] = array(0 => "input", 1 => "홈페이지 타이틀");
 $LANG_CONF["version"] = array(0 => "print", 1 => "FAQ 버전");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "페이지 설명");
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "검색 로봇을 위한 키워드 설정");
-$LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "관리자 이름");
+$LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "관리자 이름");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "관리자 메일주소");
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "문의 정보");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "시작페이지의 저작권 정보");

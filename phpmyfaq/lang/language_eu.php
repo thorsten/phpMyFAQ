@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_eu.php,v 1.17 2007-03-29 12:03:46 thorstenr Exp $
+* $Id: language_eu.php,v 1.18 2007-03-29 12:09:32 thorstenr Exp $
 *
 * Euskera language file
 *
@@ -557,7 +557,7 @@ $LANG_CONF["title"] = array(0 => "input", 1 => "FAQaren izenburua");
 $LANG_CONF["version"] = array(0 => "print", 1 => "phpMyFAQ bertsioa");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Orriaren deskribapena");
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Bilatzaileentzat (Goolge, Yahoo...) hitz klabeak");
-$LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "Administratzailearen izena");
+$LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Administratzailearen izena");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Administratzailearen posta elektronikoa");
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Harremanetarako informazioa");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Konfirmazio orriko copyright-eko testua");

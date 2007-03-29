@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.120 2007-03-29 12:03:52 thorstenr Exp $
+* $Id: update.php,v 1.121 2007-03-29 12:09:36 thorstenr Exp $
 *
 * Main update script
 *
@@ -1345,6 +1345,8 @@ if ($step == 5) {
         $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.ldapSupport' WHERE config_name = 'ldap_support'";
         $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.metaDescription' WHERE config_name = 'metaDescription'";
         $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.metaKeywords' WHERE config_name = 'metaKeywords'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.language' WHERE config_name = 'language'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.metaPublisher' WHERE config_name = 'metaPublisher'";
 
     }
 

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_da.php,v 1.19 2007-03-29 12:03:46 thorstenr Exp $
+* $Id: language_da.php,v 1.20 2007-03-29 12:09:32 thorstenr Exp $
 *
 * Danish language file
 *
@@ -555,7 +555,7 @@ $LANG_CONF["title"] = array(0 => "input", 1 => "Title of the FAQ");
 $LANG_CONF["version"] = array(0 => "print", 1 => "FAQ Version");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Describtion of the Page");
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Keywords for Spiders");
-$LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "Name of the Publisher");
+$LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Name of the Publisher");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Emailadress of the Admin");
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Contactinformation");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Copyrighttext for the startpage");

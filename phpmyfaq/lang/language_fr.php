@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_fr.php,v 1.26 2007-03-29 12:03:47 thorstenr Exp $
+* $Id: language_fr.php,v 1.27 2007-03-29 12:09:32 thorstenr Exp $
 *
 * The French language file - try to be the best
 *
@@ -558,7 +558,7 @@ $LANG_CONF["title"] = array(0 => "input", 1 => "Titre de la FAQ");
 $LANG_CONF["version"] = array(0 => "print", 1 => "Version de la FAQ");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Description de la page");
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Mots-clef pour les moteurs de recherche");
-$LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "Nom du publieur");
+$LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Nom du publieur");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Adresse Email de l'administrateur");
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Informations de contact");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Texte de Copyright pour la page d'entrée");

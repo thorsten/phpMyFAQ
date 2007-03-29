@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_nl.php,v 1.25 2007-03-29 12:03:47 thorstenr Exp $
+ * $Id: language_nl.php,v 1.26 2007-03-29 12:09:33 thorstenr Exp $
  *
  * Dutch language file
  *
@@ -555,7 +555,7 @@ $LANG_CONF["title"] = array(0 => "input", 1 => "Titel van de FAQ");
 $LANG_CONF["version"] = array(0 => "print", 1 => "FAQ Versie");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Beschrijving van de pagina");
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Sleutelwoorden voor Spiders");
-$LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "Naam van de uitgever");
+$LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Naam van de uitgever");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Emailadres van de beheerder");
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Contact informatie");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Copyright tekst voor op de startpagina");

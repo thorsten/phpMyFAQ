@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_nb.php,v 1.15 2007-03-29 12:03:47 thorstenr Exp $
+* $Id: language_nb.php,v 1.16 2007-03-29 12:09:33 thorstenr Exp $
 *
 * Norwegian Bokmål language file
 *
@@ -554,7 +554,7 @@ $LANG_CONF["title"] = array(0 => "input", 1 => "Tittel for OSS/FAQ");
 $LANG_CONF["version"] = array(0 => "print", 1 => "FAQ versjon");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Beskrivelse av siden");
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Nøkkel for søkemaskiner");
-$LANG_CONF["metaPublisher"] = array(0 => "input", 1 => "Utgiversnavn");
+$LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Utgiversnavn");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Administrators e-postadresse");
 $LANG_CONF["msgContactOwnText"] = array(0 => "area", 1 => "Kontaktinformasjon");
 $LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Tekst for opphavsrett på startsiden");
