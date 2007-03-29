@@ -1,23 +1,23 @@
 <?php
 /**
-* $Id: Link.php,v 1.24 2007-03-29 12:18:19 thorstenr Exp $
-*
-* Link management - Functions and Classes
-*
-* @author       Matteo Scaramuccia <matteo@scaramuccia.com>
-* @since        2005-11-02
-* @copyright    (c) 2005-2006 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * $Id: Link.php,v 1.25 2007-03-29 18:56:28 matteo Exp $
+ *
+ * Link management - Functions and Classes
+ *
+ * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @since       2005-11-02
+ * @copyright   (c) 2005-2007 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 /**
  * PHP 6 script encoding
@@ -166,9 +166,10 @@ class PMF_Link
     function isIISServer()
     {
         return (
-                   isset($_SERVER['ALL_HTTP'])      // IIS 5.x
-                || isset($_SERVER['APP_POOL_ID'])   // IIS 6.0
-                );
+               isset($_SERVER['ALL_HTTP'])      // IIS 5.x possible signature
+            || isset($_SERVER['COMPUTERNAME'])  // IIS 5.x possible signature
+            || isset($_SERVER['APP_POOL_ID'])   // IIS 6.0 possible signature
+        );
     }
 
     function isAdminIndex()
