@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.63 2007-03-29 12:09:32 thorstenr Exp $
+ * $Id: language_de.php,v 1.64 2007-03-29 12:18:15 thorstenr Exp $
  *
  * German language file
  *
@@ -568,7 +568,7 @@ $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Soll die IP zum Check 
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Anzahl der angezeigten Themen pro Seite");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Anzahl der angezeigten News");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Gesperrte IPs (Bitte mit Leerzeichen trennen)");
-$LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "mod_rewrite Support aktivieren? (Voreinstellung: deaktiviert)");
+$LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "mod_rewrite Support aktivieren? (Voreinstellung: deaktiviert)");
 $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "LDAP Support aktivieren? (Voreinstellung: deaktiviert)");
 $LANG_CONF["referenceURL"] = array(0 => "input", 1 => "Basis-Adresse für die Linküberprüfung (Adresse der Startseite)");
 $LANG_CONF["URLValidateInterval"] = array(0 => "input", 1 => "Zeitintervall zwischen den Ajax-Linküberprüfungen (in Sekunden)");

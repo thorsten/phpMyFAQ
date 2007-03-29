@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Link.php,v 1.23 2006-11-11 16:22:24 matteo Exp $
+* $Id: Link.php,v 1.24 2007-03-29 12:18:19 thorstenr Exp $
 *
 * Link management - Functions and Classes
 *
@@ -224,9 +224,8 @@ class PMF_Link
 
     function hasModRewriteSupport()
     {
-        global $PMF_CONF;
-
-        return ((isset($PMF_CONF['mod_rewrite'])) && $PMF_CONF['mod_rewrite']);
+        global $faqconfig;
+        return $faqconfig->get('main.enableRewriteRules');
     }
 
     function hasScheme()

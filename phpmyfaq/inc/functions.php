@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.174 2007-03-29 12:09:37 thorstenr Exp $
+ * $Id: functions.php,v 1.175 2007-03-29 12:18:19 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -1391,7 +1391,7 @@ function searchEngine($begriff, $cat = '%', $allLanguages = true, $hasMore = fal
     if (is_numeric($begriff) && ($begriff >= PMF_SOLUTION_ID_START_VALUE) && ($num > 0)) {
         // Hack: before a redirection we must force the PHP session update for preventing data loss
         session_write_close();
-        if (isset($PMF_CONF['mod_rewrite']) && $PMF_CONF['mod_rewrite']) {
+        if (isset($PMF_CONF['main.enableRewriteRules']) && $PMF_CONF['main.enableRewriteRules']) {
             header('Location: '.PMF_Link::getSystemUri('/index.php').'/solution_id_'.$begriff.'.html');
         } else {
             header('Location: '.PMF_Link::getSystemUri('/index.php').'/index.php?solution_id='.$begriff);
@@ -1517,7 +1517,7 @@ function searchEngine($begriff, $cat = '%', $allLanguages = true, $hasMore = fal
         $vor = $seite - 1;
         $next = $seite + 1;
         if ($vor != 0) {
-            if (isset($PMF_CONF['mod_rewrite']) && $PMF_CONF['mod_rewrite']) {
+            if (isset($PMF_CONF['main.enableRewriteRules']) && $PMF_CONF['main.enableRewriteRules']) {
                 $output .= "[ <a href=\"search.html?search=".urlencode($_begriff)."&amp;seite=".$vor."\">".$PMF_LANG["msgPrevious"]."</a> ]";
             } else {
                 $output .= "[ <a href=\"index.php?".$sids."action=search&amp;search=".urlencode($_begriff)."&amp;seite=".$vor."\">".$PMF_LANG["msgPrevious"]."</a> ]";

@@ -567,7 +567,7 @@ $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "你希望admin.php在�
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "�?�?顯示主題數目");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "新文章數�?");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "�?止這些IP�?�?�訪�?");
-$LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "你希望開啟mod_rewrite支�?�嗎? (�?設: 關閉)");
+$LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "你希望開啟mod_rewrite支�?�嗎? (�?設: 關閉)");
 $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "你希望開啟LDAP支�?�嗎? (�?設: 關閉)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "作為一個新的類別";

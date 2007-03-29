@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.121 2007-03-29 12:09:36 thorstenr Exp $
+* $Id: update.php,v 1.122 2007-03-29 12:18:18 thorstenr Exp $
 *
 * Main update script
 *
@@ -1347,7 +1347,7 @@ if ($step == 5) {
         $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.metaKeywords' WHERE config_name = 'metaKeywords'";
         $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.language' WHERE config_name = 'language'";
         $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.metaPublisher' WHERE config_name = 'metaPublisher'";
-
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.enableRewriteRules' WHERE config_name = 'mod_rewrite'";
     }
 
     // Perform the queries for updating/migrating the database from 2.x

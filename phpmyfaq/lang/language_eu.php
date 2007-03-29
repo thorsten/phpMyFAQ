@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_eu.php,v 1.18 2007-03-29 12:09:32 thorstenr Exp $
+* $Id: language_eu.php,v 1.19 2007-03-29 12:18:16 thorstenr Exp $
 *
 * Euskera language file
 *
@@ -570,7 +570,7 @@ $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Nahi al duzu IP-ak azt
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Erakutsitako item-en kopurua orriko");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Artikulu berrien kopurua");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "IP hauek blokeatu");
-$LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Mod_rewrite-rentzat euskarria aktibatu? (besterik esan ezean, desaktibatua)");
+$LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Mod_rewrite-rentzat euskarria aktibatu? (besterik esan ezean, desaktibatua)");
 $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "LDAPrentzat euskarria gaitu nahi al duzu? (besterik esan ezean, desaktibatua)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "Atal nagusi berri gisa";

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_fi.php,v 1.20 2007-03-29 12:09:32 thorstenr Exp $
+ * $Id: language_fi.php,v 1.21 2007-03-29 12:18:16 thorstenr Exp $
  *
  * Finnish language file
  *
@@ -570,7 +570,7 @@ $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Näytettyjen tietueiden 
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Uutisten määrä");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Estä käyttö näistä IP-osoitteista");
 $LANG_CONF["parse_php"] = array(0 => "checkbox", 1 => "Should the template engine parse PHP code? (oletus: ei käytössä)");
-$LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Aktivoi mod_rewrite tuki? (oletus: ei käytössä)");
+$LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Aktivoi mod_rewrite tuki? (oletus: ei käytössä)");
 $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Haluatko laittaa LDAP tuen päälle(enabled)? (oletus: ei käytössä)");
 
 /*Correction to ad_categ_desc & ad_categ_paste_error msg by Matti Kröger*/

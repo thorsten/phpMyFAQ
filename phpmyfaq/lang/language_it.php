@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.60 2007-03-29 12:09:33 thorstenr Exp $
+* $Id: language_it.php,v 1.61 2007-03-29 12:18:16 thorstenr Exp $
 *
 * Italian language file
 *
@@ -570,7 +570,7 @@ $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Vuoi controllare l'IP 
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Numero di elementi visualizzati per pagina");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Numero di elementi visualizzati per la sezione News");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Vieta l'accesso a questi indirizzi IP");
-$LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Attivare il supporto a <em>mod_rewrite</em>? (default: disabilitato)");
+$LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Attivare il supporto a <em>mod_rewrite</em>? (default: disabilitato)");
 $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Attivare il supporto LDAP? (default: disabilitato)");
 $LANG_CONF["referenceURL"] = array(0 => "input", 1 => "<em>Base URL</em> dell'installazione di phpMyFAQ, es: http://www.example.org/faq (&egrave; necessaria per la verifica dei links)");
 $LANG_CONF["URLValidateInterval"] = array(0 => "input", 1 => "Intervallo della verifica asincrona dei links (in secondi)");

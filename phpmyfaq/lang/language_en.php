@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.90 2007-03-29 12:09:32 thorstenr Exp $
+* $Id: language_en.php,v 1.91 2007-03-29 12:18:15 thorstenr Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -570,7 +570,7 @@ $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Do you want the IP to 
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Number of displayed topics per page");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Number of news articles");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Ban these IPs");
-$LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Activate mod_rewrite support? (default: disabled)");
+$LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Activate mod_rewrite support? (default: disabled)");
 $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Do you want to enable LDAP support? (default: disabled)");
 $LANG_CONF["referenceURL"] = array(0 => "input", 1 => "Base URL for link verification (e.g.: http://www.example.org/faq)");
 $LANG_CONF["URLValidateInterval"] = array(0 => "input", 1 => "Interval between AJAX link verification (in seconds)");

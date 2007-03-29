@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_zh.php,v 1.23 2007-03-29 12:09:34 thorstenr Exp $
+* $Id: language_zh.php,v 1.24 2007-03-29 12:18:17 thorstenr Exp $
 *
 * Chinese (simplified) language file
 *
@@ -569,7 +569,7 @@ $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "ä½ å¸Œæœ›admin.phpåœ¨æ
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "æ¯?é¡µæ˜¾ç¤ºä¸»é¢˜æ•°ç›®");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "æ–°å†…å®¹æ•°é‡?");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "ç¦?æ­¢è¿™äº›IPåœ°å?€è®¿é—®");
-$LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "å?¯ç”¨mod_rewriteå?—?(é»˜è®¤:ç¦?æ­¢)");
+$LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "å?¯ç”¨mod_rewriteå?—?(é»˜è®¤:ç¦?æ­¢)");
 $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "å?¯ç”¨LDAPæ”¯æŒ?å?—? (é»˜è®¤:ç¦?æ­¢)");
 $LANG_CONF["referenceURL"] = array(0 => "input", 1 => "é“¾æŽ¥éªŒè¯?ç”¨çš„åŸºæœ¬ URL ç½‘å?€ (è®¾ç½®ä¸ºé¦–é¡µ URL ç½‘å?€)");
 $LANG_CONF["URLValidateInterval"] = array(0 => "input", 1 => "AJAX è¿žæŽ¥éªŒè¯?é—´éš”æ—¶é—´ (å?•ä½?ï¼šç§’)");

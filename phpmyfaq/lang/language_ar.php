@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_ar.php,v 1.23 2007-03-29 12:09:32 thorstenr Exp $
+* $Id: language_ar.php,v 1.24 2007-03-29 12:18:15 thorstenr Exp $
 *
 * Arabic language file
 *
@@ -608,7 +608,7 @@ $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Do you want the IP to 
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "عدد المواضيع المعروضة بالص�?حة الواحدة");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "عدد مقالات الأخبار");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "حجب ومنع هذة العناوين");
-$LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "? mod_rewrite هل تريد تشغيل خاصية ال  (default: disabled)");
+$LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "? mod_rewrite هل تريد تشغيل خاصية ال  (default: disabled)");
 $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "هل تريد ان تشغل خاصية ال  LDAP? (default: disabled)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "كتصني�? رئيسي جديد";

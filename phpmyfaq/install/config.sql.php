@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: config.sql.php,v 1.23 2007-03-29 12:09:36 thorstenr Exp $
+ * $Id: config.sql.php,v 1.24 2007-03-29 12:18:18 thorstenr Exp $
  *
  * INSERT instruction for configuration
  *
@@ -32,7 +32,7 @@ $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.ldapSupport', 'fal
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.metaDescription', 'phpMyFAQ should be the answer for all questions in life')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.metaKeywords', '')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.metaPublisher', 'John Doe')";
-$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('mod_rewrite', 'false')";
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.enableRewriteRules', 'false')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('msgContactOwnText', '')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('numNewsArticles', '3')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('numRecordsPage', '10')";

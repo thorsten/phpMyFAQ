@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_id.php,v 1.21 2007-03-29 12:09:33 thorstenr Exp $
+ * $Id: language_id.php,v 1.22 2007-03-29 12:18:16 thorstenr Exp $
  *
  * Indonesian language file
  *
@@ -657,8 +657,7 @@ ditampilkan per halaman");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Jumlah kabar yang
 ditampilkan");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Larang IP berikut");
-$LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Aktifkan dukungan
-untuk mod_rewrite? (awal: tidak aktif)");
+$LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Aktifkan dukungan untuk mod_rewrite? (awal: tidak aktif)");
 $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Apakah anda ingin mengaktifkan dukungan untuk LDAP? (awal: tidak aktif)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "sebagai kategori utama baru";

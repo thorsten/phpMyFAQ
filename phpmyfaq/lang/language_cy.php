@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_cy.php,v 1.15 2007-03-29 12:09:32 thorstenr Exp $
+* $Id: language_cy.php,v 1.16 2007-03-29 12:18:15 thorstenr Exp $
 *
 * The Cymraeg language file - Welsh (Cymraeg) translation
 *
@@ -566,7 +566,7 @@ $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => " Ydych chi am i’r IP g
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => " Nifer y pynciau a ddangosir fesul tudalen");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => " Nifer yr erthyglau newyddion");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => " Gwahardd yr Ips hyn");
-$LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => " Actifadu mod_ailysgrifennu’r gefnogaeth? (diofyn: analluogi)");
+$LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => " Actifadu mod_ailysgrifennu’r gefnogaeth? (diofyn: analluogi)");
 $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => " Hoffech chi osod cefnogaeth LDAP? (default: disabled)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "fel prif gategori newydd";

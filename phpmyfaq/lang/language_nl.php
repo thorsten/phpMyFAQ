@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_nl.php,v 1.26 2007-03-29 12:09:33 thorstenr Exp $
+ * $Id: language_nl.php,v 1.27 2007-03-29 12:18:16 thorstenr Exp $
  *
  * Dutch language file
  *
@@ -568,7 +568,7 @@ $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Wilt u dat het IP word
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Aantal weergegeven onderwerpen per pagina");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Aantal nieuws artikelen");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Blokkeer deze IPs");
-$LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "mod_rewrite ondersteuning activeren? (standaard: gedeactiveerd)");
+$LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "mod_rewrite ondersteuning activeren? (standaard: gedeactiveerd)");
 $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "LDAP ondersteuning activeren? (standaard: gedeactiveerd)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "als nieuwe hoofd categorie";

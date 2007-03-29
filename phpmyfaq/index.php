@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: index.php,v 1.100 2007-03-29 12:09:36 thorstenr Exp $
+ * $Id: index.php,v 1.101 2007-03-29 12:18:18 thorstenr Exp $
  *
  * This is the main public frontend page of phpMyFAQ. It detects the browser's
  * language, gets and sets all cookie, post and get informations and includes
@@ -357,7 +357,7 @@ $main_template_vars = array(
                                 $usersOnLine[1]),
     'copyright'         => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> '.$faqconfig->get('version'));
 
-if ($faqconfig->get('mod_rewrite')) {
+if ($faqconfig->get('main.enableRewriteRules')) {
     $links_template_vars = array(
         "faqHome"               => $_SERVER['PHP_SELF'],
         "msgSearch"             => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'search.html">'.$PMF_LANG["msgAdvancedSearch"].'</a>',

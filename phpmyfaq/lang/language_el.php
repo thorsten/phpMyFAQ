@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_el.php,v 1.15 2007-03-29 12:09:32 thorstenr Exp $
+* $Id: language_el.php,v 1.16 2007-03-29 12:18:15 thorstenr Exp $
 *
 * The Hellenic language file
 *
@@ -568,7 +568,7 @@ $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Θέλετε να γίνεται έλεγ
 $LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Αριθμός εμφανιζόμενων άρθρων ανά σελίδα");
 $LANG_CONF["numNewsArticles"] = array(0 => "input", 1 => "Αριθμός ειδήσεων");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Απαγόρευση πρόσβασης των παρακάτω διευθύνσεων IP");
-$LANG_CONF["mod_rewrite"] = array(0 => "checkbox", 1 => "Ενεργοποίηση της υποστήριξης mod_rewrite; (Προεπιλογή: απενεργοποιημένο)");
+$LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Ενεργοποίηση της υποστήριξης mod_rewrite; (Προεπιλογή: απενεργοποιημένο)");
 $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Θέλετε να ενεργοποιήσετε την υποστήριξη LDAP; (Προεπιλογή: απενεργοποιημένο)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "ως νέα κύρια κατηγορία";
