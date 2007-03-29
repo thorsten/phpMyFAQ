@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.config_list.php,v 1.16 2007-03-29 19:55:58 thorstenr Exp $
+* $Id: ajax.config_list.php,v 1.17 2007-03-29 20:22:45 thorstenr Exp $
 *
 * AJAX: lists the complete configuration items
 *
@@ -104,11 +104,8 @@ function printInputFieldByType($key, $type)
 
 header("Content-type: text/html; charset=".$PMF_LANG['metaCharset']);
 
-ksort($LANG_CONF);
-
 foreach ($LANG_CONF as $key => $value) {
-    $filterConfigParams = ($configMode == 'main'? false === strpos($key, 'spam') : 0 === strpos($key, $configMode));
-    if ($filterConfigParams) {
+    if (strpos($key, $configMode) === 0) {
 ?>
 <dl>
     <dt><strong><?php print $value[1]; ?></strong></dt>
