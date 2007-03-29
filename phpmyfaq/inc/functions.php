@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.175 2007-03-29 12:18:19 thorstenr Exp $
+ * $Id: functions.php,v 1.176 2007-03-29 12:34:11 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -1131,12 +1131,12 @@ function generateXHTMLFile()
 
     /* get main template, set main variables */
     $tpl->processTemplate ('html', array(
-                'title'             => htmlentities($PMF_CONF['title']),
-                'header'            => htmlentities($PMF_CONF['title']),
-                'metaCharset'       => htmlentities($PMF_LANG['metaCharset']),
-                'metaDescription'   => htmlentities($PMF_CONF['main.metaDescription']),
-                'metaKeywords'      => htmlentities($PMF_CONF['main.metaKeywords']),
-                'metaPublisher'     => htmlentities($PMF_CONF['main.metaPublisher']),
+                'title'             => PMF_htmlentities($PMF_CONF['title']),
+                'header'            => PMF_htmlentities($PMF_CONF['title']),
+                'metaCharset'       => PMF_htmlentities($PMF_LANG['metaCharset']),
+                'metaDescription'   => PMF_htmlentities($PMF_CONF['main.metaDescription']),
+                'metaKeywords'      => PMF_htmlentities($PMF_CONF['main.metaKeywords']),
+                'metaPublisher'     => PMF_htmlentities($PMF_CONF['main.metaPublisher']),
                 'metaLanguage'      => $PMF_LANG['metaLanguage'],
                 'metaCharset'       => $PMF_LANG['metaCharset'],
                 'entrylinks'        => $headlinks,

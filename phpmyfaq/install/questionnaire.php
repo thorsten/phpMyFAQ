@@ -1,6 +1,6 @@
 <?php
 /*
- * $Id: questionnaire.php,v 1.7 2007-03-29 12:03:52 thorstenr Exp $
+ * $Id: questionnaire.php,v 1.8 2007-03-29 12:34:12 thorstenr Exp $
  *
  * This class collects data which is used to create some usage statistics.
  *
@@ -188,13 +188,13 @@ class PMF_Questionnaire_Data
  */
 function data_printer($value, $key, $ident = "\n\t")
 {
-    echo $ident, '<dt>', htmlentities($key), '</dt>', $ident, "\t", '<dd>';
+    echo $ident, '<dt>', PMF_htmlentities($key), '</dt>', $ident, "\t", '<dd>';
     if (is_array($value)) {
         echo '<dl>';
         array_walk($value, 'data_printer', $ident."\t");
         echo $ident, "\t", '</dl>';
     } else {
-        echo htmlentities($value);
+        echo PMF_htmlentities($value);
     }
     echo '</dd>';
 }
