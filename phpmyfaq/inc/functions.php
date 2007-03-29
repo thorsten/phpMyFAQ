@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.184 2007-03-29 19:31:53 thorstenr Exp $
+ * $Id: functions.php,v 1.185 2007-03-29 21:16:22 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -1680,13 +1680,21 @@ function PMF_htmlentities($string, $quote_style = ENT_QUOTES, $charset = 'iso-88
 /**
  * Adds a menu entry according to user permissions
  *
- * @param unknown_type $restrictions
- * @param unknown_type $action
- * @param unknown_type $caption
+ * @param   string  $restrictions
+ * @param   string  $action
+ * @param   string  $caption
+ * @param   string  $active
+ * @access  public
+ * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
  */
-function addMenuEntry($restrictions = '', $action = '', $caption = '')
+function addMenuEntry($restrictions = '', $action = '', $caption = '', $active = '')
 {
     global $permission, $PMF_LANG;
+
+    $class = '';
+    if ($active == $action) {
+        $class = ' class="current"';
+    }
 
     if ($action != '') {
         $action = "action=".$action;
@@ -1698,7 +1706,11 @@ function addMenuEntry($restrictions = '', $action = '', $caption = '')
         $_caption = 'No string for '.$caption;
     }
 
-    $output = '        <li><a href="?'.$action.'">'.$_caption."</a></li>\n";
+    $output = sprintf('        <li><a%s href="?%s">%s</a></li>%s',
+        $class,
+        $action,
+        $_caption,
+        "\n");
     if ($restrictions == '') {
         print $output;
         return;

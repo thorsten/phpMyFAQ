@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: header.php,v 1.43 2007-03-29 20:22:31 thorstenr Exp $
+ * $Id: header.php,v 1.44 2007-03-29 21:16:22 thorstenr Exp $
  *
  * Header of the admin area
  *
@@ -114,12 +114,12 @@ if (isset($_action)) {
         case 'group':
         case 'passwd':
         case 'cookies':
-            addMenuEntry('adduser,edituser,deluser',             'user',             'ad_menu_user_administration');
+            addMenuEntry('adduser,edituser,deluser',             'user',             'ad_menu_user_administration', $_action);
             if ($groupSupport) {
-                addMenuEntry('adduser,edituser,deluser',         'group',            'ad_menu_group_administration');
+                addMenuEntry('adduser,edituser,deluser',         'group',            'ad_menu_group_administration', $_action);
             }
-            addMenuEntry('passwd',                               'passwd',           'ad_menu_passwd');
-            addMenuEntry('',                                     'cookies',          'ad_menu_cookie');
+            addMenuEntry('passwd',                               'passwd',           'ad_menu_passwd', $_action);
+            addMenuEntry('',                                     'cookies',          'ad_menu_cookie', $_action);
             break;
         case 'content':
         case 'category':
@@ -148,32 +148,32 @@ if (isset($_action)) {
         case 'news':
         case 'question':
         case 'comments':
-            addMenuEntry('addcateg,editcateg,delcateg',          'category',         'ad_menu_categ_edit');
-            addMenuEntry('addbt',                                'editentry',        'ad_entry_add');
-            addMenuEntry('editbt,delbt',                         'view',             'ad_menu_entry_edit');
-            addMenuEntry('editbt,delbt',                         'accept',           'ad_menu_entry_aprove');
-            addMenuEntry('delcomment',                           'comments',         'ad_menu_comments');
-            addMenuEntry('delquestion',                          'question',         'ad_menu_open');
-            addMenuEntry('addglossary,editglossary,delglossary', 'glossary',         'ad_menu_glossary');
-            addMenuEntry('addnews,editnews,delnews',             'news&amp;do=edit', 'ad_menu_news_edit');
+            addMenuEntry('addcateg,editcateg,delcateg',          'category',         'ad_menu_categ_edit', $_action);
+            addMenuEntry('addbt',                                'editentry',        'ad_entry_add', $_action);
+            addMenuEntry('editbt,delbt',                         'view',             'ad_menu_entry_edit', $_action);
+            addMenuEntry('editbt,delbt',                         'accept',           'ad_menu_entry_aprove', $_action);
+            addMenuEntry('delcomment',                           'comments',         'ad_menu_comments', $_action);
+            addMenuEntry('delquestion',                          'question',         'ad_menu_open', $_action);
+            addMenuEntry('addglossary,editglossary,delglossary', 'glossary',         'ad_menu_glossary', $_action);
+            addMenuEntry('addnews,editnews,delnews',             'news&amp;do=edit', 'ad_menu_news_edit', $_action);
             break;
         case 'statistics':
         case 'viewsessions':
         case 'sessionbrowse':
         case 'sessionsuche':
         case 'adminlog':
-            addMenuEntry('viewlog',                              'statistics',       'ad_menu_stat');
-            addMenuEntry('viewlog',                              'viewsessions',     'ad_menu_session');
-            addMenuEntry('adminlog',                             'adminlog',         'ad_menu_adminlog');
+            addMenuEntry('viewlog',                              'statistics',       'ad_menu_stat', $_action);
+            addMenuEntry('viewlog',                              'viewsessions',     'ad_menu_session', $_action);
+            addMenuEntry('adminlog',                             'adminlog',         'ad_menu_adminlog', $_action);
             break;
         case 'export':
         case 'plugins':
-            addMenuEntry('',                                     'export',           'ad_menu_export');
+            addMenuEntry('',                                     'export',           'ad_menu_export', $_action);
             break;
         case 'config':
         case 'linkconfig':
-            addMenuEntry('editconfig',                           'config',           'ad_menu_editconfig');
-            addMenuEntry('editconfig,editbt,delbt',              'linkconfig',       'ad_menu_linkconfig');
+            addMenuEntry('editconfig',                           'config',           'ad_menu_editconfig', $_action);
+            addMenuEntry('editconfig,editbt,delbt',              'linkconfig',       'ad_menu_linkconfig', $_action);
             break;
         default:
             print '<li></li>';

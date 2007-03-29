@@ -1,5 +1,5 @@
 /**
- * $Id: admin.css,v 1.39 2007-03-03 16:30:53 thorstenr Exp $
+ * $Id: admin.css,v 1.40 2007-03-29 21:16:22 thorstenr Exp $
  *
  * This is the CSS file for the admin section of phpMyFAQ 2.0.x
  * You don't need to change enything here but feel free to do it. :-)
@@ -252,6 +252,9 @@ div#sessioncounter {
     background: #c60;
     border: 1px solid #c60;
     color: #fff;
+}
+#subnavcontainer ul li a.current {
+    background: #FFDEAD;
 }
 
 
