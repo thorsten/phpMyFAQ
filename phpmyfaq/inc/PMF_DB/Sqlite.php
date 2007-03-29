@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Sqlite.php,v 1.13 2007-03-28 23:25:55 matteo Exp $
+ * $Id: Sqlite.php,v 1.14 2007-03-29 19:03:43 matteo Exp $
  *
  * The db_sqlite class provides methods and functions for a sqlite database.
  *
@@ -267,30 +267,21 @@ class db_sqlite
     }
 
     /**
-     * Returns the error string.
-     *
      * This function returns the table status.
      *
      * @access  public
      * @return  array
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      * @since   2005-06-27
      */
     public function getTableStatus()
     {
         $arr = array();
 
-        $result = $this->query("SELECT name, sql FROM sqlite_master WHERE type='table' ORDER BY name");
+        $result = $this->query("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name");
         while ($row = $this->fetch_assoc($result)) {
-            // Get the first column of the table which is supposed to be the primary key
-            preg_match('/^CREATE\s+TABLE\s+'.$row['name'].'\s*\(\s*([^\s]+)\s+/im', $row['sql'], $matches);
-            if (isset($matches[1])) { // It would be really strange if the regexp misses the match
-                $pk = $matches[1];
-                // Count the records evaluating the SQL COUNT only over the primary key
-                $num_result = $this->query('SELECT COUNT('.$pk.') FROM '.$row['name']);
-                $arr[$row['name']] = sqlite_fetch_single($num_result);
-            }
+            $num_result = $this->query('SELECT * FROM '.$row['name']);
+            $arr[$row['name']] = $this->num_rows($num_result);
         }
 
         return $arr;
