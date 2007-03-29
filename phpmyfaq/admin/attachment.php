@@ -1,12 +1,12 @@
 <?php
 /**
-* $Id: attachment.php,v 1.32 2007-03-29 12:34:11 thorstenr Exp $
+* $Id: attachment.php,v 1.33 2007-03-29 15:57:53 thorstenr Exp $
 *
 * Select an attachment and save it or create the SQL backup files
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-09-17
-* @copyright    (c) 2001-2005 phpMyFAQ
+* @copyright    (c) 2002-2007 phpMyFAQ
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -90,8 +90,8 @@ if (!isset($_REQUEST["action"]) || isset($_REQUEST["save"])) {
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php print $PMF_LANG["metaLanguage"]; ?>" lang="<?php print $PMF_LANG["metaLanguage"]; ?>">
 <head>
-    <title><?php print PMF_htmlentities($PMF_CONF["title"]); ?> - powered by phpMyFAQ</title>
-    <meta name="copyright" content="(c) 2001-2006 phpMyFAQ Team" />
+    <title><?php print PMF_htmlentities($PMF_CONF["title"], ENT_QUOTES, $PMF_LANG['metaCharset']); ?> - powered by phpMyFAQ</title>
+    <meta name="copyright" content="(c) 2001-2007 phpMyFAQ Team" />
     <meta http-equiv="Content-Type" content="text/html; charset=<?php print $PMF_LANG["metaCharset"]; ?>" />
 
     <link rel="shortcut icon" href="../template/favicon.ico" type="image/x-icon" />

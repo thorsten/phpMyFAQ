@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: artikel.php,v 1.77 2007-03-29 11:39:03 thorstenr Exp $
+ * $Id: artikel.php,v 1.78 2007-03-29 15:57:52 thorstenr Exp $
  *
  * Shows the page with the FAQ record and - when available - the user
  * comments
@@ -125,7 +125,7 @@ if (isset($oLnk->urlpool['href'])) {
             }
             $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().$_link);
             $oLink->itemTitle = $_title;
-            $oLink->tooltip = PMF_htmlentities($_title, ENT_NOQUOTES, $PMF_LANG['metaCharset']);
+            $oLink->tooltip = PMF_htmlentities($_title, ENT_QUOTES, $PMF_LANG['metaCharset']);
             $newFaqPath = $oLink->toString();
             $fixedContent = str_replace($_url, $newFaqPath, $fixedContent);
         }

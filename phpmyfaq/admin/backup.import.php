@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: backup.import.php,v 1.15 2006-09-19 21:39:38 matteo Exp $
+* $Id: backup.import.php,v 1.16 2007-03-29 15:57:53 thorstenr Exp $
 *
 * The import function to import the phpMyFAQ backups
 *
@@ -72,10 +72,15 @@ if ($permission["restore"]) {
                 $mquery[$i] = alignTablePrefix($mquery[$i], $table_prefix, SQLPREFIX);
                 $kg = $db->query($mquery[$i]);
                 if (!$kg) {
-                    print "<div style=\"font-size: 9px;\"><b>Query</b>: \"".PMF_htmlentities($mquery[$i])."\" <span style=\"color: red;\">failed (Reason: ".$db->error().")</span></div>\n";
+                    printf('<div style="font-size: 9px;"><strong>Query</strong>: "%s" <span style="color: red;">failed (Reason: %s)</span></div>%s',
+                        PMF_htmlentities($mquery[$i], ENT_QUOTES, $PMF_LANG['metaCharset']),
+                        $db->error(),
+                        "\n");
                     $k++;
                 } else {
-                    print "<div style=\"font-size: 9px;\"><b>Query</b>: <!-- \"".PMF_htmlentities($mquery[$i])."\" --> <span style=\"color: green;\">okay</span></div>\n";
+                    printf('<div style="font-size: 9px;"><strong>Query</strong>: "%s" <span style="color: green;">okay</span></div>%s',
+                        PMF_htmlentities($mquery[$i], ENT_QUOTES, $PMF_LANG['metaCharset']),
+                        "\n");
                     $g++;
                 }
             }

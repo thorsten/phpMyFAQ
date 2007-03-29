@@ -1,17 +1,17 @@
 <?php
 /**
-* $Id: ajax.ondemandurl.php,v 1.19 2007-03-29 12:34:12 thorstenr Exp $
+* $Id: ajax.ondemandurl.php,v 1.20 2007-03-29 15:57:53 thorstenr Exp $
 *
 * AJAX: onDemandURL
 *
 * Usage:
-*   index.php?uin=<uin>&action=ajax&ajax=onDemandURL&id=<id>&lang=<lang>[&lookup=1]
+*   index.php?action=ajax&ajax=onDemandURL&id=<id>&lang=<lang>[&lookup=1]
 *
 * Performs link verification at demand of the user.
 *
 * @author           Minoru TODA <todam@netjapan.co.jp>
 * @since            2005-09-30
-* @copyright        (c) 2005-2006 NetJapan, Inc.
+* @copyright        (c) 2005-2007 NetJapan, Inc.
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -66,8 +66,8 @@ if (count(ob_list_handlers()) > 0) {
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php print $PMF_LANG["metaLanguage"]; ?>" lang="<?php print $PMF_LANG["metaLanguage"]; ?>">
 <head>
-    <title><?php print PMF_htmlentities($PMF_CONF["title"]); ?> - powered by phpMyFAQ</title>
-    <meta name="copyright" content="(c) 2001-2006 phpMyFAQ Team" />
+    <title><?php print PMF_htmlentities($PMF_CONF["title"], ENT_QUOTES, $PMF_LANG['metaCharset']); ?> - powered by phpMyFAQ</title>
+    <meta name="copyright" content="(c) 2001-2007 phpMyFAQ Team" />
     <meta http-equiv="Content-Type" content="text/html; charset=<?php print $PMF_LANG["metaCharset"]; ?>" />
     <style type="text/css"> @import url(../template/admin.css); </style>
     <script type="text/javascript" src="../inc/js/prototype.js"></script>

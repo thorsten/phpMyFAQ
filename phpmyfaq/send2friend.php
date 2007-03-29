@@ -1,12 +1,12 @@
 <?php
 /**
-* $Id: send2friend.php,v 1.14 2007-03-29 12:34:11 thorstenr Exp $
+* $Id: send2friend.php,v 1.15 2007-03-29 15:57:51 thorstenr Exp $
 *
 * The send2friend page
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-09-16
-* @copyright    (c) 2001-2006 phpMyFAQ Team
+* @copyright    (c) 2002-2007 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -36,23 +36,21 @@ Tracking('send2friend',0);
 $send2friendLink = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].'?action=artikel&amp;cat='.(int)$_REQUEST['cat'].'&amp;id='.(int)$_REQUEST['id'].'&amp;artlang='.urlencode($_REQUEST['artlang']);
 
 $tpl->processTemplate ('writeContent', array(
-                'msgSend2Friend' => $PMF_LANG['msgSend2Friend'],
-                'writeSendAdress' => $_SERVER['PHP_SELF'].'?'.$sids.'action=mailsend2friend',
-                'msgS2FReferrer' => 'link',
-                'msgS2FName' => $PMF_LANG['msgS2FName'],
-                'msgS2FEMail' => $PMF_LANG['msgS2FEMail'],
-                'defaultContentMail' => getEmailAddress(),
-                'defaultContentName' => getFullUserName(),
-                'msgS2FFriends' => $PMF_LANG['msgS2FFriends'],
-                'msgS2FEMails' => $PMF_LANG['msgS2FEMails'],
-                'msgS2FText' => $PMF_LANG['msgS2FText'],
-                'send2friend_text' => PMF_htmlentities($PMF_CONF['send2friendText']),
-                'msgS2FText2' => $PMF_LANG['msgS2FText2'],
-                'send2friendLink' => $send2friendLink,
-                'msgS2FMessage' => $PMF_LANG['msgS2FMessage'],
-                'captchaFieldset' => printCaptchaFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('send2friend'), $captcha->caplength),
-                'msgS2FButton' => $PMF_LANG['msgS2FButton']
-                ));
+    'msgSend2Friend' => $PMF_LANG['msgSend2Friend'],
+    'writeSendAdress' => $_SERVER['PHP_SELF'].'?'.$sids.'action=mailsend2friend',
+    'msgS2FReferrer' => 'link',
+    'msgS2FName' => $PMF_LANG['msgS2FName'],
+    'msgS2FEMail' => $PMF_LANG['msgS2FEMail'],
+    'defaultContentMail' => getEmailAddress(),
+    'defaultContentName' => getFullUserName(),
+    'msgS2FFriends' => $PMF_LANG['msgS2FFriends'],
+    'msgS2FEMails' => $PMF_LANG['msgS2FEMails'],
+    'msgS2FText' => $PMF_LANG['msgS2FText'],
+    'send2friend_text' => PMF_htmlentities($PMF_CONF['send2friendText'], ENT_QUOTES, $PMF_LANG['metaCharset']),
+    'msgS2FText2' => $PMF_LANG['msgS2FText2'],
+    'send2friendLink' => $send2friendLink,
+    'msgS2FMessage' => $PMF_LANG['msgS2FMessage'],
+    'captchaFieldset' => printCaptchaFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('send2friend'), $captcha->caplength),
+    'msgS2FButton' => $PMF_LANG['msgS2FButton']));
 
 $tpl->includeTemplate('writeContent', 'index');
-?>

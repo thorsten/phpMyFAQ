@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: password.php,v 1.17 2007-03-29 12:34:12 thorstenr Exp $
+* $Id: password.php,v 1.18 2007-03-29 15:57:53 thorstenr Exp $
 *
 * Reset a forgotten password to a new one
 *
@@ -107,7 +107,7 @@ if (isset($_GET["action"]) && $_GET["action"] == "newpassword") {
         <input class="submit" style="margin-left: 190px;" type="submit" value="<?php print $PMF_LANG["msgNewContentSubmit"]; ?>" />
 
         <p><img src="images/arrow.gif" width="11" height="11" alt="<?php print $PMF_LANG["ad_sess_back"]; ?> FAQ" border="0" /> <a href="index.php" title="<?php print $PMF_LANG["ad_sess_back"]; ?> FAQ"><?php print $PMF_LANG["ad_sess_back"]; ?></a></p>
-        <p><img src="images/arrow.gif" width="11" height="11" alt="<?php print PMF_htmlentities($PMF_CONF["title"]); ?> FAQ" border="0" /> <a href="../index.php" title="<?php print PMF_htmlentities($PMF_CONF["title"]); ?> FAQ"><?php print PMF_htmlentities($PMF_CONF["title"]); ?> FAQ</a></p>
+        <p><img src="images/arrow.gif" width="11" height="11" alt="<?php print PMF_htmlentities($PMF_CONF["title"], ENT_QUOTES, $PMF_LANG['metaCharset']); ?> FAQ" border="0" /> <a href="../index.php" title="<?php print PMF_htmlentities($PMF_CONF["title"], ENT_QUOTES, $PMF_LANG['metaCharset']); ?> FAQ"><?php print PMF_htmlentities($PMF_CONF["title"], ENT_QUOTES, $PMF_LANG['metaCharset']); ?> FAQ</a></p>
 
     </fieldset>
     </form>

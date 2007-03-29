@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.87 2007-03-29 12:34:12 thorstenr Exp $
+* $Id: index.php,v 1.88 2007-03-29 15:57:53 thorstenr Exp $
 *
 * The main admin backend index file
 *
@@ -396,7 +396,7 @@ if (isset($auth)) {
         <p><img src="images/arrow.gif" width="11" height="11" alt="<?php print $PMF_LANG["lostPassword"]; ?>" border="0" /> <a href="password.php" title="<?php print $PMF_LANG["lostPassword"]; ?>">
 <?php print $PMF_LANG["lostPassword"]; ?>
 </a></p>
-        <p><img src="images/arrow.gif" width="11" height="11" alt="<?php print PMF_htmlentities($PMF_CONF["title"]); ?>" border="0" /> <a href="../index.php" title="<?php print PMF_htmlentities($PMF_CONF["title"]); ?>"><?php print PMF_htmlentities($PMF_CONF["title"]); ?></a></p>
+        <p><img src="images/arrow.gif" width="11" height="11" alt="<?php print PMF_htmlentities($PMF_CONF["title"], ENT_QUOTES, $PMF_LANG['metaCharset']); ?>" border="0" /> <a href="../index.php" title="<?php print PMF_htmlentities($PMF_CONF["title"], ENT_QUOTES, $PMF_LANG['metaCharset']); ?>"><?php print PMF_htmlentities($PMF_CONF["title"], ENT_QUOTES, $PMF_LANG['metaCharset']); ?></a></p>
     </fieldset>
     </form>
 <?php

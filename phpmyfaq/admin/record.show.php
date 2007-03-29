@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.show.php,v 1.43 2007-03-07 21:01:30 matteo Exp $
+ * $Id: record.show.php,v 1.44 2007-03-29 15:57:54 thorstenr Exp $
  *
  * Shows the list of records ordered by categories
  *
@@ -269,7 +269,7 @@ if ($permission["editbt"] || $permission["delbt"]) {
     <tr>
         <td class="list" style="width: 24px; text-align: right;"><?php print $record['id']; ?></td>
         <td class="list" style="width: 16px;"><?php print $record['lang']; ?></td>
-        <td class="list"><a href="?action=editentry&amp;id=<?php print $record['id']; ?>&amp;lang=<?php print $record['lang']; ?>" title="<?php print $PMF_LANG["ad_user_edit"]; ?> '<?php print str_replace("\"", "´", $record['title']); ?>'"><?php print PMF_htmlentities($record['title'], ENT_NOQUOTES, $PMF_LANG['metaCharset']); ?></a>
+        <td class="list"><a href="?action=editentry&amp;id=<?php print $record['id']; ?>&amp;lang=<?php print $record['lang']; ?>" title="<?php print $PMF_LANG["ad_user_edit"]; ?> '<?php print str_replace("\"", "´", $record['title']); ?>'"><?php print PMF_htmlentities($record['title'], ENT_QUOTES, $PMF_LANG['metaCharset']); ?></a>
 <?php
         if (isset($numCommentsByFaq[$record['id']])) {
             print " (".$numCommentsByFaq[$record['id']]." ".$PMF_LANG["ad_start_comments"].")";

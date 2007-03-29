@@ -1,12 +1,12 @@
 <?php
 /**
-* $Id: ajax.user_list.php,v 1.22 2006-09-27 18:21:29 thorstenr Exp $
+* $Id: ajax.user_list.php,v 1.23 2007-03-29 15:57:53 thorstenr Exp $
 *
 * AJAX: lists all registered users
 *
 * @author       Lars Tiedemann <larstiedemann@yahoo.de>
 * @since        2005-12-15
-* @copyright    (c) 2005-2006 phpMyFAQ Team
+* @copyright    (c) 2005-2007 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -62,7 +62,7 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
             continue;
 ?>
         <right id="<?php print $right_id; ?>">
-            <name><?php print isset($PMF_LANG['rightsLanguage'][$right_data['name']]) ? PMF_htmlentities($PMF_LANG['rightsLanguage'][$right_data['name']]) : $right_data['name']; ?></name>
+            <name><?php print isset($PMF_LANG['rightsLanguage'][$right_data['name']]) ? PMF_htmlentities($PMF_LANG['rightsLanguage'][$right_data['name']], ENT_QUOTES, $PMF_LANG['metaCharset']) : $right_data['name']; ?></name>
             <description><?php print $right_data['description']; ?></description>
         </right>
 <?php

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.edit.php,v 1.61 2007-03-28 08:47:31 thorstenr Exp $
+ * $Id: record.edit.php,v 1.62 2007-03-29 15:57:53 thorstenr Exp $
  *
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since       2003-02-23
@@ -359,7 +359,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
         foreach ($changeEntries as $entry) {
             $user->getUserById($entry['user']);
 ?>
-    <div style="font-size: 10px;"><strong><?php print date("Y-m-d H:i:s", $entry['date']).": ".$user->getUserData('display_name'); ?></strong><br /><?php print PMF_htmlentities($entry['changelog'], ENT_NOQUOTES, $PMF_LANG['metaCharset']); ?><br /><?php print $PMF_LANG['ad_entry_revision'].' 1.'.$entry['revision_id']; ?></div>
+    <div style="font-size: 10px;"><strong><?php print date("Y-m-d H:i:s", $entry['date']).": ".$user->getUserData('display_name'); ?></strong><br /><?php print PMF_htmlentities($entry['changelog'], ENT_QUOTES, $PMF_LANG['metaCharset']); ?><br /><?php print $PMF_LANG['ad_entry_revision'].' 1.'.$entry['revision_id']; ?></div>
 <?php
         }
 ?>

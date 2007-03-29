@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Export.php,v 1.3 2007-03-29 12:34:11 thorstenr Exp $
+* $Id: Export.php,v 1.4 2007-03-29 15:57:52 thorstenr Exp $
 *
 * XML, XML DocBook, XHTML and PDF export - Classes and Functions
 *
@@ -157,7 +157,7 @@ class PMF_Export
         $xhtml .= '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
         $xhtml .= '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="'.$PMF_LANG['metaLanguage'].'" lang="'.$PMF_LANG['metaLanguage'].'">';
         $xhtml .= '<head>';
-        $xhtml .= '    <title>'.PMF_htmlentities($PMF_CONF['title']).'</title>';
+        $xhtml .= '    <title>'.PMF_htmlentities($PMF_CONF['title'], ENT_QUOTES, $PMF_LANG['metaCharset']).'</title>';
         $xhtml .= '    <meta http-equiv="Content-Type" content="application/xhtml+xml; charset='.$PMF_LANG['metaCharset'].'" />';
         $xhtml .= '    <meta name="title" content="'.htmlspecialchars($PMF_CONF['title']).'" />';
         $xhtml .= '</head>';
@@ -225,8 +225,8 @@ class PMF_Export
                 $xml_thema    = $faq['topic'];
                 $xml_keywords = $faq['keywords'];
                 // Take care of XML entities
-                $xml_content  = strip_tags(htmlspecialchars($xml_content, ENT_NOQUOTES, $PMF_LANG['metaCharset']));
-                $xml_rubrik   = PMF_htmlentities(strip_tags($xml_rubrik), ENT_NOQUOTES, $PMF_LANG['metaCharset']);
+                $xml_content  = strip_tags(htmlspecialchars($xml_content, ENT_QUOTES, $PMF_LANG['metaCharset']));
+                $xml_rubrik   = PMF_htmlentities(strip_tags($xml_rubrik), ENT_QUOTES, $PMF_LANG['metaCharset']);
                 $xml_thema    = strip_tags($xml_thema);
                 // Build the <article/> node
                 $my_xml_output .= "\t<article id=\"".$faq['id']."\">\n";

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: writecomment.php,v 1.13 2007-03-29 12:34:11 thorstenr Exp $
+* $Id: writecomment.php,v 1.14 2007-03-29 15:57:51 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-08-29
@@ -44,7 +44,7 @@ $tpl->processTemplate('writeContent', array(
                       'msgYourComment' => $PMF_LANG['msgYourComment'],
                       'msgNewContentSubmit' => $PMF_LANG['msgNewContentSubmit'],
                       'captchaFieldset' => printCaptchaFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('writecomment'), $captcha->caplength),
-                      'copyright_eintrag' => PMF_htmlentities($PMF_CONF['copyright_eintrag'])));
+                      'copyright_eintrag' => PMF_htmlentities($PMF_CONF['copyright_eintrag'], ENT_QUOTES, $PMF_LANG['metaCharset'])));
 
 $tpl->includeTemplate('writeContent', 'index');
 ?>

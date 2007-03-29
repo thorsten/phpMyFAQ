@@ -1,18 +1,18 @@
 <?php
 /**
- * $Id: stat.ratings.php,v 1.16 2007-02-27 22:27:12 matteo Exp $
+ * $Id: stat.ratings.php,v 1.17 2007-03-29 15:57:54 thorstenr Exp $
  *
  * The page with the ratings of the votings
  *
  * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since        2003-02-24
  * @copyright    (c) 2001-2007 phpMyFAQ Team
- * 
+ *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
  * http://www.mozilla.org/MPL/
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
@@ -110,7 +110,7 @@ if ($permission["viewlog"]) {
     <tr>
         <td class="list"><?php print $row->id; ?></td>
         <td class="list"><?php print $row->lang; ?></td>
-        <td class="list"><a href="../index.php?action=artikel&amp;cat=<?php print $row->category_id;?>&amp;id=<?php print $row->id;?>&amp;artlang=<?php print $row->lang; ?>" title="<?php print htmlspecialchars(trim($row->thema), ENT_QUOTES, $PMF_LANG['metaCharset']); ?>"><?php print makeShorterText(PMF_htmlentities(trim($row->thema), ENT_NOQUOTES, $PMF_LANG['metaCharset']), 14); ?></a></td>
+        <td class="list"><a href="../index.php?action=artikel&amp;cat=<?php print $row->category_id;?>&amp;id=<?php print $row->id;?>&amp;artlang=<?php print $row->lang; ?>" title="<?php print htmlspecialchars(trim($row->thema), ENT_QUOTES, $PMF_LANG['metaCharset']); ?>"><?php print makeShorterText(PMF_htmlentities(trim($row->thema), ENT_QUOTES, $PMF_LANG['metaCharset']), 14); ?></a></td>
         <td class="list"><?php print $row->usr; ?></td>
         <td class="list" style="background-color: #d3d3d3;"><img src="stat.bar.php?num=<?php print $row->num; ?>" border="0" alt="<?php print round($row->num * 20); ?> %" width="50" height="15" title="<?php print round($row->num * 20); ?> %" /></td>
     </tr>

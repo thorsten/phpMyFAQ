@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.97 2007-03-11 07:21:14 thorstenr Exp $
+ * $Id: Faq.php,v 1.98 2007-03-29 15:57:52 thorstenr Exp $
  *
  * The main FAQ class
  *
@@ -257,7 +257,7 @@ class PMF_Faq
                     $visits = $row->visits;
                 }
 
-                $title = PMF_htmlentities($row->thema, ENT_NOQUOTES, $this->pmf_lang['metaCharset']);
+                $title = PMF_htmlentities($row->thema, ENT_QUOTES, $this->pmf_lang['metaCharset']);
                 $url   = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                             $sids,
                             $row->category_id,
@@ -988,7 +988,7 @@ class PMF_Faq
                 'revision_id'   => $row->revision_id,
                 'active'        => $row->active,
                 'keywords'      => $row->keywords,
-                'title'         => PMF_htmlentities($row->thema, ENT_NOQUOTES, $this->pmf_lang['metaCharset']),
+                'title'         => PMF_htmlentities($row->thema, ENT_QUOTES, $this->pmf_lang['metaCharset']),
                 'content'       => $content,
                 'author'        => $row->author,
                 'email'         => $row->email,
@@ -1012,7 +1012,7 @@ class PMF_Faq
     function getRecordTitle($id, $encode = true)
     {
         if (isset($this->faqRecord['id']) && ($this->faqRecord['id'] == $id)) {
-            return ($encode ? PMF_htmlentities($this->faqRecord['title'], ENT_NOQUOTES, $this->pmf_lang['metaCharset']) : $this->faqRecord['title']);
+            return ($encode ? PMF_htmlentities($this->faqRecord['title'], ENT_QUOTES, $this->pmf_lang['metaCharset']) : $this->faqRecord['title']);
         }
 
         $query = sprintf(
@@ -1031,7 +1031,7 @@ class PMF_Faq
         if ($this->db->num_rows($result) > 0) {
             while ($row = $this->db->fetch_object($result)) {
                 if ($encode) {
-                    $output = PMF_htmlentities($row->thema, ENT_NOQUOTES, $this->pmf_lang['metaCharset']);
+                    $output = PMF_htmlentities($row->thema, ENT_QUOTES, $this->pmf_lang['metaCharset']);
                 } else {
                     $output = $row->thema;
                 }
@@ -1142,7 +1142,7 @@ class PMF_Faq
         $result = $this->db->query($query);
         if ($this->db->num_rows($result) > 0) {
             $row = $this->db->fetch_object($result);
-            return PMF_htmlentities($row->keywords, ENT_NOQUOTES, $this->pmf_lang['metaCharset']);
+            return PMF_htmlentities($row->keywords, ENT_QUOTES, $this->pmf_lang['metaCharset']);
         } else {
             return '';
         }
@@ -1322,7 +1322,7 @@ class PMF_Faq
                 $output .= sprintf('<li><strong>%d %s:</strong><br />',
                     $row['visits'],
                     $this->pmf_lang['msgViews']);
-                $shortTitle = makeShorterText(PMF_htmlentities($row['thema'], ENT_NOQUOTES, $this->pmf_lang['metaCharset']), 8);
+                $shortTitle = makeShorterText(PMF_htmlentities($row['thema'], ENT_QUOTES, $this->pmf_lang['metaCharset']), 8);
                 $output .= sprintf('<a href="%s">%s</a></li>',
                     $row['url'],
                     $shortTitle);
@@ -1350,7 +1350,7 @@ class PMF_Faq
         if (count ($result) > 0) {
             $output = '<ol>';
             foreach ($result as $row) {
-                $shortTitle = makeShorterText(PMF_htmlentities($row['thema'], ENT_NOQUOTES, $this->pmf_lang['metaCharset']), 8);
+                $shortTitle = makeShorterText(PMF_htmlentities($row['thema'], ENT_QUOTES, $this->pmf_lang['metaCharset']), 8);
                 $output .= sprintf('<li><a href="%s">%s</a> (%s)</li>',
                     $row['url'],
                     $shortTitle,
@@ -1518,7 +1518,7 @@ class PMF_Faq
                 $data['date'] = $row->datum;
                 $data['last_visit'] = $row->last_visit;
 
-                $title = PMF_htmlentities($row->thema, ENT_NOQUOTES, $this->pmf_lang['metaCharset']);
+                $title = PMF_htmlentities($row->thema, ENT_QUOTES, $this->pmf_lang['metaCharset']);
                 $url   = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                         $sids,
                         $row->category_id,
@@ -1602,7 +1602,7 @@ class PMF_Faq
                 $data['content'] = $row->content;
                 $data['visits'] = $row->visits;
 
-                $title = PMF_htmlentities($row->thema, ENT_NOQUOTES, $this->pmf_lang['metaCharset']);
+                $title = PMF_htmlentities($row->thema, ENT_QUOTES, $this->pmf_lang['metaCharset']);
                 $url   = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                         $sids,
                         $row->category_id,

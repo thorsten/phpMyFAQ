@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: sitemap.php,v 1.14 2007-03-06 21:21:55 thorstenr Exp $
+ * $Id: sitemap.php,v 1.15 2007-03-29 15:57:52 thorstenr Exp $
  *
  * Shows the whole FAQ articles
  *
@@ -73,7 +73,7 @@ $result = $db->query($query_2);
 $oldId = 0;
 while ($row = $db->fetch_object($result)) {
     if ($oldId != $row->id) {
-        $title = PMF_htmlentities($row->thema, ENT_NOQUOTES, $PMF_LANG['metaCharset']);
+        $title = PMF_htmlentities($row->thema, ENT_QUOTES, $PMF_LANG['metaCharset']);
         $url   = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                     $sids,
                     $row->category_id,

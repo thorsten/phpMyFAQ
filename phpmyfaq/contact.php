@@ -1,10 +1,10 @@
 <?php
 /**
-* $Id: contact.php,v 1.14 2007-03-29 12:34:11 thorstenr Exp $
+* $Id: contact.php,v 1.15 2007-03-29 15:57:51 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-09-16
-* @copyright    (c) 2001-2006 phpMyFAQ Team
+* @copyright    (c) 2001-2007 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -33,7 +33,7 @@ if (isset($_GET['gen'])) {
 
 $tpl->processTemplate ('writeContent', array(
     'msgContact'            => $PMF_LANG['msgContact'],
-    'msgContactOwnText'     => PMF_htmlentities($faqconfig->get('main.contactInformations')),
+    'msgContactOwnText'     => PMF_htmlentities($faqconfig->get('main.contactInformations'), ENT_QUOTES, $PMF_LANG['metaCharset']),
     'msgContactEMail'       => $PMF_LANG['msgContactEMail'],
     'writeSendAdress'       => $_SERVER['PHP_SELF'].'?'.$sids.'action=sendmail',
     'msgNewContentName'     => $PMF_LANG['msgNewContentName'],

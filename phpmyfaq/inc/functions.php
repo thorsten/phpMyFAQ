@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.176 2007-03-29 12:34:11 thorstenr Exp $
+ * $Id: functions.php,v 1.177 2007-03-29 15:57:52 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -1131,12 +1131,12 @@ function generateXHTMLFile()
 
     /* get main template, set main variables */
     $tpl->processTemplate ('html', array(
-                'title'             => PMF_htmlentities($PMF_CONF['title']),
-                'header'            => PMF_htmlentities($PMF_CONF['title']),
-                'metaCharset'       => PMF_htmlentities($PMF_LANG['metaCharset']),
-                'metaDescription'   => PMF_htmlentities($PMF_CONF['main.metaDescription']),
-                'metaKeywords'      => PMF_htmlentities($PMF_CONF['main.metaKeywords']),
-                'metaPublisher'     => PMF_htmlentities($PMF_CONF['main.metaPublisher']),
+                'title'             => PMF_htmlentities($PMF_CONF['title'], ENT_QUOTES, $PMF_LANG['metaCharset']),
+                'header'            => PMF_htmlentities($PMF_CONF['title'], ENT_QUOTES, $PMF_LANG['metaCharset']),
+                'metaCharset'       => PMF_htmlentities($PMF_LANG['metaCharset'], ENT_QUOTES, $PMF_LANG['metaCharset']),
+                'metaDescription'   => PMF_htmlentities($PMF_CONF['main.metaDescription'], ENT_QUOTES, $PMF_LANG['metaCharset']),
+                'metaKeywords'      => PMF_htmlentities($PMF_CONF['main.metaKeywords'], ENT_QUOTES, $PMF_LANG['metaCharset']),
+                'metaPublisher'     => PMF_htmlentities($PMF_CONF['main.metaPublisher'], ENT_QUOTES, $PMF_LANG['metaCharset']),
                 'metaLanguage'      => $PMF_LANG['metaLanguage'],
                 'metaCharset'       => $PMF_LANG['metaCharset'],
                 'entrylinks'        => $headlinks,
@@ -1177,17 +1177,17 @@ function generateXMLFile()
             if (is_writeable("../xml/")) {
                 $my_xml_output .= "\t<article id=\"".$row->id."\" solution_id=\"".$row->solution_id."\" revision_id=\"1.".$row->revision_id."\">\n";
                 $my_xml_output .= "\t<language>".$row->lang."</language>\n";
-                $my_xml_output .= "\t<category>".PMF_htmlentities(strip_tags($xml_rubrik), ENT_NOQUOTES, $PMF_LANG['metaCharset'])."</category>\n";
+                $my_xml_output .= "\t<category>".PMF_htmlentities(strip_tags($xml_rubrik), ENT_QUOTES, $PMF_LANG['metaCharset'])."</category>\n";
                 if (isset($row->keywords) && $row->keywords != '') {
                     $my_xml_output .= "\t<keywords>".$row->keywords."</keywords>\n";
                 }
                 else {
                     $my_xml_output .= "\t<keywords />\n";
                 }
-                $my_xml_output .= "\t<theme>".PMF_htmlentities(strip_tags($xml_thema), ENT_NOQUOTES, $PMF_LANG['metaCharset'])."</theme>\n";
+                $my_xml_output .= "\t<theme>".PMF_htmlentities(strip_tags($xml_thema), ENT_QUOTES, $PMF_LANG['metaCharset'])."</theme>\n";
                 $my_xml_output .= "\t<content xmlns=\"http://www.w3.org/TR/REC-html40\">".strip_tags($xml_content)."</content>\n";
                 if ($row->author) {
-                    $my_xml_output .= "\t<author>".PMF_htmlentities(strip_tags($row->author), ENT_NOQUOTES, $PMF_LANG['metaCharset'])."</author>\n";
+                    $my_xml_output .= "\t<author>".PMF_htmlentities(strip_tags($row->author), ENT_QUOTES, $PMF_LANG['metaCharset'])."</author>\n";
                 }
                 else {
                     $my_xml_output .= "\t<author />\n";
@@ -1461,7 +1461,7 @@ function searchEngine($begriff, $cat = '%', $allLanguages = true, $hasMore = fal
             $displayedCounter++;
 
             $rubriktext = $category->getPath($row->category_id);
-            $thema = PMF_htmlentities(chopString($row->thema, 15),ENT_NOQUOTES, $PMF_LANG['metaCharset']);
+            $thema = PMF_htmlentities(chopString($row->thema, 15),ENT_QUOTES, $PMF_LANG['metaCharset']);
             $content = chopString(strip_tags($row->content), 25);
             $begriff = str_replace(array('^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']', '"'), '', $begriff);
             $begriff = preg_quote($begriff, '/');
@@ -1654,8 +1654,6 @@ function printOpenQuestions()
 //
 
 /**
- * PMF_htmlentities
- *
  * This is a wrapper for htmlspecialchars() with a check on valid charsets.
  *
  * @param   string
@@ -1665,12 +1663,12 @@ function printOpenQuestions()
  * @access  private
  * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
  */
-function PMF_htmlentities($string, $quote_style = ENT_COMPAT, $charset = 'iso-8859-1')
+function PMF_htmlentities($string, $quote_style = ENT_QUOTES, $charset = 'iso-8859-1')
 {
     $acceptedCharsets = array('iso-8859-1', 'iso-8859-15', 'utf-8', 'cp866', 'ibm866', '866', 'cp1251', 'windows-1251', 'win-1251', '1251', 'cp1252', 'windows-1252', '1252', 'koi8-r', 'koi8-ru', 'koi8r', 'big5', '950', 'gb2312', '936', 'big5-hkscs', 'shift_jis', 'sjis', '932', 'euc-jp', 'eucjp');
 
     if (in_array(strtolower($charset), $acceptedCharsets)) {
-        return htmlspecialchars($string, ENT_NOQUOTES, $charset);
+        return htmlspecialchars($string, $quote_style, $charset);
     } else {
         return htmlspecialchars($string);
     }

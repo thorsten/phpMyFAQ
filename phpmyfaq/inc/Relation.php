@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Relation.php,v 1.6 2006-10-02 20:14:24 matteo Exp $
+* $Id: Relation.php,v 1.7 2007-03-29 15:57:52 thorstenr Exp $
 *
 * The Relation class for dynamic related record linking
 *
@@ -192,7 +192,7 @@ class PMF_Relation
                 );
             $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
             $oLink->itemTitle = $row->thema;
-            $oLink->text = PMF_htmlentities($row->thema, ENT_NOQUOTES, $this->pmf_lang['metaCharset']);
+            $oLink->text = PMF_htmlentities($row->thema, ENT_QUOTES, $this->pmf_lang['metaCharset']);
             $oLink->tooltip = $row->thema;
             $relevantslisting .= $oLink->toHtmlAnchor().'</li>';
             $i++;

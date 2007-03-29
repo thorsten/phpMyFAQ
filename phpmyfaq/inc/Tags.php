@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Tags.php,v 1.27 2007-03-28 22:28:24 matteo Exp $
+* $Id: Tags.php,v 1.28 2007-03-29 15:57:52 thorstenr Exp $
 *
 * The main Tags class
 *
@@ -153,7 +153,7 @@ class PMF_Tags
         $taglisting = '';
 
         foreach ($this->getAllTagsById($record_id) as $tagging_id => $tagging_name) {
-            $title = PMF_htmlentities($tagging_name, ENT_NOQUOTES, $PMF_LANG['metaCharset']);
+            $title = PMF_htmlentities($tagging_name, ENT_QUOTES, $PMF_LANG['metaCharset']);
             $url = sprintf(
                 $sids.'action=search&amp;tagging_id=%d',
                 $tagging_id
@@ -183,7 +183,7 @@ class PMF_Tags
             return false;
         }
         $current_tags = $this->getAllTags();
-        
+
         // Delete all tag references for the faq record
         if (count($tags) > 0) {
             $query = sprintf("
@@ -408,7 +408,7 @@ class PMF_Tags
             }
             $class = 'relevance'.$CSSRelevanceLevel;
             $html .= '<span class="'.$class.'">';
-            $title = PMF_htmlentities($tag['name'].' ('.$tag['count'].')', ENT_NOQUOTES, $PMF_LANG['metaCharset']);
+            $title = PMF_htmlentities($tag['name'].' ('.$tag['count'].')', ENT_QUOTES, $PMF_LANG['metaCharset']);
             $url = sprintf(
                         $sids.'action=search&amp;tagging_id=%d',
                         $tag['id']
