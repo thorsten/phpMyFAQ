@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: session.keepalive.php,v 1.5 2007-03-28 08:47:31 thorstenr Exp $
+ * $Id: session.keepalive.php,v 1.6 2007-03-29 18:01:26 thorstenr Exp $
  *
  * A dummy page used within an IFRAME for warning the user about his next
  * session expiration and to give him the contextual possibility for
@@ -34,7 +34,7 @@ if (isset($_GET['lang']) && PMF_Init::isASupportedLanguage($_GET['lang'])) {
 }
 
 PMF_Init::cleanRequest();
-session_name('pmf_auth_'.$faqconfig->get('phpMyFAQToken'));
+session_name('pmf_auth_'.$faqconfig->get('main.phpMyFAQToken'));
 session_start();
 
 $user = PMF_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));

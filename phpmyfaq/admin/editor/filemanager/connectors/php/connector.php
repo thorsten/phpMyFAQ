@@ -19,7 +19,7 @@
  */
 
 /*** Start PMF custom code ***/
-// $Id: connector.php,v 1.3 2007-03-28 08:47:31 thorstenr Exp $
+// $Id: connector.php,v 1.4 2007-03-29 18:01:27 thorstenr Exp $
 
 //
 // Prepend and start the PHP session
@@ -29,7 +29,7 @@ require_once($pmfIncludeDir.'/inc/Init.php');
 require_once($pmfIncludeDir.'/inc/PMF_User/CurrentUser.php');
 
 PMF_Init::cleanRequest();
-session_name('pmf_auth_'.$faqconfig->get('phpMyFAQToken'));
+session_name('pmf_auth_'.$faqconfig->get('main.phpMyFAQToken'));
 session_start();
 
 //

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: password.php,v 1.18 2007-03-29 15:57:53 thorstenr Exp $
+* $Id: password.php,v 1.19 2007-03-29 18:01:26 thorstenr Exp $
 *
 * Reset a forgotten password to a new one
 *
@@ -34,7 +34,7 @@ define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('IS_VALID_PHPMYFAQ_ADMIN', null);
 require_once(PMF_ROOT_DIR.'/inc/Init.php');
 PMF_Init::cleanRequest();
-session_name('pmf_auth_'.$faqconfig->get('phpMyFAQToken'));
+session_name('pmf_auth_'.$faqconfig->get('main.phpMyFAQToken'));
 session_start();
 
 require_once(PMF_ROOT_DIR.'/inc/PMF_User/CurrentUser.php');

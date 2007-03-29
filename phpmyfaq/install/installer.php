@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: installer.php,v 1.94 2007-03-26 22:05:40 matteo Exp $
+ * $Id: installer.php,v 1.95 2007-03-29 18:01:26 thorstenr Exp $
  *
  * The main phpMyFAQ Installer
  *
@@ -57,7 +57,7 @@ function db_check($supported_databases)
             return true;
         }
     }
-    
+
     return false;
 }
 
@@ -945,7 +945,7 @@ foreach ($permLevels as $level => $desc) {
     // Set the link verification base url
     $configs['referenceURL'] = PMF_Link::getSystemUri('/install/installer.php');
     // Create a unique identifier for this installation
-    $configs['phpMyFAQToken'] = md5(uniqid(rand()));
+    $configs['main.phpMyFAQToken'] = md5(uniqid(rand()));
     $oConf->update($configs);
     print "</p>\n";
 

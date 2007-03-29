@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.88 2007-03-29 15:57:53 thorstenr Exp $
+* $Id: index.php,v 1.89 2007-03-29 18:01:26 thorstenr Exp $
 *
 * The main admin backend index file
 *
@@ -38,7 +38,7 @@ if (!file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
 define('IS_VALID_PHPMYFAQ_ADMIN', null);
 require_once(PMF_ROOT_DIR.'/inc/Init.php');
 PMF_Init::cleanRequest();
-session_name('pmf_auth_'.$faqconfig->get('phpMyFAQToken'));
+session_name('pmf_auth_'.$faqconfig->get('main.phpMyFAQToken'));
 session_start();
 
 // Include classes and functions

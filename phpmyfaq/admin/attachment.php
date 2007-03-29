@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: attachment.php,v 1.33 2007-03-29 15:57:53 thorstenr Exp $
+* $Id: attachment.php,v 1.34 2007-03-29 18:01:26 thorstenr Exp $
 *
 * Select an attachment and save it or create the SQL backup files
 *
@@ -23,7 +23,7 @@ require_once('../inc/functions.php');
 require_once('../inc/Init.php');
 define('IS_VALID_PHPMYFAQ_ADMIN', null);
 PMF_Init::cleanRequest();
-session_name('pmf_auth_'.$faqconfig->get('phpMyFAQToken'));
+session_name('pmf_auth_'.$faqconfig->get('main.phpMyFAQToken'));
 session_start();
 
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: stat.bar.php,v 1.9 2007-01-21 14:37:43 thorstenr Exp $
+* $Id: stat.bar.php,v 1.10 2007-03-29 18:01:26 thorstenr Exp $
 *
 * Generates a graphical bar
 *
@@ -23,7 +23,7 @@ define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
 require_once(PMF_ROOT_DIR.'/inc/Init.php');
 PMF_Init::cleanRequest();
-session_name('pmf_auth_'.$faqconfig->get('phpMyFAQToken'));
+session_name('pmf_auth_'.$faqconfig->get('main.phpMyFAQToken'));
 session_start();
 
 header ("Content-type: image/png");
