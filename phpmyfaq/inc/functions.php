@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.179 2007-03-29 18:28:43 thorstenr Exp $
+ * $Id: functions.php,v 1.180 2007-03-29 18:33:26 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -582,7 +582,7 @@ function printCaptchaFieldset($legend, $img, $length)
 
     $html = '';
 
-    if (isset($PMF_CONF['spamEnableCatpchaCode']) && $PMF_CONF['spamEnableCatpchaCode']) {
+    if (isset($PMF_CONF['spam.enableCatpchaCode']) && $PMF_CONF['spam.enableCatpchaCode']) {
         $html .= '<fieldset><legend>'.$legend.'</legend>';
         $html .= '<div style="text-align:center;">'.$img;
         $html .= '<input class="inputfield" style="vertical-align: top;" type="text" name="captcha" id="captcha" value="" size="'.$length.'" />';
@@ -607,7 +607,7 @@ function checkCaptchaCode()
 {
     global $PMF_CONF, $captcha;
 
-    if (isset($PMF_CONF['spamEnableCatpchaCode']) && $PMF_CONF['spamEnableCatpchaCode']) {
+    if (isset($PMF_CONF['spam.enableCatpchaCode']) && $PMF_CONF['spam.enableCatpchaCode']) {
         return (isset($_POST['captcha']) && ($captcha->validateCaptchaCode($_POST['captcha'])));
     } else {
         return true;

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.130 2007-03-29 18:28:41 thorstenr Exp $
+* $Id: update.php,v 1.131 2007-03-29 18:33:24 thorstenr Exp $
 *
 * Main update script
 *
@@ -1357,6 +1357,7 @@ if ($step == 5) {
         $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.referenceURL' WHERE config_name = 'referenceURL'";
         $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.send2friendText' WHERE config_name = 'send2friendText'";
         $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'spam.checkBannedWords' WHERE config_name = 'spamCheckBannedWords'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'spam.enableCatpchaCode' WHERE config_name = 'spamEnableCatpchaCode'";
     }
 
     // Perform the queries for updating/migrating the database from 2.x

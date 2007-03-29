@@ -618,7 +618,7 @@ $PMF_LANG['msgAdvancedSearch'] = 'Avancerad sökning';
 $PMF_LANG['spamControlCenter'] = 'Spam-skyddsinställningar';
 $LANG_CONF["spamEnableSafeEmail"] = array(0 => "checkbox", 1 => "Visa epost-adresser säkert (standard: på).");
 $LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "Kontrollera det publika formuläret mot listan på förbjudna ord (standard: på).");
-$LANG_CONF["spamEnableCatpchaCode"] = array(0 => "checkbox", 1 => "Använd grafisk kod (catpcha ) för det publika formuläret (standard: på).");
+$LANG_CONF["spam.enableCatpchaCode"] = array(0 => "checkbox", 1 => "Använd grafisk kod (catpcha ) för det publika formuläret (standard: på).");
 $PMF_LANG['ad_session_expiring'] = 'Din session går ut om %d minuter: vill du fortsätta arbeta?';
 
 // added v1.6.2 - 2006-06-13 by Matteo

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_ja.php,v 1.39 2007-03-29 18:28:41 thorstenr Exp $
+ * $Id: language_ja.php,v 1.40 2007-03-29 18:33:25 thorstenr Exp $
  *
  * The Japanese language file
  *
@@ -621,7 +621,7 @@ $PMF_LANG['msgAdvancedSearch'] = 'é«˜åº¦ã?ªæ¤œç´¢';
 $PMF_LANG['spamControlCenter'] = 'ã‚¹ãƒ‘ãƒ åˆ¶å¾¡ã‚»ãƒ³ã‚¿ãƒ¼';
 $LANG_CONF["spamEnableSafeEmail"] = array(0 => "checkbox", 1 => "å®‰å…¨ã?«ãƒ¦ãƒ¼ã‚¶ãƒ¼ã?®é›»å­?ãƒ¡ãƒ¼ãƒ«ã‚’è¡¨ç¤ºã?™ã‚‹ (ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ: æœ‰åŠ¹)");
 $LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "å…¬é–‹ãƒ•ã‚©ãƒ¼ãƒ ã?®å†…å®¹ã?«å¯¾ã?™ã‚‹ç¦?æ­¢å?˜èªžã‚’ç¢ºèª?ã?™ã‚‹ (ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ: æœ‰åŠ¹)");
-$LANG_CONF["spamEnableCatpchaCode"] = array(0 => "checkbox", 1 => "å…¬é–‹ãƒ•ã‚©ãƒ¼ãƒ ã?®é€?ä¿¡ã‚’è¨±å?¯ã?™ã‚‹ã?Ÿã‚?ã?« captcha ã‚’ä½¿ç”¨ã?™ã‚‹ (ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ: æœ‰åŠ¹)");
+$LANG_CONF["spam.enableCatpchaCode"] = array(0 => "checkbox", 1 => "å…¬é–‹ãƒ•ã‚©ãƒ¼ãƒ ã?®é€?ä¿¡ã‚’è¨±å?¯ã?™ã‚‹ã?Ÿã‚?ã?« captcha ã‚’ä½¿ç”¨ã?™ã‚‹ (ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ: æœ‰åŠ¹)");
 $PMF_LANG['ad_session_expiring'] = 'ã‚»ãƒƒã‚·ãƒ§ãƒ³ã?®æœŸé™?åˆ‡ã‚Œã?¯ %d åˆ†ã?§ã?™: would you like to go on working?';
 
 // added v1.6.2 - 2006-06-13 by Matteo
