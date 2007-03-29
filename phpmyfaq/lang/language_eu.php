@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_eu.php,v 1.23 2007-03-29 19:03:22 thorstenr Exp $
+* $Id: language_eu.php,v 1.24 2007-03-29 19:31:54 thorstenr Exp $
 *
 * Euskera language file
 *
@@ -554,20 +554,19 @@ $PMF_LANG["ad_entry_fontsize"] = "Letraren tamaina: ";
 $LANG_CONF['main.language'] = array(0 => "select", 1 => "Fitxategientzat lehenetsitako hizkuntza");
 $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Edukien kudeaketa automatikoa gaitu");
 $LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => "FAQaren izenburua");
-$LANG_CONF["version"] = array(0 => "print", 1 => "phpMyFAQ bertsioa");
+$LANG_CONF['main.currentVersion'] = array(0 => "print", 1 => "phpMyFAQ bertsioa");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Orriaren deskribapena");
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Bilatzaileentzat (Goolge, Yahoo...) hitz klabeak");
 $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Administratzailearen izena");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Administratzailearen posta elektronikoa");
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Harremanetarako informazioa");
-$LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Konfirmazio orriko copyright-eko testua");
-$LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "<em>Lagun bati bidali</em> orrirako testua");
+$LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "<em>Lagun bati bidali</em> orrirako testua");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Eranskinetako gehieneko tamaina byte-etan (max. ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Sarrera azpian eranskinei estekaren bat ipini?");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "Monitorizazioa erabili?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Adminlog-a erabili?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Nahi al duzu IP-ak aztertzea UIN-ak egiaztatzean?");
-$LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Erakutsitako item-en kopurua orriko");
+$LANG_CONF["main.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Erakutsitako item-en kopurua orriko");
 $LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Artikulu berrien kopurua");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "IP hauek blokeatu");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Mod_rewrite-rentzat euskarria aktibatu? (besterik esan ezean, desaktibatua)");

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_nl.php,v 1.35 2007-03-29 19:03:22 thorstenr Exp $
+ * $Id: language_nl.php,v 1.36 2007-03-29 19:31:55 thorstenr Exp $
  *
  * Dutch language file
  *
@@ -552,20 +552,19 @@ $PMF_LANG["ad_entry_fontsize"] = "Letter grootte: ";
 $LANG_CONF['main.language'] = array(0 => "select", 1 => "Taal-bestand");
 $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Activeer automatische taal herkenning");
 $LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => "Titel van de FAQ");
-$LANG_CONF["version"] = array(0 => "print", 1 => "FAQ Versie");
+$LANG_CONF['main.currentVersion'] = array(0 => "print", 1 => "FAQ Versie");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Beschrijving van de pagina");
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Sleutelwoorden voor Spiders");
 $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Naam van de uitgever");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Emailadres van de beheerder");
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Contact informatie");
-$LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Copyright tekst voor op de startpagina");
-$LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Tekst voor de send2friend pagina");
+$LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Tekst voor de send2friend pagina");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "maximum grootte van bijlagen in Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "De bijlagen onder de records aantonen?");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "Tracking activeren?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Beheerlog activeren?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Wilt u dat het IP wordt gecontroleerd wanneer de UINs in admin.php worden gecontroleerd?");
-$LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Aantal weergegeven onderwerpen per pagina");
+$LANG_CONF["main.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Aantal weergegeven onderwerpen per pagina");
 $LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Aantal nieuws artikelen");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Blokkeer deze IPs");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "mod_rewrite ondersteuning activeren? (standaard: gedeactiveerd)");

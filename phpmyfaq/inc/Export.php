@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Export.php,v 1.5 2007-03-29 18:47:40 thorstenr Exp $
+* $Id: Export.php,v 1.6 2007-03-29 19:31:53 thorstenr Exp $
 *
 * XML, XML DocBook, XHTML and PDF export - Classes and Functions
 *
@@ -209,7 +209,7 @@ class PMF_Export
         $tree = new PMF_Category();
         $tree->transform(0);
         $my_xml_output  = "<?xml version=\"1.0\" encoding=\"".$PMF_LANG["metaCharset"]."\" standalone=\"yes\" ?>\n";
-        $my_xml_output .= "<!-- XML-Output by phpMyFAQ ".$PMF_CONF["version"]." | Date: ".makeDate(date("YmdHis"))." -->\n";
+        $my_xml_output .= "<!-- XML-Output by phpMyFAQ ".$PMF_CONF['main.currentVersion']." | Date: ".makeDate(date("YmdHis"))." -->\n";
         $my_xml_output .= "<phpmyfaq xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:NamespaceSchemaLocation=\"http://www.phpmyfaq.de/xml/faqschema.xsd\">\n";
 
         // Get Faq Data

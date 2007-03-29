@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_nb.php,v 1.21 2007-03-29 19:03:23 thorstenr Exp $
+* $Id: language_nb.php,v 1.22 2007-03-29 19:31:55 thorstenr Exp $
 *
 * Norwegian Bokmål language file
 *
@@ -551,20 +551,19 @@ $PMF_LANG["ad_entry_fontsize"] = "Skrifttype størrelse: ";
 $LANG_CONF['main.language'] = array(0 => "select", 1 => "Språkfil");
 $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Aktiver automatisk forhandling av tegnsett");
 $LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => "Tittel for OSS/FAQ");
-$LANG_CONF["version"] = array(0 => "print", 1 => "FAQ versjon");
+$LANG_CONF['main.currentVersion'] = array(0 => "print", 1 => "FAQ versjon");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Beskrivelse av siden");
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Nøkkel for søkemaskiner");
 $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Utgiversnavn");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Administrators e-postadresse");
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Kontaktinformasjon");
-$LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Tekst for opphavsrett på startsiden");
-$LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Tekst for send2friend-siden");
+$LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Tekst for send2friend-siden");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "maksimum størrelse for vedlegg i byte (maks. ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Lenke til vedlegg under oppføringene?");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "bruk Tracking?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "bruk adminlogg?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Vil du at IP-en skal sjekkes når man sjekket UIN-en i admin.php?");
-$LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Antall oppføringer per side");
+$LANG_CONF["main.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Antall oppføringer per side");
 $LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Antall nyhetsartikler");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Steng ute disse IP-ene");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Aktiver mod_rewrite støtte? (standard: deaktivert)");

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: header.php,v 1.40 2007-03-29 18:47:40 thorstenr Exp $
+ * $Id: header.php,v 1.41 2007-03-29 19:31:53 thorstenr Exp $
  *
  * Header of the admin area
  *
@@ -67,7 +67,7 @@ if (isset($_action)) {
 
 <!-- header -->
 <div id="header">
-    <h1>phpMyFAQ <?php print $PMF_CONF["version"]; ?></h1>
+    <h1>phpMyFAQ <?php print $PMF_CONF['main.currentVersion']; ?></h1>
 <?php if (isset($auth)) { ?>
 <?php if ('' == $_action) { ?>
     <div id="langform">

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.76 2007-03-29 19:06:44 thorstenr Exp $
+ * $Id: language_de.php,v 1.77 2007-03-29 19:31:54 thorstenr Exp $
  *
  * German language file
  *
@@ -553,7 +553,7 @@ $PMF_LANG["ad_entry_fontsize"] = "Schriftgröße: ";
 $LANG_CONF['main.language'] = array(0 => "select", 1 => "Sprachdatei");
 $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Automatische Spracherkennung");
 $LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => "Titel der FAQ");
-$LANG_CONF["version"] = array(0 => "print", 1 => "Version der FAQ");
+$LANG_CONF['main.currentVersion'] = array(0 => "print", 1 => "Version der FAQ");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Beschreibung der Seite");
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Keywords für Suchmaschinen");
 $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Name des Veröffentlichers");
@@ -565,7 +565,7 @@ $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Attachments
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "Tracking aktiviert?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Adminlog aktiviert?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Soll die IP zum Check der UINs im Administrationsbereich herangezogen werden?");
-$LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Anzahl der angezeigten Themen pro Seite");
+$LANG_CONF["main.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Anzahl der angezeigten Themen pro Seite");
 $LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Anzahl der angezeigten News");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Gesperrte IPs (Bitte mit Leerzeichen trennen)");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "mod_rewrite Support aktivieren? (Voreinstellung: deaktiviert)");

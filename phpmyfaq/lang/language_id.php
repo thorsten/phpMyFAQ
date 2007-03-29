@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_id.php,v 1.26 2007-03-29 19:03:22 thorstenr Exp $
+ * $Id: language_id.php,v 1.27 2007-03-29 19:31:55 thorstenr Exp $
  *
  * Indonesian language file
  *
@@ -632,7 +632,7 @@ $LANG_CONF['main.language'] = array(0 => "select", 1 => "Berkas-Bahasa");
 $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Aktifkan 'automatic
 content negotiation'");
 $LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => "Judul FAQ");
-$LANG_CONF["version"] = array(0 => "print", 1 => "Versi FAQ");
+$LANG_CONF['main.currentVersion'] = array(0 => "print", 1 => "Versi FAQ");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Penjelasan halaman");
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Kata kunci untuk
 spiders");
@@ -640,9 +640,7 @@ $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Nama Penulis");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Alamat e-mail Administrator");
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Informasi
 Hubungan");
-$LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Naskah hak cipta
-untuk halaman utama");
-$LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Naskah untuk
+$LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Naskah untuk
 pengiriman ke teman");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Ukuran maksimum file berkas dalam Bytes (maksimum. ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Sediakan hubungkan ke
@@ -651,10 +649,8 @@ $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "Aktifkan pe
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Aktifkan catatan
 administrasi?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Apakah anda ingin pemeriksaan terhadap alamat IP ketika pemeriksaan terhadap UIN dilakukan di admin.php?");
-$LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Jumlah materi yang
-ditampilkan per halaman");
-$LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Jumlah kabar yang
-ditampilkan");
+$LANG_CONF["main.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Jumlah materi yang ditampilkan per halaman");
+$LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Jumlah kabar yang ditampilkan");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Larang IP berikut");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Aktifkan dukungan untuk mod_rewrite? (awal: tidak aktif)");
 $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Apakah anda ingin mengaktifkan dukungan untuk LDAP? (awal: tidak aktif)");

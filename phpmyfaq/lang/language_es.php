@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_es.php,v 1.28 2007-03-29 19:03:22 thorstenr Exp $
+ * $Id: language_es.php,v 1.29 2007-03-29 19:31:54 thorstenr Exp $
  *
  * Spanish language file
  *
@@ -554,20 +554,19 @@ $PMF_LANG["ad_entry_fontsize"] = "Font size: ";
 $LANG_CONF['main.language'] = array(0 => "select", 1 => "Fichero de Idioma");
 $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Enable automatic content negotiation");
 $LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => "Título del FAQ");
-$LANG_CONF["version"] = array(0 => "print", 1 => "Versión FAQ");
+$LANG_CONF['main.currentVersion'] = array(0 => "print", 1 => "Versión FAQ");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Descripción de página");
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Palabras clave para Spiders");
 $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Nombre del editor");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Dirección de e-mail del administrador");
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Informaciones de contacto");
-$LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Texto del copyright de la página de confirmación");
-$LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Texto para la página de enviar a un amigo");
+$LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Texto para la página de enviar a un amigo");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Tamaño máximo para los adjuntos en Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "¿Poner un link a los adjuntos bajo las entradas?");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "¿Usar monitorización?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "¿Usar el Adminlog?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "¿Quieres que las IP sean chequeadas cuando se comprueben las UINs");
-$LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Number of displayed topics per page");
+$LANG_CONF["main.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Number of displayed topics per page");
 $LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Número de nuevos artículos");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Bloquear estas IPs");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Activate mod_rewrite support? (default: disabled)");

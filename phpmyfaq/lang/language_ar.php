@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_ar.php,v 1.32 2007-03-29 19:03:22 thorstenr Exp $
+* $Id: language_ar.php,v 1.33 2007-03-29 19:31:54 thorstenr Exp $
 *
 * Arabic language file
 *
@@ -592,20 +592,19 @@ $PMF_LANG["ad_entry_fontsize"] = "حجم الخط : ";
 $LANG_CONF["main.language"] = array(0 => "select", 1 => "مل�? اللغة");
 $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "ت�?عيل خاصية تبادل المحتوى التلقائي ؟");
 $LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => "عنوان البرنامج ");
-$LANG_CONF["version"] = array(0 => "print", 1 => "نسخة البرنامج");
+$LANG_CONF['main.currentVersion'] = array(0 => "print", 1 => "نسخة البرنامج");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "وص�? الص�?حة");
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "كلمات البحث لمحركات البحث");
 $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "إسم الناشر");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "البريد الإلكتروني للمشر�?");
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "معلومات الإتصال");
-$LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "حقوق النشر �?ي ص�?حة البداية");
-$LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "نص لص�?حة أرسل إلي صديق");
+$LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "نص لص�?حة أرسل إلي صديق");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "أقصى حجم للمر�?قات بالبايت (max. ".ini_get("upload_max_filesize")."بايت)");
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "ضع روابط المر�?قات أس�?ل المداخلات ؟");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "استخدم خاصية التتبع ؟");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "استخدم خاصية سجل المشر�?ين ؟");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Do you want the IP to be checked when checking the UINs in admin.php?");
-$LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "عدد المواضيع المعروضة بالص�?حة الواحدة");
+$LANG_CONF["main.numberOfRecordsPerPage"] = array(0 => "input", 1 => "عدد المواضيع المعروضة بالص�?حة الواحدة");
 $LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "عدد مقالات الأخبار");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "حجب ومنع هذة العناوين");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "? mod_rewrite هل تريد تشغيل خاصية ال  (default: disabled)");

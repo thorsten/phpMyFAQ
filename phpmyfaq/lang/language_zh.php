@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_zh.php,v 1.35 2007-03-29 19:06:45 thorstenr Exp $
+* $Id: language_zh.php,v 1.36 2007-03-29 19:31:56 thorstenr Exp $
 *
 * Chinese (simplified) language file
 *
@@ -554,7 +554,7 @@ $PMF_LANG["ad_entry_fontsize"] = "字体大�?: ";
 $LANG_CONF['main.language'] = array(0 => "select", 1 => "选择语言");
 $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "自动选择系统语言");
 $LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => "系统�??称");
-$LANG_CONF["version"] = array(0 => "print", 1 => "程�?版本");
+$LANG_CONF['main.currentVersion'] = array(0 => "print", 1 => "程�?版本");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "页�?��??述");
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "用户Meta（网页自动�?�索程�?）的关键�?");
 $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "管�?�员姓�??");
@@ -566,7 +566,7 @@ $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "显示内�
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "�?�用跟踪？");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "�?�用�?作日志？");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "你希望admin.php在检查UIN的时候也检查IP地�?�么？");
-$LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "�?页显示主题数目");
+$LANG_CONF["main.numberOfRecordsPerPage"] = array(0 => "input", 1 => "�?页显示主题数目");
 $LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "新内容数�?");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "�?止这些IP地�?�访问");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "�?�用mod_rewrite�?�?(默认:�?止)");

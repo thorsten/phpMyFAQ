@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.73 2007-03-29 19:06:44 thorstenr Exp $
+* $Id: language_it.php,v 1.74 2007-03-29 19:31:55 thorstenr Exp $
 *
 * Italian language file
 *
@@ -555,7 +555,7 @@ $PMF_LANG["ad_entry_fontsize"] = "Dimensione del carattere: ";
 $LANG_CONF['main.language'] = array(0 => "select", 1 => "File di lingua");
 $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Abilita la <em>automatic content negotiation</em>");
 $LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => "Titolo del sistema");
-$LANG_CONF["version"] = array(0 => "print", 1 => "Versione di phpMyFAQ");
+$LANG_CONF['main.currentVersion'] = array(0 => "print", 1 => "Versione di phpMyFAQ");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Descrizione della pagina");
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Keywords per gli Spiders");
 $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Nome dell'Editore");
@@ -567,7 +567,7 @@ $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Mostra il l
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "Abilito il tracciamento per le attivit&agrave; dell'Utente?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Abilito il tracciamento per le attivit&agrave; di Amministrazione?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Vuoi controllare l'IP quando verifico l'<em>UIN</em> in <em>admin.php</em>?");
-$LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Numero di elementi visualizzati per pagina");
+$LANG_CONF["main.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Numero di elementi visualizzati per pagina");
 $LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Numero di elementi visualizzati per la sezione News");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Vieta l'accesso a questi indirizzi IP");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Attivare il supporto a <em>mod_rewrite</em>? (default: disabilitato)");

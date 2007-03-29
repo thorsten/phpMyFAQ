@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: index.php,v 1.90 2007-03-29 18:47:40 thorstenr Exp $
+* $Id: index.php,v 1.91 2007-03-29 19:31:53 thorstenr Exp $
 *
 * The main admin backend index file
 *
@@ -324,7 +324,7 @@ if (isset($auth)) {
     <h2>System Information</h2>
     <dl class="table-display">
         <dt><strong>phpMyFAQ Version</strong></dt>
-        <dd>phpMyFAQ <?php print $PMF_CONF["version"]; ?></dd>
+        <dd>phpMyFAQ <?php print $PMF_CONF['main.currentVersion']; ?></dd>
         <dt><strong>Server Software</strong></dt>
         <dd><?php print $_SERVER["SERVER_SOFTWARE"]; ?></dd>
         <dt><strong>PHP Version</strong></dt>
@@ -354,7 +354,7 @@ if (isset($auth)) {
             } else {
                 printf('<p>%s <a href="http://www.phpmyfaq.de" target="_blank">www.phpmyfaq.de</a>: <strong>phpMyFAQ %s</strong>', $PMF_LANG['ad_xmlrpc_latest'], $result->scalarval());
                 // Installed phpMyFAQ version is outdated
-                if (-1 == version_compare($PMF_CONF["version"], $result->scalarval())) {
+                if (-1 == version_compare($PMF_CONF['main.currentVersion'], $result->scalarval())) {
                     print '<br />'.$PMF_LANG['ad_you_should_update'];
                 }
                 print '</p>';

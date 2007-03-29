@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.103 2007-03-29 19:06:44 thorstenr Exp $
+* $Id: language_en.php,v 1.104 2007-03-29 19:31:54 thorstenr Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -555,7 +555,7 @@ $PMF_LANG["ad_entry_fontsize"] = "Font size: ";
 $LANG_CONF['main.language'] = array(0 => "select", 1 => "Language-File");
 $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Enable automatic content negotiation");
 $LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => "Title of the FAQ");
-$LANG_CONF["version"] = array(0 => "print", 1 => "FAQ Version");
+$LANG_CONF['main.currentVersion'] = array(0 => "print", 1 => "FAQ Version");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Describtion of the Page");
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Keywords for Spiders");
 $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Name of the Publisher");
@@ -567,7 +567,7 @@ $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Link the at
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "use Tracking?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "use Adminlog?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Do you want the IP to be checked when checking the UINs in admin.php?");
-$LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Number of displayed topics per page");
+$LANG_CONF["main.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Number of displayed topics per page");
 $LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Number of news articles");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Ban these IPs");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Activate mod_rewrite support? (default: disabled)");

@@ -1,21 +1,21 @@
 <?php
 /**
-* $Id: writecomment.php,v 1.14 2007-03-29 15:57:51 thorstenr Exp $
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @since        2002-08-29
-* @copyright    (c) 2001-2006 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * $Id: writecomment.php,v 1.15 2007-03-29 19:31:53 thorstenr Exp $
+ *
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since       2002-08-29
+ * @copyright   (c) 2002-2007 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
@@ -29,7 +29,7 @@ if (isset($_GET['gen'])) {
     exit;
 }
 
-Tracking('write_comment', $_GET['id']);
+Tracking('write_comment', (int)$_GET['id']);
 
 $tpl->processTemplate('writeContent', array(
                       'msgCommentHeader' => $PMF_LANG['msgWriteComment'],
@@ -43,9 +43,6 @@ $tpl->processTemplate('writeContent', array(
                       'defaultContentName' => getFullUserName(),
                       'msgYourComment' => $PMF_LANG['msgYourComment'],
                       'msgNewContentSubmit' => $PMF_LANG['msgNewContentSubmit'],
-                      'captchaFieldset' => printCaptchaFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('writecomment'), $captcha->caplength),
-                      'copyright_eintrag' => PMF_htmlentities($PMF_CONF['copyright_eintrag'], ENT_QUOTES, $PMF_LANG['metaCharset'])));
+                      'captchaFieldset' => printCaptchaFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('writecomment'), $captcha->caplength)));
 
 $tpl->includeTemplate('writeContent', 'index');
-?>
-

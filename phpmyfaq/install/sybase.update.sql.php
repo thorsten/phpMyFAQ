@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: sybase.update.sql.php,v 1.34 2007-03-29 19:06:44 thorstenr Exp $
+ * $Id: sybase.update.sql.php,v 1.35 2007-03-29 19:31:53 thorstenr Exp $
  *
  * CREATE TABLE instruction for Sybase database
  *
@@ -191,7 +191,7 @@ $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('spam.enableSafeEmail', '
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.titleFAQ', 'phpMyFAQ Codename \"Prometheus\"')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.enableUserTracking', 'true')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.urlValidateInterval', '86400')";
-$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('version', '".NEWVERSION."')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.currentVersion', '".NEWVERSION."')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('records.numberOfRelatedArticles', '5')";
 
 $query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (1, 'adduser', 'Right to add user accounts', 1, 1)";

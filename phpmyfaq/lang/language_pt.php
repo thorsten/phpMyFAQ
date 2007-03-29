@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_pt.php,v 1.29 2007-03-29 19:03:22 thorstenr Exp $
+ * $Id: language_pt.php,v 1.30 2007-03-29 19:31:56 thorstenr Exp $
  *
  * Portuguese language file
  *
@@ -554,20 +554,19 @@ $PMF_LANG["ad_entry_fontsize"] = "Tamanho da fonte: ";
 $LANG_CONF['main.language'] = array(0 => "select", 1 => "Ficheiro de Linguagem");
 $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Enable automatic content negotiation");
 $LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => "T&iacute;tulo do FAQ");
-$LANG_CONF["version"] = array(0 => "print", 1 => "Vers&atilde;o do FAQ");
+$LANG_CONF['main.currentVersion'] = array(0 => "print", 1 => "Vers&atilde;o do FAQ");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Descri&ccedil;&atilde;o da p&aacute;gina");
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Palavras-Chave para Rob&ocirc;s de Indexa&ccedil;&atilde;o");
 $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Nome do Editor");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Email do Administrador");
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Informa&ccedil;&atilde;o do contacto");
-$LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Texto de Copyright para p&aacute;gina inicial");
-$LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Texto para p&aacute;gina send2friend");
+$LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Texto para p&aacute;gina send2friend");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Tamanho m&aacute;ximo para anexos em Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Colocar hiperliga&ccedil;&otilde;es para anexos abaixo das entradas?");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "usar Tracking?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "usar Adminlog?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Conferir o IP ao verificar o UINs no admin.php?");
-$LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "N&uacute;mero de t&oacute;picos mostrados por p&aacute;gina");
+$LANG_CONF["main.numberOfRecordsPerPage"] = array(0 => "input", 1 => "N&uacute;mero de t&oacute;picos mostrados por p&aacute;gina");
 $LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "N&uacute;ero de artigos de not&iacute;cias");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Banir estes IPs");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Activar suporte de  mod_rewrite? (por defeito: desactivado)");

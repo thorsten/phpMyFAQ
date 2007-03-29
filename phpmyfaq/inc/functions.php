@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.183 2007-03-29 19:03:23 thorstenr Exp $
+ * $Id: functions.php,v 1.184 2007-03-29 19:31:53 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -1141,7 +1141,7 @@ function generateXHTMLFile()
                 'metaCharset'       => $PMF_LANG['metaCharset'],
                 'entrylinks'        => $headlinks,
                 'writeContent'      => $xhtml,
-                'copyright'         => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> '.$PMF_CONF['version']
+                'copyright'         => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> '.$PMF_CONF['main.currentVersion']
         ));
 
     /* parse without printing */
@@ -1165,7 +1165,7 @@ function generateXMLFile()
 
     if ($db->num_rows($result) > 0) {
         $my_xml_output = "<?xml version=\"1.0\" encoding=\"".$PMF_LANG["metaCharset"]."\" standalone=\"yes\" ?>\n";
-        $my_xml_output .= "<!-- XML-Output by phpMyFAQ ".$PMF_CONF["version"]." | Date: ".makeDate(date("YmdHis"))." -->\n";
+        $my_xml_output .= "<!-- XML-Output by phpMyFAQ ".$PMF_CONF['main.currentVersion']." | Date: ".makeDate(date("YmdHis"))." -->\n";
         $my_xml_output .= "<phpmyfaq xmlns=\"http://www.phpmyfaq.de/phpmyfaq\">\n";
         $xml_fp = fopen("../xml/phpmyfaq.xml","w");
         while ($row = $db->fetch_object($result)) {

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_fr.php,v 1.35 2007-03-29 19:03:22 thorstenr Exp $
+* $Id: language_fr.php,v 1.36 2007-03-29 19:31:55 thorstenr Exp $
 *
 * The French language file - try to be the best
 *
@@ -555,20 +555,19 @@ $PMF_LANG["ad_entry_fontsize"] = "Taille de police&nbsp;&nbsp;: ";
 $LANG_CONF['main.language'] = array(0 => "select", 1 => "Langue de fichier");
 $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Active la négociation de contenu automatique");
 $LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => "Titre de la FAQ");
-$LANG_CONF["version"] = array(0 => "print", 1 => "Version de la FAQ");
+$LANG_CONF['main.currentVersion'] = array(0 => "print", 1 => "Version de la FAQ");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Description de la page");
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Mots-clef pour les moteurs de recherche");
 $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Nom du publieur");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Adresse Email de l'administrateur");
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Informations de contact");
-$LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Texte de Copyright pour la page d'entrée");
-$LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Texte pour la page send2friend");
+$LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Texte pour la page send2friend");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Taille maximum des attachements en Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Afficher le lien des attachements en bas de page&nbsp;?");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "Utiliser le Tracking&nbsp;?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Utiliser l'Adminlog&nbsp;?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Désirez vous vérifier l'adresse IP afin d'identifier le UINs dans admin.php&nbsp;?");
-$LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Nombre de topics affichés par page");
+$LANG_CONF["main.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Nombre de topics affichés par page");
 $LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Nombre de nouveaux articles");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Bannir ces adresses IP");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Activer le support du mod_rewrite&nbsp;? (d&eacute;fault&nbsp;: d&eacute;sactiv&eacute;)");

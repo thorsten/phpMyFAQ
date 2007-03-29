@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_fi.php,v 1.28 2007-03-29 19:03:22 thorstenr Exp $
+ * $Id: language_fi.php,v 1.29 2007-03-29 19:31:54 thorstenr Exp $
  *
  * Finnish language file
  *
@@ -553,23 +553,21 @@ $PMF_LANG["ad_entry_fontsize"] = "Tekstin koko: ";
 $LANG_CONF['main.language'] = array(0 => "select", 1 => "Kieli-Tiedosto");
 $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Salli automaattinen sisällön kätteleminen");
 $LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => "FAQ Otsikko");
-$LANG_CONF["version"] = array(0 => "print", 1 => "FAQ Versio");
+$LANG_CONF['main.currentVersion'] = array(0 => "print", 1 => "FAQ Versio");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Sivun Kuvaus");
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Avainsanat hakukoneille");
 $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Julkaisijan nimi");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Ylläpitäjän sähköposti osoite");
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Yhteystiedot");
-$LANG_CONF["copyright_eintrag"] = array(0 => "area", 1 => "Kopiointioikeudet aloitussivulle");
-$LANG_CONF["send2friend_text"] = array(0 => "area", 1 => "Teksti lähetä tuttavalle sivulle");
+$LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Teksti lähetä tuttavalle sivulle");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "suurin sallittu koko liitetiedostoille tavuina on  (max. ".ini_get("upload_max_filesize")."tavua)");
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Linkitä liitteet tietueiden alpuolelle?");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "käytä lokia?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "käytä ylläpitolokia?");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Haluatko, että admin.php:ssa IP tarkastetaan samalla kun UIN?");
-$LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "Näytettyjen tietueiden määrä per sivu");
+$LANG_CONF["main.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Näytettyjen tietueiden määrä per sivu");
 $LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Uutisten määrä");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Estä käyttö näistä IP-osoitteista");
-$LANG_CONF["parse_php"] = array(0 => "checkbox", 1 => "Should the template engine parse PHP code? (oletus: ei käytössä)");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Aktivoi mod_rewrite tuki? (oletus: ei käytössä)");
 $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Haluatko laittaa LDAP tuen päälle(enabled)? (oletus: ei käytössä)");
 

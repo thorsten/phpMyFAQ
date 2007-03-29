@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_ja.php,v 1.44 2007-03-29 19:06:45 thorstenr Exp $
+ * $Id: language_ja.php,v 1.45 2007-03-29 19:31:55 thorstenr Exp $
  *
  * The Japanese language file
  *
@@ -555,7 +555,7 @@ $PMF_LANG["ad_entry_fontsize"] = "ãƒ•ã‚©ãƒ³ãƒˆã‚µã‚¤ã‚º: ";
 $LANG_CONF['main.language'] = array(0 => "select", 1 => "è¨€èªž");
 $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "è¨€èªžã?®è‡ªå‹•èª?è­˜ã‚’æœ‰åŠ¹ã?«ã?™ã‚‹");
 $LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => "FAQ ã?®é¡Œå??");
-$LANG_CONF["version"] = array(0 => "print", 1 => "FAQ ãƒ?ãƒ¼ã‚¸ãƒ§ãƒ³");
+$LANG_CONF['main.currentVersion'] = array(0 => "print", 1 => "FAQ ãƒ?ãƒ¼ã‚¸ãƒ§ãƒ³");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "ãƒšãƒ¼ã‚¸ã?®èª¬æ˜Ž");
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "æ¤œç´¢ãƒ­ãƒœãƒƒãƒˆç”¨ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰");
 $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "ç®¡ç?†è€…å??");
@@ -567,7 +567,7 @@ $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "ã‚¨ãƒ³ãƒˆãƒ
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "è¿½è·¡æ©Ÿèƒ½ã‚’ä½¿ç”¨ã?™ã‚‹");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "ç®¡ç?†ãƒ­ã‚°ã‚’ä½¿ç”¨ã?™ã‚‹");
 $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "admin.php ã?§ UIN ã?®ãƒ?ã‚§ãƒƒã‚¯æ™‚ã?« IP ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’ç¢ºèª?ã?™ã‚‹ã?‹");
-$LANG_CONF["numRecordsPage"] = array(0 => "input", 1 => "ãƒšãƒ¼ã‚¸æ¯Žã?«è¡¨ç¤ºã?™ã‚‹ãƒˆãƒ”ãƒƒã‚¯æ•°");
+$LANG_CONF["main.numberOfRecordsPerPage"] = array(0 => "input", 1 => "ãƒšãƒ¼ã‚¸æ¯Žã?«è¡¨ç¤ºã?™ã‚‹ãƒˆãƒ”ãƒƒã‚¯æ•°");
 $LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "ã?ŠçŸ¥ã‚‰ã?›ã?®è¡¨ç¤ºæ•°");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "æ‹’å?¦ã?™ã‚‹ IP ã‚¢ãƒ‰ãƒ¬ã‚¹");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "mod_rewrite ã?®ã‚µãƒ?ãƒ¼ãƒˆã‚’ä½¿ç”¨ã?—ã?¾ã?™ã?‹? (ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ: ç„¡åŠ¹)");

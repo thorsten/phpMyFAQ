@@ -1,6 +1,6 @@
 <?php
 /*
- * $Id: questionnaire.php,v 1.9 2007-03-29 19:09:40 matteo Exp $
+ * $Id: questionnaire.php,v 1.10 2007-03-29 19:31:53 thorstenr Exp $
  *
  * This class collects data which is used to create some usage statistics.
  *
@@ -92,7 +92,7 @@ class PMF_Questionnaire_Data
     {
         // oldversion isn't a real PMF config option and it is just used by this class
         $settings = array(
-            'version',
+            'main.currentVersion',
             'oldversion',
             'main.language',
             'permLevel',
