@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.104 2007-03-29 19:31:54 thorstenr Exp $
+* $Id: language_en.php,v 1.105 2007-03-29 20:44:24 thorstenr Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -877,3 +877,7 @@ $PMF_LANG['recordsControlCenter'] = 'FAQ records configuration';
 // added v2.0.0 - 2007-03-17 by Thorsten
 $PMF_LANG['msgInstantResponse'] = 'Instant Response';
 $PMF_LANG['msgInstantResponseMaxRecords'] = '. Find below the first %d records.';
+
+// added v2.0.0 - 2007-03-29 by Thorsten
+$LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "Activate a new records (default: deactivated)");
+$LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Allow comments for new records (default: disallowed)");

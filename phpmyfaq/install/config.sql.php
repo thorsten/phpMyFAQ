@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: config.sql.php,v 1.39 2007-03-29 20:01:26 thorstenr Exp $
+ * $Id: config.sql.php,v 1.40 2007-03-29 20:44:23 thorstenr Exp $
  *
  * INSERT instruction for configuration
  *
@@ -50,3 +50,5 @@ $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.titleFAQ', 'phpMyF
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.enableUserTracking', 'true')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.urlValidateInterval', '86400')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.currentVersion', '".VERSION."')";
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('records.defaultActivation', 'false')";
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('records.defaultAllowComments', 'false')";

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.77 2007-03-29 19:31:54 thorstenr Exp $
+ * $Id: language_de.php,v 1.78 2007-03-29 20:44:24 thorstenr Exp $
  *
  * German language file
  *
@@ -867,3 +867,7 @@ $PMF_LANG['recordsControlCenter'] = 'Artikel-Konfiguration';
 // added v2.0.0 - 2007-03-17 by Thorsten
 $PMF_LANG['msgInstantResponse'] = 'Sofortantwort';
 $PMF_LANG['msgInstantResponseMaxRecords'] = '. Nachfolgend werden die ersten %d Eintr&auml;ge aufgelistet.';
+
+// added v2.0.0 - 2007-03-29 by Thorsten
+$LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "Neue FAQ-Einträge sind sichtbar (Voreinstellung: unsichtbar)");
+$LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Erlaube Kommentare bei neuen FAQ-Einträgen (Voreinstellung: nicht erlaubt)");

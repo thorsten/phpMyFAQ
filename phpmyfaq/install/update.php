@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.136 2007-03-29 19:31:53 thorstenr Exp $
+* $Id: update.php,v 1.137 2007-03-29 20:44:23 thorstenr Exp $
 *
 * Main update script
 *
@@ -1363,6 +1363,8 @@ if ($step == 5) {
         $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.enableUserTracking' WHERE config_name = 'tracking'";
         $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.urlValidateInterval' WHERE config_name = 'URLValidateInterval'";
         $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.currentVersion' WHERE config_name = 'version'";
+        $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('records.defaultActivation', 'false')";
+        $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('records.defaultAllowComments', 'false')";
     }
 
     // Perform the queries for updating/migrating the database from 2.x
