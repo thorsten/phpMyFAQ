@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.177 2007-03-29 15:57:52 thorstenr Exp $
+ * $Id: functions.php,v 1.178 2007-03-29 17:49:51 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -1426,9 +1426,9 @@ function searchEngine($begriff, $cat = '%', $allLanguages = true, $hasMore = fal
         $output = $PMF_LANG['err_noArticles'];
     }
 
-    $pages = ceil($num / $PMF_CONF['numRecordsPage']);
-    $last = $seite * $PMF_CONF['numRecordsPage'];
-    $first = $last - $PMF_CONF['numRecordsPage'];
+    $pages = ceil($num / $PMF_CONF['main.numberOfRecordsPerPage']);
+    $last = $seite * $PMF_CONF['main.numberOfRecordsPerPage'];
+    $first = $last - $PMF_CONF['main.numberOfRecordsPerPage'];
     if ($last > $num) {
         $last = $num;
     }
@@ -1441,8 +1441,7 @@ function searchEngine($begriff, $cat = '%', $allLanguages = true, $hasMore = fal
             if ($hasMore && ($pages > 1)) {
                 $output .= sprintf(
                     $PMF_LANG['msgInstantResponseMaxRecords'],
-                    $PMF_CONF['numRecordsPage']
-                );
+                    $PMF_CONF['main.numberOfRecordsPerPage']);
             }
             $output .= "</p>\n";
         }
@@ -1453,7 +1452,7 @@ function searchEngine($begriff, $cat = '%', $allLanguages = true, $hasMore = fal
 
         $counter = 0;
         $displayedCounter = 0;
-        while (($row = $db->fetch_object($result)) && $displayedCounter < $PMF_CONF['numRecordsPage']) {
+        while (($row = $db->fetch_object($result)) && $displayedCounter < $PMF_CONF['main.numberOfRecordsPerPage']) {
             $counter ++;
             if ($counter <= $first) {
                 continue;

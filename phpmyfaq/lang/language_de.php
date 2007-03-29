@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.66 2007-03-29 12:44:25 thorstenr Exp $
+ * $Id: language_de.php,v 1.67 2007-03-29 17:49:52 thorstenr Exp $
  *
  * German language file
  *
@@ -776,7 +776,7 @@ $PMF_LANG['ad_linkcheck_feedback_url-noscript'] = 'Keine Skript-Unterstützung ve
 
 // added v2.0.0 - 2006-09-02 by Thomas
 $PMF_LANG['msg_related_articles'] = 'Verwandte Artikel';
-$LANG_CONF['numRelatedArticles'] = array(0 => "input", 1 => "Anzahl der verwandten Artikel");
+$LANG_CONF['records.numberOfRelatedArticles'] = array(0 => "input", 1 => "Anzahl der verwandten Artikel");
 
 // added v2.0.0 - 2006-09-09 by Rudi
 $PMF_LANG['ad_categ_trans_1'] = 'Übersetze';

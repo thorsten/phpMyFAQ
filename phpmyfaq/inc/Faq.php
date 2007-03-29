@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.98 2007-03-29 15:57:52 thorstenr Exp $
+ * $Id: Faq.php,v 1.99 2007-03-29 17:49:51 thorstenr Exp $
  *
  * The main FAQ class
  *
@@ -226,12 +226,12 @@ class PMF_Faq
         $result = $this->db->query($query);
 
         $num = $this->db->num_rows($result);
-        $pages = ceil($num / $PMF_CONF["numRecordsPage"]);
+        $pages = ceil($num / $PMF_CONF["main.numberOfRecordsPerPage"]);
 
         if ($page == 1) {
             $first = 0;
         } else {
-            $first = ($page * $PMF_CONF["numRecordsPage"]) - $PMF_CONF["numRecordsPage"];
+            $first = ($page * $PMF_CONF["main.numberOfRecordsPerPage"]) - $PMF_CONF["main.numberOfRecordsPerPage"];
         }
 
         if ($num > 0) {
@@ -244,7 +244,7 @@ class PMF_Faq
             $output .= '<ul class="phpmyfaq_ul">';
             $counter = 0;
             $displayedCounter = 0;
-            while (($row = $this->db->fetch_object($result)) && $displayedCounter < $PMF_CONF['numRecordsPage']) {
+            while (($row = $this->db->fetch_object($result)) && $displayedCounter < $PMF_CONF['main.numberOfRecordsPerPage']) {
                 $counter ++;
                 if ($counter <= $first) {
                     continue;

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: mysql.update.sql.php,v 1.39 2007-03-29 12:44:28 thorstenr Exp $
+ * $Id: mysql.update.sql.php,v 1.40 2007-03-29 17:49:52 thorstenr Exp $
  *
  * CREATE TABLE instruction for MySQL database - UPDATE STAGE from 1.x to 2.0.0
  *
@@ -196,7 +196,7 @@ $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('title', 'phpMyFAQ Codena
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('tracking', 'true')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('URLValidateInterval', '86400')";
 $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('version', '".NEWVERSION."')";
-$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('numRelatedArticles', '5')";
+$query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('records.numberOfRelatedArticles', '5')";
 
 $query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (1, 'adduser', 'Right to add user accounts', 1, 1)";
 $query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (2, 'edituser', 'Right to edit user accounts', 1, 1)";

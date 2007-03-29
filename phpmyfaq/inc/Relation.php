@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Relation.php,v 1.7 2007-03-29 15:57:52 thorstenr Exp $
+* $Id: Relation.php,v 1.8 2007-03-29 17:49:51 thorstenr Exp $
 *
 * The Relation class for dynamic related record linking
 *
@@ -178,7 +178,7 @@ class PMF_Relation
                           $begriffe,
                           array(SQLPREFIX."faqdata.active" => "'yes'"));
 
-        while (($row = $this->db->fetch_object($result)) && ($i < $PMF_CONF['numRelatedArticles'])) {
+        while (($row = $this->db->fetch_object($result)) && ($i < $PMF_CONF['records.numberOfRelatedArticles'])) {
             if ($row->id == $record_id) {
                 continue;
             }

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_es.php,v 1.22 2007-03-29 12:44:25 thorstenr Exp $
+ * $Id: language_es.php,v 1.23 2007-03-29 17:49:52 thorstenr Exp $
  *
  * Spanish language file
  *
@@ -779,7 +779,7 @@ $PMF_LANG['ad_linkcheck_feedback_url-noscript'] = 'No Script';
 
 // added v2.0.0 - 2006-09-02 by Thomas
 $PMF_LANG['msg_related_articles'] = 'Related entries';
-$LANG_CONF['numRelatedArticles'] = array(0 => "input", 1 => "Number of related entries");
+$LANG_CONF['records.numberOfRelatedArticles'] = array(0 => "input", 1 => "Number of related entries");
 
 // added v2.0.0 - 2006-09-09 by Rudi
 $PMF_LANG['ad_categ_trans_1'] = 'Translate';

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_ja.php,v 1.34 2007-03-29 12:44:26 thorstenr Exp $
+ * $Id: language_ja.php,v 1.35 2007-03-29 17:49:52 thorstenr Exp $
  *
  * The Japanese language file
  *
@@ -785,7 +785,7 @@ $PMF_LANG['ad_linkcheck_feedback_url-noscript'] = 'スクリプト�?��?�り�?��?
 
 // added v2.0.0 - 2006-09-02 by Thomas
 $PMF_LANG['msg_related_articles'] = '関連エントリ';
-$LANG_CONF['numRelatedArticles'] = array(0 => "input", 1 => "関連エントリ�?�数");
+$LANG_CONF['records.numberOfRelatedArticles'] = array(0 => "input", 1 => "関連エントリ�?�数");
 
 // added v2.0.0 - 2006-09-09 by Rudi
 $PMF_LANG['ad_categ_trans_1'] = '翻訳';

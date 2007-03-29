@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_ar.php,v 1.26 2007-03-29 12:44:25 thorstenr Exp $
+* $Id: language_ar.php,v 1.27 2007-03-29 17:49:52 thorstenr Exp $
 *
 * Arabic language file
 *
@@ -817,7 +817,7 @@ $PMF_LANG['ad_linkcheck_feedback_url-noscript'] = 'لا يوجد إسكربتا�
 
 // added v2.0.0 - 2006-09-02 by Thomas
 $PMF_LANG['msg_related_articles'] = 'مداخلات ذات صلة';
-$LANG_CONF['numRelatedArticles'] = array(0 => "input", 1 => "عدد المداخلات ذات الصلة");
+$LANG_CONF['records.numberOfRelatedArticles'] = array(0 => "input", 1 => "عدد المداخلات ذات الصلة");
 
 // added v2.0.0 - 2006-09-09 by Rudi
 $PMF_LANG['ad_categ_trans_1'] = 'ترجم';

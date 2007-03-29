@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.63 2007-03-29 12:44:26 thorstenr Exp $
+* $Id: language_it.php,v 1.64 2007-03-29 17:49:52 thorstenr Exp $
 *
 * Italian language file
 *
@@ -770,7 +770,7 @@ $PMF_LANG['msg_tags'] = '<a href="http://en.wikipedia.org/wiki/Tags" title="Vai 
 
 // added v2.0.0 - 2006-09-02 by Thomas
 $PMF_LANG['msg_related_articles'] = 'FAQ correlate';
-$LANG_CONF['numRelatedArticles'] = array(0 => "input", 1 => "Numero di FAQ correlate");
+$LANG_CONF['records.numberOfRelatedArticles'] = array(0 => "input", 1 => "Numero di FAQ correlate");
 
 // added v2.0.0 - 2006-09-03 by Matteo
 $PMF_LANG['ad_linkcheck_feedback_url-batch1'] = 'In corso...';
