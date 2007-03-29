@@ -1,6 +1,6 @@
 <?php
 /*
- * $Id: questionnaire.php,v 1.8 2007-03-29 12:34:12 thorstenr Exp $
+ * $Id: questionnaire.php,v 1.9 2007-03-29 19:09:40 matteo Exp $
  *
  * This class collects data which is used to create some usage statistics.
  *
@@ -160,7 +160,7 @@ class PMF_Questionnaire_Data
      */
     function getSystemInfo()
     {
-        $aIPAddress = explode('.', $_SERVER['SERVER_ADDR']);
+        $aIPAddress = explode('.', isset($_SERVER['SERVER_ADDR']) ? $_SERVER['SERVER_ADDR'] : $_SERVER['LOCAL_ADDR']);
 
         return array(
             'os'    => PHP_OS,
