@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Category.php,v 1.47 2007-03-30 14:13:18 thorstenr Exp $
+ * $Id: Category.php,v 1.48 2007-03-30 19:49:32 thorstenr Exp $
  *
  * The main category class
  *
@@ -608,9 +608,11 @@ class PMF_Category
             }
 
             if ($level > $open) {
-                $output .= "\n".str_repeat("\t", $level+1)."<ul>\n".str_repeat("\t", $level+1)."<li>";
+                $output .= sprintf("\n%s<ul>\n%s<li>",
+                    str_repeat("\t", $level + 1),
+                    str_repeat("\t", $level + 1));
             } else {
-                $output .= str_repeat("\t", $this->treeTab[$y]["level"]+1)."<li>";
+                $output .= str_repeat("\t", $level + 1)."<li>";
             }
 
             if (0 == $number[$parent] && 0 == $level) {
@@ -795,8 +797,11 @@ class PMF_Category
                 $leveldiff = $open - $level;
 
                 if ($leveldiff > 1) {
+                    $output .= '</li>';
                     for ($i = $leveldiff; $i > 1; $i--) {
-                        $output .= "</li>\n".str_repeat("\t", $level + 2)."</ul>\n".str_repeat("\t", $level + 1)."</li>\n";
+                        $output .= sprintf("\n%s</ul>\n%s</li>\n",
+                        str_repeat("\t", $level + $i + 1),
+                        str_repeat("\t", $level + $i));
                     }
                 }
 
@@ -810,9 +815,11 @@ class PMF_Category
                 }
 
                 if ($level > $open) {
-                    $output .= "\n".str_repeat("\t", $level +1 )."<ul class=\"subcat\">\n".str_repeat("\t", $level + 1)."<li>";
+                    $output .= sprintf("\n%s<ul class=\"subcat\">\n%s<li>",
+                        str_repeat("\t", $level + 1),
+                        str_repeat("\t", $level + 1));
                 } else {
-                    $output .= str_repeat("\t", $this->treeTab[$y]["level"] + 1)."<li>";
+                    $output .= str_repeat("\t", $level + 1)."<li>";
                 }
 
                 if (isset($this->treeTab[$y]['symbol']) && $this->treeTab[$y]['symbol'] == 'plus') {
