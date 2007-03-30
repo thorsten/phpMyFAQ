@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Category.php,v 1.46 2007-03-27 18:21:17 thorstenr Exp $
+ * $Id: Category.php,v 1.47 2007-03-30 14:13:18 thorstenr Exp $
  *
  * The main category class
  *
@@ -580,12 +580,15 @@ class PMF_Category
         for ($y = 0 ;$y < $this->height(); $y = $this->getNextLineTree($y)) {
 
             list($symbol, $categoryName, $parent, $description) = $this->getLineDisplay($y);
-            $level = $this->treeTab[$y]["level"];
+            $level = $this->treeTab[$y]['level'];
             $leveldiff = $open - $level;
 
             if ($leveldiff > 1) {
+                $output .= '</li>';
                 for ($i = $leveldiff; $i > 1; $i--) {
-                    $output .= "</li>\n".str_repeat("\t", $level+2)."</ul>\n".str_repeat("\t", $level+1)."</li>\n";
+                    $output .= sprintf("\n%s</ul>\n%s</li>\n",
+                        str_repeat("\t", $level + $i + 1),
+                        str_repeat("\t", $level + $i));
                 }
             }
 
@@ -597,7 +600,9 @@ class PMF_Category
                 if (($level - $open) == -1) {
                     $output .= '</li>';
                 }
-                $output .= "\n".str_repeat("\t", $level+2)."</ul>\n".str_repeat("\t", $level+1)."</li>\n";
+                $output .= sprintf("\n%s</ul>\n%s</li>\n",
+                    str_repeat("\t", $level + 2),
+                    str_repeat("\t", $level + 1));
             } elseif ($level == $open && $y != 0) {
                 $output .= "</li>\n";
             }
@@ -633,7 +638,8 @@ class PMF_Category
         }
 
         $output .= "\t</li>\n";
-        $output .= "\t</ul>".'<span id="totFaqRecords" style="display: none;">'.$totFaqRecords."</span>\n";
+        $output .= "\t</ul>\n";
+        $output .= '<span id="totFaqRecords" style="display: none;">'.$totFaqRecords."</span>\n";
         return $output;
     }
 
