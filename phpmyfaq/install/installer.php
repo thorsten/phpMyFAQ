@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: installer.php,v 1.97 2007-03-29 18:33:25 thorstenr Exp $
+ * $Id: installer.php,v 1.98 2007-03-31 15:34:51 thorstenr Exp $
  *
  * The main phpMyFAQ Installer
  *
@@ -219,6 +219,13 @@ function cleanInstallation()
     }
     label.left {
         width: 200px;
+        float: left;
+        text-align: right;
+        padding-right: 10px;
+        line-height: 20px;
+    }
+    label.leftquestionaire {
+        width: 235px;
         float: left;
         text-align: right;
         padding-right: 10px;
@@ -976,17 +983,19 @@ function show(item) {
 </script>
 <iframe onload="iframeUpdated();" name="questionaireResult" style="display:none"></iframe>
 <form action="http://www.phpmyfaq.de/stats/getstatdata.php" method="post" target="questionaireResult" id="questionnaireForm">
-    <p class="center">For further development we would like to get some feedback from our users. Therefore we'd ask you to spend us a few minutes from your time and answer a few questions.</p>
+
+    <p class="center">For further development we would like to get some feedback from our users.<br />Therefore we'd ask you to spend us a few minutes from your time and answer a few questions.</p>
     <p class="center">If you don't want to you can directly visit <a href="../index.php">your version of phpMyFAQ</a> or login into your <a href="../admin/index.php">admin section</a>.</p>
-    <fieldset>
-        <legend>General questions</legend>
-        <label>Are you acting as individual person or for your comapny?</label>
+
+    <fieldset class="installation">
+        <legend class="installation">General questions</legend>
+        <label class="leftquestionaire">How do you act like?</label>
         <select name="q[individual]">
-            <option>individual</option>
-            <option>organisation</option>
+            <option>as an individual</option>
+            <option>as an organisation</option>
         </select>
         <br/>
-        <label>What kind of organisation is that?</label>
+        <label class="leftquestionaire">What kind of organisation is that?</label>
         <select name="q[organisation]">
              <option>private held</option>
              <option>public held</option>
@@ -996,23 +1005,25 @@ function show(item) {
          </select>
      </fieldset>
      <br />
-     <fieldset>
-         <legend>Technical questions</legend>
-         <label>Where are you installing the software?</label>
+
+     <fieldset class="installation">
+         <legend class="installation">Technical questions</legend>
+         <label class="leftquestionaire">Where did you installed phpMyFAQ?</label>
          <select name="q[server]">
-             <option>On a server run by a hosting company</option>
-             <option>On a public server run by you/your organisation</option>
-             <option>On a private server run by you/your organisation</option>
+             <option>server run by a hosting company</option>
+             <option>public server run by you/your organisation</option>
+             <option>private server run by you/your organisation</option>
              <option>Don't know</option>
          </select>
      </fieldset>
      <br />
-     <fieldset>
-         <legend>beyond our own nose</legend>
-         <label>Are you using other PHP driven software? Which?</label>
+
+     <fieldset class="installation">
+         <legend class="installation">Beyond our own nose</legend>
+         <label class="leftquestionaire">Which PHP software do you also use?</label>
          <input name="q[other]" /><br />
 
-         <label>Are you running web-based applicatios using other technologies?</label>
+         <label class="leftquestionaire">Are you using other web technologies?</label>
          <input type="checkbox" name="q[other][]" value="ASP" />ASP
          <input type="checkbox" name="q[other][]" value="ASP.NET" />ASP.NET
          <input type="checkbox" name="q[other][]" value="jsp" />JAVA JSP
