@@ -83,4 +83,41 @@ class PMF_Session
         return $timestamp;
     }
 
+    /**
+     * Returns all session from a date
+     *
+     * @param   integer $timestamp
+     * @return  array
+     * @access  public
+     * @since   2007-03-31
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function getSessionsbyDate($firstHour, $lastHour)
+    {
+        $sessions = array();
+
+        $query = sprintf("
+            SELECT
+                sid, ip, time
+            FROM
+                %sfaqsessions
+            WHERE
+                time > %d
+            AND
+                time < %d
+            ORDER BY
+                time",
+            SQLPREFIX,
+            $firstHour,
+            $lastHour);
+
+        $result = $this->db->query($query);
+        while ($row = $this->db->fetch_object($result)) {
+            $sessions[$row->sid] = array(
+                'ip'    => $row->ip,
+                'time'  => $row->time);
+        }
+
+        return $sessions;
+    }
 }
