@@ -22,13 +22,16 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
-if ($permission["viewlog"]) {
-	$perpage = 50;
-	$day = $_REQUEST["day"];
-	$firstHour = mktime (0, 0, 0, date("m", $day), date("d", $day), date("Y", $day));
-	$lastHour = mktime (23, 59, 59, date("m", $day), date("d", $day), date("Y", $day));
-	$query = "SELECT sid, ip, time from ".SQLPREFIX."faqsessions WHERE time > ".$firstHour." AND time < ".$lastHour." ORDER BY time";
-	$laktion = "presentsessionresult&day=".$day;
+if ($permission['viewlog']) {
+    require_once(PMF_ROOT_DIR.'/inc/Session.php');
+
+	$perpage   = 50;
+	$day       = (int)$_POST['day'];
+	$firstHour = mktime (0, 0, 0, date('m', $day), date('d', $day), date('Y', $day));
+	$lastHour  = mktime (23, 59, 59, date('m', $day), date('d', $day), date('Y', $day));
+
+	$session = new PMF_Session($db, $LANGCODE);
+    $sessiondata = $session->getSessionsbyDate($firstHour, $lastHour);
 ?>
 	<h2><?php print "Session ".date("Y-m-d", $day); ?></h2>
     <table class="list">
@@ -41,22 +44,19 @@ if ($permission["viewlog"]) {
     </thead>
     <tbody>
 <?php
-	$result = $db->query($query);
-	while ($row = $db->fetch_object($result)) {
+	foreach ($sessiondata as $sid => $data) {
 ?>
         <tr>
-            <td class="list"><?php print $row->ip; ?></td>
-            <td class="list"><?php print date("Y-m-d H:i:s", $row->time); ?></td>
-            <td class="list"><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;action=viewsession&amp;id=<?php print $row->sid; ?>"><?php print $row->sid; ?></a></td>
+            <td class="list"><?php print $data['ip']; ?></td>
+            <td class="list"><?php print date("Y-m-d H:i:s", $data['time']); ?></td>
+            <td class="list"><a href="?action=viewsession&amp;id=<?php print $sid; ?>"><?php print $sid; ?></a></td>
 	</tr>
 <?php
-		}
+    }
 ?>
     </tbody>
     </table>
 <?php
-	}
-else {
-	print $PMF_LANG["err_NotAuth"];
-	}
-?>
+} else {
+    print $PMF_LANG['err_NotAuth'];
+}
