@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.100 2007-03-29 20:49:38 thorstenr Exp $
+ * $Id: Faq.php,v 1.101 2007-04-03 18:58:13 thorstenr Exp $
  *
  * The main FAQ class
  *
@@ -266,13 +266,12 @@ class PMF_Faq
                         );
                 $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
                 $oLink->itemTitle = $row->thema;
-                $oLink->text = sprintf('%s</a><br /><span class="little">(%d %s)</span>',
-                            $title,
-                            $visits,
-                            $this->pmf_lang['msgViews']
-                        );
+                $oLink->text = $title;
                 $oLink->tooltip = $title;
-                $listItem = '<li>'.$oLink->toHtmlAnchor().'</li>';
+                $listItem = sprintf('<li>%s<br /><span class="little">(%d %s)</span></li>',
+                    $oLink->toHtmlAnchor(),
+                    $visits,
+                    $this->pmf_lang['msgViews']);
 
                 $output .= $listItem;
             }
