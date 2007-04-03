@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.185 2007-03-29 21:16:22 thorstenr Exp $
+ * $Id: functions.php,v 1.186 2007-04-03 19:19:18 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -171,22 +171,22 @@ function getAvailableLanguages()
  * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
  */
-function selectLanguages($default, $submitOnChange = false, $excludedLanguages = array())
+function selectLanguages($default, $submitOnChange = false, $excludedLanguages = array(), $id = 'language')
 {
     global $languageCodes;
 
     $onChange = ($submitOnChange ? ' onchange="this.form.submit();"' : '');
-    $output = "<select class=\"language\" name=\"language\" id=\"language\" size=\"1\"".$onChange.">\n";
+    $output = '<select class="language" name="'.$id.'" id="'.$id.'" size="1"'.$onChange.">\n";
     $languages = getAvailableLanguages();
 
     if (count($languages) > 0) {
         foreach ($languages as $lang => $value) {
             if (!in_array($lang, $excludedLanguages)) {
-                $output .= "\t<option value=\"".$lang."\"";
+                $output .= "\t" . '<option value="'.$lang.'"';
                 if ($lang == $default) {
-                    $output .= " selected=\"selected\"";
+                    $output .= ' selected="selected"';
                 }
-                $output .=  ">".$value."</option>\n";
+                $output .= '>'.$value."</option>\n";
             }
         }
     } else {

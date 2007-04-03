@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: translate.php,v 1.1 2006-12-30 16:47:49 matteo Exp $
+ * $Id: translate.php,v 1.2 2007-04-03 19:19:18 thorstenr Exp $
  *
  * This is the page there a user can add a FAQ record.
  *
@@ -31,8 +31,14 @@ if (isset($_GET['gen'])) {
     exit;
 }
 
+if (isset($_POST['translation']) && PMF_Init::isASupportedLanguage($_POST['translation'])) {
+    $translationLanguage = strip_tags($_POST['translation']);
+} else {
+    $translationLanguage = $LANGCODE;
+}
+
 $faqSource['id'] = 'writeSourceFaqId';
-$faqSource['lang'] = $LANGCODE;
+$faqSource['lang'] = $translationLanguage;
 $faqSource['title'] = 'writeSourceTitle';
 $faqSource['content'] = 'writeSourceContent';
 $faqSource['keywords'] = 'writeSourceKeywords';
@@ -62,7 +68,7 @@ $tpl->processTemplate('writeContent', array(
     'msgNewTranslationName'     => $PMF_LANG['msgNewTranslationName'],
     'msgNewTranslationMail'     => $PMF_LANG['msgNewTranslationMail'],
     'msgNewTranslationKeywords' => $PMF_LANG['msgNewTranslationKeywords'],
-    'writeTransFaqLanguage'     => $faqSource['lang'],
+    'writeTransFaqLanguage'     => $translationLanguage,
     'captchaFieldset'           => printCaptchaFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('translate'), $captcha->caplength),
     'msgNewTranslationSubmit'   => $PMF_LANG['msgNewTranslationSubmit'])
     );
