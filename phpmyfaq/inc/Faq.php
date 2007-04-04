@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.102 2007-04-04 17:33:28 thorstenr Exp $
+ * $Id: Faq.php,v 1.103 2007-04-04 18:00:45 thorstenr Exp $
  *
  * The main FAQ class
  *
@@ -2402,6 +2402,86 @@ class PMF_Faq
             $permissions[] = $row->permission;
         }
         return $permissions;
+    }
+
+    /**
+     * Returns all records of one category
+     *
+     * @param   integer $category
+     * @return  string
+     * @access  public
+     * @since   2007-04-04
+     * @author  Georgi Korchev <korchev@yahoo.com>
+     */
+    function showAllRecordsWoPaging($category) {
+
+        global $sids, $PMF_CONF, $tree;
+
+        $now = date('YmdHis');
+        $query = '
+            SELECT
+                '.SQLPREFIX.'faqdata.id AS id,
+                '.SQLPREFIX.'faqdata.lang AS lang,
+                '.SQLPREFIX.'faqdata.thema AS thema,
+                '.SQLPREFIX.'faqcategoryrelations.category_id AS category_id,
+                '.SQLPREFIX.'faqvisits.visits AS visits
+            FROM
+                '.SQLPREFIX.'faqdata
+            LEFT JOIN
+                '.SQLPREFIX.'faqcategoryrelations
+            ON
+                '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id
+            AND
+                '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang
+            LEFT JOIN
+                '.SQLPREFIX.'faqvisits
+            ON
+                '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvisits.id
+            AND
+                '.SQLPREFIX.'faqvisits.lang = '.SQLPREFIX.'faqdata.lang
+            LEFT JOIN
+                '.SQLPREFIX.'faqdata_group
+            ON
+                '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqdata_group.record_id
+            LEFT JOIN
+                '.SQLPREFIX.'faqdata_user
+            ON
+                '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqdata_user.record_id
+            WHERE
+                    '.SQLPREFIX.'faqdata.date_start <= \''.$now.'\'
+                AND '.SQLPREFIX.'faqdata.date_end   >= \''.$now.'\'
+                AND '.SQLPREFIX.'faqdata.active = \'yes\'
+                AND '.SQLPREFIX.'faqcategoryrelations.category_id = '.$category.'
+                AND '.SQLPREFIX.'faqdata.lang = \''.$this->language.'\'
+            ORDER BY
+                '.SQLPREFIX.'faqdata.id';
+
+        $result = $this->db->query($query);
+
+        $output = '<ul class="phpmyfaq_ul">';
+
+        while (($row = $this->db->fetch_object($result))) {
+            $title = PMF_htmlentities($row->thema, ENT_NOQUOTES, $this->pmf_lang['metaCharset']);
+                            $url   = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                            $sids,
+                            $row->category_id,
+                            $row->id,
+                            $row->lang
+                        );
+                $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+                $oLink->itemTitle = $row->thema;
+                $oLink->text = $title;
+                $oLink->tooltip = $title;
+                $listItem = sprintf('<li>%s</li>',
+                    $oLink->toHtmlAnchor(),
+                    $this->pmf_lang['msgViews']);
+                $listItem = '<li>'.$oLink->toHtmlAnchor().'</li>';
+
+                $output .= $listItem;
+        }
+        $output .= '</ul>';
+
+        return $output;
     }
 }
 // }}}

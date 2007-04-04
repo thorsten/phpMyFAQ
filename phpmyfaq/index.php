@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: index.php,v 1.105 2007-03-29 19:35:24 thorstenr Exp $
+ * $Id: index.php,v 1.106 2007-04-04 18:00:45 thorstenr Exp $
  *
  * This is the main public frontend page of phpMyFAQ. It detects the browser's
  * language, gets and sets all cookie, post and get informations and includes
@@ -316,7 +316,7 @@ if ($action != 'main') {
 // Check in any tags with at leat one entry exist
 $hasTags = $oTag->existTagRelations();
 if ($hasTags && (($action == 'artikel') || ($action == 'show'))) {
-    $right_tpl = 'template/tagcloud.tpl';
+    $right_tpl = $action == 'artikel'?'template/catandtag.tpl' : 'template/tagcloud.tpl';
 } else {
     $right_tpl = 'template/startpage.tpl';
 }
@@ -447,7 +447,9 @@ $tpl->processTemplate('rightBox', array(
     'writeNewestHeader'     => $PMF_LANG['msgLatestArticles'],
     'writeNewestRow'        => $faq->getLatest(),
     'writeTagCloudHeader'   => $PMF_LANG['msg_tags'],
-    'writeTags'             => $oTag->printHTMLTagsCloud()));
+    'writeTags'             => $oTag->printHTMLTagsCloud(),
+    'msgAllCatArticles'     => $PMF_LANG['msgAllCatArticles'],
+    'allCatArticles'        => $faq->showAllRecordsWoPaging($cat)));
 $tpl->includeTemplate('rightBox', 'index');
 
 //
