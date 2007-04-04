@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: mailsend2friend.php,v 1.17 2007-03-29 18:19:13 thorstenr Exp $
+ * $Id: mailsend2friend.php,v 1.18 2007-04-04 17:25:46 thorstenr Exp $
  *
  * Sends the emails to your friends
  *
@@ -44,8 +44,8 @@ if (   isset($_POST['name']) && $_POST['name'] != ''
     list($user, $host) = explode("@", $mailto[0]);
     if (checkEmail($mailfrom)) {
         foreach($mailto as $mail) {
-            $mail = checkEmail($db->escape_string(strip_tags($mail)));
-            if ($mail != "") {
+            $mail = $db->escape_string(strip_tags($mail));
+            if ($mail != '') {
                 mail(
                     $IDN->encode($mail),
                     $PMF_LANG["msgS2FMailSubject"].$name,
