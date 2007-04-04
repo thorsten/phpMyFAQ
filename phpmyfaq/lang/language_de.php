@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.78 2007-03-29 20:44:24 thorstenr Exp $
+ * $Id: language_de.php,v 1.79 2007-04-04 18:01:02 thorstenr Exp $
  *
  * German language file
  *
@@ -871,3 +871,6 @@ $PMF_LANG['msgInstantResponseMaxRecords'] = '. Nachfolgend werden die ersten %d 
 // added v2.0.0 - 2007-03-29 by Thorsten
 $LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "Neue FAQ-Einträge sind sichtbar (Voreinstellung: unsichtbar)");
 $LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Erlaube Kommentare bei neuen FAQ-Einträgen (Voreinstellung: nicht erlaubt)");
+
+// added v2.0.0 - 2007-04-04 by Thorsten
+$PMF_LANG['msgAllCatArticles'] = 'Einträge in dieser Kategorie';

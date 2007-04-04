@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.105 2007-03-29 20:44:24 thorstenr Exp $
+* $Id: language_en.php,v 1.106 2007-04-04 18:01:02 thorstenr Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -881,3 +881,6 @@ $PMF_LANG['msgInstantResponseMaxRecords'] = '. Find below the first %d records.'
 // added v2.0.0 - 2007-03-29 by Thorsten
 $LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "Activate a new records (default: deactivated)");
 $LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Allow comments for new records (default: disallowed)");
+
+// added v2.0.0 - 2007-04-04 by Thorsten
+$PMF_LANG['msgAllCatArticles'] = 'Records in this category';
