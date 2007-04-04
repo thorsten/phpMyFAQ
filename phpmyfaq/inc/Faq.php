@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.101 2007-04-03 18:58:13 thorstenr Exp $
+ * $Id: Faq.php,v 1.102 2007-04-04 17:33:28 thorstenr Exp $
  *
  * The main FAQ class
  *
@@ -2186,45 +2186,50 @@ class PMF_Faq
         // --------------------------------------------------------------------------------------------------------------------------------------------------
         // id | solution_id | revision_id | lang | category_id | active | keywords | thema | content | author | email | comment | datum | visits | last_visit
         // --------------------------------------------------------------------------------------------------------------------------------------------------
-        $sql  = "SELECT
-              ".SQLPREFIX."faqdata.id AS id,
-              ".SQLPREFIX."faqdata.solution_id AS solution_id,
-              ".SQLPREFIX."faqdata.revision_id AS revision_id,
-              ".SQLPREFIX."faqdata.lang AS lang,
-              ".SQLPREFIX."faqcategoryrelations.category_id AS category_id,
-              ".SQLPREFIX."faqdata.active AS active,
-              ".SQLPREFIX."faqdata.keywords AS keywords,
-              ".SQLPREFIX."faqdata.thema AS thema,
-              ".SQLPREFIX."faqdata.content AS content,
-              ".SQLPREFIX."faqdata.author AS author,
-              ".SQLPREFIX."faqdata.email AS email,
-              ".SQLPREFIX."faqdata.comment AS comment,
-              ".SQLPREFIX."faqdata.datum AS datum,
-              ".SQLPREFIX."faqvisits.visits AS visits,
-              ".SQLPREFIX."faqvisits.last_visit AS last_visit
-              FROM ".SQLPREFIX."faqdata, ".SQLPREFIX."faqvisits";
-        // Join criteria
-        // TODO: why LEFT? Ask to Thorsten: it would be better INNER
-        $sql .= "\nLEFT JOIN ".SQLPREFIX."faqcategoryrelations
-              ON ".SQLPREFIX."faqdata.id = ".SQLPREFIX."faqcategoryrelations.record_id
-              AND ".SQLPREFIX."faqdata.lang = ".SQLPREFIX."faqcategoryrelations.record_lang";
-        // Filter criteria
-        $sql .= "\nWHERE
-                  ".SQLPREFIX."faqdata.date_start <= '".$now."'
-              AND ".SQLPREFIX."faqdata.date_end   >= '".$now."' AND ";
+        $sql  = "
+            SELECT
+                fd.id AS id,
+                fd.solution_id AS solution_id,
+                fd.revision_id AS revision_id,
+                fd.lang AS lang,
+                fcr.category_id AS category_id,
+                fd.active AS active,
+                fd.keywords AS keywords,
+                fd.thema AS thema,
+                fd.content AS content,
+                fd.author AS author,
+                fd.email AS email,
+                fd.comment AS comment,
+                fd.datum AS datum,
+                fv.visits AS visits,
+                fv.last_visit AS last_visit
+            FROM
+                ".SQLPREFIX."faqdata fd,
+                ".SQLPREFIX."faqvisits fv,
+                ".SQLPREFIX."faqcategoryrelations fcr
+            WHERE
+                fd.id = fcr.record_id
+            AND
+                fd.lang = fcr.record_lang
+            AND
+                fd.date_start <= '".$now."'
+            AND
+                fd.date_end   >= '".$now."'
+            AND ";
         // faqvisits data selection
         if (!empty($faqid)) {
             // Select ONLY the faq with the provided $faqid
-            $sql .= SQLPREFIX."faqdata.id = '".$faqid."' AND ";
+            $sql .= "fd.id = '".$faqid."' AND ";
         }
-        $sql .= SQLPREFIX."faqdata.id = ".SQLPREFIX."faqvisits.id
-              AND ".SQLPREFIX."faqdata.lang = ".SQLPREFIX."faqvisits.lang";
+        $sql .= "fd.id = fv.id
+            AND
+                fd.lang = fv.lang";
         $needAndOp = true;
         if ((!empty($nCatid)) && (PMF_Utils::isInteger($nCatid)) && ($nCatid > 0)) {
             if ($needAndOp) {
                 $sql .= " AND";
             }
-            $sql .= " (".SQLPREFIX."faqcategoryrelations.category_id = '".$nCatid."'";
+            $sql .= " (fcr.category_id = '".$nCatid."'";
             if ($bDownwards) {
                 $sql .= $this->_getCatidWhereSequence($nCatid, "OR");
             }
@@ -2235,14 +2240,14 @@ class PMF_Faq
             if ($needAndOp) {
                 $sql .= " AND";
             }
-            $sql .= " ".SQLPREFIX."faqdata.datum LIKE '".$date."'";
+            $sql .= " fd.datum LIKE '".$date."'";
             $needAndOp = true;
         }
         if ((!empty($lang)) && PMF_Utils::isLanguage($lang)) {
             if ($needAndOp) {
                 $sql .= " AND";
             }
-            $sql .= " ".SQLPREFIX."faqdata.lang = '".$lang."'";
+            $sql .= " fd.lang = '".$lang."'";
             $needAndOp = true;
         }
         switch ($QueryType) {
@@ -2250,7 +2255,7 @@ class PMF_Faq
                 if ($needAndOp) {
                     $sql .= " AND";
                 }
-                $sql .= " ".SQLPREFIX."faqdata.active = '".FAQ_SQL_ACTIVE_NO."'";
+                $sql .= " fd.active = '".FAQ_SQL_ACTIVE_NO."'";
                 $needAndOp = true;
                 break;
             case FAQ_QUERY_TYPE_EXPORT_DOCBOOK:
@@ -2260,14 +2265,14 @@ class PMF_Faq
                 if ($needAndOp) {
                     $sql .= " AND";
                 }
-                $sql .= " ".SQLPREFIX."faqdata.active = '".FAQ_SQL_ACTIVE_YES."'";
+                $sql .= " fd.active = '".FAQ_SQL_ACTIVE_YES."'";
                 $needAndOp = true;
                 break;
             default:
                 if ($needAndOp) {
                     $sql .= " AND";
                 }
-                $sql .= " ".SQLPREFIX."faqdata.active = '".FAQ_SQL_ACTIVE_YES."'";
+                $sql .= " fd.active = '".FAQ_SQL_ACTIVE_YES."'";
                 $needAndOp = true;
                 break;
         }
@@ -2279,14 +2284,14 @@ class PMF_Faq
             case FAQ_QUERY_TYPE_EXPORT_XML:
                 // Preferred ordering: Sitemap-like
                 // TODO: see if this sort is compatible with the current set of indexes
-                $sql .= "\nORDER BY ".SQLPREFIX."faqdata.thema";
+                $sql .= "\nORDER BY fd.thema";
                 break;
             case FAQ_QUERY_TYPE_RSS_LATEST:
-                $sql .= "\nORDER BY ".SQLPREFIX."faqdata.datum DESC";
+                $sql .= "\nORDER BY fd.datum DESC";
                 break;
             default:
                 // Normal ordering
-                $sql .= "\nORDER BY ".SQLPREFIX."faqcategoryrelations.category_id, ".SQLPREFIX."faqdata.id";
+                $sql .= "\nORDER BY fcr.category_id, fd.id";
                 break;
         }
 
