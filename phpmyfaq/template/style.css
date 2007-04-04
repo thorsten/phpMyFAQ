@@ -1,5 +1,5 @@
 /**
- * $Id: style.css,v 1.31 2007-04-04 18:01:38 thorstenr Exp $
+ * $Id: style.css,v 1.32 2007-04-04 18:12:22 thorstenr Exp $
  *
  * This is the main style sheet file for phpMyFAQ 2.0
  * If you want to change only the colours, use colors.css
@@ -243,12 +243,12 @@ html>body #categories li a {
 }
 
 /**
- * Top 10 and Latest areticles
+ * Top 10, Latest articles, Tag cloud and all records in one category
  */
-#topten, #latest, #tagcloud, #allcategorycrticles {
+#topten, #latest, #tagcloud, #allcategoryarticles {
    margin-bottom: 10px;
 }
-#topten h3, #latest h3, #tagcloud h3, #allcategorycrticles h3 {
+#topten h3, #latest h3, #tagcloud h3, #allcategoryarticles h3 {
    font-size: 135%;
    border: 1px solid;
    margin-bottom: 5px;
