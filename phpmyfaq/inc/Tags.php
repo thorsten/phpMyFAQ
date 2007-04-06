@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Tags.php,v 1.28 2007-03-29 15:57:52 thorstenr Exp $
+* $Id: Tags.php,v 1.29 2007-04-06 08:39:43 thorstenr Exp $
 *
 * The main Tags class
 *
@@ -61,8 +61,9 @@ class PMF_Tags
      * @since   2006-08-28
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     * @author  Georgi Korchev <korchev@yahoo.com>
      */
-    function getAllTags($search = null, $limit = false)
+function getAllTags($search = null, $limit = false)
     {
         global $DB;
         $tags = array();
@@ -86,18 +87,38 @@ class PMF_Tags
             ORDER BY tagging_name",
             SQLPREFIX,
             (isset($search) && ($search != '') ? "WHERE tagging_name ".$like." '".$search."%'" : '')
-        );
+            );
 
         $i = 0;
         $result = $this->db->query($query);
+
         if ($result) {
-            $numberOfItems = $limit ? PMF_TAGS_CLOUD_RESULT_SET_SIZE : $this->db->num_rows($result);
-            while (($row = $this->db->fetch_object($result)) && ($i < $numberOfItems)) {
-                $i++;
-                $tags[$row->tagging_id] = $row->tagging_name;
-            }
+           while ($row = $this->db->fetch_object($result)) {
+              $allTags[$row->tagging_id] = $row->tagging_name;
+           }
         }
 
+        $numberOfItems = $limit ? PMF_TAGS_CLOUD_RESULT_SET_SIZE : $this->db->num_rows($result);
+
+        if ($numberOfItems < count($allTags)) {
+           for ($n = 0; $n<$numberOfItems; $n++) {
+              $valid = false;
+              while (!$valid) {
+                 $rand = rand(1, count($allTags) + 1);
+                  if (!isset($soFar[$rand])) {
+                     if (isset($allTags[$rand])) {
+                        $valid = true;
+                        $soFar[$rand] = '';
+                        $tags[$rand] = $allTags[$rand];
+                     }
+
+                  }
+              }
+           }
+        } else {
+           shuffle($allTags);
+           $tags = $allTags;
+        }
         return $tags;
     }
 
