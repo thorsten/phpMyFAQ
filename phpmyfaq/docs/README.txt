@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.77 2007-03-29 21:18:14 thorstenr Exp $
+$Id: README.txt,v 1.78 2007-04-06 08:43:30 thorstenr Exp $
 
 phpMyFAQ 2.0.0-beta2
 Codename "Prometheus"
@@ -16,13 +16,13 @@ Changes since 2.0.0-beta:
 - added questionnaire for statistics in installer (Johannes)
 - added Ajax-powered Instant Response (Thorsten)
 - added editable default values for record configuration (Thorsten)
-- fixed tons of bugs (Matteo, Thorsten)
+- fixed tons of bugs (Matteo, Thorsten, Johannes)
 
 For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.0.0-beta2 - 2007-
+Version 2.0.0-beta2 - 2007-04-
 - added rewritten and enhanced user management (Lars)
 - added rewritten and enhanced authorization management (Lars)
 - added user and group based permissions for categories and records (Thorsten)
@@ -57,6 +57,7 @@ Version 2.0.0-beta2 - 2007-
 - updated German translation (Thorsten)
 - updated Italian translation (Matteo)
 - updated Japanese translation (Tadashi Jokagi)
+- prepared for PHP6 (Johannes)
 
 Version 1.6.10 - 2007-02-18
 - fixed a serious security issue
