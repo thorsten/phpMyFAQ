@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.188 2007-04-06 10:21:13 thorstenr Exp $
+ * $Id: functions.php,v 1.189 2007-04-06 11:33:43 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -680,64 +680,81 @@ function hilight($content)
 /**
  * Trackt den User und zeichnet die Bewegungen auf
  *
- * @param    string
- * @param    integer
- * @return   void
- * @since    2001-02-18
- * @since    Bastian Poettner <bastian@poettner.net>
- * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author   Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @param   string
+ * @param   integer
+ * @return  void
+ * @since   2001-02-18
+ * @since   Bastian Poettner <bastian@poettner.net>
+ * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author  Marco Fester <webmaster@marcof.de>
  */
 function Tracking($action, $id = 0)
 {
-    global $db, $PMF_CONF, $sid, $user;
+    global $db, $PMF_CONF, $sid, $user, $botBlacklist;
 
     if (isset($PMF_CONF["main.enableUserTracking"])) {
+
+        $bots   = 0;
+        $agent  = $_SERVER['HTTP_USER_AGENT'];
+
         if (isset($_GET["sid"])) {
-            $sid = $_GET["sid"];
+            $sid = (int)$_GET["sid"];
         }
+
         if (isset($_COOKIE['pmf_sid'])) {
-            $sid = $_COOKIE['pmf_sid'];
+            $sid = (int)$_COOKIE['pmf_sid'];
         }
+
         if ($action == "old_session") {
             $sid = null;
         }
-        if (!isset($sid)) {
-            $sid = $db->nextID(SQLPREFIX."faqsessions", "sid");
-            // HACK: be sure that pmf_sid cookie contains the current $sid
-            if (isset($_COOKIE["pmf_sid"]) && ((int)$_COOKIE['pmf_sid'] != $sid)) {
-                setcookie('pmf_sid', $sid, time() + 3600);
+
+        foreach ($botBlacklist as $bot) {
+            if (strpos($agent, $bot)) {
+                $bots++;
             }
-            $db->query("
+        }
+
+        if ($bots > 0) {
+
+            if (!isset($sid)) {
+                $sid = $db->nextID(SQLPREFIX."faqsessions", "sid");
+                // HACK: be sure that pmf_sid cookie contains the current $sid
+                if (isset($_COOKIE["pmf_sid"]) && ((int)$_COOKIE['pmf_sid'] != $sid)) {
+                    setcookie('pmf_sid', $sid, time() + 3600);
+                }
+                $db->query("
                     INSERT INTO
                         ".SQLPREFIX."faqsessions
                         (sid, user_id, ip, time)
                     VALUES
                         (".$sid.", ".($user ? $user->getUserId() : '-1').", '".$_SERVER["REMOTE_ADDR"]."', ".time().")"
-                    );
-        }
-        $fp = @fopen("./data/tracking".date("dmY"), "a+b");
-        if (function_exists("stream_encoding")) {
-            stream_encoding($fp, "iso-8859-1");
-        }
-        if ($fp) {
-            $flanz = "0";
-            while (!flock($fp, LOCK_EX) && $flanz < 6) {
-                wait(500);
-                $flanz++;
+                        );
             }
-            if ($flanz >= 6) {
-                fclose($fp);
-            } elseif ((!empty($_SERVER["HTTP_REFERER"])) || ($action == "new_session")) {
-                if (!isset($_SERVER["HTTP_REFERER"])) {
-                    $_SERVER["HTTP_REFERER"] = "";
+            $fp = @fopen("./data/tracking".date("dmY"), "a+b");
+            if (function_exists("stream_encoding")) {
+                stream_encoding($fp, "iso-8859-1");
+            }
+            if ($fp) {
+                $flanz = "0";
+                while (!flock($fp, LOCK_EX) && $flanz < 6) {
+                    wait(500);
+                    $flanz++;
                 }
-                if (!isset($_SERVER["QUERY_STRING"])) {
-                    $_SERVER["QUERY_STRING"] = "";
+                if ($flanz >= 6) {
+                    fclose($fp);
+                } elseif ((!empty($_SERVER["HTTP_REFERER"])) || ($action == "new_session")) {
+                    if (!isset($_SERVER["HTTP_REFERER"])) {
+                        $_SERVER["HTTP_REFERER"] = "";
+                    }
+                    if (!isset($_SERVER["QUERY_STRING"])) {
+                        $_SERVER["QUERY_STRING"] = "";
+                    }
+                    fputs($fp, $sid.";".str_replace(";", ",",$action).";".$id.";".$_SERVER["REMOTE_ADDR"].";".str_replace(";", ",", $_SERVER["QUERY_STRING"]).";".str_replace(";", ",", $_SERVER["HTTP_REFERER"]).";".str_replace(";", ",", urldecode($_SERVER["HTTP_USER_AGENT"])).";".time().";\n");
+                    flock($fp, LOCK_UN);
+                    fclose($fp);
                 }
-                fputs($fp, $sid.";".str_replace(";", ",",$action).";".$id.";".$_SERVER["REMOTE_ADDR"].";".str_replace(";", ",", $_SERVER["QUERY_STRING"]).";".str_replace(";", ",", $_SERVER["HTTP_REFERER"]).";".str_replace(";", ",", urldecode($_SERVER["HTTP_USER_AGENT"])).";".time().";\n");
-                flock($fp, LOCK_UN);
-                fclose($fp);
             }
         }
     }
