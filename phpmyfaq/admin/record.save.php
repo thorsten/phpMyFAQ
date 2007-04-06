@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.save.php,v 1.56 2007-03-28 08:47:31 thorstenr Exp $
+ * $Id: record.save.php,v 1.57 2007-04-06 11:15:24 thorstenr Exp $
  *
  * Save or delete a FAQ record
  *
@@ -69,7 +69,7 @@ if (    isset($submit[2])
     <p class="little"><?php print $PMF_LANG["msgLastUpdateArticle"].makeDate(date("YmdHis")); ?><br />
     <?php print $PMF_LANG["msgAuthor"].$_REQUEST["author"]; ?></p>
 
-    <form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;action=editpreview" method="post">
+    <form action="?action=editpreview" method="post">
     <input type="hidden" name="id"                  value="<?php print (int)$_REQUEST['id']; ?>" />
     <input type="hidden" name="thema"               value="<?php print htmlspecialchars($_REQUEST['thema']); ?>" />
     <input type="hidden" name="content" class="mceNoEditor" value="<?php print htmlspecialchars($_REQUEST['content']); ?>" />

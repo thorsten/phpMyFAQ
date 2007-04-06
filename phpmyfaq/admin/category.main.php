@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: category.main.php,v 1.38 2007-03-02 22:54:28 thorstenr Exp $
+ * $Id: category.main.php,v 1.39 2007-04-06 11:15:24 thorstenr Exp $
  *
  * List all categories in the admin section
  *
@@ -24,7 +24,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
-$currentLink = $_SERVER['PHP_SELF'].$linkext;
+$currentLink = $_SERVER['PHP_SELF'];
 
 printf('<h2>%s</h2>', $PMF_LANG['ad_menu_categ_edit']);
 

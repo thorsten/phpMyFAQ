@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: category.showstructure.php,v 1.5 2007-02-25 11:33:02 thorstenr Exp $
+ * $Id: category.showstructure.php,v 1.6 2007-04-06 11:15:24 thorstenr Exp $
  *
  * build table of all categories in all languages
  *
@@ -30,7 +30,7 @@ printf('<h2>%s</h2>', $PMF_LANG['ad_menu_categ_structure']);
 if ($permission['editcateg']) {
 
     $category = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
-    $currentLink = $_SERVER['PHP_SELF'].$linkext;
+    $currentLink = $_SERVER['PHP_SELF'];
     $actual_language = $languageCodes[strtoupper($LANGCODE)];
     $all_languages = array();
     $all_lang = array();
@@ -94,7 +94,7 @@ if ($permission['editcateg']) {
         printf("<td class=\"%s\">",
             $desc);
         if ($cat['lang'] != $LANGCODE) {
-           // translate category 
+           // translate category
            printf('<a href="%s&amp;action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s"><img src="images/translate2.gif" width="13" height="16" border="0" title="%s" alt="%s" /></a>',
                $currentLink,
                $cat['id'],
@@ -107,7 +107,7 @@ if ($permission['editcateg']) {
             $indent,
             $catname);
         print "</td>\n";
- 
+
 
         // get languages in use for categories
         $id_languages = $category->getCategoryLanguagesTranslated($cat["id"]);

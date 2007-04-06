@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id: record.delatt.php,v 1.10 2006-12-17 18:32:58 johannes Exp $
+ * $Id: record.delatt.php,v 1.11 2007-04-06 11:15:24 thorstenr Exp $
  *
  * Deletes an attachment
  *
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since       2003-02-24
- * @copyright   (c) 2003-2006 phpMyFAQ Team
+ * @copyright   (c) 2003-2007 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -27,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 printf("<h2>%s</h2>\n", $PMF_LANG['ad_entry_aor']);
 
 if ($permission["delatt"]) {
-    
+
     $record_id   = (int)$_GET['id'];
     $record_lang = $_GET['lang'];
 
@@ -41,8 +41,8 @@ if ($permission["delatt"]) {
     } else {
         printf("<p>%s</p>\n", $PMF_LANG['ad_att_delfail']);
     }
-    printf('<p><a href="%s&amp;action=editentry&amp;id=%d&amp;lang=%s">%s</a></p>',
-        $linkext, $record_id, $record_lang, $PMF_LANG['ad_entry_back']);
+    printf('<p><a href="?action=editentry&amp;id=%d&amp;lang=%s">%s</a></p>',
+        $record_id, $record_lang, $PMF_LANG['ad_entry_back']);
 } else {
     print $PMF_LANG['err_NotAuth'];
 }

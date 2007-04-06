@@ -1,24 +1,24 @@
 <?php
 /**
-* $Id: stat.main.php,v 1.11 2006-10-01 15:52:50 matteo Exp $
-*
-* The main statistics page
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @author       Matteo Scaramuccia <matteo@scaramuccia.com>
-* @since        2003-02-24
-* @copyright    (c) 2001-2006 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * $Id: stat.main.php,v 1.12 2007-04-06 11:15:24 thorstenr Exp $
+ *
+ * The main statistics page
+ *
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @since       2003-02-24
+ * @copyright   (c) 2003-2007 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
@@ -53,7 +53,7 @@ if ($permission["viewlog"]) {
 ?>
     <h2><?php print $PMF_LANG["ad_stat_sess"]; ?></h2>
 
-    <form action="<?php print $_SERVER["PHP_SELF"].$linkext ?>" method="post" style="display: inline;">
+    <form action="<?php print $_SERVER["PHP_SELF"] ?>" method="post" style="display: inline;">
     <input type="hidden" name="action" value="sessionbrowse" />
 
     <fieldset>
@@ -144,12 +144,12 @@ if ($permission["viewlog"]) {
         <input class="submit" type="submit" name="statbrowse" value="<?php print $PMF_LANG["ad_stat_ok"]; ?>" />
         </div>
 
-        <p align="center"><a href="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;action=sessionsuche&amp;statstart=<?php print $qstamp ?>&amp;statend=<?php print $stamp ?>"><?php print $PMF_LANG["ad_sess_search"]; ?></a></p>
+        <p align="center"><a href="?action=sessionsuche&amp;statstart=<?php print $qstamp ?>&amp;statend=<?php print $stamp ?>"><?php print $PMF_LANG["ad_sess_search"]; ?></a></p>
 
     </fieldset>
     </form>
 
-    <form action="<?php print $_SERVER["PHP_SELF"].$linkext ?>" method="post" style="display: inline;">
+    <form action="<?php print $_SERVER["PHP_SELF"]; ?>" method="post" style="display: inline;">
     <input type="hidden" name="action" value="viewsessions" />
 
     <fieldset>

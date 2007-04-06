@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: pwd.save.php,v 1.10 2007-03-28 08:47:31 thorstenr Exp $
+ * $Id: pwd.save.php,v 1.11 2007-04-06 11:15:24 thorstenr Exp $
  *
  * Save the password of the current user in the database
  *
@@ -45,10 +45,9 @@ if (    ($_authSource->encrypt($_REQUEST["opass"]) == $user->_encrypted_password
     // TODO: Manage the 'Rembember me' Cookie also under 2.0.0.
     if (isset($_COOKIE['cuser'])) {
         if ($_COOKIE["cuser"] == $user) {
-            print $PMF_LANG["ad_passwd_remark"]."<br /><a href=\"".$_SERVER["PHP_SELF"].$linkext."&action=setcookie\">".$PMF_LANG["ad_cookie_set"]."</a>\n";
+            print $PMF_LANG["ad_passwd_remark"]."<br /><a href=\"?action=setcookie\">".$PMF_LANG["ad_cookie_set"]."</a>\n";
         }
     }
 } else {
     print $PMF_LANG["ad_passwd_fail"];
 }
-?>

@@ -1,26 +1,26 @@
 <?php
 /**
-* $Id: index.php,v 1.91 2007-03-29 19:31:53 thorstenr Exp $
-*
-* The main admin backend index file
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @author       Bastian Poettner <bastian@poettner.net>
-* @author       Meikel Katzengreis <meikel@katzengreis.com>
-* @author       Minoru TODA <todam@netjapan.co.jp>
-* @since        2002-09-16
-* @copyright    (c) 2001-2007 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * $Id: index.php,v 1.92 2007-04-06 11:15:24 thorstenr Exp $
+ *
+ * The main admin backend index file
+ *
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author      Bastian Poettner <bastian@poettner.net>
+ * @author      Meikel Katzengreis <meikel@katzengreis.com>
+ * @author      Minoru TODA <todam@netjapan.co.jp>
+ * @since       2002-09-16
+ * @copyright   (c) 2002-2007 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
@@ -155,9 +155,6 @@ if (isset($user) && is_object($user)) {
         $current_admin_groups = array(-1);
     }
 }
-
-// FIXME: remove this dummy declaration when the all of the pages will NOT use it for building the links
-$linkext = '?uin=';
 
 //
 // Get action from _GET and _POST first

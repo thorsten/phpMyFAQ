@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Linkverifier.php,v 1.22 2007-03-29 18:06:17 thorstenr Exp $
+ * $Id: Linkverifier.php,v 1.23 2007-04-06 11:15:25 thorstenr Exp $
  *
  * PMF_Linkverifier
  *
@@ -649,8 +649,8 @@ class PMF_Linkverifier
     {
         global $PMF_CONF;
 
-        if (isset($PMF_CONF['URLValidateInterval'])) {
-            return time() - $PMF_CONF['URLValidateInterval'];
+        if (isset($PMF_CONF['main.urlValidateInterval'])) {
+            return time() - $PMF_CONF['main.urlValidateInterval'];
         } else {
             return time() - 86400; // default in recheck links once a day unless explicitly requested.
         }
@@ -965,7 +965,7 @@ class PMF_Linkverifier
 // Client-side Javascript needed for AJAX URL verification
 function link_verifier_javascript()
 {
-    global $linkext, $PMF_LANG;
+    global $PMF_LANG;
 
     //TODO: ASSIGN STRINGS FOR THE <IMG ALT="">
     $ajaxphp = $_SERVER["PHP_SELF"].'?';

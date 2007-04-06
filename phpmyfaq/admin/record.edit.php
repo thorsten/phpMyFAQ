@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.edit.php,v 1.63 2007-03-29 20:55:39 thorstenr Exp $
+ * $Id: record.edit.php,v 1.64 2007-04-06 11:15:24 thorstenr Exp $
  *
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since       2003-02-23
@@ -143,7 +143,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
         $revisions = $faq->getRevisionIds($faqData['id'], $faqData['lang']);
         if (count($revisions)) {
 ?>
-    <form id="selectRevision" name="selectRevision" action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;action=editentry&amp;id=<?php print $faqData['id']; ?>&amp;lang=<?php print $faqData['lang']; ?>" method="post" />
+    <form id="selectRevision" name="selectRevision" action="?action=editentry&amp;id=<?php print $faqData['id']; ?>&amp;lang=<?php print $faqData['lang']; ?>" method="post" />
     <fieldset>
     <legend><?php print $PMF_LANG['ad_changerev']; ?></legend>
         <select name="revisionid_selected" onChange="selectRevision.submit();" />
@@ -165,7 +165,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     }
 ?>
 
-    <form style="float: left;" action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>&amp;action=<?php print $url_variables; ?>" method="post">
+    <form style="float: left;" action="?action=<?php print $url_variables; ?>" method="post">
     <input type="hidden" name="revision_id" id="revision_id" value="<?php print $faqData['revision_id']; ?>" />
     <input type="hidden" name="record_id" id="record_id" value="<?php print $faqData['id']; ?>" />
 
@@ -198,7 +198,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
                     if ($dat != "." && $dat != "..") {
                         print "<a href=\""."../attachments/".$faqData['id']."/".rawurlencode($dat)."\">".$dat."</a>";
                         if ($permission["delatt"]) {
-                            print "&nbsp;[&nbsp;<a href=\"".$_SERVER["PHP_SELF"].$linkext."&amp;action=delatt&amp;id=".$faqData['id']."&amp;which=".rawurlencode($dat)."&amp;lang=".$faqData['lang']."\">".$PMF_LANG["ad_att_del"]."</a>&nbsp;]";
+                            print "&nbsp;[&nbsp;<a href=\"?action=delatt&amp;id=".$faqData['id']."&amp;which=".rawurlencode($dat)."&amp;lang=".$faqData['lang']."\">".$PMF_LANG["ad_att_del"]."</a>&nbsp;]";
                         }
                         print "<br />\n";
                     }

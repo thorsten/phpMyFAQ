@@ -1,23 +1,23 @@
 <?php
 /**
-* $Id: adminlog.php,v 1.15 2006-11-10 15:47:47 matteo Exp $
-*
-* Overview of actions in the admin section
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @since        2003-02-23
-* @copyright    (c) 2001-2006 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * $Id: adminlog.php,v 1.16 2007-04-06 11:15:24 thorstenr Exp $
+ *
+ * Overview of actions in the admin section
+ *
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since       2003-02-23
+ * @copyright   (c) 2003-2007 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
@@ -51,7 +51,7 @@ if ($permission['adminlog'] && 'adminlog' == $_action) {
     $start = ($page - 1) * $perpage;
     $ende = $start + $perpage;
 
-    $PageSpan = PageSpan("<a href=\"".$_SERVER["PHP_SELF"].$linkext."&amp;action=adminlog&amp;pages=".$pages."&amp;page=<NUM>\">", 1, $pages, $page);
+    $PageSpan = PageSpan("<a href=\"".$_SERVER["PHP_SELF"]."?action=adminlog&amp;pages=".$pages."&amp;page=<NUM>\">", 1, $pages, $page);
 
     $logging_data = $logging->getAll();
 ?>
@@ -122,7 +122,7 @@ if ($permission['adminlog'] && 'adminlog' == $_action) {
     //
     // Delete logs older than 30 days
     //
-    
+
     if ($logging->delete()) {
         printf('<p>%s</p>', $PMF_LANG['ad_adminlog_delete_success']);
     } else {

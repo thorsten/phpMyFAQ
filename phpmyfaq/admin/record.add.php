@@ -1,13 +1,13 @@
 <?php
 /**
- * $Id: record.add.php,v 1.55 2007-03-28 08:47:31 thorstenr Exp $
+ * $Id: record.add.php,v 1.56 2007-04-06 11:15:24 thorstenr Exp $
  *
  * Adds a record in the database, handles the preview and checks for missing
  * category entries.
  *
- * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since        2003-02-23
- * @copyright    (c) 2001-2006 phpMyFAQ Team
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since       2003-02-23
+ * @copyright   (c) 2003-2007 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -144,7 +144,7 @@ if ($permission["editbt"]) {
     <p class="little"><?php print $PMF_LANG["msgLastUpdateArticle"].makeDate(date("YmdHis")); ?><br />
     <?php print $PMF_LANG["msgAuthor"].' '.$_POST["author"]; ?></p>
 
-    <form action="<?php print $_SERVER['PHP_SELF'].$linkext; ?>&amp;action=editpreview" method="post">
+    <form action="?action=editpreview" method="post">
     <input type="hidden" name="id"                  value="<?php print $id; ?>" />
     <input type="hidden" name="thema"               value="<?php print htmlspecialchars($_POST['thema']); ?>" />
     <input type="hidden" name="content" class="mceNoEditor" value="<?php print htmlspecialchars($_POST['content']); ?>" />
@@ -177,7 +177,7 @@ if ($permission["editbt"]) {
         printf("<p>%s</p>", $PMF_LANG['ad_entryins_fail']);
         $rubrik = isset($_POST['rubrik']) ? $_POST['rubrik'] : null;
 ?>
-    <form action="<?php print $_SERVER['PHP_SELF'].$linkext; ?>&amp;action=editpreview" method="post">
+    <form action="?action=editpreview" method="post">
     <input type="hidden" name="thema"               value="<?php print htmlspecialchars($_POST['thema']); ?>" />
     <input type="hidden" name="content" class="mceNoEditor" value="<?php print htmlspecialchars($_POST['content']); ?>" />
     <input type="hidden" name="lang"                value="<?php print $_POST['language']; ?>" />

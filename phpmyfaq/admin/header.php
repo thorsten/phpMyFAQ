@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: header.php,v 1.44 2007-03-29 21:16:22 thorstenr Exp $
+ * $Id: header.php,v 1.45 2007-04-06 11:15:24 thorstenr Exp $
  *
  * Header of the admin area
  *
@@ -71,7 +71,7 @@ if (isset($_action)) {
 <?php if (isset($auth)) { ?>
 <?php if ('' == $_action) { ?>
     <div id="langform">
-        <form action="<?php print($linkext); ?>" method="post">
+        <form action="<?php print $_SERVER['PHP_SELF']; ?>" method="post">
         <label for="language"><?php print $PMF_LANG['msgLangaugeSubmit']; ?></label>
         <?php print selectLanguages($LANGCODE, true); ?>
         <input type="hidden" name="action" value="<?php print($_action); ?>" />

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: footer.php,v 1.27 2007-04-06 09:52:00 thorstenr Exp $
+ * $Id: footer.php,v 1.28 2007-04-06 11:15:24 thorstenr Exp $
  *
  * Footer of the admin area
  *
@@ -39,7 +39,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 <?php
 if (isset($auth)) {
 ?>
-<iframe id="keepPMFSessionAlive" src="session.keepalive.php<?php print $linkext; ?>&amp;lang=<?php print $LANGCODE; ?>" style="border: none;" width="0" height="0"></iframe>
+<iframe id="keepPMFSessionAlive" src="session.keepalive.php?lang=<?php print $LANGCODE; ?>" style="border: none;" width="0" height="0"></iframe>
 
 <?php
 }

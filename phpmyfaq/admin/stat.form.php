@@ -1,23 +1,23 @@
 <?php
 /**
-* $Id: stat.form.php,v 1.7 2006-09-19 21:39:39 matteo Exp $
-*
-* Form for the session search
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @since        2003-02-24
-* @copyright    (c) 2001-12006 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * $Id: stat.form.php,v 1.8 2007-04-06 11:15:24 thorstenr Exp $
+ *
+ * Form for the session search
+ *
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since       2003-02-24
+ * @copyright   (c) 2003-2007 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
@@ -34,7 +34,7 @@ $statend = end($arrDates);
 closedir($dir);
 ?>
 	<h2><?php print $PMF_LANG["ad_sess_sfs"]; ?></h2>
-	<form action="<?php print $_SERVER["PHP_SELF"].$linkext; ?>" method="POST">
+	<form action="<?php print $_SERVER["PHP_SELF"]; ?>" method="POST">
 	<input type="hidden" name="action" value="sessionsearch">
 	<table width="400" cellspacing="0" cellpadding="0" border="0" align="center">
 	<tr bgcolor="#778899">
