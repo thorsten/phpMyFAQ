@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: rss.php,v 1.22 2007-03-29 18:47:40 thorstenr Exp $
+* $Id: rss.php,v 1.23 2007-04-06 09:52:00 thorstenr Exp $
 *
 * The RSS feed with the top ten
 *
@@ -79,7 +79,7 @@ if ($num > 0) {
         }
         $rss .= "\t<item>\n" .
                 "\t\t<title><![CDATA[" .
-                makeShorterText($item['thema'], 8)." (".$item['visits']." ".$PMF_LANG['msgViews'].")" .
+                PMF_Utils::makeShorterText($item['thema'], 8)." (".$item['visits']." ".$PMF_LANG['msgViews'].")" .
                 "]]></title>\n" .
                 "\t\t<description><![CDATA[" .
                 "[".$i.".] ".$item['thema']." (".$item['visits']." ".$PMF_LANG['msgViews'].")" .

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Pdf.php,v 1.12 2007-03-29 12:09:37 thorstenr Exp $
+* $Id: Pdf.php,v 1.13 2007-04-06 09:51:59 thorstenr Exp $
 *
 * Main PDF class for phpMyFAQ based on FPDF by Olivier Plathey
 *
@@ -300,7 +300,7 @@ class PDF extends FPDF
         $this->MultiCell(0, 9, $title, 1, 1, "C", 1);
         $this->Ln(8);
         if ($this->enableBookmarks == true) {
-            $this->Bookmark(makeShorterText($this->thema, 5));
+            $this->Bookmark(PMF_Utils::makeShorterText($this->thema, 5));
         }
         $this->TextColor = $currentTextColor;
     }

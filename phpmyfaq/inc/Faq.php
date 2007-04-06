@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.103 2007-04-04 18:00:45 thorstenr Exp $
+ * $Id: Faq.php,v 1.104 2007-04-06 09:51:59 thorstenr Exp $
  *
  * The main FAQ class
  *
@@ -1321,7 +1321,7 @@ class PMF_Faq
                 $output .= sprintf('<li><strong>%d %s:</strong><br />',
                     $row['visits'],
                     $this->pmf_lang['msgViews']);
-                $shortTitle = makeShorterText(PMF_htmlentities($row['thema'], ENT_QUOTES, $this->pmf_lang['metaCharset']), 8);
+                $shortTitle = PMF_Utils::makeShorterText(PMF_htmlentities($row['thema'], ENT_QUOTES, $this->pmf_lang['metaCharset']), 8);
                 $output .= sprintf('<a href="%s">%s</a></li>',
                     $row['url'],
                     $shortTitle);
@@ -1349,7 +1349,7 @@ class PMF_Faq
         if (count ($result) > 0) {
             $output = '<ol>';
             foreach ($result as $row) {
-                $shortTitle = makeShorterText(PMF_htmlentities($row['thema'], ENT_QUOTES, $this->pmf_lang['metaCharset']), 8);
+                $shortTitle = PMF_Utils::makeShorterText(PMF_htmlentities($row['thema'], ENT_QUOTES, $this->pmf_lang['metaCharset']), 8);
                 $output .= sprintf('<li><a href="%s">%s</a> (%s)</li>',
                     $row['url'],
                     $shortTitle,

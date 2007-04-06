@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: rss.php,v 1.9 2007-03-29 18:47:40 thorstenr Exp $
+ * $Id: rss.php,v 1.10 2007-04-06 09:52:00 thorstenr Exp $
  *
  * The RSS feed with the latest open questions
  *
@@ -60,7 +60,7 @@ if ($num > 0) {
             $counter++;
             $rss .= "\t<item>\n";
             $content = $item['question'];
-            $rss .= "\t\t<title><![CDATA[".makeShorterText($item['question'], 8)." (".$item['user'].")]]></title>\n";
+            $rss .= "\t\t<title><![CDATA[".PMF_Utils::makeShorterText($item['question'], 8)." (".$item['user'].")]]></title>\n";
             $rss .= "\t\t<description><![CDATA[".$content."]]></description>\n";
             $rss .= "\t\t<link>http".(isset($_SERVER['HTTPS']) ? 's' : '')."://".$_SERVER["HTTP_HOST"].str_replace("feed/openquestions/rss.php", "index.php", $_SERVER["PHP_SELF"])."?action=open#openq_".$item['id']."</link>\n";
             $rss .= "\t\t<pubDate>".makeRFC822Date($item['date'])."</pubDate>\n";
