@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Init.php,v 1.32 2007-04-06 09:34:45 thorstenr Exp $
+ * $Id: Init.php,v 1.33 2007-04-06 09:51:05 thorstenr Exp $
  *
  * Some functions
  *
@@ -74,6 +74,7 @@ require_once(PMF_INCLUDE_DIR.'/data.php');
 require_once(PMF_INCLUDE_DIR.'/constants.php');
 require_once(PMF_INCLUDE_DIR.'/functions.php');
 require_once(PMF_INCLUDE_DIR.'/Configuration.php');
+require_once(PMF_INCLUDE_DIR.'/Utils.php');
 require_once(PMF_INCLUDE_DIR.'/Db.php');
 define('SQLPREFIX', $DB['prefix']);
 $db = PMF_Db::db_select($DB['type']);
