@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Utils.php,v 1.3 2007-03-31 14:48:26 thorstenr Exp $
+ * $Id: Utils.php,v 1.4 2007-04-06 09:49:37 thorstenr Exp $
  *
  * Utilities - Functions and Classes common to the whole phpMyFAQ architecture
  *
@@ -86,8 +86,7 @@ class PMF_Utils
     }
 
     /**
-     *
-     * getUserRights()
+     * Returns the permissions and rights of a given user
      *
      * @param   PMF_CurrentUser $user
      * @access  public
@@ -114,5 +113,33 @@ class PMF_Utils
 
         return $permission;
     }
+
+    /**
+     * Shortens a string for a given number of words
+     *
+     * @param   string  $str
+     * @param   integer $char
+     * @return  string
+     * @access  public
+     * @since   2002-08-26
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de
+     */
+    function makeShorterText($str, $char)
+    {
+        $str = preg_replace('/\s+/', ' ', $str);
+        $arrStr = explode(' ', $str);
+        $shortStr = '';
+        $num = count($arrStr);
+
+        if ($num > $char) {
+            for ($j = 0; $j <= $char; $j++) {
+                $shortStr .= $arrStr[$j]." ";
+            }
+            $shortStr .= '...';
+        } else {
+            $shortStr = $str;
+        }
+
+        return $shortStr;
+    }
 }
-// }}}
