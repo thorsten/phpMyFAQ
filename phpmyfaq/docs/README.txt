@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.78 2007-04-06 08:43:30 thorstenr Exp $
+$Id: README.txt,v 1.79 2007-04-06 11:35:04 thorstenr Exp $
 
 phpMyFAQ 2.0.0-beta2
 Codename "Prometheus"
@@ -16,6 +16,7 @@ Changes since 2.0.0-beta:
 - added questionnaire for statistics in installer (Johannes)
 - added Ajax-powered Instant Response (Thorsten)
 - added editable default values for record configuration (Thorsten)
+- added blacklist for search bots (Marco Fester, Thorsten)
 - fixed tons of bugs (Matteo, Thorsten, Johannes)
 
 For known issues please take a look at KNOWNBUGS.txt
@@ -50,6 +51,7 @@ Version 2.0.0-beta2 - 2007-04-
 - added questionnaire for statistics in installer (Johannes)
 - added Ajax-powered Instant Response (Thorsten)
 - added editable default values for record configuration (Thorsten)
+- added blacklist for search bots (Marco Fester, Thorsten)
 - improved export functions (Matteo)
 - improved URL rewrite functions (Matteo)
 - improved category management (Thorsten, Rudi Ferrari)
