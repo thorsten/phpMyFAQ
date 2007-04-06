@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.187 2007-04-06 09:50:19 thorstenr Exp $
+ * $Id: functions.php,v 1.188 2007-04-06 10:21:13 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -91,8 +91,6 @@ function pmf_microtime_float()
 //
 
 /**
- * getAvailableLanguages()
- *
  * This function returns the available languages
  *
  * @param   mixed
@@ -118,8 +116,6 @@ function isPMFSessionID($text)
 //
 
 /**
- * getAvailableLanguages()
- *
  * This function returns the available languages
  *
  * @return  array
@@ -157,8 +153,6 @@ function getAvailableLanguages()
 }
 
 /**
- * selectLanguages()
- *
  * This function displays the <select> box for the available languages
  * optionally filtered by excluding some provided languages
  *
@@ -198,8 +192,6 @@ function selectLanguages($default, $submitOnChange = false, $excludedLanguages =
 }
 
 /**
- * languageOptions()
- *
  * Function for displaying all languages in <option>
  *
  * @param   string  the languange to be selected
@@ -271,36 +263,47 @@ function sortingOptions($current)
 }
 
 /**
-* Converts the phpMyFAQ date format to a format similar to ISO 8601 standard
-*
-* @param    string
-* @return   date
-* @since    2001-04-30
-* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-*/
+ * Converts the phpMyFAQ date format to a format similar to ISO 8601 standard
+ *
+ * @param   string  $date
+ * @return  date
+ * @access  public
+ * @since   2001-04-30
+ * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+ */
 function makeDate($date)
 {
-    $offset = (60 * 60) * (PMF_DATETIME_TIMEZONE / 100);
-    $current = strtotime(substr($date,0,4)."-".substr($date,4,2)."-".substr($date,6,2)." ".substr($date,8,2).":".substr($date,10,2));
-    $timestamp = $current + $offset;
-    return date("Y-m-d H:i", $timestamp);
+    $offset     = (60 * 60) * (PMF_DATETIME_TIMEZONE / 100);
+    $current    = strtotime(substr($date, 0, 4) . '-' .
+                  substr($date, 4, 2) . '-' .
+                  substr($date, 6, 2) . ' ' .
+                  substr($date, 8, 2) . ':' .
+                  substr($date, 10, 2));
+    $timestamp  = $current + $offset;
+    return date('Y-m-d H:i', $timestamp);
 }
 
 /**
-* Converts the phpMyFAQ/Unix date format to the format given by the PHP date format
-*
-* @param    object  date
-* @param    string  the PHP format of date
-* @param    boolean true if the passed date is in phpMyFAQ format, false if in Unix timestamp format
-* @return   string  date in the requested format
-* @since    2006-06-26
-* @author   Matteo Scaramuccia <matteo@scaramuccia.com>
-*/
+ * Converts the phpMyFAQ/Unix date format to the format given by the PHP date
+ * format
+ *
+ * @param   object  date
+ * @param   string  the PHP format of date
+ * @param   boolean true if the passed date is in phpMyFAQ format, false if in
+ *                  Unix timestamp format
+ * @return  string  date in the requested format
+ * @since   2006-06-26
+ * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+ */
 function makeDateByFormat($date, $type, $phpmyfaq = true)
 {
     $offset = (60 * 60) * (PMF_DATETIME_TIMEZONE / 100);
     if ($phpmyfaq) {
-        $current = strtotime(substr($date,0,4)."-".substr($date,4,2)."-".substr($date,6,2)." ".substr($date,8,2).":".substr($date,10,2).":".substr($date,12,2));
+        $current = strtotime(substr($date, 0, 4) . '-' .
+                   substr($date, 4, 2) . '-' .
+                   substr($date, 6, 2) . ' ' .
+                   substr($date, 8, 2) . ':' .
+                   substr($date, 10, 2));
     } else {
         $current = $date;
     }
@@ -310,17 +313,19 @@ function makeDateByFormat($date, $type, $phpmyfaq = true)
 }
 
 /**
-* Converts the Unix date format to the format needed to view a comment entry
-*
-* @param    object  date
-* @return   string  formatted date for the comment
-* @since    2006-08-21
-* @author   Matteo Scaramuccia <matteo@scaramuccia.com>
-*/
+ * Converts the Unix date format to the format needed to view a comment entry
+ *
+ * @param   object  date
+ * @return  string  formatted date for the comment
+ * @since   2006-08-21
+ * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+ */
 function makeCommentDate($date)
 {
-    // TODO: Time is needed for studying the impact of timezone settings in the system.
-    //       No issue is arised if users of a PMF service has the timezone equals to that of the server.
+    // TODO: Time is needed for studying the impact of timezone settings in the
+    //       system.
+    //       No issue is arised if users of a PMF service has the timezone
+    //       equals to that of the server.
     //       We have the solution, makeDateByFormat(), and we'll wait also for
     //       feedbacks from the Community before applying it in all date outputs.
     // $TZ = ' '.(PMF_DATETIME_TIMEZONE == '0' ? 'GMT': PMF_DATETIME_TIMEZONE);
@@ -330,14 +335,15 @@ function makeCommentDate($date)
 }
 
 /**
-* Converts the phpMyFAQ/Unix date format to the RFC 822 format
-*
-* @param    string  date
-* @param    boolean true if the passed date is in phpMyFAQ format, false if in Unix timestamp format
-* @return   string  RFC 822 date
-* @since    2005-10-03
-* @author   Matteo Scaramuccia <matteo@scaramuccia.com>
-*/
+ * Converts the phpMyFAQ/Unix date format to the RFC 822 format
+ *
+ * @param   string  date
+ * @param   boolean true if the passed date is in phpMyFAQ format, false if in
+ *          Unix timestamp format
+ * @return  string  RFC 822 date
+ * @since   2005-10-03
+ * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+ */
 function makeRFC822Date($date, $phpmyfaq = true)
 {
     $rfc822TZ = ' '.(PMF_DATETIME_TIMEZONE == '0' ? 'GMT': PMF_DATETIME_TIMEZONE);
@@ -539,14 +545,11 @@ function getBannedWords()
  */
 function checkBannedWord($content)
 {
-    global $PMF_CONF;
+    global $faqconfig;
 
     // Sanity checks
     $content = trim($content);
-    if (    ('' == $content)
-         || (!isset($PMF_CONF['spam.checkBannedWords']))
-         || (isset($PMF_CONF['spam.checkBannedWords']) && (!$PMF_CONF['spam.checkBannedWords']))
-         ) {
+    if (('' == $content) && (!$faqconfig->get('spam.checkBannedWords'))) {
         return true;
     }
 
@@ -565,8 +568,6 @@ function checkBannedWord($content)
 }
 
 /**
- * printCaptchaFieldset
- *
  * Get out the HTML code for the fieldset that insert the captcha code in a (public) form
  *
  * @param    string  Text of the HTML Legend element
@@ -578,12 +579,12 @@ function checkBannedWord($content)
  */
 function printCaptchaFieldset($legend, $img, $length)
 {
-    global $PMF_CONF;
+    global $faqconfig;
 
     $html = '';
 
-    if (isset($PMF_CONF['spam.enableCatpchaCode']) && $PMF_CONF['spam.enableCatpchaCode']) {
-        $html .= '<fieldset><legend>'.$legend.'</legend>';
+    if ($faqconfig->get('spam.enableCatpchaCode')) {
+        $html = sprintf('<fieldset><legend>%s</legend>', $legend);
         $html .= '<div style="text-align:center;">'.$img;
         $html .= '<input class="inputfield" style="vertical-align: top;" type="text" name="captcha" id="captcha" value="" size="'.$length.'" />';
         $html .= '</div></fieldset>';
@@ -593,8 +594,6 @@ function printCaptchaFieldset($legend, $img, $length)
 }
 
 /**
- * checkCaptchaCode()
- *
  * This function checks the provided captcha code
  * if the captcha code spam protection has been activated from the general PMF configuration.
  *
@@ -605,9 +604,9 @@ function printCaptchaFieldset($legend, $img, $length)
  */
 function checkCaptchaCode()
 {
-    global $PMF_CONF, $captcha;
+    global $faqconfig, $captcha;
 
-    if (isset($PMF_CONF['spam.enableCatpchaCode']) && $PMF_CONF['spam.enableCatpchaCode']) {
+    if ($faqconfig->get('spam.enableCatpchaCode')) {
         return (isset($_POST['captcha']) && ($captcha->validateCaptchaCode($_POST['captcha'])));
     } else {
         return true;
@@ -615,8 +614,6 @@ function checkCaptchaCode()
 }
 
 /**
- * getHighlightedBannedWords()
- *
  * This function returns the passed content with HTML hilighted banned words.
  *
  * @param   string  $content
@@ -788,8 +785,7 @@ function CheckSID($sid, $ip)
                             ) {
         // No sid found (maybe someone is refering to an old one): create a new one
         Tracking("old_session", $sid);
-    }
-    else {
+    } else {
         // Update the current sid in the db according also to the current user authentication status
         $db->query("
                 UPDATE
@@ -872,8 +868,6 @@ function EndSlash($string)
 }
 
 /**
- * safeHTML()
- *
  * Function to remove all HTML tags but not <strong>, <em>, <u>, und <a>
  *
  * @param   string  $html
@@ -1027,257 +1021,6 @@ function quoted_printable_encode($return = '')
         }
     $return = preg_replace('!\.$!', '. ', $return);
     return preg_replace('!(\r\n|\r|\n)$!', '', $return)."\r\n";
-}
-
-
-/******************************************************************************
- * Funktionen fuer den XML-Export
- ******************************************************************************/
-
-/**
-* generateXHTMLFile()
-*
-* This function generates a plain XHTML file with all entries.
-*
-* @return   boolean
-* @access   public
-* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-* @since    2004-11-13
-*/
-function generateXHTMLFile()
-{
-    global $db, $PMF_CONF, $PMF_LANG;
-
-    require_once('Template.php');
-
-    $category = new PMF_Category();
-    $category->transform(0);
-    $old = 0;
-
-    $newest = array();
-
-    //
-    // get the 5 newest entries
-    //
-    $query = "SELECT DISTINCT ".SQLPREFIX."faqdata.id FROM ".SQLPREFIX."faqdata, ".SQLPREFIX."faqvisits WHERE ".SQLPREFIX."faqdata.id = ".SQLPREFIX."faqvisits.id AND ".SQLPREFIX."faqdata.lang = ".SQLPREFIX."faqvisits.lang AND ".SQLPREFIX."faqdata.active = 'yes' ORDER BY ".SQLPREFIX."faqdata.datum desc";
-      $result = $db->query($query);
-      if ($num = $db->num_rows($result) > 0) {
-        $i = 1;
-        $oldId = 0;
-          while ($row = $db->fetch_object($result) && $i <= 5) {
-              $newest[] = $row->id;
-              $i++;
-          }
-      }
-
-    $result = $db->query('SELECT '.SQLPREFIX.'faqdata.id, '.SQLPREFIX.'faqdata.lang, '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.thema, '.SQLPREFIX.'faqdata.content, '.SQLPREFIX.'faqdata.author, '.SQLPREFIX.'faqdata.datum FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang ORDER BY '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.id');
-
-    $xhtml = '';
-
-    if ($db->num_rows($result) > 0) {
-        while ($row = $db->fetch_object($result)) {
-            if ($row->category_id != $old) {
-                if ( !empty($old) ) {
-                    $headlinks .= "\n</ul>\n";
-                    $xhtml     .= "<p><a href=\"#top\">".$PMF_LANG['to_top']."</a></p>\n";
-                }
-                /* add current line to index */
-                $headlinks .= '<p><strong>'.$PMF_LANG["html_head_cat"].' <a href="#cat'.$row->category_id.'">'.$category->getPath($row->category_id)."</a></strong></p>\n<ul>\n";
-                $xhtml .= "\n<a name=\"cat".$row->category_id."\">&nbsp;</a><h1>".$category->getPath($row->category_id)."</h1>\n";
-            }
-            $xhtml .= '<h2>'.$marker.'<a name="'.$row->id.'">'.$row->thema.'</h2>';
-            $xhtml .= '<p>'.$row->content.'</p>';
-            $xhtml .= '<p>'.$PMF_LANG["msgAuthor"].$row->author.'<br />';
-            $xhtml .= 'ID: '.$row->solution_id.'<br />';
-            $xhtml .= $PMF_LANG['ad_entry_revision'].': 1.'.$row->revision_id.'<br />';
-            $xhtml .= $PMF_LANG["msgLastUpdateArticle"].makeDate($row->datum).'</p>';
-            $xhtml .= '<hr style="width: 90%;" />';
-            $old = $row->category_id;
-            /* add entry to index */
-            $headlinks .= "\t<li>$marker<a href=\"#$row->id\">$row->thema</a></li>\n";
-        }
-    }
-
-    $tpl = new phpmyfaqTemplate(array('html' => '../template/htmlexport.tpl'));
-
-    /* get main template, set main variables */
-    $tpl->processTemplate ('html', array(
-                'title'             => PMF_htmlentities($PMF_CONF['title'], ENT_QUOTES, $PMF_LANG['metaCharset']),
-                'header'            => PMF_htmlentities($PMF_CONF['main.titleFAQ'], ENT_QUOTES, $PMF_LANG['metaCharset']),
-                'metaCharset'       => PMF_htmlentities($PMF_LANG['metaCharset'], ENT_QUOTES, $PMF_LANG['metaCharset']),
-                'metaDescription'   => PMF_htmlentities($PMF_CONF['main.metaDescription'], ENT_QUOTES, $PMF_LANG['metaCharset']),
-                'metaKeywords'      => PMF_htmlentities($PMF_CONF['main.metaKeywords'], ENT_QUOTES, $PMF_LANG['metaCharset']),
-                'metaPublisher'     => PMF_htmlentities($PMF_CONF['main.metaPublisher'], ENT_QUOTES, $PMF_LANG['metaCharset']),
-                'metaLanguage'      => $PMF_LANG['metaLanguage'],
-                'metaCharset'       => $PMF_LANG['metaCharset'],
-                'entrylinks'        => $headlinks,
-                'writeContent'      => $xhtml,
-                'copyright'         => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> '.$PMF_CONF['main.currentVersion']
-        ));
-
-    /* parse without printing */
-    $xhtml = $tpl->getTemplateContents();
-
-    if ($fp = fopen("../xml/phpmyfaq.html","w")) {
-        fputs($fp, $xhtml);
-        fclose($fp);
-    }
-}
-
-/*
- * Funktion zum Exportieren aller Artikel in eine XML-Datei | @@ Thorsten, 2003-03-03
- * Last Update: @@ Thorsten, 2004-05-07
- */
-function generateXMLFile()
-{
-    global $db, $category, $PMF_CONF, $PMF_LANG;
-
-    $result = $db->query('SELECT '.SQLPREFIX.'faqdata.id AS id, '.SQLPREFIX.'faqdata.lang AS lang, '.SQLPREFIX.'faqdata.solution_id AS solution_id, '.SQLPREFIX.'faqdata.revision_id AS revision_id, '.SQLPREFIX.'faqcategoryrelations.category_id AS category_id, '.SQLPREFIX.'faqdata.thema AS thema, '.SQLPREFIX.'faqdata.content AS content, '.SQLPREFIX.'faqdata.keywords AS keywords, '.SQLPREFIX.'faqdata.author AS author, '.SQLPREFIX.'faqdata.datum AS datum FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang ORDER BY '.SQLPREFIX.'faqcategoryrelations.category_id, '.SQLPREFIX.'faqdata.id');
-
-    if ($db->num_rows($result) > 0) {
-        $my_xml_output = "<?xml version=\"1.0\" encoding=\"".$PMF_LANG["metaCharset"]."\" standalone=\"yes\" ?>\n";
-        $my_xml_output .= "<!-- XML-Output by phpMyFAQ ".$PMF_CONF['main.currentVersion']." | Date: ".makeDate(date("YmdHis"))." -->\n";
-        $my_xml_output .= "<phpmyfaq xmlns=\"http://www.phpmyfaq.de/phpmyfaq\">\n";
-        $xml_fp = fopen("../xml/phpmyfaq.xml","w");
-        while ($row = $db->fetch_object($result)) {
-            $xml_content = wordwrap($row->content);
-            $xml_rubrik = $category->categoryName[$row->category_id]['name'];
-            $xml_thema = wordwrap($row->thema, 60);
-            $xml_content = trim(htmlspecialchars(wordwrap($xml_content, 60)));
-
-            if (is_writeable("../xml/")) {
-                $my_xml_output .= "\t<article id=\"".$row->id."\" solution_id=\"".$row->solution_id."\" revision_id=\"1.".$row->revision_id."\">\n";
-                $my_xml_output .= "\t<language>".$row->lang."</language>\n";
-                $my_xml_output .= "\t<category>".PMF_htmlentities(strip_tags($xml_rubrik), ENT_QUOTES, $PMF_LANG['metaCharset'])."</category>\n";
-                if (isset($row->keywords) && $row->keywords != '') {
-                    $my_xml_output .= "\t<keywords>".$row->keywords."</keywords>\n";
-                }
-                else {
-                    $my_xml_output .= "\t<keywords />\n";
-                }
-                $my_xml_output .= "\t<theme>".PMF_htmlentities(strip_tags($xml_thema), ENT_QUOTES, $PMF_LANG['metaCharset'])."</theme>\n";
-                $my_xml_output .= "\t<content xmlns=\"http://www.w3.org/TR/REC-html40\">".strip_tags($xml_content)."</content>\n";
-                if ($row->author) {
-                    $my_xml_output .= "\t<author>".PMF_htmlentities(strip_tags($row->author), ENT_QUOTES, $PMF_LANG['metaCharset'])."</author>\n";
-                }
-                else {
-                    $my_xml_output .= "\t<author />\n";
-                }
-                $my_xml_output .= "\t<date>".makeDate($row->datum)."</date>\n";
-                $my_xml_output .= "\t</article>\n\n";
-            }
-        }
-        $my_xml_output .= "</phpmyfaq>";
-        fputs($xml_fp, $my_xml_output);
-        fclose($xml_fp);
-    }
-}
-
-/**
-* This function generates a plain XHTML file with all entries.
-*
-* @return   boolean
-* @access   public
-* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-* @author   Johann-Peter Hartmann <hartmann@mayflower.de>
-* @since    2004-12-23
-*/
-function generateDocBookExport()
-{
-    global $db, $category, $PMF_CONF, $PMF_LANG;
-
-    $output = '<?xml version="1.0"?>
-<!DOCTYPE book PUBLIC "-//Norman Walsh//DTD DocBk XML V3.1.4//EN" "http://nwalsh.com/docbook/xml/3.1.4/db3xml.dtd">
-<book id="phpmyfaq" lang="'.$PMF_LANG['metaLanguage'].'">
-    <bookinfo>
-        <title>'.htmlspecialchars($PMF_CONF['main.titleFAQ']).'</title>
-        <author>
-            <firstname></firstname>
-            <surname></surname>
-        </author>
-        <date>'.makeDate('Y-m-d', time()).'</date>
-        <abstract>
-            <para>'.htmlspecialchars($PMF_CONF['main.metaDescription']).'</para>
-        </abstract>
-    </bookinfo>
-';
-
-    // get all categories
-    $result_chapters = $db->query("SELECT id, name FROM ".SQLPREFIX."faqcategories");
-    // get all faqs
-    $result_faqs = $db->query("SELECT category_id, record_id, id FROM ".SQLPREFIX."faqcategoryrelations");
-    // get all data
-    $result_data = $db->query("SELECT * FROM ".SQLPREFIX."faqdata d, ".SQLPREFIX."faqcategoryrelations r where d.id = r.record_id");
-
-    // chapters
-    $chapters = array();
-    while ($row = $db->fetch_object($result_chapters)) {
-        $chapters[$row->id]['title'] = $row->name;
-        $chapters[$row->id]['faqs'] = array();
-    }
-
-    // faqs
-    while ($row = $db->fetch_object($result_faqs)) {
-        $chapters[$row->category_id]['faqs'][$row->id] = array();
-    }
-
-    // data
-    while ($row = $db->fetch_object($result_data)) {
-        $chapters[$row->category_id]['faqs'][$row->id][$row->record_id] =
-            array(
-                'author' => $row->author,
-                'date'   => $row->datum,
-                'thema'  => $row->thema,
-                'para'   => $row->content
-            );
-    }
-
-    // output
-    foreach($chapters as $c_key=>$c_value){
-
-        $output .= '<chapter id="'.$c_key.'">';
-        $output .= "\n";
-        $output .= '<title>'.$c_value['title'].'</title>';
-        $output .= "\n";
-
-        foreach($c_value['faqs'] as $f_id => $data){
-            foreach($data as $d_id => $posting){
-                $output .= '<sect1 id="'.$d_id.'">';
-                $output .= "\n";
-
-                $output .= '<author>';
-                $output .= $posting['author'];
-                $output .= '</author>';
-                $output .= "\n";
-
-                $output .= '<date>';
-                $output .= $posting['date'];
-                $output .= '</date>';
-                $output .= "\n";
-
-                $output .= '<title>';
-                $output .= $posting['thema'];
-                $output .= '</title>';
-                $output .= "\n";
-
-                $output .= '<para>';
-                $output .= $posting['para'];
-                $output .= '</para>';
-                $output .= "\n";
-
-                $output .= '</sect1>';
-                $output .= "\n";
-            }
-        }
-
-        $output .= '</chapter>';
-    }
-    $output .= "</book>";
-
-    // write xml file
-    $xml_fp = fopen("../xml/docbook.xml","w");
-    fputs($xml_fp, $output);
-    fclose($xml_fp);
 }
 
 /**
@@ -1790,8 +1533,7 @@ function FileToDate($file, $endOfDay = false)
         $yea = substr($file, 12, 4);
         if (!$endOfDay) {
             $tim = mktime(0, 0, 0, $mon, $tag, $yea);
-        }
-        else {
+        } else {
             $tim = mktime(23, 59, 59, $mon, $tag, $yea);
         }
         return $tim;
@@ -1929,8 +1671,6 @@ function safeSQL($string)
 }
 
 /**
-* alignTablePrefixByPattern()
-*
 * Align the prefix of the table name used in the PMF backup file,
 * from the (old) value of the system upon which the backup was performed
 * to the (new) prefix of the system upon which the backup will be restored.
@@ -1960,8 +1700,6 @@ function alignTablePrefixByPattern($query, $start_pattern, $oldvalue, $newvalue)
 }
 
 /**
-* alignTablePrefix()
-*
 * Align the prefix of the table name used in the PMF backup file,
 * from the (old) value of the system upon which the backup was performed
 * to the (new) prefix of the system upon which the backup will be restored
@@ -1986,8 +1724,6 @@ function alignTablePrefix($query, $oldvalue, $newvalue)
 }
 
 /**
-* fixslashes
-*
 * This function takes care of safely removing slashes
 * not really needed for escaping characters on PMF 1.5.3 and above
 * (see instead PMF DB population on 1.5.2 and below)
