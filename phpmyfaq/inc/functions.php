@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.186 2007-04-03 19:19:18 thorstenr Exp $
+ * $Id: functions.php,v 1.187 2007-04-06 09:50:19 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -853,35 +853,6 @@ function getUsersOnline($activityTimeWindow = 300)
 
     return $users;
 }
-
-
-
-/******************************************************************************
- * Funktionen fuer die Startseite
- ******************************************************************************/
-
-/*
- * Kuerzt einen String auf eine bestimmte Anzahl von Woertern | @@ Thorsten - 2002-08-26
- * Last Update: @@ Thorsten, 2004-06-09
- */
-function makeShorterText($str, $char)
-{
-    $str = ereg_replace("[[:space:]]+", " ", $str);
-    $arrStr = explode(" ", $str);
-    $shortStr = "";
-    $num = count($arrStr);
-    if ($num > $char) {
-        for ($j = 0; $j <= $char; $j++) {
-            $shortStr .= $arrStr[$j]." ";
-            }
-        $shortStr .= "...";
-        }
-    else {
-        $shortStr = $str;
-        }
-    return $shortStr;
-}
-
 
 
 /******************************************************************************
