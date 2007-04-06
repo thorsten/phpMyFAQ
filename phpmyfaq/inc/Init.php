@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Init.php,v 1.31 2007-03-28 08:55:39 thorstenr Exp $
+ * $Id: Init.php,v 1.32 2007-04-06 09:34:45 thorstenr Exp $
  *
  * Some functions
  *
@@ -152,7 +152,9 @@ class PMF_Init
      */
     function cleanRequest()
     {
-        $_SERVER['PHP_SELF'] = strtr(rawurlencode($_SERVER['PHP_SELF']),array( "%2F"=>"/", "%257E"=>"%7E"));
+        if (version_compare(PHP_VERSION, '6.0.0', '<')) {
+            $_SERVER['PHP_SELF'] = strtr(rawurlencode($_SERVER['PHP_SELF']),array( "%2F"=>"/", "%257E"=>"%7E"));
+        }
         $_SERVER['HTTP_USER_AGENT'] = urlencode($_SERVER['HTTP_USER_AGENT']);
 
         // remove global registered variables to avoid injections
