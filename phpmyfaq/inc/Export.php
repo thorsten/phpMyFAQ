@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Export.php,v 1.6 2007-03-29 19:31:53 thorstenr Exp $
+* $Id: Export.php,v 1.7 2007-04-06 10:54:03 thorstenr Exp $
 *
 * XML, XML DocBook, XHTML and PDF export - Classes and Functions
 *
@@ -259,7 +259,7 @@ class PMF_Export
     {
         // TODO: check/refine/improve/fix docbook.php and add toString method before recoding the method in order to use faq and news classes.
 
-        global $db, $DB, $PMF_CONF, $PMF_LANG;
+        global $db, $PMF_CONF, $PMF_LANG;
 
         // XML DocBook export
         $parentID     = 0;
@@ -267,7 +267,7 @@ class PMF_Export
         $sql          = '';
         $selectString = '';
 
-        $export = new DocBook_XML_Export($DB);
+        $export = new DocBook_XML_Export($db);
         $export->delete_file();
 
         // Set the FAQ title
