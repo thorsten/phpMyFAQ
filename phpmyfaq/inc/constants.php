@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: constants.php,v 1.31 2007-04-06 11:23:52 thorstenr Exp $
+ * $Id: constants.php,v 1.32 2007-04-06 11:45:40 thorstenr Exp $
  *
  * Constants for phpMyFAQ
  *
@@ -145,7 +145,8 @@ $denyUploadExts = array();
 $botBlacklist = array(
     'nustcrape',
     'webpost',
-    'google',
+    'GoogleBot',
+    'msnbot',
     'crawler',
     'scooter',
     'bravobrian',
