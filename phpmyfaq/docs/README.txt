@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.79 2007-04-06 11:35:04 thorstenr Exp $
+$Id: README.txt,v 1.80 2007-04-08 16:35:33 thorstenr Exp $
 
 phpMyFAQ 2.0.0-beta2
 Codename "Prometheus"
@@ -55,11 +55,17 @@ Version 2.0.0-beta2 - 2007-04-
 - improved export functions (Matteo)
 - improved URL rewrite functions (Matteo)
 - improved category management (Thorsten, Rudi Ferrari)
+- improved administration backend (Thorsten, Matteo)
 - updated Arabic translation (Ahmed Shalaby)
 - updated German translation (Thorsten)
 - updated Italian translation (Matteo)
 - updated Japanese translation (Tadashi Jokagi)
 - prepared for PHP6 (Johannes)
+
+Version 1.6.11 - 2007-03-31
+- updated Finnish translation
+- fixed problems with unsupported charsets in PHP
+- fixed some minor bugs
 
 Version 1.6.10 - 2007-02-18
 - fixed a serious security issue
