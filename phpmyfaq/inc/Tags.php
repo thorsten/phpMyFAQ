@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Tags.php,v 1.29 2007-04-06 08:39:43 thorstenr Exp $
+* $Id: Tags.php,v 1.30 2007-04-08 13:54:20 thorstenr Exp $
 *
 * The main Tags class
 *
@@ -100,7 +100,7 @@ function getAllTags($search = null, $limit = false)
 
         $numberOfItems = $limit ? PMF_TAGS_CLOUD_RESULT_SET_SIZE : $this->db->num_rows($result);
 
-        if ($numberOfItems < count($allTags)) {
+        if (isset($allTags) && $numberOfItems < count($allTags)) {
            for ($n = 0; $n<$numberOfItems; $n++) {
               $valid = false;
               while (!$valid) {

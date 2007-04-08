@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: category.main.php,v 1.39 2007-04-06 11:15:24 thorstenr Exp $
+ * $Id: category.main.php,v 1.40 2007-04-08 13:54:20 thorstenr Exp $
  *
  * List all categories in the admin section
  *
@@ -181,7 +181,7 @@ if ($permission['editcateg']) {
 
         if ($cat["lang"] == $lang) {
            // add sub category (if actual language)
-           printf('<a href="%s&amp;action=addcategory&amp;cat=%s&amp;lang=%s" title="%s"><img src="images/add.gif" width="17" height="18" alt="%s" title="%s" border="0" /></a>',
+           printf('<a href="%s?action=addcategory&amp;cat=%s&amp;lang=%s" title="%s"><img src="images/add.gif" width="17" height="18" alt="%s" title="%s" border="0" /></a>',
                $currentLink,
                $cat['id'],
                $cat['lang'],
@@ -190,7 +190,7 @@ if ($permission['editcateg']) {
                $PMF_LANG['ad_quick_category']);
 
            // rename (sub) category (if actual language)
-           printf('<a href="%s&amp;action=editcategory&amp;cat=%s" title="%s"><img src="images/edit.gif" width="18" height="18" border="0" title="%s" alt="%s" /></a>',
+           printf('<a href="%s?action=editcategory&amp;cat=%s" title="%s"><img src="images/edit.gif" width="18" height="18" border="0" title="%s" alt="%s" /></a>',
                $currentLink,
                $cat['id'],
                $PMF_LANG['ad_kateg_rename'],
@@ -199,7 +199,7 @@ if ($permission['editcateg']) {
         }
 
         // translate category (always)
-        printf('<a href="%s&amp;action=translatecategory&amp;cat=%s" title="%s"><img src="images/translate.gif" width="18" height="18" border="0" title="%s" alt="%s" /></a>',
+        printf('<a href="%s?action=translatecategory&amp;cat=%s" title="%s"><img src="images/translate.gif" width="18" height="18" border="0" title="%s" alt="%s" /></a>',
             $currentLink,
             $cat['id'],
             $PMF_LANG['ad_categ_translate'],
@@ -208,7 +208,7 @@ if ($permission['editcateg']) {
 
         // delete (sub) category (if actual language)
         if (count($category->getChildren($cat['id'])) == 0 && $cat["lang"] == $lang) {
-            printf('<a href="%s&amp;action=deletecategory&amp;cat=%s&amp;lang=%s" title="%s"><img src="images/delete.gif" width="17" height="18" alt="%s" title="%s" border="0" /></a>',
+            printf('<a href="%s?action=deletecategory&amp;cat=%s&amp;lang=%s" title="%s"><img src="images/delete.gif" width="17" height="18" alt="%s" title="%s" border="0" /></a>',
                 $currentLink,
                 $cat['id'],
                 $cat['lang'],
@@ -219,7 +219,7 @@ if ($permission['editcateg']) {
 
         if ($cat["lang"] == $lang) {
            // cut category (if actual language)
-           printf('<a href="%s&amp;action=cutcategory&amp;cat=%s" title="%s"><img src="images/cut.gif" width="16" height="16" alt="%s" border="0" title="%s" /></a>',
+           printf('<a href="%s?action=cutcategory&amp;cat=%s" title="%s"><img src="images/cut.gif" width="16" height="16" alt="%s" border="0" title="%s" /></a>',
                $currentLink,
                $cat['id'],
                $PMF_LANG['ad_categ_cut'],
@@ -228,7 +228,7 @@ if ($permission['editcateg']) {
 
            if ($category->numParent($cat['parent_id']) > 1) {
               // move category (if actual language) AND more than 1 category at the same level)
-              printf('<a href="%s&amp;action=movecategory&amp;cat=%s&amp;parent_id=%s" title="%s"><img src="images/move.gif" width="16" height="16" alt="%s" border="0" title="%s" /></a>',
+              printf('<a href="%s?action=movecategory&amp;cat=%s&amp;parent_id=%s" title="%s"><img src="images/move.gif" width="16" height="16" alt="%s" border="0" title="%s" /></a>',
                   $currentLink,
                   $cat['id'],
                   $cat['parent_id'],
