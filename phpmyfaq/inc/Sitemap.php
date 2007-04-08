@@ -23,7 +23,7 @@
 /**
  * This include is needed for accessing to mod_rewrite support configuration value
  */
-require_once('Link.php');
+require_once(PMF_INCLUDE_DIR.'/Link.php');
 
 class PMF_Sitemap
 {

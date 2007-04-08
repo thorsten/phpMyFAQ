@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Tags.php,v 1.30 2007-04-08 13:54:20 thorstenr Exp $
+* $Id: Tags.php,v 1.31 2007-04-08 14:40:19 thorstenr Exp $
 *
 * The main Tags class
 *
@@ -8,7 +8,7 @@
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Matteo Scaramuccia <matteo@scaramuccia.com>
 * @since        2006-08-10
-* @copyright    (c) 2006 phpMyFAQ Team
+* @copyright    (c) 2006-2007 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in

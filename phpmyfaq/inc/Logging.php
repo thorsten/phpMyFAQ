@@ -1,13 +1,13 @@
 <?php
 /**
-* $Id: Logging.php,v 1.2 2006-11-10 15:47:47 matteo Exp $
+* $Id: Logging.php,v 1.3 2007-04-08 14:40:20 thorstenr Exp $
 *
 * The main Logging class
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @package      phpMyFAQ
 * @since        2006-08-15
-* @copyright    (c) 2006 phpMyFAQ Team
+* @copyright    (c) 2006-2007 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in

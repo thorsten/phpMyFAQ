@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Category.php,v 1.48 2007-03-30 19:49:32 thorstenr Exp $
+ * $Id: Category.php,v 1.49 2007-04-08 14:40:19 thorstenr Exp $
  *
  * The main category class
  *
@@ -26,7 +26,7 @@
 /**
  * This include is needed for accessing to mod_rewrite support configuration value
  */
-require_once('Link.php');
+require_once(PMF_INCLUDE_DIR.'/Link.php');
 // }}}
 
 class PMF_Category

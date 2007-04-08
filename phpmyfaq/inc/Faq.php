@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.104 2007-04-06 09:51:59 thorstenr Exp $
+ * $Id: Faq.php,v 1.105 2007-04-08 14:40:19 thorstenr Exp $
  *
  * The main FAQ class
  *
@@ -25,15 +25,15 @@
 /**
  * This include is needed for manipulating PMF_Comment objects
  */
-require_once('Comment.php');
+require_once(PMF_INCLUDE_DIR.'/Comment.php');
 /**
  * This include is needed for accessing to mod_rewrite support configuration value
  */
-require_once('Link.php');
+require_once(PMF_INCLUDE_DIR.'/Link.php');
 /**
  * This include is needed in _getSQLQuery() private method
  */
-require_once('Utils.php');
+require_once(PMF_INCLUDE_DIR.'/Utils.php');
 // }}}
 
 // {{{ Constants

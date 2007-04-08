@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: News.php,v 1.16 2007-03-29 12:44:29 thorstenr Exp $
+ * $Id: News.php,v 1.17 2007-04-08 14:40:20 thorstenr Exp $
  *
  * The News class for phpMyFAQ news
  *
@@ -25,11 +25,11 @@
 /**
  * This include is needed for manipulating PMF_Comment objects
  */
-require_once('Comment.php');
+require_once(PMF_INCLUDE_DIR.'/Comment.php');
 /**
  * This include is needed for accessing to mod_rewrite support configuration value
  */
-require_once('Link.php');
+require_once(PMF_INCLUDE_DIR.'/Link.php');
 // }}}
 
 // {{{ Classes

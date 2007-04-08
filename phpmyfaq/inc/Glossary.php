@@ -1,13 +1,13 @@
 <?php
 /**
-* $Id: Glossary.php,v 1.4 2006-07-02 18:59:10 matteo Exp $
+* $Id: Glossary.php,v 1.5 2007-04-08 14:40:19 thorstenr Exp $
 *
 * The main glossary class
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @package      phpMyFAQ
 * @since        2005-09-15
-* @copyright    (c) 2005-2006 phpMyFAQ Team
+* @copyright    (c) 2005-2007 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -109,7 +109,7 @@ class PMF_Glossary
         if ('' == $content) {
             return '';
         }
-        
+
         foreach($this->getAllGlossaryItems() as $item) {
             $content = preg_replace('/(^|[\s]+)('.$item['item'].')([\s,;:\!\?\.]+|$)/ism',
                                     '\1<acronym class="glossary" title="'.$item['definition'].'">\2</acronym>\3',

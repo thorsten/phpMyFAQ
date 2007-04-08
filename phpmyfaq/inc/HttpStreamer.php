@@ -1,12 +1,12 @@
 <?php
 /**
-* $Id: HttpStreamer.php,v 1.1 2006-07-20 21:44:45 matteo Exp $
+* $Id: HttpStreamer.php,v 1.2 2007-04-08 14:40:20 thorstenr Exp $
 *
 * Simple HTTP Streamer
 *
 * @author       Matteo Scaramuccia <matteo@scaramuccia.com>
 * @since        2005-11-02
-* @copyright    (c) 2005-2006 phpMyFAQ Team
+* @copyright    (c) 2005-2007 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in

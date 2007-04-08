@@ -1,13 +1,13 @@
 <?php
 /**
-* $Id: Export.php,v 1.7 2007-04-06 10:54:03 thorstenr Exp $
+* $Id: Export.php,v 1.8 2007-04-08 14:40:19 thorstenr Exp $
 *
 * XML, XML DocBook, XHTML and PDF export - Classes and Functions
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author       Matteo Scaramuccia <matteo@scaramuccia.com>
 * @since        2005-11-02
-* @copyright    (c) 2005-2006 phpMyFAQ Team
+* @copyright    (c) 2005-2007 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -24,27 +24,27 @@
 /**
  * Needed for accessing to $PMF_CONST
  */
-require_once("constants.php");
+require_once(PMF_INCLUDE_DIR.'/constants.php');
 /**
  * Needed for managing faq categories
  */
-require_once("Category.php");
+require_once(PMF_INCLUDE_DIR.'/Category.php');
 /**
  * Faq class
  */
-require_once("Faq.php");
+require_once(PMF_INCLUDE_DIR.'/Faq.php');
 /**
  * Needed for managing the http streaming
  */
-require_once("HttpStreamer.php");
+require_once(PMF_INCLUDE_DIR.'/HttpStreamer.php');
 /**
  * Needed for managing docbook
  */
-require_once("PMF_Export/Docbook.php");
+require_once(PMF_INCLUDE_DIR.'/PMF_Export/Docbook.php');
 /**
  * Needed for managing pdf
  */
-require_once("PMF_Export/Pdf.php");
+require_once(PMF_INCLUDE_DIR.'/PMF_Export/Pdf.php');
 // }}}
 
 // {{{ Constants

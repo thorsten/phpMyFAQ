@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Relation.php,v 1.8 2007-03-29 17:49:51 thorstenr Exp $
+* $Id: Relation.php,v 1.9 2007-04-08 14:40:20 thorstenr Exp $
 *
 * The Relation class for dynamic related record linking
 *
@@ -8,7 +8,7 @@
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @package      phpMyFAQ
 * @since        2006-06-18
-* @copyright    (c) 2006 phpMyFAQ Team
+* @copyright    (c) 2006-2007 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
