@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: open.php,v 1.11 2007-02-26 19:01:09 thorstenr Exp $
+ * $Id: open.php,v 1.12 2007-04-08 19:29:40 thorstenr Exp $
  *
  * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since        2002-09-17
@@ -29,6 +29,6 @@ $tpl->processTemplate ('writeContent', array(
     'msgQuestionText'       => $PMF_LANG['msgQuestionText'],
     'msgDate_User'          => $PMF_LANG['msgDate_User'],
     'msgQuestion2'          => $PMF_LANG['msgQuestion2'],
-    'printOpenQuestions'    => printOpenQuestions()));
+    'printOpenQuestions'    => $faq->printOpenQuestions()));
 
 $tpl->includeTemplate('writeContent', 'index');

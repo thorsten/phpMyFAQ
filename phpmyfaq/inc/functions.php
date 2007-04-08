@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.189 2007-04-06 11:33:43 thorstenr Exp $
+ * $Id: functions.php,v 1.190 2007-04-08 19:29:40 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -1319,64 +1319,6 @@ function chopString($string, $words)
         $str .= $pieces[$i]." ";
     }
     return $str;
-}
-
-//
-// FUNCTIONS FOR THE OPEN QUESTIONS
-//
-
-/**
-* printOpenQuestions()
-*
-* Prints the open questions as a XHTML table
-*
-* @return   string
-* @access   public
-* @since    2002-09-17
-* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-*/
-function printOpenQuestions()
-{
-    global $db, $sids, $category, $PMF_LANG;
-
-    $query =   'SELECT
-                    COUNT(*) AS num
-                FROM '.SQLPREFIX.'faqquestions
-                WHERE
-                    is_visible != \'Y\'';
-    $result = $db->query($query);
-    $row = $db->fetch_object($result);
-    $numOfInvisibles = $row->num;
-
-    if ($numOfInvisibles > 0) {
-        $extraout = "\t<tr>\n\t\t<td colspan=\"3\"><hr>".$PMF_LANG['msgQuestionsWaiting'].$numOfInvisibles."</td>\n\t</tr>\n";
-    } else {
-        $extraout = '';
-    }
-
-    $query =   'SELECT
-                    id, ask_username, ask_usermail, ask_rubrik, ask_content, ask_date
-                FROM
-                    '.SQLPREFIX.'faqquestions
-                WHERE
-                    is_visible = \'Y\'
-                ORDER BY
-                    ask_date ASC';
-    $result = $db->query($query);
-    $output = '';
-    if ($db->num_rows($result) > 0) {
-        while ($row = $db->fetch_object($result)) {
-            $output .= "\t<tr class=\"openquestions\">\n";
-            $output .= "\t\t<td valign=\"top\" nowrap=\"nowrap\">".makeDate($row->ask_date)."<br /><a href=\"mailto:".safeEmail($row->ask_usermail)."\">".$row->ask_username."</a></td>\n";
-            $output .= "\t\t<td valign=\"top\"><strong>".$category->categoryName[$row->ask_rubrik]['name'].":</strong><br />".strip_tags($row->ask_content)."</td>\n";
-            $output .= "\t\t<td valign=\"top\"><a href=\"".$_SERVER['PHP_SELF']."?".$sids."action=add&amp;question=".$row->id."&amp;cat=".$row->ask_rubrik."\">".$PMF_LANG['msg2answer']."</a></td>\n";
-            $output .= "\t</tr>\n";
-        }
-    } else {
-        $output = "\t<tr>\n\t\t<td colspan=\"3\">".$PMF_LANG['msgNoQuestionsAvailable']."</td>\n\t</tr>\n";
-    }
-
-    return $output.$extraout;
 }
 
 //
