@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.107 2007-04-09 15:52:37 thorstenr Exp $
+ * $Id: Faq.php,v 1.108 2007-04-09 16:19:19 thorstenr Exp $
  *
  * The main FAQ class
  *
@@ -424,9 +424,9 @@ class PMF_Faq
             $this->faqRecord = array(
                 'id'            => $id,
                 'lang'          => $this->language,
-                'solution_id'   => null,
-                'revision_id'   => null,
-                'active'        => '',
+                'solution_id'   => 42,
+                'revision_id'   => 0,
+                'active'        => 'no',
                 'keywords'      => '',
                 'title'         => '',
                 'content'       => $PMF_LANG['err_inactiveArticle'],
@@ -1211,7 +1211,7 @@ class PMF_Faq
             $this->language);
 
         $result = $this->db->query($query);
-        if ($result) {
+        if ($this->db->num_rows($result)) {
             $row = $this->db->fetch_object($result);
             $nVisits = $row->visits;
         }

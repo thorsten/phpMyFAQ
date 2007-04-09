@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Tags.php,v 1.31 2007-04-08 14:40:19 thorstenr Exp $
+* $Id: Tags.php,v 1.32 2007-04-09 16:14:55 thorstenr Exp $
 *
 * The main Tags class
 *
@@ -63,10 +63,10 @@ class PMF_Tags
      * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      * @author  Georgi Korchev <korchev@yahoo.com>
      */
-function getAllTags($search = null, $limit = false)
+    function getAllTags($search = null, $limit = false)
     {
         global $DB;
-        $tags = array();
+        $tags = $allTags = array();
 
         // Hack: LIKE is case sensitive under PostgreSQL
         switch ($DB['type']) {
