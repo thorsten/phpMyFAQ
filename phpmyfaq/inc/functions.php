@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.191 2007-04-09 13:53:50 thorstenr Exp $
+ * $Id: functions.php,v 1.192 2007-04-09 14:00:52 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -1217,7 +1217,7 @@ function searchEngine($begriff, $cat = '%', $allLanguages = true, $hasMore = fal
         $output = $PMF_LANG["err_noArticles"];
     }
 
-    if (!$hasMore && ($num > $PMF_CONF['numRecordsPage'])) {
+    if (!$hasMore && ($num > $PMF_CONF['main.numberOfRecordsPerPage'])) {
         $output .= "<p align=\"center\"><strong>";
         $vor = $seite - 1;
         $next = $seite + 1;
