@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.190 2007-04-08 19:29:40 thorstenr Exp $
+ * $Id: functions.php,v 1.191 2007-04-09 13:53:50 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -84,31 +84,6 @@ function pmf_microtime_float()
 {
    list($usec, $sec) = explode(' ', microtime());
    return ((float)$usec + (float)$sec);
-}
-
-//
-// UTILITIES
-//
-
-/**
- * This function returns the available languages
- *
- * @param   mixed
- * @return  boolean
- * @access  public
- * @since   2006-07-02
- * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
- */
-function isPMFSessionID($text)
-{
-    if (null == $text) {
-        return false;
-    }
-    if (preg_match('/^[0-9a-z]{32}$/i', $text)) {
-        return true;
-    }
-
-    return false;
 }
 
 //
