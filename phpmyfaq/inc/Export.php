@@ -1,24 +1,24 @@
 <?php
 /**
-* $Id: Export.php,v 1.8 2007-04-08 14:40:19 thorstenr Exp $
-*
-* XML, XML DocBook, XHTML and PDF export - Classes and Functions
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @author       Matteo Scaramuccia <matteo@scaramuccia.com>
-* @since        2005-11-02
-* @copyright    (c) 2005-2007 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * $Id: Export.php,v 1.9 2007-04-09 16:57:11 thorstenr Exp $
+ *
+ * XML, XML DocBook, XHTML and PDF export - Classes and Functions
+ *
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @since       2005-11-02
+ * @copyright   (c) 2005-2007 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 // {{{ Includes
 /**
@@ -73,9 +73,6 @@ define("EXPORT_TYPE_NONE", "none");
  */
 class PMF_Export
 {
-    function PMF_Export()
-    {
-    }
 
     function getExportTimeStamp()
     {
@@ -111,8 +108,11 @@ class PMF_Export
         // Get Faq Data
         $oFaq = new PMF_Faq($db, $LANGCODE);
         $faqs = $oFaq->get(FAQ_QUERY_TYPE_EXPORT_PDF, $nCatid,  $bDownwards, $lang);
+
         if (count($faqs) > 0) {
             $i = 0;
+
+            // Get the data
             foreach ($faqs as $faq) {
                 $arrRubrik[$i]  = $faq['category_id'];
                 $arrThema[$i]   = $faq['topic'];
@@ -121,27 +121,28 @@ class PMF_Export
                 $arrDatum[$i]   = $faq['lastmodified'];
                 $i++;
             }
+
+            // Start composing PDF
+            $pdf = new PDF();
+            $pdf->enableBookmarks = true;
+            $pdf->Open();
+            $pdf->AliasNbPages();
+            $pdf->SetDisplayMode('real');
+
+            // Create the PDF
+            foreach ($arrContent as $key => $value) {
+                $pdf->rubrik     = $arrRubrik[$key];
+                $pdf->thema      = $arrThema[$key];
+                $pdf->categories = $tree->categoryName;
+                $date            = $arrDatum[$key];
+                $author          = $arrAuthor[$key];
+                $pdf->AddPage();
+                $pdf->SetFont("Arial", "", 12);
+                $pdf->WriteHTML(unhtmlentities($value));
+            }
+
+            return $pdf->Output('', 'S');
         }
-
-        // Start composing PDF
-        $pdf = new PDF();
-        $pdf->enableBookmarks = TRUE;
-        $pdf->Open();
-        $pdf->AliasNbPages();
-        $pdf->SetDisplayMode("real");
-
-        foreach ($arrContent as $key => $value) {
-            $pdf->rubrik     = $arrRubrik[$key];
-            $pdf->thema      = $arrThema[$key];
-            $pdf->categories = $tree->categoryName;
-            $date            = $arrDatum[$key];
-            $author          = $arrAuthor[$key];
-            $pdf->AddPage();
-            $pdf->SetFont("Arial", "", 12);
-            $pdf->WriteHTML(unhtmlentities($value));
-        }
-
-        return($pdf->Output("", "S"));
     }
 
     function getXHTMLExport($nCatid = 0, $bDownwards = true, $lang = "")

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.108 2007-04-09 16:19:19 thorstenr Exp $
+ * $Id: Faq.php,v 1.109 2007-04-09 16:57:11 thorstenr Exp $
  *
  * The main FAQ class
  *
@@ -2099,14 +2099,12 @@ class PMF_Faq
      * @since   2005-11-02
      * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      */
-    function get($QueryType = FAQ_QUERY_TYPE_DEFAULT, $nCatid = 0, $bDownwards = true, $lang = "", $date = "")
+    function get($QueryType = FAQ_QUERY_TYPE_DEFAULT, $nCatid = 0, $bDownwards = true, $lang = '', $date = '')
     {
         $faqs = array();
 
         $result = $this->db->query($this->_getSQLQuery($QueryType, $nCatid, $bDownwards, $lang, $date));
-        // ----------------------------------------------------------------------------------------------------------------------
-        // id | solution_id | revision_id | lang | category_id | active | keywords | thema | content | author | email | comment | datum | visits | last_visit
-        // ----------------------------------------------------------------------------------------------------------------------
+
         if ($this->db->num_rows($result) > 0) {
             $i = 0;
             while ($row = $this->db->fetch_object($result)) {
@@ -2145,9 +2143,9 @@ class PMF_Faq
      * @since   2005-11-02
      * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      */
-    function _getCatidWhereSequence($nCatid, $logicOp = "OR", $oCat = NULL)
+    function _getCatidWhereSequence($nCatid, $logicOp = 'OR', $oCat = null)
     {
-        $sqlWherefilter = "";
+        $sqlWherefilter = '';
 
         if (!isset($oCat)) {
             $oCat  = new PMF_Category();
@@ -2155,8 +2153,8 @@ class PMF_Faq
         $aChildren = array_values($oCat->getChildren($nCatid));
 
         foreach ($aChildren as $catid) {
-            $sqlWherefilter .= " ".$logicOp." ".SQLPREFIX."faqcategoryrelations.category_id = '".$catid."'";
-            $sqlWherefilter .= $this->_getCatidWhereSequence($catid, "OR", $oCat);
+            $sqlWherefilter .= " ".$logicOp." fcr.category_id = ".$catid;
+            $sqlWherefilter .= $this->_getCatidWhereSequence($catid, 'OR', $oCat);
         }
 
         return $sqlWherefilter;
@@ -2229,7 +2227,7 @@ class PMF_Faq
             if ($needAndOp) {
                 $sql .= " AND";
             }
-            $sql .= " (fcr.category_id = '".$nCatid."'";
+            $sql .= " (fcr.category_id = ".$nCatid;
             if ($bDownwards) {
                 $sql .= $this->_getCatidWhereSequence($nCatid, "OR");
             }

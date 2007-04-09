@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Pdf.php,v 1.13 2007-04-06 09:51:59 thorstenr Exp $
+* $Id: Pdf.php,v 1.14 2007-04-09 16:57:11 thorstenr Exp $
 *
 * Main PDF class for phpMyFAQ based on FPDF by Olivier Plathey
 *
@@ -189,7 +189,7 @@ class PDF extends FPDF
     * @return   void
     * @access   private
     */
-    function PDF($rubrik = '', $thema = '', $categories = '', $orientation = "P", $unit = "mm", $format = "A4")
+    function PDF($rubrik = '', $thema = '', $categories = array(), $orientation = "P", $unit = "mm", $format = "A4")
     {
         $this->rubrik = $rubrik;
         $this->thema = $thema;
@@ -293,7 +293,7 @@ class PDF extends FPDF
     */
     function Header()
     {
-        $title = $this->categories[$this->rubrik]["name"].": ".$this->thema;
+        $title = $this->categories[$this->rubrik]['name'].': '.$this->thema;
         $currentTextColor = $this->TextColor;
         $this->SetTextColor(0,0,0);
         $this->SetFont("Arial", "I", 18);
