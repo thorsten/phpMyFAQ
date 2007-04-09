@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.106 2007-04-08 19:29:40 thorstenr Exp $
+ * $Id: Faq.php,v 1.107 2007-04-09 15:52:37 thorstenr Exp $
  *
  * The main FAQ class
  *
@@ -1188,7 +1188,6 @@ class PMF_Faq
      * Counting the views of a FAQ record
      *
      * @param   integer     id
-     * @param   string      lang
      * @return  void
      * @access  public
      * @since   2001-02-15
@@ -1204,18 +1203,19 @@ class PMF_Faq
             FROM
                 %sfaqvisits
             WHERE
-                    id = %d
-                AND lang = '%s'",
+                id = %d
+            AND
+                lang = '%s'",
             SQLPREFIX,
             $id,
-            $this->language
-            );
+            $this->language);
 
-        if ($result = $this->db->query($query)) {
+        $result = $this->db->query($query);
+        if ($result) {
             $row = $this->db->fetch_object($result);
             $nVisits = $row->visits;
         }
-        if ($nVisits == 0 || $nVisits == '') {
+        if ($nVisits == 0) {
             $this->createNewVisit($id, $this->language);
         } else {
             $this->updateVisit($id);
