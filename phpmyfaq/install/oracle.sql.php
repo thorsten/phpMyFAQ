@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: oracle.sql.php,v 1.1 2007-02-24 07:46:38 thorstenr Exp $
+ * $Id: oracle.sql.php,v 1.2 2007-04-10 12:17:36 thorstenr Exp $
  *
  * CREATE TABLE instruction for Oracle databases
  *
@@ -20,7 +20,6 @@
  */
 
 $uninst[] = "DROP TABLE ".$sqltblpre."faqadminlog";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqadminsessions";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcaptcha";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcategories";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcategoryrelations";
@@ -59,14 +58,6 @@ usr VARCHAR(255) NOT NULL,
 text VARCHAR(512) NOT NULL,
 ip VARCHAR(64) NOT NULL,
 PRIMARY KEY (id))";
-
-//faqadminsessions
-$query[] = "CREATE TABLE ".$sqltblpre."faqadminsessions (
-uin VARCHAR(50) NOT NULL,
-usr VARCHAR(128) NOT NULL,
-pass VARCHAR(64) NOT NULL,
-ip VARCHAR(64) NOT NULL,
-time INTEGER NOT NULL)";
 
 //faqcaptcha
 $query[] = "CREATE TABLE ".$sqltblpre."faqcaptcha (

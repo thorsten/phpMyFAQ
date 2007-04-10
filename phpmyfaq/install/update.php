@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.137 2007-03-29 20:44:23 thorstenr Exp $
+* $Id: update.php,v 1.138 2007-04-10 12:17:36 thorstenr Exp $
 *
 * Main update script
 *
@@ -21,7 +21,7 @@
 * under the License.
 */
 
-define('NEWVERSION', '2.0.0-beta2');
+define('NEWVERSION', '2.0.0-rc');
 define('COPYRIGHT', '&copy; 2001-2007 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
@@ -417,7 +417,6 @@ if ($step == 5) {
     }
     if (version_compare($version, '1.4.2', '<')) {
         $query[] = "ALTER TABLE ".SQLPREFIX."faqadminlog CHANGE user usr INT(11) DEFAULT '0' NOT NULL";
-        $query[] = "ALTER TABLE ".SQLPREFIX."faqadminsessions CHANGE user usr TINYTEXT NOT NULL";
         $query[] = "ALTER TABLE ".SQLPREFIX."faqchanges CHANGE user usr INT(11) DEFAULT '0' NOT NULL";
         $query[] = "ALTER TABLE ".SQLPREFIX."faqcomments CHANGE user usr VARCHAR(255) NOT NULL";
         $query[] = "ALTER TABLE ".SQLPREFIX."faqvoting CHANGE user usr INT(11) DEFAULT '0' NOT NULL";
@@ -1365,6 +1364,13 @@ if ($step == 5) {
         $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.currentVersion' WHERE config_name = 'version'";
         $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('records.defaultActivation', 'false')";
         $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('records.defaultAllowComments', 'false')";
+    }
+
+    //
+    // UPDATES FROM 2.0-RC
+    //
+    if (version_compare($version, '2.0.0-rc', '<')) {
+        $query[] = "DROP TABLE ".SQLPREFIX."faqadminsessions";
     }
 
     // Perform the queries for updating/migrating the database from 2.x

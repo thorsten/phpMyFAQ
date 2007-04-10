@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: sqlite.sql.php,v 1.27 2007-02-24 07:47:49 thorstenr Exp $
+* $Id: sqlite.sql.php,v 1.28 2007-04-10 12:17:36 thorstenr Exp $
 *
 * CREATE TABLE instructions for SQLite
 *
@@ -21,7 +21,6 @@
 */
 
 $uninst[] = "DROP TABLE ".$sqltblpre."faqadminlog";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqadminsessions";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcaptcha";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcategories";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcategoryrelations";
@@ -60,14 +59,6 @@ usr int(11) NOT NULL,
 text text NOT NULL,
 ip text NOT NULL,
 PRIMARY KEY (id))";
-
-//faqadminsessions
-$query[] = "CREATE TABLE ".$sqltblpre."faqadminsessions (
-uin varchar(50) NOT NULL,
-usr tinytext NOT NULL,
-pass varchar(64) NOT NULL,
-ip text NOT NULL,
-time int(11) NOT NULL)";
 
 //faqcaptcha
 $query[] = "CREATE TABLE ".$sqltblpre."faqcaptcha (

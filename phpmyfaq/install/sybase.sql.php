@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: sybase.sql.php,v 1.20 2007-02-24 07:47:49 thorstenr Exp $
+* $Id: sybase.sql.php,v 1.21 2007-04-10 12:17:36 thorstenr Exp $
 *
 * CREATE TABLE instruction for Sybase database
 *
@@ -21,7 +21,6 @@
 */
 
 $uninst[] = "DROP TABLE ".$sqltblpre."faqadminlog";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqadminsessions";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcaptcha";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcategories";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcategoryrelations";
@@ -74,14 +73,6 @@ usr integer NOT NULL REFERENCES ".$sqltblpre."faquser(user_id),
 text text NOT NULL,
 ip varchar(64) NOT NULL,
 PRIMARY KEY (id))";
-
-//faqadminsessions
-$query[] = "CREATE TABLE ".$sqltblpre."faqadminsessions (
-uin varchar(50) NOT NULL,
-usr varchar(128) NOT NULL,
-pass varchar(64) NOT NULL,
-ip varchar(64) NOT NULL,
-time integer NOT NULL)";
 
 //faqcaptcha
 $query[] = "CREATE TABLE ".$sqltblpre."faqcaptcha (

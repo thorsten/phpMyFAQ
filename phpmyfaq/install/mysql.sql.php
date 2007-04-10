@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mysql.sql.php,v 1.45 2007-02-18 11:38:12 thorstenr Exp $
+* $Id: mysql.sql.php,v 1.46 2007-04-10 12:17:36 thorstenr Exp $
 *
 * CREATE TABLE instruction for MySQL database
 *
@@ -22,7 +22,6 @@
 */
 
 $uninst[] = "DROP TABLE ".$sqltblpre."faqadminlog";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqadminsessions";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcaptcha";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcategories";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcategoryrelations";
@@ -61,14 +60,6 @@ usr int(11) NOT NULL,
 text text NOT NULL,
 ip text NOT NULL,
 PRIMARY KEY (id))";
-
-//faqadminsessions
-$query[] = "CREATE TABLE ".$sqltblpre."faqadminsessions (
-uin varchar(50) BINARY NOT NULL,
-usr tinytext NOT NULL,
-pass varchar(64) BINARY NOT NULL,
-ip text NOT NULL,
-time int(11) NOT NULL)";
 
 //faqcaptcha
 $query[] = "CREATE TABLE ".$sqltblpre."faqcaptcha (
