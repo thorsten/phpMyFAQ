@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: savequestion.php,v 1.33 2007-03-29 18:47:40 thorstenr Exp $
+* $Id: savequestion.php,v 1.34 2007-04-10 20:58:11 thorstenr Exp $
 *
 * @author           Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author           David Saez Padros <david@ols.es>
@@ -44,7 +44,7 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
         $cat = new PMF_Category();
         $categories = $cat->getAllCategories();
 
-        if (isset($faqconfig->get('records.enableVisibilityQuestions'))) {
+        if ($faqconfig->get('records.enableVisibilityQuestions')) {
             $visibility = 'N';
         } else {
             $visibility = 'Y';
