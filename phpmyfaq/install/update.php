@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.138 2007-04-10 12:17:36 thorstenr Exp $
+* $Id: update.php,v 1.139 2007-04-10 12:22:41 thorstenr Exp $
 *
 * Main update script
 *
@@ -177,6 +177,7 @@ if ($step == 1) {
     <li>phpMyFAQ 1.1.x</li>
     <li>phpMyFAQ 1.2.x</li>
     <li>phpMyFAQ 1.3.x</li>
+    <li>phpMyFAQ 1.4.x preview releases</li>
 </ul>
 <p><strong>Please make a full backup of your SQL tables before running this update.</strong></p>
 
@@ -193,6 +194,7 @@ if ($step == 1) {
     <option value="1.6.0">phpMyFAQ 1.6.0 and later</option>
     <option value="2.0.0-alpha">phpMyFAQ 2.0.0-alpha</option>
     <option value="2.0.0-beta">phpMyFAQ 2.0.0-beta</option>
+    <option value="2.0.0-beta2">phpMyFAQ 2.0.0-beta2</option>
 </select>
 
 <p class="center"><input type="submit" value="Go to step 2 of 5" class="button" /></p>
