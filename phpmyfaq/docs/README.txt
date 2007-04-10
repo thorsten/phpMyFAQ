@@ -1,6 +1,6 @@
-$Id: README.txt,v 1.81 2007-04-10 08:42:34 thorstenr Exp $
+$Id: README.txt,v 1.82 2007-04-10 12:20:33 thorstenr Exp $
 
-phpMyFAQ 2.0.0-beta2
+phpMyFAQ 2.0.0-rc
 Codename "Prometheus"
 
 Installation/Update:
@@ -9,21 +9,14 @@ Please read the documentation (documentation.en.html) carefully.
 Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
-Changes since 2.0.0-beta:
-- added configurable simple reordering of records (Thorsten)
-- added sorting by id, title and date for records in admin backend (Thorsten)
-- added comment administration frontend (Thorsten)
-- added questionnaire for statistics in installer (Johannes)
-- added Ajax-powered Instant Response (Thorsten)
-- added editable default values for record configuration (Thorsten)
-- added blacklist for search bots (Marco Fester, Thorsten)
-- fixed tons of bugs (Matteo, Thorsten, Johannes)
+Changes since 2.0.0-beta2:
+-
 
 For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.0.0-beta2 - 2007-04-10
+Version 2.0.0-rc - 2007-05-
 - added rewritten and enhanced user management (Lars)
 - added rewritten and enhanced authorization management (Lars)
 - added user and group based permissions for categories and records (Thorsten)
