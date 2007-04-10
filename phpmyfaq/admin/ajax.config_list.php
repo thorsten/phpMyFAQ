@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.config_list.php,v 1.17 2007-03-29 20:22:45 thorstenr Exp $
+* $Id: ajax.config_list.php,v 1.18 2007-04-10 21:03:20 thorstenr Exp $
 *
 * AJAX: lists the complete configuration items
 *
@@ -38,14 +38,14 @@ if (isset($_GET['conf']) && is_string($_GET['conf']) && isset($availableConfigMo
 
 function printInputFieldByType($key, $type)
 {
-    global $PMF_CONF, $PMF_LANG;
+    global $faqconfig, $PMF_LANG;
 
     switch($type) {
         case 'area':
 
             printf('<textarea name="edit[%s]" cols="60" rows="6">%s</textarea>',
                     $key,
-                    str_replace('<', '&lt;', str_replace('>', '&gt;', $PMF_CONF[$key])));
+                    str_replace('<', '&lt;', str_replace('>', '&gt;', $faqconfig->get($key))));
             printf("<br />\n");
             break;
 
@@ -53,7 +53,7 @@ function printInputFieldByType($key, $type)
 
             printf('<input type="text" name="edit[%s]" size="80" value="%s" />',
                     $key,
-                    str_replace('"', '&quot;', $PMF_CONF[$key]));
+                    str_replace('"', '&quot;', $faqconfig->get($key)));
             printf("<br />\n");
             break;
 
@@ -63,18 +63,18 @@ function printInputFieldByType($key, $type)
             if ('main.language' == $key) {
                 $languages = getAvailableLanguages();
                 if (count($languages) > 0) {
-                    print languageOptions(str_replace(array("language_", ".php"), "", $PMF_CONF['main.language']), false, true);
+                    print languageOptions(str_replace(array("language_", ".php"), "", $faqconfig->get('main.language')), false, true);
                 } else {
                     print '<option value="language_en.php">English</option>';
                 }
             } else if ('records.orderby' == $key) {
-                    print sortingOptions($PMF_CONF[$key]);
+                    print sortingOptions($faqconfig->get($key));
             } elseif ('records.sortby' == $key) {
                     printf('<option value="DESC"%s>%s</option>',
-                        ('DESC' == $PMF_CONF[$key]) ? ' selected="selected"' : '',
+                        ('DESC' == $faqconfig->get($key)) ? ' selected="selected"' : '',
                         $PMF_LANG['ad_conf_desc']);
                     printf('<option value="ASC"%s>%s</option>',
-                        ('ASC' == $PMF_CONF[$key]) ? ' selected="selected"' : '',
+                        ('ASC' == $faqconfig->get($key)) ? ' selected="selected"' : '',
                         $PMF_LANG['ad_conf_asc']);
             }
             print '</select>';
@@ -84,7 +84,7 @@ function printInputFieldByType($key, $type)
         case 'checkbox':
 
             printf('<input type="checkbox" name="edit[%s]" value="true"', $key);
-            if (isset($PMF_CONF[$key]) && $PMF_CONF[$key]) {
+            if ($faqconfig->get($key)) {
                 print ' checked="checked"';
             }
             printf(' />&nbsp;%s', $PMF_LANG["ad_entry_active"]);
@@ -93,10 +93,10 @@ function printInputFieldByType($key, $type)
 
         case 'print':
 
-            print $PMF_CONF[$key];
+            print $faqconfig->get($key);
             printf('<input type="hidden" name="edit[%s]" size="80" value="%s" />',
                     $key,
-                    str_replace('"', '&quot;', $PMF_CONF[$key]));
+                    str_replace('"', '&quot;', $faqconfig->get($key)));
             printf("<br />\n");
             break;
     }
