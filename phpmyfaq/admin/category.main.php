@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: category.main.php,v 1.40 2007-04-08 13:54:20 thorstenr Exp $
+ * $Id: category.main.php,v 1.41 2007-04-10 19:33:51 thorstenr Exp $
  *
  * List all categories in the admin section
  *
@@ -29,11 +29,11 @@ $currentLink = $_SERVER['PHP_SELF'];
 printf('<h2>%s</h2>', $PMF_LANG['ad_menu_categ_edit']);
 
 print "<p class=\"hr\">\n";
-printf('<img src="images/arrow.gif" width="11" height="11" alt="" border="0" /> <a href="%s&amp;action=addcategory">%s</a>',
+printf('<img src="images/arrow.gif" width="11" height="11" alt="" border="0" /> <a href="%s?action=addcategory">%s</a>',
    $currentLink,
    $PMF_LANG['ad_kateg_add']);
 print "&nbsp;&nbsp;&nbsp;";
-printf('<img src="images/arrow.gif" width="11" height="11" alt="" border="0" /> <a href="%s&amp;action=showcategory">%s</a>',
+printf('<img src="images/arrow.gif" width="11" height="11" alt="" border="0" /> <a href="%s?action=showcategory">%s</a>',
    $currentLink,
    $PMF_LANG['ad_categ_show']);
 print "</p>\n";
