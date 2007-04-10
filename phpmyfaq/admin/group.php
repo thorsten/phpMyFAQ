@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: group.php,v 1.21 2007-03-05 19:51:13 thorstenr Exp $
+ * $Id: group.php,v 1.22 2007-04-10 20:56:05 thorstenr Exp $
  *
  * Displays the user managment frontend
  *
@@ -618,6 +618,7 @@ getGroupList();
                 <select class="admin" name="group_list_select" id="group_list_select" size="<?php print $groupSelectSize; ?>" onchange="groupSelect(event)" tabindex="1">
                     <option value="">select...</option>
                 </select>
+                <br />
                 <input class="submit" type="submit" value="<?php print $text['delGroup_button']; ?>" tabindex="2" />
             </form>
         </fieldset>
