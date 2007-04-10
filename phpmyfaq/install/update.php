@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.139 2007-04-10 12:22:41 thorstenr Exp $
+* $Id: update.php,v 1.140 2007-04-10 12:28:36 thorstenr Exp $
 *
 * Main update script
 *
@@ -21,7 +21,7 @@
 * under the License.
 */
 
-define('NEWVERSION', '2.0.0-rc');
+define('NEWVERSION', '2.0.0-RC');
 define('COPYRIGHT', '&copy; 2001-2007 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
@@ -1405,7 +1405,7 @@ if ($step == 5) {
     // Always the last step: Update version number
     if (version_compare($version, NEWVERSION, '<')) {
         $oPMFConf = new PMF_Configuration($db);
-        $oPMFConf->update(array('version' => NEWVERSION));
+        $oPMFConf->update(array('main.currentVersion' => NEWVERSION));
     }
 
     // optimize tables
