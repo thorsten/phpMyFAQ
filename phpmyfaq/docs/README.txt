@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.80 2007-04-08 16:35:33 thorstenr Exp $
+$Id: README.txt,v 1.81 2007-04-10 08:42:34 thorstenr Exp $
 
 phpMyFAQ 2.0.0-beta2
 Codename "Prometheus"
@@ -23,7 +23,7 @@ For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.0.0-beta2 - 2007-04-
+Version 2.0.0-beta2 - 2007-04-10
 - added rewritten and enhanced user management (Lars)
 - added rewritten and enhanced authorization management (Lars)
 - added user and group based permissions for categories and records (Thorsten)
