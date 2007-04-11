@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.192 2007-04-09 14:00:52 thorstenr Exp $
+ * $Id: functions.php,v 1.193 2007-04-11 20:29:37 matteo Exp $
  *
  * This is the main functions file!
  *
@@ -691,8 +691,7 @@ function Tracking($action, $id = 0)
             }
         }
 
-        if ($bots > 0) {
-
+        if (0 == $bots) {
             if (!isset($sid)) {
                 $sid = $db->nextID(SQLPREFIX."faqsessions", "sid");
                 // HACK: be sure that pmf_sid cookie contains the current $sid
