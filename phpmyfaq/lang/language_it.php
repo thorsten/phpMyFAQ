@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.74 2007-03-29 19:31:55 thorstenr Exp $
+* $Id: language_it.php,v 1.75 2007-04-11 19:48:18 matteo Exp $
 *
 * Italian language file
 *
@@ -877,3 +877,6 @@ $PMF_LANG['recordsControlCenter'] = 'Configurazione delle FAQ';
 // added v2.0.0 - 2007-03-17 by Thorsten
 $PMF_LANG['msgInstantResponse'] = 'Ricerca a risposta immediata';
 $PMF_LANG['msgInstantResponseMaxRecords'] = '. Qui sotto trovi le prime %d faq.';
+
+// added v2.0.0 - 2007-04-04 by Thorsten
+$PMF_LANG['msgAllCatArticles'] = 'FAQ in questa categoria';
