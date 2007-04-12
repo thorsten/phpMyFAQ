@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: glossary.edit.php,v 1.10 2007-04-06 11:15:24 thorstenr Exp $
+ * $Id: glossary.edit.php,v 1.11 2007-04-12 19:09:33 thorstenr Exp $
  *
  * Displays a form to edit an extisting glossary item
  *
@@ -30,7 +30,7 @@ if ($permission['editglossary']) {
 
     $id = (int)$_GET['id'];
 
-    require_once('../inc/Glossary.php');
+    require_once(PMF_ROOT_DIR.'/inc/Glossary.php');
     $glossary = new PMF_Glossary($db, $LANGCODE);
     $glossaryItem = $glossary->getGlossaryItem($id);
 ?>

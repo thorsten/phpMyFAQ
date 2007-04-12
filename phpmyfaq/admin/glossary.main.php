@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: glossary.main.php,v 1.14 2007-04-06 11:15:24 thorstenr Exp $
+ * $Id: glossary.main.php,v 1.15 2007-04-12 19:09:33 thorstenr Exp $
  *
  * The main glossary index file
  *
@@ -28,7 +28,7 @@ print sprintf('<h2>%s</h2>', $PMF_LANG['ad_menu_glossary']);
 
 if ($permission['addglossary'] || $permission['editglossary'] || $permission['delglossary']) {
 
-    require_once('../inc/Glossary.php');
+    require_once(PMF_ROOT_DIR.'/inc/Glossary.php');
     $glossary = new PMF_Glossary($db, $LANGCODE);
 
     if ('saveglossary' == $_action && $permission['addglossary']) {
@@ -42,7 +42,7 @@ if ($permission['addglossary'] || $permission['editglossary'] || $permission['de
     }
 
     if ('updateglossary' == $_action && $permission['editglossary']) {
-        if ($glossary->updateGlossaryItem($_POST['id'], $_POST['item'], $_POST['definition'])) {
+        if ($glossary->updateGlossaryItem((int)$_POST['id'], $_POST['item'], $_POST['definition'])) {
             print '<p>' . $PMF_LANG['ad_glossary_update_success'] . '</p>';
         } else {
             print '<p>' . $PMF_LANG['ad_glossary_update_error'];
@@ -52,7 +52,7 @@ if ($permission['addglossary'] || $permission['editglossary'] || $permission['de
     }
 
     if ('deleteglossary' == $_action && $permission['editglossary']) {
-        if ($glossary->deleteGlossaryItem($_GET['id'])) {
+        if ($glossary->deleteGlossaryItem((int)$_GET['id'])) {
             print '<p>' . $PMF_LANG['ad_glossary_delete_success'] . '</p>';
         } else {
             print '<p>' . $PMF_LANG['ad_glossary_delete_error'];
