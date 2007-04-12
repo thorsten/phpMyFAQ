@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Utils.php,v 1.4 2007-04-06 09:49:37 thorstenr Exp $
+ * $Id: Utils.php,v 1.5 2007-04-12 19:27:25 thorstenr Exp $
  *
  * Utilities - Functions and Classes common to the whole phpMyFAQ architecture
  *
@@ -141,5 +141,26 @@ class PMF_Utils
         }
 
         return $shortStr;
+    }
+
+    /**
+     * Shuffles an associative array without losing key associations
+     *
+     * @param   array   $data
+     * @return  array   $shuffled_data
+     * @access  static
+     * @since   2007-04-12
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de
+     */
+    function shuffleData($data)
+    {
+        $shuffled_data   = array();
+        $randomized_keys = array_rand($data, count($data));
+
+        foreach($randomized_keys as $current_key) {
+            $shuffled_data[$current_key] = $data[$current_key];
+        }
+
+        return $shuffled_data;
     }
 }
