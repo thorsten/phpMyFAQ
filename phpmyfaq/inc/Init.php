@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Init.php,v 1.33 2007-04-06 09:51:05 thorstenr Exp $
+ * $Id: Init.php,v 1.34 2007-04-12 20:29:54 thorstenr Exp $
  *
  * Some functions
  *
@@ -27,7 +27,7 @@
 // - false      debug mode disabled
 // - true       debug mode enabled
 //
-define('DEBUG', true);
+define('DEBUG', false);
 if (DEBUG) {
     error_reporting(E_ALL);
     if (defined('E_STRICT')) {
