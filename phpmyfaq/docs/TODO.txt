@@ -11,6 +11,7 @@ TODO list for future versions of phpMyFAQ:
 - add public user profile page ?
 - add improved revision system with diff of revisions ?
 - add RTF export ?
+- add public glossary page ?
 - improve permission management ?
 - message to the user, who has posted a question and an answer is availible ?
 - update only possible from versions 1.6 and 2.0 !
