@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: category.cut.php,v 1.13 2007-03-22 17:51:57 thorstenr Exp $
+ * $Id: category.cut.php,v 1.14 2007-04-12 20:42:21 thorstenr Exp $
  *
  * Cuts out a category
  *
@@ -27,9 +27,9 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 if ($permission["editcateg"]) {
     $category = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
     $category->buildTree();
-    $id = (int)$_GET["cat"];
+    $id = (int)$_GET['cat'];
     $parent_id = $category->categoryName[$id]['parent_id'];
-    
+
     $header = sprintf('%s: <em>%s</em>',
         $PMF_LANG['ad_categ_move'],
         $category->categoryName[$id]['name']);
@@ -43,23 +43,29 @@ if ($permission["editcateg"]) {
 	    <input type="hidden" name="action" value="pastecategory" />
 	    <input type="hidden" name="cat" value="<?php print $id; ?>" />
 	    <div class="row">
-               <select name="after" size="1">
+            <select name="after" size="1">
 <?php
-                   foreach ($category->catTree as $cat) {
-                       if ($id != $cat['id']) {
-                          printf("<option value=\"%s\">%s%s</option>", $cat['id'], $indent, $cat['name']);
-                       }
-                   }
-                   if ($parent_id != 0) {
-                       printf('<option value="0">%s</option>', $PMF_LANG['ad_categ_new_main_cat']);
-                   }
+
+    foreach ($category->catTree as $cat) {
+        $indent = '';
+        for ($j = 0; $j < $cat['indent']; $j++) {
+            $indent .= '...';
+        }
+        if ($id != $cat['id']) {
+            printf("<option value=\"%s\">%s%s</option>\n", $cat['id'], $indent, $cat['name']);
+        }
+    }
+
+    if ($parent_id != 0) {
+        printf('<option value="0">%s</option>', $PMF_LANG['ad_categ_new_main_cat']);
+    }
+
 ?>
-               </select>&nbsp;&nbsp;
-               <input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_updatecateg"]; ?>" />
-            </div>
+            </select>&nbsp;&nbsp;
+            <input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_updatecateg"]; ?>" />
+        </div>
     </fieldset>
     </form>
-
 <?php
 } else {
 	print $PMF_LANG["err_NotAuth"];
