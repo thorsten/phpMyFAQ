@@ -33,12 +33,11 @@ $printInstantResponse   = '';
 $tpl->processTemplate(
     'writeContent',
     array(
-        'msgInstantResponse'    => $PMF_LANG['msgInstantResponse'],
-        'searchString'          => $searchString,
-        'writeSendAdress'       => $_SERVER['PHP_SELF'].'?'.$sids.'action=instantresponse',
-        'msgSearchWord'         => $PMF_LANG['msgSearchWord'],
-        'printInstantResponse'  => $printInstantResponse
-    )
-);
+        'msgInstantResponse'            => $PMF_LANG['msgInstantResponse'],
+        'msgDescriptionInstantResponse' => $PMF_LANG['msgDescriptionInstantResponse'],
+        'searchString'                  => $searchString,
+        'writeSendAdress'               => $_SERVER['PHP_SELF'].'?'.$sids.'action=instantresponse',
+        'msgSearchWord'                 => $PMF_LANG['msgSearchWord'],
+        'printInstantResponse'          => $printInstantResponse));
 
 $tpl->includeTemplate('writeContent', 'index');

@@ -1,7 +1,8 @@
     <h2>{msgInstantResponse}</h2>
 
-    <script type="text/javascript" src="inc/js/prototype.js"></script>
+    <p>{msgDescriptionInstantResponse}</p>
 
+    <script type="text/javascript" src="inc/js/prototype.js"></script>
     <form id="instantform" action="?action=instantresponse" method="post">
         <fieldset>
             <legend>{msgSearchWord}</legend>
