@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Tags.php,v 1.32 2007-04-09 16:14:55 thorstenr Exp $
+* $Id: Tags.php,v 1.33 2007-04-12 19:28:33 thorstenr Exp $
 *
 * The main Tags class
 *
@@ -116,8 +116,7 @@ class PMF_Tags
               }
            }
         } else {
-           shuffle($allTags);
-           $tags = $allTags;
+           $tags = PMF_Utils::shuffleData($allTags);
         }
         return $tags;
     }
