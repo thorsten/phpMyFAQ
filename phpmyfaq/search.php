@@ -1,24 +1,24 @@
 <?php
 /**
-* $Id: search.php,v 1.21 2007-04-12 07:12:28 thorstenr Exp $
-*
-* The fulltext search page
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @author       Periklis Tsirakidis <tsirakidis@phpdevel.de>
-* @since        2002-09-16
-* @copyright    (c) 2001-2007 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * $Id: search.php,v 1.22 2007-04-12 07:19:07 thorstenr Exp $
+ *
+ * The fulltext search page
+ *
+ * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author       Periklis Tsirakidis <tsirakidis@phpdevel.de>
+ * @since        2002-09-16
+ * @copyright    (c) 2002-2007 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
@@ -42,7 +42,7 @@ if ($allLanguages) {
     $category->transform(0);
 }
 
-$searchCategory = isset($_GET['searchcategory']) && is_numeric($_GET['searchcategory']) ? $_GET['searchcategory'] : '%';
+$searchCategory = isset($_GET['searchcategory']) && is_numeric($_GET['searchcategory']) ? (int)$_GET['searchcategory'] : '%';
 $searchterm = '';
 $printResult = $PMF_LANG['help_search'];
 
