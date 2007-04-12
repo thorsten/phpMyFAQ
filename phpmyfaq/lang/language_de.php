@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.79 2007-04-04 18:01:02 thorstenr Exp $
+ * $Id: language_de.php,v 1.80 2007-04-12 20:27:22 thorstenr Exp $
  *
  * German language file
  *
@@ -874,3 +874,4 @@ $LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Erlaub
 
 // added v2.0.0 - 2007-04-04 by Thorsten
 $PMF_LANG['msgAllCatArticles'] = 'Einträge in dieser Kategorie';
+$PMF_LANG['msgDescriptionInstantResponse'] = 'Einfach lostippen und Antworten finden ...';
