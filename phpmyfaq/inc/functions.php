@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.193 2007-04-11 20:29:37 matteo Exp $
+ * $Id: functions.php,v 1.194 2007-04-12 07:12:28 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -1029,31 +1029,31 @@ function quoted_printable_encode($return = '')
  * @author   Matteo Scaramuccia <matteo@scaramuccia.com>
  * @since    2002-09-16
  */
-function searchEngine($begriff, $cat = '%', $allLanguages = true, $hasMore = false)
+function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = false)
 {
     global $db, $sids, $category, $PMF_LANG, $PMF_CONF, $LANGCODE;
 
-    $_begriff    = $begriff;
-    $seite       = '';
+    $_searchterm = PMF_htmlentities(stripslashes($searchterm), ENT_QUOTES, $PMF_LANG['metaCharset']);
+    $seite       = 1;
     $output      = '';
-    $num = 0;
+    $num         = 0;
     $searchItems = array();
 
-    if (isset($_REQUEST["seite"])) {
-        $seite = $_REQUEST["seite"];
-    } else {
-        $seite = 1;
+    if (isset($_REQUEST['seite'])) {
+        $seite = (int)$_REQUEST['seite'];
     }
 
     $cond = array(SQLPREFIX."faqdata.active" => "'yes'");
+
     if ($cat != '%') {
         $cond = array_merge(array(SQLPREFIX."faqcategoryrelations.category_id" => $cat), $cond);
     }
-    if ((!$allLanguages) && (!is_numeric($begriff))) {
+
+    if ((!$allLanguages) && (!is_numeric($searchterm))) {
         $cond = array_merge(array(SQLPREFIX."faqdata.lang" => "'".$LANGCODE."'"), $cond);
     }
 
-    if (is_numeric($begriff)) {
+    if (is_numeric($searchterm)) {
         // search for the solution_id
         $result = $db->search(SQLPREFIX.'faqdata',
                         array(SQLPREFIX.'faqdata.id AS id',
@@ -1066,7 +1066,7 @@ function searchEngine($begriff, $cat = '%', $allLanguages = true, $hasMore = fal
                         array(SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id',
                               SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang'),
                         array(SQLPREFIX.'faqdata.solution_id'),
-                        $begriff,
+                        $searchterm,
                         $cond);
     } else {
         $result = $db->search(SQLPREFIX."faqdata",
@@ -1081,7 +1081,7 @@ function searchEngine($begriff, $cat = '%', $allLanguages = true, $hasMore = fal
                         array(SQLPREFIX."faqdata.thema",
                               SQLPREFIX."faqdata.content",
                               SQLPREFIX."faqdata.keywords"),
-                        $begriff,
+                        $searchterm,
                         $cond);
     }
 
@@ -1093,19 +1093,19 @@ function searchEngine($begriff, $cat = '%', $allLanguages = true, $hasMore = fal
     // Sanity checks: if a valid Solution ID has been provided the result set
     //                will measure 1: this is true ONLY if the faq is not
     //                classified among more than 1 category
-    if (is_numeric($begriff) && ($begriff >= PMF_SOLUTION_ID_START_VALUE) && ($num > 0)) {
+    if (is_numeric($searchterm) && ($searchterm >= PMF_SOLUTION_ID_START_VALUE) && ($num > 0)) {
         // Hack: before a redirection we must force the PHP session update for preventing data loss
         session_write_close();
         if (isset($PMF_CONF['main.enableRewriteRules']) && $PMF_CONF['main.enableRewriteRules']) {
-            header('Location: '.PMF_Link::getSystemUri('/index.php').'/solution_id_'.$begriff.'.html');
+            header('Location: '.PMF_Link::getSystemUri('/index.php').'/solution_id_'.$searchterm.'.html');
         } else {
-            header('Location: '.PMF_Link::getSystemUri('/index.php').'/index.php?solution_id='.$begriff);
+            header('Location: '.PMF_Link::getSystemUri('/index.php').'/index.php?solution_id='.$searchterm);
         }
         exit();
     }
 
     if (0 == $num) {
-        $keys = preg_split("/\s+/", $begriff);
+        $keys = preg_split("/\s+/", $searchterm);
         $numKeys = count($keys);
         $where = '';
         for ($i = 0; $i < $numKeys; $i++) {
@@ -1167,9 +1167,9 @@ function searchEngine($begriff, $cat = '%', $allLanguages = true, $hasMore = fal
             $rubriktext = $category->getPath($row->category_id);
             $thema = PMF_htmlentities(chopString($row->thema, 15),ENT_QUOTES, $PMF_LANG['metaCharset']);
             $content = chopString(strip_tags($row->content), 25);
-            $begriff = str_replace(array('^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']', '"'), '', $begriff);
-            $begriff = preg_quote($begriff, '/');
-            $searchItems = explode(' ', $begriff);
+            $searchterm = str_replace(array('^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']', '"'), '', $searchterm);
+            $searchterm = preg_quote($searchterm, '/');
+            $searchItems = explode(' ', $searchterm);
 
             if (strlen($searchItems[0]) > 1) {
                 foreach ($searchItems as $item) {
@@ -1199,7 +1199,7 @@ function searchEngine($begriff, $cat = '%', $allLanguages = true, $hasMore = fal
                 $row->category_id,
                 $row->id,
                 $row->lang,
-                $begriff
+                $searchterm
             );
             // kick out ajaxresponse.php
             $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri('ajaxresponse.php').'?'.$url);
@@ -1207,7 +1207,7 @@ function searchEngine($begriff, $cat = '%', $allLanguages = true, $hasMore = fal
             $oLink->text = $thema;
             $oLink->tooltip = $row->thema;
             $output .=
-                '<li><strong>'.$rubriktext.'</strong>: '.$oLink->toHtmlAnchor().'</li><br />'
+                '<li><strong>'.$rubriktext.'</strong>: '.$oLink->toHtmlAnchor().'<br />'
                 .'<div class="searchpreview"><strong>'.$PMF_LANG['msgSearchContent'].'</strong> '.$content.'...</div>'
                 .'<br /></li>'."\n";
         }
@@ -1222,14 +1222,14 @@ function searchEngine($begriff, $cat = '%', $allLanguages = true, $hasMore = fal
         $next = $seite + 1;
         if ($vor != 0) {
             if (isset($PMF_CONF['main.enableRewriteRules']) && $PMF_CONF['main.enableRewriteRules']) {
-                $output .= "[ <a href=\"search.html?search=".urlencode($_begriff)."&amp;seite=".$vor."\">".$PMF_LANG["msgPrevious"]."</a> ]";
+                $output .= "[ <a href=\"search.html?search=".urlencode($_searchterm)."&amp;seite=".$vor."\">".$PMF_LANG["msgPrevious"]."</a> ]";
             } else {
-                $output .= "[ <a href=\"index.php?".$sids."action=search&amp;search=".urlencode($_begriff)."&amp;seite=".$vor."\">".$PMF_LANG["msgPrevious"]."</a> ]";
+                $output .= "[ <a href=\"index.php?".$sids."action=search&amp;search=".urlencode($_searchterm)."&amp;seite=".$vor."\">".$PMF_LANG["msgPrevious"]."</a> ]";
             }
         }
         $output .= " ";
         if ($next <= $pages) {
-            $url = $sids.'&amp;action=search&amp;search='.urlencode($_begriff).'&amp;seite='.$next;
+            $url = $sids.'&amp;action=search&amp;search='.urlencode($_searchterm).'&amp;seite='.$next;
             $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
             $oLink->itemTitle = '';
             $oLink->text = $PMF_LANG["msgNext"];

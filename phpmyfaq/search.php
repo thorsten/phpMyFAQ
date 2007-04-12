@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: search.php,v 1.20 2007-02-04 19:27:50 thorstenr Exp $
+* $Id: search.php,v 1.21 2007-04-12 07:12:28 thorstenr Exp $
 *
 * The fulltext search page
 *
@@ -43,7 +43,7 @@ if ($allLanguages) {
 }
 
 $searchCategory = isset($_GET['searchcategory']) && is_numeric($_GET['searchcategory']) ? $_GET['searchcategory'] : '%';
-$suchbegriff = '';
+$searchterm = '';
 $printResult = $PMF_LANG['help_search'];
 
 //
@@ -52,8 +52,8 @@ $printResult = $PMF_LANG['help_search'];
 if (isset($_GET['tagging_id']) && is_numeric($_GET['tagging_id'])) {
     $tag_id = (int)$_GET['tagging_id'];
     $tagging = new PMF_Tags($db, $LANGCODE);
-    $suchbegriff = $tagging->getTagNameById($tag_id);
-    $printResult = searchEngine($suchbegriff, $searchCategory, $allLanguages);
+    $searchterm = $tagging->getTagNameById($tag_id);
+    $printResult = searchEngine($searchterm, $searchCategory, $allLanguages);
 }
 
 //
@@ -61,40 +61,37 @@ if (isset($_GET['tagging_id']) && is_numeric($_GET['tagging_id'])) {
 //
 if (isset($_GET['suchbegriff']) || isset($_GET['search'])) {
     if (isset($_GET['suchbegriff'])) {
-        $suchbegriff = $db->escape_string(strip_tags($_GET['suchbegriff']));
+        $searchterm = $db->escape_string(strip_tags($_GET['suchbegriff']));
     }
     if (isset($_GET['search'])) {
-        $suchbegriff = $db->escape_string(strip_tags($_GET['search']));
+        $searchterm = $db->escape_string(strip_tags($_GET['search']));
     }
-    $printResult = searchEngine($suchbegriff, $searchCategory, $allLanguages);
+    $printResult = searchEngine($searchterm, $searchCategory, $allLanguages);
+    $searchterm = stripslashes($searchterm);
 }
-
 
 // Change a little bit the $searchCategory value;
 $searchCategory = ('%' == $searchCategory) ? 0 : $searchCategory;
 
-Tracking('fulltext_search', $suchbegriff);
+Tracking('fulltext_search', $searchterm);
 
 $category->buildTree();
 
-$openSearchLink = sprintf('<p><a class="searchplugin" href="#" onclick="window.external.AddSearchProvider(&quot;%s/opensearch.php&quot;);">%s</a></p>',
+$openSearchLink = sprintf('<a class="searchplugin" href="#" onclick="window.external.AddSearchProvider(\'%s/opensearch.php\');">%s</a>',
     PMF_Link::getSystemUri('/index.php'),
     $PMF_LANG['opensearch_plugin_install']);
 
-$tpl->processTemplate('writeContent',
-                        array(
-                        'msgSearch'             => $PMF_LANG['msgSearch'],
-                        'searchString'          => $suchbegriff,
-                        'searchOnAllLanguages'  => $PMF_LANG['msgSearchOnAllLanguages'],
-                        'checkedAllLanguages'   => $allLanguages ? ' checked="checked"' : '',
-                        'selectCategories'      => $PMF_LANG['msgSelectCategories'],
-                        'allCategories'         => $PMF_LANG['msgAllCategories'],
-                        'printCategoryOptions'  => $category->printCategoryOptions($searchCategory),
-                        'writeSendAdress'       => $_SERVER['PHP_SELF'].'?'.$sids.'action=search',
-                        'msgSearchWord'         => $PMF_LANG['msgSearchWord'],
-                        'printResult'           => $printResult,
-                        'openSearchLink'        => $openSearchLink
-                        )
-                    );
+$tpl->processTemplate('writeContent', array(
+    'msgSearch'             => $PMF_LANG['msgSearch'],
+    'searchString'          => PMF_htmlentities($searchterm, ENT_QUOTES, $PMF_LANG['metaCharset']),
+    'searchOnAllLanguages'  => $PMF_LANG['msgSearchOnAllLanguages'],
+    'checkedAllLanguages'   => $allLanguages ? ' checked="checked"' : '',
+    'selectCategories'      => $PMF_LANG['msgSelectCategories'],
+    'allCategories'         => $PMF_LANG['msgAllCategories'],
+    'printCategoryOptions'  => $category->printCategoryOptions($searchCategory),
+    'writeSendAdress'       => $_SERVER['PHP_SELF'].'?'.$sids.'action=search',
+    'msgSearchWord'         => $PMF_LANG['msgSearchWord'],
+    'printResult'           => $printResult,
+    'openSearchLink'        => $openSearchLink));
 
 $tpl->includeTemplate('writeContent', 'index');
