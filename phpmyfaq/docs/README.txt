@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.84 2007-04-12 20:20:30 thorstenr Exp $
+$Id: README.txt,v 1.85 2007-04-13 11:26:55 thorstenr Exp $
 
 phpMyFAQ 2.0.0-RC
 Codename "Prometheus"
@@ -10,6 +10,7 @@ Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.0.0-beta2:
+- updated Spanish translation (Eduardo Polidor)
 - many bugfixes
 
 For known issues please take a look at KNOWNBUGS.txt
@@ -53,6 +54,7 @@ Version 2.0.0-RC - 2007-05-
 - updated German translation (Thorsten)
 - updated Italian translation (Matteo)
 - updated Japanese translation (Tadashi Jokagi)
+- updated Spanish translation (Eduardo Polidor)
 - prepared for PHP6 (Johannes)
 
 Version 1.6.11 - 2007-03-31
