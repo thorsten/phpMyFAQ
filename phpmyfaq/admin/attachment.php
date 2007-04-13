@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: attachment.php,v 1.35 2007-03-29 18:47:40 thorstenr Exp $
+* $Id: attachment.php,v 1.36 2007-04-13 18:38:11 thorstenr Exp $
 *
 * Select an attachment and save it or create the SQL backup files
 *
@@ -19,9 +19,10 @@
 * under the License.
 */
 
-require_once('../inc/functions.php');
-require_once('../inc/Init.php');
+define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('IS_VALID_PHPMYFAQ_ADMIN', null);
+
+require_once(PMF_ROOT_DIR.'/inc/Init.php');
 PMF_Init::cleanRequest();
 session_name('pmf_auth_'.$faqconfig->get('main.phpMyFAQToken'));
 session_start();
@@ -42,7 +43,7 @@ if (isset($_REQUEST["action"]) && ($_REQUEST["action"] == "sicherdaten" || $_REQ
 $pmf = new PMF_Init();
 $LANGCODE = $pmf->setLanguage((isset($PMF_CONF['main.languageDetection']) ? true : false), $PMF_CONF['main.language']);
 // Preload English strings
-require_once ('../lang/language_en.php');
+require_once(PMF_ROOT_DIR.'/lang/language_en.php');
 
 if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE)) {
     // Overwrite English strings with the ones we have in the current language
