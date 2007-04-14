@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.85 2007-04-13 11:26:55 thorstenr Exp $
+$Id: README.txt,v 1.86 2007-04-14 09:57:23 thorstenr Exp $
 
 phpMyFAQ 2.0.0-RC
 Codename "Prometheus"
@@ -55,7 +55,6 @@ Version 2.0.0-RC - 2007-05-
 - updated Italian translation (Matteo)
 - updated Japanese translation (Tadashi Jokagi)
 - updated Spanish translation (Eduardo Polidor)
-- prepared for PHP6 (Johannes)
 
 Version 1.6.11 - 2007-03-31
 - updated Finnish translation
