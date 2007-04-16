@@ -1,15 +1,33 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<!-- $Id: documentation.en.html,v 1.25 2007-03-14 21:13:58 thorstenr Exp $ -->
+<!-- $Id: documentation.en.html,v 1.26 2007-04-16 20:28:17 thorstenr Exp $ -->
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<title>Documentation for phpMyFAQ 2.0.x</title>
     <style type="text/css"><!--
-    body { font: normal normal 14px "Trebuchet MS", Verdana, Geneva, Arial, Helvetica, sans-serif;	background-color: #f5f5f5; line-height: 20px; }
-    pre { background-color: #FAFAD2; padding: 5px; }
-	a { color: #0000ff; }
-	a:hover { color: #ff0000; }
-    #doc { width: 70%; min-width: 550px; max-width:700px; }
-    ol.alpha { list-style-type: lower-alpha; }
+    body {
+        font: normal normal 14px "Trebuchet MS", Verdana, Geneva, Arial, Helvetica, sans-serif;
+        background-color: #f5f5f5;
+        line-height: 20px;
+    }
+    pre {
+        background-color:
+        #FAFAD2;
+        padding: 5px;
+    }
+	a {
+	   color: #0000ff;
+	}
+	a:hover {
+	   color: #ff0000;
+	}
+    #doc {
+        width: 70%;
+        min-width: 550px;
+        max-width:700px;
+    }
+    ol.alpha {
+        list-style-type: lower-alpha;
+    }
     -->
     </style>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
@@ -49,14 +67,22 @@
             <li><a href="#3c">Upgrading from phpMyFAQ 1.6.x</a></li>
             <li><a href="#3d">Upgrading phpMyFAQ 2.0.x versions</a></li>
             <li><a href="#3e">Modifying templates for phpMyFAQ 2.0.x</a></li>
-            <li><a href="#3f">Migration</a></li>
         </ol></li>
         <li><strong><a href="#4">Frontend</a></strong>
         <ol class="alpha">
-            <li></li>
+            <li><a href="#4a">Change languages</a></li>
+            <li><a href="#4a">RSS Feeds</a></li>
+            <li><a href="#4a">Advanced search</a></li>
+            <li><a href="#4a">Instant Response</a></li>
+            <li><a href="#4a">Add content</a></li>
+            <li><a href="#4a">Ask questions</a></li>
+            <li><a href="#4a">Open questions</a></li>
+            <li><a href="#4a">Submit translation</a></li>
+            <li><a href="#4a">Digg it!</a></li>
+            <li><a href="#4a">Internal references</a></li>
         </ol></li>
         <li><strong><a href="#5">Administration</a></strong>
-        <ol class="alpha"">
+        <ol class="alpha">
             <li><a href="#5a">User Administration</a></li>
             <li><a href="#5b">Group Administration</a></li>
             <li><a href="#5c">Category Administration</a></li>
@@ -69,7 +95,7 @@
             <li><a href="#5j">Configuration</a></li>
         </ol></li>
         <li><strong><a href="#6">Customising phpMyFAQ 2.0.x</a></strong>
-        <ol class="alpha"">
+        <ol class="alpha">
             <li><a href="#6a">The file template/index.tpl</a></li>
             <li><a href="#6b">The file template/style.css</a></li>
             <li><a href="#6c">More Templates</a></li>
@@ -118,7 +144,7 @@
     <p>phpMyFAQ addresses a database system via PHP. In order to install it you will need a webserver that meets the following requirements:</p>
     <ul type="square">
         <li><strong><a href="http://www.php.net">PHP</a></strong>
-        <ul type="circle">    
+        <ul type="circle">
             <li>from version 4.3.3 (recommended: latest PHP 4.4 or latest PHP 5.2)</li>
             <li>register_globals = off (recommended)</li>
             <li>safe_mode = off (recommended)</li>
@@ -152,7 +178,7 @@
     <hr style="width: 90%; height: 1px;"  />
     <p><strong><a name="2b"></a>2.b. Preparations</strong></p>
     <p>Please unzip the downloaded archive on your harddisk.</p>
-    <p>You can modify the layout of phpMyFAQ using templates. A description of how this is done can be found <a href="#5">below</a>. Copy all unzipped files to your webserver in a directory using FTP. A good choice would be the directory <strong>faq/</strong>.<br />
+    <p>You can modify the layout of phpMyFAQ using templates. A description of how this is done can be found <a href="#6">below</a>. Copy all unzipped files to your webserver in a directory using FTP. A good choice would be the directory <strong>faq/</strong>.<br />
     <strong>Important:</strong><br />
     Writing permission for your script is needed in this directory to be able to configure the file <strong>data.php</strong> during installation. This is the case if you're running PHP as CGI or as mod_php with disabled safe-mode. The installation script will stop when your webserver isn't configured as needed.</p>
     <p>It might help to set chmod 766 to the whole phpMyFAQ directory to avoid problems during the installation. If you're running a very restrictive mod_php installation you should keep the chmod 766 for the following files and directories even after the succesful installation:</p>
@@ -227,7 +253,7 @@
 
     <hr style="width: 90%; height: 1px;" />
     <p><strong><a name="2g"></a>2.g. PHP settings</strong></p>
-    <p>If you're able to edit the php.ini file, please check that the variable <em>file_upload = On</em> is set; otherwise the file upload will not work for the attachments.</p>
+    <p>If you're able to edit the php.ini file, please check that the variable <em>file_upload = On</em> is set; otherwise the file upload will not work for the attachments. You should disable the <em>safe_mode</em> because it will cause trouble when you're trying to upload files or if you want to use the user tracking.</p>
     <p><a href="#top">back to top</a></p>
 
 
@@ -368,36 +394,100 @@
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><a name="3f"></a><strong>3.f. Migration</strong></p>
-    <p>Prerequisites:</p>
-    <ol>
-        <li>Application that is capable of exporting csv data</li>
-        <li>Ready configured <a href="http://www.phpmyadmin.net">phpMyAdmin</a> for importing the csv data</li>
-        <li>A recent backup copy of your database</li>
-    </ol>
-    <p>If you would like to migrate your existing data into your phpMyFAQ database we recommend the following steps:</p>
-    <ol>
-        <li>Write down your categories to have them available later (or print them with phpMyAdmin); you will find the data in the xx_faqcategories table. If you do not have any categories yet this is a good time for creating them, you´ll need them in less tha a minute...</li>
-        <li>Open your application used for calculations (e.g. OpenOffice, Excel, etc.)</li>
-        <li>Create a new sheet containing the following data:
-<pre>id   lang   solution_id    revision_id    active   keywords   thema   content   author   email   comment   datum</pre></li>
-    </ol>
-    <p>In case you do not have any data already in the phpMyFAQ database your "id" field counts from 1 otherwise look at your current xx_faqdata to find out the highest "id" number to start counting from. The field "lang" contains the language you prefer. In my case you´ll find "de" becuase my preferred language is German. Set "active" to "yes" (without qoutation marks of course) otherwise the data won´t display later. You can leave out "keywords" for now but remember that you´ll need them in case you want to find your FAQs by keywords. "thema" describes the FAQ topic or in other words the question. "content" contains the answer to the frequently asked question. "author" and "email" shold be seld-explanatory. "comment" is just a value and can be "y" or "n". I´d prefer "n" to disable users from commenting but this is up to you. You should be careful with "datum" as this value strongly depends on the format. An example would look like this: 20050401090000 in other words: 4digits year (2005), 2 digits month (04), 2 digits day (01), 2 digits hour (09), 2 digits minutes (00) and 2 digits seconds (00). Your table could look like this now:</p>
-
-    <pre>id   lang   solution_id    revision_id    active   keywords   thema                  content   author      email         comment   datum
-1   de   1000    1    yes   FAQ   Is there any better solution than phpMyFAQ?   No!   John Doe   john@doe.com   n   20050401090101</pre>
-
-<p>Be aware that the fields containing numbers should default to "number" with 0 decimals otherwise phpMyAdmin could do wrong. Now you are ready to export to csv. Do yourself a favour and avoid any spaces in the filename, UNIXes could have trouble to read the filename otherwise.</p>
-
-    <ol start="4">
-        <li>Open your phpMyAdmin URL and open your phpMyFAQ database (even if it was still empty). Scroll down the page click on the link "import text file", choose your file and click "submit" button.</li>
-    </ol>
-    <p>That´s it. Should you have any trouble it is a good time to restore your data from the backup you saved earlier. Then edit the imported records and reassign the record to the categories.</p>
+    <p><strong><a name="4"></a>4. Frontend</strong></p>
+    <p>The phpMyFAQ frontend has a quite simple default layout. The header has the main links for the advanced search, add content, ask questions, open questions, help and contact. On the left side you see the main categories, the instant response page and the sitemap. You can also change the current language of the FAQ, use the search form or the login box if you have a valid user account. On the right side you see the Top 10 FAQ records and the five latest records. On the pages with the FAQ records you'll see the other records of the current category and the tagcloud if you're using tagging.</p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4"></a>4. Administration</strong></p>
+    <p><strong><a name="4a"></a>Change languages</strong></p>
+    <p>As written above there's a select box for changing the current language. If you're visiting a phpMyFAQ powered FAQ, the current language will be the one you're browser is usring or the language which was selected by the administrator of the FAQ. If you change the language you'll see the categories and records of your chosen language. If there are no entries in this language you'll see no entries. If you're switching to languages with right to left text direction (for example Arabic, Hebrew or Farsi) the whole layout will be switching according to the text direction.</p>
+    <p><a href="#top">back to top</a></p>
+
+
+    <hr style="width: 90%; height: 1px;"  />
+    <p><strong><a name="4b"></a>RSS Feeds</strong></p>
+    <p>On the start page you can subscribe to three RSS feeds with the news of the FAQ, the Top 10 and the latest records available in the FAQ. On the page with the open user questions you can subscribe to the RSS feed with these questions. All feeds are compatible to the RSS 2.0 specification.</p>
+    <p><a href="#top">back to top</a></p>
+
+
+    <hr style="width: 90%; height: 1px;"  />
+    <p><strong><a name="4c"></a>Advanced search</strong></p>
+    <p>On the page with the advanced search you have more possibilities to find an entry. You can search over all language if you want to. It's alos possible to search only in one selected category. Additionally the link for the OpenSearch plugin is below the main search box.</p>
+    <p><a href="#top">back to top</a></p>
+
+
+    <hr style="width: 90%; height: 1px;"  />
+    <p><strong><a name="4d"></a>Instant Response</strong></p>
+    <p>The Instant Response is an Ajax-powered page with direct access to the whole FAQ database and the page will return the search results while you're typing into the input form. For performance reason only the first 10 results will be displayed on the page.</p>
+
+
+    <p><a href="#top">back to top</a></p>
+
+
+    <hr style="width: 90%; height: 1px;"  />
+    <p><strong><a name="4e"></a>Add content</strong></p>
+
+
+
+    <p><a href="#top">back to top</a></p>
+
+
+    <hr style="width: 90%; height: 1px;"  />
+    <p><strong><a name="4f"></a>Ask questions</strong></p>
+
+
+
+    <p><a href="#top">back to top</a></p>
+
+
+    <hr style="width: 90%; height: 1px;"  />
+    <p><strong><a name="4g"></a>Open questions</strong></p>
+
+
+
+    <p><a href="#top">back to top</a></p>
+
+
+    <hr style="width: 90%; height: 1px;"  />
+    <p><strong><a name="4h"></a>Submit translation</strong></p>
+
+
+
+    <p><a href="#top">back to top</a></p>
+
+
+    <hr style="width: 90%; height: 1px;"  />
+    <p><strong><a name="4i"></a>Digg it!</strong></p>
+
+
+
+    <p><a href="#top">back to top</a></p>
+
+
+    <hr style="width: 90%; height: 1px;"  />
+    <p><strong><a name="4j"></a>Internal references</strong></p>
+
+
+
+    <p><a href="#top">back to top</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <hr style="width: 90%; height: 1px;"  />
+    <p><strong><a name="5"></a>5. Administration</strong></p>
     <p>The administration of phpMyFAQ is completely browser-based. The admin area can be found under this URL:</p>
     <pre>http://www.example.com/faq/admin/index.php</pre>
     <p>If you have lost your password you can reset it. A new random password will be generated and sent to you via e-mail. Please change it after your successful login with the generated password.</p>
