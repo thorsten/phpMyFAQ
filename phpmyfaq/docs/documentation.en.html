@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<!-- $Id: documentation.en.html,v 1.26 2007-04-16 20:28:17 thorstenr Exp $ -->
+<!-- $Id: documentation.en.html,v 1.27 2007-04-17 19:40:17 thorstenr Exp $ -->
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<title>Documentation for phpMyFAQ 2.0.x</title>
@@ -71,15 +71,15 @@
         <li><strong><a href="#4">Frontend</a></strong>
         <ol class="alpha">
             <li><a href="#4a">Change languages</a></li>
-            <li><a href="#4a">RSS Feeds</a></li>
-            <li><a href="#4a">Advanced search</a></li>
-            <li><a href="#4a">Instant Response</a></li>
-            <li><a href="#4a">Add content</a></li>
-            <li><a href="#4a">Ask questions</a></li>
-            <li><a href="#4a">Open questions</a></li>
-            <li><a href="#4a">Submit translation</a></li>
-            <li><a href="#4a">Digg it!</a></li>
-            <li><a href="#4a">Internal references</a></li>
+            <li><a href="#4b">RSS Feeds</a></li>
+            <li><a href="#4c">Advanced search</a></li>
+            <li><a href="#4d">Instant Response</a></li>
+            <li><a href="#4e">Add content</a></li>
+            <li><a href="#4f">Ask questions</a></li>
+            <li><a href="#4g">Open questions</a></li>
+            <li><a href="#4h">Submit translation</a></li>
+            <li><a href="#4i">Digg it!</a></li>
+            <li><a href="#4j">Internal references</a></li>
         </ol></li>
         <li><strong><a href="#5">Administration</a></strong>
         <ol class="alpha">
@@ -400,90 +400,63 @@
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4a"></a>Change languages</strong></p>
+    <p><strong><a name="4a"></a>4.a.Change languages</strong></p>
     <p>As written above there's a select box for changing the current language. If you're visiting a phpMyFAQ powered FAQ, the current language will be the one you're browser is usring or the language which was selected by the administrator of the FAQ. If you change the language you'll see the categories and records of your chosen language. If there are no entries in this language you'll see no entries. If you're switching to languages with right to left text direction (for example Arabic, Hebrew or Farsi) the whole layout will be switching according to the text direction.</p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4b"></a>RSS Feeds</strong></p>
+    <p><strong><a name="4b"></a>4.b. RSS Feeds</strong></p>
     <p>On the start page you can subscribe to three RSS feeds with the news of the FAQ, the Top 10 and the latest records available in the FAQ. On the page with the open user questions you can subscribe to the RSS feed with these questions. All feeds are compatible to the RSS 2.0 specification.</p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4c"></a>Advanced search</strong></p>
+    <p><strong><a name="4c"></a>4.c. Advanced search</strong></p>
     <p>On the page with the advanced search you have more possibilities to find an entry. You can search over all language if you want to. It's alos possible to search only in one selected category. Additionally the link for the OpenSearch plugin is below the main search box.</p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4d"></a>Instant Response</strong></p>
-    <p>The Instant Response is an Ajax-powered page with direct access to the whole FAQ database and the page will return the search results while you're typing into the input form. For performance reason only the first 10 results will be displayed on the page.</p>
-
-
+    <p><strong><a name="4d"></a>4.d. Instant Response</strong></p>
+    <p>The Instant Response is an Ajax-powered page with direct access to the whole FAQ database and the page will return the search results while you're typing into the input form. For performance reasons only the first 10 results will be displayed on the page. Please note that between every keypress there's a delay of 200ms.</p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4e"></a>Add content</strong></p>
-
-
-
+    <p><strong><a name="4e"></a>4.e. Add content</strong></p>
+    <p>On the <em>add content</em> page it's possible for all users to add a new FAQ record. The users have to add a FAQ question, select a category, add an answer, and they have to insert their name and e-mail address. If the spam protection is enabled they have to enter the correct captcha code, too. New FAQ entries won't be displayed and have to be activated by an administrator.</p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4f"></a>Ask questions</strong></p>
-
-
-
+    <p><strong><a name="4f"></a>4.f. Ask questions</strong></p>
+    <p>On the <em>ask question</em> page it's possible for all users to add a new question without an answer. The users have to add a question, select a category, and they have to insert their name and e-mail address. If the spam protection is enabled they have to enter the correct captcha code, too. By default new questions won't be displayed and have to be activated by an administrator.</p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4g"></a>Open questions</strong></p>
-
-
-
+    <p><strong><a name="4g"></a>4.g. Open questions</strong></p>
+    <p>This page displays all open questions and it's possible for all users to add an answer for this question. The user will be directed to the <a href="#4e">add content</a> page If the spam protection is enabled they have to enter the correct captcha code, too.</p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4h"></a>Submit translation</strong></p>
-
-
-
+    <p><strong><a name="4h"></a>4.h. Submit translation</strong></p>
+    <p>On every FAQ record page there's a select box for languages and a button to translate an existing FAQ record to another language. The translating user will be directed to a special <a href="#4e">add content</a> page with the original entry and a stripped down WYSIWYG editor component. If the spam protection is enabled they have to enter the correct captcha code, too.</p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4i"></a>Digg it!</strong></p>
-
-
-
+    <p><strong><a name="4i"></a>4.i. Digg it!</strong></p>
+    <p>On every FAQ record page there's a direct link to <a href="http://www.digg.com">digg.com</a> there you can submit the FAQ entry.</p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4j"></a>Internal references</strong></p>
-
-
-
+    <p><strong><a name="4j"></a>4.j. Internal references</strong></p>
+    <p>For better usability there are some helpful links below every FAQ record. If the administrator added tags to the records they will be displayed next to five (or more) related articles. The related articles are based on the content of the current FAQ entry. On the right side you'll see links to all entries of the current category and the complete tag cloud of the whole FAQ.</p>
     <p><a href="#top">back to top</a></p>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     <hr style="width: 90%; height: 1px;"  />
@@ -498,19 +471,19 @@
     <hr style="width: 90%; height: 1px;"  />
     <p><strong><a name="4a"></a>4.a. User Administration</strong></p>
     <p>phpMyFAQ offers a flexible management of privileges (or rights) for different users in the admin area. It is possible to assign different priviledges to real people (represented by the term users). Those priviledges are very detailed and specific, so that you could allow a certain user to edit but not to delete an entry. It is very important to contemplate which user shall get which priviledges. You could edit an entry by completely deleting all content, which would be equivalent to deleting the whole entry. The number of possible users is not limited by phpMyFAQ.</p>
-    <p>In the main screen of the user administration you'll see an overview of all active user profiles, whereas a combination of "1" and "0" represents the priviledges of a user. A "1" symbolizes that a user has this priviledge, a "0" shows that a user cannot perform a certain action. The order is essentially the same as the listing of the "Rights" when creating or editing a user.</p>
+    <p></p>
     <p>Keep in mind that new users have no priviledges at all, you will have to assign them by editing the user's profile. The <em>admin</em> user cannot be deleted, nor can the name be changed.</p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4b"></a>4.b. Category Administration</strong></p>
+    <p><strong><a name="4c"></a>4.c. Category Administration</strong></p>
     <p>phpMyFAQ lets you create different categories and nested sub-categories for your FAQ. You can also re-arrange your categories in a different order. It is possible to use varius languages per category, too. For accessibility reasons you should add a small description for every category.</p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4c"></a>4.c. Record Administration</strong></p>
+    <p><strong><a name="4d"></a>4.d. Record Administration</strong></p>
     <p>You can create entries directly in the admin area. Created entries are NOT published by default. The meaning of the fields is as follows:</p>
     <ul>
 
@@ -577,19 +550,19 @@
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4d"></a>4.d. News Administration</strong></p>
+    <p><strong><a name="4f"></a>4.f. News Administration</strong></p>
     <p>phpMyFAQ offers the ability to post news on the starting page of your FAQ. In the administration area you can create new items, edit existing news or delete them. </p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4e"></a>4.e. Edit open questions</strong></p>
+    <p><strong><a name="4g"></a>4.g. Edit open questions</strong></p>
     <p>phpMyFAQ lets visitors contribute to the FAQ by asking questions. Every visitor is able to view these open questions in the public area, and may give an answer. If you wish to get rid of open questions you can do so using this section. Alternatively you can take over a question and answer it yourself and hereby add it to the FAQ.</p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4f"></a>4.f. Rating statistics</strong></p>
+    <p><strong><a name="4g"></a>4.g. Statistics</strong></p>
     <p>Below every entry visitors have the chance to rate the overall quality of an article by giving ratings from 1 to 5 (whereas 1 is the worst, 5 the best rating). In the statistics the average rating and number of votes becomes visible for every rated entry. To give you a quick overview entries with an average rating of 2 or worse are displayed in red, an average above 4 results in a green number.</p>
     <p><a href="#top">back to top</a></p>
 
