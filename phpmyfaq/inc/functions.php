@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.194 2007-04-12 07:12:28 thorstenr Exp $
+ * $Id: functions.php,v 1.195 2007-04-20 20:22:08 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -1201,8 +1201,9 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
                 $row->lang,
                 $searchterm
             );
+
             // kick out ajaxresponse.php
-            $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri('ajaxresponse.php').'?'.$url);
+            $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri('ajaxresponse.php').'index.php?'.$url);
             $oLink->itemTitle = $row->thema;
             $oLink->text = $thema;
             $oLink->tooltip = $row->thema;
