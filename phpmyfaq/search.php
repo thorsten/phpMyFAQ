@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: search.php,v 1.22 2007-04-12 07:19:07 thorstenr Exp $
+ * $Id: search.php,v 1.23 2007-04-20 08:57:47 thorstenr Exp $
  *
  * The fulltext search page
  *
@@ -25,7 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-Tracking("fulltext_search",0);
+Tracking('fulltext_search', 0);
 
 // Search only on current language (default)
 $allLanguages = false;
@@ -43,17 +43,19 @@ if ($allLanguages) {
 }
 
 $searchCategory = isset($_GET['searchcategory']) && is_numeric($_GET['searchcategory']) ? (int)$_GET['searchcategory'] : '%';
-$searchterm = '';
-$printResult = $PMF_LANG['help_search'];
+$searchterm     = '';
+$printResult    = $PMF_LANG['help_search'];
+$tagSearch      = false;
 
 //
 // Handle the Tagging ID
 //
 if (isset($_GET['tagging_id']) && is_numeric($_GET['tagging_id'])) {
+    $tagSearch = true;
     $tag_id = (int)$_GET['tagging_id'];
     $tagging = new PMF_Tags($db, $LANGCODE);
-    $searchterm = $tagging->getTagNameById($tag_id);
-    $printResult = searchEngine($searchterm, $searchCategory, $allLanguages);
+    $record_ids = $tagging->getRecordsByTagId($tag_id);
+    $printResult = $faq->showAllRecordsByIds($record_ids);
 }
 
 //
@@ -82,7 +84,7 @@ $openSearchLink = sprintf('<a class="searchplugin" href="#" onclick="window.exte
     $PMF_LANG['opensearch_plugin_install']);
 
 $tpl->processTemplate('writeContent', array(
-    'msgSearch'             => $PMF_LANG['msgSearch'],
+    'msgSearch'             => ($tagSearch ? $PMF_LANG['msgTagSearch'] : $PMF_LANG['msgSearch']),
     'searchString'          => PMF_htmlentities($searchterm, ENT_QUOTES, $PMF_LANG['metaCharset']),
     'searchOnAllLanguages'  => $PMF_LANG['msgSearchOnAllLanguages'],
     'checkedAllLanguages'   => $allLanguages ? ' checked="checked"' : '',
