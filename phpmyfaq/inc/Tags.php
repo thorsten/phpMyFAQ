@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Tags.php,v 1.33 2007-04-12 19:28:33 thorstenr Exp $
+* $Id: Tags.php,v 1.34 2007-04-20 08:56:01 thorstenr Exp $
 *
 * The main Tags class
 *
@@ -473,6 +473,42 @@ class PMF_Tags
             SQLPREFIX,
             $tagName
         );
+
+        $records = array();
+        $result = $this->db->query($query);
+        while ($row = $this->db->fetch_object($result)) {
+            $records[] = $row->record_id;
+        }
+
+        return $records;
+    }
+
+    /**
+     * Returns all FAQ record IDs where all tags are included
+     *
+     * @param   integer $tagId
+     * @return  array   $records
+     * @access  public
+     * @since   2007-04-20
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function getRecordsByTagId($tagId)
+    {
+        if (!is_integer($tagId)) {
+            return false;
+        }
+
+        $query = sprintf("
+            SELECT
+                d.record_id AS record_id
+            FROM
+                %sfaqdata_tags d, %sfaqtags t
+            WHERE
+                    t.tagging_id = d.tagging_id
+                AND t.tagging_id = %d",
+            SQLPREFIX,
+            SQLPREFIX,
+            $tagId);
 
         $records = array();
         $result = $this->db->query($query);
