@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<!-- $Id: documentation.en.html,v 1.27 2007-04-17 19:40:17 thorstenr Exp $ -->
+<!-- $Id: documentation.en.html,v 1.28 2007-04-20 16:30:37 thorstenr Exp $ -->
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<title>Documentation for phpMyFAQ 2.0.x</title>
@@ -464,21 +464,29 @@
     <p>The administration of phpMyFAQ is completely browser-based. The admin area can be found under this URL:</p>
     <pre>http://www.example.com/faq/admin/index.php</pre>
     <p>If you have lost your password you can reset it. A new random password will be generated and sent to you via e-mail. Please change it after your successful login with the generated password.</p>
-    <p>After entering your username and password you can log into the system. On the startpage you can see the admin menu on the left, some statistics about visits, entries and comments on the right. At the bottom of the main admin page you'll see a button for version information. If you click on that button your version of phpMyFAQ will check the latest version number from our website www.phpmyfaq.de. We do not log anything in this process!</p>
+    <p>After entering your username and password you can log into the system. On the startpage you can see the admin menu on the top, some statistics about visits, entries and comments in the middle of the page. At the bottom of the main admin page you'll see a button for version information. If you click on that button your version of phpMyFAQ will check the latest version number from our website www.phpmyfaq.de. We do not log anything in this process! You can switch the current language in the administration backend and you have an info box about the session timeout.</p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4a"></a>4.a. User Administration</strong></p>
-    <p>phpMyFAQ offers a flexible management of privileges (or rights) for different users in the admin area. It is possible to assign different priviledges to real people (represented by the term users). Those priviledges are very detailed and specific, so that you could allow a certain user to edit but not to delete an entry. It is very important to contemplate which user shall get which priviledges. You could edit an entry by completely deleting all content, which would be equivalent to deleting the whole entry. The number of possible users is not limited by phpMyFAQ.</p>
-    <p></p>
+    <p><strong><a name="5a"></a>5.a. User Administration</strong></p>
+    <p>phpMyFAQ 2 offers a flexible management of privileges (or rights) for different users in the admin area. It is possible to assign different priviledges to real people (represented by the term users). Those priviledges are very detailed and specific, so that you could allow a certain user to edit but not to delete an entry. It is very important to contemplate which user shall get which priviledges. You could edit an entry by completely deleting all content, which would be equivalent to deleting the whole entry. The number of possible users is not limited by phpMyFAQ.</p>
     <p>Keep in mind that new users have no priviledges at all, you will have to assign them by editing the user's profile. The <em>admin</em> user cannot be deleted, nor can the name be changed.</p>
+    <p>A user without any permission in the admin section can still get read access to categories and records. You can set the permissions on categories and records in the category and record administration frontends.</p>
+    <p><a href="#top">back to top</a></p>
+
+
+    <hr style="width: 90%; height: 1px;"  />
+    <p><strong><a name="5b"></a>5.b. Group Administration</strong></p>
+    <p>phpMyFAQ 2 also offers a flexible management of privileges (or rights) for different groups in the admin area. You can set permissions for groups in the same way like for users described in the topic above.</p>
+    <p>Please note that the permissions for a group are higher rated than the permissions on a user.</p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
     <p><strong><a name="4c"></a>4.c. Category Administration</strong></p>
-    <p>phpMyFAQ lets you create different categories and nested sub-categories for your FAQ. You can also re-arrange your categories in a different order. It is possible to use varius languages per category, too. For accessibility reasons you should add a small description for every category.</p>
+    <p>phpMyFAQ lets you create different categories and nested sub-categories for your FAQ. You can also re-arrange your categories in a different order. It is possible to use varius languages per category, too; there's also a frontend about all translated categories. For accessibility reasons you should add a small description for every category. If you add a new category, you can set the permissions for users and groups, and you can bind an administrator to that category. This is quite nice if you want to share the work in your FAQ between various admin users.</p>
+    <p></p>
     <p><a href="#top">back to top</a></p>
 
 
