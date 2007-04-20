@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.109 2007-04-09 16:57:11 thorstenr Exp $
+ * $Id: Faq.php,v 1.110 2007-04-20 08:55:28 thorstenr Exp $
  *
  * The main FAQ class
  *
@@ -335,6 +335,139 @@ class PMF_Faq
 
             $output .= "</strong></p>";
         }
+       return $output;
+    }
+
+    /**
+     * This function returns all not expired records from the given record ids
+     *
+     * @param   array   $record_ids
+     * @param   string  $orderby
+     * @param   string  $sortby
+     * @return  string
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @since   2007-04-20
+     */
+    function showAllRecordsByIds($record_ids, $orderby = 'id', $sortby = 'ASC')
+    {
+        global $sids, $PMF_CONF, $category;
+
+        $records = implode(', ', $record_ids);
+        $page    = 1;
+        $output  = '';
+
+        if (isset($_REQUEST['seite'])) {
+            $page = (int)$_REQUEST['seite'];
+        }
+
+        $now = date('YmdHis');
+        $query = sprintf("
+            SELECT
+                fd.id AS id,
+                fd.lang AS lang,
+                fd.thema AS thema,
+                fcr.category_id AS category_id,
+                fv.visits AS visits
+            FROM
+                %sfaqdata AS fd
+            LEFT JOIN
+                %sfaqcategoryrelations AS fcr
+            ON
+                fd.id = fcr.record_id
+            AND
+                fd.lang = fcr.record_lang
+            LEFT JOIN
+                %sfaqvisits AS fv
+            ON
+                fd.id = fv.id
+            AND
+                fv.lang = fd.lang
+            LEFT JOIN
+                %sfaqdata_group AS fdg
+            ON
+                fd.id = fdg.record_id
+            LEFT JOIN
+                %sfaqdata_user AS fdu
+            ON
+                fd.id = fdu.record_id
+            WHERE
+                    fd.date_start <= '%s'
+                AND fd.date_end   >= '%s'
+                AND fd.active = 'yes'
+                AND fd.id IN (%s)
+                AND fd.lang = '%s'
+            ORDER BY
+                %s %s",
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            $now,
+            $now,
+            $records,
+            $this->language,
+            $this->db->escape_string($orderby),
+            $this->db->escape_string($sortby));
+
+        $result = $this->db->query($query);
+
+        $num = $this->db->num_rows($result);
+        $pages = ceil($num / $PMF_CONF["main.numberOfRecordsPerPage"]);
+
+        if ($page == 1) {
+            $first = 0;
+        } else {
+            $first = ($page * $PMF_CONF["main.numberOfRecordsPerPage"]) - $PMF_CONF["main.numberOfRecordsPerPage"];
+        }
+
+        if ($num > 0) {
+            if ($pages > 1) {
+                $output .= sprintf('<p><strong>%s %s %s</strong></p>',
+                    $this->pmf_lang['msgPage'] . $page,
+                    $this->pmf_lang['msgVoteFrom'],
+                    $pages . $this->pmf_lang['msgPages']);
+            }
+            $output .= '<ul class="phpmyfaq_ul">';
+            $counter = 0;
+            $displayedCounter = 0;
+            while (($row = $this->db->fetch_object($result)) && $displayedCounter < $PMF_CONF['main.numberOfRecordsPerPage']) {
+                $counter ++;
+                if ($counter <= $first) {
+                    continue;
+                }
+                $displayedCounter++;
+
+                if (empty($row->visits)) {
+                    $visits = 0;
+                } else {
+                    $visits = $row->visits;
+                }
+
+                $title = PMF_htmlentities($row->thema, ENT_QUOTES, $this->pmf_lang['metaCharset']);
+                $url   = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                            $sids,
+                            $row->category_id,
+                            $row->id,
+                            $row->lang
+                        );
+                $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+                $oLink->itemTitle = $row->thema;
+                $oLink->text = $title;
+                $oLink->tooltip = $title;
+                $listItem = sprintf('<li>%s<br /><span class="little">(%d %s)</span></li>',
+                    $oLink->toHtmlAnchor(),
+                    $visits,
+                    $this->pmf_lang['msgViews']);
+
+                $output .= $listItem;
+            }
+            $output .= '</ul><span id="totFaqRecords" style="display: none;">'.$num.'</span>';
+        } else {
+            return false;
+        }
+
        return $output;
     }
 
