@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Category.php,v 1.49 2007-04-08 14:40:19 thorstenr Exp $
+ * $Id: Category.php,v 1.50 2007-04-20 09:57:39 thorstenr Exp $
  *
  * The main category class
  *
@@ -165,21 +165,24 @@ class PMF_Category
     function &getOrderedCategories($withperm = true)
     {
         $where = '';
-        if ($withperm) {
-            $where = sprintf("
-            WHERE
-                ( fu.user_id = %d
-            OR
-                fg.group_id IN (%s) )",
-            $this->user,
-            implode(', ', $this->groups));
-        }
+
         if (isset($this->language) && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
             $where .= empty($where) ? '
             WHERE' : '
             AND';
             $where .= "
                 lang = '".$this->language."'";
+        }
+
+        if ($withperm) {
+            $where = sprintf("
+            WHERE
+                ( fg.group_id IN (%s)
+            OR
+                (fu.user_id = %d AND fg.group_id IN (%s)))",
+            implode(', ', $this->groups),
+            $this->user,
+            implode(', ', $this->groups));
         }
 
         $query = sprintf("
@@ -207,8 +210,7 @@ class PMF_Category
             SQLPREFIX,
             SQLPREFIX,
             SQLPREFIX,
-            $where
-        );
+            $where);
 
         $result = $this->db->query($query);
         while ($row = $this->db->fetch_assoc($result)) {
