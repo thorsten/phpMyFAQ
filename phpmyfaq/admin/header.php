@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: header.php,v 1.45 2007-04-06 11:15:24 thorstenr Exp $
+ * $Id: header.php,v 1.46 2007-04-20 19:31:45 thorstenr Exp $
  *
  * Header of the admin area
  *
@@ -82,6 +82,7 @@ if (isset($_action)) {
         <label for="sessioncounter"><?php print $PMF_LANG['ad_session_expiration']; ?></label>
         <div id="sessioncounter">Loading...</div>
     </div>
+<div class="clearing">&nbsp;</div>
 <?php } ?>
 </div>
 
@@ -96,7 +97,7 @@ if (isset($_action)) {
         <li><a href="index.php?action=export"><?php print $PMF_LANG['admin_mainmenu_exports']; ?></a></li>
         <li><a href="index.php?action=backup"><?php print $PMF_LANG['admin_mainmenu_backup']; ?></a></li>
         <li><a href="index.php?action=config"><?php print $PMF_LANG['admin_mainmenu_configuration']; ?></a></li>
-        <li><a id="logout" href="index.php?action=logout"><?php print $PMF_LANG['admin_mainmenu_logout']; ?></a></li>
+        <li><a class="logout" href="index.php?action=logout"><?php print $PMF_LANG['admin_mainmenu_logout']; ?></a></li>
     </ul>
 </div>
 

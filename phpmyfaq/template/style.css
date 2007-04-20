@@ -1,5 +1,5 @@
 /**
- * $Id: style.css,v 1.32 2007-04-04 18:12:22 thorstenr Exp $
+ * $Id: style.css,v 1.33 2007-04-20 19:31:45 thorstenr Exp $
  *
  * This is the main style sheet file for phpMyFAQ 2.0
  * If you want to change only the colours, use colors.css
@@ -103,12 +103,10 @@ code {
     margin-bottom: 1em;
     height: 3em;
     padding: 15px 0;
-    -moz-border-radius: 10px 10px 10px 10px;
-    border-radius: 10px 10px 10px 10px;
 }
 .header {
-   margin: 0px;
-   padding: 0px;
+    margin: 0px;
+    padding: 0px;
 }
 
 /**
@@ -116,6 +114,7 @@ code {
  */
 #header h1 {
    padding-left: 20px;
+   font-weight: bold;
 }
 #header h1 a {
    text-decoration: none;
@@ -471,7 +470,7 @@ input[type=submit] {
 
 body {
    margin: 0px;
-   padding: 12px;
+   padding: 0px;
 }
 * html>body {
    margin-right: -3px; /* IE hack */
@@ -506,18 +505,18 @@ div {
    left: 0px;
    width: 200px;
    margin: 0px;
-   padding: 0px;
+   padding-left: 20px;
 }
 .rightcolumn {
    position: static;
    float: right;
    width: 247px;
    margin: 0px;
-   padding: 0px;
+   padding-right: 20px;
 }
 .centercolumn {
    margin: 0px;
-   padding: 0px;
+   padding-left: 0px;
    margin-right: 255px;
    margin-left: 210px;
 }

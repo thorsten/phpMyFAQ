@@ -1,10 +1,11 @@
 /**
- * $Id: admin.css,v 1.40 2007-03-29 21:16:22 thorstenr Exp $
+ * $Id: admin.css,v 1.41 2007-04-20 19:31:45 thorstenr Exp $
  *
  * This is the CSS file for the admin section of phpMyFAQ 2.0.x
  * You don't need to change enything here but feel free to do it. :-)
  *
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author      Jens Grochtdreis <jens@grochtdreis.de>
  * @since       2004-06-09
  * @copyright   (c) 2004-2007 phpMyFAQ Team
  *
@@ -19,12 +20,17 @@
  * under the License.
  */
 
-/* color defintions */
-#header {
-    background: #0D487A;
-    color: #fff;
+* {
+    margin: 0;
+    padding: 0;
 }
 
+/* color defintions */
+
+#header {
+    background: #1096B3;
+    color: #ffffff;
+}
 body {
     background-color: #fff;
     color: black;
@@ -36,12 +42,13 @@ h1 {
     font-weight: bold;
     font-style: italic;
     font-size: 24px;
-    padding-bottom: 0.5ex;
 }
 h2 {
     font-size: 18px;
     font-style: italic;
-    border-bottom: 1px solid;
+    border-bottom: 1px solid #656565;
+    margin-bottom: 15px;
+    color: #004256;
 }
 img {
     border: 0;
@@ -51,12 +58,13 @@ ul {
 }
 fieldset {
     margin-top: 15px;
-    border: 1px solid #D0D9D9;
+    border: 1px solid #656565;
+    padding: 5px;
 }
 legend {
-    background: #EDF2F2;
+    background: #eeeeee;
     font-weight: bold;
-    border: 1px solid #D0D9D9;
+    border: 1px solid #656565;
     padding: 2px 6px;
     -moz-border-radius: 5px 5px 5px 5px;
     border-radius: 5px 5px 5px 5px;
@@ -69,9 +77,12 @@ input, textarea, select {
     font-size: 12px;
 }
 p.hr{
-   margin-top:6px;
-   padding-bottom:8px;
-   border-bottom:1px solid #D0D9D9;
+   margin-top: 6px;
+   padding-bottom: 8px;
+   border-bottom: 1px solid #656565;
+}
+p {
+    padding-top: 10px;
 }
 
 /**
@@ -121,27 +132,25 @@ textarea#content {
     padding: 20px;
 }
 #header h1{
-    display: table-cell;
+    float: left;
     vertical-align: middle;
-    width: 350px;
+    width: 300px; /* war 350px;*/
 }
 
 div#langform {
-    display: table-cell;
-    vertical-align: middle;
+    float: left;
     font-size: 95%;
     width: 230px;
 }
 
 div#sessionexpiration {
-    display: table-cell;
-    vertical-align: middle;
+    float: left;
     text-align: center;
     font-size: 95%;
     width: 180px;
     color: #000;
     background-color: #EDF2F2;
-    border: 1px solid #D0D9D9;
+    border: 1px solid #656565;
     -moz-border-radius: 5px 5px 5px 5px;
     border-radius: 5px 5px 5px 5px;
 }
@@ -155,8 +164,9 @@ div#sessioncounter {
     margin: 0;
     padding: 0;
     height: 24px;
-    background-color: #4A769C;
-    border-left: 1px solid #C2D1DE;
+    background: #1096B3;
+    color: #000000;
+    border-left: 1px solid #656565;
 }
 #navcontainer ul {
     border: 0;
@@ -171,36 +181,38 @@ div#sessioncounter {
     text-align: center;
     padding: 0;
     margin: 0;
-    border-top: 1px solid #C2D1DE;
-    border-bottom: 1px solid #C2D1DE;
+    border-bottom: 1px solid #656565;
 }
 #navcontainer ul li a {
     width: 92px;
     height: 18px;
-    border-right: 1px solid #C2D1DE;
+    border-top: 1px solid #656565;
+    border-right: 1px solid #656565;
     padding-top: 4px;
     padding-left: 3px;
     padding-right: 3px;
-    color: #C2D1DE;
+    background-color: #F6AD53;
+    color: #36393D;
     text-decoration: none;
     display: block;
     text-align: center;
+    -moz-border-radius-topleft: 5px;
+    -moz-border-radius-topright: 5px;
 }
 #navcontainer ul li a:hover {
     color: #07243D;
-    background: #E7EDF2;
+    background: #B3DE77;
 }
 #navcontainer a:active {
-    background: #01070C;
+    background: #D15FE4;
     color: #fff;
 }
 #navcontainer li#active a {
-    background: #c60;
-    border: 1px solid #c60;
+    background: #FF6917;
     color: #fff;
 }
-#logout {
-    background: #FF4500;
+#navcontainer ul li a.logout {
+    background: #EF6022;
 }
 
 /* 2nd Administration Menu */
@@ -222,39 +234,39 @@ div#sessioncounter {
     text-align: center;
     padding: 0;
     margin: 0;
-    background-color: #87A4BD;
-    border-left: 1px solid #C2D1DE;
-    border-top: 1px solid #C2D1DE;
-    border-bottom: 1px solid #C2D1DE;
+    border-bottom: 1px solid #656565;
 }
 #subnavcontainer ul li a {
     width: 92px;
     height: 18px;
-    border-right: 1px solid #C2D1DE;
+    border-left: 1px solid #656565;
+    border-right: 1px solid #656565;
     padding-top: 4px;
     padding-left: 2px;
     padding-right: 2px;
+    background-color: #FBD7A9;
     color: #03121F;
     text-decoration: none;
     display: block;
     text-align: center;
     font-size: 80%;
+    -moz-border-radius-topleft: 5px;
+    -moz-border-radius-topright: 5px;
 }
 #subnavcontainer ul li a:hover {
     color: #07243D;
-    background: #E7EDF2;
+    background: #B3DE77;
 }
 #subnavcontainer a:active {
     background: #01070C;
     color: #fff;
 }
 #subnavcontainer li#active a {
-    background: #c60;
-    border: 1px solid #c60;
+    background: #FF6917;
     color: #fff;
 }
 #subnavcontainer ul li a.current {
-    background: #FFDEAD;
+    background: #A2E865;
 }
 
 
@@ -272,12 +284,12 @@ div#sessioncounter {
 
 /* table styles */
 table.list {
-    border: 1px solid #D0D9D9;
+    border: 1px solid #cccccc;
     border-collapse: collapse;
     width: 785px;
 }
 table.listrecords {
-    border: 1px solid #D0D9D9;
+    border: 1px solid #cccccc;
     border-collapse: collapse;
     width: 765px;
 }
@@ -288,13 +300,13 @@ table.listrecords {
     text-align: right;
 }
 th.list, td.list {
-    border: 1px solid #D0D9D9;
+    border: 1px solid #cccccc;
     padding: 2px;
     line-height: 20px;
     text-align: left;
 }
 th.listhead {
-    border: 1px solid #D0D9D9;
+    border: 1px solid #cccccc;
     padding: 2px;
     line-height: 20px;
     text-align: center;
@@ -353,7 +365,7 @@ input.submit {
  */
 table.ssc {
    background-color: #EDF2F2;
-   border-color: #D0D9D9;
+   border-color: #656565;
    border: 1px solid;
 }
 td.sscTitle {
@@ -703,7 +715,7 @@ div.button_row input.reset {
 #tags_autocomplete_choices li {
     list-style: none;
     background: #FCFCFC;
-    border: 1px solid #D0D9D9;
+    border: 1px solid #656565;
     padding: 2px;
 }
 #tags_autocomplete_choices li.selected {
