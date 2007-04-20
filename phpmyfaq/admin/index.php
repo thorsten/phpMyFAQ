@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: index.php,v 1.93 2007-04-20 10:07:18 thorstenr Exp $
+ * $Id: index.php,v 1.94 2007-04-20 19:59:13 thorstenr Exp $
  *
  * The main admin backend index file
  *
@@ -319,26 +319,9 @@ if (isset($auth)) {
             $sm = "off";
         }
 ?>
-    <h2>System Information</h2>
-    <dl class="table-display">
-        <dt><strong>phpMyFAQ Version</strong></dt>
-        <dd>phpMyFAQ <?php print $PMF_CONF['main.currentVersion']; ?></dd>
-        <dt><strong>Server Software</strong></dt>
-        <dd><?php print $_SERVER["SERVER_SOFTWARE"]; ?></dd>
-        <dt><strong>PHP Version</strong></dt>
-        <dd>PHP <?php print phpversion(); ?></dd>
-        <dt><strong>Register Globals</strong></dt>
-        <dd><?php print $rg; ?></dd>
-        <dt><strong>Safe Mode</strong></dt>
-        <dd><?php print $sm; ?></dd>
-        <dt><strong>Database Client Version</strong></dt>
-        <dd><?php print $db->client_version(); ?></dd>
-        <dt><strong>Database Server Version</strong></dt>
-        <dd><?php print $db->server_version(); ?></dd>
-        <dt><strong>Webserver Interface</strong></dt>
-        <dd><?php print strtoupper(@php_sapi_name()); ?></dd>
-    </dl>
+
     <h2>Online Version Information</h2>
+    <div id="versionceck">
 <?php
         if (isset($_POST["param"]) && $_POST["param"] == "version") {
             require_once (PMF_ROOT_DIR."/inc/libs/xmlrpc.php");
@@ -365,6 +348,31 @@ if (isset($auth)) {
     </form>
 <?php
         }
+?>
+    </div>
+
+    <h2>System Information</h2>
+    <dl class="table-display">
+        <dt><strong>phpMyFAQ Version</strong></dt>
+        <dd>phpMyFAQ <?php print $PMF_CONF['main.currentVersion']; ?></dd>
+        <dt><strong>Server Software</strong></dt>
+        <dd><?php print $_SERVER["SERVER_SOFTWARE"]; ?></dd>
+        <dt><strong>PHP Version</strong></dt>
+        <dd>PHP <?php print phpversion(); ?></dd>
+        <dt><strong>Register Globals</strong></dt>
+        <dd><?php print $rg; ?></dd>
+        <dt><strong>Safe Mode</strong></dt>
+        <dd><?php print $sm; ?></dd>
+        <dt><strong>Database Client Version</strong></dt>
+        <dd><?php print $db->client_version(); ?></dd>
+        <dt><strong>Database Server Version</strong></dt>
+        <dd><?php print $db->server_version(); ?></dd>
+        <dt><strong>Webserver Interface</strong></dt>
+        <dd><?php print strtoupper(@php_sapi_name()); ?></dd>
+    </dl>
+
+    <div style="font-size: 5px; text-align: right; color: #f5f5f5">NOTE: Art is resistance. Thank you very much for inspiration and everything else, L<!--issy-->.</div>
+<?php
     }
 // User is NOT authenticated
 } else {

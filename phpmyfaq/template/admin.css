@@ -1,5 +1,5 @@
 /**
- * $Id: admin.css,v 1.41 2007-04-20 19:31:45 thorstenr Exp $
+ * $Id: admin.css,v 1.42 2007-04-20 19:59:13 thorstenr Exp $
  *
  * This is the CSS file for the admin section of phpMyFAQ 2.0.x
  * You don't need to change enything here but feel free to do it. :-)
@@ -26,7 +26,12 @@
 }
 
 /* color defintions */
-
+a {
+    color: #FF6917;
+}
+a:visited {
+    color: #FF6917;
+}
 #header {
     background: #1096B3;
     color: #ffffff;
@@ -41,7 +46,7 @@ body {
 h1 {
     font-weight: bold;
     font-style: italic;
-    font-size: 24px;
+    font-size: 28px;
 }
 h2 {
     font-size: 18px;
@@ -54,6 +59,7 @@ img {
     border: 0;
 }
 ul {
+    margin-left: 15px;
     list-style: square;
 }
 fieldset {
@@ -82,7 +88,18 @@ p.hr{
    border-bottom: 1px solid #656565;
 }
 p {
-    padding-top: 10px;
+    padding-bottom: 10px;
+}
+dl {
+    margin-bottom: 15px;
+}
+dt {
+    float: left;
+    width: 200px;
+    height: 20px;
+}
+dd {
+    height: 30px;
 }
 
 /**
@@ -134,7 +151,7 @@ textarea#content {
 #header h1{
     float: left;
     vertical-align: middle;
-    width: 300px; /* war 350px;*/
+    width: 350px;
 }
 
 div#langform {
@@ -280,6 +297,9 @@ div#sessioncounter {
 #quicklinks {
     width: 300px;
     float: right;
+}
+#versionceck {
+    margin-bottom: 15px;
 }
 
 /* table styles */
