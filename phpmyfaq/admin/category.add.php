@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: category.add.php,v 1.24 2007-03-22 17:51:57 thorstenr Exp $
+ * $Id: category.add.php,v 1.25 2007-04-20 10:00:22 thorstenr Exp $
  *
  * Adds a category
  *
@@ -60,11 +60,6 @@ if ($permission["addcateg"]) {
 
 <?php
     if ($parent_id == 0) {
-?>
-    <label class="left" for="userpermission"><?php print $PMF_LANG['ad_entry_userpermission']; ?></label>
-    <input type="radio" name="userpermission" class="active" value="all" checked="checked" /> <?php print $PMF_LANG['ad_entry_all_users']; ?> <input type="radio" name="userpermission" class="active" value="restricted" /> <?php print $PMF_LANG['ad_entry_restricted_users']; ?> <select name="restricted_users" size="1"><?php print $user->getAllUserOptions(1); ?></select><br />
-
-<?php
         if ($groupSupport) {
 ?>
     <label class="left" for="grouppermission"><?php print $PMF_LANG['ad_entry_grouppermission']; ?></label>
@@ -72,6 +67,11 @@ if ($permission["addcateg"]) {
 
 <?php
         }
+?>
+    <label class="left" for="userpermission"><?php print $PMF_LANG['ad_entry_userpermission']; ?></label>
+    <input type="radio" name="userpermission" class="active" value="all" checked="checked" /> <?php print $PMF_LANG['ad_entry_all_users']; ?> <input type="radio" name="userpermission" class="active" value="restricted" /> <?php print $PMF_LANG['ad_entry_restricted_users']; ?> <select name="restricted_users" size="1"><?php print $user->getAllUserOptions(1); ?></select><br />
+
+<?php
     }
 ?>
     <input class="submit" style="margin-left: 190px;" type="submit" name="submit" value="<?php print $PMF_LANG["ad_categ_add"]; ?>" />
