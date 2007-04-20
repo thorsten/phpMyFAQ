@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: index.php,v 1.92 2007-04-06 11:15:24 thorstenr Exp $
+ * $Id: index.php,v 1.93 2007-04-20 10:07:18 thorstenr Exp $
  *
  * The main admin backend index file
  *
@@ -289,6 +289,7 @@ if (isset($auth)) {
             addMenuEntry('adduser,edituser,deluser',    'group&amp;group_action=add',   'ad_quick_group');
         }
 ?>
+            <li><a href="../index.php" title="<?php print PMF_htmlentities($PMF_CONF['main.titleFAQ'], ENT_QUOTES, $PMF_LANG['metaCharset']); ?>"><?php print PMF_htmlentities($PMF_CONF['main.titleFAQ'], ENT_QUOTES, $PMF_LANG['metaCharset']); ?></a></li>
         </ul>
     </fieldset>
     </div>
