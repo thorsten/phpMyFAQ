@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.config_list.php,v 1.18 2007-04-10 21:03:20 thorstenr Exp $
+* $Id: ajax.config_list.php,v 1.19 2007-04-21 10:31:10 thorstenr Exp $
 *
 * AJAX: lists the complete configuration items
 *
@@ -43,7 +43,7 @@ function printInputFieldByType($key, $type)
     switch($type) {
         case 'area':
 
-            printf('<textarea name="edit[%s]" cols="60" rows="6">%s</textarea>',
+            printf('<textarea name="edit[%s]" cols="60" rows="6" style="width: 500px;">%s</textarea>',
                     $key,
                     str_replace('<', '&lt;', str_replace('>', '&gt;', $faqconfig->get($key))));
             printf("<br />\n");
@@ -51,7 +51,7 @@ function printInputFieldByType($key, $type)
 
         case 'input':
 
-            printf('<input type="text" name="edit[%s]" size="80" value="%s" />',
+            printf('<input type="text" name="edit[%s]" size="75" value="%s" style="width: 500px;" />',
                     $key,
                     str_replace('"', '&quot;', $faqconfig->get($key)));
             printf("<br />\n");
@@ -59,7 +59,7 @@ function printInputFieldByType($key, $type)
 
         case 'select':
 
-            printf('<select name="edit[%s]" size="1">', $key);
+            printf('<select name="edit[%s]" size="1" style="width: 500px;">', $key);
             if ('main.language' == $key) {
                 $languages = getAvailableLanguages();
                 if (count($languages) > 0) {
@@ -107,15 +107,8 @@ header("Content-type: text/html; charset=".$PMF_LANG['metaCharset']);
 foreach ($LANG_CONF as $key => $value) {
     if (strpos($key, $configMode) === 0) {
 ?>
-<dl>
-    <dt><strong><?php print $value[1]; ?></strong></dt>
-        <dd>
-<?php
-            printInputFieldByType($key, $value[0]);
-?>
-        </dd>
-    </dt>
-</dl>
+    <label class="leftconfig"><?php print $value[1]; ?></label>
+    <?php printInputFieldByType($key, $value[0]); ?><br />
 <?php
     }
 }

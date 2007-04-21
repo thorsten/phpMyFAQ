@@ -1,5 +1,5 @@
 /**
- * $Id: admin.css,v 1.42 2007-04-20 19:59:13 thorstenr Exp $
+ * $Id: admin.css,v 1.43 2007-04-21 10:31:10 thorstenr Exp $
  *
  * This is the CSS file for the admin section of phpMyFAQ 2.0.x
  * You don't need to change enything here but feel free to do it. :-)
@@ -115,6 +115,12 @@ label.lefteditor {
     float: left;
     text-align: right;
     width: 135px;
+    margin-right: 5px;
+}
+label.leftconfig {
+    float: left;
+    text-align: right;
+    width: 235px;
     margin-right: 5px;
 }
 input[type=text], input[type=password] {
