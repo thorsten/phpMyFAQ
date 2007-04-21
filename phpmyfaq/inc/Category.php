@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Category.php,v 1.50 2007-04-20 09:57:39 thorstenr Exp $
+ * $Id: Category.php,v 1.51 2007-04-21 10:18:37 thorstenr Exp $
  *
  * The main category class
  *
@@ -166,14 +166,6 @@ class PMF_Category
     {
         $where = '';
 
-        if (isset($this->language) && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
-            $where .= empty($where) ? '
-            WHERE' : '
-            AND';
-            $where .= "
-                lang = '".$this->language."'";
-        }
-
         if ($withperm) {
             $where = sprintf("
             WHERE
@@ -183,6 +175,14 @@ class PMF_Category
             implode(', ', $this->groups),
             $this->user,
             implode(', ', $this->groups));
+        }
+
+        if (isset($this->language) && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
+            $where .= empty($where) ? '
+            WHERE' : '
+            AND';
+            $where .= "
+                lang = '".$this->language."'";
         }
 
         $query = sprintf("
