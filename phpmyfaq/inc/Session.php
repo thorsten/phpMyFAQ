@@ -120,4 +120,59 @@ class PMF_Session
 
         return $sessions;
     }
+
+    /**
+     * Returns the number of sessions
+     *
+     * @return  integer
+     * @access  public
+     * @since   2007-04-21
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function getNumberOfSessions()
+    {
+        $num = 0;
+
+        $query = sprintf("
+            SELECT
+                sid
+            FROM
+                %sfaqsessions",
+            SQLPREFIX);
+
+        $result = $this->db->query($query);
+        if ($result) {
+            $num = $this->db->num_rows($result);
+        }
+
+        return $num;
+    }
+
+    /**
+     * Deletes the sessions for a given timespan
+     *
+     * @param   integer $first
+     * @param   integer $last
+     * @return  boolean
+     * @access  public
+     * @since   2007-04-21
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function deleteSessions($first, $last)
+    {
+        $query = sprintf("
+            DELETE FROM
+                %sfaqsessions
+            WHERE
+                time >= %d
+            AND
+                time <= %d",
+            SQLPREFIX,
+            $first,
+            $last);
+
+        $this->db->query($query);
+
+        return true;
+    }
 }
