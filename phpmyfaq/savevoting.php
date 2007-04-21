@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: savevoting.php,v 1.23 2007-03-20 18:03:36 thorstenr Exp $
+ * $Id: savevoting.php,v 1.24 2007-04-21 21:26:32 thorstenr Exp $
  *
  * Saves a user voting
  *
@@ -24,7 +24,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$record_id   = (isset($_POST['artikel'])) ? intval($_POST['artikel']) : '';
+$record_id   = (isset($_POST['artikel'])) ? intval($_POST['artikel']) : 0;
 $voting      = (isset($_POST['vote'])) ? intval($_POST['vote']) : 0;
 $user_ip     = (isset($_SERVER['REMOTE_ADDR'])) ? strip_tags($_SERVER['REMOTE_ADDR']) : '';
 

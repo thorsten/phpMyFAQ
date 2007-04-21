@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: translate.php,v 1.2 2007-04-03 19:19:18 thorstenr Exp $
+ * $Id: translate.php,v 1.3 2007-04-21 21:26:32 thorstenr Exp $
  *
  * This is the page there a user can add a FAQ record.
  *
@@ -49,7 +49,7 @@ if (   isset($_GET['id']) && is_numeric($_GET['id']) && (intval($_GET['id']) > 0
     && isset($_GET['srclang']) && PMF_Init::isASupportedLanguage($_GET['srclang'])
     ) {
     $oFaq = new PMF_Faq($db, $_GET['srclang']);
-    $oFaq->getRecord($_GET['id']);
+    $oFaq->getRecord((int)$_GET['id']);
     $faqSource = $oFaq->faqRecord;
 }
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: artikel.php,v 1.79 2007-04-03 19:19:18 thorstenr Exp $
+ * $Id: artikel.php,v 1.80 2007-04-21 21:26:32 thorstenr Exp $
  *
  * Shows the page with the FAQ record and - when available - the user
  * comments
@@ -39,7 +39,7 @@ if (isset($_REQUEST['id']) && is_numeric($_REQUEST['id'])) {
     $id = (int)$_REQUEST['id'];
 }
 if (isset($_REQUEST['solution_id']) && is_numeric($_REQUEST['solution_id'])) {
-    $solution_id = $_REQUEST['solution_id'];
+    $solution_id = (int)$_REQUEST['solution_id'];
 } else {
     $solution_id = 0;
 }

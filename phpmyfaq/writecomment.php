@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: writecomment.php,v 1.15 2007-03-29 19:31:53 thorstenr Exp $
+ * $Id: writecomment.php,v 1.16 2007-04-21 21:26:32 thorstenr Exp $
  *
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since       2002-08-29
@@ -34,9 +34,9 @@ Tracking('write_comment', (int)$_GET['id']);
 $tpl->processTemplate('writeContent', array(
                       'msgCommentHeader' => $PMF_LANG['msgWriteComment'],
                       'writeSendAdress' => $_SERVER['PHP_SELF'].'?'.$sids.'action=savecomment',
-                      'ID' => $_GET['id'],
+                      'ID' => (int)$_GET['id'],
                       'LANG' => $_GET['artlang'],
-                      'writeThema' => getThema($_GET['id'], $_GET['artlang']),
+                      'writeThema' => getThema((int)$_GET['id'], $_GET['artlang']),
                       'msgNewContentName' => $PMF_LANG['msgNewContentName'],
                       'msgNewContentMail' => $PMF_LANG['msgNewContentMail'],
                       'defaultContentMail' => getEmailAddress(),

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: news.php,v 1.13 2007-03-29 18:47:40 thorstenr Exp $
+* $Id: news.php,v 1.14 2007-04-21 21:26:32 thorstenr Exp $
 *
 * Shows the page with the news record and - when available - the user
 * comments
@@ -39,8 +39,7 @@ $oNews = new PMF_News($db, $LANGCODE);
 
 if (isset($_REQUEST['newsid']) && is_numeric($_REQUEST['newsid'])) {
     $id = (int)$_REQUEST['newsid'];
-}
-else {
+} else {
     // Wrong access
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();

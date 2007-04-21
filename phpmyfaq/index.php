@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: index.php,v 1.106 2007-04-04 18:00:45 thorstenr Exp $
+ * $Id: index.php,v 1.107 2007-04-21 21:26:32 thorstenr Exp $
  *
  * This is the main public frontend page of phpMyFAQ. It detects the browser's
  * language, gets and sets all cookie, post and get informations and includes
@@ -201,8 +201,8 @@ if ($faqconfig->get('main.enableUserTracking')) {
 //
 // Found a article language?
 //
-if (isset($_POST["artlang"]) && PMF_Init::isASupportedLanguage($_POST["artlang"]) ) {
-    $lang = $_POST["artlang"];
+if (isset($_POST['artlang']) && PMF_Init::isASupportedLanguage($_POST['artlang']) ) {
+    $lang = strip_tags($_POST['artlang']);
 } else {
     $lang = $LANGCODE;
 }
@@ -225,13 +225,13 @@ $oTag = new PMF_Tags($db, $LANGCODE);
 //
 // Found a record ID?
 //
-if (isset($_REQUEST["id"]) && is_numeric($_REQUEST["id"]) == true) {
-    $id = (int)$_REQUEST["id"];
-    $title = ' - '.$faq->getRecordTitle($id);
-    $keywords = ' '.$faq->getRecordKeywords($id);
+if (isset($_REQUEST['id']) && is_numeric($_REQUEST['id']) == true) {
+    $id       = (int)$_REQUEST['id'];
+    $title    = ' - ' . $faq->getRecordTitle($id);
+    $keywords = ' ' . $faq->getRecordKeywords($id);
 } else {
-    $id = '';
-    $title = ' -  powered by phpMyFAQ '.$faqconfig->get('main.currentVersion');
+    $id       = '';
+    $title    = ' -  powered by phpMyFAQ ' . $faqconfig->get('main.currentVersion');
     $keywords = '';
 }
 
@@ -239,9 +239,9 @@ if (isset($_REQUEST["id"]) && is_numeric($_REQUEST["id"]) == true) {
 // found a solution ID?
 //
 if (isset($_REQUEST['solution_id']) && is_numeric($_REQUEST['solution_id']) === true) {
-    $solution_id = $_REQUEST['solution_id'];
-    $title = ' -  powered by phpMyFAQ '.$faqconfig->get('main.currentVersion');
-    $keywords = '';
+    $solution_id = (int)$_REQUEST['solution_id'];
+    $title       = ' -  powered by phpMyFAQ '.$faqconfig->get('main.currentVersion');
+    $keywords    = '';
     $a = $faq->getIdFromSolutionId($solution_id);
     if (is_array($a)) {
         $id = $a['id'];
@@ -252,11 +252,12 @@ if (isset($_REQUEST['solution_id']) && is_numeric($_REQUEST['solution_id']) === 
 //
 // Found a category ID?
 //
-if (isset($_GET["cat"])) {
-    $cat = $_GET["cat"];
+if (isset($_GET['cat'])) {
+    $cat = (int)$_GET['cat'];
 } else {
     $cat = 0;
 }
+
 $cat_from_id = -1;
 if (is_numeric($id) && $id > 0) {
     $cat_from_id = $category->getCategoryIdFromArticle($id);
@@ -316,7 +317,7 @@ if ($action != 'main') {
 // Check in any tags with at leat one entry exist
 $hasTags = $oTag->existTagRelations();
 if ($hasTags && (($action == 'artikel') || ($action == 'show'))) {
-    $right_tpl = $action == 'artikel'?'template/catandtag.tpl' : 'template/tagcloud.tpl';
+    $right_tpl = $action == 'artikel' ? 'template/catandtag.tpl' : 'template/tagcloud.tpl';
 } else {
     $right_tpl = 'template/startpage.tpl';
 }
