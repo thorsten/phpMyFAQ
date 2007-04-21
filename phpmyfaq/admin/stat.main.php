@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: stat.main.php,v 1.12 2007-04-06 11:15:24 thorstenr Exp $
+ * $Id: stat.main.php,v 1.13 2007-04-21 06:41:08 thorstenr Exp $
  *
  * The main statistics page
  *
@@ -25,7 +25,11 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
-if ($permission["viewlog"]) {
+if ($permission['viewlog']) {
+    require_once(PMF_ROOT_DIR.'/inc/Session.php');
+
+    $session = new PMF_Session($db, $LANGCODE);
+
     if (isset($_POST['statdelete']) && isset($_POST['month']) && is_numeric($_POST['month'])) {
         // Search for related tracking data files and
         // delete them including the sid records in the faqsessions table
@@ -48,12 +52,12 @@ if ($permission["viewlog"]) {
             }
         }
         closedir($dir);
-        $result = $db->query('DELETE FROM '.SQLPREFIX.'faqsessions WHERE time >= '.$first.' AND time <= '.$last);
+        $session->deleteSessions($first, $last);
     }
 ?>
     <h2><?php print $PMF_LANG["ad_stat_sess"]; ?></h2>
 
-    <form action="<?php print $_SERVER["PHP_SELF"] ?>" method="post" style="display: inline;">
+    <form action="<?php print $_SERVER['PHP_SELF'] ?>" method="post" style="display: inline;">
     <input type="hidden" name="action" value="sessionbrowse" />
 
     <fieldset>
@@ -81,7 +85,7 @@ if ($permission["viewlog"]) {
 ?>
         <br />
         <label class="left"><?php print $PMF_LANG["ad_stat_vis"]; ?>:</label>
-        <?php print $vanz = $db->num_rows($db->query("SELECT sid FROM ".SQLPREFIX."faqsessions")); ?><br />
+        <?php print $vanz = $session->getNumberOfSessions(); ?><br />
 
         <label class="left"><?php print $PMF_LANG["ad_stat_vpd"]; ?>:</label>
         <?php print (($danz != 0) ? round(($vanz / $danz),2) : 0); ?><br />
@@ -188,4 +192,3 @@ if ($permission["viewlog"]) {
 } else {
     print $PMF_LANG["err_NotAuth"];
 }
-?>
