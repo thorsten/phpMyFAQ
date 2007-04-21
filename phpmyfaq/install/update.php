@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.140 2007-04-10 12:28:36 thorstenr Exp $
+* $Id: update.php,v 1.141 2007-04-21 14:30:21 thorstenr Exp $
 *
 * Main update script
 *
@@ -155,6 +155,12 @@ if (!@is_readable(PMF_ROOT_DIR.'/inc/data.php')) {
     HTMLFooter();
     die();
 }
+if (version_compare(PHP_VERSION, '4.3.3', '<')) {
+    print '<p class="center">You need PHP 4.3.3 or later!</p>';
+    HTMLFooter();
+    die();
+}
+
 require_once(PMF_ROOT_DIR.'/inc/data.php');
 
 /**************************** STEP 1 OF 5 ***************************/
