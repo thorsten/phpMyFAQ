@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: header.php,v 1.46 2007-04-20 19:31:45 thorstenr Exp $
+ * $Id: header.php,v 1.47 2007-04-21 10:56:05 thorstenr Exp $
  *
  * Header of the admin area
  *
@@ -120,7 +120,6 @@ if (isset($_action)) {
                 addMenuEntry('adduser,edituser,deluser',         'group',            'ad_menu_group_administration', $_action);
             }
             addMenuEntry('passwd',                               'passwd',           'ad_menu_passwd', $_action);
-            addMenuEntry('',                                     'cookies',          'ad_menu_cookie', $_action);
             break;
         case 'content':
         case 'category':

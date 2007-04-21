@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: index.php,v 1.95 2007-04-21 10:51:01 thorstenr Exp $
+ * $Id: index.php,v 1.96 2007-04-21 10:56:05 thorstenr Exp $
  *
  * The main admin backend index file
  *
@@ -241,10 +241,6 @@ if (isset($auth)) {
             case 'deleteglossary':          require_once('glossary.main.php'); break;
             case 'addglossary':             require_once('glossary.add.php'); break;
             case 'editglossary':            require_once('glossary.edit.php'); break;
-            // functions for cookie administration
-            case "setcookie":                require_once ("cookie.check.php"); break;
-            case "cookies":                  require_once ("cookie.check.php"); break;
-            case "delcookie":                require_once ("cookie.check.php"); break;
             // adminlog administration
             case 'adminlog':
             case 'deleteadminlog':          require_once ('adminlog.php'); break;
