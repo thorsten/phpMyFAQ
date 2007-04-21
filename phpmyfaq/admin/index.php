@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: index.php,v 1.94 2007-04-20 19:59:13 thorstenr Exp $
+ * $Id: index.php,v 1.95 2007-04-21 10:51:01 thorstenr Exp $
  *
  * The main admin backend index file
  *
@@ -304,21 +304,6 @@ if (isset($auth)) {
         <dt><strong><?php print $PMF_LANG["msgOpenQuestions"]; ?></strong></dt>
         <dd><?php print $PMF_TABLE_INFO[SQLPREFIX."faqquestions"]; ?></dd>
     </dl>
-<?php
-        $rg = @ini_get("register_globals");
-        if ($rg == "1") {
-            $rg = "on";
-        } else {
-            $rg = "off";
-        }
-
-        $sm = @ini_get("safe_mode");
-        if ($sm == "1") {
-            $sm = "on";
-        } else {
-            $sm = "off";
-        }
-?>
 
     <h2>Online Version Information</h2>
     <div id="versionceck">
@@ -360,15 +345,21 @@ if (isset($auth)) {
         <dt><strong>PHP Version</strong></dt>
         <dd>PHP <?php print phpversion(); ?></dd>
         <dt><strong>Register Globals</strong></dt>
-        <dd><?php print $rg; ?></dd>
+        <dd><?php print ini_get('register_globals') == 1 ? 'on' : 'off'; ?></dd>
         <dt><strong>Safe Mode</strong></dt>
-        <dd><?php print $sm; ?></dd>
+        <dd><?php print ini_get('safe_mode') == 1 ? 'on' : 'off'; ?></dd>
+        <dt><strong>Open Basedir</strong></dt>
+        <dd><?php print ini_get('open_basedir') == 1 ? 'on' : 'off'; ?></dd>
+        <dt><strong>Database Server</strong></dt>
+        <dd><?php print ucfirst($DB['type']); ?></dd>
         <dt><strong>Database Client Version</strong></dt>
         <dd><?php print $db->client_version(); ?></dd>
         <dt><strong>Database Server Version</strong></dt>
         <dd><?php print $db->server_version(); ?></dd>
         <dt><strong>Webserver Interface</strong></dt>
         <dd><?php print strtoupper(@php_sapi_name()); ?></dd>
+        <dt><strong>PHP Extensions</strong></dt>
+        <dd><?php print implode(', ', get_loaded_extensions()); ?></dd>
     </dl>
 
     <div style="font-size: 5px; text-align: right; color: #f5f5f5">NOTE: Art is resistance. Thank you very much for inspiration and everything else, L<!--issy-->.</div>
