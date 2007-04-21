@@ -17,7 +17,9 @@
 
     {captchaFieldset}
 
+    <div style="text-align:center;">
     <input class="submit" type="submit" name="submit" value="{msgS2FButton}" />
+    </div>
 
     </form>
 

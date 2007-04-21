@@ -1,5 +1,5 @@
 /**
- * $Id: style.css,v 1.33 2007-04-20 19:31:45 thorstenr Exp $
+ * $Id: style.css,v 1.34 2007-04-21 10:14:17 thorstenr Exp $
  *
  * This is the main style sheet file for phpMyFAQ 2.0
  * If you want to change only the colours, use colors.css
@@ -64,9 +64,7 @@ form {
 }
 fieldset {
    margin-bottom: 1em;
-   padding: .5em;
-    -moz-border-radius: 10px 10px 10px 10px;
-    border-radius: 10px 10px 10px 10px;
+   padding: 1em;
 }
 img {
    border: 0;
@@ -208,25 +206,35 @@ html>body #categories li a {
 /**
  * Search box and language selection box
  */
-#search, #langform, #loginform {
+#search,
+#langform,
+#loginform {
     margin-top: 10px;
     border: 1px solid;
     padding: 5px;
     -moz-border-radius: 5px 5px 5px 5px;
     border-radius: 5px 5px 5px 5px;
 }
-#search fieldset, #langform fieldset, #loginform fieldset {
+#search fieldset,
+#langform fieldset,
+#loginform fieldset {
     display: inline;
     border: 0;
 }
-#search input[type=text], #search .inputfield, #langform .inputfield, #loginform .inputfield {
+#search input[type=text],
+#search .inputfield,
+#langform .inputfield,
+#loginform .inputfield {
     border: 1px solid;
     width: 170px;
 }
-#instantfield, #instantfield .inputfield{
+#instantfield,
+#instantfield .inputfield{
     width: 99%;
 }
-#search input[type=submit], #langform input[type=submit], #loginform input[type=submit] {
+#search input[type=submit],
+#langform input[type=submit],
+#loginform input[type=submit] {
     margin-top: 3px;
     padding: 0;
     border: 1px solid;
@@ -244,10 +252,16 @@ html>body #categories li a {
 /**
  * Top 10, Latest articles, Tag cloud and all records in one category
  */
-#topten, #latest, #tagcloud, #allcategoryarticles {
+#topten,
+#latest,
+#tagcloud,
+#allcategoryarticles {
    margin-bottom: 10px;
 }
-#topten h3, #latest h3, #tagcloud h3, #allcategoryarticles h3 {
+#topten h3,
+#latest h3,
+#tagcloud h3,
+#allcategoryarticles h3 {
    font-size: 135%;
    border: 1px solid;
    margin-bottom: 5px;
@@ -255,14 +269,18 @@ html>body #categories li a {
    -moz-border-radius: 5px 5px 5px 5px;
    border-radius: 5px 5px 5px 5px;
 }
-#topten img, #latest img {
+#topten img,
+#latest img {
     float: right;
     margin-top: -16px;
 }
-#topten ol, #latest ol {
+#topten ol,
+#latest ol {
+    margin-left: 15px;
     list-style-type: decimal;
 }
-#topten li, #latest li {
+#topten li,
+#latest li {
     list-style-type: decimal;
 }
 #tagcloud .relevance1 {
@@ -289,11 +307,13 @@ html>body #categories li a {
    margin: 0;
    line-height: 1.3;
 }
-.main-content h2, .main-content h3 {
+.main-content h2,
+.main-content h3 {
    border-bottom: 1px solid;
    margin-bottom: 7px;
 }
-.main-content pre, .main-content code {
+.main-content pre,
+.main-content code {
     white-space: -moz-pre-wrap; /* Mozilla, supported since 1999 */
     white-space: -pre-wrap;     /* Opera 4 - 6 */
     white-space: -o-pre-wrap;   /* Opera 7 */
@@ -320,13 +340,21 @@ html>body #categories li a {
 .main-content .searchpreview {
     font-size: 10px;
 }
-.main-content div#action, .main-content div#translation {
+.main-content div#action,
+.main-content div.translation {
+    padding-top: 10px;
     text-align: center;
 }
 #article_content {
    padding: 0;
    margin: 0;
    margin-bottom: 0.8em;
+}
+.main-content div#voting fieldset {
+    margin-top: 10px;
+}
+.main-content table.openquestions {
+    width: 100%;
 }
 
 /**

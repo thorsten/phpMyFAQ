@@ -9,7 +9,7 @@
     <meta name="keywords" content="{metaKeywords}" />
     <meta name="author" content="{metaPublisher}" />
     <meta name="publisher" content="{metaPublisher}" />
-    <meta name="copyright" content="(c) 2001 - 2006 phpMyFAQ Team" />
+    <meta name="copyright" content="(c) 2001 - 2007 phpMyFAQ Team" />
     <meta name="generator" content="phpMyFAQ {version}" />
     <meta name="Content-Language" content="{metaCharset}" />
     <meta name="robots" content="INDEX, FOLLOW" />

@@ -15,7 +15,7 @@
     <!-- /Tags -->
 
     <!-- Related Articles -->
-    <div id="article_related"><strong>{writeRelatedArticlesHeader}</strong>{writeRelatedArticles}</div>
+    <p><strong>{writeRelatedArticlesHeader}</strong>{writeRelatedArticles}</p>
     <!-- / Related Articles -->
 
     <!-- Article Info -->
@@ -28,12 +28,13 @@
     </div>
 
     <!-- Translation Form -->
-    <div id="translation">
+    <div class="translation">
     {translationForm}
     </div>
     <!-- /Translation Form -->
 
     <!-- Voting Form -->
+    <div id="voting">
     <form action="{saveVotingPATH}" method="post" style="display: inline;">
     <fieldset>
     <legend>{msgVoteUseability}</legend>
@@ -50,6 +51,7 @@
     </p>
     </fieldset>
     </form>
+    </div>
     <!-- /Voting Form -->
 
     <p>{writeCommentMsg}</p>
