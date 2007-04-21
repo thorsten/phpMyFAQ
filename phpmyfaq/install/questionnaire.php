@@ -1,6 +1,6 @@
 <?php
 /*
- * $Id: questionnaire.php,v 1.11 2007-03-31 14:57:35 thorstenr Exp $
+ * $Id: questionnaire.php,v 1.12 2007-04-21 14:36:32 thorstenr Exp $
  *
  * This class collects data which is used to create some usage statistics.
  *
@@ -164,6 +164,7 @@ class PMF_Questionnaire_Data
 
         return array(
             'os'    => PHP_OS,
+            'httpd' => $_SERVER['SERVER_SOFTWARE'],
             // we don't want the real IP address (for privacy policy reasons) but only
             // a network address to see whether your phpMyFAQ is running on a private or public network.
             // IANA reserved addresses for private networks (RFC 1918) are:
