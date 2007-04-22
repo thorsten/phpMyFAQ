@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.add.php,v 1.56 2007-04-06 11:15:24 thorstenr Exp $
+ * $Id: record.add.php,v 1.57 2007-04-22 19:46:59 thorstenr Exp $
  *
  * Adds a record in the database, handles the preview and checks for missing
  * category entries.
@@ -100,7 +100,7 @@ if ($permission["editbt"]) {
             $faq->addCategoryRelations($categories, $record_id, $recordData['lang']);
             // Insert the tags
             if ($tags != '') {
-                $tagging->saveTags($record_id, explode(' ',$tags));
+                $tagging->saveTags($record_id, explode(',',$tags));
             }
             // Add user permissions
             $faq->addPermission('user', $record_id, $user_allowed);
