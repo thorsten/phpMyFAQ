@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.195 2007-04-20 20:22:08 thorstenr Exp $
+ * $Id: functions.php,v 1.196 2007-04-22 10:34:54 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -752,42 +752,6 @@ function wait($usecs)
         if ($stop - $start >= $usecs) {
             break;
         }
-    }
-}
-
-/*
- * Testet ob die SID zu der IP passt |  @@ Bastian, 2001-04-07
- * Last Update: @@ Thorsten, 2003-03-06
- * Last Update: @@ Matteo, 2006-03-13
- */
-function CheckSID($sid, $ip)
-{
-    global $db, $user;
-
-    if ($db->num_rows($db->query("
-                            SELECT
-                                sid
-                            FROM
-                                ".SQLPREFIX."faqsessions
-                            WHERE
-                                    sid = ".$sid."
-                                AND ip = '".$ip."'
-                                AND time > ".(time()-86400))) < 1
-                            ) {
-        // No sid found (maybe someone is refering to an old one): create a new one
-        Tracking("old_session", $sid);
-    } else {
-        // Update the current sid in the db according also to the current user authentication status
-        $db->query("
-                UPDATE
-                    ".SQLPREFIX."faqsessions
-                SET
-                    time = ".time().",
-                    user_id = ".($user ? $user->getUserId() : '-1')."
-                WHERE
-                        sid = ".$sid."
-                    AND ip = '".$ip."'"
-                );
     }
 }
 
@@ -1661,6 +1625,8 @@ function alignTablePrefix($query, $oldvalue, $newvalue)
 * This function takes care of safely removing slashes
 * not really needed for escaping characters on PMF 1.5.3 and above
 * (see instead PMF DB population on 1.5.2 and below)
+*
+* TODO: Remove this function in phpMyFAQ 2.1!
 *
 * @param    string
 * @return   string

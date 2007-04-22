@@ -175,4 +175,57 @@ class PMF_Session
 
         return true;
     }
+
+    /**
+     * Checks the Session ID
+     *
+     * @param   integer $sid
+     * @param   string  $ip
+     * @return  void
+     * @access  public
+     * @since   2007-04-22
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function checkSessionId($sid, $ip)
+    {
+        global $user;
+
+        $query = sprintf("
+            SELECT
+                sid
+            FROM
+                %sfaqsessions
+            WHERE
+                sid = %d
+            AND
+                ip = '%s'
+            AND
+                time > %d",
+            SQLPREFIX,
+            $sid,
+            $ip,
+            time() - 86400);
+
+        $result = $this->db->query($query);
+
+        if ($this->db->num_rows($result) == 0) {
+            Tracking('old_session', $sid);
+        } else {
+            $query = sprintf("
+                UPDATE
+                    %sfaqsessions
+                SET
+                    time = %d,
+                    user_id = %d
+                WHERE
+                    sid = %d
+                    AND ip = '%s'",
+                SQLPREFIX,
+                time(),
+                ($user ? $user->getUserId() : '-1'),
+                $sid,
+                $ip);
+            $this->db->query($query);
+        }
+    }
 }

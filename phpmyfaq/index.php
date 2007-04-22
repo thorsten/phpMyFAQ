@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: index.php,v 1.107 2007-04-21 21:26:32 thorstenr Exp $
+ * $Id: index.php,v 1.108 2007-04-22 10:34:53 thorstenr Exp $
  *
  * This is the main public frontend page of phpMyFAQ. It detects the browser's
  * language, gets and sets all cookie, post and get informations and includes
@@ -50,6 +50,7 @@ require_once('inc/Captcha.php');
 require_once('inc/Category.php');
 require_once('inc/Faq.php');
 require_once('inc/Glossary.php');
+require_once('inc/Session.php');
 require_once('inc/Tags.php');
 require_once('inc/libs/idna_convert.class.php');
 $IDN = new idna_convert;
@@ -164,15 +165,16 @@ if (function_exists('mb_language') && in_array($PMF_LANG['metaLanguage'], $valid
 //
 // found a session ID in _GET or _COOKIE?
 //
+$faqsession = new PMF_Session($db, $LANGCODE);
 if ((!isset($_GET['sid'])) && (!isset($_COOKIE['pmf_sid']))) {
     // Create a per-site unique SID
     Tracking('new_session', 0);
     setcookie('pmf_sid', $sid, time() + 3600);
 } else {
     if (isset($_COOKIE['pmf_sid']) && is_numeric($_COOKIE['pmf_sid'])) {
-        CheckSID((int)$_COOKIE['pmf_sid'], $_SERVER['REMOTE_ADDR']);
+        $faqsession->checkSessionId((int)$_COOKIE['pmf_sid'], $_SERVER['REMOTE_ADDR']);
     } else {
-        CheckSID((int)$_GET['sid'], $_SERVER['REMOTE_ADDR']);
+        $faqsession->checkSessionId((int)$_GET['sid'], $_SERVER['REMOTE_ADDR']);
     }
 }
 
