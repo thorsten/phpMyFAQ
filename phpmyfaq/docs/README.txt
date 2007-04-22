@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.86 2007-04-14 09:57:23 thorstenr Exp $
+$Id: README.txt,v 1.87 2007-04-22 14:41:06 thorstenr Exp $
 
 phpMyFAQ 2.0.0-RC
 Codename "Prometheus"
@@ -10,14 +10,16 @@ Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.0.0-beta2:
+- added some documentation (Thorsten)
 - updated Spanish translation (Eduardo Polidor)
+- improved administration backend (Thorsten, Matteo)
 - many bugfixes
 
 For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.0.0-RC - 2007-05-
+Version 2.0.0-RC - 2007-04-
 - added rewritten and enhanced user management (Lars)
 - added rewritten and enhanced authorization management (Lars)
 - added user and group based permissions for categories and records (Thorsten)
