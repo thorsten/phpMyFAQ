@@ -1,5 +1,5 @@
 /**
- * $Id: admin.css,v 1.44 2007-04-22 20:35:58 thorstenr Exp $
+ * $Id: admin.css,v 1.45 2007-04-22 21:09:05 matteo Exp $
  *
  * This is the CSS file for the admin section of phpMyFAQ 2.0.x
  * You don't need to change enything here but feel free to do it. :-)
@@ -739,7 +739,7 @@ div.button_row input.reset {
 
 /* Tags */
 #tags_autocomplete_choices {
-    margin: -14px 0 0 -40px;
+    margin: 0;
 }
 #tags_autocomplete_choices li {
     list-style: none;
