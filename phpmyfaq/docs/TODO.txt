@@ -1,24 +1,27 @@
 TODO list for future versions of phpMyFAQ:
 
-2.0.0 "Prometheus" (planned CVS branch: PMF_2_0):
-- finish the new admin backend layout
+2.0.x "Prometheus" (planned CVS branch: PMF_2_0):
+- bugfixing for stability or security reasons
 
 2.1.0 "Pandora" (planned CVS branch: PMF_2_1):
-- add new setup routine (Johannes)
+- add new setup routine ?
 - add random list of records (XHTML and RSS) ?
 - add archive function ?
 - add public user registration ?
 - add public user profile page ?
-- add improved revision system with diff of revisions ?
 - add RTF export ?
 - add public glossary page ?
+- add OpenID support ?
+- add LDAP authentication support ?
 - improve permission management ?
+- improve backup/restore including attachment backups ?
 - message to the user, who has posted a question and an answer is availible ?
 - update only possible from versions 1.6 and 2.0 !
 - more accessibility features (WAI and Section 508) ?
 - bugfixing for stability or security reasons
 
 2.2.0 "Portia" (planned CVS branch: PMF_2_2):
+- add improved revision system with diff of revisions ?
 - improve permission management ?
 - possibility to disable multiple languages ?
 - SOAP interface ?
