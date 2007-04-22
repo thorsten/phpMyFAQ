@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.edit.php,v 1.66 2007-04-22 19:53:14 thorstenr Exp $
+ * $Id: record.edit.php,v 1.67 2007-04-22 20:26:27 matteo Exp $
  *
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since       2003-02-23
@@ -225,12 +225,12 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     <div id="tags_autocomplete_choices"></div><br />
     <script type="text/javascript">
         new Ajax.Autocompleter("tags", "tags_autocomplete_choices", "index.php?action=ajax&amp;ajax=tags_list",
-                                {
-                                    paramName: "autocomplete",
-                                    tokens: " ",
-                                    minChars: 1,
-                                    indicator: "tags_autocomplete_wait"
-                                }
+            {
+                paramName:  "autocomplete",
+                tokens:     ",",
+                minChars:   1,
+                indicator:  "tags_autocomplete_wait"
+            }
         );
     </script>
 
