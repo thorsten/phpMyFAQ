@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.edit.php,v 1.67 2007-04-22 20:26:27 matteo Exp $
+ * $Id: record.edit.php,v 1.68 2007-04-22 20:35:57 thorstenr Exp $
  *
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since       2003-02-23
@@ -169,7 +169,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     <input type="hidden" name="revision_id" id="revision_id" value="<?php print $faqData['revision_id']; ?>" />
     <input type="hidden" name="record_id" id="record_id" value="<?php print $faqData['id']; ?>" />
 
-    <fieldset>
+    <fieldset class="fullwidth">
     <legend><?php print $PMF_LANG['ad_entry_faq_record']; ?></legend>
 
     <label class="lefteditor" for="rubrik"><?php print $PMF_LANG["ad_entry_category"]; ?></label>
@@ -242,7 +242,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 
     </fieldset>
 
-    <fieldset>
+    <fieldset class="fullwidth">
     <legend><?php print $PMF_LANG['ad_entry_record_administration']; ?></legend>
 
     <label class="left" for="language"><?php print $PMF_LANG["ad_entry_locale"]; ?>:</label>
@@ -304,7 +304,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 
     </fieldset>
 
-    <fieldset>
+    <fieldset class="fullwidth">
     <legend><?php print $PMF_LANG['ad_record_expiration_window']; ?></legend>
         <label class="lefteditor" for="from"><?php print $PMF_LANG['ad_news_from']; ?></label>
 <?php
@@ -332,7 +332,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 ?>
     </fieldset>
 
-    <fieldset>
+    <fieldset class="fullwidth">
     <legend><?php print $PMF_LANG['ad_entry_changelog']; ?></legend>
 
     <label class="lefteditor"><?php print $PMF_LANG["ad_entry_date"]; ?></label>
