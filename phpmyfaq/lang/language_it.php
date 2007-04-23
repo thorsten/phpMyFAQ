@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_it.php,v 1.77 2007-04-22 20:13:49 matteo Exp $
+* $Id: language_it.php,v 1.78 2007-04-23 19:42:50 matteo Exp $
 *
 * Italian language file
 *
@@ -882,3 +882,6 @@ $PMF_LANG['msgInstantResponseMaxRecords'] = '. Qui sotto trovi le prime %d faq.'
 $PMF_LANG['msgAllCatArticles'] = 'FAQ in questa categoria';
 $PMF_LANG['msgDescriptionInstantResponse'] = 'Iniziare a scrivere e troverai le risposte...';
 $PMF_LANG['msgTagSearch'] = 'Ricerca tramite Tags';
+$PMF_LANG['ad_pmf_info'] = 'phpMyFAQ Info';
+$PMF_LANG['ad_online_info'] = 'Verifica della versione (richiede la connessione alla rete)';
+$PMF_LANG['ad_system_info'] = 'Informazioni di sistema';
