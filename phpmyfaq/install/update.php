@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.141 2007-04-21 14:30:21 thorstenr Exp $
+* $Id: update.php,v 1.142 2007-04-23 18:22:50 thorstenr Exp $
 *
 * Main update script
 *
@@ -1379,6 +1379,18 @@ if ($step == 5) {
     //
     if (version_compare($version, '2.0.0-rc', '<')) {
         $query[] = "DROP TABLE ".SQLPREFIX."faqadminsessions";
+        $query[] = "ALTER TABLE ".SQLPREFIX."faqcategories CHANGE description description VARCHAR(255) DEFAULT NULL";
+        $query[] = "ALTER TABLE ".SQLPREFIX."faqchanges CHANGE what what TEXT DEFAULT NULL";
+        $query[] = "ALTER TABLE ".SQLPREFIX."faqcomments CHANGE helped helped TEXT DEFAULT NULL";
+        $query[] = "ALTER TABLE ".SQLPREFIX."faqconfig CHANGE config_value config_value VARCHAR(255) DEFAULT NULL";
+        $query[] = "ALTER TABLE ".SQLPREFIX."faqdata CHANGE keywords keywords TEXT DEFAULT NULL";
+        $query[] = "ALTER TABLE ".SQLPREFIX."faqdata_revisions CHANGE keywords keywords TEXT DEFAULT NULL";
+        $query[] = "ALTER TABLE ".SQLPREFIX."faqnews CHANGE link link VARCHAR(255) DEFAULT NULL";
+        $query[] = "ALTER TABLE ".SQLPREFIX."faqdata CHANGE content content LONGTEXT DEFAULT NULL";
+        $query[] = "ALTER TABLE ".SQLPREFIX."faqdata CHANGE links_state links_state VARCHAR(7) DEFAULT NULL";
+        $query[] = "ALTER TABLE ".SQLPREFIX."faqdata_revisions CHANGE content content LONGTEXT DEFAULT NULL";
+        $query[] = "ALTER TABLE ".SQLPREFIX."faqdata_revisions CHANGE links_state links_state VARCHAR(7) DEFAULT NULL";
+        $query[] = "ALTER TABLE ".SQLPREFIX."faqnews CHANGE linktitel linktitel VARCHAR(255) DEFAULT NULL";
     }
 
     // Perform the queries for updating/migrating the database from 2.x
