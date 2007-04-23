@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: index.php,v 1.97 2007-04-23 18:31:18 thorstenr Exp $
+ * $Id: index.php,v 1.98 2007-04-23 18:37:44 thorstenr Exp $
  *
  * The main admin backend index file
  *
@@ -267,7 +267,7 @@ if (isset($auth)) {
         }
     } else {
         // start page with some informations about the FAQ
-        print '<h2>phpMyFAQ Information</h2>';
+        printf('<h2>%s</h2>', $PMF_LANG['ad_pmf_info']);
         $PMF_TABLE_INFO = $db->getTableStatus();
 ?>
     <div id="quicklinks">
@@ -298,7 +298,7 @@ if (isset($auth)) {
         <dd><?php print $PMF_TABLE_INFO[SQLPREFIX."faqquestions"]; ?></dd>
     </dl>
 
-    <h2>Online Version Information</h2>
+    <?php printf('<h2>%s</h2>', $PMF_LANG['ad_online_info']); ?>
     <div id="versionceck">
 <?php
         if (isset($_POST["param"]) && $_POST["param"] == "version") {
@@ -329,7 +329,7 @@ if (isset($auth)) {
 ?>
     </div>
 
-    <h2>System Information</h2>
+    <?php printf('<h2>%s</h2>', $PMF_LANG['ad_system_info']); ?>
     <dl class="table-display">
         <dt><strong>phpMyFAQ Version</strong></dt>
         <dd>phpMyFAQ <?php print $PMF_CONF['main.currentVersion']; ?></dd>

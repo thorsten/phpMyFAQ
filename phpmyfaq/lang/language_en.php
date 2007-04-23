@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.108 2007-04-20 08:57:59 thorstenr Exp $
+* $Id: language_en.php,v 1.109 2007-04-23 18:37:44 thorstenr Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -886,3 +886,6 @@ $LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Allow 
 $PMF_LANG['msgAllCatArticles'] = 'Records in this category';
 $PMF_LANG['msgDescriptionInstantResponse'] = 'Just type and find the answers ...';
 $PMF_LANG['msgTagSearch'] = 'Tagged entries';
+$PMF_LANG['ad_pmf_info'] = 'phpMyFAQ Information';
+$PMF_LANG['ad_online_info'] = 'Online version check';
+$PMF_LANG['ad_system_info'] = 'System Information';

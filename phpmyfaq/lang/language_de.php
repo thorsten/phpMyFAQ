@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.81 2007-04-20 08:57:59 thorstenr Exp $
+ * $Id: language_de.php,v 1.82 2007-04-23 18:37:44 thorstenr Exp $
  *
  * German language file
  *
@@ -876,3 +876,6 @@ $LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Erlaub
 $PMF_LANG['msgAllCatArticles'] = 'Einträge in dieser Kategorie';
 $PMF_LANG['msgDescriptionInstantResponse'] = 'Einfach lostippen und Antworten finden ...';
 $PMF_LANG['msgTagSearch'] = 'Einträge mit gleichen Tags';
+$PMF_LANG['ad_pmf_info'] = 'phpMyFAQ Information';
+$PMF_LANG['ad_online_info'] = 'Online Versionsüberprüfung';
+$PMF_LANG['ad_system_info'] = 'System Information';
