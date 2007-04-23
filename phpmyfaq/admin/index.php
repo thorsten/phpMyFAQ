@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: index.php,v 1.98 2007-04-23 18:37:44 thorstenr Exp $
+ * $Id: index.php,v 1.99 2007-04-23 20:22:56 matteo Exp $
  *
  * The main admin backend index file
  *
@@ -299,7 +299,7 @@ if (isset($auth)) {
     </dl>
 
     <?php printf('<h2>%s</h2>', $PMF_LANG['ad_online_info']); ?>
-    <div id="versionceck">
+    <div id="versioncheck">
 <?php
         if (isset($_POST["param"]) && $_POST["param"] == "version") {
             require_once (PMF_ROOT_DIR."/inc/libs/xmlrpc.php");
@@ -327,10 +327,11 @@ if (isset($auth)) {
 <?php
         }
 ?>
+    <br />
     </div>
 
     <?php printf('<h2>%s</h2>', $PMF_LANG['ad_system_info']); ?>
-    <dl class="table-display">
+    <dl>
         <dt><strong>phpMyFAQ Version</strong></dt>
         <dd>phpMyFAQ <?php print $PMF_CONF['main.currentVersion']; ?></dd>
         <dt><strong>Server Software</strong></dt>
