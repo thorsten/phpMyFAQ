@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: index.php,v 1.96 2007-04-21 10:56:05 thorstenr Exp $
+ * $Id: index.php,v 1.97 2007-04-23 18:31:18 thorstenr Exp $
  *
  * The main admin backend index file
  *
@@ -107,9 +107,6 @@ if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
     if ($user) {
         $auth = true;
     } else {
-        // error
-        adminlog('Session expired\nSession-ID: '.session_id());
-        $error = $PMF_LANG['ad_auth_sess'];
         $user = null;
         unset($user);
         $_REQUEST['action'] = '';
