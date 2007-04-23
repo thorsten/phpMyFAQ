@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Utils.php,v 1.5 2007-04-12 19:27:25 thorstenr Exp $
+ * $Id: Utils.php,v 1.6 2007-04-23 21:02:56 matteo Exp $
  *
  * Utilities - Functions and Classes common to the whole phpMyFAQ architecture
  *
@@ -154,11 +154,18 @@ class PMF_Utils
      */
     function shuffleData($data)
     {
-        $shuffled_data   = array();
-        $randomized_keys = array_rand($data, count($data));
+        $shuffled_data = array();
 
-        foreach($randomized_keys as $current_key) {
-            $shuffled_data[$current_key] = $data[$current_key];
+        if (is_array($data)) {
+            if (count($data) > 1) {
+                $randomized_keys = array_rand($data, count($data));
+
+                foreach($randomized_keys as $current_key) {
+                    $shuffled_data[$current_key] = $data[$current_key];
+                }
+            } else {
+                $shuffled_data = $data;
+            }
         }
 
         return $shuffled_data;

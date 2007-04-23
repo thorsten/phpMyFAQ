@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Tags.php,v 1.34 2007-04-20 08:56:01 thorstenr Exp $
+* $Id: Tags.php,v 1.35 2007-04-23 21:02:56 matteo Exp $
 *
 * The main Tags class
 *
@@ -100,8 +100,8 @@ class PMF_Tags
 
         $numberOfItems = $limit ? PMF_TAGS_CLOUD_RESULT_SET_SIZE : $this->db->num_rows($result);
 
-        if (isset($allTags) && $numberOfItems < count($allTags)) {
-           for ($n = 0; $n<$numberOfItems; $n++) {
+        if (isset($allTags) && ($numberOfItems < count($allTags))) {
+           for ($n = 0; $n < $numberOfItems; $n++) {
               $valid = false;
               while (!$valid) {
                  $rand = rand(1, count($allTags) + 1);
@@ -118,6 +118,7 @@ class PMF_Tags
         } else {
            $tags = PMF_Utils::shuffleData($allTags);
         }
+
         return $tags;
     }
 
