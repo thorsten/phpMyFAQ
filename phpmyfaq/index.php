@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: index.php,v 1.109 2007-04-24 17:24:48 thorstenr Exp $
+ * $Id: index.php,v 1.110 2007-04-24 20:00:32 thorstenr Exp $
  *
  * This is the main public frontend page of phpMyFAQ. It detects the browser's
  * language, gets and sets all cookie, post and get informations and includes
@@ -63,8 +63,9 @@ $LANGCODE = $pmf->setLanguage($faqconfig->get('main.languageDetection'), $faqcon
 // Preload English strings
 require_once ('lang/language_en.php');
 
-if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE)) {
-    // Overwrite English strings with the ones we have in the current language
+if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE) && $_GET['gen'] != 'img') {
+    // Overwrite English strings with the ones we have in the current language,
+    // but don't include UTF-8 encoded files, these will break the captcha images
     require_once('lang/language_'.$LANGCODE.'.php');
 } else {
     $LANGCODE = 'en';
