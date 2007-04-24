@@ -1,0 +1,572 @@
+/**
+ * $Id: style.css,v 1.32 2007/04/04 18:12:22 thorstenr Exp $
+ *
+ * This is the main style sheet file for phpMyFAQ 2.0
+ * If you want to change only the colours, use colors.css
+ *
+ * NOTE:
+ * phpMyFAQ 2.0 uses CSS 1, CSS 2.1 and CSS 3; some specific implementations will
+ * only work on modern browsers like Mozilla Firefox, IE7, Opera 9 or Safari.
+ *
+ * @author      Jens Grochtdreis <jens@grochtdreis.de>
+ * @author      Thorsten Rinne <thorsten@rinne.info>
+ * @author      Matteo scaramuccia <matteo@scaramuccia.com>
+ * @author      Roy Ronen <royroy15@gmail.com> RTLizing of CSS
+ * @since       2004-06-02
+ * @copyright   (c) 2004-2007 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
+
+/**
+ * Main definitions
+ *
+ * NOTE: You may remove them because they are global
+ */
+body, td {
+   font-family: "Bitstream Vera Sans", "Trebuchet MS", Geneva, Verdana, Arial, Helvetica, sans-serif;
+   font-size: 80.01%;
+}
+body, h1, h2, h3, h4, h5, h6, div, p, table, td, li, dd, dt, dl, blockquote, address, hr {
+   margin: 0;
+   padding: 0;
+}
+h1, h2, h3, h4, h5, h6 {
+   font-family: "Trebuchet MS", Geneva, Verdana, Arial, Helvetica, sans-serif;
+   font-weight: normal;
+   font-size: 100%;
+}
+a {
+   text-decoration: none;
+}
+a:hover {
+   text-decoration: underline;
+   }
+h1 {
+   font-size: 200%;
+}
+h2 {
+   font-size: 175%;
+}
+h3 {
+   font-size: 150%;
+}
+form {
+   margin: 0;
+   padding: 0;
+}
+fieldset {
+   margin-bottom: 1em;
+   padding: .5em;
+    -moz-border-radius: 10px 10px 10px 10px;
+    border-radius: 10px 10px 10px 10px;
+}
+img {
+   border: 0;
+}
+pre, code {
+   font-size: 11px;
+}
+hr {
+   height: 1px;
+   border: 1px solid gray;
+}
+p {
+   padding: 0;
+   margin: 0;
+   margin-bottom: 0.8em;
+}
+code {
+   white-space: pre;
+}
+
+.invisible {
+    display: none;
+}
+
+/**
+ * Header definitions
+ */
+#header {
+    position: relative;
+    min-height: 49px;
+    height: 5em;
+    padding: 0;
+    margin: 0;
+    margin-bottom: 1em;
+    height: 3em;
+    padding: 15px 0;
+    -moz-border-radius: 10px 10px 10px 10px;
+    border-radius: 10px 10px 10px 10px;
+}
+.header {
+   margin: 0px;
+   padding: 0px;
+}
+
+/**
+ * phpMyFAQ title
+ */
+#header h1 {
+   padding-left: 20px;
+}
+#header h1 a {
+   text-decoration: none;
+}
+
+/**
+ * Main navigation
+ */
+#header ul {
+   width: auto;
+   position: absolute;
+   bottom: 0;
+   right: 0;
+   margin: 0;
+   padding: 0 15px 0 0;
+   list-style: none;
+}
+#header li {
+   float: right;
+   padding: 0 6px 0 0;
+   margin: 0 1px 0 0;
+   display: inline;
+   white-space: nowrap;
+}
+#header ul a {
+    float: left;
+    display: block;
+    padding: 6px 6px 6px 6px;
+    font-weight: bold;
+    font-size: 110%;
+    text-decoration: none;
+    border: 1px solid;
+    -moz-border-radius-topleft: 5px;
+    -moz-border-radius-topright: 5px;
+}
+#header ul a:hover {
+   text-decoration: underline;
+}
+
+/**
+ * Categories
+ */
+#categories {
+   width: 198px;
+   padding: 0;
+   font-size: 100%;
+   border: 1px solid;
+    -moz-border-radius: 5px 5px 5px 5px;
+    border-radius: 5px 5px 5px 5px;
+}
+#categories ul {
+   list-style: none;
+   margin: 0;
+   padding: 0;
+   border: none;
+}
+#categories li {
+   margin: 0;
+   border-right: 10px solid;
+}
+#categories li a {
+   display: block;
+   padding: 5px 5px 5px 0.5em;
+   border-bottom: 1px solid;
+   text-decoration: none;
+   height: 100%; /* stupid IE fix */
+}
+html>body #categories li a {
+   width: auto;
+}
+#categories li ul li {
+   margin: 0;
+   border-right: 0px
+}
+#categories li ul a {
+   padding-right: 15px;
+}
+#categories ul ul ul a {
+   padding-right: 25px;
+}
+#categories ul ul ul ul a {
+   padding-right: 35px;
+}
+#categories .active {
+}
+#categories .subcat a {
+}
+#categories .subcat .active {
+}
+
+/**
+ * Search box and language selection box
+ */
+#search, #langform, #loginform {
+    margin-top: 10px;
+    border: 1px solid;
+    padding: 5px;
+    -moz-border-radius: 5px 5px 5px 5px;
+    border-radius: 5px 5px 5px 5px;
+}
+#search fieldset, #langform fieldset, #loginform fieldset {
+    display: inline;
+    border: 0;
+}
+#search input[type=text], #search .inputfield, #langform .inputfield, #loginform .inputfield {
+    border: 1px solid;
+    width: 170px;
+}
+#instantfield, #instantfield .inputfield{
+    width: 99%;
+}
+#search input[type=submit], #langform input[type=submit], #loginform input[type=submit] {
+    margin-top: 3px;
+    padding: 0;
+    border: 1px solid;
+    margin-right: 0;
+}
+
+/**
+ * Number of current users
+ */
+#useronline {
+   margin-top: 10px;
+   text-align: center;
+}
+
+/**
+ * Top 10, Latest articles, Tag cloud and all records in one category
+ */
+#topten, #latest, #tagcloud, #allcategoryarticles {
+   margin-bottom: 10px;
+}
+#topten h3, #latest h3, #tagcloud h3, #allcategoryarticles h3 {
+   font-size: 135%;
+   border: 1px solid;
+   margin-bottom: 5px;
+   padding: 4px 4px 2px 4px;
+   -moz-border-radius: 5px 5px 5px 5px;
+   border-radius: 5px 5px 5px 5px;
+}
+#topten img, #latest img {
+    float: left;
+    margin-top: -16px;
+}
+#topten ol, #latest ol {
+    list-style-type: decimal;
+}
+#topten li, #latest li {
+    list-style-type: decimal;
+}
+#tagcloud .relevance1 {
+    font-size: 80%;
+}
+#tagcloud .relevance2 {
+    font-size: 100%;
+}
+#tagcloud .relevance3 {
+    font-size: 120%;
+}
+#tagcloud .relevance4 {
+    font-size: 140%;
+}
+#tagcloud .relevance5 {
+    font-size: 160%;
+}
+
+/**
+ * Main content
+ */
+.main-content {
+   padding: 0;
+   margin: 0;
+   line-height: 1.3;
+}
+.main-content h2, .main-content h3 {
+   border-bottom: 1px solid;
+   margin-bottom: 7px;
+}
+.main-content pre, .main-content code {
+    white-space: -moz-pre-wrap; /* Mozilla, supported since 1999 */
+    white-space: -pre-wrap;     /* Opera 4 - 6 */
+    white-space: -o-pre-wrap;   /* Opera 7 */
+    white-space: pre-wrap;      /* CSS3 - Text module (Candidate Recommendation)
+                                   http://www.w3.org/TR/css3-text/#white-space */
+    word-wrap: break-word;      /* IE 5.5+ */
+}
+.main-content h2#article_category {
+   font-size: 145%;
+   font-style: italic;
+   margin: 5px 0 5px 0;
+   border-bottom: none;
+}
+.main-content ul, ol {
+   padding-right: 1em;
+   list-style: outside;
+}
+.main-content li {
+   margin-right: 20px;
+}
+.main-content #solution_id {
+   float: left;
+}
+.main-content .searchpreview {
+    font-size: 10px;
+}
+.main-content div#action, .main-content div#translation {
+    text-align: center;
+}
+#article_content {
+   padding: 0;
+   margin: 0;
+   margin-bottom: 0.8em;
+}
+
+/**
+ * Main content - news section
+ */
+
+.main-content #news h2 {
+    font-size: 135%;
+    border: 1px solid;
+    margin-bottom: 5px;
+    padding: 2px 4px 2px 4px;
+    -moz-border-radius: 5px 5px 5px 5px;
+    border-radius: 5px 5px 5px 5px;
+}
+.main-content #news h3 {
+   font-size: 135%;
+   border-bottom: 1px solid;
+   margin-bottom: 7px;
+}
+.main-content #news h3 a {
+    text-decoration: none;
+}
+.main-content #news h2#news_header {
+    font-size: 175%;
+    background: none;
+    border: none;
+    border-bottom: 1px solid;
+    margin-top: 7px;
+    margin-bottom: 7px;
+}
+.main-content #news img#newsRSS {
+    float: left;
+    margin-top: -16px;
+}
+.main-content #news img#goNews {
+    border: none;
+}
+.main-content #news .block {
+   margin-top: 7px;
+   margin-bottom: 7px;
+}
+.main-content #news .date {
+   font-size: 80%;
+   margin-bottom: 12px;
+}
+#news_content {
+   padding: 0;
+   margin: 0;
+   margin-bottom: 0.8em;
+}
+
+/**
+ * Table definitions in the main content column
+ */
+.main-content table {
+   overflow: scroll;
+   padding: 0;
+   margin: 0;
+}
+td, th, .main-content td {
+   padding: 2px;
+   margin: 0;
+}
+.main-content th {
+   border: 0;
+   padding: 2px;
+   text-align: center;
+   vertical-align: middle;
+}
+
+/**
+ * Form and Fieldset definitions in the main content column
+ */
+.main-content form {
+   float: right;
+   display: block;
+   width: 99%;
+}
+.main-content fieldset {
+   border: 1px solid;
+}
+.main-content textarea.inputarea, .main-content form .inputfield, .main-content select {
+   margin: 2px;
+   border-width: 1px;
+   border-style: solid;
+}
+.main-content form input[type=radio], .main-content form input[type=checkbox] {
+   border: 0;
+}
+.main-content label.left {
+   float: right;
+   text-align: right;
+   width: 150px;
+   margin-right: .3em;
+}
+.main-content form br {
+   clear: both;
+}
+.main-content #article_categories {
+    float: right;
+    width: 220px;
+    margin: 0 0 10px 20px;
+}
+.main-content #article_categories fieldset {
+}
+.main-content #article_categories legend {
+}
+.main-content #article_categories ul {
+    list-style: none outside;
+    margin-right: 0px;
+}
+.main-content #article_categories ul li {
+    margin: 0;
+    padding: 0;
+}
+
+/**
+ * Submit button definitions
+ */
+input[type=submit] {
+   border: 2px solid;
+   padding: 2px 4px;
+   margin-right: 0;
+}
+
+/**
+ * Comments
+ */
+.comment {
+   padding: 1.0em;
+   margin: 0.5em 0;
+}
+
+/**
+* Left and right sidebar definitions
+*/
+.sidebar {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+   margin: 0px;
+   padding: 12px;
+}
+* html>body {
+   margin-right: -3px; /* IE hack */
+}
+div {
+   border: 0;
+   margin: 0px;
+   padding: 0px;
+}
+
+/**
+ * Main wrapper around the div containers
+ */
+#wrapper1 {
+   min-width: 710px;
+   max-width: 1200px;
+}
+#wrapper1, #wrapper2 {
+   margin: 0px;
+   padding: 0px;
+}
+
+/**
+ * Main columns definitions
+ */
+.columns {
+   border: none;
+   margin-top: 0px;
+}
+.rightcolumn {
+   float: left;
+   left: 0px;
+   width: 247px;
+   margin: 0px;
+   padding: 0px;
+}
+.leftcolumn {
+   position: static;
+   float: right;
+   width: 200px;
+   margin: 0px;
+   padding: 0px;
+}
+.centercolumn {
+   margin: 0px;
+   padding: 0px;
+   margin-right: 210px;
+   margin-left: 255px;
+}
+
+/**
+ * Padding definitions for the columns
+ */
+.centerpadding, .leftpadding, .rightpadding {
+   margin: 0px;
+   padding: 0px;
+}
+.rightpadding {
+   padding-left: 0;
+}
+.centerpadding {
+   padding-left: 20px;
+   padding-right: 20px;
+}
+.clearing {
+   height: 0;
+   margin: 10px;
+   clear: both;
+   display: none;
+}
+
+/**
+ * Definitions for version info and copyright on contact page
+ */
+#version {
+   margin-top: 20px;
+   text-align: center;
+}
+#copyright {
+   margin-top: 12px;
+   font-size: 80%;
+   text-align: center;
+}
+
+/**
+ * Footer definitions
+ */
+#footer {
+   margin-top: 10px;
+   clear: both;
+   border-top: 1px solid;
+   padding-top: 10px;
+   text-align: right;
+}
+#footer p#copyrightnote {
+   text-align: right;
+}
