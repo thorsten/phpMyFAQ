@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.edit.php,v 1.70 2007-04-23 18:25:07 matteo Exp $
+ * $Id: record.edit.php,v 1.71 2007-04-24 18:55:00 thorstenr Exp $
  *
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since       2003-02-23
@@ -225,11 +225,10 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     <div id="tags_autocomplete_choices"></div><br />
     <script type="text/javascript">
         // Hack: IE7 needs a valid XHTML URL
-        var sAmpersand = window.navigator.userAgent.indexOf("MSIE 7") > -1 ? "&amp;" : "&";
         new Ajax.Autocompleter(
             "tags",
             "tags_autocomplete_choices",
-            "index.php?action=ajax" + sAmpersand + "ajax=tags_list",
+            "index.php?action=ajax&ajax=tags_list",
             {
                 paramName:  "autocomplete",
                 tokens:     ",",
