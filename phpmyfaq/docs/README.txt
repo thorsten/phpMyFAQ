@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.87 2007-04-22 14:41:06 thorstenr Exp $
+$Id: README.txt,v 1.88 2007-04-24 17:29:00 thorstenr Exp $
 
 phpMyFAQ 2.0.0-RC
 Codename "Prometheus"
@@ -11,6 +11,8 @@ Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.0.0-beta2:
 - added some documentation (Thorsten)
+- added stylesheets for right-to-left text-direction (Roy Ronen)
+- updated Hewbrew translation (Roy Ronen)
 - updated Spanish translation (Eduardo Polidor)
 - improved administration backend (Thorsten, Matteo)
 - many bugfixes
@@ -48,12 +50,14 @@ Version 2.0.0-RC - 2007-04-
 - added Ajax-powered Instant Response (Thorsten)
 - added editable default values for record configuration (Thorsten)
 - added blacklist for search bots (Marco Fester, Thorsten)
+- added stylesheets for right-to-left text-direction (Roy Ronen)
 - improved export functions (Matteo)
 - improved URL rewrite functions (Matteo)
 - improved category management (Thorsten, Rudi Ferrari)
 - improved administration backend (Thorsten, Matteo)
 - updated Arabic translation (Ahmed Shalaby)
 - updated German translation (Thorsten)
+- updated Hewbrew translation (Roy Ronen)
 - updated Italian translation (Matteo)
 - updated Japanese translation (Tadashi Jokagi)
 - updated Spanish translation (Eduardo Polidor)
