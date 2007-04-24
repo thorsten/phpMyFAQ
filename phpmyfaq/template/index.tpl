@@ -16,7 +16,7 @@
     <meta name="revisit-after" content="7 days" />
     <meta name="MSSmartTagsPreventParsing" content="true" />
     <style type="text/css" media="screen"> /*<![CDATA[*/ <!--
-    @import url(template/style.css);
+    @import url(template/{stylesheet}.css);
     @import url(template/colors.css);
     --> /*]]>*/ </style>
     <style type="text/css" media="print"> /*<![CDATA[*/ <!--
