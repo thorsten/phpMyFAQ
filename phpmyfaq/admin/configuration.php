@@ -1,12 +1,13 @@
 <?php
 /**
-* $Id: configuration.php,v 1.12 2007-03-29 19:55:58 thorstenr Exp $
+* $Id: configuration.php,v 1.13 2007-04-24 19:41:13 matteo Exp $
 *
 * The main configuration frontend
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
+* @author       Matteo Scaramuccia <matteo@scaramuccia.com>
 * @since        2005-12-26
-* @copyright    (c) 2006 phpMyFAQ Team
+* @copyright    (c) 2006-2007 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -49,10 +50,14 @@ if ('saveConfig' == $userAction) {
     foreach ($arrVar as $key => $value) {
         $PMF_CONF[$key] = str_replace($forbidden_values, '', $value);
     }
-    // Fix checkbox values: they are not returned during the HTTP POST
+    // Hacks
     if (is_array($arrVar)) {
         foreach ($PMF_CONF as $key => $value) {
-            if (!array_key_exists($key, $arrVar)) {
+            if (// Fix checkbox values: they are not returned as HTTP POST values...
+                    !array_key_exists($key, $arrVar)
+                // except, obviuosly, those that cannot be configured i.e. never returned as HTTP POST values.
+                &&  array_key_exists($key, array('main.phpMyFAQToken'))
+                ) {
                 $PMF_CONF[$key] = 'false';
             }
         }
