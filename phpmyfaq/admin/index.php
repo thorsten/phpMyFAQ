@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: index.php,v 1.99 2007-04-23 20:22:56 matteo Exp $
+ * $Id: index.php,v 1.100 2007-04-24 21:15:17 matteo Exp $
  *
  * The main admin backend index file
  *
@@ -362,6 +362,7 @@ if (isset($auth)) {
 // User is NOT authenticated
 } else {
 ?>
+    <div class="centerlogin">
     <form action="index.php" method="post">
     <fieldset class="login">
         <legend class="login">phpMyFAQ Login</legend>
@@ -390,6 +391,7 @@ if (isset($auth)) {
         <p><img src="images/arrow.gif" width="11" height="11" alt="<?php print PMF_htmlentities($PMF_CONF['main.titleFAQ'], ENT_QUOTES, $PMF_LANG['metaCharset']); ?>" border="0" /> <a href="../index.php" title="<?php print PMF_htmlentities($PMF_CONF['main.titleFAQ'], ENT_QUOTES, $PMF_LANG['metaCharset']); ?>"><?php print PMF_htmlentities($PMF_CONF['main.titleFAQ'], ENT_QUOTES, $PMF_LANG['metaCharset']); ?></a></p>
     </fieldset>
     </form>
+    </div>
 <?php
 }
 

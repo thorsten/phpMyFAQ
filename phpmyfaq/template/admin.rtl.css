@@ -153,6 +153,14 @@ div#sessioncounter {
     text-align: center;
 }
 
+.centerlogin {
+    width: 500px;
+    margin: 0px auto;
+}
+fieldset.login {
+    background-color: #EDF2F2;
+}
+
 /* Administration Menu */
 #navcontainer {
     margin: 0;
