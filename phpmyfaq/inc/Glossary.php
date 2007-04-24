@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Glossary.php,v 1.5 2007-04-08 14:40:19 thorstenr Exp $
+* $Id: Glossary.php,v 1.6 2007-04-24 19:44:05 thorstenr Exp $
 *
 * The main glossary class
 *
@@ -111,13 +111,45 @@ class PMF_Glossary
         }
 
         foreach($this->getAllGlossaryItems() as $item) {
-            $content = preg_replace('/(^|[\s]+)('.$item['item'].')([\s,;:\!\?\.]+|$)/ism',
-                                    '\1<acronym class="glossary" title="'.$item['definition'].'">\2</acronym>\3',
-                                    $content
-                                    );
+            $this->definition = $item['definition'];
+            $content = preg_replace_callback('/'
+                .'('.$item['item'].'="[^"]*")|'
+                .'((href|src|title|alt|class|style|id|name)="[^"]*'.$item['item'].'[^"]*")|'
+                .'('.$item['item'].')'
+                .'/mis',
+                array($this, 'setAcronyms'),
+                $content);
         }
 
         return $content;
+    }
+
+    /**
+     * Callback function for filtering HTML from URLs and images
+     *
+     * @param   array
+     * @access  public
+     * @return  string
+     * @since   2007-04-24
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function setAcronyms($items)
+    {
+        static $attributes = array(
+            'href', 'src', 'title', 'alt', 'class', 'style', 'id', 'name',
+            'face', 'size', 'dir', 'onclick', 'ondblclick', 'onmousedown',
+            'onmouseup', 'onmouseover', 'onmousemove', 'onmouseout',
+            'onkeypress', 'onkeydown', 'onkeyup');
+
+        foreach ($items as $item) {
+            if (in_array($item, $attributes)) {
+                return $item;
+            } elseif ('' == $item) {
+                return '';
+            } else {
+                return '<acronym class="glossary" title="'.$this->definition.'">'.$item.'</acronym>';
+            }
+        }
     }
 
     /**
