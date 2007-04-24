@@ -1,12 +1,15 @@
-<?php
-/******************************************************************************
- * File:				language_he.php
- * Description:         Hebrew language file.
- * Authors:				Daniel Shkuri <dan-shk@bezeqint.net>
- * Date:				2004-08-27
- * Last Update:		    2004-08-27
- * Copyright:           (c) 2006 phpMyFAQ Team
- * Thanks:              Niran Shay <nirshay1@012.net.il>
+ο»Ώ<?php
+/**
+ * $Id: language_he.php,v 1.26 2007-04-24 17:19:00 thorstenr Exp $
+ *
+ * Hebrew language file
+ *
+ * @author      Daniel Shkuri <dan-shk@bezeqint.net>
+ * @author      Niran Shay <nirshay1@012.net.il> 
+ * @author      Roy Ronen <royroy15@gmail.com>
+ * @since       2004-08-27
+ * @copyright   (c) 2004-2007 phpMyFAQ Team
+ *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -16,580 +19,866 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
- ******************************************************************************/
+ */
 
-$PMF_LANG["metaCharset"] = "windows-1255";
+$PMF_LANG["metaCharset"] = "utf-8";
 $PMF_LANG["metaLanguage"] = "he";
 $PMF_LANG["language"] = "hebrew";
 $PMF_LANG["dir"] = "rtl"; // ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic/Hebrew language)
-
+$PMF_LANG["copyright"] = "Χ›Χ Χ”Χ–Χ›Χ•Χ™Χ•Χª Χ©ΧΧ•Χ¨Χ•Χª ΧΧΧ™Χ¤ Χ Χ“Χ\"Χ 2004-2007 Β©";
 // Navigation
-$PMF_LANG["msgCategory"] = "χθβεψιεϊ";
-$PMF_LANG["msgShowAllCategories"] = "δψΰδ ΰϊ λμ δχθβεψιεϊ";
-$PMF_LANG["msgSearch"] = "ητω";
-$PMF_LANG["msgAddContent"] = "δερσ ϊελο";
-$PMF_LANG["msgQuestion"] = "ωΰμ ωΰμδ";
-$PMF_LANG["msgOpenQuestions"] = "τϊη ωΰμεϊ";
-$PMF_LANG["msgHelp"] = "ςζψδ";
-$PMF_LANG["msgContact"] = "ϊελο";
-$PMF_LANG["msgHome"] = "αιϊ";
-$PMF_LANG["msgNews"] = "ηγωεϊ";
-$PMF_LANG["msgUserOnline"] = "ξωϊξωιν ξηεαψιν";
-$PMF_LANG["msgXMLExport"] = "χεαυ XML";
-$PMF_LANG["msgBack2Home"] = "ηζεψ μςξεγ δαιϊ";
+$PMF_LANG["msgCategory"] = "Χ§ΧΧ’Χ•Χ¨Χ™Χ•Χª";
+$PMF_LANG["msgShowAllCategories"] = "Χ”Χ¨ΧΧ” ΧΧª Χ›Χ Χ”Χ§ΧΧ’Χ•Χ¨Χ™Χ•Χª";
+$PMF_LANG["msgSearch"] = "Χ—Χ¤Χ©";
+$PMF_LANG["msgSearch1"] = "Χ—Χ™Χ¤Χ•Χ©";
+$PMF_LANG["msgAddContent"] = "Χ”Χ•Χ΅Χ£ ΧªΧ•Χ›Χ";
+$PMF_LANG["msgQuestion"] = "Χ©ΧΧ Χ©ΧΧΧ”";
+$PMF_LANG["msgOpenQuestions"] = "Χ©ΧΧΧ•Χª Χ¤ΧªΧ•Χ—Χ•Χª";
+$PMF_LANG["msgHelp"] = "ΧΆΧ–Χ¨Χ”";
+$PMF_LANG["msgContact"] = "Χ¦Χ•Χ¨ Χ§Χ©Χ¨";
+$PMF_LANG["msgHome"] = "Χ‘Χ™Χª";
+$PMF_LANG["msgNews"] = "Χ—Χ“Χ©Χ•Χª";
+$PMF_LANG["msgUserOnline"] = "ΧΧ©ΧªΧΧ©Χ™Χ ΧΧ—Χ•Χ‘Χ¨Χ™Χ";
+$PMF_LANG["msgXMLExport"] = "Χ§Χ•Χ‘Χ¥ XML";
+$PMF_LANG["msgBack2Home"] = "Χ—Χ–Χ•Χ¨ ΧΧΆΧΧ•Χ“ Χ”Χ‘Χ™Χª";
 
 // Contentpages
-$PMF_LANG["msgFullCategories"] = "χθβεψιεϊ ςν ψωεξεϊ";
-$PMF_LANG["msgFullCategoriesIn"] = "χθβεψιεϊ ςν ψωεξεϊ τπιξιεϊ ";
-$PMF_LANG["msgSubCategories"] = "χθβεψιεϊ ξωπδ";
-$PMF_LANG["msgEntries"] = "Entries";
-$PMF_LANG["msgEntriesIn"] = "Questions in ";
-$PMF_LANG["msgViews"] = "φτιεϊ";
-$PMF_LANG["msgPage"] = "ςξεγ";
-$PMF_LANG["msgPages"] = "ςξεγιν";
-$PMF_LANG["msgPrevious"] = "δχεγν";
-$PMF_LANG["msgNext"] = "δαΰ";
-$PMF_LANG["msgCategoryUp"] = "χθβεψιδ ΰηϊ μξςμδ";
-$PMF_LANG["msgLastUpdateArticle"] = "ςγλεο ΰηψεο:";
-$PMF_LANG["msgAuthor"] = "λεϊα:";
-$PMF_LANG["msgPrinterFriendly"] = "βψρδ μδγτρδ";
-$PMF_LANG["msgPrintArticle"] = "δγτρ ψωεξδ ζΰϊ";
-$PMF_LANG["msgMakeXMLExport"] = "ιφΰ λχεαυ XML";
-$PMF_LANG["msgAverageVote"] = "γιψεβ ξξεφς:";
-$PMF_LANG["msgVoteUseability"] = "γψβ ςψκ ζδ:";
-$PMF_LANG["msgVoteFrom"] = "ξ-";
-$PMF_LANG["msgVoteBad"] = "μβξψι μΰ ωιξεωι";
-$PMF_LANG["msgVoteGood"] = "ξΰεγ ωιξεωι";
-$PMF_LANG["msgVotings"] = "δφαςεϊ";
-$PMF_LANG["msgVoteSubmit"] = "δφας";
-$PMF_LANG["msgVoteThanks"] = "ϊεγδ ψαδ ςμ δφαςϊκ!";
-$PMF_LANG["msgYouCan"] = "ΰϊδ ιλεμ:";
-$PMF_LANG["msgWriteComment"] = "μδςιψ ςμ ςψκ ζδ";
-$PMF_LANG["msgShowCategory"] = "μψΰεϊ ξιγς";
-$PMF_LANG["msgCommentBy"] = "μδςιψ ςμ";
-$PMF_LANG["msgCommentHeader"] = "μδςιψ ςμ ςψκ ζδ";
-$PMF_LANG["msgYourComment "] = "δςψεϊικ:";
-$PMF_LANG["msgCommentThanks"] = "ϊεγδ ψαδ ςμ δδςψεϊ:";
-$PMF_LANG["msgSeeXMLFile"] = "τϊη χεαυ XML";
-$PMF_LANG["msgSend2Friend"] = "ωμη μηαψ";
-$PMF_LANG["msgS2FName"] = "ωξκ:";
-$PMF_LANG["msgS2FEMail"] = "λϊεαϊ δγεΰμ ωμκ:";
-$PMF_LANG["msgS2FFriends"] = "ηαψιικ";
-$PMF_LANG["msgS2FEMails"] = ".λϊεαεϊ γεΰμ :";
-$PMF_LANG["msgS2FText"] = "δθχρθ δαΰ ιωμη:";
-$PMF_LANG["msgS2FText2"] = "ϊξφΰ ΰϊ δψωεξδ αλϊεαϊ δαΰδ:";
-$PMF_LANG["msgS2FMessage"] = "δερσ δεγςδ μηαψκ:";
-$PMF_LANG["msgS2FButton"] = "ωμη γεΰμ:";
-$PMF_LANG["msgS2FThx"] = "ϊεγδ ςμ δξμφϊκ!";
-$PMF_LANG["msgS2FMailSubject"] = "δξμφδ ξ";
+$PMF_LANG["msgFullCategories"] = "Χ§ΧΧ’Χ•Χ¨Χ™Χ•Χª ΧΆΧ ΧΆΧ¨Χ›Χ™Χ";
+$PMF_LANG["msgFullCategoriesIn"] = "Χ§ΧΧ’Χ•Χ¨Χ™Χ•Χª ΧΆΧ ΧΆΧ¨Χ›Χ™Χ Χ‘ ";
+$PMF_LANG["msgSubCategories"] = "Χ§ΧΧ’Χ•Χ¨Χ™Χ•Χª ΧΧ©Χ Χ”";
+$PMF_LANG["msgEntries"] = "ΧΆΧ¨Χ›Χ™Χ";
+$PMF_LANG["msgEntriesIn"] = "ΧΆΧ¨Χ›Χ™Χ Χ‘ ";
+$PMF_LANG["msgViews"] = "Χ¦Χ¤Χ™Χ•Χª";
+$PMF_LANG["msgPage"] = "ΧΆΧΧ•Χ“";
+$PMF_LANG["msgPages"] = "ΧΆΧΧ•Χ“Χ™Χ";
+$PMF_LANG["msgPrevious"] = "Χ”Χ§Χ•Χ“Χ";
+$PMF_LANG["msgNext"] = "Χ”Χ‘Χ";
+$PMF_LANG["msgCategoryUp"] = "Χ§ΧΧ’Χ•Χ¨Χ™Χ” ΧΧ—Χª ΧΧΧΆΧΧ”";
+$PMF_LANG["msgLastUpdateArticle"] = "ΧΆΧ“Χ›Χ•Χ ΧΧ—Χ¨Χ•Χ:";
+$PMF_LANG["msgAuthor"] = "Χ”Χ›Χ•ΧªΧ‘: ";
+$PMF_LANG["msgPrinterFriendly"] = "Χ’Χ™Χ¨Χ΅Χ” ΧΧ”Χ“Χ¤Χ΅Χ”";
+$PMF_LANG["msgPrintArticle"] = "Χ”Χ“Χ¤Χ΅ ΧΆΧ¨Χ Χ–Χ”";
+$PMF_LANG["msgMakeXMLExport"] = "Χ™Χ¦Χ Χ›Χ§Χ•Χ‘Χ¥ XML";
+$PMF_LANG["msgAverageVote"] = "Χ“Χ™Χ¨Χ•Χ’ ΧΧΧ•Χ¦ΧΆ: ";
+$PMF_LANG["msgVoteUseability"] = "Χ“Χ¨Χ’ ΧΆΧ¨Χ Χ–Χ”: ";
+$PMF_LANG["msgVoteFrom"] = "Χ-";
+$PMF_LANG["msgVoteBad"] = "ΧΧ Χ©Χ™ΧΧ•Χ©Χ™";
+$PMF_LANG["msgVoteGood"] = "ΧΧΧ•Χ“ Χ©Χ™ΧΧ•Χ©Χ™";
+$PMF_LANG["msgVotings"] = "Χ”Χ¦Χ‘ΧΆΧ•Χª";
+$PMF_LANG["msgVoteSubmit"] = "Χ”Χ¦Χ‘ΧΆ";
+$PMF_LANG["msgVoteThanks"] = "ΧªΧ•Χ“Χ” Χ¨Χ‘Χ” ΧΆΧ Χ”Χ¦Χ‘ΧΆΧªΧ!";
+$PMF_LANG["msgYouCan"] = "ΧΧªΧ” Χ™Χ›Χ•Χ: ";
+$PMF_LANG["msgWriteComment"] = "ΧΧ”Χ’Χ™Χ‘ ΧΆΧ ΧΆΧ¨Χ Χ–Χ”";
+$PMF_LANG["msgShowCategory"] = "ΧΧ¨ΧΧ•Χª ΧΧ™Χ“ΧΆ";
+$PMF_LANG["msgCommentBy"] = "Χ”ΧΧ’Χ™Χ‘: ";
+$PMF_LANG["msgCommentHeader"] = "ΧªΧ’Χ•Χ‘Χ”";
+$PMF_LANG["msgYourComment "] = "ΧªΧ’Χ•Χ‘ΧªΧ:";
+$PMF_LANG["msgCommentThanks"] = "ΧªΧ•Χ“Χ” Χ¨Χ‘Χ” ΧΆΧ Χ”ΧªΧ’Χ•Χ‘Χ”:";
+$PMF_LANG["msgSeeXMLFile"] = "Χ¤ΧªΧ— Χ§Χ•Χ‘Χ¥ XML";
+$PMF_LANG["msgSend2Friend"] = "Χ©ΧΧ— ΧΧ—Χ‘Χ¨";
+$PMF_LANG["msgS2FName"] = "Χ©ΧΧ:";
+$PMF_LANG["msgS2FEMail"] = "Χ›ΧªΧ•Χ‘Χª Χ”Χ“Χ•ΧΧ Χ©ΧΧ:";
+$PMF_LANG["msgS2FFriends"] = "Χ—Χ‘Χ¨Χ™Χ™Χ";
+$PMF_LANG["msgS2FEMails"] = "Χ›ΧªΧ•Χ‘Χ•Χª Χ“Χ•ΧΧ:";
+$PMF_LANG["msgS2FText"] = "Χ”ΧΧ§Χ΅Χ Χ”Χ‘Χ Χ™Χ©ΧΧ—: ";
+$PMF_LANG["msgS2FText2"] = "ΧªΧΧ¦Χ ΧΧª Χ”ΧΆΧ¨Χ Χ‘Χ›ΧªΧ•Χ‘Χª Χ”Χ‘ΧΧ”: ";
+$PMF_LANG["msgS2FMessage"] = "Χ”Χ•Χ΅Χ£ Χ”Χ•Χ“ΧΆΧ” ΧΧ—Χ‘Χ¨Χ:";
+$PMF_LANG["msgS2FButton"] = "Χ©ΧΧ— Χ“Χ•ΧΧ:";
+$PMF_LANG["msgS2FThx"] = "ΧªΧ•Χ“Χ” ΧΆΧ Χ”ΧΧΧ¦ΧªΧ!";
+$PMF_LANG["msgS2FMailSubject"] = "Χ”ΧΧΧ¦Χ” Χ";
 
 // Search
-$PMF_LANG["msgSearchWord"] = "ξιμϊ ξτϊη";
-$PMF_LANG["msgSearchFind"] = "ητω ϊεφΰεϊ μ";
-$PMF_LANG["msgSearchAmount"] = "ητω ϊεφΰδ";
-$PMF_LANG["msgSearchAmounts"] = "ητω ϊεφΰεϊ";
-$PMF_LANG["msgSearchCategory"] = "χθβεψιδ: ";
-$PMF_LANG["msgSearchContent"] = "ϊελο: ";
+$PMF_LANG["msgSearchWord"] = "ΧΧ™ΧΧ” ΧΧ—Χ™Χ¤Χ•Χ©";
+$PMF_LANG["msgSearchFind"] = "Χ—Χ¤Χ©";
+$PMF_LANG["msgSearchAmount"] = "ΧªΧ•Χ¦ΧΧª Χ—Χ™Χ¤Χ•Χ©";
+$PMF_LANG["msgSearchAmounts"] = "ΧªΧ•Χ¦ΧΧ•Χª Χ—Χ™Χ¤Χ•Χ©";
+$PMF_LANG["msgSearchCategory"] = "Χ§ΧΧ’Χ•Χ¨Χ™Χ”: ";
+$PMF_LANG["msgSearchContent"] = "ΧªΧ•Χ›Χ: ";
 
 // new Content
-$PMF_LANG["msgNewContentHeader"] = "δφς μπε ωΰμδ πτεφδ: ";
-$PMF_LANG["msgNewContentAddon"] = "δφςϊκ μΰ ϊϊτψρν ξιγ, ψχ μΰηψ ΰιωεψ δξπδμιν. ωγεϊ πηεφιν <strong>ωξκ</strong>, <strong>λϊεαϊ ΰξιιμ</strong>, <strong>χΰθβεψιδ</strong>, <strong>λεϊψϊ</strong> ε <strong>ψωεξδ</strong>. δτψγ αιο δξιμιν αςζψϊ ξχω spacebar αμαγ.";
-$PMF_LANG["msgNewContentName"] = "ωξκ:";
-$PMF_LANG["msgNewContentMail"] = "λϊεαϊ δγεΰμ ωμκ:";
-$PMF_LANG["msgNewContentCategory"] = "ΰιζε χθβεψιδ μαηεψ?";
-$PMF_LANG["msgNewContentTheme"] = "λεϊψϊ:";
-$PMF_LANG["msgNewContentArticle"] = "δωΰμδ δπτεφδ ωμκ:";
-$PMF_LANG["msgNewContentKeywords"] = "ξιμεϊ ξτϊη:";
-$PMF_LANG["msgNewContentLink"] = "χιωεψ μωΰμδ ζΰϊ";
-$PMF_LANG["msgNewContentSubmit"] = "ωμη";
-$PMF_LANG["msgInfo"] = "ςεγ ξιγς:";
-$PMF_LANG["msgNewContentThanks"] = "ϊεγδ ςμ δφςϊκ!";
-$PMF_LANG["msgNoQuestionsAvailable"] = "ΰιο λψβς ωΰμεϊ ξξϊιπεϊ.";
+$PMF_LANG["msgNewContentHeader"] = "Χ”Χ¦ΧΆ ΧΧ Χ• ΧΆΧ¨Χ: ";
+$PMF_LANG["msgNewContentAddon"] = "Χ”Χ¦ΧΆΧªΧ ΧªΧªΧ¤Χ¨Χ΅Χ ΧΧΧ—Χ¨ ΧΧ™Χ©Χ•Χ¨ ΧΆΧ•Χ¨Χ Χ”ΧΧªΧ¨. Χ©Χ“Χ•Χª Χ Χ—Χ•Χ¦Χ™Χ <strong>Χ©ΧΧ</strong>, <strong>Χ›ΧªΧ•Χ‘Χª ΧΧΧ™Χ™Χ</strong>, <strong>Χ§ΧΧ’Χ•Χ¨Χ™Χ”</strong>, <strong>Χ›Χ•ΧªΧ¨Χª</strong> Χ• <strong>ΧªΧ•Χ›Χ</strong>. Χ”Χ¤Χ¨Χ“ Χ‘Χ™Χ Χ”ΧΧ™ΧΧ™Χ Χ‘ΧΆΧ–Χ¨Χª ΧΧ§Χ© spacebar Χ‘ΧΧ‘Χ“.";
+$PMF_LANG["msgNewContentName"] = "Χ©ΧΧ:";
+$PMF_LANG["msgNewContentMail"] = "Χ›ΧªΧ•Χ‘Χª Χ”Χ“Χ•ΧΧ Χ©ΧΧ:";
+$PMF_LANG["msgNewContentCategory"] = "Χ§ΧΧ’Χ•Χ¨Χ™Χ”:";
+$PMF_LANG["msgNewContentTheme"] = "Χ›Χ•ΧªΧ¨Χª:";
+$PMF_LANG["msgNewContentArticle"] = "ΧªΧ•Χ›Χ:";
+$PMF_LANG["msgNewContentKeywords"] = "ΧΧ™ΧΧ•Χª ΧΧ¤ΧªΧ—:";
+$PMF_LANG["msgNewContentLink"] = "Χ§Χ™Χ©Χ•Χ¨ Χ Χ™ΧΧ•Χ•Χ”:";
+$PMF_LANG["msgNewContentSubmit"] = "Χ©ΧΧ—";
+$PMF_LANG["msgInfo"] = "Χ Χ•Χ΅Χ£ ΧΧ™Χ“ΧΆ:";
+$PMF_LANG["msgNewContentThanks"] = "ΧªΧ•Χ“Χ” ΧΆΧ Χ”Χ¦ΧΆΧªΧ!";
+$PMF_LANG["msgNoQuestionsAvailable"] = "ΧΧ™Χ Χ›Χ¨Χ’ΧΆ Χ©ΧΧΧ•Χª Χ¤ΧªΧ•Χ—Χ•Χª.";
 
 // ask Question
-$PMF_LANG["msgNewQuestion"] = "ωΰμ ΰϊ ωΰμϊκ ξϊηϊ:";
-$PMF_LANG["msgAskCategory"] = "ωΰμϊκ μβαι χθβεψιδ:";
-$PMF_LANG["msgAskYourQuestion"] = "ωΰμϊκ:";
-$PMF_LANG["msgAskThx4Mail"] = "<h2>ωΰμϊκ δϊχαμδ, ϊεγδ!</h2>";
-$PMF_LANG["msgDate_User"] = "ϊΰψικ / ξωϊξω";
-$PMF_LANG["msgQuestion2"] = "ωΰμδ";
-$PMF_LANG["msg2answer"] = "ϊωεαδ";
-$PMF_LANG["msgQuestionText"] = "λΰο ϊελμ μψΰεϊ ωΰμεϊ ωπωΰμε ςμ ιγι ξωϊξωιν ΰηψιν. ΰν διπκ ιεγς ΰϊ δϊωεαδ μωΰμδ, ϊωεαϊκ ϊϊεερσ μωΰμεϊ δπτεφεϊ.";
+$PMF_LANG["msgNewQuestion"] = "Χ©ΧΧ ΧΧª Χ©ΧΧΧªΧ:";
+$PMF_LANG["msgAskCategory"] = "Χ”Χ©ΧΧΧ” Χ‘Χ§Χ©Χ¨ ΧΧ§ΧΧ’Χ•Χ¨Χ™Χ”:";
+$PMF_LANG["msgAskYourQuestion"] = "Χ©ΧΧΧªΧ:";
+$PMF_LANG["msgAskThx4Mail"] = "<h2>Χ©ΧΧΧªΧ Χ”ΧªΧ§Χ‘ΧΧ”, ΧªΧ•Χ“Χ”!</h2>";
+$PMF_LANG["msgDate_User"] = "ΧªΧΧ¨Χ™Χ / ΧΧ©ΧªΧΧ©";
+$PMF_LANG["msgQuestion2"] = "Χ©ΧΧΧ”";
+$PMF_LANG["msg2answer"] = "ΧªΧ©Χ•Χ‘Χ”";
+$PMF_LANG["msgQuestionText"] = "Χ›ΧΧ ΧªΧ•Χ›Χ ΧΧ¨ΧΧ•Χª Χ©ΧΧΧ•Χª Χ©Χ Χ©ΧΧΧ• ΧΆΧ Χ™Χ“Χ™ ΧΧ©ΧªΧΧ©Χ™Χ ΧΧ—Χ¨Χ™Χ. ΧΧ Χ”Χ™Χ Χ Χ™Χ•Χ“ΧΆ ΧΧª Χ”ΧªΧ©Χ•Χ‘Χ” ΧΧ©ΧΧΧ”, ΧΧ Χ Χ©ΧΧ— ΧΧ•ΧªΧ” Χ•Χ”Χ©ΧΧΧ” Χ•Χ”ΧªΧ©Χ•Χ‘Χ” Χ™ΧªΧ•Χ•Χ΅Χ¤Χ• Χ›ΧΆΧ¨Χ ΧΧΧªΧ¨.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>ξαπδ δωΰμδ δπτεφδ διπε γι τωεθ ΰϊδ ιλεμ μητω ΰϊ δ<strong><a href=\"".$_SERVER["PHP_SELF"]."?action=show\">χθβεψιδ</a></strong>ΰε μΰτωψ μ<strong><a href=\"".$_SERVER["PHP_SELF"]."?action=search\">ξπες ηιτεω δωΰμεϊ δπτεφεϊ</a></strong> μητω ξιμϊ ξτϊη.</p>";
+$PMF_LANG["msgHelpText"] = "<p>ΧΧ‘Χ Χ” Χ”Χ©ΧΧΧ” Χ”Χ Χ¤Χ•Χ¦Χ” Χ”Χ™Χ Χ• Χ“Χ™ Χ¤Χ©Χ•Χ ΧΧªΧ” Χ™Χ›Χ•Χ ΧΧ—Χ¤Χ© ΧΧª Χ”<strong><a href=\"".$_SERVER["PHP_SELF"]."?action=show\">Χ§ΧΧ’Χ•Χ¨Χ™Χ”</a></strong>ΧΧ• ΧΧΧ¤Χ©Χ¨ Χ<strong><a href=\"".$_SERVER["PHP_SELF"]."?action=search\">ΧΧ Χ•ΧΆ Χ—Χ™Χ¤Χ•Χ© Χ”Χ©ΧΧΧ•Χª Χ”Χ Χ¤Χ•Χ¦Χ•Χª</a></strong> ΧΧ—Χ¤Χ© ΧΧ™ΧΧª ΧΧ¤ΧªΧ—.</p>";
 
 // Contact
-$PMF_LANG["msgContactEMail"] = "ωμη γεΰμ μξπδμ:";
-$PMF_LANG["msgMessage"] = "δεγςϊκ:";
+$PMF_LANG["msgContactEMail"] = "Χ©ΧΧ— Χ“Χ•ΧΧ ΧΧΆΧ•Χ¨Χ Χ”ΧΧªΧ¨:";
+$PMF_LANG["msgMessage"] = "Χ”Χ•Χ“ΧΆΧªΧ:";
 
 // Startseite
-$PMF_LANG["msgNews"] = "ηγωεϊ ";
-$PMF_LANG["msgTopTen"] = "ςωψϊ δβγεμιν";
-$PMF_LANG["msgHomeThereAre"] = "ιωπν ";
-$PMF_LANG["msgHomeArticlesOnline"] = " ψωεξεϊ ξηεαψεϊ";
-$PMF_LANG["msgNoNews"] = "ΰιο ηγωεϊ.";
-$PMF_LANG["msgLatestArticles"] = "ηξωϊ δωΰμεϊ ωπωμηε μΰηψεπδ:";
+$PMF_LANG["msgNews"] = "Χ—Χ“Χ©Χ•Χª ";
+$PMF_LANG["msgTopTen"] = "Χ”ΧΧ™Χ¤Χ™Χ Χ”Χ Χ¦Χ¤Χ™Χ Χ‘Χ™Χ•ΧªΧ¨";
+$PMF_LANG["msgHomeThereAre"] = "Χ™Χ©Χ Χ ";
+$PMF_LANG["msgHomeArticlesOnline"] = " ΧΧ™Χ¤Χ™Χ Χ‘ΧΧΆΧ¨Χ›Χª";
+$PMF_LANG["msgNoNews"] = "ΧΧ™Χ Χ—Χ“Χ©Χ•Χª.";
+$PMF_LANG["msgLatestArticles"] = "Χ—ΧΧ©Χª Χ”ΧΧ™Χ¤Χ™Χ Χ”ΧΧ—Χ¨Χ•Χ Χ™Χ";
 
 // E-Mailbenachrichtigung
-$PMF_LANG["msgMailThanks"] = "ϊεγδ ψαδ ςμ δφςϊκ μξΰβψ.";
-$PMF_LANG["msgMailCheck"] = "ιω ωΰμδ πτεφδ ηγωδ!\n ΰπΰ αγεχ ΰϊ ΰζεψ δπιδεμ!";
-$PMF_LANG["msgMailContact"] = "ωΰμϊκ πωμηδ μξπδμ.";
+$PMF_LANG["msgMailThanks"] = "ΧªΧ•Χ“Χ” Χ¨Χ‘Χ” ΧΆΧ Χ©ΧΧΧªΧ.";
+$PMF_LANG["msgMailCheck"] = "Χ™Χ© Χ©ΧΧΧ” Χ Χ¤Χ•Χ¦Χ” Χ—Χ“Χ©Χ”!\n ΧΧ Χ Χ‘Χ“Χ•Χ§ ΧΧª ΧΧ–Χ•Χ¨ Χ”Χ Χ™Χ”Χ•Χ!";
+$PMF_LANG["msgMailContact"] = "Χ©ΧΧΧªΧ Χ Χ©ΧΧ—Χ” ΧΧΆΧ•Χ¨Χ Χ”ΧΧªΧ¨";
 
 // Fehlermeldungen
-$PMF_LANG["err_noDatabase"] = "ΰιο αριρ πϊεπιν ζξιο.";
-$PMF_LANG["err_noHeaders"] = "μΰ πξφΰε χθβεψιεϊ.";
-$PMF_LANG["err_noArticles"] = "<p>μΰ πξφΰε ψωεξεϊ.</p>";
-$PMF_LANG["err_badID"] = "<p>ξρτψ ωβει.</p>";
-$PMF_LANG["err_noTopTen"] = "<p>ΰιο ςωψδ βγεμιν ςγιιο.</p>";
-$PMF_LANG["err_nothingFound"] = "<p>ΰσ ψωεξδ μΰ πξφΰδ.</p>";
-$PMF_LANG["err_SaveEntries"] = "ωγεϊ πηεφιν δν <strong>ωξκ</strong>, <strong>δγεΰμ ωμκ</strong>, <strong>χθβεψιδ</strong>, <strong>λεϊψϊ</strong> ε<strong>δψωεξδ ωμκ</strong>!<br /><br />\n<a href=\"javascript:history.back();\">δχεγν</a><br /><br />\n";
-$PMF_LANG["err_SaveComment"] = "δωγεϊ δπηεφιν δν <strong>ωξκ</strong>, <strong>λϊεαϊ δγεΰμ ωμκ</strong> ε<strong>ϊβεαϊκ</strong>!<br /><br />\n<a href=\"javascript:history.back();\">δχεγν</a><br /><br />\n";
-$PMF_LANG["err_VoteTooMuch"] = "<p>ΰιππε ρετψιν δφαςεϊ λτεμεϊ. <a href=\"javascript:history.back();\">μηυ λΰο</a>, λγι μηζεψ μςξεγ δχεγν.</p>";
-$PMF_LANG["err_noVote"] = "<p><strong>μΰ γψβϊ ΰϊ δωΰμδ!</strong> <a href=\"javascript:history.back();\">ΰπΰ μηυ λΰο</a>, μδφαςδ.</p>";
-$PMF_LANG["err_noMailAdress"] = "λϊεαϊ δΰιξιιμ ΰιπδ πλεπδ.<br /><a href=\"javascript:history.back();\">ηζεψ</a>";
-$PMF_LANG["err_sendMail"] = "ωγεϊ πηεφιν <strong>ων τψθι</strong>, <strong>λϊεαϊ ΰξιιμ</strong>ε<strong>ωΰμϊκ</strong>!<br /><br />\n<a href=\"javascript:history.back();\">δχεγν </a><br /><br />\n";
+$PMF_LANG["err_noDatabase"] = "ΧΧ™Χ Χ‘Χ΅Χ™Χ΅ Χ ΧªΧ•Χ Χ™Χ Χ–ΧΧ™Χ.";
+$PMF_LANG["err_noHeaders"] = "ΧΧ Χ ΧΧ¦ΧΧ• Χ§ΧΧ’Χ•Χ¨Χ™Χ•Χª.";
+$PMF_LANG["err_noArticles"] = "<p>ΧΧ Χ ΧΧ¦ΧΧ• ΧΆΧ¨Χ›Χ™Χ.</p>";
+$PMF_LANG["err_badID"] = "<p>ΧΧ΅Χ¤Χ¨ Χ©Χ’Χ•Χ™.</p>";
+$PMF_LANG["err_noTopTen"] = "<p>ΧΧ™Χ ΧΆΧ©Χ¨Χ” Χ’Χ“Χ•ΧΧ™Χ ΧΆΧ“Χ™Χ™Χ.</p>";
+$PMF_LANG["err_nothingFound"] = "<p>ΧΧ Χ ΧΧ¦ΧΧ• ΧΆΧ¨Χ›Χ™Χ.</p>";
+$PMF_LANG["err_SaveEntries"] = "Χ©Χ“Χ•Χª Χ Χ—Χ•Χ¦Χ™Χ Χ”Χ <strong>Χ©ΧΧ</strong>, <strong>Χ”Χ“Χ•ΧΧ Χ©ΧΧ</strong>, <strong>Χ§ΧΧ’Χ•Χ¨Χ™Χ”</strong>, <strong>Χ›Χ•ΧªΧ¨Χª</strong> Χ•<strong>ΧªΧ•Χ›Χ</strong>!<br /><br />\n<a href=\"javascript:history.back();\">Χ”Χ§Χ•Χ“Χ</a><br /><br />\n";
+$PMF_LANG["err_SaveComment"] = "Χ”Χ©Χ“Χ•Χª Χ”Χ Χ—Χ•Χ¦Χ™Χ Χ”Χ <strong>Χ©ΧΧ</strong>, <strong>Χ›ΧªΧ•Χ‘Χª Χ”Χ“Χ•ΧΧ Χ©ΧΧ</strong> Χ•<strong>ΧªΧ’Χ•Χ‘ΧªΧ</strong>!<br /><br />\n<a href=\"javascript:history.back();\">Χ”Χ§Χ•Χ“Χ</a><br /><br />\n";
+$PMF_LANG["err_VoteTooMuch"] = "<p>ΧΧ™Χ Χ Χ• Χ΅Χ•Χ¤Χ¨Χ™Χ Χ”Χ¦Χ‘ΧΆΧ•Χª Χ›Χ¤Χ•ΧΧ•Χª. <a href=\"javascript:history.back();\">ΧΧ—Χ¥ Χ›ΧΧ</a>, Χ›Χ“Χ™ ΧΧ—Χ–Χ•Χ¨ ΧΧΆΧΧ•Χ“ Χ”Χ§Χ•Χ“Χ.</p>";
+$PMF_LANG["err_noVote"] = "<p><strong>ΧΧ Χ“Χ¨Χ’Χª ΧΧª Χ”Χ©ΧΧΧ”!</strong> <a href=\"javascript:history.back();\">ΧΧ Χ ΧΧ—Χ¥ Χ›ΧΧ</a>, ΧΧ”Χ¦Χ‘ΧΆΧ”.</p>";
+$PMF_LANG["err_noMailAdress"] = "Χ›ΧªΧ•Χ‘Χª Χ”ΧΧ™ΧΧ™Χ™Χ ΧΧ™Χ Χ” Χ Χ›Χ•Χ Χ”.<br /><a href=\"javascript:history.back();\">Χ—Χ–Χ•Χ¨</a>";
+$PMF_LANG["err_sendMail"] = "Χ©Χ“Χ•Χª Χ Χ—Χ•Χ¦Χ™Χ <strong>Χ©Χ Χ¤Χ¨ΧΧ™</strong>, <strong>Χ›ΧªΧ•Χ‘Χª ΧΧΧ™Χ™Χ</strong>Χ•<strong>Χ©ΧΧΧªΧ</strong>!<br /><br />\n<a href=\"javascript:history.back();\">Χ”Χ§Χ•Χ“Χ </a><br /><br />\n";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "<p><strong>ητω ψωεξεϊ:</strong><br />ςν ςψκ λξε <strong style=\"color: Red;\">ξιμδ 1 ξιμδ 2</strong> δπκ ιλεμ μαφς ηιτεω μωπιιν ΰε ιεϊψ χψιθψιεπιν.</p><p><strong>δςψδ:</strong> χψιθψιεπι δηιτεω ωμκ ηιιαιν μδλιμ 4 ΰε ιεϊψ ΰεϊιεϊ ΰηψϊ αχωϊκ ϊιγηδ.</p>";
+$PMF_LANG["help_search"] = "<p><strong>Χ—Χ¤Χ© ΧΆΧ¨Χ›Χ™Χ:</strong><br />ΧΆΧ ΧΆΧ¨Χ Χ›ΧΧ• <strong style=\"color: Red;\">ΧΧ™ΧΧ” 1 ΧΧ™ΧΧ” 2</strong> Χ”Χ Χ Χ™Χ›Χ•Χ ΧΧ‘Χ¦ΧΆ Χ—Χ™Χ¤Χ•Χ© ΧΧ©Χ Χ™Χ™Χ ΧΧ• Χ™Χ•ΧªΧ¨ Χ§Χ¨Χ™ΧΧ¨Χ™Χ•Χ Χ™Χ.</p><p><strong>Χ”ΧΆΧ¨Χ”:</strong> Χ§Χ¨Χ™ΧΧ¨Χ™Χ•Χ Χ™ Χ”Χ—Χ™Χ¤Χ•Χ© Χ—Χ™Χ™Χ‘Χ™Χ ΧΧ”Χ›Χ™Χ 4 Χ΅Χ™ΧΧ Χ™Χ ΧΧ• Χ™Χ•ΧªΧ¨.</p>";
 
-// Menό
-$PMF_LANG["ad"] = "ΰζεψ δπιδεμ";
-$PMF_LANG["ad_menu_user_administration"] = "πιδεμ ξωϊξωιν";
-$PMF_LANG["ad_menu_entry_aprove"] = "ΰωψ ψωεξδ";
-$PMF_LANG["ad_menu_entry_edit"] = "ςψεκ ψωεξδ";
-$PMF_LANG["ad_menu_categ_add"] = "δερσ χθβεψιδ";
-$PMF_LANG["ad_menu_categ_edit"] = "ςψεκ χθβεψιδ";
-$PMF_LANG["ad_menu_news_add"] = "δερσ ηγωεϊ";
-$PMF_LANG["ad_menu_news_edit"] = "ςψεκ ηγωεϊ";
-$PMF_LANG["ad_menu_open"] = "ςψεκ ωΰμδ τϊεηδ";
-$PMF_LANG["ad_menu_stat"] = "ρθθιρθιχδ";
-$PMF_LANG["ad_menu_cookie"] = "χεχιρ";
-$PMF_LANG["ad_menu_session"] = "ψΰδ session";
-$PMF_LANG["ad_menu_adminlog"] = "ψΰδ ψιωεν ξπδμ";
-$PMF_LANG["ad_menu_passwd"] = "ωπδ ριρξδ";
-$PMF_LANG["ad_menu_logout"] = "δϊπϊχ";
-$PMF_LANG["ad_menu_startpage"] = "ςξεγ δαιϊ";
+// MenοΆ•
+$PMF_LANG["ad"] = "ΧΧ–Χ•Χ¨ Χ”Χ Χ™Χ”Χ•Χ";
+$PMF_LANG["ad_menu_user_administration"] = "Χ Χ™Χ”Χ•Χ ΧΧ©ΧªΧΧ©Χ™Χ";
+$PMF_LANG["ad_menu_entry_aprove"] = "ΧΧ©Χ¨ ΧΆΧ¨Χ";
+$PMF_LANG["ad_menu_entry_edit"] = "ΧΆΧ¨Χ•Χ ΧΆΧ¨Χ";
+$PMF_LANG["ad_menu_categ_add"] = "Χ”Χ•Χ΅Χ£ Χ§ΧΧ’Χ•Χ¨Χ™Χ”";
+$PMF_LANG["ad_menu_categ_edit"] = "ΧΆΧ¨Χ•Χ Χ§ΧΧ’Χ•Χ¨Χ™Χ”";
+$PMF_LANG["ad_menu_news_add"] = "Χ”Χ•Χ΅Χ£ Χ—Χ“Χ©Χ•Χª";
+$PMF_LANG["ad_menu_news_edit"] = "ΧΆΧ¨Χ•Χ Χ—Χ“Χ©Χ•Χª";
+$PMF_LANG["ad_menu_open"] = "ΧΆΧ¨Χ•Χ Χ©ΧΧΧ” Χ¤ΧªΧ•Χ—Χ”";
+$PMF_LANG["ad_menu_stat"] = "Χ΅ΧΧΧ™Χ΅ΧΧ™Χ§Χ”";
+$PMF_LANG["ad_menu_cookie"] = "ΧΆΧ•Χ’Χ™Χ•Χª";
+$PMF_LANG["ad_menu_session"] = "Χ¨ΧΧ” Χ‘Χ™Χ§Χ•Χ¨Χ™Χ (session)";
+$PMF_LANG["ad_menu_adminlog"] = "Χ¨ΧΧ” Χ¨Χ™Χ©Χ•Χ ΧΧ Χ”Χ";
+$PMF_LANG["ad_menu_passwd"] = "Χ©Χ Χ” Χ΅Χ™Χ΅ΧΧ”";
+$PMF_LANG["ad_menu_logout"] = "Χ”ΧªΧ ΧªΧ§";
+$PMF_LANG["ad_menu_startpage"] = "ΧΆΧΧ•Χ“ Χ”Χ‘Χ™Χª";
 
 // Nachrichten
-$PMF_LANG["ad_msg_identify"] = "ΰπΰ ζδδ ΰϊ ςφξκ.";
-$PMF_LANG["ad_msg_passmatch"] = "δριρξΰεϊ ωδζπϊ <strong>ΰιπο ζδεϊ</strong>!";
-$PMF_LANG["ad_msg_savedsuc_1"] = "δτψετιμ ωμ";
-$PMF_LANG["ad_msg_savedsuc_2"] = "πωξψ αδφμηδ.";
-$PMF_LANG["ad_msg_mysqlerr"] = "αςχαεϊ <strong>ϊχμδ ααριρ δπϊεπιν</strong>, δτψετιμ μΰ ιλεμ μδωξψ.";
-$PMF_LANG["ad_msg_noauth"] = "ΰιπκ ξΰεωψ.";
+$PMF_LANG["ad_msg_identify"] = "ΧΧ Χ Χ–Χ”Χ” ΧΧª ΧΆΧ¦ΧΧ.";
+$PMF_LANG["ad_msg_passmatch"] = "Χ”Χ΅Χ™Χ΅ΧΧΧ•Χª Χ©Χ”Χ–Χ Χª <strong>ΧΧ™Χ Χ Χ–Χ”Χ•Χª</strong>!";
+$PMF_LANG["ad_msg_savedsuc_1"] = "Χ”Χ¤Χ¨Χ•Χ¤Χ™Χ Χ©Χ";
+$PMF_LANG["ad_msg_savedsuc_2"] = "Χ Χ©ΧΧ¨ Χ‘Χ”Χ¦ΧΧ—Χ”.";
+$PMF_LANG["ad_msg_mysqlerr"] = "Χ‘ΧΆΧ§Χ‘Χ•Χª <strong>ΧªΧ§ΧΧ” Χ‘Χ‘Χ΅Χ™Χ΅ Χ”Χ ΧªΧ•Χ Χ™Χ</strong>, Χ”Χ¤Χ¨Χ•Χ¤Χ™Χ ΧΧ Χ™Χ›Χ•Χ ΧΧ”Χ©ΧΧ¨.";
+$PMF_LANG["ad_msg_noauth"] = "ΧΧ™Χ Χ ΧΧ•Χ¨Χ©Χ”.";
 
 // Allgemein
-$PMF_LANG["ad_gen_page"] = "ςξεγ";
-$PMF_LANG["ad_gen_of"] = "ωμ";
-$PMF_LANG["ad_gen_lastpage"] = "δχεγν";
-$PMF_LANG["ad_gen_nextpage"] = "δαΰ";
-$PMF_LANG["ad_gen_save"] = "ωξεψ";
-$PMF_LANG["ad_gen_reset"] = "ΰτρ";
-$PMF_LANG["ad_gen_yes"] = "λο";
-$PMF_LANG["ad_gen_no"] = "μΰ";
-$PMF_LANG["ad_gen_top"] = "ψΰω δςξεγ";
-$PMF_LANG["ad_gen_ncf"] = "μΰ πξφΰε χθβεψιεϊ!";
-$PMF_LANG["ad_gen_delete"] = "ξηχ";
+$PMF_LANG["ad_gen_page"] = "ΧΆΧΧ•Χ“";
+$PMF_LANG["ad_gen_of"] = "Χ©Χ";
+$PMF_LANG["ad_gen_lastpage"] = "Χ”Χ§Χ•Χ“Χ";
+$PMF_LANG["ad_gen_nextpage"] = "Χ”Χ‘Χ";
+$PMF_LANG["ad_gen_save"] = "Χ©ΧΧ•Χ¨";
+$PMF_LANG["ad_gen_reset"] = "ΧΧ¤Χ΅";
+$PMF_LANG["ad_gen_yes"] = "Χ›Χ";
+$PMF_LANG["ad_gen_no"] = "ΧΧ";
+$PMF_LANG["ad_gen_top"] = "Χ¨ΧΧ© Χ”ΧΆΧΧ•Χ“";
+$PMF_LANG["ad_gen_ncf"] = "ΧΧ Χ ΧΧ¦ΧΧ• Χ§ΧΧ’Χ•Χ¨Χ™Χ•Χª!";
+$PMF_LANG["ad_gen_delete"] = "ΧΧ—Χ§";
 
 // Benutzerverwaltung
-$PMF_LANG["ad_user"] = "πιδεμ ξωϊξωιν";
-$PMF_LANG["ad_user_username"] = "ξωϊξωιν ψωεξιν";
-$PMF_LANG["ad_user_rights"] = "ζλειεϊ ξωϊξωιν";
-$PMF_LANG["ad_user_edit"] = "ςψεκ";
-$PMF_LANG["ad_user_delete"] = "ξηχ";
-$PMF_LANG["ad_user_add"] = "δερσ ξωϊξω";
-$PMF_LANG["ad_user_profou"] = "τψετιμ δξωϊξω";
-$PMF_LANG["ad_user_name"] = "ων";
-$PMF_LANG["ad_user_password"] = "ριρξδ";
-$PMF_LANG["ad_user_confirm"] = "εειγεΰ ριρξδ";
-$PMF_LANG["ad_user_rights"] = "ζλειεϊ";
-$PMF_LANG["ad_user_del_1"] = "δξωϊξω";
-$PMF_LANG["ad_user_del_2"] = "φψικ μδξηχ?";
-$PMF_LANG["ad_user_del_3"] = "δΰν ΰϊδ αθεη?";
-$PMF_LANG["ad_user_deleted"] = "δξωϊξω πξηχ αδφμηδ.";
-$PMF_LANG["ad_user_checkall"] = "αηψ δλμ";
+$PMF_LANG["ad_user"] = "Χ Χ™Χ”Χ•Χ ΧΧ©ΧªΧΧ©Χ™Χ";
+$PMF_LANG["ad_user_username"] = "ΧΧ©ΧªΧΧ©Χ™Χ Χ¨Χ©Χ•ΧΧ™Χ";
+$PMF_LANG["ad_user_rights"] = "Χ”Χ¨Χ©ΧΧ•Χª ΧΧ©ΧªΧΧ©Χ™Χ";
+$PMF_LANG["ad_user_edit"] = "ΧΆΧ¨Χ•Χ";
+$PMF_LANG["ad_user_delete"] = "ΧΧ—Χ§";
+$PMF_LANG["ad_user_add"] = "Χ”Χ•Χ΅Χ£ ΧΧ©ΧªΧΧ©";
+$PMF_LANG["ad_user_profou"] = "Χ¤Χ¨Χ•Χ¤Χ™Χ Χ”ΧΧ©ΧªΧΧ©";
+$PMF_LANG["ad_user_name"] = "Χ©Χ";
+$PMF_LANG["ad_user_password"] = "Χ΅Χ™Χ΅ΧΧ”";
+$PMF_LANG["ad_user_confirm"] = "Χ•Χ•Χ™Χ“Χ•Χ Χ΅Χ™Χ΅ΧΧ”";
+$PMF_LANG["ad_user_rights"] = "Χ”Χ¨Χ©ΧΧ•Χª";
+$PMF_LANG["ad_user_del_1"] = "Χ”ΧΧ©ΧªΧΧ©";
+$PMF_LANG["ad_user_del_2"] = "Χ¦Χ¨Χ™Χ ΧΧ”ΧΧ—Χ§?";
+$PMF_LANG["ad_user_del_3"] = "Χ”ΧΧ ΧΧªΧ” Χ‘ΧΧ•Χ—?";
+$PMF_LANG["ad_user_deleted"] = "Χ”ΧΧ©ΧªΧΧ© Χ ΧΧ—Χ§ Χ‘Χ”Χ¦ΧΧ—Χ”.";
+$PMF_LANG["ad_user_checkall"] = "Χ‘Χ—Χ¨ Χ”Χ›Χ";
 
 // Beitragsverwaltung
-$PMF_LANG["ad_entry_aor"] = "πιδεμ ψωεξεϊ";
-$PMF_LANG["ad_entry_id"] = "ξρτψ";
-$PMF_LANG["ad_entry_topic"] = "πεωΰ";
-$PMF_LANG["ad_entry_action"] = "τςεμδ";
-$PMF_LANG["ad_entry_edit_1"] = "ςψεκ ψωεξδ";
+$PMF_LANG["ad_entry_aor"] = "Χ Χ™Χ”Χ•Χ ΧΆΧ¨Χ›Χ™Χ";
+$PMF_LANG["ad_entry_id"] = "ΧΧ΅Χ¤Χ¨ Χ”ΧΆΧ¨Χ";
+$PMF_LANG["ad_entry_topic"] = "Χ›Χ•ΧªΧ¨Χª";
+$PMF_LANG["ad_entry_action"] = "Χ¤ΧΆΧ•ΧΧ”";
+$PMF_LANG["ad_entry_edit_1"] = "ΧΆΧ¨Χ•Χ ΧΆΧ¨Χ";
 $PMF_LANG["ad_entry_edit_2"] = "";
-$PMF_LANG["ad_entry_theme"] = "ξεθια:";
-$PMF_LANG["ad_entry_content"] = "ϊελο:";
-$PMF_LANG["ad_entry_keywords"] = "ξιμεϊ ξτϊη:";
-$PMF_LANG["ad_entry_author"] = "ξηαψ:";
-$PMF_LANG["ad_entry_category"] = "χθβεψιδ: ";
-$PMF_LANG["ad_entry_active"] = "τςιμ?";
-$PMF_LANG["ad_entry_date"] = "ξιγς:";
-$PMF_LANG["ad_entry_changed"] = "ωεπδ?";
-$PMF_LANG["ad_entry_changelog"] = "διρθεψιιϊ ωιπειιν:";
-$PMF_LANG["ad_entry_commentby 	"] = "ϊβεαδ ξ";
-$PMF_LANG["ad_entry_comment"] = "ϊβεαεϊ:";
-$PMF_LANG["ad_entry_save"] = "ωξεψ";
-$PMF_LANG["ad_entry_delete"] = "ξηχ";
-$PMF_LANG["ad_entry_delcom_1"] = "δΰν ΰϊδ αθεη ωδϊβεαδ ωμ δξωϊξω ";
-$PMF_LANG["ad_entry_delcom_2"] = "φψιλδ μδξηχ?";
-$PMF_LANG["ad_entry_commentdelsuc"] = "δϊβεαδ πξηχδ <strong>αδφμηδ</strong>.";
-$PMF_LANG["ad_entry_back"] = "ηζεψ μλϊαδ";
-$PMF_LANG["ad_entry_commentdelfail"] = "δϊβεαδ <strong>μΰ</strong> πξηχδ.";
-$PMF_LANG["ad_entry_savedsuc"] = "δωιπειιν πωξψε <strong>αδφμηδ</strong>.";
-$PMF_LANG["ad_entry_savedfail 	"] = "μψες δξζμ, <strong>δϊψηωδ ϊχμδ ααριρ δπϊεπιν</strong>.";
-$PMF_LANG["ad_entry_del_1"] = "δΰν ΰϊδ αθεη ωδπεωΰ";
-$PMF_LANG["ad_entry_del_2"] = "ωμ";
-$PMF_LANG["ad_entry_del_3"] = "φψικ μδξηχ?";
-$PMF_LANG["ad_entry_delsuc"] = "δπεωΰ πξηχ <strong>αδφμηδ</strong>.";
-$PMF_LANG["ad_entry_delfail"] = "δπεωΰ <strong>μΰ πξηχ</strong>!";
-$PMF_LANG["ad_entry_back"] = "ηζεψ";
+$PMF_LANG["ad_entry_theme"] = "Χ›Χ•ΧªΧ¨Χª:";
+$PMF_LANG["ad_entry_content"] = "ΧªΧ•Χ›Χ:";
+$PMF_LANG["ad_entry_keywords"] = "ΧΧ™ΧΧ•Χª ΧΧ¤ΧªΧ—:";
+$PMF_LANG["ad_entry_author"] = "ΧΧ—Χ‘Χ¨:";
+$PMF_LANG["ad_entry_category"] = "Χ§ΧΧ’Χ•Χ¨Χ™Χ”: ";
+$PMF_LANG["ad_entry_active"] = "Χ¤ΧΆΧ™Χ?";
+$PMF_LANG["ad_entry_date"] = "ΧªΧΧ¨Χ™Χ:";
+$PMF_LANG["ad_entry_changed"] = "ΧΧ” Χ©Χ•Χ Χ”?";
+$PMF_LANG["ad_entry_changelog"] = "Χ”Χ™Χ΅ΧΧ•Χ¨Χ™Χ™Χª Χ©Χ™Χ Χ•Χ™Χ™Χ:";
+$PMF_LANG["ad_entry_commentby"] = "ΧªΧ’Χ•Χ‘Χ” Χ";
+$PMF_LANG["ad_entry_comment"] = "ΧªΧ’Χ•Χ‘Χ•Χª:";
+$PMF_LANG["ad_entry_save"] = "Χ©ΧΧ•Χ¨";
+$PMF_LANG["ad_entry_delete"] = "ΧΧ—Χ§";
+$PMF_LANG["ad_entry_delcom_1"] = "Χ”ΧΧ ΧΧªΧ” Χ‘ΧΧ•Χ— Χ©Χ”ΧªΧ’Χ•Χ‘Χ” Χ©Χ Χ”ΧΧ©ΧªΧΧ© ";
+$PMF_LANG["ad_entry_delcom_2"] = "Χ¦Χ¨Χ™Χ›Χ” ΧΧ”ΧΧ—Χ§?";
+$PMF_LANG["ad_entry_commentdelsuc"] = "Χ”ΧªΧ’Χ•Χ‘Χ” Χ ΧΧ—Χ§Χ” <strong>Χ‘Χ”Χ¦ΧΧ—Χ”</strong>.";
+$PMF_LANG["ad_entry_back"] = "Χ—Χ–Χ•Χ¨ ΧΧΆΧ¨Χ";
+$PMF_LANG["ad_entry_commentdelfail"] = "Χ”ΧªΧ’Χ•Χ‘Χ” <strong>ΧΧ</strong> Χ ΧΧ—Χ§Χ”.";
+$PMF_LANG["ad_entry_savedsuc"] = "Χ”Χ©Χ™Χ Χ•Χ™Χ™Χ Χ Χ©ΧΧ¨Χ• <strong>Χ‘Χ”Χ¦ΧΧ—Χ”</strong>.";
+$PMF_LANG["ad_entry_savedfail 	"] = "ΧΧ¨Χ•ΧΆ Χ”ΧΧ–Χ, <strong>Χ”ΧªΧ¨Χ—Χ©Χ” ΧªΧ§ΧΧ” Χ‘Χ‘Χ΅Χ™Χ΅ Χ”Χ ΧªΧ•Χ Χ™Χ</strong>.";
+$PMF_LANG["ad_entry_del_1"] = "Χ”ΧΧ ΧΧªΧ” Χ‘ΧΧ•Χ— Χ©Χ”ΧΆΧ¨Χ";
+$PMF_LANG["ad_entry_del_2"] = "Χ©Χ";
+$PMF_LANG["ad_entry_del_3"] = "Χ¦Χ¨Χ™Χ ΧΧ”ΧΧ—Χ§?";
+$PMF_LANG["ad_entry_delsuc"] = "Χ”ΧΆΧ¨Χ Χ ΧΧ—Χ§ <strong>Χ‘Χ”Χ¦ΧΧ—Χ”</strong>.";
+$PMF_LANG["ad_entry_delfail"] = "Χ”ΧΆΧ¨Χ <strong>ΧΧ Χ ΧΧ—Χ§</strong>!";
+$PMF_LANG["ad_entry_back"] = "Χ—Χ–Χ•Χ¨";
 
 
 // Newsverwaltung
- $PMF_LANG["ad_news_header"] = "λεϊψϊ δξΰξψ";
-$PMF_LANG["ad_news_text"] = "ψωεν λΰο ψωεξδ";
-$PMF_LANG["ad_news_link_url"] = "χιωεψ: (<strong>αμι http://</strong>)!";
-$PMF_LANG["ad_news_link_title"] = "λεϊψϊ δχιωεψ:";
-$PMF_LANG["ad_news_link_target"] = "ιςγ";
-$PMF_LANG["ad_news_link_window"] = "τϊη ιςγ αημεο ηγω";
-$PMF_LANG["ad_news_link_faq"] = "χωψ αϊεκ δωΰμδ δπτεφδ";
-$PMF_LANG["ad_news_add"] = "δερσ ηγωεϊ";
+$PMF_LANG["ad_news_header"] = "Χ›Χ•ΧªΧ¨Χª Χ”Χ—Χ“Χ©Χ”";
+$PMF_LANG["ad_news_text"] = "ΧªΧ•Χ›Χ";
+$PMF_LANG["ad_news_link_url"] = "Χ§Χ™Χ©Χ•Χ¨: (<strong>Χ‘ΧΧ™ //:http</strong>)!";
+$PMF_LANG["ad_news_link_title"] = "Χ›Χ•ΧªΧ¨Χª Χ”Χ§Χ™Χ©Χ•Χ¨:";
+$PMF_LANG["ad_news_link_target"] = "Χ™ΧΆΧ“";
+$PMF_LANG["ad_news_link_window"] = "Χ¤ΧªΧ— Χ™ΧΆΧ“ Χ‘Χ—ΧΧ•Χ Χ—Χ“Χ©";
+$PMF_LANG["ad_news_link_faq"] = "Χ¤ΧªΧ— Χ‘Χ—ΧΧ•Χ Χ”Χ Χ•Χ›Χ—Χ™";
+$PMF_LANG["ad_news_add"] = "Χ”Χ•Χ΅Χ£ Χ—Χ“Χ©Χ•Χª";
 $PMF_LANG["ad_news_id"] = "#";
-$PMF_LANG["ad_news_headline"] = "λεϊψϊ";
-$PMF_LANG["ad_news_date"] = "ϊΰψικ";
-$PMF_LANG["ad_news_action"] = "τςεμδ";
-$PMF_LANG["ad_news_update"] = "ςγλο";
-$PMF_LANG["ad_news_delete"] = "ξηχ";
-$PMF_LANG["ad_news_nodata"] = "μΰ πξφΰ ξιγς";
-$PMF_LANG["ad_news_updatesuc"] = "δηγωεϊ ςεγλπε.";
-$PMF_LANG["ad_news_del"] = "δΰν ΰϊδ αθεη ωαψφεπκ μξηεχ ΰϊ χθς δηγωεϊ δπμ?";
-$PMF_LANG["ad_news_yesdelete"] = "λο, ξηχ!";
-$PMF_LANG["ad_news_nodelete"] = "μΰ!";
-$PMF_LANG["ad_news_delsuc"] = "χθς ηγωεϊ πξηχ.";
-$PMF_LANG["ad_news_updatenews"] = "ςγλο ηγωεϊ";
+$PMF_LANG["ad_news_headline"] = "Χ›Χ•ΧªΧ¨Χª";
+$PMF_LANG["ad_news_date"] = "ΧªΧΧ¨Χ™Χ";
+$PMF_LANG["ad_news_action"] = "Χ¤ΧΆΧ•ΧΧ”";
+$PMF_LANG["ad_news_update"] = "ΧΆΧ“Χ›Χ";
+$PMF_LANG["ad_news_delete"] = "ΧΧ—Χ§";
+$PMF_LANG["ad_news_nodata"] = "ΧΧ Χ ΧΧ¦Χ ΧΧ™Χ“ΧΆ";
+$PMF_LANG["ad_news_updatesuc"] = "Χ”Χ—Χ“Χ©Χ•Χª ΧΆΧ•Χ“Χ›Χ Χ•.";
+$PMF_LANG["ad_news_del"] = "Χ”ΧΧ ΧΧªΧ” Χ‘ΧΧ•Χ— Χ©Χ‘Χ¨Χ¦Χ•Χ Χ ΧΧΧ—Χ•Χ§ ΧΧª Χ”Χ—Χ“Χ©Χ” Χ”Χ Χ?";
+$PMF_LANG["ad_news_yesdelete"] = "Χ›Χ, ΧΧ—Χ§!";
+$PMF_LANG["ad_news_nodelete"] = "ΧΧ!";
+$PMF_LANG["ad_news_delsuc"] = "Χ”Χ—Χ“Χ©Χ” Χ ΧΧ—Χ§Χ”.";
+$PMF_LANG["ad_news_updatenews"] = "ΧΆΧ“Χ›Χ Χ—Χ“Χ©Χ•Χª";
 
 
 // Kategorieverwaltung
-$PMF_LANG["ad_categ_new"] = "δερσ χθβεψιδ";
-$PMF_LANG["ad_categ_catnum"] = "ξρτψ χθβεψιδ:";
-$PMF_LANG["ad_categ_subcatnum"] = "ξρτψ χθβεψιϊ ξωπδ:";
-$PMF_LANG["ad_categ_nya"] = "<em>μΰ ζξιο ςγιιο!</em>";
-$PMF_LANG["ad_categ_titel"] = "λεϊψϊ δχθβεψιδ:";
-$PMF_LANG["ad_categ_add"] = "δερσ χθβεψιδ";
-$PMF_LANG["ad_categ_existing"] = "χθβεψιεϊ χιιξεϊ";
+$PMF_LANG["ad_categ_new"] = "Χ”Χ•Χ΅Χ£ Χ§ΧΧ’Χ•Χ¨Χ™Χ”";
+$PMF_LANG["ad_categ_catnum"] = "ΧΧ΅Χ¤Χ¨ Χ§ΧΧ’Χ•Χ¨Χ™Χ”:";
+$PMF_LANG["ad_categ_subcatnum"] = "ΧΧ΅Χ¤Χ¨ Χ§ΧΧ’Χ•Χ¨Χ™Χª ΧΧ©Χ Χ”:";
+$PMF_LANG["ad_categ_nya"] = "<em>ΧΧ Χ–ΧΧ™Χ ΧΆΧ“Χ™Χ™Χ!</em>";
+$PMF_LANG["ad_categ_titel"] = "Χ›Χ•ΧªΧ¨Χª Χ”Χ§ΧΧ’Χ•Χ¨Χ™Χ”:";
+$PMF_LANG["ad_categ_add"] = "Χ”Χ•Χ΅Χ£ Χ§ΧΧ’Χ•Χ¨Χ™Χ”";
+$PMF_LANG["ad_categ_existing"] = "Χ§ΧΧ’Χ•Χ¨Χ™Χ•Χª Χ§Χ™Χ™ΧΧ•Χª";
 $PMF_LANG["ad_categ_id"] = "#";
-$PMF_LANG["ad_categ_categ"] = "χθβεψιδ";
-$PMF_LANG["ad_categ_subcateg"] = "χθβεψιϊ ξωπδ";
-$PMF_LANG["ad_categ_titel"] = "λεϊψϊ χθβεψιδ";
-$PMF_LANG["ad_categ_action"] = "τςεμδ";
-$PMF_LANG["ad_categ_update"] = "ςγλεο";
-$PMF_LANG["ad_categ_delete"] = "ξηιχδ";
-$PMF_LANG["ad_categ_updatecateg"] = "ςγλο χθβεψιδ";
-$PMF_LANG["ad_categ_nodata"] = "μΰ πξφΰ ξιγς αξργ δπϊεπιν";
-$PMF_LANG["ad_categ_remark"] = "ωιν μα ωψωεξεϊ μΰ ιδιε πιϊπεϊ μφτιιδ ιεϊψ, ΰν ΰϊδ ξεηχ ΰϊ δχθβεψιδ ωμδο. ΰϊδ ηιια μφιιο χθβεψιδ μλϊαδ ΰε μξηεχ ΰεϊδ..";
-$PMF_LANG["ad_categ_edit_1"] = "ςψεκ";
-$PMF_LANG["ad_categ_edit_2"] = "χθβεψιδ";
-$PMF_LANG["ad_categ_add"] = "δερσ χθβεψιδ";
-$PMF_LANG["ad_categ_added"] = "δχθβεψιδ περτδ.";
-$PMF_LANG["ad_categ_updated"] = "δχθβεψιδ ςεγλπδ.";
-$PMF_LANG["ad_categ_del_yes"] = "λο, ξηχ!";
-$PMF_LANG["ad_categ_del_no"] = "μΰ!";
-$PMF_LANG["ad_categ_deletesure"] = "δΰν μδξωικ αξηιχδ?";
-$PMF_LANG["ad_categ_deleted"] = "δχθβεψιδ πξηχδ.";
+$PMF_LANG["ad_categ_categ"] = "Χ§ΧΧ’Χ•Χ¨Χ™Χ”";
+$PMF_LANG["ad_categ_subcateg"] = "Χ§ΧΧ’Χ•Χ¨Χ™Χª ΧΧ©Χ Χ”";
+$PMF_LANG["ad_categ_titel"] = "Χ›Χ•ΧªΧ¨Χª Χ§ΧΧ’Χ•Χ¨Χ™Χ”";
+$PMF_LANG["ad_categ_action"] = "Χ¤ΧΆΧ•ΧΧ”";
+$PMF_LANG["ad_categ_update"] = "ΧΆΧ“Χ›Χ•Χ";
+$PMF_LANG["ad_categ_delete"] = "ΧΧ—Χ™Χ§Χ”";
+$PMF_LANG["ad_categ_updatecateg"] = "ΧΆΧ“Χ›Χ Χ§ΧΧ’Χ•Χ¨Χ™Χ”";
+$PMF_LANG["ad_categ_nodata"] = "ΧΧ Χ ΧΧ¦Χ ΧΧ™Χ“ΧΆ Χ‘ΧΧ΅Χ“ Χ”Χ ΧªΧ•Χ Χ™Χ";
+$PMF_LANG["ad_categ_remark"] = "Χ©Χ™Χ ΧΧ‘ ! ΧΆΧ¨Χ›Χ™Χ Χ©ΧΧ™Χ Χ ΧΧ©Χ•Χ™Χ›Χ™Χ ΧΧ§ΧΧ’Χ•Χ¨Χ™Χ” ΧΧ Χ Χ™ΧªΧ Χ™Χ ΧΧ¦Χ¤Χ™Χ™Χ”.";
+$PMF_LANG["ad_categ_edit_1"] = "ΧΆΧ¨Χ•Χ";
+$PMF_LANG["ad_categ_edit_2"] = "Χ§ΧΧ’Χ•Χ¨Χ™Χ”";
+$PMF_LANG["ad_categ_add"] = "Χ”Χ•Χ΅Χ£ Χ§ΧΧ’Χ•Χ¨Χ™Χ”";
+$PMF_LANG["ad_categ_added"] = "Χ”Χ§ΧΧ’Χ•Χ¨Χ™Χ” Χ Χ•Χ΅Χ¤Χ”.";
+$PMF_LANG["ad_categ_updated"] = "Χ”Χ§ΧΧ’Χ•Χ¨Χ™Χ” ΧΆΧ•Χ“Χ›Χ Χ”.";
+$PMF_LANG["ad_categ_del_yes"] = "Χ›Χ, ΧΧ—Χ§!";
+$PMF_LANG["ad_categ_del_no"] = "ΧΧ!";
+$PMF_LANG["ad_categ_deletesure"] = "Χ”ΧΧ ΧΧ”ΧΧ©Χ™Χ Χ‘ΧΧ—Χ™Χ§Χ”?";
+$PMF_LANG["ad_categ_deleted"] = "Χ”Χ§ΧΧ’Χ•Χ¨Χ™Χ” Χ ΧΧ—Χ§Χ”.";
 
 // Cookies
-$PMF_LANG["ad_cookie_cookiesuc 	"] = "δχεχι πεφψδ <strong>αδφμηδ</strong>.";
-$PMF_LANG["ad_cookie_already"] = "δχει πεφψδ λαψ, λςϊ ιω μκ ΰϊ δΰτωψειεϊ δαΰεϊ: ";
-$PMF_LANG["ad_cookie_again"] = "μιιφεψ ΰϊ δχεχι ωεα";
-$PMF_LANG["ad_cookie_delete"] = "μξηεχ ΰϊ δχεχι";
-$PMF_LANG["ad_cookie_no"] = "ΰιο χεχι ωξεψδ. ςν ςεβιδ ΰϊδ ιλεμ μωξεψ ΰϊ δξιγς μλπιρδ ωμκ, μλο ΰιπκ φψικ μζλεψ ΰϊ τψθι δδϊηαψεϊ ωμκ. λςϊ πρδ ΰϊ δΰετφιεϊ δαΰεϊ:";
-$PMF_LANG["ad_cookie_set"] = "φεψ ςεβιιδ";
-$PMF_LANG["ad_cookie_deleted"] = "δςεβιιδ πξηχδ αδφμηδ.";
+$PMF_LANG["ad_cookie_cookiesuc 	"] = "Χ”ΧΆΧ•Χ’Χ™Χ” Χ Χ•Χ¦Χ¨Χ” <strong>Χ‘Χ”Χ¦ΧΧ—Χ”</strong>.";
+$PMF_LANG["ad_cookie_already"] = "Χ”ΧΆΧ•Χ’Χ™Χ” Χ Χ•Χ¦Χ¨Χ” Χ›Χ‘Χ¨, Χ›ΧΆΧª Χ™Χ© ΧΧ ΧΧª Χ”ΧΧ¤Χ©Χ¨Χ•Χ™Χ•Χª Χ”Χ‘ΧΧ•Χª: ";
+$PMF_LANG["ad_cookie_again"] = "ΧΧ™Χ¦Χ•Χ¨ Χ©Χ•Χ‘ ΧΆΧ•Χ’Χ™Χ”";
+$PMF_LANG["ad_cookie_delete"] = "ΧΧΧ—Χ•Χ§ ΧΧª Χ”ΧΆΧ•Χ’Χ™Χ”";
+$PMF_LANG["ad_cookie_no"] = "ΧΆΧ•Χ’Χ™Χ” ΧΧ Χ Χ©ΧΧ¨Χ” ΧΆΧ“Χ™Χ™Χ. ΧΆΧ•Χ’Χ™Χ” ΧΧΧ¤Χ©Χ¨Χª ΧΧ ΧΧ”Χ›Χ Χ΅ ΧΧΧΆΧ¨Χ›Χª ΧΧΧ Χ¦Χ•Χ¨Χ Χ‘Χ”Χ§ΧΧ“Χª Χ©Χ ΧΧ©ΧªΧΧ© Χ•Χ΅Χ™Χ΅ΧΧ”. Χ”ΧΧ¤Χ©Χ¨Χ•Χ™Χ•Χª Χ©ΧΧ Χ”Χ:";
+$PMF_LANG["ad_cookie_set"] = "Χ¦Χ•Χ¨ ΧΆΧ•Χ’Χ™Χ™Χ”";
+$PMF_LANG["ad_cookie_deleted"] = "Χ”ΧΆΧ•Χ’Χ™Χ™Χ” Χ ΧΧ—Χ§Χ” Χ‘Χ”Χ¦ΧΧ—Χ”.";
 
 // Adminlog
-$PMF_LANG["ad_adminlog"] = "ψιωεν ξπδμ";
+$PMF_LANG["ad_adminlog"] = "Χ¨Χ™Χ©Χ•Χ Χ¤ΧΆΧ™ΧΧ•Χª ΧΧ Χ”Χ";
 
 // Passwd
-$PMF_LANG["ad_passwd_cop"] = "ωπδ ΰϊ ριρξϊκ";
-$PMF_LANG["ad_passwd_old"] = "ριρξδ ιωπδ:";
-$PMF_LANG["ad_passwd_new"] = "ριρξδ ηγωδ:";
-$PMF_LANG["ad_passwd_con"] = "εειγεΰ ριρξδ ηγωδ:";
-$PMF_LANG["ad_passwd_change"] = "ωπδ ριρξδ";
-$PMF_LANG["ad_passwd_suc"] = "δριρξδ ωεπϊδ αδφμηδ.";
-$PMF_LANG["ad_passwd_remark"] = "<strong>μϊωεξϊ μακ:</strong><br />χεχι φψιλδ μδεεφψ ωεα!";
-$PMF_LANG["ad_passwd_fail"] = "δριρξδ διωπδ <strong>ηιιαϊ</strong> μδιεϊ πλεπδ εωϊι δηγωεϊ ηιιαεϊ μδιεϊ <strong>ζδεϊ</strong>.";
+$PMF_LANG["ad_passwd_cop"] = "Χ©Χ Χ” ΧΧª Χ΅Χ™Χ΅ΧΧªΧ";
+$PMF_LANG["ad_passwd_old"] = "Χ΅Χ™Χ΅ΧΧ” Χ™Χ©Χ Χ”:";
+$PMF_LANG["ad_passwd_new"] = "Χ΅Χ™Χ΅ΧΧ” Χ—Χ“Χ©Χ”:";
+$PMF_LANG["ad_passwd_con"] = "Χ•Χ•Χ™Χ“Χ•Χ Χ΅Χ™Χ΅ΧΧ” Χ—Χ“Χ©Χ”:";
+$PMF_LANG["ad_passwd_change"] = "Χ©Χ Χ” Χ΅Χ™Χ΅ΧΧ”";
+$PMF_LANG["ad_passwd_suc"] = "Χ”Χ΅Χ™Χ΅ΧΧ” Χ©Χ•Χ ΧªΧ” Χ‘Χ”Χ¦ΧΧ—Χ”.";
+$PMF_LANG["ad_passwd_remark"] = "<strong>ΧΧªΧ©Χ•ΧΧª ΧΧ‘Χ:</strong><br />ΧΆΧ•Χ’Χ™Χ” Χ¦Χ¨Χ™Χ›Χ” ΧΧ”Χ•Χ•Χ¦Χ¨ Χ©Χ•Χ‘!";
+$PMF_LANG["ad_passwd_fail"] = "Χ”Χ΅Χ™Χ΅ΧΧ” Χ”Χ™Χ©Χ Χ” <strong>Χ—Χ™Χ™Χ‘Χª</strong> ΧΧ”Χ™Χ•Χª Χ Χ›Χ•Χ Χ” Χ•Χ©ΧªΧ™ Χ”Χ—Χ“Χ©Χ•Χª Χ—Χ™Χ™Χ‘Χ•Χª ΧΧ”Χ™Χ•Χª <strong>Χ–Χ”Χ•Χª</strong>.";
 
 // Adduser
-$PMF_LANG["ad_adus_adduser"] = "δερσ ξωϊξω";
-$PMF_LANG["ad_adus_name"] = "ων:";
-$PMF_LANG["ad_adus_password"] = "ριρξδ:";
-$PMF_LANG["ad_adus_add"] = "δερσ ξωϊξω";
-$PMF_LANG["ad_adus_suc"] = "δξωϊξω <strong>περσ</strong> αδφμηδ.";
-$PMF_LANG["ad_adus_edit"] = "ςψεκ τψετιμ";
-$PMF_LANG["ad_adus_dberr"] = "<strong>ωβιΰδ αξργ δπϊεπιν!</strong>";
-$PMF_LANG["ad_adus_exerr"] = "ων δξωϊξω <strong>χιιν</strong> λαψ.";
+$PMF_LANG["ad_adus_adduser"] = "Χ”Χ•Χ΅Χ£ ΧΧ©ΧªΧΧ©";
+$PMF_LANG["ad_adus_name"] = "Χ©Χ:";
+$PMF_LANG["ad_adus_password"] = "Χ΅Χ™Χ΅ΧΧ”:";
+$PMF_LANG["ad_adus_add"] = "Χ”Χ•Χ΅Χ£ ΧΧ©ΧªΧΧ©";
+$PMF_LANG["ad_adus_suc"] = "Χ”ΧΧ©ΧªΧΧ© <strong>Χ Χ•Χ΅Χ£</strong> Χ‘Χ”Χ¦ΧΧ—Χ”.";
+$PMF_LANG["ad_adus_edit"] = "ΧΆΧ¨Χ•Χ Χ¤Χ¨Χ•Χ¤Χ™Χ";
+$PMF_LANG["ad_adus_dberr"] = "<strong>Χ©Χ’Χ™ΧΧ” Χ‘ΧΧ΅Χ“ Χ”Χ ΧªΧ•Χ Χ™Χ!</strong>";
+$PMF_LANG["ad_adus_exerr"] = "Χ©Χ Χ”ΧΧ©ΧªΧΧ© <strong>Χ§Χ™Χ™Χ</strong> Χ›Χ‘Χ¨.";
 
 // Sessions
-$PMF_LANG["ad_sess_id"] = "ξρτψ";
-$PMF_LANG["ad_sess_sid"] = "Session ξρτψ";
+$PMF_LANG["ad_sess_id"] = "ΧΧ΅Χ¤Χ¨";
+$PMF_LANG["ad_sess_sid"] = "ΧΧ΅Χ¤Χ¨ Χ΅Χ©Χ";
 $PMF_LANG["ad_sess_ip"] = "IP";
-$PMF_LANG["ad_sess_time"] = "ζξο";
-$PMF_LANG["ad_sess_pageviews"] = "φτιεϊ αςξεγ";
-$PMF_LANG["ad_sess_search"] = "ητω";
-$PMF_LANG["ad_sess_sfs"] = "ητω sessions";
+$PMF_LANG["ad_sess_time"] = "ΧΧ©Χ Χ”Χ΅Χ©Χ";
+$PMF_LANG["ad_sess_pageviews"] = "Χ¦Χ¤Χ™Χ•Χª Χ‘ΧΆΧΧ•Χ“Χ™Χ";
+$PMF_LANG["ad_sess_search"] = "Χ—Χ¤Χ©";
+$PMF_LANG["ad_sess_sfs"] = "Χ—Χ¤Χ© Χ΅Χ©Χ";
 $PMF_LANG["ad_sess_s_ip"] = "IP:";
-$PMF_LANG["ad_sess_s_minct"] = "γχεϊ δτςεμδ:";
-$PMF_LANG["ad_sess_s_date"] = "ϊΰψικ";
-$PMF_LANG["ad_sess_s_after"] = "ΰηψι";
-$PMF_LANG["ad_sess_s_before"] = "μτπι";
-$PMF_LANG["ad_sess_s_search"] = "ητω";
-$PMF_LANG["ad_sess_session"] = "Session";
-$PMF_LANG["ad_sess_r"] = "ϊεφΰεϊ ηιτεω μ";
-$PMF_LANG["ad_sess_referer"] = "ξϊιηρ μ:";
-$PMF_LANG["ad_sess_browser"] = "γτγτο:";
-$PMF_LANG["ad_sess_ai_rubrik"] = "χθβεψιδ:";
-$PMF_LANG["ad_sess_ai_artikel"] = "ψωεξδ:";
-$PMF_LANG["ad_sess_ai_sb"] = "ξηψεζϊ ηιτεω:";
-$PMF_LANG["ad_sess_ai_sid"] = "Session ξρτψ:";
-$PMF_LANG["ad_sess_back"] = "ηζεψ";
+$PMF_LANG["ad_sess_s_minct"] = "Χ“Χ§Χ•Χª Χ”Χ¤ΧΆΧ•ΧΧ”:";
+$PMF_LANG["ad_sess_s_date"] = "ΧªΧΧ¨Χ™Χ";
+$PMF_LANG["ad_sess_s_after"] = "ΧΧ—Χ¨Χ™";
+$PMF_LANG["ad_sess_s_before"] = "ΧΧ¤Χ Χ™";
+$PMF_LANG["ad_sess_s_search"] = "Χ—Χ¤Χ©";
+$PMF_LANG["ad_sess_session"] = "Χ΅Χ©Χ";
+$PMF_LANG["ad_sess_r"] = "ΧªΧ•Χ¦ΧΧ•Χª Χ—Χ™Χ¤Χ•Χ© Χ";
+$PMF_LANG["ad_sess_referer"] = "ΧΧªΧ™Χ—Χ΅ Χ:";
+$PMF_LANG["ad_sess_browser"] = "Χ“Χ¤Χ“Χ¤Χ:";
+$PMF_LANG["ad_sess_ai_rubrik"] = "Χ§ΧΧ’Χ•Χ¨Χ™Χ”:";
+$PMF_LANG["ad_sess_ai_artikel"] = "ΧΆΧ¨Χ:";
+$PMF_LANG["ad_sess_ai_sb"] = "ΧΧ—Χ¨Χ•Χ–Χª Χ—Χ™Χ¤Χ•Χ©:";
+$PMF_LANG["ad_sess_ai_sid"] = "Χ΅Χ©Χ ΧΧ΅Χ¤Χ¨:";
+$PMF_LANG["ad_sess_back"] = "Χ—Χ–Χ•Χ¨";
 
 // Statistik
-$PMF_LANG["ad_rs"] = "ρθθιρθιχϊ ψιιθιπβ";
-$PMF_LANG["ad_rs_rating_1"] = "δγιψεβ ωμ";
-$PMF_LANG["ad_rs_rating_2"] = "δφβεϊ ξωϊξωιν:";
-$PMF_LANG["ad_rs_red"] = "ΰγεν";
-$PMF_LANG["ad_rs_green"] = "ιψεχ";
-$PMF_LANG["ad_rs_altt"] = "ςν ξξεφς πξεκ ξ2";
-$PMF_LANG["ad_rs_ahtf"] = "ςν ξξεφς βαεδδ ξ4";
-$PMF_LANG["ad_rs_no"] = "ΰιο γψεβ ζξιο";
+$PMF_LANG["ad_rs"] = "Χ΅ΧΧΧ™Χ΅ΧΧ™Χ§Χª Χ“Χ™Χ¨Χ•Χ’ ΧΆΧ¨Χ›Χ™Χ";
+$PMF_LANG["ad_rs_rating_1"] = "Χ”Χ“Χ™Χ¨Χ•Χ’ Χ©Χ";
+$PMF_LANG["ad_rs_rating_2"] = "Χ”Χ¦Χ’Χ•Χª ΧΧ©ΧªΧΧ©Χ™Χ:";
+$PMF_LANG["ad_rs_red"] = "ΧΧ“Χ•Χ";
+$PMF_LANG["ad_rs_green"] = "Χ™Χ¨Χ•Χ§";
+$PMF_LANG["ad_rs_altt"] = "ΧΆΧ ΧΧΧ•Χ¦ΧΆ Χ ΧΧ•Χ Χ2";
+$PMF_LANG["ad_rs_ahtf"] = "ΧΆΧ ΧΧΧ•Χ¦ΧΆ Χ’Χ‘Χ•Χ”Χ” Χ4";
+$PMF_LANG["ad_rs_no"] = "ΧΧ™Χ Χ“Χ¨Χ•Χ’ Χ–ΧΧ™Χ";
 
 // Auth
-$PMF_LANG["ad_auth_insert"] = "δζο ΰϊ ων δξωϊξω εδριρξδ ωμκ.";
-$PMF_LANG["ad_auth_user"] = "ων ξωϊξω:";
-$PMF_LANG["ad_auth_passwd"] = "ριρξδ:";
-$PMF_LANG["ad_auth_ok"] = "ΰιωεψ";
-$PMF_LANG["ad_auth_reset"] = "ΰτρ";
-$PMF_LANG["ad_auth_fail"] = "ων δξωϊξω ε/ΰε δριρξδ μΰ ϊχιπιν.";
-$PMF_LANG["ad_auth_sess"] = "ξρτψ δρωο πωμη.";
+$PMF_LANG["ad_auth_insert"] = "Χ”Χ–Χ ΧΧª Χ©Χ Χ”ΧΧ©ΧªΧΧ© Χ•Χ”Χ΅Χ™Χ΅ΧΧ” Χ©ΧΧ.";
+$PMF_LANG["ad_auth_user"] = "Χ©Χ ΧΧ©ΧªΧΧ©:";
+$PMF_LANG["ad_auth_passwd"] = "Χ΅Χ™Χ΅ΧΧ”:";
+$PMF_LANG["ad_auth_ok"] = "ΧΧ™Χ©Χ•Χ¨";
+$PMF_LANG["ad_auth_reset"] = "ΧΧ¤Χ΅";
+$PMF_LANG["ad_auth_fail"] = "Χ©Χ Χ”ΧΧ©ΧªΧΧ© Χ•/ΧΧ• Χ”Χ΅Χ™Χ΅ΧΧ” ΧΧ ΧªΧ§Χ™Χ Χ™Χ.";
+$PMF_LANG["ad_auth_sess"] = "Χ”Χ΅Χ™Χ΅ΧΧ” Χ Χ©ΧΧ—Χ”.";
 
 // Added v0.8 - 24.05.2001 - Bastian - Admin
-$PMF_LANG["ad_config_edit"] = "ςψεκ δβγψεϊ";
-$PMF_LANG["ad_config_save"] = "ωξεψ δβγψεϊ";
-$PMF_LANG["ad_config_reset"] = "ΰτρ";
-$PMF_LANG["ad_config_saved"] = "δδβγψεϊ πωξψε αδφμηδ.";
+$PMF_LANG["ad_config_edit"] = "ΧΆΧ¨Χ•Χ Χ”Χ’Χ“Χ¨Χ•Χª";
+$PMF_LANG["ad_config_save"] = "Χ©ΧΧ•Χ¨ Χ”Χ’Χ“Χ¨Χ•Χª";
+$PMF_LANG["ad_config_reset"] = "ΧΧ¤Χ΅";
+$PMF_LANG["ad_config_saved"] = "Χ”Χ”Χ’Χ“Χ¨Χ•Χª Χ Χ©ΧΧ¨Χ• Χ‘Χ”Χ¦ΧΧ—Χ”.";
 $PMF_LANG["ad_config_file"] = "config_english.dat";
-$PMF_LANG["ad_menu_editconfig"] = "ςψιλϊ δβγψεϊ";
-$PMF_LANG["ad_att_none"] = "ΰιο χαφιν ξφεψτιν ζξιπιν";
-$PMF_LANG["ad_att_att"] = "χαφιν ξφεψτιν:";
-$PMF_LANG["ad_att_add"] = "φψσ χεαυ";
-$PMF_LANG["ad_entryins_suc"] = "δψωεξδ πωξψδ αδφμηδ.";
-$PMF_LANG["ad_entryins_fail"] = "δϊψηωδ ωβιΰδ.";
-$PMF_LANG["ad_att_del"] = "ξηχ";
-$PMF_LANG["ad_att_nope"] = "χαφιν ξφεψτιν ιλεμιν μδωξψ ψχ αζξο δςψιλδ.";
-$PMF_LANG["ad_att_delsuc"] = "δχεαυ δξφεψσ πξηχ αδφμηδ.";
-$PMF_LANG["ad_att_delfail"] = "δϊψηωδ ωβιΰδ αξηιχϊ δχεαυ.";
-$PMF_LANG["ad_entry_add"] = "φεψ ψωεξδ";
+$PMF_LANG["ad_menu_editconfig"] = "ΧΆΧ¨Χ™Χ›Χª Χ”Χ’Χ“Χ¨Χ•Χª";
+$PMF_LANG["ad_att_none"] = "ΧΧ™Χ Χ§Χ‘Χ¦Χ™Χ ΧΧ¦Χ•Χ¨Χ¤Χ™Χ Χ–ΧΧ™Χ Χ™Χ";
+$PMF_LANG["ad_att_att"] = "Χ§Χ‘Χ¦Χ™Χ ΧΧ¦Χ•Χ¨Χ¤Χ™Χ:";
+$PMF_LANG["ad_att_add"] = "Χ¦Χ¨Χ£ Χ§Χ•Χ‘Χ¥";
+$PMF_LANG["ad_entryins_suc"] = "Χ”ΧΆΧ¨Χ Χ Χ©ΧΧ¨ Χ‘Χ”Χ¦ΧΧ—Χ”.";
+$PMF_LANG["ad_entryins_fail"] = "Χ”ΧªΧ¨Χ—Χ©Χ” Χ©Χ’Χ™ΧΧ”.";
+$PMF_LANG["ad_att_del"] = "ΧΧ—Χ§";
+$PMF_LANG["ad_att_nope"] = "Χ§Χ‘Χ¦Χ™Χ ΧΧ¦Χ•Χ¨Χ¤Χ™Χ Χ™Χ›Χ•ΧΧ™Χ ΧΧ”Χ©ΧΧ¨ Χ¨Χ§ Χ‘Χ–ΧΧ Χ”ΧΆΧ¨Χ™Χ›Χ”.";
+$PMF_LANG["ad_att_delsuc"] = "Χ”Χ§Χ•Χ‘Χ¥ Χ”ΧΧ¦Χ•Χ¨Χ£ Χ ΧΧ—Χ§ Χ‘Χ”Χ¦ΧΧ—Χ”.";
+$PMF_LANG["ad_att_delfail"] = "Χ”ΧªΧ¨Χ—Χ©Χ” Χ©Χ’Χ™ΧΧ” Χ‘ΧΧ—Χ™Χ§Χª Χ”Χ§Χ•Χ‘Χ¥.";
+$PMF_LANG["ad_entry_add"] = "Χ¦Χ•Χ¨ ΧΆΧ¨Χ";
 
 // Added v0.85 - 08.06.2001 - Bastian - Admin
-$PMF_LANG["ad_csv_make"] = "βιαει ζδ ϊξεπδ ξμΰδ ωμ λμ δξιγς ωααριρ πϊεπιν. βιαει φψικ μδςωεϊ μτηεϊ ΰηϊ μηεγω. τεψξθ δβιαει δεΰ mysql transaction file, ωΰτωψ μιφΰ ςμ-ιγι phpMyAdmin ΰε ςμ ιγι ωεψϊ δτχεγδ ωμ ξωϊξω δmysql.";
-$PMF_LANG["ad_csv_link"] = "δεψγ ΰϊ δβιαει";
-$PMF_LANG["ad_csv_head"] = "φεψ βιαει";
-$PMF_LANG["ad_att_addto"] = "δερσ χεαυ ξφεψσ μπεωΰ";
+$PMF_LANG["ad_csv_make"] = "Χ’Χ™Χ‘Χ•Χ™ Χ–Χ” ΧªΧΧ•Χ Χ” ΧΧΧΧ” Χ©Χ Χ›Χ Χ”ΧΧ™Χ“ΧΆ Χ©Χ‘Χ‘Χ΅Χ™Χ΅ Χ ΧªΧ•Χ Χ™Χ. Χ’Χ™Χ‘Χ•Χ™ Χ¦Χ¨Χ™Χ ΧΧ”ΧΆΧ©Χ•Χª ΧΧ¤Χ—Χ•Χª ΧΧ—Χª ΧΧ—Χ•Χ“Χ©. Χ¤Χ•Χ¨ΧΧ Χ”Χ’Χ™Χ‘Χ•Χ™ Χ”Χ•Χ mysql transaction file, Χ©ΧΧ¤Χ©Χ¨ ΧΧ™Χ¦Χ ΧΆΧ-Χ™Χ“Χ™ phpMyAdmin ΧΧ• ΧΆΧ Χ™Χ“Χ™ Χ©Χ•Χ¨Χª Χ”Χ¤Χ§Χ•Χ“Χ” Χ©Χ ΧΧ©ΧªΧΧ© Χ”mysql.";
+$PMF_LANG["ad_csv_link"] = "Χ”Χ•Χ¨Χ“ ΧΧª Χ”Χ’Χ™Χ‘Χ•Χ™";
+$PMF_LANG["ad_csv_head"] = "Χ¦Χ•Χ¨ Χ’Χ™Χ‘Χ•Χ™";
+$PMF_LANG["ad_att_addto"] = "Χ”Χ•Χ΅Χ£ Χ§Χ•Χ‘Χ¥ ΧΧ¦Χ•Χ¨Χ£ ΧΧ Χ•Χ©Χ";
 $PMF_LANG["ad_att_addto_2"] = "";
-$PMF_LANG["ad_att_att"] = "χεαυ:";
-$PMF_LANG["ad_att_butt"] = "ΰιωεψ";
-$PMF_LANG["ad_att_suc"] = "δχεαυ περσ αδφμηδ.";
-$PMF_LANG["ad_att_fail"] = "δϊψηωδ ϊχμδ αφψεσ δχεαυ.";
-$PMF_LANG["ad_att_close"] = "ρβεψ ημεο ζδ";
+$PMF_LANG["ad_att_att"] = "Χ§Χ•Χ‘Χ¥:";
+$PMF_LANG["ad_att_butt"] = "ΧΧ™Χ©Χ•Χ¨";
+$PMF_LANG["ad_att_suc"] = "Χ”Χ§Χ•Χ‘Χ¥ Χ Χ•Χ΅Χ£ Χ‘Χ”Χ¦ΧΧ—Χ”.";
+$PMF_LANG["ad_att_fail"] = "Χ”ΧªΧ¨Χ—Χ©Χ” ΧªΧ§ΧΧ” Χ‘Χ¦Χ¨Χ•Χ£ Χ”Χ§Χ•Χ‘Χ¥.";
+$PMF_LANG["ad_att_close"] = "Χ΅Χ’Χ•Χ¨ Χ—ΧΧ•Χ Χ–Χ”";
 
 // Added v0.85 - 08.07.2001 - Bastian - Admin
-$PMF_LANG["ad_csv_restore"] = "ςν θετρ ζδ ΰϊδ ιλεμ μωηζψ ΰϊ ϊελο αριρ δπϊεπιν, ϊεκ ωιξεω αβιαει ωπςωδ ςν phpmyfaq. ΰπΰ ωιν μα ωδξιγς δχιιν ςμεμ μδξηχ.";
-$PMF_LANG["ad_csv_file"] = "χεαυ";
-$PMF_LANG["ad_csv_ok"] = "ΰιωεψ";
-$PMF_LANG["ad_csv_linklog"] = "βαδ διρθεψιδ";
-$PMF_LANG["ad_csv_linkdat"] = "βαδ πϊεπιν";
-$PMF_LANG["ad_csv_head2"] = "ωηζψ";
-$PMF_LANG["ad_csv_no"] = "ζδ μΰ βιαει ωμ δξςψλϊ.";
-$PMF_LANG["ad_csv_prepare"] = "ξλιο ΰϊ δαριριν δπηεφιν...";
-$PMF_LANG["ad_csv_process"] = "ωΰιμδ...";
-$PMF_LANG["ad_csv_of"] = "ωμ";
-$PMF_LANG["ad_csv_suc"] = "δφμιη.";
-$PMF_LANG["ad_csv_backup"] = "βιαει";
-$PMF_LANG["ad_csv_rest"] = "ωηζψ βιαει";
+$PMF_LANG["ad_csv_restore"] = "ΧΆΧ ΧΧ•Χ¤Χ΅ Χ–Χ” ΧΧªΧ” Χ™Χ›Χ•Χ ΧΧ©Χ—Χ–Χ¨ ΧΧª ΧªΧ•Χ›Χ Χ‘Χ΅Χ™Χ΅ Χ”Χ ΧªΧ•Χ Χ™Χ, ΧªΧ•Χ Χ©Χ™ΧΧ•Χ© Χ‘Χ’Χ™Χ‘Χ•Χ™ Χ©Χ ΧΆΧ©Χ” ΧΆΧ phpmyfaq. ΧΧ Χ Χ©Χ™Χ ΧΧ‘ Χ©Χ”ΧΧ™Χ“ΧΆ Χ”Χ§Χ™Χ™Χ ΧΆΧΧ•Χ ΧΧ”ΧΧ—Χ§.";
+$PMF_LANG["ad_csv_file"] = "Χ§Χ•Χ‘Χ¥";
+$PMF_LANG["ad_csv_ok"] = "ΧΧ™Χ©Χ•Χ¨";
+$PMF_LANG["ad_csv_linklog"] = "Χ’Χ‘Χ” Χ”Χ™Χ΅ΧΧ•Χ¨Χ™Χ”";
+$PMF_LANG["ad_csv_linkdat"] = "Χ’Χ‘Χ” Χ ΧªΧ•Χ Χ™Χ";
+$PMF_LANG["ad_csv_head2"] = "Χ©Χ—Χ–Χ¨";
+$PMF_LANG["ad_csv_no"] = "Χ–Χ” ΧΧ Χ’Χ™Χ‘Χ•Χ™ Χ©Χ Χ”ΧΧΆΧ¨Χ›Χª.";
+$PMF_LANG["ad_csv_prepare"] = "ΧΧ›Χ™Χ ΧΧª Χ”Χ‘Χ΅Χ™Χ΅Χ™Χ Χ”Χ Χ—Χ•Χ¦Χ™Χ...";
+$PMF_LANG["ad_csv_process"] = "ΧΧ‘Χ¦ΧΆ...";
+$PMF_LANG["ad_csv_of"] = "Χ©Χ";
+$PMF_LANG["ad_csv_suc"] = "Χ”Χ¦ΧΧ™Χ—.";
+$PMF_LANG["ad_csv_backup"] = "Χ’Χ™Χ‘Χ•Χ™";
+$PMF_LANG["ad_csv_rest"] = "Χ©Χ—Χ–Χ¨ Χ’Χ™Χ‘Χ•Χ™";
 
 // Added v0.8 - 25.05.2001 - Bastian - Admin
-$PMF_LANG["ad_menu_backup"] = "βιαει";
-$PMF_LANG["ad_logout"] = "Session δρϊιιν αδφμηδ.";
-$PMF_LANG["ad_news_add"] = "δερσ ηγωεϊ";
-$PMF_LANG["ad_news_edit"] = "ςψεκ ηγωεϊ";
-$PMF_LANG["ad_cookie"] = "χεχιρ";
-$PMF_LANG["ad_sess_head"] = "ψΰδ ρωο.";
+$PMF_LANG["ad_menu_backup"] = "Χ’Χ™Χ‘Χ•Χ™";
+$PMF_LANG["ad_logout"] = "Χ™Χ¦ΧΧª ΧΧ”ΧΧΆΧ¨Χ›Χª.";
+$PMF_LANG["ad_news_add"] = "Χ”Χ•Χ΅Χ£ Χ—Χ“Χ©Χ•Χª";
+$PMF_LANG["ad_news_edit"] = "ΧΆΧ¨Χ•Χ Χ—Χ“Χ©Χ•Χª";
+$PMF_LANG["ad_cookie"] = "ΧΆΧ•Χ’Χ™Χ•Χª";
+$PMF_LANG["ad_sess_head"] = "Χ¨ΧΧ” Χ΅Χ©Χ.";
 
 // Added v1.1 - 06.01.2002 - Bastian
-$PMF_LANG["ad_menu_categ_edit"] = "πιδεμ χθβεψιεϊ";
-$PMF_LANG["ad_menu_stat"] = "ρθθιρθιχϊ ψιιθιπβ";
-$PMF_LANG["ad_kateg_add"] = "δερσ χθβεψιδ";
-$PMF_LANG["ad_kateg_rename"] = "ωπδ ων";
-$PMF_LANG["ad_adminlog_date"] = "ϊΰψικ";
-$PMF_LANG["ad_adminlog_user"] = "ξωϊξω";
-$PMF_LANG["ad_adminlog_ip"] = "λϊεαϊ IP";
+$PMF_LANG["ad_menu_categ_edit"] = "Χ Χ™Χ”Χ•Χ Χ§ΧΧ’Χ•Χ¨Χ™Χ•Χª";
+$PMF_LANG["ad_menu_stat"] = "Χ΅ΧΧΧ™Χ΅ΧΧ™Χ§Χª Χ“Χ™Χ¨Χ•Χ’Χ™Χ";
+$PMF_LANG["ad_kateg_add"] = "Χ”Χ•Χ΅Χ£ Χ§ΧΧ’Χ•Χ¨Χ™Χ”";
+$PMF_LANG["ad_kateg_rename"] = "Χ©Χ Χ” Χ©Χ";
+$PMF_LANG["ad_adminlog_date"] = "ΧªΧΧ¨Χ™Χ";
+$PMF_LANG["ad_adminlog_user"] = "ΧΧ©ΧªΧΧ©";
+$PMF_LANG["ad_adminlog_ip"] = "Χ›ΧªΧ•Χ‘Χª IP";
 
 $PMF_LANG["ad_stat_sess"] = "Sessions";
-$PMF_LANG["ad_stat_days"] = "ιξιν";
-$PMF_LANG["ad_stat_vis"] = "Sessions (αιχεψιν)";
-$PMF_LANG["ad_stat_vpd"] = "αιχεψιν αλμ ιεν";
-$PMF_LANG["ad_stat_fien"] = "αιχεψ ψΰωεο";
-$PMF_LANG["ad_stat_laen"] = "αιχεψ ΰηψεο";
-$PMF_LANG["ad_stat_browse"] = "ςιεο Sessions";
-$PMF_LANG["ad_stat_ok"] = "ΰιωεψ";
+$PMF_LANG["ad_stat_days"] = "Χ™ΧΧ™Χ";
+$PMF_LANG["ad_stat_vis"] = "Sessions (Χ‘Χ™Χ§Χ•Χ¨Χ™Χ)";
+$PMF_LANG["ad_stat_vpd"] = "Χ‘Χ™Χ§Χ•Χ¨Χ™Χ Χ‘Χ›Χ Χ™Χ•Χ";
+$PMF_LANG["ad_stat_fien"] = "Χ‘Χ™Χ§Χ•Χ¨ Χ¨ΧΧ©Χ•Χ";
+$PMF_LANG["ad_stat_laen"] = "Χ‘Χ™Χ§Χ•Χ¨ ΧΧ—Χ¨Χ•Χ";
+$PMF_LANG["ad_stat_browse"] = "ΧΆΧ™Χ•Χ Sessions";
+$PMF_LANG["ad_stat_ok"] = "ΧΧ™Χ©Χ•Χ¨";
 
-$PMF_LANG["ad_sess_time"] = "ζξο";
+$PMF_LANG["ad_sess_time"] = "Χ–ΧΧ";
 $PMF_LANG["ad_sess_sid"] = "Session-ID";
-$PMF_LANG["ad_sess_ip"] = "λϊεαϊ IP";
+$PMF_LANG["ad_sess_ip"] = "Χ›ΧªΧ•Χ‘Χª IP";
 
-$PMF_LANG["ad_ques_take"] = "αηψ ωΰμδ εςψεκ";
-$PMF_LANG["no_cats"] = "μΰ πξφΰε χθβεψιεϊ.";
+$PMF_LANG["ad_ques_take"] = "Χ‘Χ—Χ¨ Χ©ΧΧΧ” Χ•ΧΆΧ¨Χ•Χ";
+$PMF_LANG["no_cats"] = "ΧΧ Χ ΧΧ¦ΧΧ• Χ§ΧΧ’Χ•Χ¨Χ™Χ•Χª.";
 
 // Added v1.1 - 17.01.2002 - Bastian
-$PMF_LANG["ad_log_lger"] = "ων ξωϊξω ΰε ριρξδ μΰ πλεπιν.";
-$PMF_LANG["ad_log_sess"] = "τχιςϊ δρωο.";
-$PMF_LANG["ad_log_edit"] = "θετρ ςψιλϊ ξωϊξωιν μξωϊξωιν δαΰιν: ";
-$PMF_LANG["ad_log_crea"] = "θετρ λϊαδ ηγωδ.";
-$PMF_LANG["ad_log_crsa"] = "φεψ ψωεξδ ηγωδ.";
-$PMF_LANG["ad_log_ussa"] = "ςγλο ΰϊ δξιγς μξωϊξωιν δαΰιν: ";
-$PMF_LANG["ad_log_usde"] = "ξηχ ΰϊ δξωϊξωιν δαΰιν: ";
-$PMF_LANG["ad_log_beed"] = "θετρ ςψιλδ μξωϊξωιν δαΰιν: ";
-$PMF_LANG["ad_log_bede"] = "ξηχ ΰϊ δψωεξεϊ δαΰεϊ: ";
+$PMF_LANG["ad_log_lger"] = "Χ©Χ ΧΧ©ΧªΧΧ© ΧΧ• Χ΅Χ™Χ΅ΧΧ” ΧΧ Χ Χ›Χ•Χ Χ™Χ.";
+$PMF_LANG["ad_log_sess"] = "Χ”Χ΅Χ©Χ Χ¤Χ§ΧΆ.";
+$PMF_LANG["ad_log_edit"] = "ΧΧ•Χ¤Χ΅ ΧΆΧ¨Χ™Χ›Χª ΧΧ©ΧªΧΧ©Χ™Χ ΧΧΧ©ΧªΧΧ© Χ”Χ‘Χ: ";
+$PMF_LANG["ad_log_crea"] = "ΧΧ•Χ¤Χ΅ ΧΆΧ¨Χ Χ—Χ“Χ©.";
+$PMF_LANG["ad_log_crsa"] = "Χ¦Χ•Χ¨ ΧΆΧ¨Χ Χ—Χ“Χ©.";
+$PMF_LANG["ad_log_ussa"] = "ΧΆΧ“Χ›Χ ΧΧª Χ”ΧΧ™Χ“ΧΆ ΧΧΧ©ΧªΧΧ©Χ™Χ Χ”Χ‘ΧΧ™Χ: ";
+$PMF_LANG["ad_log_usde"] = "ΧΧ—Χ§ ΧΧª Χ”ΧΧ©ΧªΧΧ©Χ™Χ Χ”Χ‘ΧΧ™Χ: ";
+$PMF_LANG["ad_log_beed"] = "ΧΧ•Χ¤Χ΅ ΧΆΧ¨Χ™Χ›Χ” ΧΧΧ©ΧªΧΧ©Χ™Χ Χ”Χ‘ΧΧ™Χ: ";
+$PMF_LANG["ad_log_bede"] = "ΧΧ—Χ§ ΧΧª Χ”ΧΆΧ¨Χ›Χ™Χ Χ”Χ‘ΧΧ™Χ: ";
 
-$PMF_LANG["ad_start_visits"] = "αιχεψιν";
-$PMF_LANG["ad_start_articles"] = "λϊαεϊ";
-$PMF_LANG["ad_start_comments"] = "ϊβεαεϊ";
+$PMF_LANG["ad_start_visits"] = "Χ‘Χ™Χ§Χ•Χ¨Χ™Χ";
+$PMF_LANG["ad_start_articles"] = "ΧΆΧ¨Χ›Χ™Χ";
+$PMF_LANG["ad_start_comments"] = "ΧªΧ’Χ•Χ‘Χ•Χª";
 
-$PMF_LANG["ad_user_chpw"] = "ΰϊδ ιλεμ ψχ μωπεϊ ΰϊ δριρξδ ωμ δξωϊξω δπεληι ςμ ιγι \"".$PMF_LANG["ad_menu_passwd"]."\".";
+$PMF_LANG["ad_user_chpw"] = "ΧΧªΧ” Χ™Χ›Χ•Χ Χ¨Χ§ ΧΧ©Χ Χ•Χª ΧΧª Χ”Χ΅Χ™Χ΅ΧΧ” Χ©Χ Χ”ΧΧ©ΧªΧΧ© Χ”Χ Χ•Χ›Χ—Χ™ ΧΆΧ Χ™Χ“Χ™ \"".$PMF_LANG["ad_menu_passwd"]."\".";
 
 // Added v1.1 - 30.01.2002 - Bastian
-$PMF_LANG["ad_categ_paste"] = "δγαχ";
-$PMF_LANG["ad_categ_cut"] = "ηϊεκ";
-$PMF_LANG["ad_categ_copy"] = "δςϊχ";
-$PMF_LANG["ad_categ_process"] = "ξςαγ χθβεψιεϊ...";
+$PMF_LANG["ad_categ_paste"] = "Χ”Χ“Χ‘Χ§";
+$PMF_LANG["ad_categ_cut"] = "Χ—ΧªΧ•Χ";
+$PMF_LANG["ad_categ_copy"] = "Χ”ΧΆΧªΧ§";
+$PMF_LANG["ad_categ_process"] = "ΧΧΆΧ‘Χ“ Χ§ΧΧ’Χ•Χ¨Χ™Χ•Χª...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten
-$PMF_LANG["err_NotAuth"] = "<strong>ΰιπκ ξΰεωψ.</strong>";
+$PMF_LANG["err_NotAuth"] = "<strong>ΧΧ™Χ Χ ΧΧ•Χ¨Χ©Χ”.</strong>";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
-$PMF_LANG["msgPreviusPage"] = "ςξεγ χεγν";
-$PMF_LANG["msgNextPage"] = "ςξεγ δαΰ";
-$PMF_LANG["msgPageDoublePoint"] = "ςξεγ: ";
-$PMF_LANG["msgMainCategory"] = "χθβεψιδ ψΰωιϊ";
+$PMF_LANG["msgPreviusPage"] = "ΧΆΧΧ•Χ“ Χ§Χ•Χ“Χ";
+$PMF_LANG["msgNextPage"] = "ΧΆΧΧ•Χ“ Χ”Χ‘Χ";
+$PMF_LANG["msgPageDoublePoint"] = "ΧΆΧΧ•Χ“: ";
+$PMF_LANG["msgMainCategory"] = "Χ§ΧΧ’Χ•Χ¨Χ™Χ” Χ¨ΧΧ©Χ™Χª";
 
 // Added v1.2.4 - 30.01.2003 - Thorsten
-$PMF_LANG["ad_passwdsuc"] = "ριρξϊκ ωεπϊδ.";
+$PMF_LANG["ad_passwdsuc"] = "Χ΅Χ™Χ΅ΧΧªΧ Χ©Χ•Χ ΧªΧ”.";
 
 // Added v1.3.0 - 04.03.2003 - Thorsten
-$PMF_LANG["msgPDF"] = "δψΰδ ζΰϊ λχεαυ PDF";
-$PMF_LANG["ad_xml_head"] = "XML-βιαει";
-$PMF_LANG["ad_xml_hint"] = "ωξεψ διρθεψιδ ωμ ωΰμεϊ πτεφεϊ λχεαυ XML.";
-$PMF_LANG["ad_xml_gen"] = "φεψ χεαυ XML";
-$PMF_LANG["ad_entry_locale"] = "ωτδ";
-$PMF_LANG["msgLangaugeSubmit"] = "ωπδ ωτδ";
+$PMF_LANG["msgPDF"] = "Χ”Χ¨ΧΧ” Χ–ΧΧª Χ›Χ§Χ•Χ‘Χ¥ PDF";
+$PMF_LANG["ad_xml_head"] = "XML-Χ’Χ™Χ‘Χ•Χ™";
+$PMF_LANG["ad_xml_hint"] = "Χ©ΧΧ•Χ¨ Χ”Χ™Χ΅ΧΧ•Χ¨Χ™Χ” Χ©Χ Χ©ΧΧΧ•Χª Χ Χ¤Χ•Χ¦Χ•Χª Χ›Χ§Χ•Χ‘Χ¥ XML.";
+$PMF_LANG["ad_xml_gen"] = "Χ¦Χ•Χ¨ Χ§Χ•Χ‘Χ¥ XML";
+$PMF_LANG["ad_entry_locale"] = "Χ©Χ¤Χ”";
+$PMF_LANG["msgLangaugeSubmit"] = "Χ©Χ Χ” Χ©Χ¤Χ”";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
-$PMF_LANG["ad_entry_preview"] = "ϊφεβδ ξχγιξδ";
-$PMF_LANG["ad_attach_1"] = "ΰϊδ φψικ μαηεψ ϊιχιιδ μχαφιν δξφεψτιν αΰζεψ δδβγψεϊ.";
-$PMF_LANG["ad_attach_2"] = "ΰϊδ φψικ μαηεψ χιωεψ μϊιχιιϊ δχαφιν δξφεψτιν αΰζεψ δδβγψεϊ.";
-$PMF_LANG["ad_attach_3"] = "δχεαυ attachment.php αμι αγιχϊ ΰεθπθιεϊ.";
-$PMF_LANG["ad_attach_4"] = "δχεαυ δξφεψσ ηιια μδιεϊ χθο ξ ".$PMF_CONF['main.maxAttachmentSize']." Bytes.";
-$PMF_LANG["ad_menu_export"] = "ιφΰ ΰϊ δFAQ ωμκ";
-$PMF_LANG["ad_export_1"] = "απδ RSS-Feed";
+$PMF_LANG["ad_entry_preview"] = "ΧªΧ¦Χ•Χ’Χ” ΧΧ§Χ“Χ™ΧΧ”";
+$PMF_LANG["ad_attach_1"] = "ΧΧªΧ” Χ¦Χ¨Χ™Χ ΧΧ‘Χ—Χ•Χ¨ ΧªΧ™Χ§Χ™Χ™Χ” ΧΧ§Χ‘Χ¦Χ™Χ Χ”ΧΧ¦Χ•Χ¨Χ¤Χ™Χ Χ‘ΧΧ–Χ•Χ¨ Χ”Χ”Χ’Χ“Χ¨Χ•Χª.";
+$PMF_LANG["ad_attach_2"] = "ΧΧªΧ” Χ¦Χ¨Χ™Χ ΧΧ‘Χ—Χ•Χ¨ Χ§Χ™Χ©Χ•Χ¨ ΧΧªΧ™Χ§Χ™Χ™Χª Χ”Χ§Χ‘Χ¦Χ™Χ Χ”ΧΧ¦Χ•Χ¨Χ¤Χ™Χ Χ‘ΧΧ–Χ•Χ¨ Χ”Χ”Χ’Χ“Χ¨Χ•Χª.";
+$PMF_LANG["ad_attach_3"] = "Χ”Χ§Χ•Χ‘Χ¥ attachment.php Χ‘ΧΧ™ Χ‘Χ“Χ™Χ§Χª ΧΧ•ΧΧ ΧΧ™Χ•Χª.";
+$PMF_LANG["ad_attach_4"] = "Χ”Χ§Χ•Χ‘Χ¥ Χ”ΧΧ¦Χ•Χ¨Χ£ Χ—Χ™Χ™Χ‘ ΧΧ”Χ™Χ•Χª Χ§ΧΧ Χ ".$PMF_CONF['main.maxAttachmentSize']." Bytes.";
+$PMF_LANG["ad_menu_export"] = "Χ™Χ¦Χ ΧΧª Χ”ΧΆΧ¨Χ›Χ™Χ Χ©ΧΧ";
+$PMF_LANG["ad_export_1"] = "Χ‘Χ Χ” RSS-Feed";
 $PMF_LANG["ad_export_2"] = ".";
-$PMF_LANG["ad_export_file"] = "ωβιΰδ: μΰ πιϊο μιιφεψ ΰϊ δχεαυ.";
-$PMF_LANG["ad_export_news"] = "ηγωεϊ RSS-Feed";
-$PMF_LANG["ad_export_topten"] = "ξφςγ δ RSS-Feed";
-$PMF_LANG["ad_export_latest"] = "5 δψωεξεϊ δΰηψεπεϊ RSS-Feed";
-$PMF_LANG["ad_export_pdf"] = "ιφΰ αPDF ΰϊ λμ δψωεξεϊ";
-$PMF_LANG["ad_export_generate"] = "απδ RSS-Feed";
+$PMF_LANG["ad_export_file"] = "Χ©Χ’Χ™ΧΧ”: ΧΧ Χ Χ™ΧªΧ ΧΧ™Χ™Χ¦Χ•Χ¨ ΧΧª Χ”Χ§Χ•Χ‘Χ¥.";
+$PMF_LANG["ad_export_news"] = "Χ—Χ“Χ©Χ•Χª RSS-Feed";
+$PMF_LANG["ad_export_topten"] = "ΧΧ¦ΧΆΧ“ Χ” RSS-Feed";
+$PMF_LANG["ad_export_latest"] = "5 Χ”ΧΆΧ¨Χ›Χ™Χ Χ”ΧΧ—Χ¨Χ•Χ Χ™Χ RSS-Feed";
+$PMF_LANG["ad_export_pdf"] = "Χ™Χ¦Χ Χ‘ PDF ΧΧª Χ›Χ Χ”ΧΆΧ¨Χ›Χ™Χ";
+$PMF_LANG["ad_export_generate"] = "Χ‘Χ Χ” RSS-Feed";
 
-$PMF_LANG["rightsLanguage"]['adduser'] = "δερσ ξωϊξω";
-$PMF_LANG["rightsLanguage"]['edituser'] = "ςψεκ ξωϊξω";
-$PMF_LANG["rightsLanguage"]['deluser'] = "ξηχ ξωϊξω";
-$PMF_LANG["rightsLanguage"]['addbt'] = "δερσ ψωεξδ";
-$PMF_LANG["rightsLanguage"]['editbt'] = "ςψεκ ψωεξδ";
-$PMF_LANG["rightsLanguage"]['delbt'] = "ξηχ ψωεξδ";
-$PMF_LANG["rightsLanguage"]['viewlog'] = "ψΰδ ψιωεν";
-$PMF_LANG["rightsLanguage"]['adminlog'] = "ψΰδ ψιωεν ξπδμ";
-$PMF_LANG["rightsLanguage"]['delcomment'] = "ξηχ δςψδ";
-$PMF_LANG["rightsLanguage"]['addnews'] = "δερσ ηγωεϊ";
-$PMF_LANG["rightsLanguage"]['editnews'] = "ςψεκ ηγωεϊ";
-$PMF_LANG["rightsLanguage"]['delnews'] = "ξηχ ηγωεϊ";
-$PMF_LANG["rightsLanguage"]['addcateg'] = "δερσ χθβεψιδ";
-$PMF_LANG["rightsLanguage"]['editcateg'] = "ςψεκ χθβεψιδ";
-$PMF_LANG["rightsLanguage"]['delcateg'] = "ξηχ χθβεψιδ";
-$PMF_LANG["rightsLanguage"]['passwd'] = "ωπδ ριρξΰ";
-$PMF_LANG["rightsLanguage"]['editconfig'] = "ςψεκ δβγψεϊ";
-$PMF_LANG["rightsLanguage"]['addatt'] = "δερσ χεαυ";
-$PMF_LANG["rightsLanguage"]['delatt'] = "ξηχ χεαυ";
-$PMF_LANG["rightsLanguage"]['backup'] = "φεψ βιαει";
-$PMF_LANG["rightsLanguage"]['restore'] = "ωηζψ βιαει";
-$PMF_LANG["rightsLanguage"]['delquestion'] = "ξηχ ωΰμεϊ τϊεηεϊ";
+$PMF_LANG["rightsLanguage"]['adduser'] = "Χ”Χ•Χ΅Χ£ ΧΧ©ΧªΧΧ©";
+$PMF_LANG["rightsLanguage"]['edituser'] = "ΧΆΧ¨Χ•Χ ΧΧ©ΧªΧΧ©";
+$PMF_LANG["rightsLanguage"]['deluser'] = "ΧΧ—Χ§ ΧΧ©ΧªΧΧ©";
+$PMF_LANG["rightsLanguage"]['addbt'] = "Χ”Χ•Χ΅Χ£ ΧΆΧ¨Χ";
+$PMF_LANG["rightsLanguage"]['editbt'] = "ΧΆΧ¨Χ•Χ ΧΆΧ¨Χ";
+$PMF_LANG["rightsLanguage"]['delbt'] = "ΧΧ—Χ§ ΧΆΧ¨Χ";
+$PMF_LANG["rightsLanguage"]['viewlog'] = "Χ¨ΧΧ” Χ¨Χ™Χ©Χ•Χ";
+$PMF_LANG["rightsLanguage"]['adminlog'] = "Χ¨ΧΧ” Χ¨Χ™Χ©Χ•Χ Χ¤ΧΆΧ™ΧΧ•Χª ΧΧ Χ”Χ";
+$PMF_LANG["rightsLanguage"]['delcomment'] = "ΧΧ—Χ§ Χ”ΧΆΧ¨Χ”";
+$PMF_LANG["rightsLanguage"]['addnews'] = "Χ”Χ•Χ΅Χ£ Χ—Χ“Χ©Χ•Χª";
+$PMF_LANG["rightsLanguage"]['editnews'] = "ΧΆΧ¨Χ•Χ Χ—Χ“Χ©Χ•Χª";
+$PMF_LANG["rightsLanguage"]['delnews'] = "ΧΧ—Χ§ Χ—Χ“Χ©Χ•Χª";
+$PMF_LANG["rightsLanguage"]['addcateg'] = "Χ”Χ•Χ΅Χ£ Χ§ΧΧ’Χ•Χ¨Χ™Χ”";
+$PMF_LANG["rightsLanguage"]['editcateg'] = "ΧΆΧ¨Χ•Χ Χ§ΧΧ’Χ•Χ¨Χ™Χ”";
+$PMF_LANG["rightsLanguage"]['delcateg'] = "ΧΧ—Χ§ Χ§ΧΧ’Χ•Χ¨Χ™Χ”";
+$PMF_LANG["rightsLanguage"]['passwd'] = "Χ©Χ Χ” Χ΅Χ™Χ΅ΧΧ";
+$PMF_LANG["rightsLanguage"]['editconfig'] = "ΧΆΧ¨Χ•Χ Χ”Χ’Χ“Χ¨Χ•Χª";
+$PMF_LANG["rightsLanguage"]['addatt'] = "Χ”Χ•Χ΅Χ£ Χ§Χ•Χ‘Χ¥";
+$PMF_LANG["rightsLanguage"]['delatt'] = "ΧΧ—Χ§ Χ§Χ•Χ‘Χ¥";
+$PMF_LANG["rightsLanguage"]['backup'] = "Χ¦Χ•Χ¨ Χ’Χ™Χ‘Χ•Χ™";
+$PMF_LANG["rightsLanguage"]['restore'] = "Χ©Χ—Χ–Χ¨ Χ’Χ™Χ‘Χ•Χ™";
+$PMF_LANG["rightsLanguage"]['delquestion'] = "ΧΧ—Χ§ Χ©ΧΧΧ•Χª Χ¤ΧªΧ•Χ—Χ•Χª";
 
-$PMF_LANG["msgAttachedFiles"] = "χαφιν ξφεψτιν:";
+$PMF_LANG["msgAttachedFiles"] = "Χ§Χ‘Χ¦Χ™Χ ΧΧ¦Χ•Χ¨Χ¤Χ™Χ:";
 
 // Added v1.3.3 - 27.05.2003 - Thorsten
-$PMF_LANG["ad_user_action"] = "τςεμδ";
-$PMF_LANG["ad_entry_email"] = "λϊεαϊ γεΰμ:";
-$PMF_LANG["ad_entry_allowComments"] = "ΰτωψ ϊβεαεϊ";
-$PMF_LANG["msgWriteNoComment"] = "ΰιπκ ιλεμ μδερισ δςψεϊ μςψκ ζδ";
-$PMF_LANG["ad_user_realname"] = "ων ΰξιϊι:";
-$PMF_LANG["ad_export_generate_pdf"] = "φεψ χεαυ PDF";
-$PMF_LANG["ad_export_full_faq"] = "ωΰμεϊιικ ατεψξθ PDF";
-$PMF_LANG["err_bannedIP"] = "λϊεαϊ δIP ωμκ πηρξδ.";
-$PMF_LANG["err_SaveQuestion"] = "ωγεϊ πηεφιν <strong> ωξκ</strong>, <strong>λϊεαϊ ΰξιιμ</strong> ε<strong>δωΰμδ ωμκ</strong>.<br /><br /><a href=\"javascript:history.back();\">δχεγν</a><br /><br />\n";
+$PMF_LANG["ad_user_action"] = "Χ¤ΧΆΧ•ΧΧ”";
+$PMF_LANG["ad_entry_email"] = "Χ›ΧªΧ•Χ‘Χª Χ“Χ•ΧΧ:";
+$PMF_LANG["ad_entry_allowComments"] = "ΧΧ¤Χ©Χ¨ ΧªΧ’Χ•Χ‘Χ•Χª";
+$PMF_LANG["msgWriteNoComment"] = "ΧΧ™Χ Χ Χ™Χ›Χ•Χ ΧΧ”Χ•Χ΅Χ™Χ£ Χ”ΧΆΧ¨Χ•Χª ΧΧΆΧ¨Χ Χ–Χ”";
+$PMF_LANG["ad_user_realname"] = "Χ©Χ ΧΧΧ™ΧªΧ™:";
+$PMF_LANG["ad_export_generate_pdf"] = "Χ¦Χ•Χ¨ Χ§Χ•Χ‘Χ¥ PDF";
+$PMF_LANG["ad_export_full_faq"] = "Χ©ΧΧΧ•ΧªΧ™Χ™Χ Χ‘Χ¤Χ•Χ¨ΧΧ PDF";
+$PMF_LANG["err_bannedIP"] = "Χ›ΧªΧ•Χ‘Χª Χ”IP Χ©ΧΧ Χ Χ—Χ΅ΧΧ”.";
+$PMF_LANG["err_SaveQuestion"] = "Χ©Χ“Χ•Χª Χ Χ—Χ•Χ¦Χ™Χ <strong> Χ©ΧΧ</strong>, <strong>Χ›ΧªΧ•Χ‘Χª ΧΧΧ™Χ™Χ</strong> Χ•<strong>Χ”Χ©ΧΧΧ” Χ©ΧΧ</strong>.<br /><br /><a href=\"javascript:history.back();\">Χ”Χ§Χ•Χ“Χ</a><br /><br />\n";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
-$PMF_LANG["ad_entry_fontcolor"] = "φας τεπθ: ";
-$PMF_LANG["ad_entry_fontsize"] = "βεγμ τεπθ: ";
+$PMF_LANG["ad_entry_fontcolor"] = "Χ¦Χ‘ΧΆ Χ¤Χ•Χ Χ: ";
+$PMF_LANG["ad_entry_fontsize"] = "Χ’Χ•Χ“Χ Χ¤Χ•Χ Χ: ";
 
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias
-$LANG_CONF['main.language'] = array(0 => "checkbox", 1 => "χεαυ ωτδ");
-$LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "ΰτωψ δςαψϊ πϊεπιν ΰεθεξθιϊ");
-$LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => "λεϊψϊ δωΰμδ δπτεφδ");
-$LANG_CONF['main.currentVersion'] = array(0 => "print", 1 => "βιψρΰϊ δωΰμδ δπτεφδ");
-$LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "ϊιΰεψ δςξεγ");
-$LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "ξιμεϊ ξτϊη μξπεςι ηιτεω");
-$LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "ων διεφψ");
-$LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "λϊεαϊ δγεΰμ ωμ δξπδμ");
-$LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "ξιγς μιφιψϊ χωψ");
-$LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "θχρθ μςξεγ ωμη μηαψ");
-$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "βεγμ ξχριξμι ωμ χεαυ ξφεψσ α- Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
-$LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "χωψ μχεαυ δξφεψσ δπμ ΰϊ δψωεξδ?");
-$LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "φεψ ξςχα?");
-$LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "ςωδ ?");
-$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "δΰν δπκ ψεφδ ωδIP ιαγχ λΰωψ παγχιν τψθι δξωϊξωιν αadmin.php?");
-$LANG_CONF["main.numberOfRecordsPerPage"] = array(0 => "input", 1 => "ξρτψ ςξεγιν ξεφβιν αλμ ςξεγ");
-$LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "ξρτψ λϊαεϊ ηγωεϊ");
-$LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "ηρεν ΰϊ IP ζδ");
-$LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Activate mod_rewrite support? (default: disabled)");
-$LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Do you want to enable LDAP support? (default: disabled)");
+$LANG_CONF['main.language'] = array(0 => "checkbox", 1 => "Χ§Χ•Χ‘Χ¥ Χ©Χ¤Χ”");
+$LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "ΧΧ¤Χ©Χ¨ Χ”ΧΆΧ‘Χ¨Χª Χ ΧªΧ•Χ Χ™Χ ΧΧ•ΧΧ•ΧΧΧ™Χª");
+$LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => "Χ›Χ•ΧªΧ¨Χª Χ”ΧΆΧ¨Χ");
+$LANG_CONF['main.currentVersion'] = array(0 => "print", 1 => "Χ’Χ™Χ¨Χ΅Χª Χ”ΧΆΧ¨Χ");
+$LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "ΧªΧ™ΧΧ•Χ¨ Χ”ΧΧªΧ¨");
+$LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "ΧΧ™ΧΧ•Χª ΧΧ¤ΧªΧ— ΧΧΧ Χ•ΧΆΧ™ Χ—Χ™Χ¤Χ•Χ©");
+$LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Χ©Χ Χ”Χ™Χ•Χ¦Χ¨");
+$LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Χ›ΧªΧ•Χ‘Χª Χ”Χ“Χ•ΧΧ Χ©Χ ΧΆΧ•Χ¨Χ Χ”ΧΧªΧ¨");
+$LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "ΧΧ™Χ“ΧΆ ΧΧ™Χ¦Χ™Χ¨Χª Χ§Χ©Χ¨");
+$LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "ΧΧ§Χ΅Χ ΧΧΆΧΧ•Χ“ Χ©ΧΧ— ΧΧ—Χ‘Χ¨");
+$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Χ’Χ•Χ“Χ ΧΧ§Χ΅Χ™ΧΧΧ™ Χ©Χ Χ§Χ•Χ‘Χ¥ ΧΧ¦Χ•Χ¨Χ£ Χ‘- Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
+$LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Χ§Χ©Χ¨ ΧΧ§Χ•Χ‘Χ¥ Χ”ΧΧ¦Χ•Χ¨Χ£ Χ‘ΧªΧ—ΧªΧ™Χª Χ”ΧΆΧ¨Χ?");
+$LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "ΧΧ¤Χ©Χ¨ Χ¨Χ™Χ©Χ•Χ Χ©Χ Χ¤ΧΆΧ™ΧΧ•Χª Χ”ΧΧ©ΧªΧΧ©Χ™Χ?");
+$LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "ΧΧ¤Χ©Χ¨ Χ¨Χ™Χ©Χ•Χ Χ©Χ Χ¤ΧΆΧ™ΧΧ•Χª Χ”ΧΧ Χ”Χ ?");
+$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Χ”ΧΧ Χ”Χ Χ Χ¨Χ•Χ¦Χ” Χ©Χ”IP Χ™Χ‘Χ“Χ§ Χ›ΧΧ©Χ¨ Χ Χ‘Χ“Χ§Χ™Χ Χ¤Χ¨ΧΧ™ Χ”ΧΧ©ΧªΧΧ©Χ™Χ Χ‘admin.php?");
+$LANG_CONF["main.numberOfRecordsPerPage"] = array(0 => "input", 1 => "ΧΧ΅Χ¤Χ¨ ΧΆΧ¨Χ›Χ™Χ ΧΧ•Χ¦Χ’Χ™Χ Χ‘Χ›Χ ΧΆΧΧ•Χ“");
+$LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "ΧΧ΅Χ¤Χ¨ Χ§ΧΧΆΧ™ Χ—Χ“Χ©Χ•Χª");
+$LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Χ—Χ΅Χ•Χ ΧΧª IP Χ–Χ”");
+$LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Χ”Χ¤ΧΆΧ mod_rewrite? (Χ‘Χ¨Χ™Χ¨Χª ΧΧ—Χ“Χ: ΧΧ Χ¤ΧΆΧ™Χ)");
+$LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Χ”Χ¤ΧΆΧ LDAP? (Χ‘Χ¨Χ™Χ¨Χª ΧΧ—Χ“Χ: ΧΧ Χ¤ΧΆΧ™Χ)");
 
-$PMF_LANG["ad_categ_new_main_cat"] = "λχθβεψιδ ψΰωιϊ ηγωδ";
-$PMF_LANG["ad_categ_paste_error"] = "δζζϊ δχθβεψιδ αμϊι ΰτωψιϊ.";
-$PMF_LANG["ad_categ_move"] = "δζζ χθβεψιδ";
-$PMF_LANG["ad_categ_lang"] = "ωτδ";
-$PMF_LANG["ad_categ_desc"] = "ϊιΰεψ";
-$PMF_LANG["ad_categ_change"] = "ωεπδ ςν";
+$PMF_LANG["ad_categ_new_main_cat"] = "Χ›Χ§ΧΧ’Χ•Χ¨Χ™Χ” Χ¨ΧΧ©Χ™Χª Χ—Χ“Χ©Χ”";
+$PMF_LANG["ad_categ_paste_error"] = "Χ”Χ–Χ–Χª Χ”Χ§ΧΧ’Χ•Χ¨Χ™Χ” Χ‘ΧΧªΧ™ ΧΧ¤Χ©Χ¨Χ™Χª.";
+$PMF_LANG["ad_categ_move"] = "Χ”Χ–Χ– Χ§ΧΧ’Χ•Χ¨Χ™Χ”";
+$PMF_LANG["ad_categ_lang"] = "Χ©Χ¤Χ”";
+$PMF_LANG["ad_categ_desc"] = "ΧªΧ™ΧΧ•Χ¨";
+$PMF_LANG["ad_categ_change"] = "Χ”Χ•Χ—ΧΧ¤Χ” ΧΆΧ";
 
-$PMF_LANG["lostPassword"] = "ωληϊ ΰϊ ριρξϊκ? δχω λΰο.";
-$PMF_LANG["lostpwd_err_1"] = "ωβιΰδ: ων δξωϊξω εδγεΰμ μΰ πξφΰε.";
-$PMF_LANG["lostpwd_err_2"] = "ωβιΰδ: ςψλιν ωβειιν";
-$PMF_LANG["lostpwd_text_1"] = "ϊεγδ ςμ αχωϊ ξιγς δξωϊξω ωμκ.";
-$PMF_LANG["lostpwd_text_2"] = "ΰπΰ ςψεκ ριρξδ ΰιωιϊ ηγωδ αΰζεψ δπιδεμ ωμ δωΰμεϊ δπτεφεϊ ωμκ.";
-$PMF_LANG["lostpwd_mail_okay"] = "δγεΰμ πωμη.";
+$PMF_LANG["lostPassword"] = "Χ©Χ›Χ—Χª ΧΧª Χ΅Χ™Χ΅ΧΧªΧ? Χ”Χ§Χ© Χ›ΧΧ.";
+$PMF_LANG["lostpwd_err_1"] = "Χ©Χ’Χ™ΧΧ”: Χ©Χ Χ”ΧΧ©ΧªΧΧ© Χ•Χ”Χ“Χ•ΧΧ ΧΧ Χ ΧΧ¦ΧΧ•.";
+$PMF_LANG["lostpwd_err_2"] = "Χ©Χ’Χ™ΧΧ”: ΧΆΧ¨Χ›Χ™Χ Χ©Χ’Χ•Χ™Χ™Χ";
+$PMF_LANG["lostpwd_text_1"] = "ΧªΧ•Χ“Χ” ΧΆΧ Χ‘Χ§Χ©Χª ΧΧ™Χ“ΧΆ Χ”ΧΧ©ΧªΧΧ© Χ©ΧΧ.";
+$PMF_LANG["lostpwd_text_2"] = "ΧΧ Χ ΧΆΧ¨Χ•Χ Χ΅Χ™Χ΅ΧΧ” ΧΧ™Χ©Χ™Χª Χ—Χ“Χ©Χ” Χ‘ΧΧ–Χ•Χ¨ Χ”Χ Χ™Χ”Χ•Χ.";
+$PMF_LANG["lostpwd_mail_okay"] = "Χ”Χ“Χ•ΧΧ Χ Χ©ΧΧ—.";
 
-$PMF_LANG["ad_xmlrpc_button"] = "χαμ ΰϊ δβιψρδ δΰηψεπδ ωμ phpMyFAQ ςμ ιγι δΰιπθψπθ";
-$PMF_LANG["ad_xmlrpc_latest"] = "δβιψρδ δηγωδ πιϊπϊ μδεψγδ ξ";
+$PMF_LANG["ad_xmlrpc_button"] = "Χ§Χ‘Χ ΧΧª Χ”Χ’Χ™Χ¨Χ΅Χ” Χ”ΧΧ—Χ¨Χ•Χ Χ” Χ©Χ phpMyFAQ ΧΆΧ Χ™Χ“Χ™ Χ”ΧΧ™Χ ΧΧ¨Χ Χ";
+$PMF_LANG["ad_xmlrpc_latest"] = "Χ”Χ’Χ™Χ¨Χ΅Χ” Χ”Χ—Χ“Χ©Χ” Χ Χ™ΧªΧ Χª ΧΧ”Χ•Χ¨Χ“Χ” Χ";
 
 // added v1.5.0 - 2005-07-31 by Thorsten
-$PMF_LANG['ad_categ_select'] = 'Select category language';
+$PMF_LANG['ad_categ_select'] = 'Χ‘Χ—Χ¨ Χ©Χ¤Χ” ΧΧ§ΧΧ’Χ•Χ¨Χ™Χ”';
 
 // added v1.5.1 - 2005-09-06 by Thorsten
-$PMF_LANG['msgSitemap'] = 'Sitemap';
+$PMF_LANG['msgSitemap'] = 'ΧΧ¤Χª Χ”ΧΧªΧ¨';
+
+// added v1.5.2 - 2005-09-23 by Lars
+$PMF_LANG['err_inactiveArticle'] = 'ΧΆΧ¨Χ Χ–Χ” Χ ΧΧ¦Χ Χ‘ΧΆΧ¨Χ™Χ›Χ” Χ•ΧΧ Χ Χ™ΧªΧ ΧΧ¦Χ¤Χ™Χ™Χ”.';
+$PMF_LANG['msgArticleCategories'] = 'Χ§ΧΧ’Χ•Χ¨Χ™Χ•Χª ΧΆΧ‘Χ•Χ¨ ΧΆΧ¨Χ Χ–Χ”';
+
+// added v1.6.0 - 2006-02-02 by Thorsten
+$PMF_LANG['ad_entry_solution_id'] = 'ΧΧ΅Χ¤Χ¨ Χ™Χ™Χ—Χ•Χ“Χ™ ΧΧΆΧ¨Χ';
+$PMF_LANG['ad_entry_faq_record'] = 'ΧΆΧ¨Χ';
+$PMF_LANG['ad_entry_new_revision'] = 'ΧΧ™Χ¦Χ•Χ¨ Χ’Χ™Χ¨Χ΅Χ” Χ—Χ“Χ©Χ”?';
+$PMF_LANG['ad_entry_record_administration'] = 'Χ Χ™Χ”Χ•Χ ΧΆΧ¨Χ›Χ™Χ';
+$PMF_LANG['ad_entry_changelog'] = 'ΧΧΆΧ§Χ‘ Χ©Χ™Χ Χ•Χ™Χ™Χ';
+$PMF_LANG['ad_entry_revision'] = 'Χ’Χ™Χ¨Χ΅Χ”';
+$PMF_LANG['ad_changerev'] = 'Χ‘Χ—Χ¨ Χ’Χ™Χ¨Χ΅Χ”';
+$PMF_LANG['msgCaptcha'] = "ΧΧ Χ Χ”Χ§ΧΧ“ ΧΧª Χ”Χ΅Χ™ΧΧ Χ™Χ";
+$PMF_LANG['msgSelectCategories'] = 'Χ—Χ¤Χ© Χ‘ ...';
+$PMF_LANG['msgAllCategories'] = '... Χ›Χ Χ”Χ§ΧΧ’Χ•Χ¨Χ™Χ•Χª';
+$PMF_LANG['ad_you_should_update'] = 'Your phpMyFAQ installation is outdated. You should update to the latest available version.';
+$PMF_LANG['msgAdvancedSearch'] = 'Χ—Χ™Χ¤Χ•Χ© ΧΧªΧ§Χ“Χ';
+
+// added v1.6.1 - 2006-04-25 by MatteoΒ andΒ Thorsten
+$PMF_LANG['spamControlCenter'] = 'Χ‘Χ§Χ¨Χª Χ΅Χ¤ΧΧ';
+$LANG_CONF["spam.enableSafeEmail"] = array(0 => "checkbox", 1 => "Χ”Χ“Χ¤Χ΅ Χ›ΧªΧ•Χ‘Χ•Χª ΧΧ™ΧΧ™Χ™Χ Χ‘Χ¦Χ•Χ¨Χ” Χ‘ΧΧ•Χ—Χ” (Χ‘Χ¨Χ™Χ¨Χª ΧΧ—Χ“Χ: Χ¤ΧΆΧ™Χ).");
+$LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "Χ‘Χ“Χ•Χ§ ΧΧ™ΧΧ™Χ Χ—Χ΅Χ•ΧΧ•Χª Χ‘ΧΧ¤Χ΅Χ™Χ Χ¦Χ™Χ‘Χ•Χ¨Χ™Χ™Χ (Χ‘Χ¨Χ™Χ¨Χª ΧΧ—Χ“Χ: Χ¤ΧΆΧ™Χ).");
+$LANG_CONF["spam.enableCatpchaCode"] = array(0 => "checkbox", 1 => "Χ”Χ©ΧªΧΧ© Χ‘Χ΅Χ™ΧΧ Χ™Χ Χ’Χ¨Χ¤Χ™Χ™Χ ΧΧΧ™Χ©Χ•Χ¨ Χ©ΧΧ™Χ—Χª ΧΧ¤Χ΅Χ™Χ Χ¦Χ™Χ‘Χ•Χ¨Χ™Χ™Χ (Χ‘Χ¨Χ™Χ¨Χª ΧΧ—Χ“Χ: Χ¤ΧΆΧ™Χ).");
+$PMF_LANG['ad_session_expiring'] = 'Χ”Χ΅Χ©Χ Χ©ΧΧ Χ™Χ¤Χ§ΧΆ Χ‘ΧΆΧ•Χ“ %d Χ“Χ§Χ•Χª: Χ”ΧΧ ΧΧªΧ” Χ¨Χ•Χ¦Χ” ΧΧ”ΧΧ©Χ™Χ ΧΧΆΧ‘Χ•Χ“?';
+
+// added v1.6.2 - 2006-06-13 by Matteo
+$PMF_LANG['ad_stat_management'] = 'Χ Χ™Χ”Χ•Χ Χ΅Χ©Χ Χ™Χ';
+$PMF_LANG['ad_stat_choose'] = 'Χ‘Χ—Χ¨ Χ—Χ•Χ“Χ©';
+$PMF_LANG['ad_stat_delete'] = 'ΧΧ—Χ§ ΧΧ™Χ™Χ“ ΧΧª Χ”Χ΅Χ©Χ Χ™Χ Χ©Χ Χ‘Χ—Χ¨Χ•';
+
+// added v2.0.0 - 2005-09-15 by Thorsten and by Minoru TODA
+$PMF_LANG['ad_menu_glossary'] = 'ΧΧ•Χ Χ—Χ™Χ';
+$PMF_LANG['ad_glossary_add'] = 'Χ”Χ•Χ΅Χ£ ΧΧ•Χ Χ—';
+$PMF_LANG['ad_glossary_edit'] = 'ΧΆΧ¨Χ•Χ ΧΧ•Χ Χ—';
+$PMF_LANG['ad_glossary_item'] = 'Χ¤Χ¨Χ™Χ';
+$PMF_LANG['ad_glossary_definition'] = 'Χ”Χ’Χ“Χ¨Χ”';
+$PMF_LANG['ad_glossary_save'] = 'Χ©ΧΧ•Χ¨ ΧΧ•Χ Χ—';
+$PMF_LANG['ad_glossary_save_success'] = 'Χ”ΧΧ•Χ Χ— Χ Χ©ΧΧ¨ Χ‘Χ”Χ¦ΧΧ—Χ”!';
+$PMF_LANG['ad_glossary_save_error'] = 'Χ”ΧΧ•Χ Χ— ΧΧ Χ Χ©ΧΧ¨ Χ‘ΧΆΧ§Χ‘Χ•Χª ΧªΧ§ΧΧ” Χ‘ΧΧΆΧ¨Χ›Χª.';
+$PMF_LANG['ad_glossary_update_success'] = 'Χ”ΧΧ•Χ Χ— ΧΆΧ•Χ“Χ›Χ Χ‘Χ”Χ¦ΧΧ—Χ”!';
+$PMF_LANG['ad_glossary_update_error'] = 'Χ”ΧΧ•Χ Χ— ΧΧ ΧΆΧ•Χ“Χ›Χ Χ‘ΧΆΧ§Χ‘Χ•Χª ΧªΧ§ΧΧ” Χ‘ΧΧΆΧ¨Χ›Χª.';
+$PMF_LANG['ad_glossary_delete'] = 'ΧΧ—Χ§ ΧΧ•Χ Χ—';
+$PMF_LANG['ad_glossary_delete_success'] = 'Χ”ΧΧ•Χ Χ— Χ ΧΧ—Χ§ Χ‘Χ”Χ¦ΧΧ—Χ”!';
+$PMF_LANG['ad_glossary_delete_error'] = 'Χ”ΧΧ•Χ Χ— ΧΧ Χ ΧΧ—Χ§ Χ‘ΧΆΧ§Χ‘Χ•Χª ΧªΧ§ΧΧ” Χ‘ΧΧΆΧ¨Χ›Χª.';
+$PMF_LANG['ad_linkcheck_noReferenceURL'] = 'ΧΧ™ΧΧ•Χª Χ§Χ™Χ©Χ•Χ¨ ΧΧ•ΧΧ•ΧΧΧ™ ΧΧ Χ¤ΧΆΧ™Χ (URL ΧΧΧ™ΧΧ•Χª ΧΧ Χ Χ§Χ‘ΧΆ)';
+$PMF_LANG['ad_linkcheck_noAllowUrlOpen'] = 'ΧΧ™ΧΧ•Χª Χ§Χ™Χ©Χ•Χ¨ ΧΧ•ΧΧ•ΧΧΧ™ ΧΧ Χ¤ΧΆΧ™Χ (PHP ΧΧ•Χ¤Χ¦Χ™Χª allow_url_fopen ΧΧ ΧΧ•Χ¤ΧΆΧΧª)';
+$PMF_LANG['ad_linkcheck_checkResult'] = 'ΧªΧ•Χ¦ΧΧª ΧΧ™ΧΧ•Χª Χ§Χ™Χ©Χ•Χ¨ ΧΧ•ΧΧ•ΧΧΧ™';
+$PMF_LANG['ad_linkcheck_checkSuccess'] = 'OK';
+$PMF_LANG['ad_linkcheck_checkFailed'] = 'Χ Χ›Χ©Χ';
+$PMF_LANG['ad_linkcheck_failReason'] = 'Χ΅Χ™Χ‘Χª Χ”Χ›Χ©ΧΧ•Χ:';
+$PMF_LANG['ad_linkcheck_noLinksFound'] = 'ΧΧ Χ ΧΧ¦ΧΧ• Χ›ΧªΧ•Χ‘Χ•Χª URL ΧΧªΧΧ™ΧΧ•Χª ΧΧΧ™ΧΧ•Χª.';
+$PMF_LANG['ad_linkcheck_searchbadonly'] = 'Χ¨Χ§ ΧΆΧ Χ§Χ™Χ©Χ•Χ¨Χ™Χ Χ¤Χ’Χ•ΧΧ™Χ';
+$PMF_LANG['ad_linkcheck_infoReason'] = 'ΧΧ™Χ“ΧΆ Χ Χ•Χ΅Χ£:';
+$PMF_LANG['ad_linkcheck_openurl_infoprefix'] = 'Χ‘Χ‘Χ“Χ™Χ§Χ” Χ ΧΧ¦Χ <strong>%s</strong>: ';
+$PMF_LANG['ad_linkcheck_openurl_notready'] = 'ΧΧΧΧª Χ”Χ§Χ™Χ©Χ•Χ¨Χ™Χ ΧΧ ΧΧ•Χ›Χ.';
+$PMF_LANG['ad_linkcheck_openurl_maxredirect'] = 'Χ™Χ•ΧªΧ¨ Χ”Χ›Χ•Χ•Χ Χ•Χª (redirect) ΧΧ”ΧΧ§Χ΅Χ™ΧΧ•Χ <strong>%d</strong> Χ”ΧΧ•ΧªΧ¨.';
+$PMF_LANG['ad_linkcheck_openurl_urlisblank'] = 'ΧªΧ•Χ¨Χ’Χ Χ URL Χ¨Χ™Χ§.';
+$PMF_LANG['ad_linkcheck_openurl_tooslow'] = 'Χ”Χ©Χ¨Χª Χ”ΧΧΧ¨Χ— <strong>%s</strong> ΧΧ™ΧΧ™ ΧΧ• ΧΧ ΧΧ’Χ™Χ‘.';
+$PMF_LANG['ad_linkcheck_openurl_nodns'] = 'ΧªΧ¨Χ’Χ•Χ DNS Χ©Χ Χ”Χ©Χ¨Χª Χ”ΧΧΧ¨Χ— <strong>%s</strong> ΧΧ™ΧΧ™ ΧΧ• Χ Χ›Χ©Χ Χ‘ΧΆΧ§Χ‘Χ•Χª Χ‘ΧΆΧ™Χ•Χª DNS, ΧΧ§Χ•ΧΧ™Χ•Χª ΧΧ• ΧΧ¨Χ•Χ—Χ§Χ•Χª.';
+$PMF_LANG['ad_linkcheck_openurl_redirected'] = 'URL Χ”Χ•Χ’Χ‘Χ Χ <strong>%s</strong>.';
+$PMF_LANG['ad_linkcheck_openurl_ambiguous'] = 'Χ΅ΧΧΧ•Χ΅ HTTP ΧΧ Χ‘Χ¨Χ•Χ¨ <strong>%s</strong> Χ”Χ•Χ—Χ–Χ¨.';
+$PMF_LANG['ad_linkcheck_openurl_not_allowed'] = 'Χ©Χ™ΧΧª Χ” <em>HEAD</em> ΧΧ Χ ΧªΧΧ›Χª ΧΆΧ Χ™Χ“Χ™ Χ”Χ©Χ¨Χª Χ”ΧΧΧ¨Χ— <strong>%s</strong>, Χ”Χ©Χ™ΧΧ•Χª Χ”Χ ΧªΧΧ›Χ•Χª: <strong>%s</strong>.';
+$PMF_LANG['ad_linkcheck_openurl_not_found'] = 'ΧΧ©ΧΧ‘ Χ–Χ” ΧΧ™Χ Χ• Χ ΧΧ¦Χ ΧΆΧ Χ”Χ©Χ¨Χª Χ”ΧΧΧ¨Χ— <strong>%s</strong>.';
+$PMF_LANG['ad_linkcheck_protocol_unsupported'] = 'Χ¤Χ¨Χ•ΧΧ•Χ§Χ•Χ %s ΧΧ Χ ΧªΧΧ ΧΆΧ Χ™Χ“Χ™ ΧΧΧΧª Χ”Χ§Χ™Χ©Χ•Χ¨Χ™Χ Χ”ΧΧ•ΧΧ•ΧΧΧ™.';
+$PMF_LANG['ad_menu_linkconfig'] = 'URL ΧΧΧΧª';
+$PMF_LANG['ad_linkcheck_config_title'] = 'URL Χ§Χ•Χ Χ¤Χ™Χ’Χ•Χ¨Χ¦Χ™Χª ΧΧΧΧª Χ”';
+$PMF_LANG['ad_linkcheck_config_disabled'] = 'ΧΧ Χ¤ΧΆΧ™ΧΧ” URL Χ¤Χ•Χ Χ§Χ¦Χ™Χª ΧΧΧΧª Χ”';
+$PMF_LANG['ad_linkcheck_config_warnlist'] = 'Χ™ΧURL ΧΧ”Χ–Χ”Χ™Χ¨ ΧΧ¤Χ Χ™ Χ”';
+$PMF_LANG['ad_linkcheck_config_ignorelist'] = 'Χ™Χ Χ”Χ‘ΧΧ™ΧURL ΧΧ”ΧªΧΆΧΧ ΧΧ”';
+$PMF_LANG['ad_linkcheck_config_warnlist_description'] = 'URLs prefixed with items below will be issued warning regardless of whether it is valid.<br />Use this feature to detect soon-to-be defunct URLs';
+$PMF_LANG['ad_linkcheck_config_ignorelist_description'] = 'Exact URLs listed below will be assumed valid without validation.<br />Use this feature to omit URLs that fail to validate using URL Verifier';
+$PMF_LANG['ad_linkcheck_config_th_id'] = 'ID#';
+$PMF_LANG['ad_linkcheck_config_th_url'] = 'URL to match';
+$PMF_LANG['ad_linkcheck_config_th_reason'] = 'Χ΅Χ™Χ‘Χª Χ”ΧªΧΧΧ”';
+$PMF_LANG['ad_linkcheck_config_th_owner'] = 'Χ”Χ‘ΧΆΧΧ™Χ Χ©Χ Χ”ΧΆΧ¨Χ';
+$PMF_LANG['ad_linkcheck_config_th_enabled'] = 'Χ΅ΧΧ ΧΧΧ™Χ¤Χ©Χ•Χ¨ ΧΆΧ¨Χ';
+$PMF_LANG['ad_linkcheck_config_th_locked'] = 'Χ΅ΧΧ ΧΧ ΧΆΧ™ΧΧª Χ‘ΧΆΧΧ•Χª';
+$PMF_LANG['ad_linkcheck_config_th_chown'] = 'Χ΅ΧΧ ΧΧ§Χ‘ΧΧª Χ‘ΧΆΧΧ•Χª';
+$PMF_LANG['msgNewQuestionVisible'] = 'Χ™Χ© ΧΧΆΧ¨Χ•Χ ΧΧª Χ”Χ©ΧΧΧ” ΧΧ¤Χ Χ™ Χ¤Χ¨Χ΅Χ•ΧΧ”.';
+$PMF_LANG['msgQuestionsWaiting'] = 'ΧΧΧªΧ™Χ ΧΧ¤Χ¨Χ΅Χ•Χ ΧΆΧ Χ™Χ“Χ™ ΧΆΧ•Χ¨Χ Χ”ΧΧªΧ¨: ';
+$PMF_LANG['ad_entry_visibility'] = 'Χ¤Χ¨Χ΅Χ?';
+
+// added v2.0.0 - 2006-01-02 by Lars
+$PMF_LANG['ad_user_error_password'] =  "ΧΧ Χ Χ”Χ›Χ Χ΅ Χ΅Χ™Χ΅ΧΧ”. ";
+$PMF_LANG['ad_user_error_passwordsDontMatch'] =  "Χ”Χ΅Χ™Χ΅ΧΧΧ•Χª ΧΧ™Χ Χ Χ–Χ”Χ•Χª. ";
+$PMF_LANG['ad_user_error_loginInvalid'] =  "Χ©Χ Χ”ΧΧ©ΧªΧΧ© Χ©Χ¦Χ•Χ™Χ ΧΧ ΧªΧ§Χ™Χ.";
+$PMF_LANG['ad_user_error_noEmail'] =  "ΧΧ Χ Χ”Χ›Χ Χ΅ Χ›ΧªΧ•Χ‘Χª Χ“Χ•ΧΧ ΧªΧ§Χ¤Χ”. ";
+$PMF_LANG['ad_user_error_noRealName'] =  "ΧΧ Χ Χ”Χ›Χ Χ΅ ΧΧª Χ©ΧΧ Χ”ΧΧΧ™ΧªΧ™. ";
+$PMF_LANG['ad_user_error_delete'] =  "ΧΧ Χ Χ™ΧªΧ Χ”Χ™Χ” ΧΧΧ—Χ•Χ§ ΧΧª Χ—Χ©Χ‘Χ•Χ Χ”ΧΧ©ΧªΧΧ©. ";
+$PMF_LANG['ad_user_error_noId'] =  "ΧΧ Χ¦Χ•Χ™Χ ID. ";
+$PMF_LANG['ad_user_error_protectedAccount'] =  "Χ—Χ©Χ‘Χ•Χ Χ”ΧΧ©ΧªΧΧ© ΧΧ•Χ’Χ. ";
+$PMF_LANG['ad_user_deleteUser'] = "ΧΧ—Χ§ ΧΧ©ΧªΧΧ©";
+$PMF_LANG['ad_user_status'] = "Χ΅ΧΧΧ•Χ΅:";
+$PMF_LANG['ad_user_lastModified'] = "ΧΆΧ“Χ›Χ•Χ ΧΧ—Χ¨Χ•Χ:";
+$PMF_LANG['ad_gen_cancel'] = "Χ‘ΧΧ";
+$PMF_LANG["rightsLanguage"]['addglossary'] = "Χ”Χ•Χ΅Χ£ ΧΧ•Χ Χ—";
+$PMF_LANG["rightsLanguage"]['editglossary'] = "ΧΆΧ¨Χ•Χ ΧΧ•Χ Χ—";
+$PMF_LANG["rightsLanguage"]['delglossary'] = "ΧΧ—Χ§ ΧΧ•Χ Χ—";
+$PMF_LANG["ad_menu_group_administration"] = "Χ§Χ‘Χ•Χ¦Χ•Χª";
+$PMF_LANG['ad_user_loggedin'] = 'Χ Χ›Χ Χ΅Χª ΧΧΧΆΧ¨Χ›Χª Χ‘ΧªΧ•Χ¨ ';
+
+$PMF_LANG['ad_group_details'] = "Χ¤Χ¨ΧΧ™ Χ§Χ‘Χ•Χ¦Χ”";
+$PMF_LANG['ad_group_add'] = "Χ”Χ•Χ΅Χ£ Χ§Χ‘Χ•Χ¦Χ”";
+$PMF_LANG['ad_group_add_link'] = "Χ”Χ•Χ΅Χ£ Χ§Χ™Χ©Χ•Χ¨";
+$PMF_LANG['ad_group_name'] = "Χ©Χ:";
+$PMF_LANG['ad_group_description'] = "ΧªΧΧ•Χ¨:";
+$PMF_LANG['ad_group_autoJoin'] = "Auto-join:";
+$PMF_LANG['ad_group_suc'] = "Χ§Χ‘Χ•Χ¦Χ” Χ Χ•Χ΅Χ¤Χ” <strong>Χ‘Χ”Χ¦ΧΧ—Χ”</strong>.";
+$PMF_LANG['ad_group_error_noName'] = "ΧΧ Χ Χ”Χ›Χ Χ΅ Χ©Χ Χ§Χ‘Χ•Χ¦Χ”. ";
+$PMF_LANG['ad_group_error_delete'] = "ΧΧ Χ Χ™ΧªΧ Χ”Χ™Χ” ΧΧΧ—Χ•Χ§ ΧΧª Χ”Χ§Χ‘Χ•Χ¦Χ”. ";
+$PMF_LANG['ad_group_deleted'] = "Χ”Χ§Χ‘Χ•Χ¦Χ” Χ ΧΧ—Χ§Χ” Χ‘Χ”Χ¦ΧΧ—Χ”.";
+$PMF_LANG['ad_group_deleteGroup'] = "ΧΧ—Χ§ Χ§Χ‘Χ•Χ¦Χ”";
+$PMF_LANG['ad_group_deleteQuestion'] = "Χ”ΧΧ ΧΧªΧ” Χ‘ΧΧ•Χ— Χ©Χ¦Χ¨Χ™Χ ΧΧΧ—Χ•Χ§ ΧΧª Χ”Χ§Χ‘Χ•Χ¦Χ” Χ”Χ–Χ•?";
+$PMF_LANG['ad_user_uncheckall'] = "Χ‘ΧΧ ΧΧª Χ›Χ Χ”Χ‘Χ—Χ™Χ¨Χ•Χª";
+$PMF_LANG['ad_group_membership'] = "Χ—Χ‘Χ¨Χ•Χª Χ‘Χ§Χ‘Χ•Χ¦Χ”";
+$PMF_LANG['ad_group_members'] = "Χ—Χ‘Χ¨Χ™Χ";
+$PMF_LANG['ad_group_addMember'] = "+";
+$PMF_LANG['ad_group_removeMember'] = "-";
+
+// added v2.0.0 - 2006-07-20 by Matteo
+$PMF_LANG['ad_export_which_cat'] = 'Χ”Χ’Χ‘Χ ΧΧª Χ”ΧΧ™Χ“ΧΆ ΧΧ™Χ¦Χ•Χ (ΧΧ•Χ¤Χ¦Χ™Χ•Χ ΧΧ™)';
+$PMF_LANG['ad_export_cat_downwards'] = 'Χ™Χ•Χ¨Χ“?';
+$PMF_LANG['ad_export_type'] = 'Χ¤Χ•Χ¨ΧΧ Χ™Χ¦Χ•Χ';
+$PMF_LANG['ad_export_type_choose'] = 'Χ‘Χ—Χ¨ Χ‘ΧΧ—Χ“ Χ”Χ¤Χ•Χ¨ΧΧΧ™Χ Χ”Χ ΧªΧΧ›Χ™Χ:';
+$PMF_LANG['ad_export_download_view'] = 'Χ”Χ•Χ¨Χ“Χ” ΧΧ• Χ¦Χ¤Χ™Χ™Χ” ΧΆΧ Χ”ΧΧ΅Χ?';
+$PMF_LANG['ad_export_download'] = 'Χ”Χ•Χ¨Χ“Χ”';
+$PMF_LANG['ad_export_view'] = 'Χ¦Χ¤Χ™Χ™Χ” ΧΆΧ Χ”ΧΧ΅Χ';
+$PMF_LANG['ad_export_gen_xhtml'] = 'Χ¦Χ•Χ¨ Χ§Χ•Χ‘Χ¥ XHTML';
+$PMF_LANG['ad_export_gen_docbook'] = 'Χ¦Χ•Χ¨ Χ§Χ•Χ‘Χ¥ Docbook';
+
+// added v2.0.0 - 2006-07-22 by Matteo
+$PMF_LANG['ad_news_data'] = 'ΧªΧ•Χ›Χ Χ”Χ—Χ“Χ©Χ”';
+$PMF_LANG['ad_news_author_name'] = 'Χ©Χ Χ”Χ›Χ•ΧªΧ‘:';
+$PMF_LANG['ad_news_author_email'] = 'Χ“Χ•ΧΧ Χ”Χ›Χ•ΧªΧ‘:';
+$PMF_LANG['ad_news_set_active'] = 'Χ¤ΧΆΧ™Χ:';
+$PMF_LANG['ad_news_allowComments'] = 'ΧΧ¤Χ©Χ¨ ΧªΧ’Χ•Χ‘Χ•Χª:';
+$PMF_LANG['ad_news_expiration_window'] = 'Χ—ΧΧ•Χ Χ¤Χ§Χ™ΧΆΧª Χ”Χ—Χ“Χ©Χ” (ΧΧ•Χ¤Χ¦Χ™Χ•Χ ΧΧ™)';
+$PMF_LANG['ad_news_from'] = 'Χ¤ΧΆΧ™Χ Χ:';
+$PMF_LANG['ad_news_to'] = 'Χ¤ΧΆΧ™Χ ΧΆΧ“:';
+$PMF_LANG['ad_news_insertfail'] = 'ΧΧ¨ΧΆΧ” ΧªΧ§ΧΧ” Χ‘Χ”Χ›Χ Χ΅Χª Χ”Χ—Χ“Χ©Χ” ΧΧ‘Χ΅Χ™Χ΅ Χ”Χ ΧªΧ•Χ Χ™Χ.';
+$PMF_LANG['ad_news_updatefail'] = 'ΧΧ¨ΧΆΧ” ΧªΧ§ΧΧ” Χ‘ΧΆΧ“Χ›Χ•Χ Χ”Χ—Χ“Χ©Χ”.';
+$PMF_LANG['newsShowCurrent'] = 'Χ”Χ¦Χ’ Χ—Χ“Χ©Χ•Χª Χ Χ•Χ›Χ—Χ™Χ•Χª.';
+$PMF_LANG['newsShowArchive'] = 'Χ—Χ“Χ©Χ•Χª Χ Χ•Χ΅Χ¤Χ•Χª';
+$PMF_LANG['newsArchive'] = ' ΧΧ¨Χ›Χ™Χ•Χ Χ—Χ“Χ©Χ•Χª';
+$PMF_LANG['newsWriteComment'] = 'Χ”Χ’Χ‘ ΧΆΧ ΧΆΧ¨Χ Χ–Χ”';
+$PMF_LANG['newsCommentDate'] = 'Χ”Χ•Χ΅Χ£ Χ‘: ';
+
+// added v2.0.0 - 2006-07-29 by Matteo & Thorsten
+$PMF_LANG['ad_record_expiration_window'] = 'Χ—ΧΧ•Χ Χ¤Χ§Χ™ΧΆΧª Χ”ΧΆΧ¨Χ (ΧΧ•Χ¤Χ¦Χ™Χ•Χ ΧΧ™)';
+$PMF_LANG['admin_mainmenu_home'] = 'ΧΆΧΧ•Χ“ Χ”Χ‘Χ™Χª';
+$PMF_LANG['admin_mainmenu_users'] = 'ΧΧ©ΧªΧΧ©Χ™Χ';
+$PMF_LANG['admin_mainmenu_content'] = 'ΧªΧ•Χ›Χ';
+$PMF_LANG['admin_mainmenu_statistics'] = 'Χ΅ΧΧΧ™Χ΅ΧΧ™Χ§Χ•Χª';
+$PMF_LANG['admin_mainmenu_exports'] = 'Χ™Χ¦Χ•Χ';
+$PMF_LANG['admin_mainmenu_backup'] = 'Χ’Χ™Χ‘Χ•Χ™';
+$PMF_LANG['admin_mainmenu_configuration'] = 'ΧªΧ¦Χ•Χ¨Χ”';
+$PMF_LANG['admin_mainmenu_logout'] = 'Χ™Χ¦Χ™ΧΧ” ΧΧ”ΧΧΆΧ¨Χ›Χª';
+
+// added v2.0.0 - 2006-08-15 by Thorsten and Matteo
+$PMF_LANG["ad_categ_owner"] = 'Χ”Χ§ΧΧ’Χ•Χ¨Χ™Χ” Χ‘Χ‘ΧΆΧΧ•Χª';
+$PMF_LANG['adminSection'] = 'Χ Χ™Χ”Χ•Χ';
+$PMF_LANG['err_expiredArticle'] = 'ΧΆΧ¨Χ Χ–Χ” Χ¤Χ§ΧΆ Χ•ΧΧ Χ Χ™ΧªΧ ΧΧ¦Χ¤Χ™Χ™Χ”';
+$PMF_LANG['err_expiredNews'] = 'Χ—Χ“Χ©Χ” Χ–Χ• Χ¤Χ§ΧΆΧ” Χ•ΧΧ™Χ Χ” Χ Χ™ΧªΧ Χª ΧΧ¦Χ¤Χ™Χ™Χ”';
+$PMF_LANG['err_inactiveNews'] = 'Χ—Χ“Χ©Χ” Χ–Χ• Χ ΧΧ¦ΧΧª Χ‘ΧΆΧ¨Χ™Χ›Χ” Χ•ΧΧ Χ Χ™ΧªΧ Χª ΧΧ¦Χ¤Χ™Χ™Χ”';
+$PMF_LANG['msgSearchOnAllLanguages'] = 'Χ—Χ¤Χ© Χ‘Χ›Χ Χ”Χ©Χ¤Χ•Χª:';
+$PMF_LANG['ad_entry_tags'] = 'ΧªΧ’Χ™Χ';
+$PMF_LANG['msg_tags'] = 'ΧªΧ’Χ™Χ';
+
+// added v2.0.0 - 2006-09-03 by Matteo
+$PMF_LANG['ad_linkcheck_feedback_url-batch1'] = 'Χ‘Χ•Χ“Χ§...';
+$PMF_LANG['ad_linkcheck_feedback_url-batch2'] = 'Χ‘Χ•Χ“Χ§...';
+$PMF_LANG['ad_linkcheck_feedback_url-batch3'] = 'Χ‘Χ•Χ“Χ§...';
+$PMF_LANG['ad_linkcheck_feedback_url-checking'] = 'Χ‘Χ•Χ“Χ§...';
+$PMF_LANG['ad_linkcheck_feedback_url-disabled'] = 'ΧΧ Χ¤ΧΆΧ™Χ';
+$PMF_LANG['ad_linkcheck_feedback_url-linkbad'] = 'Links KO';
+$PMF_LANG['ad_linkcheck_feedback_url-linkok'] = 'Links OK';
+$PMF_LANG['ad_linkcheck_feedback_url-noaccess'] = 'ΧΧ™Χ Χ’Χ™Χ©Χ”';
+$PMF_LANG['ad_linkcheck_feedback_url-noajax'] = 'No AJAX';
+$PMF_LANG['ad_linkcheck_feedback_url-nolinks'] = 'ΧΧ™Χ Χ§Χ™Χ©Χ•Χ¨Χ™Χ';
+$PMF_LANG['ad_linkcheck_feedback_url-noscript'] = 'ΧΧ™Χ Χ΅Χ§Χ¨Χ™Χ¤Χ';
+
+// added v2.0.0 - 2006-09-02 by Thomas
+$PMF_LANG['msg_related_articles'] = 'ΧΆΧ¨Χ›Χ™Χ Χ§Χ©Χ•Χ¨Χ™Χ';
+$LANG_CONF['records.numberOfRelatedArticles'] = array(0 => "input", 1 => "ΧΧ΅Χ¤Χ¨ ΧΆΧ¨Χ›Χ™Χ Χ§Χ©Χ•Χ¨Χ™Χ");
+
+// added v2.0.0 - 2006-09-09 by Rudi
+$PMF_LANG['ad_categ_trans_1'] = 'ΧªΧ¨Χ’Χ';
+$PMF_LANG['ad_categ_trans_2'] = 'Χ§ΧΧ’Χ•Χ¨Χ™Χ”';
+$PMF_LANG['ad_categ_translatecateg'] = 'ΧªΧ¨Χ’Χ Χ§ΧΧ’Χ•Χ¨Χ™Χ”';
+$PMF_LANG['ad_categ_translate'] = 'ΧªΧ¨Χ’Χ';
+$PMF_LANG['ad_categ_transalready'] = 'ΧΧªΧ•Χ¨Χ’Χ Χ›Χ‘Χ¨ Χ‘: ';
+$PMF_LANG["ad_categ_deletealllang"] = 'ΧΧ—Χ§ Χ‘Χ›Χ Χ”Χ©Χ¤Χ•Χª?';
+$PMF_LANG["ad_categ_deletethislang"] = 'ΧΧ—Χ§ Χ‘Χ©Χ¤Χ” Χ–Χ• Χ‘ΧΧ‘Χ“?';
+$PMF_LANG["ad_categ_translated"] = "Χ”Χ§ΧΧ’Χ•Χ¨Χ™Χ” ΧªΧ•Χ¨Χ’ΧΧ”.";
+
+// added v2.0.0 - 2006-09-21 by Rudi
+$PMF_LANG["ad_categ_show"] = "ΧΧ‘Χ ΧΆΧ";
+$PMF_LANG['ad_menu_categ_structure'] = "ΧΧ‘Χ ΧΆΧ ΧΆΧ Χ§ΧΧ’Χ•Χ¨Χ™Χ” Χ‘Χ©Χ¤Χ•Χª Χ”Χ‘ΧΧ•Χª";
+
+// added v2.0.0 - 2006-09-26 by Thorsten
+$PMF_LANG['ad_entry_userpermission'] = 'Χ”Χ¨Χ©ΧΧ•Χª ΧΧ©ΧªΧΧ©:';
+$PMF_LANG['ad_entry_grouppermission'] = 'Χ”Χ¨Χ©ΧΧ•Χª Χ§Χ‘Χ•Χ¦Χ”:';
+$PMF_LANG['ad_entry_all_users'] = 'Χ’Χ™Χ©Χ” ΧΧ›Χ Χ”ΧΧ©ΧªΧΧ©Χ™Χ';
+$PMF_LANG['ad_entry_restricted_users'] = 'Χ’Χ™Χ©Χ” ΧΧ•Χ’Χ‘ΧΧª Χ';
+$PMF_LANG['ad_entry_all_groups'] = 'Χ’Χ™Χ©Χ” ΧΧ›Χ Χ”Χ§Χ‘Χ•Χ¦Χ•Χª';
+$PMF_LANG['ad_entry_restricted_groups'] = 'Χ’Χ™Χ©Χ” ΧΧ•Χ’Χ‘ΧΧª Χ';
+$PMF_LANG['ad_session_expiration'] = 'Χ–ΧΧ Χ Χ•ΧªΧ¨ ΧΆΧ“ ΧΧ¤Χ§Χ™ΧΆΧª Χ”Χ΅Χ©Χ Χ©ΧΧ';
+$PMF_LANG['ad_user_active'] = 'Χ¤ΧΆΧ™Χ';
+$PMF_LANG['ad_user_blocked'] = 'Χ—Χ΅Χ•Χ';
+$PMF_LANG['ad_user_protected'] = 'ΧΧ•Χ’Χ';
+
+// added v2.0.0 - 2006-10-07 by Matteo
+$PMF_LANG['ad_entry_intlink'] = 'Χ‘Χ—Χ¨ ΧΆΧ¨Χ ΧΧ”Χ›Χ Χ΅Χ” Χ›Χ§Χ™Χ©Χ•Χ¨...';
+
+//added 2.0.0 - 2006-10-10 by Rudi
+$PMF_LANG["ad_categ_paste2"] = "Χ”Χ“Χ‘Χ§ ΧΧ—Χ¨Χ™";
+$PMF_LANG["ad_categ_remark_move"] = "Χ”Χ—ΧΧ¤Χ” Χ‘Χ™Χ Χ©ΧªΧ™ Χ§ΧΧ’Χ•Χ¨Χ™Χ•Χª ΧΧ¤Χ©Χ¨Χ™ Χ¨Χ§ Χ‘ΧΧ•ΧªΧ” Χ¨ΧΧ”.";
+$PMF_LANG["ad_categ_remark_overview"] = "Χ”Χ§ΧΧ’Χ•Χ¨Χ™Χ•Χª Χ™Χ•Χ¦Χ’Χ• Χ‘Χ΅Χ“Χ¨ Χ Χ›Χ•Χ Χ¨Χ§ ΧΧ Χ”Χ•Χ’Χ“Χ¨Χ• ΧΆΧ‘Χ•Χ¨ ΧΧ•ΧªΧ” Χ©Χ¤Χ” (ΧªΧ•Χ¨ Χ¨ΧΧ©Χ•Χ).";
+
+// added v2.0.0 - 2006-10-15 by Matteo
+$PMF_LANG['msgUsersOnline'] = ' :: %d ΧΧ•Χ¨Χ—Χ™Χ Χ• %d Χ¨Χ©Χ•ΧΧ™Χ';
+$PMF_LANG['ad_adminlog_del_older_30d'] = 'ΧΧ—Χ§ Χ¨Χ™Χ©Χ•ΧΧ™Χ Χ‘Χ Χ™ Χ™Χ•ΧªΧ¨ Χ 30 Χ™Χ•Χ';
+$PMF_LANG['ad_adminlog_delete_success'] = 'Χ¨Χ™Χ©Χ•ΧΧ™Χ Χ™Χ©Χ Χ™Χ Χ ΧΧ—Χ§Χ• Χ‘Χ”Χ¦ΧΧ—Χ”.';
+$PMF_LANG['ad_adminlog_delete_failure'] = 'ΧΧ Χ ΧΧ—Χ§Χ• Χ¨Χ™Χ©Χ•ΧΧ™Χ: ΧΧ¨ΧΆΧ” ΧªΧ§ΧΧ” Χ‘Χ‘Χ™Χ¦Χ•ΧΆ Χ”Χ‘Χ§Χ©Χ”.';
+
+// added 2.0.0 - 2006-11-19 by Thorsten
+$PMF_LANG['opensearch_plugin_install'] = 'Χ”Χ•Χ΅Χ£ Χ”Χ¨Χ—Χ‘Χª Χ—Χ™Χ¤Χ•Χ©';
+$PMF_LANG['ad_quicklinks'] = 'Χ§Χ™Χ©Χ•Χ¨Χ™Χ ΧΧ”Χ™Χ¨Χ™Χ';
+$PMF_LANG['ad_quick_category'] = 'Χ”Χ•Χ΅Χ£ Χ§ΧΧ’Χ•Χ¨Χ™Χ” Χ—Χ“Χ©Χ”';
+$PMF_LANG['ad_quick_record'] = 'Χ”Χ•Χ΅Χ£ ΧΆΧ¨Χ Χ—Χ“Χ©';
+$PMF_LANG['ad_quick_user'] = 'Χ”Χ•Χ΅Χ£ ΧΧ©ΧªΧΧ© Χ—Χ“Χ©';
+$PMF_LANG['ad_quick_group'] = 'Χ”Χ•Χ΅Χ£ Χ§Χ‘Χ•Χ¦Χ” Χ—Χ“Χ©Χ”';
+
+// added v2.0.0 - 2006-12-30 by Matteo
+$PMF_LANG['msgNewTranslationHeader'] = 'Χ”Χ¦ΧΆΧª ΧªΧ¨Χ’Χ•Χ';
+$PMF_LANG['msgNewTranslationAddon'] = 'Χ”Χ¦ΧΆΧª Χ”ΧªΧ¨Χ’Χ•Χ Χ©ΧΧ ΧªΧ¤Χ•Χ¨Χ΅Χ ΧΧΧ—Χ¨ Χ‘Χ“Χ™Χ§Χª ΧΆΧ•Χ¨Χ Χ”ΧΧªΧ¨. Χ©Χ“Χ•Χª Χ Χ“Χ¨Χ©Χ™Χ Χ”Χ <strong>Χ©Χ™ΧΧ</strong>, <strong>Χ›ΧªΧ•Χ‘Χª Χ”ΧΧ™ΧΧ™Χ™Χ Χ©ΧΧ</strong>, <strong>ΧªΧ¨Χ’Χ•Χ Χ”Χ›Χ•ΧªΧ¨Χª Χ©ΧΧ</strong> Χ• <strong>ΧªΧ¨Χ’Χ•Χ Χ”ΧªΧ•Χ›Χ Χ©ΧΧ</strong>. ΧΧ Χ Χ”Χ¤Χ¨Χ“ ΧΧª ΧΧ™ΧΧ•Χª Χ”ΧΧ¤ΧªΧ— ΧΆΧ Χ¨Χ•Χ•Χ— Χ‘ΧΧ‘Χ“.';
+$PMF_LANG['msgNewTransSourcePane'] = 'Χ—ΧΧ•Χ Χ™Χª Χ”ΧΧ§Χ•Χ¨';
+$PMF_LANG['msgNewTranslationPane'] = 'Χ—ΧΧ•Χ Χ™Χª Χ”ΧªΧ¨Χ’Χ•Χ';
+$PMF_LANG['msgNewTranslationName'] = $PMF_LANG['msgNewContentName'];
+$PMF_LANG['msgNewTranslationMail'] = $PMF_LANG['msgNewContentMail'];
+$PMF_LANG['msgNewTranslationKeywords'] = $PMF_LANG['msgNewContentKeywords'];
+$PMF_LANG['msgNewTranslationSubmit'] = 'Χ©ΧΧ— Χ”Χ¦ΧΆΧªΧ';
+$PMF_LANG['msgTranslate'] = 'Χ”Χ¦ΧΆ ΧªΧ¨Χ’Χ•Χ ΧΆΧ‘Χ•Χ¨';
+$PMF_LANG['msgTranslateSubmit'] = 'Χ”ΧªΧ—Χ ΧªΧ¨Χ’Χ•Χ...';
+$PMF_LANG['msgNewTranslationThanks'] = "ΧªΧ•Χ“Χ” ΧΆΧ Χ”Χ¦ΧΆΧª Χ”ΧªΧ¨Χ’Χ•Χ Χ©ΧΧ!";
+
+// added v2.0.0 - 2007-02-27 by Matteo
+$PMF_LANG["rightsLanguage"]['addgroup'] = "Χ”Χ•Χ΅Χ£ Χ—Χ©Χ‘Χ•Χ Χ•Χª ΧΧ§Χ‘Χ•Χ¦Χ”";
+$PMF_LANG["rightsLanguage"]['editgroup'] = "ΧΆΧ¨Χ•Χ Χ—Χ©Χ‘Χ•Χ Χ•Χª Χ‘Χ§Χ‘Χ•Χ¦Χ”";
+$PMF_LANG["rightsLanguage"]['delgroup'] = "ΧΧ—Χ§ Χ—Χ©Χ‘Χ•Χ Χ•Χª Χ‘Χ§Χ‘Χ•Χ¦Χ”";
+
+// added v2.0.0 - 2007-02-27 by Thorsten
+$PMF_LANG['ad_news_link_parent'] = 'Χ§Χ™Χ©Χ•Χ¨ Χ Χ¤ΧªΧ— Χ‘Χ—ΧΧ•Χ Χ”ΧΧ‘ (Χ‘ΧΧªΧ¨ ΧΆΧ Χ¤Χ¨Χ™Χ™ΧΧ™Χ)';
+
+// added v2.0.0 - 2007-03-04 by Thorsten
+$PMF_LANG['ad_menu_comments'] = 'ΧªΧ’Χ•Χ‘Χ•Χª';
+$PMF_LANG['ad_comment_administration'] = 'Χ Χ™Χ”Χ•Χ ΧªΧ’Χ•Χ‘Χ•Χª';
+$PMF_LANG['ad_comment_faqs'] = 'ΧªΧ’Χ•Χ‘Χ•Χª ΧΧΆΧ¨Χ›Χ™Χ:';
+$PMF_LANG['ad_comment_news'] = 'ΧªΧ’Χ•Χ‘Χ•Χª ΧΧ—Χ“Χ©Χ•Χª:';
+$PMF_LANG['ad_groups'] = 'Χ§Χ‘Χ•Χ¦Χ•Χª';
+
+// added v2.0.0 - 2007-03-10 by Thorsten
+$LANG_CONF['records.orderby'] = array(0 => 'select', 1 => 'ΧΧ™Χ•Χ ΧΆΧ¨Χ›Χ™Χ (ΧΧ¤Χ™ ΧªΧ›Χ•Χ Χ”)');
+$LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'ΧΧ™Χ•Χ ΧΆΧ¨Χ›Χ™Χ (Χ΅Χ“Χ¨ ΧΆΧ•ΧΧ” ΧΧ• Χ™Χ•Χ¨Χ“)');
+$PMF_LANG['ad_conf_order_id'] = 'ID (Χ‘Χ¨Χ™Χ¨Χª ΧΧ—Χ“Χ)';
+$PMF_LANG['ad_conf_order_thema'] = 'Χ›Χ•ΧªΧ¨Χª';
+$PMF_LANG['ad_conf_order_visits'] = 'ΧΧ΅Χ¤Χ¨ Χ¦Χ¤Χ™Χ•Χª';
+$PMF_LANG['ad_conf_order_datum'] = 'ΧªΧΧ¨Χ™Χ';
+$PMF_LANG['ad_conf_order_author'] = 'Χ›Χ•ΧªΧ‘';
+$PMF_LANG['ad_conf_desc'] = 'Χ΅Χ“Χ¨ Χ™Χ•Χ¨Χ“';
+$PMF_LANG['ad_conf_asc'] = 'Χ΅Χ“Χ¨ ΧΆΧ•ΧΧ”';
+$PMF_LANG['mainControlCenter'] = 'ΧªΧ¦Χ•Χ¨Χ” Χ‘Χ΅Χ™Χ΅Χ™Χª';
+$PMF_LANG['recordsControlCenter'] = 'ΧªΧ¦Χ•Χ¨Χª ΧΆΧ¨Χ›Χ™Χ';
+
+// added v2.0.0 - 2007-03-17 by Thorsten
+$PMF_LANG['msgInstantResponse'] = 'ΧªΧ’Χ•Χ‘Χ” ΧΧ™Χ™Χ“Χ™Χª';
+$PMF_LANG['msgInstantResponseMaxRecords'] = '. Find below the first %d records.';
+
+// added v2.0.0 - 2007-03-29 by Thorsten
+$LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "Χ”Χ¤ΧΆΧΧª ΧΆΧ¨Χ Χ—Χ“Χ© (Χ‘Χ¨Χ™Χ¨Χª ΧΧ—Χ“Χ: ΧΧ ΧΧ•Χ¤ΧΆΧ)");
+$LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Χ”Χ¨Χ©Χ” ΧªΧ’Χ•Χ‘Χ•Χª ΧΧΆΧ¨Χ›Χ™Χ Χ—Χ“Χ©Χ™Χ (Χ‘Χ¨Χ™Χ¨Χª ΧΧ—Χ“Χ: ΧΧ ΧΧ•Χ¤ΧΆΧ)");
+
+// added v2.0.0 - 2007-04-04 by Thorsten
+$PMF_LANG['msgAllCatArticles'] = 'ΧΆΧ¨Χ›Χ™Χ Χ‘Χ§ΧΧ’Χ•Χ¨Χ™Χ” Χ–Χ•';
