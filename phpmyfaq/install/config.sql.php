@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: config.sql.php,v 1.40 2007-03-29 20:44:23 thorstenr Exp $
+ * $Id: config.sql.php,v 1.41 2007-04-26 19:09:28 matteo Exp $
  *
  * INSERT instruction for configuration
  *
@@ -20,35 +20,37 @@
  */
 
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.administrationMail', 'webmaster@example.org')";
-$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.maxAttachmentSize', '100000')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.bannedIPs', '')";
-$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.languageDetection', 'true')";
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.contactInformations', '')";
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.currentVersion', '".VERSION."')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.disableAttachments', 'true')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.enableAdminLog', 'true')";
-$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('records.enableVisibilityQuestions', 'false')";
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.enableRewriteRules', 'false')";
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.enableUserTracking', 'true')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.ipCheck', 'false')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.language', '".$language."')";
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.languageDetection', 'true')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.ldapSupport', 'false')";
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.maxAttachmentSize', '100000')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.metaDescription', 'phpMyFAQ should be the answer for all questions in life')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.metaKeywords', '')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.metaPublisher', 'John Doe')";
-$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.enableRewriteRules', 'false')";
-$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.contactInformations', '')";
-$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.numberOfShownNewsEntries', '3')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.numberOfRecordsPerPage', '10')";
-$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('records.numberOfRelatedArticles', '5')";
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.numberOfShownNewsEntries', '3')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.permLevel', '".$permLevel."')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.phpMyFAQToken', '')";
-$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('records.orderby', 'id')";
-$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('records.sortby', 'DESC')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.referenceURL', '')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.send2friendText', '')";
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.titleFAQ', 'phpMyFAQ Codename \"Prometheus\"')";
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.urlValidateInterval', '86400')";
+
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('records.defaultActivation', 'false')";
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('records.defaultAllowComments', 'false')";
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('records.enableVisibilityQuestions', 'false')";
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('records.numberOfRelatedArticles', '5')";
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('records.orderby', 'id')";
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('records.sortby', 'DESC')";
+
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('spam.checkBannedWords', 'true')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('spam.enableCatpchaCode', 'true')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('spam.enableSafeEmail', 'true')";
-$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.titleFAQ', 'phpMyFAQ Codename \"Prometheus\"')";
-$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.enableUserTracking', 'true')";
-$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.urlValidateInterval', '86400')";
-$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.currentVersion', '".VERSION."')";
-$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('records.defaultActivation', 'false')";
-$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('records.defaultAllowComments', 'false')";
