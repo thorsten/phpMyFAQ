@@ -4,12 +4,13 @@
 
     <script type="text/javascript" src="inc/js/prototype.js"></script>
     <form id="instantform" action="?action=instantresponse" method="post">
-        <fieldset>
-            <legend>{msgSearchWord}</legend>
+    <input id="ajaxlanguage" name="ajaxlanguage" type="hidden" value="{ajaxlanguage}" />
+    <fieldset>
+        <legend>{msgSearchWord}</legend>
 
-            <input class="inputfield" id="instantfield" type="text" name="search" value="{searchString}" />
+        <input class="inputfield" id="instantfield" type="text" name="search" value="{searchString}" />
 
-        </fieldset>
+    </fieldset>
     </form>
     <script type="text/javascript">
     //<![CDATA[

@@ -31,19 +31,12 @@ session_start();
 
 $searchString = '';
 
-//
-// get language (default: english)
-//
-$pmf = new PMF_Init();
-$LANGCODE = $pmf->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
-// Preload English strings
-require_once ('lang/language_en.php');
-
-if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE)) {
-    // Overwrite English strings with the ones we have in the current language
+if (isset($_POST['ajaxlanguage']) && PMF_Init::isASupportedLanguage($_POST['ajaxlanguage'])) {
+    $LANGCODE = trim($_POST['ajaxlanguage']);
     require_once('lang/language_'.$LANGCODE.'.php');
 } else {
     $LANGCODE = 'en';
+    require_once('lang/language_en.php');
 }
 
 $category = new PMF_Category($LANGCODE);
@@ -55,5 +48,10 @@ $category->buildTree();
 //
 if (isset($_POST['search'])) {
     $searchString = $db->escape_string(trim(strip_tags($_POST['search'])));
-    print utf8_encode(searchEngine($searchString, '%', false, true));
+    $result = searchEngine($searchString, '%', false, true);
+    if ($PMF_LANG['metaCharset'] != 'utf-8') {
+        print utf8_encode($result);
+    } else {
+        print $result;
+    }
 }
