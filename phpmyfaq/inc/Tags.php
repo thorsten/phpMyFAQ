@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Tags.php,v 1.35 2007-04-23 21:02:56 matteo Exp $
+* $Id: Tags.php,v 1.36 2007-04-28 15:06:55 thorstenr Exp $
 *
 * The main Tags class
 *
@@ -219,46 +219,46 @@ class PMF_Tags
         }
 
         // Store tags and references for the faq record
-        foreach ($tags as $tagging_id => $tagging_name) {
-            if (!in_array($tagging_name, $current_tags)) {
-                // Create the new tag
-                $new_tagging_id = $this->db->nextID(SQLPREFIX.'faqtags', 'tagging_id');
-                $query = sprintf("
-                    INSERT INTO
-                        %sfaqtags
-                    (tagging_id, tagging_name)
-                        VALUES
-                    (%d, '%s')",
-                    SQLPREFIX,
-                    $new_tagging_id,
-                    $tagging_name
-                );
-                $this->db->query($query);
-                // Add the tag reference for the faq record
-                $query = sprintf("
-                    INSERT INTO
-                        %sfaqdata_tags
-                    (record_id, tagging_id)
-                        VALUES
-                    (%d, %d)",
-                    SQLPREFIX,
-                    $record_id,
-                    $new_tagging_id
-                );
-                $this->db->query($query);
-            } else {
-                // Add the tag reference for the faq record
-                $query = sprintf("
-                    INSERT INTO
-                        %sfaqdata_tags
-                    (record_id, tagging_id)
-                        VALUES
-                    (%d, %d)",
-                    SQLPREFIX,
-                    $record_id,
-                    array_search($tagging_name, $current_tags)
-                );
-                @$this->db->query($query);
+        foreach ($tags as $tagging_name) {
+            if (strlen($tagging_name) > 0) {
+                if (!in_array($tagging_name, $current_tags)) {
+                    // Create the new tag
+                    $new_tagging_id = $this->db->nextID(SQLPREFIX.'faqtags', 'tagging_id');
+                    $query = sprintf("
+                        INSERT INTO
+                            %sfaqtags
+                        (tagging_id, tagging_name)
+                            VALUES
+                        (%d, '%s')",
+                        SQLPREFIX,
+                        $new_tagging_id,
+                        $tagging_name);
+                    $this->db->query($query);
+
+                    // Add the tag reference for the faq record
+                    $query = sprintf("
+                        INSERT INTO
+                            %sfaqdata_tags
+                        (record_id, tagging_id)
+                            VALUES
+                        (%d, %d)",
+                        SQLPREFIX,
+                        $record_id,
+                        $new_tagging_id);
+                    $this->db->query($query);
+                } else {
+                    // Add the tag reference for the faq record
+                    $query = sprintf("
+                        INSERT INTO
+                            %sfaqdata_tags
+                        (record_id, tagging_id)
+                            VALUES
+                        (%d, %d)",
+                        SQLPREFIX,
+                        $record_id,
+                        array_search($tagging_name, $current_tags));
+                    $this->db->query($query);
+                }
             }
         }
 
