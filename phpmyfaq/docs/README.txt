@@ -1,6 +1,6 @@
-$Id: README.txt,v 1.89 2007-04-29 09:17:44 thorstenr Exp $
+$Id: README.txt,v 1.90 2007-04-29 10:22:12 thorstenr Exp $
 
-phpMyFAQ 2.0.0-RC
+phpMyFAQ 2.0.0-RC2
 Codename "Prometheus"
 
 Installation/Update:
@@ -9,19 +9,14 @@ Please read the documentation (documentation.en.html) carefully.
 Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
-Changes since 2.0.0-beta2:
-- added some documentation (Thorsten)
-- added stylesheets for right-to-left text-direction (Roy Ronen)
-- updated Hewbrew translation (Roy Ronen)
-- updated Spanish translation (Eduardo Polidor)
-- improved administration backend (Thorsten, Matteo)
-- many bugfixes
+Changes since 2.0.0-RC:
+- some bugfixes
 
 For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.0.0-RC - 2007-04-29
+Version 2.0.0-RC2 - 2007-05
 - added rewritten and enhanced user management (Lars)
 - added rewritten and enhanced authorization management (Lars)
 - added user and group based permissions for categories and records (Thorsten)
