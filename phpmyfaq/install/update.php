@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.142 2007-04-23 18:22:50 thorstenr Exp $
+* $Id: update.php,v 1.143 2007-04-29 10:17:56 thorstenr Exp $
 *
 * Main update script
 *
@@ -21,7 +21,7 @@
 * under the License.
 */
 
-define('NEWVERSION', '2.0.0-RC');
+define('NEWVERSION', '2.0.0-RC2');
 define('COPYRIGHT', '&copy; 2001-2007 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
@@ -201,6 +201,7 @@ if ($step == 1) {
     <option value="2.0.0-alpha">phpMyFAQ 2.0.0-alpha</option>
     <option value="2.0.0-beta">phpMyFAQ 2.0.0-beta</option>
     <option value="2.0.0-beta2">phpMyFAQ 2.0.0-beta2</option>
+    <option value="2.0.0-RC">phpMyFAQ 2.0.0-RC</option>
 </select>
 
 <p class="center"><input type="submit" value="Go to step 2 of 5" class="button" /></p>
@@ -1370,8 +1371,8 @@ if ($step == 5) {
         $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.enableUserTracking' WHERE config_name = 'tracking'";
         $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.urlValidateInterval' WHERE config_name = 'URLValidateInterval'";
         $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.currentVersion' WHERE config_name = 'version'";
-        $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('records.defaultActivation', 'false')";
-        $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('records.defaultAllowComments', 'false')";
+        $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('records.defaultActivation', 'false')";
+        $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('records.defaultAllowComments', 'false')";
     }
 
     //
