@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.save.php,v 1.58 2007-04-22 19:46:59 thorstenr Exp $
+ * $Id: record.save.php,v 1.59 2007-04-29 20:03:05 thorstenr Exp $
  *
  * Save or delete a FAQ record
  *
@@ -118,7 +118,7 @@ if (    isset($submit[1])
 	if ('yes' == $revision) {
         // Add current version into revision table
         $faq->addNewRevision($record_id, $record_lang);
-        $revision_id += 1;
+        $revision_id = $nextID(SQLPREFIX.'faqdata', 'revision_id');
 	}
 
     $recordData = array(
