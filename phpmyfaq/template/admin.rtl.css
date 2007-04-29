@@ -20,6 +20,10 @@
  * under the License.
  */
 
+* {
+    margin: 0;
+    padding: 0;
+}
 /* color defintions */
 #header {
     background: #0D487A;
@@ -43,17 +47,25 @@ h2 {
     font-size: 18px;
     font-style: italic;
     border-bottom: 1px solid;
+    margin-bottom: 15px;
 }
 img {
     border: 0;
 }
 ul {
+    margin-right: 15px;
     list-style: square;
 }
 fieldset {
     margin-top: 15px;
     border: 1px solid #D0D9D9;
+    padding: 5px;
 }
+
+fieldset.fullwidth {
+    width: 775px;
+}
+
 legend {
     background: #EDF2F2;
     font-weight: bold;
@@ -74,6 +86,19 @@ p.hr{
    padding-bottom:8px;
    border-bottom:1px solid #D0D9D9;
 }
+p {
+    padding-bottom: 10px;
+}
+dl {
+    margin-bottom: 40px;
+}
+dt {
+    float: right;
+    width: 200px;
+}
+dd {
+    margin: 0 200px 10px 0px;
+}
 
 /**
 * Forms
@@ -90,8 +115,14 @@ label.lefteditor {
     width: 135px;
     margin-right: 5px;
 }
+label.leftconfig {
+    float: right;
+    text-align: right;
+    width: 235px;
+    margin-left: 5px;
+}
 input[type=text], input[type=password] {
-    
+    float: right;
     margin-bottom: 10px;
 }
 input.right {
@@ -122,14 +153,12 @@ textarea#content {
     padding: 20px;
 }
 #header h1{
-    display: table-cell;
+    float: right;
     vertical-align: middle;
     width: 350px;
-    float:left;
 }
 
 div#langform {
-    display: table-cell;
     float:right;
     vertical-align: middle;
     font-size: 95%;
@@ -137,7 +166,7 @@ div#langform {
 }
 
 div#sessionexpiration {
-    display: table-cell;
+    float: right;
     vertical-align: middle;
     text-align: center;
     font-size: 95%;
@@ -153,13 +182,6 @@ div#sessioncounter {
     text-align: center;
 }
 
-.centerlogin {
-    width: 500px;
-    margin: 0px auto;
-}
-fieldset.login {
-    background-color: #EDF2F2;
-}
 
 /* Administration Menu */
 #navcontainer {
@@ -188,6 +210,7 @@ fieldset.login {
 #navcontainer ul li a {
     width: 92px;
     height: 18px;
+    border-top: 1px solid #C2D1DE;
     border-right: 1px solid #C2D1DE;
     padding-top: 4px;
     padding-left: 3px;
@@ -196,6 +219,8 @@ fieldset.login {
     text-decoration: none;
     display: block;
     text-align: center;
+    -moz-border-radius-topleft: 5px;
+    -moz-border-radius-topright: 5px;
 }
 #navcontainer ul li a:hover {
     color: #07243D;
@@ -210,7 +235,7 @@ fieldset.login {
     border: 1px solid #c60;
     color: #fff;
 }
-#logout {
+#navcontainer ul li a.logout {
     background: #FF4500;
 }
 
@@ -219,6 +244,7 @@ fieldset.login {
     margin-left: 20px;
     padding: 0;
     height: 24px;
+    float:right;
 }
 #subnavcontainer ul {
     border: 0;
@@ -241,6 +267,7 @@ fieldset.login {
 #subnavcontainer ul li a {
     width: 92px;
     height: 18px;
+    border-left: 1px solid #C2D1DE;
     border-right: 1px solid #C2D1DE;
     padding-top: 4px;
     padding-left: 2px;
@@ -250,6 +277,8 @@ fieldset.login {
     display: block;
     text-align: center;
     font-size: 80%;
+    -moz-border-radius-topleft: 5px;
+    -moz-border-radius-topright: 5px;
 }
 #subnavcontainer ul li a:hover {
     color: #07243D;
@@ -279,6 +308,9 @@ fieldset.login {
 #quicklinks {
     width: 300px;
     float: left;
+}
+#versioncheck {
+    margin-bottom: 15px;
 }
 
 /* table styles */
@@ -355,8 +387,8 @@ input.submit {
 	background-color: #F8F8FF;
 	padding: 3px;
 	margin-bottom: 10px;
-	height: 130px;
-	overflow: auto;
+	height: auto;
+
 }
 
 /**
@@ -710,7 +742,7 @@ div.button_row input.reset {
 
 /* Tags */
 #tags_autocomplete_choices {
-    margin: -14px 0 0 -40px;
+    margin: 0;
 }
 #tags_autocomplete_choices li {
     list-style: none;
