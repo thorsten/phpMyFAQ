@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Configuration.php,v 1.15 2007-04-29 12:20:25 thorstenr Exp $
+* $Id: Configuration.php,v 1.16 2007-04-29 14:40:23 thorstenr Exp $
 *
 * The main class for fetching the configuration, update and delete items.
 *
@@ -89,7 +89,17 @@ class PMF_Configuration
         if (!isset($this->config[$item])) {
             $this->getAll();
         }
-        return $this->config[$item];
+        switch ($this->config[$item]) {
+            case 'true':
+        		return true;
+        		break;
+        	case 'false':
+        	    return false;
+        	    break;
+        	default:
+        	    return $this->config[$item];
+        		break;
+        }
     } // end func get()
 
     /**
