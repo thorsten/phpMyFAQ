@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: config.sql.php,v 1.41 2007-04-26 19:09:28 matteo Exp $
+ * $Id: config.sql.php,v 1.42 2007-04-29 10:34:44 thorstenr Exp $
  *
  * INSERT instruction for configuration
  *
@@ -41,7 +41,7 @@ $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.permLevel', '".$pe
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.phpMyFAQToken', '')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.referenceURL', '')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.send2friendText', '')";
-$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.titleFAQ', 'phpMyFAQ Codename \"Prometheus\"')";
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.titleFAQ', 'phpMyFAQ ".VERSION."')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.urlValidateInterval', '86400')";
 
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('records.defaultActivation', 'false')";
