@@ -1,15 +1,13 @@
 ﻿<?php
-/**
- * $Id: language_he.php,v 1.26 2007-04-24 17:19:00 thorstenr Exp $
- *
- * Hebrew language file
- *
- * @author      Daniel Shkuri <dan-shk@bezeqint.net>
- * @author      Niran Shay <nirshay1@012.net.il> 
- * @author      Roy Ronen <royroy15@gmail.com>
- * @since       2004-08-27
- * @copyright   (c) 2004-2007 phpMyFAQ Team
- *
+/******************************************************************************
+ * File:				language_he.php
+ * Description:         Hebrew language file.
+ * Authors:				Daniel Shkuri <dan-shk@bezeqint.net>
+ * Date:				2004-08-27
+ * Last Update:		    2007-04-17
+ * Copyright:           (c) 2006 phpMyFAQ Team
+ * Thanks:              Niran Shay <nirshay1@012.net.il> 
+ * Thanks:              Roy Ronen <royroy15@gmail.com>
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -19,13 +17,13 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
- */
+ ******************************************************************************/
 
 $PMF_LANG["metaCharset"] = "utf-8";
 $PMF_LANG["metaLanguage"] = "he";
 $PMF_LANG["language"] = "hebrew";
 $PMF_LANG["dir"] = "rtl"; // ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic/Hebrew language)
-$PMF_LANG["copyright"] = "כל הזכויות שמורות לטיפ נדל\"ן 2004-2007 ©";
+
 // Navigation
 $PMF_LANG["msgCategory"] = "קטגוריות";
 $PMF_LANG["msgShowAllCategories"] = "הראה את כל הקטגוריות";
@@ -574,6 +572,10 @@ $LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "מספר
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "חסום את IP זה");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "הפעל mod_rewrite? (ברירת מחדל: לא פעיל)");
 $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "הפעל LDAP? (ברירת מחדל: לא פעיל)");
+$LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "URL בסיסי לאימות קישורים (דוגמה: http://www.example.org/faq)");
+$LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "מרווח בין אימות קישורים (בשניות)");
+$LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "לא להציג באתר שאלות חדשות ?");
+$LANG_CONF['main.permLevel'] = array(0 => "input", 1 => "רמת הרשאות");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "כקטגוריה ראשית חדשה";
 $PMF_LANG["ad_categ_paste_error"] = "הזזת הקטגוריה בלתי אפשרית.";
@@ -662,15 +664,15 @@ $PMF_LANG['ad_linkcheck_openurl_ambiguous'] = 'סטטוס HTTP לא ברור <st
 $PMF_LANG['ad_linkcheck_openurl_not_allowed'] = 'שיטת ה <em>HEAD</em> לא נתמכת על ידי השרת המארח <strong>%s</strong>, השיטות הנתמכות: <strong>%s</strong>.';
 $PMF_LANG['ad_linkcheck_openurl_not_found'] = 'משאב זה אינו נמצא על השרת המארח <strong>%s</strong>.';
 $PMF_LANG['ad_linkcheck_protocol_unsupported'] = 'פרוטוקול %s לא נתמך על ידי מאמת הקישורים האוטומטי.';
-$PMF_LANG['ad_menu_linkconfig'] = 'URL מאמת';
-$PMF_LANG['ad_linkcheck_config_title'] = 'URL קונפיגורצית מאמת ה';
+$PMF_LANG['ad_menu_linkconfig'] = 'מאמת URL';
+$PMF_LANG['ad_linkcheck_config_title'] = 'קונפיגורצית מאמת ה URL';
 $PMF_LANG['ad_linkcheck_config_disabled'] = 'לא פעילה URL פונקצית מאמת ה';
-$PMF_LANG['ad_linkcheck_config_warnlist'] = 'יםURL להזהיר מפני ה';
-$PMF_LANG['ad_linkcheck_config_ignorelist'] = 'ים הבאיםURL להתעלם מה';
-$PMF_LANG['ad_linkcheck_config_warnlist_description'] = 'URLs prefixed with items below will be issued warning regardless of whether it is valid.<br />Use this feature to detect soon-to-be defunct URLs';
-$PMF_LANG['ad_linkcheck_config_ignorelist_description'] = 'Exact URLs listed below will be assumed valid without validation.<br />Use this feature to omit URLs that fail to validate using URL Verifier';
+$PMF_LANG['ad_linkcheck_config_warnlist'] = 'להזהיר מפני הכתובות הבאות';
+$PMF_LANG['ad_linkcheck_config_ignorelist'] = 'להתעלם מהכתובות הבאות';
+$PMF_LANG['ad_linkcheck_config_warnlist_description'] = 'הזהרה תוצג עבור הכתובות המופיעות מטה גם אם הן תקינות.<br />השתמש בתכונה זו כדי להזהיר מפני כתובות העומדות להפוך ללא פעילות בקרוב.';
+$PMF_LANG['ad_linkcheck_config_ignorelist_description'] = 'הכתובות המופיעות כאן יחשבו תקינות ללא בדיקה.<br />השתמש בתכונה זו עבור כתובות תקינות שהמאמת מוצא כלא תקינות.';
 $PMF_LANG['ad_linkcheck_config_th_id'] = 'ID#';
-$PMF_LANG['ad_linkcheck_config_th_url'] = 'URL to match';
+$PMF_LANG['ad_linkcheck_config_th_url'] = 'URL להתאמה';
 $PMF_LANG['ad_linkcheck_config_th_reason'] = 'סיבת התאמה';
 $PMF_LANG['ad_linkcheck_config_th_owner'] = 'הבעלים של הערך';
 $PMF_LANG['ad_linkcheck_config_th_enabled'] = 'סמן לאיפשור ערך';
@@ -882,3 +884,8 @@ $LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "הרש
 
 // added v2.0.0 - 2007-04-04 by Thorsten
 $PMF_LANG['msgAllCatArticles'] = 'ערכים בקטגוריה זו';
+$PMF_LANG['msgDescriptionInstantResponse'] = 'התשובות יופיעו תוך כדי הקלדה...';
+$PMF_LANG['msgTagSearch'] = 'ערכים מתויגים';
+$PMF_LANG['ad_pmf_info'] = 'נתוני phpMyFAQ';
+$PMF_LANG['ad_online_info'] = 'בדיקת גירסה מקוונת';
+$PMF_LANG['ad_system_info'] = 'נתוני המערכת';
