@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Captcha.php,v 1.10 2007-02-28 20:03:48 thorstenr Exp $
+ * $Id: Captcha.php,v 1.11 2007-04-29 20:14:16 thorstenr Exp $
  *
  * The phpMyFAQ Captcha class
  *
@@ -161,8 +161,6 @@ class PMF_Captcha
     //
 
     /**
-     * printCaptcha()
-     *
      * Gives the HTML output code for the Captcha
      *
      * @param   string  The action parameter
@@ -187,8 +185,6 @@ class PMF_Captcha
     }
 
     /**
-     * showCaptchaImg()
-     *
      * Draw the Captcha
      *
      * @return  void
@@ -216,8 +212,6 @@ class PMF_Captcha
     }
 
     /**
-     * getCaptchaCode()
-     *
      * Gets the Captcha from the DB
      *
      * @return  string
@@ -241,8 +235,6 @@ class PMF_Captcha
     //
 
     /**
-    * drawlines()
-    *
     * Draw random lines
     *
     * @return   img
@@ -282,8 +274,6 @@ class PMF_Captcha
     }
 
     /**
-     * drawText()
-     *
      * Draw the Text
      *
      * @return  img
@@ -350,8 +340,6 @@ class PMF_Captcha
     }
 
     /**
-     * createBackground()
-     *
      * Create the background
      *
      * @return  resource
@@ -371,8 +359,6 @@ class PMF_Captcha
     }
 
     /**
-     * generateCaptchaCode()
-     *
      * Generate a Captcha Code
      *
      * @param   int $caplength
@@ -416,8 +402,6 @@ class PMF_Captcha
     }
 
     /**
-    * saveCaptcha()
-    *
     * Save the Captcha
     *
     * @return   bool
@@ -443,8 +427,6 @@ class PMF_Captcha
     }
 
     /**
-     * removeCaptcha()
-     *
      * Remove the Captcha
      *
      * @return  void
@@ -462,8 +444,6 @@ class PMF_Captcha
     }
 
     /**
-     * validateCaptchaCode()
-     *
      * Validate the Captcha
      *
      * @param   string $captchaCode
@@ -500,8 +480,6 @@ class PMF_Captcha
     }
 
     /**
-     * garbageCollector()
-     *
      * Delete old captcha records.
      *
      * During normal use the <b>faqcaptcha</b> table would be empty, on average:
@@ -522,8 +500,6 @@ class PMF_Captcha
     }
 
     /**
-     * getFonts()
-     *
      * Get Fonts
      *
      * @return  array
@@ -534,14 +510,5 @@ class PMF_Captcha
     function getFonts()
     {
         return glob(dirname(dirname(__FILE__)).'/font/*.ttf');
-    }
-
-    /**
-     * Destructor
-     *
-     *
-     */
-    function __destruct()
-    {
     }
 }
