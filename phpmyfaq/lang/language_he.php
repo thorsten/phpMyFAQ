@@ -1,13 +1,15 @@
 ﻿<?php
-/******************************************************************************
- * File:				language_he.php
- * Description:         Hebrew language file.
- * Authors:				Daniel Shkuri <dan-shk@bezeqint.net>
- * Date:				2004-08-27
- * Last Update:		    2007-04-17
- * Copyright:           (c) 2006 phpMyFAQ Team
- * Thanks:              Niran Shay <nirshay1@012.net.il> 
- * Thanks:              Roy Ronen <royroy15@gmail.com>
+/**
+ * $Id: language_he.php,v 1.28 2007-04-29 14:25:30 thorstenr Exp $
+ *
+ * Hebrew language file
+ *
+ * @author      Daniel Shkuri <dan-shk@bezeqint.net>
+ * @author      Niran Shay <nirshay1@012.net.il>
+ * @author      Roy Ronen <royroy15@gmail.com>
+ * @since       2004-08-27
+ * @copyright   (c) 2004-2007 phpMyFAQ Team
+ *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -17,7 +19,7 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
- ******************************************************************************/
+ */
 
 $PMF_LANG["metaCharset"] = "utf-8";
 $PMF_LANG["metaLanguage"] = "he";
