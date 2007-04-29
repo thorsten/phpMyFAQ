@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# $Id: cvs2package.sh,v 1.6 2007-04-29 09:18:31 thorstenr Exp $
+# $Id: cvs2package.sh,v 1.7 2007-04-29 19:21:27 matteo Exp $
 #
 # This is the shell script for building:
 # 1. a TAR.GZ package;
@@ -39,7 +39,7 @@
 # CVS tag
 CVS_TAG="HEAD"
 # PMF Version
-PMF_VERSION="2.0.0-RC"
+PMF_VERSION="2.0.0.rc2"
 
 # Build folder
 PMF_BUILD_FOLDER="PMFBUILD_${CVS_TAG}_${PMF_VERSION}"
