@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Configuration.php,v 1.14 2007-04-29 11:39:40 thorstenr Exp $
+* $Id: Configuration.php,v 1.15 2007-04-29 12:20:25 thorstenr Exp $
 *
 * The main class for fetching the configuration, update and delete items.
 *
@@ -72,20 +72,9 @@ class PMF_Configuration
             SQLPREFIX);
         $result = $this->db->query($query);
         while ($row = $this->db->fetch_object($result)) {
-            // Check if this config value is a boolean one
-            $isBooleanValue = false;
-            if (isset($LANG_CONF[$row->config_name])) {
-                $isBooleanValue = ('checkbox' == $LANG_CONF[$row->config_name][0]);
-            }
-            // Fix the boolean values
-            $isTrueValue  = ('1' == ($row->config_value)) || ('true'  == ($row->config_value));
-            if ($isBooleanValue) {
-                $this->config[$row->config_name] = $isTrueValue;
-            } else {
-                $this->config[$row->config_name] = $row->config_value;
-            }
+            $this->config[$row->config_name] = $row->config_value;
         }
-    } // end func fetchAll()
+    } // end func getAll()
 
     /**
     * Returns a configuration item
