@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.198 2007-04-29 17:14:04 thorstenr Exp $
+ * $Id: functions.php,v 1.199 2007-04-29 19:32:04 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -971,17 +971,18 @@ function quoted_printable_encode($return = '')
  *
  * TODO: add filter for (X)HTML tag names and attributes!
  *
- * @param    string     Text/Number (solution id)
- * @param    string     '%' to avoid any category filtering
- * @param    boolean    True to search over all languages
- * @param    boolean    True to disable the results paging
- * @return   string
- * @access   public
- * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author   Matteo Scaramuccia <matteo@scaramuccia.com>
- * @since    2002-09-16
+ * @param   string  Text/Number (solution id)
+ * @param   string  '%' to avoid any category filtering
+ * @param   boolean true to search over all languages
+ * @param   boolean true to disable the results paging
+ * @param   boolean true to use it for Instant Response
+ * @return  string
+ * @access  public
+ * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @since   2002-09-16
  */
-function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = false)
+function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = false, $instantRespnse = false)
 {
     global $db, $sids, $category, $PMF_LANG, $PMF_CONF, $LANGCODE;
 
@@ -1146,16 +1147,19 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
 
             // Print the link to the faq record
             $url = sprintf(
-                '%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s&amp;highlight=%s',
+                '?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s&amp;highlight=%s',
                 $sids,
                 $row->category_id,
                 $row->id,
                 $row->lang,
-                $searchterm
-            );
+                $searchterm);
 
-            // kick out ajaxresponse.php
-            $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri('ajaxresponse.php').'index.php?'.$url);
+            if ($instantRespnse) {
+                $currentUrl = PMF_Link::getSystemRelativeUri('ajaxresponse.php').'index.php';
+            } else {
+                $currentUrl = PMF_Link::getSystemRelativeUri();
+            }
+            $oLink = new PMF_Link($currentUrl.$url);
             $oLink->itemTitle = $row->thema;
             $oLink->text = $thema;
             $oLink->tooltip = $row->thema;
