@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.111 2007-04-29 19:56:33 thorstenr Exp $
+ * $Id: Faq.php,v 1.112 2007-04-29 20:09:29 matteo Exp $
  *
  * The main FAQ class
  *
@@ -1324,7 +1324,7 @@ class PMF_Faq
      * @return  void
      * @access  public
      * @since   2001-02-15
-     * @auhtor  Bastian Pï¿½ttner <bastian@poettner.net>
+     * @auhtor  Bastian Pöttner <bastian@poettner.net>
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     function logViews($id)
