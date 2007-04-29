@@ -241,10 +241,10 @@ div#sessioncounter {
 
 /* 2nd Administration Menu */
 #subnavcontainer {
-    margin-left: 20px;
+    margin-right: 20px;
     padding: 0;
     height: 24px;
-    float:right;
+        clear:both;
 }
 #subnavcontainer ul {
     border: 0;
