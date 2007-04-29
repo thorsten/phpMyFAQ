@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Export.php,v 1.9 2007-04-09 16:57:11 thorstenr Exp $
+ * $Id: Export.php,v 1.10 2007-04-29 17:07:36 thorstenr Exp $
  *
  * XML, XML DocBook, XHTML and PDF export - Classes and Functions
  *
@@ -138,7 +138,7 @@ class PMF_Export
                 $author          = $arrAuthor[$key];
                 $pdf->AddPage();
                 $pdf->SetFont("Arial", "", 12);
-                $pdf->WriteHTML(unhtmlentities($value));
+                $pdf->WriteHTML(html_entity_decode($value));
             }
 
             return $pdf->Output('', 'S');

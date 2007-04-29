@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.196 2007-04-22 10:34:54 thorstenr Exp $
+ * $Id: functions.php,v 1.197 2007-04-29 17:07:36 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -836,18 +836,6 @@ function safeHTML($html)
     $html = strip_tags($html, "<strong><em><i><u><a><br>");
     $html = str_replace('<a ', '<a rel="nofollow" ', $html);
     return $html;
-}
-
-/*
- * Funktion wandelt HTML Entities zurueck | @@ Thorsten, 2003-03-27
- * Last Update: @@ Thorsten, 2003-03-27
- */
-function unhtmlentities($html)
-{
-    $translation_table = get_html_translation_table (HTML_ENTITIES);
-    $translation_table = array_flip ($translation_table);
-    $content = strtr ($html, $translation_table);
-    return preg_replace('/\&\#([0-9]+)\;/me', "chr('\\1')", $content);
 }
 
 /*

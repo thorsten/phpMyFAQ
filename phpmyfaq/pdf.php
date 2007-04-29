@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: pdf.php,v 1.30 2007-03-29 19:31:52 thorstenr Exp $
+ * $Id: pdf.php,v 1.31 2007-04-29 17:07:35 thorstenr Exp $
  *
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author      Peter Beauvain <pbeauvain@web.de>
@@ -80,12 +80,12 @@ $pdf->WriteHTML(str_replace("../", "", $faq->faqRecord['content']));
 $pdf->Ln();
 $pdf->Ln();
 $pdf->SetStyle('I', true);
-$pdf->Write(5, unhtmlentities($PMF_LANG['ad_entry_solution_id']).': #'.$faq->faqRecord['solution_id']);
+$pdf->Write(5, html_entity_decode($PMF_LANG['ad_entry_solution_id']).': #'.$faq->faqRecord['solution_id']);
 $pdf->SetAuthor($faq->faqRecord['author']);
 $pdf->Ln();
-$pdf->Write(5, unhtmlentities($PMF_LANG["msgAuthor"]).$faq->faqRecord['author']);
+$pdf->Write(5, html_entity_decode($PMF_LANG["msgAuthor"]).$faq->faqRecord['author']);
 $pdf->Ln();
-$pdf->Write(5, unhtmlentities($PMF_LANG["msgLastUpdateArticle"]).makeDate($faq->faqRecord['date']));
+$pdf->Write(5, html_entity_decode($PMF_LANG["msgLastUpdateArticle"]).makeDate($faq->faqRecord['date']));
 $pdf->SetStyle('I', false);
 
 $pdfFile = "pdf/".$id.".pdf";

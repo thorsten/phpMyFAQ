@@ -1,11 +1,11 @@
 <?php
 /**
- * $Id: save.php,v 1.41 2007-03-29 18:47:40 thorstenr Exp $
+ * $Id: save.php,v 1.42 2007-04-29 17:07:35 thorstenr Exp $
  *
  * Saves a user FAQ record and sends an email to the user
  *
  * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author       Jürgen Kuza <kig@bluewin.ch>
+ * @author       Jï¿½rgen Kuza <kig@bluewin.ch>
  * @author       Matteo Scaramuccia <matteo@scaramuccia.com>
  * @since        2002-09-16
  * @copyright    (c) 2002-2007 phpMyFAQ Team
@@ -112,7 +112,7 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
             if (function_exists('mb_encode_mimeheader')) {
                 $subject = mb_encode_mimeheader($subject);
             }
-            $body = unhtmlentities($PMF_LANG['msgMailCheck'])."\n".$PMF_CONF['main.titleFAQ'].": ".PMF_Link::getSystemUri('/index.php').'/admin';
+            $body = html_entity_decode($PMF_LANG['msgMailCheck'])."\n".$PMF_CONF['main.titleFAQ'].": ".PMF_Link::getSystemUri('/index.php').'/admin';
             if (ini_get('safe_mode')) {
                 mail($IDN->encode($faqconfig->get('main.administrationMail')),
                 $subject,
