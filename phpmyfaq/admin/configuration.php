@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: configuration.php,v 1.13 2007-04-24 19:41:13 matteo Exp $
+* $Id: configuration.php,v 1.14 2007-04-29 11:39:40 thorstenr Exp $
 *
 * The main configuration frontend
 *
@@ -53,11 +53,8 @@ if ('saveConfig' == $userAction) {
     // Hacks
     if (is_array($arrVar)) {
         foreach ($PMF_CONF as $key => $value) {
-            if (// Fix checkbox values: they are not returned as HTTP POST values...
-                    !array_key_exists($key, $arrVar)
-                // except, obviuosly, those that cannot be configured i.e. never returned as HTTP POST values.
-                &&  array_key_exists($key, array('main.phpMyFAQToken'))
-                ) {
+            // Fix checkbox values: they are not returned as HTTP POST values...
+            if (!array_key_exists($key, $arrVar)) {
                 $PMF_CONF[$key] = 'false';
             }
         }

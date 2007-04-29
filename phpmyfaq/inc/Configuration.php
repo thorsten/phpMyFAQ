@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Configuration.php,v 1.13 2007-03-10 22:26:43 thorstenr Exp $
+* $Id: Configuration.php,v 1.14 2007-04-29 11:39:40 thorstenr Exp $
 *
 * The main class for fetching the configuration, update and delete items.
 *
@@ -115,20 +115,21 @@ class PMF_Configuration
     {
         if (is_array($newconfig)) {
             foreach ($newconfig as $name => $value) {
-                $query = sprintf("
-                    UPDATE
-                        %sfaqconfig
-                    SET
-                        config_value = '%s'
-                    WHERE
-                        config_name = '%s'",
-                    SQLPREFIX,
-                    $this->db->escape_string(trim($value)),
-                    $name
-                    );
-                $this->db->query($query);
-                if (isset($this->config[$name])) {
-                    unset($this->config[$name]);
+                if ($name != 'main.phpMyFAQToken') {
+                    $query = sprintf("
+                        UPDATE
+                            %sfaqconfig
+                        SET
+                            config_value = '%s'
+                        WHERE
+                            config_name = '%s'",
+                        SQLPREFIX,
+                        $this->db->escape_string(trim($value)),
+                        $name);
+                    $this->db->query($query);
+                    if (isset($this->config[$name])) {
+                        unset($this->config[$name]);
+                    }
                 }
             }
             return true;
