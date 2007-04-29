@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.110 2007-04-20 08:55:28 thorstenr Exp $
+ * $Id: Faq.php,v 1.111 2007-04-29 19:56:33 thorstenr Exp $
  *
  * The main FAQ class
  *
@@ -493,15 +493,15 @@ class PMF_Faq
                  content, author, email, comment, datum, links_state,
                  links_check_date, date_start, date_end
             FROM
-                %s%s
+                %s%s fd
             LEFT JOIN
                 %sfaqdata_group
             ON
-                %sfaqdata.id = %sfaqdata_group.record_id
+                fd.id = %sfaqdata_group.record_id
             LEFT JOIN
                 %sfaqdata_user
             ON
-                %sfaqdata.id = %sfaqdata_user.record_id
+                fd.id = %sfaqdata_user.record_id
             WHERE
                 id = %d
             %s
@@ -509,19 +509,19 @@ class PMF_Faq
                 lang = '%s'",
             SQLPREFIX,
             isset($revision_id) ? 'faqdata_revisions': 'faqdata',
-            SQLPREFIX,
-            SQLPREFIX,
+
             SQLPREFIX,
             SQLPREFIX,
             SQLPREFIX,
             SQLPREFIX,
             $id,
-            isset($revision_id) ? 'AND revision_id = \'' + $revision_id +'\'': '',
-            $this->language
-            );
+            isset($revision_id) ? 'AND revision_id = '.$revision_id : '',
+            $this->language);
+
         $result = $this->db->query($query);
 
         if ($row = $this->db->fetch_object($result)) {
+
             $content        = $row->content;
             $active         = ('yes' == $row->active);
             $expired        = (date('YmdHis') > $row->date_end);
@@ -1324,7 +1324,7 @@ class PMF_Faq
      * @return  void
      * @access  public
      * @since   2001-02-15
-     * @auhtor  Bastian Pöttner <bastian@poettner.net>
+     * @auhtor  Bastian Pï¿½ttner <bastian@poettner.net>
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     function logViews($id)
