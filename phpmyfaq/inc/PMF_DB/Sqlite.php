@@ -1,13 +1,13 @@
 <?php
 /**
- * $Id: Sqlite.php,v 1.15 2007-04-30 05:42:32 thorstenr Exp $
+ * $Id: Sqlite.php,v 1.16 2007-04-30 05:58:27 matteo Exp $
  *
  * The db_sqlite class provides methods and functions for a sqlite database.
  *
  * NOTE: PHP5 only!
  *
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Johannes SchlÃ¼ter <johannes@php.net>
+ * @author      Johannes Schlüter <johannes@php.net>
  * @package     db_sqlite
  * @since       2005-06-27
  * @copyright   (c) 2005-2007 phpMyFAQ Team
