@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: pgsql.sql.php,v 1.31 2007-04-10 12:17:36 thorstenr Exp $
+* $Id: pgsql.sql.php,v 1.32 2007-04-30 14:00:15 thorstenr Exp $
 *
 * CREATE TABLE instruction for PostgreSQL database
 *
@@ -118,7 +118,7 @@ id SERIAL NOT NULL,
 lang varchar(5) NOT NULL,
 parent_id int4 NOT NULL,
 name varchar(255) NOT NULL,
-description varchar(255) NOT NULL,
+description varchar(255) DEFAULT NULL,
 user_id int4 NOT NULL,
 PRIMARY KEY (id, lang))";
 
@@ -153,7 +153,7 @@ lang varchar(5) NOT NULL,
 revision_id int4 NOT NULL DEFAULT 0,
 usr int4 NOT NULL,
 datum int4 NOT NULL,
-what text NOT NULL,
+what text DEFAULT NULL,
 PRIMARY KEY (id, lang))";
 
 //faqcomments
@@ -165,13 +165,13 @@ usr varchar(255) NOT NULL,
 email varchar(255) NOT NULL,
 comment text NOT NULL,
 datum int4 NOT NULL,
-helped text NOT NULL,
+helped text DEFAULT NULL,
 PRIMARY KEY (id_comment))";
 
 //faqconfig
 $query[] = "CREATE TABLE ".$sqltblpre."faqconfig (
 config_name varchar(255) NOT NULL default '',
-config_value varchar(255) NOT NULL default '',
+config_value varchar(255) DEFAULT NULL,
 PRIMARY KEY (config_name))";
 
 //faqdata
@@ -181,14 +181,14 @@ lang varchar(5) NOT NULL,
 solution_id int4 NOT NULL,
 revision_id int4 NOT NULL DEFAULT 0,
 active char(3) NOT NULL,
-keywords text NOT NULL,
+keywords text DEFAULT NULL,
 thema text NOT NULL,
-content text NOT NULL,
+content text DEFAULT NULL,
 author varchar(255) NOT NULL,
 email varchar(255) NOT NULL,
 comment char(1) NOT NULL default 'y',
 datum varchar(15) NOT NULL,
-links_state varchar(7) NOT NULL,
+links_state varchar(7) DEFAULT NULL,
 links_check_date int4 DEFAULT 0 NOT NULL,
 date_start varchar(14) NOT NULL DEFAULT '00000000000000',
 date_end varchar(14) NOT NULL DEFAULT '99991231235959',
@@ -201,14 +201,14 @@ lang varchar(5) NOT NULL,
 solution_id int4 NOT NULL,
 revision_id int4 NOT NULL DEFAULT 0,
 active char(3) NOT NULL,
-keywords text NOT NULL,
+keywords text DEFAULT NULL,
 thema text NOT NULL,
-content text NOT NULL,
+content text DEFAULT NULL,
 author varchar(255) NOT NULL,
 email varchar(255) NOT NULL,
 comment char(1) default 'y',
 datum varchar(15) NOT NULL,
-links_state varchar(7) NOT NULL,
+links_state varchar(7) DEFAULT NULL,
 links_check_date int4 DEFAULT 0 NOT NULL,
 date_start varchar(14) NOT NULL DEFAULT '00000000000000',
 date_end varchar(14) NOT NULL DEFAULT '99991231235959',
@@ -275,8 +275,8 @@ active char(1) default 'y',
 comment char(1) default 'n',
 date_start varchar(14) NOT NULL DEFAULT '00000000000000',
 date_end varchar(14) NOT NULL DEFAULT '99991231235959',
-link varchar(255) NOT NULL,
-linktitel varchar(255) NOT NULL,
+link varchar(255) DEFAULT NULL,
+linktitel varchar(255) DEFAULT NULL,
 target varchar(255) NOT NULL,
 PRIMARY KEY (id))";
 

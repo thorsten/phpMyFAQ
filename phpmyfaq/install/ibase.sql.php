@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: ibase.sql.php,v 1.2 2007-04-10 12:17:36 thorstenr Exp $
+ * $Id: ibase.sql.php,v 1.3 2007-04-30 14:00:15 thorstenr Exp $
  *
  * CREATE TABLE instruction for Interbase/Firebird databases
  *
@@ -88,7 +88,7 @@ id INTEGER NOT NULL,
 lang VARCHAR(5) NOT NULL,
 parent_id SMALLINT NOT NULL,
 name VARCHAR(255) NOT NULL,
-description VARCHAR(255) NOT NULL,
+description VARCHAR(255) DEFAULT NULL,
 user_id INTEGER NOT NULL,
 PRIMARY KEY (id, lang))";
 
@@ -123,7 +123,7 @@ lang VARCHAR(5) NOT NULL,
 revision_id INTEGER NOT NULL DEFAULT 0,
 usr INTEGER NOT NULL REFERENCES ".$sqltblpre."faquser(user_id),
 datum INTEGER NOT NULL,
-what text NOT NULL,
+what TEXT DEFAULT NULL,
 PRIMARY KEY (id, lang))";
 
 //faqcomments
@@ -135,13 +135,13 @@ usr VARCHAR(255) NOT NULL,
 email VARCHAR(255) NOT NULL,
 comment BLOB SUB_TYPE TEXT NOT NULL,
 datum VARCHAR(64) NOT NULL,
-helped VARCHAR(255) NOT NULL,
+helped VARCHAR(255) DEFAULT NULL,
 PRIMARY KEY (id_comment))";
 
 //faqconfig
 $query[] = "CREATE TABLE ".$sqltblpre."faqconfig (
 config_name VARCHAR(255) NOT NULL default '',
-config_value VARCHAR(255) NOT NULL default '',
+config_value VARCHAR(255) DEFAULT NULL,
 PRIMARY KEY (config_name))";
 
 //faqdata
@@ -151,14 +151,14 @@ lang VARCHAR(5) NOT NULL,
 solution_id INTEGER NOT NULL,
 revision_id INTEGER NOT NULL DEFAULT 0,
 active CHAR(3) NOT NULL,
-keywords BLOB SUB_TYPE TEXT NOT NULL,
+keywords BLOB SUB_TYPE TEXT DEFAULT NULL,
 thema BLOB SUB_TYPE TEXT NOT NULL,
-content BLOB SUB_TYPE TEXT NOT NULL,
+content BLOB SUB_TYPE TEXT DEFAULT NULL,
 author VARCHAR(255) NOT NULL,
 email VARCHAR(255) NOT NULL,
 comment CHAR(1) default 'y',
 datum VARCHAR(15) NOT NULL,
-links_state VARCHAR(7) NOT NULL,
+links_state VARCHAR(7) DEFAULT NULL,
 links_check_date INTEGER DEFAULT 0 NOT NULL,
 date_start VARCHAR(14) NOT NULL DEFAULT '00000000000000',
 date_end VARCHAR(14) NOT NULL DEFAULT '99991231235959',
@@ -171,14 +171,14 @@ lang VARCHAR(5) NOT NULL,
 solution_id INTEGER NOT NULL,
 revision_id INTEGER NOT NULL DEFAULT 0,
 active CHAR(3) NOT NULL,
-keywords BLOB SUB_TYPE TEXT NOT NULL,
+keywords BLOB SUB_TYPE TEXT DEFAULT NULL,
 thema BLOB SUB_TYPE TEXT NOT NULL,
-content BLOB SUB_TYPE TEXT NOT NULL,
+content BLOB SUB_TYPE TEXT DEFAULT NULL,
 author VARCHAR(255) NOT NULL,
 email VARCHAR(255) NOT NULL,
 comment CHAR(1) default 'y',
 datum VARCHAR(15) NOT NULL,
-links_state VARCHAR(7) NOT NULL,
+links_state VARCHAR(7) DEFAULT NULL,
 links_check_date INTEGER DEFAULT 0 NOT NULL,
 date_start VARCHAR(14) NOT NULL DEFAULT '00000000000000',
 date_end VARCHAR(14) NOT NULL DEFAULT '99991231235959',
@@ -255,8 +255,8 @@ active CHAR(1) default 'y',
 comment CHAR(1) default 'n',
 date_start VARCHAR(14) NOT NULL DEFAULT '00000000000000',
 date_end VARCHAR(14) NOT NULL DEFAULT '99991231235959',
-link VARCHAR(255) NOT NULL,
-linktitel VARCHAR(255) NOT NULL,
+link VARCHAR(255) DEFAULT NULL,
+linktitel VARCHAR(255) DEFAULT NULL,
 target VARCHAR(255) NOT NULL,
 PRIMARY KEY (id))";
 
