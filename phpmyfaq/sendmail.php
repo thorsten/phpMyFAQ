@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: sendmail.php,v 1.14 2007-03-29 18:47:40 thorstenr Exp $
+ * $Id: sendmail.php,v 1.15 2007-04-30 22:00:52 matteo Exp $
  *
  * The 'send an email from the contact page' page
  *
@@ -43,8 +43,10 @@ if (    isset($_POST['name']) && $_POST['name'] != ''
 
     if (function_exists('mb_encode_mimeheader')) {
         $name = mb_encode_mimeheader($name);
+        $subject = mb_encode_mimeheader($subject);
     } else {
         $name = encode_iso88591($name);
+        $subject = encode_iso88591($subject);
     }
 
     $additional_header = array();
