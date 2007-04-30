@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.143 2007-04-29 10:17:56 thorstenr Exp $
+* $Id: update.php,v 1.144 2007-04-30 14:05:46 thorstenr Exp $
 *
 * Main update script
 *
@@ -1212,14 +1212,14 @@ if ($step == 5) {
         @ob_flush();
         flush();
         $count = 0;
-        while ($each_query = each($query)) {
-            $result = @$db->query($each_query[1]);
+        foreach ($query as $current_query) {
+            $result = @$db->query($current_query);
             print "| ";
             if (!$result) {
                 print "\n<div class=\"error\">\n";
                 print "<p><strong>DB error:</strong> ".$db->error()."</p>\n";
                 print "<div style=\"text-align: left;\"><p>Query:\n";
-                print "<pre>".PMF_htmlentities($each_query[1])."</pre></p></div>\n";
+                print "<pre>".PMF_htmlentities($current_query)."</pre></p></div>\n";
                 print "</div>";
                 die();
             }
@@ -1385,13 +1385,13 @@ if ($step == 5) {
         $query[] = "ALTER TABLE ".SQLPREFIX."faqcomments CHANGE helped helped TEXT DEFAULT NULL";
         $query[] = "ALTER TABLE ".SQLPREFIX."faqconfig CHANGE config_value config_value VARCHAR(255) DEFAULT NULL";
         $query[] = "ALTER TABLE ".SQLPREFIX."faqdata CHANGE keywords keywords TEXT DEFAULT NULL";
-        $query[] = "ALTER TABLE ".SQLPREFIX."faqdata_revisions CHANGE keywords keywords TEXT DEFAULT NULL";
-        $query[] = "ALTER TABLE ".SQLPREFIX."faqnews CHANGE link link VARCHAR(255) DEFAULT NULL";
         $query[] = "ALTER TABLE ".SQLPREFIX."faqdata CHANGE content content LONGTEXT DEFAULT NULL";
         $query[] = "ALTER TABLE ".SQLPREFIX."faqdata CHANGE links_state links_state VARCHAR(7) DEFAULT NULL";
+        $query[] = "ALTER TABLE ".SQLPREFIX."faqdata_revisions CHANGE keywords keywords TEXT DEFAULT NULL";
         $query[] = "ALTER TABLE ".SQLPREFIX."faqdata_revisions CHANGE content content LONGTEXT DEFAULT NULL";
         $query[] = "ALTER TABLE ".SQLPREFIX."faqdata_revisions CHANGE links_state links_state VARCHAR(7) DEFAULT NULL";
         $query[] = "ALTER TABLE ".SQLPREFIX."faqnews CHANGE linktitel linktitel VARCHAR(255) DEFAULT NULL";
+        $query[] = "ALTER TABLE ".SQLPREFIX."faqnews CHANGE link link VARCHAR(255) DEFAULT NULL";
     }
 
     // Perform the queries for updating/migrating the database from 2.x
@@ -1399,14 +1399,14 @@ if ($step == 5) {
         @ob_flush();
         flush();
         $count = 0;
-        while ($each_query = each($query)) {
-            $result = @$db->query($each_query[1]);
+        foreach ($query as $current_query) {
+            $result = @$db->query($current_query);
             print '| ';
             if (!$result) {
                 print "\n<div class=\"error\">\n";
                 print "<p><strong>DB error:</strong> ".$db->error()."</p>\n";
                 print "<div style=\"text-align: left;\"><p>Query:\n";
-                print "<pre>".PMF_htmlentities($each_query[1])."</pre></p></div>\n";
+                print "<pre>".PMF_htmlentities($current_query)."</pre></p></div>\n";
                 print "</div>";
                 die();
             }
@@ -1451,14 +1451,14 @@ if ($step == 5) {
     }
     // Perform the queries for optimizing the database
     if (isset($query)) {
-        while ($each_query = each($query)) {
-            $result = @$db->query($each_query[1]);
+        foreach ($query as $current_query) {
+            $result = @$db->query($current_query);
             print "| ";
             if (!$result) {
                 print "\n<div class=\"error\">\n";
                 print "<p><strong>DB error:</strong> ".$db->error()."</p>\n";
                 print "<div style=\"text-align: left;\"><p>Query:\n";
-                print "<pre>".PMF_htmlentities($each_query[1])."</pre></p></div>\n";
+                print "<pre>".PMF_htmlentities($current_query)."</pre></p></div>\n";
                 print "</div>";
                 die();
             }
