@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: constants.php,v 1.32 2007-04-06 11:45:40 thorstenr Exp $
+ * $Id: constants.php,v 1.33 2007-04-30 09:51:53 thorstenr Exp $
  *
  * Constants for phpMyFAQ
  *
@@ -168,11 +168,11 @@ $botBlacklist = array(
  * @var  array
  */
 $supported_databases = array(
-    'mysql'     => array('4.3.0', 'MySQL 4.x / 5.x (PHP4 / PHP5)'),
+    'mysql'     => array('4.3.0', 'MySQL 4.x / 5.x / 6.x (PHP 4 / PHP 5)'),
     'pgsql'     => array('4.3.0', 'PostgreSQL 7.x / 8.x'),
     'sybase'    => array('4.3.0', 'Sybase'),
     'mssql'     => array('4.3.0', 'MS SQL Server 2000 / 2005'),
-    'mysqli'    => array('5.0.0', 'MySQL 4.1 / 5.x (PHP5)'),
+    'mysqli'    => array('5.0.0', 'MySQL 4.1 / 5.x / 6.x (PHP 5)'),
     'sqlite'    => array('5.0.0', 'SQLite'),
     'ibm_db2'   => array('4.3.0', 'IBM DB2 Universal Database 8.2 / 9.1'),
     'oracle'    => array('5.0.0', 'Oracle 8i and later (experimental)'),
@@ -290,7 +290,7 @@ $languageCodes = array (
         'NA' => 'Nauru',
         'NE' => 'Nepali',
         'NL' => 'Dutch',
-        'NB' => 'Norwegian Bokmål',
+        'NB' => 'Norwegian Bokmï¿½l',
         'NN' => 'Norwegian Nynorsk',
         'OC' => 'Occitan',
         'OM' => 'Oromo',
