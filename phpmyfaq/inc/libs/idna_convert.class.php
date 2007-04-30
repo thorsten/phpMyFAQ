@@ -1,11 +1,4 @@
 <?php
-/* ------------------------------------------------------------------------- */
-/* idna_convert.class.php - Encode / Decode Internationalized Domain Names   */
-/* (c) 2004-2007 phlyLabs, Berlin (http://phlylabs.de)                       */
-/* All rights reserved                                                       */
-/* v0.5.0                                                                    */
-/* ------------------------------------------------------------------------- */
-
 // {{{ license
 
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4 foldmethod=marker: */
@@ -54,10 +47,10 @@
  * ACE input and output is always expected to be ASCII.
  *
  * @author  Matthias Sommerfeld <mso@phlylabs.de>
- * @version 0.5.0
+ * @copyright 2004-2007 phlyLabs Berlin, http://phlylabs.de
+ * @version 0.5.1
  *
  */
-
 class idna_convert
 {
     /**
@@ -231,7 +224,7 @@ class idna_convert
                         .(empty($parsed['user']) ? '' : $parsed['user'].(empty($parsed['pass']) ? '' : ':'.$parsed['pass']).'@')
                         .$parsed['host']
                         .(empty($parsed['port']) ? '' : ':'.$parsed['port'])
-                        .$parsed['path']
+                        .(empty($parsed['path']) ? '' : $parsed['path'])
                         .(empty($parsed['query']) ? '' : '?'.$parsed['query'])
                         .(empty($parsed['fragment']) ? '' : '#'.$parsed['fragment']);
             } else { // parse_url seems to have failed, try without it
