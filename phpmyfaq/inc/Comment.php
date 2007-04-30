@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Comment.php,v 1.9 2007-03-04 13:27:16 thorstenr Exp $
+ * $Id: Comment.php,v 1.10 2007-04-30 05:45:30 thorstenr Exp $
  *
  * The main Comment class
  *
@@ -93,10 +93,8 @@ class PMF_Comment
                     WHERE
                         id_comment = %d",
                     SQLPREFIX,
-                    $id
-                );
+                    $id);
 
-        $output = '';
         $result = $this->db->query($query);
         if (($this->db->num_rows($result) > 0) && ($row = $this->db->fetch_object($result))) {
             $item = array(
@@ -106,8 +104,7 @@ class PMF_Comment
                     'content'   => $row->comment,
                     'date'      => $row->datum,
                     'user'      => $row->usr,
-                    'email'     => $row->email
-                    );
+                    'email'     => $row->email);
         }
 
         return $item;
@@ -138,8 +135,7 @@ class PMF_Comment
                         AND id = %d",
                     SQLPREFIX,
                     $type,
-                    $id
-                );
+                    $id);
 
 
         $result = $this->db->query($query);
@@ -181,8 +177,7 @@ class PMF_Comment
                                 safeEmail($item['email']),
                                 $item['user'],
                                 $item['content'],
-                                $this->pmf_lang['newsCommentDate'].makeCommentDate($item['date'])
-                        );
+                                $this->pmf_lang['newsCommentDate'].makeCommentDate($item['date']));
         }
 
         return $output;
@@ -218,8 +213,7 @@ class PMF_Comment
                     $commentData['usermail'],
                     $commentData['comment'],
                     $commentData['date'],
-                    $commentData['helped']
-                );
+                    $commentData['helped']);
 
         if (!$this->db->query($query)) {
             return false;
