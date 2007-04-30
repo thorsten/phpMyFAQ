@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Sybase.php,v 1.10 2007-02-20 20:11:15 thorstenr Exp $
+ * $Id: Sybase.php,v 1.11 2007-04-30 05:42:32 thorstenr Exp $
  *
  * db_sybase
  *
@@ -47,7 +47,7 @@ class db_sybase
      * @var     array
      */
     var $tableNames = array();
-    
+
     /**
      * Constructor
      *
@@ -178,26 +178,6 @@ class db_sybase
     function num_rows($result)
     {
         return @sybase_num_rows($result);
-    }
-
-    /**
-     * Returns the ID of the latest insert
-     *
-     * @return  integer
-     * @access  public
-     * @author  Adam Greene <phpmyfaq@skippy.fastmail.fm>
-     * @since   2004-12-10
-     */
-
-    function insert_id($table, $field)
-    {
-        $sql = "SELECT max($field) FROM $table ";
-        $rs = sybase_query($sql, $this->conn);
-        $row = sybase_fetch_row($rs);
-        if (isset($row[0]) && $row[0] > 0) {
-            return $row[0] + 1;
-        }
-        return 1;
     }
 
     /**

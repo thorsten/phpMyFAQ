@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Oracle.php,v 1.8 2007-03-03 08:29:43 thorstenr Exp $
+ * $Id: Oracle.php,v 1.9 2007-04-30 05:42:32 thorstenr Exp $
  *
  * The db_oracle class provides methods and functions for a Oracle database
  *
@@ -154,26 +154,6 @@ class db_oracle
     public function num_rows($result)
     {
         return oci_num_rows($result);
-    }
-
-    /**
-     * Returns the ID of the latest insert
-     *
-     * @return  integer
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2005-09-20
-     */
-    public function insert_id($table, $field)
-    {
-        $query = sprintf('SELECT max(%s) FROM %s', $field, $table);
-         $result = $this->query($query);
-         $row = $this->fetch_row($result);
-        if (isset($row[0]) && $row[0] > 0){
-            return $row[0] + 1;
-        } else {
-            return 1;
-        }
     }
 
     /**

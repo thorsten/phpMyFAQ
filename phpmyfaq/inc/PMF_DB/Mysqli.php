@@ -1,8 +1,6 @@
 <?php
 /**
- * $Id: Mysqli.php,v 1.13 2007-02-20 20:11:15 thorstenr Exp $
- *
- * db_mysqli
+ * $Id: Mysqli.php,v 1.14 2007-04-30 05:42:32 thorstenr Exp $
  *
  * The db_mysqli class provides methods and functions for a MySQL 4.1.x,
  * 5.0.x, 5.1.x, and 5.2.x databases.
@@ -158,20 +156,6 @@ class db_mysqli
     public function num_rows($result)
     {
         return $result->num_rows;
-    }
-
-    /**
-     * Returns the ID of the latest insert
-     *
-     * @return  integer
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2005-02-21
-     */
-    public function insert_id($table, $field)
-    {
-        $result = $this->query('SELECT max('.$field.') AS last_id FROM '.$table);
-        return $this->fetch_object($result)->last_id;
     }
 
     /**

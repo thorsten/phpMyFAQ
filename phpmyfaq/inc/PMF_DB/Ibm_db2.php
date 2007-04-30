@@ -1,11 +1,11 @@
 <?php
 /**
- * $Id: Ibm_db2.php,v 1.6 2007-02-20 20:11:15 thorstenr Exp $
+ * $Id: Ibm_db2.php,v 1.7 2007-04-30 05:42:32 thorstenr Exp $
  *
  * db_ibm_db2
  *
- * The db_db2 class provides methods and functions for a IBM DB2 Version 8.2
- * database. This will only work with the PECL extension.
+ * The db_db2 class provides methods and functions for IBM DB2 Version 8.2 or
+ * 9.1 databases. This will only work with the PECL extension ext/ibm_db2.
  *
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author      Helmut Tessarek <tessus@evermeet.cx>
@@ -210,27 +210,6 @@ class db_ibm_db2
     {
         return db2_num_rows($result);
     }
-
-
-
-    /**
-    * insert_id()
-    *
-    * Returns the ID of the latest insert
-    *
-    * @return  integer
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since   2005-04-16
-    */
-    function insert_id($table, $field)
-    {
-        $result = $this->query('SELECT max('.$field.') AS last_id FROM '.$table);
-        $row = $this->fetch_object($result);
-        return $row->last_id;
-    }
-
-
 
     /**
     * sqllog()

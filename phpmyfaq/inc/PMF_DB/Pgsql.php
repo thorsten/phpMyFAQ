@@ -1,6 +1,6 @@
 <?php
 /**
- * db_pgsql
+ * $Id: Pgsql.php,v 1.9 2007-04-30 05:42:32 thorstenr Exp $
  *
  * The db_pgsql class provides methods and functions for a PostgreSQL
  * database.
@@ -46,7 +46,7 @@ class db_pgsql
      * @var     array
      */
     var $tableNames = array();
-    
+
     /**
      * Connects to the database.
      *
@@ -156,22 +156,6 @@ class db_pgsql
     function num_rows($result)
     {
         return pg_num_rows($result);
-    }
-
-    /**
-     * Returns the ID of the latest insert
-     *
-     * @return  integer
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @author  Tom Rochester <tom.rochester@gmail.com>
-     * @since   2003-08-05
-     */
-    function insert_id($table, $field)
-    {
-         $res = $this->query("SELECT last_value FROM ".$table."_".$field."_seq");
-         $row = pg_fetch_row($res, 0);
-         return $row[0];
     }
 
     /**

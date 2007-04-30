@@ -1,8 +1,6 @@
 <?php
 /**
- * $Id: Mysql.php,v 1.14 2007-03-18 10:22:56 thorstenr Exp $
- *
- * db_mysql
+ * $Id: Mysql.php,v 1.15 2007-04-30 05:42:32 thorstenr Exp $
  *
  * The db_mysql class provides methods and functions for a MySQL 4.0.x
  * and higher database.
@@ -136,6 +134,8 @@ class db_mysql
      */
     function fetch_assoc($result)
     {
+        #print '<pre>';
+        #debug_print_backtrace();
         return mysql_fetch_assoc($result);
     }
 
@@ -151,20 +151,6 @@ class db_mysql
     function num_rows($result)
     {
         return mysql_num_rows($result);
-    }
-
-    /**
-     * Returns the ID of the latest insert
-     *
-     * @return  integer
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2003-02-24
-     */
-    function insert_id($table, $field)
-    {
-        $result = $this->query('SELECT max('.$field.') AS last_id FROM '.$table);
-        return mysql_result($result, 0, 'last_id');
     }
 
     /**

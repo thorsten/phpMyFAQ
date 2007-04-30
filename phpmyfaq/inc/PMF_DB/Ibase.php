@@ -1,8 +1,6 @@
 <?php
 /**
- * $Id: Ibase.php,v 1.7 2007-02-20 20:11:15 thorstenr Exp $
- *
- * db_ibase
+ * $Id: Ibase.php,v 1.8 2007-04-30 05:42:32 thorstenr Exp $
  *
  * The db_ibase class provides methods and functions for Firebird/InterBase
  * databases.
@@ -15,7 +13,7 @@
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/ 
+ * http://www.mozilla.org/MPL/
  *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
@@ -169,21 +167,6 @@ class db_ibase
     function num_rows($result)
     {
         return ibase_num_rows($result);
-    }
-
-    /**
-    * Returns the ID of the latest insert
-    *
-    * @return  integer
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since   2005-04-16
-    */
-    function insert_id($table, $field)
-    {
-        $result = $this->query('SELECT max('.$field.') AS last_id FROM '.$table);
-        $row = $this->fetch_object($result);
-        return $row->last_id;
     }
 
     /**
@@ -384,7 +367,7 @@ class db_ibase
         // First, declare those tables that are referenced by others
         $this->tableNames[] = $prefix.'faquser';
     }
-    
+
     /**
     * Closes the connection to the database.
     *

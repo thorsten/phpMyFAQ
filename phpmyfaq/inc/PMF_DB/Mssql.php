@@ -1,8 +1,6 @@
 <?php
 /**
- * $Id: Mssql.php,v 1.12 2007-02-20 20:11:15 thorstenr Exp $
- *
- * db_mssql
+ * $Id: Mssql.php,v 1.13 2007-04-30 05:42:32 thorstenr Exp $
  *
  * The db_mssql class provides methods and functions for a Microsoft SQL Server
  * database.
@@ -48,7 +46,7 @@ class db_mssql
      * @var     array
      */
     var $tableNames = array();
-    
+
     /**
      * Connects to the database.
      *
@@ -150,20 +148,6 @@ class db_mssql
     function num_rows($result)
     {
         return @mssql_num_rows($result);
-    }
-
-    /**
-     * Returns the ID of the latest insert
-     *
-     * @return  integer
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2005-01-11
-     */
-    function insert_id($table, $field)
-    {
-         $result = $this->query('SELECT max('.$field.') AS last_id FROM '.$table);
-        return mssql_result($result, 0, 'last_id');
     }
 
     /**

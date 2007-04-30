@@ -1,13 +1,13 @@
 <?php
 /**
- * $Id: Sqlite.php,v 1.14 2007-03-29 19:03:43 matteo Exp $
+ * $Id: Sqlite.php,v 1.15 2007-04-30 05:42:32 thorstenr Exp $
  *
  * The db_sqlite class provides methods and functions for a sqlite database.
  *
  * NOTE: PHP5 only!
  *
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Johannes Schlüter <johannes@php.net>
+ * @author      Johannes SchlÃ¼ter <johannes@php.net>
  * @package     db_sqlite
  * @since       2005-06-27
  * @copyright   (c) 2005-2007 phpMyFAQ Team
@@ -148,19 +148,6 @@ class db_sqlite
     public function num_rows($result)
     {
         return sqlite_num_rows($result);
-    }
-
-    /**
-     * Returns the ID of the latest insert
-     *
-     * @return  integer
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2005-06-27
-     */
-    public function insert_id($table, $field)
-    {
-        return sqlite_last_insert_rowid($this->conn);
     }
 
     /**
