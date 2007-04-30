@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: index.php,v 1.111 2007-04-24 20:02:40 thorstenr Exp $
+ * $Id: index.php,v 1.112 2007-04-30 21:58:50 matteo Exp $
  *
  * This is the main public frontend page of phpMyFAQ. It detects the browser's
  * language, gets and sets all cookie, post and get informations and includes
@@ -155,11 +155,12 @@ if (isset($user) && is_object($user)) {
 }
 
 //
-// use mbstring extension if available
+// use mbstring extension if available and when possible
 //
-$valid_mb_strings = array('ja', 'en');
-if (function_exists('mb_language') && in_array($PMF_LANG['metaLanguage'], $valid_mb_strings)) {
-    mb_language($PMF_LANG['metaLanguage']);
+$valid_mb_strings = array('ja', 'en', 'uni');
+$mbLanguage = ('utf-8' == strtolower($PMF_LANG['metaCharset'])) && ($PMF_LANG['metaLanguage'] != 'ja') ? 'uni' : $PMF_LANG['metaLanguage'];
+if (function_exists('mb_language') && in_array($mbLanguage, $valid_mb_strings)) {
+    mb_language($mbLanguage);
     mb_internal_encoding($PMF_LANG['metaCharset']);
 }
 
