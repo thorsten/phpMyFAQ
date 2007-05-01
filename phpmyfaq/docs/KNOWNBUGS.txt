@@ -1,17 +1,17 @@
-$Id: KNOWNBUGS.txt,v 1.20 2007-04-29 09:17:44 thorstenr Exp $
+$Id: KNOWNBUGS.txt,v 1.21 2007-05-01 19:44:12 thorstenr Exp $
 
-MISSING FEATURES in phpMyFAQ 2.0.0-beta2
+MISSING FEATURES in phpMyFAQ 2.0.0-rc2
 
 - unfinished documentation (blocker for final)
 
 
-KNOWN ISSUES in phpMyFAQ 2.0.0-beta2
+KNOWN ISSUES in phpMyFAQ 2.0.0-rc2
 
 - some language files need an update
-- using UTF-8 will not work in the PDF files
+- using UTF-8 may not work in the PDF files
 
 
-KNOWN BUGS AND ISSUES in phpMyFAQ 2.0.0-beta2
+KNOWN BUGS AND ISSUES in phpMyFAQ 2.0.0-rc2
 
 - IBM DB2 support untested
 - Oracle support untested
