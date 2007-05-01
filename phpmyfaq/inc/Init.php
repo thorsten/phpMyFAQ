@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Init.php,v 1.36 2007-05-01 12:37:27 johannes Exp $
+ * $Id: Init.php,v 1.37 2007-05-01 12:40:08 thorstenr Exp $
  *
  * Some functions
  *
@@ -482,7 +482,8 @@ class PMF_Init
         if (strpos($string, '\0') !== false) {
             return null;
         }
-        if (get_magic_quotes_gpc()) {
+
+        if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
             $string = stripslashes($string);
         }
 
