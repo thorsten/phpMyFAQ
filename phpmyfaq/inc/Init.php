@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Init.php,v 1.34 2007-04-12 20:29:54 thorstenr Exp $
+ * $Id: Init.php,v 1.35 2007-05-01 12:33:05 thorstenr Exp $
  *
  * Some functions
  *
@@ -153,7 +153,7 @@ class PMF_Init
      */
     function cleanRequest()
     {
-        if (version_compare(PHP_VERSION, '6.0.0', '<')) {
+        if (version_compare(PHP_VERSION, '6.0.0-dev', '<')) {
             $_SERVER['PHP_SELF'] = strtr(rawurlencode($_SERVER['PHP_SELF']),array( "%2F"=>"/", "%257E"=>"%7E"));
         }
         $_SERVER['HTTP_USER_AGENT'] = urlencode($_SERVER['HTTP_USER_AGENT']);
