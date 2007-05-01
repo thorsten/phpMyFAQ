@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.112 2007-04-29 20:09:29 matteo Exp $
+ * $Id: Faq.php,v 1.113 2007-05-01 17:21:39 thorstenr Exp $
  *
  * The main FAQ class
  *
@@ -173,6 +173,12 @@ class PMF_Faq
             $page = (int)$_REQUEST['seite'];
         }
 
+        if ($orderby == 'visits') {
+            $current_table = 'fv';
+        } else {
+            $current_table = 'fd';
+        }
+
         $now = date('YmdHis');
         $query = sprintf("
             SELECT
@@ -210,7 +216,7 @@ class PMF_Faq
                 AND fcr.category_id = %d
                 AND fd.lang = '%s'
             ORDER BY
-                %s %s",
+                %s.%s %s",
             SQLPREFIX,
             SQLPREFIX,
             SQLPREFIX,
@@ -220,6 +226,7 @@ class PMF_Faq
             $now,
             $category_id,
             $this->language,
+            $current_table,
             $this->db->escape_string($orderby),
             $this->db->escape_string($sortby));
 
@@ -1324,7 +1331,7 @@ class PMF_Faq
      * @return  void
      * @access  public
      * @since   2001-02-15
-     * @auhtor  Bastian Pöttner <bastian@poettner.net>
+     * @auhtor  Bastian Pï¿½ttner <bastian@poettner.net>
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     function logViews($id)
