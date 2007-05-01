@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: index.php,v 1.100 2007-04-24 21:15:17 matteo Exp $
+ * $Id: index.php,v 1.101 2007-05-01 11:22:59 thorstenr Exp $
  *
  * The main admin backend index file
  *
@@ -288,13 +288,13 @@ if (isset($auth)) {
     </div>
 
     <dl class="table-display">
-        <dt><strong><?php print $PMF_LANG["ad_start_visits"]; ?></strong></dt>
+        <dt><strong><a href="?action=viewsessions"><?php print $PMF_LANG["ad_start_visits"]; ?></a></strong></dt>
         <dd><?php print $PMF_TABLE_INFO[SQLPREFIX."faqsessions"]; ?></dd>
-        <dt><strong><?php print $PMF_LANG["ad_start_articles"]; ?></strong></dt>
+        <dt><strong><a href="?action=view"><?php print $PMF_LANG["ad_start_articles"]; ?></a></strong></dt>
         <dd><?php print $PMF_TABLE_INFO[SQLPREFIX."faqdata"]; ?></dd>
-        <dt><strong><?php print $PMF_LANG["ad_start_comments"]; ?></strong></dt>
+        <dt><strong><a href="?action=comments"><?php print $PMF_LANG["ad_start_comments"]; ?></strong></a></dt>
         <dd><?php print $PMF_TABLE_INFO[SQLPREFIX."faqcomments"]; ?></dd>
-        <dt><strong><?php print $PMF_LANG["msgOpenQuestions"]; ?></strong></dt>
+        <dt><strong><a href="?action=question"><?php print $PMF_LANG["msgOpenQuestions"]; ?></strong></a></dt>
         <dd><?php print $PMF_TABLE_INFO[SQLPREFIX."faqquestions"]; ?></dd>
     </dl>
 
