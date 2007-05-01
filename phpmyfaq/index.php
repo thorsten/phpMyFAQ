@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: index.php,v 1.112 2007-04-30 21:58:50 matteo Exp $
+ * $Id: index.php,v 1.113 2007-05-01 12:45:29 thorstenr Exp $
  *
  * This is the main public frontend page of phpMyFAQ. It detects the browser's
  * language, gets and sets all cookie, post and get informations and includes
@@ -356,7 +356,7 @@ $main_template_vars = array(
     'searchBox'         => $PMF_LANG['msgSearch'],
     'languageBox'       => $PMF_LANG['msgLangaugeSubmit'],
     'writeLangAdress'   => $writeLangAdress,
-    'switchLanguages'   => selectLanguages($LANGCODE),
+    'switchLanguages'   => selectLanguages($LANGCODE, true),
     'userOnline'        => $totUsersOnLine.$PMF_LANG['msgUserOnline'].
                                 sprintf($PMF_LANG['msgUsersOnline'],
                                 $usersOnLine[0],
