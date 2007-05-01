@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.edit.php,v 1.73 2007-04-29 19:56:32 thorstenr Exp $
+ * $Id: record.edit.php,v 1.74 2007-05-01 11:23:47 thorstenr Exp $
  *
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since       2003-02-23
@@ -114,7 +114,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     }
 
     // Permissions
-    $user_permission = $faq->getPermission('user', array($faqData['id']));
+    $user_permission = $faq->getPermission('user', $faqData['id']);
     if ($user_permission[0] == -1) {
         $all_users = true;
         $restricted_users = false;
@@ -123,7 +123,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
         $restricted_users = true;
     }
 
-    $group_permission = $faq->getPermission('group', array($faqData['id']));
+    $group_permission = $faq->getPermission('group', $faqData['id']);
     if ($group_permission[0] == -1) {
         $all_groups = true;
         $restricted_groups = false;
