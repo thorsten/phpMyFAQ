@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: index.php,v 1.102 2007-05-01 19:25:44 thorstenr Exp $
+ * $Id: index.php,v 1.103 2007-05-01 19:32:20 thorstenr Exp $
  *
  * The main admin backend index file
  *
@@ -250,7 +250,6 @@ if (isset($auth)) {
             // functions for session administration
             case "viewsessions":            require_once ("stat.main.php"); break;
             case "sessionbrowse":           require_once ("stat.browser.php"); break;
-            case "sessionsearch":           require_once ("stat.query.php"); break;
             case "sessionsuche":            require_once ("stat.form.php"); break;
             case "viewsession":             require_once ("stat.show.php"); break;
             case "statistics":              require_once ("stat.ratings.php"); break;

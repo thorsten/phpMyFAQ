@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: stat.main.php,v 1.13 2007-04-21 06:41:08 thorstenr Exp $
+ * $Id: stat.main.php,v 1.14 2007-05-01 19:32:52 thorstenr Exp $
  *
  * The main statistics page
  *
@@ -147,8 +147,6 @@ if ($permission['viewlog']) {
         <div align="center">
         <input class="submit" type="submit" name="statbrowse" value="<?php print $PMF_LANG["ad_stat_ok"]; ?>" />
         </div>
-
-        <p align="center"><a href="?action=sessionsuche&amp;statstart=<?php print $qstamp ?>&amp;statend=<?php print $stamp ?>"><?php print $PMF_LANG["ad_sess_search"]; ?></a></p>
 
     </fieldset>
     </form>
