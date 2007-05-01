@@ -93,7 +93,7 @@
                     <form action="{writeLangAdress}" method="post">
                     <label for="language">{languageBox}</label>
                     {switchLanguages}<br />
-                    <input type="submit" name="submit" value="Go" class="submit" />
+                    <input type="hidden" name="action" value="" />
                     </form>
                     </div>
                 </div>
