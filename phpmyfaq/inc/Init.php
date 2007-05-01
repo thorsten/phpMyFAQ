@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Init.php,v 1.35 2007-05-01 12:33:05 thorstenr Exp $
+ * $Id: Init.php,v 1.36 2007-05-01 12:37:27 johannes Exp $
  *
  * Some functions
  *
@@ -452,7 +452,7 @@ class PMF_Init
             die('Deep recursion attack detected.');
         }
 
-        if (get_magic_quotes_gpc()) {
+        if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
             $addedData = array();
             foreach ($data as $key => $val) {
                 $key = addslashes($key);
