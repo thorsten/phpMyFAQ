@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: backup.import.php,v 1.16 2007-03-29 15:57:53 thorstenr Exp $
+* $Id: backup.import.php,v 1.17 2007-05-01 11:20:56 thorstenr Exp $
 *
 * The import function to import the phpMyFAQ backups
 *
@@ -78,7 +78,7 @@ if ($permission["restore"]) {
                         "\n");
                     $k++;
                 } else {
-                    printf('<div style="font-size: 9px;"><strong>Query</strong>: "%s" <span style="color: green;">okay</span></div>%s',
+                    printf('<!-- <div style="font-size: 9px;"><strong>Query</strong>: "%s" <span style="color: green;">okay</span></div> -->%s',
                         PMF_htmlentities($mquery[$i], ENT_QUOTES, $PMF_LANG['metaCharset']),
                         "\n");
                     $g++;
