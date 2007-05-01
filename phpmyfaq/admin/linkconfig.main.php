@@ -1,31 +1,28 @@
 <?php
 /**
-* $Id: linkconfig.main.php,v 1.14 2007-03-28 08:47:31 thorstenr Exp $
-*
-* LinkVerifier configuration
-*
-* Usage:
-*   index.php?action=linkconfig
-*
-* Configures link verifier
-*
-* @author       Minoru TODA <todam@netjapan.co.jp>
-* @since        2005-11-07
-* @copyright    (c) 2005-2006 NetJapan, Inc.
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*
-* The Initial Developer of the Original Code is released for external use
-* with permission from NetJapan, Inc. IT Administration Group.
-*/
+ * $Id: linkconfig.main.php,v 1.15 2007-05-01 19:38:53 thorstenr Exp $
+ *
+ * LinkVerifier configuration
+ *
+ * TODO: Move all queries and functions into the class PMF_Linkverifier
+ *
+ * @author      Minoru TODA <todam@netjapan.co.jp>
+ * @since       2005-11-07
+ * @copyright   (c) 2005-2007 NetJapan, Inc. and phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ *
+ * The Initial Developer of the Original Code is released for external use
+ * with permission from NetJapan, Inc. IT Administration Group.
+ */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
