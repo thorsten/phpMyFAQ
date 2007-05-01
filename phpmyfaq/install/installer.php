@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: installer.php,v 1.101 2007-04-29 10:22:12 thorstenr Exp $
+ * $Id: installer.php,v 1.102 2007-05-01 17:29:19 thorstenr Exp $
  *
  * The main phpMyFAQ Installer
  *
@@ -349,6 +349,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 
     <label class="left">SQL server:</label>
     <select class="input" name="sql_type" size="1" onchange="select_database(this);">
+        <option value="">Please select a database</option>
 <?php
     // check what extensions are loaded in PHP
     foreach ($supported_databases as $extension => $database) {
