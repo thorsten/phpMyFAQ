@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: index.php,v 1.101 2007-05-01 11:22:59 thorstenr Exp $
+ * $Id: index.php,v 1.102 2007-05-01 19:25:44 thorstenr Exp $
  *
  * The main admin backend index file
  *
@@ -69,10 +69,13 @@ if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE)) {
 //
 $faq = new PMF_Faq($db, $LANGCODE);
 
-// use mbstring extension if available
-$valid_mb_strings = array('ja', 'en');
-if (function_exists('mb_language') && in_array($PMF_LANG['metaLanguage'], $valid_mb_strings)) {
-    mb_language($PMF_LANG['metaLanguage']);
+//
+// use mbstring extension if available and when possible
+//
+$valid_mb_strings = array('ja', 'en', 'uni');
+$mbLanguage = ('utf-8' == strtolower($PMF_LANG['metaCharset'])) && ($PMF_LANG['metaLanguage'] != 'ja') ? 'uni' : $PMF_LANG['metaLanguage'];
+if (function_exists('mb_language') && in_array($mbLanguage, $valid_mb_strings)) {
+    mb_language($mbLanguage);
     mb_internal_encoding($PMF_LANG['metaCharset']);
 }
 
