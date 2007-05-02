@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: category.main.php,v 1.42 2007-04-20 09:10:50 thorstenr Exp $
+ * $Id: category.main.php,v 1.43 2007-05-02 17:58:03 thorstenr Exp $
  *
  * List all categories in the admin section
  *
@@ -53,10 +53,10 @@ if ($permission['editcateg']) {
 
         $userperm       = isset($_POST['userpermission']) ?
                           $db->escape_string($_POST['userpermission']) : 'all';
-        $user_allowed   = ('all' == $userperm) ? -1 : (int)$_POST['restricted_users'];
+        $user_allowed   = ('all' == $userperm) ? -1 : (int)$_POST['userpermission'];
         $groupperm      = isset($_POST['grouppermission']) ?
                           $db->escape_string($_POST['grouppermission']) : 'all';
-        $group_allowed  = ('all' == $groupperm) ? -1 : (int)$_POST['restricted_groups'];
+        $group_allowed  = ('all' == $groupperm) ? -1 : (int)$_POST['grouppermission'];
 
         $category_id = $category->addCategory($category_data, $parent_id);
         if ($category_id) {
@@ -83,10 +83,10 @@ if ($permission['editcateg']) {
 
         $userperm       = isset($_POST['userpermission']) ?
                           $db->escape_string($_POST['userpermission']) : 'all';
-        $user_allowed   = ('all' == $userperm) ? -1 : (int)$_POST['restricted_users'];
+        $user_allowed   = ('all' == $userperm) ? -1 : (int)$_POST['userpermission'];
         $groupperm      = isset($_POST['grouppermission']) ?
                           $db->escape_string($_POST['grouppermission']) : 'all';
-        $group_allowed  = ('all' == $groupperm) ? -1 : (int)$_POST['restricted_groups'];
+        $group_allowed  = ('all' == $groupperm) ? -1 : (int)$_POST['grouppermission'];
 
         if (!$category->checkLanguage($category_data['id'], $category_data['lang'])) {
             if ($category->addCategory($category_data, $parent_id, $category_data['id']) &&
