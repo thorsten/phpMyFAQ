@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: footer.php,v 1.29 2007-04-20 19:31:45 thorstenr Exp $
+ * $Id: footer.php,v 1.30 2007-05-02 18:11:44 thorstenr Exp $
  *
  * Footer of the admin area
  *
@@ -62,9 +62,9 @@ if (    isset($auth) &&
         editor_deselector : "mceNoEditor",
         document_base_url : "<?php print(PMF_Link::getSystemRelativeUri('admin/index.php')); ?>",
         theme : "advanced",
-        plugins : "table,save,advhr,advimage,advlink,emotions,iespell,insertdatetime,preview,zoom,flash,searchreplace,print,paste,directionality,fullscreen,noneditable,contextmenu",
+        plugins : "table,save,advhr,advimage,advlink,emotions,iespell,insertdatetime,preview,zoom,flash,print,paste,directionality,fullscreen,noneditable,contextmenu",
         theme_advanced_disable : "styleselect",
-        theme_advanced_buttons1_add_before : "save,newdocument,separator",
+        theme_advanced_buttons1_add_before : "newdocument,separator",
         theme_advanced_buttons1_add : "fontselect,fontsizeselect",
         theme_advanced_buttons2_add : "separator,insertdate,inserttime,preview,zoom,separator,forecolor,backcolor,liststyle",
         theme_advanced_buttons2_add_before: "cut,copy,paste,pastetext,pasteword,separator,search,replace,separator",
