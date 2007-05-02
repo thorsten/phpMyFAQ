@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: installer.php,v 1.102 2007-05-01 17:29:19 thorstenr Exp $
+ * $Id: installer.php,v 1.103 2007-05-02 18:39:40 thorstenr Exp $
  *
  * The main phpMyFAQ Installer
  *
@@ -10,6 +10,7 @@
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author      Tom Rochester <tom.rochester@gmail.com>
  * @author      Johannes Schlueter <johannes@php.net>
+ * @author      Uwe Pries <uwe.pries@
  * @since       2002-08-20
  * @copyright   (c) 2001-2007 phpMyFAQ Team
  *
@@ -142,16 +143,35 @@ function cleanInstallation()
     <link rel="icon" href="../template/favicon.ico" type="image/x-icon" />
     <script language="javascript" type="text/javascript">
     /*<![CDATA[*/
-    <!--
+    <!--+
+    function cssAddClass(ele, className) {
+        if (typeof ele == 'string') {
+            ele = document.getElementById(ele);
+        }
+
+        ele.className += ' ' + className;
+    }
+
+    function cssDelClass(ele, className) {
+        if (typeof ele == 'string') {
+            ele = document.getElementById(ele);
+        }
+
+        var regexp = new RegExp(
+            '^'+className+'\\b\\s*|\\s*\\b'+className+'\\b', 'ig'
+        );
+        ele.className = ele.className.replace(regexp, '');
+    }
+
     function select_database(field) {
         switch (field.value) {
             case 'sqlite':
-                document.getElementById('dbsqlite').style.display='inline';
-                document.getElementById('dbdatafull').style.display='none';
+                cssDelClass('dbsqlite', 'collapsed');
+                cssAddClass('dbdatafull', 'collapsed');
                 break;
             default:
-                document.getElementById('dbsqlite').style.display='none';
-                document.getElementById('dbdatafull').style.display='inline';
+                cssAddClass('dbsqlite', 'collapsed');
+                cssDelClass('dbdatafull', 'collapsed');
                 break;
         }
     }
@@ -186,6 +206,9 @@ function cleanInstallation()
         font-family: "Trebuchet MS", Geneva, Verdana, Arial, Helvetica, sans-serif;
         margin: auto;
         text-align: center;
+    }
+    .collapsed {
+        display: none;
     }
     .center {
         text-align: center;
@@ -974,11 +997,11 @@ function iframeUpdated() {
 }
 
 function hide(item) {
-    document.getElementById(item).style.display = "none";
+    cssAddClass(item, 'collapsed');
 }
 
 function show(item) {
-    document.getElementById(item).style.display = "block";
+    cssDelClass(item, 'collapsed');
 }
 //]]>
 </script>
@@ -1035,10 +1058,10 @@ function show(item) {
     <br />
 
     <p class="center">Additional to your input we're going to submit some information about your system setup for statstic purpose.</p>
-    <p class="center">We are not storing any personal information. You can see the data by clicking <a href="javascript:show('configliste');">here</a>.</p>
+    <p class="center">We are not storing any personal information. You can see the data by clicking <a href="#" onclick="show('configliste');return false;">here</a>.</p>
 
     <div id="configliste" style="display:none;">
-        <a href="javascript:hide('configliste');">hide again</a>
+        <a href="#" onclick="hide('configliste'); return false;">hide again</a>
         <dl>
 <?php
 $q = new PMF_Questionnaire_Data($configs);
