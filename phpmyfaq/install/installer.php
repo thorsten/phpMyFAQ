@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: installer.php,v 1.103 2007-05-02 18:39:40 thorstenr Exp $
+ * $Id: installer.php,v 1.104 2007-05-02 18:46:56 thorstenr Exp $
  *
  * The main phpMyFAQ Installer
  *
@@ -10,7 +10,7 @@
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author      Tom Rochester <tom.rochester@gmail.com>
  * @author      Johannes Schlueter <johannes@php.net>
- * @author      Uwe Pries <uwe.pries@
+ * @author      Uwe Pries <uwe.pries@digartis.de>
  * @since       2002-08-20
  * @copyright   (c) 2001-2007 phpMyFAQ Team
  *
