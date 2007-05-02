@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Tags.php,v 1.36 2007-04-28 15:06:55 thorstenr Exp $
+* $Id: Tags.php,v 1.37 2007-05-02 18:16:54 thorstenr Exp $
 *
 * The main Tags class
 *
@@ -207,15 +207,7 @@ class PMF_Tags
 
         // Delete all tag references for the faq record
         if (count($tags) > 0) {
-            $query = sprintf("
-                DELETE FROM
-                    %sfaqdata_tags
-                WHERE
-                    record_id = %d",
-                SQLPREFIX,
-                $record_id
-            );
-            $this->db->query($query);
+            $this->deleteTagsFromRecordId($record_id);
         }
 
         // Store tags and references for the faq record
@@ -263,6 +255,35 @@ class PMF_Tags
         }
 
         return true;
+    }
+
+    /**
+     * Deletes all tags from a given record id
+     *
+     * @param   integer $record_id
+     * @return  boolean
+     * @access  public
+     * @since   2007-05-02
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function deleteTagsFromRecordId($record_id)
+    {
+        if (!is_integer($record_id)) {
+            return false;
+        }
+
+        $query = sprintf("
+            DELETE FROM
+                %sfaqdata_tags
+            WHERE
+                record_id = %d",
+            SQLPREFIX,
+            $record_id);
+
+        $this->db->query($query);
+
+        return true;
+
     }
 
     /**

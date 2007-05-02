@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.save.php,v 1.60 2007-04-29 20:04:25 thorstenr Exp $
+ * $Id: record.save.php,v 1.61 2007-05-02 18:16:54 thorstenr Exp $
  *
  * Save or delete a FAQ record
  *
@@ -166,6 +166,8 @@ if (    isset($submit[1])
     $tags = $db->escape_string(trim($_POST['tags']));
     if ($tags != '') {
         $tagging->saveTags($record_id, explode(',', $tags));
+    } else {
+        $tagging->deleteTagsFromRecordId($record_id);
     }
 }
 
