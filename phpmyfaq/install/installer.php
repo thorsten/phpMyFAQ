@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: installer.php,v 1.104 2007-05-02 18:46:56 thorstenr Exp $
+ * $Id: installer.php,v 1.105 2007-05-02 20:30:43 thorstenr Exp $
  *
  * The main phpMyFAQ Installer
  *
@@ -372,7 +372,6 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 
     <label class="left">SQL server:</label>
     <select class="input" name="sql_type" size="1" onchange="select_database(this);">
-        <option value="">Please select a database</option>
 <?php
     // check what extensions are loaded in PHP
     foreach ($supported_databases as $extension => $database) {
@@ -402,7 +401,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     <input class="input" type="text" name="sql_db" title="Please enter your SQL database name here." /><br />
     </div>
 
-    <div id="dbsqlite" style="display: none;">
+    <div id="dbsqlite" class="collapsed">
     <label class="left">SQLite database file:</label>
     <input class="input" type="text" name="sql_sqlitefile" value="<?php print dirname(dirname(__FILE__)); ?>" title="Please enter the full path to your SQLite datafile which should be outside your documentation root." /><br />
     </div>
