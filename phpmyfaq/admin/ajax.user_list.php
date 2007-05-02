@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.user_list.php,v 1.23 2007-03-29 15:57:53 thorstenr Exp $
+* $Id: ajax.user_list.php,v 1.24 2007-05-02 20:49:06 thorstenr Exp $
 *
 * AJAX: lists all registered users
 *
@@ -51,8 +51,10 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
     if (count(ob_list_handlers()) > 0) {
         ob_clean();
     }
+
+    printf('<?xml version="1.0" encoding="%s" standalone="yes"?>', $PMF_LANG['metaCharset']);
 ?>
-<xml>
+<phpmyfaq>
     <rightlist>
 <?php
     foreach ($all_rights as $right_data) {
@@ -118,6 +120,6 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
     } /* end foreach ($userList) */
 ?>
     </userlist>
-</xml>
+</phpmyfaq>
 <?php
 }
