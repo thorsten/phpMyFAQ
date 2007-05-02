@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.edit.php,v 1.74 2007-05-01 11:23:47 thorstenr Exp $
+ * $Id: record.edit.php,v 1.75 2007-05-02 17:51:28 thorstenr Exp $
  *
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since       2003-02-23
@@ -92,7 +92,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
             $categories         = $category->getCategoryRelationsFromArticle($faqData['id'], $faqData['lang']);
             $faq->getRecord($faqData['id'], null, true);
             $faqData = $faq->faqRecord;
-            $tags = implode(', ', $tagging->getAllTagsById($faqData['id']));
+            $tags = implode(',', $tagging->getAllTagsById($faqData['id']));
             $url_variables = 'saveentry&amp;id='.$_REQUEST['id'];
         } else {
             $url_variables = 'insertentry';
@@ -161,7 +161,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
             $faq->language = $faqData['lang'];
             $faq->getRecord($faqData['id'], $revisionid_selected, true);
             $faqData = $faq->faqRecord;
-            $tags = implode(', ', $tagging->getAllTagsById($faqData['id']));
+            $tags = implode(',', $tagging->getAllTagsById($faqData['id']));
         }
     }
 ?>
