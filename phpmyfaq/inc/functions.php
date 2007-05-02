@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.199 2007-04-29 19:32:04 thorstenr Exp $
+ * $Id: functions.php,v 1.200 2007-05-02 18:07:31 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -984,7 +984,7 @@ function quoted_printable_encode($return = '')
  */
 function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = false, $instantRespnse = false)
 {
-    global $db, $sids, $category, $PMF_LANG, $PMF_CONF, $LANGCODE;
+    global $db, $sids, $category, $faqconfig, $PMF_LANG, $PMF_CONF, $LANGCODE;
 
     $_searchterm = PMF_htmlentities(stripslashes($searchterm), ENT_QUOTES, $PMF_LANG['metaCharset']);
     $seite       = 1;
@@ -1049,7 +1049,7 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
     if (is_numeric($searchterm) && ($searchterm >= PMF_SOLUTION_ID_START_VALUE) && ($num > 0)) {
         // Hack: before a redirection we must force the PHP session update for preventing data loss
         session_write_close();
-        if (isset($PMF_CONF['main.enableRewriteRules']) && $PMF_CONF['main.enableRewriteRules']) {
+        if ($faqconfig->get('main.enableRewriteRules')) {
             header('Location: '.PMF_Link::getSystemUri('/index.php').'/solution_id_'.$searchterm.'.html');
         } else {
             header('Location: '.PMF_Link::getSystemUri('/index.php').'/index.php?solution_id='.$searchterm);
@@ -1084,9 +1084,9 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
         $output = $PMF_LANG['err_noArticles'];
     }
 
-    $pages = ceil($num / $PMF_CONF['main.numberOfRecordsPerPage']);
-    $last = $seite * $PMF_CONF['main.numberOfRecordsPerPage'];
-    $first = $last - $PMF_CONF['main.numberOfRecordsPerPage'];
+    $pages = ceil($num / $faqconfig->get('main.numberOfRecordsPerPage'));
+    $last = $seite * $faqconfig->get('main.numberOfRecordsPerPage');
+    $first = $last - $faqconfig->get('main.numberOfRecordsPerPage');
     if ($last > $num) {
         $last = $num;
     }
@@ -1099,7 +1099,7 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
             if ($hasMore && ($pages > 1)) {
                 $output .= sprintf(
                     $PMF_LANG['msgInstantResponseMaxRecords'],
-                    $PMF_CONF['main.numberOfRecordsPerPage']);
+                    $faqconfig->get('main.numberOfRecordsPerPage'));
             }
             $output .= "</p>\n";
         }
@@ -1110,7 +1110,7 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
 
         $counter = 0;
         $displayedCounter = 0;
-        while (($row = $db->fetch_object($result)) && $displayedCounter < $PMF_CONF['main.numberOfRecordsPerPage']) {
+        while (($row = $db->fetch_object($result)) && $displayedCounter < $faqconfig->get('main.numberOfRecordsPerPage')) {
             $counter ++;
             if ($counter <= $first) {
                 continue;
@@ -1173,12 +1173,12 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
         $output = $PMF_LANG["err_noArticles"];
     }
 
-    if (!$hasMore && ($num > $PMF_CONF['main.numberOfRecordsPerPage'])) {
+    if (!$hasMore && ($num > $faqconfig->get('main.numberOfRecordsPerPage'))) {
         $output .= "<p align=\"center\"><strong>";
         $vor = $seite - 1;
         $next = $seite + 1;
         if ($vor != 0) {
-            if (isset($PMF_CONF['main.enableRewriteRules']) && $PMF_CONF['main.enableRewriteRules']) {
+            if ($faqconfig->get('main.enableRewriteRules')) {
                 $output .= "[ <a href=\"search.html?search=".urlencode($_searchterm)."&amp;seite=".$vor."\">".$PMF_LANG["msgPrevious"]."</a> ]";
             } else {
                 $output .= "[ <a href=\"index.php?".$sids."action=search&amp;search=".urlencode($_searchterm)."&amp;seite=".$vor."\">".$PMF_LANG["msgPrevious"]."</a> ]";
