@@ -1,23 +1,24 @@
 <?php
 /**
-* $Id: user.php,v 1.35 2007-03-29 17:54:47 thorstenr Exp $
-*
-* Displays the user managment frontend
-*
-* @author       Lars Tiedemann <php@larstiedemann.de>
-* @since        2005-12-15
-* @copyright    (c) 2006 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * $Id: user.php,v 1.36 2007-05-03 19:45:05 thorstenr Exp $
+ *
+ * Displays the user managment frontend
+ *
+ * @author      Lars Tiedemann <php@larstiedemann.de>
+ * @author      Uwe Pries <uwe.pries@digartis.de>
+ * @since       2005-12-15
+ * @copyright   (c) 2005-2007 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
@@ -501,12 +502,15 @@ function buildUserRights(id)
         }
         // build new table row
         checkbox = document.createElement('input');
-        checkbox.setAttribute('type', "checkbox");
-        checkbox.setAttribute('name', "user_rights[]");
-        checkbox.setAttribute('value', right_id);
-        if (isUserRight == 1) {
-            checkbox.setAttribute('checked', "checked");
-        }
+        checkbox.type = 'checkbox';
+        checkbox.name = 'user_rights[]';
+        checkbox.value = right_id;
+        setTimeout((function(checkbox, isUserRight) {
+            return function() {            
+                checkbox.checked = isUserRight == 1;
+            }
+        })(checkbox, isUserRight), 10);
+
         table_addRow(user_rights_table, i, checkbox, document.createTextNode(right_name));
     }
 }
@@ -514,16 +518,13 @@ function buildUserRights(id)
 
 function userSelect(evt)
 {
-    evt = (evt) ? evt : ((windows.event) ? windows.event : null);
-    if (evt) {
-        var select = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
-        if (select && select.value > 0) {
-            clearUserData();
-            buildUserData(select.value);
-            clearUserRights();
-            buildUserRights(select.value);
-            selectUserStatus(select.value);
-        }
+    var select = evt.srcElement || evt.target;
+    if (select && select.value > 0) {
+        clearUserData();
+        buildUserData(select.value);
+        clearUserRights();
+        buildUserRights(select.value);
+        selectUserStatus(select.value);
     }
 }
 
