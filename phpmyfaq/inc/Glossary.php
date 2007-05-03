@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Glossary.php,v 1.6 2007-04-24 19:44:05 thorstenr Exp $
+* $Id: Glossary.php,v 1.7 2007-05-03 20:08:33 matteo Exp $
 *
 * The main glossary class
 *
@@ -110,15 +110,27 @@ class PMF_Glossary
             return '';
         }
 
+        $attributes = array(
+            'href', 'src', 'title', 'alt', 'class', 'style', 'id', 'name',
+            'face', 'size', 'dir', 'onclick', 'ondblclick', 'onmousedown',
+            'onmouseup', 'onmouseover', 'onmousemove', 'onmouseout',
+            'onkeypress', 'onkeydown', 'onkeyup'
+        );
+
         foreach($this->getAllGlossaryItems() as $item) {
             $this->definition = $item['definition'];
-            $content = preg_replace_callback('/'
+            $content = preg_replace_callback(
+                '/'
+                // a. the glossary item could be an attribute name
                 .'('.$item['item'].'="[^"]*")|'
-                .'((href|src|title|alt|class|style|id|name)="[^"]*'.$item['item'].'[^"]*")|'
-                .'('.$item['item'].')'
+                // b. the glossary item could be inside an attribute value
+                .'(('.implode('|', $attributes).')="[^"]*'.$item['item'].'[^"]*")|'
+                // c. the glossary item could be everywhere as a distinct word
+                .'(\s+)('.$item['item'].')(\s+)'
                 .'/mis',
                 array($this, 'setAcronyms'),
-                $content);
+                $content
+            );
         }
 
         return $content;
@@ -132,24 +144,22 @@ class PMF_Glossary
      * @return  string
      * @since   2007-04-24
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      */
-    function setAcronyms($items)
+    function setAcronyms($matches)
     {
-        static $attributes = array(
-            'href', 'src', 'title', 'alt', 'class', 'style', 'id', 'name',
-            'face', 'size', 'dir', 'onclick', 'ondblclick', 'onmousedown',
-            'onmouseup', 'onmouseover', 'onmousemove', 'onmouseout',
-            'onkeypress', 'onkeydown', 'onkeyup');
+        $itemAsAttrName = $matches[1];
+        $itemInAttrValue = $matches[2]; // $matches[3] is the attribute name
+        $prefix = $matches[4];
+        $item = $matches[5];
+        $postfix = $matches[6];
 
-        foreach ($items as $item) {
-            if (in_array($item, $attributes)) {
-                return $item;
-            } elseif ('' == $item) {
-                return '';
-            } else {
-                return '<acronym class="glossary" title="'.$this->definition.'">'.$item.'</acronym>';
-            }
+        if (!empty($item)) {
+            return '<acronym class="glossary" title="'.$this->definition.'">'.$prefix.$item.$postfix.'</acronym>';
         }
+
+        // Fallback: the original matched string
+        return $matches[0];
     }
 
     /**
