@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: session.keepalive.php,v 1.7 2007-03-29 20:22:31 thorstenr Exp $
+ * $Id: session.keepalive.php,v 1.8 2007-05-07 16:03:10 thorstenr Exp $
  *
  * A dummy page used within an IFRAME for warning the user about his next
  * session expiration and to give him the contextual possibility for
@@ -10,6 +10,7 @@
  * @access      private
  * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author      Uwe Pries <uwe.pries@digartis.de>
  * @since       2006-05-08
  * @copyright   (c) 2006-2007 phpMyFAQ Team
  *
@@ -58,30 +59,35 @@ if (isset($user) && ($refreshTime > 0)) {
             {
                 if (window.confirm('<?php printf($PMF_LANG['ad_session_expiring'], PMF_SESSION_ID_REFRESH); ?>')) {
                     // Reload this iframe: session refreshed!
-                    window.location.reload();
+                    location.href = location.href;
                 }
             }
-            function _PMFClockPad(number)
+            function _PMFSessionTimeoutClock(topRef, expire)
             {
-                return (new String(number).length < 2 ? '0' + number : '' + number);
-            }
-            function _PMFSessionTimeoutClock()
-            {
-                _PMFSessionTimeoutSeconds--;
-                if (top.document.getElementById('sessioncounter')) {
-                    var nClockHours   = parseInt(_PMFSessionTimeoutSeconds/3600, 10);
-                    var nClockMinutes = parseInt((_PMFSessionTimeoutSeconds - (3600*nClockHours))/60, 10);
-                    var nClockSeconds = parseInt((_PMFSessionTimeoutSeconds - (3600*nClockHours) - (60*nClockMinutes)), 10);
-                    var sClock = _PMFClockPad(nClockHours) + ':' + _PMFClockPad(nClockMinutes) + ':' + _PMFClockPad(nClockSeconds);
-                    top.document.getElementById('sessioncounter').innerHTML = sClock;
+                // decrease time
+                expire.setSeconds(expire.getSeconds() - 1);
+                // check if we're out of time and log out if needed
+                if (expire.getFullYear() < 2007) {
+                    parent.location.search = '?action=logout';
+                    return;
                 }
-                if ('00:00:00' != sClock) {
-                    window.setTimeout("_PMFSessionTimeoutClock()", 1000);
+
+                // refresh clock in GUI
+                if (topRef) {
+                    topRef.innerHTML = ('' + expire).match(/\d\d:\d\d:\d\d/);
                 }
             }
-            var _PMFSessionTimeoutSeconds = <?php print PMF_SESSION_ID_EXPIRES?> * 60;
-            window.setTimeout("_PMFSessionTimeoutWarning()", <?php print $refreshTime; ?> * 1000);
-            window.setTimeout("_PMFSessionTimeoutClock()", 500);
+
+            window.onload = function() {
+                var expire = new Date(2007, 0, 1);
+                expire.setSeconds(<?php print PMF_SESSION_ID_EXPIRES; ?> * 60);
+                var topRef = top.document.getElementById('sessioncounter');
+
+                window.setTimeout(_PMFSessionTimeoutWarning, <?php print $refreshTime; ?> * 1000);
+                window.setInterval(function() {
+                    _PMFSessionTimeoutClock(topRef, expire);
+                }, 1000);
+            }
         // --> /*]]>*/
         </script>
 <?php
