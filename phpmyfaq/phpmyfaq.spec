@@ -1,5 +1,5 @@
 #
-# $Id: phpmyfaq.spec,v 1.14 2007-04-29 19:15:12 matteo Exp $
+# $Id: phpmyfaq.spec,v 1.15 2007-05-12 16:14:03 matteo Exp $
 #
 # This is the spec file for building an RPM package of phpMyFAQ
 # for most of the different RPM-based distributions
@@ -57,7 +57,7 @@
 # phpMyFAQ
 #
 %define name        phpmyfaq
-%define version     2.0.0.rc2
+%define version     2.1.0.dev
 %define release     1
 %define epoch       0
 
