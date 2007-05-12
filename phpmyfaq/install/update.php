@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.144 2007-04-30 14:05:46 thorstenr Exp $
+* $Id: update.php,v 1.145 2007-05-12 11:46:10 thorstenr Exp $
 *
 * Main update script
 *
@@ -21,7 +21,7 @@
 * under the License.
 */
 
-define('NEWVERSION', '2.0.0-RC2');
+define('NEWVERSION', '2.0.0');
 define('COPYRIGHT', '&copy; 2001-2007 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
@@ -201,7 +201,7 @@ if ($step == 1) {
     <option value="2.0.0-alpha">phpMyFAQ 2.0.0-alpha</option>
     <option value="2.0.0-beta">phpMyFAQ 2.0.0-beta</option>
     <option value="2.0.0-beta2">phpMyFAQ 2.0.0-beta2</option>
-    <option value="2.0.0-RC">phpMyFAQ 2.0.0-RC</option>
+    <option value="2.0.0-RC">phpMyFAQ 2.0.0-RC and later</option>
 </select>
 
 <p class="center"><input type="submit" value="Go to step 2 of 5" class="button" /></p>
