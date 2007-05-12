@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ibm_db2.sql.php,v 1.17 2007-04-30 14:00:15 thorstenr Exp $
+* $Id: ibm_db2.sql.php,v 1.18 2007-05-12 14:30:30 thorstenr Exp $
 *
 * CREATE TABLE instruction for IBM DB2 Universal Database, IBM Cloudscape,
 * and Apache Derby databases
@@ -195,34 +195,33 @@ $query[] = "CREATE TABLE ".$sqltblpre."faqglossary (
 id INTEGER NOT NULL ,
 lang VARCHAR(2) NOT NULL ,
 item VARCHAR(255) NOT NULL ,
-definition TEXT NOT NULL,
+definition CLOB NOT NULL,
 PRIMARY KEY (id, lang))";
 
 //faqgroup
 $query[] = "CREATE TABLE ".$sqltblpre."faqgroup (
 group_id INTEGER NOT NULL,
-name VARCHAR(25) NULL,
-description TEXT NULL,
-auto_join INTEGER NULL,
-PRIMARY KEY(group_id),
-UNIQUE INDEX name(name)
+name VARCHAR(25) NOT NULL,
+description CLOB NOT NULL,
+auto_join INTEGER NOT NULL,
+PRIMARY KEY(group_id)
 )";
 
 //faqgroup_right
 $query[] = "CREATE TABLE ".$sqltblpre."faqgroup_right (
-group_id INT(11) NOT NULL,
-right_id INT(11) NOT NULL,
+group_id INTEGER NOT NULL,
+right_id INTEGER NOT NULL,
 PRIMARY KEY(group_id, right_id)
 )";
 
 //faqlinkverifyrules
 $query[] = "CREATE TABLE ".$sqltblpre."faqlinkverifyrules (
-id int(11) NOT NULL default '0',
+id INTEGER NOT NULL,
 type varchar(6) NOT NULL default '',
 url varchar(255) NOT NULL default '',
 reason varchar(255) NOT NULL default '',
-enabled enum('y','n') NOT NULL default 'y',
-locked enum('y','n') NOT NULL default 'n',
+enabled VARCHAR(1) NOT NULL default 'y',
+locked VARCHAR(1) NOT NULL default 'n',
 owner varchar(255) NOT NULL default '',
 dtInsertDate varchar(15) NOT NULL default '',
 dtUpdateDate varchar(15) NOT NULL default '',
@@ -236,8 +235,8 @@ lang varchar(5) NOT NULL,
 header varchar(255) NOT NULL,
 artikel CLOB NOT NULL,
 datum varchar(14) NOT NULL,
-author_name  varchar(255) NULL,
-author_email varchar(255) NULL,
+author_name  varchar(255) NOT NULL,
+author_email varchar(255) NOT NULL,
 active char(1) default 'y',
 comment char(1) default 'n',
 date_start varchar(14) NOT NULL DEFAULT '00000000000000',
@@ -260,17 +259,17 @@ PRIMARY KEY (id))";
 
 //faqright
 $query[] = "CREATE TABLE ".$sqltblpre."faqright (
-right_id INTEGER UNSIGNED NOT NULL,
-name VARCHAR(50) NULL,
-description TEXT NULL,
-for_users INTEGER NULL DEFAULT 1,
-for_groups INTEGER NULL DEFAULT 1,
+right_id INTEGER NOT NULL,
+name VARCHAR(50) NOT NULL,
+description CLOB NOT NULL,
+for_users INTEGER NOT NULL DEFAULT 1,
+for_groups INTEGER NOT NULL DEFAULT 1,
 PRIMARY KEY (right_id)
 )";
 
 //faqsessions
 $query[] = "CREATE TABLE ".$sqltblpre."faqsessions (
-sid integer NOT NULL,
+sid INTEGER NOT NULL,
 user_id INTEGER NOT NULL,
 ip varchar(64) NOT NULL,
 time integer NOT NULL,
@@ -288,28 +287,28 @@ PRIMARY KEY (tagging_id, tagging_name)
 $query[] = "CREATE TABLE ".$sqltblpre."faquser (
 user_id INTEGER NOT NULL,
 login VARCHAR(25) NOT NULL,
-session_id VARCHAR(150) NULL,
-session_timestamp INTEGER NULL,
-ip VARCHAR(15) NULL,
-account_status VARCHAR(50) NULL,
-last_login VARCHAR(14) NULL,
-auth_source VARCHAR(100) NULL,
-member_since VARCHAR(14) NULL,
+session_id VARCHAR(150) NOT NULL,
+session_timestamp INTEGER NOT NULL,
+ip VARCHAR(15) NOT NULL,
+account_status VARCHAR(50) NOT NULL,
+last_login VARCHAR(14) NOT NULL,
+auth_source VARCHAR(100) NOT NULL,
+member_since VARCHAR(14) NOT NULL,
 PRIMARY KEY (user_id)
 )";
 
 //faquserdata
 $query[] = "CREATE TABLE ".$sqltblpre."faquserdata (
 user_id INTEGER NOT NULL,
-last_modified varchar(14)(14) NULL,
-display_name VARCHAR(50) NULL,
-email VARCHAR(100) NULL
+last_modified varchar(14) NOT NULL,
+display_name VARCHAR(50) NOT NULL,
+email VARCHAR(100) NOT NULL
 )";
 
 //faquserlogin
 $query[] = "CREATE TABLE ".$sqltblpre."faquserlogin (
 login VARCHAR(25) NOT NULL,
-pass VARCHAR(25) NULL,
+pass VARCHAR(25) NOT NULL,
 PRIMARY KEY (login)
 )";
 
@@ -329,7 +328,7 @@ PRIMARY KEY (user_id, right_id)
 
 //faqvisits
 $query[] = "CREATE TABLE ".$sqltblpre."faqvisits (
-id integer NOT NULL,
+id INTEGER NOT NULL,
 lang varchar(5) NOT NULL,
 visits INTEGER NOT NULL,
 last_visit INTEGER NOT NULL,

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Ibm_db2.php,v 1.7 2007-04-30 05:42:32 thorstenr Exp $
+ * $Id: Ibm_db2.php,v 1.8 2007-05-12 14:30:30 thorstenr Exp $
  *
  * db_ibm_db2
  *
@@ -348,24 +348,6 @@ class db_ibm_db2
 
         return $this->query($query);
     }
-
-    /**
-    * getTableStatus()
-    *
-    * This function returns the table status.
-    *
-    * TODO: Implement this function!
-    *
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since   2005-04-16
-    */
-    function getTableStatus()
-    {
-        return;
-    }
-
-
 
     /**
     * nextID()
