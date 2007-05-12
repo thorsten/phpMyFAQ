@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<!-- $Id: documentation.en.html,v 1.28 2007-04-20 16:30:37 thorstenr Exp $ -->
+<!-- $Id: documentation.en.html,v 1.28.2.1 2007-05-12 12:24:32 thorstenr Exp $ -->
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<title>Documentation for phpMyFAQ 2.0.x</title>
@@ -484,14 +484,14 @@
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4c"></a>4.c. Category Administration</strong></p>
+    <p><strong><a name="5c"></a>5.c. Category Administration</strong></p>
     <p>phpMyFAQ lets you create different categories and nested sub-categories for your FAQ. You can also re-arrange your categories in a different order. It is possible to use varius languages per category, too; there's also a frontend about all translated categories. For accessibility reasons you should add a small description for every category. If you add a new category, you can set the permissions for users and groups, and you can bind an administrator to that category. This is quite nice if you want to share the work in your FAQ between various admin users.</p>
     <p></p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4d"></a>4.d. Record Administration</strong></p>
+    <p><strong><a name="5d"></a>5.d. Record Administration</strong></p>
     <p>You can create entries directly in the admin area. Created entries are NOT published by default. The meaning of the fields is as follows:</p>
     <ul>
 
@@ -501,7 +501,7 @@
     <li><strong>Question</strong><br />
     This is the question or headline of your entry. </li>
 
-    <li><strong>Content</strong><br />The content is an answer to the question or a solution for a problem. The content can be edited with the included WYSIWYG (<strong>W</strong>hat <strong>Y</strong>ou <strong>S</strong>ee <strong>I</strong>s <strong>W</strong>hat <strong>Y</strong>ou <strong>G</strong>et) editor when JavaScript is enabled. You can place images where you want with the integrated image manager. The editor provides the following key combinations:
+    <li><strong>Answer</strong><br />The content is an answer to the question or a solution for a problem. The content can be edited with the included WYSIWYG (<strong>W</strong>hat <strong>Y</strong>ou <strong>S</strong>ee <strong>I</strong>s <strong>W</strong>hat <strong>Y</strong>ou <strong>G</strong>et) editor when JavaScript is enabled. You can place images where you want with the integrated image manager. The editor provides the following key combinations:
         <ul>
         <li>CTRL-A - select all</li>
         <li>CTRL-B - bold</li>
@@ -535,7 +535,7 @@
     If you do not want to allow public comments for this entry you can disable the feature here.</li>
 
     <li><strong>Revsion</strong><br />
-    Lika a wiki, phpMyFAQ 1.6.x supports revisions of every entry. New revisions won't be created autmatically but you can create a new one if you click on "yes". The old revision will be stored in the database and the new current revision will be displayed in the public frontend. You can also bring back old revisions into the frontend if you select an old revision and save them as a new one.</li>
+    Lika a wiki, phpMyFAQ 2 supports revisions of every entry. New revisions won't be created autmatically but you can create a new one if you click on "yes". The old revision will be stored in the database and the new current revision will be displayed in the public frontend. You can also bring back old revisions into the frontend if you select an old revision and save them as a new one.</li>
 
     <li><strong>Date</strong><br />
     Date of the last change.</li>
@@ -556,31 +556,68 @@
     <p><a href="#top">back to top</a></p>
 
 
-
+    
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4f"></a>4.f. News Administration</strong></p>
+    <p><strong><a name="5e"></a>5.e. Comment Administration</strong></p>
+    <p></p>
+    <p><a href="#top">back to top</a></p>
+    
+    
+    
+    <hr style="width: 90%; height: 1px;"  />
+    <p><strong><a name="5f"></a>5.f. News Administration</strong></p>
     <p>phpMyFAQ offers the ability to post news on the starting page of your FAQ. In the administration area you can create new items, edit existing news or delete them. </p>
     <p><a href="#top">back to top</a></p>
 
 
+    
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4g"></a>4.g. Edit open questions</strong></p>
-    <p>phpMyFAQ lets visitors contribute to the FAQ by asking questions. Every visitor is able to view these open questions in the public area, and may give an answer. If you wish to get rid of open questions you can do so using this section. Alternatively you can take over a question and answer it yourself and hereby add it to the FAQ.</p>
-    <p><a href="#top">back to top</a></p>
-
-
-    <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4g"></a>4.g. Statistics</strong></p>
+    <p><strong><a name="5g"></a>5.g. Statistics</strong></p>
     <p>Below every entry visitors have the chance to rate the overall quality of an article by giving ratings from 1 to 5 (whereas 1 is the worst, 5 the best rating). In the statistics the average rating and number of votes becomes visible for every rated entry. To give you a quick overview entries with an average rating of 2 or worse are displayed in red, an average above 4 results in a green number.</p>
     <p><a href="#top">back to top</a></p>
 
 
+
+    
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4g"></a>4.g. Cookies</strong></p>
-    <p>phpMyFAQ can save the login information to the admin area as a cookie on your computer. Although this feature may be very comfortable it is a potential security hole. Only use cookies if you are the only person using the computer.
-    </p>
+    <p><strong><a name="5h"></a>5.h. Exports</strong></p>
+    <p>You can export your contents of your whole FAQ or just some selected categories into four formats:</p>
+    <ul>
+        <li>a XML file</li>
+        <li>a plain XHTML file</li>
+        <li>a PDF file with a table of contents</li>
+        <li>a DocBook XML file</li>
+    </ul>
     <p><a href="#top">back to top</a></p>
 
+
+
+    
+    <hr style="width: 90%; height: 1px;"  />
+    <p><strong><a name="5i"></a>5.i. Backup</strong></p>
+    <p>Using the backup function it is possible to create a copy of the database to a single file. This makes it possible to restore the FAQ after a possible "crash" or to move the FAQ from one server to another. It is recommended to make regular backups of your FAQ.</p>
+    <ul>
+    <li><strong>backup data</strong><br />
+    A backup of all <strong>data</strong> will include all entries, users, comments, etc.</li>
+    <li><strong>backup logs</strong><br />
+    The sessions of visits and the adminlog will be saved (i.e. all <strong>LOG</strong> files). This information is not necessary for running phpMyFAQ, they serve only statistical purposes.</li>
+    </ul>
+    <p><a href="#top">back to top</a></p>
+
+
+
+    
+    <hr style="width: 90%; height: 1px;"  />
+    <p><strong><a name="5j"></a>5.j. Configuration</strong></p>
+    <p></p>
+    <p><a href="#top">back to top</a></p>
+
+
+<!-- 
+    <hr style="width: 90%; height: 1px;"  />
+    <p><strong><a name="4g"></a>4.g. Edit open questions</strong></p>
+    <p>phpMyFAQ lets visitors contribute to the FAQ by asking questions. Every visitor is able to view these open questions in the public area, and may give an answer. If you wish to get rid of open questions you can do so using this section. Alternatively you can take over a question and answer it yourself and hereby add it to the FAQ.</p>
+    <p><a href="#top">back to top</a></p>
 
     <hr style="width: 90%; height: 1px;"  />
     <p><strong><a name="4h"></a>4.h. View Sessions</strong></p>
@@ -605,45 +642,7 @@
     <p>Here you can edit the general settings of phpMyFAQ. Should you want to enter multiple email addresses in the configuration separate them by a comma (",").</p>
     <p><a href="#top">back to top</a></p>
 
-
-    <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4l"></a>4.l. Backups</strong></p>
-    <p>Using the backup function it is possible to create a copy of the database to a single file. This makes it possible to restore the FAQ after a possible "crash" or to move the FAQ from one server to another. It is recommended to make regular backups of your FAQ.</p>
-    <ul>
-    <li><strong>backup data</strong><br />
-    A backup of all <strong>data</strong> will include all entries, users, comments, etc.</li>
-    <li><strong>backup LOGs</strong><br />
-    The sessions of visits and the adminlog will be saved (i.e. all <strong>LOG</strong> files). This information is not necessary for running phpMyFAQ, they serve only statistical purposes.</li>
-    </ul>
-    <p><a href="#top">back to top</a></p>
-
-
-    <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4m"></a>4.m. Export your FAQ</strong></p>
-    <p>You can export your contents of your FAQ in four formats:</p>
-    <ul>
-        <li>a XML file</li>
-        <li>a plain XHTML file</li>
-        <li>a PDF file with a table of contents</li>
-        <li>a DocBook XML file</li>
-    </ul>
-    <p><a href="#top">nach oben</a></p>
-
-
-    <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4n"></a>4.n. Firefox search plugin</strong></p>
-    <p>You can enter the title and a description for your unique Firefox search plugin for your version of phpMyFAQ. If you want to change the title or the description just re-create the plugin.</p>
-    <p>If you want an own favicon for the Firefox search box you have to change the PNG image file called <strong>pmfsearch.png</strong> in the folder <strong>images/</strong>. If you don't change it the phpMyFAQ logo will be used.</p>
-    <p><a href="#top">back to top</a></p>
-
-
-
-    <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4o"></a>4.o. Logout</strong></p>
-    <p>Clicking on <strong>Logout</strong> will end the current session. It is recommended to logout before closing the browser to prevent exploits.</p>
-    <p><a href="#top">back to top</a></p>
-
-
+ -->
 
     <hr style="width: 90%; height: 1px;"  />
     <p><strong><a name="6"></a>6. Customising phpMyFAQ 2.0.x</strong></p>
@@ -676,7 +675,7 @@
     <p>
     Author: Thorsten Rinne<br />
     Co-Authors: <a href="mailto:stephan AT yauh DOT de">Stephan Hochhaus</a>, <a href="mailto:mgl-mail AT t-online DOT de">Markus Gläser</a><br />
-    Last update: 2007-03-14</p>
+    Last update: 2007-05-12</p>
     <p>&copy; 2001-2007 phpMyFAQ Team</p>
     <p>This documentation is licensed under a <a href="http://creativecommons.org/licenses/by/2.0/" class="subfoot">Creative Commons License</a>.</p>
     <p><a href="#top">back to top</a></p>
