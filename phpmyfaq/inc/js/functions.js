@@ -1,25 +1,26 @@
 /**
-* $Id: functions.js,v 1.4 2006-10-01 13:44:59 matteo Exp $
-*
-* Some JavaScript functions used in the admin backend
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @author       Periklis Tsirakidis <tsirakidis@phpdevel.de>
-* @author       Matteo Scaramuccia <matteo@scaramuccia.com>
-* @author       Minoru TODA <todam@netjapan.co.jp>
-* @since        2003-11-13
-* @copyright    (c) 2001-2006 phpMyFAQ Team
-* 
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-* 
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * $Id: functions.js,v 1.5 2007-05-14 19:42:49 thorstenr Exp $
+ *
+ * Some JavaScript functions used in the admin backend
+ *
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author      Periklis Tsirakidis <tsirakidis@phpdevel.de>
+ * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author      Minoru TODA <todam@netjapan.co.jp>
+ * @author      Lars Tiedemann, <php@larstiedemann.de>
+ * @since       2003-11-13
+ * @copyright   (c) 2003-2007 phpMyFAQ Team
+ * 
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 function Picture(pic,title,width,height)
 {
@@ -152,40 +153,38 @@ function select_unselectAll(select_id)
 }
 
 /**
-* checks all checkboxes in form with the given ID.
-*
-* @access public
-* @author Lars Tiedemann, <php@larstiedemann.de>
-* @param string
-* @return void
-*/
+ * checks all checkboxes in form with the given ID.
+ *
+ * @access  public
+ * @author  Lars Tiedemann, <php@larstiedemann.de>
+ * @param   string
+ * @return  void
+ */
 function form_checkAll(form_id)
 {
     var inputElements = document.getElementById(form_id).getElementsByTagName('input');
-    for (var i = 0; i < inputElements.length; i++) {
-        var type = inputElements[i].getAttribute('type');
-        if ((type == "checkbox" || type == "CHECKBOX")) {
-            inputElements[i].setAttribute('checked', "checked");
+    for (var i = 0, ele; ele = inputElements[i]; i++) {
+        if (ele.type == "checkbox") {
+            ele.checked = true;
         }
     }
 }
 
 /**
-* unchecks all checkboxes in form with the given ID.
-*
-* @access public
-* @author Lars Tiedemann, <php@larstiedemann.de>
-* @param string
-* @return void
-*/
+ * unchecks all checkboxes in form with the given ID.
+ *
+ * @access  public
+ * @author  Lars Tiedemann, <php@larstiedemann.de>
+ * @param   string
+ * @return  void
+ */
 function form_uncheckAll(form_id)
 {
     var inputElements = document.getElementById(form_id).getElementsByTagName('input');
-    for (var i = 0; i < inputElements.length; i++) {
-        var type = inputElements[i].getAttribute('type');
-        if ((type == "checkbox" || type == "CHECKBOX") && inputElements[i].getAttribute('checked')) {
-            inputElements[i].removeAttributeNode(inputElements[i].getAttributeNode('checked'));
-        }
+    for (var i = 0, ele; ele = inputElements[i]; i++) {
+        if (ele.type == "checkbox") {
+            ele.checked = false;
+        } 
     }
 }
 
