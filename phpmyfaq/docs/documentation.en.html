@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<!-- $Id: documentation.en.html,v 1.28.2.1 2007-05-12 12:24:32 thorstenr Exp $ -->
+<!-- $Id: documentation.en.html,v 1.28.2.2 2007-05-14 17:36:58 thorstenr Exp $ -->
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<title>Documentation for phpMyFAQ 2.0.x</title>
@@ -89,10 +89,11 @@
             <li><a href="#5d">Record Administration</a></li>
             <li><a href="#5e">Comment Administration</a></li>
             <li><a href="#5f">News Administration</a></li>
-            <li><a href="#5g">Statistics</a></li>
-            <li><a href="#5h">Exports</a></li>
-            <li><a href="#5i">Backup</a></li>
-            <li><a href="#5j">Configuration</a></li>
+            <li><a href="#5g">Glossary</a></li>
+            <li><a href="#5h">Statistics</a></li>
+            <li><a href="#5i">Exports</a></li>
+            <li><a href="#5j">Backup</a></li>
+            <li><a href="#5k">Configuration</a></li>
         </ol></li>
         <li><strong><a href="#6">Customising phpMyFAQ 2.0.x</a></strong>
         <ol class="alpha">
@@ -103,13 +104,14 @@
         <li><strong><a href="#7">One more thing</a></strong></li>
     </ol>
 
+    
     <hr style="width: 90%; height: 1px;"  />
     <p><a name="1"></a><strong>1. Introduction</strong></p>
     <p>phpMyFAQ is a multilingual, completely database-driven FAQ-system. It supports various databases to store all data, PHP 4.3.3 (or higher) is needed in order to access this data. phpMyFAQ also offers a multi-language Content Management-System with a WYSIWYG editor and an Image Manager, flexible multi-user support with user and group based permissions on categories and records, a wiki-like revision feature, a news system, user-tracking, language modules, enhanced automatic content negotiation, templates, extensive XML-support, PDF-support, a backup-system, a dynamic sitemap, related articles, tagging, RSS feeds, built-in spam protection systems, LDAP support, and an easy to use installation script.</p>
     <p>This documentation should help you with installing and administrating phpMyFAQ.</p>
     <p><a href="#top">back to top</a></p>
 
-
+    
     <hr style="width: 90%; height: 1px;"  />
     <p><a name="1a"></a><strong>1.a. License</strong></p>
     <p>phpMyFAQ is published unter the <a href="http://www.mozilla.org/MPL/MPL-1.1.html">Mozilla Public License Version 1.1</a> (MPL). This license guarantees you the free usage of phpMyFAQ, access to the sourcecode and the right to modify and distribute phpMyFAQ.</p>
@@ -119,7 +121,7 @@
     <p>This documentation is licensed under a <a href="http://creativecommons.org/licenses/by/2.0/" class="subfoot">Creative Commons License</a>.</p>
     <p><a href="#top">back to top</a></p>
 
-
+    
     <hr style="width: 90%; height: 1px;"  />
     <p><a name="1b"></a><strong>1.b. Support</strong></p>
     <p>If you should run into any problems using phpMyFAQ check out our support forums at <a href="http://forum.phpmyfaq.de">forum.phpmyfaq.de</a>. There is no support for free by phone or email, please refrain from calling or mailing us.</p>
@@ -314,7 +316,6 @@
     <p><a href="#top">back to top</a></p>
 
 
-
     <hr style="width: 90%; height: 1px;"  />
     <p><a name="3"></a><strong>3. Upgrading</strong></p>
     <p>Upgrading to phpMyFAQ 2.0.x is possible from the following versions:</p>
@@ -492,7 +493,8 @@
 
     <hr style="width: 90%; height: 1px;"  />
     <p><strong><a name="5d"></a>5.d. Record Administration</strong></p>
-    <p>You can create entries directly in the admin area. Created entries are NOT published by default. The meaning of the fields is as follows:</p>
+    <p>You can create entries directly in the admin area. Created entries are NOT published by default. All available entries are listed on the page "edit FAQs". By clicking on them the same interface that lets you create records will open up, this time with all the relevant data of the specific entry. The meaning of the fields is as follows:</p>
+    
     <ul>
 
     <li><strong>Category</strong><br />
@@ -519,8 +521,14 @@
     <li><strong>Keywords</strong><br />
     Keywords are relevant for searching through the database. In case you didn't include a specific word in the entry itself, but it is closely related to the content you may wish to include it as a keyword, so the entry will come up as a search result. It is also possible to use non-related keywords so that a wrongly entered search will also lead to the right results.</li>
 
+    <li><strong>Tags</strong><br />
+    You can add some tags about the current entry here. An Ajax-based auto-completion method helps you while typing your tags.</li>
+
     <li><strong>Author</strong><br />
-    It is possible to specify an author for your entries.</li>
+    It is possible to specify an author for your entry.</li>
+
+    <li><strong>E-Mail</strong><br />
+    It is possible to specify the author's e-mail for your entry, but the e-mail address won't be shown in the frontend.</li>
 
     <li><strong>Language</strong><br />
     You can select the language of your entry. By default the selected language saved in the configuration will be chosen. You can create entries in multiple languages like this: Write an article in English (or any other language) and save it. Now choose <em>edit records</em> and edit your English entry. Change the theme, content and keywords and change language to, let's say Brazilian portuguese. <em>Save</em> the entry. Now you can, when you click <em>edit records</em>, see both entries in your list, having the same id, yet different languages.</li>
@@ -537,6 +545,12 @@
     <li><strong>Revsion</strong><br />
     Lika a wiki, phpMyFAQ 2 supports revisions of every entry. New revisions won't be created autmatically but you can create a new one if you click on "yes". The old revision will be stored in the database and the new current revision will be displayed in the public frontend. You can also bring back old revisions into the frontend if you select an old revision and save them as a new one.</li>
 
+    <li><strong>Permissions</strong><br />
+    If you add or edit a new entry, you can set the permissions for users and groups.</li>
+
+    <li><strong>Record expiration time window</strong><br />
+    If you need to you can set a time frame from one date to a second date when the FAQ entry should be valid and visible. Before and after this time frame the entry isn't visible and cannot be accessed.</li>
+    
     <li><strong>Date</strong><br />
     Date of the last change.</li>
 
@@ -545,42 +559,43 @@
 
     <li><strong>Changelog</strong><br />
     The changelog lists all previous changes, including user and date of change.</li>
-    <li><strong>approve records</strong><br />
-    All entries in the database that are <strong>not</strong> active (and therefore not publicly visible) are listed here. Content suggested by visitors will also be placed here. To approve those entries click on the entry to edit it. Change it to "active" so it becomes visible. You can also delete entries here (this includes a security check if you are certain).</li>
-
-    <li><strong>edit records</strong><br />
-    All available entries are listed here. By clicking on them the same interface that lets you create records will open up, this time with all the relevant data of the specific entry.</li>
     </ul>
 
     <p>You can edit and delete all records as well. Please note that old revisions won't be deleted.</p>
+    <p>phpMyFAQ lets visitors contribute to the FAQ by asking questions. Every visitor is able to view these open questions in the public area, and may give an answer. If you wish to get rid of open questions you can do so using this section. Alternatively you can take over a question and answer it yourself and hereby add it to the FAQ.</p>
     <p><a href="#top">back to top</a></p>
-
 
     
     <hr style="width: 90%; height: 1px;"  />
     <p><strong><a name="5e"></a>5.e. Comment Administration</strong></p>
-    <p></p>
+    <p>In this straight frontend you can see all comments that have been posted in the FAQs and the news. You cannot edit comments but you can delete them with one easy click.</p>
     <p><a href="#top">back to top</a></p>
-    
-    
+        
     
     <hr style="width: 90%; height: 1px;"  />
     <p><strong><a name="5f"></a>5.f. News Administration</strong></p>
     <p>phpMyFAQ offers the ability to post news on the starting page of your FAQ. In the administration area you can create new items, edit existing news or delete them. </p>
     <p><a href="#top">back to top</a></p>
-
-
+        
     
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="5g"></a>5.g. Statistics</strong></p>
-    <p>Below every entry visitors have the chance to rate the overall quality of an article by giving ratings from 1 to 5 (whereas 1 is the worst, 5 the best rating). In the statistics the average rating and number of votes becomes visible for every rated entry. To give you a quick overview entries with an average rating of 2 or worse are displayed in red, an average above 4 results in a green number.</p>
+    <p><strong><a name="5g"></a>5.g. Glossary</strong></p>
+    <p>A glossary is a list of terms in a particular domain of knowledge with the definitions for those terms. You can add, edit and delete glossary items here. The items will be automatically displayed in &lt;acronym&gt; tags in the frontend.</p>
     <p><a href="#top">back to top</a></p>
 
-
+    
+    <hr style="width: 90%; height: 1px;"  />
+    <p><strong><a name="5h"></a>5.h. Statistics</strong></p>
+    <p>Below every entry visitors have the chance to rate the overall quality of an article by giving ratings from 1 to 5 (whereas 1 is the worst, 5 the best rating). In the statistics the average rating and number of votes becomes visible for every rated entry. To give you a quick overview entries with an average rating of 2 or worse are displayed in red, an average above 4 results in a green number.</p>
+    <p><strong>View Sessions</strong><br />
+    This functions lets you keep track of your visitors. Every visitor is assigned an id when coming to your starting page, that identifies him during his whole visit. Using the information gathered here you could reconstruct the way visitors use your FAQ and make neccessary adjustments to your categories, content or keywords. There is also a search function that you can use to look for <strong>a certain IP</strong>, the <strong>number of minimum actions</strong> or <strong>the date of a visit</strong>.</p>
+    <p><strong>View Adminlog</strong><br />
+    The adminlog allows you to track any actions taken by users in the admin area of phpMyFAQ. If you feel you have an intruder in the system you can find out for sure by checking the admin log.</p>
+    <p><a href="#top">back to top</a></p>
 
     
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="5h"></a>5.h. Exports</strong></p>
+    <p><strong><a name="5i"></a>5.i. Exports</strong></p>
     <p>You can export your contents of your whole FAQ or just some selected categories into four formats:</p>
     <ul>
         <li>a XML file</li>
@@ -590,11 +605,9 @@
     </ul>
     <p><a href="#top">back to top</a></p>
 
-
-
     
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="5i"></a>5.i. Backup</strong></p>
+    <p><strong><a name="5j"></a>5.j. Backup</strong></p>
     <p>Using the backup function it is possible to create a copy of the database to a single file. This makes it possible to restore the FAQ after a possible "crash" or to move the FAQ from one server to another. It is recommended to make regular backups of your FAQ.</p>
     <ul>
     <li><strong>backup data</strong><br />
@@ -604,52 +617,20 @@
     </ul>
     <p><a href="#top">back to top</a></p>
 
-
-
     
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="5j"></a>5.j. Configuration</strong></p>
-    <p></p>
+    <p><strong><a name="5k"></a>5.k. Configuration</strong></p>
+    <p>Here you can edit the general, the record and spam protection settings of phpMyFAQ. Should you want to enter multiple email addresses in the configuration separate them by a comma (",").</p>
     <p><a href="#top">back to top</a></p>
 
-
-<!-- 
-    <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4g"></a>4.g. Edit open questions</strong></p>
-    <p>phpMyFAQ lets visitors contribute to the FAQ by asking questions. Every visitor is able to view these open questions in the public area, and may give an answer. If you wish to get rid of open questions you can do so using this section. Alternatively you can take over a question and answer it yourself and hereby add it to the FAQ.</p>
-    <p><a href="#top">back to top</a></p>
-
-    <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4h"></a>4.h. View Sessions</strong></p>
-    <p>This functions lets you keep track of your visitors. Every visitor is assigned an id when coming to your starting page, that identifies him during his whole visit. Using the information gathered here you could reconstruct the way visitors use your FAQ and make neccessary adjustments to your categories, content or keywords. There is also a search function that you can use to look for <strong>a certain IP</strong>, the <strong>number of minimum actions</strong> or <strong>the date of a visit</strong>.</p>
-    <p><a href="#top">back to top</a></p>
-
-
-    <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4i"></a>4.i. View Adminlog</strong></p>
-    <p>The adminlog allows you to track any actions taken by users in the admin area of phpMyFAQ. If you feel you have an intruder in the system you can find out for sure by checking the admin log.</p>
-    <p><a href="#top">back to top</a></p>
-
-
-    <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4j"></a>4.j. Change passwords</strong></p>
-    <p>This section lets you change your password. It is possible to deny this function for a certain user, which is very reasonable for group accounts. In order to change the password you need to have "Change Password" enabled for this user.</p>
-    <p><a href="#top">back to top</a></p>
-
-
-    <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4k"></a>4.k. Edit configuration</strong></p>
-    <p>Here you can edit the general settings of phpMyFAQ. Should you want to enter multiple email addresses in the configuration separate them by a comma (",").</p>
-    <p><a href="#top">back to top</a></p>
-
- -->
-
+    
     <hr style="width: 90%; height: 1px;"  />
     <p><strong><a name="6"></a>6. Customising phpMyFAQ 2.0.x</strong></p>
     <p>In phpMyFAQ 2.0.x code and layout are seperated. The layout is based on several templates, that you can modify to suit your own needs. The most important files for phpMyFAQ's layout can be found in the directory <em>template/</em>. All original templates are valid XHTML 1.0 Transitional and we don't use tables for layout reasons.</p>
     <p><strong>Note:</strong> You can change the layout of the admin area using the CSS file <em>admin.css</em>.</p>
     <p><a href="#top">back to top</a></p>
-
+    
+    
     <hr style="width: 90%; height: 1px;"  />
     <p><strong><a name="6a"></a>6.a. The file template/index.tpl</strong></p>
     <p>The default layout of phpMyFAQ is saved in the <strong>index.tpl</strong> file. This is a normal HTML-file including some variables in curly brackets, serving as placeholders for content.</p>
@@ -659,11 +640,13 @@
     <p>You can change the template as you wish, but you may want to keep the original template in case something goes wrong. Theoretically you can use any editor for changing the templates, test using Dreamweaver were successful. Modifying the files with Microsoft Frontpage, Adobe GoLive or NetObjects Fusion may mess up the template, since they alter the source-code.</p>
     <p><a href="#top">back to top</a></p>
 
+    
     <hr style="width: 90%; height: 1px;"  />
     <p><strong><a name="6b"></a>6.b. The file template/style.css</strong></p>
     <p>All formattings such as fonts and the like can be modified in the CSS-file <strong>style.css</strong>. The colors are defined in the file <strong>colors.css</strong>. More info can be found at <a href="http://www.w3.org/Style/CSS">the official W3C website</a>.</p>
     <p><a href="#top">back to top</a></p>
 
+    
     <hr style="width: 90%; height: 1px;"  />
     <p><strong><a name="6c"></a>6.c. More Templates</strong></p>
     <p>You need an other template design or more XHTML/CSS features? Then write us an email and we can talk about it.</p>
@@ -675,7 +658,7 @@
     <p>
     Author: Thorsten Rinne<br />
     Co-Authors: <a href="mailto:stephan AT yauh DOT de">Stephan Hochhaus</a>, <a href="mailto:mgl-mail AT t-online DOT de">Markus Gläser</a><br />
-    Last update: 2007-05-12</p>
+    Last update: 2007-05-14</p>
     <p>&copy; 2001-2007 phpMyFAQ Team</p>
     <p>This documentation is licensed under a <a href="http://creativecommons.org/licenses/by/2.0/" class="subfoot">Creative Commons License</a>.</p>
     <p><a href="#top">back to top</a></p>
