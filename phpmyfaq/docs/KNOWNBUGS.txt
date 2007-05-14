@@ -1,18 +1,32 @@
-$Id: KNOWNBUGS.txt,v 1.21 2007-05-01 19:44:12 thorstenr Exp $
+$Id: KNOWNBUGS.txt,v 1.22 2007-05-14 17:40:58 thorstenr Exp $
 
-MISSING FEATURES in phpMyFAQ 2.0.0-rc2
+MISSING FEATURES in phpMyFAQ 2.1.0-dev
 
-- unfinished documentation (blocker for final)
+- add random list of records (XHTML and RSS) ?
+- add archive function ?
+- add public user registration ?
+- add public user profile page ?
+- add RTF export ?
+- add public glossary page ?
+- add OpenID support ?
+- add LDAP authentication support ?
+- switch to TCPDF class (still based on FPDF)
+- improve permission management ?
+- improve backup/restore including attachment backups ?
+- improve PHP 6 support
+- message to the user, who has posted a question and an answer is availible ?
+- update only possible from versions 1.5, 1.6 and 2.0 !
+- more accessibility features (WAI and Section 508) ?
+- bugfixing for stability or security reasons
 
 
-KNOWN ISSUES in phpMyFAQ 2.0.0-rc2
+KNOWN ISSUES in phpMyFAQ 2.1.0-dev
 
 - some language files need an update
 - using UTF-8 may not work in the PDF files
 
 
-KNOWN BUGS AND ISSUES in phpMyFAQ 2.0.0-rc2
+KNOWN BUGS AND ISSUES in phpMyFAQ 2.1.0-dev
 
-- IBM DB2 support untested
 - Oracle support untested
 - Interbase/Firebird support untested
