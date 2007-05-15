@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.113 2007-05-01 17:21:39 thorstenr Exp $
+ * $Id: Faq.php,v 1.114 2007-05-15 18:51:47 thorstenr Exp $
  *
  * The main FAQ class
  *
@@ -210,11 +210,19 @@ class PMF_Faq
             ON
                 fd.id = fdu.record_id
             WHERE
-                    fd.date_start <= '%s'
-                AND fd.date_end   >= '%s'
-                AND fd.active = 'yes'
-                AND fcr.category_id = %d
-                AND fd.lang = '%s'
+                fd.date_start <= '%s'
+            AND
+                fd.date_end   >= '%s'
+            AND
+                fd.active = 'yes'
+            AND
+                fcr.category_id = %d
+            AND
+                fd.lang = '%s'
+            AND
+                ( fdg.group_id IN (%s)
+            OR
+                (fdu.user_id = %d AND fdg.group_id IN (%s)))
             ORDER BY
                 %s.%s %s",
             SQLPREFIX,
@@ -226,6 +234,9 @@ class PMF_Faq
             $now,
             $category_id,
             $this->language,
+            implode(', ', $this->groups),
+            $this->user,
+            implode(', ', $this->groups),
             $current_table,
             $this->db->escape_string($orderby),
             $this->db->escape_string($sortby));
@@ -399,11 +410,19 @@ class PMF_Faq
             ON
                 fd.id = fdu.record_id
             WHERE
-                    fd.date_start <= '%s'
-                AND fd.date_end   >= '%s'
-                AND fd.active = 'yes'
-                AND fd.id IN (%s)
-                AND fd.lang = '%s'
+                fd.date_start <= '%s'
+            AND
+                fd.date_end   >= '%s'
+            AND
+                fd.active = 'yes'
+            AND
+                fd.id IN (%s)
+            AND
+                fd.lang = '%s'
+            AND
+                ( fdg.group_id IN (%s)
+            OR
+                (fdu.user_id = %d AND fdg.group_id IN (%s)))
             ORDER BY
                 %s %s",
             SQLPREFIX,
@@ -415,6 +434,9 @@ class PMF_Faq
             $now,
             $records,
             $this->language,
+            implode(', ', $this->groups),
+            $this->user,
+            implode(', ', $this->groups),
             $this->db->escape_string($orderby),
             $this->db->escape_string($sortby));
 
@@ -2451,9 +2473,6 @@ class PMF_Faq
         if (!($mode == "user" || $mode == "group")) {
             return false;
         }
-        if (!(is_int($record_id) && is_int($id))) {
-            return false;
-        }
 
         $query = sprintf("
             INSERT INTO
@@ -2466,6 +2485,7 @@ class PMF_Faq
             $mode,
             $record_id,
             $id);
+
         $this->db->query($query);
 
         return true;
@@ -2514,10 +2534,8 @@ class PMF_Faq
     function getPermission($mode, $record_id)
     {
         $permissions = null;
-        if (!($mode == "user" || $mode == "group")) {
-            return false;
-        }
-        if (!is_int($record_id)) {
+
+        if (!($mode == 'user' || $mode == 'group')) {
             return false;
         }
 
@@ -2525,14 +2543,13 @@ class PMF_Faq
             SELECT
                 %s_id AS permission
             FROM
-                %s_faqdata_%s
+                %sfaqdata_%s
             WHERE
                 record_id = %d",
             $mode,
             SQLPREFIX,
             $mode,
-            $record_id
-            );
+            (int)$record_id);
 
         $result = $this->db->query($query);
         if ($this->db->num_rows($result) > 0) {

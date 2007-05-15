@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.add.php,v 1.57 2007-04-22 19:46:59 thorstenr Exp $
+ * $Id: record.add.php,v 1.58 2007-05-15 18:51:46 thorstenr Exp $
  *
  * Adds a record in the database, handles the preview and checks for missing
  * category entries.
@@ -67,10 +67,11 @@ if ($permission["editbt"]) {
         $tags           = $db->escape_string(trim($_POST['tags']));
         $userperm       = isset($_POST['userpermission']) ?
                           $db->escape_string($_POST['userpermission']) : 'all';
-        $user_allowed   = ('all' == $userperm) ? -1 : $db->escape_string($_POST['restricted_users']);
+        $user_allowed   = ('all' == $userperm) ? -1 : (int)$_POST['restricted_users'];
         $groupperm      = isset($_POST['grouppermission']) ?
                           $db->escape_string($_POST['grouppermission']) : 'all';
-        $group_allowed  = ('all' == $groupperm) ? -1 : $db->escape_string($_POST['restricted_groups']);
+        $group_allowed  = ('all' == $groupperm) ? -1 : (int)$_POST['restricted_groups'];
+
         $recordData     = array(
             'lang'          => $db->escape_string($_POST['language']),
             'active'        => $db->escape_string($_POST['active']),

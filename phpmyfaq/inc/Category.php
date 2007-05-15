@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Category.php,v 1.51 2007-04-21 10:18:37 thorstenr Exp $
+ * $Id: Category.php,v 1.52 2007-05-15 18:51:47 thorstenr Exp $
  *
  * The main category class
  *
@@ -1490,7 +1490,7 @@ class PMF_Category
         if (!($mode == "user" || $mode == "group")) {
             return false;
         }
-        if (!is_array($categories) && !is_int($id)) {
+        if (!is_array($categories)) {
             return false;
         }
 
