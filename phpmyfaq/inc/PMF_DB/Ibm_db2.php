@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Ibm_db2.php,v 1.7.2.1 2007-05-12 13:59:22 thorstenr Exp $
+ * $Id: Ibm_db2.php,v 1.7.2.2 2007-05-15 18:05:22 thorstenr Exp $
  *
  * db_ibm_db2
  *
@@ -449,7 +449,7 @@ class db_ibm_db2
         $result = $this->query($query);
 
         while ($row = $this->fetch_object($result)) {
-            if (!in_array($tableName, $this->tableNames)) {
+            if (!in_array($row->SYSTEM_TABLE_NAME, $this->tableNames)) {
                 $this->tableNames[] = $row->SYSTEM_TABLE_NAME;
             }
         }
