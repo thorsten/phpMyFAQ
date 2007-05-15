@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.save.php,v 1.61 2007-05-02 18:16:54 thorstenr Exp $
+ * $Id: record.save.php,v 1.61.2.1 2007-05-15 18:50:15 thorstenr Exp $
  *
  * Save or delete a FAQ record
  *
@@ -168,6 +168,27 @@ if (    isset($submit[1])
         $tagging->saveTags($record_id, explode(',', $tags));
     } else {
         $tagging->deleteTagsFromRecordId($record_id);
+    }
+
+    // Save the permissions
+    $userperm       = isset($_POST['userpermission']) ?
+                      $db->escape_string($_POST['userpermission']) : 'all';
+    $user_allowed   = ('all' == $userperm) ? -1 : (int)$_POST['restricted_users'];
+    $groupperm      = isset($_POST['grouppermission']) ?
+                      $db->escape_string($_POST['grouppermission']) : 'all';
+    $group_allowed  = ('all' == $groupperm) ? -1 : (int)$_POST['restricted_groups'];
+
+    // Add user permissions
+    $faq->deletePermission('user', $record_id);
+    $faq->addPermission('user', $record_id, $user_allowed);
+    $category->deletePermission('user', $categories);
+    $category->addPermission('user', $categories, $user_allowed);
+    // Add group permission
+    if ($groupSupport) {
+        $faq->deletePermission('group', $record_id);
+        $faq->addPermission('group', $record_id, $group_allowed);
+        $category->deletePermission('group', $categories);
+        $category->addPermission('group', $categories, $group_allowed);
     }
 }
 
