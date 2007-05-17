@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: category.add.php,v 1.25 2007-04-20 10:00:22 thorstenr Exp $
+ * $Id: category.add.php,v 1.25.2.1 2007-05-17 15:13:38 thorstenr Exp $
  *
  * Adds a category
  *
@@ -63,7 +63,7 @@ if ($permission["addcateg"]) {
         if ($groupSupport) {
 ?>
     <label class="left" for="grouppermission"><?php print $PMF_LANG['ad_entry_grouppermission']; ?></label>
-    <input type="radio" name="grouppermission" class="active" value="all" checked="checked" /> <?php print $PMF_LANG['ad_entry_all_groups']; ?> <input type="radio" name="grouppermission" class="active" value="restricted" /> <?php print $PMF_LANG['ad_entry_restricted_groups']; ?> <select name="restricted_groups" size="1"><?php print $user->getAllUserOptions(1); ?></select><br />
+    <input type="radio" name="grouppermission" class="active" value="all" checked="checked" /> <?php print $PMF_LANG['ad_entry_all_groups']; ?> <input type="radio" name="grouppermission" class="active" value="restricted" /> <?php print $PMF_LANG['ad_entry_restricted_groups']; ?> <select name="restricted_groups" size="1"><?php print $user->perm->getAllGroupsOptions(); ?></select><br />
 
 <?php
         }
