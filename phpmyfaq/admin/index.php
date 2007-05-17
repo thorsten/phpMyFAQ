@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: index.php,v 1.103 2007-05-01 19:32:20 thorstenr Exp $
+ * $Id: index.php,v 1.103.2.1 2007-05-17 15:32:22 thorstenr Exp $
  *
  * The main admin backend index file
  *
@@ -195,7 +195,7 @@ if ((isset($_REQUEST["action"])) && ($_REQUEST["action"] == "exportfile")) {
 require_once ("header.php");
 
 // User is authenticated
-if (isset($auth)) {
+if (isset($auth) && in_array(true, $permission)) {
     if (isset($_action) && ($_action)) {
         // the various sections of the admin area
         switch ($_action) {

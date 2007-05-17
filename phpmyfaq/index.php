@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: index.php,v 1.113 2007-05-01 12:45:29 thorstenr Exp $
+ * $Id: index.php,v 1.113.2.1 2007-05-17 15:32:22 thorstenr Exp $
  *
  * This is the main public frontend page of phpMyFAQ. It detects the browser's
  * language, gets and sets all cookie, post and get informations and includes
@@ -433,7 +433,7 @@ if (isset($auth)) {
     $tpl->processTemplate('loginBox', array(
         'loggedinas'        => $PMF_LANG['ad_user_loggedin'],
         'currentuser'       => $user->getUserData('display_name'),
-        'printAdminPath'    => 'admin/index.php',
+        'printAdminPath'    => (in_array(true, $permission)) ? 'admin/index.php' : '#',
         'adminSection'      => $PMF_LANG['adminSection'],
         'printLogoutPath'   => $_SERVER['PHP_SELF'].'?action=logout',
         'logout'            => $PMF_LANG['ad_menu_logout']));
