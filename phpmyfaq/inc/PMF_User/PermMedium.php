@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: PermMedium.php,v 1.24 2007-03-11 09:09:16 thorstenr Exp $
+ * $Id: PermMedium.php,v 1.24.2.1 2007-05-17 15:04:48 thorstenr Exp $
  *
  * The medium permission class provides group rights.
  *
@@ -649,7 +649,7 @@ class PMF_PermMedium
             if (-1 != $group_id) {
                 $options .= sprintf('<option value="%d"%s>%s</option>',
                     $group_id,
-                    ($group_id == $groups) ? ' selected="selected"' : '',
+                    (in_array($group_id, $groups)) ? ' selected="selected"' : '',
                     $this->getGroupName($group_id));
             }
         }
