@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: index.php,v 1.103.2.1 2007-05-17 15:32:22 thorstenr Exp $
+ * $Id: index.php,v 1.103.2.2 2007-05-17 15:33:18 thorstenr Exp $
  *
  * The main admin backend index file
  *
@@ -162,7 +162,7 @@ $_action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 $_ajax   = isset($_REQUEST['ajax']) ? $_REQUEST['ajax'] : null;
 
 // if performing AJAX operation, needs to branch before header.php
-if (isset($auth)) {
+if (isset($auth) && in_array(true, $permission)) {
     if (isset($_action) && isset($_ajax)) {
         if ($_action == 'ajax') {
             switch ($_ajax) {
