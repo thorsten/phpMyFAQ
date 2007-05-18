@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.200 2007-05-02 18:07:31 thorstenr Exp $
+ * $Id: functions.php,v 1.201 2007-05-18 13:53:30 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -1672,9 +1672,11 @@ function getShortUserName()
  */
 function getFullUserName()
 {
-    global $faqconfig, $ldap;
+    global $faqconfig, $ldap, $user;
     if ($faqconfig->get('main.ldapSupport') && is_object($ldap)) {
         return $ldap->ldap_getCompleteName(getShortUserName());
+    } elseif (!is_null($user)) {
+        return $user->getUserData('display_name');
     } else {
         return getShortUserName();
     }
@@ -1690,9 +1692,11 @@ function getFullUserName()
  */
 function getEmailAddress()
 {
-    global $faqconfig, $ldap;
+    global $faqconfig, $ldap, $user;
     if ($faqconfig->get('main.ldapSupport') && is_object($ldap)) {
         return $ldap->ldap_getMail(getShortUserName());
+    } elseif (!is_null($user)) {
+        return $user->getUserData('email');
     } else {
         return '';
     }

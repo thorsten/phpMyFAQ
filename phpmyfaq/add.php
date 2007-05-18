@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: add.php,v 1.20 2007-02-10 22:05:29 thorstenr Exp $
+ * $Id: add.php,v 1.21 2007-05-18 13:53:31 thorstenr Exp $
  *
  * This is the page there a user can add a FAQ record.
  *
@@ -46,7 +46,7 @@ if (isset($_GET['question']) && is_numeric($_GET['question'])) {
 
 if (isset($_GET['cat']) && is_numeric($_GET['cat'])) {
     $categories = array(array(
-        'category_id' => (int)$_GET['cat'], 
+        'category_id' => (int)$_GET['cat'],
         'category_lang' => $LANGCODE));
 } else {
     $categories = array();
@@ -62,6 +62,8 @@ $tpl->processTemplate('writeContent', array(
     'defaultContentName'    => getFullUserName(),
     'msgNewContentName'     => $PMF_LANG['msgNewContentName'],
     'msgNewContentMail'     => $PMF_LANG['msgNewContentMail'],
+    'defaultContentMail'    => getEmailAddress(),
+    'defaultContentName'    => getFullUserName(),
     'msgNewContentCategory' => $PMF_LANG['msgNewContentCategory'],
     'printCategoryOptions'  => $category->printCategoryOptions($categories),
     'msgNewContentTheme'    => $PMF_LANG['msgNewContentTheme'],
