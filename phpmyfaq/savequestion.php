@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: savequestion.php,v 1.34 2007-04-10 20:58:11 thorstenr Exp $
+* $Id: savequestion.php,v 1.35 2007-05-18 21:12:04 thorstenr Exp $
 *
 * @author           Thorsten Rinne <thorsten@phpmyfaq.de>
 * @author           David Saez Padros <david@ols.es>
@@ -52,10 +52,10 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
 
         $content = strip_tags($_POST['content']);
         $questionData = array(
-            'ask_username'  => $db->escape_string(strip_tags($_POST['username'])),
-            'ask_usermail'  => $db->escape_string($IDN->encode($_POST['usermail'])),
+            'ask_username'  => strip_tags($_POST['username']),
+            'ask_usermail'  => $IDN->encode($_POST['usermail']),
             'ask_category'  => intval($_POST['rubrik']),
-            'ask_content'   => $db->escape_string($content),
+            'ask_content'   => $content,
             'ask_date'      => date('YmdHis'),
             'is_visible'    => $visibility
             );
