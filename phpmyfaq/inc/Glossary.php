@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Glossary.php,v 1.7 2007-05-03 20:08:33 matteo Exp $
+* $Id: Glossary.php,v 1.8 2007-05-18 20:51:27 thorstenr Exp $
 *
 * The main glossary class
 *
@@ -216,8 +216,8 @@ class PMF_Glossary
             SQLPREFIX,
             $this->db->nextID(SQLPREFIX.'faqglossary', 'id'),
             $this->language,
-            $this->item,
-            $this->definition);
+            $this->db->escape_string($this->item),
+            $this->db->escape_string($this->definition));
         if ($this->db->query($query)) {
             return true;
         }
@@ -248,8 +248,8 @@ class PMF_Glossary
             WHERE
                 id = %d AND lang = '%s'",
             SQLPREFIX,
-            $this->item,
-            $this->definition,
+            $this->db->escape_string($this->item),
+            $this->db->escape_string($this->definition),
             (int)$id,
             $this->language);
         if ($this->db->query($query)) {
