@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.113.2.1 2007-05-15 18:50:15 thorstenr Exp $
+ * $Id: Faq.php,v 1.113.2.2 2007-05-18 21:10:30 thorstenr Exp $
  *
  * The main FAQ class
  *
@@ -1894,10 +1894,10 @@ class PMF_Faq
                 (%d, '%s', '%s', %d, '%s', '%s', '%s')",
             SQLPREFIX,
             $this->db->nextID(SQLPREFIX.'faqquestions', 'id'),
-            $questionData['ask_username'],
-            $questionData['ask_usermail'],
+            $this->db->escape_string($questionData['ask_username']),
+            $this->db->escape_string($questionData['ask_usermail']),
             $questionData['ask_category'],
-            $questionData['ask_content'],
+            $this->db->escape_string($questionData['ask_content']),
             $questionData['ask_date'],
             $questionData['is_visible']);
         $this->db->query($query);
