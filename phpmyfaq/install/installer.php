@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: installer.php,v 1.107 2007-05-12 12:15:21 thorstenr Exp $
+ * $Id: installer.php,v 1.108 2007-05-20 18:20:01 matteo Exp $
  *
  * The main phpMyFAQ Installer
  *
@@ -1059,7 +1059,7 @@ function show(item) {
     <p class="center">Additional to your input we're going to submit some information about your system setup for statstic purpose.</p>
     <p class="center">We are not storing any personal information. You can see the data by clicking <a href="#" onclick="show('configliste');return false;">here</a>.</p>
 
-    <div id="configliste" style="display:none;">
+    <div id="configliste" class="collapsed">
         <a href="#" onclick="hide('configliste'); return false;">hide again</a>
         <dl>
 <?php
