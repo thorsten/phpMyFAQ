@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Init.php,v 1.37 2007-05-01 12:40:08 thorstenr Exp $
+ * $Id: Init.php,v 1.37.2.1 2007-05-20 20:07:35 thorstenr Exp $
  *
  * Some functions
  *
@@ -243,8 +243,6 @@ class PMF_Init
     }
 
    /**
-    * cleanFilenames()
-    *
     * Clean the filename of any uploaded file by the user and force an error
     * when calling is_uploaded_file($_FILES[key]['tmp_name']) if the cleanup goes wrong
     *
@@ -265,11 +263,7 @@ class PMF_Init
                         $_FILES[$key]['type'][$idx] = '';
                         $_FILES[$key]['tmp_name'][$idx] = '';
                         $_FILES[$key]['size'][$idx] = 0;
-                        // Since PHP 4.2.0
-                        if (isset($_FILES[$key]['error'][$idx])) {
-                            // Set an error
-                            $_FILES[$key]['error'][$idx] = UPLOAD_ERR_NO_FILE;
-                        }
+                        $_FILES[$key]['error'][$idx] = UPLOAD_ERR_NO_FILE;
                     }
                 }
                 reset($_FILES[$key]['name']);
@@ -279,11 +273,7 @@ class PMF_Init
                     $_FILES[$key]['type'] = '';
                     $_FILES[$key]['tmp_name'] = '';
                     $_FILES[$key]['size'] = 0;
-                    // Since PHP 4.2.0
-                    if (isset($_FILES[$key]['error'])) {
-                        // Set an error
-                        $_FILES[$key]['error'] = UPLOAD_ERR_NO_FILE;
-                    }
+                    $_FILES[$key]['error'] = UPLOAD_ERR_NO_FILE;
                 }
             }
         }
