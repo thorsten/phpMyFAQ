@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.user_list.php,v 1.24 2007-05-02 20:49:06 thorstenr Exp $
+* $Id: ajax.user_list.php,v 1.24.2.1 2007-05-20 20:31:02 thorstenr Exp $
 *
 * AJAX: lists all registered users
 *
@@ -93,7 +93,7 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
 
                 <item name="<?php print $field; ?>">
                     <name><?php print $data[$field]; ?></name>
-                    <value><?php print $value; ?></value>
+                    <value><?php print PMF_htmlentities($value, ENT_QUOTES, $PMF_LANG['metaCharset']); ?></value>
                 </item>
 <?php
         } /* end foreach ($user_data) */
