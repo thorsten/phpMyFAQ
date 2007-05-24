@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Link.php,v 1.25 2007-03-29 18:56:28 matteo Exp $
+ * $Id: Link.php,v 1.26 2007-05-24 19:17:22 matteo Exp $
  *
  * Link management - Functions and Classes
  *
@@ -371,7 +371,10 @@ class PMF_Link
             }
         }
         $htmlAnchor .= '>';
-        if (!empty($this->text)) {
+        if (
+               ('0' == $this->text) // Possible when used w/ Sitemap letter = 0
+            || (!empty($this->text))
+            ) {
             $htmlAnchor .= $this->text;
         } else {
             if (!empty($this->name)) {

@@ -123,7 +123,7 @@ class PMF_Sitemap
                     $letters,
                     $this->language);
             $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
-            $oLink->text = $letters;
+            $oLink->text = (string)$letters;
             $writeLetters .= $oLink->toHtmlAnchor().' ';
             }
         }
