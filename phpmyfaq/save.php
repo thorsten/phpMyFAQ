@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: save.php,v 1.42 2007-04-29 17:07:35 thorstenr Exp $
+ * $Id: save.php,v 1.42.2.1 2007-05-24 19:58:27 thorstenr Exp $
  *
  * Saves a user FAQ record and sends an email to the user
  *
@@ -48,6 +48,12 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
     }
     $content = $db->escape_string(safeHTML(nl2br($_POST['content'])));
     $contentlink = $db->escape_string(safeHTML($_POST['contentlink']));
+    
+    $isTranslation = false;
+    if (isset($_POST['faqlanguage'])) {
+        $isTranslation = true;
+        $newLanguage = $db->escape_string($_POST['faqlanguage']);
+    }
 
     if (substr($contentlink,7) != "") {
         $content = $content."<br />".$PMF_LANG["msgInfo"]."<a href=\"http://".substr($contentlink,7)."\" target=\"_blank\">".$contentlink."</a>";
@@ -55,7 +61,7 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
 
     $userMail = $IDN->encode($db->escape_string($_POST['usermail']));
     $newData = array(
-        'lang'          => $LANGCODE,
+        'lang'          => ($isTranslation == true ? $newLanguage : $LANGCODE),
         'thema'         => $db->escape_string(safeHTML($_POST['thema'])),
         'active'        => FAQ_SQL_ACTIVE_NO,
         'content'       => $content,
