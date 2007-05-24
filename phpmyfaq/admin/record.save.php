@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.save.php,v 1.62 2007-05-15 18:51:46 thorstenr Exp $
+ * $Id: record.save.php,v 1.63 2007-05-24 18:39:04 thorstenr Exp $
  *
  * Save or delete a FAQ record
  *
@@ -28,6 +28,8 @@ $submit = $_REQUEST["submit"];
 // Re-evaluate $user
 $user = PMF_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
 
+$category = new PMF_Category;
+
 // Evaluate the passed validity range, if any
 $dateStart =
     (isset($_POST['dateStartYYYY']) && !empty($_POST['dateStartYYYY']) ? str_pad((int)$_POST['dateStartYYYY'], 4, '0', STR_PAD_LEFT) : '0001') .
@@ -54,7 +56,6 @@ if (    isset($submit[2])
     ) {
     // Preview
     $rubrik = $_REQUEST['rubrik'];
-    $category = new PMF_Category;
     $category->transform(0);
     $categorylist = '';
     foreach ($rubrik as $categories) {
