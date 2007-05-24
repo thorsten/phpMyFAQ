@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.145.2.1 2007-05-20 20:16:45 thorstenr Exp $
+* $Id: update.php,v 1.145.2.2 2007-05-24 18:29:12 thorstenr Exp $
 *
 * Main update script
 *
@@ -33,7 +33,7 @@ if (isset($_GET["step"]) && $_GET["step"] != "") {
     $step = 1;
 }
 
-$query  = array();
+$query = array();
 
 /**
 * HTMLFooter()
@@ -1233,6 +1233,10 @@ if ($step == 5) {
         @ob_flush();
         flush();
     }
+    
+    // Clear the array with the arrays
+    unset($query);
+    $query = array();
 
     if (version_compare($version, '2.0.0-alpha', '<')) {
         // 11/13. Move each image file in each of the faq content, from '/images' to '/images/Image'
