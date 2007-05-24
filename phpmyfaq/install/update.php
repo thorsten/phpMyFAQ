@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.146 2007-05-12 12:15:21 thorstenr Exp $
+* $Id: update.php,v 1.147 2007-05-24 18:32:46 thorstenr Exp $
 *
 * Main update script
 *
@@ -33,7 +33,7 @@ if (isset($_GET["step"]) && $_GET["step"] != "") {
     $step = 1;
 }
 
-$query  = array();
+$query = array();
 
 /**
 * HTMLFooter()
@@ -171,7 +171,6 @@ if ($step == 1) {
 <legend class="installation"><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 1 of 5)</strong></legend>
 <p>This update will work <strong>only</strong> for the following versions:</p>
 <ul type="square">
-    <li>phpMyFAQ 1.4.x</li>
     <li>phpMyFAQ 1.5.x</li>
     <li>phpMyFAQ 1.6.x</li>
     <li>phpMyFAQ 2.0.x</li>
@@ -183,16 +182,12 @@ if ($step == 1) {
     <li>phpMyFAQ 1.1.x</li>
     <li>phpMyFAQ 1.2.x</li>
     <li>phpMyFAQ 1.3.x</li>
-    <li>phpMyFAQ 1.4.x preview releases</li>
+    <li>phpMyFAQ 1.4.x</li>
 </ul>
 <p><strong>Please make a full backup of your SQL tables before running this update.</strong></p>
 
 <p>Please select your current version:</p>
 <select name="version" size="1">
-    <option value="1.4.0">phpMyFAQ 1.4.0 alpha2 or later</option>
-    <option value="1.4.1">phpMyFAQ 1.4.1</option>
-    <option value="1.4.2">phpMyFAQ 1.4.2 and later</option>
-    <option value="1.4.4">phpMyFAQ 1.4.4 and later</option>
     <option value="1.5.0">phpMyFAQ 1.5.0 and later</option>
     <option value="1.5.2">phpMyFAQ 1.5.2 and later</option>
     <option value="1.5.4">phpMyFAQ 1.5.4 and later</option>
@@ -241,8 +236,8 @@ if ($step == 2) {
         $test4 = 1;
     }
 
-    if ('1.3.' == substr($_POST['version'], 0, 4)) {
-        print "<p class=\"error\"><strong>Error:</strong> You can't upgrade from phpMyFAQ 1.3.x to ".NEWVERSION.". Please upgrade first to the latest version of phpMyFAQ 1.6.x.</p>";
+    if ('1.4.' == substr($_POST['version'], 0, 4)) {
+        print "<p class=\"error\"><strong>Error:</strong> You can't upgrade from phpMyFAQ 1.4.x to ".NEWVERSION.". Please upgrade first to the latest version of phpMyFAQ 2.0.x.</p>";
     } else {
         $test5 = 1;
     }
@@ -1233,6 +1228,10 @@ if ($step == 5) {
         @ob_flush();
         flush();
     }
+    
+    // Clear the array with the arrays
+    unset($query);
+    $query = array();
 
     if (version_compare($version, '2.0.0-alpha', '<')) {
         // 11/13. Move each image file in each of the faq content, from '/images' to '/images/Image'
