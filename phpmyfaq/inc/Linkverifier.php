@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Linkverifier.php,v 1.23 2007-04-06 11:15:25 thorstenr Exp $
+ * $Id: Linkverifier.php,v 1.23.2.1 2007-05-24 21:06:22 matteo Exp $
  *
  * PMF_Linkverifier
  *
@@ -396,10 +396,10 @@ class PMF_Linkverifier
         // Clean $this->urlpool
         $this->urlpool = array();
         while(list(,$type) = each($types)) {
-            preg_match_all("|[^?&]$type\=\"?'?`?([[:alnum:]\:%?=;&@/\.\_\-\{\}]+)\"?'?`?|i", $string, $matches);
-                $sz = sizeof($matches[1]);
+            preg_match_all("|[^?&]$type\=(\"?'?`?)([[:alnum:]\:%?=;&@/\ \.\_\-\{\}]+)\\1|i", $string, $matches);
+                $sz = sizeof($matches[2]);
                 for ($i=0;$i < $sz;$i++) {
-                    $this->urlpool[$type][] = $matches[1][$i];
+                    $this->urlpool[$type][] = $matches[2][$i];
                     $urlcount++;
                 }
         }
@@ -466,6 +466,11 @@ class PMF_Linkverifier
                 case 'http': $urlParts['port'] = '80'; break;
                 default: $urlParts['port'] = '80'; break;
             }
+        }
+
+        // Hack: fix any unsafe chars in any component of the path to avoid HTTP 400 status during HEAD crawling
+        if ($urlParts['path'] != '') {
+            $urlParts['path'] = implode('/', array_map('rawurlencode', explode('/', $urlParts['path'])));
         }
 
         if ($urlParts['query'] != "") {
