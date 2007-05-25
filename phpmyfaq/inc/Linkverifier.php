@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Linkverifier.php,v 1.23.2.1 2007-05-24 21:06:22 matteo Exp $
+ * $Id: Linkverifier.php,v 1.23.2.2 2007-05-25 20:16:04 matteo Exp $
  *
  * PMF_Linkverifier
  *
@@ -468,9 +468,13 @@ class PMF_Linkverifier
             }
         }
 
-        // Hack: fix any unsafe chars in any component of the path to avoid HTTP 400 status during HEAD crawling
+        // Hack: fix any unsafe space chars in any component of the path to avoid HTTP 400 status during HEAD crawling
         if ($urlParts['path'] != '') {
-            $urlParts['path'] = implode('/', array_map('rawurlencode', explode('/', $urlParts['path'])));
+            $urlSubParts = explode('/', $urlParts['path']);
+            for ($i = 0; $i < count($urlSubParts); $i++) {
+                $urlSubParts[$i] = str_replace(' ', '%20', $urlSubParts[$i]);
+            }
+            $urlParts['path'] = implode('/', $urlSubParts);
         }
 
         if ($urlParts['query'] != "") {
