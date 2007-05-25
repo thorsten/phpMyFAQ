@@ -1,5 +1,5 @@
 /**
- * $Id: admin.css,v 1.46 2007-04-23 20:22:56 matteo Exp $
+ * $Id: admin.css,v 1.47 2007-05-25 21:35:24 matteo Exp $
  *
  * This is the CSS file for the admin section of phpMyFAQ 2.0.x
  * You don't need to change enything here but feel free to do it. :-)
@@ -34,7 +34,7 @@ a:visited {
 }
 #header {
     background: #1096B3;
-    color: #ffffff;
+    color: #fff;
 }
 body {
     background-color: #fff;
@@ -71,7 +71,7 @@ fieldset.fullwidth {
     width: 775px;
 }
 legend {
-    background: #eeeeee;
+    background: #eee;
     font-weight: bold;
     border: 1px solid #656565;
     padding: 2px 6px;
@@ -523,55 +523,55 @@ table.linkconfig#configuration tr#lastrow td {
     border-top: 2px solid #305C77;
 }
 
-.url-batch1, .url-batch2, .url-batch3, .url-checking
-{
+.url-batch1, .url-batch2, .url-batch3, .url-checking {
     background-color: #ff0;
+    color: #000;
     text-align: center;
+    text-decoration: none;
     font-weight: bold;
     -moz-border-radius: 5px 5px 5px 5px;
     border-radius: 5px 5px 5px 5px;
 }
-.url-batch1 span a, .url-batch2 span a, .url-batch3 span a, .url-checking span a
-{
+.url-batch1 span a, .url-batch2 span a, .url-batch3 span a, .url-checking span a {
     color: #000;
     text-decoration: none;
 }
-.url-disabled, .url-noaccess, .url-noajax, .url-noscript
-{
+.url-disabled, .url-noaccess, .url-noajax, .url-noscript {
     background-color: #000;
+    color: #fff;
     text-align: center;
+    text-decoration: none;
     font-weight: bold;
     -moz-border-radius: 5px 5px 5px 5px;
     border-radius: 5px 5px 5px 5px;
 }
-a.url-disabled span a, a.url-noaccess span a, a.url-noajax span a, .url-noscript span a
-{
+.url-disabled span a, .url-noaccess span a, .url-noajax span a, .url-noscript span a {
     color: #fff;
     text-decoration: none;
 }
-.url-linkbad
-{
+.url-linkbad {
     background-color: #f00;
+    color: #000;
     text-align: center;
+    text-decoration: none;
     font-weight: bold;
     -moz-border-radius: 5px 5px 5px 5px;
     border-radius: 5px 5px 5px 5px;
 }
-.url-linkbad span a
-{
-    color: #fff;
+.url-linkbad span a {
+    color: #000;
     text-decoration: none;
 }
-.url-linkok, .url-nolinks
-{
+.url-linkok, .url-nolinks {
     background-color: #0f0;
+    color: #000;
     text-align: center;
+    text-decoration: none;
     font-weight: bold;
     -moz-border-radius: 5px 5px 5px 5px;
     border-radius: 5px 5px 5px 5px;
 }
-.url-linkok span a, .url-nolinks span a
-{
+.url-linkok span a, .url-nolinks span a {
     color: #000;
     text-decoration: none;
 }
