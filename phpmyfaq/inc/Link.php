@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Link.php,v 1.25.2.1 2007-05-24 19:11:47 matteo Exp $
+ * $Id: Link.php,v 1.25.2.2 2007-05-27 09:31:53 matteo Exp $
  *
  * Link management - Functions and Classes
  *
@@ -339,11 +339,11 @@ class PMF_Link
 
     function getSystemUri($path = null)
     {
-        // $_SERVER['HTTP_HOST'] is the name of the website or virtual host name
+        // $_SERVER['HTTP_HOST'] is the name of the website or virtual host name (HTTP/1.1)
+        // Precisely, it contains what the user has written in the Host request-header, see below.
+        // RFC 2616: The Host request-header field specifies the Internet host and port number of the resource
+        //           being requested, as obtained from the original URI given by the user or referring resource
         $sysUri = PMF_Link::getSystemScheme().$_SERVER['HTTP_HOST'];
-        if (($_SERVER['SERVER_PORT'] != '80') && ($_SERVER['SERVER_PORT'] != '443')) {
-            $sysUri .= ':'.$_SERVER['SERVER_PORT'];
-        }
 
         return $sysUri.PMF_link::getSystemRelativeUri($path);
     }
