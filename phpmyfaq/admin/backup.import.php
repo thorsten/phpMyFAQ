@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: backup.import.php,v 1.17 2007-05-01 11:20:56 thorstenr Exp $
+* $Id: backup.import.php,v 1.18 2007-05-27 20:41:15 matteo Exp $
 *
 * The import function to import the phpMyFAQ backups
 *
@@ -36,13 +36,11 @@ if ($permission["restore"]) {
             print $PMF_LANG["ad_csv_no"];
             $ok = 0;
         } else {
-            $dat = substr($dat, 11);
+            $dat = trim(substr($dat, 11));
             $tbl = explode(' ', $dat);
             $num = count($tbl);
-            for ($h = 0; $h <= $num; $h++) {
-                if (isset($tbl[$h])) {
-                    $mquery[] = 'DELETE FROM '.trim($tbl[$h]);
-                }
+            for ($h = 0; $h < $num; $h++) {
+                $mquery[] = 'DELETE FROM '.$tbl[$h];
             }
             $ok = 1;
         }
