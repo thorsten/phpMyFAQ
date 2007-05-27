@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.200 2007-05-02 18:07:31 thorstenr Exp $
+ * $Id: functions.php,v 1.200.2.1 2007-05-27 21:32:58 matteo Exp $
  *
  * This is the main functions file!
  *
@@ -1517,17 +1517,18 @@ function build_insert($query, $table)
         return;
     }
     $ret = array();
+
     $ret[] = "\n-- Table: ".$table;
-    while ($row = $db->fetch_assoc ($result)) {
+
+    while ($row = $db->fetch_assoc($result)) {
         $p1 = array();
         $p2 = array();
         foreach ($row as $key => $val) {
             $p1[] = $key;
-            $val = trim($val);
             if ('rights' != $key && is_numeric($val)) {
                 $p2[] = $val;
             } else {
-                if (strlen($val) == 0) {
+                if (is_null($val)) {
                     $p2[] = 'NULL';
                 } else {
                     $p2[] = sprintf("'%s'", $db->escape_string($val));
@@ -1536,6 +1537,7 @@ function build_insert($query, $table)
         }
         $ret[] = "INSERT INTO ".$table." (".implode(",", $p1).") VALUES (".implode(",", $p2).");";
     }
+
     return $ret;
 }
 
