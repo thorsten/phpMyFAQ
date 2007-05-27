@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Link.php,v 1.27 2007-05-27 09:36:36 matteo Exp $
+ * $Id: Link.php,v 1.28 2007-05-27 09:59:01 matteo Exp $
  *
  * Link management - Functions and Classes
  *
@@ -343,7 +343,11 @@ class PMF_Link
         // Precisely, it contains what the user has written in the Host request-header, see below.
         // RFC 2616: The Host request-header field specifies the Internet host and port number of the resource
         //           being requested, as obtained from the original URI given by the user or referring resource
-        $sysUri = PMF_Link::getSystemScheme().$_SERVER['HTTP_HOST'];
+
+        // Remove any ref to standard ports 80 and 443.
+        $pattern[0] = '/:80$/';   // HTTP: port 80
+        $pattern[1] = '/:443$/'; // HTTPS: port 443
+        $sysUri = PMF_Link::getSystemScheme().preg_replace($pattern, '', $_SERVER['HTTP_HOST']);
 
         return $sysUri.PMF_link::getSystemRelativeUri($path);
     }
