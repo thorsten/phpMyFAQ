@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.save.php,v 1.63 2007-05-24 18:39:04 thorstenr Exp $
+ * $Id: record.save.php,v 1.64 2007-05-28 20:46:24 thorstenr Exp $
  *
  * Save or delete a FAQ record
  *
@@ -108,7 +108,8 @@ if (    isset($submit[1])
     adminlog("Beitragsave", (int)$_REQUEST['id']);
     print "<h2>".$PMF_LANG["ad_entry_aor"]."</h2>\n";
 
-    $tagging = new PMF_Tags($db, $LANGCODE);
+    $category = new PMF_Category;
+    $tagging  = new PMF_Tags($db, $LANGCODE);
 
     $categories  = $_REQUEST['rubrik'];
     $record_id   = (int)$_REQUEST['id'];
