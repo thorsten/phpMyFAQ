@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.203 2007-05-28 07:52:25 thorstenr Exp $
+ * $Id: functions.php,v 1.204 2007-05-28 20:39:21 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -60,15 +60,18 @@ function dump($var)
  */
 function pmf_debug($string)
 {
-    $debug = debug_backtrace();
-
-    $ret = '';
-    if (isset($debug[2]['class'])) {
-        $ret  = $debug[2]['class'].$debug[1]['type'];
-        $ret .= $debug[2]['function'] . '() in line ' . $debug[2]['line'];
-        $ret .= ": <pre>" . $string . "</pre><br />\n";
+    // sometimes Zend Optimizer causes segfaults with debug_backtrace()
+    if (extension_loaded('Zend Optimizer')) {
+        $ret = "<pre>" . $string . "</pre><br />\n";
+    } else {
+        $debug = debug_backtrace();
+        $ret = '';
+        if (isset($debug[2]['class'])) {
+            $ret  = $debug[2]['class'].$debug[1]['type'];
+            $ret .= $debug[2]['function'] . '() in line ' . $debug[2]['line'];
+            $ret .= ": <pre>" . $string . "</pre><br />\n";
+        }
     }
-
     return $ret;
 }
 
