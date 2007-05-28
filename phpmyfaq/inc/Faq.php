@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.116 2007-05-28 07:57:05 thorstenr Exp $
+ * $Id: Faq.php,v 1.117 2007-05-28 08:19:38 thorstenr Exp $
  *
  * The main FAQ class
  *
@@ -197,7 +197,7 @@ class PMF_Faq
                 $this->user,
                 implode(', ', $this->groups));
         } else {
-            $permPart = sprintf("fdu.user_id = %d",
+            $permPart = sprintf("( fdu.user_id = %d OR fdu.user_id = -1 )",
                 $this->user);
         }
 
