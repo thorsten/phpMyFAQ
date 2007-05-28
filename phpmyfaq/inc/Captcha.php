@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Captcha.php,v 1.11 2007-04-29 20:14:16 thorstenr Exp $
+ * $Id: Captcha.php,v 1.11.2.1 2007-05-28 11:34:30 thorstenr Exp $
  *
  * The phpMyFAQ Captcha class
  *
@@ -467,7 +467,17 @@ class PMF_Captcha
             }
         }
         // Search for this Captcha in the db
-        if ($result = $this->db->query("SELECT id FROM ".SQLPREFIX."faqcaptcha WHERE id = '".$captchaCode."'")) {
+        $query = sprintf("
+            SELECT
+                id
+            FROM
+                %sfaqcaptcha
+            WHERE
+                id = '%s'",
+            SQLPREFIX,
+            $this->db->escape_string($captchaCode));
+
+        if ($result = $this->db->query($query)) {
             $num = $this->db->num_rows($result);
             if ($num > 0) {
                 $this->code = $captchaCode;
