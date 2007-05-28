@@ -5,12 +5,14 @@ CHANGED FILES FROM 2.0.0 -> 2.0.1
 ./admin/category.main.php
 ./admin/news.php
 ./admin/record.save.php
-./inc/Init.php
+./inc/Captcha.php
 ./inc/Faq.php
 ./inc/functions.php
+./inc/Init.php
 ./inc/Link.php
 ./inc/Linkverifier.php
 ./inc/Sitemap.php
+./inc/PMF_DB/Oracle.php
 ./install/installer.php
 ./install/update.php
 ./template/admin.css
