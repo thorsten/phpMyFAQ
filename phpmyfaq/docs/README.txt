@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.92.2.1 2007-05-20 20:16:44 thorstenr Exp $
+$Id: README.txt,v 1.92.2.2 2007-05-28 06:02:30 thorstenr Exp $
 
 phpMyFAQ 2.0.1
 Codename "Prometheus"
@@ -10,14 +10,16 @@ Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.0.0:
-- some minor bugfixes
+- fixed broken update script
+- many minor bugfixes
 
 For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
 Version 2.0.1 - 2007-
-- some minor bugfixes
+- fixed broken update script
+- many minor bugfixes
 
 Version 2.0.0 - 2007-05-22
 - added rewritten and enhanced user management (Lars)
@@ -59,6 +61,10 @@ Version 2.0.0 - 2007-05-22
 - updated Italian translation (Matteo)
 - updated Japanese translation (Tadashi Jokagi)
 - updated Spanish translation (Eduardo Polidor)
+
+Version 1.6.12 - 2007-05-13
+- updated bundled Net_Idna to version 0.5.1
+- fixed some minor bugs
 
 Version 1.6.11 - 2007-03-31
 - updated Finnish translation

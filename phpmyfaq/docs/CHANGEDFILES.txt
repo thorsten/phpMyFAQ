@@ -1,6 +1,14 @@
 CHANGED FILES FROM 2.0.0 -> 2.0.1
 
-.admin/ajax.user_list.php
+./admin/ajax.user_list.php
+./admin/backup.import.php
+./admin/record.save.php
 ./inc/Init.php
+./inc/functions.php
+./inc/Link.php
+./inc/Linkverifier.php
+./inc/Sitemap.php
 ./install/installer.php
 ./install/update.php
+./template/admin.css
+./save.php
