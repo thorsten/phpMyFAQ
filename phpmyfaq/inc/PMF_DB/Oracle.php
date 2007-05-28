@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Oracle.php,v 1.9 2007-04-30 05:42:32 thorstenr Exp $
+ * $Id: Oracle.php,v 1.10 2007-05-28 20:45:46 thorstenr Exp $
  *
  * The db_oracle class provides methods and functions for a Oracle database
  *
@@ -277,7 +277,7 @@ class db_oracle
      */
     public function error()
     {
-        $errormsg = oci_error($this-conn);
+        $errormsg = oci_error($this->conn);
         return $errormsg['message'];
     }
 
