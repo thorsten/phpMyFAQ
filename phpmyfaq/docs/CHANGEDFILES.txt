@@ -4,6 +4,7 @@ CHANGED FILES FROM 2.0.0 -> 2.0.1
 ./admin/backup.import.php
 ./admin/record.save.php
 ./inc/Init.php
+./inc/Faq.php
 ./inc/functions.php
 ./inc/Link.php
 ./inc/Linkverifier.php

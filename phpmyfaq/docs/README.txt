@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.92.2.2 2007-05-28 06:02:30 thorstenr Exp $
+$Id: README.txt,v 1.92.2.3 2007-05-28 08:02:54 thorstenr Exp $
 
 phpMyFAQ 2.0.1
 Codename "Prometheus"
@@ -11,6 +11,7 @@ Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.0.0:
 - fixed broken update script
+- fixed bug with basic permission level
 - many minor bugfixes
 
 For known issues please take a look at KNOWNBUGS.txt
@@ -19,6 +20,7 @@ CHANGELOG:
 
 Version 2.0.1 - 2007-
 - fixed broken update script
+- fixed bug with basic permission level
 - many minor bugfixes
 
 Version 2.0.0 - 2007-05-22
