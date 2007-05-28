@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.200.2.1 2007-05-27 21:32:58 matteo Exp $
+ * $Id: functions.php,v 1.200.2.2 2007-05-28 07:49:55 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -42,10 +42,10 @@
 * @since    2004-11-27
 * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
 */
-function pmf_dump($var)
+function dump($var)
 {
     print '<pre>';
-    print_r($var);
+    var_dump($var);
     print '</pre>';
 }
 
