@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: news.php,v 1.33 2007-04-06 11:15:24 thorstenr Exp $
+ * $Id: news.php,v 1.34 2007-05-28 09:00:28 thorstenr Exp $
  *
  * The main administration file for the news
  *
@@ -223,10 +223,23 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
         }
     }
 } elseif (isset($_REQUEST["do"]) && $_REQUEST["do"] == "save" && $permission["addnews"]) {
-    $dateStart = $_POST['dateStartYYYY'].$_POST['dateStartMM'].$_POST['dateStartDD'].$_POST['dateStartHH'].$_POST['dateStartmm'].$_POST['dateStartss'];
-    $dateStart = str_pad($dateStart, 14, "0", STR_PAD_RIGHT);
-    $dateEnd = $_POST['dateEndYYYY'].$_POST['dateEndMM'].$_POST['dateEndDD'].$_POST['dateEndHH'].$_POST['dateEndmm'].$_POST['dateEndss'];
-    $dateEnd = str_pad($dateEnd, 14, "0", STR_PAD_RIGHT);
+
+    // Evaluate the passed validity range, if any
+    $dateStart =
+        (isset($_POST['dateStartYYYY']) && !empty($_POST['dateStartYYYY']) ? str_pad((int)$_POST['dateStartYYYY'], 4, '0', STR_PAD_LEFT) : '0001') .
+        (isset($_POST['dateStartMM']) && !empty($_POST['dateStartMM']) ? str_pad((int)$_POST['dateStartMM'], 2, '0', STR_PAD_LEFT) : '01') .
+        (isset($_POST['dateStartDD']) && !empty($_POST['dateStartDD']) ? str_pad((int)$_POST['dateStartDD'], 2, '0', STR_PAD_LEFT) : '01') .
+        (isset($_POST['dateStartHH']) && !empty($_POST['dateStartHH']) ? str_pad((int)$_POST['dateStartHH'], 2, '0', STR_PAD_LEFT) : '00') .
+        (isset($_POST['dateStartmm']) && !empty($_POST['dateStartss']) ? str_pad((int)$_POST['dateStartmm'], 2, '0', STR_PAD_LEFT) : '00') .
+        (isset($_POST['dateStartss']) && !empty($_POST['dateStartMM']) ? str_pad((int)$_POST['dateStartss'], 2, '0', STR_PAD_LEFT) : '00');
+    $dateEnd =
+        (isset($_POST['dateEndYYYY']) ? str_pad((int)$_POST['dateEndYYYY'], 4, '0', STR_PAD_LEFT) : '0000') .
+        (isset($_POST['dateEndMM']) && !empty($_POST['dateEndMM']) ? str_pad((int)$_POST['dateEndMM'], 2, '0', STR_PAD_LEFT) : '01') .
+        (isset($_POST['dateEndDD']) && !empty($_POST['dateEndDD']) ? str_pad((int)$_POST['dateEndDD'], 2, '0', STR_PAD_LEFT) : '01') .
+        (isset($_POST['dateEndHH']) && !empty($_POST['dateEndHH']) ? str_pad((int)$_POST['dateEndHH'], 2, '0', STR_PAD_LEFT) : '00') .
+        (isset($_POST['dateEndmm']) && !empty($_POST['dateEndmm']) ? str_pad((int)$_POST['dateEndmm'], 2, '0', STR_PAD_LEFT) : '00') .
+        (isset($_POST['dateEndss']) && !empty($_POST['dateEndss']) ? str_pad((int)$_POST['dateEndss'], 2, '0', STR_PAD_LEFT) : '00');
+
     // Sanity checks
     if ('00000000000000' == $dateEnd) {
         $dateEnd = '99991231235959';
@@ -253,10 +266,23 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
         printf("<p>%s</p>", $PMF_LANG['ad_news_insertfail']);
     }
 } elseif (isset($_REQUEST["do"]) && $_REQUEST["do"] == "update" && $permission["editnews"]) {
-    $dateStart = $_POST['dateStartYYYY'].$_POST['dateStartMM'].$_POST['dateStartDD'].$_POST['dateStartHH'].$_POST['dateStartmm'].$_POST['dateStartss'];
-    $dateStart = str_pad($dateStart, 14, '0', STR_PAD_RIGHT);
-    $dateEnd   = $_POST['dateEndYYYY'].$_POST['dateEndMM'].$_POST['dateEndDD'].$_POST['dateEndHH'].$_POST['dateEndmm'].$_POST['dateEndss'];
-    $dateEnd   = str_pad($dateEnd, 14, '0', STR_PAD_RIGHT);
+
+    // Evaluate the passed validity range, if any
+    $dateStart =
+        (isset($_POST['dateStartYYYY']) && !empty($_POST['dateStartYYYY']) ? str_pad((int)$_POST['dateStartYYYY'], 4, '0', STR_PAD_LEFT) : '0001') .
+        (isset($_POST['dateStartMM']) && !empty($_POST['dateStartMM']) ? str_pad((int)$_POST['dateStartMM'], 2, '0', STR_PAD_LEFT) : '01') .
+        (isset($_POST['dateStartDD']) && !empty($_POST['dateStartDD']) ? str_pad((int)$_POST['dateStartDD'], 2, '0', STR_PAD_LEFT) : '01') .
+        (isset($_POST['dateStartHH']) && !empty($_POST['dateStartHH']) ? str_pad((int)$_POST['dateStartHH'], 2, '0', STR_PAD_LEFT) : '00') .
+        (isset($_POST['dateStartmm']) && !empty($_POST['dateStartss']) ? str_pad((int)$_POST['dateStartmm'], 2, '0', STR_PAD_LEFT) : '00') .
+        (isset($_POST['dateStartss']) && !empty($_POST['dateStartMM']) ? str_pad((int)$_POST['dateStartss'], 2, '0', STR_PAD_LEFT) : '00');
+    $dateEnd =
+        (isset($_POST['dateEndYYYY']) ? str_pad((int)$_POST['dateEndYYYY'], 4, '0', STR_PAD_LEFT) : '0000') .
+        (isset($_POST['dateEndMM']) && !empty($_POST['dateEndMM']) ? str_pad((int)$_POST['dateEndMM'], 2, '0', STR_PAD_LEFT) : '01') .
+        (isset($_POST['dateEndDD']) && !empty($_POST['dateEndDD']) ? str_pad((int)$_POST['dateEndDD'], 2, '0', STR_PAD_LEFT) : '01') .
+        (isset($_POST['dateEndHH']) && !empty($_POST['dateEndHH']) ? str_pad((int)$_POST['dateEndHH'], 2, '0', STR_PAD_LEFT) : '00') .
+        (isset($_POST['dateEndmm']) && !empty($_POST['dateEndmm']) ? str_pad((int)$_POST['dateEndmm'], 2, '0', STR_PAD_LEFT) : '00') .
+        (isset($_POST['dateEndss']) && !empty($_POST['dateEndss']) ? str_pad((int)$_POST['dateEndss'], 2, '0', STR_PAD_LEFT) : '00');
+
     // Sanity checks
     if ('00000000000000' == $dateEnd) {
         $dateEnd = '99991231235959';
