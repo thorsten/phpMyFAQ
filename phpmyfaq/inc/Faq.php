@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.113.2.2 2007-05-18 21:10:30 thorstenr Exp $
+ * $Id: Faq.php,v 1.113.2.3 2007-05-28 07:55:04 thorstenr Exp $
  *
  * The main FAQ class
  *
@@ -118,6 +118,13 @@ class PMF_Faq
     var $groups = array();
 
     /**
+     * Flag for Group support
+     *
+     * @var boolean
+     */
+    var $groupSupport = false;
+
+    /**
      * Constructor
      *
      * @param   object  $db
@@ -127,11 +134,11 @@ class PMF_Faq
      */
     function PMF_Faq(&$db, $language, $user = null, $groups = null)
     {
-        global $PMF_LANG;
+        global $PMF_LANG, $faqconfig;
 
-        $this->db = &$db;
-        $this->language = $language;
-        $this->pmf_lang = $PMF_LANG;
+        $this->db           = &$db;
+        $this->language     = $language;
+        $this->pmf_lang     = $PMF_LANG;
 
         if (is_null($user)) {
             $this->user  = -1;
@@ -139,9 +146,12 @@ class PMF_Faq
             $this->user  = $user;
         }
         if (is_null($groups)) {
-            $this->groups = array(-1);
+            $this->groups       = array(-1);
         } else {
-            $this->groups = $groups;
+            $this->groups       = $groups;
+        }
+        if ($faqconfig->get('main.permLevel') == 'medium') {
+            $this->groupSupport = true;
         }
     }
 
@@ -177,6 +187,18 @@ class PMF_Faq
             $current_table = 'fv';
         } else {
             $current_table = 'fd';
+        }
+
+        if ($this->groupSupport) {
+            $permPart = sprintf("( fdg.group_id IN (%s)
+            OR
+                (fdu.user_id = %d AND fdg.group_id IN (%s)))",
+                implode(', ', $this->groups),
+                $this->user,
+                implode(', ', $this->groups));
+        } else {
+            $permPart = sprintf("fdu.user_id = %d",
+                $this->user);
         }
 
         $now = date('YmdHis');
@@ -220,9 +242,7 @@ class PMF_Faq
             AND
                 fd.lang = '%s'
             AND
-                ( fdg.group_id IN (%s)
-            OR
-                (fdu.user_id = %d AND fdg.group_id IN (%s)))
+                %s
             ORDER BY
                 %s.%s %s",
             SQLPREFIX,
@@ -234,9 +254,7 @@ class PMF_Faq
             $now,
             $category_id,
             $this->language,
-            implode(', ', $this->groups),
-            $this->user,
-            implode(', ', $this->groups),
+            $permPart,
             $current_table,
             $this->db->escape_string($orderby),
             $this->db->escape_string($sortby));
