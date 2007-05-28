@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: pdf.php,v 1.31 2007-04-29 17:07:35 thorstenr Exp $
+ * $Id: pdf.php,v 1.32 2007-05-28 11:17:15 thorstenr Exp $
  *
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author      Peter Beauvain <pbeauvain@web.de>
@@ -85,7 +85,7 @@ $pdf->SetAuthor($faq->faqRecord['author']);
 $pdf->Ln();
 $pdf->Write(5, html_entity_decode($PMF_LANG["msgAuthor"]).$faq->faqRecord['author']);
 $pdf->Ln();
-$pdf->Write(5, html_entity_decode($PMF_LANG["msgLastUpdateArticle"]).makeDate($faq->faqRecord['date']));
+$pdf->Write(5, html_entity_decode($PMF_LANG["msgLastUpdateArticle"]).$faq->faqRecord['date']);
 $pdf->SetStyle('I', false);
 
 $pdfFile = "pdf/".$id.".pdf";
