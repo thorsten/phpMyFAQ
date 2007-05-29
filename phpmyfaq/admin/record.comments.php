@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.comments.php,v 1.1 2007-03-04 14:12:41 thorstenr Exp $
+ * $Id: record.comments.php,v 1.2 2007-05-29 04:11:29 thorstenr Exp $
  *
  * Shows all comments in the categories and provides a link to delete comments
  *
@@ -25,6 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 }
 
 printf("<h2>%s</h2>\n", $PMF_LANG['ad_comment_administration']);
+
 if ($permission['delcomment']) {
 
     $comment = new PMF_Comment($db, $LANGCODE);
@@ -35,9 +36,9 @@ if ($permission['delcomment']) {
     $faq = new PMF_Faq($db, $LANGCODE);
 
     $faqcomments  = $comment->getAllComments('faq');
-    $newscomments = $comment->getAllComments('news');
 
     printf("<p><strong>%s</strong></p>\n", $PMF_LANG['ad_comment_faqs']);
+    if (count($faqcomments)) {
 ?>
     <table class="listrecords">
     <thead>
@@ -49,21 +50,27 @@ if ($permission['delcomment']) {
     </thead>
     <tbody>
 <?php
-    foreach ($faqcomments as $faqcomment) {
+        foreach ($faqcomments as $faqcomment) {
 ?>
     <tr>
         <td class="list"><a href="mailto:<?php print $faqcomment['email']; ?>"><?php print $faqcomment['user']; ?></td>
         <td class="list"><?php print $faqcomment['content']; ?></td>
-        <td class="list"><a href="?action=delcomment&amp;artid=<?php print $faqcomment['record_id']; ?>&amp;cmtid=<?php print $faqcomment['comment_id']; ?>"><img src="images/delete.gif" alt="<?php print $PMF_LANG["ad_entry_delete"] ?>" title="<?php print $PMF_LANG["ad_entry_delete"] ?>" border="0" width="17" height="18" align="right" /></a></td>
+        <td class="list"><a href="?action=delcomment&amp;artid=<?php print $faqcomment['record_id']; ?>&amp;cmtid=<?php print $faqcomment['comment_id']; ?>&amp;type=faq"><img src="images/delete.gif" alt="<?php print $PMF_LANG["ad_entry_delete"] ?>" title="<?php print $PMF_LANG["ad_entry_delete"] ?>" border="0" width="17" height="18" align="right" /></a></td>
     </tr>
 <?php
-    }
+        }
 ?>
     </tbody>
     </table>
 <?php
-    printf("<p><strong>%s</strong></p>\n", $PMF_LANG['ad_comment_news']);
+    } else {
+        print '<p><strong>0</strong></p>';
+    }
 
+    $newscomments = $comment->getAllComments('news');
+
+    printf("<p><strong>%s</strong></p>\n", $PMF_LANG['ad_comment_news']);
+    if (count($newscomments)) {
 ?>
     <table class="listrecords">
     <thead>
@@ -75,20 +82,22 @@ if ($permission['delcomment']) {
     </thead>
     <tbody>
 <?php
-    foreach ($newscomments as $newscomment) {
+        foreach ($newscomments as $newscomment) {
 ?>
     <tr>
         <td class="list"><a href="mailto:<?php print $newscomment['email']; ?>"><?php print $newscomment['user']; ?></td>
         <td class="list"><?php print $newscomment['content']; ?></td>
-        <td class="list"><a href="?action=delcomment&amp;artid=<?php print $newscomment['record_id']; ?>&amp;cmtid=<?php print $newscomment['comment_id']; ?>"><img src="images/delete.gif" alt="<?php print $PMF_LANG["ad_entry_delete"] ?>" title="<?php print $PMF_LANG["ad_entry_delete"] ?>" border="0" width="17" height="18" align="right" /></a></td>
+        <td class="list"><a href="?action=delcomment&amp;artid=<?php print $newscomment['record_id']; ?>&amp;cmtid=<?php print $newscomment['comment_id']; ?>&amp;type=news"><img src="images/delete.gif" alt="<?php print $PMF_LANG["ad_entry_delete"] ?>" title="<?php print $PMF_LANG["ad_entry_delete"] ?>" border="0" width="17" height="18" align="right" /></a></td>
     </tr>
 <?php
-    }
+        }
 ?>
     </tbody>
     </table>
 <?php
-
+    } else {
+        print '<p><strong>0</strong></p>';
+    }
 } else {
     print $PMF_LANG["err_NotAuth"];
 }
