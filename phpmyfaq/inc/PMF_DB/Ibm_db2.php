@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Ibm_db2.php,v 1.9 2007-05-14 22:14:54 johannes Exp $
+ * $Id: Ibm_db2.php,v 1.10 2007-05-29 03:43:04 thorstenr Exp $
  *
  * db_ibm_db2
  *
@@ -26,79 +26,45 @@
 class db_ibm_db2
 {
     /**
-    * The connection object
-    *
-    * @var  mixed
-    * @see  connect(), query(), dbclose()
-    */
-    var $conn = FALSE;
-
-
+     * The connection object
+     *
+     * @var mixed
+     */
+    var $conn = false;
 
     /**
-    * The query log string
-    *
-    * @var  string
-    * @see  query()
-    */
-    var $sqllog = "";
-
-
+     * The query log string
+     *
+     * @var string
+     */
+    var $sqllog = '';
 
     /**
      * Tables
      *
-     * @var     array
+     * @var array
      */
     var $tableNames = array();
 
-
-
     /**
-    * The options array for DB2
-    *
-    * @var  array
-    * @see  connect()
-    */
+     * The options array for DB2
+     *
+     * @var array
+     */
     var $options = array('autocommit' => DB2_AUTOCOMMIT_ON);
 
-
-
     /**
-    * SQL statement
-    *
-    */
-    var $stmt;
-
-
-
-    /**
-     * Constructor
+     * This function connects to a DB2 database
      *
+     * @param   string $host
+     * @param   string $username
+     * @param   string $password
+     * @param   string $db_name
+     * @return  boolean TRUE, if connected, otherwise FALSE
      * @access  public
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-04-16
      */
-    function db_db2()
-    {
-    }
-
-
-
-    /**
-    * connect()
-    *
-    * This function connects to a DB2 database
-    *
-    * @param   string $host
-    * @param   string $username
-    * @param   string $password
-    * @param   string $db_name
-    * @return  boolean TRUE, if connected, otherwise FALSE
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since   2005-04-16
-    */
     function connect($host, $user, $passwd, $db)
     {
         $this->conn = db2_pconnect($db, $user, $passwd, $this->options);
@@ -109,57 +75,45 @@ class db_ibm_db2
         return true;
     }
 
-
-
     /**
-    * query()
-    *
-    * This function sends a query to the database.
-    *
-    * @param   string $query
-    * @return  mixed $result
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since   2005-04-16
-    */
+     * This function sends a query to the database.
+     *
+     * @param   string $query
+     * @return  mixed $result
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @since   2005-04-16
+     */
     function query($query)
     {
         $this->sqllog .= pmf_debug($query);
         return db2_exec($this->conn, $query, array('cursor' => DB2_SCROLLABLE));
     }
 
-
-
     /**
-    * escape_string()
-    *
-    * Escapes a string for use in a query
-    *
-    * @param   string
-    * @return  string
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since   2005-04-16
-    */
+     * Escapes a string for use in a query
+     *
+     * @param   string
+     * @return  string
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @since   2005-04-16
+     */
     function escape_string($string)
     {
       return str_replace("'", "''", $string);
     }
 
-
-
     /**
-    * fetch_object()
-    *
-    * This function fetches a result row as an object.
-    *
-    * @param   mixed $result
-    * @return  mixed
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @author  Helmut Tessarek <tessus@evermeet.cx>
-    * @since   2005-04-16
-    */
+     * This function fetches a result row as an object.
+     *
+     * @param   mixed $result
+     * @return  mixed
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @author  Helmut Tessarek <tessus@evermeet.cx>
+     * @since   2005-04-16
+     */
     function fetch_object($result)
     {
         $_result = db2_fetch_object($result);
@@ -170,19 +124,15 @@ class db_ibm_db2
         }
     }
 
-
-
     /**
-    * fetch_assoc()
-    *
-    * This function fetches a result as an associative array.
-    *
-    * @param   mixed $result
-    * @return  array
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since   2005-04-16
-    */
+     * This function fetches a result as an associative array.
+     *
+     * @param   mixed $result
+     * @return  array
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @since   2005-04-16
+     */
     function fetch_assoc($result)
     {
         $_result = db2_fetch_assoc($result);
@@ -193,41 +143,33 @@ class db_ibm_db2
         }
     }
 
-
-
     /**
-    * num_rows()
-    *
-    * Number of rows in a result
-    *
-    * @param   mixed $result
-    * @return  integer
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since   2005-04-16
-    */
+     * Number of rows in a result
+     *
+     * @param   mixed $result
+     * @return  integer
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @since   2005-04-16
+     */
     function num_rows($result)
     {
         return db2_num_rows($result);
     }
 
     /**
-    * sqllog()
-    *
-    * Logs the queries
-    *
-    * @param   mixed $result
-    * @return  integer
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since   2005-04-16
-    */
+     * Logs the queries
+     *
+     * @param   mixed $result
+     * @return  integer
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @since   2005-04-16
+     */
     function sqllog()
     {
         return $this->sqllog;
     }
-
-
 
     /**
      * This function returns the table status.
@@ -263,8 +205,6 @@ class db_ibm_db2
 
 
     /**
-     * search()
-     *
      * This function generates a result set based on a search string.
      *
      * @access  public
@@ -350,17 +290,15 @@ class db_ibm_db2
     }
 
     /**
-    * nextID()
-    *
-    * Returns the next ID of a table
-    *
-    * @param   string      the name of the table
-    * @param   string      the name of the ID column
-    * @return  int
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since   2005-04-16
-    */
+     * Returns the next ID of a table
+     *
+     * @param   string      the name of the table
+     * @param   string      the name of the ID column
+     * @return  int
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @since   2005-04-16
+     */
     function nextID($table, $id)
     {
         $result = $this->query('SELECT MAX('.$id.') as current_id FROM '.$table);
@@ -368,33 +306,25 @@ class db_ibm_db2
         return ($row->current_id + 1);
     }
 
-
-
     /**
-    * error()
-    *
-    * This function returns the last error string.
-    *
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since   2005-04-16
-    */
+     * This function returns the last error string.
+     *
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @since   2005-04-16
+     */
     function error()
     {
-        return db2_stmt_errormsg();
+        return db2_stmt_errormsg($this->conn);
     }
 
-
-
     /**
-    * client_version()
-    *
-    * This function returns the version string.
-    *
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since   2005-04-16
-    */
+     * This function returns the version string.
+     *
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @since   2005-04-16
+     */
     function client_version()
     {
         $client = db2_client_info($this->conn);
@@ -405,14 +335,12 @@ class db_ibm_db2
 
 
     /**
-    * server_version()
-    *
-    * This function returns the version string.
-    *
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since   2005-04-16
-    */
+     * This function returns the version string.
+     *
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @since   2005-04-16
+     */
     function server_version()
     {
         $server = db2_server_info($this->conn);
@@ -423,49 +351,32 @@ class db_ibm_db2
 
 
     /**
-     * Returns an array with all table names
+     * Creates an array with all table names
      *
-     * TODO: Test it!
-     *
+     * @return  void
      * @access  public
      * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2006-08-26
      */
-    function getTableNames($prefix = '')
+    function getTableNames()
     {
-        // First, declare those tables that are referenced by others
-        $this->tableNames[] = $prefix.'faquser';
+        $stmt = db2_tables($this->conn);
 
-        $query = "
-            SELECT
-                SYSTEM_TABLE_SCHEMA, SYSTEM_TABLE_NAME
-            FROM
-                QSYS2.SYSTABLES
-            WHERE
-                    SYSTEM_TABLE_SCHEMA like 'VDR%'
-                AND SYSTEM_TABLE_NAME LIKE '".$prefix."%'
-            ORDER BY
-                SYSTEM_TABLE_NAME";
-        $result = $this->query($query);
-
-        while ($row = $this->fetch_object($result)) {
-            if (!in_array($row->SYSTEM_TABLE_NAME, $this->tableNames)) {
-                $this->tableNames[] = $row->SYSTEM_TABLE_NAME;
+        while ($table = db2_fetch_assoc($stmt)) {
+            if ($table['TABLE_TYPE'] == 'TABLE' && strstr($table['TABLE_NAME'], 'FAQ')) {
+                $this->tableNames[] = $table['TABLE_NAME'];
             }
         }
     }
 
-
-
     /**
-    * dbclose()
-    *
-    * This function closes the connection to the database.
-    *
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since   2005-04-16
-    */
+     * This function closes the connection to the database.
+     *
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @since   2005-04-16
+     */
     function dbclose()
     {
         return db2_close($this->conn);
