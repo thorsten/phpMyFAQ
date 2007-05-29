@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.82 2007-04-23 18:37:44 thorstenr Exp $
+ * $Id: language_de.php,v 1.82.2.1 2007-05-29 06:56:31 thorstenr Exp $
  *
  * German language file
  *
@@ -200,7 +200,7 @@ $PMF_LANG["ad_user"] = "Benutzerverwaltung";
 $PMF_LANG["ad_user_username"] = "Benutzername";
 $PMF_LANG["ad_user_rights"] = "Rechte";
 $PMF_LANG["ad_user_edit"] = "bearbeiten";
-$PMF_LANG["ad_user_delete"] = "löschen";
+$PMF_LANG["ad_user_delete"] = "Löschen";
 $PMF_LANG["ad_user_add"] = "Benutzer hinzufügen";
 $PMF_LANG["ad_user_profou"] = "Profil des Benutzers";
 $PMF_LANG["ad_user_name"] = "Name";
@@ -232,7 +232,7 @@ $PMF_LANG["ad_entry_changelog"] = "Changelog:";
 $PMF_LANG["ad_entry_commentby"] = "Kommentar von";
 $PMF_LANG["ad_entry_comment"] = "Kommentare:";
 $PMF_LANG["ad_entry_save"] = "Speichern";
-$PMF_LANG["ad_entry_delete"] = "löschen";
+$PMF_LANG["ad_entry_delete"] = "Löschen";
 $PMF_LANG["ad_entry_delcom_1"] = "Sicher, dass der Kommentar des Benutzers";
 $PMF_LANG["ad_entry_delcom_2"] = "gelöscht werden soll?";
 $PMF_LANG["ad_entry_commentdelsuc"] = "Der Kommentar wurde <strong>erfolgreich</strong> gelöscht.";
@@ -262,7 +262,7 @@ $PMF_LANG["ad_news_headline"] = "Überschrift";
 $PMF_LANG["ad_news_date"] = "Datum";
 $PMF_LANG["ad_news_action"] = "Aktion";
 $PMF_LANG["ad_news_update"] = "bearbeiten";
-$PMF_LANG["ad_news_delete"] = "löschen";
+$PMF_LANG["ad_news_delete"] = "Löschen";
 $PMF_LANG["ad_news_nodata"] = "Keine Daten in der Datenbank gefunden.";
 $PMF_LANG["ad_news_updatesuc"] = "Die News wurde <strong>erfolgreich</strong> gespeichert.";
 $PMF_LANG["ad_news_del"] = "Sicher, dass  die News <strong>gelöscht</strong> werden sollen?";
@@ -285,7 +285,7 @@ $PMF_LANG["ad_categ_subcateg"] = "Unterkategorie-ID";
 $PMF_LANG["ad_categ_titel"] = "Kategoriename";
 $PMF_LANG["ad_categ_action"] = "Aktion";
 $PMF_LANG["ad_categ_update"] = "editeren";
-$PMF_LANG["ad_categ_delete"] = "löschen";
+$PMF_LANG["ad_categ_delete"] = "Löschen";
 $PMF_LANG["ad_categ_updatecateg"] = "Kategorie editeren";
 $PMF_LANG["ad_categ_nodata"] = "Keine Daten in der Datenbank gefunden.";
 $PMF_LANG["ad_categ_remark"] = "Es gilt zu beachten, wenn eine Kategorie gelöscht wird, dass die Artikel der gelöschten Kategorie nicht mehr angezeigt werden. Dem Artikel ist dann eine neue Kategorie zuzuweisen oder er muss gelöscht werden.";
