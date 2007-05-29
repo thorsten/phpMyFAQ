@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: index.php,v 1.103.2.2 2007-05-17 15:33:18 thorstenr Exp $
+ * $Id: index.php,v 1.103.2.3 2007-05-29 02:13:30 thorstenr Exp $
  *
  * The main admin backend index file
  *
@@ -53,13 +53,13 @@ $IDN = new idna_convert;
 
 // get language (default: english)
 $pmf = new PMF_Init();
-$LANGCODE = $pmf->setLanguage((isset($PMF_CONF['main.languageDetection']) ? true : false), $PMF_CONF['main.language']);
+$LANGCODE = $pmf->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
 // Preload English strings
-require_once ('../lang/language_en.php');
+require_once (PMF_ROOT_DIR.'/lang/language_en.php');
 
 if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE)) {
     // Overwrite English strings with the ones we have in the current language
-    require_once('../lang/language_'.$LANGCODE.'.php');
+    require_once(PMF_ROOT_DIR.'/lang/language_'.$LANGCODE.'.php');
 } else {
     $LANGCODE = 'en';
 }
@@ -79,7 +79,6 @@ if (function_exists('mb_language') && in_array($mbLanguage, $valid_mb_strings)) 
     mb_internal_encoding($PMF_LANG['metaCharset']);
 }
 
-// TODO: Manage the 'Rembember me' Cookie also under 2.0.0.
 // authenticate current user
 $auth = null;
 if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
@@ -172,13 +171,13 @@ if (isset($auth) && in_array(true, $permission)) {
 
                 // User management
                 case 'user_list':       require_once('ajax.user_list.php'); break;
-                case 'group_list':       require_once('ajax.group_list.php'); break;
+                case 'group_list':      require_once('ajax.group_list.php'); break;
 
                 // Configuration management
                 case 'config_list':     require_once('ajax.config_list.php'); break;
 
                 // Tags management
-                case 'tags_list':     require_once('ajax.tags_list.php'); break;
+                case 'tags_list':       require_once('ajax.tags_list.php'); break;
             }
         exit();
         }
@@ -187,12 +186,12 @@ if (isset($auth) && in_array(true, $permission)) {
 
 // are we running a PMF export file request?
 if ((isset($_REQUEST["action"])) && ($_REQUEST["action"] == "exportfile")) {
-    require_once("export.file.php");
+    require_once('export.file.php');
     exit();
 }
 
 // Header of the admin page inlcuding the navigation
-require_once ("header.php");
+require_once('header.php');
 
 // User is authenticated
 if (isset($auth) && in_array(true, $permission)) {
@@ -203,22 +202,22 @@ if (isset($auth) && in_array(true, $permission)) {
             case 'user':                    require_once('user.php'); break;
             case 'group':                   require_once('group.php'); break;
             // functions for record administration
-            case "view":                    require_once ("record.show.php"); break;
-            case "accept":                  require_once ("record.show.php"); break;
-            case "zeichan":                 require_once ("record.show.php"); break;
-            case "takequestion":            require_once ("record.edit.php"); break;
-            case "editentry":               require_once ("record.edit.php"); break;
-            case "editpreview":             require_once ("record.edit.php"); break;
-            case "delcomment":              require_once ("record.delcommentform.php"); break;
-            case "deletecomment":           require_once ("record.delcomment.php"); break;
-            case "insertentry":             require_once ("record.add.php"); break;
-            case "saveentry":               require_once ("record.save.php"); break;
-            case "delentry":                require_once ("record.delete.php"); break;
-            case "delatt":                  require_once ("record.delatt.php"); break;
-            case "question":                require_once ("record.delquestion.php"); break;
-            case 'comments':                require_once ('record.comments.php'); break;
+            case "view":
+            case "accept":
+            case "zeichan":                 require_once('record.show.php'); break;
+            case "takequestion":
+            case "editentry":
+            case "editpreview":             require_once('record.edit.php'); break;
+            case "delcomment":              require_once('record.delcommentform.php'); break;
+            case "deletecomment":           require_once('record.delcomment.php'); break;
+            case "insertentry":             require_once('record.add.php'); break;
+            case "saveentry":               require_once('record.save.php'); break;
+            case "delentry":                require_once('record.delete.php'); break;
+            case "delatt":                  require_once('record.delatt.php'); break;
+            case "question":                require_once('record.delquestion.php'); break;
+            case 'comments':                require_once('record.comments.php'); break;
             // news administraion
-            case "news":                    require_once ("news.php"); break;
+            case "news":                    require_once('news.php'); break;
             // category administration
             case 'content':
             case 'category':
@@ -226,14 +225,14 @@ if (isset($auth) && in_array(true, $permission)) {
             case 'updatecategory':
             case 'removecategory':
             case 'changecategory':
-            case 'pastecategory':           require_once ('category.main.php'); break;
-            case "addcategory":             require_once ("category.add.php"); break;
-            case "editcategory":            require_once ("category.edit.php"); break;
-            case "translatecategory":       require_once ("category.translate.php"); break;
-            case "deletecategory":          require_once ("category.delete.php"); break;
-            case "cutcategory":             require_once ("category.cut.php"); break;
-            case "movecategory":            require_once ("category.move.php"); break;
-            case "showcategory":            require_once ("category.showstructure.php"); break;
+            case 'pastecategory':           require_once('category.main.php'); break;
+            case "addcategory":             require_once('category.add.php'); break;
+            case "editcategory":            require_once('category.edit.php'); break;
+            case "translatecategory":       require_once('category.translate.php'); break;
+            case "deletecategory":          require_once('category.delete.php'); break;
+            case "cutcategory":             require_once('category.cut.php'); break;
+            case "movecategory":            require_once('category.move.php'); break;
+            case "showcategory":            require_once('category.showstructure.php'); break;
             // glossary
             case 'glossary':
             case 'saveglossary':
@@ -245,25 +244,22 @@ if (isset($auth) && in_array(true, $permission)) {
             case 'adminlog':
             case 'deleteadminlog':          require_once ('adminlog.php'); break;
             // functions for password administration
-            case "passwd":                  require_once ("pwd.change.php"); break;
-            case "savepwd":                 require_once ("pwd.save.php"); break;
+            case "passwd":                  require_once('pwd.change.php'); break;
+            case "savepwd":                 require_once('pwd.save.php'); break;
             // functions for session administration
-            case "viewsessions":            require_once ("stat.main.php"); break;
-            case "sessionbrowse":           require_once ("stat.browser.php"); break;
-            case "sessionsuche":            require_once ("stat.form.php"); break;
-            case "viewsession":             require_once ("stat.show.php"); break;
-            case "statistics":              require_once ("stat.ratings.php"); break;
+            case "viewsessions":            require_once('stat.main.php'); break;
+            case "sessionbrowse":           require_once('stat.browser.php'); break;
+            case "sessionsuche":            require_once('stat.form.php'); break;
+            case "viewsession":             require_once('stat.show.php'); break;
+            case "statistics":              require_once('stat.ratings.php'); break;
             // functions for config administration
-            case 'config':                  require_once ("configuration.php"); break;
+            case 'config':                  require_once('configuration.php'); break;
             case 'linkconfig':              require_once ('linkconfig.main.php'); break;
             // functions for backup administration
             case 'backup':                  require_once ('backup.main.php'); break;
             case 'restore':                 require_once ('backup.import.php'); break;
             // functions for FAQ export
-            case "export":                  require_once ("export.main.php"); break;
-            case 'plugins':                 require_once ('plugins.main.php'); break;
-            case 'firefoxsearch':           require_once ('plugins.firefoxsearch.php'); break;
-            case 'msiesearch':              require_once ('plugins.msiesearch.php'); break;
+            case "export":                  require_once('export.main.php'); break;
 
             default:                        print "Error"; break;
         }
@@ -284,7 +280,7 @@ if (isset($auth) && in_array(true, $permission)) {
             addMenuEntry('adduser,edituser,deluser',    'group&amp;group_action=add',   'ad_quick_group');
         }
 ?>
-            <li><a href="../index.php" title="<?php print PMF_htmlentities($PMF_CONF['main.titleFAQ'], ENT_QUOTES, $PMF_LANG['metaCharset']); ?>"><?php print PMF_htmlentities($PMF_CONF['main.titleFAQ'], ENT_QUOTES, $PMF_LANG['metaCharset']); ?></a></li>
+            <li><a href="../index.php" title="<?php print PMF_htmlentities($faqconfig->get('main.titleFAQ'), ENT_QUOTES, $PMF_LANG['metaCharset']); ?>"><?php print PMF_htmlentities($faqconfig->get('main.titleFAQ'), ENT_QUOTES, $PMF_LANG['metaCharset']); ?></a></li>
         </ul>
     </fieldset>
     </div>
@@ -315,7 +311,7 @@ if (isset($auth) && in_array(true, $permission)) {
             } else {
                 printf('<p>%s <a href="http://www.phpmyfaq.de" target="_blank">www.phpmyfaq.de</a>: <strong>phpMyFAQ %s</strong>', $PMF_LANG['ad_xmlrpc_latest'], $result->scalarval());
                 // Installed phpMyFAQ version is outdated
-                if (-1 == version_compare($PMF_CONF['main.currentVersion'], $result->scalarval())) {
+                if (-1 == version_compare($faqconfig->get('main.currentVersion'), $result->scalarval())) {
                     print '<br />'.$PMF_LANG['ad_you_should_update'];
                 }
                 print '</p>';
@@ -335,7 +331,7 @@ if (isset($auth) && in_array(true, $permission)) {
     <?php printf('<h2>%s</h2>', $PMF_LANG['ad_system_info']); ?>
     <dl>
         <dt><strong>phpMyFAQ Version</strong></dt>
-        <dd>phpMyFAQ <?php print $PMF_CONF['main.currentVersion']; ?></dd>
+        <dd>phpMyFAQ <?php print $faqconfig->get('main.currentVersion'); ?></dd>
         <dt><strong>Server Software</strong></dt>
         <dd><?php print $_SERVER["SERVER_SOFTWARE"]; ?></dd>
         <dt><strong>PHP Version</strong></dt>
@@ -390,7 +386,7 @@ if (isset($auth) && in_array(true, $permission)) {
         <p><img src="images/arrow.gif" width="11" height="11" alt="<?php print $PMF_LANG["lostPassword"]; ?>" border="0" /> <a href="password.php" title="<?php print $PMF_LANG["lostPassword"]; ?>">
 <?php print $PMF_LANG["lostPassword"]; ?>
 </a></p>
-        <p><img src="images/arrow.gif" width="11" height="11" alt="<?php print PMF_htmlentities($PMF_CONF['main.titleFAQ'], ENT_QUOTES, $PMF_LANG['metaCharset']); ?>" border="0" /> <a href="../index.php" title="<?php print PMF_htmlentities($PMF_CONF['main.titleFAQ'], ENT_QUOTES, $PMF_LANG['metaCharset']); ?>"><?php print PMF_htmlentities($PMF_CONF['main.titleFAQ'], ENT_QUOTES, $PMF_LANG['metaCharset']); ?></a></p>
+        <p><img src="images/arrow.gif" width="11" height="11" alt="<?php print PMF_htmlentities($faqconfig->get('main.titleFAQ'), ENT_QUOTES, $PMF_LANG['metaCharset']); ?>" border="0" /> <a href="../index.php" title="<?php print PMF_htmlentities($faqconfig->get('main.titleFAQ'), ENT_QUOTES, $PMF_LANG['metaCharset']); ?>"><?php print PMF_htmlentities($PMF_CONF['main.titleFAQ'], ENT_QUOTES, $PMF_LANG['metaCharset']); ?></a></p>
     </fieldset>
     </form>
     </div>
