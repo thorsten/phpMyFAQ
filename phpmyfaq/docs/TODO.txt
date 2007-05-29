@@ -1,6 +1,6 @@
 TODO list for future versions of phpMyFAQ:
 
-2.0.x "Prometheus" (planned CVS branch: PMF_2_0):
+2.0.x "Prometheus" (CVS branch: PMF_2_0):
 - bugfixing for stability or security reasons
 
 2.1.0 "Pandora" (planned CVS branch: PMF_2_1):
