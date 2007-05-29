@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: opensearch.php,v 1.4 2007-03-29 18:47:40 thorstenr Exp $
+* $Id: opensearch.php,v 1.4.2.1 2007-05-29 15:54:11 thorstenr Exp $
 *
 * This is XML code for OpenSearch
 *
@@ -25,7 +25,7 @@ require_once(PMF_ROOT_DIR.'/inc/Init.php');
 require_once(PMF_ROOT_DIR.'/inc/Link.php');
 
 $plugin_icon    = $_SERVER['HTTP_HOST'].'.pmfsearch.png';
-$baseUrl        = PMF_Link::getSystemUri('/index.php');
+$baseUrl        = PMF_Link::getSystemUri('/opensearch.php');
 $search_url     = $baseUrl.'/index.php?action=search';
 $src_url        = $baseUrl;
 
