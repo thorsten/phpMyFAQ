@@ -5,6 +5,7 @@ CHANGED FILES FROM 2.0.0 -> 2.0.1
 ./admin/category.main.php
 ./admin/index.php
 ./admin/news.php
+./admin/record.comments.php
 ./admin/record.save.php
 ./inc/Captcha.php
 ./inc/Faq.php
