@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: news.php,v 1.34 2007-05-28 09:00:28 thorstenr Exp $
+ * $Id: news.php,v 1.35 2007-05-29 11:48:00 thorstenr Exp $
  *
  * The main administration file for the news
  *
@@ -241,7 +241,7 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
         (isset($_POST['dateEndss']) && !empty($_POST['dateEndss']) ? str_pad((int)$_POST['dateEndss'], 2, '0', STR_PAD_LEFT) : '00');
 
     // Sanity checks
-    if ('00000000000000' == $dateEnd) {
+    if ('00000101000000' == $dateEnd) {
         $dateEnd = '99991231235959';
     }
         $newsData = array(
@@ -284,7 +284,7 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
         (isset($_POST['dateEndss']) && !empty($_POST['dateEndss']) ? str_pad((int)$_POST['dateEndss'], 2, '0', STR_PAD_LEFT) : '00');
 
     // Sanity checks
-    if ('00000000000000' == $dateEnd) {
+    if ('00000101000000' == $dateEnd) {
         $dateEnd = '99991231235959';
     }
     $newsData = array(
