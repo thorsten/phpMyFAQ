@@ -18,8 +18,11 @@ CHANGED FILES FROM 2.0.0 -> 2.0.1
 ./inc/PMF_DB/Oracle.php
 ./install/installer.php
 ./install/update.php
+./lang/language_de.php
 ./template/admin.css
 ./template/contact.tpl
+./_.htaccess
 ./contact.php
+./opensearch.php
 ./pdf.php
 ./save.php
