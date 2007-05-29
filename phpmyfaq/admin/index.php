@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: index.php,v 1.103.2.3 2007-05-29 02:13:30 thorstenr Exp $
+ * $Id: index.php,v 1.103.2.4 2007-05-29 03:57:21 thorstenr Exp $
  *
  * The main admin backend index file
  *
@@ -290,9 +290,9 @@ if (isset($auth) && in_array(true, $permission)) {
         <dd><?php print $PMF_TABLE_INFO[SQLPREFIX."faqsessions"]; ?></dd>
         <dt><strong><a href="?action=view"><?php print $PMF_LANG["ad_start_articles"]; ?></a></strong></dt>
         <dd><?php print $PMF_TABLE_INFO[SQLPREFIX."faqdata"]; ?></dd>
-        <dt><strong><a href="?action=comments"><?php print $PMF_LANG["ad_start_comments"]; ?></strong></a></dt>
+        <dt><strong><a href="?action=comments"><?php print $PMF_LANG["ad_start_comments"]; ?></a></strong></dt>
         <dd><?php print $PMF_TABLE_INFO[SQLPREFIX."faqcomments"]; ?></dd>
-        <dt><strong><a href="?action=question"><?php print $PMF_LANG["msgOpenQuestions"]; ?></strong></a></dt>
+        <dt><strong><a href="?action=question"><?php print $PMF_LANG["msgOpenQuestions"]; ?></a></strong></dt>
         <dd><?php print $PMF_TABLE_INFO[SQLPREFIX."faqquestions"]; ?></dd>
     </dl>
 
