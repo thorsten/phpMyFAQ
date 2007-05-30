@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: save.php,v 1.42.2.1 2007-05-24 19:58:27 thorstenr Exp $
+ * $Id: save.php,v 1.42.2.2 2007-05-30 20:31:31 thorstenr Exp $
  *
  * Saves a user FAQ record and sends an email to the user
  *
@@ -48,7 +48,7 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
     }
     $content = $db->escape_string(safeHTML(nl2br($_POST['content'])));
     $contentlink = $db->escape_string(safeHTML($_POST['contentlink']));
-    
+
     $isTranslation = false;
     if (isset($_POST['faqlanguage'])) {
         $isTranslation = true;
@@ -81,7 +81,7 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
         // Fix data with correct values
         $newData['id'] = intval($_POST['faqid']);
         // Set categories equal to the faq source of the translation
-        $category = new PMF_Category($_POST['faqlanguage']);
+        $category = new PMF_Category($newLanguage);
         $categories = $category->getCategoryIdsFromArticle($newData['id']);
     }
 
