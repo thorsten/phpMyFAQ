@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.145.2.2 2007-05-24 18:29:12 thorstenr Exp $
+* $Id: update.php,v 1.145.2.3 2007-05-30 17:39:46 thorstenr Exp $
 *
 * Main update script
 *
@@ -1208,7 +1208,7 @@ if ($step == 5) {
 
     print '<p class="center">';
     // Perform the queries for updating/migrating the database from 1.x
-    if (isset($query)) {
+    if (count($query)) {
         @ob_flush();
         flush();
         $count = 0;
@@ -1233,8 +1233,8 @@ if ($step == 5) {
         @ob_flush();
         flush();
     }
-    
-    // Clear the array with the arrays
+
+    // Clear the array with the queries
     unset($query);
     $query = array();
 
@@ -1425,6 +1425,10 @@ if ($step == 5) {
         flush();
     }
 
+    // Clear the array with the queries
+    unset($query);
+    $query = array();
+
     // Always the last step: Update version number
     if (version_compare($version, NEWVERSION, '<')) {
         $oPMFConf = new PMF_Configuration($db);
@@ -1453,6 +1457,7 @@ if ($step == 5) {
             $query[] = "VACUUM ANALYZE;";
             break;
     }
+
     // Perform the queries for optimizing the database
     if (isset($query)) {
         foreach ($query as $current_query) {
