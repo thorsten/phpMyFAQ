@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.148 2007-05-30 17:46:30 thorstenr Exp $
+* $Id: update.php,v 1.149 2007-05-30 21:53:41 matteo Exp $
 *
 * Main update script
 *
@@ -463,7 +463,7 @@ if ($step == 5) {
                             parent_id int4 NOT NULL,
                             name varchar(255) NOT NULL,
                             description varchar(255) NOT NULL,
-                            user_id int4 NOT NULL,
+                            user_id int4 NULL,
                             PRIMARY KEY (id, lang))";
                 // Copy data from the faqcategories_PMF16x_old table
                 $query[] = 'INSERT INTO '.SQLPREFIX.'faqcategories
@@ -622,7 +622,7 @@ if ($step == 5) {
                 break;
         }
         // 5/13. Fix faqnews table
-        $defaultLang = str_replace(array('language_', '.php'), '', $PMF_CONF['main.language']);
+        $defaultLang = str_replace(array('language_', '.php'), '', $PMF_CONF['language']);
         switch($DB["type"]) {
             case 'mssql':
             case 'sybase':
@@ -917,7 +917,7 @@ if ($step == 5) {
 
     print '<p class="center">';
     // Perform the queries for updating/migrating the database from 1.x
-    if (isset($query)) {
+    if (count($query)) {
         @ob_flush();
         flush();
         $count = 0;
@@ -954,13 +954,30 @@ if ($step == 5) {
             @rename(PMF_ROOT_DIR.$image, PMF_ROOT_DIR.$newImagePath);
         }
         // 12/13. Move the PMF configurarion: from inc/config.php to the faqconfig table
-        $PMF_CONF['version'] = NEWVERSION;
-        $PMF_CONF['permLevel'] = 'basic';
-        $PMF_CONF['enablevisibility'] = 'Y';
-        $PMF_CONF['referenceURL'] = PMF_Link::getSystemUri('/install/update.php');
-        $PMF_CONF['send2friendText'] = $PMF_CONF['send2friend_text'];
-        unset($PMF_CONF['send2friend_text']);
-        unset($PMF_CONF['copyright_eintrag']);
+        $PMF_CONF['main.administrationMail'] = $PMF_CONF['adminmail'];
+        $PMF_CONF['main.bannedIPs'] = $PMF_CONF['bannedIP'];
+        $PMF_CONF['main.contactInformations'] = $PMF_CONF['msgContactOwnText'];
+        $PMF_CONF['main.currentVersion'] = NEWVERSION;
+        $PMF_CONF['main.disableAttachments'] = $PMF_CONF['disatt'];
+        $PMF_CONF['main.enableAdminLog'] = $PMF_CONF['enableadminlog'];
+        $PMF_CONF['main.enableRewriteRules'] = $PMF_CONF['mod_rewrite'];
+        $PMF_CONF['main.enableUserTracking'] = $PMF_CONF['tracking'];
+        $PMF_CONF['main.language'] = $PMF_CONF['language'];
+        $PMF_CONF['main.languageDetection'] = $PMF_CONF['detection'];
+        $PMF_CONF['main.maxAttachmentSize'] = $PMF_CONF['attmax'];
+        $PMF_CONF['main.metaDescription'] = $PMF_CONF['metaDescription'];
+        $PMF_CONF['main.metaKeywords'] = $PMF_CONF['metaKeywords'];
+        $PMF_CONF['main.metaPublisher'] = $PMF_CONF['metaPublisher'];
+        $PMF_CONF['main.numberOfRecordsPerPage'] = $PMF_CONF['numRecordsPage'];
+        $PMF_CONF['main.numberOfShownNewsEntries'] = $PMF_CONF['numNewsArticles'];
+        $PMF_CONF['main.referenceURL'] = PMF_Link::getSystemUri('/install/update.php');
+        $PMF_CONF['main.send2friendText'] = $PMF_CONF['send2friend_text'];
+        $PMF_CONF['main.titleFAQ'] = $PMF_CONF['title'];
+
+        $PMF_CONF['spam.checkBannedWords'] = $PMF_CONF['spamCheckBannedWords'];
+        $PMF_CONF['spam.enableCatpchaCode'] = $PMF_CONF['spamEnableCatpchaCode'];
+        $PMF_CONF['spam.enableSafeEmail'] = $PMF_CONF['spamEnableSafeEmail'];
+
         foreach ($PMF_CONF as $key => $value) {
             $PMF_CONF[$key] = html_entity_decode($value);
             if ('TRUE' == $value) {
@@ -1046,46 +1063,6 @@ if ($step == 5) {
         $query[] = 'UPDATE '.SQLPREFIX.'faqdata_group SET group_id = -1 WHERE group_id = 0';
         $query[] = 'INSERT INTO '.SQLPREFIX.'faqdata_user (record_id) SELECT DISTINCT id FROM '.SQLPREFIX.'faqdata';
         $query[] = 'UPDATE '.SQLPREFIX.'faqdata_user SET user_id = -1 WHERE user_id = 0';
-    }
-
-    //
-    // UPDATES FROM 2.0-BETA2
-    //
-    if (version_compare($version, '2.0.0-beta2', '<')) {
-        // Added sorting configuration
-        $query[] = "INSERT INTO ".SQLPREFIX."faqconfig (config_name, config_value) VALUES ('records.orderby', 'id')";
-        $query[] = "INSERT INTO ".SQLPREFIX."faqconfig (config_name, config_value) VALUES ('records.sortby', 'DESC')";
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.administrationMail' WHERE config_name = 'adminmail'";
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.maxAttachmentSize' WHERE config_name = 'attmax'";
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.bannedIPs' WHERE config_name = 'bannedIP'";
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.languageDetection' WHERE config_name = 'detection'";
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.disableAttachments' WHERE config_name = 'disatt'";
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.enableAdminLog' WHERE config_name = 'enableadminlog'";
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'records.enableVisibilityQuestions' WHERE config_name = 'enablevisibility'";
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.ipCheck' WHERE config_name = 'ipcheck'";
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.ldapSupport' WHERE config_name = 'ldap_support'";
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.metaDescription' WHERE config_name = 'metaDescription'";
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.metaKeywords' WHERE config_name = 'metaKeywords'";
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.language' WHERE config_name = 'language'";
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.metaPublisher' WHERE config_name = 'metaPublisher'";
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.enableRewriteRules' WHERE config_name = 'mod_rewrite'";
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.contactInformations' WHERE config_name = 'msgContactOwnText'";
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.numberOfShownNewsEntries' WHERE config_name = 'numNewsArticles'";
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.numberOfRecordsPerPage' WHERE config_name = 'numRecordsPage'";
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'records.numberOfRelatedArticles' WHERE config_name = 'numRelatedArticles'";
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.permLevel' WHERE config_name = 'permLevel'";
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.phpMyFAQToken' WHERE config_name = 'phpMyFAQToken'";
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.referenceURL' WHERE config_name = 'referenceURL'";
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.send2friendText' WHERE config_name = 'send2friendText'";
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'spam.checkBannedWords' WHERE config_name = 'spamCheckBannedWords'";
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'spam.enableCatpchaCode' WHERE config_name = 'spamEnableCatpchaCode'";
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'spam.enableSafeEmail' WHERE config_name = 'spamEnableSafeEmail'";
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.titleFAQ' WHERE config_name = 'title'";
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.enableUserTracking' WHERE config_name = 'tracking'";
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.urlValidateInterval' WHERE config_name = 'URLValidateInterval'";
-        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.currentVersion' WHERE config_name = 'version'";
-        $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('records.defaultActivation', 'false')";
-        $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('records.defaultAllowComments', 'false')";
     }
 
     //
