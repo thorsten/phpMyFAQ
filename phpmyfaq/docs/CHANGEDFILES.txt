@@ -3,6 +3,7 @@ CHANGED FILES FROM 2.0.0 -> 2.0.1
 ./admin/ajax.user_list.php
 ./admin/backup.import.php
 ./admin/category.main.php
+./admin/footer.php
 ./admin/index.php
 ./admin/news.php
 ./admin/record.comments.php
