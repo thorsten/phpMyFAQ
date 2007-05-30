@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.113.2.4 2007-05-28 08:19:27 thorstenr Exp $
+ * $Id: Faq.php,v 1.113.2.5 2007-05-30 19:56:54 thorstenr Exp $
  *
  * The main FAQ class
  *
@@ -387,7 +387,7 @@ class PMF_Faq
      */
     function showAllRecordsByIds($record_ids, $orderby = 'id', $sortby = 'ASC')
     {
-        global $sids, $PMF_CONF, $category;
+        global $sids, $faqconfig, $category;
 
         $records = implode(', ', $record_ids);
         $page    = 1;
@@ -395,6 +395,18 @@ class PMF_Faq
 
         if (isset($_REQUEST['seite'])) {
             $page = (int)$_REQUEST['seite'];
+        }
+
+        if ($this->groupSupport) {
+            $permPart = sprintf("( fdg.group_id IN (%s)
+            OR
+                (fdu.user_id = %d AND fdg.group_id IN (%s)))",
+                implode(', ', $this->groups),
+                $this->user,
+                implode(', ', $this->groups));
+        } else {
+            $permPart = sprintf("( fdu.user_id = %d OR fdu.user_id = -1 )",
+                $this->user);
         }
 
         $now = date('YmdHis');
@@ -438,9 +450,7 @@ class PMF_Faq
             AND
                 fd.lang = '%s'
             AND
-                ( fdg.group_id IN (%s)
-            OR
-                (fdu.user_id = %d AND fdg.group_id IN (%s)))
+                %s
             ORDER BY
                 %s %s",
             SQLPREFIX,
@@ -452,21 +462,19 @@ class PMF_Faq
             $now,
             $records,
             $this->language,
-            implode(', ', $this->groups),
-            $this->user,
-            implode(', ', $this->groups),
+            $permPart,
             $this->db->escape_string($orderby),
             $this->db->escape_string($sortby));
 
         $result = $this->db->query($query);
 
         $num = $this->db->num_rows($result);
-        $pages = ceil($num / $PMF_CONF["main.numberOfRecordsPerPage"]);
+        $pages = ceil($num / $faqconfig->get('main.numberOfRecordsPerPage'));
 
         if ($page == 1) {
             $first = 0;
         } else {
-            $first = ($page * $PMF_CONF["main.numberOfRecordsPerPage"]) - $PMF_CONF["main.numberOfRecordsPerPage"];
+            $first = ($page * $faqconfig->get('main.numberOfRecordsPerPage')) - $faqconfig->get('main.numberOfRecordsPerPage');
         }
 
         if ($num > 0) {
@@ -479,7 +487,7 @@ class PMF_Faq
             $output .= '<ul class="phpmyfaq_ul">';
             $counter = 0;
             $displayedCounter = 0;
-            while (($row = $this->db->fetch_object($result)) && $displayedCounter < $PMF_CONF['main.numberOfRecordsPerPage']) {
+            while (($row = $this->db->fetch_object($result)) && $displayedCounter < $faqconfig->get('main.numberOfRecordsPerPage')) {
                 $counter ++;
                 if ($counter <= $first) {
                     continue;
