@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Ibm_db2.php,v 1.10 2007-05-29 03:43:04 thorstenr Exp $
+ * $Id: Ibm_db2.php,v 1.11 2007-05-30 19:26:36 thorstenr Exp $
  *
  * db_ibm_db2
  *
@@ -359,12 +359,12 @@ class db_ibm_db2
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2006-08-26
      */
-    function getTableNames()
+    function getTableNames($prefix = '')
     {
         $stmt = db2_tables($this->conn);
 
         while ($table = db2_fetch_assoc($stmt)) {
-            if ($table['TABLE_TYPE'] == 'TABLE' && strstr($table['TABLE_NAME'], 'FAQ')) {
+            if ($table['TABLE_TYPE'] == 'TABLE' && strstr($table['TABLE_NAME'], $prefix.'FAQ')) {
                 $this->tableNames[] = $table['TABLE_NAME'];
             }
         }
