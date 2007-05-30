@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.add.php,v 1.58 2007-05-15 18:51:46 thorstenr Exp $
+ * $Id: record.add.php,v 1.59 2007-05-30 20:35:13 thorstenr Exp $
  *
  * Adds a record in the database, handles the preview and checks for missing
  * category entries.
@@ -59,7 +59,7 @@ if ($permission["editbt"]) {
         adminlog("Beitragcreatesave");
         printf("<h2>%s</h2>\n", $PMF_LANG['ad_entry_aor']);
 
-        $category   = new PMF_Category($LANGCODE);
+        $category   = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
         $tagging    = new PMF_Tags($db, $LANGCODE);
 
         // Get the data
@@ -126,7 +126,7 @@ if ($permission["editbt"]) {
              ) {
         // Preview
         $rubrik = $_POST['rubrik'];
-        $cat = new PMF_Category;
+        $cat = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
         $cat->transform(0);
         $categorylist = '';
         foreach ($rubrik as $categories) {

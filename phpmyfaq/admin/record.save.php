@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.save.php,v 1.64 2007-05-28 20:46:24 thorstenr Exp $
+ * $Id: record.save.php,v 1.65 2007-05-30 20:35:13 thorstenr Exp $
  *
  * Save or delete a FAQ record
  *
@@ -28,7 +28,7 @@ $submit = $_REQUEST["submit"];
 // Re-evaluate $user
 $user = PMF_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
 
-$category = new PMF_Category;
+$category = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
 
 // Evaluate the passed validity range, if any
 $dateStart =

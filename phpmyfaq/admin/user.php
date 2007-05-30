@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: user.php,v 1.36 2007-05-03 19:45:05 thorstenr Exp $
+ * $Id: user.php,v 1.37 2007-05-30 20:35:13 thorstenr Exp $
  *
  * Displays the user managment frontend
  *
@@ -189,7 +189,7 @@ if ($userAction == 'delete') {
             $message .= '<p class="error">'.$errorMessages['delUser'].'</p>';
         } else {
             // Move the categories ownership to admin (id == 1)
-            $oCat = new PMF_Category($LANGCODE);
+            $oCat = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
             $oCat->moveOwnership($userId, 1);
 
             // Remove the user from groups
@@ -506,7 +506,7 @@ function buildUserRights(id)
         checkbox.name = 'user_rights[]';
         checkbox.value = right_id;
         setTimeout((function(checkbox, isUserRight) {
-            return function() {            
+            return function() {
                 checkbox.checked = isUserRight == 1;
             }
         })(checkbox, isUserRight), 10);
