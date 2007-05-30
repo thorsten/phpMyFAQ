@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.204 2007-05-28 20:39:21 thorstenr Exp $
+ * $Id: functions.php,v 1.205 2007-05-30 18:04:00 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -1129,22 +1129,24 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
 
             if (strlen($searchItems[0]) > 1) {
                 foreach ($searchItems as $item) {
-                    $thema = preg_replace_callback('/'
-                        .'('.$item.'="[^"]*")|'
-                        .'((href|src|title|alt|class|style|id|name|dir|onclick|ondblclick|onmousedown|onmouseup|onmouseover|onmousemove|onmouseout|onkeypress|onkeydown|onkeyup)="[^"]*'.$item.'[^"]*")|'
-                        .'('.$item.')'
-                        .'/mis',
-                        "highlight_no_links",
-                        $thema
-                    );
-                    $content = preg_replace_callback('/'
-                        .'('.$item.'="[^"]*")|'
-                        .'((href|src|title|alt|class|style|id|name|dir|onclick|ondblclick|onmousedown|onmouseup|onmouseover|onmousemove|onmouseout|onkeypress|onkeydown|onkeyup)="[^"]*'.$item.'[^"]*")|'
-                        .'('.$item.')'
-                        .'/mis',
-                        "highlight_no_links",
-                        $content
-                    );
+                    if (strlen($item) > 2) {
+                        $thema = preg_replace_callback('/'
+                            .'('.$item.'="[^"]*")|'
+                            .'((href|src|title|alt|class|style|id|name|dir|onclick|ondblclick|onmousedown|onmouseup|onmouseover|onmousemove|onmouseout|onkeypress|onkeydown|onkeyup)="[^"]*'.$item.'[^"]*")|'
+                            .'('.$item.')'
+                            .'/mis',
+                            "highlight_no_links",
+                            $thema
+                        );
+                        $content = preg_replace_callback('/'
+                            .'('.$item.'="[^"]*")|'
+                            .'((href|src|title|alt|class|style|id|name|dir|onclick|ondblclick|onmousedown|onmouseup|onmouseover|onmousemove|onmouseout|onkeypress|onkeydown|onkeyup)="[^"]*'.$item.'[^"]*")|'
+                            .'('.$item.')'
+                            .'/mis',
+                            "highlight_no_links",
+                            $content
+                        );
+                    }
                 }
             }
 
