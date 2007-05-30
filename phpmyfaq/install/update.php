@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.147 2007-05-24 18:32:46 thorstenr Exp $
+* $Id: update.php,v 1.148 2007-05-30 17:46:30 thorstenr Exp $
 *
 * Main update script
 *
@@ -171,7 +171,6 @@ if ($step == 1) {
 <legend class="installation"><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 1 of 5)</strong></legend>
 <p>This update will work <strong>only</strong> for the following versions:</p>
 <ul type="square">
-    <li>phpMyFAQ 1.5.x</li>
     <li>phpMyFAQ 1.6.x</li>
     <li>phpMyFAQ 2.0.x</li>
 </ul>
@@ -183,15 +182,12 @@ if ($step == 1) {
     <li>phpMyFAQ 1.2.x</li>
     <li>phpMyFAQ 1.3.x</li>
     <li>phpMyFAQ 1.4.x</li>
+    <li>phpMyFAQ 1.5.x</li>
 </ul>
 <p><strong>Please make a full backup of your SQL tables before running this update.</strong></p>
 
 <p>Please select your current version:</p>
 <select name="version" size="1">
-    <option value="1.5.0">phpMyFAQ 1.5.0 and later</option>
-    <option value="1.5.2">phpMyFAQ 1.5.2 and later</option>
-    <option value="1.5.4">phpMyFAQ 1.5.4 and later</option>
-    <option value="1.5.5">phpMyFAQ 1.5.5 and later</option>
     <option value="1.6.0">phpMyFAQ 1.6.0 and later</option>
     <option value="2.0.0-alpha">phpMyFAQ 2.0.0-alpha</option>
     <option value="2.0.0-beta">phpMyFAQ 2.0.0-beta</option>
@@ -236,7 +232,7 @@ if ($step == 2) {
         $test4 = 1;
     }
 
-    if ('1.4.' == substr($_POST['version'], 0, 4)) {
+    if ('1.5.' == substr($_POST['version'], 0, 4)) {
         print "<p class=\"error\"><strong>Error:</strong> You can't upgrade from phpMyFAQ 1.4.x to ".NEWVERSION.". Please upgrade first to the latest version of phpMyFAQ 2.0.x.</p>";
     } else {
         $test5 = 1;
@@ -275,41 +271,7 @@ if ($step == 3) {
     if (version_compare($version, '2.0.0-alpha', '<')) {
         require_once(PMF_ROOT_DIR."/inc/config.php");
     }
-    if (version_compare($version, '1.5.0', '<')) {
-        // Version 1.4.x
-?>
-<input type="hidden" name="db[server]" value="<?php print $DB["server"]; ?>" />
-<input type="hidden" name="db[user]" value="<?php print $DB["user"]; ?>" />
-<input type="hidden" name="db[password]" value="<?php print $DB["password"]; ?>" />
-<input type="hidden" name="db[db]" value="<?php print $DB["db"]; ?>" />
-<input type="hidden" name="db[prefix]" value="<?php print $DB["prefix"]; ?>" />
-
-<input type="hidden" name="edit[language]" value="<?php print $PMF_CONF["language"]; ?>" />
-<input type="hidden" name="edit[detection]" value="<?php print $PMF_CONF["detection"]; ?>" />
-<input type="hidden" name="edit[title]" value="<?php print str_replace('"', '&quot;', $PMF_CONF["title"]); ?>" />
-<input type="hidden" name="edit[version]" value="<?php print NEWVERSION; ?>" />
-<input type="hidden" name="edit[metaDescription]" value="<?php print str_replace('"', '&quot;', $PMF_CONF["metaDescription"]); ?>" />
-<input type="hidden" name="edit[metaKeywords]" value="<?php print str_replace('"', '&quot;', $PMF_CONF["metaKeywords"]); ?>" />
-<input type="hidden" name="edit[metaPublisher]" value="<?php print str_replace('"', '&quot;', $PMF_CONF["metaPublisher"]); ?>" />
-<input type="hidden" name="edit[adminmail]" value="<?php print $PMF_CONF["adminmail"]; ?>" />
-<input type="hidden" name="edit[msgContactOwnText]" value="<?php print str_replace('"', '&quot;', $PMF_CONF["msgContactOwnText"]); ?>" />
-<input type="hidden" name="edit[copyright_eintrag]" value="<?php print str_replace('"', '&quot;', $PMF_CONF["copyright_eintrag"]); ?>" />
-<input type="hidden" name="edit[send2friend_text]" value="<?php print str_replace('"', '&quot;', $PMF_CONF["send2friend_text"]); ?>" />
-<input type="hidden" name="edit[attmax]" value="<?php print $PMF_CONF["attmax"]; ?>" />
-<input type="hidden" name="edit[disatt]" value="<?php print $PMF_CONF["disatt"]; ?>" />
-<input type="hidden" name="edit[tracking]" value="<?php print $PMF_CONF["tracking"]; ?>" />
-<input type="hidden" name="edit[enableadminlog]" value="<?php print $PMF_CONF["enableadminlog"]; ?>" />
-<input type="hidden" name="edit[ipcheck]" value="<?php print $PMF_CONF["ipcheck"]; ?>">
-<input type="hidden" name="edit[numRecordsPage]" value="<?php print $PMF_CONF["numRecordsPage"]; ?>" />
-<input type="hidden" name="edit[numNewsArticles]" value="<?php print $PMF_CONF["numNewsArticles"]; ?>" />
-<input type="hidden" name="edit[bannedIP]" value="<?php print $PMF_CONF["bannedIP"]; ?>" />
-<input type="hidden" name="edit[mod_rewrite]" value="" />
-<input type="hidden" name="edit[ldap_support]" value="" />
-<input type="hidden" name="edit[spamEnableSafeEmail]" value="TRUE" />
-<input type="hidden" name="edit[spamCheckBannedWords]" value="TRUE" />
-<input type="hidden" name="edit[spamEnableCatpchaCode]" value="TRUE" />
-<?php
-    } else {
+    if (version_compare($version, '2.0.0', '<')) {
         $PMF_CONF['mod_rewrite'] = isset($PMF_CONF['mod_rewrite']) ? $PMF_CONF['mod_rewrite'] : '';
         $PMF_CONF['ldap_support'] = isset($PMF_CONF['ldap_support']) ? $PMF_CONF['ldap_support'] : '';
         $PMF_CONF['disatt'] = isset($PMF_CONF['disatt']) ? $PMF_CONF['disatt'] : '';
@@ -406,254 +368,6 @@ if ($step == 5) {
     define("SQLPREFIX", $DB["prefix"]);
     $db = PMF_Db::db_select($DB["type"]);
     $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
-
-    //
-    // UPDATES FROM 1.4
-    //
-    if (version_compare($version, '1.4.0', '<=')) {
-        // rewrite data.php
-        if ($fp = @fopen("../inc/data.php","w")) {
-            @fputs($fp,"<?php\n\$DB[\"server\"] = '".$DB["server"]."';\n\$DB[\"user\"] = '".$DB["user"]."';\n\$DB[\"password\"] = '".$DB["password"]."';\n\$DB[\"db\"] = '".$DB["db"]."';\n\$DB[\"prefix\"] = '".SQLPREFIX."';\n\$DB[\"type\"] = 'mysql';\n?>");
-            @fclose($fp);
-        } else {
-            print "<p class=\"error\"><strong>Error:</strong> Cannot rewrite to data.php.</p>";
-        }
-    }
-    if (version_compare($version, '1.4.2', '<')) {
-        $query[] = "ALTER TABLE ".SQLPREFIX."faqadminlog CHANGE user usr INT(11) DEFAULT '0' NOT NULL";
-        $query[] = "ALTER TABLE ".SQLPREFIX."faqchanges CHANGE user usr INT(11) DEFAULT '0' NOT NULL";
-        $query[] = "ALTER TABLE ".SQLPREFIX."faqcomments CHANGE user usr VARCHAR(255) NOT NULL";
-        $query[] = "ALTER TABLE ".SQLPREFIX."faqvoting CHANGE user usr INT(11) DEFAULT '0' NOT NULL";
-    }
-    if (version_compare($version, '1.4.4', '<=')) {
-        $query[] = "ALTER TABLE ".SQLPREFIX."faqdata CHANGE content content LONGTEXT NOT NULL";
-    }
-
-    //
-    // UPDATES FROM 1.5
-    //
-    if (version_compare($version, '1.5.0', '<')) {
-        // alter column faqdata.rubrik to integer
-        $query[] = "ALTER TABLE ".SQLPREFIX."faqdata CHANGE rubrik rubrik INT NOT NULL";
-        // create new table faqcategoryrelations
-        $query[] = "CREATE TABLE ".SQLPREFIX."faqcategoryrelations ( category_id INT(11) NOT NULL, category_lang VARCHAR(5) NOT NULL default '', record_id INT(11) NOT NULL, record_lang VARCHAR(5) NOT NULL default '', PRIMARY KEY  (category_id,category_lang,record_id,record_lang) )";
-        // fill the new table
-        $query[] = "INSERT INTO ".SQLPREFIX."faqcategoryrelations SELECT ".SQLPREFIX."faqcategories.id as category_id, ".SQLPREFIX."faqcategories.lang as category_lang, ".SQLPREFIX."faqdata.id as record_id, ".SQLPREFIX."faqdata.lang as record_lang FROM ".SQLPREFIX."faqcategories, ".SQLPREFIX."faqdata WHERE ".SQLPREFIX."faqcategories.id = ".SQLPREFIX."faqdata.rubrik ORDER BY category_id";
-        // drop faqdata.rubrik
-        $query[] = "ALTER TABLE ".SQLPREFIX."faqdata DROP rubrik";
-        // remove all auto-increments
-        $query[] = 'ALTER TABLE '.SQLPREFIX.'faqadminlog CHANGE id id INT(11) NOT NULL';
-        $query[] = 'ALTER TABLE '.SQLPREFIX.'faqcategories CHANGE id id INT(11) NOT NULL';
-        $query[] = 'ALTER TABLE '.SQLPREFIX.'faqchanges CHANGE id id INT(11) NOT NULL';
-        $query[] = 'ALTER TABLE '.SQLPREFIX.'faqcomments CHANGE id_comment id_comment INT(11) NOT NULL';
-        $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata CHANGE id id INT(11) NOT NULL';
-        $query[] = 'ALTER TABLE '.SQLPREFIX.'faqfragen CHANGE id id INT(11) NOT NULL';
-        $query[] = 'ALTER TABLE '.SQLPREFIX.'faqnews CHANGE id id INT(11) NOT NULL';
-        $query[] = 'ALTER TABLE '.SQLPREFIX.'faquser CHANGE id id INT(11) NOT NULL';
-        $query[] = 'ALTER TABLE '.SQLPREFIX.'faqvisits CHANGE id id INT(11) NOT NULL';
-    }
-    if (version_compare($version, '1.5.2', '<')) {
-        switch($DB["type"]) {
-            case 'mssql':   $query[] = 'CREATE INDEX idx_record ON '.SQLPREFIX.'faqcategoryrelations (record_id, record_lang)';
-                            break;
-            default:        $query[] = 'ALTER TABLE '.SQLPREFIX.'faqcategoryrelations ADD INDEX idx_record_id_lang (record_id, record_lang)';
-                            break;
-        }
-    }
-    if (version_compare($version, '1.5.5', '<')) {
-        // Fix unuseful slashes
-        // Table: faqcategories
-        $faqCategoriesQuery = "SELECT * FROM ".SQLPREFIX."faqcategories"
-                             ." WHERE     name LIKE '%\\\\\\\\%'"
-                             ." OR description LIKE '%\\\\\\\\%'";
-        $faqCategories = $db->query($faqCategoriesQuery);
-        if ($db->num_rows($faqCategories) > 0) {
-            while ($row = $db->fetch_object($faqCategories)) {
-                switch($DB["type"]) {
-                    default:
-                        $query[] = "UPDATE ".SQLPREFIX."faqcategories SET "
-                                 ."         name = '".$db->escape_string(fixslashes($row->name))."'"
-                                 .", description = '".$db->escape_string(fixslashes($row->description))."'"
-                                 ." WHERE id = '".$row->id."'";
-                        break;
-                }
-            }
-        }
-        // Table: faqdata
-        $faqDataQuery = "SELECT * FROM ".SQLPREFIX."faqdata"
-                       ." WHERE thema LIKE '%\\\\\\\\%'"
-                       ." OR  content LIKE '%\\\\\\\\%'"
-                       ." OR keywords LIKE '%\\\\\\\\%'"
-                       ." OR   author LIKE '%\\\\\\\\%'";
-        $faqData = $db->query($faqDataQuery);
-        if ($db->num_rows($faqData) > 0) {
-            while ($row = $db->fetch_object($faqData)) {
-                switch($DB["type"]) {
-                    default:
-                        $query[] = "UPDATE ".SQLPREFIX."faqdata SET "
-                                 ."     thema = '".$db->escape_string(fixslashes($row->thema))."'"
-                                 .",  content = '".$db->escape_string(fixslashes($row->content))."'"
-                                 .", keywords = '".$db->escape_string(fixslashes($row->keywords))."'"
-                                 .",   author = '".$db->escape_string(fixslashes($row->author))."'"
-                                 ." WHERE id = '".$row->id."'";
-                        break;
-                }
-            }
-        }
-        // Table: faqcomments
-        $faqCommentsQuery = "SELECT * FROM ".SQLPREFIX."faqcomments"
-                           ." WHERE  usr LIKE '%\\\\\\\\%'"
-                           ." OR comment LIKE '%\\\\\\\\%'";
-        $faqComments = $db->query($faqCommentsQuery);
-        if ($db->num_rows($faqComments) > 0) {
-            while ($row = $db->fetch_object($faqComments)) {
-                switch($DB["type"]) {
-                    default:
-                        $query[] = "UPDATE ".SQLPREFIX."faqcomments SET "
-                                 ."      usr = '".$db->escape_string(fixslashes($row->usr))."'"
-                                 .", comment = '".$db->escape_string(fixslashes($row->comment))."'"
-                                 ." WHERE id_comment = '".$row->id_comment."'";
-                        break;
-                }
-            }
-        }
-        // Table: faqfragen
-        $faqQuestionsQuery = "SELECT * FROM ".SQLPREFIX."faqfragen"
-                            ." WHERE ask_username LIKE '%\\\\\\\\%'"
-                            ."     OR ask_content LIKE '%\\\\\\\\%'";
-        $faqQuestions = $db->query($faqQuestionsQuery);
-        if ($db->num_rows($faqQuestions) > 0) {
-            while ($row = $db->fetch_object($faqQuestions)) {
-                switch($DB["type"]) {
-                    default:
-                        $query[] = "UPDATE ".SQLPREFIX."faqfragen SET "
-                                 ." ask_username = '".$db->escape_string(fixslashes($row->ask_username))."'"
-                                 .", ask_content = '".$db->escape_string(fixslashes($row->ask_content))."'"
-                                 ." WHERE id = '".$row->id."'";
-                        break;
-                }
-            }
-        }
-        // Table: faqnews
-        $faqNewsQuery = "SELECT * FROM ".SQLPREFIX."faqnews"
-                       ." WHERE header LIKE '%\\\\\\\\%'"
-                       ."   OR artikel LIKE '%\\\\\\\\%'"
-                       ." OR linktitel LIKE '%\\\\\\\\%'";
-        $faqNews = $db->query($faqNewsQuery);
-        if ($db->num_rows($faqNews) > 0) {
-            while ($row = $db->fetch_object($faqNews)) {
-                switch($DB["type"]) {
-                    default:
-                        $query[] = "UPDATE ".SQLPREFIX."faqnews SET "
-                                 ."     header = '".$db->escape_string(fixslashes($row->header))."'"
-                                 .",   artikel = '".$db->escape_string(fixslashes($row->artikel))."'"
-                                 .", linktitel = '".$db->escape_string(fixslashes($row->linktitel))."'"
-                                 ." WHERE id = '".$row->id."'";
-                        break;
-                }
-            }
-        }
-    }
-
-    //
-    // UPDATES FROM 1.6
-    //
-    if (version_compare($version, '1.6.0', '<')) {
-        // add revision_id and solution_id
-        // 1/2. Fix faqdata and faqchanges tables
-        switch($DB["type"]) {
-            case 'pgsql':
-                // faqdata (NEW) from install/pgsql.sql.php
-                $query[] = "CREATE TABLE ".SQLPREFIX."faqdata_new (
-                            id SERIAL NOT NULL,
-                            lang varchar(5) NOT NULL,
-                            solution_id bigint NOT NULL,
-                            revision_id bigint NOT NULL DEFAULT 0,
-                            active char(3) NOT NULL,
-                            keywords text NOT NULL,
-                            thema text NOT NULL,
-                            content text NOT NULL,
-                            author varchar(255) NOT NULL,
-                            email varchar(255) NOT NULL,
-                            comment char(1) NOT NULL default 'y',
-                            datum varchar(15) NOT NULL,
-                            PRIMARY KEY (id, lang))";
-                // Copy data from the (old) faqdata
-                $query[] = 'INSERT INTO '.SQLPREFIX.'faqdata_new
-                            (id, lang, active, keywords, thema, content, author, email, comment, datum)
-                            SELECT id, lang, active, keywords, thema, content, author, email, comment, datum
-                            FROM '.SQLPREFIX.'faqdata';
-                // Drop the (old) faqdata and rename the new faqdata table
-                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata     RENAME TO '.SQLPREFIX.'faqdata_PMF155_old';
-                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata_new RENAME TO '.SQLPREFIX.'faqdata';
-                $query[] = 'DROP TABLE '.SQLPREFIX.'faqdata_PMF155_old';
-                // faqchanges (NEW) from install/pgsql.sql.php
-                $query[] = "CREATE TABLE ".SQLPREFIX."faqchanges_new (
-                            id SERIAL NOT NULL,
-                            beitrag bigint NOT NULL,
-                            lang varchar(5) NOT NULL,
-                            revision_id integer NOT NULL DEFAULT 0,
-                            usr bigint NOT NULL REFERENCES ".SQLPREFIX."faquser(id),
-                            datum bigint NOT NULL,
-                            what text NOT NULL,
-                            PRIMARY KEY (id, lang))";
-                // Copy data from the (old) faqchanges
-                $query[] = 'INSERT INTO '.SQLPREFIX.'faqchanges_new
-                            (id, beitrag, lang, usr, datum, what)
-                            SELECT id, beitrag, lang, usr, datum, what
-                            FROM '.SQLPREFIX.'faqchanges';
-                // Drop the (old) faqchanges and rename the new faqchanges table
-                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqchanges     RENAME TO '.SQLPREFIX.'faqchanges_PMF155_old';
-                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqchanges_new RENAME TO '.SQLPREFIX.'faqchanges';
-                $query[] = 'DROP TABLE '.SQLPREFIX.'faqchanges_PMF155_old';
-                break;
-            default:
-                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata ADD solution_id INTEGER NOT NULL AFTER lang';
-                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata ADD revision_id INTEGER NOT NULL AFTER solution_id';
-                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqchanges ADD revision_id INTEGER NOT NULL AFTER lang';
-                break;
-        }
-        // 2/2. Add faqdata_revisions table
-        switch($DB["type"]) {
-            case 'mysql':
-            case 'mysqli':
-            case 'sqlite':
-                $query[] = "CREATE TABLE ".SQLPREFIX."faqdata_revisions (id int(11) NOT NULL, lang varchar(5) NOT NULL, solution_id int(11) NOT NULL, revision_id int(11) NOT NULL DEFAULT 0, active char(3) NOT NULL, keywords text NOT NULL, thema text NOT NULL, content longtext NOT NULL, author varchar(255) NOT NULL, email varchar(255) NOT NULL, comment char(1) NOT NULL, datum varchar(15) NOT NULL, PRIMARY KEY (id, lang, solution_id, revision_id))";
-                break;
-            case 'db2':
-                $query[] = "CREATE TABLE ".SQLPREFIX."faqdata_revisions (id integer NOT NULL, lang varchar(5) NOT NULL, solution_id integer NOT NULL, revision_id integer NOT NULL DEFAULT 0, active char(3) NOT NULL, keywords varchar(512) NOT NULL, thema varchar(512) NOT NULL, content CLOB NOT NULL, author varchar(255) NOT NULL, email varchar(255) NOT NULL, comment char(1) default 'y', datum varchar(15) NOT NULL, PRIMARY KEY (id, lang, solution_id, revision_id))";
-                break;
-            default:
-                $query[] = "CREATE TABLE ".SQLPREFIX."faqdata_revisions (id integer NOT NULL, lang varchar(5) NOT NULL, solution_id integer NOT NULL, revision_id integer NOT NULL DEFAULT 0, active char(3) NOT NULL, keywords varchar(512) NOT NULL, thema varchar(512) NOT NULL, content TEXT NOT NULL, author varchar(255) NOT NULL, email varchar(255) NOT NULL, comment char(1) default 'y', datum varchar(15) NOT NULL, PRIMARY KEY (id, lang, solution_id, revision_id))";
-                break;
-        }
-
-        // add the new "edit revisions" right to the existing user rights profiles
-        // 1/2. Fix admin/id=1 user rights
-        $query[] = "UPDATE ".SQLPREFIX."faquser SET rights = '11111111111111111111111111' WHERE id = 1";
-        // 2/2. Fix normal user rights
-        $_records = array();
-        $_result = $db->query('SELECT id, rights FROM '.SQLPREFIX.'faquser WHERE id <> 1 ORDER BY id');
-        while ($row = $db->fetch_object($_result)) {
-            $_records[] = array('id' => $row->id, 'rights' => $row->rights);
-        }
-        foreach ($_records as $_r) {
-            $query[] = "UPDATE ".SQLPREFIX."faquser SET rights = '".$_r['rights']."0' WHERE id = ".$_r['id'];
-        }
-        // add captcha support
-        $query[] = 'CREATE TABLE '.SQLPREFIX.'faqcaptcha ( id varchar(6) NOT NULL, useragent varchar(255) NOT NULL, language varchar(2) NOT NULL, ip varchar(64) NOT NULL, captcha_time integer NOT NULL, PRIMARY KEY (id))';
-        // add solution id to existing records
-        $_records = array();
-        $_result = $db->query('SELECT id, lang FROM '.SQLPREFIX.'faqdata ORDER BY id, lang');
-        while ($row = $db->fetch_object($_result)) {
-            $_records[] = array('id' => $row->id, 'lang' => $row->lang);
-        }
-        $_start = PMF_SOLUTION_ID_START_VALUE;
-        foreach ($_records as $_r) {
-            $query[] = "UPDATE ".SQLPREFIX."faqdata SET solution_id = ".$_start." WHERE id = ".$_r['id']." AND lang = '".$_r['lang']."'";
-            $_start += PMF_SOLUTION_ID_INCREMENT_VALUE;
-        }
-    }
 
     $images = array();
 
@@ -1228,8 +942,8 @@ if ($step == 5) {
         @ob_flush();
         flush();
     }
-    
-    // Clear the array with the arrays
+
+    // Clear the array with the queries
     unset($query);
     $query = array();
 
@@ -1419,6 +1133,10 @@ if ($step == 5) {
         @ob_flush();
         flush();
     }
+
+    // Clear the array with the queries
+    unset($query);
+    $query = array();
 
     // Always the last step: Update version number
     if (version_compare($version, NEWVERSION, '<')) {
