@@ -18,6 +18,7 @@ CHANGED FILES FROM 2.0.0 -> 2.0.1
 ./inc/Link.php
 ./inc/Linkverifier.php
 ./inc/Sitemap.php
+./inc/js/functions.js
 ./inc/PMF_DB/Ibm_db2.php
 ./inc/PMF_DB/Oracle.php
 ./install/installer.php
