@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.149 2007-05-30 21:53:41 matteo Exp $
+* $Id: update.php,v 1.150 2007-05-31 05:49:39 matteo Exp $
 *
 * Main update script
 *
@@ -1063,6 +1063,49 @@ if ($step == 5) {
         $query[] = 'UPDATE '.SQLPREFIX.'faqdata_group SET group_id = -1 WHERE group_id = 0';
         $query[] = 'INSERT INTO '.SQLPREFIX.'faqdata_user (record_id) SELECT DISTINCT id FROM '.SQLPREFIX.'faqdata';
         $query[] = 'UPDATE '.SQLPREFIX.'faqdata_user SET user_id = -1 WHERE user_id = 0';
+    }
+
+    //
+    // UPDATES FROM 2.0-BETA2
+    //
+    if (version_compare($version, '2.0.0-beta2', '<')) {
+        // Note: these stage could be avoided if we're coming from v1.6.x-
+        // Refactored configuration keys
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.administrationMail' WHERE config_name = 'adminmail'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.bannedIPs' WHERE config_name = 'bannedIP'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.contactInformations' WHERE config_name = 'msgContactOwnText'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.currentVersion' WHERE config_name = 'version'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.disableAttachments' WHERE config_name = 'disatt'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.enableAdminLog' WHERE config_name = 'enableadminlog'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.enableRewriteRules' WHERE config_name = 'mod_rewrite'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.enableUserTracking' WHERE config_name = 'tracking'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.ipCheck' WHERE config_name = 'ipcheck'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.language' WHERE config_name = 'language'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.languageDetection' WHERE config_name = 'detection'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.ldapSupport' WHERE config_name = 'ldap_support'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.maxAttachmentSize' WHERE config_name = 'attmax'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.metaDescription' WHERE config_name = 'metaDescription'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.metaKeywords' WHERE config_name = 'metaKeywords'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.metaPublisher' WHERE config_name = 'metaPublisher'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.numberOfRecordsPerPage' WHERE config_name = 'numRecordsPage'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.numberOfShownNewsEntries' WHERE config_name = 'numNewsArticles'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.permLevel' WHERE config_name = 'permLevel'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.phpMyFAQToken' WHERE config_name = 'phpMyFAQToken'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.referenceURL' WHERE config_name = 'referenceURL'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.send2friendText' WHERE config_name = 'send2friendText'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.titleFAQ' WHERE config_name = 'title'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'main.urlValidateInterval' WHERE config_name = 'URLValidateInterval'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'records.enableVisibilityQuestions' WHERE config_name = 'enablevisibility'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'records.numberOfRelatedArticles' WHERE config_name = 'numRelatedArticles'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'spam.checkBannedWords' WHERE config_name = 'spamCheckBannedWords'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'spam.enableCatpchaCode' WHERE config_name = 'spamEnableCatpchaCode'";
+        $query[] = "UPDATE ".SQLPREFIX."faqconfig SET config_name = 'spam.enableSafeEmail' WHERE config_name = 'spamEnableSafeEmail'";
+        // Added sorting configuration
+        $query[] = "INSERT INTO ".SQLPREFIX."faqconfig (config_name, config_value) VALUES ('records.orderby', 'id')";
+        $query[] = "INSERT INTO ".SQLPREFIX."faqconfig (config_name, config_value) VALUES ('records.sortby', 'DESC')";
+        // Added default beahviour configuration
+        $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('records.defaultActivation', 'false')";
+        $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('records.defaultAllowComments', 'false')";
     }
 
     //
