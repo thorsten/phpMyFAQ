@@ -1,5 +1,5 @@
 /**
- * $Id: functions.js,v 1.4.2.1 2007-05-14 19:42:21 thorstenr Exp $
+ * $Id: functions.js,v 1.4.2.2 2007-05-31 13:32:26 thorstenr Exp $
  *
  * Some JavaScript functions used in the admin backend
  *
@@ -10,12 +10,12 @@
  * @author      Lars Tiedemann, <php@larstiedemann.de>
  * @since       2003-11-13
  * @copyright   (c) 2003-2007 phpMyFAQ Team
- * 
+ *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
  * http://www.mozilla.org/MPL/
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
@@ -184,7 +184,7 @@ function form_uncheckAll(form_id)
     for (var i = 0, ele; ele = inputElements[i]; i++) {
         if (ele.type == "checkbox") {
             ele.checked = false;
-        } 
+        }
     }
 }
 
@@ -294,7 +294,7 @@ function pmf_dump(data)
 */
 function hide(id)
 {
-    document.getElementById(id).style.display = 'hidden'; 
+    document.getElementById(id).style.display = 'hidden';
 }
 
 /**
@@ -308,5 +308,5 @@ function hide(id)
 */
 function show(id)
 {
-    document.getElementById(id).style.display = 'inline'; 
+    document.getElementById(id).style.display = 'block';
 }
