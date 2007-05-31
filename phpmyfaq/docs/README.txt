@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.92.2.5 2007-05-29 17:24:49 thorstenr Exp $
+$Id: README.txt,v 1.92.2.6 2007-05-31 18:43:18 thorstenr Exp $
 
 phpMyFAQ 2.0.1
 Codename "Prometheus"
@@ -20,7 +20,7 @@ For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.0.1 - 2007-
+Version 2.0.1 - 2007-06-
 - fixed broken update script (Thorsten, Matteo)
 - fixed bug with basic permission level (Thorsten, Matteo)
 - fixed PHP segfaults with Zend Optimizer extension (Thorsten, Matteo)
