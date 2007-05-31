@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.113.2.5 2007-05-30 19:56:54 thorstenr Exp $
+ * $Id: Faq.php,v 1.113.2.6 2007-05-31 14:46:26 thorstenr Exp $
  *
  * The main FAQ class
  *
@@ -1653,44 +1653,67 @@ class PMF_Faq
     {
         global $sids, $PMF_CONF;
 
+        if ($this->groupSupport) {
+            $permPart = sprintf("( fdg.group_id IN (%s)
+            OR
+                (fdu.user_id = %d AND fdg.group_id IN (%s)))",
+                implode(', ', $this->groups),
+                $this->user,
+                implode(', ', $this->groups));
+        } else {
+            $permPart = sprintf("( fdu.user_id = %d OR fdu.user_id = -1 )",
+                $this->user);
+        }
+
         $now = date('YmdHis');
         $query =
 '            SELECT
-                '.SQLPREFIX.'faqdata.id AS id,
-                '.SQLPREFIX.'faqdata.lang AS lang,
-                '.SQLPREFIX.'faqdata.thema AS thema,
-                '.SQLPREFIX.'faqdata.datum AS datum,
-                '.SQLPREFIX.'faqcategoryrelations.category_id AS category_id,
-                '.SQLPREFIX.'faqvisits.visits AS visits,
-                '.SQLPREFIX.'faqvisits.last_visit AS last_visit
+                fd.id AS id,
+                fd.lang AS lang,
+                fd.thema AS thema,
+                fd.datum AS datum,
+                fcr.category_id AS category_id,
+                fv.visits AS visits,
+                fv.last_visit AS last_visit
             FROM
-                '.SQLPREFIX.'faqvisits,
-                '.SQLPREFIX.'faqdata
+                '.SQLPREFIX.'faqvisits fv,
+                '.SQLPREFIX.'faqdata fd
             LEFT JOIN
-                '.SQLPREFIX.'faqcategoryrelations
+                '.SQLPREFIX.'faqcategoryrelations fcr
             ON
-                '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id
+                fd.id = fcr.record_id
             AND
-                '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang
+                fd.lang = fcr.record_lang
+            LEFT JOIN
+                '.SQLPREFIX.'faqdata_group AS fdg
+            ON
+                fd.id = fdg.record_id
+            LEFT JOIN
+                '.SQLPREFIX.'faqdata_user AS fdu
+            ON
+                fd.id = fdu.record_id
             WHERE
-                    '.SQLPREFIX.'faqdata.date_start <= \''.$now.'\'
-                AND '.SQLPREFIX.'faqdata.date_end   >= \''.$now.'\'
-                AND '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvisits.id
-                AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqvisits.lang
-                AND '.SQLPREFIX.'faqdata.active = \'yes\'';
+                    fd.date_start <= \''.$now.'\'
+                AND fd.date_end   >= \''.$now.'\'
+                AND fd.id = fv.id
+                AND fd.lang = fv.lang
+                AND fd.active = \'yes\'';
+
         if (isset($categoryId) && is_numeric($categoryId) && ($categoryId != 0)) {
             $query .= '
             AND
-                '.SQLPREFIX.'faqcategoryrelations.category_id = \''.$categoryId.'\'';
+                fcr.category_id = \''.$categoryId.'\'';
         }
         if (isset($language) && PMF_Init::isASupportedLanguage($language)) {
             $query .= '
             AND
-                '.SQLPREFIX.'faqdata.lang = \''.$language.'\'';
+                fd.lang = \''.$language.'\'';
         }
         $query .= '
+            AND
+                '.$permPart.'
             ORDER BY
-                '.SQLPREFIX.'faqvisits.visits DESC';
+                fv.visits DESC';
 
         $result = $this->db->query($query);
         $topten = array();
@@ -1742,39 +1765,62 @@ class PMF_Faq
     {
         global $sids, $PMF_CONF;
 
+        if ($this->groupSupport) {
+            $permPart = sprintf("( fdg.group_id IN (%s)
+            OR
+                (fdu.user_id = %d AND fdg.group_id IN (%s)))",
+                implode(', ', $this->groups),
+                $this->user,
+                implode(', ', $this->groups));
+        } else {
+            $permPart = sprintf("( fdu.user_id = %d OR fdu.user_id = -1 )",
+                $this->user);
+        }
+
         $now = date('YmdHis');
         $query =
 '            SELECT
-                '.SQLPREFIX.'faqdata.id AS id,
-                '.SQLPREFIX.'faqdata.lang AS lang,
-                '.SQLPREFIX.'faqcategoryrelations.category_id AS category_id,
-                '.SQLPREFIX.'faqdata.thema AS thema,
-                '.SQLPREFIX.'faqdata.content AS content,
-                '.SQLPREFIX.'faqdata.datum AS datum,
-                '.SQLPREFIX.'faqvisits.visits AS visits
+                fd.id AS id,
+                fd.lang AS lang,
+                fcr.category_id AS category_id,
+                fd.thema AS thema,
+                fd.content AS content,
+                fd.datum AS datum,
+                fv.visits AS visits
             FROM
-                '.SQLPREFIX.'faqvisits,
-                '.SQLPREFIX.'faqdata
+                '.SQLPREFIX.'faqvisits fv,
+                '.SQLPREFIX.'faqdata fd
             LEFT JOIN
-                '.SQLPREFIX.'faqcategoryrelations
+                '.SQLPREFIX.'faqcategoryrelations fcr
             ON
-                '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id
+                fd.id = fcr.record_id
             AND
-                '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang
+                fd.lang = fcr.record_lang
+            LEFT JOIN
+                '.SQLPREFIX.'faqdata_group AS fdg
+            ON
+                fd.id = fdg.record_id
+            LEFT JOIN
+                '.SQLPREFIX.'faqdata_user AS fdu
+            ON
+                fd.id = fdu.record_id
             WHERE
-                    '.SQLPREFIX.'faqdata.date_start <= \''.$now.'\'
-                AND '.SQLPREFIX.'faqdata.date_end   >= \''.$now.'\'
-                AND '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvisits.id
-                AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqvisits.lang
-                AND '.SQLPREFIX.'faqdata.active = \'yes\'';
+                    fd.date_start <= \''.$now.'\'
+                AND fd.date_end   >= \''.$now.'\'
+                AND fd.id = fv.id
+                AND fd.lang = fv.lang
+                AND fd.active = \'yes\'';
+
         if (isset($language) && PMF_Init::isASupportedLanguage($language)) {
             $query .= '
             AND
-                '.SQLPREFIX.'faqdata.lang = \''.$language.'\'';
+                fd.lang = \''.$language.'\'';
         }
         $query .= '
+            AND
+                '.$permPart.'
             ORDER BY
-                '.SQLPREFIX.'faqdata.datum DESC';
+                fd.datum DESC';
 
         $result = $this->db->query($query);
         $latest = array();
