@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.92.2.6 2007-05-31 18:43:18 thorstenr Exp $
+$Id: README.txt,v 1.92.2.7 2007-06-01 07:34:03 thorstenr Exp $
 
 phpMyFAQ 2.0.1
 Codename "Prometheus"
@@ -11,7 +11,7 @@ Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.0.0:
 - fixed broken update script (Thorsten, Matteo)
-- fixed bug with basic permission level (Thorsten, Matteo)
+- fixed bugs with basic permission level (Thorsten, Matteo)
 - fixed PHP segfaults with Zend Optimizer extension (Thorsten, Matteo)
 - updated Japanese translation (Tadashi Jokagi)
 - many minor bugfixes (Thorsten, Matteo)
@@ -20,9 +20,9 @@ For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.0.1 - 2007-06-
+Version 2.0.1 - 2007-06-01
 - fixed broken update script (Thorsten, Matteo)
-- fixed bug with basic permission level (Thorsten, Matteo)
+- fixed bugs with basic permission level (Thorsten, Matteo)
 - fixed PHP segfaults with Zend Optimizer extension (Thorsten, Matteo)
 - updated Japanese translation (Tadashi Jokagi)
 - many minor bugfixes (Thorsten, Matteo)
