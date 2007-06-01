@@ -1,3 +1,10 @@
+CHANGED FILES FROM 2.0.1 -> 2.0.2
+
+./install/installer.php
+./install/update.php
+
+
+
 CHANGED FILES FROM 2.0.0 -> 2.0.1
 
 ./admin/ajax.user_list.php
