@@ -26,8 +26,10 @@ CHANGED FILES FROM 2.0.0 -> 2.0.1
 ./lang/language_de.php
 ./lang/language_ja.php
 ./template/admin.css
+./template/artikel.tpl
 ./template/contact.tpl
 ./_.htaccess
+./artikel.php
 ./contact.php
 ./opensearch.php
 ./pdf.php
