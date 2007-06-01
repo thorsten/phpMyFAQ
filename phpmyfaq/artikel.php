@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: artikel.php,v 1.80.2.1 2007-06-01 06:24:07 thorstenr Exp $
+ * $Id: artikel.php,v 1.80.2.2 2007-06-01 06:59:22 thorstenr Exp $
  *
  * Shows the page with the FAQ record and - when available - the user
  * comments
@@ -70,29 +70,41 @@ $oLink->itemTitle = $faq->getRecordTitle($id, false);
 $changeLanguagePath = $oLink->toString();
 
 $highlight = '';
-if (isset($_GET['highlight']) && $_GET['highlight'] != "/" && $_GET['highlight'] != "<" && $_GET['highlight'] != ">" && strlen($_GET['highlight']) > 1) {
+if (isset($_GET['highlight']) && $_GET['highlight'] != "/" && $_GET['highlight'] != "<" && $_GET['highlight'] != ">" && strlen($_GET['highlight']) > 3) {
     $highlight = strip_tags($_GET['highlight']);
     $highlight = str_replace("'", "´", $highlight);
     $highlight = str_replace(array('^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']'), '', $highlight);
     $highlight = preg_quote($highlight, '/');
     $searchItems = explode(' ', $highlight);
+    $attributes = array(
+        'href', 'src', 'title', 'alt', 'class', 'style', 'id', 'name', 'face',
+        'size', 'dir', 'onclick', 'ondblclick', 'onmousedown', 'onmouseup',
+        'onmouseover', 'onmousemove', 'onmouseout', 'onkeypress', 'onkeydown',
+        'onkeyup');
+
     foreach ($searchItems as $item) {
-        $thema = preg_replace_callback('/'
-                    .'('.$item.'="[^"]*")|'
-                    .'((href|src|title|alt|class|style|id|name)="[^"]*'.$item.'[^"]*")|'
-                    .'('.$item.')'
-                    .'/mis',
-                    "highlight_no_links",
-                    $thema
-                    );
-        $content = preg_replace_callback('/'
-                    .'('.$item.'="[^"]*")|'
-                    .'((href|src|title|alt|class|style|id|name)="[^"]*'.$item.'[^"]*")|'
-                    .'('.$item.')'
-                    .'/mis',
-                    "highlight_no_links",
-                    $content
-                    );
+        $thema = preg_replace_callback(
+            '/'
+            // a. the glossary item could be an attribute name
+            .'('.$item.'="[^"]*")|'
+            // b. the glossary item could be inside an attribute value
+            .'(('.implode('|', $attributes).')="[^"]*'.$item.'[^"]*")|'
+            // c. the glossary item could be everywhere as a distinct word
+            .'(\s+)('.$item.')(\s+)'
+            .'/mis',
+            'highlight_no_links',
+            $thema);
+        $content = preg_replace_callback(
+            '/'
+            // a. the glossary item could be an attribute name
+            .'('.$item.'="[^"]*")|'
+            // b. the glossary item could be inside an attribute value
+            .'(('.implode('|', $attributes).')="[^"]*'.$item.'[^"]*")|'
+            // c. the glossary item could be everywhere as a distinct word
+            .'(\s+)('.$item.')(\s+)'
+            .'/mis',
+            'highlight_no_links',
+            $content);
     }
 }
 
