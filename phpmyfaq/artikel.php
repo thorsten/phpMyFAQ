@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: artikel.php,v 1.80 2007-04-21 21:26:32 thorstenr Exp $
+ * $Id: artikel.php,v 1.80.2.1 2007-06-01 06:24:07 thorstenr Exp $
  *
  * Shows the page with the FAQ record and - when available - the user
  * comments
@@ -212,7 +212,7 @@ if (($faq->faqRecord['active'] != 'yes') || ('n' == $faq->faqRecord['comment']) 
     $oLink->itemTitle = $thema;
     $commentHref = $oLink->toString().'#comment';
     $commentMessage = sprintf(
-        '%s<a onclick="show(\'comment\');" href="%s">%s</a>',
+        '%s<a href="%s" onclick="show(\'comment\');">%s</a>',
         $PMF_LANG['msgYouCan'],
         $commentHref,
         $PMF_LANG['msgWriteComment']

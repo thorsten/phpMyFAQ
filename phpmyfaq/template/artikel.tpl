@@ -57,7 +57,7 @@
     <p>{writeCommentMsg}</p>
 
     <!-- Comment Form -->
-    <a name="comment"></a><div id="comment" style="display: none;">
+    <div id="comment" style="display: none;"><a name="comment"></a>
     <form action="{writeSendAdress}" method="post">
     <input type="hidden" name="id" value="{id}" />
     <input type="hidden" name="lang" value="{lang}" />
@@ -79,7 +79,7 @@
 
     {captchaFieldset}
 
-    <div style="text-align:center;">
+    <div style="text-align: center;">
         <input class="submit" type="submit" name="submit" value="{msgNewContentSubmit}" />
     </div>
     <br />

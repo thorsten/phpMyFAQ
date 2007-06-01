@@ -1,5 +1,5 @@
 /**
- * $Id: functions.js,v 1.4.2.2 2007-05-31 13:32:26 thorstenr Exp $
+ * $Id: functions.js,v 1.4.2.3 2007-06-01 06:24:07 thorstenr Exp $
  *
  * Some JavaScript functions used in the admin backend
  *
@@ -294,7 +294,7 @@ function pmf_dump(data)
 */
 function hide(id)
 {
-    document.getElementById(id).style.display = 'hidden';
+    document.getElementById(id).style.display = 'none';
 }
 
 /**
