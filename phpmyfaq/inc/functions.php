@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.205 2007-05-30 18:04:00 thorstenr Exp $
+ * $Id: functions.php,v 1.206 2007-06-01 07:01:33 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -1217,24 +1217,20 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
  * @author  Johannes Schlueter <johannes@php.net>
  * @since   2003-07-14
  */
-function highlight_no_links($string)
+function highlight_no_links($matches)
 {
-    static $attributes = array(
-        'href', 'src', 'title', 'alt', 'class', 'style', 'id', 'name',
-        'face', 'size', 'dir', 'onclick', 'ondblclick', 'onmousedown',
-        'onmouseup', 'onmouseover', 'onmousemove', 'onmouseout',
-        'onkeypress', 'onkeydown', 'onkeyup'
-        );
-    foreach ($string as $str) {
-        $_str = explode('=', strtolower(ltrim($str)), 1);
-        if (in_array($_str, $attributes)) {
-            return $_str;
-        } elseif ('' == $str) {
-            return '';
-        } else {
-            return '<span class="highlight">'.$str.'</span>';
-        }
+    $itemAsAttrName  = $matches[1];
+    $itemInAttrValue = $matches[2]; // $matches[3] is the attribute name
+    $prefix          = isset($matches[4]) ? $matches[4] : '';
+    $item            = isset($matches[5]) ? $matches[5] : '';
+    $postfix         = isset($matches[6]) ? $matches[6] : '';
+
+    if (!empty($item)) {
+        return '<span class="highlight">'.$prefix.$item.$postfix.'</span>';
     }
+
+    // Fallback: the original matched string
+    return $matches[0];
 }
 
 
