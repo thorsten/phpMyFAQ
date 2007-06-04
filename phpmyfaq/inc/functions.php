@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.200.2.5 2007-06-01 06:59:22 thorstenr Exp $
+ * $Id: functions.php,v 1.200.2.6 2007-06-04 19:34:19 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -772,33 +772,43 @@ function wait($usecs)
  */
 function getUsersOnline($activityTimeWindow = 300)
 {
-    global $db, $PMF_CONF;
+    global $db, $faqconfig;
     $users = array(0 ,0);
 
-    if (isset($PMF_CONF['main.enableUserTracking']) && $PMF_CONF['main.enableUserTracking']) {
+    if ($faqconfig->get('main.enableUserTracking')) {
         $timeNow = (time() - $activityTimeWindow);
         // Count all sids within the time window
         // TODO: add a new field in faqsessions in order to find out only sids of anonymous users
-        $result = $db->query("
-                    SELECT
-                        count(sid) AS anonymous_users
-                    FROM
-                        ".SQLPREFIX."faqsessions
-                    WHERE
-                            user_id = -1
-                        AND time > ".$timeNow);
+        $query = sprintf("
+            SELECT
+                COUNT(sid) AS anonymous_users
+            FROM
+                %sfaqsessions
+            WHERE
+                user_id = -1
+            AND
+                time > %d",
+            SQLPREFIX,
+            $timeNow);
+
+        $result = $db->query($query);
         if (isset($result)) {
             $row = $db->fetch_object($result);
             $users[0] = $row->anonymous_users;
         }
+
         // Count all faquser records within the time window
-        $result = $db->query("
-                    SELECT
-                        count(session_id) AS registered_users
-                    FROM
-                        ".SQLPREFIX."faquser
-                    WHERE
-                        session_timestamp > ".$timeNow);
+        $query = sprintf("
+            SELECT
+                COUNT(session_id) AS registered_users
+            FROM
+                %sfaquser
+            WHERE
+                session_timestamp > %d",
+            SQLPREFIX,
+            $timeNow);
+
+        $result = $db->query($query);
         if (isset($result)) {
             $row = $db->fetch_object($result);
             $users[1] = $row->registered_users;
