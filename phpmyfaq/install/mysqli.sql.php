@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mysqli.sql.php,v 1.34 2007-04-30 14:00:15 thorstenr Exp $
+* $Id: mysqli.sql.php,v 1.34.2.1 2007-06-04 19:43:09 thorstenr Exp $
 *
 * CREATE TABLE instruction for MySQL 4.1 and 5.0 databases
 *
@@ -277,6 +277,7 @@ ip text NOT NULL,
 time int(11) NOT NULL,
 PRIMARY KEY (sid)
 )";
+$query[] = 'CREATE INDEX idx_user_time ON '.$sqltblpre.'faqsessions (user_id, time)';
 
 //faqtags
 $query[] = "CREATE TABLE ".$sqltblpre."faqtags (

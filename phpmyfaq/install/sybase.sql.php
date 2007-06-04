@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: sybase.sql.php,v 1.22 2007-04-30 14:00:15 thorstenr Exp $
+* $Id: sybase.sql.php,v 1.22.2.1 2007-06-04 19:43:09 thorstenr Exp $
 *
 * CREATE TABLE instruction for Sybase database
 *
@@ -290,6 +290,7 @@ ip varchar(64) NOT NULL,
 time integer NOT NULL,
 PRIMARY KEY (sid)
 )";
+$query[] = 'CREATE INDEX idx_user_time ON '.$sqltblpre.'faqsessions (user_id, time)';
 
 //faqtags
 $query[] = "CREATE TABLE ".$sqltblpre."faqtags (

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.145.2.6 2007-06-01 12:45:37 thorstenr Exp $
+* $Id: update.php,v 1.145.2.7 2007-06-04 19:43:09 thorstenr Exp $
 *
 * Main update script
 *
@@ -1416,6 +1416,13 @@ if ($step == 5) {
         $query[] = "ALTER TABLE ".SQLPREFIX."faqdata_revisions CHANGE links_state links_state VARCHAR(7) DEFAULT NULL";
         $query[] = "ALTER TABLE ".SQLPREFIX."faqnews CHANGE linktitel linktitel VARCHAR(255) DEFAULT NULL";
         $query[] = "ALTER TABLE ".SQLPREFIX."faqnews CHANGE link link VARCHAR(255) DEFAULT NULL";
+    }
+
+    //
+    // UPDATES FROM 2.0.2
+    //
+    if (version_compare($version, '2.0.2', '<')) {
+        $query[] = 'CREATE INDEX idx_user_time ON '.SQLPREFIX.'faqsessions (user_id, time)';
     }
 
     // Perform the queries for updating/migrating the database from 2.x

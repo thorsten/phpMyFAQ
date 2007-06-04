@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ibm_db2.sql.php,v 1.17.2.1 2007-05-12 13:59:22 thorstenr Exp $
+* $Id: ibm_db2.sql.php,v 1.17.2.2 2007-06-04 19:43:09 thorstenr Exp $
 *
 * CREATE TABLE instruction for IBM DB2 Universal Database, IBM Cloudscape,
 * and Apache Derby databases
@@ -275,6 +275,7 @@ ip varchar(64) NOT NULL,
 time integer NOT NULL,
 PRIMARY KEY (sid)
 )";
+$query[] = 'CREATE INDEX idx_user_time ON '.$sqltblpre.'faqsessions (user_id, time)';
 
 //faqtags
 $query[] = "CREATE TABLE ".$sqltblpre."faqtags (

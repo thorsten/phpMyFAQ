@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: ibase.sql.php,v 1.3 2007-04-30 14:00:15 thorstenr Exp $
+ * $Id: ibase.sql.php,v 1.3.2.1 2007-06-04 19:43:09 thorstenr Exp $
  *
  * CREATE TABLE instruction for Interbase/Firebird databases
  *
@@ -289,6 +289,7 @@ ip VARCHAR(64) NOT NULL,
 time INTEGER NOT NULL,
 PRIMARY KEY (sid)
 )";
+$query[] = 'CREATE INDEX idx_user_time ON '.$sqltblpre.'faqsessions (user_id, time)';
 
 //faqtags
 $query[] = "CREATE TABLE ".$sqltblpre."faqtags (
