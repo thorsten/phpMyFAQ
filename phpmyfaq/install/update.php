@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: update.php,v 1.145.2.7 2007-06-04 19:43:09 thorstenr Exp $
+* $Id: update.php,v 1.145.2.8 2007-06-05 10:22:09 thorstenr Exp $
 *
 * Main update script
 *
@@ -458,12 +458,7 @@ if ($step == 5) {
         $query[] = 'ALTER TABLE '.SQLPREFIX.'faqvisits CHANGE id id INT(11) NOT NULL';
     }
     if (version_compare($version, '1.5.2', '<')) {
-        switch($DB["type"]) {
-            case 'mssql':   $query[] = 'CREATE INDEX idx_record ON '.SQLPREFIX.'faqcategoryrelations (record_id, record_lang)';
-                            break;
-            default:        $query[] = 'ALTER TABLE '.SQLPREFIX.'faqcategoryrelations ADD INDEX idx_record_id_lang (record_id, record_lang)';
-                            break;
-        }
+        $query[] = 'CREATE INDEX idx_record ON '.SQLPREFIX.'faqcategoryrelations (record_id, record_lang)';
     }
     if (version_compare($version, '1.5.5', '<')) {
         // Fix unuseful slashes
@@ -668,11 +663,8 @@ if ($step == 5) {
     if (version_compare($version, '2.0.0-alpha', '<')) {
         // Fix old/odd errors
         // 1/1. Fix faqchanges.usr
-        switch($DB["type"]) {
-            default:
-                $query[] = 'UPDATE '.SQLPREFIX.'faqchanges SET usr = 1 WHERE usr = 0';
-                break;
-        }
+        $query[] = 'UPDATE '.SQLPREFIX.'faqchanges SET usr = 1 WHERE usr = 0';
+
         // Start 1.6.x -> 2.0.0 migration
         // 1/13. Fix faqfragen table
         switch($DB["type"]) {
@@ -1346,14 +1338,10 @@ if ($step == 5) {
         $query[] = 'INSERT INTO '.SQLPREFIX.'faqconfig (config_name, config_value) VALUES (\'phpMyFAQToken\', \''.md5(uniqid(rand())).'\')';
 
         // 4/4. Fill the new tables for user and group permissions
-        $query[] = 'INSERT INTO '.SQLPREFIX.'faqcategory_group (category_id) SELECT DISTINCT id FROM '.SQLPREFIX.'faqcategories';
-        $query[] = 'UPDATE '.SQLPREFIX.'faqcategory_group SET group_id = -1 WHERE group_id = 0';
-        $query[] = 'INSERT INTO '.SQLPREFIX.'faqcategory_user (category_id) SELECT DISTINCT id FROM '.SQLPREFIX.'faqcategories';
-        $query[] = 'UPDATE '.SQLPREFIX.'faqcategory_user SET user_id = -1 WHERE user_id = 0';
-        $query[] = 'INSERT INTO '.SQLPREFIX.'faqdata_group (record_id) SELECT DISTINCT id FROM '.SQLPREFIX.'faqdata';
-        $query[] = 'UPDATE '.SQLPREFIX.'faqdata_group SET group_id = -1 WHERE group_id = 0';
-        $query[] = 'INSERT INTO '.SQLPREFIX.'faqdata_user (record_id) SELECT DISTINCT id FROM '.SQLPREFIX.'faqdata';
-        $query[] = 'UPDATE '.SQLPREFIX.'faqdata_user SET user_id = -1 WHERE user_id = 0';
+        $query[] = 'INSERT INTO '.SQLPREFIX.'faqcategory_group (category_id, group_id) SELECT DISTINCT id, -1 FROM '.SQLPREFIX.'faqcategories';
+        $query[] = 'INSERT INTO '.SQLPREFIX.'faqcategory_user (category_id, user_id) SELECT DISTINCT id, -1 FROM '.SQLPREFIX.'faqcategories';
+        $query[] = 'INSERT INTO '.SQLPREFIX.'faqdata_group (record_id, group_id) SELECT DISTINCT id, -1 FROM '.SQLPREFIX.'faqdata';
+        $query[] = 'INSERT INTO '.SQLPREFIX.'faqdata_user (record_id, user_id) SELECT DISTINCT id, -1 FROM '.SQLPREFIX.'faqdata';
     }
 
     //
