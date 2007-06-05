@@ -1,5 +1,6 @@
 CHANGED FILES FROM 2.0.1 -> 2.0.2
 
+./inc/functions.php
 ./install/installer.php
 ./install/update.php
 
