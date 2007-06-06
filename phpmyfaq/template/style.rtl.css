@@ -310,8 +310,9 @@ html>body #categories li a {
    border-bottom: none;
 }
 .main-content ul, ol {
-   padding-right: 1em;
-   list-style: outside;
+    padding-left: 1em;
+    list-style-image: none;
+    list-style-position: outside;
 }
 .main-content li {
    margin-right: 20px;

@@ -1,5 +1,5 @@
 /**
- * $Id: style.css,v 1.34 2007-04-21 10:14:17 thorstenr Exp $
+ * $Id: style.css,v 1.35 2007-06-06 09:36:50 thorstenr Exp $
  *
  * This is the main style sheet file for phpMyFAQ 2.0
  * If you want to change only the colours, use colors.css
@@ -328,8 +328,9 @@ html>body #categories li a {
    border-bottom: none;
 }
 .main-content ul, ol {
-   padding-left: 1em;
-   list-style: outside;
+    padding-left: 1em;
+    list-style-image: none;
+    list-style-position: outside;
 }
 .main-content li {
    margin-left: 20px;
