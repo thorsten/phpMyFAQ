@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.save.php,v 1.65 2007-05-30 20:35:13 thorstenr Exp $
+ * $Id: record.save.php,v 1.66 2007-06-06 14:40:13 thorstenr Exp $
  *
  * Save or delete a FAQ record
  *
@@ -108,8 +108,7 @@ if (    isset($submit[1])
     adminlog("Beitragsave", (int)$_REQUEST['id']);
     print "<h2>".$PMF_LANG["ad_entry_aor"]."</h2>\n";
 
-    $category = new PMF_Category;
-    $tagging  = new PMF_Tags($db, $LANGCODE);
+    $tagging = new PMF_Tags($db, $LANGCODE);
 
     $categories  = $_REQUEST['rubrik'];
     $record_id   = (int)$_REQUEST['id'];
@@ -143,7 +142,7 @@ if (    isset($submit[1])
     );
 
     // Create ChangeLog entry
-    $faq->createChangeEntry($record_id, $user->getUserId(), nl2br($db->escape_string($_POST["changed"])), $record_lang);
+    $faq->createChangeEntry($record_id, $user->getUserId(), nl2br($db->escape_string($_POST['changed'])), $record_lang, $revision_id);
 
     // save or update the FAQ record
     if ($faq->isAlreadyTranslated($record_id, $record_lang)) {

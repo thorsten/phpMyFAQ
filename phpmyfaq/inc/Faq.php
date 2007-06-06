@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.119 2007-05-31 14:47:05 thorstenr Exp $
+ * $Id: Faq.php,v 1.120 2007-06-06 14:40:13 thorstenr Exp $
  *
  * The main FAQ class
  *
@@ -656,9 +656,8 @@ class PMF_Faq
         $query = sprintf(
             "INSERT INTO
                 %sfaqdata
-             (id, lang, solution_id, revision_id, active, keywords, thema, content, author, email, comment, datum, links_state, links_check_date, date_start, date_end)
-                VALUES
-            (%d, '%s', %d, %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %d, '%s', '%s')",
+            VALUES
+                (%d, '%s', %d, %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %d, '%s', '%s')",
             SQLPREFIX,
             $record_id,
             $data['lang'],
@@ -919,26 +918,24 @@ class PMF_Faq
             "SELECT
                 *
             FROM
-                %sfaqdata
+                %sfaqdata fd
             LEFT JOIN
-                %sfaqdata_group
+                %sfaqdata_group fdg
             ON
-                %sfaqdata.id = %sfaqdata_group.record_id
+                fd.id = fdg.record_id
             LEFT JOIN
-                %sfaqdata_user
+                %sfaqdata_user fdu
             ON
-                %sfaqdata.id = %sfaqdata_user.record_id
+                fd.id = fdu.record_id
             WHERE
-                solution_id = %d",
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
+                fd.solution_id = %d",
             SQLPREFIX,
             SQLPREFIX,
             SQLPREFIX,
             $solution_id);
+
         $result = $this->db->query($query);
+
         if ($row = $this->db->fetch_object($result)) {
             $content        = $row->content;
             $active         = ('yes' == $row->active);
@@ -967,8 +964,7 @@ class PMF_Faq
                 'dateStart'     => $row->date_start,
                 'dateEnd'       => $row->date_end,
                 'linkState'     => $row->links_state,
-                'linkCheckDate' => $row->links_check_date
-                );
+                'linkCheckDate' => $row->links_check_date);
         }
     }
 
@@ -991,20 +987,23 @@ class PMF_Faq
                 solution_id = %d",
             SQLPREFIX,
             $solution_id);
+
         $result = $this->db->query($query);
+
         if ($row = $this->db->fetch_object($result)) {
             return array('id' => $row->id, 'lang' => $row->lang);
         }
+
         return null;
     }
 
     /**
-      * Gets the latest solution id for a FAQ record
-      *
-      * @return  integer
-      * @access  public
-      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-      */
+     * Gets the latest solution id for a FAQ record
+     *
+     * @return  integer
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
     function getSolutionId()
     {
         $latest_id = 0;
@@ -1027,6 +1026,7 @@ class PMF_Faq
         } else {
             $next_solution_id = $latest_id + PMF_SOLUTION_ID_INCREMENT_VALUE;
         }
+
         return $next_solution_id;
     }
 
@@ -1073,85 +1073,61 @@ class PMF_Faq
             case FAQ_SORTING_TYPE_CATID_FAQID:
                 $orderBy = sprintf("
             ORDER BY
-                %sfaqcategoryrelations.category_id,
-                %sfaqdata.id %s",
-                    SQLPREFIX,
-                    SQLPREFIX,
+                fcr.category_id,
+                fd.id %s",
                     $sortOrder);
                 break;
 
             case FAQ_SORTING_TYPE_FAQTITLE_FAQID:
                 $orderBy = sprintf("
             ORDER BY
-                %sfaqcategoryrelations.category_id,
-                %sfaqdata.thema %s",
-                    SQLPREFIX,
-                    SQLPREFIX,
+                fcr.category_id,
+                fd.thema %s",
                     $sortOrder);
                 break;
 
             case FAQ_SORTING_TYPE_DATE_FAQID:
                 $orderBy = sprintf("
             ORDER BY
-                %sfaqcategoryrelations.category_id,
-                %sfaqdata.datum %s",
-                    SQLPREFIX,
-                    SQLPREFIX,
+                fcr.category_id,
+                fd.datum %s",
                     $sortOrder);
                 break;
         }
 
         $query = sprintf("
             SELECT
-                %sfaqdata.id AS id,
-                %sfaqdata.lang AS lang,
-                %sfaqcategoryrelations.category_id AS category_id,
-                %sfaqdata.solution_id AS solution_id,
-                %sfaqdata.revision_id AS revision_id,
-                %sfaqdata.active AS active,
-                %sfaqdata.keywords AS keywords,
-                %sfaqdata.thema AS thema,
-                %sfaqdata.content AS content,
-                %sfaqdata.author AS author,
-                %sfaqdata.email AS email,
-                %sfaqdata.comment AS comment,
-                %sfaqdata.datum AS datum,
-                %sfaqdata.links_state AS links_state,
-                %sfaqdata.links_check_date AS links_check_date,
-                %sfaqdata.date_start AS date_start,
-                %sfaqdata.date_end AS date_end
-            FROM %sfaqdata
-            LEFT JOIN %sfaqcategoryrelations
-                ON %sfaqdata.id = %sfaqcategoryrelations.record_id
-                AND %sfaqdata.lang = %sfaqcategoryrelations.record_lang
+                fd.id AS id,
+                fd.lang AS lang,
+                fcr.category_id AS category_id,
+                fd.solution_id AS solution_id,
+                fd.revision_id AS revision_id,
+                fd.active AS active,
+                fd.keywords AS keywords,
+                fd.thema AS thema,
+                fd.content AS content,
+                fd.author AS author,
+                fd.email AS email,
+                fd.comment AS comment,
+                fd.datum AS datum,
+                fd.links_state AS links_state,
+                fd.links_check_date AS links_check_date,
+                fd.date_start AS date_start,
+                fd.date_end AS date_end
+            FROM
+                %sfaqdata fd
+            LEFT JOIN
+                %sfaqcategoryrelations fcr
+            ON
+                fd.id = fcr.record_id
+            AND
+                fd.lang = fcr.record_lang
             %s
             %s",
             SQLPREFIX,
             SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
             $where,
-            $orderBy
-            );
+            $orderBy);
 
         $result = $this->db->query($query);
 
@@ -1182,8 +1158,7 @@ class PMF_Faq
                 'comment'       => $row->comment,
                 'date'          => makeDate($row->datum),
                 'dateStart'     => $row->date_start,
-                'dateEnd'       => $row->date_end
-                );
+                'dateEnd'       => $row->date_end);
         }
     }
 
@@ -1250,14 +1225,15 @@ class PMF_Faq
             FROM
                 %sfaqdata_revisions
             WHERE
-                    id = %d
-                AND lang = '%s'
+                id = %d
+            AND
+                lang = '%s'
             ORDER BY
                 revision_id",
             SQLPREFIX,
             $record_id,
-            $record_lang
-            );
+            $record_lang);
+
         $result = $this->db->query($query);
 
         if ($this->db->num_rows($result) > 0) {
@@ -1326,7 +1302,9 @@ class PMF_Faq
             SQLPREFIX,
             $id,
             $this->language);
+
         $result = $this->db->query($query);
+
         if ($this->db->num_rows($result) > 0) {
             $row = $this->db->fetch_object($result);
             return PMF_htmlentities($row->keywords, ENT_QUOTES, $this->pmf_lang['metaCharset']);
@@ -1355,16 +1333,19 @@ class PMF_Faq
             FROM
                 %sfaqdata
             WHERE
-                    active = 'yes'
-                %s
-                AND date_start <= '%s'
-                AND date_end   >= '%s'",
+                active = 'yes'
+            %s
+            AND
+                date_start <= '%s'
+            AND
+                date_end   >= '%s'",
             SQLPREFIX,
             null == $language ? '' : "AND lang = '".$language."'",
             $now,
-            $now
-            );
+            $now);
+
         $num = $this->db->num_rows($this->db->query($query));
+
         if ($num > 0) {
             return $num;
         } else {
@@ -1996,8 +1977,7 @@ class PMF_Faq
             'category'      => '',
             'question'      => '',
             'date'          => '',
-            'is_visible'    => ''
-            );
+            'is_visible'    => '');
 
         if (!is_int($id_question)) {
             return $question;
@@ -2024,8 +2004,7 @@ class PMF_Faq
                     'category'      => $row->ask_rubrik,
                     'question'      => $row->ask_content,
                     'date'          => $row->ask_date,
-                    'is_visible'    => $row->is_visible
-                    );
+                    'is_visible'    => $row->is_visible);
             }
         }
 
@@ -2247,13 +2226,14 @@ class PMF_Faq
      * @param   integer $userId
      * @param   string  $text
      * @param   string  $lang
+     * @param   integer $revision_id
      * @return  boolean
      * @access  private
      * @since   2006-08-18
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      */
-    function createChangeEntry($id, $userId, $text, $lang)
+    function createChangeEntry($id, $userId, $text, $lang, $revision_id = 0)
     {
         if (   !is_numeric($id)
             && !is_numeric($userId)
@@ -2266,17 +2246,18 @@ class PMF_Faq
         $query = sprintf(
             "INSERT INTO
                 %sfaqchanges
-            (id, beitrag, usr, datum, what, lang)
-            VALUES
-                (%d, %d, %d, %d, '%s', '%s')",
+            (id, beitrag, lang, revision_id, usr, datum, what)
+                VALUES
+            (%d, %d, '%s', %d, %d, %d, '%s')",
             SQLPREFIX,
-            $this->db->nextID(SQLPREFIX."faqchanges", "id"),
+            $this->db->nextID(SQLPREFIX.'faqchanges', 'id'),
             $id,
+            $lang,
+            $revision_id,
             $userId,
             time(),
-            $text,
-            $lang
-        );
+            $text);
+
         $this->db->query($query);
 
         return true;
@@ -2413,12 +2394,7 @@ class PMF_Faq
         global $DB;
 
         $now = date('YmdHis');
-        $sql = "";
-        // Fields selection
-        // --------------------------------------------------------------------------------------------------------------------------------------------------
-        // id | solution_id | revision_id | lang | category_id | active | keywords | thema | content | author | email | comment | datum | visits | last_visit
-        // --------------------------------------------------------------------------------------------------------------------------------------------------
-        $sql  = "
+        $query = sprintf("
             SELECT
                 fd.id AS id,
                 fd.solution_id AS solution_id,
@@ -2436,18 +2412,23 @@ class PMF_Faq
                 fv.visits AS visits,
                 fv.last_visit AS last_visit
             FROM
-                ".SQLPREFIX."faqdata fd,
-                ".SQLPREFIX."faqvisits fv,
-                ".SQLPREFIX."faqcategoryrelations fcr
+                %sfaqdata fd,
+                %sfaqvisits fv,
+                %sfaqcategoryrelations fcr
             WHERE
                 fd.id = fcr.record_id
             AND
                 fd.lang = fcr.record_lang
             AND
-                fd.date_start <= '".$now."'
+                fd.date_start <= '%s'
             AND
-                fd.date_end   >= '".$now."'
-            AND ";
+                fd.date_end   >= '%s'
+            AND ",
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            $now,
+            $now);
         // faqvisits data selection
         if (!empty($faqid)) {
             // Select ONLY the faq with the provided $faqid
@@ -2647,41 +2628,45 @@ class PMF_Faq
         $now = date('YmdHis');
         $query = '
             SELECT
-                '.SQLPREFIX.'faqdata.id AS id,
-                '.SQLPREFIX.'faqdata.lang AS lang,
-                '.SQLPREFIX.'faqdata.thema AS thema,
-                '.SQLPREFIX.'faqcategoryrelations.category_id AS category_id,
-                '.SQLPREFIX.'faqvisits.visits AS visits
+                fd.id AS id,
+                fd.lang AS lang,
+                fd.thema AS thema,
+                fcr.category_id AS category_id,
+                fv.visits AS visits
             FROM
-                '.SQLPREFIX.'faqdata
+                '.SQLPREFIX.'faqdata fd
             LEFT JOIN
-                '.SQLPREFIX.'faqcategoryrelations
+                '.SQLPREFIX.'faqcategoryrelations fcr
             ON
-                '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id
+                fd.id = fcr.record_id
             AND
-                '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang
+                fd.lang = fcr.record_lang
             LEFT JOIN
-                '.SQLPREFIX.'faqvisits
+                '.SQLPREFIX.'faqvisits fv
             ON
-                '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqvisits.id
+                fd.id = fv.id
             AND
-                '.SQLPREFIX.'faqvisits.lang = '.SQLPREFIX.'faqdata.lang
+                fv.lang = fd.lang
             LEFT JOIN
-                '.SQLPREFIX.'faqdata_group
+                '.SQLPREFIX.'faqdata_group fdg
             ON
-                '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqdata_group.record_id
+                fd.id = fdg.record_id
             LEFT JOIN
-                '.SQLPREFIX.'faqdata_user
+                '.SQLPREFIX.'faqdata_user fdu
             ON
-                '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqdata_user.record_id
+                fd.id = fdu.record_id
             WHERE
-                    '.SQLPREFIX.'faqdata.date_start <= \''.$now.'\'
-                AND '.SQLPREFIX.'faqdata.date_end   >= \''.$now.'\'
-                AND '.SQLPREFIX.'faqdata.active = \'yes\'
-                AND '.SQLPREFIX.'faqcategoryrelations.category_id = '.$category.'
-                AND '.SQLPREFIX.'faqdata.lang = \''.$this->language.'\'
+                fd.date_start <= \''.$now.'\'
+            AND
+                fd.date_end   >= \''.$now.'\'
+            AND
+                fd.active = \'yes\'
+            AND
+                fcr.category_id = '.$category.'
+            AND
+                fd.lang = \''.$this->language.'\'
             ORDER BY
-                '.SQLPREFIX.'faqdata.id';
+                fd.id';
 
         $result = $this->db->query($query);
 
