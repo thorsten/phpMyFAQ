@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.113.2.7 2007-06-03 21:07:40 thorstenr Exp $
+ * $Id: Faq.php,v 1.113.2.8 2007-06-06 14:33:52 thorstenr Exp $
  *
  * The main FAQ class
  *
@@ -2226,13 +2226,14 @@ class PMF_Faq
      * @param   integer $userId
      * @param   string  $text
      * @param   string  $lang
+     * @param   integer $revision_id
      * @return  boolean
      * @access  private
      * @since   2006-08-18
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      */
-    function createChangeEntry($id, $userId, $text, $lang)
+    function createChangeEntry($id, $userId, $text, $lang, $revision_id = 0)
     {
         if (   !is_numeric($id)
             && !is_numeric($userId)
@@ -2245,17 +2246,18 @@ class PMF_Faq
         $query = sprintf(
             "INSERT INTO
                 %sfaqchanges
-            (id, beitrag, usr, datum, what, lang)
-            VALUES
-                (%d, %d, %d, %d, '%s', '%s')",
+            (id, beitrag, lang, revision_id, usr, datum, what)
+                VALUES
+            (%d, %d, '%s', %d, %d, %d, '%s')",
             SQLPREFIX,
-            $this->db->nextID(SQLPREFIX."faqchanges", "id"),
+            $this->db->nextID(SQLPREFIX.'faqchanges', 'id'),
             $id,
+            $lang,
+            $revision_id,
             $userId,
             time(),
-            $text,
-            $lang
-        );
+            $text);
+
         $this->db->query($query);
 
         return true;
@@ -2642,7 +2644,7 @@ class PMF_Faq
             LEFT JOIN
                 '.SQLPREFIX.'faqvisits fv
             ON
-                fd.id = '.SQLPREFIX.'faqvisits.id
+                fd.id = fv.id
             AND
                 fv.lang = fd.lang
             LEFT JOIN

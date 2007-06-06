@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.save.php,v 1.61.2.3 2007-05-30 20:31:08 thorstenr Exp $
+ * $Id: record.save.php,v 1.61.2.4 2007-06-06 14:33:52 thorstenr Exp $
  *
  * Save or delete a FAQ record
  *
@@ -142,7 +142,7 @@ if (    isset($submit[1])
     );
 
     // Create ChangeLog entry
-    $faq->createChangeEntry($record_id, $user->getUserId(), nl2br($db->escape_string($_POST["changed"])), $record_lang);
+    $faq->createChangeEntry($record_id, $user->getUserId(), nl2br($db->escape_string($_POST['changed'])), $record_lang, $revision_id);
 
     // save or update the FAQ record
     if ($faq->isAlreadyTranslated($record_id, $record_lang)) {
