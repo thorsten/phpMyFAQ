@@ -1,7 +1,9 @@
 CHANGED FILES FROM 2.0.1 -> 2.0.2
 
+./admin/record.save.php
 ./inc/functions.php
 ./inc/Relation.php
+./inc/PMF_User/PermMedium.php
 ./install/installer.php
 ./install/update.php
 ./template/style.css
