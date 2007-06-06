@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Relation.php,v 1.9 2007-04-08 14:40:20 thorstenr Exp $
+* $Id: Relation.php,v 1.9.2.1 2007-06-06 09:45:25 thorstenr Exp $
 *
 * The Relation class for dynamic related record linking
 *
@@ -161,7 +161,7 @@ class PMF_Relation
         global $sids, $PMF_LANG, $PMF_CONF;
         $relevantslisting = '';
         $begriffe = str_replace('-', ' ', $article_name) . $keywords;
-        $i = 0;
+        $i = $last_id = 0;
 
         $result = $this->db->search(SQLPREFIX."faqdata",
                           array(SQLPREFIX."faqdata.id AS id",
@@ -179,7 +179,7 @@ class PMF_Relation
                           array(SQLPREFIX."faqdata.active" => "'yes'"));
 
         while (($row = $this->db->fetch_object($result)) && ($i < $PMF_CONF['records.numberOfRelatedArticles'])) {
-            if ($row->id == $record_id) {
+            if ($row->id == $record_id || $row->id == $last_id) {
                 continue;
             }
             $relevantslisting .= ('' == $relevantslisting ? '<ul>' : '');
@@ -188,14 +188,14 @@ class PMF_Relation
                     $sids,
                     $row->category_id,
                     $row->id,
-                    $row->lang
-                );
+                    $row->lang);
             $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
             $oLink->itemTitle = $row->thema;
             $oLink->text = PMF_htmlentities($row->thema, ENT_QUOTES, $this->pmf_lang['metaCharset']);
             $oLink->tooltip = $row->thema;
             $relevantslisting .= $oLink->toHtmlAnchor().'</li>';
             $i++;
+            $last_id = $row->id;
         }
         $relevantslisting .= ($i > 0 ? '</ul>' : '');
 
