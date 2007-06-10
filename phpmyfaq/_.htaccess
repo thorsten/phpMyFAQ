@@ -1,5 +1,5 @@
 ##
-# $Id: _.htaccess,v 1.16.2.1 2007-05-29 07:38:07 thorstenr Exp $
+# $Id: _.htaccess,v 1.16.2.2 2007-06-10 05:46:11 thorstenr Exp $
 #
 # phpMyFAQ 2.0 .htaccess file
 #
@@ -22,7 +22,7 @@
 ##
 
 # always follow the symlinks
-Options FollowSymlinks
+Options +FollowSymlinks
 
 # if you want to use mod_rewrite, set this 'On'
 RewriteEngine On
