@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: category.showstructure.php,v 1.6 2007-04-06 11:15:24 thorstenr Exp $
+ * $Id: category.showstructure.php,v 1.6.2.1 2007-06-16 13:28:47 thorstenr Exp $
  *
  * build table of all categories in all languages
  *
@@ -95,7 +95,7 @@ if ($permission['editcateg']) {
             $desc);
         if ($cat['lang'] != $LANGCODE) {
            // translate category
-           printf('<a href="%s&amp;action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s"><img src="images/translate2.gif" width="13" height="16" border="0" title="%s" alt="%s" /></a>',
+           printf('<a href="%s?action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s"><img src="images/translate2.gif" width="13" height="16" border="0" title="%s" alt="%s" /></a>',
                $currentLink,
                $cat['id'],
                $LANGCODE,
@@ -127,7 +127,7 @@ if ($permission['editcateg']) {
            }
            else {
            print "<td class=\"sscDescNA\">";
-           printf('<a href="%s&amp;action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s"><img src="images/translate2.gif" width="13" height="16" border="0" title="%s" alt="%s" /></a>',
+           printf('<a href="%s?action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s"><img src="images/translate2.gif" width="13" height="16" border="0" title="%s" alt="%s" /></a>',
                $currentLink,
                $cat['id'],
                $lang,
