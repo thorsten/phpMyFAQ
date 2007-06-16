@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.120 2007-06-06 14:40:13 thorstenr Exp $
+ * $Id: Faq.php,v 1.121 2007-06-16 13:33:30 thorstenr Exp $
  *
  * The main FAQ class
  *
@@ -2757,7 +2757,8 @@ class PMF_Faq
                 $output .= sprintf('<td valign="top"><strong>%s:</strong><br />%s</td>',
                     $category->categoryName[$row->ask_rubrik]['name'],
                     strip_tags($row->ask_content));
-                $output .= sprintf('<td valign="top"><a href="?%saction=add&amp;question=%d&amp;cat=%d">%s</a></td>',
+                $output .= sprintf('<td valign="top"><a href="%s?%saction=add&amp;question=%d&amp;cat=%d">%s</a></td>',
+                    $_SERVER['PHP_SELF'],
                     $sids,
                     $row->id,
                     $row->ask_rubrik,
