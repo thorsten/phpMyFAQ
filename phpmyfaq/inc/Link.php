@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Link.php,v 1.28 2007-05-27 09:59:01 matteo Exp $
+ * $Id: Link.php,v 1.29 2007-06-16 14:54:33 thorstenr Exp $
  *
  * Link management - Functions and Classes
  *
@@ -68,6 +68,7 @@ define('PMF_LINK_GET_NEWS_LANG', 'newslang');
 define('PMF_LINK_GET_PAGE', 'seite');
 define('PMF_LINK_GET_SIDS', 'SIDS');
 define('PMF_LINK_GET_TAGGING_ID', 'tagging_id');
+define('PMF_LINK_GET_LANGS', 'langs');
 /**#@-*/
 /**#@+
   * System GET values definitions
@@ -441,6 +442,9 @@ class PMF_Link
                                 if (isset($getParams[PMF_LINK_GET_PAGE])) {
                                     $url .= PMF_LINK_AMPERSAND.PMF_LINK_GET_PAGE.'='.$getParams[PMF_LINK_GET_PAGE];
                                 }
+                            }
+                            if (isset($getParams[PMF_LINK_GET_LANGS])) {
+                                $url .= PMF_LINK_AMPERSAND.PMF_LINK_GET_LANGS.'='.$getParams[PMF_LINK_GET_LANGS];
                             }
                             break;
                         case PMF_LINK_GET_ACTION_SITEMAP:

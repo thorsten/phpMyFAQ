@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.207 2007-06-16 14:27:24 thorstenr Exp $
+ * $Id: functions.php,v 1.208 2007-06-16 14:54:33 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -994,6 +994,7 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
     $output      = '';
     $num         = 0;
     $searchItems = array();
+    $langs       = (true == $allLanguages) ? '&amp;langs=all' : '';
 
     if (isset($_REQUEST['seite'])) {
         $seite = (int)$_REQUEST['seite'];
@@ -1198,14 +1199,14 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
         $next = $seite + 1;
         if ($vor != 0) {
             if ($faqconfig->get('main.enableRewriteRules')) {
-                $output .= "[ <a href=\"search.html?search=".urlencode($_searchterm)."&amp;seite=".$vor."\">".$PMF_LANG["msgPrevious"]."</a> ]";
+                $output .= "[ <a href=\"search.html?search=".urlencode($_searchterm)."&amp;seite=".$vor.$langs."\">".$PMF_LANG["msgPrevious"]."</a> ]";
             } else {
-                $output .= "[ <a href=\"index.php?".$sids."action=search&amp;search=".urlencode($_searchterm)."&amp;seite=".$vor."\">".$PMF_LANG["msgPrevious"]."</a> ]";
+                $output .= "[ <a href=\"index.php?".$sids."action=search&amp;search=".urlencode($_searchterm)."&amp;seite=".$vor.$langs."\">".$PMF_LANG["msgPrevious"]."</a> ]";
             }
         }
         $output .= " ";
         if ($next <= $pages) {
-            $url = $sids.'&amp;action=search&amp;search='.urlencode($_searchterm).'&amp;seite='.$next;
+            $url = $sids.'&amp;action=search&amp;search='.urlencode($_searchterm).'&amp;seite='.$next.$langs;
             $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
             $oLink->itemTitle = '';
             $oLink->text = $PMF_LANG["msgNext"];
