@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.show.php,v 1.44 2007-03-29 15:57:54 thorstenr Exp $
+ * $Id: record.show.php,v 1.45 2007-06-16 13:17:51 thorstenr Exp $
  *
  * Shows the list of records ordered by categories
  *
@@ -191,6 +191,16 @@ if ($permission["editbt"] || $permission["delbt"]) {
         $laction = 'view';
         $internalSearch = '&amp;search='.$searchterm;
         $wasSearch = true;
+
+        while ($row = $db->fetch_object($result)) {
+            $faq->faqRecords[] = array(
+                'id'            => $row->id,
+                'category_id'   => $row->category_id,
+                'lang'          => $row->lang,
+                'title'         => $row->thema,
+                'content'       => $row->content,
+                'date'          => makeDate($row->datum));
+        }
 
     } elseif (isset($_REQUEST['action']) && $_REQUEST['action'] == 'accept') {
 
