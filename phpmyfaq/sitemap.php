@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: sitemap.php,v 1.16 2007-03-30 16:56:34 thorstenr Exp $
+ * $Id: sitemap.php,v 1.16.2.1 2007-06-16 14:08:31 thorstenr Exp $
  *
  * Shows the whole FAQ articles
  *
@@ -35,7 +35,7 @@ if (isset($_GET['letter']) && is_string($_GET['letter']) && (1 == strlen($_GET['
     $currentLetter = 'A';
 }
 
-$sitemap = new PMF_Sitemap($db, $LANGCODE);
+$sitemap = new PMF_Sitemap($db, $LANGCODE, $current_user, $current_groups);
 
 $tpl->processTemplate (
     'writeContent', array(

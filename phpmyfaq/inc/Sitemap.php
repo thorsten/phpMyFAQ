@@ -49,20 +49,57 @@ class PMF_Sitemap
     var $type;
 
     /**
+     * Users
+     *
+     * @var array
+     */
+    var $user = null;
+
+    /**
+     * Groups
+     *
+     * @var array
+     */
+    var $groups = array();
+
+    /**
+     * Flag for Group support
+     *
+     * @var boolean
+     */
+    var $groupSupport = false;
+
+    /**
      * Constructor
      *
      * @param   object  PMF_Db
      * @param   string  $language
+     * @param   integer $user
+     * @param   array   $groups
      * @since   2007-03-30
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function PMF_Sitemap(&$db, $language)
+    function PMF_Sitemap(&$db, $language, $user = null, $groups = null)
     {
-        global $DB;
+        global $DB, $faqconfig;
 
         $this->db       = &$db;
         $this->language = $language;
         $this->type     = $DB['type'];
+
+        if (is_null($user)) {
+            $this->user  = -1;
+        } else {
+            $this->user  = $user;
+        }
+        if (is_null($groups)) {
+            $this->groups       = array(-1);
+        } else {
+            $this->groups       = $groups;
+        }
+        if ($faqconfig->get('main.permLevel') == 'medium') {
+            $this->groupSupport = true;
+        }
     }
 
     /**
@@ -77,6 +114,18 @@ class PMF_Sitemap
     {
         global $sids;
 
+        if ($this->groupSupport) {
+            $permPart = sprintf("( fdg.group_id IN (%s)
+            OR
+                (fdu.user_id = %d AND fdg.group_id IN (%s)))",
+                implode(', ', $this->groups),
+                $this->user,
+                implode(', ', $this->groups));
+        } else {
+            $permPart = sprintf("( fdu.user_id = %d OR fdu.user_id = -1 )",
+                $this->user);
+        }
+
         $writeLetters = '<p id="sitemapletters">';
 
         switch($this->type) {
@@ -84,33 +133,59 @@ class PMF_Sitemap
             case 'sqlite':
                 $query = sprintf("
                     SELECT
-                        DISTINCT substr(thema, 1, 1) AS letters
+                        DISTINCT substr(fd.thema, 1, 1) AS letters
                     FROM
-                        %sfaqdata
+                        %sfaqdata fd
+                    LEFT JOIN
+                        %sfaqdata_group AS fdg
+                    ON
+                        fd.id = fdg.record_id
+                    LEFT JOIN
+                        %sfaqdata_user AS fdu
+                    ON
+                        fd.id = fdu.record_id
                     WHERE
-                        lang = '%s'
+                        fd.lang = '%s'
                     AND
-                        active = 'yes'
+                        fd.active = 'yes'
+                    AND
+                        %s
                     ORDER BY
-                        letters",
+                        fd.letters",
                     SQLPREFIX,
-                    $this->language);
+                    SQLPREFIX,
+                    SQLPREFIX,
+                    $this->language,
+                    $permPart);
                 break;
 
             default:
                 $query = sprintf("
                     SELECT
-                        DISTINCT substring(thema, 1, 1) AS letters
+                        DISTINCT substring(fd.thema, 1, 1) AS letters
                     FROM
-                        %sfaqdata
+                        %sfaqdata fd
+                    LEFT JOIN
+                        %sfaqdata_group AS fdg
+                    ON
+                        fd.id = fdg.record_id
+                    LEFT JOIN
+                        %sfaqdata_user AS fdu
+                    ON
+                        fd.id = fdu.record_id
                     WHERE
-                        lang = '%s'
+                        fd.lang = '%s'
                     AND
-                        active = 'yes'
+                        fd.active = 'yes'
+                    AND
+                        %s
                     ORDER BY
                         letters",
                     SQLPREFIX,
-                    $this->language);
+                    SQLPREFIX,
+                    SQLPREFIX,
+                    $this->language,
+                    $permPart);
                 break;
         }
 
@@ -145,6 +220,18 @@ class PMF_Sitemap
     {
         global $sids, $PMF_LANG;
 
+        if ($this->groupSupport) {
+            $permPart = sprintf("( fdg.group_id IN (%s)
+            OR
+                (fdu.user_id = %d AND fdg.group_id IN (%s)))",
+                implode(', ', $this->groups),
+                $this->user,
+                implode(', ', $this->groups));
+        } else {
+            $permPart = sprintf("( fdu.user_id = %d OR fdu.user_id = -1 )",
+                $this->user);
+        }
+
         $letter = strtoupper($this->db->escape_string(substr($letter, 0, 1)));
 
         $writeMap = '<ul>';
@@ -154,45 +241,77 @@ class PMF_Sitemap
             case 'sqlite':
                 $query = sprintf("
                     SELECT
-                        a.thema AS thema,
-                        a.id AS id,
-                        a.lang AS lang,
-                        b.category_id AS category_id,
-                        a.content AS snap
+                        fd.thema AS thema,
+                        fd.id AS id,
+                        fd.lang AS lang,
+                        fcr.category_id AS category_id,
+                        fd.content AS snap
                     FROM
-                        %sfaqdata a,
-                        %sfaqcategoryrelations b
+                        %sfaqcategoryrelations fcr,
+                        %sfaqdata fd
+                    LEFT JOIN
+                        %sfaqdata_group AS fdg
+                    ON
+                        fd.id = fdg.record_id
+                    LEFT JOIN
+                        %sfaqdata_user AS fdu
+                    ON
+                        fd.id = fdu.record_id
                     WHERE
-                        a.id = b.record_id
+                        fd.id = fcr.record_id
                     AND
-                        substr(thema, 1, 1) = '%s'
-                    AND lang = '%s' AND active = 'yes'",
+                        substr(fd.thema, 1, 1) = '%s'
+                    AND
+                        fd.lang = '%s'
+                    AND
+                        fd.active = 'yes'
+                    AND
+                        %s",
+                    SQLPREFIX,
+                    SQLPREFIX,
                     SQLPREFIX,
                     SQLPREFIX,
                     $letter,
-                    $this->language);
+                    $this->language,
+                    $permPart);
                 break;
 
             default:
                 $query = sprintf("
                     SELECT
-                        a.thema AS thema,
-                        a.id AS id,
-                        a.lang AS lang,
-                        b.category_id AS category_id,
-                        a.content AS snap
+                        fd.thema AS thema,
+                        fd.id AS id,
+                        fd.lang AS lang,
+                        fcr.category_id AS category_id,
+                        fd.content AS snap
                     FROM
-                        %sfaqdata a,
-                        %sfaqcategoryrelations b
+                        %sfaqcategoryrelations fcr,
+                        %sfaqdata fd
+                    LEFT JOIN
+                        %sfaqdata_group AS fdg
+                    ON
+                        fd.id = fdg.record_id
+                    LEFT JOIN
+                        %sfaqdata_user AS fdu
+                    ON
+                        fd.id = fdu.record_id
                     WHERE
-                        a.id = b.record_id
+                        fd.id = fcr.record_id
                     AND
-                        substring(thema, 1, 1) = '%s'
-                    AND lang = '%s' AND active = 'yes'",
+                        substring(fd.thema, 1, 1) = '%s'
+                    AND
+                        fd.lang = '%s'
+                    AND
+                        fd.active = 'yes'
+                    AND
+                        %s",
+                    SQLPREFIX,
+                    SQLPREFIX,
                     SQLPREFIX,
                     SQLPREFIX,
                     $letter,
-                    $this->language);
+                    $this->language,
+                    $permPart);
                 break;
         }
 
