@@ -1,14 +1,21 @@
 CHANGED FILES FROM 2.0.1 -> 2.0.2
 
+./admin/category.showstructure.php
 ./admin/record.save.php
+./admin/record.show.php
+./docs/documentation.en.html
 ./inc/functions.php
+./inc/Glossary.php
 ./inc/Relation.php
+./inc/Sitemap.php
 ./inc/PMF_User/PermMedium.php
 ./install/installer.php
 ./install/update.php
+./tamplate/artikel.tpl
 ./template/style.css
 ./template/style.rtl.css
 ./_.htaccess
+./sitemap.php
 
 
 
