@@ -6,6 +6,7 @@ CHANGED FILES FROM 2.0.1 -> 2.0.2
 ./docs/documentation.en.html
 ./inc/functions.php
 ./inc/Glossary.php
+./inc/Link.php
 ./inc/Relation.php
 ./inc/Sitemap.php
 ./inc/PMF_User/PermMedium.php
