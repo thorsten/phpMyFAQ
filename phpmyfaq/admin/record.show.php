@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.show.php,v 1.44 2007-03-29 15:57:54 thorstenr Exp $
+ * $Id: record.show.php,v 1.44.2.1 2007-06-16 13:17:34 thorstenr Exp $
  *
  * Shows the list of records ordered by categories
  *
@@ -163,7 +163,8 @@ if ($permission["editbt"] || $permission["delbt"]) {
                             SQLPREFIX.'faqdata.lang AS lang',
                             SQLPREFIX.'faqcategoryrelations.category_id AS category_id',
                             SQLPREFIX.'faqdata.thema AS thema',
-                            SQLPREFIX.'faqdata.content AS content'),
+                            SQLPREFIX.'faqdata.content AS content',
+                            SQLPREFIX.'faqdata.datum AS datum'),
                         SQLPREFIX.'faqcategoryrelations',
                         array(SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id',
                             SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang'),
@@ -176,7 +177,8 @@ if ($permission["editbt"] || $permission["delbt"]) {
                             SQLPREFIX.'faqdata.lang AS lang',
                             SQLPREFIX.'faqcategoryrelations.category_id AS category_id',
                             SQLPREFIX.'faqdata.thema AS thema',
-                            SQLPREFIX.'faqdata.content AS content'),
+                            SQLPREFIX.'faqdata.content AS content',
+                            SQLPREFIX.'faqdata.datum AS datum'),
                         SQLPREFIX.'faqcategoryrelations',
                         array(SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id',
                             SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang'),
@@ -191,6 +193,16 @@ if ($permission["editbt"] || $permission["delbt"]) {
         $laction = 'view';
         $internalSearch = '&amp;search='.$searchterm;
         $wasSearch = true;
+
+        while ($row = $db->fetch_object($result)) {
+            $faq->faqRecords[] = array(
+                'id'            => $row->id,
+                'category_id'   => $row->category_id,
+                'lang'          => $row->lang,
+                'title'         => $row->thema,
+                'content'       => $row->content,
+                'date'          => makeDate($row->datum));
+        }
 
     } elseif (isset($_REQUEST['action']) && $_REQUEST['action'] == 'accept') {
 
