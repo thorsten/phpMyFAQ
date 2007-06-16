@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Glossary.php,v 1.8 2007-05-18 20:51:27 thorstenr Exp $
+* $Id: Glossary.php,v 1.9 2007-06-16 14:39:09 thorstenr Exp $
 *
 * The main glossary class
 *
@@ -119,6 +119,7 @@ class PMF_Glossary
 
         foreach($this->getAllGlossaryItems() as $item) {
             $this->definition = $item['definition'];
+            $item['item'] = preg_quote('/', $item['item']);
             $content = preg_replace_callback(
                 '/'
                 // a. the glossary item could be an attribute name
