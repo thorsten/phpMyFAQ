@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.200.2.6 2007-06-04 19:34:19 thorstenr Exp $
+ * $Id: functions.php,v 1.200.2.7 2007-06-16 14:26:04 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -997,7 +997,7 @@ function quoted_printable_encode($return = '')
  */
 function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = false, $instantRespnse = false)
 {
-    global $db, $sids, $category, $faqconfig, $PMF_LANG, $PMF_CONF, $LANGCODE;
+    global $db, $sids, $category, $faqconfig, $PMF_LANG, $PMF_CONF, $LANGCODE, $faq, $current_user, $current_groups;
 
     $_searchterm = PMF_htmlentities(stripslashes($searchterm), ENT_QUOTES, $PMF_LANG['metaCharset']);
     $seite       = 1;
@@ -1129,6 +1129,19 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
                 continue;
             }
             $displayedCounter++;
+
+            // HACK!
+            // @todo: this have to be implemented much more better...
+            $perm_user = $faq->getPermission('user', $row->id);
+            if ((int)$perm_user[0] != $current_user) {
+                continue;
+            }
+            if ($faqconfig->get('main.permLevel') == 'medium') {
+                $perm_group = $faq->getPermission('group', $row->id);
+                if (in_array($perm_group, $current_groups)) {
+                    continue;
+                }
+            }
 
             $rubriktext = $category->getPath($row->category_id);
             $thema = PMF_htmlentities(chopString($row->thema, 15),ENT_QUOTES, $PMF_LANG['metaCharset']);
