@@ -1,25 +1,25 @@
 <?php
 /**
-* $Id: update.php,v 1.145.2.8 2007-06-05 10:22:09 thorstenr Exp $
-*
-* Main update script
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @author       Thomas Melchinger <t.melchinger@uni.de>
-* @author       Matteo Scaramuccia <matteo@scaramuccia.com>
-* @since        2002-01-10
-* @copyright    (c) 2002-2007 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * $Id: update.php,v 1.145.2.9 2007-06-18 23:45:42 matteo Exp $
+ *
+ * Main update script
+ *
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author      Thomas Melchinger <t.melchinger@uni.de>
+ * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @since       2002-01-10
+ * @copyright   (c) 2002-2007 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 define('NEWVERSION', '2.0.2');
 define('COPYRIGHT', '&copy; 2001-2007 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
@@ -36,17 +36,54 @@ if (isset($_GET["step"]) && $_GET["step"] != "") {
 $query = array();
 
 /**
-* HTMLFooter()
-*
-* Print out the HTML Footer
-*
-* @return   void
-* @access   public
-* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-*/
+ * Print out the HTML Footer
+ *
+ * @return   void
+ * @access   public
+ * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+ */
 function HTMLFooter()
 {
     print '<p class="center">'.COPYRIGHT.'</p></body></html>';
+}
+
+/**
+ * Returns the SQL query to drop a DEFAULT constraint for the given database type.
+ *
+ * @param   string  Table name
+ * @param   string  Column name
+ * @param   string  Database type. Default: mssql
+ * @return  string
+ * @access  public
+ * @since   2007-06-19
+ * @author  Matteo Scaramuccia <matteo@scaramuccia.com>  
+ */
+function writeDropDefaultConstraintQuery($sTableName, $sColumnName, $dbtype = 'mssql')
+{
+    $query = '';
+
+    switch($dbtype) {
+        case 'mssql':
+        case 'sybase':
+            $query = "
+                -- Find the name of the constraint for the given table and column name
+                DECLARE @default_constraint_name VARCHAR(255)
+                SELECT
+                	@default_constraint_name = t1.name
+                FROM
+                	sysobjects t1
+                INNER JOIN
+                	syscolumns t2 ON t1.id = t2.cdefault
+                INNER JOIN
+                	sysobjects t3 ON t1.parent_obj = t3.id
+                WHERE (t3.name = '".$sTableName."') AND (t2.name = '".$sColumnName."')
+                -- Drop the constraint using its name, if any
+                IF @default_constraint_name IS NOT NULL
+                	EXEC('ALTER TABLE ".$sTableName." DROP CONSTRAINT ' + @default_constraint_name)";
+            break;
+    }
+
+    return $query;
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
@@ -1048,6 +1085,29 @@ if ($step == 5) {
         // 9/13. Run the user migration and remove the faquser_PMF16x_old table
         // Populate faquser table
         $now = date("YmdHis", time());
+        // Fix any FK constraints issue: remove these FK cons
+        switch($DB["type"]) {
+            case 'mssql':
+            case 'sybase':
+                // Expected FK in tables: <SQLPREFIX>faqadminlog, <SQLPREFIX>faqchanges
+                $queryDropConstraints = "
+                    SELECT
+                    	'ALTER TABLE ' + t2.Table_Name + '
+                    	DROP CONSTRAINT ' + t1.Constraint_Name
+                    	AS 'query'
+                    FROM
+                    	INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS t1 
+                    INNER JOIN
+                    	INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE t2 
+                    ON
+                    		t1.CONSTRAINT_NAME = t2.CONSTRAINT_NAME
+                    	AND t2.TABLE_NAME LIKE '".SQLPREFIX."%'";
+                $_result = $db->query($queryDropConstraints);
+                while ($row = $db->fetch_object($_result)) {
+                    $query[] = $row->query;
+                }
+                break;
+        }
         switch($DB["type"]) {
             default:
                 // Copy all the users
@@ -1391,19 +1451,74 @@ if ($step == 5) {
     // UPDATES FROM 2.0-RC
     //
     if (version_compare($version, '2.0.0-rc', '<')) {
-        $query[] = "DROP TABLE ".SQLPREFIX."faqadminsessions";
-        $query[] = "ALTER TABLE ".SQLPREFIX."faqcategories CHANGE description description VARCHAR(255) DEFAULT NULL";
-        $query[] = "ALTER TABLE ".SQLPREFIX."faqchanges CHANGE what what TEXT DEFAULT NULL";
-        $query[] = "ALTER TABLE ".SQLPREFIX."faqcomments CHANGE helped helped TEXT DEFAULT NULL";
-        $query[] = "ALTER TABLE ".SQLPREFIX."faqconfig CHANGE config_value config_value VARCHAR(255) DEFAULT NULL";
-        $query[] = "ALTER TABLE ".SQLPREFIX."faqdata CHANGE keywords keywords TEXT DEFAULT NULL";
-        $query[] = "ALTER TABLE ".SQLPREFIX."faqdata CHANGE content content LONGTEXT DEFAULT NULL";
-        $query[] = "ALTER TABLE ".SQLPREFIX."faqdata CHANGE links_state links_state VARCHAR(7) DEFAULT NULL";
-        $query[] = "ALTER TABLE ".SQLPREFIX."faqdata_revisions CHANGE keywords keywords TEXT DEFAULT NULL";
-        $query[] = "ALTER TABLE ".SQLPREFIX."faqdata_revisions CHANGE content content LONGTEXT DEFAULT NULL";
-        $query[] = "ALTER TABLE ".SQLPREFIX."faqdata_revisions CHANGE links_state links_state VARCHAR(7) DEFAULT NULL";
-        $query[] = "ALTER TABLE ".SQLPREFIX."faqnews CHANGE linktitel linktitel VARCHAR(255) DEFAULT NULL";
-        $query[] = "ALTER TABLE ".SQLPREFIX."faqnews CHANGE link link VARCHAR(255) DEFAULT NULL";
+        switch($DB["type"]) {
+            case 'mssql':
+            case 'sybase':
+                // Fix categories.description
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqcategories ALTER COLUMN description VARCHAR(255) NULL';
+                $query[] = writeDropDefaultConstraintQuery(SQLPREFIX.'faqcategories', 'description');
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqcategories WITH NOCHECK ADD CONSTRAINT DF_'.SQLPREFIX.'description DEFAULT NULL FOR description';
+                // Fix faqchanges.what
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqchanges ALTER COLUMN what TEXT NULL';
+                $query[] = writeDropDefaultConstraintQuery(SQLPREFIX.'faqchanges', 'what');
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqchanges WITH NOCHECK ADD CONSTRAINT DF_'.SQLPREFIX.'what DEFAULT NULL FOR what';
+                // Fix faqcomments.helped
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqcomments ALTER COLUMN helped TEXT NULL';
+                $query[] = writeDropDefaultConstraintQuery(SQLPREFIX.'faqcomments', 'helped');
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqcomments WITH NOCHECK ADD CONSTRAINT DF_'.SQLPREFIX.'helped DEFAULT NULL FOR helped';
+                // Fix faqconfig.config_value
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqconfig ALTER COLUMN config_value VARCHAR(255) NULL';
+                $query[] = writeDropDefaultConstraintQuery(SQLPREFIX.'faqconfig', 'config_value');
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqconfig WITH NOCHECK ADD CONSTRAINT DF_'.SQLPREFIX.'config_value DEFAULT NULL FOR config_value';
+                // Fix faqdata.keywords
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata ALTER COLUMN keywords TEXT NULL';
+                $query[] = writeDropDefaultConstraintQuery(SQLPREFIX.'faqdata', 'keywords');
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata WITH NOCHECK ADD CONSTRAINT DF_'.SQLPREFIX.'keywords DEFAULT NULL FOR keywords';
+                // Fix faqdata.content
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata ALTER COLUMN content TEXT NULL';
+                $query[] = writeDropDefaultConstraintQuery(SQLPREFIX.'faqdata', 'content');
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata WITH NOCHECK ADD CONSTRAINT DF_'.SQLPREFIX.'content DEFAULT NULL FOR content';
+                // Fix faqdata.links_state
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata ALTER COLUMN links_state VARCHAR(7) NULL';
+                $query[] = writeDropDefaultConstraintQuery(SQLPREFIX.'faqdata', 'links_state');
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata WITH NOCHECK ADD CONSTRAINT DF_'.SQLPREFIX.'links_state DEFAULT NULL FOR links_state';
+                // Fix faqdata_revisions.keywords
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata_revisions ALTER COLUMN keywords TEXT NULL';
+                $query[] = writeDropDefaultConstraintQuery(SQLPREFIX.'faqdata_revisions', 'keywords');
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata_revisions WITH NOCHECK ADD CONSTRAINT DF_'.SQLPREFIX.'keywords_revisions DEFAULT NULL FOR keywords';
+                // Fix faqdata_revisions.content
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata_revisions ALTER COLUMN content TEXT NULL';
+                $query[] = writeDropDefaultConstraintQuery(SQLPREFIX.'faqdata_revisions', 'content');
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata_revisions WITH NOCHECK ADD CONSTRAINT DF_'.SQLPREFIX.'content_revisions DEFAULT NULL FOR content';
+                // Fix faqdata_revisions.links_state
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata_revisions ALTER COLUMN links_state VARCHAR(7) NULL';
+                $query[] = writeDropDefaultConstraintQuery(SQLPREFIX.'faqdata_revisions', 'links_state');
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqdata_revisions WITH NOCHECK ADD CONSTRAINT DF_'.SQLPREFIX.'links_state_revisions DEFAULT NULL FOR links_state';
+                // Fix faqnews.linktitel
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqnews ALTER COLUMN linktitel VARCHAR(255) NULL';
+                $query[] = writeDropDefaultConstraintQuery(SQLPREFIX.'faqnews', 'linktitel');
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqnews WITH NOCHECK ADD CONSTRAINT DF_'.SQLPREFIX.'linktitel DEFAULT NULL FOR linktitel';
+                // Fix faqnews.link
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqnews ALTER COLUMN link VARCHAR(255) NULL';
+                $query[] = writeDropDefaultConstraintQuery(SQLPREFIX.'faqnews', 'link');
+                $query[] = 'ALTER TABLE '.SQLPREFIX.'faqnews WITH NOCHECK ADD CONSTRAINT DF_'.SQLPREFIX.'link DEFAULT NULL FOR link';
+                break;
+            default:
+                $query[] = "DROP TABLE ".SQLPREFIX."faqadminsessions";
+                $query[] = "ALTER TABLE ".SQLPREFIX."faqcategories CHANGE description description VARCHAR(255) DEFAULT NULL";
+                $query[] = "ALTER TABLE ".SQLPREFIX."faqchanges CHANGE what what TEXT DEFAULT NULL";
+                $query[] = "ALTER TABLE ".SQLPREFIX."faqcomments CHANGE helped helped TEXT DEFAULT NULL";
+                $query[] = "ALTER TABLE ".SQLPREFIX."faqconfig CHANGE config_value config_value VARCHAR(255) DEFAULT NULL";
+                $query[] = "ALTER TABLE ".SQLPREFIX."faqdata CHANGE keywords keywords TEXT DEFAULT NULL";
+                $query[] = "ALTER TABLE ".SQLPREFIX."faqdata CHANGE content content LONGTEXT DEFAULT NULL";
+                $query[] = "ALTER TABLE ".SQLPREFIX."faqdata CHANGE links_state links_state VARCHAR(7) DEFAULT NULL";
+                $query[] = "ALTER TABLE ".SQLPREFIX."faqdata_revisions CHANGE keywords keywords TEXT DEFAULT NULL";
+                $query[] = "ALTER TABLE ".SQLPREFIX."faqdata_revisions CHANGE content content LONGTEXT DEFAULT NULL";
+                $query[] = "ALTER TABLE ".SQLPREFIX."faqdata_revisions CHANGE links_state links_state VARCHAR(7) DEFAULT NULL";
+                $query[] = "ALTER TABLE ".SQLPREFIX."faqnews CHANGE linktitel linktitel VARCHAR(255) DEFAULT NULL";
+                $query[] = "ALTER TABLE ".SQLPREFIX."faqnews CHANGE link link VARCHAR(255) DEFAULT NULL";
+                break;
+        }
     }
 
     //
