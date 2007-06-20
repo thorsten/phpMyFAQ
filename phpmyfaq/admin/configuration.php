@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: configuration.php,v 1.14 2007-04-29 11:39:40 thorstenr Exp $
+* $Id: configuration.php,v 1.14.2.1 2007-06-20 20:32:38 matteo Exp $
 *
 * The main configuration frontend
 *
@@ -96,9 +96,9 @@ if ('listConfig' == $userAction) {
 
 function getConfigList()
 {
-    var ajax = new Ajax.Updater('configMain',  'index.php?action=ajax&ajax=config_list&conf=main');
-    var ajax = new Ajax.Updater('configRecords', 'index.php?action=ajax&ajax=config_list&conf=records');
-    var ajax = new Ajax.Updater('configSpam', 'index.php?action=ajax&ajax=config_list&conf=spam');
+    var ajax = new Ajax.Updater('configMain', 'index.php?action=ajax&ajax=config_list&conf=main', {method:'get'});
+    var ajax = new Ajax.Updater('configRecords', 'index.php?action=ajax&ajax=config_list&conf=records', {method:'get'});
+    var ajax = new Ajax.Updater('configSpam', 'index.php?action=ajax&ajax=config_list&conf=spam', {method:'get'});
 }
 
 getConfigList();
