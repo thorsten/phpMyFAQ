@@ -1,6 +1,7 @@
 CHANGED FILES FROM 2.0.1 -> 2.0.2
 
 ./admin/category.showstructure.php
+./admin/configuration.php
 ./admin/record.save.php
 ./admin/record.show.php
 ./docs/documentation.en.html
