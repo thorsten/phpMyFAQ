@@ -1,14 +1,16 @@
 <?php
 /**
- * $Id: Faq.php,v 1.113.2.9 2007-06-16 13:32:31 thorstenr Exp $
+ * $Id: Faq.php,v 1.113.2.10 2007-06-23 13:46:00 thorstenr Exp $
  *
  * The main FAQ class
  *
- * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author       Matteo Scaramuccia <matteo@scaramuccia.com>
- * @package      phpMyFAQ
- * @since        2005-12-20
- * @copyright    (c) 2005-2007 phpMyFAQ Team
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author      Georgi Korchev <korchev@yahoo.com>
+ * @author      Adrianna Musiol <musiol@imageaccess.de>
+ * @package     phpMyFAQ
+ * @since       2005-12-20
+ * @copyright   (c) 2005-2007 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -2620,10 +2622,23 @@ class PMF_Faq
      * @access  public
      * @since   2007-04-04
      * @author  Georgi Korchev <korchev@yahoo.com>
+     * @author  Adrianna Musiol <musiol@imageaccess.de>
      */
     function showAllRecordsWoPaging($category) {
 
         global $sids, $PMF_CONF, $tree;
+
+		if ($this->groupSupport) {
+            $permPart = sprintf("( fdg.group_id IN (%s)
+            OR
+                (fdu.user_id = %d AND fdg.group_id IN (%s)))",
+                implode(', ', $this->groups),
+                $this->user,
+                implode(', ', $this->groups));
+        } else {
+            $permPart = sprintf("( fdu.user_id = %d OR fdu.user_id = -1 )",
+                $this->user);
+        }
 
         $now = date('YmdHis');
         $query = '
@@ -2665,6 +2680,8 @@ class PMF_Faq
                 fcr.category_id = '.$category.'
             AND
                 fd.lang = \''.$this->language.'\'
+			AND'.
+				$permPart.'
             ORDER BY
                 fd.id';
 

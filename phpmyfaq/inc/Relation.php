@@ -1,25 +1,26 @@
 <?php
 /**
-* $Id: Relation.php,v 1.9.2.1 2007-06-06 09:45:25 thorstenr Exp $
-*
-* The Relation class for dynamic related record linking
-*
-* @author       Marco Enders <marco@minimarco.de>
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @package      phpMyFAQ
-* @since        2006-06-18
-* @copyright    (c) 2006-2007 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * $Id: Relation.php,v 1.9.2.2 2007-06-23 13:46:00 thorstenr Exp $
+ *
+ * The Relation class for dynamic related record linking
+ *
+ * @author      Marco Enders <marco@minimarco.de>
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author      Adrianna Musiol <musiol@imageaccess.de>
+ * @package     phpMyFAQ
+ * @since       2006-06-18
+ * @copyright   (c) 2006-2007 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 class PMF_Relation
 {
@@ -151,14 +152,15 @@ class PMF_Relation
      *
      * @param   integer $record_id
      * @param   string  $thema
-     * @return   string
-     * @access   public
+     * @return  string
+     * @access  public
      * @since   2006-08-29
      * @author  Thomas Zeithaml <info@spider-trap.de>
+     * @author  Adrianna Musiol <musiol@imageaccess.de>
      */
     function getAllRelatedById($record_id, $article_name, $keywords)
     {
-        global $sids, $PMF_LANG, $PMF_CONF;
+        global $sids, $PMF_LANG, $PMF_CONF, $faqconfig, $faq, $current_groups;
         $relevantslisting = '';
         $begriffe = str_replace('-', ' ', $article_name) . $keywords;
         $i = $last_id = 0;
@@ -182,18 +184,47 @@ class PMF_Relation
             if ($row->id == $record_id || $row->id == $last_id) {
                 continue;
             }
-            $relevantslisting .= ('' == $relevantslisting ? '<ul>' : '');
-            $relevantslisting .= '<li>';
-            $url = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+
+			$localPermission = false;
+
+			if ($faqconfig->get('main.permLevel') == 'medium') {
+                $perm_group = $faq->getPermission('group', $row->id);
+				foreach($current_groups as $index => $value){
+					if (in_array($value, $perm_group)) {
+						$localPermission = true;
+					}
+				}
+			}
+
+			if ($localPermission) {
+				$perm_user = $faq->getPermission('user', $row->id);
+				foreach ($perm_user as $index => $value) {
+					if ($value == -1) {
+						$localPermission = true;
+						break;
+					} elseif (((int)$value == $current_user)) {
+						$localPermission = true;
+						break;
+					} else {
+						$localPermission = false;
+					}
+				}
+			}
+
+			if ($localPermission) {
+			    $relevantslisting .= ('' == $relevantslisting ? '<ul>' : '');
+			    $relevantslisting .= '<li>';
+			    $url = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                     $sids,
-                    $row->category_id,
-                    $row->id,
-                    $row->lang);
-            $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
-            $oLink->itemTitle = $row->thema;
-            $oLink->text = PMF_htmlentities($row->thema, ENT_QUOTES, $this->pmf_lang['metaCharset']);
-            $oLink->tooltip = $row->thema;
-            $relevantslisting .= $oLink->toHtmlAnchor().'</li>';
+			        $row->category_id,
+			        $row->id,
+			        $row->lang);
+			    $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+			    $oLink->itemTitle = $row->thema;
+			    $oLink->text = PMF_htmlentities($row->thema, ENT_QUOTES, $this->pmf_lang['metaCharset']);
+			    $oLink->tooltip = $row->thema;
+			    $relevantslisting .= $oLink->toHtmlAnchor().'</li>';
+			}
             $i++;
             $last_id = $row->id;
         }
@@ -201,6 +232,4 @@ class PMF_Relation
 
         return ('' == $relevantslisting ? '-' : $relevantslisting);
     }
-
-
 }

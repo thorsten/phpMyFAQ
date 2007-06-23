@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.200.2.8 2007-06-16 14:53:45 thorstenr Exp $
+ * $Id: functions.php,v 1.200.2.9 2007-06-23 13:46:00 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -10,6 +10,7 @@
  * @author      Meikel Katzengreis <meikel@katzengreis.com>
  * @author      Robin Wood <robin@digininja.org>
  * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author      Adrianna Musiol <musiol@imageaccess.de>
  * @since       2001-02-18
  * @copyright   (c) 2001-2007 phpMyFAQ Team
  *
@@ -993,6 +994,7 @@ function quoted_printable_encode($return = '')
  * @access  public
  * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author  Adrianna Musiol <musiol@imageaccess.de>
  * @since   2002-09-16
  */
 function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = false, $instantRespnse = false)
@@ -1131,71 +1133,83 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
             }
             $displayedCounter++;
 
-            // HACK!
-            // @todo: this have to be implemented much more better...
-            $perm_user = $faq->getPermission('user', $row->id);
-            if ((int)$perm_user[0] != $current_user) {
-                continue;
-            }
+            $b_permission = false;
+			//Groups Permission Check
             if ($faqconfig->get('main.permLevel') == 'medium') {
                 $perm_group = $faq->getPermission('group', $row->id);
-                if (in_array($perm_group, $current_groups)) {
-                    continue;
-                }
-            }
+				foreach ($current_groups as $index => $value){
+					if (in_array($value, $perm_group)) {
+						$b_permission = true;
+					}
+				}
+			}
+			if ($b_permission) {
+				$perm_user = $faq->getPermission('user', $row->id);
+				foreach ($perm_user as $index => $value) {
+					if ($value == -1) {
+						$b_permission = true;
+						break;
+					} elseif (((int)$value == $current_user)) {
+						$b_permission = true;
+						break;
+					} else {
+						$b_permission = false;
+					}
+				}
+			}
 
-            $rubriktext = $category->getPath($row->category_id);
-            $thema = PMF_htmlentities(chopString($row->thema, 15),ENT_QUOTES, $PMF_LANG['metaCharset']);
-            $content = chopString(strip_tags($row->content), 25);
-            $searchterm = str_replace(array('^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']', '"'), '', $searchterm);
-            $searchterm = preg_quote($searchterm, '/');
-            $searchItems = explode(' ', $searchterm);
+			if ($b_permission) {
+                $rubriktext = $category->getPath($row->category_id);
+                $thema = PMF_htmlentities(chopString($row->thema, 15),ENT_QUOTES, $PMF_LANG['metaCharset']);
+                $content = chopString(strip_tags($row->content), 25);
+                $searchterm = str_replace(array('^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']', '"'), '', $searchterm);
+                $searchterm = preg_quote($searchterm, '/');
+                $searchItems = explode(' ', $searchterm);
 
-            if (strlen($searchItems[0]) > 1) {
-                foreach ($searchItems as $item) {
-                    if (strlen($item) > 2) {
-                        $thema = preg_replace_callback('/'
-                            .'('.$item.'="[^"]*")|'
-                            .'((href|src|title|alt|class|style|id|name|dir|onclick|ondblclick|onmousedown|onmouseup|onmouseover|onmousemove|onmouseout|onkeypress|onkeydown|onkeyup)="[^"]*'.$item.'[^"]*")|'
-                            .'('.$item.')'
-                            .'/mis',
-                            "highlight_no_links",
-                            $thema
-                        );
-                        $content = preg_replace_callback('/'
-                            .'('.$item.'="[^"]*")|'
-                            .'((href|src|title|alt|class|style|id|name|dir|onclick|ondblclick|onmousedown|onmouseup|onmouseover|onmousemove|onmouseout|onkeypress|onkeydown|onkeyup)="[^"]*'.$item.'[^"]*")|'
-                            .'('.$item.')'
-                            .'/mis',
-                            "highlight_no_links",
-                            $content
-                        );
+                if (strlen($searchItems[0]) > 1) {
+                    foreach ($searchItems as $item) {
+                        if (strlen($item) > 2) {
+                            $thema = preg_replace_callback('/'
+                                .'('.$item.'="[^"]*")|'
+                                .'((href|src|title|alt|class|style|id|name|dir|onclick|ondblclick|onmousedown|onmouseup|onmouseover|onmousemove|onmouseout|onkeypress|onkeydown|onkeyup)="[^"]*'.$item.'[^"]*")|'
+                                .'('.$item.')'
+                                .'/mis',
+                                "highlight_no_links",
+                                $thema );
+                            $content = preg_replace_callback('/'
+                                .'('.$item.'="[^"]*")|'
+                                .'((href|src|title|alt|class|style|id|name|dir|onclick|ondblclick|onmousedown|onmouseup|onmouseover|onmousemove|onmouseout|onkeypress|onkeydown|onkeyup)="[^"]*'.$item.'[^"]*")|'
+                                .'('.$item.')'
+                                .'/mis',
+                                    "highlight_no_links",
+                                $content);
+                        }
                     }
                 }
-            }
 
-            // Print the link to the faq record
-            $url = sprintf(
-                '?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s&amp;highlight=%s',
-                $sids,
-                $row->category_id,
-                $row->id,
-                $row->lang,
-                $searchterm);
+                // Print the link to the faq record
+                $url = sprintf(
+                    '?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s&amp;highlight=%s',
+                    $sids,
+                    $row->category_id,
+                    $row->id,
+                    $row->lang,
+                    $searchterm);
 
-            if ($instantRespnse) {
-                $currentUrl = PMF_Link::getSystemRelativeUri('ajaxresponse.php').'index.php';
-            } else {
-                $currentUrl = PMF_Link::getSystemRelativeUri();
-            }
-            $oLink = new PMF_Link($currentUrl.$url);
-            $oLink->itemTitle = $row->thema;
-            $oLink->text = $thema;
-            $oLink->tooltip = $row->thema;
-            $output .=
-                '<li><strong>'.$rubriktext.'</strong>: '.$oLink->toHtmlAnchor().'<br />'
-                .'<div class="searchpreview"><strong>'.$PMF_LANG['msgSearchContent'].'</strong> '.$content.'...</div>'
-                .'<br /></li>'."\n";
+                if ($instantRespnse) {
+                    $currentUrl = PMF_Link::getSystemRelativeUri('ajaxresponse.php').'index.php';
+                } else {
+                    $currentUrl = PMF_Link::getSystemRelativeUri();
+                }
+                $oLink = new PMF_Link($currentUrl.$url);
+                $oLink->itemTitle = $row->thema;
+                $oLink->text = $thema;
+                $oLink->tooltip = $row->thema;
+                $output .=
+                    '<li><strong>'.$rubriktext.'</strong>: '.$oLink->toHtmlAnchor().'<br />'
+                    .'<div class="searchpreview"><strong>'.$PMF_LANG['msgSearchContent'].'</strong> '.$content.'...</div>'
+                    .'<br /></li>'."\n";
+			}
         }
         $output .= "</ul>\n";
     } else {

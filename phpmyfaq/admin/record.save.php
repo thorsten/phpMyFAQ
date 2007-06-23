@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.save.php,v 1.61.2.4 2007-06-06 14:33:52 thorstenr Exp $
+ * $Id: record.save.php,v 1.61.2.5 2007-06-23 13:46:00 thorstenr Exp $
  *
  * Save or delete a FAQ record
  *
@@ -182,14 +182,10 @@ if (    isset($submit[1])
     // Add user permissions
     $faq->deletePermission('user', $record_id);
     $faq->addPermission('user', $record_id, $user_allowed);
-    $category->deletePermission('user', $categories);
-    $category->addPermission('user', $categories, $user_allowed);
     // Add group permission
     if ($groupSupport) {
         $faq->deletePermission('group', $record_id);
         $faq->addPermission('group', $record_id, $group_allowed);
-        $category->deletePermission('group', $categories);
-        $category->addPermission('group', $categories, $group_allowed);
     }
 }
 
