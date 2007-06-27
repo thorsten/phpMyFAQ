@@ -1,26 +1,25 @@
 <?php
 /**
-* $Id: language_fr.php,v 1.36 2007-03-29 19:31:55 thorstenr Exp $
-*
-* The French language file - try to be the best
-*
-* @author       Sylvain Corvaisier <cocky@cocky.fr>
-* @author       Thomas Bassetto <tbassetto@gmail.com> (reprise le 13/02/2005)
-* @author       Laurent J.V. Dubois <laurent.dubois@ljvd.com>
-* @since        2004-02-19
-* @copyright    (c) 2004-2006 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
-
+ * $Id: language_fr.php,v 1.37 2007-06-27 20:05:49 matteo Exp $
+ *
+ * The French language file - try to be the best
+ *
+ * @author      Sylvain Corvaisier <cocky@cocky.fr>
+ * @author      Thomas Bassetto <tbassetto@gmail.com> (reprise le 13/02/2005)
+ * @author      Laurent J.V. Dubois <laurent.dubois@ljvd.com>
+ * @since       2004-02-19
+ * @copyright   (c) 2004-2007 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 $PMF_LANG["metaCharset"] = "iso-8859-1";
 $PMF_LANG["metaLanguage"] = "fr";
@@ -90,8 +89,8 @@ $PMF_LANG["msgS2FMailSubject"] = "Recommandation de ";
 // Search
 $PMF_LANG["msgSearchWord"] = "Mots-clef";
 $PMF_LANG["msgSearchFind"] = "R&eacute;sultat de recherche pour ";
-$PMF_LANG["msgSearchAmount"] = " r&eacute;slultat de recherche";
-$PMF_LANG["msgSearchAmounts"] = " r&eacute;slultats de recherche";
+$PMF_LANG["msgSearchAmount"] = " r&eacute;sultat de recherche";
+$PMF_LANG["msgSearchAmounts"] = " r&eacute;sultats de recherche";
 $PMF_LANG["msgSearchCategory"] = "Cat&eacute;gorie&nbsp;: ";
 $PMF_LANG["msgSearchContent"] = "Contenu&nbsp;: ";
 
