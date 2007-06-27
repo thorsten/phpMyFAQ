@@ -16,6 +16,7 @@ CHANGED FILES FROM 2.0.1 -> 2.0.2
 ./install/installer.php
 ./install/update.php
 ./lang/language_da.php
+./lang/language_fr.php
 ./template/artikel.tpl
 ./template/style.css
 ./template/style.rtl.css
