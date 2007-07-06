@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: update.php,v 1.151 2007-06-18 23:59:31 matteo Exp $
+ * $Id: update.php,v 1.152 2007-07-06 19:30:45 thorstenr Exp $
  *
  * Main update script
  *
@@ -21,7 +21,7 @@
  * under the License.
  */
 
-define('NEWVERSION', '2.1.0-dev');
+define('NEWVERSION', '2.5.0-dev');
 define('COPYRIGHT', '&copy; 2001-2007 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
@@ -192,8 +192,8 @@ if (!@is_readable(PMF_ROOT_DIR.'/inc/data.php')) {
     HTMLFooter();
     die();
 }
-if (version_compare(PHP_VERSION, '4.3.3', '<')) {
-    print '<p class="center">You need PHP 4.3.3 or later!</p>';
+if (version_compare(PHP_VERSION, '5.2.0', '<')) {
+    print '<p class="center">You need PHP 5.2.0 or later!</p>';
     HTMLFooter();
     die();
 }
@@ -1115,14 +1115,10 @@ if ($step == 5) {
         $query[] = 'INSERT INTO '.SQLPREFIX.'faqconfig (config_name, config_value) VALUES (\'phpMyFAQToken\', \''.md5(uniqid(rand())).'\')';
 
         // 4/4. Fill the new tables for user and group permissions
-        $query[] = 'INSERT INTO '.SQLPREFIX.'faqcategory_group (category_id) SELECT DISTINCT id FROM '.SQLPREFIX.'faqcategories';
-        $query[] = 'UPDATE '.SQLPREFIX.'faqcategory_group SET group_id = -1 WHERE group_id = 0';
-        $query[] = 'INSERT INTO '.SQLPREFIX.'faqcategory_user (category_id) SELECT DISTINCT id FROM '.SQLPREFIX.'faqcategories';
-        $query[] = 'UPDATE '.SQLPREFIX.'faqcategory_user SET user_id = -1 WHERE user_id = 0';
-        $query[] = 'INSERT INTO '.SQLPREFIX.'faqdata_group (record_id) SELECT DISTINCT id FROM '.SQLPREFIX.'faqdata';
-        $query[] = 'UPDATE '.SQLPREFIX.'faqdata_group SET group_id = -1 WHERE group_id = 0';
-        $query[] = 'INSERT INTO '.SQLPREFIX.'faqdata_user (record_id) SELECT DISTINCT id FROM '.SQLPREFIX.'faqdata';
-        $query[] = 'UPDATE '.SQLPREFIX.'faqdata_user SET user_id = -1 WHERE user_id = 0';
+        $query[] = 'INSERT INTO '.SQLPREFIX.'faqcategory_group (category_id, group_id) SELECT DISTINCT id, -1 FROM '.SQLPREFIX.'faqcategories';
+        $query[] = 'INSERT INTO '.SQLPREFIX.'faqcategory_user (category_id, user_id) SELECT DISTINCT id, -1 FROM '.SQLPREFIX.'faqcategories';
+        $query[] = 'INSERT INTO '.SQLPREFIX.'faqdata_group (record_id, group_id) SELECT DISTINCT id, -1 FROM '.SQLPREFIX.'faqdata';
+        $query[] = 'INSERT INTO '.SQLPREFIX.'faqdata_user (record_id, user_id) SELECT DISTINCT id, -1 FROM '.SQLPREFIX.'faqdata';
     }
 
     //
@@ -1240,6 +1236,13 @@ if ($step == 5) {
                 $query[] = "ALTER TABLE ".SQLPREFIX."faqnews CHANGE link link VARCHAR(255) DEFAULT NULL";
                 break;
         }
+    }
+
+    //
+    // UPDATES FROM 2.0.2
+    //
+    if (version_compare($version, '2.0.2', '<')) {
+        $query[] = 'CREATE INDEX idx_user_time ON '.SQLPREFIX.'faqsessions (user_id, time)';
     }
 
     //
