@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.83 2007-05-29 06:57:18 thorstenr Exp $
+ * $Id: language_de.php,v 1.84 2007-07-06 19:26:21 thorstenr Exp $
  *
  * German language file
  *
@@ -538,7 +538,7 @@ $PMF_LANG["msgAttachedFiles"] = "angehängte Dateien:";
 $PMF_LANG["ad_user_action"] = "Aktion";
 $PMF_LANG["ad_entry_email"] = "E-Mailadresse:";
 $PMF_LANG["ad_entry_allowComments"] = "Kommentare zulassen";
-$PMF_LANG["msgWriteNoComment"] = "Kommentieren von diesen Artikel nicht möglich";
+$PMF_LANG["msgWriteNoComment"] = "Kommentieren nicht möglich";
 $PMF_LANG["ad_user_realname"] = "Realname:";
 $PMF_LANG["ad_export_generate_pdf"] = "PDF-Datei generieren";
 $PMF_LANG["ad_export_full_faq"] = "Die FAQ als PDF-Datei: ";
