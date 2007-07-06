@@ -22,8 +22,9 @@
 //
 // Prepend and start the PHP session
 //
-require_once('inc/Init.php');
-require_once('inc/Category.php');
+require_once 'inc/Init.php';
+require_once 'inc/Faq.php';
+require_once 'inc/Category.php';
 define('IS_VALID_PHPMYFAQ', null);
 PMF_Init::cleanRequest();
 session_name('pmf_auth_'.$faqconfig->get('main.phpMyFAQToken'));
@@ -39,9 +40,29 @@ if (isset($_POST['ajaxlanguage']) && PMF_Init::isASupportedLanguage($_POST['ajax
     require_once('lang/language_en.php');
 }
 
+//
+// Get current user and group id - default: -1
+//
+if (isset($user) && is_object($user)) {
+    $current_user   = $user->getUserId();
+    if (is_a($user->perm, 'PMF_PermMedium')) {
+        $current_groups = $user->perm->getUserGroups($current_user);
+    } else {
+        $current_groups = array(-1);
+    }
+    if (0 == count($current_groups)) {
+        $current_groups = array(-1);
+    }
+} else {
+    $current_user   = -1;
+    $current_groups = array(-1);
+}
+
 $category = new PMF_Category($LANGCODE);
 $category->transform(0);
 $category->buildTree();
+
+$faq = new PMF_Faq($db, $LANGCODE);
 
 //
 // Handle the search requests
