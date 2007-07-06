@@ -3,6 +3,8 @@ CHANGED FILES FROM 2.0.1 -> 2.0.2
 ./admin/category.showstructure.php
 ./admin/configuration.php
 ./admin/editor/plugins/fullscreen/css/content.css
+./admin/footer.php
+./admin/record.edit.php
 ./admin/record.save.php
 ./admin/record.show.php
 ./docs/documentation.en.html
@@ -16,11 +18,13 @@ CHANGED FILES FROM 2.0.1 -> 2.0.2
 ./install/installer.php
 ./install/update.php
 ./lang/language_da.php
+./lang/language_de.php
 ./lang/language_fr.php
 ./template/artikel.tpl
 ./template/style.css
 ./template/style.rtl.css
 ./_.htaccess
+./ajaxresponse.php
 ./sitemap.php
 
 
