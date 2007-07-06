@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: footer.php,v 1.31 2007-05-30 20:20:28 matteo Exp $
+ * $Id: footer.php,v 1.32 2007-07-06 19:06:50 thorstenr Exp $
  *
  * Footer of the admin area
  *
@@ -118,7 +118,7 @@ if (    isset($auth) &&
 <script type="text/javascript">
 /*<![CDATA[*/ <!--
     function insertFaqLink() {
-        var sHTML = document.forms[0].intfaqlink.value;
+        var sHTML = document.forms['faqEditor'].intfaqlink.value;
         aParams = sHTML.split('_');
         if (aParams.length == 4) {
             var inst = tinyMCE.getInstanceById(tinyMCE.getWindowArg('editor_id'));
@@ -132,7 +132,7 @@ if (    isset($auth) &&
 
             tinyMCE.execCommand("mceEndUndoLevel");
         }
-        document.forms[0].intfaqlink[0].selected = true;
+        document.forms['faqEditor'].intfaqlink[0].selected = true;
     }
 
     var TinyMCE_PMFIntFaqLinkPlugin = {
