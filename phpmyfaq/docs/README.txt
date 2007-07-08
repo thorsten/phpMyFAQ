@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.92.2.12 2007-07-06 19:30:59 thorstenr Exp $
+$Id: README.txt,v 1.92.2.13 2007-07-08 07:24:36 thorstenr Exp $
 
 phpMyFAQ 2.0.2
 Codename "Prometheus"
@@ -20,7 +20,7 @@ For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.0.2 - 2007-07-
+Version 2.0.2 - 2007-07-08
 - some performance improvements (Thorsten)
 - some permission related fixes (Adrianna Musiol)
 - some update fixes (Matteo)
