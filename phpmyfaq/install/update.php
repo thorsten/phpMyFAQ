@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: update.php,v 1.152 2007-07-06 19:30:45 thorstenr Exp $
+ * $Id: update.php,v 1.153 2007-07-13 15:38:42 thorstenr Exp $
  *
  * Main update script
  *
@@ -56,7 +56,7 @@ function HTMLFooter()
  * @return  string
  * @access  public
  * @since   2007-06-19
- * @author  Matteo Scaramuccia <matteo@scaramuccia.com>  
+ * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
  */
 function writeDropDefaultConstraintQuery($sTableName, $sColumnName, $dbtype = 'mssql')
 {
@@ -284,7 +284,7 @@ if ($step == 2) {
     <legend class="installation"><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 2 of 5)</strong></legend>
     <p>A backup of your database configuration file has been made.</p>
     <p>Now the configuration files will be updated.</p>
-    <p class="center"><input type="submit" value="Go to step 3 of 5" class="button" /></p>
+    <p class="center"><input type="submit" value="Go to step 2 of 5" class="button" /></p>
 </fieldset>
 </form>
 <?php
@@ -813,9 +813,9 @@ if ($step == 5) {
                     	DROP CONSTRAINT ' + t1.Constraint_Name
                     	AS 'query'
                     FROM
-                    	INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS t1 
+                    	INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS t1
                     INNER JOIN
-                    	INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE t2 
+                    	INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE t2
                     ON
                     		t1.CONSTRAINT_NAME = t2.CONSTRAINT_NAME
                     	AND t2.TABLE_NAME LIKE '".SQLPREFIX."%'";
