@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Init.php,v 1.39 2007-05-24 20:09:03 thorstenr Exp $
+ * $Id: Init.php,v 1.40 2007-07-13 15:21:21 thorstenr Exp $
  *
  * Some functions
  *
@@ -467,8 +467,10 @@ class PMF_Init
      * @author      Christian Stocker <chregu@bitflux.ch>
      * @copyright   Bitflux (c) 2001-2005 Bitflux GmbH
      */
-    function basicXSSClean($string)
+    private function basicXSSClean($string)
     {
+        global  $PMF_LANG;
+
         if (strpos($string, '\0') !== false) {
             return null;
         }
@@ -494,7 +496,7 @@ class PMF_Init
             $tmp = preg_replace('#(&\#x*)([0-9A-F]+);*#i',"$1$2;",$string);
         }
         $string = $tmp;
-        $string = html_entity_decode($string, ENT_COMPAT);
+        $string = html_entity_decode($string, ENT_COMPAT, $PMF_LANG['metaCharset']);
 
         // remove any attribute starting with "on" or xmlns
         $tmp = preg_replace('#(<[^>]+[\x00-\x20\"\'])(on|xmlns)[^>]*>#iUu',"$1>",$string);
