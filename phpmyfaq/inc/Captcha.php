@@ -1,14 +1,16 @@
 <?php
 /**
- * $Id: Captcha.php,v 1.12 2007-05-28 11:35:20 thorstenr Exp $
+ * $Id: Captcha.php,v 1.13 2007-07-13 15:05:16 thorstenr Exp $
  *
  * The phpMyFAQ Captcha class
  *
- * @author      Thomas Zeithaml <seo@annatom.de>
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
- * @since       2006-02-04
- * @copyright   (c) 2006-2007 phpMyFAQ Team
+ * @package   phpMyFAQ
+ * @license   MPL
+ * @author    Thomas Zeithaml <seo@annatom.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @since     2006-02-04
+ * @copyright (c) 2006-2007 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -28,98 +30,98 @@ class PMF_Captcha
      *
      * @var mixed
      */
-    var $db;
+    private $db;
 
     /**
      * The phpMyFAQ session id
      *
      * @var string
      */
-    var $sids;
+    private $sids;
 
     /**
      * Array of fonts
      *
      * @var array
      */
-    var $fonts = array();
+    private $fonts = array();
 
     /**
      * The captcha code
      *
      * @var string
      */
-    var $code;
+    private $code;
 
     /**
      * Array of characters
      *
      * @var array
      */
-    var $letters;
+    private $letters;
 
     /**
      * Length of the captcha code
      *
      * @var integer
      */
-    var $caplength;
+    private $caplength;
 
     /**
      * Width of the image
      *
      * @var integer
      */
-    var $width;
+    private $width;
 
     /**
      * Height of the image
      *
      * @var integer
      */
-    var $height;
+    private $height;
 
     /**
      * JPEG quality in percents
      *
      * @var integer
      */
-    var $quality;
+    private $quality;
 
     /**
      * Random background color RGB components
      *
      * @var array
      */
-    var $_backgroundColor;
+    private $_backgroundColor;
 
     /**
      * Generated image
      *
      * @var resource
      */
-    var $img;
+    private $img;
 
     /**
      * The user agent language
      *
      * @var string
      */
-    var $language;
+    private $language;
 
     /**
      * The user agent string
      *
      * @var string
      */
-    var $userAgent;
+    private $userAgent;
 
     /**
      * Timestamp
      *
      * @var integer
      */
-    var $timestamp;
+    private $timestamp;
 
     /**
      * Constructor
@@ -132,28 +134,28 @@ class PMF_Captcha
      * @author  Thomas Zeithaml <seo@annatom.de>
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function PMF_Captcha($db, $sids, $language, $caplength = 6)
+    public function __construct($db, $sids, $language, $caplength = 6)
     {
-        $this->db           =& $db;
+        $this->db        =& $db;
         if ($sids > 0) {
-            $this->sids     = $sids;
+            $this->sids  = $sids;
         } else {
-            $this->sids     = '';
+            $this->sids  = '';
         }
-        $this->language     = $language;
-        $this->userAgent    = $_SERVER['HTTP_USER_AGENT'];
-        $this->ip           = $_SERVER['REMOTE_ADDR'];
-        $this->caplength    = $caplength;
-        $this->letters      = array('1', '2', '3', '4', '5', '6', '7', '8', '9',
+        $this->language  = $language;
+        $this->userAgent = $_SERVER['HTTP_USER_AGENT'];
+        $this->ip        = $_SERVER['REMOTE_ADDR'];
+        $this->caplength = $caplength;
+        $this->letters   = array('1', '2', '3', '4', '5', '6', '7', '8', '9',
                                     'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',
                                     'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
                                     'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' );
-        $this->code          = '';
-        $this->quality       = 60;
-        $this->fonts         = $this->getFonts();
-        $this->width         = 200;
-        $this->height         = 40;
-        $this->timestamp     = time();
+        $this->code      = '';
+        $this->quality   = 60;
+        $this->fonts     = $this->getFonts();
+        $this->width     = 200;
+        $this->height    = 40;
+        $this->timestamp = time();
     }
 
     //
@@ -171,7 +173,7 @@ class PMF_Captcha
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      */
-    function printCaptcha($action)
+    public function printCaptcha($action)
     {
         $output = sprintf(
             '<img src="%s?%saction=%s&amp;gen=img&amp;ck=%s" height="%d" width="%d" border="0" alt="Chuck Norris has counted to infinity. Twice." title="Chuck Norris has counted to infinity. Twice." />',
@@ -192,7 +194,7 @@ class PMF_Captcha
      * @since   2006-02-02
      * @author  Thomas Zeithaml <info@spider-trap.de>
      */
-    function showCaptchaImg()
+    public function showCaptchaImg()
     {
         $this->createBackground();
         $this->drawlines();
@@ -219,15 +221,61 @@ class PMF_Captcha
      * @since   2006-02-02
      * @author  Thomas Zeithaml <info@spider-trap.de>
      */
-    function getCaptchaCode()
+    public function getCaptchaCode()
     {
-        $query = "SELECT id FROM ".SQLPREFIX."faqcaptcha";
+        $query = sprintf('SELECT id FROM %sfaqcaptcha', SQLPREFIX);
         $result = $this->db->query($query);
         while ($row = $this->db->fetch_assoc($result)) {
             $this->code = $row['id'];
         }
 
         return $this->code;
+    }
+
+    /**
+     * Validate the Captcha
+     *
+     * @param   string $captchaCode
+     * @return  void
+     * @access  public
+     * @since   2006-02-18
+     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     */
+    public function validateCaptchaCode($captchaCode)
+    {
+        $captchaCode = strtoupper($captchaCode);
+        // Help the user: treat "0" (ASCII 48) like "O" (ASCII 79)
+        //                if "0" is not in the realm of captcha code letters
+        if (!in_array("0", $this->letters)) {
+            $captchaCode = str_replace("0", "O", $captchaCode);
+        }
+        // Sanity check
+        for ($i = 0; $i < strlen( $captchaCode ); $i++) {
+            if (!in_array($captchaCode[$i], $this->letters)) {
+                return false;
+            }
+        }
+        // Search for this Captcha in the db
+        $query = sprintf("
+            SELECT
+                id
+            FROM
+                %sfaqcaptcha
+            WHERE
+                id = '%s'",
+            SQLPREFIX,
+            $this->db->escape_string($captchaCode));
+
+        if ($result = $this->db->query($query)) {
+            $num = $this->db->num_rows($result);
+            if ($num > 0) {
+                $this->code = $captchaCode;
+                $this->removeCaptcha($captchaCode);
+                return true;
+            }
+        }
+
+        return false;
     }
 
     //
@@ -242,7 +290,7 @@ class PMF_Captcha
     * @since    2006-02-02
     * @author   Thomas Zeithaml <info@spider-trap.de>
     */
-    function drawlines()
+    private function drawlines()
     {
         $color1   = rand(150, 185);
         $color2   = rand(185, 225);
@@ -282,7 +330,7 @@ class PMF_Captcha
      * @author  Thomas Zeithaml <info@spider-trap.de>
      * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      */
-    function drawText()
+    private function drawText()
     {
         $len = strlen($this->code);
         $w1  = 15;
@@ -347,7 +395,7 @@ class PMF_Captcha
      * @since   2006-02-02
      * @author  Thomas Zeithaml <info@spider-trap.de>
      */
-    function createBackground()
+    private function createBackground()
     {
         $this->img = imagecreate($this->width, $this->height);
         $this->_backgroundColor['r'] = rand(220, 255);
@@ -368,7 +416,7 @@ class PMF_Captcha
      * @author  Thomas Zeithaml <info@spider-trap.de>
      * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      */
-    function generateCaptchaCode($caplength)
+    private function generateCaptchaCode($caplength)
     {
         // Start garbage collector for removing old (==unresolved) captcha codes
         // Note that we would like to avoid performing any garbaging of old records
@@ -410,7 +458,7 @@ class PMF_Captcha
     * @author   Thomas Zeithaml <info@spider-trap.de>
     * @author   Matteo Scaramuccia <matteo@scaramuccia.com>
     */
-    function saveCaptcha()
+    private function saveCaptcha()
     {
         if ($result = $this->db->query("SELECT id FROM ".SQLPREFIX."faqcaptcha WHERE id = '".$this->code."'")) {
             $num = $this->db->num_rows($result);
@@ -434,59 +482,13 @@ class PMF_Captcha
      * @since   2006-02-18
      * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      */
-    function removeCaptcha($captchaCode = null)
+    private function removeCaptcha($captchaCode = null)
     {
         if ($captchaCode == null) {
             $captchaCode = $this->code;
         }
         $query = sprintf("DELETE FROM %sfaqcaptcha WHERE id = '%s'", SQLPREFIX, $captchaCode);
         $this->db->query($query);
-    }
-
-    /**
-     * Validate the Captcha
-     *
-     * @param   string $captchaCode
-     * @return  void
-     * @access  private
-     * @since   2006-02-18
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
-     */
-    function validateCaptchaCode($captchaCode)
-    {
-        $captchaCode = strtoupper($captchaCode);
-        // Help the user: treat "0" (ASCII 48) like "O" (ASCII 79)
-        //                if "0" is not in the realm of captcha code letters
-        if (!in_array("0", $this->letters)) {
-            $captchaCode = str_replace("0", "O", $captchaCode);
-        }
-        // Sanity check
-        for ($i = 0; $i < strlen( $captchaCode ); $i++) {
-            if (!in_array($captchaCode[$i], $this->letters)) {
-                return false;
-            }
-        }
-        // Search for this Captcha in the db
-        $query = sprintf("
-            SELECT
-                id
-            FROM
-                %sfaqcaptcha
-            WHERE
-                id = '%s'",
-            SQLPREFIX,
-            $this->db->escape_string($captchaCode));
-
-        if ($result = $this->db->query($query)) {
-            $num = $this->db->num_rows($result);
-            if ($num > 0) {
-                $this->code = $captchaCode;
-                $this->removeCaptcha($captchaCode);
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**
@@ -503,7 +505,7 @@ class PMF_Captcha
      * @since   2006-03-25
      * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      */
-    function garbageCollector($time = 604800)
+    private function garbageCollector($time = 604800)
     {
         $query = sprintf("DELETE FROM %sfaqcaptcha WHERE captcha_time < %d", SQLPREFIX, time() - $time);
         $this->db->query($query);
@@ -517,7 +519,7 @@ class PMF_Captcha
      * @since   2006-02-02
      * @author  Thomas Zeithaml <info@spider-trap.de>
      */
-    function getFonts()
+    private function getFonts()
     {
         return glob(dirname(dirname(__FILE__)).'/font/*.ttf');
     }
