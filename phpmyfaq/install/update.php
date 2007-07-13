@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: update.php,v 1.145.2.9 2007-06-18 23:45:42 matteo Exp $
+ * $Id: update.php,v 1.145.2.10 2007-07-13 15:07:19 thorstenr Exp $
  *
  * Main update script
  *
@@ -21,7 +21,7 @@
  * under the License.
  */
 
-define('NEWVERSION', '2.0.2');
+define('NEWVERSION', '2.0.3');
 define('COPYRIGHT', '&copy; 2001-2007 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
@@ -56,7 +56,7 @@ function HTMLFooter()
  * @return  string
  * @access  public
  * @since   2007-06-19
- * @author  Matteo Scaramuccia <matteo@scaramuccia.com>  
+ * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
  */
 function writeDropDefaultConstraintQuery($sTableName, $sColumnName, $dbtype = 'mssql')
 {
@@ -1096,9 +1096,9 @@ if ($step == 5) {
                     	DROP CONSTRAINT ' + t1.Constraint_Name
                     	AS 'query'
                     FROM
-                    	INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS t1 
+                    	INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS t1
                     INNER JOIN
-                    	INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE t2 
+                    	INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE t2
                     ON
                     		t1.CONSTRAINT_NAME = t2.CONSTRAINT_NAME
                     	AND t2.TABLE_NAME LIKE '".SQLPREFIX."%'";
