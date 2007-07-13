@@ -70,7 +70,7 @@ $faq = new PMF_Faq($db, $LANGCODE);
 if (isset($_POST['search'])) {
     $searchString = $db->escape_string(trim(strip_tags($_POST['search'])));
     $result = searchEngine($searchString, '%', false, true, true);
-    if ($PMF_LANG['metaCharset'] != 'utf-8') {
+    if (strtolower($PMF_LANG['metaCharset']) != 'utf-8') {
         print utf8_encode($result);
     } else {
         print $result;
