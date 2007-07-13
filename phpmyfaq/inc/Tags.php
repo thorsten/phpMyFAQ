@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Tags.php,v 1.37 2007-05-02 18:16:54 thorstenr Exp $
+* $Id: Tags.php,v 1.37.2.1 2007-07-13 15:11:32 thorstenr Exp $
 *
 * The main Tags class
 *
@@ -526,8 +526,11 @@ class PMF_Tags
             FROM
                 %sfaqdata_tags d, %sfaqtags t
             WHERE
-                    t.tagging_id = d.tagging_id
-                AND t.tagging_id = %d",
+                t.tagging_id = d.tagging_id
+            AND
+                t.tagging_id = %d
+            GROUP BY
+                record_id",
             SQLPREFIX,
             SQLPREFIX,
             $tagId);
