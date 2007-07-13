@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: update.php,v 1.145.2.10 2007-07-13 15:07:19 thorstenr Exp $
+ * $Id: update.php,v 1.145.2.11 2007-07-13 15:38:03 thorstenr Exp $
  *
  * Main update script
  *
@@ -293,7 +293,7 @@ if ($step == 2) {
     <legend class="installation"><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 2 of 5)</strong></legend>
     <p>A backup of your database configuration file has been made.</p>
     <p>Now the configuration files will be updated.</p>
-    <p class="center"><input type="submit" value="Go to step 3 of 5" class="button" /></p>
+    <p class="center"><input type="submit" value="Go to step 2 of 5" class="button" /></p>
 </fieldset>
 </form>
 <?php
