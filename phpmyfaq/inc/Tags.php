@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Tags.php,v 1.37 2007-05-02 18:16:54 thorstenr Exp $
+* $Id: Tags.php,v 1.38 2007-07-13 15:13:29 thorstenr Exp $
 *
 * The main Tags class
 *
@@ -28,14 +28,14 @@ class PMF_Tags
      *
      * @var object PMF_Db
      */
-    var $db;
+    private $db;
 
     /**
      * Language
      *
      * @var string
      */
-    var $language;
+    private $language;
 
     /**
      * Constructor
@@ -45,7 +45,7 @@ class PMF_Tags
      * @since   2006-08-10
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function PMF_Tags(&$db, $language)
+    function __construct(&$db, $language)
     {
         $this->db = &$db;
         $this->language = $language;
@@ -514,7 +514,7 @@ class PMF_Tags
      * @since   2007-04-20
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function getRecordsByTagId($tagId)
+    public function getRecordsByTagId($tagId)
     {
         if (!is_integer($tagId)) {
             return false;
@@ -526,8 +526,11 @@ class PMF_Tags
             FROM
                 %sfaqdata_tags d, %sfaqtags t
             WHERE
-                    t.tagging_id = d.tagging_id
-                AND t.tagging_id = %d",
+                t.tagging_id = d.tagging_id
+            AND
+                t.tagging_id = %d
+            GROUP BY
+                record_id",
             SQLPREFIX,
             SQLPREFIX,
             $tagId);
