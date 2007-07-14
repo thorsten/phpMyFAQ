@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: constants.php,v 1.35 2007-04-30 09:57:04 thorstenr Exp $
+ * $Id: constants.php,v 1.36 2007-07-14 17:49:08 thorstenr Exp $
  *
  * Constants for phpMyFAQ
  *
@@ -168,16 +168,16 @@ $botBlacklist = array(
  * @var  array
  */
 $supported_databases = array(
-    'mysql'     => array('4.3.0', 'MySQL 4.x / 5.x / 6.x (PHP 4 / PHP 5)'),
-    'pgsql'     => array('4.3.0', 'PostgreSQL 7.x / 8.x'),
-    'sybase'    => array('4.3.0', 'Sybase'),
-    'mssql'     => array('4.3.0', 'MS SQL Server 2000 / 2005'),
-    'mysqli'    => array('5.0.0', 'MySQL 4.1 / 5.x / 6.x (PHP 5)'),
-    'sqlite'    => array('5.0.0', 'SQLite'),
-    'ibm_db2'   => array('4.3.0', 'IBM DB2 Universal Database 8.2 / 9.1'),
-    'oracle'    => array('5.0.0', 'Oracle 8i and later (experimental)'),
-    'ibase'     => array('4.3.0', 'Interbase/Firebird (experimental)'),
-    'maxdb'     => array('4.3.0', 'MaxDB 7.5 and later (experimental)')
+    'mysql'     => array('5.2.0', 'MySQL 4.x / 5.x / 6.x (ext/mysql)'),
+    'pgsql'     => array('5.2.0', 'PostgreSQL 7.x / 8.x'),
+    'sybase'    => array('5.2.0', 'Sybase'),
+    'mssql'     => array('5.2.0', 'MS SQL Server 2000 / 2005'),
+    'mysqli'    => array('5.2.0', 'MySQL 4.1 / 5.x / 6.x (ext/mysqli)'),
+    'sqlite'    => array('5.2.0', 'SQLite'),
+    'ibm_db2'   => array('5.2.0', 'IBM DB2 Universal Database 8.2 / 9.1'),
+    'oracle'    => array('5.2.0', 'Oracle 8i and later (experimental)'),
+    'ibase'     => array('5.2.0', 'Interbase/Firebird (experimental)'),
+    'maxdb'     => array('5.2.0', 'MaxDB 7.5 and later (experimental)')
     );
 
 /* allowed 'action' varibales for GET - DO NOT CHANGE! */
