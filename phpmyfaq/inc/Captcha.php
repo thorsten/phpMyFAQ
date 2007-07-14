@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Captcha.php,v 1.13 2007-07-13 15:05:16 thorstenr Exp $
+ * $Id: Captcha.php,v 1.14 2007-07-14 17:52:48 thorstenr Exp $
  *
  * The phpMyFAQ Captcha class
  *
@@ -65,7 +65,7 @@ class PMF_Captcha
      *
      * @var integer
      */
-    private $caplength;
+    public $caplength;
 
     /**
      * Width of the image
