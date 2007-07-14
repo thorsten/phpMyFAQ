@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: update.php,v 1.153 2007-07-13 15:38:42 thorstenr Exp $
+ * $Id: update.php,v 1.154 2007-07-14 17:48:44 thorstenr Exp $
  *
  * Main update script
  *
@@ -230,6 +230,7 @@ if ($step == 1) {
     <option value="2.0.0-beta">phpMyFAQ 2.0.0-beta</option>
     <option value="2.0.0-beta2">phpMyFAQ 2.0.0-beta2</option>
     <option value="2.0.0-RC">phpMyFAQ 2.0.0-RC and later</option>
+    <option value="2.0.2">phpMyFAQ 2.0.2 or later</option>
 </select>
 
 <p class="center"><input type="submit" value="Go to step 2 of 5" class="button" /></p>
@@ -270,7 +271,7 @@ if ($step == 2) {
     }
 
     if ('1.5.' == substr($_POST['version'], 0, 4)) {
-        print "<p class=\"error\"><strong>Error:</strong> You can't upgrade from phpMyFAQ 1.4.x to ".NEWVERSION.". Please upgrade first to the latest version of phpMyFAQ 2.0.x.</p>";
+        print "<p class=\"error\"><strong>Error:</strong> You can't upgrade from phpMyFAQ 1.5.x to ".NEWVERSION.". Please upgrade first to the latest version of phpMyFAQ 2.0.x.</p>";
     } else {
         $test5 = 1;
     }
