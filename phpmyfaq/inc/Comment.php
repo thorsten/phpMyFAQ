@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Comment.php,v 1.10 2007-04-30 05:45:30 thorstenr Exp $
+ * $Id: Comment.php,v 1.11 2007-07-14 17:52:07 thorstenr Exp $
  *
  * The main Comment class
  *
@@ -36,21 +36,21 @@ class PMF_Comment
      *
      * @var object
      */
-    var $db;
+    private $db;
 
     /**
      * Language
      *
      * @var string
      */
-    var $language;
+    private $language;
 
     /**
      * Language strings
      *
      * @var string
      */
-    var $pmf_lang;
+    private $pmf_lang;
 
     /**
      * Constructor
@@ -58,11 +58,11 @@ class PMF_Comment
      * @param   object
      * @param   string
      */
-    function PMF_Comment(&$db, $language)
+    public function __construct($db, $language)
     {
         global $PMF_LANG;
 
-        $this->db = &$db;
+        $this->db       = $db;
         $this->language = $language;
         $this->pmf_lang = $PMF_LANG;
     }
@@ -81,7 +81,7 @@ class PMF_Comment
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      */
-    function getCommentDataById($id)
+    public function getCommentDataById($id)
     {
         $item = array();
 
@@ -121,7 +121,7 @@ class PMF_Comment
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      */
-    function getCommentsData($id, $type)
+    public function getCommentsData($id, $type)
     {
         $comments = array();
 
@@ -165,7 +165,7 @@ class PMF_Comment
      * @since   2002-08-29
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function getComments($id, $type)
+    public function getComments($id, $type)
     {
         $comments = $this->getCommentsData($id, $type);
 
@@ -184,8 +184,6 @@ class PMF_Comment
     }
 
     /**
-     * addComment()
-     *
      * Adds a comment
      *
      * @param   array       $commentData
@@ -223,8 +221,6 @@ class PMF_Comment
     }
 
     /**
-     * deleteComment()
-     *
      * Deletes a comment
      *
      * @param   integer     $record_id
@@ -234,7 +230,7 @@ class PMF_Comment
      * @since   2006-06-18
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function deleteComment($record_id, $comment_id)
+    public function deleteComment($record_id, $comment_id)
     {
         if (!is_int($record_id) && !is_int($comment_id)) {
             return false;
@@ -266,7 +262,7 @@ class PMF_Comment
      * @since   2007-02-11
      * @author  Thorsten Rinne <thorsten@rinne.info>
      */
-    function getNumberOfComments()
+    public function getNumberOfComments()
     {
         $num = array();
 
@@ -299,7 +295,7 @@ class PMF_Comment
      * @since   2007-03-04
      * @author  Thorsten Rinne <thorsten@rinne.info>
      */
-    function getAllComments($type = PMF_COMMENT_TYPE_FAQ)
+    public function getAllComments($type = PMF_COMMENT_TYPE_FAQ)
     {
         $comments = array();
 
@@ -342,4 +338,3 @@ class PMF_Comment
         return $comments;
     }
 }
-// }}}
