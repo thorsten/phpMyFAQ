@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: update.php,v 1.145.2.11 2007-07-13 15:38:03 thorstenr Exp $
+ * $Id: update.php,v 1.145.2.12 2007-07-14 17:42:31 thorstenr Exp $
  *
  * Main update script
  *
@@ -239,6 +239,7 @@ if ($step == 1) {
     <option value="2.0.0-beta">phpMyFAQ 2.0.0-beta</option>
     <option value="2.0.0-beta2">phpMyFAQ 2.0.0-beta2</option>
     <option value="2.0.0-RC">phpMyFAQ 2.0.0-RC and later</option>
+    <option value="2.0.2">phpMyFAQ 2.0.2 or later</option>
 </select>
 
 <p class="center"><input type="submit" value="Go to step 2 of 5" class="button" /></p>
