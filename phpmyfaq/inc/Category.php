@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Category.php,v 1.52 2007-05-15 18:51:47 thorstenr Exp $
+ * $Id: Category.php,v 1.53 2007-07-15 11:09:06 thorstenr Exp $
  *
  * The main category class
  *
@@ -37,21 +37,21 @@ class PMF_Category
      *
      * @var  object  PMF_Db
      */
-    var $db = null;
+    private $db = null;
 
     /**
      * User ID
      *
      * @var integer
      */
-    var $user = null;
+    private $user = null;
 
     /**
      * Groupd
      *
      * @var array
      */
-    var $groups = array();
+    private $groups = array();
 
     /**
      *
@@ -59,49 +59,49 @@ class PMF_Category
      *
      * @var  array
      */
-    var $categories = array();
+    public $categories = array();
 
     /**
      * The category names as an array.
      *
      * @var  array
      */
-    var $categoryName = array();
+    public $categoryName = array();
 
     /**
      * The category tree
      *
      * @var  array
      */
-    var $catTree = array();
+    public $catTree = array();
 
     /**
      * The children nodes
      *
      * @var  array
      */
-    var $children = array();
+    private $children = array();
 
     /**
      * The current language
      *
      * @var  string
      */
-    var $language = null;
+    private $language = null;
 
     /**
      * The lines of tabs
      *
      * @var  array
      */
-    var $lineTab = array();
+    private $lineTab = array();
 
     /**
      * The tree with the tabs
      *
      * @var  array
      */
-    var $treeTab = array();
+    private $treeTab = array();
 
     /**
      * Symbol for each item
@@ -109,7 +109,7 @@ class PMF_Category
      *
      * @var  array
      */
-    var $symbols = array(
+    private $symbols = array(
         'vertical' => '|',
         'plus'     => '+',
         'minus'    => '-',
@@ -128,12 +128,12 @@ class PMF_Category
      * @access  public
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function PMF_Category ($language = '', $user = null, $groups = null, $withperm = true)
+    function __construct($language = '', $user = null, $groups = null, $withperm = true)
     {
         global $db;
 
         $this->language   = $language;
-        $this->db         = &$db;
+        $this->db         = $db;
         $this->categories = array();
 
         if (is_null($user)) {
@@ -162,7 +162,7 @@ class PMF_Category
      * @access  private
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function &getOrderedCategories($withperm = true)
+    private function getOrderedCategories($withperm = true)
     {
         $where = '';
 
@@ -231,7 +231,7 @@ class PMF_Category
      * @access  public
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function getCategories($cat, $parent_id = true)
+    public function getCategories($cat, $parent_id = true)
     {
         $_query = '';
         $query = sprintf('
@@ -268,7 +268,7 @@ class PMF_Category
      * @access  public
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function getAllCategories()
+    public function getAllCategories()
     {
         $query = sprintf("
             SELECT
@@ -286,18 +286,28 @@ class PMF_Category
         return $this->categories;
     }
 
-    /* buld the tree in an array */
-    function buildTree($id_parent = 0, $indent = 0)
+    /**
+     * Builds the category tree
+     *
+     * @param  integer $id_parent
+     * @param  integer $indent
+     * @return void
+     * @access public
+     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    public function buildTree($id_parent = 0, $indent = 0)
     {
         $tt = array();
         $x = 0;
         $loop = 0;
+
         foreach ($this->categories as $n) {
             if (isset($n['parent_id']) && $n['parent_id'] == $id_parent) {
                 $tt[$x++] = $loop;
             }
             $loop++;
         }
+
         if ($x != 0) {
             foreach ($tt as $d) {
                 $tmp = array();
@@ -308,17 +318,18 @@ class PMF_Category
                 $this->catTree[] = $tmp;
                 $this->buildTree($tmp["id"], $indent+1);
             }
-        } else {
-            return 0;
         }
     }
 
     /**
-    * levelOf()
-    *
-    * Get the level of the item id
-    */
-    function levelOf($id)
+     * Get the level of the item id
+     *
+     * @param  integer $id
+     * @return integer
+     * @access private
+     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    private function levelOf($id)
     {
         $ret = 0;
         while ((isset($this->categoryName[$id]['parent_id'])) && ($this->categoryName[$id]['parent_id'] != 0)) {
@@ -329,11 +340,14 @@ class PMF_Category
     }
 
     /**
-    * getLine()
-    *
-    * Get the line number where to find the node $id
-    */
-    function getLine($id)
+     * Get the line number where to find the node $id
+     *
+     * @param  integer $id
+     * @return integer
+     * @access private
+     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    private function getLine($id)
     {
         for ($i = 0; $i < count($this->lineTab); $i++) {
             if ($this->lineTab[$i]['id'] == $id) {
@@ -343,17 +357,16 @@ class PMF_Category
     }
 
     /**
-    * transform()
-    *
-    * Transforms the linear array in a 1D array in the order of the tree, with the info
-    *
-    * @param   integer     $id
-    * @return  void
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since   2004-02-16
-    */
-    function transform($id)
+     * Transforms the linear array in a 1D array in the order of the tree, with
+     * the info
+     *
+     * @param  integer $id
+     * @return void
+     * @access public
+     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @since  2004-02-16
+     */
+    public function transform($id)
     {
         $thisParent_id = 0;
         $tree = array();
@@ -381,8 +394,8 @@ class PMF_Category
 
         if ($id > 0) {
             for ($i = 0; $i < $num_ascendants; $i++) {
-                $freres = $this->getBrothers($ascendants[$i]);
-                $tree[$i] = ($ascendants[$i] == $freres[count($freres)-1]) ? 'space' : 'vertical';
+                $brothers = $this->getBrothers($ascendants[$i]);
+                $tree[$i] = ($ascendants[$i] == $brothers[count($brothers) - 1]) ? 'space' : 'vertical';
             }
         }
 
@@ -395,18 +408,15 @@ class PMF_Category
         }
     }
 
-    // get the id of the parent_id, i.e. where parent_id == 0
-    function getParent_id()
-    {
-        for ($i = 0; $i < count($this->lineTab); $i++) {
-            if ($this->lineTab[$i]['parent_id'] == 0) {
-                return $this->lineTab[$i]['id'];
-            }
-        }
-    }
-
-    // get the line number where to find the node $id in the category tree
-    function getLineCategory($id)
+    /**
+     * Get the line number where to find the node $id in the category tree
+     *
+     * @param  integer $id
+     * @return intger
+     * @access private
+     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    private function getLineCategory($id)
     {
         for ($i = 0; $i < count($this->treeTab); $i++) {
             if (isset($this->treeTab[$i]['id']) && $this->treeTab[$i]['id'] == $id) {
@@ -415,14 +425,22 @@ class PMF_Category
         }
     }
 
-    // list in a array of the $id of the child
-    function getChildren($id)
+    //
+    /**
+     * List in a array of the $id of the child
+     *
+     * @param  integer $id
+     * @return array
+     * @access public
+     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    public function getChildren($id)
     {
         return isset($this->children[$id]) ? array_keys($this->children[$id]) : array();
     }
 
     // list in a array of the $id of the child
-    function getChildNodes($id)
+    public function getChildNodes($id)
     {
         $childs = array();
 
@@ -437,13 +455,13 @@ class PMF_Category
     }
 
     // number of childs of the $id
-    function numChilds($id)
+    private function numChilds($id)
     {
         return count($this->getNodes($id));
     }
 
     // list in array the root, super-root, ... of the $id
-    function getNodes($id)
+    private function getNodes($id)
     {
         if (($id > 0) && (isset($this->categoryName[$id]['level']))) {
             $thisLevel = $this->categoryName[$id]['level'];
@@ -456,16 +474,8 @@ class PMF_Category
         }
     }
 
-    // collapse the node $id
-    function collapse($id)
-    {
-        if (isset($this->treeTab[$this->getLineCategory($id)]['symbol'])) {
-            $this->treeTab[$this->getLineCategory($id)]['symbol'] = 'plus';
-        }
-    }
-
     // collapse the complete category tree
-    function collapseAll()
+    public function collapseAll()
     {
         for ($i = 0; $i < count($this->treeTab); $i++) {
             if ($this->treeTab[$i]["symbol"] == "minus") {
@@ -475,13 +485,13 @@ class PMF_Category
     }
 
     // expand the node $id
-    function expand($id)
+    public function expand($id)
     {
         $this->treeTab[$this->getLineCategory($id)]["symbol"] = "minus";
     }
 
     // try to expand from the parent_id to the node $id
-    function expandTo($id)
+    public function expandTo($id)
     {
         $this->collapseAll();
         $ascendants = $this->getNodes($id);
@@ -500,7 +510,7 @@ class PMF_Category
     }
 
     // expand the entire tree
-    function expandAll()
+    public function expandAll()
     {
         for ($i = 0; $i < count($this->treeTab); $i++) {
             if ($this->treeTab[$i]["symbol"] == "plus") {
@@ -509,17 +519,8 @@ class PMF_Category
         }
     }
 
-    // width of the expanded tree
-    function width()
-    {
-        for ($x = -1, $i = 0; $i < count($this->treeTab) ; $i = $this->getNextLineTree($i)) {
-            $x = max($x,$this->treeTab[$i]["level"]);
-        }
-        return $x;
-    }
-
     // total height of the expanded tree
-    function height()
+    private function height()
     {
         return count($this->treeTab);
     }
@@ -531,7 +532,7 @@ class PMF_Category
     * @access   public
     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
     */
-    function viewTree()
+    public function viewTree()
     {
         global $sids, $PMF_LANG;
         $totFaqRecords = 0;
@@ -656,7 +657,7 @@ class PMF_Category
      * @access    private
      * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function getLineDisplay($y)
+    private function getLineDisplay($y)
     {
         $ret[0] = $this->symbols[$this->treeTab[$y]["symbol"]];
         $ret[1] = $this->treeTab[$y]["name"];
@@ -674,7 +675,7 @@ class PMF_Category
      * @access    private
      * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function getNextLineTree($l)
+    private function getNextLineTree($l)
     {
         if ($this->treeTab[$l]["symbol"] != "plus") {
             return $l + 1;
@@ -693,9 +694,9 @@ class PMF_Category
      *
      * @param   integer
      * @return  array
-     * @access  public
+     * @access  private
      */
-    function getBrothers($id)
+    private function getBrothers($id)
     {
         $ret = $this->getChildren($this->categoryName[$id]['parent_id']);
         return $ret;
@@ -708,9 +709,9 @@ class PMF_Category
      * @return  string
      * @access  public
      */
-    function printCategoryOptions($catID = "")
+    public function printCategoryOptions($catID = "")
     {
-        $categories = "";
+        $categories = '';
 
         if (!is_array($catID)) {
             $catID = array(array('category_id' => $catID, 'category_lang' => ''));
@@ -748,7 +749,7 @@ class PMF_Category
     * @return   string
     * @access   public
     */
-    function printCategoryList($catID = "")
+    public function printCategoryList($catID = "")
     {
         $categories = '<ul>';
 
@@ -778,7 +779,7 @@ class PMF_Category
     * @access   public
     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
     */
-    function printCategories($activeCat = 0)
+    public function printCategories($activeCat = 0)
     {
         global $sids, $PMF_LANG, $PMF_CONF;
 
@@ -861,7 +862,7 @@ class PMF_Category
      * @since   2007-02-10
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function addCategoryLink($sids, $parent, $categoryName, $description, $hasChildren = false)
+    private function addCategoryLink($sids, $parent, $categoryName, $description, $hasChildren = false)
     {
         $url = sprintf('%saction=show&amp;cat=%d', $sids, $parent);
         $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
@@ -875,22 +876,6 @@ class PMF_Category
         return $oLink->toHtmlAnchor();
     }
 
-    /* checks if a category is a child node */
-    function isChild($catID, $rootCatID)
-    {
-        // FIXME: rewrite without using the database
-        $query = "SELECT parent_id FROM ".SQLPREFIX."faqcategories WHERE id = ".$rootCatID;
-        $result = $this->db->query($query);
-        while ($row = $this->db->fetch_object($result)) {
-            if ($row->parent_id == $catID) {
-                return FALSE;
-            } else {
-                return TRUE;
-            }
-        }
-        return FALSE;
-    }
-
     /**
      * Gets the path from root to child as breadcrumb
      *
@@ -901,7 +886,7 @@ class PMF_Category
      * @access  public
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function getPath($id, $separator = ' &raquo; ', $showlinks = false)
+    public function getPath($id, $separator = ' &raquo; ', $showlinks = false)
     {
         global $sids, $PMF_CONF;
 
@@ -953,7 +938,7 @@ class PMF_Category
      * @since   2006-11-12
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function getCategoryRelationsFromArticle($record_id, $record_lang)
+    public function getCategoryRelationsFromArticle($record_id, $record_lang)
     {
         $categories = array();
 
@@ -990,7 +975,7 @@ class PMF_Category
      * @return  array   array(array('name'=>string,'id'=>int,'lang'=>string,'parent_id'=>int,'description'=>string),...)
      * @author  Lars Tiedemann <larstiedemann@yahoo.de>
      */
-    function getCategoriesFromArticle($article_id)
+    public function getCategoriesFromArticle($article_id)
     {
         $rel = SQLPREFIX."faqcategoryrelations";
         $cat = SQLPREFIX."faqcategories";
@@ -1039,7 +1024,7 @@ class PMF_Category
     * @return   integer
     * @author   Lars Tiedemann <larstiedemann@yahoo.de>
     */
-    function getCategoryIdFromArticle($article_id)
+    public function getCategoryIdFromArticle($article_id)
     {
         $cats = $this->getCategoryIdsFromArticle($article_id);
         if (isset($cats[0])) {
@@ -1060,7 +1045,7 @@ class PMF_Category
     * @return   array
     * @author   Lars Tiedemann <larstiedemann@yahoo.de>
     */
-    function getCategoryIdsFromArticle($article_id)
+    public function getCategoryIdsFromArticle($article_id)
     {
         $cats = $this->getCategoriesFromArticle($article_id);
         $arr = array();
@@ -1079,7 +1064,7 @@ class PMF_Category
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @todo    Return the name, not the ID
      */
-    function getCategoryUser($category_id)
+    public function getCategoryUser($category_id)
     {
         return $this->categoryName[$category_id]['user_id'];
     }
@@ -1094,7 +1079,7 @@ class PMF_Category
      * @access  public
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function addCategory($category_data, $parent_id = 0, $id = null)
+    public function addCategory($category_data, $parent_id = 0, $id = null)
     {
         if (!is_array($category_data)) {
             return false;
@@ -1131,7 +1116,7 @@ class PMF_Category
      * @access  public
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function updateCategory($category_data)
+    public function updateCategory($category_data)
     {
         if (!is_array($category_data)) {
             return false;
@@ -1169,7 +1154,7 @@ class PMF_Category
      * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      * @since   2006-08-20
      */
-    function moveOwnership($from, $to)
+    public function moveOwnership($from, $to)
     {
         if (!is_numeric($from) || !is_numeric($to)) {
             return false;
@@ -1200,7 +1185,7 @@ class PMF_Category
      * @access  public
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function checkLanguage($category_id, $category_lang)
+    public function checkLanguage($category_id, $category_lang)
     {
         $query = sprintf("
             SELECT
@@ -1228,7 +1213,7 @@ class PMF_Category
      * @access  public
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function swapCategories($category_id_1, $category_id_2)
+    public function swapCategories($category_id_1, $category_id_2)
     {
         $temp_cat = rand(200000, 400000);
 
@@ -1276,7 +1261,7 @@ class PMF_Category
      * @access  public
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function updateParentCategory($category_id, $parent_id)
+    public function updateParentCategory($category_id, $parent_id)
     {
         if ((!is_numeric($category_id) || !is_numeric($parent_id)) && $category_id != $parent_id) {
             return false;
@@ -1308,7 +1293,7 @@ class PMF_Category
      * @since   2006-09-11
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function deleteCategory($category_id, $category_lang, $delete_all = false)
+    public function deleteCategory($category_id, $category_lang, $delete_all = false)
     {
         $query = sprintf("
             DELETE FROM
@@ -1335,8 +1320,7 @@ class PMF_Category
      * @since   2006-09-11
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-
-    function deleteCategoryRelation($category_id, $category_lang, $delete_all = false)
+    public function deleteCategoryRelation($category_id, $category_lang, $delete_all = false)
     {
         $query = sprintf("
             DELETE FROM
@@ -1362,9 +1346,10 @@ class PMF_Category
      * @since   2006-09-10
      * @author  Rudi Ferrari <bookcrossers@gmx.de>
      */
-    function getCategoryLanguagesTranslated($category_id)
+    public function getCategoryLanguagesTranslated($category_id)
     {
         global $languageCodes;
+
         $existcatlang = check4Language($category_id, 'faqcategories');
         $translated = array();
 
@@ -1401,7 +1386,7 @@ class PMF_Category
      * @since   2006-09-10
      * @author  Rudi Ferrari <bookcrossers@gmx.de>
      */
-    function getCategoryLanguagesToTranslate($category_id, $selected_lang)
+    public function getCategoryLanguagesToTranslate($category_id, $selected_lang)
     {
         global $languageCodes;
         $output = "";
@@ -1428,7 +1413,7 @@ class PMF_Category
      * @since   2006-09-16
      * @author  Rudi Ferrari <bookcrossers@gmx.de>
      */
-    function getMissingCategories()
+    public function getMissingCategories()
     {
         $query = sprintf("
             SELECT
@@ -1459,7 +1444,7 @@ class PMF_Category
      * @since   2006-10-10
      * @author  Rudi Ferrari <bookcrossers@gmx.de>
      */
-    function numParent($parent_id)
+    public function numParent($parent_id)
     {
         $query = sprintf("
             SELECT distinct
@@ -1485,7 +1470,7 @@ class PMF_Category
      * @access  public
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function addPermission($mode, $categories, $id)
+    public function addPermission($mode, $categories, $id)
     {
         if (!($mode == "user" || $mode == "group")) {
             return false;
@@ -1522,7 +1507,7 @@ class PMF_Category
      * @access  public
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function deletePermission($mode, $categories)
+    public function deletePermission($mode, $categories)
     {
         if (!($mode == "user" || $mode == "group")) {
             return false;
@@ -1555,7 +1540,7 @@ class PMF_Category
      * @access  public
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function getPermissions($mode, $categories)
+    public function getPermissions($mode, $categories)
     {
         $permissions = array();
         if (!($mode == "user" || $mode == "group")) {
@@ -1593,7 +1578,7 @@ class PMF_Category
      * @access  public
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function getNumberOfRecordsOfCategory($active = 'yes')
+    public function getNumberOfRecordsOfCategory($active = 'yes')
     {
         $numRecordsByCat = array();
 
@@ -1632,7 +1617,7 @@ class PMF_Category
      * @since   2007-02-18
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function getCategoryRecordsMatrix()
+    public function getCategoryRecordsMatrix()
     {
         $matrix = array();
 
