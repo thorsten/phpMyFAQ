@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: footer.php,v 1.30.2.2 2007-07-06 19:04:50 thorstenr Exp $
+ * $Id: footer.php,v 1.30.2.3 2007-07-22 14:31:07 thorstenr Exp $
  *
  * Footer of the admin area
  *
@@ -127,7 +127,7 @@ if (    isset($auth) &&
 
             // Write down the HTML anchor for the selected FAQ record
             // <option value="%d_%d_%s_%s">%s</option>
-            sHTML = '<a class="intfaqlink" href="index.php?action=artikel&amp;cat=' + aParams[0] + '&amp;id=' + aParams[1] + '&amp;artlang=' + aParams[2] + '>' + aParams[3] + '</a>';
+            sHTML = '<a class="intfaqlink" href="index.php?action=artikel&amp;cat=' + aParams[0] + '&amp;id=' + aParams[1] + '&amp;artlang=' + aParams[2] + '">' + aParams[3] + '</a>';
             tinyMCE.execCommand('mceInsertContent', false, sHTML);
 
             tinyMCE.execCommand("mceEndUndoLevel");
