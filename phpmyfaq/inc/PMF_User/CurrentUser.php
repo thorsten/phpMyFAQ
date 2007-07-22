@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: CurrentUser.php,v 1.24 2007-02-25 10:24:27 matteo Exp $
+ * $Id: CurrentUser.php,v 1.25 2007-07-22 19:08:15 thorstenr Exp $
  *
  * manages authentication process using php sessions.
  *
@@ -298,13 +298,10 @@ class PMF_CurrentUser extends PMF_User
         // renew the session-ID
         $oldSessionId = session_id();
         if (session_regenerate_id(true)) {
-            // Since PHP 5.1.0 the old associated session file could be delete passing the true boolean
-            if (version_compare(phpversion(),'5.1.0', '<')) {
-                $sessionPath = realpath(session_save_path());
-                $sessionFilename = $sessionPath.'/sess_'.$oldSessionId;
-                if (@file_exists($sessionFilename)) {
-                    @unlink($sessionFilename);
-                }
+            $sessionPath = realpath(session_save_path());
+            $sessionFilename = $sessionPath.'/sess_'.$oldSessionId;
+            if (@file_exists($sessionFilename)) {
+                @unlink($sessionFilename);
             }
         }
         // store session-ID age

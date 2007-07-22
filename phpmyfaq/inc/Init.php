@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Init.php,v 1.40 2007-07-13 15:21:21 thorstenr Exp $
+ * $Id: Init.php,v 1.41 2007-07-22 19:08:15 thorstenr Exp $
  *
  * Some functions
  *
@@ -56,14 +56,10 @@ if (!$foundCurrPath) {
 
 //
 // Tweak some PHP configuration values
+// Warning: be sure the server has enough memory and stack for PHP
 //
-// Since PHP 5.2.0 there are some values for tuning PCRE behaviour
-// and avoid high resources consumption
-if (version_compare(PHP_VERSION, '5.2.0', '>=')) {
-    // Warning: be sure the server has enough memory and stack for PHP
-    ini_set('pcre.backtrack_limit', 100000000);
-    ini_set('pcre.recursion_limit', 100000000);
-}
+ini_set('pcre.backtrack_limit', 100000000);
+ini_set('pcre.recursion_limit', 100000000);
 
 //
 // Read configuration and constants, include main classes and functions
@@ -486,45 +482,30 @@ class PMF_Init
 
         $string = str_replace(array("&amp;","&lt;","&gt;"),array("&amp;amp;","&amp;lt;","&amp;gt;",),$string);
         // fix &entitiy\n;
-        $tmp = preg_replace('#(&\#*\w+)[\x00-\x20]+;#u',"$1;",$string);
-        if ($canCheckUTF8Error && (PREG_BAD_UTF8_ERROR == preg_last_error())) {
-            $tmp = preg_replace('#(&\#*\w+)[\x00-\x20]+;#',"$1;",$string);
-        }
+        $tmp = preg_replace('#(&\#*\w+)[\x00-\x20]+;#',"$1;",$string);
+
         $string = $tmp;
-        $tmp = preg_replace('#(&\#x*)([0-9A-F]+);*#iu',"$1$2;",$string);
-        if ($canCheckUTF8Error && (PREG_BAD_UTF8_ERROR == preg_last_error())) {
-            $tmp = preg_replace('#(&\#x*)([0-9A-F]+);*#i',"$1$2;",$string);
-        }
+        $tmp = preg_replace('#(&\#x*)([0-9A-F]+);*#i',"$1$2;",$string);
+
         $string = $tmp;
         $string = html_entity_decode($string, ENT_COMPAT, $PMF_LANG['metaCharset']);
 
         // remove any attribute starting with "on" or xmlns
-        $tmp = preg_replace('#(<[^>]+[\x00-\x20\"\'])(on|xmlns)[^>]*>#iUu',"$1>",$string);
-        if ($canCheckUTF8Error && (PREG_BAD_UTF8_ERROR == preg_last_error())) {
-            $tmp = preg_replace('#(<[^>]+[\x00-\x20\"\'])(on|xmlns)[^>]*>#iU',"$1>",$string);
-        }
+        $tmp = preg_replace('#(<[^>]+[\x00-\x20\"\'])(on|xmlns)[^>]*>#iU',"$1>",$string);
         $string = $tmp;
 
         // remove javascript: and vbscript: protocol
-        $tmp = preg_replace('#([a-z]*)[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*)[\x00-\x20]*j[\x00-\x20]*a[\x00-\x20]*v[\x00-\x20]*a[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iUu','$1=$2nojavascript...',$string);
-        if ($canCheckUTF8Error && (PREG_BAD_UTF8_ERROR == preg_last_error())) {
-            $tmp = preg_replace('#([a-z]*)[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*)[\x00-\x20]*j[\x00-\x20]*a[\x00-\x20]*v[\x00-\x20]*a[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iU','$1=$2nojavascript...',$string);
-        }
+        $tmp = preg_replace('#([a-z]*)[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*)[\x00-\x20]*j[\x00-\x20]*a[\x00-\x20]*v[\x00-\x20]*a[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iU','$1=$2nojavascript...',$string);
         $string = $tmp;
-        $tmp = preg_replace('#([a-z]*)[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*)[\x00-\x20]*v[\x00-\x20]*b[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iUu','$1=$2novbscript...',$string);
-        if ($canCheckUTF8Error && (PREG_BAD_UTF8_ERROR == preg_last_error())) {
-            $tmp = preg_replace('#([a-z]*)[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*)[\x00-\x20]*v[\x00-\x20]*b[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iU','$1=$2novbscript...',$string);
-        }
+
+        $tmp = preg_replace('#([a-z]*)[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*)[\x00-\x20]*v[\x00-\x20]*b[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iU','$1=$2novbscript...',$string);
         $string = $tmp;
 
         // <span style="width: expression(alert('Ping!'));"></span>
         // only works in ie...
         $string = preg_replace('#(<[^>]+)style[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*).*expression[\x00-\x20]*\([^>]*>#iU',"$1>",$string);
         $string = preg_replace('#(<[^>]+)style[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*).*behaviour[\x00-\x20]*\([^>]*>#iU',"$1>",$string);
-        $tmp = preg_replace('#(<[^>]+)style[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*).*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:*[^>]*>#iUu',"$1>",$string);
-        if ($canCheckUTF8Error && (PREG_BAD_UTF8_ERROR == preg_last_error())) {
-            $tmp = preg_replace('#(<[^>]+)style[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*).*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:*[^>]*>#iU',"$1>",$string);
-        }
+        $tmp = preg_replace('#(<[^>]+)style[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*).*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:*[^>]*>#iU',"$1>",$string);
         $string = $tmp;
 
         // remove namespaced elements (we do not need them...)

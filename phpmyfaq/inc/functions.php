@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.209 2007-07-22 19:02:28 thorstenr Exp $
+ * $Id: functions.php,v 1.210 2007-07-22 19:08:15 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -1463,39 +1463,6 @@ function mkts($datum,$zeit)
     }
     return mktime($stunde, $minute, $sekunde, $monat, $tag, $jahr);
 }
-
-
-
-//
-// Add re-built PHP functions, which we need and not included in PHP 4.3.0
-//
-
-/**
-* Creates an array by using one array for keys and another for its values
-* NOTE: This function is included in PHP 5.0.0 and later
-*
-* @param    array
-* @param    array
-* @return   array
-* @access   public
-* @since    2004-07-23
-* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-*/
-if (!function_exists("array_combine")) {
-    function array_combine($keys, $values)
-    {
-        $keys = array_values($keys);
-        $values  = array_values($values);
-        $combined = array ();
-        $num = count($values);
-        for ($i = 0; $i < $num; $i++) {
-            $combined[$keys[$i]] = $values[$i];
-        }
-        return $combined;
-    }
-}
-
-
 
 //
 // Functions for backup and SQL security

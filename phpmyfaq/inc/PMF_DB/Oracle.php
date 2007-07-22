@@ -1,10 +1,8 @@
 <?php
 /**
- * $Id: Oracle.php,v 1.10 2007-05-28 20:45:46 thorstenr Exp $
+ * $Id: Oracle.php,v 1.11 2007-07-22 19:08:15 thorstenr Exp $
  *
  * The db_oracle class provides methods and functions for a Oracle database
- *
- * NOTE: PHP5 only!
  *
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
  * @package     db_oracle
