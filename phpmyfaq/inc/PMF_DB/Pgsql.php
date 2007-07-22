@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Pgsql.php,v 1.9 2007-04-30 05:42:32 thorstenr Exp $
+ * $Id: Pgsql.php,v 1.10 2007-07-22 18:57:11 thorstenr Exp $
  *
  * The db_pgsql class provides methods and functions for a PostgreSQL
  * database.
@@ -27,25 +27,23 @@ class db_pgsql
     /**
      * The connection object
      *
-     * @var   mixed
-     * @see   connect(), query(), dbclose()
+     * @var object
      */
-    var $conn = false;
+    private $conn = null;
 
     /**
      * The query log string
      *
-     * @var   string
-     * @see   query()
+     * @var string
      */
-    var $sqllog = "";
+    public $sqllog = '';
 
     /**
      * Tables
      *
-     * @var     array
+     * @var array
      */
-    var $tableNames = array();
+    public $tableNames = array();
 
     /**
      * Connects to the database.
@@ -62,7 +60,7 @@ class db_pgsql
      * @author  Tom Rochester <tom.rochester@gmail.com>
      * @since   2003-02-24
      */
-    function connect ($host, $user, $passwd, $db)
+    public function connect ($host, $user, $passwd, $db)
     {
         /* if you use mysql_pconnect(), remove the next line: */
         $this->conn = pg_pconnect('host='.$host.' port=5432 dbname='.$db.' user='.$user.' password='.$passwd);
@@ -87,7 +85,7 @@ class db_pgsql
      * @author  Tom Rochester <tom.rochester@gmail.com>
      * @since   2003-02-24
      */
-    function query($query)
+    public function query($query)
     {
         $this->sqllog .= pmf_debug($query);
         return pg_query($this->conn, $query);
@@ -102,9 +100,9 @@ class db_pgsql
     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
     * @since   2004-12-16
     */
-    function escape_string($string)
+    public function escape_string($string)
     {
-        return pg_escape_string($string);
+        return pg_escape_string($this->conn, $string);
     }
 
     /**
@@ -119,7 +117,7 @@ class db_pgsql
      * @author  Tom Rochester <tom.rochester@gmail.com>
      * @since   2003-02-24
      */
-    function fetch_object($result)
+    public function fetch_object($result)
     {
         return pg_fetch_object($result);
     }
@@ -138,7 +136,7 @@ class db_pgsql
      * @author  Tom Rochester <tom.rochester@gmail.com>
      * @since   2003-02-24
      */
-    function fetch_assoc($result)
+    public function fetch_assoc($result)
     {
         return pg_fetch_array($result, NULL, PGSQL_ASSOC);
     }
@@ -153,7 +151,7 @@ class db_pgsql
      * @author  Tom Rochester <tom.rochester@gmail.com>
      * @since   2003-02-24
      */
-    function num_rows($result)
+    public function num_rows($result)
     {
         return pg_num_rows($result);
     }
@@ -167,7 +165,7 @@ class db_pgsql
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2003-02-24
      */
-    function sqllog()
+    public function sqllog()
     {
         return $this->sqllog;
     }
@@ -175,55 +173,38 @@ class db_pgsql
     /**
      * Closes the connection to the database.
      *
-     * This function closes the connection to the database.
-     *
      * @access  public
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @author  Tom Rochester <tom.rochester@gmail.com>
      * @since   2003-02-24
      */
-    function dbclose()
+    public function dbclose()
     {
         return pg_close($this->conn);
     }
 
     /**
-     * fti_check.
+     * Returns just one row
      *
-     * This function test for FULL TEXT INDEXING extension support.
-     * FIXME: implement
-     * @access  public
-     * @author  Tom Rochester <tom.rochester@gmail.com>
-     * @since   2004-08-06
+     * @param  string
+     * @return string
+     * @author Tom Rochester <tom.rochester@gmail.com>
+     * @since  2004-08-06
      */
-    function fti_check() { return false; }
-
-    /**
-    * getOne
-    *
-    * TODO: add documentation
-    *
-    * @param    string
-    * @return   string
-    * @author  Tom Rochester <tom.rochester@gmail.com>
-    * @since   2004-08-06
-    */
-    function getOne($query)
+    private function getOne($query)
     {
         $row = pg_fetch_row($this->query($query));
         return $row[0];
     }
 
     /**
-     * getTableStatus.
-     *
      * This function returns the table status.
      *
      * @access  public
      * @author  Tom Rochester <tom.rochester@gmail.com>
      * @since   2004-08-06
      */
-    function getTableStatus()
+    public function getTableStatus()
     {
         $select = "SELECT relname FROM pg_stat_user_tables ORDER BY relname;";
         $arr = array();
@@ -246,7 +227,7 @@ class db_pgsql
      * @author  Matteo scaramuccia <matteo@scaramuccia.com>
      * @since   2004-08-06
      */
-    function search($table, $assoc, $joinedTable = '', $joinAssoc = array(), $match = array(), $string = '', $cond = array(), $orderBy = array())
+    public function search($table, $assoc, $joinedTable = '', $joinAssoc = array(), $match = array(), $string = '', $cond = array(), $orderBy = array())
     {
         $string = pg_escape_string(trim($string));
         $fields = "";
@@ -314,19 +295,17 @@ class db_pgsql
     }
 
     /**
-    * Returns the next ID of a table
-    *
-    * This function is a replacement for MySQL's auto-increment so that
-    * we don't need it anymore.
-    *
-    * @param   string      the name of the table
-    * @param   string      the name of the ID column
-    * @return  int
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since   2004-11-30
-    */
-    function nextID($table, $id)
+     * This function is a replacement for MySQL's auto-increment so that
+     * we don't need it anymore.
+     *
+     * @param   string      the name of the table
+     * @param   string      the name of the ID column
+     * @return  int
+     * @access  public
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @since   2004-11-30
+     */
+    public function nextID($table, $id)
     {
         $result = $this->query("SELECT nextval('".$table."_".$id."_seq') as current_id;");
         $currentID = pg_result($result, 0, 'current_id');
@@ -334,63 +313,48 @@ class db_pgsql
     }
 
     /**
-    * Returns the error string.
-    *
-    * This function returns the last error string.
-    * NOTE: can extend to handle operands like google
-    * @access  public
-    * @author  Tom Rochester <tom.rochester@gmail.com>
-    * @since   2004-08-06
-    */
-
-    function error()
+     * Returns the error string.
+     *
+     * This function returns the last error string.
+     *
+     * @access  public
+     * @author  Tom Rochester <tom.rochester@gmail.com>
+     * @since   2004-08-06
+     */
+    public function error()
     {
         return pg_last_error();
     }
 
     /**
-    * Returns the client version string.
-    *
-    * This function returns the client version string.
-    * NOTE: needs PHP5
-    *
-    * @access  public
-    * @author  Tom Rochester <tom.rochester@gmail.com>
-    * @since   2004-08-06
-    */
-      function client_version()
+     * This function returns the client version string.
+     *
+     * @access  public
+     * @author  Tom Rochester <tom.rochester@gmail.com>
+     * @since   2004-08-06
+     */
+    public function client_version()
     {
-        if (function_exists('pg_version')) {
-            $pg_version = pg_version();
-            if (isset($pg_version['client'])) {
-                return $pg_version['client'];
-            } else {
-                return 'n/a';
-            }
+        $pg_version = pg_version($this->conn);
+        if (isset($pg_version['client'])) {
+            return $pg_version['client'];
         } else {
             return 'n/a';
         }
     }
 
     /**
-    * Returns the server version string.
-    *
-    * This function returns the server version string.
-    * NOTE: needs PHP5
-    *
-    * @access  public
-    * @author  Thorsten Rinne
-    * @since   2004-11-12
-    */
-    function server_version()
+     * Returns the server version string.
+     *
+     * @access  public
+     * @author  Thorsten Rinne
+     * @since   2004-11-12
+     */
+    public function server_version()
     {
-        if (function_exists('pg_version')) {
-            $pg_version = pg_version();
-            if (isset($pg_version['server_version'])) {
-                return $pg_version['server_version'];
-            } else {
-                return 'n/a';
-            }
+        $pg_version = pg_version($this->conn);
+        if (isset($pg_version['server_version'])) {
+            return $pg_version['server_version'];
         } else {
             return 'n/a';
         }
@@ -404,7 +368,7 @@ class db_pgsql
      * @author  Tom Rochester <tom.rochester@gmail.com>
      * @since   2006-08-25
      */
-    function getTableNames($prefix = '')
+    public function getTableNames($prefix = '')
     {
         // First, declare those tables that are referenced by others
         $this->tableNames[] = $prefix.'faquser';
