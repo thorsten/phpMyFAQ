@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Configuration.php,v 1.17 2007-07-15 11:12:11 thorstenr Exp $
+ * $Id: Configuration.php,v 1.18 2007-07-22 19:38:47 thorstenr Exp $
  *
  * The main class for fetching the configuration, update and delete items.
  *
@@ -44,7 +44,7 @@ class PMF_Configuration
      */
     function __construct($db)
     {
-        $this->db = db;
+        $this->db = $db;
     }
 
     /**

@@ -71,34 +71,35 @@ require_once dirname(__FILE__).'/Perm.php';
  */
 require_once dirname(__FILE__).'/UserData.php';
 
-/* user defined constants */
-@define('PMF_USERERROR_NO_DB', 'No database specified. ');
-@define('PMF_USERERROR_NO_PERM', 'No permission container specified. ');
-@define('PMF_USER_SQLPREFIX', SQLPREFIX.'faq');
-@define('PMF_USERERROR_INVALID_STATUS', 'Undefined user status. ');
-@define('PMF_USERERROR_NO_USERID', 'No user-ID found. ');
-@define('PMF_USERERROR_NO_USERLOGINDATA', 'No user login data found. ');
-@define('PMF_USERERROR_LOGIN_NOT_UNIQUE', 'Specified login name already exists. ');
-@define('PMF_USERERROR_LOGIN_INVALID', 'The chosen login is invalid. A valid login has at least four characters. Only letters, numbers and underscore _ are allowed. The first letter must be a letter. ');
-@define('PMF_UNDEFINED_PARAMETER', 'Following parameter must to be defined: ');
-@define('PMF_USERERROR_ADD', 'Account could not be created. ');
-@define('PMF_USERERROR_CHANGE', 'Account could not be updated. ');
-@define('PMF_USERERROR_DELETE', 'Account could not be deleted. ');
-@define('PMF_USER_NOT_FOUND', 'User account could not be found. ');
-@define('PMF_USERERROR_NO_AUTH', 'No authentication method specified. ');
-@define('PMF_USERERROR_INCORRECT_LOGIN', 'Specified login could not be found. ');
-@define('PMF_USERERROR_CANNOT_CREATE_USER', 'User account could not be created. ');
-@define('PMF_USERERROR_CANNOT_DELETE_USER', 'User account could not be deleted. ');
-@define('PMF_USERSTATUS_PROTECTED', 'User account is protected. ');
-@define('PMF_USERSTATUS_BLOCKED', 'User account is blocked. ');
-@define('PMF_USERSTATUS_ACTIVE', 'User account is active. ');
-@define('PMF_USERERROR_NOWRITABLE', 'No authentication object is writable. ');
-@define('PMF_USERERROR_CANNOT_CREATE_USERDATA', 'Entry for user data could not be created. ');
-@define('PMF_USERERROR_CANNOT_DELETE_USERDATA', 'Entry for user data could not be deleted. ');
-@define('PMF_USERERROR_CANNOT_UPDATE_USERDATA', 'Entry for user data could not be updated. ');
+define('SQLTABLEPREFIX', SQLPREFIX . 'faq');
 
-class PMF_User
+abstract class PMF_User
 {
+    const USERERROR_NO_DB = 'No database specified.';
+    const USERERROR_NO_PERM = 'No permission container specified. ';
+    const PMF_USER_SQLPREFIX = SQLTABLEPREFIX;
+    const PMF_USERERROR_INVALID_STATUS = 'Undefined user status. ';
+    const PMF_USERERROR_NO_USERID = 'No user-ID found. ';
+    const PMF_USERERROR_NO_USERLOGINDATA = 'No user login data found. ';
+    const PMF_USERERROR_LOGIN_NOT_UNIQUE = 'Specified login name already exists. ';
+    const PMF_USERERROR_LOGIN_INVALID = 'The chosen login is invalid. A valid login has at least four characters. Only letters, numbers and underscore _ are allowed. The first letter must be a letter. ';
+    const PMF_UNDEFINED_PARAMETER = 'Following parameter must to be defined: ';
+    const PMF_USERERROR_ADD = 'Account could not be created. ';
+    const PMF_USERERROR_CHANGE = 'Account could not be updated. ';
+    const PMF_USERERROR_DELETE = 'Account could not be deleted. ';
+    const PMF_USER_NOT_FOUND = 'User account could not be found. ';
+    const PMF_USERERROR_NO_AUTH = 'No authentication method specified. ';
+    const PMF_USERERROR_INCORRECT_LOGIN = 'Specified login could not be found. ';
+    const PMF_USERERROR_CANNOT_CREATE_USER = 'User account could not be created. ';
+    const PMF_USERERROR_CANNOT_DELETE_USER = 'User account could not be deleted. ';
+    const PMF_USERSTATUS_PROTECTED = 'User account is protected. ';
+    const PMF_USERSTATUS_BLOCKED = 'User account is blocked. ';
+    const PMF_USERSTATUS_ACTIVE = 'User account is active. ';
+    const PMF_USERERROR_NOWRITABLE = 'No authentication object is writable. ';
+    const PMF_USERERROR_CANNOT_CREATE_USERDATA = 'Entry for user data could not be created. ';
+    const PMF_USERERROR_CANNOT_DELETE_USERDATA = 'Entry for user data could not be deleted. ';
+    const PMF_USERERROR_CANNOT_UPDATE_USERDATA = 'Entry for user data could not be updated. ';
+
     // --- ATTRIBUTES ---
 
     /**
@@ -690,7 +691,7 @@ class PMF_User
         }
         // check db
         if (!$this->_db) {
-            $this->errors[] = PMF_USERERROR_NO_DB;
+            $this->errors[] = self::USERERROR_NO_DB;
             return false;
         }
         // update status
@@ -722,7 +723,7 @@ class PMF_User
         $methods = array('query', 'num_rows', 'fetch_assoc', 'error');
         foreach ($methods as $method) {
             if (!method_exists($db, $method)) {
-                $this->errors[] = PMF_USERERROR_NO_DB;
+                $this->errors[] = self::USERERROR_NO_DB;
                 return false;
                 break;
             }
@@ -825,9 +826,10 @@ class PMF_User
      */
     function checkPerm($perm)
     {
-        if (is_a($perm, 'pmf_perm'))
+        if ($perm instanceof PMF_Perm) {
             return true;
-        $this->errors[] = PMF_USERERROR_NO_PERM;
+        }
+        $this->errors[] = USERERROR_NO_PERM;
         return false;
     }
 
