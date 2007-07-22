@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: cron.verifyurls.php,v 1.11 2007-04-06 09:51:59 thorstenr Exp $
+ * $Id: cron.verifyurls.php,v 1.12 2007-07-22 19:02:28 thorstenr Exp $
  *
  * Performs an Automatic Link Verification over all the faq records
  *
@@ -64,16 +64,16 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
     require_once(PMF_ROOT_DIR.'/inc/Faq.php');
     $oLnk = new PMF_Linkverifier($db);
     $faq = new PMF_Faq($db, LANGCODE);
-    $totStart = pmf_microtime_float();
+    $totStart = microtime(true);
 
     // Read the data directly from the faqdata table (all faq records in all languages)
-    $start = pmf_microtime_float();
+    $start = microtime(true);
     $output .= ($isRequestedByWebLocalhost ? '' : "\n");
     $output .= 'Extracting faq records...';
     $faq->getAllRecords();
     $_records = $faq->faqRecords;
     $tot = count($_records);
-    $end = pmf_microtime_float();
+    $end = microtime(true);
     $output .= ' #'.$tot.', done in '.round($end - $start, 4).' sec.'.($isRequestedByWebLocalhost ? '' : "\n");;
     $output .= ($isRequestedByWebLocalhost ? '' : "\n");
     if ($isRequestedByWebLocalhost) {
@@ -89,11 +89,11 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
         $i++;
         $output = '';
         $output .= sprintf('%0'.strlen((string)$tot).'d', $i).'/'.$tot.'. Checking '.$_r['solution_id'].' ('.PMF_Utils::makeShorterText(strip_tags($_r['title']), 8).'):';
-        $start = pmf_microtime_float();
+        $start = microtime(true);
         if ($oLnk->getEntryState($_r['id'], $_r['lang'], true) === true) {
             $output .= $oLnk->verifyArticleURL($_r['content'], $_r['id'], $_r['lang'], true);
         }
-        $end = pmf_microtime_float();
+        $end = microtime(true);
         $output .= ' done in '.round($end - $start, 4).' sec.';
         $output .= ($isRequestedByWebLocalhost ? '' : "\n");
         if ($isRequestedByWebLocalhost) {
@@ -105,7 +105,7 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
     }
 
     $output = '';
-    $totEnd = pmf_microtime_float();
+    $totEnd = microtime(true);
     $output .= ($isRequestedByWebLocalhost ? '' : "\n");
     $output .= 'Done in '.round($totEnd - $totStart, 4).' sec.';
     $output .= ($isRequestedByWebLocalhost ? '' : "\n");

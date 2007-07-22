@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.208 2007-06-16 14:54:33 thorstenr Exp $
+ * $Id: functions.php,v 1.209 2007-07-22 19:02:28 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -73,20 +73,6 @@ function pmf_debug($string)
         }
     }
     return $ret;
-}
-
-/**
- * microtime wrapper function (PHP 5 like)
- *
- * @return  float
- * @access  public
- * @since   2006-09-17
- * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
- */
-function pmf_microtime_float()
-{
-   list($usec, $sec) = explode(' ', microtime());
-   return ((float)$usec + (float)$sec);
 }
 
 //
