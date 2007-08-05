@@ -1,13 +1,13 @@
 <?php
 /**
- * $Id: news.php,v 1.33.2.2 2007-05-29 11:47:32 thorstenr Exp $
+ * $Id: news.php,v 1.33.2.3 2007-08-05 16:19:20 thorstenr Exp $
  *
  * The main administration file for the news
  *
- * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author       Matteo Scaramuccia <matteo@scaramuccia.com>
- * @since        2003-02-23
- * @copyright    (c) 2003-2007 phpMyFAQ Team
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @since     2003-02-23
+ * @copyright (c) 2003-2007 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -25,7 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
-require_once (PMF_ROOT_DIR."/inc/News.php");
+require_once PMF_ROOT_DIR."/inc/News.php";
 
 $news = new PMF_News($db, $LANGCODE);
 
@@ -35,7 +35,7 @@ $user = PMF_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
 if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews"]) {
 ?>
     <h2><?php print $PMF_LANG['ad_news_add']; ?></h2>
-    <form id="editRecord" name="editRecord" action="<?php print $_SERVER['PHP_SELF']; ?>" method="post">
+    <form id="faqEditor" name="faqEditor" action="<?php print $_SERVER['PHP_SELF']; ?>" method="post">
     <fieldset>
     <legend><?php print $PMF_LANG['ad_news_data']; ?></legend>
         <input type="hidden" name="action" value="news" />
@@ -140,7 +140,7 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
         $newsData = $news->getNewsEntry($id, true);
 ?>
     <h2><?php print $PMF_LANG['ad_news_edit']; ?></h2>
-    <form  style="float: left;" id="editRecord" name="editRecord" action="<?php print $_SERVER["PHP_SELF"]; ?>" method="post">
+    <form  style="float: left;" id="faqEditor" name="faqEditor" action="<?php print $_SERVER["PHP_SELF"]; ?>" method="post">
     <fieldset>
     <legend><?php print $PMF_LANG['ad_news_data']; ?></legend>
         <input type="hidden" name="action" value="news" />
