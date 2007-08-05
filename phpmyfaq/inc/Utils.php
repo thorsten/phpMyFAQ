@@ -1,13 +1,13 @@
 <?php
 /**
- * $Id: Utils.php,v 1.6 2007-04-23 21:02:56 matteo Exp $
+ * $Id: Utils.php,v 1.7 2007-08-05 16:06:49 thorstenr Exp $
  *
  * Utilities - Functions and Classes common to the whole phpMyFAQ architecture
  *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
- * @since       2005-11-01
- * @copyright   (c) 2005-2007 phpMyFAQ Team
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @since     2005-11-01
+ * @copyright (c) 2005-2007 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -42,16 +42,31 @@ define("HTTP_PARAMS_GET_TYPE", "type");
  */
 class PMF_Utils
 {
-    function getPMFDate($unixTime = NULL)
+    /**
+     * Returns a phpMyFAQ date
+     *
+     * @param  integer $unixTime
+     * @return string
+     * @access public
+     * @static
+     */
+    public static function getPMFDate($unixTime = NULL)
     {
         if (!isset($unixTime)) {
             // localtime
             $unixTime = time();
         }
-        return date("YmdHis", $unixTime);
+        return date('YmdHis', $unixTime);
     }
 
-    function getNeverExpireDate()
+    /**
+     * Returns date from out of time
+     *
+     * @return string
+     * @access public
+     * @static
+     */
+    public static function getNeverExpireDate()
     {
         // Unix: 13 Dec 1901 20:45:54 -> 19 Jan 2038 03:14:07, signed 32 bit
         // Windows: 1 Jan 1970 -> 19 Jan 2038.
@@ -59,17 +74,41 @@ class PMF_Utils
         return PMF_Utils::getPMFDate(mktime(0, 0 , 1, 1, 1, 2038));
     }
 
-    function isInteger($digits)
+    /**
+     * Check if a given digit is an integer
+     *
+     * @param  string $digits
+     * @return bool
+     * @access public
+     * @static
+     */
+    public static function isInteger($digits)
     {
         return (preg_match("/^[0-9]+$/", $digits));
     }
 
-    function isLanguage($lang)
+    /**
+     * Check if a given string could be a language
+     *
+     * @param  string $lang
+     * @return bool
+     * @access public
+     * @static
+     */
+    public static function isLanguage($lang)
     {
         return (preg_match("/^[a-zA-Z\-]+$/", $lang));
     }
 
-    function isLikeOnPMFDate($date)
+    /**
+     * Checks if a date is a phpMyFAQ valid date
+     *
+     * @param  integer $date
+     * @return integer
+     * @access public
+     * @static
+     */
+    public static function isLikeOnPMFDate($date)
     {
         // Test if the passed string is in the format: %YYYYMMDDhhmmss%
         $testdate = $date;
@@ -86,35 +125,6 @@ class PMF_Utils
     }
 
     /**
-     * Returns the permissions and rights of a given user
-     *
-     * @param   PMF_CurrentUser $user
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @author  Lars Tiedemann <php@larstiedemann.de>
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
-     * @return  array
-     */
-    function getUserRights($user)
-    {
-        $permission = array();
-
-        // read all rights, set them FALSE
-        $allRights = $user->perm->getAllRightsData();
-        foreach ($allRights as $right) {
-            $permission[$right['name']] = false;
-        }
-        // check user rights, set them TRUE
-        $allUserRights = $user->perm->getAllUserRights($user->getUserId());
-        foreach ($allRights as $right) {
-            if (in_array($right['right_id'], $allUserRights))
-                $permission[$right['name']] = true;
-        }
-
-        return $permission;
-    }
-
-    /**
      * Shortens a string for a given number of words
      *
      * @param   string  $str
@@ -124,7 +134,7 @@ class PMF_Utils
      * @since   2002-08-26
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de
      */
-    function makeShorterText($str, $char)
+    public static function makeShorterText($str, $char)
     {
         $str = preg_replace('/\s+/', ' ', $str);
         $arrStr = explode(' ', $str);
@@ -152,7 +162,7 @@ class PMF_Utils
      * @since   2007-04-12
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de
      */
-    function shuffleData($data)
+    public static function shuffleData($data)
     {
         $shuffled_data = array();
 
