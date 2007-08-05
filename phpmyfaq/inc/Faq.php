@@ -1,14 +1,14 @@
 <?php
 /**
- * $Id: Faq.php,v 1.121 2007-06-16 13:33:30 thorstenr Exp $
+ * $Id: Faq.php,v 1.122 2007-08-05 16:13:22 thorstenr Exp $
  *
  * The main FAQ class
  *
- * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author       Matteo Scaramuccia <matteo@scaramuccia.com>
- * @package      phpMyFAQ
- * @since        2005-12-20
- * @copyright    (c) 2005-2007 phpMyFAQ Team
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @package   phpMyFAQ
+ * @since     2005-12-20
+ * @copyright (c) 2005-2007 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -2375,7 +2375,7 @@ class PMF_Faq
         return $sqlWherefilter;
     }
 
-    /**
+/**
      * Build the SQL query for retrieving faq records according to the constraints provided
      *
      * @param   $QueryType
@@ -2389,10 +2389,8 @@ class PMF_Faq
      * @since   2005-11-02
      * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      */
-    function _getSQLQuery($QueryType, $nCatid, $bDownwards, $lang, $date, $faqid = 0)
+    private function _getSQLQuery($QueryType, $nCatid, $bDownwards, $lang, $date, $faqid = 0)
     {
-        global $DB;
-
         $now = date('YmdHis');
         $query = sprintf("
             SELECT
@@ -2432,43 +2430,43 @@ class PMF_Faq
         // faqvisits data selection
         if (!empty($faqid)) {
             // Select ONLY the faq with the provided $faqid
-            $sql .= "fd.id = '".$faqid."' AND ";
+            $query .= "fd.id = '".$faqid."' AND ";
         }
-        $sql .= "fd.id = fv.id
+        $query .= "fd.id = fv.id
             AND
                 fd.lang = fv.lang";
         $needAndOp = true;
         if ((!empty($nCatid)) && (PMF_Utils::isInteger($nCatid)) && ($nCatid > 0)) {
             if ($needAndOp) {
-                $sql .= " AND";
+                $query .= " AND";
             }
-            $sql .= " (fcr.category_id = ".$nCatid;
+            $query .= " (fcr.category_id = ".$nCatid;
             if ($bDownwards) {
-                $sql .= $this->_getCatidWhereSequence($nCatid, "OR");
+                $query .= $this->_getCatidWhereSequence($nCatid, "OR");
             }
-            $sql .= ")";
+            $query .= ")";
             $needAndOp = true;
         }
         if ((!empty($date)) && PMF_Utils::isLikeOnPMFDate($date)) {
             if ($needAndOp) {
-                $sql .= " AND";
+                $query .= " AND";
             }
-            $sql .= " fd.datum LIKE '".$date."'";
+            $query .= " fd.datum LIKE '".$date."'";
             $needAndOp = true;
         }
         if ((!empty($lang)) && PMF_Utils::isLanguage($lang)) {
             if ($needAndOp) {
-                $sql .= " AND";
+                $query .= " AND";
             }
-            $sql .= " fd.lang = '".$lang."'";
+            $query .= " fd.lang = '".$lang."'";
             $needAndOp = true;
         }
         switch ($QueryType) {
             case FAQ_QUERY_TYPE_APPROVAL:
                 if ($needAndOp) {
-                    $sql .= " AND";
+                    $query .= " AND";
                 }
-                $sql .= " fd.active = '".FAQ_SQL_ACTIVE_NO."'";
+                $query .= " fd.active = '".FAQ_SQL_ACTIVE_NO."'";
                 $needAndOp = true;
                 break;
             case FAQ_QUERY_TYPE_EXPORT_DOCBOOK:
@@ -2476,16 +2474,16 @@ class PMF_Faq
             case FAQ_QUERY_TYPE_EXPORT_XHTML:
             case FAQ_QUERY_TYPE_EXPORT_XML:
                 if ($needAndOp) {
-                    $sql .= " AND";
+                    $query .= " AND";
                 }
-                $sql .= " fd.active = '".FAQ_SQL_ACTIVE_YES."'";
+                $query .= " fd.active = '".FAQ_SQL_ACTIVE_YES."'";
                 $needAndOp = true;
                 break;
             default:
                 if ($needAndOp) {
-                    $sql .= " AND";
+                    $query .= " AND";
                 }
-                $sql .= " fd.active = '".FAQ_SQL_ACTIVE_YES."'";
+                $query .= " fd.active = '".FAQ_SQL_ACTIVE_YES."'";
                 $needAndOp = true;
                 break;
         }
@@ -2497,18 +2495,18 @@ class PMF_Faq
             case FAQ_QUERY_TYPE_EXPORT_XML:
                 // Preferred ordering: Sitemap-like
                 // TODO: see if this sort is compatible with the current set of indexes
-                $sql .= "\nORDER BY fd.thema";
+                $query .= "\nORDER BY fd.thema";
                 break;
             case FAQ_QUERY_TYPE_RSS_LATEST:
-                $sql .= "\nORDER BY fd.datum DESC";
+                $query .= "\nORDER BY fd.datum DESC";
                 break;
             default:
                 // Normal ordering
-                $sql .= "\nORDER BY fcr.category_id, fd.id";
+                $query .= "\nORDER BY fcr.category_id, fd.id";
                 break;
         }
 
-        return $sql;
+        return $query;
     }
 
     /**
