@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: PermMedium.php,v 1.26 2007-06-06 14:40:29 thorstenr Exp $
+ * $Id: PermMedium.php,v 1.27 2007-08-12 18:47:12 thorstenr Exp $
  *
  * The medium permission class provides group rights.
  *
@@ -289,7 +289,7 @@ class PMF_PermMedium
         $set = "";
         $comma = "";
         foreach ($group_data as $key => $val) {
-            $set .= $comma.$key." = '".$checked_data[$key]."'";
+            $set .= $comma.$key." = '".$this->_db->escape_string($checked_data[$key])."'";
             $comma = ",\n                ";
         }
         // update group
