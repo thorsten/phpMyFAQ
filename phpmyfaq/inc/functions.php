@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.200.2.9 2007-06-23 13:46:00 thorstenr Exp $
+ * $Id: functions.php,v 1.200.2.10 2007-08-12 13:49:58 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -1143,7 +1143,7 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
 					}
 				}
 			}
-			if ($b_permission) {
+			if ($faqconfig->get('main.permLevel') == 'basic' || $b_permission) {
 				$perm_user = $faq->getPermission('user', $row->id);
 				foreach ($perm_user as $index => $value) {
 					if ($value == -1) {
