@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: footer.php,v 1.30.2.3 2007-07-22 14:31:07 thorstenr Exp $
+ * $Id: footer.php,v 1.30.2.4 2007-08-12 13:34:33 thorstenr Exp $
  *
  * Footer of the admin area
  *
@@ -82,7 +82,8 @@ if (    isset($auth) &&
         theme_advanced_resizing : true,
         theme_advanced_resize_horizontal : false,
         theme_advanced_link_targets : "_something=My somthing;_something2=My somthing2;_something3=My somthing3;",
-        apply_source_formatting : true
+        apply_source_formatting : true,
+        entity_encoding : "raw"
     });
 
     function fileBrowserCallBack(field_name, url, type, win) {
