@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: PermMedium.php,v 1.24.2.2 2007-06-06 14:34:13 thorstenr Exp $
+ * $Id: PermMedium.php,v 1.24.2.3 2007-08-12 18:46:12 thorstenr Exp $
  *
  * The medium permission class provides group rights.
  *
@@ -273,11 +273,11 @@ class PMF_PermMedium
      *
      * Changes the group data of the given group.
      *
+     * @param  int
+     * @param  array
+     * @return bool
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param int
-     * @param array
-     * @return bool
      */
     function changeGroup($group_id, $group_data)
     {
@@ -289,7 +289,7 @@ class PMF_PermMedium
         $set = "";
         $comma = "";
         foreach ($group_data as $key => $val) {
-            $set .= $comma.$key." = '".$checked_data[$key]."'";
+            $set .= $comma.$key." = '".$this->_db->escape_string($checked_data[$key])."'";
             $comma = ",\n                ";
         }
         // update group
