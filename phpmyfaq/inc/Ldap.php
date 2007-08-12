@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Ldap.php,v 1.3 2007-02-27 20:52:32 thorstenr Exp $
+ * $Id: Ldap.php,v 1.3.2.1 2007-08-12 14:02:06 thorstenr Exp $
  *
  * The PMF_Ldap class provides methods and functions for a LDAP database
  *
@@ -34,7 +34,7 @@ class PMF_Ldap
      *
      */
     var $base = null;
-    
+
     /**
      * Errorlog
      *
@@ -63,17 +63,17 @@ class PMF_Ldap
         if (!isset($ldap_user) || !isset($ldap_server) || $ldap_server == "" || !isset($ldap_port) || $ldap_port == "" || !isset($ldap_base) || $ldap_base == "" || !isset($ldap_password)) {
             return false;
 		}
-        
+
         $this->ds = ldap_connect($ldap_server, $ldap_port);
         if (!$this->ds) {
             $this->error = 'Unable to connect to LDAP server (Error: '.ldap_error().')';
         }
-        
+
         $ldapbind = ldap_bind($this->ds, $ldap_user, $ldap_password);
         if (!$ldapbind) {
             $this->error = 'Unable to bind to LDAP server (Error: '.ldap_error().')';
         }
-        
+
         return $this->ds;
     }
 
@@ -88,7 +88,7 @@ class PMF_Ldap
      */
     function ldap_getMail($username)
     {
-        if ($this->ds) {
+        if (!$this->ds) {
             return '';
         }
 
@@ -112,7 +112,7 @@ class PMF_Ldap
      */
     function ldap_getCompleteName($username)
     {
-        if ($this->ds) {
+        if (!$this->ds) {
             return '';
         }
 

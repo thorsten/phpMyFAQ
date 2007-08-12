@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Init.php,v 1.37.2.3 2007-07-13 15:20:22 thorstenr Exp $
+ * $Id: Init.php,v 1.37.2.4 2007-08-12 14:02:06 thorstenr Exp $
  *
  * Some functions
  *
@@ -27,7 +27,7 @@
 // - false      debug mode disabled
 // - true       debug mode enabled
 //
-define('DEBUG', true);
+define('DEBUG', false);
 if (DEBUG) {
     error_reporting(E_ALL);
     if (defined('E_STRICT')) {
@@ -98,7 +98,7 @@ ini_set('url_rewriter.tags', '');
 //
 // Connect to LDAP server, when LDAP support is enabled
 //
-if ($faqconfig->get('main.ldapSupport') && file_exists(PMF_INCLUDE_DIR.'/inc/dataldap.php')) {
+if ($faqconfig->get('main.ldapSupport') && file_exists(PMF_INCLUDE_DIR.'/dataldap.php')) {
     require_once(PMF_INCLUDE_DIR.'/dataldap.php');
     require_once(PMF_INCLUDE_DIR.'/Ldap.php');
     $ldap = new PMF_Ldap($PMF_LDAP['ldap_server'], $PMF_LDAP['ldap_port'], $PMF_LDAP['ldap_base'], $PMF_LDAP['ldap_user'], $PMF_LDAP['ldap_password']);
