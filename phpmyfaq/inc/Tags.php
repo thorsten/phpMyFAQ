@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Tags.php,v 1.38 2007-07-13 15:13:29 thorstenr Exp $
+* $Id: Tags.php,v 1.39 2007-08-12 13:56:28 thorstenr Exp $
 *
 * The main Tags class
 *
@@ -212,6 +212,7 @@ class PMF_Tags
 
         // Store tags and references for the faq record
         foreach ($tags as $tagging_name) {
+            $tagging_name = trim($tagging_name);
             if (strlen($tagging_name) > 0) {
                 if (!in_array($tagging_name, $current_tags)) {
                     // Create the new tag
