@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: CurrentUser.php,v 1.25 2007-07-22 19:08:15 thorstenr Exp $
+ * $Id: CurrentUser.php,v 1.26 2007-08-18 21:01:25 thorstenr Exp $
  *
  * manages authentication process using php sessions.
  *
@@ -93,9 +93,9 @@ class PMF_CurrentUser extends PMF_User
      * @author Lars Tiedemann, <php@larstiedemann.de>
      * @return void
      */
-    function PMF_CurrentUser()
+    function __construct()
     {
-        $this->PMF_User();
+        parent::__construct();
     }
 
     /**
@@ -173,10 +173,10 @@ class PMF_CurrentUser extends PMF_User
         }
         // raise errors and return false
         if ($login_error == $count) {
-            $this->errors[] = PMF_USERERROR_INCORRECT_LOGIN;
+            $this->errors[] = parent::USERERROR_INCORRECT_LOGIN;
         }
         if ($pass_error > 0) {
-            $this->errors[] = PMF_USERERROR_INCORRECT_PASSWORD;
+            $this->errors[] = parent::USERERROR_INCORRECT_PASSWORD;
         }
         return false;
     }
