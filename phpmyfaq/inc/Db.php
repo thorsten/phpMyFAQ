@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Db.php,v 1.3 2007-03-02 16:34:01 thorstenr Exp $
+* $Id: Db.php,v 1.4 2007-08-18 21:06:50 thorstenr Exp $
 *
 * The database abstraction factory
 *
@@ -29,14 +29,14 @@ class PMF_Db
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2005-01-02
      */
-	function db_select($type)
+	public static function db_select($type)
     {
         $file = str_replace('\\', '/', __FILE__);
         $dir = substr($file, 0, strrpos($file, "/"));
         $dir .= '/PMF_DB/';
         $type = ucfirst($type);
         if (file_exists($dir.$type.'.php')) {
-            require_once($dir.$type.'.php');
+            require_once $dir . $type . '.php';
             $class = 'db_'.$type;
             return new $class;
         } else {
@@ -52,7 +52,7 @@ class PMF_Db
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2007-03-02
      */
-    function &singleton()
+    public static function &singleton()
     {
         static $obj;
 
@@ -72,7 +72,7 @@ class PMF_Db
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @since   2007-02-20
      */
-    function errorPage($method)
+    public static function errorPage($method)
     {
         print "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n";
         print "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n";
