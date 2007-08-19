@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: AuthDb.php,v 1.10 2007-07-22 19:38:47 thorstenr Exp $
+* $Id: AuthDb.php,v 1.11 2007-08-19 21:46:38 johannes Exp $
 *
 * manages user authentication with databases.
 *
@@ -439,18 +439,14 @@ class PMF_AuthDb extends PMF_Auth
     * @param    object
     * @return   object
     */
-    function _db($db = null)
+    function _db(PMF_DB $db = null)
     {
         if ($db !== null) {
             $old_db = $this->_db;
-            if (!PMF_User::checkDb($db)) {
-                $this->errors[] = PMF_User::USERERROR_NO_DB;
-                return false;
-            }
             $this->_db = $db;
             return $old_db;
         }
-        if (!PMF_User::checkDb($this->_db)) {
+        if (!$this->_db instanceof PMF_User) {
             $this->_db = null;
             $this->errors[] = PMF_User::USERERROR_NO_DB;
             return false;

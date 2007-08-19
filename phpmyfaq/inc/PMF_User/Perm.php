@@ -175,11 +175,9 @@ class PMF_Perm
      * @param int
      * @return bool
      */
-    function addDb(&$db, $context = '', $context_id = 0)
+    function addDb(PMF_DB $db, $context = '', $context_id = 0)
     {
-        if (!PMF_User::checkDb($db))
-            return false;
-        $this->_db = &$db;
+        $this->_db = $db;
         $this->_initialized = true;
         return true;
     }

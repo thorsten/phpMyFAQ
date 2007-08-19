@@ -307,14 +307,10 @@ abstract class PMF_User
      * @param object
      * @return void
      */
-    function addDb(&$db)
+    function addDb(PMF_DB $db)
     {
-        if ($this->checkDb($db)) {
-            $this->_db = &$db;
-            return true;
-        }
-        $this->_db = null;
-        return false;
+        $this->_db = $db;
+        return true;
     }
 
     /**
@@ -346,8 +342,11 @@ abstract class PMF_User
     function getUserById($user_id)
     {
         // check db
-        if (!$this->checkDb($this->_db))
+        // TODO: Do we really need that check? :-)
+        if (!$this->_db instanceof PMF_DB) {
             return false;
+	}
+
         // get user
         $query = sprintf(
                     "SELECT
@@ -412,8 +411,9 @@ abstract class PMF_User
     function getUserByLogin($login, $raise_error = true)
     {
         // check db
-        if (!$this->checkDb($this->_db))
+        if (!$this->_db instanceof PMF_DBi) {
             return false;
+        }
         // get user
         $res = $this->_db->query("
           SELECT
@@ -454,8 +454,10 @@ abstract class PMF_User
      */
     function createUser($login, $pass = '', $user_id = 0)
     {
-        if (!$this->checkDb($this->_db))
+        if (!$this->_db instanceof PMF_DB) {
             return false;
+        }
+
         foreach ($this->_auth_container as $name => $auth) {
             if (!$this->checkAuth($auth)) {
                 return false;
@@ -545,7 +547,7 @@ abstract class PMF_User
             return false;
         }
         // check db
-        if (!$this->checkDb($this->_db)) {
+        if (!$this->_db instanceof PMF_DB) {
             return false;
         }
         // delete user rights
@@ -604,8 +606,10 @@ abstract class PMF_User
      */
     function changePassword($pass = '')
     {
-        if (!$this->checkDb($this->_db))
+        if (!$this->_db instanceof PMF_DB) {
             return false;
+        }
+
         foreach ($this->_auth_container as $name => $auth) {
             if (!$this->checkAuth($auth)) {
                 return false;
@@ -686,27 +690,6 @@ abstract class PMF_User
         if ($res)
             return true;
         return false;
-    }
-
-    /**
-     * returns true if db is a valid database object.
-     *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param object
-     * @return bool
-     */
-    function checkDb($db)
-    {
-        $methods = array('query', 'num_rows', 'fetch_assoc', 'error');
-        foreach ($methods as $method) {
-            if (!method_exists($db, $method)) {
-                $this->errors[] = self::USERERROR_NO_DB;
-                return false;
-                break;
-            }
-        }
-        return true;
     }
 
     /**
