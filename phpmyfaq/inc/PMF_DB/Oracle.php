@@ -1,6 +1,8 @@
 <?php
+require_once(dirname(__FILE__).'/DB.php');
+
 /**
- * $Id: Oracle.php,v 1.11 2007-07-22 19:08:15 thorstenr Exp $
+ * $Id: Oracle.php,v 1.12 2007-08-19 21:34:56 johannes Exp $
  *
  * The db_oracle class provides methods and functions for a Oracle database
  *
@@ -20,7 +22,7 @@
  * under the License.
  */
 
-class db_oracle
+class db_oracle implements PMF_DB
 {
     /**
      * The connection object

@@ -1,6 +1,8 @@
 <?php
+require_once(dirname(__FILE__).'/DB.php');
+
 /**
- * $Id: Mysqli.php,v 1.14 2007-04-30 05:42:32 thorstenr Exp $
+ * $Id: Mysqli.php,v 1.15 2007-08-19 21:34:56 johannes Exp $
  *
  * The db_mysqli class provides methods and functions for a MySQL 4.1.x,
  * 5.0.x, 5.1.x, and 5.2.x databases.
@@ -22,7 +24,7 @@
  * under the License.
  */
 
-class db_mysqli
+class db_mysqli implements PMF_DB
 {
     /**
      * The connection object

@@ -1,6 +1,8 @@
 <?php
+require_once(dirname(__FILE__).'/DB.php');
+
 /**
- * $Id: Ibm_db2.php,v 1.11 2007-05-30 19:26:36 thorstenr Exp $
+ * $Id: Ibm_db2.php,v 1.12 2007-08-19 21:34:56 johannes Exp $
  *
  * db_ibm_db2
  *
@@ -23,7 +25,7 @@
  * under the License.
  */
 
-class db_ibm_db2
+class db_ibm_db2 implements PMF_DB
 {
     /**
      * The connection object

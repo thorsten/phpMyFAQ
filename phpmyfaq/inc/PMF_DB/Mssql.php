@@ -1,6 +1,8 @@
 <?php
+require_once(dirname(__FILE__).'/DB.php');
+
 /**
- * $Id: Mssql.php,v 1.13 2007-04-30 05:42:32 thorstenr Exp $
+ * $Id: Mssql.php,v 1.14 2007-08-19 21:34:56 johannes Exp $
  *
  * The db_mssql class provides methods and functions for a Microsoft SQL Server
  * database.
@@ -22,7 +24,7 @@
  * under the License.
  */
 
-class db_mssql
+class db_mssql implements PMF_DB
 {
     /**
      * The connection object

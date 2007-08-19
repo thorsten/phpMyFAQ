@@ -1,6 +1,8 @@
 <?php
+require_once(dirname(__FILE__).'/DB.php');
+
 /**
- * $Id: Pgsql.php,v 1.10 2007-07-22 18:57:11 thorstenr Exp $
+ * $Id: Pgsql.php,v 1.11 2007-08-19 21:34:56 johannes Exp $
  *
  * The db_pgsql class provides methods and functions for a PostgreSQL
  * database.
@@ -22,7 +24,7 @@
  * under the License.
  */
 
-class db_pgsql
+class db_pgsql implements PMF_DB
 {
     /**
      * The connection object
