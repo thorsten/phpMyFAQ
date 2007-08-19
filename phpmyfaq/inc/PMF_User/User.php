@@ -411,7 +411,7 @@ abstract class PMF_User
     function getUserByLogin($login, $raise_error = true)
     {
         // check db
-        if (!$this->_db instanceof PMF_DBi) {
+        if (!$this->_db instanceof PMF_DB) {
             return false;
         }
         // get user
