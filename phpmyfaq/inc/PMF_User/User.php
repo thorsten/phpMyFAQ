@@ -222,7 +222,7 @@ abstract class PMF_User
      * @param mixed
      * @return void
      */
-    function __construct($db = null, $perm = null, $auth = array())
+    function __construct(PDF_DB $db = null, $perm = null, $auth = array())
     {
         if ($db !== null) {
             if (!$this->addDb($db)) {
