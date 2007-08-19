@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Auth.php,v 1.12 2006-08-18 11:20:51 matteo Exp $
+* $Id: Auth.php,v 1.13 2007-08-19 21:06:31 johannes Exp $
 *
 * manages user authentication.
 *
@@ -202,7 +202,7 @@ class PMF_Auth
     * @param    string
     * @return   object
     */
-    function selectAuth($database)
+    static function selectAuth($database)
     {
         // verify selected database
         $auth = new PMF_Auth();

@@ -106,7 +106,7 @@ class PMF_Perm
      * @param string
      * @return object
      */
-    function selectPerm($perm_level)
+    static function selectPerm($perm_level)
     {
         // verify selected database
         $perm = new PMF_Perm();
