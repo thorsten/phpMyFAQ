@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: installer.php,v 1.108 2007-05-20 18:20:01 matteo Exp $
+ * $Id: installer.php,v 1.109 2007-08-20 19:32:21 johannes Exp $
  *
  * The main phpMyFAQ Installer
  *
@@ -561,6 +561,7 @@ foreach ($permLevels as $level => $desc) {
 
     // check database connection
     require_once(PMF_ROOT_DIR."/inc/Db.php");
+    require_once(PMF_ROOT_DIR."/inc/PMF_DB/Driver.php");
     $db = PMF_Db::db_select($sql_type);
     $db->connect($sql_server, $sql_user, $sql_passwort, $sql_db);
     if (!$db) {

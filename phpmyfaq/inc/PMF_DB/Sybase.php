@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Sybase.php,v 1.11 2007-04-30 05:42:32 thorstenr Exp $
+ * $Id: Sybase.php,v 1.12 2007-08-20 19:32:20 johannes Exp $
  *
  * db_sybase
  *
@@ -23,7 +23,7 @@
  * under the License.
  */
 
-class db_sybase
+class db_sybase implements PMF_IDB_Driver
 {
     /**
      * The connection object

@@ -307,7 +307,7 @@ abstract class PMF_User
      * @param object
      * @return void
      */
-    function addDb(PMF_DB $db)
+    function addDb(PMF_IDB_Driver $db)
     {
         $this->_db = $db;
         return true;
@@ -343,7 +343,7 @@ abstract class PMF_User
     {
         // check db
         // TODO: Do we really need that check? :-)
-        if (!$this->_db instanceof PMF_DB) {
+        if (!$this->_db instanceof PMF_IDB_Driver) {
             return false;
 	}
 
@@ -411,7 +411,7 @@ abstract class PMF_User
     function getUserByLogin($login, $raise_error = true)
     {
         // check db
-        if (!$this->_db instanceof PMF_DB) {
+        if (!$this->_db instanceof PMF_IDB_Driver) {
             return false;
         }
         // get user
@@ -454,7 +454,7 @@ abstract class PMF_User
      */
     function createUser($login, $pass = '', $user_id = 0)
     {
-        if (!$this->_db instanceof PMF_DB) {
+        if (!$this->_db instanceof PMF_IDB_Driver) {
             return false;
         }
 
@@ -547,7 +547,7 @@ abstract class PMF_User
             return false;
         }
         // check db
-        if (!$this->_db instanceof PMF_DB) {
+        if (!$this->_db instanceof PMF_IDB_Driver) {
             return false;
         }
         // delete user rights
@@ -606,7 +606,7 @@ abstract class PMF_User
      */
     function changePassword($pass = '')
     {
-        if (!$this->_db instanceof PMF_DB) {
+        if (!$this->_db instanceof PMF_IDB_Driver) {
             return false;
         }
 

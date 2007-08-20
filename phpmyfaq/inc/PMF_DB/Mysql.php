@@ -1,8 +1,6 @@
 <?php
-require_once(dirname(__FILE__).'/DB.php');
-
 /**
- * $Id: Mysql.php,v 1.16 2007-08-19 21:34:56 johannes Exp $
+ * $Id: Mysql.php,v 1.17 2007-08-20 19:32:20 johannes Exp $
  *
  * The db_mysql class provides methods and functions for a MySQL 4.0.x
  * and higher database.
@@ -25,7 +23,7 @@ require_once(dirname(__FILE__).'/DB.php');
  * under the License.
  */
 
-class db_mysql implements PMF_DB
+class db_mysql implements PMF_IDB_Driver 
 {
     /**
      * The connection object

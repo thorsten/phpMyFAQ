@@ -1,8 +1,6 @@
 <?php
-require_once(dirname(__FILE__).'/DB.php');
-
 /**
- * $Id: Ibase.php,v 1.9 2007-08-19 21:34:56 johannes Exp $
+ * $Id: Ibase.php,v 1.10 2007-08-20 19:32:20 johannes Exp $
  *
  * The db_ibase class provides methods and functions for Firebird/InterBase
  * databases.
@@ -23,7 +21,7 @@ require_once(dirname(__FILE__).'/DB.php');
  * under the License.
  */
 
-class db_ibase implements PMF_DB
+class db_ibase implements PMF_IDB_Driver
 {
     /**
     * The connection object

@@ -175,7 +175,7 @@ class PMF_Perm
      * @param int
      * @return bool
      */
-    function addDb(PMF_DB $db, $context = '', $context_id = 0)
+    function addDb(PMF_IDB_Driver $db, $context = '', $context_id = 0)
     {
         $this->_db = $db;
         $this->_initialized = true;

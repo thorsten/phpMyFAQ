@@ -1,7 +1,6 @@
 <?php
-require_once(dirname(__FILE__).'/DB.php'); 
 /**
- * $Id: Sqlite.php,v 1.18 2007-08-19 21:34:56 johannes Exp $
+ * $Id: Sqlite.php,v 1.19 2007-08-20 19:32:20 johannes Exp $
  *
  * The db_sqlite class provides methods and functions for a sqlite database.
  *
@@ -22,7 +21,7 @@ require_once(dirname(__FILE__).'/DB.php');
  * under the License.
  */
 
-class db_sqlite implements PMF_DB
+class db_sqlite implements PMF_IDB_Driver
 {
     /**
      * The connection object

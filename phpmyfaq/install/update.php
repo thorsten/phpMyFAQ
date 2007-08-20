@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: update.php,v 1.154 2007-07-14 17:48:44 thorstenr Exp $
+ * $Id: update.php,v 1.155 2007-08-20 19:32:21 johannes Exp $
  *
  * Main update script
  *
@@ -402,6 +402,7 @@ if ($step == 5) {
     require_once(PMF_ROOT_DIR."/inc/functions.php");
     require_once(PMF_ROOT_DIR."/inc/Configuration.php");
     require_once(PMF_ROOT_DIR."/inc/Db.php");
+    require_once(PMF_ROOT_DIR."/inc/PMF_DB/Driver.php");
     require_once(PMF_ROOT_DIR."/inc/Link.php");
     define("SQLPREFIX", $DB["prefix"]);
     $db = PMF_Db::db_select($DB["type"]);
