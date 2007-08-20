@@ -1,13 +1,12 @@
 <?php
 /**
-* $Id: Glossary.php,v 1.10 2007-07-13 15:04:35 thorstenr Exp $
+* $Id: Glossary.php,v 1.11 2007-08-20 19:30:03 thorstenr Exp $
 *
 * The main glossary class
 *
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @package      phpMyFAQ
-* @since        2005-09-15
-* @copyright    (c) 2005-2007 phpMyFAQ Team
+* @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+* @since     2005-09-15
+* @copyright 2005 - 2007 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -23,55 +22,55 @@
 class PMF_Glossary
 {
     /**
-    * DB handle
-    *
-    * @var  object
-    */
-    var $db;
+     * DB handle
+     *
+     * @var PMF_DB
+     */
+    private $db = null;
 
     /**
-    * Language
-    *
-    * @var  string
-    */
-    var $language;
+     * Language
+     *
+     * @var string
+     */
+    private $language = '';
 
     /**
-    * Item
-    *
-    * @var  array
-    */
-    var $item;
+     * Item
+     *
+     * @var array
+     */
+    private $item = array();
 
     /**
-    * Definition of an item
-    *
-    * @var
-    */
-    var $definition;
+     * Definition of an item
+     *
+     * @var string
+     */
+    private $definition = '';
 
     /**
     * Constructor
     *
-    * @param    object    $db
-    * @param    string    $language
-    * @return   void
-    * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+    * @param  object $db       Database object
+    * @param  string $language Language
+    * @return void
+    * @author Thorsten Rinne <thorsten@phpmyfaq.de>
     */
-    function PMF_Glossary(&$db, $language)
+    public function __construct($db, $language)
     {
-        $this->db       = &$db;
+        $this->db       = $db;
         $this->language = $language;
     }
 
     /**
     * Gets all items and definitions from the database
     *
-    * @return   array
-    * @access   public
-    * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+    * @return array
+    * @access public
+    * @author Thorsten Rinne <thorsten@phpmyfaq.de>
     */
-    function getAllGlossaryItems()
+    public function getAllGlossaryItems()
     {
         $items = array();
 
@@ -94,17 +93,15 @@ class PMF_Glossary
     }
 
     /**
-     * insertItemsIntoContent()
-     *
      * Fill the passed string with the current Glossary items.
      *
-     * @param   string
-     * @return  string
-     * @access  public
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
-     * @since   2006-07-02
+     * @param  string $content Content
+     * @return string
+     * @access public
+     * @author Matteo Scaramuccia <matteo@scaramuccia.com>
+     * @since  2006-07-02
      */
-    function insertItemsIntoContent($content = '')
+    public function insertItemsIntoContent($content = '')
     {
         if ('' == $content) {
             return '';
@@ -114,8 +111,7 @@ class PMF_Glossary
             'href', 'src', 'title', 'alt', 'class', 'style', 'id', 'name',
             'face', 'size', 'dir', 'onclick', 'ondblclick', 'onmousedown',
             'onmouseup', 'onmouseover', 'onmousemove', 'onmouseout',
-            'onkeypress', 'onkeydown', 'onkeyup'
-        );
+            'onkeypress', 'onkeydown', 'onkeyup');
 
         foreach($this->getAllGlossaryItems() as $item) {
             $this->definition = $item['definition'];
@@ -129,9 +125,8 @@ class PMF_Glossary
                 // c. the glossary item could be everywhere as a distinct word
                 .'(\s+)('.$item['item'].')(\s+)'
                 .'/mis',
-                array($this, 'setAcronyms'),
-                $content
-            );
+                array($this, '_setAcronyms'),
+                $content);
         }
 
         return $content;
@@ -140,19 +135,17 @@ class PMF_Glossary
     /**
      * Callback function for filtering HTML from URLs and images
      *
-     * @param   array
-     * @access  public
-     * @return  string
-     * @since   2007-04-24
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     * @param  array $matches Matchings
+     * @access public
+     * @return string
+     * @since  2007-04-24
+     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @author Matteo Scaramuccia <matteo@scaramuccia.com>
      */
-    function setAcronyms($matches)
+    private function _setAcronyms($matches)
     {
-        $itemAsAttrName = $matches[1];
-        $itemInAttrValue = $matches[2]; // $matches[3] is the attribute name
-        $prefix = $matches[4];
-        $item = $matches[5];
+        $prefix  = $matches[4];
+        $item    = $matches[5];
         $postfix = $matches[6];
 
         if (!empty($item)) {
@@ -164,14 +157,14 @@ class PMF_Glossary
     }
 
     /**
-    * Gets one item and definition from the database
-    *
-    * @param    integer    $id
-    * @return   array
-    * @access   public
-    * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-    */
-    function getGlossaryItem($id)
+     * Gets one item and definition from the database
+     *
+     * @param  integer $id Glossary ID
+     * @return array
+     * @access public
+     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    public function getGlossaryItem($id)
     {
         $item = array();
 
@@ -187,25 +180,25 @@ class PMF_Glossary
             $this->language));
         while ($row = $this->db->fetch_object($result)) {
             $item = array(
-                'id'            => $row->id,
-                'item'          => stripslashes($row->item),
-                'definition'    => stripslashes($row->definition));
+                'id'         => $row->id,
+                'item'       => stripslashes($row->item),
+                'definition' => stripslashes($row->definition));
         }
         return $item;
     }
 
     /**
-    * Inserts an item and definition into the database
-    *
-    * @param    string    $item
-    * @param    string    $item
-    * @return   boolean
-    * @access   public
-    * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-    */
-    function addGlossaryItem($item, $definition)
+     * Inserts an item and definition into the database
+     *
+     * @param  string $item       Item
+     * @param  string $definition Definition
+     * @return boolean
+     * @access public
+     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    public function addGlossaryItem($item, $definition)
     {
-        $this->item = $this->db->escape_string($item);
+        $this->item       = $this->db->escape_string($item);
         $this->definition = $this->db->escape_string($definition);
 
         $query = sprintf(
@@ -219,6 +212,7 @@ class PMF_Glossary
             $this->language,
             $this->db->escape_string($this->item),
             $this->db->escape_string($this->definition));
+
         if ($this->db->query($query)) {
             return true;
         }
@@ -226,18 +220,18 @@ class PMF_Glossary
     }
 
     /**
-    * Updates an item and definition into the database
-    *
-    * @param    integer    $id
-    * @param    string     $item
-    * @param    string     $definition
-    * @return   boolean
-    * @access   public
-    * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-    */
-    function updateGlossaryItem($id, $item, $definition)
+     * Updates an item and definition into the database
+     *
+     * @param  integer $id         Glossary ID
+     * @param  string  $item       Item
+     * @param  string  $definition Definition
+     * @return boolean
+     * @access public
+     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    public function updateGlossaryItem($id, $item, $definition)
     {
-        $this->item = $this->db->escape_string($item);
+        $this->item       = $this->db->escape_string($item);
         $this->definition = $this->db->escape_string($definition);
 
         $query = sprintf(
@@ -253,6 +247,7 @@ class PMF_Glossary
             $this->db->escape_string($this->definition),
             (int)$id,
             $this->language);
+
         if ($this->db->query($query)) {
             return true;
         }
@@ -260,14 +255,14 @@ class PMF_Glossary
     }
 
     /**
-    * Deletes an item and definition into the database
-    *
-    * @param    integer    $id
-    * @return   boolean
-    * @access   public
-    * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-    */
-    function deleteGlossaryItem($id)
+     * Deletes an item and definition into the database
+     *
+     * @param  integer $id Glossary ID
+     * @return boolean
+     * @access public
+     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    public function deleteGlossaryItem($id)
     {
         $query = sprintf(
             "DELETE FROM
@@ -277,6 +272,7 @@ class PMF_Glossary
             SQLPREFIX,
             (int)$id,
             $this->language);
+
         if ($this->db->query($query)) {
             return true;
         }
