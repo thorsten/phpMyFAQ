@@ -1,18 +1,15 @@
 <?php
 /**
- * $Id: Template.php,v 1.4 2007-02-28 20:19:58 thorstenr Exp $
+ * $Id: Template.php,v 1.5 2007-08-20 18:20:48 thorstenr Exp $
  *
  * PMF_Template
  *
  * The PMF_Template class provides methods and functions for the
  * template parser
  *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Eden Akhavi <eden.akhavi@ltt.com>
- * @author      Bianka Martinovic <blackbird@webbird.de>
- * @package     phpmyfaqTemplate
- * @since       2002-08-22
- * @copyright   (c) 2002-2007 phpMyFAQ Team
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since     2002-08-22
+ * @copyright (c) 2002-2007 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -30,18 +27,16 @@ class PMF_Template
     /**
      * The template array
      *
-     * @var   mixed
-     * @see   PMF_Template(), processTemplate()
+     * @var array
      */
-    var $templates = array();
+    public $templates = array();
 
     /**
      * The output array
      *
-     * @var   mixed
-     * @see   includeTemplate(), processTemplate(), printTemplate(), addTemplate()
+     * @var array
      */
-	var $outputs = array();
+    private $outputs = array();
 
     /**
      * Constructor
@@ -52,9 +47,9 @@ class PMF_Template
      * @access  public
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-	function PMF_Template($myTemplate)
+    public function __construct($myTemplate)
     {
-		foreach ($myTemplate as $templateName => $filename) {
+        foreach ($myTemplate as $templateName => $filename) {
             $this->templates[$templateName] = $this->readTemplate($filename);
         }
     }
@@ -68,11 +63,11 @@ class PMF_Template
      * @access  public
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function includeTemplate($name, $toname)
+    public function includeTemplate($name, $toname)
     {
         $this->outputs[$toname] = str_replace('{'.$name.'}', $this->outputs[$name], $this->outputs[$toname]);
-		$this->outputs[$name] = '';
-	}
+        $this->outputs[$name] = '';
+    }
 
     /**
      * Parses the template
@@ -83,7 +78,7 @@ class PMF_Template
      * @access  public
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de
      */
-	function processTemplate($templateName, $myTemplate)
+    public function processTemplate($templateName, $myTemplate)
     {
         $tmp = $this->templates[$templateName];
 
@@ -104,10 +99,10 @@ class PMF_Template
         // Hack: Backtick Fix
         $tmp = str_replace('&acute;', '`', $tmp);
 
-		if (isset($this->outputs[$templateName])) {
-			$this->outputs[$templateName] .= $tmp;
+        if (isset($this->outputs[$templateName])) {
+            $this->outputs[$templateName] .= $tmp;
         } else {
-			$this->outputs[$templateName] = $tmp;
+            $this->outputs[$templateName] = $tmp;
         }
     }
 
@@ -118,28 +113,12 @@ class PMF_Template
      * @access  public
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-	function printTemplate()
+    public function printTemplate()
     {
-		foreach ($this->outputs as $val) {
+        foreach ($this->outputs as $val) {
             print str_replace("\n\n", "\n", $val);
         }
-	}
-
-    /**
-     * Returns the parsed template, but don't print
-     *
-     * @return  string
-     * @access  public
-     * @since   2006-01-03
-     * @author  Bianka Martinovic <blackbird@webbird.de>
-     */
-	function getTemplateContents()
-	{
-		foreach ($this->outputs as $val) {
-			$output .= str_replace("\n\n", "\n", $val);
-		}
-		return $output;
-	}
+    }
 
     /**
      * This function adds two template outputs.
@@ -149,26 +128,26 @@ class PMF_Template
      * @access  public
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-	function addTemplate($name, $toname)
+    function addTemplate($name, $toname)
     {
-		$this->outputs[$toname] .= $this->outputs[$name];
-		$this->outputs[$name] = '';
-	}
+        $this->outputs[$toname] .= $this->outputs[$name];
+        $this->outputs[$name] = '';
+    }
 
     /**
      * This function reads a template file.
      *
      * @param   string $filename
      * @return  string
-     * @access  private
+     * @access  public
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-	function readTemplate($filename)
+    public function readTemplate($filename)
     {
         if (file_exists($filename)) {
             return file_get_contents($filename);
         } else {
-             return '<p><span style="color: red;">Error:</span> Cannot open the file '.$filename.'.</p>';
+            return '<p><span style="color: red;">Error:</span> Cannot open the file '.$filename.'.</p>';
         }
-	}
+    }
 }
