@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Export.php,v 1.10 2007-04-29 17:07:36 thorstenr Exp $
+ * $Id: Export.php,v 1.11 2007-08-20 19:21:32 thorstenr Exp $
  *
  * XML, XML DocBook, XHTML and PDF export - Classes and Functions
  *
@@ -20,46 +20,21 @@
  * under the License.
  */
 
-// {{{ Includes
-/**
- * Needed for accessing to $PMF_CONST
- */
-require_once(PMF_INCLUDE_DIR.'/constants.php');
-/**
- * Needed for managing faq categories
- */
-require_once(PMF_INCLUDE_DIR.'/Category.php');
-/**
- * Faq class
- */
-require_once(PMF_INCLUDE_DIR.'/Faq.php');
-/**
- * Needed for managing the http streaming
- */
-require_once(PMF_INCLUDE_DIR.'/HttpStreamer.php');
-/**
- * Needed for managing docbook
- */
-require_once(PMF_INCLUDE_DIR.'/PMF_Export/Docbook.php');
-/**
- * Needed for managing pdf
- */
-require_once(PMF_INCLUDE_DIR.'/PMF_Export/Pdf.php');
-// }}}
+require_once PMF_INCLUDE_DIR.'/constants.php';
+require_once PMF_INCLUDE_DIR.'/Category.php';
+require_once PMF_INCLUDE_DIR.'/Faq.php';
+require_once PMF_INCLUDE_DIR.'/HttpStreamer.php';
+require_once PMF_INCLUDE_DIR.'/PMF_Export/Docbook.php';
+require_once PMF_INCLUDE_DIR.'/PMF_Export/Pdf.php';
 
-// {{{ Constants
-/**#@+
-  * Export type definitions
-  */
+
 define("EXPORT_TYPE_DOCBOOK", "docbook");
 define("EXPORT_TYPE_PDF", "pdf");
 define("EXPORT_TYPE_XHTML", "xhtml");
 define("EXPORT_TYPE_XML", "xml");
 define("EXPORT_TYPE_NONE", "none");
-/**#@-*/
-// }}}
 
-// {{{ Classes
+
 /**
  * PMF_Export Class
  *
@@ -82,7 +57,7 @@ class PMF_Export
         return date("Y-m-d-H-i-s", $timestamp);
     }
 
-    function getDocBookExport($nCatid = 0, $bDownwards = true, $lang = "")
+    public static function getDocBookExport($nCatid = 0, $bDownwards = true, $lang = "")
     {
         global $DB;
 
@@ -94,7 +69,7 @@ class PMF_Export
         return(PMF_Export::_getFileContents($filename));
     }
 
-    function getPDFExport($nCatid = 0, $bDownwards = true, $lang = "")
+    public static function getPDFExport($nCatid = 0, $bDownwards = true, $lang = "")
     {
         global $db, $LANGCODE;
 
@@ -145,7 +120,7 @@ class PMF_Export
         }
     }
 
-    function getXHTMLExport($nCatid = 0, $bDownwards = true, $lang = "")
+    public static function getXHTMLExport($nCatid = 0, $bDownwards = true, $lang = "")
     {
         global $db, $LANGCODE;
 
@@ -203,7 +178,7 @@ class PMF_Export
         return $xhtml;
     }
 
-    function getXMLExport($nCatid = 0, $bDownwards = true, $lang = "")
+    public static function getXMLExport($nCatid = 0, $bDownwards = true, $lang = "")
     {
         global $db, $LANGCODE, $PMF_LANG, $PMF_CONF;
 
@@ -256,7 +231,7 @@ class PMF_Export
         return $my_xml_output;
     }
 
-    function _generateDocBookExport2()
+    private static function _generateDocBookExport2()
     {
         // TODO: check/refine/improve/fix docbook.php and add toString method before recoding the method in order to use faq and news classes.
 
@@ -323,7 +298,7 @@ class PMF_Export
         $export->write_file();
     }
 
-    function _getFileContents($filename)
+    private static function _getFileContents($filename)
     {
         $filedata = "";
 
@@ -347,4 +322,3 @@ class PMF_Export
         return $filedata;
     }
 }
-// }}}
