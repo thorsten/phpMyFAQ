@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Auth.php,v 1.13 2007-08-19 21:06:31 johannes Exp $
+* $Id: Auth.php,v 1.14 2007-08-21 20:16:36 thorstenr Exp $
 *
 * manages user authentication.
 *
@@ -22,10 +22,10 @@
 * selectDb(dbtype) may be called which returns a valid database-specific
 * object. See documentation of the static method selectDb for further details.
 *
-* @author       Lars Tiedemann <php@larstiedemann.de>
-* @package      PMF
-* @since        2005-09-30
-* @copyright    (c) 2005-2006 phpMyFAQ Team
+* @author    Lars Tiedemann <php@larstiedemann.de>
+* @package   PMF
+* @since     2005-09-30
+* @copyright (c) 2005-2007 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -48,10 +48,8 @@
 * @author       Lars Tiedemann <php@larstiedemann.de>
 * @since        2005-09-18
 */
-require_once(dirname(__FILE__).'/Enc.php');
 
-/* user defined constants */
-define('PMF_USERERROR_NO_AUTHTYPE', 'Specified authentication access class could not be found. ');
+require_once dirname(__FILE__).'/Enc.php';
 
 /**
 * manages user authentication.
@@ -82,97 +80,85 @@ define('PMF_USERERROR_NO_AUTHTYPE', 'Specified authentication access class could
 class PMF_Auth
 {
     /**
-    * private container that stores the encryption object.
-    *
-    * @access private
-    * @var object
-    */
-    var $_enc_container = null;
+     * Error constants
+     *
+     * @var const
+     */
+    const PMF_USERERROR_NO_AUTHTYPE = 'Specified authentication access class could not be found. ';
 
     /**
-    * public array that contains error messages.
-    *
-    * @access public
-    * @var array
-    */
-    var $errors = array();
+     * private container that stores the encryption object.
+     *
+     * @var object
+     */
+    private $_enc_container = null;
 
     /**
-    * authentication access methods
-    *
-    * @access private
-    * @var array
-    */
-    var $_auth_typemap = array('db' => 'AuthDb');
+     * public array that contains error messages.
+     *
+     * @var array
+     */
+    public $errors = array();
 
     /**
-    * Short description of attribute read_only
-    *
-    * @access private
-    * @var bool
-    */
-    var $_read_only = false;
-
-
+     * authentication access methods
+     *
+     * @var array
+     */
+    private $_auth_typemap = array(
+        'db'   => 'AuthDb',
+        'ldap' => 'AuthLdap');
 
     /**
-    * constructor
-    *
-    * @access   public
-    * @author   Lars Tiedemann, <php@larstiedemann.de>
-    * @return   void
-    */
-    function PMF_Auth()
+     * Short description of attribute read_only
+     *
+     * @var bool
+     */
+    private $_read_only = false;
+
+    /**
+     * constructor
+     *
+     * @access   public
+     * @return   void
+     * @author   Lars Tiedemann, <php@larstiedemann.de>
+     */
+    function __construct()
     {
     }
 
     /**
-    * destructor
-    *
-    * @access   public
-    * @author   Lars Tiedemann, <php@larstiedemann.de>
-    * @return   void
-    */
-    function __destruct()
-    {
-    }
-
-    /**
-    * selectEncType()
-    *
-    * instantiates a new encryption object, stores it in a private container
-    * returns it.
-    *
-    * This method instantiates a new Enc object by calling the static
-    * method. The specified encryption method enctype is passed to
-    * The result is stored in the private container variable _enc_container and
-    *
-    * @access   public
-    * @author   Lars Tiedemann, <php@larstiedemann.de>
-    * @param    string
-    * @return   object
-    */
-    function selectEncType($enctype)
+     * instantiates a new encryption object, stores it in a private container
+     * returns it.
+     *
+     * This method instantiates a new Enc object by calling the static
+     * method. The specified encryption method enctype is passed to
+     * The result is stored in the private container variable _enc_container and
+     *
+     * @param  string $enctype encryption type
+     * @return object
+     * @access public
+     * @author Lars Tiedemann, <php@larstiedemann.de>
+     */
+    public function selectEncType($enctype)
     {
         $this->_enc_container = PMF_Enc::selectEnc($enctype);
         return $this->_enc_container;
     }
 
     /**
-    * error()
-    *
-    * Returns a string with error messages.
-    *
-    * The string returned by error() contains messages for all errors that
-    * during object procesing. Messages are separated by new lines.
-    *
-    * Error messages are stored in the public array errors.
-    *
-    * @access   public
-    * @author   Lars Tiedemann, <php@larstiedemann.de>
-    * @return   string
-    */
-    function error()
+     * Returns a string with error messages.
+     *
+     * The string returned by error() contains messages for all errors that
+     * during object procesing. Messages are separated by new lines.
+     *
+     * Error messages are stored in the public array errors.
+     *
+     * @return   string
+     * @access   public
+     * @author   Lars Tiedemann, <php@larstiedemann.de>
+     */
+    public function error()
     {
         $message = '';
         if (!is_array($this->errors)) {
@@ -186,23 +172,21 @@ class PMF_Auth
     }
 
     /**
-    * selectAuth()
-    *
-    * Returns an authentication object with the specified database access.
-    *
-    * This method is called statically. The parameter database specifies the
-    * of database access for the authentication object.
-    *
-    * If the given database-type is not supported, selectAuth() will return an
-    * object without database access and with an error message. See the
-    * of the error() method for further details.
-    *
-    * @access   public
-    * @author   Lars Tiedemann, <php@larstiedemann.de>
-    * @param    string
-    * @return   object
-    */
-    static function selectAuth($database)
+     * Returns an authentication object with the specified database access.
+     *
+     * This method is called statically. The parameter database specifies the
+     * of database access for the authentication object.
+     *
+     * If the given database-type is not supported, selectAuth() will return an
+     * object without database access and with an error message. See the
+     * of the error() method for further details.
+     *
+     * @param    string
+     * @return   object
+     * @access   public
+     * @author   Lars Tiedemann, <php@larstiedemann.de>
+     */
+    public static function selectAuth($database)
     {
         // verify selected database
         $auth = new PMF_Auth();
@@ -224,16 +208,14 @@ class PMF_Auth
     }
 
     /**
-    * read_only()
-    *
-    * Short description of method read_only
-    *
-    * @access   public
-    * @author   Lars Tiedemann, <php@larstiedemann.de>
-    * @param    bool
-    * @return   bool
-    */
-    function read_only($read_only = null)
+     * Short description of method read_only
+     *
+     * @param  bool $read_only boolean flag
+     * @return bool
+     * @access public
+     * @author Lars Tiedemann, <php@larstiedemann.de>
+     */
+    public function read_only($read_only = null)
     {
         if ($read_only === null) {
             return $this->_read_only;
@@ -244,18 +226,15 @@ class PMF_Auth
     }
 
     /**
-    * encrypt()
-    *
-    * Short description of method encrypt
-    *
-    * @access   public
-    * @author   Lars Tiedemann, <php@larstiedemann.de>
-    * @param    string
-    * @return   string
-    */
+     * Short description of method encrypt
+     *
+     * @param  string $str string
+     * @return string
+     * @access public
+     * @author Lars Tiedemann, <php@larstiedemann.de>
+     */
     function encrypt($str)
     {
         return $this->_enc_container->encrypt($str);
     }
-
-} // end of class PMF_Auth
+}
