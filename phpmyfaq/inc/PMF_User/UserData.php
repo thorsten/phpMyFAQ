@@ -15,33 +15,41 @@
 
 class PMF_UserData
 {
-    // --- ATTRIBUTES ---
-
     /**
      * database object
      *
-     * @access private
-     * @var object
+     * @var PMF_DB
      */
-    var $_db = null;
+    private $_db = null;
 
     /**
      * associative array containing user data
      *
-     * @access private
      * @var array
      */
-    var $_data = array();
+    private $_data = array();
 
     /**
-     * user-ID
+     * User-ID
      *
-     * @access private
      * @var int
      */
-    var $_user_id = 0;
+    private $_user_id = 0;
 
     // --- OPERATIONS ---
+
+    /**
+     * Constructor. Expects a database object $db.
+     *
+     * @param  PMF_DB $db PMF_DB
+     * @return void
+     * @access public
+     * @author Lars Tiedemann, <php@larstiedemann.de>
+     */
+    function PMF_UserData($db)
+    {
+        $this->_db = $db;
+    }
 
     /**
      * Returns the field $field of the user data. If $field is an
@@ -68,7 +76,7 @@ class PMF_UserData
             SELECT
                 ".$fields."
             FROM
-                ".PMF_USER_SQLPREFIX."userdata
+                ".SQLPREFIX."faquserdata
             WHERE
                 user_id = ".$this->_user_id;
         $res = $this->_db->query($query);
@@ -110,19 +118,6 @@ class PMF_UserData
     }
 
     /**
-     * Constructor. Expects a database object $db.
-     *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param object
-     * @return void
-     */
-    function PMF_UserData(&$db)
-    {
-        $this->_db = &$db;
-    }
-
-    /**
      * destructor.
      *
      * @access public
@@ -154,7 +149,7 @@ class PMF_UserData
           SELECT
             last_modified, display_name, email
           FROM
-            ".PMF_USER_SQLPREFIX."userdata
+            ".SQLPREFIX."faquserdata
           WHERE
             user_id = ".$this->_user_id
         );
@@ -177,14 +172,14 @@ class PMF_UserData
         // update data
         $query = sprintf(
                     "UPDATE
-                        %suserdata
+                        %sfaquserdata
                     SET
                         last_modified = '%s',
                         display_name  = '%s',
                         email         = '%s'
                     WHERE
                         user_id = %d",
-                    PMF_USER_SQLPREFIX,
+                    SQLPREFIX,
                     date('YmdHis', time()),
                     $this->_data['display_name'],
                     $this->_data['email'],
@@ -217,11 +212,11 @@ class PMF_UserData
         // add entry
         $query = sprintf(
                     "INSERT INTO
-                        %suserdata
+                        %sfaquserdata
                     (user_id, last_modified)
                     VALUES
                         (%d, '%s')",
-                    PMF_USER_SQLPREFIX,
+                    SQLPREFIX,
                     $this->_user_id,
                     date('YmdHis', time())
                     );
@@ -252,7 +247,7 @@ class PMF_UserData
         // delete entry
         $res = $this->_db->query("
           DELETE FROM
-            ".PMF_USER_SQLPREFIX."userdata
+            ".SQLPREFIX."faquserdata
           WHERE
             user_id = ".$this->_user_id
         );
