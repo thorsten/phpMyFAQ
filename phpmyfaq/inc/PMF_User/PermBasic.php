@@ -91,16 +91,16 @@ class PMF_PermBasic
         // check right
         $res = $this->_db->query("
             SELECT
-                ".PMF_USER_SQLPREFIX."right.right_id AS right_id
+                ".SQLPREFIX."faqright.right_id AS right_id
             FROM
-                ".PMF_USER_SQLPREFIX."right,
-                ".PMF_USER_SQLPREFIX."user_right,
-                ".PMF_USER_SQLPREFIX."user
+                ".SQLPREFIX."faqright,
+                ".SQLPREFIX."faquser_right,
+                ".SQLPREFIX."faquser
             WHERE
-                ".PMF_USER_SQLPREFIX."right.right_id = ".$right_id." AND
-                ".PMF_USER_SQLPREFIX."right.right_id = ".PMF_USER_SQLPREFIX."user_right.right_id AND
-                ".PMF_USER_SQLPREFIX."user.user_id   = ".$user_id." AND
-                ".PMF_USER_SQLPREFIX."user.user_id   = ".PMF_USER_SQLPREFIX."user_right.user_id
+                ".SQLPREFIX."faqright.right_id = ".$right_id." AND
+                ".SQLPREFIX."faqright.right_id = ".SQLPREFIX."faquser_right.right_id AND
+                ".SQLPREFIX."faquser.user_id   = ".$user_id." AND
+                ".SQLPREFIX."faquser.user_id   = ".SQLPREFIX."faquser_right.user_id
         ");
         // return result
         if ($this->_db->num_rows($res) == 1)
@@ -127,15 +127,15 @@ class PMF_PermBasic
         // get user rights
         $res = $this->_db->query("
             SELECT
-                ".PMF_USER_SQLPREFIX."right.right_id AS right_id
+                ".SQLPREFIX."faqright.right_id AS right_id
             FROM
-                ".PMF_USER_SQLPREFIX."right,
-                ".PMF_USER_SQLPREFIX."user_right,
-                ".PMF_USER_SQLPREFIX."user
+                ".SQLPREFIX."faqright,
+                ".SQLPREFIX."faquser_right,
+                ".SQLPREFIX."faquser
             WHERE
-                ".PMF_USER_SQLPREFIX."right.right_id = ".PMF_USER_SQLPREFIX."user_right.right_id AND
-                ".PMF_USER_SQLPREFIX."user.user_id   = ".$user_id." AND
-                ".PMF_USER_SQLPREFIX."user.user_id   = ".PMF_USER_SQLPREFIX."user_right.user_id
+                ".SQLPREFIX."faqright.right_id = ".SQLPREFIX."faquser_right.right_id AND
+                ".SQLPREFIX."faquser.user_id   = ".$user_id." AND
+                ".SQLPREFIX."faquser.user_id   = ".SQLPREFIX."faquser_right.user_id
         ");
         // return result
         $result = array();
@@ -194,7 +194,7 @@ class PMF_PermBasic
         // grant user right
         $res = $this->_db->query("
             INSERT INTO
-                ".PMF_USER_SQLPREFIX."user_right
+                ".SQLPREFIX."faquser_right
             (user_id, right_id)
                 VALUES
             (".$user_id.", ".$right_id.")"
@@ -222,7 +222,7 @@ class PMF_PermBasic
             return false;
         $res = $this->_db->query("
             DELETE FROM
-                ".PMF_USER_SQLPREFIX."user_right
+                ".SQLPREFIX."faquser_right
             WHERE
                 user_id  = ".$user_id." AND
                 right_id = ".$right_id
@@ -280,7 +280,7 @@ class PMF_PermBasic
                 for_users,
                 for_groups
             FROM
-                ".PMF_USER_SQLPREFIX."right
+                ".SQLPREFIX."faqright
             WHERE
                 right_id = ".$right_id
         );
@@ -333,13 +333,13 @@ class PMF_PermBasic
         if ($this->getRightId($right_data['name']) > 0)
             return 0;
         // get next id
-        $next_id = $this->_db->nextID(PMF_USER_SQLPREFIX."right", "right_id");
+        $next_id = $this->_db->nextID(SQLPREFIX."faqright", "right_id");
         // check right data input
         $right_data = $this->checkRightData($right_data);
         // insert right
         $res = $this->_db->query("
             INSERT INTO
-                ".PMF_USER_SQLPREFIX."right
+                ".SQLPREFIX."faqright
             (right_id, name, description, for_users, for_groups)
                 VALUES
             (".$next_id.", '".$right_data['name']."', '".$right_data['description']."', ".$this->bool_to_int($right_data['for_users']).", ".$this->bool_to_int($right_data['for_groups']).")"
@@ -350,7 +350,7 @@ class PMF_PermBasic
         if (count($context_data) > 0) {
             $res = $this->_db->query("
                 INSERT INTO
-                    ".PMF_USER_SQLPREFIX."rightcontext
+                    ".SQLPREFIX."faqrightcontext
                 (right_id, context, context_id)
                   VALUES
                 (".$next_id.", '".$context_data['context']."', ".$context_data['context_id'].")"
@@ -390,7 +390,7 @@ class PMF_PermBasic
         // update right
         $res = $this->_db->query("
             UPDATE
-                ".PMF_USER_SQLPREFIX."right
+                ".SQLPREFIX."faqright
             SET
                 ".$set."
             WHERE
@@ -402,7 +402,7 @@ class PMF_PermBasic
         if (count($context_data) > 0) {
             $res = $this->_db->query("
                 UPDATE
-                    ".PMF_USER_SQLPREFIX."rightcontext
+                    ".SQLPREFIX."faqrightcontext
                 SET
                     context    = '".$context_data['context']."',
                     context_id = ".$context_data['context_id']."
@@ -433,7 +433,7 @@ class PMF_PermBasic
         // delete right
         $res = $this->_db->query("
             DELETE FROM
-                ".PMF_USER_SQLPREFIX."right
+                ".SQLPREFIX."faqright
             WHERE
                 right_id = ".$right_id."
         ");
@@ -442,7 +442,7 @@ class PMF_PermBasic
         // delete user-right links
         $res = $this->_db->query("
             DELETE FROM
-                ".PMF_USER_SQLPREFIX."user_right
+                ".SQLPREFIX."faquser_right
             WHERE
                 right_id = ".$right_id."
         ");
@@ -451,7 +451,7 @@ class PMF_PermBasic
         // delete group-right links
         $res = $this->_db->query("
             DELETE FROM
-                ".PMF_USER_SQLPREFIX."group_right
+                ".SQLPREFIX."faqgroup_right
             WHERE
                 right_id = ".$right_id."
         ");
@@ -460,7 +460,7 @@ class PMF_PermBasic
         // delete right context
         $res = $this->_db->query("
             DELETE FROM
-                ".PMF_USER_SQLPREFIX."rightcontext
+                ".SQLPREFIX."faqrightcontext
             WHERE
                 right_id = ".$right_id."
         ");
@@ -488,7 +488,7 @@ class PMF_PermBasic
             SELECT
                 right_id
             FROM
-                ".PMF_USER_SQLPREFIX."right
+                ".SQLPREFIX."faqright
             WHERE
                 name = '".$name."'
         ");
@@ -514,13 +514,13 @@ class PMF_PermBasic
         if (!$this->_initialized) {
             return false;
         }
-        
+
         $query = sprintf(
                     "SELECT
                         right_id
                     FROM
-                        %sright",
-                    PMF_USER_SQLPREFIX
+                        %sfaqright",
+                    SQLPREFIX
                     );
         $res = $this->_db->query($query);
 
@@ -551,7 +551,7 @@ class PMF_PermBasic
         if (!$this->_initialized) {
             return false;
         }
-        
+
         $query = sprintf(
                     "SELECT
                         right_id,
@@ -560,10 +560,10 @@ class PMF_PermBasic
                         for_users,
                         for_groups
                     FROM
-                        %sright
+                        %sfaqright
                     ORDER BY
                         %s",
-                    PMF_USER_SQLPREFIX,
+                    SQLPREFIX,
                     $order
                     );
         $res = $this->_db->query($query);
@@ -623,7 +623,7 @@ class PMF_PermBasic
             return false;
         $res = $this->_db->query("
             DELETE FROM
-                ".PMF_USER_SQLPREFIX."user_right
+                ".SQLPREFIX."faquser_right
             WHERE
                 user_id  = ".$user_id
         );

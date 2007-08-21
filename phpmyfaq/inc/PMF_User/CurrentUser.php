@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: CurrentUser.php,v 1.26 2007-08-18 21:01:25 thorstenr Exp $
+ * $Id: CurrentUser.php,v 1.27 2007-08-21 19:52:45 thorstenr Exp $
  *
  * manages authentication process using php sessions.
  *
@@ -152,7 +152,7 @@ class PMF_CurrentUser extends PMF_User
             // remember the auth container for administration
             $res = $this->_db->query("
                 UPDATE
-                    ".PMF_USER_SQLPREFIX."user
+                    ".SQLPREFIX."faquser
                 SET
                     auth_source = '".$name."'
                 WHERE
@@ -268,7 +268,7 @@ class PMF_CurrentUser extends PMF_User
                 session_timestamp,
                 ip
             FROM
-                ".PMF_USER_SQLPREFIX."user
+                ".SQLPREFIX."faquser
             WHERE
                 user_id = ".$this->getUserId()
         );
@@ -310,7 +310,7 @@ class PMF_CurrentUser extends PMF_User
         // save session information in user table
         $query = sprintf(
                     "UPDATE
-                        %suser
+                        %sfaquser
                     SET
                         session_id          = '%s',
                         session_timestamp   = %d,
@@ -318,7 +318,7 @@ class PMF_CurrentUser extends PMF_User
                         ip                  = '%s'
                     WHERE
                         user_id = %d",
-                    PMF_USER_SQLPREFIX,
+                    SQLPREFIX,
                     session_id(),
                     $now,
                     $updateLastlogin ?  "last_login = '".date('YmdHis', $now)."'," : '',
@@ -370,7 +370,7 @@ class PMF_CurrentUser extends PMF_User
         // delete session-ID
         $res = $this->_db->query("
             UPDATE
-                ".PMF_USER_SQLPREFIX."user
+                ".SQLPREFIX."faquser
             SET
                 session_id = null
             WHERE

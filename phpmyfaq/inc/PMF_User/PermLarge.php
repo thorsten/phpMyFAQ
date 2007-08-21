@@ -88,14 +88,14 @@ class PMF_PermLarge
         // get right id
         $res = $this->_db->query("
             SELECT
-                ".PMF_USER_SQLPREFIX."right.right_id AS right_id
+                ".SQLPREFIX."faqright.right_id AS right_id
             FROM
-                ".PMF_USER_SQLPREFIX."right,
-                ".PMF_USER_SQLPREFIX."rightcontext
-            WHERE 
-                ".PMF_USER_SQLPREFIX."right.name              = '".$name."' AND
-                ".PMF_USER_SQLPREFIX."rightcontext.context    = '".$this->_context."' AND
-                ".PMF_USER_SQLPREFIX."rightcontext.context_id = ".$this->_context_id
+                ".SQLPREFIX."faqright,
+                ".SQLPREFIX."faqrightcontext
+            WHERE
+                ".SQLPREFIX."faqright.name              = '".$name."' AND
+                ".SQLPREFIX."faqrightcontext.context    = '".$this->_context."' AND
+                ".SQLPREFIX."faqrightcontext.context_id = ".$this->_context_id
         );
         // return result
         if ($this->_db->num_rows($res) != 1)

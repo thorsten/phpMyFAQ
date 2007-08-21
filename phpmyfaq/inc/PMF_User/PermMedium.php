@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: PermMedium.php,v 1.27 2007-08-12 18:47:12 thorstenr Exp $
+ * $Id: PermMedium.php,v 1.28 2007-08-21 19:56:18 thorstenr Exp $
  *
  * The medium permission class provides group rights.
  *
@@ -76,16 +76,16 @@ class PMF_PermMedium
         // check right
         $res = $this->_db->query("
             SELECT
-                ".PMF_USER_SQLPREFIX."right.right_id AS right_id
+                ".SQLPREFIX."faqright.right_id AS right_id
             FROM
-                ".PMF_USER_SQLPREFIX."right,
-                ".PMF_USER_SQLPREFIX."group_right,
-                ".PMF_USER_SQLPREFIX."group
+                ".SQLPREFIX."faqright,
+                ".SQLPREFIX."faqgroup_right,
+                ".SQLPREFIX."faqgroup
             WHERE
-                ".PMF_USER_SQLPREFIX."right.right_id = ".$right_id." AND
-                ".PMF_USER_SQLPREFIX."right.right_id = ".PMF_USER_SQLPREFIX."group_right.right_id AND
-                ".PMF_USER_SQLPREFIX."group.group_id = ".PMF_USER_SQLPREFIX."group_right.group_id AND
-                ".PMF_USER_SQLPREFIX."group.group_id = '".$group_id."'
+                ".SQLPREFIX."faqright.right_id = ".$right_id." AND
+                ".SQLPREFIX."faqright.right_id = ".SQLPREFIX."faqgroup_right.right_id AND
+                ".SQLPREFIX."faqgroup.group_id = ".SQLPREFIX."faqgroup_right.group_id AND
+                ".SQLPREFIX."faqgroup.group_id = '".$group_id."'
         ");
         // return result
         if ($this->_db->num_rows($res) == 1)
@@ -113,15 +113,15 @@ class PMF_PermMedium
         // check right
         $res = $this->_db->query("
             SELECT
-                ".PMF_USER_SQLPREFIX."right.right_id AS right_id
+                ".SQLPREFIX."faqright.right_id AS right_id
             FROM
-                ".PMF_USER_SQLPREFIX."right,
-                ".PMF_USER_SQLPREFIX."group_right,
-                ".PMF_USER_SQLPREFIX."group
+                ".SQLPREFIX."faqright,
+                ".SQLPREFIX."faqgroup_right,
+                ".SQLPREFIX."faqgroup
             WHERE
-                ".PMF_USER_SQLPREFIX."group.group_id = '".$group_id."' AND
-                ".PMF_USER_SQLPREFIX."group.group_id = ".PMF_USER_SQLPREFIX."group_right.group_id AND
-                ".PMF_USER_SQLPREFIX."right.right_id = ".PMF_USER_SQLPREFIX."group_right.right_id
+                ".SQLPREFIX."faqgroup.group_id = '".$group_id."' AND
+                ".SQLPREFIX."faqgroup.group_id = ".SQLPREFIX."faqgroup_right.group_id AND
+                ".SQLPREFIX."faqright.right_id = ".SQLPREFIX."faqgroup_right.right_id
         ");
         // return result
         $result = array();
@@ -183,7 +183,7 @@ class PMF_PermMedium
         // grant right
         $res = $this->_db->query("
             INSERT INTO
-                ".PMF_USER_SQLPREFIX."group_right
+                ".SQLPREFIX."faqgroup_right
             (group_id, right_id)
                 VALUES
             (".$group_id.", ".$right_id.")"
@@ -215,7 +215,7 @@ class PMF_PermMedium
         // grant right
         $res = $this->_db->query("
             DELETE FROM
-                ".PMF_USER_SQLPREFIX."group_right
+                ".SQLPREFIX."faqgroup_right
             WHERE
                 group_id = ".$group_id." AND
                 right_id = ".$right_id
@@ -245,17 +245,17 @@ class PMF_PermMedium
         if ($this->getGroupId($group_data['name']) > 0)
             return 0;
         // get next id
-        $next_id = $this->_db->nextID(PMF_USER_SQLPREFIX."group", "group_id");
+        $next_id = $this->_db->nextID(SQLPREFIX."faqgroup", "group_id");
         // check group data input
         $group_data = $this->checkGroupData($group_data);
         // insert group
         $query = sprintf("
             INSERT INTO
-                %sgroup
+                %sfaqgroup
             (group_id, name, description, auto_join)
                 VALUES
             (%d, '%s', '%s', '%s')",
-            PMF_USER_SQLPREFIX,
+            SQLPREFIX,
             $next_id,
             $group_data['name'],
             $group_data['description'],
@@ -295,7 +295,7 @@ class PMF_PermMedium
         // update group
         $res = $this->_db->query("
             UPDATE
-                ".PMF_USER_SQLPREFIX."group
+                ".SQLPREFIX."faqgroup
             SET
                 ".$set."
             WHERE
@@ -327,7 +327,7 @@ class PMF_PermMedium
         // delete group
         $res = $this->_db->query("
             DELETE FROM
-                ".PMF_USER_SQLPREFIX."group
+                ".SQLPREFIX."faqgroup
             WHERE
                 group_id = ".$group_id
         );
@@ -336,7 +336,7 @@ class PMF_PermMedium
         // delete group-user links
         $res = $this->_db->query("
             DELETE FROM
-                ".PMF_USER_SQLPREFIX."user_group
+                ".SQLPREFIX."faquser_group
             WHERE
                 group_id = ".$group_id
         );
@@ -345,7 +345,7 @@ class PMF_PermMedium
         // delete group-right links
         $res = $this->_db->query("
             DELETE FROM
-                ".PMF_USER_SQLPREFIX."group_right
+                ".SQLPREFIX."faqgroup_right
             WHERE
                 group_id = ".$group_id."
 
@@ -375,16 +375,16 @@ class PMF_PermMedium
             return false;
         $res = $this->_db->query("
             SELECT
-                ".PMF_USER_SQLPREFIX."user.user_id AS user_id
+                ".SQLPREFIX."faquser.user_id AS user_id
             FROM
-                ".PMF_USER_SQLPREFIX."user,
-                ".PMF_USER_SQLPREFIX."user_group,
-                ".PMF_USER_SQLPREFIX."group
+                ".SQLPREFIX."faquser,
+                ".SQLPREFIX."faquser_group,
+                ".SQLPREFIX."faqgroup
             WHERE
-                ".PMF_USER_SQLPREFIX."user.user_id   = ".$user_id." AND
-                ".PMF_USER_SQLPREFIX."user.user_id   = ".PMF_USER_SQLPREFIX."user_group.user_id AND
-                ".PMF_USER_SQLPREFIX."group.group_id = ".PMF_USER_SQLPREFIX."user_group.group_id AND
-                ".PMF_USER_SQLPREFIX."group.group_id = ".$group_id
+                ".SQLPREFIX."faquser.user_id   = ".$user_id." AND
+                ".SQLPREFIX."faquser.user_id   = ".SQLPREFIX."faquser_group.user_id AND
+                ".SQLPREFIX."faqgroup.group_id = ".SQLPREFIX."faquser_group.group_id AND
+                ".SQLPREFIX."faqgroup.group_id = ".$group_id
         );
         if ($this->_db->num_rows($res) == 1)
             return true;
@@ -410,15 +410,15 @@ class PMF_PermMedium
             return false;
         $res = $this->_db->query("
             SELECT
-                ".PMF_USER_SQLPREFIX."user.user_id AS user_id
+                ".SQLPREFIX."faquser.user_id AS user_id
             FROM
-                ".PMF_USER_SQLPREFIX."user,
-                ".PMF_USER_SQLPREFIX."user_group,
-                ".PMF_USER_SQLPREFIX."group
+                ".SQLPREFIX."faquser,
+                ".SQLPREFIX."faquser_group,
+                ".SQLPREFIX."faqgroup
             WHERE
-                ".PMF_USER_SQLPREFIX."group.group_id = ".$group_id." AND
-                ".PMF_USER_SQLPREFIX."group.group_id = ".PMF_USER_SQLPREFIX."user_group.group_id AND
-                ".PMF_USER_SQLPREFIX."user.user_id   = ".PMF_USER_SQLPREFIX."user_group.user_id
+                ".SQLPREFIX."faqgroup.group_id = ".$group_id." AND
+                ".SQLPREFIX."faqgroup.group_id = ".SQLPREFIX."faquser_group.group_id AND
+                ".SQLPREFIX."faquser.user_id   = ".SQLPREFIX."faquser_group.user_id
         ");
         $result = array();
         while ($row = $this->_db->fetch_assoc($res)) {
@@ -451,7 +451,7 @@ class PMF_PermMedium
         // add user to group
         $res = $this->_db->query("
             INSERT INTO
-                ".PMF_USER_SQLPREFIX."user_group
+                ".SQLPREFIX."faquser_group
             (user_id, group_id)
                VALUES
             (".$user_id.", ".$group_id.")"
@@ -484,7 +484,7 @@ class PMF_PermMedium
         // remove user from group
         $res = $this->_db->query("
             DELETE FROM
-                ".PMF_USER_SQLPREFIX."user_group
+                ".SQLPREFIX."faquser_group
             WHERE
                 user_id  = ".$user_id." AND
                 group_id = ".$group_id
@@ -515,7 +515,7 @@ class PMF_PermMedium
             SELECT
                 group_id
             FROM
-                ".PMF_USER_SQLPREFIX."group
+                ".SQLPREFIX."faqgroup
             WHERE
                 name = '".$name."'
         ");
@@ -551,7 +551,7 @@ class PMF_PermMedium
                 description,
                 auto_join
             FROM
-                ".PMF_USER_SQLPREFIX."group
+                ".SQLPREFIX."faqgroup
             WHERE
                 group_id = ".$group_id
         );
@@ -579,15 +579,15 @@ class PMF_PermMedium
         // get user groups
         $res = $this->_db->query("
             SELECT
-                ".PMF_USER_SQLPREFIX."group.group_id AS group_id
+                ".SQLPREFIX."faqgroup.group_id AS group_id
             FROM
-                ".PMF_USER_SQLPREFIX."user,
-                ".PMF_USER_SQLPREFIX."user_group,
-                ".PMF_USER_SQLPREFIX."group
+                ".SQLPREFIX."faquser,
+                ".SQLPREFIX."faquser_group,
+                ".SQLPREFIX."faqgroup
             WHERE
-                ".PMF_USER_SQLPREFIX."user.user_id   = ".$user_id." AND
-                ".PMF_USER_SQLPREFIX."user.user_id   = ".PMF_USER_SQLPREFIX."user_group.user_id AND
-                ".PMF_USER_SQLPREFIX."group.group_id = ".PMF_USER_SQLPREFIX."user_group.group_id
+                ".SQLPREFIX."faquser.user_id   = ".$user_id." AND
+                ".SQLPREFIX."faquser.user_id   = ".SQLPREFIX."faquser_group.user_id AND
+                ".SQLPREFIX."faqgroup.group_id = ".SQLPREFIX."faquser_group.group_id
         ");
         // return result
         $result = array(-1);
@@ -618,8 +618,8 @@ class PMF_PermMedium
                     "SELECT
                         group_id
                     FROM
-                        %sgroup",
-                    PMF_USER_SQLPREFIX
+                        %sfaqgroup",
+                    SQLPREFIX
                     );
         $res = $this->_db->query($query);
 
@@ -678,20 +678,20 @@ class PMF_PermMedium
         // check right
         $res = $this->_db->query("
             SELECT
-                ".PMF_USER_SQLPREFIX."right.right_id AS right_id
+                ".SQLPREFIX."faqright.right_id AS right_id
             FROM
-                ".PMF_USER_SQLPREFIX."right,
-                ".PMF_USER_SQLPREFIX."group_right,
-                ".PMF_USER_SQLPREFIX."group,
-                ".PMF_USER_SQLPREFIX."user_group,
-                ".PMF_USER_SQLPREFIX."user
+                ".SQLPREFIX."faqright,
+                ".SQLPREFIX."faqgroup_right,
+                ".SQLPREFIX."faqgroup,
+                ".SQLPREFIX."faquser_group,
+                ".SQLPREFIX."faquser
             WHERE
-                ".PMF_USER_SQLPREFIX."right.right_id = ".$right_id." AND
-                ".PMF_USER_SQLPREFIX."right.right_id = ".PMF_USER_SQLPREFIX."group_right.right_id AND
-                ".PMF_USER_SQLPREFIX."group.group_id = ".PMF_USER_SQLPREFIX."group_right.group_id AND
-                ".PMF_USER_SQLPREFIX."group.group_id = ".PMF_USER_SQLPREFIX."user_group.group_id AND
-                ".PMF_USER_SQLPREFIX."user.user_id   = ".PMF_USER_SQLPREFIX."user_group.user_id AND
-                ".PMF_USER_SQLPREFIX."user.user_id   = ".$user_id
+                ".SQLPREFIX."faqright.right_id = ".$right_id." AND
+                ".SQLPREFIX."faqright.right_id = ".SQLPREFIX."faqgroup_right.right_id AND
+                ".SQLPREFIX."faqgroup.group_id = ".SQLPREFIX."faqgroup_right.group_id AND
+                ".SQLPREFIX."faqgroup.group_id = ".SQLPREFIX."faquser_group.group_id AND
+                ".SQLPREFIX."faquser.user_id   = ".SQLPREFIX."faquser_group.user_id AND
+                ".SQLPREFIX."faquser.user_id   = ".$user_id
         );
         // return result
         if ($this->_db->num_rows($res) == 1)
@@ -775,7 +775,7 @@ class PMF_PermMedium
             SELECT
                 group_id
             FROM
-                ".PMF_USER_SQLPREFIX."group
+                ".SQLPREFIX."faqgroup
             WHERE
                 auto_join = 1
         ");
@@ -813,7 +813,7 @@ class PMF_PermMedium
         // remove user from all groups
         $res = $this->_db->query("
             DELETE FROM
-                ".PMF_USER_SQLPREFIX."user_group
+                ".SQLPREFIX."faquser_group
             WHERE
                 user_id  = ".$user_id
         );
@@ -843,19 +843,19 @@ class PMF_PermMedium
         // check right
         $res = $this->_db->query("
             SELECT
-                ".PMF_USER_SQLPREFIX."right.right_id AS right_id
+                ".SQLPREFIX."faqright.right_id AS right_id
             FROM
-                ".PMF_USER_SQLPREFIX."right,
-                ".PMF_USER_SQLPREFIX."group_right,
-                ".PMF_USER_SQLPREFIX."group,
-                ".PMF_USER_SQLPREFIX."user_group,
-                ".PMF_USER_SQLPREFIX."user
+                ".SQLPREFIX."faqright,
+                ".SQLPREFIX."faqgroup_right,
+                ".SQLPREFIX."faqgroup,
+                ".SQLPREFIX."faquser_group,
+                ".SQLPREFIX."faquser
             WHERE
-                ".PMF_USER_SQLPREFIX."user.user_id   = ".$user_id." AND
-                ".PMF_USER_SQLPREFIX."user.user_id   = ".PMF_USER_SQLPREFIX."user_group.user_id AND
-                ".PMF_USER_SQLPREFIX."group.group_id = ".PMF_USER_SQLPREFIX."user_group.group_id AND
-                ".PMF_USER_SQLPREFIX."group.group_id = ".PMF_USER_SQLPREFIX."group_right.group_id AND
-                ".PMF_USER_SQLPREFIX."right.right_id = ".PMF_USER_SQLPREFIX."group_right.right_id
+                ".SQLPREFIX."faquser.user_id   = ".$user_id." AND
+                ".SQLPREFIX."faquser.user_id   = ".SQLPREFIX."faquser_group.user_id AND
+                ".SQLPREFIX."faqgroup.group_id = ".SQLPREFIX."faquser_group.group_id AND
+                ".SQLPREFIX."faqgroup.group_id = ".SQLPREFIX."faqgroup_right.group_id AND
+                ".SQLPREFIX."faqright.right_id = ".SQLPREFIX."faqgroup_right.right_id
         ");
         // return result
         $result = array();
@@ -884,7 +884,7 @@ class PMF_PermMedium
             return false;
         $res = $this->_db->query("
             DELETE FROM
-                ".PMF_USER_SQLPREFIX."group_right
+                ".SQLPREFIX."faqgroup_right
             WHERE
                 group_id  = ".$group_id
         );
@@ -914,7 +914,7 @@ class PMF_PermMedium
             SELECT
                 name
             FROM
-                ".PMF_USER_SQLPREFIX."group
+                ".SQLPREFIX."faqgroup
             WHERE
                 group_id = ".$group_id
         );
@@ -946,7 +946,7 @@ class PMF_PermMedium
         // remove all user from group
         $res = $this->_db->query("
             DELETE FROM
-                ".PMF_USER_SQLPREFIX."user_group
+                ".SQLPREFIX."faquser_group
             WHERE
                 group_id = ".$group_id
         );
