@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: installer.php,v 1.109 2007-08-20 19:32:21 johannes Exp $
+ * $Id: installer.php,v 1.110 2007-08-21 19:45:49 thorstenr Exp $
  *
  * The main phpMyFAQ Installer
  *
@@ -25,7 +25,7 @@
  * under the License.
  */
 
-define('VERSION', '2.1.0-dev');
+define('VERSION', '2.5.0-dev');
 define('COPYRIGHT', '&copy; 2001-2007 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('SAFEMODE', @ini_get('safe_mode'));
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
@@ -301,8 +301,8 @@ function cleanInstallation()
 
 <?php
 
-if (version_compare(PHP_VERSION, '4.3.3', '<')) {
-    print "<p class=\"center\">You need PHP 4.3.3 or later!</p>\n";
+if (version_compare(PHP_VERSION, '5.2.0', '<')) {
+    print "<p class=\"center\">You need PHP 5.2.0 or later!</p>\n";
     HTMLFooter();
     die();
 }
