@@ -70,17 +70,11 @@ require_once dirname(__FILE__).'/Perm.php';
  */
 require_once dirname(__FILE__).'/UserData.php';
 
-define('SQLTABLEPREFIX', SQLPREFIX . 'faq');
-
 class PMF_User
 {
     const USERERROR_NO_DB = 'No database specified.';
     const USERERROR_NO_PERM = 'No permission container specified.';
     const USERERROR_INVALID_STATUS = 'Undefined user status.';
-
-
-
-    const PMF_USER_SQLPREFIX = SQLTABLEPREFIX;
     const USERERROR_NO_USERID = 'No user-ID found. ';
     const USERERROR_NO_USERLOGINDATA = 'No user login data found. ';
     const USERERROR_LOGIN_NOT_UNIQUE = 'Specified login name already exists. ';
@@ -260,7 +254,7 @@ class PMF_User
         $authLocal = PMF_Auth::selectAuth($this->_auth_data['authSource']['name']);
         $authLocal->selectEncType($this->_auth_data['encType']);
         $authLocal->read_only($this->_auth_data['readOnly']);
-        $authLocal->connect($this->_db, SQLPREFIX.'userlogin', 'login', 'pass');
+        $authLocal->connect($this->_db, SQLPREFIX.'faquserlogin', 'login', 'pass');
         if (!$this->addAuth($authLocal, $this->_auth_data['authSource']['type'])) {
             return false;
         }
@@ -268,7 +262,6 @@ class PMF_User
         if (count($auth) > 0) {
             foreach ($auth as $name => $auth_object) {
                 if (!$this->addAuth($auth_object, $name)) {
-                    return false;
                     break;
                 }
             }
@@ -354,10 +347,10 @@ class PMF_User
                         login,
                         account_status
                     FROM
-                        %suser
+                        %sfaquser
                     WHERE
                         user_id = %d",
-                    PMF_USER_SQLPREFIX,
+                    SQLPREFIX,
                     (int) $user_id
                     );
         $res = $this->_db->query($query);
@@ -377,10 +370,10 @@ class PMF_User
                         "SELECT
                             pass
                         FROM
-                            %suserlogin
+                            %sfaquserlogin
                         WHERE
                             login = '%s'",
-                        PMF_USER_SQLPREFIX,
+                        SQLPREFIX,
                         $this->_login
                         );
             $res = $this->_db->query($query);
@@ -421,7 +414,7 @@ class PMF_User
             login,
             account_status
           FROM
-            ".PMF_USER_SQLPREFIX."user
+            ".SQLPREFIX."faquser
           WHERE
             login = '".$this->_db->escape_string($login)."'
         ");
@@ -474,7 +467,7 @@ class PMF_User
         }
         // set user-ID
         if (0 == $user_id) {
-            $this->_user_id = (int) $this->_db->nextID(PMF_USER_SQLPREFIX.'user', 'user_id');
+            $this->_user_id = (int) $this->_db->nextID(SQLPREFIX.'faquser', 'user_id');
         } else {
             $this->_user_id = -1;
         }
@@ -482,11 +475,11 @@ class PMF_User
         $now = time();
         $query = sprintf(
                     "INSERT INTO
-                        %suser
+                        %sfaquser
                         (user_id, login, session_timestamp, member_since)
                     VALUES
                         (%d, '%s', %d, '%s')",
-                    PMF_USER_SQLPREFIX,
+                    SQLPREFIX,
                     $this->getUserId(),
                     $this->_db->escape_string($login),
                     $now,
@@ -555,7 +548,7 @@ class PMF_User
         // delete user account
         $res = $this->_db->query("
           DELETE FROM
-            ".PMF_USER_SQLPREFIX."user
+            ".SQLPREFIX."faquser
           WHERE
             user_id = ".$this->_user_id
         );
@@ -620,7 +613,7 @@ class PMF_User
         if ($pass == '')
             $pass = $this->createPassword();
         $success = false;
-        foreach ($this->_auth_container as $name => $auth) {
+        foreach ($this->_auth_container as $auth) {
             if ($auth->read_only()) {
                 continue;
             }
@@ -680,7 +673,7 @@ class PMF_User
         $this->_status = $status;
         $res = $this->_db->query("
           UPDATE
-            ".PMF_USER_SQLPREFIX."user
+            ".SQLPREFIX."faquser
           SET
             account_status = '".$status."'
           WHERE
@@ -868,11 +861,11 @@ class PMF_User
                     SELECT
                         user_id
                     FROM
-                        %suser
+                        %sfaquser
                     %s
                     ORDER BY
                         login ASC",
-                    PMF_USER_SQLPREFIX,
+                    SQLPREFIX,
                     ($withoutAnonymous ? 'WHERE user_id <> -1' : '')
                     );
 
