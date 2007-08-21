@@ -72,7 +72,7 @@ require_once dirname(__FILE__).'/UserData.php';
 
 define('SQLTABLEPREFIX', SQLPREFIX . 'faq');
 
-abstract class PMF_User
+class PMF_User
 {
     const USERERROR_NO_DB = 'No database specified.';
     const USERERROR_NO_PERM = 'No permission container specified.';
