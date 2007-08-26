@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Pdf.php,v 1.14 2007-04-09 16:57:11 thorstenr Exp $
+* $Id: Pdf.php,v 1.15 2007-08-26 09:18:20 thorstenr Exp $
 *
 * Main PDF class for phpMyFAQ based on FPDF by Olivier Plathey
 *
@@ -25,9 +25,9 @@
 */
 
 define('FPDF_FONTPATH', dirname(dirname(dirname(__FILE__))).'/font/');
-require_once(dirname(dirname(__FILE__)).'/libs/fpdf.php');
+require_once(dirname(dirname(__FILE__)).'/libs/tcpdf.php');
 
-class PDF extends FPDF
+class PDF extends TCPDF
 {
     /**
     * <b> and <strong> for bold strings
@@ -189,12 +189,12 @@ class PDF extends FPDF
     * @return   void
     * @access   private
     */
-    function PDF($rubrik = '', $thema = '', $categories = array(), $orientation = "P", $unit = "mm", $format = "A4")
+    public function __construct($rubrik = '', $thema = '', $categories = array(), $orientation = "P", $unit = "mm", $format = "A4")
     {
         $this->rubrik = $rubrik;
         $this->thema = $thema;
         $this->categories = $categories;
-        $this->FPDF($orientation, $unit, $format);
+        parent::__construct($orientation, $unit, $format);
         $this->B = 0;
         $this->I = 0;
         $this->U = 0;
@@ -296,7 +296,7 @@ class PDF extends FPDF
         $title = $this->categories[$this->rubrik]['name'].': '.$this->thema;
         $currentTextColor = $this->TextColor;
         $this->SetTextColor(0,0,0);
-        $this->SetFont("Arial", "I", 18);
+        $this->SetFont("Helvetica", "I", 18);
         $this->MultiCell(0, 9, $title, 1, 1, "C", 1);
         $this->Ln(8);
         if ($this->enableBookmarks == true) {
@@ -316,14 +316,14 @@ class PDF extends FPDF
         $currentTextColor = $this->TextColor;
         $this->SetTextColor(0,0,0);
         $this->SetY(-25);
-        $this->SetFont("Arial", "I", 10);
+        $this->SetFont("Helvetica", "I", 10);
         $this->Cell(0, 10, $PMF_LANG["ad_gen_page"]." ".$this->PageNo()."/{nb}",0,0,"C");
         $this->SetY(-20);
-        $this->SetFont("Arial", "B", 8);
+        $this->SetFont("Helvetica", "B", 8);
         $this->Cell(0, 10, "(c) ".date("Y")." ".$PMF_CONF["main.metaPublisher"]." <".$PMF_CONF['main.administrationMail'].">",0,1,"C");
         if ($this->enableBookmarks == false) {
             $this->SetY(-15);
-            $this->SetFont("Arial", "", 8);
+            $this->SetFont("Helvetica", "", 8);
             $url =PMF_Link::getSystemScheme().$_SERVER['HTTP_HOST'].str_replace('pdf.php', 'index.php?action=artikel&amp;cat='.$this->categories[$this->rubrik]['id'].'&amp;id='.(int)$_REQUEST['id'].'&amp;artlang='.$_REQUEST['lang'], $_SERVER['PHP_SELF']);
             $urlObj = new PMF_Link($url);
             $urlObj->itemTitle = $this->thema;
@@ -444,7 +444,7 @@ class PDF extends FPDF
             case "EM":      $this->SetStyle("I", false);
                             break;
             case "CODE":
-            case "PRE":     $this->SetFont("Arial", "", 12);
+            case "PRE":     $this->SetFont("Helvetica", "", 12);
                             $this->SetTextColor(0,0,0);
                             break;
             case "A":       $this->HREF = "";

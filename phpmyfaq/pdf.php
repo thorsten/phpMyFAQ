@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: pdf.php,v 1.32 2007-05-28 11:17:15 thorstenr Exp $
+ * $Id: pdf.php,v 1.33 2007-08-26 09:18:19 thorstenr Exp $
  *
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author      Peter Beauvain <pbeauvain@web.de>
@@ -69,12 +69,12 @@ $faq->getRecord($id);
 
 $pdf = new PDF($currentCategory, $faq->faqRecord['title'], $category->categoryName, $orientation = "P", $unit = "mm", $format = "A4");
 $pdf->Open();
-$pdf->SetAutoPageBreak(true, 2*(40/$pdf->k));
+//$pdf->SetAutoPageBreak(true, 2*(40/$pdf->k));
 $pdf->SetTitle($faq->faqRecord['title']);
 $pdf->SetCreator($PMF_CONF['main.titleFAQ']." - powered by phpMyFAQ ".$PMF_CONF['main.currentVersion']);
 $pdf->AliasNbPages();
 $pdf->AddPage();
-$pdf->SetFont("Arial", "", 12);
+$pdf->SetFont("Helvetica", "", 12);
 $pdf->SetDisplayMode("real");
 $pdf->WriteHTML(str_replace("../", "", $faq->faqRecord['content']));
 $pdf->Ln();
