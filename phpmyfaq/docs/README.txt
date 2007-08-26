@@ -1,6 +1,6 @@
-$Id: README.txt,v 1.93 2007-05-12 12:15:21 thorstenr Exp $
+$Id: README.txt,v 1.94 2007-08-26 09:21:00 thorstenr Exp $
 
-phpMyFAQ 2.1.0-dev
+phpMyFAQ 2.5.0-dev
 Codename "Pandora"
 
 Installation/Update:
@@ -10,14 +10,37 @@ Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.0.x:
-- 
+- Changed PHP requirement to PHP 5.2
+- Added TCPDF library to support Unicode PDFs
 
 For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.1.0-dev - 2007-
-- 
+Version 2.5.0-dev - 2007-
+- Changed PHP requirement to PHP 5.2
+- Added TCPDF library to support Unicode PDFs
+
+
+
+Version 2.0.3 - 2007-08-18
+- some permission related fixes (Thorsten)
+- some glossary related fixes (Thorsten)
+- many minor bugfixes (Thorsten)
+
+Version 2.0.2 - 2007-07-08
+- some performance improvements (Thorsten)
+- some permission related fixes (Adrianna Musiol)
+- some update fixes (Matteo)
+- updated Danish translation (Tommy Ipsen)
+- some minor bugfixes (Thorsten)
+
+Version 2.0.1 - 2007-06-01
+- fixed broken update script (Thorsten, Matteo)
+- fixed bugs with basic permission level (Thorsten, Matteo)
+- fixed PHP segfaults with Zend Optimizer extension (Thorsten, Matteo)
+- updated Japanese translation (Tadashi Jokagi)
+- many minor bugfixes (Thorsten, Matteo)
 
 Version 2.0.0 - 2007-05-22
 - added rewritten and enhanced user management (Lars)
