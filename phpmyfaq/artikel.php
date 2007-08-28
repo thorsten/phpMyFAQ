@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: artikel.php,v 1.80.2.2 2007-06-01 06:59:22 thorstenr Exp $
+ * $Id: artikel.php,v 1.80.2.3 2007-08-28 17:22:35 thorstenr Exp $
  *
  * Shows the page with the FAQ record and - when available - the user
  * comments
@@ -236,7 +236,12 @@ require_once('inc/Tags.php');
 $tagging = new PMF_Tags($db, $LANGCODE);
 
 // Build Digg it! URL
-$diggItUrl = sprintf('%s?cat=%s&id=%d&lang=%s', PMF_Link::getSystemUri(), $currentCategory, $id, $lang);
+$diggItUrl = sprintf('%s?cat=%s&amp;id=%d&amp;lang=%s&amp;title=%s',
+    PMF_Link::getSystemUri(),
+    $currentCategory,
+    $id,
+    $lang,
+    urlencode($thema));
 
 // Create commented out HTML for microsummary
 $allVisitsData = $faq->getAllVisitsData();
