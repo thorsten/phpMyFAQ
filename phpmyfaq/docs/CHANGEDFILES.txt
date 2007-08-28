@@ -4,6 +4,7 @@ CHANGED FILES FROM 2.0.3 -> 2.0.4
 ./install/update.php
 ./lang/language_fr.php
 ./lang/language_th.php
+./artikel.php
 
 
 
