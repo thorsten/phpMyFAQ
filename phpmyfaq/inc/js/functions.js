@@ -1,5 +1,5 @@
 /**
- * $Id: functions.js,v 1.4.2.3 2007-06-01 06:24:07 thorstenr Exp $
+ * $Id: functions.js,v 1.4.2.4 2007-09-02 12:25:53 thorstenr Exp $
  *
  * Some JavaScript functions used in the admin backend
  *
@@ -59,6 +59,9 @@ function focusOnSearchField()
 {
     if (document.getElementById('searchfield')) {
         document.getElementById('searchfield').focus();
+    }
+    if (document.getElementById('suchbegriff')) {
+        document.getElementById('suchbegriff').focus();
     }
 }
 
