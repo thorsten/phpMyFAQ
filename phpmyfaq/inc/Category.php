@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Category.php,v 1.51.2.1 2007-05-15 18:50:15 thorstenr Exp $
+ * $Id: Category.php,v 1.51.2.2 2007-09-07 16:41:48 thorstenr Exp $
  *
  * The main category class
  *
@@ -147,7 +147,7 @@ class PMF_Category
             $this->groups = $groups;
         }
 
-        $this->lineTab    = $this->getOrderedCategories($withperm);
+        $this->lineTab = $this->getOrderedCategories($withperm);
         for ($i = 0; $i < count($this->lineTab); $i++) {
             $this->lineTab[$i]['level'] = $this->levelOf($this->lineTab[$i]['id']);
         }
@@ -182,7 +182,7 @@ class PMF_Category
             WHERE' : '
             AND';
             $where .= "
-                lang = '".$this->language."'";
+                fc.lang = '".$this->language."'";
         }
 
         $query = sprintf("
@@ -204,9 +204,9 @@ class PMF_Category
             ON
                 fc.id = fu.category_id%s
             GROUP BY
-                id
+                fc.id, fc.lang, fc.parent_id, fc.name, fc.description, fc.user_id
             ORDER BY
-                id",
+                fc.id",
             SQLPREFIX,
             SQLPREFIX,
             SQLPREFIX,
