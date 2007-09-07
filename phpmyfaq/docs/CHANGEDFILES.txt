@@ -1,5 +1,9 @@
 CHANGED FILES FROM 2.0.3 -> 2.0.4
 
+./admin/category.main.php
+./admin/record.show.php
+./inc/Category.php
+./inc/js/functions.js
 ./install/installer.php
 ./install/update.php
 ./lang/language_fr.php
