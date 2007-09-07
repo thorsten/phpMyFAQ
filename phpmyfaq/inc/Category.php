@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Category.php,v 1.53 2007-07-15 11:09:06 thorstenr Exp $
+ * $Id: Category.php,v 1.54 2007-09-07 16:42:19 thorstenr Exp $
  *
  * The main category class
  *
@@ -182,7 +182,7 @@ class PMF_Category
             WHERE' : '
             AND';
             $where .= "
-                lang = '".$this->language."'";
+                fc.lang = '".$this->language."'";
         }
 
         $query = sprintf("
@@ -204,9 +204,9 @@ class PMF_Category
             ON
                 fc.id = fu.category_id%s
             GROUP BY
-                id
+                fc.id, fc.lang, fc.parent_id, fc.name, fc.description, fc.user_id
             ORDER BY
-                id",
+                fc.id",
             SQLPREFIX,
             SQLPREFIX,
             SQLPREFIX,
