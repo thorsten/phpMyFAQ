@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: installer.php,v 1.110 2007-08-21 19:45:49 thorstenr Exp $
+ * $Id: installer.php,v 1.111 2007-09-13 18:58:47 thorstenr Exp $
  *
  * The main phpMyFAQ Installer
  *
@@ -71,14 +71,9 @@ function db_check($supported_databases)
  */
 function phpmyfaq_check()
 {
-    if (@include(PMF_ROOT_DIR.'/inc/data.php')) {
-        include(PMF_ROOT_DIR.'/inc/data.php');
-        // check for version 1.4.x
-        if ((isset($DB["server"]) && $DB["server"] != "") || (isset($DB["user"]) && $DB["user"] != "") || (isset($DB["password"]) && $DB["password"] != "") || (isset($DB["db"]) && $DB["db"] != "") || (isset($DB["prefix"]) && $DB["prefix"] != "")) {
-            return false;
-        }
-        // check for version 1.5.x
-        if ((isset($DB["server"]) && $DB["server"] != "") || (isset($DB["user"]) && $DB["user"] != "") || (isset($DB["password"]) && $DB["password"] != "") || (isset($DB["db"]) && $DB["db"] != "") || (isset($DB["prefix"]) && $DB["prefix"] != "")  || (isset($DB["type"]) && $DB["type"] != "")) {
+    if (is_file(PMF_ROOT_DIR.'/inc/data.php')) {
+        include PMF_ROOT_DIR.'/inc/data.php';
+        if ((isset($DB["server"]) && $DB["server"] != '') || (isset($DB["user"]) && $DB["user"] != '') || (isset($DB["password"]) && $DB["password"] != '') || (isset($DB["db"]) && $DB["db"] != '') || (isset($DB["prefix"]) && $DB["prefix"] != '')  || (isset($DB["type"]) && $DB["type"] != '')) {
             return false;
         }
     }
@@ -504,7 +499,7 @@ foreach ($permLevels as $level => $desc) {
     }
 
     // check database entries
-    if (isset($_POST["sql_type"]) && $_POST["sql_type"] != "") {
+    if (isset($_POST["sql_type"]) && $_POST["sql_type"] != '') {
         $sql_type = trim($_POST["sql_type"]);
         if (file_exists(PMF_ROOT_DIR.'/install/'.$sql_type.'.sql.php')) {
             require_once(PMF_ROOT_DIR.'/install/'.$sql_type.'.sql.php');
@@ -519,7 +514,7 @@ foreach ($permLevels as $level => $desc) {
         die();
     }
 
-    if (isset($_POST["sql_server"]) && $_POST["sql_server"] != "" || $sql_type == 'sqlite') {
+    if (isset($_POST["sql_server"]) && $_POST["sql_server"] != '' || $sql_type == 'sqlite') {
         $sql_server = $_POST["sql_server"];
     } else {
         print "<p class=\"error\"><strong>Error:</strong> There's no DB server input.</p>\n";
@@ -527,7 +522,7 @@ foreach ($permLevels as $level => $desc) {
         die();
     }
 
-    if (isset($_POST["sql_user"]) && $_POST["sql_user"] != "" || $sql_type == 'sqlite') {
+    if (isset($_POST["sql_user"]) && $_POST["sql_user"] != '' || $sql_type == 'sqlite') {
         $sql_user = $_POST["sql_user"];
     } else {
         print "<p class=\"error\"><strong>Error:</strong> There's no DB username input.</p>\n";
@@ -535,13 +530,13 @@ foreach ($permLevels as $level => $desc) {
         die();
     }
 
-    if (isset($_POST["sql_passwort"]) && $_POST["sql_passwort"] != "" || $sql_type == 'sqlite') {
+    if (isset($_POST["sql_passwort"]) && $_POST["sql_passwort"] != '' || $sql_type == 'sqlite') {
         $sql_passwort = $_POST["sql_passwort"];
     } else {
         $sql_passwort = '';
     }
 
-    if (isset($_POST["sql_db"]) && $_POST["sql_db"] != "" || $sql_type == 'sqlite') {
+    if (isset($_POST["sql_db"]) && $_POST["sql_db"] != '' || $sql_type == 'sqlite') {
         $sql_db = $_POST["sql_db"];
     } else {
         print "<p class=\"error\"><strong>Error:</strong> There's no DB database input.</p>\n";
@@ -550,7 +545,7 @@ foreach ($permLevels as $level => $desc) {
     }
 
     if ($sql_type == 'sqlite') {
-        if (isset($_POST["sql_sqlitefile"]) && $_POST["sql_sqlitefile"] != "") {
+        if (isset($_POST["sql_sqlitefile"]) && $_POST["sql_sqlitefile"] != '') {
             $sql_server = $_POST["sql_sqlitefile"]; // We're using $sql_server, too!
         } else {
             print "<p class=\"error\"><strong>Error:</strong> There's no SQLite database filename input.</p>\n";
@@ -574,35 +569,35 @@ foreach ($permLevels as $level => $desc) {
     if (extension_loaded('ldap') && isset($_POST['ldap_enabled']) && $_POST['ldap_enabled'] == 'yes') {
 
         // check LDAP entries
-        if (isset($_POST["ldap_server"]) && $_POST["ldap_server"] != "") {
+        if (isset($_POST["ldap_server"]) && $_POST["ldap_server"] != '') {
             $ldap_server = $_POST["ldap_server"];
         } else {
             print "<p class=\"error\"><strong>Error:</strong> There's no LDAP server input.</p>\n";
             HTMLFooter();
             die();
         }
-        if (isset($_POST["ldap_port"]) && $_POST["ldap_port"] != "") {
+        if (isset($_POST["ldap_port"]) && $_POST["ldap_port"] != '') {
             $ldap_port = $_POST["ldap_port"];
         } else {
             print "<p class=\"error\"><strong>Error:</strong> There's no LDAP port input.</p>\n";
             HTMLFooter();
             die();
         }
-        if (isset($_POST["ldap_user"]) && $_POST["ldap_user"] != "") {
+        if (isset($_POST["ldap_user"]) && $_POST["ldap_user"] != '') {
             $ldap_user = $_POST["ldap_user"];
         } else {
             print "<p class=\"error\"><strong>Error:</strong> There's no LDAP username input.</p>\n";
             HTMLFooter();
             die();
         }
-        if (isset($_POST["ldap_password"]) && $_POST["ldap_password"] != "") {
+        if (isset($_POST["ldap_password"]) && $_POST["ldap_password"] != '') {
             $ldap_password = $_POST["ldap_password"];
         } else {
             print "<p class=\"error\"><strong>Error:</strong> There's no LDAP password input.</p>\n";
             HTMLFooter();
             die();
         }
-        if (isset($_POST["ldap_base"]) && $_POST["ldap_base"] != "") {
+        if (isset($_POST["ldap_base"]) && $_POST["ldap_base"] != '') {
             $ldap_base = $_POST["ldap_base"];
         } else {
             print "<p class=\"error\"><strong>Error:</strong> There's no distinguished name input for LDAP.</p>\n";
@@ -621,14 +616,14 @@ foreach ($permLevels as $level => $desc) {
     }
 
     // check user entries
-    if (isset($_POST["password"]) && $_POST["password"] != "") {
+    if (isset($_POST["password"]) && $_POST["password"] != '') {
         $password = $_POST["password"];
     } else {
         print "<p class=\"error\"><strong>Error:</strong> There's no password for the administrator's account. Please set your password.</p>\n";
         HTMLFooter();
         die();
     }
-    if (isset($_POST["password_retyped"]) && $_POST["password_retyped"] != "") {
+    if (isset($_POST["password_retyped"]) && $_POST["password_retyped"] != '') {
         $password_retyped = $_POST["password_retyped"];
     } else {
         print "<p class=\"error\"><strong>Error:</strong> There's no retyped password. Please set your retyped password.</p>\n";
@@ -646,20 +641,20 @@ foreach ($permLevels as $level => $desc) {
         die();
     }
 
-    if (isset($_POST["language"]) && $_POST["language"] != "") {
+    if (isset($_POST["language"]) && $_POST["language"] != '') {
         $language = $_POST["language"];
     } else {
         $language = "en";
     }
-    if (isset($_POST["realname"]) && $_POST["realname"] != "") {
+    if (isset($_POST["realname"]) && $_POST["realname"] != '') {
         $realname = $_POST["realname"];
     } else {
-        $realname = "";
+        $realname = '';
     }
-    if (isset($_POST["email"]) && $_POST["email"] != "") {
+    if (isset($_POST["email"]) && $_POST["email"] != '') {
         $email = $_POST["email"];
     } else {
-        $email = "";
+        $email = '';
     }
     $permLevel = (isset($_POST['permLevel']) && in_array($_POST['permLevel'], array_keys($permLevels))) ? $_POST['permLevel'] : 'basic';
 
@@ -738,7 +733,7 @@ foreach ($permLevels as $level => $desc) {
     }
     require_once(PMF_ROOT_DIR.'/inc/PMF_User/User.php');
     $admin = new PMF_User();
-    $admin->createUser('admin', $password);
+    $admin->createUser('admin', $password, 1);
     $admin->setStatus('protected');
     $adminData = array(
         'display_name' => $realname,
