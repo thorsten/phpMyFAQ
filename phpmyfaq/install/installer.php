@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: installer.php,v 1.106.2.5 2007-08-22 17:34:16 thorstenr Exp $
+ * $Id: installer.php,v 1.106.2.6 2007-09-13 18:57:47 thorstenr Exp $
  *
  * The main phpMyFAQ Installer
  *
@@ -737,7 +737,7 @@ foreach ($permLevels as $level => $desc) {
     }
     require_once(PMF_ROOT_DIR.'/inc/PMF_User/User.php');
     $admin = new PMF_User();
-    $admin->createUser('admin', $password);
+    $admin->createUser('admin', $password, 1);
     $admin->setStatus('protected');
     $adminData = array(
         'display_name' => $realname,
