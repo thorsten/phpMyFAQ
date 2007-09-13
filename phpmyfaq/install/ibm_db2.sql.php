@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ibm_db2.sql.php,v 1.17.2.2 2007-06-04 19:43:09 thorstenr Exp $
+* $Id: ibm_db2.sql.php,v 1.17.2.3 2007-09-13 19:10:53 thorstenr Exp $
 *
 * CREATE TABLE instruction for IBM DB2 Universal Database, IBM Cloudscape,
 * and Apache Derby databases
@@ -288,12 +288,12 @@ PRIMARY KEY (tagging_id, tagging_name)
 $query[] = "CREATE TABLE ".$sqltblpre."faquser (
 user_id INTEGER NOT NULL,
 login VARCHAR(25) NOT NULL,
-session_id VARCHAR(150) NOT NULL,
-session_timestamp INTEGER NOT NULL,
-ip VARCHAR(15) NOT NULL,
-account_status VARCHAR(50) NOT NULL,
-last_login VARCHAR(14) NOT NULL,
-auth_source VARCHAR(100) NOT NULL,
+session_id VARCHAR(150) NULL,
+session_timestamp INTEGER NULL,
+ip VARCHAR(15) NULL,
+account_status VARCHAR(50) NULL,
+last_login VARCHAR(14) NULL,
+auth_source VARCHAR(100) NULL,
 member_since VARCHAR(14) NOT NULL,
 PRIMARY KEY (user_id)
 )";
