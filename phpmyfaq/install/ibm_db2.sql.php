@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ibm_db2.sql.php,v 1.19 2007-09-13 19:09:54 thorstenr Exp $
+* $Id: ibm_db2.sql.php,v 1.20 2007-09-14 06:05:52 thorstenr Exp $
 *
 * CREATE TABLE instruction for IBM DB2 Universal Database, IBM Cloudscape,
 * and Apache Derby databases
@@ -287,12 +287,12 @@ PRIMARY KEY (tagging_id, tagging_name)
 $query[] = "CREATE TABLE ".$sqltblpre."faquser (
 user_id INTEGER NOT NULL,
 login VARCHAR(25) NOT NULL,
-session_id VARCHAR(150) NULL,
-session_timestamp INTEGER NULL,
-ip VARCHAR(15) NULL,
-account_status VARCHAR(50) NULL,
-last_login VARCHAR(14) NULL,
-auth_source VARCHAR(100) NULL,
+session_id VARCHAR(150) DEFAULT NULL,
+session_timestamp INTEGER DEFAULT NULL,
+ip VARCHAR(15) DEFAULT NULL,
+account_status VARCHAR(50) DEFAULT NULL,
+last_login VARCHAR(14) DEFAULT NULL,
+auth_source VARCHAR(100) DEFAULT NULL,
 member_since VARCHAR(14) NOT NULL,
 PRIMARY KEY (user_id)
 )";
@@ -301,14 +301,14 @@ PRIMARY KEY (user_id)
 $query[] = "CREATE TABLE ".$sqltblpre."faquserdata (
 user_id INTEGER NOT NULL,
 last_modified varchar(14) NOT NULL,
-display_name VARCHAR(50) NOT NULL,
-email VARCHAR(100) NOT NULL
+display_name VARCHAR(50) DEFAULT NULL,
+email VARCHAR(100) DEFAULT  NULL
 )";
 
 //faquserlogin
 $query[] = "CREATE TABLE ".$sqltblpre."faquserlogin (
-login VARCHAR(25) NOT NULL,
-pass VARCHAR(25) NOT NULL,
+login VARCHAR(32) NOT NULL,
+pass VARCHAR(64) NOT NULL,
 PRIMARY KEY (login)
 )";
 
