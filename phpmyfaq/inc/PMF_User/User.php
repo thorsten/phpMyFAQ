@@ -407,7 +407,7 @@ class PMF_User
         if (0 == $user_id) {
             $this->_user_id = (int) $this->_db->nextID(PMF_USER_SQLPREFIX.'user', 'user_id');
         } else {
-            $this->_user_id = -1;
+            $this->_user_id = $user_id;
         }
         // create user entry
         $now = time();
