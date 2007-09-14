@@ -4,6 +4,7 @@ CHANGED FILES FROM 2.0.3 -> 2.0.4
 ./admin/record.show.php
 ./inc/Category.php
 ./inc/js/functions.js
+./inc/PMF_DB/Ibm_db2.php
 ./inc/PMF_User/User.php
 ./install/ibm_db2.sql.php
 ./install/installer.php
