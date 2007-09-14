@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Ibm_db2.php,v 1.7.2.4 2007-05-30 19:25:40 thorstenr Exp $
+ * $Id: Ibm_db2.php,v 1.7.2.5 2007-09-14 07:03:33 thorstenr Exp $
  *
  * db_ibm_db2
  *
@@ -76,7 +76,8 @@ class db_ibm_db2
     }
 
     /**
-     * This function sends a query to the database.
+     * This function sends a query to the database. If the query contains a JOIN
+     * we're using no SCROLLABLE CURSOR!
      *
      * @param   string $query
      * @return  mixed $result
@@ -87,7 +88,12 @@ class db_ibm_db2
     function query($query)
     {
         $this->sqllog .= pmf_debug($query);
-        return db2_exec($this->conn, $query, array('cursor' => DB2_SCROLLABLE));
+        if (!strpos($query, 'JOIN')) {
+            $res = db2_exec($this->conn, $query, array('cursor' => DB2_SCROLLABLE));
+        } else {
+            $res = db2_exec($this->conn, $query);
+        }
+        return $res;
     }
 
     /**
@@ -315,7 +321,7 @@ class db_ibm_db2
      */
     function error()
     {
-        return db2_stmt_errormsg($this->conn);
+        return db2_stmt_errormsg();
     }
 
     /**
