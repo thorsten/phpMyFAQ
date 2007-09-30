@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Ibm_db2.php,v 1.13 2007-08-20 19:32:20 johannes Exp $
+ * $Id: Ibm_db2.php,v 1.14 2007-09-30 10:04:07 thorstenr Exp $
  *
  * db_ibm_db2
  *
@@ -23,7 +23,7 @@
  * under the License.
  */
 
-class db_ibm_db2 implements PMF_IDB_Driver 
+class db_ibm_db2 implements PMF_IDB_Driver
 {
     /**
      * The connection object
@@ -174,29 +174,21 @@ class db_ibm_db2 implements PMF_IDB_Driver
     /**
      * This function returns the table status.
      *
-     * TODO: Test it!
-     *
-     * @access  public
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
-     * @since   2006-08-26
+     * @return void
+     * @access public
+     * @author Matteo Scaramuccia <matteo@scaramuccia.com>
+     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @since  2006-08-26
      */
-    function getTableStatus()
+    public function getTableStatus()
     {
         $tables = array();
-
-        $query = "
-            SELECT
-                SYSTEM_TABLE_SCHEMA, SYSTEM_TABLE_NAME, ROW_LENGTH
-            FROM
-                QSYS2.SYSTABLES
-            WHERE
-                SYSTEM_TABLE_SCHEMA like 'VDR%'
-            ORDER BY
-                SYSTEM_TABLE_NAME";
-        $result = $this->query($query);
-
-        while ($row = $this->fetch_object($result)) {
-            $tables[$row->SYSTEM_TABLE_SCHEMA] = $row->ROW_LENGTH;
+        $this->getTableNames(SQLPREFIX);
+        foreach ($this->tableNames as $table) {
+        	$result = db2_statistics($this->conn, null, null, $table);
+        	while ($res = db2_fetch_assoc($result)) {
+                $tables[strtolower($table)] = $res['CARDINALITY'];
+        	}
         }
 
         return $tables;
