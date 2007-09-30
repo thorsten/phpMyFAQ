@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Ibm_db2.php,v 1.7.2.5 2007-09-14 07:03:33 thorstenr Exp $
+ * $Id: Ibm_db2.php,v 1.7.2.6 2007-09-30 10:00:43 thorstenr Exp $
  *
  * db_ibm_db2
  *
@@ -189,20 +189,12 @@ class db_ibm_db2
     function getTableStatus()
     {
         $tables = array();
-
-        $query = "
-            SELECT
-                SYSTEM_TABLE_SCHEMA, SYSTEM_TABLE_NAME, ROW_LENGTH
-            FROM
-                QSYS2.SYSTABLES
-            WHERE
-                SYSTEM_TABLE_SCHEMA like 'VDR%'
-            ORDER BY
-                SYSTEM_TABLE_NAME";
-        $result = $this->query($query);
-
-        while ($row = $this->fetch_object($result)) {
-            $tables[$row->SYSTEM_TABLE_SCHEMA] = $row->ROW_LENGTH;
+        $this->getTableNames(SQLPREFIX);
+        foreach ($this->tableNames as $table) {
+        	$result = db2_statistics($this->conn, null, null, $table);
+        	while ($res = db2_fetch_assoc($result)) {
+                $tables[strtolower($table)] = $res['CARDINALITY'];
+        	}
         }
 
         return $tables;
