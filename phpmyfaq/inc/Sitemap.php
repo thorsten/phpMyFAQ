@@ -4,10 +4,9 @@
  *
  * The main Sitemap class
  *
- * @package      phpMyFAQ
- * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since        2007-03-30
- * @copyright    (c) 2007 phpMyFAQ Team
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since     2007-03-30
+ * @copyright (c) 2007 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -20,10 +19,7 @@
  * under the License.
  */
 
-/**
- * This include is needed for accessing to mod_rewrite support configuration value
- */
-require_once(PMF_INCLUDE_DIR.'/Link.php');
+require_once PMF_INCLUDE_DIR . '/Link.php';
 
 class PMF_Sitemap
 {
@@ -32,54 +28,54 @@ class PMF_Sitemap
      *
      * @var object PMF_Db
      */
-    var $db;
+    private $db = null;
 
     /**
      * Language
      *
      * @var string
      */
-    var $language;
+    private $language = '';
 
     /**
      * Database type
      *
      * @var string
      */
-    var $type;
+    private $type = '';
 
     /**
      * Users
      *
      * @var array
      */
-    var $user = null;
+    private $user = array();
 
     /**
      * Groups
      *
      * @var array
      */
-    var $groups = array();
+    private $groups = array();
 
     /**
      * Flag for Group support
      *
      * @var boolean
      */
-    var $groupSupport = false;
+    private $groupSupport = false;
 
     /**
      * Constructor
      *
-     * @param   object  PMF_Db
-     * @param   string  $language
-     * @param   integer $user
-     * @param   array   $groups
-     * @since   2007-03-30
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  PMF_Db  &$db      DB connection
+     * @param  string  $language Language
+     * @param  integer $user     User
+     * @param  array   $groups   Groupss
+     * @since  2007-03-30
+     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function PMF_Sitemap(&$db, $language, $user = null, $groups = null)
+    function __construct(&$db, $language, $user = null, $groups = null)
     {
         global $DB, $faqconfig;
 
@@ -105,10 +101,10 @@ class PMF_Sitemap
     /**
      * Returns all available first letters
      *
-     * @return  array
-     * @access  public
-     * @since   2007-03-30
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @return array
+     * @access public
+     * @since  2007-03-30
+     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     function getAllFirstLetters()
     {
@@ -129,9 +125,9 @@ class PMF_Sitemap
         $writeLetters = '<p id="sitemapletters">';
 
         switch($this->type) {
-            case 'db2':
-            case 'sqlite':
-                $query = sprintf("
+        case 'db2':
+        case 'sqlite':
+            $query = sprintf("
                     SELECT
                         DISTINCT substr(fd.thema, 1, 1) AS letters
                     FROM
@@ -152,15 +148,15 @@ class PMF_Sitemap
                         %s
                     ORDER BY
                         fd.letters",
-                    SQLPREFIX,
-                    SQLPREFIX,
-                    SQLPREFIX,
-                    $this->language,
-                    $permPart);
-                break;
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            $this->language,
+            $permPart);
+            break;
 
-            default:
-                $query = sprintf("
+        default:
+            $query = sprintf("
                     SELECT
                         DISTINCT substring(fd.thema, 1, 1) AS letters
                     FROM
@@ -181,12 +177,12 @@ class PMF_Sitemap
                         %s
                     ORDER BY
                         letters",
-                    SQLPREFIX,
-                    SQLPREFIX,
-                    SQLPREFIX,
-                    $this->language,
-                    $permPart);
-                break;
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            $this->language,
+            $permPart);
+            break;
         }
 
         $result = $this->db->query($query);
@@ -210,11 +206,11 @@ class PMF_Sitemap
     /**
      * Returns all records from the current first letter
      *
-     * @param   string  $letter
-     * @return  array
-     * @access  public
-     * @since   2007-03-30
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  string $letter Letter
+     * @return array
+     * @access public
+     * @since  2007-03-30
+     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     function getRecordsFromLetter($letter = 'A')
     {
