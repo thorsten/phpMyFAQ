@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Init.php,v 1.43 2007-08-20 19:32:19 johannes Exp $
+ * $Id: Init.php,v 1.44 2007-10-11 01:12:52 thorstenr Exp $
  *
  * Some functions
  *
@@ -122,18 +122,16 @@ class PMF_Init
     /**
      * The accepted language of the user agend
      *
-     * @var  string
-     * @see
+     * @var string
      */
-    var $acceptedLanguage;
+    public $acceptedLanguage = '';
 
     /**
      * The current language
      *
-     * @var  string
-     * @see
+     * @var string
      */
-    var $language;
+    public $language = '';
 
     /**
      * cleanRequest
@@ -148,7 +146,7 @@ class PMF_Init
      * @access  public
      * @author  Johann-Peter Hartmann <hartmann@mayflower.de>
      */
-    function cleanRequest()
+    public static function cleanRequest()
     {
         if (version_compare(PHP_VERSION, '6.0.0-dev', '<')) {
             $_SERVER['PHP_SELF'] = strtr(rawurlencode($_SERVER['PHP_SELF']),array( "%2F"=>"/", "%257E"=>"%7E"));
@@ -157,7 +155,7 @@ class PMF_Init
 
         // remove global registered variables to avoid injections
         if (ini_get('register_globals')) {
-            PMF_Init::unregisterGlobalVariables();
+            self::_unregisterGlobalVariables();
         }
 
         // clean external variables
@@ -167,10 +165,10 @@ class PMF_Init
 
                 // first clean XSS issues
                 $newvalues = $GLOBALS[$external];
-                $newvalues = PMF_Init::removeXSSGPC($newvalues);
+                $newvalues = self::_removeXSSGPC($newvalues);
 
                 // then remove magic quotes
-                $newvalues = PMF_Init::removeMagicQuotesGPC($newvalues);
+                $newvalues = self::_removeMagicQuotesGPC($newvalues);
 
                 // clean old array and insert cleaned data
                 foreach (array_keys($GLOBALS[$external]) as $key) {
@@ -184,12 +182,10 @@ class PMF_Init
         }
 
         // clean external filenames (uploaded files)
-        PMF_Init::cleanFilenames();
+        self::_cleanFilenames();
     }
 
     /**
-     * basicFilenameClean()
-     *
      * Clean up a filename: if anything goes wrong, an empty string will be returned
      *
      * @param   string  $filename
@@ -198,7 +194,7 @@ class PMF_Init
      * @since   2006-12-29
      * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      */
-    function basicFilenameClean($filename)
+    private static function _basicFilenameClean($filename)
     {
         global $denyUploadExts;
 
@@ -247,7 +243,7 @@ class PMF_Init
     * @since   2006-12-29
     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
     */
-   function cleanFilenames()
+   private static function _cleanFilenames()
    {
         reset($_FILES);
         while (list($key, $value) = each($_FILES)) {
@@ -255,7 +251,7 @@ class PMF_Init
                 reset($_FILES[$key]['name']);
                 // We have a multiple upload with the same name for <input />
                 while (list($idx, $value2) = each($_FILES[$key]['name'])) {
-                    $_FILES[$key]['name'][$idx] = PMF_Init::basicFilenameClean($_FILES[$key]['name'][$idx]);
+                    $_FILES[$key]['name'][$idx] = self::_basicFilenameClean($_FILES[$key]['name'][$idx]);
                     if ('' == $_FILES[$key]['name'][$idx]) {
                         $_FILES[$key]['type'][$idx] = '';
                         $_FILES[$key]['tmp_name'][$idx] = '';
@@ -265,7 +261,7 @@ class PMF_Init
                 }
                 reset($_FILES[$key]['name']);
             } else {
-                $_FILES[$key]['name'] = PMF_Init::basicFilenameClean($_FILES[$key]['name']);
+                $_FILES[$key]['name'] = self::_basicFilenameClean($_FILES[$key]['name']);
                 if ('' == $_FILES[$key]['name']) {
                     $_FILES[$key]['type'] = '';
                     $_FILES[$key]['tmp_name'] = '';
@@ -278,8 +274,6 @@ class PMF_Init
     }
 
     /**
-     * getUserAgentLanguage()
-     *
      * Gets the accepted language from the user agent
      *
      * @return  void
@@ -287,7 +281,7 @@ class PMF_Init
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      */
-    function getUserAgentLanguage()
+    private static function _getUserAgentLanguage()
     {
         $this->acceptedLanguage = '';
         // $_SERVER['HTTP_ACCEPT_LANGUAGE'] could be like the text below:
@@ -304,8 +298,6 @@ class PMF_Init
     }
 
     /**
-     * isASupportedLanguage()
-     *
      * True if the language is supported by the current phpMyFAQ installation
      *
      * @param   string  $langcode
@@ -313,7 +305,7 @@ class PMF_Init
      * @access  public
      * @author  Matteo scaramuccia <matteo@scaramuccia.com>
      */
-    function isASupportedLanguage($langcode)
+    public static function isASupportedLanguage($langcode)
     {
         global $languageCodes;
         return isset($languageCodes[strtoupper($langcode)]);
@@ -331,10 +323,10 @@ class PMF_Init
      * @author  Thorsten Rinne <rinne@mayflower.de>
      * @author  Matteo scaramuccia <matteo@scaramuccia.com>
      */
-    function setLanguage($config_detection, $config_language)
+    public function setLanguage($config_detection, $config_language)
     {
         $_lang = array();
-        PMF_Init::getUserAgentLanguage();
+        self::_getUserAgentLanguage();
 
         // Get language from: _POST, _GET, _COOKIE, phpMyFAQ configuration and
         //                    the automatic language detection
@@ -402,7 +394,7 @@ class PMF_Init
      * @access  private
      * @author  Stefan Esser <sesser@php.net>
      */
-    function unregisterGlobalVariables()
+    private static function _unregisterGlobalVariables()
     {
         if (!ini_get('register_globals')) {
             return;
@@ -430,7 +422,7 @@ class PMF_Init
      * @access  private
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function removeMagicQuotesGPC($data)
+    private static function _removeMagicQuotesGPC($data)
     {
         static $recursionCounter = 0;
         // Avoid webserver crashes. For any detail, see: http://www.php-security.org/MOPB/MOPB-02-2007.html
@@ -445,7 +437,7 @@ class PMF_Init
                 $key = addslashes($key);
                 if (is_array($val)) {
                     $recursionCounter++;
-                    $addedData[$key] = PMF_Init::removeMagicQuotesGPC($val);
+                    $addedData[$key] = self::_removeMagicQuotesGPC($val);
                 } else {
                     $addedData[$key] = $val;
                 }
@@ -464,7 +456,7 @@ class PMF_Init
      * @author      Christian Stocker <chregu@bitflux.ch>
      * @copyright   Bitflux (c) 2001-2005 Bitflux GmbH
      */
-    private function basicXSSClean($string)
+    private static function _basicXSSClean($string)
     {
         global  $PMF_LANG;
 
@@ -475,11 +467,6 @@ class PMF_Init
         if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
             $string = stripslashes($string);
         }
-
-        // Since PHP 5.2.0 PCRE behaviour has been changed and now its behaviour
-        // is more correct e.g. according to the modifiers used in the pattern.
-        // That said, we are in need to add a fallback if any UTF-8 error is arised
-        $canCheckUTF8Error = defined('PREG_BAD_UTF8_ERROR') && function_exists('preg_last_error');
 
         $string = str_replace(array("&amp;","&lt;","&gt;"),array("&amp;amp;","&amp;lt;","&amp;gt;",),$string);
         // fix &entitiy\n;
@@ -522,8 +509,6 @@ class PMF_Init
     }
 
     /**
-     * removeXSSGPC
-     *
      * Removes xss from an array
      *
      * @param   array   $data
@@ -532,7 +517,7 @@ class PMF_Init
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @author  Johann-Peter Hartmann <hartmann@mayflower.de>
      */
-    function removeXSSGPC($data)
+    private static function _removeXSSGPC($data)
     {
         static $recursionCounter = 0;
         // Avoid webserver crashes. For any detail, see: http://www.php-security.org/MOPB/MOPB-02-2007.html
@@ -543,12 +528,12 @@ class PMF_Init
 
         $cleanData = array();
         foreach ($data as $key => $val) {
-            $key = PMF_Init::basicXSSClean($key);
+            $key = self::_basicXSSClean($key);
             if (is_array($val)) {
                 $recursionCounter++;
-                $cleanData[$key] = PMF_Init::removeXSSGPC($val);
+                $cleanData[$key] = self::_removeXSSGPC($val);
             } else {
-                $cleanData[$key] = PMF_Init::basicXSSClean($val);
+                $cleanData[$key] = self::_basicXSSClean($val);
             }
         }
         return $cleanData;
