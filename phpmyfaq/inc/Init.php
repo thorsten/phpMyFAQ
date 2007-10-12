@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Init.php,v 1.44 2007-10-11 01:12:52 thorstenr Exp $
+ * $Id: Init.php,v 1.45 2007-10-12 19:22:43 thorstenr Exp $
  *
  * Some functions
  *
@@ -281,12 +281,11 @@ class PMF_Init
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      */
-    private static function _getUserAgentLanguage()
+    private function _getUserAgentLanguage()
     {
-        $this->acceptedLanguage = '';
         // $_SERVER['HTTP_ACCEPT_LANGUAGE'] could be like the text below:
         // it,pt-br;q=0.8,en-us;q=0.5,en;q=0.3
-        // TODO: (ENH) get an array of accepted languages and cycle through it in PMF_Init::setLanguage
+        // TODO: (ENH) get an array of accepted languages and cycle through it in self::setLanguage
         if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
             // ISO Language Codes, 2-letters: ISO 639-1, <Country tag>[-<Country subtag>]
             // Simplified language syntax detection: xx[-yy]
@@ -330,30 +329,30 @@ class PMF_Init
 
         // Get language from: _POST, _GET, _COOKIE, phpMyFAQ configuration and
         //                    the automatic language detection
-        if (isset($_POST['language']) && PMF_Init::isASupportedLanguage($_POST['language']) ) {
+        if (isset($_POST['language']) && self::isASupportedLanguage($_POST['language']) ) {
             $_lang['post'] = trim($_POST['language']);
         }
         // Get the user language
-        if (isset($_GET['lang']) && PMF_Init::isASupportedLanguage($_GET['lang']) ) {
+        if (isset($_GET['lang']) && self::isASupportedLanguage($_GET['lang']) ) {
             $_lang['get'] = trim($_GET['lang']);
         }
         // Get the faq record language
-        if (isset($_GET['artlang']) && PMF_Init::isASupportedLanguage($_GET['artlang']) ) {
+        if (isset($_GET['artlang']) && self::isASupportedLanguage($_GET['artlang']) ) {
             $_lang['get'] = trim($_GET['artlang']);
         }
         // Get the language from the cookie
-        if (isset($_COOKIE['pmf_lang']) && PMF_Init::isASupportedLanguage($_COOKIE['pmf_lang']) ) {
+        if (isset($_COOKIE['pmf_lang']) && self::isASupportedLanguage($_COOKIE['pmf_lang']) ) {
             $_lang['cookie'] = trim($_COOKIE['pmf_lang']);
         }
         // Get the language from the config
         if (isset($config_language)) {
             $confLangCode = str_replace(array("language_", ".php"), "", $config_language);
-            if (PMF_Init::isASupportedLanguage($confLangCode) ) {
+            if (self::isASupportedLanguage($confLangCode) ) {
                 $_lang['config'] = $confLangCode;
             }
         }
         // Detect the browser's language
-        if ((true === $config_detection) && PMF_Init::isASupportedLanguage($this->acceptedLanguage) ) {
+        if ((true === $config_detection) && self::isASupportedLanguage($this->acceptedLanguage) ) {
             $_lang['detection'] = $this->acceptedLanguage;
         }
         // Select the language
