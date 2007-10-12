@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.94 2007-08-26 09:21:00 thorstenr Exp $
+$Id: README.txt,v 1.95 2007-10-12 19:49:38 thorstenr Exp $
 
 phpMyFAQ 2.5.0-dev
 Codename "Pandora"
@@ -10,16 +10,18 @@ Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.0.x:
-- Changed PHP requirement to PHP 5.2
-- Added TCPDF library to support Unicode PDFs
+- changed PHP requirement to PHP 5.2 (Thorsten)
+- added TCPDF library to support Unicode PDFs (Thorsten)
+- added new and improved new basic layout theme (Charles A. Landemaine)
 
 For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
 Version 2.5.0-dev - 2007-
-- Changed PHP requirement to PHP 5.2
-- Added TCPDF library to support Unicode PDFs
+- changed PHP requirement to PHP 5.2 (Thorsten)
+- added TCPDF library to support Unicode PDFs (Thorsten)
+- added new and improved new basic layout theme (Charles A. Landemaine)
 
 
 
