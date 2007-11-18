@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.92.2.17 2007-08-28 17:40:16 thorstenr Exp $
+$Id: README.txt,v 1.92.2.18 2007-11-18 14:14:40 thorstenr Exp $
 
 phpMyFAQ 2.0.2
 Codename "Prometheus"
@@ -18,10 +18,11 @@ For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.0.4 - 2007-09-
+Version 2.0.4 - 2007-11-18
 - add Thai translation (Thanadon Somdee)
 - improved DiggIt link (Thorsten
 - fixed French translation (Thorsten)
+- many minor bugfixes (Thorsten)
 
 Version 2.0.3 - 2007-08-18
 - some permission related fixes (Thorsten)
