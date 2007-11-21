@@ -1,3 +1,11 @@
+CHANGED FILES FROM 2.0.4 -> 2.0.5
+
+./admin/record.save.php
+./install/installer.php
+./install/update.php
+
+
+
 CHANGED FILES FROM 2.0.3 -> 2.0.4
 
 ./admin/category.main.php

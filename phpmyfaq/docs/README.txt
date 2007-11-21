@@ -1,6 +1,6 @@
-$Id: README.txt,v 1.92.2.18 2007-11-18 14:14:40 thorstenr Exp $
+$Id: README.txt,v 1.92.2.19 2007-11-21 11:45:32 thorstenr Exp $
 
-phpMyFAQ 2.0.2
+phpMyFAQ 2.0.5
 Codename "Prometheus"
 
 Installation/Update:
@@ -9,14 +9,15 @@ Please read the documentation (documentation.en.html) carefully.
 Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
-Changes since 2.0.3:
-- add Thai translation (Thanadon Somdee)
-- improved DiggIt link (Thorsten
-- fixed French translation (Thorsten)
+Changes since 2.0.4:
+- minor bugfixes (Thorsten)
 
 For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
+
+Version 2.0.5 - 2007-12-
+- minor bugfixes (Thorsten)
 
 Version 2.0.4 - 2007-11-18
 - add Thai translation (Thanadon Somdee)
