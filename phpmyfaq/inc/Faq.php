@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.113.2.11 2007-08-05 16:10:46 thorstenr Exp $
+ * $Id: Faq.php,v 1.113.2.12 2007-11-21 19:04:32 thorstenr Exp $
  *
  * The main FAQ class
  *
@@ -398,6 +398,10 @@ class PMF_Faq
         if (isset($_REQUEST['seite'])) {
             $page = (int)$_REQUEST['seite'];
         }
+        if (isset($_REQUEST['tagging_id'])) {
+            $tagging_id = (int)$_REQUEST['tagging_id'];
+        }
+
 
         if ($this->groupSupport) {
             $permPart = sprintf("( fdg.group_id IN (%s)
@@ -525,7 +529,33 @@ class PMF_Faq
             return false;
         }
 
-       return $output;
+        if ($num > $faqconfig->get('main.numberOfRecordsPerPage')) {
+            $output .= "<p align=\"center\"><strong>";
+            if (!isset($page)) {
+                $page = 1;
+            }
+            $vor = $page - 1;
+            $next = $page + 1;
+            if ($vor != 0) {
+                if ($faqconfig->get('main.enableRewriteRules')) {
+                    $output .= "[ <a href=\"search.html?tagging_id=".$tagging_id."&amp;seite=".$vor.$langs."\">".$this->pmf_lang["msgPrevious"]."</a> ]";
+                } else {
+                    $output .= "[ <a href=\"index.php?".$sids."action=search&amp;tagging_id=".$tagging_id."&amp;seite=".$vor.$langs."\">".$this->pmf_lang["msgPrevious"]."</a> ]";
+                }
+            }
+            $output .= " ";
+            if ($next <= $pages) {
+                $url = $sids.'&amp;action=search&amp;tagging_id='.$tagging_id.'&amp;seite='.$next.$langs;
+                $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+                $oLink->itemTitle = '';
+                $oLink->text = $this->pmf_lang["msgNext"];
+                $oLink->tooltip = $this->pmf_lang["msgNext"];
+                $output .= '[ '.$oLink->toHtmlAnchor().' ]';
+            }
+            $output .= "</strong></p>";
+        }
+
+        return $output;
     }
 
     /**
