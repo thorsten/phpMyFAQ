@@ -228,11 +228,18 @@ html>body #categories li a {
 #instantfield, #instantfield .inputfield{
     width: 99%;
 }
-#search input[type=submit], #langform input[type=submit], #loginform input[type=submit] {
+#search input[type=submit],
+#voting input[type=submit],
+#msgNewContentSubmitID input[type=submit],
+#msgS2FButtonID input[type=submit],
+#langform input[type=submit],
+#loginform input[type=submit] {
     margin-top: 3px;
     padding: 0;
     border: 1px solid;
-    margin-right: 0;
+    margin-right: 0;+
+    moz-border-radius: 5px 5px 5px 5px;
+    border-radius: 5px 5px 5px 5px;
 }
 
 /**
