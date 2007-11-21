@@ -1,6 +1,7 @@
 CHANGED FILES FROM 2.0.4 -> 2.0.5
 
 ./admin/record.save.php
+./inc/Faq.php
 ./install/installer.php
 ./install/update.php
 
