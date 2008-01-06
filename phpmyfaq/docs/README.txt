@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.92.2.19 2007-11-21 11:45:32 thorstenr Exp $
+$Id: README.txt,v 1.92.2.20 2008-01-06 12:27:49 thorstenr Exp $
 
 phpMyFAQ 2.0.5
 Codename "Prometheus"
@@ -10,13 +10,15 @@ Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.0.4:
+- fixed lighttpd rewrite rules (Markus Kohlmeyer)
 - minor bugfixes (Thorsten)
 
 For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.0.5 - 2007-12-
+Version 2.0.5 - 2008-01-
+- fixed lighttpd rewrite rules (Markus Kohlmeyer)
 - minor bugfixes (Thorsten)
 
 Version 2.0.4 - 2007-11-18
@@ -646,4 +648,4 @@ basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 License for the specific language governing rights and limitations
 under the License.
 
-(c) 2001-2007 phpMyFAQ Team
+(c) 2001-2008 phpMyFAQ Team
