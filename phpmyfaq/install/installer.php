@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: installer.php,v 1.106.2.7 2007-11-21 11:45:33 thorstenr Exp $
+ * $Id: installer.php,v 1.106.2.8 2008-01-19 17:39:42 thorstenr Exp $
  *
  * The main phpMyFAQ Installer
  *
@@ -12,7 +12,7 @@
  * @author      Johannes Schlueter <johannes@php.net>
  * @author      Uwe Pries <uwe.pries@digartis.de>
  * @since       2002-08-20
- * @copyright   (c) 2001-2007 phpMyFAQ Team
+ * @copyright   (c) 2001-2008 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -26,7 +26,7 @@
  */
 
 define('VERSION', '2.0.5');
-define('COPYRIGHT', '&copy; 2001-2007 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
+define('COPYRIGHT', '&copy; 2001-2008 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('SAFEMODE', @ini_get('safe_mode'));
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 require_once(PMF_ROOT_DIR.'/inc/constants.php');

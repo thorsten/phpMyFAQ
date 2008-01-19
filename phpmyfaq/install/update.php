@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: update.php,v 1.145.2.14 2007-11-21 11:45:33 thorstenr Exp $
+ * $Id: update.php,v 1.145.2.15 2008-01-19 17:39:42 thorstenr Exp $
  *
  * Main update script
  *
@@ -8,7 +8,7 @@
  * @author      Thomas Melchinger <t.melchinger@uni.de>
  * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
  * @since       2002-01-10
- * @copyright   (c) 2002-2007 phpMyFAQ Team
+ * @copyright   (c) 2002-2008 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -22,7 +22,7 @@
  */
 
 define('NEWVERSION', '2.0.5');
-define('COPYRIGHT', '&copy; 2001-2007 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
+define('COPYRIGHT', '&copy; 2001-2008 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
 require_once(PMF_ROOT_DIR."/inc/constants.php");
