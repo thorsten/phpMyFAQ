@@ -1,13 +1,21 @@
 /**
- * $Id: admin.css,v 1.48 2007-10-12 19:34:51 thorstenr Exp $
+ * To change the look and feel, search for the following selectors (Ctrl-F) in this style sheet:
+ * 
+ * - Font, background color/image: body
+ * - Link colors: a:link, a:visited
+ * - Hover links color: a:hover
+ * - Code color: pre
+ * - Title color: #header h1 a
+ * - Separation color of navigation menu: #categories li a
+ * - Footer color and separator: #footer
+ * - Footer link color: #footer a:link, #footer a:visited
+ * - RSS button color: a.rss:link, a.rss:visited
+ * - Text highlight color: .highlight
  *
- * This is the CSS file for the admin section of phpMyFAQ 2.0.x
- * You don't need to change enything here but feel free to do it. :-)
- *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Jens Grochtdreis <jens@grochtdreis.de>
- * @since       2004-06-09
- * @copyright   (c) 2004-2007 phpMyFAQ Team
+ * @author    Charles A. Landemaine <landemaine@gmail.com>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2004-2008 phpMyFAQ Team
+ * @version   CVS: $Id: admin.css,v 1.49 2008-01-19 17:35:05 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -20,34 +28,21 @@
  * under the License.
  */
 
-* {
-    margin: 0;
-    padding: 0;
-}
 
-/* color defintions */
-a {
-    color: #FF6917;
-}
-a:visited {
-    color: #FF6917;
-}
-#header {
-    background: #1096B3;
-    color: #ffffff;
-}
-body {
-    background-color: #fff;
-    color: black;
-    font-family: "Bitstream Vera Sans", "Trebuchet MS", Verdana, Tahoma, sans-serif;
-    font-size: 12px;
-    margin: auto;
-}
-h1 {
-    font-weight: bold;
-    font-style: italic;
-    font-size: 28px;
-}
+/*	General	*/
+body { font: .8em 'Trebuchet MS', 'Nimbus Sans L', sans-serif; padding: 1em; margin: 0; background: url(../images/background.png) repeat-x; }
+td { font-size: .8em; }
+a:link, a:visited { color: #191970; text-decoration: none; }
+a:hover { color: #000; background: #f4f7fa; }
+form { margin: 0; padding: 0; }
+a img, img { border: 0; }
+pre {	padding: 0.5em; background: #eee; border: 1px solid #ddd; overflow: auto; }
+ul { list-style: square; }
+
+ 
+/* Structure */
+
+#header { text-align:center; }
 h2 {
     font-size: 18px;
     font-style: italic;
@@ -55,12 +50,8 @@ h2 {
     margin-bottom: 15px;
     color: #004256;
 }
-img {
-    border: 0;
-}
 ul {
     margin-left: 15px;
-    list-style: square;
 }
 fieldset {
     margin-top: 15px;
@@ -82,7 +73,6 @@ label {
     font-weight: bold;
 }
 input, textarea, select {
-    font-family: "Bitstream Vera Sans", "Trebuchet MS", Verdana, Tahoma, sans-serif;
     font-size: 12px;
 }
 p.hr{
@@ -152,15 +142,6 @@ textarea#content {
 }
 
 /* Header */
-#header {
-    height: 40px;
-    padding: 20px;
-}
-#header h1{
-    float: left;
-    vertical-align: middle;
-    width: 350px;
-}
 
 div#langform {
     float: left;
@@ -189,7 +170,7 @@ div#sessioncounter {
     margin: 0;
     padding: 0;
     height: 24px;
-    background: #1096B3;
+    background: #e8e8e8;
     color: #000000;
     border-left: 1px solid #656565;
 }
@@ -216,7 +197,7 @@ div#sessioncounter {
     padding-top: 4px;
     padding-left: 3px;
     padding-right: 3px;
-    background-color: #F6AD53;
+    background-color: #e8e8e8;
     color: #36393D;
     text-decoration: none;
     display: block;
@@ -226,7 +207,7 @@ div#sessioncounter {
 }
 #navcontainer ul li a:hover {
     color: #07243D;
-    background: #B3DE77;
+    background: #f4f7fa;
 }
 #navcontainer a:active {
     background: #D15FE4;
@@ -237,7 +218,8 @@ div#sessioncounter {
     color: #fff;
 }
 #navcontainer ul li a.logout {
-    background: #EF6022;
+    background: #c00;
+	 color: #fff;
 }
 
 /* 2nd Administration Menu */
@@ -269,7 +251,7 @@ div#sessioncounter {
     padding-top: 4px;
     padding-left: 2px;
     padding-right: 2px;
-    background-color: #FBD7A9;
+    background-color: #e8e8e8;
     color: #03121F;
     text-decoration: none;
     display: block;
@@ -280,7 +262,7 @@ div#sessioncounter {
 }
 #subnavcontainer ul li a:hover {
     color: #07243D;
-    background: #B3DE77;
+    background: #f4f7fa;
 }
 #subnavcontainer a:active {
     background: #01070C;
@@ -291,7 +273,7 @@ div#sessioncounter {
     color: #fff;
 }
 #subnavcontainer ul li a.current {
-    background: #A2E865;
+    background: #e8e8e8;
 }
 
 
@@ -357,13 +339,9 @@ input.admin, select.admin, textarea.admin {
     float: left;
     width: auto;
     clear: both;
-    border: 1px solid gray;
-    background: White;
     margin-bottom: 10px;
 }
 input.submit {
-    border: 2px solid #696969;
-    background-color: #dcdcdc;
 }
 
 /* Category / Record listing styles */
@@ -621,12 +599,10 @@ div.input_row label {
 }
 div.input_row input {
     background: White;
-    border: 1px solid black;
 }
 div.input_row input[type=text], div.input_row select, div.input_row textarea {
     width: 100%;
     background: White;
-    border: 1px solid black;
 }
 div.button_row {
 }
@@ -634,15 +610,11 @@ div.button_row input.submit {
     margin: 0 25px 0 10px;
     display: block;
     float: right;
-    border: 2px solid #696969;
-    background-color: #dcdcdc;
 }
 div.button_row input.reset {
     margin: 0 10px 0 25px;
     display: block;
     float: left;
-    border: 2px solid #696969;
-    background-color: #dcdcdc;
 }
 /* select/unselect all js shortcut links */
 .select_all, .unselect_all {

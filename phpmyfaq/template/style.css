@@ -1,8 +1,37 @@
-/*	General	*/
+/**
+ * To change the look and feel, search for the following selectors (Ctrl-F) in this style sheet:
+ * 
+ * - Font, background color/image: body
+ * - Link colors: a:link, a:visited
+ * - Hover links color: a:hover
+ * - Code color: pre
+ * - Title color: #header h1 a
+ * - Separation color of navigation menu: #categories li a
+ * - Footer color and separator: #footer
+ * - Footer link color: #footer a:link, #footer a:visited
+ * - RSS button color: a.rss:link, a.rss:visited
+ * - Text highlight color: .highlight
+ *
+ * @author    Charles A. Landemaine <landemaine@gmail.com>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2004-2008 phpMyFAQ Team
+ * @version   CVS: $Id: style.css,v 1.37 2008-01-19 17:35:05 thorstenr Exp $
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
+/*	General	*/
 body { font: .8em 'Trebuchet MS', 'Nimbus Sans L', sans-serif; padding: 1em; margin: 0; background: url(../images/background.png) repeat-x; }
 td { font-size: .8em; }
-a:link, a:visited { color: #007ccb; border-bottom: 1px dotted #bbb; text-decoration: none; }
+a:link, a:visited { color: #191970; border-bottom: 1px dotted #bbb; text-decoration: none; }
 h3 a:link, h3 a:visited { border: 0;}
 h3 img { vertical-align: middle; }
 a:hover { color: #000; background: #f4f7fa; }
@@ -14,7 +43,7 @@ ul { list-style: square; }
 /* Structure */
 
 #header { height: 3em; }
-#header ul { margin: 0; padding: 0; list-style: none;	font-size: 1em; font-weight: bold; line-height: 1em; height: 1em; float: right; }
+#header ul { margin: 0; padding: 0; list-style: none; font-size: 1em; font-weight: bold; line-height: 1em; height: 1em; float: right; }
 #header li { float: right; padding: 0 1em 0 0; margin: 0; }
 #header h1 { font-size: 1.5em; height: 1.2em; float: left; padding: 0; margin: 0; }
 #header h1 a { color: #000; border: 0; background: none; }
@@ -54,7 +83,7 @@ label { display: block; }
 
 /* Main content */
 
-.main-content { margin: 0 220px 1em 220px; }
+.main-content { margin: 0; padding: 0 220px 1em 220px; }
 .main-content h1, .main-content h2, .main-content h3, .main-content h4, .main-content h5 { margin-bottom: 0.5em; }
 .main-content pre, .main-content code { white-space: pre; }
 .main-content #solution_id { float: right; }
@@ -63,7 +92,7 @@ label { display: block; }
 .main-content label.left { float: left; text-align: right; width: 150px; margin-right: 0.3em; }
 .main-content form br { clear: both; }
 #article_category { font-size: 1.5em; }
-#search { padding: 0; margin: 0; }
+#search { padding: 0; margin: 0; width: auto; }
 #search input { vertical-align: middle; font-size: 1.5em; font-weight: bold; }
 
 /*		Main columns definitions		*/

@@ -18,6 +18,7 @@
 <div id="content">
 <div class="header" id="header">
 	<div>
+		<h1><a title="{header}" href="{faqHome}">{header}</a></h1>
 		<ul>
 			<li>{msgContact}</li>
 			<li>{msgHelp}</li>
@@ -26,9 +27,6 @@
 			<li>{msgAddContent}</li>
 			<li>{msgSearch}</li>
 		</ul>
-		<h1><a title="{header}" href="{faqHome}">{header}</a></h1>
-	</div>
-	<div>
 	</div>
 </div>
 <div class="columns">
