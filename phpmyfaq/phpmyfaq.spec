@@ -1,5 +1,5 @@
 #
-# $Id: phpmyfaq.spec,v 1.14.2.5 2007-11-21 11:45:32 thorstenr Exp $
+# $Id: phpmyfaq.spec,v 1.14.2.6 2008-01-19 17:45:14 thorstenr Exp $
 #
 # This is the spec file for building an RPM package of phpMyFAQ
 # for most of the different RPM-based distributions
@@ -41,7 +41,7 @@
 #
 # @author       Matteo Scaramuccia <matteo@scaramuccia.com>
 # @since        2006-07-05
-# @copyright:   (c) 2006-2007 phpMyFAQ Team
+# @copyright:   (c) 2006-2008 phpMyFAQ Team
 #
 # The contents of this file are subject to the Mozilla Public License
 # Version 1.1 (the "License"); you may not use this file except in
