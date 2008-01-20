@@ -1,13 +1,12 @@
 <?php
 /**
- * $Id: group.php,v 1.22 2007-04-10 20:56:05 thorstenr Exp $
- *
  * Displays the user managment frontend
  *
- * @author      Lars Tiedemann <php@larstiedemann.de>
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since       2005-12-15
- * @copyright   (c) 2006-2007 phpMyFAQ Team
+ * @author    Lars Tiedemann <php@larstiedemann.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since     2005-12-15
+ * @copyright 2005-2008 phpMyFAQ Team
+ * @version   CVS: $Id: group.php,v 1.22.2.1 2008-01-20 19:57:52 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -464,13 +463,16 @@ function buildGroupRights(id)
         }
         // build new table row
         checkbox = document.createElement('input');
-        checkbox.setAttribute('type', "checkbox");
-        checkbox.setAttribute('name', "group_rights[]");
-        checkbox.setAttribute('value', right_id);
-        if (isGroupRight == 1) {
-            checkbox.setAttribute('checked', "checked");
+        checkbox.type = 'checkbox';
+        checkbox.name = 'group_rights[]';
+        checkbox.value = right_id;
+        setTimeout((function(checkbox, isGroupRight) {
+        return function() {
+        checkbox.checked = isGroupRight == 1;
         }
+        })(checkbox, isGroupRight), 10);
         table_addRow(group_rights_table, i, checkbox, document.createTextNode(right_name));
+        
     }
 }
 

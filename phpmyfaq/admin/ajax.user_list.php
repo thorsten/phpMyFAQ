@@ -1,23 +1,22 @@
 <?php
 /**
-* $Id: ajax.user_list.php,v 1.24.2.1 2007-05-20 20:31:02 thorstenr Exp $
-*
-* AJAX: lists all registered users
-*
-* @author       Lars Tiedemann <larstiedemann@yahoo.de>
-* @since        2005-12-15
-* @copyright    (c) 2005-2007 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * AJAX: lists all registered users
+ *
+ * @author    Lars Tiedemann <larstiedemann@yahoo.de>
+ * @since     2005-12-15
+ * @copyright 2005-2008 phpMyFAQ Team
+ * @version   CVS: $Id: ajax.user_list.php,v 1.24.2.2 2008-01-20 19:57:52 thorstenr Exp $
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
@@ -92,7 +91,7 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
 ?>
 
                 <item name="<?php print $field; ?>">
-                    <name><?php print $data[$field]; ?></name>
+                    <name><?php print PMF_htmlentities($data[$field], ENT_QUOTES, $PMF_LANG['metaCharset']); ?></name>
                     <value><?php print PMF_htmlentities($value, ENT_QUOTES, $PMF_LANG['metaCharset']); ?></value>
                 </item>
 <?php
