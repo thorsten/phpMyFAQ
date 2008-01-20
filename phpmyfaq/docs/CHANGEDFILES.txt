@@ -1,5 +1,7 @@
 CHANGED FILES FROM 2.0.5 -> 2.0.6
 
+./admin/ajax.user_list.php
+./admin/group.php
 ./install/installer.php
 ./install/update.php
 
