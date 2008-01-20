@@ -1,9 +1,13 @@
 CHANGED FILES FROM 2.0.4 -> 2.0.5
 
+./admin/adminlog.php
 ./admin/record.save.php
+./inc/js/functions.js
 ./inc/Faq.php
 ./install/installer.php
 ./install/update.php
+./template/contact.tpl
+./template/index.tpl
 ./template/style.css
 ./template/style.rtl.css
 ./_lighttpd.conf
