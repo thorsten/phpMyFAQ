@@ -1,12 +1,11 @@
 <?php
 /**
- * $Id: adminlog.php,v 1.16 2007-04-06 11:15:24 thorstenr Exp $
- *
  * Overview of actions in the admin section
  *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since       2003-02-23
- * @copyright   (c) 2003-2007 phpMyFAQ Team
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since     2003-02-23
+ * @copyright (c) 2003-2008 phpMyFAQ Team
+ * @version   CVS: $Id: adminlog.php,v 1.16.2.1 2008-01-20 16:17:19 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -96,15 +95,16 @@ if ($permission['adminlog'] && 'adminlog' == $_action) {
         </tr>
         <tr class="cell">
             <td colspan="4" class="list"><?php
-        $text = str_replace("Loginerror", $PMF_LANG["ad_log_lger"], $logging_value['text']);
-        $text = str_replace("Session expired", $PMF_LANG["ad_log_sess"], $logging_value['text']);
-        $text = str_replace("Useredit, ", $PMF_LANG["ad_log_edit"], $logging_value['text']);
-        $text = str_replace("Beitragcreatesave", $PMF_LANG["ad_log_crsa"], $logging_value['text']);
-        $text = str_replace("Beitragcreate", $PMF_LANG["ad_log_crea"], $logging_value['text']);
-        $text = str_replace("Usersave, ", $PMF_LANG["ad_log_ussa"], $logging_value['text']);
-        $text = str_replace("Userdel, ", $PMF_LANG["ad_log_usde"], $logging_value['text']);
-        $text = str_replace("Beitragedit, ", $PMF_LANG["ad_log_beed"], $logging_value['text']);
-        $text = str_replace("Beitragdel, ", $PMF_LANG["ad_log_bede"], $logging_value['text']);
+        $text = $logging_value['text'];
+        $text = str_replace("Loginerror", $PMF_LANG["ad_log_lger"], $text);
+        $text = str_replace("Session expired", $PMF_LANG["ad_log_sess"], $text);
+        $text = str_replace("Useredit, ", $PMF_LANG["ad_log_edit"], $text);
+        $text = str_replace("Beitragcreatesave", $PMF_LANG["ad_log_crsa"], $text);
+        $text = str_replace("Beitragcreate", $PMF_LANG["ad_log_crea"], $text);
+        $text = str_replace("Usersave, ", $PMF_LANG["ad_log_ussa"], $text);
+        $text = str_replace("Userdel, ", $PMF_LANG["ad_log_usde"], $text);
+        $text = str_replace("Beitragedit, ", $PMF_LANG["ad_log_beed"], $text);
+        $text = str_replace("Beitragdel, ", $PMF_LANG["ad_log_bede"], $text);
         print $text;
 ?></td>
         </tr>
