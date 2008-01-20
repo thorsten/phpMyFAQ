@@ -1,7 +1,5 @@
 #!/bin/sh
 #
-# $Id: cvs2package.sh,v 1.8.2.5 2007-11-21 11:45:32 thorstenr Exp $
-#
 # This is the shell script for building:
 # 1. a TAR.GZ package;
 # 2. a ZIP package
@@ -22,9 +20,10 @@
 # The script will download the source code from branch CVS_TAG and
 # it will create the 2 packages plus their MD5 hashes.
 #
-# @author       Matteo Scaramuccia <matteo@scaramuccia.com>
-# @since        2005-11-22
-# @copyright:   (c) 2005-2007 phpMyFAQ Team
+# @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+# @since     2005-11-22
+# @copyright 2005-2008 phpMyFAQ Team
+# @version   CVS: $Id: cvs2package.sh,v 1.8.2.6 2008-01-20 16:32:06 thorstenr Exp $
 #
 # The contents of this file are subject to the Mozilla Public License
 # Version 1.1 (the "License"); you may not use this file except in

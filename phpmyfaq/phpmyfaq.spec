@@ -1,6 +1,4 @@
 #
-# $Id: phpmyfaq.spec,v 1.14.2.6 2008-01-19 17:45:14 thorstenr Exp $
-#
 # This is the spec file for building an RPM package of phpMyFAQ
 # for most of the different RPM-based distributions
 #
@@ -39,9 +37,10 @@
 # KNOWN ISSUES
 # 1. Relocation (rpm flag: --relocate OLDPATH=NEWPATH) is not working as expected
 #
-# @author       Matteo Scaramuccia <matteo@scaramuccia.com>
-# @since        2006-07-05
-# @copyright:   (c) 2006-2008 phpMyFAQ Team
+# @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+# @since     2006-07-05
+# @copyright 2006-2008 phpMyFAQ Team
+# @version   CVS: $Id: phpmyfaq.spec,v 1.14.2.7 2008-01-20 16:32:06 thorstenr Exp $
 #
 # The contents of this file are subject to the Mozilla Public License
 # Version 1.1 (the "License"); you may not use this file except in
