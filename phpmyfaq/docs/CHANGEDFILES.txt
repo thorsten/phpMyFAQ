@@ -1,3 +1,10 @@
+CHANGED FILES FROM 2.0.5 -> 2.0.6
+
+./install/installer.php
+./install/update.php
+
+
+
 CHANGED FILES FROM 2.0.4 -> 2.0.5
 
 ./admin/adminlog.php
