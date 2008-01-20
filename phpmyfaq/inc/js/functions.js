@@ -1,15 +1,14 @@
 /**
- * $Id: functions.js,v 1.4.2.4 2007-09-02 12:25:53 thorstenr Exp $
- *
  * Some JavaScript functions used in the admin backend
  *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Periklis Tsirakidis <tsirakidis@phpdevel.de>
- * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
- * @author      Minoru TODA <todam@netjapan.co.jp>
- * @author      Lars Tiedemann, <php@larstiedemann.de>
- * @since       2003-11-13
- * @copyright   (c) 2003-2007 phpMyFAQ Team
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Periklis Tsirakidis <tsirakidis@phpdevel.de>
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author    Minoru TODA <todam@netjapan.co.jp>
+ * @author    Lars Tiedemann <php@larstiedemann.de>
+ * @since     2003-11-13
+ * @copyright 2003-2008 phpMyFAQ Team
+ * @version   CVS: $Id: functions.js,v 1.4.2.5 2008-01-20 16:22:26 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -62,6 +61,9 @@ function focusOnSearchField()
     }
     if (document.getElementById('suchbegriff')) {
         document.getElementById('suchbegriff').focus();
+    }
+    if (document.getElementById('instantfield')) {
+        document.getElementById('instantfield').focus();
     }
 }
 
