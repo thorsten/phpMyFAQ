@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.123 2007-11-21 19:04:42 thorstenr Exp $
+ * $Id: Faq.php,v 1.124 2008-01-25 21:18:27 thorstenr Exp $
  *
  * The main FAQ class
  *
@@ -160,6 +160,140 @@ class PMF_Faq
     // PUBLIC METHODS
     //
     //
+
+    /**
+     * This function returns all not expired records from one category
+     *
+     * @param  int     $category_id Category ID
+     * @param  string  $orderby     Order by
+     * @param  string  $sortby      Sorty by
+     * @return array
+     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    public function getAllRecordPerCategory($category_id, $orderby = 'id', $sortby = 'ASC')
+    {
+        global $sids, $PMF_CONF, $category;
+
+        $faqdata = array();
+
+        if ($orderby == 'visits') {
+            $current_table = 'fv';
+        } else {
+            $current_table = 'fd';
+        }
+
+        if ($this->groupSupport) {
+            $permPart = sprintf("( fdg.group_id IN (%s)
+            OR
+                (fdu.user_id = %d AND fdg.group_id IN (%s)))",
+                implode(', ', $this->groups),
+                $this->user,
+                implode(', ', $this->groups));
+        } else {
+            $permPart = sprintf("( fdu.user_id = %d OR fdu.user_id = -1 )",
+                $this->user);
+        }
+
+        $now   = date('YmdHis');
+        $query = sprintf("
+            SELECT
+                fd.id AS id,
+                fd.lang AS lang,
+                fd.thema AS thema,
+                fd.content AS record_content,
+                fd.datum AS record_date,
+                fcr.category_id AS category_id,
+                fv.visits AS visits
+            FROM
+                %sfaqdata AS fd
+            LEFT JOIN
+                %sfaqcategoryrelations AS fcr
+            ON
+                fd.id = fcr.record_id
+            AND
+                fd.lang = fcr.record_lang
+            LEFT JOIN
+                %sfaqvisits AS fv
+            ON
+                fd.id = fv.id
+            AND
+                fv.lang = fd.lang
+            LEFT JOIN
+                %sfaqdata_group AS fdg
+            ON
+                fd.id = fdg.record_id
+            LEFT JOIN
+                %sfaqdata_user AS fdu
+            ON
+                fd.id = fdu.record_id
+            WHERE
+                fd.date_start <= '%s'
+            AND
+                fd.date_end   >= '%s'
+            AND
+                fd.active = 'yes'
+            AND
+                fcr.category_id = %d
+            AND
+                fd.lang = '%s'
+            AND
+                %s
+            ORDER BY
+                %s.%s %s",
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            $now,
+            $now,
+            $category_id,
+            $this->language,
+            $permPart,
+            $current_table,
+            $this->db->escape_string($orderby),
+            $this->db->escape_string($sortby));
+
+        $result = $this->db->query($query);
+        $num    = $this->db->num_rows($result);
+
+        if ($num > 0) {
+            while (($row = $this->db->fetch_object($result))) {
+
+                if (empty($row->visits)) {
+                    $visits = 0;
+                } else {
+                    $visits = $row->visits;
+                }
+
+                $title = PMF_htmlentities($row->thema, ENT_QUOTES, $this->pmf_lang['metaCharset']);
+                $url   = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                            $sids,
+                            $row->category_id,
+                            $row->id,
+                            $row->lang
+                        );
+                $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+                $oLink->itemTitle = $row->thema;
+                $oLink->text = $title;
+                $oLink->tooltip = $title;
+
+                $faqdata[] = array(
+                    'record_id'      => $row->id,
+                    'record_lang'    => $row->lang,
+                    'category_id'    => $row->category_id,
+                    'record_title'   => $title,
+                    'record_preview' => chopString(strip_tags($row->record_content), 25),
+                    'record_link'    => $oLink->toString(),
+                    'record_date'    => $row->record_date,
+                    'visits'         => $visits);
+            }
+        } else {
+            return $faqdata;
+        }
+
+        return $faqdata;
+    }
 
     /**
      * This function returns all not expired records from one category
