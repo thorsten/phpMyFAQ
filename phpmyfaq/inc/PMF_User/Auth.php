@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Auth.php,v 1.14 2007-08-21 20:16:36 thorstenr Exp $
+* $Id: Auth.php,v 1.15 2008-01-25 15:33:19 thorstenr Exp $
 *
 * manages user authentication.
 *
@@ -91,7 +91,7 @@ class PMF_Auth
      *
      * @var object
      */
-    private $_enc_container = null;
+    protected $_enc_container = null;
 
     /**
      * public array that contains error messages.

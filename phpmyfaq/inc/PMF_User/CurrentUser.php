@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: CurrentUser.php,v 1.27 2007-08-21 19:52:45 thorstenr Exp $
+ * $Id: CurrentUser.php,v 1.28 2008-01-25 15:33:19 thorstenr Exp $
  *
  * manages authentication process using php sessions.
  *
@@ -32,7 +32,6 @@ require_once dirname(__FILE__).'/User.php';
 @define('PMF_LOGIN_BY_SESSION', true);
 @define('PMF_LOGIN_BY_SESSION_FAILED', 'Could not login user from session. ');
 @define('PMF_LOGIN_BY_AUTH_FAILED', 'Could not login with login and password. ');
-@define('PMF_USERERROR_INCORRECT_PASSWORD', 'Specified password is not correct. ');
 
 /**
 * manages authentication process using php sessions.
@@ -49,6 +48,8 @@ require_once dirname(__FILE__).'/User.php';
 */
 class PMF_CurrentUser extends PMF_User
 {
+
+
     /**
     * TRUE if CurrentUser is logged in, otherwise false.
     * Call isLoggedIn() to check.

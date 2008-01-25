@@ -95,6 +95,7 @@ class PMF_User
     const USERERROR_CANNOT_CREATE_USERDATA = 'Entry for user data could not be created. ';
     const USERERROR_CANNOT_DELETE_USERDATA = 'Entry for user data could not be deleted. ';
     const USERERROR_CANNOT_UPDATE_USERDATA = 'Entry for user data could not be updated. ';
+    const USERERROR_INCORRECT_PASSWORD = 'Specified password is not correct.';
 
     // --- ATTRIBUTES ---
 
@@ -158,7 +159,7 @@ class PMF_User
      * @access private
      * @var array
      */
-    private $_auth_data = array('authSource' => array('name' => 'db', 'type' => 'local'),
+    protected $_auth_data = array('authSource' => array('name' => 'db', 'type' => 'local'),
                             'encType' => 'md5',
                             'readOnly' => false
                             );

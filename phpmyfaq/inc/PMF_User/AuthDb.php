@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: AuthDb.php,v 1.13 2007-08-20 19:32:20 johannes Exp $
+* $Id: AuthDb.php,v 1.14 2008-01-25 15:33:19 thorstenr Exp $
 *
 * manages user authentication with databases.
 *
@@ -232,9 +232,6 @@ class PMF_AuthDb extends PMF_Auth
     */
     function checkPassword($login, $pass)
     {
-        if (!$this->_db()) {
-            return false;
-        }
         $check = "
           SELECT
             ".$this->_login_column().",
@@ -308,9 +305,6 @@ class PMF_AuthDb extends PMF_Auth
     */
     function checkLogin($login)
     {
-        if (!$this->_db()) {
-            return false;
-        }
         $check = "
           SELECT
             ".$this->_login_column."
@@ -441,7 +435,7 @@ class PMF_AuthDb extends PMF_Auth
     */
     function _db(PMF_IDB_Driver $db = null)
     {
-        if ($db !== null) {
+        if (is_object($db)) {
             $old_db = $this->_db;
             $this->_db = $db;
             return $old_db;
