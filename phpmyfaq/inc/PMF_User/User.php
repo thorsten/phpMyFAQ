@@ -536,8 +536,8 @@ class PMF_User
             return false;
         }
         // user-account is protected
-        if (isset($this->_allowed_status[$this->_status]) and $this->_allowed_status[$this->_status] == PMF_USERSTATUS_PROTECTED) {
-            $this->errors[] = self::USERERROR_CANNOT_DELETE_USER . PMF_USERSTATUS_PROTECTED;
+        if (isset($this->_allowed_status[$this->_status]) and $this->_allowed_status[$this->_status] == self::PMF_USERSTATUS_PROTECTED) {
+            $this->errors[] = self::USERERROR_CANNOT_DELETE_USER . self::PMF_USERSTATUS_PROTECTED;
             return false;
         }
         // check db
