@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Category.php,v 1.54 2007-09-07 16:42:19 thorstenr Exp $
+ * $Id: Category.php,v 1.55 2008-01-25 16:42:40 thorstenr Exp $
  *
  * The main category class
  *
@@ -622,7 +622,13 @@ class PMF_Category
                 $num_entries = '';
             } else {
                 $totFaqRecords += $number[$parent];
-                $num_entries = sprintf(' (%d %s)', $number[$parent], $PMF_LANG['msgEntries']);
+                $num_entries = sprintf(' (%d %s ',
+                                        $number[$parent],
+                                        $PMF_LANG['msgEntries']);
+                $num_entries .= sprintf(' <a href="feed/category/rss.php?category_id=%d&category_lang=%s" target="_blank"><img id="category_%d_RSS" src="images/rss.png" width="28" height="16" alt="RSS" /></a>)',
+                                        $parent,
+                                        $this->language,
+                                        $parent);
             }
 
             $url = sprintf('%saction=show&amp;cat=%d',
