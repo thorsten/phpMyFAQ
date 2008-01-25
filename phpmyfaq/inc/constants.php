@@ -1,13 +1,12 @@
 <?php
 /**
- * $Id: constants.php,v 1.36 2007-07-14 17:49:08 thorstenr Exp $
- *
  * Constants for phpMyFAQ
  *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
- * @since       2003-12-10
- * @copyright   (c) 2003-2007 phpMyFAQ Team
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @since     2003-12-10
+ * @copyright 2003-2008 phpMyFAQ Team
+ * @version   CVS: $Id: constants.php,v 1.37 2008-01-25 21:27:51 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License Version
  * 1.1 (the "License"); you may not use this file except in compliance with
@@ -182,27 +181,27 @@ $supported_databases = array(
 
 /* allowed 'action' varibales for GET - DO NOT CHANGE! */
 $allowedVariables = array(
-        'add'               => 1,
-        'artikel'           => 1,
-        'ask'               => 1,
-        'contact'           => 1,
-        'help'              => 1,
-        'instantresponse'   => 1,
-        'mailsend2friend'   => 1,
-        'news'              => 1,
-        'open'              => 1,
-        'save'              => 1,
-        'savecomment'       => 1,
-        'savequestion'      => 1,
-        'savevoting'        => 1,
-        'search'            => 1,
-        'send2friend'       => 1,
-        'sendmail'          => 1,
-        'show'              => 1,
-        'sitemap'           => 1,
-        'translate'         => 1,
-        'writecomment'      => 1
-        );
+        'add'             => 1,
+        'artikel'         => 1,
+        'ask'             => 1,
+        'contact'         => 1,
+        'help'            => 1,
+        'instantresponse' => 1,
+        'mailsend2friend' => 1,
+        'news'            => 1,
+        'open'            => 1,
+        'save'            => 1,
+        'savecomment'     => 1,
+        'savequestion'    => 1,
+        'savevoting'      => 1,
+        'search'          => 1,
+        'send2friend'     => 1,
+        'sendmail'        => 1,
+        'show'            => 1,
+        'sitemap'         => 1,
+        'translate'       => 1,
+        'writecomment'    => 1,
+        'register'        => 1);
 
 /* ISO 639 language code list - DO NOT CHANGE! */
 $languageCodes = array (
