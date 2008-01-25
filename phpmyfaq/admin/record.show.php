@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.show.php,v 1.46 2007-09-02 12:03:35 thorstenr Exp $
+ * $Id: record.show.php,v 1.47 2008-01-25 22:06:18 thorstenr Exp $
  *
  * Shows the list of records ordered by categories
  *
@@ -204,7 +204,7 @@ if ($permission["editbt"] || $permission["delbt"]) {
 
     } elseif (isset($_REQUEST['action']) && $_REQUEST['action'] == 'accept') {
 
-        $cond[SQLPREFIX.'fd.active'] = 'no';
+        $cond['fd.active'] = 'no';
         $faq->getAllRecords($orderby, $cond, $sortby);
         $laction = 'accept';
         $internalSearch = '';
