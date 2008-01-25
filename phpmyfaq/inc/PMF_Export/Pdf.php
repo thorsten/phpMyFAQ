@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Pdf.php,v 1.15 2007-08-26 09:18:20 thorstenr Exp $
+* $Id: Pdf.php,v 1.16 2008-01-25 16:27:50 thorstenr Exp $
 *
 * Main PDF class for phpMyFAQ based on FPDF by Olivier Plathey
 *
@@ -25,9 +25,9 @@
 */
 
 define('FPDF_FONTPATH', dirname(dirname(dirname(__FILE__))).'/font/');
-require_once(dirname(dirname(__FILE__)).'/libs/tcpdf.php');
+require_once(dirname(dirname(__FILE__)).'/libs/fpdf.php');
 
-class PDF extends TCPDF
+class PDF extends FPDF
 {
     /**
     * <b> and <strong> for bold strings
