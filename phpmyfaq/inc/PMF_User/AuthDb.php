@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: AuthDb.php,v 1.14 2008-01-25 15:33:19 thorstenr Exp $
+* $Id: AuthDb.php,v 1.15 2008-01-25 15:52:02 thorstenr Exp $
 *
 * manages user authentication with databases.
 *
@@ -107,9 +107,6 @@ class PMF_AuthDb extends PMF_Auth
     */
     function add($login, $pass)
     {
-        if (!$this->_db()) {
-            return false;
-        }
         // check if $login already exists
         if ($this->checkLogin($login) > 0) {
             $this->errors[] = PMF_USERERROR_ADD . PMF_USERERROR_LOGIN_NOT_UNIQUE;
@@ -153,9 +150,6 @@ class PMF_AuthDb extends PMF_Auth
     */
     function changePassword($login, $pass)
     {
-        if (!$this->_db()) {
-            return false;
-        }
         $change = "
           UPDATE
             ".$this->_tablename()."
@@ -193,9 +187,6 @@ class PMF_AuthDb extends PMF_Auth
     */
     function delete($login)
     {
-        if (!$this->_db()) {
-            return false;
-        }
         $delete = "
           DELETE FROM
             ".$this->_tablename()."
