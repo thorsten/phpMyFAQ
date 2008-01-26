@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Category.php,v 1.55 2008-01-25 16:42:40 thorstenr Exp $
+ * $Id: Category.php,v 1.56 2008-01-26 01:02:56 thorstenr Exp $
  *
  * The main category class
  *
@@ -128,7 +128,7 @@ class PMF_Category
      * @access  public
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function __construct($language = '', $user = null, $groups = null, $withperm = true)
+    public function __construct($language = '', $user = null, $groups = null, $withperm = true)
     {
         global $db;
 
@@ -439,7 +439,12 @@ class PMF_Category
         return isset($this->children[$id]) ? array_keys($this->children[$id]) : array();
     }
 
-    // list in a array of the $id of the child
+    /**
+     * list in a array of the $id of the child
+     *
+     * @param  integer $id ID
+     * @return array
+     */
     public function getChildNodes($id)
     {
         $childs = array();
@@ -454,7 +459,12 @@ class PMF_Category
         return($childs);
     }
 
-    // number of childs of the $id
+    /**
+     * number of childs of the $id
+     *
+     * @param  integer $id ID
+     * @return integer
+     */
     private function numChilds($id)
     {
         return count($this->getNodes($id));
