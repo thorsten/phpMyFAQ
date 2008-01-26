@@ -447,7 +447,7 @@ class PMF_User
     {
         $query = sprintf("
                     SELECT
-                        login, user_id
+                        login, user_id, account_status
                     FROM
                         %sfaquser
                     WHERE login LIKE '%s'",

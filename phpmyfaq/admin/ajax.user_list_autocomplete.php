@@ -5,7 +5,7 @@
  * @package   phpMyFAQ
  * @author    Sarah Hermann <sayh@gmx.de>
  * @copyright 2008 phpMyFAQ Team
- * @version   CVS: $Id: ajax.user_list_autocomplete.php,v 1.1 2008-01-26 15:43:36 thorstenr Exp $
+ * @version   CVS: ajax.user_list_autocomplete.php,v 1.1 2008/01/26 15:43:36 thorstenr Exp
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -30,6 +30,11 @@ $userList = $user->searchUsers($_REQUEST['user_list_search']);
 
 echo "<ul id='user_list_autocomplete' class='user_list_autocomplete'>";
 foreach ($userList as $user) {
-    echo "<li id='".$user['user_id']."'>".$user['login']."</li>";
+
+    if ($user['account_status'] == 'blocked') {
+        echo "<li id='".$user['user_id']."' style='color: red;'><strong>".$user['login']."</strong></li>";
+    } else {
+        echo "<li id='".$user['user_id']."' >".$user['login']."</li>";
+    }
 }
 echo "</ul>";
