@@ -9,7 +9,7 @@
  * @author    Minoru TODA <todam@netjapan.co.jp>
  * @since     2002-09-16
  * @copyright 2002-2008 phpMyFAQ Team
- * @version   CVS: $Id: index.php,v 1.107 2008-01-26 09:44:14 thorstenr Exp $
+ * @version   CVS: $Id: index.php,v 1.108 2008-01-26 15:43:36 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -179,6 +179,9 @@ if (isset($auth) && in_array(true, $permission)) {
                 break;
             case 'group_list':
                 require_once 'ajax.group_list.php';
+                break;
+            case 'user_list_autocomplete':
+                require_once 'ajax.user_list_autocomplete.php';
                 break;
 
             // Configuration management
