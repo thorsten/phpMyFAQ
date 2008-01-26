@@ -1,15 +1,15 @@
 <?php
 /**
- * $Id: index.php,v 1.105 2007-05-29 02:14:26 thorstenr Exp $
- *
  * The main admin backend index file
  *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Bastian Poettner <bastian@poettner.net>
- * @author      Meikel Katzengreis <meikel@katzengreis.com>
- * @author      Minoru TODA <todam@netjapan.co.jp>
- * @since       2002-09-16
- * @copyright   (c) 2002-2007 phpMyFAQ Team
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Bastian Poettner <bastian@poettner.net>
+ * @author    Meikel Katzengreis <meikel@katzengreis.com>
+ * @author    Minoru TODA <todam@netjapan.co.jp>
+ * @since     2002-09-16
+ * @copyright 2002-2008 phpMyFAQ Team
+ * @version   CVS: $Id: index.php,v 1.106 2008-01-26 08:30:55 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -28,7 +28,7 @@ define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 // Check if data.php exist -> if not, redirect to installer
 //
 if (!file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
-    header("Location: ".str_replace('admin/index.php', '', $_SERVER["PHP_SELF"])."install/installer.php");
+    header("Location: ".str_replace('admin/index.php', '', $_SERVER['PHP_SELF']).'install/installer.php');
     exit();
 }
 
@@ -36,19 +36,19 @@ if (!file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
 // Prepend and start the PHP session
 //
 define('IS_VALID_PHPMYFAQ_ADMIN', null);
-require_once(PMF_ROOT_DIR.'/inc/Init.php');
+require_once PMF_ROOT_DIR.'/inc/Init.php';
 PMF_Init::cleanRequest();
 session_name('pmf_auth_'.$faqconfig->get('main.phpMyFAQToken'));
 session_start();
 
 // Include classes and functions
-require_once(PMF_ROOT_DIR.'/inc/Utils.php');
-require_once(PMF_ROOT_DIR.'/inc/Category.php');
-require_once(PMF_ROOT_DIR.'/inc/Faq.php');
-require_once(PMF_ROOT_DIR.'/inc/Linkverifier.php');
-require_once(PMF_ROOT_DIR.'/inc/Tags.php');
-require_once(PMF_ROOT_DIR.'/inc/PMF_User/CurrentUser.php');
-require_once(PMF_ROOT_DIR.'/inc/libs/idna_convert.class.php');
+require_once PMF_ROOT_DIR.'/inc/Utils.php';
+require_once PMF_ROOT_DIR.'/inc/Category.php';
+require_once PMF_ROOT_DIR.'/inc/Faq.php';
+require_once PMF_ROOT_DIR.'/inc/Linkverifier.php';
+require_once PMF_ROOT_DIR.'/inc/Tags.php';
+require_once PMF_ROOT_DIR.'/inc/PMF_User/CurrentUser.php';
+require_once PMF_ROOT_DIR.'/inc/libs/idna_convert.class.php';
 $IDN = new idna_convert;
 
 // get language (default: english)
