@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Init.php,v 1.47 2008-01-26 08:41:28 thorstenr Exp $
+ * $Id: Init.php,v 1.48 2008-01-26 09:30:16 thorstenr Exp $
  *
  * Some functions
  *
@@ -324,6 +324,8 @@ class PMF_Init
      */
     public function setLanguage($config_detection, $config_language)
     {
+        global $sid;
+
         $_lang = array();
         self::_getUserAgentLanguage();
 
