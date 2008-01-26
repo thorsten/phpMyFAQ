@@ -9,7 +9,7 @@
  * @author    Jan Mergler <jan.mergler@gmx.de>
  * @since     2002-08-22
  * @copyright 2002-2008 phpMyFAQ Team
- * @version   CVS: $Id: Template.php,v 1.6 2008-01-26 11:55:37 thorstenr Exp $
+ * @version   CVS: $Id: Template.php,v 1.7 2008-01-26 17:22:57 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -44,6 +44,14 @@ class PMF_Template
      * @var array
      */
     private $blocks;
+
+    /**
+     * array containing the touched blocks
+     *
+     * @var array
+     */
+    private $blocksTouched = array();
+
 
     /**
      * Constructor
@@ -95,8 +103,18 @@ class PMF_Template
         // process blocked content
         if (isset($this->blocks[$templateName])) {
             foreach ($rawBlocks as $key => $rawBlock) {
-                $tmp = str_replace($rawBlock, $this->blocks[$templateName][$key], $tmp);
-                $tmp = preg_replace('/\[.+\]/', '', $tmp);
+
+                if (in_array($key, $this->blocksTouched) && $key != 'unblocked') {
+
+                    $tmp = str_replace($rawBlock, $this->blocks[$templateName][$key], $tmp);
+                    $tmp = preg_replace('/\[.+\]/', '', $tmp);
+
+                } elseif ($key != 'unblocked') {
+
+                    $tmp = str_replace($rawBlock, '', $tmp);
+                    $tmp = preg_replace('/\[.+\]/', '', $tmp);
+
+                }
             }
         }
 
@@ -188,17 +206,18 @@ class PMF_Template
         $blockContent = $this->_checkContent($blockContent);
 
         foreach ($blockContent as $var => $val) {
-            if (is_array($val)) {
-                foreach ($val as $item) {
-                    $tmpBlock .= str_replace('{'.$var.'}', $item, $block);
-                }
-                $block = $tmpBlock;
 
+            // if array given, multiply block
+            if (is_array($val)) {
+                $block = $this->_multiplyBlock($this->blocks[$templateName][$blockName], $blockContent);
+                break;
             } else {
                 $block = str_replace('{'.$var.'}', $val, $block);
             }
 
         }
+
+        $this->blocksTouched[] = $blockName;
 
         // Hack: Backtick Fix
         $block = str_replace('&acute;', '`', $block);
@@ -209,6 +228,63 @@ class PMF_Template
     //
     // Private Functions
     //
+
+    /**
+     * This function multiplies blocks
+     *
+     * @param  string $block
+     * @param  array  $blockContent
+     * @return string implode('', $tmpBlock)
+     * @author Jan Mergler <jan.mergler@gmx.de>
+     */
+    private function _multiplyBlock($block, $blockContent)
+    {
+
+        $multiplyTimes = null;
+
+        //create the replacement array
+        foreach ($blockContent as $var => $val) {
+
+            if (is_array($val) && !$multiplyTimes) {
+                //the first array in $blockContent defines $multiplyTimes
+                $multiplyTimes = count($val);
+                $replace[$var] = $val;
+
+            } elseif ((is_array($val) && $multiplyTimes)) {
+
+                //check if all further arrays in $blockContent have the same lenght
+                if ($multiplyTimes == count($val)) {
+                    $replace[$var] = $val;
+                } else {
+                    die('Wrong parameter length!');
+                }
+
+            } else{
+                //multiply strings to $multiplyTimes
+                for ($i=0; $i<$multiplyTimes; $i++){
+                    $replace[$var][] = $val;
+                }
+            }
+
+        }
+
+        //do the replacement
+        for ($i=0; $i<$multiplyTimes; $i++) {
+
+            $tmpBlock[$i] = $block;
+
+            foreach ($replace as $var => $val) {
+
+                foreach ($val as $item){
+                    $tmpBlock[$i] = str_replace('{'.$var.'}', $item, $tmpBlock[$i]);
+                }
+            }
+
+        }
+
+        return implode('',$tmpBlock);
+
+    }
 
     /**
      * This function reads the block
@@ -222,7 +298,8 @@ class PMF_Template
         $tmpBlocks = array();
 
         // read all blocks into $tmpBlocks
-        preg_match_all('/\[.+\]\s*[\w\s\{\}\<\>\=\"\/]*\s*\[\/.+\]/', $tpl, $tmpBlocks);
+        preg_match_all('/\[.+\]\s*[\W\w\s\{\}\<\>\=\"\/]*?\s*\[\/.+\]/', $tpl, $tmpBlocks);
+
 
         $unblocked = $tpl;
 
@@ -283,7 +360,16 @@ class PMF_Template
         $content = str_replace('`', '&acute;', $content);
 
         foreach ($content as $var => $val) {
-            $content[$var] = preg_replace($search, $replace, $val);
+
+            if (is_array($val)) {
+
+                foreach ($val as $key => $value) {
+                    $content[$var][$key] = preg_replace($search, $replace, $value);
+                }
+
+            } else {
+                $content[$var] = preg_replace($search, $replace, $val);
+            }
         }
 
         return $content;
