@@ -1,11 +1,13 @@
 <?php
 /**
- * $Id: record.edit.php,v 1.78 2007-07-06 19:06:50 thorstenr Exp $
+ * The FAQ record editor
  *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since       2003-02-23
- * @license     Mozilla Public License 1.1
- * @copyright   (c) 2003-2007 phpMyFAQ Team
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since     2003-02-23
+ * @license   Mozilla Public License 1.1
+ * @copyright 2003-2008 phpMyFAQ Team
+ * @version   CVS: $Id: record.edit.php,v 1.79 2008-01-26 10:35:16 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -27,29 +29,33 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 $user = PMF_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
 
 if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
+
     $category = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
     $category->buildTree();
 
-    $current_category   = '';
-    $categories         = array();
-    $faqData = array(
+    $current_category = '';
+    $categories       = array();
+    $faqData          = array(
         'id'            => 0,
         'lang'          => $LANGCODE,
         'revision_id'   => 0,
         'title'         => '');
+
     $tagging = new PMF_Tags($db, $LANGCODE);
 
-    if (isset($_REQUEST["action"]) && $_REQUEST["action"] == "takequestion") {
-        $question_id = intval( $_REQUEST['id']);
-        $question = $faq->getQuestion($question_id);
+    $currentaction = (isset($_GET['action']) ? $_GET['action'] : '');
+
+    if ($currentaction == 'takequestion') {
+        $question_id      = (int)$_REQUEST['id'];
+        $question         = $faq->getQuestion($question_id);
         $current_category = $question['category'];
         $faqData['title'] = $question['question'];
-        $categories = array(
+        $categories       = array(
             'category_id'   => $current_category,
             'category_lang' => $faqData['lang']);
     }
 
-    if (isset($_REQUEST["action"]) && $_REQUEST["action"] == "editpreview") {
+    if ($currentaction == 'editpreview') {
 
         if (isset($_REQUEST["id"]) && $_REQUEST["id"] != "") {
             $faqData['id'] = (int)$_REQUEST["id"];
@@ -82,21 +88,34 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
             $faqData['dateEnd'] = $_REQUEST['dateEnd'];
         }
 
-    } elseif (isset($_REQUEST["action"]) && $_REQUEST["action"] == "editentry") {
+    } elseif ($currentaction == 'editentry') {
 
         if ((!isset($current_category) && !isset($faqData['title'])) || (isset($_GET['id']) && $_GET['id'] != '')) {
-            adminlog("Beitragedit, ".$_GET['id']);
+            adminlog("Beitragedit, " . (int)$_GET['id']);
             $faqData['id']      = (int)$_GET['id'];
             $faqData['lang']    = $_GET["lang"];
             $faq->language      = $faqData['lang'];
             $categories         = $category->getCategoryRelationsFromArticle($faqData['id'], $faqData['lang']);
+
             $faq->getRecord($faqData['id'], null, true);
-            $faqData = $faq->faqRecord;
-            $tags = implode(',', $tagging->getAllTagsById($faqData['id']));
-            $url_variables = 'saveentry&amp;id='.$_REQUEST['id'];
+            $faqData       = $faq->faqRecord;
+            $tags          = implode(',', $tagging->getAllTagsById($faqData['id']));
+            $url_variables = 'saveentry&amp;id='.$faqData['id'];
         } else {
             $url_variables = 'insertentry';
         }
+
+    } elseif ($currentaction == 'copyentry') {
+
+        $faqData['id']   = (int)$_GET['id'];
+        $faqData['lang'] = $_GET["lang"];
+        $faq->language   = $faqData['lang'];
+        $categories      = $category->getCategoryRelationsFromArticle($faqData['id'], $faqData['lang']);
+
+        $faq->getRecord($faqData['id'], null, true);
+
+        $faqData         = $faq->faqRecord;
+        $url_variables   = 'insertentry';
 
     } else {
         adminlog('Beitragcreate');
@@ -133,8 +152,11 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     }
 
     print '<h2>'.$PMF_LANG["ad_entry_edit_1"];
-    if (0 != $faqData['id']) {
-        print ' <span style="color: Red;">'.$faqData['id'].' ('.$PMF_LANG['ad_entry_revision'].' 1.'.$revisionid_selected.') </span> ';
+    if ($faqData['id'] != 0 && $currentaction != 'copyentry') {
+        printf(' <span style="color: Red;">%d (%s 1.%d) </span> ',
+            $faqData['id'],
+            $PMF_LANG['ad_entry_revision'],
+            $revisionid_selected);
     }
     print ' '.$PMF_LANG["ad_entry_edit_2"].'</h2>';
 
@@ -157,7 +179,11 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     <br />
 <?php
         }
-        if (isset($revisionid_selected) && isset($faqData['revision_id']) && $revisionid_selected != $faqData['revision_id']) {
+
+        if (isset($revisionid_selected) &&
+            isset($faqData['revision_id']) &&
+            $revisionid_selected != $faqData['revision_id']) {
+
             $faq->language = $faqData['lang'];
             $faq->getRecord($faqData['id'], $revisionid_selected, true);
             $faqData = $faq->faqRecord;
@@ -185,6 +211,12 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript><textarea id="content" name="content" cols="84" rows="10"><?php if (isset($faqData['content'])) { print trim(htmlspecialchars($faqData['content'])); } ?></textarea><br />
 
 <?php
+
+    if ($currentaction == 'copyentry') {
+        unset($faqData);
+        $faqData['lang'] = $_GET['lang'];
+    }
+
     if ($permission["addatt"]) {
 ?>
     <label><?php print $PMF_LANG["ad_att_att"]; ?></label>
@@ -269,7 +301,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     }
 ?>
     <label class="left" for="active"><?php print $PMF_LANG["ad_entry_active"]; ?></label>
-    <input type="radio" name="active" class="active" value="yes"<?php if (isset($suf)) { print $suf; } ?> /> <?php print $PMF_LANG['ad_gen_yes']; ?> <input type="radio" name="active" class="active" value="no"<?php if (isset($sul)) { print $sul; } ?> /> <?php print $PMF_LANG['ad_gen_no']; ?><br />
+    <input type="radio" id="active" name="active" class="active" value="yes"<?php if (isset($suf)) { print $suf; } ?> /> <?php print $PMF_LANG['ad_gen_yes']; ?> <input type="radio" name="active" class="active" value="no"<?php if (isset($sul)) { print $sul; } ?> /> <?php print $PMF_LANG['ad_gen_no']; ?><br />
 
 <?php
     if (isset($faqData['comment']) && $faqData['comment'] == 'y') {
@@ -300,12 +332,12 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     if ($groupSupport) {
 ?>
     <label class="left" for="grouppermission"><?php print $PMF_LANG['ad_entry_grouppermission']; ?></label>
-    <input type="radio" name="grouppermission" class="active" value="all" <?php print ($all_groups ? 'checked="checked"' : ''); ?>/> <?php print $PMF_LANG['ad_entry_all_groups']; ?> <input type="radio" name="grouppermission" class="active" value="restricted" <?php print ($restricted_groups ? 'checked="checked"' : ''); ?>/> <?php print $PMF_LANG['ad_entry_restricted_groups']; ?> <select name="restricted_groups" size="1"><?php print $user->perm->getAllGroupsOptions($group_permission); ?></select><br />
+    <input type="radio" id="grouppermission" name="grouppermission" class="active" value="all" <?php print ($all_groups ? 'checked="checked"' : ''); ?>/> <?php print $PMF_LANG['ad_entry_all_groups']; ?> <input type="radio" name="grouppermission" class="active" value="restricted" <?php print ($restricted_groups ? 'checked="checked"' : ''); ?>/> <?php print $PMF_LANG['ad_entry_restricted_groups']; ?> <select name="restricted_groups" size="1"><?php print $user->perm->getAllGroupsOptions($group_permission); ?></select><br />
 <?php
     }
 ?>
     <label class="left" for="userpermission"><?php print $PMF_LANG['ad_entry_userpermission']; ?></label>
-    <input type="radio" name="userpermission" class="active" value="all" <?php print ($all_users ? 'checked="checked"' : ''); ?>/> <?php print $PMF_LANG['ad_entry_all_users']; ?> <input type="radio" name="userpermission" class="active" value="restricted" <?php print ($restricted_users ? 'checked="checked"' : ''); ?>/> <?php print $PMF_LANG['ad_entry_restricted_users']; ?> <select name="restricted_users" size="1"><?php print $user->getAllUserOptions($user_permission[0]); ?></select><br />
+    <input type="radio" id="userpermission" name="userpermission" class="active" value="all" <?php print ($all_users ? 'checked="checked"' : ''); ?>/> <?php print $PMF_LANG['ad_entry_all_users']; ?> <input type="radio" name="userpermission" class="active" value="restricted" <?php print ($restricted_users ? 'checked="checked"' : ''); ?>/> <?php print $PMF_LANG['ad_entry_restricted_users']; ?> <select name="restricted_users" size="1"><?php print $user->getAllUserOptions($user_permission[0]); ?></select><br />
 
     </fieldset>
 

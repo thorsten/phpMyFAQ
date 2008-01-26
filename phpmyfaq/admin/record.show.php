@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.show.php,v 1.47 2008-01-25 22:06:18 thorstenr Exp $
+ * $Id: record.show.php,v 1.48 2008-01-26 10:35:16 thorstenr Exp $
  *
  * Shows the list of records ordered by categories
  *
@@ -266,7 +266,7 @@ if ($permission["editbt"] || $permission["delbt"]) {
         <th class="listhead">&nbsp;</th>
         <th class="listhead"><a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=title&amp;sortby=desc">&uarr;</a>&nbsp;<a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=title&amp;sortby=asc">&darr;</a></th>
         <th class="listhead"><a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=date&amp;sortby=desc">&uarr;</a>&nbsp;<a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=date&amp;sortby=asc">&darr;</a></th>
-        <th class="listhead" colspan="2">&nbsp;</th>
+        <th class="listhead" colspan="3">&nbsp;</th>
     </tr>
     </thead>
 <?php
@@ -289,6 +289,7 @@ if ($permission["editbt"] || $permission["delbt"]) {
         <td class="list" width="50"><?php print substr($record['date'], 0, 10); ?></td>
         <td class="list" width="100"><?php print $linkverifier->getEntryStateHTML($record['id'], $record['lang']); ?></td>
         <td class="list" width="17"><a href="?action=saveentry&amp;id=<?php print $record['id']; ?>&amp;language=<?php print $record['lang']; ?>&amp;submit%5B0%5D=<?php print urlencode($PMF_LANG["ad_entry_delete"]); ?>" title="<?php print $PMF_LANG["ad_user_delete"]; ?> '<?php print str_replace("\"", "´", $record['title']); ?>'"><img src="images/delete.gif" width="17" height="18" alt="<?php print $PMF_LANG["ad_entry_delete"]; ?>" /></a></td>
+        <td class="list" width="17"><a href="?action=copyentry&amp;id=<?php print $record['id']; ?>&amp;lang=<?php print $record['lang']; ?>">copy</a></td>
     </tr>
 <?php
             $old = $cid;
