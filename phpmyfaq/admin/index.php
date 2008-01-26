@@ -9,7 +9,7 @@
  * @author    Minoru TODA <todam@netjapan.co.jp>
  * @since     2002-09-16
  * @copyright 2002-2008 phpMyFAQ Team
- * @version   CVS: $Id: index.php,v 1.106 2008-01-26 08:30:55 thorstenr Exp $
+ * @version   CVS: $Id: index.php,v 1.107 2008-01-26 09:44:14 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -59,7 +59,7 @@ require_once (PMF_ROOT_DIR.'/lang/language_en.php');
 
 if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE)) {
     // Overwrite English strings with the ones we have in the current language
-    require_once(PMF_ROOT_DIR.'/lang/language_'.$LANGCODE.'.php');
+    require_once PMF_ROOT_DIR.'/lang/language_'.$LANGCODE.'.php';
 } else {
     $LANGCODE = 'en';
 }
@@ -165,19 +165,31 @@ if (isset($auth) && in_array(true, $permission)) {
     if (isset($_action) && isset($_ajax)) {
         if ($_action == 'ajax') {
             switch ($_ajax) {
-                // Link verification
-                case 'verifyURL':       require_once('ajax.verifyurl.php'); break;
-                case 'onDemandURL':     require_once('ajax.ondemandurl.php'); break;
+            // Link verification
+            case 'verifyURL':
+                require_once 'ajax.verifyurl.php';
+                break;
+            case 'onDemandURL':
+                require_once 'ajax.ondemandurl.php';
+                break;
 
-                // User management
-                case 'user_list':       require_once('ajax.user_list.php'); break;
-                case 'group_list':      require_once('ajax.group_list.php'); break;
+            // User management
+            case 'user_list':
+                require_once 'ajax.user_list.php';
+                break;
+            case 'group_list':
+                require_once 'ajax.group_list.php';
+                break;
 
-                // Configuration management
-                case 'config_list':     require_once('ajax.config_list.php'); break;
+            // Configuration management
+            case 'config_list':
+                require_once 'ajax.config_list.php';
+                break;
 
-                // Tags management
-                case 'tags_list':       require_once('ajax.tags_list.php'); break;
+            // Tags management
+            case 'tags_list':
+                require_once 'ajax.tags_list.php';
+                break;
             }
         exit();
         }
@@ -186,12 +198,12 @@ if (isset($auth) && in_array(true, $permission)) {
 
 // are we running a PMF export file request?
 if ((isset($_REQUEST["action"])) && ($_REQUEST["action"] == "exportfile")) {
-    require_once('export.file.php');
+    require_once 'export.file.php';
     exit();
 }
 
 // Header of the admin page inlcuding the navigation
-require_once('header.php');
+require_once 'header.php';
 
 // User is authenticated
 if (isset($auth) && in_array(true, $permission)) {
@@ -199,25 +211,26 @@ if (isset($auth) && in_array(true, $permission)) {
         // the various sections of the admin area
         switch ($_action) {
             // functions for user administration
-            case 'user':                    require_once('user.php'); break;
-            case 'group':                   require_once('group.php'); break;
+            case 'user':                    require_once 'user.php'; break;
+            case 'group':                   require_once 'group.php'; break;
             // functions for record administration
             case "view":
             case "accept":
-            case "zeichan":                 require_once('record.show.php'); break;
+            case "zeichan":                 require_once 'record.show.php'; break;
             case "takequestion":
             case "editentry":
-            case "editpreview":             require_once('record.edit.php'); break;
-            case "delcomment":              require_once('record.delcommentform.php'); break;
-            case "deletecomment":           require_once('record.delcomment.php'); break;
-            case "insertentry":             require_once('record.add.php'); break;
-            case "saveentry":               require_once('record.save.php'); break;
-            case "delentry":                require_once('record.delete.php'); break;
-            case "delatt":                  require_once('record.delatt.php'); break;
-            case "question":                require_once('record.delquestion.php'); break;
-            case 'comments':                require_once('record.comments.php'); break;
+            case 'copyentry':
+            case "editpreview":             require_once 'record.edit.php'; break;
+            case "delcomment":              require_once 'record.delcommentform.php'; break;
+            case "deletecomment":           require_once 'record.delcomment.php'; break;
+            case "insertentry":             require_once 'record.add.php'; break;
+            case "saveentry":               require_once 'record.save.php'; break;
+            case "delentry":                require_once 'record.delete.php'; break;
+            case "delatt":                  require_once 'record.delatt.php'; break;
+            case "question":                require_once 'record.delquestion.php'; break;
+            case 'comments':                require_once 'record.comments.php'; break;
             // news administraion
-            case "news":                    require_once('news.php'); break;
+            case "news":                    require_once 'news.php'; break;
             // category administration
             case 'content':
             case 'category':
@@ -225,41 +238,41 @@ if (isset($auth) && in_array(true, $permission)) {
             case 'updatecategory':
             case 'removecategory':
             case 'changecategory':
-            case 'pastecategory':           require_once('category.main.php'); break;
-            case "addcategory":             require_once('category.add.php'); break;
-            case "editcategory":            require_once('category.edit.php'); break;
-            case "translatecategory":       require_once('category.translate.php'); break;
-            case "deletecategory":          require_once('category.delete.php'); break;
-            case "cutcategory":             require_once('category.cut.php'); break;
-            case "movecategory":            require_once('category.move.php'); break;
-            case "showcategory":            require_once('category.showstructure.php'); break;
+            case 'pastecategory':           require_once 'category.main.php'; break;
+            case "addcategory":             require_once 'category.add.php'; break;
+            case "editcategory":            require_once 'category.edit.php'; break;
+            case "translatecategory":       require_once 'category.translate.php'; break;
+            case "deletecategory":          require_once 'category.delete.php'; break;
+            case "cutcategory":             require_once 'category.cut.php'; break;
+            case "movecategory":            require_once 'category.move.php'; break;
+            case "showcategory":            require_once 'category.showstructure.php'; break;
             // glossary
             case 'glossary':
             case 'saveglossary':
             case 'updateglossary':
-            case 'deleteglossary':          require_once('glossary.main.php'); break;
-            case 'addglossary':             require_once('glossary.add.php'); break;
-            case 'editglossary':            require_once('glossary.edit.php'); break;
+            case 'deleteglossary':          require_once 'glossary.main.php'; break;
+            case 'addglossary':             require_once 'glossary.add.php'; break;
+            case 'editglossary':            require_once 'glossary.edit.php'; break;
             // adminlog administration
             case 'adminlog':
-            case 'deleteadminlog':          require_once ('adminlog.php'); break;
+            case 'deleteadminlog':          require_once 'adminlog.php'; break;
             // functions for password administration
-            case "passwd":                  require_once('pwd.change.php'); break;
-            case "savepwd":                 require_once('pwd.save.php'); break;
+            case "passwd":                  require_once 'pwd.change.php'; break;
+            case "savepwd":                 require_once 'pwd.save.php'; break;
             // functions for session administration
-            case "viewsessions":            require_once('stat.main.php'); break;
-            case "sessionbrowse":           require_once('stat.browser.php'); break;
-            case "sessionsuche":            require_once('stat.form.php'); break;
-            case "viewsession":             require_once('stat.show.php'); break;
-            case "statistics":              require_once('stat.ratings.php'); break;
+            case "viewsessions":            require_once 'stat.main.php'; break;
+            case "sessionbrowse":           require_once 'stat.browser.php'; break;
+            case "sessionsuche":            require_once 'stat.form.php'; break;
+            case "viewsession":             require_once 'stat.show.php'; break;
+            case "statistics":              require_once 'stat.ratings.php'; break;
             // functions for config administration
-            case 'config':                  require_once('configuration.php'); break;
-            case 'linkconfig':              require_once ('linkconfig.main.php'); break;
+            case 'config':                  require_once 'configuration.php'; break;
+            case 'linkconfig':              require_once 'linkconfig.main.php'; break;
             // functions for backup administration
-            case 'backup':                  require_once ('backup.main.php'); break;
-            case 'restore':                 require_once ('backup.import.php'); break;
+            case 'backup':                  require_once 'backup.main.php'; break;
+            case 'restore':                 require_once 'backup.import.php'; break;
             // functions for FAQ export
-            case "export":                  require_once('export.main.php'); break;
+            case "export":                  require_once 'export.main.php'; break;
 
             default:                        print "Error"; break;
         }
@@ -411,6 +424,6 @@ if (DEBUG) {
     print '</div>';
 }
 
-require_once('footer.php');
+require_once 'footer.php';
 
 $db->dbclose();
