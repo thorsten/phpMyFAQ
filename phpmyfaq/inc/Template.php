@@ -9,7 +9,7 @@
  * @author    Jan Mergler <jan.mergler@gmx.de>
  * @since     2002-08-22
  * @copyright 2002-2008 phpMyFAQ Team
- * @version   CVS: $Id: Template.php,v 1.7 2008-01-26 17:22:57 thorstenr Exp $
+ * @version   CVS: $Id: Template.php,v 1.8 2008-01-26 17:30:10 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -275,12 +275,12 @@ class PMF_Template
 
             foreach ($replace as $var => $val) {
 
-                foreach ($val as $item){
-                    $tmpBlock[$i] = str_replace('{'.$var.'}', $item, $tmpBlock[$i]);
-                }
+                $tmpBlock[$i] = str_replace('{'.$var.'}', $val[$i], $tmpBlock[$i]);
+
             }
 
         }
+
 
         return implode('',$tmpBlock);
 
