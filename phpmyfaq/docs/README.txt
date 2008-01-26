@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.98 2008-01-26 10:45:59 thorstenr Exp $
+$Id: README.txt,v 1.99 2008-01-26 11:00:40 thorstenr Exp $
 
 phpMyFAQ 2.5.0-dev
 Codename "Pandora"
@@ -15,6 +15,7 @@ Changes since 2.0.x:
 - added RSS feed for every category (Thorsten)
 - added ability to copy and duplicate FAQ entries (Thorsten)
 - updated bundled Net_IDNA to version 0.6.0 (Thorsten)
+- updated bundled TinyMCE editor component to version 2.1.3 (Thorsten)
 
 For known issues please take a look at KNOWNBUGS.txt
 
@@ -26,6 +27,7 @@ Version 2.5.0-dev - 2008-
 - added RSS feed for every category (Thorsten)
 - added ability to copy and duplicate FAQ entries (Thorsten)
 - updated bundled Net_IDNA to version 0.6.0 (Thorsten)
+- updated bundled TinyMCE editor component to version 2.1.3 (Thorsten)
 
 Version 2.0.5 - 2008-01-20
 - fixed lighttpd rewrite rules (Markus Kohlmeyer)
