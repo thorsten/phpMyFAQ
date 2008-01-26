@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.200.2.11 2008-01-26 08:31:59 thorstenr Exp $
+ * $Id: functions.php,v 1.200.2.12 2008-01-26 08:48:34 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -700,7 +700,7 @@ function Tracking($action, $id = 0)
                 $sid = $db->nextID(SQLPREFIX."faqsessions", "sid");
                 // HACK: be sure that pmf_sid cookie contains the current $sid
                 if (isset($_COOKIE["pmf_sid"]) && ((int)$_COOKIE['pmf_sid'] != $sid)) {
-                    setcookie('pmf_sid', $sid, time() + 3600, dirname($_SERVER['SCRIPT_NAME']), $_SERVER['REMOTE_HOST']);
+                    setcookie('pmf_sid', $sid, time() + 3600);
                 }
                 $db->query("
                     INSERT INTO

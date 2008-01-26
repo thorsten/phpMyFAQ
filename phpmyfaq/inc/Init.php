@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Init.php,v 1.37.2.5 2008-01-26 08:31:59 thorstenr Exp $
+ * $Id: Init.php,v 1.37.2.6 2008-01-26 08:48:34 thorstenr Exp $
  *
  * Some functions
  *
@@ -372,7 +372,7 @@ class PMF_Init
             $this->language = $_lang['post'];
             $_lang = null;
             unset($_lang);
-            setcookie('pmf_lang', $this->language, time() + 3600, dirname($_SERVER['SCRIPT_NAME']), $_SERVER['REMOTE_HOST']);
+            setcookie('pmf_lang', $this->language, time() + 3600);
         } elseif (isset($_lang['get'])) {
             $this->language = $_lang['get'];
         } elseif (isset($_lang['cookie'])) {
@@ -383,12 +383,12 @@ class PMF_Init
             $this->language = $_lang['detection'];
             $_lang = null;
             unset($_lang);
-            setcookie('pmf_lang', $this->language, time() + 3600, dirname($_SERVER['SCRIPT_NAME']), $_SERVER['REMOTE_HOST']);
+            setcookie('pmf_lang', $this->language, time() + 3600);
         } elseif (isset($_lang['config'])) {
             $this->language = $_lang['config'];
             $_lang = null;
             unset($_lang);
-            setcookie('pmf_lang', $this->language, time() + 3600, dirname($_SERVER['SCRIPT_NAME']), $_SERVER['REMOTE_HOST']);
+            setcookie('pmf_lang', $this->language, time() + 3600);
         } else {
             $this->language = 'en'; // just a fallback
         }
