@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.213 2008-01-26 08:41:28 thorstenr Exp $
+ * $Id: functions.php,v 1.214 2008-01-26 15:10:15 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -541,7 +541,7 @@ function checkBannedWord($content)
  * @since    2006-04-25
  * @author   Matteo Scaramuccia <matteo@scaramuccia.com>
  */
-function printCaptchaFieldset($legend, $img, $length)
+function printCaptchaFieldset($legend, $img, $length, $error = '')
 {
     global $faqconfig;
 
@@ -549,8 +549,12 @@ function printCaptchaFieldset($legend, $img, $length)
 
     if ($faqconfig->get('spam.enableCatpchaCode')) {
         $html = sprintf('<fieldset><legend>%s</legend>', $legend);
-        $html .= '<div style="text-align:center;">'.$img;
-        $html .= '<input class="inputfield" style="vertical-align: top;" type="text" name="captcha" id="captcha" value="" size="'.$length.'" />';
+        $html .= '<div style="text-align:left;">';
+        if ($error != '') {
+            $html .= '<div class="error">' . $error . '</div>';
+        }
+        $html .= $img;
+        $html .= '&nbsp; &nbsp;<input class="inputfield" type="text" name="captcha" id="captcha" value="" size="7" style="vertical-align: top; height: 35px; text-valign: middle; font-size: 20pt;" />';
         $html .= '</div></fieldset>';
     }
 

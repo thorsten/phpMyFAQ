@@ -6,7 +6,7 @@
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @since     2003-12-10
  * @copyright 2003-2008 phpMyFAQ Team
- * @version   CVS: $Id: constants.php,v 1.37 2008-01-25 21:27:51 thorstenr Exp $
+ * @version   CVS: $Id: constants.php,v 1.38 2008-01-26 15:10:15 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License Version
  * 1.1 (the "License"); you may not use this file except in compliance with
@@ -201,7 +201,8 @@ $allowedVariables = array(
         'sitemap'         => 1,
         'translate'       => 1,
         'writecomment'    => 1,
-        'register'        => 1);
+        'register'        => 1,
+        'thankyou'        => 1);
 
 /* ISO 639 language code list - DO NOT CHANGE! */
 $languageCodes = array (

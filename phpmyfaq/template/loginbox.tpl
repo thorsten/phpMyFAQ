@@ -8,3 +8,5 @@
     <input class="submit" type="submit" value="{login}" />
 	</form>
 	{msgLoginFailed}
+	{msgLostPassword}
+	{msgRegisterUser}

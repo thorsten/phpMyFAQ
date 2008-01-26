@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: language_en.php,v 1.109 2007-04-23 18:37:44 thorstenr Exp $
+* $Id: language_en.php,v 1.110 2008-01-26 15:10:14 thorstenr Exp $
 *
 * The English language file - try to be the best of British and American English
 *
@@ -541,7 +541,7 @@ $PMF_LANG["ad_user_action"] = "action";
 $PMF_LANG["ad_entry_email"] = "Email address:";
 $PMF_LANG["ad_entry_allowComments"] = "Allow comments:";
 $PMF_LANG["msgWriteNoComment"] = "You cannot comment on this entry";
-$PMF_LANG["ad_user_realname"] = "real name:";
+$PMF_LANG["ad_user_realname"] = "Real name:";
 $PMF_LANG["ad_export_generate_pdf"] = "generate PDF file";
 $PMF_LANG["ad_export_full_faq"] = "Your FAQ as a PDF file: ";
 $PMF_LANG["err_bannedIP"] = "Your IP address has been banned.";
@@ -889,3 +889,15 @@ $PMF_LANG['msgTagSearch'] = 'Tagged entries';
 $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ Information';
 $PMF_LANG['ad_online_info'] = 'Online version check';
 $PMF_LANG['ad_system_info'] = 'System Information';
+
+// added 2.5 - 2007-01-25 by Elger
+$PMF_LANG['msgRegisterUser'] = 'Do you want to register?';
+$PMF_LANG["ad_user_loginname"] = 'Login name:';
+$PMF_LANG['errorRegistration'] = 'This field is required!';
+$PMF_LANG['submitRegister'] = 'register';
+$PMF_LANG['msgUserData'] = 'User information needed for registration';
+$PMF_LANG['captchaError'] = 'Please enter the right Capture Code!';
+$PMF_LANG['msgRegError'] = 'Following errors occured! Please correct them:';
+$PMF_LANG['successMessage'] = 'Your registration was successful! You will soon receive a confirmation mail within your login data!';
+$PMF_LANG['msgRegThankYou'] = 'Thank you for your registration';
+$PMF_LANG['emailRegSubject'] = '[phpMyFaq] registration: new user';
