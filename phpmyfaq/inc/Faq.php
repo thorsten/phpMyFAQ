@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.126 2008-01-26 17:50:05 thorstenr Exp $
+ * $Id: Faq.php,v 1.127 2008-01-26 18:03:03 thorstenr Exp $
  *
  * The main FAQ class
  *
@@ -1679,15 +1679,13 @@ class PMF_Faq
         $result = $this->getLatestData(PMF_NUMBER_RECORDS_LATEST, $this->language);
 
         if (count ($result) > 0) {
-            $output = '<ol>';
             foreach ($result as $row) {
                 $shortTitle = PMF_Utils::makeShorterText(PMF_htmlentities($row['thema'], ENT_QUOTES, $this->pmf_lang['metaCharset']), 8);
-                $output .= sprintf('<li><a href="%s">%s</a> (%s)</li>',
-                    $row['url'],
-                    $shortTitle,
-                    makeDate($row['datum']));
+                
+                $output['url'][]   =  $row['url'];
+                $output['title'][] = $shortTitle;
+                $output['date'][]  = makeDate($row['datum']);
             }
-            $output .= '</ol>';
         } else {
             $output = $this->pmf_lang["err_noArticles"];
         }

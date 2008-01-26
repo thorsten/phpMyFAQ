@@ -14,7 +14,7 @@
                     <h3>{writeNewestHeader}&nbsp;<a href="feed/latest/rss.php" target="_blank"><img src="images/rss.png" width="28" height="16" alt="RSS" /></a></h3>
                     <ol>
                         [latestEntriesList]
-                        <li><a href="{latestEntriesUrl}">latestEntriesTitle</a> ({latestEntriesDate})</li>
+                        <li><a href="{latestEntriesUrl}">{latestEntriesTitle}</a> ({latestEntriesDate})</li>
                         [/latestEntriesList]
                     </ol>
                     </div>

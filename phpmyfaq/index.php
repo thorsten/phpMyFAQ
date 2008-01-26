@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: index.php,v 1.118 2008-01-26 17:56:02 thorstenr Exp $
+ * $Id: index.php,v 1.119 2008-01-26 18:03:03 thorstenr Exp $
  *
  * This is the main public frontend page of phpMyFAQ. It detects the browser's
  * language, gets and sets all cookie, post and get informations and includes
@@ -454,10 +454,11 @@ $tpl->processBlock('rightBox', 'toptenList', array(
     'toptenVisits' => $toptenParams['visits']));
 
 $latestEntriesParams = $faq->getLatest();
+
 $tpl->processBlock('rightBox', 'latestEntriesList', array(
     'latestEntriesUrl'   => $latestEntriesParams['url'],
     'latestEntriesTitle' => $latestEntriesParams['title'],
-    'latestEntriesDate'  => $latestEntriesParams['visits']));
+    'latestEntriesDate'  => $latestEntriesParams['date']));
 
 $tpl->processTemplate('rightBox', array(
     'writeTopTenHeader'     => $PMF_LANG['msgTopTen'],
