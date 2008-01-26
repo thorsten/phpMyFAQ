@@ -1,13 +1,13 @@
 <?php
 /**
- * $Id: user.php,v 1.38 2008-01-26 15:16:09 thorstenr Exp $
- *
  * Displays the user managment frontend
  *
- * @author      Lars Tiedemann <php@larstiedemann.de>
- * @author      Uwe Pries <uwe.pries@digartis.de>
- * @since       2005-12-15
- * @copyright   (c) 2005-2007 phpMyFAQ Team
+ * @author    Lars Tiedemann <php@larstiedemann.de>
+ * @author    Uwe Pries <uwe.pries@digartis.de>
+ * @author    Sarah Hermann <sayh@gmx.de>
+ * @since     2005-12-15
+ * @copyright 2005-2008 phpMyFAQ Team
+ * @version   CVS: $Id: user.php,v 1.39 2008-01-26 15:57:57 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
