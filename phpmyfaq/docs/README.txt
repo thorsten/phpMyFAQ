@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.96 2008-01-25 21:18:58 thorstenr Exp $
+$Id: README.txt,v 1.97 2008-01-26 10:42:31 thorstenr Exp $
 
 phpMyFAQ 2.5.0-dev
 Codename "Pandora"
@@ -13,6 +13,7 @@ Changes since 2.0.x:
 - changed PHP requirement to PHP 5.2 (Thorsten)
 - added new and improved new basic layout theme (Charles A. Landemaine)
 - added RSS feed for every category (Thorsten)
+- added ability to copy and duplicate FAQ entries (Thorsten)
 
 For known issues please take a look at KNOWNBUGS.txt
 
@@ -22,8 +23,17 @@ Version 2.5.0-dev - 2008-
 - changed PHP requirement to PHP 5.2 (Thorsten)
 - added new and improved new basic layout theme (Charles A. Landemaine)
 - added RSS feed for every category (Thorsten)
+- added ability to copy and duplicate FAQ entries (Thorsten)
 
+Version 2.0.5 - 2008-01-20
+- fixed lighttpd rewrite rules (Markus Kohlmeyer)
+- minor bugfixes (Thorsten)
 
+Version 2.0.4 - 2007-11-18
+- add Thai translation (Thanadon Somdee)
+- improved DiggIt link (Thorsten
+- fixed French translation (Thorsten)
+- many minor bugfixes (Thorsten)
 
 Version 2.0.3 - 2007-08-18
 - some permission related fixes (Thorsten)
