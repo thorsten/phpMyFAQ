@@ -226,19 +226,25 @@ function setAttrib(elm, attrib, value) {
 		if (attrib == "width") {
 			attrib = "style.width";
 			value = value + "px";
+			value = value.replace(/%px/g, 'px');
 		}
 
 		if (attrib == "height") {
 			attrib = "style.height";
 			value = value + "px";
+			value = value.replace(/%px/g, 'px');
 		}
 
 		if (attrib == "class")
 			attrib = "className";
 
 		eval('elm.' + attrib + "=value;");
-	} else
+	} else {
+		if (attrib == 'class')
+			elm.className = '';
+
 		elm.removeAttribute(attrib);
+	}
 }
 
 function makeAttrib(attrib, value) {
@@ -278,16 +284,7 @@ function insertAction() {
 	}
 
 	if (tinyMCE.getParam("accessibility_warnings")) {
-		if (formObj.alt.value == "") {
-			var answer = confirm(tinyMCE.getLang('lang_advimage_missing_alt', '', true));
-			if (answer == true) {
-				formObj.alt.value = " ";
-			}
-		} else {
-			var answer = true;
-		}
-
-		if (!answer)
+		if (formObj.alt.value == "" && !confirm(tinyMCE.getLang('lang_advimage_missing_alt', '', true)))
 			return;
 	}
 
@@ -436,7 +433,7 @@ function changeHeight() {
 	if (formObj.width.value == "" || formObj.height.value == "")
 		return;
 
-	var temp = (formObj.width.value / preloadImg.width) * preloadImg.height;
+	var temp = (parseInt(formObj.width.value) / parseInt(preloadImg.width)) * preloadImg.height;
 	formObj.height.value = temp.toFixed(0);
 	updateStyle();
 }
@@ -452,7 +449,7 @@ function changeWidth() {
 	if (formObj.width.value == "" || formObj.height.value == "")
 		return;
 
-	var temp = (formObj.height.value / preloadImg.height) * preloadImg.width;
+	var temp = (parseInt(formObj.height.value) / parseInt(preloadImg.height)) * preloadImg.width;
 	formObj.width.value = temp.toFixed(0);
 	updateStyle();
 }
@@ -481,27 +478,18 @@ function showPreviewImage(src, start) {
 	if (src == "")
 		elm.innerHTML = "";
 	else
-		elm.innerHTML = '<img src="' + src + '" border="0" />'
-
-	getImageData(src);
+		elm.innerHTML = '<img id="previewImg" src="' + src + '" border="0" onload="updateImageData(' + start + ');" onerror="resetImageData();" />'
 }
 
-function getImageData(src) {
-	preloadImg = new Image();
-
-	tinyMCE.addEvent(preloadImg, "load", updateImageData);
-	tinyMCE.addEvent(preloadImg, "error", resetImageData);
-
-	preloadImg.src = src;
-}
-
-function updateImageData() {
+function updateImageData(start) {
 	var formObj = document.forms[0];
 
-	if (formObj.width.value == "")
+	preloadImg = document.getElementById('previewImg');
+
+	if (!start && formObj.width.value == "")
 		formObj.width.value = preloadImg.width;
 
-	if (formObj.height.value == "")
+	if (!start && formObj.height.value == "")
 		formObj.height.value = preloadImg.height;
 
 	updateStyle();

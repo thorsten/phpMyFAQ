@@ -78,5 +78,16 @@ help : 'Help',
 not_set : '-- Not set --',
 close : 'Close',
 toolbar_focus : 'Jump to tool buttons - Alt+Q, Jump to editor - Alt-Z, Jump to element path - Alt-X',
-invalid_data : 'Error: Invalid values entered, these are marked in red.'
+invalid_data : 'Error: Invalid values entered, these are marked in red.',
+more_colors : 'More colors',
+color_picker_tab : 'Picker',
+color_picker : 'Color picker',
+web_colors_tab : 'Palette',
+web_colors : 'Palette colors',
+named_colors_tab : 'Named',
+named_colors : 'Named colors',
+color : 'Color:',
+color_name : 'Name:',
+is_email : 'The URL you entered seems to be an email address, do you want to add the required mailto: prefix?',
+is_external : 'The URL you entered seems to external link, do you want to add the required http:// prefix?'
 });

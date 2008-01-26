@@ -1,8 +1,8 @@
 /**
- * $Id: editor_plugin_src.js,v 1.2 2006-11-22 21:40:16 thorstenr Exp $
+ * $Id: editor_plugin_src.js,v 1.3 2008-01-26 10:52:56 thorstenr Exp $
  *
  * @author Moxiecode
- * @copyright Copyright © 2004-2006, Moxiecode Systems AB, All rights reserved.
+ * @copyright Copyright © 2004-2007, Moxiecode Systems AB, All rights reserved.
  */
 
 /* Import plugin specific language pack */
@@ -14,7 +14,7 @@ var TinyMCE_AdvancedLinkPlugin = {
 			longname : 'Advanced link',
 			author : 'Moxiecode Systems AB',
 			authorurl : 'http://tinymce.moxiecode.com',
-			infourl : 'http://tinymce.moxiecode.com/tinymce/docs/plugin_advlink.html',
+			infourl : 'http://wiki.moxiecode.com/index.php/TinyMCE:Plugins/advlink',
 			version : tinyMCE.majorVersion + "." + tinyMCE.minorVersion
 		};
 	},
@@ -35,26 +35,18 @@ var TinyMCE_AdvancedLinkPlugin = {
 	execCommand : function(editor_id, element, command, user_interface, value) {
 		switch (command) {
 			case "mceAdvLink":
-				var anySelection = false;
-				var inst = tinyMCE.getInstanceById(editor_id);
-				var focusElm = inst.getFocusElement();
-				var selectedText = inst.selection.getSelectedText();
-
-				if (tinyMCE.selectedElement)
-					anySelection = (tinyMCE.selectedElement.nodeName.toLowerCase() == "img") || (selectedText && selectedText.length > 0);
+				var inst = tinyMCE.getInstanceById(editor_id), anySelection = !inst.selection.isCollapsed();
+				var focusElm = inst.getFocusElement(), selectedText = inst.selection.getSelectedText();
 
 				if (anySelection || (focusElm != null && focusElm.nodeName == "A")) {
-					var template = new Array();
-
-					template['file']   = '../../plugins/advlink/link.htm';
-					template['width']  = 480;
-					template['height'] = 400;
-
-					// Language specific width and height addons
-					template['width']  += tinyMCE.getLang('lang_advlink_delta_width', 0);
-					template['height'] += tinyMCE.getLang('lang_advlink_delta_height', 0);
-
-					tinyMCE.openWindow(template, {editor_id : editor_id, inline : "yes"});
+					tinyMCE.openWindow({
+						file : '../../plugins/advlink/link.htm',
+						width : 480 + tinyMCE.getLang('lang_advlink_delta_width', 0),
+						height : 400 + tinyMCE.getLang('lang_advlink_delta_height', 0)
+					}, {
+						editor_id : editor_id,
+						inline : "yes"
+					});
 				}
 
 				return true;

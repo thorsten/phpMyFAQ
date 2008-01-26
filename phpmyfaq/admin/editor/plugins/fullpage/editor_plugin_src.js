@@ -1,8 +1,8 @@
 /**
- * $Id: editor_plugin_src.js,v 1.2 2006-11-22 21:40:17 thorstenr Exp $
+ * $Id: editor_plugin_src.js,v 1.3 2008-01-26 10:52:56 thorstenr Exp $
  *
  * @author Moxiecode
- * @copyright Copyright © 2004-2006, Moxiecode Systems AB, All rights reserved.
+ * @copyright Copyright © 2004-2007, Moxiecode Systems AB, All rights reserved.
  */
 
 /* Import plugin specific language pack */
@@ -14,7 +14,7 @@ var TinyMCE_FullPagePlugin = {
 			longname : 'Fullpage',
 			author : 'Moxiecode Systems AB',
 			authorurl : 'http://tinymce.moxiecode.com',
-			infourl : 'http://tinymce.moxiecode.com/tinymce/docs/plugin_fullpage.html',
+			infourl : 'http://wiki.moxiecode.com/index.php/TinyMCE:Plugins/fullpage',
 			version : tinyMCE.majorVersion + "." + tinyMCE.minorVersion
 		};
 	},
@@ -127,7 +127,15 @@ var TinyMCE_FullPagePlugin = {
 				break;
 
 			case "get_from_editor":
-				if (inst.fullpageTopContent)
+				if (inst.fullpageTopContent && !tinyMCE.getParam("fullpage_hide_in_source_view", false)) {
+					content = content.replace(/(\s)?mce\_[a-z_]+\=[^\s>]+(\s|\>)/i, ''); // Remove internal stuff
+					content = inst.fullpageTopContent + content + "\n</body>\n</html>";
+				}
+
+				break;
+
+			case "submit_content":
+				if (inst.fullpageTopContent && tinyMCE.getParam("fullpage_hide_in_source_view", false))
 					content = inst.fullpageTopContent + content + "\n</body>\n</html>";
 
 				break;

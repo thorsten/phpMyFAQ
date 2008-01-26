@@ -1,8 +1,8 @@
 /**
- * $Id: editor_plugin_src.js,v 1.2 2006-11-22 21:40:20 thorstenr Exp $
+ * $Id: editor_plugin_src.js,v 1.3 2008-01-26 10:53:09 thorstenr Exp $
  *
  * @author Moxiecode
- * @copyright Copyright © 2004-2006, Moxiecode Systems AB, All rights reserved.
+ * @copyright Copyright © 2004-2007, Moxiecode Systems AB, All rights reserved.
  */
 
 /* Import plugin specific language pack */ 
@@ -14,7 +14,7 @@ var TinyMCE_PastePlugin = {
 			longname : 'Paste text/word',
 			author : 'Moxiecode Systems AB',
 			authorurl : 'http://tinymce.moxiecode.com',
-			infourl : 'http://tinymce.moxiecode.com/tinymce/docs/plugin_paste.html',
+			infourl : 'http://wiki.moxiecode.com/index.php/TinyMCE:Plugins/paste',
 			version : tinyMCE.majorVersion + "." + tinyMCE.minorVersion
 		};
 	},
@@ -22,6 +22,16 @@ var TinyMCE_PastePlugin = {
 	initInstance : function(inst) {
 		if (tinyMCE.isMSIE && tinyMCE.getParam("paste_auto_cleanup_on_paste", false))
 			tinyMCE.addEvent(inst.getBody(), "paste", TinyMCE_PastePlugin._handlePasteEvent);
+	},
+
+	handleEvent : function(e) {
+		// Force paste dialog if non IE browser
+		if (!tinyMCE.isRealIE && tinyMCE.getParam("paste_auto_cleanup_on_paste", false) && e.ctrlKey && e.keyCode == 86 && e.type == "keydown") {
+			window.setTimeout('tinyMCE.selectedInstance.execCommand("mcePasteText",true)', 1);
+			return tinyMCE.cancelEvent(e);
+		}
+
+		return true;
 	},
 
 	getControlHTML : function(cn) { 
