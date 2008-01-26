@@ -1,18 +1,17 @@
 <?php
 /**
- * $Id: installer.php,v 1.111 2007-09-13 18:58:47 thorstenr Exp $
- *
  * The main phpMyFAQ Installer
  *
  * This script tests the complete environment, writes the database connection
  * parameters into the file data.php and the configuration into the database.
  *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Tom Rochester <tom.rochester@gmail.com>
- * @author      Johannes Schlueter <johannes@php.net>
- * @author      Uwe Pries <uwe.pries@digartis.de>
- * @since       2002-08-20
- * @copyright   (c) 2001-2007 phpMyFAQ Team
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Tom Rochestr <tom.rochester@gmail.com>
+ * @author    Johannes Schlueter <johannes@php.net>
+ * @author    Uwe Pries <uwe.pries@digartis.de>
+ * @since     2002-08-20
+ * @copyright 2002-2008 phpMyFAQ Team
+ * @version   CVS: $Id: installer.php,v 1.112 2008-01-26 15:07:25 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -26,30 +25,34 @@
  */
 
 define('VERSION', '2.5.0-dev');
-define('COPYRIGHT', '&copy; 2001-2007 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
+define('COPYRIGHT', '&copy; 2001-2008 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('SAFEMODE', @ini_get('safe_mode'));
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
-require_once(PMF_ROOT_DIR.'/inc/constants.php');
-require_once(PMF_ROOT_DIR.'/inc/functions.php');
-require_once(PMF_ROOT_DIR.'/install/questionnaire.php');
+require_once PMF_ROOT_DIR.'/inc/constants.php';
+require_once PMF_ROOT_DIR.'/inc/functions.php';
+require_once PMF_ROOT_DIR.'/install/questionnaire.php';
 
 $query  = array();
 $uninst = array();
 
 // permission levels
 $permLevels = array(
-    'basic'     => 'Basic (no group support)',
-    'medium'    => 'Medium (with group support)'
-);
+    'basic'  => 'Basic (no group support)',
+    'medium' => 'Medium (with group support)');
+
+$enabled_extensions = array(
+    'gd',
+    'json',
+    'xmlwriter');
 
 /**
  * Lookup for installed database extensions
  * If the first supported extension is enabled, return true.
  *
- * @param   array   $supported_databases
- * @return  boolean
- * @access  public
- * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @param  array $supported_databases Array of supported databases
+ * @return boolean
+ * @access public
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  */
 function db_check($supported_databases)
 {
@@ -63,11 +66,31 @@ function db_check($supported_databases)
 }
 
 /**
+ * Lookup for installed PHP extensions
+ *
+ * @param  array $enabled_extensions enabled Extensions
+ * @return boolean
+ * @access public
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ */
+function extension_check($enabled_extensions)
+{
+    foreach ($enabled_extensions as $extension) {
+
+        if (!extension_loaded($extension)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+/**
  * Checks for an installed phpMyFAQ version
  *
- * @return  boolean
- * @access  public
- * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @return boolean
+ * @access public
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  */
 function phpmyfaq_check()
 {
@@ -84,9 +107,9 @@ function phpmyfaq_check()
 /**
  * Executes the uninstall queries
  *
- * @return  void
- * @access  public
- * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @return void
+ * @access public
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  */
 function uninstall()
 {
@@ -100,9 +123,9 @@ function uninstall()
 /**
  * Print out the XHTML Footer
  *
- * @return  void
- * @access  public
- * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @return void
+ * @access public
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  */
 function HTMLFooter()
 {
@@ -112,10 +135,9 @@ function HTMLFooter()
 /**
  * Removes the data.php and the dataldap.php if an installation failed
  *
- * @return  void
- * @access  public
- * @since   2005-12-18
- * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @return void
+ * @access public
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  */
 function cleanInstallation()
 {
@@ -128,6 +150,7 @@ function cleanInstallation()
         @unlink(PMF_ROOT_DIR.'/inc/dataldap.php');
     }
 }
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -302,11 +325,23 @@ if (version_compare(PHP_VERSION, '5.2.0', '<')) {
     die();
 }
 
-if (db_check($supported_databases) == false) {
-    print "<p class=\"center\">No supported database found! Please install one of the following database systems and enable the m     corresponding PHP extension:</p>\n";
-    print "<ul>\n";
+if (!db_check($supported_databases)) {
+    print '<p class="center">No supported database detected! Please install one of the following' .
+          ' database systems and enable the corresponding PHP extension:</p>';
+    print '<ul>';
     foreach ($supported_databases as $database) {
         printf('    <li>%s</li>', $database[1]);
+    }
+    print '</ul>';
+    HTMLFooter();
+    die();
+}
+
+if (!extension_check($enabled_extensions)) {
+    print "<p class=\"center\">Some missing extensions were detected! Please enable the corresponding PHP extension:</p>\n";
+    print "<ul>\n";
+    foreach ($enabled_extensions as $extension) {
+        printf('    <li>ext/%s</li>', $extension);
     }
     print "</ul>\n";
     HTMLFooter();

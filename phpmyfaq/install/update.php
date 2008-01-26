@@ -1,14 +1,13 @@
 <?php
 /**
- * $Id: update.php,v 1.155 2007-08-20 19:32:21 johannes Exp $
- *
  * Main update script
  *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Thomas Melchinger <t.melchinger@uni.de>
- * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
- * @since       2002-01-10
- * @copyright   (c) 2002-2007 phpMyFAQ Team
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Thomas Melchinger <t.melchinger@uni.de>
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @since     2002-01-10
+ * @copyright 2002-2008 phpMyFAQ Team
+ * @version   CVS: $Id: update.php,v 1.156 2008-01-26 15:07:25 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -1252,6 +1251,13 @@ if ($step == 5) {
     //
     if (version_compare($version, '2.0.2', '<')) {
         $query[] = 'CREATE INDEX idx_user_time ON '.SQLPREFIX.'faqsessions (user_id, time)';
+    }
+
+    //
+    // UPDATES FROM 2.5.0-alpha
+    //
+    if (version_compare($version, '2.5.0-alpha', '<')) {
+
     }
 
     // Perform the queries for updating/migrating the database from 2.x
