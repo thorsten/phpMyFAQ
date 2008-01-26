@@ -1,24 +1,23 @@
 <?php
 /**
-* $Id: rss.php,v 1.25 2007-03-29 18:47:40 thorstenr Exp $
-*
-* The RSS feed with the latest five records
-*
-* @package      phpMyFAQ
-* @access       public
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @copyright    (c) 2004 - 2006 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * The RSS feed with the latest five records
+ *
+ * @package   phpMyFAQ
+ * @access    public
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2004-2008 phpMyFAQ Team
+ * @version   CVS: $Id: rss.php,v 1.26 2008-01-26 16:33:49 thorstenr Exp $
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 define('PMF_ROOT_DIR', dirname(dirname(dirname(__FILE__))));
 require_once(PMF_ROOT_DIR.'/inc/Init.php');
@@ -48,16 +47,21 @@ if (isset($_GET['lang']) && PMF_Init::isASupportedLanguage($_GET['lang'])) {
     $lang = $_GET['lang'];
 }
 
-$faq = new PMF_Faq($db, $LANGCODE);
+$faq     = new PMF_Faq($db, $LANGCODE);
 $rssData = $faq->getLatestData(PMF_NUMBER_RECORDS_LATEST, $lang);
-$num = count($rssData);
+$num     = count($rssData);
 
-$rss =
-    "<?xml version=\"1.0\" encoding=\"".$PMF_LANG["metaCharset"]."\" standalone=\"yes\" ?>\n" .
-    "<rss version=\"2.0\">\n<channel>\n" .
-    "<title>".htmlspecialchars($PMF_CONF['main.titleFAQ'])." - ".htmlspecialchars($PMF_LANG['msgLatestArticles'])."</title>\n" .
-    "<description>".htmlspecialchars($PMF_CONF['main.metaDescription'])."</description>\n" .
-    "<link>".PMF_Link::getSystemUri('/feed/latest/rss.php')."</link>";
+
+$rss = new XMLWriter();
+$rss->openMemory();
+
+$rss->startDocument('1.0', $PMF_LANG['metaCharset']);
+$rss->startElement('rss');
+$rss->writeAttribute('version', '2.0');
+$rss->startElement('channel');
+$rss->writeElement('title', utf8_encode($PMF_CONF['main.titleFAQ']) . ' - ' . utf8_encode($PMF_LANG['msgLatestArticles']));
+$rss->writeElement('description', utf8_encode($PMF_CONF['main.metaDescription']));
+$rss->writeElement('link', PMF_Link::getSystemUri('/feed/latests/rss.php'));
 
 if ($num > 0) {
     foreach ($rssData as $item) {
@@ -74,23 +78,22 @@ if ($num > 0) {
         $content = $item['content'];
         // Fix the content internal image references
         $content = str_replace("<img src=\"/", "<img src=\"".PMF_Link::getSystemUri('/feed/latest/rss.php')."/", $content);
-        $rss .= "\t<item>\n" .
-                "\t\t<title><![CDATA[" .
-                $item['thema'] .
-                "]]></title>\n" .
-                "\t\t<description><![CDATA[" .
-                $content .
-                "]]></description>\n" .
-                "\t\t<link>".PMF_Link::getSystemUri('/feed/latest/rss.php').$link."</link>\n" .
-                "\t\t<pubDate>".makeRFC822Date($item['datum'])."</pubDate>\n" .
-                "\t</item>\n";
+
+        $rss->startElement('item');
+        $rss->writeElement('title', utf8_encode($item['thema']));
+        $rss->writeElement('description', utf8_encode($content));
+        $rss->writeElement('link', utf8_encode(PMF_Link::getSystemUri('/feed/latest/rss.php').$link));
+        $rss->writeElement('pubDate', makeRFC822Date($item['datum'], false));
+        $rss->endElement();
     }
 }
 
-$rss .= "</channel>\n</rss>";
+$rss->endElement();
+$rssData = $rss->outputMemory();
 
-header("Content-Type: text/xml");
-header("Content-Length: ".strlen($rss));
-print $rss;
+header('Content-Type: text/xml');
+header('Content-Length: '.strlen($rssData));
+
+print $rssData;
 
 $db->dbclose();

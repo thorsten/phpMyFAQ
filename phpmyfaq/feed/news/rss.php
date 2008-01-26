@@ -1,25 +1,26 @@
 <?php
 /**
-* $Id: rss.php,v 1.16 2007-03-29 18:47:40 thorstenr Exp $
-*
-* The RSS feed with the news
-*
-* @package      phpMyFAQ
-* @access       public
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @author       Matteo Scaramuccia <mattao@scaramuccia.com>
-* @copyright    (c) 2004-2006 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ *
+ *
+ * The RSS feed with the news
+ *
+ * @package   phpMyFAQ
+ * @access    public
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <mattao@scaramuccia.com>
+ * @copyright 2004-2008 phpMyFAQ Team
+ * @version   CVS: $Id: rss.php,v 1.17 2008-01-26 16:38:21 thorstenr Exp $
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 define('PMF_ROOT_DIR', dirname(dirname(dirname(__FILE__))));
 require_once(PMF_ROOT_DIR.'/inc/Init.php');
@@ -51,12 +52,16 @@ $forceConfLimit = true;
 $rssData = $oNews->getLatestData($showArchive, $active, $forceConfLimit);
 $num = count($rssData);
 
-$rss =
-    "<?xml version=\"1.0\" encoding=\"".$PMF_LANG["metaCharset"]."\" standalone=\"yes\" ?>\n" .
-    "<rss version=\"2.0\">\n<channel>\n" .
-    "<title>".htmlspecialchars($PMF_CONF['main.titleFAQ'])." - ".htmlspecialchars($PMF_LANG['msgNews'])."</title>\n" .
-    "<description>".htmlspecialchars($PMF_CONF['main.metaDescription'])."</description>\n" .
-    "<link>".PMF_Link::getSystemUri('/feed/latest/rss.php')."</link>";
+$rss = new XMLWriter();
+$rss->openMemory();
+
+$rss->startDocument('1.0', $PMF_LANG['metaCharset']);
+$rss->startElement('rss');
+$rss->writeAttribute('version', '2.0');
+$rss->startElement('channel');
+$rss->writeElement('title', utf8_encode($PMF_CONF['main.titleFAQ']) . ' - ' . utf8_encode($PMF_LANG['msgNews']));
+$rss->writeElement('description', utf8_encode($PMF_CONF['main.metaDescription']));
+$rss->writeElement('link', PMF_Link::getSystemUri('/feed/news/rss.php'));
 
 if ($num > 0) {
     foreach ($rssData as $item) {
@@ -69,23 +74,22 @@ if ($num > 0) {
                 $link = $oL->toString();
             }
         }
-        $rss .= "\t<item>\n" .
-                "\t\t<title><![CDATA[" .
-                $item['header'] .
-                "]]></title>\n" .
-                "\t\t<description><![CDATA[" .
-                $item['content'] .
-                "]]></description>\n" .
-                "\t\t<link>".PMF_Link::getSystemUri('/feed/news/rss.php').$link."</link>\n" .
-                "\t\t<pubDate>".makeRFC822Date($item['date'])."</pubDate>\n" .
-                "\t</item>\n";
+
+        $rss->startElement('item');
+        $rss->writeElement('title', utf8_encode($item['header']));
+        $rss->writeElement('description', utf8_encode($item['content']));
+        $rss->writeElement('link', utf8_encode(PMF_Link::getSystemUri('/feed/news/rss.php').$link));
+        $rss->writeElement('pubDate', makeRFC822Date($item['date'], false));
+        $rss->endElement();
     }
 }
 
-$rss .= "</channel>\n</rss>";
+$rss->endElement();
+$rssData = $rss->outputMemory();
 
-header("Content-Type: text/xml");
-header("Content-Length: ".strlen($rss));
-print $rss;
+header('Content-Type: text/xml');
+header('Content-Length: '.strlen($rssData));
+
+print $rssData;
 
 $db->dbclose();

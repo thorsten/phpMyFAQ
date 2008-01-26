@@ -1,25 +1,26 @@
 <?php
 /**
-* $Id: rss.php,v 1.23 2007-04-06 09:52:00 thorstenr Exp $
-*
-* The RSS feed with the top ten
-*
-* @package      phpMyFAQ
-* @access       public
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @author       Matteo Scaramuccia <matteo@scaramuccia.com>
-* @copyright    (c) 2004-2006 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ *
+ *
+ * The RSS feed with the top ten
+ *
+ * @package   phpMyFAQ
+ * @access    public
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @copyright 2004-2008 phpMyFAQ Team
+ * @version   CVS: $Id: rss.php,v 1.24 2008-01-26 16:47:22 thorstenr Exp $
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 define('PMF_ROOT_DIR', dirname(dirname(dirname(__FILE__))));
 require_once(PMF_ROOT_DIR.'/inc/Init.php');
@@ -57,12 +58,16 @@ $faq = new PMF_Faq($db, $LANGCODE);
 $rssData = $faq->getTopTenData(PMF_NUMBER_RECORDS_TOPTEN, $cat, $lang);
 $num = count($rssData);
 
-$rss =
-    "<?xml version=\"1.0\" encoding=\"".$PMF_LANG['metaCharset']."\" standalone=\"yes\" ?>\n" .
-    "<rss version=\"2.0\">\n<channel>\n" .
-    "<title>".htmlspecialchars($PMF_CONF['main.titleFAQ'])." - ".htmlspecialchars($PMF_LANG['msgTopTen'])."</title>\n" .
-    "<description>".htmlspecialchars($PMF_CONF['main.metaDescription'])."</description>\n" .
-    "<link>".PMF_Link::getSystemUri('/feed/topten/rss.php')."</link>";
+$rss = new XMLWriter();
+$rss->openMemory();
+
+$rss->startDocument('1.0', $PMF_LANG['metaCharset']);
+$rss->startElement('rss');
+$rss->writeAttribute('version', '2.0');
+$rss->startElement('channel');
+$rss->writeElement('title', utf8_encode($PMF_CONF['main.titleFAQ']) . ' - ' . utf8_encode($PMF_LANG['msgTopTen']));
+$rss->writeElement('description', utf8_encode($PMF_CONF['main.metaDescription']));
+$rss->writeElement('link', PMF_Link::getSystemUri('/feed/topten/rss.php'));
 
 if ($num > 0) {
     $i = 0;
@@ -77,27 +82,22 @@ if ($num > 0) {
                 $link = $oL->toString();
             }
         }
-        $rss .= "\t<item>\n" .
-                "\t\t<title><![CDATA[" .
-                PMF_Utils::makeShorterText($item['thema'], 8)." (".$item['visits']." ".$PMF_LANG['msgViews'].")" .
-                "]]></title>\n" .
-                "\t\t<description><![CDATA[" .
-                "[".$i.".] ".$item['thema']." (".$item['visits']." ".$PMF_LANG['msgViews'].")" .
-                "]]></description>\n" .
-                "\t\t<link>".PMF_Link::getSystemUri('/feed/topten/rss.php').$link."</link>\n" .
-                "\t\t<!-- The real FAQ publication date -->\n" .
-                // datum is a phpMyFAQ date
-                "\t\t<!-- ".makeRFC822Date($item['date'])." -->\n" .
-                // last_visit is a mktime timpestamp date
-                "\t\t<pubDate>".makeRFC822Date($item['last_visit'], false)."</pubDate>\n" .
-                "\t</item>\n";
+
+        $rss->startElement('item');
+        $rss->writeElement('title', utf8_encode(PMF_Utils::makeShorterText($item['thema'], 8)." (".$item['visits']." ".$PMF_LANG['msgViews'].")"));
+        $rss->writeElement('description', utf8_encode("[".$i.".] ".$item['thema']." (".$item['visits']." ".$PMF_LANG['msgViews'].")"));
+        $rss->writeElement('link', utf8_encode(PMF_Link::getSystemUri('/feed/topten/rss.php').$link));
+        $rss->writeElement('pubDate', makeRFC822Date($item['last_visit'], false));
+        $rss->endElement();
     }
 }
 
-$rss .= "</channel>\n</rss>";
+$rss->endElement();
+$rssData = $rss->outputMemory();
 
-header("Content-Type: text/xml");
-header("Content-Length: ".strlen($rss));
-print $rss;
+header('Content-Type: text/xml');
+header('Content-Length: '.strlen($rssData));
+
+print $rssData;
 
 $db->dbclose();
