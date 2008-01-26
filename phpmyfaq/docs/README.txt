@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.99 2008-01-26 11:00:40 thorstenr Exp $
+$Id: README.txt,v 1.100 2008-01-26 11:56:19 thorstenr Exp $
 
 phpMyFAQ 2.5.0-dev
 Codename "Pandora"
@@ -14,6 +14,7 @@ Changes since 2.0.x:
 - added new and improved new basic layout theme (Charles A. Landemaine)
 - added RSS feed for every category (Thorsten)
 - added ability to copy and duplicate FAQ entries (Thorsten)
+- added support for blocks in template engine (Jan Mergler)
 - updated bundled Net_IDNA to version 0.6.0 (Thorsten)
 - updated bundled TinyMCE editor component to version 2.1.3 (Thorsten)
 
@@ -26,6 +27,7 @@ Version 2.5.0-dev - 2008-
 - added new and improved new basic layout theme (Charles A. Landemaine)
 - added RSS feed for every category (Thorsten)
 - added ability to copy and duplicate FAQ entries (Thorsten)
+- added support for blocks in template engine (Jan Mergler)
 - updated bundled Net_IDNA to version 0.6.0 (Thorsten)
 - updated bundled TinyMCE editor component to version 2.1.3 (Thorsten)
 
