@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: record.delcomment.php,v 1.11 2006-09-19 21:39:39 matteo Exp $
+* $Id: record.delcomment.php,v 1.12 2008-01-26 17:12:45 thorstenr Exp $
 *
 * Deletes a user comment
 *
@@ -24,7 +24,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
-if (isset($_REQUEST['type']) && (PMF_COMMENT_TYPE_NEWS == $_REQUEST['type'])) {
+if (isset($_REQUEST['type']) && (PMF_Comment::COMMENT_TYPE_NEWS == $_REQUEST['type'])) {
     print "<h2>".$PMF_LANG['ad_news_edit']."</h2>\n";
 } else {
     print "<h2>".$PMF_LANG['ad_entry_aor']."</h2>\n";
@@ -44,7 +44,7 @@ if ($permission['delcomment']) {
         $msg = $PMF_LANG['ad_entry_commentdelfail'];
     }
     if (   !isset($_REQUEST['type'])
-        || (isset($_REQUEST['type']) && (PMF_COMMENT_TYPE_FAQ == $_REQUEST['type']))
+        || (isset($_REQUEST['type']) && (PMF_Comment::COMMENT_TYPE_FAQ == $_REQUEST['type']))
        ) {
         printf('<p align="center">%s<p><a href="?action=editentry&amp;id=%d&amp;lang=%s">%s</a></p>',
             $msg,
@@ -52,7 +52,7 @@ if ($permission['delcomment']) {
             $_REQUEST['lang'],
             $PMF_LANG['ad_entry_back']);
     }
-    if (isset($_REQUEST['type']) && (PMF_COMMENT_TYPE_NEWS == $_REQUEST['type'])) {
+    if (isset($_REQUEST['type']) && (PMF_Comment::COMMENT_TYPE_NEWS == $_REQUEST['type'])) {
         printf('<p align="center">%s<p><a href="?action=news&amp;do=edit&amp;id=%d">%s</a></p>',
             $msg,
             $_REQUEST['artid'],

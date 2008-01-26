@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.124 2008-01-25 21:18:27 thorstenr Exp $
+ * $Id: Faq.php,v 1.125 2008-01-26 17:12:45 thorstenr Exp $
  *
  * The main FAQ class
  *
@@ -1601,7 +1601,7 @@ class PMF_Faq
     function getComments($id)
     {
         $oComment = new PMF_Comment($this->db, $this->language);
-        return $oComment->getComments($id, PMF_COMMENT_TYPE_FAQ);
+        return $oComment->getComments($id, PMF_Comment::COMMENT_TYPE_FAQ);
     }
 
     /**

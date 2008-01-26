@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: News.php,v 1.17 2007-04-08 14:40:20 thorstenr Exp $
+ * $Id: News.php,v 1.18 2008-01-26 17:12:45 thorstenr Exp $
  *
  * The News class for phpMyFAQ news
  *
@@ -317,7 +317,7 @@ class PMF_News
     function getComments($id)
     {
         $oComment = new PMF_Comment($this->db, $this->language);
-        return $oComment->getComments($id, PMF_COMMENT_TYPE_NEWS);
+        return $oComment->getComments($id, PMF_Comment::COMMENT_TYPE_NEWS);
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: news.php,v 1.36 2007-08-05 16:19:57 thorstenr Exp $
+ * $Id: news.php,v 1.37 2008-01-26 17:12:45 thorstenr Exp $
  *
  * The main administration file for the news
  *
@@ -210,7 +210,7 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
 <?php
         $newsId = (int)$_GET['id'];
         $oComment = new PMF_Comment($db, $LANGCODE);
-        $comments = $oComment->getCommentsData($newsId, PMF_COMMENT_TYPE_NEWS);
+        $comments = $oComment->getCommentsData($newsId, PMF_Comment::COMMENT_TYPE_NEWS);
         if (count($comments) > 0) {
 ?>
             <p><strong><?php print $PMF_LANG["ad_entry_comment"] ?></strong></p>
@@ -218,7 +218,7 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
         }
         foreach ($comments as $item) {
 ?>
-    <p><?php print $PMF_LANG["ad_entry_commentby"] ?> <a href="mailto:<?php print($item['email']); ?>"><?php print($item['user']); ?></a>:<br /><?php print($item['content']); ?><br /><?php print($PMF_LANG['newsCommentDate'].makeCommentDate($item['date'])); ?><a href="?action=delcomment&amp;artid=<?php print($newsId); ?>&amp;cmtid=<?php print($item['id']); ?>&amp;type=<?php print(PMF_COMMENT_TYPE_NEWS);?>"><img src="images/delete.gif" alt="<?php print $PMF_LANG["ad_entry_delete"] ?>" title="<?php print $PMF_LANG["ad_entry_delete"] ?>" border="0" width="17" height="18" align="right" /></a></p>
+    <p><?php print $PMF_LANG["ad_entry_commentby"] ?> <a href="mailto:<?php print($item['email']); ?>"><?php print($item['user']); ?></a>:<br /><?php print($item['content']); ?><br /><?php print($PMF_LANG['newsCommentDate'].makeCommentDate($item['date'])); ?><a href="?action=delcomment&amp;artid=<?php print($newsId); ?>&amp;cmtid=<?php print($item['id']); ?>&amp;type=<?php print(PMF_Comment::COMMENT_TYPE_NEWS);?>"><img src="images/delete.gif" alt="<?php print $PMF_LANG["ad_entry_delete"] ?>" title="<?php print $PMF_LANG["ad_entry_delete"] ?>" border="0" width="17" height="18" align="right" /></a></p>
 <?php
         }
     }

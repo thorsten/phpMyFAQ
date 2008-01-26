@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: record.delcommentform.php,v 1.11 2007-04-06 11:15:24 thorstenr Exp $
+ * $Id: record.delcommentform.php,v 1.12 2008-01-26 17:12:45 thorstenr Exp $
  *
  * Form to delete user comment
  *
@@ -24,7 +24,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
-if (isset($_REQUEST['type']) && (PMF_COMMENT_TYPE_NEWS == $_REQUEST['type'])) {
+if (isset($_REQUEST['type']) && (PMF_Comment::COMMENT_TYPE_NEWS == $_REQUEST['type'])) {
     print "<h2>".$PMF_LANG['ad_news_edit']."</h2>\n";
 } else {
     print "<h2>".$PMF_LANG['ad_entry_aor']."</h2>\n";

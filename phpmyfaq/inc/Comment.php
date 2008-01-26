@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id: Comment.php,v 1.11 2007-07-14 17:52:07 thorstenr Exp $
- *
  * The main Comment class
  *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since       2006-07-23
- * @copyright   (c) 2006-2007 phpMyFAQ Team
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since     2006-07-23
+ * @copyright 2006-2008 phpMyFAQ Team
+ * @version   CVS: $Id: Comment.php,v 1.12 2008-01-26 17:12:45 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -19,18 +19,23 @@
  * under the License.
  */
 
-// {{{ Constants
-/**#@+
-  * Comment type
-  */
-define('PMF_COMMENT_TYPE_FAQ', 'faq');
-define('PMF_COMMENT_TYPE_NEWS', 'news');
-/**#@-*/
-// }}}
-
 // {{{ Classes
 class PMF_Comment
 {
+    /**
+     * FAQ type
+     *
+     * @const string
+     */
+    const COMMENT_TYPE_FAQ  = 'faq';
+
+    /**
+     * News type
+     *
+     * @const string
+     */
+    const COMMENT_TYPE_NEWS ='news';
+
     /**
      * DB handle
      *
@@ -295,7 +300,7 @@ class PMF_Comment
      * @since   2007-03-04
      * @author  Thorsten Rinne <thorsten@rinne.info>
      */
-    public function getAllComments($type = PMF_COMMENT_TYPE_FAQ)
+    public function getAllComments($type = self::COMMENT_TYPE_FAQ)
     {
         $comments = array();
 
@@ -313,9 +318,9 @@ class PMF_Comment
             %s
             WHERE
                 type = '%s'",
-            ($type == PMF_COMMENT_TYPE_FAQ) ? "fcg.category_id,\n" : '',
+            ($type == self::COMMENT_TYPE_FAQ) ? "fcg.category_id,\n" : '',
             SQLPREFIX,
-            ($type == PMF_COMMENT_TYPE_FAQ) ? "LEFT JOIN
+            ($type == self::COMMENT_TYPE_FAQ) ? "LEFT JOIN
                 ".SQLPREFIX."faqcategoryrelations fcg
             ON
                 fc.id = fcg.record_id\n" : '',
