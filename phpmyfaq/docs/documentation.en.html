@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<!-- $Id: documentation.en.html,v 1.32 2008-01-25 21:18:41 thorstenr Exp $ -->
+<!-- $Id: documentation.en.html,v 1.33 2008-01-26 15:06:40 thorstenr Exp $ -->
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<title>Documentation for phpMyFAQ 2.5.x</title>
@@ -63,8 +63,9 @@
         <li><strong><a href="#3">Upgrading</a></strong>
         <ol class="alpha">
             <li><a href="#3a">Upgrading from phpMyFAQ 1.6.x</a></li>
-            <li><a href="#3b">Upgrading phpMyFAQ 2.0.x versions</a></li>
-            <li><a href="#3c">Modifying templates for phpMyFAQ 2.0.x</a></li>
+            <li><a href="#3b">Upgrading from phpMyFAQ 2.0.x</a></li>
+            <li><a href="#3c">Upgrading phpMyFAQ 2.5.x versions</a></li>
+            <li><a href="#3d">Modifying templates for phpMyFAQ 2.0.x</a></li>
         </ol></li>
         <li><strong><a href="#4">Frontend</a></strong>
         <ol class="alpha">
@@ -148,14 +149,15 @@
             <li>from version 5.2.0)</li>
             <li>register_globals = off (recommended)</li>
             <li>safe_mode = off (recommended)</li>
+            <li>GD support</li>
             <li>XMLWriter support</li>
             <li>JSON support</li>
         </ul></li>
         <li><strong>Webserver</strong> (<a href="http://httpd.apache.org">Apache</a> 1.3/2.0/2.2 or <a href="http://www.lighttpd.net">lighttpd</a> 1.0+ or <a href="http://www.microsoft.com/">IIS</a> 5.0+)</li>
         <li><strong>Database server</strong>
         <ul>
-            <li><a href="http://www.mysql.com">MySQL</a> 4.x, 5.x with the MySQL extension  (recommended: 5.0.x)</li>
-            <li><a href="http://www.mysql.com">MySQL</a> 4.1.x, 5.x with the MySQLi extension (recommended: 5.0.x)</li>
+            <li><a href="http://www.mysql.com">MySQL</a> 4.x, 5.x, 6.x with the MySQL extension  (recommended: 5.0.x)</li>
+            <li><a href="http://www.mysql.com">MySQL</a> 4.1.x, 5.x, 6.x with the MySQLi extension (recommended: 5.0.x)</li>
             <li><a href="http://www.postgresql.org">PostgreSQL</a> 7.2+, 8.x (recommended: 8.1.x)</li>
             <li><a href="http://www.sybase.com">Sybase</a></li>
             <li><a href="http://www.microsoft.com/sql/">Microsoft SQL Server</a> 2000, 2005</li>
@@ -245,10 +247,10 @@
     <p>To set the default language in your browser you have to set a variable that gets passed to the web server. How this is done depends on the browser you are using.</p>
     <ul>
         <li>Mozilla Firefox<br />Tools -> Options -> Advanced -> Edit Languages</li>
-        <li>Mozilla/Netscape 4.x and later versions<pre>Edit -> Preferences -> Navigator -> Languages</pre></li>
+        <li>Mozilla Seamonkey and later versions<pre>Edit -> Preferences -> Navigator -> Languages</pre></li>
         <li>Safari<br />Safari uses the MacOS X system preferences to determine your preferred language:<pre>System preferences -> International -> Language</pre></li>
         <li>Opera<br />Most versions:<pre>File -> Preferences -> Languages</pre>Linux/*BSD versions 5.x and 6.x:<pre>File -> Preferences -> Document -> Languages</pre></li>
-        <li>Internet Explorer<br />Windows:<pre>Tools or View or Extras -> Internet Options -> (General) Languages</pre>MacOS:<pre>Edit -> Preferences -> Web Browser -> Language/Fonts</pre></li>
+        <li>Internet Explorer<br />Windows:<pre>Tools or View or Extras -> Internet Options -> (General) Languages</pre></li>
     </ul>
     <p><a href="#top">back to top</a></p>
 
@@ -318,64 +320,43 @@
 
     <hr style="width: 90%; height: 1px;"  />
     <p><a name="3"></a><strong>3. Upgrading</strong></p>
-    <p>Upgrading to phpMyFAQ 2.0.x is possible from the following versions:</p>
+    <p>Upgrading to phpMyFAQ 2.5.x is possible from the following versions:</p>
     <ul>
-        <li>phpMyFAQ 1.4.x</li>
-        <li>phpMyFAQ 1.5.x </li>
-        <li>phpMyFAQ 1.6.x </li>
+        <li>phpMyFAQ 1.6.x</li>
+        <li>phpMyFAQ 2.0.x</li>
     </ul>
     <p>If you're running an older version of phpMyFAQ we recommend a new and fresh install. </p>
     <p><a href="#top">back to top</a></p>
 
-
     <hr style="width: 90%; height: 1px;"  />
-    <p><a name="3a"></a><strong>3.a. Upgrading from phpMyFAQ 1.4.x</strong></p>
-    <p>Upgrading from 1.4.x to 2.0.x is a really major upgrade. Please make a full backup before you run the upgrade! Nevertheless the update from phpMyFAQ 1.4.x to the current release is fairly simple. First you have to delete all files <strong>except</strong>:</p>
-    <ul>
-        <li>the files <strong>data.php</strong> and <strong>config.php</strong> in the directory <strong>inc/</strong> </li>
-        <li>the directory <strong>attachments/</strong></li>
-        <li>the directory <strong>data/</strong></li>
-        <li>the directory <strong>images/</strong></li>
-        <li>the directory <strong>pdf/</strong></li>
-        <li>the directory <strong>xml/</strong></li>
-    </ul>
-    <p>Copy the new files to your webspace and open the following URL in your browser:</p>
-    <pre>http://www.example.com/faq/install/update.php</pre>
-    <p>Choose your currently installed phpMyFAQ version and click the button of the update script, your version will automatically be updated.</p>
-    <p>Note: You cannot update from MySQL to another database.</p>
-    <p><a href="#top">back to top</a></p>
-
-
-    <hr style="width: 90%; height: 1px;"  />
-    <p><a name="3b"></a><strong>3.b. Upgrading from phpMyFAQ 1.5.x</strong></p>
-    <p>Upgrading from 1.5.x to 2.0.x is a really major upgrade. Please make a full backup before you run the upgrade! Nevertheless the update from phpMyFAQ 1.5.x to the current release is fairly simple. First you have to delete all files <strong>except</strong>:</p>
+    <p><a name="3a"></a><strong>3.a. Upgrading from phpMyFAQ 1.6.x</strong></p>
+    <p>Upgrading from 1.6.x to 2.5.x is a really major upgrade. Please make a full backup before you run the upgrade! Nevertheless the update from phpMyFAQ 1.6.x to the current release is fairly simple. First you have to delete all files <strong>except</strong>:</p>
     <ul>
         <li>the files <strong>data.php</strong> and <strong>config.php</strong> in the directory <strong>inc/</strong> </li>
         <li>all files in the <strong>template/</strong> directory</li>
     </ul>
     <p>Open the following URL in your browser:</p>
     <pre>http://www.example.com/faq/install/update.php</pre>
-    <p>Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be updated.</p>
-    <p>Note: You cannot update from MySQL to another database.</p>
+    <p>Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be updated.. You have to update some of your template files due to the new, enhanced template engine.ss</p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><a name="3c"></a><strong>3.c. Upgrading from phpMyFAQ 1.6.x</strong></p>
-    <p>Upgrading from 1.6.x to 2.0.x is a really major upgrade. Please make a full backup before you run the upgrade! Nevertheless the update from phpMyFAQ 1.6.x to the current release is fairly simple. First you have to delete all files <strong>except</strong>:</p>
+    <p><a name="3b"></a><strong>3.b. Upgrading from phpMyFAQ 2.0.x</strong></p>
+    <p>Upgrading from 2.0.x to 2.5.x is a major upgrade. Please make a full backup before you run the upgrade! Nevertheless the update from phpMyFAQ 2.0.x to the current release is fairly simple. First you have to delete all files <strong>except</strong>:</p>
     <ul>
-        <li>the files <strong>data.php</strong> and <strong>config.php</strong> in the directory <strong>inc/</strong> </li>
+        <li>the files <strong>data.php</strong> in the directory <strong>inc/</strong> </li>
         <li>all files in the <strong>template/</strong> directory</li>
     </ul>
     <p>Open the following URL in your browser:</p>
     <pre>http://www.example.com/faq/install/update.php</pre>
-    <p>Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be updated.</p>
+    <p>Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be updated. You have to update some of your template files due to the new, enhanced template engine.</p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><a name="3d"></a><strong>3.d. Upgrading phpMyFAQ 2.0.x</strong></p>
-    <p>Updating phpMyFAQ 2.0.x is fairly simple. Via FTP copy all new files from the phpMyFAQ package <strong>except</strong>:</p>
+    <p><a name="3c"></a><strong>3.c. Upgrading phpMyFAQ 2.5.x</strong></p>
+    <p>Updating phpMyFAQ 2.5.x is fairly simple. Via FTP copy all new files from the phpMyFAQ package <strong>except</strong>:</p>
     <ul>
         <li>the files <strong>data.php</strong> in the directory <strong>inc/</strong> </li>
         <li>all files in the <strong>template/</strong> directory</li>
@@ -388,7 +369,7 @@
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><a name="3e"></a><strong>3.e. Modifying templates for phpMyFAQ 2.0.x</strong></p>
+    <p><a name="3c"></a><strong>3.c. Modifying templates for phpMyFAQ 2.0.x</strong></p>
     <p>The 1.4.x and 1.5.x templates are partly compatible with phpMyFAQ 2.0.x, so you have to edit them and add some new placeholders for example for the captcha support and some other improvements. The 1.6.x templates are mostly compatible with phpMyFAQ 2.0, if your layout is completly based on CSS, you only have to change the .tpl files listed in <em>docs/CHANGEDFILES.txt</em>. If you need help to integrate phpMyFAQ into your website feel free to contact us.</p>
     <p><a href="#top">back to top</a></p>
 
