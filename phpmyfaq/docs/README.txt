@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.97 2008-01-26 10:42:31 thorstenr Exp $
+$Id: README.txt,v 1.98 2008-01-26 10:45:59 thorstenr Exp $
 
 phpMyFAQ 2.5.0-dev
 Codename "Pandora"
@@ -14,6 +14,7 @@ Changes since 2.0.x:
 - added new and improved new basic layout theme (Charles A. Landemaine)
 - added RSS feed for every category (Thorsten)
 - added ability to copy and duplicate FAQ entries (Thorsten)
+- updated bundled Net_IDNA to version 0.6.0 (Thorsten)
 
 For known issues please take a look at KNOWNBUGS.txt
 
@@ -24,6 +25,7 @@ Version 2.5.0-dev - 2008-
 - added new and improved new basic layout theme (Charles A. Landemaine)
 - added RSS feed for every category (Thorsten)
 - added ability to copy and duplicate FAQ entries (Thorsten)
+- updated bundled Net_IDNA to version 0.6.0 (Thorsten)
 
 Version 2.0.5 - 2008-01-20
 - fixed lighttpd rewrite rules (Markus Kohlmeyer)
