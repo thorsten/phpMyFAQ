@@ -5,13 +5,13 @@
  * @author    Lars Tiedemann <larstiedemann@yahoo.de>
  * @since     2005-12-15
  * @copyright 2005-2008 phpMyFAQ Team
- * @version   CVS: $Id: ajax.user_list.php,v 1.26 2008-01-20 19:56:36 thorstenr Exp $
+ * @version   CVS: $Id: ajax.user_list.php,v 1.27 2008-01-26 15:16:09 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
  * http://www.mozilla.org/MPL/
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
@@ -38,7 +38,7 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
 
     $user = new PMF_User();
     $user->addDb($db);
-    $userList = $user->getAllUsers();
+    $userList = $user->getUserById($_REQUEST['userid']);
     $data = array(
         'display_name'  => $PMF_LANG["ad_user_realname"], //"real name:",
         'email'         => $PMF_LANG["ad_entry_email"], //"email adress:"
@@ -73,20 +73,17 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
     <userlist>
         <select_class>ad_select_user</select_class>
 <?php
-    foreach ($userList as $user_id) {
-        $user_object = new PMF_User();
-        $user_object->getUserById($user_id);
-        $user_id = $user_object->getUserId();
-        $login = $user_object->getLogin();
+        $user_id = $user->getUserId();
+        $login = $user->getLogin();
         $class = "ad_select_user";
-        $status = $user_object->getStatus();
+        $status = $user->getStatus();
 ?>
         <user id="<?php print $user_id; ?>">
             <login><?php print $login; ?></login>
             <status><?php print $status; ?></status>
             <user_data>
 <?php
-        $user_data = $user_object->userdata->get(array_keys($data));
+        $user_data = $user->userdata->get(array_keys($data));
         foreach ($user_data as $field => $value) {
 ?>
 
@@ -115,9 +112,6 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
 ?>
             </user_rights>
         </user>
-<?php
-    } /* end foreach ($userList) */
-?>
     </userlist>
 </phpmyfaq>
 <?php

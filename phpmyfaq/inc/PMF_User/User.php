@@ -436,6 +436,39 @@ class PMF_User
     }
 
     /**
+     * search users by login
+     *
+     * @access public
+     * @author Sarah Hermann <sayh@gmx.de>
+     * @param  string
+     * @return array
+     */
+    function searchUsers($search)
+    {
+        $query = sprintf("
+                    SELECT
+                        login, user_id
+                    FROM
+                        %sfaquser
+                    WHERE login LIKE '%s'",
+                    SQLPREFIX,
+                    $this->_db->escape_string($search.'%')
+                    );
+
+        $res = $this->_db->query($query);
+        if (!$res) {
+            return array();
+        }
+
+        $result = array();
+        while ($row = $this->_db->fetch_assoc($res)) {
+            $result[] = $row;
+        }
+
+        return $result;
+    }
+
+    /**
      * creates a new user and stores basic data in the database.
      *
      * @access  public

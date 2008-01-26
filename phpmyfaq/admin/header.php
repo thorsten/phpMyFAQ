@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: header.php,v 1.47 2007-04-21 10:56:05 thorstenr Exp $
+ * $Id: header.php,v 1.48 2008-01-26 15:16:09 thorstenr Exp $
  *
  * Header of the admin area
  *
@@ -55,6 +55,7 @@ if (isset($_action)) {
         case 'takequestion':
         case 'editentry':
         case 'editpreview':
+        case 'user':
 ?>
     <script type="text/javascript" src="../inc/js/scriptaculous/scriptaculous.js"></script>
 <?php

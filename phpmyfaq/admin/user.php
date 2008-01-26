@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: user.php,v 1.37 2007-05-30 20:35:13 thorstenr Exp $
+ * $Id: user.php,v 1.38 2008-01-26 15:16:09 thorstenr Exp $
  *
  * Displays the user managment frontend
  *
@@ -113,6 +113,7 @@ if ($userAction == 'update_rights') {
         }
         $idUser = $user->getUserById($userId);
         $message .= '<p class="success">'.sprintf($successMessages['updateRights'], $user->getLogin()).'</p>';
+        $message .= '<script type="text/javascript">updateUser('.$userId.');</script>';
     }
 } // end if ($userAction == 'update_rights')
 // update user data
@@ -131,13 +132,31 @@ if ($userAction == 'update_data') {
         $userStatus = isset($_POST['user_status']) ? $_POST['user_status'] : $defaultUserStatus;
         $user = new PMF_User();
         $user->getUserById($userId);
+
+        $stats = $user->getStatus();
+        // set new password an send email if user is switched to active
+        if ($stats == 'blocked' && $userStatus == 'active') {
+            $consonants = array("b","c","d","f","g","h","j","k","l","m","n","p","r","s","t","v","w","x","y","z");
+            $vowels = array("a","e","i","o","u");
+            $newPassword = "";
+            srand((double)microtime()*1000000);
+            for ($i = 1; $i <= 4; $i++) {
+                $newPassword .= $consonants[rand(0,19)];
+                $newPassword .= $vowels[rand(0,4)];
+            }
+            $user->changePassword($newPassword);
+            $text = "\nUsername: ".$userData['display_name']."\nLoginname: ".$user->getLogin()."\nNew Password: ".$newPassword."\n\n";
+            mail($IDN->encode($userData['email']), $PMF_CONF['main.titleFAQ'].": username / activation", $text, "From: ".$IDN->encode($PMF_CONF['main.administrationMail']));
+        }
+
         if (!$user->userdata->set(array_keys($userData), array_values($userData)) or !$user->setStatus($userStatus)) {
             $message .= '<p class="error">'.$errorMessages['updateUser'].'</p>';
         } else {
             $message .= '<p class="success">'.sprintf($successMessages['updateUser'], $user->getLogin()).'</p>';
+            $message .= '<script type="text/javascript">updateUser('.$userId.');</script>';
         }
     }
-} // end if ($userAction == 'update')
+} // end if ($userAction == 'update') // end if ($userAction == 'update')
 // delete user confirmation
 if ($userAction == 'delete_confirm') {
     $message = '';
@@ -328,21 +347,22 @@ if ($userAction == 'list') {
 /* HTTP Request object */
 var userList;
 
-function getUserList() {
+function getUserList(userid) {
     var url = 'index.php';
-    var pars = 'action=ajax&ajax=user_list';
+    var pars = 'action=ajax&ajax=user_list&userid=' + userid;
     var myAjax = new Ajax.Request( url, {method: 'get', parameters: pars, onComplete: processUserList} );
 }
 
 function processUserList(XmlRequest) {
     // process response
     userList = XmlRequest;
-    clearUserList();
-    buildUserList();
     clearUserData();
-    buildUserData(0);
     clearUserRights();
-    buildUserRights(0);
+    var users = userList.responseXML.getElementsByTagName('user');
+    var userid = users[0].getAttribute('id');
+    buildUserData(userid);
+    selectUserStatus(userid);
+    buildUserRights(userid);
 }
 
 function clearUserList()
@@ -515,20 +535,18 @@ function buildUserRights(id)
     }
 }
 
-
-function userSelect(evt)
+function userSelect(text, li)
 {
-    var select = evt.srcElement || evt.target;
-    if (select && select.value > 0) {
-        clearUserData();
-        buildUserData(select.value);
-        clearUserRights();
-        buildUserRights(select.value);
-        selectUserStatus(select.value);
-    }
+    var userid = li.id;
+    getUserList(userid);
+    $('user_list_select').value = userid;
 }
 
-getUserList();
+function updateUser(id)
+{
+    var userid = id;
+    getUserList(userid);
+}
 
 /* ]]> */
 </script>
@@ -540,10 +558,15 @@ getUserList();
         <fieldset>
             <legend><?php print $text['selectUser']; ?></legend>
             <form name="user_select" id="user_select" action="<?php print $_SERVER['PHP_SELF']; ?>?action=user&amp;user_action=delete_confirm" method="post">
-                <select name="user_list_select" id="user_list_select" onchange="userSelect(event)" size="<?php print $selectSize; ?>" tabindex="1">
-                    <option value="">select...</option>
-                </select>
+                <input type="text" id="user_list_autocomplete" name="user_list_search" automplete="off" />
+                <div id="user_list_autocomplete_choices" class="user_list_autocomplete" style="display: none;"></div>
+                <script type="text/javascript">
+                var url = 'index.php';
+                var pars = 'action=ajax&ajax=user_list_autocomplete';
+                new Ajax.Autocompleter("user_list_autocomplete", "user_list_autocomplete_choices", url, { method: 'get', parameters: pars , minChars: 1, afterUpdateElement: userSelect});
+                </script>
                 <div class="button_row">
+                    <input type="hidden" name="user_list_select" id="user_list_select">
                     <input class="submit" type="submit" value="<?php print $text['delUser_button']; ?>" tabindex="2" />
                 </div>
             </form>
