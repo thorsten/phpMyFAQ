@@ -15,7 +15,7 @@
  * @author    Charles A. Landemaine <landemaine@gmail.com>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2004-2008 phpMyFAQ Team
- * @version   CVS: $Id: admin.css,v 1.51 2008-01-26 16:55:20 thorstenr Exp $
+ * @version   CVS: $Id: admin.css,v 1.52 2008-01-26 17:49:39 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -641,12 +641,12 @@ div.button_row input.reset {
 }
 #user_list {}
 #user_list_select {
-    width: 160px;
+    width: 200px;
     margin: 10px;
 }
 .user_list_autocomplete {
     position:absolute;
-    width:auto;
+    width: 200px;
     background-color:white;
     border:1px solid #888;
     margin:0px;
