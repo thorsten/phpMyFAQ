@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.125 2008-01-26 17:12:45 thorstenr Exp $
+ * $Id: Faq.php,v 1.126 2008-01-26 17:50:05 thorstenr Exp $
  *
  * The main FAQ class
  *
@@ -1646,19 +1646,19 @@ class PMF_Faq
     function getTopTen()
     {
         $result = $this->getTopTenData(PMF_NUMBER_RECORDS_TOPTEN, 0, $this->language);
+        $output = array();
 
         if (count($result) > 0) {
-            $output = '<ol>';
             foreach ($result as $row) {
-                $output .= sprintf('<li><strong>%d %s:</strong><br />',
-                    $row['visits'],
-                    $this->pmf_lang['msgViews']);
-                $shortTitle = PMF_Utils::makeShorterText(PMF_htmlentities($row['thema'], ENT_QUOTES, $this->pmf_lang['metaCharset']), 8);
-                $output .= sprintf('<a href="%s">%s</a></li>',
-                    $row['url'],
-                    $shortTitle);
+
+                $shortTitle = PMF_Utils::makeShorterText(PMF_htmlentities($row['thema'],
+                                                         ENT_QUOTES,
+                                                         $this->pmf_lang['metaCharset']), 8);
+
+                $output['title'][]  = $shortTitle;
+                $output['url'][]    = $row['url'];
+                $output['visits'][] = $row['visits'] . ' ' . $this->pmf_lang['msgViews'];
             }
-            $output .= '</ol>';
         } else {
             $output = $this->pmf_lang['err_noTopTen'];
         }
