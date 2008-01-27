@@ -1,6 +1,6 @@
-$Id: README.txt,v 1.101 2008-01-26 15:16:40 thorstenr Exp $
+$Id: README.txt,v 1.102 2008-01-27 09:36:43 thorstenr Exp $
 
-phpMyFAQ 2.5.0-dev
+phpMyFAQ 2.5.0-alpha
 Codename "Pandora"
 
 Installation/Update:
@@ -24,7 +24,7 @@ For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.5.0-dev - 2008-
+Version 2.5.0-alpha - 2008-01-
 - changed PHP requirement to PHP 5.2 (Thorsten)
 - added new and improved new basic layout theme (Charles A. Landemaine)
 - added RSS feed for every category (Thorsten)
