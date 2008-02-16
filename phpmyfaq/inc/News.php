@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: News.php,v 1.18 2008-01-26 17:12:45 thorstenr Exp $
+ * $Id: News.php,v 1.19 2008-02-16 15:33:04 thorstenr Exp $
  *
  * The News class for phpMyFAQ news
  *
@@ -170,7 +170,7 @@ class PMF_News
             if (isset($item['header'])) {
                 $oLink->itemTitle =$item['header'];
             }
-            $output .= sprintf('<h3><a name="news_%d" href="%s">%s <img id="goNews" src="images/more.gif" width="11" height="11" alt="%s" /></a></h3><div class="block">%s',
+            $output .= sprintf('<h3><a name="news_%d" href="%s">%s <img class="goNews" src="images/more.gif" width="11" height="11" alt="%s" /></a></h3><div class="block">%s',
                             $item['id'],
                             $oLink->toString(),
                             $item['header'],
