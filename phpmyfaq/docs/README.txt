@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.92.2.23 2008-01-20 21:09:08 thorstenr Exp $
+$Id: README.txt,v 1.92.2.24 2008-02-24 17:48:33 thorstenr Exp $
 
 phpMyFAQ 2.0.6
 Codename "Prometheus"
@@ -11,13 +11,15 @@ Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.0.5:
 - permission setting related fix (Carlos Eduardo Nogueira Gonçalves)
+- minor bugfixes (Thorsten)
 
 For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.0.6 - 2008-02-
+Version 2.0.6 - 2008-02-24
 - permission setting related fix (Carlos Eduardo Nogueira Gonçalves)
+- minor bugfixes (Thorsten)
 
 Version 2.0.5 - 2008-01-20
 - fixed lighttpd rewrite rules (Markus Kohlmeyer)
