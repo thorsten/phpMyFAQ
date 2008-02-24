@@ -23,7 +23,7 @@
 # @author    Matteo Scaramuccia <matteo@scaramuccia.com>
 # @since     2005-11-22
 # @copyright 2005-2008 phpMyFAQ Team
-# @version   CVS: $Id: cvs2package.sh,v 1.8.2.6 2008-01-20 16:32:06 thorstenr Exp $
+# @version   CVS: $Id: cvs2package.sh,v 1.8.2.7 2008-02-24 17:51:16 thorstenr Exp $
 #
 # The contents of this file are subject to the Mozilla Public License
 # Version 1.1 (the "License"); you may not use this file except in
@@ -38,7 +38,7 @@
 # CVS tag
 CVS_TAG="PMF_2_0"
 # PMF Version
-PMF_VERSION="2.0.5"
+PMF_VERSION="2.0.6"
 
 # Build folder
 PMF_BUILD_FOLDER="PMFBUILD_${CVS_TAG}_${PMF_VERSION}"
