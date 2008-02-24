@@ -1,6 +1,6 @@
-$Id: README.txt,v 1.92.2.24 2008-02-24 17:48:33 thorstenr Exp $
+$Id: README.txt,v 1.92.2.25 2008-02-24 18:14:13 thorstenr Exp $
 
-phpMyFAQ 2.0.6
+phpMyFAQ 2.0.7
 Codename "Prometheus"
 
 Installation/Update:
@@ -9,13 +9,15 @@ Please read the documentation (documentation.en.html) carefully.
 Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
-Changes since 2.0.5:
-- permission setting related fix (Carlos Eduardo Nogueira Gonçalves)
-- minor bugfixes (Thorsten)
+Changes since 2.0.6:
+-
 
 For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
+
+Version 2.0.7 - 2006-03-
+-
 
 Version 2.0.6 - 2008-02-24
 - permission setting related fix (Carlos Eduardo Nogueira Gonçalves)

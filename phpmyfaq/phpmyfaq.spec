@@ -40,7 +40,7 @@
 # @author    Matteo Scaramuccia <matteo@scaramuccia.com>
 # @since     2006-07-05
 # @copyright 2006-2008 phpMyFAQ Team
-# @version   CVS: $Id: phpmyfaq.spec,v 1.14.2.8 2008-01-20 19:29:36 thorstenr Exp $
+# @version   CVS: $Id: phpmyfaq.spec,v 1.14.2.9 2008-02-24 18:14:14 thorstenr Exp $
 #
 # The contents of this file are subject to the Mozilla Public License
 # Version 1.1 (the "License"); you may not use this file except in
@@ -56,7 +56,7 @@
 # phpMyFAQ
 #
 %define name        phpmyfaq
-%define version     2.0.6
+%define version     2.0.7
 %define release     1
 %define epoch       0
 
@@ -151,6 +151,10 @@ a news-system, user-tracking, language modules, enhanced automatic
 content negotiation, accessible XHTML based templates, extensive
 XML-support, PDF-support, a backup-system and an easy to use
 installation script.
+
+%changelog
+* Wed Feb 24 2008 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.0.7-1
+- New upstream version 2.0.7.
 
 %changelog
 * Wed Jan 20 2008 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.0.6-1
