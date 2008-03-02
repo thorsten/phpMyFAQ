@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_uk.php,v 1.1 2008-03-02 14:56:43 thorstenr Exp $
+ * language_uk.php,v 1.1 2008/03/02 14:56:43 thorstenr Exp
  *
  * Ukranian language file
  *
@@ -21,7 +21,7 @@
  */
 
 $PMF_LANG["metaCharset"] = "windows-1251";
-$PMF_LANG["metaLanguage"] = "ua";
+$PMF_LANG["metaLanguage"] = "uk";
 $PMF_LANG["language"] = "Ukranian";
 $PMF_LANG["dir"] = "ltr"; 
 
