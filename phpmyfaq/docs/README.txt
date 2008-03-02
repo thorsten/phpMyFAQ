@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.92.2.25 2008-02-24 18:14:13 thorstenr Exp $
+$Id: README.txt,v 1.92.2.26 2008-03-02 14:59:26 thorstenr Exp $
 
 phpMyFAQ 2.0.7
 Codename "Prometheus"
@@ -10,14 +10,16 @@ Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.0.6:
--
+- added Ukrainian translation (Oleg P. Suvolokin and Denis A. Barybin)
+- minor bugfixes (Thorsten)
 
 For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
 Version 2.0.7 - 2006-03-
--
+- added Ukrainian translation (Oleg P. Suvolokin and Denis A. Barybin)
+- minor bugfixes (Thorsten)
 
 Version 2.0.6 - 2008-02-24
 - permission setting related fix (Carlos Eduardo Nogueira Gonçalves)
