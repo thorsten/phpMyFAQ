@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_uk.php,v 1.1 2008-03-02 14:56:43 thorstenr Exp $
+ * $Id: language_uk.php,v 1.1.2.1 2008-03-02 14:57:39 thorstenr Exp $
  *
  * Ukranian language file
  *
