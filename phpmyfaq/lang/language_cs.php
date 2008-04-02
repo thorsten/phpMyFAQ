@@ -1,11 +1,12 @@
 <?php
-/******************************************************************************
- * File:				language_cs.php
- * Description:		    Czech language file
- * Authors:				Marty Rudinec <shodan@ebeats.info>
- * Date:				2004-06-23
- * Last Update:		    2004-07-18
- * Copyright:(c) 2006 phpMyFAQ Team
+/**
+ * $Id: language_cs.php,v 1.31 2008-04-02 18:33:58 thorstenr Exp $
+ *
+ * Czech language file
+ *
+ * @author      Petr Silon <petr.silon@xtel.cz>
+ * @since       2008-03-2008
+ * @copyright   (c) 2008 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -16,7 +17,7 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
- ******************************************************************************/
+ */
 
 $PMF_LANG["metaCharset"] = "windows-1250";
 $PMF_LANG["metaLanguage"] = "cs";
@@ -25,134 +26,139 @@ $PMF_LANG["dir"] = "ltr"; // ltr: left to right (e.g. English language); rtl: ri
 
 // Navigation
 $PMF_LANG["msgCategory"] = "Kategorie";
-$PMF_LANG["msgShowAllCategories"] = "Zobraz všechny kategorie";
-$PMF_LANG["msgSearch"] = "Najdi";
-$PMF_LANG["msgAddContent"] = "Pøidej oblast";
-$PMF_LANG["msgQuestion"] = "Zeptej se";
+$PMF_LANG["msgShowAllCategories"] = "Zobrazit všechny kategorie";
+$PMF_LANG["msgSearch"] = "Vyhledávání";
+$PMF_LANG["msgAddContent"] = "Navrhnout dotaz";
+$PMF_LANG["msgQuestion"] = "Zeptat se";
 $PMF_LANG["msgOpenQuestions"] = "Nezodpovìzené";
 $PMF_LANG["msgHelp"] = "Nápovìda";
 $PMF_LANG["msgContact"] = "Kontakt";
-$PMF_LANG["msgHome"] = "Hlavní strana";
+$PMF_LANG["msgHome"] = "Úvodní stránka FAQ";
 $PMF_LANG["msgNews"] = "Nové";
 $PMF_LANG["msgUserOnline"] = " Pøipojených uživatelù";
-$PMF_LANG["msgXMLExport"] = "XML-Soubor";
-$PMF_LANG["msgBack2Home"] = "zpìt na hlavní stranu";
+$PMF_LANG["msgXMLExport"] = "XML soubor";
+$PMF_LANG["msgBack2Home"] = "zpìt na Hlavní stranu";
 
 // Contentpages
-$PMF_LANG["msgFullCategories"] = "Kategorie a záznamy";
-$PMF_LANG["msgFullCategoriesIn"] = "Kategorie se záznamy v ";
+$PMF_LANG["msgFullCategories"] = "Kategorie a dotazy";
+$PMF_LANG["msgFullCategoriesIn"] = "Kategorie s dotazy v ";
 $PMF_LANG["msgSubCategories"] = "Podkategorie";
-$PMF_LANG["msgEntries"] = "Záznamù";
-$PMF_LANG["msgEntriesIn"] = "Otázky v ";
+$PMF_LANG["msgEntries"] = "dotazù";
+$PMF_LANG["msgEntriesIn"] = "Dotazy v kategorii ";
 $PMF_LANG["msgViews"] = "zobrazení";
 $PMF_LANG["msgPage"] = "Strana ";
 $PMF_LANG["msgPages"] = "Stran";
 $PMF_LANG["msgPrevious"] = "pøedchozí";
 $PMF_LANG["msgNext"] = "další";
-$PMF_LANG["msgCategoryUp"] = "o kategorii výš";
-$PMF_LANG["msgLastUpdateArticle"] = "Naposledy doplnìno: ";
+$PMF_LANG["msgCategoryUp"] = "o kategorii výše";
+$PMF_LANG["msgLastUpdateArticle"] = "Aktualizováno: ";
 $PMF_LANG["msgAuthor"] = "Autor: ";
-$PMF_LANG["msgPrinterFriendly"] = "verze pro tisk";
-$PMF_LANG["msgPrintArticle"] = "Vytiskni tento záznam";
-$PMF_LANG["msgMakeXMLExport"] = "exportuj jako XML-Soubor";
-$PMF_LANG["msgAverageVote"] = "Prùmìrné hnocení:";
-$PMF_LANG["msgVoteUseability"] = "Prosím ohodno? tento záznam:";
+$PMF_LANG["msgPrinterFriendly"] = "Verze pro tisk";
+$PMF_LANG["msgPrintArticle"] = "Vytisknout tento dotaz";
+$PMF_LANG["msgMakeXMLExport"] = "Exportovat jako XML soubor";
+$PMF_LANG["msgAverageVote"] = "Prùmìrné hodnocení:";
+$PMF_LANG["msgVoteUseability"] = "Mùžete ohodnotit tuto odpovìï:";
 $PMF_LANG["msgVoteFrom"] = "z";
-$PMF_LANG["msgVoteBad"] = "naprosto nepoužitelný";
-$PMF_LANG["msgVoteGood"] = "velmi užiteèný";
-$PMF_LANG["msgVotings"] = "Hlasù ";
-$PMF_LANG["msgVoteSubmit"] = "Hlasuj";
-$PMF_LANG["msgVoteThanks"] = "Dìkujeme za hlas!";
-$PMF_LANG["msgYouCan"] = "Mùžeš pøidat ";
-$PMF_LANG["msgWriteComment"] = "komentáø k záznamu";
-$PMF_LANG["msgShowCategory"] = "Pøehled Obsahu: ";
+$PMF_LANG["msgVoteBad"] = "naprosto nepoužitelná";
+$PMF_LANG["msgVoteGood"] = "velmi užiteèná";
+$PMF_LANG["msgVotings"] = "Hodnocení";
+$PMF_LANG["msgVoteSubmit"] = "Hodnotit";
+$PMF_LANG["msgVoteThanks"] = "Dìkujeme za vaše hodnocení!";
+$PMF_LANG["msgYouCan"] = "Mùžete pøidat ";
+$PMF_LANG["msgWriteComment"] = "komentáø k odpovìdi";
+$PMF_LANG["msgShowCategory"] = "Pøehled obsahu: ";
 $PMF_LANG["msgCommentBy"] = "Komentáø od ";
 $PMF_LANG["msgCommentHeader"] = "Komentáø k tomuto záznamu";
-$PMF_LANG["msgYourComment"] = "Tvoje komentáøe:";
+$PMF_LANG["msgYourComment"] = "Komentáø:";
 $PMF_LANG["msgCommentThanks"] = "Dìkujeme za komentáø!";
 $PMF_LANG["msgSeeXMLFile"] = "otevøi XML-Soubor";
-$PMF_LANG["msgSend2Friend"] = "Pošli pøíteli";
-$PMF_LANG["msgS2FName"] = "Tvoje jméno:";
-$PMF_LANG["msgS2FEMail"] = "Tvoje e-mail adresa:";
-$PMF_LANG["msgS2FFriends"] = "Tvoji pøátelé:";
+$PMF_LANG["msgSend2Friend"] = "Poslat pøíteli";
+$PMF_LANG["msgS2FName"] = "Jméno:";
+$PMF_LANG["msgS2FEMail"] = "E-mail adresa:";
+$PMF_LANG["msgS2FFriends"] = "Vaši pøátelé:";
 $PMF_LANG["msgS2FEMails"] = ". e-mail adresa:";
-$PMF_LANG["msgS2FText"] = "Poslán bude následující text:";
-$PMF_LANG["msgS2FText2"] = "Záznam bude na adrese:";
-$PMF_LANG["msgS2FMessage"] = "Dodateèná zpráva pro pøátele:";
-$PMF_LANG["msgS2FButton"] = "pošli e-mail";
-$PMF_LANG["msgS2FThx"] = "Dìkujeme za doporuèení!";
+$PMF_LANG["msgS2FText"] = "Bude odeslán následující text:";
+$PMF_LANG["msgS2FText2"] = "";
+$PMF_LANG["msgS2FMessage"] = "Dodateèná zpráva pro vaše pøátele:";
+$PMF_LANG["msgS2FButton"] = "Odeslat";
+$PMF_LANG["msgS2FThx"] = "Dìkujeme za vaše doporuèení!";
 $PMF_LANG["msgS2FMailSubject"] = "Doporuèení od ";
 
 // Search
-$PMF_LANG["msgSearchWord"] = "Klíèové slovo";
-$PMF_LANG["msgSearchFind"] = "Hledej ve výsledcích ";
-$PMF_LANG["msgSearchAmount"] = " hledej výsledek";
-$PMF_LANG["msgSearchAmounts"] = " hledej výsledky";
+$PMF_LANG["msgSearchWord"] = "Vyhledávání";
+$PMF_LANG["msgSearchFind"] = "Hledat ve výsledcích ";
+$PMF_LANG["msgSearchAmount"] = " hledat výsledek";
+$PMF_LANG["msgSearchAmounts"] = " hledat výsledky";
 $PMF_LANG["msgSearchCategory"] = "Kategorie: ";
 $PMF_LANG["msgSearchContent"] = "Obsah: ";
 
 // new Content
-$PMF_LANG["msgNewContentHeader"] = "Návrh pro ÈKD";
-$PMF_LANG["msgNewContentAddon"] = "Tento návrh nebude zveøejnìn ihned, zveøejní jej po pøijetí administrátor. Povinná pole jsou <strong>jméno</strong>, <strong>e-mail adresa</strong>, <strong>kategorie</strong>, <strong>nadpis</strong> a <strong>záznam</strong>. Klíèová slova prosím oddìlujte pouze mezerou.";
-$PMF_LANG["msgNewContentUBB"] = "<p>Pro vaše dotazy mùžete použít BB kód <a href=\"help/ubbcode.php\" target=\"_blank\">Nápovìda o UBB kódech</a></p>";
+$PMF_LANG["msgNewContentHeader"] = "Navrhnout nový dotaz do FAQ";
+$PMF_LANG["msgNewContentAddon"] = "Váš návrh dotazu a odpovìï bude v databázi FAQ zveøejnìna po zpracování pracovníkem podpory spoleènosti XTEL. <br />
+Povinná pole jsou <strong>jméno</strong>, <strong>e-mailová adresa</strong>, <strong>kategorie</strong>, <strong>pøedmìt</strong> a <strong>dotaz</strong>. <br />Klíèová slova prosím oddìlujte pouze mezerou.
+<br /><br />
+<strong style=\"color: Red;\">POZOR:</strong> Tento formuláø <strong>neslouží</strong> pro kontakt na technickou podporu! Lze jím pouze navrhnout nový dotaz, o kterém si myslíte, že chybí v této FAQ databázi.
+<br /><br />Kontakt na technickou podporu je <a href=\"podpora\">www.xtel.cz/podpora</a><br /><br />";
+$PMF_LANG["msgNewContentUBB"] = "<p>Pro vaše dotazy mùžete použít BB kód <a href=\"help/ubbcode.php\" target=\"_blank\">Nápovìda o BB kódech</a></p>";
 $PMF_LANG["msgNewContentName"] = "Jméno:";
-$PMF_LANG["msgNewContentMail"] = "e-mail adresa:";
-$PMF_LANG["msgNewContentCategory"] = "Zvolte kategorii";
-$PMF_LANG["msgNewContentTheme"] = "Nadpis:";
-$PMF_LANG["msgNewContentArticle"] = "Záznam:";
+$PMF_LANG["msgNewContentMail"] = "E-mailová adresa:";
+$PMF_LANG["msgNewContentCategory"] = "Kategorie";
+$PMF_LANG["msgNewContentTheme"] = "Pøedmìt:";
+$PMF_LANG["msgNewContentArticle"] = "Dotaz:";
 $PMF_LANG["msgNewContentKeywords"] = "Klíèová slova:";
-$PMF_LANG["msgNewContentLink"] = "Odkaz pro tento záznam";
-$PMF_LANG["msgNewContentSubmit"] = "odešli";
+$PMF_LANG["msgNewContentLink"] = "Odkaz pro tento dotaz";
+$PMF_LANG["msgNewContentSubmit"] = "Odeslat";
 $PMF_LANG["msgInfo"] = "Více informací: ";
-$PMF_LANG["msgNewContentThanks"] = "Dìkujeme za návrh!";
+$PMF_LANG["msgNewContentThanks"] = "Dìkujeme za váš návrh dotazu do FAQ!";
 $PMF_LANG["msgNoQuestionsAvailable"] = "Momentálnì nejsou žádné nezodpovìzené dotazy.";
 
 // ask Question
 $PMF_LANG["msgNewQuestion"] = "Napište svùj dotaz:";
 $PMF_LANG["msgAskCategory"] = "Kategorie dotazu";
 $PMF_LANG["msgAskYourQuestion"] = "Dotaz:";
-$PMF_LANG["msgAskThx4Mail"] = "<h2>Dìkujeme za email!</h2>";
+$PMF_LANG["msgAskThx4Mail"] = "<h2>Dìkujeme za váš e-mail!</h2>";
 $PMF_LANG["msgDate_User"] = "Datum / Uživatel";
 $PMF_LANG["msgQuestion2"] = "Otázka";
-$PMF_LANG["msg2answer"] = "odpovìz";
+$PMF_LANG["msg2answer"] = "Odpovìdìt";
 $PMF_LANG["msgQuestionText"] = "Zde jsou dotazy ostatních uživatelù. Odpovíte-li na nìkteré z nich, vaše odpovìdi zde mohou být zveøejnìny.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>Struktura È K D (<strong>È</strong>asto <strong>K</strong>ladených <strong>D</strong>otazù) je naprosto jednoduchá. Mùžete buïto hledat v <strong><a href=\"".$_SERVER["PHP_SELF"]."?sid=".isset($_GET["sid"])."&amp;action=show\">kategoriích</a></strong> nebo použít <strong><a href=\"".$_SERVER["PHP_SELF"]."?sid=".isset($_GET["sid"])."&amp;action=search\">ÈKD vyhledávaè</a></strong> k prohledání klíèových slov.</p>";
+$PMF_LANG["msgHelpText"] = "<p>Struktura FAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) = <strong>Èasto Kladených Dotazù</strong> je naprosto jednoduchá. <br>
+Mùžete buïto procházet jednotlivé <strong><a href=\"".$_SERVER["PHP_SELF"]."?sid=".isset($_GET["sid"])."&amp;action=show\">kategorie</a></strong> nebo použít <strong><a href=\"".$_SERVER["PHP_SELF"]."?sid=".isset($_GET["sid"])."&amp;action=search\">prohledávání FAQ</a></strong> pomocí klíèových slov.</p>";
 
 // Contact
-$PMF_LANG["msgContactEMail"] = "email správci:";
+$PMF_LANG["msgContactEMail"] = "E-mail správci:";
 $PMF_LANG["msgMessage"] = "Zpráva:";
 
 // Startsite
-$PMF_LANG["msgNews"] = " Nové";
+$PMF_LANG["msgNews"] = "Novinky";
 $PMF_LANG["msgTopTen"] = "TOP 10";
-$PMF_LANG["msgHomeThereAre"] = "V  È K D  je ";
+$PMF_LANG["msgHomeThereAre"] = "Ve FAQ je ";
 $PMF_LANG["msgHomeArticlesOnline"] = " záznamù";
-$PMF_LANG["msgNoNews"] = "Žádné novinky - dobré novinky.";
+$PMF_LANG["msgNoNews"] = "Žádné novinky";
 $PMF_LANG["msgLatestArticles"] = "Pìt nejnovìjších dotazù:";
 
 // E-Mailbenachrichtigung
-$PMF_LANG["msgMailThanks"] = "Dìkujeme za Váš návrh do È K D.";
-$PMF_LANG["msgMailCheck"] = "V  È K D  je nový záznam! \nProsím zkontroluj admin sekci!";
+$PMF_LANG["msgMailThanks"] = "Dìkujeme za Váš návrh do FAQ.";
+$PMF_LANG["msgMailCheck"] = "Ve FAQ je nový záznam! \nProsím zkontroluj admin sekci!";
 $PMF_LANG["msgMailContact"] = "Vaše zpráva byla odeslána administrátorovi.";
 
 // Fehlermeldungen
 $PMF_LANG["err_noDatabase"] = "Není dostupné spojení s databází.";
 $PMF_LANG["err_noHeaders"] = "Žádná kategorie nenalezena.";
-$PMF_LANG["err_noArticles"] = "<p>Žádné záznamy k dispozici.</p>";
-$PMF_LANG["err_badID"] = "<p>Špatné ID.</p>";
+$PMF_LANG["err_noArticles"] = "<p>Žádné záznamy nenalezeny.</p>";
+$PMF_LANG["err_badID"] = "<p>Chybné ID.</p>";
 $PMF_LANG["err_noTopTen"] = "<p>Žádné Top 10 není k dispozici.</p>";
-$PMF_LANG["err_nothingFound"] = "<p>Nenalezeny žádné záznamy.</p>";
-$PMF_LANG["err_SaveEntries"] = "Povinná pole jsou <strong>jméno</strong>, <strong>email adresa</strong>, <strong>kategorie</strong>, <strong>nadpis</strong> a <bZáznam</strong>!<br /><br />\n<a href=\"javascript:history.back();\">o stránku zpìt</a><br /><br />\n";
-$PMF_LANG["err_SaveComment"] = "Povinná pole jsou <strong>jméno</strong>, <strong>email adresa</strong> a <strong>komentáø</strong>!<br /><br />\n<a href=\"javascript:history.back();\">o stránku zpìt</a><br /><br />\n";
-$PMF_LANG["err_VoteTooMuch"] = "<p>Opakované hlasování se nepoèítá. <a href=\"javascript:history.back();\">Kliknìte sem</a>, pro návrat.</p>";
-$PMF_LANG["err_noVote"] = "<p><strong>Není hodnocení!</strong> <a href=\"javascript:history.back();\">Prosím kliknìte sem</a>, pro hlasování.</p>";
+$PMF_LANG["err_nothingFound"] = "<p>Žádné záznamy nenalezeny.</p>";
+$PMF_LANG["err_SaveEntries"] = "Povinná pole jsou <strong>jméno</strong>, <strong>e-mailová adresa</strong>, <strong>kategorie</strong>, <strong>pøedmìt</strong> a <strong>dotaz</strong>!<br /><br />\n<a href=\"javascript:history.back();\">O stránku zpìt</a><br /><br />\n";
+$PMF_LANG["err_SaveComment"] = "Povinná pole jsou <strong>jméno</strong>, <strong>e-mailová adresa</strong> a <strong>komentáø</strong>!<br /><br />\n<a href=\"javascript:history.back();\">O stránku zpìt</a><br /><br />\n";
+$PMF_LANG["err_VoteTooMuch"] = "<p>Opakované hlasování se nepoèítá. <a href=\"javascript:history.back();\">Kliknìte zde</a> pro návrat.</p>";
+$PMF_LANG["err_noVote"] = "<p><strong>Není hodnocení!</strong> <a href=\"javascript:history.back();\">Prosím kliknìte zde</a> pro hlasování.</p>";
 $PMF_LANG["err_noMailAdress"] = "Adresa není správná.<br /><a href=\"javascript:history.back();\">zpìt</a>";
-$PMF_LANG["err_sendMail"] = "Povinná pole jsou <strong>jméno</strong>, <strong>email adresa</strong> a <strong>dotaz</strong>!<br /><br />\n<a href=\"javascript:history.back();\">o stránku zpìt</a><br /><br />\n";
+$PMF_LANG["err_sendMail"] = "Povinná pole jsou <strong>jméno</strong>, <strong>email adresa</strong> a <strong>dotaz</strong>!<br /><br />\n<a href=\"javascript:history.back();\">O stránku zpìt</a><br /><br />\n";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "<p><strong>Hledej záznamy:</strong><br />With an entry like <strong style=\"color: Red;\">word1 word2</strong> you can do a relevance descending search for two or more search criterion.</p><p><strong>Notice:</strong> Your search criterion has to be at least 4 letters long otherwise your request will be rejected.</p>";
+$PMF_LANG["help_search"] = "Prohledávejte databázi FAQ - Èasto Kladených Dotazù, tak jak jste zvyklí z bìžných vyhledávaèù. <br />Pro zvýšení relevance nalezených odpovìdí pøispìje použití více klíèových slov ve vašem dotazu (napø. KlíèovéSlovo1 KlíèovéSlovo2).<br /><br />";
 
 // Menü
 $PMF_LANG["ad"] = "ADMIN SEKCE";
@@ -209,6 +215,7 @@ $PMF_LANG["ad_user_del_1"] = "Uživatel";
 $PMF_LANG["ad_user_del_2"] = "má být smazán?";
 $PMF_LANG["ad_user_del_3"] = "Urèitì?";
 $PMF_LANG["ad_user_deleted"] = "Uživatel byl úspìšnì vymazán.";
+$PMF_LANG["ad_user_checkall"] = "Select all"; 
 
 // Beitragsverwaltung
 $PMF_LANG["ad_entry_aor"] = "Administrace Záznamù";
@@ -252,7 +259,7 @@ $PMF_LANG["ad_news_link_url"] = "Odkaz: (<strong>without http://</strong>)!";
 $PMF_LANG["ad_news_link_title"] = "Název odkazu:";
 $PMF_LANG["ad_news_link_target"] = "Cíl odkazu";
 $PMF_LANG["ad_news_link_window"] = "Odkaz otevøe nové okno";
-$PMF_LANG["ad_news_link_faq"] = "Odkaz uvnitø  È K D";
+$PMF_LANG["ad_news_link_faq"] = "Odkaz uvnitø FAQ";
 $PMF_LANG["ad_news_add"] = "Pøidej novinky";
 $PMF_LANG["ad_news_id"] = "#";
 $PMF_LANG["ad_news_headline"] = "Nadpis";
@@ -430,22 +437,22 @@ $PMF_LANG["ad_kateg_add"] = "pøidej Kategorii";
 $PMF_LANG["ad_kateg_rename"] = "Pøejmenuj";
 $PMF_LANG["ad_adminlog_date"] = "Smaž";
 $PMF_LANG["ad_adminlog_user"] = "Uživatel";
-$PMF_LANG["ad_adminlog_ip"] = "IP-Adresa";
+$PMF_LANG["ad_adminlog_ip"] = "IP adresa";
 
 $PMF_LANG["ad_stat_sess"] = "Seance";
-$PMF_LANG["ad_stat_days"] = "Dny";
+$PMF_LANG["ad_stat_days"] = "Dnù";
 $PMF_LANG["ad_stat_vis"] = "Seance (Návštìvy)";
 $PMF_LANG["ad_stat_vpd"] = "Návštìvy za Den";
 $PMF_LANG["ad_stat_fien"] = "První Log";
 $PMF_LANG["ad_stat_laen"] = "Poslední Log";
-$PMF_LANG["ad_stat_browse"] = "prohlížej Seance";
+$PMF_LANG["ad_stat_browse"] = "prohlížet seance";
 $PMF_LANG["ad_stat_ok"] = "OK";
 
 $PMF_LANG["ad_sess_time"] = "Èas";
-$PMF_LANG["ad_sess_sid"] = "ID-Seance";
-$PMF_LANG["ad_sess_ip"] = "IP-Adresa";
+$PMF_LANG["ad_sess_sid"] = "ID seance";
+$PMF_LANG["ad_sess_ip"] = "IP adresa";
 
-$PMF_LANG["ad_ques_take"] = "Edituj otázku";
+$PMF_LANG["ad_ques_take"] = "Upravit otázku";
 $PMF_LANG["no_cats"] = "Žádné kategorie nenalezeny.";
 
 // Added v1.1 - 17.01.2002 - Bastian
@@ -459,16 +466,16 @@ $PMF_LANG["ad_log_usde"] = "Smaž uživatele: ";
 $PMF_LANG["ad_log_beed"] = "Formuláø pro editaci uživatele: ";
 $PMF_LANG["ad_log_bede"] = "Smazán záznam: ";
 
-$PMF_LANG["ad_start_visits"] = "Návštìvy";
-$PMF_LANG["ad_start_articles"] = "Záznamy";
-$PMF_LANG["ad_start_comments"] = "Komentáøe";
+$PMF_LANG["ad_start_visits"] = "Návštìv";
+$PMF_LANG["ad_start_articles"] = "Záznamù";
+$PMF_LANG["ad_start_comments"] = "Komentáøù";
 
 $PMF_LANG["ad_user_chpw"] = "Zmìnit mùžete jedinì heslo aktuálního uživatele \"Zmìò Heslo\".";
 
 // Added v1.1 - 30.01.2002 - Bastian
-$PMF_LANG["ad_categ_paste"] = "vlož";
-$PMF_LANG["ad_categ_cut"] = "vyjmi";
-$PMF_LANG["ad_categ_copy"] = "kopíruj";
+$PMF_LANG["ad_categ_paste"] = "vložit";
+$PMF_LANG["ad_categ_cut"] = "vyjmout";
+$PMF_LANG["ad_categ_copy"] = "kopírovat";
 $PMF_LANG["ad_categ_process"] = "Zpracovávám kategorie...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten
@@ -481,15 +488,15 @@ $PMF_LANG["msgPageDoublePoint"] = "Strana: ";
 $PMF_LANG["msgMainCategory"] = "Hlavní kategorie";
 
 // Added v1.2.4 - 30.01.2003 - Thorsten
-$PMF_LANG["ad_passwdsuc"] = "Vaše heslo je zmìnìno.";
+$PMF_LANG["ad_passwdsuc"] = "Vaše heslo bylo zmìnìno.";
 
 // Added v1.3.0 - 04.03.2003 - Thorsten
-$PMF_LANG["msgPDF"] = "Zobraz jako PDF soubor";
+$PMF_LANG["msgPDF"] = "Zobrazit jako PDF soubor";
 $PMF_LANG["ad_xml_head"] = "XML-Záloha";
-$PMF_LANG["ad_xml_hint"] = "Ulož všechny záznamy  È K D  do jednoho XML souboru.";
-$PMF_LANG["ad_xml_gen"] = "vytvoø XML soubor";
+$PMF_LANG["ad_xml_hint"] = "Ulož všechny záznamy FAQ do jednoho XML souboru.";
+$PMF_LANG["ad_xml_gen"] = "Vytvoøit XML soubor";
 $PMF_LANG["ad_entry_locale"] = "Jazyk";
-$PMF_LANG["msgLangaugeSubmit"] = "zmìò jazyk";
+$PMF_LANG["msgLangaugeSubmit"] = "zmìit jazyk";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
 $PMF_LANG["ad_entry_preview"] = "Náhled";
@@ -497,7 +504,7 @@ $PMF_LANG["ad_attach_1"] = "Napøed prosím v nastavení vyberte adresáø pro pøíloh
 $PMF_LANG["ad_attach_2"] = "Napøed prosím v nastavení vyberte odkaz pro pøílohy.";
 $PMF_LANG["ad_attach_3"] = "Soubor s pøíponou .php nemùže být otevøen bez øádné autentifikace.";
 $PMF_LANG["ad_attach_4"] = "Pøikládaný soubor musí být menší než ".$PMF_CONF['main.maxAttachmentSize']." Bytù.";
-$PMF_LANG["ad_menu_export"] = "Exportuj  È K D";
+$PMF_LANG["ad_menu_export"] = "Exportuj FAQ";
 $PMF_LANG["ad_export_1"] = "Built RSS-Feed on";
 $PMF_LANG["ad_export_2"] = ".";
 $PMF_LANG["ad_export_file"] = "Chyba: Nemùžu zapsat soubor.";
@@ -534,14 +541,14 @@ $PMF_LANG["msgAttachedFiles"] = "pøipojené soubory:";
 
 // Added v1.3.3 - 27.05.2003 - Thorsten
 $PMF_LANG["ad_user_action"] = "akce";
-$PMF_LANG["ad_entry_email"] = "email adresa:";
+$PMF_LANG["ad_entry_email"] = "e-mail adresa:";
 $PMF_LANG["ad_entry_allowComments"] = "povolit komentáøe";
-$PMF_LANG["msgWriteNoComment"] = "K tomuto záznamu nemùžete pøidat komentáø.";
+$PMF_LANG["msgWriteNoComment"] = "K tomuto záznamu nemùžete pøipojit komentáø.";
 $PMF_LANG["ad_user_realname"] = "skuteèné jméno:";
-$PMF_LANG["ad_export_generate_pdf"] = "vytvoø PDF soubor";
-$PMF_LANG["ad_export_full_faq"] = "È K D  jako PDF soubor: ";
-$PMF_LANG["err_bannedIP"] = "Vaše IP adresa byla pøidána do \"ban listu\".";
-$PMF_LANG["err_SaveQuestion"] = "Povinná pole jsou <strong>jméno</strong>, <strong>email adresa</strong> a <strong>otázka</strong>.<br /><br /><a href=\"javascript:history.back();\">o stranu zpìt</a><br /><br />\n";
+$PMF_LANG["ad_export_generate_pdf"] = "Vytvoøit PDF soubor";
+$PMF_LANG["ad_export_full_faq"] = "FAQ jako PDF soubor: ";
+$PMF_LANG["err_bannedIP"] = "Vaše IP adresa byla pøidána do \"nepovolených adres\".";
+$PMF_LANG["err_SaveQuestion"] = "Povinná pole jsou <strong>jméno</strong>, <strong>e-mailová adresa</strong> a <strong>otázka</strong>.<br /><br /><a href=\"javascript:history.back();\">pøedchozí stránka</a><br /><br />\n";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Barva písma: ";
@@ -568,6 +575,10 @@ $LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Number o
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Ban these IPs");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Activate mod_rewrite support? (default: disabled)");
 $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Do you want to enable LDAP support? (default: disabled)");
+$LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "Base URL for link verification (e.g.: http://www.example.org/faq)");
+$LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "Interval between AJAX link verification (in seconds)");
+$LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Disable visibility of new questions?");
+$LANG_CONF['main.permLevel'] = array(0 => "input", 1 => "Permission level");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "as new main category";
 $PMF_LANG["ad_categ_paste_error"] = "Moving this category isn't possible.";
@@ -576,21 +587,21 @@ $PMF_LANG["ad_categ_lang"] = "Language";
 $PMF_LANG["ad_categ_desc"] = "Description";
 $PMF_LANG["ad_categ_change"] = "Change with";
 
-$PMF_LANG["lostPassword"] = "Password forgotten? Click here.";
-$PMF_LANG["lostpwd_err_1"] = "Error: Username and e-mail adress not found.";
-$PMF_LANG["lostpwd_err_2"] = "Error: Wrong entries!";
-$PMF_LANG["lostpwd_text_1"] = "Thank you for requesting your account information.";
-$PMF_LANG["lostpwd_text_2"] = "Please set a new personal password in the admin section of your FAQ.";
-$PMF_LANG["lostpwd_mail_okay"] = "E-Mail was sent.";
+$PMF_LANG["lostPassword"] = "Zapomìli jste heslo? Kliknìte zde.";
+$PMF_LANG["lostpwd_err_1"] = "Chyba: Uživatelské jméno a e-mailová adresa nenalezeny.";
+$PMF_LANG["lostpwd_err_2"] = "Chyba: Chybné zadání!";
+$PMF_LANG["lostpwd_text_1"] = "Dìkujeme, že jste si vyžádali vaše pøihlašovací údaje.";
+$PMF_LANG["lostpwd_text_2"] = "Prosíme, nastavete si nové helso v admin sekci vašcih FAQ.";
+$PMF_LANG["lostpwd_mail_okay"] = "E-mail byl odeslán.";
 
 $PMF_LANG["ad_xmlrpc_button"] = "Get latest phpMyFAQ version number by web service";
 $PMF_LANG["ad_xmlrpc_latest"] = "Latest version available on";
 
 // added v1.5.0 - 2005-07-31 by Thorsten
-$PMF_LANG['ad_categ_select'] = 'Select category language';
+$PMF_LANG['ad_categ_select'] = 'Zvolte jazyk sekce';
 
 // added v1.5.1 - 2005-09-06 by Thorsten
-$PMF_LANG['msgSitemap'] = 'Sitemap';
+$PMF_LANG['msgSitemap'] = 'Mapa stránek FAQ';
 
 // added v1.5.2 - 2005-09-23 by Lars
 $PMF_LANG['err_inactiveArticle'] = 'This entry is in revision and can not be displayed.';
@@ -602,13 +613,13 @@ $PMF_LANG['ad_entry_faq_record'] = 'FAQ record';
 $PMF_LANG['ad_entry_new_revision'] = 'Create new revision?';
 $PMF_LANG['ad_entry_record_administration'] = 'Record administration';
 $PMF_LANG['ad_entry_changelog'] = 'Changelog';
-$PMF_LANG['ad_entry_revision'] = 'Revision';
+$PMF_LANG['ad_entry_revision'] = 'Verze';
 $PMF_LANG['ad_changerev'] = 'Select Revision';
-$PMF_LANG['msgCaptcha'] = "Please enter the characters you're reading in the image";
-$PMF_LANG['msgSelectCategories'] = 'Search in ...';
-$PMF_LANG['msgAllCategories'] = '... all categories';
+$PMF_LANG['msgCaptcha'] = "Prosím, opište všechny znaky z obrázku";
+$PMF_LANG['msgSelectCategories'] = 'Vyhledávej ';
+$PMF_LANG['msgAllCategories'] = '... ve všech sekcích';
 $PMF_LANG['ad_you_should_update'] = 'Your phpMyFAQ installation is outdated. You should update to the latest available version.';
-$PMF_LANG['msgAdvancedSearch'] = 'Najdi';
+$PMF_LANG['msgAdvancedSearch'] = 'Vyhledávání';
 
 // added v1.6.1 - 2006-04-25 by Matteo and Thorsten
 $PMF_LANG['spamControlCenter'] = 'Spam control center';
@@ -653,6 +664,8 @@ $PMF_LANG['ad_linkcheck_openurl_tooslow'] = 'Host <strong>%s</strong> is slow or
 $PMF_LANG['ad_linkcheck_openurl_nodns'] = 'DNS resolution of host <strong>%s</strong> is slow or is failed due to DNS issues, local or remote.';
 $PMF_LANG['ad_linkcheck_openurl_redirected'] = 'URL was redirected to <strong>%s</strong>.';
 $PMF_LANG['ad_linkcheck_openurl_ambiguous'] = 'Ambiguous HTTP status <strong>%s</strong> returned.';
+$PMF_LANG['ad_linkcheck_openurl_not_allowed'] = 'The <em>HEAD</em> method is not supported by the host <strong>%s</strong>, allowed methods: <strong>%s</strong>.';
+$PMF_LANG['ad_linkcheck_openurl_not_found'] = 'This resource cannot be found at host <strong>%s</strong>.';
 $PMF_LANG['ad_linkcheck_protocol_unsupported'] = '%s protocol unsupported by Automatic link verification.';
 $PMF_LANG['ad_menu_linkconfig'] = 'Configure URL Verifier';
 $PMF_LANG['ad_linkcheck_config_title'] = 'URL Verifier Configuration';
@@ -754,3 +767,128 @@ $PMF_LANG['adminSection'] = 'Administration';
 $PMF_LANG['err_expiredArticle'] = 'This entry is expired and can not be displayed';
 $PMF_LANG['err_expiredNews'] = 'This news is expired and can not be displayed';
 $PMF_LANG['err_inactiveNews'] = 'This news is in revision and can not be displayed';
+$PMF_LANG['msgSearchOnAllLanguages'] = 'Search over all languages:';
+$PMF_LANG['ad_entry_tags'] = 'Znaèky';
+$PMF_LANG['msg_tags'] = 'Znaèky';
+
+// added v2.0.0 - 2006-09-03 by Matteo
+$PMF_LANG['ad_linkcheck_feedback_url-batch1'] = 'Checking...';
+$PMF_LANG['ad_linkcheck_feedback_url-batch2'] = 'Checking...';
+$PMF_LANG['ad_linkcheck_feedback_url-batch3'] = 'Checking...';
+$PMF_LANG['ad_linkcheck_feedback_url-checking'] = 'Checking...';
+$PMF_LANG['ad_linkcheck_feedback_url-disabled'] = 'Disabled';
+$PMF_LANG['ad_linkcheck_feedback_url-linkbad'] = 'Links KO';
+$PMF_LANG['ad_linkcheck_feedback_url-linkok'] = 'Links OK';
+$PMF_LANG['ad_linkcheck_feedback_url-noaccess'] = 'No access';
+$PMF_LANG['ad_linkcheck_feedback_url-noajax'] = 'No AJAX';
+$PMF_LANG['ad_linkcheck_feedback_url-nolinks'] = 'No Links';
+$PMF_LANG['ad_linkcheck_feedback_url-noscript'] = 'No Script';
+
+// added v2.0.0 - 2006-09-02 by Thomas
+$PMF_LANG['msg_related_articles'] = 'Související záznamy';
+$LANG_CONF['records.numberOfRelatedArticles'] = array(0 => "input", 1 => "Number of related entries");
+
+// added v2.0.0 - 2006-09-09 by Rudi
+$PMF_LANG['ad_categ_trans_1'] = 'Pøeložit';
+$PMF_LANG['ad_categ_trans_2'] = 'Kategorie';
+$PMF_LANG['ad_categ_translatecateg'] = 'Pøeložit kategorii';
+$PMF_LANG['ad_categ_translate'] = 'Translate';
+$PMF_LANG['ad_categ_transalready'] = 'Already translated in: ';
+$PMF_LANG["ad_categ_deletealllang"] = 'Delete in all languages?';
+$PMF_LANG["ad_categ_deletethislang"] = 'Delete in this language only?';
+$PMF_LANG["ad_categ_translated"] = "The category has been translated.";
+
+// added v2.0.0 - 2006-09-21 by Rudi
+$PMF_LANG["ad_categ_show"] = "Overview";
+$PMF_LANG['ad_menu_categ_structure'] = "Category Overview including its languages";
+
+// added v2.0.0 - 2006-09-26 by Thorsten
+$PMF_LANG['ad_entry_userpermission'] = 'User permissions:';
+$PMF_LANG['ad_entry_grouppermission'] = 'Group permissions:';
+$PMF_LANG['ad_entry_all_users'] = 'Access for all users';
+$PMF_LANG['ad_entry_restricted_users'] = 'Restricted access to';
+$PMF_LANG['ad_entry_all_groups'] = 'Access for all groups';
+$PMF_LANG['ad_entry_restricted_groups'] = 'Restricted access to';
+$PMF_LANG['ad_session_expiration'] = 'Time to your session expiration';
+$PMF_LANG['ad_user_active'] = 'active';
+$PMF_LANG['ad_user_blocked'] = 'blocked';
+$PMF_LANG['ad_user_protected'] = 'protected';
+
+// added v2.0.0 - 2006-10-07 by Matteo
+$PMF_LANG['ad_entry_intlink'] = 'Select a FAQ record to insert it as a link...';
+
+//added 2.0.0 - 2006-10-10 by Rudi
+$PMF_LANG["ad_categ_paste2"] = "Paste after";
+$PMF_LANG["ad_categ_remark_move"] = "The exchange of 2 categories is only possible at the same level.";
+$PMF_LANG["ad_categ_remark_overview"] = "The correct order of categories will be shown, if all categories are defined for the actual language (first column).";
+
+// added v2.0.0 - 2006-10-15 by Matteo
+$PMF_LANG['msgUsersOnline'] = ' :: %d Guests and %d Registered';
+$PMF_LANG['ad_adminlog_del_older_30d'] = 'Delete immediately logs older than 30 days';
+$PMF_LANG['ad_adminlog_delete_success'] = 'Older logs successfully deleted.';
+$PMF_LANG['ad_adminlog_delete_failure'] = 'No logs deleted: an error occurred performing the request.';
+
+// added 2.0.0 - 2006-11-19 by Thorsten
+$PMF_LANG['opensearch_plugin_install'] = 'add search plugin';
+$PMF_LANG['ad_quicklinks'] = 'Quicklinks';
+$PMF_LANG['ad_quick_category'] = 'Add new category';
+$PMF_LANG['ad_quick_record'] = 'Add new FAQ record';
+$PMF_LANG['ad_quick_user'] = 'Add new user';
+$PMF_LANG['ad_quick_group'] = 'Add new group';
+
+// added v2.0.0 - 2006-12-30 by Matteo
+$PMF_LANG['msgNewTranslationHeader'] = 'Návrh pøekladu';
+$PMF_LANG['msgNewTranslationAddon'] = 'Váš návrh pøekladu nebude publikován okamžitì, ale až po schválení administrátorem. Povinné pole jsou <strong>vaše Jméno</strong>, <strong>vaše e-mailová adresa</strong>, <strong>titulek pøekladu</strong> a <strong>vlastní pøeklad zvoleného záznamu</strong>. Prosíme, oddìlujte klíèová slova pouze mezerou.';
+$PMF_LANG['msgNewTransSourcePane'] = 'Výchozí text';
+$PMF_LANG['msgNewTranslationPane'] = 'Pøeložený text';
+$PMF_LANG['msgNewTranslationName'] = $PMF_LANG['msgNewContentName'];
+$PMF_LANG['msgNewTranslationMail'] = $PMF_LANG['msgNewContentMail'];
+$PMF_LANG['msgNewTranslationKeywords'] = $PMF_LANG['msgNewContentKeywords'];
+$PMF_LANG['msgNewTranslationSubmit'] = 'Odeslat váš návrh';
+$PMF_LANG['msgTranslate'] = 'Navrhnìte pøeklad tohoto záznamu do';
+$PMF_LANG['msgTranslateSubmit'] = 'Pøeložit...';
+$PMF_LANG['msgNewTranslationThanks'] = "Dìkujeme za váš návrh pøekladu!";
+
+// added v2.0.0 - 2007-02-27 by Matteo
+$PMF_LANG["rightsLanguage"]['addgroup'] = "add group accounts";
+$PMF_LANG["rightsLanguage"]['editgroup'] = "edit group accounts";
+$PMF_LANG["rightsLanguage"]['delgroup'] = "delete group accounts";
+
+// added v2.0.0 - 2007-02-27 by Thorsten
+$PMF_LANG['ad_news_link_parent'] = 'Link opens in parent window';
+
+// added v2.0.0 - 2007-03-04 by Thorsten
+$PMF_LANG['ad_menu_comments'] = 'Comments';
+$PMF_LANG['ad_comment_administration'] = 'Comments administration';
+$PMF_LANG['ad_comment_faqs'] = 'Comments in FAQ records:';
+$PMF_LANG['ad_comment_news'] = 'Comments in News records:';
+$PMF_LANG['ad_groups'] = 'Groups';
+
+// added v2.0.0 - 2007-03-10 by Thorsten
+$LANG_CONF['records.orderby'] = array(0 => 'select', 1 => 'Record sorting (according to property)');
+$LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'Record sorting (descending or ascending)');
+$PMF_LANG['ad_conf_order_id'] = 'ID (výchozí)';
+$PMF_LANG['ad_conf_order_thema'] = 'Titulek';
+$PMF_LANG['ad_conf_order_visits'] = 'Poèet návštìvníkù';
+$PMF_LANG['ad_conf_order_datum'] = 'Datum';
+$PMF_LANG['ad_conf_order_author'] = 'Autor';
+$PMF_LANG['ad_conf_desc'] = 'sestupnì';
+$PMF_LANG['ad_conf_asc'] = 'vzestupnì';
+$PMF_LANG['mainControlCenter'] = 'Hlavní nastavení';
+$PMF_LANG['recordsControlCenter'] = 'FAQ records configuration';
+
+// added v2.0.0 - 2007-03-17 by Thorsten
+$PMF_LANG['msgInstantResponse'] = 'Okamžité hledání';
+$PMF_LANG['msgInstantResponseMaxRecords'] = '. Nalezeno prvních %d záznamù.';
+
+// added v2.0.0 - 2007-03-29 by Thorsten
+$LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "Activate a new records (default: deactivated)");
+$LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Allow comments for new records (default: disallowed)");
+
+// added v2.0.0 - 2007-04-04 by Thorsten
+$PMF_LANG['msgAllCatArticles'] = 'Záznamù v této kategorii';
+$PMF_LANG['msgDescriptionInstantResponse'] = 'Zaènìte psát a zobrazí se vám odpovìdi ...';
+$PMF_LANG['msgTagSearch'] = 'Oznaèkovaných záznamù';
+$PMF_LANG['ad_pmf_info'] = 'phpMyFAQ Information';
+$PMF_LANG['ad_online_info'] = 'Online version check';
+$PMF_LANG['ad_system_info'] = 'System Information';
