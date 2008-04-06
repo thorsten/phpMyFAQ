@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Init.php,v 1.48 2008-01-26 09:30:16 thorstenr Exp $
+ * $Id: Init.php,v 1.49 2008-04-06 16:03:07 thorstenr Exp $
  *
  * Some functions
  *
@@ -9,7 +9,7 @@
  * @author      Stefan Esser <sesser@php.net>
  * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
  * @since       2005-09-24
- * @copyright   (c) 2005-2007 phpMyFAQ Team
+ * @copyright   (c) 2005-2008 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -42,8 +42,8 @@ if (DEBUG) {
 // Fix the include path if PMF is running under a "strange" PHP configuration
 //
 $foundCurrPath = false;
-$includePaths = split(PATH_SEPARATOR, ini_get('include_path'));
-$i = 0;
+$includePaths  = split(PATH_SEPARATOR, ini_get('include_path'));
+$i             = 0;
 while((!$foundCurrPath) && ($i < count($includePaths))) {
     if ('.' == $includePaths[$i]) {
         $foundCurrPath = true;
@@ -66,13 +66,13 @@ ini_set('pcre.recursion_limit', 100000000);
 // and create a database connection
 //
 define('PMF_INCLUDE_DIR', dirname(__FILE__));
-require_once(PMF_INCLUDE_DIR.'/data.php');
-require_once(PMF_INCLUDE_DIR.'/constants.php');
-require_once(PMF_INCLUDE_DIR.'/functions.php');
-require_once(PMF_INCLUDE_DIR.'/Configuration.php');
-require_once(PMF_INCLUDE_DIR.'/Utils.php');
-require_once(PMF_INCLUDE_DIR.'/Db.php');
-require_once(PMF_INCLUDE_DIR.'/PMF_DB/Driver.php');
+require_once PMF_INCLUDE_DIR.'/data.php';
+require_once PMF_INCLUDE_DIR.'/constants.php';
+require_once PMF_INCLUDE_DIR.'/functions.php';
+require_once PMF_INCLUDE_DIR.'/Configuration.php';
+require_once PMF_INCLUDE_DIR.'/Utils.php';
+require_once PMF_INCLUDE_DIR.'/Db.php';
+require_once PMF_INCLUDE_DIR.'/PMF_DB/Driver.php';
 define('SQLPREFIX', $DB['prefix']);
 $db = PMF_Db::db_select($DB['type']);
 $db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db']);
@@ -96,8 +96,8 @@ ini_set('url_rewriter.tags', '');
 // Connect to LDAP server, when LDAP support is enabled
 //
 if ($faqconfig->get('main.ldapSupport') && file_exists(PMF_INCLUDE_DIR.'/dataldap.php')) {
-    require_once(PMF_INCLUDE_DIR.'/dataldap.php');
-    require_once(PMF_INCLUDE_DIR.'/Ldap.php');
+    require_once PMF_INCLUDE_DIR.'/dataldap.php';
+    require_once PMF_INCLUDE_DIR.'/Ldap.php';
     $ldap = new PMF_Ldap($PMF_LDAP['ldap_server'], $PMF_LDAP['ldap_port'], $PMF_LDAP['ldap_base'], $PMF_LDAP['ldap_user'], $PMF_LDAP['ldap_password']);
 } else {
     $ldap = null;
@@ -199,7 +199,7 @@ class PMF_Init
         global $denyUploadExts;
 
         // Remove the magic quotes if enabled
-        $filename = (get_magic_quotes_gpc() ? stripslashes($filename) : $filename);
+        $filename = (ini_get('magic_quotes_gpc') ? stripslashes($filename) : $filename);
 
         $path_parts = pathinfo($filename);
         // We need a filename without any path info
@@ -229,7 +229,7 @@ class PMF_Init
         // 1. Besides \/ on Windows: :*?"<>|
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
             $reservedChars = array(':', '*', '?', '"', '<', '>', "'", '|');
-            $filename = str_replace($reservedChars, '_', $filename);
+            $filename      = str_replace($reservedChars, '_', $filename);
         }
 
         return $filename;
@@ -253,20 +253,20 @@ class PMF_Init
                 while (list($idx, $value2) = each($_FILES[$key]['name'])) {
                     $_FILES[$key]['name'][$idx] = self::_basicFilenameClean($_FILES[$key]['name'][$idx]);
                     if ('' == $_FILES[$key]['name'][$idx]) {
-                        $_FILES[$key]['type'][$idx] = '';
+                        $_FILES[$key]['type'][$idx]     = '';
                         $_FILES[$key]['tmp_name'][$idx] = '';
-                        $_FILES[$key]['size'][$idx] = 0;
-                        $_FILES[$key]['error'][$idx] = UPLOAD_ERR_NO_FILE;
+                        $_FILES[$key]['size'][$idx]     = 0;
+                        $_FILES[$key]['error'][$idx]    = UPLOAD_ERR_NO_FILE;
                     }
                 }
                 reset($_FILES[$key]['name']);
             } else {
                 $_FILES[$key]['name'] = self::_basicFilenameClean($_FILES[$key]['name']);
                 if ('' == $_FILES[$key]['name']) {
-                    $_FILES[$key]['type'] = '';
+                    $_FILES[$key]['type']     = '';
                     $_FILES[$key]['tmp_name'] = '';
-                    $_FILES[$key]['size'] = 0;
-                    $_FILES[$key]['error'] = UPLOAD_ERR_NO_FILE;
+                    $_FILES[$key]['size']     = 0;
+                    $_FILES[$key]['error']   = UPLOAD_ERR_NO_FILE;
                 }
             }
         }
@@ -360,23 +360,23 @@ class PMF_Init
         // Select the language
         if (isset($_lang['post'])) {
             $this->language = $_lang['post'];
-            $_lang = null;
+            $_lang          = null;
             unset($_lang);
             setcookie('pmf_sid', $sid, time() + 3600);
         } elseif (isset($_lang['get'])) {
             $this->language = $_lang['get'];
         } elseif (isset($_lang['cookie'])) {
             $this->language = $_lang['cookie'];
-            $_lang = null;
+            $_lang          = null;
             unset($_lang);
         } elseif (isset($_lang['detection'])) {
             $this->language = $_lang['detection'];
-            $_lang = null;
+            $_lang          = null;
             unset($_lang);
             setcookie('pmf_sid', $sid, time() + 3600);
         } elseif (isset($_lang['config'])) {
             $this->language = $_lang['config'];
-            $_lang = null;
+            $_lang          = null;
             unset($_lang);
             setcookie('pmf_sid', $sid, time() + 3600);
         } else {
@@ -406,7 +406,7 @@ class PMF_Init
         }
 
         $noUnset = array('GLOBALS', '_GET', '_POST', '_COOKIE', '_REQUEST', '_SERVER', '_ENV', '_FILES');
-        $input = array_merge($_GET, $_POST, $_COOKIE, $_SERVER, $_ENV, $_FILES, isset($_SESSION) && is_array($_SESSION) ? $_SESSION : array());
+        $input   = array_merge($_GET, $_POST, $_COOKIE, $_SERVER, $_ENV, $_FILES, isset($_SESSION) && is_array($_SESSION) ? $_SESSION : array());
         foreach (array_keys($input) as $k) {
             if (!in_array($k, $noUnset) && isset($GLOBALS[$k])) {
                 $GLOBALS[$k] = null;
@@ -432,7 +432,7 @@ class PMF_Init
             die('Deep recursion attack detected.');
         }
 
-        if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
+        if (ini_get('magic_quotes_gpc')) {
             $addedData = array();
             foreach ($data as $key => $val) {
                 $key = addslashes($key);
@@ -465,7 +465,7 @@ class PMF_Init
             return null;
         }
 
-        if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
+        if (ini_get('magic_quotes_gpc')) {
             $string = stripslashes($string);
         }
 
@@ -474,7 +474,7 @@ class PMF_Init
         $tmp = preg_replace('#(&\#*\w+)[\x00-\x20]+;#',"$1;",$string);
 
         $string = $tmp;
-        $tmp = preg_replace('#(&\#x*)([0-9A-F]+);*#i',"$1$2;",$string);
+        $tmp    = preg_replace('#(&\#x*)([0-9A-F]+);*#i',"$1$2;",$string);
 
         $string = $tmp;
         $string = html_entity_decode($string, ENT_COMPAT, $PMF_LANG['metaCharset']);
@@ -503,7 +503,7 @@ class PMF_Init
         // remove really unwanted tags
         do {
             $oldstring = $string;
-            $string = preg_replace('#</*(applet|meta|xml|blink|link|style|script|embed|object|iframe|frame|frameset|ilayer|layer|bgsound|title|base)[^>]*>#i',"",$string);
+            $string    = preg_replace('#</*(applet|meta|xml|blink|link|style|script|embed|object|iframe|frame|frameset|ilayer|layer|bgsound|title|base)[^>]*>#i',"",$string);
         } while ($oldstring != $string);
 
         return $string;
