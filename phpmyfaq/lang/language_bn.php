@@ -1,6 +1,6 @@
 ﻿<?php
 /**
-* $Id: language_bn.php,v 1.1 2008-04-23 16:22:36 thorstenr Exp $
+* $Id: language_bn.php,v 1.1.2.1 2008-04-23 16:23:04 thorstenr Exp $
 *
 * The Bangla language file - try to be the best of Bangladeshi Bangla
 *
