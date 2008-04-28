@@ -6,7 +6,7 @@
  * license text
  * 
  * @author     Lars Tiedemann <php@larstiedemann.de>
- * @version    $Id: Interface.php,v 1.1 2007-12-12 18:12:09 lars Exp $
+ * @version    $Id: Interface.php,v 1.2 2008-04-28 21:14:20 lars Exp $
  * @copyright  Copyright 2007 Lars Tiedemann
  * @since      litecoms-0.0.1
  */
@@ -65,6 +65,13 @@ interface LTC_Db_Interface
      * Searches for data in the model matching the given where conditions. 
      * 
      * Returns an array containing the results. 
+     * $options is an associative array containing optional query parameters.
+     * Commonly supported options are: 
+     *     order_by
+     *     order_reverse
+     *     limit
+     *     offset
+     *     group_by
      *
      * @param mixed Either an LTC_Model_Interface instance or an array thereof. 
      * @param array

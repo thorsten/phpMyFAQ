@@ -6,7 +6,7 @@
  * license text
  * 
  * @author     Lars Tiedemann <php@larstiedemann.de>
- * @version    $Id: Pdo.php,v 1.1 2007-12-12 18:12:09 lars Exp $
+ * @version    $Id: Pdo.php,v 1.2 2008-04-28 21:14:20 lars Exp $
  * @copyright  Copyright 2007 Lars Tiedemann
  * @since      litecoms-0.0.1
  */
@@ -133,10 +133,12 @@ class LTC_Db_Pdo
     {
         // primary key
         $pk = $model->getPrimaryKey();
-        $primaryField = $model->getFieldProperties($pk);
-        // check auto_increment option
-        if (isset($primaryField['auto_increment']) and $primaryField['auto_increment'] == true) {
-            $data[$pk] = $this->nextId($model);
+        if (!is_array($pk)) {
+            $primaryField = $model->getFieldProperties($pk);
+            // check auto_increment option
+            if (isset($primaryField['auto_increment']) and $primaryField['auto_increment'] == true) {
+                $data[$pk] = $this->nextId($model);
+            }
         }
         $sql = sprintf(
             'INSERT INTO %s SET %s',
@@ -151,7 +153,14 @@ class LTC_Db_Pdo
             return false;
         }
         // return inserted ID
-        return $data[$pk];
+        if (!is_array($pk)) {
+            return $data[$pk];
+        }
+        $returnArray = array();
+        foreach ($pk as $key) {
+            $returnArray[$key] = $data[$key];
+        }
+        return $returnArray;
     }
 
     /**
@@ -185,6 +194,15 @@ class LTC_Db_Pdo
      * Searches for data in the model matching the given where conditions. 
      * 
      * Returns an array containing the results. 
+     * $options is an associative array containing optional query parameters.
+     * The options array is passed to sqlOptions() method which builds a valid
+     * query from the given options.
+     * Currently supported options are:  
+     *     order_by
+     *     order_reverse
+     *     limit
+     *     offset
+     *     group_by
      *
      * @param mixed Either an LTC_Model_Interface instance or an array thereof. 
      * @param array
@@ -200,9 +218,6 @@ class LTC_Db_Pdo
         }
         foreach ($models as $model) {
             $tables[] = $model->getTableName();
-        }
-        if (!is_array($fields)) {
-            $fields = array($fields);
         }
         if (count($fields) == 0) {
             $fields = $model->getAllFieldProperties();
@@ -670,12 +685,12 @@ class LTC_Db_Pdo
      * Returns an SQL string with query options.
      * 
      * $options is an associative array. Allowed keys are:
-     * 'limit', 'order_by', 'order_reverse' and 'group_by'.
      * 
      * 'limit': integer
      * 'offset': integer
      * 'order_by': string "field" or array ("field1", "field2",...) 
      * 'order_reverse': bool
+     * 'group_by': string "field" or array ("field1", "field2",...) 
      * 
      * @param array
      * @return string

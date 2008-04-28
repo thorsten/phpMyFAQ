@@ -6,7 +6,7 @@
  * license text
  * 
  * @author     Lars Tiedemann <php@larstiedemann.de>
- * @version    $Id: Association.php,v 1.1 2007-12-12 18:12:09 lars Exp $
+ * @version    $Id: Association.php,v 1.2 2008-04-28 21:14:20 lars Exp $
  * @copyright  Copyright 2007 Lars Tiedemann
  * @since      29.09.2007
  */
@@ -49,7 +49,7 @@ class LTC_Model_Decorator_Association
     
     
     /**
-     * Creates a new LTC_Decorator_HasMany instance
+     * Creates a new LTC_Decorator_Association instance
      *
      * @param LTC_Model_Interface $model
      * @param LTC_Model_Interface $associatedModel
@@ -109,13 +109,6 @@ class LTC_Model_Decorator_Association
         $modelData = $this->extractModelData($data, $this->model);
         $id = $this->model->insert($modelData);
         if (!is_int($id) or $id <= 0) {
-            return false;
-        }
-        // insert into associatedModel and return the ID
-        $modelData = $this->extractModelData($data, $this->associatedModel);
-        $modelData[$this->associatedModel->getPrimaryKey()] = $id;
-        $associatedId = $this->associatedModel->insert($modelData);
-        if (!is_int($associatedId) or $associatedId !== $id) {
             return false;
         }
         return $id;
@@ -271,7 +264,7 @@ class LTC_Model_Decorator_Association
             }
             // rename field
             $newField = sprintf('%s.%s', $this->model->getTableName(), $field);
-            $where[$newField] = $where[$field];
+            $where[$newField] = $value;
             unset($where[$field]);
         }
         return $where;

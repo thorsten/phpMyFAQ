@@ -6,7 +6,7 @@
  * license text
  * 
  * @author     Lars Tiedemann <php@larstiedemann.de>
- * @version    $Id: Model.php,v 1.1 2007-12-12 18:12:09 lars Exp $
+ * @version    $Id: Model.php,v 1.2 2008-04-28 21:14:20 lars Exp $
  * @copyright  Copyright 2007 Lars Tiedemann
  * @since      litecoms-0.0.1
  */
@@ -251,6 +251,9 @@ abstract class LTC_Model
      * Searches for data in the model matching the given where conditions. 
      * 
      * Returns an array containing the results. 
+     * $options is an associative array containing optional query parameters.
+     * The options need to be supported by the database layer used (see LTC_Db
+     * package for details).
      *
      * @access public
      * @param array
@@ -395,15 +398,15 @@ abstract class LTC_Model
     }
     
     /**
-     * Returns a new LTC_Model_Decorator_HasAndBelongsTo instance
+     * Returns a new LTC_Model_Decorator_HasAndBelongsToMany instance
      * 
      * @param LTC_Model_Interface
      * @param LTC_Model_Interface
      * @return LTC_Model_Decorator_HasAndBelongsTo
      */
-    public static function hasAndBelongsTo(LTC_Model_Interface $model, LTC_Model_Interface $associatedModel) 
+    public static function hasAndBelongsToMany(LTC_Model_Interface $model, LTC_Model_Interface $associatedModel) 
     {
-        $model = new LTC_Model_Decorator_HasAndBelongsTo($model, $associatedModel);
+        $model = new LTC_Model_Decorator_HasAndBelongsToMany($model, $associatedModel);
         return $model;
     }
 

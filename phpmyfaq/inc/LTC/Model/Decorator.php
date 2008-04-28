@@ -6,7 +6,7 @@
  * license text
  * 
  * @author     Lars Tiedemann <php@larstiedemann.de>
- * @version    $Id: Decorator.php,v 1.1 2007-12-12 18:12:09 lars Exp $
+ * @version    $Id: Decorator.php,v 1.2 2008-04-28 21:14:20 lars Exp $
  * @copyright  Copyright 2007 Lars Tiedemann
  * @since      17.08.2007
  */
@@ -156,6 +156,9 @@ abstract class LTC_Model_Decorator
      * Searches for data in the model matching the given where conditions. 
      * 
      * Returns an array containing the results. 
+     * $options is an associative array containing optional query parameters.
+     * The options need to be supported by the database layer used (see LTC_Db
+     * package for details).
      *
      * @access public
      * @param array
