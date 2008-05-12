@@ -1,6 +1,6 @@
-$Id: README.txt,v 1.92.2.29 2008-05-12 06:30:52 thorstenr Exp $
+$Id: README.txt,v 1.92.2.30 2008-05-12 13:59:00 thorstenr Exp $
 
-phpMyFAQ 2.0.7
+phpMyFAQ 2.0.8
 Codename "Prometheus"
 
 Installation/Update:
@@ -9,15 +9,15 @@ Please read the documentation (documentation.en.html) carefully.
 Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
-Changes since 2.0.6:
-- added Bengali translation (Md. Masum Billah)
-- added Ukrainian translation (Oleg P. Suvolokin and Denis A. Barybin)
-- updated Czech translation (Petr Silon)
-- minor bugfixes (Thorsten)
+Changes since 2.0.7:
+- 
 
 For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
+
+Version 2.0.8 - 2008-
+-
 
 Version 2.0.7 - 2006-05-12
 - added Bengali translation (Md. Masum Billah)
