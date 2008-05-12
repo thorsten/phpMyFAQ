@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.92.2.28 2008-04-23 16:23:17 thorstenr Exp $
+$Id: README.txt,v 1.92.2.29 2008-05-12 06:30:52 thorstenr Exp $
 
 phpMyFAQ 2.0.7
 Codename "Prometheus"
@@ -19,7 +19,7 @@ For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.0.7 - 2006-04-
+Version 2.0.7 - 2006-05-12
 - added Bengali translation (Md. Masum Billah)
 - added Ukrainian translation (Oleg P. Suvolokin and Denis A. Barybin)
 - updated Czech translation (Petr Silon)
