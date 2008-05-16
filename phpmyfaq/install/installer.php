@@ -11,7 +11,7 @@
  * @author    Uwe Pries <uwe.pries@digartis.de>
  * @since     2002-08-20
  * @copyright 2002-2008 phpMyFAQ Team
- * @version   CVS: $Id: installer.php,v 1.113 2008-01-27 09:36:42 thorstenr Exp $
+ * @version   CVS: $Id: installer.php,v 1.114 2008-05-16 15:29:02 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -694,9 +694,9 @@ foreach ($permLevels as $level => $desc) {
     $permLevel = (isset($_POST['permLevel']) && in_array($_POST['permLevel'], array_keys($permLevels))) ? $_POST['permLevel'] : 'basic';
 
     // Write the DB variables in data.php
-    if ($fp = @fopen(PMF_ROOT_DIR."/inc/data.php","w")) {
-        @fputs($fp,"<?php\n\$DB[\"server\"] = '".$sql_server."';\n\$DB[\"user\"] = '".$sql_user."';\n\$DB[\"password\"] = '".$sql_passwort."';\n\$DB[\"db\"] = '".$sql_db."';\n\$DB[\"prefix\"] = '".$sqltblpre."';\n\$DB[\"type\"] = '".$sql_type."';\n?>");
-        @fclose($fp);
+    $datafile = PMF_ROOT_DIR . '/inc/data.php';
+    if (is_writable($datafile)) {
+        file_put_contents($datafile, "<?php\n\$DB[\"server\"] = '".$sql_server."';\n\$DB[\"user\"] = '".$sql_user."';\n\$DB[\"password\"] = '".$sql_passwort."';\n\$DB[\"db\"] = '".$sql_db."';\n\$DB[\"prefix\"] = '".$sqltblpre."';\n\$DB[\"type\"] = '".$sql_type."';\n?>", LOCK_EX);
     } else {
         print "<p class=\"error\"><strong>Error:</strong> Cannot write to data.php.</p>";
         HTMLFooter();
@@ -707,9 +707,9 @@ foreach ($permLevels as $level => $desc) {
     // check LDAP if available
     if (extension_loaded('ldap') && isset($_POST['ldap_enabled']) && $_POST['ldap_enabled'] == 'yes') {
 
-        if ($fp = @fopen(PMF_ROOT_DIR."/inc/dataldap.php","w")) {
-            @fputs($fp,"<?php\n\$PMF_LDAP[\"ldap_server\"] = '".$ldap_server."';\n\$PMF_LDAP[\"ldap_port\"] = '".$ldap_port."';\n\$PMF_LDAP[\"ldap_user\"] = '".$ldap_user."';\n\$PMF_LDAP[\"ldap_password\"] = '".$ldap_passwort."';\n\$PMF_LDAP[\"ldap_base\"] = '".$ldap_base."';\n;\n?>");
-            @fclose($fp);
+    $datafile = PMF_ROOT_DIR . '/inc/dataldap.php';
+    if (is_writable($datafile)) {
+        file_put_contents($datafile, "<?php\n\$PMF_LDAP[\"ldap_server\"] = '".$ldap_server."';\n\$PMF_LDAP[\"ldap_port\"] = '".$ldap_port."';\n\$PMF_LDAP[\"ldap_user\"] = '".$ldap_user."';\n\$PMF_LDAP[\"ldap_password\"] = '".$ldap_passwort."';\n\$PMF_LDAP[\"ldap_base\"] = '".$ldap_base."';\n;\n?>", LOCK_EX);
         } else {
             print "<p class=\"error\"><strong>Error:</strong> Cannot write to dataldap.php.</p>";
             HTMLFooter();
@@ -720,8 +720,8 @@ foreach ($permLevels as $level => $desc) {
     }
 
     // connect to the database using inc/data.php
-    require_once(PMF_ROOT_DIR."/inc/data.php");
-    require_once(PMF_ROOT_DIR."/inc/Db.php");
+    require_once PMF_ROOT_DIR . '/inc/data.php';
+    require_once PMF_ROOT_DIR . '/inc/Db.php';
     $db = PMF_Db::db_select($sql_type);
     $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
     if (!$db) {
@@ -731,8 +731,8 @@ foreach ($permLevels as $level => $desc) {
         die();
     }
 
-    require_once($sql_type.'.sql.php');
-    require_once('config.sql.php');
+    require_once $sql_type . '.sql.php';
+    require_once 'config.sql.php';
     print "<p class=\"center\">";
     @ob_flush();
     flush();
