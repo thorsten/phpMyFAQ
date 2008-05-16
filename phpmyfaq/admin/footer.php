@@ -1,13 +1,13 @@
 <?php
 /**
- * $Id: footer.php,v 1.34 2007-08-12 13:35:37 thorstenr Exp $
+ * $Id: footer.php,v 1.35 2008-05-16 15:14:34 thorstenr Exp $
  *
  * Footer of the admin area
  *
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
  * @since       2003-02-26
- * @copyright   (c) 2003-2007 phpMyFAQ Team
+ * @copyright   (c) 2003-2008 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -169,9 +169,7 @@ if (    isset($auth) &&
                     htmlspecialchars($_title, ENT_NOQUOTES, $PMF_LANG['metaCharset']),
                     PMF_Utils::makeShorterText($_title, 8));
     }
-    if (count($faq->faqRecords) > 0) {
-        $output = substr($output, 0, -2);
-    }
+    
     $output .= '</select>';
 
     print "return '".$output."'\n";
