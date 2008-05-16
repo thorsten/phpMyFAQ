@@ -11,7 +11,7 @@
  * @author    Uwe Pries <uwe.pries@digartis.de>
  * @since     2002-08-20
  * @copyright 2002-2008 phpMyFAQ Team
- * @version   CVS: $Id: installer.php,v 1.114 2008-05-16 15:29:02 thorstenr Exp $
+ * @version   CVS: $Id: installer.php,v 1.115 2008-05-16 15:47:03 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -477,18 +477,18 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
     <label class="left">Default language:</label>
     <select class="input" name="language" size="1" title="Please select your default language.">
 <?php
-    if ($dir = @opendir(PMF_ROOT_DIR."/lang")) {
+    if ($dir = @opendir(PMF_ROOT_DIR.'/lang')) {
         while ($dat = @readdir($dir)) {
-            if (substr($dat, -4) == ".php") {
-                print "\t\t<option value=\"".$dat."\"";
+            if (substr($dat, -4) == '.php') {
+                printf('<option value="%s"', $dat);
                 if ($dat == "language_en.php") {
-                    print " selected=\"selected\"";
+                    print ' selected="selected"';
                 }
-                print ">".$languageCodes[substr(strtoupper($dat), 9, 2)]."</option>\n";
+                print '>' . $languageCodes[substr(strtoupper($dat), 9, 2)] . '</option>';
             }
         }
     } else {
-        print "\t\t<option>english</option>";
+        print '<option>english</option>';
     }
 ?>
     </select><br />
@@ -695,9 +695,8 @@ foreach ($permLevels as $level => $desc) {
 
     // Write the DB variables in data.php
     $datafile = PMF_ROOT_DIR . '/inc/data.php';
-    if (is_writable($datafile)) {
-        file_put_contents($datafile, "<?php\n\$DB[\"server\"] = '".$sql_server."';\n\$DB[\"user\"] = '".$sql_user."';\n\$DB[\"password\"] = '".$sql_passwort."';\n\$DB[\"db\"] = '".$sql_db."';\n\$DB[\"prefix\"] = '".$sqltblpre."';\n\$DB[\"type\"] = '".$sql_type."';\n?>", LOCK_EX);
-    } else {
+    $ret = file_put_contents($datafile, "<?php\n\$DB[\"server\"] = '".$sql_server."';\n\$DB[\"user\"] = '".$sql_user."';\n\$DB[\"password\"] = '".$sql_passwort."';\n\$DB[\"db\"] = '".$sql_db."';\n\$DB[\"prefix\"] = '".$sqltblpre."';\n\$DB[\"type\"] = '".$sql_type."';\n?>", LOCK_EX);
+    if (!$ret) {
         print "<p class=\"error\"><strong>Error:</strong> Cannot write to data.php.</p>";
         HTMLFooter();
         cleanInstallation();
@@ -706,17 +705,14 @@ foreach ($permLevels as $level => $desc) {
 
     // check LDAP if available
     if (extension_loaded('ldap') && isset($_POST['ldap_enabled']) && $_POST['ldap_enabled'] == 'yes') {
-
-    $datafile = PMF_ROOT_DIR . '/inc/dataldap.php';
-    if (is_writable($datafile)) {
-        file_put_contents($datafile, "<?php\n\$PMF_LDAP[\"ldap_server\"] = '".$ldap_server."';\n\$PMF_LDAP[\"ldap_port\"] = '".$ldap_port."';\n\$PMF_LDAP[\"ldap_user\"] = '".$ldap_user."';\n\$PMF_LDAP[\"ldap_password\"] = '".$ldap_passwort."';\n\$PMF_LDAP[\"ldap_base\"] = '".$ldap_base."';\n;\n?>", LOCK_EX);
-        } else {
+        $datafile = PMF_ROOT_DIR . '/inc/dataldap.php';
+        $ret = file_put_contents($datafile, "<?php\n\$PMF_LDAP[\"ldap_server\"] = '".$ldap_server."';\n\$PMF_LDAP[\"ldap_port\"] = '".$ldap_port."';\n\$PMF_LDAP[\"ldap_user\"] = '".$ldap_user."';\n\$PMF_LDAP[\"ldap_password\"] = '".$ldap_passwort."';\n\$PMF_LDAP[\"ldap_base\"] = '".$ldap_base."';\n;\n?>", LOCK_EX);
+        if (!$ret) {
             print "<p class=\"error\"><strong>Error:</strong> Cannot write to dataldap.php.</p>";
             HTMLFooter();
             cleanInstallation();
             die();
         }
-
     }
 
     // connect to the database using inc/data.php
@@ -1118,6 +1114,7 @@ echo '</dl><input type="hidden" name="systemdata" value="'.htmlspecialchars(seri
     if (file_exists(PMF_ROOT_DIR."/phpmyfaq.spec")) {
         @unlink(PMF_ROOT_DIR."/phpmyfaq.spec");
     }
+    
     // Remove 'installer.php' file
     if (@unlink(basename($_SERVER["PHP_SELF"]))) {
         print "<p class=\"center\">The file <em>./install/installer.php</em> was deleted automatically.</p>\n";
@@ -1130,6 +1127,6 @@ echo '</dl><input type="hidden" name="systemdata" value="'.htmlspecialchars(seri
     } else {
         print "<p class=\"center\">Please delete the file <em>./install/update.php</em> manually.</p>\n";
     }
-
+    
     HTMLFooter();
 }
