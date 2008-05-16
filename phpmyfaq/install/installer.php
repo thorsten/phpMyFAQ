@@ -11,7 +11,7 @@
  * @author    Uwe Pries <uwe.pries@digartis.de>
  * @since     2002-08-20
  * @copyright 2002-2008 phpMyFAQ Team
- * @version   CVS: $Id: installer.php,v 1.115 2008-05-16 15:47:03 thorstenr Exp $
+ * @version   CVS: $Id: installer.php,v 1.116 2008-05-16 15:53:25 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -537,7 +537,7 @@ foreach ($permLevels as $level => $desc) {
     if (isset($_POST["sql_type"]) && $_POST["sql_type"] != '') {
         $sql_type = trim($_POST["sql_type"]);
         if (file_exists(PMF_ROOT_DIR.'/install/'.$sql_type.'.sql.php')) {
-            require_once(PMF_ROOT_DIR.'/install/'.$sql_type.'.sql.php');
+            require_once PMF_ROOT_DIR.'/install/'.$sql_type.'.sql.php';
         } else {
             print '<p class="error"><strong>Error:</strong> Invalid server type.</p>';
             HTMLFooter();
@@ -590,8 +590,8 @@ foreach ($permLevels as $level => $desc) {
     }
 
     // check database connection
-    require_once(PMF_ROOT_DIR."/inc/Db.php");
-    require_once(PMF_ROOT_DIR."/inc/PMF_DB/Driver.php");
+    require_once PMF_ROOT_DIR."/inc/Db.php";
+    require_once PMF_ROOT_DIR."/inc/PMF_DB/Driver.php";
     $db = PMF_Db::db_select($sql_type);
     $db->connect($sql_server, $sql_user, $sql_passwort, $sql_db);
     if (!$db) {
@@ -641,7 +641,7 @@ foreach ($permLevels as $level => $desc) {
         }
 
         // check LDAP connection
-        require_once(PMF_ROOT_DIR."/inc/Ldap.php");
+        require_once PMF_ROOT_DIR."/inc/Ldap.php";
         $ldap = new PMF_Ldap($ldap_server, $ldap_port, $ldap_user, $ldap_base);
         if (!$ldap) {
             print "<p class=\"error\"><strong>LDAP Error:</strong> ".$ldap->error()."</p>\n";
@@ -762,7 +762,7 @@ foreach ($permLevels as $level => $desc) {
     if (!defined('SQLPREFIX')) {
         define('SQLPREFIX', $sqltblpre);
     }
-    require_once(PMF_ROOT_DIR.'/inc/PMF_User/User.php');
+    require_once PMF_ROOT_DIR.'/inc/PMF_User/User.php';
     $admin = new PMF_User();
     $admin->createUser('admin', $password, 1);
     $admin->setStatus('protected');
@@ -992,8 +992,8 @@ foreach ($permLevels as $level => $desc) {
     );
     $anonymous->setUserData($anonymousData);
 
-    require_once(PMF_ROOT_DIR.'/inc/Configuration.php');
-    require_once(PMF_ROOT_DIR.'/inc/Link.php');
+    require_once PMF_ROOT_DIR.'/inc/Configuration.php';
+    require_once PMF_ROOT_DIR.'/inc/Link.php';
     $oConf = new PMF_Configuration($db);
     $oConf->getAll();
     $configs = $oConf->config;
