@@ -1,6 +1,6 @@
 TODO list for future versions of phpMyFAQ:
 
-2.1.0 "Pandora" (planned CVS branch: PMF_2_1):
+2.5.0 "Pandora" (planned CVS branch: PMF_2_5):
 - add random list of records (XHTML and RSS) ?
 - add archive function ?
 - add public user registration ?

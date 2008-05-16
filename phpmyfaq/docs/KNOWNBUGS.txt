@@ -1,6 +1,6 @@
-$Id: KNOWNBUGS.txt,v 1.22 2007-05-14 17:40:58 thorstenr Exp $
+$Id: KNOWNBUGS.txt,v 1.23 2008-05-16 15:16:24 thorstenr Exp $
 
-MISSING FEATURES in phpMyFAQ 2.1.0-dev
+MISSING FEATURES in phpMyFAQ 2.5.0-dev
 
 - add random list of records (XHTML and RSS) ?
 - add archive function ?
@@ -20,13 +20,13 @@ MISSING FEATURES in phpMyFAQ 2.1.0-dev
 - bugfixing for stability or security reasons
 
 
-KNOWN ISSUES in phpMyFAQ 2.1.0-dev
+KNOWN ISSUES in phpMyFAQ 2.5.0-dev
 
 - some language files need an update
 - using UTF-8 may not work in the PDF files
 
 
-KNOWN BUGS AND ISSUES in phpMyFAQ 2.1.0-dev
+KNOWN BUGS AND ISSUES in phpMyFAQ 2.5.0-dev
 
 - Oracle support untested
 - Interbase/Firebird support untested
