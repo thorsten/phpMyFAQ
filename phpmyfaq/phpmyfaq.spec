@@ -1,5 +1,5 @@
 #
-# $Id: phpmyfaq.spec,v 1.15 2007-05-12 16:14:03 matteo Exp $
+# $Id: phpmyfaq.spec,v 1.16 2008-05-18 11:26:22 thorstenr Exp $
 #
 # This is the spec file for building an RPM package of phpMyFAQ
 # for most of the different RPM-based distributions
@@ -41,7 +41,7 @@
 #
 # @author       Matteo Scaramuccia <matteo@scaramuccia.com>
 # @since        2006-07-05
-# @copyright:   (c) 2006-2007 phpMyFAQ Team
+# @copyright:   (c) 2006-2008 phpMyFAQ Team
 #
 # The contents of this file are subject to the Mozilla Public License
 # Version 1.1 (the "License"); you may not use this file except in
@@ -57,7 +57,7 @@
 # phpMyFAQ
 #
 %define name        phpmyfaq
-%define version     2.1.0.dev
+%define version     2.5.0.alpha
 %define release     1
 %define epoch       0
 
@@ -96,7 +96,7 @@
 %define is_apache   1
 %endif
 # Evaluate PHP version
-%define phpver_lt_430 %(out=`rpm -q --queryformat='%{VERSION}' php` 2>&1 >/dev/null || out=0 ; out=`echo $out | tr . : | sed s/://g` ; if [ $out -lt 430 ] ; then out=1 ; else out=0; fi ; echo $out)
+%define phpver_lt_520 %(out=`rpm -q --queryformat='%{VERSION}' php` 2>&1 >/dev/null || out=0 ; out=`echo $out | tr . : | sed s/://g` ; if [ $out -lt 520 ] ; then out=1 ; else out=0; fi ; echo $out)
 
 Summary:            phpMyFAQ is an open source FAQ system
 Name:               %{name}
@@ -121,19 +121,19 @@ BuildArchitectures: noarch
 AutoReq:            0
 %if "%{_vendor}" == "suse"
 Requires:           apache2
-Requires:           apache2-mod_php4
-Requires:           php4-gd
+Requires:           apache2-mod_php5
+Requires:           php5-gd
 # We do not require MySQL but one among the several DB supported by phpMyFAQ.
 # Here we make the strong assumption that an RPM will mostly be installed on a LAMP server.
-Requires:           mysql, php4-mysql
+Requires:           mysql, php5-mysql
 %else
 %if %{is_apache}
 Requires:           apache
 %else
 Requires:           httpd
 %endif
-Requires:           php >= 4.3.3
-# GD is bundle into PHP starting from PHP 4.3.0
+Requires:           php >= 5.2.0
+# GD is bundled into PHP starting from PHP 4.3.0
 Requires:           php-gd
 # We do not require MySQL but one among the several DB supported by phpMyFAQ.
 # Here we make the strong assumption that an RPM will mostly be installed on a LAMP server.
@@ -144,7 +144,7 @@ Provides:           %{name}-%{version}
 
 %description
 phpMyFAQ is a multilingual, completely database-driven FAQ-system.
-It supports various databases to store all data, PHP 4.3.3 (or higher)
+It supports various databases to store all data, PHP 5.2.0 (or higher)
 is needed in order to access this data.
 phpMyFAQ also offers a Content Management-System with a WYSIWYG editor
 and an Image Manager, flexible multi-user support with LDAP support,
@@ -154,6 +154,32 @@ XML-support, PDF-support, a backup-system and an easy to use
 installation script.
 
 %changelog
+
+%changelog
+* Sun May 18 2008 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.5.0.alpha-1
+- New upstream version 2.5.0-alpha.
+
+* Wed Feb 24 2008 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.0.7-1
+- New upstream version 2.0.7.
+
+* Wed Jan 20 2008 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.0.6-1
+- New upstream version 2.0.6.
+
+* Wed Nov 22 2007 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.0.5-1
+- New upstream version 2.0.5.
+
+* Sat Aug 22 2007 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.0.4-1
+- New upstream version 2.0.4.
+
+* Sat Jun 01 2007 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.0.2-1
+- New upstream version 2.0.2.
+
+* Sat May 20 2007 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.0.1-1
+- New upstream version 2.0.1.
+
+* Sat May 12 2007 Matteo Scaramuccia <matteo@scaramuccia.com> - 2.0.0-1
+- New upstream version 2.0.0.
+
 * Sun Apr 29 2007 Matteo Scaramuccia <matteo@scaramuccia.com> - 2.0.0.rc2-1
 - Fix uncorrect source filename.
 - New upstream version 2.0.0-RC2.

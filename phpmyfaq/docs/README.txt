@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.103 2008-05-16 15:16:24 thorstenr Exp $
+$Id: README.txt,v 1.104 2008-05-18 11:26:22 thorstenr Exp $
 
 phpMyFAQ 2.5.0-alpha
 Codename "Pandora"
@@ -24,7 +24,7 @@ For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.5.0-alpha - 2008-05-
+Version 2.5.0-alpha - 2008-05-18
 - changed PHP requirement to PHP 5.2 (Thorsten)
 - added new and improved new basic layout theme (Charles A. Landemaine)
 - added RSS feed for every category (Thorsten)
@@ -34,6 +34,16 @@ Version 2.5.0-alpha - 2008-05-
 - improved user administration frontend (Sarah Hermann)
 - updated bundled Net_IDNA to version 0.6.0 (Thorsten)
 - updated bundled TinyMCE editor component to version 2.1.3 (Thorsten)
+
+Version 2.0.7 - 2006-05-12
+- added Bengali translation (Md. Masum Billah)
+- added Ukrainian translation (Oleg P. Suvolokin and Denis A. Barybin)
+- updated Czech translation (Petr Silon)
+- minor bugfixes (Thorsten)
+
+Version 2.0.6 - 2008-02-24
+- permission setting related fix (Carlos Eduardo Nogueira Gonçalves)
+- minor bugfixes (Thorsten)
 
 Version 2.0.5 - 2008-01-20
 - fixed lighttpd rewrite rules (Markus Kohlmeyer)
