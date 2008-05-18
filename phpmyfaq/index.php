@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: index.php,v 1.119 2008-01-26 18:03:03 thorstenr Exp $
+ * $Id: index.php,v 1.120 2008-05-18 11:16:30 thorstenr Exp $
  *
  * This is the main public frontend page of phpMyFAQ. It detects the browser's
  * language, gets and sets all cookie, post and get informations and includes
@@ -448,17 +448,26 @@ if (isset($auth)) {
 $tpl->includeTemplate('loginBox', 'index');
 
 $toptenParams = $faq->getTopTen();
-$tpl->processBlock('rightBox', 'toptenList', array(
-    'toptenUrl'    => $toptenParams['url'],
-    'toptenTitle'  => $toptenParams['title'],
-    'toptenVisits' => $toptenParams['visits']));
+if (!isset($toptenParams['error'])) {
+    $tpl->processBlock('rightBox', 'toptenList', array(
+        'toptenUrl'    => $toptenParams['url'],
+        'toptenTitle'  => $toptenParams['title'],
+        'toptenVisits' => $toptenParams['visits']));
+} else {
+    $tpl->processBlock('rightBox', 'toptenListError', array(
+        'errorMsgTopTen' => $toptenParams['error']));
+}
 
 $latestEntriesParams = $faq->getLatest();
-
-$tpl->processBlock('rightBox', 'latestEntriesList', array(
-    'latestEntriesUrl'   => $latestEntriesParams['url'],
-    'latestEntriesTitle' => $latestEntriesParams['title'],
-    'latestEntriesDate'  => $latestEntriesParams['date']));
+if (!isset($latestEntriesParams['error'])) {
+    $tpl->processBlock('rightBox', 'latestEntriesList', array(
+        'latestEntriesUrl'   => $latestEntriesParams['url'],
+        'latestEntriesTitle' => $latestEntriesParams['title'],
+        'latestEntriesDate'  => $latestEntriesParams['date']));
+} else {
+    $tpl->processBlock('rightBox', 'latestEntriesListError', array(
+        'errorMsgLatest' => $latestEntriesParams['error']));
+}
 
 $tpl->processTemplate('rightBox', array(
     'writeTopTenHeader'     => $PMF_LANG['msgTopTen'],

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.127 2008-01-26 18:03:03 thorstenr Exp $
+ * $Id: Faq.php,v 1.128 2008-05-18 11:16:30 thorstenr Exp $
  *
  * The main FAQ class
  *
@@ -1638,12 +1638,11 @@ class PMF_Faq
     /**
      * This function generates the Top Ten with the mosted viewed records
      *
-     * @return  string
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2002-05-07
+     * @return array
+     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @since  2002-05-07
      */
-    function getTopTen()
+    public function getTopTen()
     {
         $result = $this->getTopTenData(PMF_NUMBER_RECORDS_TOPTEN, 0, $this->language);
         $output = array();
@@ -1660,7 +1659,7 @@ class PMF_Faq
                 $output['visits'][] = $row['visits'] . ' ' . $this->pmf_lang['msgViews'];
             }
         } else {
-            $output = $this->pmf_lang['err_noTopTen'];
+            $output['error'] = $this->pmf_lang['err_noTopTen'];
         }
 
         return $output;
@@ -1669,12 +1668,11 @@ class PMF_Faq
     /**
      * This function generates the list with the latest published records
      *
-     * @return  string
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2002-05-07
+     * @return array
+     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @since  2002-05-07
      */
-    function getLatest()
+    public function getLatest()
     {
         $result = $this->getLatestData(PMF_NUMBER_RECORDS_LATEST, $this->language);
 
@@ -1687,7 +1685,7 @@ class PMF_Faq
                 $output['date'][]  = makeDate($row['datum']);
             }
         } else {
-            $output = $this->pmf_lang["err_noArticles"];
+            $output['error'] = $this->pmf_lang["err_noArticles"];
         }
 
         return $output;

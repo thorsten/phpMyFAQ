@@ -5,6 +5,9 @@
                         [toptenList]
                         <li><a href="{toptenUrl}">{toptenTitle}</a> ({toptenVisits})</li>
                         [/toptenList]
+                        [toptenListError]
+                        <li>{errorMsgTopTen}</li>
+                        [/toptenListError]
                     </ol>
                     </div>
                 </div>
@@ -16,6 +19,9 @@
                         [latestEntriesList]
                         <li><a href="{latestEntriesUrl}">{latestEntriesTitle}</a> ({latestEntriesDate})</li>
                         [/latestEntriesList]
+                        [latestEntriesListError]
+                        <li>{errorMsgLatest}</li>
+                        [/latestEntriesListError]
                     </ol>
                     </div>
                 </div>
