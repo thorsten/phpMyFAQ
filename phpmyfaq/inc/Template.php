@@ -9,7 +9,7 @@
  * @author    Jan Mergler <jan.mergler@gmx.de>
  * @since     2002-08-22
  * @copyright 2002-2008 phpMyFAQ Team
- * @version   CVS: $Id: Template.php,v 1.8 2008-01-26 17:30:10 thorstenr Exp $
+ * @version   CVS: $Id: Template.php,v 1.9 2008-05-18 11:21:25 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -43,7 +43,7 @@ class PMF_Template
      *
      * @var array
      */
-    private $blocks;
+    private $blocks = array();
 
     /**
      * array containing the touched blocks
@@ -81,8 +81,10 @@ class PMF_Template
      */
     public function includeTemplate($name, $toname)
     {
-        $this->outputs[$toname] = str_replace('{'.$name.'}', $this->outputs[$name], $this->outputs[$toname]);
-        $this->outputs[$name] = '';
+        $this->outputs[$toname] = str_replace('{'.$name.'}', 
+                                              $this->outputs[$name], 
+                                              $this->outputs[$toname]);
+        $this->outputs[$name]   = '';
     }
 
     /**
@@ -103,24 +105,18 @@ class PMF_Template
         // process blocked content
         if (isset($this->blocks[$templateName])) {
             foreach ($rawBlocks as $key => $rawBlock) {
-
                 if (in_array($key, $this->blocksTouched) && $key != 'unblocked') {
-
                     $tmp = str_replace($rawBlock, $this->blocks[$templateName][$key], $tmp);
                     $tmp = preg_replace('/\[.+\]/', '', $tmp);
-
                 } elseif ($key != 'unblocked') {
-
                     $tmp = str_replace($rawBlock, '', $tmp);
                     $tmp = preg_replace('/\[.+\]/', '', $tmp);
-
                 }
             }
         }
 
         // process unblocked content
         if (isset($this->blocks[$templateName]['unblocked'])) {
-
             $templateContent = $this->_checkContent($templateContent);
             foreach ($this->blocks[$templateName]['unblocked'] as $tplVar) {
                 $varName = preg_replace('/[\{\}]/', '', $tplVar);
@@ -177,12 +173,8 @@ class PMF_Template
     public function readTemplate($filename, $templateName)
     {
         if (file_exists($filename)) {
-
             $tpl = file_get_contents($filename);
-
-            // read template blocks
             $this->blocks[$templateName] = $this->_readBlocks($tpl);
-
             return $tpl;
         } else {
             return '<p><span style="color: red;">Error:</span> Cannot open the file '.$filename.'.</p>';
@@ -204,9 +196,7 @@ class PMF_Template
 
         // security check
         $blockContent = $this->_checkContent($blockContent);
-
         foreach ($blockContent as $var => $val) {
-
             // if array given, multiply block
             if (is_array($val)) {
                 $block = $this->_multiplyBlock($this->blocks[$templateName][$blockName], $blockContent);
@@ -214,14 +204,10 @@ class PMF_Template
             } else {
                 $block = str_replace('{'.$var.'}', $val, $block);
             }
-
         }
 
         $this->blocksTouched[] = $blockName;
-
-        // Hack: Backtick Fix
         $block = str_replace('&acute;', '`', $block);
-
         $this->blocks[$templateName][$blockName] = $block;
     }
 
@@ -244,21 +230,17 @@ class PMF_Template
 
         //create the replacement array
         foreach ($blockContent as $var => $val) {
-
             if (is_array($val) && !$multiplyTimes) {
                 //the first array in $blockContent defines $multiplyTimes
                 $multiplyTimes = count($val);
                 $replace[$var] = $val;
-
             } elseif ((is_array($val) && $multiplyTimes)) {
-
                 //check if all further arrays in $blockContent have the same lenght
                 if ($multiplyTimes == count($val)) {
                     $replace[$var] = $val;
                 } else {
                     die('Wrong parameter length!');
                 }
-
             } else{
                 //multiply strings to $multiplyTimes
                 for ($i=0; $i<$multiplyTimes; $i++){
@@ -270,15 +252,10 @@ class PMF_Template
 
         //do the replacement
         for ($i=0; $i<$multiplyTimes; $i++) {
-
             $tmpBlock[$i] = $block;
-
             foreach ($replace as $var => $val) {
-
                 $tmpBlock[$i] = str_replace('{'.$var.'}', $val[$i], $tmpBlock[$i]);
-
             }
-
         }
 
 
@@ -296,43 +273,31 @@ class PMF_Template
     private function _readBlocks($tpl)
     {
         $tmpBlocks = array();
-
+        
         // read all blocks into $tmpBlocks
         preg_match_all('/\[.+\]\s*[\W\w\s\{\}\<\>\=\"\/]*?\s*\[\/.+\]/', $tpl, $tmpBlocks);
-
-
         $unblocked = $tpl;
-
         if (isset($tmpBlocks)) {
-
             $blockCount = count($tmpBlocks[0]);
-
             for ($i = 0 ; $i < $blockCount; $i++) {
-
                 $name = '';
-
                 //find block name
                 preg_match('/\[.+\]/', $tmpBlocks[0][$i], $name);
                 $name = preg_replace('/[\[\[\/\]]/', '', $name);
-
                 //remove block tags from block
                 $res = str_replace('[' . $name[0] . ']','',$tmpBlocks[0][$i]);
                 $res = str_replace('[/' . $name[0] . ']','',$res);
-
                 $tplBlocks[$name[0]] = $res;
 
                 //unblocked content
                 $unblocked = str_replace($tplBlocks[$name[0]], '', $unblocked);
                 $unblocked = str_replace('[' . $name[0] . ']','',$unblocked);
                 $unblocked = str_replace('[/' . $name[0] . ']','',$unblocked);
-
             }
 
             $hits = array();
-
             preg_match_all('/\{.+?\}/', $unblocked, $hits);
             $tplBlocks['unblocked'] = $hits[0];
-
         } else {
             // no blocks defined
             $tplBlocks = $tpl;
@@ -360,13 +325,10 @@ class PMF_Template
         $content = str_replace('`', '&acute;', $content);
 
         foreach ($content as $var => $val) {
-
             if (is_array($val)) {
-
                 foreach ($val as $key => $value) {
                     $content[$var][$key] = preg_replace($search, $replace, $value);
                 }
-
             } else {
                 $content[$var] = preg_replace($search, $replace, $val);
             }
