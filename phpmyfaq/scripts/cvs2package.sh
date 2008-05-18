@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# $Id: cvs2package.sh,v 1.9 2007-05-12 16:14:02 matteo Exp $
+# $Id: cvs2package.sh,v 1.10 2008-05-18 11:45:48 thorstenr Exp $
 #
 # This is the shell script for building:
 # 1. a TAR.GZ package;
@@ -24,7 +24,7 @@
 #
 # @author       Matteo Scaramuccia <matteo@scaramuccia.com>
 # @since        2005-11-22
-# @copyright:   (c) 2005-2007 phpMyFAQ Team
+# @copyright:   (c) 2005-2008 phpMyFAQ Team
 #
 # The contents of this file are subject to the Mozilla Public License
 # Version 1.1 (the "License"); you may not use this file except in
@@ -39,7 +39,7 @@
 # CVS tag
 CVS_TAG="HEAD"
 # PMF Version
-PMF_VERSION="2.1.0.dev"
+PMF_VERSION="2.5.0-alpha"
 
 # Build folder
 PMF_BUILD_FOLDER="PMFBUILD_${CVS_TAG}_${PMF_VERSION}"
@@ -62,14 +62,6 @@ rm -f *
 # cvs -z3 -d:pserver:anonymous@thinkforge.org:/cvsroot/phpmyfaq get -r${CVS_TAG} phpmyfaq
 # W/O CVS administrative folders
 cvs -z3 -d:pserver:anonymous@thinkforge.org:/cvsroot/phpmyfaq export -r${CVS_TAG} phpmyfaq
-
-# Clean the source code
-cd phpmyfaq
-# Sanity checks
-if [ "${CVS_TAG}" = "PMF_1_6" ] ; then
-    rm -rf inc/PMF_User
-fi
-cd ..
 
 # Rename the folder in which the CVS code has been retrieved
 mv phpmyfaq "${PMF_PACKAGE_FOLDER}"
