@@ -103,7 +103,7 @@ class PMF_PermBasic
                 ".PMF_USER_SQLPREFIX."user.user_id   = ".PMF_USER_SQLPREFIX."user_right.user_id
         ");
         // return result
-        if ($this->_db->num_rows($res) == 1)
+        if ($res)
             return true;
         return false;
     }
@@ -496,7 +496,7 @@ class PMF_PermBasic
                 name = '".$name."'
         ");
         // return result
-        if ($this->_db->num_rows($res) != 1)
+        if (!$res)
             return 0;
         $row = $this->_db->fetch_assoc($res);
         return $row['right_id'];

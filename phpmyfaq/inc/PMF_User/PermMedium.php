@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: PermMedium.php,v 1.24.2.3 2007-08-12 18:46:12 thorstenr Exp $
+ * $Id: PermMedium.php,v 1.24.2.4 2008-05-20 15:46:44 thorstenr Exp $
  *
  * The medium permission class provides group rights.
  *
@@ -88,7 +88,7 @@ class PMF_PermMedium
                 ".PMF_USER_SQLPREFIX."group.group_id = '".$group_id."'
         ");
         // return result
-        if ($this->_db->num_rows($res) == 1)
+        if ($res)
             return true;
         return false;
     }
@@ -386,7 +386,7 @@ class PMF_PermMedium
                 ".PMF_USER_SQLPREFIX."group.group_id = ".PMF_USER_SQLPREFIX."user_group.group_id AND
                 ".PMF_USER_SQLPREFIX."group.group_id = ".$group_id
         );
-        if ($this->_db->num_rows($res) == 1)
+        if ($res)
             return true;
         return false;
     }
@@ -556,7 +556,7 @@ class PMF_PermMedium
                 group_id = ".$group_id
         );
         // return
-        if ($this->_db->num_rows($res) != 1)
+        if (!$res)
             return array();
         return $this->_db->fetch_assoc($res);
     }
@@ -694,7 +694,7 @@ class PMF_PermMedium
                 ".PMF_USER_SQLPREFIX."user.user_id   = ".$user_id
         );
         // return result
-        if ($this->_db->num_rows($res) == 1)
+        if ($res)
             return true;
         return false;
     }
@@ -919,7 +919,7 @@ class PMF_PermMedium
                 group_id = ".$group_id
         );
         // return
-        if ($this->_db->num_rows($res) != 1)
+        if (!$res)
             return array();
         $row = $this->_db->fetch_assoc($res);
         return $row['name'];
