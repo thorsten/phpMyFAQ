@@ -284,8 +284,11 @@ class PMF_PermBasic
             WHERE
                 right_id = ".$right_id
         );
-        if ($this->_db->num_rows($res) != 1)
+        
+        if (!$res) {
             return false;
+        }
+        
         // process right data
         $right_data = $this->_db->fetch_assoc($res);
         $right_data['for_users'] = $this->int_to_bool($right_data['for_users']);
