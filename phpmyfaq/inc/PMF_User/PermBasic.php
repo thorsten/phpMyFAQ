@@ -102,7 +102,7 @@ class PMF_PermBasic extends PMF_Perm
                 ".SQLPREFIX."faquser.user_id   = ".SQLPREFIX."faquser_right.user_id
         ");
         // return result
-        if ($this->_db->num_rows($res) == 1)
+        if ($res)
             return true;
         return false;
     }
@@ -495,7 +495,7 @@ class PMF_PermBasic extends PMF_Perm
                 name = '".$name."'
         ");
         // return result
-        if ($this->_db->num_rows($res) != 1)
+        if (!$res)
             return 0;
         $row = $this->_db->fetch_assoc($res);
         return $row['right_id'];

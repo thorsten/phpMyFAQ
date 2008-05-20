@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: PermMedium.php,v 1.28 2007-08-21 19:56:18 thorstenr Exp $
+ * $Id: PermMedium.php,v 1.29 2008-05-20 15:46:38 thorstenr Exp $
  *
  * The medium permission class provides group rights.
  *
@@ -88,7 +88,7 @@ class PMF_PermMedium
                 ".SQLPREFIX."faqgroup.group_id = '".$group_id."'
         ");
         // return result
-        if ($this->_db->num_rows($res) == 1)
+        if ($res)
             return true;
         return false;
     }
@@ -386,7 +386,7 @@ class PMF_PermMedium
                 ".SQLPREFIX."faqgroup.group_id = ".SQLPREFIX."faquser_group.group_id AND
                 ".SQLPREFIX."faqgroup.group_id = ".$group_id
         );
-        if ($this->_db->num_rows($res) == 1)
+        if ($res)
             return true;
         return false;
     }
@@ -520,7 +520,7 @@ class PMF_PermMedium
                 name = '".$name."'
         ");
         // return
-        if ($this->_db->num_rows($res) != 1)
+        if (!$res)
             return 0;
         $row = $this->_db->fetch_assoc($res);
         return $row['group_id'];
@@ -556,7 +556,7 @@ class PMF_PermMedium
                 group_id = ".$group_id
         );
         // return
-        if ($this->_db->num_rows($res) != 1)
+        if (!$res)
             return array();
         return $this->_db->fetch_assoc($res);
     }
@@ -694,7 +694,7 @@ class PMF_PermMedium
                 ".SQLPREFIX."faquser.user_id   = ".$user_id
         );
         // return result
-        if ($this->_db->num_rows($res) == 1)
+        if ($res)
             return true;
         return false;
     }
@@ -919,7 +919,7 @@ class PMF_PermMedium
                 group_id = ".$group_id
         );
         // return
-        if ($this->_db->num_rows($res) != 1)
+        if (!$res)
             return array();
         $row = $this->_db->fetch_assoc($res);
         return $row['name'];
