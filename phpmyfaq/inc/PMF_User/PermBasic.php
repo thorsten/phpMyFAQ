@@ -47,8 +47,7 @@ require_once dirname(__FILE__).'/Perm.php';
 
 /* user defined constants */
 
-class PMF_PermBasic
-    extends PMF_Perm
+class PMF_PermBasic extends PMF_Perm
 {
     // --- ATTRIBUTES ---
 
@@ -60,7 +59,7 @@ class PMF_PermBasic
      * @access public
      * @var array
      */
-    var $default_right_data = array(
+    public $default_right_data = array(
         'name'          => 'DEFAULT_RIGHT',
         'description'   => 'Short description.',
         'for_users'     => true,
@@ -267,7 +266,7 @@ class PMF_PermBasic
      * @param int
      * @return array
      */
-    function getRightData($right_id)
+    public function getRightData($right_id)
     {
         if (!$this->_initialized)
             return false;
@@ -284,8 +283,11 @@ class PMF_PermBasic
             WHERE
                 right_id = ".$right_id
         );
-        if ($this->_db->num_rows($res) != 1)
+        
+        if (!$res) {
             return false;
+        }
+        
         // process right data
         $right_data = $this->_db->fetch_assoc($res);
         $right_data['for_users'] = $this->int_to_bool($right_data['for_users']);
