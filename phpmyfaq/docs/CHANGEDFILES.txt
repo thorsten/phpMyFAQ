@@ -1,5 +1,7 @@
 CHANGED FILES FROM 2.0.7 -> 2.0.8
 
+./inc/PMF_User/PermBasic.php
+./inc/PMF_User/PermMedium.php
 ./install/installer.php
 ./install/update.php
 

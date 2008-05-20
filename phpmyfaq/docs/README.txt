@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.92.2.30 2008-05-12 13:59:00 thorstenr Exp $
+$Id: README.txt,v 1.92.2.31 2008-05-20 15:48:45 thorstenr Exp $
 
 phpMyFAQ 2.0.8
 Codename "Prometheus"
@@ -10,14 +10,14 @@ Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.0.7:
-- 
+- Fixed login errors with IBM DB2 (Thorsten, Helmut Tessarek)
 
 For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
 Version 2.0.8 - 2008-
--
+- Fixed login errors with IBM DB2 (Thorsten, Helmut Tessarek)
 
 Version 2.0.7 - 2006-05-12
 - added Bengali translation (Md. Masum Billah)
