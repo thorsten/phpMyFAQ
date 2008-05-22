@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.214 2008-01-26 15:10:15 thorstenr Exp $
+ * $Id: functions.php,v 1.215 2008-05-22 11:22:59 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -689,14 +689,14 @@ function Tracking($action, $id = 0)
                 $sid = $db->nextID(SQLPREFIX."faqsessions", "sid");
                 // HACK: be sure that pmf_sid cookie contains the current $sid
                 if (isset($_COOKIE["pmf_sid"]) && ((int)$_COOKIE['pmf_sid'] != $sid)) {
-                    setcookie('pmf_sid', $sid, time() + 3600);
+                    setcookie('pmf_sid', $sid, $_SERVER['REQUEST_TIME'] + 3600);
                 }
                 $db->query("
                     INSERT INTO
                         ".SQLPREFIX."faqsessions
                         (sid, user_id, ip, time)
                     VALUES
-                        (".$sid.", ".($user ? $user->getUserId() : '-1').", '".$_SERVER["REMOTE_ADDR"]."', ".time().")"
+                        (".$sid.", ".($user ? $user->getUserId() : '-1').", '".$_SERVER["REMOTE_ADDR"]."', ".$_SERVER['REQUEST_TIME'].")"
                         );
             }
             $fp = @fopen("./data/tracking".date("dmY"), "a+b");
@@ -718,7 +718,7 @@ function Tracking($action, $id = 0)
                     if (!isset($_SERVER["QUERY_STRING"])) {
                         $_SERVER["QUERY_STRING"] = "";
                     }
-                    fputs($fp, $sid.";".str_replace(";", ",",$action).";".$id.";".$_SERVER["REMOTE_ADDR"].";".str_replace(";", ",", $_SERVER["QUERY_STRING"]).";".str_replace(";", ",", $_SERVER["HTTP_REFERER"]).";".str_replace(";", ",", urldecode($_SERVER["HTTP_USER_AGENT"])).";".time().";\n");
+                    fputs($fp, $sid.";".str_replace(";", ",",$action).";".$id.";".$_SERVER["REMOTE_ADDR"].";".str_replace(";", ",", $_SERVER["QUERY_STRING"]).";".str_replace(";", ",", $_SERVER["HTTP_REFERER"]).";".str_replace(";", ",", urldecode($_SERVER["HTTP_USER_AGENT"])).";".$_SERVER['REQUEST_TIME'].";\n");
                     flock($fp, LOCK_UN);
                     fclose($fp);
                 }
@@ -766,7 +766,7 @@ function getUsersOnline($activityTimeWindow = 300)
     $users = array(0 ,0);
 
     if (isset($PMF_CONF['main.enableUserTracking']) && $PMF_CONF['main.enableUserTracking']) {
-        $timeNow = (time() - $activityTimeWindow);
+        $timeNow = ($_SERVER['REQUEST_TIME'] - $activityTimeWindow);
         // Count all sids within the time window
         // TODO: add a new field in faqsessions in order to find out only sids of anonymous users
         $result = $db->query("
@@ -1370,7 +1370,7 @@ function adminlog($text)
                 VALUES (%d, %d, %d, %s, %s)',
                     SQLPREFIX,
                     $db->nextID(SQLPREFIX.'faqadminlog', 'id'),
-                    time(),
+                    $_SERVER['REQUEST_TIME'],
                     $user->userdata->get('user_id'),
                     "'".nl2br($text)."'",
                     "'".$_SERVER['REMOTE_ADDR']."'"

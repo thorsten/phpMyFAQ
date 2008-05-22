@@ -506,7 +506,7 @@ class PMF_User
             $this->_user_id = $user_id;
         }
         // create user entry
-        $now = time();
+        $now = $_SERVER['REQUEST_TIME'];
         $query = sprintf(
                     "INSERT INTO
                         %sfaquser

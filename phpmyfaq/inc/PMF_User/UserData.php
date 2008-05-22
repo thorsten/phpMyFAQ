@@ -180,7 +180,7 @@ class PMF_UserData
                     WHERE
                         user_id = %d",
                     SQLPREFIX,
-                    date('YmdHis', time()),
+                    date('YmdHis', $_SERVER['REQUEST_TIME']),
                     $this->_data['display_name'],
                     $this->_data['email'],
                     $this->_user_id
@@ -218,7 +218,7 @@ class PMF_UserData
                         (%d, '%s')",
                     SQLPREFIX,
                     $this->_user_id,
-                    date('YmdHis', time())
+                    date('YmdHis', $_SERVER['REQUEST_TIME'])
                     );
         $res = $this->_db->query($query);
         if (!$res) {

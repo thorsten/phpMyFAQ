@@ -7,7 +7,7 @@
  * @package      phpMyFAQ
  * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since        2007-03-31
- * @copyright    (c) 2007 phpMyFAQ Team
+ * @copyright    2007-2008 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -204,7 +204,7 @@ class PMF_Session
             SQLPREFIX,
             $sid,
             $ip,
-            time() - 86400);
+            $_SERVER['REQUEST_TIME'] - 86400);
 
         $result = $this->db->query($query);
 
@@ -221,7 +221,7 @@ class PMF_Session
                     sid = %d
                     AND ip = '%s'",
                 SQLPREFIX,
-                time(),
+                $_SERVER['REQUEST_TIME'],
                 ($user ? $user->getUserId() : '-1'),
                 $sid,
                 $ip);

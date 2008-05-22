@@ -1,13 +1,13 @@
 <?php
 /**
- * $Id: Export.php,v 1.11 2007-08-20 19:21:32 thorstenr Exp $
+ * $Id: Export.php,v 1.12 2008-05-22 11:22:59 thorstenr Exp $
  *
  * XML, XML DocBook, XHTML and PDF export - Classes and Functions
  *
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
  * @since       2005-11-02
- * @copyright   (c) 2005-2007 phpMyFAQ Team
+ * @copyright   2005-2008 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -53,7 +53,7 @@ class PMF_Export
     {
         global $PMF_CONST;
         $offset = (60 * 60) * ($PMF_CONST["timezone"] / 100);
-        $timestamp = time() + $offset;
+        $timestamp = $_SERVER['REQUEST_TIME'] + $offset;
         return date("Y-m-d-H-i-s", $timestamp);
     }
 

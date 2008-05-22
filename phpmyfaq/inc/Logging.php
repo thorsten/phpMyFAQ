@@ -1,25 +1,34 @@
 <?php
 /**
-* $Id: Logging.php,v 1.3 2007-04-08 14:40:20 thorstenr Exp $
-*
-* The main Logging class
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @package      phpMyFAQ
-* @since        2006-08-15
-* @copyright    (c) 2006-2007 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * The main Logging class
+ *
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since     2006-08-15
+ * @copyright 2006-2008 phpMyFAQ Team
+ * @version   CVS: $Id: Logging.php,v 1.4 2008-05-22 11:22:59 thorstenr Exp $
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
+/**
+ * PMF_Logging
+ *
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since     2006-08-15
+ * @copyright 2006-2008 phpMyFAQ Team
+ * @version   CVS: $Id: Logging.php,v 1.4 2008-05-22 11:22:59 thorstenr Exp $
+ *
+ */
 class PMF_Logging
 {
     /**
@@ -27,16 +36,16 @@ class PMF_Logging
      *
      * @var object
      */
-    var $db = null;
+    private $db = null;
 
     /**
      * Constructor
      *
-     * @param   object  PMF_Db
-     * @since   2006-08-10
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  PMF_Db $db PMF_Db object
+     * @since  2006-08-10
+     * @return void
      */
-    function PMF_Logging(&$db)
+    public function __construct($db)
     {
         $this->db = &$db;
     }
@@ -45,10 +54,9 @@ class PMF_Logging
      * Returns the number of entries
      *
      * @return  integer
-     * @access  public
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function getNumberOfEntries()
+    public function getNumberOfEntries()
     {
         $query = sprintf('
             SELECT
@@ -63,11 +71,10 @@ class PMF_Logging
     /**
      * Returns all data from the adminlog
      *
-     * @return  array
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @return array
+     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function getAll()
+    public function getAll()
     {
         $data = array();
 
@@ -94,11 +101,10 @@ class PMF_Logging
     /**
      * Deletes logging data older than 30 days
      *
-     * @return  boolean
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @return boolean
+     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function delete()
+    public function delete()
     {
         $query = sprintf(
             "DELETE FROM
@@ -106,7 +112,7 @@ class PMF_Logging
             WHERE
                 time < %d",
             SQLPREFIX,
-            time() - 30 * 86400);
+            $_SERVER['REQUEST_TIME'] - 30 * 86400);
 
         if ($this->db->query($query)) {
             return true;

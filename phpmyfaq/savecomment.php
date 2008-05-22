@@ -1,12 +1,12 @@
 <?php
 /**
-* $Id: savecomment.php,v 1.22 2007-03-29 18:47:40 thorstenr Exp $
+* $Id: savecomment.php,v 1.23 2008-05-22 11:23:00 thorstenr Exp $
 *
 * Saves the posted comment
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-08-29
-* @copyright    (c) 2001-2006 phpMyFAQ Team
+* @copyright    2001-2008 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -51,7 +51,7 @@ if (    isset($_POST['user']) && $_POST['user'] != ''
         'username'  => $db->escape_string(safeHTML($_POST["user"])),
         'usermail'  => $db->escape_string(safeHTML($_POST["mail"])),
         'comment'   => nl2br($db->escape_string(safeHTML($_POST["comment"]))),
-        'date'      => time(),
+        'date'      => $_SERVER['REQUEST_TIME'],
         'helped'    => '');
     if ($faq->addComment($commentData)) {
         $emailTo = $faqconfig->get('main.administrationMail');

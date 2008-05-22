@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Linkverifier.php,v 1.25 2007-05-25 20:21:58 matteo Exp $
+ * $Id: Linkverifier.php,v 1.26 2008-05-22 11:22:59 thorstenr Exp $
  *
  * PMF_Linkverifier
  *
@@ -10,7 +10,7 @@
  * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since       2005-08-01
- * @copyright   (c) 2005-2007 NetJapan, Inc. and phpMyFAQ Team
+ * @copyright   2005-2008 NetJapan, Inc. and phpMyFAQ Team
  *
  * Note: The package has been improved and fixed by Matteo Scaramuccia <matteo@scaramuccia.com>
  * to best fit with PMF 1.6.x+
@@ -638,7 +638,7 @@ class PMF_Linkverifier
             $state = $this->getLinkStateString();
         }
 
-        $query = "UPDATE ".SQLPREFIX."faqdata SET links_state = '".$state."', links_check_date = ".time()." WHERE id = ".$id." AND lang='".$artlang."'";
+        $query = "UPDATE ".SQLPREFIX."faqdata SET links_state = '".$state."', links_check_date = ".$_SERVER['REQUEST_TIME']." WHERE id = ".$id." AND lang='".$artlang."'";
         if ($this->db->query($query)) {
             return true;
         } else {
@@ -659,9 +659,9 @@ class PMF_Linkverifier
         global $PMF_CONF;
 
         if (isset($PMF_CONF['main.urlValidateInterval'])) {
-            return time() - $PMF_CONF['main.urlValidateInterval'];
+            return $_SERVER['REQUEST_TIME'] - $PMF_CONF['main.urlValidateInterval'];
         } else {
-            return time() - 86400; // default in recheck links once a day unless explicitly requested.
+            return $_SERVER['REQUEST_TIME'] - 86400; // default in recheck links once a day unless explicitly requested.
         }
     }
 

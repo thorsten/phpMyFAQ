@@ -1,7 +1,5 @@
 <?php
 /**
- * $Id: Captcha.php,v 1.14 2007-07-14 17:52:48 thorstenr Exp $
- *
  * The phpMyFAQ Captcha class
  *
  * @package   phpMyFAQ
@@ -10,7 +8,8 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @since     2006-02-04
- * @copyright (c) 2006-2007 phpMyFAQ Team
+ * @copyright 2006-2008 phpMyFAQ Team
+ * @version   CVS: $Id: Captcha.php,v 1.15 2008-05-22 11:22:59 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -23,6 +22,18 @@
  * under the License.
  */
 
+/**
+ * PMF_Captcha
+ *
+ * @package   phpMyFAQ
+ * @license   MPL
+ * @author    Thomas Zeithaml <seo@annatom.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @since     2006-02-04
+ * @copyright 2006-2008 phpMyFAQ Team
+ * @version   CVS: $Id: Captcha.php,v 1.15 2008-05-22 11:22:59 thorstenr Exp $
+ */
 class PMF_Captcha
 {
     /**
@@ -155,7 +166,7 @@ class PMF_Captcha
         $this->fonts     = $this->getFonts();
         $this->width     = 200;
         $this->height    = 40;
-        $this->timestamp = time();
+        $this->timestamp = $_SERVER['REQUEST_TIME'];
     }
 
     //
@@ -175,14 +186,17 @@ class PMF_Captcha
      */
     public function printCaptcha($action)
     {
+        $alt = 'Chuck Norris has counted to infinity. Twice.';
         $output = sprintf(
-            '<img src="%s?%saction=%s&amp;gen=img&amp;ck=%s" height="%d" width="%d" border="0" alt="Chuck Norris has counted to infinity. Twice." title="Chuck Norris has counted to infinity. Twice." />',
-            $_SERVER['PHP_SELF'],
+            '<img src="%s?%saction=%s&amp;gen=img&amp;ck=%s" height="%d" width="%d" border="0" alt="%s" title="%s" />',
+            $_SERVER['SCRIPT_NAME'],
             $this->sids,
             $action,
-            time(),
+            $_SERVER['REQUEST_TIME'],
             $this->height,
-            $this->width);
+            $this->width,
+            $alt,
+            $alt);
         return $output;
     }
 
@@ -507,7 +521,7 @@ class PMF_Captcha
      */
     private function garbageCollector($time = 604800)
     {
-        $query = sprintf("DELETE FROM %sfaqcaptcha WHERE captcha_time < %d", SQLPREFIX, time() - $time);
+        $query = sprintf("DELETE FROM %sfaqcaptcha WHERE captcha_time < %d", SQLPREFIX, $_SERVER['REQUEST_TIME'] - $time);
         $this->db->query($query);
     }
 

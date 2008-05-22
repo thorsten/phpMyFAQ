@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: index.php,v 1.120 2008-05-18 11:16:30 thorstenr Exp $
+ * $Id: index.php,v 1.121 2008-05-22 11:23:00 thorstenr Exp $
  *
  * This is the main public frontend page of phpMyFAQ. It detects the browser's
  * language, gets and sets all cookie, post and get informations and includes
@@ -10,7 +10,7 @@
  * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author       Lars Tiedemann <php@larstiedemann.de>
  * @since        2001-02-12
- * @copyright:   (c) 2001-2007 phpMyFAQ Team
+ * @copyright:   2001-2008 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -171,7 +171,7 @@ $faqsession = new PMF_Session($db, $LANGCODE);
 if ((!isset($_GET['sid'])) && (!isset($_COOKIE['pmf_sid']))) {
     // Create a per-site unique SID
     Tracking('new_session', 0);
-    setcookie('pmf_sid', $sid, time() + 3600);
+    setcookie('pmf_sid', $sid, $_SERVER['REQUEST_TIME'] + 3600);
 } else {
     if (isset($_COOKIE['pmf_sid']) && is_numeric($_COOKIE['pmf_sid'])) {
         $faqsession->checkSessionId((int)$_COOKIE['pmf_sid'], $_SERVER['REMOTE_ADDR']);
@@ -197,7 +197,7 @@ if ($faqconfig->get('main.enableUserTracking')) {
         }
     }
 } else {
-    if (!setcookie('pmf_lang', $LANGCODE, time() + 3600)) {
+    if (!setcookie('pmf_lang', $LANGCODE, $_SERVER['REQUEST_TIME'] + 3600)) {
         $sids = 'lang='.$LANGCODE.'&amp;';
     }
 }

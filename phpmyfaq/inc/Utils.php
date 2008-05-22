@@ -1,13 +1,13 @@
 <?php
 /**
- * $Id: Utils.php,v 1.7 2007-08-05 16:06:49 thorstenr Exp $
+ * $Id: Utils.php,v 1.8 2008-05-22 11:22:59 thorstenr Exp $
  *
  * Utilities - Functions and Classes common to the whole phpMyFAQ architecture
  *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @since     2005-11-01
- * @copyright (c) 2005-2007 phpMyFAQ Team
+ * @copyright 2005-2008 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -54,7 +54,7 @@ class PMF_Utils
     {
         if (!isset($unixTime)) {
             // localtime
-            $unixTime = time();
+            $unixTime = $_SERVER['REQUEST_TIME'];
         }
         return date('YmdHis', $unixTime);
     }

@@ -7,7 +7,7 @@
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @since     2002-01-10
  * @copyright 2002-2008 phpMyFAQ Team
- * @version   CVS: $Id: update.php,v 1.158 2008-05-22 07:18:57 thorstenr Exp $
+ * @version   CVS: $Id: update.php,v 1.159 2008-05-22 11:23:00 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -802,7 +802,7 @@ if ($step == 5) {
 
         // 9/13. Run the user migration and remove the faquser_PMF16x_old table
         // Populate faquser table
-        $now = date("YmdHis", time());
+        $now = date("YmdHis", $_SERVER['REQUEST_TIME']);
         // Fix any FK constraints issue: remove these FK cons
         switch($DB["type"]) {
             case 'mssql':

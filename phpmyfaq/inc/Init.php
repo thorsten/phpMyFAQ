@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Init.php,v 1.49 2008-04-06 16:03:07 thorstenr Exp $
+ * $Id: Init.php,v 1.50 2008-05-22 11:22:59 thorstenr Exp $
  *
  * Some functions
  *
@@ -362,7 +362,7 @@ class PMF_Init
             $this->language = $_lang['post'];
             $_lang          = null;
             unset($_lang);
-            setcookie('pmf_sid', $sid, time() + 3600);
+            setcookie('pmf_sid', $sid, $_SERVER['REQUEST_TIME'] + 3600);
         } elseif (isset($_lang['get'])) {
             $this->language = $_lang['get'];
         } elseif (isset($_lang['cookie'])) {
@@ -373,12 +373,12 @@ class PMF_Init
             $this->language = $_lang['detection'];
             $_lang          = null;
             unset($_lang);
-            setcookie('pmf_sid', $sid, time() + 3600);
+            setcookie('pmf_sid', $sid, $_SERVER['REQUEST_TIME'] + 3600);
         } elseif (isset($_lang['config'])) {
             $this->language = $_lang['config'];
             $_lang          = null;
             unset($_lang);
-            setcookie('pmf_sid', $sid, time() + 3600);
+            setcookie('pmf_sid', $sid, $_SERVER['REQUEST_TIME'] + 3600);
         } else {
             $this->language = 'en'; // just a fallback
         }

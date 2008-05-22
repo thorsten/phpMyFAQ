@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: sitemap.google.php,v 1.6 2007-03-29 18:01:27 thorstenr Exp $
+ * $Id: sitemap.google.php,v 1.7 2008-05-22 11:23:00 thorstenr Exp $
  *
  * The dynamic Google Sitemap builder
  *
@@ -17,7 +17,7 @@
  * @access       public
  * @author       Matteo Scaramuccia <matteo@scaramuccia.com>
  * @since        2006-06-26
- * @copyright    (c) 2006 phpMyFAQ Team
+ * @copyright    2006-2008 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -74,7 +74,7 @@ require_once(PMF_ROOT_DIR.'/inc/Faq.php');
 function buildSitemapNode($location, $lastmod = null, $changeFreq = null, $priority = null)
 {
     if (!isset($lastmod)) {
-        $lastmod = makeISO8601Date(time(), false);
+        $lastmod = makeISO8601Date($_SERVER['REQUEST_TIME'], false);
     }
     if (!isset($changeFreq)) {
         $changeFreq = PMF_SITEMAP_GOOGLE_CHANGEFREQ_DAILY;
@@ -139,7 +139,7 @@ $sitemap =
     .' http://www.google.com/schemas/sitemap/0.84/sitemap.xsd">';
 // 1st entry: the faq server itself
 $sitemap .= buildSitemapNode(PMF_Link::getSystemUri('/sitemap.google.php'),
-                makeISO8601Date(time(), false),
+                makeISO8601Date($_SERVER['REQUEST_TIME'], false),
                 PMF_SITEMAP_GOOGLE_CHANGEFREQ_DAILY,
                 PMF_SITEMAP_GOOGLE_PRIORITY_MAX
             );

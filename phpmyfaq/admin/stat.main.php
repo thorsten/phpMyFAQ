@@ -1,13 +1,13 @@
 <?php
 /**
- * $Id: stat.main.php,v 1.14 2007-05-01 19:32:52 thorstenr Exp $
+ * $Id: stat.main.php,v 1.15 2008-05-22 11:23:00 thorstenr Exp $
  *
  * The main statistics page
  *
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
  * @since       2003-02-24
- * @copyright   (c) 2003-2007 phpMyFAQ Team
+ * @copyright   2003-2008 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -112,7 +112,7 @@ if ($permission['viewlog']) {
         fclose($fp);
 
         if (empty($stamp)) {
-            $stamp = time();
+            $stamp = $_SERVER['REQUEST_TIME'];
         }
         print date("d.m.Y H:i:s", $stamp).'<br />';
     } else {
@@ -134,7 +134,7 @@ if ($permission['viewlog']) {
 <?php
     foreach ($trackingDates as $trackingDate) {
         printf('<option value="%d"', $trackingDate);
-        if (date("Y-m-d", $trackingDate) == strftime('%Y-%m-%d', time())) {
+        if (date("Y-m-d", $trackingDate) == strftime('%Y-%m-%d', $_SERVER['REQUEST_TIME'])) {
             print ' selected="selected"';
         }
         print '>';

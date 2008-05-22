@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Faq.php,v 1.128 2008-05-18 11:16:30 thorstenr Exp $
+ * $Id: Faq.php,v 1.129 2008-05-22 11:22:59 thorstenr Exp $
  *
  * The main FAQ class
  *
@@ -8,7 +8,7 @@
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @package   phpMyFAQ
  * @since     2005-12-20
- * @copyright (c) 2005-2007 phpMyFAQ Team
+ * @copyright 2005-2008 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -21,20 +21,9 @@
  * under the License.
  */
 
-// {{{ Includes
-/**
- * This include is needed for manipulating PMF_Comment objects
- */
-require_once(PMF_INCLUDE_DIR.'/Comment.php');
-/**
- * This include is needed for accessing to mod_rewrite support configuration value
- */
-require_once(PMF_INCLUDE_DIR.'/Link.php');
-/**
- * This include is needed in _getSQLQuery() private method
- */
-require_once(PMF_INCLUDE_DIR.'/Utils.php');
-// }}}
+require_once PMF_INCLUDE_DIR.'/Comment.php';
+require_once PMF_INCLUDE_DIR.'/Link.php';
+require_once PMF_INCLUDE_DIR.'/Utils.php';
 
 // {{{ Constants
 /**
@@ -2007,7 +1996,7 @@ class PMF_Faq
      */
     function votingCheck($id, $ip)
     {
-        $check = time() - 300;
+        $check = $_SERVER['REQUEST_TIME'] - 300;
         $query = sprintf(
             "SELECT
                 id
@@ -2077,7 +2066,7 @@ class PMF_Faq
             $this->db->nextID(SQLPREFIX.'faqvoting', 'id'),
             $votingData['record_id'],
             $votingData['vote'],
-            time(),
+            $_SERVER['REQUEST_TIME'],
             $votingData['user_ip']);
         $this->db->query($query);
 
@@ -2232,7 +2221,7 @@ class PMF_Faq
                 artikel = %d",
             SQLPREFIX,
             $votingData['vote'],
-            time(),
+            $_SERVER['REQUEST_TIME'],
             $votingData['user_ip'],
             $votingData['record_id']);
         $this->db->query($query);
@@ -2265,7 +2254,7 @@ class PMF_Faq
             $id,
             $lang,
             1,
-            time());
+            $_SERVER['REQUEST_TIME']);
         $this->db->query($query);
 
         return true;
@@ -2295,7 +2284,7 @@ class PMF_Faq
             WHERE
                 id = %d AND lang = '%s'",
             SQLPREFIX,
-            time(),
+            $_SERVER['REQUEST_TIME'],
             $id,
             $this->language);
         $this->db->query($query);
@@ -2353,7 +2342,7 @@ class PMF_Faq
         if (!is_numeric($id) && !is_string($lang)) {
             return false;
         }
-        $data = array('visits' => 0, 'last_visit' => time());
+        $data = array('visits' => 0, 'last_visit' => $_SERVER['REQUEST_TIME']);
 
         $query = sprintf(
             "SELECT
@@ -2414,7 +2403,7 @@ class PMF_Faq
             $lang,
             $revision_id,
             $userId,
-            time(),
+            $_SERVER['REQUEST_TIME'],
             $text);
 
         $this->db->query($query);

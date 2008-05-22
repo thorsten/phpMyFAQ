@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: CurrentUser.php,v 1.28 2008-01-25 15:33:19 thorstenr Exp $
+ * $Id: CurrentUser.php,v 1.29 2008-05-22 11:23:00 thorstenr Exp $
  *
  * manages authentication process using php sessions.
  *
@@ -247,7 +247,7 @@ class PMF_CurrentUser extends PMF_User
         if (!isset($_SESSION[PMF_SESSION_ID_TIMESTAMP])) {
             return 0;
         }
-        return (time() - $_SESSION[PMF_SESSION_ID_TIMESTAMP]) / 60;
+        return ($_SERVER['REQUEST_TIME'] - $_SESSION[PMF_SESSION_ID_TIMESTAMP]) / 60;
     }
 
     /**
@@ -306,8 +306,7 @@ class PMF_CurrentUser extends PMF_User
             }
         }
         // store session-ID age
-        $now = time();
-        $_SESSION[PMF_SESSION_ID_TIMESTAMP] = $now;
+        $_SESSION[PMF_SESSION_ID_TIMESTAMP] = $_SERVER['REQUEST_TIME'];
         // save session information in user table
         $query = sprintf(
                     "UPDATE
@@ -321,11 +320,11 @@ class PMF_CurrentUser extends PMF_User
                         user_id = %d",
                     SQLPREFIX,
                     session_id(),
-                    $now,
-                    $updateLastlogin ?  "last_login = '".date('YmdHis', $now)."'," : '',
+                    $_SERVER['REQUEST_TIME'],
+                    $updateLastlogin ?  "last_login = '".date('YmdHis', $_SERVER['REQUEST_TIME'])."'," : '',
                     $_SERVER['REMOTE_ADDR'],
-                    $this->getUserId()
-                    );
+                    $this->getUserId());
+                    
         $res = $this->_db->query($query);
         if (!$res) {
             $this->errors[] = $this->_db->error();
