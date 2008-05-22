@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ibm_db2.sql.php,v 1.20 2007-09-14 06:05:52 thorstenr Exp $
+* $Id: ibm_db2.sql.php,v 1.21 2008-05-22 07:18:57 thorstenr Exp $
 *
 * CREATE TABLE instruction for IBM DB2 Universal Database, IBM Cloudscape,
 * and Apache Derby databases
@@ -87,7 +87,7 @@ record_id INTEGER NOT NULL,
 record_lang VARCHAR(5) NOT NULL default '',
 PRIMARY KEY  (category_id, category_lang, record_id, record_lang)
 )";
-$query[] = "CREATE INDEX idx_records ON ".$sqltblpre."faqcategoryrelations
+$query[] = "CREATE INDEX ".$sqltblpre."idx_records ON ".$sqltblpre."faqcategoryrelations
 (record_id, record_lang)";
 
 //faqcategory_group

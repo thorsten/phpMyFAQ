@@ -7,7 +7,7 @@
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @since     2002-01-10
  * @copyright 2002-2008 phpMyFAQ Team
- * @version   CVS: $Id: update.php,v 1.157 2008-01-27 09:36:42 thorstenr Exp $
+ * @version   CVS: $Id: update.php,v 1.158 2008-05-22 07:18:57 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -20,7 +20,7 @@
  * under the License.
  */
 
-define('NEWVERSION', '2.5.0-alpha');
+define('NEWVERSION', '2.5.0-alpha2');
 define('COPYRIGHT', '&copy; 2001-2007 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
@@ -1243,14 +1243,7 @@ if ($step == 5) {
     // UPDATES FROM 2.0.2
     //
     if (version_compare($version, '2.0.2', '<')) {
-        $query[] = 'CREATE INDEX idx_user_time ON '.SQLPREFIX.'faqsessions (user_id, time)';
-    }
-
-    //
-    // UPDATES FROM 2.0.2
-    //
-    if (version_compare($version, '2.0.2', '<')) {
-        $query[] = 'CREATE INDEX idx_user_time ON '.SQLPREFIX.'faqsessions (user_id, time)';
+        $query[] = 'CREATE INDEX '.SQLPREFIX.'idx_user_time ON '.SQLPREFIX.'faqsessions (user_id, time)';
     }
 
     //

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mssql.sql.php,v 1.21 2007-04-30 14:00:15 thorstenr Exp $
+* $Id: mssql.sql.php,v 1.22 2008-05-22 07:18:57 thorstenr Exp $
 *
 * CREATE TABLE instruction for MS SQL Server database
 *
@@ -101,7 +101,7 @@ record_id integer NOT NULL,
 record_lang varchar(5) NOT NULL,
 PRIMARY KEY  (category_id, category_lang, record_id, record_lang)
 )";
-$query[] = "CREATE INDEX idx_records ON ".$sqltblpre."faqcategoryrelations
+$query[] = "CREATE INDEX ".$sqltblpre."idx_records ON ".$sqltblpre."faqcategoryrelations
 (record_id, record_lang)";
 
 //faqcategory_group
