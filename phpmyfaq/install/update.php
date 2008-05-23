@@ -7,7 +7,7 @@
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @since     2002-01-10
  * @copyright 2002-2008 phpMyFAQ Team
- * @version   CVS: $Id: update.php,v 1.159 2008-05-22 11:23:00 thorstenr Exp $
+ * @version   CVS: $Id: update.php,v 1.160 2008-05-23 11:22:54 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -21,10 +21,10 @@
  */
 
 define('NEWVERSION', '2.5.0-alpha2');
-define('COPYRIGHT', '&copy; 2001-2007 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
+define('COPYRIGHT', '&copy; 2001-2008 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
-require_once(PMF_ROOT_DIR."/inc/constants.php");
+require_once PMF_ROOT_DIR.'/inc/constants.php';
 
 if (isset($_GET["step"]) && $_GET["step"] != "") {
     $step = $_GET["step"];
@@ -43,7 +43,7 @@ $query = array();
  */
 function HTMLFooter()
 {
-    print '<p class="center">'.COPYRIGHT.'</p></body></html>';
+    printf('<p class="center">%s</p></body></html>', COPYRIGHT);
 }
 
 /**
@@ -197,7 +197,7 @@ if (version_compare(PHP_VERSION, '5.2.0', '<')) {
     die();
 }
 
-require_once(PMF_ROOT_DIR.'/inc/data.php');
+require_once PMF_ROOT_DIR.'/inc/data.php';
 
 /**************************** STEP 1 OF 5 ***************************/
 if ($step == 1) {
@@ -368,7 +368,7 @@ if ($step == 4) {
 <?php
     $version = $_REQUEST["version"];
     if (version_compare($version, '2.0.0-alpha', '<')) {
-        require_once(PMF_ROOT_DIR."/inc/config.php");
+        require_once PMF_ROOT_DIR."/inc/config.php";
     }
 
     if (isset($_REQUEST["db"])) {
@@ -395,15 +395,16 @@ if ($step == 4) {
 if ($step == 5) {
     $version = $_REQUEST["version"];
     if (version_compare($version, '2.0.0-alpha', '<')) {
-        require_once(PMF_ROOT_DIR."/inc/config.php");
+        require_once PMF_ROOT_DIR . '/inc/config.php';
     }
 
-    require_once(PMF_ROOT_DIR."/inc/functions.php");
-    require_once(PMF_ROOT_DIR."/inc/Configuration.php");
-    require_once(PMF_ROOT_DIR."/inc/Db.php");
-    require_once(PMF_ROOT_DIR."/inc/PMF_DB/Driver.php");
-    require_once(PMF_ROOT_DIR."/inc/Link.php");
-    define("SQLPREFIX", $DB["prefix"]);
+    require_once PMF_ROOT_DIR . '/inc/functions.php';
+    require_once PMF_ROOT_DIR . '/inc/Configuration.php';
+    require_once PMF_ROOT_DIR . '/inc/Db.php';
+    require_once PMF_ROOT_DIR . '/inc/PMF_DB/Driver.php';
+    require_once PMF_ROOT_DIR . '/inc/Link.php';
+    
+    define('SQLPREFIX', $DB['prefix']);
     $db = PMF_Db::db_select($DB["type"]);
     $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
 
@@ -1108,8 +1109,7 @@ if ($step == 5) {
         $anonymous->setStatus('protected');
         $anonymousData = array(
             'display_name' => 'Anonymous User',
-            'email' => null
-        );
+            'email'        => null);
         $anonymous->setUserData($anonymousData);
 
         // 3/4. Add new config key, 'phpMyFAQToken', into the faqconfig table
@@ -1316,7 +1316,7 @@ if ($step == 5) {
     // Perform the queries for optimizing the database
     if (isset($query)) {
         foreach ($query as $current_query) {
-            $result = @$db->query($current_query);
+            $result = $db->query($current_query);
             print "| ";
             if (!$result) {
                 print "\n<div class=\"error\">\n";
