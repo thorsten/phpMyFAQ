@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ask.php,v 1.15 2007-02-04 19:27:50 thorstenr Exp $
+* $Id: ask.php,v 1.16 2008-05-23 13:06:07 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-09-17
@@ -29,7 +29,7 @@ if (isset($_GET['gen'])) {
     exit;
 }
 
-Tracking('ask_question', 0);
+$faqsession->userTracking('ask_question', 0);
 
 $category->buildTree();
 

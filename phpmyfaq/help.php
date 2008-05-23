@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: help.php,v 1.8 2007-04-21 21:26:32 thorstenr Exp $
+ * $Id: help.php,v 1.9 2008-05-23 13:06:07 thorstenr Exp $
  *
  * The FAQ help page
  *
@@ -24,7 +24,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-Tracking('faqhelp', 0);
+$faqsession->userTracking('faqhelp', 0);
 
 $tpl->processTemplate('writeContent', array(
     'msgHelp'       => $PMF_LANG['msgHelp'],

@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: contact.php,v 1.17 2007-05-28 11:13:33 thorstenr Exp $
+* $Id: contact.php,v 1.18 2008-05-23 13:06:07 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-09-16
@@ -22,7 +22,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-Tracking('contact', 0);
+$faqsession->userTracking('contact', 0);
 
 $captcha = new PMF_Captcha($db, $sids, $pmf->language);
 

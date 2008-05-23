@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: save.php,v 1.44 2007-05-30 20:35:59 thorstenr Exp $
+ * $Id: save.php,v 1.45 2008-05-23 13:06:07 thorstenr Exp $
  *
  * Saves a user FAQ record and sends an email to the user
  *
@@ -42,9 +42,9 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
     $isNew = true;
     if (isset($_POST['faqid'])) {
         $isNew = false;
-        Tracking('save_new_translation_entry', 0);
+        $faqsession->userTracking('save_new_translation_entry', 0);
     } else {
-        Tracking('save_new_entry', 0);
+        $faqsession->userTracking('save_new_entry', 0);
     }
     $content = $db->escape_string(safeHTML(nl2br($_POST['content'])));
     $contentlink = $db->escape_string(safeHTML($_POST['contentlink']));
@@ -145,9 +145,9 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
             'Message'               => $PMF_LANG['err_bannedIP']));
     } else {
         if (!isset($_POST['faqid'])) {
-            Tracking('error_save_entry', 0);
+            $faqsession->userTracking('error_save_entry', 0);
         } else {
-            Tracking('error_save_translation_entry', 0);
+            $faqsession->userTracking('error_save_translation_entry', 0);
         }
         $tpl->processTemplate ('writeContent', array(
             'msgNewContentHeader'   => $PMF_LANG['msgNewContentHeader'],

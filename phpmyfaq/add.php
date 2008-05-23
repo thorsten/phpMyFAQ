@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: add.php,v 1.21 2007-05-18 13:53:31 thorstenr Exp $
+ * $Id: add.php,v 1.22 2008-05-23 13:06:06 thorstenr Exp $
  *
  * This is the page there a user can add a FAQ record.
  *
@@ -31,7 +31,7 @@ if (isset($_GET['gen'])) {
     exit;
 }
 
-Tracking('new_entry', 0);
+$faqsession->userTracking('new_entry', 0);
 
 $question = '';
 $readonly = '';

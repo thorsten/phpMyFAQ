@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: index.php,v 1.122 2008-05-23 11:56:21 thorstenr Exp $
+ * $Id: index.php,v 1.123 2008-05-23 13:06:07 thorstenr Exp $
  *
  * This is the main public frontend page of phpMyFAQ. It detects the browser's
  * language, gets and sets all cookie, post and get informations and includes
@@ -170,7 +170,7 @@ if (function_exists('mb_language') && in_array($mbLanguage, $valid_mb_strings)) 
 $faqsession = new PMF_Session($db, $LANGCODE);
 if ((!isset($_GET['sid'])) && (!isset($_COOKIE['pmf_sid']))) {
     // Create a per-site unique SID
-    Tracking('new_session', 0);
+    $faqsession->userTracking('new_session', 0);
     setcookie('pmf_sid', $sid, $_SERVER['REQUEST_TIME'] + 3600);
 } else {
     if (isset($_COOKIE['pmf_sid']) && is_numeric($_COOKIE['pmf_sid'])) {

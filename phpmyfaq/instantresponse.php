@@ -25,7 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-Tracking('instantresponse', 0);
+$faqsession->userTracking('instantresponse', 0);
 
 $searchString           = '';
 $printInstantResponse   = '';

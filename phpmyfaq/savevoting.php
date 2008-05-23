@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: savevoting.php,v 1.24 2007-04-21 21:26:32 thorstenr Exp $
+ * $Id: savevoting.php,v 1.25 2008-05-23 13:06:07 thorstenr Exp $
  *
  * Saves a user voting
  *
@@ -29,7 +29,7 @@ $voting      = (isset($_POST['vote'])) ? intval($_POST['vote']) : 0;
 $user_ip     = (isset($_SERVER['REMOTE_ADDR'])) ? strip_tags($_SERVER['REMOTE_ADDR']) : '';
 
 if (isset($voting) && $faq->votingCheck($record_id, $user_ip) && $voting > 0 && $voting < 6) {
-    Tracking('save_voting', $record_id);
+    $faqsession->userTracking('save_voting', $record_id);
 
     $votingData = array(
         'record_id'  => $record_id,
@@ -46,12 +46,12 @@ if (isset($voting) && $faq->votingCheck($record_id, $user_ip) && $voting > 0 && 
         'msgVoteThanks' => $PMF_LANG['msgVoteThanks']));
 
 } elseif (isset($voting) && !$faq->votingCheck($record_id, $user_ip)) {
-    Tracking('error_save_voting', $record_id);
+    $faqsession->userTracking('error_save_voting', $record_id);
     $tpl->processTemplate('writeContent', array(
         'msgVoteThanks' => $PMF_LANG['err_VoteTooMuch']));
 
 } else {
-    Tracking('error_save_voting', $record_id);
+    $faqsession->userTracking('error_save_voting', $record_id);
     $tpl->processTemplate ('writeContent', array(
         'msgVoteThanks' => $PMF_LANG['err_noVote']));
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: artikel.php,v 1.83 2007-08-28 17:23:41 thorstenr Exp $
+ * $Id: artikel.php,v 1.84 2008-05-23 13:06:06 thorstenr Exp $
  *
  * Shows the page with the FAQ record and - when available - the user
  * comments
@@ -44,7 +44,7 @@ if (isset($_REQUEST['solution_id']) && is_numeric($_REQUEST['solution_id'])) {
     $solution_id = 0;
 }
 
-Tracking('article_view', $id);
+$faqsession->userTracking('article_view', $id);
 
 // Get all data from the FAQ record
 if (0 == $solution_id) {

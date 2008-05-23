@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: writecomment.php,v 1.17 2008-02-25 06:32:26 thorstenr Exp $
+ * $Id: writecomment.php,v 1.18 2008-05-23 13:06:07 thorstenr Exp $
  *
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since       2002-08-29
@@ -29,7 +29,7 @@ if (isset($_GET['gen'])) {
     exit;
 }
 
-Tracking('write_comment', (int)$_GET['id']);
+$faqsession->userTracking('write_comment', (int)$_GET['id']);
 
 $tpl->processTemplate('writeContent', array(
                       'msgCommentHeader' => $PMF_LANG['msgWriteComment'],

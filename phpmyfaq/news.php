@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: news.php,v 1.14 2007-04-21 21:26:32 thorstenr Exp $
+* $Id: news.php,v 1.15 2008-05-23 13:06:06 thorstenr Exp $
 *
 * Shows the page with the news record and - when available - the user
 * comments
@@ -45,7 +45,7 @@ if (isset($_REQUEST['newsid']) && is_numeric($_REQUEST['newsid'])) {
     exit();
 }
 
-Tracking('news_view', $id);
+$faqsession->userTracking('news_view', $id);
 
 // Define the header of the page
 $writeNewsHeader = PMF_htmlentities($PMF_CONF['main.titleFAQ'], ENT_QUOTES, $PMF_LANG['metaCharset']).$PMF_LANG['msgNews'];

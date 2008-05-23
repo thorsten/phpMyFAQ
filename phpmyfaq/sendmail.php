@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: sendmail.php,v 1.15 2007-04-30 22:00:52 matteo Exp $
+ * $Id: sendmail.php,v 1.16 2008-05-23 13:06:06 thorstenr Exp $
  *
  * The 'send an email from the contact page' page
  *
@@ -24,7 +24,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-Tracking('sendmail_contact', 0);
+$faqsession->userTracking('sendmail_contact', 0);
 
 $captcha = new PMF_Captcha($db, $sids, $pmf->language);
 

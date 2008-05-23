@@ -7,7 +7,7 @@
  * @author    Periklis Tsirakidis <tsirakidis@phpdevel.de>
  * @since     2002-09-16
  * @copyright 2002-2008 phpMyFAQ Team
- * @version   CVS: $Id: search.php,v 1.24 2008-05-23 11:41:45 thorstenr Exp $
+ * @version   CVS: $Id: search.php,v 1.25 2008-05-23 13:06:06 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -25,7 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-Tracking('fulltext_search', 0);
+$faqsession->userTracking('fulltext_search', 0);
 
 // Search only on current language (default)
 $allLanguages = false;
@@ -79,7 +79,7 @@ if (isset($_GET['suchbegriff']) || isset($_GET['search'])) {
 // Change a little bit the $searchCategory value;
 $searchCategory = ('%' == $searchCategory) ? 0 : $searchCategory;
 
-Tracking('fulltext_search', $searchterm);
+$faqsession->userTracking('fulltext_search', $searchterm);
 
 $category->buildTree();
 

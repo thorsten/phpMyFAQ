@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: sitemap.php,v 1.17 2007-06-16 14:08:42 thorstenr Exp $
+ * $Id: sitemap.php,v 1.18 2008-05-23 13:06:06 thorstenr Exp $
  *
  * Shows the whole FAQ articles
  *
@@ -25,7 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-Tracking('sitemap', 0);
+$faqsession->userTracking('sitemap', 0);
 
 require_once('inc/Sitemap.php');
 

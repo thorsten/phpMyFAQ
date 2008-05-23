@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: show.php,v 1.15 2007-03-13 18:43:32 thorstenr Exp $
+* $Id: show.php,v 1.16 2008-05-23 13:06:06 thorstenr Exp $
 *
 * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
 * @since        2002-08-27
@@ -28,11 +28,11 @@ if (isset($_REQUEST['cat']) && is_numeric($_REQUEST['cat'])) {
 
 if (isset($currentCategory) && $currentCategory != 0 && isset($category->categoryName[$currentCategory])) {
 
-    Tracking('show_category', $currentCategory);
-    $parent = $category->categoryName[$currentCategory]['parent_id'];
-    $name = $category->categoryName[$currentCategory]['name'];
-
+    $faqsession->userTracking('show_category', $currentCategory);
+    $parent  = $category->categoryName[$currentCategory]['parent_id'];
+    $name    = $category->categoryName[$currentCategory]['name'];
     $records = $faq->showAllRecords($currentCategory, $faqconfig->get('records.orderby'), $faqconfig->get('records.sortby'));
+    
     if (!$records) {
         $categories = new PMF_Category($LANGCODE);
         $categories->transform($currentCategory);
@@ -59,7 +59,7 @@ if (isset($currentCategory) && $currentCategory != 0 && isset($category->categor
 
 } else {
 
-    Tracking('show_all_categories', 0);
+    $faqsession->userTracking('show_all_categories', 0);
     $tpl->processTemplate('writeContent', array(
                           'writeCategory' => $PMF_LANG['msgFullCategories'],
                           'writeThemes' => $category->viewTree(),

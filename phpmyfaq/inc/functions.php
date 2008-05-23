@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.217 2008-05-23 11:48:27 thorstenr Exp $
+ * $Id: functions.php,v 1.218 2008-05-23 13:06:07 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -639,81 +639,6 @@ function hilight($content)
     $string = preg_replace('/<\/FONT>/i', '</span>', $string);
 
     return $string;
-}
-
-//
-// USERTRACKING FUNCTIONS
-//
-
-/**
- * Trackt den User und zeichnet die Bewegungen auf
- *
- * @param   string
- * @param   integer
- * @return  void
- * @since   2001-02-18
- * @since   Bastian Poettner <bastian@poettner.net>
- * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
- * @author  Marco Fester <webmaster@marcof.de>
- */
-function Tracking($action, $id = 0)
-{
-    global $db, $PMF_CONF, $sid, $user, $botBlacklist;
-
-    if (isset($PMF_CONF["main.enableUserTracking"])) {
-
-        $bots   = 0;
-        $agent  = $_SERVER['HTTP_USER_AGENT'];
-
-        if (isset($_GET["sid"])) {
-            $sid = (int)$_GET["sid"];
-        }
-
-        if (isset($_COOKIE['pmf_sid'])) {
-            $sid = (int)$_COOKIE['pmf_sid'];
-        }
-
-        if ($action == "old_session") {
-            $sid = null;
-        }
-
-        foreach ($botBlacklist as $bot) {
-            if (strpos($agent, $bot)) {
-                $bots++;
-            }
-        }
-
-        if (0 == $bots) {
-            if (!isset($sid)) {
-                $sid = $db->nextID(SQLPREFIX."faqsessions", "sid");
-                // HACK: be sure that pmf_sid cookie contains the current $sid
-                if (isset($_COOKIE["pmf_sid"]) && ((int)$_COOKIE['pmf_sid'] != $sid)) {
-                    setcookie('pmf_sid', $sid, $_SERVER['REQUEST_TIME'] + 3600);
-                }
-                $db->query("
-                    INSERT INTO
-                        ".SQLPREFIX."faqsessions
-                        (sid, user_id, ip, time)
-                    VALUES
-                        (".$sid.", ".($user ? $user->getUserId() : '-1').", '".$_SERVER["REMOTE_ADDR"]."', ".$_SERVER['REQUEST_TIME'].")"
-                        );
-            }
-            
-            $data = $sid.';' . 
-                    str_replace(';', ',', $action) . ';' . 
-                    $id . ';' . 
-                    $_SERVER['REMOTE_ADDR'] . ';' . 
-                    str_replace(';', ',', $_SERVER['QUERY_STRING']) . ';' . 
-                    str_replace(';', ',', $_SERVER['HTTP_REFERER']) . ';' . 
-                    str_replace(';', ',', urldecode($_SERVER['HTTP_USER_AGENT'])) . ';' . 
-                    $_SERVER['REQUEST_TIME'] . ";\n";
-            
-            $file = './data/tracking'.date('dmY');
-            
-            $ret = file_put_contents($file, $data, FILE_APPEND);
-        }
-    }
 }
 
 /**

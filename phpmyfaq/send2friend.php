@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: send2friend.php,v 1.16 2007-03-29 18:19:13 thorstenr Exp $
+* $Id: send2friend.php,v 1.17 2008-05-23 13:06:06 thorstenr Exp $
 *
 * The send2friend page
 *
@@ -31,7 +31,7 @@ if (isset($_GET['gen'])) {
     exit;
 }
 
-Tracking('send2friend',0);
+$faqsession->userTracking('send2friend',0);
 
 $send2friendLink = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].'?action=artikel&amp;cat='.(int)$_REQUEST['cat'].'&amp;id='.(int)$_REQUEST['id'].'&amp;artlang='.urlencode($_REQUEST['artlang']);
 

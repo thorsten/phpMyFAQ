@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: open.php,v 1.12 2007-04-08 19:29:40 thorstenr Exp $
+ * $Id: open.php,v 1.13 2008-05-23 13:06:07 thorstenr Exp $
  *
  * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since        2002-09-17
@@ -22,7 +22,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-Tracking('open_questions', 0);
+$faqsession->userTracking('open_questions', 0);
 
 $tpl->processTemplate ('writeContent', array(
     'msgOpenQuestions'      => $PMF_LANG['msgOpenQuestions'],

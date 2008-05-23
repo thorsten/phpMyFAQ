@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: savecomment.php,v 1.23 2008-05-22 11:23:00 thorstenr Exp $
+* $Id: savecomment.php,v 1.24 2008-05-23 13:06:07 thorstenr Exp $
 *
 * Saves the posted comment
 *
@@ -43,7 +43,7 @@ if (    isset($_POST['user']) && $_POST['user'] != ''
         $msgWriteComment = $PMF_LANG['newsWriteComment'];
     }
 
-    Tracking("save_comment", $id);
+    $faqsession->userTracking("save_comment", $id);
 
     $commentData = array(
         'record_id' => $id,
@@ -118,7 +118,7 @@ if (    isset($_POST['user']) && $_POST['user'] != ''
                                                 )
         );
     } else {
-        Tracking("error_save_comment", $id);
+        $faqsession->userTracking("error_save_comment", $id);
         $tpl->processTemplate ("writeContent", array(
                                                 "msgCommentHeader"  => $msgWriteComment,
                                                 "Message"           => $PMF_LANG["err_SaveComment"]
@@ -133,7 +133,7 @@ if (    isset($_POST['user']) && $_POST['user'] != ''
                                                 )
         );
     } else {
-        Tracking("error_save_comment", $id);
+        $faqsession->userTracking("error_save_comment", $id);
         $tpl->processTemplate ("writeContent", array(
                                                 "msgCommentHeader"  => $msgWriteComment,
                                                 "Message"           => $PMF_LANG["err_SaveComment"]
