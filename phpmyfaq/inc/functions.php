@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.215 2008-05-22 11:22:59 thorstenr Exp $
+ * $Id: functions.php,v 1.216 2008-05-23 11:41:45 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -699,30 +699,19 @@ function Tracking($action, $id = 0)
                         (".$sid.", ".($user ? $user->getUserId() : '-1').", '".$_SERVER["REMOTE_ADDR"]."', ".$_SERVER['REQUEST_TIME'].")"
                         );
             }
-            $fp = @fopen("./data/tracking".date("dmY"), "a+b");
-            if (function_exists("stream_encoding")) {
-                stream_encoding($fp, "iso-8859-1");
-            }
-            if ($fp) {
-                $flanz = "0";
-                while (!flock($fp, LOCK_EX) && $flanz < 6) {
-                    wait(500);
-                    $flanz++;
-                }
-                if ($flanz >= 6) {
-                    fclose($fp);
-                } elseif ((!empty($_SERVER["HTTP_REFERER"])) || ($action == "new_session")) {
-                    if (!isset($_SERVER["HTTP_REFERER"])) {
-                        $_SERVER["HTTP_REFERER"] = "";
-                    }
-                    if (!isset($_SERVER["QUERY_STRING"])) {
-                        $_SERVER["QUERY_STRING"] = "";
-                    }
-                    fputs($fp, $sid.";".str_replace(";", ",",$action).";".$id.";".$_SERVER["REMOTE_ADDR"].";".str_replace(";", ",", $_SERVER["QUERY_STRING"]).";".str_replace(";", ",", $_SERVER["HTTP_REFERER"]).";".str_replace(";", ",", urldecode($_SERVER["HTTP_USER_AGENT"])).";".$_SERVER['REQUEST_TIME'].";\n");
-                    flock($fp, LOCK_UN);
-                    fclose($fp);
-                }
-            }
+            
+            $data = $sid.';' . 
+                    str_replace(';', ',', $action) . ';' . 
+                    $id . ';' . 
+                    $_SERVER['REMOTE_ADDR'] . ';' . 
+                    str_replace(';', ',', $_SERVER['QUERY_STRING']) . ';' . 
+                    str_replace(';', ',', $_SERVER['HTTP_REFERER']) . ';' . 
+                    str_replace(';', ',', urldecode($_SERVER['HTTP_USER_AGENT'])) . ';' . 
+                    $_SERVER['REQUEST_TIME'] . ";\n";
+            
+            $file = './data/tracking'.date('dmY');
+            
+            $ret = file_put_contents($file, $data, FILE_APPEND);
         }
     }
 }

@@ -1,13 +1,13 @@
 <?php
 /**
- * $Id: search.php,v 1.23 2007-04-20 08:57:47 thorstenr Exp $
- *
  * The fulltext search page
  *
- * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author       Periklis Tsirakidis <tsirakidis@phpdevel.de>
- * @since        2002-09-16
- * @copyright    (c) 2002-2007 phpMyFAQ Team
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Periklis Tsirakidis <tsirakidis@phpdevel.de>
+ * @since     2002-09-16
+ * @copyright 2002-2008 phpMyFAQ Team
+ * @version   CVS: $Id: search.php,v 1.24 2008-05-23 11:41:45 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -42,7 +42,11 @@ if ($allLanguages) {
     $category->transform(0);
 }
 
-$searchCategory = isset($_GET['searchcategory']) && is_numeric($_GET['searchcategory']) ? (int)$_GET['searchcategory'] : '%';
+$searchCategory = isset($_GET['searchcategory']) && is_numeric($_GET['searchcategory']) 
+                  ? 
+                  (int)$_GET['searchcategory'] 
+                  : 
+                  '%';
 $searchterm     = '';
 $printResult    = $PMF_LANG['help_search'];
 $tagSearch      = false;
@@ -51,10 +55,10 @@ $tagSearch      = false;
 // Handle the Tagging ID
 //
 if (isset($_GET['tagging_id']) && is_numeric($_GET['tagging_id'])) {
-    $tagSearch = true;
-    $tag_id = (int)$_GET['tagging_id'];
-    $tagging = new PMF_Tags($db, $LANGCODE);
-    $record_ids = $tagging->getRecordsByTagId($tag_id);
+    $tagSearch   = true;
+    $tag_id      = (int)$_GET['tagging_id'];
+    $tagging     = new PMF_Tags($db, $LANGCODE);
+    $record_ids  = $tagging->getRecordsByTagId($tag_id);
     $printResult = $faq->showAllRecordsByIds($record_ids);
 }
 
