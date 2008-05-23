@@ -6,7 +6,7 @@
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @since     2003-12-10
  * @copyright 2003-2008 phpMyFAQ Team
- * @version   CVS: $Id: constants.php,v 1.39 2008-05-23 11:05:12 thorstenr Exp $
+ * @version   CVS: $Id: constants.php,v 1.40 2008-05-23 11:09:38 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License Version
  * 1.1 (the "License"); you may not use this file except in compliance with
@@ -175,8 +175,7 @@ $supported_databases = array(
     'sqlite'  => array('5.2.0', 'SQLite'),
     'ibm_db2' => array('5.2.0', 'IBM DB2 Universal Database 8.2 / 9.1'),
     'oracle'  => array('5.2.0', 'Oracle 8i and later (experimental)'),
-    'ibase'   => array('5.2.0', 'Interbase/Firebird (experimental)'),
-    'maxdb'   => array('5.2.0', 'MaxDB 7.5 and later (experimental)')
+    'ibase'   => array('5.2.0', 'Interbase/Firebird (experimental)')
     );
 
 /* allowed 'action' varibales for GET - DO NOT CHANGE! */
