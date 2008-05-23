@@ -22,5 +22,10 @@
             <p>{openSearchLink}</p>
 
         </fieldset>
+        
+        <div id="mostpopularsearches">
+        {printMostPopularSearches}
+        </div>
+        
     </form>
 

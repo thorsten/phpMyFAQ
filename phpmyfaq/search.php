@@ -7,7 +7,7 @@
  * @author    Periklis Tsirakidis <tsirakidis@phpdevel.de>
  * @since     2002-09-16
  * @copyright 2002-2008 phpMyFAQ Team
- * @version   CVS: $Id: search.php,v 1.25 2008-05-23 13:06:06 thorstenr Exp $
+ * @version   CVS: $Id: search.php,v 1.26 2008-05-23 13:27:25 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -42,14 +42,15 @@ if ($allLanguages) {
     $category->transform(0);
 }
 
-$searchCategory = isset($_GET['searchcategory']) && is_numeric($_GET['searchcategory']) 
-                  ? 
-                  (int)$_GET['searchcategory'] 
-                  : 
-                  '%';
-$searchterm     = '';
-$printResult    = $PMF_LANG['help_search'];
-$tagSearch      = false;
+$searchCategory      = isset($_GET['searchcategory']) && is_numeric($_GET['searchcategory']) 
+                       ?
+                       (int)$_GET['searchcategory'] 
+                       :
+                       '%';
+$searchterm          = '';
+$printResult         = $PMF_LANG['help_search'];
+$tagSearch           = false;
+$mostPopularSearches = 'n/a'; // to be implemented
 
 //
 // Handle the Tagging ID
@@ -73,7 +74,7 @@ if (isset($_GET['suchbegriff']) || isset($_GET['search'])) {
         $searchterm = $db->escape_string(strip_tags($_GET['search']));
     }
     $printResult = searchEngine($searchterm, $searchCategory, $allLanguages);
-    $searchterm = stripslashes($searchterm);
+    $searchterm  = stripslashes($searchterm);
 }
 
 // Change a little bit the $searchCategory value;
@@ -88,16 +89,17 @@ $openSearchLink = sprintf('<a class="searchplugin" href="#" onclick="window.exte
     $PMF_LANG['opensearch_plugin_install']);
 
 $tpl->processTemplate('writeContent', array(
-    'msgSearch'             => ($tagSearch ? $PMF_LANG['msgTagSearch'] : $PMF_LANG['msgSearch']),
-    'searchString'          => PMF_htmlentities($searchterm, ENT_QUOTES, $PMF_LANG['metaCharset']),
-    'searchOnAllLanguages'  => $PMF_LANG['msgSearchOnAllLanguages'],
-    'checkedAllLanguages'   => $allLanguages ? ' checked="checked"' : '',
-    'selectCategories'      => $PMF_LANG['msgSelectCategories'],
-    'allCategories'         => $PMF_LANG['msgAllCategories'],
-    'printCategoryOptions'  => $category->printCategoryOptions($searchCategory),
-    'writeSendAdress'       => $_SERVER['PHP_SELF'].'?'.$sids.'action=search',
-    'msgSearchWord'         => $PMF_LANG['msgSearchWord'],
-    'printResult'           => $printResult,
-    'openSearchLink'        => $openSearchLink));
+    'msgSearch'                => ($tagSearch ? $PMF_LANG['msgTagSearch'] : $PMF_LANG['msgSearch']),
+    'searchString'             => PMF_htmlentities($searchterm, ENT_QUOTES, $PMF_LANG['metaCharset']),
+    'searchOnAllLanguages'     => $PMF_LANG['msgSearchOnAllLanguages'],
+    'checkedAllLanguages'      => $allLanguages ? ' checked="checked"' : '',
+    'selectCategories'         => $PMF_LANG['msgSelectCategories'],
+    'allCategories'            => $PMF_LANG['msgAllCategories'],
+    'printCategoryOptions'     => $category->printCategoryOptions($searchCategory),
+    'writeSendAdress'          => $_SERVER['PHP_SELF'].'?'.$sids.'action=search',
+    'msgSearchWord'            => $PMF_LANG['msgSearchWord'],
+    'printResult'              => $printResult,
+    'openSearchLink'           => $openSearchLink,
+    'printMostPopularSearches' => $mostPopularSearches));
 
 $tpl->includeTemplate('writeContent', 'index');
