@@ -1,13 +1,12 @@
 <?php
 /**
- * $Id$
- *
  * The main User seession class
  *
- * @package      phpMyFAQ
- * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since        2007-03-31
- * @copyright    2007-2008 phpMyFAQ Team
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since     2007-03-31
+ * @copyright 2007-2008 phpMyFAQ Team
+ * @version   CVS: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -25,16 +24,16 @@ class PMF_Session
     /**
      * DB handle
      *
-     * @var object PMF_Db
+     * @var PMF_Db
      */
-    var $db;
+    private $db;
 
     /**
      * Language
      *
      * @var string
      */
-    var $language;
+    private $language;
 
     /**
      * Constructor
@@ -44,7 +43,7 @@ class PMF_Session
      * @since   2007-03-31
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function PMF_Session(&$db, $language)
+    function __construct(&$db, $language)
     {
         $this->db       = &$db;
         $this->language = $language;
@@ -53,13 +52,12 @@ class PMF_Session
     /**
      * Returns the timestamp of a session
      *
-     * @param   integer $sid
-     * @return  integer
-     * @access  public
-     * @since   2007-03-31
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  integer $sid Session ID
+     * @return integer
+     * @since  2007-03-31
+     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function getTimeFromSessionId($sid)
+    public function getTimeFromSessionId($sid)
     {
         $timestamp = 0;
 
@@ -86,13 +84,12 @@ class PMF_Session
     /**
      * Returns all session from a date
      *
-     * @param   integer $timestamp
-     * @return  array
-     * @access  public
-     * @since   2007-03-31
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  integer $timestamp Timestamp
+     * @return array
+     * @since  2007-03-31
+     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function getSessionsbyDate($firstHour, $lastHour)
+    public function getSessionsbyDate($firstHour, $lastHour)
     {
         $sessions = array();
 
@@ -125,11 +122,10 @@ class PMF_Session
      * Returns the number of sessions
      *
      * @return  integer
-     * @access  public
      * @since   2007-04-21
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function getNumberOfSessions()
+    public function getNumberOfSessions()
     {
         $num = 0;
 
@@ -151,14 +147,13 @@ class PMF_Session
     /**
      * Deletes the sessions for a given timespan
      *
-     * @param   integer $first
-     * @param   integer $last
-     * @return  boolean
-     * @access  public
-     * @since   2007-04-21
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  integer $first Frist session ID
+     * @param  integer $last  Last session ID
+     * @return boolean
+     * @since  2007-04-21
+     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function deleteSessions($first, $last)
+    public function deleteSessions($first, $last)
     {
         $query = sprintf("
             DELETE FROM
@@ -179,14 +174,13 @@ class PMF_Session
     /**
      * Checks the Session ID
      *
-     * @param   integer $sid
-     * @param   string  $ip
-     * @return  void
-     * @access  public
-     * @since   2007-04-22
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  integer $sid Session ID
+     * @param  string  $ip  IP
+     * @return void
+     * @since  2007-04-22
+     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function checkSessionId($sid, $ip)
+    public function checkSessionId($sid, $ip)
     {
         global $user;
 

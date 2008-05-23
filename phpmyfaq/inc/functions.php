@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: functions.php,v 1.216 2008-05-23 11:41:45 thorstenr Exp $
+ * $Id: functions.php,v 1.217 2008-05-23 11:48:27 thorstenr Exp $
  *
  * This is the main functions file!
  *
@@ -11,7 +11,7 @@
  * @author      Robin Wood <robin@digininja.org>
  * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
  * @since       2001-02-18
- * @copyright   (c) 2001-2007 phpMyFAQ Team
+ * @copyright   2001-2008 phpMyFAQ Team
  *
  * Portions created by Matthias Sommerfeld are Copyright (c) 2001-2004 blue
  * birdy, Berlin (http://bluebirdy.de). All Rights Reserved.
