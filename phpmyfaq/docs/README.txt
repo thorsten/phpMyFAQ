@@ -1,6 +1,6 @@
-$Id: README.txt,v 1.104 2008-05-18 11:26:22 thorstenr Exp $
+$Id: README.txt,v 1.105 2008-05-23 11:05:12 thorstenr Exp $
 
-phpMyFAQ 2.5.0-alpha
+phpMyFAQ 2.5.0-alpha2
 Codename "Pandora"
 
 Installation/Update:
@@ -9,29 +9,24 @@ Please read the documentation (documentation.en.html) carefully.
 Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
-Changes since 2.0.x:
-- changed PHP requirement to PHP 5.2 (Thorsten)
-- added new and improved new basic layout theme (Charles A. Landemaine)
-- added RSS feed for every category (Thorsten)
-- added ability to copy and duplicate FAQ entries (Thorsten)
-- added support for blocks in template engine (Jan Mergler)
-- added public user registration (Elger Thiele)
-- improved user administration frontend (Sarah Hermann)
-- updated bundled Net_IDNA to version 0.6.0 (Thorsten)
-- updated bundled TinyMCE editor component to version 2.1.3 (Thorsten)
+Changes since 2.5.0-alpha:
+- dropped support for MySQL 4.0 (Thorsten)
+- improved performance (Thorsten)
 
 For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.5.0-alpha - 2008-05-18
+Version 2.5.0-alpha2 - 2008-
 - changed PHP requirement to PHP 5.2 (Thorsten)
+- dropped support for MySQL 4.0 (Thorsten)
 - added new and improved new basic layout theme (Charles A. Landemaine)
 - added RSS feed for every category (Thorsten)
 - added ability to copy and duplicate FAQ entries (Thorsten)
 - added support for blocks in template engine (Jan Mergler)
 - added public user registration (Elger Thiele)
 - improved user administration frontend (Sarah Hermann)
+- improved performance (Thorsten)
 - updated bundled Net_IDNA to version 0.6.0 (Thorsten)
 - updated bundled TinyMCE editor component to version 2.1.3 (Thorsten)
 
