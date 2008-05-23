@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ajax.group_list.php,v 1.15 2007-05-02 20:49:06 thorstenr Exp $
+* $Id: ajax.group_list.php,v 1.16 2008-05-23 11:56:21 thorstenr Exp $
 *
 * AJAX: lists all registered users
 *
@@ -40,7 +40,7 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
     $user = new PMF_User();
     $user->addDb($db);
     $userList = $user->getAllUsers();
-    $groupList = is_a($user->perm, "PMF_PermMedium") ? $user->perm->getAllGroups() : array();
+    $groupList = ($user->perm instanceof PMF_PermMedium) ? $user->perm->getAllGroups() : array();
     $data = array(
         'name' => "Name:",
         'description' => "Description:",

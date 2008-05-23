@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: index.php,v 1.121 2008-05-22 11:23:00 thorstenr Exp $
+ * $Id: index.php,v 1.122 2008-05-23 11:56:21 thorstenr Exp $
  *
  * This is the main public frontend page of phpMyFAQ. It detects the browser's
  * language, gets and sets all cookie, post and get informations and includes
@@ -141,7 +141,7 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'logout' && isset($auth
 //
 if (isset($user) && is_object($user)) {
     $current_user   = $user->getUserId();
-    if (is_a($user->perm, 'PMF_PermMedium')) {
+    if ($user->perm instanceof PMF_PermMedium) {
         $current_groups = $user->perm->getUserGroups($current_user);
     } else {
         $current_groups = array(-1);

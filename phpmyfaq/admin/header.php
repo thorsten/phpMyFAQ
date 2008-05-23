@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: header.php,v 1.48 2008-01-26 15:16:09 thorstenr Exp $
+ * $Id: header.php,v 1.49 2008-05-23 11:56:21 thorstenr Exp $
  *
  * Header of the admin area
  *
@@ -109,7 +109,7 @@ if (isset($_action)) {
     // check for group support
     require_once(PMF_ROOT_DIR.'/inc/PMF_User/User.php');
     $user = new PMF_User();
-    $groupSupport = is_a($user->perm, "PMF_PermMedium");
+    $groupSupport = ($user->perm instanceof PMF_PermMedium);
 
     switch ($_action) {
         case 'user':

@@ -9,7 +9,7 @@
  * @author    Minoru TODA <todam@netjapan.co.jp>
  * @since     2002-09-16
  * @copyright 2002-2008 phpMyFAQ Team
- * @version   CVS: $Id: index.php,v 1.108 2008-01-26 15:43:36 thorstenr Exp $
+ * @version   CVS: $Id: index.php,v 1.109 2008-05-23 11:56:21 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -145,7 +145,7 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'logout' && $auth) {
 //
 if (isset($user) && is_object($user)) {
     $current_admin_user   = $user->getUserId();
-    if (is_a($user->perm, "PMF_PermMedium")) {
+    if ($user->perm instanceof PMF_PermMedium) {
         $current_admin_groups = $user->perm->getUserGroups($current_admin_user);
     } else {
         $current_admin_groups = array(-1);

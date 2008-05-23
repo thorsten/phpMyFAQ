@@ -45,7 +45,7 @@ if (isset($_POST['ajaxlanguage']) && PMF_Init::isASupportedLanguage($_POST['ajax
 //
 if (isset($user) && is_object($user)) {
     $current_user   = $user->getUserId();
-    if (is_a($user->perm, 'PMF_PermMedium')) {
+    if ($user->perm instanceof PMF_PermMedium) {
         $current_groups = $user->perm->getUserGroups($current_user);
     } else {
         $current_groups = array(-1);
