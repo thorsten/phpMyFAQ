@@ -1,13 +1,13 @@
 <?php
 /**
- * $Id: PermMedium.php,v 1.24.2.4 2008-05-20 15:46:44 thorstenr Exp $
+ * $Id: PermMedium.php,v 1.24.2.5 2008-05-23 12:46:21 thorstenr Exp $
  *
  * The medium permission class provides group rights.
  *
- * @since       2005-09-18
- * @author      Lars Tiedemann <php@larstiedemann.de>
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright   (c) 2005-2007 phpMyFAQ Team
+ * @since     2005-09-18
+ * @author    Lars Tiedemann <php@larstiedemann.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2005-2008 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -520,7 +520,7 @@ class PMF_PermMedium
                 name = '".$name."'
         ");
         // return
-        if ($this->_db->num_rows($res) != 1)
+        if (!$res)
             return 0;
         $row = $this->_db->fetch_assoc($res);
         return $row['group_id'];
