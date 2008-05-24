@@ -7,7 +7,7 @@
  * @author    Periklis Tsirakidis <tsirakidis@phpdevel.de>
  * @since     2002-09-16
  * @copyright 2002-2008 phpMyFAQ Team
- * @version   CVS: $Id: search.php,v 1.26 2008-05-23 13:27:25 thorstenr Exp $
+ * @version   CVS: $Id: search.php,v 1.27 2008-05-24 16:51:39 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -42,6 +42,7 @@ if ($allLanguages) {
     $category->transform(0);
 }
 
+$faqsearch           = new PMF_Search($db, $LANGCODE);
 $searchCategory      = isset($_GET['searchcategory']) && is_numeric($_GET['searchcategory']) 
                        ?
                        (int)$_GET['searchcategory'] 

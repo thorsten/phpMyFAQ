@@ -1,16 +1,15 @@
 <?php
 /**
- * $Id: index.php,v 1.123 2008-05-23 13:06:07 thorstenr Exp $
- *
  * This is the main public frontend page of phpMyFAQ. It detects the browser's
  * language, gets and sets all cookie, post and get informations and includes
  * the templates we need and set all internal variables to the template
  * variables. That's all.
  *
- * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author       Lars Tiedemann <php@larstiedemann.de>
- * @since        2001-02-12
- * @copyright:   2001-2008 phpMyFAQ Team
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Lars Tiedemann <php@larstiedemann.de>
+ * @since     2001-02-12
+ * @copyright 2001-2008 phpMyFAQ Team
+ * @version   CVS: $Id: index.php,v 1.124 2008-05-24 16:51:39 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -32,27 +31,21 @@ if (!file_exists('inc/data.php')) {
 }
 
 //
-// Prepend and start the PHP session
+// Autoload classes, prepend and start the PHP session
 //
-require_once('inc/Init.php');
+function __autoload($class_name) {
+    require_once 'inc/'. str_replace('PMF_', '', $class_name) . '.php';
+}
+require_once 'inc/Init.php';
 define('IS_VALID_PHPMYFAQ', null);
 PMF_Init::cleanRequest();
 session_name('pmf_auth_'.$faqconfig->get('main.phpMyFAQToken'));
 session_start();
 
 //
-// Include required the link class, the template parser class, the captcha class, the category class,
-// the main FAQ class, the glossary class and the IDNA class
+// Include the IDNA class
 //
-require_once('inc/Link.php');
-require_once('inc/Template.php');
-require_once('inc/Captcha.php');
-require_once('inc/Category.php');
-require_once('inc/Faq.php');
-require_once('inc/Glossary.php');
-require_once('inc/Session.php');
-require_once('inc/Tags.php');
-require_once('inc/libs/idna_convert.class.php');
+require_once 'inc/libs/idna_convert.class.php';
 $IDN = new idna_convert;
 
 //
@@ -61,12 +54,12 @@ $IDN = new idna_convert;
 $pmf = new PMF_Init();
 $LANGCODE = $pmf->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
 // Preload English strings
-require_once ('lang/language_en.php');
+require_once 'lang/language_en.php';
 
 if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE) && !isset($_GET['gen'])) {
     // Overwrite English strings with the ones we have in the current language,
     // but don't include UTF-8 encoded files, these will break the captcha images
-    require_once('lang/language_'.$LANGCODE.'.php');
+    require_once 'lang/language_'.$LANGCODE.'.php';
 } else {
     $LANGCODE = 'en';
 }
@@ -74,7 +67,7 @@ if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE) && !isset($_GE
 //
 // Authenticate current user
 //
-require_once ('inc/PMF_User/CurrentUser.php');
+require_once 'inc/PMF_User/CurrentUser.php';
 $auth = null;
 $error = '';
 if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
