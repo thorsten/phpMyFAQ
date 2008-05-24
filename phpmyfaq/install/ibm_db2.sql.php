@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: ibm_db2.sql.php,v 1.21 2008-05-22 07:18:57 thorstenr Exp $
+* $Id: ibm_db2.sql.php,v 1.22 2008-05-24 16:35:43 thorstenr Exp $
 *
 * CREATE TABLE instruction for IBM DB2 Universal Database, IBM Cloudscape,
 * and Apache Derby databases
@@ -41,6 +41,7 @@ $uninst[] = "DROP TABLE ".$sqltblpre."faqlinkverifyrules";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqnews";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqquestions";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqright";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqsearches";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqsessions";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqtags";
 $uninst[] = "DROP TABLE ".$sqltblpre."faquser";
@@ -265,6 +266,15 @@ description CLOB NOT NULL,
 for_users INTEGER NOT NULL DEFAULT 1,
 for_groups INTEGER NOT NULL DEFAULT 1,
 PRIMARY KEY (right_id)
+)";
+
+//faqsearches
+$query[] = "CREATE TABLE ".$sqltblpre."faqsearches (
+id INTEGER NOT NULL ,
+lang VARCHAR(5) NOT NULL ,
+searchterm VARCHAR(255) NOT NULL ,
+searchdate TIMESTAMP,
+PRIMARY KEY (id, lang)
 )";
 
 //faqsessions

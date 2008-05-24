@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: mysql.sql.php,v 1.47 2007-04-30 14:00:15 thorstenr Exp $
+* $Id: mysql.sql.php,v 1.48 2008-05-24 16:35:43 thorstenr Exp $
 *
 * CREATE TABLE instruction for MySQL database
 *
@@ -42,6 +42,7 @@ $uninst[] = "DROP TABLE ".$sqltblpre."faqlinkverifyrules";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqnews";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqquestions";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqright";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqsearches";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqsessions";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqtags";
 $uninst[] = "DROP TABLE ".$sqltblpre."faquser";
@@ -267,6 +268,15 @@ description TEXT NULL,
 for_users INT(1) NULL DEFAULT 1,
 for_groups INT(1) NULL DEFAULT 1,
 PRIMARY KEY (right_id)
+)";
+
+//faqsearches
+$query[] = "CREATE TABLE ".$sqltblpre."faqsearches (
+id INT(11) NOT NULL ,
+lang VARCHAR(5) NOT NULL ,
+searchterm VARCHAR(255) NOT NULL ,
+searchdate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+PRIMARY KEY (id, lang)
 )";
 
 //faqsessions

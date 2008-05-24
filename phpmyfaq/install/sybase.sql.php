@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: sybase.sql.php,v 1.23 2008-05-22 07:18:57 thorstenr Exp $
+* $Id: sybase.sql.php,v 1.24 2008-05-24 16:35:43 thorstenr Exp $
 *
 * CREATE TABLE instruction for Sybase database
 *
@@ -41,6 +41,7 @@ $uninst[] = "DROP TABLE ".$sqltblpre."faqlinkverifyrules";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqnews";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqquestions";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqright";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqsearches";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqsessions";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqtags";
 $uninst[] = "DROP TABLE ".$sqltblpre."faquser";
@@ -280,6 +281,15 @@ description text NULL,
 for_users integer NULL DEFAULT 1,
 for_groups integer NULL DEFAULT 1,
 PRIMARY KEY (right_id)
+)";
+
+//faqsearches
+$query[] = "CREATE TABLE ".$sqltblpre."faqsearches (
+id INTEGER NOT NULL ,
+lang VARCHAR(5) NOT NULL ,
+searchterm VARCHAR(255) NOT NULL ,
+searchdate TIMESTAMP,
+PRIMARY KEY (id, lang)
 )";
 
 //faqsessions

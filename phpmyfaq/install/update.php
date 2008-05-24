@@ -7,7 +7,7 @@
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @since     2002-01-10
  * @copyright 2002-2008 phpMyFAQ Team
- * @version   CVS: $Id: update.php,v 1.160 2008-05-23 11:22:54 thorstenr Exp $
+ * @version   CVS: $Id: update.php,v 1.161 2008-05-24 16:35:43 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -1247,10 +1247,15 @@ if ($step == 5) {
     }
 
     //
-    // UPDATES FROM 2.5.0-alpha
+    // UPDATES FROM 2.5.0-alpha2
     //
-    if (version_compare($version, '2.5.0-alpha', '<')) {
-
+    if (version_compare($version, '2.5.0-alpha2', '<')) {
+        $query[] = "CREATE TABLE ".$sqltblpre."faqsearches (
+                    id INTEGER NOT NULL ,
+                    lang VARCHAR(5) NOT NULL ,
+                    searchterm VARCHAR(255) NOT NULL ,
+                    searchdate TIMESTAMP,
+                    PRIMARY KEY (id, lang))";
     }
 
     // Perform the queries for updating/migrating the database from 2.x
