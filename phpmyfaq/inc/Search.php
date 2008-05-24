@@ -19,24 +19,42 @@
  * under the License.
  */
 
+/**
+ * PMF_Search
+ *
+ * @package   phpMyFAQ
+ * @license   MPL
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2008 phpMyFAQ Team
+ * @version   CVS: Search.php,v 1.1 2008/01/26 11:33:06 thorstenr Exp
+ */
 class PMF_Search
 {
     /**
-     * The database handle
+     * DB handle
      *
-     * @var mixed
+     * @var PMF_Db
      */
-    private $db = null;
+    private $db;
+
+    /**
+     * Language
+     *
+     * @var string
+     */
+    private $language;
 
     /**
      * Constructor
      *
-     * @param  object $db Database handle
+     * @param  object  &$db      PMF_Db
+     * @param  string  $language Language
      * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    public function __construct($db)
+    function __construct(&$db, $language)
     {
-        $this->db =& $db;
+        $this->db       = &$db;
+        $this->language = $language;
     }
 
     /**
@@ -55,10 +73,8 @@ class PMF_Search
      * @author  Adrianna Musiol <musiol@imageaccess.de>
      * @since   2002-09-16
      */
-    public function search($searchterm, $searchcategory = '%', $allLanguages = true, $hasMore = false, $instantRespnse = false)
+    public function search($searchterm, $searchcategory = '%', $allLanguages = true, $hasMore = false, $instantResponse = false)
     {
-
-
         $condition = array(SQLPREFIX . 'faqdata.active' => "'yes'");
 
         // Search in all or one category?
@@ -120,10 +136,9 @@ class PMF_Search
      *
      * @param  string $searchterm Search term
      * @return void
-     * @static
      * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    private static function logSearchTerm($searchterm)
+    public function logSearchTerm($searchterm)
     {
 
     }
