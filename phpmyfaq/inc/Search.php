@@ -6,7 +6,7 @@
  * @license   MPL
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2008 phpMyFAQ Team
- * @version   CVS: $Id: Search.php,v 1.1 2008-01-26 11:33:06 thorstenr Exp $
+ * @version   CVS: Search.php,v 1.1 2008/01/26 11:33:06 thorstenr Exp
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -107,10 +107,11 @@ class PMF_Search
                 $condition);
         }
 
-
         if ($result) {
-            $num = $db->num_rows($result);
+            $num = $this->db->num_rows($result);
         }
+
+
 
     }
 
