@@ -9,7 +9,7 @@
  * @author    Minoru TODA <todam@netjapan.co.jp>
  * @since     2002-09-16
  * @copyright 2002-2008 phpMyFAQ Team
- * @version   CVS: $Id: index.php,v 1.109 2008-05-23 11:56:21 thorstenr Exp $
+ * @version   CVS: $Id: index.php,v 1.110 2008-05-31 14:04:48 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -315,20 +315,16 @@ if (isset($auth) && in_array(true, $permission)) {
     <?php printf('<h2>%s</h2>', $PMF_LANG['ad_online_info']); ?>
     <div id="versioncheck">
 <?php
-        if (isset($_POST["param"]) && $_POST["param"] == "version") {
-            require_once (PMF_ROOT_DIR."/inc/libs/xmlrpc.php");
-            $param = $_POST["param"];
-            $xmlrpc = new xmlrpc_client("/xml/version.php", "www.phpmyfaq.de", 80);
-            $msg = new xmlrpcmsg("phpmyfaq.version", array(new xmlrpcval($param, "string")));
-            $answer = $xmlrpc->send($msg);
-            $result = $answer->value();
-            if ($answer->faultCode()) {
-                print "<p>Error: ".$answer->faultCode()." (" .htmlspecialchars($answer->faultString()).")</p>";
-            } else {
-                printf('<p>%s <a href="http://www.phpmyfaq.de" target="_blank">www.phpmyfaq.de</a>: <strong>phpMyFAQ %s</strong>', $PMF_LANG['ad_xmlrpc_latest'], $result->scalarval());
+        if (isset($_POST['param']) && $_POST['param'] == 'version') {
+            $json   = file_get_contents('http://www.phpmyfaq.de/json/version.php');
+            $result = json_decode($json);
+            if ($result instanceof stdClass) {
+                printf('<p>%s <a href="http://www.phpmyfaq.de" target="_blank">www.phpmyfaq.de</a>: <strong>phpMyFAQ %s</strong>', 
+                    $PMF_LANG['ad_xmlrpc_latest'], 
+                    $result->stable);
                 // Installed phpMyFAQ version is outdated
-                if (-1 == version_compare($faqconfig->get('main.currentVersion'), $result->scalarval())) {
-                    print '<br />'.$PMF_LANG['ad_you_should_update'];
+                if (-1 == version_compare($faqconfig->get('main.currentVersion'), $result->stable)) {
+                    print '<br />' . $PMF_LANG['ad_you_should_update'];
                 }
                 print '</p>';
             }
