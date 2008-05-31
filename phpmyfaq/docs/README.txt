@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.106 2008-05-23 11:09:38 thorstenr Exp $
+$Id: README.txt,v 1.107 2008-05-31 14:09:47 thorstenr Exp $
 
 phpMyFAQ 2.5.0-alpha2
 Codename "Pandora"
@@ -11,6 +11,7 @@ Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.5.0-alpha:
 - dropped support for MySQL 4.0 and MaxDB (Thorsten)
+- dropped support for XML-RPC (Thorsten)
 - improved performance (Thorsten)
 
 For known issues please take a look at KNOWNBUGS.txt
@@ -20,6 +21,7 @@ CHANGELOG:
 Version 2.5.0-alpha2 - 2008-
 - changed PHP requirement to PHP 5.2 (Thorsten)
 - dropped support for MySQL 4.0 and MaxDB (Thorsten)
+- dropped support for XML-RPC (Thorsten)
 - added new and improved new basic layout theme (Charles A. Landemaine)
 - added RSS feed for every category (Thorsten)
 - added ability to copy and duplicate FAQ entries (Thorsten)
