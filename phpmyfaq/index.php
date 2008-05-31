@@ -9,7 +9,7 @@
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @since     2001-02-12
  * @copyright 2001-2008 phpMyFAQ Team
- * @version   CVS: $Id: index.php,v 1.125 2008-05-31 14:41:24 thorstenr Exp $
+ * @version   CVS: $Id: index.php,v 1.126 2008-05-31 15:02:53 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -37,9 +37,9 @@ function __autoload($classname)
 {
     $classpath = explode('_', $classname);
     if (count($classpath) == 2) {
-        require_once 'inc/'. $classpath[1] . '.php';
+        require 'inc/'. $classpath[1] . '.php';
     } else {
-        require_once 'inc/PMF_'. $classpath[1] . '/' . $classpath[2] . '.php';
+        require 'inc/PMF_'. $classpath[1] . '/' . $classpath[2] . '.php';
     }
 }
 require_once 'inc/Init.php';
