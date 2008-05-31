@@ -38,8 +38,6 @@
  * @version 0.1
  */
 
-require_once dirname(__FILE__).'/Auth.php';
-
 /**
  * This class manages user permissions and group memberships.
  *
@@ -59,8 +57,6 @@ require_once dirname(__FILE__).'/Auth.php';
  * @version 0.1
  */
 
-require_once dirname(__FILE__).'/Perm.php';
-
 /**
  * The userdata class provides methods to manage user information.
  *
@@ -68,9 +64,7 @@ require_once dirname(__FILE__).'/Perm.php';
  * @since 2005-09-18
  * @version 0.1
  */
-require_once dirname(__FILE__).'/UserData.php';
-
-class PMF_User
+class PMF_User_User
 {
     const USERERROR_NO_DB = 'No database specified.';
     const USERERROR_NO_PERM = 'No permission container specified.';
@@ -244,7 +238,7 @@ class PMF_User
             // check config for permission level
             global $PMF_CONF;
             $permLevel = isset($PMF_CONF['main.permLevel']) && ('' != $PMF_CONF['main.permLevel']) ? $PMF_CONF['main.permLevel'] : 'basic';
-            $perm = PMF_Perm::selectPerm($permLevel);
+            $perm = PMF_User_Perm::selectPerm($permLevel);
             $perm->addDb($this->_db);
             if (!$this->addPerm($perm))
                 return false;
@@ -252,7 +246,7 @@ class PMF_User
         // authentication objects
         // always make a 'local' $auth object (see: $_auth_data)
         $this->_auth_container = array();
-        $authLocal = PMF_Auth::selectAuth($this->_auth_data['authSource']['name']);
+        $authLocal = PMF_User_Auth::selectAuth($this->_auth_data['authSource']['name']);
         $authLocal->selectEncType($this->_auth_data['encType']);
         $authLocal->read_only($this->_auth_data['readOnly']);
         $authLocal->connect($this->_db, SQLPREFIX.'faquserlogin', 'login', 'pass');
@@ -269,7 +263,7 @@ class PMF_User
         } else {
         }
         // user data object
-        $this->userdata = new PMF_UserData($this->_db);
+        $this->userdata = new PMF_User_UserData($this->_db);
     }
 
 
@@ -387,7 +381,7 @@ class PMF_User
         }
         // get user-data
         if (!$this->userdata)
-            $this->userdata = new PMF_UserData($this->_db);
+            $this->userdata = new PMF_User_UserData($this->_db);
         $this->userdata->load($this->getUserId());
         return true;
     }
@@ -430,7 +424,7 @@ class PMF_User
         $this->_status  = (string) $user['account_status'];
         // get user-data
         if (!$this->userdata)
-            $this->userdata = new PMF_UserData($this->_db);
+            $this->userdata = new PMF_User_UserData($this->_db);
         $this->userdata->load($this->getUserId());
         return true;
     }
@@ -523,7 +517,7 @@ class PMF_User
         $this->_db->query($query);
         // create user-data entry
         if (!$this->userdata)
-            $this->userdata = new PMF_UserData($this->_db);
+            $this->userdata = new PMF_User_UserData($this->_db);
         $data = $this->userdata->add($this->getUserId());
         if (!$data) {
             $this->errors[] = self::USERERROR_CANNOT_CREATE_USERDATA;
@@ -538,7 +532,7 @@ class PMF_User
                 continue;
             }
             if (!$auth->add($login, $pass)) {
-                $this->errors[] = self::USERERROR_CANNOT_CREATE_USER.'in PMF_Auth '.$name;
+                $this->errors[] = self::USERERROR_CANNOT_CREATE_USER.'in PMF_User_Auth '.$name;
             } else {
                 $success = true;
             }
@@ -592,7 +586,7 @@ class PMF_User
         }
         // delete user-data entry
         if (!$this->userdata)
-            $this->userdata = new PMF_UserData($this->_db);
+            $this->userdata = new PMF_User_UserData($this->_db);
         $data = $this->userdata->delete($this->getUserId());
         if (!$data) {
             $this->errors[] = self::USERERROR_CANNOT_DELETE_USERDATA;
@@ -814,7 +808,7 @@ class PMF_User
      */
     function checkPerm($perm)
     {
-        if ($perm instanceof PMF_Perm) {
+        if ($perm instanceof PMF_User_Perm) {
             return true;
         }
         $this->errors[] = USERERROR_NO_PERM;
@@ -859,7 +853,7 @@ class PMF_User
         // get user-data entry
         if (!$this->userdata)
         {
-            $this->userdata = new PMF_UserData($this->_db);
+            $this->userdata = new PMF_User_UserData($this->_db);
         }
         return $this->userdata->get($field);
     }
@@ -876,7 +870,7 @@ class PMF_User
     {
         // set user-data entry
         if (!$this->userdata)
-            $this->userdata = new PMF_UserData($this->_db);
+            $this->userdata = new PMF_User_UserData($this->_db);
         $this->userdata->load($this->getUserId());
         return $this->userdata->set(array_keys($data), array_values($data));
     }

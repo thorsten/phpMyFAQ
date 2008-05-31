@@ -34,11 +34,7 @@
  * @version 0.1
  */
 
-/* user defined includes */
-
-/* user defined constants */
-
-class PMF_Perm
+class PMF_User_Perm
 {
     // --- ATTRIBUTES ---
 
@@ -70,30 +66,6 @@ class PMF_Perm
      */
     var $_initialized = false;
 
-    // --- OPERATIONS ---
-
-    /**
-     * constructor
-     *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @return void
-     */
-    function PMF_Perm()
-    {
-    }
-
-    /**
-     * destructor
-     *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @return void
-     */
-    function __destruct()
-    {
-    }
-
     /**
      * Selects a subclass of PMF_Perm. 
      *
@@ -109,7 +81,7 @@ class PMF_Perm
     static function selectPerm($perm_level)
     {
         // verify selected database
-        $perm = new PMF_Perm();
+        $perm = new PMF_User_Perm();
         $perm_level = strtolower($perm_level);
         if (!isset($perm->_perm_typemap[$perm_level])) {
             return $perm;
@@ -119,7 +91,7 @@ class PMF_Perm
             return $perm;
         }
         // instantiate 
-        $permclass = "PMF_".$perm->_perm_typemap[$perm_level];
+        $permclass = "PMF_User_".$perm->_perm_typemap[$perm_level];
         if (!class_exists($permclass))
             require_once $classfile;
         $perm = new $permclass();

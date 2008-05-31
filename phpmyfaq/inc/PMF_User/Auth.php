@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: Auth.php,v 1.15 2008-01-25 15:33:19 thorstenr Exp $
+* $Id: Auth.php,v 1.16 2008-05-31 14:41:24 thorstenr Exp $
 *
 * manages user authentication.
 *
@@ -49,8 +49,6 @@
 * @since        2005-09-18
 */
 
-require_once dirname(__FILE__).'/Enc.php';
-
 /**
 * manages user authentication.
 *
@@ -77,7 +75,7 @@ require_once dirname(__FILE__).'/Enc.php';
 * @package      PMF
 * @since        2005-09-30
 */
-class PMF_Auth
+class PMF_User_Auth
 {
     /**
      * Error constants
@@ -142,7 +140,7 @@ class PMF_Auth
      */
     public function selectEncType($enctype)
     {
-        $this->_enc_container = PMF_Enc::selectEnc($enctype);
+        $this->_enc_container = PMF_User_Enc::selectEnc($enctype);
         return $this->_enc_container;
     }
 
@@ -189,7 +187,7 @@ class PMF_Auth
     public static function selectAuth($database)
     {
         // verify selected database
-        $auth = new PMF_Auth();
+        $auth = new PMF_User_Auth();
         $database = strtolower($database);
         if (!isset($auth->_auth_typemap[$database])) {
             $auth->errors[] = PMF_USERERROR_NO_AUTHTYPE;
@@ -202,7 +200,7 @@ class PMF_Auth
         }
         require_once $classfile;
         // instantiate
-        $authclass = "PMF_".$auth->_auth_typemap[$database];
+        $authclass = "PMF_User_".$auth->_auth_typemap[$database];
         $auth = new $authclass();
         return $auth;
     }

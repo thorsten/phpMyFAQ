@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Enc.php,v 1.9 2007-03-27 16:11:52 thorstenr Exp $
+ * $Id: Enc.php,v 1.10 2008-05-31 14:41:23 thorstenr Exp $
  *
  * provides methods for password encryption. 
  *
@@ -28,7 +28,7 @@
 /* user defined constants */
 @define('PMF_USERERROR_NO_ENCTYPE', 'Specified encryption method could not be found. ');
 
-class PMF_Enc
+class PMF_User_Enc
 {
     /**
      * Encryption methods
@@ -81,7 +81,7 @@ class PMF_Enc
      */
     function selectEnc($enctype)
     {
-        $enc = new PMF_Enc();
+        $enc = new PMF_User_Enc();
         $enctype = strtolower($enctype);
         if (!isset($enc->_enc_typemap[$enctype])) {
         	$enc->errors[] = PMF_USERERROR_NO_ENCTYPE;
@@ -93,7 +93,7 @@ class PMF_Enc
         	return $enc;
         }
         require_once $classfile;
-        $newclass = "PMF_".$enc->_enc_typemap[$enctype];
+        $newclass = "PMF_User_".$enc->_enc_typemap[$enctype];
         if (!class_exists($newclass)) {
         	$enc->errors[] = PMF_USERERROR_NO_ENCTYPE;
         	return $enc;

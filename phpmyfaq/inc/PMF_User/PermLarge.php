@@ -18,12 +18,7 @@
  * @since 2005-09-18
  * @version 0.1
  */
-require_once dirname(__FILE__).'/PermMedium.php';
-
-/* user defined constants */
-
-class PMF_PermLarge
-    extends PMF_PermMedium
+class PMF_User_PermLarge extends PMF_User_PermMedium
 {
     // --- ATTRIBUTES ---
 

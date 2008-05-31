@@ -1,6 +1,6 @@
 <?php
 /**
-* $Id: AuthDb.php,v 1.15 2008-01-25 15:52:02 thorstenr Exp $
+* $Id: AuthDb.php,v 1.16 2008-05-31 14:41:24 thorstenr Exp $
 *
 * manages user authentication with databases.
 *
@@ -19,8 +19,6 @@
 * under the License.
 */
 
-require_once dirname(__FILE__).'/Auth.php';
-
 /**
 * manages user authentication with databases.
 *
@@ -28,7 +26,7 @@ require_once dirname(__FILE__).'/Auth.php';
 * @author   Lars Tiedemann, <php@larstiedemann.de>
 * @package  PMF_Auth
 */
-class PMF_AuthDb extends PMF_Auth
+class PMF_User_AuthDb extends PMF_User_Auth
 {
     /**
     * Short description of attribute db
@@ -73,21 +71,10 @@ class PMF_AuthDb extends PMF_Auth
      * @param   bool
      * @return  void
      */
-    function PMF_AuthDb($enctype = 'none', $read_only = false)
+    function __construct($enctype = 'none', $read_only = false)
     {
         $this->selectEncType($enctype);
         $this->read_only($read_only);
-    }
-
-    /**
-     * destructor
-     *
-     * @access  public
-     * @author  Lars Tiedemann, <php@larstiedemann.de>
-     * @return  void
-     */
-    function __destruct()
-    {
     }
 
     /**
@@ -339,7 +326,7 @@ class PMF_AuthDb extends PMF_Auth
             return $old_table;
         }
         if (!$this->_tablename) {
-            $this->errors[] = PMF_UNDEFINED_PARAMETER."PMF_AuthDb->_tablename";
+            $this->errors[] = PMF_UNDEFINED_PARAMETER."PMF_User_AuthDb->_tablename";
             $this->_tablename = '';
         }
         return $this->_tablename;
@@ -370,7 +357,7 @@ class PMF_AuthDb extends PMF_Auth
             return $old_login_column;
         }
         if (!$this->_login_column) {
-            $this->errors[] = PMF_UNDEFINED_PARAMETER."PMF_AuthDb->_login_column";
+            $this->errors[] = PMF_UNDEFINED_PARAMETER."PMF_User_AuthDb->_login_column";
             $this->_login_column = '';
         }
         return $this->_login_column;
@@ -401,7 +388,7 @@ class PMF_AuthDb extends PMF_Auth
             return $old_password_column;
         }
         if (!$this->_password_column) {
-            $this->errors[] = PMF_UNDEFINED_PARAMETER."PMF_AuthDb->_password_column";
+            $this->errors[] = PMF_UNDEFINED_PARAMETER."PMF_User_AuthDb->_password_column";
             $this->_password_column = '';
         }
         return (string) $this->_password_column;

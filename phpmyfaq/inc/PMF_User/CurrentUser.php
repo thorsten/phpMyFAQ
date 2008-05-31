@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: CurrentUser.php,v 1.29 2008-05-22 11:23:00 thorstenr Exp $
+ * $Id: CurrentUser.php,v 1.30 2008-05-31 14:41:24 thorstenr Exp $
  *
  * manages authentication process using php sessions.
  *
@@ -20,9 +20,6 @@
  * License for the specific language governing rights and limitations
  * under the License.
  */
-
-/* user defined includes */
-require_once dirname(__FILE__).'/User.php';
 
 /* user defined constants */
 @define('PMF_SESSION_CURRENT_USER', 'PMF_CURRENT_USER');
@@ -46,7 +43,7 @@ require_once dirname(__FILE__).'/User.php';
 * @author Lars Tiedemann, <php@larstiedemann.de>
 * @package PMF
 */
-class PMF_CurrentUser extends PMF_User
+class PMF_User_CurrentUser extends PMF_User_User
 {
 
 
@@ -164,7 +161,7 @@ class PMF_CurrentUser extends PMF_User
                 break;
             }
             // Save encrypted password just for "Change Password" convenience
-            $_authLocal = PMF_Auth::selectAuth($this->_auth_data['authSource']['name']);
+            $_authLocal = PMF_User_Auth::selectAuth($this->_auth_data['authSource']['name']);
             $_authLocal->selectEncType($this->_auth_data['encType']);
             $_authLocal->read_only($this->_auth_data['readOnly']);
             $this->_encrypted_password = $_authLocal->encrypt($pass);
@@ -409,7 +406,7 @@ class PMF_CurrentUser extends PMF_User
         if (!isset($_SESSION[PMF_SESSION_CURRENT_USER]) || !isset($_SESSION[PMF_SESSION_ID_TIMESTAMP]))
             return null;
         // create a new CurrentUser object
-        $user = new PMF_CurrentUser();
+        $user = new PMF_User_CurrentUser();
         $user->getUserById($_SESSION[PMF_SESSION_CURRENT_USER]);
         // user object is timed out
         if ($user->sessionIsTimedOut()) {

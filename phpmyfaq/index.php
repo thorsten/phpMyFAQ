@@ -9,7 +9,7 @@
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @since     2001-02-12
  * @copyright 2001-2008 phpMyFAQ Team
- * @version   CVS: $Id: index.php,v 1.124 2008-05-24 16:51:39 thorstenr Exp $
+ * @version   CVS: $Id: index.php,v 1.125 2008-05-31 14:41:24 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -33,8 +33,14 @@ if (!file_exists('inc/data.php')) {
 //
 // Autoload classes, prepend and start the PHP session
 //
-function __autoload($class_name) {
-    require_once 'inc/'. str_replace('PMF_', '', $class_name) . '.php';
+function __autoload($classname)
+{
+    $classpath = explode('_', $classname);
+    if (count($classpath) == 2) {
+        require_once 'inc/'. $classpath[1] . '.php';
+    } else {
+        require_once 'inc/PMF_'. $classpath[1] . '/' . $classpath[2] . '.php';
+    }
 }
 require_once 'inc/Init.php';
 define('IS_VALID_PHPMYFAQ', null);
@@ -67,12 +73,11 @@ if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE) && !isset($_GE
 //
 // Authenticate current user
 //
-require_once 'inc/PMF_User/CurrentUser.php';
 $auth = null;
 $error = '';
 if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
     // login with username and password
-    $user = new PMF_CurrentUser();
+    $user = new PMF_User_CurrentUser();
     $faqusername = $db->escape_string($_POST['faqusername']);
     $faqpassword = $db->escape_string($_POST['faqpassword']);
     if ($user->login($faqusername, $faqpassword)) {
@@ -91,7 +96,7 @@ if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
     }
 } else {
     // authenticate with session information
-    $user = PMF_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
+    $user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
     if ($user) {
         $auth = true;
     } else {
@@ -134,7 +139,7 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'logout' && isset($auth
 //
 if (isset($user) && is_object($user)) {
     $current_user   = $user->getUserId();
-    if ($user->perm instanceof PMF_PermMedium) {
+    if ($user->perm instanceof PMF_User_PermMedium) {
         $current_groups = $user->perm->getUserGroups($current_user);
     } else {
         $current_groups = array(-1);

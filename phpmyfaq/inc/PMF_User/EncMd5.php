@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: EncMd5.php,v 1.6 2007-03-27 16:11:52 thorstenr Exp $
+ * $Id: EncMd5.php,v 1.7 2008-05-31 14:41:23 thorstenr Exp $
  *
  * provides methods for password encryption using md5().
  *
@@ -30,13 +30,8 @@
  * @since 2005-09-18
  * @version 0.1
  */
-require_once dirname(__FILE__).'/Enc.php';
-
-/* user defined includes */
-
-/* user defined constants */
-
-class PMF_EncMd5 extends PMF_Enc
+ 
+class PMF_User_EncMd5 extends PMF_User_Enc
 {
     /**
      * Name of the encryption method.

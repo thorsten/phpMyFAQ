@@ -43,11 +43,8 @@
  * @since 2005-09-17
  * @version 0.1
  */
-require_once dirname(__FILE__).'/Perm.php';
-
-/* user defined constants */
-
-class PMF_PermBasic extends PMF_Perm
+ 
+class PMF_User_PermBasic extends PMF_User_Perm
 {
     // --- ATTRIBUTES ---
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: PermMedium.php,v 1.29 2008-05-20 15:46:38 thorstenr Exp $
+ * $Id: PermMedium.php,v 1.30 2008-05-31 14:41:24 thorstenr Exp $
  *
  * The medium permission class provides group rights.
  *
@@ -20,8 +20,6 @@
  * under the License.
  */
 
-/* user defined includes */
-
 /**
  * The basic permission class provides user rights.
  *
@@ -29,12 +27,8 @@
  * @since 2005-09-17
  * @version 0.1
  */
-require_once dirname(__FILE__).'/PermBasic.php';
-
-/* user defined constants */
-
-class PMF_PermMedium
-    extends PMF_PermBasic
+ 
+class PMF_User_PermMedium extends PMF_User_PermBasic
 {
     // --- ATTRIBUTES ---
 
@@ -47,9 +41,9 @@ class PMF_PermMedium
      * @var array
      */
     var $default_group_data = array(
-        'name' => 'DEFAULT_GROUP',
+        'name'        => 'DEFAULT_GROUP',
         'description' => 'Short group description. ',
-        'auto_join' => false
+        'auto_join'   => false
     );
 
     // --- OPERATIONS ---

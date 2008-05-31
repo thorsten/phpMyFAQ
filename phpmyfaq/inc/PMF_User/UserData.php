@@ -9,11 +9,7 @@
  * @version 0.1
  */
 
-/* user defined includes */
-
-/* user defined constants */
-
-class PMF_UserData
+class PMF_User_UserData
 {
     /**
      * database object

@@ -7,7 +7,7 @@
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @since     2002-01-10
  * @copyright 2002-2008 phpMyFAQ Team
- * @version   CVS: $Id: update.php,v 1.161 2008-05-24 16:35:43 thorstenr Exp $
+ * @version   CVS: $Id: update.php,v 1.162 2008-05-31 14:41:23 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -1104,7 +1104,7 @@ if ($step == 5) {
 
         // 2/4. Add missing anonymous user account in 2.0.0-alpha
         require_once(PMF_ROOT_DIR.'/inc/PMF_User/User.php');
-        $anonymous = new PMF_User();
+        $anonymous = new PMF_User_User();
         $anonymous->createUser('anonymous', null, -1);
         $anonymous->setStatus('protected');
         $anonymousData = array(

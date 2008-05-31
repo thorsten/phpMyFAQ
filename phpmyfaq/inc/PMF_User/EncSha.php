@@ -20,14 +20,8 @@
  * @since 2005-09-18
  * @version 0.1
  */
-require_once dirname(__FILE__).'/Enc.php';
 
-/* user defined includes */
-
-/* user defined constants */
-
-class PMF_EncSha
-    extends PMF_Enc
+class PMF_User_EncSha extends PMF_User_Enc
 {
     // --- ATTRIBUTES ---
 

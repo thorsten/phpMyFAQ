@@ -11,7 +11,7 @@
  * @author    Uwe Pries <uwe.pries@digartis.de>
  * @since     2002-08-20
  * @copyright 2002-2008 phpMyFAQ Team
- * @version   CVS: $Id: installer.php,v 1.117 2008-05-22 07:18:58 thorstenr Exp $
+ * @version   CVS: $Id: installer.php,v 1.118 2008-05-31 14:41:23 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -763,7 +763,7 @@ foreach ($permLevels as $level => $desc) {
         define('SQLPREFIX', $sqltblpre);
     }
     require_once PMF_ROOT_DIR.'/inc/PMF_User/User.php';
-    $admin = new PMF_User();
+    $admin = new PMF_User_User();
     $admin->createUser('admin', $password, 1);
     $admin->setStatus('protected');
     $adminData = array(
@@ -983,7 +983,7 @@ foreach ($permLevels as $level => $desc) {
         $admin->perm->grantUserRight($adminID, $rightID);
     }
     // Add anonymous user account
-    $anonymous = new PMF_User();
+    $anonymous = new PMF_User_User();
     $anonymous->createUser('anonymous', null, -1);
     $anonymous->setStatus('protected');
     $anonymousData = array(

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: EncCrypt.php,v 1.6 2007-03-27 16:11:52 thorstenr Exp $
+ * $Id: EncCrypt.php,v 1.7 2008-05-31 14:41:24 thorstenr Exp $
  *
  * Provides methods for password encryption using crypt().
  *
@@ -30,13 +30,8 @@
  * @since 2005-09-18
  * @version 0.1
  */
-require_once dirname(__FILE__).'/Enc.php';
 
-/* user defined includes */
-
-/* user defined constants */
-
-class PMF_EncCrypt extends PMF_Enc
+class PMF_User_EncCrypt extends PMF_User_Enc
 {
     /**
      * Name of the encryption method.
