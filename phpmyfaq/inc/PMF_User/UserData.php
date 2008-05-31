@@ -42,7 +42,7 @@ class PMF_User_UserData
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
      */
-    function PMF_UserData($db)
+    function __construct($db)
     {
         $this->_db = $db;
     }
