@@ -1,11 +1,12 @@
 <?php
-/******************************************************************************
- * File:				language_sr.php
- * Description:		    Serbian language file
- * Authors:				Vanja Hrustic <vanja@vanja.com>
- * Date:				2004-06-24
- * Last Update:		    2004-07-13
- * Copyright:           (c) 2006 phpMyFAQ Team
+/**
+ * Serbian language file
+ *
+ * @author    Vanja Hrustic <vanja@vanja.com>
+ * @author    Slavisa Milojkovic <s.milojkovic@gmail.com>
+ * @since     2004-06-24
+ * @copyright 2006-2008 phpMyFAQ Team
+ * @version   $Id: language_sr.php,v 1.25.2.1 2008-05-31 11:50:03 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -16,7 +17,7 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
- ******************************************************************************/
+ */
 
 $PMF_LANG["metaCharset"] = "iso-8859-2";
 $PMF_LANG["metaLanguage"] = "sr";
@@ -34,7 +35,7 @@ $PMF_LANG["msgHelp"] = "Pomo&#263;";
 $PMF_LANG["msgContact"] = "Kontakt";
 $PMF_LANG["msgHome"] = "Glavna stranica";
 $PMF_LANG["msgNews"] = "FAQ-Novosti";
-$PMF_LANG["msgUserOnline"] = "Korisnika online";
+$PMF_LANG["msgUserOnline"] = " Korisnika online";
 $PMF_LANG["msgXMLExport"] = "XML-File";
 $PMF_LANG["msgBack2Home"] = "nazad na glavnu stranicu";
 
@@ -84,7 +85,7 @@ $PMF_LANG["msgS2FThx"] = "Hvala za va&#353;u preporuku!";
 $PMF_LANG["msgS2FMailSubject"] = "Preporuka od: ";
 
 // Search
-$PMF_LANG["msgSearchWord"] = "Keyword";
+$PMF_LANG["msgSearchWord"] = "Kljucne reci";
 $PMF_LANG["msgSearchFind"] = "Rezultati pretrage za ";
 $PMF_LANG["msgSearchAmount"] = " pogodak";
 $PMF_LANG["msgSearchAmounts"] = " pogotka";
@@ -121,8 +122,8 @@ $PMF_LANG["msgQuestionText"] = "Ovde mo&#382;ete videti pitanja postavljena od s
 $PMF_LANG["msgHelpText"] = "<strong>Struktura FAQ-a je jednostavna. Mo&#382;ete pregledati <strong><a href=\"".$_SERVER["PHP_SELF"]."?sid=".isset($_GET["sid"])."&amp;action=show\">kategorije</a></strong>, ili iskoristiti <strong><a href=\"".$_SERVER["PHP_SELF"]."?sid=".isset($_GET["sid"])."&amp;action=search\">FAQ pretra&#382;iva&#269;</a></strong> da na&#273;ete odre&#269;ene re&#269;i";
 
 // Contact
-$PMF_LANG["msgContactEMail"] = "email to the webmaster:";
-$PMF_LANG["msgMessage"] = "Your message:";
+$PMF_LANG["msgContactEMail"] = "pošaljite webmasteru:";
+$PMF_LANG["msgMessage"] = "Vaša poruka:";
 
 // Startseite
 $PMF_LANG["msgNews"] = " Novosti";
@@ -154,7 +155,7 @@ $PMF_LANG["err_sendMail"] = "Obavezna polja su <strong>va&#353;e ime</strong>, <
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>Pretraga:</strong><br /></p>";
 
-// Menü
+// Men&uuml;
 $PMF_LANG["ad"] = "ADMINISTRACIJA";
 $PMF_LANG["ad_menu_user_administration"] = "Administracija Korisnika";
 $PMF_LANG["ad_menu_entry_aprove"] = "Potvrdi Unose";
@@ -549,45 +550,335 @@ $PMF_LANG["ad_entry_fontsize"] = "Veli&#269;ina fonta: ";
 
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias
 $LANG_CONF['main.language'] = array(0 => "select", 1 => "Language-File");
-$LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Enable automatic content negotiation");
-$LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => "Title of the FAQ");
-$LANG_CONF['main.currentVersion'] = array(0 => "print", 1 => "FAQ Version");
-$LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Describtion of the Page");
-$LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Keywords for Spiders");
-$LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Name of the Publisher");
-$LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Emailadress of the Admin");
-$LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Contactinformation");
-$LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Text for the send2friend page");
-$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "maximum Size for attachments in Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
-$LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Link the attachments below the entries?");
-$LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "use Tracking?");
-$LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "use Adminlog?");
-$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Do you want the IP to be checked when checking the UINs in admin.php?");
-$LANG_CONF["main.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Number of displayed topics per page");
-$LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Number of news articles");
-$LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Ban these IPs");
-$LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Activate mod_rewrite support? (default: disabled)");
-$LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Do you want to enable LDAP support? (default: disabled)");
+$LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Automatsko tra&#382;enje odgovora");
+$LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => "Naslov FAQ");
+$LANG_CONF['main.currentVersion'] = array(0 => "print", 1 => "FAQ Verzija");
+$LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Opis Stranice");
+$LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Klju&#269;ne re&#269;i za netpauke");
+$LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Ime izdava&#269;a");
+$LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Admin email adresa");
+$LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Kontakt info");
+$LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Tekst za send2friend stranicu");
+$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "maximalna veli&#269;ina priloga u bajtovima (max. ".ini_get("upload_max_filesize")."Byte)");
+$LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Linkuj priloge ispod unosa?");
+$LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "Koristi pra&#263;enje?");
+$LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Koristi Adminlog?");
+$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Da li &#382;elite da se IP proverava kada se proverava UINs u admin.php?");
+$LANG_CONF["main.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Broj prikazanih tema po stranici");
+$LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Broj &#269;lanaka vesti");
+$LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Banuj ove IP");
+$LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Uklju&#269;i mod_rewrite podr&#269;ku? (isklju&#269;eno)");
+$LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Da li &#382;elite LDAP podr&scaron;ku? (isklju&#269;eno)");
 
-$PMF_LANG["ad_categ_new_main_cat"] = "as new main category";
-$PMF_LANG["ad_categ_paste_error"] = "Moving this category isn't possible.";
-$PMF_LANG["ad_categ_move"] = "move category";
-$PMF_LANG["ad_categ_lang"] = "Language";
-$PMF_LANG["ad_categ_desc"] = "Description";
-$PMF_LANG["ad_categ_change"] = "Change with";
+$PMF_LANG["ad_categ_new_main_cat"] = "kao nova glavna kategorija";
+$PMF_LANG["ad_categ_paste_error"] = "Preme&scaron;tanje ove kategorije nije mogu&#263;e.";
+$PMF_LANG["ad_categ_move"] = "premesti kategoriju";
+$PMF_LANG["ad_categ_lang"] = "Jezik";
+$PMF_LANG["ad_categ_desc"] = "Opis";
+$PMF_LANG["ad_categ_change"] = "Zameni sa";
 
-$PMF_LANG["lostPassword"] = "Password forgotten? Click here.";
-$PMF_LANG["lostpwd_err_1"] = "Error: Username and e-mail adress not found.";
-$PMF_LANG["lostpwd_err_2"] = "Error: Wrong entries!";
-$PMF_LANG["lostpwd_text_1"] = "Thank you for requesting your account information.";
-$PMF_LANG["lostpwd_text_2"] = "Please set a new personal password in the admin section of your FAQ.";
-$PMF_LANG["lostpwd_mail_okay"] = "E-Mail was sent.";
+$PMF_LANG["lostPassword"] = "Zaboravljena lozinka? Kliknite ovde.";
+$PMF_LANG["lostpwd_err_1"] = "Gre&scaron;ka: Korisni&#269;ko ime i email adresa nisu na&#273;eni.";
+$PMF_LANG["lostpwd_err_2"] = "Gre&scaron;ka: Pogre&scaron;ni unosi!";
+$PMF_LANG["lostpwd_text_1"] = "Zahtev za detaljima Va&scaron;eg naloga je primljen.";
+$PMF_LANG["lostpwd_text_2"] = "Podesite novu lozinku u admin delu Va&scaron;eg FAQ.";
+$PMF_LANG["lostpwd_mail_okay"] = "E-Mail je poslat.";
 
-$PMF_LANG["ad_xmlrpc_button"] = "Get latest phpMyFAQ version number by web service";
-$PMF_LANG["ad_xmlrpc_latest"] = "Latest version available on";
+$PMF_LANG["ad_xmlrpc_button"] = "Pogledaj najnoviju phpMyFAQ verziju na internetu";
+$PMF_LANG["ad_xmlrpc_latest"] = "Najnovija dostupna verzija je";
 
 // added v1.5.0 - 2005-07-31 by Thorsten
-$PMF_LANG['ad_categ_select'] = 'Select category language';
+$PMF_LANG['ad_categ_select'] = 'Izaberite jezik kategorije';
 
 // added v1.5.1 - 2005-09-06 by Thorsten
-$PMF_LANG['msgSitemap'] = 'Sitemap';
+$PMF_LANG['msgSitemap'] = 'Mapa sajta';
+
+// added v1.5.2 - 2005-09-23 by Lars
+$PMF_LANG['err_inactiveArticle'] = 'Ovaj unos je u reviziji i ne mo&#382;e biti prikazan.';
+$PMF_LANG['msgArticleCategories'] = 'Kategorije za ovaj unos';
+
+// added v1.6.0 - 2006-02-02 by Thorsten
+$PMF_LANG['ad_entry_solution_id'] = 'ID Jedinstvenog Re&scaron;enja';
+$PMF_LANG['ad_entry_faq_record'] = 'FAQ unos';
+$PMF_LANG['ad_entry_new_revision'] = 'Otvorite novu reviziju?';
+$PMF_LANG['ad_entry_record_administration'] = 'Administracija unosa';
+$PMF_LANG['ad_entry_changelog'] = 'Izmene';
+$PMF_LANG['ad_entry_revision'] = 'Revizija';
+$PMF_LANG['ad_changerev'] = 'Izaberite Reviziju';
+$PMF_LANG['msgCaptcha'] = "Molimo Vas unesite znakove koje vidite na slici";
+$PMF_LANG['msgSelectCategories'] = 'Tra&#382;i u ...';
+$PMF_LANG['msgAllCategories'] = '... svim kategorijama';
+$PMF_LANG['ad_you_should_update'] = 'Va&scaron;a phpMyFAQ instalacija je zastarela. Instalirajte novu verziju.';
+$PMF_LANG['msgAdvancedSearch'] = 'Napredna pretraga';
+
+// added v1.6.1 - 2006-04-25 by Matteo&nbsp;and&nbsp;Thorsten
+$PMF_LANG['spamControlCenter'] = 'Spam kontrolni centar';
+$LANG_CONF["spam.enableSafeEmail"] = array(0 => "checkbox", 1 => "Ispisuj korisni&#269;ke email adrese na siguran na&#269;in (uklju&#269;eno).");
+$LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "Proveri javnu formu za zabranjene re&#269;i (uklju&#269;eno).");
+$LANG_CONF["spam.enableCatpchaCode"] = array(0 => "checkbox", 1 => "Koristi catpcha slike za kori&scaron;&#263;enje javne forme (uklju&#269;eno).");
+$PMF_LANG['ad_session_expiring'] = 'Va&scaron;a sesija &#263;e iste&#263;i za %d minuta: da li &#382;elite da nastavite sa radom?';
+
+// added v1.6.2 - 2006-06-13 by Matteo
+$PMF_LANG['ad_stat_management'] = 'Pode&scaron;avanje sesija';
+$PMF_LANG['ad_stat_choose'] = 'Izaberite mesec';
+$PMF_LANG['ad_stat_delete'] = 'Obri&scaron;i odmah odabrane sesije';
+
+// added v2.0.0 - 2005-09-15 by Thorsten and by Minoru TODA
+$PMF_LANG['ad_menu_glossary'] = 'Pojmovi';
+$PMF_LANG['ad_glossary_add'] = 'Dodaj pojam';
+$PMF_LANG['ad_glossary_edit'] = 'Izmeni pojam';
+$PMF_LANG['ad_glossary_item'] = 'Unos';
+$PMF_LANG['ad_glossary_definition'] = 'Definicija';
+$PMF_LANG['ad_glossary_save'] = 'Sa&#269;uvaj unos';
+$PMF_LANG['ad_glossary_save_success'] = 'Pojam uspe&scaron;no sa&#269;uvan!';
+$PMF_LANG['ad_glossary_save_error'] = 'Pojam nije sa&#269;uvan zbog gre&scaron;ke.';
+$PMF_LANG['ad_glossary_update_success'] = 'Pojam uspe&scaron;no izmenjen!';
+$PMF_LANG['ad_glossary_update_error'] = 'Pojam nije sa&#269;uvan zbog gre&scaron;ke.';
+$PMF_LANG['ad_glossary_delete'] = 'Obri&scaron;i unos';
+$PMF_LANG['ad_glossary_delete_success'] = 'Pojam obrisan!';
+$PMF_LANG['ad_glossary_delete_error'] = 'Pojam nije obrisan zbog gre&scaron;ke.';
+$PMF_LANG['ad_linkcheck_noReferenceURL'] = 'Automatska provera linka isklju&#269;ena (URL za verifikaciju nije pode&scaron;en)';
+$PMF_LANG['ad_linkcheck_noAllowUrlOpen'] = 'Automatska provera linka isklju&#269;ena (PHP opcija allow_url_fopen nije uklju&#269;ena)';
+$PMF_LANG['ad_linkcheck_checkResult'] = 'Rezultat automatske provere linka';
+$PMF_LANG['ad_linkcheck_checkSuccess'] = 'OK';
+$PMF_LANG['ad_linkcheck_checkFailed'] = 'Neuspe&scaron;no';
+$PMF_LANG['ad_linkcheck_failReason'] = 'Razlozi neuspeha:';
+$PMF_LANG['ad_linkcheck_noLinksFound'] = 'Nema odgovaraju&#263;ih URLa za proveru.';
+$PMF_LANG['ad_linkcheck_searchbadonly'] = 'Samo sa lo&scaron;im linkovima';
+$PMF_LANG['ad_linkcheck_infoReason'] = 'Dodatne informacije:';
+$PMF_LANG['ad_linkcheck_openurl_infoprefix'] = 'Nadjeno dok je testirano <strong>%s</strong>: ';
+$PMF_LANG['ad_linkcheck_openurl_notready'] = 'Proverava&#269;Linkova nije spreman.';
+$PMF_LANG['ad_linkcheck_openurl_maxredirect'] = 'Maksimalni broj preusmerenja <strong>%d</strong> pre&#273;en.';
+$PMF_LANG['ad_linkcheck_openurl_urlisblank'] = 'Izgleda da je prazan URL.';
+$PMF_LANG['ad_linkcheck_openurl_tooslow'] = 'Host <strong>%s</strong> je spor ili ne odgovara.';
+$PMF_LANG['ad_linkcheck_openurl_nodns'] = 'DNS prevod hosta <strong>%s</strong> je spor ili onemogu&#263;en zbog DNS problema, lokalnih ili udaljenih.';
+$PMF_LANG['ad_linkcheck_openurl_redirected'] = 'URL je preusmeren na <strong>%s</strong>.';
+$PMF_LANG['ad_linkcheck_openurl_ambiguous'] = 'HTTP status <strong>%s</strong> vra&#263;en.';
+$PMF_LANG['ad_linkcheck_openurl_not_allowed'] = '<em>HEAD</em> metod nije podr&#382;an od strane hosta <strong>%s</strong>, dozvoljeni metodi: <strong>%s</strong>.';
+$PMF_LANG['ad_linkcheck_openurl_not_found'] = 'Ne mo&#382;e biti na&#273;eno na hostu <strong>%s</strong>.';
+$PMF_LANG['ad_linkcheck_protocol_unsupported'] = '%s protokol nije podr&#382;an verifikacijom linka.';
+$PMF_LANG['ad_menu_linkconfig'] = 'URL Verifikacija';
+$PMF_LANG['ad_linkcheck_config_title'] = 'URL Verifikacija - Pode&scaron;avanje';
+$PMF_LANG['ad_linkcheck_config_disabled'] = 'URL Verifikacija isklju&#269;ena';
+$PMF_LANG['ad_linkcheck_config_warnlist'] = 'URLs za upozorenje';
+$PMF_LANG['ad_linkcheck_config_ignorelist'] = 'URLs za ignorisanje';
+$PMF_LANG['ad_linkcheck_config_warnlist_description'] = 'URLs sa prefiksima ispod bi&#263;e sa upozorenjem bez obzira da li su validni.<br />Koristite ovo za domene koji &#263;e uskoro iste&#263;i';
+$PMF_LANG['ad_linkcheck_config_ignorelist_description'] = 'Ta&#269;ni URL unosi ispod bi&#263;e prijavljeni kao validni bez provere.<br />Koristite ovo za domene koje ne &#382;elite da URL verifikacija proverava';
+$PMF_LANG['ad_linkcheck_config_th_id'] = 'ID#';
+$PMF_LANG['ad_linkcheck_config_th_url'] = 'URL za poklapanje';
+$PMF_LANG['ad_linkcheck_config_th_reason'] = 'Razlog poklapanja';
+$PMF_LANG['ad_linkcheck_config_th_owner'] = 'Vlasnik unosa';
+$PMF_LANG['ad_linkcheck_config_th_enabled'] = 'Dozvolite unos';
+$PMF_LANG['ad_linkcheck_config_th_locked'] = 'Zaklju&#269;ajte vlasni&scaron;tvo';
+$PMF_LANG['ad_linkcheck_config_th_chown'] = 'Preuzmite vlasni&scaron;tvo';
+$PMF_LANG['msgNewQuestionVisible'] = 'Pitanje mora prvo da se proveri pre nego &scaron;to postane javno.';
+$PMF_LANG['msgQuestionsWaiting'] = '&#268;eka na potvrdu administratora: ';
+$PMF_LANG['ad_entry_visibility'] = 'Objavi?';
+
+// added v2.0.0 - 2006-01-02 by Lars
+$PMF_LANG['ad_user_error_password'] =  "Molimo unesite lozinku. ";
+$PMF_LANG['ad_user_error_passwordsDontMatch'] =  "Lozinke se ne poklapaju. ";
+$PMF_LANG['ad_user_error_loginInvalid'] =  "Une&scaron;eno korisni&#269;ko ime nije na&#273;eno.";
+$PMF_LANG['ad_user_error_noEmail'] =  "Unesite va&#382;e&#263;u email adresu. ";
+$PMF_LANG['ad_user_error_noRealName'] =  "Unesite Va&scaron;e pravo ime. ";
+$PMF_LANG['ad_user_error_delete'] =  "Korisni&#269;ki nalog ne mo&#382;e biti izbrisan. ";
+$PMF_LANG['ad_user_error_noId'] =  "Nije prilo&#382;en ID. ";
+$PMF_LANG['ad_user_error_protectedAccount'] =  "Korisni&#269;ki nalog je za&scaron;ti&#263;en. ";
+$PMF_LANG['ad_user_deleteUser'] = "Obri&scaron;i korisnika";
+$PMF_LANG['ad_user_status'] = "Status:";
+$PMF_LANG['ad_user_lastModified'] = "zadnji put menjano:";
+$PMF_LANG['ad_gen_cancel'] = "Odustani";
+$PMF_LANG["rightsLanguage"]['addglossary'] = "dodaj pojam";
+$PMF_LANG["rightsLanguage"]['editglossary'] = "izmeni pojam";
+$PMF_LANG["rightsLanguage"]['delglossary'] = "obri&scaron;i pojam";
+$PMF_LANG["ad_menu_group_administration"] = "Grupe";
+$PMF_LANG['ad_user_loggedin'] = 'Prijavljeni ste kao ';
+
+$PMF_LANG['ad_group_details'] = "Detalji Grupe";
+$PMF_LANG['ad_group_add'] = "Dodaj Grupu";
+$PMF_LANG['ad_group_add_link'] = "Dodaj Grupu";
+$PMF_LANG['ad_group_name'] = "Ime:";
+$PMF_LANG['ad_group_description'] = "Opis:";
+$PMF_LANG['ad_group_autoJoin'] = "Auto-priklju&#269;enje:";
+$PMF_LANG['ad_group_suc'] = "Grupa <strong>uspe&scaron;no</strong> dodata.";
+$PMF_LANG['ad_group_error_noName'] = "Molimo unesite ime grupe. ";
+$PMF_LANG['ad_group_error_delete'] = "Grupa NIJE obrisana. ";
+$PMF_LANG['ad_group_deleted'] = "Grupa JE obrisana.";
+$PMF_LANG['ad_group_deleteGroup'] = "Obri&scaron;i Grupu";
+$PMF_LANG['ad_group_deleteQuestion'] = "Da li ste sigurni?";
+$PMF_LANG['ad_user_uncheckall'] = "Odaberi ni&scaron;ta";
+$PMF_LANG['ad_group_membership'] = "&#268;lanstvo Grupe";
+$PMF_LANG['ad_group_members'] = "&#268;lanovi";
+$PMF_LANG['ad_group_addMember'] = "+";
+$PMF_LANG['ad_group_removeMember'] = "-";
+
+// added v2.0.0 - 2006-07-20 by Matteo
+$PMF_LANG['ad_export_which_cat'] = 'Ograni&#269;i FAQ podatke za izvoz (opciono)';
+$PMF_LANG['ad_export_cat_downwards'] = 'Unazad?';
+$PMF_LANG['ad_export_type'] = 'Format izvoza';
+$PMF_LANG['ad_export_type_choose'] = 'Izaberite jedan od formata:';
+$PMF_LANG['ad_export_download_view'] = 'Preuzmite ili pogledajte in-line?';
+$PMF_LANG['ad_export_download'] = 'preuzmi';
+$PMF_LANG['ad_export_view'] = 'pogledaj in-line';
+$PMF_LANG['ad_export_gen_xhtml'] = 'Napravi XHTML fajl';
+$PMF_LANG['ad_export_gen_docbook'] = 'Napravi Docbook fajl';
+
+// added v2.0.0 - 2006-07-22 by Matteo
+$PMF_LANG['ad_news_data'] = 'Podaci novosti';
+$PMF_LANG['ad_news_author_name'] = 'Ime Autora:';
+$PMF_LANG['ad_news_author_email'] = 'Email Autora:';
+$PMF_LANG['ad_news_set_active'] = 'Uklju&#269;i:';
+$PMF_LANG['ad_news_allowComments'] = 'Dozvoli komentare:';
+$PMF_LANG['ad_news_expiration_window'] = 'Pode&scaron;avanje trajanja vesti (opciono)';
+$PMF_LANG['ad_news_from'] = 'Od:';
+$PMF_LANG['ad_news_to'] = 'Za:';
+$PMF_LANG['ad_news_insertfail'] = 'Vesti nisu une&scaron;ene u bazu.';
+$PMF_LANG['ad_news_updatefail'] = 'Vesti nisu izmenjene u bazi.';
+$PMF_LANG['newsShowCurrent'] = 'Prika&#382;i nove vesti.';
+$PMF_LANG['newsShowArchive'] = 'Prika&#382;i arhivirane vesti.';
+$PMF_LANG['newsArchive'] = ' Arhiva vesti';
+$PMF_LANG['newsWriteComment'] = 'dodaj komentar';
+$PMF_LANG['newsCommentDate'] = 'Dodato dana: ';
+
+// added v2.0.0 - 2006-07-29 by Matteo & Thorsten
+$PMF_LANG['ad_record_expiration_window'] = 'Pode&scaron;avanje trajanja unosa (opciono)';
+$PMF_LANG['admin_mainmenu_home'] = 'Home';
+$PMF_LANG['admin_mainmenu_users'] = 'Korisnici';
+$PMF_LANG['admin_mainmenu_content'] = 'Sadr&#382;aj';
+$PMF_LANG['admin_mainmenu_statistics'] = 'Statistika';
+$PMF_LANG['admin_mainmenu_exports'] = 'Izvoz';
+$PMF_LANG['admin_mainmenu_backup'] = 'Backup';
+$PMF_LANG['admin_mainmenu_configuration'] = 'Konfiguracija';
+$PMF_LANG['admin_mainmenu_logout'] = 'Odjava';
+
+// added v2.0.0 - 2006-08-15 by Thorsten and Matteo
+$PMF_LANG["ad_categ_owner"] = 'Vlasnik kategorije';
+$PMF_LANG['adminSection'] = 'Administracija';
+$PMF_LANG['err_expiredArticle'] = 'Ovaj unos je istekao i ne mo&#382;e biti prikazan';
+$PMF_LANG['err_expiredNews'] = 'Ove vesti su istekle i ne mogu biti prikazane';
+$PMF_LANG['err_inactiveNews'] = 'Ove vesti su u reviziji i ne mogu biti prikazane';
+$PMF_LANG['msgSearchOnAllLanguages'] = 'Tra&#382;i u svim jezicima:';
+$PMF_LANG['ad_entry_tags'] = 'Oznake';
+$PMF_LANG['msg_tags'] = 'Oznake';
+
+// added v2.0.0 - 2006-09-03 by Matteo
+$PMF_LANG['ad_linkcheck_feedback_url-batch1'] = 'Provera...';
+$PMF_LANG['ad_linkcheck_feedback_url-batch2'] = 'Provera...';
+$PMF_LANG['ad_linkcheck_feedback_url-batch3'] = 'Provera...';
+$PMF_LANG['ad_linkcheck_feedback_url-checking'] = 'Provera...';
+$PMF_LANG['ad_linkcheck_feedback_url-disabled'] = 'Isklju&#269;eno';
+$PMF_LANG['ad_linkcheck_feedback_url-linkbad'] = 'Linkovi KO';
+$PMF_LANG['ad_linkcheck_feedback_url-linkok'] = 'Linkovi OK';
+$PMF_LANG['ad_linkcheck_feedback_url-noaccess'] = 'Nema pristupa';
+$PMF_LANG['ad_linkcheck_feedback_url-noajax'] = 'Nema AJAX';
+$PMF_LANG['ad_linkcheck_feedback_url-nolinks'] = 'Nema Linkova';
+$PMF_LANG['ad_linkcheck_feedback_url-noscript'] = 'Nema Skripti';
+
+// added v2.0.0 - 2006-09-02 by Thomas
+$PMF_LANG['msg_related_articles'] = 'Srodne teme';
+$LANG_CONF['records.numberOfRelatedArticles'] = array(0 => "input", 1 => "Broj srodnih temi");
+
+// added v2.0.0 - 2006-09-09 by Rudi
+$PMF_LANG['ad_categ_trans_1'] = 'Prevedi';
+$PMF_LANG['ad_categ_trans_2'] = 'Kategoriju';
+$PMF_LANG['ad_categ_translatecateg'] = 'Prevedi Kategoriju';
+$PMF_LANG['ad_categ_translate'] = 'Prevedi';
+$PMF_LANG['ad_categ_transalready'] = 'Ve&#263; je prevedeno u: ';
+$PMF_LANG["ad_categ_deletealllang"] = 'Obri&scaron;i u svim jezicima?';
+$PMF_LANG["ad_categ_deletethislang"] = 'Obri&scaron;i samo za ovaj jezik?';
+$PMF_LANG["ad_categ_translated"] = "Kategorija je prevedena.";
+
+// added v2.0.0 - 2006-09-21 by Rudi
+$PMF_LANG["ad_categ_show"] = "Pregled";
+$PMF_LANG['ad_menu_categ_structure'] = "Pregled kategorije uklju&#269;uju&#263;i svoje jezike";
+
+// added v2.0.0 - 2006-09-26 by Thorsten
+$PMF_LANG['ad_entry_userpermission'] = 'Ovla&scaron;&#263;enja korisnika:';
+$PMF_LANG['ad_entry_grouppermission'] = 'Grupna ovla&scaron;&#263;enja:';
+$PMF_LANG['ad_entry_all_users'] = 'Pristup svim korisnicima';
+$PMF_LANG['ad_entry_restricted_users'] = 'Zabranjen pristup za';
+$PMF_LANG['ad_entry_all_groups'] = 'Pristup za sve grupe';
+$PMF_LANG['ad_entry_restricted_groups'] = 'Zabranjen pristup za';
+$PMF_LANG['ad_session_expiration'] = 'Vreme do isticanja sesije';
+$PMF_LANG['ad_user_active'] = 'aktivno';
+$PMF_LANG['ad_user_blocked'] = 'blokirano';
+$PMF_LANG['ad_user_protected'] = 'za&scaron;ti&#263;eno';
+
+// added v2.0.0 - 2006-10-07 by Matteo
+$PMF_LANG['ad_entry_intlink'] = 'Izaberite FAQ unos da bi ste ga ubacili kao link...';
+
+//added 2.0.0 - 2006-10-10 by Rudi
+$PMF_LANG["ad_categ_paste2"] = "Nalepi iza";
+$PMF_LANG["ad_categ_remark_move"] = "Razmena 2 kategorije je mogu&#263;a samo na istom nivou.";
+$PMF_LANG["ad_categ_remark_overview"] = "Ta&#269;an red kategorija &#269;e biti prikazan, ako su sve kategorije definisane za odre&#273;eni jezik (prva kolona).";
+
+// added v2.0.0 - 2006-10-15 by Matteo
+$PMF_LANG['msgUsersOnline'] = ' :: %d Gostiju i %d Registrovanih';
+$PMF_LANG['ad_adminlog_del_older_30d'] = 'Obriši odmah logove starije od 30 dana';
+$PMF_LANG['ad_adminlog_delete_success'] = 'Stariji logovi obrisani.';
+$PMF_LANG['ad_adminlog_delete_failure'] = 'Pojavila se greška.';
+
+// added 2.0.0 - 2006-11-19 by Thorsten
+$PMF_LANG['opensearch_plugin_install'] = 'Dodaj ovu pretragu u Firefox';
+$PMF_LANG['ad_quicklinks'] = 'BrziLinkovi';
+$PMF_LANG['ad_quick_category'] = 'Dodaj novu kategoriju';
+$PMF_LANG['ad_quick_record'] = 'Dodaj novi FAQ unos';
+$PMF_LANG['ad_quick_user'] = 'Dodaj novog korisnika';
+$PMF_LANG['ad_quick_group'] = 'Dodaj novu grupu';
+
+// added v2.0.0 - 2006-12-30 by Matteo
+$PMF_LANG['msgNewTranslationHeader'] = 'Predlog prevoda';
+$PMF_LANG['msgNewTranslationAddon'] = 'Vaš prevod nece odmah biti objavljen, ali ce ga daministrator objaviti posle revizije. Zahtevana polja su <strong>Vaše Ime</strong>, <strong>Vaša email adresa</strong>, <strong>naslov prevoda</strong> i <strong>Vaš faq prevod</strong>. Molimo odvojute kljucne reci samo razmakom.';
+$PMF_LANG['msgNewTransSourcePane'] = 'Original';
+$PMF_LANG['msgNewTranslationPane'] = 'Prevod';
+$PMF_LANG['msgNewTranslationName'] = $PMF_LANG['msgNewContentName'];
+$PMF_LANG['msgNewTranslationMail'] = $PMF_LANG['msgNewContentMail'];
+$PMF_LANG['msgNewTranslationKeywords'] = $PMF_LANG['msgNewContentKeywords'];
+$PMF_LANG['msgNewTranslationSubmit'] = 'Pošaljite predlog';
+$PMF_LANG['msgTranslate'] = 'Predložite prevod za';
+$PMF_LANG['msgTranslateSubmit'] = 'Krenite sa prevodenjem...';
+$PMF_LANG['msgNewTranslationThanks'] = "Hvala Vam za Vaš predloženi predlog!";
+
+// added v2.0.0 - 2007-02-27 by Matteo
+$PMF_LANG["rightsLanguage"]['addgroup'] = "dodajte grupne naloge";
+$PMF_LANG["rightsLanguage"]['editgroup'] = "izmenite grupne naloge";
+$PMF_LANG["rightsLanguage"]['delgroup'] = "obrišite grupne naloge";
+
+// added v2.0.0 - 2007-02-27 by Thorsten
+$PMF_LANG['ad_news_link_parent'] = 'Link se otvara u parent prozoru';
+
+// added v2.0.0 - 2007-03-04 by Thorsten
+$PMF_LANG['ad_menu_comments'] = 'Komentari';
+$PMF_LANG['ad_comment_administration'] = 'Administracija komentara';
+$PMF_LANG['ad_comment_faqs'] = 'Komentari u FAQ unosima:';
+$PMF_LANG['ad_comment_news'] = 'Komentari u Vestima:';
+$PMF_LANG['ad_groups'] = 'Grupe';
+
+// added v2.0.0 - 2007-03-10 by Thorsten
+$LANG_CONF['records.orderby'] = array(0 => 'select', 1 => 'Sortiranje unosa (po atributima)');
+$LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'Sortiranje unosa (uzlazno ili silazno)');
+$PMF_LANG['ad_conf_order_id'] = 'ID (default)';
+$PMF_LANG['ad_conf_order_thema'] = 'Naslov';
+$PMF_LANG['ad_conf_order_visits'] = 'Broj posetilaca';
+$PMF_LANG['ad_conf_order_datum'] = 'Datum';
+$PMF_LANG['ad_conf_order_author'] = 'Autor';
+$PMF_LANG['ad_conf_desc'] = 'silazno';
+$PMF_LANG['ad_conf_asc'] = 'uzlazno';
+$PMF_LANG['mainControlCenter'] = 'Glavna konfiguracija';
+$PMF_LANG['recordsControlCenter'] = 'FAQ konfiguracija unosa';
+
+// added v2.0.0 - 2007-03-17 by Thorsten
+$PMF_LANG['msgInstantResponse'] = 'Odgovori mi';
+$PMF_LANG['msgInstantResponseMaxRecords'] = '. Nadi ispod %d unosa.';
+
+// added v2.0.0 - 2007-03-29 by Thorsten
+$LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "Ukljucite nove unose (iskljuceno)");
+$LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Dozvolite komentare na nove unose (nedozvoljeno)");
+
+// added v2.0.0 - 2007-04-04 by Thorsten
+$PMF_LANG['msgAllCatArticles'] = 'Unosi u ovoj kategoriji';
+$PMF_LANG['msgDescriptionInstantResponse'] = 'Samo kucajte da nadete odgovor ...';
+$PMF_LANG['msgTagSearch'] = 'Oznaceni unosi';
+$PMF_LANG['ad_pmf_info'] = 'phpMyFAQ Informacije';
+$PMF_LANG['ad_online_info'] = 'Provera Verzije';
+$PMF_LANG['ad_system_info'] = 'Informacije Sistema';
