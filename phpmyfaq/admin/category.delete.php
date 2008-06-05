@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: category.delete.php,v 1.13 2007-02-27 19:53:08 thorstenr Exp $
+ * $Id: category.delete.php,v 1.14 2008-06-05 05:59:34 thorstenr Exp $
  *
  * Deletes a category
  *
@@ -55,7 +55,6 @@ if ($permission['delcateg']) {
 
     </fieldset>
 	</form>
-	</div>
 <?php
 } else {
 	print $PMF_LANG['err_NotAuth'];
