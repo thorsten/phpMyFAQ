@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: Init.php,v 1.50 2008-05-22 11:22:59 thorstenr Exp $
+ * $Id: Init.php,v 1.51 2008-06-05 19:26:58 thorstenr Exp $
  *
  * Some functions
  *
@@ -131,7 +131,7 @@ class PMF_Init
      *
      * @var string
      */
-    public $language = '';
+    public static $language = '';
 
     /**
      * cleanRequest
@@ -382,6 +382,9 @@ class PMF_Init
         } else {
             $this->language = 'en'; // just a fallback
         }
+        
+        dump($this->language);
+        
         return $this->language;
     }
 
