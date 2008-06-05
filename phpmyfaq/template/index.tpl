@@ -6,6 +6,7 @@
     <meta name="title" content="{metaTitle}" />
     <meta name="description" content="{metaDescription}" />
     <meta name="keywords" content="{metaKeywords}" />
+    <meta name="generator" content="phpMyFAQ {phpmyfaqversion}" />
     <style type="text/css" media="screen">@import url(template/{stylesheet}.css);</style>
     <style type="text/css" media="print">@import "template/print.css";</style>
     <script type="text/javascript" src="inc/js/functions.js"></script>
@@ -15,6 +16,7 @@
     <link rel="alternate" title="Open Questions RSS Feed" type="application/rss+xml" href="feed/openquestions/rss.php" />
 </head>
 <body dir="{dir}" onload="javascript:focusOnSearchField();">
+
 <div id="content">
 <div class="header" id="header">
 	<div>
