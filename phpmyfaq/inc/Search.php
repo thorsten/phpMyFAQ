@@ -84,10 +84,9 @@ class PMF_Search
         }
 
         if ((!$allLanguages) && (!is_numeric($searchterm))) {
-            $selectedLanguage = array(SQLPREFIX . 'faqdata.lang' => "'".$LANGCODE."'");
+            $selectedLanguage = array(SQLPREFIX . 'faqdata.lang' => "'" . $this->language . "'");
             $condition        = array_merge($selectedLanguage, $condition);
         }
-
 
         if (is_numeric($searchterm)) {
             // search for the solution_id
@@ -140,6 +139,20 @@ class PMF_Search
      */
     public function logSearchTerm($searchterm)
     {
-
+        $date = new DateTime();
+        
+        $query = sprintf("
+            INSERT INTO
+                %s
+            (id, lang, searchterm, searchdate)
+                VALUES
+            (%d, '%s', '%s', '%s')",
+            SQLPREFIX . 'faqsearches',
+            $this->db->nextID('faqsearches', 'id'),
+            $this->language,
+            $searchterm,
+            $date->format('Y-m-d H:i:s'));
+        
+        $this->db->query($query);
     }
 }

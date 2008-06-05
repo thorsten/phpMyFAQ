@@ -7,7 +7,7 @@
  * @author    Periklis Tsirakidis <tsirakidis@phpdevel.de>
  * @since     2002-09-16
  * @copyright 2002-2008 phpMyFAQ Team
- * @version   CVS: $Id: search.php,v 1.27 2008-05-24 16:51:39 thorstenr Exp $
+ * @version   CVS: $Id: search.php,v 1.28 2008-06-05 19:48:20 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -76,6 +76,8 @@ if (isset($_GET['suchbegriff']) || isset($_GET['search'])) {
     }
     $printResult = searchEngine($searchterm, $searchCategory, $allLanguages);
     $searchterm  = stripslashes($searchterm);
+    
+    $faqsearch->logSearchTerm($searchterm);
 }
 
 // Change a little bit the $searchCategory value;
