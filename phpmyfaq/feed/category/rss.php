@@ -6,7 +6,7 @@
  * @access    public
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2008 phpMyFAQ Team
- * @version   CVS: $Id: rss.php,v 1.1 2008-01-25 21:18:27 thorstenr Exp $
+ * @version   CVS: rss.php,v 1.1 2008/01/25 21:18:27 thorstenr Exp
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -69,9 +69,11 @@ if (is_array($records)) {
         $rss->startElement('item');
         $rss->writeElement('title', utf8_encode($item['record_title'] .
                                     ' (' . $item['visits'] . ' '.$PMF_LANG['msgViews'].')'));
-
-        $rss->writeElement('description', utf8_encode($item['record_preview']));
-
+        
+        $rss->startElement('description');
+        $rss->writeCdata(utf8_encode($item['record_preview']));
+        $rss->endElement();
+        
         $rss->writeElement('link', utf8_encode($item['record_link']));
         $rss->writeElement('pubDate', makeRFC822Date($item['record_date'], false));
         $rss->endElement();

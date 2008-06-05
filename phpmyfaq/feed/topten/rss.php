@@ -9,7 +9,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @copyright 2004-2008 phpMyFAQ Team
- * @version   CVS: $Id: rss.php,v 1.24 2008-01-26 16:47:22 thorstenr Exp $
+ * @version   CVS: $Id: rss.php,v 1.25 2008-06-05 05:58:05 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -85,7 +85,11 @@ if ($num > 0) {
 
         $rss->startElement('item');
         $rss->writeElement('title', utf8_encode(PMF_Utils::makeShorterText($item['thema'], 8)." (".$item['visits']." ".$PMF_LANG['msgViews'].")"));
-        $rss->writeElement('description', utf8_encode("[".$i.".] ".$item['thema']." (".$item['visits']." ".$PMF_LANG['msgViews'].")"));
+        
+        $rss->startElement('description');
+        $rss->writeCdata(utf8_encode("[".$i.".] ".$item['thema']." (".$item['visits']." ".$PMF_LANG['msgViews'].")"));
+        $rss->endElement();
+        
         $rss->writeElement('link', utf8_encode(PMF_Link::getSystemUri('/feed/topten/rss.php').$link));
         $rss->writeElement('pubDate', makeRFC822Date($item['last_visit'], false));
         $rss->endElement();

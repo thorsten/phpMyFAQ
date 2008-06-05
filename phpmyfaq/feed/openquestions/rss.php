@@ -7,7 +7,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @copyright 2006-2008 phpMyFAQ Team
- * @version   CVS: $Id: rss.php,v 1.11 2008-01-26 16:42:55 thorstenr Exp $
+ * @version   CVS: $Id: rss.php,v 1.12 2008-06-05 05:58:05 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -66,7 +66,11 @@ if ($num > 0) {
 
             $rss->startElement('item');
             $rss->writeElement('title', utf8_encode(PMF_Utils::makeShorterText($item['question'], 8)." (".$item['user'].")"));
-            $rss->writeElement('description', utf8_encode($item['question']));
+            
+            $rss->startElement('description');
+            $rss->writeCdata(utf8_encode($item['question']));
+            $rss->endElement();
+        
             $rss->writeElement('link', utf8_encode((isset($_SERVER['HTTPS']) ? 's' : '')."://".$_SERVER["HTTP_HOST"].str_replace("feed/openquestions/rss.php", "index.php", $_SERVER["PHP_SELF"])."?action=open#openq_".$item['id']));
             $rss->writeElement('pubDate', makeRFC822Date($item['date'], false));
             $rss->endElement();

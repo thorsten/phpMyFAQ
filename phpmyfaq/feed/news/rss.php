@@ -9,7 +9,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <mattao@scaramuccia.com>
  * @copyright 2004-2008 phpMyFAQ Team
- * @version   CVS: $Id: rss.php,v 1.17 2008-01-26 16:38:21 thorstenr Exp $
+ * @version   CVS: $Id: rss.php,v 1.18 2008-06-05 05:58:05 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -77,7 +77,11 @@ if ($num > 0) {
 
         $rss->startElement('item');
         $rss->writeElement('title', utf8_encode($item['header']));
-        $rss->writeElement('description', utf8_encode($item['content']));
+
+        $rss->startElement('description');
+        $rss->writeCdata(utf8_encode($item['content']));
+        $rss->endElement();
+        
         $rss->writeElement('link', utf8_encode(PMF_Link::getSystemUri('/feed/news/rss.php').$link));
         $rss->writeElement('pubDate', makeRFC822Date($item['date'], false));
         $rss->endElement();
