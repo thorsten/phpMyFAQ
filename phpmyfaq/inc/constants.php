@@ -6,7 +6,7 @@
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @since     2003-12-10
  * @copyright 2003-2008 phpMyFAQ Team
- * @version   CVS: $Id: constants.php,v 1.40 2008-05-23 11:09:38 thorstenr Exp $
+ * @version   CVS: $Id: constants.php,v 1.41 2008-06-05 05:59:52 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License Version
  * 1.1 (the "License"); you may not use this file except in compliance with
@@ -167,11 +167,11 @@ $botBlacklist = array(
  * @var  array
  */
 $supported_databases = array(
-    'mysql'   => array('5.2.0', 'MySQL 4.1 / 5.x / 6.x (ext/mysql)'),
+    'mysql'   => array('5.2.0', 'MySQL 4.1.x / 5.x / 6.x (ext/mysql)'),
     'pgsql'   => array('5.2.0', 'PostgreSQL 7.x / 8.x'),
     'sybase'  => array('5.2.0', 'Sybase'),
     'mssql'   => array('5.2.0', 'MS SQL Server 2000 / 2005'),
-    'mysqli'  => array('5.2.0', 'MySQL 4.1 / 5.x / 6.x (ext/mysqli)'),
+    'mysqli'  => array('5.2.0', 'MySQL 4.1.x / 5.x / 6.x (ext/mysqli)'),
     'sqlite'  => array('5.2.0', 'SQLite'),
     'ibm_db2' => array('5.2.0', 'IBM DB2 Universal Database 8.2 / 9.1'),
     'oracle'  => array('5.2.0', 'Oracle 8i and later (experimental)'),
