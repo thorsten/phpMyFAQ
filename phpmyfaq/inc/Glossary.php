@@ -1,23 +1,22 @@
 <?php
 /**
-* $Id: Glossary.php,v 1.11 2007-08-20 19:30:03 thorstenr Exp $
-*
-* The main glossary class
-*
-* @author    Thorsten Rinne <thorsten@phpmyfaq.de>
-* @since     2005-09-15
-* @copyright 2005 - 2007 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * The main glossary class
+ *
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since     2005-09-15
+ * @copyright 2005-2008 phpMyFAQ Team
+ * @version   CVS: $Id: Glossary.php,v 1.12 2008-06-05 06:00:36 thorstenr Exp $
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 class PMF_Glossary
 {
@@ -136,7 +135,6 @@ class PMF_Glossary
      * Callback function for filtering HTML from URLs and images
      *
      * @param  array $matches Matchings
-     * @access public
      * @return string
      * @since  2007-04-24
      * @author Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -149,7 +147,9 @@ class PMF_Glossary
         $postfix = $matches[6];
 
         if (!empty($item)) {
-            return '<acronym class="glossary" title="'.$this->definition.'">'.$prefix.$item.$postfix.'</acronym>';
+            return sprintf('<acronym class="glossary" title="%s">%s</acronym>',
+                $this->definition,
+                $prefix . $item . $postfix);
         }
 
         // Fallback: the original matched string
