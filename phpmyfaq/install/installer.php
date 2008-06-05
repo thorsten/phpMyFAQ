@@ -11,7 +11,7 @@
  * @author    Uwe Pries <uwe.pries@digartis.de>
  * @since     2002-08-20
  * @copyright 2002-2008 phpMyFAQ Team
- * @version   CVS: $Id: installer.php,v 1.119 2008-05-31 14:50:34 thorstenr Exp $
+ * @version   CVS: $Id: installer.php,v 1.120 2008-06-05 20:01:06 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -32,8 +32,7 @@ require_once PMF_ROOT_DIR.'/inc/constants.php';
 require_once PMF_ROOT_DIR.'/inc/functions.php';
 require_once PMF_ROOT_DIR.'/install/questionnaire.php';
 
-$query  = array();
-$uninst = array();
+$query = $uninst = array();
 
 // permission levels
 $permLevels = array(
@@ -54,7 +53,7 @@ $enabled_extensions = array(
  * @access public
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  */
-function db_check($supported_databases)
+function dbCheck($supported_databases)
 {
     foreach ($supported_databases as $extension => $database) {
         if (extension_loaded($extension)) {
@@ -73,7 +72,7 @@ function db_check($supported_databases)
  * @access public
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  */
-function extension_check($enabled_extensions)
+function extensionCheck($enabled_extensions)
 {
     foreach ($enabled_extensions as $extension) {
 
@@ -92,7 +91,7 @@ function extension_check($enabled_extensions)
  * @access public
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  */
-function phpmyfaq_check()
+function phpmyfaqCheck()
 {
     if (is_file(PMF_ROOT_DIR.'/inc/data.php')) {
         include PMF_ROOT_DIR.'/inc/data.php';
@@ -325,7 +324,7 @@ if (version_compare(PHP_VERSION, '5.2.0', '<')) {
     die();
 }
 
-if (!db_check($supported_databases)) {
+if (!dbCheck($supported_databases)) {
     print '<p class="center">No supported database detected! Please install one of the following' .
           ' database systems and enable the corresponding PHP extension:</p>';
     print '<ul>';
@@ -337,7 +336,7 @@ if (!db_check($supported_databases)) {
     die();
 }
 
-if (!extension_check($enabled_extensions)) {
+if (!extensionCheck($enabled_extensions)) {
     print "<p class=\"center\">Some missing extensions were detected! Please enable the corresponding PHP extension:</p>\n";
     print "<ul>\n";
     foreach ($enabled_extensions as $extension) {
@@ -348,7 +347,7 @@ if (!extension_check($enabled_extensions)) {
     die();
 }
 
-if (!phpmyfaq_check()) {
+if (!phpmyfaqCheck()) {
     print '<p class="center">It seems you\'re already running a version of phpMyFAQ.<br />Please use the <a href="update.php">update script</a>.</p>';
     HTMLFooter();
     die();
@@ -386,9 +385,6 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 <?php
     if (SAFEMODE == 1) {
         print '<p class="center">The PHP safe mode is enabled. You may have problems when phpMyFAQ writes in some directories.</p>';
-    }
-    if (!extension_loaded('gd')) {
-        print '<p class="center">You don\'t have GD support enabled in your PHP installation. Please enabled GD support in your php.ini file otherwise you can\'t use Captchas for spam protection.</p>';
     }
     if (!function_exists('imagettftext')) {
         print '<p class="center">You don\'t have Freetype support enabled in the GD extension of your PHP installation. Please enabled Freetype support in GD extension otherwise the Captchas for spam protection will be quite easy to break.</p>';
@@ -990,8 +986,7 @@ foreach ($permLevels as $level => $desc) {
     $anonymous->setStatus('protected');
     $anonymousData = array(
         'display_name' => 'Anonymous User',
-        'email' => null
-    );
+        'email'        => null);
     $anonymous->setUserData($anonymousData);
 
     require_once PMF_ROOT_DIR.'/inc/Configuration.php';
