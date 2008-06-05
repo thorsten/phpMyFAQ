@@ -9,7 +9,7 @@
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @since     2001-02-12
  * @copyright 2001-2008 phpMyFAQ Team
- * @version   CVS: $Id: index.php,v 1.126 2008-05-31 15:02:53 thorstenr Exp $
+ * @version   CVS: $Id: index.php,v 1.127 2008-06-05 20:15:17 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -333,49 +333,51 @@ $tpl = new PMF_Template (array(
     'rightBox'              => $right_tpl,
     'writeContent'          => $inc_tpl));
 
-$usersOnLine = getUsersOnline();
+$usersOnLine    = getUsersOnline();
 $totUsersOnLine = $usersOnLine[0] + $usersOnLine[1];
+$systemUri      = PMF_Link::getSystemUri('index.php');
 $main_template_vars = array(
-    'title'             => $faqconfig->get('main.titleFAQ').$title,
-    'baseHref'          => PMF_Link::getSystemUri('index.php'),
-    'version'           => $faqconfig->get('main.currentVersion'),
-    'header'            => str_replace('"', '', $faqconfig->get('main.titleFAQ')),
-    'metaTitle'         => str_replace('"', '', $faqconfig->get('main.titleFAQ')),
-    'metaDescription'   => $faqconfig->get('main.metaDescription'),
-    'metaKeywords'      => $faqconfig->get('main.metaKeywords').$keywords,
-    'metaPublisher'     => $faqconfig->get('main.metaPublisher'),
-    'metaLanguage'      => $PMF_LANG['metaLanguage'],
-    'metaCharset'       => $PMF_LANG['metaCharset'],
-    'stylesheet'        => $PMF_LANG['dir'] == 'rtl' ? 'style.rtl' : 'style',
-    'action'            => $action,
-    'dir'               => $PMF_LANG['dir'],
-    'msgCategory'       => $PMF_LANG['msgCategory'],
-    'showCategories'    => $category->printCategories($cat),
-    'searchBox'         => $PMF_LANG['msgSearch'],
-    'languageBox'       => $PMF_LANG['msgLangaugeSubmit'],
-    'writeLangAdress'   => $writeLangAdress,
-    'switchLanguages'   => selectLanguages($LANGCODE, true),
-    'userOnline'        => $totUsersOnLine.$PMF_LANG['msgUserOnline'].
-                                sprintf($PMF_LANG['msgUsersOnline'],
-                                $usersOnLine[0],
-                                $usersOnLine[1]),
-    'copyright'         => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> '.$faqconfig->get('main.currentVersion'));
+    'title'           => $faqconfig->get('main.titleFAQ').$title,
+    'baseHref'        => $systemUri,
+    'version'         => $faqconfig->get('main.currentVersion'),
+    'header'          => str_replace('"', '', $faqconfig->get('main.titleFAQ')),
+    'metaTitle'       => str_replace('"', '', $faqconfig->get('main.titleFAQ')),
+    'metaDescription' => $faqconfig->get('main.metaDescription'),
+    'metaKeywords'    => $faqconfig->get('main.metaKeywords').$keywords,
+    'metaPublisher'   => $faqconfig->get('main.metaPublisher'),
+    'metaLanguage'    => $PMF_LANG['metaLanguage'],
+    'metaCharset'     => $PMF_LANG['metaCharset'],
+    'stylesheet'      => $PMF_LANG['dir'] == 'rtl' ? 'style.rtl' : 'style',
+    'action'          => $action,
+    'dir'             => $PMF_LANG['dir'],
+    'msgCategory'     => $PMF_LANG['msgCategory'],
+    'showCategories'  => $category->printCategories($cat),
+    'searchBox'       => $PMF_LANG['msgSearch'],
+    'languageBox'     => $PMF_LANG['msgLangaugeSubmit'],
+    'writeLangAdress' => $writeLangAdress,
+    'switchLanguages' => selectLanguages($LANGCODE, true),
+    'userOnline'      => $totUsersOnLine.$PMF_LANG['msgUserOnline'].
+                         sprintf($PMF_LANG['msgUsersOnline'],
+                         $usersOnLine[0],
+                         $usersOnLine[1]),
+    'copyright'       => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> ' . 
+                         $faqconfig->get('main.currentVersion'));
 
 if ($faqconfig->get('main.enableRewriteRules')) {
     $links_template_vars = array(
-        "faqHome"               => $_SERVER['PHP_SELF'],
-        "msgSearch"             => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'search.html">'.$PMF_LANG["msgAdvancedSearch"].'</a>',
-        'msgAddContent'         => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'addcontent.html">'.$PMF_LANG["msgAddContent"].'</a>',
-        "msgQuestion"           => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'ask.html">'.$PMF_LANG["msgQuestion"].'</a>',
-        "msgOpenQuestions"      => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'open.html">'.$PMF_LANG["msgOpenQuestions"].'</a>',
-        'msgHelp'               => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'help.html">'.$PMF_LANG["msgHelp"].'</a>',
-        "msgContact"            => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'contact.html">'.$PMF_LANG["msgContact"].'</a>',
-        "backToHome"            => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'index.html">'.$PMF_LANG["msgHome"].'</a>',
-        "allCategories"         => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'showcat.html">'.$PMF_LANG["msgShowAllCategories"].'</a>',
-        "writeSendAdress"       => PMF_Link::getSystemRelativeUri('index.php').'search.html',
-        'showInstantResponse'   => '<a href="'.PMF_Link::getSystemRelativeUri('index.php').'instantresponse.html">'.$PMF_LANG['msgInstantResponse'].'</a>',
-        'showSitemap'           => getLinkHtmlAnchor($_SERVER['PHP_SELF'].'?'.$sids.'action=sitemap&amp;lang='.$LANGCODE, $PMF_LANG['msgSitemap']),
-        'opensearch'            => PMF_Link::getSystemRelativeUri('index.php').'search.html'
+        "faqHome"             => $_SERVER['PHP_SELF'],
+        "msgSearch"           => '<a href="' . $systemUri . 'search.html">'.$PMF_LANG["msgAdvancedSearch"].'</a>',
+        'msgAddContent'       => '<a href="' . $systemUri . 'addcontent.html">'.$PMF_LANG["msgAddContent"].'</a>',
+        "msgQuestion"         => '<a href="' . $systemUri . 'ask.html">'.$PMF_LANG["msgQuestion"].'</a>',
+        "msgOpenQuestions"    => '<a href="' . $systemUri . 'open.html">'.$PMF_LANG["msgOpenQuestions"].'</a>',
+        'msgHelp'             => '<a href="' . $systemUri . 'help.html">'.$PMF_LANG["msgHelp"].'</a>',
+        "msgContact"          => '<a href="' . $systemUri . 'contact.html">'.$PMF_LANG["msgContact"].'</a>',
+        "backToHome"          => '<a href="' . $systemUri . 'index.html">'.$PMF_LANG["msgHome"].'</a>',
+        "allCategories"       => '<a href="' . $systemUri . 'showcat.html">'.$PMF_LANG["msgShowAllCategories"].'</a>',
+        "writeSendAdress"     => $systemUri . 'search.html',
+        'showInstantResponse' => '<a href="' . $systemUri . 'instantresponse.html">'.$PMF_LANG['msgInstantResponse'].'</a>',
+        'showSitemap'         => getLinkHtmlAnchor($_SERVER['PHP_SELF'].'?'.$sids.'action=sitemap&amp;lang='.$LANGCODE, $PMF_LANG['msgSitemap']),
+        'opensearch'          => $systemUri . 'search.html'
         );
 } else {
     $links_template_vars = array(
@@ -441,6 +443,11 @@ if (isset($auth)) {
         'login'             => $PMF_LANG['ad_auth_ok'],
         'username'          => $PMF_LANG['ad_auth_user'],
         'password'          => $PMF_LANG['ad_auth_passwd'],
+        'msgRegisterUser'   => (($faqconfig->get('main.enableRewriteRules'))
+                               ?
+                               '<a href="' . $systemUri . 'register.html">'.$PMF_LANG['msgRegisterUser'].'</a>'
+                               :
+                               '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=register">'.$PMF_LANG['msgRegisterUser'].'</a>'),
         'msgLoginFailed'    => $error));
 }
 $tpl->includeTemplate('loginBox', 'index');
@@ -468,12 +475,12 @@ if (!isset($latestEntriesParams['error'])) {
 }
 
 $tpl->processTemplate('rightBox', array(
-    'writeTopTenHeader'     => $PMF_LANG['msgTopTen'],
-    'writeNewestHeader'     => $PMF_LANG['msgLatestArticles'],
-    'writeTagCloudHeader'   => $PMF_LANG['msg_tags'],
-    'writeTags'             => $oTag->printHTMLTagsCloud(),
-    'msgAllCatArticles'     => $PMF_LANG['msgAllCatArticles'],
-    'allCatArticles'        => $faq->showAllRecordsWoPaging($cat)));
+    'writeTopTenHeader'   => $PMF_LANG['msgTopTen'],
+    'writeNewestHeader'   => $PMF_LANG['msgLatestArticles'],
+    'writeTagCloudHeader' => $PMF_LANG['msg_tags'],
+    'writeTags'           => $oTag->printHTMLTagsCloud(),
+    'msgAllCatArticles'   => $PMF_LANG['msgAllCatArticles'],
+    'allCatArticles'      => $faq->showAllRecordsWoPaging($cat)));
 $tpl->includeTemplate('rightBox', 'index');
 
 //
