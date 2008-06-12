@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_de.php,v 1.82.2.2 2007-07-06 19:25:38 thorstenr Exp $
+ * $Id: language_de.php,v 1.82.2.3 2008-06-12 07:06:12 thorstenr Exp $
  *
  * German language file
  *
@@ -816,7 +816,7 @@ $PMF_LANG['ad_adminlog_delete_success'] = 'Die alten Logdateien wurden erfolgrei
 $PMF_LANG['ad_adminlog_delete_failure'] = 'Es wurden keine Logs gelöscht, da ein Fehler aufgfetreten ist.';
 
 // added 2.0.0 - 2006-11-19 by Thorsten
-$PMF_LANG['opensearch_plugin_install'] = 'Suchplugin installeren';
+$PMF_LANG['opensearch_plugin_install'] = 'Suchplugin installieren';
 $PMF_LANG['ad_quicklinks'] = 'Quicklinks';
 $PMF_LANG['ad_quick_category'] = 'Neue Kategorie hinzufügen';
 $PMF_LANG['ad_quick_record'] = 'Neuen FAQ-Eintrag hinzufügen';
