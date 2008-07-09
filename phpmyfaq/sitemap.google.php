@@ -117,7 +117,7 @@ function printHTTPStatus404()
 //
 
 PMF_Init::cleanRequest();
-session_name('pmf_auth_'.$faqconfig->get('main.phpMyFAQToken'));
+session_name('pmfauth' . trim($faqconfig->get('main.phpMyFAQToken')));
 session_start();
 
 $oFaq = new PMF_Faq($db, 'en');

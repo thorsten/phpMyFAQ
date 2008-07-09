@@ -29,7 +29,7 @@ require_once($pmfIncludeDir.'/inc/Init.php');
 require_once($pmfIncludeDir.'/inc/PMF_User/CurrentUser.php');
 
 PMF_Init::cleanRequest();
-session_name('pmf_auth_'.$faqconfig->get('main.phpMyFAQToken'));
+session_name('pmfauth' . trim($faqconfig->get('main.phpMyFAQToken')));
 session_start();
 
 //

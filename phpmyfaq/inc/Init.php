@@ -1,15 +1,14 @@
 <?php
 /**
- * $Id: Init.php,v 1.52 2008-06-05 19:27:46 thorstenr Exp $
+ * Some basic functions und PMF_Init class
  *
- * Some functions
- *
- * @author      Johann-Peter Hartmann <hartmann@mayflower.de>
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Stefan Esser <sesser@php.net>
- * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
- * @since       2005-09-24
- * @copyright   (c) 2005-2008 phpMyFAQ Team
+ * @author    Johann-Peter Hartmann <hartmann@mayflower.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Stefan Esser <sesser@php.net>
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @since     2005-09-24
+ * @copyright 2005-2008 phpMyFAQ Team
+ * @version   SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in

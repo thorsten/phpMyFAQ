@@ -35,7 +35,7 @@ if (isset($_GET['lang']) && PMF_Init::isASupportedLanguage($_GET['lang'])) {
 }
 
 PMF_Init::cleanRequest();
-session_name('pmf_auth_'.$faqconfig->get('main.phpMyFAQToken'));
+session_name('pmfauth'.trim($faqconfig->get('main.phpMyFAQToken')));
 session_start();
 
 $user = PMF_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));

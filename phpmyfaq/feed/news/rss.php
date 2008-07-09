@@ -25,7 +25,7 @@
 define('PMF_ROOT_DIR', dirname(dirname(dirname(__FILE__))));
 require_once(PMF_ROOT_DIR.'/inc/Init.php');
 PMF_Init::cleanRequest();
-session_name('pmf_auth_'.$faqconfig->get('main.phpMyFAQToken'));
+session_name('pmfauth' . trim($faqconfig->get('main.phpMyFAQToken')));
 session_start();
 
 require_once(PMF_ROOT_DIR.'/inc/News.php');

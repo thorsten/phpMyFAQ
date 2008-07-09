@@ -49,7 +49,7 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
     require_once(PMF_ROOT_DIR.'/inc/Init.php');
     define('IS_VALID_PHPMYFAQ', null);
     PMF_Init::cleanRequest();
-    session_name('pmf_auth_'.$faqconfig->get('main.phpMyFAQToken'));
+    session_name('pmfauth' . trim($faqconfig->get('main.phpMyFAQToken')));
     session_start();
 
     // Preload English strings
