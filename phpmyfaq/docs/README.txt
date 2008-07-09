@@ -10,6 +10,8 @@ Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.0.7:
+- switched repository from CVS to SVN (Thorsten)
+- fixed session bug with MS SQL (Simon Stewart)
 - fixed login errors with IBM DB2 (Thorsten, Helmut Tessarek)
 - updated Serbian translation (Slavisa Milojkovic)
 
@@ -17,7 +19,9 @@ For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.0.8 - 2008-
+Version 2.0.8 - 2008-07-
+- switched repository from CVS to SVN (Thorsten)
+- fixed session bug with MS SQL (Simon Stewart)
 - fixed login errors with IBM DB2 (Thorsten, Helmut Tessarek)
 - updated Serbian translation (Slavisa Milojkovic)
 
