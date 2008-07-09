@@ -37,7 +37,7 @@ if (!file_exists('inc/data.php')) {
 require_once('inc/Init.php');
 define('IS_VALID_PHPMYFAQ', null);
 PMF_Init::cleanRequest();
-session_name('pmf_auth_'.$faqconfig->get('main.phpMyFAQToken'));
+session_name('pmfauth' . trim($faqconfig->get('main.phpMyFAQToken')));
 session_start();
 
 //

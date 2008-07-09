@@ -24,7 +24,7 @@ define('IS_VALID_PHPMYFAQ_ADMIN', null);
 
 require_once(PMF_ROOT_DIR.'/inc/Init.php');
 PMF_Init::cleanRequest();
-session_name('pmf_auth_'.$faqconfig->get('main.phpMyFAQToken'));
+session_name('pmfauth' . trim($faqconfig->get('main.phpMyFAQToken')));
 session_start();
 
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
