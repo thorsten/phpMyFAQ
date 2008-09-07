@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: language_fr.php,v 1.36.2.2 2007-08-22 17:28:17 thorstenr Exp $
+ * $Id: language_fr.php,v 1.36.2.2 2007/08/22 17:28:17 thorstenr Exp $
  *
  * The French language file - try to be the best
  *
@@ -8,7 +8,7 @@
  * @author      Thomas Bassetto <tbassetto@gmail.com> (reprise le 13/02/2005)
  * @author      Laurent J.V. Dubois <laurent.dubois@ljvd.com>
  * @since       2004-02-19
- * @copyright   (c) 2004-2007 phpMyFAQ Team
+ * @copyright   (c) 2004-2008 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -212,6 +212,7 @@ $PMF_LANG["ad_user_del_2"] = "doit être supprimé?";
 $PMF_LANG["ad_user_del_3"] = "Etes vous sûr?";
 $PMF_LANG["ad_user_deleted"] = "L'utilisateur a été supprimé correctement.";
 $PMF_LANG["ad_user_checkall"] = "Tout sélectionner";
+$PMF_LANG["ad_user_loggedin"] = "Connecté :";
 
 // Beitragsverwaltung
 $PMF_LANG["ad_entry_aor"] = "Administration des articles";
@@ -225,7 +226,7 @@ $PMF_LANG["ad_entry_content"] = "Réponse:";
 $PMF_LANG["ad_entry_keywords"] = "Mots clef:";
 $PMF_LANG["ad_entry_author"] = "Auteur:";
 $PMF_LANG["ad_entry_category"] = "Catégorie:";
-$PMF_LANG["ad_entry_active"] = "Actif?";
+$PMF_LANG["ad_entry_active"] = "Publier:";
 $PMF_LANG["ad_entry_date"] = "Date:";
 $PMF_LANG["ad_entry_changed"] = "Qu'est-ce que vous avez changé?";
 $PMF_LANG["ad_entry_changelog"] = "Changelog:";
@@ -486,11 +487,110 @@ $PMF_LANG["msgMainCategory"] = "Catégorie";
 // Added v1.2.4 - 30.01.2003 - Thorsten
 $PMF_LANG["ad_passwdsuc"] = "Votre mot de passe a été modifié!";
 
+// Admin - v2.0.7 - 29-07-2008 Julianross405 
+$PMF_LANG["ad_pmf_info"] = "FAQ Informations";
+$PMF_LANG["ad_user_status"] = "Statut";
+$PMF_LANG["ad_user_uncheckall"] = "Tout déselectionner";
+$PMF_LANG["ad_user_lastModified"] = "Dernière modification";
+$PMF_LANG["ad_categ_show"] = "Vue d'ensemble";
+$PMF_LANG["ad_menu_categ_structure"] = "Vue d'ensemble des catégories";
+$PMF_LANG["ad_categ_remark_overview"] = "Le bon ordre des catégories sera affiché, si toutes les catégories sont définies pour la même langue (première colonne).";
+
+
+// Boite de raccourci - v2.0.7 - 29-07-2008 Julianross405
+$PMF_LANG["ad_quicklinks"] = "Raccourcis";
+$PMF_LANG["ad_quick_category"] = "Ajouter une nouvelle catégorie";
+$PMF_LANG["ad_quick_record"] = "Ajouter un nouvel article";
+$PMF_LANG["ad_quick_user"] = "Ajouter un nouvel utilisateur";
+
+
+// Menu de l'administration  - v2.0.7 - 29-07-2008 Julianross405
+$PMF_LANG["admin_mainmenu_home"] = "Accueil";
+$PMF_LANG["admin_mainmenu_users"] = "Utilisateurs";
+$PMF_LANG["admin_mainmenu_content"] = "Contenu";
+$PMF_LANG["admin_mainmenu_statistics"] = "Statistiques";
+$PMF_LANG["admin_mainmenu_backup"] = "Sauvegardes";
+$PMF_LANG["admin_mainmenu_logout"] = "Déconnexion";
+$PMF_LANG["ad_menu_comments"] = "commentaires";
+$PMF_LANG["ad_menu_glossary"] = "glossaire";
+
+
+// Droits des utilisateurs  - v2.0.7 - 29-07-2008 Julianross405
+$PMF_LANG["rightsLanguage"]['adduser'] = "ajouter un utilisateur";
+$PMF_LANG["rightsLanguage"]['edituser'] = "modifier un utilisateur";
+$PMF_LANG["rightsLanguage"]['deluser'] = "supprimer un utilisateur";
+$PMF_LANG["rightsLanguage"]['addbt'] = "ajouter un article";
+$PMF_LANG["rightsLanguage"]['editbt'] = "editer un article";
+$PMF_LANG["rightsLanguage"]['delbt'] = "supprimer un article";
+$PMF_LANG["rightsLanguage"]['viewlog'] = "voir les logs";
+$PMF_LANG["rightsLanguage"]['adminlog'] = "accès a l'admin log";
+$PMF_LANG["rightsLanguage"]['delcomment'] = "supprimer un commentaire";
+$PMF_LANG["rightsLanguage"]['addnews'] = "ajouter une nouveauté";
+$PMF_LANG["rightsLanguage"]['editnews'] = "modifier une nouveauté";
+$PMF_LANG["rightsLanguage"]['delnews'] = "supprimer une nouveauté";
+$PMF_LANG["rightsLanguage"]['addcateg'] = "ajouter une catégorie";
+$PMF_LANG["rightsLanguage"]['editcateg'] = "modifier une catégorie";
+$PMF_LANG["rightsLanguage"]['delcateg'] = "supprimer une catégorie";
+$PMF_LANG["rightsLanguage"]['passwd'] = "modifier un mot de passe";
+$PMF_LANG["rightsLanguage"]['editconfig'] = "modifier la configuration de la FAQ";
+$PMF_LANG["rightsLanguage"]['addatt'] = "ajouter une pièce jointe";
+$PMF_LANG["rightsLanguage"]['delatt'] = "supprimer une pièce jointe";
+$PMF_LANG["rightsLanguage"]['backup'] = "créer une sauvegarde";
+$PMF_LANG["rightsLanguage"]['restore'] = "restaurer une sauvegarde";
+$PMF_LANG["rightsLanguage"]['delquestion'] = "supprimer une question ouverte";
+$PMF_LANG["rightsLanguage"]['changebtrevs'] = "modifier une révision";
+$PMF_LANG["rightsLanguage"]['addglossary'] = "ajouter un glossaire";
+$PMF_LANG["rightsLanguage"]['editglossary'] = "modifier un glossaire";
+$PMF_LANG["rightsLanguage"]['delglossary'] = "supprimer un glossaire";
+$PMF_LANG["rightsLanguage"]['addgroup'] = "ajouter un groupe utilisateur";
+$PMF_LANG["rightsLanguage"]['editgroup'] = "modifier un groupe utilisateur";
+$PMF_LANG["rightsLanguage"]['delgroup'] = "supprimer un groupe utilisateur";
+
+// Export FAQ  - v2.0.7 - 29-07-2008 Julianross405
+$PMF_LANG["ad_export_which_cat"] = "Limiter l'export à une catégorie (optionel)";
+$PMF_LANG["ad_export_type"] = "Format de l'export";
+$PMF_LANG["ad_export_type_choose"] = "Choisissez un format parmis ceux supportés";
+$PMF_LANG["ad_export_generate_pdf"] = "fichier PDF";
+$PMF_LANG["ad_xml_gen"] = "fichier XML";
+$PMF_LANG["ad_export_gen_xhtml"] = "fichier XHTML";
+$PMF_LANG["ad_export_gen_docbook"] = "fichier Docbook";
+$PMF_LANG["ad_export_download_view"] = "Télécharger ou visualiser le fichier:";
+$PMF_LANG["ad_export_download"] = "Télécharger";
+$PMF_LANG["ad_export_view"] = "Voir en ligne";
+
+// Export FAQ - v2.0.7 - 29-07-2008 Julianross405
+$PMF_LANG["ad_csv_linkdat"] = "sauvegarder la base de données";
+$PMF_LANG["ad_csv_linklog"] = "sauvegarder les logs";
+
+// Configuration - v2.0.7 - 29-07-2008 Julianross405
+$PMF_LANG["mainControlCenter"] = "Configuration générale";
+$PMF_LANG["recordsControlCenter"] = "Configuration des enregistrements";
+
+// Glossaire - v2.0.7 - 29-07-2008 Julianross405
+$PMF_LANG['ad_menu_glossary'] = 'Glossaire';
+$PMF_LANG['ad_glossary_add'] = 'Ajouter une entrée au glossaire';
+$PMF_LANG['ad_glossary_edit'] = 'Edit glossary entry';
+$PMF_LANG['ad_glossary_item'] = 'Article';
+$PMF_LANG['ad_glossary_definition'] = 'Définition';
+$PMF_LANG['ad_glossary_save'] = "Sauvegarder l'entrée";
+$PMF_LANG['ad_glossary_save_success'] = "L'entrée du glossaire à été sauvegardée avec succès !";
+$PMF_LANG['ad_glossary_save_error'] = 'Une erreur est survenue pendant la sauvegarde !';
+$PMF_LANG['ad_glossary_update_success'] = "L'entrée du glossaire à été mise à jour avec succès !";
+$PMF_LANG['ad_glossary_update_error'] = "Une erreur est survenue pendant la mise à jour !";
+$PMF_LANG['ad_glossary_delete'] = "Supprimer l'entrée";
+$PMF_LANG['ad_glossary_delete_success'] = "L'entrée du glossaire à été supprimée avec succès !";
+$PMF_LANG['ad_glossary_delete_error'] = "Une erreur est survenue pendant la suppression !";
+
+// commentaires - v2.0.7 - 29-07-2008 Julianross405
+$PMF_LANG['ad_menu_comments'] = 'Commentaires';
+$PMF_LANG['ad_comment_administration'] = 'Administration des commentaires';
+$PMF_LANG['ad_comment_faqs'] = 'Commentaires dans la FAQ:';
+$PMF_LANG['ad_comment_news'] = 'Commentaires dans les nouveaux enregistrements:';
+
 // Added v1.3.0 - 04.03.2003 - Thorsten
 $PMF_LANG["msgPDF"] = "version PDF";
 $PMF_LANG["ad_xml_head"] = "Sauvegarde XML";
 $PMF_LANG["ad_xml_hint"] = "Sauvegarder tous les articles de votre FAQ dans un fichier XML.";
-$PMF_LANG["ad_xml_gen"] = "créer fichier XML";
 $PMF_LANG["ad_entry_locale"] = "Langue";
 $PMF_LANG["msgLangaugeSubmit"] = "modifier langue";
 
@@ -541,7 +641,6 @@ $PMF_LANG["ad_entry_email"] = "adresse email:";
 $PMF_LANG["ad_entry_allowComments"] = "autoriser les commentaires";
 $PMF_LANG["msgWriteNoComment"] = "Vous ne pouvez pas commenter cet enregistrement";
 $PMF_LANG["ad_user_realname"] = "Nom réel:";
-$PMF_LANG["ad_export_generate_pdf"] = "générer un fichier PDF";
 $PMF_LANG["ad_export_full_faq"] = "Votre FAQ en PDF: ";
 $PMF_LANG["err_bannedIP"] = "Votre IP n'est pas autorisée.";
 $PMF_LANG["err_SaveQuestion"] = "Les champs requis sont <strong>votre nome</strong>, <strong>votre adresse email</strong> et <strong>votre question</strong>!<br /><br /><a href=\"javascript:history.back();\">retour page précédente</a><br /><br />\n";
@@ -561,7 +660,7 @@ $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Nom du publieur");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Adresse Email de l'administrateur");
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Informations de contact");
 $LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Texte pour la page send2friend");
-$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Taille maximum des attachements en Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
+$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Taille maximum des pièces jointes en Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Afficher le lien des attachements en bas de page?");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "Utiliser le Tracking?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Utiliser l'Adminlog?");
@@ -571,6 +670,26 @@ $LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Nombre d
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Bannir ces adresses IP");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Activer le support du mod_rewrite? (défault: désactivé)");
 $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Voulez vous activer le support de LDAP? (défault: désactivé)");
+
+// v2.0.7 - 29-07-2008 Julianross405
+$LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Lier les pièces jointes et les articles");
+$LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "URL pour vérifcation des liens (e.g.: http://www.example.org/faq)");
+$LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "Interval entre la vérification des liens AJAX (en secondes)");
+$LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Désactiver la visibilité de nouvelles questions ?");
+$LANG_CONF['main.permLevel'] = array(0 => "input", 1 => "niveau d'autorisation");
+$LANG_CONF['records.numberOfRelatedArticles'] = array(0 => "input", 1 => "Nombre d'entrées liées");
+$LANG_CONF['records.orderby'] = array(0 => 'select', 1 => 'Triée les enregistrements par');
+$LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'Type de Tri (descendant ou ascendant)');
+$PMF_LANG['ad_conf_order_id'] = 'ID (defaut)';
+$PMF_LANG['ad_conf_order_thema'] = 'Titre';
+$PMF_LANG['ad_conf_order_visits'] = 'Nombres de visites';
+$PMF_LANG['ad_conf_order_datum'] = 'Date';
+$PMF_LANG['ad_conf_order_author'] = 'Auteur';
+$PMF_LANG['ad_conf_desc'] = 'descendant';
+$PMF_LANG['ad_conf_asc'] = 'ascendant';
+$LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "Activer un nouvel enregistrement (defaut: desactivé)");
+$LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Autoriser les commentaires pour un nouvel enregistrement (defaut: desactivé)");
+
 
 $PMF_LANG['ad_categ_new_main_cat'] = 'comme catégorie principale';
 $PMF_LANG["ad_categ_paste_error"] = "Déplacer cette catégorie est impossible.";
@@ -602,8 +721,8 @@ $PMF_LANG['msgArticleCategories'] = 'Catégories de cet article';
 // added v1.6.0 - 2006-02-02 by Thorsten
 $PMF_LANG['ad_entry_solution_id'] = 'Référence ID de l\'article';
 $PMF_LANG['ad_entry_faq_record'] = 'Enregistrement FAQ';
-$PMF_LANG['ad_entry_new_revision'] = 'Créer une nouvelle révision ?';
-$PMF_LANG['ad_entry_record_administration'] = 'Enregistrement administration';
+$PMF_LANG['ad_entry_new_revision'] = 'Créer une nouvelle révision:';
+$PMF_LANG['ad_entry_record_administration'] = 'Publication';
 $PMF_LANG['ad_entry_changelog'] = 'Changements';
 $PMF_LANG['ad_entry_revision'] = 'Révision';
 $PMF_LANG['ad_changerev'] = 'Sélectionner une révision';
