@@ -10,19 +10,23 @@ Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.0.7:
+- fixed security vulnerability in XSS filter (Alexios Fakos at n.runs.com)
 - switched repository from CVS to SVN (Thorsten)
 - fixed session bug with MS SQL (Simon Stewart)
 - fixed login errors with IBM DB2 (Thorsten, Helmut Tessarek)
+- updated French translation (Julien Ross)
 - updated Serbian translation (Slavisa Milojkovic)
 
 For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.0.8 - 2008-07-
+Version 2.0.8 - 2008-09-11
+- fixed security vulnerability in XSS filter (Alexios Fakos at n.runs.com)
 - switched repository from CVS to SVN (Thorsten)
 - fixed session bug with MS SQL (Simon Stewart)
 - fixed login errors with IBM DB2 (Thorsten, Helmut Tessarek)
+- updated French translation (Julien Ross)
 - updated Serbian translation (Slavisa Milojkovic)
 
 Version 2.0.7 - 2006-05-12
