@@ -57,7 +57,7 @@ cd "${PMF_BUILD_FOLDER}"
 rm -f *
 
 # Get the PMF source code from SVN using an anonymous login
-SVN_SSH="ssh -p 20022" svn checkout svn+ssh://anonymous@thinkforge.org/svnroot/phpmyfaq/branches/${SVN_BRANCH} phpmyfaq
+SVN_SSH="ssh -p 20022" svn export svn+ssh://anonymous@thinkforge.org/svnroot/phpmyfaq/branches/${SVN_BRANCH} phpmyfaq
 
 # Rename the folder in which the SVN code has been retrieved
 mv phpmyfaq "${PMF_PACKAGE_FOLDER}"
