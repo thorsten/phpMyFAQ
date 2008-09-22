@@ -1,0 +1,205 @@
+/**
+ * $Id: colors.css,v 1.17 2007/04/21 10:14:17 thorstenr Exp $
+ *
+ * In this CSS file you'll find all color defintions for phpMyFAQ
+ *
+ * @author      Jens Grochtdreis <jens@grochtdreis.de>
+ * @author      Thorsten Rinne <thorsten@rinne.info>
+ * @author      Matteo scaramuccia <matteo@scaramuccia.com>
+ * @since       2005-03-12
+ * @copyright   (c) 2005-2007 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
+
+/**
+ * Main body
+ */
+html, body {
+    background: #ffffff;
+    color: #000000;
+}
+a {
+    color: #FF6917;
+}
+a:visited {
+    color: #FF6917;
+}
+
+/**
+ * the header with the title
+ */
+#header {
+   background: #1096B3;
+   color: #ffffff;
+}
+#header h1 a {
+   color: #ffffff;
+}
+#header ul a {
+    border-color: #656565;
+    background-color: #F6AD53;
+    color: #36393D;
+}
+
+/**
+ * Categories
+ */
+#categories {
+    background-color: #7BBD18;
+    border-color: #73880A;
+}
+#categories li {
+    border-color: #1096B3;
+}
+#categories li a {
+    border-color: #656565;
+    background-color: #AFC6CA;
+    color: #000000;
+}
+#categories li a:hover {
+    background-color: #9DFC4A;
+    color: #000000;
+}
+
+#categories .active {
+    background-color: #73880A;
+}
+#categories .subcat a {
+    background-color: #F2ECEC;
+}
+#categories .subcat .active {
+    background-color: #ECF2ED;
+}
+/**
+ * Search box and language selection box
+ */
+#search, #langform, #loginform {
+    border-color: #656565;
+    background-color: #AFC6CA;
+}
+#search #search input[type=text], #langform #langform input[type=text], #loginform #loginform input[type=text] {
+   background: #ffffff;
+   border-color: #000000;
+}
+#search input[type=text]:focus, #langform input[type=text]:focus, #loginform input[type=text]:focus, #loginform input[type=password]:focus {
+   background: #f5f5f5;
+}
+
+/**
+ * Top 10 and Latest areticles
+ */
+#topten h3, #latest h3, #tagcloud h3, #allcategoryarticles h3 {
+   border-color: #656565;
+   background-color: #AFC6CA;
+}
+#topten ol, #latest ol {
+
+}
+#topten li, #latest li {
+
+}
+
+/**
+ * Main content
+ */
+.main-content h2, .main-content h3 {
+    color: #000000;
+    border-color: #a9a9a9;
+}
+.main-content #news h3 {
+    border-color: #a9a9a9;
+}
+.main-content #news h2 {
+   border-color: #656565;
+   background-color: #AFC6CA;
+}
+
+/**
+ * Table definitions in the main content column
+ */
+.main-content table {
+    border-color: #a9a9a9;
+}
+td, th, .main-content td {
+   border-color: #a9a9a9;
+}
+.main-content th {
+   border-bottom-color: transparent;
+}
+
+/**
+ * Fieldset definitions in the main content column
+ */
+.main-content fieldset {
+    border-color: #656565;
+}
+
+/**
+ * Form definitions in the main content column
+ */
+.main-content form textarea, .main-content form .inputfield {
+    color: #333333;
+    background-color: #ffffff;
+    border-color: #656565;
+    border-top-color: #999999;
+    border-left-color: #999999;
+}
+.main-content form textarea:focus, .main-content form input[type=text]:focus {
+   background: #f5f5f5;
+}
+.main-content form input[type=radio], .main-content form input[type=checkbox] {
+   background-color: transparent;
+}
+select {
+   background-color: #ffffff;
+   color: inherit;
+}
+
+/**
+ * Submit button definitions
+ */
+input[type=submit] {
+    color: Black;
+    background: #B3DE77;
+    border-color: #ffffff;
+    border-bottom-color: #dddddd;
+    border-right-color: #dddddd;
+}
+
+/**
+ * Highlighted search result
+ */
+.highlight {
+    background-color: #F8F8FF;
+    font-weight: bold;
+    border: 1px dotted #FF6347;
+}
+
+/**
+ * Glossary items
+ */
+.glossary {
+    color: #C79810;
+    border-bottom: 1px dotted #1096B3;
+    cursor: help;
+}
+
+/**
+ * Footer definitions
+ */
+#footer {
+   color: #666666;
+   border-color: #666666;
+}
+#footer, #footer a, #footer a:visited {
+   color: #666666;
+}
