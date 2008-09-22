@@ -11,6 +11,7 @@ Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.0.8:
 - fixed SVN export script (Thorsten)
+- re-added missing css color file (Thorsten)
 
 For known issues please take a look at KNOWNBUGS.txt
 
@@ -18,6 +19,7 @@ CHANGELOG:
 
 Version 2.0.9 - 2008-10-
 - fixed SVN export script (Thorsten)
+- re-added missing css color file (Thorsten)
 
 Version 2.0.8 - 2008-09-11
 - fixed security vulnerability in XSS filter (Alexios Fakos at n.runs.com)
