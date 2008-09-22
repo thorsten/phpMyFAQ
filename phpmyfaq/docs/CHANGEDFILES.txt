@@ -1,5 +1,7 @@
 CHANGED FILES FROM 2.0.8 -> 2.0.9
 
+./install/installer.php
+./install/update.php
 ./scripts/svn2package.sh
 
 
