@@ -56,7 +56,7 @@
 # phpMyFAQ
 #
 %define name        phpmyfaq
-%define version     2.0.8
+%define version     2.0.9
 %define release     1
 %define epoch       0
 
@@ -151,6 +151,11 @@ a news-system, user-tracking, language modules, enhanced automatic
 content negotiation, accessible XHTML based templates, extensive
 XML-support, PDF-support, a backup-system and an easy to use
 installation script.
+
+
+%changelog
+* Mon Sep 22 2008 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.0.9-1
+- New upstream version 2.0.9.
 
 %changelog
 * Mon May 12 2008 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.0.8-1

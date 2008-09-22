@@ -21,7 +21,7 @@
  * under the License.
  */
 
-define('NEWVERSION', '2.0.8');
+define('NEWVERSION', '2.0.9');
 define('COPYRIGHT', '&copy; 2001-2008 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
