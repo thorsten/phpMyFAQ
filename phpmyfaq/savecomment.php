@@ -34,7 +34,8 @@ if (    isset($_POST['user']) && $_POST['user'] != ''
      && isset($_POST['comment']) && $_POST['comment'] != ''
      && IPCheck($_SERVER['REMOTE_ADDR'])
      && checkBannedWord(htmlspecialchars(strip_tags($_POST['comment'])))
-     && checkCaptchaCode() ) {
+     && checkCaptchaCode()
+     && !$faq->commentDisabled((int)$_POST['id'], $LANGCODE)) {
 
     if ((isset($_POST['type']) && ('faq' == $_POST['type'])) && isset($_POST["id"])) {
         $id = (int)$_POST["id"];
