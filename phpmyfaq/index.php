@@ -246,9 +246,20 @@ if (isset($_REQUEST['solution_id']) && is_numeric($_REQUEST['solution_id']) === 
     $keywords    = '';
     $a = $faq->getIdFromSolutionId($solution_id);
     if (is_array($a)) {
-        $id = $a['id'];
-        $lang = $a['lang'];
+        $id       = $a['id'];
+        $lang     = $a['lang'];
+        $title    = ' - ' . $faq->getRecordTitle($id);
+        $keywords = ' ' . $faq->getRecordKeywords($id);
     }
+} 
+
+//
+// Handle the Tagging ID
+//
+if (isset($_REQUEST['tagging_id']) && is_numeric($_REQUEST['tagging_id'])) {
+    $tag_id   = (int)$_REQUEST['tagging_id'];
+    $title    = ' - ' . $oTag->getTagNameById($tag_id);
+    $keywords = '';
 }
 
 //
