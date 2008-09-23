@@ -34,10 +34,11 @@ if (    isset($_POST['user']) && $_POST['user'] != ''
      && isset($_POST['comment']) && $_POST['comment'] != ''
      && IPCheck($_SERVER['REMOTE_ADDR'])
      && checkBannedWord(htmlspecialchars(strip_tags($_POST['comment'])))
-     && checkCaptchaCode() ) {
+     && checkCaptchaCode()
+     && !$faq->commentDisabled((int)$_POST['id'], $LANGCODE)) {
 
     if ((isset($_POST['type']) && ('faq' == $_POST['type'])) && isset($_POST["id"])) {
-        $id = (int)$_POST["id"];
+        $id = (int)$_POST['id'];
     } else if ((isset($_POST['type']) && ('news' == $_POST['type'])) && isset($_POST["newsid"])) {
         $id = (int)$_POST["newsid"];
         $msgWriteComment = $PMF_LANG['newsWriteComment'];
@@ -53,6 +54,7 @@ if (    isset($_POST['user']) && $_POST['user'] != ''
         'comment'   => nl2br($db->escape_string(safeHTML($_POST["comment"]))),
         'date'      => time(),
         'helped'    => '');
+    
     if ($faq->addComment($commentData)) {
         $emailTo = $faqconfig->get('main.administrationMail');
         $urlToContent = '';
