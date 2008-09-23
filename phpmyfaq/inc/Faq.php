@@ -848,7 +848,38 @@ class PMF_Faq
 
         return false;
     }
+    
+    /**
+     * Checks, if comments are disabled for the FAQ record
+     * 
+     * @param  integer $record_id FAQ Id
+     * @param  string  $record_lang
+     * @return boolean true, if comments are disabled
+     */
+    function commentDisabled($record_id, $record_lang)
+    {
+        $query = sprintf("
+            SELECT
+                comment
+            FROM
+                %sfaqdata
+            WHERE
+                id = %d
+            AND
+                lang = '%s'",
+            SQLPREFIX,
+            $record_id,
+            $record_lang);
 
+        $result = $this->db->query($query);
+        
+        if ($row = $this->db->fetch_object($result)) {
+            return ($row->comment === 'y') ? false : true;
+        } else {
+            return true;
+        }
+    }
+    
     /**
      * Adds new category relations to a record
      *
