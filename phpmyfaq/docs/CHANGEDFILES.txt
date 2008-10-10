@@ -1,6 +1,7 @@
 CHANGED FILES FROM 2.0.8 -> 2.0.9
 
 ./inc/Faq.php
+./inc/Init.php
 ./install/installer.php
 ./install/update.php
 ./scripts/svn2package.sh
