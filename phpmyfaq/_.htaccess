@@ -7,7 +7,7 @@
 # @author       Patrick Preuster <sica@php-q.net>
 # @author       Matteo scaramuccia <matteo@scaramuccia.com>
 # @since        2004-11-13
-# @copyright    (c) 2004-2007 phpMyFAQ Team
+# @copyright    (c) 2004-2008 phpMyFAQ Team
 #
 # The contents of this file are subject to the Mozilla Public License
 # Version 1.1 (the "License"); you may not use this file except in
@@ -133,9 +133,13 @@ RewriteRule sitemap.xml.gz$     sitemap.google.php?gz=1 [L]
 RewriteRule urllist.txt$        sitemap.yahoo.php [L]
 RewriteRule urllist.txt.gz$     sitemap.yahoo.php?gz=1 [L]
 
+# PMF tags page with page count
+# * http://[...]/tags/<ID>/<PAGE NUMBER>/<HEADER>.htm
+RewriteRule tags/([0-9]+)/([0-9]+)/(.+)\.htm(l?)$   index.php?action=search&tagging_id=$1&seite=$2 [L,QSA]
+
 # PMF tags page
 # * http://[...]/tags/<ID>/<HEADER>.htm
-RewriteRule tags/([0-9]+)/([^\/]+)\.htm(l?)$     index.php?action=search&tagging_id=$1 [L,QSA]
+RewriteRule tags/([0-9]+)/([^\/]+)\.htm(l?)$     index.php?action=search&tagging_id=$1 [L,QSA] 
 
 # the instant response page
 RewriteCond %{REQUEST_URI}          instantresponse\.html$ [NC]

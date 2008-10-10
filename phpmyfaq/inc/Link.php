@@ -435,7 +435,11 @@ class PMF_Link
                             break;
                         case PMF_LINK_GET_ACTION_SEARCH:
                             if (!isset($getParams[PMF_LINK_GET_ACTION_SEARCH]) && isset($getParams[PMF_LINK_GET_TAGGING_ID])) {
-                                $url .= PMF_LINK_TAGS.$getParams[PMF_LINK_GET_TAGGING_ID].PMF_LINK_SLASH.$this->getSEOItemTitle().PMF_LINK_HTML_EXTENSION;
+                                $url .= PMF_LINK_TAGS.$getParams[PMF_LINK_GET_TAGGING_ID];
+                                if (isset($getParams[PMF_LINK_GET_PAGE])) {
+                                    $url .= PMF_LINK_HTML_SLASH.$getParams[PMF_LINK_GET_PAGE];
+                                }
+                                $url .= PMF_LINK_SLASH.$this->getSEOItemTitle().PMF_LINK_HTML_EXTENSION; 
                             } elseif (isset($getParams[PMF_LINK_GET_ACTION_SEARCH])) {
                                 $url .= PMF_LINK_HTML_SEARCH;
                                 $url .= PMF_LINK_SEARCHPART_SEPARATOR.PMF_LINK_GET_ACTION_SEARCH.'='.$getParams[PMF_LINK_GET_ACTION_SEARCH];
