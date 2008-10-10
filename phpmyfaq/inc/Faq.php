@@ -1,4 +1,4 @@
-<?php
+ <?php
 /**
  * $Id: Faq.php,v 1.129 2008-05-22 11:22:59 thorstenr Exp $
  *
@@ -654,23 +654,24 @@ class PMF_Faq
             if (!isset($page)) {
                 $page = 1;
             }
-            $vor = $page - 1;
+            $vor  = $page - 1;
             $next = $page + 1;
             if ($vor != 0) {
-                if ($faqconfig->get('main.enableRewriteRules')) {
-                    $output .= "[ <a href=\"search.html?tagging_id=".$tagging_id."&amp;seite=".$vor.$langs."\">".$this->pmf_lang["msgPrevious"]."</a> ]";
-                } else {
-                    $output .= "[ <a href=\"index.php?".$sids."action=search&amp;tagging_id=".$tagging_id."&amp;seite=".$vor.$langs."\">".$this->pmf_lang["msgPrevious"]."</a> ]";
-                }
+                $url              = $sids.'&amp;action=search&amp;tagging_id='.$tagging_id.'&amp;seite='.$vor.$langs;
+                $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+                $oLink->itemTitle = 'tag';
+                $oLink->text      = $this->pmf_lang["msgPrevious"];
+                $oLink->tooltip   = $this->pmf_lang["msgPrevious"];
+                $output          .= '[ '.$oLink->toHtmlAnchor().' ]'; 
             }
             $output .= " ";
             if ($next <= $pages) {
-                $url = $sids.'&amp;action=search&amp;tagging_id='.$tagging_id.'&amp;seite='.$next.$langs;
-                $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
-                $oLink->itemTitle = '';
-                $oLink->text = $this->pmf_lang["msgNext"];
-                $oLink->tooltip = $this->pmf_lang["msgNext"];
-                $output .= '[ '.$oLink->toHtmlAnchor().' ]';
+                $url              = $sids.'&amp;action=search&amp;tagging_id='.$tagging_id.'&amp;seite='.$next.$langs;
+                $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+                $oLink->itemTitle = 'tag';
+                $oLink->text      = $this->pmf_lang["msgNext"];
+                $oLink->tooltip   = $this->pmf_lang["msgNext"];
+                $output          .= '[ '.$oLink->toHtmlAnchor().' ]';
             }
             $output .= "</strong></p>";
         }
