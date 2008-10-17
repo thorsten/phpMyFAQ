@@ -10,6 +10,7 @@ Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.0.8:
+- dedicated to my uncle Werner
 - fixed content deletion bug (Thorsten)
 - fixed SVN export script (Thorsten)
 - improved comment spam protection (Thorsten)
@@ -20,7 +21,8 @@ For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.0.9 - 2008-10-
+Version 2.0.9 - 2008-10-17
+- dedicated to my uncle Werner
 - fixed content deletion bug (Thorsten)
 - fixed SVN export script (Thorsten)
 - improved comment spam protection (Thorsten)
