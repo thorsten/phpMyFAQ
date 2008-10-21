@@ -1,6 +1,6 @@
 $Id: README.txt,v 1.92.2.32 2008-05-31 11:50:18 thorstenr Exp $
 
-phpMyFAQ 2.0.9
+phpMyFAQ 2.0.10
 Codename "Prometheus"
 
 Installation/Update:
@@ -9,17 +9,15 @@ Please read the documentation (documentation.en.html) carefully.
 Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
-Changes since 2.0.8:
-- dedicated to my uncle Werner
-- fixed content deletion bug (Thorsten)
-- fixed SVN export script (Thorsten)
-- improved comment spam protection (Thorsten)
-- re-added missing css color file (Thorsten)
-- minor bugfixes (Thorsten)
+Changes since 2.0.9:
+- 
 
 For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
+
+Version 2.0.9 - 2008-11-
+- 
 
 Version 2.0.9 - 2008-10-17
 - dedicated to my uncle Werner

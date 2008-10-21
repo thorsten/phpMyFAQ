@@ -1,3 +1,10 @@
+CHANGED FILES FROM 2.0.9 -> 2.0.10
+
+./install/installer.php
+./install/update.php
+
+
+
 CHANGED FILES FROM 2.0.8 -> 2.0.9
 
 ./inc/Faq.php
