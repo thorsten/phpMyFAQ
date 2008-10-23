@@ -1,5 +1,6 @@
 CHANGED FILES FROM 2.0.9 -> 2.0.10
 
+./inc/PMF_Export/Pdf.php
 ./install/installer.php
 ./install/update.php
 
