@@ -526,7 +526,7 @@ class PDF extends FPDF
         // Check, if image is stored locally or not
         if ('http' != substr($image, 0, 4)) {
             // Please note that the image must be accessible by HTTP NOT ONLY by HTTPS
-            $image = 'http://'.$_SERVER['HTTP_HOST'].$image;
+             $image = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/' . $image; 
         }
         // Set a friendly User Agent
         $ua = ini_get('user_agent');
