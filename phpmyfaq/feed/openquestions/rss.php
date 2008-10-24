@@ -27,13 +27,13 @@ PMF_Init::cleanRequest();
 session_name('pmfauth' . trim($faqconfig->get('main.phpMyFAQToken')));
 session_start();
 
-require_once(PMF_ROOT_DIR.'/inc/Faq.php');
+require_once PMF_ROOT_DIR . '/inc/Faq.php';
 
 //
 // get language (default: english)
 //
 $pmf = new PMF_Init();
-$LANGCODE = $pmf->setLanguage((isset($PMF_CONF['main.languageDetection']) ? true : false), $PMF_CONF['language']);
+$LANGCODE = $pmf->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
 // Preload English strings
 require_once (PMF_ROOT_DIR.'/lang/language_en.php');
 
