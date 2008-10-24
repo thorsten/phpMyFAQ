@@ -537,7 +537,7 @@ class PMF_Faq
             $vor  = $page - 1;
             $next = $page + 1;
             if ($vor != 0) {
-                $url              = $sids.'&amp;action=search&amp;tagging_id='.$tagging_id.'&amp;seite='.$vor.$langs;
+                $url              = $sids.'&amp;action=search&amp;tagging_id='.$tagging_id.'&amp;seite='.$vor;
                 $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
                 $oLink->itemTitle = 'tag';
                 $oLink->text      = $this->pmf_lang["msgPrevious"];
@@ -546,7 +546,7 @@ class PMF_Faq
             }
             $output .= " ";
             if ($next <= $pages) {
-                $url              = $sids.'&amp;action=search&amp;tagging_id='.$tagging_id.'&amp;seite='.$next.$langs;
+                $url              = $sids.'&amp;action=search&amp;tagging_id='.$tagging_id.'&amp;seite='.$next;
                 $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
                 $oLink->itemTitle = 'tag';
                 $oLink->text      = $this->pmf_lang["msgNext"];
