@@ -48,12 +48,14 @@ if (   isset($_GET['action'])
 // Define what are the actions for which a microsummary generator (microsummary.php) is defined
 //
 $microRules = array(
-                'artikel'   => 'phpMyFAQ Faq Records',
-                'main'      => 'phpMyFAQ Homepage',
-                'news'      => 'phpMyFAQ Latest News',
-                'open'      => 'phpMyFAQ Open Questions',
-                'show'      => 'phpMyFAQ Categories'
-                );
+    'artikel'   => 'phpMyFAQ Faq Records',
+    'main'      => 'phpMyFAQ Homepage',
+    'news'      => 'phpMyFAQ Latest News',
+    'open'      => 'phpMyFAQ Open Questions',
+    'show'      => 'phpMyFAQ Categories',
+    'ask'       => 'phpMyFAQ Ask Question',
+    'search'    => 'phpMyFAQ Search');
+
 print '<?xml version="1.0" encoding="UTF-8"?>';
 ?>
 <generator xmlns="http://www.mozilla.org/microsummaries/0.1"
