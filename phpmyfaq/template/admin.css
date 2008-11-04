@@ -245,6 +245,7 @@ div#sessioncounter {
     margin-left: 20px;
     padding: 0;
     height: 24px;
+    clear: both;
 }
 #subnavcontainer ul {
     border: 0;
