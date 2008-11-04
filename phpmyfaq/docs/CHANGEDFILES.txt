@@ -8,6 +8,8 @@ CHANGED FILES FROM 2.0.9 -> 2.0.10
 ./inc/Faq.php
 ./install/installer.php
 ./install/update.php
+./template/admin.css
+./template/admin.rtl.css
 ./microsummary.php
 
 
