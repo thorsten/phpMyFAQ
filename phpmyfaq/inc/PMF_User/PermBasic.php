@@ -71,13 +71,12 @@ class PMF_User_PermBasic extends PMF_User_Perm
      * Returns true if the user given by user_id has the right
      * specified by right_id, otherwise false.
      *
-     * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
      * @param int
      * @param int
      * @return bool
      */
-    function checkUserRight($user_id, $right_id)
+    public function checkUserRight($user_id, $right_id)
     {
         if (!$this->_initialized)
             return false;
@@ -99,7 +98,7 @@ class PMF_User_PermBasic extends PMF_User_Perm
                 ".SQLPREFIX."faquser.user_id   = ".SQLPREFIX."faquser_right.user_id
         ");
         // return result
-        if ($res)
+        if ($this->_db->num_rows($res) == 1)
             return true;
         return false;
     }
@@ -139,32 +138,6 @@ class PMF_User_PermBasic extends PMF_User_Perm
             $result[] = $row['right_id'];
         }
         return $result;
-    }
-
-    /**
-     * PMF_PermBasic
-     *
-     * Constructor.
-     *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @return void
-     */
-    function PMF_PermBasic()
-    {
-    }
-
-    /**
-     * __destruct
-     *
-     * Destructor.
-     *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @return void
-     */
-    function __destruct()
-    {
     }
 
     /**
@@ -281,7 +254,7 @@ class PMF_User_PermBasic extends PMF_User_Perm
                 right_id = ".$right_id
         );
         
-        if (!$res) {
+        if ($this->_db->num_rows($res) != 1)
             return false;
         }
         
@@ -492,7 +465,7 @@ class PMF_User_PermBasic extends PMF_User_Perm
                 name = '".$name."'
         ");
         // return result
-        if (!$res)
+        if ($this->_db->num_rows($res) != 1)
             return 0;
         $row = $this->_db->fetch_assoc($res);
         return $row['right_id'];
