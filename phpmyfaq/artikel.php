@@ -143,7 +143,8 @@ if (isset($oLnk->urlpool['href'])) {
         }
     }
 }
-$content = $fixedContent;
+
+$content = str_replace('href="/#','href="index.php?action=artikel&lang='.$LANGCODE.'&id='.$id.'#', $fixedContent);
 
 // Check for the languages for a faq
 $arrLanguage = check4Language($id);
