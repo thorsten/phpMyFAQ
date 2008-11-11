@@ -88,7 +88,7 @@ class PMF_PermMedium
                 ".PMF_USER_SQLPREFIX."group.group_id = '".$group_id."'
         ");
         // return result
-        if ($res)
+        if ($this->_db->num_rows($res) == 1)
             return true;
         return false;
     }
@@ -386,7 +386,7 @@ class PMF_PermMedium
                 ".PMF_USER_SQLPREFIX."group.group_id = ".PMF_USER_SQLPREFIX."user_group.group_id AND
                 ".PMF_USER_SQLPREFIX."group.group_id = ".$group_id
         );
-        if ($res)
+        if ($this->_db->num_rows($res) == 1)
             return true;
         return false;
     }
@@ -520,7 +520,7 @@ class PMF_PermMedium
                 name = '".$name."'
         ");
         // return
-        if (!$res)
+        if ($this->_db->num_rows($res) != 1)
             return 0;
         $row = $this->_db->fetch_assoc($res);
         return $row['group_id'];
@@ -694,7 +694,7 @@ class PMF_PermMedium
                 ".PMF_USER_SQLPREFIX."user.user_id   = ".$user_id
         );
         // return result
-        if ($res)
+        if ($this->_db->num_rows($res) == 1)
             return true;
         return false;
     }
@@ -919,7 +919,7 @@ class PMF_PermMedium
                 group_id = ".$group_id
         );
         // return
-        if (!$res)
+        if ($this->_db->num_rows($res) != 1)
             return array();
         $row = $this->_db->fetch_assoc($res);
         return $row['name'];
