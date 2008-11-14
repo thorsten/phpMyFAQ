@@ -26,7 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $faqsession->userTracking('sendmail_send2friend', 0);
 
-$captcha = new PMF_Captcha($db, $sids, $pmf->language);
+$captcha = new PMF_Captcha($db, $sids, PMF_Init::$language);
 
 if (   isset($_POST['name']) && $_POST['name'] != ''
     && isset($_POST['mailfrom']) && $_POST['mailfrom'] != ''

@@ -24,7 +24,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$captcha = new PMF_Captcha($db, $sids, $pmf->language);
+$captcha = new PMF_Captcha($db, $sids, PMF_Init::$language);
 
 $id = 0;
 $msgWriteComment = $PMF_LANG['msgWriteComment'];
