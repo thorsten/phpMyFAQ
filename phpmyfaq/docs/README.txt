@@ -37,7 +37,7 @@ Version 2.0.8 - 2008-09-11
 - updated French translation (Julien Ross)
 - updated Serbian translation (Slavisa Milojkovic)
 
-Version 2.0.7 - 2006-05-12
+Version 2.0.7 - 2008-05-12
 - added Bengali translation (Md. Masum Billah)
 - added Ukrainian translation (Oleg P. Suvolokin and Denis A. Barybin)
 - updated Czech translation (Petr Silon)
