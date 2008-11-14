@@ -254,13 +254,13 @@ class PMF_User_PermBasic extends PMF_User_Perm
                 right_id = ".$right_id
         );
         
-        if ($this->_db->num_rows($res) != 1)
+        if ($this->_db->num_rows($res) != 1) {
             return false;
         }
         
         // process right data
-        $right_data = $this->_db->fetch_assoc($res);
-        $right_data['for_users'] = $this->int_to_bool($right_data['for_users']);
+        $right_data               = $this->_db->fetch_assoc($res);
+        $right_data['for_users']  = $this->int_to_bool($right_data['for_users']);
         $right_data['for_groups'] = $this->int_to_bool($right_data['for_groups']);
         return $right_data;
     }
