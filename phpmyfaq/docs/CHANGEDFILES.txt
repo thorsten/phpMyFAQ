@@ -4,6 +4,9 @@ CHANGED FILES FROM 2.0.9 -> 2.0.10
 ./feed/news/rss.php
 ./feed/openquestions/rss.php
 ./feed/topten/rss.php
+./inc/libs/npdata.ser re-added
+./inc/libs/xmlrpc.php re-added
+./inc/libs/xmlrpcs.php re-added
 ./inc/PMF_Export/Pdf.php
 ./inc/PMF_User/PermBasic.php
 ./inc/PMF_User/PermMedium.php
