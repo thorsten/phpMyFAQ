@@ -164,7 +164,7 @@ class PMF_Link
         $this->itemTitle = '';
     }
 
-    function isIISServer()
+    public static function isIISServer()
     {
         return (
                isset($_SERVER['ALL_HTTP'])      // IIS 5.x possible signature
@@ -321,7 +321,7 @@ class PMF_Link
         return $scheme;
     }
 
-    function getSystemScheme()
+    public static function getSystemScheme()
     {
         $scheme = 'http'.(    ((!PMF_Link::isIISServer()) && isset($_SERVER['HTTPS']))
                            || ((PMF_Link::isIISServer()) && ('on' == strtolower($_SERVER['HTTPS']))) ? 's' : '').'://';
@@ -329,7 +329,7 @@ class PMF_Link
         return $scheme;
     }
 
-    function getSystemRelativeUri($path = null)
+    public static function getSystemRelativeUri($path = null)
     {
         if (isset($path)) {
             return str_replace($path, '', $_SERVER['PHP_SELF']);
@@ -338,7 +338,7 @@ class PMF_Link
         return str_replace('/inc/Link.php', '', $_SERVER['PHP_SELF']);
     }
 
-    function getSystemUri($path = null)
+    public static function getSystemUri($path = null)
     {
         // $_SERVER['HTTP_HOST'] is the name of the website or virtual host name (HTTP/1.1)
         // Precisely, it contains what the user has written in the Host request-header, see below.
@@ -501,5 +501,3 @@ class PMF_Link
         return $url;
     }
 }
-// }}}
-?>

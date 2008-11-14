@@ -605,5 +605,3 @@ class PMF_User_PermBasic extends PMF_User_Perm
     }
 
 } /* end of class PMF_PermBasic */
-
-?>

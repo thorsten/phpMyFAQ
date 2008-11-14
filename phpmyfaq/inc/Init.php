@@ -76,6 +76,8 @@ define('SQLPREFIX', $DB['prefix']);
 $db = PMF_Db::db_select($DB['type']);
 $db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db']);
 
+date_default_timezone_set('Europe/Berlin');
+
 //
 // Fetch the configuration
 //
@@ -360,31 +362,31 @@ class PMF_Init
         }
         // Select the language
         if (isset($_lang['post'])) {
-            $this->language = $_lang['post'];
+            self::$language = $_lang['post'];
             $_lang          = null;
             unset($_lang);
             setcookie('pmf_sid', $sid, $_SERVER['REQUEST_TIME'] + 3600);
         } elseif (isset($_lang['get'])) {
-            $this->language = $_lang['get'];
+            self::$language = $_lang['get'];
         } elseif (isset($_lang['cookie'])) {
-            $this->language = $_lang['cookie'];
+            self::$language = $_lang['cookie'];
             $_lang          = null;
             unset($_lang);
         } elseif (isset($_lang['detection'])) {
-            $this->language = $_lang['detection'];
+            self::$language = $_lang['detection'];
             $_lang          = null;
             unset($_lang);
             setcookie('pmf_sid', $sid, $_SERVER['REQUEST_TIME'] + 3600);
         } elseif (isset($_lang['config'])) {
-            $this->language = $_lang['config'];
+            self::$language = $_lang['config'];
             $_lang          = null;
             unset($_lang);
             setcookie('pmf_sid', $sid, $_SERVER['REQUEST_TIME'] + 3600);
         } else {
-            $this->language = 'en'; // just a fallback
+            self::$language = 'en'; // just a fallback
         }
         
-        return $this->language;
+        return self::$language;
     }
 
     /**

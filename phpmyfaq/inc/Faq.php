@@ -1,4 +1,4 @@
- <?php
+<?php
 /**
  * $Id: Faq.php,v 1.129 2008-05-22 11:22:59 thorstenr Exp $
  *

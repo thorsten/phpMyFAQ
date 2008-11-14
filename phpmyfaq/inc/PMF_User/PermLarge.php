@@ -132,5 +132,3 @@ class PMF_User_PermLarge extends PMF_User_PermMedium
     }
 
 } /* end of class PMF_PermLarge */
-
-?>

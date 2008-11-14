@@ -951,5 +951,3 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
     }
 
 } /* end of class PMF_PermMedium */
-
-?>

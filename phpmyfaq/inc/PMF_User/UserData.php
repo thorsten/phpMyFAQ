@@ -254,5 +254,3 @@ class PMF_User_UserData
     }
 
 } /* end of class PMF_UserData */
-
-?>

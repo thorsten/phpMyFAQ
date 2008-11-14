@@ -400,7 +400,7 @@ class PMF_User_CurrentUser extends PMF_User_User
     * @param    bool
     * @return   mixed
     */
-    function getFromSession($ip_check = false)
+    public static function getFromSession($ip_check = false)
     {
         // there is no valid user object in session
         if (!isset($_SESSION[PMF_SESSION_CURRENT_USER]) || !isset($_SESSION[PMF_SESSION_ID_TIMESTAMP]))
