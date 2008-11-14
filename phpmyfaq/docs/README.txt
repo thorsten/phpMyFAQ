@@ -18,7 +18,7 @@ For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.5.0-alpha2 - 2008-
+Version 2.5.0-alpha2 - 2009-
 - changed PHP requirement to PHP 5.2 (Thorsten)
 - dropped support for MySQL 4.0 and MaxDB (Thorsten)
 - dropped support for XML-RPC (Thorsten)
@@ -32,7 +32,23 @@ Version 2.5.0-alpha2 - 2008-
 - updated bundled Net_IDNA to version 0.6.0 (Thorsten)
 - updated bundled TinyMCE editor component to version 2.1.3 (Thorsten)
 
-Version 2.0.7 - 2006-05-12
+Version 2.0.9 - 2008-10-17
+- dedicated to my uncle Werner
+- fixed content deletion bug (Thorsten)
+- fixed SVN export script (Thorsten)
+- improved comment spam protection (Thorsten)
+- re-added missing css color file (Thorsten)
+- minor bugfixes (Thorsten)
+
+Version 2.0.8 - 2008-09-11
+- fixed security vulnerability in XSS filter (Alexios Fakos at n.runs.com)
+- switched repository from CVS to SVN (Thorsten)
+- fixed session bug with MS SQL (Simon Stewart)
+- fixed login errors with IBM DB2 (Thorsten, Helmut Tessarek)
+- updated French translation (Julien Ross)
+- updated Serbian translation (Slavisa Milojkovic)
+
+Version 2.0.7 - 2008-05-12
 - added Bengali translation (Md. Masum Billah)
 - added Ukrainian translation (Oleg P. Suvolokin and Denis A. Barybin)
 - updated Czech translation (Petr Silon)
