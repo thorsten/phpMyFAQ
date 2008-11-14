@@ -4,11 +4,11 @@
 *
 * The main Tags class
 *
-* @package      phpMyFAQ
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @author       Matteo Scaramuccia <matteo@scaramuccia.com>
-* @since        2006-08-10
-* @copyright    (c) 2006-2007 phpMyFAQ Team
+* @package   phpMyFAQ
+* @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+* @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+* @since     2006-08-10
+* @copyright 2006-2009 phpMyFAQ Team
 *
 * The contents of this file are subject to the Mozilla Public License
 * Version 1.1 (the "License"); you may not use this file except in
@@ -47,7 +47,7 @@ class PMF_Tags
      */
     function __construct(&$db, $language)
     {
-        $this->db = &$db;
+        $this->db       = &$db;
         $this->language = $language;
     }
 
@@ -57,13 +57,12 @@ class PMF_Tags
      * @param   string  $search     Move the returned result set to be the result of a start-with search
      * @param   boolean $limit      Limit the returned result set
      * @return  array   $tags
-     * @access  public
      * @since   2006-08-28
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      * @author  Georgi Korchev <korchev@yahoo.com>
      */
-    function getAllTags($search = null, $limit = false)
+    public function getAllTags($search = null, $limit = false)
     {
         global $DB;
         $tags = $allTags = array();
@@ -89,7 +88,6 @@ class PMF_Tags
             (isset($search) && ($search != '') ? "WHERE tagging_name ".$like." '".$search."%'" : '')
             );
 
-        $i = 0;
         $result = $this->db->query($query);
 
         if ($result) {
@@ -107,16 +105,16 @@ class PMF_Tags
                  $rand = rand(1, count($allTags) + 1);
                   if (!isset($soFar[$rand])) {
                      if (isset($allTags[$rand])) {
-                        $valid = true;
+                        $valid        = true;
                         $soFar[$rand] = '';
-                        $tags[$rand] = $allTags[$rand];
+                        $tags[$rand]  = $allTags[$rand];
                      }
 
                   }
               }
            }
         } else {
-           $tags = PMF_Utils::shuffleData($allTags);
+            $tags = PMF_Utils::shuffleData($allTags);
         }
 
         return $tags;
@@ -127,11 +125,10 @@ class PMF_Tags
      *
      * @param   integer $record_id
      * @return  array   $tags
-     * @access  public
      * @since   2006-08-10
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function getAllTagsById($record_id)
+    public function getAllTagsById($record_id)
     {
         $tags = array();
 
@@ -164,11 +161,10 @@ class PMF_Tags
      *
      * @param   integer $record_id
      * @return  string
-     * @access  public
      * @since   2006-08-29
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function getAllLinkTagsById($record_id)
+    public function getAllLinkTagsById($record_id)
     {
         global $sids, $PMF_LANG;
         $taglisting = '';
@@ -179,11 +175,11 @@ class PMF_Tags
                 $sids.'action=search&amp;tagging_id=%d',
                 $tagging_id
             );
-            $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+            $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
             $oLink->itemTitle = $tagging_name;
-            $oLink->text = $tagging_name;
-            $oLink->tooltip = $title;
-            $taglisting .= $oLink->toHtmlAnchor().', ';
+            $oLink->text      = $tagging_name;
+            $oLink->tooltip   = $title;
+            $taglisting      .= $oLink->toHtmlAnchor().', ';
         }
 
         return '' == $taglisting ? '-' : substr($taglisting, 0, -2);
@@ -198,7 +194,7 @@ class PMF_Tags
      * @since   2006-08-28
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function saveTags($record_id, $tags)
+    public function saveTags($record_id, $tags)
     {
         if (!is_array($tags)) {
             return false;
@@ -263,11 +259,10 @@ class PMF_Tags
      *
      * @param   integer $record_id
      * @return  boolean
-     * @access  public
      * @since   2007-05-02
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function deleteTagsFromRecordId($record_id)
+    public function deleteTagsFromRecordId($record_id)
     {
         if (!is_integer($record_id)) {
             return false;
@@ -292,11 +287,10 @@ class PMF_Tags
      *
      * @param   array   $arrayOfTags
      * @return  array   $records
-     * @access  public
      * @since   2006-08-10
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function getRecordsByIntersectionTags($arrayOfTags)
+    public function getRecordsByIntersectionTags($arrayOfTags)
     {
         if (!is_array($arrayOfTags)) {
             return false;
@@ -322,7 +316,7 @@ class PMF_Tags
         );
 
         $records = array();
-        $result = $this->db->query($query);
+        $result  = $this->db->query($query);
         while ($row = $this->db->fetch_object($result)) {
             $records[] = $row->record_id;
         }
@@ -335,11 +329,10 @@ class PMF_Tags
      *
      * @param   array   $arrayOfTags
      * @return  array   $records
-     * @access  public
      * @since   2006-08-10
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function getRecordsByUnionTags($arrayOfTags)
+    public function getRecordsByUnionTags($arrayOfTags)
     {
         if (!is_array($arrayOfTags)) {
             return false;
@@ -362,7 +355,7 @@ class PMF_Tags
         );
 
         $records = array();
-        $result = $this->db->query($query);
+        $result  = $this->db->query($query);
         while ($row = $this->db->fetch_object($result)) {
             $records[] = $row->record_id;
         }
@@ -374,11 +367,10 @@ class PMF_Tags
      *
      * @param   integer
      * @return  string
-     * @access  public
      * @since   2006-11-19
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function getTagNameById($tagId)
+    public function getTagNameById($tagId)
     {
         if (!is_numeric($tagId)) {
             return null;
@@ -405,11 +397,10 @@ class PMF_Tags
      * Returns the HTML for the Tags Cloud
      *
      * @return  string
-     * @access  public
      * @since   2006-09-02
      * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      */
-    function printHTMLTagsCloud()
+    public function printHTMLTagsCloud()
     {
         global $sids, $PMF_LANG;
         $html = '';
@@ -438,12 +429,13 @@ class PMF_Tags
             }
         }
 
-        $CSSRelevanceLevels = 5;
+        $CSSRelevanceLevels   = 5;
         $CSSRelevanceMinLevel = 1;
         $CSSRelevanceMaxLevel = $CSSRelevanceLevels - $CSSRelevanceMinLevel;
-        $CSSRelevanceLevel = 3;
+        $CSSRelevanceLevel    = 3;
+        
         $html = '<div class="tagscloud">';
-        $i = 0;
+        $i    = 0;
         foreach ($tags as $tag) {
             $i++;
             if ($max - $min > 0) {
@@ -456,12 +448,12 @@ class PMF_Tags
                         $sids.'action=search&amp;tagging_id=%d',
                         $tag['id']
                         );
-            $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+            $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
             $oLink->itemTitle = $tag['name'];
-            $oLink->text = $tag['name'];
-            $oLink->tooltip = $title;
-            $html .= $oLink->toHtmlAnchor();
-            $html .= (count($tags) == $i ? '' : ' ').'</span>';
+            $oLink->text      = $tag['name'];
+            $oLink->tooltip   = $title;
+            $html            .= $oLink->toHtmlAnchor();
+            $html            .= (count($tags) == $i ? '' : ' ').'</span>';
         }
         $html .= '</div>';
 
@@ -471,14 +463,13 @@ class PMF_Tags
     /**
      * Returns all FAQ record IDs where all tags are included
      *
-     * @param   array   $arrayOfTags
+     * @param   string  $tagName
      * @return  array   $records
-     * @access  public
      * @since   2006-08-30
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      */
-    function getRecordsByTagName($tagName)
+    public function getRecordsByTagName($tagName)
     {
         if (!is_string($tagName)) {
             return false;
@@ -511,7 +502,6 @@ class PMF_Tags
      *
      * @param   integer $tagId
      * @return  array   $records
-     * @access  public
      * @since   2007-04-20
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
@@ -537,7 +527,7 @@ class PMF_Tags
             $tagId);
 
         $records = array();
-        $result = $this->db->query($query);
+        $result  = $this->db->query($query);
         while ($row = $this->db->fetch_object($result)) {
             $records[] = $row->record_id;
         }
@@ -549,11 +539,10 @@ class PMF_Tags
      * Check if at least one faq has been tagged with a tag
      *
      * @return  bool
-     * @access  public
      * @since   2006-12-31
      * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      */
-    function existTagRelations()
+    public function existTagRelations()
     {
         $query = sprintf('
             SELECT
