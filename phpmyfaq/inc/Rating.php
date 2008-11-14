@@ -27,21 +27,21 @@ class PMF_Rating
      *
      * @var object PMF_Db
      */
-    var $db;
+    private $db;
 
     /**
      * Language
      *
      * @var string
      */
-    var $language;
+    private $language;
 
     /**
      * Database type
      *
      * @var string
      */
-    var $type;
+    private $type;
 
     /**
      * Constructor
@@ -51,7 +51,7 @@ class PMF_Rating
      * @since   2007-03-31
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function PMF_Rating(&$db, $language)
+    function __construct(&$db, $language)
     {
         global $DB;
 
@@ -68,7 +68,7 @@ class PMF_Rating
      * @since   2007-03-31
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function getAllRatings()
+    public function getAllRatings()
     {
         $ratings = array();
 
@@ -152,16 +152,14 @@ class PMF_Rating
         $result = $this->db->query($query);
         while ($row = $this->db->fetch_object($result)) {
         	$ratings[] = array(
-        	   'id'            => $row->id,
-        	   'lang'          => $row->lang,
-        	   'category_id'   => $row->category_id,
-        	   'question'      => $row->question,
-        	   'num'           => $row->num,
-        	   'usr'           => $row->usr);
+        	   'id'          => $row->id,
+        	   'lang'        => $row->lang,
+        	   'category_id' => $row->category_id,
+        	   'question'    => $row->question,
+        	   'num'         => $row->num,
+        	   'usr'         => $row->usr);
         }
 
         return $ratings;
     }
-
-
 }

@@ -121,7 +121,7 @@ class PMF_Session
                 
                 $file = './data/tracking'.date('dmY');
                 
-                $ret = file_put_contents($file, $data, FILE_APPEND);
+                file_put_contents($file, $data, FILE_APPEND);
             }
         }
     }
@@ -151,7 +151,7 @@ class PMF_Session
         $result = $this->db->query($query);
 
         if ($result) {
-        	$res = $this->db->fetch_object($result);
+        	$res       = $this->db->fetch_object($result);
         	$timestamp = $res->time;
         }
 

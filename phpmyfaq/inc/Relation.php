@@ -28,72 +28,33 @@ class PMF_Relation
     *
     * @var  object
     */
-    var $db;
+    private $db;
 
     /**
     * Language
     *
     * @var  string
     */
-    var $language;
+    private $language;
 
     /**
     * Language strings
     *
     * @var  string
     */
-    var $pmf_lang;
+    private $pmf_lang;
 
     /**
     * Constructor
     *
     */
-    function PMF_Relation(&$db, $language)
+    function __construct(&$db, $language)
     {
         global $PMF_LANG;
 
-        $this->db = &$db;
+        $this->db       = &$db;
         $this->language = $language;
         $this->pmf_lang = $PMF_LANG;
-    }
-
-    /**
-     * Saves the keywords for the related articles
-     *
-     * @param    string
-     * @access   public
-     * @author   Marco Enders <marco@minimarco.de>
-     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-     */
-    function saveRelationKeywords($relation_keywords)
-    {
-        $relation = explode(' ', $relation_keywords);
-        foreach ($relation as $relation_word) {
-            if (strlen($relation_word) > 2) {
-                $query = sprintf(
-                    "SELECT
-                        keyword
-                    FROM
-                        %sfaqkeywords
-                    WHERE
-                        lang = '%s' AND keyword = '%s'",
-                    SQLPREFIX,
-                    $this->language,
-                    $relation_word);
-                $result_relation = $this->db->query($query);
-            }
-
-            if ($db->num_rows($result_relation) == 0) {
-                $query = sprintf(
-                    "INSERT INTO
-                        %sfaqkeywords
-                    VALUES
-                        (%d,'%s')",
-                    SQLPREFIX,
-                    $relation_word);
-                $this->db->query($query);
-            }
-        }
     }
 
     /**
@@ -103,11 +64,10 @@ class PMF_Relation
      * @param    string     $strSource
      * @param    integer    $intCount
      * @return   string
-     * @access   public
      * @author   Marco Enders <marco@minimarco.de>
      * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function setRelationLinks($strHighlight, $strSource, $intCount = 0)
+    public function setRelationLinks($strHighlight, $strSource, $intCount = 0)
     {
         global $in_content;
         $x = 0;
@@ -152,13 +112,12 @@ class PMF_Relation
      * @param   integer $record_id
      * @param   string  $thema
      * @return   string
-     * @access   public
      * @since   2006-08-29
      * @author  Thomas Zeithaml <info@spider-trap.de>
      */
-    function getAllRelatedById($record_id, $article_name, $keywords)
+    public function getAllRelatedById($record_id, $article_name, $keywords)
     {
-        global $sids, $PMF_LANG, $PMF_CONF;
+        global $sids, $PMF_CONF;
         $relevantslisting = '';
         $begriffe = str_replace('-', ' ', $article_name) . $keywords;
         $i = $last_id = 0;
@@ -189,10 +148,10 @@ class PMF_Relation
                     $row->category_id,
                     $row->id,
                     $row->lang);
-            $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
-            $oLink->itemTitle = $row->thema;
-            $oLink->text = PMF_htmlentities($row->thema, ENT_QUOTES, $this->pmf_lang['metaCharset']);
-            $oLink->tooltip = $row->thema;
+            $oLink             = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+            $oLink->itemTitle  = $row->thema;
+            $oLink->text       = PMF_htmlentities($row->thema, ENT_QUOTES, $this->pmf_lang['metaCharset']);
+            $oLink->tooltip    = $row->thema;
             $relevantslisting .= $oLink->toHtmlAnchor().'</li>';
             $i++;
             $last_id = $row->id;

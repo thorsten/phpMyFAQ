@@ -4,9 +4,10 @@
  *
  * The main Sitemap class
  *
+ * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since     2007-03-30
- * @copyright (c) 2007 phpMyFAQ Team
+ * @copyright 2007-2008 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -75,7 +76,7 @@ class PMF_Sitemap
      * @since  2007-03-30
      * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function __construct(&$db, $language, $user = null, $groups = null)
+    public function __construct(&$db, $language, $user = null, $groups = null)
     {
         global $DB, $faqconfig;
 
@@ -102,11 +103,10 @@ class PMF_Sitemap
      * Returns all available first letters
      *
      * @return array
-     * @access public
      * @since  2007-03-30
      * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function getAllFirstLetters()
+    public function getAllFirstLetters()
     {
         global $sids;
 
@@ -208,11 +208,10 @@ class PMF_Sitemap
      *
      * @param  string $letter Letter
      * @return array
-     * @access public
      * @since  2007-03-30
      * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function getRecordsFromLetter($letter = 'A')
+    public function getRecordsFromLetter($letter = 'A')
     {
         global $sids, $PMF_LANG;
 
