@@ -12,6 +12,7 @@ Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 Changes since 2.0.9:
 - fixed image bug in PDF (Thorsten)
 - re-added missing XML-RPCS library files (Thorsten)
+- fixed PHP warnings and notices (Thorsten)
 - minor bugfixes (Thorsten, Andreas Hansson)
 
 For known issues please take a look at KNOWNBUGS.txt
@@ -21,6 +22,7 @@ CHANGELOG:
 Version 2.0.9 - 2008-11-
 - fixed image bug in PDF (Thorsten)
 - re-added missing XML-RPCS library files (Thorsten)
+- fixed PHP warnings and notices (Thorsten)
 - minor bugfixes (Thorsten, Andreas Hansson)
 
 Version 2.0.9 - 2008-10-17

@@ -1,5 +1,6 @@
 CHANGED FILES FROM 2.0.9 -> 2.0.10
 
+./admin/category.move.php
 ./feed/latest/rss.php
 ./feed/news/rss.php
 ./feed/openquestions/rss.php
@@ -13,6 +14,7 @@ CHANGED FILES FROM 2.0.9 -> 2.0.10
 ./inc/Faq.php
 ./install/installer.php
 ./install/update.php
+./scripts/svn2package.sh
 ./template/admin.css
 ./template/admin.rtl.css
 ./artikel.php
