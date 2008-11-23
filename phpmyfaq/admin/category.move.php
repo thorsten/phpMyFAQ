@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id: category.move.php,v 1.15 2007-03-22 17:51:57 thorstenr Exp $
- *
  * Select a category to move
  *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since       2004-04-29
- * @copyright   (c) 2004-2007 phpMyFAQ Team
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since     2004-04-29
+ * @copyright 2004-2008 phpMyFAQ Team
+ * @version   SVN: $Id: category.move.php,v 1.15 2007-03-22 17:51:57 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -50,7 +50,7 @@ if ($permission["editcateg"]) {
 <?php
                     foreach ($category->catTree as $cat) {
                        if ($id != $cat["id"]) {
-                          printf("<option value=\"%s\">%s%s</option>", $cat["id"], $indent, $cat["name"]);
+                          printf("<option value=\"%s\">%s%s</option>", $cat['id'], $cat['indent'], $cat['name']);
                        }
                    }
 ?>
