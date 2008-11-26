@@ -16,6 +16,7 @@ CHANGED FILES FROM 2.0.9 -> 2.0.10
 ./inc/Template.php
 ./install/installer.php
 ./install/update.php
+./lang/language_nl.php
 ./scripts/svn2package.sh
 ./template/admin.css
 ./template/admin.rtl.css
