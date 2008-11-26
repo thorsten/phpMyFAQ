@@ -20,7 +20,7 @@ For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.0.9 - 2008-11-
+Version 2.0.10 - 2008-11-26
 - fixed image bug in PDF (Thorsten)
 - fixed isses in admin log display (Thorsten)
 - re-added missing XML-RPCS library files (Thorsten)
