@@ -2,10 +2,11 @@
 /**
  * Overview of actions in the admin section
  *
+ * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since     2003-02-23
- * @copyright (c) 2003-2008 phpMyFAQ Team
- * @version   CVS: $Id: adminlog.php,v 1.16.2.1 2008-01-20 16:17:19 thorstenr Exp $
+ * @copyright 2003-2008 phpMyFAQ Team
+ * @version   SVN: $Id: adminlog.php,v 1.16.2.1 2008-01-20 16:17:19 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -23,7 +24,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
-require_once(PMF_ROOT_DIR.'/inc/Logging.php');
+require_once PMF_ROOT_DIR.'/inc/Logging.php';
 
 $logging = new PMF_Logging($db);
 
@@ -38,19 +39,19 @@ if ($permission['adminlog'] && 'adminlog' == $_action) {
     if (!isset($_REQUEST["pages"])) {
         $pages = round(( $logging->getNumberOfEntries() + ($perpage / 3)) / $perpage, 0);
     } else {
-        $pages = $_REQUEST["pages"];
+        $pages = (int)$_REQUEST["pages"];
     }
 
     if (!isset($_REQUEST["page"])) {
         $page = 1;
     } else {
-        $page = $_REQUEST["page"];
+        $page = (int)$_REQUEST["page"];
     }
 
     $start = ($page - 1) * $perpage;
     $ende = $start + $perpage;
 
-    $PageSpan = PageSpan("<a href=\"".$_SERVER["PHP_SELF"]."?action=adminlog&amp;pages=".$pages."&amp;page=<NUM>\">", 1, $pages, $page);
+    $PageSpan = PageSpan("<a href=\"?action=adminlog&amp;pages=".$pages."&amp;page=<NUM>\">", 1, $pages, $page);
 
     $logging_data = $logging->getAll();
 ?>
@@ -86,11 +87,13 @@ if ($permission['adminlog'] && 'adminlog' == $_action) {
             continue;
         }
         $displayedCounter++;
+        
+        $user->getUserById($logging_value['usr']);
 ?>
         <tr class="cell">
             <td class="list"><?php print $logging_id; ?></td>
             <td class="list"><?php print date("Y-m-d H:i:s", $logging_value['time']); ?></td>
-            <td class="list"><?php print isset($_user[$logging_value['usr']]) ? $_user[$logging_value['usr']] : '&nbsp;'; ?></td>
+            <td class="list"><?php print $user->getLogin(); ?></td>
             <td class="list"><?php print $logging_value['ip']; ?></td>
         </tr>
         <tr class="cell">
