@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id: language_nl.php,v 1.36 2007-03-29 19:31:55 thorstenr Exp $
- *
  * Dutch language file
  *
- * @author      René de Kat <rdkat@home.nl>
- * @since       2004-07-09
- * @copyright   (c) 2004-2007 phpMyFAQ Team
+ * @package   phpMyFAQ
+ * @author    René de Kat <rdkat@home.nl>
+ * @since     2004-07-09
+ * @copyright 2004-2008 phpMyFAQ Team
+ * @version   SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -690,8 +690,8 @@ $PMF_LANG["rightsLanguage"]['addglossary'] = "Glossarium-records toevoegen";
 $PMF_LANG["rightsLanguage"]['editglossary'] = "Glossarium-records bewerken";
 $PMF_LANG["rightsLanguage"]['delglossary'] = "Glossarium-records verwijderen";
 $PMF_LANG["ad_menu_group_administration"] = "Groepenbeheer";
-$PMF_LANG['ad_user_loggedin'] = 'U bent aangemeld alS';
-$PMF_LANG['ad_group_details'] = "Details van de groeP";
+$PMF_LANG['ad_user_loggedin'] = 'U bent aangemeld als';
+$PMF_LANG['ad_group_details'] = "Details van de groep";
 $PMF_LANG['ad_group_add'] = "Groep toevoegen";
 $PMF_LANG['ad_group_add_link'] = "Groep toevoegen";
 $PMF_LANG['ad_group_name'] = "Groepnaam:";
