@@ -135,6 +135,7 @@ class PMF_Template
      */
 	function getTemplateContents()
 	{
+	    $output = '';
 		foreach ($this->outputs as $val) {
 			$output .= str_replace("\n\n", "\n", $val);
 		}
