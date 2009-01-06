@@ -1,7 +1,7 @@
-$Id: README.txt,v 1.92.2.32 2008-05-31 11:50:18 thorstenr Exp $
+$Id$
 
-phpMyFAQ 2.0.10
-Codename "Prometheus"
+phpMyFAQ 2.0.11
+Codename "TBD"
 
 Installation/Update:
 Please read the documentation (documentation.en.html) carefully.
@@ -9,16 +9,15 @@ Please read the documentation (documentation.en.html) carefully.
 Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
-Changes since 2.0.9:
-- fixed image bug in PDF (Thorsten)
-- fixed isses in admin log display (Thorsten)
-- re-added missing XML-RPCS library files (Thorsten)
-- fixed PHP warnings and notices (Thorsten)
-- minor bugfixes (Thorsten, Andreas Hansson)
+Changes since 2.0.10:
+- 
 
 For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
+
+Version 2.0.11 - 2009-
+- 
 
 Version 2.0.10 - 2008-11-26
 - fixed image bug in PDF (Thorsten)

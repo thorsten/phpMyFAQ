@@ -1,6 +1,11 @@
+$Id$
+
 CHANGED FILES FROM 2.0.10 -> 2.0.11
 
-.docs/documentation.en.html
+./admin/footer.php
+./docs/documentation.en.html
+./install/installer.php
+./install/update.php
 
 
 

@@ -1,13 +1,13 @@
 <?php
 /**
- * $Id: footer.php,v 1.30.2.6 2008-05-16 15:13:19 thorstenr Exp $
+ * $Id$
  *
  * Footer of the admin area
  *
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author      Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @since       2003-02-26
- * @copyright   (c) 2003-2008 phpMyFAQ Team
+ * @copyright   (c) 2003-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -31,7 +31,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 
 <!-- Footer -->
 <div id="footer">
-    <div id="copyright"><strong>phpMyFAQ <?php print $PMF_CONF['main.currentVersion']; ?></strong> | &copy; 2001-2008 <a href="http://www.phpmyfaq.de/" target="_blank">phpMyFAQ Team</a></div>
+    <div id="copyright"><strong>phpMyFAQ <?php print $PMF_CONF['main.currentVersion']; ?></strong> | &copy; 2001-2009 <a href="http://www.phpmyfaq.de/" target="_blank">phpMyFAQ Team</a></div>
 </div>
 
 <?php

@@ -12,7 +12,7 @@
  * @author      Johannes Schlueter <johannes@php.net>
  * @author      Uwe Pries <uwe.pries@digartis.de>
  * @since       2002-08-20
- * @copyright   (c) 2001-2008 phpMyFAQ Team
+ * @copyright   (c) 2002-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -25,8 +25,8 @@
  * under the License.
  */
 
-define('VERSION', '2.0.10');
-define('COPYRIGHT', '&copy; 2001-2008 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
+define('VERSION', '2.0.11');
+define('COPYRIGHT', '&copy; 2001-2009 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('SAFEMODE', @ini_get('safe_mode'));
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 require_once(PMF_ROOT_DIR.'/inc/constants.php');
