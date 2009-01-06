@@ -11,7 +11,7 @@
  * @author    Uwe Pries <uwe.pries@digartis.de>
  * @since     2002-08-20
  * @copyright 2002-2008 phpMyFAQ Team
- * @version   CVS: $Id$
+ * @version   SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
