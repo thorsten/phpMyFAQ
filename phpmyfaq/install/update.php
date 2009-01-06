@@ -4,10 +4,10 @@
  *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Thomas Melchinger <t.melchinger@uni.de>
- * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @since     2002-01-10
- * @copyright 2002-2008 phpMyFAQ Team
- * @version   CVS: $Id: update.php,v 1.162 2008-05-31 14:41:23 thorstenr Exp $
+ * @copyright 2002-2009 phpMyFAQ Team
+ * @version   SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -21,7 +21,7 @@
  */
 
 define('NEWVERSION', '2.5.0-alpha2');
-define('COPYRIGHT', '&copy; 2001-2008 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
+define('COPYRIGHT', '&copy; 2001-2009 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
 require_once PMF_ROOT_DIR.'/inc/constants.php';
@@ -55,7 +55,7 @@ function HTMLFooter()
  * @return  string
  * @access  public
  * @since   2007-06-19
- * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author  Matteo Scaramuccia <matteo@phpmyfaq.de>
  */
 function writeDropDefaultConstraintQuery($sTableName, $sColumnName, $dbtype = 'mssql')
 {
