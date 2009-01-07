@@ -1,8 +1,6 @@
 <?php
 /**
- * $Id: Enc.php,v 1.10 2008-05-31 14:41:23 thorstenr Exp $
- *
- * provides methods for password encryption. 
+ * Provides methods for password encryption. 
  *
  * Subclasses (extends) of this class provide the encrypt() method that returns
  * encrypted string. For special encryption methods, just create a new class as
@@ -10,7 +8,8 @@
  *
  * @author      Lars Tiedemann <php@larstiedemann.de>
  * @since       2005-09-18
- * @copyright   (c) 2005-2007 phpMyFAQ Team
+ * @copyright   (c) 2005-2009 phpMyFAQ Team
+ * @version     SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -74,12 +73,12 @@ class PMF_User_Enc
      * object without database access and with an error message. See the
      * of the error() method for further details.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param string
-     * @return object
+     * @access  static
+     * @author  Lars Tiedemann, <php@larstiedemann.de>
+     * @param   string
+     * @return  object
      */
-    function selectEnc($enctype)
+    public static function selectEnc($enctype)
     {
         $enc = new PMF_User_Enc();
         $enctype = strtolower($enctype);
