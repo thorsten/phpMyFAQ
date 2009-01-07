@@ -5,13 +5,15 @@
  * This script tests the complete environment, writes the database connection
  * parameters into the file data.php and the configuration into the database.
  *
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Tom Rochestr <tom.rochester@gmail.com>
- * @author    Johannes Schlueter <johannes@php.net>
- * @author    Uwe Pries <uwe.pries@digartis.de>
- * @since     2002-08-20
- * @copyright 2002-2008 phpMyFAQ Team
- * @version   SVN: $Id$
+ * @package     phpMyFAQ
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author      Tom Rochestr <tom.rochester@gmail.com>
+ * @author      Johannes Schlueter <johannes@php.net>
+ * @author      Uwe Pries <uwe.pries@digartis.de>
+ * @author      Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @since       2002-08-20
+ * @copyright   (c) 2002-2009 phpMyFAQ Team
+ * @version     SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -28,6 +30,8 @@ define('VERSION', '2.5.0-alpha2');
 define('COPYRIGHT', '&copy; 2001-2009 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('SAFEMODE', @ini_get('safe_mode'));
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
+
+require_once PMF_ROOT_DIR.'/inc/autoLoader.php';
 require_once PMF_ROOT_DIR.'/inc/constants.php';
 require_once PMF_ROOT_DIR.'/inc/functions.php';
 require_once PMF_ROOT_DIR.'/install/questionnaire.php';
@@ -105,13 +109,13 @@ function phpmyfaq_check()
 }
 
 /**
- * Executes the uninstall queries
+ * Executes the uninstall set of queries
  *
  * @return void
  * @access public
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  */
-function uninstall()
+function db_uninstall()
 {
     global $uninst, $db;
 
@@ -732,6 +736,10 @@ foreach ($permLevels as $level => $desc) {
     print "<p class=\"center\">";
     @ob_flush();
     flush();
+
+    // Erase any table before starting creating the required ones
+    db_uninstall();
+    // Start creating the required tables
     $count = 0;
     while ($each_query = each($query)) {
         $result = @$db->query($each_query[1]);
@@ -743,7 +751,7 @@ foreach ($permLevels as $level => $desc) {
             print "<div style=\"text-align: left;\"><p>Query:\n";
             print "<pre>".PMF_htmlentities($each_query[1])."</pre></p></div>\n";
             print "</div>";
-            uninstall();
+            db_uninstall();
             cleanInstallation();
             HTMLFooter();
             die();
@@ -762,8 +770,7 @@ foreach ($permLevels as $level => $desc) {
     if (!defined('SQLPREFIX')) {
         define('SQLPREFIX', $sqltblpre);
     }
-    require_once PMF_ROOT_DIR.'/inc/PMF_User/User.php';
-    $admin = new PMF_User();
+    $admin = new PMF_User_User();
     $admin->createUser('admin', $password, 1);
     $admin->setStatus('protected');
     $adminData = array(
@@ -983,7 +990,7 @@ foreach ($permLevels as $level => $desc) {
         $admin->perm->grantUserRight($adminID, $rightID);
     }
     // Add anonymous user account
-    $anonymous = new PMF_User();
+    $anonymous = new PMF_User_User();
     $anonymous->createUser('anonymous', null, -1);
     $anonymous->setStatus('protected');
     $anonymousData = array(
@@ -992,8 +999,6 @@ foreach ($permLevels as $level => $desc) {
     );
     $anonymous->setUserData($anonymousData);
 
-    require_once PMF_ROOT_DIR.'/inc/Configuration.php';
-    require_once PMF_ROOT_DIR.'/inc/Link.php';
     $oConf = new PMF_Configuration($db);
     $oConf->getAll();
     $configs = $oConf->config;
@@ -1129,4 +1134,5 @@ echo '</dl><input type="hidden" name="systemdata" value="'.htmlspecialchars(seri
     }
     
     HTMLFooter();
+
 }

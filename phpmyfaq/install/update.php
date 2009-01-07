@@ -2,12 +2,13 @@
 /**
  * Main update script
  *
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Thomas Melchinger <t.melchinger@uni.de>
- * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @since     2002-01-10
- * @copyright 2002-2009 phpMyFAQ Team
- * @version   SVN: $Id$
+ * @package     phpMyFAQ 
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author      Thomas Melchinger <t.melchinger@uni.de>
+ * @author      Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @since       2002-01-10
+ * @copyright   2002-2009 phpMyFAQ Team
+ * @version     SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -24,6 +25,7 @@ define('NEWVERSION', '2.5.0-alpha2');
 define('COPYRIGHT', '&copy; 2001-2009 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
+require_once PMF_ROOT_DIR.'/inc/autoLoader.php';
 require_once PMF_ROOT_DIR.'/inc/constants.php';
 
 if (isset($_GET["step"]) && $_GET["step"] != "") {
@@ -1103,7 +1105,6 @@ if ($step == 5) {
         }
 
         // 2/4. Add missing anonymous user account in 2.0.0-alpha
-        require_once(PMF_ROOT_DIR.'/inc/PMF_User/User.php');
         $anonymous = new PMF_User_User();
         $anonymous->createUser('anonymous', null, -1);
         $anonymous->setStatus('protected');
