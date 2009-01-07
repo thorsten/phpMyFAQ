@@ -1,40 +1,45 @@
 <?php
 /**
-* $Id: attachment.php,v 1.36 2007-04-13 18:38:11 thorstenr Exp $
-*
-* Select an attachment and save it or create the SQL backup files
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @since        2002-09-17
-* @copyright    (c) 2002-2007 phpMyFAQ
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * Select an attachment and save it or create the SQL backup files
+ *
+ * @package     phpMyFAQ
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since       2002-09-17
+ * @copyright   (c) 2002-2009 phpMyFAQ
+ * @version     SVN: $Id$ 
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
+
+//
+// Define the named constant used as a check by any included PHP file
+//
 define('IS_VALID_PHPMYFAQ_ADMIN', null);
 
-require_once(PMF_ROOT_DIR.'/inc/Init.php');
+//
+// Autoload classes, prepend and start the PHP session
+//
+require_once PMF_ROOT_DIR.'/inc/Init.php';
 PMF_Init::cleanRequest();
-session_name('pmfauth' . trim($faqconfig->get('main.phpMyFAQToken')));
+session_name('pmfauth'.trim($faqconfig->get('main.phpMyFAQToken')));
 session_start();
-
-define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
 if (isset($_REQUEST["action"]) && ($_REQUEST["action"] == "sicherdaten" || $_REQUEST["action"] == "sicherlog")) {
     Header("Content-Type: application/octet-stream");
     if ($_REQUEST["action"] == "sicherdaten") {
-        Header("Content-Disposition: attachment; filename=\"phpmyfaq-data.".date("Y-m-d").".sql\"");
+        Header("Content-Disposition: attachment; filename=\"phpmyfaq-data.".date("Y-m-d-H-i-s").".sql\"");
     } elseif ($_REQUEST["action"] == "sicherlog") {
-        Header("Content-Disposition: attachment; filename=\"phpmyfaq-logs.".date("Y-m-d").".sql\"");
+        Header("Content-Disposition: attachment; filename=\"phpmyfaq-logs.".date("Y-m-d-H-i-s").".sql\"");
     }
     Header("Pragma: no-cache");
 }
@@ -52,13 +57,8 @@ if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE)) {
     $LANGCODE = 'en';
 }
 
-//
-// Authenticate current user
-//
-require_once (PMF_ROOT_DIR.'/inc/PMF_User/CurrentUser.php');
-
 $auth = false;
-$user = PMF_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
+$user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
 if ($user) {
     $auth = true;
 } else {
@@ -92,7 +92,7 @@ if (!isset($_REQUEST["action"]) || isset($_REQUEST["save"])) {
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php print $PMF_LANG["metaLanguage"]; ?>" lang="<?php print $PMF_LANG["metaLanguage"]; ?>">
 <head>
     <title><?php print PMF_htmlentities($PMF_CONF['main.titleFAQ'], ENT_QUOTES, $PMF_LANG['metaCharset']); ?> - powered by phpMyFAQ</title>
-    <meta name="copyright" content="(c) 2001-2007 phpMyFAQ Team" />
+    <meta name="copyright" content="(c) 2001-2009 phpMyFAQ Team" />
     <meta http-equiv="Content-Type" content="text/html; charset=<?php print $PMF_LANG["metaCharset"]; ?>" />
 
     <link rel="shortcut icon" href="../template/favicon.ico" type="image/x-icon" />
@@ -166,7 +166,7 @@ if (isset($_GET['action']) && ('sicherdaten' == $_GET['action']) && $auth && $pe
         $tablenames .= $table . ' ';
     }
 
-    $text[] = "-- pmf2.0: " . $tablenames;
+    $text[] = "-- pmf2.5: " . $tablenames;
     $text[] = "-- DO NOT REMOVE THE FIRST LINE!";
     $text[] = "-- pmftableprefix: ".SQLPREFIX;
     $text[] = "-- DO NOT REMOVE THE LINES ABOVE!";
@@ -189,7 +189,7 @@ if (isset($_GET['action']) && ('sicherlog' == $_GET['action']) && $auth && $perm
             $tablenames .= $table . ' ';
         }
     }
-    $text[] = "-- pmf2.0: " . $tablenames;
+    $text[] = "-- pmf2.5: " . $tablenames;
     $text[] = "-- DO NOT REMOVE THE FIRST LINE!";
     $text[] = "-- pmftableprefix: ".SQLPREFIX;
     $text[] = "-- DO NOT REMOVE THE LINES ABOVE!";
@@ -206,7 +206,7 @@ if (isset($_GET['action']) && ('sicherlog' == $_GET['action']) && $auth && $perm
 }
 
 if (DEBUG) {
-    print "<p>".$db->sqllog()."</p>";
+    print "\n\n-- Debug information:\n<p>".$db->sqllog()."</p>";
 }
 
 if (isset($_GET['action']) && $_GET['action'] != 'sicherdaten' && $_GET['action'] != 'sicherlog') {
