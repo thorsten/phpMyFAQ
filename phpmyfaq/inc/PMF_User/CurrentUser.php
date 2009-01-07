@@ -467,4 +467,4 @@ class PMF_User_CurrentUser extends PMF_User_User
         $this->_session_id_timeout = abs($timeout);
     }
 
-} // end of class PMF_CurrentUser
+}

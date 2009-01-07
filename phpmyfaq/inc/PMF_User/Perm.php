@@ -163,4 +163,4 @@ class PMF_User_Perm
         return true;
     }
 
-} /* end of class PMF_Perm */
+}

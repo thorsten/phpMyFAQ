@@ -131,4 +131,4 @@ class PMF_User_PermLarge extends PMF_User_PermMedium
         $this->_context_id = 0;
     }
 
-} /* end of class PMF_PermLarge */
+}

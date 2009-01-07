@@ -923,4 +923,4 @@ class PMF_User_User
             $this->_login_invalidRegExp = $loginInvalidRegExp;
     }
 
-} /* end of class PMF_User */
+}

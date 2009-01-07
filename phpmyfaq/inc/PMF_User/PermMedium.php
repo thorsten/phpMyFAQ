@@ -941,4 +941,4 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
         return true;
     }
 
-} /* end of class PMF_PermMedium */
+}

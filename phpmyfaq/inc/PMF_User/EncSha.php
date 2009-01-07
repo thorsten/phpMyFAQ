@@ -78,4 +78,4 @@ class PMF_User_EncSha extends PMF_User_Enc
     {
     }
 
-} /* end of class PMF_EncSha */
+}
