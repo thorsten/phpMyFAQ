@@ -1,33 +1,32 @@
 <?php
 /**
-* $Id: export.main.php,v 1.27 2007-02-18 21:33:43 matteo Exp $
-*
-* XML, XML DocBook, XHTML and PDF export - main page
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @author       Matteo Scaramuccia <matteo@scaramuccia.com>
-* @author       Peter Beauvain <pbeauvain@web.de>
-* @since        2003-04-17
-* @copyright    (c) 2001-2006 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * XML, XML DocBook, XHTML and PDF export - main page
+ *
+ * @package     phpMyFAQ 
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author      Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @author      Peter Beauvain <pbeauvain@web.de>
+ * @since       2003-04-17
+ * @copyright   (c) 2003-2009 phpMyFAQ Team
+ * @version     SVN: $Id$
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
-
     exit();
 }
 // {{{ Includes
-require_once("../inc/Export.php");
+require_once PMF_INCLUDE_DIR.'/Export.php';
 // }}}
 ?>
     <h2><?php print($PMF_LANG["ad_menu_export"]); ?></h2>
