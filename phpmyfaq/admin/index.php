@@ -2,14 +2,15 @@
 /**
  * The main admin backend index file
  *
- * @package   phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Bastian Poettner <bastian@poettner.net>
- * @author    Meikel Katzengreis <meikel@katzengreis.com>
- * @author    Minoru TODA <todam@netjapan.co.jp>
- * @since     2002-09-16
- * @copyright 2002-2008 phpMyFAQ Team
- * @version   CVS: $Id: index.php,v 1.110 2008-05-31 14:04:48 thorstenr Exp $
+ * @package     phpMyFAQ
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author      Bastian Poettner <bastian@poettner.net>
+ * @author      Meikel Katzengreis <meikel@katzengreis.com>
+ * @author      Minoru TODA <todam@netjapan.co.jp>
+ * @author      Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @since       2002-09-16
+ * @copyright   (c) 2002-2009 phpMyFAQ Team
+ * @version     SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -33,21 +34,19 @@ if (!file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
 }
 
 //
-// Prepend and start the PHP session
+// Define the named constant used as a check by any included PHP file
 //
 define('IS_VALID_PHPMYFAQ_ADMIN', null);
+
+//
+// Autoload classes, prepend and start the PHP session
+//
 require_once PMF_ROOT_DIR.'/inc/Init.php';
 PMF_Init::cleanRequest();
 session_name('pmfauth'.trim($faqconfig->get('main.phpMyFAQToken')));
 session_start();
 
-// Include classes and functions
-require_once PMF_ROOT_DIR.'/inc/Utils.php';
-require_once PMF_ROOT_DIR.'/inc/Category.php';
-require_once PMF_ROOT_DIR.'/inc/Faq.php';
-require_once PMF_ROOT_DIR.'/inc/Linkverifier.php';
-require_once PMF_ROOT_DIR.'/inc/Tags.php';
-require_once PMF_ROOT_DIR.'/inc/PMF_User/CurrentUser.php';
+// Include external classes and functions
 require_once PMF_ROOT_DIR.'/inc/libs/idna_convert.class.php';
 $IDN = new idna_convert;
 
@@ -83,7 +82,7 @@ if (function_exists('mb_language') && in_array($mbLanguage, $valid_mb_strings)) 
 $auth = null;
 if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
     // login with username and password
-    $user = new PMF_CurrentUser();
+    $user = new PMF_User_CurrentUser();
     $faqusername = $db->escape_string($_POST['faqusername']);
     $faqpassword = $db->escape_string($_POST['faqpassword']);
     if ($user->login($faqusername, $faqpassword)) {
@@ -105,7 +104,7 @@ if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
     }
 } else {
     // authenticate with session information
-    $user = PMF_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
+    $user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
     if ($user) {
         $auth = true;
     } else {

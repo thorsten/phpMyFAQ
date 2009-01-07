@@ -2,11 +2,12 @@
 /**
  * Displays the user managment frontend
  *
- * @author    Lars Tiedemann <php@larstiedemann.de>
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since     2005-12-15
- * @copyright 2005-2008 phpMyFAQ Team
- * @version   CVS: $Id: group.php,v 1.23 2008-01-20 19:56:36 thorstenr Exp $
+ * @package     phpMyFAQ
+ * @author      Lars Tiedemann <php@larstiedemann.de>
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since       2005-12-15
+ * @copyright   (c) 2005-2008 phpMyFAQ Team
+ * @version     SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -27,8 +28,6 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 if (!$permission['edituser'] and !$permission['deluser'] and !$permission['adduser']) {
     exit();
 }
-
-require_once(PMF_ROOT_DIR.'/inc/PMF_User/User.php');
 
 // set some parameters
 $groupSelectSize = 10;
@@ -106,7 +105,7 @@ if ($groupAction == 'update_members') {
     if ($groupId == 0) {
         $message .= '<p class="error">'.$errorMessages['updateMembers_noId'].'</p>';
     } else {
-        $user = new PMF_User();
+        $user = new PMF_User_User();
         $perm = $user->perm;
         if (!$perm->removeAllUsersFromGroup($groupId)) {
             $message .= '<p class="error">'.$errorMessages['updateMembers'].'</p>';
@@ -125,7 +124,7 @@ if ($groupAction == 'update_rights') {
     if ($groupId == 0) {
         $message .= '<p class="error">'.$errorMessages['updateRights_noId'].'</p>';
     } else {
-        $user = new PMF_User();
+        $user = new PMF_User_User();
         $perm = $user->perm;
         $groupRights = isset($_POST['group_rights']) ? $_POST['group_rights'] : array();
         if (!$perm->refuseAllGroupRights($groupId)) {
@@ -150,7 +149,7 @@ if ($groupAction == 'update_data') {
         foreach ($dataFields as $field) {
             $groupData[$field] = isset($_POST[$field]) ? $_POST[$field] : '';
         }
-        $user = new PMF_User();
+        $user = new PMF_User_User();
         $perm = $user->perm;
         if (!$perm->changeGroup($groupId, $groupData)) {
             $message .= '<p class="error">'.$errorMessages['updateGroup'].'</p>';
@@ -163,7 +162,7 @@ if ($groupAction == 'update_data') {
 // delete group confirmation
 if ($groupAction == 'delete_confirm') {
     $message = '';
-    $user = new PMF_User();
+    $user = new PMF_User_User();
     $perm = $user->perm;
     $groupId = (isset($_POST['group_list_select']) && $_POST['group_list_select'] > 0) ? $_POST['group_list_select'] : 0;
     if ($groupId <= 0) {
@@ -193,7 +192,7 @@ if ($groupAction == 'delete_confirm') {
 // delete group
 if ($groupAction == 'delete') {
     $message = '';
-    $user = new PMF_User();
+    $user = new PMF_User_User();
     $perm = $user->perm;
     $groupId = (isset($_POST['group_id']) && $_POST['group_id'] > 0) ? (int) $_POST['group_id'] : 0;
     $groupAction = $defaultGroupAction;
@@ -214,7 +213,7 @@ if ($groupAction == 'delete') {
 } // end if ($groupAction == 'delete')
 // save new group
 if ($groupAction == 'addsave') {
-    $user = new PMF_User();
+    $user = new PMF_User_User();
     $message = '';
     $messages = array();
     // check input data

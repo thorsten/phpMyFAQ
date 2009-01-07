@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id: password.php,v 1.21 2008-05-22 11:23:00 thorstenr Exp $
- *
  * Reset a forgotten password to a new one
  *
- * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since        2004-05-11
- * @copyright    2004-2008 phpMyFAQ Team
+ * @package     phpMyFAQ
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since       2004-05-11
+ * @copyright   (c) 2004-2009 phpMyFAQ Team
+ * @version     SVN: $Id$ 
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -19,30 +19,38 @@
  * under the License.
  */
 
+define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
+
 //
 // Check if data.php exist -> if not, redirect to installer
 //
-if (!file_exists('../inc/data.php')) {
+if (!file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
     header("Location: ".str_replace('admin/index.php', '', $_SERVER["PHP_SELF"])."install/installer.php");
     exit();
 }
 
 //
-// Prepend
+// Define the named constant used as a check by any included PHP file
 //
-define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('IS_VALID_PHPMYFAQ_ADMIN', null);
-require_once(PMF_ROOT_DIR.'/inc/Init.php');
+
+//
+// Autoload classes, prepend and start the PHP session
+//
+require_once PMF_ROOT_DIR.'/inc/Init.php';
 PMF_Init::cleanRequest();
-session_name('pmfauth' . trim($faqconfig->get('main.phpMyFAQToken')));
+session_name('pmfauth'.trim($faqconfig->get('main.phpMyFAQToken')));
 session_start();
 
-require_once(PMF_ROOT_DIR.'/inc/PMF_User/CurrentUser.php');
-require_once(PMF_ROOT_DIR.'/inc/libs/idna_convert.class.php');
-$user = new PMF_CurrentUser();
+//
+// Include the IDNA class
+//
+require_once 'inc/libs/idna_convert.class.php';
 $IDN = new idna_convert;
 
+//
 // get language (default: english)
+//
 $pmf = new PMF_Init();
 $LANGCODE = $pmf->setLanguage((isset($PMF_CONF['main.languageDetection']) ? true : false), $PMF_CONF['main.language']);
 // Preload English strings
@@ -71,7 +79,10 @@ if (isset($_GET["action"]) && $_GET["action"] == "newpassword") {
             ) {
             $username   = $db->escape_string($_POST["username"]);
             $email      = $db->escape_string($_POST["email"]);
+
+            $user = new PMF_User_CurrentUser();
             $loginExist = $user->getUserByLogin($username);
+
             if ($loginExist && ($_POST["email"] == $user->getUserData('email'))) {
                 $consonants = array("b","c","d","f","g","h","j","k","l","m","n","p","r","s","t","v","w","x","y","z");
                 $vowels = array("a","e","i","o","u");
@@ -115,7 +126,7 @@ if (isset($_GET["action"]) && $_GET["action"] == "newpassword") {
 }
 
 if (DEBUG) {
-    print "<p>DEBUG INFORMATION:</p>\n";
+    print "\n<p>DEBUG INFORMATION:</p>\n";
     print "<p>".$db->sqllog()."</p>";
 }
 

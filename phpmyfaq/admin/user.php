@@ -2,12 +2,13 @@
 /**
  * Displays the user managment frontend
  *
- * @author    Lars Tiedemann <php@larstiedemann.de>
- * @author    Uwe Pries <uwe.pries@digartis.de>
- * @author    Sarah Hermann <sayh@gmx.de>
- * @since     2005-12-15
- * @copyright 2005-2008 phpMyFAQ Team
- * @version   CVS: $Id: user.php,v 1.39 2008-01-26 15:57:57 thorstenr Exp $
+ * @package     phpMyFAQ
+ * @author      Lars Tiedemann <php@larstiedemann.de>
+ * @author      Uwe Pries <uwe.pries@digartis.de>
+ * @author      Sarah Hermann <sayh@gmx.de>
+ * @since       2005-12-15
+ * @copyright   (c) 2005-2009 phpMyFAQ Team
+ * @version     SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -28,8 +29,6 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 if (!$permission['edituser'] and !$permission['deluser'] and !$permission['adduser']) {
     exit();
 }
-
-require_once(PMF_ROOT_DIR.'/inc/PMF_User/User.php');
 
 // set some parameters
 $selectSize = 10;
@@ -88,11 +87,12 @@ $text = array(
 // actions defined by url: user_action=
 $userAction = isset($_GET['user_action']) ? $_GET['user_action'] : $defaultUserAction;
 // actions defined by submit button
-if (isset($_POST['user_action_deleteConfirm']))
+if (isset($_POST['user_action_deleteConfirm'])) {
     $userAction = 'delete_confirm';
-if (isset($_POST['cancel']))
+}
+if (isset($_POST['cancel'])) {
     $userAction = $defaultUserAction;
-
+}
 
 // update user rights
 if ($userAction == 'update_rights') {
@@ -102,7 +102,7 @@ if ($userAction == 'update_rights') {
     if ($userId == 0) {
         $message .= '<p class="error">'.$errorMessages['updateRights_noId'].'</p>';
     } else {
-        $user = new PMF_User();
+        $user = new PMF_User_User();
         $perm = $user->perm;
         $userRights = isset($_POST['user_rights']) ? $_POST['user_rights'] : array();
         if (!$perm->refuseAllUserRights($userId)) {
@@ -130,7 +130,7 @@ if ($userAction == 'update_data') {
             $userData[$field] = isset($_POST[$field]) ? $_POST[$field] : '';
         }
         $userStatus = isset($_POST['user_status']) ? $_POST['user_status'] : $defaultUserStatus;
-        $user = new PMF_User();
+        $user = new PMF_User_User();
         $user->getUserById($userId);
 
         $stats = $user->getStatus();
@@ -160,7 +160,7 @@ if ($userAction == 'update_data') {
 // delete user confirmation
 if ($userAction == 'delete_confirm') {
     $message = '';
-    $user = new PMF_User();
+    $user = new PMF_User_User();
     $userId = isset($_POST['user_list_select']) ? $_POST['user_list_select'] : 0;
     if ($userId == 0) {
         $message .= '<p class="error">'.$errorMessages['delUser_noId'].'</p>';
@@ -195,7 +195,7 @@ if ($userAction == 'delete_confirm') {
 // delete user
 if ($userAction == 'delete') {
     $message = '';
-    $user = new PMF_User();
+    $user = new PMF_User_User();
     $userId = isset($_POST['user_id']) ? $_POST['user_id'] : 0;
     $userAction = $defaultUserAction;
     if ($userId == 0) {
@@ -230,7 +230,7 @@ if ($userAction == 'delete') {
 } // end if ($userAction == 'delete')
 // save new user
 if ($userAction == 'addsave') {
-    $user = new PMF_User();
+    $user = new PMF_User_User();
     $message = '';
     $messages = array();
     // check input data
@@ -383,7 +383,6 @@ function buildUserList()
     }
 }
 
-
 function clearUserData()
 {
     //table_clear(document.getElementById("user_data_table"));
@@ -442,7 +441,6 @@ function buildUserData(id)
     }
 }
 
-
 function selectUserStatus(id)
 {
     var getValues = true;
@@ -464,7 +462,6 @@ function selectUserStatus(id)
     var status = text_getFromParent(user, 'status');
     $('user_status_select').value = status;
 }
-
 
 function clearUserRights()
 {
@@ -550,7 +547,6 @@ function updateUser(id)
 
 /* ]]> */
 </script>
-
 <h2><?php print $text['header']; ?></h2>
 <div id="user_message"><?php print $message; ?></div>
 <div id="user_accounts">
@@ -558,12 +554,24 @@ function updateUser(id)
         <fieldset>
             <legend><?php print $text['selectUser']; ?></legend>
             <form name="user_select" id="user_select" action="<?php print $_SERVER['PHP_SELF']; ?>?action=user&amp;user_action=delete_confirm" method="post">
-                <input type="text" id="user_list_autocomplete" name="user_list_search" automplete="off" />
+                <input type="text" id="user_list_autocomplete" name="user_list_search" />
                 <div id="user_list_autocomplete_choices" class="user_list_autocomplete" style="display: none;"></div>
                 <script type="text/javascript">
-                var url = 'index.php';
-                var pars = 'action=ajax&ajax=user_list_autocomplete';
-                new Ajax.Autocompleter("user_list_autocomplete", "user_list_autocomplete_choices", url, { method: 'get', parameters: pars , minChars: 1, afterUpdateElement: userSelect});
+                <!--
+                    var url = 'index.php';
+                    var pars = 'action=ajax&ajax=user_list_autocomplete';
+                    new Ajax.Autocompleter(
+                        "user_list_autocomplete",
+                        "user_list_autocomplete_choices",
+                        url,
+                        {
+                            method: 'get',
+                            parameters: pars,
+                            minChars: 1,
+                            afterUpdateElement: userSelect
+                        }
+                    );
+                //-->
                 </script>
                 <div class="button_row">
                     <input type="hidden" name="user_list_select" id="user_list_select">

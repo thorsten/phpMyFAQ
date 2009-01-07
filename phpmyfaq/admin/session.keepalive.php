@@ -1,18 +1,17 @@
 <?php
 /**
- * $Id: session.keepalive.php,v 1.8 2007-05-07 16:03:10 thorstenr Exp $
- *
  * A dummy page used within an IFRAME for warning the user about his next
  * session expiration and to give him the contextual possibility for
  * refreshing the session by clicking <OK>
  *
  * @package     phpMyFAQ
  * @access      private
- * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author      Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author      Uwe Pries <uwe.pries@digartis.de>
  * @since       2006-05-08
- * @copyright   (c) 2006-2007 phpMyFAQ Team
+ * @copyright   (c) 2006-2009 phpMyFAQ Team
+ * @version     SVN: $Id$ 
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -27,18 +26,30 @@
 
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
-require_once(PMF_ROOT_DIR.'/inc/Init.php');
-require_once(PMF_ROOT_DIR.'/inc/PMF_User/CurrentUser.php');
+//
+// Define the named constant used as a check by any included PHP file
+//
+define('IS_VALID_PHPMYFAQ_ADMIN', null);
+
+//
+// Autoload classes, prepend and start the PHP session
+//
+require_once PMF_ROOT_DIR.'/inc/Init.php';
+PMF_Init::cleanRequest();
+session_name('pmfauth' . trim($faqconfig->get('main.phpMyFAQToken')));
+session_start();
+
+// Preload English strings
 require_once(PMF_ROOT_DIR.'/lang/language_en.php');
+
+//
+// Get language (default: english)
+//
 if (isset($_GET['lang']) && PMF_Init::isASupportedLanguage($_GET['lang'])) {
     require_once(PMF_ROOT_DIR.'/lang/language_'.$_GET['lang'].'.php');
 }
 
-PMF_Init::cleanRequest();
-session_name('pmfauth'.trim($faqconfig->get('main.phpMyFAQToken')));
-session_start();
-
-$user = PMF_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
+$user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
 
 $refreshTime = (PMF_SESSION_ID_EXPIRES - PMF_SESSION_ID_REFRESH) * 60;
 ?>
@@ -46,7 +57,7 @@ $refreshTime = (PMF_SESSION_ID_EXPIRES - PMF_SESSION_ID_REFRESH) * 60;
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php print $PMF_LANG["metaLanguage"]; ?>" lang="<?php print $PMF_LANG["metaLanguage"]; ?>">
     <head>
         <title>phpMyFAQ - "Welcome to the real world."</title>
-        <meta name="copyright" content="(c) 2001-2007 phpMyFAQ Team" />
+        <meta name="copyright" content="(c) 2001-2009 phpMyFAQ Team" />
         <meta http-equiv="Content-Type" content="text/html; charset=<?php print $PMF_LANG["metaCharset"]; ?>" />
         <link rel="shortcut icon" href="../template/favicon.ico" type="image/x-icon" />
         <link rel="icon" href="../template/favicon.ico" type="image/x-icon" />
@@ -84,16 +95,19 @@ if (isset($user) && ($refreshTime > 0)) {
                 var topRef = top.document.getElementById('sessioncounter');
 
                 window.setTimeout(_PMFSessionTimeoutWarning, <?php print $refreshTime; ?> * 1000);
-                window.setInterval(function() {
-                    _PMFSessionTimeoutClock(topRef, expire);
-                }, 1000);
+                window.setInterval(
+                    function() {
+                        _PMFSessionTimeoutClock(topRef, expire);
+                    },
+                    1000
+                );
             }
         // --> /*]]>*/
         </script>
 <?php
 }
 ?>
-</head>
-<body>
-</body>
+    </head>
+    <body>
+    </body>
 </html>

@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id: header.php,v 1.49 2008-05-23 11:56:21 thorstenr Exp $
- *
  * Header of the admin area
  *
- * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since        2003-02-26
- * @copyright    (c) 2003-2007 phpMyFAQ Team
+ * @package     phpMyFAQ
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since       2003-02-26
+ * @copyright   (c) 2003-2009 phpMyFAQ Team
+ * @version     SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -107,9 +107,8 @@ if (isset($_action)) {
     <ul id="subnavlist">
 <?php
     // check for group support
-    require_once(PMF_ROOT_DIR.'/inc/PMF_User/User.php');
-    $user = new PMF_User();
-    $groupSupport = ($user->perm instanceof PMF_PermMedium);
+    $user = new PMF_User_User();
+    $groupSupport = ($user->perm instanceof PMF_User_PermMedium);
 
     switch ($_action) {
         case 'user':

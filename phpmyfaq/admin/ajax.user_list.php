@@ -2,10 +2,11 @@
 /**
  * AJAX: lists all registered users
  *
- * @author    Lars Tiedemann <larstiedemann@yahoo.de>
- * @since     2005-12-15
- * @copyright 2005-2008 phpMyFAQ Team
- * @version   CVS: $Id: ajax.user_list.php,v 1.27 2008-01-26 15:16:09 thorstenr Exp $
+ * @package     phpMyFAQ
+ * @author      Lars Tiedemann <larstiedemann@yahoo.de>
+ * @since       2005-12-15
+ * @copyright   2005-2008 phpMyFAQ Team
+ * @version     SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -34,9 +35,7 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
     header("Vary: Negotiate,Accept");
     header("Content-type: text/xml; charset=".$PMF_LANG['metaCharset']);
 
-    require_once(PMF_ROOT_DIR.'/inc/PMF_User/User.php');
-
-    $user = new PMF_User();
+    $user = new PMF_User_User();
     $user->addDb($db);
     $userList = $user->getUserById($_REQUEST['userid']);
     $data = array(
@@ -84,15 +83,16 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
             <user_data>
 <?php
         $user_data = $user->userdata->get(array_keys($data));
-        foreach ($user_data as $field => $value) {
+        if (is_array($user_data)) {
+            foreach ($user_data as $field => $value) {
 ?>
-
                 <item name="<?php print $field; ?>">
                     <name><?php print PMF_htmlentities($data[$field], ENT_QUOTES, $PMF_LANG['metaCharset']); ?></name>
                     <value><?php print PMF_htmlentities($value, ENT_QUOTES, $PMF_LANG['metaCharset']); ?></value>
                 </item>
 <?php
-        } /* end foreach ($user_data) */
+            } /* end foreach ($user_data) */
+        } /* end if (is_array($user_data)) */
 ?>
             </user_data>
             <user_rights>

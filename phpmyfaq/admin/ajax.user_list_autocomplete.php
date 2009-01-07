@@ -2,10 +2,10 @@
 /**
  * AJAX: Lists the user auto completion
  *
- * @package   phpMyFAQ
- * @author    Sarah Hermann <sayh@gmx.de>
- * @copyright 2008 phpMyFAQ Team
- * @version   CVS: ajax.user_list_autocomplete.php,v 1.1 2008/01/26 15:43:36 thorstenr Exp
+ * @package     phpMyFAQ
+ * @author      Sarah Hermann <sayh@gmx.de>
+ * @copyright   2008-2009 phpMyFAQ Team
+ * @version     SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -23,9 +23,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
-require_once PMF_ROOT_DIR.'/inc/PMF_User/User.php';
-
-$user = new PMF_User();
+$user = new PMF_User_User();
 $userList = $user->searchUsers($_REQUEST['user_list_search']);
 
 echo "<ul id='user_list_autocomplete' class='user_list_autocomplete'>";
