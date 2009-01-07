@@ -2,13 +2,14 @@
 /**
  * Some basic functions und PMF_Init class
  *
- * @author    Johann-Peter Hartmann <hartmann@mayflower.de>
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Stefan Esser <sesser@php.net>
- * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
- * @since     2005-09-24
- * @copyright 2005-2008 phpMyFAQ Team
- * @version   SVN: $Id$
+ * @package     phpMyFAQ
+ * @author      Johann-Peter Hartmann <hartmann@mayflower.de>
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author      Stefan Esser <sesser@php.net>
+ * @author      Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @since       2005-09-24
+ * @copyright   (c) 2005-2009 phpMyFAQ Team
+ * @version     SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -61,6 +62,11 @@ ini_set('pcre.backtrack_limit', 100000000);
 ini_set('pcre.recursion_limit', 100000000);
 
 //
+// Include our class/interface autoloader
+//
+require_once 'autoLoader.php';
+
+//
 // Read configuration and constants, include main classes and functions
 // and create a database connection
 //
@@ -68,9 +74,6 @@ define('PMF_INCLUDE_DIR', dirname(__FILE__));
 require_once PMF_INCLUDE_DIR.'/data.php';
 require_once PMF_INCLUDE_DIR.'/constants.php';
 require_once PMF_INCLUDE_DIR.'/functions.php';
-require_once PMF_INCLUDE_DIR.'/Configuration.php';
-require_once PMF_INCLUDE_DIR.'/Utils.php';
-require_once PMF_INCLUDE_DIR.'/Db.php';
 require_once PMF_INCLUDE_DIR.'/PMF_DB/Driver.php';
 define('SQLPREFIX', $DB['prefix']);
 $db = PMF_Db::db_select($DB['type']);
@@ -244,7 +247,7 @@ class PMF_Init
     *
     * @access  private
     * @since   2006-12-29
-    * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+    * @author  Matteo Scaramuccia <matteo@phpmyfaq.de>
     */
    private static function _cleanFilenames()
    {
@@ -282,7 +285,7 @@ class PMF_Init
      * @return  void
      * @access  private
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     * @author  Matteo Scaramuccia <matteo@phpmyfaq.de>
      */
     private function _getUserAgentLanguage()
     {
@@ -305,7 +308,7 @@ class PMF_Init
      * @param   string  $langcode
      * @return  bool
      * @access  public
-     * @author  Matteo scaramuccia <matteo@scaramuccia.com>
+     * @author  Matteo scaramuccia <matteo@phpmyfaq.de>
      */
     public static function isASupportedLanguage($langcode)
     {
@@ -323,7 +326,7 @@ class PMF_Init
      * @return  string  $language
      * @access  public
      * @author  Thorsten Rinne <rinne@mayflower.de>
-     * @author  Matteo scaramuccia <matteo@scaramuccia.com>
+     * @author  Matteo scaramuccia <matteo@phpmyfaq.de>
      */
     public function setLanguage($config_detection, $config_language)
     {
