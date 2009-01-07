@@ -9,7 +9,12 @@
 * You may use and modify this software as you wish.                            *
 *******************************************************************************/
 
-if(!class_exists('FPDF'))
+// phpMyFAQ - START HERE
+// $Id$
+// Hack: allow phpMyFAQ to happily implement __autoload()
+// Orig: if(!class_exists('FPDF'))
+if(!class_exists('FPDF', false))
+// phpMyFAQ - END HERE
 {
 define('FPDF_VERSION','1.53');
 
