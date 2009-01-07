@@ -19,24 +19,22 @@
  */
 
 /*** Start PMF custom code ***/
-// $Id: connector.php,v 1.4 2007-03-29 18:01:27 thorstenr Exp $
+// $Id$
+define('PMF_ROOT_DIR', dirname(dirname(dirname(dirname(dirname(dirname(__FILE__)))))));
 
 //
-// Prepend and start the PHP session
+// Autoload classes, prepend and start the PHP session
 //
-$pmfIncludeDir = dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))));
-require_once($pmfIncludeDir.'/inc/Init.php');
-require_once($pmfIncludeDir.'/inc/PMF_User/CurrentUser.php');
-
+require_once PMF_ROOT_DIR.'/inc/Init.php';
 PMF_Init::cleanRequest();
-session_name('pmfauth' . trim($faqconfig->get('main.phpMyFAQToken')));
+session_name('pmfauth'.trim($faqconfig->get('main.phpMyFAQToken')));
 session_start();
 
 //
 // Get current user rights
 //
 $permission = array();
-$user = PMF_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
+$user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
 
 if ($user) {
     // read all rights, set them FALSE
