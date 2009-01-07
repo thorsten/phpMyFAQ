@@ -2,10 +2,7 @@
 /**
  * Provides methods for password encryption. 
  *
- * Subclasses (extends) of this class provide the encrypt() method that returns
- * encrypted string. For special encryption methods, just create a new class as
- * extend of this class and has the method encrypt().
- *
+ * @package     phpMyFAQ
  * @author      Lars Tiedemann <php@larstiedemann.de>
  * @since       2005-09-18
  * @copyright   (c) 2005-2009 phpMyFAQ Team
@@ -25,8 +22,19 @@
 /* user defined includes */
 
 /* user defined constants */
-@define('PMF_USERERROR_NO_ENCTYPE', 'Specified encryption method could not be found. ');
+@define('PMF_ERROR_USER_NO_ENCTYPE', 'Specified encryption method could not be found. ');
 
+/**
+ * Provides methods for password encryption. 
+ *
+ * Subclasses (extends) of this class provide the encrypt() method that returns
+ * encrypted string. For special encryption methods, just create a new class as
+ * extend of this class and has the method encrypt().
+ *
+ * @package     phpMyFAQ
+ * @author      Lars Tiedemann <php@larstiedemann.de>
+ * @since       2005-09-18
+ */ 
 class PMF_User_Enc
 {
     /**
@@ -83,18 +91,18 @@ class PMF_User_Enc
         $enc = new PMF_User_Enc();
         $enctype = strtolower($enctype);
         if (!isset($enc->_enc_typemap[$enctype])) {
-        	$enc->errors[] = PMF_USERERROR_NO_ENCTYPE;
+        	$enc->errors[] = PMF_ERROR_USER_NO_ENCTYPE;
         	return $enc;
         }
         $classfile = dirname(__FILE__)."/".$enc->_enc_typemap[$enctype].".php";
         if (!file_exists($classfile)) {
-        	$enc->errors[] = PMF_USERERROR_NO_ENCTYPE;
+        	$enc->errors[] = PMF_ERROR_USER_NO_ENCTYPE;
         	return $enc;
         }
         require_once $classfile;
         $newclass = "PMF_User_".$enc->_enc_typemap[$enctype];
         if (!class_exists($newclass)) {
-        	$enc->errors[] = PMF_USERERROR_NO_ENCTYPE;
+        	$enc->errors[] = PMF_ERROR_USER_NO_ENCTYPE;
         	return $enc;
         }
         $enc = new $newclass();

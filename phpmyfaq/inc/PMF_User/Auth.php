@@ -1,80 +1,42 @@
 <?php
 /**
-* $Id: Auth.php,v 1.16 2008-05-31 14:41:24 thorstenr Exp $
-*
-* manages user authentication.
-*
-* Subclasses of Auth implement authentication functionality with different
-* types. The class AuthLdap for example provides authentication functionality
-* LDAP-database access, AuthDb with database access.
-*
-* Authentication functionality includes creation of a new login-and-password
-* deletion of an existing login-and-password combination and validation of
-* given by a user. These functions are provided by the database-specific
-* see documentation of the database-specific authentication classes AuthMysql,
-* or AuthLdap for further details.
-*
-* Passwords are usually encrypted before stored in a database. For
-* and security, a password encryption method may be chosen. See documentation
-* Enc class for further details.
-*
-* Instead of calling the database-specific subclasses directly, the static
-* selectDb(dbtype) may be called which returns a valid database-specific
-* object. See documentation of the static method selectDb for further details.
-*
-* @author    Lars Tiedemann <php@larstiedemann.de>
-* @package   PMF
-* @since     2005-09-30
-* @copyright (c) 2005-2007 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
-
-/**
-* provides methods for password encryption.
-*
-* Subclasses (extends) of this class provide the encrypt() method that returns
-* encrypted string. For special encryption methods, just create a new class as
-* extend of this class and has the method encrypt().
-*
-* @author       Lars Tiedemann <php@larstiedemann.de>
-* @since        2005-09-18
-*/
-
-/**
-* manages user authentication.
-*
-* Subclasses of Auth implement authentication functionality with different
-* types. The class AuthLdap for expamle provides authentication functionality
-* LDAP-database access, AuthMysql with MySQL-database access.
-*
-* Authentication functionality includes creation of a new login-and-password
-* deletion of an existing login-and-password combination and validation of
-* given by a user. These functions are provided by the database-specific
-* see documentation of the database-specific authentication classes AuthMysql,
-* or AuthLdap for further details.
-*
-* Passwords are usually encrypted before stored in a database. For
-* and security, a password encryption method may be chosen. See documentation
-* Enc class for further details.
-*
-* Instead of calling the database-specific subclasses directly, the static
-* selectDb(dbtype) may be called which returns a valid database-specific
-* object. See documentation of the static method selectDb for further details.
-*
-* @access       public
-* @author       Lars Tiedemann <php@larstiedemann.de>
-* @package      PMF
-* @since        2005-09-30
-*/
+ * Manages user authentication.
+ *
+ * Subclasses of Auth implement authentication functionality with different
+ * types. The class AuthLdap for example provides authentication functionality
+ * LDAP-database access, AuthDb with database access.
+ *
+ * Authentication functionality includes creation of a new login-and-password
+ * deletion of an existing login-and-password combination and validation of
+ * given by a user. These functions are provided by the database-specific
+ * see documentation of the database-specific authentication classes AuthMysql,
+ * or AuthLdap for further details.
+ *
+ * Passwords are usually encrypted before stored in a database. For
+ * and security, a password encryption method may be chosen. See documentation
+ * Enc class for further details.
+ *
+ * Instead of calling the database-specific subclasses directly, the static
+ * selectDb(dbtype) may be called which returns a valid database-specific
+ * object. See documentation of the static method selectDb for further details.
+ *
+ * @package     phpMyFAQ
+ * @author      Lars Tiedemann <php@larstiedemann.de>
+ * @access      public
+ * @since       2005-09-30
+ * @copyright   (c) 2005-2009 phpMyFAQ Team
+ * @version     SVN: $Id$
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 class PMF_User_Auth
 {
     /**
@@ -82,7 +44,7 @@ class PMF_User_Auth
      *
      * @var const
      */
-    const PMF_USERERROR_NO_AUTHTYPE = 'Specified authentication access class could not be found. ';
+    const PMF_ERROR_USER_NO_AUTHTYPE = 'Specified authentication access class could not be found. ';
 
     /**
      * private container that stores the encryption object.
@@ -190,12 +152,12 @@ class PMF_User_Auth
         $auth = new PMF_User_Auth();
         $database = strtolower($database);
         if (!isset($auth->_auth_typemap[$database])) {
-            $auth->errors[] = PMF_USERERROR_NO_AUTHTYPE;
+            $auth->errors[] = PMF_ERROR_USER_NO_AUTHTYPE;
             return $auth;
         }
         $classfile = dirname(__FILE__)."/".$auth->_auth_typemap[$database].".php";
         if (!file_exists($classfile)) {
-            $auth->errors[] = PMF_USERERROR_NO_AUTHTYPE;
+            $auth->errors[] = PMF_ERROR_USER_NO_AUTHTYPE;
             return $auth;
         }
         require_once $classfile;

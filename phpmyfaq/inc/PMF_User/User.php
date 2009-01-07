@@ -6,90 +6,49 @@
  * using getUserById() or by his nickname (login) using getUserByLogin(). New
  * are created using createNewUser().
  *
- * @author Lars Tiedemann <php@larstiedemann.de>
- * @package PMF
- * @since 2005-09-17
- * @version 0.1
- */
-
-/**
- * manages user authentication.
+ * @package     phpMyFAQ
+ * @author      Lars Tiedemann <php@larstiedemann.de>
+ * @since       2005-09-17
+ * @copyright   (c) 2005-2009 phpMyFAQ Team
+ * @version     SVN: $Id$
  *
- * Subclasses of Auth implement authentication functionality with different
- * types. The class AuthLdap for expamle provides authentication functionality
- * LDAP-database access, AuthMysql with MySQL-database access.
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
  *
- * Authentication functionality includes creation of a new login-and-password
- * deletion of an existing login-and-password combination and validation of
- * given by a user. These functions are provided by the database-specific
- * see documentation of the database-specific authentication classes AuthMysql,
- * or AuthLdap for further details.
- *
- * Passwords are usually encrypted before stored in a database. For
- * and security, a password encryption method may be chosen. See documentation
- * Enc class for further details.
- *
- * Instead of calling the database-specific subclasses directly, the static
- * selectDb(dbtype) may be called which returns a valid database-specific
- * object. See documentation of the static method selectDb for further details.
- *
- * @author Lars Tiedemann <php@larstiedemann.de>
- * @since 2005-09-30
- * @version 0.1
- */
-
-/**
- * This class manages user permissions and group memberships.
- *
- * There are three possible extensions of this class: basic, medium and large
- * by the classes PMF_PermBasic, PMF_PermMedium and PMF_PermLarge. The classes
- * to allow for scalability. This means that PMF_PermMedium is an extend of
- * and PMF_PermLarge is an extend of PMF_PermMedium. The PMF_Perm class itself
- * not provide any methods, but a single property: the database object
- * Using this database connection, the permission-object may perform database
- * The permission object is added to a user using the user's addPerm() method.
- * a single permission-object is allowed for each user. The permission-object is
- * in the user's $perm variable. Permission methods are performed using the
- * variable (e.g. $user->perm->method() ).
- *
- * @author Lars Tiedemann <php@larstiedemann.de>
- * @since 2005-09-17
- * @version 0.1
- */
-
-/**
- * The userdata class provides methods to manage user information.
- *
- * @author Lars Tiedemann <php@larstiedemann.de>
- * @since 2005-09-18
- * @version 0.1
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
  */
 class PMF_User_User
 {
-    const USERERROR_NO_DB = 'No database specified.';
-    const USERERROR_NO_PERM = 'No permission container specified.';
-    const USERERROR_INVALID_STATUS = 'Undefined user status.';
-    const USERERROR_NO_USERID = 'No user-ID found. ';
-    const USERERROR_NO_USERLOGINDATA = 'No user login data found. ';
-    const USERERROR_LOGIN_NOT_UNIQUE = 'Specified login name already exists. ';
-    const USERERROR_LOGIN_INVALID = 'The chosen login is invalid. A valid login has at least four characters. Only letters, numbers and underscore _ are allowed. The first letter must be a letter. ';
-    const PMF_UNDEFINED_PARAMETER = 'Following parameter must to be defined: ';
-    const USERERROR_ADD = 'Account could not be created. ';
-    const USERERROR_CHANGE = 'Account could not be updated. ';
-    const USERERROR_DELETE = 'Account could not be deleted. ';
-    const PMF_USER_NOT_FOUND = 'User account could not be found. ';
-    const USERERROR_NO_AUTH = 'No authentication method specified. ';
-    const USERERROR_INCORRECT_LOGIN = 'Specified login could not be found. ';
-    const USERERROR_CANNOT_CREATE_USER = 'User account could not be created. ';
-    const USERERROR_CANNOT_DELETE_USER = 'User account could not be deleted. ';
-    const PMF_USERSTATUS_PROTECTED = 'User account is protected. ';
-    const PMF_USERSTATUS_BLOCKED = 'User account is blocked. ';
-    const PMF_USERSTATUS_ACTIVE = 'User account is active. ';
-    const USERERROR_NOWRITABLE = 'No authentication object is writable. ';
-    const USERERROR_CANNOT_CREATE_USERDATA = 'Entry for user data could not be created. ';
-    const USERERROR_CANNOT_DELETE_USERDATA = 'Entry for user data could not be deleted. ';
-    const USERERROR_CANNOT_UPDATE_USERDATA = 'Entry for user data could not be updated. ';
-    const USERERROR_INCORRECT_PASSWORD = 'Specified password is not correct.';
+    const ERROR_UNDEFINED_PARAMETER = 'Following parameter must to be defined: ';
+    const ERROR_USER_ADD = 'Account could not be created. ';
+    const ERROR_USER_CANNOT_CREATE_USER = 'User account could not be created. ';
+    const ERROR_USER_CANNOT_CREATE_USERDATA = 'Entry for user data could not be created. ';
+    const ERROR_USER_CANNOT_DELETE_USER = 'User account could not be deleted. ';
+    const ERROR_USER_CANNOT_DELETE_USERDATA = 'Entry for user data could not be deleted. ';
+    const ERROR_USER_CANNOT_UPDATE_USERDATA = 'Entry for user data could not be updated. ';
+    const ERROR_USER_CHANGE = 'Account could not be updated. ';
+    const ERROR_USER_DELETE = 'Account could not be deleted. ';
+    const ERROR_USER_INCORRECT_LOGIN = 'Specified login could not be found. ';
+    const ERROR_USER_INCORRECT_PASSWORD = 'Specified password is not correct.';
+    const ERROR_USER_INVALID_STATUS = 'Undefined user status.';
+    const ERROR_USER_LOGIN_NOT_UNIQUE = 'Specified login name already exists. ';
+    const ERROR_USER_LOGIN_INVALID = 'The chosen login is invalid. A valid login has at least four characters. Only letters, numbers and underscore _ are allowed. The first letter must be a letter. ';
+    const ERROR_USER_NO_AUTH = 'No authentication method specified. ';
+    const ERROR_USER_NO_DB = 'No database specified.';
+    const ERROR_USER_NO_PERM = 'No permission container specified.';
+    const ERROR_USER_NO_USERID = 'No user-ID found. ';
+    const ERROR_USER_NO_USERLOGINDATA = 'No user login data found. ';
+    const ERROR_USER_NOT_FOUND = 'User account could not be found. ';
+    const ERROR_USER_NOWRITABLE = 'No authentication object is writable. ';
+
+    const STATUS_USER_PROTECTED = 'User account is protected. ';
+    const STATUS_USER_BLOCKED = 'User account is blocked. ';
+    const STATUS_USER_ACTIVE = 'User account is active. ';
 
     // --- ATTRIBUTES ---
 
@@ -189,9 +148,9 @@ class PMF_User_User
      * @var array
      */
     private $_allowed_status = array(
-        'active'    => self::PMF_USERSTATUS_ACTIVE,
-        'blocked'   => self::PMF_USERSTATUS_BLOCKED,
-        'protected' => self::PMF_USERSTATUS_PROTECTED);
+        'active'    => self::STATUS_USER_ACTIVE,
+        'blocked'   => self::STATUS_USER_BLOCKED,
+        'protected' => self::STATUS_USER_PROTECTED);
 
     /**
      * authentication container
@@ -314,7 +273,7 @@ class PMF_User_User
             return (int)$this->_user_id;
         }
         $this->_user_id = 0;
-        $this->errors[] = self::USERERROR_NO_USERID;
+        $this->errors[] = self::ERROR_USER_NO_USERID;
         return 0;
     }
 
@@ -350,7 +309,7 @@ class PMF_User_User
                     );
         $res = $this->_db->query($query);
         if ($this->_db->num_rows($res) != 1) {
-            $this->errors[] = self::USERERROR_NO_USERID . 'error(): ' . $this->_db->error();
+            $this->errors[] = self::ERROR_USER_NO_USERID . 'error(): ' . $this->_db->error();
             return false;
         }
         $user = $this->_db->fetch_assoc($res);
@@ -373,7 +332,7 @@ class PMF_User_User
                         );
             $res = $this->_db->query($query);
             if ($this->_db->num_rows($res) != 1) {
-                $this->errors[] = self::USERERROR_NO_USERLOGINDATA . 'error(): ' . $this->_db->error();
+                $this->errors[] = self::ERROR_USER_NO_USERLOGINDATA . 'error(): ' . $this->_db->error();
                 return false;
             }
             $loginData = $this->_db->fetch_assoc($res);
@@ -415,7 +374,7 @@ class PMF_User_User
         ");
         if ($this->_db->num_rows($res) != 1) {
             if ($raise_error)
-                $this->errors[] = self::USERERROR_INCORRECT_LOGIN;
+                $this->errors[] = self::ERROR_USER_INCORRECT_LOGIN;
             return false;
         }
         $user = $this->_db->fetch_assoc($res);
@@ -490,7 +449,7 @@ class PMF_User_User
             return false;
         // does $login already exist?
         if ($this->getUserByLogin($login, false)) {
-            $this->errors[] = self::USERERROR_LOGIN_NOT_UNIQUE;
+            $this->errors[] = self::ERROR_USER_LOGIN_NOT_UNIQUE;
             return false;
         }
         // set user-ID
@@ -520,7 +479,7 @@ class PMF_User_User
             $this->userdata = new PMF_User_UserData($this->_db);
         $data = $this->userdata->add($this->getUserId());
         if (!$data) {
-            $this->errors[] = self::USERERROR_CANNOT_CREATE_USERDATA;
+            $this->errors[] = self::ERROR_USER_CANNOT_CREATE_USERDATA;
             return false;
         }
         // create authentication entry
@@ -532,7 +491,7 @@ class PMF_User_User
                 continue;
             }
             if (!$auth->add($login, $pass)) {
-                $this->errors[] = self::USERERROR_CANNOT_CREATE_USER.'in PMF_User_Auth '.$name;
+                $this->errors[] = self::ERROR_USER_CANNOT_CREATE_USER.'in PMF_User_Auth '.$name;
             } else {
                 $success = true;
             }
@@ -554,17 +513,17 @@ class PMF_User_User
     {
         // check user-ID
         if (!isset($this->_user_id) or $this->_user_id == 0) {
-            $this->errors[] = self::USERERROR_NO_USERID;
+            $this->errors[] = self::ERROR_USER_NO_USERID;
             return false;
         }
         // check login
         if (!isset($this->_login) or strlen($this->_login) == 0) {
-            $this->errors[] = self::USERERROR_LOGIN_INVALID;
+            $this->errors[] = self::ERROR_USER_LOGIN_INVALID;
             return false;
         }
         // user-account is protected
-        if (isset($this->_allowed_status[$this->_status]) and $this->_allowed_status[$this->_status] == self::PMF_USERSTATUS_PROTECTED) {
-            $this->errors[] = self::USERERROR_CANNOT_DELETE_USER . self::PMF_USERSTATUS_PROTECTED;
+        if (isset($this->_allowed_status[$this->_status]) and $this->_allowed_status[$this->_status] == self::STATUS_USER_PROTECTED) {
+            $this->errors[] = self::ERROR_USER_CANNOT_DELETE_USER . self::STATUS_USER_PROTECTED;
             return false;
         }
         // check db
@@ -581,7 +540,7 @@ class PMF_User_User
             user_id = ".$this->_user_id
         );
         if (!$res) {
-            $this->errors[] = self::USERERROR_CANNOT_DELETE_USER . 'error(): ' . $this->_db->error();
+            $this->errors[] = self::ERROR_USER_CANNOT_DELETE_USER . 'error(): ' . $this->_db->error();
             return false;
         }
         // delete user-data entry
@@ -589,7 +548,7 @@ class PMF_User_User
             $this->userdata = new PMF_User_UserData($this->_db);
         $data = $this->userdata->delete($this->getUserId());
         if (!$data) {
-            $this->errors[] = self::USERERROR_CANNOT_DELETE_USERDATA;
+            $this->errors[] = self::ERROR_USER_CANNOT_DELETE_USERDATA;
             return false;
         }
         // delete authentication entry
@@ -608,7 +567,7 @@ class PMF_User_User
         }
         // there was no writable authentication object
         if ($read_only == $auth_count) {
-            $this->errors[] = self::USERERROR_NO_AUTH_WRITABLE;
+            $this->errors[] = self::ERROR_USER_NO_AUTH_WRITABLE;
         }
         // deletion unsuccessful
         if (!in_array(true, $delete))
@@ -683,18 +642,18 @@ class PMF_User_User
         // is status allowed?
         $status = strtolower($status);
         if (!in_array($status, array_keys($this->_allowed_status))) {
-            $this->errors[] = self::USERERROR_INVALID_STATUS;
+            $this->errors[] = self::ERROR_USER_INVALID_STATUS;
             return false;
         }
         // check user-ID
         $user_id = $this->getUserId();
         if (!$user_id) {
-            $this->errors[] = self::USERERROR_NO_USERID;
+            $this->errors[] = self::ERROR_USER_NO_USERID;
             return false;
         }
         // check db
         if (!$this->_db) {
-            $this->errors[] = self::USERERROR_NO_DB;
+            $this->errors[] = self::ERROR_USER_NO_DB;
             return false;
         }
         // update status
@@ -753,7 +712,7 @@ class PMF_User_User
     {
         $login = (string) $login;
         if (strlen($login) < $this->_login_minLength or preg_match($this->_login_invalidRegExp, $login)) {
-            $this->errors[] = self::USERERROR_LOGIN_INVALID;
+            $this->errors[] = self::ERROR_USER_LOGIN_INVALID;
             return false;
         }
         return true;
@@ -790,7 +749,7 @@ class PMF_User_User
         $methods = array('checkPassword');
         foreach ($methods as $method) {
             if (!method_exists($auth, strtolower($method))) {
-                $this->errors[] = self::USERERROR_NO_AUTH;
+                $this->errors[] = self::ERROR_USER_NO_AUTH;
                 return false;
                 break;
             }
@@ -811,7 +770,7 @@ class PMF_User_User
         if ($perm instanceof PMF_User_Perm) {
             return true;
         }
-        $this->errors[] = USERERROR_NO_PERM;
+        $this->errors[] = ERROR_USER_NO_PERM;
         return false;
     }
 

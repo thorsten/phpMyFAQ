@@ -1,49 +1,23 @@
 <?php
-
 /**
  * The basic permission class provides user rights.
  *
- * @author Lars Tiedemann <php@larstiedemann.de>
- * @package PMF
- * @since 2005-09-17
- * @version 0.1
+ * @package     phpMyFAQ 
+ * @author      Lars Tiedemann <php@larstiedemann.de>
+ * @since       2005-09-17
+ * @copyright   (c) 2005-2009 phpMyFAQ Team
+ * @version     SVN: $Id$ 
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
  */
-
-/* user defined includes */
-
-/**
- * This class manages user permissions and group memberships.
- *
- * There are three possible extensions of this class: basic, medium and large
- * by the classes PMF_PermBasic, PMF_PermMedium and PMF_PermLarge. The classes
- * to allow for scalability. This means that PMF_PermMedium is an extend of
- * and PMF_PermLarge is an extend of PMF_PermMedium.
- *
- * The permission type can be selected by calling $perm = PMF_Perm(perm_type) or
- * static method $perm = PMF_Perm::selectPerm(perm_type) where perm_type is
- * 'medium' or 'large'. Both ways, a PMF_PermBasic, PMF_PermMedium or
- * is returned.
- *
- * Before calling any method, the object $perm needs to be initialised calling
- * user_id, context, context_id). The parameters context and context_id are
- * accepted, but do only matter in PMF_PermLarge. In other words, if you have a
- * or PMF_PermMedium, it does not matter if you pass context and context_id or
- * But in PMF_PermLarge, they do make a significant difference if passed, thus
- * for up- and downwards-compatibility.
- *
- * Perhaps the most important method is $perm->checkRight(right_name). This
- * checks whether the user having the user_id set with $perm->setPerm()
- *
- * The permission object is added to a user using the user's addPerm() method.
- * a single permission-object is allowed for each user. The permission-object is
- * in the user's $perm variable. Permission methods are performed using the
- * variable (e.g. $user->perm->method() ).
- *
- * @author Lars Tiedemann <php@larstiedemann.de>
- * @since 2005-09-17
- * @version 0.1
- */
- 
 class PMF_User_PermBasic extends PMF_User_Perm
 {
     // --- ATTRIBUTES ---

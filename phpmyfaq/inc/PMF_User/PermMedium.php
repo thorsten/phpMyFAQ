@@ -1,13 +1,13 @@
 <?php
 /**
- * $Id: PermMedium.php,v 1.30 2008-05-31 14:41:24 thorstenr Exp $
- *
  * The medium permission class provides group rights.
  *
- * @since       2005-09-18
+ * @package     phpMyFAQ 
  * @author      Lars Tiedemann <php@larstiedemann.de>
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright   (c) 2005-2007 phpMyFAQ Team
+ * @since       2005-09-18
+ * @copyright   (c) 2005-2009 phpMyFAQ Team
+ * @version     SVN: $Id$ 
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -19,15 +19,6 @@
  * License for the specific language governing rights and limitations
  * under the License.
  */
-
-/**
- * The basic permission class provides user rights.
- *
- * @author Lars Tiedemann <php@larstiedemann.de>
- * @since 2005-09-17
- * @version 0.1
- */
- 
 class PMF_User_PermMedium extends PMF_User_PermBasic
 {
     // --- ATTRIBUTES ---

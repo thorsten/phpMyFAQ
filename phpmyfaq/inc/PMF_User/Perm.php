@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This class manages user permissions and group memberships.
  *
@@ -28,12 +27,22 @@
  * in the user's $perm variable. Permission methods are performed using the
  * variable (e.g. $user->perm->method() ).
  *
- * @author Lars Tiedemann <php@larstiedemann.de>
- * @package PMF
- * @since 2005-09-17
- * @version 0.1
+ * @package     phpMyFAQ 
+ * @author      Lars Tiedemann <php@larstiedemann.de>
+ * @since       2005-09-17
+ * @copyright   (c) 2005-2009 phpMyFAQ Team
+ * @version     SVN: $Id$ 
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
  */
-
 class PMF_User_Perm
 {
     // --- ATTRIBUTES ---

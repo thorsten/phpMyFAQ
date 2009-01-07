@@ -1,14 +1,14 @@
 <?php
 /**
- * $Id: CurrentUser.php,v 1.30 2008-05-31 14:41:24 thorstenr Exp $
- *
- * manages authentication process using php sessions.
+ * Manages authentication process using php sessions.
  *
  * The CurrentUser class is an extension of the User class. It provides methods
  * manage user authentication using multiple database accesses.
  *
- * @author Lars Tiedemann, <php@larstiedemann.de>
- * @package PMF
+ * @package     phpMyFAQ
+ * @author      Lars Tiedemann <php@larstiedemann.de>
+ * @copyright   (c) 2005-2009 phpMyFAQ Team
+ * @version     SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -31,18 +31,18 @@
 @define('PMF_LOGIN_BY_AUTH_FAILED', 'Could not login with login and password. ');
 
 /**
-* manages authentication process using php sessions.
-*
-* The CurrentUser class is an extension of the User class. It provides methods
-* manage user authentication using multiple database accesses.
-* There are three ways of making a new current user object, using
-* the login() method, getFromSession() method or manually.
-* login() and getFromSession() may be combined.
-*
-* @access public
-* @author Lars Tiedemann, <php@larstiedemann.de>
-* @package PMF
-*/
+ * Manages authentication process using php sessions.
+ *
+ * The CurrentUser class is an extension of the User class. It provides methods
+ * manage user authentication using multiple database accesses.
+ * There are three ways of making a new current user object, using
+ * the login() method, getFromSession() method or manually.
+ * login() and getFromSession() may be combined.
+ *
+ * @package     phpMyFAQ
+ * @author      Lars Tiedemann <php@larstiedemann.de>
+ * @access      public
+ */
 class PMF_User_CurrentUser extends PMF_User_User
 {
 
@@ -171,10 +171,10 @@ class PMF_User_CurrentUser extends PMF_User_User
         }
         // raise errors and return false
         if ($login_error == $count) {
-            $this->errors[] = parent::USERERROR_INCORRECT_LOGIN;
+            $this->errors[] = parent::ERROR_USER_INCORRECT_LOGIN;
         }
         if ($pass_error > 0) {
-            $this->errors[] = parent::USERERROR_INCORRECT_PASSWORD;
+            $this->errors[] = parent::ERROR_USER_INCORRECT_PASSWORD;
         }
         return false;
     }
