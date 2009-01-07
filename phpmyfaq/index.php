@@ -5,11 +5,12 @@
  * the templates we need and set all internal variables to the template
  * variables. That's all.
  *
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Lars Tiedemann <php@larstiedemann.de>
- * @since     2001-02-12
- * @copyright 2001-2008 phpMyFAQ Team
- * @version   CVS: $Id: index.php,v 1.127 2008-06-05 20:15:17 thorstenr Exp $
+ * @package     phpMyFAQ
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author      Lars Tiedemann <php@larstiedemann.de>
+ * @since       2001-02-12
+ * @copyright   (c) 2001-2009 phpMyFAQ Team
+ * @version     SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -31,19 +32,14 @@ if (!file_exists('inc/data.php')) {
 }
 
 //
+// Define the named constant used as a check by any included PHP file
+//
+define('IS_VALID_PHPMYFAQ', null);
+
+//
 // Autoload classes, prepend and start the PHP session
 //
-function __autoload($classname)
-{
-    $classpath = explode('_', $classname);
-    if (count($classpath) == 2) {
-        require 'inc/'. $classpath[1] . '.php';
-    } else {
-        require 'inc/PMF_'. $classpath[1] . '/' . $classpath[2] . '.php';
-    }
-}
 require_once 'inc/Init.php';
-define('IS_VALID_PHPMYFAQ', null);
 PMF_Init::cleanRequest();
 session_name('pmfauth' . trim($faqconfig->get('main.phpMyFAQToken')));
 session_start();
@@ -55,7 +51,7 @@ require_once 'inc/libs/idna_convert.class.php';
 $IDN = new idna_convert;
 
 //
-// get language (default: english)
+// Get language (default: english)
 //
 $pmf = new PMF_Init();
 $LANGCODE = $pmf->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
@@ -414,7 +410,7 @@ if (DEBUG) {
         $cookies .= $key.': '.$value.'<br />';
     }
     $debug_template_vars = array(
-        'debugMessages' => '<div id="debug_main">DEBUG INFORMATION:<br />'.$db->sqllog().'</div><div id="debug_cookies">COOKIES:<br />'.$cookies.'</div>');
+        'debugMessages' => '\n<div id="debug_main">DEBUG INFORMATION:<br />'.$db->sqllog().'</div><div id="debug_cookies">COOKIES:<br />'.$cookies.'</div>');
 } else {
     // send headers and print template
     header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
@@ -497,7 +493,7 @@ $tpl->includeTemplate('rightBox', 'index');
 //
 // Include requested PHP file
 //
-require_once($inc_php);
+require_once $inc_php;
 if ('xml' != $action) {
     $tpl->printTemplate();
 }
