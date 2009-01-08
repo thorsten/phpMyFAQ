@@ -74,7 +74,6 @@ define('PMF_INCLUDE_DIR', dirname(__FILE__));
 require_once PMF_INCLUDE_DIR.'/data.php';
 require_once PMF_INCLUDE_DIR.'/constants.php';
 require_once PMF_INCLUDE_DIR.'/functions.php';
-require_once PMF_INCLUDE_DIR.'/PMF_DB/Driver.php';
 define('SQLPREFIX', $DB['prefix']);
 $db = PMF_Db::db_select($DB['type']);
 $db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db']);

@@ -1,6 +1,8 @@
 <?php
 /**
- * Implements PHP autoloading capabilities to load any PMF class/interface whose name can be splitted through "_".
+ * Implements PHP autoloading capabilities to load any PMF class/interface:
+ * - whose name can be splitted through "_";
+ * - through a fixed lookup table (backward compatibility).
  *
  * @package     phpMyFAQ
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -30,19 +32,39 @@ function __autoload($class)
     );
     $class = str_replace($invalidChars, '', $class);
 
-
-    $classParts = explode('_', $class);
     $rootDir = defined('PMF_ROOT_DIR') ? PMF_ROOT_DIR : '.';
 
-    // Try to load the class/interface declaration
     // Note: supposing a class<->file approach we can avoid the use of "_once".
-    // Note: using include instead of require give us the possibility to echo failures
-    if (2 == count($classParts)) {
-        @include $rootDir.'/inc/'. $classParts[1] . '.php';
-    } else if (3 == count($classParts)) {
-        @include $rootDir.'/inc/PMF_'. $classParts[1] . '/' . $classParts[2] . '.php';
-    } else {
-        echo("<br /><b>PMF Autoloader</b>: unable to find a suitable file declaring '$class'.");
+    switch($class) {
+        /* Fixed lookup table (backward compatibility) - START HERE */
+        case 'DocBook_XML_Export':
+            @include $rootDir.'/inc/PMF_Export/DocBook.php';
+            break;
+
+        case 'FPDF':
+            @include $rootDir.'/inc/libs/fpdf.php';
+            break;
+
+        case 'PDF':
+            @include $rootDir.'/inc/PMF_Export/Pdf.php';
+            break;
+
+        case 'PMF_IDB_Driver':
+            @include $rootDir.'/inc/PMF_DB/Driver.php';
+            break;
+        /* Fixed lookup table (backward compatibility) - END HERE */
+
+        default:
+            // Try to load the class/interface declaration using its name if splittable by '_'
+            // Note: using include instead of require give us the possibility to echo failures
+            $classParts = explode('_', $class);
+            if (2 == count($classParts)) {
+                @include $rootDir.'/inc/'. $classParts[1] . '.php';
+            } else if (3 == count($classParts)) {
+                @include $rootDir.'/inc/PMF_'. $classParts[1] . '/' . $classParts[2] . '.php';
+            } else {
+                echo("<br /><b>PMF Autoloader</b>: unable to find a suitable file declaring '$class'.");
+            }
     }
 
     // Sanity check
