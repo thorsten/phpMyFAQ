@@ -9,8 +9,8 @@
  * @author      Minoru TODA <todam@netjapan.co.jp>
  * @author      Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @since       2002-09-16
- * @copyright   (c) 2002-2009 phpMyFAQ Team
  * @version     SVN: $Id$
+ * @copyright   (c) 2002-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -93,6 +93,7 @@ if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
             $error = $PMF_LANG['ad_auth_fail'].' ('.$faqusername.' / *)';
             $user = null;
             unset($user);
+            $_REQUEST['action'] = '';
         }
     } else {
         // error
