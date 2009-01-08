@@ -5,11 +5,11 @@
  * User may register but registration is only knowlegded for registration.
  * Admin will receive email and has to activate this user.
  *
- * @package   phpMyFAQ
- * @author    Elger Thiele <elger@phpmyfaq.de>
- * @since     2008-01-25
- * @copyright 2008 phpMyFAQ Team
- * @version   CVS: $Id: register.php,v 1.1 2008-01-26 15:10:11 thorstenr Exp $
+ * @package     phpMyFAQ
+ * @author      Elger Thiele <elger@phpmyfaq.de>
+ * @since       2008-01-25
+ * @copyright   (c) 2008-2009 phpMyFAQ Team
+ * @version     SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -66,7 +66,7 @@ if (isset($_POST['captcha']) && !checkCaptchaCode()) {
  */
 if ($loginname != '' && $lastname != '' && $email != '' && !isset($captchaError)) {
 
-    $user     = new PMF_User();
+    $user     = new PMF_User_User();
     $message  = '';
     $messages = array();
 
