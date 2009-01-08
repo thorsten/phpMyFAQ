@@ -27,7 +27,7 @@ define('PMF_ROOT_DIR', dirname(dirname(dirname(dirname(dirname(dirname(__FILE__)
 //
 require_once PMF_ROOT_DIR.'/inc/Init.php';
 PMF_Init::cleanRequest();
-session_name('pmfauth'.trim($faqconfig->get('main.phpMyFAQToken')));
+session_name(PMF_COOKIE_NAME_AUTH.trim($faqconfig->get('main.phpMyFAQToken')));
 session_start();
 
 //
