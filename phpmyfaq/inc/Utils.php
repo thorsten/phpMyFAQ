@@ -1,13 +1,14 @@
 <?php
 /**
- * $Id: Utils.php,v 1.8 2008-05-22 11:22:59 thorstenr Exp $
- *
  * Utilities - Functions and Classes common to the whole phpMyFAQ architecture
  *
+ * @package   phpMyFAQ
+ * @license   MPL
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @since     2005-11-01
- * @copyright 2005-2008 phpMyFAQ Team
+ * @copyright 2005-2009 phpMyFAQ Team
+ * @version   SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -20,35 +21,38 @@
  * under the License.
  */
 
-// {{{ Constants
 /**#@+
   * HTTP GET Parameters PMF accepted keys definitions
   */
-define("HTTP_PARAMS_GET_CATID", "catid");
-define("HTTP_PARAMS_GET_CURRENTDAY", "today");
-define("HTTP_PARAMS_GET_DISPOSITION", "dispos");
-define("HTTP_PARAMS_GET_GIVENDATE", "givendate");
-define("HTTP_PARAMS_GET_LANG", "lang");
-define("HTTP_PARAMS_GET_DOWNWARDS", "downwards");
-define("HTTP_PARAMS_GET_TYPE", "type");
-/**#@-*/
-// }}}
+define('HTTP_PARAMS_GET_CATID', 'catid');
+define('HTTP_PARAMS_GET_CURRENTDAY', 'today');
+define('HTTP_PARAMS_GET_DISPOSITION', 'dispos');
+define('HTTP_PARAMS_GET_GIVENDATE', 'givendate');
+define('HTTP_PARAMS_GET_LANG', 'lang');
+define('HTTP_PARAMS_GET_DOWNWARDS', 'downwards');
+define('HTTP_PARAMS_GET_TYPE', 'type');
 
-// {{{ Classes
 /**
  * PMF_Utils class
  *
  * This class has only static methods
+ * 
+ * @package   phpMyFAQ
+ * @license   MPL
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @since     2005-11-01
+ * @copyright 2005-2009 phpMyFAQ Team
+ * @version   SVN: $Id$
+ *
  */
 class PMF_Utils
 {
     /**
      * Returns a phpMyFAQ date
      *
-     * @param  integer $unixTime
+     * @param  integer $unixTime Unix timestamp
      * @return string
-     * @access public
-     * @static
      */
     public static function getPMFDate($unixTime = NULL)
     {
@@ -63,8 +67,6 @@ class PMF_Utils
      * Returns date from out of time
      *
      * @return string
-     * @access public
-     * @static
      */
     public static function getNeverExpireDate()
     {
@@ -77,47 +79,41 @@ class PMF_Utils
     /**
      * Check if a given digit is an integer
      *
-     * @param  string $digits
-     * @return bool
-     * @access public
-     * @static
+     * @param  string $digits Digits
+     * @return boolean
      */
     public static function isInteger($digits)
     {
-        return (preg_match("/^[0-9]+$/", $digits));
+        return preg_match('/^[0-9]+$/', $digits);
     }
 
     /**
      * Check if a given string could be a language
      *
-     * @param  string $lang
-     * @return bool
-     * @access public
-     * @static
+     * @param  string $lang Language
+     * @return boolean
      */
     public static function isLanguage($lang)
     {
-        return (preg_match("/^[a-zA-Z\-]+$/", $lang));
+        return preg_match('/^[a-zA-Z\-]+$/', $lang);
     }
 
     /**
      * Checks if a date is a phpMyFAQ valid date
      *
-     * @param  integer $date
+     * @param  integer $date Date
      * @return integer
-     * @access public
-     * @static
      */
     public static function isLikeOnPMFDate($date)
     {
         // Test if the passed string is in the format: %YYYYMMDDhhmmss%
         $testdate = $date;
-        // Suppress first occurence of "%"
-        if (substr($testdate, 0, 1) == "%") {
+        // Suppress first occurence of '%'
+        if (substr($testdate, 0, 1) == '%') {
             $testdate = substr($testdate, 1);
         }
-        // Suppress last occurence of "%"
-        if (substr($testdate, -1, 1) == "%") {
+        // Suppress last occurence of '%'
+        if (substr($testdate, -1, 1) == '%') {
             $testdate = substr($testdate, 0, strlen($testdate)-1);
         }
         // PMF date consists of numbers only: YYYYMMDDhhmmss
@@ -127,12 +123,9 @@ class PMF_Utils
     /**
      * Shortens a string for a given number of words
      *
-     * @param   string  $str
-     * @param   integer $char
-     * @return  string
-     * @access  public
-     * @since   2002-08-26
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de
+     * @param  string  $str  String  
+     * @param  integer $char Character
+     * @return string
      */
     public static function makeShorterText($str, $char)
     {
@@ -143,7 +136,7 @@ class PMF_Utils
 
         if ($num > $char) {
             for ($j = 0; $j <= $char; $j++) {
-                $shortStr .= $arrStr[$j]." ";
+                $shortStr .= $arrStr[$j].' ';
             }
             $shortStr .= '...';
         } else {
@@ -156,11 +149,8 @@ class PMF_Utils
     /**
      * Shuffles an associative array without losing key associations
      *
-     * @param   array   $data
-     * @return  array   $shuffled_data
-     * @access  static
-     * @since   2007-04-12
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de
+     * @param  array $data          Array of data
+     * @return array $shuffled_data Array of shuffled data
      */
     public static function shuffleData($data)
     {
