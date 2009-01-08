@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id$
+ * The Ajax driven response page.
  *
- * The Ajax driven response page
- *
+ * @package     phpMyFAQ 
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since       2007-03-27
- * @copyright   (c) 2007 phpMyFAQ Team
+ * @version     SVN: $Id$
+ * @copyright   (c) 2007-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -27,7 +27,7 @@ require_once 'inc/Faq.php';
 require_once 'inc/Category.php';
 define('IS_VALID_PHPMYFAQ', null);
 PMF_Init::cleanRequest();
-session_name('pmfauth' . trim($faqconfig->get('main.phpMyFAQToken')));
+session_name(PMF_COOKIE_NAME_AUTH . trim($faqconfig->get('main.phpMyFAQToken')));
 session_start();
 
 $searchString = '';

@@ -1,14 +1,16 @@
 <?php
 /**
- * $Id: pdf.php,v 1.33 2007-08-26 09:18:19 thorstenr Exp $
+ * TODO: Short description.
  *
+ * @package     phpMyFAQ 
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author      Peter Beauvain <pbeauvain@web.de>
  * @author      Olivier Plathey <olivier@fpdf.org>
  * @author      Krzysztof Kruszynski <thywolf@wolf.homelinux.net>
- * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author      Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @since       2003-02-12
- * @copyright   (c) 2001-2007 phpMyFAQ Team
+ * @version     SVN: $Id$ 
+ * @copyright   (c) 2003-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -23,10 +25,9 @@
 
 require_once('inc/Init.php');
 PMF_Init::cleanRequest();
-session_name('pmfauth' . trim($faqconfig->get('main.phpMyFAQToken')));
+session_name(PMF_COOKIE_NAME_AUTH . trim($faqconfig->get('main.phpMyFAQToken')));
 session_start();
-require_once('inc/Category.php');
-require_once('inc/Faq.php');
+
 require_once('inc/PMF_Export/Pdf.php');
 
 $category = new PMF_Category;

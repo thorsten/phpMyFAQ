@@ -1,8 +1,6 @@
 <?php
 /**
- * $Id: sitemap.google.php,v 1.7 2008-05-22 11:23:00 thorstenr Exp $
- *
- * The dynamic Google Sitemap builder
+ * The dynamic Google Sitemap builder.
  *
  * http://[...]/sitemap.google.php
  * http://[...]/sitemap.google.php?gz=1
@@ -13,11 +11,12 @@
  * The Google Sitemap protocol is described here:
  * http://www.google.com/webmasters/sitemaps/docs/en/protocol.html
  *
- * @package      phpMyFAQ
- * @access       public
- * @author       Matteo Scaramuccia <matteo@scaramuccia.com>
- * @since        2006-06-26
- * @copyright    2006-2008 phpMyFAQ Team
+ * @package     phpMyFAQ
+ * @access      public
+ * @author      Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @since       2006-06-26
+ * @version     SVN: $Id$ 
+ * @copyright   (c) 2006-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -117,7 +116,7 @@ function printHTTPStatus404()
 //
 
 PMF_Init::cleanRequest();
-session_name('pmfauth' . trim($faqconfig->get('main.phpMyFAQToken')));
+session_name(PMF_COOKIE_NAME_AUTH . trim($faqconfig->get('main.phpMyFAQToken')));
 session_start();
 
 $oFaq = new PMF_Faq($db, 'en');

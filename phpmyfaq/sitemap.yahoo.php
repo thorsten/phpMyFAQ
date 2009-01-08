@@ -1,8 +1,6 @@
 <?php
 /**
- * $Id: sitemap.yahoo.php,v 1.3 2007-03-29 18:01:27 thorstenr Exp $
- *
- * The dynamic Yahoo Sitemap builder
+ * The dynamic Yahoo Sitemap builder.
  *
  * http://[...]/sitemap.yahoo.php
  * http://[...]/sitemap.yahoo.php?gz=1
@@ -13,11 +11,12 @@
  * each URL at the start of a new line. The filename of the URL list file must be urllist.txt;
  * for a compressed file the name must be urllist.txt.gz.
  *
- * @package      phpMyFAQ
- * @access       public
- * @author       Matteo Scaramuccia <matteo@scaramuccia.com>
- * @since        2006-09-26
- * @copyright    (c) 2006 phpMyFAQ Team
+ * @package     phpMyFAQ
+ * @access      public
+ * @author      Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @since       2006-09-26
+ * @version     SVN: $Id$ 
+ * @copyright   (c) 2006-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -78,7 +77,7 @@ function printHTTPStatus404()
 // }}}
 
 PMF_Init::cleanRequest();
-session_name('pmfauth' . trim($faqconfig->get('main.phpMyFAQToken')));
+session_name(PMF_COOKIE_NAME_AUTH . trim($faqconfig->get('main.phpMyFAQToken')));
 session_start();
 
 $oFaq = new PMF_Faq($db, 'en');

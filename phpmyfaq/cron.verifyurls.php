@@ -1,17 +1,17 @@
 <?php
 /**
- * $Id: cron.verifyurls.php,v 1.12 2007-07-22 19:02:28 thorstenr Exp $
- *
  * Performs an Automatic Link Verification over all the faq records
  *
  * You can set a cron entry:
  * a. using PHP CLI
  * b. using a Web Hit to this file
  *
- * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @package     phpMyFAQ 
+ * @author      Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since       2006-09-17
- * @copyright   (c) 2006-2007 phpMyFAQ Team
+ * @version     SVN: $Id$ 
+ * @copyright   (c) 2006-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -49,7 +49,7 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
     require_once(PMF_ROOT_DIR.'/inc/Init.php');
     define('IS_VALID_PHPMYFAQ', null);
     PMF_Init::cleanRequest();
-    session_name('pmfauth' . trim($faqconfig->get('main.phpMyFAQToken')));
+    session_name(PMF_COOKIE_NAME_AUTH . trim($faqconfig->get('main.phpMyFAQToken')));
     session_start();
 
     // Preload English strings
