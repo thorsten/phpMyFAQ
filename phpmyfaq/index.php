@@ -84,6 +84,7 @@ if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
             $error = $PMF_LANG["ad_auth_fail"]." (".$faqusername." / *)";
             $user = null;
             unset($user);
+            $_REQUEST['action'] = '';
         }
     } else {
         // error
@@ -105,7 +106,6 @@ if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
     } else {
         $user = null;
         unset($user);
-        $_REQUEST['action'] = '';
     }
 }
 
@@ -302,10 +302,14 @@ if (   isset($cat)
 //
 // Found an action request?
 //
-if (isset($_REQUEST["action"]) && is_string($_REQUEST["action"]) && !preg_match("=/=", $_REQUEST["action"]) && isset($allowedVariables[$_REQUEST["action"]])) {
-    $action = trim($_REQUEST["action"]);
-} else {
-    $action = "main";
+$action = "main";
+if (
+       isset($_REQUEST['action'])
+    && is_string($_REQUEST['action'])
+    && !preg_match("=/=", $_REQUEST['action'])
+    && isset($allowedVariables[$_REQUEST['action']])
+    ) {
+    $action = trim($_REQUEST['action']);
 }
 
 //
@@ -416,22 +420,30 @@ if ($faqconfig->get('main.enableRewriteRules')) {
         );
 }
 
+//
+// Send headers and print template
+//
+header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
+header("Cache-Control: no-store, no-cache, must-revalidate");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+header("Content-type: text/html; charset=".$PMF_LANG['metaCharset']);
+header("Vary: Negotiate,Accept");
+
+//
+// Add debug info if needed
+//
 if (DEBUG) {
     $cookies = '';
     foreach($_COOKIE as $key => $value) {
         $cookies .= $key.': '.$value.'<br />';
     }
+
     $debug_template_vars = array(
-        'debugMessages' => '\n<div id="debug_main">DEBUG INFORMATION:<br />'.$db->sqllog().'</div><div id="debug_cookies">COOKIES:<br />'.$cookies.'</div>');
+        'debugMessages' => '\n<div id="debug_main">DEBUG INFORMATION:<br />'.$db->sqllog().'</div><div id="debug_cookies">COOKIES:<br />'.$cookies.'</div>'
+    );
 } else {
-    // send headers and print template
-    header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-    header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
-    header("Cache-Control: no-store, no-cache, must-revalidate");
-    header("Cache-Control: post-check=0, pre-check=0", false);
-    header("Pragma: no-cache");
-    header("Content-type: text/html; charset=".$PMF_LANG['metaCharset']);
-    header("Vary: Negotiate,Accept");
     $debug_template_vars = array('debugMessages' => '');
 }
 
@@ -443,7 +455,9 @@ $tpl->processTemplate(
     array_merge(
         $main_template_vars,
         $links_template_vars,
-        $debug_template_vars));
+        $debug_template_vars
+    )
+);
 
 //
 // Show login box or logged-in user information
@@ -455,7 +469,8 @@ if (isset($auth)) {
         'printAdminPath'    => (in_array(true, $permission)) ? 'admin/index.php' : '#',
         'adminSection'      => $PMF_LANG['adminSection'],
         'printLogoutPath'   => $_SERVER['PHP_SELF'].'?action=logout',
-        'logout'            => $PMF_LANG['ad_menu_logout']));
+        'logout'            => $PMF_LANG['ad_menu_logout'])
+    );
 } else {
     $tpl->processTemplate('loginBox', array(
         'writeLoginPath'    => $_SERVER['PHP_SELF'].'?action=login',
@@ -467,7 +482,8 @@ if (isset($auth)) {
                                '<a href="' . $systemUri . 'register.html">'.$PMF_LANG['msgRegisterUser'].'</a>'
                                :
                                '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'action=register">'.$PMF_LANG['msgRegisterUser'].'</a>'),
-        'msgLoginFailed'    => $error));
+        'msgLoginFailed'    => $error)
+    );
 }
 $tpl->includeTemplate('loginBox', 'index');
 
@@ -476,10 +492,12 @@ if (!isset($toptenParams['error'])) {
     $tpl->processBlock('rightBox', 'toptenList', array(
         'toptenUrl'    => $toptenParams['url'],
         'toptenTitle'  => $toptenParams['title'],
-        'toptenVisits' => $toptenParams['visits']));
+        'toptenVisits' => $toptenParams['visits'])
+    );
 } else {
     $tpl->processBlock('rightBox', 'toptenListError', array(
-        'errorMsgTopTen' => $toptenParams['error']));
+        'errorMsgTopTen' => $toptenParams['error'])
+    );
 }
 
 $latestEntriesParams = $faq->getLatest();
@@ -487,10 +505,12 @@ if (!isset($latestEntriesParams['error'])) {
     $tpl->processBlock('rightBox', 'latestEntriesList', array(
         'latestEntriesUrl'   => $latestEntriesParams['url'],
         'latestEntriesTitle' => $latestEntriesParams['title'],
-        'latestEntriesDate'  => $latestEntriesParams['date']));
+        'latestEntriesDate'  => $latestEntriesParams['date'])
+    );
 } else {
     $tpl->processBlock('rightBox', 'latestEntriesListError', array(
-        'errorMsgLatest' => $latestEntriesParams['error']));
+        'errorMsgLatest' => $latestEntriesParams['error'])
+    );
 }
 
 $tpl->processTemplate('rightBox', array(
@@ -499,7 +519,8 @@ $tpl->processTemplate('rightBox', array(
     'writeTagCloudHeader' => $PMF_LANG['msg_tags'],
     'writeTags'           => $oTag->printHTMLTagsCloud(),
     'msgAllCatArticles'   => $PMF_LANG['msgAllCatArticles'],
-    'allCatArticles'      => $faq->showAllRecordsWoPaging($cat)));
+    'allCatArticles'      => $faq->showAllRecordsWoPaging($cat))
+);
 $tpl->includeTemplate('rightBox', 'index');
 
 //
