@@ -1,14 +1,14 @@
 <?php
 /**
- * $Id: save.php,v 1.45 2008-05-23 13:06:07 thorstenr Exp $
- *
  * Saves a user FAQ record and sends an email to the user
  *
- * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author       J�rgen Kuza <kig@bluewin.ch>
- * @author       Matteo Scaramuccia <matteo@scaramuccia.com>
- * @since        2002-09-16
- * @copyright    (c) 2002-2007 phpMyFAQ Team
+ * @package     phpMyFAQ 
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author      Jürgen Kuza <kig@bluewin.ch>
+ * @author      Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @since       2002-09-16
+ * @copyright   (c) 2002-2009 phpMyFAQ Team
+ * @version     SVN: $Id$ 
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -28,7 +28,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $captcha = new PMF_Captcha($db, $sids, PMF_Init::$language);
 
-if (    isset($_POST['username']) && $_POST['username'] != ''
+if (
+       isset($_POST['username']) && $_POST['username'] != ''
     && isset($_POST['usermail']) && checkEmail($_POST['usermail'])
     && ((!isset($_POST['faqid']) && isset($_POST['rubrik']) && is_array($_POST['rubrik']))
         || (isset($_POST['faqid']) && is_numeric($_POST['faqid']) && (intval($_POST['faqid']) > 0) && isset($_POST['faqlanguage']) && PMF_Init::isASupportedLanguage($_POST['faqlanguage'])))
@@ -37,7 +38,8 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
     && IPCheck($_SERVER['REMOTE_ADDR'])
     && checkBannedWord(htmlspecialchars(strip_tags($_POST['thema'])))
     && checkBannedWord(htmlspecialchars(strip_tags($_POST['content'])))
-    && checkCaptchaCode()) {
+    && checkCaptchaCode()
+    ) {
 
     $isNew = true;
     if (isset($_POST['faqid'])) {
@@ -98,7 +100,7 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
         // Avoid to send multiple emails to the same owner
         if (!isset($sent[$userId])) {
             // TODO: Move this code to Category.php and let the email contains the faq article both as plain text and as HTML
-            $oUser = new PMF_User();
+            $oUser = new PMF_User_User();
             $oUser->addDb($db);
             $oUser->getUserById($userId);
             $catOwnerEmail = $oUser->getUserData('email');

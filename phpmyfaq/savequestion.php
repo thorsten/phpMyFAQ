@@ -1,23 +1,25 @@
 <?php
 /**
-* $Id: savequestion.php,v 1.35 2007-05-18 21:12:04 thorstenr Exp $
-*
-* @author           Thorsten Rinne <thorsten@phpmyfaq.de>
-* @author           David Saez Padros <david@ols.es>
-* @author           Jürgen Kuza <kig@bluewin.ch>
-* @since            2002-09-17
-* @copyright        (c) 2001-2007 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * TODO: Short description.
+ *
+ * @package     phpMyFAQ 
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author      David Saez Padros <david@ols.es>
+ * @author      Jürgen Kuza <kig@bluewin.ch>
+ * @since       2002-09-17
+ * @version     SVN: $Id$
+ * @copyright   (c) 2002-2009 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
@@ -26,12 +28,14 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $captcha = new PMF_Captcha($db, $sids, PMF_Init::$language);
 
-if (    isset($_POST['username']) && $_POST['username'] != ''
+if (
+        isset($_POST['username']) && $_POST['username'] != ''
      && isset($_POST['usermail']) && checkEmail($_POST['usermail'])
      && isset($_POST['content']) && $_POST['content'] != ''
      && IPCheck($_SERVER['REMOTE_ADDR'])
      && checkBannedWord(htmlspecialchars(strip_tags($_POST['content'])))
-     && checkCaptchaCode() ) {
+     && checkCaptchaCode()
+     ) {
     if (isset($_POST['try_search'])) {
         $suchbegriff = strip_tags($_POST['content']);
         $printResult = searchEngine($suchbegriff, $numr);
@@ -70,7 +74,7 @@ if (    isset($_POST['username']) && $_POST['username'] != ''
                             .wordwrap($content, 72);
 
             $userId = $category->getCategoryUser($questionData['ask_category']);
-            $oUser = new PMF_User();
+            $oUser = new PMF_User_User();
             $oUser->addDb($db);
             $oUser->getUserById($userId);
 
