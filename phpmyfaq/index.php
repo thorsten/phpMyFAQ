@@ -41,7 +41,7 @@ define('IS_VALID_PHPMYFAQ', null);
 //
 require_once 'inc/Init.php';
 PMF_Init::cleanRequest();
-session_name('pmfauth' . trim($faqconfig->get('main.phpMyFAQToken')));
+session_name(PMF_COOKIE_NAME_AUTH . trim($faqconfig->get('main.phpMyFAQToken')));
 session_start();
 
 //
@@ -82,13 +82,20 @@ if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
             $auth = true;
         } else {
             $error = $PMF_LANG["ad_auth_fail"]." (".$faqusername." / *)";
+            $user = null;
+            unset($user);
         }
     } else {
         // error
-        $error = sprintf('%s<br /><a href="admin/password.php" title="%s">%s</a>',
-            $PMF_LANG['ad_auth_fail'], $PMF_LANG['lostPassword'], $PMF_LANG['lostPassword']);
+        $error = sprintf(
+            '%s<br /><a href="admin/password.php" title="%s">%s</a>',
+            $PMF_LANG['ad_auth_fail'],
+            $PMF_LANG['lostPassword'],
+            $PMF_LANG['lostPassword']
+        );
         $user = null;
         unset($user);
+        $_REQUEST['action'] = '';
     }
 } else {
     // authenticate with session information
@@ -98,6 +105,7 @@ if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
     } else {
         $user = null;
         unset($user);
+        $_REQUEST['action'] = '';
     }
 }
 
@@ -161,16 +169,19 @@ if (function_exists('mb_language') && in_array($mbLanguage, $valid_mb_strings)) 
 //
 // found a session ID in _GET or _COOKIE?
 //
+$sid = null;
 $faqsession = new PMF_Session($db, $LANGCODE);
-if ((!isset($_GET['sid'])) && (!isset($_COOKIE['pmf_sid']))) {
+if (
+       (!isset($_GET[PMF_GET_KEY_NAME_SESSIONID]))
+    && (!isset($_COOKIE[PMF_COOKIE_NAME_SESSIONID]))
+    ) {
     // Create a per-site unique SID
     $faqsession->userTracking('new_session', 0);
-    setcookie('pmf_sid', $sid, $_SERVER['REQUEST_TIME'] + 3600);
 } else {
-    if (isset($_COOKIE['pmf_sid']) && is_numeric($_COOKIE['pmf_sid'])) {
-        $faqsession->checkSessionId((int)$_COOKIE['pmf_sid'], $_SERVER['REMOTE_ADDR']);
+    if (isset($_COOKIE[PMF_COOKIE_NAME_SESSIONID]) && is_numeric($_COOKIE[PMF_COOKIE_NAME_SESSIONID])) {
+        $faqsession->checkSessionId((int)$_COOKIE[PMF_COOKIE_NAME_SESSIONID], $_SERVER['REMOTE_ADDR']);
     } else {
-        $faqsession->checkSessionId((int)$_GET['sid'], $_SERVER['REMOTE_ADDR']);
+        $faqsession->checkSessionId((int)$_GET[PMF_GET_KEY_NAME_SESSIONID], $_SERVER['REMOTE_ADDR']);
     }
 }
 
@@ -180,18 +191,19 @@ if ((!isset($_GET['sid'])) && (!isset($_COOKIE['pmf_sid']))) {
 $sids = '';
 if ($faqconfig->get('main.enableUserTracking')) {
     if (isset($sid)) {
-        if (!isset($_COOKIE['pmf_sid'])) {
+        PMF_Session::setCookie($sid);
+        if (!isset($_COOKIE[PMF_COOKIE_NAME_SESSIONID])) {
             $sids = 'sid='.(int)$sid.'&amp;lang='.$LANGCODE.'&amp;';
         }
-    } elseif (isset($_GET['sid']) || isset($_COOKIE['pmf_sid'])) {
-        if (!isset($_COOKIE['pmf_sid'])) {
-            if (is_numeric($_GET['sid'])) {
-                $sids = 'sid='.(int)$_GET['sid'].'&amp;lang='.$LANGCODE.'&amp;';
+    } elseif (isset($_GET[PMF_GET_KEY_NAME_SESSIONID]) || isset($_COOKIE[PMF_COOKIE_NAME_SESSIONID])) {
+        if (!isset($_COOKIE[PMF_COOKIE_NAME_SESSIONID])) {
+            if (isset($_GET[PMF_GET_KEY_NAME_SESSIONID]) && is_numeric($_GET[PMF_GET_KEY_NAME_SESSIONID])) {
+                $sids = 'sid='.(int)$_GET[PMF_GET_KEY_NAME_SESSIONID].'&amp;lang='.$LANGCODE.'&amp;';
             }
         }
     }
 } else {
-    if (!setcookie('pmf_lang', $LANGCODE, $_SERVER['REQUEST_TIME'] + 3600)) {
+    if (!setcookie(PMF_GET_KEY_NAME_LANGUAGE, $LANGCODE, $_SERVER['REQUEST_TIME'] + PMF_LANGUAGE_EXPIRED_TIME)) {
         $sids = 'lang='.$LANGCODE.'&amp;';
     }
 }
@@ -317,7 +329,7 @@ if ($action != 'main') {
         $inc_tpl = 'template/main.tpl';
         $inc_php = 'main.php';
     }
-    $writeLangAdress = $_SERVER['PHP_SELF']."?".$sids;
+    $writeLangAdress = $_SERVER['PHP_SELF'].'?'.$sids;
 }
 
 //
