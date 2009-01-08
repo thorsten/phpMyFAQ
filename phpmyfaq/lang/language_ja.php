@@ -1,27 +1,26 @@
 <?php
 /**
-* $Id: language_ja.php,v 1.45.2.1 2007-05-29 17:20:15 thorstenr Exp $
-*
-* The Japanese language file
-*
-* @author       Tadashi Jokagi <http://poyo.jp/>
-* @author       Minoru TODA <todam@netjapan.co.jp>
-* @since        2004-02-19
-* @copyright    (c) 2004-2007 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*
-* Don't remove the following please!!(by translator)
-* EN-Revision: 1.109
-*/
+ * The Japanese language file
+ *
+ * @author    Tadashi Jokagi <http://poyo.jp/>
+ * @author    Minoru TODA <todam@netjapan.co.jp>
+ * @since     2004-02-19
+ * @copyright 2004-2009 phpMyFAQ Team
+ * @version   SVN: $Id$
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ *
+ * Don't remove the following please!!(by translator)
+ * EN-Revision: 1.109
+ */
 
 $PMF_LANG["metaCharset"] = "UTF-8";
 $PMF_LANG["metaLanguage"] = "ja";
@@ -501,7 +500,7 @@ $PMF_LANG["ad_entry_preview"] = "プレビュー";
 $PMF_LANG["ad_attach_1"] = "環境設定から添付ファイルを保存するディレクトリを先に設定してください。";
 $PMF_LANG["ad_attach_2"] = "環境設定から添付ファイルのリンクを先に設定してください。";
 $PMF_LANG["ad_attach_3"] = "attachment.php ファイルを権限なしではオープンできません。";
-$PMF_LANG["ad_attach_4"] = "添付ファイルのサイズは ".$PMF_CONF["attmax"]." Bytes より大きくてはいけません。";
+$PMF_LANG["ad_attach_4"] = "添付ファイルのサイズは ".$PMF_CONF["main.maxAttachmentSize"]." Bytes より大きくてはいけません。";
 $PMF_LANG["ad_menu_export"] = "FAQ エクスポート";
 $PMF_LANG["ad_export_1"] = "Built RSS-Feed on";
 $PMF_LANG["ad_export_2"] = ".";
