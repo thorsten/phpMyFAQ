@@ -1,15 +1,13 @@
 <?php
 /**
+ * The RSS feed with the top ten.
  *
- *
- * The RSS feed with the top ten
- *
- * @package   phpMyFAQ
- * @access    public
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
- * @copyright 2004-2008 phpMyFAQ Team
- * @version   CVS: $Id: rss.php,v 1.25 2008-06-05 05:58:05 thorstenr Exp $
+ * @package     phpMyFAQ
+ * @access      public
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author      Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @version     SVN: $Id$ 
+ * @copyright   (c) 2004-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -23,12 +21,11 @@
  */
 
 define('PMF_ROOT_DIR', dirname(dirname(dirname(__FILE__))));
+
 require_once(PMF_ROOT_DIR.'/inc/Init.php');
 PMF_Init::cleanRequest();
-session_name('pmfauth' . trim($faqconfig->get('main.phpMyFAQToken')));
+session_name(PMF_COOKIE_NAME_AUTH . trim($faqconfig->get('main.phpMyFAQToken')));
 session_start();
-
-require_once(PMF_ROOT_DIR.'/inc/Faq.php');
 
 //
 // get language (default: english)

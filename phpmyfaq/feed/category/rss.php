@@ -1,12 +1,13 @@
 <?php
 /**
- * The RSS feed for categories
+ * The RSS feed for categories.
  *
- * @package   phpMyFAQ
- * @access    public
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2008 phpMyFAQ Team
- * @version   CVS: rss.php,v 1.1 2008/01/25 21:18:27 thorstenr Exp
+ * @package     phpMyFAQ
+ * @access      public
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since       2008-01-25 
+ * @version     SVN: $Id$
+ * @copyright   (c) 2008-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -20,13 +21,11 @@
  */
 
 define('PMF_ROOT_DIR', dirname(dirname(dirname(__FILE__))));
+
 require_once PMF_ROOT_DIR.'/inc/Init.php';
 PMF_Init::cleanRequest();
-session_name('pmfauth' . trim($faqconfig->get('main.phpMyFAQToken')));
+session_name(PMF_COOKIE_NAME_AUTH . trim($faqconfig->get('main.phpMyFAQToken')));
 session_start();
-
-require_once PMF_ROOT_DIR.'/inc/Category.php';
-require_once PMF_ROOT_DIR.'/inc/Faq.php';
 
 //
 // get language (default: english)
