@@ -43,7 +43,7 @@ define('IS_VALID_PHPMYFAQ_ADMIN', null);
 //
 require_once PMF_ROOT_DIR.'/inc/Init.php';
 PMF_Init::cleanRequest();
-session_name('pmfauth'.trim($faqconfig->get('main.phpMyFAQToken')));
+session_name(PMF_COOKIE_NAME_AUTH.trim($faqconfig->get('main.phpMyFAQToken')));
 session_start();
 
 // Include external classes and functions
