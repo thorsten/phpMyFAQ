@@ -1,12 +1,12 @@
 <?php
 /**
- * Constants for phpMyFAQ
+ * Constants for phpMyFAQ.
  *
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
- * @since     2003-12-10
- * @copyright 2003-2008 phpMyFAQ Team
- * @version   CVS: $Id: constants.php,v 1.41 2008-06-05 05:59:52 thorstenr Exp $
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @since       2003-12-10
+ * @copyright   (c) 2003-2009 phpMyFAQ Team
+ * @version     SVN: $Id: constants.php,v 1.41 2008-06-05 05:59:52 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License Version
  * 1.1 (the "License"); you may not use this file except in compliance with
@@ -27,10 +27,22 @@ declare(encoding='latin1');
 
 /**
  * Use this constant if you want to change your timezone
+ * TODO: Remove this named constant to use PHP 5.1 timezone features
  *
  * @var integer
  */
 define('PMF_DATETIME_TIMEZONE', '0'); // default: "0", example: "-0400" for 4 hours before
+
+/**
+ * Set the string below according to your users main timezone.
+ * For your convenience find below the list of the available timezones:
+ * 
+ * http://www.php.net/manual/en/timezones.php   
+ * 
+ * Note: a wrong timezone setting could affect on-line users tracking as well as
+ *       any filter criterion built using a date.
+ */
+date_default_timezone_set('Europe/Berlin');
 
 /**
  * Timeout for the admin section, in minutes
@@ -155,7 +167,8 @@ $botBlacklist = array(
     'wget',
     'bot',
     'spider',
-    'Yahoo! Slurp');
+    'Yahoo! Slurp'
+);
 
 /****************************************************************************
  *                  DO NOT CHANGE ANYTHING BELOW THIS LINE!                 *
@@ -344,4 +357,21 @@ $languageCodes = array (
         'YO' => 'Yoruba',
         'ZH' => 'Chinese (Simplified)',
         'ZU' => 'Zulu'
-        );
+);
+
+//
+// Define some internal constants
+//
+
+// Cookies
+define('PMF_COOKIE_NAME_AUTH', 'pmf_auth');
+define('PMF_COOKIE_NAME_LANGUAGE', 'pmf_lang');
+define('PMF_COOKIE_NAME_SESSIONID', 'pmf_sid');
+
+// HTTP GET parameters
+define('PMF_GET_KEY_NAME_LANGUAGE', 'lang');
+define('PMF_GET_KEY_NAME_SESSIONID', 'sid');
+
+// Misc parameters
+define('PMF_LANGUAGE_EXPIRED_TIME', 3600);
+define('PMF_SESSION_EXPIRED_TIME', 3600);
