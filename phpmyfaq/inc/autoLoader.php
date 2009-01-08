@@ -22,6 +22,15 @@
 
 function __autoload($class)
 {
+    // Class/interface name paranoid cleanup i.e.:
+    // - avoid path traversal issues;
+    // - remove any *NIX/WIN filename reserved chars.
+    $invalidChars = array(
+        '.', '\\', '/', ':', '*', '?', '"', '<', '>', "'", '|'
+    );
+    $class = str_replace($invalidChars, '', $class);
+
+
     $classParts = explode('_', $class);
     $rootDir = defined('PMF_ROOT_DIR') ? PMF_ROOT_DIR : '.';
 
