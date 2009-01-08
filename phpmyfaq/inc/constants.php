@@ -6,7 +6,7 @@
  * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
  * @since       2003-12-10
  * @copyright   (c) 2003-2009 phpMyFAQ Team
- * @version     SVN: $Id: constants.php,v 1.41 2008-06-05 05:59:52 thorstenr Exp $
+ * @version     SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License Version
  * 1.1 (the "License"); you may not use this file except in compliance with
