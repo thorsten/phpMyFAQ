@@ -79,8 +79,6 @@ define('SQLPREFIX', $DB['prefix']);
 $db = PMF_Db::db_select($DB['type']);
 $db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db']);
 
-date_default_timezone_set('Europe/Berlin');
-
 //
 // Fetch the configuration
 //
@@ -349,8 +347,8 @@ class PMF_Init
             $_lang['get'] = trim($_GET['artlang']);
         }
         // Get the language from the cookie
-        if (isset($_COOKIE['pmf_lang']) && self::isASupportedLanguage($_COOKIE['pmf_lang']) ) {
-            $_lang['cookie'] = trim($_COOKIE['pmf_lang']);
+        if (isset($_COOKIE[PMF_GET_KEY_NAME_LANGUAGE]) && self::isASupportedLanguage($_COOKIE[PMF_GET_KEY_NAME_LANGUAGE]) ) {
+            $_lang['cookie'] = trim($_COOKIE[PMF_GET_KEY_NAME_LANGUAGE]);
         }
         // Get the language from the config
         if (isset($config_language)) {
@@ -366,25 +364,22 @@ class PMF_Init
         // Select the language
         if (isset($_lang['post'])) {
             self::$language = $_lang['post'];
-            $_lang          = null;
+            $_lang = null;
             unset($_lang);
-            setcookie('pmf_sid', $sid, $_SERVER['REQUEST_TIME'] + 3600);
         } elseif (isset($_lang['get'])) {
             self::$language = $_lang['get'];
         } elseif (isset($_lang['cookie'])) {
             self::$language = $_lang['cookie'];
-            $_lang          = null;
+            $_lang = null;
             unset($_lang);
         } elseif (isset($_lang['detection'])) {
             self::$language = $_lang['detection'];
-            $_lang          = null;
+            $_lang = null;
             unset($_lang);
-            setcookie('pmf_sid', $sid, $_SERVER['REQUEST_TIME'] + 3600);
         } elseif (isset($_lang['config'])) {
             self::$language = $_lang['config'];
-            $_lang          = null;
+            $_lang = null;
             unset($_lang);
-            setcookie('pmf_sid', $sid, $_SERVER['REQUEST_TIME'] + 3600);
         } else {
             self::$language = 'en'; // just a fallback
         }

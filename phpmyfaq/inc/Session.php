@@ -1,12 +1,12 @@
 <?php
 /**
- * The main User seession class
+ * The main User session class
  *
- * @package   phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since     2007-03-31
- * @copyright 2007-2008 phpMyFAQ Team
- * @version   CVS: $Id$
+ * @package     phpMyFAQ
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since       2007-03-31
+ * @copyright   (c) 2007-2009 phpMyFAQ Team
+ * @version     SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -58,44 +58,43 @@ class PMF_Session
      * @since   2001-02-18
      * @since   Bastian Poettner <bastian@poettner.net>
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     * @author  Matteo Scaramuccia <matteo@phpmyfaq.de>
      * @author  Marco Fester <webmaster@marcof.de>
      */
     public function userTracking($action, $id = 0)
     {
         global $PMF_CONF, $sid, $user, $botBlacklist;
-    
+
         if (isset($PMF_CONF['main.enableUserTracking'])) {
-    
+
             $bots   = 0;
             $agent  = $_SERVER['HTTP_USER_AGENT'];
-    
-            if (isset($_GET["sid"])) {
-                $sid = (int)$_GET["sid"];
+   
+            if (isset($_GET[PMF_GET_KEY_NAME_SESSIONID]) && is_numeric($_GET[PMF_GET_KEY_NAME_SESSIONID])) {
+                $sid = (int)$_GET[PMF_GET_KEY_NAME_SESSIONID];
             }
     
-            if (isset($_COOKIE['pmf_sid'])) {
-                $sid = (int)$_COOKIE['pmf_sid'];
+            if (isset($_COOKIE[PMF_COOKIE_NAME_SESSIONID]) && is_numeric($_COOKIE[PMF_COOKIE_NAME_SESSIONID])) {
+                $sid = (int)$_COOKIE[PMF_COOKIE_NAME_SESSIONID];
             }
     
             if ($action == "old_session") {
                 $sid = null;
             }
-    
+
             foreach ($botBlacklist as $bot) {
                 if (strpos($agent, $bot)) {
                     $bots++;
                 }
             }
-    
             if (0 == $bots) {
                 if (!isset($sid)) {
                     $sid = $this->db->nextID(SQLPREFIX."faqsessions", "sid");
-                    
-                    if (isset($_COOKIE["pmf_sid"]) && ((int)$_COOKIE['pmf_sid'] != $sid)) {
-                        setcookie('pmf_sid', $sid, $_SERVER['REQUEST_TIME'] + 3600);
+                    // Sanity check: force the session cookie to contains the current $sid
+                    if (isset($_COOKIE[PMF_COOKIE_NAME_SESSIONID]) && ((int)$_COOKIE[PMF_COOKIE_NAME_SESSIONID] != $sid)) {
+                        self::setCookie($sid);
                     }
-                    
+
                     $query = sprintf("
                         INSERT INTO 
                             %sfaqsessions
@@ -106,10 +105,11 @@ class PMF_Session
                         $sid,
                         ($user ? $user->getUserId() : -1),
                         $_SERVER["REMOTE_ADDR"],
-                        $_SERVER['REQUEST_TIME']);
+                        $_SERVER['REQUEST_TIME']
+                    );
                     $this->db->query($query);
                 }
-                
+
                 $data = $sid.';' . 
                         str_replace(';', ',', $action) . ';' . 
                         $id . ';' . 
@@ -118,9 +118,7 @@ class PMF_Session
                         str_replace(';', ',', @$_SERVER['HTTP_REFERER']) . ';' . 
                         str_replace(';', ',', urldecode($_SERVER['HTTP_USER_AGENT'])) . ';' . 
                         $_SERVER['REQUEST_TIME'] . ";\n";
-                
                 $file = './data/tracking'.date('dmY');
-                
                 file_put_contents($file, $data, FILE_APPEND);
             }
         }
@@ -251,15 +249,15 @@ class PMF_Session
     /**
      * Checks the Session ID
      *
-     * @param  integer $sid Session ID
+     * @param  integer $sessionId Session ID
      * @param  string  $ip  IP
      * @return void
      * @since  2007-04-22
      * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    public function checkSessionId($sid, $ip)
+    public function checkSessionId($sessionId, $ip)
     {
-        global $user;
+        global $sid, $user;
 
         $query = sprintf("
             SELECT
@@ -273,15 +271,18 @@ class PMF_Session
             AND
                 time > %d",
             SQLPREFIX,
-            $sid,
+            $sessionId,
             $ip,
-            $_SERVER['REQUEST_TIME'] - 86400);
-
+            $_SERVER['REQUEST_TIME'] - 86400
+        );
         $result = $this->db->query($query);
 
         if ($this->db->num_rows($result) == 0) {
-            Tracking('old_session', $sid);
+            $this->userTracking('old_session', $sessionId);
         } else {
+            // Update global session id
+            $sid = $sessionId;
+            // Update db tracking
             $query = sprintf("
                 UPDATE
                     %sfaqsessions
@@ -294,9 +295,27 @@ class PMF_Session
                 SQLPREFIX,
                 $_SERVER['REQUEST_TIME'],
                 ($user ? $user->getUserId() : '-1'),
-                $sid,
-                $ip);
+                $sessionId,
+                $ip
+            );
             $this->db->query($query);
         }
+    }
+
+    /**
+     * Store the Session ID into a persistent cookie expiring PMF_SESSION_EXPIRED_TIME seconds after the page request.
+     *
+     * @public
+     * @static          
+     * @param   integer     $sessionId Session ID
+     * @return  void
+     * @since   2009-01-08
+     * @author  Matteo Scaramuccia <matteo@phpmyfaq.de>
+     */
+    public static function setCookie($sessionId)
+    {
+        global $sid;
+
+        setcookie(PMF_COOKIE_NAME_SESSIONID, $sid, $_SERVER['REQUEST_TIME'] + PMF_SESSION_EXPIRED_TIME);
     }
 }
