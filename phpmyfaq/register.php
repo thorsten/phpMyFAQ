@@ -8,8 +8,8 @@
  * @package     phpMyFAQ
  * @author      Elger Thiele <elger@phpmyfaq.de>
  * @since       2008-01-25
- * @copyright   (c) 2008-2009 phpMyFAQ Team
  * @version     SVN: $Id$
+ * @copyright   (c) 2008-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -105,23 +105,29 @@ if ($loginname != '' && $lastname != '' && $email != '' && !isset($captchaError)
     }
     // ok, let's go
     if (count($messages) == 0) {
-        // create user account (login and password)
-        // password is not neccesarious because it will be generatet a new on (send per mail)
-        // as soon if admin switch user to "active"
+        // Create user account (login and password)
+        // Note: password be automatically generated
+        //       and sent by email as soon if admin switch user to "active"
         if (!$user->createUser($user_name, '')) {
             $messages[] = $user->error();
         } else {
             // set user data (realname, email)
-            $user->userdata->set(array('display_name', 'email'), array($user_realname, $user_email));
+            $user->userdata->set(
+                array('display_name', 'email'),
+                array($user_realname, $user_email));
             // set user status
             $user->setStatus($defaultUserStatus);
 
-
             //mail
             $text = "New user has been registrated:\n\nUsername: ".$lastname."\nLoginname: ".$loginname."\n\nTo activate this user do please use the administration interface.";
-            mail($IDN->encode($PMF_CONF['main.administrationMail']), $PMF_LANG['emailRegSubject'], $text, "From: ".$IDN->encode($PMF_CONF['main.administrationMail']));
+            mail(
+                $IDN->encode($PMF_CONF['main.administrationMail']),
+                PMF_Utils::resolveMarkers($PMF_LANG['emailRegSubject']),
+                $text,
+                "From: ".$IDN->encode($PMF_CONF['main.administrationMail'])
+            );
 
-            header("LOCATION: index.php?action=thankyou");
+            header("Location: index.php?action=thankyou");
             exit;
         }
     }
