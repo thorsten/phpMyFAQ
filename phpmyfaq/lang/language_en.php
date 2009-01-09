@@ -1,25 +1,25 @@
 <?php
 /**
-* $Id: language_en.php,v 1.110 2008-01-26 15:10:14 thorstenr Exp $
-*
-* The English language file - try to be the best of British and American English
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @author       Matthias Sommerfeld <mso@bluebirdy.de>
-* @author       Henning Schulzrinne <hgs@cs.columbia.edu>
-* @since        2004-02-19
-* @copyright    (c) 2004-2007 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * The English language file - try to be the best of British and American English.
+ *
+ * @package     phpMyFAQ 
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author      Matthias Sommerfeld <mso@bluebirdy.de>
+ * @author      Henning Schulzrinne <hgs@cs.columbia.edu>
+ * @since       2004-02-19
+ * @version     SVN: $Id$ 
+ * @copyright   (c) 2004-2009 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 $PMF_LANG["metaCharset"] = "iso-8859-1";
 $PMF_LANG["metaLanguage"] = "en";
@@ -894,10 +894,10 @@ $PMF_LANG['ad_system_info'] = 'System Information';
 $PMF_LANG['msgRegisterUser'] = 'Do you want to register?';
 $PMF_LANG["ad_user_loginname"] = 'Login name:';
 $PMF_LANG['errorRegistration'] = 'This field is required!';
-$PMF_LANG['submitRegister'] = 'register';
-$PMF_LANG['msgUserData'] = 'User information needed for registration';
+$PMF_LANG['submitRegister'] = 'Register';
+$PMF_LANG['msgUserData'] = 'User information required for registration';
 $PMF_LANG['captchaError'] = 'Please enter the right Capture Code!';
-$PMF_LANG['msgRegError'] = 'Following errors occured! Please correct them:';
-$PMF_LANG['successMessage'] = 'Your registration was successful! You will soon receive a confirmation mail within your login data!';
+$PMF_LANG['msgRegError'] = 'Following errors occured. Please correct them:';
+$PMF_LANG['successMessage'] = 'Your registration was successful. You will soon receive a confirmation mail within your login data!';
 $PMF_LANG['msgRegThankYou'] = 'Thank you for your registration';
-$PMF_LANG['emailRegSubject'] = '[phpMyFaq] registration: new user';
+$PMF_LANG['emailRegSubject'] = '[%sitename%] Registration: new user';
