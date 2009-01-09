@@ -320,10 +320,16 @@ class PMF_Category
     */
     function levelOf($id)
     {
-        $ret = 0;
+    	$alreadies = array($id);
+        $ret       = 0;
+        
         while ((isset($this->categoryName[$id]['parent_id'])) && ($this->categoryName[$id]['parent_id'] != 0)) {
             $ret++;
             $id = $this->categoryName[$id]['parent_id'];
+            
+            if (in_array($id, $alreadies)) {
+                break;
+            }
         }
         return $ret;
     }
