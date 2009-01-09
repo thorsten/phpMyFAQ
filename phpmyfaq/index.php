@@ -9,8 +9,8 @@
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author      Lars Tiedemann <php@larstiedemann.de>
  * @since       2001-02-12
- * @copyright   (c) 2001-2009 phpMyFAQ Team
  * @version     SVN: $Id$
+ * @copyright   (c) 2001-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -441,7 +441,7 @@ if (DEBUG) {
     }
 
     $debug_template_vars = array(
-        'debugMessages' => '\n<div id="debug_main">DEBUG INFORMATION:<br />'.$db->sqllog().'</div><div id="debug_cookies">COOKIES:<br />'.$cookies.'</div>'
+        'debugMessages' => "\n".'<div id="debug_main">DEBUG INFORMATION:<br />'.$db->sqllog().'</div><div id="debug_cookies">COOKIES:<br />'.$cookies.'</div>'
     );
 } else {
     $debug_template_vars = array('debugMessages' => '');
