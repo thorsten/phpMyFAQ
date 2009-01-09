@@ -1,15 +1,16 @@
 <?php
 /**
- * $Id: Category.php,v 1.56 2008-01-26 01:02:56 thorstenr Exp $
- *
  * The main category class
  *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Lars Tiedemann <larstiedemann@yahoo.de>
- * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
- * @author      Rudi Ferrari <bookcrossers@gmx.de>
- * @since       2004-02-16
- * @copyright   (c) 2004-2007 phpMyFAQ Team
+ * @package   phpMyFAQ
+ * @license   MPL
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Lars Tiedemann <larstiedemann@yahoo.de>
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author    Rudi Ferrari <bookcrossers@gmx.de>
+ * @since     2004-02-16
+ * @copyright 2004-2009 phpMyFAQ Team
+ * @version   SVN: $Id: Category.php,v 1.56 2008-01-26 01:02:56 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -22,12 +23,7 @@
  * under the License.
  */
 
-// {{{ Includes
-/**
- * This include is needed for accessing to mod_rewrite support configuration value
- */
-require_once(PMF_INCLUDE_DIR.'/Link.php');
-// }}}
+require_once PMF_INCLUDE_DIR . '/Link.php';
 
 class PMF_Category
 {
@@ -326,15 +322,19 @@ class PMF_Category
      *
      * @param  integer $id
      * @return integer
-     * @access private
      * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     private function levelOf($id)
     {
-        $ret = 0;
+    	$alreadies = array($id);
+        $ret       = 0;
         while ((isset($this->categoryName[$id]['parent_id'])) && ($this->categoryName[$id]['parent_id'] != 0)) {
             $ret++;
             $id = $this->categoryName[$id]['parent_id'];
+            
+            if (in_array($id, $alreadies)) {
+                break;
+            }
         }
         return $ret;
     }
