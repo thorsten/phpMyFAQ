@@ -2,13 +2,13 @@
 /**
  * Utilities - Functions and Classes common to the whole phpMyFAQ architecture
  *
- * @package   phpMyFAQ
- * @license   MPL
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @since     2005-11-01
- * @copyright 2005-2009 phpMyFAQ Team
- * @version   SVN: $Id$
+ * @package     phpMyFAQ
+ * @license     MPL
+ * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author      Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @since       2005-11-01
+ * @version     SVN: $Id$
+ * @copyright   (c) 2005-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -169,5 +169,30 @@ class PMF_Utils
         }
 
         return $shuffled_data;
+    }
+
+    /**
+     * Resolves the PMF markers like e.g. %sitename%.
+     *
+     * @public
+     * @static
+     * @param   string $text Text contains PMF markers
+     * @return  string
+     */
+    public static function resolveMarkers($text)
+    {
+        global $PMF_CONF;
+
+        // Available markers: key and resolving value
+        $markers = array(
+            '%sitename%'    => $PMF_CONF['main.titleFAQ']
+        );
+
+        // Resolve any known pattern
+        return str_replace(
+            array_keys($markers),
+            array_values($markers),
+            $text
+        );
     }
 }
