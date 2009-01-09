@@ -2,11 +2,11 @@
 /**
  * The Ajax driven response page.
  *
- * @package     phpMyFAQ 
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since       2007-03-27
- * @version     SVN: $Id$
- * @copyright   (c) 2007-2009 phpMyFAQ Team
+ * @package   phpMyFAQ 
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since     2007-03-27
+ * @copyright 2007-2009 phpMyFAQ Team
+ * @version   SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -34,17 +34,17 @@ $searchString = '';
 
 if (isset($_POST['ajaxlanguage']) && PMF_Init::isASupportedLanguage($_POST['ajaxlanguage'])) {
     $LANGCODE = trim($_POST['ajaxlanguage']);
-    require_once('lang/language_'.$LANGCODE.'.php');
+    require_once 'lang/language_'.$LANGCODE.'.php';
 } else {
     $LANGCODE = 'en';
-    require_once('lang/language_en.php');
+    require_once 'lang/language_en.php';
 }
 
 //
 // Get current user and group id - default: -1
 //
 if (isset($user) && is_object($user)) {
-    $current_user   = $user->getUserId();
+    $current_user = $user->getUserId();
     if ($user->perm instanceof PMF_PermMedium) {
         $current_groups = $user->perm->getUserGroups($current_user);
     } else {

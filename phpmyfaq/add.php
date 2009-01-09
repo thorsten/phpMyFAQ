@@ -1,12 +1,13 @@
 <?php
 /**
- * $Id: add.php,v 1.22 2008-05-23 13:06:06 thorstenr Exp $
- *
  * This is the page there a user can add a FAQ record.
  *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since       2002-09-16
- * @copyright   (c) 2002-2007 phpMyFAQ Team
+ * @package   Frontend
+ * @category  phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since     2002-09-16
+ * @copyright 2002-2009 phpMyFAQ Team
+ * @version   SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -37,8 +38,8 @@ $question = '';
 $readonly = '';
 if (isset($_GET['question']) && is_numeric($_GET['question'])) {
     $question_id = (int)$_GET['question'];
-    $oQuestion = $faq->getQuestion($question_id);
-    $question = $oQuestion['question'];
+    $oQuestion   = $faq->getQuestion($question_id);
+    $question    = $oQuestion['question'];
     if (strlen($question)) {
         $readonly = ' readonly="readonly"';
     }
@@ -46,7 +47,7 @@ if (isset($_GET['question']) && is_numeric($_GET['question'])) {
 
 if (isset($_GET['cat']) && is_numeric($_GET['cat'])) {
     $categories = array(array(
-        'category_id' => (int)$_GET['cat'],
+        'category_id'   => (int)$_GET['cat'],
         'category_lang' => $LANGCODE));
 } else {
     $categories = array();

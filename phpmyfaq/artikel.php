@@ -1,14 +1,14 @@
 <?php
 /**
- * $Id: artikel.php,v 1.84 2008-05-23 13:06:06 thorstenr Exp $
- *
  * Shows the page with the FAQ record and - when available - the user
  * comments
  *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Lars Tiedemann <larstiedemann@yahoo.de>
- * @since       2002-08-27
- * @copyright   (c) 2002-2007 phpMyFAQ Team
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Lars Tiedemann <larstiedemann@yahoo.de>
+ * @since     2002-08-27
+ * @copyright 2002-2009 phpMyFAQ Team
+ * @version   SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
