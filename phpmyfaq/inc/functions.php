@@ -1,17 +1,16 @@
 <?php
 /**
- * $Id: functions.php,v 1.218 2008-05-23 13:06:07 thorstenr Exp $
- *
- * This is the main functions file!
+ * This is the main functions file.
  *
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author      Matthias Sommerfeld <phlymail@phlylabs.de>
  * @author      Bastian Poettner <bastian@poettner.net>
  * @author      Meikel Katzengreis <meikel@katzengreis.com>
  * @author      Robin Wood <robin@digininja.org>
- * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author      Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @since       2001-02-18
- * @copyright   2001-2008 phpMyFAQ Team
+ * @version     SVN: $Id$ 
+ * @copyright   (c) 2001-2009 phpMyFAQ Team
  *
  * Portions created by Matthias Sommerfeld are Copyright (c) 2001-2004 blue
  * birdy, Berlin (http://bluebirdy.de). All Rights Reserved.
@@ -32,16 +31,16 @@
 //
 
 /**
-* Function to get a pretty formatted output of a variable
-*
-* NOTE: Just for debugging!
-*
-* @param    object
-* @return   void
-* @access   public
-* @since    2004-11-27
-* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-*/
+ * Function to get a pretty formatted output of a variable
+ *
+ * NOTE: Just for debugging!
+ *
+ * @param   object
+ * @return  void
+ * @access  public
+ * @since   2004-11-27
+ * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+ */
 function dump($var)
 {
     print '<pre>';
@@ -52,11 +51,11 @@ function dump($var)
 /**
  * debug_backtrace() wrapper function
  *
- * @param    $string
- * @return   string
- * @access   public
- * @since    2006-06-24
- * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @param   $string
+ * @return  string
+ * @access  public
+ * @since   2006-06-24
+ * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
  */
 function pmf_debug($string)
 {
@@ -86,7 +85,7 @@ function pmf_debug($string)
  * @access  public
  * @since   2006-03-21
  * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author  Matteo Scaramuccia <matteo@phpmyfaq.de>
  */
 function getAvailableLanguages()
 {
@@ -127,7 +126,7 @@ function getAvailableLanguages()
  * @access  public
  * @since   2003-12-12
  * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author  Matteo Scaramuccia <matteo@phpmyfaq.de>
  */
 function selectLanguages($default, $submitOnChange = false, $excludedLanguages = array(), $id = 'language')
 {
@@ -165,7 +164,7 @@ function selectLanguages($default, $submitOnChange = false, $excludedLanguages =
  * @access  public
  * @since   2004-06-01
  * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author  Matteo Scaramuccia <matteo@phpmyfaq.de>
  */
 function languageOptions($lang = "", $onlyThisLang = false, $fileLanguageValue = false)
 {
@@ -237,13 +236,13 @@ function sortingOptions($current)
  */
 function makeDate($date)
 {
-    $offset     = (60 * 60) * (PMF_DATETIME_TIMEZONE / 100);
     $current    = strtotime(substr($date, 0, 4) . '-' .
                   substr($date, 4, 2) . '-' .
                   substr($date, 6, 2) . ' ' .
                   substr($date, 8, 2) . ':' .
                   substr($date, 10, 2));
-    $timestamp  = $current + $offset;
+    $timestamp  = $current;
+
     return date('Y-m-d H:i', $timestamp);
 }
 
@@ -257,11 +256,10 @@ function makeDate($date)
  *                  Unix timestamp format
  * @return  string  date in the requested format
  * @since   2006-06-26
- * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author  Matteo Scaramuccia <matteo@phpmyfaq.de>
  */
-function makeDateByFormat($date, $type, $phpmyfaq = true)
+function makeDateByFormat($date, $format, $phpmyfaq = true)
 {
-    $offset = (60 * 60) * (PMF_DATETIME_TIMEZONE / 100);
     if ($phpmyfaq) {
         $current = strtotime(substr($date, 0, 4) . '-' .
                    substr($date, 4, 2) . '-' .
@@ -271,9 +269,9 @@ function makeDateByFormat($date, $type, $phpmyfaq = true)
     } else {
         $current = $date;
     }
-    $timestamp = $current + $offset;
+    $timestamp = $current;
 
-    return gmdate($type, $timestamp);
+    return date($format, $timestamp);
 }
 
 /**
@@ -282,19 +280,10 @@ function makeDateByFormat($date, $type, $phpmyfaq = true)
  * @param   object  date
  * @return  string  formatted date for the comment
  * @since   2006-08-21
- * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author  Matteo Scaramuccia <matteo@phpmyfaq.de>
  */
 function makeCommentDate($date)
 {
-    // TODO: Time is needed for studying the impact of timezone settings in the
-    //       system.
-    //       No issue is arised if users of a PMF service has the timezone
-    //       equals to that of the server.
-    //       We have the solution, makeDateByFormat(), and we'll wait also for
-    //       feedbacks from the Community before applying it in all date outputs.
-    // $TZ = ' '.(PMF_DATETIME_TIMEZONE == '0' ? 'GMT': PMF_DATETIME_TIMEZONE);
-    // return makeDateByFormat($date, 'Y-m-d H:i', false).$TZ;
-
     return date('Y-m-d H:i', $date);
 }
 
@@ -306,43 +295,49 @@ function makeCommentDate($date)
  *          Unix timestamp format
  * @return  string  RFC 822 date
  * @since   2005-10-03
- * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author  Matteo Scaramuccia <matteo@phpmyfaq.de>
  */
 function makeRFC822Date($date, $phpmyfaq = true)
 {
-    $rfc822TZ = ' '.(PMF_DATETIME_TIMEZONE == '0' ? 'GMT': PMF_DATETIME_TIMEZONE);
+    $rfc822TZ = date('O');
+    if ('+0000' == $rfc822TZ) {
+        $rfc822TZ = 'GMT';
+    }
 
-    return makeDateByFormat($date, 'D, d M Y H:i:s', $phpmyfaq).$rfc822TZ;
+    return makeDateByFormat($date, 'D, d M Y H:i:s', $phpmyfaq).' '.$rfc822TZ;
 }
 
 /**
-* Converts the phpMyFAQ/Unix date format to the ISO 8601 format
-*
-* See the spec here: http://www.w3.org/TR/NOTE-datetime
-*
-* @param    string  date
-* @param    boolean true if the passed date is in phpMyFAQ format, false if in Unix timestamp format
-* @return   string  ISO 8601 date
-* @since    2005-10-03
-* @author   Matteo Scaramuccia <matteo@scaramuccia.com>
-*/
+ * Converts the phpMyFAQ/Unix date format to the ISO 8601 format
+ *
+ * See the spec here: http://www.w3.org/TR/NOTE-datetime
+ *
+ * @param    string  date
+ * @param    boolean true if the passed date is in phpMyFAQ format, false if in Unix timestamp format
+ * @return   string  ISO 8601 date
+ * @since    2005-10-03
+ * @author   Matteo Scaramuccia <matteo@phpmyfaq.de>
+ */
 function makeISO8601Date($date, $phpmyfaq = true)
 {
-    $iso8601TZD = (PMF_DATETIME_TIMEZONE == '0' ? 'Z': substr(PMF_DATETIME_TIMEZONE, 0, 3).':'.substr(PMF_DATETIME_TIMEZONE, 3));
+    $iso8601TZD = date('P');
+    if ('+00:00' == $iso8601TZD) {
+        $iso8601TZD = 'Z';
+    }
 
     return makeDateByFormat($date, 'Y-m-d\TH:i:s', $phpmyfaq).$iso8601TZD;
 }
 
 /**
-* Returns an array of country codes for a specific FAQ record ID, specific category ID
-* or all languages used by FAQ records , categories
-*
-* @param    integer
-* @param    string  specifies table
-* @return   array
-* @since    2003-03-17
-* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-*/
+ * Returns an array of country codes for a specific FAQ record ID, specific category ID
+ * or all languages used by FAQ records , categories
+ *
+ * @param   integer
+ * @param   string  specifies table
+ * @return  array
+ * @since   2003-03-17
+ * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+ */
 function check4Language($id, $table='faqdata')
 {
     global $db;
@@ -389,10 +384,10 @@ function check4Language($id, $table='faqdata')
  * this function converts an email address e.g. from "user@example.org" to "user_AT_example_DOT_org"
  * Otherwise it will return the plain email address.
  *
- * @param    string
- * @return   string
- * @since    2003-04-17
- * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @param   string
+ * @return  string
+ * @since   2003-04-17
+ * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
  */
 function safeEmail($email)
 {
@@ -410,12 +405,12 @@ function safeEmail($email)
  *
  * Checks for an address match (IP or Network)
  *
- * @param    string  IP Address
- * @param    string  Network Address (e.g.: a.b.c.d/255.255.255.0 or a.b.c.d/24) or IP Address
- * @return   boolean
- * @since    2006-01-23
- * @author   Matteo Scaramuccia <matteo@scaramuccia.com>
- * @author   Kenneth Shaw <ken@expitrans.com>
+ * @param   string  IP Address
+ * @param   string  Network Address (e.g.: a.b.c.d/255.255.255.0 or a.b.c.d/24) or IP Address
+ * @return  boolean
+ * @since   2006-01-23
+ * @author  Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @author  Kenneth Shaw <ken@expitrans.com>
  */
 function check4AddrMatch($ip, $network)
 {
@@ -473,7 +468,7 @@ function IPCheck($ip)
  *
  * @return  array
  * @access  public
- * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author  Matteo Scaramuccia <matteo@phpmyfaq.de>
  */
 function getBannedWords()
 {
@@ -504,7 +499,7 @@ function getBannedWords()
  * @access  public
  * @author  Katherine A. Bouton
  * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author  Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @author  Peter Beauvain <pbeauvain@web.de>
  */
 function checkBannedWord($content)
@@ -534,12 +529,12 @@ function checkBannedWord($content)
 /**
  * Get out the HTML code for the fieldset that insert the captcha code in a (public) form
  *
- * @param    string  Text of the HTML Legend element
- * @param    string  HTML code for the Captcha image
- * @param    string  Length of the Captcha code
- * @return   string
- * @since    2006-04-25
- * @author   Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @param   string  Text of the HTML Legend element
+ * @param   string  HTML code for the Captcha image
+ * @param   string  Length of the Captcha code
+ * @return  string
+ * @since   2006-04-25
+ * @author  Matteo Scaramuccia <matteo@phpmyfaq.de>
  */
 function printCaptchaFieldset($legend, $img, $length, $error = '')
 {
@@ -568,7 +563,7 @@ function printCaptchaFieldset($legend, $img, $length, $error = '')
  * @return  bool
  * @access  public
  * @since   2006-04-25
- * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author  Matteo Scaramuccia <matteo@phpmyfaq.de>
  */
 function checkCaptchaCode()
 {
@@ -587,7 +582,7 @@ function checkCaptchaCode()
  * @param   string  $content
  * @return  string
  * @access  public
- * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author  Matteo Scaramuccia <matteo@phpmyfaq.de>
  */
 function getHighlightedBannedWords($content)
 {
@@ -644,10 +639,10 @@ function hilight($content)
 /**
  * An OS independent function like usleep
  *
- * @param    integer
- * @return   void
- * @since    2004-05-30
- * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @param   integer
+ * @return  void
+ * @since   2004-05-30
+ * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
  */
 function wait($usecs)
 {
@@ -662,17 +657,17 @@ function wait($usecs)
     }
 }
 
-/*
+/**
  * Returns the number of anonymous users and registered ones.
  * These are the numbers of unique users who have perfomed
  * some activities within the last five minutes
  *
- * @param    integer    Optionally set the time window size in sec. Default: 300sec, 5 minutes
- * @return   array
- * @access   public
- * @since    2004-07-17
- * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author   Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @param   integer     Optionally set the time window size in sec. Default: 300sec, 5 minutes
+ * @return  array
+ * @access  public
+ * @since   2004-07-17
+ * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author  Matteo Scaramuccia <matteo@phpmyfaq.de>
  */
 function getUsersOnline($activityTimeWindow = 300)
 {
@@ -717,7 +712,7 @@ function getUsersOnline($activityTimeWindow = 300)
  * Funktionen fuer Artikelseiten
  ******************************************************************************/
 
-/*
+/**
  * Macht an den String nen / dran, falls keiner da ist
  * @@ Bastian, 2002-01-06
  */
@@ -745,7 +740,7 @@ function safeHTML($html)
     return $html;
 }
 
-/*
+/**
  * Syntax check for e-mails | @@ Thorsten, 2004-01-19
  * Last Update: @@ Thorsten, 2004-06-27
  */
@@ -764,7 +759,7 @@ function checkEmail($sender)
     }
 }
 
-/*
+/**
  * Decode MIME header elements in e-mails | @@ Matthias Sommerfeld
  * (c) 2001-2004 blue birdy, Berlin (http://bluebirdy.de)
  * used with permission
@@ -841,7 +836,7 @@ function encode_iso88591($coded = "", $cmode = "g")
     }
 }
 
-/*
+/**
  * Decode MIME header elements in e-mails | @@ Matthias Sommerfeld
  * (c) 2001-2004 blue birdy, Berlin (http://bluebirdy.de)
  * used with permission
@@ -887,7 +882,7 @@ function quoted_printable_encode($return = '')
  * @return  string
  * @access  public
  * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author  Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @author  Adrianna Musiol <musiol@imageaccess.de>
  * @since   2002-09-16
  */
@@ -1136,8 +1131,6 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
     return $output;
 }
 
-
-
 /**
  * Callback function for filtering HTML from URLs and images
  *
@@ -1165,9 +1158,7 @@ function highlight_no_links($matches)
     return $matches[0];
 }
 
-
-
-/*
+/**
  * This functions chops a string | @@ Thorsten, 2003-12-16
  * Last Update: @@ Thorsten, 2003-12-16
  */
@@ -1261,7 +1252,6 @@ function addMenuEntry($restrictions = '', $action = '', $caption = '', $active =
     }
 }
 
-
 /**
  * Administrator logging
  *
@@ -1294,7 +1284,7 @@ function adminlog($text)
     }
 }
 
-/*
+/**
  * Checkt, ob eine SQL-Tabelle leer ist | @@ Thorsten 2002-01-10
  * Last Update: @@ Thorsten, 2003-03-24
  */
@@ -1308,13 +1298,11 @@ function emptyTable($table)
     }
 }
 
-
-
 /******************************************************************************
  * Funktionen fuer den Adminbereich
  ******************************************************************************/
 
-/*
+/**
  * Funktion zum generieren vom "Umblaettern" | @@ Bastian, 2002-01-03
  * Last Update: @@ Thorsten, 2004-05-07
  */
@@ -1343,7 +1331,7 @@ function PageSpan($code, $start, $end, $akt)
     return $out;
 }
 
-/*
+/**
  * Bastelt aus den Dateinamen des Tracking einen Timestamp | @@ Bastian, 2002-01-05
  * Last Update: @@ Thorsten, 2002-09-19
  * Last Update: @@ Matteo, 2006-06-13
@@ -1365,7 +1353,7 @@ function FileToDate($file, $endOfDay = false)
     }
 }
 
-/*
+/**
  * Bastelt nen Timestamp ausm Datum | @@ Bastian, 2001-04-09
  * Last Update: @@ Thorsten - 2002-09-27
  */
@@ -1441,7 +1429,7 @@ function build_insert($query, $table)
     return $ret;
 }
 
-/*
+/**
  * Funktion zum Escapen von SQL Queries | @@ Thorsten, 2003-11-13
  * Last Update: @@ Thorsten, 2004-07-07
  */
@@ -1463,20 +1451,20 @@ function safeSQL($string)
 }
 
 /**
-* Align the prefix of the table name used in the PMF backup file,
-* from the (old) value of the system upon which the backup was performed
-* to the (new) prefix of the system upon which the backup will be restored.
-* This alignment will be perfomed ONLY upon those given SQL queries starting
-* with the given pattern.
-*
-* @param    $query                  string
-* @param    $start_pattern      string
-* @param    $oldvalue               string
-* @param    $newvalue              string
-* @return   string
-* @access   public
-* @author   Matteo Scaramuccia <matteo@scaramuccia.com>
-*/
+ * Align the prefix of the table name used in the PMF backup file,
+ * from the (old) value of the system upon which the backup was performed
+ * to the (new) prefix of the system upon which the backup will be restored.
+ * This alignment will be perfomed ONLY upon those given SQL queries starting
+ * with the given pattern.
+ *
+ * @param   $query              string
+ * @param   $start_pattern      string
+ * @param   $oldvalue           string
+ * @param   $newvalue           string
+ * @return  string
+ * @access  public
+ * @author  Matteo Scaramuccia <matteo@phpmyfaq.de>
+ */
 function alignTablePrefixByPattern($query, $start_pattern, $oldvalue, $newvalue)
 {
     $ret = $query;
@@ -1492,19 +1480,19 @@ function alignTablePrefixByPattern($query, $start_pattern, $oldvalue, $newvalue)
 }
 
 /**
-* Align the prefix of the table name used in the PMF backup file,
-* from the (old) value of the system upon which the backup was performed
-* to the (new) prefix of the system upon which the backup will be restored
-* This alignment will be performed upon all of the SQL query "patterns"
-* provided within the PMF backup file.
-*
-* @param    $query                  string
-* @param    $oldvalue               string
-* @param    $newvalue              string
-* @return   string
-* @access   public
-* @author   Matteo Scaramuccia <matteo@scaramuccia.com>
-*/
+ * Align the prefix of the table name used in the PMF backup file,
+ * from the (old) value of the system upon which the backup was performed
+ * to the (new) prefix of the system upon which the backup will be restored
+ * This alignment will be performed upon all of the SQL query "patterns"
+ * provided within the PMF backup file.
+ *
+ * @param   $query          string
+ * @param   $oldvalue       string
+ * @param   $newvalue       string
+ * @return  string
+ * @access  public
+ * @author  Matteo Scaramuccia <matteo@phpmyfaq.de>
+ */
 function alignTablePrefix($query, $oldvalue, $newvalue)
 {
     // Align DELETE FROM <prefix.tablename>
@@ -1516,18 +1504,16 @@ function alignTablePrefix($query, $oldvalue, $newvalue)
 }
 
 /**
-* This function takes care of safely removing slashes
-* not really needed for escaping characters on PMF 1.5.3 and above
-* (see instead PMF DB population on 1.5.2 and below)
-*
-* TODO: Remove this function in phpMyFAQ 2.1!
-*
-* @param    string
-* @return   string
-* @access   public
-* @since    2005-11-28
-* @author   Matteo Scaramuccia <matteo@scaramuccia.com>
-*/
+ * This function takes care of safely removing slashes
+ * not really needed for escaping characters on PMF 1.5.3 and above
+ * (see instead PMF DB population on 1.5.2 and below)
+ *
+ * @param   string
+ * @return  string
+ * @access  public
+ * @since   2005-11-28
+ * @author  Matteo Scaramuccia <matteo@phpmyfaq.de>
+ */
 function fixslashes($text)
 {
     $fixedtext = $text;
@@ -1540,18 +1526,16 @@ function fixslashes($text)
     return $fixedtext;
 }
 
-
 //
 // LDAP FUNCTIONS
 //
-
 /**
  * Returns the user name from REMOTE_USER
  *
- * @return   string
- * @access   public
- * @author   Adam Greene <phpmyfaq@skippy.fastmail.fm>
- * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @return  string
+ * @access  public
+ * @author  Adam Greene <phpmyfaq@skippy.fastmail.fm>
+ * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
  */
 function getShortUserName()
 {
@@ -1567,10 +1551,10 @@ function getShortUserName()
 /**
  * Returns the full user name from LDAP if available
  *
- * @return   string
- * @access   public
- * @author   Adam Greene <phpmyfaq@skippy.fastmail.fm>
- * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @return  string
+ * @access  public
+ * @author  Adam Greene <phpmyfaq@skippy.fastmail.fm>
+ * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
  */
 function getFullUserName()
 {
@@ -1587,10 +1571,10 @@ function getFullUserName()
 /**
  * Returns the full user name from LDAP if available
  *
- * @return   string
- * @access   public
- * @author   Adam Greene <phpmyfaq@skippy.fastmail.fm>
- * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @return  string
+ * @access  public
+ * @author  Adam Greene <phpmyfaq@skippy.fastmail.fm>
+ * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
  */
 function getEmailAddress()
 {
@@ -1612,7 +1596,7 @@ function getEmailAddress()
  * @return  array
  * @access  public
  * @since   2006-07-23
- * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author  Matteo Scaramuccia <matteo@phpmyfaq.de>
  */
 function printDateTimeInput($key, $date)
 {

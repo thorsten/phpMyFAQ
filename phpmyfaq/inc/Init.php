@@ -1,6 +1,6 @@
 <?php
 /**
- * Some basic functions und PMF_Init class
+ * Some basic functions and PMF_Init class.
  *
  * @package     phpMyFAQ
  * @author      Johann-Peter Hartmann <hartmann@mayflower.de>
@@ -8,8 +8,8 @@
  * @author      Stefan Esser <sesser@php.net>
  * @author      Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @since       2005-09-24
- * @copyright   (c) 2005-2009 phpMyFAQ Team
  * @version     SVN: $Id$
+ * @copyright   (c) 2005-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -39,7 +39,7 @@ if (DEBUG) {
 }
 
 //
-// Fix the include path if PMF is running under a "strange" PHP configuration
+// Fix the PHP include path if PMF is running under a "strange" PHP configuration
 //
 $foundCurrPath = false;
 $includePaths  = split(PATH_SEPARATOR, ini_get('include_path'));
@@ -67,13 +67,16 @@ ini_set('pcre.recursion_limit', 100000000);
 require_once 'autoLoader.php';
 
 //
-// Read configuration and constants, include main classes and functions
-// and create a database connection
+// Read configuration and constants, included main functions
 //
 define('PMF_INCLUDE_DIR', dirname(__FILE__));
 require_once PMF_INCLUDE_DIR.'/data.php';
 require_once PMF_INCLUDE_DIR.'/constants.php';
 require_once PMF_INCLUDE_DIR.'/functions.php';
+
+///
+// Create a database connection
+//
 define('SQLPREFIX', $DB['prefix']);
 $db = PMF_Db::db_select($DB['type']);
 $db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db']);

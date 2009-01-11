@@ -2,11 +2,12 @@
 /**
  * Constants for phpMyFAQ.
  *
+ * @package     phpMyFAQ 
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author      Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @since       2003-12-10
- * @copyright   (c) 2003-2009 phpMyFAQ Team
  * @version     SVN: $Id$
+ * @copyright   (c) 2003-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License Version
  * 1.1 (the "License"); you may not use this file except in compliance with
@@ -26,23 +27,18 @@
 declare(encoding='latin1');
 
 /**
- * Use this constant if you want to change your timezone
- * TODO: Remove this named constant to use PHP 5.1 timezone features
- *
- * @var integer
- */
-define('PMF_DATETIME_TIMEZONE', '0'); // default: "0", example: "-0400" for 4 hours before
-
-/**
- * Set the string below according to your users main timezone.
+ * Set the string below according to your users (main) timezone.
  * For your convenience find below the list of the available timezones:
  * 
  * http://www.php.net/manual/en/timezones.php   
  * 
  * Note: a wrong timezone setting could affect on-line users tracking as well as
  *       any filter criterion built using a date.
+ * Note: timezone is a global setting i.e. no per-user setting. 
+ *
+ * @var string
  */
-date_default_timezone_set('Europe/Berlin');
+define('PMF_DATETIME_TIMEZONE_DEFAULT', 'Europe/Berlin');
 
 /**
  * Timeout for the admin section, in minutes
@@ -372,16 +368,18 @@ $languageCodes = array(
 //
 // Define some internal constants
 //
-
 // Cookies
 define('PMF_COOKIE_NAME_AUTH', 'pmf_auth');
 define('PMF_COOKIE_NAME_LANGUAGE', 'pmf_lang');
 define('PMF_COOKIE_NAME_SESSIONID', 'pmf_sid');
-
 // HTTP GET parameters
 define('PMF_GET_KEY_NAME_LANGUAGE', 'lang');
 define('PMF_GET_KEY_NAME_SESSIONID', 'sid');
-
 // Misc parameters
 define('PMF_LANGUAGE_EXPIRED_TIME', 3600);
 define('PMF_SESSION_EXPIRED_TIME', 3600);
+
+//
+// Set the default timezone used by all date/time functions
+//
+date_default_timezone_set(PMF_DATETIME_TIMEZONE_DEFAULT);
