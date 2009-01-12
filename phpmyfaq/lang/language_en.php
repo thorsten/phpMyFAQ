@@ -6,8 +6,8 @@
  * @author    Matthias Sommerfeld <mso@bluebirdy.de>
  * @author    Henning Schulzrinne <hgs@cs.columbia.edu>
  * @since     2004-02-19
+ * @version   SVN: $Id$
  * @copyright 2004-2009 phpMyFAQ Team
- * @version   SVN: $Id: language_en.php,v 1.109 2007-04-23 18:37:44 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
