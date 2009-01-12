@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id: mailsend2friend.php,v 1.19 2008-05-23 13:06:07 thorstenr Exp $
- *
  * Sends the emails to your friends
  *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since       2002-09-16
- * @copyright   (c) 2001-2007 phpMyFAQ Team
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since     2002-09-16
+ * @copyright 2002-2009 phpMyFAQ Team
+ * @version   SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in

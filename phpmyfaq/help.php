@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id: help.php,v 1.9 2008-05-23 13:06:07 thorstenr Exp $
- *
  * The FAQ help page
  *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since       2002-08-29
- * @copyright   (c) 2002-2007 phpMyFAQ Team
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since     2002-08-29
+ * @copyright 2002-2009 phpMyFAQ Team
+ * @version   SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the 'License'); you may not use this file except in

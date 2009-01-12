@@ -1,13 +1,12 @@
 ##
-# $Id: _.htaccess,v 1.18 2007-06-10 05:47:25 thorstenr Exp $
+# phpMyFAQ 2.5 .htaccess file
 #
-# phpMyFAQ 2.0 .htaccess file
-#
-# @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-# @author       Patrick Preuster <sica@php-q.net>
-# @author       Matteo scaramuccia <matteo@scaramuccia.com>
-# @since        2004-11-13
-# @copyright    (c) 2004-2008 phpMyFAQ Team
+# @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+# @author    Patrick Preuster <sica@php-q.net>
+# @author    Matteo scaramuccia <matteo@scaramuccia.com>
+# @since     2004-11-13
+# @copyright 2004-2009 phpMyFAQ Team
+# @version   SVN: $Id$
 #
 # The contents of this file are subject to the Mozilla Public License
 # Version 1.1 (the "License"); you may not use this file except in

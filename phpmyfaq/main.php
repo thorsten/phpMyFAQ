@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id: main.php,v 1.21 2007-03-29 18:47:40 thorstenr Exp $
- *
  * The main start page with the Top10 and the latest messages
  *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since       2002-08-23
- * @copyright   (c) 2002-2007 phpMyFAQ Team
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since     2002-08-23
+ * @copyright 2002-2009 phpMyFAQ Team
+ * @version   SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License""); you may not use this file except in
