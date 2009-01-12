@@ -1,25 +1,24 @@
 <?php
 /**
-* $Id: language_en.php,v 1.109 2007-04-23 18:37:44 thorstenr Exp $
-*
-* The English language file - try to be the best of British and American English
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @author       Matthias Sommerfeld <mso@bluebirdy.de>
-* @author       Henning Schulzrinne <hgs@cs.columbia.edu>
-* @since        2004-02-19
-* @copyright    (c) 2004-2007 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * The English language file - try to be the best of British and American English
+ *
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matthias Sommerfeld <mso@bluebirdy.de>
+ * @author    Henning Schulzrinne <hgs@cs.columbia.edu>
+ * @since     2004-02-19
+ * @copyright 2004-2009 phpMyFAQ Team
+ * @version   SVN: $Id: language_en.php,v 1.109 2007-04-23 18:37:44 thorstenr Exp $
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 $PMF_LANG["metaCharset"] = "iso-8859-1";
 $PMF_LANG["metaLanguage"] = "en";
@@ -392,7 +391,7 @@ $PMF_LANG["ad_att_delfail"] = "An error occurred while deleting the attachment."
 $PMF_LANG["ad_entry_add"] = "Add FAQ";
 
 // Added v0.85 - 08.06.2001 - Bastian - Admin
-$PMF_LANG["ad_csv_make"] = "> A backup is a complete image of the database content. The format of the backup is a SQL transaction file, which can be imported using tools like phpMyAdmin or the commandline sql client. A backup should be performed at least once a month.";
+$PMF_LANG["ad_csv_make"] = "A backup is a complete image of the database content. The format of the backup is a SQL transaction file, which can be imported using tools like phpMyAdmin or the commandline sql client. A backup should be performed at least once a month.";
 $PMF_LANG["ad_csv_link"] = "Download the backup";
 $PMF_LANG["ad_csv_head"] = "Make a backup";
 $PMF_LANG["ad_att_addto"] = "Add an attachment to the issue";
@@ -433,7 +432,7 @@ $PMF_LANG["ad_kateg_add"] = "add main Category";
 $PMF_LANG["ad_kateg_rename"] = "Rename";
 $PMF_LANG["ad_adminlog_date"] = "Date";
 $PMF_LANG["ad_adminlog_user"] = "User";
-$PMF_LANG["ad_adminlog_ip"] = "IP-Adress";
+$PMF_LANG["ad_adminlog_ip"] = "IP-Address";
 
 $PMF_LANG["ad_stat_sess"] = "Sessions";
 $PMF_LANG["ad_stat_days"] = "Days";
@@ -556,7 +555,7 @@ $LANG_CONF['main.language'] = array(0 => "select", 1 => "Language-File");
 $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Enable automatic content negotiation");
 $LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => "Title of the FAQ");
 $LANG_CONF['main.currentVersion'] = array(0 => "print", 1 => "FAQ Version");
-$LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Describtion of the Page");
+$LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Description of the Page");
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Keywords for Spiders");
 $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Name of the Publisher");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Email address of the Admin");
@@ -585,7 +584,7 @@ $PMF_LANG["ad_categ_desc"] = "Description";
 $PMF_LANG["ad_categ_change"] = "Change with";
 
 $PMF_LANG["lostPassword"] = "Password forgotten? Click here.";
-$PMF_LANG["lostpwd_err_1"] = "Error: Username and e-mail adress not found.";
+$PMF_LANG["lostpwd_err_1"] = "Error: Username and e-mail address not found.";
 $PMF_LANG["lostpwd_err_2"] = "Error: Wrong entries!";
 $PMF_LANG["lostpwd_text_1"] = "Thank you for requesting your account information.";
 $PMF_LANG["lostpwd_text_2"] = "Please set a new personal password in the admin section of your FAQ.";
@@ -622,7 +621,7 @@ $PMF_LANG['msgAdvancedSearch'] = 'Advanced search';
 $PMF_LANG['spamControlCenter'] = 'Spam control center';
 $LANG_CONF["spam.enableSafeEmail"] = array(0 => "checkbox", 1 => "Print user email in a safe way (default: enabled).");
 $LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "Check public form content against banned words (default: enabled).");
-$LANG_CONF["spam.enableCatpchaCode"] = array(0 => "checkbox", 1 => "Use a catpcha code to allow public form submission (default: enabled).");
+$LANG_CONF["spam.enableCatpchaCode"] = array(0 => "checkbox", 1 => "Use a captcha code to allow public form submission (default: enabled).");
 $PMF_LANG['ad_session_expiring'] = 'Your session will expire in %d minutes: would you like to go on working?';
 
 // added v1.6.2 - 2006-06-13 by Matteo
@@ -686,7 +685,7 @@ $PMF_LANG['ad_entry_visibility'] = 'Publish?';
 $PMF_LANG['ad_user_error_password'] =  "Please enter a password. ";
 $PMF_LANG['ad_user_error_passwordsDontMatch'] =  "Passwords do not match. ";
 $PMF_LANG['ad_user_error_loginInvalid'] =  "The specified user name is invalid.";
-$PMF_LANG['ad_user_error_noEmail'] =  "Please enter a valid mail adress. ";
+$PMF_LANG['ad_user_error_noEmail'] =  "Please enter a valid mail address. ";
 $PMF_LANG['ad_user_error_noRealName'] =  "Please enter your real name. ";
 $PMF_LANG['ad_user_error_delete'] =  "User account could not be deleted. ";
 $PMF_LANG['ad_user_error_noId'] =  "No ID specified. ";
