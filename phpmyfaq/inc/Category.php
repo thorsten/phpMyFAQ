@@ -334,6 +334,8 @@ class PMF_Category
             
             if (in_array($id, $alreadies)) {
                 break;
+            } else {
+                array_push($alreadies, $id);
             }
         }
         return $ret;
