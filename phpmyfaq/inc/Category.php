@@ -326,9 +326,11 @@ class PMF_Category
         while ((isset($this->categoryName[$id]['parent_id'])) && ($this->categoryName[$id]['parent_id'] != 0)) {
             $ret++;
             $id = $this->categoryName[$id]['parent_id'];
-            
+        
             if (in_array($id, $alreadies)) {
                 break;
+            } else {
+                array_push($alreadies, $id);
             }
         }
         return $ret;
