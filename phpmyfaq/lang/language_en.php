@@ -6,8 +6,8 @@
  * @author    Matthias Sommerfeld <mso@bluebirdy.de>
  * @author    Henning Schulzrinne <hgs@cs.columbia.edu>
  * @since     2004-02-19
- * @copyright 2004-2009 phpMyFAQ Team
- * @version   SVN: $Id: language_en.php,v 1.109 2007-04-23 18:37:44 thorstenr Exp $
+ * @version   SVN: $Id$
+ * @copyright (c) 2004-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -299,10 +299,10 @@ $PMF_LANG["ad_categ_deletesure"] = "Are you sure to delete this category?";
 $PMF_LANG["ad_categ_deleted"] = "Category deleted.";
 
 // Cookies
-$PMF_LANG["ad_cookie_cookiesuc 	"] = "The Cookie was <strong>successfully</strong> set.";
+$PMF_LANG["ad_cookie_cookiesuc"] = "The cookie was <strong>successfully</strong> set.";
 $PMF_LANG["ad_cookie_already"] = "A cookie was set already. You now have following options:";
 $PMF_LANG["ad_cookie_again"] = "Set cookie again";
-$PMF_LANG["ad_cookie_delete"] = "delete cookie";
+$PMF_LANG["ad_cookie_delete"] = "Delete cookie";
 $PMF_LANG["ad_cookie_no"] = "There is no cookie saved yet. With a cookie you could save your login script, thus no need to remember your login details again. You now have following options:";
 $PMF_LANG["ad_cookie_set"] = "Set cookie";
 $PMF_LANG["ad_cookie_deleted"] = "Cookie deleted successfully.";
