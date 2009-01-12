@@ -10,7 +10,7 @@ Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.0.10:
-- updated Turkish translation and switched to UTF-8 (Evren Yurtesen)
+- updated English and Turkish translation and switched to UTF-8 (Evren Yurtesen)
 - updated Simplified Chinese translation (Techice Young)
 - fixed possible infinity loob bug in categories (Kaoru Izutani)
 - minor bugfixes (Thorsten)
@@ -20,7 +20,7 @@ For known issues please take a look at KNOWNBUGS.txt
 CHANGELOG:
 
 Version 2.0.11 - 2009-01-
-- updated Turkish translation and switched to UTF-8 (Evren Yurtesen)
+- updated English and Turkish translation and switched to UTF-8 (Evren Yurtesen)
 - updated Simplified Chinese translation (Techice Young)
 - fixed possible infinity loob bug in categories (Kaoru Izutani)
 - minor bugfixes (Thorsten)
@@ -689,4 +689,4 @@ basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 License for the specific language governing rights and limitations
 under the License.
 
-(c) 2001-2008 phpMyFAQ Team
+(c) 2001-2009 phpMyFAQ Team

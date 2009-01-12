@@ -7,6 +7,7 @@ CHANGED FILES FROM 2.0.10 -> 2.0.11
 ./inc/Category.php
 ./install/installer.php
 ./install/update.php
+./lang/language_en.php
 ./lang/language_tr.php
 ./lang/language_zh.php
 
