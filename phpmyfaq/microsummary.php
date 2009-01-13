@@ -1,13 +1,13 @@
 <?php
 /**
- * $Id: microsummary.php,v 1.5 2006-11-11 13:41:04 thorstenr Exp $
- *
  * Microsummary backend
  *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
- * @since       2006-09-05
- * @copyright   (c) 2006 phpMyFAQ Team
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @since     2006-09-05
+ * @copyright 2006-2009 phpMyFAQ Team
+ * @version   SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -54,7 +54,8 @@ $microRules = array(
     'open'      => 'phpMyFAQ Open Questions',
     'show'      => 'phpMyFAQ Categories',
     'ask'       => 'phpMyFAQ Ask Question',
-    'search'    => 'phpMyFAQ Search');
+    'search'    => 'phpMyFAQ Search',
+    'sitemap'   => 'phpMyFAQ Sitemap');
 
 print '<?xml version="1.0" encoding="UTF-8"?>';
 ?>
