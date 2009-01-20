@@ -1222,14 +1222,25 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
         $next = $seite + 1;
         if ($vor != 0) {
             if ($faqconfig->get('main.enableRewriteRules')) {
-                $output .= "[ <a href=\"search.html?search=".urlencode($_searchterm)."&amp;seite=".$vor.$langs."\">".$PMF_LANG["msgPrevious"]."</a> ]";
+                $output .= sprintf("[ <a href=\"search.html?search=%s&amp;seite=%d%s&amp;searchcategory=%d\">%s</a> ]",
+                                urlencode($_searchterm),
+                                $vor,
+                                $langs,
+                                $cat,
+                                $PMF_LANG['msgPrevious']);
             } else {
-                $output .= "[ <a href=\"index.php?".$sids."action=search&amp;search=".urlencode($_searchterm)."&amp;seite=".$vor.$langs."\">".$PMF_LANG["msgPrevious"]."</a> ]";
+                $output .= sprintf("[ <a href=\"index.php?%saction=search&amp;search=%s&amp;seite=%d%s&amp;searchcategory=%d\">%s</a> ]",
+                                $sids,
+                                urlencode($_searchterm),
+                                $vor,
+                                $langs,
+                                $cat,
+                                $PMF_LANG['msgPrevious']);
             }
         }
         $output .= " ";
         if ($next <= $pages) {
-            $url = $sids.'&amp;action=search&amp;search='.urlencode($_searchterm).'&amp;seite='.$next.$langs;
+            $url = $sids.'&amp;action=search&amp;search='.urlencode($_searchterm).'&amp;seite='.$next.$langs."&amp;searchcategory=".$cat;
             $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
             $oLink->itemTitle = '';
             $oLink->text = $PMF_LANG["msgNext"];
