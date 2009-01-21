@@ -1129,7 +1129,7 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
         }
         $output .= " ";
         if ($next <= $pages) {
-            $url = $sids.'&amp;action=search&amp;search='.urlencode($_searchterm).'&amp;seite='.$next.$langs"&amp;searchcategory=".$cat;
+            $url = $sids.'&amp;action=search&amp;search='.urlencode($_searchterm).'&amp;seite='.$next.$langs."&amp;searchcategory=".$cat;
             $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
             $oLink->itemTitle = '';
             $oLink->text = $PMF_LANG["msgNext"];
