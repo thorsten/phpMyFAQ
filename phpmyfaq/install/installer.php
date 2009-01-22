@@ -668,7 +668,7 @@ foreach ($permLevels as $level => $desc) {
 
     // Write the DB variables in data.php
     if ($fp = @fopen(PMF_ROOT_DIR."/inc/data.php","w")) {
-        @fputs($fp,"<?php\n\$DB[\"server\"] = '".$sql_server."';\n\$DB[\"user\"] = '".$sql_user."';\n\$DB[\"password\"] = '".$sql_passwort."';\n\$DB[\"db\"] = '".$sql_db."';\n\$DB[\"prefix\"] = '".$sqltblpre."';\n\$DB[\"type\"] = '".$sql_type."';\n?>");
+        @fputs($fp,"<?php\n\$DB[\"server\"] = '".$sql_server."';\n\$DB[\"user\"] = '".$sql_user."';\n\$DB[\"password\"] = '".$sql_passwort."';\n\$DB[\"db\"] = '".$sql_db."';\n\$DB[\"prefix\"] = '".$sqltblpre."';\n\$DB[\"type\"] = '".$sql_type."';");
         @fclose($fp);
     } else {
         print "<p class=\"error\"><strong>Error:</strong> Cannot write to data.php.</p>";
