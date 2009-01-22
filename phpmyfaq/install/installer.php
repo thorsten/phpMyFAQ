@@ -25,7 +25,7 @@
  * under the License.
  */
 
-define('VERSION', '2.0.11');
+define('VERSION', '2.0.12');
 define('COPYRIGHT', '&copy; 2001-2009 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('SAFEMODE', @ini_get('safe_mode'));
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));

@@ -23,7 +23,7 @@
 # @author    Matteo Scaramuccia <matteo@scaramuccia.com>
 # @author	 Thorsten Rinne <thorsten@phpmyfaq.de>
 # @since     2008-09-10
-# @copyright 2008 phpMyFAQ Team
+# @copyright 2008-2009 phpMyFAQ Team
 #
 # The contents of this file are subject to the Mozilla Public License
 # Version 1.1 (the "License"); you may not use this file except in
@@ -38,7 +38,7 @@
 # SVN Branch
 SVN_BRANCH="PMF_2_0"
 # PMF Version
-PMF_VERSION="2.0.11"
+PMF_VERSION="2.0.12"
 
 # Build folder
 PMF_BUILD_FOLDER="PMFBUILD_${SVN_BRANCH}_${PMF_VERSION}"
