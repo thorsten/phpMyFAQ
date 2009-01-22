@@ -2,14 +2,14 @@
 /**
  * Some basic functions and PMF_Init class.
  *
- * @package     phpMyFAQ
- * @author      Johann-Peter Hartmann <hartmann@mayflower.de>
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Stefan Esser <sesser@php.net>
- * @author      Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @since       2005-09-24
- * @version     SVN: $Id$
- * @copyright   (c) 2005-2009 phpMyFAQ Team
+ * @package   phpMyFAQ
+ * @author    Johann-Peter Hartmann <hartmann@mayflower.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Stefan Esser <sesser@php.net>
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @since     2005-09-24
+ * @copyright 2005-2009 phpMyFAQ Team
+ * @version   SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -289,6 +289,7 @@ class PMF_Init
      */
     private function _getUserAgentLanguage()
     {
+        $matches = array();
         // $_SERVER['HTTP_ACCEPT_LANGUAGE'] could be like the text below:
         // it,pt-br;q=0.8,en-us;q=0.5,en;q=0.3
         // TODO: (ENH) get an array of accepted languages and cycle through it in self::setLanguage
@@ -348,10 +349,11 @@ class PMF_Init
         if (isset($_GET['artlang']) && self::isASupportedLanguage($_GET['artlang']) ) {
             $_lang['get'] = trim($_GET['artlang']);
         }
-        // Get the language from the cookie
-        if (isset($_COOKIE[PMF_GET_KEY_NAME_LANGUAGE]) && self::isASupportedLanguage($_COOKIE[PMF_GET_KEY_NAME_LANGUAGE]) ) {
-            $_lang['cookie'] = trim($_COOKIE[PMF_GET_KEY_NAME_LANGUAGE]);
+        // Get the language from the session
+        if (isset($_SESSION['pmf_lang']) && self::isASupportedLanguage($_SESSION['pmf_lang']) ) {
+            $_lang['session'] = trim($_SESSION['pmf_lang']);
         }
+        
         // Get the language from the config
         if (isset($config_language)) {
             $confLangCode = str_replace(array("language_", ".php"), "", $config_language);
@@ -370,8 +372,8 @@ class PMF_Init
             unset($_lang);
         } elseif (isset($_lang['get'])) {
             self::$language = $_lang['get'];
-        } elseif (isset($_lang['cookie'])) {
-            self::$language = $_lang['cookie'];
+        } elseif (isset($_lang['session'])) {
+            self::$language = $_lang['session'];
             $_lang = null;
             unset($_lang);
         } elseif (isset($_lang['detection'])) {
@@ -386,7 +388,7 @@ class PMF_Init
             self::$language = 'en'; // just a fallback
         }
         
-        return self::$language;
+        return $_SESSION['pmf_lang'] = self::$language;
     }
 
     /**

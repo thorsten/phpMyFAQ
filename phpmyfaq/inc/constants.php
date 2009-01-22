@@ -2,12 +2,12 @@
 /**
  * Constants for phpMyFAQ.
  *
- * @package     phpMyFAQ 
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @since       2003-12-10
- * @version     SVN: $Id$
- * @copyright   (c) 2003-2009 phpMyFAQ Team
+ * @package   phpMyFAQ 
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @since     2003-12-10
+ * @copyright (c) 2003-2009 phpMyFAQ Team
+ * @version   SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License Version
  * 1.1 (the "License"); you may not use this file except in compliance with
@@ -368,7 +368,7 @@ $languageCodes = array(
 //
 // Define some internal constants
 //
-// Cookies
+// Sessions
 define('PMF_COOKIE_NAME_AUTH', 'pmf_auth');
 define('PMF_COOKIE_NAME_LANGUAGE', 'pmf_lang');
 define('PMF_COOKIE_NAME_SESSIONID', 'pmf_sid');
