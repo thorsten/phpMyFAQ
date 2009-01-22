@@ -346,4 +346,3 @@ $languageCodes = array (
         'ZH' => 'Chinese (Simplified)',
         'ZU' => 'Zulu'
         );
-?>
