@@ -12,7 +12,8 @@ Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 Changes since 2.0.10:
 - updated English and Turkish translation and switched to UTF-8 (Evren Yurtesen)
 - updated Simplified Chinese translation (Techice Young)
-- fixed possible infinity loob bug in categories (Kaoru Izutani)
+- fixed possible infinity loop bug in categories (Kaoru Izutani)
+- fixed permission bypass issue (Thorsten)
 - may minor bugfixes (Thorsten)
 
 For known issues please take a look at KNOWNBUGS.txt
@@ -22,7 +23,8 @@ CHANGELOG:
 Version 2.0.11 - 2009-01-
 - updated English and Turkish translation and switched to UTF-8 (Evren Yurtesen)
 - updated Simplified Chinese translation (Techice Young)
-- fixed possible infinity loob bug in categories (Kaoru Izutani)
+- fixed possible infinity loop bug in categories (Kaoru Izutani)
+- fixed permission bypass issue (Thorsten)
 - many minor bugfixes (Thorsten)
 
 Version 2.0.10 - 2008-11-26
