@@ -4,12 +4,12 @@
  * - whose name can be splitted through "_";
  * - through a fixed lookup table (backward compatibility).
  *
- * @package     phpMyFAQ
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Matteo Scaramucia <matteo@phpmyfaq.de>
- * @since       2009-01-07
- * @copyright   (c) 2009 phpMyFAQ Team
- * @version     SVN: $Id$
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramucia <matteo@phpmyfaq.de>
+ * @since     2009-01-07
+ * @copyright (c) 2009 phpMyFAQ Team
+ * @version   SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -38,19 +38,19 @@ function __autoload($class)
     switch($class) {
         /* Fixed lookup table (backward compatibility) - START HERE */
         case 'DocBook_XML_Export':
-            @include $rootDir.'/inc/PMF_Export/DocBook.php';
+            include $rootDir.'/inc/PMF_Export/DocBook.php';
             break;
 
         case 'FPDF':
-            @include $rootDir.'/inc/libs/fpdf.php';
+            include $rootDir.'/inc/libs/fpdf.php';
             break;
 
         case 'PDF':
-            @include $rootDir.'/inc/PMF_Export/Pdf.php';
+            include $rootDir.'/inc/PMF_Export/Pdf.php';
             break;
 
         case 'PMF_IDB_Driver':
-            @include $rootDir.'/inc/PMF_DB/Driver.php';
+            include $rootDir.'/inc/PMF_DB/Driver.php';
             break;
         /* Fixed lookup table (backward compatibility) - END HERE */
 
@@ -58,20 +58,18 @@ function __autoload($class)
             // Try to load the class/interface declaration using its name if splittable by '_'
             // Note: using include instead of require give us the possibility to echo failures
             $classParts = explode('_', $class);
+            $includeDir = $rootDir . DIRECTORY_SEPARATOR . 'inc'. DIRECTORY_SEPARATOR;
             if (2 == count($classParts)) {
-                @include $rootDir.'/inc/'. $classParts[1] . '.php';
+                include $includeDir . $classParts[1] . '.php';
             } else if (3 == count($classParts)) {
-                @include $rootDir.'/inc/PMF_'. $classParts[1] . '/' . $classParts[2] . '.php';
+                include $includeDir . 'PMF_'. $classParts[1] . DIRECTORY_SEPARATOR . $classParts[2] . '.php';
             } else {
-                echo("<br /><b>PMF Autoloader</b>: unable to find a suitable file declaring '$class'.");
+                printf("<br /><b>PMF Autoloader</b>: unable to find a suitable file declaring '%s'.", $class);
             }
     }
 
     // Sanity check
-    if (
-            !class_exists($class, false)
-        && !interface_exists($class, false)
-        ) {
-        echo("<br /><b>PMF Autoloader</b>: unable to define '$class' as a class/interface.<br />");
+    if (!class_exists($class, false) && !interface_exists($class, false)) {
+        printf("<br /><b>PMF Autoloader</b>: unable to define '%s' as a class/interface.<br />", $class);
     }
 }
