@@ -1,23 +1,23 @@
 <?php
 /**
-* $Id: savecomment.php,v 1.22 2007-03-29 18:47:40 thorstenr Exp $
-*
-* Saves the posted comment
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @since        2002-08-29
-* @copyright    (c) 2001-2006 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * Saves the posted comment
+ *
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since     2002-08-29
+ * @copyright 2001-2009 phpMyFAQ Team
+ * @version   SVN: $Id$
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
@@ -29,20 +29,20 @@ $captcha = new PMF_Captcha($db, $sids, $pmf->language);
 $id = 0;
 $msgWriteComment = $PMF_LANG['msgWriteComment'];
 
+if ((isset($_POST['type']) && ('faq' == $_POST['type'])) && isset($_POST["id"])) {
+    $id = (int)$_POST['id'];
+} else if ((isset($_POST['type']) && ('news' == $_POST['type'])) && isset($_POST["newsid"])) {
+    $id              = (int)$_POST["newsid"];
+    $msgWriteComment = $PMF_LANG['newsWriteComment'];
+}
+
 if (    isset($_POST['user']) && $_POST['user'] != ''
      && isset($_POST['mail']) && checkEmail($_POST['mail'])
      && isset($_POST['comment']) && $_POST['comment'] != ''
      && IPCheck($_SERVER['REMOTE_ADDR'])
      && checkBannedWord(htmlspecialchars(strip_tags($_POST['comment'])))
      && checkCaptchaCode()
-     && !$faq->commentDisabled((int)$_POST['id'], $LANGCODE)) {
-
-    if ((isset($_POST['type']) && ('faq' == $_POST['type'])) && isset($_POST["id"])) {
-        $id = (int)$_POST['id'];
-    } else if ((isset($_POST['type']) && ('news' == $_POST['type'])) && isset($_POST["newsid"])) {
-        $id = (int)$_POST["newsid"];
-        $msgWriteComment = $PMF_LANG['newsWriteComment'];
-    }
+     && !$faq->commentDisabled($id, $LANGCODE, isset($_POST['type']) ? $_POST['type'] : 'faq')) {
 
     Tracking("save_comment", $id);
 
