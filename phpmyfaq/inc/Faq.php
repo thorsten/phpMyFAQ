@@ -594,24 +594,22 @@ class PMF_Faq
             FROM
                 %s%s fd
             LEFT JOIN
-                %sfaqdata_group
+                %sfaqdata_group fdg
             ON
-                fd.id = %sfaqdata_group.record_id
+                fd.id = fdg.record_id
             LEFT JOIN
-                %sfaqdata_user
+                %sfaqdata_user fdu
             ON
-                fd.id = %sfaqdata_user.record_id
+                fd.id = fdu.record_id
             WHERE
-                id = %d
+                fd.id = %d
             %s
             AND
-                lang = '%s'
+                fd.lang = '%s'
             AND
                 %s",
             SQLPREFIX,
             isset($revision_id) ? 'faqdata_revisions': 'faqdata',
-            SQLPREFIX,
-            SQLPREFIX,
             SQLPREFIX,
             SQLPREFIX,
             $id,
