@@ -13,7 +13,7 @@ Changes since 2.0.10:
 - updated English and Turkish translation and switched to UTF-8 (Evren Yurtesen)
 - updated Simplified Chinese translation (Techice Young)
 - fixed possible infinity loob bug in categories (Kaoru Izutani)
-- minor bugfixes (Thorsten)
+- may minor bugfixes (Thorsten)
 
 For known issues please take a look at KNOWNBUGS.txt
 
@@ -23,7 +23,7 @@ Version 2.0.11 - 2009-01-
 - updated English and Turkish translation and switched to UTF-8 (Evren Yurtesen)
 - updated Simplified Chinese translation (Techice Young)
 - fixed possible infinity loob bug in categories (Kaoru Izutani)
-- minor bugfixes (Thorsten)
+- many minor bugfixes (Thorsten)
 
 Version 2.0.10 - 2008-11-26
 - fixed image bug in PDF (Thorsten)
