@@ -1,13 +1,13 @@
 <?php
 /**
- * $Id$
- *
  * Footer of the admin area
  *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @since       2003-02-26
- * @copyright   (c) 2003-2009 phpMyFAQ Team
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @since     2003-02-26
+ * @copyright 2003-2009 phpMyFAQ Team
+ * @version   SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -63,9 +63,10 @@ if (    isset($auth) &&
         document_base_url : "<?php print(PMF_Link::getSystemRelativeUri('admin/index.php')); ?>",
         theme : "advanced",
         plugins : "table,save,advhr,advimage,advlink,emotions,iespell,insertdatetime,preview,zoom,print,paste,directionality,fullscreen,noneditable,contextmenu",
-        theme_advanced_disable : "styleselect",
+        theme_advanced_disable : "styleselect,formatselect",
         theme_advanced_buttons1_add_before : "newdocument,separator",
-        theme_advanced_buttons1_add : "fontselect,fontsizeselect",
+        theme_advanced_buttons1_add : "formatselect,fontselect,fontsizeselect",
+        theme_advanced_blockformats : "p,pre,div,h1,h2,h3,h4,h5,h6,blockquote,dt,dd",
         theme_advanced_buttons2_add : "separator,insertdate,inserttime,preview,zoom,separator,forecolor,backcolor,liststyle",
         theme_advanced_buttons2_add_before: "cut,copy,paste,pastetext,pasteword,separator,search,replace,separator",
         theme_advanced_buttons3_add_before : "tablecontrols,separator",
@@ -83,7 +84,8 @@ if (    isset($auth) &&
         theme_advanced_resize_horizontal : false,
         theme_advanced_link_targets : "_something=My somthing;_something2=My somthing2;_something3=My somthing3;",
         apply_source_formatting : true,
-        entity_encoding : "raw"
+        entity_encoding : "raw",
+        element_format : "xhtml"            
     });
 
     function fileBrowserCallBack(field_name, url, type, win) {
