@@ -1,14 +1,15 @@
 <?php
 /**
- * $Id: Faq.php,v 1.129 2008-05-22 11:22:59 thorstenr Exp $
- *
  * The main FAQ class
  *
+ * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
- * @package   phpMyFAQ
+ * @author    Georgi Korchev <korchev@yahoo.com>
+ * @author    Adrianna Musiol <musiol@imageaccess.de>
  * @since     2005-12-20
- * @copyright 2005-2008 phpMyFAQ Team
+ * @copyright 2005-2009 phpMyFAQ Team
+ * @version   SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -973,33 +974,40 @@ class PMF_Faq
     /**
      * Checks, if comments are disabled for the FAQ record
      * 
-     * @param  integer $record_id FAQ Id
-     * @param  string  $record_lang
+     * @param  integer $record_id   Id of FAQ or news entry
+     * @param  string  $record_lang Language
+     * @param  string  $record_type Type of comment: faq or news
      * @return boolean true, if comments are disabled
      */
-    public function commentDisabled($record_id, $record_lang)
+    function commentDisabled($record_id, $record_lang, $record_type = 'faq')
     {
+        if ('news' == $record_type) {
+            $table = 'faqnews';
+        } else {
+            $table = 'faqdata';
+        }
+        
         $query = sprintf("
             SELECT
                 comment
             FROM
-                %sfaqdata
+                %s%s
             WHERE
                 id = %d
             AND
                 lang = '%s'",
             SQLPREFIX,
+            $table,
             $record_id,
             $record_lang);
 
         $result = $this->db->query($query);
         
         if ($row = $this->db->fetch_object($result)) {
-            return ($row->comment === 'y') ? true : false;
+            return ($row->comment === 'y') ? false : true;
         } else {
-            return false;
+            return true;
         }
-    }
 
     /**
      * Adds new category relations to a record

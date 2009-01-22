@@ -1,16 +1,18 @@
 <?php
 /**
- * This is the main functions file.
+ * This is the main functions file!
  *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Matthias Sommerfeld <phlymail@phlylabs.de>
- * @author      Bastian Poettner <bastian@poettner.net>
- * @author      Meikel Katzengreis <meikel@katzengreis.com>
- * @author      Robin Wood <robin@digininja.org>
- * @author      Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @since       2001-02-18
- * @version     SVN: $Id$ 
- * @copyright   (c) 2001-2009 phpMyFAQ Team
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matthias Sommerfeld <phlymail@phlylabs.de>
+ * @author    Bastian Poettner <bastian@poettner.net>
+ * @author    Meikel Katzengreis <meikel@katzengreis.com>
+ * @author    Robin Wood <robin@digininja.org>
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author    Adrianna Musiol <musiol@imageaccess.de>
+ * @since     2001-02-18
+ * @copyright 2001-2009 phpMyFAQ Team
+ * @version   SVN: $Id$
  *
  * Portions created by Matthias Sommerfeld are Copyright (c) 2001-2004 blue
  * birdy, Berlin (http://bluebirdy.de). All Rights Reserved.
@@ -440,7 +442,9 @@ function check4AddrMatch($ip, $network)
 }
 
 /**
- * Performs a check if an IP is banned
+ * Performs a check if an IPv4 is banned
+ * 
+ * NOTE: This function does not support IPv6
  *
  * @param   string  IP
  * @return  boolean
@@ -453,6 +457,7 @@ function IPCheck($ip)
     global $faqconfig;
 
     $bannedIPs = explode(' ', $faqconfig->get('main.bannedIPs'));
+    
     foreach ($bannedIPs as $oneIPorNetwork) {
         if (check4AddrMatch($ip, $oneIPorNetwork)) {
             return false;
