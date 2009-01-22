@@ -63,7 +63,7 @@ class PMF_Faq
     *
     * @var  object
     */
-    var $db;
+    private $db;
 
     /**
     * Language
@@ -122,7 +122,7 @@ class PMF_Faq
      * @param   integer $user
      * @param   array   $groups
      */
-    function PMF_Faq(&$db, $language, $user = null, $groups = null)
+    function __construct(&$db, $language, $user = null, $groups = null)
     {
         global $PMF_LANG, $faqconfig;
 
@@ -696,6 +696,18 @@ class PMF_Faq
     {
         global $PMF_LANG;
 
+        if ($this->groupSupport) {
+            $permPart = sprintf("( fdg.group_id IN (%s)
+            OR
+                (fdu.user_id = %d AND fdg.group_id IN (%s)))",
+                implode(', ', $this->groups),
+                $this->user,
+                implode(', ', $this->groups));
+        } else {
+            $permPart = sprintf("( fdu.user_id = %d OR fdu.user_id = -1 )",
+                $this->user);
+        }
+        
         $query = sprintf(
             "SELECT
                  id, lang, solution_id, revision_id, active, keywords, thema,
@@ -715,7 +727,9 @@ class PMF_Faq
                 id = %d
             %s
             AND
-                lang = '%s'",
+                lang = '%s'
+            AND
+                %s",
             SQLPREFIX,
             isset($revision_id) ? 'faqdata_revisions': 'faqdata',
 
@@ -725,7 +739,8 @@ class PMF_Faq
             SQLPREFIX,
             $id,
             isset($revision_id) ? 'AND revision_id = '.$revision_id : '',
-            $this->language);
+            $this->language,
+            $permPart);
 
         $result = $this->db->query($query);
 
@@ -979,7 +994,7 @@ class PMF_Faq
      * @param  string  $record_type Type of comment: faq or news
      * @return boolean true, if comments are disabled
      */
-    function commentDisabled($record_id, $record_lang, $record_type = 'faq')
+    public function commentDisabled($record_id, $record_lang, $record_type = 'faq')
     {
         if ('news' == $record_type) {
             $table = 'faqnews';
@@ -1008,6 +1023,7 @@ class PMF_Faq
         } else {
             return true;
         }
+    }
 
     /**
      * Adds new category relations to a record
@@ -1642,7 +1658,7 @@ class PMF_Faq
      * @since   2006-06-18
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function addComment($commentData)
+    public function addComment($commentData)
     {
         $oComment = new PMF_Comment($this->db, $this->language);
         return $oComment->addComment($commentData);
@@ -1658,7 +1674,7 @@ class PMF_Faq
      * @since   2006-06-18
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function deleteComment($record_id, $comment_id)
+    public function deleteComment($record_id, $comment_id)
     {
         $oComment = new PMF_Comment($this->db, $this->language);
         return $oComment->deleteComment($record_id, $comment_id);
