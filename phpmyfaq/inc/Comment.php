@@ -5,8 +5,8 @@
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since     2006-07-23
- * @copyright 2006-2008 phpMyFAQ Team
- * @version   CVS: $Id: Comment.php,v 1.12 2008-01-26 17:12:45 thorstenr Exp $
+ * @copyright 2006-2009 phpMyFAQ Team
+ * @version   SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -262,12 +262,12 @@ class PMF_Comment
     /**
      * Returns the number of comments of each FAQ record as an array
      *
-     * @return  array
-     * @access  public
-     * @since   2007-02-11
-     * @author  Thorsten Rinne <thorsten@rinne.info>
+     * @param  string $type Type of comment: faq or news
+     * @return array
+     * @since  2007-02-11
+     * @author Thorsten Rinne <thorsten@rinne.info>
      */
-    public function getNumberOfComments()
+    public function getNumberOfComments($type = self::COMMENT_TYPE_FAQ)
     {
         $num = array();
 
@@ -277,9 +277,12 @@ class PMF_Comment
                 id
             FROM
                 %sfaqcomments
+            WHERE
+                type = '%s'
             GROUP BY id
             ORDER BY id",
-            SQLPREFIX);
+            SQLPREFIX,
+            $type);
 
         $result = $this->db->query($query);
         if ($this->db->num_rows($result) > 0) {
