@@ -699,7 +699,7 @@ foreach ($permLevels as $level => $desc) {
 
     // Write the DB variables in data.php
     $datafile = PMF_ROOT_DIR . '/inc/data.php';
-    $ret = file_put_contents($datafile, "<?php\n\$DB[\"server\"] = '".$sql_server."';\n\$DB[\"user\"] = '".$sql_user."';\n\$DB[\"password\"] = '".$sql_passwort."';\n\$DB[\"db\"] = '".$sql_db."';\n\$DB[\"prefix\"] = '".$sqltblpre."';\n\$DB[\"type\"] = '".$sql_type."';\n?>", LOCK_EX);
+    $ret = file_put_contents($datafile, "<?php\n\$DB[\"server\"] = '".$sql_server."';\n\$DB[\"user\"] = '".$sql_user."';\n\$DB[\"password\"] = '".$sql_passwort."';\n\$DB[\"db\"] = '".$sql_db."';\n\$DB[\"prefix\"] = '".$sqltblpre."';\n\$DB[\"type\"] = '".$sql_type."';", LOCK_EX);
     if (!$ret) {
         print "<p class=\"error\"><strong>Error:</strong> Cannot write to data.php.</p>";
         HTMLFooter();
