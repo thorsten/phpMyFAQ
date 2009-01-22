@@ -32,6 +32,20 @@ Version 2.5.0-alpha2 - 2009-
 - updated bundled Net_IDNA to version 0.6.0 (Thorsten)
 - updated bundled TinyMCE editor component to version 2.1.3 (Thorsten)
 
+Version 2.0.11 - 2009-01-22
+- updated English and Turkish translation and switched to UTF-8 (Evren Yurtesen)
+- updated Simplified Chinese translation (Techice Young)
+- fixed possible infinity loop bug in categories (Kaoru Izutani)
+- fixed permission bypass issue (Thorsten)
+- many minor bugfixes (Thorsten)
+
+Version 2.0.10 - 2008-11-26
+- fixed image bug in PDF (Thorsten)
+- fixed isses in admin log display (Thorsten)
+- re-added missing XML-RPCS library files (Thorsten)
+- fixed PHP warnings and notices (Thorsten)
+- minor bugfixes (Thorsten, Andreas Hansson)
+
 Version 2.0.9 - 2008-10-17
 - dedicated to my uncle Werner
 - fixed content deletion bug (Thorsten)
