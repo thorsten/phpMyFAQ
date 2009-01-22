@@ -574,6 +574,18 @@ class PMF_Faq
     {
         global $PMF_LANG;
 
+        if ($this->groupSupport) {
+            $permPart = sprintf("( fdg.group_id IN (%s)
+            OR
+                (fdu.user_id = %d AND fdg.group_id IN (%s)))",
+                implode(', ', $this->groups),
+                $this->user,
+                implode(', ', $this->groups));
+        } else {
+            $permPart = sprintf("( fdu.user_id = %d OR fdu.user_id = -1 )",
+                $this->user);
+        }
+        
         $query = sprintf(
             "SELECT
                  id, lang, solution_id, revision_id, active, keywords, thema,
@@ -593,17 +605,19 @@ class PMF_Faq
                 id = %d
             %s
             AND
-                lang = '%s'",
+                lang = '%s'
+            AND
+                %s",
             SQLPREFIX,
             isset($revision_id) ? 'faqdata_revisions': 'faqdata',
-
             SQLPREFIX,
             SQLPREFIX,
             SQLPREFIX,
             SQLPREFIX,
             $id,
             isset($revision_id) ? 'AND revision_id = '.$revision_id : '',
-            $this->language);
+            $this->language,
+            $permPart);
 
         $result = $this->db->query($query);
 
