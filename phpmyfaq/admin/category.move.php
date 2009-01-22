@@ -5,8 +5,8 @@
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since     2004-04-29
- * @copyright 2004-2008 phpMyFAQ Team
- * @version   SVN: $Id: category.move.php,v 1.15 2007-03-22 17:51:57 thorstenr Exp $
+ * @copyright 2004-2009 phpMyFAQ Team
+ * @version   SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -50,7 +50,7 @@ if ($permission["editcateg"]) {
 <?php
                     foreach ($category->catTree as $cat) {
                        if ($id != $cat["id"]) {
-                          printf("<option value=\"%s\">%s%s</option>", $cat['id'], $cat['indent'], $cat['name']);
+                          printf("<option value=\"%s\">%s</option>", $cat['id'], $cat['name']);
                        }
                    }
 ?>
