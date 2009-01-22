@@ -14,13 +14,13 @@ Changes since 2.0.10:
 - updated Simplified Chinese translation (Techice Young)
 - fixed possible infinity loop bug in categories (Kaoru Izutani)
 - fixed permission bypass issue (Thorsten)
-- may minor bugfixes (Thorsten)
+- many minor bugfixes (Thorsten)
 
 For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.0.11 - 2009-01-
+Version 2.0.11 - 2009-01-22
 - updated English and Turkish translation and switched to UTF-8 (Evren Yurtesen)
 - updated Simplified Chinese translation (Techice Young)
 - fixed possible infinity loop bug in categories (Kaoru Izutani)
