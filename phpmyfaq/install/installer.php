@@ -307,6 +307,10 @@ if (version_compare(PHP_VERSION, '4.3.3', '<')) {
     die();
 }
 
+if (version_compare(PHP_VERSION, '5.2.0', '<')) {
+    print "<p class=\"center\">You're using an unsupported version of PHP! You should upgrade to PHP 5.2!</p>\n";
+}
+
 if (db_check($supported_databases) == false) {
     print "<p class=\"center\">No supported database found! Please install one of the following database systems and enable the m     corresponding PHP extension:</p>\n";
     print "<ul>\n";
