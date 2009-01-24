@@ -5,8 +5,8 @@
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since     2002-09-16
- * @copyright 2002-2009 phpMyFAQ Team
  * @version   SVN: $Id$
+ * @copyright 2002-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -41,41 +41,59 @@ if (   isset($_POST['name']) && $_POST['name'] != ''
     $attached = $db->escape_string(strip_tags($_POST["zusatz"]));
     $mailto = $_POST['mailto'];
 
-    list($user, $host) = explode("@", $mailto[0]);
     if (checkEmail($mailfrom)) {
-        foreach($mailto as $mail) {
-            $mail = $db->escape_string(strip_tags($mail));
-            if ($mail != '') {
-                mail(
-                    $IDN->encode($mail),
-                    $PMF_LANG["msgS2FMailSubject"].$name,
-                    $PMF_CONF["main.send2friendText"]."\r\n\r\n".$PMF_LANG["msgS2FText2"]."\r\n".$link."\r\n\r\n".$attached,
-                    "From: ".$IDN->encode($mailfrom)
-                );
+        foreach($mailto as $recipient) {
+            $recipient = trim($db->escape_string(strip_tags($recipient)));
+            if (!empty($recipient)) {
+                $mail = new PMF_Mail();
+                $mail->unsetFrom();
+                $mail->setFrom($mailfrom, $name);
+                $mail->addTo($recipient);
+                $mail->subject = $PMF_LANG["msgS2FMailSubject"].$name;
+                $mail->message = $PMF_CONF["main.send2friendText"]."\r\n\r\n".$PMF_LANG["msgS2FText2"]."\r\n".$link."\r\n\r\n".$attached;
+                $html = PMF_Utils::getHTTPContent($link);
+                if ($html !== false) {
+                    $mail->messageAlt = $PMF_CONF["main.send2friendText"]."\r\n\r\n".$PMF_LANG["msgS2FText2"]."\r\n".$link."\r\n\r\n".$attached;
+                    $mail->setHTMLMessage($html);
+                }
+                $result = $mail->send();
+                unset($mail);
                 usleep(250);
             }
         }
-        $tpl->processTemplate ("writeContent", array(
+        $tpl->processTemplate(
+            "writeContent",
+            array(
                 "msgSend2Friend" => $PMF_LANG["msgSend2Friend"],
                 "Message" => $PMF_LANG["msgS2FThx"]
-                    ));
+            )
+        );
     } else {
-        $tpl->processTemplate ("writeContent", array(
+        $tpl->processTemplate(
+            "writeContent",
+            array(
                 "msgSend2Friend" => $PMF_LANG["msgSend2Friend"],
                 "Message" => $PMF_LANG["err_noMailAdress"]
-                ));
+            )
+        );
     }
 } else {
-    if (IPCheck($_SERVER["REMOTE_ADDR"]) == FALSE) {
-        $tpl->processTemplate ("writeContent", array(
+    if (false === IPCheck($_SERVER["REMOTE_ADDR"])) {
+        $tpl->processTemplate(
+            "writeContent",
+            array(
                 "msgSend2Friend" => $PMF_LANG["msgSend2Friend"],
                 "Message" => $PMF_LANG["err_bannedIP"]
-                ));
+            )
+        );
     } else {
-        $tpl->processTemplate ("writeContent", array(
+        $tpl->processTemplate(
+            "writeContent",
+            array(
                 "msgSend2Friend" => $PMF_LANG["msgSend2Friend"],
                 "Message" => $PMF_LANG["err_sendMail"]
-                ));
+            )
+        );
     }
 }
 
