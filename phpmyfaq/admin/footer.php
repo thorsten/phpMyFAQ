@@ -2,12 +2,13 @@
 /**
  * Footer of the admin area
  *
- * @package     phpMyFAQ 
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @since       2003-02-26
- * @copyright   2003-2009 phpMyFAQ Team
- * @version     SVN: $Id$
+ * @package    phpMyFAQ 
+ * @subpackage Administration
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @since      2003-02-26
+ * @copyright  2003-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -52,6 +53,8 @@ if (    isset($auth) &&
      || ('news'         == $_action)
     )
     ) {
+    
+    if ($faqconfig->get('main.enableWysiwygEditor') == 'true') {
 ?>
 <!-- tinyMCE -->
 <script type="text/javascript">
@@ -190,6 +193,7 @@ if (    isset($auth) &&
 </script>
 <!-- /TinyMCE PMFIntFaqLink Plugin -->
 <?php
+    }
 }
 ?>
 </body>
