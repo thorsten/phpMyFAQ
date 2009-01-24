@@ -14,6 +14,7 @@ Changes since 2.5.0-alpha:
 - dropped support for XML-RPC (Thorsten)
 - improved performance (Thorsten)
 - added enable/disable WYSIWYG Editor flag (Thorsten)
+- added most popular searches list (Thorsten)
 
 For known issues please take a look at KNOWNBUGS.txt
 
@@ -29,6 +30,7 @@ Version 2.5.0-alpha2 - 2009-
 - added support for blocks in template engine (Jan Mergler)
 - added public user registration (Elger Thiele)
 - added enable/disable WYSIWYG Editor flag (Thorsten)
+- added most popular searches list (Thorsten)
 - improved user administration frontend (Sarah Hermann)
 - improved performance (Thorsten)
 - updated bundled Net_IDNA to version 0.6.0 (Thorsten)

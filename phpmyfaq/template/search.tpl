@@ -24,7 +24,7 @@
         </fieldset>
         
         <div id="mostpopularsearches">
-        {printMostPopularSearches}
+        <p>{msgMostPopularSearches} {printMostPopularSearches}</p>
         </div>
         
     </form>

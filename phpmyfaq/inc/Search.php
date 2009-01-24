@@ -5,8 +5,10 @@
  * @package   phpMyFAQ
  * @license   MPL
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2008 phpMyFAQ Team
- * @version   CVS: Search.php,v 1.1 2008/01/26 11:33:06 thorstenr Exp
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author    Adrianna Musiol <musiol@imageaccess.de>
+ * @copyright 2008-2009 phpMyFAQ Team
+ * @version   SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -25,8 +27,10 @@
  * @package   phpMyFAQ
  * @license   MPL
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2008 phpMyFAQ Team
- * @version   CVS: Search.php,v 1.1 2008/01/26 11:33:06 thorstenr Exp
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author    Adrianna Musiol <musiol@imageaccess.de>
+ * @copyright 2008-2009 phpMyFAQ Team
+ * @version   SVN: $Id$
  */
 class PMF_Search
 {
@@ -49,7 +53,6 @@ class PMF_Search
      *
      * @param  object  &$db      PMF_Db
      * @param  string  $language Language
-     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     function __construct(&$db, $language)
     {
@@ -68,10 +71,6 @@ class PMF_Search
      * @param   boolean $hasMore        true to disable the results paging
      * @param   boolean $instantRespnse true to use it for Instant Response
      * @return  array
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
-     * @author  Adrianna Musiol <musiol@imageaccess.de>
-     * @since   2002-09-16
      */
     public function search($searchterm, $searchcategory = '%', $allLanguages = true, $hasMore = false, $instantResponse = false)
     {
@@ -135,7 +134,6 @@ class PMF_Search
      *
      * @param  string $searchterm Search term
      * @return void
-     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     public function logSearchTerm($searchterm)
     {
@@ -150,9 +148,44 @@ class PMF_Search
             SQLPREFIX . 'faqsearches',
             $this->db->nextID('faqsearches', 'id'),
             $this->language,
-            $searchterm,
+            $this->db->escape_string($searchterm),
             $date->format('Y-m-d H:i:s'));
         
         $this->db->query($query);
+    }
+    
+    /**
+     * Returns the most popular searches
+     * 
+     * @param  integer $numResults Number of Results, default: 7
+     * @return array
+     */
+    public function getMostPopularSearches($numResults = 7)
+    {
+        $searchResult = array();
+        
+        $query = sprintf("
+            SELECT 
+                searchterm, COUNT(searchterm) AS number
+            FROM
+                %s
+            GROUP BY
+                searchterm
+            ORDER BY
+                number
+            DESC",
+            SQLPREFIX . 'faqsearches');
+        
+        $result = $this->db->query($query);
+        
+    
+        if ($result) {
+           while ($row = $this->db->fetch_object($result)) {
+              $searchResult[] = array('number'     => $row->number,
+                                      'searchterm' => $row->searchterm);
+           }
+        }
+        
+        return $searchResult;
     }
 }

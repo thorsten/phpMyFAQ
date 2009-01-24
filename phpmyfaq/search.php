@@ -90,6 +90,15 @@ $category->buildTree();
 $openSearchLink = sprintf('<a class="searchplugin" href="#" onclick="window.external.AddSearchProvider(\'%s/opensearch.php\');">%s</a>',
     PMF_Link::getSystemUri('/index.php'),
     $PMF_LANG['opensearch_plugin_install']);
+    
+$mostPopularSearches = '';
+$mostPopularSearchData = $faqsearch->getMostPopularSearches();
+foreach ($mostPopularSearchData as $searchItem) {
+    $mostPopularSearches .= sprintf('<a href="?search=%s&submit=Search&action=search">%s</a> (%dx), ',
+        urlencode($searchItem['searchterm']),
+        $searchItem['searchterm'],
+        $searchItem['number']);
+}
 
 $tpl->processTemplate('writeContent', array(
     'msgSearch'                => ($tagSearch ? $PMF_LANG['msgTagSearch'] : $PMF_LANG['msgSearch']),
@@ -103,6 +112,7 @@ $tpl->processTemplate('writeContent', array(
     'msgSearchWord'            => $PMF_LANG['msgSearchWord'],
     'printResult'              => $printResult,
     'openSearchLink'           => $openSearchLink,
-    'printMostPopularSearches' => $mostPopularSearches));
+    'msgMostPopularSearches'   => $PMF_LANG['msgMostPopularSearches'],
+    'printMostPopularSearches' => substr($mostPopularSearches, 0, -2)));
 
 $tpl->includeTemplate('writeContent', 'index');
