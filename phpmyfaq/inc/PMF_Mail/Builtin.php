@@ -26,34 +26,30 @@
 declare(encoding='latin1');
 
  /**
- * MUA (Mail User Agent) implementation using the PHP built-in mail() function.
- *
- * @package     phpMyFAQ 
- * @access      public
- */ 
+  * MUA (Mail User Agent) implementation using the PHP built-in mail() function.
+  *
+  * @package phpMyFAQ 
+  */ 
 class PMF_Mail_Builtin implements PMF_Mail_IMUA
 {
     /**
      * Send the message using an e-mail through the PHP bult-in mail() function.
      *
-     * @access public
-     * @param string $recipients Recipients of the e-mail as a comma-separated list
-     *                           of RFC 2822 compliant items
-     * @param array $headers Headers of the e-mail
-     * @param string $body Body of the e-mail
-     * @return bool True if successful, false otherwise.     
+     * @param  string $recipients Recipients of the e-mail as a comma-separated list
+     *                            of RFC 2822 compliant items
+     * @param  array  $headers    Headers of the e-mail
+     * @param  string $body       Body of the e-mail
+     * @return bool   True if successful, false otherwise.     
      */
     public function send($recipients, $headers, $body)
     {
         // Get the subject of the e-mail, RFC 2047 compliant
-        $subject = $headers['Subject'];
+        $subject            = $headers['Subject'];
         $headers['Subject'] = null;
         unset($headers['Subject']);
 
         $sender = '';
-        if (   ('WIN' !== strtoupper(substr(PHP_OS, 0, 3)))
-            && !ini_get('safe_mode')
-            ) {
+        if (('WIN' !== strtoupper(substr(PHP_OS, 0, 3))) && !ini_get('safe_mode')) {
             $sender = str_replace(
                 array('<', '>'),
                 '',
