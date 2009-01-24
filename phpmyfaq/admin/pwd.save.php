@@ -1,13 +1,12 @@
 <?php
 /**
- * $Id: pwd.save.php,v 1.11 2007-04-06 11:15:24 thorstenr Exp $
+ * Save the password of the current user in the database.
  *
- * Save the password of the current user in the database
- *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
- * @since       2003-02-23
- * @copyright   (c) 2003-2007 phpMyFAQ Team
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @since      2003-02-23
+ * @version    SVN: $Id$ 
+ * @copyright (c) 2003-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -26,7 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 }
 
 // Re-evaluate $user
-$user = PMF_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
+$user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
 
 // Define the (Local/Current) Authentication Source
 $_authSource = PMF_Auth::selectAuth($user->_auth_data['authSource']['name']);

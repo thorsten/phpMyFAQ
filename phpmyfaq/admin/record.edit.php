@@ -1,13 +1,13 @@
 <?php
 /**
- * The FAQ record editor
+ * The FAQ record editor.
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since     2003-02-23
  * @license   Mozilla Public License 1.1
- * @copyright 2003-2008 phpMyFAQ Team
- * @version   CVS: $Id: record.edit.php,v 1.79 2008-01-26 10:35:16 thorstenr Exp $
+ * @version   SVN: $Id$
+ * @copyright (c) 2003-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -26,7 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 }
 
 // Re-evaluate $user
-$user = PMF_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
+$user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
 
 if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 

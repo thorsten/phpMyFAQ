@@ -1,14 +1,12 @@
 <?php
 /**
- * $Id: linkconfig.main.php,v 1.15 2007-05-01 19:38:53 thorstenr Exp $
+ * LinkVerifier configuration.
  *
- * LinkVerifier configuration
- *
- * TODO: Move all queries and functions into the class PMF_Linkverifier
- *
- * @author      Minoru TODA <todam@netjapan.co.jp>
- * @since       2005-11-07
- * @copyright   (c) 2005-2007 NetJapan, Inc. and phpMyFAQ Team
+ * @author     Minoru TODA <todam@netjapan.co.jp>
+ * @since      2005-11-07
+ * @todo       Move all queries and functions into the class PMF_Linkverifier
+ * @version    SVN: $Id$ 
+ * @copyright (c) 2005-2009 NetJapan, Inc. and phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -30,7 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 }
 
 // Re-evaluate $user
-$user = PMF_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
+$user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
 
 // Define number of entries per page
 $entriesPerPage = 10;

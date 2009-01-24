@@ -1,13 +1,12 @@
 <?php
 /**
- * $Id: news.php,v 1.37 2008-01-26 17:12:45 thorstenr Exp $
- *
- * The main administration file for the news
+ * The main administration file for the news.
  *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @since     2003-02-23
- * @copyright (c) 2003-2007 phpMyFAQ Team
+ * @version   SVN: $Id$ 
+ * @copyright (c) 2003-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -25,12 +24,10 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
-require_once PMF_ROOT_DIR."/inc/News.php";
-
 $news = new PMF_News($db, $LANGCODE);
 
 // Re-evaluate $user
-$user = PMF_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
+$user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
 
 if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews"]) {
 ?>
