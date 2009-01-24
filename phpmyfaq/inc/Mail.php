@@ -37,7 +37,6 @@ class PMF_Mail
      * Type of the used MUA. Possible values:
      * - built-in.     
      *
-     * @access public
      * @var string $agent
      */
     public $agent;
@@ -45,7 +44,6 @@ class PMF_Mail
     /**
      * Attached filed.
      *
-     * @access public
      * @var mixed $attachments
      */
     public $attachments;
@@ -53,7 +51,6 @@ class PMF_Mail
     /**
      * Body of the e-mail.
      *
-     * @access public
      * @var string $body
      */
     public $body = '';
@@ -61,7 +58,6 @@ class PMF_Mail
     /**
      * Boundary.
      *
-     * @access public
      * @var string $boundary
      */
     public $boundary = '----------';
@@ -69,7 +65,6 @@ class PMF_Mail
     /**
      * Charset.
      *
-     * @access public
      * @var string $charset
      */
     public $charset = 'iso-8859-1';
@@ -77,7 +72,6 @@ class PMF_Mail
     /**
      * Content disposition.
      *
-     * @access public
      * @var string $contentDisposition
      */
     public $contentDisposition = 'inline';
@@ -85,7 +79,6 @@ class PMF_Mail
     /**
      * Content type.
      *
-     * @access public
      * @var string $contentType
      */
     public $contentType = 'text/plain';
@@ -93,7 +86,6 @@ class PMF_Mail
     /**
      * Content transfer encoding.
      *
-     * @access public
      * @var string $contentTransferEncoding
      */
     public $contentTransferEncoding = '8bit';
@@ -102,7 +94,6 @@ class PMF_Mail
      * The one and only valid End Of Line sequence as per RFC 2822:
      * carriage-return followed by line-feed.     
      *
-     * @access public
      * @var string $eol
      */
     public $eol = "\r\n";
@@ -110,7 +101,6 @@ class PMF_Mail
     /**
      * Headers of the e-mail.
      *
-     * @access public
      * @var string $headers
      */
     public $headers;
@@ -118,7 +108,6 @@ class PMF_Mail
     /**
      * Message of the e-mail: HTML text allowed.
      *
-     * @access public
      * @var string $message
      */
     public $message;
@@ -126,7 +115,6 @@ class PMF_Mail
     /**
      * Alternate message of the e-mail: only plain text allowed.
      *
-     * @access public
      * @var string $messageAlt
      */
     public $messageAlt;
@@ -134,7 +122,6 @@ class PMF_Mail
     /**
      * Message-ID of the e-mail.
      *
-     * @access public
      * @var string $messageId
      */
     public $messageId;
@@ -142,7 +129,6 @@ class PMF_Mail
     /**
      * Priorities: 1 (Highest), 2 (High), 3 (Normal), 4 (Low), 5 (Lowest).
      *
-     * @access public
      * @var mixed $priorities
      */
     public $priorities = array(
@@ -156,7 +142,6 @@ class PMF_Mail
     /**
      * Priority of the e-mail: 1 (Highest), 2 (High), 3 (Normal), 4 (Low), 5 (Lowest).
      *
-     * @access public
      * @var int $priority
      * @see priorities     
      */
@@ -165,7 +150,6 @@ class PMF_Mail
     /**
      * Subject of the e-mail.
      *
-     * @access public
      * @var string $subject
      */
     public $subject;
@@ -173,7 +157,6 @@ class PMF_Mail
     /**
      * Recipients of the e-mail as <BCC>.
      *
-     * @access private
      * @var mixed $_bcc
      */
     private $_bcc;
@@ -181,7 +164,6 @@ class PMF_Mail
     /**
      * Recipients of the e-mail as <CC>.
      *
-     * @access private
      * @var mixed $_cc
      */
     private $_cc;
@@ -189,7 +171,6 @@ class PMF_Mail
     /**
      * Recipients of the e-mail as <From>.
      *
-     * @access private
      * @var mixed $_from
      */
     private $_from;
@@ -197,7 +178,6 @@ class PMF_Mail
     /**
      * Mailer string.
      *
-     * @access private
      * @var string $_mailer
      */
     private $_mailer;
@@ -205,7 +185,6 @@ class PMF_Mail
     /**
      * Recipient of the optional notification.
      *
-     * @access private
      * @var mixed $_notifyTo
      */
     private $_notifyTo;
@@ -213,7 +192,6 @@ class PMF_Mail
     /**
      * Recipient of the e-mail as <Reply-To>.
      *
-     * @access private
      * @var mixed $_replyTo
      */
     private $_replyTo;
@@ -221,7 +199,6 @@ class PMF_Mail
     /**
      * Recipient of the e-mail as <Return-Path>.
      *
-     * @access private
      * @var mixed $_returnPath
      */
     private $_returnPath;
@@ -229,7 +206,6 @@ class PMF_Mail
     /**
      * Recipient of the e-mail as <Sender>.
      *
-     * @access private
      * @var mixed $_sender
      */
     private $_sender;
@@ -237,7 +213,6 @@ class PMF_Mail
     /**
      * Recipients of the e-mail as <TO:>.
      *
-     * @access private
      * @var mixed $_to
      */
     private $_to;
@@ -247,29 +222,29 @@ class PMF_Mail
      *      
      * @param string $agent Type of agent. Default: built-in.
      */     
-    function PMF_Mail($agent = 'built-in')
+    function __construct($agent = 'built-in')
     {
         // Set default value for public properties
-        $this->agent = $agent;
+        $this->agent       = $agent;
         $this->attachments = array();
-        $this->boundary = self::createBoundary();
-        $this->headers = array();
-        $this->message = '';
-        $this->messageAlt = '';
-        $this->messageId = '<'.time().'.'.md5(microtime()).'@'.self::getServerName().'>';
-        $this->priority = 3; // 3 -> Normal
-        $this->subject = '';
+        $this->boundary    = self::createBoundary();
+        $this->headers     = array();
+        $this->message     = '';
+        $this->messageAlt  = '';
+        $this->messageId   = '<'.$_SERVER['REQUEST_TIME'] . '.'. md5(microtime()) . '@' . self::getServerName() . '>';
+        $this->priority    = 3; // 3 -> Normal
+        $this->subject     = '';
 
         // Set default value for private properties
-        $this->_bcc = array();
-        $this->_cc = array();
-        $this->_from = array();
-        $this->_mailer = 'phpMyFAQ on PHP/'.phpversion();
-        $this->_notifyTo = array();
-        $this->_replyTo = array();
+        $this->_bcc        = array();
+        $this->_cc         = array();
+        $this->_from       = array();
+        $this->_mailer     = 'phpMyFAQ on PHP/' . PHP_VERSION;
+        $this->_notifyTo   = array();
+        $this->_replyTo    = array();
         $this->_returnPath = array();
-        $this->_sender = array();
-        $this->_to = array();
+        $this->_sender     = array();
+        $this->_to         = array();
 
         // Set phpMyFAQ related data
         global $PMF_CONF, $PMF_LANG;
@@ -282,15 +257,15 @@ class PMF_Mail
         }
     }
 
-    /*
+    /**
      * Add an e-mail address to an array.
      *
-     * @access private
-     * @param array $target Target array.
-     * @param string $target Alias Target alias.
-     * @param string $address User e-mail address.
-     * @param string $name User name (optional).
-     * @return bool True if successful, false otherwise.     
+     * @param  array  $target  Target array.
+     * @param  string $target  Alias Target alias.
+     * @param  string $address User e-mail address.
+     * @param  string $name    User name (optional).
+     * @return bool   True if successful, false otherwise.
+     * @todo   Enhance error handling using exceptions
      */          
     private function _addEmailTo(&$target, $targetAlias, $address, $name = null)
     {
@@ -321,24 +296,21 @@ class PMF_Mail
         // Add the e-mail address into the target array
         $target[$address] = $name;
         // On Windows, when using PHP built-in mail drop any name, just use the e-mail address
-        if (   ('WIN' === strtoupper(substr(PHP_OS, 0, 3)))
-            && ('built-in' == $this->agent)
-            ) {
+        if (('WIN' === strtoupper(substr(PHP_OS, 0, 3))) && ('built-in' == $this->agent)) {
             $target[$address] = null;
         }
 
         return true;
     }
 
-    /*
+    /**
      * Create the body of the email.
      *
-     * @access private
      * @return void     
      */          
     private function _createBody()
     {
-        $lines = array();
+        $lines        = array();
         $mainBoundary = $this->boundary;
 
         // Cleanup body
@@ -418,10 +390,9 @@ class PMF_Mail
         }
     }
 
-    /*
+    /**
      * Create the headers of the email.
      *
-     * @access private
      * @return void     
      */          
     private function _createHeaders()
@@ -506,15 +477,14 @@ class PMF_Mail
         $this->headers['X-Priority'] = $this->priority;
     }
 
-    /*
+    /**
      * Set just one e-mail address into an array.
      *
-     * @access private
-     * @param array $target Target array.
-     * @param string $target Alias Target alias.
-     * @param string $address User e-mail address.
-     * @param string $name User name (optional).
-     * @return bool True if successful, false otherwise.
+     * @param  array  $target  Target array.
+     * @param  string $target  Alias Target alias.
+     * @param  string $address User e-mail address.
+     * @param  string $name    User name (optional).
+     * @return bool   True if successful, false otherwise.
      */          
     private function _setEmailTo(&$target, $targetAlias, $address, $name = null)
     {
@@ -531,16 +501,15 @@ class PMF_Mail
         return $this->_addEmailTo($target, $targetAlias, $address, $name);
     }
 
-    /*
+    /**
      * Add an attachment.
      *
-     * @access public
-     * @param string $path File path.
-     * @param string $name File name. Defaults to the basename.
-     * @param string $mimetype File MIME type. Defaults to 'application/octet-stream'.
-     * @param string $disposition Attachment disposition. Defaults to 'attachment'.
-     * @param string $cid Content ID, required when disposition is 'inline'. Defaults to ''.
-     * @return bool True if successful, false otherwise.
+     * @param  string $path        File path.
+     * @param  string $name        File name. Defaults to the basename.
+     * @param  string $mimetype    File MIME type. Defaults to 'application/octet-stream'.
+     * @param  string $disposition Attachment disposition. Defaults to 'attachment'.
+     * @param  string $cid         Content ID, required when disposition is 'inline'. Defaults to ''.
+     * @return bool   True if successful, false otherwise.
      */          
     public function addAttachment($path, $name = null, $mimetype = 'application/octet-stream', $disposition = 'attachment', $cid = '')
     {
@@ -567,12 +536,11 @@ class PMF_Mail
         }
     }
 
-    /*
+    /**
      * Add a recipient as <BCC>.
      *
-     * @access public
-     * @param string $address User e-mail address.
-     * @param string $name User name (optional).
+     * @param  string $address User e-mail address.
+     * @param  string $name    User name (optional).
      * @return bool True if successful, false otherwise.
      */          
     public function addBcc($address, $name = null)
@@ -580,12 +548,11 @@ class PMF_Mail
         return $this->_addEmailTo($this->_bcc, 'Bcc', $address, $name);
     }
 
-    /*
+    /**
      * Add a recipient as <CC>.
      *
-     * @access public
-     * @param string $address User e-mail address.
-     * @param string $name User name (optional).
+     * @param  string $address User e-mail address.
+     * @param  string $name    User name (optional).
      * @return bool True if successful, false otherwise.
      */          
     public function addCc($address, $name = null)
@@ -593,12 +560,11 @@ class PMF_Mail
         return $this->_addEmailTo($this->_cc, 'Cc', $address, $name);
     }
 
-    /*
+    /**
      * Add an address to send a notification to.
      *
-     * @access public
-     * @param string $address User e-mail address.
-     * @param string $name User name (optional).
+     * @param  string $address User e-mail address.
+     * @param  string $name    User name (optional).
      * @return bool True if successful, false otherwise.
      */          
     public function addNotificationTo($address, $name = null)
@@ -606,12 +572,11 @@ class PMF_Mail
         return $this->_addEmailTo($this->_notifyTo, 'Disposition-Notification-To', $address, $name);
     }
 
-    /*
+    /**
      * Add a recipient as <TO>.
      *
-     * @access public
-     * @param string $address User e-mail address.
-     * @param string $name User name (optional).
+     * @param  string $address User e-mail address.
+     * @param  string $name    User name (optional).
      * @return bool True if successful, false otherwise.
      */          
     public function addTo($address, $name = null)
@@ -619,24 +584,22 @@ class PMF_Mail
         return $this->_addEmailTo($this->_to, 'To', $address, $name);
     }
 
-    /*
+    /**
      * Create a string to be used as a valid boundary value.
      *
-     * @access public
      * @static     
      * @return string The boundary value.
      */          
     public static function createBoundary()
     {
-        return '-----'.md5(microtime());
+        return '-----'  .md5(microtime());
     }
 
-    /*
+    /**
      * Returns the given text being sure that any CR or LF has been fixed
      * according with RFC 2822 EOL setting.
      *
-     * @access public
-     * @param string $text Text with a mixed usage of CR, LF, CRLF.
+     * @param  string $text Text with a mixed usage of CR, LF, CRLF.
      * @return string The fixed text.
      * @see eol
      */          
@@ -658,12 +621,11 @@ class PMF_Mail
         return $text;
     }
 
-    /*
+    /**
      * Returns the date according with RFC 2822.
      *
-     * @access public
      * @static
-     * @param string $date Unix timestamp.
+     * @param  string $date Unix timestamp.
      * @return string The RFC 2822 date if successful, false otherwise.
      */          
     public static function getDate($date)
@@ -673,10 +635,9 @@ class PMF_Mail
         return $rfc2822Date;
     }
 
-    /*
+    /**
      * Returns the Unix timestamp with preference to the Page Request time.
      *
-     * @access public
      * @static
      * @param string $date .
      * @return int Unix timestamp.
@@ -690,10 +651,9 @@ class PMF_Mail
         return time();
     }
 
-    /*
+    /**
      * Get the instance of the class implementing the MUA for the given type.
      *
-     * @access public
      * @static
      * @param string $type Type of the MUA.
      * @return mixed The class instance if successful, false otherwise.
@@ -712,10 +672,9 @@ class PMF_Mail
         return new $class;
     }
 
-    /*
+    /**
      * Returns the server name.
      *
-     * @access public
      * @static
      * @return string The server name.
      */          
@@ -731,11 +690,11 @@ class PMF_Mail
         return $hostname;
     }
 
-    /*
+    /**
      * Send the e-mail according with the current settings.
      *
-     * @access public
      * @return bool True if successful, false otherwise.
+     * @todo   Enhance error handling using exceptions
      */          
     public function send()
     {
@@ -809,29 +768,27 @@ class PMF_Mail
         return $sent;
     }
 
-    /*
+    /**
      * Set the "From" address.
      *
-     * @access public
-     * @param string $address User e-mail address.
-     * @param string $name User name (optional).
-     * @return bool True if successful, false otherwise.
+     * @param  string $address User e-mail address.
+     * @param  string $name User name (optional).
+     * @return bool   True if successful, false otherwise.
      */          
     public function setFrom($address, $name = null)
     {
         return $this->_setEmailTo($this->_from, 'From', $address, $name);
     }
 
-    /*
+    /**
      * Set an HTML message providing also a plain text alternative message,
      * if not already set using the $messageAlt property.
      * Besides it is possible to put resources as inline attachments
      *
-     * @access public
-     * @param string $html HTML message.
-     * @param bool $sanitize Strip out potentially unsecured HTML tags. Defaults to false.
-     * @param bool $inline Add images as inline attachments. Defaults to false.
-     * @return void.
+     * @param  string $html     HTML message.
+     * @param  bool   $sanitize Strip out potentially unsecured HTML tags. Defaults to false.
+     * @param  bool   $inline   Add images as inline attachments. Defaults to false.
+     * @return void
      */          
     public function setHTMLMessage($message, $sanitize = false, $inline = false)
     {
@@ -876,10 +833,9 @@ class PMF_Mail
         }
     }
 
-    /*
+    /**
      * Set the "Reply-to" address.
      *
-     * @access public
      * @param string $address User e-mail address.
      * @param string $name User name (optional).
      * @return bool True if successful, false otherwise.
@@ -889,24 +845,22 @@ class PMF_Mail
         return $this->_setEmailTo($this->_replyTo, 'Reply-To', $address, $name);
     }
 
-    /*
+    /**
      * Set the "Return-Path" address.
      *
-     * @access public
-     * @param string $address User e-mail address.
-     * @return bool True if successful, false otherwise.
+     * @param  string $address User e-mail address.
+     * @return bool   True if successful, false otherwise.
      */          
-    public function setReturnPath($address, $name = null)
+    public function setReturnPath($address)
     {
         return $this->_setEmailTo($this->_returnPath, 'Return-Path', $address);
     }
 
-    /*
+    /**
      * Set the "Sender" address.
      *
-     * @access public
-     * @param string $address User e-mail address.
-     * @param string $name User name (optional).
+     * @param  string $address User e-mail address.
+     * @param  string $name    User name (optional).
      * @return bool True if successful, false otherwise.
      */          
     public function setSender($address, $name = null)
@@ -914,10 +868,9 @@ class PMF_Mail
         return $this->_setEmailTo($this->_sender, 'Sender', $address, $name);
     }
 
-    /*
+    /**
      * Remove any previous "From" address.
      *
-     * @access public
      * @return bool True if successful, false otherwise.
      */          
     public function unsetFrom()
@@ -927,10 +880,9 @@ class PMF_Mail
         return true;
     }
 
-    /*
+    /**
      * Validate an address as an e-mail address.
      *
-     * @access public
      * @static
      * @param string $address
      * @return bool True if the given address is a valid e-mail address, false otherwise.     
@@ -967,13 +919,12 @@ class PMF_Mail
         return true;
     }
 
-    /*
+    /**
      * Wraps the lines contained into the given message.
      *
-     * @access public
-     * @param string $message Message.
-     * @param string $width Column width. Defaults to 72. 
-     * @param string $cut Cutting a word is allowed. Defaults to false.
+     * @param  string $message Message.
+     * @param  string $width   Column width. Defaults to 72. 
+     * @param  string $cut     Cutting a word is allowed. Defaults to false.
      * @return string The given message, wrapped as requested.
      */          
     public function wrapLines($message, $width = 72, $cut = false)
@@ -986,7 +937,7 @@ class PMF_Mail
         } else {
             $lines = explode($this->eol, $message);
             $wrapped = '';
-            foreach ($lines as $key => $value) {
+            foreach ($lines as $value) {
                 $wrapped .= (empty($wrapped) ? '' : $this->eol);
                 $wrapped .= wordwrap($value, $width, $this->eol, $cut);
             }
