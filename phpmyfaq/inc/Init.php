@@ -8,8 +8,8 @@
  * @author    Stefan Esser <sesser@php.net>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @since     2005-09-24
- * @copyright 2005-2009 phpMyFAQ Team
  * @version   SVN: $Id$
+ * @copyright (c) 2005-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -73,6 +73,9 @@ define('PMF_INCLUDE_DIR', dirname(__FILE__));
 require_once PMF_INCLUDE_DIR.'/data.php';
 require_once PMF_INCLUDE_DIR.'/constants.php';
 require_once PMF_INCLUDE_DIR.'/functions.php';
+// TODO: Linkverifier.php contains both PMF_Linkverifier class and
+//       helper functions => move the fns into the class.
+require_once PMF_INCLUDE_DIR.'/Linkverifier.php';
 
 ///
 // Create a database connection
@@ -198,7 +201,7 @@ class PMF_Init
      * @return  string
      * @access  private
      * @since   2006-12-29
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     * @author  Matteo Scaramuccia <matteo@phpmyfaq.de>
      */
     private static function _basicFilenameClean($filename)
     {
