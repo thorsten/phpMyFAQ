@@ -1,14 +1,14 @@
 <?php
 /**
- * Utilities - Functions and Classes common to the whole phpMyFAQ architecture
+ * Utilities - Functions and Classes common to the whole phpMyFAQ architecture.
  *
- * @package     phpMyFAQ
- * @license     MPL
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @since       2005-11-01
- * @version     SVN: $Id$
- * @copyright   (c) 2005-2009 phpMyFAQ Team
+ * @package   phpMyFAQ
+ * @license   MPL
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @since     2005-11-01
+ * @version   SVN: $Id$
+ * @copyright 2005-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -20,6 +20,12 @@
  * License for the specific language governing rights and limitations
  * under the License.
  */
+
+/**
+ * PHP 6 script encoding
+ *
+ */
+declare(encoding='latin1');
 
 /**#@+
   * HTTP GET Parameters PMF accepted keys definitions
@@ -49,18 +55,55 @@ define('HTTP_PARAMS_GET_TYPE', 'type');
 class PMF_Utils
 {
     /**
-     * Returns a phpMyFAQ date
+     * Get the content at the given URL using an HTTP GET call.
      *
-     * @param  integer $unixTime Unix timestamp
-     * @return string
+     * @access public
+     * @static
+     * @param $url URL of the content.               
+     * @return string Content at the given URL, false otherwise.
      */
-    public static function getPMFDate($unixTime = NULL)
+    public static function getHTTPContent($url)
     {
-        if (!isset($unixTime)) {
-            // localtime
-            $unixTime = $_SERVER['REQUEST_TIME'];
+        // Sanity check
+        if (empty($url)) {
+            return false;
         }
-        return date('YmdHis', $unixTime);
+
+        // Create the HTTP options for the HTTP stream context, see below
+        // User Agent + Method
+        $agent = 'phpMyFAQ on PHP/'.phpversion();
+        // Set phpMyFAQ related data
+        global $PMF_CONF;
+        if (isset($PMF_CONF)) {
+            $agent = 'phpMyFAQ/'.$PMF_CONF['main.currentVersion'];
+        }
+        $opts = array(
+            'header' => 'User-Agent: '.$agent."\r\n",
+            'method' => 'GET'
+        );
+        // HTTP 1.1 Virtual Host
+        $urlParts = @parse_url($url);
+        if (isset($urlParts['host'])) {
+            $opts['header'] = $opts['header'].'Host: '.$urlParts['host']."\r\n";
+        }
+        // Socket timeout
+        if (version_compare(PHP_VERSION, '5.2.1', '<')) {
+            @ini_set('default_socket_timeout', 5);
+        } else {
+            $opts['timeout'] = 5;
+        }
+
+        // Create the HTTP stream context
+        $ctx = stream_context_create(
+            array(
+                'http' => $opts
+            )
+        );
+
+        // Be kind with PHP 6
+        $flags = (version_compare(PHP_VERSION, '6.0.0-dev', '<') ? false : FILE_BINARY);
+
+        return file_get_contents($url, $flags, $ctx);
     }
 
     /**
@@ -74,6 +117,21 @@ class PMF_Utils
         // Windows: 1 Jan 1970 -> 19 Jan 2038.
         // So we will use: 1 Jan 2038 -> 2038-01-01, 00:00:01
         return PMF_Utils::getPMFDate(mktime(0, 0 , 1, 1, 1, 2038));
+    }
+
+    /**
+     * Returns a phpMyFAQ date
+     *
+     * @param  integer $unixTime Unix timestamp
+     * @return string
+     */
+    public static function getPMFDate($unixTime = NULL)
+    {
+        if (!isset($unixTime)) {
+            // localtime
+            $unixTime = $_SERVER['REQUEST_TIME'];
+        }
+        return date('YmdHis', $unixTime);
     }
 
     /**
@@ -147,31 +205,6 @@ class PMF_Utils
     }
 
     /**
-     * Shuffles an associative array without losing key associations
-     *
-     * @param  array $data          Array of data
-     * @return array $shuffled_data Array of shuffled data
-     */
-    public static function shuffleData($data)
-    {
-        $shuffled_data = array();
-
-        if (is_array($data)) {
-            if (count($data) > 1) {
-                $randomized_keys = array_rand($data, count($data));
-
-                foreach($randomized_keys as $current_key) {
-                    $shuffled_data[$current_key] = $data[$current_key];
-                }
-            } else {
-                $shuffled_data = $data;
-            }
-        }
-
-        return $shuffled_data;
-    }
-
-    /**
      * Resolves the PMF markers like e.g. %sitename%.
      *
      * @public
@@ -194,5 +227,30 @@ class PMF_Utils
             array_values($markers),
             $text
         );
+    }
+
+    /**
+     * Shuffles an associative array without losing key associations
+     *
+     * @param  array $data          Array of data
+     * @return array $shuffled_data Array of shuffled data
+     */
+    public static function shuffleData($data)
+    {
+        $shuffled_data = array();
+
+        if (is_array($data)) {
+            if (count($data) > 1) {
+                $randomized_keys = array_rand($data, count($data));
+
+                foreach($randomized_keys as $current_key) {
+                    $shuffled_data[$current_key] = $data[$current_key];
+                }
+            } else {
+                $shuffled_data = $data;
+            }
+        }
+
+        return $shuffled_data;
     }
 }
