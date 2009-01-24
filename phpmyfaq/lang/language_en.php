@@ -2,12 +2,14 @@
 /**
  * The English language file - try to be the best of British and American English
  *
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Matthias Sommerfeld <mso@bluebirdy.de>
- * @author    Henning Schulzrinne <hgs@cs.columbia.edu>
- * @since     2004-02-19
- * @version   SVN: $Id$
- * @copyright 2004-2009 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage i18n
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     Matthias Sommerfeld <mso@bluebirdy.de>
+ * @author     Henning Schulzrinne <hgs@cs.columbia.edu>
+ * @since      2004-02-19
+ * @version    SVN: $Id$
+ * @copyright  2004-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -889,7 +891,7 @@ $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ Information';
 $PMF_LANG['ad_online_info'] = 'Online version check';
 $PMF_LANG['ad_system_info'] = 'System Information';
 
-// added 2.5 - 2007-01-25 by Elger
+// added 2.5.0-alpha - 2008-01-25 by Elger
 $PMF_LANG['msgRegisterUser'] = 'Do you want to register?';
 $PMF_LANG["ad_user_loginname"] = 'Login name:';
 $PMF_LANG['errorRegistration'] = 'This field is required!';
@@ -900,3 +902,6 @@ $PMF_LANG['msgRegError'] = 'Following errors occured. Please correct them:';
 $PMF_LANG['successMessage'] = 'Your registration was successful. You will soon receive a confirmation mail with your login data!';
 $PMF_LANG['msgRegThankYou'] = 'Thank you for your registration';
 $PMF_LANG['emailRegSubject'] = '[%sitename%] Registration: new user';
+
+// added 2.5.0-alpha2 - 2009-01-24 by Thorsten
+$PMF_LANG['msgMostPopularSearches'] = 'The most popular searches are:';
