@@ -5,15 +5,16 @@
  * This script tests the complete environment, writes the database connection
  * parameters into the file data.php and the configuration into the database.
  *
- * @package     phpMyFAQ
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Tom Rochestr <tom.rochester@gmail.com>
- * @author      Johannes Schlueter <johannes@php.net>
- * @author      Uwe Pries <uwe.pries@digartis.de>
- * @author      Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @since       2002-08-20
- * @copyright   (c) 2002-2009 phpMyFAQ Team
- * @version     SVN: $Id$
+ * @package    phpMyFAQ
+ * @subpackage Installation
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     Tom Rochestr <tom.rochester@gmail.com>
+ * @author     Johannes Schlueter <johannes@php.net>
+ * @author     Uwe Pries <uwe.pries@digartis.de>
+ * @author     Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @since      2002-08-20
+ * @copyright  2002-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -36,8 +37,7 @@ require_once PMF_ROOT_DIR.'/inc/constants.php';
 require_once PMF_ROOT_DIR.'/inc/functions.php';
 require_once PMF_ROOT_DIR.'/install/questionnaire.php';
 
-$query  = array();
-$uninst = array();
+$query = $uninst = array();
 
 // permission levels
 $permLevels = array(
@@ -133,7 +133,7 @@ function db_uninstall()
  */
 function HTMLFooter()
 {
-    print '<p class="center">'.COPYRIGHT.'</p></body></html>';
+    printf('<p class="center">%s</p></body></html>', COPYRIGHT);
 }
 
 /**

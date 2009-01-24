@@ -1,13 +1,14 @@
 <?php
 /**
- * $Id: config.sql.php,v 1.43 2007-05-12 12:15:21 thorstenr Exp $
- *
  * INSERT instruction for configuration
  *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since       2006-07-02
- * @copyright   (c) 2006-2007 phpMyFAQ Team
- *
+ * @package    phpMyFAQ
+ * @subpackage Installation
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since      2006-07-02
+ * @copyright  2006-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
+ * 
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -43,6 +44,7 @@ $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.referenceURL', '')
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.send2friendText', '')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.titleFAQ', 'phpMyFAQ Codename Pandora')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.urlValidateInterval', '86400')";
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.enableWysiwygEditor', 'true')";
 
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('records.defaultActivation', 'false')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('records.defaultAllowComments', 'false')";

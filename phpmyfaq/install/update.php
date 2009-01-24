@@ -2,13 +2,14 @@
 /**
  * Main update script
  *
- * @package     phpMyFAQ 
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Thomas Melchinger <t.melchinger@uni.de>
- * @author      Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @since       2002-01-10
- * @copyright   2002-2009 phpMyFAQ Team
- * @version     SVN: $Id$
+ * @package    phpMyFAQ 
+ * @subpackage Installation
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     Thomas Melchinger <t.melchinger@uni.de>
+ * @author     Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @since      2002-01-10
+ * @copyright  2002-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -1257,6 +1258,7 @@ if ($step == 5) {
                     searchterm VARCHAR(255) NOT NULL ,
                     searchdate TIMESTAMP,
                     PRIMARY KEY (id, lang))";
+        $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.enableWysiwygEditor', 'true')";
     }
 
     // Perform the queries for updating/migrating the database from 2.x
