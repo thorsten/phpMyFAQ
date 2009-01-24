@@ -73,7 +73,7 @@ label { display: block; }
 #topten, #latest, #tagcloud, #allcategoryarticles { margin-bottom: 1em; }
 #topten h3, #latest h3, #tagcloud h3, #allcategoryarticles h3 { font-size: 135%; margin-bottom: 5px; padding: 4px 4px 2px 4px; -moz-border-radius: 5px 5px 5px 5px; border-radius: 5px 5px 5px 5px; }
 #topten img, #latest img { float: left; margin-top: -16px; }
-#topten ol, #latest ol { margin-left: 15px; list-style-type: decimal; }
+#topten ol, #latest ol { margin-right: 15px; list-style-type: decimal; }
 #topten li, #latest li { list-style-type: decimal; }
 #tagcloud .relevance1 { font-size: 80%; }
 #tagcloud .relevance2 { font-size: 100%; }
