@@ -13,6 +13,7 @@ Changes since 2.5.0-alpha:
 - dropped support for MySQL 4.0 and MaxDB (Thorsten)
 - dropped support for XML-RPC (Thorsten)
 - improved performance (Thorsten)
+- added Mail sub system (Matteo)
 - added enable/disable WYSIWYG Editor flag (Thorsten)
 - added most popular searches list (Thorsten)
 
@@ -29,6 +30,7 @@ Version 2.5.0-alpha2 - 2009-
 - added ability to copy and duplicate FAQ entries (Thorsten)
 - added support for blocks in template engine (Jan Mergler)
 - added public user registration (Elger Thiele)
+- added Mail sub system (Matteo)
 - added enable/disable WYSIWYG Editor flag (Thorsten)
 - added most popular searches list (Thorsten)
 - improved user administration frontend (Sarah Hermann)
