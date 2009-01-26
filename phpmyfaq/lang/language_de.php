@@ -1,14 +1,15 @@
 <?php
 /**
- * $Id: language_de.php,v 1.85 2008-06-12 07:05:50 thorstenr Exp $
- *
  * German language file
  *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      A. Neufang <B_A_F_F@gmx.de>
- * @author      René-Roger Ziesack <rr-phpmyfaq.de@inf99.de>
- * @since       2004-02-19
- * @copyright   (c) 2004-2007 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage Translation
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     A. Neufang <B_A_F_F@gmx.de>
+ * @author     René-Roger Ziesack <rr-phpmyfaq.de@inf99.de>
+ * @since      2004-02-19
+ * @copyright  2004-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -879,3 +880,19 @@ $PMF_LANG['msgTagSearch'] = 'Einträge mit gleichen Tags';
 $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ Information';
 $PMF_LANG['ad_online_info'] = 'Online Versionsüberprüfung';
 $PMF_LANG['ad_system_info'] = 'System Information';
+
+// added 2.5.0-alpha - 2008-01-25 by Elger
+$PMF_LANG['msgRegisterUser'] = 'Möchten Sie sich anmelden?';
+$PMF_LANG["ad_user_loginname"] = 'Benutzername:';
+$PMF_LANG['errorRegistration'] = 'Dieses Feld muss ausgefüllt sein!';
+$PMF_LANG['submitRegister'] = 'Anmelden';
+$PMF_LANG['msgUserData'] = 'Notwendige Benutzerinformationen für die Anmeldung';
+$PMF_LANG['captchaError'] = 'Bitte geben Sie die korrekten CAPTCHA Daten ein!';
+$PMF_LANG['msgRegError'] = 'Bitte korrigieren Sie die folgenden Fehler:';
+$PMF_LANG['successMessage'] = 'Die Anmeldung war erfolgreich. Sie erhalten in Kürze eine E-Mail mit ihren Daten!';
+$PMF_LANG['msgRegThankYou'] = 'Danke für die Anmeldung';
+$PMF_LANG['emailRegSubject'] = '[%sitename%] Anmeldung: Neuer Benutzer';
+
+// added 2.5.0-alpha2 - 2009-01-24 by Thorsten
+$PMF_LANG['msgMostPopularSearches'] = 'Die beliebtesten Suchbegriffe sind:';
+$LANG_CONF['main.enableWysiwygEditor'] = array(0 => "checkbox", 1 => "Aktivierung des WYSIWYG Editors (Standard: aktiv)");
