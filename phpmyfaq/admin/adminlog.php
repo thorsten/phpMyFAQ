@@ -2,11 +2,12 @@
 /**
  * Overview of actions in the admin section
  *
- * @package   phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since     2003-02-23
- * @copyright 2003-2008 phpMyFAQ Team
- * @version   SVN: $Id: adminlog.php,v 1.17 2008-01-20 16:18:34 thorstenr Exp $
+ * @package    phpMyFAQ
+ * @subpackage Administration
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since      2003-02-23
+ * @copyright  2003-2009 phpMyFAQ Team
+ * @version    SVN: $Id: adminlog.php,v 1.17 2008-01-20 16:18:34 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -30,26 +31,26 @@ $logging = new PMF_Logging($db);
 
 if ($permission['adminlog'] && 'adminlog' == $_action) {
 
-    //
-    // Show the adminlog
-    //
-
     $perpage = 15;
-
-    if (!isset($_REQUEST["pages"])) {
-        $pages = round(( $logging->getNumberOfEntries() + ($perpage / 3)) / $perpage, 0);
-    } else {
-        $pages = (int)$_REQUEST["pages"];
+    $pages   = input_filter(INPUT_GET, 'pages', FILTER_VALIDATE_INT);
+    $page    = input_filter(INPUT_GET, 'page' , FILTER_VALIDATE_INT);
+    
+    if (is_null($pages)) {
+        $pages = round(($logging->getNumberOfEntries() + ($perpage / 3)) / $perpage, 0);
+    }
+    
+    if (is_null($page)) {
+        $page = 1;
     }
 
-    if (!isset($_REQUEST["page"])) {
+    if (!isset($_GET["page"])) {
         $page = 1;
     } else {
-        $page = (int)$_REQUEST["page"];
+        $page = (int)$_GET["page"];
     }
 
     $start = ($page - 1) * $perpage;
-    $ende = $start + $perpage;
+    $ende  = $start + $perpage;
 
     $PageSpan = PageSpan("<a href=\"?action=adminlog&amp;pages=".$pages."&amp;page=<NUM>\">", 1, $pages, $page);
 
@@ -72,8 +73,7 @@ if ($permission['adminlog'] && 'adminlog' == $_action) {
     </tfoot>
     <tbody>
 <?php
-    $counter = 0;
-    $displayedCounter = 0;
+    $counter = $displayedCounter = 0;
 
     foreach ($logging_data as $logging_id => $logging_value) {
 
@@ -121,10 +121,6 @@ if ($permission['adminlog'] && 'adminlog' == $_action) {
     printf ('<p><a href="?action=deleteadminlog">%s</a></p>', $PMF_LANG['ad_adminlog_del_older_30d']);
 
 } elseif ($permission['adminlog'] && 'deleteadminlog' == $_action) {
-
-    //
-    // Delete logs older than 30 days
-    //
 
     if ($logging->delete()) {
         printf('<p>%s</p>', $PMF_LANG['ad_adminlog_delete_success']);
