@@ -2,10 +2,13 @@
 /**
  * AJAX: Lists the user auto completion
  *
- * @package     phpMyFAQ
- * @author      Sarah Hermann <sayh@gmx.de>
- * @copyright   2008-2009 phpMyFAQ Team
- * @version     SVN: $Id$
+ * @todo Switch code and logic to jQuery and PHP JSON extension
+ * 
+ * @package    phpMyFAQ
+ * @subpackage Administration Ajax
+ * @author     Sarah Hermann <sayh@gmx.de>
+ * @copyright  2008-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in

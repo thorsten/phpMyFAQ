@@ -2,6 +2,8 @@
 /**
  * AJAX: lists all registered users
  *
+ * @todo Switch code and logic to jQuery and PHP JSON extension
+ * 
  * @package     phpMyFAQ
  * @author      Lars Tiedemann <larstiedemann@yahoo.de>
  * @since       2005-12-15

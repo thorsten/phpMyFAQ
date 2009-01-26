@@ -2,6 +2,8 @@
 /**
  * AJAX: lists the complete configuration items
  * 
+ * @todo Switch code and logic to jQuery and PHP JSON extension
+ * 
  * @package    phpMyFAQ
  * @subpackage Administration
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>

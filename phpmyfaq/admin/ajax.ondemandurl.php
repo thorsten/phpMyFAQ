@@ -1,31 +1,33 @@
 <?php
 /**
-* $Id: ajax.ondemandurl.php,v 1.21 2007-03-29 18:47:40 thorstenr Exp $
-*
-* AJAX: onDemandURL
-*
-* Usage:
-*   index.php?action=ajax&ajax=onDemandURL&id=<id>&lang=<lang>[&lookup=1]
-*
-* Performs link verification at demand of the user.
-*
-* @author           Minoru TODA <todam@netjapan.co.jp>
-* @since            2005-09-30
-* @copyright        (c) 2005-2007 NetJapan, Inc.
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*
-* The Initial Developer of the Original Code is released for external use
-* with permission from NetJapan, Inc. IT Administration Group.
-*/
+ * AJAX: onDemandURL
+ *
+ * @todo Switch code and logic to jQuery and PHP JSON extension
+ * 
+ * Usage:
+ *   index.php?action=ajax&ajax=onDemandURL&id=<id>&lang=<lang>[&lookup=1]
+ *
+ * Performs link verification at demand of the user.
+ *
+ * @package    phpMyFAQ
+ * @subpackage Administration Ajax
+ * @author     Minoru TODA <todam@netjapan.co.jp>
+ * @since      2005-09-30
+ * @copyright  2005-2009 NetJapan, Inc.
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ *
+ * The Initial Developer of the Original Code is released for external use
+ * with permission from NetJapan, Inc. IT Administration Group.
+ */
 
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
