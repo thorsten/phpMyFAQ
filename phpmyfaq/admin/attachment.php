@@ -2,11 +2,12 @@
 /**
  * Select an attachment and save it or create the SQL backup files
  *
- * @package     phpMyFAQ
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since       2002-09-17
- * @copyright   (c) 2002-2009 phpMyFAQ
- * @version     SVN: $Id$ 
+ * @package    phpMyFAQ
+ * @subpackage Administration
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since      2002-09-17
+ * @copyright  2002-2009 phpMyFAQ
+ * @version    SVN: $Id$ 
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -34,25 +35,30 @@ PMF_Init::cleanRequest();
 session_name(PMF_COOKIE_NAME_AUTH.trim($faqconfig->get('main.phpMyFAQToken')));
 session_start();
 
-if (isset($_REQUEST["action"]) && ($_REQUEST["action"] == "sicherdaten" || $_REQUEST["action"] == "sicherlog")) {
-    Header("Content-Type: application/octet-stream");
-    if ($_REQUEST["action"] == "sicherdaten") {
-        Header("Content-Disposition: attachment; filename=\"phpmyfaq-data.".date("Y-m-d-H-i-s").".sql\"");
-    } elseif ($_REQUEST["action"] == "sicherlog") {
-        Header("Content-Disposition: attachment; filename=\"phpmyfaq-logs.".date("Y-m-d-H-i-s").".sql\"");
+$currentAction = filter_input(INPUT_GET,  'action', FILTER_SANITIZE_STRING);
+$currentSave   = filter_input(INPUT_POST, 'save',   FILTER_SANITIZE_STRING);
+
+if ($currentAction == 'savedcontent' || $currentAction == 'savedlogs') {
+    header('Content-Type: application/octet-stream');
+    switch($currentAction) {
+    case 'savedcontent':
+        header('Content-Disposition: attachment; filename="phpmyfaq-data.'.date("Y-m-d-H-i-s").'.sql');
+        break;
+    case 'savedlogs':
+        header('Content-Disposition: attachment; filename="phpmyfaq-logs.'.date("Y-m-d-H-i-s").'.sql');
+        break;
     }
-    Header("Pragma: no-cache");
+    header('Pragma: no-cache');
 }
 
-// get language (default: english)
-$pmf = new PMF_Init();
-$LANGCODE = $pmf->setLanguage((isset($PMF_CONF['main.languageDetection']) ? true : false), $PMF_CONF['main.language']);
-// Preload English strings
-require_once(PMF_ROOT_DIR.'/lang/language_en.php');
+
+$pmf      = new PMF_Init();
+$LANGCODE = $pmf->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
+
+require_once PMF_ROOT_DIR . '/lang/language_en.php';
 
 if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE)) {
-    // Overwrite English strings with the ones we have in the current language
-    require_once(PMF_ROOT_DIR.'/lang/language_'.$LANGCODE.'.php');
+    require_once PMF_ROOT_DIR . '/lang/language_'.$LANGCODE.'.php';
 } else {
     $LANGCODE = 'en';
 }
@@ -86,12 +92,12 @@ if ($auth === true) {
     }
 }
 
-if (!isset($_REQUEST["action"]) || isset($_REQUEST["save"])) {
+if (is_null($currentAction) || !is_null($currentSave)) {
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php print $PMF_LANG["metaLanguage"]; ?>" lang="<?php print $PMF_LANG["metaLanguage"]; ?>">
 <head>
-    <title><?php print PMF_htmlentities($PMF_CONF['main.titleFAQ'], ENT_QUOTES, $PMF_LANG['metaCharset']); ?> - powered by phpMyFAQ</title>
+    <title><?php print PMF_htmlentities($faqconfig->get('main.titleFAQ'), ENT_QUOTES, $PMF_LANG['metaCharset']); ?> - powered by phpMyFAQ</title>
     <meta name="copyright" content="(c) 2001-2009 phpMyFAQ Team" />
     <meta http-equiv="Content-Type" content="text/html; charset=<?php print $PMF_LANG["metaCharset"]; ?>" />
 
@@ -107,30 +113,29 @@ if (!isset($_REQUEST["action"]) || isset($_REQUEST["save"])) {
 <body>
 <?php
 }
-if (!isset($_REQUEST["action"]) && $auth && $permission["addatt"]) {
+if (is_null($currentAction) && $auth && $permission["addatt"]) {
 ?>
-<form action="<?php print $_SERVER["PHP_SELF"]; ?>" enctype="multipart/form-data" method="post">
-<fieldset>
-<legend><?php print $PMF_LANG["ad_att_addto"]." ".$PMF_LANG["ad_att_addto_2"]; ?></legend>
-<input type="hidden" name="action" value="save" />
-<input type="hidden" name="uin" value="<?php print $_REQUEST["uin"]; ?>" />
-<input type="hidden" name="MAX_FILE_SIZE" value="<?php print $faqconfig->get('main.maxAttachmentSize'); ?>" />
-<input type="hidden" name="id" value="<?php print $_REQUEST["id"]; ?>" />
-<input type="hidden" name="save" value="TRUE" />
-<?php print $PMF_LANG["ad_att_att"]; ?> <input name="userfile" type="file" />
-<input class="submit" type="submit" value="<?php print $PMF_LANG["ad_att_butt"]; ?>" />
-</fieldset>
-</form>
+    <form action="<?php print $_SERVER["PHP_SELF"]; ?>" enctype="multipart/form-data" method="post">
+    <fieldset>
+    <legend><?php print $PMF_LANG["ad_att_addto"]." ".$PMF_LANG["ad_att_addto_2"]; ?></legend>
+        <input type="hidden" name="action" value="save" />
+        <input type="hidden" name="MAX_FILE_SIZE" value="<?php print $faqconfig->get('main.maxAttachmentSize'); ?>" />
+        <input type="hidden" name="id" value="<?php print filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT); ?>" />
+        <input type="hidden" name="save" value="TRUE" />
+        <?php print $PMF_LANG["ad_att_att"]; ?> <input name="userfile" type="file" />
+        <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_att_butt"]; ?>" />
+    </fieldset>
+    </form>
 <?php
 }
 
-if (isset($_REQUEST["action"]) && $auth && !$permission["addatt"]) {
+if (!is_null($currentAction) && $auth && !$permission["addatt"]) {
     print $PMF_LANG["err_NotAuth"];
     die();
 }
 
-if (isset($_REQUEST["save"]) && $_REQUEST["save"] == TRUE && $auth && $permission["addatt"]) {
-    $_REQUEST["id"] = (int)$_REQUEST["id"];
+if (!is_null($currentSave) && $currentSave == true && $auth && $permission["addatt"]) {
+    $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
 ?>
 <p><strong><?php print $PMF_LANG["ad_att_addto"]." ".$PMF_LANG["ad_att_addto_2"]; ?></strong></p>
 <?php
@@ -138,10 +143,10 @@ if (isset($_REQUEST["save"]) && $_REQUEST["save"] == TRUE && $auth && $permissio
         if (!is_dir(PMF_ROOT_DIR."/attachments/")) {
             mkdir(PMF_ROOT_DIR."/attachments/", 0777);
         }
-        if (!is_dir(PMF_ROOT_DIR."/attachments/".$_REQUEST["id"])) {
-            mkdir(PMF_ROOT_DIR."/attachments/".$_REQUEST["id"], 0777);
+        if (!is_dir(PMF_ROOT_DIR."/attachments/".$id)) {
+            mkdir(PMF_ROOT_DIR."/attachments/".$id, 0777);
         }
-        if (@move_uploaded_file($_FILES["userfile"]["tmp_name"], PMF_ROOT_DIR."/attachments/".$_REQUEST["id"]."/".$_FILES["userfile"]["name"])) {
+        if (@move_uploaded_file($_FILES["userfile"]["tmp_name"], PMF_ROOT_DIR."/attachments/".$id."/".$_FILES["userfile"]["name"])) {
             chmod (PMF_ROOT_DIR."/attachments/".$_REQUEST["id"]."/".$_FILES["userfile"]["name"], 0644);
             print "<p>".$PMF_LANG["ad_att_suc"]."</p>";
         }
@@ -153,12 +158,12 @@ if (isset($_REQUEST["save"]) && $_REQUEST["save"] == TRUE && $auth && $permissio
     }
     print "<p align=\"center\"><a href=\"javascript:window.close()\">".$PMF_LANG["ad_att_close"]."</a></p>";
 }
-if (isset($_REQUEST["save"]) && $_REQUEST["save"] == TRUE && $auth && !$permission["addatt"]) {
+if (!is_null($currentSave) && $currentSave == true && $auth && !$permission["addatt"]) {
     print $PMF_LANG["err_NotAuth"];
     die();
 }
 
-if (isset($_GET['action']) && ('sicherdaten' == $_GET['action']) && $auth && $permission['backup']) {
+if (!is_null($currentAction) && ('savedcontent' == $currentAction) && $auth && $permission['backup']) {
     // Get all table names
     $db->getTableNames(SQLPREFIX);
     $tablenames = '';
@@ -175,12 +180,12 @@ if (isset($_GET['action']) && ('sicherdaten' == $_GET['action']) && $auth && $pe
        print implode("\r\n", $text);
        $text = build_insert("SELECT * FROM ".$table, $table);
     }
-} elseif (isset($_GET['action']) && ('sicherdaten' == $_GET['action']) && $auth && !$permission['backup']) {
+} elseif (!is_null($currentAction) && ('savedcontent' == $currentAction) && $auth && !$permission['backup']) {
     print $PMF_LANG['err_NotAuth'];
     die();
 }
 
-if (isset($_GET['action']) && ('sicherlog' == $_GET['action']) && $auth && $permission['backup']) {
+if (!is_null($currentAction) && ('savedlogs' == $currentAction) && $auth && $permission['backup']) {
     // Get all table names
     $db->getTableNames(SQLPREFIX);
     $tablenames = '';
@@ -200,7 +205,7 @@ if (isset($_GET['action']) && ('sicherlog' == $_GET['action']) && $auth && $perm
             $text = build_insert("SELECT * FROM ".$table, $table);
         }
     }
-} elseif (isset($_GET['action']) && ('sicherlog' == $_GET['action']) && $auth && !$permission['backup']) {
+} elseif (!is_null($currentAction) && ('savedlogs' == $currentAction) && $auth && !$permission['backup']) {
     print $PMF_LANG['err_NotAuth'];
     die();
 }
@@ -209,7 +214,7 @@ if (DEBUG) {
     print "\n\n-- Debug information:\n<p>".$db->sqllog()."</p>";
 }
 
-if (isset($_GET['action']) && $_GET['action'] != 'sicherdaten' && $_GET['action'] != 'sicherlog') {
+if (!is_null($currentSave) && $currentAction != 'savedcontent' && $currentAction != 'savedlogs') {
     print "</body></html>";
 }
 
