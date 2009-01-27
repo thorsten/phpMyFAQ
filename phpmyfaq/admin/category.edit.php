@@ -1,12 +1,13 @@
 <?php
 /**
- * $Id: category.edit.php,v 1.23 2007-04-20 10:00:22 thorstenr Exp $
- *
  * Edits a category
  *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since       2003-03-10
- * @copyright   (c) 2003-2007 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage Administration
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since      2003-03-10
+ * @copyright  2003-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -26,25 +27,29 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 
 if ($permission['editcateg']) {
 
-    $id = (int)$_GET['cat'];
-    $category = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
-    $categories = $category->getAllCategories();
+    $id = filter_input(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
+    if (!$id) {
+        $id = 0;
+    }
+    
+    $category        = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
+    $categories      = $category->getAllCategories();
     $user_permission = $category->getPermissions('user', array($id));
 
     if ($user_permission[0] == -1) {
-        $all_users = true;
+        $all_users        = true;
         $restricted_users = false;
     } else {
-        $all_users = false;
+        $all_users        = false;
         $restricted_users = true;
     }
 
     $group_permission = $category->getPermissions('group', array($id));
     if ($group_permission[0] == -1) {
-        $all_groups = true;
+        $all_groups        = true;
         $restricted_groups = false;
     } else {
-        $all_groups = false;
+        $all_groups        = false;
         $restricted_groups = true;
     }
 
