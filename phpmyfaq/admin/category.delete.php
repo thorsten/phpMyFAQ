@@ -1,12 +1,13 @@
 <?php
 /**
- * $Id: category.delete.php,v 1.14 2008-06-05 05:59:34 thorstenr Exp $
- *
  * Deletes a category
  *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since       2003-12-20
- * @copyright   (c) 2003-2007 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage Administration
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since      2003-12-20
+ * @copyright  2003-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -26,9 +27,13 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 
 print "<h2>".$PMF_LANG['ad_menu_categ_edit']."</h2>\n";
 if ($permission['delcateg']) {
-    $category = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
+    $category   = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
     $categories = $category->getAllCategories();
-    $id = $_GET['cat'];
+    $id         = filter_input(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
+
+    if (!$id) {
+        $id = 0;
+    }
 ?>
 	<form action="<?php print $_SERVER['PHP_SELF']; ?>" method="post">
     <fieldset>
