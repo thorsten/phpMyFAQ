@@ -2,11 +2,12 @@
 /**
  * The import function to import the phpMyFAQ backups
  *
- * @package     phpMyFAQ 
- * @author      Thorsten Rinne <thorsten@rinne.info>
- * @since       2003-02-24
- * @copyright   (c) 2003-2009 phpMyFAQ Team
- * @version     SVN: $Id$ 
+ * @package    phpMyFAQ 
+ * @subpackage Administration
+ * @author     Thorsten Rinne <thorsten@rinne.info>
+ * @since      2003-02-24
+ * @copyright  2003-2009 phpMyFAQ Team
+ * @version    SVN: $Id$ 
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -28,9 +29,8 @@ if ($permission["restore"]) {
     <h2><?php print $PMF_LANG["ad_csv_rest"]; ?></h2>
 <?php
     if (isset($_FILES["userfile"]["type"]) && ($_FILES["userfile"]["type"] == "application/octet-stream" || $_FILES["userfile"]["type"] == "text/plain" || $_FILES["userfile"]["type"] == "text/x-sql")) {
-        $ok = 1;
-        $fp = fopen($_FILES["userfile"]["tmp_name"], "r");
-        $dat = fgets($fp, 65536);
+        $ok  = 1;
+        $dat = file_get_contents($_FILES['userfile']['tmp_name']);
 
         if (substr($dat, 0, 9) != '-- pmf2.5') {
             print $PMF_LANG["ad_csv_no"];
@@ -47,7 +47,7 @@ if ($permission["restore"]) {
 
         if ($ok == 1) {
             $table_prefix = '';
-            print "<p>".$PMF_LANG['ad_csv_prepare']."</p>\n";
+            printf("<p>%s</p>\n", $PMF_LANG['ad_csv_prepare']);;
             while (($dat = fgets($fp, 65536))) {
                 $dat = trim($dat);
                 $backup_prefix_pattern = "-- pmftableprefix:";
@@ -59,11 +59,10 @@ if ($permission["restore"]) {
                     $mquery[] = trim(substr($dat, 0, -1));
                 }
             }
-            fclose($fp);
 
             $k = 0;
             $g = 0;
-            print "<p>".$PMF_LANG["ad_csv_process"]."</p>\n";
+            printf("<p>%s</p>\n", $PMF_LANG['ad_csv_process']);
             $anz = count($mquery);
             $kg = "";
             for ($i = 0; $i < $anz; $i++) {
