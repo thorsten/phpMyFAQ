@@ -1,12 +1,13 @@
 <?php
 /**
- * $Id: category.cut.php,v 1.14 2007-04-12 20:42:21 thorstenr Exp $
- *
  * Cuts out a category
  *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since       2003-12-25
- * @copyright   (c) 2003-2007 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage Administration
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since      2003-12-25
+ * @copyright  2003-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -27,9 +28,14 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 if ($permission["editcateg"]) {
     $category = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
     $category->buildTree();
-    $id = (int)$_GET['cat'];
+    
+    $id        = filter_input(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
     $parent_id = $category->categoryName[$id]['parent_id'];
 
+    if (!$id) {
+        $id = 0;
+    }
+    
     $header = sprintf('%s: <em>%s</em>',
         $PMF_LANG['ad_categ_move'],
         $category->categoryName[$id]['name']);
