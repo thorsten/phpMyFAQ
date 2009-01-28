@@ -1,13 +1,14 @@
 <?php
 /**
- * $Id: category.showstructure.php,v 1.7 2007-06-16 13:29:32 thorstenr Exp $
- *
  * build table of all categories in all languages
  *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Rudi Ferrari <bookcrossers@gmx.de>
- * @since       2006-09-18
- * @copyright   (c) 2006-2007 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage Administration
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     Rudi Ferrari <bookcrossers@gmx.de>
+ * @since      2006-09-18
+ * @copyright  2006-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -29,24 +30,23 @@ printf('<h2>%s</h2>', $PMF_LANG['ad_menu_categ_structure']);
 
 if ($permission['editcateg']) {
 
-    $category = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
-    $currentLink = $_SERVER['PHP_SELF'];
+    $category        = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
+    $currentLink     = $_SERVER['PHP_SELF'];
     $actual_language = $languageCodes[strtoupper($LANGCODE)];
-    $all_languages = array();
-    $all_lang = array();
+    $all_languages   = array();
+    $all_lang        = array();
 
     // translate an existing category
     if (isset($_POST['showcat']) && $_POST['showcat'] == 'yes') {
 
-        $parent_id = (int)$_POST['parent_id'];
-
+        $parent_id     = PMF_Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT);
         $category_data = array(
-            'id'            => (int)$_POST['id'],
-            'lang'          => $db->escape_string($_POST['lang']),
-            'parent_id'     => $parent_id,
-            'name'          => $db->escape_string($_POST['name']),
-            'description'   => $db->escape_string($_POST['description']),
-            'user_id'       => (int)$_POST['user_id']);
+            'id'          => PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT),
+            'lang'        => PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING),
+            'parent_id'   => $parent_id,
+            'name'        => PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING),
+            'description' => PMF_Filter::filterInput(INPUT_POST, 'description', FILTER_SANITIZE_STRING),
+            'user_id'     => PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT));
 
         // translate.category only returns non-existent languages to translate too
         if ($category->addCategory($category_data, $parent_id, $category_data['id'])) {

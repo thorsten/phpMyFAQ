@@ -29,11 +29,7 @@ print "<h2>".$PMF_LANG['ad_menu_categ_edit']."</h2>\n";
 if ($permission['delcateg']) {
     $category   = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
     $categories = $category->getAllCategories();
-    $id         = filter_input(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
-
-    if (!$id) {
-        $id = 0;
-    }
+    $id         = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
 ?>
 	<form action="<?php print $_SERVER['PHP_SELF']; ?>" method="post">
     <fieldset>

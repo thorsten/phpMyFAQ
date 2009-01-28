@@ -30,10 +30,7 @@ print "<h2>".$PMF_LANG["ad_categ_new"]."</h2>\n";
 if ($permission["addcateg"]) {
 
     $category  = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
-    $parent_id = filter_input(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
-    if (!$parent_id) {
-        $parent_id = 0;
-    }
+    $parent_id = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
 ?>
     <form action="<?php print $_SERVER['PHP_SELF']; ?>" method="post">
     <fieldset>
@@ -73,7 +70,7 @@ if ($permission["addcateg"]) {
     <label class="left" for="grouppermission"><?php print $PMF_LANG['ad_entry_grouppermission']; ?></label>
     <input type="radio" name="grouppermission" class="active" value="all" checked="checked" /> <?php print $PMF_LANG['ad_entry_all_groups']; ?> 
     <input type="radio" name="grouppermission" class="active" value="restricted" /> <?php print $PMF_LANG['ad_entry_restricted_groups']; ?> 
-    <select name="restricted_groups" size="1"><?php print $user->perm->getAllGroupsOptions(); ?></select><br />
+    <select name="restricted_groups" size="1"><?php print $user->perm->getAllGroupsOptions(1); ?></select><br />
 
 <?php
         }

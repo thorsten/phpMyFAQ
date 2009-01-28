@@ -29,16 +29,11 @@ if ($permission["editcateg"]) {
     $category = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
     $category->buildTree();
     
-    $id        = filter_input(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
+    $id        = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
     $parent_id = $category->categoryName[$id]['parent_id'];
-
-    if (!$id) {
-        $id = 0;
-    }
-    
-    $header = sprintf('%s: <em>%s</em>',
-        $PMF_LANG['ad_categ_move'],
-        $category->categoryName[$id]['name']);
+    $header    = sprintf('%s: <em>%s</em>',
+                    $PMF_LANG['ad_categ_move'],
+                    $category->categoryName[$id]['name']);
 
     printf('<h2>%s</h2>', $header);
 ?>

@@ -2,11 +2,12 @@
 /**
  * Select a category to move
  *
- * @package   phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since     2004-04-29
- * @copyright 2004-2008 phpMyFAQ Team
- * @version   SVN: $Id: category.move.php,v 1.15 2007-03-22 17:51:57 thorstenr Exp $
+ * @package    phpMyFAQ
+ * @subpackage Administration
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since      2004-04-29
+ * @copyright  2004-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -25,9 +26,9 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 }
 
 if ($permission["editcateg"]) {
-    $id = (int)$_GET['cat'];
-    $parent_id = (int)$_GET['parent_id'];
-    $category = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
+    $id         = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
+    $parent_id  = PMF_Filter::filterInput(INPUT_GET, 'parent_id', FILTER_VALIDATE_INT);
+    $category   = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
     $categories = $category->getAllCategories();
     $category->categories = null;
     unset($category->categories);
@@ -50,7 +51,7 @@ if ($permission["editcateg"]) {
 <?php
                     foreach ($category->catTree as $cat) {
                        if ($id != $cat["id"]) {
-                          printf("<option value=\"%s\">%s%s</option>", $cat['id'], $cat['indent'], $cat['name']);
+                          printf("<option value=\"%s\">%s</option>", $cat['id'], $cat['name']);
                        }
                    }
 ?>

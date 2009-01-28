@@ -1,13 +1,14 @@
 <?php
 /**
- * $Id: category.translate.php,v 1.12 2007-03-22 17:51:58 thorstenr Exp $
- *
  * Translates a category
  *
- * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author       Rudi Ferrari <bookcrossers@gmx.de>
- * @since        2006-09-10
- * @copyright    (c) 2006-2007 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage Administration
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     Rudi Ferrari <bookcrossers@gmx.de>
+ * @since      2006-09-10
+ * @copyright  2006-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -28,21 +29,21 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 if ($permission["editcateg"]) {
     $category = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
     $category->getMissingCategories();
-    $id = (int)$_GET["cat"];
+    $id     = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
     $header = sprintf('%s %s: <em>%s</em>',
         $PMF_LANG['ad_categ_trans_1'],
         $PMF_LANG['ad_categ_trans_2'],
         $category->categoryName[$id]['name']);
 
     if (isset($_GET["trlang"])) {
-       $selected_lang = $_GET["trlang"];
-       $action = "showcategory";
-       $showcat = "yes";
+       $selected_lang = PMF_Filter::filterInput(INPUT_POST, 'trlang', FILTER_SANITIZE_STRING);
+       $action        = "showcategory";
+       $showcat       = "yes";
     }
     else {
        $selected_lang = $LANGCODE;
-       $action = "updatecategory";
-       $showcat = "no";
+       $action        = "updatecategory";
+       $showcat       = "no";
     }
 
     printf('<h2>%s</h2>', $header);
