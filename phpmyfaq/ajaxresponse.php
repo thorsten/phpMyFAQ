@@ -23,17 +23,16 @@
 // Prepend and start the PHP session
 //
 require_once 'inc/Init.php';
-require_once 'inc/Faq.php';
-require_once 'inc/Category.php';
 define('IS_VALID_PHPMYFAQ', null);
 PMF_Init::cleanRequest();
 session_name(PMF_COOKIE_NAME_AUTH . trim($faqconfig->get('main.phpMyFAQToken')));
 session_start();
 
-$searchString = '';
+$searchString = PMF_Filter::filterInput(INPUT_POST, 'search', FILTER_SANITIZE_STRIPPED);
+$ajaxLanguage = PMF_Filter::filterInput(INPUT_POST, 'ajaxlanguage', FILTER_SANITIZE_STRING, 'en');
 
-if (isset($_POST['ajaxlanguage']) && PMF_Init::isASupportedLanguage($_POST['ajaxlanguage'])) {
-    $LANGCODE = trim($_POST['ajaxlanguage']);
+if (PMF_Init::isASupportedLanguage($ajaxLanguage)) {
+    $LANGCODE = trim($ajaxLanguage);
     require_once 'lang/language_'.$LANGCODE.'.php';
 } else {
     $LANGCODE = 'en';
@@ -67,9 +66,8 @@ $faq = new PMF_Faq($db, $LANGCODE);
 //
 // Handle the search requests
 //
-if (isset($_POST['search'])) {
-    $searchString = $db->escape_string(trim(strip_tags($_POST['search'])));
-    $result = searchEngine($searchString, '%', false, true, true);
+if (!is_null($searchString)) {
+    $result = searchEngine($db->escape_string($searchString), '%', false, true, true);
     if (strtolower($PMF_LANG['metaCharset']) != 'utf-8') {
         print utf8_encode($result);
     } else {
