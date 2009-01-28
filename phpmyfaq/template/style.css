@@ -39,6 +39,7 @@ form { margin: 0; padding: 0; }
 a img, img { border: 0; }
 pre {	padding: 0.5em; background: #eee; border: 1px solid #ddd; overflow: auto; }
 ul { list-style: square; }
+acronym { border-bottom: 1px dotted #999; }  
 
 /* Structure */
 
