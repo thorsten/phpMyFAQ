@@ -4,9 +4,12 @@
  *
  * The main glossary index file
  *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since       2005-09-15
- * @copyright   (c) 2005-2007 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage Administration
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since      2005-09-15
+ * @copyright  2005-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -32,7 +35,9 @@ if ($permission['addglossary'] || $permission['editglossary'] || $permission['de
     $glossary = new PMF_Glossary($db, $LANGCODE);
 
     if ('saveglossary' == $_action && $permission['addglossary']) {
-        if ($glossary->addGlossaryItem($_POST['item'], $_POST['definition'])) {
+    	$item       = PMF_Filter::filterInput(INPUT_POST, 'item', FILTER_SANITIZE_STRIPPED);
+    	$definition = PMF_Filter::filterInput(INPUT_POST, 'definition', FILTER_SANITIZE_STRIPPED);
+        if ($glossary->addGlossaryItem($item, $definition)) {
             print '<p>' . $PMF_LANG['ad_glossary_save_success'] . '</p>';
         } else {
             print '<p>' . $PMF_LANG['ad_glossary_save_error'];
@@ -42,7 +47,10 @@ if ($permission['addglossary'] || $permission['editglossary'] || $permission['de
     }
 
     if ('updateglossary' == $_action && $permission['editglossary']) {
-        if ($glossary->updateGlossaryItem((int)$_POST['id'], $_POST['item'], $_POST['definition'])) {
+    	$id         = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+        $item       = PMF_Filter::filterInput(INPUT_POST, 'item', FILTER_SANITIZE_STRIPPED);
+        $definition = PMF_Filter::filterInput(INPUT_POST, 'definition', FILTER_SANITIZE_STRIPPED);
+        if ($glossary->updateGlossaryItem($id, $item, $definition)) {
             print '<p>' . $PMF_LANG['ad_glossary_update_success'] . '</p>';
         } else {
             print '<p>' . $PMF_LANG['ad_glossary_update_error'];
@@ -52,7 +60,8 @@ if ($permission['addglossary'] || $permission['editglossary'] || $permission['de
     }
 
     if ('deleteglossary' == $_action && $permission['editglossary']) {
-        if ($glossary->deleteGlossaryItem((int)$_GET['id'])) {
+    	$id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+        if ($glossary->deleteGlossaryItem($id)) {
             print '<p>' . $PMF_LANG['ad_glossary_delete_success'] . '</p>';
         } else {
             print '<p>' . $PMF_LANG['ad_glossary_delete_error'];

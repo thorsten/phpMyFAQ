@@ -1,12 +1,13 @@
 <?php
 /**
- * $Id: glossary.add.php,v 1.11 2007-04-06 11:15:24 thorstenr Exp $
- *
  * Displays a form to add a glossary item
  *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since       2005-09-15
- * @copyright   (c) 2005-2007 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage Administration
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since      2005-09-15
+ * @copyright  2005-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in

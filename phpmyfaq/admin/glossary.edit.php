@@ -1,12 +1,13 @@
 <?php
 /**
- * $Id: glossary.edit.php,v 1.11 2007-04-12 19:09:33 thorstenr Exp $
- *
  * Displays a form to edit an extisting glossary item
  *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since       2005-09-15
- * @copyright   (c) 2005-2007 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage Administration
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since      2005-09-15
+ * @copyright  2005-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -28,10 +29,8 @@ print sprintf('<h2>%s</h2>', $PMF_LANG['ad_menu_glossary']);
 
 if ($permission['editglossary']) {
 
-    $id = (int)$_GET['id'];
-
-    require_once(PMF_ROOT_DIR.'/inc/Glossary.php');
-    $glossary = new PMF_Glossary($db, $LANGCODE);
+    $id           = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+    $glossary     = new PMF_Glossary($db, $LANGCODE);
     $glossaryItem = $glossary->getGlossaryItem($id);
 ?>
 <form action="<?php print $_SERVER['PHP_SELF']; ?>" method="post">
