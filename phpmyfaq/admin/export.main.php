@@ -2,13 +2,14 @@
 /**
  * XML, XML DocBook, XHTML and PDF export - main page
  *
- * @package     phpMyFAQ 
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @author      Peter Beauvain <pbeauvain@web.de>
- * @since       2003-04-17
- * @copyright   (c) 2003-2009 phpMyFAQ Team
- * @version     SVN: $Id$
+ * @package    phpMyFAQ 
+ * @subpackage Administration
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @author     Peter Beauvain <pbeauvain@web.de>
+ * @since      2003-04-17
+ * @copyright  2003-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -25,13 +26,11 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
-// {{{ Includes
+
 require_once PMF_INCLUDE_DIR.'/Export.php';
-// }}}
 ?>
     <h2><?php print($PMF_LANG["ad_menu_export"]); ?></h2>
     <form method="get">
-        <input type="hidden" name="uin" value="<?php isset($uin) ? print($uin) : '' ; ?>" />
         <input type="hidden" name="action" value="exportfile" />
 <?php
 if (!emptyTable(SQLPREFIX."faqdata")) {
@@ -85,4 +84,3 @@ if (!emptyTable(SQLPREFIX."faqdata")) {
 } else {
     print($PMF_LANG["err_noArticles"]);
 }
-?>
