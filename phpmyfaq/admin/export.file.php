@@ -1,42 +1,31 @@
 <?php
 /**
-* $Id: export.file.php,v 1.3 2006-09-19 21:39:39 matteo Exp $
-*
-* XML, XML DocBook, XHTML and PDF export - streamer page
-*
-* @author       Matteo Scaramuccia <matteo@scaramuccia.com>
-* @since        2005-11-02
-* @copyright    (c) 2005-2006 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * XML, XML DocBook, XHTML and PDF export - streamer page
+ *
+ * @package    phpMyFAQ
+ * @subpackage Administration
+ * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @since      2005-11-02
+ * @copyright  2005-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
-// {{{ Includes
-require_once("../inc/Export.php");
-// }}}
-
-// {{{ Variables
-$catid             = 0;
-$content           = "";
-$downwards         = false;
-$inlineDisposition = false;
-$type              = EXPORT_TYPE_NONE;
-// }}}
-
-// {{{ Main
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
-
     exit();
 }
+
+include '../inc/Export.php';
 
 //
 // GET Parameters Syntax:
@@ -46,19 +35,10 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 //       [&catid=NN[&downwards=1]], default: all, downwards
 //
 
-// Collect HTTP GET Parameters:
-if (isset($_REQUEST[HTTP_PARAMS_GET_CATID])) {
-    $catid = $_REQUEST[HTTP_PARAMS_GET_CATID];
-}
-if (isset($_REQUEST[HTTP_PARAMS_GET_CATID]) && isset($_REQUEST[HTTP_PARAMS_GET_DOWNWARDS])) {
-    $downwards = true;
-}
-if (isset($_REQUEST[HTTP_PARAMS_GET_TYPE])) {
-    $type = $_REQUEST[HTTP_PARAMS_GET_TYPE];
-}
-if (isset($_REQUEST[HTTP_PARAMS_GET_DISPOSITION])) {
-    $inlineDisposition = (EXPORT_DISPOSITION_ATTACHMENT != $_REQUEST[HTTP_PARAMS_GET_DISPOSITION]);
-}
+$catid             = PMF_Filter::filterInput(INPUT_GET, HTTP_PARAMS_GET_CATID, FILTER_VALIDATE_INT, 0);
+$downwards         = PMF_Filter::filterInput(INPUT_GET, HTTP_PARAMS_GET_DOWNWARDS, FILTER_VALIDATE_BOOLEAN, false);
+$inlineDisposition = PMF_Filter::filterInput(INPUT_GET, HTTP_PARAMS_GET_DISPOSITION, FILTER_VALIDATE_BOOLEAN, false);
+$type              = PMF_Filter::filterInput(INPUT_GET, HTTP_PARAMS_GET_TYPE, FILTER_SANITIZE_STRING, EXPORT_TYPE_NONE);
 
 // Prepare the file content to be streamed
 switch ($type) {
@@ -88,4 +68,3 @@ if ($inlineDisposition) {
 else {
     $oHttpStreamer->send(HTTP_CONTENT_DISPOSITION_ATTACHMENT);
 }
-// }}}
