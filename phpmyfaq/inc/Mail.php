@@ -219,8 +219,12 @@ class PMF_Mail
 
     /*
      * Default constructor.
+     * Note: any email will be sent from the PMF administrator, use unsetFrom
+     *       before using setFrom.     
      *      
      * @param string $agent Type of agent. Default: built-in.
+     * @see   setFrom     
+     * @see   unsetFrom     
      */     
     function __construct($agent = 'built-in')
     {
@@ -458,6 +462,7 @@ class PMF_Mail
         }
 
         // Subject. Note: it must be RFC 2047 compliant
+        // TODO: wrap mb_encode_mimeheader() to add other content encodings
         $this->headers['Subject'] = PMF_Utils::resolveMarkers($this->subject);
 
         // X-Mailer
