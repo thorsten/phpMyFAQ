@@ -2,13 +2,13 @@
 /**
  * TODO: Short description.
  *
- * @package     phpMyFAQ 
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      David Saez Padros <david@ols.es>
- * @author      Jürgen Kuza <kig@bluewin.ch>
- * @since       2002-09-17
- * @version     SVN: $Id$
- * @copyright   (c) 2002-2009 phpMyFAQ Team
+ * @package   phpMyFAQ 
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    David Saez Padros <david@ols.es>
+ * @author    Jürgen Kuza <kig@bluewin.ch>
+ * @since     2002-09-17
+ * @version   SVN: $Id$
+ * @copyright 2002-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -78,72 +78,70 @@ if (
             $oUser->addDb($db);
             $oUser->getUserById($userId);
 
-            $additional_header = array();
-            $additional_header[] = 'MIME-Version: 1.0';
-            $additional_header[] = 'Content-Type: text/plain; charset='.$PMF_LANG['metaCharset'];
-            if (strtolower($PMF_LANG['metaCharset']) == 'utf-8') {
-                $additional_header[] = 'Content-Transfer-Encoding: 8bit';
-            }
-            $additional_header[] = 'From: "'.$questionData['ask_username'].'" <'.$questionData['ask_usermail'].'>';
+            $mail = new PMF_Mail();
+            $mail->unsetFrom();
+            $mail->setFrom($questionData['ask_usermail'], $questionData['ask_username']);
+            $mail->addTo($faqconfig->get('main.administrationMail'));
             // Let the category owner get a copy of the message
-            if ($IDN->encode($faqconfig->get('main.administrationMail')) != $oUser->getUserData('email')) {
-                $additional_header[] = "Cc: ".$oUser->getUserData('email')."\n";
+            if ($faqconfig->get('main.administrationMail') != $oUser->getUserData('email')) {
+                $mail->addCc($oUser->getUserData('email'));
             }
-            $body = $questionMail;
-            $body = str_replace(array("\r\n", "\r", "\n"), "\n", $body);
-            if (strstr(PHP_OS, 'WIN') !== NULL) {
-                // if windows, cr must "\r\n". if other must "\n".
-                $body = str_replace("\n", "\r\n", $body);
-            }
-            if (ini_get('safe_mode')) {
-                mail($IDN->encode($faqconfig->get('main.administrationMail')),
-                    $PMF_CONF['main.titleFAQ'],
-                    $body,
-                    implode("\r\n", $additional_header));
-            } else {
-                mail($IDN->encode($faqconfig->get('main.administrationMail')),
-                    $PMF_CONF['main.titleFAQ'],
-                    $body,
-                    implode("\r\n", $additional_header),
-                    '-f'.$questionData['ask_usermail']);
-            }
+            $mail->subject = '%sitename%';
+            $mail->message = $questionMail;
+            $result = $mail->send();
+            unset($mail);
 
-            $tpl->processTemplate ("writeContent", array(
-                    "msgQuestion" => $PMF_LANG["msgQuestion"],
-                    "Message" => $PMF_LANG["msgAskThx4Mail"]
-                    ));
+            $tpl->processTemplate(
+                'writeContent',
+                array(
+                    'msgQuestion'   => $PMF_LANG['msgQuestion'],
+                    'Message'       => $PMF_LANG['msgAskThx4Mail']
+                )
+            );
         } else {
-            $tpl->processTemplate ("writeContent", array(
-                    "msgQuestion" => $PMF_LANG["msgQuestion"],
-                    "Message" => $PMF_LANG["err_noMailAdress"]
-                    ));
+            $tpl->processTemplate(
+                'writeContent',
+                array(
+                    'msgQuestion'   => $PMF_LANG['msgQuestion'],
+                    'Message'       => $PMF_LANG['err_noMailAdress']
+                )
+            );
         }
     } else {
         $tpl->templates['writeContent'] = $tpl->readTemplate('template/asksearch.tpl');
-        $tpl->processTemplate ('writeContent', array(
-            'msgQuestion' => $PMF_LANG["msgQuestion"],
-            'printResult' => $printResult,
-            'msgAskYourQuestion' => $PMF_LANG['msgAskYourQuestion'],
-            'msgContent' => $questionData['ask_content'],
-            'postUsername' => urlencode($questionData['ask_username']),
-            'postUsermail' => urlencode($questionData['ask_usermail']),
-            'postRubrik' => urlencode($questionData['ask_category']),
-            'postContent' => urlencode($questionData['ask_content']),
-            'writeSendAdress' => $_SERVER['PHP_SELF'].'?'.$sids.'action=savequestion',
-            ));
+        $tpl->processTemplate (
+            'writeContent',
+            array(
+                'msgQuestion'           => $PMF_LANG['msgQuestion'],
+                'printResult'           => $printResult,
+                'msgAskYourQuestion'    => $PMF_LANG['msgAskYourQuestion'],
+                'msgContent'            => $questionData['ask_content'],
+                'postUsername'          => urlencode($questionData['ask_username']),
+                'postUsermail'          => urlencode($questionData['ask_usermail']),
+                'postRubrik'            => urlencode($questionData['ask_category']),
+                'postContent'           => urlencode($questionData['ask_content']),
+                'writeSendAdress'       => $_SERVER['PHP_SELF'].'?'.$sids.'action=savequestion',
+            )
+        );
     }
 } else {
-    if (IPCheck($_SERVER["REMOTE_ADDR"]) == FALSE) {
-        $tpl->processTemplate ("writeContent", array(
-                "msgQuestion" => $PMF_LANG["msgQuestion"],
-                "Message" => $PMF_LANG["err_bannedIP"]
-                ));
+    if (false === IPCheck($_SERVER['REMOTE_ADDR'])) {
+        $tpl->processTemplate(
+            'writeContent',
+            array(
+                'msgQuestion'   => $PMF_LANG['msgQuestion'],
+                'Message'       => $PMF_LANG['err_bannedIP']
+            )
+        );
     } else {
-        $tpl->processTemplate ("writeContent", array(
-                "msgQuestion" => $PMF_LANG["msgQuestion"],
-                "Message" => $PMF_LANG["err_SaveQuestion"]
-                ));
+        $tpl->processTemplate(
+            'writeContent',
+            array(
+                'msgQuestion'   => $PMF_LANG['msgQuestion'],
+                'Message'       => $PMF_LANG['err_SaveQuestion']
+            )
+        );
     }
 }
 
-$tpl->includeTemplate("writeContent", "index");
+$tpl->includeTemplate('writeContent', 'index');

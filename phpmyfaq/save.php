@@ -2,13 +2,13 @@
 /**
  * Saves a user FAQ record and sends an email to the user
  *
- * @package     phpMyFAQ 
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Jürgen Kuza <kig@bluewin.ch>
- * @author      Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @since       2002-09-16
- * @copyright   (c) 2002-2009 phpMyFAQ Team
- * @version     SVN: $Id$ 
+ * @package   phpMyFAQ 
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Jürgen Kuza <kig@bluewin.ch>
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @since     2002-09-16
+ * @version   SVN: $Id$ 
+ * @copyright 2002-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -61,7 +61,7 @@ if (
         $content = $content."<br />".$PMF_LANG["msgInfo"]."<a href=\"http://".substr($contentlink,7)."\" target=\"_blank\">".$contentlink."</a>";
     }
 
-    $userMail = $IDN->encode($db->escape_string($_POST['usermail']));
+    $userMail = $db->escape_string($_POST['usermail']);
     $newData = array(
         'lang'          => ($isTranslation == true ? $newLanguage : $LANGCODE),
         'thema'         => $db->escape_string(safeHTML($_POST['thema'])),
@@ -99,62 +99,62 @@ if (
 
         // Avoid to send multiple emails to the same owner
         if (!isset($sent[$userId])) {
-            // TODO: Move this code to Category.php and let the email contains the faq article both as plain text and as HTML
+            // TODO: Move this code to Category.php
             $oUser = new PMF_User_User();
             $oUser->addDb($db);
             $oUser->getUserById($userId);
             $catOwnerEmail = $oUser->getUserData('email');
 
-            $additional_header = array();
-            $additional_header[] = 'MIME-Version: 1.0';
-            $additional_header[] = 'Content-Type: text/plain; charset='. $PMF_LANG['metaCharset'];
-            if (strtolower($PMF_LANG['metaCharset']) == 'utf-8') {
-                $additional_header[] = 'Content-Transfer-Encoding: 8bit';
-            }
-            $additional_header[] = 'From: '.$userMail;
+            $mail = new PMF_Mail();
+            $mail->unsetFrom();
+            $mail->setFrom($userMail);
+            $mail->addTo($faqconfig->get('main.administrationMail'));
             // Let the category owner get a copy of the message
-            if ($IDN->encode($faqconfig->get('main.administrationMail')) != $catOwnerEmail) {
-                $additional_header[] = "Cc: ".$catOwnerEmail."\n";
+            if ($faqconfig->get('main.administrationMail') != $catOwnerEmail) {
+                $mail->addCc($catOwnerEmail);
             }
-            $subject = $PMF_CONF['main.titleFAQ'];
-            if (function_exists('mb_encode_mimeheader')) {
-                $subject = mb_encode_mimeheader($subject);
-            }
-            $body = html_entity_decode($PMF_LANG['msgMailCheck'])."\n".$PMF_CONF['main.titleFAQ'].": ".PMF_Link::getSystemUri('/index.php').'/admin';
-            if (ini_get('safe_mode')) {
-                mail($IDN->encode($faqconfig->get('main.administrationMail')),
-                $subject,
-                $body,
-                implode("\r\n", $additional_header));
-            } else {
-                mail($IDN->encode($faqconfig->get('main.administrationMail')),
-                $subject, $body,
-                implode("\r\n", $additional_header),
-                "-f$userMail");
-            }
+            $mail->subject = '%sitename%';
+            // TODO: let the email contains the faq article both as plain text and as HTML
+            $mail->message = html_entity_decode(
+                $PMF_LANG['msgMailCheck']) . "\n%sitename%: " .
+                PMF_Link::getSystemUri('/index.php').'/admin';
+            $result = $mail->send();
+            unset($mail);
+
             $sent[$userId] = $catOwnerEmail;
         }
     }
 
-    $tpl->processTemplate ("writeContent", array(
-    "msgNewContentHeader" => $PMF_LANG["msgNewContentHeader"],
-    'Message' => ($isNew ? $PMF_LANG['msgNewContentThanks'] : $PMF_LANG['msgNewTranslationThanks'])
-    ));
+    $tpl->processTemplate(
+        'writeContent',
+        array(
+            'msgNewContentHeader' => $PMF_LANG["msgNewContentHeader"],
+            'Message' => ($isNew ? $PMF_LANG['msgNewContentThanks'] : $PMF_LANG['msgNewTranslationThanks'])
+        )
+    );
 } else {
-    if (IPCheck($_SERVER['REMOTE_ADDR']) == FALSE) {
-        $tpl->processTemplate ("writeContent", array(
-            'msgNewContentHeader'   => $PMF_LANG['msgNewContentHeader'],
-            'Message'               => $PMF_LANG['err_bannedIP']));
+    if (false === IPCheck($_SERVER['REMOTE_ADDR'])) {
+        $tpl->processTemplate(
+            'writeContent',
+            array(
+                'msgNewContentHeader'   => $PMF_LANG['msgNewContentHeader'],
+                'Message'               => $PMF_LANG['err_bannedIP']
+            )
+        );
     } else {
         if (!isset($_POST['faqid'])) {
             $faqsession->userTracking('error_save_entry', 0);
         } else {
             $faqsession->userTracking('error_save_translation_entry', 0);
         }
-        $tpl->processTemplate ('writeContent', array(
-            'msgNewContentHeader'   => $PMF_LANG['msgNewContentHeader'],
-            'Message'               => $PMF_LANG['err_SaveEntries']));
+        $tpl->processTemplate(
+            'writeContent',
+            array(
+                'msgNewContentHeader'   => $PMF_LANG['msgNewContentHeader'],
+                'Message'               => $PMF_LANG['err_SaveEntries']
+            )
+        );
     }
 }
 
-$tpl->includeTemplate("writeContent", "index");
+$tpl->includeTemplate('writeContent', 'index');

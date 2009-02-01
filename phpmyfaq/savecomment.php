@@ -5,8 +5,8 @@
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since     2002-08-29
- * @copyright 2001-2009 phpMyFAQ Team
  * @version   SVN: $Id$
+ * @copyright 2002-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -69,12 +69,13 @@ if (    isset($_POST['user']) && $_POST['user'] != ''
             if ($faq->faqRecord['email'] != '') {
                 $emailTo = $faq->faqRecord['email'];
             }
-            $_faqUrl = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                            $sids,
-                            0,
-                            $faq->faqRecord['id'],
-                            $faq->faqRecord['lang']
-                            );
+            $_faqUrl = sprintf(
+                '%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                $sids,
+                0,
+                $faq->faqRecord['id'],
+                $faq->faqRecord['lang']
+            );
             $oLink = new PMF_Link(PMF_Link::getSystemUri().'?'.$_faqUrl);
             $oLink->itemTitle = $faq->faqRecord['title'];
             $urlToContent = $oLink->toString();
@@ -90,64 +91,61 @@ if (    isset($_POST['user']) && $_POST['user'] != ''
             $oLink->itemTitle = $news['header'];
             $urlToContent = $oLink->toString();
         }
-        $commentMail =  "User: ".$commentData['username'].", mailto:".$commentData['usermail']."\n".
-                        "New comment posted on: ".$urlToContent.
-                        "\n\n".
-                        wordwrap($_POST["comment"], 72);
+        $commentMail =
+            'User: ' . $commentData['username'] . ', mailto:'. $commentData['usermail'] . "\n".
+            'New comment posted on: ' . $urlToContent .
+            "\n\n" .
+            wordwrap($_POST['comment'], 72);
 
-        $additional_header = array();
-        $additional_header[] = 'MIME-Version: 1.0';
-        $additional_header[] = 'Content-Type: text/plain; charset='. $PMF_LANG['metaCharset'];
-        if (strtolower($PMF_LANG['metaCharset']) == 'utf-8') {
-            $additional_header[] = 'Content-Transfer-Encoding: 8bit';
-        }
-        $additional_header[] = 'From: <'.$IDN->encode($commentData['usermail']).'>';
-        // Let the admin always get a copy
+        $mail = new PMF_Mail();
+        $mail->unsetFrom();
+        $mail->setFrom($commentData['usermail']);
+        $mail->addTo($emailTo);
+        // Let the category owner get a copy of the message
         if ($emailTo != $faqconfig->get('main.administrationMail')) {
-            $additional_header[] = 'Cc: <'.$IDN->encode($faqconfig->get('main.administrationMail')).'>';
+            $mail->addCc($faqconfig->get('main.administrationMail'));
         }
-        $body = strip_tags($commentMail);
-        $body = str_replace(array("\r\n", "\r", "\n"), "\n", $body);
-        $body = str_replace(array("\r\n", "\r", "\n"), "\n", $body);
-        if (strstr(PHP_OS, 'WIN') !== NULL) {
-            // if windows, cr must "\r\n". if other must "\n".
-            $body = str_replace("\n", "\r\n", $body);
-        }
-        // Send the email
-        if (ini_get('safe_mode')) {
-            mail($IDN->encode($emailTo), $PMF_CONF['main.titleFAQ'], $body, implode("\r\n", $additional_header));
-        } else {
-            mail($IDN->encode($emailTo), $PMF_CONF['main.titleFAQ'], $body, implode("\r\n", $additional_header), '-f'.$IDN->encode($commentData['usermail']));
-        }
+        $mail->subject = '%sitename%';
+        $mail->message = strip_tags($commentMail);
+        $result = $mail->send();
+        unset($mail);
 
-        $tpl->processTemplate ("writeContent", array(
-                                                "msgCommentHeader"  => $msgWriteComment,
-                                                "Message"           => $PMF_LANG["msgCommentThanks"]
-                                                )
+        $tpl->processTemplate(
+            'writeContent',
+            array(
+                'msgCommentHeader'  => $msgWriteComment,
+                'Message'           => $PMF_LANG['msgCommentThanks']
+            )
         );
     } else {
-        $faqsession->userTracking("error_save_comment", $id);
-        $tpl->processTemplate ("writeContent", array(
-                                                "msgCommentHeader"  => $msgWriteComment,
-                                                "Message"           => $PMF_LANG["err_SaveComment"]
-                                                )
+        $faqsession->userTracking('error_save_comment', $id);
+        $tpl->processTemplate(
+            'writeContent',
+            array(
+                'msgCommentHeader'  => $msgWriteComment,
+                'Message'           => $PMF_LANG['err_SaveComment']
+            )
         );
     }
 } else {
-    if (!IPCheck($_SERVER["REMOTE_ADDR"])) {
-        $tpl->processTemplate ("writeContent", array(
-                                                "msgCommentHeader"  => $msgWriteComment,
-                                                "Message"           => $PMF_LANG["err_bannedIP"]
-                                                )
+    if (!IPCheck($_SERVER['REMOTE_ADDR'])) {
+        $tpl->processTemplate(
+            'writeContent',
+            array(
+                'msgCommentHeader'  => $msgWriteComment,
+                'Message'           => $PMF_LANG['err_bannedIP']
+            )
         );
     } else {
-        $faqsession->userTracking("error_save_comment", $id);
-        $tpl->processTemplate ("writeContent", array(
-                                                "msgCommentHeader"  => $msgWriteComment,
-                                                "Message"           => $PMF_LANG["err_SaveComment"]
-                                                )
+        $faqsession->userTracking('error_save_comment', $id);
+        $tpl->processTemplate(
+            'writeContent',
+            array(
+                'msgCommentHeader'  => $msgWriteComment,
+                'Message'           => $PMF_LANG['err_SaveComment']
+            )
         );
     }
 }
 
-$tpl->includeTemplate("writeContent", "index");
+$tpl->includeTemplate('writeContent', 'index');

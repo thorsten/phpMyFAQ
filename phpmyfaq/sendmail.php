@@ -1,12 +1,11 @@
 <?php
 /**
- * $Id: sendmail.php,v 1.16 2008-05-23 13:06:06 thorstenr Exp $
+ * The 'send an email from the contact page' page.
  *
- * The 'send an email from the contact page' page
- *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since       2002-09-16
- * @copyright   (c) 2001-2007 phpMyFAQ Team
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since     2002-09-16
+ * version    SVN: $Id$ 
+ * @copyright 2002-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -35,49 +34,37 @@ if (    isset($_POST['name']) && $_POST['name'] != ''
      && checkBannedWord(htmlspecialchars(strip_tags($_POST['question'])))
      && checkCaptchaCode() ) {
 
-    list($user, $host) = explode("@", strip_tags($_POST['email']));
+    list($user, $host) = explode('@', strip_tags($_POST['email']));
     $question          = strip_tags($_POST['question']);
-    $sender            = $IDN->encode(strip_tags($_POST['email']));
-    $subject           = 'Feedback: '.$PMF_CONF['main.titleFAQ'];
+    $sender            = strip_tags($_POST['email']);
+    $subject           = 'Feedback: %sitename%';
     $name              = strip_tags($_POST['name']);
 
-    if (function_exists('mb_encode_mimeheader')) {
-        $name = mb_encode_mimeheader($name);
-        $subject = mb_encode_mimeheader($subject);
-    } else {
-        $name = encode_iso88591($name);
-        $subject = encode_iso88591($subject);
-    }
+    $mail = new PMF_Mail();
+    $mail->unsetFrom();
+    $mail->setFrom($sender, $name);
+    $mail->addTo($faqconfig->get('main.administrationMail'));
+    $mail->subject = $subject;
+    $mail->message = $question;
+    $result = $mail->send();
+    unset($mail);
 
-    $additional_header = array();
-    $additional_header[] = 'MIME-Version: 1.0';
-    $additional_header[] = 'Content-Type: text/plain; charset='. $PMF_LANG['metaCharset'];
-    if (strtolower( $PMF_LANG['metaCharset']) == 'utf-8') {
-        $additional_header[] = 'Content-Transfer-Encoding: 8bit';
-    }
-    $additional_header[] = 'From: '.$name.' <'.$sender.'>';
-
-    if (ini_get('safe_mode')) {
-        mail($IDN->encode($faqconfig->get('main.administrationMail')),
-            $subject,
-            $question,
-            implode("\r\n", $additional_header));
-    } else {
-        mail($IDN->encode($faqconfig->get('main.administrationMail')),
-            $subject,
-            $question,
-            implode("\r\n", $additional_header),
-            '-f'.$sender);
-    }
-
-    $tpl->processTemplate ("writeContent", array(
+    $tpl->processTemplate(
+        'writeContent',
+        array(
             'msgContact'    => $PMF_LANG['msgContact'],
-            'Message'       => $PMF_LANG['msgMailContact']));
+            'Message'       => $PMF_LANG['msgMailContact']
+        )
+    );
 } else {
 
-    $tpl->processTemplate ("writeContent", array(
+    $tpl->processTemplate(
+        'writeContent',
+        array(
             'msgContact'    => $PMF_LANG['msgContact'],
-            'Message'       => $PMF_LANG['err_sendMail']));
+            'Message'       => $PMF_LANG['err_sendMail']
+        )
+    );
 }
 
 $tpl->includeTemplate('writeContent', 'index');
