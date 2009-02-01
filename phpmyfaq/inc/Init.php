@@ -9,7 +9,7 @@
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @since     2005-09-24
  * @version   SVN: $Id$
- * @copyright (c) 2005-2009 phpMyFAQ Team
+ * @copyright 2005-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -76,6 +76,11 @@ require_once PMF_INCLUDE_DIR.'/functions.php';
 // TODO: Linkverifier.php contains both PMF_Linkverifier class and
 //       helper functions => move the fns into the class.
 require_once PMF_INCLUDE_DIR.'/Linkverifier.php';
+
+//
+// Set the error handler to our pmf_error_handler() function
+//
+set_error_handler('pmf_error_handler');
 
 ///
 // Create a database connection
