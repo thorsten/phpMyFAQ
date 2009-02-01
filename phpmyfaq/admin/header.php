@@ -25,7 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
-header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+header("Expires: Thu, 7 Apr 1977 14:47:00 GMT");
 header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
 header("Cache-Control: no-store, no-cache, must-revalidate");
 header("Cache-Control: post-check=0, pre-check=0", false);
@@ -36,7 +36,7 @@ header("Vary: Negotiate,Accept");
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php print $PMF_LANG["metaLanguage"]; ?>" lang="<?php print $PMF_LANG["metaLanguage"]; ?>">
 <head>
-    <title><?php print PMF_htmlentities($PMF_CONF['main.titleFAQ'], ENT_QUOTES, $PMF_LANG['metaCharset']); ?> - powered by phpMyFAQ</title>
+    <title><?php print PMF_htmlentities($faqconfig->get('main.titleFAQ'), ENT_QUOTES, $PMF_LANG['metaCharset']); ?> - powered by phpMyFAQ</title>
     <meta name="copyright" content="(c) 2001-2009 phpMyFAQ Team" />
     <meta http-equiv="Content-Type" content="text/html; charset=<?php print $PMF_LANG["metaCharset"]; ?>" />
     <link rel="shortcut icon" href="../template/favicon.ico" type="image/x-icon" />
@@ -51,7 +51,7 @@ header("Vary: Negotiate,Accept");
     // - Edit faq tags;
     // to minimize possible IE memory leaks
 
-    // @todo: rewrite the AJAX Suggestion and Autocomplete Behaviours using ONLY the Prototype library
+    // @todo: rewrite the AJAX Suggestion and Autocomplete Behaviours using ONLY jQuery library
 if (isset($_action)) {
     switch ($_action) {
         case 'takequestion':
@@ -66,11 +66,12 @@ if (isset($_action)) {
 }
 ?>
 </head>
-<body id="body" dir="<?php print $PMF_LANG["dir"]; ?>" onload="javascript:focusOnUsernameField();"><a name="top"></a>
+<body id="body" dir="<?php print $PMF_LANG["dir"]; ?>">
+<a name="top"></a>
 
 <!-- header -->
 <div id="header">
-    <h1>phpMyFAQ <?php print $PMF_CONF['main.currentVersion']; ?></h1>
+    <h1>phpMyFAQ <?php print $faqconfig->get('main.currentVersion'); ?></h1>
 <?php if (isset($auth)) { ?>
 <?php if ('' == $_action) { ?>
     <div id="langform">
@@ -109,7 +110,7 @@ if (isset($_action)) {
     <ul id="subnavlist">
 <?php
     // check for group support
-    $user = new PMF_User_User();
+    $user         = new PMF_User_User();
     $groupSupport = ($user->perm instanceof PMF_User_PermMedium);
 
     switch ($_action) {
