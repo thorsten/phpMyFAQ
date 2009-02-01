@@ -1,6 +1,6 @@
 <?php
 /**
- * This is the main functions file!
+ * This is the main functions file.
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -8,11 +8,11 @@
  * @author    Bastian Poettner <bastian@poettner.net>
  * @author    Meikel Katzengreis <meikel@katzengreis.com>
  * @author    Robin Wood <robin@digininja.org>
- * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @author    Adrianna Musiol <musiol@imageaccess.de>
  * @since     2001-02-18
- * @copyright 2001-2009 phpMyFAQ Team
  * @version   SVN: $Id$
+ * @copyright 2001-2009 phpMyFAQ Team
  *
  * Portions created by Matthias Sommerfeld are Copyright (c) 2001-2004 blue
  * birdy, Berlin (http://bluebirdy.de). All Rights Reserved.
@@ -74,6 +74,102 @@ function pmf_debug($string)
         }
     }
     return $ret;
+}
+
+/**
+ * phpMyFAQ custom error handler function, also to prevent the disclosure of
+ * potential sensitive data.
+ *
+ * @access public
+ * @param  int    $level    The level of the error raised.
+ * @param  string $message  The error message.
+ * @param  string $filename The filename that the error was raised in.
+ * @param  int    $line     The line number the error was raised at.
+ * @param  mixed  $context  It optionally contains an array of every variable
+ *                          that existed in the scope the error was triggered in.
+ * @since  2009-02-01
+ * @author Matteo Scaramuccia <matteo@phpmyfaq.de>
+ */
+function pmf_error_handler($level, $message, $filename, $line, $context)
+{
+    // Sanity check
+    // Note: when DEBUG mode is true we want to track any error!
+    if (
+        // 1. the @ operator sets the PHP's error_reporting() value to 0
+           (!DEBUG && (0 == error_reporting()))
+        // 2. Honor the value of PHP's error_reporting() function
+        || (!DEBUG && (0 == ($level & error_reporting())))
+        ) {
+        // Do nothing
+        return true;
+    }
+
+    // Cleanup potential sensitive data
+    $filename = (DEBUG ? $filename : basename($filename));
+
+    // Give an alias name to any PHP error level number
+    // PHP 5.3.0+
+    if (!defined('E_DEPRECATED')) {
+        define('E_DEPRECATED', 8192);
+    }
+    // PHP 5.3.0+
+    if (!defined('E_USER_DEPRECATED')) {
+        define('E_USER_DEPRECATED', 16384);        
+    }    
+    $errorTypes = array(
+        E_ERROR             => 'error',
+        E_WARNING           => 'warning',
+        E_PARSE             => 'parse error',
+        E_NOTICE            => 'notice',
+        E_CORE_ERROR        => 'code error',
+        E_CORE_WARNING      => 'core warning',
+        E_COMPILE_ERROR     => 'compile error',
+        E_COMPILE_WARNING   => 'compile warning',
+        E_USER_ERROR        => 'user error',
+        E_USER_WARNING      => 'user warning',
+        E_USER_NOTICE       => 'user notice',
+        E_STRICT            => 'strict warning',
+        E_RECOVERABLE_ERROR => 'recoverable error',
+        E_DEPRECATED        => 'deprecated warning',
+        E_USER_DEPRECATED   => 'user deprecated warning',
+    );
+    $errorType = 'unknown error';
+    if (isset($errorTypes[$level])) {
+        $errorType = $errorTypes[$level];
+    }
+
+    // Custom error message
+    $errorMessage = <<<EOD
+<br />
+<b>phpMyFAQ $errorType</b> [$level]: $message in <b>$filename</b> on line <b>$line</b><br />
+EOD;
+
+    switch ($level) {
+        // Blocking errors
+        case E_ERROR:
+        case E_PARSE:
+        case E_CORE_ERROR:
+        case E_COMPILE_ERROR:
+        case E_USER_ERROR:
+            // Clear any output that has already been generated
+            // TBD: it generally seems not useful unless when errors appear on
+            //      coded HTTP streaming e.g. when creating PDF to be sent to users
+            if (ob_get_length()) {
+                //ob_clean();
+            }
+            // Output the error message
+            echo $errorMessage;
+            // Prevent processing any more PHP scripts
+            exit();
+            break;
+        // Not blocking errors
+        default:
+            // Output the error message
+            echo $errorMessage;
+            break;
+    }
+
+    return true;
 }
 
 //
