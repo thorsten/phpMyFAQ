@@ -1,12 +1,13 @@
 <?php
 /**
- * Reset a forgotten password to a new one
+ * Reset a forgotten password to a new one.
  *
- * @package     phpMyFAQ
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since       2004-05-11
- * @copyright   (c) 2004-2009 phpMyFAQ Team
- * @version     SVN: $Id$ 
+ * @package    phpMyFAQ
+ * @subpackage Administration 
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since      2004-05-11
+ * @version    SVN: $Id$ 
+ * @copyright  2004-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -70,31 +71,42 @@ require_once ("header.php");
 <div id="bodyText">
 <?php
 if (isset($_GET["action"]) && $_GET["action"] == "newpassword") {
-
+        // Do nothing
     } elseif (isset($_GET["action"]) && $_GET["action"] == "savenewpassword") {
-
+        // Do nothing
     } elseif (isset($_GET["action"]) && $_GET["action"] == "sendmail") {
         if (    isset($_POST["username"]) && $_POST["username"] != ""
              && isset($_POST["email"]) && $_POST["email"] != "" && checkEmail($_POST["email"])
             ) {
-            $username   = $db->escape_string($_POST["username"]);
-            $email      = $db->escape_string($_POST["email"]);
+            $username = $db->escape_string($_POST["username"]);
+            $email    = $db->escape_string($_POST["email"]);
 
             $user = new PMF_User_CurrentUser();
             $loginExist = $user->getUserByLogin($username);
 
             if ($loginExist && ($_POST["email"] == $user->getUserData('email'))) {
-                $consonants = array("b","c","d","f","g","h","j","k","l","m","n","p","r","s","t","v","w","x","y","z");
-                $vowels = array("a","e","i","o","u");
-                $newPassword = "";
+                $consonants = array(
+                    'b','c','d','f','g','h','j','k','l','m','n','p','r','s','t','v','w','x','y','z'
+                );
+                $vowels = array(
+                    'a','e','i','o','u'
+                );
+                $newPassword = '';
                 srand((double)microtime()*1000000);
                 for ($i = 1; $i <= 4; $i++) {
                     $newPassword .= $consonants[rand(0,19)];
                     $newPassword .= $vowels[rand(0,4)];
                 }
                 $user->changePassword($newPassword);
-                $text = $PMF_LANG["lostpwd_text_1"]."\nUsername: ".$username."\nNew Password: ".$newPassword."\n\n".$PMF_LANG["lostpwd_text_2"];
-                mail($IDN->encode($email), $PMF_CONF['main.titleFAQ'].": username / password request", $text, "From: ".$IDN->encode($PMF_CONF['main.administrationMail']));
+                $text = $PMF_LANG['lostpwd_text_1']."\nUsername: ".$username."\nNew Password: ".$newPassword."\n\n".$PMF_LANG["lostpwd_text_2"];
+
+                $mail = new PMF_Mail();
+                $mail->addTo($email);
+                $mail->subject = '[%sitename%] Username / password request';
+                $mail->message = $text;
+                $result = $mail->send();
+                unset($mail);
+                // Trust that the email has been sent
                 print $PMF_LANG["lostpwd_mail_okay"];
                 print "<p><img src=\"images/arrow.gif\" width=\"11\" height=\"11\" alt=\"".$PMF_LANG["ad"]."\" border=\"0\" /> <a href=\"index.php\" title=\"".$PMF_LANG["ad"]."\">".$PMF_LANG["ad"]."</a></p>";
             } else {

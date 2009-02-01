@@ -2,13 +2,14 @@
 /**
  * Displays the user managment frontend
  *
- * @package     phpMyFAQ
- * @author      Lars Tiedemann <php@larstiedemann.de>
- * @author      Uwe Pries <uwe.pries@digartis.de>
- * @author      Sarah Hermann <sayh@gmx.de>
- * @since       2005-12-15
- * @copyright   (c) 2005-2009 phpMyFAQ Team
- * @version     SVN: $Id$
+ * @package    phpMyFAQ
+ * @subpackage Administration 
+ * @author     Lars Tiedemann <php@larstiedemann.de>
+ * @author     Uwe Pries <uwe.pries@digartis.de>
+ * @author     Sarah Hermann <sayh@gmx.de>
+ * @since      2005-12-15
+ * @version    SVN: $Id$
+ * @copyright  2005-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -146,7 +147,13 @@ if ($userAction == 'update_data') {
             }
             $user->changePassword($newPassword);
             $text = "\nUsername: ".$userData['display_name']."\nLoginname: ".$user->getLogin()."\nNew Password: ".$newPassword."\n\n";
-            mail($IDN->encode($userData['email']), $PMF_CONF['main.titleFAQ'].": username / activation", $text, "From: ".$IDN->encode($PMF_CONF['main.administrationMail']));
+
+            $mail = new PMF_Mail();
+            $mail->addTo($userData['email']);
+            $mail->subject = '[%sitename%] Username / activation';
+            $mail->message = $text;
+            $result = $mail->send();
+            unset($mail);
         }
 
         if (!$user->userdata->set(array_keys($userData), array_values($userData)) or !$user->setStatus($userStatus)) {
