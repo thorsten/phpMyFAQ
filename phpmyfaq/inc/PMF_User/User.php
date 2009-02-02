@@ -104,7 +104,7 @@ class PMF_User_User
      * @access private
      * @var string
      */
-    private $_encrypted_password = '';
+    public $_encrypted_password = '';
 
     /**
      * Default Authentication properties
@@ -112,10 +112,9 @@ class PMF_User_User
      * @access private
      * @var array
      */
-    protected $_auth_data = array('authSource' => array('name' => 'db', 'type' => 'local'),
-                            'encType' => 'md5',
-                            'readOnly' => false
-                            );
+    public $_auth_data = array('authSource' => array('name' => 'db', 'type' => 'local'),
+                               'encType'    => 'md5',
+                               'readOnly'   => false);
 
     /**
      * user ID
