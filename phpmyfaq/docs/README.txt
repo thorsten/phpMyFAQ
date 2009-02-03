@@ -11,13 +11,15 @@ Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.0.11:
 - fixed bug with MySQL 6 and ext/mysqli (Johannes)
+- improved SVN checkout script (Rene Treffer)
 
 For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.0.12 - 2009-02
+Version 2.0.12 - 2009-02-
 - fixed bug with MySQL 6 and ext/mysqli (Johannes)
+- improved SVN checkout script (Rene Treffer)
 
 Version 2.0.11 - 2009-01-22
 - updated English and Turkish translation and switched to UTF-8 (Evren Yurtesen)

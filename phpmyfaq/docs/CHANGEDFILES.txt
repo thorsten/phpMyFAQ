@@ -5,7 +5,7 @@ CHANGED FILES FROM 2.0.11 -> 2.0.12
 ./install/installer.php
 ./install/mysqli.sql.php
 ./install/update.php
-
+./scripts/svn2package.sh
 
 
 CHANGED FILES FROM 2.0.10 -> 2.0.11
