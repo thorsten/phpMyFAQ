@@ -1715,7 +1715,7 @@ function printDateTimeInput($key, $date)
     $html = '';
     // YYYY
     $html .= '<div style="float: left;"><select name="'.$key.'YYYY"><option value="">----</option>';
-    for ($i = 2007; $i < 2011; $i++) {
+    for ($i = 2009; $i < 2013; $i++) {
         $html .= '<option value="'.$i.'"'.( (int)$date['YYYY'] == $i ? ' selected="selected"' : '').'>'.$i.'</option>';
     }
     $html .= '</select>&nbsp;-&nbsp;</div>';
