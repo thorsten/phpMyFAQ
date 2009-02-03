@@ -20,10 +20,13 @@
 # The script will download the source code from branch CVS_TAG and
 # it will create the 2 packages plus their MD5 hashes.
 #
+# @package   phpMyFAQ
 # @author    Matteo Scaramuccia <matteo@scaramuccia.com>
 # @author	 Thorsten Rinne <thorsten@phpmyfaq.de>
+# @author    Rene Treffer <treffer+phpmyfaq@measite.de>
 # @since     2008-09-10
-# @copyright 2008 phpMyFAQ Team
+# @copyright 2008-2009 phpMyFAQ Team
+# @version   SVN: $Id$
 #
 # The contents of this file are subject to the Mozilla Public License
 # Version 1.1 (the "License"); you may not use this file except in
@@ -40,36 +43,32 @@ PMF_VERSION="2.5.0-alpha2"
 
 # Build folder
 PMF_BUILD_FOLDER="PMFBUILD_TRUNK_${PMF_VERSION}"
-# PMF Package folder name
-PMF_PACKAGE_FOLDER="phpmyfaq-${PMF_VERSION}"
 
-# Prepare the package building environment
-CWD=`pwd`
-if [ ! -d ${PMF_BUILD_FOLDER} ]; then
-    mkdir ${PMF_BUILD_FOLDER}
-fi
+( # Prepare the package building environment
+    if [ ! -d ${PMF_BUILD_FOLDER} ]; then
+        mkdir ${PMF_BUILD_FOLDER}
+    fi
 
-# Enter the PMF build folder
-cd "${PMF_BUILD_FOLDER}"
-# Clean files
-rm -f *
+    # Enter the PMF build folder
+    cd "${PMF_BUILD_FOLDER}"
+    # Clean files
+    rm -f *
 
-# Get the PMF source code from SVN using an anonymous login
-SVN_SSH="ssh -p 20022" svn export svn+ssh://anonymous@thinkforge.org/svnroot/phpmyfaq/trunk/phpmyfaq phpmyfaq
+    # Get the PMF source code from SVN using an anonymous login
+    SVN_SSH="ssh -p 20022" svn export svn+ssh://anonymous@thinkforge.org/svnroot/phpmyfaq/trunk/phpmyfaq phpmyfaq
 
-# Rename the folder in which the SVN code has been retrieved
-mv phpmyfaq "${PMF_PACKAGE_FOLDER}"
+    # Rename the folder in which the SVN code has been retrieved
+    mv phpmyfaq "${PMF_PACKAGE_FOLDER}"
 
-# Build TAR.GZ Package
-tar zcf "${PMF_PACKAGE_FOLDER}.tar.gz" "${PMF_PACKAGE_FOLDER}"
-md5sum "${PMF_PACKAGE_FOLDER}.tar.gz" > "${PMF_PACKAGE_FOLDER}.tar.gz.md5"
+    # Build TAR.GZ Package
+    tar zcf "${PMF_PACKAGE_FOLDER}.tar.gz" "${PMF_PACKAGE_FOLDER}"
+    md5sum "${PMF_PACKAGE_FOLDER}.tar.gz" > "${PMF_PACKAGE_FOLDER}.tar.gz.md5"
 
-# Build ZIP Package
-zip -r "${PMF_PACKAGE_FOLDER}.zip" "${PMF_PACKAGE_FOLDER}"
-md5sum "${PMF_PACKAGE_FOLDER}.zip" > "${PMF_PACKAGE_FOLDER}.zip.md5"
+    # Build ZIP Package
+    zip -r "${PMF_PACKAGE_FOLDER}.zip" "${PMF_PACKAGE_FOLDER}"
+    md5sum "${PMF_PACKAGE_FOLDER}.zip" > "${PMF_PACKAGE_FOLDER}.zip.md5"
 
-# Remove the code folder
-rm -rf "${PMF_PACKAGE_FOLDER}"
+    # Remove the code folder
+    rm -rf "${PMF_PACKAGE_FOLDER}"
 
-# Back to the folder from which the script was called
-cd "${CWD}"
+) # Back to the folder from which the script was called
