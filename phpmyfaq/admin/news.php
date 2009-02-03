@@ -2,11 +2,13 @@
 /**
  * The main administration file for the news.
  *
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @since     2003-02-23
- * @version   SVN: $Id$ 
- * @copyright (c) 2003-2009 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage Administration
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @since      2003-02-23 
+ * @copyright  2003-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -29,14 +31,12 @@ $news = new PMF_News($db, $LANGCODE);
 // Re-evaluate $user
 $user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
 
-if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews"]) {
+if ('addnews' == $_action && $permission["addnews"]) {
 ?>
     <h2><?php print $PMF_LANG['ad_news_add']; ?></h2>
-    <form id="faqEditor" name="faqEditor" action="<?php print $_SERVER['PHP_SELF']; ?>" method="post">
+    <form id="faqEditor" name="faqEditor" action="?action=savenews" method="post">
     <fieldset>
     <legend><?php print $PMF_LANG['ad_news_data']; ?></legend>
-        <input type="hidden" name="action" value="news" />
-        <input type="hidden" name="do" value="save" />
 
         <label class="lefteditor" for="header"><?php print $PMF_LANG['ad_news_header']; ?></label>
         <textarea name="header" style="width: 390px; height: 50px;" cols="2" rows="50"></textarea><br />
@@ -99,8 +99,7 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
     <input class="submit" type="reset" value="<?php print $PMF_LANG['ad_gen_reset']; ?>" />
     </form>
 <?php
-} elseif (isset($_REQUEST["do"]) && $_REQUEST["do"] == "edit" && $permission["editnews"]) {
-    if (!isset($_REQUEST["id"])) {
+} elseif ('news' == $_action && $permission["editnews"]) {
 ?>
     <table class="list">
     <thead>
@@ -119,7 +118,7 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
         <tr>
             <td class="list"><?php print $newsItem['header']; ?></td>
             <td class="list"><?php print $newsItem['date']; ?></td>
-            <td class="list"><a href="?action=news&amp;do=edit&amp;id=<?php print $newsItem['id']; ?>" title="<?php print $PMF_LANG["ad_news_update"]; ?>"><img src="images/edit.gif" width="18" height="18" alt="<?php print $PMF_LANG["ad_news_update"]; ?>" border="0" /></a>&nbsp;&nbsp;<a href="?action=news&amp;do=delete&amp;id=<?php print $newsItem['id']; ?>" title="<?php print $PMF_LANG["ad_news_delete"]; ?>"><img src="images/delete.gif" width="17" height="18" alt="<?php print $PMF_LANG["ad_news_delete"]; ?>" border="0" /></a></td>
+            <td class="list"><a href="?action=editnews&amp;id=<?php print $newsItem['id']; ?>" title="<?php print $PMF_LANG["ad_news_update"]; ?>"><img src="images/edit.gif" width="18" height="18" alt="<?php print $PMF_LANG["ad_news_update"]; ?>" border="0" /></a>&nbsp;&nbsp;<a href="?action=deletenews&amp;id=<?php print $newsItem['id']; ?>" title="<?php print $PMF_LANG["ad_news_delete"]; ?>"><img src="images/delete.gif" width="17" height="18" alt="<?php print $PMF_LANG["ad_news_delete"]; ?>" border="0" /></a></td>
         </tr>
 <?php
             }
@@ -130,18 +129,16 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
 ?>
     </tbody>
     </table>
-    <p><a href="?action=news&amp;do=write"><?php print $PMF_LANG["ad_menu_news_add"]; ?></a></p>
+    <p><a href="?action=addnews"><?php print $PMF_LANG["ad_menu_news_add"]; ?></a></p>
 <?php
-    } elseif (isset($_REQUEST["id"])) {
-        $id = (int)$_REQUEST['id'];
-        $newsData = $news->getNewsEntry($id, true);
+} elseif ('editnews' == $_action && $permission['editnews']) {
+    $id = (int)$_REQUEST['id'];
+    $newsData = $news->getNewsEntry($id, true);
 ?>
     <h2><?php print $PMF_LANG['ad_news_edit']; ?></h2>
-    <form  style="float: left;" id="faqEditor" name="faqEditor" action="<?php print $_SERVER["PHP_SELF"]; ?>" method="post">
+    <form  style="float: left;" id="faqEditor" name="faqEditor" action="?action=updatenews" method="post">
     <fieldset>
     <legend><?php print $PMF_LANG['ad_news_data']; ?></legend>
-        <input type="hidden" name="action" value="news" />
-        <input type="hidden" name="do" value="update" />
         <input type="hidden" name="id" value="<?php print $newsData['id']; ?>" />
 
         <label class="lefteditor" for="header"><?php print $PMF_LANG['ad_news_header']; ?></label>
@@ -205,21 +202,20 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
     <input class="submit" type="reset" value="<?php print $PMF_LANG['ad_gen_reset']; ?>" />
     </form>
 <?php
-        $newsId = (int)$_GET['id'];
-        $oComment = new PMF_Comment($db, $LANGCODE);
-        $comments = $oComment->getCommentsData($newsId, PMF_Comment::COMMENT_TYPE_NEWS);
-        if (count($comments) > 0) {
+    $newsId = (int)$_GET['id'];
+    $oComment = new PMF_Comment($db, $LANGCODE);
+    $comments = $oComment->getCommentsData($newsId, PMF_Comment::COMMENT_TYPE_NEWS);
+    if (count($comments) > 0) {
 ?>
             <p><strong><?php print $PMF_LANG["ad_entry_comment"] ?></strong></p>
 <?php
-        }
-        foreach ($comments as $item) {
+    }
+    foreach ($comments as $item) {
 ?>
     <p><?php print $PMF_LANG["ad_entry_commentby"] ?> <a href="mailto:<?php print($item['email']); ?>"><?php print($item['user']); ?></a>:<br /><?php print($item['content']); ?><br /><?php print($PMF_LANG['newsCommentDate'].makeCommentDate($item['date'])); ?><a href="?action=delcomment&amp;artid=<?php print($newsId); ?>&amp;cmtid=<?php print($item['id']); ?>&amp;type=<?php print(PMF_Comment::COMMENT_TYPE_NEWS);?>"><img src="images/delete.gif" alt="<?php print $PMF_LANG["ad_entry_delete"] ?>" title="<?php print $PMF_LANG["ad_entry_delete"] ?>" border="0" width="17" height="18" align="right" /></a></p>
 <?php
-        }
     }
-} elseif (isset($_REQUEST["do"]) && $_REQUEST["do"] == "save" && $permission["addnews"]) {
+} elseif ('savenews' == $_action && $permission["addnews"]) {
 
     // Evaluate the passed validity range, if any
     $dateStart =
@@ -262,7 +258,7 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
     } else {
         printf("<p>%s</p>", $PMF_LANG['ad_news_insertfail']);
     }
-} elseif (isset($_REQUEST["do"]) && $_REQUEST["do"] == "update" && $permission["editnews"]) {
+} elseif ('updatenews' == $_action && $permission["editnews"]) {
 
     // Evaluate the passed validity range, if any
     $dateStart =
@@ -306,23 +302,26 @@ if (isset($_REQUEST["do"]) && $_REQUEST["do"] == "write" && $permission["addnews
     } else {
         printf("<p>%s</p>", $PMF_LANG['ad_news_updatefail']);
     }
-} elseif (isset($_REQUEST["do"]) && $_REQUEST["do"] == "delete" && $permission["delnews"]) {
-    if (!isset($_REQUEST["really"])) {
+} elseif ('deletenews' == $_action && $permission["delnews"]) {
+	
+	$precheck  = PMF_Filter::filterInput(INPUT_POST, 'really', FILTER_SANITIZE_STRING, 'no');
+	$delete_id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+	
+    if ('no' == $precheck) {
 ?>
     <p><?php print $PMF_LANG["ad_news_del"]; ?></p>
     <div align="center">
-    <form action="<?php print $_SERVER["PHP_SELF"]; ?>" method="post">
-    <input type="hidden" name="action" value="news" />
-    <input type="hidden" name="do" value="delete" />
-    <input type="hidden" name="id" value="<?php print $_REQUEST["id"]; ?>" />
+    <form action="?action=deletenews" method="post">
+    <input type="hidden" name="id" value="<?php print $delete_id; ?>" />
     <input type="hidden" name="really" value="yes" />
     <input class="submit" type="submit" name="submit" value="<?php print $PMF_LANG["ad_news_yesdelete"]; ?>" style="color: Red;" />
     <input class="submit" type="reset" onclick="javascript:history.back();" value="<?php print $PMF_LANG["ad_news_nodelete"]; ?>" />
     </form>
     </div>
 <?php
-    } elseif ($_POST["really"] == "yes") {
-        $news->deleteNews($_POST['id']);
+    } else {
+    	$delete_id = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+        $news->deleteNews($delete_id);
         print "<p>".$PMF_LANG["ad_news_delsuc"]."</p>";
     }
 } else {

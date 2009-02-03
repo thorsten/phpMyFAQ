@@ -233,7 +233,12 @@ if (isset($auth) && in_array(true, $permission)) {
             case "question":                require_once 'record.delquestion.php'; break;
             case 'comments':                require_once 'record.comments.php'; break;
             // news administraion
-            case "news":                    require_once 'news.php'; break;
+            case 'news':                    
+            case 'addnews':
+            case 'editnews':
+            case 'savenews':
+            case 'updatenews':	
+            case 'deletenews':              require_once 'news.php'; break;
             // category administration
             case 'content':
             case 'category':

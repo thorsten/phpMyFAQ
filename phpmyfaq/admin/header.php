@@ -118,11 +118,11 @@ if (isset($_action)) {
         case 'group':
         case 'passwd':
         case 'cookies':
-            addMenuEntry('adduser,edituser,deluser',             'user',             'ad_menu_user_administration', $_action);
+            addMenuEntry('adduser,edituser,deluser',             'user',       'ad_menu_user_administration', $_action);
             if ($groupSupport) {
-                addMenuEntry('adduser,edituser,deluser',         'group',            'ad_menu_group_administration', $_action);
+                addMenuEntry('adduser,edituser,deluser',         'group',      'ad_menu_group_administration', $_action);
             }
-            addMenuEntry('passwd',                               'passwd',           'ad_menu_passwd', $_action);
+            addMenuEntry('passwd',                               'passwd',     'ad_menu_passwd', $_action);
             break;
         case 'content':
         case 'category':
@@ -151,32 +151,32 @@ if (isset($_action)) {
         case 'news':
         case 'question':
         case 'comments':
-            addMenuEntry('addcateg,editcateg,delcateg',          'category',         'ad_menu_categ_edit', $_action);
-            addMenuEntry('addbt',                                'editentry',        'ad_entry_add', $_action);
-            addMenuEntry('editbt,delbt',                         'view',             'ad_menu_entry_edit', $_action);
-            addMenuEntry('editbt,delbt',                         'accept',           'ad_menu_entry_aprove', $_action);
-            addMenuEntry('delcomment',                           'comments',         'ad_menu_comments', $_action);
-            addMenuEntry('delquestion',                          'question',         'ad_menu_open', $_action);
-            addMenuEntry('addglossary,editglossary,delglossary', 'glossary',         'ad_menu_glossary', $_action);
-            addMenuEntry('addnews,editnews,delnews',             'news&amp;do=edit', 'ad_menu_news_edit', $_action);
+            addMenuEntry('addcateg,editcateg,delcateg',          'category',   'ad_menu_categ_edit', $_action);
+            addMenuEntry('addbt',                                'editentry',  'ad_entry_add', $_action);
+            addMenuEntry('editbt,delbt',                         'view',       'ad_menu_entry_edit', $_action);
+            addMenuEntry('editbt,delbt',                         'accept',     'ad_menu_entry_aprove', $_action);
+            addMenuEntry('delcomment',                           'comments',   'ad_menu_comments', $_action);
+            addMenuEntry('delquestion',                          'question',   'ad_menu_open', $_action);
+            addMenuEntry('addglossary,editglossary,delglossary', 'glossary',   'ad_menu_glossary', $_action);
+            addMenuEntry('addnews,editnews,delnews',             'news',       'ad_menu_news_edit', $_action);
             break;
         case 'statistics':
         case 'viewsessions':
         case 'sessionbrowse':
         case 'sessionsuche':
         case 'adminlog':
-            addMenuEntry('viewlog',                              'statistics',       'ad_menu_stat', $_action);
-            addMenuEntry('viewlog',                              'viewsessions',     'ad_menu_session', $_action);
-            addMenuEntry('adminlog',                             'adminlog',         'ad_menu_adminlog', $_action);
+            addMenuEntry('viewlog',                              'statistics',   'ad_menu_stat', $_action);
+            addMenuEntry('viewlog',                              'viewsessions', 'ad_menu_session', $_action);
+            addMenuEntry('adminlog',                             'adminlog',     'ad_menu_adminlog', $_action);
             break;
         case 'export':
         case 'plugins':
-            addMenuEntry('',                                     'export',           'ad_menu_export', $_action);
+            addMenuEntry('',                                     'export',       'ad_menu_export', $_action);
             break;
         case 'config':
         case 'linkconfig':
-            addMenuEntry('editconfig',                           'config',           'ad_menu_editconfig', $_action);
-            addMenuEntry('editconfig,editbt,delbt',              'linkconfig',       'ad_menu_linkconfig', $_action);
+            addMenuEntry('editconfig',                           'config',       'ad_menu_editconfig', $_action);
+            addMenuEntry('editconfig,editbt,delbt',              'linkconfig',   'ad_menu_linkconfig', $_action);
             break;
         default:
             print '<li></li>';
