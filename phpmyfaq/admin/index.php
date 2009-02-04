@@ -266,7 +266,6 @@ if (isset($auth) && in_array(true, $permission)) {
             case 'deleteadminlog':          require_once 'adminlog.php'; break;
             // functions for password administration
             case "passwd":                  require_once 'pwd.change.php'; break;
-            case "savepwd":                 require_once 'pwd.save.php'; break;
             // functions for session administration
             case "viewsessions":            require_once 'stat.main.php'; break;
             case "sessionbrowse":           require_once 'stat.browser.php'; break;
