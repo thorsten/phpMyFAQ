@@ -48,7 +48,7 @@ $faqsession->userTracking('new_translation_entry', 0);
 if (   isset($_GET['id']) && is_numeric($_GET['id']) && (intval($_GET['id']) > 0)
     && isset($_GET['srclang']) && PMF_Init::isASupportedLanguage($_GET['srclang'])
     ) {
-    $oFaq = new PMF_Faq($db, $_GET['srclang']);
+    $oFaq = new PMF_Faq();
     $oFaq->getRecord((int)$_GET['id']);
     $faqSource = $oFaq->faqRecord;
 }

@@ -2,14 +2,15 @@
 /**
  * The main FAQ class
  *
- * @package   phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
- * @author    Georgi Korchev <korchev@yahoo.com>
- * @author    Adrianna Musiol <musiol@imageaccess.de>
- * @since     2005-12-20
- * @copyright 2005-2009 phpMyFAQ Team
- * @version   SVN: $Id$
+ * @package    phpMyFAQ
+ * @subpackage PMF_Faq
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author     Georgi Korchev <korchev@yahoo.com>
+ * @author     Adrianna Musiol <musiol@imageaccess.de>
+ * @since      2005-12-20
+ * @copyright  2005-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -21,10 +22,6 @@
  * License for the specific language governing rights and limitations
  * under the License.
  */
-
-require_once PMF_INCLUDE_DIR.'/Comment.php';
-require_once PMF_INCLUDE_DIR.'/Link.php';
-require_once PMF_INCLUDE_DIR.'/Utils.php';
 
 // {{{ Constants
 /**
@@ -55,7 +52,20 @@ define('FAQ_SORTING_TYPE_FAQTITLE_FAQID', 2);
 define('FAQ_SORTING_TYPE_DATE_FAQID', 3);
 // }}}
 
-// {{{ Classes
+
+/**
+ * PMF_Faq
+ *
+ * @package    phpMyFAQ
+ * @subpackage PMF_Faq
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author     Georgi Korchev <korchev@yahoo.com>
+ * @author     Adrianna Musiol <musiol@imageaccess.de>
+ * @since      2005-12-20
+ * @copyright  2005-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
+ */
 class PMF_Faq
 {
     /**
@@ -70,7 +80,7 @@ class PMF_Faq
     *
     * @var  string
     */
-    var $language;
+    private $language;
 
     /**
     * Language strings
@@ -117,28 +127,27 @@ class PMF_Faq
     /**
      * Constructor
      *
-     * @param   object  $db
-     * @param   string  $language
-     * @param   integer $user
-     * @param   array   $groups
+     * @param  integer $user   User
+     * @param  array   $groups Groups
+     * @return void
      */
-    function __construct(&$db, $language, $user = null, $groups = null)
+    function __construct($user = null, $groups = null)
     {
         global $PMF_LANG, $faqconfig;
 
-        $this->db           = &$db;
-        $this->language     = $language;
-        $this->pmf_lang     = $PMF_LANG;
+        $this->db       = PMF_Db::getInstance();
+        $this->language = PMF_Init::$language;
+        $this->pmf_lang = $PMF_LANG;
 
         if (is_null($user)) {
-            $this->user  = -1;
+            $this->user = -1;
         } else {
-            $this->user  = $user;
+            $this->user = $user;
         }
         if (is_null($groups)) {
-            $this->groups       = array(-1);
+            $this->groups = array(-1);
         } else {
-            $this->groups       = $groups;
+            $this->groups = $groups;
         }
         if ($faqconfig->get('main.permLevel') == 'medium') {
             $this->groupSupport = true;
@@ -1657,7 +1666,7 @@ class PMF_Faq
      */
     public function addComment($commentData)
     {
-        $oComment = new PMF_Comment($);
+        $oComment = new PMF_Comment();
         return $oComment->addComment($commentData);
     }
 

@@ -30,11 +30,10 @@ if ($permission['delcomment']) {
 
     $comment  = new PMF_Comment();
     $category = new PMF_Category($current_admin_user, $current_admin_groups, false);
+    $faq      = new PMF_Faq();
+    
     $category->buildTree();
-
-    $faq = new PMF_Faq($db, $LANGCODE);
-
-    $faqcomments  = $comment->getAllComments('faq');
+    $faqcomments = $comment->getAllComments('faq');
 
     printf("<p><strong>%s</strong></p>\n", $PMF_LANG['ad_comment_faqs']);
     if (count($faqcomments)) {

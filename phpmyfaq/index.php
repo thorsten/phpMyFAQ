@@ -53,7 +53,7 @@ $IDN = new idna_convert;
 //
 // Get language (default: english)
 //
-$pmf = new PMF_Init();
+$pmf      = new PMF_Init();
 $LANGCODE = $pmf->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
 // Preload English strings
 require_once 'lang/language_en.php';
@@ -220,7 +220,7 @@ if (isset($_POST['artlang']) && PMF_Init::isASupportedLanguage($_POST['artlang']
 //
 // Create a new FAQ object
 //
-$faq = new PMF_Faq($db, $lang, $current_user, $current_groups);
+$faq = new PMF_Faq($current_user, $current_groups);
 
 //
 // Create a new Category object

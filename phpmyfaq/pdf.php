@@ -65,7 +65,7 @@ if ($error) {
     exit();
 }
 
-$faq = new PMF_Faq($db, $LANGCODE);
+$faq = new PMF_Faq();
 $faq->getRecord($id);
 
 $pdf = new PDF($currentCategory, $faq->faqRecord['title'], $category->categoryName, $orientation = "P", $unit = "mm", $format = "A4");

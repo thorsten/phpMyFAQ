@@ -39,7 +39,7 @@ if ($permission["editbt"] || $permission["delbt"]) {
     }
 
     $comment = new PMF_Comment();
-    $faq     = new PMF_Faq($db, $LANGCODE);
+    $faq     = new PMF_Faq();
 
     $cond             = array();
     $numCommentsByFaq = array();

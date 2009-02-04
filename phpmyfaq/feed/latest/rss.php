@@ -46,7 +46,7 @@ if (isset($_GET['lang']) && PMF_Init::isASupportedLanguage($_GET['lang'])) {
     $lang = $_GET['lang'];
 }
 
-$faq     = new PMF_Faq($db, $LANGCODE);
+$faq     = new PMF_Faq();
 $rssData = $faq->getLatestData(PMF_NUMBER_RECORDS_LATEST, $lang);
 $num     = count($rssData);
 

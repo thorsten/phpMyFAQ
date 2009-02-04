@@ -66,7 +66,7 @@ if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE)) {
 //
 // Create a new FAQ object
 //
-$faq = new PMF_Faq($db, $LANGCODE);
+$faq = new PMF_Faq();
 
 //
 // use mbstring extension if available and when possible

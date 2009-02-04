@@ -61,7 +61,7 @@ $category = new PMF_Category();
 $category->transform(0);
 $category->buildTree();
 
-$faq = new PMF_Faq($db, $LANGCODE);
+$faq = new PMF_Faq();
 
 //
 // Handle the search requests

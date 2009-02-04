@@ -1,13 +1,14 @@
 <?php
 /**
- * $Id: Export.php,v 1.12 2008-05-22 11:22:59 thorstenr Exp $
- *
  * XML, XML DocBook, XHTML and PDF export - Classes and Functions
  *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
- * @since       2005-11-02
- * @copyright   2005-2008 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage PMF_Export
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @since      2005-11-02
+ * @copyright  2005-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -53,8 +54,6 @@ class PMF_Export
 
     public static function getDocBookExport($nCatid = 0, $bDownwards = true, $lang = "")
     {
-        global $DB;
-
         // TODO: remove the need of pre-generating a file to be read
         //generateDocBookExport();
         PMF_Export::_generateDocBookExport2();
@@ -75,7 +74,7 @@ class PMF_Export
         $arrDatum   = array();
 
         // Get Faq Data
-        $oFaq = new PMF_Faq($db, $LANGCODE);
+        $oFaq = new PMF_Faq();
         $faqs = $oFaq->get(FAQ_QUERY_TYPE_EXPORT_PDF, $nCatid,  $bDownwards, $lang);
 
         if (count($faqs) > 0) {
@@ -134,7 +133,7 @@ class PMF_Export
         $xhtml .= '<body dir="'.$PMF_LANG['dir'].'">';
 
         // Get Faq Data
-        $oFaq = new PMF_Faq($db, $LANGCODE);
+        $oFaq = new PMF_Faq();
         $faqs = $oFaq->get(FAQ_QUERY_TYPE_EXPORT_XHTML, $nCatid,  $bDownwards, $lang);
 
         // Start composing XHTML
@@ -183,7 +182,7 @@ class PMF_Export
         $my_xml_output .= "<phpmyfaq xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:NamespaceSchemaLocation=\"http://www.phpmyfaq.de/xml/faqschema.xsd\">\n";
 
         // Get Faq Data
-        $oFaq = new PMF_Faq($db, $LANGCODE);
+        $oFaq = new PMF_Faq();
         $faqs = $oFaq->get(FAQ_QUERY_TYPE_EXPORT_XML, $nCatid,  $bDownwards, $lang);
 
         // Start composing XML

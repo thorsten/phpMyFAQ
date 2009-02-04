@@ -42,18 +42,17 @@ if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE)) {
     $LANGCODE = 'en';
 }
 
-$cat = null;
-$lang = null;
+$cat = $lang = null;
 if (isset($_GET['cat']) && is_numeric($_GET['cat']) && ($_GET['cat'] != 0)) {
-    $cat = $_GET['cat'];
+    $cat = (int)$_GET['cat'];
 }
 if (isset($_GET['lang']) && PMF_Init::isASupportedLanguage($_GET['lang'])) {
     $lang = $_GET['lang'];
 }
 
-$faq = new PMF_Faq($db, $LANGCODE);
+$faq     = new PMF_Faq();
 $rssData = $faq->getTopTenData(PMF_NUMBER_RECORDS_TOPTEN, $cat, $lang);
-$num = count($rssData);
+$num     = count($rssData);
 
 $rss = new XMLWriter();
 $rss->openMemory();

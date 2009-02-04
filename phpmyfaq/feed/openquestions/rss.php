@@ -42,9 +42,9 @@ if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE)) {
     $LANGCODE = 'en';
 }
 
-$faq = new PMF_Faq($db, $LANGCODE);
+$faq     = new PMF_Faq();
 $rssData = $faq->getAllOpenQuestions();
-$num = count($rssData);
+$num     = count($rssData);
 
 $rss = new XMLWriter();
 $rss->openMemory();

@@ -62,8 +62,8 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
 
     require_once(PMF_ROOT_DIR.'/inc/Linkverifier.php');
     require_once(PMF_ROOT_DIR.'/inc/Faq.php');
-    $oLnk = new PMF_Linkverifier($db);
-    $faq = new PMF_Faq($db, LANGCODE);
+    $oLnk     = new PMF_Linkverifier($db);
+    $faq      = new PMF_Faq();
     $totStart = microtime(true);
 
     // Read the data directly from the faqdata table (all faq records in all languages)
