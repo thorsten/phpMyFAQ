@@ -48,12 +48,12 @@ class PMF_Relation
     * Constructor
     *
     */
-    function __construct(&$db, $language)
+    function __construct()
     {
-        global $PMF_LANG;
+        global $DB;
 
-        $this->db       = &$db;
-        $this->language = $language;
+        $this->db       = PMF_Db::getInstance();
+        $this->language = PMF_Init::$language;
         $this->pmf_lang = $PMF_LANG;
     }
 
