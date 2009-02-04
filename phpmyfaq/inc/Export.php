@@ -21,12 +21,6 @@
  */
 
 require_once PMF_INCLUDE_DIR.'/constants.php';
-require_once PMF_INCLUDE_DIR.'/Category.php';
-require_once PMF_INCLUDE_DIR.'/Faq.php';
-require_once PMF_INCLUDE_DIR.'/HttpStreamer.php';
-require_once PMF_INCLUDE_DIR.'/PMF_Export/Docbook.php';
-require_once PMF_INCLUDE_DIR.'/PMF_Export/Pdf.php';
-
 
 define("EXPORT_TYPE_DOCBOOK", "docbook");
 define("EXPORT_TYPE_PDF", "pdf");

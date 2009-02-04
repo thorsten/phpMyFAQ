@@ -30,7 +30,7 @@ if ($permission['delcomment']) {
 
     $comment = new PMF_Comment($db, $LANGCODE);
 
-    $category = new PMF_Category('', $current_admin_user, $current_admin_groups, false);
+    $category = new PMF_Category($current_admin_user, $current_admin_groups, false);
     $category->buildTree();
 
     $faq = new PMF_Faq($db, $LANGCODE);

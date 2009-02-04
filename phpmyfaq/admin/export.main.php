@@ -36,7 +36,7 @@ require_once PMF_INCLUDE_DIR.'/Export.php';
 if (!emptyTable(SQLPREFIX."faqdata")) {
 
     if (!emptyTable(SQLPREFIX."faqcategories")) {
-        $category = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups);
+        $category = new PMF_Category($current_admin_user, $current_admin_groups);
         $category->buildTree();
         // TODO: ENHANCEMENT/VERY LOW PRIORITY
         //       Give the user a multple selection and add support

@@ -34,7 +34,7 @@ if (isset($currentCategory) && $currentCategory != 0 && isset($category->categor
     $records = $faq->showAllRecords($currentCategory, $faqconfig->get('records.orderby'), $faqconfig->get('records.sortby'));
     
     if (!$records) {
-        $categories = new PMF_Category($LANGCODE);
+        $categories = new PMF_Category();
         $categories->transform($currentCategory);
         $categories->collapseAll();
         $records = $categories->viewTree();

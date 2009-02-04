@@ -45,7 +45,7 @@ if (
     }
 
     if ($numr == 0) {
-        $cat = new PMF_Category();
+        $cat        = new PMF_Category();
         $categories = $cat->getAllCategories();
 
         if ($faqconfig->get('records.enableVisibilityQuestions')) {

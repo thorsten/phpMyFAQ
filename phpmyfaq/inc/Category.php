@@ -2,15 +2,16 @@
 /**
  * The main category class
  *
- * @package   phpMyFAQ
- * @license   MPL
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Lars Tiedemann <larstiedemann@yahoo.de>
- * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
- * @author    Rudi Ferrari <bookcrossers@gmx.de>
- * @since     2004-02-16
- * @copyright 2004-2009 phpMyFAQ Team
- * @version   SVN: $Id: Category.php,v 1.56 2008-01-26 01:02:56 thorstenr Exp $
+ * @package    phpMyFAQ
+ * @subpackage PMF_Category
+ * @license    MPL
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     Lars Tiedemann <larstiedemann@yahoo.de>
+ * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author     Rudi Ferrari <bookcrossers@gmx.de>
+ * @since      2004-02-16
+ * @copyright  2004-2009 phpMyFAQ Team
+ * @version    SVN: $Id: Category.php,v 1.56 2008-01-26 01:02:56 thorstenr Exp $
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -23,8 +24,20 @@
  * under the License.
  */
 
-require_once PMF_INCLUDE_DIR . '/Link.php';
-
+/**
+ * PMF_Category
+ *
+ * @package    phpMyFAQ
+ * @subpackage PMF_Category
+ * @license    MPL
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     Lars Tiedemann <larstiedemann@yahoo.de>
+ * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author     Rudi Ferrari <bookcrossers@gmx.de>
+ * @since      2004-02-16
+ * @copyright  2004-2009 phpMyFAQ Team
+ * @version    SVN: $Id: Category.php,v 1.56 2008-01-26 01:02:56 thorstenr Exp $
+ */
 class PMF_Category
 {
     /**
@@ -116,20 +129,16 @@ class PMF_Category
     /**
      * Constructor
      *
-     * @param   string  $language
-     * @param   integer $user
-     * @param   array   $groups
-     * @param   boolean $withperm
+     * @param   integer $user     User
+     * @param   array   $groups   Group
+     * @param   boolean $withperm With or without permission check
      * @return  void
-     * @access  public
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    public function __construct($language = '', $user = null, $groups = null, $withperm = true)
+    public function __construct($user = null, $groups = null, $withperm = true)
     {
-        global $db;
-
-        $this->language   = $language;
-        $this->db         = $db;
+        $this->language   = PMF_Init::$language;
+        $this->db         = PMF_Db::getInstance();
         $this->categories = array();
 
         if (is_null($user)) {

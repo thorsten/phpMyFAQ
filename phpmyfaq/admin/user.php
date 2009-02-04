@@ -215,7 +215,7 @@ if ($userAction == 'delete') {
             $message .= '<p class="error">'.$errorMessages['delUser'].'</p>';
         } else {
             // Move the categories ownership to admin (id == 1)
-            $oCat = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
+            $oCat = new PMF_Category($current_admin_user, $current_admin_groups, false);
             $oCat->moveOwnership($userId, 1);
 
             // Remove the user from groups

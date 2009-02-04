@@ -83,7 +83,7 @@ if (
         // Fix data with correct values
         $newData['id'] = intval($_POST['faqid']);
         // Set categories equal to the faq source of the translation
-        $category = new PMF_Category($newLanguage);
+        $category   = new PMF_Category();
         $categories = $category->getCategoryIdsFromArticle($newData['id']);
     }
 

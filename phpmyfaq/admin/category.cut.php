@@ -26,7 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 }
 
 if ($permission["editcateg"]) {
-    $category = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
+    $category = new PMF_Category($current_admin_user, $current_admin_groups, false);
     $category->buildTree();
     
     $id        = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);

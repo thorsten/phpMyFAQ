@@ -26,7 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 
 if ($permission['delquestion']) {
 
-    $category = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
+    $category = new PMF_Category($current_admin_user, $current_admin_groups, false);
 
     $question_id = (int)$_GET['id'];
     if (isset($_GET['delete']) && $_GET['delete'] == 'yes') {

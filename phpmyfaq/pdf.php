@@ -30,7 +30,7 @@ session_start();
 
 require_once('inc/PMF_Export/Pdf.php');
 
-$category = new PMF_Category;
+$category = new PMF_Category();
 
 // get language (default: english)
 $pmf = new PMF_Init();

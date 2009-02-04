@@ -30,7 +30,7 @@ $user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
 
 if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 
-    $category = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
+    $category = new PMF_Category($current_admin_user, $current_admin_groups, false);
     $category->buildTree();
 
     $current_category = '';

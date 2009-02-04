@@ -28,7 +28,7 @@ $submit = $_REQUEST["submit"];
 // Re-evaluate $user
 $user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
 
-$category = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
+$category = new PMF_Category($current_admin_user, $current_admin_groups, false);
 
 // Evaluate the passed validity range, if any
 $dateStart =

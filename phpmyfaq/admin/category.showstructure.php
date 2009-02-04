@@ -30,7 +30,7 @@ printf('<h2>%s</h2>', $PMF_LANG['ad_menu_categ_structure']);
 
 if ($permission['editcateg']) {
 
-    $category        = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
+    $category        = new PMF_Category($current_admin_user, $current_admin_groups, false);
     $currentLink     = $_SERVER['PHP_SELF'];
     $actual_language = $languageCodes[strtoupper($LANGCODE)];
     $all_languages   = array();

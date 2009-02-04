@@ -44,7 +44,7 @@ if ($permission['editcateg']) {
     // Save a new category
     if ($_action == 'savecategory') {
 
-        $category      = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
+        $category      = new PMF_Category($current_admin_user, $current_admin_groups, false);
         $parent_id     = PMF_Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT);
         $category_data = array(
             'lang'        => PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING),
@@ -70,7 +70,7 @@ if ($permission['editcateg']) {
     // Updates an existing category
     if ($_action == 'updatecategory') {
 
-        $category      = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
+        $category      = new PMF_Category($current_admin_user, $current_admin_groups, false);
         $parent_id     = PMF_Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT);
         $category_data = array(
             'id'          => PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT),
@@ -109,7 +109,7 @@ if ($permission['editcateg']) {
     // Deletes an existing category
     if ($permission['delcateg'] && $_action == 'removecategory') {
 
-        $category = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
+        $category = new PMF_Category($current_admin_user, $current_admin_groups, false);
         $id         = PMF_Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
         $lang       = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
         $delete_all = strtolower($db->escape_string($_POST['deleteall'])) == 'yes' ? true : false;
@@ -124,7 +124,7 @@ if ($permission['editcateg']) {
     // Moves a category
     if ($_action == 'changecategory') {
 
-        $category      = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
+        $category      = new PMF_Category($current_admin_user, $current_admin_groups, false);
         $category_id_1 = PMF_Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
         $category_id_2 = PMF_Filter::filterInput(INPUT_POST, 'change', FILTER_VALIDATE_INT);
 
@@ -138,7 +138,7 @@ if ($permission['editcateg']) {
     // Pastes a category
     if ($_action == 'pastecategory') {
 
-        $category    = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
+        $category    = new PMF_Category($current_admin_user, $current_admin_groups, false);
         $category_id = PMF_Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
         $parent_id   = PMF_Filter::filterInput(INPUT_POST, 'after', FILTER_VALIDATE_INT);
         if ($category->updateParentCategory($category_id, $parent_id)) {
@@ -159,7 +159,7 @@ if ($permission['editcateg']) {
     if (isset($category)) {
         unset($category);
     }
-    $category = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
+    $category = new PMF_Category($current_admin_user, $current_admin_groups, false);
     $category->getMissingCategories();
     $category->buildTree();
 

@@ -225,7 +225,7 @@ $faq = new PMF_Faq($db, $lang, $current_user, $current_groups);
 //
 // Create a new Category object
 //
-$category = new PMF_Category($LANGCODE, $current_user, $current_groups);
+$category = new PMF_Category($current_user, $current_groups);
 
 //
 // Create a new Tags object

@@ -43,7 +43,7 @@ if (isset($_GET['category_lang']) && PMF_Init::isASupportedLanguage($_GET['categ
     $category_lang = $_GET['category_lang'];
 }
 
-$category = new PMF_Category($LANGCODE, -1, array(-1));
+$category = new PMF_Category();
 $faq      = new PMF_Faq($db, $category_lang, -1, array(-1));
 
 $records = $faq->getAllRecordPerCategory($category_id,

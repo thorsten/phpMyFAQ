@@ -29,7 +29,7 @@ printf("<h2>%s</h2>\n", $PMF_LANG['ad_entry_aor']);
 
 if ($permission["editbt"] || $permission["delbt"]) {
     // (re)evaluate the Category object w/o passing the user language
-    $category = new PMF_Category('', $current_admin_user, $current_admin_groups, false);
+    $category = new PMF_Category($current_admin_user, $current_admin_groups, false);
     $category->transform(0);
     $category->buildTree();
 

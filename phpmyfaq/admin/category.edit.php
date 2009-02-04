@@ -28,7 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 if ($permission['editcateg']) {
 
     $id              = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
-    $category        = new PMF_Category($LANGCODE, $current_admin_user, $current_admin_groups, false);
+    $category        = new PMF_Category($current_admin_user, $current_admin_groups, false);
     $categories      = $category->getAllCategories();
     $user_permission = $category->getPermissions('user', array($id));
 
