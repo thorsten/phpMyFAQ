@@ -38,9 +38,8 @@ if ($permission["editbt"] || $permission["delbt"]) {
         link_verifier_javascript();
     }
 
-    $comment = new PMF_Comment($db, $LANGCODE);
-
-    $faq = new PMF_Faq($db, $LANGCODE);
+    $comment = new PMF_Comment();
+    $faq     = new PMF_Faq($db, $LANGCODE);
 
     $cond             = array();
     $numCommentsByFaq = array();

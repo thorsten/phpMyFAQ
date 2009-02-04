@@ -33,8 +33,8 @@ if (isset($_REQUEST['type']) && (PMF_Comment::COMMENT_TYPE_NEWS == $_REQUEST['ty
 if ($permission['delcomment']) {
     if ($_REQUEST['subm'] == $PMF_LANG['ad_gen_yes']) {
         $recordId = (int)$_REQUEST['artid'];
-        $cmtId = (int)$_REQUEST['cmtid'];
-        $oComment = new PMF_Comment(& $db, $LANGCODE);
+        $cmtId    = (int)$_REQUEST['cmtid'];
+        $oComment = new PMF_Comment();
         if ($oComment->deleteComment($recordId, $cmtId)) {
             $msg = $PMF_LANG['ad_entry_commentdelsuc'];
         } else {

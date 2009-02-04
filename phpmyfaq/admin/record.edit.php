@@ -412,7 +412,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     </div>
     </form>
 <?php
-        $comment = new PMF_Comment($db, $LANGCODE);
+        $comment  = new PMF_Comment();
         $comments = $comment->getCommentsData($faqData['id'], 'faq');
         if (count($comments) > 0) {
 ?>

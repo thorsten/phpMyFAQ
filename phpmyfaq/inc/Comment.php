@@ -2,11 +2,12 @@
 /**
  * The main Comment class
  *
- * @package   phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since     2006-07-23
- * @copyright 2006-2009 phpMyFAQ Team
- * @version   SVN: $Id$
+ * @package    phpMyFAQ
+ * @subpackage PMF_Comment
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since      2006-07-23
+ * @copyright  2006-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -19,7 +20,16 @@
  * under the License.
  */
 
-// {{{ Classes
+/**
+ * The main Comment class
+ *
+ * @package    phpMyFAQ
+ * @subpackage PMF_Comment
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since      2006-07-23
+ * @copyright  2006-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
+ */
 class PMF_Comment
 {
     /**
@@ -60,15 +70,14 @@ class PMF_Comment
     /**
      * Constructor
      *
-     * @param   object
-     * @param   string
+     * @return void
      */
-    public function __construct($db, $language)
+    public function __construct()
     {
         global $PMF_LANG;
 
-        $this->db       = $db;
-        $this->language = $language;
+        $this->db       = PMF_Db::getInstance();
+        $this->language = PMF_Init::$language;
         $this->pmf_lang = $PMF_LANG;
     }
 

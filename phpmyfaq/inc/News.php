@@ -316,7 +316,7 @@ class PMF_News
     */
     function getComments($id)
     {
-        $oComment = new PMF_Comment($this->db, $this->language);
+        $oComment = new PMF_Comment();
         return $oComment->getComments($id, PMF_Comment::COMMENT_TYPE_NEWS);
     }
 
@@ -333,7 +333,7 @@ class PMF_News
      */
     function addComment($commentData)
     {
-        $oComment = new PMF_Comment($this->db, $this->language);
+        $oComment = new PMF_Comment();
         return $oComment->addComment($commentData);
     }
 
@@ -351,7 +351,7 @@ class PMF_News
      */
     function deleteComment($record_id, $comment_id)
     {
-        $oComment = new PMF_Comment($this->db, $this->language);
+        $oComment = new PMF_Comment();
         return $oComment->deleteComment($record_id, $comment_id);
     }
 

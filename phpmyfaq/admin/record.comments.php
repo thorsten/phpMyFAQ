@@ -28,8 +28,7 @@ printf("<h2>%s</h2>\n", $PMF_LANG['ad_comment_administration']);
 
 if ($permission['delcomment']) {
 
-    $comment = new PMF_Comment($db, $LANGCODE);
-
+    $comment  = new PMF_Comment();
     $category = new PMF_Category($current_admin_user, $current_admin_groups, false);
     $category->buildTree();
 

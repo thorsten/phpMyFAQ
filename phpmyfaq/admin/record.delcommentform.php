@@ -39,9 +39,9 @@ if ($permission["delcomment"]) {
     <input type="hidden" name="type" value="<?php isset($_REQUEST["type"]) ? print $_REQUEST["type"] : ''; ?>" />
 <?php
 
-    $cmtId = (int)$_GET['cmtid'];
-    $oComment = new PMF_Comment(& $db, $LANGCODE);
-    $comment = $oComment->getCommentDataById($cmtId);
+    $cmtId    = (int)$_GET['cmtid'];
+    $oComment = new PMF_Comment();
+    $comment  = $oComment->getCommentDataById($cmtId);
 ?>
     <p align="center"><?php print $PMF_LANG["ad_entry_delcom_1"]; ?> <a href="mailto:<?php print($comment['email']); ?>"><?php print($comment['user']); ?></a> <?php print $PMF_LANG["ad_entry_delcom_2"]; ?></p>
     <p align="center"><?php print($comment['content']); ?></p>
