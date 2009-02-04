@@ -1,12 +1,13 @@
 <?php
 /**
- * $Id: pwd.change.php,v 1.10 2007-04-06 11:15:24 thorstenr Exp $
- *
  * Form to change password of the current user
  *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since       2003-02-23
- * @copyright   (c) 2003-2007 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage Administration
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since      2003-02-23
+ * @copyright  2003-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -24,13 +25,48 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
+printf('<h2>%s</h2>', $PMF_LANG['ad_passwd_cop']);
+
 if ($permission["passwd"]) {
+	
+	// If we have to save a new password, do that first
+	$save = PMF_Filter::filterInput(INPUT_POST, 'save', FILTER_SANITIZE_STRING);
+	if (!is_null($save)) {
+		
+		// Re-evaluate $user
+        $user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
+		
+        // Define the (Local/Current) Authentication Source
+        $_authSource = PMF_User_Auth::selectAuth($user->_auth_data['authSource']['name']);
+        $_authSource->selectEncType($user->_auth_data['encType']);
+        $_authSource->read_only($user->_auth_data['readOnly']);
+        
+        $opasswd = PMF_Filter::filterInput(INPUT_POST, 'opass', FILTER_SANITIZE_STRING);
+        $npasswd = PMF_Filter::filterInput(INPUT_POST, 'npass', FILTER_SANITIZE_STRING);
+        $bpasswd = PMF_Filter::filterInput(INPUT_POST, 'bpass', FILTER_SANITIZE_STRING);
+        
+	   if (($_authSource->encrypt($opasswd) == $user->_encrypted_password) && ($npasswd == $bpasswd)) {
+            if (!$user->changePassword($npasswd)) {
+                print $PMF_LANG["ad_passwd_fail"]."<br />";
+            }
+    
+            print $PMF_LANG["ad_passwdsuc"]."<br />";
+
+            // TODO: Manage the 'Rembember me' Cookie also under 2.0.0.
+            if (isset($_COOKIE['cuser'])) {
+                if ($_COOKIE["cuser"] == $user) {
+                    print $PMF_LANG["ad_passwd_remark"]."<br /><a href=\"?action=setcookie\">".$PMF_LANG["ad_cookie_set"]."</a>\n";
+                }
+            }
+        } else {
+        print $PMF_LANG["ad_passwd_fail"];
+        }
+	}
 ?>
-    <h2><?php print $PMF_LANG["ad_passwd_cop"]; ?></h2>
-    <form action="<?php print $_SERVER["PHP_SELF"]; ?>" method="post">
+    <form action="?action=passwd" method="post">
     <fieldset>
     <legend><?php print $PMF_LANG["ad_passwd_cop"]; ?></legend>
-    <input type="hidden" name="action" value="savepwd" />
+    <input type="hidden" name="save" value="newpassword" />
 
     <label class="left" for="opass"><?php print $PMF_LANG["ad_passwd_old"]; ?></label>
     <input type="password" name="opass" size="30" /><br />
