@@ -28,8 +28,7 @@ if ($permission['viewlog']) {
     require_once(PMF_ROOT_DIR.'/inc/Rating.php');
 
     $category    = new PMF_Category($current_admin_user, $current_admin_groups, false);
-    $ratings     = new PMF_Rating($db, $LANGCODE);
-
+    $ratings     = new PMF_Rating();
     $ratingdata  = $ratings->getAllRatings();
     $numratings  = count($ratingdata);
     $oldcategory = 0;

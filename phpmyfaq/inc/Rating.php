@@ -46,17 +46,15 @@ class PMF_Rating
     /**
      * Constructor
      *
-     * @param   object  PMF_Db
-     * @param   string  $language
      * @since   2007-03-31
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function __construct(&$db, $language)
+    function __construct()
     {
         global $DB;
 
-        $this->db       = &$db;
-        $this->language = $language;
+        $this->db       = PMF_Db::getInstance();
+        $this->language = PMF_Init::$language;
         $this->type     = $DB['type'];
     }
 
