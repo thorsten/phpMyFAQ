@@ -49,7 +49,7 @@ $errorMessages = array(
     'updateRights'                  => $PMF_LANG['ad_msg_mysqlerr'],
     'updateRights_noId'             => $PMF_LANG['ad_user_error_noId']);
 
-$captcha = new PMF_Captcha($db, $sids, PMF_Init::$language);
+$captcha = new PMF_Captcha($sids);
 
 $loginname = isset($_REQUEST['loginname']) ? $_REQUEST['loginname'] : '';
 $lastname = isset($_REQUEST['lastname']) ? $_REQUEST['lastname'] : '';

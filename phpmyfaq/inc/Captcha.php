@@ -137,23 +137,21 @@ class PMF_Captcha
     /**
      * Constructor
      *
-     * @param   object  $db
      * @param   string  $sids
-     * @param   string  $language
      * @param   integer $caplength
      * @return  void
      * @author  Thomas Zeithaml <seo@annatom.de>
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    public function __construct($db, $sids, $language, $caplength = 6)
+    public function __construct($sids, $caplength = 6)
     {
-        $this->db        =& $db;
+        $this->db        = PMF_Db::getInstance();
+        $this->language  = PMF_Init::$language;
         if ($sids > 0) {
             $this->sids  = $sids;
         } else {
             $this->sids  = '';
         }
-        $this->language  = $language;
         $this->userAgent = $_SERVER['HTTP_USER_AGENT'];
         $this->ip        = $_SERVER['REMOTE_ADDR'];
         $this->caplength = $caplength;

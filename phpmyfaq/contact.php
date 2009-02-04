@@ -26,7 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $faqsession->userTracking('contact', 0);
 
-$captcha = new PMF_Captcha($db, $sids, PMF_Init::$language);
+$captcha = new PMF_Captcha($sids);
 
 if (isset($_GET['gen'])) {
     $captcha->showCaptchaImg();

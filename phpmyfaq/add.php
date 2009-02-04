@@ -25,7 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$captcha = new PMF_Captcha($db, $sids, PMF_Init::$language);
+$captcha = new PMF_Captcha($sids);
 
 if (isset($_GET['gen'])) {
     $captcha->showCaptchaImg();
