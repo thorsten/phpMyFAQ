@@ -1,13 +1,13 @@
 <?php
 /**
- * $Id: Configuration.php,v 1.18 2007-07-22 19:38:47 thorstenr Exp $
- *
  * The main class for fetching the configuration, update and delete items.
  *
- * @package   sphpMyFAQ
- * @since     2006-01-04
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright (c) 2006-2007 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage PMF_Configuration   
+ * @since      2006-01-04
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright  2006-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -19,12 +19,23 @@
  * License for the specific language governing rights and limitations
  * under the License.
  */
+
+/**
+ * PMF_Configuration
+ *
+ * @package    phpMyFAQ
+ * @subpackage PMF_Configuration   
+ * @since      2006-01-04
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright  2006-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
+ */
 class PMF_Configuration
 {
     /**
      * DB handle
      *
-     * @var object
+     * @var PMF_Db
      */
     private $db = null;
 
@@ -38,13 +49,12 @@ class PMF_Configuration
     /**
      * Constructor
      *
-     * @param  object
      * @return void
      * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function __construct($db)
+    function __construct()
     {
-        $this->db = $db;
+        $this->db = PMF_Db::getInstance();
     }
 
     /**
@@ -79,10 +89,8 @@ class PMF_Configuration
     /**
      * Returns a configuration item
      *
-     * @param  string
+     * @param  string $item Configuration item
      * @return mixed
-     * @access public
-     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     public function get($item)
     {
@@ -100,17 +108,15 @@ class PMF_Configuration
         	    return $this->config[$item];
         		break;
         }
-    } // end func get()
+    }
 
     /**
      * Updates all configuration items
      *
-     * @param  mixed
+     * @param  array $newconfig Array with new configuration values
      * @return bool
-     * @access public
-     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    public function update($newconfig)
+    public function update(Array $newconfig)
     {
         if (is_array($newconfig)) {
             foreach ($newconfig as $name => $value) {
@@ -134,5 +140,5 @@ class PMF_Configuration
             return true;
         }
         return false;
-    } // end func update()
+    }
 }

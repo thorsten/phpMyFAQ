@@ -86,13 +86,13 @@ set_error_handler('pmf_error_handler');
 // Create a database connection
 //
 define('SQLPREFIX', $DB['prefix']);
-$db = PMF_Db::db_select($DB['type']);
+$db = PMF_Db::dbSelect($DB['type']);
 $db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db']);
 
 //
 // Fetch the configuration
 //
-$faqconfig = new PMF_Configuration($db);
+$faqconfig = new PMF_Configuration();
 $faqconfig->getAll();
 $PMF_CONF = $faqconfig->config;
 
