@@ -62,7 +62,7 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
 
     require_once(PMF_ROOT_DIR.'/inc/Linkverifier.php');
     require_once(PMF_ROOT_DIR.'/inc/Faq.php');
-    $oLnk     = new PMF_Linkverifier($db);
+    $oLnk     = new PMF_Linkverifier();
     $faq      = new PMF_Faq();
     $totStart = microtime(true);
 

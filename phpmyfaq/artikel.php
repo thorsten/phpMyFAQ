@@ -113,7 +113,7 @@ if (isset($_GET['highlight']) && $_GET['highlight'] != "/" && $_GET['highlight']
 //         href="index.php?action=artikel&cat=NNN&id=MMM&artlang=XYZ"
 // Search for href attribute links
 require_once('inc/Linkverifier.php');
-$oLnk = new PMF_Linkverifier($db);
+$oLnk = new PMF_Linkverifier();
 // Extract URLs from content
 $oLnk->resetPool();
 $oLnk->parse_string($content);

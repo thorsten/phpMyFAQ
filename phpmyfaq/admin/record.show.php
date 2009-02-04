@@ -33,7 +33,7 @@ if ($permission["editbt"] || $permission["delbt"]) {
     $category->transform(0);
     $category->buildTree();
 
-    $linkverifier = new PMF_Linkverifier($db, $user->getLogin());
+    $linkverifier = new PMF_Linkverifier($user->getLogin());
     if ($linkverifier->isReady()) {
         link_verifier_javascript();
     }

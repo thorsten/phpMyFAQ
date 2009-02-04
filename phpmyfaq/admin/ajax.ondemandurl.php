@@ -42,7 +42,7 @@ header("Pragma: no-cache");
 header("Content-type: text/html");
 header("Vary: Negotiate,Accept");
 
-$linkverifier = new PMF_Linkverifier($db, $user->getLogin());
+$linkverifier = new PMF_Linkverifier($user->getLogin());
 if ($linkverifier->isReady() == false) {
     if (count(ob_list_handlers()) > 0) {
         ob_clean();

@@ -122,12 +122,12 @@ class PMF_Linkverifier
     /**
      * Constructor
      *
-     * @access  public
-     * @author  Minoru TODA <todam@netjapan.co.jp>
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
-     * @since   2005-08-01
+     * @param  string $user User
+     * @author Minoru TODA <todam@netjapan.co.jp>
+     * @author Matteo Scaramuccia <matteo@scaramuccia.com>
+     * @since  2005-08-01
      */
-    function PMF_Linkverifier($db, $user = null)
+    public function __construct($user = null)
     {
         global $PMF_LANG;
 

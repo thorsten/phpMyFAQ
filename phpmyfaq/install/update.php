@@ -910,7 +910,7 @@ if ($step == 5) {
         }
         // 10/13. Move each image filename in each of the faq content, from '/images' to '/images/Image'
         require_once(PMF_ROOT_DIR.'/inc/Linkverifier.php');
-        $oLnk = new PMF_Linkverifier($db);
+        $oLnk     = new PMF_Linkverifier();
         $_records = array();
         // Read the data from the current faqdata table
         $_result = $db->query('SELECT id, revision_id, lang, content FROM '.SQLPREFIX.'faqdata ORDER BY id');

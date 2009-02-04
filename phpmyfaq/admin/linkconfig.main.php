@@ -131,7 +131,7 @@ enumScriptParameters();
 ?>
 <h2><?php print $PMF_LANG['ad_linkcheck_config_title']; ?></h2>
 <?php
-$linkverifier = new PMF_Linkverifier($db, $user->getLogin());
+$linkverifier = new PMF_Linkverifier($user->getLogin());
 if ($linkverifier->isReady() == false) {
     print $PMF_LANG['ad_linkcheck_config_disabled'];
     return;

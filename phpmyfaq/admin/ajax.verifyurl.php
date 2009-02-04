@@ -44,7 +44,7 @@ header("Content-type: text/html");
 header("Vary: Negotiate,Accept");
 header("Content-type: text/xml; charset=".$PMF_LANG['metaCharset']);
 
-$linkverifier = new PMF_Linkverifier($db, $user->getLogin());
+$linkverifier = new PMF_Linkverifier($user->getLogin());
 if ($linkverifier->isReady() == false) {
     if (count(ob_list_handlers()) > 0) {
         ob_clean();
