@@ -30,7 +30,7 @@ print sprintf('<h2>%s</h2>', $PMF_LANG['ad_menu_glossary']);
 if ($permission['editglossary']) {
 
     $id           = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-    $glossary     = new PMF_Glossary($db, $LANGCODE);
+    $glossary     = new PMF_Glossary();
     $glossaryItem = $glossary->getGlossaryItem($id);
 ?>
 <form action="<?php print $_SERVER['PHP_SELF']; ?>" method="post">

@@ -32,7 +32,7 @@ print sprintf('<h2>%s</h2>', $PMF_LANG['ad_menu_glossary']);
 if ($permission['addglossary'] || $permission['editglossary'] || $permission['delglossary']) {
 
     require_once(PMF_ROOT_DIR.'/inc/Glossary.php');
-    $glossary = new PMF_Glossary($db, $LANGCODE);
+    $glossary = new PMF_Glossary();
 
     if ('saveglossary' == $_action && $permission['addglossary']) {
     	$item       = PMF_Filter::filterInput(INPUT_POST, 'item', FILTER_SANITIZE_STRIPPED);

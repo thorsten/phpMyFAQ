@@ -57,9 +57,9 @@ $faq->logViews($faq->faqRecord['id']);
 $content = $faq->faqRecord['content'];
 $thema   = $faq->getRecordTitle($id);
 // Add Glossary entries
-$oG = new PMF_Glossary($db, $LANGCODE);
-$content = $oG->insertItemsIntoContent($content);
-$thema   = $oG->insertItemsIntoContent($thema);
+$oGlossary = new PMF_Glossary();
+$content   = $oGlossary->insertItemsIntoContent($content);
+$thema     = $oGlossary->insertItemsIntoContent($thema);
 
 // Set the path of the current category
 $categoryName = $category->getPath($currentCategory, ' &raquo; ', true);

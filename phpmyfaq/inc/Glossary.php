@@ -51,15 +51,13 @@ class PMF_Glossary
     /**
     * Constructor
     *
-    * @param  object $db       Database object
-    * @param  string $language Language
     * @return void
     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
     */
-    public function __construct($db, $language)
+    public function __construct()
     {
-        $this->db       = $db;
-        $this->language = $language;
+        $this->db       = PMF_Db::getInstance();
+        $this->language = PMF_Init::$language;
     }
 
     /**

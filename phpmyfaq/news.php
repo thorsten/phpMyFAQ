@@ -58,9 +58,9 @@ $content = $news['content'];
 $header  = $news['header'];
 
 // Add Glossary entries
-$oG = new PMF_Glossary($db, $LANGCODE);
-$content = $oG->insertItemsIntoContent($content);
-$header  = $oG->insertItemsIntoContent($header);
+$oGlossary = new PMF_Glossary();
+$content   = $oGlossary->insertItemsIntoContent($content);
+$header    = $oGlossary->insertItemsIntoContent($header);
 
 // Show link to edit the news?
 $editThisEntry = '';
