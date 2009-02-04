@@ -46,20 +46,20 @@ session_start();
 //
 // Include the IDNA class
 //
-require_once 'inc/libs/idna_convert.class.php';
+require_once PMF_ROOT_DIR.'/inc/libs/idna_convert.class.php';
 $IDN = new idna_convert;
 
 //
 // get language (default: english)
 //
-$pmf = new PMF_Init();
-$LANGCODE = $pmf->setLanguage((isset($PMF_CONF['main.languageDetection']) ? true : false), $PMF_CONF['main.language']);
+$pmf      = new PMF_Init();
+$LANGCODE = $pmf->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
 // Preload English strings
-require_once ('../lang/language_en.php');
+require_once PMF_ROOT_DIR.'/lang/language_en.php';
 
 if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE)) {
     // Overwrite English strings with the ones we have in the current language
-    require_once('../lang/language_'.$LANGCODE.'.php');
+    require_once PMF_ROOT_DIR.'/lang/language_'.$LANGCODE.'.php';
 } else {
     $LANGCODE = 'en';
 }
@@ -70,21 +70,23 @@ require_once ("header.php");
 </div>
 <div id="bodyText">
 <?php
-if (isset($_GET["action"]) && $_GET["action"] == "newpassword") {
-        // Do nothing
-    } elseif (isset($_GET["action"]) && $_GET["action"] == "savenewpassword") {
-        // Do nothing
-    } elseif (isset($_GET["action"]) && $_GET["action"] == "sendmail") {
-        if (    isset($_POST["username"]) && $_POST["username"] != ""
-             && isset($_POST["email"]) && $_POST["email"] != "" && checkEmail($_POST["email"])
-            ) {
-            $username = $db->escape_string($_POST["username"]);
-            $email    = $db->escape_string($_POST["email"]);
 
-            $user = new PMF_User_CurrentUser();
+$_action = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
+
+if ($_action == "sendmail") {
+	
+	$username = PMF_Filter::filterInput(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
+	$email    = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_SANITIZE_STRING);
+	
+        if (!is_null($username) && !is_null($email) && checkEmail($email)
+            ) {
+            $username = $db->escape_string($username);
+            $email    = $db->escape_string($email);
+
+            $user       = new PMF_User_CurrentUser();
             $loginExist = $user->getUserByLogin($username);
 
-            if ($loginExist && ($_POST["email"] == $user->getUserData('email'))) {
+            if ($loginExist && ($email == $user->getUserData('email'))) {
                 $consonants = array(
                     'b','c','d','f','g','h','j','k','l','m','n','p','r','s','t','v','w','x','y','z'
                 );
@@ -117,7 +119,7 @@ if (isset($_GET["action"]) && $_GET["action"] == "newpassword") {
         }
     } else {
 ?>
-    <form action="<?php print $_SERVER["PHP_SELF"]; ?>?action=sendmail" method="post">
+    <form action="?action=sendmail" method="post">
     <fieldset class="login">
         <legend class="login"><?php print $PMF_LANG["ad_passwd_cop"]; ?></legend>
 
@@ -130,7 +132,7 @@ if (isset($_GET["action"]) && $_GET["action"] == "newpassword") {
         <input class="submit" style="margin-left: 190px;" type="submit" value="<?php print $PMF_LANG["msgNewContentSubmit"]; ?>" />
 
         <p><img src="images/arrow.gif" width="11" height="11" alt="<?php print $PMF_LANG["ad_sess_back"]; ?> FAQ" border="0" /> <a href="index.php" title="<?php print $PMF_LANG["ad_sess_back"]; ?> FAQ"><?php print $PMF_LANG["ad_sess_back"]; ?></a></p>
-        <p><img src="images/arrow.gif" width="11" height="11" alt="<?php print PMF_htmlentities($PMF_CONF['main.titleFAQ'], ENT_QUOTES, $PMF_LANG['metaCharset']); ?> FAQ" border="0" /> <a href="../index.php" title="<?php print PMF_htmlentities($PMF_CONF['main.titleFAQ'], ENT_QUOTES, $PMF_LANG['metaCharset']); ?> FAQ"><?php print PMF_htmlentities($PMF_CONF['main.titleFAQ'], ENT_QUOTES, $PMF_LANG['metaCharset']); ?> FAQ</a></p>
+        <p><img src="images/arrow.gif" width="11" height="11" alt="<?php print PMF_htmlentities($faqconfig->get('main.titleFAQ'), ENT_QUOTES, $PMF_LANG['metaCharset']); ?> FAQ" border="0" /> <a href="../index.php" title="<?php print PMF_htmlentities($faqconfig->get('main.titleFAQ'), ENT_QUOTES, $PMF_LANG['metaCharset']); ?> FAQ"><?php print PMF_htmlentities($faqconfig->get('main.titleFAQ'), ENT_QUOTES, $PMF_LANG['metaCharset']); ?> FAQ</a></p>
 
     </fieldset>
     </form>
@@ -142,6 +144,5 @@ if (DEBUG) {
     print "<p>".$db->sqllog()."</p>";
 }
 
-require_once ("footer.php");
+require_once 'footer.php';
 $db->dbclose();
-?>
