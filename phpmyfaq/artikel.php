@@ -272,8 +272,7 @@ if ($maxVisits - $minVisits > 0) {
 $faqPopularity = $currVisits.'/'.(int)$percentage.'%';
 
 // Get the related records for this entry
-require_once('inc/Relation.php');
-$relevant = new PMF_Relation($db, $LANGCODE);
+$relevant = new PMF_Relation();
 
 $translationForm = '';
 if (count($arrLanguage) < count(getAvailableLanguages())) {
