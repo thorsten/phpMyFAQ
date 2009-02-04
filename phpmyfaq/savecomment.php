@@ -80,10 +80,9 @@ if (    isset($_POST['user']) && $_POST['user'] != ''
             $oLink->itemTitle = $faq->faqRecord['title'];
             $urlToContent = $oLink->toString();
         } elseif ('news' == $_POST['type']) {
-            class_exists('PMF_News') || require('inc/News.php');
-
-            $oNews = new PMF_News($db, $LANGCODE);
-            $news = $oNews->getNewsEntry($id);
+            
+            $oNews = new PMF_News();
+            $news  = $oNews->getNewsEntry($id);
             if ($news['authorEmail'] != '') {
                 $emailTo = $news['authorEmail'];
             }

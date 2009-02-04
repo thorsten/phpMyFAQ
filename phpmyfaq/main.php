@@ -26,7 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 require_once('inc/News.php');
 
-$news = new PMF_News($db, $LANGCODE);
+$news = new PMF_News();
 
 $archived        = (isset($_GET['newsid']) && ('0' == $_GET['newsid']));
 $writeNewsHeader = PMF_htmlentities($PMF_CONF['main.titleFAQ'], ENT_QUOTES, $PMF_LANG['metaCharset']);

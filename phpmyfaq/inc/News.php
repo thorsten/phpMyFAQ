@@ -21,17 +21,6 @@
  * under the License.
  */
 
-// {{{ Includes
-/**
- * This include is needed for manipulating PMF_Comment objects
- */
-require_once(PMF_INCLUDE_DIR.'/Comment.php');
-/**
- * This include is needed for accessing to mod_rewrite support configuration value
- */
-require_once(PMF_INCLUDE_DIR.'/Link.php');
-// }}}
-
 // {{{ Classes
 class PMF_News
 {
@@ -40,14 +29,14 @@ class PMF_News
     *
     * @var  object
     */
-    var $db;
+    private $db;
 
     /**
     * Language
     *
     * @var  string
     */
-    var $language;
+    private $language;
 
     /**
     * Language strings
@@ -60,12 +49,12 @@ class PMF_News
     * Constructor
     *
     */
-    function PMF_News(&$db, $language)
+    public function __construct()
     {
         global $PMF_LANG;
 
-        $this->db = & $db;
-        $this->language = $language;
+        $this->db       = PMF_Db::getInstance();
+        $this->language = PMF_Init::$language;
         $this->pmf_lang = $PMF_LANG;
     }
 

@@ -35,7 +35,7 @@ if (isset($_GET['gen'])) {
 
 require_once('inc/News.php');
 
-$oNews = new PMF_News($db, $LANGCODE);
+$oNews = new PMF_News();
 
 if (isset($_REQUEST['newsid']) && is_numeric($_REQUEST['newsid'])) {
     $id = (int)$_REQUEST['newsid'];

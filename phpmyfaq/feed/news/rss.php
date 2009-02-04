@@ -42,12 +42,12 @@ if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE)) {
     $LANGCODE = 'en';
 }
 
-$oNews = new PMF_News($db, $LANGCODE);
+$oNews          = new PMF_News();
 $showArchive    = false;
 $active         = true;
 $forceConfLimit = true;
-$rssData = $oNews->getLatestData($showArchive, $active, $forceConfLimit);
-$num = count($rssData);
+$rssData        = $oNews->getLatestData($showArchive, $active, $forceConfLimit);
+$num            = count($rssData);
 
 $rss = new XMLWriter();
 $rss->openMemory();

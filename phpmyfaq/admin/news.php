@@ -26,7 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
-$news = new PMF_News($db, $LANGCODE);
+$news = new PMF_News();
 
 // Re-evaluate $user
 $user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
@@ -101,6 +101,7 @@ if ('addnews' == $_action && $permission["addnews"]) {
 <?php
 } elseif ('news' == $_action && $permission["editnews"]) {
 ?>
+    <br />
     <table class="list">
     <thead>
         <tr>
@@ -132,7 +133,7 @@ if ('addnews' == $_action && $permission["addnews"]) {
     <p><a href="?action=addnews"><?php print $PMF_LANG["ad_menu_news_add"]; ?></a></p>
 <?php
 } elseif ('editnews' == $_action && $permission['editnews']) {
-    $id = (int)$_REQUEST['id'];
+    $id       = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $newsData = $news->getNewsEntry($id, true);
 ?>
     <h2><?php print $PMF_LANG['ad_news_edit']; ?></h2>
@@ -202,8 +203,8 @@ if ('addnews' == $_action && $permission["addnews"]) {
     <input class="submit" type="reset" value="<?php print $PMF_LANG['ad_gen_reset']; ?>" />
     </form>
 <?php
-    $newsId = (int)$_GET['id'];
-    $oComment = new PMF_Comment($db, $LANGCODE);
+    $newsId   = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+    $oComment = new PMF_Comment();
     $comments = $oComment->getCommentsData($newsId, PMF_Comment::COMMENT_TYPE_NEWS);
     if (count($comments) > 0) {
 ?>
@@ -296,7 +297,7 @@ if ('addnews' == $_action && $permission["addnews"]) {
         'target'        => (!isset($_POST['target'])) ? '' : $db->escape_string($_POST['target'])
         );
 
-    $newsId = (int)$_POST['id'];
+    $newsId = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
     if ($news->updateNewsEntry($newsId, $newsData)) {
         printf("<p>%s</p>", $PMF_LANG['ad_news_updatesuc']);
     } else {
