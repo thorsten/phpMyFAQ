@@ -233,8 +233,7 @@ if (($faq->faqRecord['active'] != 'yes') || ('n' == $faq->faqRecord['comment']) 
 }
 
 // Get the tags for this entry
-require_once('inc/Tags.php');
-$tagging = new PMF_Tags($db, $LANGCODE);
+$tagging = new PMF_Tags();
 
 // Build Digg it! URL
 $diggItUrl = sprintf('%s?cat=%s&amp;id=%d&amp;lang=%s&amp;title=%s',

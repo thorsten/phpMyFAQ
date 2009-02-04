@@ -58,8 +58,8 @@ if ($permission["editbt"]) {
         adminlog("Beitragcreatesave");
         printf("<h2>%s</h2>\n", $PMF_LANG['ad_entry_aor']);
 
-        $category   = new PMF_Category($current_admin_user, $current_admin_groups, false);
-        $tagging    = new PMF_Tags($db, $LANGCODE);
+        $category = new PMF_Category($current_admin_user, $current_admin_groups, false);
+        $tagging  = new PMF_Tags();
 
         // Get the data
         $categories     = $_POST['rubrik'];

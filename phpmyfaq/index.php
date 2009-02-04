@@ -170,7 +170,7 @@ if (function_exists('mb_language') && in_array($mbLanguage, $valid_mb_strings)) 
 // found a session ID in _GET or _COOKIE?
 //
 $sid = null;
-$faqsession = new PMF_Session($db, $LANGCODE);
+$faqsession = new PMF_Session();
 if (
        (!isset($_GET[PMF_GET_KEY_NAME_SESSIONID]))
     && (!isset($_COOKIE[PMF_COOKIE_NAME_SESSIONID]))
@@ -230,7 +230,7 @@ $category = new PMF_Category($current_user, $current_groups);
 //
 // Create a new Tags object
 //
-$oTag = new PMF_Tags($db, $LANGCODE);
+$oTag = new PMF_Tags();
 
 //
 // Found a record ID?

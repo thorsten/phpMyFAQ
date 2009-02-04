@@ -42,12 +42,8 @@ if ($allLanguages) {
     $category->transform(0);
 }
 
-$faqsearch           = new PMF_Search($db, $LANGCODE);
-$searchCategory      = isset($_GET['searchcategory']) && is_numeric($_GET['searchcategory']) 
-                       ?
-                       (int)$_GET['searchcategory'] 
-                       :
-                       '%';
+$faqsearch           = new PMF_Search();
+$searchCategory      = PMF_Filter::filterInput(INPUT_GET, 'searchcategory', FILTER_VALIDATE_INT, '%');
 $searchterm          = '';
 $printResult         = $PMF_LANG['help_search'];
 $tagSearch           = false;
@@ -58,8 +54,8 @@ $mostPopularSearches = 'n/a'; // to be implemented
 //
 if (isset($_GET['tagging_id']) && is_numeric($_GET['tagging_id'])) {
     $tagSearch   = true;
-    $tag_id      = (int)$_GET['tagging_id'];
-    $tagging     = new PMF_Tags($db, $LANGCODE);
+    $tag_id      = PMF_Filter::filterInput(INPUT_GET, 'tagging_id', FILTER_VALIDATE_INT);
+    $tagging     = new PMF_Tags();
     $record_ids  = $tagging->getRecordsByTagId($tag_id);
     $printResult = $faq->showAllRecordsByIds($record_ids);
 }

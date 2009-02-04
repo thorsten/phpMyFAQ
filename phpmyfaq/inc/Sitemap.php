@@ -69,19 +69,17 @@ class PMF_Sitemap
     /**
      * Constructor
      *
-     * @param  PMF_Db  &$db      DB connection
-     * @param  string  $language Language
      * @param  integer $user     User
      * @param  array   $groups   Groupss
      * @since  2007-03-30
      * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    public function __construct(&$db, $language, $user = null, $groups = null)
+    public function __construct($user = null, $groups = null)
     {
         global $DB, $faqconfig;
 
-        $this->db       = &$db;
-        $this->language = $language;
+        $this->db       = PMF_Db::getInstance();
+        $this->language = PMF_Init::$language;
         $this->type     = $DB['type'];
 
         if (is_null($user)) {

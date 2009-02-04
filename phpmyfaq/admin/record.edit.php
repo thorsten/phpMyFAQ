@@ -41,7 +41,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
         'revision_id'   => 0,
         'title'         => '');
 
-    $tagging = new PMF_Tags($db, $LANGCODE);
+    $tagging = new PMF_Tags();
 
     $currentaction = (isset($_GET['action']) ? $_GET['action'] : '');
 

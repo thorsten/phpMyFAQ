@@ -30,7 +30,7 @@ if ($permission['viewlog']) {
 	$firstHour = mktime (0, 0, 0, date('m', $day), date('d', $day), date('Y', $day));
 	$lastHour  = mktime (23, 59, 59, date('m', $day), date('d', $day), date('Y', $day));
 
-	$session = new PMF_Session($db, $LANGCODE);
+	$session     = new PMF_Session();
     $sessiondata = $session->getSessionsbyDate($firstHour, $lastHour);
 ?>
 	<h2><?php print "Session ".date("Y-m-d", $day); ?></h2>

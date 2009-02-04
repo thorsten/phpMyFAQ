@@ -45,10 +45,10 @@ class PMF_Tags
      * @since   2006-08-10
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function __construct(&$db, $language)
+    function __construct()
     {
-        $this->db       = &$db;
-        $this->language = $language;
+        $this->db       = PMF_Db::getInstance();
+        $this->language = PMF_Init::$language;
     }
 
     /**

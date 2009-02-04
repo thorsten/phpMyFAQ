@@ -108,7 +108,7 @@ if (    isset($submit[1])
     adminlog("Beitragsave", (int)$_REQUEST['id']);
     print "<h2>".$PMF_LANG["ad_entry_aor"]."</h2>\n";
 
-    $tagging = new PMF_Tags($db, $LANGCODE);
+    $tagging = new PMF_Tags();
 
     $categories  = $_REQUEST['rubrik'];
     $record_id   = (int)$_REQUEST['id'];

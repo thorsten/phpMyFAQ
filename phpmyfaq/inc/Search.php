@@ -51,13 +51,11 @@ class PMF_Search
     /**
      * Constructor
      *
-     * @param  object  &$db      PMF_Db
-     * @param  string  $language Language
      */
-    function __construct(&$db, $language)
+    public function __construct()
     {
-        $this->db       = &$db;
-        $this->language = $language;
+        $this->db       = PMF_Db::getInstance();
+        $this->language = PMF_Init::$language;
     }
 
     /**

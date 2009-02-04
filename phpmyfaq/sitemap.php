@@ -35,7 +35,7 @@ if (isset($_GET['letter']) && is_string($_GET['letter']) && (1 == strlen($_GET['
     $currentLetter = 'A';
 }
 
-$sitemap = new PMF_Sitemap($db, $LANGCODE, $current_user, $current_groups);
+$sitemap = new PMF_Sitemap($current_user, $current_groups);
 
 $tpl->processTemplate (
     'writeContent', array(

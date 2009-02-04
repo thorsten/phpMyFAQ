@@ -43,10 +43,10 @@ class PMF_Session
      * @since   2007-03-31
      * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function __construct(&$db, $language)
+    public function __construct()
     {
-        $this->db       = &$db;
-        $this->language = $language;
+        $this->db       = PMF_Db::getInstance();
+        $this->language = PMF_Init::$language;
     }
     
     /**

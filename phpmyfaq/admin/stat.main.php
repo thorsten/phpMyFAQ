@@ -28,7 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 if ($permission['viewlog']) {
     require_once(PMF_ROOT_DIR.'/inc/Session.php');
 
-    $session = new PMF_Session($db, $LANGCODE);
+    $session = new PMF_Session();
 
     if (isset($_POST['statdelete']) && isset($_POST['month']) && is_numeric($_POST['month'])) {
         // Search for related tracking data files and
