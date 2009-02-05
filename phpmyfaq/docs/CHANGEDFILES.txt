@@ -3,6 +3,7 @@ $Id$
 CHANGED FILES FROM 2.0.11 -> 2.0.12
 
 ./inc/Faq.php
+./inc/PMF_Export/Pdf.php
 ./install/installer.php
 ./install/mysqli.sql.php
 ./install/update.php
