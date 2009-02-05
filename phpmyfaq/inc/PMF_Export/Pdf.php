@@ -1,28 +1,28 @@
 <?php
 /**
-* $Id: Pdf.php,v 1.16 2008-01-25 16:27:50 thorstenr Exp $
-*
-* Main PDF class for phpMyFAQ based on FPDF by Olivier Plathey
-*
-* @package      phpmyfaq
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @author       Peter Beauvain <pbeauvain@web.de>
-* @author       Olivier Plathey <olivier@fpdf.org>
-* @author       Krzysztof Kruszynski <thywolf@wolf.homelinux.net>
-* @since        2004-11-21
-* @license      Mozilla Public License 1.1
-* @copyright    (c) 2004-2006 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * Main PDF class for phpMyFAQ based on FPDF by Olivier Plathey
+ *
+ * @package    phpMyFAQ
+ * @subpackage PMF_Export
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     Peter Beauvain <pbeauvain@web.de>
+ * @author     Olivier Plathey <olivier@fpdf.org>
+ * @author     Krzysztof Kruszynski <thywolf@wolf.homelinux.net>
+ * @since      2004-11-21
+ * @license    Mozilla Public License 1.1
+ * @copyright  2004-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 define('FPDF_FONTPATH', dirname(dirname(dirname(__FILE__))).'/font/');
 require_once(dirname(dirname(__FILE__)).'/libs/fpdf.php');
@@ -219,12 +219,12 @@ class PDF extends FPDF
     * @access   public
     * @return   void
     */
-    function WriteHTML($html)
+    public function WriteHTML($html)
     {
         // save (X)HTML and XML code ...
-        $htmlSearch = array('&quot;', '&lt;', '&gt;', '&nbsp;', '&amp;', '\n');
-        $htmlReplace = array('"', '‹', '›', ' ', '&', '<br />');
-        $html = str_replace($htmlSearch, $htmlReplace, $html);
+        $htmlSearch  = array('&quot;', '&lt;', '&gt;', '&nbsp;', '&amp;', '\n', '&bdquo;', '&ldquo');
+        $htmlReplace = array('"', '<', '>', ' ', '&', '<br />', '"', '"');
+        $html        = str_replace($htmlSearch, $htmlReplace, $html);
 
         $a = preg_split("/<(.*)>/U", $html, -1, PREG_SPLIT_DELIM_CAPTURE);
         foreach($a as $i => $e) {
@@ -500,17 +500,19 @@ class PDF extends FPDF
     /**
     * Sets a link to an URL
     *
-    * @param    string  URL
-    * @param    string  the title of the link
-    * @return   void
-    * @access   private
+    * @param  string $url URL
+    * @param  string $txt the title of the link
+    * @return void
     */
-    function PutLink($URL, $txt)
+    private function PutLink($url, $txt)
     {
+        if (!strpos($url, 'http://')) {
+            $url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/' . $url;
+        }
         $this->SetTextColor(0, 0, 255);
-        $this->SetStyle("U", true);
-        $this->Write(5, $txt, $URL);
-        $this->SetStyle("U", false);
+        $this->SetStyle('U', true);
+        $this->Write(5, $txt, $url);
+        $this->SetStyle('U', false);
         $this->SetTextColor(0);
     }
 
