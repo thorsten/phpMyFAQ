@@ -746,7 +746,7 @@ class PMF_Faq
             $id,
             isset($revision_id) ? 'AND revision_id = '.$revision_id : '',
             $this->language,
-            $permPart);
+            ($admin) ? '1=1' : $permPart);
 
         $result = $this->db->query($query);
 
