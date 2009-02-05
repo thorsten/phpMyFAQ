@@ -1,12 +1,13 @@
 <?php
 /**
- * $Id: record.comments.php,v 1.2 2007-05-29 04:11:29 thorstenr Exp $
- *
  * Shows all comments in the categories and provides a link to delete comments
  *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since       2007-03-04
- * @copyright   (c) 2007 phpMyFAQ Team
+ * @param      phpMyFAQ
+ * @subpackage Administration
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since      2007-03-04
+ * @copyright  2007-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
