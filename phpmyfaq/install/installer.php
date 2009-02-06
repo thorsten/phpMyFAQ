@@ -1,18 +1,19 @@
 <?php
 /**
- * $Id$
- *
  * The main phpMyFAQ Installer
  *
  * This script tests the complete environment, writes the database connection
  * parameters into the file data.php and the configuration into the database.
  *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Tom Rochester <tom.rochester@gmail.com>
- * @author      Johannes Schlueter <johannes@php.net>
- * @author      Uwe Pries <uwe.pries@digartis.de>
- * @since       2002-08-20
- * @copyright   (c) 2002-2009 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage Installtion
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     Tom Rochester <tom.rochester@gmail.com>
+ * @author     Johannes Schlueter <johannes@php.net>
+ * @author     Uwe Pries <uwe.pries@digartis.de>
+ * @since      2002-08-20
+ * @copyright  2002-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -564,7 +565,7 @@ foreach ($permLevels as $level => $desc) {
     }
 
     // check database connection
-    require_once(PMF_ROOT_DIR."/inc/Db.php");
+    require_once PMF_ROOT_DIR . '/inc/Db.php';
     $db = PMF_Db::db_select($sql_type);
     $db->connect($sql_server, $sql_user, $sql_passwort, $sql_db);
     if (!$db) {
@@ -668,7 +669,7 @@ foreach ($permLevels as $level => $desc) {
 
     // Write the DB variables in data.php
     if ($fp = @fopen(PMF_ROOT_DIR."/inc/data.php","w")) {
-        @fputs($fp,"<?php\n\$DB[\"server\"] = '".$sql_server."';\n\$DB[\"user\"] = '".$sql_user."';\n\$DB[\"password\"] = '".$sql_passwort."';\n\$DB[\"db\"] = '".$sql_db."';\n\$DB[\"prefix\"] = '".$sqltblpre."';\n\$DB[\"type\"] = '".$sql_type."';");
+        @fputs($fp,"<?php\n\$DB[\"server\"] = '".trim($sql_server)."';\n\$DB[\"user\"] = '".trim($sql_user)."';\n\$DB[\"password\"] = '".trim($sql_passwort)."';\n\$DB[\"db\"] = '".trim($sql_db)."';\n\$DB[\"prefix\"] = '".trim($sqltblpre)."';\n\$DB[\"type\"] = '".trim($sql_type)."';");
         @fclose($fp);
     } else {
         print "<p class=\"error\"><strong>Error:</strong> Cannot write to data.php.</p>";
@@ -693,8 +694,8 @@ foreach ($permLevels as $level => $desc) {
     }
 
     // connect to the database using inc/data.php
-    require_once(PMF_ROOT_DIR."/inc/data.php");
-    require_once(PMF_ROOT_DIR."/inc/Db.php");
+    require_once PMF_ROOT_DIR . '/inc/data.php';
+    require_once PMF_ROOT_DIR . '/inc/Db.php';
     $db = PMF_Db::db_select($sql_type);
     $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
     if (!$db) {
@@ -704,8 +705,8 @@ foreach ($permLevels as $level => $desc) {
         die();
     }
 
-    require_once($sql_type.'.sql.php');
-    require_once('config.sql.php');
+    require_once $sql_type . '.sql.php';
+    require_once 'config.sql.php';
     print "<p class=\"center\">";
     @ob_flush();
     flush();
