@@ -1,16 +1,15 @@
 <?php
 /**
- * $Id: Linkverifier.php,v 1.26 2008-05-22 11:22:59 thorstenr Exp $
- *
- * PMF_Linkverifier
- *
  * The PMF_Linkverifier class provides methods and functions for verifying URLs
  *
- * @author      Minoru TODA <todam@netjapan.co.jp>
- * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since       2005-08-01
- * @copyright   2005-2008 NetJapan, Inc. and phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage PMF_Linkverifier
+ * @author     Minoru TODA <todam@netjapan.co.jp>
+ * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since      2005-08-01
+ * @copyright  2005-2009 NetJapan, Inc. and phpMyFAQ Team
+ * @version    SVN: $Id$
  *
  * Note: The package has been improved and fixed by Matteo Scaramuccia <matteo@scaramuccia.com>
  * to best fit with PMF 1.6.x+
@@ -110,7 +109,7 @@ class PMF_Linkverifier
     *
     * @var  object
     */
-    var $db = null;
+    private $db = null;
 
     /**
      * User
@@ -131,7 +130,7 @@ class PMF_Linkverifier
     {
         global $PMF_LANG;
 
-        $this->db   = $db;
+        $this->db   = PMF_Db::getInstance();
         $this->user = $user;
 
         if (!@extension_loaded('openssl')) { // PHP 4.3.0+: fsockopen needs OpenSSL
