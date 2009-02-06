@@ -50,7 +50,7 @@ class PMF_Relation
     */
     function __construct()
     {
-        global $DB;
+        global $PMF_LANG;
 
         $this->db       = PMF_Db::getInstance();
         $this->language = PMF_Init::$language;
