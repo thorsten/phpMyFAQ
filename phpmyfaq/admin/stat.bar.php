@@ -2,11 +2,12 @@
 /**
  * Generates a graphical bar.
  *
- * @package     phpMyFAQ 
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since       2003-10-26
- * @version     SVN: $Id$
- * @copyright   (c) 2003-2009 phpMyFAQ Team
+ * @package    phpMyFAQ 
+ * @subpackage Administration
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since      2003-10-26
+ * @copyright  2003-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -21,34 +22,35 @@
 
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
-require_once(PMF_ROOT_DIR.'/inc/Init.php');
+require_once PMF_ROOT_DIR . '/inc/Init.php';
 PMF_Init::cleanRequest();
 session_name(PMF_COOKIE_NAME_AUTH . trim($faqconfig->get('main.phpMyFAQToken')));
 session_start();
 
-header ("Content-type: image/png");
-$image = @imagecreate (50, 15) or die ("Sorry, but phpMyFAQ cannot initialize new GD image stream.");
+$image           = @imagecreate (50, 15) or die ("Sorry, but phpMyFAQ cannot initialize a new image stream.");
 $backgroundColor = imagecolorallocate ($image, 211, 211, 211);
-$textColor = imagecolorallocate ($image, 0, 0, 0);
+$textColor       = imagecolorallocate ($image, 0, 0, 0);
+$num             = PMF_Filter::filterInput(INPUT_GET, 'num', FILTER_VALIDATE_INT);
 
-if (isset($_GET["num"]) && $_GET["num"] != "") {
-    $num = round(($_GET["num"] * 20));
+if (!is_null($num)) {
+    $num = round($num * 20);
     if ($num < 25) {
         $textColor = imagecolorallocate ($image, 255, 255, 255);
-        $barColor = imagecolorallocate ($image, 255, 0, 0);
+        $barColor  = imagecolorallocate ($image, 255, 0, 0);
         imagefilledrectangle ($image, 0, 0, round(($num/100)*50), 15, $barColor);
     } elseif ($num > 75) {
         $textColor = imagecolorallocate ($image, 255, 255, 255);
-        $barColor = imagecolorallocate ($image, 0, 128, 0);
+        $barColor  = imagecolorallocate ($image, 0, 128, 0);
         imagefilledrectangle ($image, 0, 0, round(($num/100)*50), 15, $barColor);
-    } elseif ($num <= 75 AND $num >= 25) {
+    } elseif ($num <= 75 && $num >= 25) {
         $textColor = imagecolorallocate ($image, 255, 255, 255);
-        $barColor = imagecolorallocate ($image, 150, 150, 150);
+        $barColor  = imagecolorallocate ($image, 150, 150, 150);
         imagefilledrectangle ($image, 0, 0, round(($num/100)*50), 15, $barColor);
     }
-    imagestring ($image, 2, 1, 1, $num."%", $textColor);
+    imagestring ($image, 2, 1, 1, $num . '%', $textColor);
 } else {
-    imagestring ($image, 1, 5, 5, "n/a", $textColor);
+    imagestring ($image, 1, 5, 5, 'n/a', $textColor);
 }
 
+header ('Content-type: image/png');
 imagepng($image);
