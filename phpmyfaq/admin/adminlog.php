@@ -32,8 +32,8 @@ $logging = new PMF_Logging($db);
 if ($permission['adminlog'] && 'adminlog' == $_action) {
 
     $perpage = 15;
-    $pages   = input_filter(INPUT_GET, 'pages', FILTER_VALIDATE_INT);
-    $page    = input_filter(INPUT_GET, 'page' , FILTER_VALIDATE_INT);
+    $pages   = PMF_Filter::filterInput(INPUT_GET, 'pages', FILTER_VALIDATE_INT);
+    $page    = PMF_Filter::filterInput(INPUT_GET, 'page' , FILTER_VALIDATE_INT);
     
     if (is_null($pages)) {
         $pages = round(($logging->getNumberOfEntries() + ($perpage / 3)) / $perpage, 0);
