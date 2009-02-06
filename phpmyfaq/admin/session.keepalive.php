@@ -4,14 +4,14 @@
  * session expiration and to give him the contextual possibility for
  * refreshing the session by clicking <OK>
  *
- * @package     phpMyFAQ
- * @access      private
- * @author      Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Uwe Pries <uwe.pries@digartis.de>
- * @since       2006-05-08
- * @copyright   (c) 2006-2009 phpMyFAQ Team
- * @version     SVN: $Id$ 
+ * @package    phpMyFAQ
+ * @subpackage Administration
+ * @author     Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     Uwe Pries <uwe.pries@digartis.de>
+ * @since      2006-05-08
+ * @copyright  2006-2009 phpMyFAQ Team
+ * @version    SVN: $Id$ 
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -45,12 +45,12 @@ require_once(PMF_ROOT_DIR.'/lang/language_en.php');
 //
 // Get language (default: english)
 //
-if (isset($_GET['lang']) && PMF_Init::isASupportedLanguage($_GET['lang'])) {
-    require_once(PMF_ROOT_DIR.'/lang/language_'.$_GET['lang'].'.php');
+$_language = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
+if (!is_null($_language) && PMF_Init::isASupportedLanguage($_language)) {
+    require_once PMF_ROOT_DIR.'/lang/language_' . $_language . '.php';
 }
 
-$user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
-
+$user        = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
 $refreshTime = (PMF_SESSION_ID_EXPIRES - PMF_SESSION_ID_REFRESH) * 60;
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
@@ -78,7 +78,7 @@ if (isset($user) && ($refreshTime > 0)) {
                 // decrease time
                 expire.setSeconds(expire.getSeconds() - 1);
                 // check if we're out of time and log out if needed
-                if (expire.getFullYear() < 2007) {
+                if (expire.getFullYear() < 2009) {
                     parent.location.search = '?action=logout';
                     return;
                 }
@@ -90,7 +90,7 @@ if (isset($user) && ($refreshTime > 0)) {
             }
 
             window.onload = function() {
-                var expire = new Date(2007, 0, 1);
+                var expire = new Date(2009, 0, 1);
                 expire.setSeconds(<?php print PMF_SESSION_ID_EXPIRES; ?> * 60);
                 var topRef = top.document.getElementById('sessioncounter');
 
