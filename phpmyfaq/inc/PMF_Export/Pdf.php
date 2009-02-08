@@ -32,168 +32,152 @@ class PMF_Export_Pdf extends FPDF
     /**
     * <b> and <strong> for bold strings
     *
-    * @var      string
-    * @access   private
-    * @see
+    * @var string
     */
-    var $B;
+    private $B;
 
     /**
     * <i> and <em> for italic strings
     *
-    * @var      string
-    * @access   private
-    * @see
+    * @var string
     */
-    var $I;
+    private $I;
 
     /**
     * <u> for underlined strings
     *
-    * @var      string
-    * @access   private
-    * @see
+    * @var string
     */
-    var $U;
+    private $U;
 
     /**
     * The "src" attribute inside (X)HTML tags
     *
-    * @var      string
-    * @access   private
-    * @see
+    * @var string
     */
-    var $SRC;
+    private $SRC;
 
     /**
     * The "href" attribute inside (X)HTML tags
     *
-    * @var      string
-    * @access   private
-    * @see
+    * @var string
     */
-    var $HREF;
+    private $HREF;
 
     /**
     * <pre> for code examples
     *
-    * @var      string
-    * @access   private
-    * @see
+    * @var string
     */
-    var $PRE;
+    private $PRE;
 
     /**
     * <div align="center"> for centering text
     *
-    * @var      string
-    * @access   private
-    * @see
+    * @var string
     */
-    var $CENTER;
+    private $CENTER;
 
     /**
     * The border of a table
     *
-    * @var      int
-    * @access   private
-    * @see
+    * @var integer
     */
-    var $tableborder;
+    private $tableborder;
 
     /**
     * The begin of a table
     *
-    * @var      int
-    * @access   private
-    * @see
+    * @var integer
     */
-    var $tdbegin;
+    private $tdbegin;
 
     /**
     * The width of a table
     *
-    * @var      int
-    * @access   private
-    * @see
+    * @var integer
     */
-    var $tdwidth;
+    private $tdwidth;
 
     /**
     * The heightof a table
     *
-    * @var      int
-    * @access   private
-    * @see
+    * @var integer
     */
-    var $tdheight;
+    private $tdheight;
 
     /**
     * The alignment of a table
     *
-    * @var      int
-    * @access   private
-    * @see
+    * @var integer
     */
-    var $tdalign;
+    private $tdalign;
 
     /**
     * The background color of a table
     *
-    * @var      int
-    * @access   private
-    * @see
+    * @var integer
     */
-    var $tdbgcolor;
+    private $tdbgcolor;
 
     /**
     * With or without bookmarks
     *
-    * @var      boolean
-    * access    public
-    * @see      Bookmartk()
+    * @var boolean
     */
-    var $enableBookmarks = false;
+    public $enableBookmarks = false;
 
     /**
     * Array with titles
-    * @var      array
-    * @access   private
-    * @see
+    * 
+    * @var array
     */
-    var $outlines = array();
+    private $outlines = array();
 
     /**
     * Outline root
-    * @var      string
-    * @access   private
-    * @see
+    * 
+    * @var string
     */
-    var $OutlineRoot;
+    private $OutlineRoot;
 
     /**
-    * Supported MIME types
-    *
-    */
-    var $mimetypes = array("2" => "jpg", "3" => "png");
+     * Supported image MIME types
+     * 
+     * @var array
+     */
+    private $mimetypes = array(1 => 'gif', 2 => 'jpg', 3 => 'png');
+    
+    /**
+     * Categories
+     * 
+     * @var array
+     */
+    private $categories = array();
+    
+    /**
+     * The current category
+     * 
+     */
+    private $category = null;
 
     /**
     * Constructor
     *
-    * @param    int     The category ID
-    * @param    string  The title of the FAQ record
-    * @param    array   The array with all category names
-    * @param    string  The orientation of the created PDF file
-    * @param    string  The unit of the created PDF file
-    * @param    string  The format of the created PDF file
-    * @return   void
-    * @access   private
+    * @param  array  $category    Current category
+    * @param  string $thema       The title of the FAQ record
+    * @param  array  $categories  The array with all category names
+    * @param  string $orientation The orientation of the created PDF file
+    * @param  string $unit        The unit of the created PDF file
+    * @param  string $format      The format of the created PDF file
+    * @return void
     */
-    public function __construct($rubrik = '', $thema = '', $categories = array(), $orientation = "P", $unit = "mm", $format = "A4")
+    public function __construct($category = '', $thema = '', $categories = array(), $orientation = "P", $unit = "mm", $format = "A4")
     {
-        $this->rubrik = $rubrik;
-        $this->thema = $thema;
+        $this->category   = $category;
+        $this->thema      = $thema;
         $this->categories = $categories;
+        
         parent::__construct($orientation, $unit, $format);
         $this->B = 0;
         $this->I = 0;
@@ -286,22 +270,24 @@ class PMF_Export_Pdf extends FPDF
     // PRIVATE
 
     /**
-    * The header of the PDF file
-    *
-    * @return   void
-    * @access   private
-    */
+     * The header of the PDF file
+     *
+     * @return   void
+     * @access   private
+     */
     function Header()
     {
-        $title = $this->categories[$this->rubrik]['name'].': '.$this->thema;
+        $title            = $this->categories[$this->category]['name'].': '.$this->thema;
         $currentTextColor = $this->TextColor;
+        
         $this->SetTextColor(0,0,0);
-        $this->SetFont("Helvetica", "I", 18);
-        $this->MultiCell(0, 9, $title, 1, 1, "C", 1);
+        $this->SetFont('Helvetica', 'I', 18);
+        $this->MultiCell(0, 9, $title, 0, 'C', 0);
         $this->Ln(8);
-        if ($this->enableBookmarks == true) {
+        if ($this->enableBookmarks) {
             $this->Bookmark(PMF_Utils::makeShorterText($this->thema, 5));
         }
+        
         $this->TextColor = $currentTextColor;
     }
 
@@ -324,7 +310,7 @@ class PMF_Export_Pdf extends FPDF
         if ($this->enableBookmarks == false) {
             $this->SetY(-15);
             $this->SetFont("Helvetica", "", 8);
-            $url =PMF_Link::getSystemScheme().$_SERVER['HTTP_HOST'].str_replace('pdf.php', 'index.php?action=artikel&amp;cat='.$this->categories[$this->rubrik]['id'].'&amp;id='.(int)$_REQUEST['id'].'&amp;artlang='.$_REQUEST['lang'], $_SERVER['PHP_SELF']);
+            $url =PMF_Link::getSystemScheme().$_SERVER['HTTP_HOST'].str_replace('pdf.php', 'index.php?action=artikel&amp;cat='.$this->categories[$this->category]['id'].'&amp;id='.(int)$_REQUEST['id'].'&amp;artlang='.$_REQUEST['lang'], $_SERVER['PHP_SELF']);
             $urlObj = new PMF_Link($url);
             $urlObj->itemTitle = $this->thema;
             $_url = str_replace('&amp;', '&', $urlObj->toString());
