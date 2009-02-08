@@ -19,7 +19,7 @@
 * under the License.
 */
 
-class DocBook_XML_Export
+class PMF_Export_Docbook
 {
 
 	var $xmlContent;
@@ -36,19 +36,15 @@ class DocBook_XML_Export
 	var $einid = 0;
 
 	/**
-     * Konstruktor
+     * Constructor
      *
-     * Diese Funktion bindet die Authentifizierung ein
-     *
-     * @param   string $rowString
-     * @return  string $rowString
      * @author  David Sauer <david_sauer@web.de>
      * @since   2005-07-21
      */
-	function DocBook_XML_Export($db)
+	function __construct()
 	{
 
-		$this->db = $db;
+		$this->db = PMF_Db::getInstance();
 	}
 
 	 /**

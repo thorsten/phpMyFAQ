@@ -228,7 +228,7 @@ class PMF_Export
     {
         // TODO: check/refine/improve/fix docbook.php and add toString method before recoding the method in order to use faq and news classes.
 
-        global $db, $PMF_CONF, $PMF_LANG;
+        global $PMF_CONF, $PMF_LANG;
 
         // XML DocBook export
         $parentID     = 0;
@@ -236,7 +236,7 @@ class PMF_Export
         $sql          = '';
         $selectString = '';
 
-        $export = new DocBook_XML_Export($db);
+        $export = new PMF_Export_Docbook();
         $export->delete_file();
 
         // Set the FAQ title

@@ -37,10 +37,6 @@ function __autoload($class)
     // Note: supposing a class<->file approach we can avoid the use of "_once".
     switch($class) {
         /* Fixed lookup table (backward compatibility) - START HERE */
-        case 'DocBook_XML_Export':
-            include $rootDir.'/inc/PMF_Export/DocBook.php';
-            break;
-
         case 'FPDF':
             include $rootDir.'/inc/libs/fpdf.php';
             break;
