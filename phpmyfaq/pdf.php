@@ -1,16 +1,17 @@
 <?php
 /**
- * TODO: Short description.
+ * PDF export
  *
- * @package     phpMyFAQ 
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Peter Beauvain <pbeauvain@web.de>
- * @author      Olivier Plathey <olivier@fpdf.org>
- * @author      Krzysztof Kruszynski <thywolf@wolf.homelinux.net>
- * @author      Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @since       2003-02-12
- * @version     SVN: $Id$ 
- * @copyright   (c) 2003-2009 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage Frontend 
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     Peter Beauvain <pbeauvain@web.de>
+ * @author     Olivier Plathey <olivier@fpdf.org>
+ * @author     Krzysztof Kruszynski <thywolf@wolf.homelinux.net>
+ * @author     Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @since      2003-02-12
+ * @copyright  2003-2009 phpMyFAQ Team
+ * @version    SVN: $Id$ 
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -27,8 +28,6 @@ require_once('inc/Init.php');
 PMF_Init::cleanRequest();
 session_name(PMF_COOKIE_NAME_AUTH . trim($faqconfig->get('main.phpMyFAQToken')));
 session_start();
-
-require_once('inc/PMF_Export/Pdf.php');
 
 $category = new PMF_Category();
 
@@ -68,7 +67,7 @@ if ($error) {
 $faq = new PMF_Faq();
 $faq->getRecord($id);
 
-$pdf = new PDF($currentCategory, $faq->faqRecord['title'], $category->categoryName, $orientation = "P", $unit = "mm", $format = "A4");
+$pdf = new PMF_Export_Pdf($currentCategory, $faq->faqRecord['title'], $category->categoryName, $orientation = "P", $unit = "mm", $format = "A4");
 $pdf->Open();
 //$pdf->SetAutoPageBreak(true, 2*(40/$pdf->k));
 $pdf->SetTitle($faq->faqRecord['title']);

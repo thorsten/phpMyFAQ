@@ -27,7 +27,7 @@
 define('FPDF_FONTPATH', dirname(dirname(dirname(__FILE__))).'/font/');
 require_once(dirname(dirname(__FILE__)).'/libs/fpdf.php');
 
-class PDF extends FPDF
+class PMF_Export_Pdf extends FPDF
 {
     /**
     * <b> and <strong> for bold strings
@@ -729,4 +729,3 @@ class PDF extends FPDF
     }
 
 }
-?>

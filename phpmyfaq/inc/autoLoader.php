@@ -45,10 +45,6 @@ function __autoload($class)
             include $rootDir.'/inc/libs/fpdf.php';
             break;
 
-        case 'PDF':
-            include $rootDir.'/inc/PMF_Export/Pdf.php';
-            break;
-
         case 'PMF_IDB_Driver':
             include $rootDir.'/inc/PMF_DB/Driver.php';
             break;
