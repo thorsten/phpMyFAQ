@@ -30,34 +30,20 @@ function __autoload($class)
     $invalidChars = array(
         '.', '\\', '/', ':', '*', '?', '"', '<', '>', "'", '|'
     );
-    $class = str_replace($invalidChars, '', $class);
-
+    
+    $class   = str_replace($invalidChars, '', $class);
     $rootDir = defined('PMF_ROOT_DIR') ? PMF_ROOT_DIR : '.';
 
-    // Note: supposing a class<->file approach we can avoid the use of "_once".
-    switch($class) {
-        /* Fixed lookup table (backward compatibility) - START HERE */
-        case 'FPDF':
-            include $rootDir.'/inc/libs/fpdf.php';
-            break;
-
-        case 'PMF_IDB_Driver':
-            include $rootDir.'/inc/PMF_DB/Driver.php';
-            break;
-        /* Fixed lookup table (backward compatibility) - END HERE */
-
-        default:
-            // Try to load the class/interface declaration using its name if splittable by '_'
-            // Note: using include instead of require give us the possibility to echo failures
-            $classParts = explode('_', $class);
-            $includeDir = $rootDir . DIRECTORY_SEPARATOR . 'inc'. DIRECTORY_SEPARATOR;
-            if (2 == count($classParts)) {
-                include $includeDir . $classParts[1] . '.php';
-            } else if (3 == count($classParts)) {
-                include $includeDir . 'PMF_'. $classParts[1] . DIRECTORY_SEPARATOR . $classParts[2] . '.php';
-            } else {
-                printf("<br /><b>PMF Autoloader</b>: unable to find a suitable file declaring '%s'.", $class);
-            }
+    // Try to load the class/interface declaration using its name if splittable by '_'
+    // Note: using include instead of require give us the possibility to echo failures
+    $classParts = explode('_', $class);
+    $includeDir = $rootDir . DIRECTORY_SEPARATOR . 'inc'. DIRECTORY_SEPARATOR;
+    if (2 == count($classParts)) {
+        include $includeDir . $classParts[1] . '.php';
+    } else if (3 == count($classParts)) {
+        include $includeDir . 'PMF_'. $classParts[1] . DIRECTORY_SEPARATOR . $classParts[2] . '.php';
+    } else {
+        printf("<br /><b>PMF Autoloader</b>: unable to find a suitable file declaring '%s'.", $class);
     }
 
     // Sanity check

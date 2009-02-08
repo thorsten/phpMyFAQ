@@ -1,16 +1,15 @@
 <?php
 /**
- * $Id: Ibm_db2.php,v 1.14 2007-09-30 10:04:07 thorstenr Exp $
- *
- * db_ibm_db2
- *
  * The db_db2 class provides methods and functions for IBM DB2 Version 8.2 or
  * 9.1 databases. This will only work with the PECL extension ext/ibm_db2.
  *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Helmut Tessarek <tessus@evermeet.cx>
- * @since       2005-04-16
- * @copyright   (c) 2005-2007 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage PMF_DB
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     Helmut Tessarek <tessus@evermeet.cx>
+ * @since      2005-04-16
+ * @copyright  2005-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -23,7 +22,7 @@
  * under the License.
  */
 
-class db_ibm_db2 implements PMF_IDB_Driver
+class PMF_DB_Ibm_db2 implements PMF_DB_Driver
 {
     /**
      * The connection object

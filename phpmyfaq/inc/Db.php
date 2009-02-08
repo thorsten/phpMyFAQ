@@ -60,7 +60,7 @@ class PMF_Db
         $type = ucfirst($type);
         if (file_exists($dir . $type . '.php')) {
             require_once $dir . $type . '.php';
-            $class          = 'db_' . $type;
+            $class          = 'PMF_DB_' . $type;
             self::$instance = new $class;
             return self::$instance;
         } else {

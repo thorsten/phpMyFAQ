@@ -1,16 +1,16 @@
 <?php
 /**
- * $Id: Mysql.php,v 1.17 2007-08-20 19:32:20 johannes Exp $
- *
  * The db_mysql class provides methods and functions for a MySQL 4.0.x
  * and higher database.
  *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Meikel Katzengreis <meikel@katzengreis.com>
- * @author      Tom Rochester <tom.rochester@gmail.com>
- * @package     db_mysql
- * @since       2003-02-24
- * @copyright   (c) 2003-2007 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage PMF_DB
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     Meikel Katzengreis <meikel@katzengreis.com>
+ * @author     Tom Rochester <tom.rochester@gmail.com>
+ * @package    2003-02-24
+ * @copyright  2003-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -23,7 +23,7 @@
  * under the License.
  */
 
-class db_mysql implements PMF_IDB_Driver 
+class PMF_DB_Mysql implements PMF_DB_Driver 
 {
     /**
      * The connection object

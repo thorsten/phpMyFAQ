@@ -1,15 +1,15 @@
 <?php
 /**
- * $Id: Pgsql.php,v 1.12 2007-08-20 19:32:20 johannes Exp $
- *
  * The db_pgsql class provides methods and functions for a PostgreSQL
  * database.
  *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Tom Rochester <tom.rochester@gmail.com>
- * @package     db_pgsql
- * @since       2003-02-24
- * @copyright   (c) 2003-2007 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage PMF_DB
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     Tom Rochester <tom.rochester@gmail.com>
+ * @package    2003-02-24
+ * @copyright  2003-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -22,7 +22,7 @@
  * under the License.
  */
 
-class db_pgsql implements PMF_IDB_Driver
+class PMF_DB_Pgsql implements PMF_DB_Driver
 {
     /**
      * The connection object

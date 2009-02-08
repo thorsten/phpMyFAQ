@@ -1,13 +1,13 @@
 <?php
 /**
- * $Id: Driver.php,v 1.1 2007-08-20 19:32:20 johannes Exp $
- *
  * Base interface for database drivers.
  *
- * @author      Johannes Schl¸ter <johannes@php.net>
- * @package     db
- * @since       2007-08-19
- * @copyright   (c) 2005-2007 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage PMF_DB
+ * @author     Johannes Schlüter <johannes@php.net>
+ * @since      2007-08-19
+ * @copyright  2007-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -20,7 +20,7 @@
  * under the License.
  */
 
-interface PMF_IDB_Driver
+interface PMF_DB_Driver
 {
     /**
      * Sends a query to the database.

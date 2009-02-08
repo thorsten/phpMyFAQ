@@ -1,14 +1,14 @@
 <?php
 /**
- * $Id: Sqlite.php,v 1.19 2007-08-20 19:32:20 johannes Exp $
- *
  * The db_sqlite class provides methods and functions for a sqlite database.
  *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Johannes Schlüter <johannes@php.net>
- * @package     db_sqlite
- * @since       2005-06-27
- * @copyright   (c) 2005-2007 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage PMF_DB
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     Johannes Schlüter <johannes@php.net>
+ * @since      2005-06-27
+ * @copyright  2005-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -21,7 +21,7 @@
  * under the License.
  */
 
-class db_sqlite implements PMF_IDB_Driver
+class PMF_DB_Sqlite implements PMF_DB_Driver
 {
     /**
      * The connection object

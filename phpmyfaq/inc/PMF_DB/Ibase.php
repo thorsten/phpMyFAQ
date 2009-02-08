@@ -1,14 +1,14 @@
 <?php
 /**
- * $Id: Ibase.php,v 1.10 2007-08-20 19:32:20 johannes Exp $
- *
  * The db_ibase class provides methods and functions for Firebird/InterBase
  * databases.
  *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @package     db_ibase
- * @since       2005-11-28
- * @copyright   (c) 2005-2007 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage PMF_DB
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since      2005-11-28
+ * @copyright  2005-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -21,7 +21,7 @@
  * under the License.
  */
 
-class db_ibase implements PMF_IDB_Driver
+class PMF_DB_Ibase implements PMF_DB_Driver
 {
     /**
     * The connection object

@@ -1,15 +1,15 @@
 <?php
 /**
- * $Id: Mssql.php,v 1.15 2007-08-20 19:32:20 johannes Exp $
- *
  * The db_mssql class provides methods and functions for a Microsoft SQL Server
  * database.
  *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Daniel Hoechst <dhoechst@petzl.com>
- * @package     db_mssql
- * @since       2005-01-11
- * @copyright   (c) 2005-2007 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage PMF_DB
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     Daniel Hoechst <dhoechst@petzl.com>
+ * @package    2005-01-11
+ * @copyright  2005-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -22,7 +22,7 @@
  * under the License.
  */
 
-class db_mssql implements PMF_IDB_Driver 
+class PMF_DB_Mssql implements PMF_DB_Driver 
 {
     /**
      * The connection object

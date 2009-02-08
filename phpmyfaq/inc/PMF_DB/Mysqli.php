@@ -1,15 +1,15 @@
 <?php
 /**
- * $Id: Mysqli.php,v 1.16 2007-08-20 19:32:20 johannes Exp $
- *
  * The db_mysqli class provides methods and functions for a MySQL 4.1.x,
- * 5.0.x, 5.1.x, and 5.2.x databases.
+ * 5.0.x, 5.1.x, and 6.x databases.
  *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      David Soria Parra <dsoria@gmx.net>
- * @package     db_mysqli
- * @since       2005-02-21
- * @copyright   (c) 2005-2007 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage PMF_DB
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     David Soria Parra <dsoria@gmx.net>
+ * @package    2005-02-21
+ * @copyright  2005-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -22,7 +22,7 @@
  * under the License.
  */
 
-class db_mysqli implements PMF_IDB_Driver
+class PMF_DB_Mysqli implements PMF_DB_Driver
 {
     /**
      * The connection object

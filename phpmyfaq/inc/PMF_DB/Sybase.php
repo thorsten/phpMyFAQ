@@ -1,16 +1,14 @@
 <?php
 /**
- * $Id: Sybase.php,v 1.12 2007-08-20 19:32:20 johannes Exp $
- *
- * db_sybase
- *
  * The db_sybase class provides methods and functions for a Sybase database
  *
- * @author      Adam Greene <phpmyfaq@skippy.fastmail.fm>
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @package     db_sybase
- * @since       2004-12-10
- * @copyright   (c) 2004-2007 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage PMF_DB
+ * @author     Adam Greene <phpmyfaq@skippy.fastmail.fm>
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since      2004-12-10
+ * @copyright  2004-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -23,7 +21,7 @@
  * under the License.
  */
 
-class db_sybase implements PMF_IDB_Driver
+class PMF_DB_Sybase implements PMF_DB_Driver
 {
     /**
      * The connection object
@@ -316,29 +314,6 @@ class db_sybase implements PMF_IDB_Driver
         }
 
         return $this->query($query);
-    }
-
-     /**
-     * Returns the error string.
-     *
-     * This function returns the table status.
-     *
-     * @access  public
-     * @author  Tom Rochester <tom.rochester@gmail.com>
-     * @author  Adam Greene <phpmyfaq@skippy.fastmail.fm>
-     * @since   2004-12-10
-     */
-    function getTableStatus()
-    {
-      $select = "SELECT SO.name, STS.rowcnt FROM sysobjects SO ".
-      "INNER JOIN systabstats STS ON STS.id = SO.id ".
-      "WHERE SO.type = 'U'";
-        $arr = Array();
-        $result = $this->query($select);
-        while ($row = $this->fetch_assoc($result)) {
-            $arr[$row["name"]] = intval($row["rowcnt"]);
-        }
-        return $arr;
     }
 
     /**
