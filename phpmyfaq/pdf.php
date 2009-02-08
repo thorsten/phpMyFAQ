@@ -32,34 +32,20 @@ session_start();
 $category = new PMF_Category();
 
 // get language (default: english)
-$pmf = new PMF_Init();
-$LANGCODE = $pmf->setLanguage((isset($PMF_CONF['main.languageDetection']) ? true : false), $PMF_CONF['main.language']);
+$pmf      = new PMF_Init();
+$LANGCODE = $pmf->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
 
 if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE)) {
-    require_once("lang/language_".$LANGCODE.".php");
+    require_once "lang/language_".$LANGCODE.".php";
 } else {
     $LANGCODE = "en";
-    require_once ("lang/language_en.php");
+    require_once "lang/language_en.php";
 }
 
-$error = false;
+$currentCategory = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
+$id              = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
-if (isset($_GET['cat']) && is_numeric($_GET['cat'])) {
-    $currentCategory = (int)$_GET['cat'];
-} else {
-    $error = true;
-}
-if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
-    $id = (int)$_GET["id"];
-} else {
-    $error = true;
-}
-if (isset($_GET["lang"]) && is_string($_GET['lang']) && PMF_Init::isASupportedLanguage($_GET["lang"])) {
-    $lang = $_GET["lang"];
-} else {
-    $error = true;
-}
-if ($error) {
+if (is_null($currentCategory) || is_null($id)) {
     print "Error!";
     exit();
 }
@@ -69,14 +55,13 @@ $faq->getRecord($id);
 
 $pdf = new PMF_Export_Pdf($currentCategory, $faq->faqRecord['title'], $category->categoryName, $orientation = "P", $unit = "mm", $format = "A4");
 $pdf->Open();
-//$pdf->SetAutoPageBreak(true, 2*(40/$pdf->k));
 $pdf->SetTitle($faq->faqRecord['title']);
-$pdf->SetCreator($PMF_CONF['main.titleFAQ']." - powered by phpMyFAQ ".$PMF_CONF['main.currentVersion']);
+$pdf->SetCreator($faqconfig->get('main.titleFAQ')." - powered by phpMyFAQ ".$faqconfig->get('main.currentVersion'));
 $pdf->AliasNbPages();
 $pdf->AddPage();
 $pdf->SetFont("Helvetica", "", 12);
 $pdf->SetDisplayMode("real");
-$pdf->WriteHTML(str_replace("../", "", $faq->faqRecord['content']));
+$pdf->WriteHTML(str_replace("../", '', $faq->faqRecord['content']));
 $pdf->Ln();
 $pdf->Ln();
 $pdf->SetStyle('I', true);
