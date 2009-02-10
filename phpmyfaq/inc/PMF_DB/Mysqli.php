@@ -1,6 +1,6 @@
 <?php
 /**
- * The db_mysqli class provides methods and functions for a MySQL 4.1.x,
+ * The PMF_DB_Mysqli class provides methods and functions for a MySQL 4.1.x,
  * 5.0.x, 5.1.x, and 6.x databases.
  *
  * @package    phpMyFAQ
@@ -22,6 +22,17 @@
  * under the License.
  */
 
+/**
+ * PMF_DB_Mysqli
+ *
+ * @package    phpMyFAQ
+ * @subpackage PMF_DB
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     David Soria Parra <dsoria@gmx.net>
+ * @package    2005-02-21
+ * @copyright  2005-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
+ */
 class PMF_DB_Mysqli implements PMF_DB_Driver
 {
     /**

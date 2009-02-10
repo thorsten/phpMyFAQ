@@ -1,6 +1,6 @@
 <?php
 /**
- * The db_mysql class provides methods and functions for a MySQL 4.0.x
+ * The PMF_DB_Mysql class provides methods and functions for a MySQL 4.0.x
  * and higher database.
  *
  * @package    phpMyFAQ
@@ -23,82 +23,87 @@
  * under the License.
  */
 
+
+/**
+ * PMF_DB_Mysql
+ *
+ * @package    phpMyFAQ
+ * @subpackage PMF_DB
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     Meikel Katzengreis <meikel@katzengreis.com>
+ * @author     Tom Rochester <tom.rochester@gmail.com>
+ * @package    2003-02-24
+ * @copyright  2003-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
+ */
 class PMF_DB_Mysql implements PMF_DB_Driver 
 {
     /**
      * The connection object
      *
-     * @var   mixed
-     * @see   connect(), query(), dbclose()
+     * @var mixed
      */
-    var $conn = false;
+    private $conn = false;
 
     /**
      * The query log string
      *
-     * @var   string
-     * @see   query()
+     * @var string
      */
-    var $sqllog = "";
+    private $sqllog = '';
 
     /**
      * Tables
      *
-     * @var     array
+     * @var array
      */
-    var $tableNames = array();
+    private $tableNames = array();
 
     /**
      * Connects to the database.
      *
      * This function connects to a MySQL database
      *
-     * @param   string $host
-     * @param   string $username
-     * @param   string $password
-     * @param   string $db_name
-     * @return  boolean TRUE, if connected, otherwise false
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2003-02-24
+     * @param  string  $host     Hostname
+     * @param  string  $username Username
+     * @param  string  $password Password
+     * @param  string  $db_name  Database name
+     * @return boolean TRUE, if connected, otherwise false
      */
-    function connect ($host, $user, $passwd, $db)
+    public function connect ($host, $user, $password, $db)
     {
-        $this->conn = mysql_connect($host, $user, $passwd);
+        $this->conn = mysql_connect($host, $user, $password);
         if (empty($db) || $this->conn == false) {
-            PMF_Db::errorPage(mysql_error());
+            PMF_Db::errorPage($this->error());
             die();
         }
         return mysql_select_db($db, $this->conn);
     }
 
     /**
-     * Sends a query to the database.
-     *
      * This function sends a query to the database.
      *
-     * @param   string $query
-     * @return  mixed $result
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2003-02-24
+     * @param  string $query Query string
+     * @return mixed
      */
-    function query($query)
+    public function query($query)
     {
         $this->sqllog .= pmf_debug($query);
-        return mysql_query($query, $this->conn);
+        $result = mysql_query($query, $this->conn);
+        if (!$result) {
+        	$this->sqllog .= $this->error();
+        }
+        
+        return $result;
     }
 
     /**
-    * Escapes a string for use in a query
-    *
-    * @param   string
-    * @return  string
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since   2004-12-16
-    */
-    function escape_string($string)
+     * Escapes a string for use in a query
+     *
+     * @param  string $string String
+     * @return string
+     */
+    public function escape_string($string)
     {
         return mysql_real_escape_string($string, $this->conn);
     }
@@ -106,15 +111,10 @@ class PMF_DB_Mysql implements PMF_DB_Driver
     /**
      * Fetch a result row as an object
      *
-     * This function fetches a result row as an object.
-     *
-     * @param   mixed $result
-     * @return  mixed
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2003-02-24
+     * @param  mixed $result Resultset
+     * @return mixed
      */
-    function fetch_object($result)
+    public function fetch_object($result)
     {
         return mysql_fetch_object($result);
     }
@@ -124,31 +124,21 @@ class PMF_DB_Mysql implements PMF_DB_Driver
     /**
      * Fetch a result row as an object
      *
-     * This function fetches a result as an associative array.
-     *
-     * @param   mixed $result
-     * @return  array
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2003-02-24
+     * @param  mixed $result Resultset
+     * @return mixed
      */
-    function fetch_assoc($result)
+    public function fetch_assoc($result)
     {
-        #print '<pre>';
-        #debug_print_backtrace();
         return mysql_fetch_assoc($result);
     }
 
     /**
      * Number of rows in a result
      *
-     * @param   mixed $result
-     * @return  integer
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2003-02-24
+     * @param  mixed   $result Resultset
+     * @return integer
      */
-    function num_rows($result)
+    public function num_rows($result)
     {
         return mysql_num_rows($result);
     }
@@ -156,13 +146,9 @@ class PMF_DB_Mysql implements PMF_DB_Driver
     /**
      * Logs the queries
      *
-     * @param   mixed $result
-     * @return  integer
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2003-02-24
+     * @return string
      */
-    function sqllog()
+    public function sqllog()
     {
         return $this->sqllog;
     }
@@ -171,16 +157,17 @@ class PMF_DB_Mysql implements PMF_DB_Driver
 
     /**
      * Generates a result based on search a search string.
-     *
-     * This function generates a result set based on a search string.
-     * FIXME: can extend to handle operands like google
-     *
-     * @access  public
-     * @author  Tom Rochester <tom.rochester@gmail.com>
-     * @author  Matteo scaramuccia <matteo@scaramuccia.com>
-     * @since   2004-08-06
+     * 
+     * @param  string $table       Table for search
+     * @param  array  $assoc       Associative array with columns for the resulset
+     * @param  string $joinedTable Table to do a JOIN, e.g. for faqcategoryrelations
+     * @param  array  $joinAssoc   Associative array with comlumns for the JOIN
+     * @param  string $string      Search term
+     * @param  array  $cond        Conditions
+     * @param  array  $orderBy     ORDER BY columns
+     * @return mixed
      */
-    function search($table, $assoc, $joinedTable = '', $joinAssoc = array(), $match = array(), $string = '', $cond = array(), $orderBy = array())
+    public function search($table, Array $assoc, $joinedTable = '', Array $joinAssoc = array(), $match = array(), $string = '', Array $cond = array(), Array $orderBy = array())
     {
         $string = $this->escape_string(trim($string));
         $fields = "";
@@ -245,16 +232,12 @@ class PMF_DB_Mysql implements PMF_DB_Driver
         return $this->query($query);
     }
 
-     /**
-     * Returns the error string.
+    /**
+     * Returns the table status.
      *
-     * This function returns the table status.
-     *
-     * @access  public
-     * @author  Tom Rochester <tom.rochester@gmail.com>
-     * @since   2004-08-06
+     * @return array
      */
-    function getTableStatus()
+    public function getTableStatus()
     {
         $arr = array();
         $result = $this->query("SHOW TABLE STATUS");
@@ -265,19 +248,14 @@ class PMF_DB_Mysql implements PMF_DB_Driver
     }
 
     /**
-    * Returns the next ID of a table
-    *
-    * This function is a replacement for MySQL's auto-increment so that
-    * we don't need it anymore.
-    *
-    * @param   string      the name of the table
-    * @param   string      the name of the ID column
-    * @return  int
-    * @access  public
-    * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-    * @since   2004-11-30
-    */
-    function nextID($table, $id)
+     * Returns the next ID of a table. This function is a replacement for MySQL's 
+     * auto-increment so that we don't need it anymore.
+     *
+     * @param  string  $table The name of the table
+     * @param  string  $id    The name of the ID column
+     * @return integer
+     */
+    public function nextID($table, $id)
     {
         $result = $this->query('SELECT max('.$id.') as current_id FROM '.$table);
         $currentID = mysql_result($result, 0, 'current_id');
@@ -285,29 +263,21 @@ class PMF_DB_Mysql implements PMF_DB_Driver
     }
 
      /**
-     * Returns the error string.
-     *
-     * This function returns the last error string.
-     *
-     * @access  public
-     * @author  Tom Rochester <tom.rochester@gmail.com>
-     * @since   2004-08-06
-     */
-    function error()
+      * Returns the error string.
+      * 
+      * @return void
+      */
+    public function error()
     {
         return mysql_error();
     }
 
     /**
      * Returns the client version string.
-     *
-     * This function returns the version string.
-     *
-     * @access  public
-     * @author  Tom Rochester <tom.rochester@gmail.com>
-     * @since   2004-08-06
+     * 
+     * @return void
      */
-    function client_version()
+    public function client_version()
     {
         return mysql_get_client_info();
     }
@@ -315,13 +285,9 @@ class PMF_DB_Mysql implements PMF_DB_Driver
     /**
      * Returns the server version string.
      *
-     * This function returns the version string.
-     *
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2004-11-12
+     * @return void
      */
-    function server_version()
+    public function server_version()
     {
         return mysql_get_server_info();
     }
@@ -329,15 +295,13 @@ class PMF_DB_Mysql implements PMF_DB_Driver
     /**
      * Returns an array with all table names
      *
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
-     * @since   2006-08-21
+     * @param  string $prefix Table prefix
+     * @return void
      */
-    function getTableNames($prefix = '')
+    public function getTableNames($prefix = '')
     {
         // First, declare those tables that are referenced by others
-        $this->tableNames[] = $prefix.'faquser';
+        $this->tableNames[] = $prefix . 'faquser';
 
         $result = $this->query('SHOW TABLES'.(('' == $prefix) ? '' : ' LIKE \''.$prefix.'%\''));
         while ($row = $this->fetch_object($result)) {
@@ -352,14 +316,9 @@ class PMF_DB_Mysql implements PMF_DB_Driver
     /**
      * Closes the connection to the database.
      *
-     * This function closes the connection to the database.
-     *
-     * @return    void
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2003-02-24
+     * @return void
      */
-    function dbclose()
+    public function dbclose()
     {
         if (is_resource($this->conn)) {
             mysql_close($this->conn);
