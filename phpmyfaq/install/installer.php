@@ -6,14 +6,14 @@
  * parameters into the file data.php and the configuration into the database.
  *
  * @package    phpMyFAQ
- * @subpackage Installtion
+ * @subpackage Installation
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author     Tom Rochester <tom.rochester@gmail.com>
  * @author     Johannes Schlueter <johannes@php.net>
  * @author     Uwe Pries <uwe.pries@digartis.de>
  * @since      2002-08-20
- * @copyright  2002-2009 phpMyFAQ Team
  * @version    SVN: $Id$
+ * @copyright  2002-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
