@@ -357,7 +357,7 @@ class PMF_User_User
     function getUserByLogin($login, $raise_error = true)
     {
         // check db
-        if (!$this->_db instanceof PMF_IDB_Driver) {
+        if (!is_object($this->_db)) {
             return false;
         }
         // get user
