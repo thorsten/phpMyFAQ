@@ -151,12 +151,12 @@ class PMF_User_Perm
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param object
+     * @param PMF_DB_Driver
      * @param string
      * @param int
      * @return bool
      */
-    function addDb($db, $context = '', $context_id = 0)
+    public function addDb(PMF_DB_Driver $db, $context = '', $context_id = 0)
     {
         $this->_db = $db;
         $this->_initialized = true;

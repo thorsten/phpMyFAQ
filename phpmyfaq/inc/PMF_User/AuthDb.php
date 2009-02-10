@@ -32,8 +32,7 @@ class PMF_User_AuthDb extends PMF_User_Auth
     /**
     * Short description of attribute tablename
     *
-    * @access private
-    * @var string
+    * @var PMF_DB_Driver
     */
     var $_tablename = '';
 
@@ -250,13 +249,13 @@ class PMF_User_AuthDb extends PMF_User_Auth
     *
     * @access   public
     * @author   Lars Tiedemann, <php@larstiedemann.de>
-    * @param    object
+    * @param    PMF_DB_Driver
     * @param    string
     * @param    string
     * @param    string
     * @return   void
     */
-    function connect($db, $table = '', $login_column = '', $password_column = '')
+    public function connect(PMF_DB_Driver $db, $table = '', $login_column = '', $password_column = '')
     {
         $this->_db($db);
         $this->_tablename($table);

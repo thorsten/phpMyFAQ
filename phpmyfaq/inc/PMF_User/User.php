@@ -169,7 +169,7 @@ class PMF_User_User
      * @param mixed
      * @return void
      */
-    function __construct($db = null, $perm = null, $auth = array())
+    function __construct(PMF_DB_Driver $db = null, $perm = null, $auth = array())
     {
         if ($db !== null) {
             if (!$this->addDb($db)) {
@@ -250,10 +250,10 @@ class PMF_User_User
      *
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param object
+     * @param PMF_DB_Driver
      * @return void
      */
-    function addDb($db)
+    function addDb(PMF_DB_Driver $db)
     {
         $this->_db = $db;
         return true;
@@ -289,7 +289,7 @@ class PMF_User_User
     {
         // check db
         // TODO: Do we really need that check? :-)
-        if (!$this->_db instanceof PMF_IDB_Driver) {
+        if (!$this->_db instanceof PMF_DB_Driver) {
             return false;
 	}
 
@@ -357,7 +357,7 @@ class PMF_User_User
     function getUserByLogin($login, $raise_error = true)
     {
         // check db
-        if (!is_object($this->_db)) {
+        if (!$this->_db instanceof PMF_DB_Driver) {
             return false;
         }
         // get user
@@ -433,7 +433,7 @@ class PMF_User_User
      */
     function createUser($login, $pass = '', $user_id = 0)
     {
-        if (!$this->_db instanceof PMF_IDB_Driver) {
+    	if (!$this->_db instanceof PMF_DB_Driver) {
             return false;
         }
 
@@ -526,7 +526,7 @@ class PMF_User_User
             return false;
         }
         // check db
-        if (!$this->_db instanceof PMF_IDB_Driver) {
+        if (!$this->_db instanceof PMF_DB_Driver) {
             return false;
         }
         // delete user rights
@@ -585,7 +585,7 @@ class PMF_User_User
      */
     function changePassword($pass = '')
     {
-        if (!$this->_db instanceof PMF_IDB_Driver) {
+    	if (!$this->_db instanceof PMF_DB_Driver) {
             return false;
         }
 

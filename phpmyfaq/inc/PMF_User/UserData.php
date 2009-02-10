@@ -47,12 +47,12 @@ class PMF_User_UserData
     /**
      * Constructor. Expects a database object $db.
      *
-     * @param  PMF_DB $db PMF_DB
+     * @param  PMF_DB_Driver $db PMF_DB
      * @return void
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
      */
-    function __construct($db)
+    function __construct(PMF_DB_Driver $db)
     {
         $this->_db = $db;
     }
@@ -121,17 +121,6 @@ class PMF_User_UserData
             $this->_data[$field[$i]] = $value[$i];
         }
         return $this->save();
-    }
-
-    /**
-     * destructor.
-     *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @return void
-     */
-    function __destruct()
-    {
     }
 
     /**
