@@ -20,12 +20,12 @@
  * selectDb(dbtype) may be called which returns a valid database-specific
  * object. See documentation of the static method selectDb for further details.
  *
- * @package     phpMyFAQ
- * @author      Lars Tiedemann <php@larstiedemann.de>
- * @access      public
- * @since       2005-09-30
- * @copyright   (c) 2005-2009 phpMyFAQ Team
- * @version     SVN: $Id$
+ * @package    phpMyFAQ
+ * @subpackage PMF_User
+ * @author     Lars Tiedemann <php@larstiedemann.de>
+ * @since      2005-09-30
+ * @copyright  2005-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -36,6 +36,17 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ */
+
+/**
+ * PMF_User_Auth
+ * 
+ * @package    phpMyFAQ
+ * @subpackage PMF_User
+ * @author     Lars Tiedemann <php@larstiedemann.de>
+ * @since      2005-09-30
+ * @copyright  2005-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
  */
 class PMF_User_Auth
 {
@@ -77,17 +88,6 @@ class PMF_User_Auth
     private $_read_only = false;
 
     /**
-     * constructor
-     *
-     * @access   public
-     * @return   void
-     * @author   Lars Tiedemann, <php@larstiedemann.de>
-     */
-    function __construct()
-    {
-    }
-
-    /**
      * instantiates a new encryption object, stores it in a private container
      * returns it.
      *
@@ -96,9 +96,7 @@ class PMF_User_Auth
      * The result is stored in the private container variable _enc_container and
      *
      * @param  string $enctype encryption type
-     * @return object
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
+     * @return PMF_User
      */
     public function selectEncType($enctype)
     {
@@ -115,8 +113,6 @@ class PMF_User_Auth
      * Error messages are stored in the public array errors.
      *
      * @return   string
-     * @access   public
-     * @author   Lars Tiedemann, <php@larstiedemann.de>
      */
     public function error()
     {
@@ -141,10 +137,8 @@ class PMF_User_Auth
      * object without database access and with an error message. See the
      * of the error() method for further details.
      *
-     * @param    string
-     * @return   object
-     * @access   public
-     * @author   Lars Tiedemann, <php@larstiedemann.de>
+     * @param  string $database Database
+     * @return PMF_User
      */
     public static function selectAuth($database)
     {
@@ -155,15 +149,15 @@ class PMF_User_Auth
             $auth->errors[] = PMF_ERROR_USER_NO_AUTHTYPE;
             return $auth;
         }
-        $classfile = dirname(__FILE__)."/".$auth->_auth_typemap[$database].".php";
+        $classfile = dirname(__FILE__) . DIRECTORY_SEPARATOR . $auth->_auth_typemap[$database] . ".php";
         if (!file_exists($classfile)) {
             $auth->errors[] = PMF_ERROR_USER_NO_AUTHTYPE;
             return $auth;
         }
         require_once $classfile;
         // instantiate
-        $authclass = "PMF_User_".$auth->_auth_typemap[$database];
-        $auth = new $authclass();
+        $authclass = "PMF_User_" . $auth->_auth_typemap[$database];
+        $auth      = new $authclass();
         return $auth;
     }
 
@@ -172,8 +166,6 @@ class PMF_User_Auth
      *
      * @param  bool $read_only boolean flag
      * @return bool
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
      */
     public function read_only($read_only = null)
     {
@@ -190,8 +182,6 @@ class PMF_User_Auth
      *
      * @param  string $str string
      * @return string
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
      */
     function encrypt($str)
     {
