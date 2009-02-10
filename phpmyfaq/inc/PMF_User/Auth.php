@@ -55,14 +55,14 @@ class PMF_User_Auth
      *
      * @var const
      */
-    const PMF_ERROR_USER_NO_AUTHTYPE = 'Specified authentication access class could not be found. ';
+    const PMF_ERROR_USER_NO_AUTHTYPE = 'Specified authentication access class could not be found.';
 
     /**
-     * private container that stores the encryption object.
+     * p container that stores the encryption object.
      *
      * @var object
      */
-    protected $_enc_container = null;
+    protected $enc_container = null;
 
     /**
      * public array that contains error messages.
@@ -76,16 +76,18 @@ class PMF_User_Auth
      *
      * @var array
      */
-    private $_auth_typemap = array(
-        'db'   => 'AuthDb',
-        'ldap' => 'AuthLdap');
+    private $auth_typemap = array(
+        'db'       => 'AuthDb',
+        'openid'   => 'AuthOpenId',
+        'ldap'     => 'AuthLdap',
+        'kerberos' => 'AuthKerberos');
 
     /**
      * Short description of attribute read_only
      *
      * @var bool
      */
-    private $_read_only = false;
+    private $read_only = false;
 
     /**
      * instantiates a new encryption object, stores it in a private container
@@ -93,15 +95,15 @@ class PMF_User_Auth
      *
      * This method instantiates a new Enc object by calling the static
      * method. The specified encryption method enctype is passed to
-     * The result is stored in the private container variable _enc_container and
+     * The result is stored in the private container variable enc_container and
      *
      * @param  string $enctype encryption type
      * @return PMF_User
      */
     public function selectEncType($enctype)
     {
-        $this->_enc_container = PMF_User_Enc::selectEnc($enctype);
-        return $this->_enc_container;
+        $this->enc_container = PMF_User_Enc::selectEnc($enctype);
+        return $this->enc_container;
     }
 
     /**
@@ -123,7 +125,7 @@ class PMF_User_Auth
         foreach ($this->errors as $error) {
             $message .= $error."\n";
         }
-        $message .= $this->_enc_container->error();
+        $message .= $this->enc_container->error();
         return $message;
     }
 
@@ -145,18 +147,18 @@ class PMF_User_Auth
         // verify selected database
         $auth = new PMF_User_Auth();
         $database = strtolower($database);
-        if (!isset($auth->_auth_typemap[$database])) {
+        if (!isset($auth->auth_typemap[$database])) {
             $auth->errors[] = PMF_ERROR_USER_NO_AUTHTYPE;
             return $auth;
         }
-        $classfile = dirname(__FILE__) . DIRECTORY_SEPARATOR . $auth->_auth_typemap[$database] . ".php";
+        $classfile = dirname(__FILE__) . DIRECTORY_SEPARATOR . $auth->auth_typemap[$database] . ".php";
         if (!file_exists($classfile)) {
             $auth->errors[] = PMF_ERROR_USER_NO_AUTHTYPE;
             return $auth;
         }
         require_once $classfile;
         // instantiate
-        $authclass = "PMF_User_" . $auth->_auth_typemap[$database];
+        $authclass = "PMF_User_" . $auth->auth_typemap[$database];
         $auth      = new $authclass();
         return $auth;
     }
@@ -167,14 +169,14 @@ class PMF_User_Auth
      * @param  bool $read_only boolean flag
      * @return bool
      */
-    public function read_only($read_only = null)
+    public function setReadOnly($read_only = null)
     {
         if ($read_only === null) {
-            return $this->_read_only;
+            return $this->read_only;
         }
-        $old_read_only = $this->_read_only;
-        $this->_read_only = (bool) $read_only;
-        return $old_read_only;
+        $oldread_only = $this->read_only;
+        $this->read_only = (bool) $read_only;
+        return $oldread_only;
     }
 
     /**
@@ -185,6 +187,6 @@ class PMF_User_Auth
      */
     function encrypt($str)
     {
-        return $this->_enc_container->encrypt($str);
+        return $this->enc_container->encrypt($str);
     }
 }
