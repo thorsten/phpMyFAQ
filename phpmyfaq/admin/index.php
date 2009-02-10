@@ -269,7 +269,6 @@ if (isset($auth) && in_array(true, $permission)) {
             // functions for session administration
             case "viewsessions":            require_once 'stat.main.php'; break;
             case "sessionbrowse":           require_once 'stat.browser.php'; break;
-            case "sessionsuche":            require_once 'stat.form.php'; break;
             case "viewsession":             require_once 'stat.show.php'; break;
             case "statistics":              require_once 'stat.ratings.php'; break;
             // functions for config administration
