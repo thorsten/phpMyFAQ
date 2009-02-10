@@ -404,7 +404,7 @@ class PMF_User_AuthDb extends PMF_User_Auth
     * @param    object
     * @return   object
     */
-    function _db(PMF_IDB_Driver $db = null)
+    function _db($db = null)
     {
         if (is_object($db)) {
             $old_db = $this->_db;

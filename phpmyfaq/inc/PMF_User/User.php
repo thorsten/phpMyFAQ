@@ -169,7 +169,7 @@ class PMF_User_User
      * @param mixed
      * @return void
      */
-    function __construct(PMF_DB $db = null, $perm = null, $auth = array())
+    function __construct($db = null, $perm = null, $auth = array())
     {
         if ($db !== null) {
             if (!$this->addDb($db)) {
@@ -253,7 +253,7 @@ class PMF_User_User
      * @param object
      * @return void
      */
-    function addDb(PMF_IDB_Driver $db)
+    function addDb($db)
     {
         $this->_db = $db;
         return true;
