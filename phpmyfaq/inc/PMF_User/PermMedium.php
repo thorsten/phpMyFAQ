@@ -53,8 +53,6 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
      */
     function checkGroupRight($group_id, $right_id)
     {
-        if (!$this->_initialized)
-            return false;
         // check input
         if ($right_id <= 0 or $group_id <= 0 or !is_numeric($right_id) or !is_numeric($group_id))
             return false;
@@ -91,8 +89,6 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
      */
     function getGroupRights($group_id)
     {
-        if (!$this->_initialized)
-            return false;
         if ($group_id <= 0 or !is_numeric($group_id))
             return false;
         // check right
@@ -156,8 +152,6 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
      */
     function grantGroupRight($group_id, $right_id)
     {
-        if (!$this->_initialized)
-            return false;
         // check input
         if ($right_id <= 0 or $group_id <= 0 or !is_numeric($right_id) or !is_numeric($group_id))
             return false;
@@ -192,8 +186,6 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
      */
     function refuseGroupRight($group_id, $right_id)
     {
-        if (!$this->_initialized)
-            return false;
         // check input
         if ($right_id <= 0 or $group_id <= 0 or !is_numeric($right_id) or !is_numeric($group_id))
             return false;
@@ -224,8 +216,6 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
      */
     function addGroup($group_data)
     {
-        if (!$this->_initialized)
-            return 0;
         // check if group already exists
         if ($this->getGroupId($group_data['name']) > 0)
             return 0;
@@ -266,8 +256,6 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
      */
     function changeGroup($group_id, $group_data)
     {
-        if (!$this->_initialized)
-            return false;
         // check input
         $checked_data = $this->checkGroupData($group_data);
         // create update SET
@@ -304,8 +292,6 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
      */
     function deleteGroup($group_id)
     {
-        if (!$this->_initialized)
-            return false;
         if ($group_id <= 0 or !is_numeric($group_id))
             return false;
 
@@ -354,8 +340,6 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
      */
     function isGroupMember($user_id, $group_id)
     {
-        if (!$this->_initialized)
-            return false;
         if ($user_id <= 0 or $group_id <= 0 or !is_numeric($user_id) or !is_numeric($group_id))
             return false;
         $res = $this->_db->query("
@@ -389,8 +373,6 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
      */
     function getGroupMembers($group_id)
     {
-        if (!$this->_initialized)
-            return false;
         if ($group_id <= 0 or !is_numeric($group_id))
             return false;
         $res = $this->_db->query("
@@ -426,8 +408,6 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
      */
     function addToGroup($user_id, $group_id)
     {
-        if (!$this->_initialized)
-            return false;
         if ($user_id <= 0 or $group_id <= 0 or !is_numeric($user_id) or !is_numeric($group_id))
             return false;
         // check group
@@ -461,8 +441,6 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
      */
     function removeFromGroup($user_id, $group_id)
     {
-        if (!$this->_initialized)
-            return false;
         // check input
         if ($user_id <= 0 or $group_id <= 0 or !is_numeric($user_id) or !is_numeric($group_id))
             return false;
@@ -493,8 +471,6 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
      */
     function getGroupId($name)
     {
-        if (!$this->_initialized)
-            return false;
         // get group id
         $res = $this->_db->query("
             SELECT
@@ -524,8 +500,6 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
      */
     function getGroupData($group_id)
     {
-        if (!$this->_initialized)
-            return false;
         if ($group_id <= 0 or !is_numeric($group_id))
             return false;
         // get group data
@@ -557,8 +531,6 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
      */
     function getUserGroups($user_id)
     {
-        if (!$this->_initialized)
-            return false;
         if ($user_id <= 0 or !is_numeric($user_id))
             return false;
         // get user groups
@@ -594,10 +566,6 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
      */
     function getAllGroups()
     {
-        if (!$this->_initialized) {
-            return false;
-        }
-
         // get all groups
         $query = sprintf(
                     "SELECT
@@ -655,8 +623,6 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
      */
     function checkUserGroupRight($user_id, $right_id)
     {
-        if (!$this->_initialized)
-            return false;
         // check input
         if ($right_id <= 0 or $user_id <= 0 or !is_numeric($right_id) or !is_numeric($user_id))
             return false;
@@ -723,8 +689,6 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
      */
     function getAllUserRights($user_id)
     {
-        if (!$this->_initialized)
-            return false;
         // check input
         if ($user_id <= 0 or !is_numeric($user_id))
             return false;
@@ -750,8 +714,6 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
      */
     function autoJoin($user_id)
     {
-        if (!$this->_initialized)
-            return false;
         // check user id
         if ($user_id <= 0 or !is_numeric($user_id))
             return false;
@@ -790,8 +752,6 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
      */
     function removeFromAllGroups($user_id)
     {
-        if (!$this->_initialized)
-            return false;
         // check input
         if ($user_id <= 0 or !is_numeric($user_id))
             return false;
@@ -821,8 +781,6 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
      */
     function getUserGroupRights($user_id)
     {
-        if (!$this->_initialized)
-            return false;
         if ($user_id <= 0 or !is_numeric($user_id))
             return false;
         // check right
@@ -863,8 +821,6 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
      */
     function refuseAllGroupRights($group_id)
     {
-        if (!$this->_initialized)
-            return false;
         if ($group_id <= 0 or !is_numeric($group_id))
             return false;
         $res = $this->_db->query("
@@ -890,8 +846,6 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
      */
     function getGroupName($group_id)
     {
-        if (!$this->_initialized)
-            return false;
         if ($group_id <= 0 or !is_numeric($group_id))
             return false;
         // get group data
@@ -923,8 +877,6 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
      */
     function removeAllUsersFromGroup($group_id)
     {
-        if (!$this->_initialized)
-            return false;
         // check input
         if ($group_id <= 0 or !is_numeric($group_id))
             return false;

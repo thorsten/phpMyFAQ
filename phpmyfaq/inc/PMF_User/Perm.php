@@ -68,13 +68,15 @@ class PMF_User_Perm
     );
 
     /**
-     * Set TRUE if valid database and user-ID are given
+     * Constructor
      *
-     * @access private
-     * @var bool
+     * @return void
      */
-    var $_initialized = false;
-
+    private function __construct()
+    {
+    	$this->_db = PMF_Db::getInstance(); 
+    }
+    
     /**
      * Selects a subclass of PMF_Perm. 
      *
@@ -87,15 +89,15 @@ class PMF_User_Perm
      * @param string
      * @return object
      */
-    static function selectPerm($perm_level)
+    public static function selectPerm($perm_level)
     {
         // verify selected database
-        $perm = new PMF_User_Perm();
+        $perm       = new PMF_User_Perm();
         $perm_level = strtolower($perm_level);
         if (!isset($perm->_perm_typemap[$perm_level])) {
             return $perm;
         }
-        $classfile = dirname(__FILE__)."/".$perm->_perm_typemap[$perm_level].".php";
+        $classfile = dirname(__FILE__) . DIRECTORY_SEPARATOR . $perm->_perm_typemap[$perm_level].".php";
         if (!file_exists($classfile)) {
             return $perm;
         }
@@ -136,31 +138,4 @@ class PMF_User_Perm
             return false;
         return true;
     }
-
-    /**
-     * initalizes the object. 
-     *
-     * PMF_Perm needs a database access in order to work. db must be a valid
-     * object.
-     *
-     * User specific permissions can only be checked and set, if a valid user-ID
-     * given. However, for administration purposes, user_id may be omitted.
-     *
-     * Context information context and context_id only work with
-     * See the documentation of PMF_PermLarge for context description.
-     *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param PMF_DB_Driver
-     * @param string
-     * @param int
-     * @return bool
-     */
-    public function addDb(PMF_DB_Driver $db, $context = '', $context_id = 0)
-    {
-        $this->_db = $db;
-        $this->_initialized = true;
-        return true;
-    }
-
 }

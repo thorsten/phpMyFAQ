@@ -52,8 +52,6 @@ class PMF_User_PermBasic extends PMF_User_Perm
      */
     public function checkUserRight($user_id, $right_id)
     {
-        if (!$this->_initialized)
-            return false;
         // check right id
         if ($right_id <= 0)
             return false;
@@ -91,8 +89,6 @@ class PMF_User_PermBasic extends PMF_User_Perm
      */
     function getUserRights($user_id)
     {
-        if (!$this->_initialized)
-            return false;
         // get user rights
         $res = $this->_db->query("
             SELECT
@@ -128,8 +124,6 @@ class PMF_User_PermBasic extends PMF_User_Perm
      */
     function grantUserRight($user_id, $right_id)
     {
-        if (!$this->_initialized)
-            return false;
         // is right for users?
         $right_data = $this->getRightData($right_id);
         if (!$right_data['for_users'])
@@ -161,8 +155,6 @@ class PMF_User_PermBasic extends PMF_User_Perm
      */
     function refuseUserRight($user_id, $right_id)
     {
-        if (!$this->_initialized)
-            return false;
         $res = $this->_db->query("
             DELETE FROM
                 ".SQLPREFIX."faquser_right
@@ -212,8 +204,6 @@ class PMF_User_PermBasic extends PMF_User_Perm
      */
     public function getRightData($right_id)
     {
-        if (!$this->_initialized)
-            return false;
         // get right data
         $res = $this->_db->query("
             SELECT
@@ -273,8 +263,6 @@ class PMF_User_PermBasic extends PMF_User_Perm
      */
     function addRight($right_data, $context_data = array())
     {
-        if (!$this->_initialized)
-            return 0;
         // check if right already exists
         if ($this->getRightId($right_data['name']) > 0)
             return 0;
@@ -322,8 +310,6 @@ class PMF_User_PermBasic extends PMF_User_Perm
      */
     function changeRight($right_id, $right_data, $context_data = array())
     {
-        if (!$this->_initialized)
-            return false;
         // check input
         $checked_data = $this->checkRightData($right_data);
         // create update SET
@@ -374,8 +360,6 @@ class PMF_User_PermBasic extends PMF_User_Perm
      */
     function deleteRight($right_id)
     {
-        if (!$this->_initialized)
-            return false;
         // delete right
         $res = $this->_db->query("
             DELETE FROM
@@ -427,8 +411,6 @@ class PMF_User_PermBasic extends PMF_User_Perm
      */
     function getRightId($name)
     {
-        if (!$this->_initialized)
-            return false;
         // get right id
         $res = $this->_db->query("
             SELECT
@@ -457,10 +439,6 @@ class PMF_User_PermBasic extends PMF_User_Perm
      */
     function getAllRights()
     {
-        if (!$this->_initialized) {
-            return false;
-        }
-
         $query = sprintf(
                     "SELECT
                         right_id
@@ -494,10 +472,6 @@ class PMF_User_PermBasic extends PMF_User_Perm
      */
     function getAllRightsData($order = 'right_id ASC')
     {
-        if (!$this->_initialized) {
-            return false;
-        }
-
         $query = sprintf(
                     "SELECT
                         right_id,
@@ -565,8 +539,6 @@ class PMF_User_PermBasic extends PMF_User_Perm
      */
     function refuseAllUserRights($user_id)
     {
-        if (!$this->_initialized)
-            return false;
         $res = $this->_db->query("
             DELETE FROM
                 ".SQLPREFIX."faquser_right
@@ -577,5 +549,4 @@ class PMF_User_PermBasic extends PMF_User_Perm
             return false;
         return true;
     }
-
 }

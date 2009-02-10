@@ -165,27 +165,13 @@ class PMF_User_User
      * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
      * @param object
-     * @param object
      * @param mixed
      * @return void
      */
-    function __construct(PMF_DB_Driver $db = null, $perm = null, $auth = array())
+    function __construct($perm = null, $auth = array())
     {
-        if ($db !== null) {
-            if (!$this->addDb($db)) {
-                return false;
-            }
-        } else {
-            // or set global $db
-            global $db;
-            if (isset($db)) {
-                if (!$this->addDb($db))
-                    return false;
-            } else {
-                // no $db, no fun
-                return false;
-            }
-        }
+        $this->_db = PMF_Db::getInstance();
+    	
         // permission object
         if ($perm !== null) {
             // set given $perm
@@ -197,7 +183,6 @@ class PMF_User_User
             global $PMF_CONF;
             $permLevel = isset($PMF_CONF['main.permLevel']) && ('' != $PMF_CONF['main.permLevel']) ? $PMF_CONF['main.permLevel'] : 'basic';
             $perm = PMF_User_Perm::selectPerm($permLevel);
-            $perm->addDb($this->_db);
             if (!$this->addPerm($perm))
                 return false;
         }
@@ -243,20 +228,6 @@ class PMF_User_User
         }
         $this->perm = null;
         return false;
-    }
-
-    /**
-     * adds a database object to the user.
-     *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param PMF_DB_Driver
-     * @return void
-     */
-    function addDb(PMF_DB_Driver $db)
-    {
-        $this->_db = $db;
-        return true;
     }
 
     /**
