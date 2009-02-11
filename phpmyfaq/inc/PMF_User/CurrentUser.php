@@ -5,10 +5,11 @@
  * The CurrentUser class is an extension of the User class. It provides methods
  * manage user authentication using multiple database accesses.
  *
- * @package     phpMyFAQ
- * @author      Lars Tiedemann <php@larstiedemann.de>
- * @copyright   (c) 2005-2009 phpMyFAQ Team
- * @version     SVN: $Id$
+ * @package    phpMyFAQ
+ * @subpackage PMF_User
+ * @author     Lars Tiedemann <php@larstiedemann.de>
+ * @copyright  2005-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -39,50 +40,48 @@
  * the login() method, getFromSession() method or manually.
  * login() and getFromSession() may be combined.
  *
- * @package     phpMyFAQ
- * @author      Lars Tiedemann <php@larstiedemann.de>
- * @access      public
+ * @package    phpMyFAQ
+ * @subpackage PMF_User
+ * @author     Lars Tiedemann <php@larstiedemann.de>
+ * @copyright  2005-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
  */
 class PMF_User_CurrentUser extends PMF_User_User
 {
-
+    /**
+     * true if CurrentUser is logged in, otherwise false.
+     * Call isLoggedIn() to check.
+     *
+     * @var bool
+     */
+    private $logged_in = false;
 
     /**
-    * TRUE if CurrentUser is logged in, otherwise false.
-    * Call isLoggedIn() to check.
-    *
-    * @access private
-    * @var bool
-    */
-    var $_logged_in = false;
+     * Session timeout
+     *
+     * Specifies the timeout for the session in minutes. If the
+     * session-ID was not updated for the last
+     * $this->session_timeout minutes, the CurrentUser will be
+     * logged out automatically.
+     *
+     * @var integer
+     */
+    private $session_timeout = PMF_SESSION_ID_EXPIRES;
 
     /**
-    * Session timeout
-    *
-    * Specifies the timeout for the session in minutes. If the
-    * session-ID was not updated for the last
-    * $this->_session_timeout minutes, the CurrentUser will be
-    * logged out automatically.
-    *
-    * @access private
-    * @var int
-    */
-    var $_session_timeout = PMF_SESSION_ID_EXPIRES;
-
-    /**
-    * Session-ID timeout
-    *
-    * Specifies the timeout for the session-ID in minutes. If the
-    * session-ID was not updated for the last
-    * $this->_session_id_timeout minutes, it will be updated. If
-    * set to 0, the session-ID will be updated on every click.
-    * The session-ID timeout must not be greater than Session
-    * timeout.
-    *
-    * @access private
-    * @var int
-    */
-    var $_session_id_timeout = 1;
+     * Session-ID timeout
+     *
+     * Specifies the timeout for the session-ID in minutes. If the
+     * session-ID was not updated for the last
+     * $this->session_id_timeout minutes, it will be updated. If
+     * set to 0, the session-ID will be updated on every click.
+     * The session-ID timeout must not be greater than Session
+     * timeout.
+     *
+     * @access private
+     * @var int
+     */
+    private $session_id_timeout = 1;
 
     /**
      * constructor
@@ -97,30 +96,29 @@ class PMF_User_CurrentUser extends PMF_User_User
     }
 
     /**
-    * login()
-    *
-    * Checks the given login and password in all auth-objects.
-    * Returns true on success, otherwise false. Raises errors
-    * that can be checked using the error() method. On success,
-    * the CurrentUser instance will be stored in the session and
-    * labeled as logged in. The name of the successful auth
-    * container will be stored in the user table.
-    * A new auth object may be added by using addAuth() method.
-    * The given password must not be encrypted, since the auth
-    * object takes care about the encryption method.
-    *
-    * @access   public
-    * @author   Lars Tiedemann, <php@larstiedemann.de>
-    * @param    string
-    * @param    string
-    * @return   bool
-    */
-    function login($login, $pass)
+     * login()
+     *
+     * Checks the given login and password in all auth-objects.
+     * Returns true on success, otherwise false. Raises errors
+     * that can be checked using the error() method. On success,
+     * the CurrentUser instance will be stored in the session and
+     * labeled as logged in. The name of the successful auth
+     * container will be stored in the user table.
+     * A new auth object may be added by using addAuth() method.
+     * The given password must not be encrypted, since the auth
+     * object takes care about the encryption method.
+     *
+     * @param  string $login Loginname
+     * @param  string $pass  Password
+     * @return bool
+     */
+    public function login($login, $pass)
     {
         // authenticate user by login and password
         $login_error = 0;
         $pass_error  = 0;
-        $count = 0;
+        $count       = 0;
+        
         foreach ($this->_auth_container as $name => $auth) {
             $count++;
 
@@ -139,23 +137,28 @@ class PMF_User_CurrentUser extends PMF_User_User
                 $pass_error++;
                 break;
             }
+            
             // but hey, this must be a valid match!
             // load user object
             $this->getUserByLogin($login);
             // user is now logged in
-            $this->_logged_in = true;
+            $this->logged_in = true;
             // update last login info, session-id and save to session
             $this->updateSessionId(true);
             $this->saveToSession();
+            
             // remember the auth container for administration
-            $res = $this->_db->query("
+            $update = sprintf("
                 UPDATE
-                    ".SQLPREFIX."faquser
+                    %sfaquser
                 SET
-                    auth_source = '".$name."'
+                    auth_source = '%s'
                 WHERE
-                    user_id = ".$this->getUserId()
-            );
+                    user_id = %d",
+                SQLPREFIX,
+                $this->db->escape_string($name),
+                $this->getUserId());
+            $res = $this->db->query($update);
             if (!$res) {
                 return false;
                 break;
@@ -169,6 +172,7 @@ class PMF_User_CurrentUser extends PMF_User_User
             return true;
             break;
         }
+        
         // raise errors and return false
         if ($login_error == $count) {
             $this->errors[] = parent::ERROR_USER_INCORRECT_LOGIN;
@@ -180,66 +184,50 @@ class PMF_User_CurrentUser extends PMF_User_User
     }
 
     /**
-    * isLoggedIn()
-    *
-    * Returns true if CurrentUser is logged in, otherwise false.
-    *
-    * @access   public
-    * @author   Lars Tiedemann, <php@larstiedemann.de>
-    * @return   bool
-    */
-    function isLoggedIn()
+     * Returns true if CurrentUser is logged in, otherwise false.
+     *
+     * @return boolean
+     */
+    public function isLoggedIn()
     {
-        return $this->_logged_in;
+        return $this->logged_in;
     }
 
     /**
-    * sessionIsTimedOut()
-    *
-    * Returns false if the CurrentUser object stored in the
-    * session is valid and not timed out. There are two
-    * parameters for session timeouts: $this->_session_timeout
-    * and $this->_session_id_timeout.
-    *
-    * @access   public
-    * @author   Lars Tiedemann, <php@larstiedemann.de>
-    * @return   bool
-    */
-    function sessionIsTimedOut()
+     * Returns false if the CurrentUser object stored in the
+     * session is valid and not timed out. There are two
+     * parameters for session timeouts: $this->session_timeout
+     * and $this->session_id_timeout.
+     *
+     * @return boolean
+     */
+    public function sessionIsTimedOut()
     {
-        if ($this->_session_timeout <= $this->sessionAge()) {
+        if ($this->session_timeout <= $this->sessionAge()) {
             return true;
         }
         return false;
     }
 
     /**
-    * sessionIdIsTimedOut()
-    *
-    * Returns false if the session-ID is not timed out.
-    *
-    * @access   public
-    * @author   Lars Tiedemann, <php@larstiedemann.de>
-    * @return   bool
-    */
-    function sessionIdIsTimedOut()
+     * Returns false if the session-ID is not timed out.
+     *
+     * @return boolean
+     */
+    public function sessionIdIsTimedOut()
     {
-        if ($this->_session_id_timeout <= $this->sessionAge()) {
+        if ($this->session_id_timeout <= $this->sessionAge()) {
             return true;
         }
         return false;
     }
 
     /**
-    * sessionAge()
-    *
-    * Returns the age of the current session-ID in minutes.
-    *
-    * @access   public
-    * @author   Lars Tiedemann, <php@larstiedemann.de>
-    * @return   float
-    */
-    function sessionAge()
+     * Returns the age of the current session-ID in minutes.
+     *
+     * @return float
+     */
+    public function sessionAge()
     {
         if (!isset($_SESSION[PMF_SESSION_ID_TIMESTAMP])) {
             return 0;
@@ -248,50 +236,44 @@ class PMF_User_CurrentUser extends PMF_User_User
     }
 
     /**
-    * getSessionInfo()
-    *
-    * Returns an associative array with session information stored
-    * in the user table. The array has the following keys:
-    * session_id, session_timestamp and ip.
-    *
-    * @access   public
-    * @author   Lars Tiedemann, <php@larstiedemann.de>
-    * @return   array
-    */
-    function getSessionInfo()
+     * Returns an associative array with session information stored
+     * in the user table. The array has the following keys:
+     * session_id, session_timestamp and ip.
+     *
+     * @return array
+     */
+    public function getSessionInfo()
     {
-        $res = $this->_db->query("
+    	$select = sprintf("
             SELECT
                 session_id,
                 session_timestamp,
                 ip
             FROM
-                ".SQLPREFIX."faquser
+                %sfaquser
             WHERE
-                user_id = ".$this->getUserId()
-        );
-        if (!$res or $this->_db->num_rows($res) != 1) {
+                user_id = %d",
+    	   SQLPREFIX,
+    	   $this->getUserId());
+    	   
+        $res = $this->db->query($select);
+        if (!$res or $this->db->num_rows($res) != 1) {
             return array();
         }
-        return $this->_db->fetch_assoc($res);
+        return $this->db->fetch_assoc($res);
     }
 
     /**
-    * updateSessionId()
-    *
-    * Updates the session-ID, does not care about time outs.
-    * Stores session information in the user table: session_id,
-    * session_timestamp and ip.
-    * Optionally it should update the 'last login' time.
-    * Returns true on success, otherwise false.
-    *
-    * @param    boolean
-    * @access   public
-    * @author   Lars Tiedemann, <php@larstiedemann.de>
-    * @author   Matteo Scaramuccia <matteo@scaramuccia.com>
-    * @return   bool
-    */
-    function updateSessionId($updateLastlogin = false)
+     * Updates the session-ID, does not care about time outs.
+     * Stores session information in the user table: session_id,
+     * session_timestamp and ip.
+     * Optionally it should update the 'last login' time.
+     * Returns true on success, otherwise false.
+     *
+     * @param  boolean $updateLastlogin Update the last login time?
+     * @return boolean
+     */
+    public function updateSessionId($updateLastlogin = false)
     {
         // renew the session-ID
         $oldSessionId = session_id();
@@ -305,26 +287,26 @@ class PMF_User_CurrentUser extends PMF_User_User
         // store session-ID age
         $_SESSION[PMF_SESSION_ID_TIMESTAMP] = $_SERVER['REQUEST_TIME'];
         // save session information in user table
-        $query = sprintf(
-                    "UPDATE
-                        %sfaquser
-                    SET
-                        session_id          = '%s',
-                        session_timestamp   = %d,
-                        %s
-                        ip                  = '%s'
-                    WHERE
-                        user_id = %d",
-                    SQLPREFIX,
-                    session_id(),
-                    $_SERVER['REQUEST_TIME'],
-                    $updateLastlogin ?  "last_login = '".date('YmdHis', $_SERVER['REQUEST_TIME'])."'," : '',
-                    $_SERVER['REMOTE_ADDR'],
-                    $this->getUserId());
+        $update = sprintf("
+            UPDATE
+                %sfaquser
+            SET
+                session_id          = '%s',
+                session_timestamp   = %d,
+                %s
+                ip                  = '%s'
+            WHERE
+                user_id = %d",
+            SQLPREFIX,
+            session_id(),
+            $_SERVER['REQUEST_TIME'],
+            $updateLastlogin ?  "last_login = '".date('YmdHis', $_SERVER['REQUEST_TIME'])."'," : '',
+            $_SERVER['REMOTE_ADDR'],
+            $this->getUserId());
                     
-        $res = $this->_db->query($query);
+        $res = $this->db->query($update);
         if (!$res) {
-            $this->errors[] = $this->_db->error();
+            $this->errors[] = $this->db->error();
             return false;
         }
 
@@ -332,79 +314,70 @@ class PMF_User_CurrentUser extends PMF_User_User
     }
 
     /**
-    * saveToSession()
-    *
-    * Saves the CurrentUser into the session. This method
-    * may be called after a successful login.
-    *
-    * @access   public
-    * @author   Lars Tiedemann, <php@larstiedemann.de>
-    * @return   void
-    */
-    function saveToSession()
+     * Saves the CurrentUser into the session. This method
+     * may be called after a successful login.
+     *
+     * @return void
+     */
+    public function saveToSession()
     {
-        // save CurrentUser in session
         $_SESSION[PMF_SESSION_CURRENT_USER] = $this->getUserId();
     }
 
     /**
-    * deleteFromSession()
-    *
-    * Deletes the CurrentUser from the session. The user
-    * will be logged out. Return true on success, otherwise false.
-    *
-    * @access   public
-    * @author   Lars Tiedemann, <php@larstiedemann.de>
-    * @return   bool
-    */
-    function deleteFromSession()
+     * Deletes the CurrentUser from the session. The user
+     * will be logged out. Return true on success, otherwise false.
+     *
+     * @return boolean
+     */
+    public function deleteFromSession()
     {
         // delete CurrentUser object from session
         $_SESSION[PMF_SESSION_CURRENT_USER] = null;
         unset($_SESSION[PMF_SESSION_CURRENT_USER]);
         // log CurrentUser out
-        $this->_logged_in = false;
+        $this->logged_in = false;
         // delete session-ID
-        $res = $this->_db->query("
+        $update = sprintf("
             UPDATE
-                ".SQLPREFIX."faquser
+                %sfaquser
             SET
                 session_id = null
             WHERE
-                user_id = ".$this->getUserId()
-        );
+                user_id = %d",
+                SQLPREFIX,
+                $this->getUserId());
+                
+        $res = $this->db->query($update);
         if (!$res) {
-            $this->errors[] = $this->_db->error();
+            $this->errors[] = $this->db->error();
             return false;
         }
         return true;
     }
 
     /**
-    * getFromSession()
-    *
-    * This static method returns a valid CurrentUser object if
-    * there is one in the session that is not timed out.
-    * If the the optional parameter ip_check is true, the current
-    * user must have the same ip which is stored in the user table
-    * The session-ID is updated if necessary. The CurrentUser
-    * will be removed from the session, if it is timed out. If
-    * there is no valid CurrentUser in the session or the session
-    * is timed out, null will be returned. If the session data is
-    * correct, but there is no user found in the user table, false
-    * will be returned. On success, a valid CurrentUser object is
-    * returned.
-    *
-    * @access   public
-    * @author   Lars Tiedemann, <php@larstiedemann.de>
-    * @param    bool
-    * @return   mixed
-    */
+     * This static method returns a valid CurrentUser object if
+     * there is one in the session that is not timed out.
+     * If the the optional parameter ip_check is true, the current
+     * user must have the same ip which is stored in the user table
+     * The session-ID is updated if necessary. The CurrentUser
+     * will be removed from the session, if it is timed out. If
+     * there is no valid CurrentUser in the session or the session
+     * is timed out, null will be returned. If the session data is
+     * correct, but there is no user found in the user table, false
+     * will be returned. On success, a valid CurrentUser object is
+     * returned.
+     *
+     * @param  boolean $ip_check Check th IP address
+     * @return mixed
+     */
     public static function getFromSession($ip_check = false)
     {
         // there is no valid user object in session
-        if (!isset($_SESSION[PMF_SESSION_CURRENT_USER]) || !isset($_SESSION[PMF_SESSION_ID_TIMESTAMP]))
+        if (!isset($_SESSION[PMF_SESSION_CURRENT_USER]) || !isset($_SESSION[PMF_SESSION_ID_TIMESTAMP])) {
             return null;
+        }
         // create a new CurrentUser object
         $user = new PMF_User_CurrentUser();
         $user->getUserById($_SESSION[PMF_SESSION_CURRENT_USER]);
@@ -415,7 +388,7 @@ class PMF_User_CurrentUser extends PMF_User_User
         }
         // session-id not found in user table
         $session_info = $user->getSessionInfo();
-        $session_id = (isset($session_info['session_id']) ? $session_info['session_id'] : '');
+        $session_id   = (isset($session_info['session_id']) ? $session_info['session_id'] : '');
         if ($session_id == '' || $session_id != session_id()) {
             return false;
         }
@@ -428,43 +401,34 @@ class PMF_User_CurrentUser extends PMF_User_User
             $user->updateSessionId();
         }
         // user is now logged in
-        $user->_logged_in = true;
+        $user->logged_in = true;
         // save current user to session and return the instance
         $user->saveToSession();
         return $user;
     }
 
     /**
-    * setSessionTimeout()
-    *
-    * Sets the number of minutes when the current user stored in
-    * the session gets invalid.
-    *
-    * @access   public
-    * @author   Lars Tiedemann, <php@larstiedemann.de>
-    * @param    float
-    * @return   void
-    */
-    function setSessionTimeout($timeout)
+     * Sets the number of minutes when the current user stored in
+     * the session gets invalid.
+     *
+     * @param  float $timeout Timeout
+     * @return void
+     */
+    public function setSessionTimeout($timeout)
     {
-        $this->_session_timeout = abs($timeout);
+        $this->session_timeout = abs($timeout);
     }
 
     /**
-    * setSessionIdTimeout()
-    *
-    * Sets the number of minutes when the session-ID needs to be
-    * updated. By setting the session-ID timeout to zero, the
-    * session-ID will be updated on each click.
-    *
-    * @access   public
-    * @author   Lars Tiedemann, <php@larstiedemann.de>
-    * @param    float
-    * @return   void
-    */
-    function setSessionIdTimeout($timeout)
+     * Sets the number of minutes when the session-ID needs to be
+     * updated. By setting the session-ID timeout to zero, the
+     * session-ID will be updated on each click.
+     *
+     * @param  float $timeout Timeout
+     * @return void
+     */
+    public function setSessionIdTimeout($timeout)
     {
-        $this->_session_id_timeout = abs($timeout);
+        $this->session_id_timeout = abs($timeout);
     }
-
 }
