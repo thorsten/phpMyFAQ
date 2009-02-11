@@ -71,7 +71,7 @@ class PMF_User_User
      *
      * @var object
      */
-    protected $_db = null;
+    protected $db = null;
 
     /**
      * login string
@@ -170,7 +170,7 @@ class PMF_User_User
      */
     function __construct($perm = null, $auth = array())
     {
-        $this->_db = PMF_Db::getInstance();
+        $this->db = PMF_Db::getInstance();
     	
         // permission object
         if ($perm !== null) {
@@ -206,7 +206,7 @@ class PMF_User_User
         } else {
         }
         // user data object
-        $this->userdata = new PMF_User_UserData($this->_db);
+        $this->userdata = new PMF_User_UserData($this->db);
     }
 
 
@@ -260,7 +260,7 @@ class PMF_User_User
     {
         // check db
         // TODO: Do we really need that check? :-)
-        if (!$this->_db instanceof PMF_DB_Driver) {
+        if (!$this->db instanceof PMF_DB_Driver) {
             return false;
 	}
 
@@ -277,12 +277,12 @@ class PMF_User_User
                     SQLPREFIX,
                     (int) $user_id
                     );
-        $res = $this->_db->query($query);
-        if ($this->_db->num_rows($res) != 1) {
-            $this->errors[] = self::ERROR_USER_NO_USERID . 'error(): ' . $this->_db->error();
+        $res = $this->db->query($query);
+        if ($this->db->num_rows($res) != 1) {
+            $this->errors[] = self::ERROR_USER_NO_USERID . 'error(): ' . $this->db->error();
             return false;
         }
-        $user = $this->_db->fetch_assoc($res);
+        $user = $this->db->fetch_assoc($res);
         $this->_user_id = (int)    $user['user_id'];
         $this->_login   = (string) $user['login'];
         $this->_status  = (string) $user['account_status'];
@@ -300,17 +300,17 @@ class PMF_User_User
                         SQLPREFIX,
                         $this->_login
                         );
-            $res = $this->_db->query($query);
-            if ($this->_db->num_rows($res) != 1) {
-                $this->errors[] = self::ERROR_USER_NO_USERLOGINDATA . 'error(): ' . $this->_db->error();
+            $res = $this->db->query($query);
+            if ($this->db->num_rows($res) != 1) {
+                $this->errors[] = self::ERROR_USER_NO_USERLOGINDATA . 'error(): ' . $this->db->error();
                 return false;
             }
-            $loginData = $this->_db->fetch_assoc($res);
+            $loginData = $this->db->fetch_assoc($res);
             $this->_encrypted_password = (string) $loginData['pass'];
         }
         // get user-data
         if (!$this->userdata)
-            $this->userdata = new PMF_User_UserData($this->_db);
+            $this->userdata = new PMF_User_UserData($this->db);
         $this->userdata->load($this->getUserId());
         return true;
     }
@@ -328,11 +328,11 @@ class PMF_User_User
     function getUserByLogin($login, $raise_error = true)
     {
         // check db
-        if (!$this->_db instanceof PMF_DB_Driver) {
+        if (!$this->db instanceof PMF_DB_Driver) {
             return false;
         }
         // get user
-        $res = $this->_db->query("
+        $res = $this->db->query("
           SELECT
             user_id,
             login,
@@ -340,20 +340,20 @@ class PMF_User_User
           FROM
             ".SQLPREFIX."faquser
           WHERE
-            login = '".$this->_db->escape_string($login)."'
+            login = '".$this->db->escape_string($login)."'
         ");
-        if ($this->_db->num_rows($res) != 1) {
+        if ($this->db->num_rows($res) != 1) {
             if ($raise_error)
                 $this->errors[] = self::ERROR_USER_INCORRECT_LOGIN;
             return false;
         }
-        $user = $this->_db->fetch_assoc($res);
+        $user = $this->db->fetch_assoc($res);
         $this->_user_id = (int)    $user['user_id'];
         $this->_login   = (string) $user['login'];
         $this->_status  = (string) $user['account_status'];
         // get user-data
         if (!$this->userdata)
-            $this->userdata = new PMF_User_UserData($this->_db);
+            $this->userdata = new PMF_User_UserData($this->db);
         $this->userdata->load($this->getUserId());
         return true;
     }
@@ -375,16 +375,16 @@ class PMF_User_User
                         %sfaquser
                     WHERE login LIKE '%s'",
                     SQLPREFIX,
-                    $this->_db->escape_string($search.'%')
+                    $this->db->escape_string($search.'%')
                     );
 
-        $res = $this->_db->query($query);
+        $res = $this->db->query($query);
         if (!$res) {
             return array();
         }
 
         $result = array();
-        while ($row = $this->_db->fetch_assoc($res)) {
+        while ($row = $this->db->fetch_assoc($res)) {
             $result[] = $row;
         }
 
@@ -404,7 +404,7 @@ class PMF_User_User
      */
     function createUser($login, $pass = '', $user_id = 0)
     {
-    	if (!$this->_db instanceof PMF_DB_Driver) {
+    	if (!$this->db instanceof PMF_DB_Driver) {
             return false;
         }
 
@@ -424,7 +424,7 @@ class PMF_User_User
         }
         // set user-ID
         if (0 == $user_id) {
-            $this->_user_id = (int) $this->_db->nextID(SQLPREFIX.'faquser', 'user_id');
+            $this->_user_id = (int) $this->db->nextID(SQLPREFIX.'faquser', 'user_id');
         } else {
             $this->_user_id = $user_id;
         }
@@ -438,15 +438,15 @@ class PMF_User_User
                         (%d, '%s', %d, '%s')",
                     SQLPREFIX,
                     $this->getUserId(),
-                    $this->_db->escape_string($login),
+                    $this->db->escape_string($login),
                     $now,
                     date('YmdHis', $now)
                     );
 
-        $this->_db->query($query);
+        $this->db->query($query);
         // create user-data entry
         if (!$this->userdata)
-            $this->userdata = new PMF_User_UserData($this->_db);
+            $this->userdata = new PMF_User_UserData($this->db);
         $data = $this->userdata->add($this->getUserId());
         if (!$data) {
             $this->errors[] = self::ERROR_USER_CANNOT_CREATE_USERDATA;
@@ -497,25 +497,25 @@ class PMF_User_User
             return false;
         }
         // check db
-        if (!$this->_db instanceof PMF_DB_Driver) {
+        if (!$this->db instanceof PMF_DB_Driver) {
             return false;
         }
         // delete user rights
         $this->perm->refuseAllUserRights($this->_user_id);
         // delete user account
-        $res = $this->_db->query("
+        $res = $this->db->query("
           DELETE FROM
             ".SQLPREFIX."faquser
           WHERE
             user_id = ".$this->_user_id
         );
         if (!$res) {
-            $this->errors[] = self::ERROR_USER_CANNOT_DELETE_USER . 'error(): ' . $this->_db->error();
+            $this->errors[] = self::ERROR_USER_CANNOT_DELETE_USER . 'error(): ' . $this->db->error();
             return false;
         }
         // delete user-data entry
         if (!$this->userdata)
-            $this->userdata = new PMF_User_UserData($this->_db);
+            $this->userdata = new PMF_User_UserData($this->db);
         $data = $this->userdata->delete($this->getUserId());
         if (!$data) {
             $this->errors[] = self::ERROR_USER_CANNOT_DELETE_USERDATA;
@@ -556,7 +556,7 @@ class PMF_User_User
      */
     function changePassword($pass = '')
     {
-    	if (!$this->_db instanceof PMF_DB_Driver) {
+    	if (!$this->db instanceof PMF_DB_Driver) {
             return false;
         }
 
@@ -622,13 +622,13 @@ class PMF_User_User
             return false;
         }
         // check db
-        if (!$this->_db) {
+        if (!$this->db) {
             $this->errors[] = self::ERROR_USER_NO_DB;
             return false;
         }
         // update status
         $this->_status = $status;
-        $res = $this->_db->query("
+        $res = $this->db->query("
           UPDATE
             ".SQLPREFIX."faquser
           SET
@@ -782,7 +782,7 @@ class PMF_User_User
         // get user-data entry
         if (!$this->userdata)
         {
-            $this->userdata = new PMF_User_UserData($this->_db);
+            $this->userdata = new PMF_User_UserData($this->db);
         }
         return $this->userdata->get($field);
     }
@@ -799,7 +799,7 @@ class PMF_User_User
     {
         // set user-data entry
         if (!$this->userdata)
-            $this->userdata = new PMF_User_UserData($this->_db);
+            $this->userdata = new PMF_User_UserData($this->db);
         $this->userdata->load($this->getUserId());
         return $this->userdata->set(array_keys($data), array_values($data));
     }
@@ -826,13 +826,13 @@ class PMF_User_User
                     ($withoutAnonymous ? 'WHERE user_id <> -1' : '')
                     );
 
-        $res = $this->_db->query($query);
+        $res = $this->db->query($query);
         if (!$res) {
             return array();
         }
 
         $result = array();
-        while ($row = $this->_db->fetch_assoc($res)) {
+        while ($row = $this->db->fetch_assoc($res)) {
             $result[] = $row['user_id'];
         }
 

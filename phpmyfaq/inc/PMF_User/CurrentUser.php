@@ -166,7 +166,7 @@ class PMF_User_CurrentUser extends PMF_User_User
             // Save encrypted password just for "Change Password" convenience
             $_authLocal = PMF_User_Auth::selectAuth($this->_auth_data['authSource']['name']);
             $_authLocal->selectEncType($this->_auth_data['encType']);
-            $_authLocal->read_only($this->_auth_data['readOnly']);
+            $_authLocal->setReadOnly($this->_auth_data['readOnly']);
             $this->_encrypted_password = $_authLocal->encrypt($pass);
             // return true
             return true;
