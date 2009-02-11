@@ -19,11 +19,6 @@
  * under the License.
  */
 
-/* user defined includes */
-
-/* user defined constants */
-@define('PMF_ERROR_USER_NO_ENCTYPE', 'Specified encryption method could not be found. ');
-
 /**
  * Provides methods for password encryption. 
  *
@@ -37,33 +32,40 @@
  */ 
 class PMF_User_Enc
 {
+	/**
+	 * Error constant
+	 * 
+	 * @const
+	 */
+	const PMF_ERROR_USER_NO_ENCTYPE = 'Specified encryption method could not be found.';
+	
     /**
      * Encryption methods
      *
-     * @access private
      * @var array
      */
-    var $_enc_typemap = array('none' => 'Enc', 'crypt' => 'EncCrypt', 'sha' => 'EncSha', 'md5' => 'EncMd5');
+    private $enc_typemap = array(
+        'none'  => 'Enc', 
+        'crypt' => 'EncCrypt', 
+        'sha'   => 'EncSha', 
+        'md5'   => 'EncMd5');
 
     /**
      * Public array that contains error messages.
      *
-     * @access public
      * @var array
      */
-    var $errors = array();
+    public $errors = array();
 
     /**
      * encrypts the string str and returns the result.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param string
+     * @param  string $str String
      * @return string
      */
-    function encrypt($str)
+    public function encrypt($str)
     {
-        return $str;
+    	return $str;
     }
 
     /**
@@ -81,28 +83,26 @@ class PMF_User_Enc
      * object without database access and with an error message. See the
      * of the error() method for further details.
      *
-     * @access  static
-     * @author  Lars Tiedemann, <php@larstiedemann.de>
-     * @param   string
-     * @return  object
+     * @param  string
+     * @return PMF_User_Enc
      */
     public static function selectEnc($enctype)
     {
-        $enc = new PMF_User_Enc();
+        $enc     = new PMF_User_Enc();
         $enctype = strtolower($enctype);
-        if (!isset($enc->_enc_typemap[$enctype])) {
-        	$enc->errors[] = PMF_ERROR_USER_NO_ENCTYPE;
+        if (!isset($enc->enc_typemap[$enctype])) {
+        	$enc->errors[] = self::PMF_ERROR_USER_NO_ENCTYPE;
         	return $enc;
         }
-        $classfile = dirname(__FILE__)."/".$enc->_enc_typemap[$enctype].".php";
+        $classfile = dirname(__FILE__) . DIRECTORY_SEPARATOR . $enc->enc_typemap[$enctype].".php";
         if (!file_exists($classfile)) {
-        	$enc->errors[] = PMF_ERROR_USER_NO_ENCTYPE;
+        	$enc->errors[] = self::PMF_ERROR_USER_NO_ENCTYPE;
         	return $enc;
         }
-        require_once $classfile;
-        $newclass = "PMF_User_".$enc->_enc_typemap[$enctype];
+        
+        $newclass = "PMF_User_".$enc->enc_typemap[$enctype];
         if (!class_exists($newclass)) {
-        	$enc->errors[] = PMF_ERROR_USER_NO_ENCTYPE;
+        	$enc->errors[] = self::PMF_ERROR_USER_NO_ENCTYPE;
         	return $enc;
         }
         $enc = new $newclass();
@@ -117,14 +117,13 @@ class PMF_User_Enc
      *
      * Error messages are stored in the public array errors.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
      * @return string
      */
-    function error()
+    public function error()
     {
-        if (!is_array($this->errors)) 
+        if (!is_array($this->errors)) {
         	$this->errors = array((string) $this->errors);
+        }
         $message = '';
         foreach ($this->errors as $error) {
         	$message .= $error."\n";
