@@ -2,11 +2,12 @@
 /**
  * Provides methods for password encryption. 
  *
- * @package     phpMyFAQ
- * @author      Lars Tiedemann <php@larstiedemann.de>
- * @since       2005-09-18
- * @copyright   (c) 2005-2009 phpMyFAQ Team
- * @version     SVN: $Id$
+ * @package    phpMyFAQ
+ * @subpackage PMF_User
+ * @author     Lars Tiedemann <php@larstiedemann.de>
+ * @since      2005-09-18
+ * @copyright  2005-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -26,9 +27,12 @@
  * encrypted string. For special encryption methods, just create a new class as
  * extend of this class and has the method encrypt().
  *
- * @package     phpMyFAQ
- * @author      Lars Tiedemann <php@larstiedemann.de>
- * @since       2005-09-18
+ * @package    phpMyFAQ
+ * @subpackage PMF_User
+ * @author     Lars Tiedemann <php@larstiedemann.de>
+ * @since      2005-09-18
+ * @copyright  2005-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
  */ 
 class PMF_User_Enc
 {

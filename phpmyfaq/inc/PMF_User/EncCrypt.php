@@ -2,11 +2,12 @@
 /**
  * Provides methods for password encryption using crypt().
  *
- * @package     phpMyFAQ 
- * @author      Lars Tiedemann <php@larstiedemann.de>
- * @since       2005-09-18
- * @copyright   (c) 2005-2009 phpMyFAQ Team
- * @version     SVN: $Id$ 
+ * @package    phpMyFAQ 
+ * @subpackage PMF_User
+ * @author     Lars Tiedemann <php@larstiedemann.de>
+ * @since      2005-09-18
+ * @copyright  2005-2009 phpMyFAQ Team
+ * @version    SVN: $Id$ 
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -18,25 +19,33 @@
  * License for the specific language governing rights and limitations
  * under the License.
  */
+
+/**
+ * PMF_User_EncCrypt
+ *
+ * @package    phpMyFAQ 
+ * @subpackage PMF_User
+ * @author     Lars Tiedemann <php@larstiedemann.de>
+ * @since      2005-09-18
+ * @copyright  2005-2009 phpMyFAQ Team
+ * @version    SVN: $Id$ 
+ */
 class PMF_User_EncCrypt extends PMF_User_Enc
 {
     /**
      * Name of the encryption method.
      *
-     * @access public
      * @var string
      */
-    var $enc_method = 'crypt';
+    public $enc_method = 'crypt';
 
     /**
      * encrypts the string str and returns the result.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param string
+     * @param  string $str String
      * @return string
      */
-    function encrypt($str)
+    public function encrypt($str)
     {
         return crypt($str);
     }
