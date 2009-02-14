@@ -594,8 +594,8 @@ foreach ($permLevels as $level => $desc) {
     }
 
     // check database connection
-    require_once PMF_ROOT_DIR."/inc/Db.php";
-    require_once PMF_ROOT_DIR."/inc/PMF_DB/Driver.php";
+    require PMF_ROOT_DIR."/inc/Db.php";
+    require PMF_ROOT_DIR."/inc/PMF_DB/Driver.php";
     $db = PMF_Db::db_select($sql_type);
     $db->connect($sql_server, $sql_user, $sql_passwort, $sql_db);
     if (!$db) {
@@ -720,8 +720,7 @@ foreach ($permLevels as $level => $desc) {
     }
 
     // connect to the database using inc/data.php
-    require_once PMF_ROOT_DIR . '/inc/data.php';
-    require_once PMF_ROOT_DIR . '/inc/Db.php';
+    require PMF_ROOT_DIR . '/inc/data.php';
     $db = PMF_Db::db_select($sql_type);
     $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
     if (!$db) {
