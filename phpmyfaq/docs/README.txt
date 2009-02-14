@@ -11,6 +11,7 @@ Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.0.11:
 - fixed bug with MySQL 6 and ext/mysqli (Johannes)
+- fixed stat call bug in installer on OpenSuse 10.3 (Thorsten)
 - improved SVN checkout script (Rene Treffer)
 - minor bugfixes (Thorsten)
 
@@ -20,6 +21,7 @@ CHANGELOG:
 
 Version 2.0.12 - 2009-02-
 - fixed bug with MySQL 6 and ext/mysqli (Johannes)
+- fixed stat call bug in installer on OpenSuse 10.3 (Thorsten)
 - improved SVN checkout script (Rene Treffer)
 - minor bugfixes (Thorsten)
 
