@@ -10,6 +10,7 @@ Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.5.0-alpha:
+- migrated a lot of code to PHP 5.2 (Thorsten, Matteo)
 - dropped support for MySQL 4.0 and MaxDB (Thorsten)
 - dropped support for XML-RPC (Thorsten)
 - improved performance (Thorsten)
