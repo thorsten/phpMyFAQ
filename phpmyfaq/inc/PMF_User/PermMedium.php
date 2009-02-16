@@ -57,7 +57,7 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
         if ($right_id <= 0 or $group_id <= 0 or !is_numeric($right_id) or !is_numeric($group_id))
             return false;
         // check right
-        $res = $this->_db->query("
+        $res = $this->db->query("
             SELECT
                 ".SQLPREFIX."faqright.right_id AS right_id
             FROM
@@ -71,7 +71,7 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
                 ".SQLPREFIX."faqgroup.group_id = '".$group_id."'
         ");
         // return result
-        if ($this->_db->num_rows($res) == 1)
+        if ($this->db->num_rows($res) == 1)
             return true;
         return false;
     }
@@ -92,7 +92,7 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
         if ($group_id <= 0 or !is_numeric($group_id))
             return false;
         // check right
-        $res = $this->_db->query("
+        $res = $this->db->query("
             SELECT
                 ".SQLPREFIX."faqright.right_id AS right_id
             FROM
@@ -106,7 +106,7 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
         ");
         // return result
         $result = array();
-        while ($row = $this->_db->fetch_assoc($res)) {
+        while ($row = $this->db->fetch_assoc($res)) {
             $result[] = $row['right_id'];
         }
         return $result;
@@ -160,7 +160,7 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
         if (!$right_data['for_groups'])
             return false;
         // grant right
-        $res = $this->_db->query("
+        $res = $this->db->query("
             INSERT INTO
                 ".SQLPREFIX."faqgroup_right
             (group_id, right_id)
@@ -190,7 +190,7 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
         if ($right_id <= 0 or $group_id <= 0 or !is_numeric($right_id) or !is_numeric($group_id))
             return false;
         // grant right
-        $res = $this->_db->query("
+        $res = $this->db->query("
             DELETE FROM
                 ".SQLPREFIX."faqgroup_right
             WHERE
@@ -220,7 +220,7 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
         if ($this->getGroupId($group_data['name']) > 0)
             return 0;
         // get next id
-        $next_id = $this->_db->nextID(SQLPREFIX."faqgroup", "group_id");
+        $next_id = $this->db->nextID(SQLPREFIX."faqgroup", "group_id");
         // check group data input
         $group_data = $this->checkGroupData($group_data);
         // insert group
@@ -237,7 +237,7 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
             $this->bool_to_int($group_data['auto_join'])
             );
 
-        $res = $this->_db->query($query);
+        $res = $this->db->query($query);
         if (!$res)
             return 0;
         return $next_id;
@@ -262,11 +262,11 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
         $set = "";
         $comma = "";
         foreach ($group_data as $key => $val) {
-            $set .= $comma.$key." = '".$this->_db->escape_string($checked_data[$key])."'";
+            $set .= $comma.$key." = '".$this->db->escape_string($checked_data[$key])."'";
             $comma = ",\n                ";
         }
         // update group
-        $res = $this->_db->query("
+        $res = $this->db->query("
             UPDATE
                 ".SQLPREFIX."faqgroup
             SET
@@ -296,7 +296,7 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
             return false;
 
         // delete group
-        $res = $this->_db->query("
+        $res = $this->db->query("
             DELETE FROM
                 ".SQLPREFIX."faqgroup
             WHERE
@@ -305,7 +305,7 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
         if (!$res)
             return false;
         // delete group-user links
-        $res = $this->_db->query("
+        $res = $this->db->query("
             DELETE FROM
                 ".SQLPREFIX."faquser_group
             WHERE
@@ -314,7 +314,7 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
         if (!$res)
             return false;
         // delete group-right links
-        $res = $this->_db->query("
+        $res = $this->db->query("
             DELETE FROM
                 ".SQLPREFIX."faqgroup_right
             WHERE
@@ -342,7 +342,7 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
     {
         if ($user_id <= 0 or $group_id <= 0 or !is_numeric($user_id) or !is_numeric($group_id))
             return false;
-        $res = $this->_db->query("
+        $res = $this->db->query("
             SELECT
                 ".SQLPREFIX."faquser.user_id AS user_id
             FROM
@@ -355,7 +355,7 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
                 ".SQLPREFIX."faqgroup.group_id = ".SQLPREFIX."faquser_group.group_id AND
                 ".SQLPREFIX."faqgroup.group_id = ".$group_id
         );
-        if ($this->_db->num_rows($res) == 1)
+        if ($this->db->num_rows($res) == 1)
             return true;
         return false;
     }
@@ -375,7 +375,7 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
     {
         if ($group_id <= 0 or !is_numeric($group_id))
             return false;
-        $res = $this->_db->query("
+        $res = $this->db->query("
             SELECT
                 ".SQLPREFIX."faquser.user_id AS user_id
             FROM
@@ -388,7 +388,7 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
                 ".SQLPREFIX."faquser.user_id   = ".SQLPREFIX."faquser_group.user_id
         ");
         $result = array();
-        while ($row = $this->_db->fetch_assoc($res)) {
+        while ($row = $this->db->fetch_assoc($res)) {
             $result[] = $row['user_id'];
         }
         return $result;
@@ -414,7 +414,7 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
         if (!$this->getGroupData($group_id))
             return false;
         // add user to group
-        $res = $this->_db->query("
+        $res = $this->db->query("
             INSERT INTO
                 ".SQLPREFIX."faquser_group
             (user_id, group_id)
@@ -445,7 +445,7 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
         if ($user_id <= 0 or $group_id <= 0 or !is_numeric($user_id) or !is_numeric($group_id))
             return false;
         // remove user from group
-        $res = $this->_db->query("
+        $res = $this->db->query("
             DELETE FROM
                 ".SQLPREFIX."faquser_group
             WHERE
@@ -472,7 +472,7 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
     function getGroupId($name)
     {
         // get group id
-        $res = $this->_db->query("
+        $res = $this->db->query("
             SELECT
                 group_id
             FROM
@@ -481,9 +481,9 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
                 name = '".$name."'
         ");
         // return
-        if ($this->_db->num_rows($res) != 1)
+        if ($this->db->num_rows($res) != 1)
             return 0;
-        $row = $this->_db->fetch_assoc($res);
+        $row = $this->db->fetch_assoc($res);
         return $row['group_id'];
     }
 
@@ -503,7 +503,7 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
         if ($group_id <= 0 or !is_numeric($group_id))
             return false;
         // get group data
-        $res = $this->_db->query("
+        $res = $this->db->query("
             SELECT
                 group_id,
                 name,
@@ -515,9 +515,9 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
                 group_id = ".$group_id
         );
         // return
-        if ($this->_db->num_rows($res) != 1)
+        if ($this->db->num_rows($res) != 1)
             return array();
-        return $this->_db->fetch_assoc($res);
+        return $this->db->fetch_assoc($res);
     }
 
     /**
@@ -534,7 +534,7 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
         if ($user_id <= 0 or !is_numeric($user_id))
             return false;
         // get user groups
-        $res = $this->_db->query("
+        $res = $this->db->query("
             SELECT
                 ".SQLPREFIX."faqgroup.group_id AS group_id
             FROM
@@ -548,7 +548,7 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
         ");
         // return result
         $result = array(-1);
-        while ($row = $this->_db->fetch_assoc($res)) {
+        while ($row = $this->db->fetch_assoc($res)) {
             $result[] = $row['group_id'];
         }
         return $result;
@@ -574,11 +574,11 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
                         %sfaqgroup",
                     SQLPREFIX
                     );
-        $res = $this->_db->query($query);
+        $res = $this->db->query($query);
 
         // return result
         $result = array();
-        while ($row = $this->_db->fetch_assoc($res)) {
+        while ($row = $this->db->fetch_assoc($res)) {
             $result[] = $row['group_id'];
         }
 
@@ -627,7 +627,7 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
         if ($right_id <= 0 or $user_id <= 0 or !is_numeric($right_id) or !is_numeric($user_id))
             return false;
         // check right
-        $res = $this->_db->query("
+        $res = $this->db->query("
             SELECT
                 ".SQLPREFIX."faqright.right_id AS right_id
             FROM
@@ -645,7 +645,7 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
                 ".SQLPREFIX."faquser.user_id   = ".$user_id
         );
         // return result
-        if ($this->_db->num_rows($res) == 1)
+        if ($this->db->num_rows($res) == 1)
             return true;
         return false;
     }
@@ -718,7 +718,7 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
         if ($user_id <= 0 or !is_numeric($user_id))
             return false;
         // get auto join groups
-        $res = $this->_db->query("
+        $res = $this->db->query("
             SELECT
                 group_id
             FROM
@@ -729,7 +729,7 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
         if (!$res)
             return false;
         $auto_join = array();
-        while ($row = $this->_db->fetch_assoc($res)) {
+        while ($row = $this->db->fetch_assoc($res)) {
             $auto_join[] = $row['group_id'];
         }
         // add to groups
@@ -756,7 +756,7 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
         if ($user_id <= 0 or !is_numeric($user_id))
             return false;
         // remove user from all groups
-        $res = $this->_db->query("
+        $res = $this->db->query("
             DELETE FROM
                 ".SQLPREFIX."faquser_group
             WHERE
@@ -784,7 +784,7 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
         if ($user_id <= 0 or !is_numeric($user_id))
             return false;
         // check right
-        $res = $this->_db->query("
+        $res = $this->db->query("
             SELECT
                 ".SQLPREFIX."faqright.right_id AS right_id
             FROM
@@ -802,7 +802,7 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
         ");
         // return result
         $result = array();
-        while ($row = $this->_db->fetch_assoc($res)) {
+        while ($row = $this->db->fetch_assoc($res)) {
             $result[] = $row['right_id'];
         }
         return $result;
@@ -823,7 +823,7 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
     {
         if ($group_id <= 0 or !is_numeric($group_id))
             return false;
-        $res = $this->_db->query("
+        $res = $this->db->query("
             DELETE FROM
                 ".SQLPREFIX."faqgroup_right
             WHERE
@@ -849,7 +849,7 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
         if ($group_id <= 0 or !is_numeric($group_id))
             return false;
         // get group data
-        $res = $this->_db->query("
+        $res = $this->db->query("
             SELECT
                 name
             FROM
@@ -858,9 +858,9 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
                 group_id = ".$group_id
         );
         // return
-        if ($this->_db->num_rows($res) != 1)
+        if ($this->db->num_rows($res) != 1)
             return array();
-        $row = $this->_db->fetch_assoc($res);
+        $row = $this->db->fetch_assoc($res);
         return $row['name'];
     }
 
@@ -881,7 +881,7 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
         if ($group_id <= 0 or !is_numeric($group_id))
             return false;
         // remove all user from group
-        $res = $this->_db->query("
+        $res = $this->db->query("
             DELETE FROM
                 ".SQLPREFIX."faquser_group
             WHERE

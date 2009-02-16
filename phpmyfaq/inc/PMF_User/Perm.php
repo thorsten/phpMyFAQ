@@ -27,11 +27,12 @@
  * in the user's $perm variable. Permission methods are performed using the
  * variable (e.g. $user->perm->method() ).
  *
- * @package     phpMyFAQ 
- * @author      Lars Tiedemann <php@larstiedemann.de>
- * @since       2005-09-17
- * @copyright   (c) 2005-2009 phpMyFAQ Team
- * @version     SVN: $Id$ 
+ * @package    phpMyFAQ 
+ * @subpackage PMF_User
+ * @author     Lars Tiedemann <php@larstiedemann.de>
+ * @since      2005-09-17
+ * @copyright  2005-2009 phpMyFAQ Team
+ * @version    SVN: $Id$ 
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -43,25 +44,30 @@
  * License for the specific language governing rights and limitations
  * under the License.
  */
+
+/**
+ * @package    phpMyFAQ 
+ * @subpackage PMF_User
+ * @author     Lars Tiedemann <php@larstiedemann.de>
+ * @since      2005-09-17
+ * @copyright  2005-2009 phpMyFAQ Team
+ * @version    SVN: $Id$ 
+ */
 class PMF_User_Perm
 {
-    // --- ATTRIBUTES ---
-
     /**
      * Database object created by PMF_Db
      *
-     * @access private
-     * @var object
+     * @var PMF_Db_Driver
      */
-    var $_db = null;
+    protected $db = null;
 
     /**
      * Allowed classnames for subclasses for Perm::selectPerm()
      *
-     * @access private
      * @var array
      */
-    var $_perm_typemap = array(
+    private $perm_typemap = array(
         'basic'     => 'PermBasic',
         'medium'    => 'PermMedium',
         'large'     => 'PermLarge'
@@ -74,7 +80,7 @@ class PMF_User_Perm
      */
     private function __construct()
     {
-    	$this->_db = PMF_Db::getInstance(); 
+    	$this->db = PMF_Db::getInstance(); 
     }
     
     /**
@@ -84,58 +90,27 @@ class PMF_User_Perm
      * which subclass is returned. Allowed values and corresponding classnames
      * defined in perm_typemap.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param string
-     * @return object
+     * @param  string $perm_level Permission level
+     * @return PMF_User_Perm
      */
     public static function selectPerm($perm_level)
     {
         // verify selected database
         $perm       = new PMF_User_Perm();
         $perm_level = strtolower($perm_level);
-        if (!isset($perm->_perm_typemap[$perm_level])) {
+        
+        if (!isset($perm->perm_typemap[$perm_level])) {
             return $perm;
         }
-        $classfile = dirname(__FILE__) . DIRECTORY_SEPARATOR . $perm->_perm_typemap[$perm_level].".php";
+        
+        $classfile = dirname(__FILE__) . DIRECTORY_SEPARATOR . $perm->perm_typemap[$perm_level].".php";
         if (!file_exists($classfile)) {
             return $perm;
         }
+        
         // instantiate 
-        $permclass = "PMF_User_".$perm->_perm_typemap[$perm_level];
-        if (!class_exists($permclass))
-            require_once $classfile;
-        $perm = new $permclass();
+        $permclass = 'PMF_User_' . $perm->perm_typemap[$perm_level];
+        $perm      = new $permclass();
         return $perm;
-    }
-
-    /**
-     * converts a boolean into a corresponding integer: 0 or 1.
-     *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param bool
-     * @return int
-     */
-    function bool_to_int($val)
-    {
-        if (!$val) 
-            return (int) 0;
-        return (int) 1;
-    }
-
-    /**
-     * converts an integer into the corresponding boolean value: true or false.
-     *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param int
-     * @return bool
-     */
-    function int_to_bool($val)
-    {
-        if (!$val or $val == 0) 
-            return false;
-        return true;
     }
 }

@@ -2,11 +2,12 @@
 /**
  * The basic permission class provides user rights.
  *
- * @package     phpMyFAQ 
- * @author      Lars Tiedemann <php@larstiedemann.de>
- * @since       2005-09-17
- * @copyright   (c) 2005-2009 phpMyFAQ Team
- * @version     SVN: $Id$ 
+ * @package    phpMyFAQ
+ * @subpackage PMF_User 
+ * @author     Lars Tiedemann <php@larstiedemann.de>
+ * @since      2005-09-17
+ * @copyright  2005-2009 phpMyFAQ Team
+ * @version    SVN: $Id$ 
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -17,6 +18,17 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
+ */
+
+/**
+ * PMF_User_PermBasic
+ *
+ * @package    phpMyFAQ
+ * @subpackage PMF_User 
+ * @author     Lars Tiedemann <php@larstiedemann.de>
+ * @since      2005-09-17
+ * @copyright  2005-2009 phpMyFAQ Team
+ * @version    SVN: $Id$ 
  */
 class PMF_User_PermBasic extends PMF_User_Perm
 {
@@ -40,159 +52,164 @@ class PMF_User_PermBasic extends PMF_User_Perm
     // --- OPERATIONS ---
 
     /**
-     * checkUserRight
-     *
      * Returns true if the user given by user_id has the right
      * specified by right_id, otherwise false.
      *
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param int
-     * @param int
+     * @param  integer $user_id  User ID
+     * @param  integer $right_id Right ID
      * @return bool
      */
     public function checkUserRight($user_id, $right_id)
     {
         // check right id
-        if ($right_id <= 0)
+        if ($right_id <= 0) {
             return false;
+        }
+        
         // check right
-        $res = $this->_db->query("
+        $select = sprintf("
             SELECT
-                ".SQLPREFIX."faqright.right_id AS right_id
+                fr.right_id AS right_id
             FROM
-                ".SQLPREFIX."faqright,
-                ".SQLPREFIX."faquser_right,
-                ".SQLPREFIX."faquser
+                %sfaqright fr,
+                %sfaquser_right fur,
+                %sfaquser fu
             WHERE
-                ".SQLPREFIX."faqright.right_id = ".$right_id." AND
-                ".SQLPREFIX."faqright.right_id = ".SQLPREFIX."faquser_right.right_id AND
-                ".SQLPREFIX."faquser.user_id   = ".$user_id." AND
-                ".SQLPREFIX."faquser.user_id   = ".SQLPREFIX."faquser_right.user_id
-        ");
+                fr.right_id = %d AND
+                fr.right_id = fur.right_id AND
+                fu.user_id  = %d AND
+                fu.user_id  = fur.user_id",
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            $right_id,
+            $user_id);
+            
+        $res = $this->db->query($select);
         // return result
-        if ($this->_db->num_rows($res) == 1)
+        if ($this->db->num_rows($res) == 1) {
             return true;
+        }
+        
         return false;
     }
 
     /**
-     * getUserRights
-     *
      * Returns an array with the IDs of all user-rights the user
      * specified by user_id owns. Group rights are not taken into
      * account.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param int
+     * @param  integer $user_id User ID
      * @return array
      */
-    function getUserRights($user_id)
+    public function getUserRights($user_id)
     {
         // get user rights
-        $res = $this->_db->query("
+        $select = sprintf("
             SELECT
-                ".SQLPREFIX."faqright.right_id AS right_id
+                fr.right_id AS right_id
             FROM
-                ".SQLPREFIX."faqright,
-                ".SQLPREFIX."faquser_right,
-                ".SQLPREFIX."faquser
+                %sfaqright fr,
+                %sfaquser_right fur,
+                %sfaquser fu
             WHERE
-                ".SQLPREFIX."faqright.right_id = ".SQLPREFIX."faquser_right.right_id AND
-                ".SQLPREFIX."faquser.user_id   = ".$user_id." AND
-                ".SQLPREFIX."faquser.user_id   = ".SQLPREFIX."faquser_right.user_id
-        ");
-        // return result
+                fr.right_id = fur.right_id AND
+                fu.user_id  = %d AND
+                fu.user_id  = fur.user_id",
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            $user_id);
+            
+        $res    = $this->db->query($select);
         $result = array();
-        while ($row = $this->_db->fetch_assoc($res)) {
+        while ($row = $this->db->fetch_assoc($res)) {
             $result[] = $row['right_id'];
         }
         return $result;
     }
 
     /**
-     * grantUserRight
-     *
      * Gives the user a new user-right.
      * Returns true on success, otherwise false.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param int
-     * @param int
-     * @return bool
+     * @param  integer $user_id  User ID
+     * @param  integer $right_id Right ID
+     * @return boolean
      */
-    function grantUserRight($user_id, $right_id)
+    public function grantUserRight($user_id, $right_id)
     {
         // is right for users?
         $right_data = $this->getRightData($right_id);
-        if (!$right_data['for_users'])
+        
+        if (!$right_data['for_users']) {
             return false;
-        // grant user right
-        $res = $this->_db->query("
+        }
+        
+        $insert = sprintf("
             INSERT INTO
-                ".SQLPREFIX."faquser_right
+                %sfaquser_right
             (user_id, right_id)
                 VALUES
-            (".$user_id.", ".$right_id.")"
-        );
-        if (!$res)
+            (%d, %d)",
+            SQLPREFIX,
+            $user_id,
+            $right_id);
+        
+        $res = $this->db->query($insert);
+        if (!$res) {
             return false;
+        }
         return true;
     }
 
     /**
-     * refuseUserRight
-     *
      * Refuses the user a user-right.
      * Returns true on succes, otherwise false.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param int
-     * @param int
-     * @return bool
+     * @param  integer $user_id  User ID
+     * @param  integer $right_id Right ID
+     * @return boolean
      */
-    function refuseUserRight($user_id, $right_id)
+    public function refuseUserRight($user_id, $right_id)
     {
-        $res = $this->_db->query("
+        $delete = sprintf("
             DELETE FROM
-                ".SQLPREFIX."faquser_right
+                %sfaquser_right
             WHERE
-                user_id  = ".$user_id." AND
-                right_id = ".$right_id
-        );
-        if (!$res)
+                user_id  = %d AND
+                right_id = %d",
+            SQLPREFIX,
+            $user_id,
+            $right_id);
+            
+        $res = $this->db->query($delete);
+        if (!$res) {
             return false;
+        }
         return true;
     }
 
     /**
-     * checkRight
-     *
      * Returns true if the user given by user_id has the right,
      * otherwise false. Unlike checkUserRight(), right may be a
      * right-ID or a right-name. Another difference is, that also
      * group-rights are taken into account.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param int
-     * @param mixed
+     * @param  integer $user_id User ID
+     * @param  mixed   $right   Right ID or right name
      * @return bool
      */
-    function checkRight($user_id, $right)
+    public function checkRight($user_id, $right)
     {
-        // get right id
-        if (!is_numeric($right) and is_string($right))
+        if (!is_numeric($right) and is_string($right)) {
             $right = $this->getRightId($right);
-        // check user right
+        }
+        
         return $this->checkUserRight($user_id, $right);
     }
 
     /**
-     * getRightData
-     *
      * Returns an associative array with all data stored for in the
      * database for the specified right. The keys of the returned
      * array are the fieldnames.
@@ -205,7 +222,7 @@ class PMF_User_PermBasic extends PMF_User_Perm
     public function getRightData($right_id)
     {
         // get right data
-        $res = $this->_db->query("
+        $select = sprintf("
             SELECT
                 right_id,
                 name,
@@ -213,243 +230,214 @@ class PMF_User_PermBasic extends PMF_User_Perm
                 for_users,
                 for_groups
             FROM
-                ".SQLPREFIX."faqright
+                %sfaqright
             WHERE
-                right_id = ".$right_id
-        );
+                right_id = %d",
+            SQLPREFIX,
+            $right_id);
         
-        if ($this->_db->num_rows($res) != 1) {
+        $res = $this->db->query($select);
+        if ($this->db->num_rows($res) != 1) {
             return false;
         }
         
         // process right data
-        $right_data               = $this->_db->fetch_assoc($res);
-        $right_data['for_users']  = $this->int_to_bool($right_data['for_users']);
-        $right_data['for_groups'] = $this->int_to_bool($right_data['for_groups']);
+        $right_data               = $this->db->fetch_assoc($res);
+        $right_data['for_users']  = (bool)$right_data['for_users'];
+        $right_data['for_groups'] = (bool)$right_data['for_groups'];
         return $right_data;
     }
 
     /**
-     * getAllUserRights
-     *
      * Returns an array that contains the IDs of all user-rights
      * the user owns.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param int
+     * @param  integer $user_id User ID
      * @return array
      */
-    function getAllUserRights($user_id)
+    public function getAllUserRights($user_id)
     {
         return $this->getUserRights($user_id);
     }
 
     /**
-     * addRight
-     *
      * Adds a new right into the database. Returns the ID of the
-     * new right.
-     * The associative array right_data contains the right data
-     * stored in the rights table. The associative array
-     * context_data is only for use with PMF_PermLarge and may be
-     * omitted.
+     * new right. The associative array right_data contains the right 
+     * data stored in the rights table. 
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param array
-     * @param array
+     * @param array $right_data Array if rights
      * @return int
      */
-    function addRight($right_data, $context_data = array())
+    public function addRight(Array $right_data)
     {
-        // check if right already exists
-        if ($this->getRightId($right_data['name']) > 0)
+        if ($this->getRightId($right_data['name']) > 0) {
             return 0;
-        // get next id
-        $next_id = $this->_db->nextID(SQLPREFIX."faqright", "right_id");
-        // check right data input
+        }
+        
+        $next_id    = $this->db->nextID(SQLPREFIX."faqright", "right_id");
         $right_data = $this->checkRightData($right_data);
-        // insert right
-        $res = $this->_db->query("
+        
+        $insert = sprintf("
             INSERT INTO
-                ".SQLPREFIX."faqright
+                %sfaqright
             (right_id, name, description, for_users, for_groups)
                 VALUES
-            (".$next_id.", '".$right_data['name']."', '".$right_data['description']."', ".$this->bool_to_int($right_data['for_users']).", ".$this->bool_to_int($right_data['for_groups']).")"
-        );
-        if (!$res)
+            (%d, '%s', '%s', %d, %d)",
+            SQLPREFIX,
+            $next_id,
+            $right_data['name'],
+            $right_data['description'],
+            (int)$right_data['for_users'],
+            (int)$right_data['for_groups']);
+            
+        $res = $this->db->query();
+        if (!$res) {
             return 0;
-        // insert context data
-        if (count($context_data) > 0) {
-            $res = $this->_db->query("
-                INSERT INTO
-                    ".SQLPREFIX."faqrightcontext
-                (right_id, context, context_id)
-                  VALUES
-                (".$next_id.", '".$context_data['context']."', ".$context_data['context_id'].")"
-            );
-            if (!$res)
-                return 0;
         }
+        
         return $next_id;
     }
 
     /**
-     * changeRight
+     * Changes the right data. Returns true on success, otherwise false.
      *
-     * Changes the right data.
-     * Returns true on success, otherwise false.
-     *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param int
-     * @param array
-     * @param array
-     * @return bool
+     * @param  integer $right_id   Right ID
+     * @param  array   $right_data Array of rights
+     * @return boolean
      */
-    function changeRight($right_id, $right_data, $context_data = array())
+    public function changeRight($right_id, Array $right_data)
     {
-        // check input
         $checked_data = $this->checkRightData($right_data);
-        // create update SET
-        $set = "";
-        $comma = "";
+        $set          = '';
+        $comma        = '';
         foreach ($right_data as $key => $val) {
             $set .= $comma.$key." = '".$checked_data[$key]."'";
             $comma = ",\n                ";
         }
-        // update right
-        $res = $this->_db->query("
+        
+        $update = sprintf("
             UPDATE
-                ".SQLPREFIX."faqright
+                %sfaqright
             SET
-                ".$set."
+                %s
             WHERE
-                right_id = ".$right_id
-        );
-        if (!$res)
+                right_id = %d",
+            SQLPREFIX,
+            $set,
+            $right_id);
+            
+        $res = $this->db->query($update);
+        if (!$res) {
             return false;
-        // change right context
-        if (count($context_data) > 0) {
-            $res = $this->_db->query("
-                UPDATE
-                    ".SQLPREFIX."faqrightcontext
-                SET
-                    context    = '".$context_data['context']."',
-                    context_id = ".$context_data['context_id']."
-                WHERE
-                    right_id = ".$right_id
-            );
-            if (!$res)
-                return false;
         }
+            
         return true;
     }
 
     /**
-     * deleteRight
-     *
      * Deletes the right from the database.
      * Returns true on success, otherwise false.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param int
-     * @return bool
+     * @param  integer $right_id Right ID
+     * @return boolean
      */
-    function deleteRight($right_id)
+    public function deleteRight($right_id)
     {
         // delete right
-        $res = $this->_db->query("
+        $delete = sprintf("
             DELETE FROM
-                ".SQLPREFIX."faqright
+                %sfaqright
             WHERE
-                right_id = ".$right_id."
-        ");
-        if (!$res)
+                right_id = %d",
+            SQLPREFIX,
+            $right_id);
+        
+        $res = $this->db->query($delete);
+        if (!$res) {
             return false;
+        }
+        
         // delete user-right links
-        $res = $this->_db->query("
+        $delete = sprintf("
             DELETE FROM
-                ".SQLPREFIX."faquser_right
+                %sfaquser_right
             WHERE
-                right_id = ".$right_id."
-        ");
-        if (!$res)
+                right_id = %d",
+            SQLPREFIX,
+            $right_id);
+        
+        $res = $this->db->query($delete);
+        if (!$res) {
             return false;
+        }
+        
         // delete group-right links
-        $res = $this->_db->query("
+        $delete = sprintf("
             DELETE FROM
-                ".SQLPREFIX."faqgroup_right
+                %sfaqgroup_right
             WHERE
-                right_id = ".$right_id."
-        ");
-        if (!$res)
+                right_id = %d",
+            SQLPREFIX,
+            $right_id);
+        
+        $res = $this->db->query($delete);
+        if (!$res) {
             return false;
-        // delete right context
-        $res = $this->_db->query("
-            DELETE FROM
-                ".SQLPREFIX."faqrightcontext
-            WHERE
-                right_id = ".$right_id."
-        ");
-        if (!$res)
+        }
+            
+        $res = $this->db->query($delete);
+        if (!$res) {
             return false;
+        }
+        
         return true;
     }
 
     /**
-     * getRightId
-     *
      * Returns the right-ID of the right with the name $name.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param string
+     * @param  string $name Name
      * @return int
      */
-    function getRightId($name)
+    public function getRightId($name)
     {
         // get right id
-        $res = $this->_db->query("
+        $select = sprintf("
             SELECT
                 right_id
             FROM
-                ".SQLPREFIX."faqright
+                %sfaqright
             WHERE
-                name = '".$name."'
-        ");
-        // return result
-        if ($this->_db->num_rows($res) != 1)
+                name = '%s'",
+            SQLPREFIX,
+            $this->db->escape_string($name));
+        
+        $res = $this->db->query($select);
+        if ($this->db->num_rows($res) != 1) {
             return 0;
-        $row = $this->_db->fetch_assoc($res);
+        }
+        $row = $this->db->fetch_assoc($res);
         return $row['right_id'];
     }
 
     /**
-     * getAllRights
-     *
      * Returns an array that contains the IDs of all rights stored
      * in the database.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
      * @return array
      */
-    function getAllRights()
+    public function getAllRights()
     {
-        $query = sprintf(
-                    "SELECT
-                        right_id
-                    FROM
-                        %sfaqright",
-                    SQLPREFIX
-                    );
-        $res = $this->_db->query($query);
-
+        $select = sprintf("
+            SELECT
+                right_id
+            FROM
+                %sfaqright",
+            SQLPREFIX);
+            
+        $res    = $this->db->query($select);
         $result = array();
-        while ($row = $this->_db->fetch_assoc($res)) {
+        while ($row = $this->db->fetch_assoc($res)) {
             $result[] = $row['right_id'];
         }
 
@@ -457,40 +445,36 @@ class PMF_User_PermBasic extends PMF_User_Perm
     }
 
     /**
-     * getAllRightsData
-     *
      * Returns an array that contains all rights stored in the
      * database. Each array element is an associative array with
      * the complete right-data. By passing the optional parameter
      * $order, the order of the array may be specified. Default is
      * $order = 'right_id ASC'.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param string
+     * @param  string $order Ordering
      * @return array
      */
-    function getAllRightsData($order = 'right_id ASC')
+    public function getAllRightsData($order = 'ASC')
     {
-        $query = sprintf(
-                    "SELECT
-                        right_id,
-                        name,
-                        description,
-                        for_users,
-                        for_groups
-                    FROM
-                        %sfaqright
-                    ORDER BY
-                        %s",
-                    SQLPREFIX,
-                    $order
-                    );
-        $res = $this->_db->query($query);
-
+        $select = sprintf("
+            SELECT
+                right_id,
+                name,
+                description,
+                for_users,
+                for_groups
+            FROM
+                %sfaqright
+            ORDER BY
+                right_id %s",
+            SQLPREFIX,
+            $order);
+            
+        $res    = $this->db->query($select);
         $result = array();
-        $i = 0;
-        while ($row = $this->_db->fetch_assoc($res)) {
+        $i      = 0;
+        
+        while ($row = $this->db->fetch_assoc($res)) {
             $result[$i] = $row;
             $i++;
         }
@@ -499,54 +483,56 @@ class PMF_User_PermBasic extends PMF_User_Perm
     }
 
     /**
-     * checkRightData
-     *
      * Checks the given associative array $right_data. If a
      * parameter is incorrect or is missing, it will be replaced
      * by the default values in $this->default_right_data.
      * Returns the corrected $right_data associative array.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param array
+     * @param  array $right_data Array of rights
      * @return array
      */
-    function checkRightData($right_data)
+    public function checkRightData(Array $right_data)
     {
-        if (!isset($right_data['name']) or !is_string($right_data['name']))
+        if (!isset($right_data['name']) || !is_string($right_data['name'])) {
             $right_data['name'] = $this->default_right_data['name'];
-        if (!isset($right_data['description']) or !is_string($right_data['description']))
+        }
+        if (!isset($right_data['description']) || !is_string($right_data['description'])) {
             $right_data['description'] = $this->default_right_data['description'];
-        if (!isset($right_data['for_users']))
+        }
+        if (!isset($right_data['for_users'])) {
             $right_data['for_users'] = $this->default_right_data['for_users'];
-        if (!isset($right_data['for_groups']))
+        }
+        if (!isset($right_data['for_groups'])) {
             $right_data['for_groups'] = $this->default_right_data['for_groups'];
-        $right_data['for_users'] = $this->bool_to_int($right_data['for_users']);
-        $right_data['for_groups'] = $this->bool_to_int($right_data['for_groups']);
+        }
+        
+        $right_data['for_users']  = (int)$right_data['for_users'];
+        $right_data['for_groups'] = (int)$right_data['for_groups'];
+        
         return $right_data;
     }
 
     /**
-     * refuseAllUserRights
-     *
      * Refuses all user rights.
      * Returns true on success, otherwise false.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param int
-     * @return bool
+     * @param  integer $user_id User ID
+     * @return boolean
      */
-    function refuseAllUserRights($user_id)
+    public function refuseAllUserRights($user_id)
     {
-        $res = $this->_db->query("
+        $delete = sprintf("
             DELETE FROM
-                ".SQLPREFIX."faquser_right
+                %sfaquser_right
             WHERE
-                user_id  = ".$user_id
-        );
-        if (!$res)
+                user_id  = %d",
+            SQLPREFIX,
+            $user_id);
+        
+        $res = $this->db->query($delete);
+        if (!$res) {
             return false;
+        }
         return true;
     }
 }
