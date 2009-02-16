@@ -507,8 +507,8 @@ class PDF extends FPDF
     */
     function PutLink($URL, $txt)
     {
-    	if (!strpos($URL, 'http://')) {
-    		$URL = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/' . $URL;
+    	if (strpos($URL, 'http://') === false) {
+    		$URL = 'http://' . $_SERVER['HTTP_HOST'] . EndSlash(dirname($_SERVER['PHP_SELF'])) . $URL;
     	}
         $this->SetTextColor(0, 0, 255);
         $this->SetStyle("U", true);
