@@ -493,7 +493,7 @@ class PMF_Export_Pdf extends FPDF
     private function PutLink($url, $txt)
     {
         if (!strpos($url, 'http://')) {
-            $url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/' . $url;
+            $url = 'http://' . $_SERVER['HTTP_HOST'] . EndSlash(dirname($_SERVER['PHP_SELF'])) . $url;
         }
         $this->SetTextColor(0, 0, 255);
         $this->SetStyle('U', true);
