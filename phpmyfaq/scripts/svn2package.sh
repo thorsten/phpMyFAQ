@@ -39,34 +39,48 @@
 # under the License.
 
 # PMF Version
-PMF_VERSION="2.5.0-alpha2"
+if [ "x${PMF_VERSION}" = "x" ]; then
+	PMF_VERSION="2.5.0-alpha2"
+fi
 
 # Build folder
-PMF_BUILD_FOLDER="PMFBUILD_TRUNK_${PMF_VERSION}"
+if [ "x${PMF_BUILD_FOLDER}" = "x" ]; then
+	PMF_BUILD_FOLDER="PMFBUILD_TRUNK_${PMF_VERSION}"
+fi
+
+# Package Folder
+if [ "x${PMF_PACKAGE_FOLDER}" = "x" ]; then
+	PMF_PACKAGE_FOLDER="phpmyfaq-${PMF_VERSION}"
+fi
+
+# Repository path
+if [ "x${PMF_REPOSITORY}" = "x" ]; then
+	PMF_REPOSITORY='svn+ssh://anonymous@thinkforge.org/svnroot/phpmyfaq/trunk/phpmyfaq'
+fi
 
 ( # Prepare the package building environment
-    if [ ! -d ${PMF_BUILD_FOLDER} ]; then
-        mkdir ${PMF_BUILD_FOLDER}
+    if [ -d ${PMF_BUILD_FOLDER} ]; then
+        rm -rf ${PMF_BUILD_FOLDER}
     fi
+
+    mkdir ${PMF_BUILD_FOLDER}
 
     # Enter the PMF build folder
     cd "${PMF_BUILD_FOLDER}"
-    # Clean files
-    rm -f *
 
     # Get the PMF source code from SVN using an anonymous login
-    SVN_SSH="ssh -p 20022" svn export svn+ssh://anonymous@thinkforge.org/svnroot/phpmyfaq/trunk/phpmyfaq phpmyfaq
+    SVN_SSH="ssh -p 20022" svn export "${PMF_REPOSITORY}" phpmyfaq
 
     # Rename the folder in which the SVN code has been retrieved
     mv phpmyfaq "${PMF_PACKAGE_FOLDER}"
 
     # Build TAR.GZ Package
     tar zcf "${PMF_PACKAGE_FOLDER}.tar.gz" "${PMF_PACKAGE_FOLDER}"
-    md5sum "${PMF_PACKAGE_FOLDER}.tar.gz" > "${PMF_PACKAGE_FOLDER}.tar.gz.md5"
+    md5 "${PMF_PACKAGE_FOLDER}.tar.gz" > "${PMF_PACKAGE_FOLDER}.tar.gz.md5"
 
     # Build ZIP Package
     zip -r "${PMF_PACKAGE_FOLDER}.zip" "${PMF_PACKAGE_FOLDER}"
-    md5sum "${PMF_PACKAGE_FOLDER}.zip" > "${PMF_PACKAGE_FOLDER}.zip.md5"
+    md5 "${PMF_PACKAGE_FOLDER}.zip" > "${PMF_PACKAGE_FOLDER}.zip.md5"
 
     # Remove the code folder
     rm -rf "${PMF_PACKAGE_FOLDER}"
