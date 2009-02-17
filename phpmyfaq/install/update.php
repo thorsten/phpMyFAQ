@@ -1,14 +1,15 @@
 <?php
 /**
- * $Id$
- *
  * Main update script
  *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Thomas Melchinger <t.melchinger@uni.de>
- * @author      Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @since       2002-01-10
- * @copyright   (c) 2002-2009 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage Installation
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     Thomas Melchinger <t.melchinger@uni.de>
+ * @author     Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @since      2002-01-10
+ * @copyright  2002-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -21,7 +22,7 @@
  * under the License.
  */
 
-define('NEWVERSION', '2.0.12');
+define('NEWVERSION', '2.0.13');
 define('COPYRIGHT', '&copy; 2001-2009 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 

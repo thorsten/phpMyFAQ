@@ -1,6 +1,6 @@
 $Id$
 
-phpMyFAQ 2.0.12
+phpMyFAQ 2.0.13
 Codename "Prometheus"
 
 Installation/Update:
@@ -9,15 +9,15 @@ Please read the documentation (documentation.en.html) carefully.
 Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
-Changes since 2.0.11:
-- fixed bug with MySQL 6 and ext/mysqli (Johannes)
-- fixed stat call bug in installer on OpenSuse 10.3 (Thorsten)
-- improved SVN checkout script (Rene Treffer)
-- minor bugfixes (Thorsten)
+Changes since 2.0.12:
+- 
 
 For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
+
+Version 2.0.13 - 2009-03-
+-
 
 Version 2.0.12 - 2009-02-17
 - fixed bug with MySQL 6 and ext/mysqli (Johannes)

@@ -45,7 +45,7 @@ fi
 
 # PMF Version
 if [ "x${PMF_VERSION}" = "x" ]; then
-    PMF_VERSION="2.0.12"
+    PMF_VERSION="2.0.13"
 fi
 
 # Build folder
