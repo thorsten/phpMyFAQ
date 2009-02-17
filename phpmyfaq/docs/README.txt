@@ -19,7 +19,7 @@ For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.0.12 - 2009-02-
+Version 2.0.12 - 2009-02-17
 - fixed bug with MySQL 6 and ext/mysqli (Johannes)
 - fixed stat call bug in installer on OpenSuse 10.3 (Thorsten)
 - improved SVN checkout script (Rene Treffer)
