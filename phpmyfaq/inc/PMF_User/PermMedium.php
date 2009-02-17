@@ -2,12 +2,13 @@
 /**
  * The medium permission class provides group rights.
  *
- * @package     phpMyFAQ 
- * @author      Lars Tiedemann <php@larstiedemann.de>
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since       2005-09-18
- * @copyright   (c) 2005-2009 phpMyFAQ Team
- * @version     SVN: $Id$ 
+ * @package    phpMyFAQ 
+ * @subpackage PMF_User
+ * @author     Lars Tiedemann <php@larstiedemann.de>
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since      2005-09-18
+ * @copyright  2005-2009 phpMyFAQ Team
+ * @version    SVN: $Id$ 
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -19,92 +20,101 @@
  * License for the specific language governing rights and limitations
  * under the License.
  */
+
+/**
+ * PMF_User_PermMedium
+ *
+ * @package    phpMyFAQ 
+ * @subpackage PMF_User
+ * @author     Lars Tiedemann <php@larstiedemann.de>
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since      2005-09-18
+ * @copyright  2005-2009 phpMyFAQ Team
+ * @version    SVN: $Id$ 
+ */
 class PMF_User_PermMedium extends PMF_User_PermBasic
 {
-    // --- ATTRIBUTES ---
-
     /**
-     * default_group_data
-     *
      * Default data for new groups.
      *
-     * @access public
      * @var array
      */
-    var $default_group_data = array(
+    public $default_group_data = array(
         'name'        => 'DEFAULT_GROUP',
         'description' => 'Short group description. ',
         'auto_join'   => false
     );
 
-    // --- OPERATIONS ---
-
     /**
-     * checkGroupRight
-     *
      * Returns true if the group specified by $group_id owns the
      * right given by $right_id, otherwise false.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param int
-     * @param int
+     * @param  integer $group_id Group ID
+     * @param  integer $right_id Right ID
      * @return bool
      */
-    function checkGroupRight($group_id, $right_id)
+    public function checkGroupRight($group_id, $right_id)
     {
         // check input
-        if ($right_id <= 0 or $group_id <= 0 or !is_numeric($right_id) or !is_numeric($group_id))
+        if ($right_id <= 0 || $group_id <= 0 || !is_numeric($right_id) || !is_numeric($group_id)) {
             return false;
+        }
         // check right
-        $res = $this->db->query("
+        $select = sprintf("
             SELECT
-                ".SQLPREFIX."faqright.right_id AS right_id
+                fr.right_id AS right_id
             FROM
-                ".SQLPREFIX."faqright,
-                ".SQLPREFIX."faqgroup_right,
-                ".SQLPREFIX."faqgroup
+                %sfaqright fr,
+                %sfaqgroup_right fgr,
+                %sfaqgroup fg
             WHERE
-                ".SQLPREFIX."faqright.right_id = ".$right_id." AND
-                ".SQLPREFIX."faqright.right_id = ".SQLPREFIX."faqgroup_right.right_id AND
-                ".SQLPREFIX."faqgroup.group_id = ".SQLPREFIX."faqgroup_right.group_id AND
-                ".SQLPREFIX."faqgroup.group_id = '".$group_id."'
-        ");
-        // return result
-        if ($this->db->num_rows($res) == 1)
+                fr.right_id = %d AND
+                fr.right_id = fgr.right_id AND
+                fg.group_id = fgr.group_id AND
+                fg.group_id = %d",
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            $right_id,
+            $group_id);
+        
+        $res = $this->db->query($select);
+        if ($this->db->num_rows($res) == 1) {
             return true;
+        }
         return false;
     }
 
     /**
-     * getGroupRights
-     *
      * Returns an array that contains the right-IDs of all
      * group-rights the group $group_id owns.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param int
+     * @param  integer $group_id Group ID
      * @return array
      */
-    function getGroupRights($group_id)
+    public function getGroupRights($group_id)
     {
-        if ($group_id <= 0 or !is_numeric($group_id))
+        if ($group_id <= 0 || !is_numeric($group_id)) {
             return false;
+        }
         // check right
-        $res = $this->db->query("
+        $select = sprintf("
             SELECT
-                ".SQLPREFIX."faqright.right_id AS right_id
+                fr.right_id AS right_id
             FROM
-                ".SQLPREFIX."faqright,
-                ".SQLPREFIX."faqgroup_right,
-                ".SQLPREFIX."faqgroup
+                %sfaqright fr,
+                %sfaqgroup_right fgr,
+                %sfaqgroup fg
             WHERE
-                ".SQLPREFIX."faqgroup.group_id = '".$group_id."' AND
-                ".SQLPREFIX."faqgroup.group_id = ".SQLPREFIX."faqgroup_right.group_id AND
-                ".SQLPREFIX."faqright.right_id = ".SQLPREFIX."faqgroup_right.right_id
-        ");
-        // return result
+                fg.group_id = %d AND
+                fg.group_id = fgr.group_id AND
+                fr.right_id = fgr.right_id",
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            $group_id);
+        
+        $res    = $this->db->query($select);
         $result = array();
         while ($row = $this->db->fetch_assoc($res)) {
             $result[] = $row['right_id'];
@@ -113,118 +123,116 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
     }
 
     /**
-     * checkRight
-     *
      * Returns true, if the user given by $user_id owns the right
      * specified by $right. It does not matter if the user owns this
      * right as a user-right or because of a group-membership.
      * The parameter $right may be a right-ID (recommended for
      * performance) or a right-name.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param int
-     * @param mixed
-     * @return bool
+     * @param  integer $group_id Group ID
+     * @param  mixed   $right    Rights
+     * @return boolean
      */
-    function checkRight($user_id, $right)
+    public function checkRight($user_id, $right)
     {
         // get right id
-        if (!is_numeric($right) and is_string($right))
+        if (!is_numeric($right) && is_string($right)) {
             $right = $this->getRightId($right);
+        }
         // check user right and group right
-        if ($this->checkUserGroupRight($user_id, $right) or $this->checkUserRight($user_id, $right))
+        if ($this->checkUserGroupRight($user_id, $right) || $this->checkUserRight($user_id, $right)) {
             return true;
+        }
         return false;
     }
 
     /**
-     * grantGroupRight
-     *
      * Grants the group given by $group_id the right specified by
      * $right_id.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param int
-     * @param int
-     * @return bool
+     * @param  integer $group_id Group ID
+     * @param  integer $right_id Right ID
+     * @return boolean
      */
-    function grantGroupRight($group_id, $right_id)
+    public function grantGroupRight($group_id, $right_id)
     {
         // check input
-        if ($right_id <= 0 or $group_id <= 0 or !is_numeric($right_id) or !is_numeric($group_id))
+        if ($right_id <= 0 || $group_id <= 0 || !is_numeric($right_id) || !is_numeric($group_id)) {
             return false;
+        }
         // is right for users?
         $right_data = $this->getRightData($right_id);
-        if (!$right_data['for_groups'])
+        if (!$right_data['for_groups']) {
             return false;
+        }
         // grant right
-        $res = $this->db->query("
+        $insert = sprintf("
             INSERT INTO
-                ".SQLPREFIX."faqgroup_right
+                %sfaqgroup_right
             (group_id, right_id)
                 VALUES
-            (".$group_id.", ".$right_id.")"
-        );
-        if (!$res)
+            (%d, %d)",
+            SQLPREFIX,
+            $group_id,
+            $right_id);
+            
+        $res = $this->db->query($insert);
+        if (!$res) {
             return false;
+        }
         return true;
     }
 
     /**
-     * refuseGroupRight
-     *
      * Refuses the group given by $group_id the right specified by
      * $right_id.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param int
-     * @param int
-     * @return bool
+     * @param  integer $group_id Group ID
+     * @param  integer $right_id Right ID
+     * @return boolean
      */
-    function refuseGroupRight($group_id, $right_id)
+    public function refuseGroupRight($group_id, $right_id)
     {
         // check input
-        if ($right_id <= 0 or $group_id <= 0 or !is_numeric($right_id) or !is_numeric($group_id))
+        if ($right_id <= 0 || $group_id <= 0 || !is_numeric($right_id) || !is_numeric($group_id)) {
             return false;
+        }
         // grant right
-        $res = $this->db->query("
+        $delete = sprintf("
             DELETE FROM
-                ".SQLPREFIX."faqgroup_right
+                %sfaqgroup_right
             WHERE
-                group_id = ".$group_id." AND
-                right_id = ".$right_id
-        );
-        if (!$res)
+                group_id = %d AND
+                right_id = %d",
+            SQLPREFIX,
+            $group_id,
+            $right_id);
+            
+        $res = $this->db->query($delete);
+        if (!$res) {
             return false;
+        }
         return true;
     }
 
     /**
-     * addGroup
-     *
      * Adds a new group to the database and returns the ID of the
      * new group. The associative array $group_data contains the
      * data for the new group.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param array
+     * @param  array $group_data Array of group data
      * @return int
      */
-    function addGroup($group_data)
+    public function addGroup(Array $group_data)
     {
         // check if group already exists
-        if ($this->getGroupId($group_data['name']) > 0)
+        if ($this->getGroupId($group_data['name']) > 0) {
             return 0;
-        // get next id
-        $next_id = $this->db->nextID(SQLPREFIX."faqgroup", "group_id");
-        // check group data input
+        }
+        
+        $next_id    = $this->db->nextID(SQLPREFIX."faqgroup", "group_id");
         $group_data = $this->checkGroupData($group_data);
-        // insert group
-        $query = sprintf("
+        $insert     = sprintf("
             INSERT INTO
                 %sfaqgroup
             (group_id, name, description, auto_join)
@@ -234,159 +242,173 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
             $next_id,
             $group_data['name'],
             $group_data['description'],
-            $this->bool_to_int($group_data['auto_join'])
-            );
+            (int)$group_data['auto_join']);
 
-        $res = $this->db->query($query);
-        if (!$res)
+        $res = $this->db->query($insert);
+        if (!$res) {
             return 0;
+        }
         return $next_id;
     }
 
     /**
-     * changeGroup
-     *
      * Changes the group data of the given group.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param int
-     * @param array
-     * @return bool
+     * @param  integer $group_id   Group ID
+     * @param  array   $group_data Array of group data
+     * @return boolean
      */
-    function changeGroup($group_id, $group_data)
+    public function changeGroup($group_id, Array $group_data)
     {
-        // check input
         $checked_data = $this->checkGroupData($group_data);
-        // create update SET
-        $set = "";
-        $comma = "";
+        $set          = "";
+        $comma        = "";
+        
         foreach ($group_data as $key => $val) {
-            $set .= $comma.$key." = '".$this->db->escape_string($checked_data[$key])."'";
+            $set  .= $comma.$key." = '".$this->db->escape_string($checked_data[$key])."'";
             $comma = ",\n                ";
         }
-        // update group
-        $res = $this->db->query("
+        
+        $update = sprintf("
             UPDATE
-                ".SQLPREFIX."faqgroup
+                %sfaqgroup
             SET
-                ".$set."
+                %s
             WHERE
-                group_id = ".$group_id
-        );
-        if (!$res)
+                group_id = %d",
+                SQLPREFIX,
+                $set,
+                $group_id);
+                
+        $res = $this->db->query($update);
+        
+        if (!$res) {
             return false;
+        }
         return true;
     }
 
     /**
-     * deleteGroup
-     *
      * Removes the group given by $group_id from the database.
      * Returns true on success, otherwise false.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param int
-     * @return bool
+     * @param  integer $group_id Group ID
+     * @return boolean
      */
-    function deleteGroup($group_id)
+    public function deleteGroup($group_id)
     {
-        if ($group_id <= 0 or !is_numeric($group_id))
+        if ($group_id <= 0 || !is_numeric($group_id)) {
             return false;
+        }
 
-        // delete group
-        $res = $this->db->query("
+        $delete = sprintf("
             DELETE FROM
-                ".SQLPREFIX."faqgroup
+                %sfaqgroup
             WHERE
-                group_id = ".$group_id
-        );
-        if (!$res)
+                group_id = %d",
+            SQLPREFIX,
+            $group_id);
+        $res = $this->db->query($delete);
+        if (!$res) {
             return false;
-        // delete group-user links
-        $res = $this->db->query("
+        }
+        
+        $delete = sprintf("
             DELETE FROM
-                ".SQLPREFIX."faquser_group
+                %sfaquser_group
             WHERE
-                group_id = ".$group_id
-        );
-        if (!$res)
+                group_id = %d",
+            SQLPREFIX,
+            $group_id);
+        $res = $this->db->query($delete);
+        if (!$res) {
             return false;
-        // delete group-right links
-        $res = $this->db->query("
+        }
+        
+        $delete = sprintf("
             DELETE FROM
-                ".SQLPREFIX."faqgroup_right
+                %sfaqgroup_right
             WHERE
-                group_id = ".$group_id."
-
-        ");
-        if (!$res)
+                group_id = %d",
+            SQLPREFIX,
+            $group_id);
+        $res = $this->db->query($delete);
+        if (!$res) {
             return false;
+        }
+        
         return true;
     }
 
     /**
-     * isGroupMember
-     *
      * Returns true if the user given by $user_id is a member of
      * the group specified by $group_id, otherwise false.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param int
-     * @param int
-     * @return bool
+     * @param  integer $group_id Group ID
+     * @param  integer $right_id Right ID
+     * @return boolean
      */
-    function isGroupMember($user_id, $group_id)
+    public function isGroupMember($user_id, $group_id)
     {
-        if ($user_id <= 0 or $group_id <= 0 or !is_numeric($user_id) or !is_numeric($group_id))
+        if ($user_id <= 0 || $group_id <= 0 || !is_numeric($user_id) || !is_numeric($group_id)) {
             return false;
-        $res = $this->db->query("
+        }
+        
+        $select = sprintf("
             SELECT
-                ".SQLPREFIX."faquser.user_id AS user_id
+                fu.user_id AS user_id
             FROM
-                ".SQLPREFIX."faquser,
-                ".SQLPREFIX."faquser_group,
-                ".SQLPREFIX."faqgroup
+                %sfaquser fu,
+                %sfaquser_group fug,
+                %sfaqgroup fg
             WHERE
-                ".SQLPREFIX."faquser.user_id   = ".$user_id." AND
-                ".SQLPREFIX."faquser.user_id   = ".SQLPREFIX."faquser_group.user_id AND
-                ".SQLPREFIX."faqgroup.group_id = ".SQLPREFIX."faquser_group.group_id AND
-                ".SQLPREFIX."faqgroup.group_id = ".$group_id
-        );
-        if ($this->db->num_rows($res) == 1)
+                fu.user_id  = %d AND
+                fu.user_id  = fug.user_id AND
+                fg.group_id = fug.group_id AND
+                fg.group_id = %d",
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            $user_id,
+            $group_id);
+        
+        $res = $this->db->query($select);
+        if ($this->db->num_rows($res) == 1) {
             return true;
+        }
         return false;
     }
 
     /**
-     * getGroupMembers
-     *
      * Returns an array that contains the user-IDs of all members
      * of the group $group_id.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param int
+     * @param  integer $group_id Group ID
      * @return array
      */
-    function getGroupMembers($group_id)
+    public function getGroupMembers($group_id)
     {
-        if ($group_id <= 0 or !is_numeric($group_id))
+        if ($group_id <= 0 || !is_numeric($group_id)) {
             return false;
-        $res = $this->db->query("
+        }
+        
+        $select = sprintf("
             SELECT
-                ".SQLPREFIX."faquser.user_id AS user_id
+                fu.user_id AS user_id
             FROM
-                ".SQLPREFIX."faquser,
-                ".SQLPREFIX."faquser_group,
-                ".SQLPREFIX."faqgroup
+                %sfaquser fu,
+                %sfaquser_group fug,
+                %sfaqgroup fg
             WHERE
-                ".SQLPREFIX."faqgroup.group_id = ".$group_id." AND
-                ".SQLPREFIX."faqgroup.group_id = ".SQLPREFIX."faquser_group.group_id AND
-                ".SQLPREFIX."faquser.user_id   = ".SQLPREFIX."faquser_group.user_id
-        ");
+                fg.group_id = %d AND
+                fg.group_id = fug.group_id AND
+                fu.user_id  = fug.user_id",
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            $group_id);
+        
+        $res    = $this->db->query($select);
         $result = array();
         while ($row = $this->db->fetch_assoc($res)) {
             $result[] = $row['user_id'];
@@ -395,128 +417,129 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
     }
 
     /**
-     * addToGroup
-     *
      * Adds a new member $user_id to the group $group_id.
      * Returns true on success, otherwise false.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param int
-     * @param int
-     * @return bool
+     * @param  integer $group_id Group ID
+     * @param  integer $right_id Right ID
+     * @return boolean
      */
     function addToGroup($user_id, $group_id)
     {
-        if ($user_id <= 0 or $group_id <= 0 or !is_numeric($user_id) or !is_numeric($group_id))
+        if ($user_id <= 0 || $group_id <= 0 || !is_numeric($user_id) || !is_numeric($group_id)) {
             return false;
-        // check group
-        if (!$this->getGroupData($group_id))
+        }
+        
+        if (!$this->getGroupData($group_id)) {
             return false;
+        }
+        
         // add user to group
-        $res = $this->db->query("
+        $insert = sprintf("
             INSERT INTO
-                ".SQLPREFIX."faquser_group
+                %sfaquser_group
             (user_id, group_id)
                VALUES
-            (".$user_id.", ".$group_id.")"
-        );
-        // return
-        if (!$res)
+            (%d, %d)",
+            SQLPREFIX,
+            $user_id,
+            $group_id);
+            
+        $res = $this->db->query($insert);
+        if (!$res) {
             return false;
+        }
         return true;
     }
 
     /**
-     * removeFromGroup
-     *
      * Removes a user $user_id from the group $group_id.
      * Returns true on success, otherwise false.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param int
-     * @param int
-     * @return bool
+     * @param  integer $group_id Group ID
+     * @param  integer $right_id Right ID
+     * @return boolean
      */
-    function removeFromGroup($user_id, $group_id)
+    public function removeFromGroup($user_id, $group_id)
     {
-        // check input
-        if ($user_id <= 0 or $group_id <= 0 or !is_numeric($user_id) or !is_numeric($group_id))
+        if ($user_id <= 0 || $group_id <= 0 || !is_numeric($user_id) || !is_numeric($group_id)) {
             return false;
-        // remove user from group
-        $res = $this->db->query("
+        }
+        
+        $delete = sprintf("
             DELETE FROM
-                ".SQLPREFIX."faquser_group
+                %sfaquser_group
             WHERE
-                user_id  = ".$user_id." AND
-                group_id = ".$group_id
-        );
-        // return
-        if (!$res)
+                user_id  = %d AND
+                group_id = %d",
+            SQLPREFIX,
+            $user_id,
+            $group_id);
+            
+        $res = $this->db->query($delete);
+        if (!$res) {
             return false;
+        }
         return true;
     }
 
     /**
-     * getGroupId
-     *
      * Returns the ID of the group that has the name $name. Returns
      * 0 if the group-name cannot be found.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param string
+     * @param  string $name Group name
      * @return int
      */
-    function getGroupId($name)
+    public function getGroupId($name)
     {
-        // get group id
-        $res = $this->db->query("
+        $select = sprintf("
             SELECT
                 group_id
             FROM
-                ".SQLPREFIX."faqgroup
+                %sfaqgroup
             WHERE
-                name = '".$name."'
-        ");
-        // return
-        if ($this->db->num_rows($res) != 1)
+                name = '%s'",
+            SQLPREFIX,
+            $this->db->escape_string($name));
+            
+        $res = $this->db->query($select);
+        if ($this->db->num_rows($res) != 1) {
             return 0;
+        }
         $row = $this->db->fetch_assoc($res);
         return $row['group_id'];
     }
 
     /**
-     * getGroupData
-     *
      * Returns an associative array with the group-data of the group
      * $group_id.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param int
+     * @param  integer $group_id Group ID
      * @return array
      */
-    function getGroupData($group_id)
+    public function getGroupData($group_id)
     {
-        if ($group_id <= 0 or !is_numeric($group_id))
+        if ($group_id <= 0 || !is_numeric($group_id)) {
             return false;
-        // get group data
-        $res = $this->db->query("
+        }
+        
+        $select = sprintf("
             SELECT
                 group_id,
                 name,
                 description,
                 auto_join
             FROM
-                ".SQLPREFIX."faqgroup
+                %sfaqgroup
             WHERE
-                group_id = ".$group_id
-        );
-        // return
-        if ($this->db->num_rows($res) != 1)
+                group_id = %d",
+            SQLPREFIX,
+            $group_id);
+            
+        $res = $this->db->query($select);
+        if ($this->db->num_rows($res) != 1) {
             return array();
+        }
         return $this->db->fetch_assoc($res);
     }
 
@@ -524,29 +547,32 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
      * Returns an array that contains the IDs of all groups in which
      * the user $user_id is a member.
      *
-     * @param   integer $user_id
-     * @access  public
-     * @author  Lars Tiedemann <php@larstiedemann.de>
-     * @return  array
+     * @param  integer $user_id User ID
+     * @return array
      */
-    function getUserGroups($user_id)
+    public function getUserGroups($user_id)
     {
-        if ($user_id <= 0 or !is_numeric($user_id))
+        if ($user_id <= 0 || !is_numeric($user_id)) {
             return false;
-        // get user groups
-        $res = $this->db->query("
+        }
+        
+        $select = sprintf("
             SELECT
-                ".SQLPREFIX."faqgroup.group_id AS group_id
+                fg.group_id AS group_id
             FROM
-                ".SQLPREFIX."faquser,
-                ".SQLPREFIX."faquser_group,
-                ".SQLPREFIX."faqgroup
+                %sfaquser fu,
+                %sfaquser_group fug,
+                %sfaqgroup fg
             WHERE
-                ".SQLPREFIX."faquser.user_id   = ".$user_id." AND
-                ".SQLPREFIX."faquser.user_id   = ".SQLPREFIX."faquser_group.user_id AND
-                ".SQLPREFIX."faqgroup.group_id = ".SQLPREFIX."faquser_group.group_id
-        ");
-        // return result
+                fu.user_id  = %d AND
+                fu.user_id  = fug.user_id AND
+                fg.group_id = fug.group_id",
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            $user_id);
+        
+        $res    = $this->db->query($select);
         $result = array(-1);
         while ($row = $this->db->fetch_assoc($res)) {
             $result[] = $row['group_id'];
@@ -555,28 +581,21 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
     }
 
     /**
-     * getAllGroups
-     *
      * Returns an array with the IDs of all groups stored in the
      * database.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
      * @return array
      */
-    function getAllGroups()
+    public function getAllGroups()
     {
-        // get all groups
-        $query = sprintf(
-                    "SELECT
-                        group_id
-                    FROM
-                        %sfaqgroup",
-                    SQLPREFIX
-                    );
-        $res = $this->db->query($query);
-
-        // return result
+        $select = sprintf("
+            SELECT
+                group_id
+            FROM
+                %sfaqgroup",
+            SQLPREFIX);
+            
+        $res    = $this->db->query($select);
         $result = array();
         while ($row = $this->db->fetch_assoc($res)) {
             $result[] = $row['group_id'];
@@ -588,13 +607,10 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
     /**
      * Get all groups in <option> tags
      *
-     * @param   array   $groups
-     * @return  string
-     * @access  public
-     * @since   2007-02-10
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  integer $groups Selected group
+     * @return string
      */
-    function getAllGroupsOptions($groups = -1)
+    public function getAllGroupsOptions($groups = -1)
     {
         $options = '';
         $allGroups = $this->getAllGroups();
@@ -615,91 +631,91 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
      * Returns true if the user $user_id owns the right $right_id
      * because of a group-membership, otherwise false.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param int
-     * @param int
-     * @return void
+     * @param  integer $user_id  User ID
+     * @param  integer $right_id Right ID
+     * @return boolean
      */
-    function checkUserGroupRight($user_id, $right_id)
+    public function checkUserGroupRight($user_id, $right_id)
     {
         // check input
-        if ($right_id <= 0 or $user_id <= 0 or !is_numeric($right_id) or !is_numeric($user_id))
+        if ($right_id <= 0 || $user_id <= 0 || !is_numeric($right_id) || !is_numeric($user_id)) {
             return false;
-        // check right
-        $res = $this->db->query("
+        }
+        
+        $select = sprintf("
             SELECT
-                ".SQLPREFIX."faqright.right_id AS right_id
+                fr.right_id AS right_id
             FROM
-                ".SQLPREFIX."faqright,
-                ".SQLPREFIX."faqgroup_right,
-                ".SQLPREFIX."faqgroup,
-                ".SQLPREFIX."faquser_group,
-                ".SQLPREFIX."faquser
+                %sfaqright fr,
+                %sfaqgroup_right fgr,
+                %sfaqgroup fg,
+                %sfaquser_group fug,
+                %sfaquser fu
             WHERE
-                ".SQLPREFIX."faqright.right_id = ".$right_id." AND
-                ".SQLPREFIX."faqright.right_id = ".SQLPREFIX."faqgroup_right.right_id AND
-                ".SQLPREFIX."faqgroup.group_id = ".SQLPREFIX."faqgroup_right.group_id AND
-                ".SQLPREFIX."faqgroup.group_id = ".SQLPREFIX."faquser_group.group_id AND
-                ".SQLPREFIX."faquser.user_id   = ".SQLPREFIX."faquser_group.user_id AND
-                ".SQLPREFIX."faquser.user_id   = ".$user_id
-        );
-        // return result
-        if ($this->db->num_rows($res) == 1)
+                fr.right_id = %d AND
+                fr.right_id = fgr.right_id AND
+                fg.group_id = fgr.group_id AND
+                fg.group_id = fug.group_id AND
+                fu.user_id  = fug.user_id AND
+                fu.user_id  = %d",
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            $right_id,
+            $user_id);
+        
+        $res = $this->db->query($select);
+        if ($this->db->num_rows($res) == 1) {
             return true;
+        }
         return false;
     }
 
     /**
-     * checkGroupData
-     *
      * Checks the given associative array $group_data. If a
      * parameter is incorrect or is missing, it will be replaced
      * by the default values in $this->default_group_data.
      * Returns the corrected $group_data associative array.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param array
+     * @param  array $group_data Array of group data
      * @return array
      */
-    function checkGroupData($group_data)
+    public function checkGroupData(Array $group_data)
     {
-        if (!isset($group_data['name']) or !is_string($group_data['name']))
+        if (!isset($group_data['name']) || !is_string($group_data['name'])) {
             $group_data['name'] = $this->default_group_data['name'];
-        if (!isset($group_data['description']) or !is_string($group_data['description']))
+        }
+        if (!isset($group_data['description']) || !is_string($group_data['description'])) {
             $group_data['description'] = $this->default_group_data['description'];
-        if (!isset($group_data['auto_join']))
+        }
+        if (!isset($group_data['auto_join'])) {
             $group_data['auto_join'] = $this->default_group_data['auto_join'];
-        $group_data['auto_join'] = $this->bool_to_int($group_data['auto_join']);
+        }
+        $group_data['auto_join'] = (int)$group_data['auto_join'];
         return $group_data;
     }
 
     /**
-     * getAllUserRights
-     *
      * Returns an array that contains the right-IDs of all rights
      * the user $user_id owns. User-rights and the rights the user
      * owns because of a group-membership are taken into account.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param int
+     * @param  integer $user_id User ID
      * @return array
      */
-    function getAllUserRights($user_id)
+    public function getAllUserRights($user_id)
     {
-        // check input
-        if ($user_id <= 0 or !is_numeric($user_id))
+        if ($user_id <= 0 || !is_numeric($user_id)) {
             return false;
+        }
         $user_rights  = $this->getUserRights($user_id);
         $group_rights = $this->getUserGroupRights($user_id);
         return array_unique(array_merge($user_rights, $group_rights));
     }
 
     /**
-     * autoJoin
-     *
      * Adds the user $user_id to all groups with the auto_join
      * option. By using the auto_join option, user administration
      * can be much easier. For example by setting this option only
@@ -707,27 +723,29 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
      * then has to be called every time a new user registers.
      * Returns true on success, otherwise false.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param int
-     * @return bool
+     * @param  integer $user_id User ID
+     * @return boolean
      */
-    function autoJoin($user_id)
+    public function autoJoin($user_id)
     {
-        // check user id
-        if ($user_id <= 0 or !is_numeric($user_id))
+        if ($user_id <= 0 || !is_numeric($user_id)) {
             return false;
-        // get auto join groups
-        $res = $this->db->query("
+        }
+        
+        $select = sprintf("
             SELECT
                 group_id
             FROM
-                ".SQLPREFIX."faqgroup
+                %sfaqgroup
             WHERE
-                auto_join = 1
-        ");
-        if (!$res)
+                auto_join = 1",
+            SQLPREFIX);
+            
+        $res = $this->db->query($select);
+        if (!$res) {
             return false;
+        }
+        
         $auto_join = array();
         while ($row = $this->db->fetch_assoc($res)) {
             $auto_join[] = $row['group_id'];
@@ -740,31 +758,30 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
     }
 
     /**
-     * removeFromAllGroups
-     *
      * Removes the user $user_id from all groups.
      * Returns true on success, otherwise false.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param int
-     * @return bool
+     * @param  integer $user_id User ID
+     * @return boolean
      */
-    function removeFromAllGroups($user_id)
+    public function removeFromAllGroups($user_id)
     {
-        // check input
-        if ($user_id <= 0 or !is_numeric($user_id))
+        if ($user_id <= 0 || !is_numeric($user_id)) {
             return false;
-        // remove user from all groups
-        $res = $this->db->query("
+        }
+        
+        $delete = sprintf("
             DELETE FROM
-                ".SQLPREFIX."faquser_group
+                %sfaquser_group
             WHERE
-                user_id  = ".$user_id
-        );
-        // return
-        if (!$res)
+                user_id  = %d",
+            SQLPREFIX,
+            $user_id);
+            
+        $res = $this->db->query($delete);
+        if (!$res) {
             return false;
+        }
         return true;
     }
 
@@ -774,33 +791,38 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
      * Returns an array that contains the IDs of all rights the user
      * $user_id owns because of a group-membership.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param int
+     * @param  integer $user_id User ID
      * @return array
      */
-    function getUserGroupRights($user_id)
+    public function getUserGroupRights($user_id)
     {
-        if ($user_id <= 0 or !is_numeric($user_id))
+        if ($user_id <= 0 || !is_numeric($user_id)) {
             return false;
-        // check right
-        $res = $this->db->query("
+        }
+        
+        $select = sprintf("
             SELECT
-                ".SQLPREFIX."faqright.right_id AS right_id
+                fr.right_id AS right_id
             FROM
-                ".SQLPREFIX."faqright,
-                ".SQLPREFIX."faqgroup_right,
-                ".SQLPREFIX."faqgroup,
-                ".SQLPREFIX."faquser_group,
-                ".SQLPREFIX."faquser
+                %sfaqright fr,
+                %sfaqgroup_right fgr,
+                %sfaqgroup fg,
+                %sfaquser_group fug,
+                %sfaquser fu
             WHERE
-                ".SQLPREFIX."faquser.user_id   = ".$user_id." AND
-                ".SQLPREFIX."faquser.user_id   = ".SQLPREFIX."faquser_group.user_id AND
-                ".SQLPREFIX."faqgroup.group_id = ".SQLPREFIX."faquser_group.group_id AND
-                ".SQLPREFIX."faqgroup.group_id = ".SQLPREFIX."faqgroup_right.group_id AND
-                ".SQLPREFIX."faqright.right_id = ".SQLPREFIX."faqgroup_right.right_id
-        ");
-        // return result
+                fu.user_id  = %d AND
+                fu.user_id  = fug.user_id AND
+                fg.group_id = fug.group_id AND
+                fg.group_id = fgr.group_id AND
+                fr.right_id = fgr.right_id",
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            $user_id);
+        
+        $res    = $this->db->query($select);
         $result = array();
         while ($row = $this->db->fetch_assoc($res)) {
             $result[] = $row['right_id'];
@@ -809,88 +831,88 @@ class PMF_User_PermMedium extends PMF_User_PermBasic
     }
 
     /**
-     * refuseAllGroupRights
-     *
      * Refuses all group rights.
      * Returns true on success, otherwise false.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param int
-     * @return bool
+     * @param  integer $group_id Group ID
+     * @return boolean
      */
-    function refuseAllGroupRights($group_id)
+    public function refuseAllGroupRights($group_id)
     {
-        if ($group_id <= 0 or !is_numeric($group_id))
+        if ($group_id <= 0 || !is_numeric($group_id)) {
             return false;
-        $res = $this->db->query("
+        }
+        
+        $delete = sprintf("
             DELETE FROM
-                ".SQLPREFIX."faqgroup_right
+                %sfaqgroup_right
             WHERE
-                group_id  = ".$group_id
-        );
-        if (!$res)
+                group_id  = %d",
+            SQLPREFIX,
+            $group_id);
+            
+        $res = $this->db->query($delete);
+        if (!$res) {
             return false;
+        }
         return true;
     }
 
     /**
-     * getGroupName
-     *
      * Returns the name of the group $group_id.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param int
-     * @return array
+     * @param  integer $group_id Group ID
+     * @return string
      */
-    function getGroupName($group_id)
+    public function getGroupName($group_id)
     {
-        if ($group_id <= 0 or !is_numeric($group_id))
+        if ($group_id <= 0 || !is_numeric($group_id)) {
             return false;
-        // get group data
-        $res = $this->db->query("
+        }
+        
+        $select = sprintf("
             SELECT
                 name
             FROM
-                ".SQLPREFIX."faqgroup
+                %sfaqgroup
             WHERE
-                group_id = ".$group_id
-        );
-        // return
-        if ($this->db->num_rows($res) != 1)
+                group_id = %d",
+            SQLPREFIX,
+            $group_id);
+            
+        $res = $this->db->query($select);
+        if ($this->db->num_rows($res) != 1) {
             return array();
+        }
         $row = $this->db->fetch_assoc($res);
         return $row['name'];
     }
 
     /**
-     * removeAllUsersFromGroup
-     *
      * Removes all users from the group $group_id.
      * Returns true on success, otherwise false.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param int
+     * @param  integer $group_id Group ID
      * @return bool
      */
-    function removeAllUsersFromGroup($group_id)
+    public function removeAllUsersFromGroup($group_id)
     {
-        // check input
-        if ($group_id <= 0 or !is_numeric($group_id))
+    	if ($group_id <= 0 or !is_numeric($group_id)) {
             return false;
+    	}
         // remove all user from group
-        $res = $this->db->query("
+        $delete = sprintf("
             DELETE FROM
-                ".SQLPREFIX."faquser_group
+                %sfaquser_group
             WHERE
-                group_id = ".$group_id
-        );
-        // return
-        if (!$res)
+                group_id = %d",
+            SQLPREFIX,
+            $group_id);
+            
+        $res = $this->db->query($delete);
+        if (!$res) {
             return false;
+        }
         return true;
     }
-
 }
