@@ -1197,7 +1197,7 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
                     $row->category_id,
                     $row->id,
                     $row->lang,
-                    $searchterm);
+                    urlencode($_searchterm));
 
                 if ($instantRespnse) {
                     $currentUrl = PMF_Link::getSystemRelativeUri('ajaxresponse.php').'index.php';
