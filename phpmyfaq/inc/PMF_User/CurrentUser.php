@@ -119,7 +119,7 @@ class PMF_User_CurrentUser extends PMF_User_User
         $pass_error  = 0;
         $count       = 0;
         
-        foreach ($this->_auth_container as $name => $auth) {
+        foreach ($this->auth_container as $name => $auth) {
             $count++;
 
             // $auth is an invalid Auth object, so continue
@@ -164,10 +164,10 @@ class PMF_User_CurrentUser extends PMF_User_User
                 break;
             }
             // Save encrypted password just for "Change Password" convenience
-            $_authLocal = PMF_User_Auth::selectAuth($this->_auth_data['authSource']['name']);
-            $_authLocal->selectEncType($this->_auth_data['encType']);
-            $_authLocal->setReadOnly($this->_auth_data['readOnly']);
-            $this->_encrypted_password = $_authLocal->encrypt($pass);
+            $_authLocal = PMF_User_Auth::selectAuth($this->auth_data['authSource']['name']);
+            $_authLocal->selectEncType($this->auth_data['encType']);
+            $_authLocal->setReadOnly($this->auth_data['readOnly']);
+            $this->encrypted_password = $_authLocal->encrypt($pass);
             // return true
             return true;
             break;
