@@ -2,14 +2,16 @@
 /**
  * Some basic functions and PMF_Init class.
  *
- * @package   phpMyFAQ
- * @author    Johann-Peter Hartmann <hartmann@mayflower.de>
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Stefan Esser <sesser@php.net>
- * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @since     2005-09-24
- * @version   SVN: $Id$
- * @copyright 2005-2009 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage PMF_Init
+ * @author     Johann-Peter Hartmann <hartmann@mayflower.de>
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     Stefan Esser <sesser@php.net>
+ * @author     Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @author     Christian Stocker <chregu@bitflux.ch>
+ * @since      2005-09-24
+ * @copyright  2005-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -29,10 +31,7 @@
 //
 define('DEBUG', true);
 if (DEBUG) {
-    error_reporting(E_ALL);
-    if (defined('E_STRICT')) {
-       error_reporting(E_ALL & ~E_STRICT);
-    }
+    error_reporting(E_ALL & E_STRICT);
     ini_set('display_errors', 1);
 } else {
     ini_set('display_errors', 0);
@@ -122,12 +121,16 @@ if ($faqconfig->get('main.ldapSupport') && file_exists(PMF_INCLUDE_DIR.'/datalda
  * variables, unescaped slashes and XSS in the request string. It also detects
  * and sets the current language.
  *
- * @access      public
- * @since       2005-09-24
- * @author      Johann-Peter Hartmann <hartmann@mayflower.de>
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Stefan Esser <sesser@php.net>
- * @author      Christian Stocker <chregu@bitflux.ch>
+ * @package    phpMyFAQ
+ * @subpackage PMF_Init
+ * @author     Johann-Peter Hartmann <hartmann@mayflower.de>
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     Stefan Esser <sesser@php.net>
+ * @author     Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @author     Christian Stocker <chregu@bitflux.ch>
+ * @since      2005-09-24
+ * @copyright  2005-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
  */
 class PMF_Init
 {
