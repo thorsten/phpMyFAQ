@@ -132,7 +132,7 @@ $PMF_LANG["msgTopTen"] = "TOP 10";
 $PMF_LANG["msgHomeThereAre"] = "Es sind ";
 $PMF_LANG["msgHomeArticlesOnline"] = " Artikel online";
 $PMF_LANG["msgNoNews"] = "Es gibt derzeit keine ".$PMF_CONF['main.titleFAQ']."-News.";
-$PMF_LANG["msgLatestArticles"] = "Die fünf neuesten Artikel:";
+$PMF_LANG["msgLatestArticles"] = "Die neuesten Artikel:";
 
 // E-Mailbenachrichtigung
 $PMF_LANG["msgMailThanks"] = "Vielen Dank fuer den Vorschlag zur ".$PMF_CONF['main.titleFAQ'];
