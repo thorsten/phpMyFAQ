@@ -36,9 +36,8 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
     header("Vary: Negotiate,Accept");
     header("Content-type: text/xml; charset=".$PMF_LANG['metaCharset']);
 
-    $user = new PMF_User_User();
-    $user->addDb($db);
-    $userList = $user->getAllUsers();
+    $user      = new PMF_User_User();
+    $userList  = $user->getAllUsers();
     $groupList = ($user->perm instanceof PMF_User_PermMedium) ? $user->perm->getAllGroups() : array();
     $data = array(
         'name' => "Name:",
