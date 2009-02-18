@@ -198,8 +198,11 @@ if (version_compare(PHP_VERSION, '4.3.3', '<')) {
     HTMLFooter();
     die();
 }
+if (version_compare(PHP_VERSION, '5.2.0', '<')) {
+    print "<p class=\"center\">You're using an unsupported version of PHP! You should upgrade to PHP 5.2!</p>\n";
+}
 
-require_once(PMF_ROOT_DIR.'/inc/data.php');
+require_once PMF_ROOT_DIR.'/inc/data.php';
 
 /**************************** STEP 1 OF 5 ***************************/
 if ($step == 1) {
@@ -295,7 +298,7 @@ if ($step == 2) {
     <legend class="installation"><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 2 of 5)</strong></legend>
     <p>A backup of your database configuration file has been made.</p>
     <p>Now the configuration files will be updated.</p>
-    <p class="center"><input type="submit" value="Go to step 2 of 5" class="button" /></p>
+    <p class="center"><input type="submit" value="Go to step 3 of 5" class="button" /></p>
 </fieldset>
 </form>
 <?php
