@@ -45,7 +45,7 @@ if ($permission["passwd"]) {
         $npasswd = PMF_Filter::filterInput(INPUT_POST, 'npass', FILTER_SANITIZE_STRING);
         $bpasswd = PMF_Filter::filterInput(INPUT_POST, 'bpass', FILTER_SANITIZE_STRING);
         
-	   if (($_authSource->encrypt($opasswd) == $user->_encrypted_password) && ($npasswd == $bpasswd)) {
+	   if (($_authSource->encrypt($opasswd) == $user->encrypted_password) && ($npasswd == $bpasswd)) {
             if (!$user->changePassword($npasswd)) {
                 print $PMF_LANG["ad_passwd_fail"]."<br />";
             }
