@@ -3,7 +3,8 @@ $Id$
 CHANGED FILES FROM 2.0.12 -> 2.0.13
 
 ./install/installer.php
-./install/mysqli.sql.php
+./install/update.php
+./lang/language_de.php
 
 
 
