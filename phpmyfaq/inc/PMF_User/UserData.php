@@ -1,13 +1,13 @@
 <?php
-
 /**
  * The userdata class provides methods to manage user information.
  *
- * @package     phpMyFAQ
- * @author      Lars Tiedemann <php@larstiedemann.de>
- * @since       2005-09-18
- * @copyright   (c) 2005-2009 phpMyFAQ Team
- * @version     SVN: $Id$
+ * @package    phpMyFAQ
+ * @subpackage PMF_User
+ * @author     Lars Tiedemann <php@larstiedemann.de>
+ * @since      2005-09-18
+ * @copyright  2005-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -19,77 +19,83 @@
  * License for the specific language governing rights and limitations
  * under the License.
  */
+
+/**
+ * PMF_User_UserData
+ *
+ * @package    phpMyFAQ
+ * @subpackage PMF_User
+ * @author     Lars Tiedemann <php@larstiedemann.de>
+ * @since      2005-09-18
+ * @copyright  2005-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
+ */
 class PMF_User_UserData
 {
     /**
      * database object
      *
-     * @var PMF_DB
+     * @var PMF_DB_Driver
      */
-    private $_db = null;
+    private $db = null;
 
     /**
      * associative array containing user data
      *
      * @var array
      */
-    private $_data = array();
+    private $data = array();
 
     /**
      * User-ID
      *
      * @var int
      */
-    private $_user_id = 0;
-
-    // --- OPERATIONS ---
+    private $user_id = 0;
 
     /**
-     * Constructor. Expects a database object $db.
+     * Constructor.
      *
-     * @param  PMF_DB_Driver $db PMF_DB
      * @return void
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
      */
-    function __construct(PMF_DB_Driver $db)
+    public function __construct()
     {
-        $this->_db = $db;
+        $this->db = PMF_Db::getInstance();
     }
 
     /**
      * Returns the field $field of the user data. If $field is an
      * array, an associative array will be returned.
      *
-     * @param   mixed
-     * @return  mixed
-     * @access  public
-     * @author  Lars Tiedemann <php@larstiedemann.de>
+     * @param  mixed $field Field(s)
+     * @return mixed
      */
-    function get($field)
+    public function get($field)
     {
-        // check $field
         $single_return = false;
         if (!is_array($field)) {
             $single_return = true;
-            $fields = $field;
-        }
-        else {
+            $fields        = $field;
+        } else {
             $fields = implode(', ', $field);
         }
-        // get data
-        $query = "
+        
+        $select = sprintf("
             SELECT
-                ".$fields."
+                %s
             FROM
-                ".SQLPREFIX."faquserdata
+                %sfaquserdata
             WHERE
-                user_id = ".$this->_user_id;
-        $res = $this->_db->query($query);
-        if ($this->_db->num_rows($res) != 1) {
+                user_id = %d",
+            $fields,
+            SQLPREFIX,
+            $this->user_id);
+        
+        $res = $this->db->query($select);
+        if ($this->db->num_rows($res) != 1) {
             return false;
         }
-        $arr = $this->_db->fetch_assoc($res);
+        $arr = $this->db->fetch_assoc($res);
         if ($single_return and $field != '*') {
             return $arr[$field];
         }
@@ -101,24 +107,25 @@ class PMF_User_UserData
      * and $value are arrays, all fields with the corresponding
      * values are updated. Changes are being stored in the database.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param mixed
-     * @param mixed
+     * @param  mixed $field Field(s)
+     * @param  mixed $value Value(s)
      * @return bool
      */
-    function set($field, $value = null)
+    public function set($field, $value = null)
     {
         // check input
-        if (!is_array($field))
+        if (!is_array($field)) {
             $field = array($field);
-        if (!is_array($value))
+        }
+        if (!is_array($value)) {
             $value = array($value);
-        if (count($field) != count($value))
+        }
+        if (count($field) != count($value)) {
             return false;
+        }
         // update data
         for ($i = 0; $i < count($field); $i++) {
-            $this->_data[$field[$i]] = $value[$i];
+            $this->data[$field[$i]] = $value[$i];
         }
         return $this->save();
     }
@@ -127,30 +134,34 @@ class PMF_User_UserData
      * Loads the user-data from the database and returns an
      * associative array with the fields and values.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param int
+     * @param  integer $user_id User ID
      * @return bool
      */
-    function load($user_id)
+    public function load($user_id)
     {
-        // check user-ID
-        $user_id = (int) $user_id;
-        if (($user_id <= 0) && ($user_id != -1))
+        $user_id = (int)$user_id;
+        if (($user_id <= 0) && ($user_id != -1)) {
             return false;
-        $this->_user_id = $user_id;
-        // load data
-        $res = $this->_db->query("
-          SELECT
-            last_modified, display_name, email
-          FROM
-            ".SQLPREFIX."faquserdata
-          WHERE
-            user_id = ".$this->_user_id
-        );
-        if ($this->_db->num_rows($res) != 1)
+        }
+        
+        $this->user_id = $user_id;
+        $select        = sprintf("
+            SELECT
+                last_modified, 
+                display_name, 
+                email
+            FROM
+                %sfaquserdata
+            WHERE
+                user_id = %d",
+            SQLPREFIX,
+            $this->user_id);
+            
+        $res = $this->db->query($select);
+        if ($this->db->num_rows($res) != 1) {
             return false;
-        $this->_data = $this->_db->fetch_assoc($res);
+        }
+        $this->data = $this->db->fetch_assoc($res);
         return true;
     }
 
@@ -158,29 +169,26 @@ class PMF_User_UserData
      * Saves the current user-data into the database.
      * Returns true on success, otherwise false.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
      * @return bool
      */
-    function save()
+    public function save()
     {
-        // update data
-        $query = sprintf(
-                    "UPDATE
-                        %sfaquserdata
-                    SET
-                        last_modified = '%s',
-                        display_name  = '%s',
-                        email         = '%s'
-                    WHERE
-                        user_id = %d",
-                    SQLPREFIX,
-                    date('YmdHis', $_SERVER['REQUEST_TIME']),
-                    $this->_data['display_name'],
-                    $this->_data['email'],
-                    $this->_user_id
-                    );
-        $res = $this->_db->query($query);
+        $update = sprintf("
+            UPDATE
+                %sfaquserdata
+            SET
+                last_modified = '%s',
+                display_name  = '%s',
+                email         = '%s'
+            WHERE
+                user_id = %d",
+            SQLPREFIX,
+            date('YmdHis', $_SERVER['REQUEST_TIME']),
+            $this->db->escape_string($this->data['display_name']),
+            $this->db->escape_string($this->data['email']),
+            $this->user_id);
+            
+        $res = $this->db->query($update);
         if (!$res) {
             return false;
         }
@@ -192,30 +200,28 @@ class PMF_User_UserData
      * Adds a new user entry for user-data in the database.
      * Returns true on success, otherwise false.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param int
+     * @param  integer $user_id User ID
      * @return bool
      */
-    function add($user_id)
+    public function add($user_id)
     {
-        // check user-ID
         $user_id = (int) $user_id;
-        if (($user_id <= 0) && ($user_id != -1))
+        if (($user_id <= 0) && ($user_id != -1)) {
             return false;
-        $this->_user_id = $user_id;
-        // add entry
-        $query = sprintf(
-                    "INSERT INTO
-                        %sfaquserdata
-                    (user_id, last_modified)
-                    VALUES
-                        (%d, '%s')",
-                    SQLPREFIX,
-                    $this->_user_id,
-                    date('YmdHis', $_SERVER['REQUEST_TIME'])
-                    );
-        $res = $this->_db->query($query);
+        }
+            
+        $this->user_id = $user_id;
+        $insert        = sprintf("
+            INSERT INTO
+                %sfaquserdata
+            (user_id, last_modified)
+                VALUES
+            (%d, '%s')",
+            SQLPREFIX,
+            $this->user_id,
+            date('YmdHis', $_SERVER['REQUEST_TIME']));
+            
+        $res = $this->db->query($insert);
         if (!$res) {
             return false;
         }
@@ -227,29 +233,31 @@ class PMF_User_UserData
      * Deletes the user-data entry for the given user-ID $user_id.
      * Returns true on success, otherwise false.
      *
-     * @access public
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     * @param int
+     * @param  integer $user_id User ID
      * @return bool
      */
-    function delete($user_id)
+    public function delete($user_id)
     {
-        // check user-ID
         $user_id = (int) $user_id;
-        if (($user_id <= 0) && ($user_id != -1))
+        if (($user_id <= 0) && ($user_id != -1)) {
             return false;
-        $this->_user_id = $user_id;
-        // delete entry
-        $res = $this->_db->query("
-          DELETE FROM
-            ".SQLPREFIX."faquserdata
-          WHERE
-            user_id = ".$this->_user_id
-        );
-        if (!$res)
+        }
+            
+        $this->user_id = $user_id;
+        $delete        = sprintf("
+            DELETE FROM
+                %sfaquserdata
+            WHERE
+                user_id = %d",
+            SQLP,
+            $this->user_id);
+        
+        $res = $this->db->query($delete);
+        if (!$res) {
             return false;
-        $this->_data = array();
+        }
+        $this->data = array();
         return true;
     }
 
-} /* end of class PMF_UserData */
+}
