@@ -37,9 +37,9 @@ if ($permission["passwd"]) {
         $user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
 		
         // Define the (Local/Current) Authentication Source
-        $_authSource = PMF_User_Auth::selectAuth($user->_auth_data['authSource']['name']);
-        $_authSource->selectEncType($user->_auth_data['encType']);
-        $_authSource->read_only($user->_auth_data['readOnly']);
+        $_authSource = PMF_User_Auth::selectAuth($user->auth_data['authSource']['name']);
+        $_authSource->selectEncType($user->auth_data['encType']);
+        $_authSource->read_only($user->auth_data['readOnly']);
         
         $opasswd = PMF_Filter::filterInput(INPUT_POST, 'opass', FILTER_SANITIZE_STRING);
         $npasswd = PMF_Filter::filterInput(INPUT_POST, 'npass', FILTER_SANITIZE_STRING);
