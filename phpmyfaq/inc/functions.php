@@ -550,8 +550,7 @@ function check4AddrMatch($ip, $network)
  */
 function IPCheck($ip)
 {
-    global $faqconfig;
-
+    $faqconfig = PMF_Configuration::getInstance();
     $bannedIPs = explode(' ', $faqconfig->get('main.bannedIPs'));
     
     foreach ($bannedIPs as $oneIPorNetwork) {
@@ -605,7 +604,7 @@ function getBannedWords()
  */
 function checkBannedWord($content)
 {
-    global $faqconfig;
+    $faqconfig = PMF_Configuration::getInstance();
 
     // Sanity checks
     $content = trim($content);
@@ -639,9 +638,8 @@ function checkBannedWord($content)
  */
 function printCaptchaFieldset($legend, $img, $length, $error = '')
 {
-    global $faqconfig;
-
-    $html = '';
+    $faqconfig = PMF_Configuration::getInstance();
+    $html      = '';
 
     if ($faqconfig->get('spam.enableCatpchaCode')) {
         $html = sprintf('<fieldset><legend>%s</legend>', $legend);
@@ -668,8 +666,9 @@ function printCaptchaFieldset($legend, $img, $length, $error = '')
  */
 function checkCaptchaCode()
 {
-    global $faqconfig, $captcha;
+    global $captcha;
 
+    $faqconfig = PMF_Configuration::getInstance();
     if ($faqconfig->get('spam.enableCatpchaCode')) {
         return (isset($_POST['captcha']) && ($captcha->validateCaptchaCode($_POST['captcha'])));
     } else {
@@ -1670,7 +1669,9 @@ function getShortUserName()
  */
 function getFullUserName()
 {
-    global $faqconfig, $ldap, $user;
+    global $ldap, $user;
+    
+    $faqconfig = PMF_Configuration::getInstance();
     if ($faqconfig->get('main.ldapSupport') && is_object($ldap)) {
         return $ldap->ldap_getCompleteName(getShortUserName());
     } elseif (!is_null($user)) {
@@ -1690,7 +1691,9 @@ function getFullUserName()
  */
 function getEmailAddress()
 {
-    global $faqconfig, $ldap, $user;
+    global $ldap, $user;
+    
+    $faqconfig = PMF_Configuration::getInstance();
     if ($faqconfig->get('main.ldapSupport') && is_object($ldap)) {
         return $ldap->ldap_getMail(getShortUserName());
     } elseif (!is_null($user)) {

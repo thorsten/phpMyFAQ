@@ -41,7 +41,9 @@ if (isset($_GET['conf']) && is_string($_GET['conf']) && isset($availableConfigMo
 
 function printInputFieldByType($key, $type)
 {
-    global $faqconfig, $PMF_LANG;
+    global $PMF_LANG;
+    
+    $faqconfig = PMF_Configuration::getInstance();
 
     switch($type) {
         case 'area':

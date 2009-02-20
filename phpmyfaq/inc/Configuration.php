@@ -33,6 +33,13 @@
 class PMF_Configuration
 {
     /**
+     * Instance
+     * 
+     * @var PMF_Configuration
+     */
+    private static $instance = null;
+    
+    /**
      * DB handle
      *
      * @var PMF_Db
@@ -52,11 +59,26 @@ class PMF_Configuration
      * @return void
      * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function __construct()
+    private function __construct()
     {
         $this->db = PMF_Db::getInstance();
     }
 
+    /**
+     * Returns the single instance
+     *
+     * @access static
+     * @return object
+     */
+    public static function getInstance()
+    {
+        if (null == self::$instance) {
+            $className = __CLASS__;
+            self::$instance = new $className();
+        }
+        return self::$instance;
+    }
+   
     /**
      * Fetches all configuration items into an array
      *

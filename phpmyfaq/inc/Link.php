@@ -226,7 +226,7 @@ class PMF_Link
 
     function hasModRewriteSupport()
     {
-        global $faqconfig;
+        $faqconfig = PMF_Configuration::getInstance();
         return $faqconfig->get('main.enableRewriteRules');
     }
 

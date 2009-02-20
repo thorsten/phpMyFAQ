@@ -423,7 +423,7 @@ class PMF_Linkverifier
 
     function openURL($url = "", $redirect = "", $redirectCount = 0)
     {
-        global $faqconfig, $PMF_LANG;
+        global $PMF_LANG;
 
         // If prequisites fail
         if ($this->isReady() == false) {

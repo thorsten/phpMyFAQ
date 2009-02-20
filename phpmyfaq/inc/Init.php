@@ -81,7 +81,7 @@ require_once PMF_INCLUDE_DIR.'/Linkverifier.php';
 //
 set_error_handler('pmf_error_handler');
 
-///
+//
 // Create a database connection
 //
 define('SQLPREFIX', $DB['prefix']);
@@ -91,7 +91,7 @@ $db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db']);
 //
 // Fetch the configuration
 //
-$faqconfig = new PMF_Configuration();
+$faqconfig = PMF_Configuration::getInstance();
 $faqconfig->getAll();
 $PMF_CONF = $faqconfig->config;
 
