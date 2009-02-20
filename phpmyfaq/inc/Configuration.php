@@ -93,7 +93,7 @@ class PMF_Configuration
         if (!isset($LANG_CONF)) {
             // Hack: avoid circular reference
             $PMF_CONF['main.maxAttachmentSize'] = 2048000;
-            require_once(dirname(dirname(__FILE__)).'/lang/language_en.php');
+            require_once dirname(dirname(__FILE__)) . '/lang/language_en.php';
         }
 
         $query = sprintf("
@@ -102,6 +102,7 @@ class PMF_Configuration
             FROM
                 %sfaqconfig",
             SQLPREFIX);
+            
         $result = $this->db->query($query);
         while ($row = $this->db->fetch_object($result)) {
             $this->config[$row->config_name] = $row->config_value;
@@ -143,7 +144,8 @@ class PMF_Configuration
         if (is_array($newconfig)) {
             foreach ($newconfig as $name => $value) {
                 if ($name != 'main.phpMyFAQToken') {
-                    $query = sprintf("
+                	
+                    $update = sprintf("
                         UPDATE
                             %sfaqconfig
                         SET
@@ -153,7 +155,8 @@ class PMF_Configuration
                         SQLPREFIX,
                         $this->db->escape_string(trim($value)),
                         $name);
-                    $this->db->query($query);
+                        
+                    $this->db->query($update);
                     if (isset($this->config[$name])) {
                         unset($this->config[$name]);
                     }
