@@ -88,12 +88,8 @@ class PMF_Comment
     /**
      * Returns a user comment
      *
-     * @param   integer     comment id
-     * @return  string
-     * @access  public
-     * @since   2006-07-13
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     * @param  integer $id comment id
+     * @return string
      */
     public function getCommentDataById($id)
     {
@@ -127,13 +123,9 @@ class PMF_Comment
     /**
      * Returns all user comments from a record by type
      *
-     * @param   integer     record id
-     * @param   integer     record type: {faq|news}
-     * @return  string
-     * @access  public
-     * @since   2002-08-29
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     * @param  integer $id   record id
+     * @param  integer $type record type: {faq|news}
+     * @return string
      */
     public function getCommentsData($id, $type)
     {
@@ -172,12 +164,9 @@ class PMF_Comment
     /**
      * Returns all user comments (HTML formatted) from a record by type
      *
-     * @param   integer     record id
-     * @param   integer     record type: {faq|news}
-     * @return  string
-     * @access  public
-     * @since   2002-08-29
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  integer $id   record id
+     * @param  integer $type record type: {faq|news}
+     * @return string
      */
     public function getComments($id, $type)
     {
@@ -200,13 +189,10 @@ class PMF_Comment
     /**
      * Adds a comment
      *
-     * @param   array       $commentData
-     * @return  boolean
-     * @access  public
-     * @since   2006-06-18
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  array $commentData Array with comment dara
+     * @return boolean
      */
-    function addComment($commentData)
+    function addComment(Array $commentData)
     {
         if (!is_array($commentData)) {
             return false;
@@ -237,12 +223,9 @@ class PMF_Comment
     /**
      * Deletes a comment
      *
-     * @param   integer     $record_id
-     * @param   integer     $comment_id
-     * @return  boolean
-     * @access  public
-     * @since   2006-06-18
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  integer $record_id  Record id
+     * @param  integer $comment_id Comment id
+     * @return boolean
      */
     public function deleteComment($record_id, $comment_id)
     {
@@ -256,7 +239,7 @@ class PMF_Comment
             WHERE
                 id = %d
             AND
-            id_comment = %d',
+                id_comment = %d',
             SQLPREFIX,
             $record_id,
             $comment_id);
@@ -273,8 +256,6 @@ class PMF_Comment
      *
      * @param  string $type Type of comment: faq or news
      * @return array
-     * @since  2007-02-11
-     * @author Thorsten Rinne <thorsten@rinne.info>
      */
     public function getNumberOfComments($type = self::COMMENT_TYPE_FAQ)
     {
@@ -306,11 +287,8 @@ class PMF_Comment
     /**
      * Returns all comments with their categories
      *
-     * @param   $type
-     * @return  array
-     * @access  public
-     * @since   2007-03-04
-     * @author  Thorsten Rinne <thorsten@rinne.info>
+     * @param  string $type Type of comment: faq or news
+     * @return array
      */
     public function getAllComments($type = self::COMMENT_TYPE_FAQ)
     {
