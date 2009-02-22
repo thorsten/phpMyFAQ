@@ -6,7 +6,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @since     2003-12-10
- * @copyright (c) 2003-2009 phpMyFAQ Team
+ * @copyright 2003-2009 phpMyFAQ Team
  * @version   SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License Version
