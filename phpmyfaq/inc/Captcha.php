@@ -2,14 +2,15 @@
 /**
  * The phpMyFAQ Captcha class
  *
- * @package   phpMyFAQ
- * @license   MPL
- * @author    Thomas Zeithaml <seo@annatom.de>
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
- * @since     2006-02-04
- * @copyright 2006-2008 phpMyFAQ Team
- * @version   CVS: $Id: Captcha.php,v 1.15 2008-05-22 11:22:59 thorstenr Exp $
+ * @package    phpMyFAQ
+ * @subpackage PMF_Captcha
+ * @license    MPL
+ * @author     Thomas Zeithaml <seo@annatom.de>
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @since      2006-02-04
+ * @copyright  2006-2008 phpMyFAQ Team
+ * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -25,14 +26,15 @@
 /**
  * PMF_Captcha
  *
- * @package   phpMyFAQ
- * @license   MPL
- * @author    Thomas Zeithaml <seo@annatom.de>
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
- * @since     2006-02-04
- * @copyright 2006-2008 phpMyFAQ Team
- * @version   CVS: $Id: Captcha.php,v 1.15 2008-05-22 11:22:59 thorstenr Exp $
+ * @package    phpMyFAQ
+ * @subpackage PMF_Captcha
+ * @license    MPL
+ * @author     Thomas Zeithaml <seo@annatom.de>
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @since      2006-02-04
+ * @copyright  2006-2008 phpMyFAQ Team
+ * @version    SVN: $Id$
  */
 class PMF_Captcha
 {
@@ -137,11 +139,9 @@ class PMF_Captcha
     /**
      * Constructor
      *
-     * @param   string  $sids
-     * @param   integer $caplength
+     * @param   string  $sids      Session ID
+     * @param   integer $caplength Length of captch code
      * @return  void
-     * @author  Thomas Zeithaml <seo@annatom.de>
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     public function __construct($sids, $caplength = 6)
     {
@@ -174,13 +174,8 @@ class PMF_Captcha
     /**
      * Gives the HTML output code for the Captcha
      *
-     * @param   string  The action parameter
+     * @param   string $action The action parameter
      * @return  string
-     * @access  public
-     * @since   2006-02-02
-     * @author  Thomas Zeithaml <info@spider-trap.de>
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      */
     public function printCaptcha($action)
     {
@@ -202,9 +197,6 @@ class PMF_Captcha
      * Draw the Captcha
      *
      * @return  void
-     * @access  public
-     * @since   2006-02-02
-     * @author  Thomas Zeithaml <info@spider-trap.de>
      */
     public function showCaptchaImg()
     {
@@ -229,9 +221,6 @@ class PMF_Captcha
      * Gets the Captcha from the DB
      *
      * @return  string
-     * @access  public
-     * @since   2006-02-02
-     * @author  Thomas Zeithaml <info@spider-trap.de>
      */
     public function getCaptchaCode()
     {
@@ -247,11 +236,8 @@ class PMF_Captcha
     /**
      * Validate the Captcha
      *
-     * @param   string $captchaCode
-     * @return  void
-     * @access  public
-     * @since   2006-02-18
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     * @param   string $captchaCode Captcha code
+     * @return  boolean
      */
     public function validateCaptchaCode($captchaCode)
     {
@@ -295,13 +281,10 @@ class PMF_Captcha
     //
 
     /**
-    * Draw random lines
-    *
-    * @return   img
-    * @access   private
-    * @since    2006-02-02
-    * @author   Thomas Zeithaml <info@spider-trap.de>
-    */
+     * Draw random lines
+     *
+     * @return resource
+     */
     private function drawlines()
     {
         $color1   = rand(150, 185);
@@ -336,11 +319,7 @@ class PMF_Captcha
     /**
      * Draw the Text
      *
-     * @return  img
-     * @access  private
-     * @since   2006-02-02
-     * @author  Thomas Zeithaml <info@spider-trap.de>
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     * @return resource
      */
     private function drawText()
     {
@@ -402,18 +381,20 @@ class PMF_Captcha
     /**
      * Create the background
      *
-     * @return  resource
-     * @access  private
-     * @since   2006-02-02
-     * @author  Thomas Zeithaml <info@spider-trap.de>
+     * @return resource
      */
     private function createBackground()
     {
-        $this->img = imagecreate($this->width, $this->height);
+        $this->img                   = imagecreate($this->width, $this->height);
         $this->_backgroundColor['r'] = rand(220, 255);
         $this->_backgroundColor['g'] = rand(220, 255);
         $this->_backgroundColor['b'] = rand(220, 255);
-        $colorallocate = imagecolorallocate($this->img, $this->_backgroundColor['r'], $this->_backgroundColor['g'], $this->_backgroundColor['b']);
+        
+        $colorallocate = imagecolorallocate($this->img, 
+                                            $this->_backgroundColor['r'], 
+                                            $this->_backgroundColor['g'], 
+                                            $this->_backgroundColor['b']);
+                                            
         imagefilledrectangle($this->img, 0, 0, $this->width, $this->height, $colorallocate);
         return $this->img;
     }
@@ -421,12 +402,8 @@ class PMF_Captcha
     /**
      * Generate a Captcha Code
      *
-     * @param   int $caplength
+     * @param   integer $caplength Length of captch code
      * @return  string
-     * @access  private
-     * @since   2006-02-02
-     * @author  Thomas Zeithaml <info@spider-trap.de>
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      */
     private function generateCaptchaCode($caplength)
     {
@@ -464,21 +441,41 @@ class PMF_Captcha
     /**
     * Save the Captcha
     *
-    * @return   bool
-    * @access   private
-    * @since    2006-02-02
-    * @author   Thomas Zeithaml <info@spider-trap.de>
-    * @author   Matteo Scaramuccia <matteo@scaramuccia.com>
+    * @return   boolean
     */
     private function saveCaptcha()
     {
-        if ($result = $this->db->query("SELECT id FROM ".SQLPREFIX."faqcaptcha WHERE id = '".$this->code."'")) {
+    	$select = sprintf("
+    	   SELECT 
+    	       id 
+    	   FROM 
+    	       %sfaqcaptcha 
+    	   WHERE 
+    	       id = '%s'",
+    	   SQLPREFIX,
+    	   $this->code);
+    	
+    	$result = $this->db->query($select);   
+    	
+        if ($result) {
             $num = $this->db->num_rows($result);
             if ($num > 0) {
                 return false;
             } else {
-                $query = sprintf("INSERT INTO %sfaqcaptcha (id, useragent, language, ip, captcha_time) VALUES ('%s', '%s', '%s', '%s', %d)", SQLPREFIX, $this->code, $this->userAgent, $this->language, $this->ip, $this->timestamp);
-                $this->db->query( $query );
+                $insert = sprintf("
+                    INSERT INTO 
+                        %sfaqcaptcha 
+                    (id, useragent, language, ip, captcha_time) 
+                        VALUES 
+                    ('%s', '%s', '%s', '%s', %d)", 
+                    SQLPREFIX, 
+                    $this->code, 
+                    $this->userAgent, 
+                    $this->language, 
+                    $this->ip, 
+                    $this->timestamp);
+                    
+                $this->db->query($insert);
                 return true;
             }
         }
@@ -489,10 +486,8 @@ class PMF_Captcha
     /**
      * Remove the Captcha
      *
-     * @return  void
-     * @access  private
-     * @since   2006-02-18
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     * @param  string $captchaCode Captch code
+     * @return void
      */
     private function removeCaptcha($captchaCode = null)
     {
@@ -511,28 +506,30 @@ class PMF_Captcha
      * and deleted upon a successful matching, so, on average, a record
      * in this table is probably related to a spam attack.
      *
-     * @param   int the time (sec) to define a captcha code old and ready to be deleted (default: 1 week)
-     * @return  void
-     * @access  private
-     * @since   2006-03-25
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     * @param  int $time The time (sec) to define a captcha code old and ready 
+     *                   to be deleted (default: 1 week)
+     * @return void
      */
     private function garbageCollector($time = 604800)
     {
-        $query = sprintf("DELETE FROM %sfaqcaptcha WHERE captcha_time < %d", SQLPREFIX, $_SERVER['REQUEST_TIME'] - $time);
+        $delete = sprintf("
+            DELETE FROM 
+                %sfaqcaptcha 
+            WHERE 
+                captcha_time < %d", 
+            SQLPREFIX, 
+            $_SERVER['REQUEST_TIME'] - $time);
+            
         $this->db->query($query);
     }
 
     /**
      * Get Fonts
      *
-     * @return  array
-     * @access  private
-     * @since   2006-02-02
-     * @author  Thomas Zeithaml <info@spider-trap.de>
+     * @return array
      */
     private function getFonts()
     {
-        return glob(dirname(dirname(__FILE__)).'/font/*.ttf');
+        return glob(dirname(dirname(__FILE__)) . '/font/*.ttf');
     }
 }
