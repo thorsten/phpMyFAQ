@@ -427,55 +427,6 @@ function makeISO8601Date($date, $phpmyfaq = true)
 }
 
 /**
- * Returns an array of country codes for a specific FAQ record ID, specific category ID
- * or all languages used by FAQ records , categories
- *
- * @param   integer
- * @param   string  specifies table
- * @return  array
- * @since   2003-03-17
- * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
- */
-function check4Language($id, $table='faqdata')
-{
-    global $db;
-    $output = array();
-
-    if (isset($id)) {
-       if ($id == 0) {
-          // get languages for all ids
-          $distinct = ' DISTINCT ';
-          $where = '';
-       }
-       else {
-          // get languages for specified id
-          $distinct = '';
-          $where = " WHERE id = ".$id;
-       }
-
-       $query = sprintf("
-           SELECT %s
-              lang
-           FROM
-               %s%s
-               %s",
-           $distinct,
-           SQLPREFIX,
-           $table,
-           $where);
-       $result = $db->query($query);
-
-       if ($db->num_rows($result) > 0) {
-           while ($row = $db->fetch_object($result)) {
-               $output[] = $row->lang;
-           }
-       }
-    }
-
-    return $output;
-}
-
-/**
  * safeEmail()
  *
  * If the email spam protection has been activated from the general PMF configuration
