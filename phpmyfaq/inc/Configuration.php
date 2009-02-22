@@ -68,7 +68,7 @@ class PMF_Configuration
      * Returns the single instance
      *
      * @access static
-     * @return object
+     * @return PMF_Configuration
      */
     public static function getInstance()
     {
