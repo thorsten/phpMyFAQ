@@ -87,7 +87,7 @@ class PMF_Faq
     *
     * @var  string
     */
-    var $pmf_lang;
+    private $pmf_lang;
 
     /**
     * The current FAQ record
@@ -133,7 +133,7 @@ class PMF_Faq
      */
     function __construct($user = null, $groups = null)
     {
-        global $PMF_LANG, $faqconfig;
+        global $PMF_LANG;
 
         $this->db       = PMF_Db::getInstance();
         $this->language = PMF_Init::$language;
@@ -149,6 +149,8 @@ class PMF_Faq
         } else {
             $this->groups = $groups;
         }
+        
+        $faqconfig = PMF_Configuration::getInstance();
         if ($faqconfig->get('main.permLevel') == 'medium') {
             $this->groupSupport = true;
         }
@@ -167,11 +169,10 @@ class PMF_Faq
      * @param  string  $orderby     Order by
      * @param  string  $sortby      Sorty by
      * @return array
-     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     public function getAllRecordPerCategory($category_id, $orderby = 'id', $sortby = 'ASC')
     {
-        global $sids, $PMF_CONF, $category;
+        global $sids;
 
         $faqdata = array();
 
@@ -297,18 +298,16 @@ class PMF_Faq
     /**
      * This function returns all not expired records from one category
      *
-     * @param   int     $category id
-     * @param   string  $orderby
-     * @param   string  $sortby
-     * @return  string
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2002-08-27
+     * @param  int     $category_id Category ID
+     * @param  string  $orderby     Order by
+     * @param  string  $sortby      Sorty by
+     * @return string
      */
-    function showAllRecords($category_id, $orderby = 'id', $sortby = 'ASC')
+    public function showAllRecords($category_id, $orderby = 'id', $sortby = 'ASC')
     {
-        global $sids, $PMF_CONF, $category;
+        global $sids, $category;
 
+        $faqconfig = PMF_Configuration::getInstance();
         $page = 1;
         $output = '';
 
@@ -395,12 +394,12 @@ class PMF_Faq
         $result = $this->db->query($query);
 
         $num = $this->db->num_rows($result);
-        $pages = ceil($num / $PMF_CONF["main.numberOfRecordsPerPage"]);
+        $pages = ceil($num / $faqconfig->get("main.numberOfRecordsPerPage"));
 
         if ($page == 1) {
             $first = 0;
         } else {
-            $first = ($page * $PMF_CONF["main.numberOfRecordsPerPage"]) - $PMF_CONF["main.numberOfRecordsPerPage"];
+            $first = ($page * $faqconfig->get("main.numberOfRecordsPerPage")) - $faqconfig->get("main.numberOfRecordsPerPage");
         }
 
         if ($num > 0) {
@@ -413,7 +412,7 @@ class PMF_Faq
             $output .= '<ul class="phpmyfaq_ul">';
             $counter = 0;
             $displayedCounter = 0;
-            while (($row = $this->db->fetch_object($result)) && $displayedCounter < $PMF_CONF['main.numberOfRecordsPerPage']) {
+            while (($row = $this->db->fetch_object($result)) && $displayedCounter < $faqconfig->get("main.numberOfRecordsPerPage")) {
                 $counter ++;
                 if ($counter <= $first) {
                     continue;
@@ -510,21 +509,19 @@ class PMF_Faq
     /**
      * This function returns all not expired records from the given record ids
      *
-     * @param   array   $record_ids
-     * @param   string  $orderby
-     * @param   string  $sortby
+     * @param   array   $record_ids Array of record ids
+     * @param   string  $orderby    Order by
+     * @param   string  $sortby     Sort by
      * @return  string
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since   2007-04-20
      */
-    function showAllRecordsByIds($record_ids, $orderby = 'id', $sortby = 'ASC')
+    public function showAllRecordsByIds(Array $record_ids, $orderby = 'id', $sortby = 'ASC')
     {
-        global $sids, $faqconfig, $category;
+        global $sids;
 
-        $records = implode(', ', $record_ids);
-        $page    = 1;
-        $output  = '';
+        $faqconfig = PMF_Configuration::getInstance();
+        $records   = implode(', ', $record_ids);
+        $page      = 1;
+        $output    = '';
 
         if (isset($_REQUEST['seite'])) {
             $page = (int)$_REQUEST['seite'];
@@ -692,14 +689,10 @@ class PMF_Faq
     /**
      * Returns an array with all data from a FAQ record
      *
-     * @param    integer    record id
-     * @param    integer    revision id
-     * @param    boolean    must be true if it is called by an admin/author context
-     * @return   void
-     * @access   public
-     * @since    2005-12-20
-     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @author   Matteo Scaramuccia <matteo@scaramuccia.com>
+     * @param  integer $record_id   Record id
+     * @param  integer $revision_id Revidion id
+     * @param  boolean $admin       must be true if it is called by an admin/author context
+     * @return void
      */
     function getRecord($id, $revision_id = null, $admin = false)
     {
@@ -808,14 +801,11 @@ class PMF_Faq
     /**
      * Adds a new record
      *
-     * @param    array    $data
-     * @param    boolean  $new_record
-     * @return   integer
-     * @access   public
-     * @since    2006-06-18
-     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  array   $data       Array of FAQ data
+     * @param  boolean $new_record New record?
+     * @return integer
      */
-    function addRecord($data, $new_record = true)
+    public function addRecord(Array $data, $new_record = true)
     {
         if (!is_array($data)) {
             return false;
@@ -858,13 +848,10 @@ class PMF_Faq
     /**
      * Updates a record
      *
-     * @param    array    $data
-     * @return   boolean
-     * @access   public
-     * @since    2006-06-18
-     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  array   $data Array of FAQ data
+     * @return boolean
      */
-    function updateRecord($data)
+    public function updateRecord(Array $data)
     {
         if (!is_array($data)) {
             return false;
@@ -916,14 +903,11 @@ class PMF_Faq
     /**
      * Deletes a record and all the dependencies
      *
-     * @param   integer $record_id
-     * @param   string  $record_lang
-     * @return  boolean
-     * @access  public
-     * @since   2006-11-04
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  integer $record_id   Record id
+     * @param  string  $record_lang Record language
+     * @return boolean
      */
-    function deleteRecord($record_id, $record_lang)
+    public function deleteRecord($record_id, $record_lang)
     {
         $queries = array(
             sprintf("DELETE FROM %sfaqchanges WHERE beitrag = %d AND lang = '%s'",
@@ -961,14 +945,11 @@ class PMF_Faq
     /**
      * Checks if a record is already translated
      *
-     * @param   integer $record_id
-     * @param   string  $record_lang
-     * @return  boolean
-     * @access  public
-     * @since   2006-11-04
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  integer $record_id   Record id
+     * @param  string  $record_lang Record language
+     * @return boolean
      */
-    function isAlreadyTranslated($record_id, $record_lang)
+    public function isAlreadyTranslated($record_id, $record_lang)
     {
         $query = sprintf("
             SELECT
@@ -1034,16 +1015,12 @@ class PMF_Faq
     /**
      * Adds new category relations to a record
      *
-     * @param   array   $categories
-     * @param   integer $record_id
-     * @param   string  $language
-     * @return  integer
-     * @access  public
-     * @since   2006-12-31
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     * @param  array   $categories Array of categories
+     * @param  integer $record_id  Record id
+     * @param  string  $language   Language
+     * @return integer
      */
-    function addCategoryRelations($categories, $record_id, $language)
+    public function addCategoryRelations(Array $categories, $record_id, $language)
     {
         if (!is_array($categories)) {
             return false;
@@ -1068,16 +1045,12 @@ class PMF_Faq
     /**
      * Adds new category relation to a record
      *
-     * @param   mixed   $categories
-     * @param   integer $record_id
-     * @param   string  $language
-     * @return  integer
-     * @access  public
-     * @since   2006-07-02
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     * @param  mixed   $categories Category or array of categories
+     * @param  integer $record_id  Record id
+     * @param  string  $language   Language
+     * @return boolean
      */
-    function addCategoryRelation($category, $record_id, $language)
+    public function addCategoryRelation($category, $record_id, $language)
     {
         // Just a fallback when (wrong case) $category is an array
         if (is_array($category)) {
@@ -1091,14 +1064,11 @@ class PMF_Faq
     /**
      * Deletes category relations to a record
      *
-     * @param    integer  $record_id
-     * @param    string   $language
-     * @return   integer
-     * @access   public
-     * @since    2006-11-01
-     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  integer $record_id Record id
+     * @param  string  $language  Language
+     * @return boolean
      */
-    function deleteCategoryRelations($record_id, $record_lang)
+    public function deleteCategoryRelations($record_id, $record_lang)
     {
         $query = sprintf("
             DELETE FROM
@@ -1116,16 +1086,11 @@ class PMF_Faq
     }
 
     /**
-    * getRecordBySolutionId()
-    *
-    * Returns an array with all data from a FAQ record
-    *
-    * @param    integer $solution_id
-    * @return   void
-    * @access   public
-    * @since    2005-12-20
-    * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-    */
+     * Returns an array with all data from a FAQ record
+     *
+     * @param  integer $solution_id Solution ID
+     * @return void
+     */
     function getRecordBySolutionId($solution_id)
     {
         $query = sprintf(
@@ -1185,12 +1150,10 @@ class PMF_Faq
     /**
      * Gets the record ID from a given solution ID
      *
-     * @param   integer
-     * @return  array
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  integer $solution_id Solution ID
+     * @return array
      */
-    function getIdFromSolutionId($solution_id)
+    public function getIdFromSolutionId($solution_id)
     {
         $query = sprintf(
             "SELECT
@@ -1214,13 +1177,11 @@ class PMF_Faq
     /**
      * Gets the latest solution id for a FAQ record
      *
-     * @return  integer
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @return integer
      */
-    function getSolutionId()
+    public function getSolutionId()
     {
-        $latest_id = 0;
+        $latest_id        = 0;
         $next_solution_id = 0;
 
         $query = sprintf('
@@ -1247,13 +1208,10 @@ class PMF_Faq
     /**
      * Returns an array with all data from all FAQ records
      *
-     * @param   integer $sortType
-     * @param   array   $condition
-     * @param   string  $sortOrder
-     * @return  void
-     * @access  public
-     * @since   2005-12-26
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  integer $sortType  Sorting type
+     * @param  array   $condition Condition
+     * @param  string  $sortOrder Sorting order
+     * @return void
      */
     function getAllRecords($sortType = FAQ_SORTING_TYPE_CATID_FAQID, $condition = null, $sortOrder = 'ASC')
     {
@@ -1379,13 +1337,11 @@ class PMF_Faq
     /**
      * Returns the FAQ record title from the ID and language
      *
-     * @param   integer     record id
-     * @param   bool        Fix html special chars? (default, true)
-     * @return  string
-     * @since   2002-08-28
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  integer $id     Record id
+     * @param  bool    $encode Fix html special chars? (default, true)
+     * @return string
      */
-    function getRecordTitle($id, $encode = true)
+    public function getRecordTitle($id, $encode = true)
     {
         if (isset($this->faqRecord['id']) && ($this->faqRecord['id'] == $id)) {
             return ($encode ? PMF_htmlentities($this->faqRecord['title'], ENT_QUOTES, $this->pmf_lang['metaCharset']) : $this->faqRecord['title']);
@@ -1422,14 +1378,11 @@ class PMF_Faq
     /**
      * Gets all revisions from a given record ID
      *
-     * @param    integer    $record_id
-     * @param    string     $record_lang
-     * @return   array
-     * @access   public
-     * @since    2006-07-24
-     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  integer $record_id   Record id
+     * @param  string  $record_lang Record language
+     * @return array
      */
-    function getRevisionIds($record_id, $record_lang)
+    public function getRevisionIds($record_id, $record_lang)
     {
         $revision_data = array();
 
@@ -1453,9 +1406,9 @@ class PMF_Faq
         if ($this->db->num_rows($result) > 0) {
             while ($row = $this->db->fetch_object($result)) {
                 $revision_data[] = array(
-                    'revision_id'   => $row->revision_id,
-                    'datum'         => $row->datum,
-                    'author'        => $row->author);
+                    'revision_id' => $row->revision_id,
+                    'datum'       => $row->datum,
+                    'author'      => $row->author);
             }
         }
 
@@ -1465,14 +1418,11 @@ class PMF_Faq
     /**
      * Adds a new revision from a given record ID
      *
-     * @param    integer    $record_id
-     * @param    string     $record_lang
-     * @return   array
-     * @access   public
-     * @since    2006-07-24
-     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  integer $record_id   Record id
+     * @param  string  $record_lang Record language
+     * @return array
      */
-    function addNewRevision($record_id, $record_lang)
+    public function addNewRevision($record_id, $record_lang)
     {
         $query = sprintf("
             INSERT INTO
@@ -1496,12 +1446,10 @@ class PMF_Faq
     /**
      * Returns the keywords of a FAQ record from the ID and language
      *
-     * @param   integer     record id
-     * @return  string
-     * @since   2005-11-30
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  integer $id record id
+     * @return string
      */
-    function getRecordKeywords($id)
+    public function getRecordKeywords($id)
     {
         if (isset($this->faqRecord['id']) && ($this->faqRecord['id'] == $id)) {
             return $this->faqRecord['keywords'];
@@ -1531,18 +1479,15 @@ class PMF_Faq
      * Returns the number of activated and not expired records, optionally
      * not limited to the current language
      *
-     * @param   string
-     * @return  int
-     * @access  public
-     * @since   2002-08-23
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  string $language Language
+     * @return int
      */
     function getNumberOfRecords($language = null)
     {
         $now = date('YmdHis');
 
-        $query = sprintf(
-            "SELECT
+        $query = sprintf("
+            SELECT
                 id
             FROM
                 %sfaqdata
@@ -1570,12 +1515,8 @@ class PMF_Faq
     /**
      * Counting the views of a FAQ record
      *
-     * @param   integer     id
+     * @param   integer $id id
      * @return  void
-     * @access  public
-     * @since   2001-02-15
-     * @auhtor  Bastian P�ttner <bastian@poettner.net>
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     function logViews($id)
     {
@@ -1603,41 +1544,6 @@ class PMF_Faq
         } else {
             $this->updateVisit($id);
         }
-    }
-
-    /**
-     * Calculates the rating of the user votings
-     *
-     * @param   integer    $id
-     * @return  string
-     * @access  public
-     * @since   2002-08-29
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     */
-    function getVotingResult($id)
-    {
-        $query = sprintf(
-            'SELECT
-                (vote/usr) as voting, usr
-            FROM
-                %sfaqvoting
-            WHERE
-                artikel = %d',
-            SQLPREFIX,
-            $id);
-       $result = $this->db->query($query);
-       if ($this->db->num_rows($result) > 0) {
-            $row = $this->db->fetch_object($result);
-            return sprintf(' %s %s 5 (%d %s)',
-                round($row->voting, 2),
-                $this->pmf_lang['msgVoteFrom'],
-                $row->usr,
-                $this->pmf_lang['msgVotings']);
-       } else {
-            return sprintf(' 0 %s 5 (0 %s)',
-                $this->pmf_lang['msgVoteFrom'],
-                $this->pmf_lang['msgVotings']);
-       }
     }
 
     /**

@@ -44,6 +44,13 @@ class PMF_Rating
     private $type;
 
     /**
+     * Language strings
+     *
+     * @var  string
+     */
+    private $pmf_lang;
+    
+    /**
      * Constructor
      *
      * @since   2007-03-31
@@ -51,11 +58,12 @@ class PMF_Rating
      */
     function __construct()
     {
-        global $DB;
+        global $DB, $PMF_LANG;
 
         $this->db       = PMF_Db::getInstance();
         $this->language = PMF_Init::$language;
         $this->type     = $DB['type'];
+        $this->pmf_lang = $PMF_LANG;
     }
 
     /**
@@ -159,5 +167,40 @@ class PMF_Rating
         }
 
         return $ratings;
+    }
+
+    /**
+     * Calculates the rating of the user votings
+     *
+     * @param   integer    $id
+     * @return  string
+     * @access  public
+     * @since   2002-08-29
+     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     */
+    function getVotingResult($id)
+    {
+        $query = sprintf(
+            'SELECT
+                (vote/usr) as voting, usr
+            FROM
+                %sfaqvoting
+            WHERE
+                artikel = %d',
+            SQLPREFIX,
+            $id);
+       $result = $this->db->query($query);
+       if ($this->db->num_rows($result) > 0) {
+            $row = $this->db->fetch_object($result);
+            return sprintf(' %s %s 5 (%d %s)',
+                round($row->voting, 2),
+                $this->pmf_lang['msgVoteFrom'],
+                $row->usr,
+                $this->pmf_lang['msgVotings']);
+       } else {
+            return sprintf(' 0 %s 5 (0 %s)',
+                $this->pmf_lang['msgVoteFrom'],
+                $this->pmf_lang['msgVotings']);
+       }
     }
 }
