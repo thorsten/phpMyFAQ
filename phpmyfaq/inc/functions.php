@@ -428,22 +428,17 @@ function makeISO8601Date($date, $phpmyfaq = true)
 }
 
 /**
- * safeEmail()
- *
  * If the email spam protection has been activated from the general PMF configuration
  * this function converts an email address e.g. from "user@example.org" to "user_AT_example_DOT_org"
  * Otherwise it will return the plain email address.
  *
- * @param   string
- * @return  string
- * @since   2003-04-17
- * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @param  string $email E-mail address
+ * @return string
  */
 function safeEmail($email)
 {
-    global $PMF_CONF;
-
-    if (isset($PMF_CONF['spam.enableSafeEmail']) && $PMF_CONF['spam.enableSafeEmail']) {
+    $faqconfig = PMF_Configuration::getInstance();
+    if ($faqconfig->get('spam.enableSafeEmail')) {
         return str_replace(array('@', '.'), array('_AT_', '_DOT_'), $email);
     } else {
         return $email;
@@ -514,8 +509,6 @@ function IPCheck($ip)
 }
 
 /**
- * getBannedWords()
- *
  * This function returns the banned words dictionary as an array.
  *
  * @return  array
@@ -541,8 +534,6 @@ function getBannedWords()
 }
 
 /**
- * checkBannedWord()
- *
  * This function checks the content against a dab word list
  * if the banned word spam protection has been activated from the general PMF configuration.
  *
@@ -714,19 +705,17 @@ function wait($usecs)
  * These are the numbers of unique users who have perfomed
  * some activities within the last five minutes
  *
- * @param   integer     Optionally set the time window size in sec. Default: 300sec, 5 minutes
- * @return  array
- * @access  public
- * @since   2004-07-17
- * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author  Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @param  integer $activityTimeWindow Optionally set the time window size in sec. 
+ *                                     Default: 300sec, 5 minutes
+ * @return array
  */
 function getUsersOnline($activityTimeWindow = 300)
 {
-    global $db, $PMF_CONF;
-    $users = array(0 ,0);
+    $users     = array(0 ,0);
+    $faqconfig = PMF_Configuration::getInstance();
+    $db        = PMF_Db::getInstance();
 
-    if (isset($PMF_CONF['main.enableUserTracking']) && $PMF_CONF['main.enableUserTracking']) {
+    if ($faqconfig->get('main.enableUserTracking')) {
         $timeNow = ($_SERVER['REQUEST_TIME'] - $activityTimeWindow);
         // Count all sids within the time window
         // TODO: add a new field in faqsessions in order to find out only sids of anonymous users
@@ -739,7 +728,7 @@ function getUsersOnline($activityTimeWindow = 300)
                             user_id = -1
                         AND time > ".$timeNow);
         if (isset($result)) {
-            $row = $db->fetch_object($result);
+            $row      = $db->fetch_object($result);
             $users[0] = $row->anonymous_users;
         }
         // Count all faquser records within the time window
@@ -751,7 +740,7 @@ function getUsersOnline($activityTimeWindow = 300)
                     WHERE
                         session_timestamp > ".$timeNow);
         if (isset($result)) {
-            $row = $db->fetch_object($result);
+            $row      = $db->fetch_object($result);
             $users[1] = $row->registered_users;
         }
     }
