@@ -129,11 +129,10 @@ class PMF_Category
     /**
      * Constructor
      *
-     * @param   integer $user     User
-     * @param   array   $groups   Group
-     * @param   boolean $withperm With or without permission check
-     * @return  void
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  integer $user     User
+     * @param  array   $groups   Group
+     * @param  boolean $withperm With or without permission check
+     * @return void
      */
     public function __construct($user = null, $groups = null, $withperm = true)
     {
@@ -152,7 +151,7 @@ class PMF_Category
             $this->groups = $groups;
         }
 
-        $this->lineTab    = $this->getOrderedCategories($withperm);
+        $this->lineTab = $this->getOrderedCategories($withperm);
         for ($i = 0; $i < count($this->lineTab); $i++) {
             $this->lineTab[$i]['level'] = $this->levelOf($this->lineTab[$i]['id']);
         }
@@ -162,10 +161,8 @@ class PMF_Category
      * Returns all categories with ordered category IDs according to the user
      * and group permissions
      *
-     * @param   boolean $withperm
-     * @return  array
-     * @access  private
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  boolean $withperm With or without permission check
+     * @return array
      */
     private function getOrderedCategories($withperm = true)
     {
@@ -230,26 +227,25 @@ class PMF_Category
     /**
      * Gets the main categories and write them in an array
      *
-     * @param   integer $cat
-     * @param   boolean
-     * @return  array
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  array   $cat       Array of parent category ids
+     * @param  boolean $parent_id Only top level categories?
+     * @return array
      */
-    public function getCategories($cat, $parent_id = true)
+    public function getCategories(Array $categories, $parent_id = true)
     {
         $_query = '';
-        $query = sprintf('
+        $query  = sprintf('
             SELECT
                 id, lang, parent_id, name, description, user_id
             FROM
                 %sfaqcategories
             WHERE ',
             SQLPREFIX);
+            
         if (true == $parent_id) {
             $query .= 'parent_id = 0';
         }
-        foreach (explode(';', $cat) as $cats) {
+        foreach (explode(';', $categories) as $cats) {
             $_query .= ' OR parent_id = '.$cats;
         }
         if (false == $parent_id && 0 < strlen($_query)) {
@@ -269,9 +265,7 @@ class PMF_Category
     /**
      * Gets all categories and write them in an array
      *
-     * @return  array
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @return array
      */
     public function getAllCategories()
     {
@@ -294,11 +288,9 @@ class PMF_Category
     /**
      * Builds the category tree
      *
-     * @param  integer $id_parent
-     * @param  integer $indent
+     * @param  integer $id_parent Parent id
+     * @param  integer $indent    Indention
      * @return void
-     * @access public
-     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     public function buildTree($id_parent = 0, $indent = 0)
     {
@@ -329,9 +321,8 @@ class PMF_Category
     /**
      * Get the level of the item id
      *
-     * @param  integer $id
+     * @param  integer $id Category id
      * @return integer
-     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     private function levelOf($id)
     {
@@ -353,10 +344,8 @@ class PMF_Category
     /**
      * Get the line number where to find the node $id
      *
-     * @param  integer $id
+     * @param  integer $id Category id
      * @return integer
-     * @access private
-     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     private function getLine($id)
     {
@@ -371,11 +360,8 @@ class PMF_Category
      * Transforms the linear array in a 1D array in the order of the tree, with
      * the info
      *
-     * @param  integer $id
+     * @param  integer $id Category id
      * @return void
-     * @access public
-     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @since  2004-02-16
      */
     public function transform($id)
     {
@@ -411,7 +397,15 @@ class PMF_Category
         }
 
         if ($id > 0) {
-            $this->treeTab[] = array('id' => $id, 'symbol' => $symbol, 'name' => $thisName, 'numChilds' => count($tabs), 'level' => $thisLevel, 'parent_id' => $thisParent_id, 'childs' => $tabs, 'tree' => $tree, 'description' => $thisdescription);
+            $this->treeTab[] = array('id'          => $id, 
+                                     'symbol'      => $symbol, 
+                                     'name'        => $thisName, 
+                                     'numChilds'   => count($tabs), 
+                                     'level'       => $thisLevel, 
+                                     'parent_id'   => $thisParent_id, 
+                                     'childs'      => $tabs, 
+                                     'tree'        => $tree, 
+                                     'description' => $thisdescription);
         }
 
         foreach ($tabs as $i ) {
@@ -422,10 +416,8 @@ class PMF_Category
     /**
      * Get the line number where to find the node $id in the category tree
      *
-     * @param  integer $id
+     * @param  integer $id Category id
      * @return intger
-     * @access private
-     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     private function getLineCategory($id)
     {
@@ -440,7 +432,7 @@ class PMF_Category
     /**
      * List in a array of the $id of the child
      *
-     * @param  integer $id
+     * @param  integer $id Category id
      * @return array
      * @access public
      * @author Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -453,7 +445,7 @@ class PMF_Category
     /**
      * list in a array of the $id of the child
      *
-     * @param  integer $id ID
+     * @param  integer $id Category id
      * @return array
      */
     public function getChildNodes($id)
@@ -467,13 +459,13 @@ class PMF_Category
             }
         }
 
-        return($childs);
+        return $childs;
     }
 
     /**
      * number of childs of the $id
      *
-     * @param  integer $id ID
+     * @param  integer $id Category id
      * @return integer
      */
     private function numChilds($id)
@@ -481,7 +473,12 @@ class PMF_Category
         return count($this->getNodes($id));
     }
 
-    // list in array the root, super-root, ... of the $id
+    /**
+     * List in array the root, super-root, ... of the $id
+     * 
+     * @param  integer $id Category id
+     * @return array
+     */
     private function getNodes($id)
     {
         if (($id > 0) && (isset($this->categoryName[$id]['level']))) {
@@ -495,7 +492,11 @@ class PMF_Category
         }
     }
 
-    // collapse the complete category tree
+    /**
+     * Collapse the complete category tree
+     * 
+     * @return void
+     */
     public function collapseAll()
     {
         for ($i = 0; $i < count($this->treeTab); $i++) {
@@ -505,7 +506,12 @@ class PMF_Category
         }
     }
 
-    // expand the node $id
+    /**
+     * expand the node $id
+     *
+     * @param  integer $id Category id
+     * @return void
+     */
     public function expand($id)
     {
         $this->treeTab[$this->getLineCategory($id)]["symbol"] = "minus";
@@ -530,7 +536,11 @@ class PMF_Category
         }
     }
 
-    // expand the entire tree
+    /**
+     * expand the entire tree
+     * 
+     * @return void
+     */
     public function expandAll()
     {
         for ($i = 0; $i < count($this->treeTab); $i++) {
@@ -540,7 +550,11 @@ class PMF_Category
         }
     }
 
-    // total height of the expanded tree
+    /**
+     *  total height of the expanded tree
+     * 
+     * @return integer
+     */
     private function height()
     {
         return count($this->treeTab);
@@ -549,9 +563,7 @@ class PMF_Category
     /**
     * print the static tree with the number of records
     *
-    * @return   string
-    * @access   public
-    * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+    * @return string
     */
     public function viewTree()
     {
@@ -560,35 +572,29 @@ class PMF_Category
 
         $query = sprintf("
             SELECT
-                %sfaqcategoryrelations.category_id AS category_id,
-                count(%sfaqcategoryrelations.category_id) AS number
+                fcr.category_id AS category_id,
+                count(fcr.category_id) AS number
             FROM
-                %sfaqcategoryrelations,
-                %sfaqdata
+                %sfaqcategoryrelations fcr,
+                %sfaqdata fd
             WHERE
-                %sfaqcategoryrelations.record_id = %sfaqdata.id
+                fcr.record_id = fd.id
             AND
-                %sfaqcategoryrelations.record_lang = %sfaqdata.lang",
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
-            SQLPREFIX,
+                fcr.record_lang = fd.lang",
             SQLPREFIX,
             SQLPREFIX);
 
         if (strlen($this->language) > 0) {
-            $query .= sprintf(" AND %sfaqdata.lang = '%s'",
+            $query .= sprintf(" AND fd.lang = '%s'",
                 SQLPREFIX,
                 $this->language);
         }
 
         $query .= sprintf("
             AND
-                %sfaqdata.active = 'yes'
+                fd.active = 'yes'
             GROUP BY
-                %sfaqcategoryrelations.category_id",
+                fcr.category_id",
             SQLPREFIX,
             SQLPREFIX);
         $result = $this->db->query($query);
@@ -679,10 +685,8 @@ class PMF_Category
      * Returns the three parts of a line to display: last part of tree,
      * category name, and id of the root node
      *
-     * @param     integer
-     * @return    array
-     * @access    private
-     * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  integer $y ID
+     * @return array
      */
     private function getLineDisplay($y)
     {
@@ -697,10 +701,8 @@ class PMF_Category
      * Gets the next line in the array treeTab, depending of the
      * collapse/expand node
      *
-     * @param     integer
-     * @return    integer
-     * @access    private
-     * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  integer $l Current line
+     * @return integer
      */
     private function getNextLineTree($l)
     {
@@ -719,29 +721,27 @@ class PMF_Category
     /**
      * Gets the list of the brothers of $id (include $id)
      *
-     * @param   integer
-     * @return  array
-     * @access  private
+     * @param  integer $id Brothers
+     * @return array
      */
     private function getBrothers($id)
     {
-        $ret = $this->getChildren($this->categoryName[$id]['parent_id']);
-        return $ret;
+        return $this->getChildren($this->categoryName[$id]['parent_id']);
     }
 
     /**
      * Get all categories in <option> tags
      *
-     * @param   mixed
-     * @return  string
-     * @access  public
+     * @param  mixed $catID Category id or array of category ids
+     * @return string
      */
     public function printCategoryOptions($catID = "")
     {
         $categories = '';
 
         if (!is_array($catID)) {
-            $catID = array(array('category_id' => $catID, 'category_lang' => ''));
+            $catID = array(array('category_id'   => $catID, 
+                                 'category_lang' => ''));
         }
 
         $i = 0;
@@ -770,12 +770,11 @@ class PMF_Category
     }
 
     /**
-    * Get all categories in a unordered list
-    *
-    * @param    mixed
-    * @return   string
-    * @access   public
-    */
+     * Get all categories in a unordered list
+     *
+     * @param  mixed $catID Category id or array of category ids
+     * @return string
+     */
     public function printCategoryList($catID = "")
     {
         $categories = '<ul>';
@@ -801,16 +800,14 @@ class PMF_Category
     /**
     * Displays the main navigation
     *
-    * @param    int
-    * @return   string
-    * @access   public
-    * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+    * @param  integer $activeCat Selected category
+    * @return string
     */
     public function printCategories($activeCat = 0)
     {
-        global $sids, $PMF_LANG, $PMF_CONF;
+        global $sids, $PMF_LANG;
 
-        $open = 0;
+        $open   = 0;
         $output = '';
 
         if ($this->height() > 0) {
@@ -879,19 +876,16 @@ class PMF_Category
     /**
      * Private method to create a category link
      *
-     * @param   string  $sids
-     * @param   integer $parent
-     * @param   string  $categoryName
-     * @param   string  $description
-     * @param   boolean $hasChildren
+     * @param   string  $sids         Session id
+     * @param   integer $parent       Parent category
+     * @param   string  $categoryName Category name
+     * @param   string  $description  Description
+     * @param   boolean $hasChildren  Child categories available
      * @return  string
-     * @access  private
-     * @since   2007-02-10
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     private function addCategoryLink($sids, $parent, $categoryName, $description, $hasChildren = false)
     {
-        $url = sprintf('%saction=show&amp;cat=%d', $sids, $parent);
+        $url   = sprintf('%saction=show&amp;cat=%d', $sids, $parent);
         $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
         $oLink->itemTitle = $categoryName;
         $oLink->text = $categoryName;
@@ -906,34 +900,29 @@ class PMF_Category
     /**
      * Gets the path from root to child as breadcrumb
      *
-     * @param   integer $id
-     * @param   string  $separator
-     * @param   bool    $showlinks
-     * @return  string
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  integer $id        Category id
+     * @param  string  $separator Path separator
+     * @param  bool    $showlinks Show links?
+     * @return string
      */
     public function getPath($id, $separator = ' &raquo; ', $showlinks = false)
     {
-        global $sids, $PMF_CONF;
+        global $sids;
 
         $ids = $this->getNodes($id);
         $num = count($ids);
 
-        $temp = array();
-        $catid = array();
-        $desc = array();
-        $breadcrumb = array();
+        $temp = $catid = $desc = $breadcrumb = array();
 
         for ($i = 0; $i < $num; $i++) {
-            $temp[] = $this->treeTab[$this->getLineCategory($ids[$i])]['name'];
+            $temp[]  = $this->treeTab[$this->getLineCategory($ids[$i])]['name'];
             $catid[] = $this->treeTab[$this->getLineCategory($ids[$i])]['id'];
-            $desc[] = $this->treeTab[$this->getLineCategory($ids[$i])]['description'];
+            $desc[]  = $this->treeTab[$this->getLineCategory($ids[$i])]['description'];
         }
         if (isset($this->treeTab[$this->getLineCategory($id)]['name'])) {
-            $temp[] = $this->treeTab[$this->getLineCategory($id)]['name'];
+            $temp[]  = $this->treeTab[$this->getLineCategory($id)]['name'];
             $catid[] = $this->treeTab[$this->getLineCategory($id)]['id'];
-            $desc[] = $this->treeTab[$this->getLineCategory($id)]['description'];
+            $desc[]  = $this->treeTab[$this->getLineCategory($id)]['description'];
         }
 
         foreach ($temp as $k => $category) {
@@ -941,11 +930,11 @@ class PMF_Category
                         $sids,
                         $catid[$k]
                     );
-            $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+            $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
             $oLink->itemTitle = $category;
-            $oLink->text = $category;
-            $oLink->tooltip = $desc[$k];
-            $breadcrumb[] = $oLink->toHtmlAnchor();
+            $oLink->text      = $category;
+            $oLink->tooltip   = $desc[$k];
+            $breadcrumb[]     = $oLink->toHtmlAnchor();
         }
 
         if ($showlinks) {
@@ -958,12 +947,9 @@ class PMF_Category
     /**
      * Returns the categories from a record id and language
      *
-     * @param   integer $record_id
-     * @param   integer $record_lang
-     * @return  array
-     * @access  public
-     * @since   2006-11-12
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  integer $record_id   record id
+     * @param  integer $record_lang record language
+     * @return array
      */
     public function getCategoryRelationsFromArticle($record_id, $record_lang)
     {
@@ -981,10 +967,11 @@ class PMF_Category
             SQLPREFIX,
             $record_id,
             $record_lang);
+            
         $result = $this->db->query($query);
         while ($row = $this->db->fetch_object($result)) {
             $categories[] = array(
-                'category_id' => $row->category_id,
+                'category_id'   => $row->category_id,
                 'category_lang' => $row->category_lang);
         }
 
@@ -997,10 +984,8 @@ class PMF_Category
      * of associative arrays with the keys 'name', 'id', 'lang',
      * 'parent_id' and 'description'.
      *
-     * @access  public
-     * @param   integer   $article_id
-     * @return  array   array(array('name'=>string,'id'=>int,'lang'=>string,'parent_id'=>int,'description'=>string),...)
-     * @author  Lars Tiedemann <larstiedemann@yahoo.de>
+     * @param   integer $article_id Record id
+     * @return  array   
      */
     public function getCategoriesFromArticle($article_id)
     {
@@ -1008,30 +993,30 @@ class PMF_Category
         $cat = SQLPREFIX."faqcategories";
         $query = sprintf("
             SELECT
-                %s.id AS id,
-                %s.lang AS lang,
-                %s.parent_id AS parent_id,
-                %s.name AS name,
-                %s.description AS description
+                fc.id AS id,
+                fc.lang AS lang,
+                fc.parent_id AS parent_id,
+                fc.name AS name,
+                fc.description AS description
             FROM
-                %s,
-                %s
+                %sfaqcategoryrelations fcr,
+                %sfaqcategories fc
             WHERE
-                %s.id = %s.category_id
+                fcr.id = fc.category_id
             AND
-                %s.record_id = %d
+                fcr.record_id = %d
             AND
-                %s.category_lang = '%s'
+                fcr.category_lang = '%s'
             AND
-                %s.lang = '%s'",
-            $cat, $cat, $cat, $cat, $cat,
-            $rel, $cat,
-            $cat, $rel,
-            $rel, $article_id,
-            $rel, $this->language,
-            $cat, $this->language);
+                fc.lang = '%s'",
+            SQLPREFIX, 
+            SQLPREFIX,
+            $article_id,
+            $this->language,
+            $this->language);
+            
         $result = $this->db->query($query);
-        $num = $this->db->num_rows($result);
+        $num    = $this->db->num_rows($result);
         $this->categories = array();
         if ($num > 0) {
             while ($row = $this->db->fetch_assoc($result)) {
@@ -1042,40 +1027,32 @@ class PMF_Category
     }
 
     /**
-    * getCategoryIdFromArticle
-    *
-    * Returns the ID of a category that associated with the given article.
-    *
-    * @access   public
-    * @param    integer    $article_id
-    * @return   integer
-    * @author   Lars Tiedemann <larstiedemann@yahoo.de>
-    */
+     * Returns the ID of a category that associated with the given article.
+     *
+     * @param  integer $article_id Record id
+     * @return integer
+     */
     public function getCategoryIdFromArticle($article_id)
     {
         $cats = $this->getCategoryIdsFromArticle($article_id);
         if (isset($cats[0])) {
             return $cats[0];
         } else {
-            return null;
+            return 0;
         }
     }
 
     /**
-    * getCategoryIdsFromArticle
-    *
-    * Returns an array with the IDs of all categories that are associated with
-    * the given article.
-    *
-    * @access   public
-    * @param    integer   $article_id
-    * @return   array
-    * @author   Lars Tiedemann <larstiedemann@yahoo.de>
-    */
+     * Returns an array with the IDs of all categories that are associated with
+     * the given article.
+     *
+     * @param  integer $article_id Record id
+     * @return array
+     */
     public function getCategoryIdsFromArticle($article_id)
     {
         $cats = $this->getCategoriesFromArticle($article_id);
-        $arr = array();
+        $arr  = array();
         foreach ($cats as $cat) {
             $arr[] = $cat['id'];
         }
@@ -1085,10 +1062,8 @@ class PMF_Category
     /**
      * Returns the admin user of the selected category
      *
-     * @param   integer $category_id
-     * @return  integer $user_id
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param   integer $category_id Category id
+     * @return  integer
      * @todo    Return the name, not the ID
      */
     public function getCategoryUser($category_id)
@@ -1099,14 +1074,12 @@ class PMF_Category
     /**
      * Adds a new category entry
      *
-     * @param   array   $category_data
-     * @param   integer $parent_id
-     * @param   integer $id
-     * @return  integer
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  array   $category_data Array of category data
+     * @param  integer $parent_id     Parent id
+     * @param  integer $id            Category id
+     * @return integer
      */
-    public function addCategory($category_data, $parent_id = 0, $id = null)
+    public function addCategory(Array $category_data, $parent_id = 0, $id = null)
     {
         if (!is_array($category_data)) {
             return false;
@@ -1138,12 +1111,10 @@ class PMF_Category
     /**
      * Updates an existent category entry
      *
-     * @param   array   $category_data
-     * @return  boolean
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  array   $category_data Array of category data
+     * @return boolean
      */
-    public function updateCategory($category_data)
+    public function updateCategory(Array $category_data)
     {
         if (!is_array($category_data)) {
             return false;
@@ -1174,12 +1145,9 @@ class PMF_Category
     /**
      * Move the categories ownership, if any.
      *
-     * @param   integer $from
-     * @param   integer $to
-     * @return  boolean
-     * @access  public
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
-     * @since   2006-08-20
+     * @param  integer $from Old user id
+     * @param  integer $to   New user id
+     * @return boolean
      */
     public function moveOwnership($from, $to)
     {
@@ -1206,11 +1174,9 @@ class PMF_Category
     /**
      * Checks wether a language is already defined for a category id
      *
-     * @param   integer $category_id
-     * @param   string  $category_lang
-     * @return  boolean
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  integer $category_id   Category id
+     * @param  string  $category_lang Category language
+     * @return boolean
      */
     public function checkLanguage($category_id, $category_lang)
     {
@@ -1234,23 +1200,21 @@ class PMF_Category
     /**
      * Swaps two categories
      *
-     * @param   integer $category_id_1
-     * @param   integer $category_id_2
-     * @return  boolean
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  integer $category_id_1 First category
+     * @param  integer $category_id_2 Second category
+     * @return boolean
      */
     public function swapCategories($category_id_1, $category_id_2)
     {
         $temp_cat = rand(200000, 400000);
 
         $tables = array(
-            array('faqcategories' => 'id'),
-            array('faqcategories' => 'parent_id'),
+            array('faqcategories'        => 'id'),
+            array('faqcategories'        => 'parent_id'),
             array('faqcategoryrelations' => 'category_id'),
-            array('faqquestions' => 'ask_rubrik'),
-            array('faqcategory_group' => 'category_id'),
-            array('faqcategory_user' => 'category_id'));
+            array('faqquestions'         => 'ask_rubrik'),
+            array('faqcategory_group'    => 'category_id'),
+            array('faqcategory_user'     => 'category_id'));
 
         $result = true;
         foreach ($tables as $pair) {
@@ -1282,11 +1246,9 @@ class PMF_Category
     /**
      * Updates the parent category
      *
-     * @param   integer $category_id
-     * @param   integer $parent_id
-     * @return  boolean
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  integer $category_id Category id
+     * @param  integer $parent_id   Parent category id
+     * @return boolean
      */
     public function updateParentCategory($category_id, $parent_id)
     {
@@ -1312,13 +1274,10 @@ class PMF_Category
     /**
      * Deletes a category
      *
-     * @param   integer $category_id
-     * @param   string  $category_lang
-     * @param   bool    $delete_all languages?
-     * @return  boolean
-     * @access  public
-     * @since   2006-09-11
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  integer $category_id   Category id
+     * @param  string  $category_lang Categiry language
+     * @param  boolean $delete_all    Delete all languages?
+     * @return boolean
      */
     public function deleteCategory($category_id, $category_lang, $delete_all = false)
     {
@@ -1339,13 +1298,10 @@ class PMF_Category
     /**
      * Deletes a category relation
      *
-     * @param   integer $category_id
-     * @param   string  $category_lang
-     * @param   bool    $delete_all
-     * @return  boolean
-     * @access  public
-     * @since   2006-09-11
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  integer $category_id   Category id
+     * @param  string  $category_lang Categiry language
+     * @param  boolean $delete_all    Delete all languages?
+     * @return boolean
      */
     public function deleteCategoryRelation($category_id, $category_lang, $delete_all = false)
     {
@@ -1378,7 +1334,7 @@ class PMF_Category
         global $languageCodes;
 
         $existcatlang = check4Language($category_id, 'faqcategories');
-        $translated = array();
+        $translated   = array();
 
         foreach ($existcatlang as $language) {
            $query = sprintf("
@@ -1406,18 +1362,14 @@ class PMF_Category
     /**
      * Create all languagess which can be used for translation as <option>
      *
-     * @param   integer  $category_id
-     * @param   string   $selected_lang
-     * @return  string
-     * @access  public
-     * @since   2006-09-10
-     * @author  Rudi Ferrari <bookcrossers@gmx.de>
+     * @param  integer $category_id   Category id
+     * @param  string  $selected_lang Selected language
+     * @return string
      */
     public function getCategoryLanguagesToTranslate($category_id, $selected_lang)
     {
-        global $languageCodes;
-        $output = "";
-        $existcatlang = check4Language($category_id, 'faqcategories');
+        $output       = "";
+        $existcatlang = PMF_Utils::languageAvailable($category_id, 'faqcategories');
 
         foreach (getAvailableLanguages() as $lang => $langname) {
            if (!in_array(strtolower($lang),$existcatlang)) {
@@ -1436,9 +1388,7 @@ class PMF_Category
      * Gets all categories which are not translated in actual language
      * to add in this->categories (used in admin section)
      *
-     * @access  public
-     * @since   2006-09-16
-     * @author  Rudi Ferrari <bookcrossers@gmx.de>
+     * @return void
      */
     public function getMissingCategories()
     {
@@ -1465,11 +1415,8 @@ class PMF_Category
     /**
      * Get number of nodes at the same parent_id level
      *
-     * @param   integer  $parent_id
-     * @return  integer
-     * @access  public
-     * @since   2006-10-10
-     * @author  Rudi Ferrari <bookcrossers@gmx.de>
+     * @param  integer $parent_id Parent id
+     * @return integer
      */
     public function numParent($parent_id)
     {
@@ -1490,14 +1437,12 @@ class PMF_Category
     /**
      * Adds the category permissions for users and groups
      *
-     * @param   string  $mode           'group' or 'user'
-     * @param   array   $categories     ID of the current category
-     * @param   integer $id             group ID or user ID
-     * @return  boolean
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  string  $mode       'group' or 'user'
+     * @param  array   $categories ID of the current category
+     * @param  integer $id         group ID or user ID
+     * @return boolean
      */
-    public function addPermission($mode, $categories, $id)
+    public function addPermission($mode, Array $categories, $id)
     {
         if (!($mode == "user" || $mode == "group")) {
             return false;
@@ -1528,11 +1473,9 @@ class PMF_Category
     /**
      * Deletes the category permissions for users and groups
      *
-     * @param   string  $mode           'group' or 'user'
-     * @param   array   $categories     ID of the current category
-     * @return  boolean
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  string $mode       'group' or 'user'
+     * @param  array  $categories ID of the current category
+     * @return boolean
      */
     public function deletePermission($mode, $categories)
     {
@@ -1561,13 +1504,11 @@ class PMF_Category
     /**
      * Returns the category permissions for users and groups
      *
-     * @param   string  $mode           'group' or 'user'
-     * @param   integer $categories
+     * @param   string $mode       'group' or 'user'
+     * @param   array  $categories Array of category ids
      * @return  array
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    public function getPermissions($mode, $categories)
+    public function getPermissions($mode, Array $categories)
     {
         $permissions = array();
         if (!($mode == "user" || $mode == "group")) {
@@ -1587,8 +1528,7 @@ class PMF_Category
             $mode,
             SQLPREFIX,
             $mode,
-            implode(', ', $categories)
-            );
+            implode(', ', $categories));
 
         $result = $this->db->query($query);
         while ($row = $this->db->fetch_object($result)) {
@@ -1600,10 +1540,8 @@ class PMF_Category
     /**
      * Returns the number of records in each category
      *
-     * @param   string  $active
-     * @return  array
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  string $active Only active records
+     * @return array
      */
     public function getNumberOfRecordsOfCategory($active = 'yes')
     {
@@ -1639,10 +1577,7 @@ class PMF_Category
     /**
      * Create a matrix for representing categories and faq records
      *
-     * @return  array   $matrix
-     * @access  public
-     * @since   2007-02-18
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @return array
      */
     public function getCategoryRecordsMatrix()
     {
@@ -1650,26 +1585,18 @@ class PMF_Category
 
         $query = sprintf('
             SELECT
-                %sfaqcategoryrelations.category_id AS id_cat,
-                %sfaqdata.id AS id
+                fcr.category_id AS id_cat,
+                fd.id AS id
             FROM
-                %sfaqdata
+                %sfaqdata fd
             INNER JOIN
-                %sfaqcategoryrelations
+                %sfaqcategoryrelations fcr
             ON
-                %sfaqdata.id = %sfaqcategoryrelations.record_id
+                fd.id = fcr.record_id
             AND
-                %sfaqdata.lang = %sfaqcategoryrelations.category_lang
+                fd.lang = fcr.category_lang
             ORDER BY
-                %sfaqcategoryrelations.category_id, %sfaqdata.id',
-             SQLPREFIX,
-             SQLPREFIX,
-             SQLPREFIX,
-             SQLPREFIX,
-             SQLPREFIX,
-             SQLPREFIX,
-             SQLPREFIX,
-             SQLPREFIX,
+                fcr.category_id, fd.id',
              SQLPREFIX,
              SQLPREFIX);
         $result = $this->db->query($query);
