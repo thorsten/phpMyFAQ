@@ -520,7 +520,7 @@ class PMF_Captcha
             SQLPREFIX, 
             $_SERVER['REQUEST_TIME'] - $time);
             
-        $this->db->query($query);
+        $this->db->query($delete);
     }
 
     /**
