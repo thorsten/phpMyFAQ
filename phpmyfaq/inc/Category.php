@@ -1002,7 +1002,7 @@ class PMF_Category
                 %sfaqcategoryrelations fcr,
                 %sfaqcategories fc
             WHERE
-                fcr.id = fc.category_id
+                fc.id = fcr.category_id
             AND
                 fcr.record_id = %d
             AND
