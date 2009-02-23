@@ -101,7 +101,6 @@ if (
         if (!isset($sent[$userId])) {
             // TODO: Move this code to Category.php
             $oUser = new PMF_User_User();
-            $oUser->addDb($db);
             $oUser->getUserById($userId);
             $catOwnerEmail = $oUser->getUserData('email');
 

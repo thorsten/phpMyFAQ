@@ -75,7 +75,6 @@ if (
 
             $userId = $category->getCategoryUser($questionData['ask_category']);
             $oUser = new PMF_User_User();
-            $oUser->addDb($db);
             $oUser->getUserById($userId);
 
             $mail = new PMF_Mail();
