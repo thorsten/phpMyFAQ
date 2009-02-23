@@ -147,10 +147,10 @@ if (isset($oLnk->urlpool['href'])) {
 $content = str_replace('href="/#','href="index.php?action=artikel&lang='.$LANGCODE.'&id='.$id.'#', $fixedContent);
 
 // Check for the languages for a faq
-$arrLanguage = check4Language($id);
+$arrLanguage    = PMF_Utils::languageAvailable($id);
 $switchLanguage = '';
-$check4Lang = '';
-$num = count($arrLanguage);
+$check4Lang     = '';
+$num            = count($arrLanguage);
 if ($num > 1) {
     foreach ($arrLanguage as $language) {
         $check4Lang .= "<option value=\"".$language."\"";
@@ -271,7 +271,8 @@ if ($maxVisits - $minVisits > 0) {
 $faqPopularity = $currVisits.'/'.(int)$percentage.'%';
 
 // Get the related records for this entry
-$relevant = new PMF_Relation();
+$relevant  = new PMF_Relation();
+$faqrating = new PMF_Rating();
 
 $translationForm = '';
 if (count($arrLanguage) < count(getAvailableLanguages())) {
@@ -311,7 +312,7 @@ $tpl->processTemplate ("writeContent", array(
     'saveVotingID'                  => $id,
     'saveVotingIP'                  => $_SERVER['REMOTE_ADDR'],
     'msgAverageVote'                => $PMF_LANG['msgAverageVote'],
-    'printVotings'                  => $faq->getVotingResult($id),
+    'printVotings'                  => $faqrating->getVotingResult($id),
     'switchLanguage'                => $switchLanguage,
     'msgVoteUseability'             => $PMF_LANG['msgVoteUseability'],
     'msgVoteBad'                    => $PMF_LANG['msgVoteBad'],
