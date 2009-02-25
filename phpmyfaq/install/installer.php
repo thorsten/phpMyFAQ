@@ -998,7 +998,7 @@ foreach ($permLevels as $level => $desc) {
     );
     $anonymous->setUserData($anonymousData);
 
-    $oConf = new PMF_Configuration($db);
+    $oConf = PMF_Configuration::getInstance();
     $oConf->getAll();
     $configs = $oConf->config;
     // Disable Captcha if GD is not available
