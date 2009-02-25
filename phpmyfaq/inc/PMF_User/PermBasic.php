@@ -290,7 +290,7 @@ class PMF_User_PermBasic extends PMF_User_Perm
             (int)$right_data['for_users'],
             (int)$right_data['for_groups']);
             
-        $res = $this->db->query();
+        $res = $this->db->query($insert);
         if (!$res) {
             return 0;
         }
