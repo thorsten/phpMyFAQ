@@ -257,7 +257,15 @@ class PMF_DB_Mysql implements PMF_DB_Driver
      */
     public function nextID($table, $id)
     {
-        $result = $this->query('SELECT max('.$id.') as current_id FROM '.$table);
+    	$select = sprintf("
+    	   SELECT
+    	       MAX(%s) AS current_id
+    	   FROM
+    	       %s",
+    	   $id,
+    	   $table);
+    	   
+        $result    = $this->query($select);
         $currentID = mysql_result($result, 0, 'current_id');
         return ($currentID + 1);
     }
