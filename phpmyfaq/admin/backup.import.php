@@ -30,7 +30,9 @@ if ($permission["restore"]) {
 <?php
     if (isset($_FILES["userfile"]["type"]) && ($_FILES["userfile"]["type"] == "application/octet-stream" || $_FILES["userfile"]["type"] == "text/plain" || $_FILES["userfile"]["type"] == "text/x-sql")) {
         $ok  = 1;
-        $dat = file_get_contents($_FILES['userfile']['tmp_name']);
+        // @todo: Add check if file is utf-8 encoded
+        $handle = fopen($_FILES['userfile']['tmp_name'], 'r');
+        $dat    = fgets($handle, 65536);
 
         if (substr($dat, 0, 9) != '-- pmf2.5') {
             print $PMF_LANG["ad_csv_no"];
@@ -47,10 +49,10 @@ if ($permission["restore"]) {
 
         if ($ok == 1) {
             $table_prefix = '';
-            printf("<p>%s</p>\n", $PMF_LANG['ad_csv_prepare']);;
-            while (($dat = fgets($fp, 65536))) {
-                $dat = trim($dat);
-                $backup_prefix_pattern = "-- pmftableprefix:";
+            printf("<p>%s</p>\n", $PMF_LANG['ad_csv_prepare']);
+            while ($dat = fgets($handle, 65536)) {
+                $dat                       = trim($dat);
+                $backup_prefix_pattern     = "-- pmftableprefix:";
                 $backup_prefix_pattern_len = strlen($backup_prefix_pattern);
                 if (substr($dat, 0, $backup_prefix_pattern_len) == $backup_prefix_pattern) {
                     $table_prefix = trim(substr($dat, $backup_prefix_pattern_len));
