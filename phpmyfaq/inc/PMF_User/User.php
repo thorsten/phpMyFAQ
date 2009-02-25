@@ -446,7 +446,7 @@ class PMF_User_User
         }
         $success = false;
         foreach ($this->auth_container as $name => $auth) {
-            if ($auth->read_only()) {
+            if ($auth->setReadOnly()) {
                 continue;
             }
             if (!$auth->add($login, $pass)) {
@@ -514,7 +514,7 @@ class PMF_User_User
         $delete     = array();
         foreach ($this->auth_container as $auth) {
             $auth_count++;
-            if ($auth->read_only()) {
+            if ($auth->setReadOnly()) {
                 $read_only++;
                 continue;
             }
@@ -552,7 +552,7 @@ class PMF_User_User
         
         $success = false;
         foreach ($this->auth_container as $auth) {
-            if ($auth->read_only()) {
+            if ($auth->setReadOnly()) {
                 continue;
             }
             if (!$auth->changePassword($login, $pass)) {
