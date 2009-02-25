@@ -19,6 +19,7 @@ Changes since 2.5.0-alpha:
 - added most popular searches list (Thorsten)
 - added jQuery as replacement for Prototype/Script.aculo.us (Thorsten)
 - updated bundled FPDF library to version 1.6 (Thorsten)
+- updated bundled TinyMCE editor component to version 3.2.1.1 (Thorsten)
 
 For known issues please take a look at KNOWNBUGS.txt
 
@@ -40,7 +41,7 @@ Version 2.5.0-alpha2 - 2009-
 - improved user administration frontend (Sarah Hermann)
 - improved performance (Thorsten)
 - updated bundled Net_IDNA to version XXX (Thorsten)
-- updated bundled TinyMCE editor component to version XXX (Thorsten)
+- updated bundled TinyMCE editor component to version 3.2.1.1 (Thorsten)
 - updated bundled FPDF library to version 1.6 (Thorsten)
 
 Version 2.0.11 - 2009-01-22
