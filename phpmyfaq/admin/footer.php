@@ -54,144 +54,46 @@ if (    isset($auth) &&
     )
     ) {
     
-    if ($faqconfig->get('main.enableWysiwygEditor') == 'true') {
+    if ($faqconfig->get('main.enableWysiwygEditor') == true) {
 ?>
 <!-- tinyMCE -->
 <script type="text/javascript">
-/*<![CDATA[*/ <!--
-    tinyMCE.init({
-        mode : "exact",
-        elements : "content",
-        editor_deselector : "mceNoEditor",
-        document_base_url : "<?php print(PMF_Link::getSystemRelativeUri('admin/index.php')); ?>",
-        theme : "advanced",
-        plugins : "table,save,advhr,advimage,advlink,emotions,iespell,insertdatetime,preview,zoom,print,paste,directionality,fullscreen,noneditable,contextmenu",
-        theme_advanced_disable : "styleselect",
-        theme_advanced_buttons1_add_before : "newdocument,separator",
-        theme_advanced_buttons1_add : "fontselect,fontsizeselect",
-        theme_advanced_buttons2_add : "separator,insertdate,inserttime,preview,zoom,separator,forecolor,backcolor,liststyle",
-        theme_advanced_buttons2_add_before: "cut,copy,paste,pastetext,pasteword,separator,search,replace,separator",
-        theme_advanced_buttons3_add_before : "tablecontrols,separator",
-        theme_advanced_buttons3_add : "emotions,iespell,flash,advhr,separator,print,separator,ltr,rtl,separator,fullscreen",
-        theme_advanced_buttons4 : "PMFIntFaqLink",
-        theme_advanced_toolbar_location : "top",
-        theme_advanced_toolbar_align : "left",
-        theme_advanced_statusbar_location : "bottom",
-        plugin_insertdate_dateFormat : "%Y-%m-%d",
-        plugin_insertdate_timeFormat : "%H:%M:%S",
-        extended_valid_elements : "hr[class|width|size|noshade]",
-        file_browser_callback : "fileBrowserCallBack",
-        paste_use_dialog : false,
-        theme_advanced_resizing : true,
-        theme_advanced_resize_horizontal : false,
-        theme_advanced_link_targets : "_something=My somthing;_something2=My somthing2;_something3=My somthing3;",
-        apply_source_formatting : true,
-        entity_encoding : "raw"
-    });
+/*<![CDATA[*/ //<!--
+tinyMCE.init({
+    // General options
+    mode : "exact",
+    elements : "content",
+    theme : "advanced",
+    plugins : "safari,spellchecker,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,imagemanager,filemanager",
 
-    function fileBrowserCallBack(field_name, url, type, win) {
-        var connector = "../../filemanager/browser.html?Connector=connectors/php/connector.php";
-        var enableAutoTypeSelection = true;
+    // Theme options
+    theme_advanced_buttons1 : "save,newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,styleselect,formatselect,fontselect,fontsizeselect",
+    theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code,|,insertdate,inserttime,preview,|,forecolor,backcolor",
+    theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,emotions,iespell,media,advhr,|,print,|,ltr,rtl,|,fullscreen",
+    theme_advanced_buttons4 : "insertlayer,moveforward,movebackward,absolute,|,styleprops,spellchecker,|,cite,abbr,acronym,del,ins,attribs,|,visualchars,nonbreaking,template,blockquote,pagebreak,|,insertfile,insertimage",
+    theme_advanced_toolbar_location : "top",
+    theme_advanced_toolbar_align : "left",
+    theme_advanced_statusbar_location : "bottom",
+    theme_advanced_resizing : true,
 
-        var cType;
-        tinyfck_field = field_name;
-        tinyfck = win;
+    // Example content CSS (should be your site CSS)
+    content_css : "css/example.css",
 
-        switch (type) {
-            case "image":
-                cType = "Image";
-                break;
-            case "flash":
-                cType = "Flash";
-                break;
-            case "file":
-                cType = "File";
-                break;
-        }
+    // Drop lists for link/image/media/template dialogs
+    template_external_list_url : "js/template_list.js",
+    external_link_list_url : "js/link_list.js",
+    external_image_list_url : "js/image_list.js",
+    media_external_list_url : "js/media_list.js",
 
-        if (enableAutoTypeSelection && cType) {
-            connector += "&Type=" + cType;
-        }
-
-        window.open(connector, "tinyfck", "modal,width=600,height=400");
+    // Replace values for the template plugin
+    template_replace_values : {
+        username : "<?php print $user->userdata->get('display_name'); ?>",
+        user_id : "<?php print $user->userdata->get('user_id'); ?>"
     }
+});
 // --> /*]]>*/
 </script>
 <!-- /tinyMCE -->
-<!-- tinyMCE PMFIntFaqLink Plugin -->
-<script type="text/javascript">
-/*<![CDATA[*/ <!--
-    function insertFaqLink() {
-        var sHTML = document.forms['faqEditor'].intfaqlink.value;
-        aParams = sHTML.split('_');
-        if (aParams.length == 4) {
-            var inst = tinyMCE.getInstanceById(tinyMCE.getWindowArg('editor_id'));
-
-            tinyMCE.execCommand("mceBeginUndoLevel");
-
-            // Write down the HTML anchor for the selected FAQ record
-            // <option value="%d_%d_%s_%s">%s</option>
-            sHTML = '<a class="intfaqlink" href="index.php?action=artikel&amp;cat=' + aParams[0] + '&amp;id='
-+ aParams[1] + '&amp;artlang=' + aParams[2] + '">' + aParams[3] + '</a>';
-            tinyMCE.execCommand('mceInsertContent', false, sHTML);
-
-            tinyMCE.execCommand("mceEndUndoLevel");
-        }
-        document.forms['faqEditor'].intfaqlink[0].selected = true;
-    }
-
-    var TinyMCE_PMFIntFaqLinkPlugin = {
-        getInfo : function() {
-            return {
-                longname    : 'phpMyFAQ internal FAQ link plugin',
-                author      : 'phpMyFAQ Development Team',
-                authorurl   : 'http://www.phpmyfaq.de',
-                infourl     : 'http://www.phpmyfaq.de/dokumentation.2.0.en.php',
-                version     : '1.0'
-            };
-        },
-
-        getControlHTML : function(cn) {
-            switch (cn) {
-                case 'PMFIntFaqLink':
-<?php
-    $output = '';
-
-    $output .= '<select id="intfaqlink" name="intfaqlink" onchange="insertFaqLink()" title="'.$PMF_LANG['ad_entry_intlink'].'">';
-    $output .= '<option value="">'.$PMF_LANG['ad_entry_intlink'].'<option>';
-
-    $faq->getAllRecords(FAQ_SORTING_TYPE_FAQTITLE_FAQID);
-    foreach ($faq->faqRecords as $record) {
-        $_title = htmlspecialchars(str_replace(array("\n", "\r", "\r\n"), '', $record['title']), ENT_QUOTES, $PMF_LANG['metaCharset']);
-        $output .= sprintf(
-                    '<option value="%d_%d_%s_%s">%s</option>',
-                    $record['category_id'],
-                    $record['id'],
-                    $record['lang'],
-                    // FAQ title could contains < and >
-                    htmlspecialchars($_title, ENT_NOQUOTES, $PMF_LANG['metaCharset']),
-                    PMF_Utils::makeShorterText($_title, 8));
-    }
-    
-    $output .= '</select>';
-
-    print "return '".$output."'\n";
-?>
-            }
-
-            return '';
-        },
-
-        handleNodeChange : function(editor_id, node, undo_index, undo_levels, visual_aid, any_selection) {
-            return true;
-        }
-    };
-
-    // Adds the plugin class to the list of available TinyMCE plugins
-    tinyMCE.addPlugin("PMFIntFaqLink", TinyMCE_PMFIntFaqLinkPlugin);
-// --> /*]]>*/
-</script>
-<!-- /TinyMCE PMFIntFaqLink Plugin -->
 <?php
     }
 }
