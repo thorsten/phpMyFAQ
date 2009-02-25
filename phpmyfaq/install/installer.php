@@ -596,7 +596,7 @@ foreach ($permLevels as $level => $desc) {
     // check database connection
     require PMF_ROOT_DIR."/inc/Db.php";
     require PMF_ROOT_DIR."/inc/PMF_DB/Driver.php";
-    $db = PMF_Db::db_select($sql_type);
+    $db = PMF_Db::dbSelect($sql_type);
     $db->connect($sql_server, $sql_user, $sql_passwort, $sql_db);
     if (!$db) {
         print "<p class=\"error\"><strong>DB Error:</strong> ".$db->error()."</p>\n";
@@ -721,7 +721,7 @@ foreach ($permLevels as $level => $desc) {
 
     // connect to the database using inc/data.php
     require PMF_ROOT_DIR . '/inc/data.php';
-    $db = PMF_Db::db_select($sql_type);
+    $db = PMF_Db::dbSelect($sql_type);
     $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
     if (!$db) {
         print "<p class=\"error\"><strong>DB Error:</strong> ".$db->error()."</p>\n";
