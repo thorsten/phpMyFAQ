@@ -232,7 +232,8 @@ if ($step == 1) {
     <option value="2.0.0-beta">phpMyFAQ 2.0.0-beta</option>
     <option value="2.0.0-beta2">phpMyFAQ 2.0.0-beta2</option>
     <option value="2.0.0-RC">phpMyFAQ 2.0.0-RC and later</option>
-    <option value="2.0.2">phpMyFAQ 2.0.2 or later</option>
+    <option value="2.0.2">phpMyFAQ 2.0.2 and later</option>
+    <option value="2.5.0-alpha">phpMyFAQ 2.5.0-alpha and later</option>
 </select>
 
 <p class="center"><input type="submit" value="Go to step 2 of 5" class="button" /></p>
@@ -408,7 +409,7 @@ if ($step == 5) {
     require_once PMF_ROOT_DIR . '/inc/Link.php';
     
     define('SQLPREFIX', $DB['prefix']);
-    $db = PMF_Db::db_select($DB["type"]);
+    $db = PMF_Db::dbSelect($DB["type"]);
     $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
 
     $images = array();
@@ -1252,13 +1253,13 @@ if ($step == 5) {
     // UPDATES FROM 2.5.0-alpha2
     //
     if (version_compare($version, '2.5.0-alpha2', '<')) {
-        $query[] = "CREATE TABLE ".$sqltblpre."faqsearches (
+        $query[] = "CREATE TABLE ".SQLPREFIX."faqsearches (
                     id INTEGER NOT NULL ,
                     lang VARCHAR(5) NOT NULL ,
                     searchterm VARCHAR(255) NOT NULL ,
                     searchdate TIMESTAMP,
                     PRIMARY KEY (id, lang))";
-        $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.enableWysiwygEditor', 'true')";
+        $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.enableWysiwygEditor', 'true')";
     }
 
     // Perform the queries for updating/migrating the database from 2.x
