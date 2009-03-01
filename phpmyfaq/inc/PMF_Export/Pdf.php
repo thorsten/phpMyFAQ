@@ -154,6 +154,13 @@ class PDF extends FPDF
     * @see      Bookmartk()
     */
     var $enableBookmarks = false;
+    
+    /**
+     * Full export from admin backend?
+     * 
+     * @var boolean
+     */
+    var $isFullExport = false;
 
     /**
     * Array with titles
@@ -509,6 +516,9 @@ class PDF extends FPDF
     {
     	if (strpos($URL, 'http://') === false) {
     		$URL = 'http://' . $_SERVER['HTTP_HOST'] . EndSlash(dirname($_SERVER['PHP_SELF'])) . $URL;
+    	}
+    	if ($this->isFullExport) {
+    		$URL = str_replace('admin/', '', $URL);
     	}
         $this->SetTextColor(0, 0, 255);
         $this->SetStyle("U", true);
