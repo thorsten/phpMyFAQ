@@ -91,8 +91,9 @@ class PMF_Export
             }
 
             // Start composing PDF
-            $pdf = new PDF();
+            $pdf = new PMF_Export_Pdf();
             $pdf->enableBookmarks = true;
+            $pdf->isFullExport    = true;
             $pdf->Open();
             $pdf->AliasNbPages();
             $pdf->SetDisplayMode('real');

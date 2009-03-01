@@ -126,6 +126,13 @@ class PMF_Export_Pdf extends FPDF
     * @var boolean
     */
     public $enableBookmarks = false;
+    
+    /**
+     * Full export from admin backend?
+     * 
+     * @var boolean
+     */
+    public $isFullExport = false;
 
     /**
     * Array with titles
@@ -494,6 +501,9 @@ class PMF_Export_Pdf extends FPDF
     {
         if (!strpos($url, 'http://')) {
             $url = 'http://' . $_SERVER['HTTP_HOST'] . EndSlash(dirname($_SERVER['PHP_SELF'])) . $url;
+        }
+        if ($this->isFullExport) {
+            $URL = str_replace('admin/', '', $URL);
         }
         $this->SetTextColor(0, 0, 255);
         $this->SetStyle('U', true);
