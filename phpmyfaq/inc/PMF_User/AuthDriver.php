@@ -45,6 +45,31 @@ interface PMF_User_AuthDriver
     public function add($login, $pass);
 
     /**
+     * Changes the password for the account specified by login.
+     *
+     * Returns true on success, otherwise false.
+     *
+     * Error messages are added to the array errors.
+     *
+     * @param  string $login Loginname
+     * @param  string $pass  Password
+     * @return boolean
+    */
+    public function changePassword($login, $pass);
+    
+    /**
+     * Deletes the user account specified by login.
+     *
+     * Returns true on success, otherwise false.
+     *
+     * Error messages are added to the array errors.
+     *
+     * @param  string $login Loginname
+     * @return bool
+     */
+    public function delete($login);
+    
+    /**
      * Checks the password for the given user account.
      *
      * Returns true if the given password for the user account specified by

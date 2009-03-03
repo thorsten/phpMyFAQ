@@ -67,11 +67,34 @@ class PMF_User_AuthLdap extends PMF_User_Auth implements PMF_User_AuthDriver
         $result = $user->createUser($login, null);
         
         // Update user information from LDAP
-		$user->setUserData(array('display_name' => $this->ldap->ldap_getCompleteName($login),
-                                 'email'        => $this->ldap->ldap_getMail($login)));
+		$user->setUserData(array('display_name' => $this->ldap->getCompleteName($login),
+                                 'email'        => $this->ldap->getMail($login)));
         return $result;
     }
 
+    /**
+     * Does nothing. A function required to be a valid auth.
+     *
+     * @param  string $login Loginname
+     * @param  string $pass  Password
+     * @return boolean
+    */
+    public function changePassword($login, $pass)
+    {
+    	return true;
+    }
+    
+    /**
+     * Does nothing. A function required to be a valid auth.
+     *
+     * @param  string $login Loginname
+     * @return bool
+     */
+    public function delete($login)
+    {
+    	return true;
+    }
+    
     /**
      * Checks the password for the given user account.
      *
@@ -111,7 +134,7 @@ class PMF_User_AuthLdap extends PMF_User_Auth implements PMF_User_AuthDriver
      */
     public function checkLogin($login)
     {
-        return 1;
+        return $this->ldap->getCompleteName($login);
     }
 
 }
