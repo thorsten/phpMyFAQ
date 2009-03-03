@@ -8,7 +8,7 @@
  * @package    phpMyFAQ
  * @subpackage Installation
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Tom Rochestr <tom.rochester@gmail.com>
+ * @author     Tom Rochester <tom.rochester@gmail.com>
  * @author     Johannes Schlueter <johannes@php.net>
  * @author     Uwe Pries <uwe.pries@digartis.de>
  * @author     Matteo Scaramuccia <matteo@phpmyfaq.de>
@@ -451,7 +451,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 <fieldset class="installation">
 <legend class="installation">LDAP information</legend>
 
-    <label class="left">Do you want to use LDAP?</label>
+    <label class="left">Do you want to use LDAP for authentication?</label>
     <input class="checkbox" type="checkbox" name="ldap_enabled" value="yes" /><br />
 
     <label class="left">LDAP server host:</label>
