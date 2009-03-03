@@ -40,27 +40,6 @@ class PMF_User_AuthDb extends PMF_User_Auth implements PMF_User_AuthDriver
     private $db = null;
 
     /**
-     * Tablename with login credentials
-     *
-     * @var string
-     */
-    private $tablename = '';
-
-    /**
-     * Login name column
-     *
-     * @var string
-     */
-    private $login_column = '';
-
-    /**
-     * Password column
-     *
-     * @var string
-     */
-    private $password_column = '';
-
-    /**
      * Constructor
      *
      * @param  string  $enctype   Type of encoding
@@ -230,7 +209,7 @@ class PMF_User_AuthDb extends PMF_User_Auth implements PMF_User_AuthDriver
         }
         // if multiple accounts are ok, just 1 valid required
         while ($user = $this->db->fetch_assoc($check)) {
-            if ($user[$this->password_column] == $this->enc_container->encrypt($pass)) {
+            if ($user['pass'] == $this->enc_container->encrypt($pass)) {
                 return true;
                 break;
             }
@@ -253,7 +232,7 @@ class PMF_User_AuthDb extends PMF_User_Auth implements PMF_User_AuthDriver
             FROM
                 %sfaquserlogin
             WHERE
-                pass = '%s'",
+                login = '%s'",
             SQLPREFIX,
             $this->db->escape_string($login));
             
