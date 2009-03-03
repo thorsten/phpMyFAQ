@@ -1,14 +1,15 @@
 <?php
 /**
- * $Id: Ldap.php,v 1.4 2007-08-12 14:02:29 thorstenr Exp $
- *
  * The PMF_Ldap class provides methods and functions for a LDAP database
  *
- * @author      Adam Greene <phpmyfaq@skippy.fastmail.fm>
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @package     LDAP
- * @since       2004-12-16
- * @copyright   (c) 2004-2007 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage PMF_Ldap
+ * @author     Adam Greene <phpmyfaq@skippy.fastmail.fm>
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     Alberto Cabello Sánchez <alberto@unex.es>
+ * @since      2004-12-16
+ * @copyright  2004-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -21,42 +22,52 @@
  * under the License.
  */
 
+/**
+ * PMF_Ldap
+ *
+ * @package    phpMyFAQ
+ * @subpackage PMF_Ldap
+ * @author     Adam Greene <phpmyfaq@skippy.fastmail.fm>
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     Alberto Cabello Sánchez <alberto@unex.es>
+ * @since      2004-12-16
+ * @copyright  2004-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
+ */
 class PMF_Ldap
 {
     /**
      * The connection handle
      *
      */
-    var $ds = false;
+    private $ds = false;
 
     /**
      * The LDAP base
      *
      */
-    var $base = null;
+    private $base = null;
 
     /**
      * Errorlog
      *
      * @var string
      */
-    var $error = null;
+    private $error = null;
 
     /**
      * Constructor
      *
      * Connects and binds to LDAP server
      *
-     * @param   string      server name
-     * @param   integer     port number
-     * @param   string      base dn
-     * @param   string      LDAP user
-     * @param   string      LDAP password
-     * @return  mixed
-     * @access  public
-     * @auhor   Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  string  $ldap_server   Server name
+     * @param  integer $ldap_port     Port number
+     * @param  string  $ldap_base     Base DN
+     * @param  string  $ldap_user     LDAP user
+     * @param  string  $ldap_password LDAP password
+     * @return void
      */
-    function PMF_Ldap($ldap_server, $ldap_port, $ldap_base, $ldap_user = '', $ldap_password = '')
+    public function __construct($ldap_server, $ldap_port, $ldap_base, $ldap_user = '', $ldap_password = '')
     {
         $this->base = $ldap_base;
 
@@ -66,73 +77,63 @@ class PMF_Ldap
 
         $this->ds = ldap_connect($ldap_server, $ldap_port);
         if (!$this->ds) {
-            $this->error = 'Unable to connect to LDAP server (Error: '.ldap_error().')';
+            $this->error = 'Unable to connect to LDAP server (Error: '.ldap_error($this->ds).')';
         }
 
         $ldapbind = ldap_bind($this->ds, $ldap_user, $ldap_password);
         if (!$ldapbind) {
-            $this->error = 'Unable to bind to LDAP server (Error: '.ldap_error().')';
+            $this->error = 'Unable to bind to LDAP server (Error: '.ldap_error($this->ds).')';
         }
-
-        return $this->ds;
     }
 
     /**
      * Returns the user's email address from LDAP
      *
-     * @param    string
-     * @return   string
-     * @access   public
-     * @author   Adam Greene <phpmyfaq@skippy.fastmail.fm>
-     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  string $username Username
+     * @return string
      */
-    function ldap_getMail($username)
+    public function ldap_getMail($username)
     {
         if (!$this->ds) {
             return '';
         }
 
-        $sr = ldap_search($this->ds, $this->base, 'uid='.$username, array('mail'));
+        $sr = ldap_search($this->ds, $this->base, $username, array('mail'));
         if (!$sr) {
-            $this->error = 'Unable to search for "'.$username.'" (Error: '.ldap_error().')';
+            $this->error = 'Unable to search for "'.$username.'" (Error: '.ldap_error($this->ds).')';
         }
         $entryId = ldap_first_entry($this->ds, $sr);
-        $values = ldap_get_values($this->ds, $entryId, 'mail');
+        $values  = ldap_get_values($this->ds, $entryId, 'mail');
         return $values[0];
     }
 
     /**
      * Returns the user's email address from LDAP
      *
-     * @param    string
-     * @return   string
-     * @access   public
-     * @author   Adam Greene <phpmyfaq@skippy.fastmail.fm>
-     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  string $username Username
+     * @return string
      */
-    function ldap_getCompleteName($username)
+    public function ldap_getCompleteName($username)
     {
         if (!$this->ds) {
             return '';
         }
 
-        $sr = ldap_search($this->ds, $this->base, 'uid='.$username, array('cn'));
+        $sr = ldap_search($this->ds, $this->base, $username, array('cn'));
         if (!$sr) {
-            $this->error = 'Unable to search for "'.$username.'" (Error: '.ldap_error().')';
+            $this->error = 'Unable to search for "'.$username.'" (Error: '.ldap_error($this->ds).')';
         }
         $entryId = ldap_first_entry($this->ds, $sr);
-        $values = ldap_get_values($this->ds, $entryId, 'cn');
+        $values  = ldap_get_values($this->ds, $entryId, 'cn');
         return $values[0];
     }
 
     /**
      * Returns the LDAP error message of the last LDAP command
      *
-     * @return   string
-     * @access   public
-     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @return string
      */
-    function error()
+    public function error()
     {
         return ldap_error($this->ds);
     }
