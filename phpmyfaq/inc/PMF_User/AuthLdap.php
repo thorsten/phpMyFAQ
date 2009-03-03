@@ -31,7 +31,7 @@
  * @copyright  2009 phpMyFAQ Team
  * @version    SVN: $Id: AuthDb.php 3790 2009-02-10 20:43:36Z thorsten $ 
  */
-class PMF_User_AuthLdap extends PMF_User_Auth
+class PMF_User_AuthLdap extends PMF_User_Auth implements PMF_User_AuthDriver 
 {
 	/**
 	 * LDAP connection handle
@@ -49,8 +49,7 @@ class PMF_User_AuthLdap extends PMF_User_Auth
      */
     public function __construct($enctype = 'none', $read_only = false)
     {
-        $this->selectEncType($enctype);
-        $this->setReadOnly($read_only);
+        parent::__construct($enctype, $read_only);
     }
 
     /**

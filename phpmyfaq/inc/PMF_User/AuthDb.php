@@ -30,7 +30,7 @@
  * @copyright  2005-2009 phpMyFAQ Team
  * @version    SVN: $Id$ 
  */
-class PMF_User_AuthDb extends PMF_User_Auth
+class PMF_User_AuthDb extends PMF_User_Auth implements PMF_User_AuthDriver 
 {
     /**
      * Database connection
@@ -61,18 +61,15 @@ class PMF_User_AuthDb extends PMF_User_Auth
     private $password_column = '';
 
     /**
-     * constructor
+     * Constructor
      *
-     * @access  public
-     * @author  Lars Tiedemann, <php@larstiedemann.de>
-     * @param   string
-     * @param   bool
-     * @return  void
+     * @param  string  $enctype   Type of encoding
+     * @param  boolean $read_only Readonly?
+     * @return void
      */
     function __construct($enctype = 'none', $read_only = false)
     {
-        $this->selectEncType($enctype);
-        $this->setReadOnly($read_only);
+        parent::__construct($enctype, $read_only);
     }
 
     /**

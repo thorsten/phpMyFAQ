@@ -90,6 +90,19 @@ class PMF_User_Auth
     private $read_only = false;
 
     /**
+     * Constructor
+     *
+     * @param  string  $enctype   Type of encoding
+     * @param  boolean $read_only Readonly?
+     * @return void
+     */
+    public function __construct($enctype = 'none', $read_only = false)
+    {
+        $this->selectEncType($enctype);
+        $this->setReadOnly($read_only);
+    }
+    
+    /**
      * instantiates a new encryption object, stores it in a private container
      * returns it.
      *
