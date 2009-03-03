@@ -74,6 +74,10 @@ $error = '';
 if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
     // login with username and password
     $user = new PMF_User_CurrentUser();
+    if (file_exists('inc/PMF_User/AuthLdap.php')) {
+        $authLdap = new PMF_User_AuthLdap();
+        $user->addAuth($authLdap, 'ldap');
+    }
     $faqusername = $db->escape_string($_POST['faqusername']);
     $faqpassword = $db->escape_string($_POST['faqpassword']);
     if ($user->login($faqusername, $faqpassword)) {
