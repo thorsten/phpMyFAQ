@@ -74,7 +74,7 @@ $error = '';
 if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
     // login with username and password
     $user = new PMF_User_CurrentUser();
-    if (file_exists('inc/PMF_User/AuthLdap.php')) {
+    if ($faqconfig->get('main.ldapSupport')) {
         $authLdap = new PMF_User_AuthLdap();
         $user->addAuth($authLdap, 'ldap');
     }
