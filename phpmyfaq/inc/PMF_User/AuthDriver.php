@@ -63,16 +63,6 @@ interface PMF_User_AuthDriver
     /**
      * Does nothing. A function required to be a valid auth.
      *
-     * @param  string $table           Table for login credentials
-     * @param  string $login_column    Login name column
-     * @param  string $password_column Password column
-     * @return void
-     */
-    public function connect($table = '', $login_column = '', $password_column = '');
-
-    /**
-     * Does nothing. A function required to be a valid auth.
-     *
      * @param  string $login Loginname
      * @return integer
      */

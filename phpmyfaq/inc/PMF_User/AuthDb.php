@@ -70,6 +70,8 @@ class PMF_User_AuthDb extends PMF_User_Auth implements PMF_User_AuthDriver
     function __construct($enctype = 'none', $read_only = false)
     {
         parent::__construct($enctype, $read_only);
+        
+        $this->db = PMF_Db::getInstance();
     }
 
     /**
@@ -92,13 +94,11 @@ class PMF_User_AuthDb extends PMF_User_Auth implements PMF_User_AuthDriver
         
         $add = sprintf("
             INSERT INTO
-                %s
-            (%s, %s)
+                %sfaquserlogin
+            (login, pass)
                 VALUES
             ('%s', '%s')",
-            $this->getTableName(),
-            $this->getLoginColumn(),
-            $this->getPasswordColumn(),
+            SQLPREFIX,
             $this->db->escape_string($login),
             $this->db->escape_string($this->enc_container->encrypt($pass)));
             
@@ -132,15 +132,13 @@ class PMF_User_AuthDb extends PMF_User_Auth implements PMF_User_AuthDriver
     {
         $change = sprintf("
             UPDATE
-                %s
+                %sfaquserlogin
             SET
-                %s = '%s'
+                pass = '%s'
             WHERE
-                %s = '%s'",
-            $this->getTableName(),
-            $this->getPasswordColumn(),
+                login = '%s'",
+            SQLPREFIX,
             $this->db->escape_string($this->enc_container->encrypt($pass)),
-            $this->getLoginColumn(),
             $this->db->escape_string($login));
             
         $change = $this->db->query($change);
@@ -171,11 +169,10 @@ class PMF_User_AuthDb extends PMF_User_Auth implements PMF_User_AuthDriver
     {
         $delete = sprintf("
             DELETE FROM
-                %s
+                %sfaquserlogin
             WHERE
-                %s = '%s'",
-            $this->getTableName(),
-            $this->getLoginColumn(),
+                login = '%s'",
+            SQLPREFIX,
             $this->db->escape_string($login));
             
         $delete = $this->db->query($delete);
@@ -207,15 +204,12 @@ class PMF_User_AuthDb extends PMF_User_Auth implements PMF_User_AuthDriver
     {
         $check = sprintf("
             SELECT
-                %s, %s
+                login, pass
             FROM
-                %s
+                %sfaquserlogin
             WHERE
-                %s = '%s'",
-            $this->getLoginColumn(),
-            $this->getPasswordColumn(),
-            $this->getTableName(),
-            $this->getLoginColumn(),
+                login = '%s'",
+            SQLPREFIX,
             $this->db->escape_string($login));
             
         $check = $this->db->query($check);
@@ -246,25 +240,6 @@ class PMF_User_AuthDb extends PMF_User_Auth implements PMF_User_AuthDriver
     }
 
     /**
-     * Establishes a connection to a database server using the given parameters.
-     *
-     * Selects the database and tries to connect to the specified database server.
-     * the database link resource on success, otherwise false.
-     *
-     * @param  string $table           Table for login credentials
-     * @param  string $login_column    Login name column
-     * @param  string $password_column Password column
-     * @return void
-     */
-    public function connect($table = '', $login_column = '', $password_column = '')
-    {
-        $this->db = PMF_Db::getInstance();
-        $this->getTableName($table);
-        $this->getLoginColumn($login_column);
-        $this->getPasswordColumn($password_column);
-    }
-
-    /**
      * Checks the number of entries of given login name
      *
      * @param  string $login Loginname
@@ -274,14 +249,12 @@ class PMF_User_AuthDb extends PMF_User_Auth implements PMF_User_AuthDriver
     {
         $check = sprintf("
             SELECT
-                %s
+                login
             FROM
-                %s
+                %sfaquserlogin
             WHERE
-                %s = '%s'",
-            $this->getLoginColumn(),
-            $this->getTableName(),
-            $this->getLoginColumn(),
+                pass = '%s'",
+            SQLPREFIX,
             $this->db->escape_string($login));
             
         $check = $this->db->query($check);
@@ -293,86 +266,5 @@ class PMF_User_AuthDb extends PMF_User_Auth implements PMF_User_AuthDriver
         }
 
         return $this->db->num_rows($check);
-    }
-
-    /**
-     * sets or returns the table variable.
-     *
-     * If this method is called without parameter, the object property table is
-     * If the property table is not set, an empty string is returned and an
-     * message is added to the array errors.
-     *
-     * If a string table is passed to this method, the object property table
-     * be updated. The previous value of the property table is returned.
-     *
-     * @param  string $table Tablename
-     * @return string
-     */
-    private function getTableName($table = '')
-    {
-        if ($table != '') {
-            $old_table       = $this->tablename;
-            $this->tablename = $table;
-            return $old_table;
-        }
-        if (!$this->tablename) {
-            $this->errors[]  = PMF_User_User::ERROR_UNDEFINED_PARAMETER."PMF_User_AuthDb->tablename";
-            $this->tablename = '';
-        }
-        return $this->tablename;
-    }
-
-    /**
-     * sets or returns the login_column variable.
-     *
-     * If this method is called without parameter, the object property
-     * is returned. If the property login_column is not set, an empty string is
-     * and an error message is added to the array errors.
-     *
-     * If a string login_column is passed to this method, the object property
-     * will be updated. The previous value of the property login_column is
-     *
-     * @param  string $login_column Login name column
-     * @return string
-     */
-    private function getLoginColumn($login_column = '')
-    {
-        if ($login_column != '') {
-            $oldlogin_column    = $this->login_column;
-            $this->login_column = $login_column;
-            return $oldlogin_column;
-        }
-        if (!$this->login_column) {
-            $this->errors[]     = PMF_User_User::ERROR_UNDEFINED_PARAMETER."PMF_User_AuthDb->login_column";
-            $this->login_column = '';
-        }
-        return $this->login_column;
-    }
-
-    /**
-     * sets or returns the password_column variable.
-     *
-     * If this method is called without parameter, the object property
-     * is returned. If the property password_column is not set, an empty string
-     * returned and an error message is added to the array errors.
-     *
-     * If a string password_column is passed to this method, the object property
-     * will be updated. The previous value of the property password_column is
-     *
-     * @param  string $password_column Password column
-     * @return string
-     */
-    private function getPasswordColumn($password_column = '')
-    {
-        if ($password_column != '') {
-            $oldpassword_column    = $this->password_column;
-            $this->password_column = $password_column;
-            return $oldpassword_column;
-        }
-        if (!$this->password_column) {
-            $this->errors[]        = PMF_User_User::ERROR_UNDEFINED_PARAMETER."PMF_User_AuthDb->password_column";
-            $this->password_column = '';
-        }
-        return (string) $this->password_column;
     }
 }

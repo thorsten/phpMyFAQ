@@ -196,7 +196,6 @@ class PMF_User_User
         $authLocal = PMF_User_Auth::selectAuth($this->auth_data['authSource']['name']);
         $authLocal->selectEncType($this->auth_data['encType']);
         $authLocal->setReadOnly($this->auth_data['readOnly']);
-        $authLocal->connect(SQLPREFIX.'faquserlogin', 'login', 'pass');
         if (!$this->addAuth($authLocal, $this->auth_data['authSource']['type'])) {
             return false;
         }
