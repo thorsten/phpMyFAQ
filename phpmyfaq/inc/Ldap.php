@@ -92,7 +92,7 @@ class PMF_Ldap
      * @param  string $username Username
      * @return string
      */
-    public function ldap_getMail($username)
+    public function getMail($username)
     {
         if (!$this->ds) {
             return '';
@@ -113,7 +113,7 @@ class PMF_Ldap
      * @param  string $username Username
      * @return string
      */
-    public function ldap_getCompleteName($username)
+    public function getCompleteName($username)
     {
         if (!$this->ds) {
             return '';
