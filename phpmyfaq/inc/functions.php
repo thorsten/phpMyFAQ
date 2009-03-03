@@ -169,7 +169,7 @@ EOD;
             echo $errorMessage;
             break;
     }
-
+    
     return true;
 }
 
@@ -1595,50 +1595,6 @@ function getShortUserName()
         return $_ENV['REMOTE_USER'];
     } elseif (isset($_SERVER['REMOTE_USER'])) {
         return $_SERVER['REMOTE_USER'];
-    } else {
-        return '';
-    }
-}
-
-/**
- * Returns the full user name from LDAP if available
- *
- * @return  string
- * @access  public
- * @author  Adam Greene <phpmyfaq@skippy.fastmail.fm>
- * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
- */
-function getFullUserName()
-{
-    global $ldap, $user;
-    
-    $faqconfig = PMF_Configuration::getInstance();
-    if ($faqconfig->get('main.ldapSupport') && is_object($ldap)) {
-        return $ldap->ldap_getCompleteName(getShortUserName());
-    } elseif (!is_null($user)) {
-        return $user->getUserData('display_name');
-    } else {
-        return getShortUserName();
-    }
-}
-
-/**
- * Returns the full user name from LDAP if available
- *
- * @return  string
- * @access  public
- * @author  Adam Greene <phpmyfaq@skippy.fastmail.fm>
- * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
- */
-function getEmailAddress()
-{
-    global $ldap, $user;
-    
-    $faqconfig = PMF_Configuration::getInstance();
-    if ($faqconfig->get('main.ldapSupport') && is_object($ldap)) {
-        return $ldap->ldap_getMail(getShortUserName());
-    } elseif (!is_null($user)) {
-        return $user->getUserData('email');
     } else {
         return '';
     }
