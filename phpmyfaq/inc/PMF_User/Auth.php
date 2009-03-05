@@ -77,10 +77,8 @@ class PMF_User_Auth
      * @var array
      */
     private $auth_typemap = array(
-        'db'       => 'AuthDb',
-        'openid'   => 'AuthOpenId',
-        'ldap'     => 'AuthLdap',
-        'kerberos' => 'AuthKerberos');
+        'db'   => 'AuthDb',
+        'ldap' => 'AuthLdap');
 
     /**
      * Short description of attribute read_only
@@ -127,7 +125,7 @@ class PMF_User_Auth
      *
      * Error messages are stored in the public array errors.
      *
-     * @return   string
+     * @return string
      */
     public function error()
     {
@@ -152,26 +150,26 @@ class PMF_User_Auth
      * object without database access and with an error message. See the
      * of the error() method for further details.
      *
-     * @param  string $database Database
+     * @param  string $method Authentication access methods
      * @return PMF_User
      */
-    public static function selectAuth($database)
+    public static function selectAuth($method)
     {
         // verify selected database
-        $auth = new PMF_User_Auth();
-        $database = strtolower($database);
-        if (!isset($auth->auth_typemap[$database])) {
+        $auth     = new PMF_User_Auth();
+        $database = strtolower($method);
+        if (!isset($auth->auth_typemap[$method])) {
             $auth->errors[] = PMF_ERROR_USER_NO_AUTHTYPE;
             return $auth;
         }
-        $classfile = dirname(__FILE__) . DIRECTORY_SEPARATOR . $auth->auth_typemap[$database] . ".php";
+        $classfile = dirname(__FILE__) . DIRECTORY_SEPARATOR . $auth->auth_typemap[$method] . ".php";
         if (!file_exists($classfile)) {
             $auth->errors[] = PMF_ERROR_USER_NO_AUTHTYPE;
             return $auth;
         }
         require_once $classfile;
         // instantiate
-        $authclass = "PMF_User_" . $auth->auth_typemap[$database];
+        $authclass = "PMF_User_" . $auth->auth_typemap[$method];
         $auth      = new $authclass();
         return $auth;
     }
@@ -198,7 +196,7 @@ class PMF_User_Auth
      * @param  string $str string
      * @return string
      */
-    function encrypt($str)
+    public function encrypt($str)
     {
         return $this->enc_container->encrypt($str);
     }
