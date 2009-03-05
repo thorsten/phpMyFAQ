@@ -10,6 +10,7 @@ Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.0.12:
+- added new blocked words for spam protection (Kai)
 - minor bugfixes (Thorsten)
 
 For known issues please take a look at KNOWNBUGS.txt
@@ -17,6 +18,7 @@ For known issues please take a look at KNOWNBUGS.txt
 CHANGELOG:
 
 Version 2.0.13 - 2009-03-
+- added new blocked words for spam protection (Kai)
 - minor bugfixes (Thorsten)
 
 Version 2.0.12 - 2009-02-17
