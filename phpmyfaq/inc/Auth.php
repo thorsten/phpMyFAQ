@@ -162,7 +162,8 @@ class PMF_Auth
             $auth->errors[] = self::PMF_ERROR_USER_NO_AUTHTYPE;
             return $auth;
         }
-        $classfile = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Auth' . DIRECTORY_SEPARATOR . $auth->auth_typemap[$method] . ".php";
+        
+        $classfile = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'PMF_Auth' . DIRECTORY_SEPARATOR . $auth->auth_typemap[$method] . ".php";
         if (!file_exists($classfile)) {
             $auth->errors[] = self::PMF_ERROR_USER_NO_AUTHTYPE;
             return $auth;
