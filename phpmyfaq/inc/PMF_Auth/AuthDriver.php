@@ -3,7 +3,7 @@
  * Interface for managing user authentication
  *
  * @package    phpMyFAQ 
- * @subpackage PMF_User
+ * @subpackage PMF_Auth
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since      2009-03-03
  * @copyright  2009 phpMyFAQ Team
@@ -22,16 +22,16 @@
 
 
 /**
- * PMF_User_AuthDriver
+ * PMF_Auth_AuthDriver
  *
  * @package    phpMyFAQ 
- * @subpackage PMF_User
+ * @subpackage PMF_Auth
  * @author     Alberto Cabello <alberto@unex.es>
  * @since      2009-03-01
  * @copyright  2009 phpMyFAQ Team
  * @version    SVN: $Id: AuthDb.php 3790 2009-02-10 20:43:36Z thorsten $ 
  */
-interface PMF_User_AuthDriver
+interface PMF_Auth_AuthDriver
 {
     /**
      * Adds a new user account to the authentication table.

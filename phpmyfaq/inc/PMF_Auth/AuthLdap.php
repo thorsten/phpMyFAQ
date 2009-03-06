@@ -3,7 +3,7 @@
  * Manages user authentication with LDAP server.
  *
  * @package    phpMyFAQ 
- * @subpackage PMF_User
+ * @subpackage PMF_Auth
  * @author     Alberto Cabello <alberto@unex.es>
  * @since      2009-03-01
  * @copyright  2009 phpMyFAQ Team
@@ -25,13 +25,13 @@
  * PMF_User_AuthLdap
  *
  * @package    phpMyFAQ 
- * @subpackage PMF_User
+ * @subpackage PMF_Auth
  * @author     Alberto Cabello <alberto@unex.es>
  * @since      2009-03-01
  * @copyright  2009 phpMyFAQ Team
  * @version    SVN: $Id: AuthDb.php 3790 2009-02-10 20:43:36Z thorsten $ 
  */
-class PMF_User_AuthLdap extends PMF_User_Auth implements PMF_User_AuthDriver 
+class PMF_Auth_AuthLdap extends PMF_Auth implements PMF_Auth_AuthDriver
 {
 	/**
 	 * LDAP connection handle

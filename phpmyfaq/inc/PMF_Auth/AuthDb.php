@@ -3,7 +3,7 @@
  * Manages user authentication with databases.
  *
  * @package    phpMyFAQ 
- * @subpackage PMF_User
+ * @subpackage PMF_Auth
  * @author     Lars Tiedemann <php@larstiedemann.de>
  * @since      2005-09-30
  * @copyright  2005-2009 phpMyFAQ Team
@@ -24,13 +24,13 @@
  * PMF_User_AuthDb
  *
  * @package    phpMyFAQ 
- * @subpackage PMF_User
+ * @subpackage PMF_Auth
  * @author     Lars Tiedemann <php@larstiedemann.de>
  * @since      2005-09-30
  * @copyright  2005-2009 phpMyFAQ Team
  * @version    SVN: $Id$ 
  */
-class PMF_User_AuthDb extends PMF_User_Auth implements PMF_User_AuthDriver 
+class PMF_Auth_AuthDb extends PMF_Auth implements PMF_Auth_AuthDriver 
 {
     /**
      * Database connection
