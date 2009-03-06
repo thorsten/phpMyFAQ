@@ -21,7 +21,7 @@
  * object. See documentation of the static method selectDb for further details.
  *
  * @package    phpMyFAQ
- * @subpackage PMF_User
+ * @subpackage PMF_Auth
  * @author     Lars Tiedemann <php@larstiedemann.de>
  * @since      2005-09-30
  * @copyright  2005-2009 phpMyFAQ Team
@@ -42,13 +42,13 @@
  * PMF_User_Auth
  * 
  * @package    phpMyFAQ
- * @subpackage PMF_User
+ * @subpackage PMF_Auth
  * @author     Lars Tiedemann <php@larstiedemann.de>
  * @since      2005-09-30
  * @copyright  2005-2009 phpMyFAQ Team
  * @version    SVN: $Id$
  */
-class PMF_User_Auth
+class PMF_Auth
 {
     /**
      * Error constants
@@ -156,7 +156,7 @@ class PMF_User_Auth
     public static function selectAuth($method)
     {
         // verify selected database
-        $auth     = new PMF_User_Auth();
+        $auth     = new PMF_Auth();
         $database = strtolower($method);
         if (!isset($auth->auth_typemap[$method])) {
             $auth->errors[] = PMF_ERROR_USER_NO_AUTHTYPE;
@@ -169,7 +169,7 @@ class PMF_User_Auth
         }
         require_once $classfile;
         // instantiate
-        $authclass = "PMF_User_" . $auth->auth_typemap[$method];
+        $authclass = "PMF_Auth_" . $auth->auth_typemap[$method];
         $auth      = new $authclass();
         return $auth;
     }
