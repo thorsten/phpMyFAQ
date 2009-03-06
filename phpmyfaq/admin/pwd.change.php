@@ -37,7 +37,7 @@ if ($permission["passwd"]) {
         $user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
 		
         // Define the (Local/Current) Authentication Source
-        $_authSource = PMF_User_Auth::selectAuth($user->auth_data['authSource']['name']);
+        $_authSource = PMF_Auth::selectAuth($user->auth_data['authSource']['name']);
         $_authSource->selectEncType($user->auth_data['encType']);
         $_authSource->read_only($user->auth_data['readOnly']);
         

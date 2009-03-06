@@ -22,7 +22,7 @@
 
 
 /**
- * PMF_User_AuthLdap
+ * PMF_Auth_AuthLdap
  *
  * @package    phpMyFAQ 
  * @subpackage PMF_Auth

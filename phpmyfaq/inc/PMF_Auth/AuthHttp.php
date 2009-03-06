@@ -1,6 +1,6 @@
 <?php
 /**
- * Interface for managing user authentication
+ * Manages user authentication with Apache's HTTP authentication
  *
  * @package    phpMyFAQ 
  * @subpackage PMF_User
@@ -22,16 +22,16 @@
 
 
 /**
- * PMF_User_AuthDriver
+ * PMF_Auth_AuthHttp
  *
  * @package    phpMyFAQ 
- * @subpackage PMF_User
+ * @subpackage PMF_Auth
  * @author     Alberto Cabello <alberto@unex.es>
  * @since      2009-03-01
  * @copyright  2009 phpMyFAQ Team
  * @version    SVN: $Id: AuthDb.php 3790 2009-02-10 20:43:36Z thorsten $ 
  */
-interface PMF_User_AuthDriver
+class PMF_Auth_AuthHttp extends PMF_Auth implements PMF_Auth_AuthDriver
 {
     /**
      * Adds a new user account to the authentication table.
@@ -42,7 +42,10 @@ interface PMF_User_AuthDriver
      * @param  string $pass  Password
      * @return boolean
      */
-    public function add($login, $pass);
+    public function add($login, $pass)
+    {
+    	
+    }
 
     /**
      * Changes the password for the account specified by login.
@@ -55,7 +58,10 @@ interface PMF_User_AuthDriver
      * @param  string $pass  Password
      * @return boolean
     */
-    public function changePassword($login, $pass);
+    public function changePassword($login, $pass)
+    {
+    	
+    }
     
     /**
      * Deletes the user account specified by login.
@@ -67,7 +73,10 @@ interface PMF_User_AuthDriver
      * @param  string $login Loginname
      * @return bool
      */
-    public function delete($login);
+    public function delete($login)
+    {
+    	
+    }
     
     /**
      * Checks the password for the given user account.
@@ -83,7 +92,18 @@ interface PMF_User_AuthDriver
      * @param  string $pass  Password
      * @return boolean
      */
-    public function checkPassword($login, $pass);
+    public function checkPassword($login, $pass)
+    {
+    	if (!isset($_SERVER['PHP_AUTH_USER']) && $_SERVER['PHP_AUTH_PW']) {
+    		return false;
+    	} else {
+    		if ($_SERVER['PHP_AUTH_USER'] == $login && $_SERVER['PHP_AUTH_PW'] == $pass) {
+    			return true;
+    		} else {
+    			return false;
+    		}
+    	}
+    }
 
     /**
      * Does nothing. A function required to be a valid auth.
@@ -91,5 +111,8 @@ interface PMF_User_AuthDriver
      * @param  string $login Loginname
      * @return integer
      */
-    public function checkLogin($login);
+    public function checkLogin($login)
+    {
+    	return isset($_SERVER['PHP_AUTH_USER']) ? true : false;
+    }
 }

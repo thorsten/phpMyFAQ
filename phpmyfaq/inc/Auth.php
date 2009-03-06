@@ -39,7 +39,7 @@
  */
 
 /**
- * PMF_User_Auth
+ * PMF_Auth
  * 
  * @package    phpMyFAQ
  * @subpackage PMF_Auth

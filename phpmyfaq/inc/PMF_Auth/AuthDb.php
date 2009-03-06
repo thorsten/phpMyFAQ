@@ -21,7 +21,7 @@
  */
 
 /**
- * PMF_User_AuthDb
+ * PMF_Auth_AuthDb
  *
  * @package    phpMyFAQ 
  * @subpackage PMF_Auth

@@ -75,7 +75,7 @@ if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
     // login with username and password
     $user = new PMF_User_CurrentUser();
     if ($faqconfig->get('main.ldapSupport')) {
-        $authLdap = new PMF_User_AuthLdap();
+        $authLdap = new PMF_Auth_AuthLdap();
         $user->addAuth($authLdap, 'ldap');
     }
     $faqusername = $db->escape_string($_POST['faqusername']);

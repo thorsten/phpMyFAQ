@@ -193,7 +193,7 @@ class PMF_User_User
         // authentication objects
         // always make a 'local' $auth object (see: $auth_data)
         $this->auth_container = array();
-        $authLocal = PMF_User_Auth::selectAuth($this->auth_data['authSource']['name']);
+        $authLocal = PMF_Auth::selectAuth($this->auth_data['authSource']['name']);
         $authLocal->selectEncType($this->auth_data['encType']);
         $authLocal->setReadOnly($this->auth_data['readOnly']);
         if (!$this->addAuth($authLocal, $this->auth_data['authSource']['type'])) {
@@ -449,7 +449,7 @@ class PMF_User_User
                 continue;
             }
             if (!$auth->add($login, $pass)) {
-                $this->errors[] = self::ERROR_USER_CANNOT_CREATE_USER.'in PMF_User_Auth '.$name;
+                $this->errors[] = self::ERROR_USER_CANNOT_CREATE_USER.'in PMF_Auth '.$name;
             } else {
                 $success = true;
             }
@@ -664,8 +664,8 @@ class PMF_User_User
     /**
      * adds a new authentication object to the user object.
      *
-     * @param  PMF_User_Auth $auth PMF_User_Auth object
-     * @param  string        $name Auth name
+     * @param  PMF_Auth $auth PMF_Auth object
+     * @param  string   $name Auth name
      * @return boolean
      */
     public function addAuth($auth, $name)
@@ -680,7 +680,7 @@ class PMF_User_User
     /**
      * returns true if auth is a valid authentication object.
      *
-     * @param  PMF_User_Auth $auth PMF_User_Auth object
+     * @param  PMF_Auth $auth PMF_Auth object
      * @return bool
      */
     protected function checkAuth($auth)
