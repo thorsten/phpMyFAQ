@@ -156,19 +156,18 @@ class PMF_Auth
     public static function selectAuth($method)
     {
         // verify selected database
-        $auth     = new PMF_Auth();
-        $database = strtolower($method);
+        $auth   = new PMF_Auth();
+        $method = strtolower($method);
         if (!isset($auth->auth_typemap[$method])) {
-            $auth->errors[] = PMF_ERROR_USER_NO_AUTHTYPE;
+            $auth->errors[] = self::PMF_ERROR_USER_NO_AUTHTYPE;
             return $auth;
         }
-        $classfile = dirname(__FILE__) . DIRECTORY_SEPARATOR . $auth->auth_typemap[$method] . ".php";
+        $classfile = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Auth' . DIRECTORY_SEPARATOR . $auth->auth_typemap[$method] . ".php";
         if (!file_exists($classfile)) {
-            $auth->errors[] = PMF_ERROR_USER_NO_AUTHTYPE;
+            $auth->errors[] = self::PMF_ERROR_USER_NO_AUTHTYPE;
             return $auth;
         }
-        require_once $classfile;
-        // instantiate
+        
         $authclass = "PMF_Auth_" . $auth->auth_typemap[$method];
         $auth      = new $authclass();
         return $auth;
