@@ -27,7 +27,7 @@
  */
 
 /**
- * PMF_User_User
+ * PMF_User
  *
  * @package    phpMyFAQ
  * @subpackage PMF_User

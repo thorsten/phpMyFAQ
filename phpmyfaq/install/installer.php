@@ -769,7 +769,7 @@ foreach ($permLevels as $level => $desc) {
     if (!defined('SQLPREFIX')) {
         define('SQLPREFIX', $sqltblpre);
     }
-    $admin = new PMF_User_User();
+    $admin = new PMF_User();
     $admin->createUser('admin', $password, 1);
     $admin->setStatus('protected');
     $adminData = array(
@@ -989,7 +989,7 @@ foreach ($permLevels as $level => $desc) {
         $admin->perm->grantUserRight($adminID, $rightID);
     }
     // Add anonymous user account
-    $anonymous = new PMF_User_User();
+    $anonymous = new PMF_User();
     $anonymous->createUser('anonymous', null, -1);
     $anonymous->setStatus('protected');
     $anonymousData = array(

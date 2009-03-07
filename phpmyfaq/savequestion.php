@@ -74,7 +74,7 @@ if (
                             .wordwrap($content, 72);
 
             $userId = $category->getCategoryUser($questionData['ask_category']);
-            $oUser = new PMF_User_User();
+            $oUser = new PMF_User();
             $oUser->getUserById($userId);
 
             $mail = new PMF_Mail();

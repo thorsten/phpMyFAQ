@@ -1107,7 +1107,7 @@ if ($step == 5) {
         }
 
         // 2/4. Add missing anonymous user account in 2.0.0-alpha
-        $anonymous = new PMF_User_User();
+        $anonymous = new PMF_User();
         $anonymous->createUser('anonymous', null, -1);
         $anonymous->setStatus('protected');
         $anonymousData = array(

@@ -105,7 +105,7 @@ if ($groupAction == 'update_members') {
     if ($groupId == 0) {
         $message .= '<p class="error">'.$errorMessages['updateMembers_noId'].'</p>';
     } else {
-        $user = new PMF_User_User();
+        $user = new PMF_User();
         $perm = $user->perm;
         if (!$perm->removeAllUsersFromGroup($groupId)) {
             $message .= '<p class="error">'.$errorMessages['updateMembers'].'</p>';
@@ -124,7 +124,7 @@ if ($groupAction == 'update_rights') {
     if ($groupId == 0) {
         $message .= '<p class="error">'.$errorMessages['updateRights_noId'].'</p>';
     } else {
-        $user = new PMF_User_User();
+        $user = new PMF_User();
         $perm = $user->perm;
         $groupRights = isset($_POST['group_rights']) ? $_POST['group_rights'] : array();
         if (!$perm->refuseAllGroupRights($groupId)) {
@@ -149,7 +149,7 @@ if ($groupAction == 'update_data') {
         foreach ($dataFields as $field) {
             $groupData[$field] = isset($_POST[$field]) ? $_POST[$field] : '';
         }
-        $user = new PMF_User_User();
+        $user = new PMF_User();
         $perm = $user->perm;
         if (!$perm->changeGroup($groupId, $groupData)) {
             $message .= '<p class="error">'.$errorMessages['updateGroup'].'</p>';
@@ -162,7 +162,7 @@ if ($groupAction == 'update_data') {
 // delete group confirmation
 if ($groupAction == 'delete_confirm') {
     $message = '';
-    $user = new PMF_User_User();
+    $user = new PMF_User();
     $perm = $user->perm;
     $groupId = (isset($_POST['group_list_select']) && $_POST['group_list_select'] > 0) ? $_POST['group_list_select'] : 0;
     if ($groupId <= 0) {
@@ -192,7 +192,7 @@ if ($groupAction == 'delete_confirm') {
 // delete group
 if ($groupAction == 'delete') {
     $message = '';
-    $user = new PMF_User_User();
+    $user = new PMF_User();
     $perm = $user->perm;
     $groupId = (isset($_POST['group_id']) && $_POST['group_id'] > 0) ? (int) $_POST['group_id'] : 0;
     $groupAction = $defaultGroupAction;
@@ -213,7 +213,7 @@ if ($groupAction == 'delete') {
 } // end if ($groupAction == 'delete')
 // save new group
 if ($groupAction == 'addsave') {
-    $user = new PMF_User_User();
+    $user = new PMF_User();
     $message = '';
     $messages = array();
     // check input data

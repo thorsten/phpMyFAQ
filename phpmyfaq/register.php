@@ -66,7 +66,7 @@ if (isset($_POST['captcha']) && !checkCaptchaCode()) {
  */
 if ($loginname != '' && $lastname != '' && $email != '' && !isset($captchaError)) {
 
-    $user     = new PMF_User_User();
+    $user     = new PMF_User();
     $message  = '';
     $messages = array();
 

@@ -37,7 +37,7 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
     header("Vary: Negotiate,Accept");
     header("Content-type: text/xml; charset=".$PMF_LANG['metaCharset']);
 
-    $user     = new PMF_User_User();
+    $user     = new PMF_User();
     $userList = $user->getUserById($_REQUEST['userid']);
     $data = array(
         'display_name'  => $PMF_LANG["ad_user_realname"], //"real name:",

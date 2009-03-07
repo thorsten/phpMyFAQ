@@ -100,7 +100,7 @@ if (
         // Avoid to send multiple emails to the same owner
         if (!isset($sent[$userId])) {
             // TODO: Move this code to Category.php
-            $oUser = new PMF_User_User();
+            $oUser = new PMF_User();
             $oUser->getUserById($userId);
             $catOwnerEmail = $oUser->getUserData('email');
 

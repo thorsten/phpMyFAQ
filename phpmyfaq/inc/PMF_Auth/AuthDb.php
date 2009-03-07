@@ -67,7 +67,7 @@ class PMF_Auth_AuthDb extends PMF_Auth implements PMF_Auth_AuthDriver
     public function add($login, $pass)
     {
         if ($this->checkLogin($login) > 0) {
-            $this->errors[] = PMF_User_User::ERROR_USER_ADD . PMF_User_User::ERROR_USER_LOGIN_NOT_UNIQUE;
+            $this->errors[] = PMF_User::ERROR_USER_ADD . PMF_User::ERROR_USER_LOGIN_NOT_UNIQUE;
             return false;
         }
         
@@ -85,11 +85,11 @@ class PMF_Auth_AuthDb extends PMF_Auth implements PMF_Auth_AuthDriver
         $error = $this->db->error();
         
         if (strlen($error) > 0) {
-            $this->errors[] = PMF_User_User::ERROR_USER_ADD . 'error(): ' . $error;
+            $this->errors[] = PMF_User::ERROR_USER_ADD . 'error(): ' . $error;
             return false;
         }
         if (!$add) {
-            $this->errors[] = PMF_User_User::ERROR_USER_ADD;
+            $this->errors[] = PMF_User::ERROR_USER_ADD;
             return false;
         }
         
@@ -124,11 +124,11 @@ class PMF_Auth_AuthDb extends PMF_Auth implements PMF_Auth_AuthDriver
         $error  = $this->db->error();
         
         if (strlen($error) > 0) {
-            $this->errors[] =  PMF_User_User::ERROR_USER_CHANGE . 'error(): ' . $error;
+            $this->errors[] =  PMF_User::ERROR_USER_CHANGE . 'error(): ' . $error;
             return false;
         }
         if (!$change) {
-            $this->errors[] =  PMF_User_User::ERROR_USER_CHANGE;
+            $this->errors[] =  PMF_User::ERROR_USER_CHANGE;
             return false;
         }
         return true;
@@ -158,11 +158,11 @@ class PMF_Auth_AuthDb extends PMF_Auth implements PMF_Auth_AuthDriver
         $error  = $this->db->error();
         
         if (strlen($error) > 0) {
-            $this->errors[] = PMF_User_User::ERROR_USER_DELETE . 'error(): ' . $error;
+            $this->errors[] = PMF_User::ERROR_USER_DELETE . 'error(): ' . $error;
             return false;
         }
         if (!$delete) {
-            $this->errors[] = PMF_User_User::ERROR_USER_DELETE;
+            $this->errors[] = PMF_User::ERROR_USER_DELETE;
             return false;
         }
         return true;
@@ -195,17 +195,17 @@ class PMF_Auth_AuthDb extends PMF_Auth implements PMF_Auth_AuthDriver
         $error = $this->db->error();
         
         if (strlen($error) > 0) {
-            $this->errors[] = PMF_User_User::ERROR_USER_NOT_FOUND . 'error(): ' . $error;
+            $this->errors[] = PMF_User::ERROR_USER_NOT_FOUND . 'error(): ' . $error;
             return false;
         }
         $num_rows = $this->db->num_rows($check);
         if ($num_rows < 1) {
-            $this->errors[] = PMF_User_User::ERROR_USER_NOT_FOUND;
+            $this->errors[] = PMF_User::ERROR_USER_NOT_FOUND;
             return false;
         }
         // if login not unique, raise an error, but continue
         if ($num_rows > 1) {
-            $this->errors[] = PMF_User_User::ERROR_USER_LOGIN_NOT_UNIQUE;
+            $this->errors[] = PMF_User::ERROR_USER_LOGIN_NOT_UNIQUE;
         }
         // if multiple accounts are ok, just 1 valid required
         while ($user = $this->db->fetch_assoc($check)) {
@@ -214,7 +214,7 @@ class PMF_Auth_AuthDb extends PMF_Auth implements PMF_Auth_AuthDriver
                 break;
             }
         }
-        $this->errors[] = PMF_User_User::ERROR_USER_INCORRECT_PASSWORD;
+        $this->errors[] = PMF_User::ERROR_USER_INCORRECT_PASSWORD;
         return false;
     }
 

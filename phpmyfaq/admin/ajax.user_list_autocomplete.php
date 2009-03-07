@@ -26,7 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
-$user = new PMF_User_User();
+$user = new PMF_User();
 $userList = $user->searchUsers($_REQUEST['user_list_search']);
 
 echo "<ul id='user_list_autocomplete' class='user_list_autocomplete'>";

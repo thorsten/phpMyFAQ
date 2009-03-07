@@ -103,7 +103,7 @@ if ($userAction == 'update_rights') {
     if ($userId == 0) {
         $message .= '<p class="error">'.$errorMessages['updateRights_noId'].'</p>';
     } else {
-        $user = new PMF_User_User();
+        $user = new PMF_User();
         $perm = $user->perm;
         $userRights = isset($_POST['user_rights']) ? $_POST['user_rights'] : array();
         if (!$perm->refuseAllUserRights($userId)) {
@@ -131,7 +131,7 @@ if ($userAction == 'update_data') {
             $userData[$field] = isset($_POST[$field]) ? $_POST[$field] : '';
         }
         $userStatus = isset($_POST['user_status']) ? $_POST['user_status'] : $defaultUserStatus;
-        $user = new PMF_User_User();
+        $user = new PMF_User();
         $user->getUserById($userId);
 
         $stats = $user->getStatus();
@@ -167,7 +167,7 @@ if ($userAction == 'update_data') {
 // delete user confirmation
 if ($userAction == 'delete_confirm') {
     $message = '';
-    $user = new PMF_User_User();
+    $user = new PMF_User();
     $userId = isset($_POST['user_list_select']) ? $_POST['user_list_select'] : 0;
     if ($userId == 0) {
         $message .= '<p class="error">'.$errorMessages['delUser_noId'].'</p>';
@@ -202,7 +202,7 @@ if ($userAction == 'delete_confirm') {
 // delete user
 if ($userAction == 'delete') {
     $message = '';
-    $user = new PMF_User_User();
+    $user = new PMF_User();
     $userId = isset($_POST['user_id']) ? $_POST['user_id'] : 0;
     $userAction = $defaultUserAction;
     if ($userId == 0) {
@@ -222,7 +222,6 @@ if ($userAction == 'delete') {
             $permLevel = isset($PMF_CONF['main.permLevel']) && ('' != $PMF_CONF['main.permLevel']) ? $PMF_CONF['main.permLevel'] : 'basic';
             if ('medium' == $permLevel) {
                 $oPerm = PMF_Perm::selectPerm('medium');
-                $oPerm->addDb($db);
                 $oPerm->removeFromAllGroups($userId);
             }
 
@@ -237,7 +236,7 @@ if ($userAction == 'delete') {
 } // end if ($userAction == 'delete')
 // save new user
 if ($userAction == 'addsave') {
-    $user = new PMF_User_User();
+    $user = new PMF_User();
     $message = '';
     $messages = array();
     // check input data

@@ -36,7 +36,7 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
     header("Vary: Negotiate,Accept");
     header("Content-type: text/xml; charset=".$PMF_LANG['metaCharset']);
 
-    $user      = new PMF_User_User();
+    $user      = new PMF_User();
     $userList  = $user->getAllUsers();
     $groupList = ($user->perm instanceof PMF_User_PermMedium) ? $user->perm->getAllGroups() : array();
     $data = array(
@@ -73,7 +73,7 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
         <select_class>ad_select_user</select_class>
 <?php
     foreach ($userList as $user_id) {
-        $user_object = new PMF_User_User();
+        $user_object = new PMF_User();
         $user_object->getUserById($user_id);
 ?>
         <user id="<?php print $user_id; ?>">
@@ -112,7 +112,7 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
             <group_members>
 <?php
         foreach ($perm->getGroupMembers($group_id) as $member_id) {
-            $member = new PMF_User_User();
+            $member = new PMF_User();
             $member->getUserById($member_id);
 ?>
             <user id="<?php print $member->getUserId(); ?>"></user>
