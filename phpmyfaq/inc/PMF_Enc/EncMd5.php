@@ -22,7 +22,7 @@
 
 
 /**
- * PMF_User_EncMd5
+ * PMF_Enc_EncMd5
  *
  * @package    phpMyFAQ 
  * @subpackage PMF_Enc

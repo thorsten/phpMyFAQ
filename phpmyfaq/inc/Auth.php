@@ -113,7 +113,7 @@ class PMF_Auth
      */
     public function selectEncType($enctype)
     {
-        $this->enc_container = PMF_User_Enc::selectEnc($enctype);
+        $this->enc_container = PMF_Enc::selectEnc($enctype);
         return $this->enc_container;
     }
 

@@ -21,7 +21,7 @@
  */
 
 /**
- * PMF_User_EncSha
+ * PMF_Enc_EncSha
  *
  * @package    phpMyFAQ 
  * @subpackage PMF_Enc

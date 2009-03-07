@@ -21,7 +21,7 @@
  */
 
 /**
- * PMF_User_EncCrypt
+ * PMF_Enc_EncCrypt
  *
  * @package    phpMyFAQ 
  * @subpackage PMF_Enc

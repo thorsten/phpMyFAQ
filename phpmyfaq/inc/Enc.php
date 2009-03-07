@@ -84,11 +84,11 @@ class PMF_Enc
      * of the error() method for further details.
      *
      * @param  string
-     * @return PMF_User_Enc
+     * @return PMF_Enc
      */
     public static function selectEnc($enctype)
     {
-        $enc     = new PMF_User_Enc();
+        $enc     = new PMF_Enc();
         $enctype = strtolower($enctype);
         if (!isset($enc->enc_typemap[$enctype])) {
         	$enc->errors[] = self::PMF_ERROR_USER_NO_ENCTYPE;
