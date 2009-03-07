@@ -46,7 +46,7 @@
  * @copyright  2005-2009 phpMyFAQ Team
  * @version    SVN: $Id$
  */
-class PMF_User_CurrentUser extends PMF_User_User
+class PMF_User_CurrentUser extends PMF_User
 {
     /**
      * true if CurrentUser is logged in, otherwise false.
