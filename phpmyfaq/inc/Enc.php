@@ -94,13 +94,13 @@ class PMF_Enc
         	$enc->errors[] = self::PMF_ERROR_USER_NO_ENCTYPE;
         	return $enc;
         }
-        $classfile = dirname(__FILE__) . DIRECTORY_SEPARATOR . $enc->enc_typemap[$enctype].".php";
+        $classfile = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'PMF_Enc' . DIRECTORY_SEPARATOR . $enc->enc_typemap[$enctype].".php";
         if (!file_exists($classfile)) {
         	$enc->errors[] = self::PMF_ERROR_USER_NO_ENCTYPE;
         	return $enc;
         }
         
-        $newclass = "PMF_User_".$enc->enc_typemap[$enctype];
+        $newclass = "PMF_Enc_".$enc->enc_typemap[$enctype];
         if (!class_exists($newclass)) {
         	$enc->errors[] = self::PMF_ERROR_USER_NO_ENCTYPE;
         	return $enc;
