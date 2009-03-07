@@ -140,7 +140,9 @@ class PMF_Tags
             WHERE
                 dt.record_id = %d
             AND
-                dt.tagging_id = t.tagging_id",
+                dt.tagging_id = t.tagging_id
+            ORDER BY
+                t.tagging_name",
             SQLPREFIX,
             SQLPREFIX,
             $record_id
