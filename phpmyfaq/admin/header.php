@@ -111,7 +111,7 @@ if (isset($_action)) {
 <?php
     // check for group support
     $user         = new PMF_User();
-    $groupSupport = ($user->perm instanceof PMF_User_PermMedium);
+    $groupSupport = ($user->perm instanceof PMF_Perm_PermMedium);
 
     switch ($_action) {
         case 'user':

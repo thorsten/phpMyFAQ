@@ -71,7 +71,7 @@ class PMF_User
     /**
      * Permission container
      *
-     * @var PMF_User_Perm
+     * @var PMF_Perm
      */
     public $perm = null;
 
@@ -169,11 +169,11 @@ class PMF_User
     /**
      * Constructor
      *
-     * @param  PMF_User_Perm $perm Permission object
+     * @param  PMF_Perm $perm Permission object
      * @param  array         $auth Authorization array
      * @return void
      */
-    public function __construct(PMF_User_Perm $perm = null, Array $auth = array())
+    public function __construct(PMF_Perm $perm = null, Array $auth = array())
     {
         $this->db = PMF_Db::getInstance();
     	
@@ -184,7 +184,7 @@ class PMF_User
         } else {
             global $PMF_CONF;
             $permLevel = isset($PMF_CONF['main.permLevel']) && ('' != $PMF_CONF['main.permLevel']) ? $PMF_CONF['main.permLevel'] : 'basic';
-            $perm      = PMF_User_Perm::selectPerm($permLevel);
+            $perm      = PMF_Perm::selectPerm($permLevel);
             if (!$this->addPerm($perm)) {
                 return false;
             }
@@ -218,10 +218,10 @@ class PMF_User
     /**
      * adds a permission object to the user.
      *
-     * @param  PMF_User_Perm $perm Permission object
+     * @param  PMF_Perm $perm Permission object
      * @return boolean
      */
-    public function addPerm(PMF_User_Perm $perm)
+    public function addPerm(PMF_Perm $perm)
     {
         if ($this->checkPerm($perm)) {
             $this->perm = $perm;
@@ -699,12 +699,12 @@ class PMF_User
     /**
      * returns true if perm is a valid permission object.
      *
-     * @param  PMF_User_Perm $perm PMF_User_Perm object
+     * @param  PMF_Perm $perm PMF_Perm object
      * @return bool
      */
     private function checkPerm($perm)
     {
-        if ($perm instanceof PMF_User_Perm) {
+        if ($perm instanceof PMF_Perm) {
             return true;
         }
         $this->errors[] = ERROR_USER_NO_PERM;

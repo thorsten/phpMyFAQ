@@ -147,7 +147,7 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'logout' && isset($auth
 //
 if (isset($user) && is_object($user)) {
     $current_user   = $user->getUserId();
-    if ($user->perm instanceof PMF_User_PermMedium) {
+    if ($user->perm instanceof PMF_Perm_PermMedium) {
         $current_groups = $user->perm->getUserGroups($current_user);
     } else {
         $current_groups = array(-1);

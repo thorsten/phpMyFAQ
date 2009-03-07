@@ -93,7 +93,7 @@ class PMF_Perm
      * defined in perm_typemap.
      *
      * @param  string $perm_level Permission level
-     * @return PMF_User_Perm
+     * @return PMF_Perm
      */
     public static function selectPerm($perm_level)
     {

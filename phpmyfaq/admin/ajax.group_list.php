@@ -38,7 +38,7 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
 
     $user      = new PMF_User();
     $userList  = $user->getAllUsers();
-    $groupList = ($user->perm instanceof PMF_User_PermMedium) ? $user->perm->getAllGroups() : array();
+    $groupList = ($user->perm instanceof PMF_Perm_PermMedium) ? $user->perm->getAllGroups() : array();
     $data = array(
         'name' => "Name:",
         'description' => "Description:",
