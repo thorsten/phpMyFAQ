@@ -2,11 +2,12 @@
 /**
  * The main User session class
  *
- * @package     phpMyFAQ
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since       2007-03-31
- * @copyright   (c) 2007-2009 phpMyFAQ Team
- * @version     SVN: $Id$
+ * @package    phpMyFAQ
+ * @subpackage PMF_Session
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since      2007-03-31
+ * @copyright  2007-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -19,6 +20,16 @@
  * under the License.
  */
 
+/**
+ * PMF_Session
+ *
+ * @package    phpMyFAQ
+ * @subpackage PMF_Session
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since      2007-03-31
+ * @copyright  2007-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
+ */
 class PMF_Session
 {
     /**
@@ -115,7 +126,7 @@ class PMF_Session
                         $id . ';' . 
                         $_SERVER['REMOTE_ADDR'] . ';' . 
                         str_replace(';', ',', $_SERVER['QUERY_STRING']) . ';' . 
-                        str_replace(';', ',', @$_SERVER['HTTP_REFERER']) . ';' . 
+                        str_replace(';', ',', isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '') . ';' . 
                         str_replace(';', ',', urldecode($_SERVER['HTTP_USER_AGENT'])) . ';' . 
                         $_SERVER['REQUEST_TIME'] . ";\n";
                 $file = './data/tracking'.date('dmY');
@@ -186,8 +197,8 @@ class PMF_Session
         $result = $this->db->query($query);
         while ($row = $this->db->fetch_object($result)) {
             $sessions[$row->sid] = array(
-                'ip'    => $row->ip,
-                'time'  => $row->time);
+                'ip'   => $row->ip,
+                'time' => $row->time);
         }
 
         return $sessions;
@@ -314,8 +325,6 @@ class PMF_Session
      */
     public static function setCookie($sessionId)
     {
-        global $sid;
-
-        setcookie(PMF_COOKIE_NAME_SESSIONID, $sid, $_SERVER['REQUEST_TIME'] + PMF_SESSION_EXPIRED_TIME);
+        setcookie(PMF_COOKIE_NAME_SESSIONID, $sessionId, $_SERVER['REQUEST_TIME'] + PMF_SESSION_EXPIRED_TIME);
     }
 }
