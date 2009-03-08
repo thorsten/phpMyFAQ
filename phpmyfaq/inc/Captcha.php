@@ -41,7 +41,7 @@ class PMF_Captcha
     /**
      * The database handle
      *
-     * @var mixed
+     * @var PMF_DB_Driver
      */
     private $db;
 
