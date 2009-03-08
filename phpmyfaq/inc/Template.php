@@ -8,7 +8,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Jan Mergler <jan.mergler@gmx.de>
  * @since     2002-08-22
- * @version   SVN: $Id: Template.php,v 1.9 2008-05-18 11:21:25 thorstenr Exp $
+ * @version   SVN: $Id$
  * @copyright 2002-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
