@@ -8,8 +8,8 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Jan Mergler <jan.mergler@gmx.de>
  * @since     2002-08-22
- * @copyright 2002-2008 phpMyFAQ Team
- * @version   CVS: $Id: Template.php,v 1.9 2008-05-18 11:21:25 thorstenr Exp $
+ * @version   SVN: $Id: Template.php,v 1.9 2008-05-18 11:21:25 thorstenr Exp $
+ * @copyright 2002-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -192,23 +192,25 @@ class PMF_Template
      */
     public function processBlock($templateName, $blockName, $blockContent)
     {
-        $block = $this->blocks[$templateName][$blockName];
-
-        // security check
-        $blockContent = $this->_checkContent($blockContent);
-        foreach ($blockContent as $var => $val) {
-            // if array given, multiply block
-            if (is_array($val)) {
-                $block = $this->_multiplyBlock($this->blocks[$templateName][$blockName], $blockContent);
-                break;
-            } else {
-                $block = str_replace('{'.$var.'}', $val, $block);
+        if (isset($this->blocks[$templateName][$blockName])) {
+            $block = $this->blocks[$templateName][$blockName];
+    
+            // security check
+            $blockContent = $this->_checkContent($blockContent);
+            foreach ($blockContent as $var => $val) {
+                // if array given, multiply block
+                if (is_array($val)) {
+                    $block = $this->_multiplyBlock($this->blocks[$templateName][$blockName], $blockContent);
+                    break;
+                } else {
+                    $block = str_replace('{'.$var.'}', $val, $block);
+                }
             }
+    
+            $this->blocksTouched[] = $blockName;
+            $block = str_replace('&acute;', '`', $block);
+            $this->blocks[$templateName][$blockName] = $block;
         }
-
-        $this->blocksTouched[] = $blockName;
-        $block = str_replace('&acute;', '`', $block);
-        $this->blocks[$templateName][$blockName] = $block;
     }
 
     //
