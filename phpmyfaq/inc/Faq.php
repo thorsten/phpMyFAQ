@@ -94,35 +94,35 @@ class PMF_Faq
     *
     * @var  array
     */
-    var $faqRecord = array();
+    public $faqRecord = array();
 
     /**
     * All current FAQ records in an array
     *
     * @var  array
     */
-    var $faqRecords = array();
+    public $faqRecords = array();
 
     /**
      * Users
      *
      * @var array
      */
-    var $user = null;
+    private $user = null;
 
     /**
      * Groups
      *
      * @var array
      */
-    var $groups = array();
+    private $groups = array();
 
     /**
      * Flag for Group support
      *
      * @var boolean
      */
-    var $groupSupport = false;
+    private $groupSupport = false;
 
     /**
      * Constructor
@@ -131,7 +131,7 @@ class PMF_Faq
      * @param  array   $groups Groups
      * @return void
      */
-    function __construct($user = null, $groups = null)
+    public function __construct($user = null, $groups = null)
     {
         global $PMF_LANG;
 
@@ -694,7 +694,7 @@ class PMF_Faq
      * @param  boolean $admin       must be true if it is called by an admin/author context
      * @return void
      */
-    function getRecord($id, $revision_id = null, $admin = false)
+    public function getRecord($id, $revision_id = null, $admin = false)
     {
         global $PMF_LANG;
 
@@ -807,10 +807,6 @@ class PMF_Faq
      */
     public function addRecord(Array $data, $new_record = true)
     {
-        if (!is_array($data)) {
-            return false;
-        }
-
         if ($new_record) {
             $record_id = $this->db->nextID(SQLPREFIX.'faqdata', 'id');
         } else {
@@ -853,10 +849,6 @@ class PMF_Faq
      */
     public function updateRecord(Array $data)
     {
-        if (!is_array($data)) {
-            return false;
-        }
-
         // Update entry
         $query = sprintf("
             UPDATE
@@ -1091,7 +1083,7 @@ class PMF_Faq
      * @param  integer $solution_id Solution ID
      * @return void
      */
-    function getRecordBySolutionId($solution_id)
+    public function getRecordBySolutionId($solution_id)
     {
         $query = sprintf(
             "SELECT
@@ -1213,7 +1205,7 @@ class PMF_Faq
      * @param  string  $sortOrder Sorting order
      * @return void
      */
-    function getAllRecords($sortType = FAQ_SORTING_TYPE_CATID_FAQID, $condition = null, $sortOrder = 'ASC')
+    public function getAllRecords($sortType = FAQ_SORTING_TYPE_CATID_FAQID, Array $condition = null, $sortOrder = 'ASC')
     {
         $where = '';
         if (!is_null($condition)) {
@@ -1482,7 +1474,7 @@ class PMF_Faq
      * @param  string $language Language
      * @return int
      */
-    function getNumberOfRecords($language = null)
+    public function getNumberOfRecords($language = null)
     {
         $now = date('YmdHis');
 
@@ -1511,41 +1503,7 @@ class PMF_Faq
             return 0;
         }
     }
-
-    /**
-     * Counting the views of a FAQ record
-     *
-     * @param   integer $id id
-     * @return  void
-     */
-    function logViews($id)
-    {
-        $nVisits = 0;
-        $query = sprintf(
-            "SELECT
-                visits
-            FROM
-                %sfaqvisits
-            WHERE
-                id = %d
-            AND
-                lang = '%s'",
-            SQLPREFIX,
-            $id,
-            $this->language);
-
-        $result = $this->db->query($query);
-        if ($this->db->num_rows($result)) {
-            $row = $this->db->fetch_object($result);
-            $nVisits = $row->visits;
-        }
-        if ($nVisits == 0) {
-            $this->createNewVisit($id, $this->language);
-        } else {
-            $this->updateVisit($id);
-        }
-    }
-
+    
     /**
      * Returns all user comments from a FAQ record
      *
@@ -2195,143 +2153,6 @@ class PMF_Faq
         $this->db->query($query);
 
         return true;
-    }
-
-    /**
-     * Adds a new entry in the table faqvisits
-     *
-     * @param   integer $id
-     * @param   string  $lang
-     * @return  boolean
-     * @access  private
-     * @since   2006-06-18
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     */
-    function createNewVisit($id, $lang)
-    {
-        if (!is_numeric($id) && !is_string($lang)) {
-            return false;
-        }
-
-        $query = sprintf(
-            "INSERT INTO
-                %sfaqvisits
-            VALUES
-                (%d, '%s', %d, %d)",
-            SQLPREFIX,
-            $id,
-            $lang,
-            1,
-            $_SERVER['REQUEST_TIME']);
-        $this->db->query($query);
-
-        return true;
-    }
-
-    /**
-     * Updates an entry in the table faqvisits
-     *
-     * @param   integer $id
-     * @return  boolean
-     * @access  private
-     * @since   2006-06-18
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     */
-    function updateVisit($id)
-    {
-        if (!is_numeric($id)) {
-            return false;
-        }
-
-        $query = sprintf(
-            "UPDATE
-                %sfaqvisits
-            SET
-                visits = visits+1,
-                last_visit = %d
-            WHERE
-                id = %d AND lang = '%s'",
-            SQLPREFIX,
-            $_SERVER['REQUEST_TIME'],
-            $id,
-            $this->language);
-        $this->db->query($query);
-
-        return true;
-    }
-
-    /**
-     * Get all the entries from the table faqvisits
-     *
-     * @return  array
-     * @access  public
-     * @since   2006-09-07
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
-     */
-    function getAllVisitsData()
-    {
-        $data = array();
-
-        $query = sprintf(
-            "SELECT
-                *
-             FROM
-                %sfaqvisits
-             ORDER BY
-                visits DESC",
-            SQLPREFIX
-            );
-        $result = $this->db->query($query);
-
-        while ($row = $this->db->fetch_object($result)) {
-            $data[] = array(
-                          'id'          => $row->id,
-                          'lang'        => $row->lang,
-                          'visits'      => $row->visits,
-                          'last_visit'  => $row->last_visit
-                      );
-        }
-
-        return $data;
-    }
-
-    /**
-     * Get the entry from the table faqvisits
-     *
-     * @param   integer $id
-     * @param   string  $lang
-     * @return  boolean
-     * @access  public
-     * @since   2006-09-07
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
-     */
-    function getVisitsData($id, $lang)
-    {
-        if (!is_numeric($id) && !is_string($lang)) {
-            return false;
-        }
-        $data = array('visits' => 0, 'last_visit' => $_SERVER['REQUEST_TIME']);
-
-        $query = sprintf(
-            "SELECT
-                visits, last_visit
-             FROM
-                %sfaqvisits
-             WHERE
-                      id = %d
-                  AND lang = '%s'",
-            SQLPREFIX,
-            $id,
-            $lang
-            );
-        $result = $this->db->query($query);
-
-        if ($row = $this->db->fetch_object($result)) {
-            $data['visits'] = $row->visits;
-            $data['last_visit'] = $row->last_visit;
-        }
-
-        return $data;
     }
 
 

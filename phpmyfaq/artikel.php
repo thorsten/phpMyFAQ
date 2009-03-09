@@ -52,7 +52,8 @@ if (0 == $solution_id) {
 } else {
     $faq->getRecordBySolutionId($solution_id);
 }
-$faq->logViews($faq->faqRecord['id']);
+$faqvisits = PMF_Visits::getInstance();
+$faqvisits->logViews($faq->faqRecord['id']);
 
 $content = $faq->faqRecord['content'];
 $thema   = $faq->getRecordTitle($id);
@@ -244,7 +245,7 @@ $diggItUrl = sprintf('%s?cat=%s&amp;id=%d&amp;lang=%s&amp;title=%s',
     urlencode($thema));
 
 // Create commented out HTML for microsummary
-$allVisitsData = $faq->getAllVisitsData();
+$allVisitsData = $faqvisits->getAllData();
 $faqPopularity = '';
 $maxVisits = 0;
 $minVisits = 0;
