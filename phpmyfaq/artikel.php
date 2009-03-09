@@ -307,7 +307,7 @@ $tpl->processTemplate ("writeContent", array(
     'saveVotingID'                  => $record_id,
     'saveVotingIP'                  => $_SERVER['REMOTE_ADDR'],
     'msgAverageVote'                => $PMF_LANG['msgAverageVote'],
-    'printVotings'                  => $faqrating->getVotingResult($id),
+    'printVotings'                  => $faqrating->getVotingResult($record_id),
     'switchLanguage'                => $switchLanguage,
     'msgVoteUseability'             => $PMF_LANG['msgVoteUseability'],
     'msgVoteBad'                    => $PMF_LANG['msgVoteBad'],
