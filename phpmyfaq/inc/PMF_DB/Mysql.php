@@ -57,7 +57,7 @@ class PMF_DB_Mysql implements PMF_DB_Driver
      *
      * @var array
      */
-    private $tableNames = array();
+    public $tableNames = array();
 
     /**
      * Connects to the database.
