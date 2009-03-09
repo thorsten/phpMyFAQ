@@ -5,8 +5,8 @@
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since     2002-09-17
- * @copyright 2002-2009 phpMyFAQ Team
  * @version   SVN: $Id$
+ * @copyright 2002-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -20,7 +20,7 @@
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
-    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -38,7 +38,7 @@ $category->buildTree();
 $tpl->processTemplate('writeContent', array(
     'msgQuestion'             => $PMF_LANG['msgQuestion'],
     'msgNewQuestion'          => $PMF_LANG['msgNewQuestion'],
-    'writeSendAdress'         => $_SERVER['PHP_SELF'].'?'.$sids.'action=savequestion',
+    'writeSendAdress'         => '?' . $sids . 'action=savequestion',
     'msgNewContentName'       => $PMF_LANG['msgNewContentName'],
     'msgNewContentMail'       => $PMF_LANG['msgNewContentMail'],
     'defaultContentMail'      => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('email') : '',
