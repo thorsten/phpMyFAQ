@@ -39,9 +39,9 @@
 # KNOWN ISSUES
 # 1. Relocation (rpm flag: --relocate OLDPATH=NEWPATH) is not working as expected
 #
-# @author       Matteo Scaramuccia <matteo@scaramuccia.com>
-# @since        2006-07-05
-# @copyright:   (c) 2006-2008 phpMyFAQ Team
+# @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+# @since     2006-07-05
+# @copyright 2006-2009 phpMyFAQ Team
 #
 # The contents of this file are subject to the Mozilla Public License
 # Version 1.1 (the "License"); you may not use this file except in
@@ -57,7 +57,7 @@
 # phpMyFAQ
 #
 %define name        phpmyfaq
-%define version     2.5.0.alpha
+%define version     2.5.0.beta
 %define release     1
 %define epoch       0
 
@@ -156,6 +156,9 @@ installation script.
 %changelog
 
 %changelog
+* Mon Mar 09 2009 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.5.0.beta-1
+- New upstream version 2.5.0-beta.
+
 * Sun May 18 2008 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.5.0.alpha-1
 - New upstream version 2.5.0-alpha.
 

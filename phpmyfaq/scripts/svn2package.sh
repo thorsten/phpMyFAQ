@@ -40,7 +40,7 @@
 
 # PMF Version
 if [ "x${PMF_VERSION}" = "x" ]; then
-	PMF_VERSION="2.5.0-alpha2"
+	PMF_VERSION="2.5.0-beta"
 fi
 
 # Build folder

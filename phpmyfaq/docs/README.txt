@@ -9,25 +9,14 @@ Please read the documentation (documentation.en.html) carefully.
 Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
-Changes since 2.5.0-alpha:
-- migrated a lot of code to PHP 5.2 (Thorsten, Matteo)
-- dropped support for MySQL 4.0 and MaxDB (Thorsten)
-- dropped support for XML-RPC (Thorsten)
-- improved performance (Thorsten)
-- added LDAP authentication (Alberto Cabello Sanchez)
-- added HTTP authentication (Thorsten)
-- added Mail sub system (Matteo)
-- added enable/disable WYSIWYG Editor flag (Thorsten)
-- added most popular searches list (Thorsten)
-- added jQuery as replacement for Prototype/Script.aculo.us (Thorsten)
-- updated bundled FPDF library to version 1.6 (Thorsten)
-- updated bundled TinyMCE editor component to version 3.2.1.1 (Thorsten)
+Changes since 2.5.0-alpha2:
+- 
 
 For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.5.0-alpha2 - 2009-03-09
+Version 2.5.0-beta - 2009-
 - changed PHP requirement to PHP 5.2 (Thorsten)
 - dropped support for MySQL 4.0 and MaxDB (Thorsten)
 - dropped support for XML-RPC (Thorsten)
