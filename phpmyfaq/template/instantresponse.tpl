@@ -27,7 +27,7 @@
                     { 
                         $("#instantresponse").empty(); 
                         if (searchresults.length > 0)  { 
-                            $("#instantresponse").append(searchresults).;
+                            $("#instantresponse").append(searchresults);
                         } 
                     } 
                 });
