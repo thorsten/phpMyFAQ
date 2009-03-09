@@ -1296,7 +1296,7 @@ if ($step == 5) {
 
     // Always the last step: Update version number
     if (version_compare($version, NEWVERSION, '<')) {
-        $oPMFConf = new PMF_Configuration($db);
+        $oPMFConf = PMF_Configuration::getInstance();
         $oPMFConf->update(array('main.currentVersion' => NEWVERSION));
     }
 
