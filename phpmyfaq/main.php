@@ -2,11 +2,12 @@
 /**
  * The main start page with the Top10 and the latest messages
  *
- * @package   phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since     2002-08-23
- * @copyright 2002-2009 phpMyFAQ Team
- * @version   SVN: $Id$
+ * @package    phpMyFAQ
+ * @subpackage Frontend
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since      2002-08-23
+ * @version    SVN: $Id$
+ * @copyright  2002-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License""); you may not use this file except in
@@ -28,17 +29,18 @@ require_once('inc/News.php');
 
 $news = new PMF_News();
 
-$archived        = (isset($_GET['newsid']) && ('0' == $_GET['newsid']));
+$archived        = PMF_Filter::filterInput(INPUT_GET, 'newsid', FILTER_VALIDATE_INT);
 $writeNewsHeader = PMF_htmlentities($PMF_CONF['main.titleFAQ'], ENT_QUOTES, $PMF_LANG['metaCharset']);
 
 if ($archived) {
     $writeNewsHeader .= $PMF_LANG['newsArchive'];
-    $writeNewsRSS = '';
-    $showAllNews = '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'">'.$PMF_LANG['newsShowCurrent'].'</a>';
+    $writeNewsRSS     = '';
+    $showAllNews      = sprintf('<a href="?%s">%s</a>', $sids, $PMF_LANG['newsShowCurrent']);
 } else {
     $writeNewsHeader .= $PMF_LANG['msgNews'];
-    $writeNewsRSS = '<a href="feed/news/rss.php" target="_blank"><img id="newsRSS" src="images/rss.png" width="28" height="16" alt="RSS" /></a>';
-    $showAllNews = '<a href="'.$_SERVER['PHP_SELF'].'?'.$sids.'newsid=0">'.$PMF_LANG['newsShowArchive'].'</a>';
+    $writeNewsRSS     = '<a href="feed/news/rss.php" target="_blank">' . 
+                        '<img id="newsRSS" src="images/rss.png" width="28" height="16" alt="RSS" /></a>';
+    $showAllNews      = sprintf('<a href="?%snewsid=0">%s</a>', $sids, $PMF_LANG['newsShowArchive']);
 }
 
 $tpl->processTemplate('writeContent', array(
