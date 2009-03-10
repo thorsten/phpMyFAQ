@@ -28,72 +28,48 @@ $faqsession->userTracking('sendmail_send2friend', 0);
 
 $captcha = new PMF_Captcha($sids);
 
-if (   isset($_POST['name']) && $_POST['name'] != ''
-    && isset($_POST['mailfrom']) && $_POST['mailfrom'] != ''
-    && isset($_POST['mailto']) && $_POST['mailto'] != ''
-    && IPCheck($_SERVER['REMOTE_ADDR'])
-    && checkBannedWord(htmlspecialchars(strip_tags($_POST['zusatz'])))
-    && checkCaptchaCode() ) {
+$name     = PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+$mailfrom = PMF_Filter::filterInput(INPUT_POST, 'mailfrom', FILTER_VALIDATE_EMAIL);
+$mailto   = PMF_Filter::filterInput(INPUT_POST, 'mailto', FILTER_VALIDATE_EMAIL);
+$link     = PMF_Filter::filterInput(INPUT_POST, 'link', FILTER_VALIDATE_URL);
+$attached = PMF_Filter::filterInput(INPUT_POST, 'zusatz', FILTER_SANITIZE_STRIPPED);
 
-    $name = $db->escape_string(strip_tags($_POST["name"]));
-    $mailfrom = $db->escape_string(strip_tags($_POST["mailfrom"]));
-    $link = $db->escape_string(strip_tags($_POST["link"]));
-    $attached = $db->escape_string(strip_tags($_POST["zusatz"]));
-    $mailto = $_POST['mailto'];
+if (!is_null($name) && !is_null($mailfrom) && !is_null($mailto) && IPCheck($_SERVER['REMOTE_ADDR'])
+    && checkBannedWord(htmlspecialchars($attached)) && checkCaptchaCode() ) {
 
-    if (checkEmail($mailfrom)) {
-        foreach($mailto as $recipient) {
-            $recipient = trim($db->escape_string(strip_tags($recipient)));
-            if (!empty($recipient)) {
-                $mail = new PMF_Mail();
-                $mail->unsetFrom();
-                $mail->setFrom($mailfrom, $name);
-                $mail->addTo($recipient);
-                $mail->subject = $PMF_LANG["msgS2FMailSubject"].$name;
-                $mail->message = $PMF_CONF["main.send2friendText"]."\r\n\r\n".$PMF_LANG["msgS2FText2"]."\r\n".$link."\r\n\r\n".$attached;
-                $html = PMF_Utils::getHTTPContent($link);
-                if ($html !== false) {
-                    $mail->messageAlt = $PMF_CONF["main.send2friendText"]."\r\n\r\n".$PMF_LANG["msgS2FText2"]."\r\n".$link."\r\n\r\n".$attached;
-                    $mail->setHTMLMessage($html);
-                }
-                $result = $mail->send();
-                unset($mail);
-                usleep(250);
+    foreach($mailto as $recipient) {
+        $recipient = trim(strip_tags($recipient));
+        if (!empty($recipient)) {
+            $mail = new PMF_Mail();
+            $mail->unsetFrom();
+            $mail->setFrom($mailfrom, $name);
+            $mail->addTo($recipient);
+            $mail->subject = $PMF_LANG["msgS2FMailSubject"].$name;
+            $mail->message = $faqconfig->get("main.send2friendText")."\r\n\r\n".$PMF_LANG["msgS2FText2"]."\r\n".$link."\r\n\r\n".$attached;
+            $html = PMF_Utils::getHTTPContent($link);
+            if ($html !== false) {
+                $mail->messageAlt = $faqconfig->get("main.send2friendText")."\r\n\r\n".$PMF_LANG["msgS2FText2"]."\r\n".$link."\r\n\r\n".$attached;
+                $mail->setHTMLMessage($html);
             }
+            $result = $mail->send();
+            unset($mail);
+            usleep(250);
         }
-        $tpl->processTemplate(
-            "writeContent",
-            array(
-                "msgSend2Friend" => $PMF_LANG["msgSend2Friend"],
-                "Message" => $PMF_LANG["msgS2FThx"]
-            )
-        );
-    } else {
-        $tpl->processTemplate(
-            "writeContent",
-            array(
-                "msgSend2Friend" => $PMF_LANG["msgSend2Friend"],
-                "Message" => $PMF_LANG["err_noMailAdress"]
-            )
-        );
     }
+    
+    $tpl->processTemplate('writeContent', array(
+        'msgSend2Friend' => $PMF_LANG['msgSend2Friend'],
+        'Message'        => $PMF_LANG['msgS2FThx']));
+
 } else {
     if (false === IPCheck($_SERVER["REMOTE_ADDR"])) {
-        $tpl->processTemplate(
-            "writeContent",
-            array(
-                "msgSend2Friend" => $PMF_LANG["msgSend2Friend"],
-                "Message" => $PMF_LANG["err_bannedIP"]
-            )
-        );
+        $tpl->processTemplate('writeContent', array(
+            'msgSend2Friend' => $PMF_LANG['msgSend2Friend'],
+            'Message'        => $PMF_LANG["err_bannedIP"]));
     } else {
-        $tpl->processTemplate(
-            "writeContent",
-            array(
-                "msgSend2Friend" => $PMF_LANG["msgSend2Friend"],
-                "Message" => $PMF_LANG["err_sendMail"]
-            )
-        );
+        $tpl->processTemplate('writeContent', array(
+            'msgSend2Friend' => $PMF_LANG['msgSend2Friend'],
+            'Message'        => $PMF_LANG["err_sendMail"]));
     }
 }
 
