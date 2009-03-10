@@ -33,15 +33,11 @@ if (isset($_GET['gen'])) {
     exit();
 }
 
-require_once('inc/News.php');
+$oNews   = new PMF_News();
+$news_id = PMF_Filter::filterInput(INPUT_GET, 'newsid', FILTER_VALIDATE_INT);
 
-$oNews = new PMF_News();
-
-if (isset($_REQUEST['newsid']) && is_numeric($_REQUEST['newsid'])) {
-    $id = (int)$_REQUEST['newsid'];
-} else {
-    // Wrong access
-    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+if (is_null($news_id)) {
+    header('Location: http://'.$_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -52,7 +48,7 @@ $writeNewsHeader = PMF_htmlentities($PMF_CONF['main.titleFAQ'], ENT_QUOTES, $PMF
 $writeNewsRSS = '<a href="feed/news/rss.php" target="_blank"><img id="newsRSS" src="images/rss.png" width="28" height="16" alt="RSS" /></a>';
 
 // Get all data from the news record
-$news = $oNews->getNewsEntry($id);
+$news = $oNews->getNewsEntry($news_id);
 
 $content = $news['content'];
 $header  = $news['header'];
@@ -68,9 +64,8 @@ if (isset($permission['editnews'])) {
     $editThisEntry = sprintf(
                         '<a href="%sadmin/index.php?action=news&amp;do=edit&amp;id=%d">%s</a>',
                         PMF_Link::getSystemRelativeUri('index.php'),
-                        $id,
-                        $PMF_LANG['ad_menu_news_edit']
-                        );
+                        $news_id,
+                        $PMF_LANG['ad_menu_news_edit']);
 }
 
 // Is the news item expired?
@@ -80,15 +75,14 @@ $expired = (date('YmdHis') > $news['dateEnd']);
 if ((!$news['active']) || (!$news['allowComments']) || $expired) {
     $commentMessage = $PMF_LANG['msgWriteNoComment'];
 } else {
-    $oLink = new PMF_Link($_SERVER['PHP_SELF'].'?'.str_replace('&', '&amp;',$_SERVER['QUERY_STRING']));
+    $oLink            = new PMF_Link($_SERVER['PHP_SELF'].'?'.str_replace('&', '&amp;',$_SERVER['QUERY_STRING']));
     $oLink->itemTitle = $header;
-    $commentHref = $oLink->toString().'#comment';
-    $commentMessage = sprintf(
+    $commentHref      = $oLink->toString().'#comment';
+    $commentMessage   = sprintf(
         '%s<a onclick="show(\'comment\');" href="%s">%s</a>',
         $PMF_LANG['msgYouCan'],
         $commentHref,
-        $PMF_LANG['newsWriteComment']
-    );
+        $PMF_LANG['newsWriteComment']);
 }
 
 // Set the template variables
@@ -103,7 +97,7 @@ $tpl->processTemplate ("writeContent", array(
     'writeCommentMsg'           => $commentMessage,
     'msgWriteComment'           => $PMF_LANG['newsWriteComment'],
     'writeSendAdress'           => $_SERVER['PHP_SELF'].'?'.$sids.'action=savecomment',
-    'newsId'                    => $id,
+    'newsId'                    => $news_id,
     'newsLang'                  => $news['lang'],
     'msgCommentHeader'          => $PMF_LANG['msgCommentHeader'],
     'msgNewContentName'         => $PMF_LANG['msgNewContentName'],
@@ -113,6 +107,6 @@ $tpl->processTemplate ("writeContent", array(
     'msgYourComment'            => $PMF_LANG['msgYourComment'],
     'msgNewContentSubmit'       => $PMF_LANG['msgNewContentSubmit'],
     'captchaFieldset'           => printCaptchaFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('writecomment'), $captcha->caplength),
-    'writeComments'             => $oNews->getComments($id)));
+    'writeComments'             => $oNews->getComments($news_id)));
 
 $tpl->includeTemplate('writeContent', 'index');
