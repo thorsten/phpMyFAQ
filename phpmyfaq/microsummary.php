@@ -6,8 +6,8 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @since     2006-09-05
- * @copyright 2006-2009 phpMyFAQ Team
  * @version   SVN: $Id$
+ * @copyright 2006-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -20,7 +20,7 @@
  * under the License.
  */
 
-header("Expires: Mon, 06 Sep 2006 00:00:00 GMT");
+header("Expires: Tue, 07 Apr 1977 14:47:00 GMT");
 header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
 header("Cache-Control: no-store, no-cache, must-revalidate");
 header("Cache-Control: post-check=0, pre-check=0", false);
@@ -28,19 +28,16 @@ header("Pragma: no-cache");
 header("Content-type: text/xml");
 header("Vary: Negotiate,Accept");
 
-require_once('inc/constants.php');
-require_once('inc/Link.php');
+require_once 'inc/constants.php';
+require_once 'inc/Filter.php';
+require_once 'inc/Link.php';
 
 //
 // Found an action reference?
 //
-if (   isset($_GET['action'])
-    && is_string($_GET['action'])
-    && !preg_match("=/=", $_GET['action'])
-    && isset($allowedVariables[$_GET['action']])
-    ) {
-    $action = trim($_GET['action']);
-} else {
+$action = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING, 'main');
+
+if (preg_match("=/=", $action) && !isset($allowedVariables[$action])) {
     $action = "main";
 }
 
@@ -48,14 +45,14 @@ if (   isset($_GET['action'])
 // Define what are the actions for which a microsummary generator (microsummary.php) is defined
 //
 $microRules = array(
-    'artikel'   => 'phpMyFAQ Faq Records',
-    'main'      => 'phpMyFAQ Homepage',
-    'news'      => 'phpMyFAQ Latest News',
-    'open'      => 'phpMyFAQ Open Questions',
-    'show'      => 'phpMyFAQ Categories',
-    'ask'       => 'phpMyFAQ Ask Question',
-    'search'    => 'phpMyFAQ Search',
-    'sitemap'   => 'phpMyFAQ Sitemap');
+    'artikel' => 'phpMyFAQ Faq Records',
+    'main'    => 'phpMyFAQ Homepage',
+    'news'    => 'phpMyFAQ Latest News',
+    'open'    => 'phpMyFAQ Open Questions',
+    'show'    => 'phpMyFAQ Categories',
+    'ask'     => 'phpMyFAQ Ask Question',
+    'search'  => 'phpMyFAQ Search',
+    'sitemap' => 'phpMyFAQ Sitemap');
 
 print '<?xml version="1.0" encoding="UTF-8"?>';
 ?>
