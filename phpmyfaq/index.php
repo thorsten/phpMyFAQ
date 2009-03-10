@@ -69,7 +69,7 @@ if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE) && !isset($_GE
 //
 // Get user action
 //
-$action = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
+$action = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING, 'main');
 
 //
 // Authenticate current user
@@ -170,17 +170,18 @@ if (function_exists('mb_language') && in_array($mbLanguage, $valid_mb_strings)) 
 // found a session ID in _GET or _COOKIE?
 //
 $sid        = null;
+$sid_get    = PMF_Filter::filterInput(INPUT_GET, PMF_GET_KEY_NAME_SESSIONID, FILTER_VALIDATE_INT);
+$sid_cookie = PMF_Filter::filterInput(INPUT_COOKIE, PMF_COOKIE_NAME_SESSIONID, FILTER_VALIDATE_INT);
 $faqsession = new PMF_Session();
 
-if ((!isset($_GET[PMF_GET_KEY_NAME_SESSIONID])) && (!isset($_COOKIE[PMF_COOKIE_NAME_SESSIONID]))
-    ) {
+if (null == $sid_get && null == $sid_cookie) {
     // Create a per-site unique SID
     $faqsession->userTracking('new_session', 0);
 } else {
-    if (isset($_COOKIE[PMF_COOKIE_NAME_SESSIONID]) && is_numeric($_COOKIE[PMF_COOKIE_NAME_SESSIONID])) {
-        $faqsession->checkSessionId((int)$_COOKIE[PMF_COOKIE_NAME_SESSIONID], $_SERVER['REMOTE_ADDR']);
+    if (!is_null($sid_cookie)) {
+        $faqsession->checkSessionId($sid_cookie, $_SERVER['REMOTE_ADDR']);
     } else {
-        $faqsession->checkSessionId((int)$_GET[PMF_GET_KEY_NAME_SESSIONID], $_SERVER['REMOTE_ADDR']);
+        $faqsession->checkSessionId($sid_get, $_SERVER['REMOTE_ADDR']);
     }
 }
 
@@ -191,28 +192,27 @@ $sids = '';
 if ($faqconfig->get('main.enableUserTracking')) {
     if (isset($sid)) {
         PMF_Session::setCookie($sid);
-        if (!isset($_COOKIE[PMF_COOKIE_NAME_SESSIONID])) {
-            $sids = 'sid='.(int)$sid.'&amp;lang='.$LANGCODE.'&amp;';
+        if (is_null($sid_cookie)) {
+            $sids = sprintf('sid=%d&amp;lang=%s&amp;', $sid, $LANGCODE);
         }
-    } elseif (isset($_GET[PMF_GET_KEY_NAME_SESSIONID]) || isset($_COOKIE[PMF_COOKIE_NAME_SESSIONID])) {
-        if (!isset($_COOKIE[PMF_COOKIE_NAME_SESSIONID])) {
-            if (isset($_GET[PMF_GET_KEY_NAME_SESSIONID]) && is_numeric($_GET[PMF_GET_KEY_NAME_SESSIONID])) {
-                $sids = 'sid='.(int)$_GET[PMF_GET_KEY_NAME_SESSIONID].'&amp;lang='.$LANGCODE.'&amp;';
+    } elseif (is_null($sid_get) || is_null($sid_cookie)) {
+        if (is_null($sid_cookie)) {
+            if (!is_null($sid_get)) {
+                $sids = sprintf('sid=%d&amp;lang=%s&amp;', $sid_get, $LANGCODE);
             }
         }
     }
 } else {
     if (!setcookie(PMF_GET_KEY_NAME_LANGUAGE, $LANGCODE, $_SERVER['REQUEST_TIME'] + PMF_LANGUAGE_EXPIRED_TIME)) {
-        $sids = 'lang='.$LANGCODE.'&amp;';
+        $sids = sprintf('lang=%s&amp;', $LANGCODE);
     }
 }
 
 //
 // Found a article language?
 //
-if (isset($_POST['artlang']) && PMF_Init::isASupportedLanguage($_POST['artlang']) ) {
-    $lang = strip_tags($_POST['artlang']);
-} else {
+$lang = PMF_Filter::filterInput(INPUT_POST, 'artlang', FILTER_SANITIZE_STRING);
+if (is_null($lang) && !PMF_Init::isASupportedLanguage($lang) ) {
     $lang = $LANGCODE;
 }
 
@@ -234,8 +234,8 @@ $oTag = new PMF_Tags();
 //
 // Found a record ID?
 //
-if (isset($_REQUEST['id']) && is_numeric($_REQUEST['id']) == true) {
-    $id       = (int)$_REQUEST['id'];
+$id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+if (!is_null($id)) {
     $title    = ' - ' . $faq->getRecordTitle($id);
     $keywords = ' ' . $faq->getRecordKeywords($id);
 } else {
@@ -247,9 +247,9 @@ if (isset($_REQUEST['id']) && is_numeric($_REQUEST['id']) == true) {
 //
 // found a solution ID?
 //
-if (isset($_REQUEST['solution_id']) && is_numeric($_REQUEST['solution_id']) === true) {
-    $solution_id = (int)$_REQUEST['solution_id'];
-    $title       = ' -  powered by phpMyFAQ '.$faqconfig->get('main.currentVersion');
+$solution_id = PMF_Filter::filterInput(INPUT_GET, 'solution_id', FILTER_VALIDATE_INT);
+if (!is_null($solution_id)) {
+    $title       = ' -  powered by phpMyFAQ ' . $faqconfig->get('main.currentVersion');
     $keywords    = '';
     $a = $faq->getIdFromSolutionId($solution_id);
     if (is_array($a)) {
@@ -263,8 +263,8 @@ if (isset($_REQUEST['solution_id']) && is_numeric($_REQUEST['solution_id']) === 
 //
 // Handle the Tagging ID
 //
-if (isset($_REQUEST['tagging_id']) && is_numeric($_REQUEST['tagging_id'])) {
-    $tag_id   = (int)$_REQUEST['tagging_id'];
+$tag_id = PMF_Filter::filterInput(INPUT_GET, 'tagging_id', FILTER_VALIDATE_INT);
+if (!is_null($tag_id)) {
     $title    = ' - ' . $oTag->getTagNameById($tag_id);
     $keywords = '';
 }
@@ -272,12 +272,7 @@ if (isset($_REQUEST['tagging_id']) && is_numeric($_REQUEST['tagging_id'])) {
 //
 // Found a category ID?
 //
-if (isset($_GET['cat'])) {
-    $cat = (int)$_GET['cat'];
-} else {
-    $cat = 0;
-}
-
+$cat         = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
 $cat_from_id = -1;
 if (is_numeric($id) && $id > 0) {
     $cat_from_id = $category->getCategoryIdFromArticle($id);
@@ -290,25 +285,15 @@ $category->collapseAll();
 if ($cat != 0) {
     $category->expandTo($cat);
 }
-if (   isset($cat)
-    && ($cat != 0)
-    && ($id == '')
-    && isset($category->categoryName[$cat]['name'])
-    ) {
+if (isset($cat) && ($cat != 0) && ($id == '') && isset($category->categoryName[$cat]['name'])) {
     $title = ' - '.$category->categoryName[$cat]['name'];
 }
 
 //
 // Found an action request?
 //
-$action = "main";
-if (
-       isset($_REQUEST['action'])
-    && is_string($_REQUEST['action'])
-    && !preg_match("=/=", $_REQUEST['action'])
-    && isset($allowedVariables[$_REQUEST['action']])
-    ) {
-    $action = trim($_REQUEST['action']);
+if (preg_match("=/=", $action) && !isset($allowedVariables[$action])) {
+    $action = 'main';
 }
 
 //
@@ -320,9 +305,9 @@ if (isset($auth)) {
     $login_tpl = 'template/loginbox.tpl';
 }
 if ($action != 'main') {
-    $inc_tpl = 'template/' . $action . '.tpl';
-    $inc_php = $action.".php";
-    $writeLangAdress = $_SERVER['PHP_SELF']."?".str_replace("&", "&amp;",$_SERVER["QUERY_STRING"]);
+    $inc_tpl         = 'template/' . $action . '.tpl';
+    $inc_php         = $action.".php";
+    $writeLangAdress = "?".str_replace("&", "&amp;",$_SERVER["QUERY_STRING"]);
 } else {
     if (isset($solution_id) && is_numeric($solution_id)) {
         // show the record with the solution ID
@@ -332,7 +317,7 @@ if ($action != 'main') {
         $inc_tpl = 'template/main.tpl';
         $inc_php = 'main.php';
     }
-    $writeLangAdress = $_SERVER['PHP_SELF'].'?'.$sids;
+    $writeLangAdress = '?'.$sids;
 }
 
 //
@@ -350,10 +335,10 @@ if ($hasTags && (($action == 'artikel') || ($action == 'show'))) {
 // Load template files and set template variables
 //
 $tpl = new PMF_Template (array(
-    'index'                 => 'template/index.tpl',
-    'loginBox'              => $login_tpl,
-    'rightBox'              => $right_tpl,
-    'writeContent'          => $inc_tpl));
+    'index'        => 'template/index.tpl',
+    'loginBox'     => $login_tpl,
+    'rightBox'     => $right_tpl,
+    'writeContent' => $inc_tpl));
 
 $usersOnLine    = getUsersOnline();
 $totUsersOnLine = $usersOnLine[0] + $usersOnLine[1];
@@ -434,13 +419,8 @@ header("Vary: Negotiate,Accept");
 // Add debug info if needed
 //
 if (DEBUG) {
-    $cookies = '';
-    foreach($_COOKIE as $key => $value) {
-        $cookies .= $key.': '.$value.'<br />';
-    }
-
     $debug_template_vars = array(
-        'debugMessages' => "\n".'<div id="debug_main">DEBUG INFORMATION:<br />'.$db->sqllog().'</div><div id="debug_cookies">COOKIES:<br />'.$cookies.'</div>'
+        'debugMessages' => "\n".'<div id="debug_main">DEBUG INFORMATION:<br />'.$db->sqllog().'</div>'
     );
 } else {
     $debug_template_vars = array('debugMessages' => '');
