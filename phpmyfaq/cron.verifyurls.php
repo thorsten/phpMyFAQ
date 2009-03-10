@@ -6,12 +6,12 @@
  * a. using PHP CLI
  * b. using a Web Hit to this file
  *
- * @package     phpMyFAQ 
- * @author      Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since       2006-09-17
- * @version     SVN: $Id$ 
- * @copyright   (c) 2006-2009 phpMyFAQ Team
+ * @package   phpMyFAQ 
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since     2006-09-17
+ * @version   SVN: $Id$ 
+ * @copyright 2006-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -33,27 +33,28 @@ define('LANGCODE', 'en');
 
 // Do not change anything below this line!
 define('PMF_ROOT_DIR', dirname(__FILE__));
-$output                     = '';
-$isCronRequest              = false;
-$isRequestedByCLI           = isset($_SERVER['argv']) && (isset($_SERVER['argv'][0]));
-$isRequestedByWebLocalhost  = isset($_SERVER['REMOTE_ADDR']) && ('127.0.0.1' == $_SERVER['REMOTE_ADDR']);
+$output                    = '';
+$isCronRequest             = false;
+$isRequestedByCLI          = isset($_SERVER['argv']) && (isset($_SERVER['argv'][0]));
+$isRequestedByWebLocalhost = isset($_SERVER['REMOTE_ADDR']) && ('127.0.0.1' == $_SERVER['REMOTE_ADDR']);
 
 $isCronRequest = $isRequestedByCLI || $isRequestedByWebLocalhost;
 
 if ($isCronRequest && file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
     // Hack: set dummy values for those entries evaluated during a Web request but not during a CLI request
     if ($isRequestedByCLI) {
-        $_SERVER['HTTP_HOST'] = '';
+        $_SERVER['HTTP_HOST']       = '';
         $_SERVER['HTTP_USER_AGENT'] = '';
     }
-    require_once(PMF_ROOT_DIR.'/inc/Init.php');
+    
+    require_once PMF_ROOT_DIR. '/inc/Init.php';
     define('IS_VALID_PHPMYFAQ', null);
     PMF_Init::cleanRequest();
     session_name(PMF_COOKIE_NAME_AUTH . trim($faqconfig->get('main.phpMyFAQToken')));
     session_start();
 
     // Preload English strings
-    require_once(PMF_ROOT_DIR.'/lang/language_en.php');
+    require_once PMF_ROOT_DIR . '/lang/language_en.php');
 
     if ((LANGCODE != 'en') && PMF_Init::isASupportedLanguage(LANGCODE)) {
         // Overwrite English strings with the ones we have in the current language
@@ -67,15 +68,16 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
     $totStart = microtime(true);
 
     // Read the data directly from the faqdata table (all faq records in all languages)
-    $start = microtime(true);
+    $start   = microtime(true);
     $output .= ($isRequestedByWebLocalhost ? '' : "\n");
     $output .= 'Extracting faq records...';
+    
     $faq->getAllRecords();
     $_records = $faq->faqRecords;
-    $tot = count($_records);
-    $end = microtime(true);
-    $output .= ' #'.$tot.', done in '.round($end - $start, 4).' sec.'.($isRequestedByWebLocalhost ? '' : "\n");;
-    $output .= ($isRequestedByWebLocalhost ? '' : "\n");
+    $tot      = count($_records);
+    $end      = microtime(true);
+    $output  .= ' #'.$tot.', done in '.round($end - $start, 4).' sec.'.($isRequestedByWebLocalhost ? '' : "\n");;
+    $output  .= ($isRequestedByWebLocalhost ? '' : "\n");
     if ($isRequestedByWebLocalhost) {
         print '<pre>';
     }
