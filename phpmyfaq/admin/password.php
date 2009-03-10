@@ -76,12 +76,9 @@ $_action = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
 if ($_action == "sendmail") {
 	
 	$username = PMF_Filter::filterInput(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
-	$email    = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_SANITIZE_STRING);
+	$email    = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
 	
-        if (!is_null($username) && !is_null($email) && checkEmail($email)
-            ) {
-            $username = $db->escape_string($username);
-            $email    = $db->escape_string($email);
+        if (!is_null($username) && !is_null($email)) {
 
             $user       = new PMF_User_CurrentUser();
             $loginExist = $user->getUserByLogin($username);
