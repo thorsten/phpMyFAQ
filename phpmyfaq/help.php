@@ -5,8 +5,8 @@
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since     2002-08-29
- * @copyright 2002-2009 phpMyFAQ Team
  * @version   SVN: $Id$
+ * @copyright 2002-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the 'License'); you may not use this file except in
@@ -20,14 +20,14 @@
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
-    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
 $faqsession->userTracking('faqhelp', 0);
 
 $tpl->processTemplate('writeContent', array(
-    'msgHelp'       => $PMF_LANG['msgHelp'],
-    'msgHelpText'   => $PMF_LANG['msgHelpText']));
+    'msgHelp'     => $PMF_LANG['msgHelp'],
+    'msgHelpText' => $PMF_LANG['msgHelpText']));
 
 $tpl->includeTemplate('writeContent', 'index');
