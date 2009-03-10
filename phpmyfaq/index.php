@@ -9,8 +9,8 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @since     2001-02-12
- * @copyright 2001-2009 phpMyFAQ Team
  * @version   SVN: $Id$
+ * @copyright 2001-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -67,28 +67,29 @@ if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE) && !isset($_GE
 }
 
 //
+// Get user action
+//
+$action = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
+
+//
 // Authenticate current user
 //
-$auth = null;
-$error = '';
-if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
-    // login with username and password
+$auth        = null;
+$error       = '';
+$faqusername = PMF_Filter::filterInput(INPUT_POST, 'faqusername', FILTER_SANITIZE_STRING);
+$faqpassword = PMF_Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_SANITIZE_STRING);
+if (!is_null($faqusername) && !is_null($faqpassword)) {
     $user = new PMF_User_CurrentUser();
     if ($faqconfig->get('main.ldapSupport')) {
         $authLdap = new PMF_Auth_AuthLdap();
         $user->addAuth($authLdap, 'ldap');
     }
-    $faqusername = $db->escape_string($_POST['faqusername']);
-    $faqpassword = $db->escape_string($_POST['faqpassword']);
     if ($user->login($faqusername, $faqpassword)) {
-        // login, if user account is NOT blocked
         if ($user->getStatus() != 'blocked') {
             $auth = true;
         } else {
             $error = $PMF_LANG["ad_auth_fail"]." (".$faqusername." / *)";
-            $user = null;
-            unset($user);
-            $_REQUEST['action'] = '';
+            $user  = null;
         }
     } else {
         // error
@@ -99,8 +100,6 @@ if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
             $PMF_LANG['lostPassword']
         );
         $user = null;
-        unset($user);
-        $_REQUEST['action'] = '';
     }
 } else {
     // authenticate with session information
@@ -109,7 +108,6 @@ if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
         $auth = true;
     } else {
         $user = null;
-        unset($user);
     }
 }
 
@@ -134,18 +132,16 @@ if (isset($auth)) {
 //
 // Logout
 //
-if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'logout' && isset($auth)) {
+if ('logout' === $action && isset($auth)) {
     $user->deleteFromSession();
     $user = null;
-    unset($user);
     $auth = null;
-    unset($auth);
 }
 
 //
 // Get current user and group id - default: -1
 //
-if (isset($user) && is_object($user)) {
+if (!is_null($user) && $user instanceof PMF_User_CurrentUser) {
     $current_user   = $user->getUserId();
     if ($user->perm instanceof PMF_Perm_PermMedium) {
         $current_groups = $user->perm->getUserGroups($current_user);
@@ -164,7 +160,7 @@ if (isset($user) && is_object($user)) {
 // use mbstring extension if available and when possible
 //
 $valid_mb_strings = array('ja', 'en', 'uni');
-$mbLanguage = ('utf-8' == strtolower($PMF_LANG['metaCharset'])) && ($PMF_LANG['metaLanguage'] != 'ja') ? 'uni' : $PMF_LANG['metaLanguage'];
+$mbLanguage       = ('utf-8' == strtolower($PMF_LANG['metaCharset'])) && ($PMF_LANG['metaLanguage'] != 'ja') ? 'uni' : $PMF_LANG['metaLanguage'];
 if (function_exists('mb_language') && in_array($mbLanguage, $valid_mb_strings)) {
     mb_language($mbLanguage);
     mb_internal_encoding($PMF_LANG['metaCharset']);
@@ -173,11 +169,10 @@ if (function_exists('mb_language') && in_array($mbLanguage, $valid_mb_strings)) 
 //
 // found a session ID in _GET or _COOKIE?
 //
-$sid = null;
+$sid        = null;
 $faqsession = new PMF_Session();
-if (
-       (!isset($_GET[PMF_GET_KEY_NAME_SESSIONID]))
-    && (!isset($_COOKIE[PMF_COOKIE_NAME_SESSIONID]))
+
+if ((!isset($_GET[PMF_GET_KEY_NAME_SESSIONID])) && (!isset($_COOKIE[PMF_COOKIE_NAME_SESSIONID]))
     ) {
     // Create a per-site unique SID
     $faqsession->userTracking('new_session', 0);
