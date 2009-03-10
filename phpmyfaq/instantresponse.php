@@ -6,8 +6,8 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @since     2007-03-18
- * @copyright 2007-2009 phpMyFAQ Team
  * @version   SVN: $Id$
+ * @copyright 2007-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -27,8 +27,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $faqsession->userTracking('instantresponse', 0);
 
-$searchString           = '';
-$printInstantResponse   = '';
+$searchString         = '';
+$printInstantResponse = '';
 
 $tpl->processTemplate(
     'writeContent',
