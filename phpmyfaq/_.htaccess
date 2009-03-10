@@ -5,8 +5,8 @@
 # @author    Patrick Preuster <sica@php-q.net>
 # @author    Matteo scaramuccia <matteo@scaramuccia.com>
 # @since     2004-11-13
-# @copyright 2004-2009 phpMyFAQ Team
 # @version   SVN: $Id$
+# @copyright 2004-2009 phpMyFAQ Team
 #
 # The contents of this file are subject to the Mozilla Public License
 # Version 1.1 (the "License"); you may not use this file except in
@@ -21,7 +21,7 @@
 ##
 
 # always follow the symlinks
-Options +FollowSymlinks
+Options +FollowSymlinks -MultiViews
 
 # if you want to use mod_rewrite, set this 'On'
 RewriteEngine On
