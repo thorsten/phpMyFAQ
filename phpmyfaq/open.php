@@ -1,10 +1,13 @@
 <?php
 /**
- * $Id: open.php,v 1.13 2008-05-23 13:06:07 thorstenr Exp $
+ * Open questions frontend
  *
- * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since        2002-09-17
- * @copyright    (c) 2001-2007 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage Frontend
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since      2002-09-17
+ * @version    SVN: $Id$
+ * @copyright  2002-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the 'License'); you may not use this file except in
@@ -25,10 +28,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $faqsession->userTracking('open_questions', 0);
 
 $tpl->processTemplate ('writeContent', array(
-    'msgOpenQuestions'      => $PMF_LANG['msgOpenQuestions'],
-    'msgQuestionText'       => $PMF_LANG['msgQuestionText'],
-    'msgDate_User'          => $PMF_LANG['msgDate_User'],
-    'msgQuestion2'          => $PMF_LANG['msgQuestion2'],
-    'printOpenQuestions'    => $faq->printOpenQuestions()));
+    'msgOpenQuestions'   => $PMF_LANG['msgOpenQuestions'],
+    'msgQuestionText'    => $PMF_LANG['msgQuestionText'],
+    'msgDate_User'       => $PMF_LANG['msgDate_User'],
+    'msgQuestion2'       => $PMF_LANG['msgQuestion2'],
+    'printOpenQuestions' => $faq->printOpenQuestions()));
 
 $tpl->includeTemplate('writeContent', 'index');
