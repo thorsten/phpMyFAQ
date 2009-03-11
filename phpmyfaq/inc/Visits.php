@@ -69,7 +69,7 @@ class PMF_Visits
      * Returns the single instance
      *
      * @access static
-     * @return object
+     * @return PMF_Visits
      */
     public static function getInstance()
     {
@@ -83,14 +83,14 @@ class PMF_Visits
     /**
      * Counting the views of a FAQ record
      *
-     * @param   integer $id id
-     * @return  void
+     * @param  integer $id id
+     * @return void
      */
     public function logViews($id)
     {
         $nVisits = 0;
-        $query   = sprintf(
-            "SELECT
+        $query   = sprintf("
+            SELECT
                 visits
             FROM
                 %sfaqvisits
@@ -118,8 +118,8 @@ class PMF_Visits
     /**
      * Adds a new entry in the table faqvisits
      *
-     * @param   integer $id Record ID
-     * @return  boolean
+     * @param  integer $id Record ID
+     * @return boolean
      */
     private function createNewVisit($id)
     {
@@ -127,8 +127,8 @@ class PMF_Visits
             return false;
         }
 
-        $query = sprintf(
-            "INSERT INTO
+        $query = sprintf("
+            INSERT INTO
                 %sfaqvisits
             VALUES
                 (%d, '%s', %d, %d)",
@@ -154,8 +154,8 @@ class PMF_Visits
             return false;
         }
 
-        $query = sprintf(
-            "UPDATE
+        $query = sprintf("
+            UPDATE
                 %sfaqvisits
             SET
                 visits = visits+1,
@@ -180,8 +180,8 @@ class PMF_Visits
     {
         $data = array();
 
-        $query = sprintf(
-            "SELECT
+        $query = sprintf("
+            SELECT
                 *
              FROM
                 %sfaqvisits
@@ -192,12 +192,10 @@ class PMF_Visits
         $result = $this->db->query($query);
 
         while ($row = $this->db->fetch_object($result)) {
-            $data[] = array(
-                          'id'          => $row->id,
-                          'lang'        => $row->lang,
-                          'visits'      => $row->visits,
-                          'last_visit'  => $row->last_visit
-                      );
+            $data[] = array('id'         => $row->id,
+                            'lang'       => $row->lang,
+                            'visits'     => $row->visits,
+                            'last_visit' => $row->last_visit);
         }
 
         return $data;
