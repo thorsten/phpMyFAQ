@@ -101,6 +101,7 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
         );
         $user = null;
     }
+    $action = 'main';
 } else {
     // authenticate with session information
     $user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
@@ -407,7 +408,7 @@ if ($faqconfig->get('main.enableRewriteRules')) {
 //
 // Send headers and print template
 //
-header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+header("Expires: Thu, 07 Apr 1977 14:47:00 GMT");
 header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
 header("Cache-Control: no-store, no-cache, must-revalidate");
 header("Cache-Control: post-check=0, pre-check=0", false);
