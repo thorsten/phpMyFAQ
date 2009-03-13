@@ -80,7 +80,7 @@ class PMF_Perm
      *
      * @return void
      */
-    private function __construct()
+    protected function __construct()
     {
     	$this->db = PMF_Db::getInstance(); 
     }
