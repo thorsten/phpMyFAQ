@@ -196,7 +196,7 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
      * @author  Matteo scaramuccia <matteo@scaramuccia.com>
      * @since   2005-02-21
      */
-    public function search($table, $assoc, $joinedTable = '', $joinAssoc = array(), $match = array(), $string = '', $cond = array(), $orderBy = array())
+    public function search($table, Array $assoc, $joinedTable = '', Array $joinAssoc = array(), $match = array(), $string = '', Array $cond = array(), Array $orderBy = array())
     {
         $string = $this->escape_string(trim($string));
         $fields = "";
