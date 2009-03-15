@@ -531,17 +531,14 @@ foreach ($permLevels as $level => $desc) {
 } else {
 
     // Ckeck table prefix
-    if (isset($_POST['sqltblpre']) && $_POST['sqltblpre'] != '') {
-        $sqltblpre = $_POST['sqltblpre'];
-    } else {
-        $sqltblpre = '';
-    }
+    $sqltblpre = PMF_Filter::filterInput(INPUT_POST, 'sqltblpre', FILTER_SANITIZE_STRING, '');
 
     // check database entries
-    if (isset($_POST["sql_type"]) && $_POST["sql_type"] != '') {
-        $sql_type = trim($_POST["sql_type"]);
-        if (file_exists(PMF_ROOT_DIR.'/install/'.$sql_type.'.sql.php')) {
-            require_once PMF_ROOT_DIR.'/install/'.$sql_type.'.sql.php';
+    $sql_type = PMF_Filter::filterInput(INPUT_POST, 'sql_type', FILTER_SANITIZE_STRING);
+    if (!is_null($sql_type)) {
+        $sql_type = trim($sql_type);
+        if (file_exists(PMF_ROOT_DIR . '/install/' . $sql_type . '.sql.php')) {
+            require PMF_ROOT_DIR . '/install/' . $sql_type . '.sql.php';
         } else {
             print '<p class="error"><strong>Error:</strong> Invalid server type.</p>';
             HTMLFooter();
@@ -553,39 +550,37 @@ foreach ($permLevels as $level => $desc) {
         die();
     }
 
-    if (isset($_POST["sql_server"]) && $_POST["sql_server"] != '' || $sql_type == 'sqlite') {
-        $sql_server = $_POST["sql_server"];
-    } else {
+    $sql_server = PMF_Filter::filterInput(INPUT_POST, 'sql_server', FILTER_SANITIZE_STRING);
+    if (is_null($sql_server) || $sql_type != 'sqlite') {
         print "<p class=\"error\"><strong>Error:</strong> There's no DB server input.</p>\n";
         HTMLFooter();
         die();
     }
 
-    if (isset($_POST["sql_user"]) && $_POST["sql_user"] != '' || $sql_type == 'sqlite') {
-        $sql_user = $_POST["sql_user"];
-    } else {
+    $sql_user = PMF_Filter::filterInput(INPUT_POST, 'sql_user', FILTER_SANITIZE_STRING);
+    if (is_null($sql_user) || $sql_type != 'sqlite') {
         print "<p class=\"error\"><strong>Error:</strong> There's no DB username input.</p>\n";
         HTMLFooter();
         die();
     }
 
-    if (isset($_POST["sql_passwort"]) && $_POST["sql_passwort"] != '' || $sql_type == 'sqlite') {
-        $sql_passwort = $_POST["sql_passwort"];
-    } else {
+    $sql_passwort = PMF_Filter::filterInput(INPUT_POST, 'sql_passwort', FILTER_SANITIZE_STRING);
+    if (is_null($sql_passwort) || $sql_type == 'sqlite') {
+    	// Password can be empty...
         $sql_passwort = '';
     }
 
-    if (isset($_POST["sql_db"]) && $_POST["sql_db"] != '' || $sql_type == 'sqlite') {
-        $sql_db = $_POST["sql_db"];
-    } else {
+    $sql_db = PMF_Filter::filterInput(INPUT_POST, 'sql_db', FILTER_SANITIZE_STRING);
+    if (is_null($sql_db) || $sql_type != 'sqlite') {
         print "<p class=\"error\"><strong>Error:</strong> There's no DB database input.</p>\n";
         HTMLFooter();
         die();
     }
 
     if ($sql_type == 'sqlite') {
-        if (isset($_POST["sql_sqlitefile"]) && $_POST["sql_sqlitefile"] != '') {
-            $sql_server = $_POST["sql_sqlitefile"]; // We're using $sql_server, too!
+    	$sql_sqllitefile = PMF_Filter::filterInput(INPUT_POST, 'sql_sqlitefile', FILTER_SANITIZE_STRING);
+        if (!is_null($sql_sqllitefile)) {
+            $sql_server = $sql_sqllitefile; // We're using $sql_server, too!
         } else {
             print "<p class=\"error\"><strong>Error:</strong> There's no SQLite database filename input.</p>\n";
             HTMLFooter();
@@ -594,8 +589,8 @@ foreach ($permLevels as $level => $desc) {
     }
 
     // check database connection
-    require PMF_ROOT_DIR."/inc/Db.php";
-    require PMF_ROOT_DIR."/inc/PMF_DB/Driver.php";
+    require PMF_ROOT_DIR . "/inc/Db.php";
+    require PMF_ROOT_DIR . "/inc/PMF_DB/Driver.php";
     $db = PMF_Db::dbSelect($sql_type);
     $db->connect($sql_server, $sql_user, $sql_passwort, $sql_db);
     if (!$db) {
@@ -605,48 +600,48 @@ foreach ($permLevels as $level => $desc) {
     }
 
     // check LDAP if available
-    if (extension_loaded('ldap') && isset($_POST['ldap_enabled']) && $_POST['ldap_enabled'] == 'yes') {
+    $ldap_enabled = PMF_Filter::filterInput(INPUT_POST, 'ldap_enabled', FILTER_SANITIZE_STRING);
+    if (extension_loaded('ldap') && !is_null($ldap_enabled)) {
 
         // check LDAP entries
-        if (isset($_POST["ldap_server"]) && $_POST["ldap_server"] != '') {
-            $ldap_server = $_POST["ldap_server"];
-        } else {
+        $ldap_server = PMF_Filter::filterInput(INPUT_POST, 'ldap_server', FILTER_SANITIZE_STRING);
+        if (is_null($ldap_server)) {
             print "<p class=\"error\"><strong>Error:</strong> There's no LDAP server input.</p>\n";
             HTMLFooter();
             die();
         }
-        if (isset($_POST["ldap_port"]) && $_POST["ldap_port"] != '') {
-            $ldap_port = $_POST["ldap_port"];
-        } else {
+        
+        $ldap_port = PMF_Filter::filterInput(INPUT_POST, 'ldap_port', FILTER_VALIDATE_INT);
+        if (is_null($ldap_port)) {
             print "<p class=\"error\"><strong>Error:</strong> There's no LDAP port input.</p>\n";
             HTMLFooter();
             die();
         }
-        if (isset($_POST["ldap_user"]) && $_POST["ldap_user"] != '') {
-            $ldap_user = $_POST["ldap_user"];
-        } else {
+        
+        $ldap_user = PMF_Filter::filterInput(INPUT_POST, 'ldap_user', FILTER_SANITIZE_STRING);
+        if (is_null($ldap_user)) {
             print "<p class=\"error\"><strong>Error:</strong> There's no LDAP username input.</p>\n";
             HTMLFooter();
             die();
         }
-        if (isset($_POST["ldap_password"]) && $_POST["ldap_password"] != '') {
-            $ldap_password = $_POST["ldap_password"];
-        } else {
+        
+        $ldap_password = PMF_Filter::filterInput(INPUT_POST, 'ldap_password', FILTER_SANITIZE_STRING);
+        if (is_null($ldap_password)) {
             print "<p class=\"error\"><strong>Error:</strong> There's no LDAP password input.</p>\n";
             HTMLFooter();
             die();
         }
-        if (isset($_POST["ldap_base"]) && $_POST["ldap_base"] != '') {
-            $ldap_base = $_POST["ldap_base"];
-        } else {
+        
+        $ldap_base = PMF_Filter::filterInput(INPUT_POST, 'ldap_base', FILTER_SANITIZE_STRING);
+        if (is_null($ldap_base)) {
             print "<p class=\"error\"><strong>Error:</strong> There's no distinguished name input for LDAP.</p>\n";
             HTMLFooter();
             die();
         }
 
         // check LDAP connection
-        require_once PMF_ROOT_DIR."/inc/Ldap.php";
-        $ldap = new PMF_Ldap($ldap_server, $ldap_port, $ldap_user, $ldap_base);
+        require PMF_ROOT_DIR . "/inc/Ldap.php";
+        $ldap = new PMF_Ldap($ldap_server, $ldap_port, $ldap_base, $ldap_user, $ldap_password);
         if (!$ldap) {
             print "<p class=\"error\"><strong>LDAP Error:</strong> ".$ldap->error()."</p>\n";
             HTMLFooter();
@@ -655,20 +650,20 @@ foreach ($permLevels as $level => $desc) {
     }
 
     // check user entries
-    if (isset($_POST["password"]) && $_POST["password"] != '') {
-        $password = $_POST["password"];
-    } else {
+    $password = PMF_Filter::filterInput(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
+    if (is_null($password)) {
         print "<p class=\"error\"><strong>Error:</strong> There's no password for the administrator's account. Please set your password.</p>\n";
         HTMLFooter();
         die();
     }
-    if (isset($_POST["password_retyped"]) && $_POST["password_retyped"] != '') {
-        $password_retyped = $_POST["password_retyped"];
-    } else {
+    
+    $password_retyped = PMF_Filter::filterInput(INPUT_POST, 'password_retyped', FILTER_SANITIZE_STRING);
+    if (is_null($password_retyped)) {
         print "<p class=\"error\"><strong>Error:</strong> There's no retyped password. Please set your retyped password.</p>\n";
         HTMLFooter();
         die();
     }
+    
     if (strlen($password) <= 5 || strlen($password_retyped) <= 5) {
         print "<p class=\"error\"><strong>Error:</strong> Your password and retyped password are too short. Please set your password and your retyped password with a minimum of 6 characters.</p>\n";
         HTMLFooter();
@@ -680,23 +675,11 @@ foreach ($permLevels as $level => $desc) {
         die();
     }
 
-    if (isset($_POST["language"]) && $_POST["language"] != '') {
-        $language = $_POST["language"];
-    } else {
-        $language = "en";
-    }
-    if (isset($_POST["realname"]) && $_POST["realname"] != '') {
-        $realname = $_POST["realname"];
-    } else {
-        $realname = '';
-    }
-    if (isset($_POST["email"]) && $_POST["email"] != '') {
-        $email = $_POST["email"];
-    } else {
-        $email = '';
-    }
-    $permLevel = (isset($_POST['permLevel']) && in_array($_POST['permLevel'], array_keys($permLevels))) ? $_POST['permLevel'] : 'basic';
-
+    $language  = PMF_Filter::filterInput(INPUT_POST, 'language', FILTER_SANITIZE_STRING, 'en');
+    $realname  = PMF_Filter::filterInput(INPUT_POST, 'realname', FILTER_SANITIZE_STRING, '');
+    $email     = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL, '');
+    $permLevel = PMF_Filter::filterInput(INPUT_POST, 'permLevel', FILTER_SANITIZE_STRING, 'basic');
+    
     // Write the DB variables in data.php
     $datafile = PMF_ROOT_DIR . '/inc/data.php';
     $ret = file_put_contents($datafile, "<?php\n\$DB[\"server\"] = '".$sql_server."';\n\$DB[\"user\"] = '".$sql_user."';\n\$DB[\"password\"] = '".$sql_passwort."';\n\$DB[\"db\"] = '".$sql_db."';\n\$DB[\"prefix\"] = '".$sqltblpre."';\n\$DB[\"type\"] = '".$sql_type."';", LOCK_EX);
@@ -708,9 +691,9 @@ foreach ($permLevels as $level => $desc) {
     }
 
     // check LDAP if available
-    if (extension_loaded('ldap') && isset($_POST['ldap_enabled']) && $_POST['ldap_enabled'] == 'yes') {
+    if (extension_loaded('ldap') && !is_null($ldap_enabled)) {
         $datafile = PMF_ROOT_DIR . '/inc/dataldap.php';
-        $ret = file_put_contents($datafile, "<?php\n\$PMF_LDAP[\"ldap_server\"] = '".$ldap_server."';\n\$PMF_LDAP[\"ldap_port\"] = '".$ldap_port."';\n\$PMF_LDAP[\"ldap_user\"] = '".$ldap_user."';\n\$PMF_LDAP[\"ldap_password\"] = '".$ldap_passwort."';\n\$PMF_LDAP[\"ldap_base\"] = '".$ldap_base."';\n;\n?>", LOCK_EX);
+        $ret = file_put_contents($datafile, "<?php\n\$PMF_LDAP[\"ldap_server\"] = '".$ldap_server."';\n\$PMF_LDAP[\"ldap_port\"] = '".$ldap_port."';\n\$PMF_LDAP[\"ldap_user\"] = '".$ldap_user."';\n\$PMF_LDAP[\"ldap_password\"] = '".$ldap_password."';\n\$PMF_LDAP[\"ldap_base\"] = '".$ldap_base."';\n;\n?>", LOCK_EX);
         if (!$ret) {
             print "<p class=\"error\"><strong>Error:</strong> Cannot write to dataldap.php.</p>";
             HTMLFooter();
