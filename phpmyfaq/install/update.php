@@ -29,13 +29,9 @@ define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 require_once PMF_ROOT_DIR.'/inc/autoLoader.php';
 require_once PMF_ROOT_DIR.'/inc/constants.php';
 
-if (isset($_GET["step"]) && $_GET["step"] != "") {
-    $step = $_GET["step"];
-} else {
-    $step = 1;
-}
-
-$query = array();
+$step    = PMF_Filter::filterInput(INPUT_GET, 'step', FILTER_VALIDATE_INT, 1);
+$version = PMF_Filter::filterInput(INPUT_POST, 'version', FILTER_SANITIZE_STRING);
+$query   = array();
 
 /**
  * Print out the HTML Footer
@@ -202,12 +198,12 @@ if (version_compare(PHP_VERSION, '5.2.0', '<')) {
 
 require_once PMF_ROOT_DIR.'/inc/data.php';
 
-/**************************** STEP 1 OF 5 ***************************/
+/**************************** STEP 1 OF 4 ***************************/
 if ($step == 1) {
 ?>
 <form action="update.php?step=2" method="post">
 <fieldset class="installation">
-<legend class="installation"><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 1 of 5)</strong></legend>
+<legend class="installation"><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 1 of 4)</strong></legend>
 <p>This update will work <strong>only</strong> for the following versions:</p>
 <ul type="square">
     <li>phpMyFAQ 1.6.x</li>
@@ -237,21 +233,16 @@ if ($step == 1) {
     <option value="2.5.0-alpha2">phpMyFAQ 2.5.0-alpha2 and later</option>
 </select>
 
-<p class="center"><input type="submit" value="Go to step 2 of 5" class="button" /></p>
+<p class="center"><input type="submit" value="Go to step 2 of 4" class="button" /></p>
 </fieldset>
 </form>
 <?php
     HTMLFooter();
 }
 
-/**************************** STEP 2 OF 5 ***************************/
+/**************************** STEP 2 OF 4 ***************************/
 if ($step == 2) {
-    $version = $_POST['version'];
-    $test1 = 0;
-    $test2 = 0;
-    $test3 = 0;
-    $test4 = 0;
-    $test5 = 0;
+    $test1 = $test2 = $test3 = $test4 = $test5 = 0;
 
     if (!@is_writeable(PMF_ROOT_DIR."/inc/data.php")) {
         print "<p class=\"error\"><strong>Error:</strong> The file ../inc/data.php or the directory ../inc is not writeable. Please correct this!</p>";
@@ -284,12 +275,12 @@ if ($step == 2) {
     if ($test1 == 1 && $test2  == 1 && $test3  == 1 && $test4 == 1 && $test5 == 1) {
 ?>
 <form action="update.php?step=3" method="post">
-<input type="hidden" name="version" value="<?php print $_POST['version']; ?>" />
+<input type="hidden" name="version" value="<?php print $version; ?>" />
 <fieldset class="installation">
-    <legend class="installation"><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 2 of 5)</strong></legend>
+    <legend class="installation"><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 2 of 4)</strong></legend>
     <p>A backup of your database configuration file has been made.</p>
     <p>Now the configuration files will be updated.</p>
-    <p class="center"><input type="submit" value="Go to step 3 of 5" class="button" /></p>
+    <p class="center"><input type="submit" value="Go to step 3 of 4" class="button" /></p>
 </fieldset>
 </form>
 <?php
@@ -301,14 +292,13 @@ if ($step == 2) {
     }
 }
 
-/**************************** STEP 3 OF 5 ***************************/
+/**************************** STEP 3 OF 4 ***************************/
 if ($step == 3) {
-    $version = $_POST['version'];
 ?>
 <form action="update.php?step=4" method="post">
-<input type="hidden" name="version" value="<?php print $_POST['version']; ?>" />
+<input type="hidden" name="version" value="<?php print $version; ?>" />
 <fieldset class="installation">
-<legend class="installation"><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 3 of 5)</strong></legend>
+<legend class="installation"><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 3 of 4)</strong></legend>
 <?php
     if (version_compare($version, '2.0.0-alpha', '<')) {
         require_once(PMF_ROOT_DIR."/inc/config.php");
@@ -356,49 +346,15 @@ if ($step == 3) {
     }
 ?>
 <p class="center">The configuration will be updated after the next step.</p>
-<p class="center"><input type="submit" value="Go to step 4 of 5" class="button" /></p>
+<p class="center"><input type="submit" value="Go to step 4 of 4" class="button" /></p>
 </fieldset>
 </form>
 <?php
     HTMLFooter();
 }
 
-/**************************** STEP 4 OF 5 ***************************/
+/**************************** STEP 4 OF 4 ***************************/
 if ($step == 4) {
-?>
-<form action="update.php?step=5" method="post">
-<input type="hidden" name="version" value="<?php print $_POST['version']; ?>" />
-<fieldset class="installation">
-<legend class="installation"><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 4 of 5)</strong></legend>
-<?php
-    $version = $_REQUEST["version"];
-    if (version_compare($version, '2.0.0-alpha', '<')) {
-        require_once PMF_ROOT_DIR."/inc/config.php";
-    }
-
-    if (isset($_REQUEST["db"])) {
-        $DB = $_REQUEST["db"];
-        if ($fp = @fopen(PMF_ROOT_DIR."/inc/data.php","w")) {
-            @fputs($fp,"<?php\n\$DB[\"server\"] = '".$DB["server"]."';\n\$DB[\"user\"] = '".$DB["user"]."';\n\$DB[\"password\"] = '".$DB["password"]."';\n\$DB[\"db\"] = '".$DB["db"]."';\n\$DB[\"prefix\"] = '".$DB["prefix"]."';\n\$DB[\"type\"] = 'mysql';\n?>");
-            @fclose($fp);
-            print "<p class=\"center\">The file ../inc/data.php was successfully updated.</p>";
-        } else {
-            print "<p class=\"error\"><strong>Error:</strong> The file ../inc/data.php could not be updated.</p>";
-        }
-    } else {
-        print '<p align="center">Nothing have to be done in this step with your version.</p>';
-    }
-?>
-<p class="center"><input type="submit" value="Go to step 5 of 5" class="button" /></p>
-</fieldset>
-</form>
-<?php
-    HTMLFooter();
-}
-
-/**************************** STEP 5 OF 5 ***************************/
-if ($step == 5) {
-    $version = $_REQUEST["version"];
     if (version_compare($version, '2.0.0-alpha', '<')) {
         require_once PMF_ROOT_DIR . '/inc/config.php';
     }
