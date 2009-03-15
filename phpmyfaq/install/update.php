@@ -279,7 +279,6 @@ if ($step == 2) {
 <fieldset class="installation">
     <legend class="installation"><strong>phpMyFAQ <?php print NEWVERSION; ?> Update (Step 2 of 4)</strong></legend>
     <p>A backup of your database configuration file has been made.</p>
-    <p>Now the configuration files will be updated.</p>
     <p class="center"><input type="submit" value="Go to step 3 of 4" class="button" /></p>
 </fieldset>
 </form>
