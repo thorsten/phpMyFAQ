@@ -49,8 +49,7 @@ if ($currentAction == 'savedcontent' || $currentAction == 'savedlogs') {
         break;
     }
     header('Pragma: no-cache');
-    exit();
-}
+ }
 
 
 $pmf      = new PMF_Init();
