@@ -49,6 +49,7 @@ if ($currentAction == 'savedcontent' || $currentAction == 'savedlogs') {
         break;
     }
     header('Pragma: no-cache');
+    exit();
 }
 
 
