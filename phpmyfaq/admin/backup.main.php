@@ -32,7 +32,7 @@ if ($permission['backup']) {
 	<fieldset>
         <legend><?php print $PMF_LANG["ad_csv_head"]; ?></legend>
         <p><?php print $PMF_LANG["ad_csv_make"]; ?></p>
-        <p align="center"><a href="attachment.php?action=savecontent"><?php print $PMF_LANG["ad_csv_linkdat"]; ?></a> | <a href="attachment.php?action=savelogs"><?php print $PMF_LANG["ad_csv_linklog"]; ?></a></p>
+        <p align="center"><a href="attachment.php?action=savedcontent"><?php print $PMF_LANG["ad_csv_linkdat"]; ?></a> | <a href="attachment.php?action=savedlogs"><?php print $PMF_LANG["ad_csv_linklog"]; ?></a></p>
     </fieldset>
 
     <form method="post" action="?action=restore" enctype="multipart/form-data">
