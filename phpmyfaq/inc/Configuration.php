@@ -80,6 +80,15 @@ class PMF_Configuration
     }
    
     /**
+     * __clone() Magic method to prevent cloning
+     * 
+     * @return void
+     */
+    private function __clone()
+    {
+    }
+       
+    /**
      * Fetches all configuration items into an array
      *
      * @return void

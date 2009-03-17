@@ -88,9 +88,8 @@ class PMF_Db
      * 
      * @return void
      */
-    public function __clone()
+    private function __clone()
     {
-        throw new Exception('Illegally attempted to clone ' . __CLASS__);
     }
 
     /**

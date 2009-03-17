@@ -81,6 +81,15 @@ class PMF_Visits
     }
    
     /**
+     * __clone() Magic method to prevent cloning
+     * 
+     * @return void
+     */
+    private function __clone()
+    {
+    }
+       
+    /**
      * Counting the views of a FAQ record
      *
      * @param  integer $id id
