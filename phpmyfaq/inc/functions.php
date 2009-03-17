@@ -190,27 +190,25 @@ function getAvailableLanguages()
 {
     global $languageCodes;
 
-    $search = array("language_", ".php");
-    $languages = array();
-
-    if ($dir = @opendir(dirname(dirname(__FILE__)).'/lang/')) {
-        while (false !== ($file = @readdir($dir))) {
-            if (($file != ".") && ($file != "..") && (!is_dir($file))) {
-                $languageFiles[] = strtoupper(str_replace($search, "", trim($file)));
-            }
+    $search    = array("language_", ".php");
+    $languages = $languageFiles = array();
+    
+    $dir = new DirectoryIterator(dirname(dirname(__FILE__)) . '/lang');
+    foreach ($dir as $fileinfo) {
+        if (!$fileinfo->isDot()) {
+            $languageFiles[] = strtoupper(str_replace($search, '', trim($fileinfo->getFilename())));
         }
-        closedir($dir);
-        foreach ($languageFiles as $lang) {
-            // Check if the file is related to a (real) language before using it
-            if (array_key_exists($lang, $languageCodes)) {
-                $languages[strtolower($lang)] = $languageCodes[$lang];
-            }
-        }
-        // Sort the languages list
-        asort($languages);
-        reset($languages);
     }
-
+    foreach ($languageFiles as $lang) {
+        // Check if the file is related to a (real) language before using it
+        if (array_key_exists($lang, $languageCodes)) {
+            $languages[strtolower($lang)] = $languageCodes[$lang];
+        }
+    }
+    // Sort the languages list
+    asort($languages);
+    reset($languages);
+    
     return $languages;
 }
 
