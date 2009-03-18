@@ -2707,4 +2707,15 @@ class PMF_Faq
 
         return $output.$extraout;
     }
+    
+    /**
+     * Setter for the language
+     * 
+     * @param  string $language Language
+     * @return void
+     */
+    public function setLanguage($language)
+    {
+    	$this->language = $language;
+    }
 }

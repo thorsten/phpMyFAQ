@@ -94,8 +94,9 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
             adminlog("Beitragedit, " . (int)$_GET['id']);
             $faqData['id']      = (int)$_GET['id'];
             $faqData['lang']    = $_GET["lang"];
-            $faq->language      = $faqData['lang'];
-            $categories         = $category->getCategoryRelationsFromArticle($faqData['id'], $faqData['lang']);
+            
+            $faq->setLanguage($faqData['lang']);
+            $categories = $category->getCategoryRelationsFromArticle($faqData['id'], $faqData['lang']);
 
             $faq->getRecord($faqData['id'], null, true);
             $faqData       = $faq->faqRecord;
