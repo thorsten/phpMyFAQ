@@ -35,10 +35,10 @@ class PMF_Filter
 	/**
 	 * Static wrapper method for filter_input()
 	 *
-	 * @param integer $type          Filter type
-	 * @param string  $variable_name Variable name
-	 * @param integer $filter        Filter 
-	 * @param mixed   $default       Default value
+	 * @param  integer $type          Filter type
+	 * @param  string  $variable_name Variable name
+	 * @param  integer $filter        Filter 
+	 * @param  mixed   $default       Default value
 	 * @return mixed
 	 */
 	public static function filterInput($type, $variable_name, $filter, $default = null)
@@ -46,5 +46,17 @@ class PMF_Filter
 		$return = filter_input($type, $variable_name, $filter);
 		
 		return is_null($return) ? $default : $return;
+	}
+	
+	/**
+	 * Static wrapper method for filter_input_array()
+	 * 
+	 * @param  integer $type       Filter type
+	 * @param  array   $definition Definition
+	 * @return mixed
+	 */
+	public static function filterInputArray($type, Array $definition)
+	{
+		return filter_input_array($type, $definition);
 	}
 }
