@@ -39,22 +39,28 @@ if ($permission['delcomment']) {
     printf("<p><strong>%s</strong></p>\n", $PMF_LANG['ad_comment_faqs']);
     if (count($faqcomments)) {
 ?>
+    <form id="commentSelection" name="commentSelection" action="?action=deletecomment" method="post">
     <table class="listrecords">
     <thead>
     <tr>
+        <th class="listhead" width="20"></th>
         <th class="listhead" width="100"></th>
-        <th class="listhead"></th>
-        <th class="listhead" width="20">&nbsp;</th>
+        <th class="listhead">&nbsp;</th>
     </tr>
     </thead>
+    <tfoot>
+    <tr>
+        <td colspan="3"><input class="submit" type="submit" value="<?php print $PMF_LANG["ad_entry_delete"]; ?>" name="submit[faq]" /></td>
+    </tr>    
+    </tfoot>
     <tbody>
 <?php
         foreach ($faqcomments as $faqcomment) {
 ?>
     <tr>
-        <td class="list"><a href="mailto:<?php print $faqcomment['email']; ?>"><?php print $faqcomment['user']; ?></td>
+        <td class="list"><input name="faq_comments[<?php print $faqcomment['record_id']; ?>][<?php print $faqcomment['comment_id']; ?>]" type="checkbox" /></td>
+        <td class="list"><a href="mailto:<?php print $faqcomment['email']; ?>"><?php print $faqcomment['user']; ?></a></td>
         <td class="list"><?php print $faqcomment['content']; ?></td>
-        <td class="list"><a href="?action=delcomment&amp;artid=<?php print $faqcomment['record_id']; ?>&amp;cmtid=<?php print $faqcomment['comment_id']; ?>&amp;type=faq"><img src="images/delete.gif" alt="<?php print $PMF_LANG["ad_entry_delete"] ?>" title="<?php print $PMF_LANG["ad_entry_delete"] ?>" border="0" width="17" height="18" align="right" /></a></td>
     </tr>
 <?php
         }
@@ -74,19 +80,24 @@ if ($permission['delcomment']) {
     <table class="listrecords">
     <thead>
     <tr>
+        <th class="listhead" width="20"></th>
         <th class="listhead" width="100"></th>
-        <th class="listhead"></th>
-        <th class="listhead" width="20">&nbsp;</th>
+        <th class="listhead">&nbsp;</th>
     </tr>
     </thead>
+    <tfoot>
+    <tr>
+        <td colspan="3"><input class="submit" type="submit" value="<?php print $PMF_LANG["ad_entry_delete"]; ?>" name="submit[news]" /></td>
+    </tr>    
+    </tfoot>
     <tbody>
 <?php
         foreach ($newscomments as $newscomment) {
 ?>
     <tr>
-        <td class="list"><a href="mailto:<?php print $newscomment['email']; ?>"><?php print $newscomment['user']; ?></td>
+        <td class="list"><input name="news_comments[<?php print $faqcomment['record_id']; ?>][<?php print $faqcomment['comment_id']; ?>]" type="checkbox" /></td>
+        <td class="list"><a href="mailto:<?php print $newscomment['email']; ?>"><?php print $newscomment['user']; ?></a></td>
         <td class="list"><?php print $newscomment['content']; ?></td>
-        <td class="list"><a href="?action=delcomment&amp;artid=<?php print $newscomment['record_id']; ?>&amp;cmtid=<?php print $newscomment['comment_id']; ?>&amp;type=news"><img src="images/delete.gif" alt="<?php print $PMF_LANG["ad_entry_delete"] ?>" title="<?php print $PMF_LANG["ad_entry_delete"] ?>" border="0" width="17" height="18" align="right" /></a></td>
     </tr>
 <?php
         }
@@ -97,6 +108,9 @@ if ($permission['delcomment']) {
     } else {
         print '<p><strong>0</strong></p>';
     }
+?>
+    </form>
+<?php 
 } else {
-    print $PMF_LANG["err_NotAuth"];
+    print $PMF_LANG['err_NotAuth'];
 }
