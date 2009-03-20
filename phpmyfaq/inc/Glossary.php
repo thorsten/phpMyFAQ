@@ -90,15 +90,18 @@ class PMF_Glossary
     {
         $items = array();
 
-        $result = $this->db->query(sprintf(
-            "SELECT
+        $query = sprintf("
+            SELECT
                 id, item, definition
             FROM
                 %sfaqglossary
             WHERE
                 lang = '%s'",
             SQLPREFIX,
-            $this->language));
+            $this->language);
+            
+        $result = $this->db->query($query);
+        
         while ($row = $this->db->fetch_object($result)) {
             $items[] = array(
                 'id'            => $row->id,
@@ -177,8 +180,8 @@ class PMF_Glossary
     {
         $item = array();
 
-        $result = $this->db->query(sprintf(
-            "SELECT
+        $query = sprintf("
+            SELECT
                 id, item, definition
             FROM
                 %sfaqglossary
@@ -186,7 +189,10 @@ class PMF_Glossary
                 id = %d AND lang = '%s'",
             SQLPREFIX,
             (int)$id,
-            $this->language));
+            $this->language);
+            
+        $result = $result = $this->db->query($query);
+           
         while ($row = $this->db->fetch_object($result)) {
             $item = array(
                 'id'         => $row->id,
@@ -208,8 +214,8 @@ class PMF_Glossary
         $this->item       = $this->db->escape_string($item);
         $this->definition = $this->db->escape_string($definition);
 
-        $query = sprintf(
-            "INSERT INTO
+        $query = sprintf("
+            INSERT INTO
                 %sfaqglossary
             (id, lang, item, definition)
                 VALUES
@@ -239,8 +245,8 @@ class PMF_Glossary
         $this->item       = $this->db->escape_string($item);
         $this->definition = $this->db->escape_string($definition);
 
-        $query = sprintf(
-            "UPDATE
+        $query = sprintf("
+            UPDATE
                 %sfaqglossary
             SET
                 item = '%s',
@@ -267,8 +273,8 @@ class PMF_Glossary
      */
     public function deleteGlossaryItem($id)
     {
-        $query = sprintf(
-            "DELETE FROM
+        $query = sprintf("
+            DELETE FROM
                 %sfaqglossary
             WHERE
                 id = %d AND lang = '%s'",
