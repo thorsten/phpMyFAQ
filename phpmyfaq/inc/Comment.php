@@ -296,7 +296,7 @@ class PMF_Comment
 
         $query = sprintf("
             SELECT
-                fc.id_comment AS comment_id,
+                DISTINCT fc.id_comment AS comment_id,
                 fc.id AS record_id,
                 %s
                 fc.usr AS user,
@@ -315,7 +315,7 @@ class PMF_Comment
             ON
                 fc.id = fcg.record_id\n" : '',
             $type);
-
+            
         $result = $this->db->query($query);
         if ($this->db->num_rows($result) > 0) {
             while ($row = $this->db->fetch_object($result)) {
