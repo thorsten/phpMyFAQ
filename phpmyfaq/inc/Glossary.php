@@ -2,10 +2,12 @@
 /**
  * The main glossary class
  *
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since     2005-09-15
- * @copyright 2005-2008 phpMyFAQ Team
- * @version   CVS: $Id: Glossary.php,v 1.12 2008-06-05 06:00:36 thorstenr Exp $
+ * @package    phpMyFAQ
+ * @subpackage PMF_Glossary
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since      2005-09-15
+ * @copyright  2005-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -18,6 +20,26 @@
  * under the License.
  */
 
+/**
+ * PMF_Glossary
+ *
+ * @package    phpMyFAQ
+ * @subpackage PMF_Glossary
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since      2005-09-15
+ * @copyright  2005-2009 phpMyFAQ Team
+ * @version    SVN: $Id$
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 class PMF_Glossary
 {
     /**
@@ -52,7 +74,6 @@ class PMF_Glossary
     * Constructor
     *
     * @return void
-    * @author Thorsten Rinne <thorsten@phpmyfaq.de>
     */
     public function __construct()
     {
@@ -64,8 +85,6 @@ class PMF_Glossary
     * Gets all items and definitions from the database
     *
     * @return array
-    * @access public
-    * @author Thorsten Rinne <thorsten@phpmyfaq.de>
     */
     public function getAllGlossaryItems()
     {
@@ -94,9 +113,6 @@ class PMF_Glossary
      *
      * @param  string $content Content
      * @return string
-     * @access public
-     * @author Matteo Scaramuccia <matteo@scaramuccia.com>
-     * @since  2006-07-02
      */
     public function insertItemsIntoContent($content = '')
     {
@@ -134,9 +150,6 @@ class PMF_Glossary
      *
      * @param  array $matches Matchings
      * @return string
-     * @since  2007-04-24
-     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @author Matteo Scaramuccia <matteo@scaramuccia.com>
      */
     private function _setAcronyms($matches)
     {
@@ -159,8 +172,6 @@ class PMF_Glossary
      *
      * @param  integer $id Glossary ID
      * @return array
-     * @access public
-     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     public function getGlossaryItem($id)
     {
@@ -191,8 +202,6 @@ class PMF_Glossary
      * @param  string $item       Item
      * @param  string $definition Definition
      * @return boolean
-     * @access public
-     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     public function addGlossaryItem($item, $definition)
     {
@@ -224,8 +233,6 @@ class PMF_Glossary
      * @param  string  $item       Item
      * @param  string  $definition Definition
      * @return boolean
-     * @access public
-     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     public function updateGlossaryItem($id, $item, $definition)
     {
@@ -257,8 +264,6 @@ class PMF_Glossary
      *
      * @param  integer $id Glossary ID
      * @return boolean
-     * @access public
-     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     public function deleteGlossaryItem($id)
     {
