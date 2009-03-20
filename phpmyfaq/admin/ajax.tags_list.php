@@ -35,7 +35,6 @@ header("Content-type: text/xml");
 header("Vary: Negotiate,Accept");
 header("Content-type: text/xml; charset=".$PMF_LANG['metaCharset']);
 
-require_once(PMF_ROOT_DIR.'/inc/Tags.php');
 // TODO: manage the language correctly
 $oTag = new PMF_Tags($db, 'en');
 $autoCompleteValue = '';

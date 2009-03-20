@@ -25,8 +25,6 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
-require_once PMF_ROOT_DIR.'/inc/Logging.php';
-
 $logging = new PMF_Logging($db);
 
 if ($permission['adminlog'] && 'adminlog' == $_action) {
