@@ -44,7 +44,6 @@ header("Vary: Negotiate,Accept");
     <style type="text/css"> @import url(../template/admin.css); </style>
     <script type="text/javascript" src="../inc/js/functions.js"></script>
     <script type="text/javascript" src="../inc/js/jquery.min.js"></script>
-    <script type="text/javascript" src="../inc/js/prototype.js"></script>
     <script type="text/javascript" src="editor/tiny_mce.js"></script>
 <?php
     // Add the script.aculo.us libraries only if needed:
@@ -53,6 +52,11 @@ header("Vary: Negotiate,Accept");
 
     // @todo: rewrite the AJAX Suggestion and Autocomplete Behaviours using ONLY jQuery library
 if (isset($_action)) {
+	if ($_action != 'comments') {
+?>
+    <script type="text/javascript" src="../inc/js/prototype.js"></script>
+<?php 
+	}
     switch ($_action) {
         case 'takequestion':
         case 'editentry':
