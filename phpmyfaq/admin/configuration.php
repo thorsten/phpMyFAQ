@@ -35,24 +35,23 @@ $userAction = PMF_Filter::filterInput(INPUT_GET, 'config_action', FILTER_SANITIZ
 
 // Save the configuration
 if ('saveConfig' == $userAction) {
+	
+	$checks     = array('filter' => FILTER_SANITIZE_STRING,
+	                    'flags'  => FILTER_REQUIRE_ARRAY);
+	$editData   = PMF_Filter::filterInputArray(INPUT_POST, array('edit' => $checks));
     $message    = '';
     $userAction = 'listConfig';
 
-    $arrVar = array();
-    if (isset($_REQUEST['edit'])) {
-        $arrVar = $_REQUEST['edit'];
-    }
-
     // Set the new values into $PMF_CONF
     $forbidden_values = array('{', '}', '$');
-    foreach ($arrVar as $key => $value) {
+    foreach ($editData['edit'] as $key => $value) {
         $PMF_CONF[$key] = str_replace($forbidden_values, '', $value);
     }
     // Hacks
-    if (is_array($arrVar)) {
+    if (is_array($editData['edit'])) {
         foreach ($PMF_CONF as $key => $value) {
             // Fix checkbox values: they are not returned as HTTP POST values...
-            if (!array_key_exists($key, $arrVar)) {
+            if (!array_key_exists($key, $editData['edit'])) {
                 $PMF_CONF[$key] = 'false';
             }
         }
@@ -94,9 +93,9 @@ if ('listConfig' == $userAction) {
 
 function getConfigList()
 {
-    var ajax = new Ajax.Updater('configMain', 'index.php?action=ajax&ajax=config_list&conf=main', {method:'get'});
-    var ajax = new Ajax.Updater('configRecords', 'index.php?action=ajax&ajax=config_list&conf=records', {method:'get'});
-    var ajax = new Ajax.Updater('configSpam', 'index.php?action=ajax&ajax=config_list&conf=spam', {method:'get'});
+    $.get("index.php", {action: "ajax", ajax: "config_list", conf: "main" }, function(data) { $('#configMain').append(data); });
+    $.get("index.php", {action: "ajax", ajax: "config_list", conf: "records" }, function(data) { $('#configRecords').append(data); });
+    $.get("index.php", {action: "ajax", ajax: "config_list", conf: "spam" }, function(data) { $('#configSpam').append(data); });
 }
 
 getConfigList();

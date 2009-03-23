@@ -27,17 +27,13 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
-require_once(PMF_ROOT_DIR.'/lang/language_en.php');
+require_once PMF_ROOT_DIR . '/lang/language_en.php';
 
-$configMode = 'main';
+$configMode           = PMF_Filter::filterInput(INPUT_GET, 'conf', FILTER_SANITIZE_STRING, 'main');
 $availableConfigModes = array(
         'main'      => 1,
         'records'   => 1,
         'spam'      => 1);
-
-if (isset($_GET['conf']) && is_string($_GET['conf']) && isset($availableConfigModes[$_GET['conf']])) {
-    $configMode = $_GET['conf'];
-}
 
 function printInputFieldByType($key, $type)
 {
@@ -96,9 +92,10 @@ function printInputFieldByType($key, $type)
             break;
         case 'print':
 
-            printf('<input type="hidden" name="edit[%s]" size="80" value="%s" />',
+            printf('<input type="hidden" name="edit[%s]" size="80" value="%s" />%s<br />',
                     $key,
-                    str_replace('"', '&quot;', $faqconfig->get($key)));
+                    str_replace('"', '&quot;', $faqconfig->get($key)),
+                    $faqconfig->get($key));
             break;
     }
 }
