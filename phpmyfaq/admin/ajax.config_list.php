@@ -1,8 +1,6 @@
 <?php
 /**
- * AJAX: lists the complete configuration items
- * 
- * @todo Switch code and logic to jQuery and PHP JSON extension
+ * AJAX: lists the complete configuration items as text/html
  * 
  * @package    phpMyFAQ
  * @subpackage Administration
