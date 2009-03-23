@@ -10,7 +10,8 @@ Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.5.0-alpha2:
-- 
+- ajaxified comment administration (Thorsten)
+- fixed a lot of bugs (Thorsten)
 
 For known issues please take a look at KNOWNBUGS.txt
 
@@ -33,6 +34,7 @@ Version 2.5.0-beta - 2009-
 - added jQuery as replacement for Prototype/Script.aculo.us (Thorsten)
 - improved user administration frontend (Sarah Hermann)
 - improved performance (Thorsten)
+- ajaxified comment administration (Thorsten)
 - updated bundled Net_IDNA to version XXX (Thorsten)
 - updated bundled TinyMCE editor component to version 3.2.1.1 (Thorsten)
 - updated bundled FPDF library to version 1.6 (Thorsten)
