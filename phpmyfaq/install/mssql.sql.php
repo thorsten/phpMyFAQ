@@ -1,24 +1,25 @@
 <?php
 /**
-* $Id: mssql.sql.php,v 1.23 2008-05-24 16:35:43 thorstenr Exp $
-*
-* CREATE TABLE instruction for MS SQL Server database
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @author       Matteo Scaramuccia <matteo@scaramuccia.com>
-* @since        2005-01-11
-* @copyright    (c) 2005-2007 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * CREATE TABLE instruction for MS SQL Server database
+ *
+ * @package    phpMyFAQ
+ * @subpackage Installation
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @since      2005-01-11
+ * @version    SVN: $Id$
+ * @copyright  2005-2009 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 $uninst[] = "DROP TABLE ".$sqltblpre."faqadminlog";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqcaptcha";
@@ -71,7 +72,7 @@ $query[] = "CREATE TABLE ".$sqltblpre."faqadminlog (
 id integer NOT NULL,
 time integer NOT NULL,
 usr integer NOT NULL REFERENCES ".$sqltblpre."faquser(user_id),
-text text NOT NULL,
+text VARCHAR(max) NOT NULL,
 ip varchar(64) NOT NULL,
 PRIMARY KEY (id))";
 
@@ -125,7 +126,7 @@ lang varchar(5) NOT NULL,
 revision_id integer NOT NULL DEFAULT 0,
 usr integer NOT NULL REFERENCES ".$sqltblpre."faquser(user_id),
 datum integer NOT NULL,
-what text DEFAULT NULL,
+what VARCHAR(max) DEFAULT NULL,
 PRIMARY KEY (id, lang))";
 
 //faqcomments
@@ -135,9 +136,9 @@ id integer NOT NULL,
 type varchar(10) NOT NULL,
 usr varchar(255) NOT NULL,
 email varchar(255) NOT NULL,
-comment text NOT NULL,
+comment VARCHAR(max) NOT NULL,
 datum varchar(64) NOT NULL,
-helped text DEFAULT NULL,
+helped VARCHAR(max) DEFAULT NULL,
 PRIMARY KEY (id_comment))";
 
 //faqconfig
@@ -153,9 +154,9 @@ lang varchar(5) NOT NULL,
 solution_id integer NOT NULL,
 revision_id integer NOT NULL DEFAULT 0,
 active char(3) NOT NULL,
-keywords text DEFAULT NULL,
-thema text NOT NULL,
-content text DEFAULT NULL,
+keywords VARCHAR(max) DEFAULT NULL,
+thema VARCHAR(max) NOT NULL,
+content VARCHAR(max) DEFAULT NULL,
 author varchar(255) NOT NULL,
 email varchar(255) NOT NULL,
 comment char(1) default 'y',
@@ -173,9 +174,9 @@ lang varchar(5) NOT NULL,
 solution_id integer NOT NULL,
 revision_id integer NOT NULL DEFAULT 0,
 active char(3) NOT NULL,
-keywords text DEFAULT NULL,
-thema text NOT NULL,
-content text DEFAULT NULL,
+keywords VARCHAR(max) DEFAULT NULL,
+thema VARCHAR(max) NOT NULL,
+content VARCHAR(max) DEFAULT NULL,
 author varchar(255) NOT NULL,
 email varchar(255) NOT NULL,
 comment char(1) default 'y',
@@ -210,14 +211,14 @@ $query[] = "CREATE TABLE ".$sqltblpre."faqglossary (
 id integer NOT NULL ,
 lang varchar(2) NOT NULL ,
 item varchar(255) NOT NULL ,
-definition text NOT NULL,
+definition VARCHAR(max) NOT NULL,
 PRIMARY KEY (id, lang))";
 
 //faqgroup
 $query[] = "CREATE TABLE ".$sqltblpre."faqgroup (
 group_id integer NOT NULL,
 name varchar(25) NULL,
-description text NULL,
+description VARCHAR(max) NULL,
 auto_join integer NULL,
 PRIMARY KEY(group_id)
 )
@@ -249,7 +250,7 @@ $query[] = "CREATE TABLE ".$sqltblpre."faqnews (
 id integer NOT NULL,
 lang varchar(5) NOT NULL,
 header varchar(255) NOT NULL,
-artikel text NOT NULL,
+artikel VARCHAR(max) NOT NULL,
 datum varchar(14) NOT NULL,
 author_name  varchar(255) NULL,
 author_email varchar(255) NULL,
@@ -268,7 +269,7 @@ id integer NOT NULL,
 ask_username varchar(100) NOT NULL,
 ask_usermail varchar(100) NOT NULL,
 ask_rubrik integer NOT NULL,
-ask_content text NOT NULL,
+ask_content VARCHAR(max) NOT NULL,
 ask_date varchar(20) NOT NULL,
 is_visible char(1) default 'Y',
 PRIMARY KEY (id))";
@@ -277,7 +278,7 @@ PRIMARY KEY (id))";
 $query[] = "CREATE TABLE ".$sqltblpre."faqright (
 right_id integer NOT NULL,
 name varchar(50) NULL,
-description text NULL,
+description VARCHAR(max) NULL,
 for_users integer NULL DEFAULT 1,
 for_groups integer NULL DEFAULT 1,
 PRIMARY KEY (right_id)
