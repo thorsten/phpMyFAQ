@@ -27,6 +27,8 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 
 printf("<h2>%s</h2>\n", $PMF_LANG['ad_comment_administration']);
 
+print '<div id="returnMessage"></div>';
+
 if ($permission['delcomment']) {
 
     $comment  = new PMF_Comment();
@@ -39,7 +41,9 @@ if ($permission['delcomment']) {
     printf("<p><strong>%s</strong></p>\n", $PMF_LANG['ad_comment_faqs']);
     if (count($faqcomments)) {
 ?>
-    <form id="commentSelection" name="commentSelection" action="?action=deletecomment" method="post">
+    <form id="commentSelection" name="commentSelection" method="post">
+    <input type="hidden" name="ajax" value="comment" />
+    <input type="hidden" name="ajaxaction" value="delete" />
     <table class="listrecords">
     <thead>
     <tr>
@@ -50,15 +54,15 @@ if ($permission['delcomment']) {
     </thead>
     <tfoot>
     <tr>
-        <td colspan="3"><input class="submit" type="submit" value="<?php print $PMF_LANG["ad_entry_delete"]; ?>" name="submit[faq]" /></td>
+        <td colspan="3"><input class="submit" type="submit" value="<?php print $PMF_LANG["ad_entry_delete"]; ?>" name="submit" /></td>
     </tr>    
     </tfoot>
     <tbody>
 <?php
         foreach ($faqcomments as $faqcomment) {
 ?>
-    <tr>
-        <td class="list"><input name="faq_comments[<?php print $faqcomment['record_id']; ?>][<?php print $faqcomment['comment_id']; ?>]" type="checkbox" /></td>
+    <tr id="comments_<?php print $faqcomment['comment_id']; ?>">
+        <td class="list"><input name="faq_comments[<?php print $faqcomment['record_id']; ?>]" value="<?php print $faqcomment['comment_id']; ?>" type="checkbox" /></td>
         <td class="list"><a href="mailto:<?php print $faqcomment['email']; ?>"><?php print $faqcomment['user']; ?></a></td>
         <td class="list"><?php print $faqcomment['content']; ?></td>
     </tr>
@@ -87,15 +91,15 @@ if ($permission['delcomment']) {
     </thead>
     <tfoot>
     <tr>
-        <td colspan="3"><input class="submit" type="submit" value="<?php print $PMF_LANG["ad_entry_delete"]; ?>" name="submit[news]" /></td>
+        <td colspan="3"><input class="submit" type="submit" value="<?php print $PMF_LANG["ad_entry_delete"]; ?>" name="submit" /></td>
     </tr>    
     </tfoot>
     <tbody>
 <?php
         foreach ($newscomments as $newscomment) {
 ?>
-    <tr>
-        <td class="list"><input name="news_comments[<?php print $faqcomment['record_id']; ?>][<?php print $faqcomment['comment_id']; ?>]" type="checkbox" /></td>
+    <tr id="comments_<?php print $newscomment['comment_id']; ?>">
+        <td class="list"><input name="news_comments[<?php print $faqcomment['record_id']; ?>]" value="<?php print $faqcomment['comment_id']; ?>" type="checkbox" /></td>
         <td class="list"><a href="mailto:<?php print $newscomment['email']; ?>"><?php print $newscomment['user']; ?></a></td>
         <td class="list"><?php print $newscomment['content']; ?></td>
     </tr>
@@ -110,6 +114,25 @@ if ($permission['delcomment']) {
     }
 ?>
     </form>
+    <script>
+    $(document).ready(function() {
+      $('.submit').click(function () {
+        var comments = $('#commentSelection').serialize();
+    	$.ajax({
+          type: "POST",
+    	  url:  "index.php?action=ajax&ajax=comment",
+    	  data: comments,
+    	  success: function(msg) {
+    		if (msg == 1) {
+        	  $('#returnMessage').append('<?php print $PMF_LANG['ad_entry_commentdelsuc']; ?>').fadeIn('slow');
+        	  $("tr td input:checked").parent().parent().fadeOut('slow');
+    		  }
+    		}
+    	});
+        return false;
+      });
+    });
+    </script>
 <?php 
 } else {
     print $PMF_LANG['err_NotAuth'];
