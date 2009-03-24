@@ -115,10 +115,9 @@ if (is_null($currentAction) || !is_null($currentSave)) {
 }
 if (is_null($currentAction) && $auth && $permission["addatt"]) {
 ?>
-    <form action="<?php print $_SERVER["PHP_SELF"]; ?>" enctype="multipart/form-data" method="post">
+    <form action="?action=save" enctype="multipart/form-data" method="post">
     <fieldset>
     <legend><?php print $PMF_LANG["ad_att_addto"]." ".$PMF_LANG["ad_att_addto_2"]; ?></legend>
-        <input type="hidden" name="action" value="save" />
         <input type="hidden" name="MAX_FILE_SIZE" value="<?php print $faqconfig->get('main.maxAttachmentSize'); ?>" />
         <input type="hidden" name="id" value="<?php print filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT); ?>" />
         <input type="hidden" name="save" value="TRUE" />

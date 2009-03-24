@@ -57,9 +57,7 @@ if ($permission['viewlog']) {
 ?>
     <h2><?php print $PMF_LANG["ad_stat_sess"]; ?></h2>
 
-    <form action="<?php print $_SERVER['PHP_SELF'] ?>" method="post" style="display: inline;">
-    <input type="hidden" name="action" value="sessionbrowse" />
-
+    <form action="?action=sessionbrowse" method="post" style="display: inline;">
     <fieldset>
     <legend><?php print $PMF_LANG["ad_stat_sess"]; ?></legend>
         <label class="left"><?php print $PMF_LANG["ad_stat_days"]; ?>:</label>
@@ -151,9 +149,7 @@ if ($permission['viewlog']) {
     </fieldset>
     </form>
 
-    <form action="<?php print $_SERVER["PHP_SELF"]; ?>" method="post" style="display: inline;">
-    <input type="hidden" name="action" value="viewsessions" />
-
+    <form action="?action=viewsessions" method="post" style="display: inline;">
     <fieldset>
     <legend><?php print $PMF_LANG['ad_stat_management']; ?></legend>
         <label class="left"><?php print $PMF_LANG['ad_stat_choose']; ?>:</label>

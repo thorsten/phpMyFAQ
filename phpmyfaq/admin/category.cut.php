@@ -38,10 +38,9 @@ if ($permission["editcateg"]) {
     printf('<h2>%s</h2>', $header);
 ?>
 
-    <form action="<?php print $_SERVER['PHP_SELF']; ?>" method="post">
+    <form action="?action=pastecategory" method="post">
     <fieldset>
         <legend><?php print $PMF_LANG["ad_categ_paste2"]; ?></legend>
-	    <input type="hidden" name="action" value="pastecategory" />
 	    <input type="hidden" name="cat" value="<?php print $id; ?>" />
 	    <div class="row">
             <select name="after" size="1">

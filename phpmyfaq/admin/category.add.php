@@ -32,10 +32,9 @@ if ($permission["addcateg"]) {
     $category  = new PMF_Category($current_admin_user, $current_admin_groups, false);
     $parent_id = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
 ?>
-    <form action="<?php print $_SERVER['PHP_SELF']; ?>" method="post">
+    <form action="?action=savecategory" method="post">
     <fieldset>
     <legend><?php print $PMF_LANG["ad_categ_new"]; ?></legend>
-    <input type="hidden" name="action" value="savecategory" />
     <input type="hidden" name="lang" value="<?php print $LANGCODE; ?>" />
     <input type="hidden" name="parent_id" value="<?php print $parent_id; ?>" />
 <?php

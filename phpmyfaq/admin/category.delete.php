@@ -31,12 +31,10 @@ if ($permission['delcateg']) {
     $categories = $category->getAllCategories();
     $id         = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
 ?>
-	<form action="<?php print $_SERVER['PHP_SELF']; ?>" method="post">
+	<form action="?action=removecategory" method="post">
     <fieldset>
     <legend><?php print $PMF_LANG['ad_categ_deletesure']; ?></legend>
-
-	<input type="hidden" name="action" value="removecategory" />
-	<input type="hidden" name="cat" value="<?php print $id; ?>" />
+	    <input type="hidden" name="cat" value="<?php print $id; ?>" />
         <input type="hidden" name="lang" value="<?php print $LANGCODE; ?>" />
 
         <label class="left"><?php print $PMF_LANG['ad_categ_titel']; ?>:</label>

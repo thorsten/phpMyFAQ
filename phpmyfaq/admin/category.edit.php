@@ -54,8 +54,7 @@ if ($permission['editcateg']) {
         $categories[$id]['name'],
         $PMF_LANG['ad_categ_edit_2']);
 ?>
-    <form action="<?php print $_SERVER['PHP_SELF']; ?>" method="post">
-    <input type="hidden" name="action" value="updatecategory" />
+    <form action="?action=updatecategory" method="post">
     <input type="hidden" name="id" value="<?php print $id; ?>" />
     <input type="hidden" name="lang" value="<?php print $categories[$id]['lang']; ?>" />
     <input type="hidden" name="parent_id" value="<?php print $categories[$id]['parent_id']; ?>" />

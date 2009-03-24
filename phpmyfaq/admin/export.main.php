@@ -30,8 +30,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 require_once PMF_INCLUDE_DIR.'/Export.php';
 ?>
     <h2><?php print($PMF_LANG["ad_menu_export"]); ?></h2>
-    <form method="get">
-        <input type="hidden" name="action" value="exportfile" />
+    <form action="?action=exportfile" method="get">
 <?php
 if (!emptyTable(SQLPREFIX."faqdata")) {
 

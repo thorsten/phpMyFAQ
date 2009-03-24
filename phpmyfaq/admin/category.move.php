@@ -41,8 +41,7 @@ if ($permission["editcateg"]) {
 
     printf('<h2>%s</h2>', $header);
 ?>
-	<form action="<?php print $_SERVER['PHP_SELF']; ?>" method="post">
-    <input type="hidden" name="action" value="changecategory" />
+	<form action="?action=changecategory" method="post">
     <fieldset>
         <legend><?php print $PMF_LANG["ad_categ_change"]; ?></legend>
 	    <input type="hidden" name="cat" value="<?php print $id; ?>" />

@@ -29,11 +29,9 @@ print sprintf('<h2>%s</h2>', $PMF_LANG['ad_menu_glossary']);
 
 if ($permission['addglossary']) {
 ?>
-<form action="<?php print $_SERVER['PHP_SELF']; ?>" method="post">
+<form action="?action=saveglossary" method="post">
 <fieldset>
     <legend><?php print $PMF_LANG['ad_glossary_add']; ?></legend>
-
-    <input type="hidden" name="action" value="saveglossary" />
 
     <label class="left" for="item"><?php print $PMF_LANG['ad_glossary_item']; ?>:</label>
     <input type="text" name="item" id="item" size="50" /><br />

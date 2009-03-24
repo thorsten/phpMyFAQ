@@ -48,8 +48,7 @@ if ($permission["editcateg"]) {
 
     printf('<h2>%s</h2>', $header);
 ?>
-    <form action="<?php print $_SERVER['PHP_SELF']; ?>" method="post">
-    <input type="hidden" name="action" value="updatecategory" />
+    <form action="?action=updatecategory" method="post">
     <fieldset>
     <legend><?php print $header; ?></legend>
 

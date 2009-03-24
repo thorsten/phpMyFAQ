@@ -33,11 +33,10 @@ if ($permission['editglossary']) {
     $glossary     = new PMF_Glossary();
     $glossaryItem = $glossary->getGlossaryItem($id);
 ?>
-<form action="<?php print $_SERVER['PHP_SELF']; ?>" method="post">
+<form action="?action=updateglossary" method="post">
 <fieldset>
     <legend><?php print $PMF_LANG['ad_glossary_edit']; ?></legend>
 
-    <input type="hidden" name="action" value="updateglossary" />
     <input type="hidden" name="id" value="<?php print $glossaryItem['id']; ?>" />
 
     <label class="left" for="item"><?php print $PMF_LANG['ad_glossary_item']; ?>:</label>
