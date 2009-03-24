@@ -2,12 +2,13 @@
 /**
  * Displays the user managment frontend
  *
- * @package     phpMyFAQ
- * @author      Lars Tiedemann <php@larstiedemann.de>
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since       2005-12-15
- * @copyright   (c) 2005-2008 phpMyFAQ Team
- * @version     SVN: $Id$
+ * @package    phpMyFAQ
+ * @subpackage Administration
+ * @author     Lars Tiedemann <php@larstiedemann.de>
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since      2005-12-15
+ * @version    SVN: $Id$
+ * @copyright  2005-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -30,59 +31,59 @@ if (!$permission['edituser'] and !$permission['deluser'] and !$permission['addus
 }
 
 // set some parameters
-$groupSelectSize = 10;
-$memberSelectSize = 10;
-$descriptionRows = 3;
-$descriptionCols = 15;
+$groupSelectSize    = 10;
+$memberSelectSize   = 10;
+$descriptionRows    = 3;
+$descriptionCols    = 15;
 $defaultGroupAction = 'list';
 
 $errorMessages = array(
-    'addGroup_noName' => $PMF_LANG['ad_group_error_noName'],
-    'addGroup_db' => $PMF_LANG['ad_adus_dberr'],
-    'delGroup' => $PMF_LANG['ad_group_error_delete'],
-    'delGroup_noId' => $PMF_LANG['ad_user_error_noId'],
-    'updateGroup' => $PMF_LANG['ad_msg_mysqlerr'],
-    'updateGroup_noId' => $PMF_LANG['ad_user_error_noId'],
-    'updateRights' => $PMF_LANG['ad_msg_mysqlerr'],
-    'updateRights_noId' => $PMF_LANG['ad_user_error_noId'],
-    'updateMembers' => $PMF_LANG['ad_msg_mysqlerr'],
+    'addGroup_noName'    => $PMF_LANG['ad_group_error_noName'],
+    'addGroup_db'        => $PMF_LANG['ad_adus_dberr'],
+    'delGroup'           => $PMF_LANG['ad_group_error_delete'],
+    'delGroup_noId'      => $PMF_LANG['ad_user_error_noId'],
+    'updateGroup'        => $PMF_LANG['ad_msg_mysqlerr'],
+    'updateGroup_noId'   => $PMF_LANG['ad_user_error_noId'],
+    'updateRights'       => $PMF_LANG['ad_msg_mysqlerr'],
+    'updateRights_noId'  => $PMF_LANG['ad_user_error_noId'],
+    'updateMembers'      => $PMF_LANG['ad_msg_mysqlerr'],
     'updateMembers_noId' => $PMF_LANG['ad_user_error_noId']);
 
 $successMessages = array(
-    'addGroup' => $PMF_LANG['ad_group_suc'],
-    'delGroup' => $PMF_LANG['ad_group_deleted'],
-    'updateGroup' => $PMF_LANG['ad_msg_savedsuc_1'].' <strong>%s</strong> '.$PMF_LANG['ad_msg_savedsuc_2'],
-    'updateRights' => $PMF_LANG['ad_msg_savedsuc_1'].' <strong>%s</strong> '.$PMF_LANG['ad_msg_savedsuc_2'],
-    'updateMembers' => $PMF_LANG['ad_msg_savedsuc_1'].' <strong>%s</strong> '.$PMF_LANG['ad_msg_savedsuc_2']);
+    'addGroup'           => $PMF_LANG['ad_group_suc'],
+    'delGroup'           => $PMF_LANG['ad_group_deleted'],
+    'updateGroup'        => $PMF_LANG['ad_msg_savedsuc_1'].' <strong>%s</strong> '.$PMF_LANG['ad_msg_savedsuc_2'],
+    'updateRights'       => $PMF_LANG['ad_msg_savedsuc_1'].' <strong>%s</strong> '.$PMF_LANG['ad_msg_savedsuc_2'],
+    'updateMembers'      => $PMF_LANG['ad_msg_savedsuc_1'].' <strong>%s</strong> '.$PMF_LANG['ad_msg_savedsuc_2']);
 
 $text = array(
-    'header' => $PMF_LANG["ad_menu_group_administration"],
-    'selectGroup' => $PMF_LANG['ad_groups'],
-    'addGroup' => $PMF_LANG['ad_group_add'],
-    'addGroup_confirm' => $PMF_LANG['ad_gen_save'],
-    'addGroup_cancel' => $PMF_LANG['ad_gen_cancel'],
-    'addGroup_link' => $PMF_LANG['ad_group_add_link'],
-    'addGroup_name' => $PMF_LANG['ad_group_name'],
-    'addGroup_description' => $PMF_LANG['ad_group_description'],
-    'addGroup_autoJoin' => $PMF_LANG['ad_group_autoJoin'],
-    'delGroup' => $PMF_LANG['ad_group_deleteGroup'],
-    'delGroup_button' => $PMF_LANG['ad_gen_delete'],
-    'delGroup_question' => $PMF_LANG['ad_group_deleteQuestion'],
-    'delGroup_confirm' => $PMF_LANG['ad_gen_yes'],
-    'delGroup_cancel' => $PMF_LANG['ad_gen_no'],
-    'changeGroup' => $PMF_LANG['ad_group_details'],
-    'changeGroup_submit' => $PMF_LANG['ad_gen_save'],
-    'changeRights' => $PMF_LANG['ad_user_rights'],
-    'changeRights_submit' => $PMF_LANG['ad_gen_save'],
-    'changeRights_checkAll' => $PMF_LANG['ad_user_checkall'],
-    'changeRights_uncheckAll' => $PMF_LANG['ad_user_uncheckall'],
-    'groupMembership' => $PMF_LANG['ad_group_membership'],
-    'groupMembership_memberList' => $PMF_LANG['ad_group_members'],
-    'groupMembership_userList' => $PMF_LANG['ad_user_username'],
-    'addMember_button' => $PMF_LANG['ad_group_addMember'],
-    'removeMember_button' => $PMF_LANG['ad_group_removeMember'],
-    'updateMember_submit' => $PMF_LANG['ad_gen_save'],
-    'groupMembership_selectAll' => $PMF_LANG['ad_user_checkall'],
+    'header'                      => $PMF_LANG["ad_menu_group_administration"],
+    'selectGroup'                 => $PMF_LANG['ad_groups'],
+    'addGroup'                    => $PMF_LANG['ad_group_add'],
+    'addGroup_confirm'            => $PMF_LANG['ad_gen_save'],
+    'addGroup_cancel'             => $PMF_LANG['ad_gen_cancel'],
+    'addGroup_link'               => $PMF_LANG['ad_group_add_link'],
+    'addGroup_name'               => $PMF_LANG['ad_group_name'],
+    'addGroup_description'        => $PMF_LANG['ad_group_description'],
+    'addGroup_autoJoin'           => $PMF_LANG['ad_group_autoJoin'],
+    'delGroup'                    => $PMF_LANG['ad_group_deleteGroup'],
+    'delGroup_button'             => $PMF_LANG['ad_gen_delete'],
+    'delGroup_question'           => $PMF_LANG['ad_group_deleteQuestion'],
+    'delGroup_confirm'            => $PMF_LANG['ad_gen_yes'],
+    'delGroup_cancel'             => $PMF_LANG['ad_gen_no'],
+    'changeGroup'                 => $PMF_LANG['ad_group_details'],
+    'changeGroup_submit'          => $PMF_LANG['ad_gen_save'],
+    'changeRights'                => $PMF_LANG['ad_user_rights'],
+    'changeRights_submit'         => $PMF_LANG['ad_gen_save'],
+    'changeRights_checkAll'       => $PMF_LANG['ad_user_checkall'],
+    'changeRights_uncheckAll'     => $PMF_LANG['ad_user_uncheckall'],
+    'groupMembership'             => $PMF_LANG['ad_group_membership'],
+    'groupMembership_memberList'  => $PMF_LANG['ad_group_members'],
+    'groupMembership_userList'    => $PMF_LANG['ad_user_username'],
+    'addMember_button'            => $PMF_LANG['ad_group_addMember'],
+    'removeMember_button'         => $PMF_LANG['ad_group_removeMember'],
+    'updateMember_submit'         => $PMF_LANG['ad_gen_save'],
+    'groupMembership_selectAll'   => $PMF_LANG['ad_user_checkall'],
     'groupMembership_unselectAll' => $PMF_LANG['ad_user_uncheckall']);
 
 // what shall we do?
@@ -98,9 +99,9 @@ if (isset($_POST['cancel'])) {
 
 // update group members
 if ($groupAction == 'update_members') {
-    $message = '';
-    $groupAction = $defaultGroupAction;
-    $groupId = isset($_POST['group_id']) ? (int)$_POST['group_id'] : 0;
+    $message      = '';
+    $groupAction  = $defaultGroupAction;
+    $groupId      = PMF_Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT, 0);
     $groupMembers = isset($_POST['group_members']) ? $_POST['group_members'] : array();
     if ($groupId == 0) {
         $message .= '<p class="error">'.$errorMessages['updateMembers_noId'].'</p>';
@@ -118,9 +119,9 @@ if ($groupAction == 'update_members') {
 } // end if ($groupAction == 'update_members')
 // update group rights
 if ($groupAction == 'update_rights') {
-    $message = '';
+    $message     = '';
     $groupAction = $defaultGroupAction;
-    $groupId = isset($_POST['group_id']) ? (int)$_POST['group_id'] : 0;
+    $groupId     = PMF_Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT, 0);
     if ($groupId == 0) {
         $message .= '<p class="error">'.$errorMessages['updateRights_noId'].'</p>';
     } else {
@@ -138,13 +139,13 @@ if ($groupAction == 'update_rights') {
 } // end if ($groupAction == 'update_rights')
 // update group data
 if ($groupAction == 'update_data') {
-    $message = '';
+    $message     = '';
     $groupAction = $defaultGroupAction;
-    $groupId = (isset($_POST['group_id']) && $_POST['group_id'] > 0) ? (int)$_POST['group_id'] : 0;
+    $groupId     = PMF_Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT, 0);
     if ($groupId == 0) {
         $message .= '<p class="error">'.$errorMessages['updateGroup_noId'].'</p>';
     } else {
-        $groupData = array();
+        $groupData  = array();
         $dataFields = array('name', 'description', 'auto_join');
         foreach ($dataFields as $field) {
             $groupData[$field] = isset($_POST[$field]) ? $_POST[$field] : '';
@@ -162,11 +163,11 @@ if ($groupAction == 'update_data') {
 // delete group confirmation
 if ($groupAction == 'delete_confirm') {
     $message = '';
-    $user = new PMF_User();
-    $perm = $user->perm;
-    $groupId = (isset($_POST['group_list_select']) && $_POST['group_list_select'] > 0) ? $_POST['group_list_select'] : 0;
+    $user    = new PMF_User();
+    $perm    = $user->perm;
+    $groupId = PMF_Filter::filterInput(INPUT_POST, 'group_list_select', FILTER_VALIDATE_INT, 0);
     if ($groupId <= 0) {
-        $message .= '<p class="error">'.$errorMessages['delGroup_noId'].'</p>';
+        $message    .= '<p class="error">'.$errorMessages['delGroup_noId'].'</p>';
         $groupAction = $defaultGroupAction;
     } else {
         $group_data = $perm->getGroupData($groupId);
@@ -192,9 +193,9 @@ if ($groupAction == 'delete_confirm') {
 // delete group
 if ($groupAction == 'delete') {
     $message = '';
-    $user = new PMF_User();
-    $perm = $user->perm;
-    $groupId = (isset($_POST['group_id']) && $_POST['group_id'] > 0) ? (int) $_POST['group_id'] : 0;
+    $user    = new PMF_User();
+    $perm    = $user->perm;
+    $groupId = PMF_Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT, 0);
     $groupAction = $defaultGroupAction;
     if ($groupId <= 0) {
         $message .= '<p class="error">'.$errorMessages['delGroup_noId'].'</p>';
@@ -213,13 +214,13 @@ if ($groupAction == 'delete') {
 } // end if ($groupAction == 'delete')
 // save new group
 if ($groupAction == 'addsave') {
-    $user = new PMF_User();
-    $message = '';
+    $user     = new PMF_User();
+    $message  = '';
     $messages = array();
     // check input data
-    $group_name = isset($_POST['group_name']) ? $_POST['group_name'] : '';
-    $group_description = isset($_POST['group_description']) ? $_POST['group_description'] : '';
-    $group_auto_join = isset($_POST['group_auto_join']) ? $_POST['group_auto_join'] : '';
+    $group_name        = PMF_Filter::filterInput(INPUT_POST, 'group_name', FILTER_SANITIZE_STRING, '');
+    $group_description = PMF_Filter::filterInput(INPUT_POST, 'group_description', FILTER_SANITIZE_STRING, '');
+    $group_auto_join   = PMF_Filter::filterInput(INPUT_POST, 'group_auto_join', FILTER_SANITIZE_STRING, '');
     // check group name
     if ($group_name == "") {
         $messages[] = $errorMessages['addGroup_noName'];
@@ -228,9 +229,9 @@ if ($groupAction == 'addsave') {
     if (count($messages) == 0) {
         // create group
         $group_data = array(
-            'name' => $group_name,
+            'name'        => $group_name,
             'description' => $group_description,
-            'auto_join' => $group_auto_join
+            'auto_join'   => $group_auto_join
         );
         if ($user->perm->addGroup($group_data) <= 0)
             $messages[] = $errorMessages['addGroup_db'];
