@@ -95,7 +95,8 @@ if ($permission["editbt"]) {
             // Create ChangeLog entry
             $faq->createChangeEntry($record_id, $user->getUserId(), nl2br($db->escape_string($_POST['changed'])), $recordData['lang']);
             // Create the visit entry
-            $faq->createNewVisit($record_id, $recordData['lang']);
+            $visits = PMF_Visits::getInstance();
+            $visits->createNewVisit($record_id, $recordData['lang']);
             // Insert the new category relations
             $faq->addCategoryRelations($categories, $record_id, $recordData['lang']);
             // Insert the tags
