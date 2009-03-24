@@ -130,7 +130,7 @@ class PMF_Visits
      * @param  integer $id Record ID
      * @return boolean
      */
-    private function createNewVisit($id)
+    public function createNewVisit($id)
     {
         if (!is_numeric($id)) {
             return false;
