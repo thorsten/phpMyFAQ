@@ -31,15 +31,11 @@ header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
 header("Cache-Control: no-store, no-cache, must-revalidate");
 header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
-header("Content-type: text/xml");
 header("Vary: Negotiate,Accept");
-header("Content-type: text/xml; charset=".$PMF_LANG['metaCharset']);
 
-// TODO: manage the language correctly
-$oTag = new PMF_Tags($db, 'en');
-$autoCompleteValue = '';
-if (isset($_POST['autocomplete']) && is_string($_POST['autocomplete'])) {
-    $autoCompleteValue = $db->escape_string($_POST['autocomplete']);
+$oTag              = new PMF_Tags();
+$autoCompleteValue = PMF_Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRIPPED);
+if (!is_null($autoCompleteValue)) {
     $tags = $oTag->getAllTags($autoCompleteValue);
 } else {
     $tags = $oTag->getAllTags();
@@ -48,20 +44,13 @@ if (isset($_POST['autocomplete']) && is_string($_POST['autocomplete'])) {
 if (count(ob_list_handlers()) > 0) {
     ob_clean();
 }
-?>
-<ul>
-<?php
+
 if ($permission['editbt']) {
     $i = 0;
     foreach ($tags as $tagName) {
         $i++;
         if ($i <= PMF_TAGS_AUTOCOMPLETE_RESULT_SET_SIZE) {
-            print('<li>'.$tagName.'<span class="informal"> ('.count($oTag->getRecordsByTagName($tagName)).')</span></li>');
-        } elseif ($i == PMF_TAGS_AUTOCOMPLETE_RESULT_SET_SIZE + 1) {
-        // Manage the "More results" info
-            print('<li>'.$autoCompleteValue.'<span class="informal">...</span></li>');
+            print $tagName . "\n";
         }
     }
 }
-?>
-</ul>

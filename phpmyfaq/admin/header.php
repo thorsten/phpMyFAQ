@@ -52,15 +52,13 @@ header("Vary: Negotiate,Accept");
 
     // @todo: rewrite the AJAX Suggestion and Autocomplete Behaviours using ONLY jQuery library
 if (isset($_action)) {
-	if ($_action != 'comments' && $_action != 'config') {
+	if ($_action != 'comments' && $_action != 'config' && 
+	    $_action != 'takequestion' && $_action != 'editentry' && $_action != 'editpreview') {
 ?>
     <script type="text/javascript" src="../inc/js/prototype.js"></script>
 <?php 
 	}
     switch ($_action) {
-        case 'takequestion':
-        case 'editentry':
-        case 'editpreview':
         case 'user':
 ?>
     <script type="text/javascript" src="../inc/js/scriptaculous/scriptaculous.js"></script>

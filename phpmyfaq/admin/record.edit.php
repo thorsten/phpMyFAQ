@@ -256,20 +256,8 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 
     <label class="lefteditor" for="tags"><?php print $PMF_LANG['ad_entry_tags']; ?>:</label>
     <input name="tags" id="tags" style="width: 390px;" value="<?php if (isset($tags)) { print htmlspecialchars($tags); } ?>" /><img style="display: none; margin-bottom: -5px;" id="tags_autocomplete_wait" src="images/indicator.gif" alt="waiting..."></img>
-    <div id="tags_autocomplete_choices"></div><br />
     <script type="text/javascript">
-        // Hack: IE7 needs a valid XHTML URL
-        new Ajax.Autocompleter(
-            "tags",
-            "tags_autocomplete_choices",
-            "index.php?action=ajax&ajax=tags_list",
-            {
-                paramName:  "autocomplete",
-                tokens:     ",",
-                minChars:   1,
-                indicator:  "tags_autocomplete_wait"
-            }
-        );
+        $('#tags').autocomplete("index.php?action=ajax&ajax=tags_list", { width: 260, selectFirst: false, multiple: true } );
     </script>
 
     <label class="lefteditor" for="author"><?php print $PMF_LANG["ad_entry_author"]; ?></label>
