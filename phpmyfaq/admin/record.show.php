@@ -68,16 +68,14 @@ if ($permission["editbt"] || $permission["delbt"]) {
         $searchterm = safeSQL($_POST['searchterm']);
     }
 
-    if (isset($_GET['action']) && $_GET['action'] == 'accept') {
+    if ($action == 'accept') {
         $active = 'no';
     }
 
-    if (isset($_GET['category']) && is_numeric($_GET['category'])) {
-        $currentcategory = (int)$_GET['category'];
-    }
-
-    if (isset($_GET['orderby'])) {
-        switch ($db->escape_string($_GET['orderby'])) {
+    $currentcategory = PMF_Filter::filterInput(INPUT_GET, 'category', FILTER_VALIDATE_INT);
+    $orderby         = PMF_Filter::filterInput(INPUT_GET, 'orderby', FILTER_SANITIZE_STRING, 1);
+    if ($orderby != 1) {
+        switch ($orderby) {
             case 'id':
                 $orderby = 1;
                 break;
@@ -87,15 +85,10 @@ if ($permission["editbt"] || $permission["delbt"]) {
             case 'date':
                 $orderby = 3;
                 break;
-            default:
-                $orderby = 1;
-                break;
         }
     }
 
-    if (isset($_GET['sortby'])) {
-        $sortby = $db->escape_string($_GET['sortby']);
-    }
+    $sortby = PMF_Filter::filterInput(INPUT_GET, 'sortby', FILTER_SANITIZE_STRING);
 ?>
     <form action="?action=view" method="post">
     <fieldset>

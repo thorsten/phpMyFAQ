@@ -31,22 +31,12 @@ if ($permission['adminlog'] && 'adminlog' == $action) {
 
     $perpage = 15;
     $pages   = PMF_Filter::filterInput(INPUT_GET, 'pages', FILTER_VALIDATE_INT);
-    $page    = PMF_Filter::filterInput(INPUT_GET, 'page' , FILTER_VALIDATE_INT);
+    $page    = PMF_Filter::filterInput(INPUT_GET, 'page' , FILTER_VALIDATE_INT, 1);
     
     if (is_null($pages)) {
         $pages = round(($logging->getNumberOfEntries() + ($perpage / 3)) / $perpage, 0);
     }
     
-    if (is_null($page)) {
-        $page = 1;
-    }
-
-    if (!isset($_GET["page"])) {
-        $page = 1;
-    } else {
-        $page = (int)$_GET["page"];
-    }
-
     $start = ($page - 1) * $perpage;
     $ende  = $start + $perpage;
 

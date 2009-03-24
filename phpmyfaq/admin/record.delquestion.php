@@ -26,14 +26,16 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 
 if ($permission['delquestion']) {
 
-    $category = new PMF_Category($current_admin_user, $current_admin_groups, false);
-
-    $question_id = (int)$_GET['id'];
-    if (isset($_GET['delete']) && $_GET['delete'] == 'yes') {
+    $category    = new PMF_Category($current_admin_user, $current_admin_groups, false);
+    $question_id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+    $delete      = PMF_Filter::filterInput(INPUT_GET, 'delete', FILTER_SANITIZE_STRING, 'no');
+    
+    if ($delete == 'yes') {
         $faq->deleteQuestion($question_id);
         print $PMF_LANG['ad_entry_delsuc'];
     } else {
-        if (isset($_GET['is_visible']) && $_GET['is_visible'] == 'toggle') {
+    	$toggle = PMF_Filter::filterInput(INPUT_GET, 'is_visible', FILTER_SANITIZE_STRING);
+        if ($toggle == 'toggle') {
             $is_visible = $faq->getVisibilityOfQuestion($question_id);
             if (!is_null($is_visible)) {
                 $faq->setVisibilityOfQuestion($question_id, ($is_visible == 'N' ? 'Y' : 'N'));

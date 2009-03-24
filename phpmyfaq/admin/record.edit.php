@@ -43,10 +43,8 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 
     $tagging = new PMF_Tags();
 
-    $currentaction = (isset($_GET['action']) ? $_GET['action'] : '');
-
-    if ($currentaction == 'takequestion') {
-        $question_id      = (int)$_REQUEST['id'];
+    if ($action == 'takequestion') {
+        $question_id      = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
         $question         = $faq->getQuestion($question_id);
         $current_category = $question['category'];
         $faqData['title'] = $question['question'];
@@ -55,7 +53,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
             'category_lang' => $faqData['lang']);
     }
 
-    if ($currentaction == 'editpreview') {
+    if ($action == 'editpreview') {
 
         if (isset($_REQUEST["id"]) && $_REQUEST["id"] != "") {
             $faqData['id'] = (int)$_REQUEST["id"];
@@ -88,12 +86,14 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
             $faqData['dateEnd'] = $_REQUEST['dateEnd'];
         }
 
-    } elseif ($currentaction == 'editentry') {
+    } elseif ($action == 'editentry') {
 
-        if ((!isset($current_category) && !isset($faqData['title'])) || (isset($_GET['id']) && $_GET['id'] != '')) {
-            adminlog("Beitragedit, " . (int)$_GET['id']);
-            $faqData['id']      = (int)$_GET['id'];
-            $faqData['lang']    = $_GET["lang"];
+    	$id   = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+    	$lang = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
+        if ((!isset($current_category) && !isset($faqData['title'])) || !is_null($id)) {
+            adminlog("Beitragedit, " . $id);
+            $faqData['id']   = $id;
+            $faqData['lang'] = $lang;
             
             $faq->setLanguage($faqData['lang']);
             $categories = $category->getCategoryRelationsFromArticle($faqData['id'], $faqData['lang']);
@@ -106,10 +106,10 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
             $url_variables = 'insertentry';
         }
 
-    } elseif ($currentaction == 'copyentry') {
+    } elseif ($action == 'copyentry') {
 
-        $faqData['id']   = (int)$_GET['id'];
-        $faqData['lang'] = $_GET["lang"];
+        $faqData['id']   = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+        $faqData['lang'] = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
         $faq->language   = $faqData['lang'];
         $categories      = $category->getCategoryRelationsFromArticle($faqData['id'], $faqData['lang']);
 
@@ -153,7 +153,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     }
 
     print '<h2>'.$PMF_LANG["ad_entry_edit_1"];
-    if ($faqData['id'] != 0 && $currentaction != 'copyentry') {
+    if ($faqData['id'] != 0 && $action != 'copyentry') {
         printf(' <span style="color: Red;">%d (%s 1.%d) </span> ',
             $faqData['id'],
             $PMF_LANG['ad_entry_revision'],
@@ -213,9 +213,9 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 
 <?php
 
-    if ($currentaction == 'copyentry') {
+    if ($action == 'copyentry') {
         unset($faqData);
-        $faqData['lang'] = $_GET['lang'];
+        $faqData['lang'] = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
     }
 
     if ($permission["addatt"]) {

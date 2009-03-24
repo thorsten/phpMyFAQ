@@ -87,7 +87,7 @@ $text = array(
 
 // what shall we do?
 // actions defined by url: group_action=
-$groupAction = isset($_GET['group_action']) ? $_GET['group_action'] : $defaultGroupAction;
+$groupAction = PMF_Filter::filterInput(INPUT_GET, 'group_action', FILTER_SANITIZE_STRING, $defaultGroupAction);
 // actions defined by submit button
 if (isset($_POST['group_action_deleteConfirm'])) {
     $groupAction = 'delete_confirm';

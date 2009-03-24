@@ -86,7 +86,7 @@ $text = array(
 
 // what shall we do?
 // actions defined by url: user_action=
-$userAction = isset($_GET['user_action']) ? $_GET['user_action'] : $defaultUserAction;
+$userAction = PMF_Filter::filterInput(INPUT_GET, 'user_action', FILTER_SANITIZE_STRING, $defaultUserAction);
 // actions defined by submit button
 if (isset($_POST['user_action_deleteConfirm'])) {
     $userAction = 'delete_confirm';

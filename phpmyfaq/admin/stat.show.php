@@ -1,12 +1,13 @@
 <?php
 /**
- * $Id: stat.show.php,v 1.13 2007-03-31 13:10:48 thorstenr Exp $
- *
  * Show the session
  *
- * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since        2003-02-24
- * @copyright    (c) 2003-2007 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage Administration
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since      2003-02-24
+ * @version    SVN: $Id$
+ * @copyright  2003-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -27,7 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 if ($permission['viewlog']) {
     require_once(PMF_ROOT_DIR.'/inc/Session.php');
 
-    $sid = (int)$_GET['id'];
+    $sid = PMF_Filter::filterInput(INPUT_GET, 'sid', FILTER_VALIDATE_INT);
 
     printf('<h2>%s "<span style="color: Red;">%d</span>"</h2>',
         $PMF_LANG['ad_sess_session'],

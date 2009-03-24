@@ -35,15 +35,13 @@ if ($permission["editcateg"]) {
         $PMF_LANG['ad_categ_trans_2'],
         $category->categoryName[$id]['name']);
 
-    if (isset($_GET["trlang"])) {
-       $selected_lang = PMF_Filter::filterInput(INPUT_POST, 'trlang', FILTER_SANITIZE_STRING);
-       $action        = "showcategory";
-       $showcat       = "yes";
-    }
-    else {
-       $selected_lang = $LANGCODE;
-       $action        = "updatecategory";
-       $showcat       = "no";
+    $selected_lang = PMF_Filter::filterInput(INPUT_POST, 'trlang', FILTER_SANITIZE_STRING, $LANGCODE);
+    if ($selected_lang != $LANGCODE) {
+        $action  = "showcategory";
+        $showcat = "yes";
+    } else {
+        $action  = "updatecategory";
+        $showcat = "no";
     }
 
     printf('<h2>%s</h2>', $header);

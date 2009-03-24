@@ -53,13 +53,8 @@ if ($linkverifier->isReady() == false) {
 
 $linkverifier->loadConfigurationFromDB();
 
-if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
-    $id = $_GET["id"];
-}
-
-if (isset($_GET["lang"])) {
-    $lang = $_GET["lang"];
-}
+$id   = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+$lang = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
 
 if (count(ob_list_handlers()) > 0) {
     ob_clean();
