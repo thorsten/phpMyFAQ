@@ -227,11 +227,11 @@ class PMF_Category
     /**
      * Gets the main categories and write them in an array
      *
-     * @param  array   $cat       Array of parent category ids
+     * @param  string  $cat       Array of parent category ids
      * @param  boolean $parent_id Only top level categories?
      * @return array
      */
-    public function getCategories(Array $categories, $parent_id = true)
+    public function getCategories($categories, $parent_id = true)
     {
         $_query = '';
         $query  = sprintf('
