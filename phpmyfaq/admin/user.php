@@ -564,6 +564,7 @@ function updateUser(id)
                 <div id="user_list_autocomplete_choices" class="user_list_autocomplete" style="display: none;"></div>
                 <script type="text/javascript">
                 <!--
+                    //$('#user_list_autocomplete').autocomplete("index.php?action=ajax&ajax=user_list_autocomplete", { width: 260, selectFirst: true } );
                     var url = 'index.php';
                     var pars = 'action=ajax&ajax=user_list_autocomplete';
                     new Ajax.Autocompleter(

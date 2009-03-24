@@ -27,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 
 $logging = new PMF_Logging($db);
 
-if ($permission['adminlog'] && 'adminlog' == $_action) {
+if ($permission['adminlog'] && 'adminlog' == $action) {
 
     $perpage = 15;
     $pages   = PMF_Filter::filterInput(INPUT_GET, 'pages', FILTER_VALIDATE_INT);
@@ -118,7 +118,7 @@ if ($permission['adminlog'] && 'adminlog' == $_action) {
 
     printf ('<p><a href="?action=deleteadminlog">%s</a></p>', $PMF_LANG['ad_adminlog_del_older_30d']);
 
-} elseif ($permission['adminlog'] && 'deleteadminlog' == $_action) {
+} elseif ($permission['adminlog'] && 'deleteadminlog' == $action) {
 
     if ($logging->delete()) {
         printf('<p>%s</p>', $PMF_LANG['ad_adminlog_delete_success']);

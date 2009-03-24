@@ -31,7 +31,7 @@ $news = new PMF_News();
 // Re-evaluate $user
 $user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
 
-if ('addnews' == $_action && $permission["addnews"]) {
+if ('addnews' == $action && $permission["addnews"]) {
 ?>
     <h2><?php print $PMF_LANG['ad_news_add']; ?></h2>
     <form id="faqEditor" name="faqEditor" action="?action=savenews" method="post">
@@ -99,7 +99,7 @@ if ('addnews' == $_action && $permission["addnews"]) {
     <input class="submit" type="reset" value="<?php print $PMF_LANG['ad_gen_reset']; ?>" />
     </form>
 <?php
-} elseif ('news' == $_action && $permission["editnews"]) {
+} elseif ('news' == $action && $permission["editnews"]) {
 ?>
     <br />
     <table class="list">
@@ -132,7 +132,7 @@ if ('addnews' == $_action && $permission["addnews"]) {
     </table>
     <p><a href="?action=addnews"><?php print $PMF_LANG["ad_menu_news_add"]; ?></a></p>
 <?php
-} elseif ('editnews' == $_action && $permission['editnews']) {
+} elseif ('editnews' == $action && $permission['editnews']) {
     $id       = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $newsData = $news->getNewsEntry($id, true);
 ?>
@@ -216,7 +216,7 @@ if ('addnews' == $_action && $permission["addnews"]) {
     <p><?php print $PMF_LANG["ad_entry_commentby"] ?> <a href="mailto:<?php print($item['email']); ?>"><?php print($item['user']); ?></a>:<br /><?php print($item['content']); ?><br /><?php print($PMF_LANG['newsCommentDate'].makeCommentDate($item['date'])); ?><a href="?action=delcomment&amp;artid=<?php print($newsId); ?>&amp;cmtid=<?php print($item['id']); ?>&amp;type=<?php print(PMF_Comment::COMMENT_TYPE_NEWS);?>"><img src="images/delete.gif" alt="<?php print $PMF_LANG["ad_entry_delete"] ?>" title="<?php print $PMF_LANG["ad_entry_delete"] ?>" border="0" width="17" height="18" align="right" /></a></p>
 <?php
     }
-} elseif ('savenews' == $_action && $permission["addnews"]) {
+} elseif ('savenews' == $action && $permission["addnews"]) {
 
     // Evaluate the passed validity range, if any
     $dateStart =
@@ -259,7 +259,7 @@ if ('addnews' == $_action && $permission["addnews"]) {
     } else {
         printf("<p>%s</p>", $PMF_LANG['ad_news_insertfail']);
     }
-} elseif ('updatenews' == $_action && $permission["editnews"]) {
+} elseif ('updatenews' == $action && $permission["editnews"]) {
 
     // Evaluate the passed validity range, if any
     $dateStart =
@@ -303,7 +303,7 @@ if ('addnews' == $_action && $permission["addnews"]) {
     } else {
         printf("<p>%s</p>", $PMF_LANG['ad_news_updatefail']);
     }
-} elseif ('deletenews' == $_action && $permission["delnews"]) {
+} elseif ('deletenews' == $action && $permission["delnews"]) {
 	
 	$precheck  = PMF_Filter::filterInput(INPUT_POST, 'really', FILTER_SANITIZE_STRING, 'no');
 	$delete_id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);

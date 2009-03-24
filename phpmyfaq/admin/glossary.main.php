@@ -34,7 +34,7 @@ if ($permission['addglossary'] || $permission['editglossary'] || $permission['de
     require_once(PMF_ROOT_DIR.'/inc/Glossary.php');
     $glossary = new PMF_Glossary();
 
-    if ('saveglossary' == $_action && $permission['addglossary']) {
+    if ('saveglossary' == $action && $permission['addglossary']) {
     	$item       = PMF_Filter::filterInput(INPUT_POST, 'item', FILTER_SANITIZE_STRIPPED);
     	$definition = PMF_Filter::filterInput(INPUT_POST, 'definition', FILTER_SANITIZE_STRIPPED);
         if ($glossary->addGlossaryItem($item, $definition)) {
@@ -46,7 +46,7 @@ if ($permission['addglossary'] || $permission['editglossary'] || $permission['de
         }
     }
 
-    if ('updateglossary' == $_action && $permission['editglossary']) {
+    if ('updateglossary' == $action && $permission['editglossary']) {
     	$id         = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
         $item       = PMF_Filter::filterInput(INPUT_POST, 'item', FILTER_SANITIZE_STRIPPED);
         $definition = PMF_Filter::filterInput(INPUT_POST, 'definition', FILTER_SANITIZE_STRIPPED);
@@ -59,7 +59,7 @@ if ($permission['addglossary'] || $permission['editglossary'] || $permission['de
         }
     }
 
-    if ('deleteglossary' == $_action && $permission['editglossary']) {
+    if ('deleteglossary' == $action && $permission['editglossary']) {
     	$id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
         if ($glossary->deleteGlossaryItem($id)) {
             print '<p>' . $PMF_LANG['ad_glossary_delete_success'] . '</p>';

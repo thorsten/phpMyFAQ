@@ -78,31 +78,38 @@ if (function_exists('mb_language') && in_array($mbLanguage, $valid_mb_strings)) 
     mb_internal_encoding($PMF_LANG['metaCharset']);
 }
 
+//
+// Get user action
+//
+$action = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
+
 // authenticate current user
-$auth = null;
-if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
+$auth        = null;
+$error       = '';
+$faqusername = PMF_Filter::filterInput(INPUT_POST, 'faqusername', FILTER_SANITIZE_STRING);
+$faqpassword = PMF_Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_SANITIZE_STRING);
+if (!is_null($faqusername) && !is_null($faqpassword)) {
     // login with username and password
     $user = new PMF_User_CurrentUser();
-    $faqusername = $db->escape_string($_POST['faqusername']);
-    $faqpassword = $db->escape_string($_POST['faqpassword']);
+    if ($faqconfig->get('main.ldapSupport')) {
+        $authLdap = new PMF_Auth_AuthLdap();
+        $user->addAuth($authLdap, 'ldap');
+    }
     if ($user->login($faqusername, $faqpassword)) {
         // login, if user account is NOT blocked
         if ($user->getStatus() != 'blocked') {
             $auth = true;
         } else {
             $error = $PMF_LANG['ad_auth_fail'].' ('.$faqusername.' / *)';
-            $user = null;
-            unset($user);
-            $_REQUEST['action'] = '';
+            $user  = null;
         }
     } else {
         // error
         adminlog('Loginerror\nLogin: '.$faqusername.'\nPass: ********');
         $error = $PMF_LANG['ad_auth_fail'].' ('.$faqusername.' / *)';
-        $user = null;
-        unset($user);
-        $_REQUEST['action'] = '';
+        $user  = null;
     }
+    $action = '';
 } else {
     // authenticate with session information
     $user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
@@ -110,8 +117,6 @@ if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
         $auth = true;
     } else {
         $user = null;
-        unset($user);
-        $_REQUEST['action'] = '';
     }
 }
 
@@ -132,19 +137,17 @@ if (isset($auth)) {
 }
 
 // logout
-if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'logout' && $auth) {
+if ($action == 'logout' && $auth) {
     $user->deleteFromSession();
     $user = null;
-    unset($user);
     $auth = null;
-    unset($auth);
 }
 
 //
 // Get current admin user and group id - default: -1
 //
 if (isset($user) && is_object($user)) {
-    $current_admin_user   = $user->getUserId();
+    $current_admin_user = $user->getUserId();
     if ($user->perm instanceof PMF_PermMedium) {
         $current_admin_groups = $user->perm->getUserGroups($current_admin_user);
     } else {
@@ -157,13 +160,12 @@ if (isset($user) && is_object($user)) {
 
 //
 // Get action from _GET and _POST first
-$_action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
-$_ajax   = isset($_REQUEST['ajax']) ? $_REQUEST['ajax'] : null;
+$_ajax   = PMF_Filter::filterInput(INPUT_GET, 'ajax', FILTER_SANITIZE_STRING);
 
 // if performing AJAX operation, needs to branch before header.php
 if (isset($auth) && in_array(true, $permission)) {
-    if (isset($_action) && isset($_ajax)) {
-        if ($_action == 'ajax') {
+    if (isset($action) && isset($_ajax)) {
+        if ($action == 'ajax') {
             switch ($_ajax) {
             // Link verification
             case 'verifyURL':
@@ -205,8 +207,8 @@ if (isset($auth) && in_array(true, $permission)) {
 }
 
 // are we running a PMF export file request?
-if ((isset($_REQUEST["action"])) && ($_REQUEST["action"] == "exportfile")) {
-    require_once 'export.file.php';
+if ($action == "exportfile") {
+    require 'export.file.php';
     exit();
 }
 
@@ -215,9 +217,9 @@ require_once 'header.php';
 
 // User is authenticated
 if (isset($auth) && in_array(true, $permission)) {
-    if (isset($_action) && ($_action)) {
+    if (!is_null($action)) {
         // the various sections of the admin area
-        switch ($_action) {
+        switch ($action) {
             // functions for user administration
             case 'user':                    require_once 'user.php'; break;
             case 'group':                   require_once 'group.php'; break;
@@ -383,7 +385,7 @@ if (isset($auth) && in_array(true, $permission)) {
     <fieldset class="login">
         <legend class="login">phpMyFAQ Login</legend>
 <?php
-    if (isset($_REQUEST["action"]) && $_REQUEST["action"] == "logout") {
+    if ($action == "logout") {
         print "<p>".$PMF_LANG["ad_logout"]."</p>";
     }
     if (isset($error)) {

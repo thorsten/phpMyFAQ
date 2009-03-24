@@ -42,7 +42,7 @@ print "</p>\n";
 if ($permission['editcateg']) {
 
     // Save a new category
-    if ($_action == 'savecategory') {
+    if ($action == 'savecategory') {
 
         $category      = new PMF_Category($current_admin_user, $current_admin_groups, false);
         $parent_id     = PMF_Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT);
@@ -68,7 +68,7 @@ if ($permission['editcateg']) {
     }
 
     // Updates an existing category
-    if ($_action == 'updatecategory') {
+    if ($action == 'updatecategory') {
 
         $category      = new PMF_Category($current_admin_user, $current_admin_groups, false);
         $parent_id     = PMF_Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT);
@@ -107,7 +107,7 @@ if ($permission['editcateg']) {
     }
 
     // Deletes an existing category
-    if ($permission['delcateg'] && $_action == 'removecategory') {
+    if ($permission['delcateg'] && $action == 'removecategory') {
 
         $category = new PMF_Category($current_admin_user, $current_admin_groups, false);
         $id         = PMF_Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
@@ -122,7 +122,7 @@ if ($permission['editcateg']) {
     }
 
     // Moves a category
-    if ($_action == 'changecategory') {
+    if ($action == 'changecategory') {
 
         $category      = new PMF_Category($current_admin_user, $current_admin_groups, false);
         $category_id_1 = PMF_Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
@@ -136,7 +136,7 @@ if ($permission['editcateg']) {
     }
 
     // Pastes a category
-    if ($_action == 'pastecategory') {
+    if ($action == 'pastecategory') {
 
         $category    = new PMF_Category($current_admin_user, $current_admin_groups, false);
         $category_id = PMF_Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);

@@ -46,11 +46,11 @@ if (isset($auth)) {
 if (    isset($auth) &&
     (
         // FAQ
-        ('takequestion' == $_action)
-     || ('editentry'    == $_action)
-     || ('editpreview'  == $_action)
+        ('takequestion' == $action)
+     || ('editentry'    == $action)
+     || ('editpreview'  == $action)
         // News
-     || ('news'         == $_action)
+     || ('news'         == $action)
     )
     ) {
     

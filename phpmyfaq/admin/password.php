@@ -71,9 +71,9 @@ require_once ("header.php");
 <div id="bodyText">
 <?php
 
-$_action = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
+$action = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
 
-if ($_action == "sendmail") {
+if ($action == "sendmail") {
 	
 	$username = PMF_Filter::filterInput(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
 	$email    = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);

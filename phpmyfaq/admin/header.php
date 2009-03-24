@@ -51,14 +51,14 @@ header("Vary: Negotiate,Accept");
     // to minimize possible IE memory leaks
 
     // @todo: rewrite the AJAX Suggestion and Autocomplete Behaviours using ONLY jQuery library
-if (isset($_action)) {
-	if ($_action != 'comments' && $_action != 'config' && 
-	    $_action != 'takequestion' && $_action != 'editentry' && $_action != 'editpreview') {
+if (isset($action)) {
+	if ($action != 'comments' && $action != 'config' && 
+	    $action != 'takequestion' && $action != 'editentry' && $action != 'editpreview') {
 ?>
     <script type="text/javascript" src="../inc/js/prototype.js"></script>
 <?php 
 	}
-    switch ($_action) {
+    switch ($action) {
         case 'user':
 ?>
     <script type="text/javascript" src="../inc/js/scriptaculous/scriptaculous.js"></script>
@@ -75,12 +75,11 @@ if (isset($_action)) {
 <div id="header">
     <h1>phpMyFAQ <?php print $faqconfig->get('main.currentVersion'); ?></h1>
 <?php if (isset($auth)) { ?>
-<?php if ('' == $_action) { ?>
+<?php if ('' == $action) { ?>
     <div id="langform">
-        <form action="<?php print $_SERVER['PHP_SELF']; ?>" method="post">
+        <form action="<?php print $_SERVER['PHP_SELF']; ?>?action=<?php print $action; ?>" method="post">
         <label for="language"><?php print $PMF_LANG['msgLangaugeSubmit']; ?></label>
         <?php print selectLanguages($LANGCODE, true); ?>
-        <input type="hidden" name="action" value="<?php print($_action); ?>" />
         </form>
     </div>
 <?php } ?>
@@ -115,16 +114,16 @@ if (isset($_action)) {
     $user         = new PMF_User();
     $groupSupport = ($user->perm instanceof PMF_Perm_PermMedium);
 
-    switch ($_action) {
+    switch ($action) {
         case 'user':
         case 'group':
         case 'passwd':
         case 'cookies':
-            addMenuEntry('adduser,edituser,deluser',             'user',       'ad_menu_user_administration', $_action);
+            addMenuEntry('adduser,edituser,deluser',             'user',       'ad_menu_user_administration', $action);
             if ($groupSupport) {
-                addMenuEntry('adduser,edituser,deluser',         'group',      'ad_menu_group_administration', $_action);
+                addMenuEntry('adduser,edituser,deluser',         'group',      'ad_menu_group_administration', $action);
             }
-            addMenuEntry('passwd',                               'passwd',     'ad_menu_passwd', $_action);
+            addMenuEntry('passwd',                               'passwd',     'ad_menu_passwd', $action);
             break;
         case 'content':
         case 'category':
@@ -153,32 +152,32 @@ if (isset($_action)) {
         case 'news':
         case 'question':
         case 'comments':
-            addMenuEntry('addcateg,editcateg,delcateg',          'category',   'ad_menu_categ_edit', $_action);
-            addMenuEntry('addbt',                                'editentry',  'ad_entry_add', $_action);
-            addMenuEntry('editbt,delbt',                         'view',       'ad_menu_entry_edit', $_action);
-            addMenuEntry('editbt,delbt',                         'accept',     'ad_menu_entry_aprove', $_action);
-            addMenuEntry('delcomment',                           'comments',   'ad_menu_comments', $_action);
-            addMenuEntry('delquestion',                          'question',   'ad_menu_open', $_action);
-            addMenuEntry('addglossary,editglossary,delglossary', 'glossary',   'ad_menu_glossary', $_action);
-            addMenuEntry('addnews,editnews,delnews',             'news',       'ad_menu_news_edit', $_action);
+            addMenuEntry('addcateg,editcateg,delcateg',          'category',   'ad_menu_categ_edit', $action);
+            addMenuEntry('addbt',                                'editentry',  'ad_entry_add', $action);
+            addMenuEntry('editbt,delbt',                         'view',       'ad_menu_entry_edit', $action);
+            addMenuEntry('editbt,delbt',                         'accept',     'ad_menu_entry_aprove', $action);
+            addMenuEntry('delcomment',                           'comments',   'ad_menu_comments', $action);
+            addMenuEntry('delquestion',                          'question',   'ad_menu_open', $action);
+            addMenuEntry('addglossary,editglossary,delglossary', 'glossary',   'ad_menu_glossary', $action);
+            addMenuEntry('addnews,editnews,delnews',             'news',       'ad_menu_news_edit', $action);
             break;
         case 'statistics':
         case 'viewsessions':
         case 'sessionbrowse':
         case 'sessionsuche':
         case 'adminlog':
-            addMenuEntry('viewlog',                              'statistics',   'ad_menu_stat', $_action);
-            addMenuEntry('viewlog',                              'viewsessions', 'ad_menu_session', $_action);
-            addMenuEntry('adminlog',                             'adminlog',     'ad_menu_adminlog', $_action);
+            addMenuEntry('viewlog',                              'statistics',   'ad_menu_stat', $action);
+            addMenuEntry('viewlog',                              'viewsessions', 'ad_menu_session', $action);
+            addMenuEntry('adminlog',                             'adminlog',     'ad_menu_adminlog', $action);
             break;
         case 'export':
         case 'plugins':
-            addMenuEntry('',                                     'export',       'ad_menu_export', $_action);
+            addMenuEntry('',                                     'export',       'ad_menu_export', $action);
             break;
         case 'config':
         case 'linkconfig':
-            addMenuEntry('editconfig',                           'config',       'ad_menu_editconfig', $_action);
-            addMenuEntry('editconfig,editbt,delbt',              'linkconfig',   'ad_menu_linkconfig', $_action);
+            addMenuEntry('editconfig',                           'config',       'ad_menu_editconfig', $action);
+            addMenuEntry('editconfig,editbt,delbt',              'linkconfig',   'ad_menu_linkconfig', $action);
             break;
         default:
             print '<li></li>';
