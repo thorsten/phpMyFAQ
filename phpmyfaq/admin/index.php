@@ -109,7 +109,6 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
         $error = $PMF_LANG['ad_auth_fail'].' ('.$faqusername.' / *)';
         $user  = null;
     }
-    $action = '';
 } else {
     // authenticate with session information
     $user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
