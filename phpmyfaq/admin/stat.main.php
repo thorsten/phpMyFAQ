@@ -1,13 +1,14 @@
 <?php
 /**
- * $Id: stat.main.php,v 1.15 2008-05-22 11:23:00 thorstenr Exp $
- *
  * The main statistics page
  *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
- * @since       2003-02-24
- * @copyright   2003-2008 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage Administration
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @since      2003-02-24
+ * @version    SVN: $Id$
+ * @copyright  2003-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -26,20 +27,21 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 }
 
 if ($permission['viewlog']) {
-    require_once(PMF_ROOT_DIR.'/inc/Session.php');
+	
+    $session    = new PMF_Session();
+    $statdelete = PMF_Filter::filterInput(INPUT_POST, 'statdelete', FILTER_SANITIZE_STRING);
+    $month      = PMF_Filter::filterInput(INPUT_POST, 'month', FILTER_VALIDATE_INT);
 
-    $session = new PMF_Session();
-
-    if (isset($_POST['statdelete']) && isset($_POST['month']) && is_numeric($_POST['month'])) {
+    if (!is_null($statdelete) && !is_null($month)) {
         // Search for related tracking data files and
         // delete them including the sid records in the faqsessions table
-        $dir = opendir(PMF_ROOT_DIR."/data");
+        $dir   = opendir(PMF_ROOT_DIR."/data");
         $first = 9999999999999999999999999;
         $last  = 0;
         while($trackingFile = readdir($dir)) {
             // The filename format is: trackingDDMMYYYY
             // e.g.: tracking02042006
-            if (($trackingFile != '.') && ($trackingFile != '..') && (10 == strpos($trackingFile, $_POST['month']))) {
+            if (($trackingFile != '.') && ($trackingFile != '..') && (10 == strpos($trackingFile, $month))) {
                 $candidateFirst = FileToDate($trackingFile);
                 $candidateLast  = FileToDate($trackingFile, true);
                 if (($candidateLast > 0) && ($candidateLast > $last)) {
@@ -63,9 +65,9 @@ if ($permission['viewlog']) {
         <label class="left"><?php print $PMF_LANG["ad_stat_days"]; ?>:</label>
 <?php
     $danz = 0;
-    $fir = 9999999999999999999999999;
-    $las = 0;
-    $dir = opendir(PMF_ROOT_DIR."/data");
+    $fir  = 9999999999999999999999999;
+    $las  = 0;
+    $dir  = opendir(PMF_ROOT_DIR."/data");
     while($dat = readdir($dir)) {
         if ($dat != "." && $dat != "..") {
             $danz++;
