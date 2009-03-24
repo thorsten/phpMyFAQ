@@ -42,8 +42,11 @@ header("Vary: Negotiate,Accept");
     <link rel="shortcut icon" href="../template/favicon.ico" type="image/x-icon" />
     <link rel="icon" href="../template/favicon.ico" type="image/x-icon" />
     <style type="text/css"> @import url(../template/admin.css); </style>
+    <style type="text/css"> @import url(../inc/js/plugins/autocomplete/jquery.autocomplete.css); </style>
     <script type="text/javascript" src="../inc/js/functions.js"></script>
     <script type="text/javascript" src="../inc/js/jquery.min.js"></script>
+    <script type='text/javascript' src='../inc/js/plugins/autocomplete/jquery.autocomplete.pack.js'></script>
+    
     <script type="text/javascript" src="editor/tiny_mce.js"></script>
 <?php
     // Add the script.aculo.us libraries only if needed:
