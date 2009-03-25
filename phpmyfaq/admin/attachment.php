@@ -1,23 +1,22 @@
 <?php
 /**
-* $Id: attachment.php,v 1.36 2007-04-13 18:38:11 thorstenr Exp $
-*
-* Select an attachment and save it or create the SQL backup files
-*
-* @author       Thorsten Rinne <thorsten@phpmyfaq.de>
-* @since        2002-09-17
-* @copyright    (c) 2002-2007 phpMyFAQ
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * Select an attachment and save it or create the SQL backup files
+ *
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since     2002-09-17
+ * @version   SVN: $Id$
+ * @copyright 2002-2009 phpMyFAQ
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('IS_VALID_PHPMYFAQ_ADMIN', null);
@@ -26,8 +25,6 @@ require_once(PMF_ROOT_DIR.'/inc/Init.php');
 PMF_Init::cleanRequest();
 session_name('pmfauth' . trim($faqconfig->get('main.phpMyFAQToken')));
 session_start();
-
-define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
 if (isset($_REQUEST["action"]) && ($_REQUEST["action"] == "sicherdaten" || $_REQUEST["action"] == "sicherlog")) {
     Header("Content-Type: application/octet-stream");
