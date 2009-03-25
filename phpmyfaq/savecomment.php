@@ -29,6 +29,9 @@ $captcha = new PMF_Captcha($sids);
 $id = 0;
 $msgWriteComment = $PMF_LANG['msgWriteComment'];
 
+
+$code = PMF_Filter::filterInput(INPUT_POST, 'captcha', FILTER_SANITIZE_STRING);
+
 if ((isset($_POST['type']) && ('faq' == $_POST['type'])) && isset($_POST["id"])) {
     $id = (int)$_POST['id'];
 } else if ((isset($_POST['type']) && ('news' == $_POST['type'])) && isset($_POST["newsid"])) {
@@ -41,7 +44,7 @@ if (    isset($_POST['user']) && $_POST['user'] != ''
      && isset($_POST['comment']) && $_POST['comment'] != ''
      && IPCheck($_SERVER['REMOTE_ADDR'])
      && checkBannedWord(htmlspecialchars(strip_tags($_POST['comment'])))
-     && checkCaptchaCode()
+     && $captcha->checkCaptchaCode($code)
      && !$faq->commentDisabled($id, $LANGCODE, isset($_POST['type']) ? $_POST['type'] : 'faq')) {
 
     if ((isset($_POST['type']) && ('faq' == $_POST['type'])) && isset($_POST["id"])) {

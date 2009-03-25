@@ -33,9 +33,10 @@ $mailfrom = PMF_Filter::filterInput(INPUT_POST, 'mailfrom', FILTER_VALIDATE_EMAI
 $mailto   = PMF_Filter::filterInput(INPUT_POST, 'mailto', FILTER_VALIDATE_EMAIL);
 $link     = PMF_Filter::filterInput(INPUT_POST, 'link', FILTER_VALIDATE_URL);
 $attached = PMF_Filter::filterInput(INPUT_POST, 'zusatz', FILTER_SANITIZE_STRIPPED);
+$code     = PMF_Filter::filterInput(INPUT_POST, 'captcha', FILTER_SANITIZE_STRING);
 
 if (!is_null($name) && !is_null($mailfrom) && !is_null($mailto) && IPCheck($_SERVER['REMOTE_ADDR'])
-    && checkBannedWord(htmlspecialchars($attached)) && checkCaptchaCode() ) {
+    && checkBannedWord(htmlspecialchars($attached)) && $captcha->checkCaptchaCode($code)) {
 
     foreach($mailto as $recipient) {
         $recipient = trim(strip_tags($recipient));

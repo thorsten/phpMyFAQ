@@ -28,13 +28,15 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $captcha = new PMF_Captcha($sids);
 
+$code = PMF_Filter::filterInput(INPUT_POST, 'captcha', FILTER_SANITIZE_STRING);
+
 if (
         isset($_POST['username']) && $_POST['username'] != ''
      && isset($_POST['usermail']) && checkEmail($_POST['usermail'])
      && isset($_POST['content']) && $_POST['content'] != ''
      && IPCheck($_SERVER['REMOTE_ADDR'])
      && checkBannedWord(htmlspecialchars(strip_tags($_POST['content'])))
-     && checkCaptchaCode()
+     && $captcha->checkCaptchaCode($code)
      ) {
     if (isset($_POST['try_search'])) {
         $suchbegriff = strip_tags($_POST['content']);

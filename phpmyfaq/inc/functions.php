@@ -597,27 +597,6 @@ function printCaptchaFieldset($legend, $img, $length, $error = '')
 }
 
 /**
- * This function checks the provided captcha code
- * if the captcha code spam protection has been activated from the general PMF configuration.
- *
- * @return  bool
- * @access  public
- * @since   2006-04-25
- * @author  Matteo Scaramuccia <matteo@phpmyfaq.de>
- */
-function checkCaptchaCode()
-{
-    global $captcha;
-
-    $faqconfig = PMF_Configuration::getInstance();
-    if ($faqconfig->get('spam.enableCatpchaCode')) {
-        return (isset($_POST['captcha']) && ($captcha->validateCaptchaCode($_POST['captcha'])));
-    } else {
-        return true;
-    }
-}
-
-/**
  * This function returns the passed content with HTML hilighted banned words.
  *
  * @param   string  $content

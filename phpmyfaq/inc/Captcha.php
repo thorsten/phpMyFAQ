@@ -9,7 +9,7 @@
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
  * @since      2006-02-04
- * @copyright  2006-2008 phpMyFAQ Team
+ * @copyright  2006-2009 phpMyFAQ Team
  * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
@@ -236,8 +236,8 @@ class PMF_Captcha
     /**
      * Validate the Captcha
      *
-     * @param   string $captchaCode Captcha code
-     * @return  boolean
+     * @param  string $captchaCode Captcha code
+     * @return boolean
      */
     public function validateCaptchaCode($captchaCode)
     {
@@ -275,6 +275,24 @@ class PMF_Captcha
 
         return false;
     }
+    
+    /**
+     * This function checks the provided captcha code
+     * if the captcha code spam protection has been activated from the general PMF configuration.
+     *
+     * @param  string $code Captcha Code
+     * @return bool
+     */
+    public function checkCaptchaCode($code)
+    {
+        $faqconfig = PMF_Configuration::getInstance();
+        if ($faqconfig->get('spam.enableCatpchaCode')) {
+            return $this->validateCaptchaCode($code)));
+        } else {
+            return true;
+        }
+    }
+    
 
     //
     // private functions

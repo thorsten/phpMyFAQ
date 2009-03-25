@@ -51,11 +51,12 @@ $errorMessages = array(
 
 $captcha = new PMF_Captcha($sids);
 
-$loginname = isset($_REQUEST['loginname']) ? $_REQUEST['loginname'] : '';
-$lastname = isset($_REQUEST['lastname']) ? $_REQUEST['lastname'] : '';
-$email = isset($_REQUEST['email']) ? $_REQUEST['email'] : '';
+$loginname = PMF_Filter::filterInput(INPUT_POST, 'loginname', FILTER_SANITIZE_STRING);
+$lastname  = PMF_Filter::filterInput(INPUT_POST, 'lastname', FILTER_SANITIZE_STRING);
+$email     = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+$code      = PMF_Filter::filterInput(INPUT_POST, 'captcha', FILTER_SANITIZE_STRING);
 
-if (isset($_POST['captcha']) && !checkCaptchaCode()) {
+if (isset($_POST['captcha']) && !$captcha->checkCaptchaCode($code)) {
     $captchaError = $PMF_LANG['captchaError'];
 }
 

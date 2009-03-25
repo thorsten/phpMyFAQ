@@ -27,12 +27,14 @@ $faqsession->userTracking('sendmail_contact', 0);
 
 $captcha = new PMF_Captcha($sids);
 
+$code = PMF_Filter::filterInput(INPUT_POST, 'captcha', FILTER_SANITIZE_STRING);
+
 if (    isset($_POST['name']) && $_POST['name'] != ''
      && isset($_POST['email']) && checkEmail($_POST['email'])
      && isset($_POST['question']) && $_POST['question'] != ''
      && IPCheck($_SERVER['REMOTE_ADDR'])
      && checkBannedWord(htmlspecialchars(strip_tags($_POST['question'])))
-     && checkCaptchaCode() ) {
+     && $captcha->checkCaptchaCode($code) ) {
 
     list($user, $host) = explode('@', strip_tags($_POST['email']));
     $question          = strip_tags($_POST['question']);
