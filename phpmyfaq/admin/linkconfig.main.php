@@ -139,9 +139,10 @@ if ($linkverifier->isReady() == false) {
 
 showListTypeSelection();
 
-    $_admin = (isset($permission['editconfig']) && $permission['editconfig'] ? true : false);
-    if (isset($_POST['rowcount'])) {
-        for ($i = 0; $i < $_POST['rowcount']; $i++) {
+    $_admin   = (isset($permission['editconfig']) && $permission['editconfig'] ? true : false);
+    $rowcount = PMF_Filter::filterInput(INPUT_POST, 'rowcount', FILTER_VALIDATE_INT);
+    if (!is_null($rowcount)) {
+        for ($i = 0; $i < $rowcount; $i++) {
             // load form posts
             $posts = array();
             foreach (array( 'id'        => false,

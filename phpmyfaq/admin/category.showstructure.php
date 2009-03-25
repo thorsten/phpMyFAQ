@@ -35,9 +35,10 @@ if ($permission['editcateg']) {
     $actual_language = $languageCodes[strtoupper($LANGCODE)];
     $all_languages   = array();
     $all_lang        = array();
+    $showcat         = PMF_Filter::filterInput(INPUT_POST, 'showcat', FILTER_SANITIZE_STRING);
 
     // translate an existing category
-    if (isset($_POST['showcat']) && $_POST['showcat'] == 'yes') {
+    if (!is_null($showcat) && $showcat == 'yes') {
 
         $parent_id     = PMF_Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT);
         $category_data = array(

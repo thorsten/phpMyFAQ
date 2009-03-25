@@ -58,15 +58,13 @@ if ($permission["editbt"] || $permission["delbt"]) {
         $internalSearch .= '&amp;linkstate=linkbad';
     }
 
-    if (isset($_POST['searchcat']) && is_numeric($_POST['searchcat']) && $_POST['searchcat'] != 0) {
-        $searchcat = (int)($_POST['searchcat']);
+    $searchcat = PMF_Filter::filterInput(INPUT_POST, 'searchcat', FILTER_VALIDATE_INT);
+    if (!is_null($searchcat)) {
         $internalSearch .= "&amp;searchcat=".$searchcat;
         $cond[SQLPREFIX.'faqcategoryrelations.category_id'] = array_merge(array($searchcat), $category->getChildNodes($searchcat));
     }
 
-    if (isset($_POST['searchterm'])) {
-        $searchterm = safeSQL($_POST['searchterm']);
-    }
+    $searchterm = PMF_Filter::filterInput(INPUT_POST, 'searchterm', FILTER_SANITIZE_STRIPPED);
 
     if ($action == 'accept') {
         $active = 'no';
@@ -115,13 +113,13 @@ if ($permission["editbt"] || $permission["delbt"]) {
     </fieldset>
 
     <fieldset>
-    <legend><?php print ((isset($_REQUEST['action']) && 'accept' == $_REQUEST['action']) ? $PMF_LANG['ad_menu_entry_aprove'] : $PMF_LANG['ad_menu_entry_edit']); ?></legend>
+    <legend><?php print ($action == 'accept' ? $PMF_LANG['ad_menu_entry_aprove'] : $PMF_LANG['ad_menu_entry_edit']); ?></legend>
 <?php
     $numCommentsByFaq = $comment->getNumberOfComments();
 
     // FIXME: Count "comments"/"entries" for each category also within a search context. Now the count is broken.
     // FIXME: we are not considering 'faqdata.links_state' for filtering the faqs.
-    if (!(isset($_POST['searchterm']) && $_POST['searchterm'] != '')) {
+    if (!is_null($searchterm)) {
 
         $matrix = $category->getCategoryRecordsMatrix();
         foreach ($matrix as $catkey => $value) {
@@ -136,18 +134,17 @@ if ($permission["editbt"] || $permission["delbt"]) {
         $numRecordsByCat = $category->getNumberOfRecordsOfCategory($active);
     }
 
-    if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'view' && !(isset($_REQUEST["searchterm"]) && $_REQUEST["searchterm"] != "")) {
+    if ($action == 'view' && is_null($searchterm)) {
 
         $faq->getAllRecords($orderby, null, $sortby);
-        $laction = 'view';
+        $laction        = 'view';
         $internalSearch = '';
 
-    } else if (isset($_REQUEST["action"]) && $_REQUEST["action"] == "view" && isset($_REQUEST["searchterm"]) && $_REQUEST["searchterm"] != "") {
+    } elseif ($action == "view" && !is_null($searchterm)) {
         // Search for:
         // a. solution id
         // b. full text search
         // TODO: Decide if the search will be performed upon all entries or upon the active ones.
-        $searchterm = strip_tags($_REQUEST["searchterm"]);
         if (is_numeric($searchterm)) {
             // a. solution id
             $result = $db->search(SQLPREFIX.'faqdata',
@@ -180,25 +177,25 @@ if ($permission["editbt"] || $permission["delbt"]) {
                         array(SQLPREFIX.'faqcategoryrelations.category_id',  SQLPREFIX.'faqdata.id')
                         );
         }
-        $laction = 'view';
+        $laction        = 'view';
         $internalSearch = '&amp;search='.$searchterm;
-        $wasSearch = true;
+        $wasSearch      = true;
 
         while ($row = $db->fetch_object($result)) {
             $faq->faqRecords[] = array(
-                'id'            => $row->id,
-                'category_id'   => $row->category_id,
-                'lang'          => $row->lang,
-                'title'         => $row->thema,
-                'content'       => $row->content,
-                'date'          => makeDate($row->datum));
+                'id'          => $row->id,
+                'category_id' => $row->category_id,
+                'lang'        => $row->lang,
+                'title'       => $row->thema,
+                'content'     => $row->content,
+                'date'        => makeDate($row->datum));
         }
 
-    } elseif (isset($_REQUEST['action']) && $_REQUEST['action'] == 'accept') {
+    } elseif ($action == 'accept') {
 
         $cond['fd.active'] = 'no';
         $faq->getAllRecords($orderby, $cond, $sortby);
-        $laction = 'accept';
+        $laction        = 'accept';
         $internalSearch = '';
 
     }

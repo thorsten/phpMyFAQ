@@ -322,7 +322,8 @@ if (isset($auth) && in_array(true, $permission)) {
     <?php printf('<h2>%s</h2>', $PMF_LANG['ad_online_info']); ?>
     <div id="versioncheck">
 <?php
-        if (isset($_POST['param']) && $_POST['param'] == 'version') {
+        $version = PMF_Filter::filterInput(INPUT_POST, 'version', FILTER_SANITIZE_STRING);
+        if (!is_null($version) && $version == 'version') {
             $json   = file_get_contents('http://www.phpmyfaq.de/json/version.php');
             $result = json_decode($json);
             if ($result instanceof stdClass) {

@@ -61,7 +61,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
         } else {
             $url_variables = 'insertentry';
         }
-        $faqData['lang'] = $_REQUEST["lang"];
+        $faqData['lang']  = $_REQUEST["lang"];
         $current_category = isset($_POST['rubrik']) ? $_POST['rubrik'] : null;
         if (is_array($current_category)) {
             foreach ($current_category as $cats) {

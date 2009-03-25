@@ -112,9 +112,11 @@ if ($permission['editcateg']) {
         $category = new PMF_Category($current_admin_user, $current_admin_groups, false);
         $id         = PMF_Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
         $lang       = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
-        $delete_all = strtolower($db->escape_string($_POST['deleteall'])) == 'yes' ? true : false;
+        $deleteall  = PMF_Filter::filterInput(INPUT_POST, 'deleteall', FILTER_SANITIZE_STRING);
+        $delete_all = strtolower($deleteall) == 'yes' ? true : false;
 
-        if ($category->deleteCategory($id, $lang, $delete_all) && $category->deleteCategoryRelation($id, $lang, $delete_all)) {
+        if ($category->deleteCategory($id, $lang, $delete_all) && 
+            $category->deleteCategoryRelation($id, $lang, $delete_all)) {
             printf('<p class="message">%s</p>', $PMF_LANG['ad_categ_deleted']);
         } else {
             printf('<p class="error">%s</p>', $db->error());
@@ -149,11 +151,7 @@ if ($permission['editcateg']) {
     }
 
     // Lists all categories
-    if (isset($_POST['language'])) {
-        $lang = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
-    } else {
-        $lang = $LANGCODE;
-    }
+    $lang = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING, $LANGCODE);
 
     // If we changed the category tree, unset the object
     if (isset($category)) {

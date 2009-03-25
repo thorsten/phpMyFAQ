@@ -148,7 +148,7 @@ if ($groupAction == 'update_data') {
         $groupData  = array();
         $dataFields = array('name', 'description', 'auto_join');
         foreach ($dataFields as $field) {
-            $groupData[$field] = isset($_POST[$field]) ? $_POST[$field] : '';
+            $groupData[$field] = PMF_Filter::filterInput(INPUT_POST, $field, FILTER_SANITIZE_STRING, '');
         }
         $user = new PMF_User();
         $perm = $user->perm;
