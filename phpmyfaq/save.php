@@ -106,7 +106,7 @@ if (!is_null($username) && !is_null($usermail) && !is_null($thema) && !is_null($
 
             $mail = new PMF_Mail();
             $mail->unsetFrom();
-            $mail->setFrom($userMail);
+            $mail->setFrom($usermail);
             $mail->addTo($faqconfig->get('main.administrationMail'));
             // Let the category owner get a copy of the message
             if ($faqconfig->get('main.administrationMail') != $catOwnerEmail) {
