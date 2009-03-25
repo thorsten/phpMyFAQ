@@ -3,6 +3,7 @@ $Id$
 CHANGED FILES FROM 2.0.12 -> 2.0.13
 
 ./_.htaccess
+./admin/attachment.php
 ./inc/blockedwords.txt
 ./inc/Export.php
 ./inc/Tags.php
