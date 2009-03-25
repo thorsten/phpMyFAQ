@@ -287,7 +287,7 @@ class PMF_Captcha
     {
         $faqconfig = PMF_Configuration::getInstance();
         if ($faqconfig->get('spam.enableCatpchaCode')) {
-            return $this->validateCaptchaCode($code)));
+            return $this->validateCaptchaCode($code);
         } else {
             return true;
         }
