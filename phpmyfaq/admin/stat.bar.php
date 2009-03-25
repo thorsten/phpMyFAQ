@@ -30,7 +30,7 @@ session_start();
 $image           = @imagecreate (50, 15) or die ("Sorry, but phpMyFAQ cannot initialize a new image stream.");
 $backgroundColor = imagecolorallocate ($image, 211, 211, 211);
 $textColor       = imagecolorallocate ($image, 0, 0, 0);
-$num             = PMF_Filter::filterInput(INPUT_GET, 'num', FILTER_VALIDATE_INT);
+$num             = PMF_Filter::filterInput(INPUT_GET, 'num', FILTER_VALIDATE_FLOAT);
 
 if (!is_null($num)) {
     $num = round($num * 20);
