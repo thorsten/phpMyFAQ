@@ -156,9 +156,11 @@ class PMF_Glossary
      */
     private function _setAcronyms($matches)
     {
-        $prefix  = $matches[4];
-        $item    = $matches[5];
-        $postfix = $matches[6];
+    	if (count($matches) > 3) {
+            $prefix  = $matches[4];
+            $item    = $matches[5];
+            $postfix = $matches[6];
+    	}
 
         if (!empty($item)) {
             return sprintf('<acronym class="glossary" title="%s">%s</acronym>',
