@@ -68,10 +68,10 @@ $suchbegriff = PMF_Filter::filterInput(INPUT_GET, 'suchbegriff', FILTER_SANITIZE
 $search      = PMF_Filter::filterInput(INPUT_GET, 'search', FILTER_SANITIZE_STRIPPED);
 if (!is_null($suchbegriff) || !is_null($search)) {
     if (!is_null($suchbegriff)) {
-        $searchterm = $db->escape_string(strip_tags($suchbegriff);
+        $searchterm = $db->escape_string(strip_tags($suchbegriff));
     }
     if (!is_null($search)) {
-        $searchterm = $db->escape_string(strip_tags($search);
+        $searchterm = $db->escape_string(strip_tags($search));
     }
     $printResult = searchEngine($searchterm, $searchCategory, $allLanguages);
     $searchterm  = stripslashes($searchterm);
