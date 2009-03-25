@@ -24,7 +24,7 @@
  * under the License.
  */
 
-require_once('inc/Init.php');
+require_once 'inc/Init.php';
 PMF_Init::cleanRequest();
 session_name(PMF_COOKIE_NAME_AUTH . trim($faqconfig->get('main.phpMyFAQToken')));
 session_start();
