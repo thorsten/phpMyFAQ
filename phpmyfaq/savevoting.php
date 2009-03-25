@@ -29,7 +29,7 @@ $record_id = PMF_Filter::filterInput(INPUT_POST, 'artikel', FILTER_VALIDATE_INT,
 $vote      = PMF_Filter::filterInput(INPUT_POST, 'vote', FILTER_VALIDATE_INT);
 $user_ip   = PMF_Filter::filterVar($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP);
 
-if (isset($voting) && $faq->votingCheck($record_id, $user_ip) && $voting > 0 && $voting < 6) {
+if (isset($vote) && $faq->votingCheck($record_id, $user_ip) && $vote > 0 && $vote < 6) {
     $faqsession->userTracking('save_voting', $record_id);
 
     $votingData = array(
