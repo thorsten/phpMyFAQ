@@ -56,7 +56,7 @@ $lastname  = PMF_Filter::filterInput(INPUT_POST, 'lastname', FILTER_SANITIZE_STR
 $email     = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
 $code      = PMF_Filter::filterInput(INPUT_POST, 'captcha', FILTER_SANITIZE_STRING);
 
-if (isset($_POST['captcha']) && !$captcha->checkCaptchaCode($code)) {
+if (!$captcha->checkCaptchaCode($code)) {
     $captchaError = $PMF_LANG['captchaError'];
 }
 

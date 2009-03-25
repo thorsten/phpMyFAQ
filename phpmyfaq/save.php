@@ -2,13 +2,14 @@
 /**
  * Saves a user FAQ record and sends an email to the user
  *
- * @package   phpMyFAQ 
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Jürgen Kuza <kig@bluewin.ch>
- * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @since     2002-09-16
- * @version   SVN: $Id$ 
- * @copyright 2002-2009 phpMyFAQ Team
+ * @package    phpMyFAQ 
+ * @subpackage Frontend
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     Jürgen Kuza <kig@bluewin.ch>
+ * @author     Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @since      2002-09-16
+ * @version    SVN: $Id$ 
+ * @copyright  2002-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -28,50 +29,49 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $captcha = new PMF_Captcha($sids);
 
-$code = PMF_Filter::filterInput(INPUT_POST, 'captcha', FILTER_SANITIZE_STRING);
+$username    = PMF_Filter::filterInput(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
+$usermail    = PMF_Filter::filterInput(INPUT_POST, 'usermail', FILTER_VALIDATE_EMAIL);
 
-if (
-       isset($_POST['username']) && $_POST['username'] != ''
-    && isset($_POST['usermail']) && checkEmail($_POST['usermail'])
-    && ((!isset($_POST['faqid']) && isset($_POST['rubrik']) && is_array($_POST['rubrik']))
-        || (isset($_POST['faqid']) && is_numeric($_POST['faqid']) && (intval($_POST['faqid']) > 0) && isset($_POST['faqlanguage']) && PMF_Init::isASupportedLanguage($_POST['faqlanguage'])))
-    && isset($_POST['thema']) && $_POST['thema'] != ''
-    && isset($_POST['content']) && $_POST['content'] != ''
-    && IPCheck($_SERVER['REMOTE_ADDR'])
-    && checkBannedWord(htmlspecialchars(strip_tags($_POST['thema'])))
-    && checkBannedWord(htmlspecialchars(strip_tags($_POST['content'])))
-    && $captcha->checkCaptchaCode($code)
-    ) {
+$faqid       = PMF_Filter::filterInput(INPUT_POST, 'faqid', FILTER_VALIDATE_INT);
+$faqlanguage = PMF_Filter::filterInput(INPUT_POST, 'faqlanguage', FILTER_SANITIZE_STRING);
+$thema       = PMF_Filter::filterInput(INPUT_POST, 'thema', FILTER_SANITIZE_STRIPPED);
+$content     = PMF_Filter::filterInput(INPUT_POST, 'content', FILTER_SANITIZE_STRIPPED);
+$contentlink = PMF_Filter::filterInput(INPUT_POST, 'contentlink', FILTER_VALIDATE_URL);
+$keywords    = PMF_Filter::filterInput(INPUT_POST, 'keywords', FILTER_SANITIZE_STRIPPED);
+$code        = PMF_Filter::filterInput(INPUT_POST, 'captcha', FILTER_SANITIZE_STRING);
+
+if (!is_null($username) && !is_null($usermail) && !is_null($thema) && !is_null($content) && 
+    IPCheck($_SERVER['REMOTE_ADDR']) && checkBannedWord(htmlspecialchars($thema)) && 
+    checkBannedWord(htmlspecialchars($content)) && $captcha->checkCaptchaCode($code) && 
+    ((!isset($_POST['faqid']) && isset($_POST['rubrik']) && is_array($_POST['rubrik']))
+        || (!is_null($faqid) && !is_null($faqlanguage) && PMF_Init::isASupportedLanguage($faqlanguage)))) {
 
     $isNew = true;
-    if (isset($_POST['faqid'])) {
+    if (!is_null($faqid)) {
         $isNew = false;
         $faqsession->userTracking('save_new_translation_entry', 0);
     } else {
         $faqsession->userTracking('save_new_entry', 0);
     }
-    $content = $db->escape_string(safeHTML(nl2br($_POST['content'])));
-    $contentlink = $db->escape_string(safeHTML($_POST['contentlink']));
 
     $isTranslation = false;
-    if (isset($_POST['faqlanguage'])) {
+    if (!is_null($faqlanguage)) {
         $isTranslation = true;
-        $newLanguage = $db->escape_string($_POST['faqlanguage']);
+        $newLanguage   = $faqlanguage;
     }
 
     if (substr($contentlink,7) != "") {
         $content = $content."<br />".$PMF_LANG["msgInfo"]."<a href=\"http://".substr($contentlink,7)."\" target=\"_blank\">".$contentlink."</a>";
     }
 
-    $userMail = $db->escape_string($_POST['usermail']);
     $newData = array(
         'lang'          => ($isTranslation == true ? $newLanguage : $LANGCODE),
-        'thema'         => $db->escape_string(safeHTML($_POST['thema'])),
+        'thema'         => $thema,
         'active'        => FAQ_SQL_ACTIVE_NO,
         'content'       => $content,
-        'keywords'      => $db->escape_string($_POST['keywords']),
-        'author'        => $db->escape_string($_POST['username']),
-        'email'         => $userMail,
+        'keywords'      => $keywords,
+        'author'        => $username,
+        'email'         => $usermail,
         'comment'       => FAQ_SQL_YES,
         'date'          => date('YmdHis'),
         'dateStart'     => '00000000000000',
@@ -82,11 +82,9 @@ if (
     if ($isNew) {
         $categories = $_POST['rubrik'];
     } else {
-        // Fix data with correct values
-        $newData['id'] = intval($_POST['faqid']);
-        // Set categories equal to the faq source of the translation
-        $category   = new PMF_Category();
-        $categories = $category->getCategoryIdsFromArticle($newData['id']);
+        $newData['id'] = $faqid;
+        $category      = new PMF_Category();
+        $categories    = $category->getCategoryIdsFromArticle($newData['id']);
     }
 
     $recordId = $faq->addRecord($newData, $isNew);
@@ -128,11 +126,8 @@ if (
 
     $tpl->processTemplate(
         'writeContent',
-        array(
-            'msgNewContentHeader' => $PMF_LANG["msgNewContentHeader"],
-            'Message' => ($isNew ? $PMF_LANG['msgNewContentThanks'] : $PMF_LANG['msgNewTranslationThanks'])
-        )
-    );
+        array('msgNewContentHeader' => $PMF_LANG["msgNewContentHeader"],
+              'Message'             => ($isNew ? $PMF_LANG['msgNewContentThanks'] : $PMF_LANG['msgNewTranslationThanks'])));
 } else {
     if (false === IPCheck($_SERVER['REMOTE_ADDR'])) {
         $tpl->processTemplate(
@@ -143,7 +138,7 @@ if (
             )
         );
     } else {
-        if (!isset($_POST['faqid'])) {
+        if (is_null($faqid)) {
             $faqsession->userTracking('error_save_entry', 0);
         } else {
             $faqsession->userTracking('error_save_translation_entry', 0);

@@ -1,12 +1,13 @@
 <?php
-/*
+/**
  * Saves the posted comment
  *
- * @package   phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since     2002-08-29
- * @version   SVN: $Id$
- * @copyright 2002-2009 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage Frontend
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since      2002-08-29
+ * @version    SVN: $Id$
+ * @copyright  2002-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -26,48 +27,44 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $captcha = new PMF_Captcha($sids);
 
-$id = 0;
-$msgWriteComment = $PMF_LANG['msgWriteComment'];
+$type    = PMF_Filter::filterInput(INPUT_POST, 'type', FILTER_SANITIZE_STRING);
+$code    = PMF_Filter::filterInput(INPUT_POST, 'captcha', FILTER_SANITIZE_STRING);
+$faqid   = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT, 0);
+$newsid  = PMF_Filter::filterInput(INPUT_POST, 'newsid', FILTER_VALIDATE_INT);
+$user    = PMF_Filter::filterInput(INPUT_POST, 'user', FILTER_SANITIZE_STRING);
+$mail    = PMF_Filter::filterInput(INPUT_POST, 'mail', FILTER_VALIDATE_EMAIL);
+$comment = PMF_Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_STRIPPED);
 
-
-$code = PMF_Filter::filterInput(INPUT_POST, 'captcha', FILTER_SANITIZE_STRING);
-
-if ((isset($_POST['type']) && ('faq' == $_POST['type'])) && isset($_POST["id"])) {
-    $id = (int)$_POST['id'];
-} else if ((isset($_POST['type']) && ('news' == $_POST['type'])) && isset($_POST["newsid"])) {
-    $id              = (int)$_POST["newsid"];
-    $msgWriteComment = $PMF_LANG['newsWriteComment'];
+switch ($type) {
+	case 'news':
+		$id              = $newsid;
+		$msgWriteComment = $PMF_LANG['newsWriteComment'];
+		break;
+	case 'faq';
+	default:
+        $id = $faqid;
+        $msgWriteComment = $PMF_LANG['msgWriteComment'];
+        break;
 }
 
-if (    isset($_POST['user']) && $_POST['user'] != ''
-     && isset($_POST['mail']) && checkEmail($_POST['mail'])
-     && isset($_POST['comment']) && $_POST['comment'] != ''
-     && IPCheck($_SERVER['REMOTE_ADDR'])
-     && checkBannedWord(htmlspecialchars(strip_tags($_POST['comment'])))
-     && $captcha->checkCaptchaCode($code)
-     && !$faq->commentDisabled($id, $LANGCODE, isset($_POST['type']) ? $_POST['type'] : 'faq')) {
 
-    if ((isset($_POST['type']) && ('faq' == $_POST['type'])) && isset($_POST["id"])) {
-        $id = (int)$_POST["id"];
-    } else if ((isset($_POST['type']) && ('news' == $_POST['type'])) && isset($_POST["newsid"])) {
-        $id = (int)$_POST["newsid"];
-        $msgWriteComment = $PMF_LANG['newsWriteComment'];
-    }
+if (!is_null($user) && !is_null($mail) && !is_null($comment) && checkBannedWord(htmlspecialchars($comment)) &&
+    IPCheck($_SERVER['REMOTE_ADDR']) && $captcha->checkCaptchaCode($code) && !$faq->commentDisabled($id, $LANGCODE, $type)) {
 
     $faqsession->userTracking("save_comment", $id);
 
     $commentData = array(
         'record_id' => $id,
-        'type'      => $db->escape_string($_POST['type']),
-        'username'  => $db->escape_string(safeHTML($_POST["user"])),
-        'usermail'  => $db->escape_string(safeHTML($_POST["mail"])),
-        'comment'   => nl2br($db->escape_string(safeHTML($_POST["comment"]))),
+        'type'      => $type,
+        'username'  => $user,
+        'usermail'  => $mail,
+        'comment'   => nl2br($comment),
         'date'      => $_SERVER['REQUEST_TIME'],
         'helped'    => '');
     if ($faq->addComment($commentData)) {
         $emailTo = $faqconfig->get('main.administrationMail');
         $urlToContent = '';
-        if ('faq' == $_POST['type']) {
+        if ('faq' == $type) {
             $faq->getRecord($id);
             if ($faq->faqRecord['email'] != '') {
                 $emailTo = $faq->faqRecord['email'];
@@ -79,25 +76,25 @@ if (    isset($_POST['user']) && $_POST['user'] != ''
                 $faq->faqRecord['id'],
                 $faq->faqRecord['lang']
             );
-            $oLink = new PMF_Link(PMF_Link::getSystemUri().'?'.$_faqUrl);
+            $oLink            = new PMF_Link(PMF_Link::getSystemUri().'?'.$_faqUrl);
             $oLink->itemTitle = $faq->faqRecord['title'];
-            $urlToContent = $oLink->toString();
-        } elseif ('news' == $_POST['type']) {
+            $urlToContent     = $oLink->toString();
+        } else {
             
             $oNews = new PMF_News();
             $news  = $oNews->getNewsEntry($id);
             if ($news['authorEmail'] != '') {
                 $emailTo = $news['authorEmail'];
             }
-            $oLink = new PMF_Link(PMF_Link::getSystemUri().'?action=news&amp;newsid='.$news['id'].'&amp;newslang='.$news['lang']);
+            $oLink            = new PMF_Link(PMF_Link::getSystemUri().'?action=news&amp;newsid='.$news['id'].'&amp;newslang='.$news['lang']);
             $oLink->itemTitle = $news['header'];
-            $urlToContent = $oLink->toString();
+            $urlToContent     = $oLink->toString();
         }
         $commentMail =
             'User: ' . $commentData['username'] . ', mailto:'. $commentData['usermail'] . "\n".
             'New comment posted on: ' . $urlToContent .
             "\n\n" .
-            wordwrap($_POST['comment'], 72);
+            wordwrap($comment, 72);
 
         $mail = new PMF_Mail();
         $mail->unsetFrom();

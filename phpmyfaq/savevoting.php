@@ -1,12 +1,13 @@
 <?php
 /**
- * $Id: savevoting.php,v 1.25 2008-05-23 13:06:07 thorstenr Exp $
- *
  * Saves a user voting
  *
- * @author       Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since        2002-09-16
- * @copyright    (c) 2002-2007 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage Frontend
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since      2002-09-16
+ * @version    SVN: $Id$
+ * @copyright  2002-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -24,17 +25,17 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$record_id   = (isset($_POST['artikel'])) ? intval($_POST['artikel']) : 0;
-$voting      = (isset($_POST['vote'])) ? intval($_POST['vote']) : 0;
-$user_ip     = (isset($_SERVER['REMOTE_ADDR'])) ? strip_tags($_SERVER['REMOTE_ADDR']) : '';
+$record_id = PMF_Filter::filterInput(INPUT_POST, 'artikel', FILTER_VALIDATE_INT, 0);
+$vote      = PMF_Filter::filterInput(INPUT_POST, 'vote', FILTER_VALIDATE_INT);
+$user_ip   = PMF_Filter::filterVar($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP);
 
 if (isset($voting) && $faq->votingCheck($record_id, $user_ip) && $voting > 0 && $voting < 6) {
     $faqsession->userTracking('save_voting', $record_id);
 
     $votingData = array(
-        'record_id'  => $record_id,
-        'vote'       => $voting,
-        'user_ip'    => $db->escape_string($user_ip));
+        'record_id' => $record_id,
+        'vote'      => $vote,
+        'user_ip'   => $user_ip);
 
     if (!$faq->getNumberOfVotings($record_id)) {
         $faq->addVoting($votingData);
@@ -43,17 +44,17 @@ if (isset($voting) && $faq->votingCheck($record_id, $user_ip) && $voting > 0 && 
     }
 
     $tpl->processTemplate ('writeContent', array(
-        'msgVoteThanks' => $PMF_LANG['msgVoteThanks']));
+                           'msgVoteThanks' => $PMF_LANG['msgVoteThanks']));
 
 } elseif (isset($voting) && !$faq->votingCheck($record_id, $user_ip)) {
     $faqsession->userTracking('error_save_voting', $record_id);
     $tpl->processTemplate('writeContent', array(
-        'msgVoteThanks' => $PMF_LANG['err_VoteTooMuch']));
+                          'msgVoteThanks' => $PMF_LANG['err_VoteTooMuch']));
 
 } else {
     $faqsession->userTracking('error_save_voting', $record_id);
-    $tpl->processTemplate ('writeContent', array(
-        'msgVoteThanks' => $PMF_LANG['err_noVote']));
+    $tpl->processTemplate('writeContent', array(
+                           'msgVoteThanks' => $PMF_LANG['err_noVote']));
 
 }
 

@@ -1,12 +1,13 @@
 <?php
 /**
- * $Id: translate.php,v 1.4 2008-05-23 13:06:07 thorstenr Exp $
+ * This is the page there a user can add a FAQ record translation.
  *
- * This is the page there a user can add a FAQ record.
- *
- * @author      Matteo Scaramuccia <matteo@scaramuccia.com>
- * @since       2006-11-12
- * @copyright   (c) 2006 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage Frontend
+ * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @since      2006-11-12
+ * @version    SVN: $Id$
+ * @copyright  2006-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -31,25 +32,22 @@ if (isset($_GET['gen'])) {
     exit;
 }
 
-if (isset($_POST['translation']) && PMF_Init::isASupportedLanguage($_POST['translation'])) {
-    $translationLanguage = strip_tags($_POST['translation']);
-} else {
-    $translationLanguage = $LANGCODE;
-}
+$translationLanguage = PMF_Filter::filterInput(INPUT_POST, 'translation', FILTER_SANITIZE_STRING, $LANGCODE);
 
-$faqSource['id'] = 'writeSourceFaqId';
-$faqSource['lang'] = $translationLanguage;
-$faqSource['title'] = 'writeSourceTitle';
-$faqSource['content'] = 'writeSourceContent';
+$faqSource['id']       = 'writeSourceFaqId';
+$faqSource['lang']     = $translationLanguage;
+$faqSource['title']    = 'writeSourceTitle';
+$faqSource['content']  = 'writeSourceContent';
 $faqSource['keywords'] = 'writeSourceKeywords';
 
 $faqsession->userTracking('new_translation_entry', 0);
 
-if (   isset($_GET['id']) && is_numeric($_GET['id']) && (intval($_GET['id']) > 0)
-    && isset($_GET['srclang']) && PMF_Init::isASupportedLanguage($_GET['srclang'])
-    ) {
+$id      = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+$srclang = PMF_Filter::filterInput(INPUT_GET, 'srclang', FILTER_SANITIZE_STRING); 
+
+if (!is_null($id) && !is_null($srclang) && PMF_Init::isASupportedLanguage($srclang)) {
     $oFaq = new PMF_Faq();
-    $oFaq->getRecord((int)$_GET['id']);
+    $oFaq->getRecord($id);
     $faqSource = $oFaq->faqRecord;
 }
 
@@ -62,7 +60,7 @@ $tpl->processTemplate('writeContent', array(
     'msgNewTranslationAddon'    => $PMF_LANG['msgNewTranslationAddon'],
     'msgNewTransSourcePane'     => $PMF_LANG['msgNewTransSourcePane'],
     'msgNewTranslationPane'     => $PMF_LANG['msgNewTranslationPane'],
-    'writeSendAdress'           => $_SERVER['PHP_SELF'].'?'.$sids.'action=save',
+    'writeSendAdress'           => '?'.$sids.'action=save',
     'defaultContentName'        => ($user ? $user->getUserData('display_name') : ''),
     'defaultContentMail'        => ($user ? $user->getUserData('email') : ''),
     'msgNewTranslationName'     => $PMF_LANG['msgNewTranslationName'],

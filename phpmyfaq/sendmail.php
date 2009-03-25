@@ -2,10 +2,12 @@
 /**
  * The 'send an email from the contact page' page.
  *
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since     2002-09-16
- * version    SVN: $Id$ 
- * @copyright 2002-2009 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage Freontend
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since      2002-09-16
+ * version     SVN: $Id$ 
+ * @copyright  2002-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -27,46 +29,31 @@ $faqsession->userTracking('sendmail_contact', 0);
 
 $captcha = new PMF_Captcha($sids);
 
-$code = PMF_Filter::filterInput(INPUT_POST, 'captcha', FILTER_SANITIZE_STRING);
+$name     = PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+$email    = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+$question = PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRIPPED);
+$code     = PMF_Filter::filterInput(INPUT_POST, 'captcha', FILTER_SANITIZE_STRING);
 
-if (    isset($_POST['name']) && $_POST['name'] != ''
-     && isset($_POST['email']) && checkEmail($_POST['email'])
-     && isset($_POST['question']) && $_POST['question'] != ''
-     && IPCheck($_SERVER['REMOTE_ADDR'])
-     && checkBannedWord(htmlspecialchars(strip_tags($_POST['question'])))
-     && $captcha->checkCaptchaCode($code) ) {
-
-    list($user, $host) = explode('@', strip_tags($_POST['email']));
-    $question          = strip_tags($_POST['question']);
-    $sender            = strip_tags($_POST['email']);
-    $subject           = 'Feedback: %sitename%';
-    $name              = strip_tags($_POST['name']);
+if (!is_null($name) && !is_null($email) && !is_null($question) && IPCheck($_SERVER['REMOTE_ADDR']) && 
+    checkBannedWord(htmlspecialchars($question)) && $captcha->checkCaptchaCode($code)) {
 
     $mail = new PMF_Mail();
     $mail->unsetFrom();
-    $mail->setFrom($sender, $name);
+    $mail->setFrom($email, $name);
     $mail->addTo($faqconfig->get('main.administrationMail'));
-    $mail->subject = $subject;
+    $mail->subject = 'Feedback: %sitename%';;
     $mail->message = $question;
     $result = $mail->send();
     unset($mail);
 
-    $tpl->processTemplate(
-        'writeContent',
-        array(
-            'msgContact'    => $PMF_LANG['msgContact'],
-            'Message'       => $PMF_LANG['msgMailContact']
-        )
-    );
+    $message = $PMF_LANG['msgMailContact'];
+    
 } else {
-
-    $tpl->processTemplate(
-        'writeContent',
-        array(
-            'msgContact'    => $PMF_LANG['msgContact'],
-            'Message'       => $PMF_LANG['err_sendMail']
-        )
-    );
+    $message = $PMF_LANG['err_sendMail'];
 }
+
+$tpl->processTemplate('writeContent', array(
+                      'msgContact' => $PMF_LANG['msgContact'],
+                      'Message'    => $message));
 
 $tpl->includeTemplate('writeContent', 'index');
