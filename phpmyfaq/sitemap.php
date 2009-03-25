@@ -1,13 +1,14 @@
 <?php
 /**
- * $Id: sitemap.php,v 1.18 2008-05-23 13:06:06 thorstenr Exp $
- *
  * Shows the whole FAQ articles
  *
- * @author      Thomas Zeithaml <seo@annatom.de>
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since       2005-08-21
- * @copyright   (c) 2005-2007 phpMyFAQ Team
+ * @param      phpMyFAQ
+ * @subpackage Frontend
+ * @author     Thomas Zeithaml <seo@annatom.de>
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since      2005-08-21
+ * @version    SVN: $Id$
+ * @copyright  2005-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -27,10 +28,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $faqsession->userTracking('sitemap', 0);
 
-require_once('inc/Sitemap.php');
-
-if (isset($_GET['letter']) && is_string($_GET['letter']) && (1 == strlen($_GET['letter']))) {
-    $currentLetter = strtoupper($db->escape_string(substr($_GET['letter'], 0, 1)));
+$letter = PMF_Filter::filterInput(INPUT_GET, 'letter', FILTER_SANITIZE_STRIPPED);
+if (!is_null($letter) && (1 == strlen($letter))) {
+    $currentLetter = strtoupper($db->escape_string(substr($letter, 0, 1)));
 } else {
     $currentLetter = 'A';
 }

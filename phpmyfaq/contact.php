@@ -28,7 +28,7 @@ $faqsession->userTracking('contact', 0);
 
 $captcha = new PMF_Captcha($sids);
 
-if (isset($_GET['gen'])) {
+if (!is_null($showCaptcha)) {
     $captcha->showCaptchaImg();
     exit;
 }

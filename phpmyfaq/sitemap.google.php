@@ -170,20 +170,15 @@ foreach ($items as $item) {
 
 $sitemap .= '</urlset>';
 
-if (   isset($_GET[PMF_SITEMAP_GOOGLE_GET_GZIP])
-    && is_numeric($_GET[PMF_SITEMAP_GOOGLE_GET_GZIP])
-    && (1 == $_GET[PMF_SITEMAP_GOOGLE_GET_GZIP])
-    ) {
-    if (function_exists('gzencode'))
-    {
+$getgezip = PMF_Filter::filterInput(INPUT_GET, PMF_SITEMAP_GOOGLE_GET_GZIP, FILTER_VALIDATE_INT);
+if (!is_null($getgezip) && (1 == $getgezip)) {
+    if (function_exists('gzencode')) {
         $sitemapGz = gzencode($sitemap);
         header('Content-Type: application/x-gzip');
         header('Content-Disposition: attachment; filename="'.PMF_SITEMAP_GOOGLE_FILENAME_GZ.'"');
         header('Content-Length: '.strlen($sitemapGz));
         print $sitemapGz;
-    }
-    else
-    {
+    } else {
         printHTTPStatus404();
     }
 } else {

@@ -1,10 +1,13 @@
 <?php
 /**
- * $Id: writecomment.php,v 1.18 2008-05-23 13:06:07 thorstenr Exp $
+ * Snippet for writing a comment
  *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since       2002-08-29
- * @copyright   (c) 2002-2007 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage Frontend
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since      2002-08-29
+ * @version    SVN: $Id$
+ * @copyright  2002-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -24,25 +27,28 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $captcha = new PMF_Captcha($sids);
 
-if (isset($_GET['gen'])) {
+if (!is_null($showCaptcha)) {
     $captcha->showCaptchaImg();
     exit;
 }
 
-$faqsession->userTracking('write_comment', (int)$_GET['id']);
+$id      = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+$artlang = PMF_Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRIPPED);
+
+$faqsession->userTracking('write_comment', $id);
 
 $tpl->processTemplate('writeContent', array(
-                      'msgCommentHeader' => $PMF_LANG['msgWriteComment'],
-                      'writeSendAdress' => $_SERVER['PHP_SELF'].'?'.$sids.'action=savecomment',
-                      'ID' => (int)$_GET['id'],
-                      'LANG' => $_GET['artlang'],
-                      'writeThema' => $faq->getRecordTitle((int)$_GET['id']),
-                      'msgNewContentName' => $PMF_LANG['msgNewContentName'],
-                      'msgNewContentMail' => $PMF_LANG['msgNewContentMail'],
-                      'defaultContentMail' => getEmailAddress(),
-                      'defaultContentName' => getFullUserName(),
-                      'msgYourComment' => $PMF_LANG['msgYourComment'],
+                      'msgCommentHeader'    => $PMF_LANG['msgWriteComment'],
+                      'writeSendAdress'     => '?'.$sids.'action=savecomment',
+                      'ID'                  => $id,
+                      'LANG'                => $artlang,
+                      'writeThema'          => $faq->getRecordTitle($id),
+                      'msgNewContentName'   => $PMF_LANG['msgNewContentName'],
+                      'msgNewContentMail'   => $PMF_LANG['msgNewContentMail'],
+                      'defaultContentMail'  => getEmailAddress(),
+                      'defaultContentName'  => getFullUserName(),
+                      'msgYourComment'      => $PMF_LANG['msgYourComment'],
                       'msgNewContentSubmit' => $PMF_LANG['msgNewContentSubmit'],
-                      'captchaFieldset' => printCaptchaFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('writecomment'), $captcha->caplength)));
+                      'captchaFieldset'     => printCaptchaFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('writecomment'), $captcha->caplength)));
 
 $tpl->includeTemplate('writeContent', 'index');

@@ -58,7 +58,9 @@ $LANGCODE = $pmf->setLanguage($faqconfig->get('main.languageDetection'), $faqcon
 // Preload English strings
 require_once 'lang/language_en.php';
 
-if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE) && !isset($_GET['gen'])) {
+
+$showCaptcha = PMF_Filter::filterInput(INPUT_GET, 'gen', FILTER_SANITIZE_STRING);
+if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE) && is_null($showCaptcha)) {
     // Overwrite English strings with the ones we have in the current language,
     // but don't include UTF-8 encoded files, these will break the captcha images
     require_once 'lang/language_'.$LANGCODE.'.php';

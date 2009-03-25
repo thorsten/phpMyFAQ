@@ -28,9 +28,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $captcha = new PMF_Captcha($sids);
 
-if (isset($_GET['gen'])) {
+if (!is_null($showCaptcha)) {
     $captcha->showCaptchaImg();
-    exit();
+    exit;
 }
 
 $currentCategory = $cat;
@@ -63,14 +63,13 @@ $oLink              = new PMF_Link($changeLanguagePath);
 $oLink->itemTitle   = $faq->getRecordTitle($record_id, false);
 $changeLanguagePath = $oLink->toString();
 
-$highlight = '';
-if (isset($_GET['highlight']) && $_GET['highlight'] != "/" && $_GET['highlight'] != "<" && $_GET['highlight'] != ">" && strlen($_GET['highlight']) > 3) {
-    $highlight = strip_tags($_GET['highlight']);
-    $highlight = str_replace("'", "´", $highlight);
-    $highlight = str_replace(array('^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']'), '', $highlight);
-    $highlight = preg_quote($highlight, '/');
+$highlight = PMF_Filter::filterInput(INPUT_GET, 'highlight', FILTER_SANITIZE_STRIPPED);
+if (!is_null($highlight) && $highlight != "/" && $highlight != "<" && $highlight != ">" && strlen($highlight) > 3) {
+    $highlight   = str_replace("'", "´", $highlight);
+    $highlight   = str_replace(array('^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']'), '', $highlight);
+    $highlight   = preg_quote($highlight, '/');
     $searchItems = explode(' ', $highlight);
-    $attributes = array(
+    $attributes  = array(
         'href', 'src', 'title', 'alt', 'class', 'style', 'id', 'name', 'face',
         'size', 'dir', 'onclick', 'ondblclick', 'onmousedown', 'onmouseup',
         'onmouseover', 'onmousemove', 'onmouseout', 'onkeypress', 'onkeydown',

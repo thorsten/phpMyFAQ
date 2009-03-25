@@ -29,8 +29,9 @@ $faqsession->userTracking('fulltext_search', 0);
 
 // Search only on current language (default)
 $allLanguages = false;
-if (isset($_GET['langs'])) {
-    $allLanguages = ('all' == $_GET['langs']);
+$langs        = PMF_Filter::filterInput(INPUT_GET, 'langs', FILTER_SANITIZE_STRING);
+if (!is_null($langs)) {
+    $allLanguages = true;
 }
 
 // HACK: (re)evaluate the Category object w/o passing the user language
@@ -52,9 +53,9 @@ $mostPopularSearches = 'n/a'; // to be implemented
 //
 // Handle the Tagging ID
 //
-if (isset($_GET['tagging_id']) && is_numeric($_GET['tagging_id'])) {
+$tag_id      = PMF_Filter::filterInput(INPUT_GET, 'tagging_id', FILTER_VALIDATE_INT);
+if (!is_null($tag_id)) {
     $tagSearch   = true;
-    $tag_id      = PMF_Filter::filterInput(INPUT_GET, 'tagging_id', FILTER_VALIDATE_INT);
     $tagging     = new PMF_Tags();
     $record_ids  = $tagging->getRecordsByTagId($tag_id);
     $printResult = $faq->showAllRecordsByIds($record_ids);
@@ -63,12 +64,14 @@ if (isset($_GET['tagging_id']) && is_numeric($_GET['tagging_id'])) {
 //
 // Handle the full text search stuff
 //
-if (isset($_GET['suchbegriff']) || isset($_GET['search'])) {
-    if (isset($_GET['suchbegriff'])) {
-        $searchterm = $db->escape_string(strip_tags($_GET['suchbegriff']));
+$suchbegriff = PMF_Filter::filterInput(INPUT_GET, 'suchbegriff', FILTER_SANITIZE_STRIPPED);
+$search      = PMF_Filter::filterInput(INPUT_GET, 'search', FILTER_SANITIZE_STRIPPED);
+if (!is_null($suchbegriff) || !is_null($search)) {
+    if (!is_null($suchbegriff)) {
+        $searchterm = $db->escape_string(strip_tags($suchbegriff);
     }
-    if (isset($_GET['search'])) {
-        $searchterm = $db->escape_string(strip_tags($_GET['search']));
+    if (!is_null($search)) {
+        $searchterm = $db->escape_string(strip_tags($search);
     }
     $printResult = searchEngine($searchterm, $searchCategory, $allLanguages);
     $searchterm  = stripslashes($searchterm);

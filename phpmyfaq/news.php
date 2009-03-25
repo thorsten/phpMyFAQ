@@ -28,9 +28,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $captcha = new PMF_Captcha($sids);
 
-if (isset($_GET['gen'])) {
+if (!is_null($showCaptcha)) {
     $captcha->showCaptchaImg();
-    exit();
+    exit;
 }
 
 $oNews   = new PMF_News();
