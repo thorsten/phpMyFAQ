@@ -59,4 +59,19 @@ class PMF_Filter
 	{
 		return filter_input_array($type, $definition);
 	}
+	
+	/**
+	 * Static wrapper method for filter_var()
+	 * 
+	 * @param  mixed   $variable Variable
+	 * @param  integer $filter   Filter
+     * @param  mixed   $default       Default value
+     * @return mixed
+	 */
+	public static function filterVar($variable, $filter, $default)
+	{
+		$return = filter_var($variable, $filter);
+        
+        return is_null($return) ? $default : $return;
+	}
 }
