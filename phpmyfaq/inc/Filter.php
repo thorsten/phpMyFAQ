@@ -68,7 +68,7 @@ class PMF_Filter
      * @param  mixed   $default       Default value
      * @return mixed
 	 */
-	public static function filterVar($variable, $filter, $default)
+	public static function filterVar($variable, $filter, $default = null)
 	{
 		$return = filter_var($variable, $filter);
         
