@@ -156,7 +156,7 @@ class PMF_Glossary
      */
     private function _setAcronyms($matches)
     {
-    	if (count($matches) > 3) {
+    	if (count($matches) > 4) {
             $prefix  = $matches[4];
             $item    = $matches[5];
             $postfix = $matches[6];
