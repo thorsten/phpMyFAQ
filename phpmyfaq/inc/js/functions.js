@@ -7,8 +7,8 @@
  * @author    Minoru TODA <todam@netjapan.co.jp>
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @since     2003-11-13
- * @copyright 2003-2008 phpMyFAQ Team
- * @version   CVS: $Id: functions.js,v 1.9 2008-01-20 16:21:43 thorstenr Exp $
+ * @version   SVN: $Id: functions.js,v 1.9 2008-01-20 16:21:43 thorstenr Exp $
+ * @copyright 2003-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -47,54 +47,39 @@ function addEngine(uri, name, ext, cat)
     }
 }
 
-function focusOnUsernameField()
-{
-    if (document.getElementById('faqusername')) {
-        document.getElementById('faqusername').focus();
-    }
-}
-
+/**
+ * Sets the focus on the search input field for better usability
+ * 
+ * @return void
+ */
 function focusOnSearchField()
 {
-    if (document.getElementById('searchfield')) {
-        document.getElementById('searchfield').focus();
-    }
-    if (document.getElementById('suchbegriff')) {
-        document.getElementById('suchbegriff').focus();
-    }
-    if (document.getElementById('instantfield')) {
-        document.getElementById('instantfield').focus();
-    }
+    $('#searchfield').focus();
+    $('#suchbegriff').focus();
+    $('#instantfield').focus();
 }
 
 /**
- * showhideCategory()
- *
  * Displays or hides a div block
  *
- * @param    string
- * @return   void
- * @access   public
- * @since    2006-03-04
- * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @param  string id Id of the block
+ * @return void
  */
 function showhideCategory(id)
 {
-    if (document.getElementById(id).style.display == 'none') {
-        document.getElementById(id).style.display = 'block';
+    if ($('#' + id).css('display') == 'none') {
+    	$('#' + id).fadeIn("slow");
     } else {
-        document.getElementById(id).style.display = 'none';
+        $('#' + id).fadeOut("slow");
     }
 }
 
 /**
-* deletes all options from given select-object.
-*
-* @access public
-* @author Lars Tiedemann, <php@larstiedemann.de>
-* @param select
-* @return void
-*/
+ * deletes all options from given select-object.
+ *
+ * @param select
+ * @return void
+ */
 function select_clear(select)
 {
     while (select.length > 0) {
@@ -269,48 +254,22 @@ function table_addRow(table, rowNumber, col1, col2)
 }
 
 /**
-* Function to get a pretty formatted output of a variable
-*
-* NOTE: Just for debugging!
-*
-* @param    string
-* @return   void
-* @access   public
-* @since    2005-12-26
-* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-*/
-function pmf_dump(data)
-{
-    var s = '';
-    for(idx in data){
-        s += idx + '('+typeof data[idx]+'): ' + data[idx]+'\n';
-    }
-    document.write('<pre>' + s + '</pre>');
-}
-
-/**
-* Hide a <div> container
-*
-* @param    string
-* @return   void
-* @access   public
-* @since    2006-01-07
-* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-*/
+ * Hide a <div> container
+ *
+ * @param  string
+ * @return void
+ */
 function hide(id)
 {
     document.getElementById(id).style.display = 'none';
 }
 
 /**
-* Show a <div> container
-*
-* @param    string
-* @return   void
-* @access   public
-* @since    2006-01-07
-* @author   Thorsten Rinne <thorsten@phpmyfaq.de>
-*/
+ * Show a <div> container
+ *
+ * @param  string
+ * @return void
+ */
 function show(id)
 {
     document.getElementById(id).style.display = 'block';

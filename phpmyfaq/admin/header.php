@@ -55,7 +55,7 @@ header("Vary: Negotiate,Accept");
 
     // @todo: rewrite the AJAX Suggestion and Autocomplete Behaviours using ONLY jQuery library
 if (isset($action)) {
-	if ($action != 'comments' && $action != 'config' && 
+	if ($action != 'comments' && $action != 'config' && $action != 'view' &&
 	    $action != 'takequestion' && $action != 'editentry' && $action != 'editpreview') {
 ?>
     <script type="text/javascript" src="../inc/js/prototype.js"></script>
