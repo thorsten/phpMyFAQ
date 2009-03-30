@@ -30,7 +30,7 @@ if ($permission['viewlog']) {
 	
     $session    = new PMF_Session();
     $statdelete = PMF_Filter::filterInput(INPUT_POST, 'statdelete', FILTER_SANITIZE_STRING);
-    $month      = PMF_Filter::filterInput(INPUT_POST, 'month', FILTER_VALIDATE_INT);
+    $month      = PMF_Filter::filterInput(INPUT_POST, 'month', FILTER_SANITIZE_STRING);
 
     if (!is_null($statdelete) && !is_null($month)) {
         // Search for related tracking data files and
