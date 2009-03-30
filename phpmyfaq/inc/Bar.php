@@ -52,6 +52,13 @@ class PMF_Bar
 	private $colored = false;
 	
 	/**
+	 * Quartiles
+	 * 
+	 * @var array
+	 */
+	private $quartiles = array(25, 50, 75);
+	
+	/**
 	 * Constructor
 	 *
 	 * @param  float   $number  Number for the bar
@@ -62,6 +69,27 @@ class PMF_Bar
 	{
 		$this->number  = $number;
 		$this->colored = $colored;
+	}
+	
+	/**
+	 * Sets the quartiles
+	 * 
+	 * @param  array $quartiles Quartiles
+	 * @return void 
+	 */
+	public function setQuartiles(Array $quartiles)
+	{
+		$this->quartiles = $quartiles;
+	}
+	
+	/**
+	 * Returns the quartiles
+	 * 
+	 * @return array
+	 */
+	public function getQuartiles()
+	{
+		return $this->quartiles;
 	}
 	
 	/**
