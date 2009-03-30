@@ -2,12 +2,12 @@
 /**
  * The RSS feed for categories.
  *
- * @package     phpMyFAQ
- * @access      public
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since       2008-01-25 
- * @version     SVN: $Id$
- * @copyright   (c) 2008-2009 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage RSS
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since      2008-01-25 
+ * @version    SVN: $Id$
+ * @copyright  2008-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -33,18 +33,11 @@ session_start();
 $pmf      = new PMF_Init();
 $LANGCODE = $pmf->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
 // Preload English strings
-require_once PMF_ROOT_DIR.'/lang/language_en.php';
+require_once PMF_ROOT_DIR . '/lang/language_en.php';
 
-$category_id = $category_lang = null;
-if (isset($_GET['category_id']) && is_numeric($_GET['category_id']) && ($_GET['category_id'] != 0)) {
-    $category_id = (int)$_GET['category_id'];
-}
-if (isset($_GET['category_lang']) && PMF_Init::isASupportedLanguage($_GET['category_lang'])) {
-    $category_lang = $_GET['category_lang'];
-}
-
-$category = new PMF_Category();
-$faq      = new PMF_Faq();
+$category_id = PMF_Filter::filterInput(INPUT_GET, 'category_id', FILTER_VALIDATE_INT);
+$category    = new PMF_Category();
+$faq         = new PMF_Faq();
 
 $records = $faq->getAllRecordPerCategory($category_id,
                                          $faqconfig->get('records.orderby'),
