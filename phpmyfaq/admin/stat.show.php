@@ -28,7 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 if ($permission['viewlog']) {
     require_once(PMF_ROOT_DIR.'/inc/Session.php');
 
-    $sid = PMF_Filter::filterInput(INPUT_GET, 'sid', FILTER_VALIDATE_INT);
+    $sid = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
     printf('<h2>%s "<span style="color: Red;">%d</span>"</h2>',
         $PMF_LANG['ad_sess_session'],
