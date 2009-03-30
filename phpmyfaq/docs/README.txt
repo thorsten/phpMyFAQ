@@ -10,6 +10,7 @@ Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.5.0-alpha2:
+- added frontend for search logs statistics (Anatoliy Belsky)
 - ajaxified comment administration (Thorsten)
 - fixed a lot of bugs (Thorsten)
 
@@ -31,6 +32,7 @@ Version 2.5.0-beta - 2009-
 - added Mail sub system (Matteo)
 - added enable/disable WYSIWYG Editor flag (Thorsten)
 - added most popular searches list (Thorsten)
+- added frontend for search logs statistics (Anatoliy Belsky)
 - added jQuery as replacement for Prototype/Script.aculo.us (Thorsten)
 - improved user administration frontend (Sarah Hermann)
 - improved performance (Thorsten)
