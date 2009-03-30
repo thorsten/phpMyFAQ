@@ -3,10 +3,10 @@
  * The RSS feed with the latest five records.
  *
  * @package     phpMyFAQ
- * @access      public
+ * @subpackage  RSS
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright   (c) 2004-2009 phpMyFAQ Team
  * @version     SVN: $Id$
+ * @copyright   2004-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -36,20 +36,14 @@ require_once (PMF_ROOT_DIR.'/lang/language_en.php');
 
 if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE)) {
     // Overwrite English strings with the ones we have in the current language
-    require_once(PMF_ROOT_DIR.'/lang/language_'.$LANGCODE.'.php');
+    require_once PMF_ROOT_DIR . '/lang/language_' . $LANGCODE . '.php';
 } else {
     $LANGCODE = 'en';
 }
 
-$lang = null;
-if (isset($_GET['lang']) && PMF_Init::isASupportedLanguage($_GET['lang'])) {
-    $lang = $_GET['lang'];
-}
-
 $faq     = new PMF_Faq();
-$rssData = $faq->getLatestData(PMF_NUMBER_RECORDS_LATEST, $lang);
+$rssData = $faq->getLatestData(PMF_NUMBER_RECORDS_LATEST);
 $num     = count($rssData);
-
 
 $rss = new XMLWriter();
 $rss->openMemory();
