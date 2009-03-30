@@ -1217,6 +1217,17 @@ if ($step == 4) {
                     PRIMARY KEY (id, lang))";
         $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.enableWysiwygEditor', 'true')";
     }
+    
+    //
+    // UPDATES FROM 2.5.0-beta
+    //
+    if (version_compare($version, '2.5.0-beta', '<')) {
+        $query[] = "CREATE TABLE ".SQLPREFIX."faqstopwords (
+                    id INTEGER NOT NULL,
+                    lang VARCHAR(5) NOT NULL,
+                    stopword VARCHAR(6 ) NOT NULL,
+                    PRIMARY KEY (id, lang )";
+    }
 
     // Perform the queries for updating/migrating the database from 2.x
     if (isset($query)) {
