@@ -137,8 +137,9 @@ if (isset($auth)) {
 //
 if ('logout' === $action && isset($auth)) {
     $user->deleteFromSession();
-    $user = null;
-    $auth = null;
+    $user   = null;
+    $auth   = null;
+    $action = 'main';
 }
 
 //
