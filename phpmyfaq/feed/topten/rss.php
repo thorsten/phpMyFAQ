@@ -2,12 +2,12 @@
 /**
  * The RSS feed with the top ten.
  *
- * @package     phpMyFAQ
- * @access      public
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @version     SVN: $Id$ 
- * @copyright   (c) 2004-2009 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage RSS
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @version    SVN: $Id$ 
+ * @copyright  2004-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -42,16 +42,8 @@ if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE)) {
     $LANGCODE = 'en';
 }
 
-$cat = $lang = null;
-if (isset($_GET['cat']) && is_numeric($_GET['cat']) && ($_GET['cat'] != 0)) {
-    $cat = (int)$_GET['cat'];
-}
-if (isset($_GET['lang']) && PMF_Init::isASupportedLanguage($_GET['lang'])) {
-    $lang = $_GET['lang'];
-}
-
 $faq     = new PMF_Faq();
-$rssData = $faq->getTopTenData(PMF_NUMBER_RECORDS_TOPTEN, $cat, $lang);
+$rssData = $faq->getTopTenData(PMF_NUMBER_RECORDS_TOPTEN);
 $num     = count($rssData);
 
 $rss = new XMLWriter();
