@@ -79,12 +79,13 @@ if ($num > 0) {
         $rss->writeCdata(utf8_encode($item['content']));
         $rss->endElement();
         
-        $rss->writeElement('link', utf8_encode(PMF_Link::getSystemUri('/feed/news/rss.php').$link));
+        $rss->writeElement('link', PMF_Link::getSystemUri('/feed/news/rss.php').$link);
         $rss->writeElement('pubDate', makeRFC822Date($item['date'], false));
         $rss->endElement();
     }
 }
 
+$rss->endElement();
 $rss->endElement();
 $rssData = $rss->outputMemory();
 

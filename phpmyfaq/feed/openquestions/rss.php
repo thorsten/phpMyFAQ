@@ -78,6 +78,7 @@ if ($num > 0) {
 }
 
 $rss->endElement();
+$rss->endElement();
 $rssData = $rss->outputMemory();
 
 header('Content-Type: text/xml');

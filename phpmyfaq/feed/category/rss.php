@@ -73,6 +73,7 @@ if (is_array($records)) {
 }
 
 $rss->endElement();
+$rss->endElement();
 $rssData = $rss->outputMemory();
 
 header('Content-Type: text/xml');
