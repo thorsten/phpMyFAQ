@@ -28,8 +28,65 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 
 if ($permission['viewlog']) {
 	
-	
-	
+    $perpage = 15;
+    $pages   = PMF_Filter::filterInput(INPUT_GET, 'pages', FILTER_VALIDATE_INT);
+    $page    = PMF_Filter::filterInput(INPUT_GET, 'page' , FILTER_VALIDATE_INT, 1);
+    
+   	$search = new PMF_Search;
+	$searchesList = $search->getMostPopularSearches(0, true);
+    
+    if (is_null($pages)) {
+        $pages = round((count($searchesList) + ($perpage / 3)) / $perpage, 0);
+    }
+    
+    $start = ($page - 1) * $perpage;
+    $ende  = $start + $perpage;
+
+    $PageSpan = PageSpan("<a href=\"?action=searchstats&amp;pages=".$pages."&amp;page=<NUM>\">", 1, $pages, $page);
+?>
+<table class="list">
+<thead>
+<tr>
+	<th class="list"><?php print $PMF_LANG['ad_searchstats_search_term'] ?></th>
+	<th class="list"><?php print $PMF_LANG['ad_searchstats_search_term_count'] ?></th>
+	<th class="list"><?php print $PMF_LANG['ad_searchstats_search_term_lang'] ?></th>
+</tr>
+</thead>
+   <tfoot>
+       <tr>
+           <td class="list" colspan="4"><?php print $PageSpan; ?></td>
+       </tr>
+   </tfoot>
+<tbody>
+<?php 
+
+	$counter = $displayedCounter = 0;
+
+	foreach($searchesList as $searchItem) {
+		
+        if ($displayedCounter >= $perpage) {
+            $displayedCounter++;
+            continue;
+        }
+
+        $counter++;
+        if ($counter <= $start) {
+            continue;
+        }
+        $displayedCounter++;
+?>
+<tr>
+	<td class="list"><?php print $searchItem['searchterm'] ?></td>
+	<td class="list"><?php print $searchItem['number'] ?></td>
+	<td class="list"><?php print $searchItem['lang'] ?></td>
+</tr>
+<?php
+	}
+?>
+</tbody>
+</table>
+<?php 
+
 } else {
     print $PMF_LANG["err_NotAuth"];
 }

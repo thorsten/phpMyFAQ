@@ -65,7 +65,7 @@ if ($permission['adminlog'] && 'adminlog' == $action) {
 
     foreach ($logging_data as $logging_id => $logging_value) {
 
-        if ($displayedCounter > $perpage) {
+        if ($displayedCounter >= $perpage) {
             $displayedCounter++;
             continue;
         }

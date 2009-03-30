@@ -275,6 +275,7 @@ if (isset($auth) && in_array(true, $permission)) {
             case "sessionbrowse":           require_once 'stat.browser.php'; break;
             case "viewsession":             require_once 'stat.show.php'; break;
             case "statistics":              require_once 'stat.ratings.php'; break;
+            case "searchstats": 			require_once 'stat.search.php'; break;
             // functions for config administration
             case 'config':                  require_once 'configuration.php'; break;
             case 'linkconfig':              require_once 'linkconfig.main.php'; break;

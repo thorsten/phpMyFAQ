@@ -169,9 +169,11 @@ if (isset($action)) {
         case 'sessionbrowse':
         case 'sessionsuche':
         case 'adminlog':
+        case 'searchstats':
             addMenuEntry('viewlog',                              'statistics',   'ad_menu_stat', $action);
             addMenuEntry('viewlog',                              'viewsessions', 'ad_menu_session', $action);
             addMenuEntry('adminlog',                             'adminlog',     'ad_menu_adminlog', $action);
+            addMenuEntry('viewlog',                              'searchstats',  'ad_menu_searchstats', $action);
             break;
         case 'export':
         case 'plugins':

@@ -144,7 +144,7 @@ class PMF_Search
                 VALUES
             (%d, '%s', '%s', '%s')",
             SQLPREFIX . 'faqsearches',
-            $this->db->nextID('faqsearches', 'id'),
+            $this->db->nextID(SQLPREFIX . 'faqsearches', 'id'),
             $this->language,
             $this->db->escape_string($searchterm),
             $date->format('Y-m-d H:i:s'));
@@ -156,31 +156,32 @@ class PMF_Search
      * Returns the most popular searches
      * 
      * @param  integer $numResults Number of Results, default: 7
+     * @param  boolean weither language must be included into result
      * @return array
      */
-    public function getMostPopularSearches($numResults = 7)
+    public function getMostPopularSearches($numResults = 7, $withLang = false)
     {
         $searchResult = array();
         
+        $byLang = $withLang ? ', lang' : '';
         $query = sprintf("
             SELECT 
-                searchterm, COUNT(searchterm) AS number
+                searchterm, COUNT(searchterm) AS number %s
             FROM
                 %s
             GROUP BY
-                searchterm
+                searchterm %s
             ORDER BY
                 number
             DESC",
-            SQLPREFIX . 'faqsearches');
+            $byLang, SQLPREFIX . 'faqsearches', $byLang);
         
         $result = $this->db->query($query);
         
     
         if ($result) {
            while ($row = $this->db->fetch_object($result)) {
-              $searchResult[] = array('number'     => $row->number,
-                                      'searchterm' => $row->searchterm);
+              $searchResult[] = (array) $row;
            }
         }
         
