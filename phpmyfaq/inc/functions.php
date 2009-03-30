@@ -906,7 +906,7 @@ function quoted_printable_encode($return = '')
  */
 function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = false, $instantRespnse = false)
 {
-    global $db, $sids, $category, $faqconfig, $PMF_LANG, $PMF_CONF, $LANGCODE, $faq, $current_user, $current_groups;
+    global $db, $sids, $category, $PMF_LANG, $LANGCODE, $faq, $current_user, $current_groups;
 
     $_searchterm = PMF_htmlentities(stripslashes($searchterm), ENT_QUOTES, $PMF_LANG['metaCharset']);
     $seite       = 1;
@@ -914,10 +914,8 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
     $num         = 0;
     $searchItems = array();
     $langs       = (true == $allLanguages) ? '&amp;langs=all' : '';
-
-    if (isset($_REQUEST['seite'])) {
-        $seite = (int)$_REQUEST['seite'];
-    }
+    $seite       = PMF_Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 0);
+    $faqconfig   = PMF_Configuration::getInstance();
 
     $cond = array(SQLPREFIX."faqdata.active" => "'yes'");
 
@@ -1293,9 +1291,12 @@ function addMenuEntry($restrictions = '', $action = '', $caption = '', $active =
  */
 function adminlog($text)
 {
-    global $db, $PMF_CONF, $auth, $user;
+    global $auth, $user;
 
-    if (isset($PMF_CONF['main.enableAdminLog']) && $auth && isset($user)) {
+    $faqconfig = PMF_Configuration::getInstance();
+    $db        = PMF_Db::getInstance();
+    
+    if ($faqconfig->get('main.enableAdminLog') && $auth && isset($user)) {
         $query = sprintf(
                 'INSERT INTO
                     %sfaqadminlog
