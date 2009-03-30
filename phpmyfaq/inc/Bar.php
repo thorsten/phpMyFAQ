@@ -52,6 +52,20 @@ class PMF_Bar
 	private $colored = false;
 	
 	/**
+	 * Text color
+	 * 
+	 * @var integer
+	 */
+	private $textcolor = 0;
+	
+	/**
+	 * Background color
+	 * 
+	 * @var integer
+	 */
+	private $backgroundcolor = 0;
+	
+	/**
 	 * Quartiles
 	 * 
 	 * @var array
@@ -69,6 +83,7 @@ class PMF_Bar
 	{
 		$this->number  = $number;
 		$this->colored = $colored;
+		$this->image   = imagecreate(50, 15);
 	}
 	
 	/**
