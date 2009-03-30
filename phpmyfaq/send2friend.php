@@ -33,7 +33,16 @@ if (!is_null($showCaptcha)) {
 
 $faqsession->userTracking('send2friend',0);
 
-$send2friendLink = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].'?action=artikel&amp;cat='.(int)$_REQUEST['cat'].'&amp;id='.(int)$_REQUEST['id'].'&amp;artlang='.urlencode($_REQUEST['artlang']);
+$cat     = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
+$id      = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+$artlang = PMF_Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRING);
+
+$send2friendLink = sprintf('http://%s%s?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+    $_SERVER['HTTP_HOST'],
+    $_SERVER['PHP_SELF'],
+    $cat,
+    $id,
+    urlencode($artlang));
 
 $tpl->processTemplate ('writeContent', array(
     'msgSend2Friend' => $PMF_LANG['msgSend2Friend'],
