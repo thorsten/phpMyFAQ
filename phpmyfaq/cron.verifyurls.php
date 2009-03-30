@@ -54,7 +54,7 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
     session_start();
 
     // Preload English strings
-    require_once PMF_ROOT_DIR . '/lang/language_en.php');
+    require_once PMF_ROOT_DIR . '/lang/language_en.php';
 
     if ((LANGCODE != 'en') && PMF_Init::isASupportedLanguage(LANGCODE)) {
         // Overwrite English strings with the ones we have in the current language
