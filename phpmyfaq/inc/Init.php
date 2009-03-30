@@ -327,16 +327,11 @@ class PMF_Init
     }
 
     /**
-     * setLanguage()
-     *
      * Sets the current language for phpMyFAQ user session
      *
-     * @param   bool    $config_detection
-     * @param   string  $config_language
-     * @return  string  $language
-     * @access  public
-     * @author  Thorsten Rinne <rinne@mayflower.de>
-     * @author  Matteo scaramuccia <matteo@phpmyfaq.de>
+     * @param   bool    $config_detection Configuration detection
+     * @param   string  $config_language  Language from configuration
+     * @return  string
      */
     public function setLanguage($config_detection, $config_language)
     {
@@ -345,18 +340,20 @@ class PMF_Init
         $_lang = array();
         self::_getUserAgentLanguage();
 
-        // Get language from: _POST, _GET, _COOKIE, phpMyFAQ configuration and
-        //                    the automatic language detection
-        if (isset($_POST['language']) && self::isASupportedLanguage($_POST['language']) ) {
-            $_lang['post'] = trim($_POST['language']);
+        // Get language from: _POST, _GET, _COOKIE, phpMyFAQ configuration and the automatic language detection
+        $_lang['post'] = PMF_Filter::filterInput(INPUT_POST, 'language', FILTER_SANITIZE_STRING);
+        if (!is_null($_lang['post']) && !self::isASupportedLanguage($_lang['post']) ) {
+            $_lang['post'] = null;
         }
         // Get the user language
-        if (isset($_GET['lang']) && self::isASupportedLanguage($_GET['lang']) ) {
-            $_lang['get'] = trim($_GET['lang']);
+        $_lang['get'] = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
+        if (!is_null($_lang['get']) && !self::isASupportedLanguage($_lang['get']) ) {
+            $_lang['get'] = null;
         }
         // Get the faq record language
-        if (isset($_GET['artlang']) && self::isASupportedLanguage($_GET['artlang']) ) {
-            $_lang['get'] = trim($_GET['artlang']);
+        $_lang['artget'] = PMF_Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRING);
+        if (!is_null($_lang['artget']) && !self::isASupportedLanguage($_lang['artget']) ) {
+            $_lang['get'] = null;
         }
         // Get the language from the session
         if (isset($_SESSION['pmf_lang']) && self::isASupportedLanguage($_SESSION['pmf_lang']) ) {
