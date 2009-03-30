@@ -78,7 +78,7 @@ if ($permission['viewlog']) {
 <tr>
 	<td class="list"><?php print $searchItem['searchterm'] ?></td>
 	<td class="list"><?php print $searchItem['number'] ?></td>
-	<td class="list"><?php print $searchItem['lang'] ?></td>
+	<td class="list"><?php print $languageCodes[strtoupper($searchItem['lang'])] ?></td>
 </tr>
 <?php
 	}
