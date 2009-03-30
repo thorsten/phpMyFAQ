@@ -308,12 +308,8 @@ class PMF_Faq
         global $sids, $category;
 
         $faqconfig = PMF_Configuration::getInstance();
-        $page = 1;
-        $output = '';
-
-        if (isset($_REQUEST['seite'])) {
-            $page = (int)$_REQUEST['seite'];
-        }
+        $page      = PMF_Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);
+        $output    = '';
 
         if ($orderby == 'visits') {
             $current_table = 'fv';
@@ -518,17 +514,11 @@ class PMF_Faq
     {
         global $sids;
 
-        $faqconfig = PMF_Configuration::getInstance();
-        $records   = implode(', ', $record_ids);
-        $page      = 1;
-        $output    = '';
-
-        if (isset($_REQUEST['seite'])) {
-            $page = (int)$_REQUEST['seite'];
-        }
-        if (isset($_REQUEST['tagging_id'])) {
-            $tagging_id = (int)$_REQUEST['tagging_id'];
-        }
+        $faqconfig  = PMF_Configuration::getInstance();
+        $records    = implode(', ', $record_ids);
+        $page       = PMF_Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);
+        $tagging_id = PMF_Filter::filterInput(INPUT_GET, 'tagging_id', FILTER_VALIDATE_INT); 
+        $output     = '';
 
         if ($this->groupSupport) {
             $permPart = sprintf("( fdg.group_id IN (%s)
@@ -542,7 +532,7 @@ class PMF_Faq
                 $this->user);
         }
 
-        $now = date('YmdHis');
+        $now   = date('YmdHis');
         $query = sprintf("
             SELECT
                 fd.id AS id,
