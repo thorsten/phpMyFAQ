@@ -45,3 +45,7 @@ if ('save_sticky_records' == $ajax_action && $permission['editbt']) {
         }
     }
 }
+
+if ('delete_record' == $ajax_action && $permission['delbt']) {
+	
+}
