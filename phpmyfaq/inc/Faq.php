@@ -80,7 +80,7 @@ class PMF_Faq
     *
     * @var  string
     */
-    private $language;
+    public $language;
 
     /**
     * Language strings
