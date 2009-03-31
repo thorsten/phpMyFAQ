@@ -1,21 +1,11 @@
 /**
- * To change the look and feel, search for the following selectors (Ctrl-F) in this style sheet:
+ * Administration Layout
  *
- * - Font, background color/image: body
- * - Link colors: a:link, a:visited
- * - Hover links color: a:hover
- * - Code color: pre
- * - Title color: #header h1 a
- * - Separation color of navigation menu: #categories li a
- * - Footer color and separator: #footer
- * - Footer link color: #footer a:link, #footer a:visited
- * - RSS button color: a.rss:link, a.rss:visited
- * - Text highlight color: .highlight
- *
- * @author    Charles A. Landemaine <landemaine@gmail.com>
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2004-2008 phpMyFAQ Team
- * @version   CVS: $Id: admin.css,v 1.52 2008-01-26 17:49:39 thorstenr Exp $
+ * @package    phpMyFAQ
+ * @subpackage Layout
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @version    SVN: $Id$ 
+ * @copyright  2004-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -28,75 +18,71 @@
  * under the License.
  */
 
-
 /*	General	*/
-body { font: .8em 'Trebuchet MS', 'Nimbus Sans L', sans-serif; padding: 1em; margin: 0; background: url(../images/background.png) repeat-x; }
-td { font-size: .8em; }
-a:link, a:visited { color: #191970; text-decoration: none; }
-a:hover { color: #000; background: #f4f7fa; }
+* { padding: 0; margin: 0; }
+body { font: .8em 'Trebuchet MS', 'Nimbus Sans L', sans-serif; line-height: 1.6em; color: #19191B; background: url(../images/background.png) repeat-x; }
+#wrap { margin: 0 auto; width: 80% }
+
+/* Header */
+#top { margin: 0 auto; padding: 0; color: #BEC5CD; height: 87px; background-color: #0D2458; }
+#top h1 { padding: 10px 0 0 25px; color: #D4451B; font-size: 200%; }
+#top h2 { padding: 0px 0 0 25px; color: #BEC5CD; font-size: 90%; }
+#top .padding { padding-top: 5px; }
+#top .lefts { height: 87px; }
+#top .rights { float: right; height: 87px; width: 18px; }
+
+#languageselection { float: right;  padding: 10px 25px 0 0;  }
+
+/* Top menu */
+#topmenu { margin: 0; padding: 0; height: 35px; background-color: #1A3878; border-top: 1px solid #E8EAF6;}
+#topmenu .lefts { height: 35px; padding-left: 5px; }
+#topmenu .rights { float: right; height: 35px; width: 8px; }
+#topmenu li a { color: #FFF; text-align: left; padding-left: 10px; padding-right: 15px; text-decoration: none; font-weight: bold } 
+#topmenu li { padding: 0px; float: left; margin: 0; font-size: 14px; line-height: 35px; white-space: nowrap; list-style-type: none; width: auto; border-right: 1px solid #E8EAF6; }
+#topmenu li a.logout { color: red; }
+
+/* Main container */
+#main { margin: 5px 0 5px; padding: ;color: #19191B; padding-top: 5px; }
+
+/* 2nd level menu */
+#main #rightmenu { width: 200px; float: right; background: #FFF; margin-right: 0px; color: #666; } 
+#main #rightmenu .box { background: #efefef; margin-bottom: 10px; padding: 5px; color: #666; }
+#main #rightmenu h2 { font: bold 1.0em;  height: 18px; padding: 3px; color: #E8EAF6; background-color: #807B77; }
+
+/* Content */
+#content { color: #19191B; margin-right: 215px; }
+#content h2 { color: #160F17; text-indent: 5px; font-size: 120%; border-bottom: 1px solid #160F17; }
+
+/* Footer */
+#footer { clear: both; height: 46px; font-size: 85%; color: #160F17; border-top: 1px solid #050110; margin-top: 5px; }
+#footer .right { float: right; display: inline; text-align: right; padding-top: 5px; }
+
+/* Global CSS definitions */
+a { color: #7A4E69; background: inherit; text-decoration: none }
+h1 { font: bold 1.9em 'Trebuchet MS', 'Nimbus Sans L', sans-serif }
+h2 { font: bold 1.2em 'Trebuchet MS', 'Nimbus Sans L', sans-serif; padding: 0 0 2px; margin: 0 0 10px; }
+ul {  padding: 0; margin: 0}
+li { list-style-type: none }
 form { margin: 0; padding: 0; }
 a img, img { border: 0; }
-pre {	padding: 0.5em; background: #eee; border: 1px solid #ddd; overflow: auto; }
-ul { list-style: square; }
+pre {	padding: 0.5em; background: #E8EAF6; border: 1px solid #160F17; overflow: auto; }
+dl { margin-bottom: 40px; }
+dt { float: left; width: 200px; }
+dd { margin: 0 0 10px 200px; }
+
+/* Global forms CSS definitions */
+#content textarea { border: 1px solid #050110; width: 85%;  }
+#main #content fieldset { float: left; width: 95%; border: 1px solid #ccc; padding: 10px 8px; margin: 0 10px 8px 0; background: #FFF; color: #000; }
+#main #content fieldset p { width: 95%; }
+#main input { padding: 3px; margin: 0; border: 1px solid #bbb }
 
 
-/* Structure */
 
-#header { text-align:center; }
-h2 {
-    font-size: 18px;
-    font-style: italic;
-    border-bottom: 1px solid #656565;
-    margin-bottom: 15px;
-    color: #004256;
-}
-ul {
-    margin-left: 15px;
-}
-fieldset {
-    margin-top: 15px;
-    border: 1px solid #656565;
-    padding: 5px;
-}
-fieldset.fullwidth {
-    width: 775px;
-}
-legend {
-    background: #eeeeee;
-    font-weight: bold;
-    border: 1px solid #656565;
-    padding: 2px 6px;
-    -moz-border-radius: 5px 5px 5px 5px;
-    border-radius: 5px 5px 5px 5px;
-}
-label {
-    font-weight: bold;
-}
-input, textarea, select {
-    font-size: 12px;
-}
-p.hr{
-   margin-top: 6px;
-   padding-bottom: 8px;
-   border-bottom: 1px solid #656565;
-}
-p {
-    padding-bottom: 10px;
-}
-dl {
-    margin-bottom: 40px;
-}
-dt {
-    float: left;
-    width: 200px;
-}
-dd {
-    margin: 0 0 10px 200px;
-}
+/*
 
-/**
-* Forms
-*/
+
+
+
 label.left {
     float: left;
     text-align: right;
@@ -137,162 +123,6 @@ textarea#content {
     height: 400px;
 }
 
-#bodyText p {
-    padding-bottom: 1ex;
-}
-
-/* Header */
-
-div#langform {
-    float: left;
-    font-size: 95%;
-    width: 230px;
-}
-
-div#sessionexpiration {
-    float: left;
-    text-align: center;
-    font-size: 95%;
-    width: 180px;
-    color: #000;
-    background-color: #EDF2F2;
-    border: 1px solid #656565;
-    -moz-border-radius: 5px 5px 5px 5px;
-    border-radius: 5px 5px 5px 5px;
-}
-div#sessioncounter {
-    font-size: 100%;
-    text-align: center;
-}
-
-/* Administration Menu */
-#navcontainer {
-    margin: 0;
-    padding: 0;
-    height: 24px;
-    background: #e8e8e8;
-    color: #000000;
-    border-left: 1px solid #656565;
-}
-#navcontainer ul {
-    border: 0;
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
-    text-align: center;
-}
-#navcontainer ul li {
-    display: block;
-    float: left;
-    text-align: center;
-    padding: 0;
-    margin: 0;
-    border-bottom: 1px solid #656565;
-}
-#navcontainer ul li a {
-    width: 92px;
-    height: 18px;
-    border-top: 1px solid #656565;
-    border-right: 1px solid #656565;
-    padding-top: 4px;
-    padding-left: 3px;
-    padding-right: 3px;
-    background-color: #e8e8e8;
-    color: #36393D;
-    text-decoration: none;
-    display: block;
-    text-align: center;
-    -moz-border-radius-topleft: 5px;
-    -moz-border-radius-topright: 5px;
-}
-#navcontainer ul li a:hover {
-    color: #07243D;
-    background: #f4f7fa;
-}
-#navcontainer a:active {
-    background: #D15FE4;
-    color: #fff;
-}
-#navcontainer li#active a {
-    background: #FF6917;
-    color: #fff;
-}
-#navcontainer ul li a.logout {
-    background: #c00;
-	 color: #fff;
-}
-
-/* 2nd Administration Menu */
-#subnavcontainer {
-    margin-left: 20px;
-    padding: 0;
-    height: 24px;
-}
-#subnavcontainer ul {
-    border: 0;
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
-    text-align: center;
-}
-#subnavcontainer ul li {
-    display: block;
-    float: left;
-    text-align: center;
-    padding: 0;
-    margin: 0;
-    border-bottom: 1px solid #656565;
-}
-#subnavcontainer ul li a {
-    width: 92px;
-    height: 18px;
-    border-left: 1px solid #656565;
-    border-right: 1px solid #656565;
-    padding-top: 4px;
-    padding-left: 2px;
-    padding-right: 2px;
-    background-color: #e8e8e8;
-    color: #03121F;
-    text-decoration: none;
-    display: block;
-    text-align: center;
-    font-size: 80%;
-    -moz-border-radius-topleft: 5px;
-    -moz-border-radius-topright: 5px;
-}
-#subnavcontainer ul li a:hover {
-    color: #07243D;
-    background: #f4f7fa;
-}
-#subnavcontainer a:active {
-    background: #01070C;
-    color: #fff;
-}
-#subnavcontainer li#active a {
-    background: #FF6917;
-    color: #fff;
-}
-#subnavcontainer ul li a.current {
-    background: #e8e8e8;
-}
-
-
-/* the main body */
-#bodyText {
-    line-height: 1.5em;
-    margin: 10px 0px 10px 0px;
-    padding: 0 10px 10px 10px;
-    width: 785px;
-}
-#quicklinks {
-    width: 300px;
-    float: right;
-}
-#versioncheck {
-    margin-bottom: 15px;
-}
-
-/* table styles */
 table.list {
     border: 1px solid #cccccc;
     border-collapse: collapse;
@@ -326,12 +156,12 @@ th.listhead a {
     font-weight: bold;
 }
 
-/* indent at user administration */
+
 .userrights {
     padding-left: 132px;
 }
 
-/* styles for input and textarea fields */
+
 textarea.admin {
     width: 755px;
 }
@@ -344,7 +174,7 @@ input.admin, select.admin, textarea.admin {
 input.submit {
 }
 
-/* Category / Record listing styles */
+
 .categorylisting {
     color: Black;
     font-weight: bold;
@@ -366,9 +196,7 @@ input.submit {
 	overflow: auto;
 }
 
-/**
- * Table definitions for the showstructure of categories (ssc)
- */
+
 table.ssc {
    background-color: #EDF2F2;
    border-color: #656565;
@@ -383,8 +211,6 @@ td.sscTitle {
    padding-left:6px;
    padding-right:6px;
    vertical-align:middle;
-   /* remove commment of next line for better view in IE */
-   /* font-size:80%; */
 }
 td.sscDesc {
    background-color:#EDF2F2;
@@ -392,8 +218,6 @@ td.sscDesc {
    padding-right:5px;
    border:1px solid;
    vertical-align:middle;
-   /* use this line for better view in IE */
-   /* font-size:75%; */
 }
 td.sscDescNA {
    background-color:#FF4400;
@@ -401,13 +225,7 @@ td.sscDescNA {
    padding-right:5px;
    border:1px solid;
    vertical-align:middle;
-   /* use this line for better view in IE */
-   /* font-size:75%; */
 }
-
-/**
-* Link configuration
-*/
 
 table.verifyArticleURL tr.urlfail td {
     background-color:#FFF5F5;
@@ -426,7 +244,7 @@ table.verifyArticleURL tr.urlsuccess td.urlsuccess {
     font-weight: bold;
 }
 
-/* linkconfig.main.php */
+
 table.linkconfig#typeselection {
     width: 100%;
 }
@@ -554,7 +372,6 @@ table.linkconfig#configuration tr#lastrow td {
     text-decoration: none;
 }
 
-/* ###### Footer ###### */
 .clearing {
     height: 0;
     margin: 10px;
@@ -579,16 +396,14 @@ table.linkconfig#configuration tr#lastrow td {
     color: #666666;
 }
 
-/* blind container clearing float:left/right couples */
+
 .clear {
     clear: both;
     display: block;
     height: 1px;
 }
 
-/* ##### User administration 2.0 ##### */
 
-/* admin form */
 div.input_row {
     margin-bottom: 10px;
 }
@@ -616,12 +431,13 @@ div.button_row input.reset {
     display: block;
     float: left;
 }
-/* select/unselect all js shortcut links */
+
+
 .select_all, .unselect_all {
     font-size: 80%;
 }
 
-/* message box */
+
 #user_message .error {
     color: red;
     font-weight: bold;
@@ -630,11 +446,12 @@ div.button_row input.reset {
     color: green;
     font-weight: bold;
 }
-/* create user form container */
+
+
 #user_create {
     width: 450px;
 }
-/* container for #user_list */
+
 #user_accounts {
     float: left;
     width: 200px;
@@ -673,7 +490,7 @@ div.button_row input.reset {
     border-top: dashed 1px white;
     border-bottom: dashed 1px white;
 }
-/* container for #user_data and #user_rights */
+
 #user_details {
     float: right;
     width: 550px;
@@ -688,22 +505,22 @@ div.button_row input.reset {
 #user_rights {
     margin: 0 0 20px 200px;
 }
-/* delete confirmation */
+
+
 #user_confirmDelete {
     width: 250px;
 }
 
-/* create group form container */
 #group_create {
     width: 350px;
 }
-/* container for #group_list */
+
 #groups {
     float: left;
     width: 220px;
 }
 #group_list {}
-/* container for #group_data and #group_rights */
+
 #group_details {
     float: right;
     width: 220px;
@@ -714,7 +531,7 @@ div.button_row input.reset {
     margin: 0 0 20px 0;
 }
 #group_rights {}
-/* container for #group_memberList, #group_userList, #group_membershipButtons */
+
 #group_membership {
     float: left;
     width: 340px;
@@ -737,7 +554,7 @@ div.button_row input.reset {
     padding-top: 10px;
 }
 
-/* Tags */
+
 #tags_autocomplete_choices {
     margin: 0;
 }
@@ -750,3 +567,4 @@ div.button_row input.reset {
 #tags_autocomplete_choices li.selected {
     background: #EDF2F2;
 }
+*/

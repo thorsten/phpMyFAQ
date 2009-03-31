@@ -1,13 +1,11 @@
 /**
- * $Id: admin.css,v 1.40 2007/03/29 21:16:22 thorstenr Exp $
+ * Administration Layout
  *
- * This is the CSS file for the admin section of phpMyFAQ 2.0.x
- * You don't need to change enything here but feel free to do it. :-)
- *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Roy Ronen <royroy15@gmail.com>
- * @since       2004-06-09
- * @copyright   (c) 2004-2007 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage Layout
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @version    SVN: $Id$ 
+ * @copyright  2004-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -20,109 +18,91 @@
  * under the License.
  */
 
-* {
-    margin: 0;
-    padding: 0;
-}
-/* color defintions */
-#header {
-    background: #0D487A;
-    color: #fff;
-}
+/*  General */
+* { padding: 0; margin: 0; }
+body { font: .8em 'Trebuchet MS', 'Nimbus Sans L', sans-serif; line-height: 1.6em; color: #19191B; background: url(../images/background.png) repeat-x; }
+#wrap { margin: 0 auto; width: 80% }
 
-body {
-    background-color: #fff;
-    color: black;
-    font-family: "Bitstream Vera Sans", "Trebuchet MS", Verdana, Tahoma, sans-serif;
-    font-size: 12px;
-    margin: auto;
-}
-h1 {
-    font-weight: bold;
-    font-style: italic;
-    font-size: 24px;
-    padding-bottom: 0.5ex;
-}
-h2 {
-    font-size: 18px;
-    font-style: italic;
-    border-bottom: 1px solid;
-    margin-bottom: 15px;
-}
-img {
-    border: 0;
-}
-ul {
-    margin-right: 15px;
-    list-style: square;
-}
-fieldset {
-    margin-top: 15px;
-    border: 1px solid #D0D9D9;
-    padding: 5px;
-}
+/* Header */
+#top { margin: 0 auto; padding: 0; color: #BEC5CD; height: 87px; background-color: #0D2458; }
+#top h1 { padding: 10px 0 0 25px; color: #D4451B; font-size: 200%; }
+#top h2 { padding: 0px 0 0 25px; color: #BEC5CD; font-size: 90%; }
+#top .padding { padding-top: 5px; }
+#top .lefts { height: 87px; }
+#top .rights { float: right; height: 87px; width: 18px; }
 
-fieldset.fullwidth {
-    width: 775px;
-}
+#languageselection { float: right;  padding: 10px 25px 0 0;  }
 
-legend {
-    background: #EDF2F2;
-    font-weight: bold;
-    border: 1px solid #D0D9D9;
-    padding: 2px 6px;
-    -moz-border-radius: 5px 5px 5px 5px;
-    border-radius: 5px 5px 5px 5px;
-}
-label {
-    font-weight: bold;
-}
-input, textarea, select {
-    font-family: "Bitstream Vera Sans", "Trebuchet MS", Verdana, Tahoma, sans-serif;
-    font-size: 12px;
-}
-p.hr{
-   margin-top:6px;
-   padding-bottom:8px;
-   border-bottom:1px solid #D0D9D9;
-}
-p {
-    padding-bottom: 10px;
-}
-dl {
-    margin-bottom: 40px;
-}
-dt {
-    float: right;
-    width: 200px;
-}
-dd {
-    margin: 0 200px 10px 0px;
-}
+/* Top menu */
+#topmenu { margin: 0; padding: 0; height: 35px; background-color: #1A3878; border-top: 1px solid #E8EAF6;}
+#topmenu .lefts { height: 35px; padding-left: 5px; }
+#topmenu .rights { float: right; height: 35px; width: 8px; }
+#topmenu li a { color: #FFF; text-align: left; padding-left: 10px; padding-right: 15px; text-decoration: none; font-weight: bold } 
+#topmenu li { padding: 0px; float: left; margin: 0; font-size: 14px; line-height: 35px; white-space: nowrap; list-style-type: none; width: auto; border-right: 1px solid #E8EAF6; }
+#topmenu li a.logout { color: red; }
 
-/**
-* Forms
-*/
+/* Main container */
+#main { margin: 5px 0 5px; padding: ;color: #19191B; padding-top: 5px; }
+
+/* 2nd level menu */
+#main #rightmenu { width: 200px; float: right; background: #FFF; margin-right: 0px; color: #666; } 
+#main #rightmenu .box { background: #efefef; margin-bottom: 10px; padding: 5px; color: #666; }
+#main #rightmenu h2 { font: bold 1.0em;  height: 18px; padding: 3px; color: #E8EAF6; background-color: #807B77; }
+
+/* Content */
+#content { color: #19191B; margin-right: 215px; }
+#content h2 { color: #160F17; text-indent: 5px; font-size: 120%; border-bottom: 1px solid #160F17; }
+
+/* Footer */
+#footer { clear: both; height: 46px; font-size: 85%; color: #160F17; border-top: 1px solid #050110; margin-top: 5px; }
+#footer .right { float: right; display: inline; text-align: right; padding-top: 5px; }
+
+/* Global CSS definitions */
+a { color: #7A4E69; background: inherit; text-decoration: none }
+h1 { font: bold 1.9em 'Trebuchet MS', 'Nimbus Sans L', sans-serif }
+h2 { font: bold 1.2em 'Trebuchet MS', 'Nimbus Sans L', sans-serif; padding: 0 0 2px; margin: 0 0 10px; }
+ul {  padding: 0; margin: 0}
+li { list-style-type: none }
+form { margin: 0; padding: 0; }
+a img, img { border: 0; }
+pre {   padding: 0.5em; background: #E8EAF6; border: 1px solid #160F17; overflow: auto; }
+dl { margin-bottom: 40px; }
+dt { float: left; width: 200px; }
+dd { margin: 0 0 10px 200px; }
+
+/* Global forms CSS definitions */
+#content textarea { border: 1px solid #050110; width: 85%;  }
+#main #content fieldset { float: left; width: 95%; border: 1px solid #ccc; padding: 10px 8px; margin: 0 10px 8px 0; background: #FFF; color: #000; }
+#main #content fieldset p { width: 95%; }
+#main input { padding: 3px; margin: 0; border: 1px solid #bbb }
+
+
+
+/*
+
+
+
+
 label.left {
-    float: right;
+    float: left;
     text-align: right;
     width: 185px;
     margin-right: 5px;
 }
 label.lefteditor {
-    float: right;
+    float: left;
     text-align: right;
     width: 135px;
     margin-right: 5px;
 }
 label.leftconfig {
-    float: right;
+    float: left;
     text-align: right;
     width: 235px;
-    margin-left: 5px;
+    margin-right: 5px;
 }
 input[type=text], input[type=password] {
-    float: right;
+    float: left;
     margin-bottom: 10px;
 }
 input.right {
@@ -143,184 +123,13 @@ textarea#content {
     height: 400px;
 }
 
-#bodyText p {
-    padding-bottom: 1ex;
-}
-
-/* Header */
-#header {
-    height: 40px;
-    padding: 20px;
-}
-#header h1{
-    float: right;
-    vertical-align: middle;
-    width: 350px;
-}
-
-div#langform {
-    float:right;
-    vertical-align: middle;
-    font-size: 95%;
-    width: 230px;
-}
-
-div#sessionexpiration {
-    float: right;
-    vertical-align: middle;
-    text-align: center;
-    font-size: 95%;
-    width: 180px;
-    color: #000;
-    background-color: #EDF2F2;
-    border: 1px solid #D0D9D9;
-    -moz-border-radius: 5px 5px 5px 5px;
-    border-radius: 5px 5px 5px 5px;
-}
-div#sessioncounter {
-    font-size: 100%;
-    text-align: center;
-}
-
-
-/* Administration Menu */
-#navcontainer {
-    margin: 0;
-    padding: 0;
-    height: 24px;
-    background-color: #4A769C;
-    border-left: 1px solid #C2D1DE;
-}
-#navcontainer ul {
-    border: 0;
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
-    text-align: center;
-}
-#navcontainer ul li {
-    display: block;
-    float: right;
-    text-align: center;
-    padding: 0;
-    margin: 0;
-    border-top: 1px solid #C2D1DE;
-    border-bottom: 1px solid #C2D1DE;
-}
-#navcontainer ul li a {
-    width: 92px;
-    height: 18px;
-    border-top: 1px solid #C2D1DE;
-    border-right: 1px solid #C2D1DE;
-    padding-top: 4px;
-    padding-left: 3px;
-    padding-right: 3px;
-    color: #C2D1DE;
-    text-decoration: none;
-    display: block;
-    text-align: center;
-    -moz-border-radius-topleft: 5px;
-    -moz-border-radius-topright: 5px;
-}
-#navcontainer ul li a:hover {
-    color: #07243D;
-    background: #E7EDF2;
-}
-#navcontainer a:active {
-    background: #01070C;
-    color: #fff;
-}
-#navcontainer li#active a {
-    background: #c60;
-    border: 1px solid #c60;
-    color: #fff;
-}
-#navcontainer ul li a.logout {
-    background: #FF4500;
-}
-
-/* 2nd Administration Menu */
-#subnavcontainer {
-    margin-right: 20px;
-    padding: 0;
-    height: 24px;
-        clear:both;
-}
-#subnavcontainer ul {
-    border: 0;
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
-    text-align: center;
-}
-#subnavcontainer ul li {
-    display: block;
-    float: right;
-    text-align: center;
-    padding: 0;
-    margin: 0;
-    background-color: #87A4BD;
-    border-left: 1px solid #C2D1DE;
-    border-top: 1px solid #C2D1DE;
-    border-bottom: 1px solid #C2D1DE;
-}
-#subnavcontainer ul li a {
-    width: 92px;
-    height: 18px;
-    border-left: 1px solid #C2D1DE;
-    border-right: 1px solid #C2D1DE;
-    padding-top: 4px;
-    padding-left: 2px;
-    padding-right: 2px;
-    color: #03121F;
-    text-decoration: none;
-    display: block;
-    text-align: center;
-    font-size: 80%;
-    -moz-border-radius-topleft: 5px;
-    -moz-border-radius-topright: 5px;
-}
-#subnavcontainer ul li a:hover {
-    color: #07243D;
-    background: #E7EDF2;
-}
-#subnavcontainer a:active {
-    background: #01070C;
-    color: #fff;
-}
-#subnavcontainer li#active a {
-    background: #c60;
-    border: 1px solid #c60;
-    color: #fff;
-}
-#subnavcontainer ul li a.current {
-    background: #FFDEAD;
-}
-
-
-/* the main body */
-#bodyText {
-    line-height: 1.5em;
-    margin: 10px 0px 10px 0px;
-    padding: 0 10px 10px 10px;
-    width: 785px;
-}
-#quicklinks {
-    width: 300px;
-    float: left;
-}
-#versioncheck {
-    margin-bottom: 15px;
-}
-
-/* table styles */
 table.list {
-    border: 1px solid #D0D9D9;
+    border: 1px solid #cccccc;
     border-collapse: collapse;
     width: 785px;
 }
 table.listrecords {
-    border: 1px solid #D0D9D9;
+    border: 1px solid #cccccc;
     border-collapse: collapse;
     width: 765px;
 }
@@ -331,13 +140,13 @@ table.listrecords {
     text-align: right;
 }
 th.list, td.list {
-    border: 1px solid #D0D9D9;
+    border: 1px solid #cccccc;
     padding: 2px;
     line-height: 20px;
-    text-align: right;
+    text-align: left;
 }
 th.listhead {
-    border: 1px solid #D0D9D9;
+    border: 1px solid #cccccc;
     padding: 2px;
     line-height: 20px;
     text-align: center;
@@ -347,12 +156,12 @@ th.listhead a {
     font-weight: bold;
 }
 
-/* indent at user administration */
+
 .userrights {
     padding-left: 132px;
 }
 
-/* styles for input and textarea fields */
+
 textarea.admin {
     width: 755px;
 }
@@ -360,16 +169,12 @@ input.admin, select.admin, textarea.admin {
     float: left;
     width: auto;
     clear: both;
-    border: 1px solid gray;
-    background: White;
     margin-bottom: 10px;
 }
 input.submit {
-    border: 2px solid #696969;
-    background-color: #dcdcdc;
 }
 
-/* Category / Record listing styles */
+
 .categorylisting {
     color: Black;
     font-weight: bold;
@@ -383,20 +188,18 @@ input.submit {
     padding-bottom: 16px;
 }
 #changelog {
-	border: 1ps solid darkgray;
-	background-color: #F8F8FF;
-	padding: 3px;
-	margin-bottom: 10px;
-	height: auto;
-
+    border: 1ps solid darkgray;
+    background-color: #F8F8FF;
+    padding: 3px;
+    margin-bottom: 10px;
+    height: 130px;
+    overflow: auto;
 }
 
-/**
- * Table definitions for the showstructure of categories (ssc)
- */
+
 table.ssc {
    background-color: #EDF2F2;
-   border-color: #D0D9D9;
+   border-color: #656565;
    border: 1px solid;
 }
 td.sscTitle {
@@ -408,8 +211,6 @@ td.sscTitle {
    padding-left:6px;
    padding-right:6px;
    vertical-align:middle;
-   /* remove commment of next line for better view in IE */
-   /* font-size:80%; */
 }
 td.sscDesc {
    background-color:#EDF2F2;
@@ -417,8 +218,6 @@ td.sscDesc {
    padding-right:5px;
    border:1px solid;
    vertical-align:middle;
-   /* use this line for better view in IE */
-   /* font-size:75%; */
 }
 td.sscDescNA {
    background-color:#FF4400;
@@ -426,13 +225,7 @@ td.sscDescNA {
    padding-right:5px;
    border:1px solid;
    vertical-align:middle;
-   /* use this line for better view in IE */
-   /* font-size:75%; */
 }
-
-/**
-* Link configuration
-*/
 
 table.verifyArticleURL tr.urlfail td {
     background-color:#FFF5F5;
@@ -451,7 +244,7 @@ table.verifyArticleURL tr.urlsuccess td.urlsuccess {
     font-weight: bold;
 }
 
-/* linkconfig.main.php */
+
 table.linkconfig#typeselection {
     width: 100%;
 }
@@ -526,60 +319,59 @@ table.linkconfig#configuration tr#lastrow td {
     border-top: 2px solid #305C77;
 }
 
-.url-batch1, .url-batch2, .url-batch3, .url-checking
-{
+.url-batch1, .url-batch2, .url-batch3, .url-checking {
     background-color: #ff0;
+    color: #000;
     text-align: center;
+    text-decoration: none;
     font-weight: bold;
     -moz-border-radius: 5px 5px 5px 5px;
     border-radius: 5px 5px 5px 5px;
 }
-.url-batch1 span a, .url-batch2 span a, .url-batch3 span a, .url-checking span a
-{
+.url-batch1 span a, .url-batch2 span a, .url-batch3 span a, .url-checking span a {
     color: #000;
     text-decoration: none;
 }
-.url-disabled, .url-noaccess, .url-noajax, .url-noscript
-{
+.url-disabled, .url-noaccess, .url-noajax, .url-noscript {
     background-color: #000;
+    color: #fff;
     text-align: center;
+    text-decoration: none;
     font-weight: bold;
     -moz-border-radius: 5px 5px 5px 5px;
     border-radius: 5px 5px 5px 5px;
 }
-a.url-disabled span a, a.url-noaccess span a, a.url-noajax span a, .url-noscript span a
-{
+.url-disabled span a, .url-noaccess span a, .url-noajax span a, .url-noscript span a {
     color: #fff;
     text-decoration: none;
 }
-.url-linkbad
-{
+.url-linkbad {
     background-color: #f00;
+    color: #000;
     text-align: center;
+    text-decoration: none;
     font-weight: bold;
     -moz-border-radius: 5px 5px 5px 5px;
     border-radius: 5px 5px 5px 5px;
 }
-.url-linkbad span a
-{
-    color: #fff;
+.url-linkbad span a {
+    color: #000;
     text-decoration: none;
 }
-.url-linkok, .url-nolinks
-{
+.url-linkok, .url-nolinks {
     background-color: #0f0;
+    color: #000;
     text-align: center;
+    text-decoration: none;
     font-weight: bold;
     -moz-border-radius: 5px 5px 5px 5px;
     border-radius: 5px 5px 5px 5px;
 }
-.url-linkok span a, .url-nolinks span a
-{
+.url-linkok span a, .url-nolinks span a {
     color: #000;
     text-decoration: none;
 }
 
-/* ###### Footer ###### */
 .clearing {
     height: 0;
     margin: 10px;
@@ -604,56 +396,48 @@ a.url-disabled span a, a.url-noaccess span a, a.url-noajax span a, .url-noscript
     color: #666666;
 }
 
-/* blind container clearing float:left/right couples */
+
 .clear {
     clear: both;
     display: block;
     height: 1px;
 }
 
-/* ##### User administration 2.0 ##### */
 
-/* admin form */
 div.input_row {
     margin-bottom: 10px;
 }
 div.input_row label {
     display: block;
-    float: right;
-    text-align: right;
+    float: left;
+    text-align: left;
 }
 div.input_row input {
     background: White;
-    border: 1px solid black;
 }
 div.input_row input[type=text], div.input_row select, div.input_row textarea {
     width: 100%;
     background: White;
-    border: 1px solid black;
 }
 div.button_row {
-
 }
 div.button_row input.submit {
     margin: 0 25px 0 10px;
     display: block;
     float: right;
-    border: 2px solid #696969;
-    background-color: #dcdcdc;
 }
 div.button_row input.reset {
     margin: 0 10px 0 25px;
     display: block;
     float: left;
-    border: 2px solid #696969;
-    background-color: #dcdcdc;
 }
-/* select/unselect all js shortcut links */
+
+
 .select_all, .unselect_all {
     font-size: 80%;
 }
 
-/* message box */
+
 #user_message .error {
     color: red;
     font-weight: bold;
@@ -662,21 +446,51 @@ div.button_row input.reset {
     color: green;
     font-weight: bold;
 }
-/* create user form container */
+
+
 #user_create {
     width: 450px;
 }
-/* container for #user_list */
+
 #user_accounts {
     float: left;
     width: 200px;
 }
 #user_list {}
 #user_list_select {
-    width: 160px;
+    width: 200px;
     margin: 10px;
 }
-/* container for #user_data and #user_rights */
+.user_list_autocomplete {
+    position:absolute;
+    width: 200px;
+    background-color:white;
+    border:1px solid #888;
+    margin:0px;
+    padding:0px;
+}
+.user_list_autocomplete ul {
+    list-style-type:none;
+    margin:0px;
+    padding:0px;
+}
+.user_list_autocomplete ul li.selected {
+    background-color: #ffb;
+    border-top: dashed 1px black;
+    border-bottom: dashed 1px black;
+}
+.user_list_autocomplete ul li {
+    list-style-type:none;
+    display:block;
+    margin:0;
+    padding:2px;
+    height:20px;
+    cursor:pointer;
+
+    border-top: dashed 1px white;
+    border-bottom: dashed 1px white;
+}
+
 #user_details {
     float: right;
     width: 550px;
@@ -685,28 +499,28 @@ div.button_row input.reset {
 }
 #user_data {
     float: left;
-    width: 200px;
+    width: 250px;
     margin: 0 20px 20px 0;
 }
 #user_rights {
     margin: 0 0 20px 200px;
 }
-/* delete confirmation */
+
+
 #user_confirmDelete {
     width: 250px;
 }
 
-/* create group form container */
 #group_create {
     width: 350px;
 }
-/* container for #group_list */
+
 #groups {
     float: left;
     width: 220px;
 }
 #group_list {}
-/* container for #group_data and #group_rights */
+
 #group_details {
     float: right;
     width: 220px;
@@ -717,7 +531,7 @@ div.button_row input.reset {
     margin: 0 0 20px 0;
 }
 #group_rights {}
-/* container for #group_memberList, #group_userList, #group_membershipButtons */
+
 #group_membership {
     float: left;
     width: 340px;
@@ -740,16 +554,17 @@ div.button_row input.reset {
     padding-top: 10px;
 }
 
-/* Tags */
+
 #tags_autocomplete_choices {
     margin: 0;
 }
 #tags_autocomplete_choices li {
     list-style: none;
     background: #FCFCFC;
-    border: 1px solid #D0D9D9;
+    border: 1px solid #656565;
     padding: 2px;
 }
 #tags_autocomplete_choices li.selected {
     background: #EDF2F2;
 }
+*/
