@@ -50,8 +50,8 @@ body { font: .8em 'Trebuchet MS', 'Nimbus Sans L', sans-serif; line-height: 1.6e
 #main #rightmenu h2 { font: bold 1.0em;  height: 18px; padding: 3px; color: #E8EAF6; background-color: #807B77; }
 
 /* Content */
-#content { color: #19191B; margin-right: 215px; }
-#content h2 { color: #160F17; text-indent: 5px; font-size: 120%; border-bottom: 1px solid #160F17; }
+#maincontent { color: #19191B; margin-right: 215px; }
+#maincontent h2 { color: #160F17; text-indent: 5px; font-size: 120%; border-bottom: 1px solid #160F17; }
 
 /* Footer */
 #footer { clear: both; height: 46px; font-size: 85%; color: #160F17; border-top: 1px solid #050110; margin-top: 5px; }
@@ -71,9 +71,9 @@ dt { float: left; width: 200px; }
 dd { margin: 0 0 10px 200px; }
 
 /* Global forms CSS definitions */
-#content textarea { border: 1px solid #050110; width: 85%;  }
-#main #content fieldset { float: left; width: 95%; border: 1px solid #ccc; padding: 10px 8px; margin: 0 10px 8px 0; background: #FFF; color: #000; }
-#main #content fieldset p { width: 95%; }
+#maincontent textarea { border: 1px solid #050110; width: 85%;  }
+#main #maincontent fieldset { float: left; width: 95%; border: 1px solid #ccc; padding: 10px 8px; margin: 0 10px 8px 0; background: #FFF; color: #000; }
+#main #maincontent fieldset p { width: 95%; }
 #main input { padding: 3px; margin: 0; border: 1px solid #bbb }
 
 
@@ -118,7 +118,7 @@ input[type=checkbox].right, input[type=radio].right, input[type=submit].right {
 form br {
     clear: both;
 }
-textarea#content {
+textarea#maincontent {
     width: 755px;
     height: 400px;
 }
