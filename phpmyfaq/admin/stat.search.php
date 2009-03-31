@@ -101,7 +101,7 @@ if ($permission['viewlog']) {
 	<td class="list"><?php print $searchItem['searchterm'] ?></td>
 	<td class="list"><?php print $searchItem['number'] ?></td>
 	<td class="list"><?php print $languageCodes[strtoupper($searchItem['lang'])] ?></td>
-	<td class="list"><img src="<?php print  $self. '?num=' . $num ?>" alt="<?php print $num ?>%" title="<?php print $num ?>%" /></td>
+	<td class="list"><img src="stat.search.php?num=<?php print $num ?>" alt="<?php print $num ?>%" title="<?php print $num ?>%" /></td>
 </tr>
 <?php
 	}
