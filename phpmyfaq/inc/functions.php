@@ -675,7 +675,7 @@ function Tracking($action, $id = 0)
 {
     global $db, $PMF_CONF, $sid, $user, $botBlacklist;
 
-    if (isset($PMF_CONF["main.enableUserTracking"])) {
+    if (isset($PMF_CONF['main.enableUserTracking']) && ($PMF_CONF['main.enableUserTracking'])) {
 
         $bots   = 0;
         $agent  = $_SERVER['HTTP_USER_AGENT'];
