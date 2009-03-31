@@ -44,6 +44,7 @@ $uninst[] = "DROP TABLE ".$sqltblpre."faqquestions";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqright";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqsearches";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqsessions";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqstopwords";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqtags";
 $uninst[] = "DROP TABLE ".$sqltblpre."faquser";
 $uninst[] = "DROP TABLE ".$sqltblpre."faquserdata";
@@ -319,6 +320,13 @@ ip text NOT NULL,
 time int4 NOT NULL,
 PRIMARY KEY (sid)
 )";
+
+//faqstopwords
+$query[] = "CREATE TABLE ".$sqltblpre."faqstopwords (
+id INTEGER NOT NULL,
+lang VARCHAR(5) NOT NULL,
+stopword VARCHAR(64) NOT NULL,
+PRIMARY KEY (id, lang)";
 
 //faqtags
 $query[] = "CREATE TABLE ".$sqltblpre."faqtags (
