@@ -78,8 +78,8 @@ if (isset($action)) {
         <div class="rights">
         </div>
         <div id="languageselection">
-        <?php if (isset($auth) && '' == $action) { ?>
-            <form action="<?php print $_SERVER['PHP_SELF']; ?>?action=<?php print $action; ?>" method="post">
+        <?php if (isset($auth)) { ?>
+            <form action="index.php<?php print (isset($action) ? '?action=' . $action : ''); ?>" method="post">
             <label for="language"><?php print $PMF_LANG['msgLangaugeSubmit']; ?>: </label>
             <?php print selectLanguages($LANGCODE, true); ?>
             </form>
