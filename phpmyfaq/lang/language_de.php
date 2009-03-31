@@ -902,3 +902,4 @@ $PMF_LANG['ad_menu_searchstats'] = 'Suchstatistik';
 $PMF_LANG['ad_searchstats_search_term'] = 'Suchbegriff';
 $PMF_LANG['ad_searchstats_search_term_count'] = 'Anzahl';
 $PMF_LANG['ad_searchstats_search_term_lang'] = 'Sprache';
+$PMF_LANG['ad_searchstats_search_term_percentage'] = 'Anteil';

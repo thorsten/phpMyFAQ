@@ -21,19 +21,36 @@
  * under the License.
  */
 
+if(isset($_GET['num']) && !defined('PMF_ROOT_DIR')) {
+    define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
+    
+    require_once PMF_ROOT_DIR . '/inc/Init.php';
+    PMF_Init::cleanRequest();
+    session_name(PMF_COOKIE_NAME_AUTH . trim($faqconfig->get('main.phpMyFAQToken')));
+    session_start();
+    
+    $num = PMF_Filter::filterInput(INPUT_GET, 'num', FILTER_VALIDATE_FLOAT);
+    if(!is_null($num)) {
+        $bar = new PMF_Bar($num);
+        $bar->renderImage();
+        exit;
+    }
+}
+
 if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
 if ($permission['viewlog']) {
-	
+
     $perpage = 15;
     $pages   = PMF_Filter::filterInput(INPUT_GET, 'pages', FILTER_VALIDATE_INT);
     $page    = PMF_Filter::filterInput(INPUT_GET, 'page' , FILTER_VALIDATE_INT, 1);
     
    	$search = new PMF_Search;
 	$searchesList = $search->getMostPopularSearches(0, true);
+	$searchesCount = $search->getSearchesCount();
     
     if (is_null($pages)) {
         $pages = round((count($searchesList) + ($perpage / 3)) / $perpage, 0);
@@ -50,6 +67,7 @@ if ($permission['viewlog']) {
 	<th class="list"><?php print $PMF_LANG['ad_searchstats_search_term'] ?></th>
 	<th class="list"><?php print $PMF_LANG['ad_searchstats_search_term_count'] ?></th>
 	<th class="list"><?php print $PMF_LANG['ad_searchstats_search_term_lang'] ?></th>
+	<th class="list"><?php print $PMF_LANG['ad_searchstats_search_term_percentage'] ?></th>
 </tr>
 </thead>
    <tfoot>
@@ -62,6 +80,8 @@ if ($permission['viewlog']) {
 
 	$counter = $displayedCounter = 0;
 
+	$self = substr(__FILE__, strlen($_SERVER['DOCUMENT_ROOT']));
+	
 	foreach($searchesList as $searchItem) {
 		
         if ($displayedCounter >= $perpage) {
@@ -74,11 +94,14 @@ if ($permission['viewlog']) {
             continue;
         }
         $displayedCounter++;
+        
+        $num = round($searchItem['number']*100/$searchesCount, 2);
 ?>
 <tr>
 	<td class="list"><?php print $searchItem['searchterm'] ?></td>
 	<td class="list"><?php print $searchItem['number'] ?></td>
 	<td class="list"><?php print $languageCodes[strtoupper($searchItem['lang'])] ?></td>
+	<td class="list"><img src="<?php print  $self. '?num=' . $num ?>" /></td>
 </tr>
 <?php
 	}

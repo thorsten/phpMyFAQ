@@ -30,91 +30,184 @@
  */
 class PMF_Bar
 {
-	/**
-	 * Image resource
-	 * 
-	 * @var resource
-	 */
-	private $image = null;
-	
-	/**
-	 * Number
-	 * 
-	 * @var float
-	 */
-	private $number = 0;
-	
-	/**
-	 * Colored image
-	 * 
-	 * @var boolean
-	 */
-	private $colored = false;
-	
-	/**
-	 * Text color
-	 * 
-	 * @var integer
-	 */
-	private $textcolor = 0;
-	
-	/**
-	 * Background color
-	 * 
-	 * @var integer
-	 */
-	private $backgroundcolor = 0;
-	
-	/**
-	 * Quartiles
-	 * 
-	 * @var array
-	 */
-	private $quartiles = array(25, 50, 75);
-	
-	/**
-	 * Constructor
-	 *
-	 * @param  float   $number  Number for the bar
-	 * @param  boolean $colored Image colored? default: false
-	 * @return void
-	 */
-	public function __construct($number, $colored = false)
-	{
-		$this->number  = $number;
-		$this->colored = $colored;
-		$this->image   = imagecreate(50, 15);
-	}
-	
-	/**
-	 * Sets the quartiles
-	 * 
-	 * @param  array $quartiles Quartiles
-	 * @return void 
-	 */
-	public function setQuartiles(Array $quartiles)
-	{
-		$this->quartiles = $quartiles;
-	}
-	
-	/**
-	 * Returns the quartiles
-	 * 
-	 * @return array
-	 */
-	public function getQuartiles()
-	{
-		return $this->quartiles;
-	}
-	
-	/**
-	 * Rendering of the image
-	 * 
-	 * @return boolean
-	 */
-	public function renderImage()
-	{
-		header ('Content-type: image/png');
-        imagepng($this->image);
-	}
+    /**
+     * Image resource
+     * 
+     * @var resource
+     */
+    private $image = null;
+    
+    /**
+     * Number
+     * 
+     * @var float
+     */
+    private $number = 0;
+    
+    /**
+     * Colored image
+     * 
+     * @var boolean
+     */
+    private $colored = false;
+    
+    /**
+     * Text color
+     * 
+     * @var integer
+     */
+    private $textcolor = 0;
+    
+    /**
+     * Background color
+     * 
+     * @var integer
+     */
+    private $backgroundcolor = 0;
+    
+    /**
+     * Quartiles
+     * 
+     * @var array
+     */
+    private $quartiles = array(25, 50, 75);
+    
+    /**
+     * @return boolean
+     */
+    public function getColored() {
+        return $this->colored;
+    }
+    
+    /**
+     * @return float
+     */
+    public function getNumber() {
+        return $this->number;
+    }
+    
+    /**
+     * @param boolean $colored
+     */
+    public function setColored($colored) {
+        $this->colored = $colored;
+    }
+    
+    /**
+     * @param float $number
+     */
+    public function setNumber($number) {
+        $this->number = $number;
+    }
+    /**
+     * Constructor
+     *
+     * @param  float   $number  Number for the bar
+     * @param  boolean $colored Image colored? default: false
+     * @return void
+     */
+    public function __construct($number = null, $colored = false)
+    {
+        $this->number  = $number;
+        $this->colored = $colored;
+        
+        /**
+         * Initalize default quartiles
+         */
+        $this->quartiles = array('lower_quartile' => array('percentile' => 25,
+                                                           'text_color' => array(255, 255, 255),
+                                                           'bar_color' => array(255, 0, 0)),
+                                 /**
+                                  * Median is currently not used
+                                  */
+                                 'median' => array(),
+                                 'upper_quartile' => array('percentile' => 75,
+                                                           'text_color' => array(255, 255, 255),
+                                                           'bar_color' => array(0, 128, 0)),
+                                 /**
+                                  * This is the difference between the upper and lower quartiles
+                                  */
+                                 'interquartile_range' => array('text_color' => array(255, 255, 255),
+                                                           	    'bar_color' => array(150, 150, 150))
+        
+        );
+    }
+    
+    /**
+     * Sets the quartiles
+     * 
+     * @param  array $quartiles Quartiles of structure:
+     * array(
+     * @return void 
+     */
+    public function setQuartiles(Array $quartiles)
+    {
+        $this->quartiles = $quartiles;
+    }
+    
+    /**
+     * Returns the quartiles
+     * 
+     * @return array
+     */
+    public function getQuartiles()
+    {
+        return $this->quartiles;
+    }
+    
+    /**
+     * Rendering of the image
+     * 
+     * @return boolean
+     */
+    public function renderImage()
+    {
+        header ('Content-type: image/png');
+
+        $this->prepareImage() or $this->resetImage();
+        
+        return imagepng($this->image);
+    }
+    
+    public function prepareImage()
+    {
+        $retval = false;
+        
+        $this->resetImage();
+        
+        if(null !== $this->number) {
+            if($this->colored) {
+                if ($this->number < $this->quartiles['lower_quartile']['percentile']) {
+                    list($r1, $g1, $b1) = $this->quartiles['lower_quartile']['text_color'];
+                    list($r2, $g2, $b2) = $this->quartiles['lower_quartile']['bar_color'];
+                } elseif ($this->number > $this->quartiles['upper_quartile']['percentile']) {
+                    list($r1, $g1, $b1) = $this->quartiles['upper_quartile']['text_color'];
+                    list($r2, $g2, $b2) = $this->quartiles['upper_quartile']['bar_color'];
+                } elseif ($this->number <= $this->quartiles['upper_quartile']['percentile'] &&
+                          $this->number >= $this->quartiles['lower_quartile']['percentile']) {
+                    list($r1, $g1, $b1) = $this->quartiles['interquartile_range']['text_color'];
+                    list($r2, $g2, $b2) = $this->quartiles['interquartile_range']['bar_color'];
+                }
+            } else {
+                list($r1, $g1, $b1) = array(255, 255, 255);
+                list($r2, $g2, $b2) = array(0, 0, 0);
+            }
+            
+            $this->textcolor = imagecolorallocate ($this->image, $r1, $g1, $b1);
+            $barColor        = imagecolorallocate ($this->image, $r2, $g2, $b2);
+            $retval = imagefilledrectangle ($this->image, 0, 0, round(($this->number/100)*50), 15, $barColor);
+            $retval = $retval && imagestring($this->image, 2, 1, 1, $this->number . '%', $this->textcolor);
+        } else {
+            $retval = imagestring($this->image, 1, 5, 5, 'n/a', $this->textcolor);
+        }
+        
+        return $retval;
+    }
+    
+    public function resetImage()
+    {
+        $this->image           = imagecreate(50, 15);
+        $this->backgroundcolor = imagecolorallocate ($this->image, 211, 211, 211);
+        $this->textcolor       = imagecolorallocate ($this->image, 0, 0, 0);
+    }
 }

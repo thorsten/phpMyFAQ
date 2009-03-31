@@ -187,4 +187,18 @@ class PMF_Search
         
         return $searchResult;
     }
+    
+    /**
+     * Returns row count from the faqsearches table
+     * 
+     * @return integer
+     */
+    public function getSearchesCount()
+    {
+    	$sql = 'SELECT COUNT(1) AS count FROM ' . SQLPREFIX . 'faqsearches';
+    	
+    	$result = $this->db->query($sql);
+
+    	return (int) $this->db->fetch_object($result)->count;
+    }
 }
