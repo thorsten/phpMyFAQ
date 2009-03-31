@@ -1226,7 +1226,7 @@ if ($step == 4) {
                     id INTEGER NOT NULL,
                     lang VARCHAR(5) NOT NULL,
                     stopword VARCHAR(64) NOT NULL,
-                    PRIMARY KEY (id, lang)";
+                    PRIMARY KEY (id, lang))";
         
         switch($DB['type']) {
         	case 'sqlite':
