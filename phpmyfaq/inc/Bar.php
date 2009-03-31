@@ -73,33 +73,6 @@ class PMF_Bar
     private $quartiles = array(25, 50, 75);
     
     /**
-     * @return boolean
-     */
-    public function getColored() {
-        return $this->colored;
-    }
-    
-    /**
-     * @return float
-     */
-    public function getNumber() {
-        return $this->number;
-    }
-    
-    /**
-     * @param boolean $colored
-     */
-    public function setColored($colored) {
-        $this->colored = $colored;
-    }
-    
-    /**
-     * @param float $number
-     */
-    public function setNumber($number) {
-        $this->number = $number;
-    }
-    /**
      * Constructor
      *
      * @param  float   $number  Number for the bar
@@ -132,12 +105,51 @@ class PMF_Bar
         
         );
     }
+
+    /**
+     * Returns the colors
+     * 
+     * @return boolean
+     */
+    public function getColored()
+    {
+        return $this->colored;
+    }
+    
+    /**
+     * Returns the number
+     * 
+     * @return float
+     */
+    public function getNumber()
+    {
+        return $this->number;
+    }
+    
+    /**
+     * Sets the color
+     * 
+     * @param boolean $colored Colored?
+     */
+    public function setColored($colored)
+    {
+        $this->colored = $colored;
+    }
+    
+    /**
+     * Sets the number
+     * 
+     * @param float $number Number
+     */
+    public function setNumber($number)
+    {
+        $this->number = $number;
+    }
     
     /**
      * Sets the quartiles
      * 
-     * @param  array $quartiles Quartiles of structure:
-     * array(
+     * @param  array $quartiles Quartiles
      * @return void 
      */
     public function setQuartiles(Array $quartiles)
@@ -164,19 +176,24 @@ class PMF_Bar
     {
         header ('Content-type: image/png');
 
-        $this->prepareImage() or $this->resetImage();
+        $this->prepareImage() || $this->resetImage();
         
         return imagepng($this->image);
     }
     
-    public function prepareImage()
+    /**
+     * Prepares the image for rendering
+     *
+     * @return boolean
+     */
+    private function prepareImage()
     {
         $retval = false;
         
         $this->resetImage();
         
-        if(null !== $this->number) {
-            if($this->colored) {
+        if (null !== $this->number) {
+            if ($this->colored) {
                 if ($this->number < $this->quartiles['lower_quartile']['percentile']) {
                     list($r1, $g1, $b1) = $this->quartiles['lower_quartile']['text_color'];
                     list($r2, $g2, $b2) = $this->quartiles['lower_quartile']['bar_color'];
@@ -196,7 +213,7 @@ class PMF_Bar
             $this->textcolor = imagecolorallocate ($this->image, $r1, $g1, $b1);
             $barColor        = imagecolorallocate ($this->image, $r2, $g2, $b2);
             $retval = imagefilledrectangle ($this->image, 0, 0, round(($this->number/100)*50), 15, $barColor);
-            $retval = $retval && imagestring($this->image, 2, 1, 1, $this->number . '%', $this->textcolor);
+            $retval = $retval && imagestring($this->image, 2, 1, 1, floor($this->number) . '%', $this->textcolor);
         } else {
             $retval = imagestring($this->image, 1, 5, 5, 'n/a', $this->textcolor);
         }
@@ -204,7 +221,12 @@ class PMF_Bar
         return $retval;
     }
     
-    public function resetImage()
+    /**
+     * Resets the image
+     *
+     * @return void
+     */
+    private function resetImage()
     {
         $this->image           = imagecreate(50, 15);
         $this->backgroundcolor = imagecolorallocate ($this->image, 211, 211, 211);
