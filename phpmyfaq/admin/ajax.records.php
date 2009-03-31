@@ -28,6 +28,6 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 
 $ajax_action = PMF_Filter::filterInput(INPUT_POST, 'ajaxaction', FILTER_SANITIZE_STRING);
 
-if ('save_sticky_records' == $ajax_action && $permission['delcomment']) {
+if ('save_sticky_records' == $ajax_action && $permission['editbt']) {
     
 }
