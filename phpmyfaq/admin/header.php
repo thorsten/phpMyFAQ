@@ -204,6 +204,6 @@ if (isset($action)) {
                 </ul>
             </div>
         </div>
-        <div id="leftside">
+        <div id="maincontent">
 <?php } ?>
 
