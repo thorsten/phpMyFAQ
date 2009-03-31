@@ -111,7 +111,9 @@ if ($permission["editbt"] || $permission["delbt"]) {
         </tr>
         </table>
     </fieldset>
+    </form>
 
+    <form id="recordSelection" name="recordSelection" method="post">
     <fieldset>
     <legend><?php print ($action == 'accept' ? $PMF_LANG['ad_menu_entry_aprove'] : $PMF_LANG['ad_menu_entry_edit']); ?></legend>
 <?php
