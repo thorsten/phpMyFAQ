@@ -89,19 +89,19 @@ class PMF_Bar
          */
         $this->quartiles = array('lower_quartile' => array('percentile' => 25,
                                                            'text_color' => array(255, 255, 255),
-                                                           'bar_color' => array(255, 0, 0)),
+                                                           'bar_color'  => array(255, 0, 0)),
                                  /**
                                   * Median is currently not used
                                   */
                                  'median' => array(),
                                  'upper_quartile' => array('percentile' => 75,
                                                            'text_color' => array(255, 255, 255),
-                                                           'bar_color' => array(0, 128, 0)),
+                                                           'bar_color'  => array(0, 128, 0)),
                                  /**
                                   * This is the difference between the upper and lower quartiles
                                   */
                                  'interquartile_range' => array('text_color' => array(255, 255, 255),
-                                                           	    'bar_color' => array(150, 150, 150))
+                                                           	    'bar_color'  => array(150, 150, 150))
         
         );
     }
@@ -206,8 +206,8 @@ class PMF_Bar
                     list($r2, $g2, $b2) = $this->quartiles['interquartile_range']['bar_color'];
                 }
             } else {
-                list($r1, $g1, $b1) = array(255, 255, 255);
-                list($r2, $g2, $b2) = array(0, 0, 0);
+                list($r1, $g1, $b1) = array(0, 0, 0);
+                list($r2, $g2, $b2) = array(211, 211, 211);
             }
             
             $this->textcolor = imagecolorallocate ($this->image, $r1, $g1, $b1);
@@ -229,7 +229,7 @@ class PMF_Bar
     private function resetImage()
     {
         $this->image           = imagecreate(50, 15);
-        $this->backgroundcolor = imagecolorallocate ($this->image, 211, 211, 211);
+        $this->backgroundcolor = imagecolorallocate ($this->image, 255, 255, 255);
         $this->textcolor       = imagecolorallocate ($this->image, 0, 0, 0);
     }
 }
