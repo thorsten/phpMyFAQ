@@ -199,6 +199,11 @@ if (isset($auth) && in_array(true, $permission)) {
             case 'comment':
             	require 'ajax.comment.php';
             	break;
+            	
+            // Records
+            case 'records':	
+                require 'ajax.records.php';
+                break;
             }
         exit();
         }
