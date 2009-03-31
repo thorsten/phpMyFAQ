@@ -88,20 +88,6 @@ if ($permission["editbt"] || $permission["delbt"]) {
 
     $sortby = PMF_Filter::filterInput(INPUT_GET, 'sortby', FILTER_SANITIZE_STRING);
 ?>
-<script type="text/javascript">
-/* <![CDATA[ */
-function saveStickyStatus(ids)
-{
-	var items = [];
-	var data = {action: "ajax", ajax: 'records', ajaxaction: "save_sticky_records"};
-	
-	for(var i = 0; i < ids.length; i++) {
-		data['items[' + i + '][]'] = [ids[i], $('#record_' + ids[i]).attr('lang'), $('#record_' + ids[i]).attr('checked')*1];
-	}
-
-	$.get("index.php", data, null);
-}
-</script>
     <form action="?action=view" method="post">
     <fieldset>
     <legend><?php print $PMF_LANG["msgSearch"]; ?></legend>
@@ -218,6 +204,7 @@ function saveStickyStatus(ids)
 
     if ($num > 0) {
         $old = 0;
+        $all_ids = array();
         foreach ($faq->faqRecords as $record) {
             $catInfo =  '';
             $isBracketOpened = false;
@@ -250,7 +237,7 @@ function saveStickyStatus(ids)
     <tr>
         <th class="listhead"><a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=id&amp;sortby=desc">&uarr;</a>&nbsp;<a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=id&amp;sortby=asc">&darr;</a></th>
         <th class="listhead">&nbsp;</th>
-        <th class="listhead" style="text-align: left"><input type="checkbox" />&nbsp;<?php print $PMF_LANG['ad_record_sticky'] ?></th>
+        <th class="listhead" style="text-align: left"><input type="checkbox" id="category_block_<?php print $cid; ?>" onclick="saveStickyStatusForCategory(<?php print $cid; ?>)" />&nbsp;<?php print $PMF_LANG['ad_record_sticky'] ?></th>
         <th class="listhead"><a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=title&amp;sortby=desc">&uarr;</a>&nbsp;<a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=title&amp;sortby=asc">&darr;</a></th>
         <th class="listhead"><a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=date&amp;sortby=desc">&uarr;</a>&nbsp;<a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=date&amp;sortby=asc">&darr;</a></th>
         <th class="listhead" colspan="2">&nbsp;</th>
@@ -268,7 +255,7 @@ function saveStickyStatus(ids)
     <tr>
         <th class="listhead"><a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=id&amp;sortby=desc">&uarr;</a>&nbsp;<a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=id&amp;sortby=asc">&darr;</a></th>
         <th class="listhead">&nbsp;</th>
-        <th class="listhead" style="text-align: left"><input type="checkbox" />&nbsp;<?php print $PMF_LANG['ad_record_sticky'] ?></th>
+        <th class="listhead" style="text-align: left"><input type="checkbox" id="category_block_<?php print $cid; ?>" onclick="saveStickyStatusForCategory(<?php print $cid; ?>)" />&nbsp;<?php print $PMF_LANG['ad_record_sticky'] ?></th>
         <th class="listhead"><a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=title&amp;sortby=desc">&uarr;</a>&nbsp;<a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=title&amp;sortby=asc">&darr;</a></th>
         <th class="listhead"><a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=date&amp;sortby=desc">&uarr;</a>&nbsp;<a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=date&amp;sortby=asc">&darr;</a></th>
         <th class="listhead" colspan="3">&nbsp;</th>
@@ -284,7 +271,7 @@ function saveStickyStatus(ids)
     <tr>
         <td class="list" style="width: 24px; text-align: right;"><?php print $record['id']; ?></td>
         <td class="list" style="width: 16px;"><?php print $record['lang']; ?></td>
-        <td class="list"><input type="checkbox" lang="<?php print $record['lang'] ?>" onclick="saveStickyStatus([<?php print $record['id'] ?>]);" id="record_<?php print $record['id'] ?>" <?php $record['sticky'] ? print 'checked="checked"' : print '    ' ?> /></td>
+        <td class="list"><input type="checkbox" lang="<?php print $record['lang'] ?>" onclick="saveStickyStatus(<?php print $cid . ', [' . $record['id'] . ']' ?>);" id="record_<?php print $cid . '_' . $record['id'] ?>" <?php $record['sticky'] ? print 'checked="checked"' : print '    ' ?> /></td>
         <td class="list"><a href="?action=editentry&amp;id=<?php print $record['id']; ?>&amp;lang=<?php print $record['lang']; ?>" title="<?php print $PMF_LANG["ad_user_edit"]; ?> '<?php print str_replace("\"", "´", $record['title']); ?>'"><?php print PMF_htmlentities($record['title'], ENT_QUOTES, $PMF_LANG['metaCharset']); ?></a>
 <?php
         if (isset($numCommentsByFaq[$record['id']])) {
@@ -299,6 +286,8 @@ function saveStickyStatus(ids)
     </tr>
 <?php
             $old = $cid;
+            
+            $all_ids[$cid][] = $record['id'];
         }
 ?>
     </tbody>
@@ -306,6 +295,37 @@ function saveStickyStatus(ids)
     </div>
     </fieldset>
     </form>
+
+    <script type="text/javascript">
+    function saveStickyStatusForCategory(id)
+    {
+        var ids = [];
+<?php 
+
+foreach($all_ids as $cat_id => $record_ids) {
+    echo "        ids[$cat_id] = [" . implode(',', $record_ids) . "];\n";
+}
+
+?>
+
+        for(var i = 0; i < ids[id].length; i++) {
+            $('#record_' + id + '_' + ids[id][i]).attr('checked', $('#category_block_' + id).attr('checked'));
+        }
+
+        saveStickyStatus(id, ids[id]);
+    }
+
+    function saveStickyStatus(cid, ids)
+    {
+        var data = {action: "ajax", ajax: 'records', ajaxaction: "save_sticky_records"};
+        
+        for(var i = 0; i < ids.length; i++) {
+            data['items[' + i + '][]'] = [ids[i], $('#record_' + cid + '_' + ids[i]).attr('lang'), $('#record_' + cid + '_' + ids[i]).attr('checked')*1];
+        }
+    
+        $.get("index.php", data, null);
+    }
+    </script>
 <?php
     } else {
         print $PMF_LANG['err_nothingFound'];
