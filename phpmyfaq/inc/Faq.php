@@ -1267,7 +1267,8 @@ class PMF_Faq
                 fd.links_state AS links_state,
                 fd.links_check_date AS links_check_date,
                 fd.date_start AS date_start,
-                fd.date_end AS date_end
+                fd.date_end AS date_end,
+                fd.sticky AS sticky
             FROM
                 %sfaqdata fd
             LEFT JOIN
@@ -1312,7 +1313,8 @@ class PMF_Faq
                 'comment'       => $row->comment,
                 'date'          => makeDate($row->datum),
                 'dateStart'     => $row->date_start,
-                'dateEnd'       => $row->date_end);
+                'dateEnd'       => $row->date_end,
+                'sticky'        => $row->sticky);
         }
     }
 
@@ -2707,5 +2709,22 @@ class PMF_Faq
     public function setLanguage($language)
     {
     	$this->language = $language;
+    }
+    
+    /**
+     * Set or unset a faq item to be sticky 
+     *
+     * @param int $id Record id
+     * @param string $lang language code which is valid with PMF_Init::isASupportedLanguage
+     * @param boolean $isSticky weither or not the record is set to sticky
+     * 
+     * @return void
+     */
+    public function updateRecordSticky($id, $lang, $isSticky)
+    {
+        $sql = "UPDATE " . SQLPREFIX . "faqdata SET sticky = %d WHERE id = %d AND lang = '%s'";
+        $sql = sprintf($sql, (int)$isSticky, $id, $lang);
+        
+        $this->db->query($sql);
     }
 }

@@ -88,6 +88,20 @@ if ($permission["editbt"] || $permission["delbt"]) {
 
     $sortby = PMF_Filter::filterInput(INPUT_GET, 'sortby', FILTER_SANITIZE_STRING);
 ?>
+<script type="text/javascript">
+/* <![CDATA[ */
+function saveStickyStatus(ids)
+{
+	var items = [];
+	var data = {action: "ajax", ajax: 'records', ajaxaction: "save_sticky_records"};
+	
+	for(var i = 0; i < ids.length; i++) {
+		data['items[' + i + '][]'] = [ids[i], $('#record_' + ids[i]).attr('lang'), $('#record_' + ids[i]).attr('checked')*1];
+	}
+
+	$.get("index.php", data, null);
+}
+</script>
     <form action="?action=view" method="post">
     <fieldset>
     <legend><?php print $PMF_LANG["msgSearch"]; ?></legend>
@@ -236,6 +250,7 @@ if ($permission["editbt"] || $permission["delbt"]) {
     <tr>
         <th class="listhead"><a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=id&amp;sortby=desc">&uarr;</a>&nbsp;<a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=id&amp;sortby=asc">&darr;</a></th>
         <th class="listhead">&nbsp;</th>
+        <th class="listhead" style="text-align: left"><input type="checkbox" />&nbsp;<?php print $PMF_LANG['ad_record_sticky'] ?></th>
         <th class="listhead"><a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=title&amp;sortby=desc">&uarr;</a>&nbsp;<a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=title&amp;sortby=asc">&darr;</a></th>
         <th class="listhead"><a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=date&amp;sortby=desc">&uarr;</a>&nbsp;<a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=date&amp;sortby=asc">&darr;</a></th>
         <th class="listhead" colspan="2">&nbsp;</th>
@@ -253,6 +268,7 @@ if ($permission["editbt"] || $permission["delbt"]) {
     <tr>
         <th class="listhead"><a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=id&amp;sortby=desc">&uarr;</a>&nbsp;<a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=id&amp;sortby=asc">&darr;</a></th>
         <th class="listhead">&nbsp;</th>
+        <th class="listhead" style="text-align: left"><input type="checkbox" />&nbsp;<?php print $PMF_LANG['ad_record_sticky'] ?></th>
         <th class="listhead"><a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=title&amp;sortby=desc">&uarr;</a>&nbsp;<a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=title&amp;sortby=asc">&darr;</a></th>
         <th class="listhead"><a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=date&amp;sortby=desc">&uarr;</a>&nbsp;<a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=date&amp;sortby=asc">&darr;</a></th>
         <th class="listhead" colspan="3">&nbsp;</th>
@@ -268,7 +284,8 @@ if ($permission["editbt"] || $permission["delbt"]) {
     <tr>
         <td class="list" style="width: 24px; text-align: right;"><?php print $record['id']; ?></td>
         <td class="list" style="width: 16px;"><?php print $record['lang']; ?></td>
-        <td class="list"><a href="?action=editentry&amp;id=<?php print $record['id']; ?>&amp;lang=<?php print $record['lang']; ?>" title="<?php print $PMF_LANG["ad_user_edit"]; ?> '<?php print str_replace("\"", "´", $record['title']); ?>'"><?php print PMF_htmlentities($record['title'], ENT_QUOTES, $PMF_LANG['metaCharset']); ?></a>
+        <td class="list"><input type="checkbox" lang="<?php print $record['lang'] ?>" onclick="saveStickyStatus([<?php print $record['id'] ?>]);" id="record_<?php print $record['id'] ?>" <?php $record['sticky'] ? print 'checked="checked"' : print '    ' ?> /></td>
+        <td class="list"><a href="?action=editentry&amp;id=<?php print $record['id']; ?>&amp;lang=<?php print $record['lang']; ?>" title="<?php print $PMF_LANG["ad_user_edit"]; ?> '<?php print str_replace("\"", "Â´", $record['title']); ?>'"><?php print PMF_htmlentities($record['title'], ENT_QUOTES, $PMF_LANG['metaCharset']); ?></a>
 <?php
         if (isset($numCommentsByFaq[$record['id']])) {
             print " (".$numCommentsByFaq[$record['id']]." ".$PMF_LANG["ad_start_comments"].")";
@@ -277,7 +294,7 @@ if ($permission["editbt"] || $permission["delbt"]) {
         </td>
         <td class="list" width="50"><?php print substr($record['date'], 0, 10); ?></td>
         <td class="list" width="100"><?php print $linkverifier->getEntryStateHTML($record['id'], $record['lang']); ?></td>
-        <td class="list" width="17"><a href="?action=saveentry&amp;id=<?php print $record['id']; ?>&amp;language=<?php print $record['lang']; ?>&amp;submit%5B0%5D=<?php print urlencode($PMF_LANG["ad_entry_delete"]); ?>" title="<?php print $PMF_LANG["ad_user_delete"]; ?> '<?php print str_replace("\"", "´", $record['title']); ?>'"><img src="images/delete.gif" width="17" height="18" alt="<?php print $PMF_LANG["ad_entry_delete"]; ?>" /></a></td>
+        <td class="list" width="17"><a href="?action=saveentry&amp;id=<?php print $record['id']; ?>&amp;language=<?php print $record['lang']; ?>&amp;submit%5B0%5D=<?php print urlencode($PMF_LANG["ad_entry_delete"]); ?>" title="<?php print $PMF_LANG["ad_user_delete"]; ?> '<?php print str_replace("\"", "Â´", $record['title']); ?>'"><img src="images/delete.gif" width="17" height="18" alt="<?php print $PMF_LANG["ad_entry_delete"]; ?>" /></a></td>
         <td class="list" width="17"><a href="?action=copyentry&amp;id=<?php print $record['id']; ?>&amp;lang=<?php print $record['lang']; ?>">copy</a></td>
     </tr>
 <?php

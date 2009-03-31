@@ -897,9 +897,12 @@ $PMF_LANG['emailRegSubject'] = '[%sitename%] Anmeldung: Neuer Benutzer';
 $PMF_LANG['msgMostPopularSearches'] = 'Die beliebtesten Suchbegriffe sind:';
 $LANG_CONF['main.enableWysiwygEditor'] = array(0 => "checkbox", 1 => "Aktivierung des WYSIWYG Editors (Standard: aktiv)");
 
-// added 2.5.0-beta - 2009-03-20 by Anatoliy
+// added 2.5.0-beta - 2009-03-30 by Anatoliy
 $PMF_LANG['ad_menu_searchstats'] = 'Suchstatistik';
 $PMF_LANG['ad_searchstats_search_term'] = 'Suchbegriff';
 $PMF_LANG['ad_searchstats_search_term_count'] = 'Anzahl';
 $PMF_LANG['ad_searchstats_search_term_lang'] = 'Sprache';
 $PMF_LANG['ad_searchstats_search_term_percentage'] = 'Anteil';
+
+// added 2.5.0-beta - 2009-03-31 by Anatoliy
+$PMF_LANG['ad_record_sticky'] = 'Sticky';

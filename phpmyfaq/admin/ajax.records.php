@@ -26,8 +26,22 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
-$ajax_action = PMF_Filter::filterInput(INPUT_POST, 'ajaxaction', FILTER_SANITIZE_STRING);
+$ajax_action = PMF_Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
 
 if ('save_sticky_records' == $ajax_action && $permission['editbt']) {
+    /**
+     * Expected is an array of the structure:
+     * array( 0 => array((int)id, (string)langugage, (int) checked)),
+     * 	      1 => .....
+     * )
+     */
+    $items = isset($_GET['items']) && is_array($_GET['items']) ? $_GET['items'] : array();
+   
+    $faq = new PMF_Faq();
     
+    foreach($items as $item) {
+        if(is_array($item) && count($item) == 3 && PMF_Init::isASupportedLanguage($item[1])) { 
+            $faq->updateRecordSticky((int)$item[0], addslashes($item[1]), (int)$item[2]);
+        }
+    }
 }
