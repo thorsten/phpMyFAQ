@@ -702,8 +702,8 @@ class PMF_Faq
         
         $query = sprintf(
             "SELECT
-                 id, lang, solution_id, revision_id, active, keywords, thema,
-                 content, author, email, comment, datum, links_state,
+                 id, lang, solution_id, revision_id, active, sticky, keywords, 
+                 thema, content, author, email, comment, datum, links_state, 
                  links_check_date, date_start, date_end
             FROM
                 %s%s fd
@@ -754,6 +754,7 @@ class PMF_Faq
                 'solution_id'   => $row->solution_id,
                 'revision_id'   => $row->revision_id,
                 'active'        => $row->active,
+                'sticky'        => $row->sticky,
                 'keywords'      => $row->keywords,
                 'title'         => $row->thema,
                 'content'       => $content,
@@ -773,6 +774,7 @@ class PMF_Faq
                 'solution_id'   => 42,
                 'revision_id'   => 0,
                 'active'        => 'no',
+                'sticky'        => 0,
                 'keywords'      => '',
                 'title'         => '',
                 'content'       => $PMF_LANG['err_inactiveArticle'],
@@ -808,13 +810,14 @@ class PMF_Faq
             "INSERT INTO
                 %sfaqdata
             VALUES
-                (%d, '%s', %d, %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %d, '%s', '%s')",
+                (%d, '%s', %d, %d, '%s', %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %d, '%s', '%s')",
             SQLPREFIX,
             $record_id,
             $data['lang'],
             $this->getSolutionId(),
             0,
             $data['active'],
+            $data['sticky'],
             $data['keywords'],
             $data['thema'],
             $data['content'],
@@ -846,6 +849,7 @@ class PMF_Faq
             SET
                 revision_id = %d,
                 active = '%s',
+                sticky = %d,
                 keywords = '%s',
                 thema = '%s',
                 content = '%s',
@@ -864,6 +868,7 @@ class PMF_Faq
             SQLPREFIX,
             $data['revision_id'],
             $data['active'],
+            $data['sticky'],
             $data['keywords'],
             $data['thema'],
             $data['content'],
@@ -1115,6 +1120,7 @@ class PMF_Faq
                 'solution_id'   => $row->solution_id,
                 'revision_id'   => $row->revision_id,
                 'active'        => $row->active,
+                'sticky'        => $row->sticky,
                 'keywords'      => $row->keywords,
                 'title'         => $row->thema,
                 'content'       => $content,
@@ -1257,6 +1263,7 @@ class PMF_Faq
                 fd.solution_id AS solution_id,
                 fd.revision_id AS revision_id,
                 fd.active AS active,
+                fd.sticky AS sticky,
                 fd.keywords AS keywords,
                 fd.thema AS thema,
                 fd.content AS content,
@@ -1305,6 +1312,7 @@ class PMF_Faq
                 'solution_id'   => $row->solution_id,
                 'revision_id'   => $row->revision_id,
                 'active'        => $row->active,
+                'sticky'        => $row->sticky,
                 'keywords'      => $row->keywords,
                 'title'         => PMF_htmlentities($row->thema, ENT_QUOTES, $this->pmf_lang['metaCharset']),
                 'content'       => $content,
@@ -1313,8 +1321,7 @@ class PMF_Faq
                 'comment'       => $row->comment,
                 'date'          => makeDate($row->datum),
                 'dateStart'     => $row->date_start,
-                'dateEnd'       => $row->date_end,
-                'sticky'        => $row->sticky);
+                'dateEnd'       => $row->date_end);
         }
     }
 
@@ -2259,6 +2266,7 @@ class PMF_Faq
                 $faq['lang']           = $row->lang;
                 $faq['category_id']    = $row->category_id;
                 $faq['active']         = $row->active;
+                $faq['sticky']         = $row->sticky;
                 $faq['keywords']       = $row->keywords;
                 $faq['topic']          = $row->thema;
                 $faq['content']        = $row->content;
@@ -2329,6 +2337,7 @@ class PMF_Faq
                 fd.lang AS lang,
                 fcr.category_id AS category_id,
                 fd.active AS active,
+                fd.sticky AS sticky,
                 fd.keywords AS keywords,
                 fd.thema AS thema,
                 fd.content AS content,
