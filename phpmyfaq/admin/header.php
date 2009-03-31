@@ -46,7 +46,6 @@ header("Vary: Negotiate,Accept");
     <script type="text/javascript" src="../inc/js/functions.js"></script>
     <script type="text/javascript" src="../inc/js/jquery.min.js"></script>
     <script type='text/javascript' src='../inc/js/plugins/autocomplete/jquery.autocomplete.pack.js'></script>
-    
     <script type="text/javascript" src="editor/tiny_mce.js"></script>
 <?php
     // Add the script.aculo.us libraries only if needed:
@@ -74,44 +73,49 @@ if (isset($action)) {
 <body id="body" dir="<?php print $PMF_LANG["dir"]; ?>">
 <a name="top"></a>
 
-<!-- header -->
-<div id="header">
-    <h1>phpMyFAQ <?php print $faqconfig->get('main.currentVersion'); ?></h1>
-<?php if (isset($auth)) { ?>
-<?php if ('' == $action) { ?>
-    <div id="langform">
-        <form action="<?php print $_SERVER['PHP_SELF']; ?>?action=<?php print $action; ?>" method="post">
-        <label for="language"><?php print $PMF_LANG['msgLangaugeSubmit']; ?></label>
-        <?php print selectLanguages($LANGCODE, true); ?>
-        </form>
+<div id="wrap">
+    <div id="top">
+        <div class="rights">
+        </div>
+        <div id="languageselection">
+        <?php if (isset($auth) && '' == $action) { ?>
+            <form action="<?php print $_SERVER['PHP_SELF']; ?>?action=<?php print $action; ?>" method="post">
+            <label for="language"><?php print $PMF_LANG['msgLangaugeSubmit']; ?>: </label>
+            <?php print selectLanguages($LANGCODE, true); ?>
+            </form>
+        <?php } ?>
+        </div>
+        <div class="lefts">
+            <h1>phpMyFAQ <?php print $faqconfig->get('main.currentVersion'); ?></h1>
+            <?php if (isset($auth)) { ?>
+            <h2><?php print $PMF_LANG['ad_session_expiration']; ?>: <span id="sessioncounter">Loading...</span></h2>
+            <?php } ?>
+        </div>
     </div>
-<?php } ?>
-    <div id="sessionexpiration">
-        <label for="sessioncounter"><?php print $PMF_LANG['ad_session_expiration']; ?></label>
-        <div id="sessioncounter">Loading...</div>
-    </div>
-<div class="clearing">&nbsp;</div>
-<?php } ?>
-</div>
 
 <?php if (isset($auth)) { ?>
-<!-- administration menu -->
-<div id="navcontainer">
-    <ul id="navlist">
-        <li><a href="index.php"><?php print $PMF_LANG['admin_mainmenu_home']; ?></a></li>
-        <li><a href="index.php?action=user"><?php print $PMF_LANG['admin_mainmenu_users']; ?></a></li>
-        <li><a href="index.php?action=content"><?php print $PMF_LANG['admin_mainmenu_content']; ?></a></li>
-        <li><a href="index.php?action=statistics"><?php print $PMF_LANG['admin_mainmenu_statistics']; ?></a></li>
-        <li><a href="index.php?action=export"><?php print $PMF_LANG['admin_mainmenu_exports']; ?></a></li>
-        <li><a href="index.php?action=backup"><?php print $PMF_LANG['admin_mainmenu_backup']; ?></a></li>
-        <li><a href="index.php?action=config"><?php print $PMF_LANG['admin_mainmenu_configuration']; ?></a></li>
-        <li><a class="logout" href="index.php?action=logout"><?php print $PMF_LANG['admin_mainmenu_logout']; ?></a></li>
-    </ul>
-</div>
+    <div id="topmenu">
+        <div class="rights">
+        </div>
+        <div class="lefts">
+            <ul>
+                <li><a href="index.php"><?php print $PMF_LANG['admin_mainmenu_home']; ?></a></li>
+                <li><a href="index.php?action=user"><?php print $PMF_LANG['admin_mainmenu_users']; ?></a></li>
+                <li><a href="index.php?action=content"><?php print $PMF_LANG['admin_mainmenu_content']; ?></a></li>
+                <li><a href="index.php?action=statistics"><?php print $PMF_LANG['admin_mainmenu_statistics']; ?></a></li>
+                <li><a href="index.php?action=export"><?php print $PMF_LANG['admin_mainmenu_exports']; ?></a></li>
+                <li><a href="index.php?action=backup"><?php print $PMF_LANG['admin_mainmenu_backup']; ?></a></li>
+                <li><a href="index.php?action=config"><?php print $PMF_LANG['admin_mainmenu_configuration']; ?></a></li>
+                <li><a class="logout" href="index.php?action=logout"><?php print $PMF_LANG['admin_mainmenu_logout']; ?></a></li>
+            </ul>
+        </div>
+    </div>
 
-<!-- sub-administration menu -->
-<div id="subnavcontainer">
-    <ul id="subnavlist">
+    <div id="main">
+        <div id="rightmenu">
+            <h2>xxx:</h2>
+            <div class="box">
+                <ul>
 <?php
     // check for group support
     $user         = new PMF_User();
@@ -185,12 +189,21 @@ if (isset($action)) {
             addMenuEntry('editconfig,editbt,delbt',              'linkconfig',   'ad_menu_linkconfig', $action);
             break;
         default:
-            print '<li></li>';
+            addMenuEntry('addcateg,editcateg,delcateg',          'addcategory',  'ad_quick_category');
+            addMenuEntry('addbt',                                'editentry',    'ad_quick_record');
+            addMenuEntry('adduser,edituser,deluser',             'user&amp;user_action=add', 'ad_quick_user');
+            if ($groupSupport) {
+                addMenuEntry('adduser,edituser,deluser',         'group&amp;group_action=add', 'ad_quick_group');
+            }
+?>
+            <li><a href="../index.php" title="<?php print PMF_htmlentities($faqconfig->get('main.titleFAQ'), ENT_QUOTES, $PMF_LANG['metaCharset']); ?>"><?php print PMF_htmlentities($faqconfig->get('main.titleFAQ'), ENT_QUOTES, $PMF_LANG['metaCharset']); ?></a></li>
+<?php
             break;
     }
 ?>
-    </ul>
-</div>
+                </ul>
+            </div>
+        </div>
+        <div id="leftside">
 <?php } ?>
-<!-- content of body -->
-<div id="bodyText">
+

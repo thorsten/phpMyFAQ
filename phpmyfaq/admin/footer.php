@@ -26,13 +26,14 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 ?>
-</div>
+        </div>
+    </div>
 
-<div class="clearing"></div>
+    <!-- Footer -->
+    <div id="footer">
+        <div class="right"><?php print $faqconfig->get('main.titleFAQ'); ?> is proudly powered by <strong>phpMyFAQ <?php print $faqconfig->get('main.currentVersion'); ?></strong> | &copy; 2001-2009 <a href="http://www.phpmyfaq.de/" target="_blank">phpMyFAQ Team</a></div>
+    </div>
 
-<!-- Footer -->
-<div id="footer">
-    <div id="copyright"><strong>phpMyFAQ <?php print $PMF_CONF['main.currentVersion']; ?></strong> | &copy; 2001-2009 <a href="http://www.phpmyfaq.de/" target="_blank">phpMyFAQ Team</a></div>
 </div>
 
 <?php

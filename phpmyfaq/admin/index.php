@@ -297,23 +297,6 @@ if (isset($auth) && in_array(true, $permission)) {
         printf('<h2>%s</h2>', $PMF_LANG['ad_pmf_info']);
         $PMF_TABLE_INFO = $db->getTableStatus();
 ?>
-    <div id="quicklinks">
-    <fieldset>
-        <legend><?php print $PMF_LANG['ad_quicklinks']; ?></legend>
-        <ul>
-<?php
-        addMenuEntry('addcateg,editcateg,delcateg',     'addcategory',                  'ad_quick_category');
-        addMenuEntry('addbt',                           'editentry',                    'ad_quick_record');
-        addMenuEntry('adduser,edituser,deluser',        'user&amp;user_action=add',     'ad_quick_user');
-        if ($groupSupport) {
-            addMenuEntry('adduser,edituser,deluser',    'group&amp;group_action=add',   'ad_quick_group');
-        }
-?>
-            <li><a href="../index.php" title="<?php print PMF_htmlentities($faqconfig->get('main.titleFAQ'), ENT_QUOTES, $PMF_LANG['metaCharset']); ?>"><?php print PMF_htmlentities($faqconfig->get('main.titleFAQ'), ENT_QUOTES, $PMF_LANG['metaCharset']); ?></a></li>
-        </ul>
-    </fieldset>
-    </div>
-
     <dl class="table-display">
         <dt><strong><a href="?action=viewsessions"><?php print $PMF_LANG["ad_start_visits"]; ?></a></strong></dt>
         <dd><?php print $PMF_TABLE_INFO[SQLPREFIX."faqsessions"]; ?></dd>
