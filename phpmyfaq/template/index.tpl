@@ -72,6 +72,17 @@
 
 	<div class="rightcolumn">
 		{rightBox}
+                
+            <div class="content">
+                <div id="stickyrecords">
+                <h3>{stickyRecordsHeader}</h3>
+                <ul>
+                    [stickyRecordsList]
+                    <li><a href="{stickyRecordsUrl}">{stickyRecordsTitle}</a></li>
+                    [/stickyRecordsList]
+                </ul>
+                </div>
+           </div>
 	</div>
 
 	<div class="main-content">
