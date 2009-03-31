@@ -1225,8 +1225,8 @@ if ($step == 4) {
         $query[] = "CREATE TABLE ".SQLPREFIX."faqstopwords (
                     id INTEGER NOT NULL,
                     lang VARCHAR(5) NOT NULL,
-                    stopword VARCHAR(6 ) NOT NULL,
-                    PRIMARY KEY (id, lang )";
+                    stopword VARCHAR(64) NOT NULL,
+                    PRIMARY KEY (id, lang)";
     }
 
     // Perform the queries for updating/migrating the database from 2.x
