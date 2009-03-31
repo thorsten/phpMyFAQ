@@ -1227,6 +1227,106 @@ if ($step == 4) {
                     lang VARCHAR(5) NOT NULL,
                     stopword VARCHAR(64) NOT NULL,
                     PRIMARY KEY (id, lang)";
+        
+        switch($DB['type']) {
+        	case 'sqlite':
+                $query[] = "BEGIN TRANSACTION";
+                $query[] = "CREATE TEMPORARY TABLE ".SQLPREFIX."faqdata_temp (
+                    id int(11) NOT NULL,
+                    lang varchar(5) NOT NULL,
+                    solution_id int(11) NOT NULL,
+                    revision_id int(11) NOT NULL DEFAULT 0,
+                    active char(3) NOT NULL,
+                    keywords text DEFAULT NULL,
+                    thema text NOT NULL,
+                    content longtext DEFAULT NULL,
+                    author varchar(255) NOT NULL,
+                    email varchar(255) NOT NULL,
+                    comment char(1) NOT NULL default 'y',
+                    datum varchar(15) NOT NULL,
+                    links_state VARCHAR(7) DEFAULT NULL,
+                    links_check_date INT(11) DEFAULT 0 NOT NULL,
+                    date_start varchar(14) NOT NULL DEFAULT '00000000000000',
+                    date_end varchar(14) NOT NULL DEFAULT '99991231235959',
+                    PRIMARY KEY (id, lang))";
+                $query[] = "INSERT INTO ".SQLPREFIX."faqdata_temp SELECT * FROM ".SQLPREFIX."faqdata";
+                $query[] = "DROP TABLE ".SQLPREFIX."faqdata";
+                $query[] = "CREATE TABLE ".SQLPREFIX."faqdata (
+                    id int(11) NOT NULL,
+                    lang varchar(5) NOT NULL,
+                    solution_id int(11) NOT NULL,
+                    revision_id int(11) NOT NULL DEFAULT 0,
+                    active char(3) NOT NULL,
+                    sticky INTEGER NOT NULL,
+                    keywords text DEFAULT NULL,
+                    thema text NOT NULL,
+                    content longtext DEFAULT NULL,
+                    author varchar(255) NOT NULL,
+                    email varchar(255) NOT NULL,
+                    comment char(1) NOT NULL default 'y',
+                    datum varchar(15) NOT NULL,
+                    links_state VARCHAR(7) DEFAULT NULL,
+                    links_check_date INT(11) DEFAULT 0 NOT NULL,
+                    date_start varchar(14) NOT NULL DEFAULT '00000000000000',
+                    date_end varchar(14) NOT NULL DEFAULT '99991231235959',
+                    PRIMARY KEY (id, lang))";
+                $query[] = "INSERT INTO ".SQLPREFIX."faqdata SELECT id, lang, solution_id, revision_id, active, NULL,
+                    keywords, thema, content, author, email, comment, datum, links_state, links_check_date, date_start,
+                    date_end FROM ".SQLPREFIX."faqdata_temp";
+                $query[] = "DROP TABLE ".SQLPREFIX."faqdata_temp";
+                $query[] = "COMMIT";
+                
+                $query[] = "BEGIN TRANSACTION";
+                $query[] = "CREATE TEMPORARY TABLE ".SQLPREFIX."faqdata_revisions_temp (
+                    id int(11) NOT NULL,
+                    lang varchar(5) NOT NULL,
+                    solution_id int(11) NOT NULL,
+                    revision_id int(11) NOT NULL DEFAULT 0,
+                    active char(3) NOT NULL,
+                    keywords text DEFAULT NULL,
+                    thema text NOT NULL,
+                    content longtext DEFAULT NULL,
+                    author varchar(255) NOT NULL,
+                    email varchar(255) NOT NULL,
+                    comment char(1) NOT NULL default 'y',
+                    datum varchar(15) NOT NULL,
+                    links_state VARCHAR(7) DEFAULT NULL,
+                    links_check_date INT(11) DEFAULT 0 NOT NULL,
+                    date_start varchar(14) NOT NULL DEFAULT '00000000000000',
+                    date_end varchar(14) NOT NULL DEFAULT '99991231235959',
+                    PRIMARY KEY (id, lang))";
+                $query[] = "INSERT INTO ".SQLPREFIX."faqdata_revisions_temp SELECT * FROM ".SQLPREFIX."faqdata_revisions";
+                $query[] = "DROP TABLE ".SQLPREFIX."faqdata_revisions";
+                $query[] = "CREATE TABLE ".SQLPREFIX."faqdata_revisions (
+                    id int(11) NOT NULL,
+                    lang varchar(5) NOT NULL,
+                    solution_id int(11) NOT NULL,
+                    revision_id int(11) NOT NULL DEFAULT 0,
+                    active char(3) NOT NULL,
+                    sticky INTEGER NOT NULL,
+                    keywords text DEFAULT NULL,
+                    thema text NOT NULL,
+                    content longtext DEFAULT NULL,
+                    author varchar(255) NOT NULL,
+                    email varchar(255) NOT NULL,
+                    comment char(1) NOT NULL default 'y',
+                    datum varchar(15) NOT NULL,
+                    links_state VARCHAR(7) DEFAULT NULL,
+                    links_check_date INT(11) DEFAULT 0 NOT NULL,
+                    date_start varchar(14) NOT NULL DEFAULT '00000000000000',
+                    date_end varchar(14) NOT NULL DEFAULT '99991231235959',
+                    PRIMARY KEY (id, lang))";
+                $query[] = "INSERT INTO ".SQLPREFIX."faqdata_revisions SELECT id, lang, solution_id, revision_id, active, NULL,
+                    keywords, thema, content, author, email, comment, datum, links_state, links_check_date, date_start,
+                    date_end FROM ".SQLPREFIX."faqdata_revisions_temp";
+                $query[] = "DROP TABLE ".SQLPREFIX."faqdata_revisions_temp";
+                $query[] = "COMMIT";
+        		break;
+        	default:
+                $query[] = "ALTER TABLE ".SQLPREFIX."faqdata ADD sticky INTEGER NOT NULL AFTER active";
+                $query[] = "ALTER TABLE ".SQLPREFIX."faqdata_revisions ADD sticky INTEGER NOT NULL AFTER active";
+                break;
+        }
     }
 
     // Perform the queries for updating/migrating the database from 2.x
