@@ -10,7 +10,9 @@ Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.5.0-alpha2:
+- added new administration layout (Thorsten)
 - added frontend for search logs statistics (Anatoliy Belsky)
+- added sticky FAQ records (Anatoliy Belsky)
 - ajaxified comment administration (Thorsten)
 - fixed a lot of bugs (Thorsten)
 
@@ -18,11 +20,12 @@ For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.5.0-beta - 2009-
+Version 2.5.0-beta - 2009-04-
 - changed PHP requirement to PHP 5.2 (Thorsten)
 - dropped support for MySQL 4.0 and MaxDB (Thorsten)
 - dropped support for XML-RPC (Thorsten)
 - added new and improved new basic layout theme (Charles A. Landemaine)
+- added new administration layout (Thorsten)
 - added RSS feed for every category (Thorsten)
 - added ability to copy and duplicate FAQ entries (Thorsten)
 - added support for blocks in template engine (Jan Mergler)
@@ -33,6 +36,7 @@ Version 2.5.0-beta - 2009-
 - added enable/disable WYSIWYG Editor flag (Thorsten)
 - added most popular searches list (Thorsten)
 - added frontend for search logs statistics (Anatoliy Belsky)
+- added sticky FAQ records (Anatoliy Belsky)
 - added jQuery as replacement for Prototype/Script.aculo.us (Thorsten)
 - improved user administration frontend (Sarah Hermann)
 - improved performance (Thorsten)
