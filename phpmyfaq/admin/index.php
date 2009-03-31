@@ -369,10 +369,11 @@ if (isset($auth) && in_array(true, $permission)) {
 // User is NOT authenticated
 } else {
 ?>
-    <div class="centerlogin">
-    <form action="index.php" method="post">
-    <fieldset class="login">
-        <legend class="login">phpMyFAQ Login</legend>
+    <div id="main">
+        <div class="centerlogin">
+        <form action="index.php" method="post">
+        <fieldset class="login">
+            <legend class="login">phpMyFAQ Login</legend>
 <?php
     if ($action == "logout") {
         print "<p>".$PMF_LANG["ad_logout"]."</p>";
@@ -383,22 +384,21 @@ if (isset($auth) && in_array(true, $permission)) {
         print "<p><strong>".$PMF_LANG["ad_auth_insert"]."</strong></p>\n";
     }
 ?>
-        <label class="left" for="faqusername"><?php print $PMF_LANG["ad_auth_user"]; ?></label>
-        <input type="text" name="faqusername" id="faqusername" size="20" /><br />
+            <label class="left" for="faqusername"><?php print $PMF_LANG["ad_auth_user"]; ?></label>
+            <input type="text" name="faqusername" id="faqusername" size="20" /><br />
 
-        <label class="left" for="faqpassword"><?php print $PMF_LANG["ad_auth_passwd"]; ?></label>
-        <input type="password" size="20" name="faqpassword" id="faqpassword" /><br />
+            <label class="left" for="faqpassword"><?php print $PMF_LANG["ad_auth_passwd"]; ?></label>
+            <input type="password" size="20" name="faqpassword" id="faqpassword" /><br />
 
-        <input class="submit" style="margin-left: 190px;" type="submit" value="<?php print $PMF_LANG["ad_auth_ok"]; ?>" />
-        <input class="submit" type="reset" value="<?php print $PMF_LANG["ad_auth_reset"]; ?>" />
+            <input class="submit" style="margin-left: 190px;" type="submit" value="<?php print $PMF_LANG["ad_auth_ok"]; ?>" />
+            <input class="submit" type="reset" value="<?php print $PMF_LANG["ad_auth_reset"]; ?>" />
 
-        <p><img src="images/arrow.gif" width="11" height="11" alt="<?php print $PMF_LANG["lostPassword"]; ?>" border="0" /> <a href="password.php" title="<?php print $PMF_LANG["lostPassword"]; ?>">
+            <p><img src="images/arrow.gif" width="11" height="11" alt="<?php print $PMF_LANG["lostPassword"]; ?>" border="0" /> <a href="password.php" title="<?php print $PMF_LANG["lostPassword"]; ?>">
 <?php print $PMF_LANG["lostPassword"]; ?>
 </a></p>
-        <p><img src="images/arrow.gif" width="11" height="11" alt="<?php print PMF_htmlentities($faqconfig->get('main.titleFAQ'), ENT_QUOTES, $PMF_LANG['metaCharset']); ?>" border="0" /> <a href="../index.php" title="<?php print PMF_htmlentities($faqconfig->get('main.titleFAQ'), ENT_QUOTES, $PMF_LANG['metaCharset']); ?>"><?php print PMF_htmlentities($PMF_CONF['main.titleFAQ'], ENT_QUOTES, $PMF_LANG['metaCharset']); ?></a></p>
-    </fieldset>
-    </form>
-    </div>
+            <p><img src="images/arrow.gif" width="11" height="11" alt="<?php print PMF_htmlentities($faqconfig->get('main.titleFAQ'), ENT_QUOTES, $PMF_LANG['metaCharset']); ?>" border="0" /> <a href="../index.php" title="<?php print PMF_htmlentities($faqconfig->get('main.titleFAQ'), ENT_QUOTES, $PMF_LANG['metaCharset']); ?>"><?php print PMF_htmlentities($PMF_CONF['main.titleFAQ'], ENT_QUOTES, $PMF_LANG['metaCharset']); ?></a></p>
+        </fieldset>
+        </form>
 <?php
 }
 
@@ -420,6 +420,6 @@ if (DEBUG) {
     print '</div>';
 }
 
-require_once 'footer.php';
+require 'footer.php';
 
 $db->dbclose();
