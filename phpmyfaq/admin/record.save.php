@@ -79,6 +79,7 @@ if (    isset($submit[2])
     <input type="hidden" name="tags"                value="<?php print $_REQUEST['tags']; ?>" />
     <input type="hidden" name="author"              value="<?php print $_REQUEST['author']; ?>" />
     <input type="hidden" name="email"               value="<?php print $_REQUEST['email']; ?>" />
+    <input type="hidden" name="sticky"              value="<?php print (isset($_REQUEST['sticky']) ? $_REQUEST['sticky'] : ''); ?>" />
 <?php
     foreach ($rubrik as $key => $categories) {
         print '    <input type="hidden" name="rubrik['.$key.']" value="'.$categories.'" />';
@@ -128,6 +129,7 @@ if (    isset($submit[1])
         'solution_id'   => intval($_POST['solution_id']),
         'revision_id'   => $revision_id,
         'active'        => $db->escape_string($_POST['active']),
+        'sticky'        => (int)isset($_POST['sticky']) && 'on' == $_POST['sticky'],
         'thema'         => $db->escape_string($_POST['thema']),
         'content'       => $db->escape_string($_POST['content']),
         'keywords'      => $db->escape_string($_POST['keywords']),

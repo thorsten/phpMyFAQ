@@ -74,6 +74,7 @@ if ($permission["editbt"]) {
         $recordData     = array(
             'lang'          => $db->escape_string($_POST['language']),
             'active'        => $db->escape_string($_POST['active']),
+            'sticky'        => (int)isset($_POST['sticky']) && 'on' == $_POST['sticky'],
             'thema'         => $db->escape_string($_POST['thema']),
             'content'       => $db->escape_string($_POST['content']),
             'keywords'      => $db->escape_string($_POST['keywords']),
@@ -154,6 +155,7 @@ if ($permission["editbt"]) {
     <input type="hidden" name="tags"                value="<?php print $_POST['tags']; ?>" />
     <input type="hidden" name="author"              value="<?php print $_POST['author']; ?>" />
     <input type="hidden" name="email"               value="<?php print $_POST['email']; ?>" />
+    <input type="hidden" name="sticky"              value="<?php print (isset($_REQUEST['sticky']) ? $_REQUEST['sticky'] : ''); ?>" />
 <?php
         foreach ($rubrik as $key => $categories) {
             print '    <input type="hidden" name="rubrik['.$key.']" value="'.$categories.'" />';

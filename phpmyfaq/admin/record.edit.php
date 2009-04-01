@@ -77,6 +77,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
         $faqData['comment']     = $_REQUEST["comment"];
         $faqData['solution_id'] = (int)$_REQUEST['solution_id'];
         $faqData['revision_id'] = isset($_REQUEST['revision_id']) ? (int)$_REQUEST['revision_id'] : 0;
+        $faqData['sticky']      = $_REQUEST['sticky'];
         $tags                   = $_REQUEST["tags"];
         $changed                = $_REQUEST["changed"];
         if (isset($_REQUEST['dateStart'])) {
@@ -292,6 +293,9 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     <label class="left" for="active"><?php print $PMF_LANG["ad_entry_active"]; ?></label>
     <input type="radio" id="active" name="active" class="active" value="yes"<?php if (isset($suf)) { print $suf; } ?> /> <?php print $PMF_LANG['ad_gen_yes']; ?> <input type="radio" name="active" class="active" value="no"<?php if (isset($sul)) { print $sul; } ?> /> <?php print $PMF_LANG['ad_gen_no']; ?><br />
 
+	<label class="left" for="sticky"><?php print $PMF_LANG['ad_entry_sticky']; ?>:</label>
+	<input type="checkbox" id="sticky" name="sticky" <?php print (isset($faqData['sticky']) && $faqData['sticky'] ? 'checked="checked"' : '') ?> /><br />
+
 <?php
     if (isset($faqData['comment']) && $faqData['comment'] == 'y') {
         $suf = ' checked="checked"';
@@ -327,7 +331,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 ?>
     <label class="left" for="userpermission"><?php print $PMF_LANG['ad_entry_userpermission']; ?></label>
     <input type="radio" id="userpermission" name="userpermission" class="active" value="all" <?php print ($all_users ? 'checked="checked"' : ''); ?>/> <?php print $PMF_LANG['ad_entry_all_users']; ?> <input type="radio" name="userpermission" class="active" value="restricted" <?php print ($restricted_users ? 'checked="checked"' : ''); ?>/> <?php print $PMF_LANG['ad_entry_restricted_users']; ?> <select name="restricted_users" size="1"><?php print $user->getAllUserOptions($user_permission[0]); ?></select><br />
-
+	
     </fieldset>
 
     <fieldset class="fullwidth">
