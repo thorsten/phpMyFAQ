@@ -300,20 +300,19 @@ if ($permission['editbt'] || $permission['delbt']) {
     <script type="text/javascript">
     function saveStickyStatusForCategory(id)
     {
-        var ids = [];
+        var id_map = [];
 <?php 
 
 foreach($all_ids as $cat_id => $record_ids) {
-    echo "        ids[$cat_id] = [" . implode(',', $record_ids) . "];\n";
+    echo "        id_map[$cat_id] = [" . implode(',', $record_ids) . "];\n";
 }
 
-?>
-
-        for(var i = 0; i < ids[id].length; i++) {
-            $('#record_' + id + '_' + ids[id][i]).attr('checked', $('#category_block_' + id).attr('checked'));
+?>        
+        for(var i = 0; i < id_map[id].length; i++) {
+            $('#record_' + id + '_' + id_map[id][i]).attr('checked', $('#category_block_' + id).attr('checked'));
         }
 
-        saveStickyStatus(id, ids[id]);
+        saveStickyStatus(id, id_map[id]);
     }
 
     function saveStickyStatus(cid, ids)
@@ -322,8 +321,16 @@ foreach($all_ids as $cat_id => $record_ids) {
         
         for(var i = 0; i < ids.length; i++) {
             data['items[' + i + '][]'] = [ids[i], $('#record_' + cid + '_' + ids[i]).attr('lang'), $('#record_' + cid + '_' + ids[i]).attr('checked')*1];
+
+            /**
+             * Updating the current record if it's also contained in another category
+             */
+           var same_records = $('input').filter(function(){return this.id.match(new RegExp('record_(\\d+)_' + ids[i]));});
+    		for(var j = 0; j<same_records.length; j++) {
+    			$('#' + same_records[j].id).attr('checked', $('#record_' + cid + '_' + ids[i]).attr('checked'));
+    		}
         }
-    
+        
         $.get("index.php", data, null);
     }
     </script>
