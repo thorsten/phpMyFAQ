@@ -907,3 +907,4 @@ $PMF_LANG['ad_searchstats_search_term_percentage'] = 'Anteil';
 // added 2.5.0-beta - 2009-03-31 by Anatoliy
 $PMF_LANG['ad_record_sticky'] = 'Sticky';
 $PMF_LANG['ad_entry_sticky'] = 'Sticky';
+$PMF_LANG['stickyRecordsHeader'] = 'Sticky Records';
