@@ -43,7 +43,7 @@ if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE)) {
 }
 
 $faq     = new PMF_Faq();
-$rssData = $faq->getAllOpenQuestions();
+$rssData = $faq->getAllOpenQuestions(false);
 $num     = count($rssData);
 
 $rss = new XMLWriter();
