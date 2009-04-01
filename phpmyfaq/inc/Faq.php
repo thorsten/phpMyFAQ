@@ -334,6 +334,7 @@ class PMF_Faq
             SELECT
                 fd.id AS id,
                 fd.lang AS lang,
+                fd.sticky AS sticky,
                 fd.thema AS thema,
                 fcr.category_id AS category_id,
                 fv.visits AS visits
@@ -372,7 +373,7 @@ class PMF_Faq
             AND
                 %s
             ORDER BY
-                %s.%s %s",
+                %s.sticky DESC, %s.%s %s",
             SQLPREFIX,
             SQLPREFIX,
             SQLPREFIX,
@@ -383,6 +384,7 @@ class PMF_Faq
             $category_id,
             $this->language,
             $permPart,
+            $current_table,
             $current_table,
             $this->db->escape_string($orderby),
             $this->db->escape_string($sortby));
@@ -432,10 +434,11 @@ class PMF_Faq
                 $oLink->itemTitle = $row->thema;
                 $oLink->text = $title;
                 $oLink->tooltip = $title;
-                $listItem = sprintf('<li>%s<br /><span class="little">(%d %s)</span></li>',
+                $listItem = sprintf('<li>%s<br /><span class="little">(%d %s)</span>%s</li>',
                     $oLink->toHtmlAnchor(),
                     $visits,
-                    $this->pmf_lang['msgViews']);
+                    $this->pmf_lang['msgViews'],
+                    ($row->sticky == 1) ? '<br /><br />' : '');
 
                 $output .= $listItem;
             }
