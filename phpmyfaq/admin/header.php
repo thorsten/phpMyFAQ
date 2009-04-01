@@ -112,7 +112,7 @@ if (isset($action)) {
     </div>
 
     <div id="main">
-        <div id="rightmenu">
+        <div id="leftmenu">
             <h2>2nd level menu</h2>
             <div class="box">
                 <ul>

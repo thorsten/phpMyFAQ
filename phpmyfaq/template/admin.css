@@ -45,12 +45,13 @@ body { font: .8em 'Trebuchet MS', 'Nimbus Sans L', sans-serif; line-height: 1.6e
 #main { margin: 5px 0 5px; padding: ;color: #19191B; padding-top: 5px; }
 
 /* 2nd level menu */
-#main #rightmenu { width: 200px; float: right; background: #FFF; margin-right: 0px; color: #666; } 
-#main #rightmenu .box { background: #efefef; margin-bottom: 10px; padding: 5px; color: #666; }
-#main #rightmenu h2 { font: bold 1.0em;  height: 18px; padding: 3px; color: #E8EAF6; background-color: #807B77; }
+#main #leftmenu { width: 200px; margin-left: 0px; float: left; } 
+#main #leftmenu .box { background: #efefef; margin-bottom: 10px; color: #666; border-top: 1px solid #807B77; }
+#main #leftmenu h2 { font: bold 1.0em;  height: 18px; padding: 3px; color: #E8EAF6; background-color: #807B77; }
+#main #leftmenu li { padding-bottom: 3px; border-bottom: 1px solid #807B77; }
 
 /* Content */
-#maincontent { color: #19191B; margin-right: 215px; }
+#maincontent { color: #19191B; margin-left: 215px; }
 #maincontent h2 { color: #160F17; text-indent: 5px; font-size: 120%; border-bottom: 1px solid #160F17; }
 
 /* Footer */
