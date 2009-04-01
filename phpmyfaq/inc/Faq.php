@@ -1697,15 +1697,10 @@ class PMF_Faq
      * @param   integer
      * @param   string
      * @return  array
-     * @access  private
-     * @author  Robin Wood <robin@digininja.org>
-     * @author  Thorsten Rinne <thorsten@rinne.info>
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
-     * @since   2005-03-06
      */
-    function getTopTenData($count = PMF_NUMBER_RECORDS_TOPTEN, $categoryId = 0, $language = null)
+    private function getTopTenData($count = PMF_NUMBER_RECORDS_TOPTEN, $categoryId = 0, $language = null)
     {
-        global $sids, $PMF_CONF;
+        global $sids;
 
         if ($this->groupSupport) {
             $permPart = sprintf("( fdg.group_id IN (%s)
@@ -1810,14 +1805,10 @@ class PMF_Faq
      * @param   integer
      * @param   string
      * @return  array
-     * @access  public
-     * @author  Robin Wood <robin@digininja.org>
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
-     * @since   2005-03-06
      */
-    function getLatestData($count = PMF_NUMBER_RECORDS_LATEST, $language = null)
+    private function getLatestData($count = PMF_NUMBER_RECORDS_LATEST, $language = null)
     {
-        global $sids, $PMF_CONF;
+        global $sids;
 
         if ($this->groupSupport) {
             $permPart = sprintf("( fdg.group_id IN (%s)
@@ -2735,5 +2726,125 @@ class PMF_Faq
         $sql = sprintf($sql, (int)$isSticky, $id, $lang);
         
         $this->db->query($sql);
+    }
+    
+    /**
+     * Returns the sticky records with URL and Title
+     * 
+     * @return array
+     */
+    private function getStickyRecordsData()
+    {
+        global $sids;
+        
+        if ($this->groupSupport) {
+            $permPart = sprintf("AND
+                ( fdg.group_id IN (%s)
+            OR
+                (fdu.user_id = %d AND fdg.group_id IN (%s)))",
+                implode(', ', $this->groups),
+                $this->user,
+                implode(', ', $this->groups));
+        } else {
+            $permPart = sprintf("AND
+                ( fdu.user_id = %d OR fdu.user_id = -1 )",
+                $this->user);
+        }
+        
+        
+        $now = date('YmdHis');
+        $query = sprintf("
+            SELECT
+                fd.id AS id,
+                fd.lang AS lang,
+                fd.thema AS thema,
+                fcr.category_id AS category_id
+            FROM
+                %sfaqdata fd
+            LEFT JOIN
+                %sfaqcategoryrelations fcr
+            ON
+                fd.id = fcr.record_id
+            AND
+                fd.lang = fcr.record_lang
+            LEFT JOIN
+                %sfaqdata_group AS fdg
+            ON
+                fd.id = fdg.record_id
+            LEFT JOIN
+                %sfaqdata_user AS fdu
+            ON
+                fd.id = fdu.record_id
+            WHERE
+                fd.lang = '%s'
+            AND 
+                fd.date_start <= '%s'
+            AND 
+                fd.date_end   >= '%s'
+            AND 
+                fd.active = 'yes'
+            AND 
+                fd.sticky = 1
+            %s",
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            SQLPREFIX,
+            $this->language,
+            $now,
+            $now,
+            $permPart);
+
+        $result = $this->db->query($query);
+        $sticky = array();
+        $data   = array();
+
+        $oldId = 0;
+        while (($row = $this->db->fetch_object($result))) {
+            if ($oldId != $row->id) {
+                $data['thema'] = $row->thema;
+
+                $title = PMF_htmlentities($row->thema, ENT_QUOTES, $this->pmf_lang['metaCharset']);
+                $url   = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                            $sids,
+                            $row->category_id,
+                            $row->id,
+                            $row->lang);
+                $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
+                $oLink->itemTitle = $row->thema;
+                $oLink->tooltip = $title;
+                $data['url'] = $oLink->toString();
+
+                $sticky[] = $data;
+            }
+            $oldId = $row->id;
+        }
+
+        return $sticky;
+    }
+    
+    /**
+     * Prepares and returns the sticky records for the frontend
+     * 
+     * @return array
+     */
+    public function getStickyRecords()
+    {
+        $result = $this->getStickyRecordsData();
+        $output = array();
+
+        if (count($result) > 0) {
+            foreach ($result as $row) {
+                $shortTitle = PMF_Utils::makeShorterText(PMF_htmlentities($row['thema'],
+                                                         ENT_QUOTES,
+                                                         $this->pmf_lang['metaCharset']), 8);
+                $output['title'][]  = $shortTitle;
+                $output['url'][]    = $row['url'];
+            }
+        } else {
+            $output['error'] = $this->pmf_lang['err_noTopTen'];
+        }
+
+        return $output;
     }
 }
