@@ -2097,10 +2097,11 @@ class PMF_Faq
     /**
      * Returns all open questions
      *
-     * @return  array
-     * @access  public
-     * @since   2007-02-11
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  $all boolean If true, then return visible and unvisble questions; otherwise only visible ones
+     * @return array
+     * @access public
+     * @since  2007-02-11
+     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
      function getAllOpenQuestions()
      {
@@ -2111,19 +2112,22 @@ class PMF_Faq
                 id, ask_username, ask_usermail, ask_rubrik, ask_content, ask_date, is_visible
             FROM
                 %sfaqquestions
-            ORDER BY ask_date ASC",
-            SQLPREFIX);
+            %s
+            ORDER BY 
+                ask_date ASC",
+            SQLPREFIX,
+            ($all == false ? "WHERE is_visible = 'Y'" : ''));
 
         if ($result = $this->db->query($query)) {
             while ($row = $this->db->fetch_object($result)) {
                 $questions[] = array(
-                    'id'            => $row->id,
-                    'user'          => $row->ask_username,
-                    'email'         => $row->ask_usermail,
-                    'category'      => $row->ask_rubrik,
-                    'question'      => $row->ask_content,
-                    'date'          => $row->ask_date,
-                    'is_visible'    => $row->is_visible);
+                    'id'         => $row->id,
+                    'user'       => $row->ask_username,
+                    'email'      => $row->ask_usermail,
+                    'category'   => $row->ask_rubrik,
+                    'question'   => $row->ask_content,
+                    'date'       => $row->ask_date,
+                    'is_visible' => $row->is_visible);
             }
         }
         return $questions;

@@ -50,7 +50,7 @@ $rss .= "<description>".htmlspecialchars($PMF_CONF['main.metaDescription'])."</d
 $rss .= "<link>".PMF_Link::getSystemUri('/feed/openquestions/rss.php')."</link>\n";
 
 $faq = new PMF_Faq($db, $LANGCODE);
-$rssData = $faq->getAllOpenQuestions();
+$rssData = $faq->getAllOpenQuestions(false);
 $num = count($rssData);
 
 if ($num > 0) {
