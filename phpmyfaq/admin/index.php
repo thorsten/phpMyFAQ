@@ -284,6 +284,7 @@ if (isset($auth) && in_array(true, $permission)) {
             // functions for config administration
             case 'config':                  require_once 'configuration.php'; break;
             case 'linkconfig':              require_once 'linkconfig.main.php'; break;
+            case 'stopwordsconfig':         require_once 'stopwordsconfig.main.php'; break;
             // functions for backup administration
             case 'backup':                  require_once 'backup.main.php'; break;
             case 'restore':                 require_once 'backup.import.php'; break;
