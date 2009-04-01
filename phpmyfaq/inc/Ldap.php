@@ -53,7 +53,7 @@ class PMF_Ldap
      *
      * @var string
      */
-    private $error = null;
+    public $error = null;
 
     /**
      * Constructor
