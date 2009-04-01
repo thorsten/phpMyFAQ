@@ -194,32 +194,3 @@ if (    isset($submit[1])
         $category->addPermission('group', $categories, $group_allowed);
     }
 }
-
-if (isset($submit[0])) {
-    if ($permission["delbt"])    {
-        if (isset($_REQUEST["thema"]) && $_REQUEST["thema"] != "") {
-            $thema = "<strong>".$_REQUEST["thema"]."</strong>";
-        } else {
-            $thema = '';
-        }
-        if (isset($_REQUEST["author"]) && $_REQUEST["author"] != "") {
-            $author = $PMF_LANG["ad_entry_del_2"]."<strong>".$_REQUEST["author"]."</strong>";
-        } else {
-            $author = '';
-        }
-?>
-    <p align="center"><?php print $PMF_LANG["ad_entry_del_1"]." ".$thema." ".$author." ".$PMF_LANG["ad_entry_del_3"]; ?></p>
-    <div align="center">
-    <form action="?action=delentry" method="post">
-        <input type="hidden" name="referer" value="<?php print $_SERVER["HTTP_REFERER"]; ?>">
-        <input type="hidden" name="id" value="<?php print (int)$_REQUEST["id"]; ?>">
-        <input type="hidden" name="language" value="<?php print $_REQUEST["language"]; ?>">
-        <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_gen_yes"] ?>" name="subm">
-        <input class="submit" type="submit" value="<?php print $PMF_LANG["ad_gen_no"] ?>" name="subm">
-    </form>
-    </div>
-<?php
-    } else {
-        print $PMF_LANG["err_NotAuth"];
-    }
-}

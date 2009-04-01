@@ -48,4 +48,22 @@ if ('save_sticky_records' == $ajax_action && $permission['editbt']) {
 
 if ('delete_record' == $ajax_action && $permission['delbt']) {
 	
+    $record_id   = PMF_Filter::filterInput(INPUT_POST, 'record_id', FILTER_VALIDATE_INT);
+    $record_lang = PMF_Filter::filterInput(INPUT_POST, 'record_lang', FILTER_SANITIZE_STRING);
+    
+    adminlog('Beitragdel, ' . $record_id);
+
+    $path = PMF_ROOT_DIR . '/attachments/' . $record_id . '/';
+    if (@is_dir($path)) {
+        $do = dir($path);
+        while ($dat = $do->read()) {
+            if ($dat != "." && $dat != "..") {
+                unlink($path . $dat);
+            }
+        }
+        rmdir($path);
+    }
+    
+    $faq->deleteRecord($record_id, $record_lang);
+    print utf8_encode($PMF_LANG['ad_entry_delsuc']);
 }

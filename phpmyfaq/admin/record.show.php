@@ -269,7 +269,7 @@ if ($permission['editbt'] || $permission['delbt']) {
 <?php
             }
 ?>
-    <tr>
+    <tr class="record_<?php print $record['id']; ?>_<?php print $record['lang']; ?>">
         <td class="list" style="width: 24px; text-align: right;"><?php print $record['id']; ?></td>
         <td class="list" style="width: 16px;"><?php print $record['lang']; ?></td>
         <td class="list"><input type="checkbox" lang="<?php print $record['lang'] ?>" onclick="saveStickyStatus(<?php print $cid . ', [' . $record['id'] . ']' ?>);" id="record_<?php print $cid . '_' . $record['id'] ?>" <?php $record['sticky'] ? print 'checked="checked"' : print '    ' ?> /></td>
@@ -278,11 +278,10 @@ if ($permission['editbt'] || $permission['delbt']) {
         if (isset($numCommentsByFaq[$record['id']])) {
             print " (".$numCommentsByFaq[$record['id']]." ".$PMF_LANG["ad_start_comments"].")";
         }
-?>
-        </td>
+?></td>
         <td class="list" width="50"><?php print substr($record['date'], 0, 10); ?></td>
         <td class="list" width="100"><?php print $linkverifier->getEntryStateHTML($record['id'], $record['lang']); ?></td>
-        <td class="list" width="17"><a href="?action=saveentry&amp;id=<?php print $record['id']; ?>&amp;language=<?php print $record['lang']; ?>&amp;submit%5B0%5D=<?php print urlencode($PMF_LANG["ad_entry_delete"]); ?>" title="<?php print $PMF_LANG["ad_user_delete"]; ?> '<?php print str_replace("\"", "´", $record['title']); ?>'"><img src="images/delete.gif" width="17" height="18" alt="<?php print $PMF_LANG["ad_entry_delete"]; ?>" /></a></td>
+        <td class="list" width="17"><a href="#" onclick="javascript:deleteRecord(<?php print $record['id']; ?>, '<?php print $record['lang']; ?>');" title="<?php print $PMF_LANG["ad_user_delete"]; ?> '<?php print str_replace("\"", "´", $record['title']); ?>'"><img src="images/delete.gif" width="17" height="18" alt="<?php print $PMF_LANG["ad_entry_delete"]; ?>" /></a></td>
         <td class="list" width="17"><a href="?action=copyentry&amp;id=<?php print $record['id']; ?>&amp;lang=<?php print $record['lang']; ?>">copy</a></td>
     </tr>
 <?php
@@ -298,23 +297,35 @@ if ($permission['editbt'] || $permission['delbt']) {
     </form>
 
     <script type="text/javascript">
+
+    /**
+     * Saves the sticky record status for the whole category
+     *
+     * @param  integer id id
+     * @return void
+     */
     function saveStickyStatusForCategory(id)
     {
-        var id_map = [];
+    	var id_map = [];
 <?php 
-
 foreach($all_ids as $cat_id => $record_ids) {
     echo "        id_map[$cat_id] = [" . implode(',', $record_ids) . "];\n";
 }
-
-?>        
+?>
         for(var i = 0; i < id_map[id].length; i++) {
-            $('#record_' + id + '_' + id_map[id][i]).attr('checked', $('#category_block_' + id).attr('checked'));
+        	$('#record_' + id + '_' + id_map[id][i]).attr('checked', $('#category_block_' + id).attr('checked'));
         }
 
         saveStickyStatus(id, id_map[id]);
     }
 
+    /**
+     * Ajax call for saving the sticky record status
+     *
+     * @param  integer cid category id
+     * @param  integer ids ids
+     * @return void
+     */
     function saveStickyStatus(cid, ids)
     {
         var data = {action: "ajax", ajax: 'records', ajaxaction: "save_sticky_records"};
@@ -322,16 +333,36 @@ foreach($all_ids as $cat_id => $record_ids) {
         for(var i = 0; i < ids.length; i++) {
             data['items[' + i + '][]'] = [ids[i], $('#record_' + cid + '_' + ids[i]).attr('lang'), $('#record_' + cid + '_' + ids[i]).attr('checked')*1];
 
-            /**
-             * Updating the current record if it's also contained in another category
-             */
-           var same_records = $('input').filter(function(){return this.id.match(new RegExp('record_(\\d+)_' + ids[i]));});
-    		for(var j = 0; j<same_records.length; j++) {
-    			$('#' + same_records[j].id).attr('checked', $('#record_' + cid + '_' + ids[i]).attr('checked'));
-    		}
+            // Updating the current record if it's also contained in another category
+            var same_records = $('input').filter(function(){return this.id.match(new RegExp('record_(\\d+)_' + ids[i]));});
+            for (var j = 0; j<same_records.length; j++) {
+                $('#' + same_records[j].id).attr('checked', $('#record_' + cid + '_' + ids[i]).attr('checked'));
+            }
         }
-        
+    
         $.get("index.php", data, null);
+    }
+
+    /**
+     * Ajax call for deleting records
+     *
+     * @param  integer record_id   Record id
+     * @param  string  record_lang Record language
+     * @return void
+     */
+    function deleteRecord(record_id, record_lang)
+    {
+        if (confirm('<?php print $PMF_LANG["ad_entry_del_1"] . " " . $PMF_LANG["ad_entry_del_3"]; ?>')) {
+            $.ajax({
+                type:    "POST",
+                url:     "index.php?action=ajax&ajax=records&ajaxaction=delete_record",
+                data:    "record_id=" + record_id + "&record_lang=" + record_lang,
+                success: function(msg) {
+                    $('.record_' + record_id + '_' + record_lang).fadeOut('slow');
+                    $('.record_' + record_id + '_' + record_lang).after('<tr><td colspan="8">' + msg + '</td></tr>');
+                }
+            });
+        }
     }
     </script>
 <?php
