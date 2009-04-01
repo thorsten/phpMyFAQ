@@ -1,13 +1,14 @@
 <?php
 /**
- * $Id: record.show.php,v 1.48 2008-01-26 10:35:16 thorstenr Exp $
- *
  * Shows the list of records ordered by categories
  *
- * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author      Minoru TODA <todam@netjapan.co.jp>
- * @since       2003-02-23
- * @copyright   (c) 2003-2007 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage Administration
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     Minoru TODA <todam@netjapan.co.jp>
+ * @since      2003-02-23
+ * @version    SVN: $Id$
+ * @copyright  2003-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -27,7 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 
 printf("<h2>%s</h2>\n", $PMF_LANG['ad_entry_aor']);
 
-if ($permission["editbt"] || $permission["delbt"]) {
+if ($permission['editbt'] || $permission['delbt']) {
     // (re)evaluate the Category object w/o passing the user language
     $category = new PMF_Category($current_admin_user, $current_admin_groups, false);
     $category->transform(0);
@@ -51,20 +52,19 @@ if ($permission["editbt"] || $permission["delbt"]) {
     $currentcategory  = 0;
     $orderby          = 1;
     $sortby           = null;
-
-    if (isset($_REQUEST['linkstate'])) {
+    $linkState        = PMF_Filter::filterInput(INPUT_POST, 'linkstate', FILTER_SANITIZE_STRING);
+    $searchcat        = PMF_Filter::filterInput(INPUT_POST, 'searchcat', FILTER_VALIDATE_INT);
+    $searchterm       = PMF_Filter::filterInput(INPUT_POST, 'searchterm', FILTER_SANITIZE_STRIPPED);
+    
+    if (!is_null($linkState)) {
         $cond[SQLPREFIX.'faqdata.links_state'] = 'linkbad';
-        $linkState = ' checked="checked" ';
-        $internalSearch .= '&amp;linkstate=linkbad';
+        $linkState                             = ' checked="checked" ';
+        $internalSearch                       .= '&amp;linkstate=linkbad';
     }
-
-    $searchcat = PMF_Filter::filterInput(INPUT_POST, 'searchcat', FILTER_VALIDATE_INT);
     if (!is_null($searchcat)) {
-        $internalSearch .= "&amp;searchcat=".$searchcat;
+        $internalSearch .= "&amp;searchcat=" . $searchcat;
         $cond[SQLPREFIX.'faqcategoryrelations.category_id'] = array_merge(array($searchcat), $category->getChildNodes($searchcat));
     }
-
-    $searchterm = PMF_Filter::filterInput(INPUT_POST, 'searchterm', FILTER_SANITIZE_STRIPPED);
 
     if ($action == 'accept') {
         $active = 'no';
@@ -72,6 +72,7 @@ if ($permission["editbt"] || $permission["delbt"]) {
 
     $currentcategory = PMF_Filter::filterInput(INPUT_GET, 'category', FILTER_VALIDATE_INT);
     $orderby         = PMF_Filter::filterInput(INPUT_GET, 'orderby', FILTER_SANITIZE_STRING, 1);
+    $sortby          = PMF_Filter::filterInput(INPUT_GET, 'sortby', FILTER_SANITIZE_STRING);
     if ($orderby != 1) {
         switch ($orderby) {
             case 'id':
@@ -85,8 +86,6 @@ if ($permission["editbt"] || $permission["delbt"]) {
                 break;
         }
     }
-
-    $sortby = PMF_Filter::filterInput(INPUT_GET, 'sortby', FILTER_SANITIZE_STRING);
 ?>
     <form action="?action=view" method="post">
     <fieldset>
