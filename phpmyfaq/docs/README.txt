@@ -12,15 +12,17 @@ Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 Changes since 2.0.12:
 - added new blocked words for spam protection (Kai)
 - fixed redirect problem with multiviews in .htaccess (Antonio)
+- fixed problem with visible questions in RSS feed (Thorsten)
 - minor bugfixes (Thorsten)
 
 For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.0.13 - 2009-03-
+Version 2.0.13 - 2009-04-
 - added new blocked words for spam protection (Kai)
 - fixed redirect problem with multiviews in .htaccess (Antonio)
+- fixed problem with visible questions in RSS feed (Thorsten)
 - minor bugfixes (Thorsten)
 
 Version 2.0.12 - 2009-02-17
