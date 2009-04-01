@@ -586,7 +586,6 @@ class PMF_Category
 
         if (strlen($this->language) > 0) {
             $query .= sprintf(" AND fd.lang = '%s'",
-                SQLPREFIX,
                 $this->language);
         }
 
