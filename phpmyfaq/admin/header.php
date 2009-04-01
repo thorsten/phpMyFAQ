@@ -185,8 +185,9 @@ if (isset($action)) {
             break;
         case 'config':
         case 'linkconfig':
-            addMenuEntry('editconfig',                           'config',       'ad_menu_editconfig', $action);
-            addMenuEntry('editconfig,editbt,delbt',              'linkconfig',   'ad_menu_linkconfig', $action);
+            addMenuEntry('editconfig',                           'config',          'ad_menu_editconfig', $action);
+            addMenuEntry('editconfig,editbt,delbt',              'linkconfig',      'ad_menu_linkconfig', $action);
+            addMenuEntry('editconfig',                           'stopwordsconfig', 'ad_menu_stopwordsconfig', $action);
             break;
         default:
             addMenuEntry('addcateg,editcateg,delcateg',          'addcategory',  'ad_quick_category');
