@@ -25,22 +25,10 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
-if (!$permission['editconfig']) {
-    exit();
-}
-
-// actions defined by url: user_action=
-$userAction = PMF_Filter::filterInput(INPUT_GET, 'config_action', FILTER_SANITIZE_STRING, 'listConfig');
-
-// Save the configuration
-if ('save' == $userAction) {
-    
-} else if ('load' == $userAction) {
-    
-    
-}
-
+if ($permission['editconfig']) {
+    printf('<h2>%s</h2', $PMF_LANG['ad_menu_stopwordsconfig']);
 ?>
+
 <table class="list">
 <tr>
     <td>
@@ -247,3 +235,7 @@ function addStopWordInputElem()
 } 
 /* ]]> */
 </script>
+<?php
+} else {
+    print $PMF_LANG['err_NotAuth'];
+}
