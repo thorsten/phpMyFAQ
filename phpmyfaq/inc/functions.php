@@ -1514,29 +1514,6 @@ function alignTablePrefix($query, $oldvalue, $newvalue)
     return $query;
 }
 
-/**
- * This function takes care of safely removing slashes
- * not really needed for escaping characters on PMF 1.5.3 and above
- * (see instead PMF DB population on 1.5.2 and below)
- *
- * @param   string
- * @return  string
- * @access  public
- * @since   2005-11-28
- * @author  Matteo Scaramuccia <matteo@phpmyfaq.de>
- */
-function fixslashes($text)
-{
-    $fixedtext = $text;
-    // Check if the line must be fixed...
-    if (!(false === strpos($fixedtext, "\\"))) {
-        // ... and fix it!
-        $fixedtext = preg_replace("/(\\\\)([^\w\s\\\\])/", "$2", $fixedtext);
-    }
-
-    return $fixedtext;
-}
-
 //
 // LDAP FUNCTIONS
 //
