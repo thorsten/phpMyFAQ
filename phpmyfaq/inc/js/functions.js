@@ -252,25 +252,3 @@ function table_addRow(table, rowNumber, col1, col2)
     tr.appendChild(td1);
     tr.appendChild(td2);
 }
-
-/**
- * Hide a <div> container
- *
- * @param  string
- * @return void
- */
-function hide(id)
-{
-    document.getElementById(id).style.display = 'none';
-}
-
-/**
- * Show a <div> container
- *
- * @param  string
- * @return void
- */
-function show(id)
-{
-    document.getElementById(id).style.display = 'block';
-}
