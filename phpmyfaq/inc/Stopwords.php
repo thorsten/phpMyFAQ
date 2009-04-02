@@ -149,4 +149,27 @@ class PMF_Stopwords
         
         return $this->db->num_rows($result) > 0;
     }
+    
+    
+    /**
+     * Retrieve all the stop words by a certain language
+     * 
+     * @param string $lang Language to retrieve stop words by
+     * 
+     * @return array
+     */
+    public function getByLang($lang)
+    {
+        $sql = sprintf("SELECT * FROM $this->table_name WHERE lang = '%s'", $lang);
+        
+        $result = $this->db->query($sql);
+        
+        $retval = array();
+        
+        while(($row = $this->db->fetch_object($result)) == true) {
+            $retval[] = $row; 
+        }
+        
+        return $retval;
+    }
 }
