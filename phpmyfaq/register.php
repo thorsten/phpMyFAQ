@@ -5,11 +5,12 @@
  * User may register but registration is only knowlegded for registration.
  * Admin will receive email and has to activate this user.
  *
- * @package     phpMyFAQ
- * @author      Elger Thiele <elger@phpmyfaq.de>
- * @since       2008-01-25
- * @version     SVN: $Id$
- * @copyright   (c) 2008-2009 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage Frontend
+ * @author     Elger Thiele <elger@phpmyfaq.de>
+ * @since      2008-01-25
+ * @version    SVN: $Id$
+ * @copyright  2008-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -28,29 +29,28 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 // Settings
-$selectSize = 10;
-$defaultUserAction = 'list';
-$defaultUserStatus = 'blocked';
-$loginMinLength = 4;
+$selectSize         = 10;
+$defaultUserAction  = 'list';
+$defaultUserStatus  = 'blocked';
+$loginMinLength     = 4;
 $loginInvalidRegExp = '/(^[^a-z]{1}|[\W])/i';
 
 $errorMessages = array(
-    'addUser_password'              => $PMF_LANG['ad_user_error_password'],
-    'addUser_passwordsDontMatch'    => $PMF_LANG['ad_user_error_passwordsDontMatch'],
-    'addUser_loginExists'           => $PMF_LANG["ad_adus_exerr"],
-    'addUser_loginInvalid'          => $PMF_LANG['ad_user_error_loginInvalid'],
-    'addUser_noEmail'               => $PMF_LANG['ad_user_error_noEmail'],
-    'addUser_noRealName'            => $PMF_LANG['ad_user_error_noRealName'],
-    'delUser'                       => $PMF_LANG['ad_user_error_delete'],
-    'delUser_noId'                  => $PMF_LANG['ad_user_error_noId'],
-    'delUser_protectedAccount'      => $PMF_LANG['ad_user_error_protectedAccount'],
-    'updateUser'                    => $PMF_LANG['ad_msg_mysqlerr'],
-    'updateUser_noId'               => $PMF_LANG['ad_user_error_noId'],
-    'updateRights'                  => $PMF_LANG['ad_msg_mysqlerr'],
-    'updateRights_noId'             => $PMF_LANG['ad_user_error_noId']);
+    'addUser_password'           => $PMF_LANG['ad_user_error_password'],
+    'addUser_passwordsDontMatch' => $PMF_LANG['ad_user_error_passwordsDontMatch'],
+    'addUser_loginExists'        => $PMF_LANG["ad_adus_exerr"],
+    'addUser_loginInvalid'       => $PMF_LANG['ad_user_error_loginInvalid'],
+    'addUser_noEmail'            => $PMF_LANG['ad_user_error_noEmail'],
+    'addUser_noRealName'         => $PMF_LANG['ad_user_error_noRealName'],
+    'delUser'                    => $PMF_LANG['ad_user_error_delete'],
+    'delUser_noId'               => $PMF_LANG['ad_user_error_noId'],
+    'delUser_protectedAccount'   => $PMF_LANG['ad_user_error_protectedAccount'],
+    'updateUser'                 => $PMF_LANG['ad_msg_mysqlerr'],
+    'updateUser_noId'            => $PMF_LANG['ad_user_error_noId'],
+    'updateRights'               => $PMF_LANG['ad_msg_mysqlerr'],
+    'updateRights_noId'          => $PMF_LANG['ad_user_error_noId']);
 
-$captcha = new PMF_Captcha($sids);
-
+$captcha   = new PMF_Captcha($sids);
 $loginname = PMF_Filter::filterInput(INPUT_POST, 'loginname', FILTER_SANITIZE_STRING);
 $lastname  = PMF_Filter::filterInput(INPUT_POST, 'lastname', FILTER_SANITIZE_STRING);
 $email     = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
@@ -60,12 +60,7 @@ if (!$captcha->checkCaptchaCode($code)) {
     $captchaError = $PMF_LANG['captchaError'];
 }
 
-/**
- * in this case captchure is true
- * this sequenze is copied from admin user
- * @see admin/user.php for more details
- */
-if ($loginname != '' && $lastname != '' && $email != '' && !isset($captchaError)) {
+if (!is_null($loginname) && !is_null($lastname) && !is_null($email) && !isset($captchaError)) {
 
     $user     = new PMF_User();
     $message  = '';
@@ -77,33 +72,24 @@ if ($loginname != '' && $lastname != '' && $email != '' && !isset($captchaError)
     $user_password = '';
     $user_email    = $email;
 
-    // check e-mail. TODO: MAIL ADRESS VALIDATOR
-    if ($user_email == "") {
-        $user_password = "";
-        $user_password_confirm = "";
-        $messages[] = $errorMessages['addUser_password'];
-    }
-    // check e-mail.
-    if (!checkEmail($user_email)) {
-        $user_email = "";
-        $messages[] = $errorMessages['addUser_noEmail'];
-    }
     // check login name
     $user->setLoginMinLength($loginMinLength);
     $user->setLoginInvalidRegExp($loginInvalidRegExp);
     if (!$user->isValidLogin($user_name)) {
-        $user_name = "";
+        $user_name  = '';
         $messages[] = $errorMessages['addUser_loginInvalid'];
     }
     if ($user->getUserByLogin($user_name)) {
-        $user_name = "";
+        $user_name  = '';
         $messages[] = $errorMessages['addUser_loginExists'];
     }
+    
     // check realname
-    if ($user_realname == "") {
-        $user_realname = "";
-        $messages[] = $errorMessages['addUser_noRealName'];
+    if ($user_realname == '') {
+        $user_realname = '';
+        $messages[]    = $errorMessages['addUser_noRealName'];
     }
+    
     // ok, let's go
     if (count($messages) == 0) {
         // Create user account (login and password)
@@ -119,15 +105,20 @@ if ($loginname != '' && $lastname != '' && $email != '' && !isset($captchaError)
             // set user status
             $user->setStatus($defaultUserStatus);
 
-            //mail
-            $text = "New user has been registrated:\n\nUsername: ".$lastname."\nLoginname: ".$loginname."\n\nTo activate this user do please use the administration interface.";
-            mail(
-                $IDN->encode($PMF_CONF['main.administrationMail']),
-                PMF_Utils::resolveMarkers($PMF_LANG['emailRegSubject']),
-                $text,
-                "From: ".$IDN->encode($PMF_CONF['main.administrationMail'])
-            );
-
+            $text = sprintf("New user has been registrated:\n\nUsername: %s\nLoginname: %s\n\n" .
+                            "To activate this user do please use the administration interface.",
+                            $lastname,
+                            $loginname,
+            
+            $mail = new PMF_Mail();
+            $mail->unsetFrom();
+            $mail->setFrom($user_email);
+            $mail->addTo($faqconfig->get('main.administrationMail'));
+            $mail->subject = PMF_Utils::resolveMarkers($PMF_LANG['emailRegSubject']);
+            $mail->message = $text;
+            $result = $mail->send();
+            unset($mail);
+            
             header("Location: index.php?action=thankyou");
             exit;
         }
@@ -141,9 +132,9 @@ if ($loginname != '' && $lastname != '' && $email != '' && !isset($captchaError)
         $tpl->processTemplate('writeContent', array(
             'regErrors'               => sprintf("<strong>%s</strong> <br /> - %s <br /><br />", $PMF_LANG['msgRegError'], implode("<br />- ", $messages)),
             'msgUserData'             => $PMF_LANG['msgUserData'],
-            'login_errorRegistration' => ($loginname == "") ? $PMF_LANG['errorRegistration'] : '',
-            'name_errorRegistration'  => ($lastname == "") ? $PMF_LANG['errorRegistration'] : '',
-            'email_errorRegistration' => ($email == "") ? $PMF_LANG['errorRegistration'] : '',
+            'login_errorRegistration' => (!is_null($loginname)) ? $PMF_LANG['errorRegistration'] : '',
+            'name_errorRegistration'  => (!is_null($lastname)) ? $PMF_LANG['errorRegistration'] : '',
+            'email_errorRegistration' => (!is_null($email)) ? $PMF_LANG['errorRegistration'] : '',
             'loginname'               => $PMF_LANG["ad_user_loginname"],
             'lastname'                => $PMF_LANG["ad_user_realname"],
             'email'                   => $PMF_LANG["ad_entry_email"],
@@ -161,9 +152,9 @@ if ($loginname != '' && $lastname != '' && $email != '' && !isset($captchaError)
     $tpl->processTemplate('writeContent', array(
         'regErrors'               => '',
         'msgUserData'             => $PMF_LANG['msgUserData'],
-        'login_errorRegistration' => ($loginname == "") ? $PMF_LANG['errorRegistration'] : '',
-        'name_errorRegistration'  => ($lastname == "") ? $PMF_LANG['errorRegistration'] : '',
-        'email_errorRegistration' => ($email == "") ? $PMF_LANG['errorRegistration'] : '',
+        'login_errorRegistration' => '',
+        'name_errorRegistration'  => '',
+        'email_errorRegistration' => '',
         'loginname'               => $PMF_LANG["ad_user_loginname"],
         'lastname'                => $PMF_LANG["ad_user_realname"],
         'email'                   => $PMF_LANG["ad_entry_email"],
