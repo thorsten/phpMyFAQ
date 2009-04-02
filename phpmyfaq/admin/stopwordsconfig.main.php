@@ -44,7 +44,7 @@ if ('save' == $userAction) {
 <table class="list">
 <tr>
     <td>
-    <select onchange="loadStopWordsByLang(this.options[this.selectedIndex].value)">
+    <select onchange="loadStopWordsByLang(this.options[this.selectedIndex].value)" id="stopwords_lang_selector">
     <option value="none">---</option>
 <?php 
     foreach($languageCodes as $key => $value) {
@@ -63,6 +63,12 @@ if ('save' == $userAction) {
 </table>
 <script type="text/javascript">
 /* <![CDATA[ */
+
+/**
+ * column count in the stop words table
+ */
+var max_cols = 4;
+
 
 /**
  * Load stop words by language, build html and put 
@@ -100,22 +106,21 @@ function buildStopWordsHTML(data)
         return '';
     }
     
-    var html = '<table>';
-    var attrs = 'onblur="saveStopWord(this.id)" onkeydown="saveStopWord(this.id, event)" onfocus="saveOldValue(this.id)"';
-    var elem_id, max_cols = 4;
+    var html = '<table class="list">';
+    var elem_id;
     for(var i = 0; i < data.length; i++) {
 
         if(i % max_cols == 0) {
-            html += '<tr>';
+            html += '<tr id="stopwords_group_' + i + '">';
         }
         
         /**
-         * id atribut is of the format stopword_<id>_<lang>
+         * id atribute is of the format stopword_<id>_<lang>
          */
-        elem_id = 'stopword_' + data[i].id + '_' + data[i].lang;
+        elem_id = buildStopWordInputElemId(data[i].id, data[i].lang);
         
         html += '<td>';
-        html += '<input id="' + elem_id + '" value="' + data[i].stopword + '" ' + attrs + ' />';
+        html += buildStopWordInputElement(elem_id, data[i].stopword);
         html += '</td>';
 
         if(i % max_cols == max_cols - 1) {
@@ -124,8 +129,43 @@ function buildStopWordsHTML(data)
     }
 
     html += '</table>';
+    html += '<a href="javascript: addStopWordInputElem();"><img src="images/add.gif" /></a>'
 
     return html;   
+}
+
+function buildStopWordInputElement(elem_id, stopword)
+{
+    elem_id = elem_id || buildStopWordInputElemId();
+    stopword = stopword || '';
+    var attrs = 'onblur="saveStopWord(this.id)" onkeydown="saveStopWord(this.id, event)" onfocus="saveOldValue(this.id)"';
+    var element = '<input id="' + elem_id + '" value="' + stopword + '" ' + attrs + ' />';
+
+    return element;
+}
+
+/**
+ * Id atribute is of the format stopword_<id>_<lang>
+ *
+ * @param integer id database id of the word
+ * @param string lang
+ *
+ * @return string 
+ */
+function buildStopWordInputElemId(id, lang)
+{
+    id = id || -1;
+    lang = lang || $('#stopwords_lang_selector').val();
+    
+    return 'stopword_' + id + '_' + lang;
+}
+
+
+function parseStopWordInputElemId(elem_id)
+{
+    var info = elem_id.split('_');
+
+    return {id: info[1], lang: info[2]};
 }
 
 function saveStopWord(elem_id, e)
@@ -144,17 +184,22 @@ function saveStopWord(elem_id, e)
             return;
         }
     }
+
+    var info =  parseStopWordInputElemId(elem_id);
+
+    if(0 > info.id && '' == $('#' + elem_id).attr('value')) {
+        $('#' + elem_id).remove();
+        return;
+    }
     
-    if($('#' + elem_id).attr('old_value') != $('#' + elem_id).attr('value')) {
-        var info = elem_id.split('_');
-        
+    if($('#' + elem_id).attr('old_value') != $('#' + elem_id).attr('value')) {        
         $.get("index.php",
               {action: "ajax",
                ajax: 'config',
                ajaxaction: "save_stop_word",
-               stopword_id: info[1],
+               stopword_id: info.id,
                stopword: $('#' + elem_id).val(),
-               stopwords_lang: info[2]}
+               stopwords_lang: info.lang}
           );
     }
 }
@@ -166,7 +211,7 @@ function saveOldValue(elem_id)
 
 function deleteStopWord(elem_id)
 {
-    var info = elem_id.split('_');
+    var info = parseStopWordInputElemId(elem_id);
 
     $('#' + elem_id).fadeOut('slow');
     
@@ -174,12 +219,24 @@ function deleteStopWord(elem_id)
             {action: "ajax",
              ajax: 'config',
              ajaxaction: "delete_stop_word",
-             stopword_id: info[1],
-             stopwords_lang: info[2]},
+             stopword_id: info.id,
+             stopwords_lang: info.lang},
             function (){
-                 loadStopWordsByLang(info[2])
+                 loadStopWordsByLang(info.lang)
             }
         );
+}
+
+function addStopWordInputElem() {
+    trs = $('#stopwords_content').children('table').children('tbody').children('tr');
+    
+    if(trs[trs.length-1].childNodes.length < max_cols) {
+        $('#' + trs[trs.length-1].id).html($('#' + trs[trs.length-1].id).html() + buildStopWordInputElement());
+        trs[trs.length-1].lastChild.focus();
+    } else {
+        var next_row = '<tr id="stopwords_group_' + trs.length + '">' + buildStopWordInputElement() + '</tr>';
+        $('#' + trs[trs.length-1].id).after(next_row);
+    }
 }
 /* ]]> */
 </script>
