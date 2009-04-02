@@ -36,10 +36,10 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     $current_category = '';
     $categories       = array();
     $faqData          = array(
-        'id'            => 0,
-        'lang'          => $LANGCODE,
-        'revision_id'   => 0,
-        'title'         => '');
+        'id'          => 0,
+        'lang'        => $LANGCODE,
+        'revision_id' => 0,
+        'title'       => '');
 
     $tagging = new PMF_Tags();
 
@@ -167,10 +167,11 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
         $revisions = $faq->getRevisionIds($faqData['id'], $faqData['lang']);
         if (count($revisions)) {
 ?>
-    <form id="selectRevision" name="selectRevision" action="?action=editentry&amp;id=<?php print $faqData['id']; ?>&amp;lang=<?php print $faqData['lang']; ?>" method="post" />
+
+    <form id="selectRevision" name="selectRevision" action="?action=editentry&amp;id=<?php print $faqData['id']; ?>&amp;lang=<?php print $faqData['lang']; ?>" method="post">
     <fieldset>
     <legend><?php print $PMF_LANG['ad_changerev']; ?></legend>
-        <select name="revisionid_selected" onChange="selectRevision.submit();" />
+        <select name="revisionid_selected" onchange="selectRevision.submit();">
             <option value="<?php print $faqData['revision_id']; ?>"><?php print $PMF_LANG['ad_changerev']; ?></option>
 <?php foreach ($revisions as $_revision_id => $_revision_data) { ?>
             <option value="<?php print $_revision_data['revision_id']; ?>" <?php if ($revisionid_selected == $_revision_data['revision_id']) { print 'selected="selected"'; } ?> ><?php print $PMF_LANG['ad_entry_revision'].' 1.'.$_revision_data['revision_id'].': '.makeDate($_revision_data['datum'])." - ".$_revision_data['author']; ?></option>
