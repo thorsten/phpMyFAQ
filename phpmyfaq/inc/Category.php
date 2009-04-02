@@ -651,7 +651,7 @@ class PMF_Category
                 $num_entries = sprintf(' (%d %s ',
                                         $number[$parent],
                                         $PMF_LANG['msgEntries']);
-                $num_entries .= sprintf(' <a href="feed/category/rss.php?category_id=%d&category_lang=%s" target="_blank"><img id="category_%d_RSS" src="images/rss.png" width="28" height="16" alt="RSS" /></a>)',
+                $num_entries .= sprintf(' <a href="feed/category/rss.php?category_id=%d&category_lang=%s" target="_blank"><img id="category_%d_RSS" src="images/feed.png" width="16" height="16" alt="RSS" /></a>)',
                                         $parent,
                                         $this->language,
                                         $parent);

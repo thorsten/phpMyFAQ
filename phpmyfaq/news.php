@@ -45,7 +45,7 @@ $faqsession->userTracking('news_view', $id);
 
 // Define the header of the page
 $writeNewsHeader = PMF_htmlentities($PMF_CONF['main.titleFAQ'], ENT_QUOTES, $PMF_LANG['metaCharset']).$PMF_LANG['msgNews'];
-$writeNewsRSS = '<a href="feed/news/rss.php" target="_blank"><img id="newsRSS" src="images/rss.png" width="28" height="16" alt="RSS" /></a>';
+$writeNewsRSS    = '&nbsp;<a href="feed/news/rss.php" target="_blank"><img id="newsRSS" src="images/feed.png" width="16" height="16" alt="RSS" /></a>';
 
 // Get all data from the news record
 $news = $oNews->getNewsEntry($news_id);
