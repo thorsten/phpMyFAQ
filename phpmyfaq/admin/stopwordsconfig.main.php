@@ -180,17 +180,12 @@ function saveStopWord(elem_id, e)
             } else {
                 $('#' + elem_id).blur();
             }
-    
-            return;
         }
-    }
 
-    var info =  parseStopWordInputElemId(elem_id);
-
-    if(0 > info.id && '' == $('#' + elem_id).attr('value')) {
-        $('#' + elem_id).remove();
         return;
     }
+    
+    var info =  parseStopWordInputElemId(elem_id);
     
     if($('#' + elem_id).attr('old_value') != $('#' + elem_id).attr('value')) {        
         $.get("index.php",
@@ -201,6 +196,11 @@ function saveStopWord(elem_id, e)
                stopword: $('#' + elem_id).val(),
                stopwords_lang: info.lang}
           );
+    } else {
+        if(0 > info.id && '' == $('#' + elem_id).attr('value')) {
+            $('#' + elem_id).remove();
+            return;
+        }
     }
 }
 
@@ -227,16 +227,23 @@ function deleteStopWord(elem_id)
         );
 }
 
-function addStopWordInputElem() {
-    trs = $('#stopwords_content').children('table').children('tbody').children('tr');
+function addStopWordInputElem()
+{
+    var word = prompt('<?php print $PMF_LANG["ad_config_stopword_input"]?>', '');
+    var lang = $('#stopwords_lang_selector').val();
     
-    if(trs[trs.length-1].childNodes.length < max_cols) {
-        $('#' + trs[trs.length-1].id).html($('#' + trs[trs.length-1].id).html() + buildStopWordInputElement());
-        trs[trs.length-1].lastChild.focus();
-    } else {
-        var next_row = '<tr id="stopwords_group_' + trs.length + '">' + buildStopWordInputElement() + '</tr>';
-        $('#' + trs[trs.length-1].id).after(next_row);
+    if(!!word) {
+       $.get("index.php",
+       {action: "ajax",
+        ajax: 'config',
+        ajaxaction: "save_stop_word",
+        stopword: word,
+        stopwords_lang: lang},
+        function (){
+            loadStopWordsByLang(lang)
+       }
+       );
     }
-}
+} 
 /* ]]> */
 </script>

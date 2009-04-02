@@ -921,3 +921,4 @@ $PMF_LANG['stickyRecordsHeader'] = 'Sticky Records';
 
 // added 2.5.0-beta - 2009-04-01 by Anatoliy
 $PMF_LANG['ad_menu_stopwordsconfig'] = 'Stop Words';
+$PMF_LANG['ad_config_stopword_input'] = 'Add new stop word';
