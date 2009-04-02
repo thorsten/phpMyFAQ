@@ -78,7 +78,11 @@ function loadStopWordsByLang(lang)
 
 
 /**
- * Supposed is stop words json data
+ * Build complete html contents to view and edit stop words 
+ *
+ * @param array data Supposed is stop words json data
+ *
+ * @return string
  */
 function buildStopWordsHTML(data)
 {
@@ -114,6 +118,15 @@ function buildStopWordsHTML(data)
     return html;   
 }
 
+
+/**
+ * Build an input element to view and edit stop word
+ *
+ * @param string elem_id id of the html element
+ * @param string stopword
+ *
+ * @return string
+ */
 function buildStopWordInputElement(elem_id, stopword)
 {
     elem_id = elem_id || buildStopWordInputElemId();
@@ -140,7 +153,13 @@ function buildStopWordInputElemId(id, lang)
     return 'stopword_' + id + '_' + lang;
 }
 
-
+/**
+ * Parse the stopword element id and return a clean object
+ * 
+ * @param string elem_id input element id
+ *
+ * @return object
+ */
 function parseStopWordInputElemId(elem_id)
 {
     var info = elem_id.split('_');
@@ -148,6 +167,14 @@ function parseStopWordInputElemId(elem_id)
     return {id: info[1], lang: info[2]};
 }
 
+/**
+ * Handle enter press on a stop word input element
+ * 
+ * @param string elem_id input element id
+ * @param object e event
+ *
+ * @return void 
+ */
 function saveStopWordHandleEnter(elem_id, e)
 {
     e = e || window.event || undefined;
@@ -165,6 +192,13 @@ function saveStopWordHandleEnter(elem_id, e)
     }
 }
 
+/**
+ * Save stopword doing an ajax call
+ * 
+ * @param string elem_id input element id
+ *
+ * @return void
+ */
 function saveStopWord(elem_id)
 {
     var info =  parseStopWordInputElemId(elem_id);
@@ -186,11 +220,27 @@ function saveStopWord(elem_id)
     }
 }
 
+/**
+ * Save the value of the stop word input element.
+ * This is bound on onfocus.
+ *
+ * @param string elem_id input element id
+ *
+ * @return void
+ */
 function saveOldValue(elem_id)
 {
     $('#' + elem_id).attr('old_value', $('#' + elem_id).attr('value'));
 }
 
+
+/**
+ * Handle stop word delete doing an ajax request.
+ *
+ * @param string elem_id input element id
+ *
+ * @return void
+ */
 function deleteStopWord(elem_id)
 {
     var info = parseStopWordInputElemId(elem_id);
@@ -209,6 +259,11 @@ function deleteStopWord(elem_id)
         );
 }
 
+/**
+ * Handle stop word add prompting for a new word and doing an ajax request.
+ *
+ * @return void
+ */
 function addStopWordInputElem()
 {
     var word = prompt('<?php print $PMF_LANG["ad_config_stopword_input"]?>', '');
