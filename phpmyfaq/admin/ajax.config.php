@@ -55,7 +55,7 @@ switch($ajax_action) {
         if(null != $stopword && PMF_Init::isASupportedLanguage($stopwords_lang)) {
             $pmf_sw = PMF_Stopwords::getInstance();
             $pmf_sw->setLanguage($stopwords_lang);
-            if(null != $stopword_id && -1 < $stopword_id) {
+            if(null !== $stopword_id && -1 < $stopword_id) {
                 $pmf_sw->update($stopword_id, $stopword);
             } else if(!$pmf_sw->match($stopword)){
                 $pmf_sw->add($stopword);

@@ -126,7 +126,7 @@ function buildStopWordInputElement(elem_id, stopword)
 {
     elem_id = elem_id || buildStopWordInputElemId();
     stopword = stopword || '';
-    var attrs = 'onblur="saveStopWord(this.id)" onkeydown="saveStopWord(this.id, event)" onfocus="saveOldValue(this.id)"';
+    var attrs = 'onblur="saveStopWord(this.id)" onkeydown="saveStopWordHandleEnter(this.id, event)" onfocus="saveOldValue(this.id)"';
     var element = '<input id="' + elem_id + '" value="' + stopword + '" ' + attrs + ' />';
 
     return element;
@@ -156,7 +156,7 @@ function parseStopWordInputElemId(elem_id)
     return {id: info[1], lang: info[2]};
 }
 
-function saveStopWord(elem_id, e)
+function saveStopWordHandleEnter(elem_id, e)
 {
     e = e || window.event || undefined;
 
@@ -166,13 +166,15 @@ function saveStopWord(elem_id, e)
             if('' == $('#' + elem_id).val()) {
                 deleteStopWord(elem_id);
             } else {
+                // this blur action will cause saveStopWord() call 
                 $('#' + elem_id).blur();
             }
         }
-
-        return;
     }
-    
+}
+
+function saveStopWord(elem_id)
+{
     var info =  parseStopWordInputElemId(elem_id);
     
     if($('#' + elem_id).attr('old_value') != $('#' + elem_id).attr('value')) {        
