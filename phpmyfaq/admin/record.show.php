@@ -296,8 +296,9 @@ if ($permission['editbt'] || $permission['delbt']) {
     </div>
     </fieldset>
     </form>
-
+    
     <script type="text/javascript">
+    /* <![CDATA[ */
 
     /**
      * Saves the sticky record status for the whole category
@@ -365,6 +366,8 @@ foreach($all_ids as $cat_id => $record_ids) {
             });
         }
     }
+    
+    /* ]]> */
     </script>
 <?php
     } else {

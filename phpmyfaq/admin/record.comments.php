@@ -114,7 +114,9 @@ if ($permission['delcomment']) {
     }
 ?>
     </form>
-    <script>
+    
+    <script type="text/javascript">
+    /* <![CDATA[ */
     $(document).ready(function() {
       $('.submit').click(function () {
         var comments = $('#commentSelection').serialize();
@@ -132,6 +134,8 @@ if ($permission['delcomment']) {
         return false;
       });
     });
+    
+    /* ]]> */
     </script>
 <?php 
 } else {
