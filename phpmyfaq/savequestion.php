@@ -65,7 +65,7 @@ if (!is_null($username) && !is_null($usermail) && !is_null($content) && IPCheck(
             );
 
         list($user, $host) = explode("@", $questionData['ask_usermail']);
-        if (checkEmail($questionData['ask_usermail'])) {
+        if (PMF_Filter::filterVar($questionData['ask_usermail'], FILTER_VALIDATE_EMAIL) != false) {
 
             $faq->addQuestion($questionData);
 

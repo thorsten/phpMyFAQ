@@ -759,25 +759,6 @@ function safeHTML($html)
 }
 
 /**
- * Syntax check for e-mails | @@ Thorsten, 2004-01-19
- * Last Update: @@ Thorsten, 2004-06-27
- */
-function checkEmail($sender)
-{
-    global $IDN;
-    $sender = $IDN->decode($sender);
-    $pattern =  "#^[-!\#$%&\"*+\\./\d=?A-Z^_|'a-z{|}~]+".
-                "@".
-                "[-!\#$%&\"*+\\./\d=?A-Z^_|'a-z{|}~]+\.".
-                "[-!\#$%&\"*+\\./\d=?A-Z^_|'a-z{|}~]+$#";
-    if (preg_match($pattern, $sender)) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-/**
  * Decode MIME header elements in e-mails | @@ Matthias Sommerfeld
  * (c) 2001-2004 blue birdy, Berlin (http://bluebirdy.de)
  * used with permission

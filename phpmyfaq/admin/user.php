@@ -258,7 +258,7 @@ if ($userAction == 'addsave') {
         $messages[] = $errorMessages['addUser_passwordsDontMatch'];
     }
     // check e-mail.
-    if (!checkEmail($user_email)) {
+    if (PMF_Filter::filterVar($user_email, FILTER_VALIDATE_EMAIL) == false) {
         $user_email = "";
         $messages[] = $errorMessages['addUser_noEmail'];
     }
