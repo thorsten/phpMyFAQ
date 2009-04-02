@@ -6,7 +6,7 @@
  * @subpackage Administration
  * @author     Anatoliy Belsky
  * @since      2009-04-01
- * @copyright  2005-2009 phpMyFAQ Team
+ * @copyright  2009 phpMyFAQ Team
  * @version    SVN: $Id$
  *
  * The contents of this file are subject to the Mozilla Public License
@@ -29,26 +29,18 @@ if ($permission['editconfig']) {
     printf('<h2>%s</h2', $PMF_LANG['ad_menu_stopwordsconfig']);
 ?>
 
-<table class="list">
-<tr>
-    <td>
+<p>
     <select onchange="loadStopWordsByLang(this.options[this.selectedIndex].value)" id="stopwords_lang_selector">
     <option value="none">---</option>
-<?php 
-    foreach($languageCodes as $key => $value) {
-?><option value="<?php print strtolower($key) ?>"><?php print $value?></option>
-        
-<?php
-    }
-?>
+<?php foreach($languageCodes as $key => $value) { ?>
+    <option value="<?php print strtolower($key); ?>"><?php print $value; ?></option>    
+<?php } ?>
     </select>
     <span id="stopwords_loading_indicator"></span>
-    </td>
-</tr>
-<tr><td>
+</p>
+
 <div id="stopwords_content"></div>
-</td></tr>
-</table>
+
 <script type="text/javascript">
 /* <![CDATA[ */
 
