@@ -114,7 +114,9 @@ function buildStopWordsHTML(data)
          */
         elem_id = 'stopword_' + data[i].id + '_' + data[i].lang;
         
-        html += '<td><input id="' + elem_id + '" value="' + data[i].stopword + '" ' + attrs + ' /></td>';
+        html += '<td>';
+        html += '<input id="' + elem_id + '" value="' + data[i].stopword + '" ' + attrs + ' />';
+        html += '</td>';
 
         if(i % max_cols == max_cols - 1) {
             html += '</tr>';
@@ -134,7 +136,11 @@ function saveStopWord(elem_id, e)
          * Be sure enter was pressed and emulate blur()
          */
        if(13 == key) {
-           $('#' + elem_id).blur();;
+           if('' == $('#' + elem_id).val()) {
+               deleteStopWord(elem_id);
+           } else {
+               $('#' + elem_id).blur();
+           }
         }
 
        return;
@@ -149,7 +155,7 @@ function saveStopWord(elem_id, e)
                ajaxaction: "save_stop_word",
                stopword_id: info[1],
                stopword: $('#' + elem_id).val(),
-               stopword_lang: info[2]}
+               stopwords_lang: info[2]}
           );
     }
 }
@@ -159,5 +165,19 @@ function saveOldValue(elem_id)
     $('#' + elem_id).attr('old_value', $('#' + elem_id).attr('value'));
 }
 
+function deleteStopWord(elem_id)
+{
+    var info = elem_id.split('_');
+
+    $.get("index.php",
+            {action: "ajax",
+             ajax: 'config',
+             ajaxaction: "delete_stop_word",
+             stopword_id: info[1],
+             stopwords_lang: info[2]}
+        );
+
+    loadStopWordsByLang(info[2])
+}
 /* ]]> */
 </script>

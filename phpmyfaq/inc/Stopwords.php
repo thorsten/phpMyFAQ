@@ -148,7 +148,7 @@ class PMF_Stopwords
     /**
      * Remove a word from the stop word dictionary
      *
-     * @param unknown_type $id
+     * @param integer $id
      * 
      * @return void
      */

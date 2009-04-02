@@ -21,42 +21,43 @@
  * under the License.
  */
 
-if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
+if (!defined('IS_VALID_PHPMYFAQ_ADMIN') || !$permission['editconfig']) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
 $ajax_action = PMF_Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
 
+$stopword_id = PMF_Filter::filterInput(INPUT_GET, 'stopword_id', FILTER_VALIDATE_INT);
+$stopword = PMF_Filter::filterInput(INPUT_GET, 'stopword', FILTER_SANITIZE_STRING);
+$stopwords_lang = PMF_Filter::filterInput(INPUT_GET, 'stopwords_lang', FILTER_SANITIZE_STRING);
 
 switch($ajax_action) {
     
     case 'load_stop_words_by_lang':
-        $stopwords_lang = PMF_Filter::filterInput(INPUT_GET, 'stopwords_lang', FILTER_SANITIZE_STRING);
-        
-        $stop_words_list = PMF_Stopwords::getInstance()->getByLang($stopwords_lang);
-        
-        header('Content-Type: application/json');
-        print json_encode($stop_words_list);
-        
+        if(PMF_Init::isASupportedLanguage($stopwords_lang)) {
+            $stop_words_list = PMF_Stopwords::getInstance()->getByLang($stopwords_lang);
+            
+            header('Content-Type: application/json');
+            print json_encode($stop_words_list);
+        }
         break;
         
     case 'delete_stop_word':
-        
+        if(null != $stopword_id && PMF_Init::isASupportedLanguage($stopwords_lang)) {
+            $pmf_sw = PMF_Stopwords::getInstance();
+            $pmf_sw->setLanguage($stopwords_lang);
+            $pmf_sw->remove($stopword_id);
+        }
         break;
         
     case 'save_stop_word':
-        
-        $stopword_id = PMF_Filter::filterInput(INPUT_GET, 'stopword_id', FILTER_VALIDATE_INT);
-        $stopword = PMF_Filter::filterInput(INPUT_GET, 'stopword', FILTER_SANITIZE_STRING);
-        $stopword_lang = PMF_Filter::filterInput(INPUT_GET, 'stopword_lang', FILTER_SANITIZE_STRING);
-        
-        if(null != $stopword) {
+        if(null != $stopword && PMF_Init::isASupportedLanguage($stopwords_lang)) {
             $pmf_sw = PMF_Stopwords::getInstance();
-            $pmf_sw->setLanguage($stopword_lang);
-            if($pmf_sw->match($stopword) && null != $stopword_id) {
+            $pmf_sw->setLanguage($stopwords_lang);
+            if(null != $stopword_id) {
                 $pmf_sw->update($stopword_id, $stopword);
-            } else {
+            } else if(!$pmf_sw->match($stopword)){
                 $pmf_sw->add($stopword);
             }
         }
