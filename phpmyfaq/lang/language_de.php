@@ -743,7 +743,7 @@ $PMF_LANG['newsWriteComment'] = 'Diesen Eintrag kommentieren';
 
 // added v2.0.0 - 2006-07-29 by Matteo & Thorsten
 $PMF_LANG['ad_record_expiration_window'] = 'Abblaufdatum des Eintrags (optional)';
-$PMF_LANG['admin_mainmenu_home'] = 'Startseite';
+$PMF_LANG['admin_mainmenu_home'] = 'Dashboard';
 $PMF_LANG['admin_mainmenu_users'] = 'Benutzer';
 $PMF_LANG['admin_mainmenu_content'] = 'Inhalte';
 $PMF_LANG['admin_mainmenu_statistics'] = 'Statistiken';

@@ -750,7 +750,7 @@ $PMF_LANG['newsCommentDate'] = 'Added at: ';
 
 // added v2.0.0 - 2006-07-29 by Matteo & Thorsten
 $PMF_LANG['ad_record_expiration_window'] = 'Record expiration time window (optional)';
-$PMF_LANG['admin_mainmenu_home'] = 'Home';
+$PMF_LANG['admin_mainmenu_home'] = 'Dashboard';
 $PMF_LANG['admin_mainmenu_users'] = 'Users';
 $PMF_LANG['admin_mainmenu_content'] = 'Content';
 $PMF_LANG['admin_mainmenu_statistics'] = 'Statistics';
