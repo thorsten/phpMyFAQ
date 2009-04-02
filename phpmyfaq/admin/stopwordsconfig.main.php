@@ -101,7 +101,7 @@ function buildStopWordsHTML(data)
     }
     
     var html = '<table>';
-    var attrs = 'onblur="saveStopWord(this.id)" onkeydown="saveStopWord(this.id, event)"';
+    var attrs = 'onblur="saveStopWord(this.id)" onkeydown="saveStopWord(this.id, event)" onfocus="saveOldValue(this.id)"';
     var elem_id, max_cols = 4;
     for(var i = 0; i < data.length; i++) {
 
@@ -139,17 +139,24 @@ function saveStopWord(elem_id, e)
 
        return;
     } 
-    
-    var info = elem_id.split('_');
-    
-    $.get("index.php",
-          {action: "ajax",
-           ajax: 'config',
-           ajaxaction: "save_stop_word",
-           stopword_id: info[1],
-           stopword: $('#' + elem_id).val(),
-           stopword_lang: info[2]}
-      );
+
+    if($('#' + elem_id).attr('old_value') != $('#' + elem_id).attr('value')) {
+        var info = elem_id.split('_');
+        
+        $.get("index.php",
+              {action: "ajax",
+               ajax: 'config',
+               ajaxaction: "save_stop_word",
+               stopword_id: info[1],
+               stopword: $('#' + elem_id).val(),
+               stopword_lang: info[2]}
+          );
+    }
+}
+
+function saveOldValue(elem_id)
+{
+    $('#' + elem_id).attr('old_value', $('#' + elem_id).attr('value'));
 }
 
 /* ]]> */
