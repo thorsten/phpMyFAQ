@@ -247,6 +247,7 @@ if ($permission['editbt'] || $permission['delbt']) {
 <?php
                 } else {
 ?>
+    </tbody>
     </table>
     </div>
     <!--<a name="cat_<?php print $cid; ?>" />--><div class="categorylisting"><a href="#cat_<?php print $cid; ?>" onclick="showhideCategory('category_<?php print $cid; ?>');"><img src="../images/more.gif" width="11" height="11" alt="" /> <?php print $category->getPath($cid); ?></a><?php print $catInfo;?></div>
