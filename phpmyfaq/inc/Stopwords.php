@@ -50,7 +50,34 @@ class PMF_Stopwords
      * @var string
      */
     private $table_name;
-    
+    /**
+     * @return string
+     */
+    public function getLanguage ()
+    {
+        return $this->language;
+    }
+    /**
+     * @return string
+     */
+    public function getTableName ()
+    {
+        return $this->table_name;
+    }
+    /**
+     * @param string $language
+     */
+    public function setLanguage ($language)
+    {
+        $this->language = $language;
+    }
+    /**
+     * @param string $table_name
+     */
+    public function setTableName ($table_name)
+    {
+        $this->table_name = $table_name;
+    }
     /**
      * Constructor
      */

@@ -190,6 +190,10 @@ if (isset($auth) && in_array(true, $permission)) {
                 require_once 'ajax.config_list.php';
                 break;
 
+            case 'config':
+                require_once 'ajax.config.php';
+                break;
+                
             // Tags management
             case 'tags_list':
                 require_once 'ajax.tags_list.php';
