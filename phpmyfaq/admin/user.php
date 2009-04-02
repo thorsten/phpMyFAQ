@@ -589,49 +589,47 @@ function updateUser(id)
         <p>[ <a href="<?php print $_SERVER['PHP_SELF']; ?>?action=user&amp;user_action=add"><?php print $text['addUser_link']; ?></a> ]</p>
     </div> <!-- end #user_list -->
 </div> <!-- end #user_accounts -->
-<div id="user_details">
-    <div id="user_data">
-        <fieldset>
-            <legend id="user_data_legend"><?php print $text['changeUser']; ?></legend>
-            <form action="<?php print $_SERVER['PHP_SELF']; ?>?action=user&amp;user_action=update_data" method="post">
-                <input id="update_user_id" type="hidden" name="user_id" value="0" />
-                <div class="input_row">
-                    <label for="user_status_select"><?php print $text['changeUser_status']; ?></label>
-                    <select id="user_status_select" name="user_status" >
-                        <option value="active"><?php print $PMF_LANG['ad_user_active']; ?></option>
-                        <option value="blocked"><?php print $PMF_LANG['ad_user_blocked']; ?></option>
-                        <option value="protected"><?php print $PMF_LANG['ad_user_protected']; ?></option>
-                    </select>
-                </div>
-                <div id="user_data_table"></div><!-- end #user_data_table -->
-                <div class="button_row">
-                    <input class="submit" type="submit" value="<?php print $text['changeUser_submit']; ?>" tabindex="6" />
-                </div>
-            </form>
-        </fieldset>
-    </div> <!-- end #user_details -->
-    <div id="user_rights">
-        <fieldset>
-            <legend id="user_rights_legend"><?php print $text['changeRights']; ?></legend>
-            <form id="rightsForm" action="<?php print $_SERVER['PHP_SELF']; ?>?action=user&amp;user_action=update_rights" method="post">
-                <input id="rights_user_id" type="hidden" name="user_id" value="0" />
-                <div>
-                    <span><a href="javascript:form_checkAll('rightsForm')"><?php print $text['changeRights_checkAll']; ?></a></span>
-                    <span><a href="javascript:form_uncheckAll('rightsForm')"><?php print $text['changeRights_uncheckAll']; ?></a></span>
-                </div>
-                <table id="user_rights_table">
-                    <tr>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                    </tr>
-                </table>
-                <div class="button_row">
-                    <input class="submit" type="submit" value="<?php print $text['changeRights_submit']; ?>" />
-                </div>
-            </form>
-        </fieldset>
-    </div> <!-- end #user_rights -->
+<div id="user_data">
+    <fieldset>
+        <legend id="user_data_legend"><?php print $text['changeUser']; ?></legend>
+        <form action="<?php print $_SERVER['PHP_SELF']; ?>?action=user&amp;user_action=update_data" method="post">
+            <input id="update_user_id" type="hidden" name="user_id" value="0" />
+            <div class="input_row">
+                <label for="user_status_select"><?php print $text['changeUser_status']; ?></label>
+                <select id="user_status_select" name="user_status" >
+                    <option value="active"><?php print $PMF_LANG['ad_user_active']; ?></option>
+                    <option value="blocked"><?php print $PMF_LANG['ad_user_blocked']; ?></option>
+                    <option value="protected"><?php print $PMF_LANG['ad_user_protected']; ?></option>
+                </select>
+            </div>
+            <div id="user_data_table"></div><!-- end #user_data_table -->
+            <div class="button_row">
+                <input class="submit" type="submit" value="<?php print $text['changeUser_submit']; ?>" tabindex="6" />
+            </div>
+        </form>
+    </fieldset>
 </div> <!-- end #user_details -->
+<div id="user_rights">
+    <fieldset>
+        <legend id="user_rights_legend"><?php print $text['changeRights']; ?></legend>
+        <form id="rightsForm" action="<?php print $_SERVER['PHP_SELF']; ?>?action=user&amp;user_action=update_rights" method="post">
+            <input id="rights_user_id" type="hidden" name="user_id" value="0" />
+            <div>
+                <span><a href="javascript:form_checkAll('rightsForm')"><?php print $text['changeRights_checkAll']; ?></a></span>
+                <span><a href="javascript:form_uncheckAll('rightsForm')"><?php print $text['changeRights_uncheckAll']; ?></a></span>
+            </div>
+            <table id="user_rights_table">
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+            </table>
+            <div class="button_row">
+                <input class="submit" type="submit" value="<?php print $text['changeRights_submit']; ?>" />
+            </div>
+        </form>
+    </fieldset>
+</div> <!-- end #user_rights -->
 <div class="clear"></div>
 <?php
 } // end if ($userAction == 'list')
