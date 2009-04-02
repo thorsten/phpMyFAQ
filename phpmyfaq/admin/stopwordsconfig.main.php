@@ -130,22 +130,21 @@ function buildStopWordsHTML(data)
 
 function saveStopWord(elem_id, e)
 {
+    e = e || window.event || undefined;
+
     if(undefined != e) {
         var key = e.charCode || e.keyCode || 0;
-        /**
-         * Be sure enter was pressed and emulate blur()
-         */
-       if(13 == key) {
-           if('' == $('#' + elem_id).val()) {
-               deleteStopWord(elem_id);
-           } else {
-               $('#' + elem_id).blur();
-           }
+        if(13 == key) {
+            if('' == $('#' + elem_id).val()) {
+                deleteStopWord(elem_id);
+            } else {
+                $('#' + elem_id).blur();
+            }
+    
+            return;
         }
-
-       return;
-    } 
-
+    }
+    
     if($('#' + elem_id).attr('old_value') != $('#' + elem_id).attr('value')) {
         var info = elem_id.split('_');
         
@@ -169,15 +168,18 @@ function deleteStopWord(elem_id)
 {
     var info = elem_id.split('_');
 
+    $('#' + elem_id).fadeOut('slow');
+    
     $.get("index.php",
             {action: "ajax",
              ajax: 'config',
              ajaxaction: "delete_stop_word",
              stopword_id: info[1],
-             stopwords_lang: info[2]}
+             stopwords_lang: info[2]},
+            function (){
+                 loadStopWordsByLang(info[2])
+            }
         );
-
-    loadStopWordsByLang(info[2])
 }
 /* ]]> */
 </script>
