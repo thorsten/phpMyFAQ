@@ -54,6 +54,7 @@ if ('save' == $userAction) {
     }
 ?>
     </select>
+    <span id="stopwords_loading_indicator"></span>
     </td>
 </tr>
 <tr><td>
@@ -77,10 +78,13 @@ function loadStopWordsByLang(lang)
         return;
     }
 
+    $('#stopwords_loading_indicator').html('<img src="images/indicator.gif" />');
+    
     $.get("index.php",
 		  {action: "ajax", ajax: 'config', ajaxaction: "load_stop_words_by_lang", stopwords_lang: lang},
 		  function (data, textStatus) {
 		      $('#stopwords_content').html(buildStopWordsHTML(data));
+		      $('#stopwords_loading_indicator').html('');
           },
           'json'
 	);
