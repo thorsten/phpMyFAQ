@@ -42,7 +42,7 @@ ul { list-style: square; }
 acronym { border-bottom: 1px dotted #999; }  
 
 /* Structure */
-
+#content { max-width: 1400px; margin: auto; }
 #header { height: 3em; }
 #header ul { margin: 0; padding: 0; list-style: none; font-size: 1em; font-weight: bold; line-height: 1em; height: 1em; float: right; }
 #header li { float: right; padding: 0 1em 0 0; margin: 0; }
