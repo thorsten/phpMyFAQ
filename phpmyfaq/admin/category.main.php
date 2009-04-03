@@ -117,7 +117,7 @@ if ($permission['editcateg']) {
 
         if ($category->deleteCategory($id, $lang, $delete_all) && 
             $category->deleteCategoryRelation($id, $lang, $delete_all) &&
-            $category->deletePermission('user', $id) && $category->deletePermission('group', $id)) {
+            $category->deletePermission('user', array($id)) && $category->deletePermission('group', array($id))) {
             printf('<p class="message">%s</p>', $PMF_LANG['ad_categ_deleted']);
         } else {
             printf('<p class="error">%s</p>', $db->error());
