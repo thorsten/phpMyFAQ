@@ -72,6 +72,10 @@ if ($permission["addcateg"]) {
     <select name="restricted_groups" size="1"><?php print $user->perm->getAllGroupsOptions(1); ?></select><br />
 
 <?php
+        } else {
+?>
+    <input type="hidden" name="grouppermission" class="active" value="all" />
+<?php	
         }
 ?>
     <label class="left" for="userpermission"><?php print $PMF_LANG['ad_entry_userpermission']; ?></label>
