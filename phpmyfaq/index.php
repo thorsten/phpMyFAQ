@@ -375,10 +375,12 @@ $main_template_vars = array(
     'copyright'           => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> ' . 
                              $faqconfig->get('main.currentVersion'));
 
-$stickyRecordsParams = $faq->getStickyRecords();                   
-$tpl->processBlock('index', 'stickyRecordsList', array(
-    'stickyRecordsUrl'   => $stickyRecordsParams['url'],
-    'stickyRecordsTitle' => $stickyRecordsParams['title']));
+$stickyRecordsParams = $faq->getStickyRecords();
+if (!isset($stickyRecordsParams['error'])) {
+    $tpl->processBlock('index', 'stickyRecordsList', array(
+        'stickyRecordsUrl'   => $stickyRecordsParams['url'],
+        'stickyRecordsTitle' => $stickyRecordsParams['title']));
+}
 
 if ($faqconfig->get('main.enableRewriteRules')) {
     $links_template_vars = array(
