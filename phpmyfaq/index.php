@@ -348,31 +348,37 @@ $usersOnLine    = getUsersOnline();
 $totUsersOnLine = $usersOnLine[0] + $usersOnLine[1];
 $systemUri      = PMF_Link::getSystemUri('index.php');
 $main_template_vars = array(
-    'title'           => $faqconfig->get('main.titleFAQ').$title,
-    'baseHref'        => $systemUri,
-    'version'         => $faqconfig->get('main.currentVersion'),
-    'header'          => str_replace('"', '', $faqconfig->get('main.titleFAQ')),
-    'metaTitle'       => str_replace('"', '', $faqconfig->get('main.titleFAQ')),
-    'metaDescription' => $faqconfig->get('main.metaDescription'),
-    'metaKeywords'    => $faqconfig->get('main.metaKeywords').$keywords,
-    'metaPublisher'   => $faqconfig->get('main.metaPublisher'),
-    'metaLanguage'    => $PMF_LANG['metaLanguage'],
-    'metaCharset'     => $PMF_LANG['metaCharset'],
-    'stylesheet'      => $PMF_LANG['dir'] == 'rtl' ? 'style.rtl' : 'style',
-    'action'          => $action,
-    'dir'             => $PMF_LANG['dir'],
-    'msgCategory'     => $PMF_LANG['msgCategory'],
-    'showCategories'  => $category->printCategories($cat),
-    'searchBox'       => $PMF_LANG['msgSearch'],
-    'languageBox'     => $PMF_LANG['msgLangaugeSubmit'],
-    'writeLangAdress' => $writeLangAdress,
-    'switchLanguages' => selectLanguages($LANGCODE, true),
-    'userOnline'      => $totUsersOnLine.$PMF_LANG['msgUserOnline'].
-                         sprintf($PMF_LANG['msgUsersOnline'],
-                         $usersOnLine[0],
-                         $usersOnLine[1]),
-    'copyright'       => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> ' . 
-                         $faqconfig->get('main.currentVersion'));
+    'title'               => $faqconfig->get('main.titleFAQ').$title,
+    'baseHref'            => $systemUri,
+    'version'             => $faqconfig->get('main.currentVersion'),
+    'header'              => str_replace('"', '', $faqconfig->get('main.titleFAQ')),
+    'metaTitle'           => str_replace('"', '', $faqconfig->get('main.titleFAQ')),
+    'metaDescription'     => $faqconfig->get('main.metaDescription'),
+    'metaKeywords'        => $faqconfig->get('main.metaKeywords').$keywords,
+    'metaPublisher'       => $faqconfig->get('main.metaPublisher'),
+    'metaLanguage'        => $PMF_LANG['metaLanguage'],
+    'metaCharset'         => $PMF_LANG['metaCharset'],
+    'stylesheet'          => $PMF_LANG['dir'] == 'rtl' ? 'style.rtl' : 'style',
+    'action'              => $action,
+    'dir'                 => $PMF_LANG['dir'],
+    'msgCategory'         => $PMF_LANG['msgCategory'],
+    'showCategories'      => $category->printCategories($cat),
+    'searchBox'           => $PMF_LANG['msgSearch'],
+    'languageBox'         => $PMF_LANG['msgLangaugeSubmit'],
+    'writeLangAdress'     => $writeLangAdress,
+    'switchLanguages'     => selectLanguages($LANGCODE, true),
+    'userOnline'          => $totUsersOnLine.$PMF_LANG['msgUserOnline'].
+                             sprintf($PMF_LANG['msgUsersOnline'],
+                             $usersOnLine[0],
+                             $usersOnLine[1]),
+    'stickyRecordsHeader' => $PMF_LANG['stickyRecordsHeader'],
+    'copyright'           => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> ' . 
+                             $faqconfig->get('main.currentVersion'));
+
+$stickyRecordsParams = $faq->getStickyRecords();                   
+$tpl->processBlock('index', 'stickyRecordsList', array(
+    'stickyRecordsUrl'   => $stickyRecordsParams['url'],
+    'stickyRecordsTitle' => $stickyRecordsParams['title']));
 
 if ($faqconfig->get('main.enableRewriteRules')) {
     $links_template_vars = array(
