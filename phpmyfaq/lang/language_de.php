@@ -93,7 +93,7 @@ $PMF_LANG["msgSearchFind"] = "Suchergebnis für ";
 $PMF_LANG["msgSearchAmount"] = " Suchergebnis";
 $PMF_LANG["msgSearchAmounts"] = " Suchergebnisse";
 $PMF_LANG["msgSearchCategory"] = "Kategorie: ";
-$PMF_LANG["msgSearchContent"] = "Inhalt: ";
+$PMF_LANG["msgSearchContent"] = "Antwort: ";
 
 // new Content
 $PMF_LANG["msgNewContentHeader"] = "Vorschlag für FAQ-Eintrag";
@@ -101,10 +101,10 @@ $PMF_LANG["msgNewContentAddon"] = "Der Eintrag erscheint nicht sofort, sondern w
 $PMF_LANG["msgNewContentName"] = "Name:";
 $PMF_LANG["msgNewContentMail"] = "E-Mail-Adresse:";
 $PMF_LANG["msgNewContentCategory"] = "Zu welcher Kategorie gehört dieser Eintrag?";
-$PMF_LANG["msgNewContentTheme"] = "Themenüberschrift:";
-$PMF_LANG["msgNewContentArticle"] = "Hilfeartikel:";
+$PMF_LANG["msgNewContentTheme"] = "Frage:";
+$PMF_LANG["msgNewContentArticle"] = "Antwort:";
 $PMF_LANG["msgNewContentKeywords"] = "Suchbegriffe:";
-$PMF_LANG["msgNewContentLink"] = "Link zu diesem Thema";
+$PMF_LANG["msgNewContentLink"] = "Link zu diesem Eintrag:";
 $PMF_LANG["msgNewContentSubmit"] = "absenden";
 $PMF_LANG["msgInfo"] = "Mehr Informationen unter: ";
 $PMF_LANG["msgNewContentThanks"] = "<p><strong>Vielen Dank für diesen Vorschlag!</strong></p>";
@@ -402,7 +402,7 @@ $PMF_LANG["ad_cookie"] = "Cookies";
 $PMF_LANG["ad_sess_head"] = "Sessions ansehen";
 
 // Added v0.85 - 08.06.2001 - Bastian - Admin
-$PMF_LANG["ad_csv_make"] = "Eine Sicherung stellt im Grunde ein komplettes Abbild der MySQL-Tabellen der FAQ dar. Diese Sicherung stellt immer eine Momentaufnahme dar und sollte mindestens einmal monatlich gemacht werden. Das Format der Sicherung ist eine normale MySQL-Transaktionsdatei, man kann eine Rücksicherung also notfalls auch mit Hilfe von phpMyAdmin oder ähnlichen Tools vornehmen.";
+$PMF_LANG["ad_csv_make"] = "Eine Sicherung stellt im Grunde ein komplettes Abbild der SQL-Tabellen der FAQ dar. Diese Sicherung stellt immer eine Momentaufnahme dar und sollte mindestens einmal monatlich gemacht werden. Das Format der Sicherung ist eine normale SQL-Transaktionsdatei, man kann eine Rücksicherung also notfalls auch mit Hilfe von Tools wie phpMyAdmin oder ähnlichen Tools vornehmen.";
 $PMF_LANG["ad_csv_head"] = "Sicherung erstellen";
 $PMF_LANG["ad_att_addto"] = "Attachment zum Artikel";
 $PMF_LANG["ad_att_addto_2"] = "hinzufügen";
