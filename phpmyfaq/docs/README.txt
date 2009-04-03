@@ -1,4 +1,4 @@
-$Id: README.txt,v 1.107 2008-05-31 14:09:47 thorstenr Exp $
+$Id$
 
 phpMyFAQ 2.5.0-alpha2
 Codename "Pandora"
@@ -13,7 +13,7 @@ Changes since 2.5.0-alpha2:
 - added new administration layout (Thorsten)
 - added frontend for search logs statistics (Anatoliy Belsky)
 - added sticky FAQ records (Anatoliy Belsky)
-- ajaxified comment administration (Thorsten)
+- ajaxified comment and record administration (Thorsten)
 - fixed a lot of bugs (Thorsten)
 
 For known issues please take a look at KNOWNBUGS.txt
@@ -24,6 +24,7 @@ Version 2.5.0-beta - 2009-04-
 - changed PHP requirement to PHP 5.2 (Thorsten)
 - dropped support for MySQL 4.0 and MaxDB (Thorsten)
 - dropped support for XML-RPC (Thorsten)
+- refactored complete code base to PHP 5.2+ (Thorsten, Matteo)
 - added new and improved new basic layout theme (Charles A. Landemaine)
 - added new administration layout (Thorsten)
 - added RSS feed for every category (Thorsten)
@@ -37,10 +38,10 @@ Version 2.5.0-beta - 2009-04-
 - added most popular searches list (Thorsten)
 - added frontend for search logs statistics (Anatoliy Belsky)
 - added sticky FAQ records (Anatoliy Belsky)
-- added jQuery as replacement for Prototype/Script.aculo.us (Thorsten)
+- added jQuery 1.3 as replacement for Prototype/Script.aculo.us (Thorsten)
 - improved user administration frontend (Sarah Hermann)
 - improved performance (Thorsten)
-- ajaxified comment administration (Thorsten)
+- ajaxified comment and record administration (Thorsten)
 - updated bundled Net_IDNA to version XXX (Thorsten)
 - updated bundled TinyMCE editor component to version 3.2.1.1 (Thorsten)
 - updated bundled FPDF library to version 1.6 (Thorsten)
