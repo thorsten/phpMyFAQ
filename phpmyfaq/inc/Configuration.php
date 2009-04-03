@@ -113,9 +113,12 @@ class PMF_Configuration
             SQLPREFIX);
             
         $result = $this->db->query($query);
-        while ($row = $this->db->fetch_object($result)) {
-            $this->config[$row->config_name] = $row->config_value;
+        $config = $this->db->fetchAll($result);
+        
+        foreach ($config as $items) {
+        	$this->config[$items->config_name] = $items->config_value;
         }
+        
     } // end func getAll()
 
     /**
