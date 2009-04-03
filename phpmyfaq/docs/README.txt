@@ -46,6 +46,17 @@ Version 2.5.0-beta - 2009-04-
 - updated bundled TinyMCE editor component to version 3.2.1.1 (Thorsten)
 - updated bundled FPDF library to version 1.6 (Thorsten)
 
+Version 2.0.13 - 2009-04-
+- added new blocked words for spam protection (Kai)
+- fixed redirect problem with multiviews in .htaccess (Antonio)
+- minor bugfixes (Thorsten)
+
+Version 2.0.12 - 2009-02-17
+- fixed bug with MySQL 6 and ext/mysqli (Johannes)
+- fixed stat call bug in installer on OpenSuse 10.3 (Thorsten)
+- improved SVN checkout script (Rene Treffer)
+- minor bugfixes (Thorsten)
+
 Version 2.0.11 - 2009-01-22
 - updated English and Turkish translation and switched to UTF-8 (Evren Yurtesen)
 - updated Simplified Chinese translation (Techice Young)
