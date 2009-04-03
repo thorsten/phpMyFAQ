@@ -66,7 +66,7 @@ interface PMF_DB_Driver
      * @param  resource      $result Resultset
      * @return PMF_DB_Driver
      */
-    #public function fetchAll($result);
+    public function fetchAll($result);
 
     /**
      * Number of rows in a result
