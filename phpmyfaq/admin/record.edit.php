@@ -2,12 +2,13 @@
 /**
  * The FAQ record editor.
  *
- * @package   phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since     2003-02-23
- * @license   Mozilla Public License 1.1
- * @version   SVN: $Id$
- * @copyright (c) 2003-2009 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage Administration
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since      2003-02-23
+ * @license    Mozilla Public License 1.1
+ * @version    SVN: $Id$
+ * @copyright  2003-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -55,31 +56,32 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 
     if ($action == 'editpreview') {
 
-        if (isset($_REQUEST["id"]) && $_REQUEST["id"] != "") {
-            $faqData['id'] = (int)$_REQUEST["id"];
+    	$faqData['id'] = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+        if (!is_null($faqData['id'])) {
             $url_variables = 'saveentry&amp;id='.$faqData['id'];
         } else {
             $url_variables = 'insertentry';
         }
-        $faqData['lang']  = $_REQUEST["lang"];
+        
+        $faqData['lang']  = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
         $current_category = isset($_POST['rubrik']) ? $_POST['rubrik'] : null;
         if (is_array($current_category)) {
             foreach ($current_category as $cats) {
                 $categories[] = array('category_id' => $cats, 'category_lang' => $faqData['lang']);
             }
         }
-        $faqData['active']      = $_REQUEST["active"];
-        $faqData['keywords']    = $_REQUEST["keywords"];
-        $faqData['title']       = $_REQUEST["thema"];
-        $faqData['content']     = $_REQUEST["content"];
-        $faqData['author']      = $_REQUEST["author"];
-        $faqData['email']       = $_REQUEST["email"];
-        $faqData['comment']     = $_REQUEST["comment"];
-        $faqData['solution_id'] = (int)$_REQUEST['solution_id'];
-        $faqData['revision_id'] = isset($_REQUEST['revision_id']) ? (int)$_REQUEST['revision_id'] : 0;
-        $faqData['sticky']      = $_REQUEST['sticky'];
-        $tags                   = $_REQUEST["tags"];
-        $changed                = $_REQUEST["changed"];
+        $faqData['active']      = PMF_Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_STRING);
+        $faqData['keywords']    = PMF_Filter::filterInput(INPUT_POST, 'keywords', FILTER_SANITIZE_STRING);
+        $faqData['title']       = PMF_Filter::filterInput(INPUT_POST, 'thema', FILTER_SANITIZE_STRING);
+        $faqData['content']     = PMF_Filter::filterInput(INPUT_POST, 'content', FILTER_SANITIZE_STRING);
+        $faqData['author']      = PMF_Filter::filterInput(INPUT_POST, 'author', FILTER_SANITIZE_STRING);
+        $faqData['email']       = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+        $faqData['comment']     = PMF_Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_STRING);
+        $faqData['solution_id'] = PMF_Filter::filterInput(INPUT_POST, 'solution_id', FILTER_VALIDATE_INT);
+        $faqData['revision_id'] = PMF_Filter::filterInput(INPUT_POST, 'revision_id', FILTER_VALIDATE_INT, 0);
+        $faqData['sticky']      = PMF_Filter::filterInput(INPUT_POST, 'sticky', FILTER_VALIDATE_INT);
+        $tags                   = PMF_Filter::filterInput(INPUT_POST, 'tags', FILTER_SANITIZE_STRING);
+        $changed                = PMF_Filter::filterInput(INPUT_POST, 'changed', FILTER_SANITIZE_STRING);
         if (isset($_REQUEST['dateStart'])) {
             $faqData['dateStart'] = $_REQUEST['dateStart'];
         }
@@ -137,19 +139,19 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     // Permissions
     $user_permission = $faq->getPermission('user', $faqData['id']);
     if (is_null($user_permission) || $user_permission[0] == -1) {
-        $all_users = true;
+        $all_users        = true;
         $restricted_users = false;
     } else {
-        $all_users = false;
+        $all_users        = false;
         $restricted_users = true;
     }
 
     $group_permission = $faq->getPermission('group', $faqData['id']);
     if (is_null($group_permission) || $group_permission[0] == -1) {
-        $all_groups = true;
+        $all_groups        = true;
         $restricted_groups = false;
     } else {
-        $all_groups = false;
+        $all_groups        = false;
         $restricted_groups = true;
     }
 
@@ -311,10 +313,10 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 <?php
     if ($url_variables != 'insertentry') {
         $rev_yes = ' checked="checked"';
-        $rev_no = null;
+        $rev_no  = null;
     }
     if (isset($faqData['active']) && $faqData['active'] == 'no') {
-        $rev_no = ' checked="checked"';
+        $rev_no  = ' checked="checked"';
         $rev_yes = null;
     }
     if ($url_variables != 'insertentry') {
@@ -341,30 +343,11 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 
     <fieldset class="fullwidth">
     <legend><?php print $PMF_LANG['ad_record_expiration_window']; ?></legend>
-        <label class="lefteditor" for="from"><?php print $PMF_LANG['ad_news_from']; ?></label>
-<?php
-    $dateStartAv = isset($faqData['dateStart']) && ($faqData['dateStart'] != '00000000000000');
-    $date['YYYY'] = $dateStartAv ? substr($faqData['dateStart'],  0, 4) : '';
-    $date['MM']   = $dateStartAv ? substr($faqData['dateStart'],  4, 2) : '';
-    $date['DD']   = $dateStartAv ? substr($faqData['dateStart'],  6, 2) : '';
-    $date['HH']   = $dateStartAv ? substr($faqData['dateStart'],  8, 2) : '';
-    $date['mm']   = $dateStartAv ? substr($faqData['dateStart'], 10, 2) : '';
-    $date['ss']   = $dateStartAv ? substr($faqData['dateStart'], 12, 2) : '';
-    print(printDateTimeInput('dateStart', $date));
-?>
+        <label class="lefteditor" for="dateStart"><?php print $PMF_LANG['ad_news_from']; ?></label>
+        <input name="dateStart" id="dateStart" class="date-pick" />
         <br />
-
-        <label class="lefteditor" for="to"><?php print $PMF_LANG['ad_news_to']; ?></label>
-<?php
-    $dateEndAv = isset($faqData['dateEnd']) && ($faqData['dateEnd'] != '99991231235959');
-    $date['YYYY'] = $dateEndAv ? substr($faqData['dateEnd'],  0, 4) : '';
-    $date['MM']   = $dateEndAv ? substr($faqData['dateEnd'],  4, 2) : '';
-    $date['DD']   = $dateEndAv ? substr($faqData['dateEnd'],  6, 2) : '';
-    $date['HH']   = $dateEndAv ? substr($faqData['dateEnd'],  8, 2) : '';
-    $date['mm']   = $dateEndAv ? substr($faqData['dateEnd'], 10, 2) : '';
-    $date['ss']   = $dateEndAv ? substr($faqData['dateEnd'], 12, 2) : '';
-    print(printDateTimeInput('dateEnd', $date));
-?>
+        <label class="lefteditor" for="dateEnd"><?php print $PMF_LANG['ad_news_to']; ?></label>
+        <input name="dateEnd" id="dateEnd" class="date-pick" />
     </fieldset>
 
     <fieldset class="fullwidth">
@@ -409,6 +392,18 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 ?>
     </div>
     </form>
+    
+    <script type="text/javascript">
+    /* <![CDATA[ */
+
+    $(function()
+    {
+        $('.date-pick').datePicker();
+    });
+    
+    /* ]]> */
+    </script>
+    
 <?php
         $comment  = new PMF_Comment();
         $comments = $comment->getCommentsData($faqData['id'], 'faq');

@@ -30,25 +30,8 @@ $user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
 
 $category = new PMF_Category($current_admin_user, $current_admin_groups, false);
 
-// Evaluate the passed validity range, if any
-$dateStart =
-    (isset($_POST['dateStartYYYY']) && !empty($_POST['dateStartYYYY']) ? str_pad((int)$_POST['dateStartYYYY'], 4, '0', STR_PAD_LEFT) : '0001') .
-    (isset($_POST['dateStartMM']) && !empty($_POST['dateStartMM']) ? str_pad((int)$_POST['dateStartMM'], 2, '0', STR_PAD_LEFT) : '01') .
-    (isset($_POST['dateStartDD']) && !empty($_POST['dateStartDD']) ? str_pad((int)$_POST['dateStartDD'], 2, '0', STR_PAD_LEFT) : '01') .
-    (isset($_POST['dateStartHH']) && !empty($_POST['dateStartHH']) ? str_pad((int)$_POST['dateStartHH'], 2, '0', STR_PAD_LEFT) : '00') .
-    (isset($_POST['dateStartmm']) && !empty($_POST['dateStartss']) ? str_pad((int)$_POST['dateStartmm'], 2, '0', STR_PAD_LEFT) : '00') .
-    (isset($_POST['dateStartss']) && !empty($_POST['dateStartMM']) ? str_pad((int)$_POST['dateStartss'], 2, '0', STR_PAD_LEFT) : '00');
-$dateEnd =
-    (isset($_POST['dateEndYYYY']) ? str_pad((int)$_POST['dateEndYYYY'], 4, '0', STR_PAD_LEFT) : '0000') .
-    (isset($_POST['dateEndMM']) && !empty($_POST['dateEndMM']) ? str_pad((int)$_POST['dateEndMM'], 2, '0', STR_PAD_LEFT) : '01') .
-    (isset($_POST['dateEndDD']) && !empty($_POST['dateEndDD']) ? str_pad((int)$_POST['dateEndDD'], 2, '0', STR_PAD_LEFT) : '01') .
-    (isset($_POST['dateEndHH']) && !empty($_POST['dateEndHH']) ? str_pad((int)$_POST['dateEndHH'], 2, '0', STR_PAD_LEFT) : '00') .
-    (isset($_POST['dateEndmm']) && !empty($_POST['dateEndmm']) ? str_pad((int)$_POST['dateEndmm'], 2, '0', STR_PAD_LEFT) : '00') .
-    (isset($_POST['dateEndss']) && !empty($_POST['dateEndss']) ? str_pad((int)$_POST['dateEndss'], 2, '0', STR_PAD_LEFT) : '00');
-// Sanity checks
-if ('00000101000000' == $dateEnd) {
-    $dateEnd = '99991231235959';
-}
+$dateStart = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
+$dateEnd   = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);
 
 if (    isset($submit[2])
      && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != ""
