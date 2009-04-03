@@ -169,7 +169,7 @@ class PMF_Stopwords
      */
     public function match($word)
     {
-        $sql = "SELECT id FROM $this->table_name WHERE stopword = '%s' AND lang = '%s'";
+        $sql = "SELECT id FROM $this->table_name WHERE LOWER(stopword) = LOWER('%s') AND lang = '%s'";
         $sql = sprintf($sql, $word, $this->language);
         
         $result = $this->db->query($sql);
@@ -182,19 +182,51 @@ class PMF_Stopwords
      * Retrieve all the stop words by a certain language
      * 
      * @param string $lang Language to retrieve stop words by
+     * @param boolean wordsOnly
      * 
      * @return array
      */
-    public function getByLang($lang)
+    public function getByLang($lang = null, $wordsOnly = false)
     {
-        $sql = sprintf("SELECT * FROM $this->table_name WHERE lang = '%s'", $lang);
+        $lang = is_null($lang) ? $this->language : $lang;
+        
+        $sql = sprintf("SELECT id, lang, LOWER(stopword) AS stopword FROM $this->table_name WHERE lang = '%s'", $lang);
         
         $result = $this->db->query($sql);
         
         $retval = array();
         
-        while(($row = $this->db->fetch_object($result)) == true) {
-            $retval[] = $row; 
+        if($wordsOnly) {
+            while(($row = $this->db->fetch_object($result)) == true) {
+                $retval[] = $row->stopword; 
+            }
+        } else {
+            return $this->db->fetchAll($result);
+        }
+        
+        return $retval;
+    }
+    
+    
+    /**
+     * Filter some text cutting out all non words and stop words
+     * 
+     * @param string $input text to filter
+     * 
+     * @return string 
+     */
+    public function clean($input)
+    {
+        $words = explode(' ', ereg_replace('[[:punct:][:space:]]+', ' ', $input));
+        $stop_words = $this->getByLang(null, true); 
+        $retval = array();
+        
+        foreach($words as $word) {
+            $word = strtolower($word);
+            if(!is_numeric($word) && 1 < strlen($word) && 
+               !in_array($word, $stop_words) && !in_array($word, $retval)) {
+                $retval[] = $word;
+            }
         }
         
         return $retval;
