@@ -53,7 +53,7 @@ class PMF_DB_Sybase implements PMF_DB_Driver
      * @author  Adam Greene <phpmyfaq@skippy.fastmail.fm>
      * @since   2003-02-24
      */
-    function db_sybase()
+    public function __construct()
     {
         if (function_exists('sybase_min_client_severity')) {
             sybase_min_client_severity(100);
@@ -163,6 +163,27 @@ class PMF_DB_Sybase implements PMF_DB_Driver
       }
         return $rs;
     }
+
+    /**
+     * Fetches a complete result as an object
+     *
+     * @param  resource      $result Resultset
+     * @return PMF_DB_Sybase
+     */
+    public function fetchAll($result)
+    {
+        $ret = array();
+        if (false === $result) {
+            throw new Exception('Error while fetching result: ' . $this->error());
+        }
+        
+        while ($row = $this->fetch_object($result)) {
+            $ret[] = $row;
+        }
+        
+        return $ret;
+    }
+    
 
     /**
      * Number of rows in a result

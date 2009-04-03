@@ -59,6 +59,14 @@ interface PMF_DB_Driver
      * @return  array
      */
     public function fetch_assoc($result);
+    
+    /**
+     * Fetches a complete result as an object
+     *
+     * @param  resource      $result Resultset
+     * @return PMF_DB_Driver
+     */
+    #public function fetchAll($result);
 
     /**
      * Number of rows in a result

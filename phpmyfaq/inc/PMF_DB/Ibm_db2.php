@@ -143,6 +143,27 @@ class PMF_DB_Ibm_db2 implements PMF_DB_Driver
     }
 
     /**
+     * Fetches a complete result as an object
+     *
+     * @param  resource       $result Resultset
+     * @return PMF_DB_Ibm_db2
+     */
+    public function fetchAll($result)
+    {
+        $ret = array();
+        if (false === $result) {
+            throw new Exception('Error while fetching result: ' . $this->error());
+        }
+        
+        while ($row = $this->fetch_object($result)) {
+            $ret[] = $row;
+        }
+        
+        return $ret;
+    }
+    
+
+    /**
      * Number of rows in a result
      *
      * @param   mixed $result

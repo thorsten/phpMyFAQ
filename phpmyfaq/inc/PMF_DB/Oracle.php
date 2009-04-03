@@ -127,6 +127,26 @@ class PMF_DB_Oracle implements PMF_DB_Driver
     }
 
     /**
+     * Fetches a complete result as an object
+     *
+     * @param  resource      $result Resultset
+     * @return PMF_DB_Oracle
+     */
+    public function fetchAll($result)
+    {
+        $ret = array();
+        if (false === $result) {
+            throw new Exception('Error while fetching result: ' . $this->error());
+        }
+        
+        while ($row = $this->fetch_object($result)) {
+            $ret[] = $row;
+        }
+        
+        return $ret;
+    }
+    
+    /**
      * Fetch a result row as an array
      *
      * @param   mixed $result
