@@ -69,30 +69,11 @@ if ('addnews' == $action && $permission["addnews"]) {
     </fieldset>
     <fieldset>
     <legend><?php print $PMF_LANG['ad_news_expiration_window']; ?></legend>
-        <label class="lefteditor" for="from"><?php print $PMF_LANG['ad_news_from']; ?></label>
-<?php
-    $dateStartAv = isset($newsData['dateStart']) && ($newsData['dateStart'] != '00000000000000');
-    $date['YYYY'] = $dateStartAv ? substr($newsData['dateStart'],  0, 4) : '';
-    $date['MM']   = $dateStartAv ? substr($newsData['dateStart'],  4, 2) : '';
-    $date['DD']   = $dateStartAv ? substr($newsData['dateStart'],  6, 2) : '';
-    $date['HH']   = $dateStartAv ? substr($newsData['dateStart'],  8, 2) : '';
-    $date['mm']   = $dateStartAv ? substr($newsData['dateStart'], 10, 2) : '';
-    $date['ss']   = $dateStartAv ? substr($newsData['dateStart'], 12, 2) : '';
-    print(printDateTimeInput('dateStart', $date));
-?>
+        <label class="lefteditor" for="dateStart"><?php print $PMF_LANG['ad_news_from']; ?></label>
+        <input name="dateStart" id="dateStart" class="date-pick" />
         <br />
-
-        <label class="lefteditor" for="to"><?php print $PMF_LANG['ad_news_to']; ?></label>
-<?php
-    $dateEndAv = isset($newsData['dateEnd']) && ($newsData['dateEnd'] != '99991231235959');
-    $date['YYYY'] = $dateEndAv ? substr($newsData['dateEnd'],  0, 4) : '';
-    $date['MM']   = $dateEndAv ? substr($newsData['dateEnd'],  4, 2) : '';
-    $date['DD']   = $dateEndAv ? substr($newsData['dateEnd'],  6, 2) : '';
-    $date['HH']   = $dateEndAv ? substr($newsData['dateEnd'],  8, 2) : '';
-    $date['mm']   = $dateEndAv ? substr($newsData['dateEnd'], 10, 2) : '';
-    $date['ss']   = $dateEndAv ? substr($newsData['dateEnd'], 12, 2) : '';
-    print(printDateTimeInput('dateEnd', $date));
-?>
+        <label class="lefteditor" for="dateEnd"><?php print $PMF_LANG['ad_news_to']; ?></label>
+        <input name="dateEnd" id="dateEnd" class="date-pick" />
     </fieldset>
     <br />
     <input class="submit" type="submit" value="<?php print $PMF_LANG['ad_news_add']; ?>" />
@@ -173,30 +154,11 @@ if ('addnews' == $action && $permission["addnews"]) {
     </fieldset>
     <fieldset>
     <legend><?php print $PMF_LANG['ad_news_expiration_window']; ?></legend>
-        <label class="lefteditor" for="from"><?php print $PMF_LANG['ad_news_from']; ?></label>
-<?php
-        $dateStartAv = isset($newsData['dateStart']) && ($newsData['dateStart'] != '00000000000000');
-        $date['YYYY'] = $dateStartAv ? substr($newsData['dateStart'],  0, 4) : '';
-        $date['MM']   = $dateStartAv ? substr($newsData['dateStart'],  4, 2) : '';
-        $date['DD']   = $dateStartAv ? substr($newsData['dateStart'],  6, 2) : '';
-        $date['HH']   = $dateStartAv ? substr($newsData['dateStart'],  8, 2) : '';
-        $date['mm']   = $dateStartAv ? substr($newsData['dateStart'], 10, 2) : '';
-        $date['ss']   = $dateStartAv ? substr($newsData['dateStart'], 12, 2) : '';
-        print(printDateTimeInput('dateStart', $date));
-?>
+        <label class="lefteditor" for="dateStart"><?php print $PMF_LANG['ad_news_from']; ?></label>
+        <input name="dateStart" id="dateStart" class="date-pick" />
         <br />
-
-        <label class="lefteditor" for="to"><?php print $PMF_LANG['ad_news_to']; ?></label>
-<?php
-        $dateEndAv = isset($newsData['dateEnd']) && ($newsData['dateEnd'] != '99991231235959');
-        $date['YYYY'] = $dateEndAv ? substr($newsData['dateEnd'],  0, 4) : '';
-        $date['MM']   = $dateEndAv ? substr($newsData['dateEnd'],  4, 2) : '';
-        $date['DD']   = $dateEndAv ? substr($newsData['dateEnd'],  6, 2) : '';
-        $date['HH']   = $dateEndAv ? substr($newsData['dateEnd'],  8, 2) : '';
-        $date['mm']   = $dateEndAv ? substr($newsData['dateEnd'], 10, 2) : '';
-        $date['ss']   = $dateEndAv ? substr($newsData['dateEnd'], 12, 2) : '';
-        print(printDateTimeInput('dateEnd', $date));
-?>
+        <label class="lefteditor" for="dateEnd"><?php print $PMF_LANG['ad_news_to']; ?></label>
+        <input name="dateEnd" id="dateEnd" class="date-pick" />
     </fieldset>
     <br />
     <input class="submit" type="submit" value="<?php print $PMF_LANG['ad_news_edit']; ?>" />
@@ -218,27 +180,10 @@ if ('addnews' == $action && $permission["addnews"]) {
     }
 } elseif ('savenews' == $action && $permission["addnews"]) {
 
-    // Evaluate the passed validity range, if any
-    $dateStart =
-        (isset($_POST['dateStartYYYY']) && !empty($_POST['dateStartYYYY']) ? str_pad((int)$_POST['dateStartYYYY'], 4, '0', STR_PAD_LEFT) : '0001') .
-        (isset($_POST['dateStartMM']) && !empty($_POST['dateStartMM']) ? str_pad((int)$_POST['dateStartMM'], 2, '0', STR_PAD_LEFT) : '01') .
-        (isset($_POST['dateStartDD']) && !empty($_POST['dateStartDD']) ? str_pad((int)$_POST['dateStartDD'], 2, '0', STR_PAD_LEFT) : '01') .
-        (isset($_POST['dateStartHH']) && !empty($_POST['dateStartHH']) ? str_pad((int)$_POST['dateStartHH'], 2, '0', STR_PAD_LEFT) : '00') .
-        (isset($_POST['dateStartmm']) && !empty($_POST['dateStartss']) ? str_pad((int)$_POST['dateStartmm'], 2, '0', STR_PAD_LEFT) : '00') .
-        (isset($_POST['dateStartss']) && !empty($_POST['dateStartMM']) ? str_pad((int)$_POST['dateStartss'], 2, '0', STR_PAD_LEFT) : '00');
-    $dateEnd =
-        (isset($_POST['dateEndYYYY']) ? str_pad((int)$_POST['dateEndYYYY'], 4, '0', STR_PAD_LEFT) : '0000') .
-        (isset($_POST['dateEndMM']) && !empty($_POST['dateEndMM']) ? str_pad((int)$_POST['dateEndMM'], 2, '0', STR_PAD_LEFT) : '01') .
-        (isset($_POST['dateEndDD']) && !empty($_POST['dateEndDD']) ? str_pad((int)$_POST['dateEndDD'], 2, '0', STR_PAD_LEFT) : '01') .
-        (isset($_POST['dateEndHH']) && !empty($_POST['dateEndHH']) ? str_pad((int)$_POST['dateEndHH'], 2, '0', STR_PAD_LEFT) : '00') .
-        (isset($_POST['dateEndmm']) && !empty($_POST['dateEndmm']) ? str_pad((int)$_POST['dateEndmm'], 2, '0', STR_PAD_LEFT) : '00') .
-        (isset($_POST['dateEndss']) && !empty($_POST['dateEndss']) ? str_pad((int)$_POST['dateEndss'], 2, '0', STR_PAD_LEFT) : '00');
-
-    // Sanity checks
-    if ('00000101000000' == $dateEnd) {
-        $dateEnd = '99991231235959';
-    }
-        $newsData = array(
+    $dateStart = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
+    $dateEnd   = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);
+    
+    $newsData = array(
         'lang'          => $LANGCODE,
         'header'        => $db->escape_string($_POST['header']),
         'content'       => $db->escape_string($_POST['content']),
@@ -261,26 +206,9 @@ if ('addnews' == $action && $permission["addnews"]) {
     }
 } elseif ('updatenews' == $action && $permission["editnews"]) {
 
-    // Evaluate the passed validity range, if any
-    $dateStart =
-        (isset($_POST['dateStartYYYY']) && !empty($_POST['dateStartYYYY']) ? str_pad((int)$_POST['dateStartYYYY'], 4, '0', STR_PAD_LEFT) : '0001') .
-        (isset($_POST['dateStartMM']) && !empty($_POST['dateStartMM']) ? str_pad((int)$_POST['dateStartMM'], 2, '0', STR_PAD_LEFT) : '01') .
-        (isset($_POST['dateStartDD']) && !empty($_POST['dateStartDD']) ? str_pad((int)$_POST['dateStartDD'], 2, '0', STR_PAD_LEFT) : '01') .
-        (isset($_POST['dateStartHH']) && !empty($_POST['dateStartHH']) ? str_pad((int)$_POST['dateStartHH'], 2, '0', STR_PAD_LEFT) : '00') .
-        (isset($_POST['dateStartmm']) && !empty($_POST['dateStartss']) ? str_pad((int)$_POST['dateStartmm'], 2, '0', STR_PAD_LEFT) : '00') .
-        (isset($_POST['dateStartss']) && !empty($_POST['dateStartMM']) ? str_pad((int)$_POST['dateStartss'], 2, '0', STR_PAD_LEFT) : '00');
-    $dateEnd =
-        (isset($_POST['dateEndYYYY']) ? str_pad((int)$_POST['dateEndYYYY'], 4, '0', STR_PAD_LEFT) : '0000') .
-        (isset($_POST['dateEndMM']) && !empty($_POST['dateEndMM']) ? str_pad((int)$_POST['dateEndMM'], 2, '0', STR_PAD_LEFT) : '01') .
-        (isset($_POST['dateEndDD']) && !empty($_POST['dateEndDD']) ? str_pad((int)$_POST['dateEndDD'], 2, '0', STR_PAD_LEFT) : '01') .
-        (isset($_POST['dateEndHH']) && !empty($_POST['dateEndHH']) ? str_pad((int)$_POST['dateEndHH'], 2, '0', STR_PAD_LEFT) : '00') .
-        (isset($_POST['dateEndmm']) && !empty($_POST['dateEndmm']) ? str_pad((int)$_POST['dateEndmm'], 2, '0', STR_PAD_LEFT) : '00') .
-        (isset($_POST['dateEndss']) && !empty($_POST['dateEndss']) ? str_pad((int)$_POST['dateEndss'], 2, '0', STR_PAD_LEFT) : '00');
-
-    // Sanity checks
-    if ('00000101000000' == $dateEnd) {
-        $dateEnd = '99991231235959';
-    }
+    $dateStart = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
+    $dateEnd   = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);
+	
     $newsData = array(
         'lang'          => $LANGCODE,
         'header'        => $db->escape_string($_POST['header']),
@@ -319,6 +247,18 @@ if ('addnews' == $action && $permission["addnews"]) {
     <input class="submit" type="reset" onclick="javascript:history.back();" value="<?php print $PMF_LANG["ad_news_nodelete"]; ?>" />
     </form>
     </div>
+    
+    <script type="text/javascript">
+    /* <![CDATA[ */
+
+    $(function()
+    {
+        $('.date-pick').datePicker();
+    });
+    
+    /* ]]> */
+    </script>
+    
 <?php
     } else {
     	$delete_id = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
