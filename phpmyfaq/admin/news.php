@@ -7,8 +7,8 @@
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author     Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @since      2003-02-23 
- * @copyright  2003-2009 phpMyFAQ Team
  * @version    SVN: $Id$
+ * @copyright  2003-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -188,7 +188,7 @@ if ('addnews' == $action && $permission["addnews"]) {
         'header'        => $db->escape_string($_POST['header']),
         'content'       => $db->escape_string($_POST['content']),
         'authorName'    => $db->escape_string($_POST['authorName']),
-        'authorEmail'   => $db->escape_string($_POST['authorEmail']),
+        'authorEmail'   => PMF_Filter::filterInput(INPUT_POST, 'authorEmail', FILTER_VALIDATE_EMAIL),
         'active'        => (isset($_POST['active'])) ? $db->escape_string($_POST['active']) : 'n',
         'comment'       => (isset($_POST['comment'])) ? $db->escape_string($_POST['comment']) : 'n',
         'dateStart'     => ('' == $dateStart) ? '00000000000000' : $db->escape_string($dateStart),
@@ -214,7 +214,7 @@ if ('addnews' == $action && $permission["addnews"]) {
         'header'        => $db->escape_string($_POST['header']),
         'content'       => $db->escape_string($_POST['content']),
         'authorName'    => $db->escape_string($_POST['authorName']),
-        'authorEmail'   => $db->escape_string($_POST['authorEmail']),
+        'authorEmail'   => PMF_Filter::filterInput(INPUT_POST, 'authorEmail', FILTER_VALIDATE_EMAIL),
         'active'        => (isset($_POST['active'])) ? $db->escape_string($_POST['active']) : 'n',
         'comment'       => (isset($_POST['comment'])) ? $db->escape_string($_POST['comment']) : 'n',
         'dateStart'     => ('' == $dateStart) ? '00000000000000' : $db->escape_string($dateStart),
