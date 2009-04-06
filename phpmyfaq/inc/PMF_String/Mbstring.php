@@ -1,0 +1,88 @@
+<?php
+/**
+ * The string wrapper class using mbstring extension. 
+ *
+ * @package    phpMyFAQ
+ * @subpackage PMF_Mbstring
+ * @license    MPL
+ * @author     Anatoliy Belsky <ab@php.net>
+ * @since      2009-04-06
+ * @copyright  2004-2009 phpMyFAQ Team
+ * @version    SVN: $Id: Mbstring.php,v 1.56 2008-01-26 01:02:56 thorstenr Exp $
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
+
+/**
+ * PMF_Mbstring
+ *
+ * @package    phpMyFAQ
+ * @subpackage PMF_Mbstring
+ * @license    MPL
+ * @author     Anatoliy Belsky <ab@php.net>
+ * @since      2009-04-06
+ * @copyright  2004-2009 phpMyFAQ Team
+ * @version    SVN: $Id: Mbstring.php,v 1.56 2008-01-26 01:02:56 thorstenr Exp $
+ */
+class PMF_Mbstring
+{
+    /**
+     * Instance
+     * @var object
+     */
+    private static $instance;
+     
+    private final function __construct(){}
+    private final function __clone(){}
+    
+    
+    /**
+     * Create and return an instance
+     * @return object
+     */
+    public static function getInstance()
+    {
+        if(!self::$instance) {
+            self::$instance = new self;
+            mb_internal_encoding('utf8');
+        }
+        
+        return self::$instance;
+    }
+    
+    
+    /**
+     * Get string character count
+     * 
+     * @param string $str
+     * 
+     * @return int
+     */
+    public function strlen($str)
+    {
+        return mb_strlen($str);
+    }
+    
+    
+    /**
+     * Get a part of string
+     * 
+     * @param string $str
+     * @param int $start
+     * @param int $length
+     * 
+     * @return string
+     */
+    public function substr($str, $start, $length)
+    {
+        return mb_substr($str, $start, $length);
+    }
+}    
