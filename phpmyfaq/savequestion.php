@@ -99,13 +99,50 @@ if (!is_null($username) && !empty($usermail) && !empty($content) && IPCheck($_SE
 
     $search        = new PMF_Search();
     $search_result = array();
-    foreach ($search_stuff as $word) {
-        $search_result[] = searchengine($word);
+    $counter = 0;
+    foreach($search_stuff as $word) {
+        $tmp = getSearchData($word);
+        foreach($tmp as $foundItem) {
+            if(!isset($foundItem->id, $search_result[$foundItem->category_id])) {
+                $counter++;
+                $foundItem->searchterm = PMF_htmlentities(stripslashes($word), ENT_QUOTES, $PMF_LANG['metaCharset']);
+                $search_result[$foundItem->category_id][$foundItem->id] = $foundItem; 
+            }
+        }
     }
     
     if ($search_result) {
+        $search_result_html = '<p>' . $counter . $PMF_LANG["msgSearchAmount"] . "</p>\n";
+        $counter = 0;
+        $displayedCounter = 0;
+        reset($search_result);
+        foreach($search_result as $cat_id => $cat_contents) {
+            $search_result_html .= '<strong>'.$category->getPath($cat_id).'</strong>: ';
+            $search_result_html .= '<ul class="phpmyfaq_ul">' . "\n";
+            foreach($cat_contents as $cat_content_item) {
+                $url = sprintf(
+                    '?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s&amp;highlight=%s',
+                    $sids,
+                    $cat_content_item->category_id,
+                    $cat_content_item->id,
+                    $cat_content_item->lang,
+                    urlencode($cat_content_item->searchterm));
     
-        $tpl->processBlock('writeContent', 'adequateAnswers', array('answers' => $search_result));
+                $currentUrl = PMF_Link::getSystemRelativeUri();
+            
+                $oLink = new PMF_Link($currentUrl.$url);
+                $oLink->itemTitle = $cat_content_item->thema;
+                $oLink->text = $cat_content_item->thema;
+                $oLink->tooltip = $cat_content_item->thema;
+                $search_result_html .=
+                    '<li>' . $oLink->toHtmlAnchor() . '<br /></li>' . "\n";
+            }
+            $search_result_html .= '</ul>';
+        }
+        
+        $search_result_html .= '<div class="searchpreview"><strong>'.$PMF_LANG['msgSearchContent'].'</strong> '.$content.'...</div>';
+        
+        $tpl->processBlock('writeContent', 'adequateAnswers', array('answers' => $search_result_html));
         $tpl->processBlock('writeContent', 
                            'messageQuestionFound', 
                            array('BtnText' => $PMF_LANG['msgSendMailDespiteEverything'],
@@ -117,7 +154,6 @@ if (!is_null($username) && !empty($usermail) && !empty($content) && IPCheck($_SE
                                                     'usercat'  => $usercat,
                                                     'content'  => $content);
     } else {
-        
         if (sendAskedQuestion($username, $usermail, $usercat, $content)) {
             header('Location: index.php?action=savequestion&thankyou=1');
             exit;

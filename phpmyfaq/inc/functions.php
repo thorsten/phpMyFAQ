@@ -869,33 +869,21 @@ function quoted_printable_encode($return = '')
 
 
 /**
- * The main search function for the full text search
+ * Get search data weither as array or resource
  *
- * TODO: add filter for (X)HTML tag names and attributes!
- *
- * @param   string  Text/Number (solution id)
- * @param   string  '%' to avoid any category filtering
- * @param   boolean true to search over all languages
- * @param   boolean true to disable the results paging
- * @param   boolean true to use it for Instant Response
- * @return  string
- * @access  public
- * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author  Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @author  Adrianna Musiol <musiol@imageaccess.de>
- * @since   2002-09-16
+ * @param string $searchterm
+ * @param boolean $asResource
+ * @param string $cat
+ * @param boolean $allLanguages
+ * 
+ * @return array|resource
  */
-function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = false, $instantRespnse = false)
+function getSearchData($searchterm, $asResource = false, $cat = '%', $allLanguages = true)
 {
-    global $db, $sids, $category, $PMF_LANG, $LANGCODE, $faq, $current_user, $current_groups;
+    global $db, $LANGCODE;
 
-    $_searchterm = PMF_htmlentities(stripslashes($searchterm), ENT_QUOTES, $PMF_LANG['metaCharset']);
-    $seite       = 1;
-    $output      = '';
+    $result = null;  
     $num         = 0;
-    $searchItems = array();
-    $langs       = (true == $allLanguages) ? '&amp;langs=all' : '';
-    $seite       = PMF_Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 0);
     $faqconfig   = PMF_Configuration::getInstance();
 
     $cond = array(SQLPREFIX."faqdata.active" => "'yes'");
@@ -979,8 +967,43 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
         $where = " WHERE (".$where.") AND ".SQLPREFIX."faqdata.active = 'yes'";
         $query = 'SELECT '.SQLPREFIX.'faqdata.id AS id, '.SQLPREFIX.'faqdata.lang AS lang, '.SQLPREFIX.'faqcategoryrelations.category_id AS category_id, '.SQLPREFIX.'faqdata.thema AS thema, '.SQLPREFIX.'faqdata.content AS content FROM '.SQLPREFIX.'faqdata LEFT JOIN '.SQLPREFIX.'faqcategoryrelations ON '.SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id AND '.SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang '.$where;
         $result = $db->query($query);
-        $num = $db->num_rows($result);
     }
+
+    return $asResource ? $result : $db->fetchAll($result);
+}
+
+/**
+ * The main search function for the full text search
+ *
+ * TODO: add filter for (X)HTML tag names and attributes!
+ *
+ * @param   string  Text/Number (solution id)
+ * @param   string  '%' to avoid any category filtering
+ * @param   boolean true to search over all languages
+ * @param   boolean true to disable the results paging
+ * @param   boolean true to use it for Instant Response
+ * @return  string
+ * @access  public
+ * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author  Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @author  Adrianna Musiol <musiol@imageaccess.de>
+ * @since   2002-09-16
+ */
+function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = false, $instantRespnse = false)
+{
+    global $db, $sids, $category, $PMF_LANG, $LANGCODE, $faq, $current_user, $current_groups;
+
+    $_searchterm = PMF_htmlentities(stripslashes($searchterm), ENT_QUOTES, $PMF_LANG['metaCharset']);
+    $seite       = 1;
+    $output      = '';
+    $num         = 0;
+    $searchItems = array();
+    $langs       = (true == $allLanguages) ? '&amp;langs=all' : '';
+    $seite       = PMF_Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 0);
+    $faqconfig   = PMF_Configuration::getInstance();
+
+    $result = getSearchData($searchterm, true, $cat, $allLanguages);
+    $num = $db->num_rows($result);
 
     if (0 == $num) {
         $output = $PMF_LANG['err_noArticles'];
