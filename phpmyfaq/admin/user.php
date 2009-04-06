@@ -551,6 +551,23 @@ function updateUser(id)
     getUserList(userid);
 }
 
+/**
+ * Returns the user data as JSON object
+ *
+ * @param integer user_id User ID
+ */
+function getUserData(user_id)
+{
+    $.getJSON("index.php?action=ajax&ajax=user&ajaxaction=get_user_data&user_id=" + user_id,
+    	function(data) {
+    	    console.log(data);
+    	    $('#update_user_id').val(data.user_id);
+    	    $('#user_status_select').val(data.status);
+    	    // Append inout fields
+    	    $('#user_data_table').append('test');
+        });
+}
+
 /* ]]> */
 </script>
 <h2><?php print $text['header']; ?></h2>
@@ -568,6 +585,7 @@ function updateUser(id)
                     $('#user_list_autocomplete').result(function(event, data, formatted) {
                         var user_id = data[1];
                         $("#user_list_select").val(user_id);
+                        getUserData(user_id);
                     });
 
                     //]]>
