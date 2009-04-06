@@ -30,14 +30,12 @@ $userid      = PMF_Filter::filterInput(INPUT_POST, 'userid', FILTER_VALIDATE_INT
 
 if ($permission['adduser'] || $permission['edituser'] || $permission['deluser']) {
 
-    $user     = new PMF_User();
-    $userList = $user->getUserById($userid);
+    $user = new PMF_User();
+    $user->getUserById($userid);
 
 	// Return the user data
 	if ('get_user_data' == $ajax_action) {
-		$user_data = array();
-		
-		print json_encode($user_data);
+		print json_encode($user->userdata->get('*'));
 	}
 	
 	// Return the user rights
