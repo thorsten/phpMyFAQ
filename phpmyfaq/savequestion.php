@@ -5,7 +5,7 @@
  * @package    phpMyFAQ 
  * @subpackage Frontend
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     David Saez Padros <david@ols.es>
+ * @author     Anatoliy Belsky <anatoliy.belsky@mayflower.de>
  * @author     Jürgen Kuza <kig@bluewin.ch>
  * @since      2002-09-17
  * @version    SVN: $Id$
@@ -34,10 +34,8 @@ $usermail = PMF_Filter::filterInput(INPUT_POST, 'usermail', FILTER_VALIDATE_EMAI
 $usercat  = PMF_Filter::filterInput(INPUT_POST, 'rubrik', FILTER_VALIDATE_INT);
 $content  = PMF_Filter::filterInput(INPUT_POST, 'content', FILTER_SANITIZE_STRIPPED);
 $code     = PMF_Filter::filterInput(INPUT_POST, 'captcha', FILTER_SANITIZE_STRING);
-
 $code     = $code ? $code : PMF_Filter::filterInput(INPUT_GET, 'code', FILTER_SANITIZE_STRING);
 $domail   = PMF_Filter::filterInput(INPUT_GET, 'domail', FILTER_VALIDATE_INT);
-
 $thankyou = PMF_Filter::filterInput(INPUT_GET, 'thankyou', FILTER_VALIDATE_INT);
 
 function sendAskedQuestion($username, $usermail, $usercat, $content)
@@ -96,33 +94,31 @@ function sendAskedQuestion($username, $usermail, $usercat, $content)
 if (!is_null($username) && !empty($usermail) && !empty($content) && IPCheck($_SERVER['REMOTE_ADDR']) && 
     checkBannedWord(htmlspecialchars($content)) && $captcha->checkCaptchaCode($code)) {
     	
-    $pmf_sw = PMF_Stopwords::getInstance();
+    $pmf_sw       = PMF_Stopwords::getInstance();
     $search_stuff = $pmf_sw->clean($content);       
 
-    $search = new PMF_Search();
+    $search        = new PMF_Search();
     $search_result = array();
-    foreach($search_stuff as $word) {
+    foreach ($search_stuff as $word) {
         $search_result[] = searchengine($word);
     }
     
-    if($search_result) {
+    if ($search_result) {
     
         $tpl->processBlock('writeContent', 'adequateAnswers', array('answers' => $search_result));
         $tpl->processBlock('writeContent', 
                            'messageQuestionFound', 
                            array('BtnText' => $PMF_LANG['msgSendMailDespiteEverything'],
                                  'Message' => $PMF_LANG['msgSendMailIfNothingIsFound'],
-                                 'Code' => $code)
-        );
+                                 'Code'    => $code));
         
         $_SESSION['asked_questions'][$code] = array('username' => $username, 
                                                     'usermail' => $usermail,
                                                     'usercat'  => $usercat,
-                                                    'content'  => $content,
-        );
+                                                    'content'  => $content);
     } else {
         
-        if(sendAskedQuestion($username, $usermail, $usercat, $content)) {
+        if (sendAskedQuestion($username, $usermail, $usercat, $content)) {
             header('Location: index.php?action=savequestion&thankyou=1');
             exit;
         }
@@ -130,7 +126,7 @@ if (!is_null($username) && !empty($usermail) && !empty($content) && IPCheck($_SE
         $tpl->processBlock('writeContent', 'messageSaveQuestion', array('Message' => $PMF_LANG['err_noMailAdress']));
     }
 
-} else if(null != $domail && null != $code && isset($_SESSION['asked_questions'][$code])) {
+} elseif (null != $domail && null != $code && isset($_SESSION['asked_questions'][$code])) {
     
     extract($_SESSION['asked_questions'][$code]);
     sendAskedQuestion($username, $usermail, $usercat, $content);
@@ -138,8 +134,9 @@ if (!is_null($username) && !empty($usermail) && !empty($content) && IPCheck($_SE
     unset($_SESSION['asked_questions'][$code]);
     header('Location: index.php?action=savequestion&thankyou=1');
     exit;
-} else if(null != $thankyou) {
-    $tpl->processBlock('writeContent', 'messageSaveQuestion', array('Message' => $PMF_LANG['msgAskThx4Mail']));
+} elseif (null != $thankyou) {
+    $tpl->processBlock('writeContent', 
+        'messageSaveQuestion', array('Message' => $PMF_LANG['msgAskThx4Mail']));
 } else {
     if (false === IPCheck($_SERVER['REMOTE_ADDR'])) {
         $message = $PMF_LANG['err_bannedIP'];
