@@ -27,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
-if (!$permission['edituser'] and !$permission['deluser'] and !$permission['adduser']) {
+if (!$permission['edituser'] && !$permission['deluser'] && !$permission['adduser']) {
     exit();
 }
 
@@ -563,22 +563,14 @@ function updateUser(id)
                 <input type="text" id="user_list_autocomplete" name="user_list_search" />
                 <div id="user_list_autocomplete_choices" class="user_list_autocomplete" style="display: none;"></div>
                 <script type="text/javascript">
-                <!--
-                    //$('#user_list_autocomplete').autocomplete("index.php?action=ajax&ajax=user_list_autocomplete", { width: 260, selectFirst: true } );
-                    var url = 'index.php';
-                    var pars = 'action=ajax&ajax=user_list_autocomplete';
-                    new Ajax.Autocompleter(
-                        "user_list_autocomplete",
-                        "user_list_autocomplete_choices",
-                        url,
-                        {
-                            method: 'get',
-                            parameters: pars,
-                            minChars: 1,
-                            afterUpdateElement: userSelect
-                        }
-                    );
-                //-->
+                //<![CDATA[
+                    $('#user_list_autocomplete').autocomplete("index.php?action=ajax&ajax=user&ajaxaction=get_user_list", { width: 260, selectFirst: true } );
+                    $('#user_list_autocomplete').result(function(event, data, formatted) {
+                        var user_id = data[1];
+                        $("#user_list_select").val(user_id);
+                    });
+
+                    //]]>
                 </script>
                 <div class="button_row">
                     <input type="hidden" name="user_list_select" id="user_list_select">
