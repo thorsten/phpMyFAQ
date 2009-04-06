@@ -62,18 +62,11 @@ header("Vary: Negotiate,Accept");
 if (isset($action)) {
 	if ($action != 'comments' && $action != 'config' && $action != 'view' && $action != 'accept' &&
 	    $action != 'takequestion' && $action != 'editentry' && $action != 'editpreview' &&
-	    $action != 'stopwordsconfig') {
+	    $action != 'stopwordsconfig' && $action != 'user') {
 ?>
     <script type="text/javascript" src="../inc/js/prototype.js"></script>
 <?php 
 	}
-    switch ($action) {
-        case 'user':
-?>
-    <script type="text/javascript" src="../inc/js/scriptaculous/scriptaculous.js"></script>
-<?php
-        break;
-    }
 }
 ?>
 </head>
