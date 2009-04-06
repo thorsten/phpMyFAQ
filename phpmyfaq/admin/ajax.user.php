@@ -27,12 +27,17 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 
 $ajax_action = PMF_Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
 $userid      = PMF_Filter::filterInput(INPUT_POST, 'userid', FILTER_VALIDATE_INT);
+$usersearch  = PMF_Filter::filterInput(INPUT_POST, 'usersearch', FILTER_SANITIZE_STRING);
 
 if ($permission['adduser'] || $permission['edituser'] || $permission['deluser']) {
 
     $user = new PMF_User();
     $user->getUserById($userid);
 
+    if ('get_user_list' == $ajax_action) {
+    	print json_encode($user->searchUsers($usersearch));
+    }
+    
 	// Return the user data
 	if ('get_user_data' == $ajax_action) {
 		print json_encode($user->userdata->get('*'));
