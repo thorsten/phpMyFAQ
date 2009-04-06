@@ -35,101 +35,121 @@ $usercat  = PMF_Filter::filterInput(INPUT_POST, 'rubrik', FILTER_VALIDATE_INT);
 $content  = PMF_Filter::filterInput(INPUT_POST, 'content', FILTER_SANITIZE_STRIPPED);
 $code     = PMF_Filter::filterInput(INPUT_POST, 'captcha', FILTER_SANITIZE_STRING);
 
-if (!is_null($username) && !is_null($usermail) && !is_null($content) && IPCheck($_SERVER['REMOTE_ADDR']) && 
-    checkBannedWord(htmlspecialchars($content)) && $captcha->checkCaptchaCode($code)) {
-    	
-    if (isset($_POST['try_search'])) {
-        $printResult = searchEngine($content, $numr);
-        echo $numr;
+$code     = $code ? $code : PMF_Filter::filterInput(INPUT_GET, 'code', FILTER_SANITIZE_STRING);
+$domail   = PMF_Filter::filterInput(INPUT_GET, 'domail', FILTER_VALIDATE_INT);
+
+$thankyou = PMF_Filter::filterInput(INPUT_GET, 'thankyou', FILTER_VALIDATE_INT);
+
+function sendAskedQuestion($username, $usermail, $usercat, $content)
+{
+    global $IDN, $category, $PMF_LANG, $faq, $faqconfig;
+    
+    $retval = false;
+    $cat        = new PMF_Category();
+    $categories = $cat->getAllCategories();
+
+    if ($faqconfig->get('records.enableVisibilityQuestions')) {
+        $visibility = 'N';
     } else {
-        $numr = 0;
+        $visibility = 'Y';
     }
 
-    if ($numr == 0) {
-        $cat        = new PMF_Category();
-        $categories = $cat->getAllCategories();
-
-        if ($faqconfig->get('records.enableVisibilityQuestions')) {
-            $visibility = 'N';
-        } else {
-            $visibility = 'Y';
-        }
-
-        $questionData = array(
-            'ask_username'  => $username,
-            'ask_usermail'  => $IDN->encode($usermail),
-            'ask_category'  => $usercat,
-            'ask_content'   => $content,
-            'ask_date'      => date('YmdHis'),
-            'is_visible'    => $visibility
-            );
-
-        list($user, $host) = explode("@", $questionData['ask_usermail']);
-        if (PMF_Filter::filterVar($questionData['ask_usermail'], FILTER_VALIDATE_EMAIL) != false) {
-
-            $faq->addQuestion($questionData);
-
-            $questionMail = "User: ".$questionData['ask_username'].", mailto:".$questionData['ask_usermail']."\n"
-                            .$PMF_LANG["msgCategory"].": ".$categories[$questionData['ask_category']]["name"]."\n\n"
-                            .wordwrap($content, 72);
-
-            $userId = $category->getCategoryUser($questionData['ask_category']);
-            $oUser = new PMF_User();
-            $oUser->getUserById($userId);
-
-            $mail = new PMF_Mail();
-            $mail->unsetFrom();
-            $mail->setFrom($questionData['ask_usermail'], $questionData['ask_username']);
-            $mail->addTo($faqconfig->get('main.administrationMail'));
-            // Let the category owner get a copy of the message
-            if ($faqconfig->get('main.administrationMail') != $oUser->getUserData('email')) {
-                $mail->addCc($oUser->getUserData('email'));
-            }
-            $mail->subject = '%sitename%';
-            $mail->message = $questionMail;
-            $result = $mail->send();
-            unset($mail);
-
-            $message = $PMF_LANG['msgAskThx4Mail'];
-            
-        } else {
-        	
-            $message = $PMF_LANG['err_noMailAdress'];
-            
-        }
-        
-        $tpl->processTemplate('writeContent', array(
-                              'msgQuestion' => $PMF_LANG['msgQuestion'],
-                              'Message'     => $message));        
-    } else {
-        $tpl->templates['writeContent'] = $tpl->readTemplate('template/asksearch.tpl');
-        $tpl->processTemplate (
-            'writeContent',
-            array(
-                'msgQuestion'        => $PMF_LANG['msgQuestion'],
-                'printResult'        => $printResult,
-                'msgAskYourQuestion' => $PMF_LANG['msgAskYourQuestion'],
-                'msgContent'         => $questionData['ask_content'],
-                'postUsername'       => urlencode($questionData['ask_username']),
-                'postUsermail'       => urlencode($questionData['ask_usermail']),
-                'postRubrik'         => urlencode($questionData['ask_category']),
-                'postContent'        => urlencode($questionData['ask_content']),
-                'writeSendAdress'    => '?'.$sids.'action=savequestion',
-            )
+    $questionData = array(
+        'ask_username'  => $username,
+        'ask_usermail'  => $IDN->encode($usermail),
+        'ask_category'  => $usercat,
+        'ask_content'   => $content,
+        'ask_date'      => date('YmdHis'),
+        'is_visible'    => $visibility
         );
+
+    list($user, $host) = explode("@", $questionData['ask_usermail']);
+    
+    if (PMF_Filter::filterVar($questionData['ask_usermail'], FILTER_VALIDATE_EMAIL) != false) {
+
+        $faq->addQuestion($questionData);
+
+        $questionMail = "User: ".$questionData['ask_username'].", mailto:".$questionData['ask_usermail']."\n"
+                        .$PMF_LANG["msgCategory"].": ".$categories[$questionData['ask_category']]["name"]."\n\n"
+                        .wordwrap($content, 72);
+
+        $userId = $category->getCategoryUser($questionData['ask_category']);
+        $oUser = new PMF_User();
+        $oUser->getUserById($userId);
+
+        $mail = new PMF_Mail();
+        $mail->unsetFrom();
+        $mail->setFrom($questionData['ask_usermail'], $questionData['ask_username']);
+        $mail->addTo($faqconfig->get('main.administrationMail'));
+        // Let the category owner get a copy of the message
+        if ($faqconfig->get('main.administrationMail') != $oUser->getUserData('email')) {
+            $mail->addCc($oUser->getUserData('email'));
+        }
+        $mail->subject = '%sitename%';
+        $mail->message = $questionMail;
+        $retval = $mail->send();
     }
     
+    return $retval;
+}
+
+if (!is_null($username) && !empty($usermail) && !empty($content) && IPCheck($_SERVER['REMOTE_ADDR']) && 
+    checkBannedWord(htmlspecialchars($content)) && $captcha->checkCaptchaCode($code)) {
+    	
+    $pmf_sw = PMF_Stopwords::getInstance();
+    $search_stuff = $pmf_sw->clean($content);       
+
+    $search = new PMF_Search();
+    $search_result = array();
+    foreach($search_stuff as $word) {
+        $search_result[] = searchengine($word);
+    }
+    
+    if($search_result) {
+    
+        $tpl->processBlock('writeContent', 'adequateAnswers', array('answers' => $search_result));
+        $tpl->processBlock('writeContent', 
+                           'messageQuestionFound', 
+                           array('BtnText' => $PMF_LANG['msgSendMailDespiteEverything'],
+                                 'Message' => $PMF_LANG['msgSendMailIfNothingIsFound'],
+                                 'Code' => $code)
+        );
+        
+        $_SESSION['asked_questions'][$code] = array('username' => $username, 
+                                                    'usermail' => $usermail,
+                                                    'usercat'  => $usercat,
+                                                    'content'  => $content,
+        );
+    } else {
+        
+        if(sendAskedQuestion($username, $usermail, $usercat, $content)) {
+            header('Location: index.php?action=savequestion&thankyou=1');
+            exit;
+        }
+        
+        $tpl->processBlock('writeContent', 'messageSaveQuestion', array('Message' => $PMF_LANG['err_noMailAdress']));
+    }
+
+} else if(null != $domail && null != $code && isset($_SESSION['asked_questions'][$code])) {
+    
+    extract($_SESSION['asked_questions'][$code]);
+    sendAskedQuestion($username, $usermail, $usercat, $content);
+    
+    unset($_SESSION['asked_questions'][$code]);
+    header('Location: index.php?action=savequestion&thankyou=1');
+    exit;
+} else if(null != $thankyou) {
+    $tpl->processBlock('writeContent', 'messageSaveQuestion', array('Message' => $PMF_LANG['msgAskThx4Mail']));
 } else {
-	
     if (false === IPCheck($_SERVER['REMOTE_ADDR'])) {
         $message = $PMF_LANG['err_bannedIP'];
     } else {
         $message = $PMF_LANG['err_SaveQuestion'];
     }
-        
-    $tpl->processTemplate('writeContent', array(
-                          'msgQuestion' => $PMF_LANG['msgQuestion'],
-                          'Message'     => $message));
+    
+    $tpl->processBlock('writeContent', 'messageSaveQuestion', array('Message' => $message));
 }
 
+$tpl->processTemplate('writeContent', array(
+          'msgQuestion' => $PMF_LANG['msgQuestion']));
 $tpl->includeTemplate('writeContent', 'index');

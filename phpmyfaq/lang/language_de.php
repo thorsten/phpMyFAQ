@@ -912,3 +912,7 @@ $PMF_LANG['stickyRecordsHeader'] = 'Sticky Records';
 // added 2.5.0-beta - 2009-04-01 by Anatoliy
 $PMF_LANG['ad_menu_stopwordsconfig'] = 'Stoppwörter';
 $PMF_LANG['ad_config_stopword_input'] = 'Neues Stoppwort hinzufügen';
+
+// added 2.5.0-beta - 2009-04-06 by Anatoliy
+$PMF_LANG['msgSendMailDespiteEverything'] = 'Nein, keine passende Antwort gelistet (Mail senden)';
+$PMF_LANG['msgSendMailIfNothingIsFound'] = 'Ist die gesuchte Antwort oben gelistet?';
