@@ -114,12 +114,38 @@ if (!is_null($username) && !empty($usermail) && !empty($content) && IPCheck($_SE
     if ($search_result) {
         $search_result_html = '<p>' . $counter . $PMF_LANG["msgSearchAmount"] . "</p>\n";
         $counter = 0;
-        $displayedCounter = 0;
-        reset($search_result);
         foreach($search_result as $cat_id => $cat_contents) {
-            $search_result_html .= '<strong>'.$category->getPath($cat_id).'</strong>: ';
-            $search_result_html .= '<ul class="phpmyfaq_ul">' . "\n";
+            $tmp_result_html = '';
             foreach($cat_contents as $cat_content_item) {
+                $b_permission = false;
+                //Groups Permission Check
+                if ($faqconfig->get('main.permLevel') == 'medium') {
+                    $perm_group = $faq->getPermission('group', $cat_content_item->id);
+                    foreach ($current_groups as $index => $value){
+                        if (in_array($value, $perm_group)) {
+                            $b_permission = true;
+                        }
+                    }
+                }
+                if ($faqconfig->get('main.permLevel') == 'basic' || $b_permission) {
+                    $perm_user = $faq->getPermission('user', $cat_content_item->id);
+                    foreach ($perm_user as $index => $value) {
+                        if ($value == -1) {
+                            $b_permission = true;
+                            break;
+                        } elseif (((int)$value == $current_user)) {
+                            $b_permission = true;
+                            break;
+                        } else {
+                            $b_permission = false;
+                        }
+                    }
+                }
+                
+                if(!$b_permission) {
+                    continue;
+                }
+                
                 $url = sprintf(
                     '?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s&amp;highlight=%s',
                     $sids,
@@ -134,10 +160,15 @@ if (!is_null($username) && !empty($usermail) && !empty($content) && IPCheck($_SE
                 $oLink->itemTitle = $cat_content_item->thema;
                 $oLink->text = $cat_content_item->thema;
                 $oLink->tooltip = $cat_content_item->thema;
-                $search_result_html .=
-                    '<li>' . $oLink->toHtmlAnchor() . '<br /></li>' . "\n";
+                $tmp_result_html .= '<li>' . $oLink->toHtmlAnchor() . '<br /></li>' . "\n";
             }
-            $search_result_html .= '</ul>';
+            
+            if($tmp_result_html) {
+                $search_result_html .= '<strong>'.$category->getPath($cat_id).'</strong>: ';
+                $search_result_html .= '<ul class="phpmyfaq_ul">' . "\n";
+                $search_result_html .= $tmp_result_html;
+                $search_result_html .= '</ul>';
+            }
         }
         
         $search_result_html .= '<div class="searchpreview"><strong>'.$PMF_LANG['msgSearchContent'].'</strong> '.$content.'...</div>';
