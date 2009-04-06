@@ -26,7 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 }
 
 $ajax_action = PMF_Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
-$userid      = PMF_Filter::filterInput(INPUT_POST, 'userid', FILTER_VALIDATE_INT);
+$user_id     = PMF_Filter::filterInput(INPUT_GET, 'user_id', FILTER_VALIDATE_INT);
 $usersearch  = PMF_Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRING);
 
 if ($permission['adduser'] || $permission['edituser'] || $permission['deluser']) {
@@ -39,7 +39,7 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
     	}
     }
     
-    $user->getUserById($userid);
+    $user->getUserById($user_id);
     
 	// Return the user data
 	if ('get_user_data' == $ajax_action) {
