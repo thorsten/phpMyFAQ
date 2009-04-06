@@ -192,7 +192,7 @@ class PMF_DB_Sqlite implements PMF_DB_Driver
      * @author  Matteo scaramuccia <matteo@scaramuccia.com>
      * @since   2005-06-27
      */
-    public function search($table, $assoc, $joinedTable = '', $joinAssoc = array(), $match = array(), $string = '', $cond = array(), $orderBy = array())
+    public function search($table, Array $assoc, $joinedTable = '', Array $joinAssoc = array(), $match = array(), $string = '', Array $cond = array(), Array $orderBy = array())
     {
         $string = trim($string);
         $fields = '';

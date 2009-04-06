@@ -224,7 +224,7 @@ class PMF_DB_Ibm_db2 implements PMF_DB_Driver
      * @author  Matteo scaramuccia <matteo@scaramuccia.com>
      * @since   2005-04-16
      */
-    function search($table, $assoc, $joinedTable = '', $joinAssoc = array(), $match = array(), $string = '', $cond = array(), $orderBy = array())
+    function search($table, Array $assoc, $joinedTable = '', Array $joinAssoc = array(), $match = array(), $string = '', Array $cond = array(), Array $orderBy = array())
     {
         $string = trim($string);
         $fields = '';

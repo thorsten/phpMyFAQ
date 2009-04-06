@@ -247,7 +247,7 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
      * @author  Matteo scaramuccia <matteo@scaramuccia.com>
      * @since   2004-08-06
      */
-    public function search($table, $assoc, $joinedTable = '', $joinAssoc = array(), $match = array(), $string = '', $cond = array(), $orderBy = array())
+    public function search($table, Array $assoc, $joinedTable = '', Array $joinAssoc = array(), $match = array(), $string = '', Array $cond = array(), Array $orderBy = array())
     {
         $string = pg_escape_string(trim($string));
         $fields = "";
