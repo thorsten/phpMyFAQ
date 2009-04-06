@@ -208,6 +208,16 @@ if (isset($auth) && in_array(true, $permission)) {
             case 'records':	
                 require 'ajax.records.php';
                 break;
+                
+            // Users
+            case 'user': 
+                require 'ajax.user.php';
+                break;
+            
+            // Groups
+            case 'group': 
+                require 'ajax.group.php';
+                break;
             }
         exit();
         }
