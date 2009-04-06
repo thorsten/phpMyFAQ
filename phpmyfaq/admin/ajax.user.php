@@ -43,7 +43,10 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
     
 	// Return the user data
 	if ('get_user_data' == $ajax_action) {
-		print json_encode($user->userdata->get('*'));
+		$userdata           = array();
+		$userdata           = $user->userdata->get('*');
+        $userdata['status'] = $user->getStatus();
+		print json_encode($userdata);
 	}
 	
 	// Return the user rights
