@@ -44,13 +44,6 @@ class PMF_String_Basic extends PMF_String_Abstract
      * @var object
      */
     private static $instance;
-    
-    
-    /**
-     * Default encoding
-     * @var string
-     */
-    const DEFAULT_ENCODING = 'iso-8859-1';
 
     
     /**

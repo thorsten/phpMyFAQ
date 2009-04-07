@@ -42,13 +42,6 @@ class PMF_String_Mbstring extends PMF_String_Abstract
 
     
     /**
-     * Default encoding
-     * @var string
-     */
-    const DEFAULT_ENCODING = 'utf8';
-
-    
-    /**
      * 
      * Constructor
      * @return PMF_String_Mbstring

@@ -35,10 +35,16 @@
 abstract class PMF_String_Abstract
 {
     /**
+     * Default encoding
+     * @var string
+     */
+    const DEFAULT_ENCODING = 'utf8';
+	
+    /**
      * Encoding
      * @var unknown_type
      */
-    private $encoding = self::DEFAULT_ENCODING;
+    protected $encoding = self::DEFAULT_ENCODING;
     
     
     /**
