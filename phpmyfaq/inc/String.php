@@ -54,7 +54,6 @@ class PMF_String
     public static function init($encoding = null)
     {
         if(!self::$instance) {
-            $cwd = dirname(__FILE__);
             if(extension_loaded('mbstring')) {
                 self::$instance = PMF_String_Mbstring::getInstance($encoding);
             } else {
