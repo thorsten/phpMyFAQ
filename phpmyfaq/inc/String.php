@@ -69,7 +69,7 @@ class PMF_String
      */
     public static function getEncoding()
     {
-    	return self::$instance->getEncoding();
+        return self::$instance->getEncoding();
     }
     
     
@@ -102,54 +102,54 @@ class PMF_String
     
     
     /**
-	 * Get position of the first occurence of a string
-	 * @param string $haystack
-	 * @param string $needle
-	 * @param string $offset
-	 * 
-	 * @return int
+     * Get position of the first occurence of a string
+     * @param string $haystack
+     * @param string $needle
+     * @param string $offset
+     * 
+     * @return int
      */
     public static function strpos($haystack, $needle, $offset = null)
     {
-    	return self::$instance->strpos($haystack, $needle, $offset);
+        return self::$instance->strpos($haystack, $needle, $offset);
     }
     
     
     /**
-	 * Make a string lower case
-	 * @param string $str
-	 * 
-	 * @return string
+     * Make a string lower case
+     * @param string $str
+     * 
+     * @return string
      */
     public static function strtolower($str)
     {
-    	return self::$instance->strtolower($str);
+        return self::$instance->strtolower($str);
     }
     
     
     /**
-	 * Make a string upper case
-	 * @param string $str
-	 * 
-	 * @return string
+     * Make a string upper case
+     * @param string $str
+     * 
+     * @return string
      */
     public static function strtoupper($str)
     {
-    	return self::$instance->strtoupper($str);
+        return self::$instance->strtoupper($str);
     }
     
     
     /**
-	 * Get occurence of a string within another
-	 * @param string $haystack
-	 * @param string $needle
-	 * @param boolean $part
-	 * 
-	 * @return string|false
+     * Get occurence of a string within another
+     * @param string $haystack
+     * @param string $needle
+     * @param boolean $part
+     * 
+     * @return string|false
      */
     public static function strstr($haystack, $needle, $part = false)
     {
-    	return self::$instance->strstr($haystack, $needle, $part);
+        return self::$instance->strstr($haystack, $needle, $part);
     }
     
     
@@ -159,6 +159,6 @@ class PMF_String
      */
     public function setEncoding($encoding)
     {
-    	self::$instance->setEncoding($encoding);
+        self::$instance->setEncoding($encoding);
     }
 }
