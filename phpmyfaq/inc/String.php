@@ -23,6 +23,10 @@
 
 /**
  * PMF_String
+ * 
+ * The class uses mbstring extension if available. It's strongly recommended
+ * to use and extend this class instead of using direct string functions. Doing so
+ * you garantee your code is upwards compatible with UTF-8 improvements.
  *
  * @package    phpMyFAQ
  * @subpackage PMF_String
@@ -43,23 +47,30 @@ class PMF_String
          */
     }
     
-    /**
-     * 
-     * Check if the instance exists and create it if needed.
+    /** 
+     * Initalize myself
      * @return void
      */
-    public static function instance()
+    public static function init($encoding = null)
     {
         if(!self::$instance) {
             $cwd = dirname(__FILE__);
             if(extension_loaded('mbstring')) {
-                require_once "$cwd/PMF_String/Mbstring.php";
-                self::$instance = PMF_Mbstring::getInstance();
+                self::$instance = PMF_String_Mbstring::getInstance($encoding);
             } else {
-                require_once "$cwd/PMF_String/Basic.php";
-                self::$instance = PMF_StringBasic::getInstance();
+                self::$instance = PMF_String_Basic::getInstance($encoding);
             }
         }
+    }
+    
+    
+    /**
+     * Get current encoding
+     * @return string
+     */
+    public static function getEncoding()
+    {
+    	return self::$instance->getEncoding();
     }
     
     
@@ -70,10 +81,8 @@ class PMF_String
      * 
      * @return int
      */
-    public function strlen($str)
+    public static function strlen($str)
     {
-        self::instance();
-        
         return self::$instance->strlen($str);
     }
     
@@ -87,10 +96,70 @@ class PMF_String
      * 
      * @return string
      */
-    public function substr($str, $start, $length)
+    public static function substr($str, $start, $length = null)
     {
-        self::instance();
-
         return self::$instance->substr($str, $start, $length);
+    }
+    
+    
+    /**
+	 * Get position of the first occurence of a string
+	 * @param string $haystack
+	 * @param string $needle
+	 * @param string $offset
+	 * 
+	 * @return int
+     */
+    public static function strpos($haystack, $needle, $offset = null)
+    {
+    	return self::$instance->strpos($haystack, $needle, $offset);
+    }
+    
+    
+    /**
+	 * Make a string lower case
+	 * @param string $str
+	 * 
+	 * @return string
+     */
+    public static function strtolower($str)
+    {
+    	return self::$instance->strtolower($str);
+    }
+    
+    
+    /**
+	 * Make a string upper case
+	 * @param string $str
+	 * 
+	 * @return string
+     */
+    public static function strtoupper($str)
+    {
+    	return self::$instance->strtoupper($str);
+    }
+    
+    
+    /**
+	 * Get occurence of a string within another
+	 * @param string $haystack
+	 * @param string $needle
+	 * @param boolean $part
+	 * 
+	 * @return string|false
+     */
+    public static function strstr($haystack, $needle, $part = false)
+    {
+    	return self::$instance->strstr($haystack, $needle, $part);
+    }
+    
+    
+    /**
+     * Set current encoding
+     * @return string
+     */
+    public function setEncoding($encoding)
+    {
+    	self::$instance->setEncoding($encoding);
     }
 }

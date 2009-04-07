@@ -69,6 +69,11 @@ if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE) && is_null($sh
 }
 
 //
+// Initalizing static string wrapper
+//
+PMF_String::init($PMF_LANG["metaCharset"]);
+
+//
 // Get user action
 //
 $action = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING, 'main');

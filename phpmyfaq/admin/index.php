@@ -64,6 +64,11 @@ if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE)) {
 }
 
 //
+// Initalizing static string wrapper
+//
+PMF_String::init($PMF_LANG["metaCharset"]);
+
+//
 // Create a new FAQ object
 //
 $faq = new PMF_Faq();

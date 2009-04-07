@@ -32,13 +32,26 @@
  * @copyright  2004-2009 phpMyFAQ Team
  * @version    SVN: $Id: Basic.php,v 1.56 2008-01-26 01:02:56 thorstenr Exp $
  */
-class PMF_StringBasic
+class PMF_String_Basic
 {
     /**
      * Instance
      * @var object
      */
     private static $instance;
+    
+    /**
+     * Default encoding
+     * @var string
+     */
+    const DEFAULT_ENCODING = 'iso-8859-1';
+    
+    /**
+     * Encoding
+     * @var unknown_type
+     */
+    private $encoding = self::DEFAULT_ENCODING;
+
     
     private final function __construct(){}
     private final function __clone(){}
@@ -48,14 +61,29 @@ class PMF_StringBasic
      * Create and return an instance
      * @return object
      */
-    public static function getInstance()
+    public static function getInstance($encoding = null)
     {
         if(!self::$instance) {
        	    self::$instance = new self;
+       	    self::$instance->encoding = null == $encoding ? self::DEFAULT_ENCODING : $encoding;
         }
        
         return self::$instance;
     }
+    
+    
+    /**
+     * Get string character count
+     * 
+     * @param string $str
+     * 
+     * @return int
+     */
+    public function strlen($str)
+    {
+        return strlen($str);
+    }
+    
     
     /**
      * Get a part of string
@@ -66,8 +94,82 @@ class PMF_StringBasic
      * 
      * @return string
      */
-    public function substr($str, $start, $length)
+    public function substr($str, $start, $length = null)
     {
+    	$length = null == $length ? strlen($str) : $length;
+    	
         return substr($str, $start, $length);
+    }
+    
+    
+    /**
+     * Get current encoding
+     * @return string
+     */
+    public function getEncoding()
+    {
+    	return $this->encoding;
+    }
+    
+
+    /**
+	 * Get position of the first occurence of a string
+	 * @param string $haystack
+	 * @param string $needle
+	 * @param string $offset
+	 * 
+	 * @return int
+     */
+    public static function strpos($haystack, $needle, $offset = null)
+    {
+    	return strpos($haystack, $needle, (int) $offset, $this->encoding);
+    }
+    
+    
+    /**
+	 * Make a string lower case
+	 * @param string $str
+	 * 
+	 * @return string
+     */
+    public static function strtolower($str)
+    {
+    	return strtolower($str);
+    }
+    
+    
+    /**
+	 * Make a string upper case
+	 * @param string $str
+	 * 
+	 * @return string
+     */
+    public static function strtoupper($str)
+    {
+    	return strtoupper($str);
+    }
+    
+    
+    /**
+	 * Get occurence of a string within another
+	 * @param string $haystack
+	 * @param string $needle
+	 * @param boolean $part
+	 * 
+	 * @return string|false
+     */
+    public static function strstr($haystack, $needle, $part = false)
+    {
+    	return strstr($haystack, $needle, (boolean) $part);
+    }
+    
+    
+    /**
+     * Set current encoding
+     * @return string
+     */
+    public function setEncoding($encoding)
+    {
+    	$this->encoding = $encoding;
     }
 }
