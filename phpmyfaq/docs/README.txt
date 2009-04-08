@@ -13,6 +13,8 @@ Changes since 2.5.0-alpha2:
 - added new administration layout (Thorsten)
 - added frontend for search logs statistics (Anatoliy Belsky)
 - added sticky FAQ records (Anatoliy Belsky)
+- added smart answering for user questions (Anatoliy Belsky)
+- added string wrapper for better UTF-8 handling (Anatoliy Belsky)
 - ajaxified comment and record administration (Thorsten)
 - fixed a lot of bugs (Thorsten)
 
@@ -38,6 +40,8 @@ Version 2.5.0-beta - 2009-04-
 - added most popular searches list (Thorsten)
 - added frontend for search logs statistics (Anatoliy Belsky)
 - added sticky FAQ records (Anatoliy Belsky)
+- added smart answering for user questions (Anatoliy Belsky)
+- added string wrapper for better UTF-8 handling (Anatoliy Belsky)
 - added jQuery 1.3 as replacement for Prototype/Script.aculo.us (Thorsten)
 - improved user administration frontend (Sarah Hermann)
 - improved performance (Thorsten)
