@@ -7,8 +7,8 @@
  * @license    MPL
  * @author     Anatoliy Belsky <ab@php.net>
  * @since      2009-04-06
- * @copyright  2004-2009 phpMyFAQ Team
- * @version    SVN: $Id: Mbstring.php,v 1.56 2008-01-26 01:02:56 thorstenr Exp $
+ * @version    SVN: $Id$
+ * @copyright  2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -29,27 +29,29 @@
  * @license    MPL
  * @author     Anatoliy Belsky <ab@php.net>
  * @since      2009-04-06
- * @copyright  2004-2009 phpMyFAQ Team
- * @version    SVN: $Id: Mbstring.php,v 1.56 2008-01-26 01:02:56 thorstenr Exp $
+ * @version    SVN: $Id$
+ * @copyright  2009 phpMyFAQ Team
  */
 abstract class PMF_String_Abstract
 {
     /**
      * Default encoding
+     * 
      * @var string
      */
     const DEFAULT_ENCODING = 'utf8';
 	
     /**
      * Encoding
-     * @var unknown_type
+     * 
+     * @var string
      */
     protected $encoding = self::DEFAULT_ENCODING;
     
-    
     /**
      * Check if the string is a unicode string
-     * @param string $str
+     * 
+     * @param string $str String
      * 
      * @return boolean
      */
@@ -67,18 +69,17 @@ abstract class PMF_String_Abstract
 
         return preg_match($regex, $str) === 1;
     }
-    
-    
+        
     /**
      * Set current encoding
+     * 
      * @return string
      */
     public function setEncoding($encoding)
     {
         $this->encoding = $encoding;
     }
-    
-    
+        
     /**
      * Get current encoding
      * @return string
@@ -87,5 +88,4 @@ abstract class PMF_String_Abstract
     {
         return $this->encoding;
     }
-    
 }

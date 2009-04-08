@@ -7,8 +7,8 @@
  * @license    MPL
  * @author     Anatoliy Belsky <ab@php.net>
  * @since      2009-04-06
- * @copyright  2004-2009 phpMyFAQ Team
- * @version    SVN: $Id: Basic.php,v 1.56 2008-01-26 01:02:56 thorstenr Exp $
+ * @version    SVN: $Id$
+ * @copyright  2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -34,50 +34,48 @@
  * @license    MPL
  * @author     Anatoliy Belsky <ab@php.net>
  * @since      2009-04-06
- * @copyright  2004-2009 phpMyFAQ Team
- * @version    SVN: $Id: Basic.php,v 1.56 2008-01-26 01:02:56 thorstenr Exp $
+ * @version    SVN: $Id$
+ * @copyright  2009 phpMyFAQ Team
  */
 class PMF_String_Basic extends PMF_String_Abstract
 {
     /**
      * Instance
+     * 
      * @var object
      */
     private static $instance;
 
-    
     /**
      * 
      * Constructor
-     * @return PMF_String_Mbstring
+     * 
+     * @return PMF_String_Basic
      */
     private final function __construct()
     {
-        /**
-         * Just blocking
-         */
     }
  
     
     /**
      * Create and return an instance
-     * @return object
+     * 
+     * @return PMF_String_Basic
      */
     public static function getInstance($encoding = null)
     {
-        if(!self::$instance) {
-               self::$instance = new self;
-               self::$instance->encoding = null == $encoding ? self::DEFAULT_ENCODING : $encoding;
+        if (!self::$instance) {
+            self::$instance = new self;
+            self::$instance->encoding = null == $encoding ? self::DEFAULT_ENCODING : $encoding;
         }
        
         return self::$instance;
     }
     
-    
     /**
      * Get string character count
      * 
-     * @param string $str
+     * @param string $str String
      * 
      * @return int
      */
@@ -90,9 +88,9 @@ class PMF_String_Basic extends PMF_String_Abstract
     /**
      * Get a part of string
      * 
-     * @param string $str
-     * @param int $start
-     * @param int $length
+     * @param string $str    String
+     * @param int    $start  Start
+     * @param int    $length Length
      * 
      * @return string
      */
@@ -102,13 +100,13 @@ class PMF_String_Basic extends PMF_String_Abstract
         
         return substr($str, $start, $length);
     }
-    
 
     /**
      * Get position of the first occurence of a string
-     * @param string $haystack
-     * @param string $needle
-     * @param string $offset
+     * 
+     * @param string $haystack Haystack
+     * @param string $needle   Needle
+     * @param string $offset   Offset
      * 
      * @return int
      */
@@ -117,10 +115,10 @@ class PMF_String_Basic extends PMF_String_Abstract
         return strpos($haystack, $needle, (int) $offset, $this->encoding);
     }
     
-    
     /**
      * Make a string lower case
-     * @param string $str
+     * 
+     * @param string $str String
      * 
      * @return string
      */
@@ -129,10 +127,10 @@ class PMF_String_Basic extends PMF_String_Abstract
         return strtolower($str);
     }
     
-    
     /**
      * Make a string upper case
-     * @param string $str
+     * 
+     * @param string $str String
      * 
      * @return string
      */
@@ -141,12 +139,12 @@ class PMF_String_Basic extends PMF_String_Abstract
         return strtoupper($str);
     }
     
-    
     /**
      * Get occurence of a string within another
-     * @param string $haystack
-     * @param string $needle
-     * @param boolean $part
+     * 
+     * @param string $haystack Haystack
+     * @param string $needle   Needle
+     * @param boolean $part    Part
      * 
      * @return string|false
      */
