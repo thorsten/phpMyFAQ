@@ -54,13 +54,17 @@ class PMF_String_Mbstring extends PMF_String_Abstract
     /**
      * Create and return an instance
      * 
+     * @param string $encoding
+     * @param string $language
+     * 
      * @return PMF_String_Mbstring
      */
-    public static function getInstance($encoding = null)
+    public static function getInstance($encoding = null, $language = 'en')
     {
         if (!self::$instance) {
             self::$instance = new self;
             self::$instance->encoding = null == $encoding ? self::DEFAULT_ENCODING : $encoding;
+            self::$instance->language = PMF_Init::isASupportedLanguage($language) ? $language : self::DEFAULT_LANGUAGE;
         }
         
         return self::$instance;

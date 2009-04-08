@@ -1,13 +1,13 @@
 <?php
 /**
- * The string wrapper class using single byte string functions 
+ * The string wrapper class using single byte string functions.
  *
  * @package    phpMyFAQ
  * @subpackage PMF_String
  * @license    MPL
  * @author     Anatoliy Belsky <ab@php.net>
- * @since      2009-04-06
- * @version    SVN: $Id$
+ * @since      2009-04-08
+ * @version    SVN: $Id: Basic.php 4153 2009-04-08 05:54:08Z thorsten $
  * @copyright  2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
@@ -22,17 +22,25 @@
  */
 
 /**
- * PMF_String_Basic 
+ * PMF_String_UTF8ToLatinConvertable
+ *
+ * The trick is to use xml utf8 functions to encode and decode
+ * utf8 strings. This is useful for strings which could be
+ * cleanly converted to iso-8859-1 and back with utf8_decode and
+ * utf8_decode, so then non multibyte functions could be use
+ *
+ * TODO Cover also nearly complete supported charsets, languages and chars
+ *      Notice this article: http://en.wikipedia.org/wiki/ISO_8859-1
  * 
  * @package    phpMyFAQ
  * @subpackage PMF_String
  * @license    MPL
  * @author     Anatoliy Belsky <ab@php.net>
- * @since      2009-04-06
- * @version    SVN: $Id$
+ * @since      2009-04-08
+ * @version    SVN: $Id: Basic.php 4153 2009-04-08 05:54:08Z thorsten $
  * @copyright  2009 phpMyFAQ Team
  */
-class PMF_String_Basic extends PMF_String_Abstract
+class PMF_String_UTF8ToLatinConvertable extends PMF_String_Abstract
 {
     /**
      * Instance
@@ -41,15 +49,6 @@ class PMF_String_Basic extends PMF_String_Abstract
      */
     private static $instance;
 
-    
-    /**
-     * Default encoding
-     * 
-     * @var string
-     */
-    const DEFAULT_ENCODING = 'iso-8859-1';
-    
-    
     /**
      * 
      * Constructor
@@ -159,6 +158,5 @@ class PMF_String_Basic extends PMF_String_Abstract
     public static function strstr($haystack, $needle, $part = false)
     {
         return strstr($haystack, $needle, (boolean) $part);
-    }
-    
+    }   
 }

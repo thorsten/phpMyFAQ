@@ -71,7 +71,7 @@ if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE) && is_null($sh
 //
 // Initalizing static string wrapper
 //
-PMF_String::init($PMF_LANG["metaCharset"]);
+PMF_String::init($PMF_LANG["metaCharset"], $LANGCODE);
 
 //
 // Get user action

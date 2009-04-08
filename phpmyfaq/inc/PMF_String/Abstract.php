@@ -39,14 +39,30 @@ abstract class PMF_String_Abstract
      * 
      * @var string
      */
-    const DEFAULT_ENCODING = 'utf8';
+    const DEFAULT_ENCODING = 'utf-8';
 	
+    
+    /**
+     * Default language
+     * @var string
+     */
+    const DEFAULT_LANGUAGE = 'en';
+    
+    
     /**
      * Encoding
      * 
      * @var string
      */
     protected $encoding = self::DEFAULT_ENCODING;
+    
+    
+    /**
+     * Language
+     * @var string
+     */
+    protected $language = self::DEFAULT_LANGUAGE;
+    
     
     /**
      * Check if the string is a unicode string

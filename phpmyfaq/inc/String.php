@@ -58,14 +58,17 @@ class PMF_String
      * Initalize myself
      * 
      * @return void
-     */
-    public static function init($encoding = null)
+     */ 
+    public static function init($encoding = null, $language = 'en')
     {
         if (!self::$instance) {
+            $encoding = 'utf8' == strtolower($encoding) ? 'utf-8' : $encoding;
             if (extension_loaded('mbstring')) {
-                self::$instance = PMF_String_Mbstring::getInstance($encoding);
+                self::$instance = PMF_String_Mbstring::getInstance($encoding, $language);
+            } else if($encoding == 'utf-8' && self::isLangUTF8ToLatinConvertable($language)) {
+                self::$instance = PMF_String_UTF8ToLatinConvertable::getInstance($encoding, $language);
             } else {
-                self::$instance = PMF_String_Basic::getInstance($encoding);
+                self::$instance = PMF_String_Basic::getInstance($encoding, $language);
             }
         }
     }
@@ -164,8 +167,26 @@ class PMF_String
      * 
      * @return string
      */
-    public function setEncoding($encoding)
+    public static function setEncoding($encoding)
     {
         self::$instance->setEncoding($encoding);
+    }
+    
+    
+    /**
+	 * Check if a language could be converted to iso-8859-1
+	 * @param string $language
+	 * 
+	 * @return boolean
+     */
+    public static function isLangUTF8ToLatinConvertable($language)
+    {
+        $iso_languages = array('af', 'sq', 'br', 'ca', 'da', 'en', 'fo', 'gl', 'de', 'is', 'it',
+                               'ku', 'la', 'lb', 'nb', 'oc', 'pt', 'es', 'sw', 'sv', 'wa', 'eu',
+                               // NOTE this languages are not fully supported by latin1 
+                               'nl', 'fr', 'et', 'fi', 'cy'
+        );
+        
+        return in_array($language, $iso_languages);
     }
 }
