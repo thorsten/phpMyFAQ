@@ -7,8 +7,8 @@
  * @license    MPL
  * @author     Anatoliy Belsky <ab@php.net>
  * @since      2009-04-06
- * @copyright  2004-2009 phpMyFAQ Team
- * @version    SVN: $Id: Category.php,v 1.56 2008-01-26 01:02:56 thorstenr Exp $
+ * @version    SVN: $Id$
+ * @copyright  2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -33,28 +33,36 @@
  * @license    MPL
  * @author     Anatoliy Belsky <ab@php.net>
  * @since      2009-04-06
- * @copyright  2004-2009 phpMyFAQ Team
- * @version    SVN: $Id: String.php,v 1.56 2008-01-26 01:02:56 thorstenr Exp $
+ * @version    SVN: $Id$
+ * @copyright  2009 phpMyFAQ Team
  */
 class PMF_String
 {
+    /**
+     * Instance
+     * 
+     * @var PMF_String
+     */
     private static $instance;
     
+    /**
+     * Constructor
+     *
+     * @return void
+     */
     private final function __construct()
     {
-        /**
-         * just blocking
-         */
     }
     
     /** 
      * Initalize myself
+     * 
      * @return void
      */
     public static function init($encoding = null)
     {
-        if(!self::$instance) {
-            if(extension_loaded('mbstring')) {
+        if (!self::$instance) {
+            if (extension_loaded('mbstring')) {
                 self::$instance = PMF_String_Mbstring::getInstance($encoding);
             } else {
                 self::$instance = PMF_String_Basic::getInstance($encoding);
@@ -62,21 +70,20 @@ class PMF_String
         }
     }
     
-    
     /**
      * Get current encoding
+     * 
      * @return string
      */
     public static function getEncoding()
     {
         return self::$instance->getEncoding();
-    }
-    
+    }    
     
     /**
      * Get string character count
      * 
-     * @param string $str
+     * @param string $str String
      * 
      * @return int
      */
@@ -89,47 +96,47 @@ class PMF_String
     /**
      * Get a part of string
      * 
-     * @param string $str
-     * @param int $start
-     * @param int $length
+     * @param string  $str    String
+     * @param integer $start  Start
+     * @param integer $length Length
      * 
      * @return string
      */
     public static function substr($str, $start, $length = null)
     {
         return self::$instance->substr($str, $start, $length);
-    }
-    
+    }    
     
     /**
      * Get position of the first occurence of a string
-     * @param string $haystack
-     * @param string $needle
-     * @param string $offset
+     * 
+     * @param string $haystack Haystack
+     * @param string $needle   Needle
+     * @param string $offset   Offset
      * 
      * @return int
      */
     public static function strpos($haystack, $needle, $offset = null)
     {
         return self::$instance->strpos($haystack, $needle, $offset);
-    }
-    
+    }    
     
     /**
      * Make a string lower case
-     * @param string $str
+     * 
+     * @param string $str String
      * 
      * @return string
      */
     public static function strtolower($str)
     {
         return self::$instance->strtolower($str);
-    }
-    
+    }    
     
     /**
      * Make a string upper case
-     * @param string $str
+     * 
+     * @param string $str String
      * 
      * @return string
      */
@@ -137,13 +144,13 @@ class PMF_String
     {
         return self::$instance->strtoupper($str);
     }
-    
-    
+        
     /**
      * Get occurence of a string within another
-     * @param string $haystack
-     * @param string $needle
-     * @param boolean $part
+     * 
+     * @param string  $haystack Haystack
+     * @param string  $needle   Needle
+     * @param boolean $part     Part
      * 
      * @return string|false
      */
@@ -151,10 +158,10 @@ class PMF_String
     {
         return self::$instance->strstr($haystack, $needle, $part);
     }
-    
-    
+        
     /**
      * Set current encoding
+     * 
      * @return string
      */
     public function setEncoding($encoding)
