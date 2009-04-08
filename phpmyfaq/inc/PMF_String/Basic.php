@@ -120,7 +120,7 @@ class PMF_String_Basic extends PMF_String_Abstract
      */
     public static function strpos($haystack, $needle, $offset = null)
     {
-        return strpos($haystack, $needle, (int) $offset, $this->encoding);
+        return strpos($haystack, $needle, (int) $offset);
     }
     
     /**

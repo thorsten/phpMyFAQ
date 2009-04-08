@@ -27,7 +27,7 @@
  * The trick is to use xml utf8 functions to encode and decode
  * utf8 strings. This is useful for strings which could be
  * cleanly converted to iso-8859-1 and back with utf8_decode and
- * utf8_decode, so then non multibyte functions could be use
+ * utf8_decode, so then non multibyte functions could be used.
  *
  * TODO Cover also nearly complete supported charsets, languages and chars
  *      Notice this article: http://en.wikipedia.org/wiki/ISO_8859-1
@@ -79,6 +79,30 @@ class PMF_String_UTF8ToLatinConvertable extends PMF_String_Abstract
         return self::$instance;
     }
     
+    
+    /**
+	 * Prepare a string to be used with a single byte string function.
+	 * If the string isn't utf8, presume it's iso
+	 * @param string $str
+	 * 
+	 * @return string
+     */
+    public function iso($str)
+    {
+        return isUTF8($str) ? utf8_decode($str) : $str;
+    }
+    
+    
+    /**
+	 * Convert a string back to it's original charset which is utf8
+	 * @param string $str
+	 * 
+	 * @return string
+     */
+    public function utf8($str)
+    {
+        return utf8_encode($str);
+    }
     /**
      * Get string character count
      * 
@@ -88,7 +112,7 @@ class PMF_String_UTF8ToLatinConvertable extends PMF_String_Abstract
      */
     public function strlen($str)
     {
-        return strlen($str);
+        return strlen($this->iso($str));
     }
     
     
@@ -103,9 +127,11 @@ class PMF_String_UTF8ToLatinConvertable extends PMF_String_Abstract
      */
     public function substr($str, $start, $length = null)
     {
-        $length = null == $length ? strlen($str) : $length;
+        $length = null == $length ? $this->strlen($str) : $length;
         
-        return substr($str, $start, $length);
+        $retval = substr($this->iso($str), $start, $length);
+        
+        return $this->utf8($retval);
     }
 
     /**
@@ -119,7 +145,7 @@ class PMF_String_UTF8ToLatinConvertable extends PMF_String_Abstract
      */
     public static function strpos($haystack, $needle, $offset = null)
     {
-        return strpos($haystack, $needle, (int) $offset, $this->encoding);
+        return strpos($this->iso($haystack), $this->iso($needle), (int) $offset);
     }
     
     /**
@@ -131,7 +157,9 @@ class PMF_String_UTF8ToLatinConvertable extends PMF_String_Abstract
      */
     public static function strtolower($str)
     {
-        return strtolower($str);
+        $retval = strtolower($this->iso($str));
+        
+        return $this->utf8($retval);
     }
     
     /**
@@ -143,7 +171,9 @@ class PMF_String_UTF8ToLatinConvertable extends PMF_String_Abstract
      */
     public static function strtoupper($str)
     {
-        return strtoupper($str);
+        $retval = strtoupper($this->iso($str));
+        
+        return $this->utf8($retval);
     }
     
     /**
@@ -157,6 +187,8 @@ class PMF_String_UTF8ToLatinConvertable extends PMF_String_Abstract
      */
     public static function strstr($haystack, $needle, $part = false)
     {
-        return strstr($haystack, $needle, (boolean) $part);
+        $retval = strstr($this->iso($haystack), $this->iso($needle), (boolean) $part);
+        
+        return $this->utf8($retval);
     }   
 }
