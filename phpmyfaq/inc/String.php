@@ -26,7 +26,9 @@
  * 
  * The class uses mbstring extension if available. It's strongly recommended
  * to use and extend this class instead of using direct string functions. Doing so
- * you garantee your code is upwards compatible with UTF-8 improvements.
+ * you garantee your code is upwards compatible with UTF-8 improvements. All
+ * the string methods behaviour is identical to that of the same named 
+ * single byte string functions.
  *
  * @package    phpMyFAQ
  * @subpackage PMF_String
@@ -45,6 +47,7 @@ class PMF_String
      */
     private static $instance;
     
+    
     /**
      * Constructor
      *
@@ -53,6 +56,7 @@ class PMF_String
     private final function __construct()
     {
     }
+    
     
     /** 
      * Initalize myself
@@ -73,6 +77,7 @@ class PMF_String
         }
     }
     
+    
     /**
      * Get current encoding
      * 
@@ -82,6 +87,7 @@ class PMF_String
     {
         return self::$instance->getEncoding();
     }    
+    
     
     /**
      * Get string character count
@@ -110,6 +116,7 @@ class PMF_String
         return self::$instance->substr($str, $start, $length);
     }    
     
+    
     /**
      * Get position of the first occurence of a string
      * 
@@ -119,10 +126,11 @@ class PMF_String
      * 
      * @return int
      */
-    public static function strpos($haystack, $needle, $offset = null)
+    public static function strpos($haystack, $needle, $offset = 0)
     {
         return self::$instance->strpos($haystack, $needle, $offset);
     }    
+    
     
     /**
      * Make a string lower case
@@ -136,6 +144,7 @@ class PMF_String
         return self::$instance->strtolower($str);
     }    
     
+    
     /**
      * Make a string upper case
      * 
@@ -147,7 +156,8 @@ class PMF_String
     {
         return self::$instance->strtoupper($str);
     }
-        
+
+    
     /**
      * Get occurence of a string within another
      * 
@@ -161,7 +171,8 @@ class PMF_String
     {
         return self::$instance->strstr($haystack, $needle, $part);
     }
-        
+
+    
     /**
      * Set current encoding
      * 
@@ -188,5 +199,46 @@ class PMF_String
         );
         
         return in_array($language, $iso_languages);
+    }
+    
+    
+    /**
+	 * Get last occurence of a string within another
+	 * @param string $haystack
+	 * @param string $needle
+	 * 
+	 * @return string
+     */
+    public function strrchr($haystack, $needle)
+    {
+        return self::$instance->strrchr($haystack, $needle);
+    }
+    
+    
+    /**
+     * 
+     * Count substring occurences
+     * @param string $haystack
+     * @param string $needle
+     * 
+     * @return int
+     */
+    public function substr_count($haystack, $needle)
+    {
+        return self::$instance->substr_count($haystack, $needle);
+    }
+    
+    
+    /**
+	 * Find position of last occurrence of a char in a string
+	 * @param string $haystack
+	 * @param string $needle
+	 * @param int $offset
+	 * 
+	 * @return int
+     */
+    public function strrpos($haystack, $needle, $offset = 0)
+    {
+        return self::$instance->strrpos($haystack, $needle, $offset);
     }
 }

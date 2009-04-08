@@ -134,6 +134,7 @@ class PMF_String_UTF8ToLatinConvertable extends PMF_String_Abstract
         return $this->utf8($retval);
     }
 
+    
     /**
      * Get position of the first occurence of a string
      * 
@@ -143,10 +144,11 @@ class PMF_String_UTF8ToLatinConvertable extends PMF_String_Abstract
      * 
      * @return int
      */
-    public static function strpos($haystack, $needle, $offset = null)
+    public function strpos($haystack, $needle, $offset = 0)
     {
-        return strpos($this->iso($haystack), $this->iso($needle), (int) $offset);
+        return strpos($this->iso($haystack), $this->iso($needle), $offset);
     }
+    
     
     /**
      * Make a string lower case
@@ -155,12 +157,13 @@ class PMF_String_UTF8ToLatinConvertable extends PMF_String_Abstract
      * 
      * @return string
      */
-    public static function strtolower($str)
+    public function strtolower($str)
     {
         $retval = strtolower($this->iso($str));
         
         return $this->utf8($retval);
     }
+    
     
     /**
      * Make a string upper case
@@ -169,12 +172,13 @@ class PMF_String_UTF8ToLatinConvertable extends PMF_String_Abstract
      * 
      * @return string
      */
-    public static function strtoupper($str)
+    public function strtoupper($str)
     {
         $retval = strtoupper($this->iso($str));
         
         return $this->utf8($retval);
     }
+    
     
     /**
      * Get occurence of a string within another
@@ -185,10 +189,53 @@ class PMF_String_UTF8ToLatinConvertable extends PMF_String_Abstract
      * 
      * @return string|false
      */
-    public static function strstr($haystack, $needle, $part = false)
+    public function strstr($haystack, $needle, $part = false)
     {
-        $retval = strstr($this->iso($haystack), $this->iso($needle), (boolean) $part);
+        $retval = strstr($this->iso($haystack), $this->iso($needle), $part);
         
         return $this->utf8($retval);
-    }   
+    }
+
+    
+    /**
+	 * Get last occurence of a string within another
+	 * @param string $haystack
+	 * @param string $needle
+	 * 
+	 * @return string
+     */
+    public function strrchr($haystack, $needle)
+    {
+        $retval = strrchr($this->iso($haystack), $this->iso($needle));
+        
+        return $this->utf8($retval);
+    }
+    
+    
+    /**
+     * 
+     * Count substring occurences
+     * @param string $haystack
+     * @param string $needle
+     * 
+     * @return int
+     */
+    public function substr_count($haystack, $needle)
+    {
+        return substr_count($this->iso($haystack), $this->iso($needle));
+    }
+    
+    
+    /**
+	 * Find position of last occurrence of a char in a string
+	 * @param string $haystack
+	 * @param string $needle
+	 * @param int $offset
+	 * 
+	 * @return int
+     */
+    public function strrpos($haystack, $needle, $offset = 0)
+    {
+        return strrpos($this->iso($haystack), $this->iso($needle), $offset);
+    }
 }

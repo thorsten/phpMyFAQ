@@ -80,6 +80,7 @@ class PMF_String_Basic extends PMF_String_Abstract
         return self::$instance;
     }
     
+    
     /**
      * Get string character count
      * 
@@ -109,6 +110,7 @@ class PMF_String_Basic extends PMF_String_Abstract
         return substr($str, $start, $length);
     }
 
+    
     /**
      * Get position of the first occurence of a string
      * 
@@ -118,10 +120,11 @@ class PMF_String_Basic extends PMF_String_Abstract
      * 
      * @return int
      */
-    public static function strpos($haystack, $needle, $offset = null)
+    public function strpos($haystack, $needle, $offset = 0)
     {
-        return strpos($haystack, $needle, (int) $offset);
+        return strpos($haystack, $needle, $offset);
     }
+    
     
     /**
      * Make a string lower case
@@ -130,10 +133,11 @@ class PMF_String_Basic extends PMF_String_Abstract
      * 
      * @return string
      */
-    public static function strtolower($str)
+    public function strtolower($str)
     {
         return strtolower($str);
     }
+    
     
     /**
      * Make a string upper case
@@ -142,10 +146,11 @@ class PMF_String_Basic extends PMF_String_Abstract
      * 
      * @return string
      */
-    public static function strtoupper($str)
+    public function strtoupper($str)
     {
         return strtoupper($str);
     }
+
     
     /**
      * Get occurence of a string within another
@@ -156,9 +161,49 @@ class PMF_String_Basic extends PMF_String_Abstract
      * 
      * @return string|false
      */
-    public static function strstr($haystack, $needle, $part = false)
+    public function strstr($haystack, $needle, $part = false)
     {
         return strstr($haystack, $needle, (boolean) $part);
     }
     
+    
+    /**
+	 * Get last occurence of a string within another
+	 * @param string $haystack
+	 * @param string $needle
+	 * 
+	 * @return string
+     */
+    public function strrchr($haystack, $needle)
+    {
+        return strrchr($haystack, $needle);
+    }
+    
+    
+    /**
+     * 
+     * Count substring occurences
+     * @param string $haystack
+     * @param string $needle
+     * 
+     * @return int
+     */
+    public function substr_count($haystack, $needle)
+    {
+        return substr_count($haystack, $needle);
+    }
+    
+    
+    /**
+	 * Find position of last occurrence of a char in a string
+	 * @param string $haystack
+	 * @param string $needle
+	 * @param int $offset
+	 * 
+	 * @return int
+     */
+    public function strrpos($haystack, $needle, $offset = 0)
+    {
+        return strrpos($haystack, $needle, $offset);
+    }
 }
