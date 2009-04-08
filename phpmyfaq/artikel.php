@@ -219,7 +219,7 @@ if (($faq->faqRecord['active'] != 'yes') || ('n' == $faq->faqRecord['comment']) 
     $oLink->itemTitle = $thema;
     $commentHref = $oLink->toString().'#comment';
     $commentMessage = sprintf(
-        '%s<a href="%s" onclick="show(\'comment\');">%s</a>',
+        "%s<a href=\"%s\" onclick=\"javascript:$('#comment').show();\">%s</a>",
         $PMF_LANG['msgYouCan'],
         $commentHref,
         $PMF_LANG['msgWriteComment']
