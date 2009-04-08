@@ -21,7 +21,7 @@
 /*	General	*/
 * { padding: 0; margin: 0; }
 body { font: .8em 'Trebuchet MS', 'Nimbus Sans L', sans-serif; line-height: 1.6em; color: #19191B; background: url(../images/background.png) repeat-x; }
-#wrap { margin: 0 auto; width: 80% }
+#wrap { margin: 0 auto; width: 90% }
 
 /* Header */
 #top { margin: 0 auto; padding: 0; color: #BEC5CD; height: 87px; background-color: #0D2458; }
@@ -79,8 +79,8 @@ dd { margin: 0 0 10px 200px; }
 
 /* User pages */
 #user_accounts { float: left; width: 200px; margin: 0; }
-#user_data { float: left; width: 300px; margin: 0; padding-left: 20px; }
-#user_rights { float: left; width: 250px; margin: 0; padding-left: 15px;}
+#user_data { float: left; width: 225px; margin: 0; padding-left: 15px; }
+#user_rights { float: left; width: 225px; margin: 0; padding-left: 15px;}
 .clear { clear: both; }
 
 /* datePicker CSS definitions */

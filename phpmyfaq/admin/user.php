@@ -399,7 +399,7 @@ function getUserRights(user_id)
                 <input type="text" id="user_list_autocomplete" name="user_list_search" />
                 <script type="text/javascript">
                 //<![CDATA[
-                    $('#user_list_autocomplete').autocomplete("index.php?action=ajax&ajax=user&ajaxaction=get_user_list", { width: 260, selectFirst: true } );
+                    $('#user_list_autocomplete').autocomplete("index.php?action=ajax&ajax=user&ajaxaction=get_user_list", { width: 180, selectFirst: true } );
                     $('#user_list_autocomplete').result(function(event, data, formatted) {
                         var user_id = data[1];
                         $("#user_list_select").val(user_id);
