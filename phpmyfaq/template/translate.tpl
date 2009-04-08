@@ -18,7 +18,7 @@
 
     <textarea class="inputarea" cols="60" rows="3" name="thema" id="thema">{writeSourceTitle}</textarea><br />
     <br />
-    <textarea class="inputarea" cols="60" rows="10" name="content" id="content">{writeSourceContent}</textarea><br />
+    <textarea class="inputarea" cols="60" rows="10" name="translated_content" id="translated_content">{writeSourceContent}</textarea><br />
 
     <label for="keywords" class="left">{msgNewTranslationKeywords}</label>
     <input class="inputfield" type="text" name="keywords" id="keywords" size="37" value="{writeSourceKeywords}"/><br />
@@ -50,7 +50,7 @@
     <!--
         tinyMCE.init({
             mode : "exact",
-            elements : "content",
+            elements : "translated_content",
             editor_deselector : "mceNoEditor",
             theme : "simple"
         });

@@ -36,6 +36,7 @@ $faqid       = PMF_Filter::filterInput(INPUT_POST, 'faqid', FILTER_VALIDATE_INT)
 $faqlanguage = PMF_Filter::filterInput(INPUT_POST, 'faqlanguage', FILTER_SANITIZE_STRING);
 $thema       = PMF_Filter::filterInput(INPUT_POST, 'thema', FILTER_SANITIZE_STRIPPED);
 $content     = PMF_Filter::filterInput(INPUT_POST, 'content', FILTER_SANITIZE_STRIPPED);
+$tr_content  = PMF_Filter::filterInput(INPUT_POST, 'translated_content', FILTER_SANITIZE_STRING);
 $contentlink = PMF_Filter::filterInput(INPUT_POST, 'contentlink', FILTER_VALIDATE_URL);
 $keywords    = PMF_Filter::filterInput(INPUT_POST, 'keywords', FILTER_SANITIZE_STRIPPED);
 $code        = PMF_Filter::filterInput(INPUT_POST, 'captcha', FILTER_SANITIZE_STRING);
@@ -48,7 +49,8 @@ if (!is_null($username) && !is_null($usermail) && !is_null($thema) && !is_null($
 
     $isNew = true;
     if (!is_null($faqid)) {
-        $isNew = false;
+        $isNew   = false;
+        $content = $tr_content;
         $faqsession->userTracking('save_new_translation_entry', 0);
     } else {
         $faqsession->userTracking('save_new_entry', 0);
