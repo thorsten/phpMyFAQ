@@ -558,16 +558,36 @@ function updateUser(id)
  */
 function getUserData(user_id)
 {
+	$('#user_data_table').empty();
     $.getJSON("index.php?action=ajax&ajax=user&ajaxaction=get_user_data&user_id=" + user_id,
     	function(data) {
-    	    console.log(data);
     	    $('#update_user_id').val(data.user_id);
     	    $('#user_status_select').val(data.status);
-    	    // Append inout fields
-    	    $('#user_data_table').append('test');
+    	    // Append input fields
+    	    $('#user_data_table').append('<br /><label><?php print $PMF_LANG["ad_user_realname"]; ?></label>');
+    	    $('#user_data_table').append('<input type="text" class="input_row" name="display_name" value="' + data.display_name + '" />');
+            $('#user_data_table').append('<br /><label><?php print $PMF_LANG["ad_entry_email"]; ?></label>');
+            $('#user_data_table').append('<input type="text" class="input_row" name="email" value="' + data.email + '" />');
+            $('#user_data_table').append('<br /><label><?php print $PMF_LANG["ad_user_lastModified"]; ?></label>');
+            $('#user_data_table').append('<input type="text" class="input_row" name="last_modified" value="' + data.last_modified + '" />');
+            
         });
 }
 
+
+/**
+ * Returns the user rights as JSON object
+ *
+ * @param integer user_id User ID
+ */
+function getUserRights(user_id)
+{
+    $('#user_rights_table').empty();
+    $.getJSON("index.php?action=ajax&ajax=user&ajaxaction=get_user_rights&user_id=" + user_id,
+        function(data) {
+            console.log(data);
+        });
+}
 /* ]]> */
 </script>
 <h2><?php print $text['header']; ?></h2>
@@ -586,6 +606,7 @@ function getUserData(user_id)
                         var user_id = data[1];
                         $("#user_list_select").val(user_id);
                         getUserData(user_id);
+                        getUserRights(user_id);
                     });
 
                     //]]>
@@ -629,10 +650,12 @@ function getUserData(user_id)
                 <span><a href="javascript:form_uncheckAll('rightsForm')"><?php print $text['changeRights_uncheckAll']; ?></a></span>
             </div>
             <table id="user_rights_table">
+<?php foreach ($user->perm->getAllRightsData() as $right) { ?>
                 <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
+                    <td><input type="checkbox" name="user_rights[]" value=""/></td>
+                    <td><?php print $right['description']; ?></td>
                 </tr>
+<?php } ?>
             </table>
             <div class="button_row">
                 <input class="submit" type="submit" value="<?php print $text['changeRights_submit']; ?>" />
