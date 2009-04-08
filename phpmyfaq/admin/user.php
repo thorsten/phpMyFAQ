@@ -246,11 +246,11 @@ if ($userAction == 'addsave') {
     $user_email = isset($_POST['user_email']) ? $_POST['user_email'] : '';
     $user_password = isset($_POST['user_password']) ? $_POST['user_password'] : '';
     $user_password_confirm = isset($_POST['user_password_confirm']) ? $_POST['user_password_confirm'] : '';
-    // check e-mail. TODO: MAIL ADRESS VALIDATOR
-    if ($user_email == "") {
-        $user_password = "";
-        $user_password_confirm = "";
-        $messages[] = $errorMessages['addUser_password'];
+
+    if (!is_null(PMF_Filter::filterVar($user_email, FILTER_VALIDATE_EMAIL))) {
+        $user_password         = '';
+        $user_password_confirm = '';
+        $messages[]            = $errorMessages['addUser_password'];
     }
     if ($user_password != $user_password_confirm) {
         $user_password = "";
@@ -350,207 +350,6 @@ if ($userAction == 'list') {
 <script type="text/javascript">
 /* <![CDATA[ */
 
-/* HTTP Request object */
-var userList;
-
-function getUserList(userid) {
-    var url = 'index.php';
-    var pars = 'action=ajax&ajax=user_list&userid=' + userid;
-    var myAjax = new Ajax.Request( url, {method: 'get', parameters: pars, onComplete: processUserList} );
-}
-
-function processUserList(XmlRequest) {
-    // process response
-    userList = XmlRequest;
-    clearUserData();
-    clearUserRights();
-    var users = userList.responseXML.getElementsByTagName('user');
-    var userid = users[0].getAttribute('id');
-    buildUserData(userid);
-    selectUserStatus(userid);
-    buildUserRights(userid);
-}
-
-function clearUserList()
-{
-    select_clear($('user_list_select'));
-}
-
-function buildUserList()
-{
-    var users = userList.responseXML.getElementsByTagName('user');
-    var id;
-    var textNode;
-    var classAttrValue = text_getFromParent(userList.responseXML.getElementsByTagName('userlist')[0], "select_class");
-    for (var i = 0; i < users.length; i++) {
-        textNode = document.createTextNode(text_getFromParent(users[i], "login"));
-        id = users[i].getAttribute('id');
-        select_addOption($('user_list_select'), id, textNode, classAttrValue);
-    }
-}
-
-function clearUserData()
-{
-    //table_clear(document.getElementById("user_data_table"));
-    $('user_data_table').innerHTML = "";
-}
-
-function buildUserData(id)
-{
-    var getValues = true;
-    var users = userList.responseXML.getElementsByTagName('user');
-    var user;
-    // get user with given id
-    if (id == 0) {
-        getValues = false;
-        user = users[0];
-    } else {
-        getValues = true;
-        for (var i = 0; i < users.length; i++) {
-            if (users[i].getAttribute('id') == id) {
-                user = users[i];
-                break;
-            }
-        }
-    }
-    // change user-ID
-    $('update_user_id').setAttribute('value', id);
-    // build new data div rows
-    var dataList = user.getElementsByTagName('user_data')[0];
-    var items = dataList.getElementsByTagName('item');
-    var user_data_table = $('user_data_table');
-    var name;
-    var value;
-    var div;
-    var input;
-    var label;
-    for (var i = 0; i < items.length; i++) {
-        name = text_getFromParent(items[i], 'name');
-        if (getValues) {
-            value = text_getFromParent(items[i], 'value');
-        } else {
-            value = "";
-        }
-        input = document.createElement('input');
-        input.setAttribute('type', "text");
-        input.setAttribute('name', items[i].getAttribute('name'));
-        input.setAttribute('value', value);
-        input.setAttribute('tabindex', (i + 3));
-        label = document.createElement('label');
-        label.setAttribute('for', items[i].getAttribute('name'));
-        label.appendChild(document.createTextNode(name));
-        div = document.createElement('div');
-        div.setAttribute('class', "input_row");
-        div.appendChild(label);
-        div.appendChild(input);
-        user_data_table.appendChild(div);
-    }
-}
-
-function selectUserStatus(id)
-{
-    var getValues = true;
-    var users = userList.responseXML.getElementsByTagName('user');
-    var user;
-    // get user with given id
-    if (id == 0) {
-        getValues = false;
-        user = users[0];
-    } else {
-        getValues = true;
-        for (var i = 0; i < users.length; i++) {
-            if (users[i].getAttribute('id') == id) {
-                user = users[i];
-                break;
-            }
-        }
-    }
-    var status = text_getFromParent(user, 'status');
-    $('user_status_select').value = status;
-}
-
-function clearUserRights()
-{
-    table_clear($('user_rights_table'));
-}
-
-function buildUserRights(id)
-{
-    var user_rights_table = $('user_rights_table');
-    var getValues = true;
-    // get user with given id
-    if (id == 0) {
-        getValues = false;
-    } else {
-        getValues = true;
-        // loop through user-elements
-        var users = userList.responseXML.getElementsByTagName('user');
-        var user;
-        for (var i = 0; i < users.length; i++) {
-            if (users[i].getAttribute('id') == id) {
-                user = users[i];
-                break;
-            }
-        }
-    }
-    // change user-ID
-    $('rights_user_id').setAttribute('value', id);
-    var right_id;
-    var right_name;
-    var right_description;
-    var checkbox;
-    var isUserRight = 0;
-    // loop through rightlist at beginning (all user rights)
-    var rightList = userList.responseXML.getElementsByTagName('rightlist')[0].getElementsByTagName('right');
-    for (var i = 0; i < rightList.length; i++) {
-        right_name = text_getFromParent(rightList[i], 'name');
-        right_description = text_getFromParent(rightList[i], 'description');
-        right_id = rightList[i].getAttribute('id');
-        // search for that right in user right list
-        isUserRight = 0;
-        if (getValues) {
-            var userRights = user.getElementsByTagName('right');
-            var j = 0;
-            while (isUserRight == 0 && j < userRights.length) {
-                if (userRights[j].getAttribute('id') == right_id) {
-                    isUserRight = 1;
-                    break;
-                } else {
-                    isUserRight = 0;
-                    j++;
-                }
-            }
-        } else {
-            isUserRight = 0;
-        }
-        // build new table row
-        checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.name = 'user_rights[]';
-        checkbox.value = right_id;
-        setTimeout((function(checkbox, isUserRight) {
-            return function() {
-                checkbox.checked = isUserRight == 1;
-            }
-        })(checkbox, isUserRight), 10);
-
-        table_addRow(user_rights_table, i, checkbox, document.createTextNode(right_name));
-    }
-}
-
-function userSelect(text, li)
-{
-    var userid = li.id;
-    getUserList(userid);
-    $('user_list_select').value = userid;
-}
-
-function updateUser(id)
-{
-    var userid = id;
-    getUserList(userid);
-}
-
 /**
  * Returns the user data as JSON object
  *
@@ -582,9 +381,13 @@ function getUserData(user_id)
  */
 function getUserRights(user_id)
 {
+	form_uncheckAll('rightsForm');
     $.getJSON("index.php?action=ajax&ajax=user&ajaxaction=get_user_rights&user_id=" + user_id,
         function(data) {
-            console.log(data);
+    	    for (var i = 1; i <= data.length; i++) {
+                $('#user_right_' + i).attr('checked', true);
+            };
+            $('#rights_user_id').val(user_id);
         });
 }
 /* ]]> */
@@ -597,7 +400,6 @@ function getUserRights(user_id)
             <legend><?php print $text['selectUser']; ?></legend>
             <form name="user_select" id="user_select" action="<?php print $_SERVER['PHP_SELF']; ?>?action=user&amp;user_action=delete_confirm" method="post">
                 <input type="text" id="user_list_autocomplete" name="user_list_search" />
-                <div id="user_list_autocomplete_choices" class="user_list_autocomplete" style="display: none;"></div>
                 <script type="text/javascript">
                 //<![CDATA[
                     $('#user_list_autocomplete').autocomplete("index.php?action=ajax&ajax=user&ajaxaction=get_user_list", { width: 260, selectFirst: true } );
@@ -651,7 +453,7 @@ function getUserRights(user_id)
             <table id="user_rights_table">
 <?php foreach ($user->perm->getAllRightsData() as $right) { ?>
                 <tr>
-                    <td><input id="user_right_<?php print $right['right_id']; ?>" type="checkbox" name="user_rights[]" value=""/></td>
+                    <td><input id="user_right_<?php print $right['right_id']; ?>" type="checkbox" name="user_rights[]" value="<?php print $right['right_id']; ?>"/></td>
                     <td><?php print $right['description']; ?></td>
                 </tr>
 <?php } ?>
