@@ -74,21 +74,20 @@ class PMF_Session
      */
     public function userTracking($action, $id = 0)
     {
-        global $PMF_CONF, $sid, $user, $botBlacklist;
+        global $sid, $user, $botBlacklist;
 
-        if (isset($PMF_CONF['main.enableUserTracking'])) {
+        $faqconfig = PMF_Configuration::getInstance();
+        
+        if ($faqconfig->get('main.enableUserTracking')) {
 
-            $bots   = 0;
-            $agent  = $_SERVER['HTTP_USER_AGENT'];
-   
-            if (isset($_GET[PMF_GET_KEY_NAME_SESSIONID]) && is_numeric($_GET[PMF_GET_KEY_NAME_SESSIONID])) {
-                $sid = (int)$_GET[PMF_GET_KEY_NAME_SESSIONID];
+            $bots  = 0;
+            $agent = $_SERVER['HTTP_USER_AGENT'];
+            $sid   = PMF_Filter::filterInput(INPUT_GET, PMF_GET_KEY_NAME_SESSIONID, FILTER_VALIDATE_INT);
+            $sidc  = PMF_Filter::filterInput(INPUT_COOKIE, PMF_COOKIE_NAME_SESSIONID, FILTER_VALIDATE_INT);
+            
+            if (!is_null($sidc)) {
+                $sid = $sidc;
             }
-    
-            if (isset($_COOKIE[PMF_COOKIE_NAME_SESSIONID]) && is_numeric($_COOKIE[PMF_COOKIE_NAME_SESSIONID])) {
-                $sid = (int)$_COOKIE[PMF_COOKIE_NAME_SESSIONID];
-            }
-    
             if ($action == "old_session") {
                 $sid = null;
             }
@@ -102,7 +101,7 @@ class PMF_Session
                 if (!isset($sid)) {
                     $sid = $this->db->nextID(SQLPREFIX."faqsessions", "sid");
                     // Sanity check: force the session cookie to contains the current $sid
-                    if (isset($_COOKIE[PMF_COOKIE_NAME_SESSIONID]) && ((int)$_COOKIE[PMF_COOKIE_NAME_SESSIONID] != $sid)) {
+                    if (!is_null($sidc) && (!$sidc != $sid)) {
                         self::setCookie($sid);
                     }
 
