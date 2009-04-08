@@ -582,7 +582,6 @@ function getUserData(user_id)
  */
 function getUserRights(user_id)
 {
-    $('#user_rights_table').empty();
     $.getJSON("index.php?action=ajax&ajax=user&ajaxaction=get_user_rights&user_id=" + user_id,
         function(data) {
             console.log(data);
@@ -652,7 +651,7 @@ function getUserRights(user_id)
             <table id="user_rights_table">
 <?php foreach ($user->perm->getAllRightsData() as $right) { ?>
                 <tr>
-                    <td><input type="checkbox" name="user_rights[]" value=""/></td>
+                    <td><input id="user_right_<?php print $right['right_id']; ?>" type="checkbox" name="user_rights[]" value=""/></td>
                     <td><?php print $right['description']; ?></td>
                 </tr>
 <?php } ?>
