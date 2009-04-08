@@ -7,6 +7,7 @@
  * @author     Lars Tiedemann <php@larstiedemann.de>
  * @author     Uwe Pries <uwe.pries@digartis.de>
  * @author     Sarah Hermann <sayh@gmx.de>
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since      2005-12-15
  * @version    SVN: $Id$
  * @copyright  2005-2009 phpMyFAQ Team
@@ -32,57 +33,57 @@ if (!$permission['edituser'] && !$permission['deluser'] && !$permission['adduser
 }
 
 // set some parameters
-$selectSize = 10;
-$defaultUserAction = 'list';
-$defaultUserStatus = 'active';
-$loginMinLength = 4;
+$selectSize         = 10;
+$defaultUserAction  = 'list';
+$defaultUserStatus  = 'active';
+$loginMinLength     = 4;
 $loginInvalidRegExp = '/(^[^a-z]{1}|[\W])/i';
 
 $errorMessages = array(
-    'addUser_password'              => $PMF_LANG['ad_user_error_password'],
-    'addUser_passwordsDontMatch'    => $PMF_LANG['ad_user_error_passwordsDontMatch'],
-    'addUser_loginExists'           => $PMF_LANG["ad_adus_exerr"],
-    'addUser_loginInvalid'          => $PMF_LANG['ad_user_error_loginInvalid'],
-    'addUser_noEmail'               => $PMF_LANG['ad_user_error_noEmail'],
-    'addUser_noRealName'            => $PMF_LANG['ad_user_error_noRealName'],
-    'delUser'                       => $PMF_LANG['ad_user_error_delete'],
-    'delUser_noId'                  => $PMF_LANG['ad_user_error_noId'],
-    'delUser_protectedAccount'      => $PMF_LANG['ad_user_error_protectedAccount'],
-    'updateUser'                    => $PMF_LANG['ad_msg_mysqlerr'],
-    'updateUser_noId'               => $PMF_LANG['ad_user_error_noId'],
-    'updateRights'                  => $PMF_LANG['ad_msg_mysqlerr'],
-    'updateRights_noId'             => $PMF_LANG['ad_user_error_noId']);
+    'addUser_password'           => $PMF_LANG['ad_user_error_password'],
+    'addUser_passwordsDontMatch' => $PMF_LANG['ad_user_error_passwordsDontMatch'],
+    'addUser_loginExists'        => $PMF_LANG["ad_adus_exerr"],
+    'addUser_loginInvalid'       => $PMF_LANG['ad_user_error_loginInvalid'],
+    'addUser_noEmail'            => $PMF_LANG['ad_user_error_noEmail'],
+    'addUser_noRealName'         => $PMF_LANG['ad_user_error_noRealName'],
+    'delUser'                    => $PMF_LANG['ad_user_error_delete'],
+    'delUser_noId'               => $PMF_LANG['ad_user_error_noId'],
+    'delUser_protectedAccount'   => $PMF_LANG['ad_user_error_protectedAccount'],
+    'updateUser'                 => $PMF_LANG['ad_msg_mysqlerr'],
+    'updateUser_noId'            => $PMF_LANG['ad_user_error_noId'],
+    'updateRights'               => $PMF_LANG['ad_msg_mysqlerr'],
+    'updateRights_noId'          => $PMF_LANG['ad_user_error_noId']);
 
 $successMessages = array(
-    'addUser'                       => $PMF_LANG["ad_adus_suc"],
-    'delUser'                       => $PMF_LANG["ad_user_deleted"],
-    'updateUser'                    => $PMF_LANG['ad_msg_savedsuc_1'].' <strong>%s</strong> '.$PMF_LANG['ad_msg_savedsuc_2'],
-    'updateRights'                  => $PMF_LANG['ad_msg_savedsuc_1'].' <strong>%s</strong> '.$PMF_LANG['ad_msg_savedsuc_2']);
+    'addUser'                    => $PMF_LANG["ad_adus_suc"],
+    'delUser'                    => $PMF_LANG["ad_user_deleted"],
+    'updateUser'                 => $PMF_LANG['ad_msg_savedsuc_1'].' <strong>%s</strong> '.$PMF_LANG['ad_msg_savedsuc_2'],
+    'updateRights'               => $PMF_LANG['ad_msg_savedsuc_1'].' <strong>%s</strong> '.$PMF_LANG['ad_msg_savedsuc_2']);
 
 $text = array(
-    'header'                        => $PMF_LANG['ad_user'],
-    'selectUser'                    => $PMF_LANG["ad_user_username"],
-    'addUser'                       => $PMF_LANG["ad_adus_adduser"],
-    'addUser_confirm'               => $PMF_LANG["ad_gen_save"],
-    'addUser_cancel'                => $PMF_LANG['ad_gen_cancel'],
-    'addUser_link'                  => $PMF_LANG["ad_user_add"],
-    'addUser_name'                  => $PMF_LANG["ad_adus_name"],
-    'addUser_displayName'           => $PMF_LANG["ad_user_realname"],
-    'addUser_email'                 => $PMF_LANG["ad_entry_email"],
-    'addUser_password'              => $PMF_LANG["ad_adus_password"],
-    'addUser_password2'             => $PMF_LANG["ad_passwd_con"],
-    'delUser'                       => $PMF_LANG['ad_user_deleteUser'],
-    'delUser_button'                => $PMF_LANG['ad_gen_delete'],
-    'delUser_question'              => $PMF_LANG["ad_user_del_3"]." ".$PMF_LANG["ad_user_del_1"]." ".$PMF_LANG["ad_user_del_2"],
-    'delUser_confirm'               => $PMF_LANG["ad_gen_yes"],
-    'delUser_cancel'                => $PMF_LANG["ad_gen_no"],
-    'changeUser'                    => $PMF_LANG["ad_user_profou"],
-    'changeUser_submit'             => $PMF_LANG["ad_gen_save"],
-    'changeUser_status'             => $PMF_LANG['ad_user_status'],
-    'changeRights'                  => $PMF_LANG["ad_user_rights"],
-    'changeRights_submit'           => $PMF_LANG["ad_gen_save"],
-    'changeRights_checkAll'         => $PMF_LANG['ad_user_checkall'],
-    'changeRights_uncheckAll'       => $PMF_LANG['ad_user_uncheckall']);
+    'header'                     => $PMF_LANG['ad_user'],
+    'selectUser'                 => $PMF_LANG["ad_user_username"],
+    'addUser'                    => $PMF_LANG["ad_adus_adduser"],
+    'addUser_confirm'            => $PMF_LANG["ad_gen_save"],
+    'addUser_cancel'             => $PMF_LANG['ad_gen_cancel'],
+    'addUser_link'               => $PMF_LANG["ad_user_add"],
+    'addUser_name'               => $PMF_LANG["ad_adus_name"],
+    'addUser_displayName'        => $PMF_LANG["ad_user_realname"],
+    'addUser_email'              => $PMF_LANG["ad_entry_email"],
+    'addUser_password'           => $PMF_LANG["ad_adus_password"],
+    'addUser_password2'          => $PMF_LANG["ad_passwd_con"],
+    'delUser'                    => $PMF_LANG['ad_user_deleteUser'],
+    'delUser_button'             => $PMF_LANG['ad_gen_delete'],
+    'delUser_question'           => $PMF_LANG["ad_user_del_3"]." ".$PMF_LANG["ad_user_del_1"]." ".$PMF_LANG["ad_user_del_2"],
+    'delUser_confirm'            => $PMF_LANG["ad_gen_yes"],
+    'delUser_cancel'             => $PMF_LANG["ad_gen_no"],
+    'changeUser'                 => $PMF_LANG["ad_user_profou"],
+    'changeUser_submit'          => $PMF_LANG["ad_gen_save"],
+    'changeUser_status'          => $PMF_LANG['ad_user_status'],
+    'changeRights'               => $PMF_LANG["ad_user_rights"],
+    'changeRights_submit'        => $PMF_LANG["ad_gen_save"],
+    'changeRights_checkAll'      => $PMF_LANG['ad_user_checkall'],
+    'changeRights_uncheckAll'    => $PMF_LANG['ad_user_uncheckall']);
 
 // what shall we do?
 // actions defined by url: user_action=
@@ -97,14 +98,15 @@ if (isset($_POST['cancel'])) {
 
 // update user rights
 if ($userAction == 'update_rights') {
-    $message = '';
+    $message    = '';
     $userAction = $defaultUserAction;
-    $userId = isset($_POST['user_id']) ? $_POST['user_id'] : 0;
+    $userId     = PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
     if ($userId == 0) {
         $message .= '<p class="error">'.$errorMessages['updateRights_noId'].'</p>';
     } else {
-        $user = new PMF_User();
-        $perm = $user->perm;
+        $user       = new PMF_User();
+        $perm       = $user->perm;
+        // @todo: Add PMF_Filter::filterInputArray()
         $userRights = isset($_POST['user_rights']) ? $_POST['user_rights'] : array();
         if (!$perm->refuseAllUserRights($userId)) {
             $message .= '<p class="error">'.$errorMessages['updateRights'].'</p>';
@@ -112,34 +114,35 @@ if ($userAction == 'update_rights') {
         foreach ($userRights as $rightId) {
             $perm->grantUserRight($userId, $rightId);
         }
-        $idUser = $user->getUserById($userId);
+        $idUser   = $user->getUserById($userId);
         $message .= '<p class="success">'.sprintf($successMessages['updateRights'], $user->getLogin()).'</p>';
         $message .= '<script type="text/javascript">updateUser('.$userId.');</script>';
     }
-} // end if ($userAction == 'update_rights')
+}
+
 // update user data
 if ($userAction == 'update_data') {
-    $message = '';
+    $message    = '';
     $userAction = $defaultUserAction;
-    $userId = isset($_POST['user_id']) ? $_POST['user_id'] : 0;
+    $userId     = PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
     if ($userId == 0) {
         $message .= '<p class="error">'.$errorMessages['updateUser_noId'].'</p>';
     } else {
-        $userData = array();
-        $dataFields = array('display_name', 'email', 'last_modified');
-        foreach ($dataFields as $field) {
-            $userData[$field] = isset($_POST[$field]) ? $_POST[$field] : '';
-        }
-        $userStatus = isset($_POST['user_status']) ? $_POST['user_status'] : $defaultUserStatus;
+        $userData                  = array();
+        $userData['display_name']  = PMF_Filter::filterInput(INPUT_POST, 'display_name', FILTER_SANITIZE_STRING, '');
+        $userData['email']         = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL, '');
+        $userData['last_modified'] = PMF_Filter::filterInput(INPUT_POST, 'last_modified', FILTER_SANITIZE_STRING, '');
+        $userStatus                = PMF_Filter::filterInput(INPUT_POST, 'user_status', FILTER_SANITIZE_STRING, $defaultUserStatus);
+        
         $user = new PMF_User();
         $user->getUserById($userId);
 
         $stats = $user->getStatus();
         // set new password an send email if user is switched to active
         if ($stats == 'blocked' && $userStatus == 'active') {
-            $consonants = array("b","c","d","f","g","h","j","k","l","m","n","p","r","s","t","v","w","x","y","z");
-            $vowels = array("a","e","i","o","u");
-            $newPassword = "";
+            $consonants  = array("b","c","d","f","g","h","j","k","l","m","n","p","r","s","t","v","w","x","y","z");
+            $vowels      = array("a","e","i","o","u");
+            $newPassword = '';
             srand((double)microtime()*1000000);
             for ($i = 1; $i <= 4; $i++) {
                 $newPassword .= $consonants[rand(0,19)];
@@ -163,12 +166,13 @@ if ($userAction == 'update_data') {
             $message .= '<script type="text/javascript">updateUser('.$userId.');</script>';
         }
     }
-} // end if ($userAction == 'update') // end if ($userAction == 'update')
+}
+
 // delete user confirmation
 if ($userAction == 'delete_confirm') {
-    $message = '';
-    $user = new PMF_User();
-    $userId = isset($_POST['user_list_select']) ? $_POST['user_list_select'] : 0;
+    $message    = '';
+    $user       = new PMF_User();
+    $userId     = PMF_Filter::filterInput(INPUT_POST, 'user_list_select', FILTER_VALIDATE_INT, 0);
     if ($userId == 0) {
         $message .= '<p class="error">'.$errorMessages['delUser_noId'].'</p>';
         $userAction = $defaultUserAction;
@@ -186,7 +190,7 @@ if ($userAction == 'delete_confirm') {
         <legend><?php print $text['delUser']; ?></legend>
         <strong><?php print $user->getLogin(); ?></strong>
         <p><?php print $text['delUser_question']; ?></p>
-        <form action ="<?php print $_SERVER['PHP_SELF']; ?>?action=user&amp;user_action=delete" method="post">
+        <form action ="?action=user&amp;user_action=delete" method="post">
             <input type="hidden" name="user_id" value="<?php print $userId; ?>" />
             <div class="button_row">
                 <input class="reset" type="submit" name="cancel" value="<?php print $text['delUser_cancel']; ?>" />
@@ -198,12 +202,13 @@ if ($userAction == 'delete_confirm') {
 <?php
         }
     }
-} // end if ($userAction == 'delete_confirm')
+}
+
 // delete user
 if ($userAction == 'delete') {
-    $message = '';
-    $user = new PMF_User();
-    $userId = isset($_POST['user_id']) ? $_POST['user_id'] : 0;
+    $message    = '';
+    $user       = new PMF_User();
+    $userId     = PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
     $userAction = $defaultUserAction;
     if ($userId == 0) {
         $message .= '<p class="error">'.$errorMessages['delUser_noId'].'</p>';
@@ -233,50 +238,42 @@ if ($userAction == 'delete') {
         }
     }
 
-} // end if ($userAction == 'delete')
+}
+
 // save new user
 if ($userAction == 'addsave') {
-    $user = new PMF_User();
-    $message = '';
+    $user     = new PMF_User();
+    $message  = '';
     $messages = array();
     // check input data
-    $user_name = isset($_POST['user_name']) ? $_POST['user_name'] : '';
-    $user_realname = isset($_POST['user_realname']) ? $_POST['user_realname'] : '';
-    $user_password = isset($_POST['user_password']) ? $_POST['user_password'] : '';
-    $user_email = isset($_POST['user_email']) ? $_POST['user_email'] : '';
-    $user_password = isset($_POST['user_password']) ? $_POST['user_password'] : '';
-    $user_password_confirm = isset($_POST['user_password_confirm']) ? $_POST['user_password_confirm'] : '';
+    $user_name             = PMF_Filter::filterInput(INPUT_POST, 'user_name', FILTER_SANITIZE_STRING, '');
+    $user_realname         = PMF_Filter::filterInput(INPUT_POST, 'user_realname', FILTER_SANITIZE_STRING, '');
+    $user_password         = PMF_Filter::filterInput(INPUT_POST, 'user_password', FILTER_SANITIZE_STRING, '');
+    $user_email            = PMF_Filter::filterInput(INPUT_POST, 'user_email', FILTER_VALIDATE_EMAIL, '');
+    $user_password         = PMF_Filter::filterInput(INPUT_POST, 'user_password', FILTER_SANITIZE_STRING, '');
+    $user_password_confirm = PMF_Filter::filterInput(INPUT_POST, 'user_password_confirm', FILTER_SANITIZE_STRING, '');
 
-    if (!is_null(PMF_Filter::filterVar($user_email, FILTER_VALIDATE_EMAIL))) {
+    if ($user_password != $user_password_confirm) {
         $user_password         = '';
         $user_password_confirm = '';
-        $messages[]            = $errorMessages['addUser_password'];
+        $messages[]            = $errorMessages['addUser_passwordsDontMatch'];
     }
-    if ($user_password != $user_password_confirm) {
-        $user_password = "";
-        $user_password_confirm = "";
-        $messages[] = $errorMessages['addUser_passwordsDontMatch'];
-    }
-    // check e-mail.
-    if (PMF_Filter::filterVar($user_email, FILTER_VALIDATE_EMAIL) == false) {
-        $user_email = "";
-        $messages[] = $errorMessages['addUser_noEmail'];
-    }
+    
     // check login name
     $user->setLoginMinLength($loginMinLength);
     $user->setLoginInvalidRegExp($loginInvalidRegExp);
     if (!$user->isValidLogin($user_name)) {
-        $user_name = "";
+        $user_name  = '';
         $messages[] = $errorMessages['addUser_loginInvalid'];
     }
     if ($user->getUserByLogin($user_name)) {
-        $user_name = "";
+        $user_name  = '';
         $messages[] = $errorMessages['addUser_loginExists'];
     }
     // check realname
     if ($user_realname == "") {
-        $user_realname = "";
-        $messages[] = $errorMessages['addUser_noRealName'];
+        $user_realname = '';
+        $messages[]    = $errorMessages['addUser_noRealName'];
     }
     // ok, let's go
     if (count($messages) == 0) {
@@ -301,11 +298,11 @@ if ($userAction == 'addsave') {
             $message .= '<p class="error">'.$err.'</p>';
         }
     }
-} // end if ($userAction == 'addsave')
+}
 
-
-if (!isset($message))
+if (!isset($message)) {
     $message = '';
+}
 
 // show new user form
 if ($userAction == 'add') {
