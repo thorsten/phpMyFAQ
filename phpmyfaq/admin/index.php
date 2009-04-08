@@ -180,14 +180,8 @@ if (isset($auth) && in_array(true, $permission)) {
                 break;
 
             // User management
-            case 'user_list':
-                require_once 'ajax.user_list.php';
-                break;
             case 'group_list':
                 require_once 'ajax.group_list.php';
-                break;
-            case 'user_list_autocomplete':
-                require_once 'ajax.user_list_autocomplete.php';
                 break;
 
             // Configuration management
