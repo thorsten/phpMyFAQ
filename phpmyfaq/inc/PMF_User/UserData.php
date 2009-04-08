@@ -6,8 +6,8 @@
  * @subpackage PMF_User
  * @author     Lars Tiedemann <php@larstiedemann.de>
  * @since      2005-09-18
- * @copyright  2005-2009 phpMyFAQ Team
  * @version    SVN: $Id$
+ * @copyright  2005-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -27,8 +27,8 @@
  * @subpackage PMF_User
  * @author     Lars Tiedemann <php@larstiedemann.de>
  * @since      2005-09-18
- * @copyright  2005-2009 phpMyFAQ Team
  * @version    SVN: $Id$
+ * @copyright  2005-2009 phpMyFAQ Team
  */
 class PMF_User_UserData
 {
@@ -249,7 +249,7 @@ class PMF_User_UserData
                 %sfaquserdata
             WHERE
                 user_id = %d",
-            SQLP,
+            SQLPREFIX,
             $this->user_id);
         
         $res = $this->db->query($delete);
