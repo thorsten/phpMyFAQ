@@ -31,16 +31,31 @@ $groupid      = PMF_Filter::filterInput(INPUT_POST, 'groupid', FILTER_VALIDATE_I
 if ($permission['adduser'] || $permission['edituser'] || $permission['deluser']) {
 	
 	$user      = new PMF_User();
-    $allUsers  = $user->getAllUsers();
+    $userList  = $user->getAllUsers();
     $groupList = ($user->perm instanceof PMF_Perm_PermMedium) ? $user->perm->getAllGroups() : array();
+    
+    // Returns all groups
+    if ('get_all_groups') {
+        print json_encode(array_map('utf8_encode', $groupList));
+    }
     
     // Return the group data
     if ('get_group_data' == $ajax_action) {
         print json_encode($user->perm->getGroupData($groupid));
     }
     
+    // Return the group rights
     if ('get_group_rights' == $ajax_action) {
     	print json_encode();
     }
     
+    // Return all users
+    if ('get_all_users' == $ajax_action) {
+        print json_encode(array_map('utf8_encode', $userList));
+    }
+    
+    // Returns all group members
+    if ('get_all_group_members' == $ajax_action) {
+        
+    }
 }
