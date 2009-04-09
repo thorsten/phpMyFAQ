@@ -268,7 +268,7 @@ class PMF_Export
                 $export->xmlContent .='<article>'
                 .  '<title>'.$row->header.'</title>'
                 .  '<para>'.wordwrap($datum,20).'</para>';
-                $replacedString = ltrim(ereg_replace('<br />','',$row->artikel));
+                $replacedString = ltrim(str_replace('<br />', '', $row->artikel));
                 $export->TableImageText($replacedString);
                 $export->xmlContent.='</article>';
             }
