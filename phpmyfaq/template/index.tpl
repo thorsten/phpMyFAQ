@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{metaLanguage}" lang="{metaLanguage}">
 <head>
     <title>{title}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=8" />
     <meta http-equiv="Content-Type" content="application/xhtml+xml; charset={metaCharset}" />
     <meta name="title" content="{metaTitle}" />
     <meta name="description" content="{metaDescription}" />
