@@ -20,8 +20,9 @@
 
 /*  General */
 * { padding: 0; margin: 0; }
-body { font: .8em 'Trebuchet MS', 'Nimbus Sans L', sans-serif; line-height: 1.6em; color: #19191B; background: url(../images/background.png) repeat-x; }
-#wrap { margin: 0 auto; width: 90% }
+body { font: .8em 'Trebuchet MS', 'Nimbus Sans L', sans-serif; line-height: 1.6em; color: #19191B;
+    background: url(../images/background.png) repeat-x; }
+#wrap { margin: 0 auto; }
 
 /* Header */
 #top { margin: 0 auto; padding: 0; color: #BEC5CD; height: 87px; background-color: #0D2458; }
@@ -37,8 +38,10 @@ body { font: .8em 'Trebuchet MS', 'Nimbus Sans L', sans-serif; line-height: 1.6e
 #topmenu { margin: 0; padding: 0; height: 35px; background-color: #1A3878; border-top: 1px solid #E8EAF6;}
 #topmenu .lefts { height: 35px; padding-left: 5px; }
 #topmenu .rights { float: right; height: 35px; width: 8px; }
-#topmenu li a { color: #FFF; text-align: left; padding-left: 10px; padding-right: 15px; text-decoration: none; font-weight: bold } 
-#topmenu li { padding: 0px; float: left; margin: 0; font-size: 14px; line-height: 35px; white-space: nowrap; list-style-type: none; width: auto; border-right: 1px solid #E8EAF6; }
+#topmenu li a { color: #FFF; text-align: left; padding-left: 10px; padding-right: 15px; text-decoration: none;
+    font-weight: bold } 
+#topmenu li { padding: 0px; float: left; margin: 0; font-size: 14px; line-height: 35px; white-space: nowrap;
+    list-style-type: none; width: auto; border-right: 1px solid #E8EAF6; }
 #topmenu li a.logout { color: red; }
 
 /* Main container */
@@ -48,7 +51,7 @@ body { font: .8em 'Trebuchet MS', 'Nimbus Sans L', sans-serif; line-height: 1.6e
 #main #leftmenu { width: 200px; margin-left: 0px; float: left; } 
 #main #leftmenu .box { background: #efefef; margin-bottom: 10px; color: #666; border-top: 1px solid #807B77; }
 #main #leftmenu h2 { font: bold 1.0em;  height: 18px; padding: 3px; color: #E8EAF6; background-color: #807B77; }
-#main #leftmenu li { padding-bottom: 3px; border-bottom: 1px solid #807B77; }
+#main #leftmenu li { padding-bottom: 3px; padding-left: 3px; border-bottom: 1px solid #807B77; }
 
 /* Content */
 #maincontent { color: #19191B; margin-left: 215px; }
@@ -73,14 +76,25 @@ dd { margin: 0 0 10px 200px; }
 
 /* Global forms CSS definitions */
 #maincontent textarea { border: 1px solid #050110; width: 85%;  }
-#main #maincontent fieldset { float: left; width: 95%; border: 1px solid #ccc; padding: 10px 8px; margin: 0 10px 8px 0; background: #FFF; color: #000; }
+#main #maincontent fieldset { float: left; width: 95%; border: 1px solid #ccc; padding: 10px 8px; margin: 0 10px 8px 0;
+    background: #FFF; color: #000; }
 #main #maincontent fieldset p { width: 95%; }
 #main input { padding: 3px; margin: 0; border: 1px solid #bbb }
 
 /* User pages */
 #user_accounts { float: left; width: 200px; margin: 0; }
-#user_data { float: left; width: 300px; margin: 0; padding-left: 20px; }
-#user_rights { float: left; width: 250px; margin: 0; padding-left: 15px;}
+#user_data { float: left; width: 225px; margin: 0; padding-left: 15px; }
+#user_rights { float: left; width: 225px; margin: 0; padding-left: 15px;}
+
+#groups { float: left; width: 200px; margin: 0; }
+#group_membership { float: left; width: 225px; margin: 0; padding-left: 5px; }
+#group_details { float: left; width: 225px; margin: 0 0 0 25px; padding-left: 5px;}
+
+#group_rights {}
+#group_memberList { float: right; width: 35%; height: 220px; }
+#group_userList { float: left; width: 35%; height: 220px; }
+#group_membershipButtons { text-align: center; padding-top: 105px; }
+#group_membership .button_row { padding-top: 10px; }
 .clear { clear: both; }
 
 /* datePicker CSS definitions */
@@ -465,10 +479,6 @@ div.button_row input.reset {
     width: 450px;
 }
 
-#user_accounts {
-    float: left;
-    width: 200px;
-}
 #user_list {}
 #user_list_select {
     width: 200px;
@@ -504,22 +514,6 @@ div.button_row input.reset {
     border-bottom: dashed 1px white;
 }
 
-#user_details {
-    float: right;
-    width: 550px;
-    margin: 0;
-    padding: 0;
-}
-#user_data {
-    float: left;
-    width: 250px;
-    margin: 0 20px 20px 0;
-}
-#user_rights {
-    margin: 0 0 20px 200px;
-}
-
-
 #user_confirmDelete {
     width: 250px;
 }
@@ -527,46 +521,6 @@ div.button_row input.reset {
 #group_create {
     width: 350px;
 }
-
-#groups {
-    float: left;
-    width: 220px;
-}
-#group_list {}
-
-#group_details {
-    float: right;
-    width: 220px;
-    margin: 0;
-    padding: 0;
-}
-#group_data {
-    margin: 0 0 20px 0;
-}
-#group_rights {}
-
-#group_membership {
-    float: left;
-    width: 340px;
-}
-#group_memberList {
-    float: right;
-    width: 35%;
-    height: 220px;
-}
-#group_userList {
-    float: left;
-    width: 35%;
-    height: 220px;
-}
-#group_membershipButtons {
-    text-align: center;
-    padding-top: 105px;
-}
-#group_membership .button_row {
-    padding-top: 10px;
-}
-
 
 #tags_autocomplete_choices {
     margin: 0;

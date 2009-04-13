@@ -627,6 +627,42 @@ getGroupList();
         <p>[ <a href="<?php print $_SERVER['PHP_SELF']; ?>?action=group&amp;group_action=add"><?php print $text['addGroup_link']; ?></a> ]</p>
     </div> <!-- end #group_list -->
 </div> <!-- end #groups -->
+<div id="group_membership">
+    <form id="group_membership" name="group_membership" action="?action=group&amp;group_action=update_members" method="post" onsubmit="select_selectAll('group_member_list')">
+        <input id="update_member_group_id" type="hidden" name="group_id" value="0" />
+        <fieldset>
+            <legend><?php print $text['groupMembership']; ?></legend>
+            <fieldset id="group_userList">
+                <legend><?php print $text['groupMembership_userList']; ?></legend>
+                <div>
+                    <span class="select_all"><a href="javascript:select_selectAll('group_user_list')"><?php print $text['groupMembership_selectAll']; ?></a></span>
+                    <span class="unselect_all"><a href="javascript:select_unselectAll('group_user_list')"><?php print $text['groupMembership_unselectAll']; ?></a></span>
+                </div>
+                <select id="group_user_list" multiple="multiple" size="<?php print $memberSelectSize; ?>">
+                    <option value="0">...user list...</option>
+                </select>
+            </fieldset>
+            <div id="group_membershipButtons">
+                <input type="button" value="<?php print $text['addMember_button']; ?>" onclick="addGroupMembers()" />
+                <input type="button" value="<?php print $text['removeMember_button']; ?>" onclick="removeGroupMembers()" />
+            </div>
+            <fieldset id="group_memberList">
+                <legend><?php print $text['groupMembership_memberList']; ?></legend>
+                <div>
+                    <span class="select_all"><a href="javascript:select_selectAll('group_member_list')"><?php print $text['groupMembership_selectAll']; ?></a></span>
+                    <span class="unselect_all"><a href="javascript:select_unselectAll('group_member_list')"><?php print $text['groupMembership_unselectAll']; ?></a></span>
+                </div>
+                <select id="group_member_list" name="group_members[]" multiple="multiple" size="<?php print $memberSelectSize; ?>">
+                    <option value="0">...member list...</option>
+                </select>
+            </fieldset>
+            <div class="clear"></div>
+            <div class="button_row">
+                <input class="submit" type="submit" value="<?php print $text['updateMember_submit']; ?>" />
+            </div>
+        </fieldset>
+    </form>
+</div> <!-- end #group_membership -->
 <div id="group_details">
     <div id="group_data">
         <fieldset>
@@ -675,42 +711,6 @@ getGroupList();
         </fieldset>
     </div> <!-- end #user_rights -->
 </div> <!-- end #user_details -->
-<div id="group_membership">
-    <form id="group_membership" name="group_membership" action="?action=group&amp;group_action=update_members" method="post" onsubmit="select_selectAll('group_member_list')">
-        <input id="update_member_group_id" type="hidden" name="group_id" value="0" />
-        <fieldset>
-            <legend><?php print $text['groupMembership']; ?></legend>
-            <fieldset id="group_userList">
-                <legend><?php print $text['groupMembership_userList']; ?></legend>
-                <div>
-                    <span class="select_all"><a href="javascript:select_selectAll('group_user_list')"><?php print $text['groupMembership_selectAll']; ?></a></span>
-                    <span class="unselect_all"><a href="javascript:select_unselectAll('group_user_list')"><?php print $text['groupMembership_unselectAll']; ?></a></span>
-                </div>
-                <select id="group_user_list" multiple="multiple" size="<?php print $memberSelectSize; ?>">
-                    <option value="0">...user list...</option>
-                </select>
-            </fieldset>
-            <fieldset id="group_memberList">
-                <legend><?php print $text['groupMembership_memberList']; ?></legend>
-                <div>
-                    <span class="select_all"><a href="javascript:select_selectAll('group_member_list')"><?php print $text['groupMembership_selectAll']; ?></a></span>
-                    <span class="unselect_all"><a href="javascript:select_unselectAll('group_member_list')"><?php print $text['groupMembership_unselectAll']; ?></a></span>
-                </div>
-                <select id="group_member_list" name="group_members[]" multiple="multiple" size="<?php print $memberSelectSize; ?>">
-                    <option value="0">...member list...</option>
-                </select>
-            </fieldset>
-            <div id="group_membershipButtons">
-                <input type="button" value="<?php print $text['addMember_button']; ?>" onclick="addGroupMembers()" />
-                <input type="button" value="<?php print $text['removeMember_button']; ?>" onclick="removeGroupMembers()" />
-            </div>
-            <div class="clear"></div>
-            <div class="button_row">
-                <input class="submit" type="submit" value="<?php print $text['updateMember_submit']; ?>" />
-            </div>
-        </fieldset>
-    </form>
-</div> <!-- end #group_membership -->
 <div class="clear"></div>
 <?php
 }
