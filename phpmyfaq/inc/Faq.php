@@ -920,6 +920,8 @@ class PMF_Faq
                 SQLPREFIX, $record_id, $record_lang),
             sprintf("DELETE FROM %faqdata_tags WHERE record_id = %d",
                 SQLPREFIX, $record_id),
+            sprintf('DELETE FROM %sfaqdata_tags WHERE %sfaqdata_tags.record_id NOT IN (SELECT %sfaqdata.id FROM %sfaqdata)',
+                SQLPREFIX, SQLPREFIX, SQLPREFIX, SQLPREFIX),
             sprintf("DELETE FROM %faqcomments WHERE id = %d",
                 SQLPREFIX, $record_id),
             sprintf("DELETE FROM %faqvoting WHERE artikel = %d",
