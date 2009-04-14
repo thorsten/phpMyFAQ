@@ -297,21 +297,34 @@ if ($groupAction == 'list') {
 <script type="text/javascript">
 /* <![CDATA[ */
 
-/* HTTP Request object */
 var groupList;
 
-function getGroupList() {
-    var url = 'index.php';
-    var pars = 'action=ajax&ajax=group_list';
-    var myAjax = new Ajax.Request( url, {method: 'get', parameters: pars, onComplete: processGroupList} );
+/**
+ * Load groups as JSON using HTTP GET
+ *
+ * @return void
+ */
+function getGroupList()
+{
+	clearGroupList();
+	$.getJSON("index.php?action=ajax&ajax=group&ajaxaction=get_all_groups",
+	    function(data) {
+		    $.each(data, function(i, val) {
+			    $('#group_list_select').append('<option value="' + val.group_id + '">' + val.name + '</option>');
+	        });
+	    });
+	processGroupList();
 }
 
-function processGroupList(XmlRequest) {
-    // process response
-    groupList = XmlRequest;
-    clearGroupList();
-    buildGroupList();
+/**
+ * Processes everything we need 
+ *
+ * @return void
+ */
+function processGroupList()
+{
     clearGroupData();
+    /*
     buildGroupData(0);
     clearGroupRights();
     buildGroupRights(0);
@@ -319,6 +332,32 @@ function processGroupList(XmlRequest) {
     buildUserList();
     clearMemberList();
     buildMemberList(0);
+    */
+}
+
+/**
+ * Removes all entries from the group list
+ *
+ * @return void
+ */
+function clearGroupList()
+{
+    $('#group_list_select').empty();
+}
+
+/**
+ * Removes all values from the group data form
+ *
+ * @return void
+ */
+function clearGroupData()
+{
+    $('#update_group_id').empty();
+    $('#update_group_name').empty();
+    $('#update_group_description').empty();
+    if ($('update_group_auto_join').attr('checked') == 'checked') {
+        $('update_group_auto_join').attr('checked', false);
+    }
 }
 
 
@@ -337,79 +376,15 @@ function getGroupNode(groupId)
     return group;
 }
 
-
-function clearGroupList()
-{
-    select_clear($('group_list_select'));
-}
-
-function buildGroupList()
-{
-    var groups = groupList.responseXML.getElementsByTagName('group');
-    var id;
-    var textNode;
-    var classAttrValue = text_getFromParent(groupList.responseXML.getElementsByTagName('grouplist')[0], "select_class");
-    for (var i = 0; i < groups.length; i++) {
-        textNode = document.createTextNode(text_getFromParent(groups[i], 'name'));
-        id = groups[i].getAttribute('id');
-        select_addOption($('group_list_select'), id, textNode, classAttrValue);
-    }
-}
-
-
-function clearGroupData()
-{
-    $('update_group_id').removeAttribute('value');
-    $('update_group_name').removeAttribute('value');
-    $('update_group_description').value = '';
-    if ($('update_group_auto_join').getAttribute('checked')) {
-        $('update_group_auto_join').removeAttributeNode($('update_group_auto_join').getAttributeNode('checked'));
-    }
-}
-
 function buildGroupData(id)
 {
-    var getValues = true;
-    var groups = groupList.responseXML.getElementsByTagName('group');
-    var group;
-    // get group with given id
-    if (id == 0) {
-        getValues = false;
-    } else {
-        getValues = true;
-        for (var i = 0; i < groups.length; i++) {
-            if (groups[i].getAttribute('id') == id) {
-                group = groups[i];
-                break;
-            }
-        }
-    }
-    var debugMsg = '';
-    if (group)
-    {
-        // change group-ID
-        $('update_group_id').setAttribute('value', id);
-        var name = text_getFromParent(group, 'name');
-        $('update_group_name').setAttribute('value', name);
-        var description = text_getFromParent(group, 'description');
-        $('update_group_description').value = description;
-        var auto_join = text_getFromParent(group, 'auto_join');
-        if (auto_join == "1") {
-            $('update_group_auto_join').setAttribute('checked', "checked");
-        } else {
-            if ($('update_group_auto_join').getAttribute('checked')) {
-                $('update_group_auto_join').removeAttributeNode($('update_group_auto_join').getAttributeNode('checked'));
-            }
-        }
-        debugMsg += 'name = ' + name;
-        debugMsg += '\ndescription = ' + description;
-    }
+    
 }
 
 
 function clearGroupRights()
 {
-    table_clear($('group_rights_table'));
+    $('#group_rights_table'));
 }
 
 function buildGroupRights(id)
@@ -618,7 +593,6 @@ getGroupList();
             <legend><?php print $text['selectGroup']; ?></legend>
             <form id="group_select" name="group_select" action="?action=group&amp;group_action=delete_confirm" method="post">
                 <select class="admin" name="group_list_select" id="group_list_select" size="<?php print $groupSelectSize; ?>" onchange="groupSelect(event)" tabindex="1">
-                    <option value="">select...</option>
                 </select>
                 <br />
                 <input class="submit" type="submit" value="<?php print $text['delGroup_button']; ?>" tabindex="2" />
