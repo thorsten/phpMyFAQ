@@ -36,7 +36,13 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
     
     // Returns all groups
     if ('get_all_groups') {
-        print json_encode(array_map('utf8_encode', $groupList));
+    	$groups = array();
+    	foreach ($groupList as $group_id) {
+            $data     = $user->perm->getGroupData($group_id);
+            $groups[] = array('group_id' => $data['group_id'],
+                              'name'     => $data['name']);
+    	}
+        print json_encode($groups);
     }
     
     // Return the group data
