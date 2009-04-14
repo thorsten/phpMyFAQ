@@ -16,6 +16,8 @@ Changes since 2.5.0-alpha2:
 - added smart answering for user questions (Anatoliy Belsky)
 - added string wrapper for better UTF-8 handling (Anatoliy Belsky)
 - ajaxified comment and record administration (Thorsten)
+- updated bundled jQuery to version 1.3.2 (Thorsten)
+- removed Prototype/Script.aculo.us (Thorsten)
 - fixed a lot of bugs (Thorsten)
 
 For known issues please take a look at KNOWNBUGS.txt
