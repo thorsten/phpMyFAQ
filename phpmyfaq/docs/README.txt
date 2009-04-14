@@ -17,6 +17,7 @@ Changes since 2.5.0-alpha2:
 - added string wrapper for better UTF-8 handling (Anatoliy Belsky)
 - ajaxified comment and record administration (Thorsten)
 - updated bundled jQuery to version 1.3.2 (Thorsten)
+- updated bundled TinyMCE editor component to version 3.2.2.3 (Thorsten)
 - removed Prototype/Script.aculo.us (Thorsten)
 - fixed a lot of bugs (Thorsten)
 
@@ -49,7 +50,7 @@ Version 2.5.0-beta - 2009-04-
 - improved performance (Thorsten)
 - ajaxified comment and record administration (Thorsten)
 - updated bundled Net_IDNA to version XXX (Thorsten)
-- updated bundled TinyMCE editor component to version 3.2.1.1 (Thorsten)
+- updated bundled TinyMCE editor component to version 3.2.2.3 (Thorsten)
 - updated bundled FPDF library to version 1.6 (Thorsten)
 
 Version 2.0.13 - 2009-04-
