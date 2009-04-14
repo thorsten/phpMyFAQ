@@ -53,20 +53,6 @@ header("Vary: Negotiate,Accept");
     <script type="text/javascript" src="../inc/js/plugins/datePicker/date.js"></script>
     <script type="text/javascript" src="../inc/js/plugins/datePicker/jquery.datePicker.js"></script>
     <script type="text/javascript" src="editor/tiny_mce.js"></script>
-<?php
-    // Add the script.aculo.us libraries only if needed:
-    // - Edit faq tags;
-    // to minimize possible IE memory leaks
-
-    // @todo: rewrite the AJAX Suggestion and Autocomplete Behaviours using ONLY jQuery library
-if (isset($action)) {
-	if ($action == 'group') {
-?>
-    <script type="text/javascript" src="../inc/js/prototype.js"></script>
-<?php 
-	}
-}
-?>
 </head>
 <body id="body" dir="<?php print $PMF_LANG["dir"]; ?>">
 <a name="top"></a>
