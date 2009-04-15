@@ -26,7 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 }
 
 $ajax_action = PMF_Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
-$groupid      = PMF_Filter::filterInput(INPUT_POST, 'groupid', FILTER_VALIDATE_INT);
+$group_id      = PMF_Filter::filterInput(INPUT_POST, 'groupid', FILTER_VALIDATE_INT);
 
 if ($permission['adduser'] || $permission['edituser'] || $permission['deluser']) {
 	
@@ -47,12 +47,12 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
     
     // Return the group data
     if ('get_group_data' == $ajax_action) {
-        print json_encode($user->perm->getGroupData($groupid));
+        print json_encode($user->perm->getGroupData($group_id));
     }
     
     // Return the group rights
     if ('get_group_rights' == $ajax_action) {
-    	print json_encode();
+    	print json_encode($user->perm->getGroupRights($group_id));
     }
     
     // Return all users
