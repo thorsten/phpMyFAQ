@@ -26,7 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 }
 
 $ajax_action = PMF_Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
-$group_id      = PMF_Filter::filterInput(INPUT_POST, 'groupid', FILTER_VALIDATE_INT);
+$group_id    = PMF_Filter::filterInput(INPUT_GET, 'group_id', FILTER_VALIDATE_INT);
 
 if ($permission['adduser'] || $permission['edituser'] || $permission['deluser']) {
 	
@@ -35,7 +35,7 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
     $groupList = ($user->perm instanceof PMF_Perm_PermMedium) ? $user->perm->getAllGroups() : array();
     
     // Returns all groups
-    if ('get_all_groups') {
+    if ('get_all_groups' == $ajax_action) {
     	$groups = array();
     	foreach ($groupList as $group_id) {
             $data     = $user->perm->getGroupData($group_id);
@@ -52,16 +52,29 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
     
     // Return the group rights
     if ('get_group_rights' == $ajax_action) {
-    	print json_encode($user->perm->getGroupRights($group_id));
+     	print json_encode($user->perm->getGroupRights($group_id));
     }
     
     // Return all users
     if ('get_all_users' == $ajax_action) {
-        print json_encode(array_map('utf8_encode', $userList));
+    	$users = array();
+    	foreach ($userList as $single_user) {
+    		$user->getUserById($single_user);
+    		$users[] = array('user_id' => $user->getUserId(),
+    		                 'login'   => $user->getLogin());
+    	}
+        print json_encode($users);
     }
     
     // Returns all group members
-    if ('get_all_group_members' == $ajax_action) {
-        
+    if ('get_all_members' == $ajax_action) {
+        $memberList = $user->perm->getGroupMembers($group_id);
+        $members = array();
+        foreach ($memberList as $single_member) {
+            $user->getUserById($single_member);
+            $members[] = array('user_id' => $user->getUserId(),
+                               'login'   => $user->getLogin());
+        }
+        print json_encode($members);
     }
 }

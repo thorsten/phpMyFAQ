@@ -471,11 +471,11 @@ function getMemberList(group_id)
         clearMemberList();
         return;
     }
-    $.getJSON("index.php?action=ajax&ajax=group&ajaxaction=get_all_members",
+    $.getJSON("index.php?action=ajax&ajax=group&ajaxaction=get_all_members&group_id=" + group_id,
             function(data) {
             $('#group_member_list').empty();
                 $.each(data, function(i, val) {
-                    $('#group_user_member').append('<option value="' + val.user_id + '">' + val.login + '</option>');
+                    $('#group_member_list').append('<option value="' + val.user_id + '">' + val.login + '</option>');
                 });
 
             });
