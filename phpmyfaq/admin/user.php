@@ -372,7 +372,7 @@ function getUserData(user_id)
 
 
 /**
- * Returns the user rights as JSON object
+ * Fetches the user rights as JSON object and checks the checkboxes
  *
  * @param integer user_id User ID
  */
@@ -381,12 +381,24 @@ function getUserRights(user_id)
 	form_uncheckAll('rightsForm');
     $.getJSON("index.php?action=ajax&ajax=user&ajaxaction=get_user_rights&user_id=" + user_id,
         function(data) {
-    	    for (var i = 1; i <= data.length; i++) {
-                $('#user_right_' + i).attr('checked', true);
-            };
+            $.each(data, function(i, val) {
+                $('#user_right_' + val).attr('checked', true);
+            });
             $('#rights_user_id').val(user_id);
         });
 }
+
+/**
+ * Updates the user data in forms
+ *
+ * @return void
+ */
+function updateUser(user_id)
+{
+	getUserData(user_id);
+	getUserRights(user_id);
+}
+
 /* ]]> */
 </script>
 <h2><?php print $text['header']; ?></h2>
