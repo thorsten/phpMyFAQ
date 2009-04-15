@@ -324,15 +324,10 @@ function getGroupList()
 function processGroupList()
 {
     clearGroupData();
-    /*
-    buildGroupData(0);
     clearGroupRights();
-    buildGroupRights(0);
     clearUserList();
-    buildUserList();
+    getUserList();
     clearMemberList();
-    buildMemberList(0);
-    */
 }
 
 /**
@@ -360,98 +355,56 @@ function clearGroupData()
     }
 }
 
-
-function getGroupNode(groupId)
+/**
+ * Returns the group data as JSON object and fills the input forms
+ *
+ * @param integer group_id Group ID
+ */
+function getGroupData(group_id)
 {
-    // loop through group-elements
-    var group_list = groupList.responseXML.getElementsByTagName('grouplist')[0];
-    var groups = group_list.getElementsByTagName('group');
-    var group = null;
-    for (var i = 0; i < groups.length; i++) {
-        if (groups[i].getAttribute('id') == groupId) {
-            group = groups[i];
-            break;
-        }
-    }
-    return group;
+    $.getJSON("index.php?action=ajax&ajax=group&ajaxaction=get_group_data&group_id=" + group_id,
+        function(data) {
+            console.log(data);
+            $('#update_group_id').val(data.group_id);
+            $('#update_group_name').val(data.name);
+            $('#update_group_description').val(data.description);
+            if (data.auto_join == 1) {
+                $('#update_group_auto_join').attr('checked', true);
+            }
+        });
 }
 
-function buildGroupData(id)
-{
-    
-}
-
-
+/**
+ * Unchecks all checkboxes
+ *
+ * @return void
+ */
 function clearGroupRights()
 {
-    $('#group_rights_table'));
+    $('#group_rights_table input').attr('checked', false);
 }
 
-function buildGroupRights(id)
+/**
+ * Returns the group rights as JSON object and checks the checkboxes
+ *
+ * @param integer group_id Group ID
+ */
+function getGroupRights(group_id)
 {
-    var group_rights_table = $('group_rights_table');
-    var getValues = true;
-    // get group with given id
-    if (id == 0) {
-        getValues = false;
-    } else {
-        getValues = true;
-        // loop through group-elements
-        var groups = groupList.responseXML.getElementsByTagName('group');
-        var group;
-        for (var i = 0; i < groups.length; i++) {
-            if (groups[i].getAttribute('id') == id) {
-                group = groups[i];
-                break;
-            }
-        }
-    }
-    // change group-ID
-    $('rights_group_id').setAttribute('value', id);
-    var right_id;
-    var right_name;
-    var right_description;
-    var checkbox;
-    var isGroupRight = 0;
-    // loop through rightlist at beginning (all group rights)
-    var rightList = groupList.responseXML.getElementsByTagName('rightlist')[0].getElementsByTagName('right');
-    for (var i = 0; i < rightList.length; i++) {
-        right_name = text_getFromParent(rightList[i], 'name');
-        right_description = text_getFromParent(rightList[i], 'description');
-        right_id = rightList[i].getAttribute('id');
-        // search for that right in group right list
-        isGroupRight = 0;
-        if (getValues) {
-            var groupRights = group.getElementsByTagName('right');
-            var j = 0;
-            while (isGroupRight == 0 && j < groupRights.length) {
-                if (groupRights[j].getAttribute('id') == right_id) {
-                    isGroupRight = 1;
-                    break;
-                } else {
-                    isGroupRight = 0;
-                    j++;
-                }
-            }
-        } else {
-            isGroupRight = 0;
-        }
-        // build new table row
-        checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.name = 'group_rights[]';
-        checkbox.value = right_id;
-        setTimeout((function(checkbox, isGroupRight) {
-        return function() {
-        checkbox.checked = isGroupRight == 1;
-        }
-        })(checkbox, isGroupRight), 10);
-        table_addRow(group_rights_table, i, checkbox, document.createTextNode(right_name));
-        
-    }
+    $.getJSON("index.php?action=ajax&ajax=group&ajaxaction=get_group_rights&group_id=" + group_id,
+        function(data) {
+            $.each(data, function(i, val) {
+                $('#group_right_' + val).attr('checked', true);
+            });
+            $('#rights_group_id').val(group_id);
+        });
 }
 
-
+/**
+ * Handles the group selection event
+ *
+ * @return void
+ */
 function groupSelect(evt)
 {
     evt = (evt) ? evt : ((windows.event) ? windows.event : null);
@@ -459,125 +412,129 @@ function groupSelect(evt)
         var select = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
         if (select && select.value > 0) {
             clearGroupData();
-            buildGroupData(select.value);
+            getGroupData(select.value);
             clearGroupRights();
-            buildGroupRights(select.value);
+            getGroupRights(select.value);
             clearUserList();
-            buildUserList();
+            getUserList();
             clearMemberList();
-            buildMemberList(select.value);
+            getMemberList(select.value);
         }
     }
 }
 
-
+/**
+ * Clears the user list
+ *
+ * @return void
+ */
 function clearUserList()
 {
-    select_clear($('group_user_list'));
+    $('#group_user_list option').empty();
 }
 
-function buildUserList()
+/**
+ * Adds all users to the user list select box
+ *
+ * @return void
+ */
+function getUserList()
 {
-    var user_list = groupList.responseXML.getElementsByTagName('userlist')[0];
-    var users = user_list.getElementsByTagName('user');
-    var id;
-    var textNode;
-    var classAttrValue = text_getFromParent(user_list, "select_class");
-    for (var i = 0; i < users.length; i++) {
-        textNode = document.createTextNode(text_getFromParent(users[i], "login"));
-        id = users[i].getAttribute('id');
-        select_addOption($('group_user_list'), id, textNode, classAttrValue);
-    }
+    $.getJSON("index.php?action=ajax&ajax=group&ajaxaction=get_all_users",
+        function(data) {
+    	$('#group_user_list').empty();
+            $.each(data, function(i, val) {
+                $('#group_user_list').append('<option value="' + val.user_id + '">' + val.login + '</option>');
+            });
+
+        });
 }
 
-
+/**
+ * Clears the member list
+ *
+ * @return void
+ */
 function clearMemberList()
 {
-    select_clear($('group_member_list'));
+    $('#group_member_list').empty();
 }
 
-function buildMemberList(groupId)
+/**
+ * Adds all members to the members list select box
+ *
+ * @return void
+ */
+function getMemberList(group_id)
 {
-    if (groupId == 0) {
+    if (group_id == 0) {
         clearMemberList();
         return;
     }
-    // update group-id
-    $('update_member_group_id').setAttribute('value', groupId);
-    // loop through user_list
-    var user_list = groupList.responseXML.getElementsByTagName('userlist')[0];
-    var users = user_list.getElementsByTagName('user');
-    var user_id;
-    var login;
-    var isGroupMember = false;
-    for (var i = 0; i < users.length; i++) {
-        user_id = users[i].getAttribute('id');
-        // search for user element in group
-        var group = getGroupNode(groupId);
-        var group_members = group.getElementsByTagName('group_members')[0];
-        var members = group_members.getElementsByTagName('user');
-        for (var j = 0; j < members.length; j++) {
-            if (members[j].getAttribute('id') == user_id) {
-                isGroupMember = true;
-                break;
-            } else {
-                isGroupMember = false;
-            }
-        }
-        if (isGroupMember == true) {
-            var login = text_getFromParent(users[i], 'login');
-            select_addOption($('group_member_list'), user_id, document.createTextNode(login), text_getFromParent(user_list, 'select_class'));
-        }
-    }
+    $.getJSON("index.php?action=ajax&ajax=group&ajaxaction=get_all_members",
+            function(data) {
+            $('#group_member_list').empty();
+                $.each(data, function(i, val) {
+                    $('#group_user_member').append('<option value="' + val.user_id + '">' + val.login + '</option>');
+                });
+
+            });
 }
 
-
+/**
+ * Adds a user to the group members selection list
+ *
+ * @return void
+ */
 function addGroupMembers()
 {
     // make sure that a group is selected
-    var group_list = $('group_list_select');
-    if (group_list.value == '') {
+    var selected_group = $('#group_list_select option:selected');
+    if (selected_group.size() == 0) {
         alert('Please choose a group. ');
         return;
     }
+
     // get selected users from list
-    var users = $('group_user_list').options;
-    for (var i = 0; i < users.length; i++) {
-        if (users[i].selected == true) {
-            // check if user is already in member list
-            var members = $('group_member_list').options;
+    var selected_users = $('#group_user_list option:selected');
+    if (selected_users.size() > 0) {
+        selected_users.each(function() {
+
+            var members  = $('#group_member_list option');
             var isMember = false;
-            for (var j = 0; j < members.length; j++) {
-                if (members[j].value == users[i].value) {
+
+            members.each(function(member) {
+                if (member.val() == user.val()) {
                     isMember = true;
-                    break;
                 } else {
                     isMember = false;
                 }
-            }
-            // add new member
+            });
+
             if (isMember == false) {
-                select_addOption($('group_member_list'), users[i].value, document.createTextNode(users[i].text), users[i].getAttribute('class'));
+            	$('#group_member_list').append('<option value="' + $(this).val() + '">' + $(this).text() + '</option>');
             }
-        }
+            
+        });
     }
 }
+
+/**
+ * Adds a user to the group members selection list
+ *
+ * @return void
+ */
 function removeGroupMembers()
 {
     // make sure that a group is selected
-    var group_list = $('group_list_select');
-    if (group_list.value == '') {
+    var selected_group = $('#group_list_select option:selected');
+    if (selected_group.size() == 0) {
         alert('Please choose a group. ');
         return;
     }
+    
     // get selected members from list
-    var members = $('group_member_list').options;
-    for (var i = 0; i < members.length; i++) {
-        if (members[i].selected) {
-            $('group_member_list').removeChild(members[i]);
-            i--; // members.length was reduced by removeChild
-        }
-    }
+    $('#group_member_list option:selected').empty();
 }
 
 getGroupList();
@@ -673,10 +630,12 @@ getGroupList();
                     <span class="unselect_all"><a href="javascript:form_uncheckAll('rightsForm')"><?php print $text['changeRights_uncheckAll']; ?></a></span>
                 </div>
                 <table id="group_rights_table">
-                    <tr>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                    </tr>
+<?php foreach ($user->perm->getAllRightsData() as $right) { ?>
+                <tr>
+                    <td><input id="group_right_<?php print $right['right_id']; ?>" type="checkbox" name="group_rights[]" value="<?php print $right['right_id']; ?>"/></td>
+                    <td><?php print $right['description']; ?></td>
+                </tr>
+<?php } ?>
                 </table>
                 <div class="button_row">
                     <input class="submit" type="submit" value="<?php print $text['changeRights_submit']; ?>" />
