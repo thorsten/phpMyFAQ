@@ -179,11 +179,6 @@ if (isset($auth) && in_array(true, $permission)) {
                 require_once 'ajax.ondemandurl.php';
                 break;
 
-            // User management
-            case 'group_list':
-                require_once 'ajax.group_list.php';
-                break;
-
             // Configuration management
             case 'config_list':
                 require_once 'ajax.config_list.php';
