@@ -149,35 +149,39 @@ if ($permission['editbt'] || $permission['delbt']) {
         if (is_numeric($searchterm)) {
             // a. solution id
             $result = $db->search(SQLPREFIX.'faqdata',
-                        array(SQLPREFIX.'faqdata.id AS id',
-                            SQLPREFIX.'faqdata.lang AS lang',
-                            SQLPREFIX.'faqcategoryrelations.category_id AS category_id',
-                            SQLPREFIX.'faqdata.thema AS thema',
-                            SQLPREFIX.'faqdata.content AS content'),
-                        SQLPREFIX.'faqcategoryrelations',
-                        array(SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id',
-                            SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang'),
-                        array(SQLPREFIX.'faqdata.solution_id'),
-                        $searchterm);
+                                  array(SQLPREFIX.'faqdata.id AS id',
+                                        SQLPREFIX.'faqdata.lang AS lang',
+                                        SQLPREFIX.'faqcategoryrelations.category_id AS category_id',
+                                        SQLPREFIX.'faqdata.sticky AS sticky',
+                                        SQLPREFIX.'faqdata.thema AS thema',
+                                        SQLPREFIX.'faqdata.content AS content',
+                                        SQLPREFIX.'faqdata.datum AS date'),
+                                  SQLPREFIX.'faqcategoryrelations',
+                                  array(SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id',
+                                        SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang'),
+                                  array(SQLPREFIX.'faqdata.solution_id'),
+                                  $searchterm);
         } else {
             // b. full text search
             $result = $db->search(SQLPREFIX."faqdata",
-                        array(SQLPREFIX.'faqdata.id AS id',
-                            SQLPREFIX.'faqdata.lang AS lang',
-                            SQLPREFIX.'faqcategoryrelations.category_id AS category_id',
-                            SQLPREFIX.'faqdata.thema AS thema',
-                            SQLPREFIX.'faqdata.content AS content'),
-                        SQLPREFIX.'faqcategoryrelations',
-                        array(SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id',
-                            SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang'),
-                        array(SQLPREFIX.'faqdata.thema',
-                            SQLPREFIX.'faqdata.content',
-                            SQLPREFIX.'faqdata.keywords'),
-                        $searchterm,
-                        array(),
-                        array(SQLPREFIX.'faqcategoryrelations.category_id',  SQLPREFIX.'faqdata.id')
-                        );
+                                  array(SQLPREFIX.'faqdata.id AS id',
+                                        SQLPREFIX.'faqdata.lang AS lang',
+                                        SQLPREFIX.'faqcategoryrelations.category_id AS category_id',
+                                        SQLPREFIX.'faqdata.sticky AS sticky',
+                                        SQLPREFIX.'faqdata.thema AS thema',
+                                        SQLPREFIX.'faqdata.content AS content',
+                                        SQLPREFIX.'faqdata.datum AS date'),
+                                  SQLPREFIX.'faqcategoryrelations',
+                                  array(SQLPREFIX.'faqdata.id = '.SQLPREFIX.'faqcategoryrelations.record_id',
+                                        SQLPREFIX.'faqdata.lang = '.SQLPREFIX.'faqcategoryrelations.record_lang'),
+                                  array(SQLPREFIX.'faqdata.thema',
+                                        SQLPREFIX.'faqdata.content',
+                                        SQLPREFIX.'faqdata.keywords'),
+                                  $searchterm,
+                                  array(),
+                                  array(SQLPREFIX.'faqcategoryrelations.category_id',  SQLPREFIX.'faqdata.id'));
         }
+        
         $laction        = 'view';
         $internalSearch = '&amp;search='.$searchterm;
         $wasSearch      = true;
@@ -187,9 +191,10 @@ if ($permission['editbt'] || $permission['delbt']) {
                 'id'          => $row->id,
                 'category_id' => $row->category_id,
                 'lang'        => $row->lang,
+                'sticky'      => $row->sticky,
                 'title'       => $row->thema,
                 'content'     => $row->content,
-                'date'        => makeDate($row->datum));
+                'date'        => makeDate($row->date));
         }
 
     } elseif ($action == 'accept') {
