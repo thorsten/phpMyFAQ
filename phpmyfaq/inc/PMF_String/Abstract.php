@@ -71,7 +71,7 @@ abstract class PMF_String_Abstract
      * 
      * @return boolean
      */
-    public function isUTF8($str)
+    public static function isUTF8($str)
     {
         $regex = '/^([\x00-\x7f]|'
                . '[\xc2-\xdf][\x80-\xbf]|'
@@ -86,6 +86,7 @@ abstract class PMF_String_Abstract
         return preg_match($regex, $str) === 1;
     }
         
+    
     /**
      * Set current encoding
      * 
@@ -95,7 +96,8 @@ abstract class PMF_String_Abstract
     {
         $this->encoding = $encoding;
     }
-        
+
+    
     /**
      * Get current encoding
      * @return string

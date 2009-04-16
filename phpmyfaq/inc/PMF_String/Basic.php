@@ -206,4 +206,85 @@ class PMF_String_Basic extends PMF_String_Abstract
     {
         return strrpos($haystack, $needle, $offset);
     }
+    
+    
+    /**
+     * 
+     * Match a regexp
+     * @param string $pattern
+     * @param string $subject
+     * @param array &$matches
+     * @param int $flags
+     * @param int $offset
+     * 
+     * @return int
+     */
+    public function preg_match($pattern, $subject, &$matches = null, $flags = 0, $offset = 0)
+    {
+        return preg_match($pattern, $subject, &$matches, $flags, $offset);
+    }
+    
+    
+    /**
+     * 
+     * Match a regexp globally
+     * @param string $pattern
+     * @param string $subject
+     * @param array &$matches
+     * @param int $flags
+     * @param int $offset
+     * 
+     * @return int
+     */
+    public function preg_match_all($pattern, $subject, &$matches, $flags = 0, $offset = 0)
+    {
+        return preg_match_all($pattern, $subject, &$matches, $flags, $offset);
+    }
+    
+    
+    /**
+     * Split string by a regexp
+     * @param string $pattern
+     * @param string $subject
+     * @param int $limit
+     * @param int $flags
+     * 
+     * @return array
+     */
+    public function preg_split($pattern, $subject, $limit = -1, $flags = 0)
+    {
+        return preg_split($pattern, $subject, $limit = -1, $flags = 0);
+    }
+    
+    
+    /**
+     * Search and replace by a regexp using a callback
+     * @param string|array $pattern
+     * @param function $callback
+     * @param string|array $subject
+     * @param int $limit
+     * @param int &$count
+     * 
+     * @return array|string
+     */
+    public function preg_replace_callback($pattern, $callback, $subject, $limit= -1, &$count = 0)
+    {
+        return preg_replace_callback($pattern, $callback, $subject, $limit, &$count);
+    }
+    
+    
+    /**
+     * Search and replace by a regexp
+     * @param string|array $pattern
+     * @param string|array $replacement
+     * @param string|array $subject
+     * @param int $limit
+     * @param int &$count
+     * 
+     * @return array|string|null
+     */
+    public function preg_replace($pattern, $replacement, $subject, $limit= -1, &$count = 0)
+    {
+        return preg_replace($pattern, $replacement, $subject, $limit, &$count);
+    }
 }

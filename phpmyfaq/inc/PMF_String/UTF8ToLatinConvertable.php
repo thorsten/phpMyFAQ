@@ -89,7 +89,7 @@ class PMF_String_UTF8ToLatinConvertable extends PMF_String_Abstract
      */
     public function iso($str)
     {
-        return isUTF8($str) ? utf8_decode($str) : $str;
+        return self::isUTF8($str) ? utf8_decode($str) : $str;
     }
     
     
@@ -101,7 +101,7 @@ class PMF_String_UTF8ToLatinConvertable extends PMF_String_Abstract
      */
     public function utf8($str)
     {
-        return utf8_encode($str);
+        return self::isUTF8($str) ? $str : utf8_encode($str);
     }
     /**
      * Get string character count
@@ -237,5 +237,116 @@ class PMF_String_UTF8ToLatinConvertable extends PMF_String_Abstract
     public function strrpos($haystack, $needle, $offset = 0)
     {
         return strrpos($this->iso($haystack), $this->iso($needle), $offset);
+    }
+    
+    
+    /**
+     * 
+     * Match a regexp
+     * @param string $pattern
+     * @param string $subject
+     * @param array &$matches
+     * @param int $flags
+     * @param int $offset
+     * 
+     * @return int
+     */
+    public function preg_match($pattern, $subject, &$matches = null, $flags = 0, $offset = 0)
+    {
+        return preg_match(self::appendU($pattern), $subject, &$matches, $flags, $offset);
+    }
+    
+    
+    /**
+     * 
+     * Match a regexp globally
+     * @param string $pattern
+     * @param string $subject
+     * @param array &$matches
+     * @param int $flags
+     * @param int $offset
+     * 
+     * @return int
+     */
+    public function preg_match_all($pattern, $subject, &$matches, $flags = 0, $offset = 0)
+    {
+        return preg_match_all(self::appendU($pattern), $subject, &$matches, $flags, $offset);
+    }
+    
+    
+    /**
+     * Split string by a regexp
+     * @param string $pattern
+     * @param string $subject
+     * @param int $limit
+     * @param int $flags
+     * 
+     * @return array
+     */
+    public function preg_split($pattern, $subject, $limit = -1, $flags = 0)
+    {
+        return preg_split(self::appendU($pattern), $subject, $limit = -1, $flags = 0);
+    }
+    
+    
+    /**
+     * Search and replace by a regexp using a callback
+     * @param string|array $pattern
+     * @param function $callback
+     * @param string|array $subject
+     * @param int $limit
+     * @param int &$count
+     * 
+     * @return array|string
+     */
+    public function preg_replace_callback($pattern, $callback, $subject, $limit= -1, &$count = 0)
+    {
+        if(is_array($pattern)) {
+            foreach($pattern as &$p) {
+                $p = self::appendU($p);
+            }
+        } else {
+            $pattern = self::appendU($pattern);
+        }
+        
+        return preg_replace_callback($pattern, $callback, $subject, $limit, &$count);
+    }
+    
+    
+    /**
+     * Search and replace by a regexp
+     * @param string|array $pattern
+     * @param string|array $replacement
+     * @param string|array $subject
+     * @param int $limit
+     * @param int &$count
+     * 
+     * @return array|string|null
+     */
+    public function preg_replace($pattern, $replacement, $subject, $limit= -1, &$count = 0)
+    {
+        if(is_array($pattern)) {
+            foreach($pattern as &$p) {
+                $p = self::appendU($p);
+            }
+        } else {
+            $pattern = self::appendU($pattern);
+        }
+        
+        return preg_replace($pattern, $replacement, $subject, $limit, &$count);
+    }
+    
+    
+    /**
+     * Append an u to the string. The string is supposed 
+     * to be a regex prepared to use with a preg_* function
+     * 
+     * @param string $str
+     * 
+     * @return string
+     */
+    private static function appendU($str)
+    {
+        return ((string) $str)' . u';
     }
 }

@@ -209,7 +209,7 @@ class PMF_String
 	 * 
 	 * @return string
      */
-    public function strrchr($haystack, $needle)
+    public static function strrchr($haystack, $needle)
     {
         return self::$instance->strrchr($haystack, $needle);
     }
@@ -223,7 +223,7 @@ class PMF_String
      * 
      * @return int
      */
-    public function substr_count($haystack, $needle)
+    public static function substr_count($haystack, $needle)
     {
         return self::$instance->substr_count($haystack, $needle);
     }
@@ -237,8 +237,89 @@ class PMF_String
 	 * 
 	 * @return int
      */
-    public function strrpos($haystack, $needle, $offset = 0)
+    public static function strrpos($haystack, $needle, $offset = 0)
     {
         return self::$instance->strrpos($haystack, $needle, $offset);
+    }
+    
+    
+    /**
+     * 
+     * Match a regexp
+     * @param string $pattern
+     * @param string $subject
+     * @param array &$matches
+     * @param int $flags
+     * @param int $offset
+     * 
+     * @return int
+     */
+    public static function preg_match($pattern, $subject, &$matches = null, $flags = 0, $offset = 0)
+    {
+        return self::$instance->preg_match($pattern, $subject, &$matches, $flags, $offset);
+    }
+    
+    
+    /**
+     * 
+     * Match a regexp globally
+     * @param string $pattern
+     * @param string $subject
+     * @param array &$matches
+     * @param int $flags
+     * @param int $offset
+     * 
+     * @return int
+     */
+    public static function preg_match_all($pattern, $subject, &$matches, $flags = 0, $offset = 0)
+    {
+        return self::$instance->preg_match_all($pattern, $subject, &$matches, $flags, $offset);
+    }
+    
+    
+    /**
+     * Split string by a regexp
+     * @param string $pattern
+     * @param string $subject
+     * @param int $limit
+     * @param int $flags
+     * 
+     * @return array
+     */
+    public static function preg_split($pattern, $subject, $limit = -1, $flags = 0)
+    {
+        return self::$instance->preg_split($pattern, $subject, $limit = -1, $flags = 0);
+    }
+    
+    
+    /**
+     * Search and replace by a regexp using a callback
+     * @param string|array $pattern
+     * @param function $callback
+     * @param string|array $subject
+     * @param int $limit
+     * @param int &$count
+     * 
+     * @return array|string
+     */
+    public static function preg_replace_callback($pattern, $callback, $subject, $limit= -1, &$count = 0)
+    {
+        return self::$instance->preg_replace_callback($pattern, $callback, $subject, $limit, &$count);
+    }
+    
+    
+    /**
+     * Search and replace by a regexp
+     * @param string|array $pattern
+     * @param string|array $replacement
+     * @param string|array $subject
+     * @param int $limit
+     * @param int &$count
+     * 
+     * @return array|string|null
+     */
+    public static function preg_replace($pattern, $replacement, $subject, $limit= -1, &$count = 0)
+    {
+        return self::$instance->preg_replace($pattern, $replacement, $subject, $limit, &$count);
     }
 }
