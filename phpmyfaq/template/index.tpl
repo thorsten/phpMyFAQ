@@ -2,20 +2,32 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{metaLanguage}" lang="{metaLanguage}">
 <head>
     <title>{title}</title>
+    <base href="{baseHref}" />
     <meta http-equiv="X-UA-Compatible" content="IE=8" />
     <meta http-equiv="Content-Type" content="application/xhtml+xml; charset={metaCharset}" />
     <meta name="title" content="{metaTitle}" />
     <meta name="description" content="{metaDescription}" />
     <meta name="keywords" content="{metaKeywords}" />
+    <meta name="author" content="{metaPublisher}" />
+    <meta name="publisher" content="{metaPublisher}" />
+    <meta name="copyright" content="(c) 2001 - 2009 phpMyFAQ Team" />
     <meta name="generator" content="phpMyFAQ {phpmyfaqversion}" />
+    <meta name="Content-Language" content="{metaCharset}" />
+    <meta name="robots" content="INDEX, FOLLOW" />
+    <meta name="revisit-after" content="7 days" />
+    <meta name="MSSmartTagsPreventParsing" content="true" />    
     <style type="text/css" media="screen">@import url(template/{stylesheet}.css);</style>
-    <style type="text/css" media="print">@import "template/print.css";</style>
+    <style type="text/css" media="print">@import url(template/template/print.css);</style>
     <script type="text/javascript" src="inc/js/functions.js"></script>
     <script type="text/javascript" src="inc/js/jquery.min.js"></script>
+    <link rel="shortcut icon" href="template/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="template/favicon.ico" type="image/x-icon" />
     <link rel="alternate" title="News RSS Feed" type="application/rss+xml" href="feed/news/rss.php" />
     <link rel="alternate" title="TopTen RSS Feed" type="application/rss+xml" href="feed/topten/rss.php" />
     <link rel="alternate" title="Latest FAQ Records RSS Feed" type="application/rss+xml" href="feed/latest/rss.php" />
     <link rel="alternate" title="Open Questions RSS Feed" type="application/rss+xml" href="feed/openquestions/rss.php" />
+    <link rel="microsummary" type="application/x.microsummary+xml" href="microsummary.php?action={action}" />
+    <link rel="search" type="application/opensearchdescription+xml" title="{metaTitle}" href="{opensearch}" />
 </head>
 <body dir="{dir}" onload="javascript:focusOnSearchField();">
 

@@ -363,6 +363,7 @@ $main_template_vars = array(
     'metaPublisher'       => $faqconfig->get('main.metaPublisher'),
     'metaLanguage'        => $PMF_LANG['metaLanguage'],
     'metaCharset'         => $PMF_LANG['metaCharset'],
+    'phpmyfaqversion'     => $faqconfig->get('main.currentVersion'),
     'stylesheet'          => $PMF_LANG['dir'] == 'rtl' ? 'style.rtl' : 'style',
     'action'              => $action,
     'dir'                 => $PMF_LANG['dir'],
