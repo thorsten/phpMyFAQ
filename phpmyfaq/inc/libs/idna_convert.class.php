@@ -48,10 +48,10 @@
  *
  * @author  Matthias Sommerfeld <mso@phlylabs.de>
  * @author  Leonid Kogan <lko@neuse.de>
- * @copyright 2004-2008 phlyLabs Berlin, http://phlylabs.de
- * @version 0.6.0
+ * @copyright 2004-2009 phlyLabs Berlin, http://phlylabs.de
+ * @version 0.6.3
  * @changelog since 0.5.1 class updated to PHP5/6 style should be compatible to PHP 4.3+
- *
+ * - added a missing replace mapping for THAI CHARACTER SARA AM
  */
 class idna_convert
 {
@@ -764,7 +764,12 @@ class idna_convert
     {
         $output = array();
         $out_len = 0;
-        $inp_len = strlen($input);
+        // Patch by Daniel Hahler; work around prolbem with mbstring.func_overload
+        if (function_exists('mb_strlen')) {
+            $inp_len = mb_strlen($input, '8bit');
+        } else {
+            $inp_len = strlen($input);
+        }
         $mode = 'next';
         $test = 'none';
         for ($k = 0; $k < $inp_len; ++$k) {
@@ -840,7 +845,7 @@ class idna_convert
     private function _ucs4_to_utf8($input)
     {
         $output = '';
-        foreach ($input as $v) {
+        foreach ($input as $k => $v) {
             if ($v < 128) { // 7bit are transferred literally
                 $output .= chr($v);
             } elseif ($v < (1 << 11)) { // 2 bytes
@@ -1396,6 +1401,7 @@ class idna_convert
                     ,0x555   => array(0x585)
                     ,0x556   => array(0x586)
                     ,0x587   => array(0x565, 0x582)
+                    ,0xE33   => array(0xE4D, 0xE32)
                     ,0x1E00  => array(0x1E01)
                     ,0x1E02  => array(0x1E03)
                     ,0x1E04  => array(0x1E05)
