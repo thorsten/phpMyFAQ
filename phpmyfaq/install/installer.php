@@ -47,7 +47,8 @@ $permLevels = array(
 $enabled_extensions = array(
     'gd',
     'json',
-    'xmlwriter');
+    'xmlwriter',
+    'filter');
 
 /**
  * Lookup for installed database extensions
