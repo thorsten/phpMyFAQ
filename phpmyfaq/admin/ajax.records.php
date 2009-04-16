@@ -39,9 +39,9 @@ if ('save_sticky_records' == $ajax_action && $permission['editbt']) {
    
     $faq = new PMF_Faq();
     
-    foreach($items as $item) {
-        if(is_array($item) && count($item) == 3 && PMF_Init::isASupportedLanguage($item[1])) { 
-            $faq->updateRecordSticky((int)$item[0], addslashes($item[1]), (int)$item[2]);
+    foreach ($items as $item) {
+        if (is_array($item) && count($item) == 3 && PMF_Init::isASupportedLanguage($item[1])) { 
+            print $faq->updateRecordSticky((int)$item[0], addslashes($item[1]), (int)$item[2]);
         }
     }
 }

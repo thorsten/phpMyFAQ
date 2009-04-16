@@ -2720,18 +2720,28 @@ class PMF_Faq
     /**
      * Set or unset a faq item to be sticky 
      *
-     * @param int $id Record id
-     * @param string $lang language code which is valid with PMF_Init::isASupportedLanguage
-     * @param boolean $isSticky weither or not the record is set to sticky
-     * 
-     * @return void
+     * @param  integer $id       Record id
+     * @param  string  $lang     language code which is valid with PMF_Init::isASupportedLanguage
+     * @param  boolean $isSticky weither or not the record is set to sticky
+     * @return boolean
      */
     public function updateRecordSticky($id, $lang, $isSticky)
     {
-        $sql = "UPDATE " . SQLPREFIX . "faqdata SET sticky = %d WHERE id = %d AND lang = '%s'";
-        $sql = sprintf($sql, (int)$isSticky, $id, $lang);
+        $update = sprintf("
+            UPDATE 
+                %sfaqdata 
+            SET 
+                sticky = %d 
+            WHERE 
+                id = %d 
+            AND 
+                lang = '%s'",
+            SQLPREFIX, 
+            (int)$isSticky, 
+            $id, 
+            $lang);
         
-        $this->db->query($sql);
+        return (bool)$this->db->query($update);
     }
     
     /**
