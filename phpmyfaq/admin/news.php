@@ -82,7 +82,8 @@ if ('addnews' == $action && $permission["addnews"]) {
 <?php
 } elseif ('news' == $action && $permission["editnews"]) {
 ?>
-    <br />
+    <h2><?php print $PMF_LANG["msgNews"]; ?></h2>
+    <p><a href="?action=addnews"><?php print $PMF_LANG["ad_menu_news_add"]; ?></a></p>
     <table class="list">
     <thead>
         <tr>
@@ -111,7 +112,6 @@ if ('addnews' == $action && $permission["addnews"]) {
 ?>
     </tbody>
     </table>
-    <p><a href="?action=addnews"><?php print $PMF_LANG["ad_menu_news_add"]; ?></a></p>
 <?php
 } elseif ('editnews' == $action && $permission['editnews']) {
     $id       = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
