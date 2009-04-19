@@ -841,30 +841,32 @@ function encode_iso88591($coded = "", $cmode = "g")
  * used with permission
  * Last Update: @@ Thorsten, 2004-07-17
  */
-function quoted_printable_encode($return = '')
-{
-    // Ersetzen der lt. RFC 1521 noetigen Zeichen
-    $return = preg_replace('/([^\t\x20\x2E\041-\074\076-\176])/ie', "sprintf('=%2X',ord('\\1'))", $return);
-    $return = preg_replace('!=\ ([A-F0-9])!', '=0\\1', $return);
-    // Einfuegen von QP-Breaks (=\r\n)
-    if (strlen($return) > 75) {
-        $length = strlen($return); $offset = 0;
-        do {
-            $step = 76;
-            $add_mode = (($offset+$step) < $length) ? 1 : 0;
-            $auszug = substr($return, $offset, $step);
-            if (preg_match('!\=$!', $auszug))   $step = 75;
-            if (preg_match('!\=.$!', $auszug))  $step = 74;
-            if (preg_match('!\=..$!', $auszug)) $step = 73;
-            $auszug = substr($return, $offset, $step);
-            $offset += $step;
-            $schachtel .= $auszug;
-            if (1 == $add_mode) $schachtel.= '='."\r\n";
-            } while ($offset < $length);
-        $return = $schachtel;
-        }
-    $return = preg_replace('!\.$!', '. ', $return);
-    return preg_replace('!(\r\n|\r|\n)$!', '', $return)."\r\n";
+if (!function_exists('quoted_printable_encode')) {
+	function quoted_printable_encode($return = '')
+	{
+	    // Ersetzen der lt. RFC 1521 noetigen Zeichen
+	    $return = preg_replace('/([^\t\x20\x2E\041-\074\076-\176])/ie', "sprintf('=%2X',ord('\\1'))", $return);
+	    $return = preg_replace('!=\ ([A-F0-9])!', '=0\\1', $return);
+	    // Einfuegen von QP-Breaks (=\r\n)
+	    if (strlen($return) > 75) {
+		$length = strlen($return); $offset = 0;
+		do {
+		    $step = 76;
+		    $add_mode = (($offset+$step) < $length) ? 1 : 0;
+		    $auszug = substr($return, $offset, $step);
+		    if (preg_match('!\=$!', $auszug))   $step = 75;
+		    if (preg_match('!\=.$!', $auszug))  $step = 74;
+		    if (preg_match('!\=..$!', $auszug)) $step = 73;
+		    $auszug = substr($return, $offset, $step);
+		    $offset += $step;
+		    $schachtel .= $auszug;
+		    if (1 == $add_mode) $schachtel.= '='."\r\n";
+		    } while ($offset < $length);
+		$return = $schachtel;
+		}
+	    $return = preg_replace('!\.$!', '. ', $return);
+	    return preg_replace('!(\r\n|\r|\n)$!', '', $return)."\r\n";
+	}
 }
 
 

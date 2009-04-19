@@ -192,7 +192,7 @@ class PMF_String_Mbstring extends PMF_String_Abstract
      */
     public function preg_match($pattern, $subject, &$matches = null, $flags = 0, $offset = 0)
     {
-        return preg_match(self::appendU($pattern), $subject, &$matches, $flags, $offset);
+        return preg_match(self::appendU($pattern), $subject, $matches, $flags, $offset);
     }
     
     
@@ -209,7 +209,7 @@ class PMF_String_Mbstring extends PMF_String_Abstract
      */
     public function preg_match_all($pattern, $subject, &$matches, $flags = 0, $offset = 0)
     {
-        return preg_match_all(self::appendU($pattern), $subject, &$matches, $flags, $offset);
+        return preg_match_all(self::appendU($pattern), $subject, $matches, $flags, $offset);
     }
     
     
@@ -248,7 +248,7 @@ class PMF_String_Mbstring extends PMF_String_Abstract
             $pattern = self::appendU($pattern);
         }
         
-        return preg_replace_callback($pattern, $callback, $subject, $limit, &$count);
+        return preg_replace_callback($pattern, $callback, $subject, $limit, $count);
     }
     
     
@@ -272,7 +272,7 @@ class PMF_String_Mbstring extends PMF_String_Abstract
             $pattern = self::appendU($pattern);
         }
         
-        return preg_replace($pattern, $replacement, $subject, $limit, &$count);
+        return preg_replace($pattern, $replacement, $subject, $limit, $count);
     }
     
     

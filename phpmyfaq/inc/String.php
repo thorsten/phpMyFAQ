@@ -254,9 +254,9 @@ class PMF_String
      * 
      * @return int
      */
-    public static function preg_match($pattern, $subject, &$matches = null, $flags = 0, $offset = 0)
+    public static function preg_match($pattern, $subject, $matches = null, $flags = 0, $offset = 0)
     {
-        return self::$instance->preg_match($pattern, $subject, &$matches, $flags, $offset);
+        return self::$instance->preg_match($pattern, $subject, $matches, $flags, $offset);
     }
     
     
@@ -271,9 +271,9 @@ class PMF_String
      * 
      * @return int
      */
-    public static function preg_match_all($pattern, $subject, &$matches, $flags = 0, $offset = 0)
+    public static function preg_match_all($pattern, $subject, $matches, $flags = 0, $offset = 0)
     {
-        return self::$instance->preg_match_all($pattern, $subject, &$matches, $flags, $offset);
+        return self::$instance->preg_match_all($pattern, $subject, $matches, $flags, $offset);
     }
     
     
@@ -304,7 +304,7 @@ class PMF_String
      */
     public static function preg_replace_callback($pattern, $callback, $subject, $limit= -1, &$count = 0)
     {
-        return self::$instance->preg_replace_callback($pattern, $callback, $subject, $limit, &$count);
+        return self::$instance->preg_replace_callback($pattern, $callback, $subject, $limit, $count);
     }
     
     
@@ -320,6 +320,6 @@ class PMF_String
      */
     public static function preg_replace($pattern, $replacement, $subject, $limit= -1, &$count = 0)
     {
-        return self::$instance->preg_replace($pattern, $replacement, $subject, $limit, &$count);
+        return self::$instance->preg_replace($pattern, $replacement, $subject, $limit, $count);
     }
 }
