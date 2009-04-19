@@ -951,10 +951,14 @@ function encode_iso88591($coded = "", $cmode = "g")
     }
 }
 
+if (!function_exists('quoted_printable_encode')) {
 /*
  * Decode MIME header elements in e-mails | @@ Matthias Sommerfeld
  * (c) 2001-2004 blue birdy, Berlin (http://bluebirdy.de)
  * used with permission
+ * 
+ * Hint: function included in PHP 5.3
+ * 
  * Last Update: @@ Thorsten, 2004-07-17
  */
 function quoted_printable_encode($return = '')
@@ -981,6 +985,7 @@ function quoted_printable_encode($return = '')
         }
     $return = preg_replace('!\.$!', '. ', $return);
     return preg_replace('!(\r\n|\r|\n)$!', '', $return)."\r\n";
+}
 }
 
 /**
