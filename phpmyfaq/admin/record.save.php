@@ -25,10 +25,9 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
-$submit = $_REQUEST["submit"];
-
 // Re-evaluate $user
-$user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
+$user     = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
+$category = new PMF_Category($current_admin_user, $current_admin_groups, false);    
 
 if ($permission['editbt']) {
     
@@ -41,7 +40,7 @@ if ($permission['editbt']) {
     $question      = PMF_Filter::filterInput(INPUT_POST, 'thema', FILTER_SANITIZE_STRING);
     $categories    = PMF_Filter::filterInputArray(INPUT_POST, array('rubrik' => array('filter' => FILTER_VALIDATE_INT,
                                                                                       'flags'  => FILTER_REQUIRE_ARRAY)));
-    $language      = PMF_Filter::filterInput(INPUT_POST, 'language', FILTER_SANITIZE_STRING);
+    $record_lang   = PMF_Filter::filterInput(INPUT_POST, 'language', FILTER_SANITIZE_STRING);
     $tags          = PMF_Filter::filterInput(INPUT_POST, 'tags', FILTER_SANITIZE_STRING);
     $active        = PMF_Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_STRING);
     $sticky        = PMF_Filter::filterInput(INPUT_POST, 'sticky', FILTER_SANITIZE_STRING);
@@ -50,26 +49,24 @@ if ($permission['editbt']) {
     $author        = PMF_Filter::filterInput(INPUT_POST, 'author', FILTER_SANITIZE_STRING);
     $email         = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
     $comment       = PMF_Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_STRING);
-    $record_id     = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+    $record_id     = PMF_Filter::filterInput(INPUT_POST, 'record_id', FILTER_VALIDATE_INT);
     $solution_id   = PMF_Filter::filterInput(INPUT_POST, 'solution_id', FILTER_VALIDATE_INT);
     $revision      = PMF_Filter::filterInput(INPUT_POST, 'revision', FILTER_SANITIZE_STRING);
     $revision_id   = PMF_Filter::filterInput(INPUT_POST, 'revision_id', FILTER_VALIDATE_INT);
     $changed       = PMF_Filter::filterInput(INPUT_POST, 'changed', FILTER_SANITIZE_STRING);
     
     // Permissions
-    $userperm      = PMF_Filter::filterInput(INPUT_POST, 'userpermission', FILTER_SANITIZE_STRING);
-    $user_allowed  = ('all' == $userperm) ? -1 : PMF_Filter::filterInput(INPUT_POST, 'restricted_users', FILTER_VALIDATE_INT);
-    $groupperm     = PMF_Filter::filterInput(INPUT_POST, 'grouppermission', FILTER_SANITIZE_STRING);
-    $group_allowed = ('all' == $groupperm) ? -1 : PMF_Filter::filterInput(INPUT_POST, 'restricted_groups', FILTER_VALIDATE_INT);
+    $user_permission   = PMF_Filter::filterInput(INPUT_POST, 'userpermission', FILTER_SANITIZE_STRING);
+    $restricted_users  = ('all' == $user_permission) ? -1 : PMF_Filter::filterInput(INPUT_POST, 'restricted_users', FILTER_VALIDATE_INT);
+    $group_permission  = PMF_Filter::filterInput(INPUT_POST, 'grouppermission', FILTER_SANITIZE_STRING);
+    $restricted_groups = ('all' == $group_permission) ? -1 : PMF_Filter::filterInput(INPUT_POST, 'restricted_groups', FILTER_VALIDATE_INT);
     
     if (isset($submit['submit'][2]) && !is_null($question) && !is_null($categories)) {
     // Preview
-    
-    $category = new PMF_Category($current_admin_user, $current_admin_groups, false);	
     $category->transform(0);
     $categorylist = '';
         foreach ($categories['rubrik'] as $_categories) {
-            $categorylist .= $cat->getPath($_categories).'<br />';
+            $categorylist .= $category->getPath($_categories).'<br />';
         }
 ?>
     <h2><?php print $PMF_LANG["ad_entry_preview"]; ?></h2>
@@ -84,7 +81,7 @@ if ($permission['editbt']) {
     <input type="hidden" name="id"                  value="<?php print $record_id; ?>" />
     <input type="hidden" name="thema"               value="<?php print htmlspecialchars($question); ?>" />
     <input type="hidden" name="content" class="mceNoEditor" value="<?php print htmlspecialchars($content); ?>" />
-    <input type="hidden" name="lang"                value="<?php print $language; ?>" />
+    <input type="hidden" name="lang"                value="<?php print $record_lang; ?>" />
     <input type="hidden" name="keywords"            value="<?php print $keywords; ?>" />
     <input type="hidden" name="tags"                value="<?php print $tags; ?>" />
     <input type="hidden" name="author"              value="<?php print $author; ?>" />
@@ -95,6 +92,7 @@ if ($permission['editbt']) {
             print '    <input type="hidden" name="rubrik['.$key.']" value="'.$_categories.'" />';
         }
 ?>
+
     <input type="hidden" name="solution_id"         value="<?php print $solution_id; ?>" />
     <input type="hidden" name="revision"            value="<?php print $revision_id; ?>" />
     <input type="hidden" name="active"              value="<?php print $active; ?>" />
@@ -111,20 +109,21 @@ if ($permission['editbt']) {
 <?php
     } elseif (isset($submit['submit'][1]) && !is_null($question) && !is_null($categories)) {
     // Save entry
-        adminlog("Beitragsave", (int)$_REQUEST['id']);
+        adminlog("Beitragsave", $record_id);
         print "<h2>".$PMF_LANG["ad_entry_aor"]."</h2>\n";
 
         $tagging = new PMF_Tags();
-
-	   if ('yes' == $revision) {
+        
+        if ('yes' == $revision) {
             // Add current version into revision table
             $faq->addNewRevision($record_id, $record_lang);
             $revision_id++;
-	   }
+        }
 
         $recordData = array(
             'id'            => $record_id,
-            'lang'          => $language,
+            'lang'          => $record_lang,
+            'revision_id'   => $revision_id,
             'active'        => $active,
             'sticky'        => (int)$sticky,
             'thema'         => $question,
@@ -159,7 +158,7 @@ if ($permission['editbt']) {
         // delete category relations
         $faq->deleteCategoryRelations($record_id, $record_lang);
         // save or update the category relations
-        $faq->addCategoryRelations($categories, $record_id, $record_lang);
+        $faq->addCategoryRelations($categories['rubrik'], $record_id, $record_lang);
 
         // Insert the tags
         if ($tags != '') {
@@ -170,15 +169,15 @@ if ($permission['editbt']) {
 
         // Add user permissions
         $faq->deletePermission('user', $record_id);
-        $faq->addPermission('user', $record_id, $user_allowed);
-        $category->deletePermission('user', $categories);
-        $category->addPermission('user', $categories, $user_allowed);
+        $faq->addPermission('user', $record_id, $restricted_users);
+        $category->deletePermission('user', $categories['rubrik']);
+        $category->addPermission('user', $categories['rubrik'], $restricted_users);
         // Add group permission
         if ($groupSupport) {
             $faq->deletePermission('group', $record_id);
-            $faq->addPermission('group', $record_id, $group_allowed);
-            $category->deletePermission('group', $categories);
-            $category->addPermission('group', $categories, $group_allowed);
+            $faq->addPermission('group', $record_id, $restricted_groups);
+            $category->deletePermission('group', $categories['rubrik']);
+            $category->addPermission('group', $categories['rubrik'], $restricted_groups);
         }
     }
 } else {
