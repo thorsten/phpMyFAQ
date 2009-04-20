@@ -40,12 +40,13 @@ $tr_content  = PMF_Filter::filterInput(INPUT_POST, 'translated_content', FILTER_
 $contentlink = PMF_Filter::filterInput(INPUT_POST, 'contentlink', FILTER_VALIDATE_URL);
 $keywords    = PMF_Filter::filterInput(INPUT_POST, 'keywords', FILTER_SANITIZE_STRIPPED);
 $code        = PMF_Filter::filterInput(INPUT_POST, 'captcha', FILTER_SANITIZE_STRING);
+$categories  = PMF_Filter::filterInputArray(INPUT_POST, array('rubrik' => array('filter' => FILTER_VALIDATE_INT,
+                                                                                'flags'  => FILTER_REQUIRE_ARRAY)));
 
 if (!is_null($username) && !is_null($usermail) && !is_null($thema) && !is_null($content) && 
     IPCheck($_SERVER['REMOTE_ADDR']) && checkBannedWord(htmlspecialchars($thema)) && 
     checkBannedWord(htmlspecialchars($content)) && $captcha->checkCaptchaCode($code) && 
-    ((!isset($_POST['faqid']) && isset($_POST['rubrik']) && is_array($_POST['rubrik']))
-        || (!is_null($faqid) && !is_null($faqlanguage) && PMF_Init::isASupportedLanguage($faqlanguage)))) {
+    ((is_null($faqid) && !is_null($categories)) || (!is_null($faqid) && !is_null($faqlanguage) && PMF_Init::isASupportedLanguage($faqlanguage)))) {
 
     $isNew = true;
     if (!is_null($faqid)) {
@@ -70,6 +71,7 @@ if (!is_null($username) && !is_null($usermail) && !is_null($thema) && !is_null($
         'lang'          => ($isTranslation == true ? $newLanguage : $LANGCODE),
         'thema'         => $thema,
         'active'        => FAQ_SQL_ACTIVE_NO,
+        'sticky'        => 0,
         'content'       => $content,
         'keywords'      => $keywords,
         'author'        => $username,
@@ -82,20 +84,20 @@ if (!is_null($username) && !is_null($usermail) && !is_null($thema) && !is_null($
         'linkDateCheck' => 0);
 
     if ($isNew) {
-        $categories = $_POST['rubrik'];
+        $categories = $categories['rubrik'];
     } else {
         $newData['id'] = $faqid;
         $category      = new PMF_Category();
         $categories    = $category->getCategoryIdsFromArticle($newData['id']);
     }
-
+    
     $recordId = $faq->addRecord($newData, $isNew);
     $faq->addCategoryRelations($categories, $recordId, $newData['lang']);
 
     $sent = array();
 
     // Let the PMF Administrator and the Category Owner to be informed by email of this new entry
-    foreach($categories as $_category) {
+    foreach ($categories as $_category) {
 
         $userId = $category->getCategoryUser($_category);
 
