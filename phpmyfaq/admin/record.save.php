@@ -30,8 +30,8 @@ $user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
 
 $category = new PMF_Category($current_admin_user, $current_admin_groups, false);
 
-$dateStart = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
-$dateEnd   = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);
+$dateStart = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING, '00000000000000');
+$dateEnd   = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING, '99991231235959');
 
 if (    isset($submit[2])
      && isset($_REQUEST["thema"]) && $_REQUEST["thema"] != ""

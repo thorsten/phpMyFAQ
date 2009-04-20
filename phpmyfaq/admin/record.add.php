@@ -30,8 +30,8 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 $user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
 
 // Evaluate the passed validity range, if any
-$dateStart = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
-$dateEnd   = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);
+$dateStart = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING, '00000000000000');
+$dateEnd   = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING, '99991231235959');
 
 if ($permission["editbt"]) {
     $submit = $_POST["submit"];

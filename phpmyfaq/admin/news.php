@@ -180,8 +180,8 @@ if ('addnews' == $action && $permission["addnews"]) {
     }
 } elseif ('savenews' == $action && $permission["addnews"]) {
 
-    $dateStart = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
-    $dateEnd   = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);
+    $dateStart = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING, '00000000000000');
+    $dateEnd   = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING, '99991231235959');
     
     $newsData = array(
         'lang'          => $LANGCODE,
@@ -206,8 +206,8 @@ if ('addnews' == $action && $permission["addnews"]) {
     }
 } elseif ('updatenews' == $action && $permission["editnews"]) {
 
-    $dateStart = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
-    $dateEnd   = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);
+    $dateStart = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING, '00000000000000');
+    $dateEnd   = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING, '99991231235959');
 	
     $newsData = array(
         'lang'          => $LANGCODE,
