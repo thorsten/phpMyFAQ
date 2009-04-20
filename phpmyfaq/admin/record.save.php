@@ -75,7 +75,7 @@ if ($permission['editbt']) {
     <?php print $question; ?></strong></h3>
     <?php print $content; ?>
     <p class="little"><?php print $PMF_LANG["msgLastUpdateArticle"].makeDate(date("YmdHis")); ?><br />
-    <?php print $PMF_LANG["msgAuthor"].' '.$_POST["author"]; ?></p>
+    <?php print $PMF_LANG["msgAuthor"].' '.$author; ?></p>
 
     <form action="?action=editpreview" method="post">
     <input type="hidden" name="id"                  value="<?php print $record_id; ?>" />
