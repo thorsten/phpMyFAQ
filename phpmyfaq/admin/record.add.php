@@ -133,7 +133,7 @@ if ($permission['editbt']) {
     <?php print $PMF_LANG["msgAuthor"].' '.$_POST["author"]; ?></p>
 
     <form action="?action=editpreview" method="post">
-    <input type="hidden" name="id"                  value="<?php print $id; ?>" />
+    <input type="hidden" name="id"                  value="<?php print $record_id; ?>" />
     <input type="hidden" name="thema"               value="<?php print htmlspecialchars($question); ?>" />
     <input type="hidden" name="content" class="mceNoEditor" value="<?php print htmlspecialchars($content); ?>" />
     <input type="hidden" name="lang"                value="<?php print $language; ?>" />
