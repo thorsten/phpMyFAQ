@@ -54,9 +54,11 @@ Version 2.5.0-beta - 2009-04-
 - updated bundled TinyMCE editor component to version 3.2.2.3 (Thorsten)
 - updated bundled FPDF library to version 1.6 (Thorsten)
 
-Version 2.0.13 - 2009-04-
+Version 2.0.13 - 2009-04-20
 - added new blocked words for spam protection (Kai)
+- fixed fatal error in PHP 5.3 (David Soria Parra, Thorsten)
 - fixed redirect problem with multiviews in .htaccess (Antonio)
+- fixed problem with visible questions in RSS feed (Thorsten)
 - minor bugfixes (Thorsten)
 
 Version 2.0.12 - 2009-02-17
