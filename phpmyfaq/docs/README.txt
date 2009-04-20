@@ -9,16 +9,15 @@ Please read the documentation (documentation.en.html) carefully.
 Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
-Changes since 2.0.12:
-- added new blocked words for spam protection (Kai)
-- fixed fatal error in PHP 5.3 (David Soria Parra, Thorsten)
-- fixed redirect problem with multiviews in .htaccess (Antonio)
-- fixed problem with visible questions in RSS feed (Thorsten)
-- minor bugfixes (Thorsten)
+Changes since 2.0.13:
+- 
 
 For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
+
+Version 2.0.14 - 2009-05-
+-
 
 Version 2.0.13 - 2009-04-20
 - added new blocked words for spam protection (Kai)
