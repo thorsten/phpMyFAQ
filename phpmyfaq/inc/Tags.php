@@ -6,8 +6,8 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @since     2006-08-10
- * @copyright 2006-2009 phpMyFAQ Team
  * @version   SVN: $Id$
+ * @copyright 2006-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -98,24 +98,22 @@ class PMF_Tags
         }
 
         $numberOfItems = $limit ? PMF_TAGS_CLOUD_RESULT_SET_SIZE : $this->db->num_rows($result);
-
+    
         if (isset($allTags) && ($numberOfItems < count($allTags))) {
-           for ($n = 0; $n < $numberOfItems; $n++) {
-              $valid = false;
-              while (!$valid) {
-                 $rand = rand(1, count($allTags) + 1);
-                  if (!isset($soFar[$rand])) {
-                     if (isset($allTags[$rand])) {
-                        $valid = true;
-                        $soFar[$rand] = '';
+            $keys = array_keys($allTags);
+            for ($n = 0; $n < $numberOfItems; $n++) {
+                $valid = false;
+                while (!$valid) {
+                    $rand = array_rand($keys);
+                    if (isset($allTags[$rand])) {
+                        $valid       = true;
                         $tags[$rand] = $allTags[$rand];
-                     }
-
-                  }
-              }
-           }
+                        unset($keys[$rand]);
+                    }
+                }
+            }
         } else {
-           $tags = PMF_Utils::shuffleData($allTags);
+            $tags = PMF_Utils::shuffleData($allTags);
         }
 
         return $tags;
