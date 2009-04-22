@@ -1,32 +1,45 @@
 <?php
 /**
-* $Id: Tags.php,v 1.39 2007-08-12 13:56:28 thorstenr Exp $
-*
-* The main Tags class
-*
-* @package   phpMyFAQ
-* @author    Thorsten Rinne <thorsten@phpmyfaq.de>
-* @author    Matteo Scaramuccia <matteo@scaramuccia.com>
-* @since     2006-08-10
-* @copyright 2006-2009 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * The main Tags class
+ *
+ * @package    phpMyFAQ
+ * @subpackage PMF_Tags
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author     Georgi Korchev <korchev@yahoo.com>
+ * @since      2006-08-10
+ * @version    SVN: $Id$
+ * @copyright  2006-2009 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
+/**
+ * PMF_Tags
+ *
+ * @package    phpMyFAQ
+ * @subpackage PMF_Tags
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author     Georgi Korchev <korchev@yahoo.com>
+ * @since      2006-08-10
+ * @version    SVN: $Id$
+ * @copyright  2006-2009 phpMyFAQ Team
+ */
 class PMF_Tags
 {
     /**
      * DB handle
      *
-     * @var object PMF_Db
+     * @var PMF_Db
      */
     private $db;
 
@@ -40,10 +53,7 @@ class PMF_Tags
     /**
      * Constructor
      *
-     * @param   object  PMF_Db
-     * @param   string  $language
-     * @since   2006-08-10
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @return void
      */
     function __construct()
     {
@@ -54,13 +64,9 @@ class PMF_Tags
     /**
      * Returns all tags
      *
-     * @param   string  $search     Move the returned result set to be the result of a start-with search
-     * @param   boolean $limit      Limit the returned result set
-     * @return  array   $tags
-     * @since   2006-08-28
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
-     * @author  Georgi Korchev <korchev@yahoo.com>
+     * @param  string  $search Move the returned result set to be the result of a start-with search
+     * @param  boolean $limit  Limit the returned result set
+     * @return array
      */
     public function getAllTags($search = null, $limit = false)
     {
@@ -99,20 +105,18 @@ class PMF_Tags
         $numberOfItems = $limit ? PMF_TAGS_CLOUD_RESULT_SET_SIZE : $this->db->num_rows($result);
 
         if (isset($allTags) && ($numberOfItems < count($allTags))) {
-           for ($n = 0; $n < $numberOfItems; $n++) {
-              $valid = false;
-              while (!$valid) {
-                 $rand = rand(1, count($allTags) + 1);
-                  if (!isset($soFar[$rand])) {
-                     if (isset($allTags[$rand])) {
-                        $valid        = true;
-                        $soFar[$rand] = '';
-                        $tags[$rand]  = $allTags[$rand];
-                     }
-
-                  }
-              }
-           }
+        	$keys = array_keys($allTags);
+        	for ($n = 0; $n < $numberOfItems; $n++) {
+                $valid = false;
+                while (!$valid) {
+                    $rand = array_rand($keys);
+                    if (isset($allTags[$rand])) {
+                        $valid       = true;
+                        $tags[$rand] = $allTags[$rand];
+                        unset($keys[$rand]);
+                    }
+                }
+            }
         } else {
             $tags = PMF_Utils::shuffleData($allTags);
         }
@@ -123,10 +127,8 @@ class PMF_Tags
     /**
      * Returns all tags for a FAQ record
      *
-     * @param   integer $record_id
-     * @return  array   $tags
-     * @since   2006-08-10
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  integer $record_id Record ID
+     * @return array
      */
     public function getAllTagsById($record_id)
     {
@@ -161,10 +163,8 @@ class PMF_Tags
     /**
      * Returns all tags for a FAQ record
      *
-     * @param   integer $record_id
-     * @return  string
-     * @since   2006-08-29
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  integer $record_id Record ID
+     * @return string
      */
     public function getAllLinkTagsById($record_id)
     {
@@ -190,11 +190,8 @@ class PMF_Tags
     /**
      * Saves all tags from a FAQ record
      *
-     * @param   integer $record_id
-     * @param   array   $tags
-     * @return  boolean
-     * @since   2006-08-28
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param integer $record_id Record ID
+     * @param array   $tags      Array of tags
      */
     public function saveTags($record_id, $tags)
     {
@@ -259,10 +256,8 @@ class PMF_Tags
     /**
      * Deletes all tags from a given record id
      *
-     * @param   integer $record_id
-     * @return  boolean
-     * @since   2007-05-02
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  integer $record_id Record ID
+     * @return boolean
      */
     public function deleteTagsFromRecordId($record_id)
     {
@@ -287,10 +282,8 @@ class PMF_Tags
     /**
      * Returns the FAQ record IDs where all tags are included
      *
-     * @param   array   $arrayOfTags
-     * @return  array   $records
-     * @since   2006-08-10
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  array $arrayOfTags Array of Tags
+     * @return array
      */
     public function getRecordsByIntersectionTags($arrayOfTags)
     {
@@ -329,10 +322,8 @@ class PMF_Tags
     /**
      * Returns all FAQ record IDs where all tags are included
      *
-     * @param   array   $arrayOfTags
-     * @return  array   $records
-     * @since   2006-08-10
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  array $arrayOfTags Array of Tags
+     * @return array
      */
     public function getRecordsByUnionTags($arrayOfTags)
     {
@@ -367,10 +358,8 @@ class PMF_Tags
     /**
      * Returns the tagged item
      *
-     * @param   integer
-     * @return  string
-     * @since   2006-11-19
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  integer $tagId Tagging ID
+     * @return string
      */
     public function getTagNameById($tagId)
     {
@@ -398,9 +387,7 @@ class PMF_Tags
     /**
      * Returns the HTML for the Tags Cloud
      *
-     * @return  string
-     * @since   2006-09-02
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     * @return string
      */
     public function printHTMLTagsCloud()
     {
@@ -465,11 +452,8 @@ class PMF_Tags
     /**
      * Returns all FAQ record IDs where all tags are included
      *
-     * @param   string  $tagName
-     * @return  array   $records
-     * @since   2006-08-30
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     * @param  string $tagName The name of the tag
+     * @return array
      */
     public function getRecordsByTagName($tagName)
     {
@@ -502,10 +486,8 @@ class PMF_Tags
     /**
      * Returns all FAQ record IDs where all tags are included
      *
-     * @param   integer $tagId
-     * @return  array   $records
-     * @since   2007-04-20
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  integer $tagId Tagging ID
+     * @return array
      */
     public function getRecordsByTagId($tagId)
     {
@@ -540,9 +522,7 @@ class PMF_Tags
     /**
      * Check if at least one faq has been tagged with a tag
      *
-     * @return  bool
-     * @since   2006-12-31
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
+     * @return boolean
      */
     public function existTagRelations()
     {
