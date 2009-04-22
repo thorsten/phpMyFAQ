@@ -997,6 +997,18 @@ class PMF_Faq
     */
     function getRecordBySolutionId($solution_id)
     {
+        if ($this->groupSupport) {
+            $permPart = sprintf("( fdg.group_id IN (%s)
+            OR
+                (fdu.user_id = %d AND fdg.group_id IN (%s)))",
+                implode(', ', $this->groups),
+                $this->user,
+                implode(', ', $this->groups));
+        } else {
+            $permPart = sprintf("( fdu.user_id = %d OR fdu.user_id = -1 )",
+                $this->user);
+        }
+        
         $query = sprintf(
             "SELECT
                 *
@@ -1011,11 +1023,14 @@ class PMF_Faq
             ON
                 fd.id = fdu.record_id
             WHERE
-                fd.solution_id = %d",
+                fd.solution_id = %d
+            AND
+                %s",
             SQLPREFIX,
             SQLPREFIX,
             SQLPREFIX,
-            $solution_id);
+            $solution_id,
+            $permPart);
 
         $result = $this->db->query($query);
 
