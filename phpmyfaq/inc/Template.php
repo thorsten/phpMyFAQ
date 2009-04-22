@@ -1,15 +1,15 @@
 <?php
 /**
- * PMF_Template
- *
  * The PMF_Template class provides methods and functions for the
  * template parser
  *
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Jan Mergler <jan.mergler@gmx.de>
- * @since     2002-08-22
- * @version   SVN: $Id$
- * @copyright 2002-2009 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage PMF_Template
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     Jan Mergler <jan.mergler@gmx.de>
+ * @since      2002-08-22
+ * @version    SVN: $Id$
+ * @copyright  2002-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -22,6 +22,17 @@
  * under the License.
  */
 
+/**
+ * PMF_Template
+ *
+ * @package    phpMyFAQ
+ * @subpackage PMF_Template
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     Jan Mergler <jan.mergler@gmx.de>
+ * @since      2002-08-22
+ * @version    SVN: $Id$
+ * @copyright  2002-2009 phpMyFAQ Team
+ */
 class PMF_Template
 {
     /**
@@ -58,12 +69,10 @@ class PMF_Template
      *
      * Combine all template files into the main templates array
      *
-     * @param  array $myTemplate Templaes
-     * @access public
-     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @author Jan Mergler <jan.mergler@gmx.de>
+     * @param  array $myTemplate Templates
+     * @return void
      */
-    public function __construct($myTemplate)
+    public function __construct(Array $myTemplate)
     {
         foreach ($myTemplate as $templateName => $filename) {
             $this->templates[$templateName] = $this->readTemplate($filename, $templateName);
@@ -73,11 +82,9 @@ class PMF_Template
     /**
      * This function merges two templates
      *
-     * @param   string  $name
-     * @param   string  $toname
-     * @return  void
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  string $name   Name of the template to include
+     * @param  string $toname Name of the new template
+     * @return void
      */
     public function includeTemplate($name, $toname)
     {
@@ -90,14 +97,11 @@ class PMF_Template
     /**
      * Parses the template
      *
-     * @param   string
-     * @param   array
-     * @return  void
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @author  Jan Mergler <jan.mergler@gmx.de>
+     * @param  string $templateName    Name of the template
+     * @param  array  $templateContent Content of the template
+     * @return void
      */
-    public function processTemplate($templateName, $templateContent)
+    public function processTemplate($templateName, Array $templateContent)
     {
         $tmp       = $this->templates[$templateName];
         $rawBlocks = $this->_readBlocks($tmp);
@@ -137,8 +141,6 @@ class PMF_Template
      * This function prints the whole parsed template file.
      *
      * @return  void
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     public function printTemplate()
     {
@@ -150,12 +152,11 @@ class PMF_Template
     /**
      * This function adds two template outputs.
      *
-     * @param   array
-     * @param   array
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  array $name   Name of the template to add
+     * @param  array $toname Name of the new template
+     * @return void
      */
-    function addTemplate($name, $toname)
+    public function addTemplate($name, $toname)
     {
         $this->outputs[$toname] .= $this->outputs[$name];
         $this->outputs[$name] = '';
@@ -164,11 +165,9 @@ class PMF_Template
     /**
      * This function reads a template file.
      *
-     * @param   string $filename
-     * @return  string
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @author  Jan Mergler <jan.mergler@gmx.de>
+     * @param  string $filename     Filename
+     * @param  string $templateName Name of the template
+     * @return string
      */
     public function readTemplate($filename, $templateName)
     {
@@ -184,13 +183,12 @@ class PMF_Template
     /**
      * This function processes the block
      *
-     * @param  string $templateName
-     * @param  string $blockName
-     * @param  array  $blockContent
+     * @param  string $templateName Name of the template
+     * @param  string $blockName    Block name
+     * @param  array  $blockContent Content of the block
      * @return void
-     * @author Jan Mergler <jan.mergler@gmx.de>
      */
-    public function processBlock($templateName, $blockName, $blockContent)
+    public function processBlock($templateName, $blockName, Array $blockContent)
     {
         if (isset($this->blocks[$templateName][$blockName])) {
             $block = $this->blocks[$templateName][$blockName];
@@ -220,10 +218,9 @@ class PMF_Template
     /**
      * This function multiplies blocks
      *
-     * @param  string $block
-     * @param  array  $blockContent
+     * @param  string $block        Blockname
+     * @param  array  $blockContent Content of block
      * @return string implode('', $tmpBlock)
-     * @author Jan Mergler <jan.mergler@gmx.de>
      */
     private function _multiplyBlock($block, $blockContent)
     {
@@ -268,9 +265,8 @@ class PMF_Template
     /**
      * This function reads the block
      *
-     * @param  string $tpl
+     * @param  string $tpl Block to read
      * @return string
-     * @author Jan Mergler <jan.mergler@gmx.de>
      */
     private function _readBlocks($tpl)
     {
@@ -311,9 +307,8 @@ class PMF_Template
     /**
      * This function checks the content
      *
-     * @param  string $content
+     * @param  string $content Content to check
      * @return string
-     * @author Jan Mergler <jan.mergler@gmx.de>
      */
     private function _checkContent($content)
     {
