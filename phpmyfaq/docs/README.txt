@@ -10,14 +10,16 @@ Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.0.13:
-- 
+- updated Vietnamese translation (Julien Petitperrin)
+-
 
 For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
 Version 2.0.14 - 2009-05-
--
+- updated Vietnamese translation (Julien Petitperrin)
+- 
 
 Version 2.0.13 - 2009-04-20
 - added new blocked words for spam protection (Kai)
