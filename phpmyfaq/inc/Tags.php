@@ -212,7 +212,7 @@ class PMF_Tags
         foreach ($tags as $tagging_name) {
             $tagging_name = trim($tagging_name);
             if (strlen($tagging_name) > 0) {
-                if (!in_array($tagging_name, $current_tags)) {
+                    if (!in_array(strtolower($tagging_name), array_map('strtolower', $current_tags))) {
                     // Create the new tag
                     $new_tagging_id = $this->db->nextID(SQLPREFIX.'faqtags', 'tagging_id');
                     $query = sprintf("
@@ -247,7 +247,7 @@ class PMF_Tags
                         (%d, %d)",
                         SQLPREFIX,
                         $record_id,
-                        array_search($tagging_name, $current_tags));
+                        array_search(strtolower($tagging_name), array_map('strtolower', $current_tags)));
                     $this->db->query($query);
                 }
             }

@@ -11,7 +11,9 @@ Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.0.13:
 - updated Vietnamese translation (Julien Petitperrin)
+- improved tagging implementation (Thorsten)
 - fixed authentication bypass (Thorsten)
+- minor bugfixes (Thorsten)
 
 For known issues please take a look at KNOWNBUGS.txt
 
@@ -19,8 +21,9 @@ CHANGELOG:
 
 Version 2.0.14 - 2009-05-
 - updated Vietnamese translation (Julien Petitperrin)
+- improved tagging implementation (Thorsten)
 - fixed authentication bypass (Thorsten)
-- 
+- minor bugfixes (Thorsten)
 
 Version 2.0.13 - 2009-04-20
 - added new blocked words for spam protection (Kai)
