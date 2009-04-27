@@ -1,15 +1,13 @@
 <?php
 /**
- * $Id: glossary.main.php,v 1.15 2007-04-12 19:09:33 thorstenr Exp $
- *
  * The main glossary index file
  *
  * @package    phpMyFAQ
  * @subpackage Administration
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since      2005-09-15
- * @copyright  2005-2009 phpMyFAQ Team
  * @version    SVN: $Id$
+ * @copyright  2005-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -72,16 +70,26 @@ if ($permission['addglossary'] || $permission['editglossary'] || $permission['de
 
     $glossaryItems = $glossary->getAllGlossaryItems();
 
-    print sprintf('<p>[ <a href="%s?action=addglossary">%s</a> ]</p>', $_SERVER['PHP_SELF'], $PMF_LANG['ad_glossary_add']);
+    print sprintf('<p>[ <a href="?action=addglossary">%s</a> ]</p>', $PMF_LANG['ad_glossary_add']);
 
     print '<table class="list">';
-    print sprintf("<tr><th class=\"list\">%s</th><th class=\"list\">%s</th><th>&nbsp;</th></tr>", $PMF_LANG['ad_glossary_item'], $PMF_LANG['ad_glossary_definition']);
+    print sprintf("<thead><tr><th class=\"list\">%s</th><th class=\"list\">%s</th><th>&nbsp;</th></tr></thead>", 
+        $PMF_LANG['ad_glossary_item'], 
+        $PMF_LANG['ad_glossary_definition']);
 
     foreach ($glossaryItems as $items) {
         print '<tr>';
-        print sprintf('<td class="list"><a href="%s%d">%s</a></td>', '?action=editglossary&amp;id=', $items['id'], $items['item']);
-        print sprintf('<td class="list">%s</td>', $items['definition']);
-        print sprintf('<td class="list"><a href="%s%d"><img src="images/delete.gif" width="17" height="18" alt="%s" title="%s" border="0" /></a></td>', '?action=deleteglossary&amp;id=', $items['id'], $PMF_LANG['ad_user_del_3'], $PMF_LANG['ad_user_del_3']);
+        print sprintf('<td class="list"><a href="%s%d">%s</a></td>', 
+            '?action=editglossary&amp;id=', 
+            $items['id'], 
+            $items['item']);
+        print sprintf('<td class="list">%s</td>', 
+            $items['definition']);
+        print sprintf('<td class="list"><a href="%s%d"><img src="images/delete.gif" width="17" height="18" alt="%s" title="%s" border="0" /></a></td>', 
+            '?action=deleteglossary&amp;id=', 
+            $items['id'], 
+            $PMF_LANG['ad_user_del_3'], 
+            $PMF_LANG['ad_user_del_3']);
         print '</tr>';
     }
     print '</table>';
