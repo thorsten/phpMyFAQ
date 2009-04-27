@@ -97,6 +97,26 @@ dd { margin: 0 0 10px 200px; }
 #group_membership .button_row { padding-top: 10px; }
 .clear { clear: both; }
 
+/* Form CSS definitions */
+form br { clear: both; }
+label { float: left; text-align: right; margin-right: 5px; }
+label.left { width: 185px; }
+label.lefteditor { width: 135px; }
+label.leftconfig { width: 235px; }
+input { padding-bottom: 10px; }
+input[type=text], input[type=password] { float: left; margin-bottom: 10px; }
+input.right { float: left; width: auto; clear: both; margin-left: 200px; margin-right: 5px; margin-bottom: 5px;}
+input[type=checkbox].right, input[type=radio].right, input[type=submit].right { margin-left: 200px; }
+
+/* Table CSS definitions */
+table.list { border: 1px solid #cccccc; border-collapse: collapse; width: 768px; }
+table.listrecords { border: 1px solid #cccccc; border-collapse: collapse; width: 768px; }
+.list thead th, tfoot td { background-color: #EDF2F2; }
+.list tfoot td { text-align: right; }
+th.list, td.list { border: 1px solid #cccccc; padding: 2px; line-height: 20px; text-align: left; }
+th.listhead { border: 1px solid #cccccc; padding: 2px; line-height: 20px; text-align: center; }
+th.listhead a { text-decoration: none; font-weight: bold; }
+
 /* datePicker CSS definitions */
 a.dp-choose-date { width: 16px; height: 16px; padding: 0; margin: 5px 3px 0; display: block;
     text-indent: -2000px; overflow: hidden; background: url(../admin/images/calendar.png) no-repeat; }
@@ -106,82 +126,6 @@ input.dp-applied { width: 140px; float: left; }
 
 
 /*
-
-
-
-
-label.left {
-    float: left;
-    text-align: right;
-    width: 185px;
-    margin-right: 5px;
-}
-label.lefteditor {
-    float: left;
-    text-align: right;
-    width: 135px;
-    margin-right: 5px;
-}
-label.leftconfig {
-    float: left;
-    text-align: right;
-    width: 235px;
-    margin-right: 5px;
-}
-input[type=text], input[type=password] {
-    float: left;
-    margin-bottom: 10px;
-}
-input.right {
-    float: left;
-    width: auto;
-    clear: both;
-    margin-left: 200px;
-    margin-right: 5px;
-}
-input[type=checkbox].right, input[type=radio].right, input[type=submit].right {
-    margin-left: 200px;
-}
-form br {
-    clear: both;
-}
-textarea#maincontent {
-    width: 755px;
-    height: 400px;
-}
-
-table.list {
-    border: 1px solid #cccccc;
-    border-collapse: collapse;
-    width: 785px;
-}
-table.listrecords {
-    border: 1px solid #cccccc;
-    border-collapse: collapse;
-    width: 765px;
-}
-.list thead th, tfoot td {
-    background-color: #EDF2F2;
-}
-.list tfoot td {
-    text-align: right;
-}
-th.list, td.list {
-    border: 1px solid #cccccc;
-    padding: 2px;
-    line-height: 20px;
-    text-align: left;
-}
-th.listhead {
-    border: 1px solid #cccccc;
-    padding: 2px;
-    line-height: 20px;
-    text-align: center;
-}
-th.listhead a {
-    text-decoration: none;
-    font-weight: bold;
-}
 
 
 .userrights {
