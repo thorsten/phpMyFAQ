@@ -30,15 +30,42 @@ $captcha = new PMF_Captcha($sids);
 
 $name     = PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
 $mailfrom = PMF_Filter::filterInput(INPUT_POST, 'mailfrom', FILTER_VALIDATE_EMAIL);
-$mailto   = PMF_Filter::filterInput(INPUT_POST, 'mailto', FILTER_VALIDATE_EMAIL);
+$mailto   = PMF_Filter::filterInputArray(INPUT_POST, array('mailto' => array('filter' => FILTER_VALIDATE_EMAIL, 'flags' => FILTER_REQUIRE_ARRAY | FILTER_NULL_ON_FAILURE)));
 $link     = PMF_Filter::filterInput(INPUT_POST, 'link', FILTER_VALIDATE_URL);
 $attached = PMF_Filter::filterInput(INPUT_POST, 'zusatz', FILTER_SANITIZE_STRIPPED);
 $code     = PMF_Filter::filterInput(INPUT_POST, 'captcha', FILTER_SANITIZE_STRING);
 
-if (!is_null($name) && !is_null($mailfrom) && !is_null($mailto) && IPCheck($_SERVER['REMOTE_ADDR'])
+if (!is_null($name) && !is_null($mailfrom) && is_array($mailto) && IPCheck($_SERVER['REMOTE_ADDR'])
     && checkBannedWord(htmlspecialchars($attached)) && $captcha->checkCaptchaCode($code)) {
+    // Backward compatibility: extract article info from the link, no template change required
+    $cat = null;
+    $id = null;
+    $artlang = null;
+    preg_match('`index\.php\?action=artikel&cat=(?<cat>[\d]+)&id=(?<id>[\d]+)&artlang=(?<artlang>[^$]+)$`', $link, $matches);
+    if (isset($matches['cat'])) {
+        $cat = (int)$matches['cat'];
+    }
+    if (isset($matches['id'])) {
+        $id = (int)$matches['id'];
+    }
+    if (isset($matches['artlang'])) {
+        $artlang = $matches['artlang'];
+    }
+    // Sanity check
+    if (is_null($cat) || is_null($id) || is_null($artlang)) {
+        header('HTTP/1.1 403 Forbidden');
+        print 'Invalid link.';
+        exit();
+    }
 
-    foreach($mailto as $recipient) {
+    // Get the HTML content
+    $html = @PMF_Utils::getHTTPContent($link);
+    // Try to attach the PDF content
+    $pdfLink = str_replace("index.php?action=artikel&cat=$cat&id=$id&artlang=$artlang", "pdf.php?cat=$cat&id=$id&artlang=$artlang&nostream=1", $link);
+    $response = @PMF_Utils::getHTTPContent($pdfLink);
+    $pdfFile = "pdf/".$id.".pdf";
+
+    foreach($mailto['mailto'] as $recipient) {
         $recipient = trim(strip_tags($recipient));
         if (!empty($recipient)) {
             $mail = new PMF_Mail();
@@ -47,11 +74,14 @@ if (!is_null($name) && !is_null($mailfrom) && !is_null($mailto) && IPCheck($_SER
             $mail->addTo($recipient);
             $mail->subject = $PMF_LANG["msgS2FMailSubject"].$name;
             $mail->message = $faqconfig->get("main.send2friendText")."\r\n\r\n".$PMF_LANG["msgS2FText2"]."\r\n".$link."\r\n\r\n".$attached;
-            $html = PMF_Utils::getHTTPContent($link);
             if ($html !== false) {
                 $mail->messageAlt = $faqconfig->get("main.send2friendText")."\r\n\r\n".$PMF_LANG["msgS2FText2"]."\r\n".$link."\r\n\r\n".$attached;
                 $mail->setHTMLMessage($html);
             }
+            if (file_exists($pdfFile)) {
+                $mail->addAttachment($pdfFile, basename($pdfFile), 'application/pdf');
+            }
+            // Send the email
             $result = $mail->send();
             unset($mail);
             usleep(250);
