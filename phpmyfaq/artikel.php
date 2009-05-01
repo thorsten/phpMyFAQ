@@ -297,7 +297,7 @@ $tpl->processTemplate ("writeContent", array(
     'writeDiggMsgTag'               => 'Digg it!',
     'link_digg'                     => sprintf('http://digg.com/submit?phase=2&amp;url=%s', urlencode($diggItUrl)),
     'link_email'                    => sprintf(str_replace('%', '%%', PMF_Link::getSystemRelativeUri('index.php')).'index.php?%saction=send2friend&amp;cat=%d&amp;id=%d&amp;artlang=%s', $sids, $currentCategory, $record_id, $lang),
-    'link_pdf'                      => sprintf(str_replace('%', '%%', PMF_Link::getSystemRelativeUri('index.php')).'pdf.php?cat=%s&amp;id=%d', $currentCategory, $record_id),
+    'link_pdf'                      => sprintf(str_replace('%', '%%', PMF_Link::getSystemRelativeUri('index.php')).'pdf.php?cat=%d&amp;id=%d&amp;artlang=%s', $currentCategory, $record_id, $lang),
     'writePDFTag'                   => $PMF_LANG['msgPDF'],
     'writePrintMsgTag'              => $PMF_LANG['msgPrintArticle'],
     'writeSend2FriendMsgTag'        => $PMF_LANG['msgSend2Friend'],
