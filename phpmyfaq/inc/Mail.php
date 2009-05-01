@@ -726,7 +726,7 @@ class PMF_Mail
         $hasInlineAttachments = false;
         $idx = 0;
         while (!$hasInlineAttachments && ($idx < count($this->attachments))) {
-            $hasInlineAttachments = ('inline' == $this->attachments[i]['disposition']);
+            $hasInlineAttachments = ('inline' == $this->attachments[$idx]['disposition']);
             $idx++;
         }
 
