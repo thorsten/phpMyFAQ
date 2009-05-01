@@ -317,7 +317,11 @@ class PMF_Export_Pdf extends FPDF
         if ($this->enableBookmarks == false) {
             $this->SetY(-15);
             $this->SetFont("Helvetica", "", 8);
-            $url =PMF_Link::getSystemScheme().$_SERVER['HTTP_HOST'].str_replace('pdf.php', 'index.php?action=artikel&amp;cat='.$this->categories[$this->category]['id'].'&amp;id='.(int)$_REQUEST['id'].'&amp;artlang='.$_REQUEST['lang'], $_SERVER['PHP_SELF']);
+            $baseUrl = 'index.php?action=artikel&amp;cat='.$this->categories[$this->category]['id'].'&amp;id='.(int)$_REQUEST['id'];
+            if (isset($_REQUEST['artlang'])) {
+                $baseUrl .= '&amp;artlang='.$_REQUEST['artlang'];
+            }
+            $url = PMF_Link::getSystemScheme().$_SERVER['HTTP_HOST'].str_replace('pdf.php', $baseUrl, $_SERVER['PHP_SELF']);
             $urlObj = new PMF_Link($url);
             $urlObj->itemTitle = $this->thema;
             $_url = str_replace('&amp;', '&', $urlObj->toString());
@@ -503,8 +507,9 @@ class PMF_Export_Pdf extends FPDF
             $url = 'http://' . $_SERVER['HTTP_HOST'] . EndSlash(dirname($_SERVER['PHP_SELF'])) . $url;
         }
         if ($this->isFullExport) {
-            $URL = str_replace('admin/', '', $URL);
+            $url = str_replace('admin/', '', $url);
         }
+
         $this->SetTextColor(0, 0, 255);
         $this->SetStyle('U', true);
         $this->Write(5, $txt, $url);
