@@ -10,8 +10,8 @@
  * @author     Krzysztof Kruszynski <thywolf@wolf.homelinux.net>
  * @author     Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @since      2003-02-12
- * @copyright  2003-2009 phpMyFAQ Team
  * @version    SVN: $Id$ 
+ * @copyright  2003-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -44,11 +44,16 @@ if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE)) {
 
 $currentCategory = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
 $id              = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+$noStream        = PMF_Filter::filterInput(INPUT_GET, 'nostream', FILTER_VALIDATE_INT);
 
 if (is_null($currentCategory) || is_null($id)) {
     print "Error!";
     exit();
 }
+
+// Cleanup
+$pdfFile = "pdf/".$id.".pdf";
+@unlink($pdfFile);
 
 $faq = new PMF_Faq();
 $faq->getRecord($id);
@@ -73,21 +78,35 @@ $pdf->Ln();
 $pdf->Write(5, html_entity_decode($PMF_LANG["msgLastUpdateArticle"]).$faq->faqRecord['date']);
 $pdf->SetStyle('I', false);
 
-$pdfFile = "pdf/".$id.".pdf";
 $pdf->Output($pdfFile);
+
+// Sanity check: stop here if no PDF has been created
+if (!file_exists($pdfFile)) {
+    header('HTTP/1.1 404 Not Found');
+    print 'PDF not available.';
+    exit();
+}
 
 $file = basename($pdfFile);
 $size = filesize($pdfFile);
+
 session_cache_limiter('private');
 header("Pragma: public");
 header("Expires: 0"); // set expiration time
 header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
 
+// Stop here when streaming is not requested - hack for mailsend2friend.php
+if (!is_null($noStream)) {
+    header('HTTP/1.1 200 OK');
+    print 'PDF available.';
+    exit();
+}
+
 if (preg_match("/MSIE/i", $_SERVER["HTTP_USER_AGENT"])) {
     header("Content-type: application/pdf");
     header("Content-Transfer-Encoding: binary");
     header("Content-Length: ".filesize($pdfFile));
-    header("Content-Disposition: Attachment; filename=".$id.".pdf" );
+    header("Content-Disposition: attachment; filename=".$id.".pdf" );
     readfile($pdfFile);
 } else {
     header("Location: ".$pdfFile."");
