@@ -166,7 +166,7 @@ if (!is_null($user) && $user instanceof PMF_User_CurrentUser) {
 }
 
 //
-// use mbstring extension if available and when possible
+// Use mbstring extension if available and when possible
 //
 $valid_mb_strings = array('ja', 'en', 'uni');
 $mbLanguage       = ('utf-8' == strtolower($PMF_LANG['metaCharset'])) && ($PMF_LANG['metaLanguage'] != 'ja') ? 'uni' : $PMF_LANG['metaLanguage'];
@@ -176,26 +176,28 @@ if (function_exists('mb_language') && in_array($mbLanguage, $valid_mb_strings)) 
 }
 
 //
-// found a session ID in _GET or _COOKIE?
+// Found a session ID in _GET or _COOKIE?
 //
 $sid        = null;
 $sid_get    = PMF_Filter::filterInput(INPUT_GET, PMF_GET_KEY_NAME_SESSIONID, FILTER_VALIDATE_INT);
 $sid_cookie = PMF_Filter::filterInput(INPUT_COOKIE, PMF_COOKIE_NAME_SESSIONID, FILTER_VALIDATE_INT);
 $faqsession = new PMF_Session();
-
-if (null == $sid_get && null == $sid_cookie) {
-    // Create a per-site unique SID
-    $faqsession->userTracking('new_session', 0);
-} else {
-    if (!is_null($sid_cookie)) {
-        $faqsession->checkSessionId($sid_cookie, $_SERVER['REMOTE_ADDR']);
+// Note: do not track internal calls
+if (($_SERVER['REMOTE_ADDR'] != '127.0.0.1')) {
+    if (is_null($sid_get) && is_null($sid_cookie)) {
+        // Create a per-site unique SID
+        $faqsession->userTracking('new_session', 0);
     } else {
-        $faqsession->checkSessionId($sid_get, $_SERVER['REMOTE_ADDR']);
+        if (!is_null($sid_cookie)) {
+            $faqsession->checkSessionId($sid_cookie, $_SERVER['REMOTE_ADDR']);
+        } else {
+            $faqsession->checkSessionId($sid_get, $_SERVER['REMOTE_ADDR']);
+        }
     }
 }
 
 //
-// is user tracking activated?
+// Is user tracking activated?
 //
 $sids = '';
 if ($faqconfig->get('main.enableUserTracking')) {
