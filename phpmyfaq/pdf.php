@@ -44,44 +44,19 @@ if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE)) {
 
 $currentCategory = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
 $id              = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-$noStream        = PMF_Filter::filterInput(INPUT_GET, 'nostream', FILTER_VALIDATE_INT);
 
 if (is_null($currentCategory) || is_null($id)) {
-    print "Error!";
+    header('HTTP/1.1 403 Forbidden');
+    print 'Wrong HTTP GET parameters values.';
     exit();
 }
 
-// Cleanup
-$pdfFile = "pdf/".$id.".pdf";
-@unlink($pdfFile);
-
 $faq = new PMF_Faq();
 $faq->getRecord($id);
-
-$pdf = new PMF_Export_Pdf($currentCategory, $faq->faqRecord['title'], $category->categoryName, $orientation = "P", $unit = "mm", $format = "A4");
-$pdf->Open();
-$pdf->SetTitle($faq->faqRecord['title']);
-$pdf->SetCreator($faqconfig->get('main.titleFAQ')." - powered by phpMyFAQ ".$faqconfig->get('main.currentVersion'));
-$pdf->AliasNbPages();
-$pdf->AddPage();
-$pdf->SetFont("Helvetica", "", 12);
-$pdf->SetDisplayMode("real");
-$pdf->WriteHTML(str_replace("../", '', $faq->faqRecord['content']));
-$pdf->Ln();
-$pdf->Ln();
-$pdf->SetStyle('I', true);
-$pdf->Write(5, html_entity_decode($PMF_LANG['ad_entry_solution_id']).': #'.$faq->faqRecord['solution_id']);
-$pdf->SetAuthor($faq->faqRecord['author']);
-$pdf->Ln();
-$pdf->Write(5, html_entity_decode($PMF_LANG["msgAuthor"]).$faq->faqRecord['author']);
-$pdf->Ln();
-$pdf->Write(5, html_entity_decode($PMF_LANG["msgLastUpdateArticle"]).$faq->faqRecord['date']);
-$pdf->SetStyle('I', false);
-
-$pdf->Output($pdfFile);
+$pdfFile = $faq->buildPDFFile($currentCategory);
 
 // Sanity check: stop here if no PDF has been created
-if (!file_exists($pdfFile)) {
+if (empty($pdfFile) || (!file_exists($pdfFile))) {
     header('HTTP/1.1 404 Not Found');
     print 'PDF not available.';
     exit();
