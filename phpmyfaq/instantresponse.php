@@ -5,7 +5,7 @@
  * @package    phpMyFAQ
  * @subpackage Frontend
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author     Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @since      2007-03-18
  * @version    SVN: $Id$
  * @copyright  2007-2009 phpMyFAQ Team
