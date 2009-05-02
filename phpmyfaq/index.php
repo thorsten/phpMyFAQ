@@ -9,7 +9,7 @@
  * @subpackage Frontend
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author     Lars Tiedemann <php@larstiedemann.de>
- * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author     Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @since      2001-02-12
  * @version    SVN: $Id$
  * @copyright  2001-2009 phpMyFAQ Team
@@ -185,7 +185,11 @@ $sid_get    = PMF_Filter::filterInput(INPUT_GET, PMF_GET_KEY_NAME_SESSIONID, FIL
 $sid_cookie = PMF_Filter::filterInput(INPUT_COOKIE, PMF_COOKIE_NAME_SESSIONID, FILTER_VALIDATE_INT);
 $faqsession = new PMF_Session();
 // Note: do not track internal calls
-if (($_SERVER['REMOTE_ADDR'] != '127.0.0.1')) {
+$internal = false;
+if (isset($_SERVER['HTTP_USER_AGENT'])) {
+    $internal = (strpos($_SERVER['HTTP_USER_AGENT'], 'phpMyFAQ%2F') === 0);
+}
+if (!$internal) {
     if (is_null($sid_get) && is_null($sid_cookie)) {
         // Create a per-site unique SID
         $faqsession->userTracking('new_session', 0);
