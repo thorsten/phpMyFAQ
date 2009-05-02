@@ -35,8 +35,11 @@ $link     = PMF_Filter::filterInput(INPUT_POST, 'link', FILTER_VALIDATE_URL);
 $attached = PMF_Filter::filterInput(INPUT_POST, 'zusatz', FILTER_SANITIZE_STRIPPED);
 $code     = PMF_Filter::filterInput(INPUT_POST, 'captcha', FILTER_SANITIZE_STRING);
 
-if (!is_null($name) && !is_null($mailfrom) && is_array($mailto) && IPCheck($_SERVER['REMOTE_ADDR'])
-    && checkBannedWord(htmlspecialchars($attached)) && $captcha->checkCaptchaCode($code)) {
+if (
+    !is_null($name) && !is_null($mailfrom) && is_array($mailto) && IPCheck($_SERVER['REMOTE_ADDR'])
+    && checkBannedWord(htmlspecialchars($attached)) && $captcha->checkCaptchaCode($code)
+    ) {
+
     // Backward compatibility: extract article info from the link, no template change required
     $cat = null;
     $id = null;
@@ -54,16 +57,19 @@ if (!is_null($name) && !is_null($mailfrom) && is_array($mailto) && IPCheck($_SER
     // Sanity check
     if (is_null($cat) || is_null($id) || is_null($artlang)) {
         header('HTTP/1.1 403 Forbidden');
-        print 'Invalid link.';
+        print 'Invalid FAQ link.';
         exit();
     }
 
+    // Load categories
+    $category = new PMF_Category();
+    // Load the required faq
+    $faq = new PMF_Faq();
+    $faq->getRecord($id);
     // Get the HTML content
     $html = @PMF_Utils::getHTTPContent($link);
     // Try to attach the PDF content
-    $pdfLink = str_replace("index.php?action=artikel&cat=$cat&id=$id&artlang=$artlang", "pdf.php?cat=$cat&id=$id&artlang=$artlang&nostream=1", $link);
-    $response = @PMF_Utils::getHTTPContent($pdfLink);
-    $pdfFile = "pdf/".$id.".pdf";
+    $pdfFile = $faq->buildPDFFile($cat);
 
     foreach($mailto['mailto'] as $recipient) {
         $recipient = trim(strip_tags($recipient));
@@ -78,7 +84,7 @@ if (!is_null($name) && !is_null($mailfrom) && is_array($mailto) && IPCheck($_SER
                 $mail->messageAlt = $faqconfig->get("main.send2friendText")."\r\n\r\n".$PMF_LANG["msgS2FText2"]."\r\n".$link."\r\n\r\n".$attached;
                 $mail->setHTMLMessage($html);
             }
-            if (file_exists($pdfFile)) {
+            if (!empty($pdfFile) && (file_exists($pdfFile))) {
                 $mail->addAttachment($pdfFile, basename($pdfFile), 'application/pdf');
             }
             // Send the email
