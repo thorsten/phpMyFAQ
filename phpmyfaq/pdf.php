@@ -70,13 +70,6 @@ header("Pragma: public");
 header("Expires: 0"); // set expiration time
 header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
 
-// Stop here when streaming is not requested - hack for mailsend2friend.php
-if (!is_null($noStream)) {
-    header('HTTP/1.1 200 OK');
-    print 'PDF available.';
-    exit();
-}
-
 if (preg_match("/MSIE/i", $_SERVER["HTTP_USER_AGENT"])) {
     header("Content-type: application/pdf");
     header("Content-Transfer-Encoding: binary");
