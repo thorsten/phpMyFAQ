@@ -161,12 +161,18 @@ class PMF_Export_Pdf extends FPDF
      * @var array
      */
     private $categories = array();
-    
+
     /**
      * The current category
      * 
      */
     private $category = null;
+
+    /**
+     * The current faq
+     * 
+     */
+    public $faq = null;
 
     /**
     * Constructor
@@ -317,11 +323,13 @@ class PMF_Export_Pdf extends FPDF
         if ($this->enableBookmarks == false) {
             $this->SetY(-15);
             $this->SetFont("Helvetica", "", 8);
-            $baseUrl = 'index.php?action=artikel&amp;cat='.$this->categories[$this->category]['id'].'&amp;id='.(int)$_REQUEST['id'];
-            if (isset($_REQUEST['artlang'])) {
-                $baseUrl .= '&amp;artlang='.$_REQUEST['artlang'];
+            $baseUrl = '/index.php';
+            if (is_array($this->faq) && !empty($this->faq)) {
+                $baseUrl .= '?action=artikel&amp;cat='.$this->categories[$this->category]['id'];
+                $baseUrl .= '&amp;id='.$this->faq['id'];
+                $baseUrl .= '&amp;artlang='.$this->faq['lang'];
             }
-            $url = PMF_Link::getSystemScheme().$_SERVER['HTTP_HOST'].str_replace('pdf.php', $baseUrl, $_SERVER['PHP_SELF']);
+            $url = PMF_Link::getSystemScheme().$_SERVER['HTTP_HOST'].$baseUrl;
             $urlObj = new PMF_Link($url);
             $urlObj->itemTitle = $this->thema;
             $_url = str_replace('&amp;', '&', $urlObj->toString());
