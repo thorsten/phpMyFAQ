@@ -5,12 +5,14 @@
  * the templates we need and set all internal variables to the template
  * variables. That's all.
  *
- * @package   phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Lars Tiedemann <php@larstiedemann.de>
- * @since     2001-02-12
- * @version   SVN: $Id$
- * @copyright 2001-2009 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage Frontend
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author     Lars Tiedemann <php@larstiedemann.de>
+ * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @since      2001-02-12
+ * @version    SVN: $Id$
+ * @copyright  2001-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
