@@ -982,17 +982,17 @@ function link_verifier_javascript()
 <!--
 function getImageElement(id, lang)
 {
-    return $('imgurl_' + lang + '_' + id);
+    return $('#imgurl_' + lang + '_' + id);
 }
 
 function getSpanElement(id, lang)
 {
-    return $('spanurl_' + lang + '_' + id);
+    return $('#spanurl_' + lang + '_' + id);
 }
 
 function getDivElement(id, lang)
 {
-    return $('divurl_' + lang + '_' + id);
+    return $('#divurl_' + lang + '_' + id);
 }
 
 function onDemandVerifyURL(id, lang, target)
@@ -1076,7 +1076,7 @@ function link_ondemand_javascript($id, $lang) {
 <!--
 function ajaxOnDemandVerify(id, lang)
 {
-    var target = $('onDemandVerifyResult');
+    var target = $('#onDemandVerifyResult');
     var url = 'index.php';
     var pars = 'action=ajax&ajax=onDemandURL&id=' + id + '&lang=' + lang + '&lookup=1';
     var myAjax = new Ajax.Request( url, {method: 'get', parameters: pars, onComplete: ajaxOnDemandVerify_success, onFailure: ajaxOnDemandVerify_failure} );
