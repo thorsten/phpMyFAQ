@@ -993,7 +993,7 @@ function getSearchData($searchterm, $asResource = false, $cat = '%', $allLanguag
  */
 function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = false, $instantRespnse = false)
 {
-    global $db, $sids, $category, $PMF_LANG, $LANGCODE, $faq, $current_user, $current_groups;
+    global $sids, $category, $PMF_LANG, $LANGCODE, $faq, $current_user, $current_groups;
 
     $_searchterm = PMF_htmlentities(stripslashes($searchterm), ENT_QUOTES, $PMF_LANG['metaCharset']);
     $seite       = 1;
@@ -1002,17 +1002,18 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
     $searchItems = array();
     $langs       = (true == $allLanguages) ? '&amp;langs=all' : '';
     $seite       = PMF_Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 0);
+    $db          = PMF_Db::getInstance();
     $faqconfig   = PMF_Configuration::getInstance();
 
     $result = getSearchData($searchterm, true, $cat, $allLanguages);
-    $num = $db->num_rows($result);
+    $num    = $db->num_rows($result);
 
     if (0 == $num) {
         $output = $PMF_LANG['err_noArticles'];
     }
 
     $pages = ceil($num / $faqconfig->get('main.numberOfRecordsPerPage'));
-    $last = $seite * $faqconfig->get('main.numberOfRecordsPerPage');
+    $last  = $seite * $faqconfig->get('main.numberOfRecordsPerPage');
     $first = $last - $faqconfig->get('main.numberOfRecordsPerPage');
     if ($last > $num) {
         $last = $num;
@@ -1175,14 +1176,14 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
  * @author  Johannes Schlueter <johannes@php.net>
  * @since   2003-07-14
  */
-function highlight_no_links($matches)
+function highlight_no_links(Array $matches)
 {
     $itemAsAttrName  = $matches[1];
     $itemInAttrValue = $matches[2]; // $matches[3] is the attribute name
-    $prefix          = isset($matches[4]) ? $matches[4] : '';
-    $item            = isset($matches[5]) ? $matches[5] : '';
-    $postfix         = isset($matches[6]) ? $matches[6] : '';
-
+    $prefix          = isset($matches[3]) ? $matches[3] : '';
+    $item            = isset($matches[4]) ? $matches[4] : '';
+    $postfix         = isset($matches[5]) ? $matches[5] : '';
+    
     if (!empty($item)) {
         return '<span class="highlight">'.$prefix.$item.$postfix.'</span>';
     }
