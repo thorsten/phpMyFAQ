@@ -164,7 +164,7 @@ class PMF_Search
         $searchResult = array();
         
         $byLang = $withLang ? ', lang' : '';
-        $query = sprintf("
+        $query  = sprintf("
             SELECT 
                 searchterm, COUNT(searchterm) AS number %s
             FROM
@@ -178,11 +178,14 @@ class PMF_Search
         
         $result = $this->db->query($query);
         
-    
         if ($result) {
-           while ($row = $this->db->fetch_object($result)) {
-              $searchResult[] = (array) $row;
-           }
+        	$i = 0;
+            while ($row = $this->db->fetch_object($result)) {
+            	if ($i < 10) {
+            		$searchResult[] = (array) $row;
+            	}
+            	$i++;
+            }
         }
         
         return $searchResult;
