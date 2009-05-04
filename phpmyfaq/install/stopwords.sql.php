@@ -20,7 +20,7 @@
  * under the License.
  */
 
-$query[] = "INSERT INTO ".$sqltblpre."faqstopwords (id, lang, stopword) VALUES
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES
 (0, 'cs', 'dnes'),
 (1, 'cs', 'cz'),
 (2, 'cs', 'timto'),
@@ -2380,8 +2380,9 @@ $query[] = "INSERT INTO ".$sqltblpre."faqstopwords (id, lang, stopword) VALUES
 (2356, 'fr', 'ces'),
 (2357, 'fr', 'ceux'),
 (2358, 'fr', 'chaque'),
-(2359, 'fr', 'ci');
-INSERT INTO `phpmyfaq_faqstopwords` (`id`, `lang`, `stopword`) VALUES
+(2359, 'fr', 'ci')";
+
+$query[] = "INSERT INTO ".SQLPREFIX."faqstopwords (id, lang, stopword) VALUES
 (2360, 'fr', 'comme'),
 (2361, 'fr', 'comment'),
 (2362, 'fr', 'dans'),
