@@ -1,6 +1,6 @@
 $Id$
 
-phpMyFAQ 2.5.0-alpha2
+phpMyFAQ 2.5.0-RC
 Codename "Pandora"
 
 Installation/Update:
@@ -9,24 +9,14 @@ Please read the documentation (documentation.en.html) carefully.
 Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
-Changes since 2.5.0-alpha2:
-- added new administration layout (Thorsten)
-- added frontend for search logs statistics (Anatoliy Belsky)
-- added sticky FAQ records (Anatoliy Belsky)
-- added smart answering for user questions (Anatoliy Belsky)
-- added string wrapper for better UTF-8 handling (Anatoliy Belsky)
-- ajaxified comment and record administration (Thorsten)
-- updated bundled jQuery to version 1.3.2 (Thorsten)
-- updated bundled TinyMCE editor component to version 3.2.2.3 (Thorsten)
-- updated bundled Net_IDNA to version 0.6.3 (Thorsten)
-- removed Prototype/Script.aculo.us (Thorsten)
-- fixed a lot of bugs (Thorsten)
+Changes since 2.5.0-beta:
+- 
 
 For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.5.0-beta - 2009-05-04
+Version 2.5.0-RC - 2009-06-
 - changed PHP requirement to PHP 5.2 (Thorsten)
 - dropped support for MySQL 4.0 and MaxDB (Thorsten)
 - dropped support for XML-RPC (Thorsten)

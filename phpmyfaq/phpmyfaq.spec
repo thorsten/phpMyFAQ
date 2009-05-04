@@ -57,7 +57,7 @@
 # phpMyFAQ
 #
 %define name        phpmyfaq
-%define version     2.5.0.beta
+%define version     2.5.0.RC
 %define release     1
 %define epoch       0
 
@@ -156,6 +156,9 @@ installation script.
 %changelog
 
 %changelog
+* Mon May 04 2009 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.5.0.RC-1
+- New upstream version 2.5.0-RC.
+
 * Mon Mar 09 2009 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.5.0.beta-1
 - New upstream version 2.5.0-beta.
 
