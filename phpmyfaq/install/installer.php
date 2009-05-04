@@ -714,8 +714,10 @@ foreach ($permLevels as $level => $desc) {
         die();
     }
 
-    require_once $sql_type . '.sql.php';
-    require_once 'config.sql.php';
+    require $sql_type . '.sql.php'; // CREATE TABLES
+    require 'config.sql.php';       // INSERTs for configiration
+    require 'stopwords.sql.php';    // INSERTs for stopwords
+    
     print "<p class=\"center\">";
     @ob_flush();
     flush();
