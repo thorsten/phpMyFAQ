@@ -533,6 +533,9 @@ foreach ($permLevels as $level => $desc) {
 
     // Ckeck table prefix
     $sqltblpre = PMF_Filter::filterInput(INPUT_POST, 'sqltblpre', FILTER_SANITIZE_STRING, '');
+    if (!defined('SQLPREFIX')) {
+        define('SQLPREFIX', $sqltblpre);
+    }
 
     // check database entries
     $sql_type = PMF_Filter::filterInput(INPUT_POST, 'sql_type', FILTER_SANITIZE_STRING);
@@ -714,9 +717,9 @@ foreach ($permLevels as $level => $desc) {
         die();
     }
 
-    require $sql_type . '.sql.php'; // CREATE TABLES
-    require 'config.sql.php';       // INSERTs for configiration
-    require 'stopwords.sql.php';    // INSERTs for stopwords
+    require_once $sql_type . '.sql.php'; // CREATE TABLES
+    require_once 'config.sql.php';       // INSERTs for configiration
+    require_once 'stopwords.sql.php';    // INSERTs for stopwords
     
     print "<p class=\"center\">";
     @ob_flush();
@@ -752,9 +755,6 @@ foreach ($permLevels as $level => $desc) {
     flush();
 
     // add admin account and rights
-    if (!defined('SQLPREFIX')) {
-        define('SQLPREFIX', $sqltblpre);
-    }
     $admin = new PMF_User();
     $admin->createUser('admin', $password, 1);
     $admin->setStatus('protected');
