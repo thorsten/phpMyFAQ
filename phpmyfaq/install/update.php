@@ -1228,6 +1228,9 @@ if ($step == 4) {
                     stopword VARCHAR(64) NOT NULL,
                     PRIMARY KEY (id, lang))";
         
+        // Add stopwords list
+        require 'stopwords.sql.php';
+
         switch($DB['type']) {
         	case 'sqlite':
                 $query[] = "BEGIN TRANSACTION";
