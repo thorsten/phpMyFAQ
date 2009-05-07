@@ -52,10 +52,10 @@ acronym { border-bottom: 1px dotted #999; }
 /*		Categories		*/
 
 #categories { width: 200px; }
-#categories ul { list-style: none; margin: 0; padding: 0; border-top: 1px solid #ddd; }
+#categories ul { list-style: none; margin: 0; padding: 0; border-top: 1px solid gray; }
 #categories ul ul, #categories ul ul ul, #categories ul ul ul ul, #categories ul ul ul ul ul { border-top: 0; }
 #categories li { margin: 0; padding: 0; }
-#categories li a { display: block; padding: .5em 0; border-bottom: 1px solid #ddd; text-decoration: none; height: 100%; /* stupid IE fix */ }
+#categories li a { display: block; border-bottom: 1px solid gray; text-decoration: none; height: 100%; padding: .5em 0 .5em .5em; }
 #categories li ul a { padding-left: 1em; }
 #categories ul ul ul a { padding-left: 2em; }
 #categories ul ul ul ul a { padding-left: 3em; }
@@ -112,4 +112,5 @@ html>body .rightcolumn ol { margin: 0 0 0 20px; padding: 0; }
 a.rss:link, a.rss:visited { background: #ff6a00; color: #fff; font: 9px normal Verdana, sans-serif; border-top: 1px solid #ffb627; border-left: 1px solid #ffb627; border-right: 1px solid #ab4800; border-bottom: 1px solid #ab4800; padding: 0 2px;	text-transform: uppercase; vertical-align: middle; }
 .clearing { clear: both; display: none; }
 .highlight { background: #f0ff00; padding: 0 .2em; font-weight: bold; }
+#action { text-align: center; margin: 5px; }
 p#action img { vertical-align: middle; }
