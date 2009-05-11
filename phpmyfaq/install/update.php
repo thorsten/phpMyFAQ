@@ -1344,6 +1344,9 @@ if ($step == 4) {
             (31, 'edittranslation', 'Right to edit translation', 1, 1)";
         $query[] = "INSERT INTO ".SQLPREFIX."faqright (right_id, name, description, for_users, for_groups) VALUES 
             (32, 'deltranslation', 'Right to delete translation', 1, 1)";
+        $query[] = "INSERT INTO ".SQLPREFIX."faquser_right (user_id, right_id) VALUES (1, 30)";
+        $query[] = "INSERT INTO ".SQLPREFIX."faquser_right (user_id, right_id) VALUES (1, 31)";
+        $query[] = "INSERT INTO ".SQLPREFIX."faquser_right (user_id, right_id) VALUES (1, 32)";
     }
 
     // Perform the queries for updating/migrating the database from 2.x
