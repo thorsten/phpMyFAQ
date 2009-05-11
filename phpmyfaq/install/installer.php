@@ -944,7 +944,7 @@ foreach ($permLevels as $level => $desc) {
         //26 => 'changebtrevs'
         array(
             'name' => 'changebtrevs',
-            'description' => 'Edit revisions',
+            'description' => 'Right to edit revisions',
             'for_users' => 1,
             'for_groups' => 1
         ),
@@ -966,6 +966,27 @@ foreach ($permLevels as $level => $desc) {
         array(
             'name' => 'delgroup',
             'description' => 'Right to delete group accounts',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
+        //30 => "addtranslation",
+        array(
+            'name' => 'addtranslation',
+            'description' => 'Right to add translation',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
+        //31 => "edittranslation",
+        array(
+            'name' => 'edittranslation',
+            'description' => 'Right to edit translations',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
+        //32 => "deltranslation",
+        array(
+            'name' => 'deltranslation',
+            'description' => 'Right to delete translations',
             'for_users' => 1,
             'for_groups' => 1
         ),

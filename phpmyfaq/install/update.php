@@ -232,6 +232,7 @@ if ($step == 1) {
     <option value="2.5.0-alpha">phpMyFAQ 2.5.0-alpha</option>
     <option value="2.5.0-alpha2">phpMyFAQ 2.5.0-alpha2</option>
     <option value="2.5.0-beta">phpMyFAQ 2.5.0-beta</option>
+    <option value="2.5.0-RC">phpMyFAQ 2.5.0-RC</option>
 </select>
 
 <p class="center"><input type="submit" value="Go to step 2 of 4" class="button" /></p>
@@ -1331,6 +1332,18 @@ if ($step == 4) {
                 $query[] = "ALTER TABLE ".SQLPREFIX."faqdata_revisions ADD sticky INTEGER NOT NULL AFTER active";
                 break;
         }
+    }
+    
+    //
+    // UPDATES FROM 2.5.0-RC
+    //
+    if (version_compare($version, '2.5.0-RC', '<')) {
+        $query[] = "INSERT INTO ".SQLPREFIX."faqright (right_id, name, description, for_users, for_groups) VALUES 
+            (30, 'addtranslation', 'Right to add translation', 1, 1)"; 
+        $query[] = "INSERT INTO ".SQLPREFIX."faqright (right_id, name, description, for_users, for_groups) VALUES 
+            (31, 'edittranslation', 'Right to edit translation', 1, 1)";
+        $query[] = "INSERT INTO ".SQLPREFIX."faqright (right_id, name, description, for_users, for_groups) VALUES 
+            (32, 'deltranslation', 'Right to delete translation', 1, 1)";
     }
 
     // Perform the queries for updating/migrating the database from 2.x
