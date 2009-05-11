@@ -375,7 +375,7 @@ if (isset($auth) && in_array(true, $permission)) {
         <dd><?php print implode(', ', get_loaded_extensions()); ?></dd>
     </dl>
 
-    <div style="font-size: 5px; text-align: right; color: #f5f5f5">NOTE: Art is resistance. Thank you very much for inspiration and everything else, L<!--issy-->.</div>
+    <div style="font-size: 5px; text-align: right; color: #f5f5f5">NOTE: Art is resistance.</div>
 <?php
     }
 // User is NOT authenticated
@@ -417,19 +417,6 @@ if (isset($auth) && in_array(true, $permission)) {
 if (DEBUG) {
     print "\n";
     print '<div id="debug_main">DEBUG INFORMATION:<br />'.$db->sqllog().'</div>';
-    $cookies = '';
-    foreach($_COOKIE as $key => $value) {
-        $cookies .= $key.': '.$value.'<br />';
-    }
-    print "\n";
-    print '<div id="debug_cookies">COOKIES:<br />'.$cookies.'</div>';
-    print "\n<br />";
-    print '<div id="debug_tables">TABLES &amp; RECORDS:<br />';
-    $tableStatuses = $db->getTableStatus();
-    foreach ($tableStatuses as $key => $value) {
-        print "$key: $value<br />";
-    }
-    print '</div>';
 }
 
 require 'footer.php';
