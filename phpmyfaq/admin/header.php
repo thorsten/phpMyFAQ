@@ -196,7 +196,7 @@ header("Vary: Negotiate,Accept");
 
             <h2>Admin worklog</h2>
             <div class="box">
-                
+                <span id="saving_data_indicator"></span>
             </div>
         </div>
         
