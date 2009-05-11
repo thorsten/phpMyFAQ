@@ -30,7 +30,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 require_once PMF_INCLUDE_DIR.'/Export.php';
 ?>
     <h2><?php print($PMF_LANG["ad_menu_export"]); ?></h2>
-    <form action="?action=exportfile" method="get">
+    <form action="?action=exportfile" method="post">
 <?php
 if (!emptyTable(SQLPREFIX."faqdata")) {
 
@@ -45,14 +45,14 @@ if (!emptyTable(SQLPREFIX."faqdata")) {
 ?>
         <fieldset><legend><?php print($PMF_LANG['ad_export_which_cat']); ?></legend>
             <label class="left" for="rubrik"><?php print($PMF_LANG["ad_entry_category"]); ?></label>
-            <select name="<?php print HTTP_PARAMS_GET_CATID; ?>" id="<?php print HTTP_PARAMS_GET_CATID; ?>" size="10">
+            <select name="catid" id="catid" size="10">
 <?php
         print($category->printCategoryOptions());
 ?>
             </select>
             <br />
-            <label class="left" for="<?php print(HTTP_PARAMS_GET_DOWNWARDS); ?>"><?php print($PMF_LANG['ad_export_cat_downwards']); ?></label>
-            <input type="checkbox" name="<?php print(HTTP_PARAMS_GET_DOWNWARDS); ?>" value="1" checked="checked"></input>
+            <label class="left" for="downwards"><?php print($PMF_LANG['ad_export_cat_downwards']); ?></label>
+            <input type="checkbox" name="downwards" value="1" checked="checked"></input>
         </fieldset>
         <br />
 <?php
@@ -68,8 +68,8 @@ if (!emptyTable(SQLPREFIX."faqdata")) {
             </p>
             <p>
                 <label for="disposition"><?php print($PMF_LANG['ad_export_download_view']); ?></label>
-                <input type="radio" name="<?php print(HTTP_PARAMS_GET_DISPOSITION); ?>" value="<?php print(EXPORT_DISPOSITION_ATTACHMENT); ?>" checked="checked"><?php print($PMF_LANG['ad_export_download']); ?></input>
-                <input type="radio" name="<?php print(HTTP_PARAMS_GET_DISPOSITION); ?>" value="<?php print(EXPORT_DISPOSITION_INLINE); ?>"><?php print($PMF_LANG['ad_export_view']); ?></input>
+                <input type="radio" name="dispos" value="<?php print PMF_HttpStreamer::EXPORT_DISPOSITION_ATTACHMENT; ?>" checked="checked"><?php print($PMF_LANG['ad_export_download']); ?></input>
+                <input type="radio" name="dispos" value="<?php print PMF_HttpStreamer::EXPORT_DISPOSITION_INLINE; ?>"><?php print($PMF_LANG['ad_export_view']); ?></input>
             </p>
         </fieldset>
         <div align="center">

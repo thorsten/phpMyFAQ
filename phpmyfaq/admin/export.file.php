@@ -35,10 +35,10 @@ include '../inc/Export.php';
 //       [&catid=NN[&downwards=1]], default: all, downwards
 //
 
-$catid             = PMF_Filter::filterInput(INPUT_GET, HTTP_PARAMS_GET_CATID, FILTER_VALIDATE_INT, 0);
-$downwards         = PMF_Filter::filterInput(INPUT_GET, HTTP_PARAMS_GET_DOWNWARDS, FILTER_VALIDATE_BOOLEAN, false);
-$inlineDisposition = PMF_Filter::filterInput(INPUT_GET, HTTP_PARAMS_GET_DISPOSITION, FILTER_VALIDATE_BOOLEAN, false);
-$type              = PMF_Filter::filterInput(INPUT_GET, HTTP_PARAMS_GET_TYPE, FILTER_SANITIZE_STRING, EXPORT_TYPE_NONE);
+$catid             = PMF_Filter::filterInput(INPUT_POST, 'catid', FILTER_VALIDATE_INT, 0);
+$downwards         = PMF_Filter::filterInput(INPUT_POST, 'downwards', FILTER_VALIDATE_BOOLEAN, false);
+$inlineDisposition = PMF_Filter::filterInput(INPUT_POST, 'dispos', FILTER_VALIDATE_BOOLEAN, false);
+$type              = PMF_Filter::filterInput(INPUT_POST, 'type', FILTER_SANITIZE_STRING, EXPORT_TYPE_NONE);
 
 // Prepare the file content to be streamed
 switch ($type) {
@@ -63,8 +63,8 @@ switch ($type) {
 // Stream the file content
 $oHttpStreamer = new PMF_HttpStreamer($type, $content);
 if ($inlineDisposition) {
-    $oHttpStreamer->send(HTTP_CONTENT_DISPOSITION_INLINE);
+    $oHttpStreamer->send(PMF_HttpStreamer::HTTP_CONTENT_DISPOSITION_INLINE);
 }
 else {
-    $oHttpStreamer->send(HTTP_CONTENT_DISPOSITION_ATTACHMENT);
+    $oHttpStreamer->send(PMF_HttpStreamer::HTTP_CONTENT_DISPOSITION_ATTACHMENT);
 }

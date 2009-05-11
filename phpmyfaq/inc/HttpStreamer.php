@@ -19,27 +19,6 @@
 * under the License.
 */
 
-// {{{ Constants
-/**#@+
-  * See RFC 1806: http://www.faqs.org/rfcs/rfc1806.html
-  */
-define("HTTP_CONTENT_DISPOSITION_ATTACHMENT", "attachment");
-define("HTTP_CONTENT_DISPOSITION_INLINE", "inline");
-/**#@-*/
-/**#@+
-  * HTTP GET Parameters EXPORT accepted values definitions
-  */
-define("EXPORT_DISPOSITION_ATTACHMENT", "attachment");
-define("EXPORT_DISPOSITION_INLINE", "inline");
-/**#@-*/
-/**#@+
-  * Output buffering management: set it to true to improve perfomances
-  */
-define("EXPORT_BUFFER_ENABLE", true);
-/**#@-*/
-// }}}
-
-// {{{ Classes
 /**
  * PMF_HttpStreamer Class
  *
@@ -55,6 +34,13 @@ define("EXPORT_BUFFER_ENABLE", true);
  */
 class PMF_HttpStreamer
 {
+    
+    const HTTP_CONTENT_DISPOSITION_ATTACHMENT = "attachment";
+    const HTTP_CONTENT_DISPOSITION_INLINE = "inline";
+    const EXPORT_DISPOSITION_ATTACHMENT = "attachment";
+    const EXPORT_DISPOSITION_INLINE = "inline";
+    const EXPORT_BUFFER_ENABLE = true;
+    
     // {{{ PMF_HttpStreamer Properties
     /**
     * PMF export data type
@@ -88,7 +74,7 @@ class PMF_HttpStreamer
     function PMF_HttpStreamer($type, $content)
     {
         $this->type        = $type;
-        $this->disposition = HTTP_CONTENT_DISPOSITION_INLINE;
+        $this->disposition = self::HTTP_CONTENT_DISPOSITION_INLINE;
         $this->content     = $content;
         $this->size        = strlen($this->content);
     }
@@ -103,7 +89,7 @@ class PMF_HttpStreamer
         if(headers_sent()) {
             die("<b>PMF_HttpStreamer Class</b> error: unable to send my headers: someone already sent other headers!");
         }
-        if (EXPORT_BUFFER_ENABLE) {
+        if (self::EXPORT_BUFFER_ENABLE) {
             if (ob_get_contents()) {
                 die("<b>PMF_HttpStreamer Class</b>error: unable to send my data: someone already sent other data!");
             }

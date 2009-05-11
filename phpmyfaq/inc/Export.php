@@ -100,7 +100,7 @@ class PMF_Export
 
             // Create the PDF
             foreach ($arrContent as $key => $value) {
-                $pdf->rubrik     = $arrRubrik[$key];
+                $pdf->category   = $arrRubrik[$key];
                 $pdf->thema      = $arrThema[$key];
                 $pdf->categories = $tree->categoryName;
                 $date            = $arrDatum[$key];

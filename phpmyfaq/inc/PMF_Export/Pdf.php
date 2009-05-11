@@ -160,13 +160,13 @@ class PMF_Export_Pdf extends FPDF
      * 
      * @var array
      */
-    private $categories = array();
+    public $categories = array();
 
     /**
      * The current category
      * 
      */
-    private $category = null;
+    public $category = null;
 
     /**
      * The current faq
