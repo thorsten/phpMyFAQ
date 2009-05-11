@@ -1,23 +1,24 @@
 <?php
 /**
-* $Id: HttpStreamer.php,v 1.2 2007-04-08 14:40:20 thorstenr Exp $
-*
-* Simple HTTP Streamer
-*
-* @author       Matteo Scaramuccia <matteo@scaramuccia.com>
-* @since        2005-11-02
-* @copyright    (c) 2005-2007 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * Simple HTTP Streamer
+ *
+ * @package    phpMyFAQ
+ * @subpackage PMF_HttpStreamer
+ * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @since      2005-11-02
+ * @version    SVN: $Id$
+ * @copyright  2005-2009 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ *  License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 /**
  * PMF_HttpStreamer Class
@@ -31,47 +32,86 @@
  * - XHTML: application/xhtml+xml
  * - XML: text/xml
  * - Generic file: application/octet-stream
+ *
+ * @package    phpMyFAQ
+ * @subpackage PMF_HttpStreamer
+ * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @since      2005-11-02
+ * @version    SVN: $Id$
+ * @copyright  2005-2009 phpMyFAQ Team
  */
 class PMF_HttpStreamer
 {
+    /**
+     * HTTP content disposition attachment constant
+     *
+     * @var string
+     */
+    const HTTP_CONTENT_DISPOSITION_ATTACHMENT = 'attachment';
     
-    const HTTP_CONTENT_DISPOSITION_ATTACHMENT = "attachment";
-    const HTTP_CONTENT_DISPOSITION_INLINE = "inline";
-    const EXPORT_DISPOSITION_ATTACHMENT = "attachment";
-    const EXPORT_DISPOSITION_INLINE = "inline";
+    /**
+     * HTTP content disposition inline constant
+     *
+     * @var string
+     */
+    const HTTP_CONTENT_DISPOSITION_INLINE = 'inline';
+    
+    /**
+     * Disposition attachment constant
+     *
+     * @var string
+     */
+    const EXPORT_DISPOSITION_ATTACHMENT = 'attachment';
+    
+    /**
+     * Disposition inline constant
+     *
+     * @var string
+     */
+    const EXPORT_DISPOSITION_INLINE = 'inline';
+    
+    /**
+     * Enable buffer
+     *
+     * @var boolean
+     */
     const EXPORT_BUFFER_ENABLE = true;
     
-    // {{{ PMF_HttpStreamer Properties
     /**
-    * PMF export data type
-    *
-    * @var  $type
-    */
-    var $type;
+     * PMF export data type
+     *
+     * @var string
+     */
+    private $type;
 
     /**
-    * HTTP Content Disposition
-    *
-    * @var  $disposition
-    */
-    var $disposition;
+     * HTTP Content Disposition
+     *
+     * @var string
+     */
+    private $disposition;
 
     /**
-    * HTTP streaming data
-    *
-    * @var  $content
-    */
-    var $content;
+     * HTTP streaming data
+     *
+     * @var string
+     */
+    private $content;
 
     /**
-    * HTTP streaming data length
-    *
-    * @var  $size
-    */
-    var $size;
-    // }}}
+     * HTTP streaming data length
+     *
+     * @var integer
+     */
+    private $size;
 
-    function PMF_HttpStreamer($type, $content)
+    /**
+     * Constructor
+     *
+     * @param string $type    Type
+     * @param string $content Content
+     */
+    function __construct($type, $content)
     {
         $this->type        = $type;
         $this->disposition = self::HTTP_CONTENT_DISPOSITION_INLINE;
@@ -79,7 +119,13 @@ class PMF_HttpStreamer
         $this->size        = strlen($this->content);
     }
 
-    function send($disposition)
+    /**
+     * Sends data
+     *
+     * @param  string $disposition Disposition
+     * @return void
+     */
+    public function send($disposition)
     {
         if (isset($disposition)) {
             $this->disposition = $disposition;
@@ -91,12 +137,12 @@ class PMF_HttpStreamer
         }
         if (self::EXPORT_BUFFER_ENABLE) {
             if (ob_get_contents()) {
-                die("<b>PMF_HttpStreamer Class</b>error: unable to send my data: someone already sent other data!");
+                die("<b>PMF_HttpStreamer Class</b> error: unable to send my data: someone already sent other data!");
             }
         }
 
         // Manage output buffering
-        if (EXPORT_BUFFER_ENABLE) {
+        if (self::EXPORT_BUFFER_ENABLE) {
             ob_start();
         }
         // Send the right HTTP headers
@@ -104,16 +150,21 @@ class PMF_HttpStreamer
         // Send the raw content
         $this->_streamContent();
         // Manage output buffer flushing
-        if (EXPORT_BUFFER_ENABLE) {
+        if (self::EXPORT_BUFFER_ENABLE) {
             ob_end_flush();
         }
     }
 
-    function _setHttpHeaders()
+    /**
+     * Sends HTTP Headers
+     *
+     * @return void
+     */
+    private function _setHttpHeaders()
     {
-        $filename = "";
+        $filename    = "";
         $description = "";
-        $mimeType = "";
+        $mimeType    = "";
 
         // Evaluate data upon export type request
         switch ($this->type) {
@@ -164,7 +215,8 @@ class PMF_HttpStreamer
 
         // 2. Set the correct values for file streaming
         header("Content-Type: ".$mimeType);
-        if (($this->disposition == HTTP_CONTENT_DISPOSITION_ATTACHMENT) && isset($_SERVER["HTTP_USER_AGENT"]) && !(strpos($_SERVER["HTTP_USER_AGENT"], "MSIE") === false)) {
+        if (($this->disposition == self::HTTP_CONTENT_DISPOSITION_ATTACHMENT) && 
+             isset($_SERVER["HTTP_USER_AGENT"]) && !(strpos($_SERVER["HTTP_USER_AGENT"], "MSIE") === false)) {
             header("Content-Type: application/force-download");
         }
         // RFC2616, §19.5.1: $filename must be a quoted-string
@@ -178,9 +230,13 @@ class PMF_HttpStreamer
         header("Content-Length: ".$this->size);
     }
 
-    function _streamContent()
+    /**
+     * Streams the content
+     *
+     * @return void
+     */
+    private function _streamContent()
     {
         print($this->content);
     }
 }
-// }}}
