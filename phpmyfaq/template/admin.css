@@ -27,6 +27,7 @@ body { font: .8em 'Trebuchet MS', 'Nimbus Sans L', sans-serif; line-height: 1.6e
 /* Header */
 #top { margin: 0 auto; padding: 0; color: #BEC5CD; height: 87px; background-color: #0D2458; }
 #top h1 { padding: 10px 0 0 25px; color: #D4451B; font-size: 200%; }
+#top h1 a.mainpage { color: #D4451B; }
 #top h2 { padding: 0px 0 0 25px; color: #BEC5CD; font-size: 90%; }
 #top .padding { padding-top: 5px; }
 #top .lefts { height: 87px; }
