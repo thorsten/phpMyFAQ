@@ -212,10 +212,10 @@ if ($permission['editbt'] || $permission['delbt']) {
         $old = 0;
         $all_ids = array();
         foreach ($faq->faqRecords as $record) {
-            $catInfo =  '';
+            $catInfo         =  '';
             $isBracketOpened = false;
-            $needComma = false;
-            $cid = $record['category_id'];
+            $needComma       = false;
+            $cid             = $record['category_id'];
             if (isset($numRecordsByCat[$cid]) && ($numRecordsByCat[$cid] > 0)) {
                 if (!$isBracketOpened) {
                     $catInfo .= ' (';
@@ -335,9 +335,10 @@ foreach($all_ids as $cat_id => $record_ids) {
      */
     function saveStickyStatus(cid, ids)
     {
+        $('#saving_data_indicator').html('<img src="images/indicator.gif" /> saving ...');
         var data = {action: "ajax", ajax: 'records', ajaxaction: "save_sticky_records"};
         
-        for(var i = 0; i < ids.length; i++) {
+        for (var i = 0; i < ids.length; i++) {
             data['items[' + i + '][]'] = [ids[i], $('#record_' + cid + '_' + ids[i]).attr('lang'), $('#record_' + cid + '_' + ids[i]).attr('checked')*1];
 
             // Updating the current record if it's also contained in another category
@@ -348,6 +349,7 @@ foreach($all_ids as $cat_id => $record_ids) {
         }
     
         $.get("index.php", data, null);
+        $('#saving_data_indicator').html('<?php print $PMF_LANG['ad_entry_savedsuc']; ?>');
     }
 
     /**
@@ -360,6 +362,7 @@ foreach($all_ids as $cat_id => $record_ids) {
     function deleteRecord(record_id, record_lang)
     {
         if (confirm('<?php print $PMF_LANG["ad_entry_del_1"] . " " . $PMF_LANG["ad_entry_del_3"]; ?>')) {
+            $('#saving_data_indicator').html('<img src="images/indicator.gif" /> deleting ...');
             $.ajax({
                 type:    "POST",
                 url:     "index.php?action=ajax&ajax=records&ajaxaction=delete_record",
@@ -367,6 +370,7 @@ foreach($all_ids as $cat_id => $record_ids) {
                 success: function(msg) {
                     $('.record_' + record_id + '_' + record_lang).fadeOut('slow');
                     $('.record_' + record_id + '_' + record_lang).after('<tr><td colspan="8">' + msg + '</td></tr>');
+                    $('#saving_data_indicator').html('<?php print $PMF_LANG['ad_entry_delsuc']; ?>');
                 }
             });
         }
