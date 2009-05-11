@@ -183,6 +183,10 @@ if ('addnews' == $action && $permission["addnews"]) {
     $dateStart = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING, '00000000000000');
     $dateEnd   = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING, '99991231235959');
     
+    // Fix dates
+    $dateStart = str_replace('-', '', $dateStart) . '000001';
+    $dateEnd   = str_replace('-', '', $dateEnd) . '235959';
+    
     $newsData = array(
         'lang'          => $LANGCODE,
         'header'        => $db->escape_string($_POST['header']),
@@ -209,6 +213,10 @@ if ('addnews' == $action && $permission["addnews"]) {
     $dateStart = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING, '00000000000000');
     $dateEnd   = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING, '99991231235959');
 	
+    // Fix dates
+    $dateStart = str_replace('-', '', $dateStart) . '000001';
+    $dateEnd   = str_replace('-', '', $dateEnd) . '235959';
+    
     $newsData = array(
         'lang'          => $LANGCODE,
         'header'        => $db->escape_string($_POST['header']),

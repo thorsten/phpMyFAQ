@@ -60,6 +60,10 @@ if ($permission['editbt']) {
     $group_permission  = PMF_Filter::filterInput(INPUT_POST, 'grouppermission', FILTER_SANITIZE_STRING);
     $restricted_groups = ('all' == $group_permission) ? -1 : PMF_Filter::filterInput(INPUT_POST, 'restricted_groups', FILTER_VALIDATE_INT);
     
+    // Fix dates
+    $dateStart = str_replace('-', '', $dateStart) . '000001';
+    $dateEnd   = str_replace('-', '', $dateEnd) . '235959';
+    
     if (isset($submit['submit'][1]) && !is_null($question) && !is_null($categories)) {
         // new entry
         adminlog("Beitragcreatesave");
