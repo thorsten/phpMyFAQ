@@ -157,7 +157,7 @@ $PMF_LANG["err_sendMail"] = "Required fields are <strong>your name</strong>, <st
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>Search for records:</strong><br />With an entry like <strong style=\"color: Red;\">word1 word2</strong> you can do a relevance descending search for two or more search criterion.</p><p><strong>Notice:</strong> Your search criterion has to be at least 4 letters long otherwise your request will be rejected.</p>";
 
-// Menü
+// Menï¿½
 $PMF_LANG["ad"] = "ADMIN SECTION";
 $PMF_LANG["ad_menu_user_administration"] = "Users";
 $PMF_LANG["ad_menu_entry_aprove"] = "Approve FAQs";
@@ -619,7 +619,7 @@ $PMF_LANG['msgAllCategories'] = '... all categories';
 $PMF_LANG['ad_you_should_update'] = 'Your phpMyFAQ installation is outdated. You should update to the latest available version.';
 $PMF_LANG['msgAdvancedSearch'] = 'Advanced search';
 
-// added v1.6.1 - 2006-04-25 by Matteo and Thorsten
+// added v1.6.1 - 2006-04-25 by Matteoï¿½andï¿½Thorsten
 $PMF_LANG['spamControlCenter'] = 'Spam control center';
 $LANG_CONF["spam.enableSafeEmail"] = array(0 => "checkbox", 1 => "Print user email in a safe way (default: enabled).");
 $LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "Check public form content against banned words (default: enabled).");
@@ -926,3 +926,8 @@ $PMF_LANG['ad_config_stopword_input'] = 'Add new stop word';
 // added 2.5.0-beta - 2009-04-06 by Anatoliy
 $PMF_LANG['msgSendMailDespiteEverything'] = 'No, there is still no adequate answer (will send the mail)';
 $PMF_LANG['msgSendMailIfNothingIsFound'] = 'Is the wanted answer listed in the results above?';
+
+// added 2.5.0-beta - 2009-04-06 by Anatoliy
+$PMF_LANG['msgChooseLanguageToTranslate'] = 'Please choose the language for translation';
+$PMF_LANG['msgLangDirIsntWritable'] = 'Translations dir isn\'t writable';
+$PMF_LANG['ad_menu_translations'] = 'Interface Translation';

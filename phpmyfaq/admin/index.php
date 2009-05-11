@@ -298,7 +298,10 @@ if (isset($auth) && in_array(true, $permission)) {
             case 'restore':                 require_once 'backup.import.php'; break;
             // functions for FAQ export
             case "export":                  require_once 'export.main.php'; break;
-
+            // translation tools
+            case "transedit":                require_once 'trans.edit.php'; break;
+            case "translist":                require_once 'trans.list.php'; break;
+            
             default:                        print "Error"; break;
         }
     } else {
