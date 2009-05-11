@@ -253,7 +253,7 @@ class PMF_String_Basic extends PMF_String_Abstract
      */
     public function preg_split($pattern, $subject, $limit = -1, $flags = 0)
     {
-        return preg_split($pattern, $subject, $limit = -1, $flags = 0);
+        return preg_split($pattern, $subject, $limit, $flags);
     }
     
     
