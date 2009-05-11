@@ -182,22 +182,30 @@ if ('addnews' == $action && $permission["addnews"]) {
 
     $dateStart = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING, '00000000000000');
     $dateEnd   = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING, '99991231235959');
+    $header    = PMF_Filter::filterInput(INPUT_POST, 'header', FILTER_SANITIZE_STRIPPED);
+    $content   = PMF_Filter::filterInput(INPUT_POST, 'content', FILTER_SANITIZE_STRIPPED);
+    $author    = PMF_Filter::filterInput(INPUT_POST, 'authorName', FILTER_SANITIZE_STRIPPED);
+    $email     = PMF_Filter::filterInput(INPUT_POST, 'authorEmail', FILTER_VALIDATE_EMAIL);
+    $active    = PMF_Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_STRING);
+    $comment   = PMF_Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_STRING);
+    $link      = PMF_Filter::filterInput(INPUT_POST, 'link', FILTER_VALIDATE_URL);
+    $linktitle = PMF_Filter::filterInput(INPUT_POST, 'linkTitle', FILTER_SANITIZE_STRIPPED);
+    $target    = PMF_Filter::filterInput(INPUT_POST, 'target', FILTER_SANITIZE_STRIPPED);
     
     $newsData = array(
         'lang'          => $LANGCODE,
-        'header'        => $db->escape_string($_POST['header']),
-        'content'       => $db->escape_string($_POST['content']),
-        'authorName'    => $db->escape_string($_POST['authorName']),
-        'authorEmail'   => PMF_Filter::filterInput(INPUT_POST, 'authorEmail', FILTER_VALIDATE_EMAIL),
-        'active'        => (isset($_POST['active'])) ? $db->escape_string($_POST['active']) : 'n',
-        'comment'       => (isset($_POST['comment'])) ? $db->escape_string($_POST['comment']) : 'n',
+        'header'        => $header,
+        'content'       => $content,
+        'authorName'    => $author,
+        'authorEmail'   => $email,
+        'active'        => (is_null($active)) ? 'n' : 'y',
+        'comment'       => (is_null($comment)) ? 'n' : 'y',
         'dateStart'     => ('' == $dateStart) ? '00000000000000' : str_replace('-', '', $dateStart) . '000000',
         'dateEnd'       => ('' == $dateEnd)   ? '99991231235959' : str_replace('-', '', $dateEnd) . '235959',
-        'link'          => $db->escape_string($_POST['link']),
-        'linkTitle'     => $db->escape_string($_POST['linkTitle']),
+        'link'          => $link,
+        'linkTitle'     => $linktitle,
         'date'          => date('YmdHis'),
-        'target'        => (!isset($_POST['target'])) ? '' : $db->escape_string($_POST['target'])
-        );
+        'target'        => (is_null($target)) ? '' : $target);
 
     if ($news->addNewsEntry($newsData)) {
         printf("<p>%s</p>", $PMF_LANG['ad_news_updatesuc']);
@@ -208,23 +216,31 @@ if ('addnews' == $action && $permission["addnews"]) {
 
     $dateStart = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING, '00000000000000');
     $dateEnd   = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING, '99991231235959');
-	
+    $header    = PMF_Filter::filterInput(INPUT_POST, 'header', FILTER_SANITIZE_STRIPPED);
+    $content   = PMF_Filter::filterInput(INPUT_POST, 'content', FILTER_SANITIZE_STRIPPED);
+    $author    = PMF_Filter::filterInput(INPUT_POST, 'authorName', FILTER_SANITIZE_STRIPPED);
+    $email     = PMF_Filter::filterInput(INPUT_POST, 'authorEmail', FILTER_VALIDATE_EMAIL);
+    $active    = PMF_Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_STRING);
+    $comment   = PMF_Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_STRING);
+    $link      = PMF_Filter::filterInput(INPUT_POST, 'link', FILTER_VALIDATE_URL);
+    $linktitle = PMF_Filter::filterInput(INPUT_POST, 'linkTitle', FILTER_SANITIZE_STRIPPED);
+    $target    = PMF_Filter::filterInput(INPUT_POST, 'target', FILTER_SANITIZE_STRIPPED);
+    
     $newsData = array(
         'lang'          => $LANGCODE,
-        'header'        => $db->escape_string($_POST['header']),
-        'content'       => $db->escape_string($_POST['content']),
-        'authorName'    => $db->escape_string($_POST['authorName']),
-        'authorEmail'   => PMF_Filter::filterInput(INPUT_POST, 'authorEmail', FILTER_VALIDATE_EMAIL),
-        'active'        => (isset($_POST['active'])) ? $db->escape_string($_POST['active']) : 'n',
-        'comment'       => (isset($_POST['comment'])) ? $db->escape_string($_POST['comment']) : 'n',
+        'header'        => $header,
+        'content'       => $content,
+        'authorName'    => $author,
+        'authorEmail'   => $email,
+        'active'        => (is_null($active)) ? 'n' : 'y',
+        'comment'       => (is_null($comment)) ? 'n' : 'y',
         'dateStart'     => ('' == $dateStart) ? '00000000000000' : str_replace('-', '', $dateStart) . '000000',
         'dateEnd'       => ('' == $dateEnd)   ? '99991231235959' : str_replace('-', '', $dateEnd) . '235959',
-        'link'          => $db->escape_string($_POST['link']),
-        'linkTitle'     => $db->escape_string($_POST['linkTitle']),
+        'link'          => $link,
+        'linkTitle'     => $linktitle,
         'date'          => date('YmdHis'),
-        'target'        => (!isset($_POST['target'])) ? '' : $db->escape_string($_POST['target'])
-        );
-
+        'target'        => (is_null($target)) ? '' : $target);
+    
     $newsId = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
     if ($news->updateNewsEntry($newsId, $newsData)) {
         printf("<p>%s</p>", $PMF_LANG['ad_news_updatesuc']);
