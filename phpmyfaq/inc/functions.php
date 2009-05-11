@@ -1242,12 +1242,12 @@ function PMF_htmlentities($string, $quote_style = ENT_QUOTES, $charset = 'iso-88
 /**
  * Adds a menu entry according to user permissions
  *
- * @param   string  $restrictions
- * @param   string  $action
- * @param   string  $caption
- * @param   string  $active
- * @access  public
- * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @param  string  $restrictions Restrictions
+ * @param  string  $action       Action parameter
+ * @param  string  $caption      Caption
+ * @param  string  $active       Active
+ * @access public
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  */
 function addMenuEntry($restrictions = '', $action = '', $caption = '', $active = '')
 {
@@ -1274,14 +1274,12 @@ function addMenuEntry($restrictions = '', $action = '', $caption = '', $active =
         $_caption,
         "\n");
     if ($restrictions == '') {
-        print $output;
-        return;
+        return $output;
     }
 
     foreach (explode(',', $restrictions) as $_restriction) {
         if (isset($permission[$_restriction]) && $permission[$_restriction]) {
-            print $output;
-            return;
+            return $output;
         }
     }
 }
