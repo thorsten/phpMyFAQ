@@ -24,21 +24,74 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
-/**
- * addtranslation
- * edittranslation
- * deltranslation
- */
-if(false) {
+if(!$permission["edittranslation"]) {
     print $PMF_LANG['err_NotAuth'];
     return;
 }
 
 $translateLang = PMF_Filter::filterInput(INPUT_GET, 'translang', FILTER_SANITIZE_STRING);
 
-if(empty($translateLang)) {
+if(empty($translateLang) || !file_exists(PMF_ROOT_DIR . "/lang/language_$translateLang.php")) {
     header("Location: ?action=translist");
 }
 
-print 'hello';
+/**
+ * English is our exemplary language
+ */
+$leftVarsOnly  = getTransVars(PMF_ROOT_DIR . "/lang/language_en.php");
+$rightVarsOnly = getTransVars(PMF_ROOT_DIR . "/lang/language_$translateLang.php");
+
+?>
+<form>
+<input type="hidden" name="translang" value="<?php  ?>" />
+<table>
+<?php
+    while(list($key, $line) = each($leftVarsOnly)):   
+    
+?>
+<tr>
+<td><input style="width: 350px;" type="text" name="<?php echo $key?>" value="<?php echo htmlspecialchars($line)?>" disabled="disabled"     /></td>
+<td><input style="width: 350px;" type="text" name="<?php echo $key?>" value="<?php echo @htmlspecialchars($rightVarsOnly[$key]) ?>" /></td>
+</tr>
+<?php endwhile; ?>
+</table>
+</form>
+<?php 
+/**
+ * Parse language file
+ *
+ * @param string $filepath
+ * 
+ * @return array
+ */
+function getTransVars($filepath)
+{
+    $orig = file($filepath);
+    $retval = array();
+    
+    while(list(,$line) = each($orig)) {
+        $line = rtrim($line);
+        /**
+         * Bypass all but variable definitions
+         */
+        $m = array();
+        if(strlen($line) && '$' == $line[0]) {
+            preg_match('/\$([^\=]+)=(\s?)(\"(.+)\"|.+)\;.*/xU', $line, $m);
+            $key = str_replace(array('["', '"]', '[\'', '\']'), array('[', ']', '[', ']'), trim($m[1]));
+            
+            $tmp = trim($m[3]);
+            if(0 === strstr($tmp, 'array')) {
+                $tmp2 = preg_split('/\,\s?/', $tmp);
+                foreach($tmp2 as $val) {
+                    $tmp3 = explode('=>', $val);
+                    $retval[$key][trim($tmp3[0])] = substr(trim($tmp[1]), 1, -1);
+                }
+            } else {
+                $retval[$key] = substr($tmp, 1, -1);
+            }
+        }
+    }
+//print '<pre>' . print_r($retval, true) . '</pre>';
+    return $retval;
+}
 ?>
