@@ -183,10 +183,6 @@ if ('addnews' == $action && $permission["addnews"]) {
     $dateStart = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING, '00000000000000');
     $dateEnd   = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING, '99991231235959');
     
-    // Fix dates
-    $dateStart = str_replace('-', '', $dateStart) . '000001';
-    $dateEnd   = str_replace('-', '', $dateEnd) . '235959';
-    
     $newsData = array(
         'lang'          => $LANGCODE,
         'header'        => $db->escape_string($_POST['header']),
@@ -195,8 +191,8 @@ if ('addnews' == $action && $permission["addnews"]) {
         'authorEmail'   => PMF_Filter::filterInput(INPUT_POST, 'authorEmail', FILTER_VALIDATE_EMAIL),
         'active'        => (isset($_POST['active'])) ? $db->escape_string($_POST['active']) : 'n',
         'comment'       => (isset($_POST['comment'])) ? $db->escape_string($_POST['comment']) : 'n',
-        'dateStart'     => ('' == $dateStart) ? '00000000000000' : $db->escape_string($dateStart),
-        'dateEnd'       => ('' == $dateEnd)   ? '99991231235959' : $db->escape_string($dateEnd),
+        'dateStart'     => ('' == $dateStart) ? '00000000000000' : str_replace('-', '', $dateStart) . '000000',
+        'dateEnd'       => ('' == $dateEnd)   ? '99991231235959' : str_replace('-', '', $dateEnd) . '235959',
         'link'          => $db->escape_string($_POST['link']),
         'linkTitle'     => $db->escape_string($_POST['linkTitle']),
         'date'          => date('YmdHis'),
@@ -213,10 +209,6 @@ if ('addnews' == $action && $permission["addnews"]) {
     $dateStart = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING, '00000000000000');
     $dateEnd   = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING, '99991231235959');
 	
-    // Fix dates
-    $dateStart = str_replace('-', '', $dateStart) . '000001';
-    $dateEnd   = str_replace('-', '', $dateEnd) . '235959';
-    
     $newsData = array(
         'lang'          => $LANGCODE,
         'header'        => $db->escape_string($_POST['header']),
@@ -225,8 +217,8 @@ if ('addnews' == $action && $permission["addnews"]) {
         'authorEmail'   => PMF_Filter::filterInput(INPUT_POST, 'authorEmail', FILTER_VALIDATE_EMAIL),
         'active'        => (isset($_POST['active'])) ? $db->escape_string($_POST['active']) : 'n',
         'comment'       => (isset($_POST['comment'])) ? $db->escape_string($_POST['comment']) : 'n',
-        'dateStart'     => ('' == $dateStart) ? '00000000000000' : $db->escape_string($dateStart),
-        'dateEnd'       => ('' == $dateEnd)   ? '99991231235959' : $db->escape_string($dateEnd),
+        'dateStart'     => ('' == $dateStart) ? '00000000000000' : str_replace('-', '', $dateStart) . '000000',
+        'dateEnd'       => ('' == $dateEnd)   ? '99991231235959' : str_replace('-', '', $dateEnd) . '235959',
         'link'          => $db->escape_string($_POST['link']),
         'linkTitle'     => $db->escape_string($_POST['linkTitle']),
         'date'          => date('YmdHis'),
