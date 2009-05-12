@@ -23,7 +23,8 @@
 $PMF_LANG["metaCharset"] = "UTF-8";
 $PMF_LANG["metaLanguage"] = "zh";
 $PMF_LANG["language"] = "Chinese Simplified (UTF-8)";
-$PMF_LANG["dir"] = "ltr"; // ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
+// ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
+$PMF_LANG["dir"] = "ltr";
 
 // Navigation
 $PMF_LANG["msgCategory"] = "类别";

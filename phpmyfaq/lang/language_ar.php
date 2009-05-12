@@ -22,7 +22,8 @@
 $PMF_LANG["metaCharset"] = "utf-8";
 $PMF_LANG["metaLanguage"] = "ar";
 $PMF_LANG["language"] = "Arabic";
-$PMF_LANG["dir"] = "rtl"; // ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
+// ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
+$PMF_LANG["dir"] = "rtl";
 
 // Navigation
 $PMF_LANG["msgCategory"] = "التصني�?ات";

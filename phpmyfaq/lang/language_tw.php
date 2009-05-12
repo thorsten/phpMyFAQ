@@ -21,7 +21,8 @@
 $PMF_LANG["metaCharset"] = "UTF-8";
 $PMF_LANG["metaLanguage"] = "tw";
 $PMF_LANG["language"] = "Chinese_Traditional";
-$PMF_LANG["dir"] = "ltr"; // ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
+// ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
+$PMF_LANG["dir"] = "ltr";
 
 // Navigation
 $PMF_LANG["msgCategory"] = "類別";

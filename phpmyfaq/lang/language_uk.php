@@ -23,7 +23,8 @@
 $PMF_LANG["metaCharset"] = "windows-1251";
 $PMF_LANG["metaLanguage"] = "uk";
 $PMF_LANG["language"] = "Ukranian";
-$PMF_LANG["dir"] = "ltr"; 
+// ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
+$PMF_LANG["dir"] = "ltr";
 
 // ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
 

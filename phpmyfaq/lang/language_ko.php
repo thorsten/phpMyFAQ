@@ -22,7 +22,8 @@
 $PMF_LANG["metaCharset"] = "euc-kr";
 $PMF_LANG["metaLanguage"] = "ko";
 $PMF_LANG["language"] = "Korean";
-$PMF_LANG["dir"] = "ltr"; // ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
+// ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
+$PMF_LANG["dir"] = "ltr";
 
 // Navigation
 $PMF_LANG["msgCategory"] = "카테고리";
