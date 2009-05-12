@@ -132,12 +132,12 @@ $PMF_LANG["msgNews"] = " News";
 $PMF_LANG["msgTopTen"] = "TOP 10";
 $PMF_LANG["msgHomeThereAre"] = "Es sind ";
 $PMF_LANG["msgHomeArticlesOnline"] = " Artikel online";
-$PMF_LANG["msgNoNews"] = "Es gibt derzeit keine ".$PMF_CONF['main.titleFAQ']."-News.";
+$PMF_LANG["msgNoNews"] = "Es gibt derzeit keine News.";
 $PMF_LANG["msgLatestArticles"] = "Die neuesten Artikel:";
 
 // E-Mailbenachrichtigung
-$PMF_LANG["msgMailThanks"] = "Vielen Dank fuer den Vorschlag zur ".$PMF_CONF['main.titleFAQ'];
-$PMF_LANG["msgMailCheck"] = "Neuer Eintrag fuer die ".$PMF_CONF['main.titleFAQ']." vorhanden!\nBitte im Adminbereich der FAQ checken!";
+$PMF_LANG["msgMailThanks"] = "Vielen Dank fuer den FAQ-Vorschlag";
+$PMF_LANG["msgMailCheck"] = "Es ist ein neuer Eintrag für Ihre FAQ vorhanden!\nBitte im Adminbereich der FAQ überprüfen!";
 $PMF_LANG["msgMailContact"] = "Die Anfrage wurde an den Administrator versendet!";
 
 // Fehlermeldungen
