@@ -697,7 +697,7 @@ foreach ($permLevels as $level => $desc) {
     // check LDAP if available
     if (extension_loaded('ldap') && !is_null($ldap_enabled)) {
         $datafile = PMF_ROOT_DIR . '/inc/dataldap.php';
-        $ret = file_put_contents($datafile, "<?php\n\$PMF_LDAP[\"ldap_server\"] = '".$ldap_server."';\n\$PMF_LDAP[\"ldap_port\"] = '".$ldap_port."';\n\$PMF_LDAP[\"ldap_user\"] = '".$ldap_user."';\n\$PMF_LDAP[\"ldap_password\"] = '".$ldap_password."';\n\$PMF_LDAP[\"ldap_base\"] = '".$ldap_base."';\n;\n?>", LOCK_EX);
+        $ret = file_put_contents($datafile, "<?php\n\$PMF_LDAP[\"ldap_server\"] = '".$ldap_server."';\n\$PMF_LDAP[\"ldap_port\"] = '".$ldap_port."';\n\$PMF_LDAP[\"ldap_user\"] = '".$ldap_user."';\n\$PMF_LDAP[\"ldap_password\"] = '".$ldap_password."';\n\$PMF_LDAP[\"ldap_base\"] = '".$ldap_base."';", LOCK_EX);
         if (!$ret) {
             print "<p class=\"error\"><strong>Error:</strong> Cannot write to dataldap.php.</p>";
             HTMLFooter();
