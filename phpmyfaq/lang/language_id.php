@@ -193,7 +193,7 @@ atau lebih.</p><p><strong>Perhatian:</strong> Kriteria masukan anda harus
 mempunyai minimal 4 karakter, jika tidak permintaan pencarian anda akan
 ditolak.</p>";
 
-// Menü
+// Menï¿½
 $PMF_LANG["ad"] = "BAGIAN ADMINISTRASI";
 $PMF_LANG["ad_menu_user_administration"] = "Administrasi Pengguna";
 $PMF_LANG["ad_menu_entry_aprove"] = "Persetujuan Materi";
@@ -531,8 +531,6 @@ $PMF_LANG["ad_log_bede"] = "Materi berikut telah dihapus: ";
 $PMF_LANG["ad_start_visits"] = "Kunjungan";
 $PMF_LANG["ad_start_articles"] = "Materi";
 $PMF_LANG["ad_start_comments"] = "Komentar";
-
-user via \"".$PMF_LANG["ad_menu_passwd"]."\".";
 
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "paste";
