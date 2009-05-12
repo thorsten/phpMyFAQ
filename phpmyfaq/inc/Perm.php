@@ -70,10 +70,9 @@ class PMF_Perm
      * @var array
      */
     private $perm_typemap = array(
-        'basic'     => 'PermBasic',
-        'medium'    => 'PermMedium',
-        'large'     => 'PermLarge'
-    );
+        'basic'  => 'PermBasic',
+        'medium' => 'PermMedium',
+        'large'  => 'PermLarge');
 
     /**
      * Constructor
@@ -114,5 +113,26 @@ class PMF_Perm
         $permclass = 'PMF_Perm_' . $perm->perm_typemap[$perm_level];
         $perm      = new $permclass();
         return $perm;
+    }
+    
+    /**
+     * Renders a select box for permission types
+     * 
+     * @param  string $current Selected option
+     * @return string
+     */
+    public static function permOptions($current)
+    {
+        $options = array('basic', 'medium');
+        $output  = '';
+
+        foreach ($options as $value) {
+            $output .= sprintf('<option value="%s"%s>%s</option>',
+                $value,
+                ($value == $current) ? ' selected="selected"' : '',
+                $value);
+        }
+
+        return $output;
     }
 }

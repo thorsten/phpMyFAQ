@@ -6,8 +6,8 @@
  * @subpackage Administration
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since      2005-12-26
- * @copyright  2005-2009 phpMyFAQ Team
  * @version    SVN: $Id$
+ * @copyright  2005-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -59,6 +59,7 @@ function printInputFieldByType($key, $type)
         case 'select':
 
             printf('<select name="edit[%s]" size="1" style="width: 500px;">', $key);
+            
             if ('main.language' == $key) {
                 $languages = getAvailableLanguages();
                 if (count($languages) > 0) {
@@ -66,15 +67,17 @@ function printInputFieldByType($key, $type)
                 } else {
                     print '<option value="language_en.php">English</option>';
                 }
-            } else if ('records.orderby' == $key) {
-                    print sortingOptions($faqconfig->get($key));
+            } elseif ('records.orderby' == $key) {
+                print sortingOptions($faqconfig->get($key));
             } elseif ('records.sortby' == $key) {
-                    printf('<option value="DESC"%s>%s</option>',
-                        ('DESC' == $faqconfig->get($key)) ? ' selected="selected"' : '',
-                        $PMF_LANG['ad_conf_desc']);
-                    printf('<option value="ASC"%s>%s</option>',
-                        ('ASC' == $faqconfig->get($key)) ? ' selected="selected"' : '',
-                        $PMF_LANG['ad_conf_asc']);
+                printf('<option value="DESC"%s>%s</option>',
+                    ('DESC' == $faqconfig->get($key)) ? ' selected="selected"' : '',
+                    $PMF_LANG['ad_conf_desc']);
+                printf('<option value="ASC"%s>%s</option>',
+                    ('ASC' == $faqconfig->get($key)) ? ' selected="selected"' : '',
+                    $PMF_LANG['ad_conf_asc']);
+            } elseif ('main.permLevel' == $key) {
+                print PMF_Perm::permOptions($faqconfig->get($key));
             }
             print '</select>';
             printf("<br />\n");
