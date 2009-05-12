@@ -212,6 +212,11 @@ if (isset($auth) && in_array(true, $permission)) {
             case 'group': 
                 require 'ajax.group.php';
                 break;
+            
+            // Interface translation
+            case 'trans':
+                require 'ajax.trans.php';
+                break;
             }
         exit();
         }
