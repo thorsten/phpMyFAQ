@@ -11,7 +11,8 @@ Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.5.0-beta:
 - added visual Ajax indicator in administration backend (Thorsten) 
-- many minor bugfixes (Thorsten)
+- improved language files (Anatoliy Belsky, Thorsten)
+- many minor bugfixes (Thorsten, Matteo)
 
 For known issues please take a look at KNOWNBUGS.txt
 
@@ -40,6 +41,7 @@ Version 2.5.0-RC - 2009-06-
 - added jQuery 1.3 as replacement for Prototype/Script.aculo.us (Thorsten)
 - improved user administration frontend (Sarah Hermann)
 - improved performance (Thorsten)
+- improved language files (Anatoliy Belsky, Thorsten)
 - ajaxified comment and record administration (Thorsten)
 - updated bundled Net_IDNA to version 0.6.3 (Thorsten)
 - updated bundled TinyMCE editor component to version 3.2.2.3 (Thorsten)
