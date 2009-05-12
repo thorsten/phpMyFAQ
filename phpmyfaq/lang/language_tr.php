@@ -116,7 +116,7 @@ $PMF_LANG["msg2answer"] = "Cevap";
 $PMF_LANG["msgQuestionText"] = "Burada diğer kullanıcıların sormuş olduğu soruları görebilirsiniz. Eğer bu soruyu cevaplayacaksanız, cevabınız SSS'da yerleştirilebilir.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>SSS'ın yapısı (<strong>S</strong>ıkça <strong>S</strong>orulan <strong>S</strong>orular) oldukça basit. Ayrıca <strong><a href=\"".$_SERVER["PHP_SELF"]."?action=show\">Kategoriler</a></strong> içinde araştırma yapabilir, veya <strong><a href=\"".$_SERVER["PHP_SELF"]."?action=search\">SSS Arama Motoru</a></strong> ile anahtar sözcüklere göre arama yapabilirsiniz.</p>";
+$PMF_LANG["msgHelpText"] = "<p>SSS'ın yapısı (<strong>S</strong>ıkça <strong>S</strong>orulan <strong>S</strong>orular) oldukça basit. Ayrıca <strong><a href=\"?action=show\">Kategoriler</a></strong> içinde araştırma yapabilir, veya <strong><a href=\"?action=search\">SSS Arama Motoru</a></strong> ile anahtar sözcüklere göre arama yapabilirsiniz.</p>";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "Webmaster 'a E-Mail:";

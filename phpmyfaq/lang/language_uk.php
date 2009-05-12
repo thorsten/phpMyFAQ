@@ -122,7 +122,7 @@ $PMF_LANG["msg2answer"] = "Відповісти";
 $PMF_LANG["msgQuestionText"] = "Тут знаходяться питання задані користувачами і що ще не отримали свою відповідь. Якщо ви відповісте на яке нібудь з питань, то він після перевірки адміністратором буде перенесений до основного розділу Mac F.A.Q";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>Структура нашої Mac F.A.Q. системи (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) системи проста і зручна і я думаю у вас не виникне питань: як і що?. Ви можете проглянути список <strong><a href=\"".$_SERVER["PHP_SELF"]."?sid=".isset($_GET["sid"])."&amp;aktion=anzeigen\">розділів</a></strong> або скористатися функцією <strong><a href=\"".$_SERVER["PHP_SELF"]."?sid=".isset($_GET["sid"])."&amp;aktion=search\">пошуку по всій базі</a></strong>.</p>";
+$PMF_LANG["msgHelpText"] = "<p>Структура нашої Mac F.A.Q. системи (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) системи проста і зручна і я думаю у вас не виникне питань: як і що?. Ви можете проглянути список <strong><a href=\"?sid=".isset($_GET["sid"])."&amp;aktion=anzeigen\">розділів</a></strong> або скористатися функцією <strong><a href=\"?sid=".isset($_GET["sid"])."&amp;aktion=search\">пошуку по всій базі</a></strong>.</p>";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "Тут ви можете написати лист веб-серверу-майстрові:";

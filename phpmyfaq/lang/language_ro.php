@@ -117,7 +117,7 @@ $PMF_LANG["msg2answer"] = "raspuns";
 $PMF_LANG["msgQuestionText"] = "Aici poti vedea raspunsurile altor utilizatori. Daca raspunzi la aceasta intrebare, raspunsul tau va fi introdus aici.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>Structura Intrebarilor frecvente-FAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) este foarte simpla. Poti sa cauti in <strong><a href=\"".$_SERVER["PHP_SELF"]."?action=show\">categoriile</a></strong> create sau in <strong><a href=\"".$_SERVER["PHP_SELF"]."?action=search\">motorul de cautare in FAQ</a></strong> dupa cuvinte-cheie.</p>";
+$PMF_LANG["msgHelpText"] = "<p>Structura Intrebarilor frecvente-FAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) este foarte simpla. Poti sa cauti in <strong><a href=\"?action=show\">categoriile</a></strong> create sau in <strong><a href=\"?action=search\">motorul de cautare in FAQ</a></strong> dupa cuvinte-cheie.</p>";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "e-mail catre webmaster:";

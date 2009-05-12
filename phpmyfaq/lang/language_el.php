@@ -118,7 +118,7 @@ $PMF_LANG["msg2answer"] = "Απάντηση";
 $PMF_LANG["msgQuestionText"] = "Ερωτήσεις που τέθηκαν από άλλους χρήστες. Εαν απαντήσετε σε αυτές τις ερωτήσεις, οι απάντησή σας μπορεί να εμφανιστεί στο FAQ.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>H Δομή του FAQ (<strong>F</strong>requently (Συχνες)<strong>A</strong>sked (Ερωτούμενες)<strong>Q</strong>uestions(Ερωτήσεις)) είναι πολύ απλή. Μπορείτε είτε να αναζητήσετε <strong><a href=\"".$_SERVER["PHP_SELF"]."?action=show\">κατηγορίες</a></strong> η να αφήσετε τη <strong><a href=\"".$_SERVER["PHP_SELF"]."?action=search\">μηχανή αναζήτησης</a></strong> για λέξεις κλειδιά.</p>";
+$PMF_LANG["msgHelpText"] = "<p>H Δομή του FAQ (<strong>F</strong>requently (Συχνες)<strong>A</strong>sked (Ερωτούμενες)<strong>Q</strong>uestions(Ερωτήσεις)) είναι πολύ απλή. Μπορείτε είτε να αναζητήσετε <strong><a href=\"?action=show\">κατηγορίες</a></strong> η να αφήσετε τη <strong><a href=\"?action=search\">μηχανή αναζήτησης</a></strong> για λέξεις κλειδιά.</p>";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "αποστολή e-mail προς το διαχειριστή:";

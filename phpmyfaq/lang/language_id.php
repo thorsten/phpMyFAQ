@@ -130,9 +130,9 @@ $PMF_LANG["msgHelpText"] = "<p>Struktur dari FAQ
 (<strong>F</strong>requently <strong>A</strong>sked
 <strong>Q</strong>uestions) sangat sederhana. Anda dapat melakukan pencarian
 terhadap <strong><a
-href=\"".$_SERVER["PHP_SELF"]."?action=show\">kategori</a></strong> atau
+href=\"?action=show\">kategori</a></strong> atau
 anda dapat meminta <strong><a
-href=\"".$_SERVER["PHP_SELF"]."?action=search\">mesin pencarian
+href=\"?action=search\">mesin pencarian
 FAQ</a></strong> untuk mencari terhadap kata kunci.</p>";
 
 // Contact

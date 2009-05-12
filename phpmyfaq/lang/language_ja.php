@@ -121,7 +121,7 @@ $PMF_LANG["msg2answer"] = "回答";
 $PMF_LANG["msgQuestionText"] = "他のユーザーが質問した内容を確認することができます。質問に答えた場合、管理者の確認後、FAQに追加されます。";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>このFAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) の利用方法が簡単です。<strong><a href=\"".$_SERVER["PHP_SELF"]."?action=show\">カテゴリ</a></strong> から関連内容を項目別に探すか <strong><a href=\"".$_SERVER["PHP_SELF"]."?action=search\">検索</a></strong> からキーワードを入力して探すことができます。</p>";
+$PMF_LANG["msgHelpText"] = "<p>このFAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) の利用方法が簡単です。<strong><a href=\"?action=show\">カテゴリ</a></strong> から関連内容を項目別に探すか <strong><a href=\"?action=search\">検索</a></strong> からキーワードを入力して探すことができます。</p>";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "管理者に電子メール:";

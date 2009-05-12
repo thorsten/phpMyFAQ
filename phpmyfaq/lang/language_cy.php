@@ -118,7 +118,7 @@ $PMF_LANG["msg2answer"] = "Ateb";
 $PMF_LANG["msgQuestionText"] = "Gallwch weld cwestiynau a ofynnwyd gan ddefnyddwyr eraill yma. Os byddwch yn ateb y cwestiynau hyn, efallai caiff eich atebion eu cynnwys yn y Cwestiynau Cyffredin.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>Mae strwythur CC (Cwestiynau Cyffredin) yn eithaf syml. Gallwch naill ai chwilio’r <strong><a href=\"".$_SERVER["PHP_SELF"]."?action=show\">Categorïau</a></strong> neu adael i <strong><a href=\"".$_SERVER["PHP_SELF"]."?action=search\">beiriant chwilio CC</a></strong> chwilio am eiriau allweddol.</p>";
+$PMF_LANG["msgHelpText"] = "<p>Mae strwythur CC (Cwestiynau Cyffredin) yn eithaf syml. Gallwch naill ai chwilio’r <strong><a href=\"?action=show\">Categorïau</a></strong> neu adael i <strong><a href=\"?action=search\">beiriant chwilio CC</a></strong> chwilio am eiriau allweddol.</p>";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "e-bostio at y gwefeistr:";

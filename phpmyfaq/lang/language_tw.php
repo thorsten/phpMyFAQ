@@ -122,7 +122,7 @@ $PMF_LANG["msg2answer"] = "回答";
 $PMF_LANG["msgQuestionText"] = "這裡您可以看到別的用戶列出的問題. 如果您回答了這些問題, 您的回答有可能會被加入FAQ.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>FAQ的架構(<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) 是很簡單的. 您可以按照<strong><a href=\"".$_SERVER["PHP_SELF"]."連action=show\">類別</a></strong>搜尋或者遞鿎輸入關鍵字讓<strong><a href=\"".$_SERVER["PHP_SELF"]."連action=search\">FAQ搜尋引擎</a></strong>來搜尋.</p>";
+$PMF_LANG["msgHelpText"] = "<p>FAQ的架構(<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) 是很簡單的. 您可以按照<strong><a href=\"連action=show\">類別</a></strong>搜尋或者遞鿎輸入關鍵字讓<strong><a href=\"連action=search\">FAQ搜尋引擎</a></strong>來搜尋.</p>";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "發郵件給管理員:";

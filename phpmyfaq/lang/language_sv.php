@@ -118,7 +118,7 @@ $PMF_LANG["msg2answer"] = "Svara";
 $PMF_LANG["msgQuestionText"] = "Här finns obesvarade/öppna frågor som du kan besvara. Om kontrollpanelen godkänner ditt svar, publiceras det.";
 
 // Hjälp
-$PMF_LANG["msgHelpText"] = "<p>Hitta svaret på din fråga genom att antingen navigera med hjälp av <strong><a href=\"".$_SERVER["PHP_SELF"]."?action=show\">kategorierna</a></strong> eller söka efter nyckelord med <strong><a href=\"".$_SERVER["PHP_SELF"]."?action=search\">sökmotorn.</a></strong></p>";
+$PMF_LANG["msgHelpText"] = "<p>Hitta svaret på din fråga genom att antingen navigera med hjälp av <strong><a href=\"?action=show\">kategorierna</a></strong> eller söka efter nyckelord med <strong><a href=\"?action=search\">sökmotorn.</a></strong></p>";
 
 // Kontakt
 $PMF_LANG["msgContactEMail"] = "Skicka e-post till kontrollpanelen:";

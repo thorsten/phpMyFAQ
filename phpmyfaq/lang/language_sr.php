@@ -119,7 +119,7 @@ $PMF_LANG["msg2answer"] = "odgovori";
 $PMF_LANG["msgQuestionText"] = "Ovde mo&#382;ete videti pitanja postavljena od strane drugih korisnika. Ako odgovorite na neko od pitanja, va&#353 odgovor mo&#382;e biti dodan u FAQ.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<strong>Struktura FAQ-a je jednostavna. Mo&#382;ete pregledati <strong><a href=\"".$_SERVER["PHP_SELF"]."?sid=".isset($_GET["sid"])."&amp;action=show\">kategorije</a></strong>, ili iskoristiti <strong><a href=\"".$_SERVER["PHP_SELF"]."?sid=".isset($_GET["sid"])."&amp;action=search\">FAQ pretra&#382;iva&#269;</a></strong> da na&#273;ete odre&#269;ene re&#269;i";
+$PMF_LANG["msgHelpText"] = "<strong>Struktura FAQ-a je jednostavna. Mo&#382;ete pregledati <strong><a href=\"?sid=".isset($_GET["sid"])."&amp;action=show\">kategorije</a></strong>, ili iskoristiti <strong><a href=\"?sid=".isset($_GET["sid"])."&amp;action=search\">FAQ pretra&#382;iva&#269;</a></strong> da na&#273;ete odre&#269;ene re&#269;i";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "pošaljite webmasteru:";

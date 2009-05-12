@@ -121,7 +121,7 @@ $PMF_LANG["msg2answer"] = "תשובה";
 $PMF_LANG["msgQuestionText"] = "כאן תוכל לראות שאלות שנשאלו על ידי משתמשים אחרים. אם הינך יודע את התשובה לשאלה, אנא שלח אותה והשאלה והתשובה יתווספו כערך לאתר.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>מבנה השאלה הנפוצה הינו די פשוט אתה יכול לחפש את ה<strong><a href=\"".$_SERVER["PHP_SELF"]."?action=show\">קטגוריה</a></strong>או לאפשר ל<strong><a href=\"".$_SERVER["PHP_SELF"]."?action=search\">מנוע חיפוש השאלות הנפוצות</a></strong> לחפש מילת מפתח.</p>";
+$PMF_LANG["msgHelpText"] = "<p>מבנה השאלה הנפוצה הינו די פשוט אתה יכול לחפש את ה<strong><a href=\"?action=show\">קטגוריה</a></strong>או לאפשר ל<strong><a href=\"?action=search\">מנוע חיפוש השאלות הנפוצות</a></strong> לחפש מילת מפתח.</p>";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "שלח דואל לעורך האתר:";

@@ -118,7 +118,7 @@ $PMF_LANG["msg2answer"] = "odgovor";
 $PMF_LANG["msgQuestionText"] = "Tukaj lahko vidiš vprašanja drugih uporabnikov. &Egrave;e odgovoriš na katero vprašanje, bo tvoj odgovor mogo&egrave;e dodan v seznam.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>Struktura aplikacije vprašanja je zelo preposta. Lahko iš&egrave;eš <strong><a href=\"".$_SERVER["PHP_SELF"]."?sid=".isset($_GET["sid"])."&amp;action=show\">po kategorijah</a></strong> ali <strong><a href=\"".$_SERVER["PHP_SELF"]."?sid=".isset($_GET["sid"])."&amp;action=search\">napredno iskanje</a></strong> po besedah.</p>";
+$PMF_LANG["msgHelpText"] = "<p>Struktura aplikacije vprašanja je zelo preposta. Lahko iš&egrave;eš <strong><a href=\"?sid=".isset($_GET["sid"])."&amp;action=show\">po kategorijah</a></strong> ali <strong><a href=\"?sid=".isset($_GET["sid"])."&amp;action=search\">napredno iskanje</a></strong> po besedah.</p>";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "email za webmasterja:";

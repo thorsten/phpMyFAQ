@@ -130,7 +130,7 @@ $PMF_LANG["msg2answer"] = "Answer";
 $PMF_LANG["msgQuestionText"] = "Here you can see questions asked by other users. If you answer these question, your answers may be inserted into the FAQ.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>The structure of the FAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) is quite simple. You can either search the <strong><a href=\"".$_SERVER["PHP_SELF"]."?action=show\">categories</a></strong> or let the <strong><a href=\"".$_SERVER["PHP_SELF"]."?action=search\">FAQ search engine</a></strong> search for keywords.</p>";
+$PMF_LANG["msgHelpText"] = "<p>The structure of the FAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) is quite simple. You can either search the <strong><a href=\"?action=show\">categories</a></strong> or let the <strong><a href=\"?action=search\">FAQ search engine</a></strong> search for keywords.</p>";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "e-mail to the webmaster:";

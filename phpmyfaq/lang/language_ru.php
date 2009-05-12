@@ -117,7 +117,7 @@ $PMF_LANG["msg2answer"] = "ќтветить";
 $PMF_LANG["msgQuestionText"] = "«десь наход€тс€ вопросы заданные пользовател€ми и еще не получившими свой ответ. ≈сли вы ответите на какой нибудь из вопросов, то он после проверки администратором будет перенесен в основной раздел F.A.Q.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>—труктура нашей F.A.Q. системы (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) системы проста и удобна и € думаю у вас не возникнет вопросов: 'как и что?'. ¬ы можете просмотреть список <strong><a href=\"".$_SERVER["PHP_SELF"]."?sid=".isset($_GET["sid"])."&amp;aktion=anzeigen\">разделов</a></strong> или воспользоватьс€ функцией <strong><a href=\"".$_SERVER["PHP_SELF"]."?sid=".isset($_GET["sid"])."&amp;aktion=search\">поиска по всей базе</a></strong>.</p>";
+$PMF_LANG["msgHelpText"] = "<p>—труктура нашей F.A.Q. системы (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) системы проста и удобна и € думаю у вас не возникнет вопросов: 'как и что?'. ¬ы можете просмотреть список <strong><a href=\"?sid=".isset($_GET["sid"])."&amp;aktion=anzeigen\">разделов</a></strong> или воспользоватьс€ функцией <strong><a href=\"?sid=".isset($_GET["sid"])."&amp;aktion=search\">поиска по всей базе</a></strong>.</p>";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "«десь вы можете написать письмо веб-мастеру:";

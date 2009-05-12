@@ -119,7 +119,7 @@ $PMF_LANG["msg2answer"] = "svar";
 $PMF_LANG["msgQuestionText"] = "Her kan du se sp&oslash;rgsm&aring;l oprettet af andre brugere. Hvis du besvarer et sp&oslash;rgsm&aring;l, bliver dit svar muligvis brugt i FAQ'en.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>Strukturen af denne FAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) er rimelig simpel. Du kan enten navigere i <strong><a href=\"".$_SERVER["PHP_SELF"]."?sid=".isset($_GET["sid"])."&amp;action=show\">kategorierne</a></strong> eller lade <strong><a href=\"".$_SERVER["PHP_SELF"]."?sid=".isset($_GET["sid"])."&amp;action=search\">FAQ maskinen</a></strong> s&oslash;ge efter n&oslash;gleord.</p>";
+$PMF_LANG["msgHelpText"] = "<p>Strukturen af denne FAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) er rimelig simpel. Du kan enten navigere i <strong><a href=\"?sid=".isset($_GET["sid"])."&amp;action=show\">kategorierne</a></strong> eller lade <strong><a href=\"?sid=".isset($_GET["sid"])."&amp;action=search\">FAQ maskinen</a></strong> s&oslash;ge efter n&oslash;gleord.</p>";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "send e-mail til webmaster:";

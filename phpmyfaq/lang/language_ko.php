@@ -118,7 +118,7 @@ $PMF_LANG["msg2answer"] = "답변";
 $PMF_LANG["msgQuestionText"] = "다른 사용자가 질문한 내용을 보실 수 있습니다. 질문에 답변하시면 FAQ에 추가될 수 있습니다.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>FAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) 의 사용 방법은 간단합니다. <strong><a href=\"".$_SERVER["PHP_SELF"]."?action=show\">카테고리</a></strong> 에서 궁금한 내용을 항목별로 찾거나 <strong><a href=\"".$_SERVER["PHP_SELF"]."?action=search\">검색</a></strong> 에서 검색어를 입력하여 찾으실 수 있습니다.</p>";
+$PMF_LANG["msgHelpText"] = "<p>FAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) 의 사용 방법은 간단합니다. <strong><a href=\"?action=show\">카테고리</a></strong> 에서 궁금한 내용을 항목별로 찾거나 <strong><a href=\"?action=search\">검색</a></strong> 에서 검색어를 입력하여 찾으실 수 있습니다.</p>";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "관리자에게 메일 보내기:";

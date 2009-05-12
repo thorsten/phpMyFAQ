@@ -122,8 +122,8 @@ $PMF_LANG["msgQuestionText"] =  "这里你可以看到别的用户提出的问�
 
 // Help
 $PMF_LANG["msgHelpText"] = "<p><strong>常见问题解答</strong>系统的结构经常简单，你可以按照<strong><a
-href=\"".$_SERVER["PHP_SELF"]."?action=show\">类别</a></strong>来查询，或者通过<strong><a
-href=\"".$_SERVER["PHP_SELF"]."?action=search\">搜索引擎</a></strong>来搜索索关键词.</p>";
+href=\"?action=show\">类别</a></strong>来查询，或者通过<strong><a
+href=\"?action=search\">搜索引擎</a></strong>来搜索索关键词.</p>";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "给管理员发邮件:";

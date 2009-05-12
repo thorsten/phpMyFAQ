@@ -119,7 +119,7 @@ $PMF_LANG["msg2answer"] = "trả lời";
 $PMF_LANG["msgQuestionText"] = "Tại đây, bạn có thể xem những câu hỏi do những thành viên khác nêu ra. Bạn có thể đề nghị một câu trả lời, câu trả lời của bạn có thể được sử dụng làm lời giải đáp trong phần Các câu hỏi thường gặp.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>Cấu trúc của phần 'Các câu hỏi thường gặp' khá đơn giản. Bạn có thể tìm kiếm <strong><a href=\"".$_SERVER["PHP_SELF"]."?action=show\">thông qua các mục</a></strong> hay để cho <strong><a href=\"".$_SERVER["PHP_SELF"]."?action=search\">hệ thống</a></strong> tìm thông qua từ khóa.</p>";
+$PMF_LANG["msgHelpText"] = "<p>Cấu trúc của phần 'Các câu hỏi thường gặp' khá đơn giản. Bạn có thể tìm kiếm <strong><a href=\"?action=show\">thông qua các mục</a></strong> hay để cho <strong><a href=\"?action=search\">hệ thống</a></strong> tìm thông qua từ khóa.</p>";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "Gửi email cho bộ phận hỗ trợ kỹ thuật của chúng tôi:";

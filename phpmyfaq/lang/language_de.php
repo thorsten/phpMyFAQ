@@ -121,7 +121,7 @@ $PMF_LANG["msgQuestionText"] = "Hier sind die Fragen von verschiedenen Usern zu 
 $PMF_LANG["msgNoQuestionsAvailable"] = "Derzeit gibt es keine offenen Fragen.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>Die FAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions - Häufig gestellte Fragen) ist recht einfach aufgebaut. Man kann entweder die <a href=\"".$_SERVER["PHP_SELF"]."?action=show\">Kategorien durchsuchen</a> oder auch unsere <a href=\"".$_SERVER["PHP_SELF"]."?action=search\">FAQ-Suchmaschine</a> nach Stichwörtern suchen lassen.</p>\n";
+$PMF_LANG["msgHelpText"] = "<p>Die FAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions - Häufig gestellte Fragen) ist recht einfach aufgebaut. Man kann entweder die <a href=\"?action=show\">Kategorien durchsuchen</a> oder auch unsere <a href=\"?action=search\">FAQ-Suchmaschine</a> nach Stichwörtern suchen lassen.</p>\n";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "E-Mail an den Betreiber:";

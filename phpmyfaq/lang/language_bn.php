@@ -125,7 +125,7 @@ $PMF_LANG["msg2answer"] = "উত্তর";
 $PMF_LANG["msgQuestionText"] = "এখানে আপনি অন্য ব্যবহারকারীর প্রশ্ন দেখতে পারেন। আপনি কোন প্রশ্নের উত্তর দিলে তা প্রশ্ন-উত্তর তালিকায় আসার সম্ভাবনা আছে।";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>প্রশ্ন-উত্তর তালিকার কাঠামো খুবই সরল। আপনি <strong><a href=\"".$_SERVER["PHP_SELF"]."?action=show\">বিভাগ</a></strong> অনুসারে খুঁজতে পারেন অথবা প্রশ্ন-উত্তর তালিকা <strong><a href=\"".$_SERVER["PHP_SELF"]."?action=search\">অনুসন্ধান ব্যবস্থা</a></strong> ব্যবহার করে আপনার ইচ্ছা মত শব্দ দিয়ে খুঁজতে পারেন।</p>";
+$PMF_LANG["msgHelpText"] = "<p>প্রশ্ন-উত্তর তালিকার কাঠামো খুবই সরল। আপনি <strong><a href=\"?action=show\">বিভাগ</a></strong> অনুসারে খুঁজতে পারেন অথবা প্রশ্ন-উত্তর তালিকা <strong><a href=\"?action=search\">অনুসন্ধান ব্যবস্থা</a></strong> ব্যবহার করে আপনার ইচ্ছা মত শব্দ দিয়ে খুঁজতে পারেন।</p>";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "ওয়েবমাস্টারকে ই-মেইল করুন:";

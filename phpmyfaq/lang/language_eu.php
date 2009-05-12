@@ -120,7 +120,7 @@ $PMF_LANG["msg2answer"] = "Erantzuna";
 $PMF_LANG["msgQuestionText"] = "Hemen beste erabiltzaileen galderak <strong>ikus</strong> eta <strong>erantzun</strong> ditzakezu. FAQean erantsiko dira.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>FAQaren egitura(<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions)nahiko sinplea da. <strong><a href=\"".$_SERVER["PHP_SELF"]."?action=show\">Atal</a></strong> ezberdinen artean bilatzea hauta dezakezu edota <strong><a href=\"".$_SERVER["PHP_SELF"]."?action=search\">bilatzaileak</a></strong> hitz klabeak erakusteko hautatu.</p>";
+$PMF_LANG["msgHelpText"] = "<p>FAQaren egitura(<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions)nahiko sinplea da. <strong><a href=\"?action=show\">Atal</a></strong> ezberdinen artean bilatzea hauta dezakezu edota <strong><a href=\"?action=search\">bilatzaileak</a></strong> hitz klabeak erakusteko hautatu.</p>";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "Administratzaileari idatzi:";

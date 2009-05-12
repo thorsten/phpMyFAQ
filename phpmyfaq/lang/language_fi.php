@@ -119,7 +119,7 @@ $PMF_LANG["msg2answer"] = "vastaus";
 $PMF_LANG["msgQuestionText"] = "Täältä näet muiden käyttäjien kysymät kysymykset. Jos vastaat kysymykseen, vastauksesi voi päätyä FAQ tietoihin.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>FAQ:n (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) rakenne on melko yksinkertainen. Voit joko selata <strong><a href=\"".$_SERVER["PHP_SELF"]."?action=show\">kategorioita</a></strong> tai anna <strong><a href=\"".$_SERVER["PHP_SELF"]."?action=search\">FAQ hakukoneen</a></strong> etsiä avainsanoja.</p>";
+$PMF_LANG["msgHelpText"] = "<p>FAQ:n (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) rakenne on melko yksinkertainen. Voit joko selata <strong><a href=\"?action=show\">kategorioita</a></strong> tai anna <strong><a href=\"?action=search\">FAQ hakukoneen</a></strong> etsiä avainsanoja.</p>";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "sähköposti ylläpitäjälle:";
