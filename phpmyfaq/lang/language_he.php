@@ -564,7 +564,7 @@ $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "שם היוצר");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "כתובת הדואל של עורך האתר");
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "מידע ליצירת קשר");
 $LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "טקסט לעמוד שלח לחבר");
-$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "גודל מקסימלי של קובץ מצורף ב- Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
+$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "גודל מקסימלי של קובץ מצורף ב- Bytes (max. %sByte)");
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "קשר לקובץ המצורף בתחתית הערך?");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "אפשר רישום של פעילות המשתמשים?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "אפשר רישום של פעילות המנהל ?");

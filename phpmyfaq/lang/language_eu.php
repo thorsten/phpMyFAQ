@@ -561,7 +561,7 @@ $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Administratzaileare
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Administratzailearen posta elektronikoa");
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Harremanetarako informazioa");
 $LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "<em>Lagun bati bidali</em> orrirako testua");
-$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Eranskinetako gehieneko tamaina byte-etan (max. ".ini_get("upload_max_filesize")."Byte)");
+$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Eranskinetako gehieneko tamaina byte-etan (max. %sByte)");
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Sarrera azpian eranskinei estekaren bat ipini?");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "Monitorizazioa erabili?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Adminlog-a erabili?");

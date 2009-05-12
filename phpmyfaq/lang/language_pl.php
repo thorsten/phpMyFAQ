@@ -561,7 +561,7 @@ $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Imiê autora");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Adres e-mail administraotra");
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Informacje kontaktowe");
 $LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Tekst na stronie wy¶lij do znajomego");
-$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "maksymalny rozmiar za³±cznika w bajtach (maks. ".ini_get("upload_max_filesize")."bajtów)");
+$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "maksymalny rozmiar za³±cznika w bajtach (maks. %sbajtów)");
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Linkuj za³aczniki pod wpisami?");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "u¿ywaj statystyk?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "u¿ywaj logowania dzia³añ administratora?");

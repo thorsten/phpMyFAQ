@@ -558,7 +558,7 @@ $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Utgiversnavn");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Administrators e-postadresse");
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Kontaktinformasjon");
 $LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Tekst for send2friend-siden");
-$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "maksimum størrelse for vedlegg i byte (maks. ".ini_get("upload_max_filesize")."Byte)");
+$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "maksimum størrelse for vedlegg i byte (maks. %sByte)");
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Lenke til vedlegg under oppføringene?");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "bruk Tracking?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "bruk adminlogg?");

@@ -599,7 +599,7 @@ $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "إسم الناشر
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "البريد الإلكتروني للمشر�?");
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "معلومات الإتصال");
 $LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "نص لص�?حة أرسل إلي صديق");
-$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "أقصى حجم للمر�?قات بالبايت (max. ".ini_get("upload_max_filesize")."بايت)");
+$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "أقصى حجم للمر�?قات بالبايت (max. %sبايت)");
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "ضع روابط المر�?قات أس�?ل المداخلات ؟");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "استخدم خاصية التتبع ؟");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "استخدم خاصية سجل المشر�?ين ؟");

@@ -558,7 +558,7 @@ $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Yayıncı Adı");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Yönetici E-posta Adresi");
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "İletişim Bilgisi");
 $LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Arkadaşa gönder sayfası için metin");
-$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Maksimum ek boyutu (maks. ".ini_get("upload_max_filesize")."Byte)");
+$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Maksimum ek boyutu (maks. %sByte)");
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Ekleri girdilerin altına linkle?");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "İzleme kullan?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Yönetici kütüğü kullan?");

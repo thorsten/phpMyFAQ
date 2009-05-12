@@ -575,7 +575,7 @@ $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "管理员姓名");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "管理员Email");
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "联系我们");
 $LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "发送到朋友页面的文字");
-$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "附件最大限制是 (. ".ini_get("upload_max_filesize")."字节)");
+$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "附件最大限制是 (. %s字节)");
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "显示内容附件？");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "启用跟踪？");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "启用操作日志？");

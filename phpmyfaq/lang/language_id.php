@@ -642,7 +642,7 @@ $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Informasi
 Hubungan");
 $LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Naskah untuk
 pengiriman ke teman");
-$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Ukuran maksimum file berkas dalam Bytes (maksimum. ".ini_get("upload_max_filesize")."Byte)");
+$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "Ukuran maksimum file berkas dalam Bytes (maksimum. %sByte)");
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Sediakan hubungkan ke
 file berkas di bawah materi?");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "Aktifkan penelusuran?");

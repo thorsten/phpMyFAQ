@@ -560,7 +560,7 @@ $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Namn på ansvarig");
 $LANG_CONF["adminmail"] = array(0 => "input", 1 => "Emailadress till admin");
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Kontaktinformation");
 $LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Text för skicka-till-en-vän-sidan");
-$LANG_CONF["attmax"] = array(0 => "input", 1 => "Maximal storlek på bilagor (max. ".ini_get("upload_max_filesize")."Byte)");
+$LANG_CONF["attmax"] = array(0 => "input", 1 => "Maximal storlek på bilagor (max. %sByte)");
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Länka bilagorna under frågorna?");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "Spårning?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Adminlogg?");

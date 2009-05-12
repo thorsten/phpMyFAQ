@@ -563,7 +563,7 @@ $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "發佈者姓名");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "管理員電郵");
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "連絡資料");
 $LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "傳遞到朋友頁面的文字");
-$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "附件最大限制是".ini_get("upload_max_filesize")."位元組");
+$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "附件最大限制是%s位元組");
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "連接記錄下的附件？");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "啟用跟蹤？");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "啟用管理員日誌？");

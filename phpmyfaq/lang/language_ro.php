@@ -558,7 +558,7 @@ $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Numele autorului");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Adresa de email a administratorului");
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Informatii de contact");
 $LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Text pentru pagina de recomandare");
-$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "marimea maxima a fisierelor care pot fi uploadate in Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
+$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "marimea maxima a fisierelor care pot fi uploadate in Bytes (max. %sByte)");
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Link the attachments below the entries?");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "utilizeaza monitorizarea?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "utilizeaza monitorizarea activitatii de admin?");

@@ -570,7 +570,7 @@ $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Name of the Publish
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Emailadress of the Admin");
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Contactinformation");
 $LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Text for the send2friend page");
-$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "maximum Size for attachments in Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
+$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "maximum Size for attachments in Bytes (max. %sByte)");
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Link the attachments below the entries?");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "use Tracking?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "use Adminlog?");

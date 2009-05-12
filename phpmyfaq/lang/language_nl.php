@@ -559,7 +559,7 @@ $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Naam van de uitgeve
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Emailadres van de beheerder");
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Contact informatie");
 $LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Tekst voor de send2friend pagina");
-$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "maximum grootte van bijlagen in Bytes (max. ".ini_get("upload_max_filesize")."Byte)");
+$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "maximum grootte van bijlagen in Bytes (max. %sByte)");
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "De bijlagen onder de records aantonen?");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "Tracking activeren?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Beheerlog activeren?");

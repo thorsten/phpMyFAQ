@@ -559,7 +559,7 @@ $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Ime izdava&#269;a")
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Admin email adresa");
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Kontakt info");
 $LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Tekst za send2friend stranicu");
-$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "maximalna veli&#269;ina priloga u bajtovima (max. ".ini_get("upload_max_filesize")."Byte)");
+$LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => "maximalna veli&#269;ina priloga u bajtovima (max. %sByte)");
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Linkuj priloge ispod unosa?");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "Koristi pra&#263;enje?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Koristi Adminlog?");

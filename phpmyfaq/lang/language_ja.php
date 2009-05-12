@@ -564,7 +564,7 @@ $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "管理者名");
 $LANG_CONF["main.administrationMail"] = array(0 => "input", 1 => "管理者の電子メールアドレス");
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "問い合わせ情報");
 $LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "友達に送信ページのテキスト");
-$LANG_CONF["main.maxAttachmentSize"] = array(0 => "input", 1 => "添付ファイルの最大サイズ (最大 ".ini_get("upload_max_filesize")." バイト)");
+$LANG_CONF["main.maxAttachmentSize"] = array(0 => "input", 1 => "添付ファイルの最大サイズ (最大 %s バイト)");
 $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "エントリの下に添付のリンクを表示する");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "追跡機能を使用する");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "管理ログを使用する");
