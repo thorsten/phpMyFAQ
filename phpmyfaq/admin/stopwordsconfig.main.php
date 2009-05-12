@@ -6,8 +6,8 @@
  * @subpackage Administration
  * @author     Anatoliy Belsky
  * @since      2009-04-01
- * @copyright  2009 phpMyFAQ Team
  * @version    SVN: $Id$
+ * @copyright  2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -27,12 +27,16 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 
 if ($permission['editconfig']) {
     printf('<h2>%s</h2', $PMF_LANG['ad_menu_stopwordsconfig']);
+
+    $sortedLanguageCodes = $languageCodes;
+    asort($sortedLanguageCodes);
+    reset($sortedLanguageCodes);
 ?>
 
 <p>
     <select onchange="loadStopWordsByLang(this.options[this.selectedIndex].value)" id="stopwords_lang_selector">
     <option value="none">---</option>
-<?php foreach($languageCodes as $key => $value) { ?>
+<?php foreach($sortedLanguageCodes as $key => $value) { ?>
     <option value="<?php print strtolower($key); ?>"><?php print $value; ?></option>    
 <?php } ?>
     </select>
