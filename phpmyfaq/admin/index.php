@@ -308,18 +308,21 @@ if (isset($auth) && in_array(true, $permission)) {
         // start page with some informations about the FAQ
         printf('<h2>%s</h2>', $PMF_LANG['ad_pmf_info']);
         $PMF_TABLE_INFO = $db->getTableStatus();
+        $faq->getAllRecords(FAQ_SORTING_TYPE_CATID_FAQID, array('fd.active' => 'no'));
 ?>
     <dl class="table-display">
-        <dt><strong><a href="?action=viewsessions"><?php print $PMF_LANG["ad_start_visits"]; ?></a></strong></dt>
+        <dt><strong>&rarr; <a href="?action=viewsessions"><?php print $PMF_LANG["ad_start_visits"]; ?></a></strong></dt>
         <dd><?php print $PMF_TABLE_INFO[SQLPREFIX."faqsessions"]; ?></dd>
-        <dt><strong><a href="?action=view"><?php print $PMF_LANG["ad_start_articles"]; ?></a></strong></dt>
+        <dt><strong>&rarr; <a href="?action=view"><?php print $PMF_LANG["ad_start_articles"]; ?></a></strong></dt>
         <dd><?php print $PMF_TABLE_INFO[SQLPREFIX."faqdata"]; ?></dd>
-        <dt><strong><a href="?action=comments"><?php print $PMF_LANG["ad_start_comments"]; ?></strong></a></dt>
+        <dt><strong>&rarr; <a href="?action=accept"><?php print $PMF_LANG['ad_start_notactive']; ?></a></strong></dt>
+        <dd><?php print count($faq->faqRecords); ?></dd>
+        <dt><strong>&rarr; <a href="?action=comments"><?php print $PMF_LANG["ad_start_comments"]; ?></strong></a></dt>
         <dd><?php print $PMF_TABLE_INFO[SQLPREFIX."faqcomments"]; ?></dd>
-        <dt><strong><a href="?action=question"><?php print $PMF_LANG["msgOpenQuestions"]; ?></strong></a></dt>
+        <dt><strong>&rarr; <a href="?action=question"><?php print $PMF_LANG["msgOpenQuestions"]; ?></strong></a></dt>
         <dd><?php print $PMF_TABLE_INFO[SQLPREFIX."faqquestions"]; ?></dd>
     </dl>
-
+    
     <?php printf('<h2>%s</h2>', $PMF_LANG['ad_online_info']); ?>
     <div id="versioncheck">
 <?php

@@ -927,7 +927,8 @@ $PMF_LANG['ad_config_stopword_input'] = 'Add new stop word';
 $PMF_LANG['msgSendMailDespiteEverything'] = 'No, there is still no adequate answer (will send the mail)';
 $PMF_LANG['msgSendMailIfNothingIsFound'] = 'Is the wanted answer listed in the results above?';
 
-// added 2.5.0-beta - 2009-04-06 by Anatoliy
+// added 2.5.0-RC - 2009-05-11 by Anatoliy & Thorsten
 $PMF_LANG['msgChooseLanguageToTranslate'] = 'Please choose the language for translation';
 $PMF_LANG['msgLangDirIsntWritable'] = 'Translations dir isn\'t writable';
 $PMF_LANG['ad_menu_translations'] = 'Interface Translation';
+$PMF_LANG['ad_start_notactive'] = 'Waiting for activation';

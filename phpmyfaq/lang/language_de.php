@@ -916,3 +916,9 @@ $PMF_LANG['ad_config_stopword_input'] = 'Neues Stoppwort hinzufügen';
 // added 2.5.0-beta - 2009-04-06 by Anatoliy
 $PMF_LANG['msgSendMailDespiteEverything'] = 'Nein, keine passende Antwort gelistet (Mail senden)';
 $PMF_LANG['msgSendMailIfNothingIsFound'] = 'Ist die gesuchte Antwort oben gelistet?';
+
+// added 2.5.0-RC - 2009-05-11 by Anatoliy & Thorsten
+$PMF_LANG['msgChooseLanguageToTranslate'] = 'Bitte wählen Sie die zu übersetzende Sprache aus';
+$PMF_LANG['msgLangDirIsntWritable'] = 'Das Verzeichnis mit den Übersetzungen ist nicht beschreibbar';
+$PMF_LANG['ad_menu_translations'] = 'Übersetzung';
+$PMF_LANG['ad_start_notactive'] = 'Wartend auf Freischaltung';
