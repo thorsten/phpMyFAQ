@@ -462,7 +462,6 @@ $PMF_LANG["ad_start_visits"] = "Посещений";
 $PMF_LANG["ad_start_articles"] = "Записей";
 $PMF_LANG["ad_start_comments"] = "Комментариев";
 
-$PMF_LANG["ad_user_chpw"] = "Смена пароля для текущего пользователя возможна только через опцию \"Смена пароля\".";
 
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "вставить";

@@ -465,7 +465,6 @@ $PMF_LANG["ad_start_visits"] = "Besuche";
 $PMF_LANG["ad_start_articles"] = "Artikel";
 $PMF_LANG["ad_start_comments"] = "Kommentare";
 
-$PMF_LANG["ad_user_chpw"] = "Das Passwort des aktuellen Benutzers ist nur über die Funktion \"".$PMF_LANG["ad_menu_passwd"]."\" änderbar.";
 
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "einfügen";

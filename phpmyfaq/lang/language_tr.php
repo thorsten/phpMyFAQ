@@ -462,7 +462,6 @@ $PMF_LANG["ad_start_visits"] = "Ziyaretler";
 $PMF_LANG["ad_start_articles"] = "Makaleler";
 $PMF_LANG["ad_start_comments"] = "Yorumlar";
 
-$PMF_LANG["ad_user_chpw"] = "Sadece geçerli kullanıcının şifresini değiştirebilirsiniz \"".$PMF_LANG["ad_menu_passwd"]."\".";
 
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "yapıştır";

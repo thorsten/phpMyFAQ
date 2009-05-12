@@ -467,7 +467,6 @@ $PMF_LANG["ad_start_visits"] = "Visites";
 $PMF_LANG["ad_start_articles"] = "Articles";
 $PMF_LANG["ad_start_comments"] = "Commentaires";
 
-$PMF_LANG["ad_user_chpw"] = "Vous pouvez uniquement modifier le mot de passe de l'usager actuel via \"Modifier mot de passe\".";
 
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "coller";

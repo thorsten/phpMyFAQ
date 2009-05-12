@@ -463,7 +463,6 @@ $PMF_LANG["ad_start_visits"] = "Obiskov";
 $PMF_LANG["ad_start_articles"] = "&Egrave;lankov";
 $PMF_LANG["ad_start_comments"] = "Komentarjev";
 
-$PMF_LANG["ad_user_chpw"] = "Lahko spremeniš geslo uporabnika samo preko \"".$PMF_LANG["ad_menu_passwd"]."\".";
 
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "prilepi";

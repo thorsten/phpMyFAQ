@@ -461,7 +461,6 @@ $PMF_LANG["ad_start_visits"] = "Ymweliadau";
 $PMF_LANG["ad_start_articles"] = "Erthyglau";
 $PMF_LANG["ad_start_comments"] = "Sylwadau";
 
-$PMF_LANG["ad_user_chpw"] = "Gallwch newid cyfrinair y defnyddiwr personol  drwy yn unig\"".$PMF_LANG["ad_menu_passwd"]."\".";
 
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "pastio";

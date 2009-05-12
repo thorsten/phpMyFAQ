@@ -470,7 +470,6 @@ $PMF_LANG["ad_start_visits"] = "Visits";
 $PMF_LANG["ad_start_articles"] = "Articles";
 $PMF_LANG["ad_start_comments"] = "Comments";
 
-$PMF_LANG["ad_user_chpw"] = "You can only change the password of the current user via \"".$PMF_LANG["ad_menu_passwd"]."\".";
 
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "paste";

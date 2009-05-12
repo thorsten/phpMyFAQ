@@ -466,7 +466,6 @@ $PMF_LANG["ad_start_visits"] = "Accessi";
 $PMF_LANG["ad_start_articles"] = "FAQ";
 $PMF_LANG["ad_start_comments"] = "Commenti";
 
-$PMF_LANG["ad_user_chpw"] = "Puoi solo cambiare la password dell'utente corrente con \"".$PMF_LANG["ad_menu_passwd"]."\".";
 
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "Incolla";

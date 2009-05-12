@@ -464,7 +464,6 @@ $PMF_LANG["ad_start_visits"] = "Wizyt";
 $PMF_LANG["ad_start_articles"] = "Artyku³ów";
 $PMF_LANG["ad_start_comments"] = "Komentarzy";
 
-$PMF_LANG["ad_user_chpw"] = "U¿ywaj±c \"Zmieñ has³o\" mo¿esz zmieniæ tylko has³o danego u¿ytkownika.";
 
 
 // Added v1.1 - 30.01.2002 - Bastian

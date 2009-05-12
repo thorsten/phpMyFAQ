@@ -463,7 +463,6 @@ $PMF_LANG["ad_start_visits"] = "Besøk";
 $PMF_LANG["ad_start_articles"] = "Artikler";
 $PMF_LANG["ad_start_comments"] = "Kommentarer";
 
-$PMF_LANG["ad_user_chpw"] = "Du kan kun skifte passord på eksisterende bruker via \"Skift passord\".";
 
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "lim inn";

@@ -497,7 +497,6 @@ $PMF_LANG["ad_start_visits"] = "زيارات";
 $PMF_LANG["ad_start_articles"] = "مواضيع";
 $PMF_LANG["ad_start_comments"] = "تعليقات";
 
-$PMF_LANG["ad_user_chpw"] = "تستطيع �?قط تغيير كلمة مرور المستخدم الحالي عن
 طريق \"".$PMF_LANG["ad_menu_passwd"]."\".";
 
 // Added v1.1 - 30.01.2002 - Bastian

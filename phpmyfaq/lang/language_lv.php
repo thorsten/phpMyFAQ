@@ -460,7 +460,6 @@ $PMF_LANG["ad_log_bede"] = "Ieraksts dz&ccedil;sts: ";
 $PMF_LANG["ad_start_visits"] = "Apmekl&ccedil;jumi";
 $PMF_LANG["ad_start_articles"] = "Ieraksti";
 $PMF_LANG["ad_start_comments"] = "Koment&acirc;ri";
-$PMF_LANG["ad_user_chpw"] = "Paroli at&iuml;auts main&icirc;t tikai pa&eth;reiz&ccedil;jam sist&ccedil;m&acirc; eso&eth;am dal&icirc;bniekam ar \"Nomain&icirc;t paroli\".";
 
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "paste";

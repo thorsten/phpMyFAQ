@@ -466,7 +466,6 @@ $PMF_LANG["ad_start_visits"] = "Bisitak";
 $PMF_LANG["ad_start_articles"] = "Artikuluak";
 $PMF_LANG["ad_start_comments"] = "iruzkin";
 
-$PMF_LANG["ad_user_chpw"] = "Erabiltzailearen pasahitza soilik alda dezakezu \"Pasahitza aldatu\" erabiliz.";
 
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "itsatsi";

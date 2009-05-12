@@ -464,7 +464,6 @@ $PMF_LANG["ad_start_visits"] = "مشاهدات";
 $PMF_LANG["ad_start_articles"] = "مطالب";
 $PMF_LANG["ad_start_comments"] = "نظرات";
 
-$PMF_LANG["ad_user_chpw"] = "شما �?قط میتوانید رمز عبور کاربر زیر را از طریق \"".$PMF_LANG["ad_menu_passwd"]."\" تعویض کنید.";
 
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "الصاق";

@@ -464,7 +464,6 @@ $PMF_LANG["ad_start_visits"] = "방문";
 $PMF_LANG["ad_start_articles"] = "글(FAQ)";
 $PMF_LANG["ad_start_comments"] = "코멘트";
 
-$PMF_LANG["ad_user_chpw"] = "현재 사용자의 비밀번호는 \"".$PMF_LANG["ad_menu_passwd"]."\" 에서 변경하실 수 있습니다.";
 
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "붙여넣기";

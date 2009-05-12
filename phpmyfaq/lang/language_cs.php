@@ -470,7 +470,6 @@ $PMF_LANG["ad_start_visits"] = "Návštìv";
 $PMF_LANG["ad_start_articles"] = "Záznamù";
 $PMF_LANG["ad_start_comments"] = "Komentáøù";
 
-$PMF_LANG["ad_user_chpw"] = "Zmìnit mùžete jedinì heslo aktuálního uživatele \"Zmìò Heslo\".";
 
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "vložit";

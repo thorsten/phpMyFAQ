@@ -467,7 +467,6 @@ $PMF_LANG["ad_start_visits"] = "訪問数";
 $PMF_LANG["ad_start_articles"] = "記事数";
 $PMF_LANG["ad_start_comments"] = "コメント数";
 
-$PMF_LANG["ad_user_chpw"] = "現在のユーザーのパスワード変更は「".$PMF_LANG["ad_menu_passwd"]."」でできます。";
 
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "貼り付け";

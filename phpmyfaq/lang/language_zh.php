@@ -478,7 +478,6 @@ $PMF_LANG["ad_start_visits"] = "访问人数";
 $PMF_LANG["ad_start_articles"] = "问答条数";
 $PMF_LANG["ad_start_comments"] = "篇/评论";
 
-$PMF_LANG["ad_user_chpw"] = "请通过 \"".$PMF_LANG["ad_menu_passwd"]."\"修改当前用户的密码.";
 
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "粘贴";

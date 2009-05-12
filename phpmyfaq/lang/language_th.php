@@ -463,7 +463,6 @@ $PMF_LANG["ad_start_visits"] = "เยี่ยมชม";
 $PMF_LANG["ad_start_articles"] = "หัวข้อ";
 $PMF_LANG["ad_start_comments"] = "ความคิดเห็น";
 
-$PMF_LANG["ad_user_chpw"] = "คุณสามารถเปลี่ยนรหัสผ่านของผู้ใช้ที่ \"".$PMF_LANG["ad_menu_passwd"]."\"เท่านั้น";
 
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "วางทับ";

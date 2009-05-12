@@ -463,7 +463,6 @@ $PMF_LANG["ad_start_visits"] = "Látogatások";
 $PMF_LANG["ad_start_articles"] = "Hírek";
 $PMF_LANG["ad_start_comments"] = "Megjegyzések";
 
-$PMF_LANG["ad_user_chpw"] = "Az aktuális felhasználó jelszavát csak itt tudod módosítani: \"Jelszó változtatás\".";
 
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "beillesztés";

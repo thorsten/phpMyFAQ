@@ -464,7 +464,6 @@ $PMF_LANG["ad_start_visits"] = "Poseta";
 $PMF_LANG["ad_start_articles"] = "&#268;lanaka";
 $PMF_LANG["ad_start_comments"] = "Komentara";
 
-$PMF_LANG["ad_user_chpw"] = "Mo&#382;ete promeniti &#353;ifru za trenutnog korisnika preko \"".$PMF_LANG["ad_menu_passwd"]."\".";
 
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "paste";

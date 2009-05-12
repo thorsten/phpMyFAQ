@@ -464,7 +464,6 @@ $PMF_LANG["ad_start_visits"] = "Bes&oslash;g";
 $PMF_LANG["ad_start_articles"] = "Artikler";
 $PMF_LANG["ad_start_comments"] = "kommentarer";
 
-$PMF_LANG["ad_user_chpw"] = "Du kan kun skifte adgangskode p&aring; eksisterende bruger via \"Skift adgangskode\".";
 
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "s&aelig;t ind";

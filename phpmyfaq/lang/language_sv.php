@@ -464,7 +464,6 @@ $PMF_LANG["ad_start_visits"] = "Besök";
 $PMF_LANG["ad_start_articles"] = "Artiklar";
 $PMF_LANG["ad_start_comments"] = "Kommentarer";
 
-$PMF_LANG["ad_user_chpw"] = "Du kan endast ändra lösenordet för den aktuella användaren via \"".$PMF_LANG["ad_menu_passwd"]."\".";
 
 // Admin - flytta kategorier
 $PMF_LANG["ad_categ_paste"] = "klistra in";

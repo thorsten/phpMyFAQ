@@ -469,7 +469,6 @@ $PMF_LANG["ad_start_visits"] = "ביקורים";
 $PMF_LANG["ad_start_articles"] = "ערכים";
 $PMF_LANG["ad_start_comments"] = "תגובות";
 
-$PMF_LANG["ad_user_chpw"] = "אתה יכול רק לשנות את הסיסמה של המשתמש הנוכחי על ידי \"".$PMF_LANG["ad_menu_passwd"]."\".";
 
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "הדבק";
