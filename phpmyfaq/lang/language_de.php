@@ -30,15 +30,15 @@ $PMF_LANG["dir"] = "ltr";
 
 // Navigation
 $PMF_LANG["msgCategory"] = "Kategorien";
-$PMF_LANG["msgShowAllCategories"] = "alle Kategorien anzeigen";
-$PMF_LANG["msgSearch"] = "Volltextsuche";
-$PMF_LANG["msgAddContent"] = "Neue FAQ eintragen";
+$PMF_LANG["msgShowAllCategories"] = "Alle Kategorien";
+$PMF_LANG["msgSearch"] = "Suche";
+$PMF_LANG["msgAddContent"] = "FAQ vorschlagen";
 $PMF_LANG["msgQuestion"] = "Frage stellen";
 $PMF_LANG["msgOpenQuestions"] = "Offene Fragen";
-$PMF_LANG["msgHelp"] = "Hilfe zur FAQ";
+$PMF_LANG["msgHelp"] = "Hilfe";
 $PMF_LANG["msgContact"] = "Kontakt";
 $PMF_LANG["msgHome"] = "Startseite";
-$PMF_LANG["msgNews"] = "FAQ-News";
+$PMF_LANG["msgNews"] = "FAQ News";
 $PMF_LANG["msgUserOnline"] = " Besucher online";
 $PMF_LANG["msgXMLExport"] = "XML-Export";
 $PMF_LANG["msgBack2Home"] = "Zurück zur Startseite";
@@ -97,11 +97,11 @@ $PMF_LANG["msgSearchCategory"] = "Kategorie: ";
 $PMF_LANG["msgSearchContent"] = "Antwort: ";
 
 // new Content
-$PMF_LANG["msgNewContentHeader"] = "Vorschlag für FAQ-Eintrag";
-$PMF_LANG["msgNewContentAddon"] = "Der Eintrag erscheint nicht sofort, sondern wird vor der Veröffentlichung von uns überprüft. Pflichtfelder sind <strong>Name</strong>, <strong>E-Mail-Adresse</strong>, <strong>Kategorie</strong>, <strong>Frage</strong> und <strong>Antwort</strong>. Die Keywords bitte nur mit Leerzeichen trennen.";
+$PMF_LANG["msgNewContentHeader"] = "Vorschlag für neue FAQ";
+$PMF_LANG["msgNewContentAddon"] = "Ihr Vorschlag erscheint nicht sofort, sondern wird vor der Veröffentlichung von uns überprüft. Pflichtfelder sind <strong>Name</strong>, <strong>E-Mail-Adresse</strong>, <strong>Kategorie</strong>, <strong>Frage</strong> und <strong>Antwort</strong>. Die Keywords bitte nur mit Leerzeichen trennen.";
 $PMF_LANG["msgNewContentName"] = "Name:";
-$PMF_LANG["msgNewContentMail"] = "E-Mail-Adresse:";
-$PMF_LANG["msgNewContentCategory"] = "Zu welcher Kategorie gehört dieser Eintrag?";
+$PMF_LANG["msgNewContentMail"] = "E-Mail:";
+$PMF_LANG["msgNewContentCategory"] = "Kategorie:";
 $PMF_LANG["msgNewContentTheme"] = "Frage:";
 $PMF_LANG["msgNewContentArticle"] = "Antwort:";
 $PMF_LANG["msgNewContentKeywords"] = "Suchbegriffe:";
@@ -112,7 +112,7 @@ $PMF_LANG["msgNewContentThanks"] = "<p><strong>Vielen Dank für diesen Vorschlag!
 
 // ask Question
 $PMF_LANG["msgNewQuestion"] = "Auf dieser Seite können Fragen an die FAQ-Leser gestellt werden und so neue Artikeleinträge fördern. Nur durch Fragen können wir erfahren, zu welchen Themen Antworten gewünscht werden! Die offene Fragen erscheinen in der Kategorie der offenen Fragen.";
-$PMF_LANG["msgAskCategory"] = "Frage zur Kategorie ";
+$PMF_LANG["msgAskCategory"] = "Kategorie:";
 $PMF_LANG["msgAskYourQuestion"] = "Frage:";
 $PMF_LANG["msgAskThx4Mail"] = "<p><strong>Vielen Dank für diese Anfrage.</strong></p>";
 $PMF_LANG["msgDate_User"] = "Datum / User";
@@ -130,14 +130,14 @@ $PMF_LANG["msgMessage"] = "Anfrage:";
 
 // Startseite
 $PMF_LANG["msgNews"] = " News";
-$PMF_LANG["msgTopTen"] = "TOP 10";
+$PMF_LANG["msgTopTen"] = "Beliebte FAQs";
 $PMF_LANG["msgHomeThereAre"] = "Es sind ";
 $PMF_LANG["msgHomeArticlesOnline"] = " Artikel online";
 $PMF_LANG["msgNoNews"] = "Es gibt derzeit keine News.";
-$PMF_LANG["msgLatestArticles"] = "Die neuesten Artikel:";
+$PMF_LANG["msgLatestArticles"] = "Neueste FAQs";
 
 // E-Mailbenachrichtigung
-$PMF_LANG["msgMailThanks"] = "Vielen Dank fuer den FAQ-Vorschlag";
+$PMF_LANG["msgMailThanks"] = "Vielen Dank für den Vorschlag";
 $PMF_LANG["msgMailCheck"] = "Es ist ein neuer Eintrag für Ihre FAQ vorhanden!\nBitte im Adminbereich der FAQ überprüfen!";
 $PMF_LANG["msgMailContact"] = "Die Anfrage wurde an den Administrator versendet!";
 
@@ -146,7 +146,7 @@ $PMF_LANG["err_noDatabase"] = "<p>Keine Datenbankverbindung möglich!</p>";
 $PMF_LANG["err_noHeaders"] = "<p>Keine Kategorie gefunden!</p>";
 $PMF_LANG["err_noArticles"] = "<p>Es gibt noch keine Einträge.</p>";
 $PMF_LANG["err_badID"] = "<p>Fehlerhafte ID!</p>";
-$PMF_LANG["err_noTopTen"] = "<p>Derzeit ist keine TOP TEN verfügbar</p>";
+$PMF_LANG["err_noTopTen"] = "<p>Derzeit sind keine beliebten FAQs verfügbar.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>Es wurde kein Eintrag gefunden.</p>";
 $PMF_LANG["err_SaveEntries"] = "Pflichtfelder sind <strong>Name</strong>, <strong>E-Mail-Adresse</strong>, <strong>Kategorie</strong>, <strong>Themenüberschrift</strong> und <strong>Artikel</strong>!<br /><br /><a href=\"javascript:history.go(-1);\">eine Seite zurück</a><br /><br />\n";
 $PMF_LANG["err_SaveComment"] = "Pflichtfelder sind <strong>Name</strong>, <strong>E-Mail-Adresse</strong> und <strong>Kommentar</strong>!<br /><br /><a href=\"javascript:history.go(-1);\">eine Seite zurück</a><br /><br />\n";
@@ -614,7 +614,7 @@ $PMF_LANG['msgCaptcha'] = "Bitte die Zeichen der Captcha-Grafik eingeben";
 $PMF_LANG['msgSelectCategories'] = 'Suche in ...';
 $PMF_LANG['msgAllCategories'] = '... allen Kategorien';
 $PMF_LANG['ad_you_should_update'] = 'Ihre phpMyFAQ Installtion ist veraltet. Sie sollten auf die neueste Version aktualisieren.';
-$PMF_LANG['msgAdvancedSearch'] = 'Erweiterte Volltextsuche';
+$PMF_LANG['msgAdvancedSearch'] = 'Erweiterte Suche';
 
 // added v1.6.1 - 2006-04-25 by Matteo and Thorsten
 $PMF_LANG['spamControlCenter'] = 'Spamschutz-Konfiguration';
@@ -907,7 +907,7 @@ $PMF_LANG['ad_searchstats_search_term_percentage'] = 'Anteil';
 // added 2.5.0-beta - 2009-03-31 by Anatoliy
 $PMF_LANG['ad_record_sticky'] = 'Sticky';
 $PMF_LANG['ad_entry_sticky'] = 'Sticky';
-$PMF_LANG['stickyRecordsHeader'] = 'Sticky Records';
+$PMF_LANG['stickyRecordsHeader'] = 'Sticky FAQs';
 
 // added 2.5.0-beta - 2009-04-01 by Anatoliy
 $PMF_LANG['ad_menu_stopwordsconfig'] = 'Stoppwörter';
