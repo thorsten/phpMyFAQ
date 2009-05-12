@@ -22,10 +22,19 @@
  * under the License.
  */
 
+/**
+ * Please consider following while defining new vars:
+ * - the perfect case is to define a scalar string value
+ * - if some dynamic content is needed, use sprintf syntax
+ * - arrays are allowed but not recommended
+ * - no comments at the end of line after the var definition
+ */
+
 $PMF_LANG["metaCharset"] = "iso-8859-1";
 $PMF_LANG["metaLanguage"] = "en";
 $PMF_LANG["language"] = "english";
-$PMF_LANG["dir"] = "ltr"; // ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
+// ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
+$PMF_LANG["dir"] = "ltr";
 
 // Navigation
 $PMF_LANG["msgCategory"] = "Categories";
@@ -500,7 +509,7 @@ $PMF_LANG["ad_entry_preview"] = "Preview";
 $PMF_LANG["ad_attach_1"] = "Please choose a directory for attachments first in configuration.";
 $PMF_LANG["ad_attach_2"] = "Please choose a link for attachments first in configuration.";
 $PMF_LANG["ad_attach_3"] = "The file attachment.php cannot be opened without proper authentification.";
-$PMF_LANG["ad_attach_4"] = "The attached file must be smaller than ".$PMF_CONF['main.maxAttachmentSize']." Bytes.";
+$PMF_LANG["ad_attach_4"] = "The attached file must be smaller than %s Bytes.";
 $PMF_LANG["ad_menu_export"] = "Export your FAQ";
 $PMF_LANG["ad_export_1"] = "Built RSS-Feed on";
 $PMF_LANG["ad_export_2"] = ".";

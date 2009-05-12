@@ -571,7 +571,7 @@ $PMF_LANG["ad_attach_2"] = "Silahkan pilih dahulu sebuah link untuk berkas
 tambahan di dalam konfigurasi.";
 $PMF_LANG["ad_attach_3"] = "Berkas attachment.php tidak dapat dibuka tanpa
 hak yang sesuai.";
-$PMF_LANG["ad_attach_4"] = "Berkas tambahan harus lebih kecil dari ".$PMF_CONF['main.maxAttachmentSize']." Bytes.";
+$PMF_LANG["ad_attach_4"] = "Berkas tambahan harus lebih kecil dari %s Bytes.";
 $PMF_LANG["ad_menu_export"] = "Ekspor FAQ";
 $PMF_LANG["ad_export_1"] = "Buat RSS-Feed pada";
 $PMF_LANG["ad_export_2"] = ".";
