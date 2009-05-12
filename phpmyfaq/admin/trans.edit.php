@@ -35,11 +35,12 @@ if(empty($translateLang) || !file_exists(PMF_ROOT_DIR . "/lang/language_$transla
     header("Location: ?action=translist");
 }
 
+$tt = new PMF_TransTool;
 /**
  * English is our exemplary language
  */
-$leftVarsOnly  = getTransVars(PMF_ROOT_DIR . "/lang/language_en.php");
-$rightVarsOnly = getTransVars(PMF_ROOT_DIR . "/lang/language_$translateLang.php");
+$leftVarsOnly  = $tt->getVars(PMF_ROOT_DIR . "/lang/language_en.php");
+$rightVarsOnly = $tt->getVars(PMF_ROOT_DIR . "/lang/language_$translateLang.php");
 
 ?>
 <form id="transDiffForm">
@@ -64,6 +65,10 @@ $rightVarsOnly = getTransVars(PMF_ROOT_DIR . "/lang/language_$translateLang.php"
 </table>
 </form>
 <script>
+/**
+ * Transparently save the translation form
+ * @return void
+ */
 function save()
 {
     var data = {};
@@ -83,44 +88,3 @@ function save()
     )
 }
 </script>
-<?php 
-/**
- * Parse language file
- *
- * @param string $filepath
- * 
- * @return array
- */
-function getTransVars($filepath)
-{
-    $orig = file($filepath);
-    $retval = array();
-    
-    while(list(,$line) = each($orig)) {
-        $line = rtrim($line);
-        /**
-         * Bypass all but variable definitions
-         */
-        if(strlen($line) && '$' == $line[0]) {
-            /**
-             * $PMF_LANG["key"] = "val";
-             * or
-             * $PMF_LANG["key"] = array(0 => "something", 1 => ...);
-             * turns to something like  array('$PMF_LANG["key"]', '"val";')
-             */
-            $m = explode("=", $line, 2);
-            
-            $key = str_replace(array('["', '"]', '[\'', '\']'), array('[', ']', '[', ']'), PMF_String::substr(trim($m[0]), 1));
-            
-            $tmp = trim($m[1]);
-            if(0 === PMF_String::strpos($tmp, 'array')) {
-                $retval[$key] = PMF_String::substr($tmp, 0, -1);
-            } else {
-                $retval[$key] = PMF_String::substr($tmp, 1, -2);
-            }
-        }
-    }
-
-    return $retval;
-}
-?>
