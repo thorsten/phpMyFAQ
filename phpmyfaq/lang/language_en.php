@@ -44,24 +44,23 @@ $PMF_LANG["dir"] = "ltr";
 
 // Navigation
 $PMF_LANG["msgCategory"] = "Categories";
-$PMF_LANG["msgShowAllCategories"] = "Show all categories";
+$PMF_LANG["msgShowAllCategories"] = "All categories";
 $PMF_LANG["msgSearch"] = "Search";
-$PMF_LANG["msgAddContent"] = "Add content";
+$PMF_LANG["msgAddContent"] = "Add FAQ";
 $PMF_LANG["msgQuestion"] = "Ask question";
 $PMF_LANG["msgOpenQuestions"] = "Open questions";
 $PMF_LANG["msgHelp"] = "Help";
 $PMF_LANG["msgContact"] = "Contact";
-$PMF_LANG["msgHome"] = "Home";
-$PMF_LANG["msgNews"] = "FAQ-News";
+$PMF_LANG["msgHome"] = "FAQ Home";
+$PMF_LANG["msgNews"] = "FAQ news";
 $PMF_LANG["msgUserOnline"] = " Users online";
-$PMF_LANG["msgXMLExport"] = "XML-File";
-$PMF_LANG["msgBack2Home"] = "back to home page";
+$PMF_LANG["msgBack2Home"] = "Back to main page";
 
 // Contentpages
-$PMF_LANG["msgFullCategories"] = "Categories with entries";
-$PMF_LANG["msgFullCategoriesIn"] = "Categories with entries in ";
+$PMF_LANG["msgFullCategories"] = "Categories with FAQs";
+$PMF_LANG["msgFullCategoriesIn"] = "Categories with FAQs in ";
 $PMF_LANG["msgSubCategories"] = "Subcategories";
-$PMF_LANG["msgEntries"] = "Entries";
+$PMF_LANG["msgEntries"] = "FAQs";
 $PMF_LANG["msgEntriesIn"] = "Questions in ";
 $PMF_LANG["msgViews"] = "views";
 $PMF_LANG["msgPage"] = "Page ";
@@ -75,7 +74,7 @@ $PMF_LANG["msgPrinterFriendly"] = "printer-friendly version";
 $PMF_LANG["msgPrintArticle"] = "Print this record";
 $PMF_LANG["msgMakeXMLExport"] = "Export as XML-File";
 $PMF_LANG["msgAverageVote"] = "Average rating:";
-$PMF_LANG["msgVoteUseability"] = "Please rate this entry:";
+$PMF_LANG["msgVoteUseability"] = "Please rate this FAQ:";
 $PMF_LANG["msgVoteFrom"] = "out of";
 $PMF_LANG["msgVoteBad"] = "completely useless";
 $PMF_LANG["msgVoteGood"] = "most valuable";
@@ -83,20 +82,20 @@ $PMF_LANG["msgVotings"] = "Votes ";
 $PMF_LANG["msgVoteSubmit"] = "Vote";
 $PMF_LANG["msgVoteThanks"] = "Thanks a lot for your vote!";
 $PMF_LANG["msgYouCan"] = "You can ";
-$PMF_LANG["msgWriteComment"] = "comment on this entry";
+$PMF_LANG["msgWriteComment"] = "comment this FAQ";
 $PMF_LANG["msgShowCategory"] = "Content Overview: ";
 $PMF_LANG["msgCommentBy"] = "Comment of ";
-$PMF_LANG["msgCommentHeader"] = "Comment on this entry";
-$PMF_LANG["msgYourComment"] = "Your comments:";
-$PMF_LANG["msgCommentThanks"] = "Thanks a lot for your comments!";
+$PMF_LANG["msgCommentHeader"] = "Comment this FAQ";
+$PMF_LANG["msgYourComment"] = "Your comment:";
+$PMF_LANG["msgCommentThanks"] = "Thanks a lot for your comment!";
 $PMF_LANG["msgSeeXMLFile"] = "open XML-File";
-$PMF_LANG["msgSend2Friend"] = "Send to a friend";
+$PMF_LANG["msgSend2Friend"] = "Send FAQ to a friend";
 $PMF_LANG["msgS2FName"] = "Your name:";
 $PMF_LANG["msgS2FEMail"] = "Your e-mail address:";
 $PMF_LANG["msgS2FFriends"] = "Your friends:";
 $PMF_LANG["msgS2FEMails"] = ". e-mail address:";
 $PMF_LANG["msgS2FText"] = "The following text will be sent:";
-$PMF_LANG["msgS2FText2"] = "You'll find the record on the following address:";
+$PMF_LANG["msgS2FText2"] = "You'll find the FAQ at the following address:";
 $PMF_LANG["msgS2FMessage"] = "Additional message for your friends:";
 $PMF_LANG["msgS2FButton"] = "send e-mail";
 $PMF_LANG["msgS2FThx"] = "Thanks for your recommendation!";
@@ -108,27 +107,27 @@ $PMF_LANG["msgSearchFind"] = "Search result for ";
 $PMF_LANG["msgSearchAmount"] = " search result";
 $PMF_LANG["msgSearchAmounts"] = " search results";
 $PMF_LANG["msgSearchCategory"] = "Category: ";
-$PMF_LANG["msgSearchContent"] = "Content: ";
+$PMF_LANG["msgSearchContent"] = "Answer: ";
 
 // new Content
-$PMF_LANG["msgNewContentHeader"] = "Proposal for FAQ";
+$PMF_LANG["msgNewContentHeader"] = "Proposal for a new FAQ";
 $PMF_LANG["msgNewContentAddon"] = "Your proposal will not be published right away, but will be released by the administrator upon receipt. Required  fields are <strong>your Name</strong>, <strong>your email address</strong>, <strong>category</strong>, <strong>headline</strong> and <strong>your record</strong>. Please separate the keywords with space only.";
 $PMF_LANG["msgNewContentName"] = "Your Name:";
 $PMF_LANG["msgNewContentMail"] = "Your email address:";
-$PMF_LANG["msgNewContentCategory"] = "Which category to choose?";
-$PMF_LANG["msgNewContentTheme"] = "Headline:";
-$PMF_LANG["msgNewContentArticle"] = "Your FAQ Record:";
+$PMF_LANG["msgNewContentCategory"] = "Category:";
+$PMF_LANG["msgNewContentTheme"] = "Question:";
+$PMF_LANG["msgNewContentArticle"] = "Answer:";
 $PMF_LANG["msgNewContentKeywords"] = "Keywords:";
-$PMF_LANG["msgNewContentLink"] = "Link for this record";
+$PMF_LANG["msgNewContentLink"] = "Link for this record:";
 $PMF_LANG["msgNewContentSubmit"] = "submit";
 $PMF_LANG["msgInfo"] = "More information: ";
 $PMF_LANG["msgNewContentThanks"] = "Thank you for your suggestion!";
-$PMF_LANG["msgNoQuestionsAvailable"] = "There are currently no pending questions.";
+$PMF_LANG["msgNoQuestionsAvailable"] = "Currently there are no pending questions.";
 
 // ask Question
 $PMF_LANG["msgNewQuestion"] = "Ask your question below:";
-$PMF_LANG["msgAskCategory"] = "Your question about category";
-$PMF_LANG["msgAskYourQuestion"] = "Your question:";
+$PMF_LANG["msgAskCategory"] = "Category:";
+$PMF_LANG["msgAskYourQuestion"] = "Question:";
 $PMF_LANG["msgAskThx4Mail"] = "<h2>Thanks for your question!</h2>";
 $PMF_LANG["msgDate_User"] = "Date / User";
 $PMF_LANG["msgQuestion2"] = "Question";
@@ -139,16 +138,16 @@ $PMF_LANG["msgQuestionText"] = "Here you can see questions asked by other users.
 $PMF_LANG["msgHelpText"] = "<p>The structure of the FAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) is quite simple. You can either search the <strong><a href=\"?action=show\">categories</a></strong> or let the <strong><a href=\"?action=search\">FAQ search engine</a></strong> search for keywords.</p>";
 
 // Contact
-$PMF_LANG["msgContactEMail"] = "e-mail to the webmaster:";
+$PMF_LANG["msgContactEMail"] = "Email to the webmaster:";
 $PMF_LANG["msgMessage"] = "Your message:";
 
 // Startseite
 $PMF_LANG["msgNews"] = " News";
-$PMF_LANG["msgTopTen"] = "TOP 10";
+$PMF_LANG["msgTopTen"] = "Most popular FAQs";
 $PMF_LANG["msgHomeThereAre"] = "There are ";
-$PMF_LANG["msgHomeArticlesOnline"] = " records online";
+$PMF_LANG["msgHomeArticlesOnline"] = " FAQs online";
 $PMF_LANG["msgNoNews"] = "No news is good news.";
-$PMF_LANG["msgLatestArticles"] = "The latest articles:";
+$PMF_LANG["msgLatestArticles"] = "Latest FAQs";
 
 // E-Mailbenachrichtigung
 $PMF_LANG["msgMailThanks"] = "Many thanks for your proposal to the FAQ.";
@@ -158,9 +157,9 @@ $PMF_LANG["msgMailContact"] = "Your message has been sent to the administrator."
 // Fehlermeldungen
 $PMF_LANG["err_noDatabase"] = "No database connection available.";
 $PMF_LANG["err_noHeaders"] = "No category found.";
-$PMF_LANG["err_noArticles"] = "<p>No entries available.</p>";
+$PMF_LANG["err_noArticles"] = "<p>No FAQs available.</p>";
 $PMF_LANG["err_badID"] = "<p>Wrong ID.</p>";
-$PMF_LANG["err_noTopTen"] = "<p>No Top Ten available yet.</p>";
+$PMF_LANG["err_noTopTen"] = "<p>No popular FAQs available yet.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>No entry found.</p>";
 $PMF_LANG["err_SaveEntries"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>category</strong>, <strong>headline</strong>, <strong>your Record</strong> and, when requested, the <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!<br /><br />\n<a href=\"javascript:history.back();\">one page back</a><br /><br />\n";
 $PMF_LANG["err_SaveComment"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>your comments</strong> and, when requested, the <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!<br /><br />\n<a href=\"javascript:history.back();\">one page back</a><br /><br />\n";
@@ -507,7 +506,7 @@ $PMF_LANG["ad_xml_head"] = "XML-Backup";
 $PMF_LANG["ad_xml_hint"] = "Save all records of your FAQ in one XML file.";
 $PMF_LANG["ad_xml_gen"] = "make XML file";
 $PMF_LANG["ad_entry_locale"] = "Language";
-$PMF_LANG["msgLangaugeSubmit"] = "Change language";
+$PMF_LANG["msgLangaugeSubmit"] = "Select language:";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
 $PMF_LANG["ad_entry_preview"] = "Preview";
@@ -714,7 +713,7 @@ $PMF_LANG["rightsLanguage"]['addglossary'] = "add glossary item";
 $PMF_LANG["rightsLanguage"]['editglossary'] = "edit glossary item";
 $PMF_LANG["rightsLanguage"]['delglossary'] = "delete glossary item";
 $PMF_LANG["ad_menu_group_administration"] = "Groups";
-$PMF_LANG['ad_user_loggedin'] = 'You\'re logged in as ';
+$PMF_LANG['ad_user_loggedin'] = 'Logged in as ';
 
 $PMF_LANG['ad_group_details'] = "Group Details";
 $PMF_LANG['ad_group_add'] = "Add Group";
@@ -931,7 +930,7 @@ $PMF_LANG['ad_searchstats_search_term_percentage'] = 'Percentage';
 // added 2.5.0-beta - 2009-03-31 by Anatoliy
 $PMF_LANG['ad_record_sticky'] = 'Sticky';
 $PMF_LANG['ad_entry_sticky'] = 'Sticky';
-$PMF_LANG['stickyRecordsHeader'] = 'Sticky Records';
+$PMF_LANG['stickyRecordsHeader'] = 'Sticky FAQs';
 
 // added 2.5.0-beta - 2009-04-01 by Anatoliy
 $PMF_LANG['ad_menu_stopwordsconfig'] = 'Stop Words';
