@@ -71,16 +71,16 @@ if ('listConfig' == $userAction) {
 
 <form id="config_list" name="config_list" action="?action=config&amp;config_action=saveConfig" method="post">
     <fieldset>
-        <legend><?php print $PMF_LANG['mainControlCenter']; ?></legend>
-        <div id="configMain"></div>
+        <legend><a href="#" onclick="javascript:toggleConfig('Main');"><?php print $PMF_LANG['mainControlCenter']; ?></a></legend>
+        <div id="configMain" style="display: none;"></div>
     </fieldset>
     <fieldset>
-        <legend><?php print $PMF_LANG['recordsControlCenter']; ?></legend>
-        <div id="configRecords"></div>
+        <legend><a href="#" onclick="javascript:toggleConfig('Records');"><?php print $PMF_LANG['recordsControlCenter']; ?></a></legend>
+        <div id="configRecords" style="display: none;"></div>
     </fieldset>
     <fieldset>
-        <legend><?php print $PMF_LANG['spamControlCenter']; ?></legend>
-        <div id="configSpam"></div>
+        <legend><a href="#" onclick="javascript:toggleConfig('Spam');"><?php print $PMF_LANG['spamControlCenter']; ?></a></legend>
+        <div id="configSpam" style="display: none;"></div>
     </fieldset>
     <p align="center">
         <input class="submit" type="submit" value="<?php print $PMF_LANG['ad_config_save']; ?>" />

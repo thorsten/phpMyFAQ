@@ -73,6 +73,21 @@ function showhideCategory(id)
         $('#' + id).fadeOut("slow");
     }
 }
+ 
+/**
+ * Displays or hides a configuration block
+ * 
+ * @param  string container
+ * @return void
+ */
+function toggleConfig(container)
+{
+    if ($('#config' + container).css('display') == 'none') {
+    	$('#config' + container).fadeIn("slow");
+    } else {
+        $('#config' + container).fadeOut("slow");
+    }
+}
 
 /**
  * deletes all options from given select-object.
