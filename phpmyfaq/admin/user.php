@@ -422,7 +422,7 @@ function updateUser(user_id)
                     //]]>
                 </script>
                 <div class="button_row">
-                    <input type="hidden" name="user_list_select" id="user_list_select">
+                    <input type="hidden" name="user_list_select" id="user_list_select" />
                     <input class="submit" type="submit" value="<?php print $text['delUser_button']; ?>" tabindex="2" />
                 </div>
             </form>
