@@ -45,13 +45,16 @@ $rightVarsOnly = getTransVars(PMF_ROOT_DIR . "/lang/language_$translateLang.php"
 <form>
 <input type="hidden" name="translang" value="<?php  ?>" />
 <table>
-<?php
-    while(list($key, $line) = each($leftVarsOnly)):   
-    
-?>
+<tr><td>Variable</td><td>en</td><td><?php echo $translateLang ?></td></tr>
+<?php while(list($key, $line) = each($leftVarsOnly)): ?>
 <tr>
-<td><input style="width: 350px;" type="text" name="<?php echo $key?>" value="<?php echo htmlspecialchars($line)?>" disabled="disabled"     /></td>
-<td><input style="width: 350px;" type="text" name="<?php echo $key?>" value="<?php echo @htmlspecialchars($rightVarsOnly[$key]) ?>" /></td>
+<td><?php echo $key?></td>
+<td><input style="width: 300px;" type="text" value="<?php echo htmlspecialchars($line) ?>" disabled="disabled" /></td>
+<?php if(array_key_exists($key, $rightVarsOnly)): ?>
+<td><input style="width: 300px;" type="text" name="<?php echo $key?>" value="<?php echo htmlspecialchars($rightVarsOnly[$key]) ?>" /></td>
+<?php else: ?>
+<td><input style="width: 300px;border-color: red;" type="text" name="<?php echo $key?>" value="<?php echo htmlspecialchars($line) ?>" /></td>
+<?php endif; ?>
 </tr>
 <?php endwhile; ?>
 </table>
@@ -74,24 +77,26 @@ function getTransVars($filepath)
         /**
          * Bypass all but variable definitions
          */
-        $m = array();
         if(strlen($line) && '$' == $line[0]) {
-            preg_match('/\$([^\=]+)=(\s?)(\"(.+)\"|.+)\;.*/xU', $line, $m);
-            $key = str_replace(array('["', '"]', '[\'', '\']'), array('[', ']', '[', ']'), trim($m[1]));
+            /**
+             * $PMF_LANG["key"] = "val";
+             * or
+             * $PMF_LANG["key"] = array(0 => "something", 1 => ...);
+             * turns to something like  array('$PMF_LANG["key"]', '"val";')
+             */
+            $m = explode("=", $line, 2);
             
-            $tmp = trim($m[3]);
-            if(0 === strstr($tmp, 'array')) {
-                $tmp2 = preg_split('/\,\s?/', $tmp);
-                foreach($tmp2 as $val) {
-                    $tmp3 = explode('=>', $val);
-                    $retval[$key][trim($tmp3[0])] = substr(trim($tmp[1]), 1, -1);
-                }
+            $key = str_replace(array('["', '"]', '[\'', '\']'), array('[', ']', '[', ']'), substr(trim($m[0]), 1));
+            
+            $tmp = trim($m[1]);
+            if(0 === strpos($tmp, 'array')) {
+                $retval[$key] = substr($tmp, 0, -1);
             } else {
-                $retval[$key] = substr($tmp, 1, -1);
+                $retval[$key] = substr($tmp, 1, -2);
             }
         }
     }
-//print '<pre>' . print_r($retval, true) . '</pre>';
+
     return $retval;
 }
 ?>
