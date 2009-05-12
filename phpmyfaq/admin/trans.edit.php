@@ -1,6 +1,6 @@
 <?php
 /**
- * Sessionbrowser
+ * Read in files for the translation and show them inside a form.
  * 
  * @package    phpMyFAQ
  * @subpackage Administration
@@ -86,13 +86,13 @@ function getTransVars($filepath)
              */
             $m = explode("=", $line, 2);
             
-            $key = str_replace(array('["', '"]', '[\'', '\']'), array('[', ']', '[', ']'), substr(trim($m[0]), 1));
+            $key = str_replace(array('["', '"]', '[\'', '\']'), array('[', ']', '[', ']'), PMF_String::substr(trim($m[0]), 1));
             
             $tmp = trim($m[1]);
-            if(0 === strpos($tmp, 'array')) {
-                $retval[$key] = substr($tmp, 0, -1);
+            if(0 === PMF_String::strpos($tmp, 'array')) {
+                $retval[$key] = PMF_String::substr($tmp, 0, -1);
             } else {
-                $retval[$key] = substr($tmp, 1, -2);
+                $retval[$key] = PMF_String::substr($tmp, 1, -2);
             }
         }
     }

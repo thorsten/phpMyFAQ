@@ -1,6 +1,7 @@
 <?php
 /**
- * Sessionbrowser
+ * List avaliable interface translations and actions
+ * depending on user right
  * 
  * @package    phpMyFAQ
  * @subpackage Administration
@@ -26,13 +27,13 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 
 $transDir = new DirectoryIterator(PMF_ROOT_DIR . "/lang");
 ?>
-<?php if(!$transDir->isWritable()):
-    echo '<font color="red">'. $PMF_LANG['msgLangDirIsntWritable'] . "</font><br />";
-endif; ?>
 <?php echo $PMF_LANG['msgChooseLanguageToTranslate'] ?>: <br />
 <table>
 <?php if($permission["addtranslation"]): ?>
-<tr><td colspan="3">
+<tr><td colspan="4">
+<?php if(!$transDir->isWritable()):
+    echo '<font color="red">'. $PMF_LANG['msgLangDirIsntWritable'] . "</font><br />";
+endif; ?>
 <form action="?action=transadd">
 <fieldset>
 <legend>Add translation</legend>
@@ -41,12 +42,12 @@ Lang code: <input name="translang" type="text" /> <input type="submit" />
 </form>
 </td></tr>
 <?php endif; ?>
-<tr><td>Filename</td><td colspan="2">Actions</td></tr>
+<tr><td>Filename</td><td colspan="2">Actions</td><td>Writable</td></tr>
 <?php
     $sortedLangList = array();
     
     foreach($transDir as $file) {
-        if($file->isFile() && '.php' == substr($file, -4)) {
+        if($file->isFile() && '.php' == PMF_String::substr($file, -4)) {
             $lang = str_replace(array('language_', '.php'), '', $file);
 
             /**
@@ -74,6 +75,11 @@ Lang code: <input name="translang" type="text" /> <input type="submit" />
         <td><a href="?action=transdel&amp;translang=<?php print $lang ?>" >Delete</a></td>
         <?php else: ?>
         <td>&nbsp;</td>
+        <?php endif; ?>
+        <?php if(is_writable(PMF_ROOT_DIR . "/lang/language_$lang.php")): ?>
+        <td><font color="green">yes</font></td>
+        <?php else: ?>
+        <td><font color="red">no</font></td>
         <?php endif; ?>
         </tr>
         <?php 
