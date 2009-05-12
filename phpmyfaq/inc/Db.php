@@ -6,8 +6,8 @@
  * @package   PMF_Db
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since     2003-02-24
- * @copyright 2003-2009 phpMyFAQ Team
  * @version   SVN: $Id$
+ * @copyright 2003-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -27,8 +27,8 @@
  * @package   PMF_Db
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since     2003-02-24
- * @copyright 2003-2009 phpMyFAQ Team
  * @version   SVN: $Id$
+ * @copyright 2003-2009 phpMyFAQ Team
  */
 class PMF_Db
 {
