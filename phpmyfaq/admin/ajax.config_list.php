@@ -39,7 +39,7 @@ function printInputFieldByType($key, $type)
     
     $faqconfig = PMF_Configuration::getInstance();
 
-    switch($type) {
+    switch ($type) {
         case 'area':
 
             printf('<textarea name="edit[%s]" cols="60" rows="6" style="width: 500px;">%s</textarea>',
@@ -103,7 +103,12 @@ header("Content-type: text/html; charset=".$PMF_LANG['metaCharset']);
 foreach ($LANG_CONF as $key => $value) {
     if (strpos($key, $configMode) === 0) {
 ?>
-    <label class="leftconfig"><?php print $value[1]; ?></label>
+    <label class="leftconfig"><?php
+        if ($key == 'main.maxAttachmentSize') {
+            printf($value[1], ini_get('upload_max_filesize'));
+        } else {
+            print $value[1];
+        } ?></label>
     <?php printInputFieldByType($key, $value[0]); ?><br />
 <?php
     }
