@@ -25,10 +25,10 @@
 class PMF_News
 {
     /**
-    * DB handle
-    *
-    * @var  object
-    */
+     * DB handle
+     *
+     * @var PMF_DB
+     */
     private $db;
 
     /**
@@ -43,7 +43,7 @@ class PMF_News
     *
     * @var  string
     */
-    var $pmf_lang;
+    private $pmf_lang;
 
     /**
     * Constructor
