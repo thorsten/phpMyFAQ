@@ -1,14 +1,15 @@
 <?php
 /**
- * Italian language file.
+ * The Italian language file.
  *
- * @package     phpMyFAQ 
- * @author      Stefano Bramato <stefano@pubblideaweb.it>
- * @auhtor      Rudy <webmaster@queenarena.com>
- * @author      Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @since       2004-06-24
- * @version     SVN: $Id$ 
- * @copyright   (c) 2004-2009 phpMyFAQ Team
+ * @package    phpMyFAQ 
+ * @subpackage i18n
+ * @author     Stefano Bramato <stefano@pubblideaweb.it>
+ * @auhtor     Rudy <webmaster@queenarena.com>
+ * @author     Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @since      2004-06-24
+ * @version    SVN: $Id$ 
+ * @copyright  (c) 2004-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -368,7 +369,7 @@ $PMF_LANG["ad_rs_no"] = "Nessuna statistica disponibile";
 
 // Auth
 $PMF_LANG["ad_auth_insert"] = "Inserisci le tue credenziali: <em>username</em> e <em>password</em>.";
-$PMF_LANG["ad_auth_user"] = "Username:";
+$PMF_LANG["ad_auth_user"] = "Pseudonimo:";
 $PMF_LANG["ad_auth_passwd"] = "Password:";
 $PMF_LANG["ad_auth_ok"] = "OK";
 $PMF_LANG["ad_auth_reset"] = "Reimposta";
@@ -570,8 +571,8 @@ $LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Vuoi controllare l'IP 
 $LANG_CONF["main.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Numero di elementi visualizzati per pagina");
 $LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Numero di elementi visualizzati per la sezione News");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => "Vieta l'accesso a questi indirizzi IP");
-$LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Attivare il supporto a <em>mod_rewrite</em>? (default: disabilitato)");
-$LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Attivare il supporto LDAP? (default: disabilitato)");
+$LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Attivare il supporto a <em>mod_rewrite</em>? (predefinito: disabilitato)");
+$LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Attivare il supporto LDAP? (predefinito: disabilitato)");
 $LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "<em>Base URL</em> dell'installazione di phpMyFAQ, es: http://www.example.org/faq (&egrave; necessaria per la verifica dei links)");
 $LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "Intervallo della verifica asincrona dei links (in secondi)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Disabilitare la visibilit&agrave; delle domande appena inserite?");
@@ -620,9 +621,9 @@ $PMF_LANG['msgAdvancedSearch'] = 'Ricerca avanzata';
 
 // added v1.6.1 - 2006-04-25 by Matteo and Thorsten
 $PMF_LANG['spamControlCenter'] = 'Centro di controllo contro lo Spam';
-$LANG_CONF['spam.enableSafeEmail'] = array(0 => 'checkbox', 1 => 'Stampa l\'email dell\'utente in maniera sicura (default: abilitato).');
-$LANG_CONF['spam.checkBannedWords'] = array(0 => 'checkbox', 1 => 'Controlla se il testo delle form pubbliche contenga parole vietate (default: abilitato).');
-$LANG_CONF['spam.enableCatpchaCode'] = array(0 => 'checkbox', 1 => 'Usa un codice <a href="http://it.wikipedia.org/wiki/Captcha" title="Vai alla definizione di Wikipedia" target="_blank">captcha</a> per permettere la sottomissione delle form pubbliche (default: abilitato).');
+$LANG_CONF['spam.enableSafeEmail'] = array(0 => 'checkbox', 1 => 'Stampa l\'email dell\'utente in maniera sicura (predefinito: abilitato).');
+$LANG_CONF['spam.checkBannedWords'] = array(0 => 'checkbox', 1 => 'Controlla se il testo delle form pubbliche contenga parole vietate (predefinito: abilitato).');
+$LANG_CONF['spam.enableCatpchaCode'] = array(0 => 'checkbox', 1 => 'Usa un codice <a href="http://it.wikipedia.org/wiki/Captcha" title="Vai alla definizione di Wikipedia" target="_blank">captcha</a> per permettere la sottomissione delle form pubbliche (predefinito: abilitato).');
 $PMF_LANG['ad_session_expiring'] = 'Questa sessione scadrà tra %d minuti: vuoi continuare a lavorare?';
 
 // added v1.6.2 - 2006-06-13 by Matteo
@@ -878,6 +879,10 @@ $PMF_LANG['recordsControlCenter'] = 'Configurazione delle FAQ';
 $PMF_LANG['msgInstantResponse'] = 'Ricerca a risposta immediata';
 $PMF_LANG['msgInstantResponseMaxRecords'] = '. Qui sotto trovi le prime %d faq.';
 
+// added v2.0.0 - 2007-03-29 by Thorsten
+$LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "Attiva le nuove faq (predefinito: disattivato)");
+$LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Permetti i commenti per le nuove faq (predefinito: non permesso)");
+
 // added v2.0.0 - 2007-04-04 by Thorsten
 $PMF_LANG['msgAllCatArticles'] = 'FAQ in questa categoria';
 $PMF_LANG['msgDescriptionInstantResponse'] = 'Iniziare a scrivere e troverai le risposte...';
@@ -886,7 +891,7 @@ $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ Info';
 $PMF_LANG['ad_online_info'] = 'Verifica della versione (richiede la connessione alla rete)';
 $PMF_LANG['ad_system_info'] = 'Informazioni di sistema';
 
-// added 2.5 - 2007-01-25 by Elger
+// added 2.5.0-alpha - 2008-01-25 by Elger
 $PMF_LANG['msgRegisterUser'] = 'Vuoi registrarti?';
 $PMF_LANG["ad_user_loginname"] = 'Pseudonimo:';
 $PMF_LANG['errorRegistration'] = 'Questo campo è necessario!';
@@ -897,3 +902,33 @@ $PMF_LANG['msgRegError'] = 'Questi gli errori trovati, correggili:';
 $PMF_LANG['successMessage'] = 'La tua registrazione è stata effettuata! Riceverai una email di conferma con i tuoi dati di accesso dopo l\'approvazione!';
 $PMF_LANG['msgRegThankYou'] = 'Grazie per esserti registrato';
 $PMF_LANG['emailRegSubject'] = '[%sitename%] Registrazione nuovo utente';
+
+// added 2.5.0-alpha2 - 2009-01-24 by Thorsten
+$PMF_LANG['msgMostPopularSearches'] = 'Le ricerche pi&ugrave; popolari sono:';
+$LANG_CONF['main.enableWysiwygEditor'] = array(0 => "checkbox", 1 => "Abilita l'editor WYSIWYG preinstallato (predefinito: abilitato)");
+
+// added 2.5.0-beta - 2009-03-30 by Anatoliy
+$PMF_LANG['ad_menu_searchstats'] = 'Statistiche sulla ricerca';
+$PMF_LANG['ad_searchstats_search_term'] = 'Chiave';
+$PMF_LANG['ad_searchstats_search_term_count'] = 'Incidenza';
+$PMF_LANG['ad_searchstats_search_term_lang'] = 'Lingua';
+$PMF_LANG['ad_searchstats_search_term_percentage'] = 'Percentuale';
+
+// added 2.5.0-beta - 2009-03-31 by Anatoliy
+$PMF_LANG['ad_record_sticky'] = 'Sticky';
+$PMF_LANG['ad_entry_sticky'] = 'Sticky';
+$PMF_LANG['stickyRecordsHeader'] = 'Sticky FAQs';
+
+// added 2.5.0-beta - 2009-04-01 by Anatoliy
+$PMF_LANG['ad_menu_stopwordsconfig'] = 'Parole comuni (stop words)';
+$PMF_LANG['ad_config_stopword_input'] = 'Aggiungi una nuova parola comune (stop word)';
+
+// added 2.5.0-beta - 2009-04-06 by Anatoliy
+$PMF_LANG['msgSendMailDespiteEverything'] = 'Non c\'&grave; ancora una risposta adeguata (sar&grave; inviata una email)';
+$PMF_LANG['msgSendMailIfNothingIsFound'] = 'La risposta desiderata &grave; indicata nella lista di cui sopra?';
+
+// added 2.5.0-RC - 2009-05-11 by Anatoliy & Thorsten
+$PMF_LANG['msgChooseLanguageToTranslate'] = 'Scegli la lingua da tradurre';
+$PMF_LANG['msgLangDirIsntWritable'] = 'La cartella per le localizzazioni (/lang) non &egrave; scrivibile!';
+$PMF_LANG['ad_menu_translations'] = 'Interfaccia per le traduzioni';
+$PMF_LANG['ad_start_notactive'] = 'In attesa di attivazione';
