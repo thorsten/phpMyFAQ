@@ -6,8 +6,8 @@
  * @subpackage Administration
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since      2002-09-17
- * @copyright  2002-2009 phpMyFAQ
  * @version    SVN: $Id$ 
+ * @copyright  2002-2009 phpMyFAQ
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -153,7 +153,7 @@ if (!is_null($currentSave) && $currentSave == true && $auth && $permission["adda
             print "<p>".$PMF_LANG["ad_att_fail"]."</p>";
         }
     } else {
-        print "<p>".$PMF_LANG["ad_attach_4"]."</p>";
+        printf("<p>%s</p>", sprintf($PMF_LANG['ad_attach_4'], $faqconfig->get('main.maxAttachmentSize')));
     }
     print "<p align=\"center\"><a href=\"javascript:window.close()\">".$PMF_LANG["ad_att_close"]."</a></p>";
 }
