@@ -60,27 +60,36 @@ function printInputFieldByType($key, $type)
 
             printf('<select name="edit[%s]" size="1" style="width: 500px;">', $key);
             
-            if ('main.language' == $key) {
-                $languages = getAvailableLanguages();
-                if (count($languages) > 0) {
-                    print languageOptions(str_replace(array("language_", ".php"), "", $faqconfig->get('main.language')), false, true);
-                } else {
-                    print '<option value="language_en.php">English</option>';
-                }
-            } elseif ('records.orderby' == $key) {
-                print sortingOptions($faqconfig->get($key));
-            } elseif ('records.sortby' == $key) {
-                printf('<option value="DESC"%s>%s</option>',
-                    ('DESC' == $faqconfig->get($key)) ? ' selected="selected"' : '',
-                    $PMF_LANG['ad_conf_desc']);
-                printf('<option value="ASC"%s>%s</option>',
-                    ('ASC' == $faqconfig->get($key)) ? ' selected="selected"' : '',
-                    $PMF_LANG['ad_conf_asc']);
-            } elseif ('main.permLevel' == $key) {
-                print PMF_Perm::permOptions($faqconfig->get($key));
+            switch ($key) {
+                
+            	case 'main.language':
+                    $languages = getAvailableLanguages();
+                    if (count($languages) > 0) {
+                        print languageOptions(str_replace(array("language_", ".php"), "", $faqconfig->get('main.language')), false, true);
+                    } else {
+                        print '<option value="language_en.php">English</option>';
+                    }
+            	   break;
+            	
+                case 'records.orderby':
+                    print sortingOptions($faqconfig->get($key));
+                    break;
+                    
+                case 'records.sortby':
+                    printf('<option value="DESC"%s>%s</option>',
+                        ('DESC' == $faqconfig->get($key)) ? ' selected="selected"' : '',
+                        $PMF_LANG['ad_conf_desc']);
+                    printf('<option value="ASC"%s>%s</option>',
+                        ('ASC' == $faqconfig->get($key)) ? ' selected="selected"' : '',
+                        $PMF_LANG['ad_conf_asc']);
+                    break;
+                    
+                case 'main.permLevel':
+                    print PMF_Perm::permOptions($faqconfig->get($key));
+                    break;
             }
-            print '</select>';
-            printf("<br />\n");
+            
+            print "</select>\n<br />\n";
             break;
 
         case 'checkbox':
