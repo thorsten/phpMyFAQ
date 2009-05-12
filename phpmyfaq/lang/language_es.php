@@ -119,7 +119,7 @@ $PMF_LANG["msg2answer"] = "Respuesta";
 $PMF_LANG["msgQuestionText"] = "Aquí puedes ver algunas preguntas de otros usuarios. Puedes escribir respuestas a estas preguntas y se insertarán dentro del FAQ.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>La estructura del FAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions)es bastante simple. Puedes seleccionar buscar entre <strong><a href=\"?sid=".isset($_GET["sid"])."&amp;action=show\">categorías</a></strong> o dejar al <strong><a href=\"?sid=".isset($_GET["sid"])."&amp;action=search\">motor de búsqueda</a></strong> que te muestre las palabras clave.</p>";
+$PMF_LANG["msgHelpText"] = "<p>La estructura del FAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions)es bastante simple. Puedes seleccionar buscar entre <strong><a href=\"?action=show\">categorías</a></strong> o dejar al <strong><a href=\"?action=search\">motor de búsqueda</a></strong> que te muestre las palabras clave.</p>";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "escribir al webmaster:";

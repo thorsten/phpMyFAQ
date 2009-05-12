@@ -124,7 +124,7 @@ $PMF_LANG["msgQuestionText"] = "Zde jsou dotazy ostatních uživatelù. Odpovíte-li
 
 // Help
 $PMF_LANG["msgHelpText"] = "<p>Struktura FAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) = <strong>Èasto Kladených Dotazù</strong> je naprosto jednoduchá. <br>
-Mùžete buïto procházet jednotlivé <strong><a href=\"?sid=".isset($_GET["sid"])."&amp;action=show\">kategorie</a></strong> nebo použít <strong><a href=\"?sid=".isset($_GET["sid"])."&amp;action=search\">prohledávání FAQ</a></strong> pomocí klíèových slov.</p>";
+Mùžete buïto procházet jednotlivé <strong><a href=\"?action=show\">kategorie</a></strong> nebo použít <strong><a href=\"?action=search\">prohledávání FAQ</a></strong> pomocí klíèových slov.</p>";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "E-mail správci:";

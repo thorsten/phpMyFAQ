@@ -118,7 +118,7 @@ $PMF_LANG["msg2answer"] = "Javaslat";
 $PMF_LANG["msgQuestionText"] = "Itt a többi látogató által feltett kérdéseket láthatod. Ha válaszolsz valamelyik kérdésre, akkor a válaszod bekerülhet a GYIK-ba.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>A GYIK (<strong>GY</strong>akran <strong>I</strong>smételt <strong>K</strong>érdések) használata meglehetősen egyszerű. Kereshetsz a <strong><a href=\"?sid=".isset($_GET["sid"])."&amp;action=show\">kategóriákban</a></strong> vagy <strong><a href=\"?sid=".isset($_GET["sid"])."&amp;action=search\">kulcsszavakra</a></strong>.</p>";
+$PMF_LANG["msgHelpText"] = "<p>A GYIK (<strong>GY</strong>akran <strong>I</strong>smételt <strong>K</strong>érdések) használata meglehetősen egyszerű. Kereshetsz a <strong><a href=\"?action=show\">kategóriákban</a></strong> vagy <strong><a href=\"?action=search\">kulcsszavakra</a></strong>.</p>";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "email az adminisztrátornak:";

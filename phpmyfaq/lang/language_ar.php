@@ -127,8 +127,8 @@ $PMF_LANG["msgQuestionText"] = "هنا تجد بعض الأسئلة المطرو
 , تستطيع الإجابة عها إذا كان لك القدرة على ذلك ";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>طريقة بناء برنامج الاسئلة المتكررة سهل جدا , وتسطيع أن تبحث عن الأسئلة إما �?ي   . <a href=\"?sid=".isset($_GET["sid"])."&amp;aktion=anzeigen\">التصني�?ات</a> أو تستعمل <a
-href=\"?sid=".isset($_GET["sid"])."&amp;aktion=search\">محرك بحث الموقع</a> للبحث بكلمة معينة .</p>";
+$PMF_LANG["msgHelpText"] = "<p>طريقة بناء برنامج الاسئلة المتكررة سهل جدا , وتسطيع أن تبحث عن الأسئلة إما �?ي   . <a href=\"?aktion=anzeigen\">التصني�?ات</a> أو تستعمل <a
+href=\"?aktion=search\">محرك بحث الموقع</a> للبحث بكلمة معينة .</p>";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "مراسلة المشر�?:";

@@ -118,7 +118,7 @@ $PMF_LANG["msg2answer"] = "Svar";
 $PMF_LANG["msgQuestionText"] = "Her kan du se spørsmål opprettet av andre brukere. Hvis du besvarer et spørsmål, blir ditt svar muligens brukt.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>Strukturen i denne OSS (<strong>O</strong>fte <strong>S</strong>tilte <strong>S</strong>pøsrmål) / FAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) er virkelig enkel. Du kan enten søke i <strong><a href=\"?sid=".isset($_GET["sid"])."&amp;action=show\">kategoriene</a></strong> eller etter <strong><a href=\"?sid=".isset($_GET["sid"])."&amp;action=search\">nøkkelord</a></strong>.</p>";
+$PMF_LANG["msgHelpText"] = "<p>Strukturen i denne OSS (<strong>O</strong>fte <strong>S</strong>tilte <strong>S</strong>pøsrmål) / FAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) er virkelig enkel. Du kan enten søke i <strong><a href=\"?action=show\">kategoriene</a></strong> eller etter <strong><a href=\"?action=search\">nøkkelord</a></strong>.</p>";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "Send e-post til webmaster:";
