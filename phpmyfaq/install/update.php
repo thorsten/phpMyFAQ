@@ -196,8 +196,13 @@ if (version_compare(PHP_VERSION, '5.2.0', '<')) {
     die();
 }
 
-require_once PMF_ROOT_DIR.'/inc/data.php';
+require PMF_ROOT_DIR . '/inc/data.php';
+require PMF_ROOT_DIR . '/inc/functions.php';
 
+define('SQLPREFIX', $DB['prefix']);
+$db = PMF_Db::dbSelect($DB["type"]);
+$db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
+    
 /**************************** STEP 1 OF 4 ***************************/
 if ($step == 1) {
 ?>
@@ -305,17 +310,17 @@ if ($step == 3) {
         require_once(PMF_ROOT_DIR."/inc/config.php");
     }
     if (version_compare($version, '2.0.0', '<')) {
-        $PMF_CONF['mod_rewrite'] = isset($PMF_CONF['mod_rewrite']) ? $PMF_CONF['mod_rewrite'] : '';
+        $PMF_CONF['mod_rewrite']  = isset($PMF_CONF['mod_rewrite']) ? $PMF_CONF['mod_rewrite'] : '';
         $PMF_CONF['ldap_support'] = isset($PMF_CONF['ldap_support']) ? $PMF_CONF['ldap_support'] : '';
-        $PMF_CONF['disatt'] = isset($PMF_CONF['disatt']) ? $PMF_CONF['disatt'] : '';
-        $PMF_CONF['ipcheck'] = isset($PMF_CONF['ipcheck']) ? $PMF_CONF['ipcheck'] : '';
+        $PMF_CONF['disatt']       = isset($PMF_CONF['disatt']) ? $PMF_CONF['disatt'] : '';
+        $PMF_CONF['ipcheck']      = isset($PMF_CONF['ipcheck']) ? $PMF_CONF['ipcheck'] : '';
         if (version_compare($version, '1.6.1', '<')) {
-            $PMF_CONF['spamEnableSafeEmail'] = isset($PMF_CONF['spamEnableSafeEmail']) ? $PMF_CONF['spamEnableSafeEmail'] : 'TRUE';
-            $PMF_CONF['spamCheckBannedWords'] = isset($PMF_CONF['spamCheckBannedWords']) ? $PMF_CONF['spamCheckBannedWords'] : 'TRUE';
+            $PMF_CONF['spamEnableSafeEmail']   = isset($PMF_CONF['spamEnableSafeEmail']) ? $PMF_CONF['spamEnableSafeEmail'] : 'TRUE';
+            $PMF_CONF['spamCheckBannedWords']  = isset($PMF_CONF['spamCheckBannedWords']) ? $PMF_CONF['spamCheckBannedWords'] : 'TRUE';
             $PMF_CONF['spamEnableCatpchaCode'] = isset($PMF_CONF['spamEnableCatpchaCode']) ? $PMF_CONF['spamEnableCatpchaCode'] : 'TRUE';
         } else {
-            $PMF_CONF['spamEnableSafeEmail'] = isset($PMF_CONF['spamEnableSafeEmail']) ? $PMF_CONF['spamEnableSafeEmail'] : '';
-            $PMF_CONF['spamCheckBannedWords'] = isset($PMF_CONF['spamCheckBannedWords']) ? $PMF_CONF['spamCheckBannedWords'] : '';
+            $PMF_CONF['spamEnableSafeEmail']   = isset($PMF_CONF['spamEnableSafeEmail']) ? $PMF_CONF['spamEnableSafeEmail'] : '';
+            $PMF_CONF['spamCheckBannedWords']  = isset($PMF_CONF['spamCheckBannedWords']) ? $PMF_CONF['spamCheckBannedWords'] : '';
             $PMF_CONF['spamEnableCatpchaCode'] = isset($PMF_CONF['spamEnableCatpchaCode']) ? $PMF_CONF['spamEnableCatpchaCode'] : '';
         }
 ?>
@@ -360,16 +365,11 @@ if ($step == 4) {
         require_once PMF_ROOT_DIR . '/inc/config.php';
     }
 
-    require_once PMF_ROOT_DIR . '/inc/functions.php';
     require_once PMF_ROOT_DIR . '/inc/Configuration.php';
     require_once PMF_ROOT_DIR . '/inc/Db.php';
     require_once PMF_ROOT_DIR . '/inc/PMF_DB/Driver.php';
     require_once PMF_ROOT_DIR . '/inc/Link.php';
     
-    define('SQLPREFIX', $DB['prefix']);
-    $db = PMF_Db::dbSelect($DB["type"]);
-    $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
-
     $images = array();
 
     //
@@ -1413,7 +1413,7 @@ if ($step == 4) {
     if (isset($query)) {
         foreach ($query as $current_query) {
             $result = $db->query($current_query);
-            print "| ";
+            printf('<span title="%s">|</span> ', $current_query);
             if (!$result) {
                 print "\n<div class=\"error\">\n";
                 print "<p><strong>DB error:</strong> ".$db->error()."</p>\n";
