@@ -571,7 +571,7 @@ $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "เปิดใช
 $LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "URL หลักสำหรับการตรวจสอบลิงค์ (ตัวอย่าง: http://www.example.org/faq)");
 $LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "ช่วงเวลาสำหรับการตรวจลิงค์ของ AJAX  (หน่วยเป็นวินาที)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "ปิดการแสดงผลของคำถามใหม่");
-$LANG_CONF['main.permLevel'] = array(0 => "input", 1 => "ระดับการอนุญาต");
+$LANG_CONF['main.permLevel'] = array(0 => "select", 1 => "ระดับการอนุญาต");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "เป็น หัวข้อใหม่";
 $PMF_LANG["ad_categ_paste_error"] = "ไม่สามารถย้ายหัวข้อนี้ได้";

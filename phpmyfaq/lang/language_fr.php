@@ -675,7 +675,7 @@ $LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Lier les pi
 $LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "URL pour vérifcation des liens (e.g.: http://www.example.org/faq)");
 $LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "Interval entre la vérification des liens AJAX (en secondes)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Désactiver la visibilité de nouvelles questions ?");
-$LANG_CONF['main.permLevel'] = array(0 => "input", 1 => "niveau d'autorisation");
+$LANG_CONF['main.permLevel'] = array(0 => "select", 1 => "niveau d'autorisation");
 $LANG_CONF['records.numberOfRelatedArticles'] = array(0 => "input", 1 => "Nombre d'entrées liées");
 $LANG_CONF['records.orderby'] = array(0 => 'select', 1 => 'Triée les enregistrements par');
 $LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'Type de Tri (descendant ou ascendant)');

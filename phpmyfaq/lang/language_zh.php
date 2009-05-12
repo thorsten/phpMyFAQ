@@ -587,7 +587,7 @@ $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "启用LDAP支持�
 $LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "链接验启用的基本 URL 网址 (设置为首页 URL 网址)");
 $LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "AJAX 连接验证间隔时间 (单位：秒)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "显示新问题?(默认:禁止)");
-$LANG_CONF['main.permLevel'] = array(0 => "input", 1 => "权限级别");
+$LANG_CONF['main.permLevel'] = array(0 => "select", 1 => "权限级别");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "作为一个新的类别";
 $PMF_LANG["ad_categ_paste_error"] = "此类别不能移动。";

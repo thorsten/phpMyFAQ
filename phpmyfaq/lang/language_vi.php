@@ -567,7 +567,7 @@ $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Bạn có muốn k
 $LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "Tham chiếu URL để kiểm tra đường dẫn (vd.: http://www.example.org/faq)");
 $LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "Khoảng cách giữa các lần kiểm tra đường dẫn AJAX (tính bằng giây)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Không chọn chức năng cho xem các câu hỏi mới?");
-$LANG_CONF['main.permLevel'] = array(0 => "input", 1 => "Permission level");
+$LANG_CONF['main.permLevel'] = array(0 => "select", 1 => "Permission level");
 
 $PMF_LANG['ad_categ_new_main_cat'] = 'như mục chính';
 $PMF_LANG["ad_categ_paste_error"] = "Không thể di chuyển mục này.";

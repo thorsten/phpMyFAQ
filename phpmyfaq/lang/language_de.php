@@ -573,7 +573,7 @@ $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "LDAP Support aktiv
 $LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "Basis-Adresse für die Linküberprüfung (Adresse der Startseite)");
 $LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "Zeitintervall zwischen den Ajax-Linküberprüfungen (in Sekunden)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Sichtbarkeit neuer Fragen unterdrücken?");
-$LANG_CONF['main.permLevel'] = array(0 => "input", 1 => "Berechtigungsebene");
+$LANG_CONF['main.permLevel'] = array(0 => "select", 1 => "Berechtigungsebene");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "Als neue Hauptkategorie";
 $PMF_LANG["ad_categ_paste_error"] = "Diese Kategorie kann hier nicht eingefügt werden.";

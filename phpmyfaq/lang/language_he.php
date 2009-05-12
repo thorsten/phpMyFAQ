@@ -576,7 +576,7 @@ $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "הפעל LDAP? (ב
 $LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "URL בסיסי לאימות קישורים (דוגמה: http://www.example.org/faq)");
 $LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "מרווח בין אימות קישורים (בשניות)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "לא להציג באתר שאלות חדשות ?");
-$LANG_CONF['main.permLevel'] = array(0 => "input", 1 => "רמת הרשאות");
+$LANG_CONF['main.permLevel'] = array(0 => "select", 1 => "רמת הרשאות");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "כקטגוריה ראשית חדשה";
 $PMF_LANG["ad_categ_paste_error"] = "הזזת הקטגוריה בלתי אפשרית.";

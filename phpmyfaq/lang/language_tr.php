@@ -570,7 +570,7 @@ $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "LDAP desteğini et
 $LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "Link kontrolü için baz URL (örn.: http://www.example.org/faq)");
 $LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "AJAX link kontrolü zaman aralığı (saniye olarak)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Yeni soruların görünürlüğünü kapat?");
-$LANG_CONF['main.permLevel'] = array(0 => "input", 1 => "İzin düzeyi");
+$LANG_CONF['main.permLevel'] = array(0 => "select", 1 => "İzin düzeyi");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "yeni ana kategori olarak";
 $PMF_LANG["ad_categ_paste_error"] = "Bu kategori taşınamaz.";

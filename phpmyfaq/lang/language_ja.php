@@ -576,7 +576,7 @@ $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Do you want to ena
 $LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "リンク確認の基準 URL (例: http://www.example.org/faq)");
 $LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "AJAX リンクの確認間隔 (秒単位)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "新しい質問の表示を無効にする");
-$LANG_CONF['main.permLevel'] = array(0 => "input", 1 => "パーミッションレベル");
+$LANG_CONF['main.permLevel'] = array(0 => "select", 1 => "パーミッションレベル");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "ROOT の下位カテゴリへ";
 $PMF_LANG["ad_categ_paste_error"] = "このカテゴリは移動できません。";
