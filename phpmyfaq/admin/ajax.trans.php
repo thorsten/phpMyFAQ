@@ -24,4 +24,12 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
+$ajax_action = PMF_Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
+
+switch($ajax_action) {
+    case 'save_translated_lang':
+        print_r($_POST);
+    break;
+}
+
 ?>

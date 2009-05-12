@@ -42,8 +42,7 @@ $leftVarsOnly  = getTransVars(PMF_ROOT_DIR . "/lang/language_en.php");
 $rightVarsOnly = getTransVars(PMF_ROOT_DIR . "/lang/language_$translateLang.php");
 
 ?>
-<form>
-<input type="hidden" name="translang" value="<?php  ?>" />
+<form id="transDiffForm">
 <table>
 <tr><td>Variable</td><td>en</td><td><?php echo $translateLang ?></td></tr>
 <?php while(list($key, $line) = each($leftVarsOnly)): ?>
@@ -57,8 +56,33 @@ $rightVarsOnly = getTransVars(PMF_ROOT_DIR . "/lang/language_$translateLang.php"
 <?php endif; ?>
 </tr>
 <?php endwhile; ?>
+<tr>
+<td>&nbsp;</td>
+<td><input type="button" value="Cancel" onclick="location.href='?action=translist'" /></td>
+<td><input type="button" value="Save" onclick="save()" /></td>
+</tr>
 </table>
 </form>
+<script>
+function save()
+{
+    var data = {};
+    var form = document.getElementById('transDiffForm');
+    for(var i=0; i < form.elements.length;i++) {
+        var element = form.elements[i]
+        if(('text' == element.type || 'hidden' == element.type) && !element.disabled) {
+            data[element.name] = element.value
+        }
+    }
+
+    $.post('index.php?action=ajax&ajax=trans&ajaxaction=save_translated_lang',
+            data,
+            function () {
+
+            }
+    )
+}
+</script>
 <?php 
 /**
  * Parse language file
