@@ -108,7 +108,7 @@ if (!is_null($loginname) && !is_null($lastname) && !is_null($email) && !isset($c
             $text = sprintf("New user has been registrated:\n\nUsername: %s\nLoginname: %s\n\n" .
                             "To activate this user do please use the administration interface.",
                             $lastname,
-                            $loginname,
+                            $loginname);
             
             $mail = new PMF_Mail();
             $mail->unsetFrom();
