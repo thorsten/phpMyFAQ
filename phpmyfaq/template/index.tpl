@@ -17,7 +17,7 @@
     <meta name="revisit-after" content="7 days" />
     <meta name="MSSmartTagsPreventParsing" content="true" />    
     <style type="text/css" media="screen">@import url(template/{stylesheet}.css);</style>
-    <style type="text/css" media="print">@import url(template/template/print.css);</style>
+    <style type="text/css" media="print">@import url(template/print.css);</style>
     <script type="text/javascript" src="inc/js/functions.js"></script>
     <script type="text/javascript" src="inc/js/jquery.min.js"></script>
     <link rel="shortcut icon" href="template/favicon.ico" type="image/x-icon" />
