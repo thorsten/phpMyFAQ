@@ -78,7 +78,8 @@ class PMF_Auth
      */
     private $auth_typemap = array(
         'db'   => 'AuthDb',
-        'ldap' => 'AuthLdap');
+        'ldap' => 'AuthLdap',
+        'http' => 'AuthHttp');
 
     /**
      * Short description of attribute read_only
