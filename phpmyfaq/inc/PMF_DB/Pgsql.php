@@ -286,18 +286,14 @@ class db_pgsql
 
         $match = implode("|| ' ' ||", $match);
 
-        if ($this->fti_check() == false)  {
-            $query = "SELECT ".$fields." FROM ".$table.$joined." WHERE (".$match.") ILIKE ('%".$string."%')";
-        } else {
-            // use fti postgres extension - NOT IMPLEMENTED
-        }
-
-        if (!empty($where)) {
-            $query .= " AND (".$where.")";
-        }
-
         if (is_numeric($string)) {
             $query = "SELECT ".$fields." FROM ".$table.$joined." WHERE ".$match." = ".$string;
+        } else {
+            $query = "SELECT ".$fields." FROM ".$table.$joined." WHERE (".$match.") ILIKE ('%".$string."%')";
+
+            if (!empty($where)) {
+                $query .= " AND (".$where.")";
+            }
         }
 
         $firstOrderBy = true;
