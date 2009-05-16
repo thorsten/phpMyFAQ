@@ -84,7 +84,7 @@ if ($num > 0) {
 
 $rss .= "</channel>\n</rss>";
 
-header("Content-Type: text/xml");
+header("Content-Type: application/rss+xml");
 header("Content-Length: ".strlen($rss));
 print $rss;
 
