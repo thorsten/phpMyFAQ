@@ -13,6 +13,7 @@ Changes since 2.0.13:
 - updated Vietnamese translation (Julien Petitperrin)
 - improved tagging implementation (Thorsten)
 - fixed authentication bypass (Thorsten)
+- fixed content type for RSS feeds (Thorsten)
 - minor bugfixes (Thorsten, Anatoliy)
 
 For known issues please take a look at KNOWNBUGS.txt
@@ -23,6 +24,7 @@ Version 2.0.14 - 2009-05-
 - updated Vietnamese translation (Julien Petitperrin)
 - improved tagging implementation (Thorsten)
 - fixed authentication bypass (Thorsten)
+- fixed content type for RSS feeds (Thorsten)
 - minor bugfixes (Thorsten)
 
 Version 2.0.13 - 2009-04-20
