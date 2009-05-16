@@ -88,7 +88,7 @@ $rss->endElement();
 $rss->endElement();
 $rssData = $rss->outputMemory();
 
-header('Content-Type: text/xml');
+header('Content-Type: application/rss+xml');
 header('Content-Length: '.strlen($rssData));
 
 print $rssData;
