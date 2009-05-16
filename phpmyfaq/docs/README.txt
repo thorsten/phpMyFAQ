@@ -13,7 +13,7 @@ Changes since 2.0.13:
 - updated Vietnamese translation (Julien Petitperrin)
 - improved tagging implementation (Thorsten)
 - fixed authentication bypass (Thorsten)
-- minor bugfixes (Thorsten)
+- minor bugfixes (Thorsten, Anatoliy)
 
 For known issues please take a look at KNOWNBUGS.txt
 
@@ -75,7 +75,7 @@ Version 2.0.7 - 2008-05-12
 - minor bugfixes (Thorsten)
 
 Version 2.0.6 - 2008-02-24
-- permission setting related fix (Carlos Eduardo Nogueira Gonçalves)
+- permission setting related fix (Carlos Eduardo Nogueira Gonï¿½alves)
 - minor bugfixes (Thorsten)
 
 Version 2.0.5 - 2008-01-20
@@ -300,7 +300,7 @@ Version 1.5.2 - 2005-09-23
 Version 1.5.1 - 2005-09-19
 - added experimental support for SQLite
 - added dynamic Sitemap
-- added Norwegian Bokmål translation
+- added Norwegian Bokmï¿½l translation
 - improved image handling in PDF export
 - some minor bugfixes
 
