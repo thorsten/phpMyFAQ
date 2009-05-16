@@ -21,7 +21,7 @@
  */
 
 require_once 'PHPUnit/Framework.php';
-require_once 'Package/AllTests.php';
+//require_once 'Package/AllTests.php';
 
 /**
  * AllTests
