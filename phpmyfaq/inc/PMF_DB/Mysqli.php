@@ -319,9 +319,9 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
            $id,
            $table);
            
-        $result    = $this->query($select);
-        $currentID = mysql_result($result, 0, 'current_id');
-        return ($currentID + 1);
+        $result  = $this->query($select);
+        $current = $result->fetch_row();
+        return $current[0];
     }
 
      /**
