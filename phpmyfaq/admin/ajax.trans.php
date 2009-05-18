@@ -31,7 +31,17 @@ switch($ajax_action) {
     case 'save_translated_lang':
         
         $lang = $_POST['PMF_LANG']['metaLanguage'];
-        $filename = PMF_ROOT_DIR . "/lang/language_$lang.php";       
+        $filename = PMF_ROOT_DIR . "/lang/language_$lang.php"; 
+        
+        if(!is_writable(PMF_ROOT_DIR . "/lang")) {
+            print 0;
+            exit;
+        }     
+        
+        if(!copy($filename, PMF_ROOT_DIR . "/lang/language_$lang.bak.php")) {
+            print 0;
+            exit;
+        }
         
         $newFileContents = '';
         /**
