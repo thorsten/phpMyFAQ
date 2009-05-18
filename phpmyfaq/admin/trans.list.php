@@ -28,18 +28,13 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 $transDir = new DirectoryIterator(PMF_ROOT_DIR . "/lang");
 ?>
 <?php echo $PMF_LANG['msgChooseLanguageToTranslate'] ?>: <br />
-<table>
+<table cellspacing="7">
+<?php if(!$transDir->isWritable()):
+    echo '<tr><td colspan="4"><font color="red">'. $PMF_LANG['msgLangDirIsntWritable'] . "</font></tr></td>";
+endif; ?>
 <?php if($permission["addtranslation"]): ?>
 <tr><td colspan="4">
-<?php if(!$transDir->isWritable()):
-    echo '<font color="red">'. $PMF_LANG['msgLangDirIsntWritable'] . "</font><br />";
-endif; ?>
-<form action="?action=transadd">
-<fieldset>
-<legend>Add translation</legend>
-Lang code: <input name="translang" type="text" /> <input type="submit" />
-</fieldset>
-</form>
+<a href="?action=transadd">Add new translation</a>
 </td></tr>
 <?php endif; ?>
 <tr><td>Filename</td><td colspan="2">Actions</td><td>Writable</td></tr>

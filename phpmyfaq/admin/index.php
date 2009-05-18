@@ -304,8 +304,9 @@ if (isset($auth) && in_array(true, $permission)) {
             // functions for FAQ export
             case "export":                  require_once 'export.main.php'; break;
             // translation tools
-            case "transedit":                require_once 'trans.edit.php'; break;
-            case "translist":                require_once 'trans.list.php'; break;
+            case "transedit":               require_once 'trans.edit.php'; break;
+            case "translist":               require_once 'trans.list.php'; break;
+            case "transadd":                require_once 'trans.add.php'; break;
             
             default:                        print "Error"; break;
         }
