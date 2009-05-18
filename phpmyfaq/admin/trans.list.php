@@ -64,7 +64,7 @@ Lang code: <input name="translang" type="text" /> <input type="submit" />
     sort($sortedLangList);
     while(list(,$lang) = each($sortedLangList)) {           
         ?>
-        <tr>
+        <tr class="lang_<?php echo $lang ?>_container">
         <td><?php echo $lang ?></td>
         <?php if($permission["edittranslation"]): ?>
         <td><a href="?action=transedit&amp;translang=<?php print $lang ?>" >Edit</a></td>
@@ -72,7 +72,7 @@ Lang code: <input name="translang" type="text" /> <input type="submit" />
         <td>&nbsp;</td>
         <?php endif; ?>
         <?php if($permission["edittranslation"]): ?>
-        <td><a href="?action=transdel&amp;translang=<?php print $lang ?>" >Delete</a></td>
+        <td><a href="javascript: del('<?php print $lang ?>');" >Delete</a></td>
         <?php else: ?>
         <td>&nbsp;</td>
         <?php endif; ?>
@@ -85,3 +85,32 @@ Lang code: <input name="translang" type="text" /> <input type="submit" />
         <?php 
     }
 ?></table>
+<script>
+/**
+ * Remove a language file
+ *
+ * @param string lang Language to remove 
+ *
+ * @return void
+ */
+function del(lang)
+{
+    if(!confirm('Are you sure this language file must be deleted?')) {
+        return;
+    }
+    
+    $('#saving_data_indicator').html('<img src="images/indicator.gif" /> removing ...');
+
+    $.get('index.php?action=ajax&ajax=trans&ajaxaction=remove_lang_file',
+          {translang: lang},
+          function(retval, status) {
+              if(1*retval > 0 && 'success' == status) {
+                  $('.lang_' + lang + '_container').fadeOut('slow');
+                  $('#saving_data_indicator').html('File successfully removed');
+              } else {
+                  $('#saving_data_indicator').html('Error removing the language file');
+              }
+        }
+    );
+}
+</script>

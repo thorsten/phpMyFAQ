@@ -91,12 +91,11 @@ function save()
     $.post('index.php?action=ajax&ajax=trans&ajaxaction=save_translated_lang',
             data,
             function (retval, status) {
-                $('#saving_data_indicator').html('<?php print $PMF_LANG['ad_entry_savedsuc']; ?>');
-
                 if(1*retval > 0 && 'success' == status) {
+                    $('#saving_data_indicator').html('Language file saved successfully');
                     document.location = '?action=translist'
                 } else {
-                    alert('Error saving the language file');
+                    $('#saving_data_indicator').html('Error saving the language file');
                 }
             }
     )

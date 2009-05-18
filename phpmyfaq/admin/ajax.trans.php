@@ -102,6 +102,28 @@ switch($ajax_action) {
         $retval = @file_put_contents($filename, $newFileContents);
         print intval($retval);
     break;
+    
+    case 'remove_lang_file':
+        
+        $lang = PMF_Filter::filterInput(INPUT_GET, 'translang', FILTER_SANITIZE_STRING);
+        
+        if(!is_writable(PMF_ROOT_DIR . "/lang")) {
+            print 0;
+            exit;
+        }     
+        
+        if(!copy(PMF_ROOT_DIR . "/lang/language_$lang.php", PMF_ROOT_DIR . "/lang/language_$lang.bak.php")) {
+            print 0;
+            exit;
+        }
+        
+        if(!unlink(PMF_ROOT_DIR . "/lang/language_$lang.php")) {
+            print 0;
+            exit;
+        }
+        
+        print 1;
+    break;
 }
 
 ?>
