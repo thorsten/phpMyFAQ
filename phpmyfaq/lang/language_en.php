@@ -26,7 +26,7 @@
  *                !!! IMPORTANT NOTE !!!
  * Please consider following while defining new vars:
  * - the perfect case is to define a scalar string value
- * - if some dynamic content is needed, use sprintf syntax
+ * - if some dynamic content is needed, use printf syntax
  * - arrays are allowed but not recommended
  * - no comments at the end of line after the var definition
  * - do not use '=' char in the array keys
@@ -151,7 +151,7 @@ $PMF_LANG["msgLatestArticles"] = "Latest FAQs";
 
 // E-Mailbenachrichtigung
 $PMF_LANG["msgMailThanks"] = "Many thanks for your proposal to the FAQ.";
-$PMF_LANG["msgMailCheck"] = "There's a new entry in the FAQ!\nPlease check the admin section!";
+$PMF_LANG["msgMailCheck"] = "There's a new entry in the FAQ! Please check the admin section!";
 $PMF_LANG["msgMailContact"] = "Your message has been sent to the administrator.";
 
 // Fehlermeldungen
@@ -161,12 +161,12 @@ $PMF_LANG["err_noArticles"] = "<p>No FAQs available.</p>";
 $PMF_LANG["err_badID"] = "<p>Wrong ID.</p>";
 $PMF_LANG["err_noTopTen"] = "<p>No popular FAQs available yet.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>No entry found.</p>";
-$PMF_LANG["err_SaveEntries"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>category</strong>, <strong>headline</strong>, <strong>your Record</strong> and, when requested, the <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!<br /><br />\n<a href=\"javascript:history.back();\">one page back</a><br /><br />\n";
-$PMF_LANG["err_SaveComment"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>your comments</strong> and, when requested, the <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!<br /><br />\n<a href=\"javascript:history.back();\">one page back</a><br /><br />\n";
+$PMF_LANG["err_SaveEntries"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>category</strong>, <strong>headline</strong>, <strong>your Record</strong> and, when requested, the <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!<br /><br /><a href=\"javascript:history.back();\">one page back</a><br /><br />";
+$PMF_LANG["err_SaveComment"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>your comments</strong> and, when requested, the <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!<br /><br /><a href=\"javascript:history.back();\">one page back</a><br /><br />";
 $PMF_LANG["err_VoteTooMuch"] = "<p>We do not count double votings. <a href=\"javascript:history.back();\">Click here</a>, to go back.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>You did not rate the question!</strong> <a href=\"javascript:history.back();\">Please click here</a>, to vote.</p>";
 $PMF_LANG["err_noMailAdress"] = "Your email address is not correct.<br /><a href=\"javascript:history.back();\">back</a>";
-$PMF_LANG["err_sendMail"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>your question</strong> and, when requested, the <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!<br /><br />\n<a href=\"javascript:history.back();\">one page back</a><br /><br />\n";
+$PMF_LANG["err_sendMail"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>your question</strong> and, when requested, the <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!<br /><br /><a href=\"javascript:history.back();\">one page back</a><br /><br />";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>Search for records:</strong><br />With an entry like <strong style=\"color: Red;\">word1 word2</strong> you can do a relevance descending search for two or more search criterion.</p><p><strong>Notice:</strong> Your search criterion has to be at least 4 letters long otherwise your request will be rejected.</p>";
@@ -559,7 +559,7 @@ $PMF_LANG["ad_user_realname"] = "real name:";
 $PMF_LANG["ad_export_generate_pdf"] = "generate PDF file";
 $PMF_LANG["ad_export_full_faq"] = "Your FAQ as a PDF file: ";
 $PMF_LANG["err_bannedIP"] = "Your IP address has been banned.";
-$PMF_LANG["err_SaveQuestion"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>your question</strong> and, when requested, the <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>.<br /><br /><a href=\"javascript:history.back();\">one page back</a><br /><br />\n";
+$PMF_LANG["err_SaveQuestion"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>your question</strong> and, when requested, the <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>.<br /><br /><a href=\"javascript:history.back();\">one page back</a><br /><br />";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Font color: ";
@@ -852,9 +852,9 @@ $PMF_LANG['msgNewTranslationHeader'] = 'Translation proposal';
 $PMF_LANG['msgNewTranslationAddon'] = 'Your proposal will not be published right away, but will be released by the administrator upon receipt. Required  fields are <strong>your Name</strong>, <strong>your email address</strong>, <strong>your headline translation</strong> and <strong>your faq translation</strong>. Please separate the keywords with space only.';
 $PMF_LANG['msgNewTransSourcePane'] = 'Source pane';
 $PMF_LANG['msgNewTranslationPane'] = 'Translation pane';
-$PMF_LANG['msgNewTranslationName'] = $PMF_LANG['msgNewContentName'];
-$PMF_LANG['msgNewTranslationMail'] = $PMF_LANG['msgNewContentMail'];
-$PMF_LANG['msgNewTranslationKeywords'] = $PMF_LANG['msgNewContentKeywords'];
+$PMF_LANG['msgNewTranslationName'] = "Your Name:";
+$PMF_LANG['msgNewTranslationMail'] = "Your email address:";
+$PMF_LANG['msgNewTranslationKeywords'] = "Keywords:";
 $PMF_LANG['msgNewTranslationSubmit'] = 'Submit your proposal';
 $PMF_LANG['msgTranslate'] = 'Propose a translation for';
 $PMF_LANG['msgTranslateSubmit'] = 'Start translation...';

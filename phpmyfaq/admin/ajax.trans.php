@@ -28,7 +28,46 @@ $ajax_action = PMF_Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_
 
 switch($ajax_action) {
     case 'save_translated_lang':
-        print_r($_POST);
+        
+        $lang = $_POST['PMF_LANG']['metaLanguage'];
+        $filename = PMF_ROOT_DIR . "/lang/language_$lang.php";       
+        
+        $newFileContents = '';
+        /**
+         * Read in the head of the file we're writing to
+         */
+        $fh = fopen($filename, 'r');
+        $line = '';
+        do {
+            $line = fgets($fh);
+            $newFileContents .= $line;
+        }
+        while('*/' != trim($line));
+        fclose($fh);
+        
+        /**
+         * Build language variable definitions
+         */
+        foreach($_POST['PMF_LANG'] as $key => $val) {
+            if(is_string($val)) {
+                $val = str_replace(array('\\\\', '\"', '\\\''), array('\\', '"', "'"), $val);
+                $val = str_replace("'", "\\'", $val);
+                $newFileContents .= "\$PMF_LANG['$key'] = '$val';\n";
+            } else if(is_array($val)) {
+                /**
+                 * Here we deal with a two dimensional array
+                 */
+                foreach($val as $key2 => $val2) {
+                    $newFileContents .= "\$PMF_LANG['$key']['$key2'] = '$val2';\n";
+                }
+            }
+        }
+        
+        foreach($_POST['LANG_CONF'] as $key => $val) {
+            $newFileContents .= "\$LANG_CONF['$key'] = $val;\n";
+        }
+        
+        file_put_contents($filename, $newFileContents);
     break;
 }
 
