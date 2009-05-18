@@ -64,7 +64,9 @@ $rightVarsOnly = $tt->getVars(PMF_ROOT_DIR . "/lang/language_$translateLang.php"
 <tr>
 <td>&nbsp;</td>
 <td><input type="button" value="Cancel" onclick="location.href='?action=translist'" /></td>
-<td><input type="button" value="Save" onclick="save()" /></td>
+<td><input type="button"
+           value="Save"
+           onclick="save()"<?php if(!is_writable(PMF_ROOT_DIR . "/lang/language_$translateLang.php")) {echo ' disabled="disabled"';} ?> /></td>
 </tr>
 </table>
 </form>
@@ -88,8 +90,14 @@ function save()
 
     $.post('index.php?action=ajax&ajax=trans&ajaxaction=save_translated_lang',
             data,
-            function () {
+            function (retval, status) {
                 $('#saving_data_indicator').html('<?php print $PMF_LANG['ad_entry_savedsuc']; ?>');
+
+                if(1*retval > 0 && 'success' == status) {
+                    document.location = '?action=translist'
+                } else {
+                    alert('Error saving the language file');
+                }
             }
     )
 }

@@ -27,6 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 $ajax_action = PMF_Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
 
 switch($ajax_action) {
+    
     case 'save_translated_lang':
         
         $lang = $_POST['PMF_LANG']['metaLanguage'];
@@ -50,6 +51,13 @@ switch($ajax_action) {
          */
         foreach($_POST['PMF_LANG'] as $key => $val) {
             if(is_string($val)) {
+                /**
+                 * Since we get data per ajax, it's always utf-8 encoded
+                 */
+                if(PMF_String::isUTF8($val)) {
+                    $val = @iconv('UTF-8', $PMF_LANG["metaCharset"], $val);
+                }
+                       
                 $val = str_replace(array('\\\\', '\"', '\\\''), array('\\', '"', "'"), $val);
                 $val = str_replace("'", "\\'", $val);
                 $newFileContents .= "\$PMF_LANG['$key'] = '$val';\n";
@@ -58,16 +66,31 @@ switch($ajax_action) {
                  * Here we deal with a two dimensional array
                  */
                 foreach($val as $key2 => $val2) {
+                    /**
+                     * Since we get data per ajax, it's always utf-8 encoded
+                     */
+                    if(PMF_String::isUTF8($val2)) {
+                       $val2 = iconv('UTF-8', $PMF_LANG["metaCharset"], $val2);
+                    }
+                    
                     $newFileContents .= "\$PMF_LANG['$key']['$key2'] = '$val2';\n";
                 }
             }
         }
         
         foreach($_POST['LANG_CONF'] as $key => $val) {
+            /**
+             * Since we get data per ajax, it's always utf-8 encoded
+             */
+            if(PMF_String::isUTF8($val)) {
+                $val = iconv('UTF-8', $PMF_LANG["metaCharset"], $val);
+            }
+            
             $newFileContents .= "\$LANG_CONF['$key'] = $val;\n";
         }
         
-        file_put_contents($filename, $newFileContents);
+        $retval = @file_put_contents($filename, $newFileContents);
+        print intval($retval);
     break;
 }
 

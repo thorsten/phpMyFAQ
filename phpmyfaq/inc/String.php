@@ -322,4 +322,16 @@ class PMF_String
     {
         return self::$instance->preg_replace($pattern, $replacement, $subject, $limit, $count);
     }
+    
+    /**
+     * Check if the string is a unicode string
+     * 
+     * @param string $str String
+     * 
+     * @return boolean
+     */
+    public static function isUTF8($str)
+    {
+        return PMF_String_Basic::isUTF8($str);
+    }
 }
