@@ -124,6 +124,10 @@ switch($ajax_action) {
         
         print 1;
     break;
+    
+    case 'save_added_trans':
+        print 1;        
+    break;
 }
 
 ?>

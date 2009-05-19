@@ -32,7 +32,38 @@ if(!$permission["addtranslation"]) {
 <form>
 <table cellspacing="7">
 <tr><td>Language code</td><td><input name="langcode" /></td></tr>
-<tr><td>Author</td><td><input name="author[]" /></td></tr>
-<tr><td colspan="2"><input type="submit" /></td></tr>
+<tr><td>Language name</td><td><input name="langname" /></td></tr>
+<tr><td>Language charset</td><td><input name="langcharset" /></td></tr>
+<tr class="author_1_container"><td>Author</td><td><input name="author[]" /></td></tr>
+<tr><td colspan="2"><a href="javascript: addAuthorContainer();">Add author</a></td></tr>
+<tr><td colspan="2"><input type="button" value="Create Translation" onclick="save()" /></td></tr>
 </table>
 </form>
+<script>
+var max_author = 1
+
+/**
+ * Add an author input field to the form 
+ * @return void
+ */
+function addAuthorContainer()
+{
+    var next_max_author = max_author + 1;
+    var next_author_html = '<tr class="author_' + next_max_author + '_container">' +
+                            '<td>Author</td><td><input name="author[]" />' +
+                            '<a href="javascript: $(\'.author_' + next_max_author + '_container\').fadeOut(\'slow\');void(0);" >' +
+                            'Remove</a></td></tr>';
+    $('.author_' + max_author + '_container').after(next_author_html);
+    max_author++
+}
+
+/**
+ * Send the form data to the server to save
+ * a new translation and redirect to the edit form
+ * @return void
+ */
+function save()
+{
+    
+}
+</script>
