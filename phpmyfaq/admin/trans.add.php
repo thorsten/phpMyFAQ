@@ -31,7 +31,7 @@ if(!$permission["addtranslation"]) {
 ?>
 <form id="newTranslationForm"> 
 <table cellspacing="7">
-<tr><td>Language code</td><td><input name="langcode" /></td></tr>
+<tr><td>Language code</td><td><input name="langcode" id="langcode" /></td></tr>
 <tr><td>Language name</td><td><input name="langname" /></td></tr>
 <tr><td>Language charset</td><td><input name="langcharset" /></td></tr>
 <tr><td>Language direction</td><td><select name="langdir"><option>ltr</option><option>rtl</option></select></td></tr>
@@ -93,7 +93,7 @@ function save()
            function(retval, status) {
                if(1*retval > 0 && 'success' == status) {
                    $('#saving_data_indicator').html('New translation successfully created');
-                   document.location = '?action=transedit&translang=' + $('#langcode').attr('value')
+                   document.location = '?action=transedit&translang=' + $('#langcode').val()
                } else {
                    $('#saving_data_indicator').html('Could not create the new translation');
                }

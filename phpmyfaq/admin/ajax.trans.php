@@ -126,7 +126,62 @@ switch($ajax_action) {
     break;
     
     case 'save_added_trans':
-        print 1;        
+        if(!is_writable(PMF_ROOT_DIR . "/lang")) {
+            print 0;
+            exit;
+        }
+        
+        $langCode    = PMF_Filter::filterInput(INPUT_POST, 'langcode', FILTER_SANITIZE_STRING);
+        $langName    = PMF_Filter::filterInput(INPUT_POST, 'langname', FILTER_SANITIZE_STRING);
+        $langCharset = PMF_Filter::filterInput(INPUT_POST, 'langcharset', FILTER_SANITIZE_STRING);
+        $langDir     = PMF_Filter::filterInput(INPUT_POST, 'langdir', FILTER_SANITIZE_STRING);
+        $langDesc    = PMF_Filter::filterInput(INPUT_POST, 'langdesc', FILTER_SANITIZE_STRING);
+        $author      = (array) @$_POST['author'];
+        
+        if(empty($langCode) || empty($langName) || empty($langCharset) ||
+           empty($langDir) || empty($langDesc) || empty($author)) {
+            print 0;
+            exit;
+        }
+        
+        $fileTpl     = <<<FILE
+<?php
+/**
+ * %s
+ *
+ * @package    phpMyFAQ
+ * @subpackage i18n
+%s * @since      %s
+ * @version    SVN: \$Id: language_%s.php \$
+ * @copyright  2004-%d phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
+
+\$PMF_LANG['metaCharset'] = '%s';
+\$PMF_LANG['metaLanguage'] = '%s';
+\$PMF_LANG['language'] = '%s';
+\$PMF_LANG['dir'] = '%s';        
+FILE;
+
+        $authorTpl = '';
+        foreach($author as $authorData) {
+            $authorTpl .= " * @author     $authorData\n";
+        }
+        
+        $fileTpl = sprintf($fileTpl, $langDesc, $authorTpl, date('Y-m-d'), $langCode, date('Y'),
+                                     $langCharset, $langCode, $langName, $langDir);
+        
+        $retval = @file_put_contents(PMF_ROOT_DIR . "/lang/language_$langCode.php", $fileTpl);
+        print intval($retval);
     break;
 }
 
