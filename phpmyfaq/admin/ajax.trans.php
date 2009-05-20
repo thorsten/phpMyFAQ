@@ -131,8 +131,8 @@ switch($ajax_action) {
             exit;
         }
         
-        $langCode    = PMF_Filter::filterInput(INPUT_POST, 'langcode', FILTER_SANITIZE_STRING);
-        $langName    = PMF_Filter::filterInput(INPUT_POST, 'langname', FILTER_SANITIZE_STRING);
+        $langCode    = PMF_Filter::filterInput(INPUT_POST, 'translang', FILTER_SANITIZE_STRING);
+        $langName    = @$languageCodes[$langCode];
         $langCharset = PMF_Filter::filterInput(INPUT_POST, 'langcharset', FILTER_SANITIZE_STRING);
         $langDir     = PMF_Filter::filterInput(INPUT_POST, 'langdir', FILTER_SANITIZE_STRING);
         $langDesc    = PMF_Filter::filterInput(INPUT_POST, 'langdesc', FILTER_SANITIZE_STRING);
@@ -178,9 +178,9 @@ FILE;
         }
         
         $fileTpl = sprintf($fileTpl, $langDesc, $authorTpl, date('Y-m-d'), $langCode, date('Y'),
-                                     $langCharset, $langCode, $langName, $langDir);
-        
-        $retval = @file_put_contents(PMF_ROOT_DIR . "/lang/language_$langCode.php", $fileTpl);
+                                     $langCharset, strtolower($langCode), $langName, $langDir);
+
+        $retval = @file_put_contents(PMF_ROOT_DIR . '/lang/language_' . strtolower($langCode) . '.php', $fileTpl);
         print intval($retval);
     break;
 }

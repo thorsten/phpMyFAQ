@@ -31,8 +31,15 @@ if(!$permission["addtranslation"]) {
 ?>
 <form id="newTranslationForm"> 
 <table cellspacing="7">
-<tr><td>Language code</td><td><input name="langcode" id="langcode" /></td></tr>
-<tr><td>Language name</td><td><input name="langname" /></td></tr>
+<tr><td>Language</td><td><select name="translang" id="translang">
+<?php 
+$avaliableLanguages = array_keys(PMF_Language::getAvailableLanguages());
+foreach($languageCodes as $langCode => $langName):
+    if(!in_array(strtolower($langCode), $avaliableLanguages)):
+?>
+<option value="<?php echo $langCode ?>"><?php echo $langName ?></option>
+<?php endif; endforeach; ?>
+</select></td></tr>
 <tr><td>Language charset</td><td><input name="langcharset" /></td></tr>
 <tr><td>Language direction</td><td><select name="langdir"><option>ltr</option><option>rtl</option></select></td></tr>
 <tr><td>Language description</td><td><textarea name="langdesc"></textarea></td></tr>
@@ -93,7 +100,7 @@ function save()
            function(retval, status) {
                if(1*retval > 0 && 'success' == status) {
                    $('#saving_data_indicator').html('New translation successfully created');
-                   document.location = '?action=transedit&translang=' + $('#langcode').val()
+                   document.location = '?action=transedit&translang=' + $('#translang').val().toLowerCase()
                } else {
                    $('#saving_data_indicator').html('Could not create the new translation');
                }
