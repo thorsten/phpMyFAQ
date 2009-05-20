@@ -31,7 +31,7 @@ if(!$permission["addtranslation"]) {
 ?>
 <form id="newTranslationForm"> 
 <table cellspacing="7">
-<tr><td>Language</td><td><select name="translang" id="translang">
+<tr><td><?php echo $PMF_LANG['msgLanguage'] ?></td><td><select name="translang" id="translang">
 <?php 
 $avaliableLanguages = array_keys(PMF_Language::getAvailableLanguages());
 foreach($languageCodes as $langCode => $langName):
@@ -40,12 +40,12 @@ foreach($languageCodes as $langCode => $langName):
 <option value="<?php echo $langCode ?>"><?php echo $langName ?></option>
 <?php endif; endforeach; ?>
 </select></td></tr>
-<tr><td>Language charset</td><td><input name="langcharset" /></td></tr>
-<tr><td>Language direction</td><td><select name="langdir"><option>ltr</option><option>rtl</option></select></td></tr>
-<tr><td>Language description</td><td><textarea name="langdesc"></textarea></td></tr>
-<tr class="author_1_container"><td>Author</td><td><input name="author[]" /></td></tr>
-<tr><td colspan="2"><a href="javascript: addAuthorContainer();">Add author</a></td></tr>
-<tr><td colspan="2"><input type="button" value="Create Translation" onclick="save()" /></td></tr>
+<tr><td><?php echo $PMF_LANG['msgTransToolLanguageCharset'] ?></td><td><input name="langcharset" /></td></tr>
+<tr><td><?php echo $PMF_LANG['msgTransToolLanguageDir'] ?></td><td><select name="langdir"><option>ltr</option><option>rtl</option></select></td></tr>
+<tr><td><?php echo $PMF_LANG['msgTransToolLanguageDesc'] ?></td><td><textarea name="langdesc"></textarea></td></tr>
+<tr class="author_1_container"><td><?php echo $PMF_LANG['msgAuthor'] ?></td><td><input name="author[]" /></td></tr>
+<tr><td colspan="2"><a href="javascript: addAuthorContainer();"><?php echo $PMF_LANG['msgTransToolAddAuthor'] ?></a></td></tr>
+<tr><td colspan="2"><input type="button" value="<?php echo $PMF_LANG['msgTransToolCreateTranslation'] ?>" onclick="save()" /></td></tr>
 </table>
 </form>
 <script>
@@ -81,7 +81,7 @@ function delAuthorContainer(id)
  */
 function save()
 {
-    $('#saving_data_indicator').html('<img src="images/indicator.gif" /> adding ...');
+    $('#saving_data_indicator').html('<img src="images/indicator.gif" /> <?php echo $PMF_LANG['msgAdding3Dots'] ?>');
 
     var data = {}
     var form = document.getElementById('newTranslationForm')
@@ -99,10 +99,10 @@ function save()
            data,
            function(retval, status) {
                if(1*retval > 0 && 'success' == status) {
-                   $('#saving_data_indicator').html('New translation successfully created');
+                   $('#saving_data_indicator').html('<?php echo $PMF_LANG['msgTransToolTransCreated'] ?>');
                    document.location = '?action=transedit&translang=' + $('#translang').val().toLowerCase()
                } else {
-                   $('#saving_data_indicator').html('Could not create the new translation');
+                   $('#saving_data_indicator').html('<?php echo $PMF_LANG['msgTransToolCouldntCreateTrans'] ?>');
                }
            }
     );

@@ -45,7 +45,7 @@ $rightVarsOnly = $tt->getVars(PMF_ROOT_DIR . "/lang/language_$translateLang.php"
 ?>
 <form id="transDiffForm">
 <table>
-<tr><td>Variable</td><td>en</td><td><?php echo $translateLang ?></td></tr>
+<tr><td><b><?php echo $PMF_LANG['msgVariable'] ?></b></td><td><b>en</b></td><td><b><?php echo $translateLang ?></b></td></tr>
 <?php while(list($key, $line) = each($leftVarsOnly)): ?>
 <tr>
 <td><?php echo $key?></td>
@@ -63,9 +63,9 @@ $rightVarsOnly = $tt->getVars(PMF_ROOT_DIR . "/lang/language_$translateLang.php"
 <?php endwhile; ?>
 <tr>
 <td>&nbsp;</td>
-<td><input type="button" value="Cancel" onclick="location.href='?action=translist'" /></td>
+<td><input type="button" value="<?php echo $PMF_LANG['msgCancel'] ?>" onclick="location.href='?action=translist'" /></td>
 <td><input type="button"
-           value="Save"
+           value="<?php echo $PMF_LANG['msgSave'] ?>"
            onclick="save()"<?php if(!is_writable(PMF_ROOT_DIR . "/lang/language_$translateLang.php")) {echo ' disabled="disabled"';} ?> /></td>
 </tr>
 </table>
@@ -77,7 +77,7 @@ $rightVarsOnly = $tt->getVars(PMF_ROOT_DIR . "/lang/language_$translateLang.php"
  */
 function save()
 {
-    $('#saving_data_indicator').html('<img src="images/indicator.gif" /> saving ...');
+    $('#saving_data_indicator').html('<img src="images/indicator.gif" /> <?php echo $PMF_LANG['msgSaving3Dots'] ?>');
     
     var data = {};
     var form = document.getElementById('transDiffForm');
@@ -92,10 +92,10 @@ function save()
             data,
             function (retval, status) {
                 if(1*retval > 0 && 'success' == status) {
-                    $('#saving_data_indicator').html('Language file saved successfully');
+                    $('#saving_data_indicator').html('<?php echo $PMF_LANG['msgTransToolFileSaved'] ?>');
                     document.location = '?action=translist'
                 } else {
-                    $('#saving_data_indicator').html('Error saving the language file');
+                    $('#saving_data_indicator').html('<?php echo $PMF_LANG['msgTransToolErrorSavingFile'] ?>');
                 }
             }
     )

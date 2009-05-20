@@ -34,10 +34,13 @@ $transDir = new DirectoryIterator(PMF_ROOT_DIR . "/lang");
 endif; ?>
 <?php if($permission["addtranslation"]): ?>
 <tr><td colspan="4">
-<a href="?action=transadd">Add new translation</a>
+<a href="?action=transadd"><?php echo $PMF_LANG['msgTransToolAddNewTranslation'] ?></a>
 </td></tr>
 <?php endif; ?>
-<tr><td>Filename</td><td colspan="2">Actions</td><td>Writable</td></tr>
+<tr><td><?php echo $PMF_LANG['msgTransToolFilename'] ?></td>
+    <td colspan="2"><?php echo $PMF_LANG['msgTransToolActions'] ?></td>
+    <td><?php echo $PMF_LANG['msgTransToolWritable'] ?></td>
+</tr>
 <?php
     $sortedLangList = array();
     
@@ -62,19 +65,19 @@ endif; ?>
         <tr class="lang_<?php echo $lang ?>_container">
         <td><?php echo $lang ?></td>
         <?php if($permission["edittranslation"]): ?>
-        <td><a href="?action=transedit&amp;translang=<?php print $lang ?>" >Edit</a></td>
+        <td><a href="?action=transedit&amp;translang=<?php print $lang ?>" ><?php echo $PMF_LANG['msgEdit'] ?></a></td>
         <?php else: ?>
         <td>&nbsp;</td>
         <?php endif; ?>
         <?php if($permission["edittranslation"]): ?>
-        <td><a href="javascript: del('<?php print $lang ?>');" >Delete</a></td>
+        <td><a href="javascript: del('<?php print $lang ?>');" ><?php echo $PMF_LANG['msgDelete'] ?></a></td>
         <?php else: ?>
         <td>&nbsp;</td>
         <?php endif; ?>
         <?php if(is_writable(PMF_ROOT_DIR . "/lang/language_$lang.php")): ?>
-        <td><font color="green">yes</font></td>
+        <td><font color="green"><?php echo $PMF_LANG['msgYes'] ?></font></td>
         <?php else: ?>
-        <td><font color="red">no</font></td>
+        <td><font color="red"><?php echo $PMF_LANG['msgNo'] ?></font></td>
         <?php endif; ?>
         </tr>
         <?php 
@@ -90,20 +93,20 @@ endif; ?>
  */
 function del(lang)
 {
-    if(!confirm('Are you sure this language file must be deleted?')) {
+    if(!confirm('<?php echo $PMF_LANG['msgTransToolSureDeleteFile'] ?>')) {
         return;
     }
     
-    $('#saving_data_indicator').html('<img src="images/indicator.gif" /> removing ...');
+    $('#saving_data_indicator').html('<img src="images/indicator.gif" /> <?php echo $PMF_LANG['msgRemoving3Dots'] ?>');
 
     $.get('index.php?action=ajax&ajax=trans&ajaxaction=remove_lang_file',
           {translang: lang},
           function(retval, status) {
               if(1*retval > 0 && 'success' == status) {
                   $('.lang_' + lang + '_container').fadeOut('slow');
-                  $('#saving_data_indicator').html('File successfully removed');
+                  $('#saving_data_indicator').html('<?php echo $PMF_LANG['msgTransToolFileRemoved'] ?>');
               } else {
-                  $('#saving_data_indicator').html('Error removing the language file');
+                  $('#saving_data_indicator').html('<?php echo $PMF_LANG['msgTransToolErrorRemovingFile'] ?>');
               }
         }
     );
