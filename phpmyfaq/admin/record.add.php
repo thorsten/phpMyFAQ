@@ -44,7 +44,7 @@ if ($permission['editbt']) {
     $tags          = PMF_Filter::filterInput(INPUT_POST, 'tags', FILTER_SANITIZE_STRING);
     $active        = PMF_Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_STRING);
     $sticky        = PMF_Filter::filterInput(INPUT_POST, 'sticky', FILTER_SANITIZE_STRING);
-    $content       = PMF_Filter::filterInput(INPUT_POST, 'content', FILTER_SANITIZE_STRING);
+    $content       = PMF_Filter::filterInput(INPUT_POST, 'content', FILTER_SANITIZE_SPECIAL_CHARS);
     $keywords      = PMF_Filter::filterInput(INPUT_POST, 'keywords', FILTER_SANITIZE_STRING);
     $author        = PMF_Filter::filterInput(INPUT_POST, 'author', FILTER_SANITIZE_STRING);
     $email         = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
@@ -84,6 +84,8 @@ if ($permission['editbt']) {
             'linkState'     => '',
             'linkDateCheck' => 0);
 
+        dump($recordData);
+        
         // Add new record and get that ID
         $record_id = $faq->addRecord($recordData);
 
