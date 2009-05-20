@@ -975,3 +975,4 @@ $PMF_LANG['msgTransToolCreateTranslation'] = 'Create Translation';
 $PMF_LANG['msgTransToolTransCreated'] = 'New translation successfully created';
 $PMF_LANG['msgTransToolCouldntCreateTrans'] = 'Could not create the new translation';
 $PMF_LANG['msgAdding3Dots'] = 'adding ...';
+$PMF_LANG['msgTransToolSendToTeam'] = 'Send to phpMyFAQ team';

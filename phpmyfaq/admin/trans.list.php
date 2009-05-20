@@ -30,15 +30,15 @@ $transDir = new DirectoryIterator(PMF_ROOT_DIR . "/lang");
 <?php echo $PMF_LANG['msgChooseLanguageToTranslate'] ?>: <br />
 <table cellspacing="7">
 <?php if(!$transDir->isWritable()):
-    echo '<tr><td colspan="4"><font color="red">'. $PMF_LANG['msgLangDirIsntWritable'] . "</font></tr></td>";
+    echo '<tr><td colspan="5"><font color="red">'. $PMF_LANG['msgLangDirIsntWritable'] . "</font></tr></td>";
 endif; ?>
 <?php if($permission["addtranslation"]): ?>
-<tr><td colspan="4">
+<tr><td colspan="5">
 <a href="?action=transadd"><?php echo $PMF_LANG['msgTransToolAddNewTranslation'] ?></a>
 </td></tr>
 <?php endif; ?>
 <tr><td><?php echo $PMF_LANG['msgTransToolFilename'] ?></td>
-    <td colspan="2"><?php echo $PMF_LANG['msgTransToolActions'] ?></td>
+    <td colspan="3"><?php echo $PMF_LANG['msgTransToolActions'] ?></td>
     <td><?php echo $PMF_LANG['msgTransToolWritable'] ?></td>
 </tr>
 <?php
@@ -74,6 +74,7 @@ endif; ?>
         <?php else: ?>
         <td>&nbsp;</td>
         <?php endif; ?>
+        <td><a href="javascript: sendToTeam('<?php print $lang ?>');" ><?php echo $PMF_LANG['msgTransToolSendToTeam'] ?></a></td>
         <?php if(is_writable(PMF_ROOT_DIR . "/lang/language_$lang.php")): ?>
         <td><font color="green"><?php echo $PMF_LANG['msgYes'] ?></font></td>
         <?php else: ?>
@@ -110,5 +111,17 @@ function del(lang)
               }
         }
     );
+}
+
+/**
+ * Send a translation file to the phpMyFAQ team
+ * 
+ * @param string lang
+ *
+ * @return void
+ */
+function sendToTeam(lang)
+{
+
 }
 </script>

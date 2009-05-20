@@ -183,6 +183,11 @@ FILE;
         $retval = @file_put_contents(PMF_ROOT_DIR . '/lang/language_' . strtolower($langCode) . '.php', $fileTpl);
         print intval($retval);
     break;
+    
+    
+    case 'send_translated_file':
+        print 1;
+    break;
 }
 
 ?>
