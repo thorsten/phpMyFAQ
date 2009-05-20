@@ -128,6 +128,109 @@ class PMF_Language
         
         return $_SESSION['pmf_lang'] = self::$language;
     }
+    /**
+     * This function returns the available languages
+     *
+     * @return array
+     */
+    public static function getAvailableLanguages()
+    {
+        global $languageCodes;
+        
+        $search    = array("language_" , ".php");
+        $languages = $languageFiles = array();
+        
+        $dir = new DirectoryIterator(dirname(dirname(__FILE__)) . '/lang');
+        foreach ($dir as $fileinfo) {
+            if (! $fileinfo->isDot()) {
+                $languageFiles[] = strtoupper(str_replace($search, '', trim($fileinfo->getFilename())));
+            }
+        }
+        
+        foreach ($languageFiles as $lang) {
+            // Check if the file is related to a (real) language before using it
+            if (array_key_exists($lang, $languageCodes)) {
+                $languages[strtolower($lang)] = $languageCodes[$lang];
+            }
+        }
+        
+        // Sort the languages list
+        asort($languages);
+        reset($languages);
+        return $languages;
+    }
+    
+    /**
+     * This function displays the <select> box for the available languages
+     * optionally filtered by excluding some provided languages
+     *
+     * @param  string  $default
+     * @param  boolean $submitOnChange
+     * @param  array   $excludedLanguages
+     * @param  string  $id
+     * @return string
+     */
+    public static function selectLanguages ($default, $submitOnChange = false, Array $excludedLanguages = array(), $id = 'language')
+    {
+        global $languageCodes;
+        
+        $onChange  = ($submitOnChange ? ' onchange="this.form.submit();"' : '');
+        $output    = '<select class="language" name="' . $id . '" id="' . $id . '" size="1"' . $onChange . ">\n";
+        $languages = self::getAvailableLanguages();
+        
+        if (count($languages) > 0) {
+            foreach ($languages as $lang => $value) {
+                if (! in_array($lang, $excludedLanguages)) {
+                    $output .= "\t" . '<option value="' . $lang . '"';
+                    if ($lang == $default) {
+                        $output .= ' selected="selected"';
+                    }
+                    $output .= '>' . $value . "</option>\n";
+                }
+            }
+        } else {
+            $output .= "\t<option value=\"en\">" . $languageCodes["EN"] . "</option>";
+        }
+        $output .= "</select>\n";
+        return $output;
+    }
+    /**
+     * Function for displaying all languages in <option>
+     *
+     * @param  string $lang              the languange to be selected
+     * @param  bool   $onlyThisLang      print only the passed language?
+     * @param  bool   $fileLanguageValue print the <language file> instead of the <language code> as value?
+     * @return string
+     */
+    public static function languageOptions ($lang = "", $onlyThisLang = false, $fileLanguageValue = false)
+    {
+        $output = "";
+        foreach (self::getAvailableLanguages() as $key => $value) {
+            if ($onlyThisLang) {
+                if (strtolower($key) == $lang) {
+                    if ($fileLanguageValue) {
+                        $output .= "\t<option value=\"language_" . strtolower($lang) . ".php\"";
+                    } else {
+                        $output .= "\t<option value=\"" . strtolower($lang) . "\"";
+                    }
+                    $output .= " selected=\"selected\"";
+                    $output .= ">" . $value . "</option>\n";
+                    break;
+                }
+            } else {
+                if ($fileLanguageValue) {
+                    $output .= "\t<option value=\"language_" . strtolower($key) . ".php\"";
+                } else {
+                    $output .= "\t<option value=\"" . strtolower($key) . "\"";
+                }
+                if (strtolower($key) == $lang) {
+                    $output .= " selected=\"selected\"";
+                }
+                $output .= ">" . $value . "</option>\n";
+            }
+        }
+        return $output;
+    }
     
     /**
      * True if the language is supported by the current phpMyFAQ installation
@@ -144,10 +247,7 @@ class PMF_Language
     /**
      * Gets the accepted language from the user agent
      *
-     * @return  void
-     * @access  private
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @author  Matteo Scaramuccia <matteo@phpmyfaq.de>
+     * @return void
      */
     private function _getUserAgentLanguage()
     {
