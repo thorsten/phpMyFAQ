@@ -127,7 +127,7 @@ if ($permission['editbt']) {
             'active'        => $active,
             'sticky'        => (int)$sticky,
             'thema'         => $question,
-            'content'       => $content,
+            'content'       => html_entity_decode($content),
             'keywords'      => $keywords,
             'author'        => $author,
             'email'         => $email,
