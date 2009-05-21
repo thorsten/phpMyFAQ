@@ -354,7 +354,7 @@ if (isset($auth) && in_array(true, $permission)) {
         <dd><?php print implode(', ', get_loaded_extensions()); ?></dd>
     </dl>
 
-    <div style="font-size: 5px; text-align: right; color: #f5f5f5">NOTE: Art is resistance. Thank you very much for inspiration and everything else, L<!--issy-->.</div>
+    <div style="font-size: 5px; text-align: right; color: #f5f5f5">NOTE: Art is resistance.</div>
 <?php
     }
 // User is NOT authenticated
