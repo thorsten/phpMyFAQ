@@ -94,11 +94,13 @@ class PMF_TransTool
         
         if($exemplary) {
             while(list($key, $val) = each($exemplary)) {
-                if(isset($toCheck[$key]) && $toCheck[$key] != $val) {
-                    $countTranslated++;
+                if(!$this->isKeyIgnorable($key) && !$this->isValIgnorable($val)) {
+                    if(isset($toCheck[$key]) && $toCheck[$key] != $val) {
+                        $countTranslated++;
+                    }
+                    
+                    $countAll++;
                 }
-                
-                $countAll++;
             }
             
             $retval = floor(100*$countTranslated/$countAll);
@@ -107,6 +109,37 @@ class PMF_TransTool
         unset($exemplary, $toCheck);
         
         return $retval;
+    }
+    
+    
+    /**
+     * Check if the key can be ignored while comparing
+     * 
+     * @param string $key
+     * 
+     * @return boolean
+     */
+    public function isKeyIgnorable($key)
+    {
+        $keyIgnore = array('PMF_LANG[metaCharset]',
+                           'PMF_LANG[metaLanguage]',
+                           'PMF_LANG[language]',
+                           'PMF_LANG[dir]');
+
+        return in_array($key, $keyIgnore);
+    }
+    
+    /**
+     * Check if we can ignore a value while comparing. Actually
+     * catching empty and non alphanumeric strings
+     * 
+     * @param string $val
+     * 
+     * @return boolean
+     */
+    public function isValIgnorable($val)
+    {
+        return PMF_String::preg_match('/^[^a-z0-9]*$/i', $val);
     }
 }
 ?>

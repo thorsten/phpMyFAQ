@@ -51,9 +51,8 @@ $rightVarsOnly = $tt->getVars(PMF_ROOT_DIR . "/lang/language_$translateLang.php"
 <td><?php echo $key?></td>
 <td><input style="width: 300px;" type="text" value="<?php echo htmlspecialchars($line) ?>" disabled="disabled" /></td>
 <?php 
-    $ignore = array('PMF_LANG[metaCharset]', 'PMF_LANG[metaLanguage]', 'PMF_LANG[language]', 'PMF_LANG[dir]');
-    if(array_key_exists($key, $rightVarsOnly) && $line != $rightVarsOnly[$key] ||
-       in_array($key, $ignore)): 
+    if(array_key_exists($key, $rightVarsOnly) && ($line != $rightVarsOnly[$key] ||
+       $tt->isKeyIgnorable($key) || $tt->isValIgnorable($line))): 
 ?>
 <td><input style="width: 300px;" type="text" name="<?php echo $key?>" value="<?php echo htmlspecialchars($rightVarsOnly[$key]) ?>" /></td>
 <?php else: ?>
