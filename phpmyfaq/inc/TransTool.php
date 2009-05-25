@@ -76,6 +76,15 @@ class PMF_TransTool
         return $retval;
     }
     
+    
+    /**
+     * Get the translation ratio of the language files
+     * 
+     * @param string $filepathExemplary
+     * @param string $filepathToCheck
+     * 
+     * @return integer
+     */
     public function getTranslatedPercentage($filepathExemplary, $filepathToCheck)
     {
         $exemplary = $this->getVars($filepathExemplary);
