@@ -108,6 +108,7 @@ function del(lang)
                   $('#saving_data_indicator').html('<?php echo $PMF_LANG['msgTransToolFileRemoved'] ?>');
               } else {
                   $('#saving_data_indicator').html('<?php echo $PMF_LANG['msgTransToolErrorRemovingFile'] ?>');
+                  alert('<?php echo $PMF_LANG['msgTransToolErrorRemovingFile'] ?>');
               }
         }
     );
@@ -122,6 +123,22 @@ function del(lang)
  */
 function sendToTeam(lang)
 {
+     $('#saving_data_indicator').html('<img src="images/indicator.gif" /> <?php echo $PMF_LANG['msgSending3Dots'] ?>');
 
+     var msg = '';
+     
+     $.get('index.php?action=ajax&ajax=trans&ajaxaction=send_translated_file',
+             {translang: lang},
+             function(retval, status) {
+                 if(1*retval > 0 && 'success' == status) {
+                     msg = '<?php echo $PMF_LANG['msgTransToolFileSent'] ?>';
+                 } else {
+                     msg = '<?php echo $PMF_LANG['msgTransToolErrorSendingFile'] ?>';
+                 }
+           }
+       );
+
+     $('#saving_data_indicator').html('<?php echo $PMF_LANG['msgTransToolFileSent'] ?>');
+     alert('<?php echo $PMF_LANG['msgTransToolFileSent'] ?>');
 }
 </script>

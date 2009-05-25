@@ -186,7 +186,25 @@ FILE;
     
     
     case 'send_translated_file':
-        print 1;
+        
+        $lang = PMF_Filter::filterInput(INPUT_GET, 'translang', FILTER_SANITIZE_STRING);
+        
+        $filename = PMF_ROOT_DIR . "/lang/language_$lang.php";
+        
+        if(!file_exists($filename)) {
+            print 0;
+            exit;
+        }
+
+        $letterTpl = '';
+        
+        $mail = new PMF_Mail();
+        $mail->subject = 'New language file submitted';
+        $mail->message = 'Hi, there is the a new language file';
+        $mail->addTo('anatoliy.belsky@mayflower.de');
+        $mail->addAttachment($filename, null, 'text/plain');
+        
+        print (int) $mail->send();
     break;
 }
 

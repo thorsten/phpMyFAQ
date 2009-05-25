@@ -25,8 +25,9 @@
 /**
  *                !!! IMPORTANT NOTE !!!
  * Please consider following while defining new vars:
+ * - one variable definition per line !!!
  * - the perfect case is to define a scalar string value
- * - if some dynamic content is needed, use printf syntax
+ * - if some dynamic content is needed, use sprintf syntax
  * - arrays are allowed but not recommended
  * - no comments at the end of line after the var definition
  * - do not use '=' char in the array keys
@@ -976,3 +977,6 @@ $PMF_LANG['msgTransToolTransCreated'] = 'New translation successfully created';
 $PMF_LANG['msgTransToolCouldntCreateTrans'] = 'Could not create the new translation';
 $PMF_LANG['msgAdding3Dots'] = 'adding ...';
 $PMF_LANG['msgTransToolSendToTeam'] = 'Send to phpMyFAQ team';
+$PMF_LANG['msgSending3Dots'] = 'sending ...';
+$PMF_LANG['msgTransToolFileSent'] = 'Language file was successfully sent to the phpMyFAQ team';
+$PMF_LANG['msgTransToolErrorSendingFile'] = 'There was an error while sending the language file';
