@@ -978,5 +978,5 @@ $PMF_LANG['msgTransToolCouldntCreateTrans'] = 'Could not create the new translat
 $PMF_LANG['msgAdding3Dots'] = 'adding ...';
 $PMF_LANG['msgTransToolSendToTeam'] = 'Send to phpMyFAQ team';
 $PMF_LANG['msgSending3Dots'] = 'sending ...';
-$PMF_LANG['msgTransToolFileSent'] = 'Language file was successfully sent to the phpMyFAQ team';
+$PMF_LANG['msgTransToolFileSent'] = 'Language file was successfully sent to the phpMyFAQ team. Thank you very much for sharing it.';
 $PMF_LANG['msgTransToolErrorSendingFile'] = 'There was an error while sending the language file';

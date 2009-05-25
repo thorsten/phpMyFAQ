@@ -125,8 +125,8 @@ function sendToTeam(lang)
 {
      $('#saving_data_indicator').html('<img src="images/indicator.gif" /> <?php echo $PMF_LANG['msgSending3Dots'] ?>');
 
-     var msg = '';
-     
+     var msg = '';;
+               
      $.get('index.php?action=ajax&ajax=trans&ajaxaction=send_translated_file',
              {translang: lang},
              function(retval, status) {

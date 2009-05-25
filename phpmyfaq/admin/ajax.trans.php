@@ -199,8 +199,9 @@ FILE;
         $letterTpl = '';
         
         $mail = new PMF_Mail();
-        $mail->subject = 'New language file submitted';
-        $mail->message = 'Hi, there is the a new language file';
+        $mail->subject = 'New phpMyFAQ language file submitted';
+        $mail->message = sprintf('The file below was sent by %s, which is using phpMyFAQ %s on %s',
+                                 $user->userdata->get('email'), $PMF_CONF['main.currentVersion'], $_SERVER['HTTP_HOST']);
         $mail->addTo('anatoliy.belsky@mayflower.de');
         $mail->addAttachment($filename, null, 'text/plain');
         
