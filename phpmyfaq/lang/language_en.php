@@ -980,3 +980,4 @@ $PMF_LANG['msgTransToolSendToTeam'] = 'Send to phpMyFAQ team';
 $PMF_LANG['msgSending3Dots'] = 'sending ...';
 $PMF_LANG['msgTransToolFileSent'] = 'Language file was successfully sent to the phpMyFAQ team. Thank you very much for sharing it.';
 $PMF_LANG['msgTransToolErrorSendingFile'] = 'There was an error while sending the language file';
+$PMF_LANG['msgTransToolPercent'] = 'Percentage';

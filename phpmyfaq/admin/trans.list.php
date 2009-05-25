@@ -26,6 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 }
 
 $transDir = new DirectoryIterator(PMF_ROOT_DIR . "/lang");
+$tt = new PMF_TransTool;
 ?>
 <?php echo $PMF_LANG['msgChooseLanguageToTranslate'] ?>: <br />
 <table cellspacing="7">
@@ -33,13 +34,14 @@ $transDir = new DirectoryIterator(PMF_ROOT_DIR . "/lang");
     echo '<tr><td colspan="5"><font color="red">'. $PMF_LANG['msgLangDirIsntWritable'] . "</font></tr></td>";
 endif; ?>
 <?php if($permission["addtranslation"]): ?>
-<tr><td colspan="5">
+<tr><td colspan="6">
 <a href="?action=transadd"><?php echo $PMF_LANG['msgTransToolAddNewTranslation'] ?></a>
 </td></tr>
 <?php endif; ?>
 <tr><td><?php echo $PMF_LANG['msgTransToolFilename'] ?></td>
     <td colspan="3"><?php echo $PMF_LANG['msgTransToolActions'] ?></td>
     <td><?php echo $PMF_LANG['msgTransToolWritable'] ?></td>
+    <td><?php echo $PMF_LANG['msgTransToolPercent'] ?></td>
 </tr>
 <?php
     $sortedLangList = array();
@@ -80,6 +82,7 @@ endif; ?>
         <?php else: ?>
         <td><font color="red"><?php echo $PMF_LANG['msgNo'] ?></font></td>
         <?php endif; ?>
+        <td><?php echo$tt->getTranslatedPercentage(PMF_ROOT_DIR . "/lang/language_en.php", PMF_ROOT_DIR . "/lang/language_$lang.php"); ?>%</td>
         </tr>
         <?php 
     }

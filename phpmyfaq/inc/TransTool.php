@@ -41,35 +41,63 @@ class PMF_TransTool
      */
     public function getVars($filepath)
     {
-        $orig = file($filepath);
         $retval = array();
         
-        while(list(,$line) = each($orig)) {
-            $line = rtrim($line);
-            /**
-             * Bypass all but variable definitions
-             */
-            if(strlen($line) && '$' == $line[0]) {
+        if(file_exists($filepath) && is_readable($filepath)) {
+        
+            $orig = file($filepath);
+            
+            while(list(,$line) = each($orig)) {
+                $line = rtrim($line);
                 /**
-                 * $PMF_LANG["key"] = "val";
-                 * or
-                 * $PMF_LANG["key"] = array(0 => "something", 1 => ...);
-                 * turns to something like  array('$PMF_LANG["key"]', '"val";')
+                 * Bypass all but variable definitions
                  */
-                $m = explode("=", $line, 2);
-                
-                $key = str_replace(array('["', '"]', '[\'', '\']'), array('[', ']', '[', ']'), PMF_String::substr(trim($m[0]), 1));
-                
-                $tmp = trim($m[1]);
-                if(0 === PMF_String::strpos($tmp, 'array')) {
-                    $retval[$key] = PMF_String::substr($tmp, 0, -1);
-                } else {
-                    $retval[$key] = PMF_String::substr($tmp, 1, -2);
+                if(strlen($line) && '$' == $line[0]) {
+                    /**
+                     * $PMF_LANG["key"] = "val";
+                     * or
+                     * $PMF_LANG["key"] = array(0 => "something", 1 => ...);
+                     * turns to something like  array('$PMF_LANG["key"]', '"val";')
+                     */
+                    $m = explode("=", $line, 2);
+                    
+                    $key = str_replace(array('["', '"]', '[\'', '\']'), array('[', ']', '[', ']'), PMF_String::substr(trim($m[0]), 1));
+                    
+                    $tmp = trim(@$m[1]);
+                    if(0 === PMF_String::strpos($tmp, 'array')) {
+                        $retval[$key] = PMF_String::substr($tmp, 0, -1);
+                    } else {
+                        $retval[$key] = PMF_String::substr($tmp, 1, -2);
+                    }
                 }
             }
         }
     
         return $retval;
-    } 
+    }
+    
+    public function getTranslatedPercentage($filepathExemplary, $filepathToCheck)
+    {
+        $exemplary = $this->getVars($filepathExemplary);
+        $toCheck = $this->getVars($filepathToCheck);
+        
+        $retval = $countAll = $countTranslated = 0;
+        
+        if($exemplary) {
+            while(list($key, $val) = each($exemplary)) {
+                if(isset($toCheck[$key]) && $toCheck[$key] != $val) {
+                    $countTranslated++;
+                }
+                
+                $countAll++;
+            }
+            
+            $retval = floor(100*$countTranslated/$countAll);
+        }
+        
+        unset($exemplary, $toCheck);
+        
+        return $retval;
+    }
 }
 ?>
