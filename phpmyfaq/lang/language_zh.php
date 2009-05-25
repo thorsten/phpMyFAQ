@@ -140,7 +140,7 @@ $PMF_LANG["msgLatestArticles"] = "5个新问题:";
 
 // E-Mailbenachrichtigung
 $PMF_LANG["msgMailThanks"] = "非常感谢您的支持.";
-$PMF_LANG["msgMailCheck"] = "系统有新问答!\n请进入管理员界面察看!";
+$PMF_LANG["msgMailCheck"] = "系统有新问答!请进入管理员界面察看!";
 $PMF_LANG["msgMailContact"] = "您的信息已经发送给管理员.";
 
 // Fehlermeldungen
@@ -151,16 +151,16 @@ $PMF_LANG["err_badID"] = "<p>错误的ID.</p>";
 $PMF_LANG["err_noTopTen"] = "<p>暂时没有问题.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>暂时没有问题.</p>";
 $PMF_LANG["err_SaveEntries"] =  "必须输入的字段是<strong>姓名</strong>, <strong>email地址</strong>, <strong>类别</strong>,
-<strong>标题</strong> 和 <strong>问题内容</strong>!<br /><br />\n<a href=\"javascript:history.back();\">返回前页</a><br /><br
-/>\n";
+<strong>标题</strong> 和 <strong>问题内容</strong>!<br /><br /><a href=\"javascript:history.back();\">返回前页</a><br /><br
+/>";
 $PMF_LANG["err_SaveComment"] = "必须输入的字段是<strong>姓名</strong>, <strong>email</strong> 和 <strong>您的评论
-</strong>!<br /><br />\n<a href=\"javascript:history.back();\">返回前页</a><br /><br />\n";
+</strong>!<br /><br /><a href=\"javascript:history.back();\">返回前页</a><br /><br />";
 $PMF_LANG["err_VoteTooMuch"] = "<p>您已经评过分了. <a href=\"javascript:history.back();\">点击这里</a>, 返回.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>你没有给此问题评分!</strong> <a href=\"javascript:history.back();\">请点击这里</a>, 进行评
 分.</p>";
 $PMF_LANG["err_noMailAdress"] = "你输入的email地不正确.<br /><a href=\"javascript:history.back();\">返回</a>";
 $PMF_LANG["err_sendMail"] = "必须输入<strong>姓名</strong>, <strong>email 地址</strong> 和 <strong>问题</strong>!<br /><br
-/>\n<a href=\"javascript:history.back();\">返回前页</a><br /><br />\n";
+/><a href=\"javascript:history.back();\">返回前页</a><br /><br />";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>搜索问题:</strong><br />包含 <strong style=\"color: Red;\">关键词1 关键词2</strong> 你可
@@ -558,7 +558,7 @@ $PMF_LANG["ad_export_generate_pdf"] = "生成PDF文件";
 $PMF_LANG["ad_export_full_faq"] = "您的FAQ导出的PDF文件: ";
 $PMF_LANG["err_bannedIP"] = "您的IP地址被禁止了。";
 $PMF_LANG["err_SaveQuestion"] = "必须输入<strong>您的姓名</strong>, <strong>您的Email</strong> 和 <strong>您的问题
-</strong>.<br /><br /><a href=\"javascript:history.back();\">返回首页</a><br /><br />\n";
+</strong>.<br /><br /><a href=\"javascript:history.back();\">返回首页</a><br /><br />";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "字体颜色: ";

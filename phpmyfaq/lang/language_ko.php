@@ -135,7 +135,7 @@ $PMF_LANG["msgLatestArticles"] = "최근에 작성된 5개의 질문:";
 
 // E-Mailbenachrichtigung
 $PMF_LANG["msgMailThanks"] = "FAQ에 제안을 해 주셔서 대단히 감사합니다.";
-$PMF_LANG["msgMailCheck"] = "새로운 내용이 있습니다.\n 관리자 페이지를 확인해 주십시오.";
+$PMF_LANG["msgMailCheck"] = "새로운 내용이 있습니다. 관리자 페이지를 확인해 주십시오.";
 $PMF_LANG["msgMailContact"] = "관리자에게 메시지가 전달되었습니다.";
 
 // Fehlermeldungen
@@ -145,12 +145,12 @@ $PMF_LANG["err_noArticles"] = "<p>등록된 데이터가 없습니다.</p>";
 $PMF_LANG["err_badID"] = "<p>잘못된 ID</p>";
 $PMF_LANG["err_noTopTen"] = "<p>TOP 10을 이용하실 수 없습니다.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>검색 결과가 없습니다.</p>";
-$PMF_LANG["err_SaveEntries"] = "<strong>이름</strong>, <strong>메일주소</strong>, <strong>카테고리</strong>, <strong>제목</strong>, <strong>FAQ 내용</strong>은 필수 입력 항목입니다.<br /><br />\n<a href=\"javascript:history.back();\">되돌아 가기</a><br /><br />\n";
-$PMF_LANG["err_SaveComment"] = "<strong>이름</strong>, <strong>메일주소</strong>, <strong>코멘트 내용</strong>은 필수 입력 항목입니다.<br /><br />\n<a href=\"javascript:history.back();\">되돌아 가기</a><br /><br />\n";
+$PMF_LANG["err_SaveEntries"] = "<strong>이름</strong>, <strong>메일주소</strong>, <strong>카테고리</strong>, <strong>제목</strong>, <strong>FAQ 내용</strong>은 필수 입력 항목입니다.<br /><br /><a href=\"javascript:history.back();\">되돌아 가기</a><br /><br />";
+$PMF_LANG["err_SaveComment"] = "<strong>이름</strong>, <strong>메일주소</strong>, <strong>코멘트 내용</strong>은 필수 입력 항목입니다.<br /><br /><a href=\"javascript:history.back();\">되돌아 가기</a><br /><br />";
 $PMF_LANG["err_VoteTooMuch"] = "<p>중복 평가 하실 수 없습니다. 되돌아 가시려면<a href=\"javascript:history.back();\">여기</a>를 클릭하세요.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>평점을 선택하지 않으셨습니다.</strong> 평가를  다시 하시려면<a href=\"javascript:history.back();\">여기</a>를 클릭하세요.</p>";
 $PMF_LANG["err_noMailAdress"] = "메일주소가 바르지 않습니다.<br /><a href=\"javascript:history.back();\">되돌아 가기</a>";
-$PMF_LANG["err_sendMail"] = "<strong>이름</strong>, <strong>메일주소</strong>, <strong>질문 내용</strong>은 필수 입력 항목입니다.<br /><br />\n<a href=\"javascript:history.back();\">되돌아 가기</a><br /><br />\n";
+$PMF_LANG["err_sendMail"] = "<strong>이름</strong>, <strong>메일주소</strong>, <strong>질문 내용</strong>은 필수 입력 항목입니다.<br /><br /><a href=\"javascript:history.back();\">되돌아 가기</a><br /><br />";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>내용 검색:</strong><br /><strong style=\"color: Red;\">단어1 단어2</strong>로 검색하시면, 2개 이상의 검색 결과를 관련이 높은 순서대로 찾으실 수 있습니다.</p><p><strong>주의:</strong> 검색시에는 적어도 영문 4자 이상을 입력하셔야 합니다.</p>";
@@ -542,7 +542,7 @@ $PMF_LANG["ad_user_realname"] = "성명:";
 $PMF_LANG["ad_export_generate_pdf"] = "PDF 파일 생성";
 $PMF_LANG["ad_export_full_faq"] = "PDF 파일로 FAQ 내보내기: ";
 $PMF_LANG["err_bannedIP"] = "당신의 IP는 접근 금지되었습니다.";
-$PMF_LANG["err_SaveQuestion"] = "<strong>이름</strong>, <strong>메일주소</strong>, <strong>질문 내용</strong>은 필수 입력 항목입니다.<br /><br /><a href=\"javascript:history.back();\">되돌아 가기</a><br /><br />\n";
+$PMF_LANG["err_SaveQuestion"] = "<strong>이름</strong>, <strong>메일주소</strong>, <strong>질문 내용</strong>은 필수 입력 항목입니다.<br /><br /><a href=\"javascript:history.back();\">되돌아 가기</a><br /><br />";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "색상: ";

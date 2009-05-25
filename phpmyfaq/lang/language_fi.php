@@ -136,7 +136,7 @@ $PMF_LANG["msgLatestArticles"] = "Viisi uusinta kysymystä:";
 
 // E-Mailbenachrichtigung
 $PMF_LANG["msgMailThanks"] = "Monet kiitokset FAQ ehdotuksestasi.";
-$PMF_LANG["msgMailCheck"] = "Uusi FAQ saatavilla!\nOle hyvä ja tarkasta ylläpito tehtävät!";
+$PMF_LANG["msgMailCheck"] = "Uusi FAQ saatavilla!Ole hyvä ja tarkasta ylläpito tehtävät!";
 $PMF_LANG["msgMailContact"] = "Viestisi on lähetetty ylläpitäjälle.";
 
 // Fehlermeldungen
@@ -146,12 +146,12 @@ $PMF_LANG["err_noArticles"] = "<p>Tietueita ei ole saatavilla.</p>";
 $PMF_LANG["err_badID"] = "<p>Väärä ID.</p>";
 $PMF_LANG["err_noTopTen"] = "<p>Kymmentä suosituinta ei ole vielä saatavilla.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>Tietuetta ei löydy.</p>";
-$PMF_LANG["err_SaveEntries"] = "Vaadittavat kentät ovat <strong>Nimesi</strong>, <strong>sähköposti osoitteesi</strong>, <strong>kategoria</strong>, <strong>otsikko</strong> ja <strong>Tietueesi</strong>!<br /><br />\n<a href=\"javascript:history.back();\">yksi sivu takaisin</a><br /><br />\n";
-$PMF_LANG["err_SaveComment"] = "Vaadittavat kentät ovat <strong>Nimesi</strong>, <strong>sähköposti osoitteesi</strong> ja <strong>kommenttisi</strong>!<br /><br />\n<a href=\"javascript:history.back();\">yksi sivu takaisin</a><br /><br />\n";
+$PMF_LANG["err_SaveEntries"] = "Vaadittavat kentät ovat <strong>Nimesi</strong>, <strong>sähköposti osoitteesi</strong>, <strong>kategoria</strong>, <strong>otsikko</strong> ja <strong>Tietueesi</strong>!<br /><br /><a href=\"javascript:history.back();\">yksi sivu takaisin</a><br /><br />";
+$PMF_LANG["err_SaveComment"] = "Vaadittavat kentät ovat <strong>Nimesi</strong>, <strong>sähköposti osoitteesi</strong> ja <strong>kommenttisi</strong>!<br /><br /><a href=\"javascript:history.back();\">yksi sivu takaisin</a><br /><br />";
 $PMF_LANG["err_VoteTooMuch"] = "<p>Emme laske kuin yhden arvostelun. <a href=\"javascript:history.back();\">Klikkaa tästä</a>, päästäksesi takaisin.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>Et arvostellut kysymystä!</strong> <a href=\"javascript:history.back();\">Ole hyvä ja klikkaa tästä</a>, arvostellaksesi.</p>";
 $PMF_LANG["err_noMailAdress"] = "Sähköpostiosoitteesi ei ole oikein.<br /><a href=\"javascript:history.back();\">takaisin</a>";
-$PMF_LANG["err_sendMail"] = "Vaadittavat kentät ovat <strong>nimesi</strong>, <strong>sähköposti osoitteesi</strong> ja <strong>kysymyksesi</strong>!<br /><br />\n<a href=\"javascript:history.back();\">yksi sivu takaisin</a><br /><br />\n";
+$PMF_LANG["err_sendMail"] = "Vaadittavat kentät ovat <strong>nimesi</strong>, <strong>sähköposti osoitteesi</strong> ja <strong>kysymyksesi</strong>!<br /><br /><a href=\"javascript:history.back();\">yksi sivu takaisin</a><br /><br />";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>Etsi tietueita:</strong><br />Tietueella kuten <strong style=\"color: Red;\">sana1 sana2</strong> voit tehdä asiaan kuuluvan laskevan haun kahdella tai useammalla hakukriteerillä.</p><p><strong>Huomaa:</strong> Haku kriteerisi tulee olla ainakin 4 merkkiä pitkä tai muuten hakusi hylätään.</p>";
@@ -543,7 +543,7 @@ $PMF_LANG["ad_user_realname"] = "oikea nimi:";
 $PMF_LANG["ad_export_generate_pdf"] = "koosta PDF tiedosto";
 $PMF_LANG["ad_export_full_faq"] = "FAQ kooste PDF tiedostona: ";
 $PMF_LANG["err_bannedIP"] = "Käyttö IP-osoitteestasi on estetty.";
-$PMF_LANG["err_SaveQuestion"] = "Vaadittavat kentät ovat <strong>nimesi</strong>, <strong>sähköposti osoitteesi</strong> ja <strong>kysymyksesi</strong>.<br /><br /><a href=\"javascript:history.back();\">yksi sivu taaksepäin</a><br /><br />\n";
+$PMF_LANG["err_SaveQuestion"] = "Vaadittavat kentät ovat <strong>nimesi</strong>, <strong>sähköposti osoitteesi</strong> ja <strong>kysymyksesi</strong>.<br /><br /><a href=\"javascript:history.back();\">yksi sivu taaksepäin</a><br /><br />";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Tekstin väri: ";

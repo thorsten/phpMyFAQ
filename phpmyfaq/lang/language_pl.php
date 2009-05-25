@@ -136,7 +136,7 @@ $PMF_LANG["msgLatestArticles"] = "Piêæ ostatnich wpisów:";
 
 // E-Mailbenachrichtigung
 $PMF_LANG["msgMailThanks"] = "Dziêkujê za propozycje do naszego FAQ.";
-$PMF_LANG["msgMailCheck"] = "Dodano nowy wpis do  FAQ!\nZajrzyj do sekcji administracyjnej!";
+$PMF_LANG["msgMailCheck"] = "Dodano nowy wpis do  FAQ!Zajrzyj do sekcji administracyjnej!";
 $PMF_LANG["msgMailContact"] = "Wiadomo¶æ wys³ana do administratora!";
 
 // Fehlermeldungen
@@ -146,12 +146,12 @@ $PMF_LANG["err_noArticles"] = "<p>Brak wpisów.</p>";
 $PMF_LANG["err_badID"] = "<p>B³êdny identyfikator!</p>";
 $PMF_LANG["err_noTopTen"] = "<p>Jeszcze nie ma TOP 10.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>Brak wpisów.</p>";
-$PMF_LANG["err_SaveEntries"] = "Wymagane pola: <strong>imiê</strong>, <strong>twój email</strong>, <strong>kategoria</strong>, <strong>nag³ówek</strong> oraz <strong>tre¶æ wpisu</strong>!<br /><br />\n<a href=\"javascript:history.back();\">wróæ do poprzedniej strony</a><br /><br />\n";
-$PMF_LANG["err_SaveComment"] = "Wymagane pola: <strong>imiê</strong>, <strong>twój email</strong> and <strong>tre¶æ komentarza</strong>!<br /><br />\n<a href=\"javascript:history.back();\">wróæ do poprzedniej strony</a><br /><br />\n";
+$PMF_LANG["err_SaveEntries"] = "Wymagane pola: <strong>imiê</strong>, <strong>twój email</strong>, <strong>kategoria</strong>, <strong>nag³ówek</strong> oraz <strong>tre¶æ wpisu</strong>!<br /><br /><a href=\"javascript:history.back();\">wróæ do poprzedniej strony</a><br /><br />";
+$PMF_LANG["err_SaveComment"] = "Wymagane pola: <strong>imiê</strong>, <strong>twój email</strong> and <strong>tre¶æ komentarza</strong>!<br /><br /><a href=\"javascript:history.back();\">wróæ do poprzedniej strony</a><br /><br />";
 $PMF_LANG["err_VoteTooMuch"] = "<p>Mo¿na g³osowaæ tylko jeden raz. <a href=\"javascript:history.back();\">wróæ do poprzedniej strony</a>.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>Nie odda³e¶ g³osu!</strong> <a href=\"javascript:history.back();\">wejd¼ tutaj</a>, aby oddaæ g³os.</p>";
 $PMF_LANG["err_noMailAdress"] = "Nieprawid³owy adres email.<br /><a href=\"javascript:history.back();\">wróæ</a>";
-$PMF_LANG["err_sendMail"] = "Wymagane pola: <strong>imiê</strong>, <strong>twój email</strong> and <strong>pytanie</strong>!<br /><br />\n<a href=\"javascript:history.back();\">wróæ do poprzedniej strony</a><br /><br />\n";
+$PMF_LANG["err_sendMail"] = "Wymagane pola: <strong>imiê</strong>, <strong>twój email</strong> and <strong>pytanie</strong>!<br /><br /><a href=\"javascript:history.back();\">wróæ do poprzedniej strony</a><br /><br />";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>Szukaj wpisu:</strong><br /></p>";
@@ -544,7 +544,7 @@ $PMF_LANG["ad_user_realname"] = "twoje imiê:";
 $PMF_LANG["ad_export_generate_pdf	"] = "wygeneruj plik PDF";
 $PMF_LANG["ad_export_full_faq"] = "FAQ w pliku PDF: ";
 $PMF_LANG["err_bannedIP"] = "Twój numer IP zosta³ zablokowany.";
-$PMF_LANG["err_SaveQuestion"] = "Pola wymagane: <strong>twoje imiê</strong>, <strong>adres email</strong> i <strong>tre¶æ pytania</strong>!<br /><br /><a href=\"javascript:history.back();\">wróæ na poprzedni± stronê</a><br /><br />\n";
+$PMF_LANG["err_SaveQuestion"] = "Pola wymagane: <strong>twoje imiê</strong>, <strong>adres email</strong> i <strong>tre¶æ pytania</strong>!<br /><br /><a href=\"javascript:history.back();\">wróæ na poprzedni± stronê</a><br /><br />";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Kolor czcionki: ";

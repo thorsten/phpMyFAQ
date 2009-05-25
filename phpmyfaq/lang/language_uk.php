@@ -139,7 +139,7 @@ $PMF_LANG["msgLatestArticles"] = "П'ять нових питань:";
 
 // E-Mailbenachrichtigung
 $PMF_LANG["msgMailThanks"] = "Спасибі за новий запис в базу Mac F.A.Q.";
-$PMF_LANG["msgMailCheck"] = "Доданий новий запис в базу Mac F.A.Q.!\nЗавітайте до панелі управління для адміністратора!";
+$PMF_LANG["msgMailCheck"] = "Доданий новий запис в базу Mac F.A.Q.!Завітайте до панелі управління для адміністратора!";
 $PMF_LANG["msgMailContact"] = "Повідомлення відправлене адміністраторові.";
 
 // Fehlermeldungen
@@ -149,12 +149,12 @@ $PMF_LANG["err_noArticles"] = "<p>Нічого не знайдено</p>";
 $PMF_LANG["err_badID"] = "<p>Wrong ID.</p>";
 $PMF_LANG["err_noTopTen"] = "<p>Нічого поки не немає.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>No entry found.</p>";
-$PMF_LANG["err_SaveEntries"] = "Не заповнені обов'язкові поля <strong>ваше ім'я</strong>, <strong>адрес email</strong>, <strong>категорія</strong>, <strong>заголовок</strong> і <strong>текст питання</strong>!<br /><br />\n<a href=\"javascript:history.back();\">Вернитесь назад і заповните необхідні поля</a><br /><br />\n";
-$PMF_LANG["err_SaveComment"] = "Не заповнені обов'язкові поля <strong>ім'я</strong>, <strong>арес email</strong> i <strong>ваш коментар</strong>!<br /><br />\n<a href=\"javascript:history.back();\">Вернуться назад</a><br /><br />\n";
+$PMF_LANG["err_SaveEntries"] = "Не заповнені обов'язкові поля <strong>ваше ім'я</strong>, <strong>адрес email</strong>, <strong>категорія</strong>, <strong>заголовок</strong> і <strong>текст питання</strong>!<br /><br /><a href=\"javascript:history.back();\">Вернитесь назад і заповните необхідні поля</a><br /><br />";
+$PMF_LANG["err_SaveComment"] = "Не заповнені обов'язкові поля <strong>ім'я</strong>, <strong>арес email</strong> i <strong>ваш коментар</strong>!<br /><br /><a href=\"javascript:history.back();\">Вернуться назад</a><br /><br />";
 $PMF_LANG["err_VoteTooMuch"] = "<p>We do not count double votings. <a href=\"javascript:history.back();\">Click here</a>, to go back.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>Ви забули поставити оцінку цій відповіді або намагаєтеся зробити це повторно!</strong> <a href=\"javascript:history.back();\">Натисніть сюди</a>, для повернення на попередню сторінку.</p>";
 $PMF_LANG["err_noMailAdress"] = "Your email address is not correct.<br /><a href=\"javascript:history.back();\">back</a>";
-$PMF_LANG["err_sendMail"] = "Не заповнені обов'язкові поля <strong>ваше ім'я</strong>, <strong>адрес email</strong> і <strong>текст повідомлення</strong>!<br /><br />\n<a href=\"javascript:history.back();\">Вернуться назад</a><br /><br />\n";
+$PMF_LANG["err_sendMail"] = "Не заповнені обов'язкові поля <strong>ваше ім'я</strong>, <strong>адрес email</strong> і <strong>текст повідомлення</strong>!<br /><br /><a href=\"javascript:history.back();\">Вернуться назад</a><br /><br />";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>Поиск по базе Mac F.A.Q.:</strong><br /></p>";
@@ -553,7 +553,7 @@ $PMF_LANG["ad_user_realname"] = "Справжнє ім'я:";
 $PMF_LANG["ad_export_generate_pdf "] = "Створити PDF файл"; 
 $PMF_LANG["ad_export_full_Mac F.A.Q."] = "База Mac F.A.Q. у вигляді PDF файлу: "; 
 $PMF_LANG["err_bannedIP"] = "Доступ до системи з вашого IP адреси заборонений.";
-$PMF_LANG["err_SaveQuestion"] = "Не заповнені обов'язкові поля <strong>ваше ім'я</strong>, <strong>ваше ім'я email</strong> і <strong>текст питання</strong>.<br /><br /><a href=\"javascript:history.back();\">Вернутсья назад</a><br /><br />\n";
+$PMF_LANG["err_SaveQuestion"] = "Не заповнені обов'язкові поля <strong>ваше ім'я</strong>, <strong>ваше ім'я email</strong> і <strong>текст питання</strong>.<br /><br /><a href=\"javascript:history.back();\">Вернутсья назад</a><br /><br />";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Колір шрифту: "; 

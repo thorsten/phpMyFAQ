@@ -135,7 +135,7 @@ $PMF_LANG["msgLatestArticles"] = "Nekaj najpogostejših vprašanj:";
 
 // E-Mailbenachrichtigung
 $PMF_LANG["msgMailThanks"] = "Hvala za tvoj predlog.";
-$PMF_LANG["msgMailCheck"] = "Nov vnos v FAQ!\nPrijavi se v admin!";
+$PMF_LANG["msgMailCheck"] = "Nov vnos v FAQ!Prijavi se v admin!";
 $PMF_LANG["msgMailContact"] = "Tvoje sporo&egrave;ilo je bilo poslano administratorju.";
 
 // Fehlermeldungen
@@ -145,12 +145,12 @@ $PMF_LANG["err_noArticles"] = "<p>Ni nobenega vnosa.</p>";
 $PMF_LANG["err_badID"] = "<p>Napa&egrave;en ID.</p>";
 $PMF_LANG["err_noTopTen"] = "<p>Ni 10 NAJ vnosov trenutno.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>Ne najdem vnosa.</p>";
-$PMF_LANG["err_SaveEntries"] = "Potrebna polja so <strong>tvoje ime</strong>, <strong>tvoj email</strong>, <strong>kategorija</strong>, <strong>zaglavje</strong> in <strong>tvoj vnos</strong>!<br /><br />\n<a href=\"javascript:history.back();\">ena stran nazaj</a><br /><br />\n";
-$PMF_LANG["err_SaveComment"] = "Potrebna polja so <strong>tvoje ime</strong>, <strong>tvoj email</strong> in <strong>tvoj komentar</strong>!<br /><br />\n<a href=\"javascript:history.back();\">ena stran nazaj</a><br /><br />\n";
+$PMF_LANG["err_SaveEntries"] = "Potrebna polja so <strong>tvoje ime</strong>, <strong>tvoj email</strong>, <strong>kategorija</strong>, <strong>zaglavje</strong> in <strong>tvoj vnos</strong>!<br /><br /><a href=\"javascript:history.back();\">ena stran nazaj</a><br /><br />";
+$PMF_LANG["err_SaveComment"] = "Potrebna polja so <strong>tvoje ime</strong>, <strong>tvoj email</strong> in <strong>tvoj komentar</strong>!<br /><br /><a href=\"javascript:history.back();\">ena stran nazaj</a><br /><br />";
 $PMF_LANG["err_VoteTooMuch"] = "<p>Ne štejejo dvojna glasovanja. <a href=\"javascript:history.back();\">Klikni tukaj</a>, da greš nazaj.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>Nisi glasoval za vprašanje!</strong> <a href=\"javascript:history.back();\">Prosim klikni tukaj</a>, za glasovanje.</p>";
 $PMF_LANG["err_noMailAdress"] = "Tvoj email ni pravilen.<br /><a href=\"javascript:history.back();\">nazaj</a>";
-$PMF_LANG["err_sendMail"] = "Potrebna polja so <strong>tvoje ime</strong>, <strong>tvoj email</strong> in <strong>tvoje vprašanje</strong>!<br /><br />\n<a href=\"javascript:history.back();\">ena stran nazaj</a><br /><br />\n";
+$PMF_LANG["err_sendMail"] = "Potrebna polja so <strong>tvoje ime</strong>, <strong>tvoj email</strong> in <strong>tvoje vprašanje</strong>!<br /><br /><a href=\"javascript:history.back();\">ena stran nazaj</a><br /><br />";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>Iskanje po vnosih:</strong><br /></p>";
@@ -541,7 +541,7 @@ $PMF_LANG["ad_user_realname"] = "pravo ime:";
 $PMF_LANG["ad_export_generate_pdf"] = "generiranje PDF datoteke";
 $PMF_LANG["ad_export_full_faq"] = "Tvoje vprašanje kot PDF datoteka: ";
 $PMF_LANG["err_bannedIP"] = "Tvoj IP naslov je prepovedan.";
-$PMF_LANG["err_SaveQuestion"] = "Obvezna polja so <strong>tvoje ime</strong>, <strong>tvoj email</strong> in <strong>tvoje vprašanje</strong>.<br /><br /><a href=\"javascript:history.back();\">ena stran nazaj/a><br /><br />\n";
+$PMF_LANG["err_SaveQuestion"] = "Obvezna polja so <strong>tvoje ime</strong>, <strong>tvoj email</strong> in <strong>tvoje vprašanje</strong>.<br /><br /><a href=\"javascript:history.back();\">ena stran nazaj/a><br /><br />";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Barva &egrave;rk: ";

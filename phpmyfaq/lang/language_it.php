@@ -138,7 +138,7 @@ $PMF_LANG["msgLatestArticles"] = "Le ultime 5 FAQ pubblicate";
 
 // E-Mailbenachrichtigung
 $PMF_LANG["msgMailThanks"] = "Grazie per la tua proposta per una nuova FAQ.";
-$PMF_LANG["msgMailCheck"] = "C'&egrave; una nuova proposta per una FAQ!\nPer cortesia controlla la sezione 'Amministrazione'.\n";
+$PMF_LANG["msgMailCheck"] = "C'&egrave; una nuova proposta per una FAQ!Per cortesia controlla la sezione 'Amministrazione'.";
 $PMF_LANG["msgMailContact"] = "Il tuo messaggio &egrave; stato spedito all'amministratore.";
 
 // Fehlermeldungen
@@ -148,12 +148,12 @@ $PMF_LANG["err_noArticles"] = "<p>Nessuna FAQ trovata.</p>";
 $PMF_LANG["err_badID"] = "<p>ID sbagliato.</p>";
 $PMF_LANG["err_noTopTen"] = "<p>Nessuna FAQ ancora disponibile.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>Nessun informazione trovata.</p>";
-$PMF_LANG["err_SaveEntries"] = "I campi richiesti sono il <strong>tuo nome</strong>, il <strong>tuo indirizzo email</strong>, la <strong>categoria</strong>, il <strong>titolo</strong>, il <strong>testo</strong> e, quando richiesto, il <strong>codice <a href=\"http://it.wikipedia.org/wiki/Captcha\" title=\"Vai alla definizione di Wikipedia\" target=\"_blank\">captcha</a> corretto</strong>!<br />Per favore controlla i dati immessi.<br /><br />\n<a href=\"javascript:history.back();\">Una pagina indietro</a><br /><br />\n";
-$PMF_LANG["err_SaveComment"] = "I campi richiesti sono il <strong>tuo nome</strong>, il <strong>tuo indirizzo email</strong>, il <strong>tuo commento</strong> e, quando richiesto, il <strong>codice <a href=\"http://it.wikipedia.org/wiki/Captcha\" title=\"Vai alla definizione di Wikipedia\" target=\"_blank\">captcha</a> corretto</strong>!<br />Per favore controlla i dati immessi.<br /><br />\n<a href=\"javascript:history.back();\">Una pagina indietro</a><br /><br />\n";
+$PMF_LANG["err_SaveEntries"] = "I campi richiesti sono il <strong>tuo nome</strong>, il <strong>tuo indirizzo email</strong>, la <strong>categoria</strong>, il <strong>titolo</strong>, il <strong>testo</strong> e, quando richiesto, il <strong>codice <a href=\"http://it.wikipedia.org/wiki/Captcha\" title=\"Vai alla definizione di Wikipedia\" target=\"_blank\">captcha</a> corretto</strong>!<br />Per favore controlla i dati immessi.<br /><br /><a href=\"javascript:history.back();\">Una pagina indietro</a><br /><br />";
+$PMF_LANG["err_SaveComment"] = "I campi richiesti sono il <strong>tuo nome</strong>, il <strong>tuo indirizzo email</strong>, il <strong>tuo commento</strong> e, quando richiesto, il <strong>codice <a href=\"http://it.wikipedia.org/wiki/Captcha\" title=\"Vai alla definizione di Wikipedia\" target=\"_blank\">captcha</a> corretto</strong>!<br />Per favore controlla i dati immessi.<br /><br /><a href=\"javascript:history.back();\">Una pagina indietro</a><br /><br />";
 $PMF_LANG["err_VoteTooMuch"] = "<p>Attenzione, hai gi&agrave votato: non registriamo votazioni multiple nella stessa sessione. Riprova pi&ugrave tardi.<br /><a href=\"javascript:history.back();\">Clicca qui</a>, per tornare indietro.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>Non hai votato!</strong> <a href=\"javascript:history.back();\">Per cortesia clicca qui</a>, per votare.</p>";
 $PMF_LANG["err_noMailAdress"] = "Il tuo indirizzo email non &egrave; corretto.<br /><a href=\"javascript:history.back();\">indietro</a>";
-$PMF_LANG["err_sendMail"] = "I campi richiesti sono il <strong>tuo nome</strong>, il <strong>tuo indirizzo email</strong>, gli <strong>indirizzi dei destinatari</strong> e, quando richiesto, il <strong>codice <a href=\"http://it.wikipedia.org/wiki/Captcha\" title=\"Vai alla definizione di Wikipedia\" target=\"_blank\">captcha</a> corretto</strong>!<br />Per favore controlla i dati immessi.<br /><br />\n<a href=\"javascript:history.back();\">Una pagina indietro</a><br /><br />\n";
+$PMF_LANG["err_sendMail"] = "I campi richiesti sono il <strong>tuo nome</strong>, il <strong>tuo indirizzo email</strong>, gli <strong>indirizzi dei destinatari</strong> e, quando richiesto, il <strong>codice <a href=\"http://it.wikipedia.org/wiki/Captcha\" title=\"Vai alla definizione di Wikipedia\" target=\"_blank\">captcha</a> corretto</strong>!<br />Per favore controlla i dati immessi.<br /><br /><a href=\"javascript:history.back();\">Una pagina indietro</a><br /><br />";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>Cerca nelle FAQ</strong>: usando un criterio come \"<strong style=\"font-style: italic; color: Red;\">parola1 parola2</strong>\" puoi fare una ricerca ordinata per importanza per due (o piu') chiavi di ricerca.</p><p><strong>Nota:</strong> la tua chiave deve essere composta da almeno 4 caratteri altrimenti potrebbe non essere accettata.</p>";
@@ -546,7 +546,7 @@ $PMF_LANG["ad_user_realname"] = "Vero nome:";
 $PMF_LANG["ad_export_generate_pdf"] = "Crea il file PDF";
 $PMF_LANG["ad_export_full_faq"] = "Ecco le tue FAQ in un unico file PDF: ";
 $PMF_LANG["err_bannedIP"] = "&Egrave; stato vietato l'accesso al tuo indirizzo IP.";
-$PMF_LANG["err_SaveQuestion"] = "I campi richiesti sono il <strong>tuo nome</strong>, il <strong>tuo indirizzo email</strong>, la <strong>tua domanda</strong> e, quando richiesto, il <strong>codice <a href=\"http://it.wikipedia.org/wiki/Captcha\" title=\"Vai alla definizione di Wikipedia\" target=\"_blank\">captcha</a> corretto</strong>!<br />Per favore controlla i dati immessi.<br /><br /><a href=\"javascript:history.back();\">Una pagina indietro</a><br /><br />\n";
+$PMF_LANG["err_SaveQuestion"] = "I campi richiesti sono il <strong>tuo nome</strong>, il <strong>tuo indirizzo email</strong>, la <strong>tua domanda</strong> e, quando richiesto, il <strong>codice <a href=\"http://it.wikipedia.org/wiki/Captcha\" title=\"Vai alla definizione di Wikipedia\" target=\"_blank\">captcha</a> corretto</strong>!<br />Per favore controlla i dati immessi.<br /><br /><a href=\"javascript:history.back();\">Una pagina indietro</a><br /><br />";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Colore del carattere: ";

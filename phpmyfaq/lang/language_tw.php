@@ -139,7 +139,7 @@ $PMF_LANG["msgLatestArticles"] = "最新列出的5個問題:";
 
 // E-Mailbenachrichtigung
 $PMF_LANG["msgMailThanks"] = "非常感謝您的建議.";
-$PMF_LANG["msgMailCheck"] = "FAQ有新增記錄!\n請進入管理員界面查看!";
+$PMF_LANG["msgMailCheck"] = "FAQ有新增記錄!請進入管理員界面查看!";
 $PMF_LANG["msgMailContact"] = "您的訊息已經傳遞給管理員.";
 
 // Fehlermeldungen
@@ -149,12 +149,12 @@ $PMF_LANG["err_noArticles"] = "<p>尚無記錄.</p>";
 $PMF_LANG["err_badID"] = "<p>錯誤的ID.</p>";
 $PMF_LANG["err_noTopTen"] = "<p>尚無TOP 10問題.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>沒有發翾記錄.</p>";
-$PMF_LANG["err_SaveEntries"] = "必須輸入的字段是<strong>姓名</strong>, <strong>電郵</strong>, <strong>類別</strong>, <strong>標題</strong> 和 <strong>記錄內容</strong>!<br /><br />\n<a href=\"javascript:history.back();\">返回前頁</a><br /><br />\n";
-$PMF_LANG["err_SaveComment"] = "必須輸入的字段是<strong>姓名</strong>, <strong>電郵</strong> 和 <strong>您的評論</strong>!<br /><br />\n<a href=\"javascript:history.back();\">返回前頁</a><br /><br />\n";
+$PMF_LANG["err_SaveEntries"] = "必須輸入的字段是<strong>姓名</strong>, <strong>電郵</strong>, <strong>類別</strong>, <strong>標題</strong> 和 <strong>記錄內容</strong>!<br /><br /><a href=\"javascript:history.back();\">返回前頁</a><br /><br />";
+$PMF_LANG["err_SaveComment"] = "必須輸入的字段是<strong>姓名</strong>, <strong>電郵</strong> 和 <strong>您的評論</strong>!<br /><br /><a href=\"javascript:history.back();\">返回前頁</a><br /><br />";
 $PMF_LANG["err_VoteTooMuch"] = "<p>您已經評分了. <a href=\"javascript:history.back();\">點擊這裡</a>, 返回.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>您沒有給此問題評分!</strong> <a href=\"javascript:history.back();\">請點擊這裡</a>, 進行評分.</p>";
 $PMF_LANG["err_noMailAdress"] = "您輸入的電郵不正確.<br /><a href=\"javascript:history.back();\">返回</a>";
-$PMF_LANG["err_sendMail"] = "必須輸入的字段是 <strong>姓名</strong>, <strong>電郵</strong> 和 <strong>問題</strong>!<br /><br />\n<a href=\"javascript:history.back();\">返回前頁</a><br /><br />\n";
+$PMF_LANG["err_sendMail"] = "必須輸入的字段是 <strong>姓名</strong>, <strong>電郵</strong> 和 <strong>問題</strong>!<br /><br /><a href=\"javascript:history.back();\">返回前頁</a><br /><br />";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>搜尋記錄:</strong><br />包快 <strong style=\"color: Red;\">word1 word2</strong> 您可以進行兩個或兩個以上條件的關連查詢.</p><p><strong>注意:</strong> 您的搜尋條件必須至少包括4個字符,否則將不能進行查詢.</p>";
@@ -546,7 +546,7 @@ $PMF_LANG["ad_user_realname"] = "真實姓名:";
 $PMF_LANG["ad_export_generate_pdf"] = "生成PDF文件";
 $PMF_LANG["ad_export_full_faq"] = "您的FAQ導出的PDF文件:";
 $PMF_LANG["err_bannedIP"] = "您的IP使用被禁止了.";
-$PMF_LANG["err_SaveQuestion"] = "必須輸入的字段包括 <strong>您的姓名</strong>, <strong>您的電郵</strong> 和 <strong>您的問題</strong>.<br /><br /><a href=\"javascript:history.back();\">返回前頁</a><br /><br />\n";
+$PMF_LANG["err_SaveQuestion"] = "必須輸入的字段包括 <strong>您的姓名</strong>, <strong>您的電郵</strong> 和 <strong>您的問題</strong>.<br /><br /><a href=\"javascript:history.back();\">返回前頁</a><br /><br />";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "字體顿色: ";

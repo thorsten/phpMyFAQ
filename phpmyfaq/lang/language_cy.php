@@ -145,12 +145,12 @@ $PMF_LANG["err_noArticles"] = "<p>Dim cofnodion ar gael.</p>";
 $PMF_LANG["err_badID"] = "<p>Gwybodaeth adnabod anghywir.</p>";
 $PMF_LANG["err_noTopTen"] = "<p>Does dim Deg Uchaf ar gael eto.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>Ni chafwyd cofnod.</p>";
-$PMF_LANG["err_SaveEntries"] = " Y meysydd gofynnol yw <strong>eich enw</strong>, <strong> eich cyfeiriad e-bost</strong>, <strong>categori</strong>, <strong>pennawd</strong>, <strong> eich cofnod </strong> a phan ofynnir amdano, <strong>Captcha Code</strong>!<br /><br />\n<a href=\"javascript:history.back();\">un dudalen yn ôl</a><br /><br />\n";
-$PMF_LANG["err_SaveComment"] = " Y meysydd gofynnol yw <strong> eich enw </strong>, <strong> eich cyfeiriad e-bost </strong>, <strong> eich sylwadau</strong> a phan ofynnir amdano, <strong>Captcha Code</strong>!<br /><br />\n<a href=\"javascript:history.back();\">un dudalen yn ôl </a><br /><br />\n";
+$PMF_LANG["err_SaveEntries"] = " Y meysydd gofynnol yw <strong>eich enw</strong>, <strong> eich cyfeiriad e-bost</strong>, <strong>categori</strong>, <strong>pennawd</strong>, <strong> eich cofnod </strong> a phan ofynnir amdano, <strong>Captcha Code</strong>!<br /><br /><a href=\"javascript:history.back();\">un dudalen yn ôl</a><br /><br />";
+$PMF_LANG["err_SaveComment"] = " Y meysydd gofynnol yw <strong> eich enw </strong>, <strong> eich cyfeiriad e-bost </strong>, <strong> eich sylwadau</strong> a phan ofynnir amdano, <strong>Captcha Code</strong>!<br /><br /><a href=\"javascript:history.back();\">un dudalen yn ôl </a><br /><br />";
 $PMF_LANG["err_VoteTooMuch"] = "<p> nid ydym yn cyfrif pleidleisio ddwywaith. <a href=\"javascript:history.back();\">Cliciwch yma </a>, i fynd yn ôl.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong> ni wnaethoch ateb y cwestiwn hwn!</strong> <a href=\"javascript:history.back();\">Cliciwch yma </a>, to vote.</p>";
 $PMF_LANG["err_noMailAdress"] = " nid yw eich cyfeiriad e-bost yn gywir.<br /><a href=\"javascript:history.back();\">back</a>";
-$PMF_LANG["err_sendMail"] = " Y meysydd gofynnol yw <strong> eich enw </strong>, <strong> eich cyfeiriad e-bost </strong>, <strong> eich cwestiwn</strong> a phan ofynnir amdano, <strong>Captcha Code</strong>!<br /><br />\n<a href=\"javascript:history.back();\">un dudalen yn ôl </a><br /><br />\n";
+$PMF_LANG["err_sendMail"] = " Y meysydd gofynnol yw <strong> eich enw </strong>, <strong> eich cyfeiriad e-bost </strong>, <strong> eich cwestiwn</strong> a phan ofynnir amdano, <strong>Captcha Code</strong>!<br /><br /><a href=\"javascript:history.back();\">un dudalen yn ôl </a><br /><br />";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong> chwilio’r cofnodion:</strong><br /> Gyda chofnod fel <strong style=\"color: Red;\"> gair1 gair2</strong> gallwch wneud chwiliad yn ôl perthnasedd ar gyfer dau faen prawf chwilio neu fwy.</p><p><strong> Sylwer:</strong> rhaid i’ch maen prawf chwilio fod o leiaf 4 llythyren neu fel arall bydd eich cais yn cael ei wrthod.</p>";
@@ -540,7 +540,7 @@ $PMF_LANG["ad_user_realname"] = "enw cywir:";
 $PMF_LANG["ad_export_generate_pdf"] = "cynhyrchu ffeil PDf";
 $PMF_LANG["ad_export_full_faq"] = "Eich Cwestiynau Cyffredin fel ffeil PDF: ";
 $PMF_LANG["err_bannedIP"] = "Mae eich cyfeiriad IP wedi'i wahardd.";
-$PMF_LANG["err_SaveQuestion"] = " Y meysydd gofynnol yw <strong>eich enw</strong>, <strong> eich cyfeiriad e-bost </strong>, <strong> eich cwestiwn</strong> a phan ofynnir amdano, <strong>Captcha Code</strong>.<br /><br /><a href=\"javascript:history.back();\">un dudalen yn ôl </a><br /><br />\n";
+$PMF_LANG["err_SaveQuestion"] = " Y meysydd gofynnol yw <strong>eich enw</strong>, <strong> eich cyfeiriad e-bost </strong>, <strong> eich cwestiwn</strong> a phan ofynnir amdano, <strong>Captcha Code</strong>.<br /><br /><a href=\"javascript:history.back();\">un dudalen yn ôl </a><br /><br />";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Lliw'r ffont : ";

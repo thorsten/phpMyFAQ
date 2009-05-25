@@ -136,7 +136,7 @@ $PMF_LANG["msgLatestArticles"] = "Los últimos cinco registros:";
 
 // E-Mailbenachrichtigung
 $PMF_LANG["msgMailThanks"] = "Muchas gracias por tu propuesta par el FAQ.";
-$PMF_LANG["msgMailCheck"] = "Hay un nuevo registro en el FAQ!\nPor favor, chequea la sección de administración!";
+$PMF_LANG["msgMailCheck"] = "Hay un nuevo registro en el FAQ!Por favor, chequea la sección de administración!";
 $PMF_LANG["msgMailContact"] = "¡Tu mensaje ha sido enviado al administrador!";
 
 // Fehlermeldungen
@@ -146,12 +146,12 @@ $PMF_LANG["err_noArticles"] = "<p>No hay entradas disponibles.</p>";
 $PMF_LANG["err_badID"] = "<p>¡ID erróneo!</p>";
 $PMF_LANG["err_noTopTen"] = "<p>No hay TOP Ten disponibles aún.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>No se han encontrado entradas.</p>";
-$PMF_LANG["err_SaveEntries"] = "Campos requeridos son <strong>tu Nombre</strong>, <strong>tu dirección de e-mail</strong>, <strong>categoría</strong>, <strong>encabezado</strong> y <strong>tu Registro</strong>!<br /><br />\n<a href=\"javascript:history.back();\">volver atrás</a><br /><br />\n";
-$PMF_LANG["err_SaveComment"] = "Required fields are <strong>tu Nombre</strong>, <strong>tu dirección de e-mail</strong> y <strong>tus comentarios</strong>!<br /><br />\n<a href=\"javascript:history.back();\">volver atrás</a><br /><br />\n";
+$PMF_LANG["err_SaveEntries"] = "Campos requeridos son <strong>tu Nombre</strong>, <strong>tu dirección de e-mail</strong>, <strong>categoría</strong>, <strong>encabezado</strong> y <strong>tu Registro</strong>!<br /><br /><a href=\"javascript:history.back();\">volver atrás</a><br /><br />";
+$PMF_LANG["err_SaveComment"] = "Required fields are <strong>tu Nombre</strong>, <strong>tu dirección de e-mail</strong> y <strong>tus comentarios</strong>!<br /><br /><a href=\"javascript:history.back();\">volver atrás</a><br /><br />";
 $PMF_LANG["err_VoteTooMuch"] = "<p>No se contabilizan votaciones dobles. <a href=\"javascript:history.back();\">Click aquí</a>, para volver.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>¡No se ha evaluado!</strong> <a href=\"javascript:history.back();\">Por favor, pulsa aquí</a>, para votar.</p>";
 $PMF_LANG["err_noMailAdress"] = "Tu dirección de e-mail no es correcta.<br /><a href=\"javascript:history.back();\">volver</a>";
-$PMF_LANG["err_sendMail"] = "Campos requeridos son <strong>tu nombre</strong>, <strong>tu dirección de e-mail</strong> y <strong>tu pregunta</strong>!<br /><br />\n<a href=\"javascript:history.back();\">volver atrás</a><br /><br />\n";
+$PMF_LANG["err_sendMail"] = "Campos requeridos son <strong>tu nombre</strong>, <strong>tu dirección de e-mail</strong> y <strong>tu pregunta</strong>!<br /><br /><a href=\"javascript:history.back();\">volver atrás</a><br /><br />";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>Búsqueda de registros:</strong><br /></p>";
@@ -544,7 +544,7 @@ $PMF_LANG["ad_user_realname"] = "nombre real:";
 $PMF_LANG["ad_export_generate_pdf"] = "generar fichero PDF";
 $PMF_LANG["ad_export_full_faq"] = "Tu FAQ como fichero PDF: ";
 $PMF_LANG["err_bannedIP"] = "Tu IP ha sido bloqueada.";
-$PMF_LANG["err_SaveQuestion"] = "Son campos obligatorios <strong>tu Nombre</strong>, <strong>tu dirección de e-mail</strong> y <strong>tu pregunta</strong>!<br /><br /><a href=\"javascript:history.back();\">volver</a><br /><br />\n";
+$PMF_LANG["err_SaveQuestion"] = "Son campos obligatorios <strong>tu Nombre</strong>, <strong>tu dirección de e-mail</strong> y <strong>tu pregunta</strong>!<br /><br /><a href=\"javascript:history.back();\">volver</a><br /><br />";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Font color: ";

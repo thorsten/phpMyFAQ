@@ -65,16 +65,16 @@ endif; ?>
         <tr class="lang_<?php echo $lang ?>_container">
         <td><?php echo $lang ?></td>
         <?php if($permission["edittranslation"]): ?>
-        <td><a href="?action=transedit&amp;translang=<?php print $lang ?>" ><?php echo $PMF_LANG['msgEdit'] ?></a></td>
+        <td>[<a href="?action=transedit&amp;translang=<?php print $lang ?>" ><?php echo $PMF_LANG['msgEdit'] ?></a>]</td>
         <?php else: ?>
         <td>&nbsp;</td>
         <?php endif; ?>
         <?php if($permission["edittranslation"]): ?>
-        <td><a href="javascript: del('<?php print $lang ?>');" ><?php echo $PMF_LANG['msgDelete'] ?></a></td>
+        <td>[<a href="javascript: del('<?php print $lang ?>');" ><?php echo $PMF_LANG['msgDelete'] ?></a>]</td>
         <?php else: ?>
         <td>&nbsp;</td>
         <?php endif; ?>
-        <td><a href="javascript: sendToTeam('<?php print $lang ?>');" ><?php echo $PMF_LANG['msgTransToolSendToTeam'] ?></a></td>
+        <td>[<a href="javascript: sendToTeam('<?php print $lang ?>');" ><?php echo $PMF_LANG['msgTransToolSendToTeam'] ?></a>]</td>
         <?php if(is_writable(PMF_ROOT_DIR . "/lang/language_$lang.php")): ?>
         <td><font color="green"><?php echo $PMF_LANG['msgYes'] ?></font></td>
         <?php else: ?>

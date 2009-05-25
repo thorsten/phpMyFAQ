@@ -134,7 +134,7 @@ $PMF_LANG["msgLatestArticles"] = "Пять новых ответов/вопросов:";
 
 // E-Mailbenachrichtigung
 $PMF_LANG["msgMailThanks"] = "Спасибо за новую запись в базу FAQ.";
-$PMF_LANG["msgMailCheck"] = "Добавлена новая запись в базу FAQ!\nПосетите панель управления для администратора!";
+$PMF_LANG["msgMailCheck"] = "Добавлена новая запись в базу FAQ!Посетите панель управления для администратора!";
 $PMF_LANG["msgMailContact"] = "Сообщение отправлено администратору.";
 
 // Fehlermeldungen
@@ -144,12 +144,12 @@ $PMF_LANG["err_noArticles"] = "<p>Ничего не найдено</p>";
 $PMF_LANG["err_badID"] = "<p>Wrong ID.</p>";
 $PMF_LANG["err_noTopTen"] = "<p>No Top Ten available yet.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>No entry found.</p>";
-$PMF_LANG["err_SaveEntries"] = "Не заполнены обязательные поля <strong>ваше имя</strong>, <strong>адрес email</strong>, <strong>категория</strong>, <strong>заголовок</strong> и <strong>текст вопроса</strong>!<br /><br />\n<a href=\"javascript:history.back();\">Вернитесь назад и заполните необходимые поля</a><br /><br />\n";
-$PMF_LANG["err_SaveComment"] = "Не заполнены обязательные поля <strong>ваше имя</strong>, <strong>арес email</strong> и <strong>ваш комментарий</strong>!<br /><br />\n<a href=\"javascript:history.back();\">Вернуться назад</a><br /><br />\n";
+$PMF_LANG["err_SaveEntries"] = "Не заполнены обязательные поля <strong>ваше имя</strong>, <strong>адрес email</strong>, <strong>категория</strong>, <strong>заголовок</strong> и <strong>текст вопроса</strong>!<br /><br /><a href=\"javascript:history.back();\">Вернитесь назад и заполните необходимые поля</a><br /><br />";
+$PMF_LANG["err_SaveComment"] = "Не заполнены обязательные поля <strong>ваше имя</strong>, <strong>арес email</strong> и <strong>ваш комментарий</strong>!<br /><br /><a href=\"javascript:history.back();\">Вернуться назад</a><br /><br />";
 $PMF_LANG["err_VoteTooMuch"] = "<p>We do not count double votings. <a href=\"javascript:history.back();\">Click here</a>, to go back.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>Вы забыли поставить оценку этому ответу или пытаетесь сделать это повторно!</strong> <a href=\"javascript:history.back();\">Нажмите сюда</a>, для возврата на предыдущую страницу.</p>";
 $PMF_LANG["err_noMailAdress"] = "Your email address is not correct.<br /><a href=\"javascript:history.back();\">back</a>";
-$PMF_LANG["err_sendMail"] = "Не заполнены обязательные поля <strong>ваше имя</strong>, <strong>адрес email</strong> и <strong>текст сообщения</strong>!<br /><br />\n<a href=\"javascript:history.back();\">Вернуться назад</a><br /><br />\n";
+$PMF_LANG["err_sendMail"] = "Не заполнены обязательные поля <strong>ваше имя</strong>, <strong>адрес email</strong> и <strong>текст сообщения</strong>!<br /><br /><a href=\"javascript:history.back();\">Вернуться назад</a><br /><br />";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>Поиск по базе FAQ:</strong><br /></p>";
@@ -540,7 +540,7 @@ $PMF_LANG["ad_user_realname"] = "Настоящее имя:";
 $PMF_LANG["ad_export_generate_pdf	"] = "Создать PDF файл";
 $PMF_LANG["ad_export_full_faq"] = "База FAQ в виде PDF файла: ";
 $PMF_LANG["err_bannedIP"] = "Доступ к системе с вашего IP адреса запрещен.";
-$PMF_LANG["err_SaveQuestion"] = "Не заполнены обязательные поля <strong>ваше имя</strong>, <strong>адрес email</strong> и <strong>текст вопроса</strong>.<br /><br /><a href=\"javascript:history.back();\">Вернутсья назад</a><br /><br />\n";
+$PMF_LANG["err_SaveQuestion"] = "Не заполнены обязательные поля <strong>ваше имя</strong>, <strong>адрес email</strong> и <strong>текст вопроса</strong>.<br /><br /><a href=\"javascript:history.back();\">Вернутсья назад</a><br /><br />";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Цвет шрифта: ";

@@ -145,7 +145,7 @@ $PMF_LANG["msgLatestArticles"] = "أحدث خمسة أسئلة تمت إضا�?
 
 // E-Mailbenachrichtigung
 $PMF_LANG["msgMailThanks"] = "الشكر الجزيل لك ولمقترحاتك القيّمة";
-$PMF_LANG["msgMailCheck"] = "يوجد سؤال جديدة �?ي مركز الأسئلة !\n�?ضلاً قم بمراجعة
+$PMF_LANG["msgMailCheck"] = "يوجد سؤال جديدة �?ي مركز الأسئلة !�?ضلاً قم بمراجعة
 إدارة البرنامج !";
 $PMF_LANG["msgMailContact"] = "تم إرسال رسالتك إلى المشر�? العام .";
 
@@ -159,10 +159,10 @@ $PMF_LANG["err_nothingFound"] = "<p>لا يوجد أسئلة حتى الآن .</
 $PMF_LANG["err_SaveEntries"] = "الحقول المطلوبة هي <font color=\"red\">إسمك</font>, <font
 color=\"red\">عنوان بريدك</font>, <font color=\"red\">التصني�? المناسب</font>, <font
 color=\"red\">عنوان السؤال</font> وأخيراً <font color=\"red\">نص السؤال أو
-الإست�?سار</font>!<br /><br />\n<a href=\"javascript:history.back();\">عد ص�?حة إلى الخل�?</a><br /><br />\n";
+الإست�?سار</font>!<br /><br /><a href=\"javascript:history.back();\">عد ص�?حة إلى الخل�?</a><br /><br />";
 $PMF_LANG["err_SaveComment"] = "الحقول المطلوبة هي <font color=\"red\">إسمك</font>, <font
-color=\"red\">عنوان بريدك</font> وأخيراً <font color=\"red\">تعليقك</font>!<br /><br />\n<a href=\"
-javascript:history.back();\">عد ص�?حة إلى الخل�?</a><br /><br />\n";
+color=\"red\">عنوان بريدك</font> وأخيراً <font color=\"red\">تعليقك</font>!<br /><br /><a href=\"
+javascript:history.back();\">عد ص�?حة إلى الخل�?</a><br /><br />";
 $PMF_LANG["err_VoteTooMuch"] = "<p>نحن لا نقوم بإحتساب التقييم المزدوج أو المتكرر <a
 href=\"javascript:history.back();\">إضغط هنا</a>, للعودة إلى الخل�? .</p>";
 $PMF_LANG["err_noVote"] = "<p>لم تقم بتقييم هذا السؤال بعد ! <a href=\"
@@ -170,8 +170,8 @@ javascript:history.back();\">�?ضلاً إضغط هنا</a>, لتقوم بذل
 $PMF_LANG["err_noMailAdress"] = "عنوان بريدك الإلكتروني غير صحيح .<br /><a href=\"
 javascript:history.back();\">عودة</a>";
 $PMF_LANG["err_sendMail"] = "الحقول المطلوبة هي <font color=\"red\">إسمك</font>, <font
-color=\"red\">عنوان بريدك</font> وأخيراً <font color=\"red\">سؤالك</font>!<br /><br />\n<a href=\"
-javascript:history.back();\">عد ص�?حة إلى الخل�?</a><br /><br />\n";
+color=\"red\">عنوان بريدك</font> وأخيراً <font color=\"red\">سؤالك</font>!<br /><br /><a href=\"
+javascript:history.back();\">عد ص�?حة إلى الخل�?</a><br /><br />";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p>إبحث عن سؤال:<br /></p>";
@@ -580,7 +580,7 @@ $PMF_LANG["ad_export_full_faq"] = "PDF أسئلتك على شكل مل�? من 
 $PMF_LANG["err_bannedIP"] = " الخاص بك تم إيقا�?ه رقم الأى بي";
 $PMF_LANG["err_SaveQuestion"] = "الحقول المطلوبة هي <font color=\"red\">إسمك</font>, <font
 color=\"red\">بريدك الإلكتروني</font> وأخيراً <font color=\"red\">سؤالك</font>.<br /><br /><a href=\"
-javascript:history.back();\">عد ص�?حة إلى الخل�?</a><br /><br />\n";
+javascript:history.back();\">عد ص�?حة إلى الخل�?</a><br /><br />";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "لون الخط : ";

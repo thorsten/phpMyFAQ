@@ -135,7 +135,7 @@ $PMF_LANG["msgLatestArticles"] = "De fem senast besvarade frågorna:";
 
 // E-postmeddelande
 $PMF_LANG["msgMailThanks"] = "Tack för ditt förslag!.";
-$PMF_LANG["msgMailCheck"] = "En ny fråga på phpMyFAQ!\n Logga in på kontrollpanelen";
+$PMF_LANG["msgMailCheck"] = "En ny fråga på phpMyFAQ! Logga in på kontrollpanelen";
 $PMF_LANG["msgMailContact"] = "Ditt meddelande har blivit skickat till kontrollpanelen.";
 
 // Felmeddelande
@@ -145,12 +145,12 @@ $PMF_LANG["err_noArticles"] = "<p>Inga frågor funna.</p>";
 $PMF_LANG["err_badID"] = "<p>Fel ID.</p>";
 $PMF_LANG["err_noTopTen"] = "<p>Det finns ingen tio-i-topp lista.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>Inga frågor funna.</p>";
-$PMF_LANG["err_SaveEntries"] = "Nödvändiga fält är <strong>ditt namn</strong>, <strong>din email</strong>, <strong>kategori</strong>, <strong>rubrik</strong> och <strong>din fråga/svar</strong>!<br><br>\n<a href=\"javascript:history.back();\">Backa</a><br><br>\n";
-$PMF_LANG["err_SaveComment"] = "Nödvändiga fält är <strong>ditt namn</strong>, <strong>din email</strong> och <strong>din kommentar</strong>!<br><br>\n<a href=\"javascript:history.back();\">Backa</a><br><br>\n";
+$PMF_LANG["err_SaveEntries"] = "Nödvändiga fält är <strong>ditt namn</strong>, <strong>din email</strong>, <strong>kategori</strong>, <strong>rubrik</strong> och <strong>din fråga/svar</strong>!<br><br><a href=\"javascript:history.back();\">Backa</a><br><br>";
+$PMF_LANG["err_SaveComment"] = "Nödvändiga fält är <strong>ditt namn</strong>, <strong>din email</strong> och <strong>din kommentar</strong>!<br><br><a href=\"javascript:history.back();\">Backa</a><br><br>";
 $PMF_LANG["err_VoteTooMuch"] = "<p>Vi räknar inte dubbla röster.<a href=\"javascript:history.back();\">Klicka här</a> för att gå tillbaka.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>Du röstade inte på frågan!</strong> <a href=\"javascript:history.back();\">Klicka här</a>, för att rösta.</p>";
 $PMF_LANG["err_noMailAdress"] = "Din email är inte korrekt.<br /><a href=\"javascript:history.back();\">Backa</a>";
-$PMF_LANG["err_sendMail"] = "Nödvändiga fält är <strong>ditt namn</strong>, <strong>din email</strong> och <strong>din fråga</strong>!<br><br>\n<a href=\"javascript:history.back();\">Backa</a><br><br>\n";
+$PMF_LANG["err_sendMail"] = "Nödvändiga fält är <strong>ditt namn</strong>, <strong>din email</strong> och <strong>din fråga</strong>!<br><br><a href=\"javascript:history.back();\">Backa</a><br><br>";
 
 // Sökhjälp
 $PMF_LANG["help_search"] = "<p><strong>Sök efter frågor/svar:</strong><br />Med ett innehåll likt: <strong style=\"color: Red;\">ord1 ord2</strong> du kan göra en relevanssökning (i fallande ordning), med två eller fler sökkriterier.</p><p><strong>Obs:</strong> Ditt sökkriterium måste vara minst 4 tecken långt.</p>";
@@ -543,7 +543,7 @@ $PMF_LANG["ad_user_realname"] = "Riktigt namn:";
 $PMF_LANG["ad_export_generate_pdf"] = "Skapa pdf-fil";
 $PMF_LANG["ad_export_full_faq"] = "phpMyFAQ som pdf-fil: ";
 $PMF_LANG["err_bannedIP"] = "Din IP-adress har blivit blockad, du är inte behörig att besöka denna sida.";
-$PMF_LANG["err_SaveQuestion"] = "Obligatoriska fält är <strong>ditt namn</strong>, <strong>din e-post</strong> och <strong>din fråga</strong>.<br /><br /><a href=\"javascript:history.back();\">tillbaka</a><br /><br />\n";
+$PMF_LANG["err_SaveQuestion"] = "Obligatoriska fält är <strong>ditt namn</strong>, <strong>din e-post</strong> och <strong>din fråga</strong>.<br /><br /><a href=\"javascript:history.back();\">tillbaka</a><br /><br />";
 
 // Admin - font
 $PMF_LANG["ad_entry_fontcolor"] = "Teckensnitt, färg: ";

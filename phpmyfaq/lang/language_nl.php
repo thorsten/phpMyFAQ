@@ -135,7 +135,7 @@ $PMF_LANG["msgLatestArticles"] = "De vijf meest recent gestelde vragen:";
 
 // E-Mailbenachrichtigung
 $PMF_LANG["msgMailThanks"] = "Vriendelijk bedankt voor uw voorstel voor de FAQ.";
-$PMF_LANG["msgMailCheck"] = "Er zijn nieuwe records in de FAQ!\nControleer het beheerders gedeelte!";
+$PMF_LANG["msgMailCheck"] = "Er zijn nieuwe records in de FAQ!Controleer het beheerders gedeelte!";
 $PMF_LANG["msgMailContact"] = "Uw bericht is naar de beheerder verstuurt..";
 
 // Fehlermeldungen
@@ -145,12 +145,12 @@ $PMF_LANG["err_noArticles"] = "<p>Geen records beschikbaar.</p>";
 $PMF_LANG["err_badID"] = "<p>Verkeerd ID.</p>";
 $PMF_LANG["err_noTopTen"] = "<p>Er is nog geen top 10 beschikbaar.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>Geen record gevonden.</p>";
-$PMF_LANG["err_SaveEntries"] = "Verplichte velden zijn <strong>uw naam</strong>, <strong>uw emailadres</strong>, <strong>categorie</strong>, <strong>koptekst</strong> en <strong>uw Record</strong>!<br /><br />\n<a href=\"javascript:history.back();\">&eacute;&eacute;n pagina terug</a><br /><br />\n";
-$PMF_LANG["err_SaveComment"] = "Verplichte velden zijn <strong>uw naam</strong>, <strong>uw emailadres</strong> en <strong>uw commentaren</strong>!<br /><br />\n<a href=\"javascript:history.back();\">&eacute;&eacute;n pagina terug</a><br /><br />\n";
+$PMF_LANG["err_SaveEntries"] = "Verplichte velden zijn <strong>uw naam</strong>, <strong>uw emailadres</strong>, <strong>categorie</strong>, <strong>koptekst</strong> en <strong>uw Record</strong>!<br /><br /><a href=\"javascript:history.back();\">&eacute;&eacute;n pagina terug</a><br /><br />";
+$PMF_LANG["err_SaveComment"] = "Verplichte velden zijn <strong>uw naam</strong>, <strong>uw emailadres</strong> en <strong>uw commentaren</strong>!<br /><br /><a href=\"javascript:history.back();\">&eacute;&eacute;n pagina terug</a><br /><br />";
 $PMF_LANG["err_VoteTooMuch"] = "<p>Dubbele stemmen worden niet geteld. <a href=\"javascript:history.back();\">Klik hier</a> om terug te gaan.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>Er werd geen beoordeling afgegeven!</strong> <a href=\"javascript:history.back();\">Klik hier</a> om te stemmen.</p>";
 $PMF_LANG["err_noMailAdress"] = "Uw emailadres is niet correct.<br /><a href=\"javascript:history.back();\">terug</a>";
-$PMF_LANG["err_sendMail"] = "Verplichte velden zijn <strong>uw naam</strong>, <strong>uw emailadres</strong> en <strong>uw vraag</strong>!<br /><br />\n<a href=\"javascript:history.back();\">&eacute;&eacute;n pagina terug</a><br /><br />\n";
+$PMF_LANG["err_sendMail"] = "Verplichte velden zijn <strong>uw naam</strong>, <strong>uw emailadres</strong> en <strong>uw vraag</strong>!<br /><br /><a href=\"javascript:history.back();\">&eacute;&eacute;n pagina terug</a><br /><br />";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>Zoek naar records:</strong><br />Met een ingave als <strong style=\"color: Red;\">woord1 woord2</strong> kunt u een zoekactie doen voor twee of meer zoekcriteria met aflopende relevantie.</p><p><strong>Let op:</strong> Uw zoekcriteria moet minstens uit 4 karakters bestaan, anders wordt uw zoekactie gewijgerd.</p>";
@@ -542,7 +542,7 @@ $PMF_LANG["ad_user_realname"] = "echte naam:";
 $PMF_LANG["ad_export_generate_pdf"] = "genereer PDF bestand";
 $PMF_LANG["ad_export_full_faq"] = "Uw FAQ als een PDF bestand: ";
 $PMF_LANG["err_bannedIP"] = "Uw IP address is geblokkeerd.";
-$PMF_LANG["err_SaveQuestion"] = "Verplichte velden zijn <strong>uw naam</strong>, <strong>uw emailadres</strong> en <strong>uw vraag</strong>.<br /><br /><a href=\"javascript:history.back();\">&eacute;&eacute;n pagina terug</a><br /><br />\n";
+$PMF_LANG["err_SaveQuestion"] = "Verplichte velden zijn <strong>uw naam</strong>, <strong>uw emailadres</strong> en <strong>uw vraag</strong>.<br /><br /><a href=\"javascript:history.back();\">&eacute;&eacute;n pagina terug</a><br /><br />";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Letter kleur: ";

@@ -135,7 +135,7 @@ $PMF_LANG["msgLatestArticles"] = "Az utolsó öt beküldött kérdés:";
 
 // E-Mailbenachrichtigung
 $PMF_LANG["msgMailThanks"] = "Köszönjük a javaslatot.";
-$PMF_LANG["msgMailCheck"] = "Új bejegyzés a GYIK-ban!\nEllenőrizd az admin részen!";
+$PMF_LANG["msgMailCheck"] = "Új bejegyzés a GYIK-ban!Ellenőrizd az admin részen!";
 $PMF_LANG["msgMailContact"] = "Az üzenet postázva az adminisztrátornak.";
 
 // Fehlermeldungen
@@ -145,12 +145,12 @@ $PMF_LANG["err_noArticles"] = "<p>Nincsenek bejegyzések.</p>";
 $PMF_LANG["err_badID"] = "<p>Rossz ID.</p>";
 $PMF_LANG["err_noTopTen"] = "<p>Még nincs TOP 10.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>Nincs bejegyzés.</p>";
-$PMF_LANG["err_SaveEntries"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>category</strong>, <strong>headline</strong> and <strong>your Record</strong>!<br /><br />\n<a href=\"javascript:history.back();\">one page back</a><br /><br />\n";
-$PMF_LANG["err_SaveComment"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong> and <strong>your comments</strong>!<br /><br />\n<a href=\"javascript:history.back();\">one page back</a><br /><br />\n";
+$PMF_LANG["err_SaveEntries"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>category</strong>, <strong>headline</strong> and <strong>your Record</strong>!<br /><br /><a href=\"javascript:history.back();\">one page back</a><br /><br />";
+$PMF_LANG["err_SaveComment"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong> and <strong>your comments</strong>!<br /><br /><a href=\"javascript:history.back();\">one page back</a><br /><br />";
 $PMF_LANG["err_VoteTooMuch"] = "<p>We do not count double votings. <a href=\"javascript:history.back();\">Click here</a>, to go back.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>You did not rate the question!</strong> <a href=\"javascript:history.back();\">Please click here</a>, to vote.</p>";
 $PMF_LANG["err_noMailAdress"] = "Your email address is not correct.<br /><a href=\"javascript:history.back();\">back</a>";
-$PMF_LANG["err_sendMail"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong> and <strong>your question</strong>!<br /><br />\n<a href=\"javascript:history.back();\">one page back</a><br /><br />\n";
+$PMF_LANG["err_sendMail"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong> and <strong>your question</strong>!<br /><br /><a href=\"javascript:history.back();\">one page back</a><br /><br />";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>Találatok:</strong><br /></p>";
@@ -541,7 +541,7 @@ $PMF_LANG["ad_user_realname"] = "teljes név:";
 $PMF_LANG["ad_export_generate_pdf"] = "PDF fájl létrehozása";
 $PMF_LANG["ad_export_full_faq"] = "A GYIK PFD fájlban: ";
 $PMF_LANG["err_bannedIP"] = "Az IP-d ki lett tiltva.";
-$PMF_LANG["err_SaveQuestion"] = "A kötelező mezők: <strong>neved</strong>, <strong>email címed</strong> és a <strong>kérdésed</strong>.<br /><br /><a href=\"javascript:history.back();\">egy oldalt visszak</a><br /><br />\n";
+$PMF_LANG["err_SaveQuestion"] = "A kötelező mezők: <strong>neved</strong>, <strong>email címed</strong> és a <strong>kérdésed</strong>.<br /><br /><a href=\"javascript:history.back();\">egy oldalt visszak</a><br /><br />";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Betű szín: ";

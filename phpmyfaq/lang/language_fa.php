@@ -135,7 +135,7 @@ $PMF_LANG["msgLatestArticles"] = " پنج مطلب اخیر";
 
 // E-Mailbenachrichtigung
 $PMF_LANG["msgMailThanks"] = "بسیار ممنون بابت پیشنهاد به FAQ.";
-$PMF_LANG["msgMailCheck"] = "مطلب جدید در FAQ وجود دارد!\n لط�?اً به بخش ادمین مراجعه کنید";
+$PMF_LANG["msgMailCheck"] = "مطلب جدید در FAQ وجود دارد! لط�?اً به بخش ادمین مراجعه کنید";
 $PMF_LANG["msgMailContact"] = "پیام شما به ادمین سایت ارسال شد.";
 
 // Fehlermeldungen
@@ -145,12 +145,12 @@ $PMF_LANG["err_noArticles"] = "<p>مطلبی در دسترس نیست.</p>";
 $PMF_LANG["err_badID"] = "<p>آی‌دی اشتباه.</p>";
 $PMF_LANG["err_noTopTen"] = "<p>هنوز مطالب برتر ایجاد نشده.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>مطلبی پیدا نشد.</p>";
-$PMF_LANG["err_SaveEntries"] = "کادرهای اجباری <strong>نام شما</strong>, <strong>ایمیل شما </strong>, <strong>موضوع </strong>, <strong>headline</strong>, <strong>your Record</strong> and, when requested, the <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> کد </strong> هستند!<br /><br />\n<a href=\"javascript:history.back();\">یک ص�?حه برگرد </a><br /><br />\n";
-$PMF_LANG["err_SaveComment"] = "کادرهای اجباری <strong>نام شما </strong>, <strong>ایمیل شما </strong>, <strong>نظر شما </strong> و, اگر خواسته شده باشه, <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> کد </strong>هستند!<br /><br />\n<a href=\"javascript:history.back();\">یک ص�?حه برگرد</a><br /><br />\n";
+$PMF_LANG["err_SaveEntries"] = "کادرهای اجباری <strong>نام شما</strong>, <strong>ایمیل شما </strong>, <strong>موضوع </strong>, <strong>headline</strong>, <strong>your Record</strong> and, when requested, the <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> کد </strong> هستند!<br /><br /><a href=\"javascript:history.back();\">یک ص�?حه برگرد </a><br /><br />";
+$PMF_LANG["err_SaveComment"] = "کادرهای اجباری <strong>نام شما </strong>, <strong>ایمیل شما </strong>, <strong>نظر شما </strong> و, اگر خواسته شده باشه, <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> کد </strong>هستند!<br /><br /><a href=\"javascript:history.back();\">یک ص�?حه برگرد</a><br /><br />";
 $PMF_LANG["err_VoteTooMuch"] = "<p>امتیازات تکراری حساب نمیشوند. <a href=\"javascript:history.back();\"> کلیک کنید </a>, برای برگشت.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>امتیاز ثبت نشد!</strong> <a href=\"javascript:history.back();\">کلید کنید </a>, برای امتیاز دادن.</p>";
 $PMF_LANG["err_noMailAdress"] = "ایمیل شما صحیح به نظر نمیرسد.<br /><a href=\"javascript:history.back();\">برگشت</a>";
-$PMF_LANG["err_sendMail"] = "کادرهای اجباری <strong>نام شما</strong>, <strong>ایمیل شما</strong>, <strong>سئوال شما</strong> و, اگر تقاضا شده باشد, <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> کد </strong>هستند!<br /><br />\n<a href=\"javascript:history.back();\">یک ص�?حه برگرد</a><br /><br />\n";
+$PMF_LANG["err_sendMail"] = "کادرهای اجباری <strong>نام شما</strong>, <strong>ایمیل شما</strong>, <strong>سئوال شما</strong> و, اگر تقاضا شده باشد, <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> کد </strong>هستند!<br /><br /><a href=\"javascript:history.back();\">یک ص�?حه برگرد</a><br /><br />";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p>شما متوانید به دنبال مطلبی با کلماتی مانند <strong style=\"color: Red;\">word1 و word2</strong> جستجو کنید، همچنین شما میتوانید برای عباراتی با دو کلمه یا بیشتر جستجو کنید.</p><p><strong>توجه:</strong>هر کلمه در جستجوی شما حداقل باید دارای چهار حر�? باشد.</p>";
@@ -543,7 +543,7 @@ $PMF_LANG["ad_user_realname"] = "نام واقعی:";
 $PMF_LANG["ad_export_generate_pdf"] = "تولید �?ایل PDF";
 $PMF_LANG["ad_export_full_faq"] = "FAQ شما بصورت �?ایل PDF: ";
 $PMF_LANG["err_bannedIP"] = "IP address شما بسته شده.";
-$PMF_LANG["err_SaveQuestion"] = "کادرهای اجباری <strong>نام شما</strong>, <strong>ایمیل شما</strong>, <strong>سئوال شما</strong> و, اگر درخواست شده باشد <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> کد</strong> هستند.<br /><br /><a href=\"javascript:history.back();\">یک ص�?حه برگرد</a><br /><br />\n";
+$PMF_LANG["err_SaveQuestion"] = "کادرهای اجباری <strong>نام شما</strong>, <strong>ایمیل شما</strong>, <strong>سئوال شما</strong> و, اگر درخواست شده باشد <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> کد</strong> هستند.<br /><br /><a href=\"javascript:history.back();\">یک ص�?حه برگرد</a><br /><br />";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "رنگ قلم: ";

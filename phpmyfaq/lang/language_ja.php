@@ -138,7 +138,7 @@ $PMF_LANG["msgLatestArticles"] = "もっとも最近投稿された 5 つの質�
 
 // E-Mailbenachrichtigung
 $PMF_LANG["msgMailThanks"] = "FAQ に提案してくれてありがとうございます。";
-$PMF_LANG["msgMailCheck"] = "新しい質問があります。\n管理者ページを確認してください。";
+$PMF_LANG["msgMailCheck"] = "新しい質問があります。管理者ページを確認してください。";
 $PMF_LANG["msgMailContact"] = "メッセージは管理者に送信されました。";
 
 // Fehlermeldungen
@@ -148,12 +148,12 @@ $PMF_LANG["err_noArticles"] = "<p>登録されているエントリがありま�
 $PMF_LANG["err_badID"] = "<p>間違った ID です。</p>";
 $PMF_LANG["err_noTopTen"] = "<p>トップ 10 が利用できません。</p>";
 $PMF_LANG["err_nothingFound"] = "<p>エントリが見つかりません。</p>";
-$PMF_LANG["err_SaveEntries"] = "<strong>名前</strong>、<strong>メールアドレス</strong>、<strong>カテゴリ</strong>、<strong>件名</strong>、<strong>FAQ 内容</strong>、要求された場合は <strong><a href=\"http://ja.wikipedia.org/wiki/Captcha\" title=\"Wikipedia で Captcha について読む\" target=\"_blank\">Captcha</a> コード</strong> は必須フィールドです!<br /><br />\n<a href=\"javascript:history.back();\">戻る</a><br /><br />\n";
-$PMF_LANG["err_SaveComment"] = "<strong>名前</strong>、<strong>メールアドレス</strong>、<strong>コメント</strong>と要求された場合は <strong><a href=\"http://ja.wikipedia.org/wiki/Captcha\" title=\"Wikipedia で Captcha について読む\" target=\"_blank\">Captcha</a> コード</strong> は必須項目です!<br /><br />\n<a href=\"javascript:history.back();\">戻る</a><br /><br />\n";
+$PMF_LANG["err_SaveEntries"] = "<strong>名前</strong>、<strong>メールアドレス</strong>、<strong>カテゴリ</strong>、<strong>件名</strong>、<strong>FAQ 内容</strong>、要求された場合は <strong><a href=\"http://ja.wikipedia.org/wiki/Captcha\" title=\"Wikipedia で Captcha について読む\" target=\"_blank\">Captcha</a> コード</strong> は必須フィールドです!<br /><br /><a href=\"javascript:history.back();\">戻る</a><br /><br />";
+$PMF_LANG["err_SaveComment"] = "<strong>名前</strong>、<strong>メールアドレス</strong>、<strong>コメント</strong>と要求された場合は <strong><a href=\"http://ja.wikipedia.org/wiki/Captcha\" title=\"Wikipedia で Captcha について読む\" target=\"_blank\">Captcha</a> コード</strong> は必須項目です!<br /><br /><a href=\"javascript:history.back();\">戻る</a><br /><br />";
 $PMF_LANG["err_VoteTooMuch"] = "<p>複数回の評価はできません。<a href=\"javascript:history.back();\">ここ</a>をクリックすると戻ります。</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>評価点数を選択してください。</strong> 評価をするためには<a href=\"javascript:history.back();\">ここ</a>をクリックしてください。</p>";
 $PMF_LANG["err_noMailAdress"] = "メールアドレスが正しくありません。<br /><a href=\"javascript:history.back();\">戻る</a>";
-$PMF_LANG["err_sendMail"] = "<strong>名前</strong>、<strong>メールアドレス</strong>、<strong>質問</strong>と要求された場合は <strong><a href=\"http://ja.wikipedia.org/wiki/Captcha\" title=\"Wikipedia で Captcha について読む\" target=\"_blank\">Captcha</a> コード</strong> は必須項目です!<br /><br />\n<a href=\"javascript:history.back();\">戻る</a><br /><br />\n";
+$PMF_LANG["err_sendMail"] = "<strong>名前</strong>、<strong>メールアドレス</strong>、<strong>質問</strong>と要求された場合は <strong><a href=\"http://ja.wikipedia.org/wiki/Captcha\" title=\"Wikipedia で Captcha について読む\" target=\"_blank\">Captcha</a> コード</strong> は必須項目です!<br /><br /><a href=\"javascript:history.back();\">戻る</a><br /><br />";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>内容検索：</strong><br /><strong style=\"color: Red;\">言葉1 言葉2</strong>のように検索すると、2個以上の検索結果が関連度が高い順番で表示されます。</p><p><strong>注意：</strong> 英文を検索する際には、少なくとも4文字以上を入力してください。</p>";
@@ -546,7 +546,7 @@ $PMF_LANG["ad_user_realname"] = "本名:";
 $PMF_LANG["ad_export_generate_pdf"] = "PDF ファイル生成";
 $PMF_LANG["ad_export_full_faq"] = "FAQ を PDF ファイルにする: ";
 $PMF_LANG["err_bannedIP"] = "あなたのIPアドレスからのアクセスは遮断されています。";
-$PMF_LANG["err_SaveQuestion"] = "<strong>名前</strong>、<strong>メールアドレス</strong>、<strong>質問</strong>と要求された場合は <strong><a href=\"http://ja.wikipedia.org/wiki/Captcha\" title=\"Wikipedia で Captcha について読む\" target=\"_blank\">Captcha</a> コード</strong> は必須項目です。<br /><br /><a href=\"javascript:history.back();\">戻る</a><br /><br />\n";
+$PMF_LANG["err_SaveQuestion"] = "<strong>名前</strong>、<strong>メールアドレス</strong>、<strong>質問</strong>と要求された場合は <strong><a href=\"http://ja.wikipedia.org/wiki/Captcha\" title=\"Wikipedia で Captcha について読む\" target=\"_blank\">Captcha</a> コード</strong> は必須項目です。<br /><br /><a href=\"javascript:history.back();\">戻る</a><br /><br />";
 
 
 // added v1.3.4 - 23.07.2003 - Thorsten

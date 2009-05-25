@@ -148,12 +148,12 @@ $PMF_LANG["err_noArticles"] = "<p>Nekas nav atrasts.<br/><br/><a href=\"javascri
 $PMF_LANG["err_badID"] = "<p>Nepareizs ID.</p>";
 $PMF_LANG["err_noTopTen"] = "<p>Pa&eth;laik TOP 10 nav pieejams.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>Ieraksts netika atrasts.</p>";
-$PMF_LANG["err_SaveEntries"] = "Nepiecie&eth;ams iesniegt <strong>savu v&acirc;rdu</strong>, <strong>savu e-pasta adresi</strong>, <strong>sada&iuml;u</strong>, <strong>virsrakstu</strong> un <strong>tekstu</strong>!<br /><br />\n<a href=\"javascript:history.back();\">Atgriezties</a><br /><br />\n";
-$PMF_LANG["err_SaveComment"] = "Nepiecie&eth;ams iesniegt <strong>savu v&acirc;rdu</strong>, <strong>savu e-pasta adresi</strong> un <strong>koment&acirc;rus</strong>!<br /><br />\n<a href=\"javascript:history.back();\">atgriezties</a><br /><br />\n";
+$PMF_LANG["err_SaveEntries"] = "Nepiecie&eth;ams iesniegt <strong>savu v&acirc;rdu</strong>, <strong>savu e-pasta adresi</strong>, <strong>sada&iuml;u</strong>, <strong>virsrakstu</strong> un <strong>tekstu</strong>!<br /><br /><a href=\"javascript:history.back();\">Atgriezties</a><br /><br />";
+$PMF_LANG["err_SaveComment"] = "Nepiecie&eth;ams iesniegt <strong>savu v&acirc;rdu</strong>, <strong>savu e-pasta adresi</strong> un <strong>koment&acirc;rus</strong>!<br /><br /><a href=\"javascript:history.back();\">atgriezties</a><br /><br />";
 $PMF_LANG["err_VoteTooMuch"] = "<p>Atk&acirc;rtots v&ccedil;rt&ccedil;jums netiek pie&ograve;emts. <a href=\"javascript:history.back();\">Atgriezties</a></p>";
 $PMF_LANG["err_noVote"] = "<p><strong>Sniedz savu nov&ccedil;rt&ccedil;jumu!</strong> <a href=\"javascript:history.back();\">Nov&ccedil;rt&ccedil; &eth;eit</a></p>";
 $PMF_LANG["err_noMailAdress"] = "E-pasta adrese nepareiz&acirc; form&acirc;t&acirc;.<br /><a href=\"javascript:history.back();\">Atgriezties</a>";
-$PMF_LANG["err_sendMail"] = "Nepiecie&eth;ams iesniegt <strong>savu v&acirc;rdu</strong>, <strong>savu e-pasta adresi</strong> un <strong>jaut&acirc;jumu par t&ccedil;mu</strong>!<br /><br />\n<a href=\"javascript:history.back();\">Atgriezties</a><br /><br />\n";
+$PMF_LANG["err_sendMail"] = "Nepiecie&eth;ams iesniegt <strong>savu v&acirc;rdu</strong>, <strong>savu e-pasta adresi</strong> un <strong>jaut&acirc;jumu par t&ccedil;mu</strong>!<br /><br /><a href=\"javascript:history.back();\">Atgriezties</a><br /><br />";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>Ierakstu mekl&ccedil;&eth;ana:</strong><br/><br/>\"+\" z&icirc;me noz&icirc;m&ccedil;, ka mekl&ccedil;jamie v&acirc;rdi tiks lo&igrave;iski apvienoti ar UN<br/>\"-\" z&icirc;me &iuml;auj izsl&ccedil;gt no mekl&ccedil;&eth;anas z&icirc;mei pievienoto atsl&ccedil;gv&acirc;rdu<br/>\"|\" z&icirc;me &iuml;auj atdal&icirc;t atsl&ccedil;gv&acirc;rdus ar lo&igrave;isko VAI<br/><br/><strong>Piem&ccedil;ri:</strong><br/><br/>Rakstot <strong>+PERL+PHP</strong>, tiks mekl&ccedil;ti visi ieraksti, kas satur gan PERL, gan PHP<br/>Rakstot <strong>+PERL -PHP</strong>, tiks mekl&ccedil;ti visi ieraksti, kas satur PERL, bet, kuros nav PHP<br/>Rakstot <strong>PERL | PHP</strong>, tiks mekl&ccedil;ti visi ieraksti, kas satur vai nu PERL, vai ar&icirc; PHP<br/></p>";
@@ -536,7 +536,7 @@ $PMF_LANG["ad_user_realname"] = "Pilnais v&acirc;rds (piem., Osvalds Zemesgrauzi
 $PMF_LANG["ad_export_generate_pdf"] = "&igrave;ener&ccedil;t k&acirc; PDF failu";
 $PMF_LANG["ad_export_full_faq"] = "BUJ k&acirc; PDF fails: ";
 $PMF_LANG["err_bannedIP"] = "Tava IP adrese &eth;eit nav at&iuml;auta.";
-$PMF_LANG["err_SaveQuestion"] = "Oblig&acirc;ti aizpild&acirc;mie lauki ir <strong>V&acirc;rds</strong>, <strong>E-pasta adrese</strong> un <strong>Jaut&acirc;jums</strong>.<br /><br /><a href=\"javascript:history.back();\">M&ccedil;&igrave;in&acirc;t v&ccedil;lreiz</a><br /><br />\n";
+$PMF_LANG["err_SaveQuestion"] = "Oblig&acirc;ti aizpild&acirc;mie lauki ir <strong>V&acirc;rds</strong>, <strong>E-pasta adrese</strong> un <strong>Jaut&acirc;jums</strong>.<br /><br /><a href=\"javascript:history.back();\">M&ccedil;&igrave;in&acirc;t v&ccedil;lreiz</a><br /><br />";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Font color: ";

@@ -138,7 +138,7 @@ $PMF_LANG["msgLatestArticles"] = "חמשת הטיפים האחרונים";
 
 // E-Mailbenachrichtigung
 $PMF_LANG["msgMailThanks"] = "תודה רבה על שאלתך.";
-$PMF_LANG["msgMailCheck"] = "יש שאלה נפוצה חדשה!\n אנא בדוק את אזור הניהול!";
+$PMF_LANG["msgMailCheck"] = "יש שאלה נפוצה חדשה! אנא בדוק את אזור הניהול!";
 $PMF_LANG["msgMailContact"] = "שאלתך נשלחה לעורך האתר";
 
 // Fehlermeldungen
@@ -148,12 +148,12 @@ $PMF_LANG["err_noArticles"] = "<p>לא נמצאו ערכים.</p>";
 $PMF_LANG["err_badID"] = "<p>מספר שגוי.</p>";
 $PMF_LANG["err_noTopTen"] = "<p>אין עשרה גדולים עדיין.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>לא נמצאו ערכים.</p>";
-$PMF_LANG["err_SaveEntries"] = "שדות נחוצים הם <strong>שמך</strong>, <strong>הדואל שלך</strong>, <strong>קטגוריה</strong>, <strong>כותרת</strong> ו<strong>תוכן</strong>!<br /><br />\n<a href=\"javascript:history.back();\">הקודם</a><br /><br />\n";
-$PMF_LANG["err_SaveComment"] = "השדות הנחוצים הם <strong>שמך</strong>, <strong>כתובת הדואל שלך</strong> ו<strong>תגובתך</strong>!<br /><br />\n<a href=\"javascript:history.back();\">הקודם</a><br /><br />\n";
+$PMF_LANG["err_SaveEntries"] = "שדות נחוצים הם <strong>שמך</strong>, <strong>הדואל שלך</strong>, <strong>קטגוריה</strong>, <strong>כותרת</strong> ו<strong>תוכן</strong>!<br /><br /><a href=\"javascript:history.back();\">הקודם</a><br /><br />";
+$PMF_LANG["err_SaveComment"] = "השדות הנחוצים הם <strong>שמך</strong>, <strong>כתובת הדואל שלך</strong> ו<strong>תגובתך</strong>!<br /><br /><a href=\"javascript:history.back();\">הקודם</a><br /><br />";
 $PMF_LANG["err_VoteTooMuch"] = "<p>איננו סופרים הצבעות כפולות. <a href=\"javascript:history.back();\">לחץ כאן</a>, כדי לחזור לעמוד הקודם.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>לא דרגת את השאלה!</strong> <a href=\"javascript:history.back();\">אנא לחץ כאן</a>, להצבעה.</p>";
 $PMF_LANG["err_noMailAdress"] = "כתובת האימייל אינה נכונה.<br /><a href=\"javascript:history.back();\">חזור</a>";
-$PMF_LANG["err_sendMail"] = "שדות נחוצים <strong>שם פרטי</strong>, <strong>כתובת אמייל</strong>ו<strong>שאלתך</strong>!<br /><br />\n<a href=\"javascript:history.back();\">הקודם </a><br /><br />\n";
+$PMF_LANG["err_sendMail"] = "שדות נחוצים <strong>שם פרטי</strong>, <strong>כתובת אמייל</strong>ו<strong>שאלתך</strong>!<br /><br /><a href=\"javascript:history.back();\">הקודם </a><br /><br />";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>חפש ערכים:</strong><br />עם ערך כמו <strong style=\"color: Red;\">מילה 1 מילה 2</strong> הנך יכול לבצע חיפוש לשניים או יותר קריטריונים.</p><p><strong>הערה:</strong> קריטריוני החיפוש חייבים להכיל 4 סימנים או יותר.</p>";
@@ -547,7 +547,7 @@ $PMF_LANG["ad_user_realname"] = "שם אמיתי:";
 $PMF_LANG["ad_export_generate_pdf"] = "צור קובץ PDF";
 $PMF_LANG["ad_export_full_faq"] = "שאלותייך בפורמט PDF";
 $PMF_LANG["err_bannedIP"] = "כתובת הIP שלך נחסמה.";
-$PMF_LANG["err_SaveQuestion"] = "שדות נחוצים <strong> שמך</strong>, <strong>כתובת אמייל</strong> ו<strong>השאלה שלך</strong>.<br /><br /><a href=\"javascript:history.back();\">הקודם</a><br /><br />\n";
+$PMF_LANG["err_SaveQuestion"] = "שדות נחוצים <strong> שמך</strong>, <strong>כתובת אמייל</strong> ו<strong>השאלה שלך</strong>.<br /><br /><a href=\"javascript:history.back();\">הקודם</a><br /><br />";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "צבע פונט: ";

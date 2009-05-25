@@ -135,7 +135,7 @@ $PMF_LANG["msgLatestArticles"] = "Οι πιο πρόσφατες πέντε ερωτήσεις:";
 
 // E-Mailbenachrichtigung
 $PMF_LANG["msgMailThanks"] = "Ευχαριστούμε για την συμβολή σας στο FAQ.";
-$PMF_LANG["msgMailCheck"] = "Υπάρχει μια νέα καταχώρηση στο FAQ!\nPlease check the admin section!";
+$PMF_LANG["msgMailCheck"] = "Υπάρχει μια νέα καταχώρηση στο FAQ!Please check the admin section!";
 $PMF_LANG["msgMailContact"] = "Το μήνυμά σας έχει σταλλεί στο διαχειριστή";
 
 // Fehlermeldungen
@@ -145,12 +145,12 @@ $PMF_LANG["err_noArticles"] = "<p>Δεν υπάρχουν καταχωρήσεις.</p>";
 $PMF_LANG["err_badID"] = "<p>Λάθος Αναγνωριστικό.</p>";
 $PMF_LANG["err_noTopTen"] = "<p>Δεν υπάρχει top-10 ακόμη.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>Δε βρέθηκε καμία καταχώρηση.</p>";
-$PMF_LANG["err_SaveEntries"] = "Τα απαραίτητα πεδία είναι: <strong>Το όνομά σας</strong>, <strong>το email σας</strong>, <strong>κατηγορία</strong>, <strong>τίτλος</strong> και <strong>η καταχώρησή σας</strong>!<br /><br />\n<a href=\"javascript:history.back();\">μία σελίδα πίσω</a><br /><br />\n";
-$PMF_LANG["err_SaveComment"] = "Τα απαραίτητα πεδία είναι: <strong>Το όνομά σας</strong>, <strong>το email σας</strong> και <strong>το σχόλιό σας</strong>!<br /><br />\n<a href=\"javascript:history.back();\">μία σελίδα πίσω</a><br /><br />\n";
+$PMF_LANG["err_SaveEntries"] = "Τα απαραίτητα πεδία είναι: <strong>Το όνομά σας</strong>, <strong>το email σας</strong>, <strong>κατηγορία</strong>, <strong>τίτλος</strong> και <strong>η καταχώρησή σας</strong>!<br /><br /><a href=\"javascript:history.back();\">μία σελίδα πίσω</a><br /><br />";
+$PMF_LANG["err_SaveComment"] = "Τα απαραίτητα πεδία είναι: <strong>Το όνομά σας</strong>, <strong>το email σας</strong> και <strong>το σχόλιό σας</strong>!<br /><br /><a href=\"javascript:history.back();\">μία σελίδα πίσω</a><br /><br />";
 $PMF_LANG["err_VoteTooMuch"] = "<p>Δεν μετρούμε διπλές ψήφους. <a href=\"javascript:history.back();\">κλικ</a>, για επιστροφή.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>Δε βαθμολογήσατε αυτή την ερώτηση</strong> <a href=\"javascript:history.back();\">κλικ εδώ</a>, για επιστροφή στη βαθμολόγηση.</p>";
 $PMF_LANG["err_noMailAdress"] = "Λανθασμένη καταχώρηση διεύθυνσης email.<br /><a href=\"javascript:history.back();\">Επιστροφή</a>";
-$PMF_LANG["err_sendMail"] = "Τα απαραίτητα πεδία είναι: <strong>Το όνομά σας</strong>, <strong>το email σας</strong> και <strong>η ερώτησή σας</strong>!<br /><br />\n<a href=\"javascript:history.back();\">πίσω μια σελίδα</a><br /><br />\n";
+$PMF_LANG["err_sendMail"] = "Τα απαραίτητα πεδία είναι: <strong>Το όνομά σας</strong>, <strong>το email σας</strong> και <strong>η ερώτησή σας</strong>!<br /><br /><a href=\"javascript:history.back();\">πίσω μια σελίδα</a><br /><br />";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>Αναζήτηση καταχωρήσεων:</strong><br />Συμπληρώνοντας το πιο κάτω πεδίο με τη μορφή <strong style=\"color: Red;\">κλειδί1 κλειδί2</strong> μπορείτε να κάνετε μία σχεσιακή αναζήτηση στη βάση για δύο ή περισσότερες λέξεις κλειδιά.</p><p><strong>Σημείωση:</strong> Το κριτήριο αναζήτησης, θα πρέπει να είναι τουλάχιστο 4 γραμμάτα σε μήκος διαφορετικά το σύστημα θα την απορρίψει.</p>";
@@ -542,7 +542,7 @@ $PMF_LANG["ad_user_realname"] = "πραγματικό όνομα:";
 $PMF_LANG["ad_export_generate_pdf"] = "δημιουργία αρχείου μορφής PDF";
 $PMF_LANG["ad_export_full_faq"] = "Εξαγωγή το FAQ σε μορφή PDF: ";
 $PMF_LANG["err_bannedIP"] = "Η πρόσβαση για τη διεύθυνση σας έχει απαγορευτεί.";
-$PMF_LANG["err_SaveQuestion"] = "Τα υποχρεωτικά πεδία είναι: <strong>Το όνομά σας</strong>, <strong>το email σας</strong> και <strong>η ερώτησή σας</strong>.<br /><br /><a href=\"javascript:history.back();\">μια σελίδα πίσω</a><br /><br />\n";
+$PMF_LANG["err_SaveQuestion"] = "Τα υποχρεωτικά πεδία είναι: <strong>Το όνομά σας</strong>, <strong>το email σας</strong> και <strong>η ερώτησή σας</strong>.<br /><br /><a href=\"javascript:history.back();\">μια σελίδα πίσω</a><br /><br />";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Χρώμα γραμματοσειράς: ";

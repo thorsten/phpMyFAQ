@@ -144,12 +144,12 @@ $PMF_LANG["err_noArticles"] = "<p>Nu sunt inregistrari.</p>";
 $PMF_LANG["err_badID"] = "<p>ID gresit</p>";
 $PMF_LANG["err_noTopTen"] = "<p>Inca nu este disponibil Topul intrebarilor.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>Nu am gasit nimic.</p>";
-$PMF_LANG["err_SaveEntries"] = "Campuri obligatorii: <strong>numele tau</strong>, <strong>adresa ta de email</strong>, <strong>categoria</strong>, <strong>titlu</strong> si <strong>intrebarea ta</strong>!<br /><br />\n<a href=\"javascript:history.back();\">inapoi</a><br /><br />\n";
-$PMF_LANG["err_SaveComment"] = "Campuri obligatorii <strong>numele tau</strong>, <strong>adresa ta de email</strong> si <strong>observatiile tale</strong>!<br /><br />\n<a href=\"javascript:history.back();\">inapoi</a><br /><br />\n";
+$PMF_LANG["err_SaveEntries"] = "Campuri obligatorii: <strong>numele tau</strong>, <strong>adresa ta de email</strong>, <strong>categoria</strong>, <strong>titlu</strong> si <strong>intrebarea ta</strong>!<br /><br /><a href=\"javascript:history.back();\">inapoi</a><br /><br />";
+$PMF_LANG["err_SaveComment"] = "Campuri obligatorii <strong>numele tau</strong>, <strong>adresa ta de email</strong> si <strong>observatiile tale</strong>!<br /><br /><a href=\"javascript:history.back();\">inapoi</a><br /><br />";
 $PMF_LANG["err_VoteTooMuch"] = "<p>Nu contorizam votarile multiple. <a href=\"javascript:history.back();\">Click aici</a>, pentru a merge inapoi.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>Inca nu ai apreciat aceasta intrebare!</strong> <a href=\"javascript:history.back();\">Click aici</a>, pentru a aprecia!</p>";
 $PMF_LANG["err_noMailAdress"] = "Adresa ta de email nu este corecta!<br /><a href=\"javascript:history.back();\">back</a>";
-$PMF_LANG["err_sendMail"] = "Campuri obligatorii <strong>numele tau</strong>, <strong>adresa ta de email</strong> si <strong>intrebarea ta</strong>!<br /><br />\n<a href=\"javascript:history.back();\">inapoi</a><br /><br />\n";
+$PMF_LANG["err_sendMail"] = "Campuri obligatorii <strong>numele tau</strong>, <strong>adresa ta de email</strong> si <strong>intrebarea ta</strong>!<br /><br /><a href=\"javascript:history.back();\">inapoi</a><br /><br />";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>Cauta inregistrarile:</strong><br />care contin cuvintele <strong style=\"color: Red;\">cuvant1 cuvant2</strong> poti avea ordonarea dupa relevanta pentru doua sa mai multe criterii de cautare.</p><p><strong>Nota:</strong> Criteriile tale de cautare rtebuie sa fie de minimum 4 caractere, in caz contrar cautarea nu poate fi efectuata.</p>";
@@ -541,7 +541,7 @@ $PMF_LANG["ad_user_realname"] = "Numele real:";
 $PMF_LANG["ad_export_generate_pdf"] = "genereaza fisier PDF";
 $PMF_LANG["ad_export_full_faq"] = "FAQ-ul tau ca si fisier PDF: ";
 $PMF_LANG["err_bannedIP"] = "Adresa ta de IP a fost restrictionata.";
-$PMF_LANG["err_SaveQuestion"] = "Urmatoarele campuri sunt obligatorii <strong>numele</strong>, <strong>adresa ta de email</strong> si <strong>intrebarea ta</strong>.<br /><br /><a href=\"javascript:history.back();\">inapoi</a><br /><br />\n";
+$PMF_LANG["err_SaveQuestion"] = "Urmatoarele campuri sunt obligatorii <strong>numele</strong>, <strong>adresa ta de email</strong> si <strong>intrebarea ta</strong>.<br /><br /><a href=\"javascript:history.back();\">inapoi</a><br /><br />";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Font color: ";

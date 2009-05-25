@@ -136,7 +136,7 @@ $PMF_LANG["msgLatestArticles"] = "De fem seneste sp&oslash;rgsm&aring;l:";
 
 // E-Mailbenachrichtigung
 $PMF_LANG["msgMailThanks"] = "Tusind tak for dit indl&aelig;g til FAQ'en.";
-$PMF_LANG["msgMailCheck"] = "Der er et nyt indl&aelig;g i FAQen!\nKontroller venligst admin sektionen!";
+$PMF_LANG["msgMailCheck"] = "Der er et nyt indl&aelig;g i FAQen!Kontroller venligst admin sektionen!";
 $PMF_LANG["msgMailContact"] = "Din besked er sendt til administratoren.";
 
 // Fehlermeldungen
@@ -146,12 +146,12 @@ $PMF_LANG["err_noArticles"] = "<p>Ingen indl&aelig;g fundet.</p>";
 $PMF_LANG["err_badID"] = "<p>Forkert ID.</p>";
 $PMF_LANG["err_noTopTen"] = "<p>Ikke indl&aelig;g nok til en Top 10.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>ingen indl&aelig;g fundet.</p>";
-$PMF_LANG["err_SaveEntries"] = "N&oslash;dvendige felter: <strong>dit navn</strong>, <strong>din e-mail-adresse</strong>, <strong>kategori</strong>, <strong>overskrift</strong> og <strong>dit indl&aelig;g</strong>!<br /><br />\n<a href=\"javascript:history.back();\">G&aring; tilbage</a><br /><br />\n";
-$PMF_LANG["err_SaveComment"] = "N&oslash;dvendige felter: <strong>dit navn</strong>, <strong>din e-mail-adresse</strong> og <strong>dine kommentarer</strong>!<br /><br />\n<a href=\"javascript:history.back();\">En side tilbage</a><br /><br />\n";
+$PMF_LANG["err_SaveEntries"] = "N&oslash;dvendige felter: <strong>dit navn</strong>, <strong>din e-mail-adresse</strong>, <strong>kategori</strong>, <strong>overskrift</strong> og <strong>dit indl&aelig;g</strong>!<br /><br /><a href=\"javascript:history.back();\">G&aring; tilbage</a><br /><br />";
+$PMF_LANG["err_SaveComment"] = "N&oslash;dvendige felter: <strong>dit navn</strong>, <strong>din e-mail-adresse</strong> og <strong>dine kommentarer</strong>!<br /><br /><a href=\"javascript:history.back();\">En side tilbage</a><br /><br />";
 $PMF_LANG["err_VoteTooMuch"] = "<p>Vi t&aelig;ller ikke dobbelt stemmer. <a href=\"javascript:history.back();\">Klik her</a>, for at g&aring; tilbage.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>Du vurderede ikke sp&oslash;rgsm&aring;let!</strong> <a href=\"javascript:history.back();\">Klik venligst her</a>, for at stemme.</p>";
 $PMF_LANG["err_noMailAdress"] = "din e-mail-adresse er ikke korrekt.<br /><a href=\"javascript:history.back();\">tilbage</a>";
-$PMF_LANG["err_sendMail"] = "N&oslash;dvendige felter: <strong>dit navn</strong>, <strong>din e-mail-adresse</strong> og <strong>dit sp&oslash;rgsm&aring;l</strong>!<br /><br />\n<a href=\"javascript:history.back();\">En side tilbage</a><br /><br />\n";
+$PMF_LANG["err_sendMail"] = "N&oslash;dvendige felter: <strong>dit navn</strong>, <strong>din e-mail-adresse</strong> og <strong>dit sp&oslash;rgsm&aring;l</strong>!<br /><br /><a href=\"javascript:history.back();\">En side tilbage</a><br /><br />";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>Fundne indl&aelig;g:</strong><br /></p>";
@@ -543,7 +543,7 @@ $PMF_LANG["ad_user_realname"] = "Fulde navn:";
 $PMF_LANG["ad_export_generate_pdf"] = "generer PDF-fil";
 $PMF_LANG["ad_export_full_faq"] = "Eksporter hele FAQ'en til en PDF-fil: ";
 $PMF_LANG["err_bannedIP"] = "Din IP-adresse er blevet forment adgang.";
-$PMF_LANG["err_SaveQuestion"] = "N&oslash;dvendige felter: <strong>dit navn</strong>, <strong>din e-mail-adresse</strong> og <strong>dit sp&oslash;rgsm&aring;l</strong>.<br /><br /><a href=\"javascript:history.back();\">én side tilbage</a><br /><br />\n";
+$PMF_LANG["err_SaveQuestion"] = "N&oslash;dvendige felter: <strong>dit navn</strong>, <strong>din e-mail-adresse</strong> og <strong>dit sp&oslash;rgsm&aring;l</strong>.<br /><br /><a href=\"javascript:history.back();\">én side tilbage</a><br /><br />";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Skrifttype farve: ";

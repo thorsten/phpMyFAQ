@@ -133,7 +133,7 @@ $PMF_LANG["msgLatestArticles"] = "Çok yakında gönderilmiş 5 soru:";
 
 // E-Mailbenachrichtigung
 $PMF_LANG["msgMailThanks"] = "SSS öneriniz için çok teşekkürler.";
-$PMF_LANG["msgMailCheck"] = "SSS'da yeni bir girdi oluşturuldu!\nLütfen admin bölümünü kontrol edin!";
+$PMF_LANG["msgMailCheck"] = "SSS'da yeni bir girdi oluşturuldu!Lütfen admin bölümünü kontrol edin!";
 $PMF_LANG["msgMailContact"] = "Mesajınız yöneticiye yollandı.";
 
 // Fehlermeldungen
@@ -143,12 +143,12 @@ $PMF_LANG["err_noArticles"] = "<p>Herhangi bir girdi yok.</p>";
 $PMF_LANG["err_badID"] = "<p>Yanlış ID.</p>";
 $PMF_LANG["err_noTopTen"] = "<p>Henüz İlk On yok.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>Bir girdi bulunamadı.</p>";
-$PMF_LANG["err_SaveEntries"] = "Gerekli alanlar <strong>adınız</strong>, <strong>e-mail adresiniz</strong>, <strong>kategori</strong>, <strong>başlık</strong> ve <strong>yazınız</strong>!<br /><br />\n<a href=\"javascript:history.back();\">bir sayfa geri</a><br /><br />\n";
-$PMF_LANG["err_SaveComment"] = "Gerekli alanlar <strong>your name</strong>, <strong>e-mail adresiniz</strong> ve <strong>yorumlarınız</strong>!<br /><br />\n<a href=\"javascript:history.back();\">bir sayfa geri</a><br /><br />\n";
+$PMF_LANG["err_SaveEntries"] = "Gerekli alanlar <strong>adınız</strong>, <strong>e-mail adresiniz</strong>, <strong>kategori</strong>, <strong>başlık</strong> ve <strong>yazınız</strong>!<br /><br /><a href=\"javascript:history.back();\">bir sayfa geri</a><br /><br />";
+$PMF_LANG["err_SaveComment"] = "Gerekli alanlar <strong>your name</strong>, <strong>e-mail adresiniz</strong> ve <strong>yorumlarınız</strong>!<br /><br /><a href=\"javascript:history.back();\">bir sayfa geri</a><br /><br />";
 $PMF_LANG["err_VoteTooMuch"] = "<p>Mükerrer oylar sayılmamaktadır. <a href=\"javascript:history.back();\">Buraya Tıkla</a>, geri dönmek için.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>Soruyu oylayamazsınız!</strong> <a href=\"javascript:history.back();\">Lütfen buraya tıklayın</a>, oy kullanmak için.</p>";
 $PMF_LANG["err_noMailAdress"] = "E-mail adresiniz yanlış.<br /><a href=\"javascript:history.back();\">geri</a>";
-$PMF_LANG["err_sendMail"] = "Gerekli alanlar <strong>adınız</strong>, <strong>e-mail adresiniz</strong> ve <strong>sorunuz</strong>!<br /><br />\n<a href=\"javascript:history.back();\">bir sayfa geri</a><br /><br />\n";
+$PMF_LANG["err_sendMail"] = "Gerekli alanlar <strong>adınız</strong>, <strong>e-mail adresiniz</strong> ve <strong>sorunuz</strong>!<br /><br /><a href=\"javascript:history.back();\">bir sayfa geri</a><br /><br />";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>Yazı Ara:</strong><br />şu kelimelere benzeyen girdileri ara <strong style=\"color: Red;\">kelime1 kelime2</strong> ıki veya daha fazla kritere inen arama yapabilirsiniz.</p><p><strong>Dikkat:</strong> Arama kriteriniz en az 4 harf uzunluğunda olmalıdır, aksi halde istek reddedilir.</p>";
@@ -541,7 +541,7 @@ $PMF_LANG["ad_user_realname"] = "Gerçek isim:";
 $PMF_LANG["ad_export_generate_pdf"] = "PDF dosya oluştur";
 $PMF_LANG["ad_export_full_faq"] = "SSS'nuz PDF dosya olarak: ";
 $PMF_LANG["err_bannedIP"] = "IP adresiniz yasaklanmış.";
-$PMF_LANG["err_SaveQuestion"] = "Gerekli alanlar <strong>isminiz</strong>, <strong>email adresiniz</strong> ve <strong>sorunuz</strong>.<br /><br /><a href=\"javascript:history.back();\">bir sayfa geri</a><br /><br />\n";
+$PMF_LANG["err_SaveQuestion"] = "Gerekli alanlar <strong>isminiz</strong>, <strong>email adresiniz</strong> ve <strong>sorunuz</strong>.<br /><br /><a href=\"javascript:history.back();\">bir sayfa geri</a><br /><br />";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Font rengi: ";

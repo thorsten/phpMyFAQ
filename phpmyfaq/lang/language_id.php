@@ -151,7 +151,7 @@ $PMF_LANG["msgLatestArticles"] = "Lima pertanyaan terbaru:";
 // E-Mailbenachrichtigung
 $PMF_LANG["msgMailThanks"] = "Terima kasih banyak atas usuk anda pada FAQ
 ini.";
-$PMF_LANG["msgMailCheck"] = "Ada materi baru di FAQ!\nAnda dapat melihatnya
+$PMF_LANG["msgMailCheck"] = "Ada materi baru di FAQ!Anda dapat melihatnya
 di bagian administrasi!";
 $PMF_LANG["msgMailContact"] = "Pesan anda telah dikirimkan pada
 administrator.";
@@ -167,12 +167,12 @@ $PMF_LANG["err_nothingFound"] = "<p>Tidak ada materi ditemukan.</p>";
 $PMF_LANG["err_SaveEntries"] = "Data yang dibutuhkan adalah <strong>nama
 anda</strong>, <strong>alamat e-mail anda</strong>,
 <strong>kategori</strong>, <strong>kepala berita</strong> dan <strong>materi
-anda</strong>!<br /><br />\n<a href=\"javascript:history.back();\">kembali
-ke halaman sebelumnya</a><br /><br />\n";
+anda</strong>!<br /><br /><a href=\"javascript:history.back();\">kembali
+ke halaman sebelumnya</a><br /><br />";
 $PMF_LANG["err_SaveComment"] = "Data yang dibutuhkan adalah <strong>nama
 anda</strong>, <strong>alamat e-mail anda</strong> dan <strong>komentar
-anda</strong>!<br /><br />\n<a href=\"javascript:history.back();\">kembali
-ke halaman sebelumnya</a><br /><br />\n";
+anda</strong>!<br /><br /><a href=\"javascript:history.back();\">kembali
+ke halaman sebelumnya</a><br /><br />";
 $PMF_LANG["err_VoteTooMuch"] = "<p>Kami tidak memperbolehkan suara ganda. <a
 href=\"javascript:history.back();\">Klik disini</a>, untuk kembali ke
 halaman sebelumnya.</p>";
@@ -183,8 +183,8 @@ $PMF_LANG["err_noMailAdress"] = "Alamat e-mail anda salah.<br /><a
 href=\"javascript:history.back();\">kembali ke halaman sebelumnya</a>";
 $PMF_LANG["err_sendMail"] = "Data yang dibutuhkan adalah <strong>nama
 anda</strong>, <strong>alamat e-mail anda</strong> dan <strong>pertanyaan
-anda</strong>!<br /><br />\n<a href=\"javascript:history.back();\">kembali
-ke halaman sebelumnya</a><br /><br />\n";
+anda</strong>!<br /><br /><a href=\"javascript:history.back();\">kembali
+ke halaman sebelumnya</a><br /><br />";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>Pencarian materi:</strong><br
@@ -619,7 +619,7 @@ $PMF_LANG["err_bannedIP"] = "IP address anda telah dilarang.";
 $PMF_LANG["err_SaveQuestion"] = "Data yang dibutuhkan adalah <strong>nama
 anda</strong>, <strong>alamat e-mail anda</strong> dan <strong>pertanyaan
 anda</strong>.<br /><br /><a href=\"javascript:history.back();\">kembali ke
-halaman sebelumnya</a><br /><br />\n";
+halaman sebelumnya</a><br /><br />";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Warna huruf: ";

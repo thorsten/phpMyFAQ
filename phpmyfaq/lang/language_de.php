@@ -122,7 +122,7 @@ $PMF_LANG["msgQuestionText"] = "Hier sind die Fragen von verschiedenen Usern zu 
 $PMF_LANG["msgNoQuestionsAvailable"] = "Derzeit gibt es keine offenen Fragen.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>Die FAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions - Häufig gestellte Fragen) ist recht einfach aufgebaut. Man kann entweder die <a href=\"?action=show\">Kategorien durchsuchen</a> oder auch unsere <a href=\"?action=search\">FAQ-Suchmaschine</a> nach Stichwörtern suchen lassen.</p>\n";
+$PMF_LANG["msgHelpText"] = "<p>Die FAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions - Häufig gestellte Fragen) ist recht einfach aufgebaut. Man kann entweder die <a href=\"?action=show\">Kategorien durchsuchen</a> oder auch unsere <a href=\"?action=search\">FAQ-Suchmaschine</a> nach Stichwörtern suchen lassen.</p>";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "E-Mail an den Betreiber:";
@@ -138,7 +138,7 @@ $PMF_LANG["msgLatestArticles"] = "Neueste FAQs";
 
 // E-Mailbenachrichtigung
 $PMF_LANG["msgMailThanks"] = "Vielen Dank für den Vorschlag";
-$PMF_LANG["msgMailCheck"] = "Es ist ein neuer Eintrag für Ihre FAQ vorhanden!\nBitte im Adminbereich der FAQ überprüfen!";
+$PMF_LANG["msgMailCheck"] = "Es ist ein neuer Eintrag für Ihre FAQ vorhanden!Bitte im Adminbereich der FAQ überprüfen!";
 $PMF_LANG["msgMailContact"] = "Die Anfrage wurde an den Administrator versendet!";
 
 // Fehlermeldungen
@@ -148,12 +148,12 @@ $PMF_LANG["err_noArticles"] = "<p>Es gibt noch keine Einträge.</p>";
 $PMF_LANG["err_badID"] = "<p>Fehlerhafte ID!</p>";
 $PMF_LANG["err_noTopTen"] = "<p>Derzeit sind keine beliebten FAQs verfügbar.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>Es wurde kein Eintrag gefunden.</p>";
-$PMF_LANG["err_SaveEntries"] = "Pflichtfelder sind <strong>Name</strong>, <strong>E-Mail-Adresse</strong>, <strong>Kategorie</strong>, <strong>Themenüberschrift</strong> und <strong>Artikel</strong>!<br /><br /><a href=\"javascript:history.go(-1);\">eine Seite zurück</a><br /><br />\n";
-$PMF_LANG["err_SaveComment"] = "Pflichtfelder sind <strong>Name</strong>, <strong>E-Mail-Adresse</strong> und <strong>Kommentar</strong>!<br /><br /><a href=\"javascript:history.go(-1);\">eine Seite zurück</a><br /><br />\n";
+$PMF_LANG["err_SaveEntries"] = "Pflichtfelder sind <strong>Name</strong>, <strong>E-Mail-Adresse</strong>, <strong>Kategorie</strong>, <strong>Themenüberschrift</strong> und <strong>Artikel</strong>!<br /><br /><a href=\"javascript:history.go(-1);\">eine Seite zurück</a><br /><br />";
+$PMF_LANG["err_SaveComment"] = "Pflichtfelder sind <strong>Name</strong>, <strong>E-Mail-Adresse</strong> und <strong>Kommentar</strong>!<br /><br /><a href=\"javascript:history.go(-1);\">eine Seite zurück</a><br /><br />";
 $PMF_LANG["err_VoteTooMuch"] = "<p>Leider konnte die Bewertung nicht gespeichert werden, da mit der IP bereits bewertet wurde. <a href=\"javascript:history.go(-1);\">Hier klicken</a>, um zum Artikel zurückzukehren.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>Es wurde keine Bewertung abgegeben!</strong> <a href=\"javascript:history.go(-1);\">Hier klicken</a>, um dies nachzuholen.</p>";
 $PMF_LANG["err_noMailAdress"] = "Die angegebene E-Mail-Adresse ist nicht korrekt.<br /><a href=\"javascript:history.go(-1);\">Eine Seite zurück</a>";
-$PMF_LANG["err_sendMail"] = "Pflichtfelder sind u.a. <strong>Name</strong> und <strong>E-Mail-Adresse</strong>!<br /><br /><a href=\"javascript:history.go(-1);\">eine Seite zurück</a><br /><br />\n";
+$PMF_LANG["err_sendMail"] = "Pflichtfelder sind u.a. <strong>Name</strong> und <strong>E-Mail-Adresse</strong>!<br /><br /><a href=\"javascript:history.go(-1);\">eine Seite zurück</a><br /><br />";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>Artikel finden:</strong><br />Mit der Eingabe <strong style=\"color: Red;\">Begriff1 Begriff2</strong> können zwei oder mehrere Suchbegriffe nach der Relevanz absteigend suchen lassen.</p><p><strong>Hinweis:</strong> Suchbegriff muss mindestens 4 Zeichen lang sein, kürzere Anfragen werden automatisch abgewiesen.</p>";
@@ -544,7 +544,7 @@ $PMF_LANG["ad_user_realname"] = "Realname:";
 $PMF_LANG["ad_export_generate_pdf"] = "PDF-Datei generieren";
 $PMF_LANG["ad_export_full_faq"] = "Die FAQ als PDF-Datei: ";
 $PMF_LANG["err_bannedIP"] = "Diese IP ist gesperrt.";
-$PMF_LANG["err_SaveQuestion"] = "Pflichtfelder sind <strong>Name</strong>, <strong>E-Mail-Adresse</strong> und <strong>Frage</strong>!<br /><br /><a href=\"javascript:history.go(-1);\">eine Seite zurück</a><br /><br />\n";
+$PMF_LANG["err_SaveQuestion"] = "Pflichtfelder sind <strong>Name</strong>, <strong>E-Mail-Adresse</strong> und <strong>Frage</strong>!<br /><br /><a href=\"javascript:history.go(-1);\">eine Seite zurück</a><br /><br />";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Schriftfarbe: ";

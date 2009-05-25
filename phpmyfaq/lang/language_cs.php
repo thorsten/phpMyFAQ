@@ -141,7 +141,7 @@ $PMF_LANG["msgLatestArticles"] = "Pìt nejnovìjších dotazù:";
 
 // E-Mailbenachrichtigung
 $PMF_LANG["msgMailThanks"] = "Dìkujeme za Váš návrh do FAQ.";
-$PMF_LANG["msgMailCheck"] = "Ve FAQ je nový záznam! \nProsím zkontroluj admin sekci!";
+$PMF_LANG["msgMailCheck"] = "Ve FAQ je nový záznam! Prosím zkontroluj admin sekci!";
 $PMF_LANG["msgMailContact"] = "Vaše zpráva byla odeslána administrátorovi.";
 
 // Fehlermeldungen
@@ -151,12 +151,12 @@ $PMF_LANG["err_noArticles"] = "<p>Žádné záznamy nenalezeny.</p>";
 $PMF_LANG["err_badID"] = "<p>Chybné ID.</p>";
 $PMF_LANG["err_noTopTen"] = "<p>Žádné Top 10 není k dispozici.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>Žádné záznamy nenalezeny.</p>";
-$PMF_LANG["err_SaveEntries"] = "Povinná pole jsou <strong>jméno</strong>, <strong>e-mailová adresa</strong>, <strong>kategorie</strong>, <strong>pøedmìt</strong> a <strong>dotaz</strong>!<br /><br />\n<a href=\"javascript:history.back();\">O stránku zpìt</a><br /><br />\n";
-$PMF_LANG["err_SaveComment"] = "Povinná pole jsou <strong>jméno</strong>, <strong>e-mailová adresa</strong> a <strong>komentáø</strong>!<br /><br />\n<a href=\"javascript:history.back();\">O stránku zpìt</a><br /><br />\n";
+$PMF_LANG["err_SaveEntries"] = "Povinná pole jsou <strong>jméno</strong>, <strong>e-mailová adresa</strong>, <strong>kategorie</strong>, <strong>pøedmìt</strong> a <strong>dotaz</strong>!<br /><br /><a href=\"javascript:history.back();\">O stránku zpìt</a><br /><br />";
+$PMF_LANG["err_SaveComment"] = "Povinná pole jsou <strong>jméno</strong>, <strong>e-mailová adresa</strong> a <strong>komentáø</strong>!<br /><br /><a href=\"javascript:history.back();\">O stránku zpìt</a><br /><br />";
 $PMF_LANG["err_VoteTooMuch"] = "<p>Opakované hlasování se nepoèítá. <a href=\"javascript:history.back();\">Kliknìte zde</a> pro návrat.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>Není hodnocení!</strong> <a href=\"javascript:history.back();\">Prosím kliknìte zde</a> pro hlasování.</p>";
 $PMF_LANG["err_noMailAdress"] = "Adresa není správná.<br /><a href=\"javascript:history.back();\">zpìt</a>";
-$PMF_LANG["err_sendMail"] = "Povinná pole jsou <strong>jméno</strong>, <strong>email adresa</strong> a <strong>dotaz</strong>!<br /><br />\n<a href=\"javascript:history.back();\">O stránku zpìt</a><br /><br />\n";
+$PMF_LANG["err_sendMail"] = "Povinná pole jsou <strong>jméno</strong>, <strong>email adresa</strong> a <strong>dotaz</strong>!<br /><br /><a href=\"javascript:history.back();\">O stránku zpìt</a><br /><br />";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "Prohledávejte databázi FAQ - Èasto Kladených Dotazù, tak jak jste zvyklí z bìžných vyhledávaèù. <br />Pro zvýšení relevance nalezených odpovìdí pøispìje použití více klíèových slov ve vašem dotazu (napø. KlíèovéSlovo1 KlíèovéSlovo2).<br /><br />";
@@ -548,7 +548,7 @@ $PMF_LANG["ad_user_realname"] = "skuteèné jméno:";
 $PMF_LANG["ad_export_generate_pdf"] = "Vytvoøit PDF soubor";
 $PMF_LANG["ad_export_full_faq"] = "FAQ jako PDF soubor: ";
 $PMF_LANG["err_bannedIP"] = "Vaše IP adresa byla pøidána do \"nepovolených adres\".";
-$PMF_LANG["err_SaveQuestion"] = "Povinná pole jsou <strong>jméno</strong>, <strong>e-mailová adresa</strong> a <strong>otázka</strong>.<br /><br /><a href=\"javascript:history.back();\">pøedchozí stránka</a><br /><br />\n";
+$PMF_LANG["err_SaveQuestion"] = "Povinná pole jsou <strong>jméno</strong>, <strong>e-mailová adresa</strong> a <strong>otázka</strong>.<br /><br /><a href=\"javascript:history.back();\">pøedchozí stránka</a><br /><br />";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Barva písma: ";

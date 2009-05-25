@@ -134,7 +134,7 @@ $PMF_LANG["msgLatestArticles"] = "5 คำถามล่าสุด:";
 
 // E-Mailbenachrichtigung
 $PMF_LANG["msgMailThanks"] = "ขอบคุณสำหรับการเสนอข้อมูลในรายการ FAQ";
-$PMF_LANG["msgMailCheck"] = "มีรายการใหม่ใน FAQ!\nโปรดตรวจสอบใ๠¸ส่วนของผู้ดูแลระบบ";
+$PMF_LANG["msgMailCheck"] = "มีรายการใหม่ใน FAQ!โปรดตรวจสอบใ๠¸ส่วนของผู้ดูแลระบบ";
 $PMF_LANG["msgMailContact"] = "ข้อมูลของคุณได้จัดส่งให้กับผู้ดูและระบบแล้ว";
 
 // Fehlermeldungen
@@ -144,12 +144,12 @@ $PMF_LANG["err_noArticles"] = "<p>ไม่พบข้อมูล.</p>";
 $PMF_LANG["err_badID"] = "<p>ID ไม่ถูกต้อง</p>";
 $PMF_LANG["err_noTopTen"] = "<p>ไม่พบ 10 คำถามยอดนิยม.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>ไม่พบข้อมูล.</p>";
-$PMF_LANG["err_SaveEntries"] = "ข้อมูลที่จำเป็น <strong>ชื่อ</strong>, <strong>อีเมล์</strong>, <strong>หัวข้อ</strong>, <strong>ชื่อเรื่อง</strong>, <strong>ข้อมูลของคุณ</strong> และ รหัสตัวอักษร<strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"รายละเอียดเกี่ยวกับ Captcha ใน Wikipedia\" target=\"_blank\">Captcha</a></strong>!<br /><br />\n<a href=\"javascript:history.back();\">ย้อนกลับ</a><br /><br />\n";
-$PMF_LANG["err_SaveComment"] = "ข้อมูลที่จำเป็น <strong>ชื่อ</strong>, <strong>อีเมล์</strong>, <strong>ความเห็น</strong> และ รหัสตัวอักษร <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"รายละเอียดเกี่ยวกับ Captcha ใน Wikipedia\" target=\"_blank\">Captcha</a></strong>!<br /><br />\n<a href=\"javascript:history.back();\">ย้อนกลับ</a><br /><br />\n";
+$PMF_LANG["err_SaveEntries"] = "ข้อมูลที่จำเป็น <strong>ชื่อ</strong>, <strong>อีเมล์</strong>, <strong>หัวข้อ</strong>, <strong>ชื่อเรื่อง</strong>, <strong>ข้อมูลของคุณ</strong> และ รหัสตัวอักษร<strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"รายละเอียดเกี่ยวกับ Captcha ใน Wikipedia\" target=\"_blank\">Captcha</a></strong>!<br /><br /><a href=\"javascript:history.back();\">ย้อนกลับ</a><br /><br />";
+$PMF_LANG["err_SaveComment"] = "ข้อมูลที่จำเป็น <strong>ชื่อ</strong>, <strong>อีเมล์</strong>, <strong>ความเห็น</strong> และ รหัสตัวอักษร <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"รายละเอียดเกี่ยวกับ Captcha ใน Wikipedia\" target=\"_blank\">Captcha</a></strong>!<br /><br /><a href=\"javascript:history.back();\">ย้อนกลับ</a><br /><br />";
 $PMF_LANG["err_VoteTooMuch"] = "<p>คุณไม่สามารถให้คะแนนได้ซ้ำได้ <a href=\"javascript:history.back();\">คลิ๊กที่นี้</a> เพื่อย้อนกลับ</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>คุณไม่สามารถให้คะแนนได้</strong> <a href=\"javascript:history.back();\">คลิ๊กที่นี้</a>, เพื่อให้คะแนน.</p>";
 $PMF_LANG["err_noMailAdress"] = "อีเมล์ของคุณไม่ถูกต้อง<br /><a href=\"javascript:history.back();\">กลับ</a>";
-$PMF_LANG["err_sendMail"] = "ข้อมูลที่จำเป็น <strong>ชื่อ</strong>, <strong>อีเมล์</strong>, <strong>คำถาม</strong> และ รหัสตัวอักษร <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"รายละเอียดเกี่ยวกับ Captcha ใน Wikipedia\" target=\"_blank\">Captcha</a></strong>!<br /><br />\n<a href=\"javascript:history.back();\">ย้อนกลับ</a><br /><br />\n";
+$PMF_LANG["err_sendMail"] = "ข้อมูลที่จำเป็น <strong>ชื่อ</strong>, <strong>อีเมล์</strong>, <strong>คำถาม</strong> และ รหัสตัวอักษร <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"รายละเอียดเกี่ยวกับ Captcha ใน Wikipedia\" target=\"_blank\">Captcha</a></strong>!<br /><br /><a href=\"javascript:history.back();\">ย้อนกลับ</a><br /><br />";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>ค้นหาข้อมูล:</strong><br />ที่ตรงกับ <strong style=\"color: Red;\">คำที่1 คำที่2</strong> คุณสามารถหาข้อมูลที่ตรงความต้องการได้มากที่สุด หากระบุคำที่ต้องการมากว่า 2 คำขึ้นไป</p><p><strong>คำแนะนำ:</strong> คุณจะต้องระบุคำที่มีความยาวมากกว่า 4 ตัวอักษรเท่านั้น</p>";
@@ -542,7 +542,7 @@ $PMF_LANG["ad_user_realname"] = "ชื่อจริง:";
 $PMF_LANG["ad_export_generate_pdf"] = "สร้างไฟล์PDF";
 $PMF_LANG["ad_export_full_faq"] = "สร้างข้อมูลทั้งหมดเป็นไฟล์ PDF: ";
 $PMF_LANG["err_bannedIP"] = "หมายเลขไอพีของคุณถูกปฏิเสธการใช้งาน";
-$PMF_LANG["err_SaveQuestion"] = "ข้อมูลที่จำเป็น <strong>ชื่อ</strong>, <strong>อีเมล์</strong>, <strong>คำถาม</strong> และ รหัสตัวอักษร <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"รายละเอียดเกี่ยวกับ Captcha ใน Wikipedia\" target=\"_blank\">Captcha</a></strong><br /><br /><a href=\"javascript:history.back();\">ย้อนกลับ</a><br /><br />\n";
+$PMF_LANG["err_SaveQuestion"] = "ข้อมูลที่จำเป็น <strong>ชื่อ</strong>, <strong>อีเมล์</strong>, <strong>คำถาม</strong> และ รหัสตัวอักษร <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"รายละเอียดเกี่ยวกับ Captcha ใน Wikipedia\" target=\"_blank\">Captcha</a></strong><br /><br /><a href=\"javascript:history.back();\">ย้อนกลับ</a><br /><br />";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "สี ตัวอักษร: ";
