@@ -202,7 +202,7 @@ FILE;
         $mail->subject = 'New phpMyFAQ language file submitted';
         $mail->message = sprintf('The file below was sent by %s, which is using phpMyFAQ %s on %s',
                                  $user->userdata->get('email'), $PMF_CONF['main.currentVersion'], $_SERVER['HTTP_HOST']);
-        $mail->addTo('anatoliy.belsky@mayflower.de');
+        $mail->addTo('thorsten@phpmyfaq.de');
         $mail->addAttachment($filename, null, 'text/plain');
         
         print (int) $mail->send();
