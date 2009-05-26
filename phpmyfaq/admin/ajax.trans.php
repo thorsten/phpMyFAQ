@@ -30,6 +30,11 @@ switch($ajax_action) {
     
     case 'save_translated_lang':
         
+        if(!$permission["edittranslation"]) {
+            print $PMF_LANG['err_NotAuth'];
+            exit;
+        }
+        
         $lang = $_POST['PMF_LANG']['metaLanguage'];
         $filename = PMF_ROOT_DIR . "/lang/language_$lang.php"; 
         
@@ -105,6 +110,11 @@ switch($ajax_action) {
     
     case 'remove_lang_file':
         
+        if(!$permission["deltranslation"]) {
+            print $PMF_LANG['err_NotAuth'];
+            exit;
+        }
+         
         $lang = PMF_Filter::filterInput(INPUT_GET, 'translang', FILTER_SANITIZE_STRING);
         
         if(!is_writable(PMF_ROOT_DIR . "/lang")) {
@@ -126,6 +136,12 @@ switch($ajax_action) {
     break;
     
     case 'save_added_trans':
+        
+        if(!$permission["addtranslation"]) {
+            print $PMF_LANG['err_NotAuth'];
+            exit;
+        }        
+        
         if(!is_writable(PMF_ROOT_DIR . "/lang")) {
             print 0;
             exit;

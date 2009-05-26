@@ -71,7 +71,7 @@ endif; ?>
         <?php else: ?>
         <td>&nbsp;</td>
         <?php endif; ?>
-        <?php if($permission["edittranslation"]): ?>
+        <?php if($permission["deltranslation"]): ?>
         <td>[<a href="javascript: del('<?php print $lang ?>');" ><?php echo $PMF_LANG['msgDelete'] ?></a>]</td>
         <?php else: ?>
         <td>&nbsp;</td>
