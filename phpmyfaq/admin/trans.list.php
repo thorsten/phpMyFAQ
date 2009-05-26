@@ -38,7 +38,7 @@ endif; ?>
 <a href="?action=transadd"><?php echo $PMF_LANG['msgTransToolAddNewTranslation'] ?></a>
 </td></tr>
 <?php endif; ?>
-<tr><td><?php echo $PMF_LANG['msgTransToolFilename'] ?></td>
+<tr><td><?php echo $PMF_LANG['msgTransToolLanguage'] ?></td>
     <td colspan="3"><?php echo $PMF_LANG['msgTransToolActions'] ?></td>
     <td><?php echo $PMF_LANG['msgTransToolWritable'] ?></td>
     <td><?php echo $PMF_LANG['msgTransToolPercent'] ?></td>
@@ -58,14 +58,14 @@ endif; ?>
             }
             
             $sortedLangList[] = $lang; 
-        }
+        }   
     }
     
     sort($sortedLangList);
     while(list(,$lang) = each($sortedLangList)) {           
         ?>
         <tr class="lang_<?php echo $lang ?>_container">
-        <td><?php echo $lang ?></td>
+        <td><?php echo $languageCodes[strtoupper($lang)] ?></td>
         <?php if($permission["edittranslation"]): ?>
         <td>[<a href="?action=transedit&amp;translang=<?php print $lang ?>" ><?php echo $PMF_LANG['msgEdit'] ?></a>]</td>
         <?php else: ?>

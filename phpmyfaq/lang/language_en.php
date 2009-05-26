@@ -949,7 +949,7 @@ $PMF_LANG['ad_start_notactive'] = 'Waiting for activation';
 
 // added 2.5.0-RC - 2009-05-20 by Anatoliy
 $PMF_LANG['msgTransToolAddNewTranslation'] = 'Add new translation';
-$PMF_LANG['msgTransToolFilename'] = 'Filename';
+$PMF_LANG['msgTransToolLanguage'] = 'Language';
 $PMF_LANG['msgTransToolActions'] = 'Actions';
 $PMF_LANG['msgTransToolWritable'] = 'Writable';
 $PMF_LANG['msgEdit'] = 'Edit';
