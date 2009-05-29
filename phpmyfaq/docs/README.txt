@@ -10,14 +10,14 @@ Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.0.14:
-- 
+- fixed XSS vulnerability (Thorsten)
 
 For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.0.15 - 2009-
-- 
+Version 2.0.15 - 2009-05-
+- fixed XSS vulnerability (Thorsten)
 
 Version 2.0.14 - 2009-05-21
 - updated Vietnamese translation (Julien Petitperrin)

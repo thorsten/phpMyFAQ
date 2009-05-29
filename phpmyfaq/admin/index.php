@@ -91,14 +91,14 @@ if (isset($_POST['faqpassword']) and isset($_POST['faqusername'])) {
         if ($user->getStatus() != 'blocked') {
             $auth = true;
         } else {
-            $error = $PMF_LANG['ad_auth_fail'].' ('.$faqusername.' / *)';
+            $error = $PMF_LANG['ad_auth_fail'].' ('.PMF_htmlentities($faqusername).' / *)';
             $user = null;
             unset($user);
         }
     } else {
         // error
-        adminlog('Loginerror\nLogin: '.$faqusername.'\nPass: ********');
-        $error = $PMF_LANG['ad_auth_fail'].' ('.$faqusername.' / *)';
+        adminlog('Loginerror\nLogin: '.PMF_htmlentities($faqusername).'\nPass: ********');
+        $error = $PMF_LANG['ad_auth_fail'].' ('.PMF_htmlentities($faqusername).' / *)';
         $user = null;
         unset($user);
         $_REQUEST['action'] = '';
