@@ -1,5 +1,12 @@
 $Id$
 
+CHANGED FILES FROM 2.0.15 -> 2.0.16
+
+./install/installer.php
+./install/update.php
+
+
+
 CHANGED FILES FROM 2.0.14 -> 2.0.15
 
 ./admin/index.php
