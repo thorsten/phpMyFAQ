@@ -2,6 +2,8 @@ $Id$
 
 CHANGED FILES FROM 2.0.15 -> 2.0.16
 
+./admin/record.delquestion.php
+./inc/Faq.php
 ./install/installer.php
 ./install/update.php
 

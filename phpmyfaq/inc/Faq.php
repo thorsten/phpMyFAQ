@@ -2118,7 +2118,7 @@ class PMF_Faq
      * @since  2007-02-11
      * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-     function getAllOpenQuestions()
+     function getAllOpenQuestions($all = false)
      {
         $questions = array();
 

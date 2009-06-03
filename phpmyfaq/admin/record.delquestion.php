@@ -42,7 +42,7 @@ if ($permission['delquestion']) {
 
         printf("<h2>%s</h2>", $PMF_LANG['msgOpenQuestions']);
 
-        $openquestions = $faq->getAllOpenQuestions();
+        $openquestions = $faq->getAllOpenQuestions(true);
 
         if (count($openquestions) > 0) {
 ?>
