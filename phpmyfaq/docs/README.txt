@@ -10,14 +10,14 @@ Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.0.15:
-- 
+- fixed problem with visible questions (Thorsten)
 
 For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.0.16 - 2009-07
--
+Version 2.0.16 - 2009-07-
+- fixed problem with visible questions (Thorsten)
 
 Version 2.0.15 - 2009-06-02
 - fixed XSS vulnerability (Thorsten)
