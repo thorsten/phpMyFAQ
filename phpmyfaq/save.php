@@ -43,15 +43,19 @@ $code        = PMF_Filter::filterInput(INPUT_POST, 'captcha', FILTER_SANITIZE_ST
 $categories  = PMF_Filter::filterInputArray(INPUT_POST, array('rubrik' => array('filter' => FILTER_VALIDATE_INT,
                                                                                 'flags'  => FILTER_REQUIRE_ARRAY)));
 
+// Check on translated content
+if (is_null($content) && !is_null($tr_content)) {
+    $content = $tr_content;
+}
+
 if (!is_null($username) && !is_null($usermail) && !is_null($thema) && !is_null($content) && 
     IPCheck($_SERVER['REMOTE_ADDR']) && checkBannedWord(htmlspecialchars($thema)) && 
-    checkBannedWord(htmlspecialchars($content)) && $captcha->checkCaptchaCode($code) && 
-    ((is_null($faqid) && !is_null($categories)) || (!is_null($faqid) && !is_null($faqlanguage) && PMF_Init::isASupportedLanguage($faqlanguage)))) {
+    checkBannedWord(htmlspecialchars($content)) && $captcha->checkCaptchaCode($code) &&
+    ((is_null($faqid) && !is_null($categories['rubrik'])) || (!is_null($faqid) && !is_null($faqlanguage) && PMF_Init::isASupportedLanguage($faqlanguage)))) {
 
     $isNew = true;
     if (!is_null($faqid)) {
-        $isNew   = false;
-        $content = $tr_content;
+        $isNew = false;
         $faqsession->userTracking('save_new_translation_entry', 0);
     } else {
         $faqsession->userTracking('save_new_entry', 0);
