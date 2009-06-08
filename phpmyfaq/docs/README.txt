@@ -11,6 +11,7 @@ Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.5.0-beta:
 - added visual Ajax indicator in administration backend (Thorsten) 
+- added new Image Manager in administration backend (Thorsten)
 - improved language files (Anatoliy Belsky, Thorsten)
 - many minor bugfixes (Thorsten, Matteo)
 
@@ -25,6 +26,7 @@ Version 2.5.0-RC - 2009-06-
 - refactored complete code base to PHP 5.2+ (Thorsten, Matteo)
 - added new and improved new basic layout theme (Charles A. Landemaine)
 - added new administration layout (Thorsten)
+- added new Image Manager in administration backend (Thorsten)
 - added RSS feed for every category (Thorsten)
 - added ability to copy and duplicate FAQ entries (Thorsten)
 - added support for blocks in template engine (Jan Mergler)
