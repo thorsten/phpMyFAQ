@@ -77,6 +77,9 @@ tinyMCE.init({
     theme_advanced_statusbar_location : "bottom",
     theme_advanced_resizing : true,
 
+    // Ajax-based file manager
+    file_browser_callback : "ajaxfilemanager",
+
     // Example content CSS (should be your site CSS)
     content_css : "css/example.css",
 
@@ -92,6 +95,51 @@ tinyMCE.init({
         user_id : "<?php print $user->userdata->get('user_id'); ?>"
     }
 });
+
+function ajaxfilemanager(field_name, url, type, win)
+{
+    var ajaxfilemanagerurl = "editor/plugins/ajaxfilemanager/ajaxfilemanager.php";
+    switch (type) {
+        case "image":
+            break;
+        case "media":
+            break;
+        case "flash": 
+            break;
+        case "file":
+            break;
+        default:
+            return false;
+    }
+    tinyMCE.activeEditor.windowManager.open({
+        url: "editor/plugins/ajaxfilemanager/ajaxfilemanager.php",
+        width: 782,
+        height: 440,
+        inline : "yes",
+        close_previous : "no"
+    },{
+        window : win,
+        input : field_name
+    });
+    
+/*            return false;         
+    var fileBrowserWindow = new Array();
+    fileBrowserWindow["file"] = ajaxfilemanagerurl;
+    fileBrowserWindow["title"] = "Ajax File Manager";
+    fileBrowserWindow["width"] = "782";
+    fileBrowserWindow["height"] = "440";
+    fileBrowserWindow["close_previous"] = "no";
+    tinyMCE.openWindow(fileBrowserWindow, {
+      window : win,
+      input : field_name,
+      resizable : "yes",
+      inline : "yes",
+      editor_id : tinyMCE.getWindowArg("editor_id")
+    });
+    
+    return false;*/
+}
+
 // --> /*]]>*/
 </script>
 <!-- /tinyMCE -->
