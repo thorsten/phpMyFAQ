@@ -92,7 +92,7 @@ tinyMCE.init({
     // Replace values for the template plugin
     template_replace_values : {
         username : "<?php print $user->userdata->get('display_name'); ?>",
-        user_id : "<?php print $user->userdata->get('user_id'); ?>"
+        user_id  : "<?php print $user->userdata->get('user_id'); ?>"
     }
 });
 
@@ -121,23 +121,6 @@ function ajaxfilemanager(field_name, url, type, win)
         window : win,
         input : field_name
     });
-    
-/*            return false;         
-    var fileBrowserWindow = new Array();
-    fileBrowserWindow["file"] = ajaxfilemanagerurl;
-    fileBrowserWindow["title"] = "Ajax File Manager";
-    fileBrowserWindow["width"] = "782";
-    fileBrowserWindow["height"] = "440";
-    fileBrowserWindow["close_previous"] = "no";
-    tinyMCE.openWindow(fileBrowserWindow, {
-      window : win,
-      input : field_name,
-      resizable : "yes",
-      inline : "yes",
-      editor_id : tinyMCE.getWindowArg("editor_id")
-    });
-    
-    return false;*/
 }
 
 // --> /*]]>*/
