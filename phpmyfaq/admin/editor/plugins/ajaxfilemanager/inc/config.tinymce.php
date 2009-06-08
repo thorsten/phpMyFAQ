@@ -51,7 +51,7 @@ error_reporting(E_ALL);
 	define('CONFIG_SYS_DEFAULT_PATH', '../../../../images/'); //accept relative path only
 	define('CONFIG_SYS_ROOT_PATH', '../../../../images/');	//accept relative path only
 	define('CONFIG_SYS_FOLDER_SHOWN_ON_TOP', true); //show your folders on the top of list if true or order by name 
-	define("CONFIG_SYS_DIR_SESSION_PATH", 'session/');
+	define("CONFIG_SYS_DIR_SESSION_PATH", '/tmp');
 	define("CONFIG_SYS_PATTERN_FORMAT", 'list'); //three options: reg ,csv, list, this option define the parttern format for the following patterns
 		/**
 		 * reg => regulare expression
