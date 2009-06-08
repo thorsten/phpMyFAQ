@@ -84,8 +84,6 @@ if ($permission['editbt']) {
             'linkState'     => '',
             'linkDateCheck' => 0);
 
-        dump($recordData);
-        
         // Add new record and get that ID
         $record_id = $faq->addRecord($recordData);
 
