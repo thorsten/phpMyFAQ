@@ -45,7 +45,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     $tagging = new PMF_Tags();
 
     if ($action == 'takequestion') {
-        $question_id      = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+        $question_id      = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
         $question         = $faq->getQuestion($question_id);
         $current_category = $question['category'];
         $faqData['title'] = $question['question'];
