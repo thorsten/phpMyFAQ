@@ -279,7 +279,8 @@ class PMF_User_CurrentUser extends PMF_User
         // renew the session-ID
         $oldSessionId = session_id();
         if (session_regenerate_id(true)) {
-            $sessionPath = realpath(session_save_path());
+        	$sessionSavePath = session_save_path();
+            $sessionPath     = realpath($sessionSavePath);
             $sessionFilename = $sessionPath.'/sess_'.$oldSessionId;
             if (@file_exists($sessionFilename)) {
                 @unlink($sessionFilename);
@@ -292,10 +293,10 @@ class PMF_User_CurrentUser extends PMF_User
             UPDATE
                 %sfaquser
             SET
-                session_id          = '%s',
-                session_timestamp   = %d,
+                session_id = '%s',
+                session_timestamp = %d,
                 %s
-                ip                  = '%s'
+                ip = '%s'
             WHERE
                 user_id = %d",
             SQLPREFIX,
