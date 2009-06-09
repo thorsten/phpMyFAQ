@@ -66,7 +66,9 @@ tinyMCE.init({
     elements : "content",
     theme : "advanced",
     plugins : "safari,spellchecker,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,imagemanager,filemanager",
-    relative_urls : false, 
+    document_base_url : "<?php print $faqconfig->get('main.referenceURL'); ?>",   
+    relative_urls : false,
+    remove_script_host : false,
 
     // Theme options
     theme_advanced_buttons1 : "save,newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,styleselect,formatselect,fontselect,fontsizeselect",
