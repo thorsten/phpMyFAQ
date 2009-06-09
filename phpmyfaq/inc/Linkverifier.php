@@ -11,9 +11,6 @@
  * @copyright  2005-2009 NetJapan, Inc. and phpMyFAQ Team
  * @version    SVN: $Id$
  *
- * Note: The package has been improved and fixed by Matteo Scaramuccia <matteo@scaramuccia.com>
- * to best fit with PMF 1.6.x+
- *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
@@ -28,103 +25,127 @@
  * with permission from NetJapan, Inc. IT Administration Group.
  */
 
-/* Defines number of times linkverifier follows 302 response before failing.
+/**
+ * PMF_Linkverifier
  *
- * Suggested value is above 10 redirects
- */
-
-if (!defined('LINKVERIFIER_MAX_REDIRECT_COUNT')) {
-    define('LINKVERIFIER_MAX_REDIRECT_COUNT', 10);
-}
-
-/* Defines the number of seconds to wait for the remote server to respond
+ * @package    phpMyFAQ
+ * @subpackage PMF_Linkverifier
+ * @author     Minoru TODA <todam@netjapan.co.jp>
+ * @author     Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since      2005-08-01
+ * @copyright  2005-2009 NetJapan, Inc. and phpMyFAQ Team
+ * @version    SVN: $Id$
  *
- * Suggested value is 5 seconds
- */
-if (!defined('LINKVERIFIER_CONNECT_TIMEOUT')) {
-    define('LINKVERIFIER_CONNECT_TIMEOUT', 5);
-}
-
-/* Defines the number of seconds to wait for the remote server to send data
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
  *
- * Suggested value is 10 seconds
- */
-if (!defined('LINKVERIFIER_RESPONSE_TIMEOUT')) {
-    define('LINKVERIFIER_RESPONSE_TIMEOUT', 10);
-}
-
-/* Defines the behaviour when a user click "Edit FAQs" in the backend.
- * Do you want an automatic links verification
- * with live update of each links verification status?
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
  *
- * Suggested value is:
- * a. false, if you don't use a cron/at entry to call 'cron.verifyurls.php' during each night.
- *           This will avoid browser high load (100% CPU)
- * b. true, if you use a cron/at entry to call 'cron.verifyurls.php' during each night
+ * The Initial Developer of the Original Code is released for external use
+ * with permission from NetJapan, Inc. IT Administration Group.
  */
-if (!defined('LINKVERIFIER_AUTOMATIC_CALL_ON_EDIT_FAQ')) {
-    define('LINKVERIFIER_AUTOMATIC_CALL_ON_EDIT_FAQ', false);
-}
-
 class PMF_Linkverifier
 {
-    /* List of protocol and urls
-     *
-     * @var mixed
+    /** 
+     * Defines number of times linkverifier follows 302 response before failing.
+     * 
+     * @var integer
      */
-    var $urlpool = array();
+    const LINKVERIFIER_MAX_REDIRECT_COUNT = 10;
 
-    /* List of prohibited prefixes and messages
-     *
-     * @var mixed
+    /** 
+     * Defines the number of seconds to wait for the remote server to respond
+     * 
+     * @var integer
      */
-    var $warnlists = array();
-
-    /* List of URLs not to probe
-     *
-     * @var mixed
-     */
-    var $ignorelists = array();
-
-    /* List of protocols we do not want to look at
-     *
-     * @var mixed
-     */
-    var $invalid_protocols = array();
-
-    /* Last verify results (we might use it later)
-     *
-     * @var mixed
-     */
-    var $lastResult = array();
-
-    /* List of hosts that are slow to resolve.
-     *
-     * @var mixed
-     */
-    var $slow_hosts = array();
+    const LINKVERIFIER_CONNECT_TIMEOUT = 5;
 
     /**
-    * DB handle
-    *
-    * @var  object
-    */
+     * Defines the number of seconds to wait for the remote server to send data
+     * 
+     * @var integer
+     */
+    const LINKVERIFIER_RESPONSE_TIMEOUT = 10;
+
+    /**
+     * Defines the behaviour when a user click "Edit FAQs" in the backend. Do you want an automatic links verification
+     * with live update of each links verification status?
+     *
+     * Suggested value is:
+     * a. false, if you don't use a cron/at entry to call 'cron.verifyurls.php' during each night.
+     *           This will avoid browser high load (100% CPU)
+     * b. true, if you use a cron/at entry to call 'cron.verifyurls.php' during each night
+     * 
+     * @var boolean
+     */
+    const LINKVERIFIER_AUTOMATIC_CALL_ON_EDIT_FAQ = false;
+
+    /**
+     * List of protocol and urls
+     *
+     * @var array
+     */
+    public $urlpool = array();
+
+    /**
+     * List of prohibited prefixes and messages
+     *
+     * @var array
+     */
+    private $warnlists = array();
+
+    /**
+     * List of URLs not to probe
+     *
+     * @var array
+     */
+    private $ignorelists = array();
+
+    /**
+     * List of protocols we do not want to look at
+     *
+     * @var array
+     */
+    private $invalid_protocols = array();
+
+    /**
+     * Last verify results (we might use it later)
+     *
+     * @var array
+     */
+    private $lastResult = array();
+
+    /**
+     * List of hosts that are slow to resolve.
+     *
+     * @var array
+     */
+    private $slow_hosts = array();
+
+    /**
+     * DB handle
+     *
+     * @var PMF_DB
+     */
     private $db = null;
 
     /**
      * User
      *
-     * @var integer
+     * @var PMF_User
      */
-    var $user = null;
+    private $user = null;
 
     /**
      * Constructor
      *
      * @param  string $user User
-     * @author Minoru TODA <todam@netjapan.co.jp>
-     * @author Matteo Scaramuccia <matteo@scaramuccia.com>
-     * @since  2005-08-01
      */
     public function __construct($user = null)
     {
@@ -136,8 +157,8 @@ class PMF_Linkverifier
         if (!@extension_loaded('openssl')) { // PHP 4.3.0+: fsockopen needs OpenSSL
             $this->addIgnoreProtocol("https:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "https"));
         }
+        
         $this->addIgnoreProtocol("ftp:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "ftp"));
-
         $this->addIgnoreProtocol("gopher:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "gopher"));
         $this->addIgnoreProtocol("mailto:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "mailto"));
         $this->addIgnoreProtocol("telnet:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "telnet"));
@@ -153,22 +174,15 @@ class PMF_Linkverifier
 
 
     /**
-     * returns whether linkverifier is ready to verify URLs.
+     * Returns whether linkverifier is ready to verify URLs.
      *
-     * @result  boolean true if ready to verify URLs, otherwise false
-     * @access  public
-     * @author  Minoru TODA <todam@netjapan.co.jp>
-     * @since   2005-08-01
+     * @return boolean true if ready to verify URLs, otherwise false
      */
-    function isReady()
+    public function isReady()
     {
-        global $PMF_CONF;
+        $faqconfig = PMF_Configuration::getInstance();
 
-        if (!(isset($PMF_CONF["main.referenceURL"]))) {
-            return false;
-        }
-
-        if ($PMF_CONF["main.referenceURL"] == "") {
+        if ($faqconfig->get('main.referenceURL') == '') {
             return false;
         }
 
@@ -180,13 +194,11 @@ class PMF_Linkverifier
     /**
      * Resets url pool for next batch of processing.
      *
-     * @access  public
-     * @author  Minoru TODA <todam@netjapan.co.jp>
-     * @since   2005-08-01
+     * @return void
      */
-    function resetPool()
+    public function resetPool()
     {
-        $this->urlpool = array();
+        $this->urlpool    = array();
         $this->lastResult = array();
     }
 
@@ -194,16 +206,13 @@ class PMF_Linkverifier
      * This function adds entry to the internal warnlists.
      * Use this if you want to mark certain URLs unsable (like internal links of a dev-site).
      *
-     * @param   string $urlprefix
-     * @param   string $message
-     * @return  boolean true, if successfully added, otherwise false
-     * @access  public
-     * @author  Minoru TODA <todam@netjapan.co.jp>
-     * @since   2005-08-01
+     * @param  string $urlprefix Prefix of URL
+     * @param  string $message   Message
+     * @return boolean true, if successfully added, otherwise false
      */
-    function addWarnlist($urlprefix = "", $message = "")
+    public function addWarnlist($urlprefix = '', $message = '')
     {
-        if ($urlprefix != "") {
+        if ($urlprefix != '') {
             $this->warnlists[$urlprefix] = $message;
             return true;
         } else {
@@ -216,14 +225,11 @@ class PMF_Linkverifier
      * Some URL/sites makes PHP report 'connection failed', even when browsers can access them.
      * URLs on ignore lists always reports as successful connect.
      *
-     * @param   string $url
-     * @param   string $message
-     * @return  boolean true, if successfully added, otherwise false
-     * @access  public
-     * @author  Minoru TODA <todam@netjapan.co.jp>
-     * @since   2005-08-01
+     * @param  string $url     URL
+     * @param  string $message Message
+     * @return boolean true, if successfully added, otherwise false
      */
-    function addIgnorelist($url = "", $message = "")
+    public function addIgnorelist($url = "", $message = "")
     {
         if ($url != "") {
             $this->ignorelists[strtolower($url)] = $message;
@@ -234,12 +240,11 @@ class PMF_Linkverifier
     }
 
     /**
-     * @param   string $protocol
-     * @param   string $message
-     * @return  boolean true, if successfully added, otherwise false
-     * @access  public
-     * @author  Minoru TODA <todam@netjapan.co.jp>
-     * @since   2005-08-01
+     * This function adds entry to the internal protocol ignore list.
+     * 
+     * @param  string $protocol Protocol
+     * @param  string $message  Message
+     * @return boolean true, if successfully added, otherwise false
      */
     function addIgnoreProtocol($protocol = "", $message = "")
     {
@@ -254,20 +259,29 @@ class PMF_Linkverifier
     /**
      * load ignore/warnlists from database
      *
-     * @access  public
-     * @author  Minoru TODA <todam@netjapan.co.jp>
-     * @since   2005-09-29
+     * @return void
     */
     function loadConfigurationFromDB()
     {
-        $query = "SELECT type, url, reason FROM ".SQLPREFIX."faqlinkverifyrules WHERE enabled = 'y'";
-        $result = $this->db->query($query);
-        while ($row = @$this->db->fetch_object($result)) {
+        $select = sprintf("
+            SELECT 
+                type, url, reason 
+            FROM 
+                %sfaqlinkverifyrules 
+            WHERE 
+                enabled = 'y'",
+            SQLPREFIX);
+            
+        $result = $this->db->query($select);
+        
+        while ($row = $this->db->fetch_object($result)) {
             switch (strtolower($row->type)) {
-            case 'ignore':      $this->addIgnoreList($row->url, $row->reason);
-                                break;
-            case 'warn':        $this->addWarnlist($row->url, $row->reason);
-                                break;
+            case 'ignore':
+            	$this->addIgnoreList($row->url, $row->reason);
+                break;
+            case 'warn':
+            	$this->addWarnlist($row->url, $row->reason);
+                break;
             }
         }
     }
@@ -275,13 +289,10 @@ class PMF_Linkverifier
     /**
      * This function verifies whether a URL is in IgnoreList.
      *
-     * @param   string $url
-     * @return  mixed  $result false if URL should NOT be ignored. !false if ignored.
-     * @access  private
-     * @*author Minoru TODA <todam@netjapan.co.jp>
-     * @since   2005-08-01
+     * @param  string $url URL
+     * @return mixed  $result false if URL should NOT be ignored. !false if ignored.
      */
-    function checkIfIgnoreLink($url = "")
+    private function checkIfIgnoreLink($url = "")
     {
         $url = strtolower($url);
         foreach ($this->invalid_protocols as $_protocol => $_message) {
@@ -302,13 +313,10 @@ class PMF_Linkverifier
     /**
      * This function verifies whether a URL should be forced as error (warnlist).
      *
-     * @param   string $url
-     * @return  mixed  $result false if URL should NOT be failed.. !false if qualifies as error.
-     * @access  private
-     * @*author Minoru TODA <todam@netjapan.co.jp>
-     * @since   2005-08-01
+     * @param  string $url
+     * @return mixed  $result false if URL should NOT be failed.. !false if qualifies as error.
      */
-    function checkIfForceErrorLink($url = "")
+    private function checkIfForceErrorLink($url = '')
     {
         $url = strtolower($url);
 
@@ -329,14 +337,11 @@ class PMF_Linkverifier
      *   $referenceuri = "http://example.com:8000/sample/index.php"
      * will generate "http://example.com:8000/sample/test/foo.html"
      *
-     * @param   string $relativeuri
-     * @param   string $message
-     * @return  string $result
-     * @access  private
-     * @author  Minoru TODA <todam@netjapan.co.jp>
-     * @since   2005-08-01
+     * @param  string $relativeuri Relative URI
+     * @param  string $message     Message
+     * @return string
      */
-    function makeAbsoluteURL($relativeuri = "", $referenceuri = "")
+    private function makeAbsoluteURL($relativeuri = "", $referenceuri = "")
     {
         // If relativeuri is protocol we don't want to handle, don't process it.
         foreach ($this->invalid_protocols as $_protocol => $_message) {
@@ -381,13 +386,10 @@ class PMF_Linkverifier
     /**
      * This function parses HTML and extracts urls
      *
-     * @param   string $string
-     * @result  mixed  false if URL is not found, otherwise returns the number of URLs found.
-     * @access  public
-     * @author  Minoru TODA <todam@netjapan.co.jp>
-     * @since   2005-08-01
+     * @param  string $string String
+     * @result mixed  false if URL is not found, otherwise returns the number of URLs found.
      */
-    function parse_string($string = "")
+    public function parse_string($string = "")
     {
         $urlcount = 0;
         $types = array("href", "src", "url");
@@ -411,17 +413,12 @@ class PMF_Linkverifier
      *
      * if $redirect is specified, will handle Location: redirects.
      *
-     * @param   string $url
-     * @param   string $redirect
-     * @param   string $loopsLeft
-     * @result  boolean true if connect successful. otherwise false
-     * @access  private
-     * @author  Minoru TODA <todam@netjapan.co.jp>
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
-     * @since   2005-08-01
+     * @param  string $url           URL
+     * @param  string $redirect      Redirect
+     * @param  string $redirectCount Loops left
+     * @return array
      */
-
-    function openURL($url = "", $redirect = "", $redirectCount = 0)
+    private function openURL($url = "", $redirect = "", $redirectCount = 0)
     {
         global $PMF_LANG;
 
@@ -431,8 +428,8 @@ class PMF_Linkverifier
         }
 
         // Recursing too much ?
-        if (($redirectCount >= LINKVERIFIER_MAX_REDIRECT_COUNT) || ($url == $redirect)) {
-            return array(false, $redirectCount, sprintf($PMF_LANG['ad_linkcheck_openurl_maxredirect'], LINKVERIFIER_MAX_REDIRECT_COUNT));
+        if (($redirectCount >= self::LINKVERIFIER_MAX_REDIRECT_COUNT) || ($url == $redirect)) {
+            return array(false, $redirectCount, sprintf($PMF_LANG['ad_linkcheck_openurl_maxredirect'], self::LINKVERIFIER_MAX_REDIRECT_COUNT));
         }
 
         // If destination is blank, fail.
@@ -445,14 +442,14 @@ class PMF_Linkverifier
         }
 
         // parse URL
-        $urlParts = @parse_url($url);
+        $urlParts = parse_url($url);
         foreach(array(
-                    'scheme' => 'http',
-                    'host' => $_SERVER['HTTP_HOST'],
-                    'user' => '',
-                    'pass' => '',
-                    'path' => '/',
-                    'query' => '',
+                    'scheme'   => 'http',
+                    'host'     => $_SERVER['HTTP_HOST'],
+                    'user'     => '',
+                    'pass'     => '',
+                    'path'     => '/',
+                    'query'    => '',
                     'fragment' => '') as $_key => $_value) {
             if (!(isset($urlParts[$_key]))) {
                 $urlParts[$_key] = $_value;
@@ -486,14 +483,20 @@ class PMF_Linkverifier
 
         // Check whether we tried the host before
         if (isset($this->slow_hosts[$urlParts['host']])) {
-            return array(false, $redirectCount, sprintf($PMF_LANG['ad_linkcheck_openurl_tooslow'],htmlspecialchars($urlParts['host'])));
+            return array(false, 
+                         $redirectCount, 
+                         sprintf($PMF_LANG['ad_linkcheck_openurl_tooslow'],
+                         htmlspecialchars($urlParts['host'])));
         }
 
         // Check whether the hostname exists
         if (gethostbynamel($urlParts['host']) === false) {
             // mark this host too slow to verify
             $this->slow_hosts[$urlParts['host']] = true;
-            return array(false, $redirectCount, sprintf($PMF_LANG['ad_linkcheck_openurl_nodns'], htmlspecialchars($urlParts['host'])));
+            return array(false, 
+                         $redirectCount, 
+                         sprintf($PMF_LANG['ad_linkcheck_openurl_nodns'], 
+                         htmlspecialchars($urlParts['host'])));
         }
 
         $_response = "";
@@ -507,7 +510,10 @@ class PMF_Linkverifier
         if (!$fp) {
             // mark this host too slow to verify
             $this->slow_hosts[$urlParts['host']] = true;
-            return array(false, $redirectCount, sprintf($PMF_LANG['ad_linkcheck_openurl_tooslow'],htmlspecialchars($urlParts['host'])));
+            return array(false, 
+                         $redirectCount, 
+                         sprintf($PMF_LANG['ad_linkcheck_openurl_tooslow'],
+                         htmlspecialchars($urlParts['host'])));
         }
 
         // wait for data with timeout (default: 10secs)
@@ -521,11 +527,11 @@ class PMF_Linkverifier
         fclose($fp);
 
         // parse response
-        $code = 0;
-        $allowVerbs = 'n/a';
+        $code          = 0;
+        $allowVerbs    = 'n/a';
         $httpStatusMsg = '';
-        $location = $url;
-        $response = explode("\r\n", $_response);
+        $location      = $url;
+        $response      = explode("\r\n", $_response);
         $httpStatusMsg = strip_tags($response[count($response) - 1]);
 
         foreach ($response as $_response) {
@@ -541,32 +547,50 @@ class PMF_Linkverifier
         }
 
         // process response code
-        switch ( $code ) {
+        switch ($code) {
             // TODO: Add more explicit http status management
             case '200': // OK
                 $_reason = ($redirectCount > 0) ? sprintf($PMF_LANG['ad_linkcheck_openurl_redirected'],htmlspecialchars($url)) : "";
-                return array(true, $redirectCount, $_reason);
+                return array(true, 
+                             $redirectCount, 
+                             $_reason);
                 break;
             case '301': // Moved Permanently (go recursive ?)
             case '302': // Found (go recursive ?)
                 return $this->openURL($url, $location, $redirectCount + 1);
                 break;
             case 400:   // Bad Request
-                return array(false, $redirectCount, sprintf($PMF_LANG['ad_linkcheck_openurl_ambiguous'].'<br />'.$httpStatusMsg, $code));
+                return array(false, 
+                             $redirectCount, 
+                             sprintf($PMF_LANG['ad_linkcheck_openurl_ambiguous'].'<br />'.$httpStatusMsg, 
+                             $code));
                 break;
             case 404:   // Not found
-                return array(false, $redirectCount, sprintf($PMF_LANG['ad_linkcheck_openurl_not_found'], $urlParts['host']));
+                return array(false, 
+                             $redirectCount, 
+                             sprintf($PMF_LANG['ad_linkcheck_openurl_not_found'], 
+                             $urlParts['host']));
                 break;
             case '300': // Multiple choices
             case '401': // Unauthorized (but it's there. right ?)
-                return array(true, $redirectCount, sprintf($PMF_LANG['ad_linkcheck_openurl_ambiguous'], $code));
+                return array(true, 
+                             $redirectCount, 
+                             sprintf($PMF_LANG['ad_linkcheck_openurl_ambiguous'], 
+                             $code));
                 break;
             case '405': // Method Not Allowed
                 // TODO: Add a fallback to use GET method, otherwise this link should be marked as bad
-                return array(true, $redirectCount, sprintf($PMF_LANG['ad_linkcheck_openurl_not_allowed'], $urlParts['host'], $allowVerbs));
+                return array(true, 
+                             $redirectCount, 
+                             sprintf($PMF_LANG['ad_linkcheck_openurl_not_allowed'], 
+                             $urlParts['host'], 
+                             $allowVerbs));
                 break;
             default:    // All other statuses
-                return array(false, $redirectCount, sprintf($PMF_LANG['ad_linkcheck_openurl_ambiguous'], $code));
+                return array(false, 
+                             $redirectCount, 
+                             sprintf($PMF_LANG['ad_linkcheck_openurl_ambiguous'], 
+                             $code));
                 break;
         }
 
@@ -576,25 +600,22 @@ class PMF_Linkverifier
     /**
      * Perform link validation to each URLs found
      *
-     * @param   string $referenceuri
-     * @result  mixed  array of [protocol][url][info] = value
-     * @access  public
-     * @author  Minoru TODA <todam@netjapan.co.jp>
-     * @since   2005-08-01
+     * @param  string $referenceuri Reference URI
+     * @return array
      */
-    function VerifyURLs($referenceuri = '')
+    public function VerifyURLs($referenceuri = '')
     {
-        $this->lastResult = array();
+        $_result = array();
 
         foreach ($this->urlpool as $_type => $_value) {
-            foreach ($_value as $_key => $_url) {
+            foreach ($_value as $_url) {
                 if (!(isset($result[$_type][$_url]))) {
-                    $_result = array();
-                    $_result['type'] = $_type;
-                    $_result['rawurl'] = $_url;
+                    $_result              = array();
+                    $_result['type']      = $_type;
+                    $_result['rawurl']    = $_url;
                     $_result['reference'] = $referenceuri;
                     // Expand uri into absolute URL.
-                    $_absurl = $this->makeAbsoluteURL($_url, $referenceuri);
+                    $_absurl           = $this->makeAbsoluteURL($_url, $referenceuri);
                     $_result['absurl'] = $_absurl;
                     // If we should disallow this URL, mark as failed.
                     if (($_result['reason'] = $this->checkIfForceErrorLink($_absurl)) !== false) {
@@ -619,15 +640,12 @@ class PMF_Linkverifier
     /**
      * logs the current state of link to the specified entry
      *
-     * @param   int    $id
-     * @param   string $artlang
-     * @param   string $state (optional)
-     * @result  boolean true if operation successful, otherwise false
-     * @access  public
-     * @author  Minoru TODA <todam@netjapan.co.jp>
-     * @since   2005-09-29
+     * @param  integer $id      FAQ Id
+     * @param  string  $artlang FAQ Language
+     * @param  string  $state   State (optional)
+     * @return boolean true if operation successful, otherwise false
      */
-    function markEntry($id = 0, $artlang = "", $state = "")
+    public function markEntry($id = 0, $artlang = "", $state = "")
     {
         if (($id < 1) || (trim($artlang) == "")) {
             return false;
@@ -646,63 +664,74 @@ class PMF_Linkverifier
     }
 
     /**
-     * retrieves the oldest timestamp for stored link validation result
+     * Retrieves the oldest timestamp for stored link validation result
      *
-     * @result   int
-     * @access   public
-     * @author   Minoru TODA <todam@netjapan.co.jp>
-     * @since    2005-09-29
+     * @return integer
      */
-    function getURLValidateInterval()
+    public function getURLValidateInterval()
     {
-        global $PMF_CONF;
+        $faqconfig = PMF_Configuration::getInstance();
 
-        if (isset($PMF_CONF['main.urlValidateInterval'])) {
-            return $_SERVER['REQUEST_TIME'] - $PMF_CONF['main.urlValidateInterval'];
+        if ($faqconfig->get('main.urlValidateInterval')) {
+            return $_SERVER['REQUEST_TIME'] - $faqconfig->get('main.urlValidateInterval');
         } else {
             return $_SERVER['REQUEST_TIME'] - 86400; // default in recheck links once a day unless explicitly requested.
         }
     }
 
     /**
-     * retrieves the number of entries that needs the links retested
+     * Retrieves the number of entries that needs the links retested
      *
-     * @result  int
-     * @access  public
-     * @author  Minoru TODA <todam@netjapan.co.jp>
-     * @since   2005-09-29
+     * @return integer
      */
-    function getUntestedEntriesCount()
+    public function getUntestedEntriesCount()
     {
         $interval = $this->getURLValidateInterval();
-
-        $query = "SELECT COUNT(*) FROM ".SQLPREFIX."faqdata WHERE links_check_date < ".$interval;
-        $result = $this->db->query($query);
+        $select   = sprintf("
+            SELECT 
+                COUNT(*) 
+            FROM 
+                %sfaqdata 
+            WHERE 
+                links_check_date < %d",
+            SQLPREFIX,
+            $interval);
+            
+        $result        = $this->db->query($select);
         $untestedCount = 0;
         while ($row = $this->db->fetch_row($result)) {
             list($untestedCount) = $row;
         }
+        
         return $untestedCount;
     }
 
     /**
      * retrieves stored link state and validates timestamp
      *
-     * @param   int     $id
-     * @param   string  $artlang
-     * @param   boolean $checkDate
-     * @result  mixed   false if entry does not exist. true if status expired, otherwise last link state text
-     * @access  public
-     * @author  Minoru TODA <todam@netjapan.co.jp>
-     * @since   2005-09-29
+     * @param  int     $id        FAQ Id
+     * @param  string  $artlang   FAQ Language
+     * @param  boolean $checkDate Date
+     * @return boolean false if entry does not exist. true if status expired, otherwise last link state text
      */
-    function getEntryState($id = 0, $artlang = "", $checkDate = false)
+    public function getEntryState($id = 0, $artlang = "", $checkDate = false)
     {
-        global $PMF_CONF;
-
         $interval = $this->getURLValidateInterval();
-        $query = "SELECT links_state, links_check_date FROM ".SQLPREFIX."faqdata WHERE id = ".$id." AND lang='".$artlang."'";
-        if ($result = $this->db->query($query)) {
+        $select   = sprintf("
+            SELECT 
+                links_state, 
+                links_check_date 
+            FROM 
+                %sfaqdata 
+            WHERE 
+                id = %d
+            AND 
+                lang = '%s'",
+            SQLPREFIX,
+            $id,
+            $artlang);
+        
+        if ($result = $this->db->query($select)) {
             while ($row = $this->db->fetch_object($result)) {
                 $_linkState = $row->links_state;
                 if (trim($_linkState) == "") {
@@ -725,17 +754,13 @@ class PMF_Linkverifier
     }
 
     /**
-     * gets the HTML text that needs to be shown in entry listing
+     * Gets the HTML text that needs to be shown in entry listing
      *
-     * @param   int    $id
-     * @param   string $artlang
-     * @result  string
-     * @access  public
-     * @author  Minoru TODA <todam@netjapan.co.jp>
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
-     * @since   2005-09-29
+     * @param  int    $id      FAQ Id
+     * @param  string $artlang FAQ Language
+     * @return string
      */
-    function getEntryStateHTML($id = 0, $artlang = "")
+    public function getEntryStateHTML($id = 0, $artlang = "")
     {
         global $PMF_LANG;
 
@@ -763,7 +788,7 @@ class PMF_Linkverifier
 
         $onLoad = '';
         if ($this->getEntryState($id, $artlang, true) === true) {
-            if (LINKVERIFIER_AUTOMATIC_CALL_ON_EDIT_FAQ) {
+            if (self::LINKVERIFIER_AUTOMATIC_CALL_ON_EDIT_FAQ) {
                 $onLoad = " onload=\"verifyEntryURL(".$id.",'".$artlang."');\"";
             }
         }
@@ -791,14 +816,11 @@ class PMF_Linkverifier
      * "linkok"  - link(s) were found and were all ok
      * "linkbad" - link(s) were found and at least one link was broken
      *
-     * @result   string
-     * @author   Minoru TODA <todam@netjapan.co.jp>
-     * @access   public
-     * @since    2005-09-29
+     * @return string
      */
-    function getLinkStateString()
+    public function getLinkStateString()
     {
-        $linkcount = 0;
+        $linkcount  = 0;
         $errorcount = 0;
 
         foreach ($this->lastResult as $_type => $_value) {
@@ -824,26 +846,24 @@ class PMF_Linkverifier
     /**
     * Verifies specified article content and update links_state database entry
     *
-    * @param   string  $contents
-    * @param   integer $id
-    * @param   string  $artlang
-    * @param   boolean $cron
-    * @result  string  HTML text, if $cron is false (default)
-    * @access  public
-    * @author  Minoru TODA <todam@netjapan.co.jp>
-    * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
-    * @since   2005-08-01
+    * @param  string  $contents
+    * @param  integer $id
+    * @param  string  $artlang
+    * @param  boolean $cron
+    * @return string  HTML text, if $cron is false (default)
     */
     function verifyArticleURL($contents = '', $id = 0, $artlang = '', $cron = false)
     {
-        global $PMF_CONF, $PMF_LANG;
+        global $PMF_LANG;
+        
+        $faqconfig = PMF_Configuration::getInstance();
 
-        if (!(isset($PMF_CONF['main.referenceURL']))) {
+        if (!$faqconfig->get('main.referenceURL')) {
             $output = $PMF_LANG['ad_linkcheck_noReferenceURL'];
             return ($cron ? '' : '<br /><br />'.$output);
         }
 
-        if (trim('' == $PMF_CONF['main.referenceURL'])) {
+        if (trim('' == $faqconfig->get('main.referenceURL'))) {
             $output = $PMF_LANG['ad_linkcheck_noReferenceURL'];
             return ($cron ? '' : '<br /><br />'.$output);
         }
@@ -855,7 +875,7 @@ class PMF_Linkverifier
 
         // Parse contents and verify URLs
         $this->parse_string($contents);
-        $result = $this->VerifyURLs($PMF_CONF['main.referenceURL']);
+        $result = $this->VerifyURLs($faqconfig->get('main.referenceURL'));
         $this->markEntry($id, $artlang);
 
         // If no URLs found
@@ -929,14 +949,12 @@ class PMF_Linkverifier
     /**
      * Add new entry into faqlinkverifyrules table
      *
-     * @param   string $type
-     * @param   string $url
-     * @param   string $reason
-     * @return  void
-     * @access  public
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  string $type   Type
+     * @param  string $url    URL
+     * @param  string $reason Reason
+     * @return void
      */
-    function addVerifyRule($type = '', $url = '', $reason = '')
+    public function addVerifyRule($type = '', $url = '', $reason = '')
     {
         if ($type != '' && $url != '') {
             $query = sprintf(
