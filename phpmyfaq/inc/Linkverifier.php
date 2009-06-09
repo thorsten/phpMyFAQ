@@ -1064,43 +1064,32 @@ function verifyEntryURL(id, lang)
 /**
  * Prints javascripts needed for AJAX verification on record add/save/clicked on listing
  *
- * @param   integer $id
- * @param   string  $lang
- * @access  public
- * @author  Minoru TODA <todam@netjapan.co.jp>
- * @since   2005-08-01
+ * @param  integer $id
+ * @param  string  $lang
+ * @author Minoru TODA <todam@netjapan.co.jp>
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  */
-function link_ondemand_javascript($id, $lang) {
+function link_ondemand_javascript($id, $lang)
+{
 ?>
 <script type="text/javascript">
 <!--
 function ajaxOnDemandVerify(id, lang)
 {
-    var target = $('#onDemandVerifyResult');
-    var url = 'index.php';
-    var pars = 'action=ajax&ajax=onDemandURL&id=' + id + '&lang=' + lang + '&lookup=1';
-    var myAjax = new Ajax.Request( url, {method: 'get', parameters: pars, onComplete: ajaxOnDemandVerify_success, onFailure: ajaxOnDemandVerify_failure} );
-    //TODO: Assign string
-    target.innerHTML = 'Querying LinkVerifier...';
-
-    function ajaxOnDemandVerify_success(XmlRequest)
-    {
-        target.innerHTML = XmlRequest.responseText;
-    }
-
-    function ajaxOnDemandVerify_failure(XmlRequest)
-    {
-        //TODO: Assign string
-        target.innerHTML = 'LinkVerifier failed (url probe timed out?)';
-    }
+	$.ajax({
+	    type:    "GET",
+	    url:     "index.php",
+	    data:    "action=ajax&ajax=onDemandURL&id=" + id + "&lang=" + lang + "&lookup=1",
+	    success: function(msg) {
+		   $('#onDemandVerifyResult').append(msg);
+		}
+	});
 }
-
-
 //-->
 </script>
 
 <div id="onDemandVerifyResult">
-<NOSCRIPT>LinkVerifier feature disabled (Reason: Javascript not enabled)</NOSCRIPT>
+    <noscript>LinkVerifier feature disabled (Reason: Javascript not enabled)</noscript>
 </div>
 <script type="text/javascript">
 <!--
