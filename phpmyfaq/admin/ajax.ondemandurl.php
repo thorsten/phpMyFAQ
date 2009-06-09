@@ -1,8 +1,6 @@
 <?php
 /**
  * AJAX: onDemandURL
- *
- * @todo Switch code and logic to jQuery and PHP JSON extension
  * 
  * Usage:
  *   index.php?action=ajax&ajax=onDemandURL&id=<id>&lang=<lang>[&lookup=1]
@@ -10,8 +8,9 @@
  * Performs link verification at demand of the user.
  *
  * @package    phpMyFAQ
- * @subpackage Administration Ajax
+ * @subpackage Administration
  * @author     Minoru TODA <todam@netjapan.co.jp>
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since      2005-09-30
  * @copyright  2005-2009 NetJapan, Inc.
  *
@@ -34,7 +33,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
-header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+header("Expires: Thu, 7 Apr 1977 14:47:00 GMT");
 header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
 header("Cache-Control: no-store, no-cache, must-revalidate");
 header("Cache-Control: post-check=0, pre-check=0", false);
@@ -53,8 +52,9 @@ if ($linkverifier->isReady() == false) {
 
 $linkverifier->loadConfigurationFromDB();
 
-$id   = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-$lang = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
+$id     = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+$lang   = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
+$lookup = PMF_Filter::filterInput(INPUT_GET, 'lookup', FILTER_VALIDATE_INT);
 
 if (count(ob_list_handlers()) > 0) {
     ob_clean();
@@ -64,21 +64,20 @@ if (count(ob_list_handlers()) > 0) {
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php print $PMF_LANG["metaLanguage"]; ?>" lang="<?php print $PMF_LANG["metaLanguage"]; ?>">
 <head>
     <title><?php print PMF_htmlentities($PMF_CONF['main.titleFAQ'], ENT_QUOTES, $PMF_LANG['metaCharset']); ?> - powered by phpMyFAQ</title>
-    <meta name="copyright" content="(c) 2001-2007 phpMyFAQ Team" />
+    <meta name="copyright" content="(c) 2001-2009 phpMyFAQ Team" />
     <meta http-equiv="Content-Type" content="text/html; charset=<?php print $PMF_LANG["metaCharset"]; ?>" />
     <style type="text/css"> @import url(../template/admin.css); </style>
-    <script type="text/javascript" src="../inc/js/prototype.js"></script>
+    <script type="text/javascript" src="../inc/js/jquery.min.js"></script>
 </head>
 <body id="body" dir="<?php print $PMF_LANG["dir"]; ?>">
 <?php
 
 if (!(isset($id) && isset($lang))) {
-    // TODO: ASSIGN STRING
-    ?>
+?>
     Error: Entry ID and Language needs to be specified.
-    </body>
-    </html>
-    <?php
+</body>
+</html>
+<?php
     exit();
 }
 
@@ -86,16 +85,15 @@ $faq->faqRecord = null;
 $faq->getRecord($id);
 
 if (!isset($faq->faqRecord['content'])) {
-    // TODO: ASSIGN STRING
-    ?>
+?>
     Error: No entry for #<?php print $id; ?>(<?php print $lang; ?>) available.
-    </body>
-    </html>
-    <?php
+</body>
+</html>
+<?php
     exit();
 }
 
-if (isset($_GET["lookup"])) {
+if (!is_null($lookup)) {
     if (count(ob_list_handlers()) > 0) {
         ob_clean();
     }
@@ -105,6 +103,5 @@ if (isset($_GET["lookup"])) {
 
 ?>
 <?php link_ondemand_javascript($id, $lang); ?>
-
 </body>
 </html>

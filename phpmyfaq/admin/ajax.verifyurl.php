@@ -2,8 +2,6 @@
 /**
  * AJAX: verifyurl
  *
- * @todo Switch code and logic to jQuery and PHP JSON extension
- * 
  * Usage:
  *   index.php?uin=<uin>&action=ajax&ajax=verifyURL&id=<id>&lang=<lang>
  *
@@ -12,6 +10,7 @@
  * @package    phpMyFAQ
  * @subpackage Administration Ajax
  * @author     Minoru TODA <todam@netjapan.co.jp>
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since      2005-09-30
  * @copyright  2005-2009 NetJapan, Inc.
  *
@@ -35,7 +34,7 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
-header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+header("Expires: Thu, 7 Apr 1977 14:47:00 GMT");
 header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
 header("Cache-Control: no-store, no-cache, must-revalidate");
 header("Cache-Control: post-check=0, pre-check=0", false);
@@ -79,7 +78,7 @@ if (count(ob_list_handlers()) > 0) {
 }
 
 $linkverifier->parse_string($faq->faqRecord['content']);
-$linkverifier->VerifyURLs($PMF_CONF['main.referenceURL']);
+$linkverifier->VerifyURLs($faqconfig->get('main.referenceURL'));
 $linkverifier->markEntry($id, $lang);
 print $linkverifier->getLinkStateString();
 exit();
