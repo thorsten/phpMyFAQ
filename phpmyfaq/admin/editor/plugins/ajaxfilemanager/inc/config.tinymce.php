@@ -18,7 +18,7 @@ error_reporting(E_ALL);
 	 * turn off => false
 	 * by session => true
 	 */
-	define('CONFIG_ACCESS_CONTROL_MODE', false); 	
+	define('CONFIG_ACCESS_CONTROL_MODE', true);
 	define("CONFIG_LOGIN_USERNAME", 'ajax');
 	define('CONFIG_LOGIN_PASSWORD', '123456');
 	define('CONFIG_LOGIN_PAGE', 'ajax_login.php'); //the url to the login page
