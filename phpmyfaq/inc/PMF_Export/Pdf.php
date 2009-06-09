@@ -537,15 +537,15 @@ class PMF_Export_Pdf extends FPDF
         // Check, if image is stored locally or not
         if ('http' != substr($image, 0, 4)) {
             // Please note that the image must be accessible by HTTP NOT ONLY by HTTPS
-             $image = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/' . $image; 
+             $image = 'http://' . $_SERVER['HTTP_HOST'] . $image; 
         }
         // Set a friendly User Agent
         $ua = ini_get('user_agent');
         ini_set('user_agent', 'phpMyFAQ PDF Builder');
-        if (!$info = @getimagesize($image)) {
+        if (!$info = getimagesize($image)) {
             return;
         }
-
+        
         if ($info[0] > 555 ) {
             $w = $info[0] / 144 * 25.4;
             $h = $info[1] / 144 * 25.4;
