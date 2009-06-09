@@ -823,8 +823,8 @@ class PMF_Linkverifier
         $linkcount  = 0;
         $errorcount = 0;
 
-        foreach ($this->lastResult as $_type => $_value) {
-            foreach ($_value as $_url => $value) {
+        foreach ($this->lastResult as $_value) {
+            foreach ($_value as $value) {
                 $linkcount++;
                 if ($value['valid'] == false) {
                     $errorcount++;
