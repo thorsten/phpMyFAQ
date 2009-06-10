@@ -1,13 +1,13 @@
 <?php
 /**
- * $Id$
- *
  * The main Sitemap class
  *
- * @package   phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since     2007-03-30
- * @copyright 2007-2008 phpMyFAQ Team
+ * @package    phpMyFAQ
+ * @subpackage PMF_Sitemap
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @since      2007-03-30
+ * @version    SVN: $Id$
+ * @copyright  2007-2008 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -27,7 +27,7 @@ class PMF_Sitemap
     /**
      * DB handle
      *
-     * @var object PMF_Db
+     * @var PMF_Db
      */
     private $db = null;
 

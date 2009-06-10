@@ -25,7 +25,7 @@ class PMF_Rating
     /**
      * DB handle
      *
-     * @var object PMF_Db
+     * @var PMF_Db
      */
     private $db;
 

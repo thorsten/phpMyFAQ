@@ -49,7 +49,7 @@ class PMF_Comment
     /**
      * DB handle
      *
-     * @var object
+     * @var PMF_Db
      */
     private $db;
 

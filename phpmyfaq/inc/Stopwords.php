@@ -1,25 +1,35 @@
 <?php
+/**
+ * The main Stopwords class
+ *
+ * @package    phpMyFAQ
+ * @subpackage PMF_Stopwords
+ * @author     Anatoliy Belsky
+ * @since      2009-04-01
+ * @version    SVN: $Id: Stopwords.php,v 1.39 2007-08-12 13:56:28 thorstenr Exp $
+ * @copyright  2006-2009 phpMyFAQ Team
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ */
 
 /**
-* $Id: Stopwords.php,v 1.39 2007-08-12 13:56:28 thorstenr Exp $
-*
-* The main Tags class
-*
-* @package   phpMyFAQ
-* @author    Anatoliy Belsky
-* @since     2009-04-01
-* @copyright 2006-2009 phpMyFAQ Team
-*
-* The contents of this file are subject to the Mozilla Public License
-* Version 1.1 (the "License"); you may not use this file except in
-* compliance with the License. You may obtain a copy of the License at
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-* License for the specific language governing rights and limitations
-* under the License.
-*/
+ * PMF_Stopwords
+ *
+ * @package    phpMyFAQ
+ * @subpackage PMF_Stopwords
+ * @author     Anatoliy Belsky
+ * @since      2009-04-01
+ * @version    SVN: $Id: Stopwords.php,v 1.39 2007-08-12 13:56:28 thorstenr Exp $
+ * @copyright  2006-2009 phpMyFAQ Team
+ */
 class PMF_Stopwords
 {
     /**
@@ -32,7 +42,7 @@ class PMF_Stopwords
     /**
      * DB handle
      *
-     * @var object PMF_Db
+     * @var PMF_Db
      */
     private $db;
 

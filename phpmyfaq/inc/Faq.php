@@ -71,7 +71,7 @@ class PMF_Faq
     /**
     * DB handle
     *
-    * @var  object
+    * @var PMF_Db
     */
     private $db;
 

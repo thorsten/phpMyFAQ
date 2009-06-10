@@ -34,7 +34,7 @@ class PMF_Logging
     /**
      * DB handle
      *
-     * @var object
+     * @var PMF_Db
      */
     private $db = null;
 

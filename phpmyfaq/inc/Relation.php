@@ -26,7 +26,7 @@ class PMF_Relation
     /**
     * DB handle
     *
-    * @var  object
+    * @var PMF_Db
     */
     private $db;
 

@@ -60,7 +60,7 @@ class PMF_Auth
     /**
      * p container that stores the encryption object.
      *
-     * @var object
+     * @var PMF_Enc
      */
     protected $enc_container = null;
 
