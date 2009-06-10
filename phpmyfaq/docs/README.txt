@@ -10,8 +10,10 @@ Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.5.0-beta:
+- removed last Prototype based JavaScript code (Thorsten)
 - added visual Ajax indicator in administration backend (Thorsten) 
 - added new Image Manager in administration backend (Thorsten)
+- added translation frontend (Anatoliy Belsky)
 - improved language files (Anatoliy Belsky, Thorsten)
 - many minor bugfixes (Thorsten, Matteo)
 
@@ -40,6 +42,7 @@ Version 2.5.0-RC - 2009-06-
 - added sticky FAQ records (Anatoliy Belsky)
 - added smart answering for user questions (Anatoliy Belsky)
 - added string wrapper for better UTF-8 handling (Anatoliy Belsky)
+- added translation frontend (Anatoliy Belsky)
 - added jQuery 1.3 as replacement for Prototype/Script.aculo.us (Thorsten)
 - improved user administration frontend (Sarah Hermann)
 - improved performance (Thorsten)
