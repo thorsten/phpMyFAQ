@@ -37,7 +37,7 @@ class PMF_String_Basic extends PMF_String_Abstract
     /**
      * Instance
      * 
-     * @var object
+     * @var PMF_String_Basic
      */
     private static $instance;
 

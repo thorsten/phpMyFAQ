@@ -45,7 +45,7 @@ class PMF_String_UTF8ToLatinConvertable extends PMF_String_Abstract
     /**
      * Instance
      * 
-     * @var object
+     * @var PMF_String_UTF8ToLatinConvertable
      */
     private static $instance;
 
