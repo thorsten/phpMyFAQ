@@ -29,7 +29,7 @@ class PMF_DB_Ibase implements PMF_DB_Driver
     * @var  mixed
     * @see  connect(), query(), dbclose()
     */
-    var $conn = false;
+    private $conn = false;
 
     /**
     * The query log string
@@ -37,14 +37,14 @@ class PMF_DB_Ibase implements PMF_DB_Driver
     * @var  string
     * @see  query()
     */
-    var $sqllog = '';
+    private $sqllog = '';
 
     /**
      * Tables
      *
      * @var     array
      */
-    var $tableNames = array();
+    public $tableNames = array();
 
     /**
     * Connects to the database.

@@ -29,28 +29,28 @@ class PMF_DB_Ibm_db2 implements PMF_DB_Driver
      *
      * @var mixed
      */
-    var $conn = false;
+    private $conn = false;
 
     /**
      * The query log string
      *
      * @var string
      */
-    var $sqllog = '';
+    private $sqllog = '';
 
     /**
      * Tables
      *
      * @var array
      */
-    var $tableNames = array();
+    public $tableNames = array();
 
     /**
      * The options array for DB2
      *
      * @var array
      */
-    var $options = array('autocommit' => DB2_AUTOCOMMIT_ON);
+    private $options = array('autocommit' => DB2_AUTOCOMMIT_ON);
 
     /**
      * This function connects to a DB2 database

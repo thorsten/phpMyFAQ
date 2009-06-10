@@ -26,25 +26,23 @@ class PMF_DB_Sybase implements PMF_DB_Driver
     /**
      * The connection object
      *
-     * @var   mixed
-     * @see   connect(), query(), dbclose()
+     * @var resource
      */
-    var $conn = false;
+    private $conn = false;
 
     /**
      * The query log string
      *
-     * @var   string
-     * @see   query()
+     * @var string
      */
-    var $sqllog = "";
+    private $sqllog = "";
 
     /**
      * Tables
      *
      * @var     array
      */
-    var $tableNames = array();
+    public $tableNames = array();
 
     /**
      * Constructor
