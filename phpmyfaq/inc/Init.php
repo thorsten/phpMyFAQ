@@ -41,7 +41,7 @@ if (DEBUG) {
 // Fix the PHP include path if PMF is running under a "strange" PHP configuration
 //
 $foundCurrPath = false;
-$includePaths  = split(PATH_SEPARATOR, ini_get('include_path'));
+$includePaths  = explode(PATH_SEPARATOR, ini_get('include_path'));
 $i             = 0;
 while((!$foundCurrPath) && ($i < count($includePaths))) {
     if ('.' == $includePaths[$i]) {
