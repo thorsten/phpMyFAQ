@@ -998,6 +998,7 @@ function link_verifier_javascript()
 ?>
 <script type="text/javascript">
 <!--
+
 function getImageElement(id, lang)
 {
     return $('#imgurl_' + lang + '_' + id);
@@ -1028,47 +1029,52 @@ function onDemandVerifyURL(id, lang, target)
 
 function verifyEntryURL(id, lang)
 {
-    //var target = getImageElement(id, lang);
     var target = getSpanElement(id, lang);
 
     // !!IMPORTANT!! DISABLE ONLOAD. If you do not do this, you will get infinite loop!
     getImageElement(id, lang).onload = "";
 
-    //target.src = "images/url-checking.png";
     getDivElement(id, lang).className = "url-checking";
     target.innerHTML = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-checking']); ?>";
 
-    var url = 'index.php';
-    var pars = 'action=ajax&ajax=verifyURL&id=' + id + '&lang=' + lang;
-    var myAjax = new Ajax.Request( url, {method: 'get', parameters: pars, onComplete: verifyEntryURL_success, onFailure: verifyEntryURL_failure} );
-
-    function verifyEntryURL_success(XmlRequest)
+    $.ajax({
+        type:    "GET",
+        url:     "index.php",
+        data:    "action=ajax&ajax=verifyURL&id=" + id + "&lang=" + lang + "&lookup=1",
+        success: function(msg) {
+    	    verifyEntryURL_success(msg);
+        },
+        error: function(msg) {
+        	verifyEntryURL_failure(msg);
+        }
+    });
+    
+    function verifyEntryURL_success(msg)
     {
-        //target.src = "images/url-" + XmlRequest.responseText + ".png";
         var allResponses = new Array();
-        allResponses['batch1'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-batch1']); ?>";
-        allResponses['batch2'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-batch2']); ?>";
-        allResponses['batch3'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-batch3']); ?>";
+        allResponses['batch1']   = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-batch1']); ?>";
+        allResponses['batch2']   = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-batch2']); ?>";
+        allResponses['batch3']   = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-batch3']); ?>";
         allResponses['checking'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-checking']); ?>";
         allResponses['disabled'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-disabled']); ?>";
-        allResponses['linkbad'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-linkbad']); ?>";
-        allResponses['linkok'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-linkok']); ?>";
+        allResponses['linkbad']  = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-linkbad']); ?>";
+        allResponses['linkok']   = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-linkok']); ?>";
         allResponses['noaccess'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-noaccess']); ?>";
-        allResponses['noajax'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-noajax']); ?>";
-        allResponses['nolinks'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-nolinks']); ?>";
+        allResponses['noajax']   = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-noajax']); ?>";
+        allResponses['nolinks']  = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-nolinks']); ?>";
         allResponses['noscript'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-noscript']); ?>";
-        getDivElement(id, lang).className = "url-" + XmlRequest.responseText;
-        if (typeof(allResponses[XmlRequest.responseText]) == "undefined") {
+        
+        getDivElement(id, lang).className = "url-" + msg;
+        if (typeof(allResponses[msg]) == "undefined") {
             getDivElement(id, lang).className = "url-noajax ";
             target.innerHTML = allResponses['noajax'];
         } else {
-            target.innerHTML = allResponses[XmlRequest.responseText];
+            target.innerHTML = allResponses[msg];
         }
     }
 
-    function verifyEntryURL_failure(XmlRequest)
+    function verifyEntryURL_failure(msg)
     {
-        //target.src = "images/url-noaccess.png";
         getDivElement(id, lang).className = "url-noaccess";
         target.innerHTML = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-noaccess']); ?>";
     }
