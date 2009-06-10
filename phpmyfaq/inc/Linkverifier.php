@@ -503,10 +503,10 @@ class PMF_Linkverifier
         // open socket for remote server with timeout (default: 5secs)
         // PHP 4.3.0+: when compiled w/ OpenSSL support, fsockopen can connect to the remote host using SSL
         $_host = $urlParts['host'];
-        if (@extension_loaded('openssl') && ('https' == $urlParts['scheme'])) {
+        if (extension_loaded('openssl') && ('https' == $urlParts['scheme'])) {
             $_host = 'ssl://'.$_host;
         }
-        $fp = @fsockopen($_host, $urlParts['port'], $errno, $errstr, LINKVERIFIER_CONNECT_TIMEOUT);
+        $fp = fsockopen($_host, $urlParts['port'], $errno, $errstr, self::LINKVERIFIER_CONNECT_TIMEOUT);
         if (!$fp) {
             // mark this host too slow to verify
             $this->slow_hosts[$urlParts['host']] = true;
@@ -517,7 +517,7 @@ class PMF_Linkverifier
         }
 
         // wait for data with timeout (default: 10secs)
-        stream_set_timeout($fp, LINKVERIFIER_RESPONSE_TIMEOUT, 0);
+        stream_set_timeout($fp, self::LINKVERIFIER_RESPONSE_TIMEOUT, 0);
         $_url = $urlParts['path'].$urlParts['query'].$urlParts['fragment'];
         fputs($fp, "HEAD ".$_url." HTTP/1.0\r\nHost: ".$urlParts['host']."\r\n");
         // Be polite: let our probe declares itself
@@ -885,38 +885,45 @@ class PMF_Linkverifier
             return ($cron ? '' : $output);
         }
 
-        //uncomment to see the result structure
-        //print str_replace("\n","<br />",htmlspecialchars(print_r($result, true)));
-
         $failreasons = array();
         $inforeasons = array();
-        $output = "    <h2>".$PMF_LANG['ad_linkcheck_checkResult']."</h2>\n";
+        $output  = "    <h2>".$PMF_LANG['ad_linkcheck_checkResult']."</h2>\n";
         $output .= '    <table class="verifyArticleURL">'."\n";
+        
         foreach ($result as $type => $_value) {
-            $output .= "        <tr><td><strong>".htmlspecialchars($type)."</strong></td></tr>\n";
-            foreach ($_value as $url => $value) {
-                $_output  = '            <td /><td>'.htmlspecialchars($value['rawurl'])."</td>\n";
-                $_output .= '            <td><a href="'.$value['absurl'].'" target="_blank">'.htmlspecialchars($value['absurl'])."</a></td>\n";
-                $_output .= '            <td>';
+        	
+            $output .= sprintf("        <tr><td colspan=\"3\"><strong>%s</strong></td></tr>\n",
+                htmlspecialchars($type));
+                
+            foreach ($_value as $value) {
+                $_output  = sprintf("            <td>%s</td>\n", htmlspecialchars($value['rawurl']));
+                $_output .= sprintf("            <td><a href=\"%s\" target=\"_blank\">%s</a></td>\n",
+                    $value['absurl'],
+                    htmlspecialchars($value['absurl']));
+                
                 if (isset($value['redirects']) && ($value['redirects'] > 0)) {
-                    $_redirects = "(".$value['redirects'].")";
+                    $_redirects = sprintf(" (%s)", $value['redirects']);
                 } else {
-                    $_redirects = "";
+                    $_redirects = '';
                 }
+                
                 if ($value['valid'] === true) {
                     $_classname = "urlsuccess";
-                    $_output .= '<td class="'.$_classname.'">'.$PMF_LANG['ad_linkcheck_checkSuccess'].$_redirects.'</td>';
+                    $_output .= sprintf('            <td class="%s">%s%s</td>',
+                        $_classname,
+                        $PMF_LANG['ad_linkcheck_checkSuccess'],
+                        $_redirects);
                     if ($value['reason'] != "") {
-                        $inforeasons[] = sprintf($PMF_LANG['ad_linkcheck_openurl_infoprefix'],htmlspecialchars($value['absurl'])).$value['reason'];
+                        $inforeasons[] = sprintf($PMF_LANG['ad_linkcheck_openurl_infoprefix'],
+                            htmlspecialchars($value['absurl'])) . $value['reason'];
                     }
                 } else {
                     $_classname = "urlfail";
-                    $_output .= '<td class="'.$_classname.'">'.$PMF_LANG['ad_linkcheck_checkFailed'].'</td>';
+                    $_output .= '            <td class="'.$_classname.'">'.$PMF_LANG['ad_linkcheck_checkFailed'].'</td>';
                     if ($value['reason'] != "") {
                         $failreasons[] = $value['reason'];
                     }
                 }
-                $_output .= '</td>';
                 $output .= '        <tr class="'.$_classname.'">'."\n".$_output."\n";
                 $output .= "        </tr>\n";
             }
