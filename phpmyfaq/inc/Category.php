@@ -1332,7 +1332,7 @@ class PMF_Category
     {
         global $languageCodes;
 
-        $existcatlang = check4Language($category_id, 'faqcategories');
+        $existcatlang = PMF_Utils::languageAvailable($category_id, 'faqcategories');
         $translated   = array();
 
         foreach ($existcatlang as $language) {

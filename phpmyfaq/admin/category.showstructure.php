@@ -66,7 +66,7 @@ if ($permission['editcateg']) {
     print "<td class=\"sscTitle\">" . $actual_language . "</th>\n";
 
     // get languages in use for all categories
-    $all_languages = check4Language(0, $table='faqcategories');
+    $all_languages = PMF_Utils::languageAvailable(0, $table='faqcategories');
     foreach ($all_languages as $lang) {
        $all_lang[$lang] = $languageCodes[strtoupper($lang)];
     }
