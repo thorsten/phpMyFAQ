@@ -43,6 +43,8 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 }
 
 if ($permission['viewlog']) {
+	
+	printf('<h2>%s</h2>', $PMF_LANG['ad_menu_searchstats']);
 
     $perpage = 15;
     $pages   = PMF_Filter::filterInput(INPUT_GET, 'pages', FILTER_VALIDATE_INT);
