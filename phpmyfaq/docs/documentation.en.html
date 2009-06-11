@@ -73,12 +73,13 @@
             <li><a href="#4b">RSS Feeds</a></li>
             <li><a href="#4c">Advanced search</a></li>
             <li><a href="#4d">Instant Response</a></li>
-            <li><a href="#4e">Add content</a></li>
+            <li><a href="#4e">Add FAQ</a></li>
             <li><a href="#4f">Ask questions</a></li>
             <li><a href="#4g">Open questions</a></li>
             <li><a href="#4h">Submit translation</a></li>
             <li><a href="#4i">Digg it!</a></li>
             <li><a href="#4j">Internal references</a></li>
+            <li><a href="#4k">Public user registration</a></li>
         </ol></li>
         <li><strong><a href="#5">Administration</a></strong>
         <ol class="alpha">
@@ -182,6 +183,8 @@
             <li>GD support</li>
             <li>XMLWriter support</li>
             <li>JSON support</li>
+            <li>Filter support</li>
+            <li>SPL support</li>
         </ul></li>
         <li><strong>Webserver</strong> (<a href="http://httpd.apache.org">Apache</a> 
         1.3/2.0/2.2 or <a href="http://www.lighttpd.net">lighttpd</a> 1.0+ or 
@@ -400,6 +403,7 @@
     	<li>support for &lt;hr&gt; and &lt;hr /&gt;</li>
         <li>support for &lt;sup&gt; and &lt;sub&gt;</li>
     </ul>
+    <p>Currently phpMyFAQ doesn't support UTF-8 in PDFs.</p>
     <p><a href="#top">back to top</a></p>
 
 
@@ -428,7 +432,7 @@
 
     <hr style="width: 90%; height: 1px;" />
     <p><strong><a name="2m"></a>2.m. Spam protection</strong></p>
-    <p>phpMyFAQ 2.0 performs these three checks on public forms:</p>
+    <p>phpMyFAQ 2.5 performs these three checks on public forms:</p>
     <ol>
         <li>Check against IP/Network address</li>
         <li>Check against banned words</li>
@@ -524,9 +528,9 @@
     help and contact. On the left side you see the main categories, the instant 
     response page and the sitemap. You can also change the current language of the 
     FAQ, use the search form or the login box if you have a valid user account. On 
-    the right side you see the Top 10 FAQ records and the five latest records. On 
-    the pages with the FAQ records you'll see the other records of the current 
-    category and the tagcloud if you're using tagging.</p>
+    the right side you see a list of the most popular FAQ records, the latest records,
+    and the sticky FAQ records. On the pages with the FAQ records you'll see the other 
+    records of the current category and the tagcloud if you're using tagging.</p>
     <p><a href="#top">back to top</a></p>
 
 
@@ -546,19 +550,20 @@
     <hr style="width: 90%; height: 1px;"  />
     <p><strong><a name="4b"></a>4.b. RSS Feeds</strong></p>
     <p>On the start page you can subscribe to three RSS feeds with the news of the 
-    FAQ, the Top 10, all records per requested category and the latest records available 
-    in the FAQ. On the page with the open user questions you can subscribe to the 
-    RSS feed with these questions. All feeds are compatible to the RSS 2.0 
-    specification.</p>
+    FAQ, the most popular FAQs, all records per requested category and the latest 
+    records available in the FAQ. On the page with the open user questions you can 
+    subscribe to the RSS feed with these questions. All feeds are valid and compatible 
+    to the RSS 2.0 specification.</p>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
     <p><strong><a name="4c"></a>4.c. Advanced search</strong></p>
     <p>On the page with the advanced search you have more possibilities to find an
-     entry. You can search over all language if you want to. It's alos possible to
-      search only in one selected category. Additionally the link for the OpenSearch
-       plugin is below the main search box.</p>
+    entry. You can search over all language if you want to. It's alos possible to
+    search only in one selected category. Additionally the link for the OpenSearch
+    plugin is below the main search box. At the bottom of the search box you'll see
+    a list of the most popular search terms.</p>
     <p><a href="#top">back to top</a></p>
 
 
@@ -572,8 +577,8 @@
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="4e"></a>4.e. Add content</strong></p>
-    <p>On the <em>add content</em> page it's possible for all users to add a new 
+    <p><strong><a name="4e"></a>4.e. Add FAQ</strong></p>
+    <p>On the <em>Add FAQ</em> page it's possible for all users to add a new 
     FAQ record. The users have to add a FAQ question, select a category, add an 
     answer, and they have to insert their name and e-mail address. If the spam 
     protection is enabled they have to enter the correct captcha code, too. New 
@@ -584,10 +589,14 @@
     <hr style="width: 90%; height: 1px;"  />
     <p><strong><a name="4f"></a>4.f. Ask questions</strong></p>
     <p>On the <em>ask question</em> page it's possible for all users to add a new 
-    question without an answer. The users have to add a question, select a category, 
-    and they have to insert their name and e-mail address. If the spam protection is 
-    enabled they have to enter the correct captcha code, too. By default new questions 
-    won't be displayed and have to be activated by an administrator.</p>
+    question without an answer. If the question is submitted, phpMyFAQ checks the
+    words for the question and will do a full text search on the database with the
+    existing FAQs. If we found some matches the user will get some recommendations
+    depending on the question he submitted. 
+    <p>The users have to add a question, select a category, and they have to insert 
+    their name and e-mail address. If the spam protection is enabled they have 
+    to enter the correct captcha code, too. By default new questions won't be 
+    displayed and have to be activated by an administrator.</p>
     <p><a href="#top">back to top</a></p>
 
 
@@ -627,6 +636,14 @@
     of the current FAQ entry. On the right side you'll see links to all entries of 
     the current category and the complete tag cloud of the whole FAQ.</p>
     <p><a href="#top">back to top</a></p>
+    
+    
+    <hr style="width: 90%; height: 1px;"  />
+    <p><strong><a name="4k">4.k. Public user registration</strong></p>
+    <p>On the left column of the default layout the users of the FAQ also have the
+    possibility to register themselves. The user generated accounts are unactived
+    by default and the administrator has to activate them.</p>
+    <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
@@ -634,6 +651,8 @@
     <p>The administration of phpMyFAQ is completely browser-based. The admin area 
     can be found under this URL:</p>
     <pre>http://www.example.com/faq/admin/index.php</pre>
+    <p>You can also login in the public frontend and after the successful login you'll
+    see a link to administration backend, too.</p>
     <p>If you have lost your password you can reset it. A new random password will 
     be generated and sent to you via e-mail. Please change it after your successful 
     login with the generated password.</p>
@@ -650,13 +669,15 @@
 
     <hr style="width: 90%; height: 1px;"  />
     <p><strong><a name="5a"></a>5.a. User Administration</strong></p>
-    <p>phpMyFAQ 2 offers a flexible management of privileges (or rights) for different 
-    users in the admin area. It is possible to assign different priviledges to real 
-    people (represented by the term users). Those priviledges are very detailed and 
-    specific, so that you could allow a certain user to edit but not to delete an 
-    entry. It is very important to contemplate which user shall get which priviledges. 
-    You could edit an entry by completely deleting all content, which would be equivalent 
-    to deleting the whole entry. The number of possible users is not limited by phpMyFAQ.</p>
+    <p>phpMyFAQ offers a flexible management of privileges (or rights) for different 
+    users in the admin area. To search for a certain user just start typing the username
+    in the input form and you'll get a list of hits for usernames. It is possible to assign 
+    different priviledges to real people (represented by the term users). Those priviledges 
+    are very detailed and specific, so that you could allow a certain user to edit but 
+    not to delete an entry. It is very important to contemplate which user shall get which 
+    priviledges. You could edit an entry by completely deleting all content, which would 
+    be equivalent to deleting the whole entry. The number of possible users is not limited 
+    by phpMyFAQ.</p>
     <p>Keep in mind that new users have no priviledges at all, you will have to assign 
     them by editing the user's profile. The <em>admin</em> user cannot be deleted, 
     nor can the name be changed.</p>
@@ -668,7 +689,7 @@
 
     <hr style="width: 90%; height: 1px;"  />
     <p><strong><a name="5b"></a>5.b. Group Administration</strong></p>
-    <p>phpMyFAQ 2 also offers a flexible management of privileges (or rights) for 
+    <p>phpMyFAQ also offers a flexible management of privileges (or rights) for 
     different groups in the admin area. You can set permissions for groups in the 
     same way like for users described in the topic above.</p>
     <p>Please note that the permissions for a group are higher rated than the permissions 
@@ -850,6 +871,10 @@
     The adminlog allows you to track any actions taken by users in the admin area 
     of phpMyFAQ. If you feel you have an intruder in the system you can find out 
     for sure by checking the admin log.</p>
+    <p><strong>Search statistics</strong><br />
+    On the search statistics page you'll get a report about which keywords and how
+    often your users are searching. These informations are splitted into keywords, the
+    number of searches for this term, the language and the overall percentage.</p>
     <p><a href="#top">back to top</a></p>
 
 
@@ -886,15 +911,34 @@
 
     <hr style="width: 90%; height: 1px;"  />
     <p><strong><a name="5k"></a>5.k. Configuration</strong></p>
-    <p>Here you can edit the general, the record and spam protection settings of 
-    phpMyFAQ. Should you want to enter multiple email addresses in the configuration 
-    separate them by a comma (",").</p>
+    <ul>
+        <li><strong>Main FAQ configuration</strong><br />
+        Here you can edit the general, the record and spam protection settings of 
+        phpMyFAQ. Should you want to enter multiple email addresses in the configuration 
+        separate them by a comma (",").</li>
+        <li><strong>URL Verifier configuration</strong><br />
+        The URL Verifier works in the back while you save a new FAQ. It checks your added
+        FAQ for links and tests the accessibility of all links in your document. In the
+        URL Verifier configuration you can add, edit and delete special URLs. You can add
+        a ignore list of URLs and a list of URLs which always return a warning message.</li>
+        <li><strong>Stop Words configuration</strong><br />
+        We need stop words for the smart answering feature. If an user is adding a new
+        question to your FAQ the words will be checked against all FAQs in your database
+        but without the stop words. Stop words are words with a very low relevance like 
+        the english word "the".</li>
+        <li><strong>Interface translation</strong><br />
+        With this interface it is possible to edit all available translations of phpMyFAQ.
+        You only can edit translations when the language file is writable. The interface
+        checks that for you. If you like you can also send your improved translation to
+        the phpMyFAQ Team. You cannot change the English translation because this is the
+        main language file.</li>
+    </ul>
     <p><a href="#top">back to top</a></p>
 
 
     <hr style="width: 90%; height: 1px;"  />
     <p><strong><a name="6"></a>6. Customising phpMyFAQ 2.5.x</strong></p>
-    <p>In phpMyFAQ 2.5.x code and layout are separated. The layout is based on several 
+    <p>In phpMyFAQ code and layout are separated. The layout is based on several 
     templates, that you can modify to suit your own needs. The most important files 
     for phpMyFAQ's layout can be found in the directory <em>template/</em>. All original 
     templates are valid XHTML 1.0 Transitional and we don't use tables for layout 
@@ -914,10 +958,7 @@
     <p>The template-parser of the FAQ converts the placeholder <em>{userOnline}</em> 
     to the actual number of visitors online.</p>
     <p>You can change the template as you wish, but you may want to keep the original 
-    template in case something goes wrong. Theoretically you can use any editor for 
-    changing the templates, test using Dreamweaver were successful. Modifying the 
-    files with Microsoft Frontpage, Adobe GoLive or NetObjects Fusion may mess up 
-    the template, since they alter the source-code.</p>
+    template in case something goes wrong.</p>
     <p><a href="#top">back to top</a></p>
 
 
@@ -943,7 +984,7 @@
     Author: Thorsten Rinne<br />
     Co-Authors: <a href="mailto:stephan AT yauh DOT de">Stephan Hochhaus</a>, 
     <a href="mailto:mgl-mail AT t-online DOT de">Markus Gläser</a><br />
-    Last update: 2009-02-16</p>
+    Last update: 2009-06-11</p>
     <p>&copy; 2001-2009 phpMyFAQ Team</p>
     <p>This documentation is licensed under a <a href="http://creativecommons.org/licenses/by/2.0/" class="subfoot">Creative Commons License</a>.</p>
     <p><a href="#top">back to top</a></p>
