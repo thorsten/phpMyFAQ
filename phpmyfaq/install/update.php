@@ -22,7 +22,7 @@
  * under the License.
  */
 
-define('NEWVERSION', '2.5.0-RC');
+define('NEWVERSION', '2.5.0-RC2');
 define('COPYRIGHT', '&copy; 2001-2009 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
@@ -237,7 +237,7 @@ if ($step == 1) {
     <option value="2.5.0-alpha">phpMyFAQ 2.5.0-alpha</option>
     <option value="2.5.0-alpha2">phpMyFAQ 2.5.0-alpha2</option>
     <option value="2.5.0-beta">phpMyFAQ 2.5.0-beta</option>
-    <option value="2.5.0-RC">phpMyFAQ 2.5.0-RC</option>
+    <option value="2.5.0-RC">phpMyFAQ 2.5.0-RC and later</option>
 </select>
 
 <p class="center"><input type="submit" value="Go to step 2 of 4" class="button" /></p>

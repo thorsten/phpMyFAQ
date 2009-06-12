@@ -1,6 +1,6 @@
 $Id$
 
-phpMyFAQ 2.5.0-RC
+phpMyFAQ 2.5.0-RC2
 Codename "Pandora"
 
 Installation/Update:
@@ -9,19 +9,14 @@ Please read the documentation (documentation.en.html) carefully.
 Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
-Changes since 2.5.0-beta:
-- removed last Prototype based JavaScript code (Thorsten)
-- added visual Ajax indicator in administration backend (Thorsten) 
-- added new Image Manager in administration backend (Thorsten)
-- added translation frontend (Anatoliy Belsky)
-- improved language files (Anatoliy Belsky, Thorsten)
-- many minor bugfixes (Thorsten, Matteo)
+Changes since 2.5.0-RC:
+- some minor fixes and improvements in the install script (Thorsten)
 
 For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.5.0-RC - 2009-06-12
+Version 2.5.0-RC2 - 2009-07-
 - changed PHP requirement to PHP 5.2 (Thorsten)
 - dropped support for MySQL 4.0 and MaxDB (Thorsten)
 - dropped support for XML-RPC (Thorsten)
