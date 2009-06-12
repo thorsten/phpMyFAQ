@@ -343,10 +343,12 @@ if (!db_check($supported_databases)) {
 }
 
 if (!extension_check($enabled_extensions)) {
-    print "<p class=\"center\">Some missing extensions were detected! Please enable the corresponding PHP extension:</p>\n";
+    print "<p class=\"center\">Some missing extensions were detected! Please enable the corresponding PHP extension(s):</p>\n";
     print "<ul>\n";
     foreach ($enabled_extensions as $extension) {
-        printf('    <li>ext/%s</li>', $extension);
+    	if (!extension_loaded($extension)) { 
+            printf('    <li>ext/%s</li>', $extension);
+    	}
     }
     print "</ul>\n";
     HTMLFooter();
