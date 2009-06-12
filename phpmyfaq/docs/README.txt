@@ -10,7 +10,9 @@ Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.5.0-RC:
+- updated Turkish translation (Evren Yurtesen)
 - some minor fixes and improvements in the install script (Thorsten)
+
 
 For known issues please take a look at KNOWNBUGS.txt
 
@@ -46,6 +48,7 @@ Version 2.5.0-RC2 - 2009-07-
 - updated bundled Net_IDNA to version 0.6.3 (Thorsten)
 - updated bundled TinyMCE editor component to version 3.2.2.3 (Thorsten)
 - updated bundled FPDF library to version 1.6 (Thorsten)
+- updated Turkish translation (Evren Yurtesen)
 
 Version 2.0.13 - 2009-04-20
 - added new blocked words for spam protection (Kai)
