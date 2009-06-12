@@ -35,7 +35,6 @@ $PMF_LANG["msgContact"] = "İrtibat";
 $PMF_LANG["msgHome"] = "AnaSayfa";
 $PMF_LANG["msgNews"] = "SSS-Haberler";
 $PMF_LANG["msgUserOnline"] = " Online Kullanıcı";
-$PMF_LANG["msgXMLExport"] = "XML-Dosya";
 $PMF_LANG["msgBack2Home"] = "Ana Sayfaya Dön";
 
 // Contentpages
@@ -133,7 +132,7 @@ $PMF_LANG["msgLatestArticles"] = "Çok yakında gönderilmiş 5 soru:";
 
 // E-Mailbenachrichtigung
 $PMF_LANG["msgMailThanks"] = "SSS öneriniz için çok teşekkürler.";
-$PMF_LANG["msgMailCheck"] = "SSS'da yeni bir girdi oluşturuldu!Lütfen admin bölümünü kontrol edin!";
+$PMF_LANG["msgMailCheck"] = "SSS'da yeni bir girdi oluşturuldu!\nLütfen admin bölümünü kontrol edin!";
 $PMF_LANG["msgMailContact"] = "Mesajınız yöneticiye yollandı.";
 
 // Fehlermeldungen
@@ -143,12 +142,12 @@ $PMF_LANG["err_noArticles"] = "<p>Herhangi bir girdi yok.</p>";
 $PMF_LANG["err_badID"] = "<p>Yanlış ID.</p>";
 $PMF_LANG["err_noTopTen"] = "<p>Henüz İlk On yok.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>Bir girdi bulunamadı.</p>";
-$PMF_LANG["err_SaveEntries"] = "Gerekli alanlar <strong>adınız</strong>, <strong>e-mail adresiniz</strong>, <strong>kategori</strong>, <strong>başlık</strong> ve <strong>yazınız</strong>!<br /><br /><a href=\"javascript:history.back();\">bir sayfa geri</a><br /><br />";
-$PMF_LANG["err_SaveComment"] = "Gerekli alanlar <strong>your name</strong>, <strong>e-mail adresiniz</strong> ve <strong>yorumlarınız</strong>!<br /><br /><a href=\"javascript:history.back();\">bir sayfa geri</a><br /><br />";
+$PMF_LANG["err_SaveEntries"] = "Gerekli alanlar <strong>adınız</strong>, <strong>e-mail adresiniz</strong>, <strong>kategori</strong>, <strong>başlık</strong> ve <strong>yazınız</strong>!<br /><br />\n<a href=\"javascript:history.back();\">bir sayfa geri</a><br /><br />\n";
+$PMF_LANG["err_SaveComment"] = "Gerekli alanlar <strong>your name</strong>, <strong>e-mail adresiniz</strong> ve <strong>yorumlarınız</strong>!<br /><br />\n<a href=\"javascript:history.back();\">bir sayfa geri</a><br /><br />\n";
 $PMF_LANG["err_VoteTooMuch"] = "<p>Mükerrer oylar sayılmamaktadır. <a href=\"javascript:history.back();\">Buraya Tıkla</a>, geri dönmek için.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>Soruyu oylayamazsınız!</strong> <a href=\"javascript:history.back();\">Lütfen buraya tıklayın</a>, oy kullanmak için.</p>";
 $PMF_LANG["err_noMailAdress"] = "E-mail adresiniz yanlış.<br /><a href=\"javascript:history.back();\">geri</a>";
-$PMF_LANG["err_sendMail"] = "Gerekli alanlar <strong>adınız</strong>, <strong>e-mail adresiniz</strong> ve <strong>sorunuz</strong>!<br /><br /><a href=\"javascript:history.back();\">bir sayfa geri</a><br /><br />";
+$PMF_LANG["err_sendMail"] = "Gerekli alanlar <strong>adınız</strong>, <strong>e-mail adresiniz</strong> ve <strong>sorunuz</strong>!<br /><br />\n<a href=\"javascript:history.back();\">bir sayfa geri</a><br /><br />\n";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>Yazı Ara:</strong><br />şu kelimelere benzeyen girdileri ara <strong style=\"color: Red;\">kelime1 kelime2</strong> ıki veya daha fazla kritere inen arama yapabilirsiniz.</p><p><strong>Dikkat:</strong> Arama kriteriniz en az 4 harf uzunluğunda olmalıdır, aksi halde istek reddedilir.</p>";
@@ -541,7 +540,7 @@ $PMF_LANG["ad_user_realname"] = "Gerçek isim:";
 $PMF_LANG["ad_export_generate_pdf"] = "PDF dosya oluştur";
 $PMF_LANG["ad_export_full_faq"] = "SSS'nuz PDF dosya olarak: ";
 $PMF_LANG["err_bannedIP"] = "IP adresiniz yasaklanmış.";
-$PMF_LANG["err_SaveQuestion"] = "Gerekli alanlar <strong>isminiz</strong>, <strong>email adresiniz</strong> ve <strong>sorunuz</strong>.<br /><br /><a href=\"javascript:history.back();\">bir sayfa geri</a><br /><br />";
+$PMF_LANG["err_SaveQuestion"] = "Gerekli alanlar <strong>isminiz</strong>, <strong>email adresiniz</strong> ve <strong>sorunuz</strong>.<br /><br /><a href=\"javascript:history.back();\">bir sayfa geri</a><br /><br />\n";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Font rengi: ";
@@ -885,3 +884,76 @@ $PMF_LANG['msgTagSearch'] = 'Etiketlenmiş girdiler';
 $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ Bilgisi';
 $PMF_LANG['ad_online_info'] = 'Online sürüm kontrolü';
 $PMF_LANG['ad_system_info'] = 'Sistem Bilgisi';
+
+// added 2.5.0-alpha - 2008-01-25 by Elger
+$PMF_LANG['msgRegisterUser'] = 'Kayıt olmak istiyor musunuz?';
+$PMF_LANG["ad_user_loginname"] = 'Kullanıcı adı:';
+$PMF_LANG['errorRegistration'] = 'Bu bölümün doldurulması gerekli!';
+$PMF_LANG['submitRegister'] = 'Kayıt ol';
+$PMF_LANG['msgUserData'] = 'Kayıt için gerekli kullanıcı bilgileri	';
+$PMF_LANG['captchaError'] = 'Lütfen doğru doğrulama (CAPTCHA) kodunu giriniz!';
+$PMF_LANG['msgRegError'] = 'Hatalar oluştu. Lütfen hataları düzeltin:';
+$PMF_LANG['successMessage'] = 'Kayıt işleminiz başarılı oldu. Kısa bir süre içinde sisteme giriş bilgilerinizi içeren onay e-postası alacaksınız.!';
+$PMF_LANG['msgRegThankYou'] = 'Thank you for your registration';
+$PMF_LANG['emailRegSubject'] = '[%sitename%] Registration: new user';
+
+// added 2.5.0-alpha2 - 2009-01-24 by Thorsten
+$PMF_LANG['msgMostPopularSearches'] = 'En popüler aramalar:';
+$LANG_CONF['main.enableWysiwygEditor'] = array(0 => "checkbox", 1 => "Enable bundled WYSIWYG editor (default: enabled)");
+
+// added 2.5.0-beta - 2009-03-30 by Anatoliy
+$PMF_LANG['ad_menu_searchstats'] = 'İstatistikleri Ara';
+$PMF_LANG['ad_searchstats_search_term'] = 'Anahtar Kelime';
+$PMF_LANG['ad_searchstats_search_term_count'] = 'Sayım';
+$PMF_LANG['ad_searchstats_search_term_lang'] = 'Dil';
+$PMF_LANG['ad_searchstats_search_term_percentage'] = 'Yüzde';
+
+// added 2.5.0-beta - 2009-03-31 by Anatoliy
+$PMF_LANG['ad_record_sticky'] = 'Yapışkan';
+$PMF_LANG['ad_entry_sticky'] = 'Yapışkan';
+$PMF_LANG['stickyRecordsHeader'] = 'Yapışkan SSSler';
+
+// added 2.5.0-beta - 2009-04-01 by Anatoliy
+$PMF_LANG['ad_menu_stopwordsconfig'] = 'Stop Words';
+$PMF_LANG['ad_config_stopword_input'] = 'Add new stop word';
+
+// added 2.5.0-beta - 2009-04-06 by Anatoliy
+$PMF_LANG['msgSendMailDespiteEverything'] = 'Hayır, cevap mevcut değil (e-posta göndereceğim)';
+$PMF_LANG['msgSendMailIfNothingIsFound'] = 'İstenilen cevap yukarıdaki sonuçlarda mevcut mu?';
+
+// added 2.5.0-RC - 2009-05-11 by Anatoliy & Thorsten
+$PMF_LANG['msgChooseLanguageToTranslate'] = 'Lütfen tercüme için dil seçin';
+$PMF_LANG['msgLangDirIsntWritable'] = 'Tercümeler dizine yazma hakkı yok';
+$PMF_LANG['ad_menu_translations'] = 'Arayüz Tercümesi';
+$PMF_LANG['ad_start_notactive'] = 'Aktivasyon bekleniyor';
+
+// added 2.5.0-RC - 2009-05-20 by Anatoliy
+$PMF_LANG['msgTransToolAddNewTranslation'] = 'Yeni tercüme ekle';
+$PMF_LANG['msgTransToolFilename'] = 'Dosya adı';
+$PMF_LANG['msgTransToolActions'] = 'İşlemler';
+$PMF_LANG['msgTransToolWritable'] = 'Yazılabilir';
+$PMF_LANG['msgEdit'] = 'Düzenle';
+$PMF_LANG['msgDelete'] = 'Sil';
+$PMF_LANG['msgYes'] = 'evet';
+$PMF_LANG['msgNo'] = 'hayır';
+$PMF_LANG['msgTransToolSureDeleteFile'] = 'Bu dil dosasını silmek istediğinize emin misiniz?';
+$PMF_LANG['msgTransToolFileRemoved'] = 'Dil dosyası başarı ile kaldırıldı';
+$PMF_LANG['msgTransToolErrorRemovingFile'] = 'Dil dosyası kaldırılamadı';
+$PMF_LANG['msgVariable'] = 'Değişken';
+$PMF_LANG['msgCancel'] = 'İptal';
+$PMF_LANG['msgSave'] = 'Kaydet';
+$PMF_LANG['msgSaving3Dots'] = 'kaydediliyor ...';
+$PMF_LANG['msgRemoving3Dots'] = 'kaldırılıyor ...';
+$PMF_LANG['msgTransToolFileSaved'] = 'Dil dosyası başarı ile kaydedildi';
+$PMF_LANG['msgTransToolErrorSavingFile'] = 'Dil dosyasını kaydedilemedi';
+$PMF_LANG['msgLanguage'] = 'Dil';
+$PMF_LANG['msgTransToolLanguageCharset'] = 'Dil karakter seti';
+$PMF_LANG['msgTransToolLanguageDir'] = 'Dil yönü';
+$PMF_LANG['msgTransToolLanguageDesc'] = 'Dil açıklaması';
+$PMF_LANG['msgAuthor'] = 'Yazar';
+$PMF_LANG['msgTransToolAddAuthor'] = 'Yazar ekle';
+$PMF_LANG['msgTransToolCreateTranslation'] = 'Tercüme Yarat';
+$PMF_LANG['msgTransToolTransCreated'] = 'Yeni tercüme başarı ile yaratıldı';
+$PMF_LANG['msgTransToolCouldntCreateTrans'] = 'Yeni tercüme yaratılamadı';
+$PMF_LANG['msgAdding3Dots'] = 'ekleniyor ...';
+$PMF_LANG['msgTransToolSendToTeam'] = 'phpMyFAQ takımına gönder';
