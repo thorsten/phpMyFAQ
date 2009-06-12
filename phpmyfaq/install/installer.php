@@ -48,7 +48,8 @@ $enabled_extensions = array(
     'gd',
     'json',
     'xmlwriter',
-    'filter');
+    'filter',
+    'spl');
 
 /**
  * Lookup for installed database extensions
