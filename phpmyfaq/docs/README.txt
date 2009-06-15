@@ -12,13 +12,13 @@ Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 Changes since 2.5.0-RC:
 - updated Turkish translation (Evren Yurtesen)
 - some minor fixes and improvements in the install script (Thorsten)
-
+- many minor bugfixes (Thorsten)
 
 For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.5.0-RC2 - 2009-07-
+Version 2.5.0-RC2 - 2009-06-15
 - changed PHP requirement to PHP 5.2 (Thorsten)
 - dropped support for MySQL 4.0 and MaxDB (Thorsten)
 - dropped support for XML-RPC (Thorsten)
