@@ -30,20 +30,20 @@ switch($ajax_action) {
     
     case 'save_translated_lang':
         
-        if(!$permission["edittranslation"]) {
+        if (!$permission["edittranslation"]) {
             print $PMF_LANG['err_NotAuth'];
             exit;
         }
         
-        $lang = $_POST['PMF_LANG']['metaLanguage'];
+        $lang     = $_POST['PMF_LANG']['metaLanguage'];
         $filename = PMF_ROOT_DIR . "/lang/language_$lang.php"; 
         
-        if(!is_writable(PMF_ROOT_DIR . "/lang")) {
+        if (!is_writable(PMF_ROOT_DIR . "/lang")) {
             print 0;
             exit;
         }     
         
-        if(!copy($filename, PMF_ROOT_DIR . "/lang/language_$lang.bak.php")) {
+        if (!copy($filename, PMF_ROOT_DIR . "/lang/language_$lang.bak.php")) {
             print 0;
             exit;
         }
@@ -52,20 +52,20 @@ switch($ajax_action) {
         /**
          * Read in the head of the file we're writing to
          */
-        $fh = fopen($filename, 'r');
+        $fh   = fopen($filename, 'r');
         $line = '';
         do {
-            $line = fgets($fh);
+            $line             = fgets($fh);
             $newFileContents .= $line;
         }
-        while('*/' != trim($line));
+        while ('*/' != trim($line));
         fclose($fh);
         
         /**
          * Build language variable definitions
          */
-        foreach($_POST['PMF_LANG'] as $key => $val) {
-            if(is_string($val)) {
+        foreach ($_POST['PMF_LANG'] as $key => $val) {
+            if (is_string($val)) {
                 /**
                  * Since we get data per ajax, it's always utf-8 encoded
                  */
@@ -76,15 +76,15 @@ switch($ajax_action) {
                 $val = str_replace(array('\\\\', '\"', '\\\''), array('\\', '"', "'"), $val);
                 $val = str_replace("'", "\\'", $val);
                 $newFileContents .= "\$PMF_LANG['$key'] = '$val';\n";
-            } else if(is_array($val)) {
+            } elseif (is_array($val)) {
                 /**
                  * Here we deal with a two dimensional array
                  */
-                foreach($val as $key2 => $val2) {
+                foreach ($val as $key2 => $val2) {
                     /**
                      * Since we get data per ajax, it's always utf-8 encoded
                      */
-                    if(PMF_String::isUTF8($val2)) {
+                    if (PMF_String::isUTF8($val2)) {
                        $val2 = iconv('UTF-8', $PMF_LANG["metaCharset"], $val2);
                     }
                     
@@ -93,7 +93,7 @@ switch($ajax_action) {
             }
         }
         
-        foreach($_POST['LANG_CONF'] as $key => $val) {
+        foreach ($_POST['LANG_CONF'] as $key => $val) {
             /**
              * Since we get data per ajax, it's always utf-8 encoded
              */
@@ -110,24 +110,24 @@ switch($ajax_action) {
     
     case 'remove_lang_file':
         
-        if(!$permission["deltranslation"]) {
+        if (!$permission['deltranslation']) {
             print $PMF_LANG['err_NotAuth'];
             exit;
         }
          
         $lang = PMF_Filter::filterInput(INPUT_GET, 'translang', FILTER_SANITIZE_STRING);
         
-        if(!is_writable(PMF_ROOT_DIR . "/lang")) {
+        if (!is_writable(PMF_ROOT_DIR . "/lang")) {
             print 0;
             exit;
         }     
         
-        if(!copy(PMF_ROOT_DIR . "/lang/language_$lang.php", PMF_ROOT_DIR . "/lang/language_$lang.bak.php")) {
+        if (!copy(PMF_ROOT_DIR . "/lang/language_$lang.php", PMF_ROOT_DIR . "/lang/language_$lang.bak.php")) {
             print 0;
             exit;
         }
         
-        if(!unlink(PMF_ROOT_DIR . "/lang/language_$lang.php")) {
+        if (!unlink(PMF_ROOT_DIR . "/lang/language_$lang.php")) {
             print 0;
             exit;
         }
@@ -137,12 +137,12 @@ switch($ajax_action) {
     
     case 'save_added_trans':
         
-        if(!$permission["addtranslation"]) {
+        if (!$permission["addtranslation"]) {
             print $PMF_LANG['err_NotAuth'];
             exit;
         }        
         
-        if(!is_writable(PMF_ROOT_DIR . "/lang")) {
+        if (!is_writable(PMF_ROOT_DIR . "/lang")) {
             print 0;
             exit;
         }
@@ -203,11 +203,10 @@ FILE;
     
     case 'send_translated_file':
         
-        $lang = PMF_Filter::filterInput(INPUT_GET, 'translang', FILTER_SANITIZE_STRING);
-        
+        $lang     = PMF_Filter::filterInput(INPUT_GET, 'translang', FILTER_SANITIZE_STRING);
         $filename = PMF_ROOT_DIR . "/lang/language_$lang.php";
         
-        if(!file_exists($filename)) {
+        if (!file_exists($filename)) {
             print 0;
             exit;
         }
@@ -224,5 +223,3 @@ FILE;
         print (int) $mail->send();
     break;
 }
-
-?>
