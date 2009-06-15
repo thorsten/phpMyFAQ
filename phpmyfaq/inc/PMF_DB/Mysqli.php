@@ -321,7 +321,7 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
            
         $result  = $this->query($select);
         $current = $result->fetch_row();
-        return $current[0];
+        return $current[0] + 1;
     }
 
      /**
