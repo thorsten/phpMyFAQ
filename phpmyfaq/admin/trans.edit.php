@@ -24,14 +24,14 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
-if(!$permission["edittranslation"]) {
+if (!$permission["edittranslation"]) {
     print $PMF_LANG['err_NotAuth'];
     return;
 }
 
 $translateLang = PMF_Filter::filterInput(INPUT_GET, 'translang', FILTER_SANITIZE_STRING);
 
-if(empty($translateLang) || !file_exists(PMF_ROOT_DIR . "/lang/language_$translateLang.php")) {
+if (empty($translateLang) || !file_exists(PMF_ROOT_DIR . "/lang/language_$translateLang.php")) {
     header("Location: ?action=translist");
 }
 
@@ -42,6 +42,7 @@ $tt = new PMF_TransTool;
 $leftVarsOnly  = $tt->getVars(PMF_ROOT_DIR . "/lang/language_en.php");
 $rightVarsOnly = $tt->getVars(PMF_ROOT_DIR . "/lang/language_$translateLang.php");
 
+printf('<h2>%s</h2>', $PMF_LANG['ad_menu_translations']);
 ?>
 <form id="transDiffForm">
 <table>
@@ -51,7 +52,7 @@ $rightVarsOnly = $tt->getVars(PMF_ROOT_DIR . "/lang/language_$translateLang.php"
 <td><?php echo $key?></td>
 <td><input style="width: 300px;" type="text" value="<?php echo htmlspecialchars($line) ?>" disabled="disabled" /></td>
 <?php 
-    if(array_key_exists($key, $rightVarsOnly) && ($line != $rightVarsOnly[$key] ||
+    if (array_key_exists($key, $rightVarsOnly) && ($line != $rightVarsOnly[$key] ||
        $tt->isKeyIgnorable($key) || $tt->isValIgnorable($line))): 
 ?>
 <td><input style="width: 300px;" type="text" name="<?php echo $key?>" value="<?php echo htmlspecialchars($rightVarsOnly[$key]) ?>" /></td>
@@ -80,9 +81,9 @@ function save()
     
     var data = {};
     var form = document.getElementById('transDiffForm');
-    for(var i=0; i < form.elements.length;i++) {
+    for (var i=0; i < form.elements.length;i++) {
         var element = form.elements[i]
-        if(('text' == element.type || 'hidden' == element.type) && !element.disabled) {
+        if (('text' == element.type || 'hidden' == element.type) && !element.disabled) {
             data[element.name] = element.value
         }
     }
@@ -90,7 +91,7 @@ function save()
     $.post('index.php?action=ajax&ajax=trans&ajaxaction=save_translated_lang',
             data,
             function (retval, status) {
-                if(1*retval > 0 && 'success' == status) {
+                if (1*retval > 0 && 'success' == status) {
                     $('#saving_data_indicator').html('<?php echo $PMF_LANG['msgTransToolFileSaved'] ?>');
                     document.location = '?action=translist'
                 } else {

@@ -26,7 +26,9 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
 }
 
 $transDir = new DirectoryIterator(PMF_ROOT_DIR . "/lang");
-$tt = new PMF_TransTool;
+$tt       = new PMF_TransTool;
+
+printf('<h2>%s</h2>', $PMF_LANG['ad_menu_translations']);
 ?>
 <?php echo $PMF_LANG['msgChooseLanguageToTranslate'] ?>: <br />
 <table cellspacing="7">
@@ -46,8 +48,8 @@ endif; ?>
 <?php
     $sortedLangList = array();
     
-    foreach($transDir as $file) {
-        if($file->isFile() && '.php' == PMF_String::substr($file, -4) && 'bak' != PMF_String::substr($file, -7, -4)) {
+    foreach ($transDir as $file) {
+        if ($file->isFile() && '.php' == PMF_String::substr($file, -4) && 'bak' != PMF_String::substr($file, -7, -4)) {
             $lang = str_replace(array('language_', '.php'), '', $file);
 
             /**
@@ -62,7 +64,7 @@ endif; ?>
     }
     
     sort($sortedLangList);
-    while(list(,$lang) = each($sortedLangList)) {           
+    while (list(,$lang) = each($sortedLangList)) {           
         ?>
         <tr class="lang_<?php echo $lang ?>_container">
         <td><?php echo $languageCodes[strtoupper($lang)] ?></td>
@@ -97,7 +99,7 @@ endif; ?>
  */
 function del(lang)
 {
-    if(!confirm('<?php echo $PMF_LANG['msgTransToolSureDeleteFile'] ?>')) {
+    if (!confirm('<?php echo $PMF_LANG['msgTransToolSureDeleteFile'] ?>')) {
         return;
     }
     
@@ -106,7 +108,7 @@ function del(lang)
     $.get('index.php?action=ajax&ajax=trans&ajaxaction=remove_lang_file',
           {translang: lang},
           function(retval, status) {
-              if(1*retval > 0 && 'success' == status) {
+              if (1*retval > 0 && 'success' == status) {
                   $('.lang_' + lang + '_container').fadeOut('slow');
                   $('#saving_data_indicator').html('<?php echo $PMF_LANG['msgTransToolFileRemoved'] ?>');
               } else {
@@ -133,7 +135,7 @@ function sendToTeam(lang)
      $.get('index.php?action=ajax&ajax=trans&ajaxaction=send_translated_file',
              {translang: lang},
              function(retval, status) {
-                 if(1*retval > 0 && 'success' == status) {
+                 if (1*retval > 0 && 'success' == status) {
                      msg = '<?php echo $PMF_LANG['msgTransToolFileSent'] ?>';
                  } else {
                      msg = '<?php echo $PMF_LANG['msgTransToolErrorSendingFile'] ?>';

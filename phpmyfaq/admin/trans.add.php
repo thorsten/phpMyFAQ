@@ -24,18 +24,20 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
-if(!$permission["addtranslation"]) {
+if (!$permission["addtranslation"]) {
     print $PMF_LANG['err_NotAuth'];
     return;
 }
+
+printf('<h2>%s</h2>', $PMF_LANG['ad_menu_translations']);
 ?>
 <form id="newTranslationForm"> 
 <table cellspacing="7">
 <tr><td><?php echo $PMF_LANG['msgLanguage'] ?></td><td><select name="translang" id="translang">
 <?php 
 $avaliableLanguages = array_keys(PMF_Language::getAvailableLanguages());
-foreach($languageCodes as $langCode => $langName):
-    if(!in_array(strtolower($langCode), $avaliableLanguages)):
+foreach ($languageCodes as $langCode => $langName):
+    if (!in_array(strtolower($langCode), $avaliableLanguages)):
 ?>
 <option value="<?php echo $langCode ?>"><?php echo $langName ?></option>
 <?php endif; endforeach; ?>
