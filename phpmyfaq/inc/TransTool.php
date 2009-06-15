@@ -35,7 +35,7 @@ class PMF_TransTool
     /**
      * Parse language file and get vars it does contain
      *
-     * @param string $filepath
+     * @param string $filepath Filepath
      * 
      * @return array
      */
@@ -43,28 +43,27 @@ class PMF_TransTool
     {
         $retval = array();
         
-        if(file_exists($filepath) && is_readable($filepath)) {
+        if (file_exists($filepath) && is_readable($filepath)) {
         
             $orig = file($filepath);
             
-            while(list(,$line) = each($orig)) {
+            while (list(,$line) = each($orig)) {
                 $line = rtrim($line);
                 /**
                  * Bypass all but variable definitions
                  */
-                if(strlen($line) && '$' == $line[0]) {
+                if (strlen($line) && '$' == $line[0]) {
                     /**
                      * $PMF_LANG["key"] = "val";
                      * or
                      * $PMF_LANG["key"] = array(0 => "something", 1 => ...);
                      * turns to something like  array('$PMF_LANG["key"]', '"val";')
                      */
-                    $m = explode("=", $line, 2);
-                    
+                    $m   = explode("=", $line, 2);
                     $key = str_replace(array('["', '"]', '[\'', '\']'), array('[', ']', '[', ']'), PMF_String::substr(trim($m[0]), 1));
-                    
                     $tmp = trim(@$m[1]);
-                    if(0 === PMF_String::strpos($tmp, 'array')) {
+                    
+                    if (0 === PMF_String::strpos($tmp, 'array')) {
                         $retval[$key] = PMF_String::substr($tmp, 0, -1);
                     } else {
                         $retval[$key] = PMF_String::substr($tmp, 1, -2);
@@ -80,22 +79,22 @@ class PMF_TransTool
     /**
      * Get the translation ratio of the language files
      * 
-     * @param string $filepathExemplary
-     * @param string $filepathToCheck
+     * @param string $filepathExemplary Exemplary file path
+     * @param string $filepathToCheck   Filepath to check
      * 
      * @return integer
      */
     public function getTranslatedPercentage($filepathExemplary, $filepathToCheck)
     {
         $exemplary = $this->getVars($filepathExemplary);
-        $toCheck = $this->getVars($filepathToCheck);
+        $toCheck   = $this->getVars($filepathToCheck);
         
         $retval = $countAll = $countTranslated = 0;
         
-        if($exemplary) {
-            while(list($key, $val) = each($exemplary)) {
-                if(!$this->isKeyIgnorable($key) && !$this->isValIgnorable($val)) {
-                    if(isset($toCheck[$key]) && $toCheck[$key] != $val) {
+        if ($exemplary) {
+            while (list($key, $val) = each($exemplary)) {
+                if (!$this->isKeyIgnorable($key) && !$this->isValIgnorable($val)) {
+                    if (isset($toCheck[$key]) && $toCheck[$key] != $val) {
                         $countTranslated++;
                     }
                     
@@ -103,7 +102,7 @@ class PMF_TransTool
                 }
             }
             
-            $retval = floor(100*$countTranslated/$countAll);
+            $retval = floor(100 * $countTranslated / $countAll);
         }
         
         unset($exemplary, $toCheck);
@@ -115,7 +114,7 @@ class PMF_TransTool
     /**
      * Check if the key can be ignored while comparing
      * 
-     * @param string $key
+     * @param string $key Key
      * 
      * @return boolean
      */
@@ -133,7 +132,7 @@ class PMF_TransTool
      * Check if we can ignore a value while comparing. Actually
      * catching empty and non alphanumeric strings
      * 
-     * @param string $val
+     * @param string $val Value
      * 
      * @return boolean
      */
@@ -142,4 +141,3 @@ class PMF_TransTool
         return PMF_String::preg_match('/^[^a-z0-9]*$/i', $val);
     }
 }
-?>
