@@ -138,7 +138,7 @@ if (!is_null($currentSave) && $currentSave == true && $auth && $permission["adda
 ?>
 <p><strong><?php print $PMF_LANG["ad_att_addto"]." ".$PMF_LANG["ad_att_addto_2"]; ?></strong></p>
 <?php
-    if (is_uploaded_file($_FILES["userfile"]["tmp_name"]) && !(@filesize($_FILES["userfile"]["tmp_name"]) > $faqconfig->get('main.maxAttachmentSize'))) {
+    if (is_uploaded_file($_FILES["userfile"]["tmp_name"]) && !(filesize($_FILES["userfile"]["tmp_name"]) > $faqconfig->get('main.maxAttachmentSize'))) {
         if (!is_dir(PMF_ATTACHMENTS_DIR)) {
             mkdir(PMF_ATTACHMENTS_DIR, 0777);
         }
@@ -149,7 +149,7 @@ if (!is_null($currentSave) && $currentSave == true && $auth && $permission["adda
         }
         
         $attachmentFilepath = $recordAttachmentsDir . DIRECTORY_SEPARATOR . $_FILES["userfile"]["name"];
-        if (@move_uploaded_file($_FILES["userfile"]["tmp_name"], $attachmentFilepath)) {
+        if (move_uploaded_file($_FILES["userfile"]["tmp_name"], $attachmentFilepath)) {
             chmod ($attachmentFilepath, 0644);
             print "<p>".$PMF_LANG["ad_att_suc"]."</p>";
         }
