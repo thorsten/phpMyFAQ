@@ -12,6 +12,7 @@ Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 Changes since 2.5.0-RC2:
 - added configurable attachment directory (Anatoliy Belsky)
 - added approval permission for FAQs (Anatoliy Belsky)
+- added Hindi translation (Sumeet Raj Aggarwal)
 - minor bugfixes (Thorsten)
 
 For known issues please take a look at KNOWNBUGS.txt
