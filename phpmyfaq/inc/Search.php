@@ -75,7 +75,7 @@ class PMF_Search
         $condition = array(SQLPREFIX . 'faqdata.active' => "'yes'");
 
         // Search in all or one category?
-        if ($searchcategory != '%') {
+        if ($searchcategory != '%' && !empty($searchcategory)) {
             $selectedCategory = array(SQLPREFIX . 'faqcategoryrelations.category_id' => $searchcategory);
             $condition        = array_merge($selectedCategory, $condition);
         }
