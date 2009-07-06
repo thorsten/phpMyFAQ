@@ -36,7 +36,6 @@ if (!is_null($currentCategory) && isset($category->categoryName[$currentCategory
     
     if (!$records) {
         $categories = new PMF_Category();
-        $categories->transform($currentCategory);
         $categories->collapseAll();
         $records = $categories->viewTree();
     }

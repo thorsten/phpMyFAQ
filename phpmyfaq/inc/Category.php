@@ -366,14 +366,14 @@ class PMF_Category
     public function transform($id)
     {
         $thisParent_id = 0;
-        $tree = array();
-        $tabs = isset($this->children[$id]) ? array_keys($this->children[$id]) : array();
-        $num = count($tabs);
+        $tree          = array();
+        $tabs          = isset($this->children[$id]) ? array_keys($this->children[$id]) : array();
+        $num           = count($tabs);
 
         if ($id > 0) {
-            $thisLevel = $this->categoryName[$id]['level'];
-            $thisParent_id = $this->categoryName[$id]['parent_id'];
-            $thisName = $this->categoryName[$id]['name'];
+            $thisLevel       = $this->categoryName[$id]['level'];
+            $thisParent_id   = $this->categoryName[$id]['parent_id'];
+            $thisName        = $this->categoryName[$id]['name'];
             $thisdescription = $this->categoryName[$id]['description'];
         }
 
