@@ -174,8 +174,7 @@ showListTypeSelection();
                                     %sfaqlinkverifyrules
                                 WHERE
                                         type='%s'
-                                    AND id=%d
-                                LIMIT 0,1",
+                                    AND id=%d",
                                 SQLPREFIX,
                                 $db->escape_string($params['type']),
                                 $posts['id']
@@ -276,11 +275,6 @@ showListTypeSelection();
     $result = $db->query($query);
     $pages = ceil($db->num_rows($result) / $entriesPerPage);
     $page = $params['page'] = max(1,min($pages,$params['page']));
-    $query .= sprintf(
-                " LIMIT %d,%d",
-                ($params['page'] - 1) * $entriesPerPage,
-                $entriesPerPage
-                );
     $result = $db->query($query);
 
 ?>
@@ -302,7 +296,10 @@ showListTypeSelection();
 
     <?php
         $id = 0;
-        while ($row = $db->fetch_object($result)) {
+        $icurrent = 0;
+        $istart = ($params['page'] - 1) * $entriesPerPage;
+        $iend = $istart + $entriesPerPage;
+        while ($row = $db->fetch_object($result) && $iend >= $icurrent && $istart <= $icurrent++) {
             $_owner = ($row->owner == $user->getLogin() ? true : false);
     ?>
     <tr>
@@ -338,7 +335,7 @@ showListTypeSelection();
     </tr>
 
     <?php
-        $id++;
+	    $id++;
         }
 
         for ($i = 0; $i < 3; $i++) {
