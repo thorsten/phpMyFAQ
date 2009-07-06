@@ -408,6 +408,8 @@ class PMF_Perm_PermMedium extends PMF_Perm_PermBasic
             SQLPREFIX,
             $group_id);
         
+        dump($select);
+            
         $res    = $this->db->query($select);
         $result = array();
         while ($row = $this->db->fetch_assoc($res)) {
@@ -426,13 +428,19 @@ class PMF_Perm_PermMedium extends PMF_Perm_PermBasic
      */
     function addToGroup($user_id, $group_id)
     {
+        print 'test0';
+        
         if ($user_id <= 0 || $group_id <= 0 || !is_numeric($user_id) || !is_numeric($group_id)) {
             return false;
         }
         
+        print 'test1';
+        
         if (!$this->getGroupData($group_id)) {
             return false;
         }
+        
+        print 'test2';
         
         // add user to group
         $insert = sprintf("

@@ -113,6 +113,32 @@ if ($faqconfig->get('main.ldapSupport') && file_exists(PMF_INCLUDE_DIR . '/datal
 }
 
 /**
+ * Build attachments path
+ */
+$confAttachmentsPath = trim($faqconfig->get('main.attachmentsPath'));
+if('/' == $confAttachmentsPath[0] || preg_match('%^[a-z]:(\\\\|/)%i', $confAttachmentsPath)) {
+    /**
+     * If we're here, some windows or unix style
+     * absolute path was detected.
+     */
+    define('PMF_ATTACHMENTS_DIR', $confAttachmentsPath);
+} else {
+    /**
+     * otherwise build the absolute path
+     *
+     */
+    $tmp =realpath(dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $confAttachmentsPath);
+    /**
+     * Check that nobody is traversing
+     */
+    if(0 === strpos((string)$tmp, dirname(__FILE__))) {
+        define('PMF_ATTACHMENTS_DIR', $tmp);
+    } else {
+        define('PMF_ATTACHMENTS_DIR', false);
+    }
+}
+
+/**
  * PMF_Init
  *
  * This class provides methods to clean the request environment from global

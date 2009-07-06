@@ -981,3 +981,9 @@ $PMF_LANG['msgSending3Dots'] = 'sending ...';
 $PMF_LANG['msgTransToolFileSent'] = 'Language file was successfully sent to the phpMyFAQ team. Thank you very much for sharing it.';
 $PMF_LANG['msgTransToolErrorSendingFile'] = 'There was an error while sending the language file';
 $PMF_LANG['msgTransToolPercent'] = 'Percentage';
+
+// added 2.5.0-RC3 - 2009-06-23 by Anatoliy
+$LANG_CONF['main.attachmentsPath'] = array(0 => "input", 1 => "Path where attachments will be saved.<br /><small>Relative path means a folder within web root</small>");
+
+// added 2.5.0-RC3 - 2009-06-24 by Anatoliy
+$PMF_LANG['msgAttachmentNotFound'] = "The file you're trying to download was not found on this server";

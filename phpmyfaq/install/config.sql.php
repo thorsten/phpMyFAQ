@@ -56,3 +56,4 @@ $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('records.sortby', 'DESC'
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('spam.checkBannedWords', 'true')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('spam.enableCatpchaCode', 'true')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('spam.enableSafeEmail', 'true')";
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.attachmentsPath', 'attachments')";

@@ -993,6 +993,13 @@ foreach ($permLevels as $level => $desc) {
             'for_users' => 1,
             'for_groups' => 1
         ),
+        // 33 => 'approverec'
+        array(
+            'name' => 'approverec',
+            'description' => 'Right to approve records',
+            'for_users' => 1,
+            'for_groups' => 1
+        ),
     );
     foreach ($rights as $right) {
         $rightID = $admin->perm->addRight($right);

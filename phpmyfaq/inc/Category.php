@@ -386,7 +386,7 @@ class PMF_Category
             }
         }
 
-        $ascendants = $this->getNodes($id);
+        $ascendants     = $this->getNodes($id);
         $num_ascendants = count($ascendants);
 
         if ($id > 0) {
@@ -408,7 +408,7 @@ class PMF_Category
                                      'description' => $thisdescription);
         }
 
-        foreach ($tabs as $i ) {
+        foreach ($tabs as $i) {
             $this->transform($i);
         }
     }

@@ -69,7 +69,7 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
     // Returns all group members
     if ('get_all_members' == $ajax_action) {
         $memberList = $user->perm->getGroupMembers($group_id);
-        $members = array();
+        $members    = array();
         foreach ($memberList as $single_member) {
             $user->getUserById($single_member);
             $members[] = array('user_id' => $user->getUserId(),

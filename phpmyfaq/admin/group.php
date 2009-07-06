@@ -103,6 +103,7 @@ if ($groupAction == 'update_members') {
     $groupAction  = $defaultGroupAction;
     $groupId      = PMF_Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT, 0);
     $groupMembers = isset($_POST['group_members']) ? $_POST['group_members'] : array();
+    
     if ($groupId == 0) {
         $message .= '<p class="error">'.$errorMessages['updateMembers_noId'].'</p>';
     } else {
@@ -473,11 +474,12 @@ function getMemberList(group_id)
     }
     $.getJSON("index.php?action=ajax&ajax=group&ajaxaction=get_all_members&group_id=" + group_id,
             function(data) {
-            $('#group_member_list').empty();
+            console.log(data);
+                //$('#group_member_list').empty();
                 $.each(data, function(i, val) {
                     $('#group_member_list').append('<option value="' + val.user_id + '">' + val.login + '</option>');
                 });
-
+                $('#update_member_group_id').val(group_id);
             });
 }
 
@@ -520,21 +522,23 @@ function addGroupMembers()
 }
 
 /**
- * Adds a user to the group members selection list
+ *Remove users from a group
  *
  * @return void
  */
 function removeGroupMembers()
 {
     // make sure that a group is selected
-    var selected_group = $('#group_list_select option:selected');
-    if (selected_group.size() == 0) {
-        alert('Please choose a group. ');
+    var selected_user_list = $('#group_member_list option:selected');
+    if (selected_user_list.size() == 0) {
+        alert('Please choose a user. ');
         return;
     }
     
-    // get selected members from list
-    $('#group_member_list option:selected').empty();
+    // remove selected members from list
+    selected_user_list.each(function(i, option){
+        document.getElementById('group_member_list').options[option.index] = null
+    })
 }
 
 getGroupList();

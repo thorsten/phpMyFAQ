@@ -922,3 +922,9 @@ $PMF_LANG['msgChooseLanguageToTranslate'] = 'Bitte wählen Sie die zu übersetzend
 $PMF_LANG['msgLangDirIsntWritable'] = 'Das Verzeichnis mit den Übersetzungen ist nicht beschreibbar';
 $PMF_LANG['ad_menu_translations'] = 'Übersetzung';
 $PMF_LANG['ad_start_notactive'] = 'Wartend auf Freischaltung';
+
+// added 2.5.0-RC3 - 2009-06-23 by Anatoliy
+$LANG_CONF['main.attachmentsPath'] = array(0 => "input", 1 => "Pfad zum Speichern der Anhänge.<br /><small>Relativer Pfad wird ab Webroot gesucht</small>");
+
+// added 2.5.0-RC3 - 2009-06-24 by Anatoliy
+$PMF_LANG['msgAttachmentNotFound'] = "Die Datei wurde auf dem Server nicht gefunden";

@@ -223,12 +223,3 @@ $query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (26, 'changebtrevs', 'Edit 
 $query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (27, 'addgroup', 'Right to add group accounts', 1, 1)";
 $query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (28, 'editgroup', 'Right to edit group accounts', 1, 1)";
 $query[] = "INSERT INTO ".SQLPREFIX."faqright VALUES (29, 'delgroup', 'Right to delete group accounts', 1, 1)";
-
-/**
- * Fixing the faqsearches id to be serial, which causes
- * the creation of the sequence table automatically
- */
-$query[] = "ALTER TABLE " . SQLPREFIX . "faqsearches DROP id";
-$query[] = "ALTER TABLE " . SQLPREFIX . "faqsearches ADD id SERIAL NOT NULL";
-
-

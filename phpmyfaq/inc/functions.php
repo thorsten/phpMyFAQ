@@ -1159,12 +1159,42 @@ function PMF_htmlentities($string, $quote_style = ENT_QUOTES, $charset = 'iso-88
     }
 }
 
+/**
+ * Build url for attachment download
+ *
+ * @param int $recordId
+ * @param int $filename
+ * @param bool $forHtml if the url will be used in html
+ * @return string
+ */
+function buildAttachmentUrl($recordId, $filename, $forHtml = true)
+{
+    $amp = $forHtml ? '&amp;' : '&';
+    
+    return sprintf('index.php?action=attachment%sid=%s%sfile=%s', $amp, $recordId, $amp, $filename);
+}
+
+/**
+ * Check if an attachment dir is valid
+ *
+ * @param int $id
+ * @return boolean
+ */
+function isAttachmentDirOk($id)
+{
+    $recordAttachmentsDir = PMF_ATTACHMENTS_DIR . DIRECTORY_SEPARATOR . $id; 
+    
+    return false !== PMF_ATTACHMENTS_DIR && file_exists(PMF_ATTACHMENTS_DIR) && is_dir(PMF_ATTACHMENTS_DIR) &&
+           file_exists($recordAttachmentsDir) && is_dir($recordAttachmentsDir);
+}
+
 /******************************************************************************
  * Funktionen fuer die Benutzerauthentifizierung und Rechtevergabe
  ******************************************************************************/
 
 /**
- * Adds a menu entry according to user permissions
+ * Adds a menu entry according to user permissions.
+ * ',' stands for 'or', '*' stands for 'and'
  *
  * @param  string  $restrictions Restrictions
  * @param  string  $action       Action parameter
@@ -1172,6 +1202,8 @@ function PMF_htmlentities($string, $quote_style = ENT_QUOTES, $charset = 'iso-88
  * @param  string  $active       Active
  * @access public
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * 
+ * @return string
  */
 function addMenuEntry($restrictions = '', $action = '', $caption = '', $active = '')
 {
@@ -1197,16 +1229,50 @@ function addMenuEntry($restrictions = '', $action = '', $caption = '', $active =
         $action,
         $_caption,
         "\n");
-    if ($restrictions == '') {
-        return $output;
-    }
-
-    foreach (explode(',', $restrictions) as $_restriction) {
-        if (isset($permission[$_restriction]) && $permission[$_restriction]) {
-            return $output;
-        }
-    }
+           
+    return evalPermStr($restrictions) ? $output : '';
 }
+
+/**
+ * Parse and check a permission string
+ * 
+ * Permissions are glued with each other as follows
+ * - ',' stands for 'or'
+ * - '*' stands for 'and'
+ * 
+ * @author Anatoliy Belsky <anatoliy.belsky@mayflower.de>
+ * @param string $restrictions
+ * 
+ * @return boolean
+ * 
+ * TODO make '+' for 'or', like in boolean logic
+ *      make it to parse more complex structures
+ */
+function evalPermStr($restrictions)
+{
+    global $permission;
+    
+    $retval = strlen($restrictions) > 0;
+    
+    if(false !== strpos($restrictions, '*')) {
+        foreach (explode('*', $restrictions) as $_restriction) {
+            if(!isset($permission[$_restriction]) || !$permission[$_restriction]) {
+                $retval = false;
+                break;   
+            }
+        }  
+    } else {
+        foreach (explode(',', $restrictions) as $_restriction) {
+            if (isset($permission[$_restriction]) && $permission[$_restriction]) {
+                $retval = true;
+                break;
+            }
+        }        
+    }
+    
+    return $retval;
+}
+
 
 /**
  * Administrator logging
@@ -1483,3 +1549,4 @@ function getShortUserName()
         return '';
     }
 }
+

@@ -143,7 +143,7 @@ header("Vary: Negotiate,Accept");
             $secLevelEntries .= addMenuEntry('addcateg,editcateg,delcateg', 'category', 'ad_menu_categ_edit', $action);
             $secLevelEntries .= addMenuEntry('addbt', 'editentry', 'ad_entry_add', $action);
             $secLevelEntries .= addMenuEntry('editbt,delbt', 'view', 'ad_menu_entry_edit', $action);
-            $secLevelEntries .= addMenuEntry('editbt,delbt', 'accept', 'ad_menu_entry_aprove', $action);
+            $secLevelEntries .= addMenuEntry('editbt*approverec', 'accept', 'ad_menu_entry_aprove', $action);
             $secLevelEntries .= addMenuEntry('delcomment', 'comments', 'ad_menu_comments', $action);
             $secLevelEntries .= addMenuEntry('delquestion', 'question', 'ad_menu_open', $action);
             $secLevelEntries .= addMenuEntry('addglossary,editglossary,delglossary', 'glossary', 'ad_menu_glossary', $action);

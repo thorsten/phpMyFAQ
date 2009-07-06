@@ -1349,6 +1349,17 @@ if ($step == 4) {
         $query[] = "INSERT INTO ".SQLPREFIX."faquser_right (user_id, right_id) VALUES (1, 32)";
     }
 
+    //
+    // UPDATES FROM 2.5.0-RC3
+    //
+    if(version_compare($version, '2.5.0-RC3', '<')) {
+        $query[] = "INSERT INTO ".SQLPREFIX."faqright (right_id, name, description, for_users, for_groups) VALUES 
+            (33, 'approverec', 'Right to approve records', 1, 1)";
+        $query[] = "INSERT INTO ".SQLPREFIX."faquser_right (user_id, right_id) VALUES (1, 33)";
+        
+        $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.attachmentsPath', 'attachments')";
+    }
+    
     // Perform the queries for updating/migrating the database from 2.x
     if (isset($query)) {
         @ob_flush();

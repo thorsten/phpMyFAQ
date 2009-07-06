@@ -227,14 +227,15 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     <label><?php print $PMF_LANG["ad_att_att"]; ?></label>
 <?php
         if (isset($faqData['id']) && $faqData['id'] != "") {
+            $recordAttachmentsDir = PMF_ATTACHMENTS_DIR . DIRECTORY_SEPARATOR . $faqData['id'];
 ?>
-        <strong><?php print "../attachments/".$faqData['id']."/" ?></strong><br />
+        <strong><?php print $recordAttachmentsDir . DIRECTORY_SEPARATOR ?></strong><br />
 <?php
-            if (@is_dir(PMF_ROOT_DIR."/attachments/".$faqData['id']."/")) {
-                $do = dir(PMF_ROOT_DIR."/attachments/".$faqData['id']."/");
+            if (isAttachmentDirOk($faqData['id'])) {
+                $do = dir($recordAttachmentsDir);
                 while ($dat = $do->read()) {
                     if ($dat != "." && $dat != "..") {
-                        print "<a href=\""."../attachments/".$faqData['id']."/".rawurlencode($dat)."\">".$dat."</a>";
+                        print "<a href=\"../".buildAttachmentUrl($faqData['id'], rawurlencode($dat), true)."\">".$dat."</a>";
                         if ($permission["delatt"]) {
                             print "&nbsp;[&nbsp;<a href=\"?action=delatt&amp;id=".$faqData['id']."&amp;which=".rawurlencode($dat)."&amp;lang=".$faqData['lang']."\">".$PMF_LANG["ad_att_del"]."</a>&nbsp;]";
                         }
@@ -281,7 +282,9 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     <label class="left" for="solution_id"><?php print $PMF_LANG['ad_entry_solution_id']; ?>:</label>
     <input name="solution_id" id="solution_id" style="width: 50px; text-align: right;" value="<?php print (isset($faqData['solution_id']) ? $faqData['solution_id'] : $faq->getSolutionId()); ?>" size="5" readonly="readonly" /><br />
 
+    <label class="left" for="active"><?php print $PMF_LANG["ad_entry_active"]; ?></label>
 <?php
+if($permission['approverec']):
     if (isset($faqData['active']) && $faqData['active'] == 'yes') {
         $suf = ' checked="checked"';
         $sul = null;
@@ -293,8 +296,10 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
         $sul = ' checked="checked"';
     }
 ?>
-    <label class="left" for="active"><?php print $PMF_LANG["ad_entry_active"]; ?></label>
     <input type="radio" id="active" name="active" class="active" value="yes"<?php if (isset($suf)) { print $suf; } ?> /> <?php print $PMF_LANG['ad_gen_yes']; ?> <input type="radio" name="active" class="active" value="no"<?php if (isset($sul)) { print $sul; } ?> /> <?php print $PMF_LANG['ad_gen_no']; ?><br />
+<?php else: ?>
+    <input type="radio" name="active" class="active" value="no" checked="checked" /> <?php print $PMF_LANG['ad_gen_no']; ?><br />
+<?php endif; ?>
 
 	<label class="left" for="sticky"><?php print $PMF_LANG['ad_entry_sticky']; ?>:</label>
 	<input type="checkbox" id="sticky" name="sticky" <?php print (isset($faqData['sticky']) && $faqData['sticky'] ? 'checked="checked"' : '') ?> /><br />
