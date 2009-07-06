@@ -263,7 +263,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     <input name="tags" id="tags" style="width: 390px;" value="<?php if (isset($tags)) { print htmlspecialchars($tags); } ?>" /><img style="display: none; margin-bottom: -5px;" id="tags_autocomplete_wait" src="images/indicator.gif" alt="waiting..."></img>
     <script type="text/javascript">
         $('#tags').autocomplete("index.php?action=ajax&ajax=tags_list", { width: 260, selectFirst: false, multiple: true } );
-    </script>
+    </script><br />
 
     <label class="lefteditor" for="author"><?php print $PMF_LANG["ad_entry_author"]; ?></label>
     <input name="author" id="author" style="width: 390px;" value="<?php if (isset($faqData['author'])) { print htmlspecialchars($faqData['author']); } else { print $user->getUserData('display_name'); } ?>" /><br />
