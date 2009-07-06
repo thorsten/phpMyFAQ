@@ -7,8 +7,8 @@
  * @author     Lars Tiedemann <php@larstiedemann.de>
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since      2005-09-18
- * @copyright  2005-2009 phpMyFAQ Team
  * @version    SVN: $Id$ 
+ * @copyright  2005-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -408,8 +408,6 @@ class PMF_Perm_PermMedium extends PMF_Perm_PermBasic
             SQLPREFIX,
             $group_id);
         
-        dump($select);
-            
         $res    = $this->db->query($select);
         $result = array();
         while ($row = $this->db->fetch_assoc($res)) {
@@ -428,19 +426,13 @@ class PMF_Perm_PermMedium extends PMF_Perm_PermBasic
      */
     function addToGroup($user_id, $group_id)
     {
-        print 'test0';
-        
         if ($user_id <= 0 || $group_id <= 0 || !is_numeric($user_id) || !is_numeric($group_id)) {
             return false;
         }
         
-        print 'test1';
-        
         if (!$this->getGroupData($group_id)) {
             return false;
         }
-        
-        print 'test2';
         
         // add user to group
         $insert = sprintf("
