@@ -10,8 +10,8 @@
  * @author     Krzysztof Kruszynski <thywolf@wolf.homelinux.net>
  * @since      2004-11-21
  * @license    Mozilla Public License 1.1
- * @copyright  2004-2009 phpMyFAQ Team
  * @version    SVN: $Id$
+ * @copyright  2004-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -537,7 +537,7 @@ class PMF_Export_Pdf extends FPDF
         // Check, if image is stored locally or not
         if ('http' != substr($image, 0, 4)) {
             // Please note that the image must be accessible by HTTP NOT ONLY by HTTPS
-             $image = 'http://' . $_SERVER['HTTP_HOST'] . $image; 
+             $image = 'http://' . EndSlash($_SERVER['HTTP_HOST']) . $image; 
         }
         // Set a friendly User Agent
         $ua = ini_get('user_agent');
