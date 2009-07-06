@@ -6,8 +6,8 @@
  * @subpackage Administration
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since      2003-02-24
- * @copyright  2003-2009 phpMyFAQ Team
  * @version    SVN: $Id$
+ * @copyright  2003-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -32,15 +32,15 @@ if ($permission["delatt"]) {
     $record_id   = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $record_lang = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
     $record_file = PMF_Filter::filterInput(INPUT_GET, 'which', FILTER_SANITIZE_STRING);
-    $record_path = PMF_ROOT_DIR . PATH_SEPARATOR . "attachments" . PATH_SEPARATOR . $record_id;
-    $filename    = realpath($record_path . PATH_SEPARATOR. $record_file);
+    $record_path = PMF_ATTACHMENTS_DIR . DIRECTORY_SEPARATOR . $record_id;
+    $filename    = realpath($record_path . DIRECTORY_SEPARATOR . $record_file);
     $file_okay   = true;
     
     if (!$filename || strpos($filename, realpath($record_path)) !== 0) {
     	$file_okay = false;
     }
     
-    if ($file_okay && @unlink($filename)) {
+    if ($file_okay && unlink($filename)) {
         printf("<p>%s</p>\n", $PMF_LANG['ad_att_delsuc']);
     } else {
         printf("<p>%s</p>\n", $PMF_LANG['ad_att_delfail']);
