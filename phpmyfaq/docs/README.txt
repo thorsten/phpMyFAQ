@@ -10,7 +10,9 @@ Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.5.0-RC2:
-- 
+- added configurable attachment directory (Anatoliy Belsky)
+- added approval permission for FAQs (Anatoliy Belsky)
+- minor bugfixes (Thorsten)
 
 For known issues please take a look at KNOWNBUGS.txt
 
@@ -39,6 +41,8 @@ Version 2.5.0-RC3 - 2009-07-
 - added string wrapper for better UTF-8 handling (Anatoliy Belsky)
 - added translation frontend (Anatoliy Belsky)
 - added jQuery 1.3 as replacement for Prototype/Script.aculo.us (Thorsten)
+- added configurable attachment directory (Anatoliy Belsky)
+- added approval permission for FAQs (Anatoliy Belsky)
 - improved user administration frontend (Sarah Hermann)
 - improved performance (Thorsten)
 - improved language files (Anatoliy Belsky, Thorsten)
