@@ -39,11 +39,11 @@ if ($permission["addcateg"]) {
     <input type="hidden" name="parent_id" value="<?php print $parent_id; ?>" />
 <?php
     if ($parent_id > 0) {
-        $user_allowed   = $category->getPermissions('user', array($parent_id));
-        $group_allowed  = $category->getPermissions('group', array($parent_id));
+        $user_allowed  = $category->getPermissions('user', array($parent_id));
+        $group_allowed = $category->getPermissions('group', array($parent_id));
 ?>
-    <input type="hidden" name="userpermission" value="<?php print $user_allowed[0]; ?>" />
-    <input type="hidden" name="grouppermission" value="<?php print $group_allowed[0]; ?>" />
+    <input type="hidden" name="restricted_users" value="<?php print $user_allowed[0]; ?>" />
+    <input type="hidden" name="restricted_groups" value="<?php print $group_allowed[0]; ?>" />
 <?php
         printf("<p>%s: %s (%s)</p>",
             $PMF_LANG["msgMainCategory"],
