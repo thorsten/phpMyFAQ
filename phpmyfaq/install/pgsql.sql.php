@@ -21,57 +21,39 @@
 * under the License.
 */
 
-$uninst[] = "DROP TABLE ".$sqltblpre."faqadminlog";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqcaptcha";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqcategories";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqcategoryrelations";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqcategory_group";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqcategory_user";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqchanges";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqcomments";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqconfig";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqdata";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqdata_revisions";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqdata_group";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqdata_tags";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqdata_user";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqglossary";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqgroup";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqgroup_right";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqlinkverifyrules";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqnews";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqquestions";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqright";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqsearches";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqsessions";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqstopwords";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqtags";
-$uninst[] = "DROP TABLE ".$sqltblpre."faquser";
-$uninst[] = "DROP TABLE ".$sqltblpre."faquserdata";
-$uninst[] = "DROP TABLE ".$sqltblpre."faquserlogin";
-$uninst[] = "DROP TABLE ".$sqltblpre."faquser_group";
-$uninst[] = "DROP TABLE ".$sqltblpre."faquser_right";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqvisits";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqvoting";
-// DROP SEQUENCES
-$uninst[] = "DROP SEQUENCE faqadminlog_id_seq";
-$uninst[] = "DROP SEQUENCE faqcategories_id_seq";
-$uninst[] = "DROP SEQUENCE faqchanges_id_seq";
-$uninst[] = "DROP SEQUENCE faqcomments_id_comment_seq";
-$uninst[] = "DROP SEQUENCE faqdata_id_seq";
-$uninst[] = "DROP SEQUENCE faqdata_revisions_id_seq";
-$uninst[] = "DROP SEQUENCE faqdata_tags_tagging_id_seq";
-$uninst[] = "DROP SEQUENCE faqglossary_id_seq";
-$uninst[] = "DROP SEQUENCE faqgroup_group_id_seq";
-$uninst[] = "DROP SEQUENCE faqlinkverifyrules_id_seq";
-$uninst[] = "DROP SEQUENCE faqnews_id_seq";
-$uninst[] = "DROP SEQUENCE faqquestions_id_seq";
-$uninst[] = "DROP SEQUENCE faqright_right_id_seq";
-$uninst[] = "DROP SEQUENCE faqsessions_sid_seq";
-$uninst[] = "DROP SEQUENCE faquser_user_id_seq";
-$uninst[] = "DROP SEQUENCE faquserdata_user_id_seq";
-$uninst[] = "DROP SEQUENCE faqvisits_id_seq";
-$uninst[] = "DROP SEQUENCE faqvoting_id_seq";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqadminlog CASCADE";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqcaptcha CASCADE";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqcategories CASCADE";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqcategoryrelations CASCADE";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqcategory_group CASCADE";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqcategory_user CASCADE";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqchanges CASCADE";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqcomments CASCADE";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqconfig CASCADE";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqdata CASCADE";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqdata_revisions CASCADE";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqdata_group CASCADE";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqdata_tags CASCADE";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqdata_user CASCADE";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqglossary CASCADE";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqgroup CASCADE";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqgroup_right CASCADE";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqlinkverifyrules CASCADE";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqnews CASCADE";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqquestions CASCADE";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqright CASCADE";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqsearches CASCADE";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqsessions CASCADE";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqstopwords CASCADE";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqtags CASCADE";
+$uninst[] = "DROP TABLE ".$sqltblpre."faquser CASCADE";
+$uninst[] = "DROP TABLE ".$sqltblpre."faquserdata CASCADE";
+$uninst[] = "DROP TABLE ".$sqltblpre."faquserlogin CASCADE";
+$uninst[] = "DROP TABLE ".$sqltblpre."faquser_group CASCADE";
+$uninst[] = "DROP TABLE ".$sqltblpre."faquser_right CASCADE";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqvisits CASCADE";
+$uninst[] = "DROP TABLE ".$sqltblpre."faqvoting CASCADE";
+
 
 //faquser
 $query[] = "CREATE TABLE ".$sqltblpre."faquser (
@@ -307,7 +289,7 @@ PRIMARY KEY (right_id)
 
 //faqsearches
 $query[] = "CREATE TABLE ".$sqltblpre."faqsearches (
-id INTEGER NOT NULL ,
+id SERIAL NOT NULL ,
 lang VARCHAR(5) NOT NULL ,
 searchterm VARCHAR(255) NOT NULL ,
 searchdate TIMESTAMP,
