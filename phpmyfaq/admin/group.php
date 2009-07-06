@@ -474,8 +474,7 @@ function getMemberList(group_id)
     }
     $.getJSON("index.php?action=ajax&ajax=group&ajaxaction=get_all_members&group_id=" + group_id,
             function(data) {
-            console.log(data);
-                //$('#group_member_list').empty();
+                $('#group_member_list').empty();
                 $.each(data, function(i, val) {
                     $('#group_member_list').append('<option value="' + val.user_id + '">' + val.login + '</option>');
                 });
@@ -493,7 +492,7 @@ function addGroupMembers()
     // make sure that a group is selected
     var selected_group = $('#group_list_select option:selected');
     if (selected_group.size() == 0) {
-        alert('Please choose a group. ');
+        alert('Please choose a group.');
         return;
     }
 
@@ -504,9 +503,11 @@ function addGroupMembers()
 
             var members  = $('#group_member_list option');
             var isMember = false;
+            var user     = $(this);
 
             members.each(function(member) {
-                if (member.val() == user.val()) {
+
+                if (user.val() == member) {
                     isMember = true;
                 } else {
                     isMember = false;
