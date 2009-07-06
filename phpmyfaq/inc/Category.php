@@ -1451,6 +1451,13 @@ class PMF_Category
         }
 
         foreach ($categories as $category_id) {
+        	$query = "SELECT * FROM %sfaqcategory_%s WHERE category_id = %d AND %s_id = %d";
+        	$query = sprintf($query, SQLPREFIX, $mode, $category_id, $mode, $id);
+        	
+        	if($this->db->num_rows($this->db->query($query))) {
+        		continue;
+        	}
+        	
             $query = sprintf("
                 INSERT INTO
                     %sfaqcategory_%s
