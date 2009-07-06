@@ -116,7 +116,7 @@ if ($faqconfig->get('main.ldapSupport') && file_exists(PMF_INCLUDE_DIR . '/datal
  * Build attachments path
  */
 $confAttachmentsPath = trim($faqconfig->get('main.attachmentsPath'));
-if('/' == $confAttachmentsPath[0] || preg_match('%^[a-z]:(\\\\|/)%i', $confAttachmentsPath)) {
+if ('/' == $confAttachmentsPath[0] || preg_match('%^[a-z]:(\\\\|/)%i', $confAttachmentsPath)) {
     /**
      * If we're here, some windows or unix style
      * absolute path was detected.
@@ -127,11 +127,12 @@ if('/' == $confAttachmentsPath[0] || preg_match('%^[a-z]:(\\\\|/)%i', $confAttac
      * otherwise build the absolute path
      *
      */
-    $tmp =realpath(dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $confAttachmentsPath);
+    $tmp = dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . $confAttachmentsPath;
+    
     /**
      * Check that nobody is traversing
      */
-    if(0 === strpos((string)$tmp, dirname(__FILE__))) {
+    if (0 === strpos((string)$tmp, dirname(dirname(__FILE__)))) {
         define('PMF_ATTACHMENTS_DIR', $tmp);
     } else {
         define('PMF_ATTACHMENTS_DIR', false);
