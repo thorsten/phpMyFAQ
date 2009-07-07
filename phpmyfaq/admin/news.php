@@ -41,8 +41,8 @@ if ('addnews' == $action && $permission["addnews"]) {
         <label class="lefteditor" for="header"><?php print $PMF_LANG['ad_news_header']; ?></label>
         <textarea name="header" style="width: 390px; height: 50px;" cols="2" rows="50"></textarea><br />
 
-        <label for="content"><?php print $PMF_LANG['ad_news_text']; ?></label>
-        <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript><textarea id="content" name="content" cols="84" rows="5"></textarea><br />
+        <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
+        <textarea id="content" name="content" cols="84" rows="5"></textarea><br />
 
         <label class="lefteditor" for="authorName"><?php print $PMF_LANG['ad_news_author_name']; ?></label>
         <input type="text" name="authorName" style="width: 390px;" value="<?php print $user->getUserData('display_name'); ?>"/><br />
@@ -126,8 +126,8 @@ if ('addnews' == $action && $permission["addnews"]) {
         <label class="lefteditor" for="header"><?php print $PMF_LANG['ad_news_header']; ?></label>
         <textarea name="header" style="width: 390px; height: 50px;" cols="2" rows="50"><?php if (isset($newsData['header'])) { print $newsData['header']; } ?></textarea><br />
 
-        <label for="content"><?php print $PMF_LANG['ad_news_text']; ?></label>
-        <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript><textarea id="content" name="content" cols="84" rows="5"><?php if (isset($newsData['content'])) { print htmlspecialchars($newsData['content'], ENT_QUOTES); } ?></textarea><br />
+        <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
+        <textarea id="content" name="content" cols="84" rows="5"><?php if (isset($newsData['content'])) { print htmlspecialchars($newsData['content'], ENT_QUOTES); } ?></textarea><br />
 
         <label class="lefteditor" for="authorName"><?php print $PMF_LANG['ad_news_author_name']; ?></label>
         <input type="text" name="authorName" style="width: 390px;" value="<?php print $newsData['authorName']; ?>" /><br />

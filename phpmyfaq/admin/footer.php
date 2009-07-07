@@ -7,8 +7,8 @@
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author     Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @since      2003-02-26
- * @copyright  2003-2009 phpMyFAQ Team
  * @version    SVN: $Id$
+ * @copyright  2003-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -42,20 +42,10 @@ if (isset($auth)) {
 <iframe id="keepPMFSessionAlive" src="session.keepalive.php?lang=<?php print $LANGCODE; ?>" style="border: none;" width="0" height="0"></iframe>
 
 <?php
-}
-
-if (    isset($auth) &&
-    (
-        // FAQ
-        ('takequestion' == $action)
-     || ('editentry'    == $action)
-     || ('editpreview'  == $action)
-        // News
-     || ('news'         == $action)
-    )
-    ) {
+    if (isset($auth) && (('takequestion' == $action) || ('editentry'    == $action) || ('editpreview'  == $action) ||
+                         ('addnews'      == $action) || ('editnews'     == $action))) {
     
-    if ($faqconfig->get('main.enableWysiwygEditor') == true) {
+        if ($faqconfig->get('main.enableWysiwygEditor') == true) {
 ?>
 <!-- tinyMCE -->
 <script type="text/javascript">
@@ -130,6 +120,7 @@ function ajaxfilemanager(field_name, url, type, win)
 </script>
 <!-- /tinyMCE -->
 <?php
+        }
     }
 }
 ?>
