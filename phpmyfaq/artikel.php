@@ -26,7 +26,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$captcha = new PMF_Captcha($sids);
+$captcha   = new PMF_Captcha($sids);
+$oGlossary = new PMF_Glossary();
+$oLnk      = new PMF_Linkverifier();
+$tagging   = new PMF_Tags();
+$relevant  = new PMF_Relation();
+$faqrating = new PMF_Rating();
 
 if (!is_null($showCaptcha)) {
     $captcha->showCaptchaImg();
@@ -36,6 +41,7 @@ if (!is_null($showCaptcha)) {
 $currentCategory = $cat;
 $record_id       = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 $solution_id     = PMF_Filter::filterInput(INPUT_GET, 'solution_id', FILTER_VALIDATE_INT);
+$highlight       = PMF_Filter::filterInput(INPUT_GET, 'highlight', FILTER_SANITIZE_STRIPPED);
 
 $faqsession->userTracking('article_view', $record_id);
 
@@ -51,9 +57,8 @@ $faqvisits->logViews($faq->faqRecord['id']);
 $content = $faq->faqRecord['content'];
 $thema   = $faq->getRecordTitle($record_id);
 // Add Glossary entries
-$oGlossary = new PMF_Glossary();
-$content   = $oGlossary->insertItemsIntoContent($content);
-$thema     = $oGlossary->insertItemsIntoContent($thema);
+$content = $oGlossary->insertItemsIntoContent($content);
+$thema   = $oGlossary->insertItemsIntoContent($thema);
 
 // Set the path of the current category
 $categoryName = $category->getPath($currentCategory, ' &raquo; ', true);
@@ -63,8 +68,8 @@ $oLink              = new PMF_Link($changeLanguagePath);
 $oLink->itemTitle   = $faq->getRecordTitle($record_id, false);
 $changeLanguagePath = $oLink->toString();
 
-$highlight = PMF_Filter::filterInput(INPUT_GET, 'highlight', FILTER_SANITIZE_STRIPPED);
-if (!is_null($highlight) && $highlight != "/" && $highlight != "<" && $highlight != ">" && strlen($highlight) > 3) {
+
+if (!is_null($highlight) && strlen($highlight) > 3) {
     $highlight   = str_replace("'", "´", $highlight);
     $highlight   = str_replace(array('^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']'), '', $highlight);
     $highlight   = preg_quote($highlight, '/');
@@ -105,7 +110,6 @@ if (!is_null($highlight) && $highlight != "/" && $highlight != "<" && $highlight
 //       other faq records (Internal Links) added with WYSIWYG Editor:
 //         href="index.php?action=artikel&cat=NNN&id=MMM&artlang=XYZ"
 // Search for href attribute links
-$oLnk = new PMF_Linkverifier();
 $oLnk->resetPool();
 $oLnk->parse_string($content);
 $fixedContent = $content;
@@ -214,19 +218,15 @@ $expired = (date('YmdHis') > $faq->faqRecord['dateEnd']);
 if (($faq->faqRecord['active'] != 'yes') || ('n' == $faq->faqRecord['comment']) || $expired) {
     $commentMessage = $PMF_LANG['msgWriteNoComment'];
 } else {
-    $oLink = new PMF_Link($_SERVER['PHP_SELF'].'?'.str_replace('&', '&amp;',$_SERVER['QUERY_STRING']));
+    $oLink            = new PMF_Link('?'.str_replace('&', '&amp;',$_SERVER['QUERY_STRING']));
     $oLink->itemTitle = $thema;
-    $commentHref = $oLink->toString().'#comment';
-    $commentMessage = sprintf(
+    $commentHref      = $oLink->toString().'#comment';
+    $commentMessage   = sprintf(
         "%s<a href=\"%s\" onclick=\"javascript:$('#comment').show();\">%s</a>",
         $PMF_LANG['msgYouCan'],
         $commentHref,
-        $PMF_LANG['msgWriteComment']
-    );
+        $PMF_LANG['msgWriteComment']);
 }
-
-// Get the tags for this entry
-$tagging = new PMF_Tags();
 
 // Build Digg it! URL
 $diggItUrl = sprintf('%s?cat=%s&amp;id=%d&amp;lang=%s&amp;title=%s',
@@ -262,10 +262,6 @@ if ($maxVisits - $minVisits > 0) {
     $percentage = 100*($currVisits - $minVisits)/($maxVisits - $minVisits);
 }
 $faqPopularity = $currVisits.'/'.(int)$percentage.'%';
-
-// Get the related records for this entry
-$relevant  = new PMF_Relation();
-$faqrating = new PMF_Rating();
 
 $translationForm = '';
 if (count($arrLanguage) < count(getAvailableLanguages())) {
