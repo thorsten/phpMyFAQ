@@ -6,8 +6,8 @@
  * @subpackage Administraion
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since      2003-02-26
- * @copyright  2003-2009 phpMyFAQ Team
  * @version    SVN: $Id$
+ * @copyright  2003-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -136,7 +136,9 @@ header("Vary: Negotiate,Accept");
         case 'deleteglossary':
         case 'addglossary':
         case 'editglossary':
-        case 'news':
+        case 'addnews':
+        case 'editnews':
+        case 'delnews':
         case 'question':
         case 'comments':
             $secLevelHeader   = $PMF_LANG['admin_mainmenu_content'];
