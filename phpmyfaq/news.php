@@ -92,7 +92,7 @@ $tpl->processTemplate ("writeContent", array(
     'writeHeader'               => $header,
     'writeContent'              => $content,
     'writeDateMsg'              => ($news['active'] && (!$expired)) ? $PMF_LANG['msgLastUpdateArticle'].'<span id="newsLastUpd">'.$news['date'].'</span>' : '',
-    'writeAuthor'               => ($news['active'] && (!$expired)) ? $PMF_LANG['msgAuthor'].$news['authorName'] : '',
+    'writeAuthor'               => ($news['active'] && (!$expired)) ? $PMF_LANG['msgAuthor'] . ': ' . $news['authorName'] : '',
     'editThisEntry'             => $editThisEntry,
     'writeCommentMsg'           => $commentMessage,
     'msgWriteComment'           => $PMF_LANG['newsWriteComment'],

@@ -287,7 +287,7 @@ $tpl->processTemplate ("writeContent", array(
     'writePopularity'               => $faqPopularity,
     'writeDateMsg'                  => $PMF_LANG['msgLastUpdateArticle'].$faq->faqRecord['date'],
     'writeRevision'                 => $PMF_LANG['ad_entry_revision'].': 1.'.$faq->faqRecord['revision_id'],
-    'writeAuthor'                   => $PMF_LANG['msgAuthor'].$faq->faqRecord['author'],
+    'writeAuthor'                   => $PMF_LANG['msgAuthor'] . ': ' . $faq->faqRecord['author'],
     'editThisEntry'                 => $editThisEntry,
     'writeDiggMsgTag'               => 'Digg it!',
     'link_digg'                     => sprintf('http://digg.com/submit?phase=2&amp;url=%s', urlencode($diggItUrl)),
