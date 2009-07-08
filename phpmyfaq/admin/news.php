@@ -183,7 +183,7 @@ if ('addnews' == $action && $permission["addnews"]) {
     $dateStart = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING, '00000000000000');
     $dateEnd   = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING, '99991231235959');
     $header    = PMF_Filter::filterInput(INPUT_POST, 'header', FILTER_SANITIZE_STRIPPED);
-    $content   = PMF_Filter::filterInput(INPUT_POST, 'content', FILTER_SANITIZE_STRIPPED);
+    $content   = PMF_Filter::filterInput(INPUT_POST, 'content', FILTER_SANITIZE_SPECIAL_CHARS);
     $author    = PMF_Filter::filterInput(INPUT_POST, 'authorName', FILTER_SANITIZE_STRIPPED);
     $email     = PMF_Filter::filterInput(INPUT_POST, 'authorEmail', FILTER_VALIDATE_EMAIL);
     $active    = PMF_Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_STRING);
@@ -195,7 +195,7 @@ if ('addnews' == $action && $permission["addnews"]) {
     $newsData = array(
         'lang'          => $LANGCODE,
         'header'        => $header,
-        'content'       => $content,
+        'content'       => html_entity_decode($content),
         'authorName'    => $author,
         'authorEmail'   => $email,
         'active'        => (is_null($active)) ? 'n' : 'y',
@@ -217,7 +217,7 @@ if ('addnews' == $action && $permission["addnews"]) {
     $dateStart = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING, '00000000000000');
     $dateEnd   = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING, '99991231235959');
     $header    = PMF_Filter::filterInput(INPUT_POST, 'header', FILTER_SANITIZE_STRIPPED);
-    $content   = PMF_Filter::filterInput(INPUT_POST, 'content', FILTER_SANITIZE_STRIPPED);
+    $content   = PMF_Filter::filterInput(INPUT_POST, 'content', FILTER_SANITIZE_SPECIAL_CHARS);
     $author    = PMF_Filter::filterInput(INPUT_POST, 'authorName', FILTER_SANITIZE_STRIPPED);
     $email     = PMF_Filter::filterInput(INPUT_POST, 'authorEmail', FILTER_VALIDATE_EMAIL);
     $active    = PMF_Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_STRING);
@@ -229,7 +229,7 @@ if ('addnews' == $action && $permission["addnews"]) {
     $newsData = array(
         'lang'          => $LANGCODE,
         'header'        => $header,
-        'content'       => $content,
+        'content'       => html_entity_decode($content),
         'authorName'    => $author,
         'authorEmail'   => $email,
         'active'        => (is_null($active)) ? 'n' : 'y',
