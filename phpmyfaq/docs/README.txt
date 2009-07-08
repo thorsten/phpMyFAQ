@@ -44,6 +44,7 @@ Version 2.5.0-RC3 - 2009-07-
 - added jQuery 1.3 as replacement for Prototype/Script.aculo.us (Thorsten)
 - added configurable attachment directory (Anatoliy Belsky)
 - added approval permission for FAQs (Anatoliy Belsky)
+- added Hindi translation (Sumeet Raj Aggarwal)
 - improved user administration frontend (Sarah Hermann)
 - improved performance (Thorsten)
 - improved language files (Anatoliy Belsky, Thorsten)
