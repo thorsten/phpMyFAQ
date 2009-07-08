@@ -8,8 +8,8 @@
  * @author     A. Neufang <B_A_F_F@gmx.de>
  * @author     René-Roger Ziesack <rr-phpmyfaq.de@inf99.de>
  * @since      2004-02-19
- * @copyright  2004-2009 phpMyFAQ Team
  * @version    SVN: $Id$
+ * @copyright  2004-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -922,6 +922,41 @@ $PMF_LANG['msgChooseLanguageToTranslate'] = 'Bitte wählen Sie die zu übersetzend
 $PMF_LANG['msgLangDirIsntWritable'] = 'Das Verzeichnis mit den Übersetzungen ist nicht beschreibbar';
 $PMF_LANG['ad_menu_translations'] = 'Übersetzung';
 $PMF_LANG['ad_start_notactive'] = 'Wartend auf Freischaltung';
+
+// added 2.5.0-RC - 2009-05-20 by Anatoliy
+$PMF_LANG['msgTransToolAddNewTranslation'] = 'Neue Übersetzung hinzufügen';
+$PMF_LANG['msgTransToolLanguage'] = 'Sprache';
+$PMF_LANG['msgTransToolActions'] = 'Aktionen';
+$PMF_LANG['msgTransToolWritable'] = 'Beschreibbar';
+$PMF_LANG['msgEdit'] = 'Bearbeiten';
+$PMF_LANG['msgDelete'] = 'Löschen';
+$PMF_LANG['msgYes'] = 'ja';
+$PMF_LANG['msgNo'] = 'nnein';
+$PMF_LANG['msgTransToolSureDeleteFile'] = 'Wollen Sie diese Sprachdatei wirklich löschen?';
+$PMF_LANG['msgTransToolFileRemoved'] = 'Sprachdatei erfolgreich gelöscht';
+$PMF_LANG['msgTransToolErrorRemovingFile'] = 'Fehler beim Löschen der Sprachdatei';
+$PMF_LANG['msgVariable'] = 'Variable';
+$PMF_LANG['msgCancel'] = 'Abbrechen';
+$PMF_LANG['msgSave'] = 'Speichern';
+$PMF_LANG['msgSaving3Dots'] = 'speichern ...';
+$PMF_LANG['msgRemoving3Dots'] = 'löschen ...';
+$PMF_LANG['msgTransToolFileSaved'] = 'Sprachdatei erfolgreich gespeichert';
+$PMF_LANG['msgTransToolErrorSavingFile'] = 'Fehler beim Speichern der Sprachdatei';
+$PMF_LANG['msgLanguage'] = 'Sprache';
+$PMF_LANG['msgTransToolLanguageCharset'] = 'Zeichensatz';
+$PMF_LANG['msgTransToolLanguageDir'] = 'Schriftrichtung';
+$PMF_LANG['msgTransToolLanguageDesc'] = 'Sprachbeschreibung';
+$PMF_LANG['msgAuthor'] = 'Autor';
+$PMF_LANG['msgTransToolAddAuthor'] = 'Autor hinzufügen';
+$PMF_LANG['msgTransToolCreateTranslation'] = 'Neue Übersetzung hinzufügen';
+$PMF_LANG['msgTransToolTransCreated'] = 'Neue Übersetzung erfolgreich erstellt.';
+$PMF_LANG['msgTransToolCouldntCreateTrans'] = 'Neue Übersetzung konnte nicht erstellt werden.';
+$PMF_LANG['msgAdding3Dots'] = 'hinzufügen ...';
+$PMF_LANG['msgTransToolSendToTeam'] = 'An das phpMyFAQ Team senden';
+$PMF_LANG['msgSending3Dots'] = 'versende ...';
+$PMF_LANG['msgTransToolFileSent'] = 'Die Sprachdatei wurde erfolgreich an das phpMyFAQ Team gesendet. Vielen Dank dafür!';
+$PMF_LANG['msgTransToolErrorSendingFile'] = 'Beim Versenden der Sprachdatei ist ein Fehler aufgetreten.';
+$PMF_LANG['msgTransToolPercent'] = 'Vollständigkeit';
 
 // added 2.5.0-RC3 - 2009-06-23 by Anatoliy
 $LANG_CONF['main.attachmentsPath'] = array(0 => "input", 1 => "Pfad zum Speichern der Anhänge.<br /><small>Relativer Pfad wird ab Webroot gesucht</small>");
