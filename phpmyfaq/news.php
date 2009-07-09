@@ -27,6 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 $captcha = new PMF_Captcha($sids);
+$comment = new PMF_Comment();
 
 if (!is_null($showCaptcha)) {
     $captcha->showCaptchaImg();
@@ -107,6 +108,6 @@ $tpl->processTemplate ("writeContent", array(
     'msgYourComment'            => $PMF_LANG['msgYourComment'],
     'msgNewContentSubmit'       => $PMF_LANG['msgNewContentSubmit'],
     'captchaFieldset'           => printCaptchaFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('writecomment'), $captcha->caplength),
-    'writeComments'             => $oNews->getComments($news_id)));
+    'writeComments'             => $comment->getComments($news_id, PMF_Comment::COMMENT_TYPE_NEWS)));
 
 $tpl->includeTemplate('writeContent', 'index');

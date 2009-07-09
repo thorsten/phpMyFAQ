@@ -1524,21 +1524,6 @@ class PMF_Faq
     }
     
     /**
-     * Returns all user comments from a FAQ record
-     *
-     * @param   integer     record id
-     * @return  string
-     * @access  public
-     * @since   2002-08-29
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     */
-    function getComments($id)
-    {
-        $oComment = new PMF_Comment();
-        return $oComment->getComments($id, PMF_Comment::COMMENT_TYPE_FAQ);
-    }
-
-    /**
      * Adds a comment
      *
      * @param   array       $commentData

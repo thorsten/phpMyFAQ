@@ -32,6 +32,7 @@ $oLnk      = new PMF_Linkverifier();
 $tagging   = new PMF_Tags();
 $relevant  = new PMF_Relation();
 $faqrating = new PMF_Rating();
+$comment   = new PMF_Comment();
 
 if (!is_null($showCaptcha)) {
     $captcha->showCaptchaImg();
@@ -320,7 +321,6 @@ $tpl->processTemplate ("writeContent", array(
     'msgYourComment'                => $PMF_LANG['msgYourComment'],
     'msgNewContentSubmit'           => $PMF_LANG['msgNewContentSubmit'],
     'captchaFieldset'               => printCaptchaFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('writecomment'), $captcha->caplength),
-    'writeComments'                 => $faq->getComments($record_id))
-    );
+    'writeComments'                 => $comment->getComments($record_id, PMF_Comment::COMMENT_TYPE_FAQ)));
 
 $tpl->includeTemplate('writeContent', 'index');
