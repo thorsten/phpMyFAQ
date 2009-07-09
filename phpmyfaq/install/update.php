@@ -224,7 +224,7 @@ if ($step == 1) {
     <li>phpMyFAQ 1.4.x</li>
     <li>phpMyFAQ 1.5.x</li>
 </ul>
-<p><strong>Please make a full backup of your SQL tables before running this update.</strong></p>
+<p><strong>Please make a full backup of your database before running this update.</strong></p>
 
 <p>Please select your current version:</p>
 <select name="version" size="1">
@@ -238,6 +238,7 @@ if ($step == 1) {
     <option value="2.5.0-alpha2">phpMyFAQ 2.5.0-alpha2</option>
     <option value="2.5.0-beta">phpMyFAQ 2.5.0-beta</option>
     <option value="2.5.0-RC">phpMyFAQ 2.5.0-RC and later</option>
+    <option value="2.5.0-RC3">phpMyFAQ 2.5.0-RC3 and later</option>
 </select>
 
 <p class="center"><input type="submit" value="Go to step 2 of 4" class="button" /></p>
@@ -1362,7 +1363,7 @@ if ($step == 4) {
     
     // Perform the queries for updating/migrating the database from 2.x
     if (isset($query)) {
-        @ob_flush();
+        ob_flush();
         flush();
         $count = 0;
         foreach ($query as $current_query) {
@@ -1379,11 +1380,11 @@ if ($step == 4) {
             wait(25);
             $count++;
             if (!($count % 10)) {
-                @ob_flush();
+                ob_flush();
                 flush();
             }
         }
-        @ob_flush();
+        ob_flush();
         flush();
     }
 
@@ -1398,7 +1399,7 @@ if ($step == 4) {
     }
 
     // optimize tables
-    switch($DB["type"]) {
+    switch ($DB["type"]) {
         case 'mssql':
         case 'sybase':
             // Get all table names
