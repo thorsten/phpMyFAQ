@@ -6,8 +6,8 @@
  * @subpackage PMF_Comment
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since      2006-07-23
- * @copyright  2006-2009 phpMyFAQ Team
  * @version    SVN: $Id$
+ * @copyright  2006-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -95,26 +95,26 @@ class PMF_Comment
     {
         $item = array();
 
-        $query = sprintf(
-                    "SELECT
-                        id_comment, id, type, usr, email, comment, datum
-                    FROM
-                        %sfaqcomments
-                    WHERE
-                        id_comment = %d",
-                    SQLPREFIX,
-                    $id);
+        $query = sprintf("
+            SELECT
+                id_comment, id, type, usr, email, comment, datum
+            FROM
+                %sfaqcomments
+            WHERE
+                id_comment = %d",
+            SQLPREFIX,
+            $id);
 
         $result = $this->db->query($query);
         if (($this->db->num_rows($result) > 0) && ($row = $this->db->fetch_object($result))) {
             $item = array(
-                    'id'        => $row->id_comment,
-                    'recordId'  => $row->id,
-                    'type'      => $row->type,
-                    'content'   => $row->comment,
-                    'date'      => $row->datum,
-                    'user'      => $row->usr,
-                    'email'     => $row->email);
+                'id'       => $row->id_comment,
+                'recordId' => $row->id,
+                'type'     => $row->type,
+                'content'  => $row->comment,
+                'date'     => $row->datum,
+                'user'     => $row->usr,
+                'email'    => $row->email);
         }
 
         return $item;
@@ -131,29 +131,28 @@ class PMF_Comment
     {
         $comments = array();
 
-        $query = sprintf(
-                    "SELECT
-                        id_comment, usr, email, comment, datum
-                    FROM
-                        %sfaqcomments
-                    WHERE
-                        type = '%s'
-                        AND id = %d",
-                    SQLPREFIX,
-                    $type,
-                    $id);
-
+        $query = sprintf("
+            SELECT
+                id_comment, usr, email, comment, datum
+            FROM
+                %sfaqcomments
+            WHERE
+                type = '%s'
+            AND 
+                id = %d",
+            SQLPREFIX,
+            $type,
+            $id);
 
         $result = $this->db->query($query);
         if ($this->db->num_rows($result) > 0) {
             while ($row = $this->db->fetch_object($result)) {
                 $item = array(
-                        'id'        => $row->id_comment,
-                        'content'   => $row->comment,
-                        'date'      => $row->datum,
-                        'user'      => $row->usr,
-                        'email'     => $row->email
-                        );
+                    'id'      => $row->id_comment,
+                    'content' => $row->comment,
+                    'date'    => $row->datum,
+                    'user'    => $row->usr,
+                    'email'   => $row->email);
                 $comments[] = $item;
             }
         }
@@ -176,11 +175,11 @@ class PMF_Comment
         foreach ($comments as $item) {
             $output .= '<p class="comment">';
             $output .= sprintf('<strong>%s<a href="mailto:%s">%s</a>:</strong><br />%s<br />%s</p>',
-                                $this->pmf_lang['msgCommentBy'],
-                                safeEmail($item['email']),
-                                $item['user'],
-                                $item['content'],
-                                $this->pmf_lang['newsCommentDate'].makeCommentDate($item['date']));
+                $this->pmf_lang['msgCommentBy'],
+                safeEmail($item['email']),
+                $item['user'],
+                $item['content'],
+                $this->pmf_lang['newsCommentDate'].makeCommentDate($item['date']));
         }
 
         return $output;
@@ -194,24 +193,20 @@ class PMF_Comment
      */
     function addComment(Array $commentData)
     {
-        if (!is_array($commentData)) {
-            return false;
-        }
-
-        $query = sprintf(
-                    "INSERT INTO
-                        %sfaqcomments
-                    VALUES
-                        (%d, %d, '%s', '%s', '%s', '%s', %d, '%s')",
-                    SQLPREFIX,
-                    $this->db->nextID(SQLPREFIX.'faqcomments', 'id_comment'),
-                    $commentData['record_id'],
-                    $commentData['type'],
-                    $commentData['username'],
-                    $commentData['usermail'],
-                    $commentData['comment'],
-                    $commentData['date'],
-                    $commentData['helped']);
+        $query = sprintf("
+            INSERT INTO
+                %sfaqcomments
+            VALUES
+                (%d, %d, '%s', '%s', '%s', '%s', %d, '%s')",
+            SQLPREFIX,
+            $this->db->nextID(SQLPREFIX.'faqcomments', 'id_comment'),
+            $commentData['record_id'],
+            $commentData['type'],
+            $commentData['username'],
+            $commentData['usermail'],
+            $commentData['comment'],
+            $commentData['date'],
+            $commentData['helped']);
 
         if (!$this->db->query($query)) {
             return false;
@@ -233,13 +228,13 @@ class PMF_Comment
             return false;
         }
 
-        $query = sprintf(
-            'DELETE FROM
+        $query = sprintf("
+            DELETE FROM
                 %sfaqcomments
             WHERE
                 id = %d
             AND
-                id_comment = %d',
+                id_comment = %d",
             SQLPREFIX,
             $record_id,
             $comment_id);
