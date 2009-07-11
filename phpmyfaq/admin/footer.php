@@ -120,6 +120,33 @@ function ajaxfilemanager(field_name, url, type, win)
 // --> /*]]>*/
 </script>
 <!-- /tinyMCE -->
+
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="../inc/js/syntaxhighlighter/scripts/shCore.js"></script>
+<script type="text/javascript" src="../inc/js/syntaxhighlighter/scripts/shBrushBash.js"></script>
+<script type="text/javascript" src="../inc/js/syntaxhighlighter/scripts/shBrushCpp.js"></script>
+<script type="text/javascript" src="../inc/js/syntaxhighlighter/scripts/shBrushCSharp.js"></script>
+<script type="text/javascript" src="../inc/js/syntaxhighlighter/scripts/shBrushCss.js"></script>
+<script type="text/javascript" src="../inc/js/syntaxhighlighter/scripts/shBrushDelphi.js"></script>
+<script type="text/javascript" src="../inc/js/syntaxhighlighter/scripts/shBrushDiff.js"></script>
+<script type="text/javascript" src="../inc/js/syntaxhighlighter/scripts/shBrushGroovy.js"></script>
+<script type="text/javascript" src="../inc/js/syntaxhighlighter/scripts/shBrushJava.js"></script>
+<script type="text/javascript" src="../inc/js/syntaxhighlighter/scripts/shBrushJScript.js"></script>
+<script type="text/javascript" src="../inc/js/syntaxhighlighter/scripts/shBrushPhp.js"></script>
+<script type="text/javascript" src="../inc/js/syntaxhighlighter/scripts/shBrushPlain.js"></script>
+<script type="text/javascript" src="../inc/js/syntaxhighlighter/scripts/shBrushPython.js"></script>
+<script type="text/javascript" src="../inc/js/syntaxhighlighter/scripts/shBrushRuby.js"></script>
+<script type="text/javascript" src="../inc/js/syntaxhighlighter/scripts/shBrushScala.js"></script>
+<script type="text/javascript" src="../inc/js/syntaxhighlighter/scripts/shBrushSql.js"></script>
+<script type="text/javascript" src="../inc/js/syntaxhighlighter/scripts/shBrushVb.js"></script>
+<script type="text/javascript" src="../inc/js/syntaxhighlighter/scripts/shBrushXml.js"></script>
+<link type="text/css" rel="stylesheet" href="../inc/js/syntaxhighlighter/styles/shCore.css"/>
+<link type="text/css" rel="stylesheet" href="../inc/js/syntaxhighlighter/styles/shThemeDefault.css"/>
+<script type="text/javascript">
+    SyntaxHighlighter.config.clipboardSwf = '../inc/js/syntaxhighlighter/scripts/clipboard.swf';
+    SyntaxHighlighter.all();
+</script>
+<!-- /SyntaxHighlighter -->
 <?php
         }
     }
