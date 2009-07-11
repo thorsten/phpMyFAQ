@@ -55,6 +55,8 @@
 					ed.getDoc().execCommand("CreateLink", false, v);
 			});
 
+/*
+			// WebKit generates spans out of thin air this patch used to remove them but it will also remove styles we want so it's disabled for now
 			ed.onPaste.add(function(ed, e) {
 				function removeStyles(e) {
 					e = e.target;
@@ -74,7 +76,7 @@
 					Event.remove(ed.getDoc(), 'DOMNodeInserted', removeStyles);
 				}, 0);
 			});
-
+*/
 			ed.onKeyUp.add(function(ed, e) {
 				var h, b, r, n, s;
 
@@ -116,6 +118,14 @@
 				ed.selection.select(ed.dom.get('_mce_tmp'));
 				ed.getDoc().execCommand("Delete", false, ' ');
 			});
+	
+	/*		ed.onKeyDown.add(function(ed, e) {
+				// Ctrl+A select all will fail on WebKit since if you paste the contents you selected it will produce a odd div wrapper
+				if ((e.ctrlKey || e.metaKey) && e.keyCode == 65) {
+					ed.selection.select(ed.getBody(), 1);
+					return Event.cancel(e);
+				}
+			});*/
 
 			ed.onKeyPress.add(function(ed, e) {
 				var se, li, lic, r1, r2, n, sel, doc, be, af, pa;
