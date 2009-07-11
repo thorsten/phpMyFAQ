@@ -1,6 +1,6 @@
 $Id$
 
-phpMyFAQ 2.5.0-RC3
+phpMyFAQ 2.5.0
 Codename "Pandora"
 
 Installation/Update:
@@ -9,17 +9,15 @@ Please read the documentation (documentation.en.html) carefully.
 Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
-Changes since 2.5.0-RC2:
-- added configurable attachment directory (Anatoliy Belsky)
-- added approval permission for FAQs (Anatoliy Belsky)
-- added Hindi translation (Sumeet Raj Aggarwal)
+Changes since 2.5.0-RC3:
+- updated bundled TinyMCE editor component to version 3.2.5 (Thorsten)
 - minor bugfixes (Thorsten)
 
 For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.5.0-RC3 - 2009-07-08
+Version 2.5.0 - 2009-07-
 - changed PHP requirement to PHP 5.2 (Thorsten)
 - dropped support for MySQL 4.0 and MaxDB (Thorsten)
 - dropped support for XML-RPC (Thorsten)
@@ -50,9 +48,19 @@ Version 2.5.0-RC3 - 2009-07-08
 - improved language files (Anatoliy Belsky, Thorsten)
 - ajaxified comment and record administration (Thorsten)
 - updated bundled Net_IDNA to version 0.6.3 (Thorsten)
-- updated bundled TinyMCE editor component to version 3.2.2.3 (Thorsten)
+- updated bundled TinyMCE editor component to version 3.2.5 (Thorsten)
 - updated bundled FPDF library to version 1.6 (Thorsten)
 - updated Turkish translation (Evren Yurtesen)
+
+Version 2.0.15 - 2009-06-02
+- fixed XSS vulnerability (Thorsten)
+
+Version 2.0.14 - 2009-05-21
+- updated Vietnamese translation (Julien Petitperrin)
+- improved tagging implementation (Thorsten)
+- fixed authentication bypass (Thorsten)
+- fixed content type for RSS feeds (Thorsten)
+- minor bugfixes (Thorsten)
 
 Version 2.0.13 - 2009-04-20
 - added new blocked words for spam protection (Kai)
