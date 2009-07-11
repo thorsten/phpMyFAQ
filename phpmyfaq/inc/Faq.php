@@ -1698,12 +1698,12 @@ class PMF_Faq
     /**
      * This function generates the Top Ten data with the mosted viewed records
      *
-     * @param   integer
-     * @param   integer
-     * @param   string
-     * @return  array
+     * @param  integer $count      Number of records
+     * @param  integer $categoryId Category ID
+     * @param  string  $language   Language
+     * @return array
      */
-    private function getTopTenData($count = PMF_NUMBER_RECORDS_TOPTEN, $categoryId = 0, $language = null)
+    public function getTopTenData($count = PMF_NUMBER_RECORDS_TOPTEN, $categoryId = 0, $language = null)
     {
         global $sids;
 
@@ -1807,11 +1807,11 @@ class PMF_Faq
      * This function generates an array with a specified number of most recent
      * published records
      *
-     * @param   integer
-     * @param   string
-     * @return  array
+     * @param  integer $count    Number of recorsd
+     * @param  string  $language Language
+     * @return array
      */
-    private function getLatestData($count = PMF_NUMBER_RECORDS_LATEST, $language = null)
+    public function getLatestData($count = PMF_NUMBER_RECORDS_LATEST, $language = null)
     {
         global $sids;
 
