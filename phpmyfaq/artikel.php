@@ -219,13 +219,9 @@ $expired = (date('YmdHis') > $faq->faqRecord['dateEnd']);
 if (($faq->faqRecord['active'] != 'yes') || ('n' == $faq->faqRecord['comment']) || $expired) {
     $commentMessage = $PMF_LANG['msgWriteNoComment'];
 } else {
-    $oLink            = new PMF_Link('?'.str_replace('&', '&amp;',$_SERVER['QUERY_STRING']));
-    $oLink->itemTitle = $thema;
-    $commentHref      = $oLink->toString().'#comment';
-    $commentMessage   = sprintf(
-        "%s<a href=\"%s\" onclick=\"javascript:$('#comment').show();\">%s</a>",
+    $commentMessage = sprintf(
+        "%s<a href=\"javascript:void(0);\" onclick=\"javascript:$('#comment').show();\">%s</a>",
         $PMF_LANG['msgYouCan'],
-        $commentHref,
         $PMF_LANG['msgWriteComment']);
 }
 
