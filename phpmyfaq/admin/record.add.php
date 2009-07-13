@@ -72,7 +72,7 @@ if ($permission['editbt']) {
             'lang'          => $record_lang,
             'active'        => $active,
             'sticky'        => (int)$sticky,
-            'thema'         => $question,
+            'thema'         => html_entity_decode($question),
             'content'       => html_entity_decode($content),
             'keywords'      => $keywords,
             'author'        => $author,
@@ -83,7 +83,7 @@ if ($permission['editbt']) {
             'dateEnd'       => (empty($dateEnd) ? '99991231235959' : str_replace('-', '', $dateEnd) . '235959'),
             'linkState'     => '',
             'linkDateCheck' => 0);
-
+        
         // Add new record and get that ID
         $record_id = $faq->addRecord($recordData);
 

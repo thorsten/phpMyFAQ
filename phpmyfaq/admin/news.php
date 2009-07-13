@@ -194,7 +194,7 @@ if ('addnews' == $action && $permission["addnews"]) {
     
     $newsData = array(
         'lang'          => $LANGCODE,
-        'header'        => $header,
+        'header'        => html_entity_decode($header),
         'content'       => html_entity_decode($content),
         'authorName'    => $author,
         'authorEmail'   => $email,
@@ -228,7 +228,7 @@ if ('addnews' == $action && $permission["addnews"]) {
     
     $newsData = array(
         'lang'          => $LANGCODE,
-        'header'        => $header,
+        'header'        => html_entity_decode($header),
         'content'       => html_entity_decode($content),
         'authorName'    => $author,
         'authorEmail'   => $email,
