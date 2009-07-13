@@ -1909,13 +1909,11 @@ class PMF_Faq
     /**
      * Reload locking for user votings
      *
-     * @param    integer    FAQ record id
-     * @param    string     IP
-     * @return   boolean
-     * @since    2003-05-15
-     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @param  integer $id FAQ record id
+     * @param  string  $ip IP
+     * @return boolean
      */
-    function votingCheck($id, $ip)
+    public function votingCheck($id, $ip)
     {
         $check = $_SERVER['REQUEST_TIME'] - 300;
         $query = sprintf(
