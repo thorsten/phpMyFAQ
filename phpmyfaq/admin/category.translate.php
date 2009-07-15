@@ -53,9 +53,15 @@ if ($permission["editcateg"]) {
     <legend><?php print $header; ?></legend>
 
         <input type="hidden" name="id" value="<?php print $id; ?>" />
-        <input type="hidden" name="parent_id" value="<?php print $category->categoryName[$id]["parent_id"]; ?>" />
+        <input type="hidden" name="parent_id" value="<?php print $category->categoryName[$id]['parent_id']; ?>" />
         <input type="hidden" name="showcat" value="<?php print $showcat; ?>" />
-
+<?php
+    $user_allowed  = $category->getPermissions('user', array($id));
+    $group_allowed = $category->getPermissions('group', array($id));
+?>
+        <input type="hidden" name="restricted_users" value="<?php print $user_allowed[0]; ?>" />
+        <input type="hidden" name="restricted_groups" value="<?php print $group_allowed[0]; ?>" />
+      
         <label class="left"><?php print $PMF_LANG["ad_categ_titel"]; ?>:</label>
         <input type="text" name="name" size="30" style="width: 250px;" value="" /><br />
 

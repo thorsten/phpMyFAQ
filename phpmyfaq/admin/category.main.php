@@ -89,9 +89,7 @@ if ($permission['editcateg']) {
         $group_allowed  = ('all' == $groupperm) ? -1 : (int)$_POST['restricted_groups'];
 
         if (!$category->checkLanguage($category_data['id'], $category_data['lang'])) {
-            if ($category->addCategory($category_data, $parent_id, $category_data['id']) &&
-                $category->addPermission('user', array($category_data['id']), $user_allowed) &&
-                $category->addPermission('group', array($category_data['id']), $group_allowed)) {
+            if ($category->addCategory($category_data, $parent_id, $category_data['id'])) {
                 printf('<p class="message">%s</p>', $PMF_LANG['ad_categ_translated']);
             } else {
                 printf('<p class="error">%s</p>', $db->error());
