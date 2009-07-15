@@ -4,10 +4,12 @@ CHANGED FILES FROM 2.0.15 -> 2.0.16
 
 ./admin/category.add.php
 ./admin/category.main.php
+./admin/category.translate.php
 ./admin/record.delquestion.php
 ./inc/Faq.php
 ./install/installer.php
 ./install/update.php
+./lang/language_fr.php
 
 
 
