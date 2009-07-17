@@ -125,7 +125,7 @@ if ($permission['editbt']) {
             'lang'          => $record_lang,
             'revision_id'   => $revision_id,
             'active'        => $active,
-            'sticky'        => (int)$sticky,
+            'sticky'        => (!is_null($sticky) ? 1 : 0),
             'thema'         => html_entity_decode($question),
             'content'       => html_entity_decode($content),
             'keywords'      => $keywords,
