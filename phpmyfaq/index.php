@@ -532,9 +532,7 @@ $tpl->includeTemplate('rightBox', 'index');
 // Include requested PHP file
 //
 require_once $inc_php;
-if ('xml' != $action) {
-    $tpl->printTemplate();
-}
+$tpl->printTemplate();
 
 //
 // Disconnect from database
