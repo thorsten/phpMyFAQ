@@ -156,6 +156,9 @@ installation script.
 %changelog
 
 %changelog
+* Tue Jul 21 2009 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.5.1-1
+- New upstream version 2.5.1.
+
 * Sat Jul 11 2009 Thorsten Rinne <thorsten@phpmyfaq.de> - 2.5.0-1
 - New upstream version 2.5.0.
 

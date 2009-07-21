@@ -1,3 +1,4 @@
-CHANGED FILES FROM 2.0.x -> 2.5.0
+CHANGED FILES FROM 2.5.0 -> 2.5.1
 
-n/a
+./install/installer.php
+./install/update.php
