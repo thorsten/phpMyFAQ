@@ -199,7 +199,11 @@ if (version_compare(PHP_VERSION, '4.3.3', '<')) {
     die();
 }
 if (version_compare(PHP_VERSION, '5.2.0', '<')) {
-    print "<p class=\"center\">You're using an unsupported version of PHP! You should upgrade to PHP 5.2!</p>\n";
+    print "<p class=\"center\">You're using an unsupported version of PHP! You should upgrade to PHP 5.2 or later!</p>\n";
+}
+if (version_compare(PHP_VERSION, '5.2.0', '>=')) {
+    print "<p class=\"center\">You're using PHP " . PHP_VERSION . "! ";
+    print "You should consider an upgrade to <a href=\"http://www.phpmyfaq.de/\">phpMyFAQ 2.5</a>!</p>\n";
 }
 
 require_once PMF_ROOT_DIR.'/inc/data.php';
