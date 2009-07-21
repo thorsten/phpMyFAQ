@@ -157,7 +157,7 @@ if ($num > 1) {
     $switchLanguage .= "<fieldset>\n";
     $switchLanguage .= "<legend>".$PMF_LANG["msgLangaugeSubmit"]."</legend>\n";
     $switchLanguage .= "<form action=\"".$changeLanguagePath."\" method=\"post\" style=\"display: inline;\">\n";
-    $switchLanguage .= "<select name=\"artlang\" size=\"1\">\n";
+    $switchLanguage .= "<select name=\"language\" size=\"1\">\n";
     $switchLanguage .= $check4Lang;
     $switchLanguage .= "</select>\n";
     $switchLanguage .= "&nbsp;\n";
