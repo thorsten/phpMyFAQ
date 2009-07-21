@@ -38,9 +38,14 @@
 # License for the specific language governing rights and limitations
 # under the License.
 
+# SVN Branch
+if [ "x${SVN_BRANCH}" = "x" ]; then
+    SVN_BRANCH="PMF_2_5"
+fi
+
 # PMF Version
 if [ "x${PMF_VERSION}" = "x" ]; then
-	PMF_VERSION="2.5.0"
+	PMF_VERSION="2.5.1"
 fi
 
 # Build folder
@@ -55,7 +60,7 @@ fi
 
 # Repository path
 if [ "x${PMF_REPOSITORY}" = "x" ]; then
-	PMF_REPOSITORY='svn+ssh://anonymous@thinkforge.org/svnroot/phpmyfaq/trunk/phpmyfaq'
+	PMF_REPOSITORY='svn+ssh://anonymous@thinkforge.org/svnroot/phpmyfaq/branches/'${SVN_BRANCH}'/phpmyfaq'
 fi
 
 ( # Prepare the package building environment
