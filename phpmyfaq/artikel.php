@@ -140,7 +140,7 @@ if (isset($oLnk->urlpool['href'])) {
     }
 }
 
-$content = str_replace('href="#','href="index.php?action=artikel&lang='.$LANGCODE.'&id='.$record_id.'#', $fixedContent);
+$content = str_replace('href="#', 'href="index.php?action=artikel&lang='.$LANGCODE.'&id='.$record_id.'#', $content);
 
 // Check for the languages for a faq
 $arrLanguage    = PMF_Utils::languageAvailable($record_id);
