@@ -373,7 +373,7 @@ class PMF_Faq
             AND
                 %s
             ORDER BY
-                %s.sticky DESC, %s.%s %s",
+                fd.sticky DESC, %s.%s %s",
             SQLPREFIX,
             SQLPREFIX,
             SQLPREFIX,
@@ -385,13 +385,12 @@ class PMF_Faq
             $this->language,
             $permPart,
             $current_table,
-            $current_table,
             $this->db->escape_string($orderby),
             $this->db->escape_string($sortby));
 
         $result = $this->db->query($query);
 
-        $num = $this->db->num_rows($result);
+        $num   = $this->db->num_rows($result);
         $pages = ceil($num / $faqconfig->get("main.numberOfRecordsPerPage"));
 
         if ($page == 1) {
