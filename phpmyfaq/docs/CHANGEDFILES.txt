@@ -1,4 +1,6 @@
 CHANGED FILES FROM 2.5.0 -> 2.5.1
 
+./inc/Faq.php
 ./install/installer.php
 ./install/update.php
+./show.php
