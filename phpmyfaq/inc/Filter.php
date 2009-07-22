@@ -45,7 +45,7 @@ class PMF_Filter
 	{
 		$return = filter_input($type, $variable_name, $filter);
 		
-		return is_null($return) ? $default : $return;
+		return (is_null($return) || $return === false) ? $default : $return;
 	}
 	
 	/**
