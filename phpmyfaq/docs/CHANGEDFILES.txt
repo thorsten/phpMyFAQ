@@ -1,5 +1,6 @@
 CHANGED FILES FROM 2.5.0 -> 2.5.1
 
+./inc/record.save.php
 ./inc/Faq.php
 ./inc/Filter.php
 ./install/installer.php
