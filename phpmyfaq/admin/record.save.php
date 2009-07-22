@@ -179,6 +179,23 @@ if ($permission['editbt']) {
             $category->deletePermission('group', $categories['rubrik']);
             $category->addPermission('group', $categories['rubrik'], $restricted_groups);
         }
+    } elseif (isset($submit['submit'][0])) {
+    
+        adminlog('Beitragdel, ' . $record_id);
+
+        $path = PMF_ROOT_DIR . '/attachments/' . $record_id . '/';
+        if (@is_dir($path)) {
+            $do = dir($path);
+            while ($dat = $do->read()) {
+                if ($dat != "." && $dat != "..") {
+                    unlink($path . $dat);
+                }
+            }
+            rmdir($path);
+        }
+    
+        $faq->deleteRecord($record_id, $record_lang);
+        print $PMF_LANG['ad_entry_delsuc'];
     }
 } else {
     print $PMF_LANG['err_NotAuth'];
