@@ -1921,7 +1921,7 @@ class PMF_Faq
             FROM
                 %sfaqvoting
             WHERE
-                artikel = %d AND (ip = '%s' AND datum > %d)",
+                artikel = %d AND (ip = '%s' AND datum > '%s')",
             SQLPREFIX,
             $id,
             $ip,
