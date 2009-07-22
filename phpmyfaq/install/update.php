@@ -238,7 +238,8 @@ if ($step == 1) {
     <option value="2.5.0-alpha2">phpMyFAQ 2.5.0-alpha2</option>
     <option value="2.5.0-beta">phpMyFAQ 2.5.0-beta</option>
     <option value="2.5.0-RC">phpMyFAQ 2.5.0-RC and later</option>
-    <option value="2.5.0-RC3">phpMyFAQ 2.5.0-RC3 and later</option>
+    <option value="2.5.0-RC3">phpMyFAQ 2.5.0-RC3</option>
+    <option value="2.5.0">phpMyFAQ 2.5.0 and later</option>
 </select>
 
 <p class="center"><input type="submit" value="Go to step 2 of 4" class="button" /></p>
