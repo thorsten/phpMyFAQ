@@ -37,7 +37,7 @@ if ($archived) {
     $writeNewsRSS     = '';
     $showAllNews      = sprintf('<a href="?%s">%s</a>', $sids, $PMF_LANG['newsShowCurrent']);
 } else {
-    $writeNewsHeader .= $PMF_LANG['msgNews'];
+    $writeNewsHeader .= ' ' . $PMF_LANG['msgNews'];
     $writeNewsRSS     = '&nbsp;<a href="feed/news/rss.php" target="_blank">' . 
                         '<img id="newsRSS" src="images/feed.png" width="16" height="16" alt="RSS" /></a>';
     $showAllNews      = sprintf('<a href="?%snewsid=0">%s</a>', $sids, $PMF_LANG['newsShowArchive']);
