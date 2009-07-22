@@ -373,7 +373,7 @@ class PMF_Faq
             AND
                 %s
             ORDER BY
-                %s.sticky DESC, %s.%s %s",
+                fd.sticky DESC, %s.%s %s",
             SQLPREFIX,
             SQLPREFIX,
             SQLPREFIX,
@@ -384,7 +384,6 @@ class PMF_Faq
             $category_id,
             $this->language,
             $permPart,
-            $current_table,
             $current_table,
             $this->db->escape_string($orderby),
             $this->db->escape_string($sortby));
