@@ -22,7 +22,7 @@
  * under the License.
  */
 
-define('NEWVERSION', '2.6.0-dev');
+define('NEWVERSION', '2.6.0-alpha');
 define('COPYRIGHT', '&copy; 2001-2009 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 
@@ -167,6 +167,9 @@ $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
     
 /**************************** STEP 1 OF 4 ***************************/
 if ($step == 1) {
+    
+    $faqconfig = PMF_Configuration::getInstance();
+    $version   = $faqconfig->get('main.currentVersion');
 ?>
 <form action="update.php?step=2" method="post">
 <fieldset class="installation">
@@ -181,18 +184,10 @@ if ($step == 1) {
     <li>phpMyFAQ 0.x</li>
     <li>phpMyFAQ 1.x</li>
 </ul>
-<p><strong>Please make a full backup of your database before running this update.</strong></p>
+<p><strong>Please make a full backup of your SQL tables before running this update.</strong></p>
 
-<p>Please select your current version:</p>
-<select name="version" size="1">
-    <option value="2.0.0">phpMyFAQ 2.0.0 and later</option>
-    <option value="2.0.2">phpMyFAQ 2.0.2 and later</option>
-    <option value="2.5.0-alpha">phpMyFAQ 2.5.0-alpha</option>
-    <option value="2.5.0-alpha2">phpMyFAQ 2.5.0-alpha2</option>
-    <option value="2.5.0-beta">phpMyFAQ 2.5.0-beta</option>
-    <option value="2.5.0-RC">phpMyFAQ 2.5.0-RC and later</option>
-    <option value="2.5.0-RC3">phpMyFAQ 2.5.0-RC3 and later</option>
-</select>
+<h3 align="center">Your current phpMyFAQ version: <?php print $version; ?></p>
+<input name="version" type="hidden" value="<?php print $version; ?>"/>
 
 <p class="center"><input type="submit" value="Go to step 2 of 4" class="button" /></p>
 </fieldset>
@@ -419,6 +414,28 @@ if ($step == 4) {
         $query[] = "INSERT INTO ".SQLPREFIX."faquser_right (user_id, right_id) VALUES (1, 33)";
         
         $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.attachmentsPath', 'attachments')";
+    }
+    
+    //
+    // UPDATES FROM 2.6.0-alpha
+    //
+    if (version_compare($version, '2.6.0-alpha', '<')) {
+        
+        switch($DB['type']) {
+
+            case 'mysql':
+                include 'mysql.utf8migration.php';
+                break;
+                
+            case 'mysqli':
+                include 'mysqli.utf8migration.php';
+                break;
+                
+            default:
+                print '<p>Please read <a target="_blank" href="../docs/documentation.en.html">documenation</a> about migration to UTF-8.</p>';
+                break; 
+        }
+        
     }
     
     // Perform the queries for updating/migrating the database from 2.x
