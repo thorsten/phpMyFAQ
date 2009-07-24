@@ -20,7 +20,7 @@
  * under the License.
  */
 
-$PMF_LANG["metaCharset"] = "windows-1251";
+$PMF_LANG["metaCharset"] = "UTF-8";
 $PMF_LANG["metaLanguage"] = "uk";
 $PMF_LANG["language"] = "Ukranian";
 // ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
@@ -29,218 +29,218 @@ $PMF_LANG["dir"] = "ltr";
 // ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
 
 // Navigation
-$PMF_LANG["msgCategory"] = "Розділи";
-$PMF_LANG["msgShowAllCategories"] = "Показати всі розділи";
-$PMF_LANG["msgSearch"] = "Пошук";
-$PMF_LANG["msgAddContent"] = "Опублікувати відповідь";
-$PMF_LANG["msgQuestion"] = "Поставити питання";
-$PMF_LANG["msgOpenQuestions"] = "Відкриті питання";
-$PMF_LANG["msgHelp"] = "Допомога";
-$PMF_LANG["msgContact"] = "Адміністрація";
-$PMF_LANG["msgHome"] = "Зміст";
-$PMF_LANG["msgNews"] = "Новини розділу";
-$PMF_LANG["msgUserOnline"] = " - активних користувачів";
-$PMF_LANG["msgXMLExport"] = "XML-файл";
-$PMF_LANG["msgBack2Home"] = "повернутися назад";
+$PMF_LANG["msgCategory"] = "Р РѕР·РґС–Р»Рё";
+$PMF_LANG["msgShowAllCategories"] = "РџРѕРєР°Р·Р°С‚Рё РІСЃС– СЂРѕР·РґС–Р»Рё";
+$PMF_LANG["msgSearch"] = "РџРѕС€СѓРє";
+$PMF_LANG["msgAddContent"] = "РћРїСѓР±Р»С–РєСѓРІР°С‚Рё РІС–РґРїРѕРІС–РґСЊ";
+$PMF_LANG["msgQuestion"] = "РџРѕСЃС‚Р°РІРёС‚Рё РїРёС‚Р°РЅРЅСЏ";
+$PMF_LANG["msgOpenQuestions"] = "Р’С–РґРєСЂРёС‚С– РїРёС‚Р°РЅРЅСЏ";
+$PMF_LANG["msgHelp"] = "Р”РѕРїРѕРјРѕРіР°";
+$PMF_LANG["msgContact"] = "РђРґРјС–РЅС–СЃС‚СЂР°С†С–СЏ";
+$PMF_LANG["msgHome"] = "Р—РјС–СЃС‚";
+$PMF_LANG["msgNews"] = "РќРѕРІРёРЅРё СЂРѕР·РґС–Р»Сѓ";
+$PMF_LANG["msgUserOnline"] = " - Р°РєС‚РёРІРЅРёС… РєРѕСЂРёСЃС‚СѓРІР°С‡С–РІ";
+$PMF_LANG["msgXMLExport"] = "XML-С„Р°Р№Р»";
+$PMF_LANG["msgBack2Home"] = "РїРѕРІРµСЂРЅСѓС‚РёСЃСЏ РЅР°Р·Р°Рґ";
 
 // Contentpages
-$PMF_LANG["msgFullCategories"] = "Зміст бази Mac F.A.Q.";
-$PMF_LANG["msgFullCategoriesIn"] = "Розділи з питаннями ";
-$PMF_LANG["msgSubCategories"] = "Підрозділи";
-$PMF_LANG["msgEntries"] = "записів";
-$PMF_LANG["msgEntriesIn"] = "Зміст розділу ";
-$PMF_LANG["msgViews"] = "переглядів";
-$PMF_LANG["msgPage"] = "Сторінка ";
+$PMF_LANG["msgFullCategories"] = "Р—РјС–СЃС‚ Р±Р°Р·Рё Mac F.A.Q.";
+$PMF_LANG["msgFullCategoriesIn"] = "Р РѕР·РґС–Р»Рё Р· РїРёС‚Р°РЅРЅСЏРјРё ";
+$PMF_LANG["msgSubCategories"] = "РџС–РґСЂРѕР·РґС–Р»Рё";
+$PMF_LANG["msgEntries"] = "Р·Р°РїРёСЃС–РІ";
+$PMF_LANG["msgEntriesIn"] = "Р—РјС–СЃС‚ СЂРѕР·РґС–Р»Сѓ ";
+$PMF_LANG["msgViews"] = "РїРµСЂРµРіР»СЏРґС–РІ";
+$PMF_LANG["msgPage"] = "РЎС‚РѕСЂС–РЅРєР° ";
 $PMF_LANG["msgPages"] = "";
-$PMF_LANG["msgPrevious"] = "попередня";
-$PMF_LANG["msgNext"] = "наступна";
-$PMF_LANG["msgCategoryUp"] = "на рівень вище";
-$PMF_LANG["msgLastUpdateArticle"] = "Останні оновлення: ";
-$PMF_LANG["msgAuthor"] = "Опублікував: ";
-$PMF_LANG["msgPrinterFriendly"] = "Версія для друку";
-$PMF_LANG["msgPrintArticle"] = "Відправити на друк";
-$PMF_LANG["msgMakeXMLExport"] = "Експорт в XML файл";
-$PMF_LANG["msgAverageVote"] = "Рейтинг відповіді:";
-$PMF_LANG["msgVoteUseability"] = "Будь ласка оціните цю відповідь:";
-$PMF_LANG["msgVoteFrom"] = "з";
-$PMF_LANG["msgVoteBad"] = "Так собі";
-$PMF_LANG["msgVoteGood"] = "Дуже <br />сильно допоміг";
-$PMF_LANG["msgVotings"] = "Голосів ";
-$PMF_LANG["msgVoteSubmit"] = "Оцінити";
-$PMF_LANG["msgVoteThanks"] = "Спасибі за оцінку!";
-$PMF_LANG["msgYouCan"] = "Ви ";
-$PMF_LANG["msgWriteComment"] = "можете залишити коментар";
-$PMF_LANG["msgShowCategory"] = "Зміст розділу: ";
+$PMF_LANG["msgPrevious"] = "РїРѕРїРµСЂРµРґРЅСЏ";
+$PMF_LANG["msgNext"] = "РЅР°СЃС‚СѓРїРЅР°";
+$PMF_LANG["msgCategoryUp"] = "РЅР° СЂС–РІРµРЅСЊ РІРёС‰Рµ";
+$PMF_LANG["msgLastUpdateArticle"] = "РћСЃС‚Р°РЅРЅС– РѕРЅРѕРІР»РµРЅРЅСЏ: ";
+$PMF_LANG["msgAuthor"] = "РћРїСѓР±Р»С–РєСѓРІР°РІ: ";
+$PMF_LANG["msgPrinterFriendly"] = "Р’РµСЂСЃС–СЏ РґР»СЏ РґСЂСѓРєСѓ";
+$PMF_LANG["msgPrintArticle"] = "Р’С–РґРїСЂР°РІРёС‚Рё РЅР° РґСЂСѓРє";
+$PMF_LANG["msgMakeXMLExport"] = "Р•РєСЃРїРѕСЂС‚ РІ XML С„Р°Р№Р»";
+$PMF_LANG["msgAverageVote"] = "Р РµР№С‚РёРЅРі РІС–РґРїРѕРІС–РґС–:";
+$PMF_LANG["msgVoteUseability"] = "Р‘СѓРґСЊ Р»Р°СЃРєР° РѕС†С–РЅРёС‚Рµ С†СЋ РІС–РґРїРѕРІС–РґСЊ:";
+$PMF_LANG["msgVoteFrom"] = "Р·";
+$PMF_LANG["msgVoteBad"] = "РўР°Рє СЃРѕР±С–";
+$PMF_LANG["msgVoteGood"] = "Р”СѓР¶Рµ <br />СЃРёР»СЊРЅРѕ РґРѕРїРѕРјС–Рі";
+$PMF_LANG["msgVotings"] = "Р“РѕР»РѕСЃС–РІ ";
+$PMF_LANG["msgVoteSubmit"] = "РћС†С–РЅРёС‚Рё";
+$PMF_LANG["msgVoteThanks"] = "РЎРїР°СЃРёР±С– Р·Р° РѕС†С–РЅРєСѓ!";
+$PMF_LANG["msgYouCan"] = "Р’Рё ";
+$PMF_LANG["msgWriteComment"] = "РјРѕР¶РµС‚Рµ Р·Р°Р»РёС€РёС‚Рё РєРѕРјРµРЅС‚Р°СЂ";
+$PMF_LANG["msgShowCategory"] = "Р—РјС–СЃС‚ СЂРѕР·РґС–Р»Сѓ: ";
 $PMF_LANG["msgCommentBy"] = "Comment of ";
-$PMF_LANG["msgCommentHeader"] = "можете залишити коментар";
-$PMF_LANG["msgYourComment"] = "Ваші коментарі:";
-$PMF_LANG["msgCommentThanks"] = "Спасибі за коментар!";
-$PMF_LANG["msgSeeXMLFile"] = "відкрити XML файл";
-$PMF_LANG["msgSend2Friend"] = "Відправити другу";
-$PMF_LANG["msgS2FName"] = "Ваше ім'я:";
-$PMF_LANG["msgS2FEMail"] = "Адрес e-mail:";
-$PMF_LANG["msgS2FFriends"] = "Список друзів:";
-$PMF_LANG["msgS2FEMails"] = ". e-mail адрес:";
-$PMF_LANG["msgS2FText"] = "Текст повідомлення для одержувачів листа:";
-$PMF_LANG["msgS2FText2"] = "Я знайшов ось таку інформацію за цією адресою:";
-$PMF_LANG["msgS2FMessage"] = "Короткий опис:";
-$PMF_LANG["msgS2FButton"] = "Відправити лист";
-$PMF_LANG["msgS2FThx"] = "Дякуємо за за рекомендацію наший бази Mac F.A.Q. вашим друзям!";
-$PMF_LANG["msgS2FMailSubject"] = "Рекомендую почитати! :";
+$PMF_LANG["msgCommentHeader"] = "РјРѕР¶РµС‚Рµ Р·Р°Р»РёС€РёС‚Рё РєРѕРјРµРЅС‚Р°СЂ";
+$PMF_LANG["msgYourComment"] = "Р’Р°С€С– РєРѕРјРµРЅС‚Р°СЂС–:";
+$PMF_LANG["msgCommentThanks"] = "РЎРїР°СЃРёР±С– Р·Р° РєРѕРјРµРЅС‚Р°СЂ!";
+$PMF_LANG["msgSeeXMLFile"] = "РІС–РґРєСЂРёС‚Рё XML С„Р°Р№Р»";
+$PMF_LANG["msgSend2Friend"] = "Р’С–РґРїСЂР°РІРёС‚Рё РґСЂСѓРіСѓ";
+$PMF_LANG["msgS2FName"] = "Р’Р°С€Рµ С–Рј'СЏ:";
+$PMF_LANG["msgS2FEMail"] = "РђРґСЂРµСЃ e-mail:";
+$PMF_LANG["msgS2FFriends"] = "РЎРїРёСЃРѕРє РґСЂСѓР·С–РІ:";
+$PMF_LANG["msgS2FEMails"] = ". e-mail Р°РґСЂРµСЃ:";
+$PMF_LANG["msgS2FText"] = "РўРµРєСЃС‚ РїРѕРІС–РґРѕРјР»РµРЅРЅСЏ РґР»СЏ РѕРґРµСЂР¶СѓРІР°С‡С–РІ Р»РёСЃС‚Р°:";
+$PMF_LANG["msgS2FText2"] = "РЇ Р·РЅР°Р№С€РѕРІ РѕСЃСЊ С‚Р°РєСѓ С–РЅС„РѕСЂРјР°С†С–СЋ Р·Р° С†С–С”СЋ Р°РґСЂРµСЃРѕСЋ:";
+$PMF_LANG["msgS2FMessage"] = "РљРѕСЂРѕС‚РєРёР№ РѕРїРёСЃ:";
+$PMF_LANG["msgS2FButton"] = "Р’С–РґРїСЂР°РІРёС‚Рё Р»РёСЃС‚";
+$PMF_LANG["msgS2FThx"] = "Р”СЏРєСѓС”РјРѕ Р·Р° Р·Р° СЂРµРєРѕРјРµРЅРґР°С†С–СЋ РЅР°С€РёР№ Р±Р°Р·Рё Mac F.A.Q. РІР°С€РёРј РґСЂСѓР·СЏРј!";
+$PMF_LANG["msgS2FMailSubject"] = "Р РµРєРѕРјРµРЅРґСѓСЋ РїРѕС‡РёС‚Р°С‚Рё! :";
 
 // Search
-$PMF_LANG["msgSearchWord"] = "Ключове слово";
-$PMF_LANG["msgSearchFind"] = "Шукати ";
-$PMF_LANG["msgSearchAmount"] = " збіг";
-$PMF_LANG["msgSearchAmounts"] = " результати пошуку";
-$PMF_LANG["msgSearchCategory"] = "Категорія: ";
-$PMF_LANG["msgSearchContent"] = "Зміст: ";
+$PMF_LANG["msgSearchWord"] = "РљР»СЋС‡РѕРІРµ СЃР»РѕРІРѕ";
+$PMF_LANG["msgSearchFind"] = "РЁСѓРєР°С‚Рё ";
+$PMF_LANG["msgSearchAmount"] = " Р·Р±С–Рі";
+$PMF_LANG["msgSearchAmounts"] = " СЂРµР·СѓР»СЊС‚Р°С‚Рё РїРѕС€СѓРєСѓ";
+$PMF_LANG["msgSearchCategory"] = "РљР°С‚РµРіРѕСЂС–СЏ: ";
+$PMF_LANG["msgSearchContent"] = "Р—РјС–СЃС‚: ";
 
 // new Content
-$PMF_LANG["msgNewContentHeader"] = "Публікація нової відповіді";
-$PMF_LANG["msgNewContentAddon"] = "Опублікована вами відповідь не з'явиться в системі відразу ж після публікації, а тільки після прочитання його адміністратором. Обов'язкові поля для заповнення <strong>Ваше ім'я</strong>, <strong>адреса e-mail</strong>, <strong>категорія</strong>, <strong>заголовок</strong>, і <strong>текст відповіді</strong>. Будь ласка розділяйте ключові слова тільки пропусками.";
-$PMF_LANG["msgNewContentUBB"] = "<p>Ви можете оформити текст повідомлення за допомогою BB кодів. <a href=\"help/ubbcode.php\" target=\"_blank\">Інструкція по використанню UBB кодів</a></p>";
-$PMF_LANG["msgNewContentName"] = "Ваше ім'я:";
-$PMF_LANG["msgNewContentMail"] = "Адреса eMail:";
-$PMF_LANG["msgNewContentCategory"] = "Вибір розділу:";
-$PMF_LANG["msgNewContentTheme"] = "Текст питання:";
-$PMF_LANG["msgNewContentArticle"] = "Текст відповіді:";
-$PMF_LANG["msgNewContentKeywords"] = "Ключові слова:";
-$PMF_LANG["msgNewContentLink"] = "Посилання на сайт<br /> або сторінку<br /> пов'язану з питанням";
-$PMF_LANG["msgNewContentSubmit"] = "Відправити";
-$PMF_LANG["msgInfo"] = "Додаткова інформація: ";
-$PMF_LANG["msgNewContentThanks"] = "Спасибі! Ваша відповідь прийнята";
-$PMF_LANG["msgNoQuestionsAvailable"] = "На даний момент немає відкритих питань.";
+$PMF_LANG["msgNewContentHeader"] = "РџСѓР±Р»С–РєР°С†С–СЏ РЅРѕРІРѕС— РІС–РґРїРѕРІС–РґС–";
+$PMF_LANG["msgNewContentAddon"] = "РћРїСѓР±Р»С–РєРѕРІР°РЅР° РІР°РјРё РІС–РґРїРѕРІС–РґСЊ РЅРµ Р·'СЏРІРёС‚СЊСЃСЏ РІ СЃРёСЃС‚РµРјС– РІС–РґСЂР°Р·Сѓ Р¶ РїС–СЃР»СЏ РїСѓР±Р»С–РєР°С†С–С—, Р° С‚С–Р»СЊРєРё РїС–СЃР»СЏ РїСЂРѕС‡РёС‚Р°РЅРЅСЏ Р№РѕРіРѕ Р°РґРјС–РЅС–СЃС‚СЂР°С‚РѕСЂРѕРј. РћР±РѕРІ'СЏР·РєРѕРІС– РїРѕР»СЏ РґР»СЏ Р·Р°РїРѕРІРЅРµРЅРЅСЏ <strong>Р’Р°С€Рµ С–Рј'СЏ</strong>, <strong>Р°РґСЂРµСЃР° e-mail</strong>, <strong>РєР°С‚РµРіРѕСЂС–СЏ</strong>, <strong>Р·Р°РіРѕР»РѕРІРѕРє</strong>, С– <strong>С‚РµРєСЃС‚ РІС–РґРїРѕРІС–РґС–</strong>. Р‘СѓРґСЊ Р»Р°СЃРєР° СЂРѕР·РґС–Р»СЏР№С‚Рµ РєР»СЋС‡РѕРІС– СЃР»РѕРІР° С‚С–Р»СЊРєРё РїСЂРѕРїСѓСЃРєР°РјРё.";
+$PMF_LANG["msgNewContentUBB"] = "<p>Р’Рё РјРѕР¶РµС‚Рµ РѕС„РѕСЂРјРёС‚Рё С‚РµРєСЃС‚ РїРѕРІС–РґРѕРјР»РµРЅРЅСЏ Р·Р° РґРѕРїРѕРјРѕРіРѕСЋ BB РєРѕРґС–РІ. <a href=\"help/ubbcode.php\" target=\"_blank\">Р†РЅСЃС‚СЂСѓРєС†С–СЏ РїРѕ РІРёРєРѕСЂРёСЃС‚Р°РЅРЅСЋ UBB РєРѕРґС–РІ</a></p>";
+$PMF_LANG["msgNewContentName"] = "Р’Р°С€Рµ С–Рј'СЏ:";
+$PMF_LANG["msgNewContentMail"] = "РђРґСЂРµСЃР° eMail:";
+$PMF_LANG["msgNewContentCategory"] = "Р’РёР±С–СЂ СЂРѕР·РґС–Р»Сѓ:";
+$PMF_LANG["msgNewContentTheme"] = "РўРµРєСЃС‚ РїРёС‚Р°РЅРЅСЏ:";
+$PMF_LANG["msgNewContentArticle"] = "РўРµРєСЃС‚ РІС–РґРїРѕРІС–РґС–:";
+$PMF_LANG["msgNewContentKeywords"] = "РљР»СЋС‡РѕРІС– СЃР»РѕРІР°:";
+$PMF_LANG["msgNewContentLink"] = "РџРѕСЃРёР»Р°РЅРЅСЏ РЅР° СЃР°Р№С‚<br /> Р°Р±Рѕ СЃС‚РѕСЂС–РЅРєСѓ<br /> РїРѕРІ'СЏР·Р°РЅСѓ Р· РїРёС‚Р°РЅРЅСЏРј";
+$PMF_LANG["msgNewContentSubmit"] = "Р’С–РґРїСЂР°РІРёС‚Рё";
+$PMF_LANG["msgInfo"] = "Р”РѕРґР°С‚РєРѕРІР° С–РЅС„РѕСЂРјР°С†С–СЏ: ";
+$PMF_LANG["msgNewContentThanks"] = "РЎРїР°СЃРёР±С–! Р’Р°С€Р° РІС–РґРїРѕРІС–РґСЊ РїСЂРёР№РЅСЏС‚Р°";
+$PMF_LANG["msgNoQuestionsAvailable"] = "РќР° РґР°РЅРёР№ РјРѕРјРµРЅС‚ РЅРµРјР°С” РІС–РґРєСЂРёС‚РёС… РїРёС‚Р°РЅСЊ.";
 
 // ask Question
-$PMF_LANG["msgNewQuestion"] = "Тут ви можете поставити своє запитання:";
-$PMF_LANG["msgAskCategory"] = "До якого розділу відноситься ваше питання";
-$PMF_LANG["msgAskYourQuestion"] = "Текст питання:";
-$PMF_LANG["msgAskThx4Mail"] = "<h4>Виконано!</h4>";
-$PMF_LANG["msgDate_User"] = "Дата / користувач";
-$PMF_LANG["msgQuestion2"] = "Розділ / Питання";
-$PMF_LANG["msg2answer"] = "Відповісти";
-$PMF_LANG["msgQuestionText"] = "Тут знаходяться питання задані користувачами і що ще не отримали свою відповідь. Якщо ви відповісте на яке нібудь з питань, то він після перевірки адміністратором буде перенесений до основного розділу Mac F.A.Q";
+$PMF_LANG["msgNewQuestion"] = "РўСѓС‚ РІРё РјРѕР¶РµС‚Рµ РїРѕСЃС‚Р°РІРёС‚Рё СЃРІРѕС” Р·Р°РїРёС‚Р°РЅРЅСЏ:";
+$PMF_LANG["msgAskCategory"] = "Р”Рѕ СЏРєРѕРіРѕ СЂРѕР·РґС–Р»Сѓ РІС–РґРЅРѕСЃРёС‚СЊСЃСЏ РІР°С€Рµ РїРёС‚Р°РЅРЅСЏ";
+$PMF_LANG["msgAskYourQuestion"] = "РўРµРєСЃС‚ РїРёС‚Р°РЅРЅСЏ:";
+$PMF_LANG["msgAskThx4Mail"] = "<h4>Р’РёРєРѕРЅР°РЅРѕ!</h4>";
+$PMF_LANG["msgDate_User"] = "Р”Р°С‚Р° / РєРѕСЂРёСЃС‚СѓРІР°С‡";
+$PMF_LANG["msgQuestion2"] = "Р РѕР·РґС–Р» / РџРёС‚Р°РЅРЅСЏ";
+$PMF_LANG["msg2answer"] = "Р’С–РґРїРѕРІС–СЃС‚Рё";
+$PMF_LANG["msgQuestionText"] = "РўСѓС‚ Р·РЅР°С…РѕРґСЏС‚СЊСЃСЏ РїРёС‚Р°РЅРЅСЏ Р·Р°РґР°РЅС– РєРѕСЂРёСЃС‚СѓРІР°С‡Р°РјРё С– С‰Рѕ С‰Рµ РЅРµ РѕС‚СЂРёРјР°Р»Рё СЃРІРѕСЋ РІС–РґРїРѕРІС–РґСЊ. РЇРєС‰Рѕ РІРё РІС–РґРїРѕРІС–СЃС‚Рµ РЅР° СЏРєРµ РЅС–Р±СѓРґСЊ Р· РїРёС‚Р°РЅСЊ, С‚Рѕ РІС–РЅ РїС–СЃР»СЏ РїРµСЂРµРІС–СЂРєРё Р°РґРјС–РЅС–СЃС‚СЂР°С‚РѕСЂРѕРј Р±СѓРґРµ РїРµСЂРµРЅРµСЃРµРЅРёР№ РґРѕ РѕСЃРЅРѕРІРЅРѕРіРѕ СЂРѕР·РґС–Р»Сѓ Mac F.A.Q";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>Структура нашої Mac F.A.Q. системи (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) системи проста і зручна і я думаю у вас не виникне питань: як і що?. Ви можете проглянути список <strong><a href=\"?aktion=anzeigen\">розділів</a></strong> або скористатися функцією <strong><a href=\"?aktion=search\">пошуку по всій базі</a></strong>.</p>";
+$PMF_LANG["msgHelpText"] = "<p>РЎС‚СЂСѓРєС‚СѓСЂР° РЅР°С€РѕС— Mac F.A.Q. СЃРёСЃС‚РµРјРё (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) СЃРёСЃС‚РµРјРё РїСЂРѕСЃС‚Р° С– Р·СЂСѓС‡РЅР° С– СЏ РґСѓРјР°СЋ Сѓ РІР°СЃ РЅРµ РІРёРЅРёРєРЅРµ РїРёС‚Р°РЅСЊ: СЏРє С– С‰Рѕ?. Р’Рё РјРѕР¶РµС‚Рµ РїСЂРѕРіР»СЏРЅСѓС‚Рё СЃРїРёСЃРѕРє <strong><a href=\"?aktion=anzeigen\">СЂРѕР·РґС–Р»С–РІ</a></strong> Р°Р±Рѕ СЃРєРѕСЂРёСЃС‚Р°С‚РёСЃСЏ С„СѓРЅРєС†С–С”СЋ <strong><a href=\"?aktion=search\">РїРѕС€СѓРєСѓ РїРѕ РІСЃС–Р№ Р±Р°Р·С–</a></strong>.</p>";
 
 // Contact
-$PMF_LANG["msgContactEMail"] = "Тут ви можете написати лист веб-серверу-майстрові:";
-$PMF_LANG["msgMessage"] = "Текст листа:";
+$PMF_LANG["msgContactEMail"] = "РўСѓС‚ РІРё РјРѕР¶РµС‚Рµ РЅР°РїРёСЃР°С‚Рё Р»РёСЃС‚ РІРµР±-СЃРµСЂРІРµСЂСѓ-РјР°Р№СЃС‚СЂРѕРІС–:";
+$PMF_LANG["msgMessage"] = "РўРµРєСЃС‚ Р»РёСЃС‚Р°:";
 
 // Startseite
-$PMF_LANG["msgNews"] = " Новини";
-$PMF_LANG["msgTopTen"] = "10 найпотрібніших відповідей";
-$PMF_LANG["msgHomeThereAre"] = "Записів в базі даних:";
+$PMF_LANG["msgNews"] = " РќРѕРІРёРЅРё";
+$PMF_LANG["msgTopTen"] = "10 РЅР°Р№РїРѕС‚СЂС–Р±РЅС–С€РёС… РІС–РґРїРѕРІС–РґРµР№";
+$PMF_LANG["msgHomeThereAre"] = "Р—Р°РїРёСЃС–РІ РІ Р±Р°Р·С– РґР°РЅРёС…:";
 $PMF_LANG["msgHomeArticlesOnline"] = " ";
-$PMF_LANG["msgNoNews"] = "Найприємніша новина - це відсутність новин.";
-$PMF_LANG["msgLatestArticles"] = "П'ять нових питань:";
+$PMF_LANG["msgNoNews"] = "РќР°Р№РїСЂРёС”РјРЅС–С€Р° РЅРѕРІРёРЅР° - С†Рµ РІС–РґСЃСѓС‚РЅС–СЃС‚СЊ РЅРѕРІРёРЅ.";
+$PMF_LANG["msgLatestArticles"] = "Рџ'СЏС‚СЊ РЅРѕРІРёС… РїРёС‚Р°РЅСЊ:";
 
 // E-Mailbenachrichtigung
-$PMF_LANG["msgMailThanks"] = "Спасибі за новий запис в базу Mac F.A.Q.";
-$PMF_LANG["msgMailCheck"] = "Доданий новий запис в базу Mac F.A.Q.!Завітайте до панелі управління для адміністратора!";
-$PMF_LANG["msgMailContact"] = "Повідомлення відправлене адміністраторові.";
+$PMF_LANG["msgMailThanks"] = "РЎРїР°СЃРёР±С– Р·Р° РЅРѕРІРёР№ Р·Р°РїРёСЃ РІ Р±Р°Р·Сѓ Mac F.A.Q.";
+$PMF_LANG["msgMailCheck"] = "Р”РѕРґР°РЅРёР№ РЅРѕРІРёР№ Р·Р°РїРёСЃ РІ Р±Р°Р·Сѓ Mac F.A.Q.!\nР—Р°РІС–С‚Р°Р№С‚Рµ РґРѕ РїР°РЅРµР»С– СѓРїСЂР°РІР»С–РЅРЅСЏ РґР»СЏ Р°РґРјС–РЅС–СЃС‚СЂР°С‚РѕСЂР°!";
+$PMF_LANG["msgMailContact"] = "РџРѕРІС–РґРѕРјР»РµРЅРЅСЏ РІС–РґРїСЂР°РІР»РµРЅРµ Р°РґРјС–РЅС–СЃС‚СЂР°С‚РѕСЂРѕРІС–.";
 
 // Fehlermeldungen
 $PMF_LANG["err_noDatabase"] = "No database connection available.";
 $PMF_LANG["err_noHeaders"] = "No category found.";
-$PMF_LANG["err_noArticles"] = "<p>Нічого не знайдено</p>";
+$PMF_LANG["err_noArticles"] = "<p>РќС–С‡РѕРіРѕ РЅРµ Р·РЅР°Р№РґРµРЅРѕ</p>";
 $PMF_LANG["err_badID"] = "<p>Wrong ID.</p>";
-$PMF_LANG["err_noTopTen"] = "<p>Нічого поки не немає.</p>";
+$PMF_LANG["err_noTopTen"] = "<p>РќС–С‡РѕРіРѕ РїРѕРєРё РЅРµ РЅРµРјР°С”.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>No entry found.</p>";
-$PMF_LANG["err_SaveEntries"] = "Не заповнені обов'язкові поля <strong>ваше ім'я</strong>, <strong>адрес email</strong>, <strong>категорія</strong>, <strong>заголовок</strong> і <strong>текст питання</strong>!<br /><br /><a href=\"javascript:history.back();\">Вернитесь назад і заповните необхідні поля</a><br /><br />";
-$PMF_LANG["err_SaveComment"] = "Не заповнені обов'язкові поля <strong>ім'я</strong>, <strong>арес email</strong> i <strong>ваш коментар</strong>!<br /><br /><a href=\"javascript:history.back();\">Вернуться назад</a><br /><br />";
+$PMF_LANG["err_SaveEntries"] = "РќРµ Р·Р°РїРѕРІРЅРµРЅС– РѕР±РѕРІ'СЏР·РєРѕРІС– РїРѕР»СЏ <strong>РІР°С€Рµ С–Рј'СЏ</strong>, <strong>Р°РґСЂРµСЃ email</strong>, <strong>РєР°С‚РµРіРѕСЂС–СЏ</strong>, <strong>Р·Р°РіРѕР»РѕРІРѕРє</strong> С– <strong>С‚РµРєСЃС‚ РїРёС‚Р°РЅРЅСЏ</strong>!<br /><br />\n<a href=\"javascript:history.back();\">Р’РµСЂРЅРёС‚РµСЃСЊ РЅР°Р·Р°Рґ С– Р·Р°РїРѕРІРЅРёС‚Рµ РЅРµРѕР±С…С–РґРЅС– РїРѕР»СЏ</a><br /><br />\n";
+$PMF_LANG["err_SaveComment"] = "РќРµ Р·Р°РїРѕРІРЅРµРЅС– РѕР±РѕРІ'СЏР·РєРѕРІС– РїРѕР»СЏ <strong>С–Рј'СЏ</strong>, <strong>Р°СЂРµСЃ email</strong> i <strong>РІР°С€ РєРѕРјРµРЅС‚Р°СЂ</strong>!<br /><br />\n<a href=\"javascript:history.back();\">Р’РµСЂРЅСѓС‚СЊСЃСЏ РЅР°Р·Р°Рґ</a><br /><br />\n";
 $PMF_LANG["err_VoteTooMuch"] = "<p>We do not count double votings. <a href=\"javascript:history.back();\">Click here</a>, to go back.</p>";
-$PMF_LANG["err_noVote"] = "<p><strong>Ви забули поставити оцінку цій відповіді або намагаєтеся зробити це повторно!</strong> <a href=\"javascript:history.back();\">Натисніть сюди</a>, для повернення на попередню сторінку.</p>";
+$PMF_LANG["err_noVote"] = "<p><strong>Р’Рё Р·Р°Р±СѓР»Рё РїРѕСЃС‚Р°РІРёС‚Рё РѕС†С–РЅРєСѓ С†С–Р№ РІС–РґРїРѕРІС–РґС– Р°Р±Рѕ РЅР°РјР°РіР°С”С‚РµСЃСЏ Р·СЂРѕР±РёС‚Рё С†Рµ РїРѕРІС‚РѕСЂРЅРѕ!</strong> <a href=\"javascript:history.back();\">РќР°С‚РёСЃРЅС–С‚СЊ СЃСЋРґРё</a>, РґР»СЏ РїРѕРІРµСЂРЅРµРЅРЅСЏ РЅР° РїРѕРїРµСЂРµРґРЅСЋ СЃС‚РѕСЂС–РЅРєСѓ.</p>";
 $PMF_LANG["err_noMailAdress"] = "Your email address is not correct.<br /><a href=\"javascript:history.back();\">back</a>";
-$PMF_LANG["err_sendMail"] = "Не заповнені обов'язкові поля <strong>ваше ім'я</strong>, <strong>адрес email</strong> і <strong>текст повідомлення</strong>!<br /><br /><a href=\"javascript:history.back();\">Вернуться назад</a><br /><br />";
+$PMF_LANG["err_sendMail"] = "РќРµ Р·Р°РїРѕРІРЅРµРЅС– РѕР±РѕРІ'СЏР·РєРѕРІС– РїРѕР»СЏ <strong>РІР°С€Рµ С–Рј'СЏ</strong>, <strong>Р°РґСЂРµСЃ email</strong> С– <strong>С‚РµРєСЃС‚ РїРѕРІС–РґРѕРјР»РµРЅРЅСЏ</strong>!<br /><br />\n<a href=\"javascript:history.back();\">Р’РµСЂРЅСѓС‚СЊСЃСЏ РЅР°Р·Р°Рґ</a><br /><br />\n";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "<p><strong>Поиск по базе Mac F.A.Q.:</strong><br /></p>";
+$PMF_LANG["help_search"] = "<p><strong>РџРѕРёСЃРє РїРѕ Р±Р°Р·Рµ Mac F.A.Q.:</strong><br /></p>";
 
-// Menь
-$PMF_LANG["ad"] = "Адмінка";
-$PMF_LANG["ad_menu_user_administration"] = "Користувачі";
-$PMF_LANG["ad_menu_entry_aprove"] = "Перевірка нових записів";
-$PMF_LANG["ad_menu_entry_edit"] = "Редагування записів";
-$PMF_LANG["ad_menu_categ_add"] = "Додати категорію";
-$PMF_LANG["ad_menu_categ_edit"] = "Змінити категорію";
-$PMF_LANG["ad_menu_news_add"] = "Додати новину";
-$PMF_LANG["ad_menu_news_edit"] = "Змінити новину";
-$PMF_LANG["ad_menu_open"] = "Відкриті питання";
-$PMF_LANG["ad_menu_stat"] = "Статистика";
-$PMF_LANG["ad_menu_cookie"] = "Безпека";
-$PMF_LANG["ad_menu_session"] = "Сесії";
-$PMF_LANG["ad_menu_adminlog"] = "Протокол адміна";
-$PMF_LANG["ad_menu_passwd"] = "Зміна пароля";
-$PMF_LANG["ad_menu_logout"] = "Вихід";
-$PMF_LANG["ad_menu_startpage"] = "Головна";
+// MenСЊ
+$PMF_LANG["ad"] = "РђРґРјС–РЅРєР°";
+$PMF_LANG["ad_menu_user_administration"] = "РљРѕСЂРёСЃС‚СѓРІР°С‡С–";
+$PMF_LANG["ad_menu_entry_aprove"] = "РџРµСЂРµРІС–СЂРєР° РЅРѕРІРёС… Р·Р°РїРёСЃС–РІ";
+$PMF_LANG["ad_menu_entry_edit"] = "Р РµРґР°РіСѓРІР°РЅРЅСЏ Р·Р°РїРёСЃС–РІ";
+$PMF_LANG["ad_menu_categ_add"] = "Р”РѕРґР°С‚Рё РєР°С‚РµРіРѕСЂС–СЋ";
+$PMF_LANG["ad_menu_categ_edit"] = "Р—РјС–РЅРёС‚Рё РєР°С‚РµРіРѕСЂС–СЋ";
+$PMF_LANG["ad_menu_news_add"] = "Р”РѕРґР°С‚Рё РЅРѕРІРёРЅСѓ";
+$PMF_LANG["ad_menu_news_edit"] = "Р—РјС–РЅРёС‚Рё РЅРѕРІРёРЅСѓ";
+$PMF_LANG["ad_menu_open"] = "Р’С–РґРєСЂРёС‚С– РїРёС‚Р°РЅРЅСЏ";
+$PMF_LANG["ad_menu_stat"] = "РЎС‚Р°С‚РёСЃС‚РёРєР°";
+$PMF_LANG["ad_menu_cookie"] = "Р‘РµР·РїРµРєР°";
+$PMF_LANG["ad_menu_session"] = "РЎРµСЃС–С—";
+$PMF_LANG["ad_menu_adminlog"] = "РџСЂРѕС‚РѕРєРѕР» Р°РґРјС–РЅР°";
+$PMF_LANG["ad_menu_passwd"] = "Р—РјС–РЅР° РїР°СЂРѕР»СЏ";
+$PMF_LANG["ad_menu_logout"] = "Р’РёС…С–Рґ";
+$PMF_LANG["ad_menu_startpage"] = "Р“РѕР»РѕРІРЅР°";
 
 // Nachrichten
-$PMF_LANG["ad_msg_identify"] = "Авторизація.";
-$PMF_LANG["ad_msg_passmatch"] = "Обидва паролі повинні <strong>співпасти</strong>!";
-$PMF_LANG["ad_msg_savedsuc_1"] = "Обліковий запис користувача: ";
-$PMF_LANG["ad_msg_savedsuc_2"] = "успішно збережена.";
-$PMF_LANG["ad_msg_mysqlerr"] = "В результаті помилки <strong>бази даних</strong>, збереження профайла неможливе.";
-$PMF_LANG["ad_msg_noauth"] = "Ви не авторизовані.";
+$PMF_LANG["ad_msg_identify"] = "РђРІС‚РѕСЂРёР·Р°С†С–СЏ.";
+$PMF_LANG["ad_msg_passmatch"] = "РћР±РёРґРІР° РїР°СЂРѕР»С– РїРѕРІРёРЅРЅС– <strong>СЃРїС–РІРїР°СЃС‚Рё</strong>!";
+$PMF_LANG["ad_msg_savedsuc_1"] = "РћР±Р»С–РєРѕРІРёР№ Р·Р°РїРёСЃ РєРѕСЂРёСЃС‚СѓРІР°С‡Р°: ";
+$PMF_LANG["ad_msg_savedsuc_2"] = "СѓСЃРїС–С€РЅРѕ Р·Р±РµСЂРµР¶РµРЅР°.";
+$PMF_LANG["ad_msg_mysqlerr"] = "Р’ СЂРµР·СѓР»СЊС‚Р°С‚С– РїРѕРјРёР»РєРё <strong>Р±Р°Р·Рё РґР°РЅРёС…</strong>, Р·Р±РµСЂРµР¶РµРЅРЅСЏ РїСЂРѕС„Р°Р№Р»Р° РЅРµРјРѕР¶Р»РёРІРµ.";
+$PMF_LANG["ad_msg_noauth"] = "Р’Рё РЅРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅС–.";
 
 // Allgemein
-$PMF_LANG["ad_gen_page"] = "сторінка";
-$PMF_LANG["ad_gen_of"] = "з";
-$PMF_LANG["ad_gen_lastpage"] = "Попередня";
-$PMF_LANG["ad_gen_nextpage"] = "Наступна";
-$PMF_LANG["ad_gen_save"] = "Зберегти";
-$PMF_LANG["ad_gen_reset"] = "Скидання";
-$PMF_LANG["ad_gen_yes"] = "Так";
-$PMF_LANG["ad_gen_no"] = "Немає";
-$PMF_LANG["ad_gen_top"] = "Наверх";
-$PMF_LANG["ad_gen_ncf"] = "Категорія не знайдена!";
-$PMF_LANG["ad_gen_delete"] = "Видалити";
+$PMF_LANG["ad_gen_page"] = "СЃС‚РѕСЂС–РЅРєР°";
+$PMF_LANG["ad_gen_of"] = "Р·";
+$PMF_LANG["ad_gen_lastpage"] = "РџРѕРїРµСЂРµРґРЅСЏ";
+$PMF_LANG["ad_gen_nextpage"] = "РќР°СЃС‚СѓРїРЅР°";
+$PMF_LANG["ad_gen_save"] = "Р—Р±РµСЂРµРіС‚Рё";
+$PMF_LANG["ad_gen_reset"] = "РЎРєРёРґР°РЅРЅСЏ";
+$PMF_LANG["ad_gen_yes"] = "РўР°Рє";
+$PMF_LANG["ad_gen_no"] = "РќРµРјР°С”";
+$PMF_LANG["ad_gen_top"] = "РќР°РІРµСЂС…";
+$PMF_LANG["ad_gen_ncf"] = "РљР°С‚РµРіРѕСЂС–СЏ РЅРµ Р·РЅР°Р№РґРµРЅР°!";
+$PMF_LANG["ad_gen_delete"] = "Р’РёРґР°Р»РёС‚Рё";
 
 // Benutzerverwaltung
-$PMF_LANG["ad_user"] = "Управління користувачами системи";
-$PMF_LANG["ad_user_username"] = "Користувачі";
-$PMF_LANG["ad_user_rights"] = "Права";
-$PMF_LANG["ad_user_edit"] = "Редагувати";
-$PMF_LANG["ad_user_delete"] = "Видалити користувача";
-$PMF_LANG["ad_user_add"] = "Додати нового користувача";
-$PMF_LANG["ad_user_profou"] = "Обліковий запис користувача: ";
-$PMF_LANG["ad_user_name"] = "Логін";
-$PMF_LANG["ad_user_password"] = "Пароль";
-$PMF_LANG["ad_user_confirm"] = "Підтвердження";
-$PMF_LANG["ad_user_rights"] = "Права";
-$PMF_LANG["ad_user_del_1"] = "Видалення користувача";
+$PMF_LANG["ad_user"] = "РЈРїСЂР°РІР»С–РЅРЅСЏ РєРѕСЂРёСЃС‚СѓРІР°С‡Р°РјРё СЃРёСЃС‚РµРјРё";
+$PMF_LANG["ad_user_username"] = "РљРѕСЂРёСЃС‚СѓРІР°С‡С–";
+$PMF_LANG["ad_user_rights"] = "РџСЂР°РІР°";
+$PMF_LANG["ad_user_edit"] = "Р РµРґР°РіСѓРІР°С‚Рё";
+$PMF_LANG["ad_user_delete"] = "Р’РёРґР°Р»РёС‚Рё РєРѕСЂРёСЃС‚СѓРІР°С‡Р°";
+$PMF_LANG["ad_user_add"] = "Р”РѕРґР°С‚Рё РЅРѕРІРѕРіРѕ РєРѕСЂРёСЃС‚СѓРІР°С‡Р°";
+$PMF_LANG["ad_user_profou"] = "РћР±Р»С–РєРѕРІРёР№ Р·Р°РїРёСЃ РєРѕСЂРёСЃС‚СѓРІР°С‡Р°: ";
+$PMF_LANG["ad_user_name"] = "Р›РѕРіС–РЅ";
+$PMF_LANG["ad_user_password"] = "РџР°СЂРѕР»СЊ";
+$PMF_LANG["ad_user_confirm"] = "РџС–РґС‚РІРµСЂРґР¶РµРЅРЅСЏ";
+$PMF_LANG["ad_user_rights"] = "РџСЂР°РІР°";
+$PMF_LANG["ad_user_del_1"] = "Р’РёРґР°Р»РµРЅРЅСЏ РєРѕСЂРёСЃС‚СѓРІР°С‡Р°";
 $PMF_LANG["ad_user_del_2"] = "?";
-$PMF_LANG["ad_user_del_3"] = "Продовжити?";
-$PMF_LANG["ad_user_deleted"] = "Користувач видалений.";
+$PMF_LANG["ad_user_del_3"] = "РџСЂРѕРґРѕРІР¶РёС‚Рё?";
+$PMF_LANG["ad_user_deleted"] = "РљРѕСЂРёСЃС‚СѓРІР°С‡ РІРёРґР°Р»РµРЅРёР№.";
 
 // Beitragsverwaltung
-$PMF_LANG["ad_entry_aor"] = "Відповіді / питання";
+$PMF_LANG["ad_entry_aor"] = "Р’С–РґРїРѕРІС–РґС– / РїРёС‚Р°РЅРЅСЏ";
 $PMF_LANG["ad_entry_id"] = "ID";
-$PMF_LANG["ad_entry_topic"] = "Тема";
-$PMF_LANG["ad_entry_action"] = "Дія";
-$PMF_LANG["ad_entry_edit_1"] = "Редагування записів";
+$PMF_LANG["ad_entry_topic"] = "РўРµРјР°";
+$PMF_LANG["ad_entry_action"] = "Р”С–СЏ";
+$PMF_LANG["ad_entry_edit_1"] = "Р РµРґР°РіСѓРІР°РЅРЅСЏ Р·Р°РїРёСЃС–РІ";
 $PMF_LANG["ad_entry_edit_2"] = ":";
-$PMF_LANG["ad_entry_theme"] = "Питання:";
-$PMF_LANG["ad_entry_content"] = "Відповідь:";
-$PMF_LANG["ad_entry_keywords"] = "Ключі:";
-$PMF_LANG["ad_entry_author"] = "Автор:";
-$PMF_LANG["ad_entry_category"] = "Розділ:";
-$PMF_LANG["ad_entry_active"] = "Активувати?";
-$PMF_LANG["ad_entry_date"] = "Дата:";
-$PMF_LANG["ad_entry_changed"] = "Змінено?";
+$PMF_LANG["ad_entry_theme"] = "РџРёС‚Р°РЅРЅСЏ:";
+$PMF_LANG["ad_entry_content"] = "Р’С–РґРїРѕРІС–РґСЊ:";
+$PMF_LANG["ad_entry_keywords"] = "РљР»СЋС‡С–:";
+$PMF_LANG["ad_entry_author"] = "РђРІС‚РѕСЂ:";
+$PMF_LANG["ad_entry_category"] = "Р РѕР·РґС–Р»:";
+$PMF_LANG["ad_entry_active"] = "РђРєС‚РёРІСѓРІР°С‚Рё?";
+$PMF_LANG["ad_entry_date"] = "Р”Р°С‚Р°:";
+$PMF_LANG["ad_entry_changed"] = "Р—РјС–РЅРµРЅРѕ?";
 $PMF_LANG["ad_entry_changelog"] = "Changelog:";
-$PMF_LANG["ad_entry_commentby"] = "Коментатор";
-$PMF_LANG["ad_entry_comment"] = "Коментарі:";
-$PMF_LANG["ad_entry_save"] = "Зберегти";
-$PMF_LANG["ad_entry_delete"] = "видалити";
+$PMF_LANG["ad_entry_commentby"] = "РљРѕРјРµРЅС‚Р°С‚РѕСЂ";
+$PMF_LANG["ad_entry_comment"] = "РљРѕРјРµРЅС‚Р°СЂС–:";
+$PMF_LANG["ad_entry_save"] = "Р—Р±РµСЂРµРіС‚Рё";
+$PMF_LANG["ad_entry_delete"] = "РІРёРґР°Р»РёС‚Рё";
 $PMF_LANG["ad_entry_delcom_1"] = "Are you sure that the comment of the user";
 $PMF_LANG["ad_entry_delcom_2"] = "should be deleted?";
 $PMF_LANG["ad_entry_commentdelsuc"] = "The comment was <strong>successfully</strong> deleted.";
 $PMF_LANG["ad_entry_back"] = "Back to the article";
 $PMF_LANG["ad_entry_commentdelfail"] = "The comment was <strong>not</strong> deleted.";
-$PMF_LANG["ad_entry_savedsuc"] = "Зміни <strong>збережені</strong>.";
+$PMF_LANG["ad_entry_savedsuc"] = "Р—РјС–РЅРё <strong>Р·Р±РµСЂРµР¶РµРЅС–</strong>.";
 $PMF_LANG["ad_entry_savedfail"] = "Unfortunately, a <strong>database error</strong> occured.";
 $PMF_LANG["ad_entry_del_1"] = "Are you sure that the topic";
 $PMF_LANG["ad_entry_del_2"] = "of";
@@ -250,104 +250,104 @@ $PMF_LANG["ad_entry_delfail"] = "Issue was <strong>not deleted</strong>!";
 $PMF_LANG["ad_entry_back"] = "Back";
 
 // Newsverwaltung
-$PMF_LANG["ad_news_header"] = "Заголовок";
-$PMF_LANG["ad_news_text"] = "Текст новини";
-$PMF_LANG["ad_news_link_url"] = "Посилання: (<strong>без http://</strong>)!";
-$PMF_LANG["ad_news_link_title"] = "Текст посилання:";
-$PMF_LANG["ad_news_link_target"] = "По кліку на посилання";
-$PMF_LANG["ad_news_link_window"] = "відкрити в новому вікні";
-$PMF_LANG["ad_news_link_Mac F.A.Q."] = "відкрити в цьому ж вікні";
-$PMF_LANG["ad_news_add"] = "Додати новину";
+$PMF_LANG["ad_news_header"] = "Р—Р°РіРѕР»РѕРІРѕРє";
+$PMF_LANG["ad_news_text"] = "РўРµРєСЃС‚ РЅРѕРІРёРЅРё";
+$PMF_LANG["ad_news_link_url"] = "РџРѕСЃРёР»Р°РЅРЅСЏ: (<strong>Р±РµР· http://</strong>)!";
+$PMF_LANG["ad_news_link_title"] = "РўРµРєСЃС‚ РїРѕСЃРёР»Р°РЅРЅСЏ:";
+$PMF_LANG["ad_news_link_target"] = "РџРѕ РєР»С–РєСѓ РЅР° РїРѕСЃРёР»Р°РЅРЅСЏ";
+$PMF_LANG["ad_news_link_window"] = "РІС–РґРєСЂРёС‚Рё РІ РЅРѕРІРѕРјСѓ РІС–РєРЅС–";
+$PMF_LANG["ad_news_link_Mac F.A.Q."] = "РІС–РґРєСЂРёС‚Рё РІ С†СЊРѕРјСѓ Р¶ РІС–РєРЅС–";
+$PMF_LANG["ad_news_add"] = "Р”РѕРґР°С‚Рё РЅРѕРІРёРЅСѓ";
 $PMF_LANG["ad_news_id"] = "#";
-$PMF_LANG["ad_news_headline"] = "Заголовок";
-$PMF_LANG["ad_news_date"] = "Дата";
-$PMF_LANG["ad_news_action"] = "Дія";
-$PMF_LANG["ad_news_update"] = "відновити";
-$PMF_LANG["ad_news_delete"] = "видалити";
-$PMF_LANG["ad_news_nodata"] = "Дані не знайдені в базі";
-$PMF_LANG["ad_news_updatesuc"] = "Запис в новинах оновлений.";
-$PMF_LANG["ad_news_del"] = "Ви дійсно хочете видалити цю новину?";
-$PMF_LANG["ad_news_yesdelete"] = "Так, видалити!";
-$PMF_LANG["ad_news_nodelete"] = "Немає!";
-$PMF_LANG["ad_news_delsuc"] = "Новина видалена.";
-$PMF_LANG["ad_news_updatenews"] = "Зберегти";
+$PMF_LANG["ad_news_headline"] = "Р—Р°РіРѕР»РѕРІРѕРє";
+$PMF_LANG["ad_news_date"] = "Р”Р°С‚Р°";
+$PMF_LANG["ad_news_action"] = "Р”С–СЏ";
+$PMF_LANG["ad_news_update"] = "РІС–РґРЅРѕРІРёС‚Рё";
+$PMF_LANG["ad_news_delete"] = "РІРёРґР°Р»РёС‚Рё";
+$PMF_LANG["ad_news_nodata"] = "Р”Р°РЅС– РЅРµ Р·РЅР°Р№РґРµРЅС– РІ Р±Р°Р·С–";
+$PMF_LANG["ad_news_updatesuc"] = "Р—Р°РїРёСЃ РІ РЅРѕРІРёРЅР°С… РѕРЅРѕРІР»РµРЅРёР№.";
+$PMF_LANG["ad_news_del"] = "Р’Рё РґС–Р№СЃРЅРѕ С…РѕС‡РµС‚Рµ РІРёРґР°Р»РёС‚Рё С†СЋ РЅРѕРІРёРЅСѓ?";
+$PMF_LANG["ad_news_yesdelete"] = "РўР°Рє, РІРёРґР°Р»РёС‚Рё!";
+$PMF_LANG["ad_news_nodelete"] = "РќРµРјР°С”!";
+$PMF_LANG["ad_news_delsuc"] = "РќРѕРІРёРЅР° РІРёРґР°Р»РµРЅР°.";
+$PMF_LANG["ad_news_updatenews"] = "Р—Р±РµСЂРµРіС‚Рё";
 
 // Kategorieverwaltung
-$PMF_LANG["ad_categ_new"] = "Створення нової категорії";
-$PMF_LANG["ad_categ_catnum"] = "Номер категорії:";
-$PMF_LANG["ad_categ_subcatnum"] = "Номер підкатегорії:";
+$PMF_LANG["ad_categ_new"] = "РЎС‚РІРѕСЂРµРЅРЅСЏ РЅРѕРІРѕС— РєР°С‚РµРіРѕСЂС–С—";
+$PMF_LANG["ad_categ_catnum"] = "РќРѕРјРµСЂ РєР°С‚РµРіРѕСЂС–С—:";
+$PMF_LANG["ad_categ_subcatnum"] = "РќРѕРјРµСЂ РїС–РґРєР°С‚РµРіРѕСЂС–С—:";
 $PMF_LANG["ad_categ_nya"] = "<em>not yet available!</em>";
-$PMF_LANG["ad_categ_titel"] = "Назва категорії:";
-$PMF_LANG["ad_categ_add"] = "Додати категорію";
-$PMF_LANG["ad_categ_existing"] = "Категорії";
+$PMF_LANG["ad_categ_titel"] = "РќР°Р·РІР° РєР°С‚РµРіРѕСЂС–С—:";
+$PMF_LANG["ad_categ_add"] = "Р”РѕРґР°С‚Рё РєР°С‚РµРіРѕСЂС–СЋ";
+$PMF_LANG["ad_categ_existing"] = "РљР°С‚РµРіРѕСЂС–С—";
 $PMF_LANG["ad_categ_id"] = "#";
-$PMF_LANG["ad_categ_categ"] = "Категорія";
-$PMF_LANG["ad_categ_subcateg"] = "Підкатегорія";
-$PMF_LANG["ad_categ_titel"] = "Заголовок";
-$PMF_LANG["ad_categ_action"] = "Дія";
-$PMF_LANG["ad_categ_update"] = "відновити";
-$PMF_LANG["ad_categ_delete"] = "видалити";
-$PMF_LANG["ad_categ_updatecateg"] = "Відновити категоріюю";
+$PMF_LANG["ad_categ_categ"] = "РљР°С‚РµРіРѕСЂС–СЏ";
+$PMF_LANG["ad_categ_subcateg"] = "РџС–РґРєР°С‚РµРіРѕСЂС–СЏ";
+$PMF_LANG["ad_categ_titel"] = "Р—Р°РіРѕР»РѕРІРѕРє";
+$PMF_LANG["ad_categ_action"] = "Р”С–СЏ";
+$PMF_LANG["ad_categ_update"] = "РІС–РґРЅРѕРІРёС‚Рё";
+$PMF_LANG["ad_categ_delete"] = "РІРёРґР°Р»РёС‚Рё";
+$PMF_LANG["ad_categ_updatecateg"] = "Р’С–РґРЅРѕРІРёС‚Рё РєР°С‚РµРіРѕСЂС–СЋСЋ";
 $PMF_LANG["ad_categ_nodata"] = "No data found in database";
-$PMF_LANG["ad_categ_remark"] = "Записи з видаленої категорії не відображатимуться до тих пір, поки Ви не привласните їм нову категорію.";
-$PMF_LANG["ad_categ_edit_1"] = "Редагування";
-$PMF_LANG["ad_categ_edit_2"] = "Категорія";
-$PMF_LANG["ad_categ_add"] = "Додати";
-$PMF_LANG["ad_categ_added"] = "Категорія створена.";
-$PMF_LANG["ad_categ_updated"] = "Категорія оновлена.";
-$PMF_LANG["ad_categ_del_yes"] = "Так, хочу!";
-$PMF_LANG["ad_categ_del_no"] = "Ні!";
-$PMF_LANG["ad_categ_deletesure"] = "Ви дійсно хочете видалити цей розділ?";
-$PMF_LANG["ad_categ_deleted"] = "Категорія видалена.";
+$PMF_LANG["ad_categ_remark"] = "Р—Р°РїРёСЃРё Р· РІРёРґР°Р»РµРЅРѕС— РєР°С‚РµРіРѕСЂС–С— РЅРµ РІС–РґРѕР±СЂР°Р¶Р°С‚РёРјСѓС‚СЊСЃСЏ РґРѕ С‚РёС… РїС–СЂ, РїРѕРєРё Р’Рё РЅРµ РїСЂРёРІР»Р°СЃРЅРёС‚Рµ С—Рј РЅРѕРІСѓ РєР°С‚РµРіРѕСЂС–СЋ.";
+$PMF_LANG["ad_categ_edit_1"] = "Р РµРґР°РіСѓРІР°РЅРЅСЏ";
+$PMF_LANG["ad_categ_edit_2"] = "РљР°С‚РµРіРѕСЂС–СЏ";
+$PMF_LANG["ad_categ_add"] = "Р”РѕРґР°С‚Рё";
+$PMF_LANG["ad_categ_added"] = "РљР°С‚РµРіРѕСЂС–СЏ СЃС‚РІРѕСЂРµРЅР°.";
+$PMF_LANG["ad_categ_updated"] = "РљР°С‚РµРіРѕСЂС–СЏ РѕРЅРѕРІР»РµРЅР°.";
+$PMF_LANG["ad_categ_del_yes"] = "РўР°Рє, С…РѕС‡Сѓ!";
+$PMF_LANG["ad_categ_del_no"] = "РќС–!";
+$PMF_LANG["ad_categ_deletesure"] = "Р’Рё РґС–Р№СЃРЅРѕ С…РѕС‡РµС‚Рµ РІРёРґР°Р»РёС‚Рё С†РµР№ СЂРѕР·РґС–Р»?";
+$PMF_LANG["ad_categ_deleted"] = "РљР°С‚РµРіРѕСЂС–СЏ РІРёРґР°Р»РµРЅР°.";
 
 
 // Cookies
-$PMF_LANG["ad_cookie_cookiesuc"] = "Інформація про сесію <strong>збережена у вашому комьютере</strong>.";
-$PMF_LANG["ad_cookie_already"] = "Сесія збережена на вашому комп'ютері. Ви можете виконати наступні операції:";
-$PMF_LANG["ad_cookie_again"] = "Зберегти наново";
-$PMF_LANG["ad_cookie_delete"] = "Видалити всю інформацію";
-$PMF_LANG["ad_cookie_no"] = "Інформація про сесію ще не збережена у вашому комп'ютері. Із збереженою сесією Вам не знадобитися кожного разу при вході в систему вводити пароль. Ви можете виконати наступні операції:";
-$PMF_LANG["ad_cookie_set"] = "Зберегти";
-$PMF_LANG["ad_cookie_deleted"] = "Сесія видалена.";
+$PMF_LANG["ad_cookie_cookiesuc"] = "Р†РЅС„РѕСЂРјР°С†С–СЏ РїСЂРѕ СЃРµСЃС–СЋ <strong>Р·Р±РµСЂРµР¶РµРЅР° Сѓ РІР°С€РѕРјСѓ РєРѕРјСЊСЋС‚РµСЂРµ</strong>.";
+$PMF_LANG["ad_cookie_already"] = "РЎРµСЃС–СЏ Р·Р±РµСЂРµР¶РµРЅР° РЅР° РІР°С€РѕРјСѓ РєРѕРјРї'СЋС‚РµСЂС–. Р’Рё РјРѕР¶РµС‚Рµ РІРёРєРѕРЅР°С‚Рё РЅР°СЃС‚СѓРїРЅС– РѕРїРµСЂР°С†С–С—:";
+$PMF_LANG["ad_cookie_again"] = "Р—Р±РµСЂРµРіС‚Рё РЅР°РЅРѕРІРѕ";
+$PMF_LANG["ad_cookie_delete"] = "Р’РёРґР°Р»РёС‚Рё РІСЃСЋ С–РЅС„РѕСЂРјР°С†С–СЋ";
+$PMF_LANG["ad_cookie_no"] = "Р†РЅС„РѕСЂРјР°С†С–СЏ РїСЂРѕ СЃРµСЃС–СЋ С‰Рµ РЅРµ Р·Р±РµСЂРµР¶РµРЅР° Сѓ РІР°С€РѕРјСѓ РєРѕРјРї'СЋС‚РµСЂС–. Р†Р· Р·Р±РµСЂРµР¶РµРЅРѕСЋ СЃРµСЃС–С”СЋ Р’Р°Рј РЅРµ Р·РЅР°РґРѕР±РёС‚РёСЃСЏ РєРѕР¶РЅРѕРіРѕ СЂР°Р·Сѓ РїСЂРё РІС…РѕРґС– РІ СЃРёСЃС‚РµРјСѓ РІРІРѕРґРёС‚Рё РїР°СЂРѕР»СЊ. Р’Рё РјРѕР¶РµС‚Рµ РІРёРєРѕРЅР°С‚Рё РЅР°СЃС‚СѓРїРЅС– РѕРїРµСЂР°С†С–С—:";
+$PMF_LANG["ad_cookie_set"] = "Р—Р±РµСЂРµРіС‚Рё";
+$PMF_LANG["ad_cookie_deleted"] = "РЎРµСЃС–СЏ РІРёРґР°Р»РµРЅР°.";
 
 
 // Adminlog
-$PMF_LANG["ad_adminlog"] = "Адмінлог";
+$PMF_LANG["ad_adminlog"] = "РђРґРјС–РЅР»РѕРі";
 
 // Passwd
-$PMF_LANG["ad_passwd_cop"] = "Зміна поточного пароля";
-$PMF_LANG["ad_passwd_old"] = "Старий пароль:";
-$PMF_LANG["ad_passwd_new"] = "Новий пароль:";
-$PMF_LANG["ad_passwd_con"] = "Підтвердження:";
-$PMF_LANG["ad_passwd_change"] = "Змінити пароль";
-$PMF_LANG["ad_passwd_suc"] = "Пароль успішно змінений.";
-$PMF_LANG["ad_passwd_remark"] = "<strong>УВАГА:</strong><br /> інформація про сесію збережена у вашому комп'ютері";
-$PMF_LANG["ad_passwd_fail"] = "Старий пароль <strong>повинен бути</strong> введений правильно, а новий підтверджений теж <strong>правильно</strong>.";
+$PMF_LANG["ad_passwd_cop"] = "Р—РјС–РЅР° РїРѕС‚РѕС‡РЅРѕРіРѕ РїР°СЂРѕР»СЏ";
+$PMF_LANG["ad_passwd_old"] = "РЎС‚Р°СЂРёР№ РїР°СЂРѕР»СЊ:";
+$PMF_LANG["ad_passwd_new"] = "РќРѕРІРёР№ РїР°СЂРѕР»СЊ:";
+$PMF_LANG["ad_passwd_con"] = "РџС–РґС‚РІРµСЂРґР¶РµРЅРЅСЏ:";
+$PMF_LANG["ad_passwd_change"] = "Р—РјС–РЅРёС‚Рё РїР°СЂРѕР»СЊ";
+$PMF_LANG["ad_passwd_suc"] = "РџР°СЂРѕР»СЊ СѓСЃРїС–С€РЅРѕ Р·РјС–РЅРµРЅРёР№.";
+$PMF_LANG["ad_passwd_remark"] = "<strong>РЈР’РђР“Рђ:</strong><br /> С–РЅС„РѕСЂРјР°С†С–СЏ РїСЂРѕ СЃРµСЃС–СЋ Р·Р±РµСЂРµР¶РµРЅР° Сѓ РІР°С€РѕРјСѓ РєРѕРјРї'СЋС‚РµСЂС–";
+$PMF_LANG["ad_passwd_fail"] = "РЎС‚Р°СЂРёР№ РїР°СЂРѕР»СЊ <strong>РїРѕРІРёРЅРµРЅ Р±СѓС‚Рё</strong> РІРІРµРґРµРЅРёР№ РїСЂР°РІРёР»СЊРЅРѕ, Р° РЅРѕРІРёР№ РїС–РґС‚РІРµСЂРґР¶РµРЅРёР№ С‚РµР¶ <strong>РїСЂР°РІРёР»СЊРЅРѕ</strong>.";
 
 // Adduser
-$PMF_LANG["ad_adus_adduser"] = "Новий користувач";
-$PMF_LANG["ad_adus_name"] = "Логін:";
-$PMF_LANG["ad_adus_password"] = "Пароль:";
-$PMF_LANG["ad_adus_add"] = "Додати користувача";
-$PMF_LANG["ad_adus_suc"] = "Користувач <strong>успішно</strong> доданий.";
-$PMF_LANG["ad_adus_edit"] = "Редагувати профайл";
-$PMF_LANG["ad_adus_dberr"] = "<strong>Помилка в базі даних!</strong>";
-$PMF_LANG["ad_adus_exerr"] = "<strong>Користувач</strong> вже існує.";
+$PMF_LANG["ad_adus_adduser"] = "РќРѕРІРёР№ РєРѕСЂРёСЃС‚СѓРІР°С‡";
+$PMF_LANG["ad_adus_name"] = "Р›РѕРіС–РЅ:";
+$PMF_LANG["ad_adus_password"] = "РџР°СЂРѕР»СЊ:";
+$PMF_LANG["ad_adus_add"] = "Р”РѕРґР°С‚Рё РєРѕСЂРёСЃС‚СѓРІР°С‡Р°";
+$PMF_LANG["ad_adus_suc"] = "РљРѕСЂРёСЃС‚СѓРІР°С‡ <strong>СѓСЃРїС–С€РЅРѕ</strong> РґРѕРґР°РЅРёР№.";
+$PMF_LANG["ad_adus_edit"] = "Р РµРґР°РіСѓРІР°С‚Рё РїСЂРѕС„Р°Р№Р»";
+$PMF_LANG["ad_adus_dberr"] = "<strong>РџРѕРјРёР»РєР° РІ Р±Р°Р·С– РґР°РЅРёС…!</strong>";
+$PMF_LANG["ad_adus_exerr"] = "<strong>РљРѕСЂРёСЃС‚СѓРІР°С‡</strong> РІР¶Рµ С–СЃРЅСѓС”.";
 
 // Sessions
 $PMF_LANG["ad_sess_id"] = "ID";
-$PMF_LANG["ad_sess_sid"] = "ID сесії";
+$PMF_LANG["ad_sess_sid"] = "ID СЃРµСЃС–С—";
 $PMF_LANG["ad_sess_ip"] = "IP";
 $PMF_LANG["ad_sess_time"] = "Time";
 $PMF_LANG["ad_sess_pageviews"] = "PageViews";
-$PMF_LANG["ad_sess_search"] = "Пошук інформації";
-$PMF_LANG["ad_sess_sfs"] = "Пошук сесій";
+$PMF_LANG["ad_sess_search"] = "РџРѕС€СѓРє С–РЅС„РѕСЂРјР°С†С–С—";
+$PMF_LANG["ad_sess_sfs"] = "РџРѕС€СѓРє СЃРµСЃС–Р№";
 $PMF_LANG["ad_sess_s_ip"] = "IP:";
 $PMF_LANG["ad_sess_s_minct"] = "min. actions:";
-$PMF_LANG["ad_sess_s_date"] = "Дата";
-$PMF_LANG["ad_sess_s_after"] = "з";
-$PMF_LANG["ad_sess_s_before"] = "до";
-$PMF_LANG["ad_sess_s_search"] = "Пошук";
+$PMF_LANG["ad_sess_s_date"] = "Р”Р°С‚Р°";
+$PMF_LANG["ad_sess_s_after"] = "Р·";
+$PMF_LANG["ad_sess_s_before"] = "РґРѕ";
+$PMF_LANG["ad_sess_s_search"] = "РџРѕС€СѓРє";
 $PMF_LANG["ad_sess_session"] = "Session";
 $PMF_LANG["ad_sess_r"] = "Search results for";
 $PMF_LANG["ad_sess_referer"] = "Referer:";
@@ -359,205 +359,205 @@ $PMF_LANG["ad_sess_ai_sid"] = "Session ID:";
 $PMF_LANG["ad_sess_back"] = "Back";
 
 // Statistik
-$PMF_LANG["ad_rs"] = "Рейтинг";
+$PMF_LANG["ad_rs"] = "Р РµР№С‚РёРЅРі";
 $PMF_LANG["ad_rs_rating_1"] = "The ranking of";
 $PMF_LANG["ad_rs_rating_2"] = "users shows:";
-$PMF_LANG["ad_rs_red"] = "Червоний";
-$PMF_LANG["ad_rs_green"] = "Зелений";
-$PMF_LANG["ad_rs_altt"] = "- середній бал нижче 2";
-$PMF_LANG["ad_rs_ahtf"] = "- середній бал більше 4";
+$PMF_LANG["ad_rs_red"] = "Р§РµСЂРІРѕРЅРёР№";
+$PMF_LANG["ad_rs_green"] = "Р—РµР»РµРЅРёР№";
+$PMF_LANG["ad_rs_altt"] = "- СЃРµСЂРµРґРЅС–Р№ Р±Р°Р» РЅРёР¶С‡Рµ 2";
+$PMF_LANG["ad_rs_ahtf"] = "- СЃРµСЂРµРґРЅС–Р№ Р±Р°Р» Р±С–Р»СЊС€Рµ 4";
 $PMF_LANG["ad_rs_no"] = "No ranking available";
 
 // Auth
-$PMF_LANG["ad_auth_insert"] = "Введіть ваше ім'я і пароль.";
-$PMF_LANG["ad_auth_user"] = "Логін:";
-$PMF_LANG["ad_auth_passwd"] = "Пароль:";
+$PMF_LANG["ad_auth_insert"] = "Р’РІРµРґС–С‚СЊ РІР°С€Рµ С–Рј'СЏ С– РїР°СЂРѕР»СЊ.";
+$PMF_LANG["ad_auth_user"] = "Р›РѕРіС–РЅ:";
+$PMF_LANG["ad_auth_passwd"] = "РџР°СЂРѕР»СЊ:";
 $PMF_LANG["ad_auth_ok"] = "OK";
-$PMF_LANG["ad_auth_reset"] = "Очистити";
-$PMF_LANG["ad_auth_fail"] = "Ім'я користувача або пароль невірні.";
-$PMF_LANG["ad_auth_sess"] = "Час дії сесії закінчився.";
+$PMF_LANG["ad_auth_reset"] = "РћС‡РёСЃС‚РёС‚Рё";
+$PMF_LANG["ad_auth_fail"] = "Р†Рј'СЏ РєРѕСЂРёСЃС‚СѓРІР°С‡Р° Р°Р±Рѕ РїР°СЂРѕР»СЊ РЅРµРІС–СЂРЅС–.";
+$PMF_LANG["ad_auth_sess"] = "Р§Р°СЃ РґС–С— СЃРµСЃС–С— Р·Р°РєС–РЅС‡РёРІСЃСЏ.";
 
 // Added v0.8 - 24.05.2001 - Bastian - Admin
-$PMF_LANG["ad_config_edit"] = "Настройки";
-$PMF_LANG["ad_config_save"] = "Зберегти настройки";
-$PMF_LANG["ad_config_reset"] = "Скидання";
-$PMF_LANG["ad_config_saved"] = "Зміни збережені.";
-$PMF_LANG["ad_menu_editconfig"] = "Настройки";
-$PMF_LANG["ad_att_none"] = "Файли відсутні";
-$PMF_LANG["ad_att_att"] = "Файли:";
-$PMF_LANG["ad_att_add"] = "Прикріпити фал";
-$PMF_LANG["ad_entryins_suc"] = "Запис збережений.";
-$PMF_LANG["ad_entryins_fail"] = "Помилка.";
-$PMF_LANG["ad_att_del"] = "Видалити";
-$PMF_LANG["ad_att_nope"] = "Прикріплення файлів можливе тільки при редагуванні відповіді.";
-$PMF_LANG["ad_att_delsuc"] = "Файл успішно прикріплений.";
-$PMF_LANG["ad_att_delfail"] = "При видаленні прикріпленого файлу виникла помилка.";
-$PMF_LANG["ad_entry_add"] = "Новий запись";
+$PMF_LANG["ad_config_edit"] = "РќР°СЃС‚СЂРѕР№РєРё";
+$PMF_LANG["ad_config_save"] = "Р—Р±РµСЂРµРіС‚Рё РЅР°СЃС‚СЂРѕР№РєРё";
+$PMF_LANG["ad_config_reset"] = "РЎРєРёРґР°РЅРЅСЏ";
+$PMF_LANG["ad_config_saved"] = "Р—РјС–РЅРё Р·Р±РµСЂРµР¶РµРЅС–.";
+$PMF_LANG["ad_menu_editconfig"] = "РќР°СЃС‚СЂРѕР№РєРё";
+$PMF_LANG["ad_att_none"] = "Р¤Р°Р№Р»Рё РІС–РґСЃСѓС‚РЅС–";
+$PMF_LANG["ad_att_att"] = "Р¤Р°Р№Р»Рё:";
+$PMF_LANG["ad_att_add"] = "РџСЂРёРєСЂС–РїРёС‚Рё С„Р°Р»";
+$PMF_LANG["ad_entryins_suc"] = "Р—Р°РїРёСЃ Р·Р±РµСЂРµР¶РµРЅРёР№.";
+$PMF_LANG["ad_entryins_fail"] = "РџРѕРјРёР»РєР°.";
+$PMF_LANG["ad_att_del"] = "Р’РёРґР°Р»РёС‚Рё";
+$PMF_LANG["ad_att_nope"] = "РџСЂРёРєСЂС–РїР»РµРЅРЅСЏ С„Р°Р№Р»С–РІ РјРѕР¶Р»РёРІРµ С‚С–Р»СЊРєРё РїСЂРё СЂРµРґР°РіСѓРІР°РЅРЅС– РІС–РґРїРѕРІС–РґС–.";
+$PMF_LANG["ad_att_delsuc"] = "Р¤Р°Р№Р» СѓСЃРїС–С€РЅРѕ РїСЂРёРєСЂС–РїР»РµРЅРёР№.";
+$PMF_LANG["ad_att_delfail"] = "РџСЂРё РІРёРґР°Р»РµРЅРЅС– РїСЂРёРєСЂС–РїР»РµРЅРѕРіРѕ С„Р°Р№Р»Сѓ РІРёРЅРёРєР»Р° РїРѕРјРёР»РєР°.";
+$PMF_LANG["ad_entry_add"] = "РќРѕРІРёР№ Р·Р°РїРёСЃСЊ";
 
 // Added v0.85 - 08.06.2001 - Bastian - Admin
-$PMF_LANG["ad_csv_make"] = "Рекомендується один раз в місяць виконувати процедуру збереження образу бази даних для запобігання її поломці і втраті даних. Формат архівного файлу сумісний з інструментом phpMyAdmin.";
+$PMF_LANG["ad_csv_make"] = "Р РµРєРѕРјРµРЅРґСѓС”С‚СЊСЃСЏ РѕРґРёРЅ СЂР°Р· РІ РјС–СЃСЏС†СЊ РІРёРєРѕРЅСѓРІР°С‚Рё РїСЂРѕС†РµРґСѓСЂСѓ Р·Р±РµСЂРµР¶РµРЅРЅСЏ РѕР±СЂР°Р·Сѓ Р±Р°Р·Рё РґР°РЅРёС… РґР»СЏ Р·Р°РїРѕР±С–РіР°РЅРЅСЏ С—С— РїРѕР»РѕРјС†С– С– РІС‚СЂР°С‚С– РґР°РЅРёС…. Р¤РѕСЂРјР°С‚ Р°СЂС…С–РІРЅРѕРіРѕ С„Р°Р№Р»Сѓ СЃСѓРјС–СЃРЅРёР№ Р· С–РЅСЃС‚СЂСѓРјРµРЅС‚РѕРј phpMyAdmin.";
 $PMF_LANG["ad_csv_link"] = "Download the backup";
-$PMF_LANG["ad_csv_head"] = "Створення аварійної копії бази даних";
+$PMF_LANG["ad_csv_head"] = "РЎС‚РІРѕСЂРµРЅРЅСЏ Р°РІР°СЂС–Р№РЅРѕС— РєРѕРїС–С— Р±Р°Р·Рё РґР°РЅРёС…";
 $PMF_LANG["ad_att_addto"] = "Add an attachment to the issue";
 $PMF_LANG["ad_att_addto_2"] = "";
 $PMF_LANG["ad_att_att"] = "File:";
 $PMF_LANG["ad_att_butt"] = "OK";
-$PMF_LANG["ad_att_suc"] = "Файл успішно прикріплений.";
+$PMF_LANG["ad_att_suc"] = "Р¤Р°Р№Р» СѓСЃРїС–С€РЅРѕ РїСЂРёРєСЂС–РїР»РµРЅРёР№.";
 $PMF_LANG["ad_att_fail"] = "An error occured while attaching the file.";
 $PMF_LANG["ad_att_close"] = "Close this window";
 
 // Added v0.85 - 08.07.2001 - Bastian - Admin
-$PMF_LANG["ad_csv_restore"] = "За допомогою цієї форми ви можете відновити базу даних з архіву. Всі існуючі записи будуть перезаписані";
-$PMF_LANG["ad_csv_file"] = "Файл";
+$PMF_LANG["ad_csv_restore"] = "Р—Р° РґРѕРїРѕРјРѕРіРѕСЋ С†С–С”С— С„РѕСЂРјРё РІРё РјРѕР¶РµС‚Рµ РІС–РґРЅРѕРІРёС‚Рё Р±Р°Р·Сѓ РґР°РЅРёС… Р· Р°СЂС…С–РІСѓ. Р’СЃС– С–СЃРЅСѓСЋС‡С– Р·Р°РїРёСЃРё Р±СѓРґСѓС‚СЊ РїРµСЂРµР·Р°РїРёСЃР°РЅС–";
+$PMF_LANG["ad_csv_file"] = "Р¤Р°Р№Р»";
 $PMF_LANG["ad_csv_ok"] = "OK";
-$PMF_LANG["ad_csv_linklog"] = "архівація протоколів";
-$PMF_LANG["ad_csv_linkdat"] = "архівація даних";
-$PMF_LANG["ad_csv_head2"] = "Відновлення бази даних";
-$PMF_LANG["ad_csv_no"] = "Формат файлу не сумісний з Mac F.A.Q.";
-$PMF_LANG["ad_csv_prepare"] = "Підготовка запитів...";
-$PMF_LANG["ad_csv_process"] = "Виконання запиту до бази даних...";
-$PMF_LANG["ad_csv_of"] = "з";
-$PMF_LANG["ad_csv_suc"] = "виконані успішно.";
-$PMF_LANG["ad_csv_backup"] = "Архівація даних";
+$PMF_LANG["ad_csv_linklog"] = "Р°СЂС…С–РІР°С†С–СЏ РїСЂРѕС‚РѕРєРѕР»С–РІ";
+$PMF_LANG["ad_csv_linkdat"] = "Р°СЂС…С–РІР°С†С–СЏ РґР°РЅРёС…";
+$PMF_LANG["ad_csv_head2"] = "Р’С–РґРЅРѕРІР»РµРЅРЅСЏ Р±Р°Р·Рё РґР°РЅРёС…";
+$PMF_LANG["ad_csv_no"] = "Р¤РѕСЂРјР°С‚ С„Р°Р№Р»Сѓ РЅРµ СЃСѓРјС–СЃРЅРёР№ Р· Mac F.A.Q.";
+$PMF_LANG["ad_csv_prepare"] = "РџС–РґРіРѕС‚РѕРІРєР° Р·Р°РїРёС‚С–РІ...";
+$PMF_LANG["ad_csv_process"] = "Р’РёРєРѕРЅР°РЅРЅСЏ Р·Р°РїРёС‚Сѓ РґРѕ Р±Р°Р·Рё РґР°РЅРёС…...";
+$PMF_LANG["ad_csv_of"] = "Р·";
+$PMF_LANG["ad_csv_suc"] = "РІРёРєРѕРЅР°РЅС– СѓСЃРїС–С€РЅРѕ.";
+$PMF_LANG["ad_csv_backup"] = "РђСЂС…С–РІР°С†С–СЏ РґР°РЅРёС…";
 $PMF_LANG["ad_csv_rest"] = "Restore a backup";
 
 // Added v0.8 - 25.05.2001 - Bastian - Admin
-$PMF_LANG["ad_menu_backup"] = "Архівація";
-$PMF_LANG["ad_logout"] = "Сесія успішно завершена.";
+$PMF_LANG["ad_menu_backup"] = "РђСЂС…С–РІР°С†С–СЏ";
+$PMF_LANG["ad_logout"] = "РЎРµСЃС–СЏ СѓСЃРїС–С€РЅРѕ Р·Р°РІРµСЂС€РµРЅР°.";
 $PMF_LANG["ad_news_add"] = "Add news";
-$PMF_LANG["ad_news_edit"] = "Редагування новин";
+$PMF_LANG["ad_news_edit"] = "Р РµРґР°РіСѓРІР°РЅРЅСЏ РЅРѕРІРёРЅ";
 $PMF_LANG["ad_cookie"] = "Cookies";
 $PMF_LANG["ad_sess_head"] = "View sessions";
 
 // Added v1.1 - 06.01.2002 - Bastian
-$PMF_LANG["ad_menu_categ_edit"] = "Управління розділами";
-$PMF_LANG["ad_menu_stat"] = "Рейтинг записів";
-$PMF_LANG["ad_kateg_add"] = "додати";
-$PMF_LANG["ad_kateg_rename"] = "перейменувати";
-$PMF_LANG["ad_adminlog_date"] = "Дата";
-$PMF_LANG["ad_adminlog_user"] = "Користувач";
-$PMF_LANG["ad_adminlog_ip"] = "IP-адреса";
+$PMF_LANG["ad_menu_categ_edit"] = "РЈРїСЂР°РІР»С–РЅРЅСЏ СЂРѕР·РґС–Р»Р°РјРё";
+$PMF_LANG["ad_menu_stat"] = "Р РµР№С‚РёРЅРі Р·Р°РїРёСЃС–РІ";
+$PMF_LANG["ad_kateg_add"] = "РґРѕРґР°С‚Рё";
+$PMF_LANG["ad_kateg_rename"] = "РїРµСЂРµР№РјРµРЅСѓРІР°С‚Рё";
+$PMF_LANG["ad_adminlog_date"] = "Р”Р°С‚Р°";
+$PMF_LANG["ad_adminlog_user"] = "РљРѕСЂРёСЃС‚СѓРІР°С‡";
+$PMF_LANG["ad_adminlog_ip"] = "IP-Р°РґСЂРµСЃР°";
 
-$PMF_LANG["ad_stat_sess"] = "Сесії";
-$PMF_LANG["ad_stat_days"] = "Дні";
-$PMF_LANG["ad_stat_vis"] = "Сесій (відвідин)";
-$PMF_LANG["ad_stat_vpd"] = "Відвідин в день";
-$PMF_LANG["ad_stat_fien"] = "Перший вхід в систему";
-$PMF_LANG["ad_stat_laen"] = "Останній вхід";
-$PMF_LANG["ad_stat_browse"] = "Переглянути сесій";
+$PMF_LANG["ad_stat_sess"] = "РЎРµСЃС–С—";
+$PMF_LANG["ad_stat_days"] = "Р”РЅС–";
+$PMF_LANG["ad_stat_vis"] = "РЎРµСЃС–Р№ (РІС–РґРІС–РґРёРЅ)";
+$PMF_LANG["ad_stat_vpd"] = "Р’С–РґРІС–РґРёРЅ РІ РґРµРЅСЊ";
+$PMF_LANG["ad_stat_fien"] = "РџРµСЂС€РёР№ РІС…С–Рґ РІ СЃРёСЃС‚РµРјСѓ";
+$PMF_LANG["ad_stat_laen"] = "РћСЃС‚Р°РЅРЅС–Р№ РІС…С–Рґ";
+$PMF_LANG["ad_stat_browse"] = "РџРµСЂРµРіР»СЏРЅСѓС‚Рё СЃРµСЃС–Р№";
 $PMF_LANG["ad_stat_ok"] = "OK";
 
-$PMF_LANG["ad_sess_time"] = "Час";
-$PMF_LANG["ad_sess_sid"] = "ID сесії";
-$PMF_LANG["ad_sess_ip"] = "IP-адреса";
+$PMF_LANG["ad_sess_time"] = "Р§Р°СЃ";
+$PMF_LANG["ad_sess_sid"] = "ID СЃРµСЃС–С—";
+$PMF_LANG["ad_sess_ip"] = "IP-Р°РґСЂРµСЃР°";
 
-$PMF_LANG["ad_ques_take"] = "Подивитися";
-$PMF_LANG["no_cats"] = "Категорії не знайдені.";
+$PMF_LANG["ad_ques_take"] = "РџРѕРґРёРІРёС‚РёСЃСЏ";
+$PMF_LANG["no_cats"] = "РљР°С‚РµРіРѕСЂС–С— РЅРµ Р·РЅР°Р№РґРµРЅС–.";
 
 // Added v1.1 - 17.01.2002 - Bastian
-$PMF_LANG["ad_log_lger"] = "Невірний пароль або логін."; 
-$PMF_LANG["ad_log_sess"] = "Сесія прострочена."; 
-$PMF_LANG["ad_log_edit"] = "Форма \"Редактрование профайла\"- користувача: "; 
-$PMF_LANG["ad_log_crea"] = "Форма \"Новая запись\"."; 
-$PMF_LANG["ad_log_crsa"] = "Доданий новий запис."; 
-$PMF_LANG["ad_log_ussa"] = "Змінений профайл користувача: "; 
-$PMF_LANG["ad_log_usde"] = "Видалений користувач: "; 
-$PMF_LANG["ad_log_beed"] = "Форма - Зміна профайла користувача: "; 
-$PMF_LANG["ad_log_bede"] = "Видалений запис: "; 
+$PMF_LANG["ad_log_lger"] = "РќРµРІС–СЂРЅРёР№ РїР°СЂРѕР»СЊ Р°Р±Рѕ Р»РѕРіС–РЅ."; 
+$PMF_LANG["ad_log_sess"] = "РЎРµСЃС–СЏ РїСЂРѕСЃС‚СЂРѕС‡РµРЅР°."; 
+$PMF_LANG["ad_log_edit"] = "Р¤РѕСЂРјР° \"Р РµРґР°РєС‚СЂРѕРІР°РЅРёРµ РїСЂРѕС„Р°Р№Р»Р°\"- РєРѕСЂРёСЃС‚СѓРІР°С‡Р°: "; 
+$PMF_LANG["ad_log_crea"] = "Р¤РѕСЂРјР° \"РќРѕРІР°СЏ Р·Р°РїРёСЃСЊ\"."; 
+$PMF_LANG["ad_log_crsa"] = "Р”РѕРґР°РЅРёР№ РЅРѕРІРёР№ Р·Р°РїРёСЃ."; 
+$PMF_LANG["ad_log_ussa"] = "Р—РјС–РЅРµРЅРёР№ РїСЂРѕС„Р°Р№Р» РєРѕСЂРёСЃС‚СѓРІР°С‡Р°: "; 
+$PMF_LANG["ad_log_usde"] = "Р’РёРґР°Р»РµРЅРёР№ РєРѕСЂРёСЃС‚СѓРІР°С‡: "; 
+$PMF_LANG["ad_log_beed"] = "Р¤РѕСЂРјР° - Р—РјС–РЅР° РїСЂРѕС„Р°Р№Р»Р° РєРѕСЂРёСЃС‚СѓРІР°С‡Р°: "; 
+$PMF_LANG["ad_log_bede"] = "Р’РёРґР°Р»РµРЅРёР№ Р·Р°РїРёСЃ: "; 
 
-$PMF_LANG["ad_start_visits"] = "Відвідин"; 
-$PMF_LANG["ad_start_articles"] = "Записів"; 
-$PMF_LANG["ad_start_comments"] = "Коментарів"; 
+$PMF_LANG["ad_start_visits"] = "Р’С–РґРІС–РґРёРЅ"; 
+$PMF_LANG["ad_start_articles"] = "Р—Р°РїРёСЃС–РІ"; 
+$PMF_LANG["ad_start_comments"] = "РљРѕРјРµРЅС‚Р°СЂС–РІ"; 
 
 
  // Added v1.1 - 30.01.2002 - Bastian 
  
-$PMF_LANG["ad_categ_paste"] = "вставити"; 
+$PMF_LANG["ad_categ_paste"] = "РІСЃС‚Р°РІРёС‚Рё"; 
 $PMF_LANG["ad_categ_cut"] = "cut"; 
 $PMF_LANG["ad_categ_copy"] = "copy"; 
 $PMF_LANG["ad_categ_process"] = "Processing categories..."; 
 
 // Added v1.1.4 - 07.05.2002 - Thorsten 
 
-$PMF_LANG["err_NotAuth"] = "Ви не авторизовані."; 
+$PMF_LANG["err_NotAuth"] = "Р’Рё РЅРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅС–."; 
 
 // Added v1.2.3 - 29.11.2002 - Thorsten 
 
-$PMF_LANG["msgPreviusPage"] = "попередня"; 
-$PMF_LANG["msgNextPage"] = "наступна"; 
-$PMF_LANG["msgPageDoublePoint"] = "Сторінки: "; 
-$PMF_LANG["msgMainCategory"] = "Основна категорія"; 
+$PMF_LANG["msgPreviusPage"] = "РїРѕРїРµСЂРµРґРЅСЏ"; 
+$PMF_LANG["msgNextPage"] = "РЅР°СЃС‚СѓРїРЅР°"; 
+$PMF_LANG["msgPageDoublePoint"] = "РЎС‚РѕСЂС–РЅРєРё: "; 
+$PMF_LANG["msgMainCategory"] = "РћСЃРЅРѕРІРЅР° РєР°С‚РµРіРѕСЂС–СЏ"; 
 
 // Added v1.2.4 - 30.01.2003 - Thorsten 
 
-$PMF_LANG["ad_passwdsuc"] = "Пароль змінений."; 
+$PMF_LANG["ad_passwdsuc"] = "РџР°СЂРѕР»СЊ Р·РјС–РЅРµРЅРёР№."; 
 
 // Added v1.3.0 - 04.03.2003 - Thorsten 
 
-$PMF_LANG["msgPDF"] = "Скомпілювати PDF файл"; 
-$PMF_LANG["ad_xml_head"] = "Архівація у формат XML"; 
-$PMF_LANG["ad_xml_hint"] = "Збереження всіх записів бази даних у форматі XML."; 
-$PMF_LANG["ad_xml_gen"] = "створити XML файл"; 
-$PMF_LANG["ad_entry_locale"] = "Мова"; 
-$PMF_LANG["msgLangaugeSubmit"] = "змінити мову"; 
+$PMF_LANG["msgPDF"] = "РЎРєРѕРјРїС–Р»СЋРІР°С‚Рё PDF С„Р°Р№Р»"; 
+$PMF_LANG["ad_xml_head"] = "РђСЂС…С–РІР°С†С–СЏ Сѓ С„РѕСЂРјР°С‚ XML"; 
+$PMF_LANG["ad_xml_hint"] = "Р—Р±РµСЂРµР¶РµРЅРЅСЏ РІСЃС–С… Р·Р°РїРёСЃС–РІ Р±Р°Р·Рё РґР°РЅРёС… Сѓ С„РѕСЂРјР°С‚С– XML."; 
+$PMF_LANG["ad_xml_gen"] = "СЃС‚РІРѕСЂРёС‚Рё XML С„Р°Р№Р»"; 
+$PMF_LANG["ad_entry_locale"] = "РњРѕРІР°"; 
+$PMF_LANG["msgLangaugeSubmit"] = "Р·РјС–РЅРёС‚Рё РјРѕРІСѓ"; 
 
 // Added v1.3.1 - 29.04.2003 - Thorsten 
 
-$PMF_LANG["ad_entry_preview"] = "Передперегляд"; 
-$PMF_LANG["ad_attach_1"] = "Невірно вказана директорія для прикріплених файлів в панелі управління."; 
-$PMF_LANG["ad_attach_2"] = "Невірно вказано посилання для прикріплених файлів в панелі управління."; 
-$PMF_LANG["ad_attach_3"] = "Файл attachment.php не можна відкрити без прав на це, виконаєте вхід в систему."; 
-$PMF_LANG["ad_attach_4"] = "Файл повинен бути не більше ".
-$PMF_CONF['main.maxAttachmentSize']." байт."; 
-$PMF_LANG["ad_menu_export"] = "Експорт даних"; 
-$PMF_LANG["ad_export_1"] = "RSS файл созздан"; 
+$PMF_LANG["ad_entry_preview"] = "РџРµСЂРµРґРїРµСЂРµРіР»СЏРґ"; 
+$PMF_LANG["ad_attach_1"] = "РќРµРІС–СЂРЅРѕ РІРєР°Р·Р°РЅР° РґРёСЂРµРєС‚РѕСЂС–СЏ РґР»СЏ РїСЂРёРєСЂС–РїР»РµРЅРёС… С„Р°Р№Р»С–РІ РІ РїР°РЅРµР»С– СѓРїСЂР°РІР»С–РЅРЅСЏ."; 
+$PMF_LANG["ad_attach_2"] = "РќРµРІС–СЂРЅРѕ РІРєР°Р·Р°РЅРѕ РїРѕСЃРёР»Р°РЅРЅСЏ РґР»СЏ РїСЂРёРєСЂС–РїР»РµРЅРёС… С„Р°Р№Р»С–РІ РІ РїР°РЅРµР»С– СѓРїСЂР°РІР»С–РЅРЅСЏ."; 
+$PMF_LANG["ad_attach_3"] = "Р¤Р°Р№Р» attachment.php РЅРµ РјРѕР¶РЅР° РІС–РґРєСЂРёС‚Рё Р±РµР· РїСЂР°РІ РЅР° С†Рµ, РІРёРєРѕРЅР°С”С‚Рµ РІС…С–Рґ РІ СЃРёСЃС‚РµРјСѓ."; 
+$PMF_LANG["ad_attach_4"] = "Р¤Р°Р№Р» РїРѕРІРёРЅРµРЅ Р±СѓС‚Рё РЅРµ Р±С–Р»СЊС€Рµ ".
+$PMF_CONF['main.maxAttachmentSize']." Р±Р°Р№С‚."; 
+$PMF_LANG["ad_menu_export"] = "Р•РєСЃРїРѕСЂС‚ РґР°РЅРёС…"; 
+$PMF_LANG["ad_export_1"] = "RSS С„Р°Р№Р» СЃРѕР·Р·РґР°РЅ"; 
 $PMF_LANG["ad_export_2"] = "."; 
-$PMF_LANG["ad_export_file"] = "Помилка запису файлу."; 
-$PMF_LANG["ad_export_news"] = "Новини у форматі RSS смуги"; 
-$PMF_LANG["ad_export_topten"] = "10 популярних записів у форматі RSS"; 
-$PMF_LANG["ad_export_latest"] = "5 останніх записів у форматі RSS"; 
-$PMF_LANG["ad_export_pdf"] = "Експорт всіх записів в PDF формат"; 
-$PMF_LANG["ad_export_generate"] = "створити RSS файл"; 
+$PMF_LANG["ad_export_file"] = "РџРѕРјРёР»РєР° Р·Р°РїРёСЃСѓ С„Р°Р№Р»Сѓ."; 
+$PMF_LANG["ad_export_news"] = "РќРѕРІРёРЅРё Сѓ С„РѕСЂРјР°С‚С– RSS СЃРјСѓРіРё"; 
+$PMF_LANG["ad_export_topten"] = "10 РїРѕРїСѓР»СЏСЂРЅРёС… Р·Р°РїРёСЃС–РІ Сѓ С„РѕСЂРјР°С‚С– RSS"; 
+$PMF_LANG["ad_export_latest"] = "5 РѕСЃС‚Р°РЅРЅС–С… Р·Р°РїРёСЃС–РІ Сѓ С„РѕСЂРјР°С‚С– RSS"; 
+$PMF_LANG["ad_export_pdf"] = "Р•РєСЃРїРѕСЂС‚ РІСЃС–С… Р·Р°РїРёСЃС–РІ РІ PDF С„РѕСЂРјР°С‚"; 
+$PMF_LANG["ad_export_generate"] = "СЃС‚РІРѕСЂРёС‚Рё RSS С„Р°Р№Р»"; 
 
-$PMF_LANG["rightsLanguage"]['adduser'] = "Додавання користувачів";
-$PMF_LANG["rightsLanguage"]['edituser'] = "Редагування користувачів";
-$PMF_LANG["rightsLanguage"]['deluser'] = "Видалення користувачів";
-$PMF_LANG["rightsLanguage"]['addbt'] = "Додавання нових записів";
-$PMF_LANG["rightsLanguage"]['editbt'] = "Редагування записів";
-$PMF_LANG["rightsLanguage"]['delbt'] = "Видалення записів";
-$PMF_LANG["rightsLanguage"]['viewlog'] = "Проглядання лог-файлов";
-$PMF_LANG["rightsLanguage"]['adminlog'] = "Проглядання лог-файлов адміністратора";
-$PMF_LANG["rightsLanguage"]['delcomment'] = "Видалення коментарів";
-$PMF_LANG["rightsLanguage"]['addnews'] = "Додавання новин";
-$PMF_LANG["rightsLanguage"]['editnews'] = "Редагування новин";
-$PMF_LANG["rightsLanguage"]['delnews'] = "Видалення новин";
-$PMF_LANG["rightsLanguage"]['addcateg'] = "Створення нових категорій";
-$PMF_LANG["rightsLanguage"]['editcateg'] = "Редагування категорій";
-$PMF_LANG["rightsLanguage"]['delcateg'] = "Видалення категорій";
-$PMF_LANG["rightsLanguage"]['passwd'] = "Зміна паролів";
-$PMF_LANG["rightsLanguage"]['editconfig'] = "Настройки системи";
-$PMF_LANG["rightsLanguage"]['addatt'] = "Прикріплення файлів до записів";
-$PMF_LANG["rightsLanguage"]['delatt'] = "Видалення прикріплених файлів";
-$PMF_LANG["rightsLanguage"]['backup'] = "Створення архіву";
-$PMF_LANG["rightsLanguage"]['restore'] = "Відновлення системи з архіву";
-$PMF_LANG["rightsLanguage"]['delquestion'] = "Видалення відкритих питань";
+$PMF_LANG["rightsLanguage"]['adduser'] = "Р”РѕРґР°РІР°РЅРЅСЏ РєРѕСЂРёСЃС‚СѓРІР°С‡С–РІ";
+$PMF_LANG["rightsLanguage"]['edituser'] = "Р РµРґР°РіСѓРІР°РЅРЅСЏ РєРѕСЂРёСЃС‚СѓРІР°С‡С–РІ";
+$PMF_LANG["rightsLanguage"]['deluser'] = "Р’РёРґР°Р»РµРЅРЅСЏ РєРѕСЂРёСЃС‚СѓРІР°С‡С–РІ";
+$PMF_LANG["rightsLanguage"]['addbt'] = "Р”РѕРґР°РІР°РЅРЅСЏ РЅРѕРІРёС… Р·Р°РїРёСЃС–РІ";
+$PMF_LANG["rightsLanguage"]['editbt'] = "Р РµРґР°РіСѓРІР°РЅРЅСЏ Р·Р°РїРёСЃС–РІ";
+$PMF_LANG["rightsLanguage"]['delbt'] = "Р’РёРґР°Р»РµРЅРЅСЏ Р·Р°РїРёСЃС–РІ";
+$PMF_LANG["rightsLanguage"]['viewlog'] = "РџСЂРѕРіР»СЏРґР°РЅРЅСЏ Р»РѕРі-С„Р°Р№Р»РѕРІ";
+$PMF_LANG["rightsLanguage"]['adminlog'] = "РџСЂРѕРіР»СЏРґР°РЅРЅСЏ Р»РѕРі-С„Р°Р№Р»РѕРІ Р°РґРјС–РЅС–СЃС‚СЂР°С‚РѕСЂР°";
+$PMF_LANG["rightsLanguage"]['delcomment'] = "Р’РёРґР°Р»РµРЅРЅСЏ РєРѕРјРµРЅС‚Р°СЂС–РІ";
+$PMF_LANG["rightsLanguage"]['addnews'] = "Р”РѕРґР°РІР°РЅРЅСЏ РЅРѕРІРёРЅ";
+$PMF_LANG["rightsLanguage"]['editnews'] = "Р РµРґР°РіСѓРІР°РЅРЅСЏ РЅРѕРІРёРЅ";
+$PMF_LANG["rightsLanguage"]['delnews'] = "Р’РёРґР°Р»РµРЅРЅСЏ РЅРѕРІРёРЅ";
+$PMF_LANG["rightsLanguage"]['addcateg'] = "РЎС‚РІРѕСЂРµРЅРЅСЏ РЅРѕРІРёС… РєР°С‚РµРіРѕСЂС–Р№";
+$PMF_LANG["rightsLanguage"]['editcateg'] = "Р РµРґР°РіСѓРІР°РЅРЅСЏ РєР°С‚РµРіРѕСЂС–Р№";
+$PMF_LANG["rightsLanguage"]['delcateg'] = "Р’РёРґР°Р»РµРЅРЅСЏ РєР°С‚РµРіРѕСЂС–Р№";
+$PMF_LANG["rightsLanguage"]['passwd'] = "Р—РјС–РЅР° РїР°СЂРѕР»С–РІ";
+$PMF_LANG["rightsLanguage"]['editconfig'] = "РќР°СЃС‚СЂРѕР№РєРё СЃРёСЃС‚РµРјРё";
+$PMF_LANG["rightsLanguage"]['addatt'] = "РџСЂРёРєСЂС–РїР»РµРЅРЅСЏ С„Р°Р№Р»С–РІ РґРѕ Р·Р°РїРёСЃС–РІ";
+$PMF_LANG["rightsLanguage"]['delatt'] = "Р’РёРґР°Р»РµРЅРЅСЏ РїСЂРёРєСЂС–РїР»РµРЅРёС… С„Р°Р№Р»С–РІ";
+$PMF_LANG["rightsLanguage"]['backup'] = "РЎС‚РІРѕСЂРµРЅРЅСЏ Р°СЂС…С–РІСѓ";
+$PMF_LANG["rightsLanguage"]['restore'] = "Р’С–РґРЅРѕРІР»РµРЅРЅСЏ СЃРёСЃС‚РµРјРё Р· Р°СЂС…С–РІСѓ";
+$PMF_LANG["rightsLanguage"]['delquestion'] = "Р’РёРґР°Р»РµРЅРЅСЏ РІС–РґРєСЂРёС‚РёС… РїРёС‚Р°РЅСЊ";
 
-$PMF_LANG["msgAttachedFiles"] = "Прикріплені файли:";
+$PMF_LANG["msgAttachedFiles"] = "РџСЂРёРєСЂС–РїР»РµРЅС– С„Р°Р№Р»Рё:";
 
 // Added v1.3.3 - 27.05.2003 - Thorsten
-$PMF_LANG["ad_user_action"] = "Дія"; 
-$PMF_LANG["ad_entry_email"] = "email адреса:"; 
-$PMF_LANG["ad_entry_allowComments"] = "Дозвіл коментувати"; 
-$PMF_LANG["msgWriteNoComment"] = "Коментарі заборонені"; 
-$PMF_LANG["ad_user_realname"] = "Справжнє ім'я:"; 
-$PMF_LANG["ad_export_generate_pdf "] = "Створити PDF файл"; 
-$PMF_LANG["ad_export_full_Mac F.A.Q."] = "База Mac F.A.Q. у вигляді PDF файлу: "; 
-$PMF_LANG["err_bannedIP"] = "Доступ до системи з вашого IP адреси заборонений.";
-$PMF_LANG["err_SaveQuestion"] = "Не заповнені обов'язкові поля <strong>ваше ім'я</strong>, <strong>ваше ім'я email</strong> і <strong>текст питання</strong>.<br /><br /><a href=\"javascript:history.back();\">Вернутсья назад</a><br /><br />";
+$PMF_LANG["ad_user_action"] = "Р”С–СЏ"; 
+$PMF_LANG["ad_entry_email"] = "email Р°РґСЂРµСЃР°:"; 
+$PMF_LANG["ad_entry_allowComments"] = "Р”РѕР·РІС–Р» РєРѕРјРµРЅС‚СѓРІР°С‚Рё"; 
+$PMF_LANG["msgWriteNoComment"] = "РљРѕРјРµРЅС‚Р°СЂС– Р·Р°Р±РѕСЂРѕРЅРµРЅС–"; 
+$PMF_LANG["ad_user_realname"] = "РЎРїСЂР°РІР¶РЅС” С–Рј'СЏ:"; 
+$PMF_LANG["ad_export_generate_pdf "] = "РЎС‚РІРѕСЂРёС‚Рё PDF С„Р°Р№Р»"; 
+$PMF_LANG["ad_export_full_Mac F.A.Q."] = "Р‘Р°Р·Р° Mac F.A.Q. Сѓ РІРёРіР»СЏРґС– PDF С„Р°Р№Р»Сѓ: "; 
+$PMF_LANG["err_bannedIP"] = "Р”РѕСЃС‚СѓРї РґРѕ СЃРёСЃС‚РµРјРё Р· РІР°С€РѕРіРѕ IP Р°РґСЂРµСЃРё Р·Р°Р±РѕСЂРѕРЅРµРЅРёР№.";
+$PMF_LANG["err_SaveQuestion"] = "РќРµ Р·Р°РїРѕРІРЅРµРЅС– РѕР±РѕРІ'СЏР·РєРѕРІС– РїРѕР»СЏ <strong>РІР°С€Рµ С–Рј'СЏ</strong>, <strong>РІР°С€Рµ С–Рј'СЏ email</strong> С– <strong>С‚РµРєСЃС‚ РїРёС‚Р°РЅРЅСЏ</strong>.<br /><br /><a href=\"javascript:history.back();\">Р’РµСЂРЅСѓС‚СЃСЊСЏ РЅР°Р·Р°Рґ</a><br /><br />\n";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
-$PMF_LANG["ad_entry_fontcolor"] = "Колір шрифту: "; 
-$PMF_LANG["ad_entry_fontsize"] = "Розмір шрифту: "; 
+$PMF_LANG["ad_entry_fontcolor"] = "РљРѕР»С–СЂ С€СЂРёС„С‚Сѓ: "; 
+$PMF_LANG["ad_entry_fontsize"] = "Р РѕР·РјС–СЂ С€СЂРёС„С‚Сѓ: "; 
 
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias 
 $LANG_CONF['main.language'] = array(0 => "select", 1 => "Language-File"); 
@@ -599,33 +599,33 @@ $PMF_LANG["ad_xmlrpc_button"] = "Get latest phpMyMac F.A.Q. version number by we
 $PMF_LANG["ad_xmlrpc_latest"] = "Latest version available on";
 
 
-// зміни Дениса - нашвидку і не уважно... 
+// Р·РјС–РЅРё Р”РµРЅРёСЃР° - РЅР°С€РІРёРґРєСѓ С– РЅРµ СѓРІР°Р¶РЅРѕ... 
 
 // added v1.5.0 - 2005-07-31 by Thorsten 
 $PMF_LANG['ad_categ_select'] = "Select category language";
 
 // added v1.5.1 - 2005-09-06 by Thorsten
-$PMF_LANG['msgSitemap'] = "Карта сайту"; 
+$PMF_LANG['msgSitemap'] = "РљР°СЂС‚Р° СЃР°Р№С‚Сѓ"; 
 
 // added v2.0.0 - 2007-03-17 by Thorsten
 $PMF_LANG["msgInstantResponse"] = "Instant Response"; 
 $PMF_LANG["msgInstantResponseMaxRecords"] = ". Find below the first %d records."; 
-$PMF_LANG["newsShowArchive"] = "Архів новин."; 
-$PMF_LANG["newsShowCurrent"] = "Поточні новини."; 
+$PMF_LANG["newsShowArchive"] = "РђСЂС…С–РІ РЅРѕРІРёРЅ."; 
+$PMF_LANG["newsShowCurrent"] = "РџРѕС‚РѕС‡РЅС– РЅРѕРІРёРЅРё."; 
 
 // added v1.6.0 - 2006-02-02 by Thorsten
 $PMF_LANG["ad_entry_solution_id"] = "Unique solution ID"; 
-$PMF_LANG["ad_entry_faq_record"] = "Хапісь FAQ"; 
-$PMF_LANG["ad_entry_new_revision"] = "Нова ревізія?"; 
+$PMF_LANG["ad_entry_faq_record"] = "РҐР°РїС–СЃСЊ FAQ"; 
+$PMF_LANG["ad_entry_new_revision"] = "РќРѕРІР° СЂРµРІС–Р·С–СЏ?"; 
 $PMF_LANG["ad_entry_record_administration"] = "Record administration"; 
 $PMF_LANG["ad_entry_changelog"] = "Changelog"; 
-$PMF_LANG["ad_entry_revision"] = "Ревізія"; 
-$PMF_LANG["ad_changerev"] = "Вибрати ревізію"; 
-$PMF_LANG["msgCaptcha"] = "Введіть Великими Літерами знаки, які видно на картинці"; 
-$PMF_LANG["msgSelectCategories"] = "Шукати в(у)..."; 
-$PMF_LANG["msgAllCategories"] = "... всіх категоріях"; 
+$PMF_LANG["ad_entry_revision"] = "Р РµРІС–Р·С–СЏ"; 
+$PMF_LANG["ad_changerev"] = "Р’РёР±СЂР°С‚Рё СЂРµРІС–Р·С–СЋ"; 
+$PMF_LANG["msgCaptcha"] = "Р’РІРµРґС–С‚СЊ Р’РµР»РёРєРёРјРё Р›С–С‚РµСЂР°РјРё Р·РЅР°РєРё, СЏРєС– РІРёРґРЅРѕ РЅР° РєР°СЂС‚РёРЅС†С–"; 
+$PMF_LANG["msgSelectCategories"] = "РЁСѓРєР°С‚Рё РІ(Сѓ)..."; 
+$PMF_LANG["msgAllCategories"] = "... РІСЃС–С… РєР°С‚РµРіРѕСЂС–СЏС…"; 
 $PMF_LANG["ad_you_should_update"] = "Your phpMyFAQ installation is outdated. You should update to the latest available version."; 
-$PMF_LANG["msgAdvancedSearch"] = "Докладний пошук"; 
+$PMF_LANG["msgAdvancedSearch"] = "Р”РѕРєР»Р°РґРЅРёР№ РїРѕС€СѓРє"; 
 
 // added v2.0.0 - 2006-08-15 by Thorsten and Matteo
 $PMF_LANG["ad_categ_owner"] = "Category owner"; 
@@ -633,24 +633,24 @@ $PMF_LANG["adminSection"] = "Administration";
 $PMF_LANG["err_expiredArticle"] = "This entry is expired and can not be displayed"; 
 $PMF_LANG["err_expiredNews"] = "This news is expired and can not be displayed"; 
 $PMF_LANG["err_inactiveNews"] = "This news is in revision and can not be displayed"; 
-$PMF_LANG["msgSearchOnAllLanguages"] = "Шукати у всіх мовах:"; 
+$PMF_LANG["msgSearchOnAllLanguages"] = "РЁСѓРєР°С‚Рё Сѓ РІСЃС–С… РјРѕРІР°С…:"; 
 $PMF_LANG["ad_entry_tags"] = "Tags"; 
 $PMF_LANG["msg_tags"] = "Tags"; 
 
 // added 2.0.0 - 2006-11-19 by Thorsten
-$PMF_LANG["opensearch_plugin_install"] = "Відмінити"; 
+$PMF_LANG["opensearch_plugin_install"] = "Р’С–РґРјС–РЅРёС‚Рё"; 
 $PMF_LANG["ad_quicklinks"] = "Quicklinks"; 
-$PMF_LANG["ad_qd_quick_category"] = "Додати нову категорію"; 
-$PMF_LANG["ad_quick_record"] = "Додати новий запис в FAQ"; 
-$PMF_LANG["ad_quick_user"] = "Додати нового користувача"; 
-$PMF_LANG["ad_quick_group"] = "Додати нову групу"; 
+$PMF_LANG["ad_qd_quick_category"] = "Р”РѕРґР°С‚Рё РЅРѕРІСѓ РєР°С‚РµРіРѕСЂС–СЋ"; 
+$PMF_LANG["ad_quick_record"] = "Р”РѕРґР°С‚Рё РЅРѕРІРёР№ Р·Р°РїРёСЃ РІ FAQ"; 
+$PMF_LANG["ad_quick_user"] = "Р”РѕРґР°С‚Рё РЅРѕРІРѕРіРѕ РєРѕСЂРёСЃС‚СѓРІР°С‡Р°"; 
+$PMF_LANG["ad_quick_group"] = "Р”РѕРґР°С‚Рё РЅРѕРІСѓ РіСЂСѓРїСѓ"; 
 
 // added v2.0.0 - 2006-10-15 by Matteo
-$PMF_LANG["msgUsersOnline"] = ":: %d гостей і %d зареєстрованих"; 
+$PMF_LANG["msgUsersOnline"] = ":: %d РіРѕСЃС‚РµР№ С– %d Р·Р°СЂРµС”СЃС‚СЂРѕРІР°РЅРёС…"; 
 $PMF_LANG["ad_adminlog_del_older_30d"] = "Delete immediately logs older than 30 days"; 
 $PMF_LANG["ad_adminlog_delete_success"] = "Older logs successfully deleted."; 
 $PMF_LANG["ad_adminlog_delete_failure"] = "No logs deleted: an error occurred performing the request."; 
-$PMF_LANG["newsArchive"] = ". Архів новин"; 
+$PMF_LANG["newsArchive"] = ". РђСЂС…С–РІ РЅРѕРІРёРЅ"; 
 
 // added v2.0.0 - 2006-01-02 by Lars
 $PMF_LANG['ad_user_error_password'] =  "Please enter a password. ";
@@ -669,7 +669,7 @@ $PMF_LANG["rightsLanguage"]['addglossary'] = "add glossary item";
 $PMF_LANG["rightsLanguage"]['editglossary'] = "edit glossary item";
 $PMF_LANG["rightsLanguage"]['delglossary'] = "delete glossary item";
 $PMF_LANG["ad_menu_group_administration"] = "Groups";
-$PMF_LANG['ad_user_loggedin'] = 'Ви увійшли під ім"ям ';
+$PMF_LANG['ad_user_loggedin'] = 'Р’Рё СѓРІС–Р№С€Р»Рё РїС–Рґ С–Рј"СЏРј ';
 
 $PMF_LANG['ad_group_details'] = "Group Details";
 $PMF_LANG['ad_group_add'] = "Add Group";
@@ -690,30 +690,30 @@ $PMF_LANG['ad_group_addMember'] = "+";
 $PMF_LANG['ad_group_removeMember'] = "-";
 
 // added v2.0.0 - 2006-08-15 by Thorsten and Matteo
-$PMF_LANG["ad_categ_owner"] = "Власник категорії"; 
-$PMF_LANG["adminSection"] = "Адміністрування"; 
+$PMF_LANG["ad_categ_owner"] = "Р’Р»Р°СЃРЅРёРє РєР°С‚РµРіРѕСЂС–С—"; 
+$PMF_LANG["adminSection"] = "РђРґРјС–РЅС–СЃС‚СЂСѓРІР°РЅРЅСЏ"; 
 $PMF_LANG["err_expiredArticle"] = "This entry is expired and can not be displayed"; 
 $PMF_LANG["err_expiredNews"] = "This news is expired and can not be displayed"; 
 $PMF_LANG["err_inactiveNews"] = "This news is in revision and can not be displayed"; 
-$PMF_LANG["msgSearchOnAllLanguages"] = "Шукати по всіх мовах:"; 
-$PMF_LANG["ad_entry_tags"] = "Теги"; 
-$PMF_LANG["msg_tags"] = "Теги"; 
+$PMF_LANG["msgSearchOnAllLanguages"] = "РЁСѓРєР°С‚Рё РїРѕ РІСЃС–С… РјРѕРІР°С…:"; 
+$PMF_LANG["ad_entry_tags"] = "РўРµРіРё"; 
+$PMF_LANG["msg_tags"] = "РўРµРіРё"; 
 
 // added v2.0.0 - 2007-04-04 by Thorsten
-$PMF_LANG["msgAllCatArticles"] = "Записів в цій категорії"; 
+$PMF_LANG["msgAllCatArticles"] = "Р—Р°РїРёСЃС–РІ РІ С†С–Р№ РєР°С‚РµРіРѕСЂС–С—"; 
 $PMF_LANG['msgDescriptionInstantResponse'] = 'Just type and find the answers ...';
-$PMF_LANG['msgTagSearch'] = 'Записей по тэгам';
+$PMF_LANG['msgTagSearch'] = 'Р—Р°РїРёСЃРµР№ РїРѕ С‚СЌРіР°Рј';
 $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ Information';
 $PMF_LANG['ad_online_info'] = 'Online version check';
-$PMF_LANG["ad_system_info"] = "Системна інформація"; 
+$PMF_LANG["ad_system_info"] = "РЎРёСЃС‚РµРјРЅР° С–РЅС„РѕСЂРјР°С†С–СЏ"; 
 
 // added v2.0.0 - 2006-09-02 by Thomas
 $PMF_LANG['msg_related_articles'] = 'Related entries';
 $LANG_CONF['records.numberOfRelatedArticles'] = array(0 => "input", 1 => "Number of related entries");
 
 // added v1.5.2 - 2005-09-23 by Lars
-$PMF_LANG["err_inactiveArticle"] = "Цей запис зараз зайнятий редактором і не може бути показана."; 
-$PMF_LANG["msgArticleCategories"] = "Цей запис в Категоріях"; 
+$PMF_LANG["err_inactiveArticle"] = "Р¦РµР№ Р·Р°РїРёСЃ Р·Р°СЂР°Р· Р·Р°Р№РЅСЏС‚РёР№ СЂРµРґР°РєС‚РѕСЂРѕРј С– РЅРµ РјРѕР¶Рµ Р±СѓС‚Рё РїРѕРєР°Р·Р°РЅР°."; 
+$PMF_LANG["msgArticleCategories"] = "Р¦РµР№ Р·Р°РїРёСЃ РІ РљР°С‚РµРіРѕСЂС–СЏС…"; 
 
 // added v2.0.0 - 2006-07-22 by Matteo
 $PMF_LANG['ad_news_data'] = 'News data';
@@ -726,8 +726,8 @@ $PMF_LANG['ad_news_from'] = 'From:';
 $PMF_LANG['ad_news_to'] = 'To:';
 $PMF_LANG['ad_news_insertfail'] = 'An error occurred inserting the news item into the database.';
 $PMF_LANG['ad_news_updatefail'] = 'An error occurred updating the news item into the database.';
-$PMF_LANG["newsShowCurrent"] = "Поточні новини."; 
-$PMF_LANG["newsShowArchive"] = "Архів новин."; 
-$PMF_LANG["newsArchive"] = "- архів новин"; 
-$PMF_LANG["newsWriteComment"] = "можете залишити коментар"; 
+$PMF_LANG["newsShowCurrent"] = "РџРѕС‚РѕС‡РЅС– РЅРѕРІРёРЅРё."; 
+$PMF_LANG["newsShowArchive"] = "РђСЂС…С–РІ РЅРѕРІРёРЅ."; 
+$PMF_LANG["newsArchive"] = "- Р°СЂС…С–РІ РЅРѕРІРёРЅ"; 
+$PMF_LANG["newsWriteComment"] = "РјРѕР¶РµС‚Рµ Р·Р°Р»РёС€РёС‚Рё РєРѕРјРµРЅС‚Р°СЂ"; 
 $PMF_LANG["newsCommentDate"] = "Added at: ";

@@ -127,7 +127,7 @@ class PMF_Sitemap
         case 'sqlite':
             $query = sprintf("
                     SELECT
-                        DISTINCT substr(fd.thema, 1, 1) AS letters
+                        DISTINCT PMF_String::substr(fd.thema, 1, 1) AS letters
                     FROM
                         %sfaqdata fd
                     LEFT JOIN
@@ -185,8 +185,8 @@ class PMF_Sitemap
 
         $result = $this->db->query($query);
         while ($row = $this->db->fetch_object($result)) {
-            $letters = strtoupper($row->letters);
-            if (preg_match("/^[a-z0-9]/i", $letters)) {
+            $letters = PMF_String::strtoupper($row->letters);
+            if (PMF_String::preg_match("/^[a-z0-9]/i", $letters)) {
                 $url = sprintf('%saction=sitemap&amp;letter=%s&amp;lang=%s',
                     $sids,
                     $letters,
@@ -225,7 +225,7 @@ class PMF_Sitemap
                 $this->user);
         }
 
-        $letter = strtoupper($this->db->escape_string(substr($letter, 0, 1)));
+        $letter = PMF_String::strtoupper($this->db->escape_string(PMF_String::substr($letter, 0, 1)));
 
         $writeMap = '<ul>';
 
@@ -253,7 +253,7 @@ class PMF_Sitemap
                     WHERE
                         fd.id = fcr.record_id
                     AND
-                        substr(fd.thema, 1, 1) = '%s'
+                        PMF_String::substr(fd.thema, 1, 1) = '%s'
                     AND
                         fd.lang = '%s'
                     AND
@@ -291,7 +291,7 @@ class PMF_Sitemap
                     WHERE
                         fd.id = fcr.record_id
                     AND
-                        substring(fd.thema, 1, 1) = '%s'
+                        PMF_String::substring(fd.thema, 1, 1) = '%s'
                     AND
                         fd.lang = '%s'
                     AND

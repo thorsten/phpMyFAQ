@@ -20,7 +20,7 @@
 * under the License.
 */
 
-$PMF_LANG["metaCharset"] = "iso-8859-1";
+$PMF_LANG["metaCharset"] = "UTF-8";
 $PMF_LANG["metaLanguage"] = "da";
 $PMF_LANG["language"] = "Danish";
 // ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
@@ -156,7 +156,7 @@ $PMF_LANG["err_sendMail"] = "N&oslash;dvendige felter: <strong>dit navn</strong>
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>Fundne indl&aelig;g:</strong><br /></p>";
 
-// MenÃ¼
+// MenÃƒÂ¼
 $PMF_LANG["ad"] = "ADMIN SECTION";
 $PMF_LANG["ad_menu_user_administration"] = "Brugere";
 $PMF_LANG["ad_menu_entry_aprove"] = "Godkend ";
@@ -201,7 +201,7 @@ $PMF_LANG["ad_user_username"] = "Registrerede brugere";
 $PMF_LANG["ad_user_rights"] = "Bruger rettigheder";
 $PMF_LANG["ad_user_edit"] = "ret";
 $PMF_LANG["ad_user_delete"] = "slet";
-$PMF_LANG["ad_user_add"] = "Tilføj bruger";
+$PMF_LANG["ad_user_add"] = "TilfÃ¸j bruger";
 $PMF_LANG["ad_user_profou"] = "Brugerprofil";
 $PMF_LANG["ad_user_name"] = "Brugernavn";
 $PMF_LANG["ad_user_password"] = "Adgangskode";
@@ -508,28 +508,28 @@ $PMF_LANG["ad_export_latest"] = "5 seneste sp&oslash;rgsm&aring;l RSS-Feed";
 $PMF_LANG["ad_export_pdf"] = "PDF-Eksport af alle sp&oslash;rgsm&aring;l";
 $PMF_LANG["ad_export_generate"] = "byg RSS-Feed";
 
-$PMF_LANG["rightsLanguage"]['adduser'] = "tilføj bruger";
+$PMF_LANG["rightsLanguage"]['adduser'] = "tilfÃ¸j bruger";
 $PMF_LANG["rightsLanguage"]['edituser'] = "rediger bruger";
 $PMF_LANG["rightsLanguage"]['deluser'] = "slet bruger";
-$PMF_LANG["rightsLanguage"]['addbt'] = "tilføj indlæg";
-$PMF_LANG["rightsLanguage"]['editbt'] = "rediger indlæg";
-$PMF_LANG["rightsLanguage"]['delbt'] = "slet indlæg";
+$PMF_LANG["rightsLanguage"]['addbt'] = "tilfÃ¸j indlÃ¦g";
+$PMF_LANG["rightsLanguage"]['editbt'] = "rediger indlÃ¦g";
+$PMF_LANG["rightsLanguage"]['delbt'] = "slet indlÃ¦g";
 $PMF_LANG["rightsLanguage"]['viewlog'] = "se log";
 $PMF_LANG["rightsLanguage"]['adminlog'] = "se admin log";
 $PMF_LANG["rightsLanguage"]['delcomment'] = "slet kommentarer";
-$PMF_LANG["rightsLanguage"]['addnews'] = "tilføj nyheder";
+$PMF_LANG["rightsLanguage"]['addnews'] = "tilfÃ¸j nyheder";
 $PMF_LANG["rightsLanguage"]['editnews'] = "rediger nyheder";
 $PMF_LANG["rightsLanguage"]['delnews'] = "slet nyheder";
-$PMF_LANG["rightsLanguage"]['addcateg'] = "tilføj kategorier";
+$PMF_LANG["rightsLanguage"]['addcateg'] = "tilfÃ¸j kategorier";
 $PMF_LANG["rightsLanguage"]['editcateg'] = "rediger kategorier";
 $PMF_LANG["rightsLanguage"]['delcateg'] = "slet kategorier";
 $PMF_LANG["rightsLanguage"]['passwd'] = "skift adgangskode";
 $PMF_LANG["rightsLanguage"]['editconfig'] = "rediger konfiguration";
-$PMF_LANG["rightsLanguage"]['addatt'] = "tilføj vedhæftninger";
-$PMF_LANG["rightsLanguage"]['delatt'] = "slet vedhæftninger";
+$PMF_LANG["rightsLanguage"]['addatt'] = "tilfÃ¸j vedhÃ¦ftninger";
+$PMF_LANG["rightsLanguage"]['delatt'] = "slet vedhÃ¦ftninger";
 $PMF_LANG["rightsLanguage"]['backup'] = "lav sikkerhedskopi";
 $PMF_LANG["rightsLanguage"]['restore'] = "genskab sikkerhedskopi";
-$PMF_LANG["rightsLanguage"]['delquestion'] = "slet åbne spørgsmål";
+$PMF_LANG["rightsLanguage"]['delquestion'] = "slet Ã¥bne spÃ¸rgsmÃ¥l";
 $PMF_LANG["rightsLanguage"]['changebtrevs'] = "rediger revisioner";
 
 $PMF_LANG["msgAttachedFiles"] = "vedh&aelig;ftede filer:";
@@ -543,14 +543,14 @@ $PMF_LANG["ad_user_realname"] = "Fulde navn:";
 $PMF_LANG["ad_export_generate_pdf"] = "generer PDF-fil";
 $PMF_LANG["ad_export_full_faq"] = "Eksporter hele FAQ'en til en PDF-fil: ";
 $PMF_LANG["err_bannedIP"] = "Din IP-adresse er blevet forment adgang.";
-$PMF_LANG["err_SaveQuestion"] = "N&oslash;dvendige felter: <strong>dit navn</strong>, <strong>din e-mail-adresse</strong> og <strong>dit sp&oslash;rgsm&aring;l</strong>.<br /><br /><a href=\"javascript:history.back();\">Ã©n side tilbage</a><br /><br />";
+$PMF_LANG["err_SaveQuestion"] = "N&oslash;dvendige felter: <strong>dit navn</strong>, <strong>din e-mail-adresse</strong> og <strong>dit sp&oslash;rgsm&aring;l</strong>.<br /><br /><a href=\"javascript:history.back();\">ÃƒÂ©n side tilbage</a><br /><br />\n";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Skrifttype farve: ";
 $PMF_LANG["ad_entry_fontsize"] = "Skrifttype st&oslash;rrelse: ";
 
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias
-$LANG_CONF['main.language'] = array(0 => "Vælg", 1 => "Sprog");
+$LANG_CONF['main.language'] = array(0 => "VÃ¦lg", 1 => "Sprog");
 $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Aktiver automatic content negotiation");
 $LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => "FAQ-titel");
 $LANG_CONF['main.currentVersion'] = array(0 => "print", 1 => "phpMyFAQ-version");
@@ -612,7 +612,7 @@ $PMF_LANG['msgAllCategories'] = '... alle kategorier';
 $PMF_LANG['ad_you_should_update'] = 'Din installation af phpMyFAQ er for&aelig;ldet. Du b&oslash;r opdatere til sidste nye version.';
 $PMF_LANG['msgAdvancedSearch'] = 'Avanceret s&oslash;gning';
 
-// added v1.6.1 - 2006-04-25 by Matteo and Thorsten
+// added v1.6.1 - 2006-04-25 by MatteoÂ andÂ Thorsten
 $PMF_LANG['spamControlCenter'] = 'Spam control center';
 $LANG_CONF["spam.enableSafeEmail"] = array(0 => "checkbox", 1 => "Print user email in a safe way (standard: enabled).");
 $LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "Check public form content against banned words (standard: enabled).");
@@ -687,9 +687,9 @@ $PMF_LANG['ad_user_error_noId'] =  "No ID specified. ";
 $PMF_LANG['ad_user_error_protectedAccount'] =  "Brugerkontoen er beskyttet. ";
 $PMF_LANG['ad_user_deleteUser'] = "Slet bruger";
 $PMF_LANG['ad_user_status'] = "Status:";
-$PMF_LANG['ad_user_lastModified'] = 'Sidst ændret:'; //:WARNING: æ => &aelig; smadrer brugeradministration!
+$PMF_LANG['ad_user_lastModified'] = 'Sidst Ã¦ndret:'; //:WARNING: Ã¦ => &aelig; smadrer brugeradministration!
 $PMF_LANG['ad_gen_cancel'] = "Fortryd";
-$PMF_LANG["rightsLanguage"]['addglossary'] = 'tilføj ordforklaring';
+$PMF_LANG["rightsLanguage"]['addglossary'] = 'tilfÃ¸j ordforklaring';
 $PMF_LANG["rightsLanguage"]['editglossary'] = 'rediger ordforklaring';
 $PMF_LANG["rightsLanguage"]['delglossary'] = 'slet ordforklaring';
 $PMF_LANG["ad_menu_group_administration"] = "Grupper";
@@ -742,7 +742,7 @@ $PMF_LANG['newsWriteComment'] = 'comment on this entry';
 $PMF_LANG['newsCommentDate'] = 'Added at: ';
 
 // added v2.0.0 - 2006-07-29 by Matteo & Thorsten
-$PMF_LANG['ad_record_expiration_window'] = 'Tidsstyring af indlæg (valgfrit)';
+$PMF_LANG['ad_record_expiration_window'] = 'Tidsstyring af indlÃ¦g (valgfrit)';
 $PMF_LANG['admin_mainmenu_home'] = 'Hjem';
 $PMF_LANG['admin_mainmenu_users'] = 'Brugere';
 $PMF_LANG['admin_mainmenu_content'] = 'Indhold';
@@ -841,7 +841,7 @@ $PMF_LANG['msgTranslateSubmit'] = 'Start overs&aelig;ttelse...';
 $PMF_LANG['msgNewTranslationThanks'] = "Tak for dit forslag til overs&aelig;ttelse!";
 
 // added v2.0.0 - 2007-02-27 by Matteo
-$PMF_LANG["rightsLanguage"]['addgroup'] = "tilføj grupper";
+$PMF_LANG["rightsLanguage"]['addgroup'] = "tilfÃ¸j grupper";
 $PMF_LANG["rightsLanguage"]['editgroup'] = "rediger grupper";
 $PMF_LANG["rightsLanguage"]['delgroup'] = "slet grupper";
 

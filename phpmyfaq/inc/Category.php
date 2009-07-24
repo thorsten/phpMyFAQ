@@ -248,8 +248,8 @@ class PMF_Category
         foreach (explode(';', $categories) as $cats) {
             $_query .= ' OR parent_id = '.$cats;
         }
-        if (false == $parent_id && 0 < strlen($_query)) {
-            $query .= substr($_query, 4);
+        if (false == $parent_id && 0 < PMF_String::strlen($_query)) {
+            $query .= PMF_String::substr($_query, 4);
         }
         if (isset($this->language) && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
             $query .= " AND lang = '".$this->language."'";

@@ -34,21 +34,26 @@ define('IS_VALID_PHPMYFAQ_ADMIN', null);
 //
 // Autoload classes, prepend and start the PHP session
 //
-require_once PMF_ROOT_DIR.'/inc/Init.php';
+require PMF_ROOT_DIR.'/inc/Init.php';
 PMF_Init::cleanRequest();
 session_name(PMF_COOKIE_NAME_AUTH . trim($faqconfig->get('main.phpMyFAQToken')));
 session_start();
 
 // Preload English strings
-require_once(PMF_ROOT_DIR.'/lang/language_en.php');
+require PMF_ROOT_DIR.'/lang/language_en.php';
 
 //
 // Get language (default: english)
 //
 $_language = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
 if (!is_null($_language) && PMF_Init::isASupportedLanguage($_language)) {
-    require_once PMF_ROOT_DIR.'/lang/language_' . $_language . '.php';
+    require PMF_ROOT_DIR.'/lang/language_' . $_language . '.php';
 }
+
+//
+// Initalizing static string wrapper
+//
+PMF_String::init($PMF_LANG["metaCharset"], $_language);
 
 $user        = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
 $refreshTime = (PMF_SESSION_ID_EXPIRES - PMF_SESSION_ID_REFRESH) * 60;

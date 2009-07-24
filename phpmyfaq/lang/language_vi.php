@@ -20,7 +20,7 @@
  * under the License.
  */
 
-$PMF_LANG["metaCharset"] = "utf-8";
+$PMF_LANG["metaCharset"] = "UTF-8";
 $PMF_LANG["metaLanguage"] = "vi";
 $PMF_LANG["language"] = "Vietnamese";
 // ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)

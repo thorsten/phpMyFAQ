@@ -50,14 +50,14 @@ printf('<h2>%s</h2>', $PMF_LANG['ad_menu_translations']);
 <?php while(list($key, $line) = each($leftVarsOnly)): ?>
 <tr>
 <td><?php echo $key?></td>
-<td><input style="width: 300px;" type="text" value="<?php echo htmlspecialchars($line) ?>" disabled="disabled" /></td>
+<td><input style="width: 300px;" type="text" value="<?php echo PMF_String::htmlspecialchars($line) ?>" disabled="disabled" /></td>
 <?php 
     if (array_key_exists($key, $rightVarsOnly) && ($line != $rightVarsOnly[$key] ||
        $tt->isKeyIgnorable($key) || $tt->isValIgnorable($line))): 
 ?>
-<td><input style="width: 300px;" type="text" name="<?php echo $key?>" value="<?php echo htmlspecialchars($rightVarsOnly[$key]) ?>" /></td>
+<td><input style="width: 300px;" type="text" name="<?php echo $key?>" value="<?php echo PMF_String::htmlspecialchars($rightVarsOnly[$key]) ?>" /></td>
 <?php else: ?>
-<td><input style="width: 300px;border-color: red;" type="text" name="<?php echo $key?>" value="<?php echo htmlspecialchars($line) ?>" /></td>
+<td><input style="width: 300px;border-color: red;" type="text" name="<?php echo $key?>" value="<?php echo PMF_String::htmlspecialchars($line) ?>" /></td>
 <?php endif; ?>
 </tr>
 <?php endwhile; ?>

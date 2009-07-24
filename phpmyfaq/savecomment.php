@@ -48,7 +48,7 @@ switch ($type) {
 }
 
 
-if (!is_null($user) && !is_null($mail) && !is_null($comment) && checkBannedWord(htmlspecialchars($comment)) &&
+if (!is_null($user) && !is_null($mail) && !is_null($comment) && checkBannedWord(PMF_String::htmlspecialchars($comment)) &&
     IPCheck($_SERVER['REMOTE_ADDR']) && $captcha->checkCaptchaCode($code) && !$faq->commentDisabled($id, $LANGCODE, $type)) {
 
     $faqsession->userTracking("save_comment", $id);

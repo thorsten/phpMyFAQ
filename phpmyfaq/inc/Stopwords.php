@@ -232,8 +232,8 @@ class PMF_Stopwords
         $retval = array();
         
         foreach($words as $word) {
-            $word = strtolower($word);
-            if(!is_numeric($word) && 1 < strlen($word) && 
+            $word = PMF_String::strtolower($word);
+            if(!is_numeric($word) && 1 < PMF_String::strlen($word) && 
                !in_array($word, $stop_words) && !in_array($word, $retval)) {
                 $retval[] = $word;
             }

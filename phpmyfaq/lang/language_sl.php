@@ -18,7 +18,7 @@
  * under the License.
  ******************************************************************************/
 
-$PMF_LANG["metaCharset"] = "windows-1250";
+$PMF_LANG["metaCharset"] = "UTF-8";
 $PMF_LANG["metaLanguage"] = "sl";
 $PMF_LANG["language"] = "Slovenian";
 // ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
@@ -26,11 +26,11 @@ $PMF_LANG["dir"] = "ltr";
 
 // Navigation
 $PMF_LANG["msgCategory"] = "Kategorije";
-$PMF_LANG["msgShowAllCategories"] = "Prikaûi vse kategorije";
+$PMF_LANG["msgShowAllCategories"] = "Prika≈æi vse kategorije";
 $PMF_LANG["msgSearch"] = "Iskanje";
 $PMF_LANG["msgAddContent"] = "Dodaj vnos";
-$PMF_LANG["msgQuestion"] = "Postavi vpraöanje";
-$PMF_LANG["msgOpenQuestions"] = "Odpri vpraöanje";
+$PMF_LANG["msgQuestion"] = "Postavi vpra≈°anje";
+$PMF_LANG["msgOpenQuestions"] = "Odpri vpra≈°anje";
 $PMF_LANG["msgHelp"] = "Pomo&egrave;";
 $PMF_LANG["msgContact"] = "Kontakt";
 $PMF_LANG["msgHome"] = "Prva stran";
@@ -44,7 +44,7 @@ $PMF_LANG["msgFullCategories"] = "Kategorije z vnosi";
 $PMF_LANG["msgFullCategoriesIn"] = "Kategorije z vnosi v ";
 $PMF_LANG["msgSubCategories"] = "Podkategorije";
 $PMF_LANG["msgEntries"] = "Zapis(ov)";
-$PMF_LANG["msgEntriesIn"] = "Vpraöanja v ";
+$PMF_LANG["msgEntriesIn"] = "Vpra≈°anja v ";
 $PMF_LANG["msgViews"] = "ogledov";
 $PMF_LANG["msgPage"] = "Stran ";
 $PMF_LANG["msgPages"] = "Strani";
@@ -65,7 +65,7 @@ $PMF_LANG["msgVotings"] = "Glasov ";
 $PMF_LANG["msgVoteSubmit"] = "Glas";
 $PMF_LANG["msgVoteThanks"] = "Hvala za ocenitev!";
 $PMF_LANG["msgYouCan"] = "Lahko ";
-$PMF_LANG["msgWriteComment"] = "dodaö komentar na ta vnos";
+$PMF_LANG["msgWriteComment"] = "doda≈° komentar na ta vnos";
 $PMF_LANG["msgShowCategory"] = "Pregled vsebine: ";
 $PMF_LANG["msgCommentBy"] = "Komentar za ";
 $PMF_LANG["msgCommentHeader"] = "Komentar na ta vnos";
@@ -78,9 +78,9 @@ $PMF_LANG["msgS2FEMail"] = "Tvoj e-mail naslov:";
 $PMF_LANG["msgS2FFriends"] = "Tvoj prijatelj:";
 $PMF_LANG["msgS2FEMails"] = ". e-mail naslov:";
 $PMF_LANG["msgS2FText"] = "Naslednji tekst bo poslan:";
-$PMF_LANG["msgS2FText2"] = "Naöel boö zapis na tem naslovu:";
+$PMF_LANG["msgS2FText2"] = "Na≈°el bo≈° zapis na tem naslovu:";
 $PMF_LANG["msgS2FMessage"] = "Obvestilo za tvojega prijatelja:";
-$PMF_LANG["msgS2FButton"] = "poölji e-mail";
+$PMF_LANG["msgS2FButton"] = "po≈°lji e-mail";
 $PMF_LANG["msgS2FThx"] = "Hvala za priporo&egrave;ilo!";
 $PMF_LANG["msgS2FMailSubject"] = "Priporo&egrave;ilo od ";
 
@@ -93,33 +93,33 @@ $PMF_LANG["msgSearchCategory"] = "Kategorija: ";
 $PMF_LANG["msgSearchContent"] = "Vsebina: ";
 
 // new Content
-$PMF_LANG["msgNewContentHeader"] = "Predlog za vpraöanje";
+$PMF_LANG["msgNewContentHeader"] = "Predlog za vpra≈°anje";
 $PMF_LANG["msgNewContentAddon"] = "Tvoj predlog ne bo takoj objavljen, ampak bo dostavljen administratorju v predogled. Obvezni podatki: <strong>tvoje ime</strong>, <strong>tvoj email naslov</strong>, <strong>kategorija</strong>, <strong>zaglavje</strong> in <strong>tvoj vnos</strong>. Prosim lo&egrave;i vnose besed z presledkom.";
-$PMF_LANG["msgNewContentUBB"] = "<p>Lahko uporabiö UBB kode za vpraöanje. <a href=\"help/ubbcode.php\" target=\"_blank\">Pomo&egrave; za UBB kode</a></p>";
+$PMF_LANG["msgNewContentUBB"] = "<p>Lahko uporabi≈° UBB kode za vpra≈°anje. <a href=\"help/ubbcode.php\" target=\"_blank\">Pomo&egrave; za UBB kode</a></p>";
 $PMF_LANG["msgNewContentName"] = "Tvoje ime:";
 $PMF_LANG["msgNewContentMail"] = "Tvoj email naslov:";
-$PMF_LANG["msgNewContentCategory"] = "Katero kategorijo boö izbral?";
+$PMF_LANG["msgNewContentCategory"] = "Katero kategorijo bo≈° izbral?";
 $PMF_LANG["msgNewContentTheme"] = "Zaglavje:";
-$PMF_LANG["msgNewContentArticle"] = "Tvoje vpraöanje - vnos:";
+$PMF_LANG["msgNewContentArticle"] = "Tvoje vpra≈°anje - vnos:";
 $PMF_LANG["msgNewContentKeywords"] = "Besede:";
 $PMF_LANG["msgNewContentLink"] = "Povezava glede na tvoj vnos";
 $PMF_LANG["msgNewContentSubmit"] = "potrdi";
 $PMF_LANG["msgInfo"] = "Ve&egrave; informacij: ";
 $PMF_LANG["msgNewContentThanks"] = "Hvala za tvoj predlog!";
-$PMF_LANG["msgNoQuestionsAvailable"] = "Trenutno ni &egrave;akajo&egrave;ih vpraöanj.";
+$PMF_LANG["msgNoQuestionsAvailable"] = "Trenutno ni &egrave;akajo&egrave;ih vpra≈°anj.";
 
 // ask Question
-$PMF_LANG["msgNewQuestion"] = "Postavi vpraöanje spodaj:";
-$PMF_LANG["msgAskCategory"] = "Tvoje vpraöanje po kategoriji";
-$PMF_LANG["msgAskYourQuestion"] = "Tvoje vpraöanje:";
+$PMF_LANG["msgNewQuestion"] = "Postavi vpra≈°anje spodaj:";
+$PMF_LANG["msgAskCategory"] = "Tvoje vpra≈°anje po kategoriji";
+$PMF_LANG["msgAskYourQuestion"] = "Tvoje vpra≈°anje:";
 $PMF_LANG["msgAskThx4Mail"] = "<h2>Hvala za tvoj email!</h2>";
 $PMF_LANG["msgDate_User"] = "Datum / Uporabnik";
-$PMF_LANG["msgQuestion2"] = "Vpraöanje";
+$PMF_LANG["msgQuestion2"] = "Vpra≈°anje";
 $PMF_LANG["msg2answer"] = "odgovor";
-$PMF_LANG["msgQuestionText"] = "Tukaj lahko vidiö vpraöanja drugih uporabnikov. &Egrave;e odgovoriö na katero vpraöanje, bo tvoj odgovor mogo&egrave;e dodan v seznam.";
+$PMF_LANG["msgQuestionText"] = "Tukaj lahko vidi≈° vpra≈°anja drugih uporabnikov. &Egrave;e odgovori≈° na katero vpra≈°anje, bo tvoj odgovor mogo&egrave;e dodan v seznam.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>Struktura aplikacije vpraöanja je zelo preposta. Lahko iö&egrave;eö <strong><a href=\"?action=show\">po kategorijah</a></strong> ali <strong><a href=\"?action=search\">napredno iskanje</a></strong> po besedah.</p>";
+$PMF_LANG["msgHelpText"] = "<p>Struktura aplikacije vpra≈°anja je zelo preposta. Lahko i≈°&egrave;e≈° <strong><a href=\"?action=show\">po kategorijah</a></strong> ali <strong><a href=\"?action=search\">napredno iskanje</a></strong> po besedah.</p>";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "email za webmasterja:";
@@ -131,7 +131,7 @@ $PMF_LANG["msgTopTen"] = "10 NAJ";
 $PMF_LANG["msgHomeThereAre"] = "Tukaj je ";
 $PMF_LANG["msgHomeArticlesOnline"] = " zapisov na strani";
 $PMF_LANG["msgNoNews"] = "Ni novic.";
-$PMF_LANG["msgLatestArticles"] = "Nekaj najpogostejöih vpraöanj:";
+$PMF_LANG["msgLatestArticles"] = "Nekaj najpogostej≈°ih vpra≈°anj:";
 
 // E-Mailbenachrichtigung
 $PMF_LANG["msgMailThanks"] = "Hvala za tvoj predlog.";
@@ -147,10 +147,10 @@ $PMF_LANG["err_noTopTen"] = "<p>Ni 10 NAJ vnosov trenutno.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>Ne najdem vnosa.</p>";
 $PMF_LANG["err_SaveEntries"] = "Potrebna polja so <strong>tvoje ime</strong>, <strong>tvoj email</strong>, <strong>kategorija</strong>, <strong>zaglavje</strong> in <strong>tvoj vnos</strong>!<br /><br /><a href=\"javascript:history.back();\">ena stran nazaj</a><br /><br />";
 $PMF_LANG["err_SaveComment"] = "Potrebna polja so <strong>tvoje ime</strong>, <strong>tvoj email</strong> in <strong>tvoj komentar</strong>!<br /><br /><a href=\"javascript:history.back();\">ena stran nazaj</a><br /><br />";
-$PMF_LANG["err_VoteTooMuch"] = "<p>Ne ötejejo dvojna glasovanja. <a href=\"javascript:history.back();\">Klikni tukaj</a>, da greö nazaj.</p>";
-$PMF_LANG["err_noVote"] = "<p><strong>Nisi glasoval za vpraöanje!</strong> <a href=\"javascript:history.back();\">Prosim klikni tukaj</a>, za glasovanje.</p>";
+$PMF_LANG["err_VoteTooMuch"] = "<p>Ne ≈°tejejo dvojna glasovanja. <a href=\"javascript:history.back();\">Klikni tukaj</a>, da gre≈° nazaj.</p>";
+$PMF_LANG["err_noVote"] = "<p><strong>Nisi glasoval za vpra≈°anje!</strong> <a href=\"javascript:history.back();\">Prosim klikni tukaj</a>, za glasovanje.</p>";
 $PMF_LANG["err_noMailAdress"] = "Tvoj email ni pravilen.<br /><a href=\"javascript:history.back();\">nazaj</a>";
-$PMF_LANG["err_sendMail"] = "Potrebna polja so <strong>tvoje ime</strong>, <strong>tvoj email</strong> in <strong>tvoje vpraöanje</strong>!<br /><br /><a href=\"javascript:history.back();\">ena stran nazaj</a><br /><br />";
+$PMF_LANG["err_sendMail"] = "Potrebna polja so <strong>tvoje ime</strong>, <strong>tvoj email</strong> in <strong>tvoje vpra≈°anje</strong>!<br /><br />\n<a href=\"javascript:history.back();\">ena stran nazaj</a><br /><br />\n";
 
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>Iskanje po vnosih:</strong><br /></p>";
@@ -164,9 +164,9 @@ $PMF_LANG["ad_menu_categ_add"] = "Dodaj kategorjio";
 $PMF_LANG["ad_menu_categ_edit"] = "Uredi kategorjo";
 $PMF_LANG["ad_menu_news_add"] = "Dodaj novico";
 $PMF_LANG["ad_menu_news_edit"] = "Uredi novice";
-$PMF_LANG["ad_menu_open"] = "Uredi odprta vpraöanja";
+$PMF_LANG["ad_menu_open"] = "Uredi odprta vpra≈°anja";
 $PMF_LANG["ad_menu_stat"] = "Statistika";
-$PMF_LANG["ad_menu_cookie"] = "Piökoti";
+$PMF_LANG["ad_menu_cookie"] = "Pi≈°koti";
 $PMF_LANG["ad_menu_session"] = "Preglej seje";
 $PMF_LANG["ad_menu_adminlog"] = "Poglej admin statistiko";
 $PMF_LANG["ad_menu_passwd"] = "Spremeni geslo";
@@ -177,14 +177,14 @@ $PMF_LANG["ad_menu_startpage"] = "Prva stran";
 $PMF_LANG["ad_msg_identify"] = "Prosim identificiraj se.";
 $PMF_LANG["ad_msg_passmatch"] = "Obe gesli morata biti <strong>enaki</strong>!";
 $PMF_LANG["ad_msg_savedsuc_1"] = "Profil za";
-$PMF_LANG["ad_msg_savedsuc_2"] = "je bil uspeöno shranjen.";
+$PMF_LANG["ad_msg_savedsuc_2"] = "je bil uspe≈°no shranjen.";
 $PMF_LANG["ad_msg_mysqlerr"] = "Zaradi <strong>napake z bazo</strong>, profil ni shranjen.";
 $PMF_LANG["ad_msg_noauth"] = "Nisi avtoriziran.";
 
 // Allgemein
 $PMF_LANG["ad_gen_page"] = "Stran";
 $PMF_LANG["ad_gen_of"] = "od";
-$PMF_LANG["ad_gen_lastpage"] = "Prejönja stran";
+$PMF_LANG["ad_gen_lastpage"] = "Prej≈°nja stran";
 $PMF_LANG["ad_gen_nextpage"] = "Naslednja stran";
 $PMF_LANG["ad_gen_save"] = "Shrani";
 $PMF_LANG["ad_gen_reset"] = "Resetiraj";
@@ -209,7 +209,7 @@ $PMF_LANG["ad_user_rights"] = "Pravice";
 $PMF_LANG["ad_user_del_1"] = "Uporabnik";
 $PMF_LANG["ad_user_del_2"] = "naj bo odstranjen?";
 $PMF_LANG["ad_user_del_3"] = "Si prepri&egrave;an?";
-$PMF_LANG["ad_user_deleted"] = "Uporabnik uspeöno odstranjen.";
+$PMF_LANG["ad_user_deleted"] = "Uporabnik uspe≈°no odstranjen.";
 
 // Beitragsverwaltung
 $PMF_LANG["ad_entry_aor"] = "Administriranje vnosov";
@@ -233,15 +233,15 @@ $PMF_LANG["ad_entry_save"] = "Shrani";
 $PMF_LANG["ad_entry_delete"] = "dodstrani";
 $PMF_LANG["ad_entry_delcom_1"] = "Si prepi&egrave;an, da komentar od uporabnika";
 $PMF_LANG["ad_entry_delcom_2"] = "naj bo odstranjen?";
-$PMF_LANG["ad_entry_commentdelsuc"] = "Komentar <strong>uspeöno</strong> odstranjen.";
+$PMF_LANG["ad_entry_commentdelsuc"] = "Komentar <strong>uspe≈°no</strong> odstranjen.";
 $PMF_LANG["ad_entry_back"] = "Nazaj v &egrave;lanek";
 $PMF_LANG["ad_entry_commentdelfail"] = "Komentar <strong>ni</strong> odstranjen.";
-$PMF_LANG["ad_entry_savedsuc"] = "Spremembe <strong>uspeöno</strong> shranjene.";
+$PMF_LANG["ad_entry_savedsuc"] = "Spremembe <strong>uspe≈°no</strong> shranjene.";
 $PMF_LANG["ad_entry_savedfail"] = "Na nesre&egrave;o, <strong>podatkovna baza</strong> ima napako.";
 $PMF_LANG["ad_entry_del_1"] = "Si prepri&egrave;an, da vsebina";
 $PMF_LANG["ad_entry_del_2"] = "za";
 $PMF_LANG["ad_entry_del_3"] = "naj bo odstranjena?";
-$PMF_LANG["ad_entry_delsuc"] = "Zapis <strong>uspeöno</strong> odstranjen.";
+$PMF_LANG["ad_entry_delsuc"] = "Zapis <strong>uspe≈°no</strong> odstranjen.";
 $PMF_LANG["ad_entry_delfail"] = "Zapis <strong>ni bil odstranjen</strong>!";
 $PMF_LANG["ad_entry_back"] = "Nazaj";
 
@@ -271,9 +271,9 @@ $PMF_LANG["ad_news_updatenews"] = "Posodobi novice";
 
 // Kategorieverwaltung
 $PMF_LANG["ad_categ_new"] = "Dodaj novo kategorjio";
-$PMF_LANG["ad_categ_catnum"] = "ät. kategorije:";
-$PMF_LANG["ad_categ_subcatnum"] = "ät. podkategorjie:";
-$PMF_LANG["ad_categ_nya"] = "<em>öe ni dostopno!</em>";
+$PMF_LANG["ad_categ_catnum"] = "≈†t. kategorije:";
+$PMF_LANG["ad_categ_subcatnum"] = "≈†t. podkategorjie:";
+$PMF_LANG["ad_categ_nya"] = "<em>≈°e ni dostopno!</em>";
 $PMF_LANG["ad_categ_titel"] = "Opis kategorjie:";
 $PMF_LANG["ad_categ_add"] = "Dodaj kategorjio";
 $PMF_LANG["ad_categ_existing"] = "Obstoje&egrave;e kategorije";
@@ -286,7 +286,7 @@ $PMF_LANG["ad_categ_update"] = "posodobi";
 $PMF_LANG["ad_categ_delete"] = "odstrani";
 $PMF_LANG["ad_categ_updatecateg"] = "Posodobi kategorije";
 $PMF_LANG["ad_categ_nodata"] = "Ni podatkov v bazi";
-$PMF_LANG["ad_categ_remark"] = "Obstoje&egrave;i vnosi v kategorji ne bodo vidni, &egrave;e jo izbriöeö.";
+$PMF_LANG["ad_categ_remark"] = "Obstoje&egrave;i vnosi v kategorji ne bodo vidni, &egrave;e jo izbri≈°e≈°.";
 $PMF_LANG["ad_categ_edit_1"] = "Uredi";
 $PMF_LANG["ad_categ_edit_2"] = "Kategorija";
 $PMF_LANG["ad_categ_add"] = "dodaj kategorijo";
@@ -315,8 +315,8 @@ $PMF_LANG["ad_passwd_old"] = "Staro geslo:";
 $PMF_LANG["ad_passwd_new"] = "Novo geslo:";
 $PMF_LANG["ad_passwd_con"] = "Ponovi:";
 $PMF_LANG["ad_passwd_change"] = "Spremeni geslo";
-$PMF_LANG["ad_passwd_suc"] = "Geslo uspeöno spremenjeno.";
-$PMF_LANG["ad_passwd_remark"] = "<strong>POZOR:</strong><br />Piökot moraö ponovno nastaviti!";
+$PMF_LANG["ad_passwd_suc"] = "Geslo uspe≈°no spremenjeno.";
+$PMF_LANG["ad_passwd_remark"] = "<strong>POZOR:</strong><br />Pi≈°kot mora≈° ponovno nastaviti!";
 $PMF_LANG["ad_passwd_fail"] = "Staro geslo <strong>mora</strong> biti pravilno in novo geslo in potrditev morata biti <strong>enaka</strong>.";
 
 // Adduser
@@ -324,10 +324,10 @@ $PMF_LANG["ad_adus_adduser"] = "Dodaj uporabnika";
 $PMF_LANG["ad_adus_name"] = "Ime:";
 $PMF_LANG["ad_adus_password"] = "Geslo:";
 $PMF_LANG["ad_adus_add"] = "Dodaj uporabnika";
-$PMF_LANG["ad_adus_suc"] = "Uporabnik <strong>uspeöno</strong> dodan.";
+$PMF_LANG["ad_adus_suc"] = "Uporabnik <strong>uspe≈°no</strong> dodan.";
 $PMF_LANG["ad_adus_edit"] = "Uredi profil";
 $PMF_LANG["ad_adus_dberr"] = "<strong>napaka baze!</strong>";
-$PMF_LANG["ad_adus_exerr"] = "Uporabnik <strong>ûe obstaja</strong>.";
+$PMF_LANG["ad_adus_exerr"] = "Uporabnik <strong>≈æe obstaja</strong>.";
 
 // Sessions
 $PMF_LANG["ad_sess_id"] = "ID";
@@ -376,17 +376,17 @@ $PMF_LANG["ad_auth_sess"] = "ID seje je pravilen.";
 $PMF_LANG["ad_config_edit"] = "Uredi nastavitve";
 $PMF_LANG["ad_config_save"] = "Shrani nastavitve";
 $PMF_LANG["ad_config_reset"] = "Resetiraj";
-$PMF_LANG["ad_config_saved"] = "Nastavitve uspeöno shranjene.";
+$PMF_LANG["ad_config_saved"] = "Nastavitve uspe≈°no shranjene.";
 $PMF_LANG["ad_menu_editconfig"] = "Uredi nastavitve";
 $PMF_LANG["ad_att_none"] = "Ni dostopnih priponk";
 $PMF_LANG["ad_att_att"] = "Priponke:";
 $PMF_LANG["ad_att_add"] = "Pripni datoteko";
-$PMF_LANG["ad_entryins_suc"] = "Zapis uspeöno shranjen.";
-$PMF_LANG["ad_entryins_fail"] = "Priölo je do napake.";
+$PMF_LANG["ad_entryins_suc"] = "Zapis uspe≈°no shranjen.";
+$PMF_LANG["ad_entryins_fail"] = "Pri≈°lo je do napake.";
 $PMF_LANG["ad_att_del"] = "Odstrani";
 $PMF_LANG["ad_att_nope"] = "Priponka se lahko doda samo med urejanjem.";
-$PMF_LANG["ad_att_delsuc"] = "Priponka uspeöno odstranjena.";
-$PMF_LANG["ad_att_delfail"] = "Pri brisanju priponke je priölo do napake.";
+$PMF_LANG["ad_att_delsuc"] = "Priponka uspe≈°no odstranjena.";
+$PMF_LANG["ad_att_delfail"] = "Pri brisanju priponke je pri≈°lo do napake.";
 $PMF_LANG["ad_entry_add"] = "Ustvari vnos";
 
 // Added v0.85 - 08.06.2001 - Bastian - Admin
@@ -397,8 +397,8 @@ $PMF_LANG["ad_att_addto"] = "Dodaj priponko v zvezek";
 $PMF_LANG["ad_att_addto_2"] = "";
 $PMF_LANG["ad_att_att"] = "Datoteka:";
 $PMF_LANG["ad_att_butt"] = "OK";
-$PMF_LANG["ad_att_suc"] = "Datoteka pripeta uspeöno.";
-$PMF_LANG["ad_att_fail"] = "Priölo je do napake pri pripenjanju datoteke.";
+$PMF_LANG["ad_att_suc"] = "Datoteka pripeta uspe≈°no.";
+$PMF_LANG["ad_att_fail"] = "Pri≈°lo je do napake pri pripenjanju datoteke.";
 $PMF_LANG["ad_att_close"] = "Zapri to okno";
 
 // Added v0.85 - 08.07.2001 - Bastian - Admin
@@ -412,16 +412,16 @@ $PMF_LANG["ad_csv_no"] = "To ni varnostna kopija.";
 $PMF_LANG["ad_csv_prepare"] = "Pripravljam vnose za bazo...";
 $PMF_LANG["ad_csv_process"] = "Urejam...";
 $PMF_LANG["ad_csv_of"] = "od";
-$PMF_LANG["ad_csv_suc"] = "je bila uspeöna.";
+$PMF_LANG["ad_csv_suc"] = "je bila uspe≈°na.";
 $PMF_LANG["ad_csv_backup"] = "Varnostna kopija";
 $PMF_LANG["ad_csv_rest"] = "Nadgradi varnostno kipijo";
 
 // Added v0.8 - 25.05.2001 - Bastian - Admin
 $PMF_LANG["ad_menu_backup"] = "Varnostna kopija";
-$PMF_LANG["ad_logout"] = "Seja uspeöno prekinjena.";
+$PMF_LANG["ad_logout"] = "Seja uspe≈°no prekinjena.";
 $PMF_LANG["ad_news_add"] = "Dodaj novice";
 $PMF_LANG["ad_news_edit"] = "Uredi novice";
-$PMF_LANG["ad_cookie"] = "Piökoti";
+$PMF_LANG["ad_cookie"] = "Pi≈°koti";
 $PMF_LANG["ad_sess_head"] = "Pregled sej";
 
 // Added v1.1 - 06.01.2002 - Bastian
@@ -446,7 +446,7 @@ $PMF_LANG["ad_sess_time"] = "Ura";
 $PMF_LANG["ad_sess_sid"] = "Seja-ID";
 $PMF_LANG["ad_sess_ip"] = "IP-naslov";
 
-$PMF_LANG["ad_ques_take"] = "Vzami vpraöanje in ga uredi";
+$PMF_LANG["ad_ques_take"] = "Vzami vpra≈°anje in ga uredi";
 $PMF_LANG["no_cats"] = "Ni kategorij.";
 
 // Added v1.1 - 17.01.2002 - Bastian
@@ -467,7 +467,7 @@ $PMF_LANG["ad_start_comments"] = "Komentarjev";
 
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "prilepi";
-$PMF_LANG["ad_categ_cut"] = "izreûi";
+$PMF_LANG["ad_categ_cut"] = "izre≈æi";
 $PMF_LANG["ad_categ_copy"] = "kopiraj";
 $PMF_LANG["ad_categ_process"] = "Proces za kategorije...";
 
@@ -475,7 +475,7 @@ $PMF_LANG["ad_categ_process"] = "Proces za kategorije...";
 $PMF_LANG["err_NotAuth"] = "<strong>Nisi avtoriziran.</strong>";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
-$PMF_LANG["msgPreviusPage"] = "prejönja stran";
+$PMF_LANG["msgPreviusPage"] = "prej≈°nja stran";
 $PMF_LANG["msgNextPage"] = "naslednja stran";
 $PMF_LANG["msgPageDoublePoint"] = "Stran: ";
 $PMF_LANG["msgMainCategory"] = "Glavna kategorija";
@@ -484,7 +484,7 @@ $PMF_LANG["msgMainCategory"] = "Glavna kategorija";
 $PMF_LANG["ad_passwdsuc"] = "Tvoje geslo je spremenjeno.";
 
 // Added v1.3.0 - 04.03.2003 - Thorsten
-$PMF_LANG["msgPDF"] = "Prikaûi to kot PDF datoteko";
+$PMF_LANG["msgPDF"] = "Prika≈æi to kot PDF datoteko";
 $PMF_LANG["ad_xml_head"] = "XML-varnostna kopija";
 $PMF_LANG["ad_xml_hint"] = "Shrani vse vnose v eni XML datoteki.";
 $PMF_LANG["ad_xml_gen"] = "ustvari XML datoteko";
@@ -496,7 +496,7 @@ $PMF_LANG["ad_entry_preview"] = "Preglej";
 $PMF_LANG["ad_attach_1"] = "Prosim izberi najprej mapo za priponke v nastvitvah.";
 $PMF_LANG["ad_attach_2"] = "Prosim izberi povezavo za priponke v nastvaitvah.";
 $PMF_LANG["ad_attach_3"] = "Datoteka attachment.php ne more biti odprta brez avtorizacije.";
-$PMF_LANG["ad_attach_4"] = "Priponka mora biti manjöa od %s bitov.";
+$PMF_LANG["ad_attach_4"] = "Priponka mora biti manj≈°a od %s bitov.";
 $PMF_LANG["ad_menu_export"] = "Izvozi tvoj FAQ";
 $PMF_LANG["ad_export_1"] = "Ustvari RSS-Feed on";
 $PMF_LANG["ad_export_2"] = ".";
@@ -528,7 +528,7 @@ $PMF_LANG["rightsLanguage"]['addatt'] = "dodaj priponko";
 $PMF_LANG["rightsLanguage"]['delatt'] = "odstrani priponko";
 $PMF_LANG["rightsLanguage"]['backup'] = "ustvari kopijo";
 $PMF_LANG["rightsLanguage"]['restore'] = "posodobi kopijo";
-$PMF_LANG["rightsLanguage"]['delquestion'] = "odstrani odprta vpraöanja";
+$PMF_LANG["rightsLanguage"]['delquestion'] = "odstrani odprta vpra≈°anja";
 
 $PMF_LANG["msgAttachedFiles"] = "pripete datoteke:";
 
@@ -536,12 +536,12 @@ $PMF_LANG["msgAttachedFiles"] = "pripete datoteke:";
 $PMF_LANG["ad_user_action"] = "akcija";
 $PMF_LANG["ad_entry_email"] = "email naslov:";
 $PMF_LANG["ad_entry_allowComments"] = "dovoli komentarje";
-$PMF_LANG["msgWriteNoComment"] = "Ne moreö dodati komentarja za ta vnos";
+$PMF_LANG["msgWriteNoComment"] = "Ne more≈° dodati komentarja za ta vnos";
 $PMF_LANG["ad_user_realname"] = "pravo ime:";
 $PMF_LANG["ad_export_generate_pdf"] = "generiranje PDF datoteke";
-$PMF_LANG["ad_export_full_faq"] = "Tvoje vpraöanje kot PDF datoteka: ";
+$PMF_LANG["ad_export_full_faq"] = "Tvoje vpra≈°anje kot PDF datoteka: ";
 $PMF_LANG["err_bannedIP"] = "Tvoj IP naslov je prepovedan.";
-$PMF_LANG["err_SaveQuestion"] = "Obvezna polja so <strong>tvoje ime</strong>, <strong>tvoj email</strong> in <strong>tvoje vpraöanje</strong>.<br /><br /><a href=\"javascript:history.back();\">ena stran nazaj/a><br /><br />";
+$PMF_LANG["err_SaveQuestion"] = "Obvezna polja so <strong>tvoje ime</strong>, <strong>tvoj email</strong> in <strong>tvoje vpra≈°anje</strong>.<br /><br /><a href=\"javascript:history.back();\">ena stran nazaj/a><br /><br />\n";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Barva &egrave;rk: ";

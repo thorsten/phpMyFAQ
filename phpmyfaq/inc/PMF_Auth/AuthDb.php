@@ -84,7 +84,7 @@ class PMF_Auth_AuthDb extends PMF_Auth implements PMF_Auth_AuthDriver
         $add   = $this->db->query($add);
         $error = $this->db->error();
         
-        if (strlen($error) > 0) {
+        if (PMF_String::strlen($error) > 0) {
             $this->errors[] = PMF_User::ERROR_USER_ADD . 'error(): ' . $error;
             return false;
         }
@@ -123,7 +123,7 @@ class PMF_Auth_AuthDb extends PMF_Auth implements PMF_Auth_AuthDriver
         $change = $this->db->query($change);
         $error  = $this->db->error();
         
-        if (strlen($error) > 0) {
+        if (PMF_String::strlen($error) > 0) {
             $this->errors[] =  PMF_User::ERROR_USER_CHANGE . 'error(): ' . $error;
             return false;
         }
@@ -157,7 +157,7 @@ class PMF_Auth_AuthDb extends PMF_Auth implements PMF_Auth_AuthDriver
         $delete = $this->db->query($delete);
         $error  = $this->db->error();
         
-        if (strlen($error) > 0) {
+        if (PMF_String::strlen($error) > 0) {
             $this->errors[] = PMF_User::ERROR_USER_DELETE . 'error(): ' . $error;
             return false;
         }
@@ -194,7 +194,7 @@ class PMF_Auth_AuthDb extends PMF_Auth implements PMF_Auth_AuthDriver
         $check = $this->db->query($check);
         $error = $this->db->error();
         
-        if (strlen($error) > 0) {
+        if (PMF_String::strlen($error) > 0) {
             $this->errors[] = PMF_User::ERROR_USER_NOT_FOUND . 'error(): ' . $error;
             return false;
         }
@@ -239,7 +239,7 @@ class PMF_Auth_AuthDb extends PMF_Auth implements PMF_Auth_AuthDriver
         $check = $this->db->query($check);
         $error = $this->db->error();
         
-        if (strlen($error) > 0) {
+        if (PMF_String::strlen($error) > 0) {
             $this->errors[] = $error;
             return 0;
         }

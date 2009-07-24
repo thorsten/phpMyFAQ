@@ -73,24 +73,24 @@ class PMF_Relation
         $x = 0;
         $arrMatch = array();
 
-        preg_match_all(
+        PMF_String::preg_match_all(
             '/(<a[^<>]*?>.*?<\/a>)|(<.*?>)/is',
             $strSource,
             $arrMatch);
-        $strSource = preg_replace(
+        $strSource = PMF_String::preg_replace(
             '/(<a[^<>]*?>.*?<\/a>)|(<.*?>)/is',
             '~+*# replaced html #*+~',
             $strSource);
-        $x = $x + preg_match(
+        $x = $x + PMF_String::preg_match(
             '/('.preg_quote($strHighlight).')/ims',
             $strSource);
-        $strSource = preg_replace(
+        $strSource = PMF_String::preg_replace(
             '/('.preg_quote($strHighlight).')/ims',
             '<a href="index.php?action=search&search='.$strHighlight.'" title="Insgesamt '.$intCount.' Artikel zu diesem Schlagwort ('.$strHighlight.') vorhanden. Jetzt danach suchen..." class="relation">$1</a>',
             $strSource);
 
         foreach($arrMatch[0] as $html) {
-            $strSource = preg_replace(
+            $strSource = PMF_String::preg_replace(
                 '/'.preg_quote('~+*# replaced html #*+~').'/',
                 $html,
                 $strSource,

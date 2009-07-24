@@ -35,30 +35,40 @@ $link     = PMF_Filter::filterInput(INPUT_POST, 'link', FILTER_VALIDATE_URL);
 $attached = PMF_Filter::filterInput(INPUT_POST, 'zusatz', FILTER_SANITIZE_STRIPPED);
 $code     = PMF_Filter::filterInput(INPUT_POST, 'captcha', FILTER_SANITIZE_STRING);
 
-if (!is_null($name) && !is_null($mailfrom) && is_array($mailto) && IPCheck($_SERVER['REMOTE_ADDR']) && 
-    checkBannedWord(htmlspecialchars($attached)) && $captcha->checkCaptchaCode($code)) {
+if (
+    !is_null($name) && !is_null($mailfrom) && is_array($mailto) && IPCheck($_SERVER['REMOTE_ADDR'])
+    && checkBannedWord(PMF_String::htmlspecialchars($attached)) && $captcha->checkCaptchaCode($code)
+    ) {
 
     // Backward compatibility: extract article info from the link, no template change required
-    $cat = $id = $artlang = null;
-    
-    $params = explode('&', parse_url($link, PHP_URL_QUERY));
-    foreach ($params as $param) {
-    	$param       = explode('=', $param);
-    	${$param[0]} = $param[1];
+    $cat = null;
+    $id = null;
+    $artlang = null;
+    preg_match('`index\.php\?action=artikel&cat=(?<cat>[\d]+)&id=(?<id>[\d]+)&artlang=(?<artlang>[^$]+)$`', $link, $matches);
+    if (isset($matches['cat'])) {
+        $cat = (int)$matches['cat'];
     }
-    
+    if (isset($matches['id'])) {
+        $id = (int)$matches['id'];
+    }
+    if (isset($matches['artlang'])) {
+        $artlang = $matches['artlang'];
+    }
     // Sanity check
     if (is_null($cat) || is_null($id) || is_null($artlang)) {
         header('HTTP/1.1 403 Forbidden');
         print 'Invalid FAQ link.';
         exit();
     }
-    
+
+    // Load categories
     $category = new PMF_Category();
-    $faq      = new PMF_Faq();
+    // Load the required faq
+    $faq = new PMF_Faq();
     $faq->getRecord($id);
-    
-    $html    = PMF_Utils::getHTTPContent($link);
+    // Get the HTML content
+    $html = @PMF_Utils::getHTTPContent($link);
+    // Try to attach the PDF content
     $pdfFile = $faq->buildPDFFile($cat);
 
     foreach($mailto['mailto'] as $recipient) {

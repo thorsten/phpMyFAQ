@@ -473,7 +473,7 @@ class PMF_User
             return false;
         }
         
-        if (!isset($this->login) || strlen($this->login) == 0) {
+        if (!isset($this->login) || PMF_String::strlen($this->login) == 0) {
             $this->errors[] = self::ERROR_USER_LOGIN_INVALID;
             return false;
         }
@@ -571,7 +571,7 @@ class PMF_User
      */
     public function getStatus()
     {
-        if (isset($this->status) && strlen($this->status) > 0) {
+        if (isset($this->status) && PMF_String::strlen($this->status) > 0) {
             return $this->status;
         }
         return false;
@@ -586,7 +586,7 @@ class PMF_User
     public function setStatus($status)
     {
         // is status allowed?
-        $status = strtolower($status);
+        $status = PMF_String::strtolower($status);
         if (!in_array($status, array_keys($this->allowed_status))) {
             $this->errors[] = self::ERROR_USER_INVALID_STATUS;
             return false;
@@ -654,7 +654,7 @@ class PMF_User
     public function isValidLogin($login)
     {
         $login = (string) $login;
-        if (strlen($login) < $this->login_minLength || preg_match($this->login_invalidRegExp, $login)) {
+        if (PMF_String::strlen($login) < $this->login_minLength || PMF_String::preg_match($this->login_invalidRegExp, $login)) {
             $this->errors[] = self::ERROR_USER_LOGIN_INVALID;
             return false;
         }
@@ -687,7 +687,7 @@ class PMF_User
     {
         $methods = array('checkPassword');
         foreach ($methods as $method) {
-            if (!method_exists($auth, strtolower($method))) {
+            if (!method_exists($auth, PMF_String::strtolower($method))) {
                 $this->errors[] = self::ERROR_USER_NO_AUTH;
                 return false;
                 break;

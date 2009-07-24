@@ -69,9 +69,9 @@ $oLink              = new PMF_Link($changeLanguagePath);
 $oLink->itemTitle   = $faq->getRecordTitle($record_id, false);
 $changeLanguagePath = $oLink->toString();
 
-
-if (!is_null($highlight) && strlen($highlight) > 3) {
-    $highlight   = str_replace("'", "´", $highlight);
+$highlight = PMF_Filter::filterInput(INPUT_GET, 'highlight', FILTER_SANITIZE_STRIPPED);
+if (!is_null($highlight) && $highlight != "/" && $highlight != "<" && $highlight != ">" && PMF_String::strlen($highlight) > 3) {
+    $highlight   = str_replace("'", "Â´", $highlight);
     $highlight   = str_replace(array('^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']'), '', $highlight);
     $highlight   = preg_quote($highlight, '/');
     $searchItems = explode(' ', $highlight);
@@ -82,7 +82,7 @@ if (!is_null($highlight) && strlen($highlight) > 3) {
         'onkeyup');
 
     foreach ($searchItems as $item) {
-        $thema = preg_replace_callback(
+        $thema = PMF_String::preg_replace_callback(
             '/'
             // a. the glossary item could be an attribute name
             .'('.$item.'="[^"]*")|'
@@ -93,7 +93,7 @@ if (!is_null($highlight) && strlen($highlight) > 3) {
             .'/mis',
             'highlight_no_links',
             $thema);
-        $content = preg_replace_callback(
+        $content = PMF_String::preg_replace_callback(
             '/'
             // a. the glossary item could be an attribute name
             .'('.$item.'="[^"]*")|'
@@ -181,7 +181,7 @@ if (isAttachmentDirOk($record_id) && $faqconfig->get('main.disableAttachments') 
         }
     }
     if ($files > 0) {
-        $content .= '<p>'.$PMF_LANG['msgAttachedFiles'].' '.substr($outstr, 0, -2).'</p>';
+        $content .= '<p>'.$PMF_LANG['msgAttachedFiles'].' '.PMF_String::substr($outstr, 0, -2).'</p>';
     }
 }
 
@@ -276,7 +276,7 @@ $tpl->processTemplate ("writeContent", array(
     'writeThema'                    => $thema,
     'writeArticleCategoryHeader'    => $PMF_LANG['msgArticleCategories'],
     'writeArticleCategories'        => $writeMultiCategories,
-    'writeContent'                  => preg_replace_callback("/<code([^>]*)>(.*?)<\/code>/is", 'hilight', $content),
+    'writeContent'                  => PMF_String::preg_replace_callback("/<code([^>]*)>(.*?)<\/code>/is", 'hilight', $content),
     'writeTagHeader'                => $PMF_LANG['msg_tags'] . ': ',
     'writeArticleTags'              => $tagging->getAllLinkTagsById($record_id),
     'writeRelatedArticlesHeader'    => $PMF_LANG['msg_related_articles'] . ': ',

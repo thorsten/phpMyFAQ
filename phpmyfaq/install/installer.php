@@ -13,8 +13,8 @@
  * @author     Uwe Pries <uwe.pries@digartis.de>
  * @author     Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @since      2002-08-20
- * @copyright  2002-2009 phpMyFAQ Team
  * @version    SVN: $Id$
+ * @copyright  2002-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -27,7 +27,7 @@
  * under the License.
  */
 
-define('VERSION', '2.5.0');
+define('VERSION', '2.6.0-dev');
 define('COPYRIGHT', '&copy; 2001-2009 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('SAFEMODE', @ini_get('safe_mode'));
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
@@ -48,8 +48,7 @@ $enabled_extensions = array(
     'gd',
     'json',
     'xmlwriter',
-    'filter',
-    'spl');
+    'filter');
 
 /**
  * Lookup for installed database extensions
@@ -167,7 +166,7 @@ function cleanInstallation()
     <link rel="icon" href="../template/favicon.ico" type="image/x-icon" />
     <script language="javascript" type="text/javascript">
     /*<![CDATA[*/
-    <!--+
+    // <!--
     function cssAddClass(ele, className) {
         if (typeof ele == 'string') {
             ele = document.getElementById(ele);
@@ -344,12 +343,10 @@ if (!db_check($supported_databases)) {
 }
 
 if (!extension_check($enabled_extensions)) {
-    print "<p class=\"center\">Some missing extensions were detected! Please enable the corresponding PHP extension(s):</p>\n";
+    print "<p class=\"center\">Some missing extensions were detected! Please enable the corresponding PHP extension:</p>\n";
     print "<ul>\n";
     foreach ($enabled_extensions as $extension) {
-    	if (!extension_loaded($extension)) { 
-            printf('    <li>ext/%s</li>', $extension);
-    	}
+        printf('    <li>ext/%s</li>', $extension);
     }
     print "</ul>\n";
     HTMLFooter();
@@ -671,7 +668,7 @@ foreach ($permLevels as $level => $desc) {
         die();
     }
     
-    if (strlen($password) <= 5 || strlen($password_retyped) <= 5) {
+    if (PMF_String::strlen($password) <= 5 || PMF_String::strlen($password_retyped) <= 5) {
         print "<p class=\"error\"><strong>Error:</strong> Your password and retyped password are too short. Please set your password and your retyped password with a minimum of 6 characters.</p>\n";
         HTMLFooter();
         die();
@@ -993,13 +990,6 @@ foreach ($permLevels as $level => $desc) {
             'for_users' => 1,
             'for_groups' => 1
         ),
-        // 33 => 'approverec'
-        array(
-            'name' => 'approverec',
-            'description' => 'Right to approve records',
-            'for_users' => 1,
-            'for_groups' => 1
-        ),
     );
     foreach ($rights as $right) {
         $rightID = $admin->perm->addRight($right);
@@ -1114,7 +1104,7 @@ function show(item) {
 $q = new PMF_Questionnaire_Data($configs);
 $options = $q->get();
 array_walk($options, 'data_printer');
-echo '</dl><input type="hidden" name="systemdata" value="'.htmlspecialchars(serialize($q->get()), ENT_QUOTES).'" />';
+echo '</dl><input type="hidden" name="systemdata" value="'.PMF_String::htmlspecialchars(serialize($q->get()), ENT_QUOTES).'" />';
 ?>
     </div>
     <p class="center"><input type="submit" value="Click here to submit the data and fnish the installation process" /></p>

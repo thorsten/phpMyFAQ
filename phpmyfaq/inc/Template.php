@@ -111,10 +111,10 @@ class PMF_Template
             foreach ($rawBlocks as $key => $rawBlock) {
                 if (in_array($key, $this->blocksTouched) && $key != 'unblocked') {
                     $tmp = str_replace($rawBlock, $this->blocks[$templateName][$key], $tmp);
-                    $tmp = preg_replace('/\[.+\]/', '', $tmp);
+                    $tmp = PMF_String::preg_replace('/\[.+\]/', '', $tmp);
                 } elseif ($key != 'unblocked') {
                     $tmp = str_replace($rawBlock, '', $tmp);
-                    $tmp = preg_replace('/\[.+\]/', '', $tmp);
+                    $tmp = PMF_String::preg_replace('/\[.+\]/', '', $tmp);
                 }
             }
         }
@@ -123,7 +123,7 @@ class PMF_Template
         if (isset($this->blocks[$templateName]['unblocked'])) {
             $templateContent = $this->_checkContent($templateContent);
             foreach ($this->blocks[$templateName]['unblocked'] as $tplVar) {
-                $varName = preg_replace('/[\{\}]/', '', $tplVar);
+                $varName = PMF_String::preg_replace('/[\{\}]/', '', $tplVar);
                 if (isset($templateContent[$varName])) {
                     $tmp = str_replace($tplVar, $templateContent[$varName], $tmp);
                 }
@@ -273,15 +273,15 @@ class PMF_Template
         $tmpBlocks = array();
         
         // read all blocks into $tmpBlocks
-        preg_match_all('/\[.+\]\s*[\W\w\s\{\}\<\>\=\"\/]*?\s*\[\/.+\]/', $tpl, $tmpBlocks);
+        PMF_String::preg_match_all('/\[.+\]\s*[\W\w\s\{\}\<\>\=\"\/]*?\s*\[\/.+\]/', $tpl, $tmpBlocks);
         $unblocked = $tpl;
         if (isset($tmpBlocks)) {
             $blockCount = count($tmpBlocks[0]);
             for ($i = 0 ; $i < $blockCount; $i++) {
                 $name = '';
                 //find block name
-                preg_match('/\[.+\]/', $tmpBlocks[0][$i], $name);
-                $name = preg_replace('/[\[\[\/\]]/', '', $name);
+                PMF_String::preg_match('/\[.+\]/', $tmpBlocks[0][$i], $name);
+                $name = PMF_String::preg_replace('/[\[\[\/\]]/', '', $name);
                 //remove block tags from block
                 $res = str_replace('[' . $name[0] . ']','',$tmpBlocks[0][$i]);
                 $res = str_replace('[/' . $name[0] . ']','',$res);
@@ -294,7 +294,7 @@ class PMF_Template
             }
 
             $hits = array();
-            preg_match_all('/\{.+?\}/', $unblocked, $hits);
+            PMF_String::preg_match_all('/\{.+?\}/', $unblocked, $hits);
             $tplBlocks['unblocked'] = $hits[0];
         } else {
             // no blocks defined
@@ -324,10 +324,10 @@ class PMF_Template
         foreach ($content as $var => $val) {
             if (is_array($val)) {
                 foreach ($val as $key => $value) {
-                    $content[$var][$key] = preg_replace($search, $replace, $value);
+                    $content[$var][$key] = PMF_String::preg_replace($search, $replace, $value);
                 }
             } else {
-                $content[$var] = preg_replace($search, $replace, $val);
+                $content[$var] = PMF_String::preg_replace($search, $replace, $val);
             }
         }
 

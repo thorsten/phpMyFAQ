@@ -252,7 +252,7 @@ class PMF_Init
         if (isset($path_parts['extension']) && ($path_parts['basename'] == '.'.$path_parts['extension'])) {
             return '';
         }
-        if (!isset($path_parts['extension']) && (strlen($path_parts['basename']) == 0)) {
+        if (!isset($path_parts['extension']) && (PMF_String::strlen($path_parts['basename']) == 0)) {
             return '';
         }
 

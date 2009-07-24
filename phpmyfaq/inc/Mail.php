@@ -799,7 +799,7 @@ class PMF_Mail
     {
         // No Javascript at all
         // 1/2. <script blahblahblah>blahblahblah</tag>
-        $message = preg_replace(
+        $message = PMF_String::preg_replace(
             '/(<script[^>]*>.*<\/script>)|<script[^\/]*\/>|<script[^\/]*>/is',
             '',
             $message
@@ -808,13 +808,13 @@ class PMF_Mail
         // Cleanup potentially dangerous HTML tags:
         if ($sanitize) {
             // 1/2. <tag blahblahblah>blahblahblah</tag>
-            $message = preg_replace(
+            $message = PMF_String::preg_replace(
                 '/<(applet|embed|head|meta|object|style|title)[^>]*>.*<\/\\1>/is',
                 '',
                 $message
             );
             // 2/2. <tag blahblahblah />
-            $message = preg_replace(
+            $message = PMF_String::preg_replace(
                 '/<(applet|embed|head|meta|object|style|title)[^\/]*\/>/is',
                 '',
                 $message
@@ -898,7 +898,7 @@ class PMF_Mail
         if (empty($address)) {
             return false;
         }
-        if (strpos($address, '\0') !== false) {
+        if (PMF_String::strpos($address, '\0') !== false) {
             return false;
         }
 
@@ -936,7 +936,7 @@ class PMF_Mail
     {
         $message = $this->fixEOL($message);
 
-        if (strpos(strtolower($this->charset), 'utf') !== false) {
+        if (PMF_String::strpos(strtolower($this->charset), 'utf') !== false) {
             // PHP wordwrap() is not safe with multibyte UTF chars
             return $message;
         } else {

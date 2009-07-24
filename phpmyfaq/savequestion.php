@@ -92,7 +92,7 @@ function sendAskedQuestion($username, $usermail, $usercat, $content)
 }
 
 if (!is_null($username) && !empty($usermail) && !empty($content) && IPCheck($_SERVER['REMOTE_ADDR']) && 
-    checkBannedWord(htmlspecialchars($content)) && $captcha->checkCaptchaCode($code)) {
+    checkBannedWord(PMF_String::htmlspecialchars($content)) && $captcha->checkCaptchaCode($code)) {
     	
     $pmf_sw       = PMF_Stopwords::getInstance();
     $search_stuff = $pmf_sw->clean($content);       

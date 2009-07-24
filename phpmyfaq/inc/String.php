@@ -254,7 +254,7 @@ class PMF_String
      * 
      * @return int
      */
-    public static function preg_match($pattern, $subject, $matches = null, $flags = 0, $offset = 0)
+    public static function preg_match($pattern, $subject, &$matches = null, $flags = 0, $offset = 0)
     {
         return self::$instance->preg_match($pattern, $subject, $matches, $flags, $offset);
     }
@@ -271,7 +271,7 @@ class PMF_String
      * 
      * @return int
      */
-    public static function preg_match_all($pattern, $subject, $matches, $flags = 0, $offset = 0)
+    public static function preg_match_all($pattern, $subject, &$matches = null, $flags = 0, $offset = 0)
     {
         return self::$instance->preg_match_all($pattern, $subject, $matches, $flags, $offset);
     }
@@ -333,5 +333,22 @@ class PMF_String
     public static function isUTF8($str)
     {
         return PMF_String_Basic::isUTF8($str);
+    }
+    
+    /**
+     * Convert special chars to html entities
+     * @param string $str
+     * @param int $quote_stype
+     * @param string $charset
+     * @param boolean $double_encode
+     * 
+     * @return string
+     */
+    public static function htmlspecialchars($str, $quote_style = ENT_COMPAT, $charset = null, $double_encode = false)
+    {
+        return htmlspecialchars($str,
+                                $quote_style,
+                                null == $charset ? self::$instance->getEncoding() : $charset,
+                                $double_encode);
     }
 }

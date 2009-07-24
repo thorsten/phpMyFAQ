@@ -134,8 +134,8 @@ if ($permission['editbt']) {
 
     <form action="?action=editpreview" method="post">
     <input type="hidden" name="id"                  value="<?php print $record_id; ?>" />
-    <input type="hidden" name="thema"               value="<?php print htmlspecialchars($question); ?>" />
-    <input type="hidden" name="content" class="mceNoEditor" value="<?php print htmlspecialchars($content); ?>" />
+    <input type="hidden" name="thema"               value="<?php print PMF_String::htmlspecialchars($question); ?>" />
+    <input type="hidden" name="content" class="mceNoEditor" value="<?php print PMF_String::htmlspecialchars($content); ?>" />
     <input type="hidden" name="lang"                value="<?php print $record_lang; ?>" />
     <input type="hidden" name="keywords"            value="<?php print $keywords; ?>" />
     <input type="hidden" name="tags"                value="<?php print $tags; ?>" />
@@ -166,8 +166,8 @@ if ($permission['editbt']) {
         printf("<p>%s</p>", $PMF_LANG['ad_entryins_fail']);
 ?>
     <form action="?action=editpreview" method="post">
-    <input type="hidden" name="thema"               value="<?php print htmlspecialchars($question); ?>" />
-    <input type="hidden" name="content" class="mceNoEditor" value="<?php print htmlspecialchars($content); ?>" />
+    <input type="hidden" name="thema"               value="<?php print PMF_String::htmlspecialchars($question); ?>" />
+    <input type="hidden" name="content" class="mceNoEditor" value="<?php print PMF_String::htmlspecialchars($content); ?>" />
     <input type="hidden" name="lang"                value="<?php print $record_lang; ?>" />
     <input type="hidden" name="keywords"            value="<?php print $keywords; ?>" />
     <input type="hidden" name="tags"                value="<?php print $tags; ?>" />

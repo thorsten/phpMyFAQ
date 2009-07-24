@@ -120,11 +120,11 @@ if ($permission['editcateg']) {
            if (array_key_exists($language,$id_languages)) {
               printf("<td class=\"sscDesc\" title=\"%s: %s\"><img src=\"images/ok.gif\" width=\"22\" height=\"18\" border=\"0\" title=\"%s: %s\" alt=\"%s: %s\" /></td>\n",
                   $PMF_LANG["ad_categ_titel"],
-                  preg_replace('/\(.*\)/','',$id_languages[$language]),
+                  PMF_String::preg_replace('/\(.*\)/','',$id_languages[$language]),
                   $PMF_LANG["ad_categ_titel"],
-                  preg_replace('/\(.*\)/','',$id_languages[$language]),
+                  PMF_String::preg_replace('/\(.*\)/','',$id_languages[$language]),
                   $PMF_LANG["ad_categ_titel"],
-                  preg_replace('/\(.*\)/','',$id_languages[$language]));
+                  PMF_String::preg_replace('/\(.*\)/','',$id_languages[$language]));
            }
            else {
            print "<td class=\"sscDescNA\">";

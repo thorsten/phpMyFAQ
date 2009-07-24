@@ -18,7 +18,7 @@
  * under the License.
  ******************************************************************************/
 
-$PMF_LANG["metaCharset"] = "windows-1257";
+$PMF_LANG["metaCharset"] = "UTF-8";
 $PMF_LANG["metaLanguage"] = "lv";
 $PMF_LANG["language"] = "Latvian";
 // ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)

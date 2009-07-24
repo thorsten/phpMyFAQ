@@ -219,7 +219,7 @@ class PMF_DB_Oracle implements PMF_DB_Driver
             foreach ($joinAssoc as $joinedFields) {
                 $joined .= $joinedFields.' AND ';
                 }
-            $joined = substr($joined, 0, -4);
+            $joined = PMF_String::substr($joined, 0, -4);
         }
 
         foreach ($cond as $field => $data) {

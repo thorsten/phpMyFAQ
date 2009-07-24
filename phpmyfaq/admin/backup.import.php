@@ -34,11 +34,11 @@ if ($permission["restore"]) {
         $handle = fopen($_FILES['userfile']['tmp_name'], 'r');
         $dat    = fgets($handle, 65536);
 
-        if (substr($dat, 0, 9) != '-- pmf2.5') {
+        if (PMF_String::substr($dat, 0, 9) != '-- pmf2.5') {
             print $PMF_LANG["ad_csv_no"];
             $ok = 0;
         } else {
-            $dat = trim(substr($dat, 11));
+            $dat = trim(PMF_String::substr($dat, 11));
             $tbl = explode(' ', $dat);
             $num = count($tbl);
             for ($h = 0; $h < $num; $h++) {
@@ -53,12 +53,12 @@ if ($permission["restore"]) {
             while ($dat = fgets($handle, 65536)) {
                 $dat                       = trim($dat);
                 $backup_prefix_pattern     = "-- pmftableprefix:";
-                $backup_prefix_pattern_len = strlen($backup_prefix_pattern);
-                if (substr($dat, 0, $backup_prefix_pattern_len) == $backup_prefix_pattern) {
-                    $table_prefix = trim(substr($dat, $backup_prefix_pattern_len));
+                $backup_prefix_pattern_len = PMF_String::strlen($backup_prefix_pattern);
+                if (PMF_String::substr($dat, 0, $backup_prefix_pattern_len) == $backup_prefix_pattern) {
+                    $table_prefix = trim(PMF_String::substr($dat, $backup_prefix_pattern_len));
                 }
-                if ( (substr($dat, 0, 2) != '--') && ($dat != '') ) {
-                    $mquery[] = trim(substr($dat, 0, -1));
+                if ( (PMF_String::substr($dat, 0, 2) != '--') && ($dat != '') ) {
+                    $mquery[] = trim(PMF_String::substr($dat, 0, -1));
                 }
             }
 

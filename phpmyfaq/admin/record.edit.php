@@ -213,7 +213,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     <textarea name="thema" id="thema" style="width: 390px; height: 50px;" cols="2" rows="50"><?php if (isset($faqData['title'])) { print $faqData['title']; } ?></textarea><br />
 
     <label for="content"><?php print $PMF_LANG["ad_entry_content"]; ?></label>
-    <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript><textarea id="content" name="content" cols="84" rows="10"><?php if (isset($faqData['content'])) { print trim(htmlspecialchars($faqData['content'])); } ?></textarea><br />
+    <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript><textarea id="content" name="content" cols="84" rows="10"><?php if (isset($faqData['content'])) { print trim(PMF_String::htmlspecialchars($faqData['content'])); } ?></textarea><br />
 
 <?php
 
@@ -257,19 +257,19 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
 ?>
 
     <label class="lefteditor" for="keywords"><?php print $PMF_LANG["ad_entry_keywords"]; ?></label>
-    <input name="keywords" id="keywords" style="width: 390px;" value="<?php if (isset($faqData['keywords'])) { print htmlspecialchars($faqData['keywords']); } ?>" /><br />
+    <input name="keywords" id="keywords" style="width: 390px;" value="<?php if (isset($faqData['keywords'])) { print PMF_String::htmlspecialchars($faqData['keywords']); } ?>" /><br />
 
     <label class="lefteditor" for="tags"><?php print $PMF_LANG['ad_entry_tags']; ?>:</label>
-    <input name="tags" id="tags" style="width: 390px;" value="<?php if (isset($tags)) { print htmlspecialchars($tags); } ?>" /><img style="display: none; margin-bottom: -5px;" id="tags_autocomplete_wait" src="images/indicator.gif" alt="waiting..."></img>
+    <input name="tags" id="tags" style="width: 390px;" value="<?php if (isset($tags)) { print PMF_String::htmlspecialchars($tags); } ?>" /><img style="display: none; margin-bottom: -5px;" id="tags_autocomplete_wait" src="images/indicator.gif" alt="waiting..."></img>
     <script type="text/javascript">
         $('#tags').autocomplete("index.php?action=ajax&ajax=tags_list", { width: 260, selectFirst: false, multiple: true } );
     </script><br />
 
     <label class="lefteditor" for="author"><?php print $PMF_LANG["ad_entry_author"]; ?></label>
-    <input name="author" id="author" style="width: 390px;" value="<?php if (isset($faqData['author'])) { print htmlspecialchars($faqData['author']); } else { print $user->getUserData('display_name'); } ?>" /><br />
+    <input name="author" id="author" style="width: 390px;" value="<?php if (isset($faqData['author'])) { print PMF_String::htmlspecialchars($faqData['author']); } else { print $user->getUserData('display_name'); } ?>" /><br />
 
     <label class="lefteditor" for="email"><?php print $PMF_LANG["ad_entry_email"]; ?></label>
-    <input name="email" id="email" style="width: 390px;" value="<?php if (isset($faqData['email'])) { print htmlspecialchars($faqData['email']); } else { print $user->getUserData('email'); } ?>" /><br />
+    <input name="email" id="email" style="width: 390px;" value="<?php if (isset($faqData['email'])) { print PMF_String::htmlspecialchars($faqData['email']); } else { print $user->getUserData('email'); } ?>" /><br />
 
     </fieldset>
 

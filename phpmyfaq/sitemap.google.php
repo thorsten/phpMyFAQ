@@ -80,7 +80,7 @@ function buildSitemapNode($location, $lastmod = null, $changeFreq = null, $prior
     }
     $node =
          '<url>'
-        .'<loc>'.htmlspecialchars(utf8_encode($location)).'</loc>'
+        .'<loc>'.PMF_String::htmlspecialchars(utf8_encode($location)).'</loc>'
         .'<lastmod>'.$lastmod.'</lastmod>'
         .'<changefreq>'.$changeFreq.'</changefreq>'
         .(isset($priority) ? '<priority>'.$priority.'</priority>' : '')
@@ -91,7 +91,7 @@ function buildSitemapNode($location, $lastmod = null, $changeFreq = null, $prior
 
 function printHTTPStatus404()
 {
-    if (    ('cgi' == substr(php_sapi_name(), 0, 3))
+    if (    ('cgi' == PMF_String::substr(php_sapi_name(), 0, 3))
          || isset($_SERVER['ALL_HTTP'])
         )
     {
@@ -184,7 +184,7 @@ if (!is_null($getgezip) && (1 == $getgezip)) {
 } else {
     header('Content-Type: text/xml');
     header('Content-Disposition: inline; filename="'.PMF_SITEMAP_GOOGLE_FILENAME.'"');
-    header('Content-Length: '.strlen($sitemap));
+    header('Content-Length: '.PMF_String::strlen($sitemap));
     print $sitemap;
 }
 

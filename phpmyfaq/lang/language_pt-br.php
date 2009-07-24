@@ -19,7 +19,7 @@
  * under the License.
  */
 
-$PMF_LANG["metaCharset"] = "iso-8859-1";
+$PMF_LANG["metaCharset"] = "UTF-8";
 $PMF_LANG["metaLanguage"] = "pt-br";
 $PMF_LANG["language"] = "Brazilian Portuguese";
 // ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)

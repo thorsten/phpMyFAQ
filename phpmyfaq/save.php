@@ -43,19 +43,15 @@ $code        = PMF_Filter::filterInput(INPUT_POST, 'captcha', FILTER_SANITIZE_ST
 $categories  = PMF_Filter::filterInputArray(INPUT_POST, array('rubrik' => array('filter' => FILTER_VALIDATE_INT,
                                                                                 'flags'  => FILTER_REQUIRE_ARRAY)));
 
-// Check on translated content
-if (is_null($content) && !is_null($tr_content)) {
-    $content = $tr_content;
-}
-
 if (!is_null($username) && !is_null($usermail) && !is_null($thema) && !is_null($content) && 
-    IPCheck($_SERVER['REMOTE_ADDR']) && checkBannedWord(htmlspecialchars($thema)) && 
-    checkBannedWord(htmlspecialchars($content)) && $captcha->checkCaptchaCode($code) &&
-    ((is_null($faqid) && !is_null($categories['rubrik'])) || (!is_null($faqid) && !is_null($faqlanguage) && PMF_Init::isASupportedLanguage($faqlanguage)))) {
+    IPCheck($_SERVER['REMOTE_ADDR']) && checkBannedWord(PMF_String::htmlspecialchars($thema)) && 
+    checkBannedWord(PMF_String::htmlspecialchars($content)) && $captcha->checkCaptchaCode($code) && 
+    ((is_null($faqid) && !is_null($categories)) || (!is_null($faqid) && !is_null($faqlanguage) && PMF_Init::isASupportedLanguage($faqlanguage)))) {
 
     $isNew = true;
     if (!is_null($faqid)) {
-        $isNew = false;
+        $isNew   = false;
+        $content = $tr_content;
         $faqsession->userTracking('save_new_translation_entry', 0);
     } else {
         $faqsession->userTracking('save_new_entry', 0);
@@ -67,8 +63,8 @@ if (!is_null($username) && !is_null($usermail) && !is_null($thema) && !is_null($
         $newLanguage   = $faqlanguage;
     }
 
-    if (substr($contentlink,7) != "") {
-        $content = $content."<br />".$PMF_LANG["msgInfo"]."<a href=\"http://".substr($contentlink,7)."\" target=\"_blank\">".$contentlink."</a>";
+    if (PMF_String::substr($contentlink,7) != "") {
+        $content = $content."<br />".$PMF_LANG["msgInfo"]."<a href=\"http://".PMF_String::substr($contentlink,7)."\" target=\"_blank\">".$contentlink."</a>";
     }
 
     $newData = array(

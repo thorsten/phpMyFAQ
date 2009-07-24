@@ -80,7 +80,7 @@ PRIMARY KEY (id))";
 $query[] = "CREATE TABLE ".$sqltblpre."faqcaptcha (
 id varchar(6) NOT NULL,
 useragent varchar(255) NOT NULL,
-language varchar(2) NOT NULL,
+language varchar(5) NOT NULL,
 ip varchar(64) NOT NULL,
 captcha_time integer NOT NULL,
 PRIMARY KEY (id))";
@@ -211,7 +211,7 @@ PRIMARY KEY (record_id, user_id))";
 //faqglossary
 $query[] = "CREATE TABLE ".$sqltblpre."faqglossary (
 id integer NOT NULL ,
-lang varchar(2) NOT NULL ,
+lang varchar(5) NOT NULL ,
 item varchar(255) NOT NULL ,
 definition text NOT NULL,
 PRIMARY KEY (id, lang))";

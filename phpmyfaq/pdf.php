@@ -29,8 +29,6 @@ PMF_Init::cleanRequest();
 session_name(PMF_COOKIE_NAME_AUTH . trim($faqconfig->get('main.phpMyFAQToken')));
 session_start();
 
-$category = new PMF_Category();
-
 // get language (default: english)
 $pmf      = new PMF_Init();
 $LANGCODE = $pmf->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
@@ -41,6 +39,12 @@ if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE)) {
     $LANGCODE = "en";
     require_once "lang/language_en.php";
 }
+//
+// Initalizing static string wrapper
+//
+PMF_String::init($PMF_LANG["metaCharset"], $LANGCODE);
+
+$category = new PMF_Category();
 
 $currentCategory = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
 $id              = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);

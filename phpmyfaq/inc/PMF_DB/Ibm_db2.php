@@ -248,10 +248,10 @@ class PMF_DB_Ibm_db2 implements PMF_DB_Driver
             foreach ($joinAssoc as $joinedFields) {
                 $join .= $joinedFields.' AND ';
                 }
-            $joined .= substr($join, 0, -4);
+            $joined .= PMF_String::substr($join, 0, -4);
         }
 
-        $keys = preg_split("/\s+/", $string);
+        $keys = PMF_String::preg_split("/\s+/", $string);
         $numKeys = count($keys);
         $numMatch = count($match);
 

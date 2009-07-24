@@ -40,7 +40,7 @@ $question_id = PMF_Filter::filterInput(INPUT_GET, 'question', FILTER_VALIDATE_IN
 if (!is_null($question_id)) {
     $oQuestion = $faq->getQuestion($question_id);
     $question  = $oQuestion['question'];
-    if (strlen($question)) {
+    if (PMF_String::strlen($question)) {
         $readonly = ' readonly="readonly"';
     }
 }

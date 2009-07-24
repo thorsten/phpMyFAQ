@@ -174,7 +174,7 @@ class idna_convert
 
         // Negotiate input and try to determine, whether it is a plain string,
         // an email address or something like a complete URL
-        if (strpos($input, '@')) { // Maybe it is an email address
+        if (PMF_String::strpos($input, '@')) { // Maybe it is an email address
             // No no in strict mode
             if ($this->_strict_mode) {
                 $this->_error('Only simple domain name parts can be handled in strict mode');
@@ -183,7 +183,7 @@ class idna_convert
             list ($email_pref, $input) = explode('@', $input, 2);
             $arr = explode('.', $input);
             foreach ($arr as $k => $v) {
-                if (preg_match('!^'.preg_quote($this->_punycode_prefix, '!').'!', $v)) {
+                if (PMF_String::preg_match('!^'.preg_quote($this->_punycode_prefix, '!').'!', $v)) {
                     $conv = $this->_decode($v);
                     if ($conv) $arr[$k] = $conv;
                 }
@@ -191,14 +191,14 @@ class idna_convert
             $input = join('.', $arr);
             $arr = explode('.', $email_pref);
             foreach ($arr as $k => $v) {
-                if (preg_match('!^'.preg_quote($this->_punycode_prefix, '!').'!', $v)) {
+                if (PMF_String::preg_match('!^'.preg_quote($this->_punycode_prefix, '!').'!', $v)) {
                     $conv = $this->_decode($v);
                     if ($conv) $arr[$k] = $conv;
                 }
             }
             $email_pref = join('.', $arr);
             $return = $email_pref . '@' . $input;
-        } elseif (preg_match('![:\./]!', $input)) { // Or a complete domain name (with or without paths / parameters)
+        } elseif (PMF_String::preg_match('![:\./]!', $input)) { // Or a complete domain name (with or without paths / parameters)
             // No no in strict mode
             if ($this->_strict_mode) {
                 $this->_error('Only simple domain name parts can be handled in strict mode');
@@ -213,7 +213,7 @@ class idna_convert
                 }
                 $parsed['host'] = join('.', $arr);
                 $return =
-                        (empty($parsed['scheme']) ? '' : $parsed['scheme'].(strtolower($parsed['scheme']) == 'mailto' ? ':' : '://'))
+                        (empty($parsed['scheme']) ? '' : $parsed['scheme'].(PMF_String::strtolower($parsed['scheme']) == 'mailto' ? ':' : '://'))
                         .(empty($parsed['user']) ? '' : $parsed['user'].(empty($parsed['pass']) ? '' : ':'.$parsed['pass']).'@')
                         .$parsed['host']
                         .(empty($parsed['port']) ? '' : ':'.$parsed['port'])
@@ -353,7 +353,7 @@ class idna_convert
     {
         $decoded = array();
         // find the Punycode prefix
-        if (!preg_match('!^'.preg_quote($this->_punycode_prefix, '!').'!', $encoded)) {
+        if (!PMF_String::preg_match('!^'.preg_quote($this->_punycode_prefix, '!').'!', $encoded)) {
             $this->_error('This is not a punycode string');
             return false;
         }
@@ -764,12 +764,8 @@ class idna_convert
     {
         $output = array();
         $out_len = 0;
-        // Patch by Daniel Hahler; work around prolbem with mbstring.func_overload
-        if (function_exists('mb_strlen')) {
-            $inp_len = mb_strlen($input, '8bit');
-        } else {
-            $inp_len = strlen($input);
-        }
+        $inp_len = PMF_String::strlen($input);
+        
         $mode = 'next';
         $test = 'none';
         for ($k = 0; $k < $inp_len; ++$k) {

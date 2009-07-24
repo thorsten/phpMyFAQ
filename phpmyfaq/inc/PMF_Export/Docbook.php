@@ -61,28 +61,28 @@ class PMF_Export_Docbook
 
 		while ($coise != ''){
 			$coise = trim($coise);
-			if(substr($coise,0,6) == substr('<table',0,6)){
+			if(PMF_String::substr($coise,0,6) == PMF_String::substr('<table',0,6)){
 				$this->table($coise);
 			}
-			elseif(substr($coise,0,8) == substr('<a title=',0,8)){
+			elseif(PMF_String::substr($coise,0,8) == PMF_String::substr('<a title=',0,8)){
 				$this->image_one($coise);
 			}
-			elseif(substr($coise,0,3) == substr('</a>',0,3)){
+			elseif(PMF_String::substr($coise,0,3) == PMF_String::substr('</a>',0,3)){
 				return;
 			}
-			elseif(substr($coise,0,5) == substr('<img src=',0,5)){
+			elseif(PMF_String::substr($coise,0,5) == PMF_String::substr('<img src=',0,5)){
 				$this->image_two($coise);
 			}
-			elseif(substr($coise,0,3) == substr('<tr>',0,3)){
+			elseif(PMF_String::substr($coise,0,3) == PMF_String::substr('<tr>',0,3)){
 				$this->row($coise);
 			}
-			elseif(substr($coise,0,4) == substr('</tr>',0,4)){
+			elseif(PMF_String::substr($coise,0,4) == PMF_String::substr('</tr>',0,4)){
 				return;
 			}
-			elseif(substr($coise,0,3) == substr('<td>',0,3)){
+			elseif(PMF_String::substr($coise,0,3) == PMF_String::substr('<td>',0,3)){
 				$this->cell($coise);
 			}
-			elseif (substr($coise,0,4)== substr('</td>',0,4)){
+			elseif (PMF_String::substr($coise,0,4)== PMF_String::substr('</td>',0,4)){
 				return;
 			}
 			else{
@@ -108,9 +108,9 @@ class PMF_Export_Docbook
 		$tableRow      	= array();
 		$row_counter 		= 0;
 
-  		$tableString = substr($tableString,(strpos($tableString,'>'))+1);
+  		$tableString = PMF_String::substr($tableString,(PMF_String::strpos($tableString,'>'))+1);
 
-  		if( substr($tableString,0,7) == '<tbody>'){
+  		if( PMF_String::substr($tableString,0,7) == '<tbody>'){
   			$xmlPart[$this->part_counter] = $this->xmlContent;
   			$this->xmlContent ='';
   			$this->part_counter++;
@@ -118,12 +118,12 @@ class PMF_Export_Docbook
 
 			isset($tableCols[$this->table_counter])? $tableCols[$this->table_counter] : $tableCols[$this->table_counter]= 0;
 
-			$tableString = substr($tableString,7);
+			$tableString = PMF_String::substr($tableString,7);
 
   			do{
- 				$tableString = substr($tableString,4);
+ 				$tableString = PMF_String::substr($tableString,4);
   				$this->row($tableString);
-  				$tableString = substr($tableString,5);
+  				$tableString = PMF_String::substr($tableString,5);
   				$row_counter++;
 
   				if($row_counter==1){
@@ -132,9 +132,9 @@ class PMF_Export_Docbook
 
   				$tableRow[$this->table_counter] = $row_counter;
     		 }
-    		 while (substr($tableString,0,8) != '</tbody>');
+    		 while (PMF_String::substr($tableString,0,8) != '</tbody>');
 
-    		$tableString = substr($tableString,16);
+    		$tableString = PMF_String::substr($tableString,16);
     		$this->part_counter--;
 			$this->xmlContent = $xmlPart[$this->part_counter]
 							   .'<para>'
@@ -165,7 +165,7 @@ class PMF_Export_Docbook
 		$this->cell_counter = 0;
 		$this->xmlContent .= '<row>';
 
-		while(substr($rowString,0,5)!= '</tr>'){
+		while(PMF_String::substr($rowString,0,5)!= '</tr>'){
 			$this->cell_counter++;
 			$this->cell($rowString);
 		}
@@ -187,11 +187,11 @@ class PMF_Export_Docbook
 	function cell(&$cellString){
 
 		$cellString = trim($cellString);
-		$cellString = substr($cellString,(strpos($cellString,'>')+1),strlen($cellString));
+		$cellString = PMF_String::substr($cellString,(PMF_String::strpos($cellString,'>')+1),PMF_String::strlen($cellString));
 		$this->xmlContent .='<entry>';
 		$this->TableImageText($cellString);
 		$this->xmlContent .='</entry>';
-		$cellString = substr($cellString,5);
+		$cellString = PMF_String::substr($cellString,5);
 
 	}
 
@@ -208,17 +208,17 @@ class PMF_Export_Docbook
      */
 	function image_one(&$imageString){
 
-		$selectimg 	= (strpos($imageString,'selectImage')+12);
-  		$source 	= substr($imageString,$selectimg);
-  		$imgsource 	= substr($source,0,strpos($source,','));
-  		$imgleng 	= (strlen($imgsource)-2);
-  		$imgsource 	= substr($imgsource,1,$imgleng);
-  		$imgsize    = substr($source,$imgleng+$imgleng+6);
- 		$imgwidth   = ltrim(substr($imgsize,0,strpos($imgsize,',')));
+		$selectimg 	= (PMF_String::strpos($imageString,'selectImage')+12);
+  		$source 	= PMF_String::substr($imageString,$selectimg);
+  		$imgsource 	= PMF_String::substr($source,0,PMF_String::strpos($source,','));
+  		$imgleng 	= (PMF_String::strlen($imgsource)-2);
+  		$imgsource 	= PMF_String::substr($imgsource,1,$imgleng);
+  		$imgsize    = PMF_String::substr($source,$imgleng+$imgleng+6);
+ 		$imgwidth   = ltrim(PMF_String::substr($imgsize,0,PMF_String::strpos($imgsize,',')));
 
-  		$text = strpos($imageString,'" />')+4;
+  		$text = PMF_String::strpos($imageString,'" />')+4;
 
-  		if(substr($imageString,$text,strpos(substr($imageString,$text),'</a>'))!= ''){
+  		if(PMF_String::substr($imageString,$text,PMF_String::strpos(PMF_String::substr($imageString,$text),'</a>'))!= ''){
   			$this->info_image($imageString);
   		}
 
@@ -230,7 +230,7 @@ class PMF_Export_Docbook
   		 	. '</imageobject>'
   		 	. '</mediaobject>'
   		 	. '</para>';
-  		$imageString= substr($imageString,(strpos($imageString,"</a>")+4));
+  		$imageString= PMF_String::substr($imageString,(PMF_String::strpos($imageString,"</a>")+4));
   	}
 
   	/**
@@ -244,9 +244,9 @@ class PMF_Export_Docbook
      * @since   2005-07-21
      */
 	function info_image(&$infoImage){
-  		$text = strpos($infoImage,'" />')+4;
+  		$text = PMF_String::strpos($infoImage,'" />')+4;
 		$infoImage .='<objectinfo>'
-  				  . '<title>'.substr($infoImage,$text,strpos(substr($infoImage,$text),'</a>')).'</title>'
+  				  . '<title>'.PMF_String::substr($infoImage,$text,PMF_String::strpos(PMF_String::substr($infoImage,$text),'</a>')).'</title>'
   				  . '</objectinfo>';
 	}
 
@@ -263,7 +263,7 @@ class PMF_Export_Docbook
      */
 	function image_two(&$imageString){
 
-		$img_end   = preg_match('/\"(\/(.*?))\"/',$imageString,$matches);
+		$img_end   = PMF_String::preg_match('/\"(\/(.*?))\"/',$imageString,$matches);
 		$source = $matches[1];
 		$this->xmlContent .='<para>'
   		 				  .'<mediaobject>'
@@ -272,7 +272,7 @@ class PMF_Export_Docbook
   		 				  .'</imageobject>'
   		 				  .'</mediaobject>'
   		 				  .'</para>';
-  		 $imageString = ltrim(substr($imageString,(strpos($imageString,'/>'))+2));
+  		 $imageString = ltrim(PMF_String::substr($imageString,(PMF_String::strpos($imageString,'/>'))+2));
   	}
 
   	/**
@@ -287,25 +287,25 @@ class PMF_Export_Docbook
      */
 	function text(&$textString){
 
-		if(preg_match('/((<)(.*)(>)?)/',$textString,$matches)){
+		if(PMF_String::preg_match('/((<)(.*)(>)?)/',$textString,$matches)){
 
-			if(preg_match('/^((?!<)(.*?))((<(\/?(.*)?)>)+)/',$textString,$matches) == true){
-				$textStringPart = substr($textString,0,strlen($matches[1]));
-				$textString = substr($textString,strlen($matches[1]));
+			if(PMF_String::preg_match('/^((?!<)(.*?))((<(\/?(.*)?)>)+)/',$textString,$matches) == true){
+				$textStringPart = PMF_String::substr($textString,0,PMF_String::strlen($matches[1]));
+				$textString = PMF_String::substr($textString,PMF_String::strlen($matches[1]));
 			} else {
-				$match = preg_match('/^(<\/?(.*)>)/',$textString,$matchesRemainder);
+				$match = PMF_String::preg_match('/^(<\/?(.*)>)/',$textString,$matchesRemainder);
                 if ($match) {
-				$textString = substr($textString,strlen($matchesRemainder[0]));
+				$textString = PMF_String::substr($textString,PMF_String::strlen($matchesRemainder[0]));
 				$textStringPart = '';
                 } else {
                     $textStringPart = '';
-                    $textString = substr($textString,strlen($textString));
+                    $textString = PMF_String::substr($textString,PMF_String::strlen($textString));
                 }
 			}
 		}
 		else{
 			$textStringPart = $textString;
-			$textString = substr($textString,strlen($textString));
+			$textString = PMF_String::substr($textString,PMF_String::strlen($textString));
 		}
         if (!empty($textStringPart)) {
 		$this->xmlContent .='<para>';
@@ -347,11 +347,11 @@ class PMF_Export_Docbook
 
 		$offset = 0;
  		$current = strtotime(
- 					 substr($date,0,4)."-"
- 					.substr($date,4,2)."-"
- 					.substr($date,6,2)." "
- 					.substr($date,8,2).":"
- 					.substr($date,10,2)
+ 					 PMF_String::substr($date,0,4)."-"
+ 					.PMF_String::substr($date,4,2)."-"
+ 					.PMF_String::substr($date,6,2)." "
+ 					.PMF_String::substr($date,8,2).":"
+ 					.PMF_String::substr($date,10,2)
  					);
     	$timestamp = $current + $offset;
 

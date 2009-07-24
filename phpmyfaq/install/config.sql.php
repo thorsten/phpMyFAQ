@@ -6,8 +6,8 @@
  * @subpackage Installation
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since      2006-07-02
- * @copyright  2006-2009 phpMyFAQ Team
  * @version    SVN: $Id$
+ * @copyright  2006-2009 phpMyFAQ Team
  * 
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -42,7 +42,7 @@ $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.permLevel', '".$pe
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.phpMyFAQToken', '')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.referenceURL', '')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.send2friendText', '')";
-$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.titleFAQ', 'phpMyFAQ Codename Pandora')";
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.titleFAQ', 'phpMyFAQ Codename Portia')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.urlValidateInterval', '86400')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.enableWysiwygEditor', 'true')";
 

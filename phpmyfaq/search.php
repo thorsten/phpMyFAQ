@@ -112,6 +112,6 @@ $tpl->processTemplate('writeContent', array(
     'printResult'              => $printResult,
     'openSearchLink'           => $openSearchLink,
     'msgMostPopularSearches'   => $PMF_LANG['msgMostPopularSearches'],
-    'printMostPopularSearches' => substr($mostPopularSearches, 0, -2)));
+    'printMostPopularSearches' => PMF_String::substr($mostPopularSearches, 0, -2)));
 
 $tpl->includeTemplate('writeContent', 'index');

@@ -18,8 +18,8 @@
  * under the License.
  */
 
-// Språk
-$PMF_LANG["metaCharset"] = "iso-8859-1";
+// SprÃ¥k
+$PMF_LANG["metaCharset"] = "UTF-8";
 $PMF_LANG["metaLanguage"] = "sv";
 $PMF_LANG["language"] = "Swedish";
 // ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
@@ -28,98 +28,98 @@ $PMF_LANG["dir"] = "ltr";
 // Navigation
 $PMF_LANG["msgCategory"] = "Kategorier";
 $PMF_LANG["msgShowAllCategories"] = "Visa alla kategorier";
-$PMF_LANG["msgSearch"] = "Sök";
-$PMF_LANG["msgAddContent"] = "Lägg till fråga";
-$PMF_LANG["msgQuestion"] = "Ställ en fråga";
-$PMF_LANG["msgOpenQuestions"] = "Öppna frågor";
-$PMF_LANG["msgHelp"] = "Hjälp";
+$PMF_LANG["msgSearch"] = "SÃ¶k";
+$PMF_LANG["msgAddContent"] = "LÃ¤gg till frÃ¥ga";
+$PMF_LANG["msgQuestion"] = "StÃ¤ll en frÃ¥ga";
+$PMF_LANG["msgOpenQuestions"] = "Ã–ppna frÃ¥gor";
+$PMF_LANG["msgHelp"] = "HjÃ¤lp";
 $PMF_LANG["msgContact"] = "Kontakt";
 $PMF_LANG["msgHome"] = "Hem";
 $PMF_LANG["msgNews"] = "Nyheter";
-$PMF_LANG["msgUserOnline"] = " Besökare online";
+$PMF_LANG["msgUserOnline"] = " BesÃ¶kare online";
 $PMF_LANG["msgXMLExport"] = "XML-Fil";
-$PMF_LANG["msgBack2Home"] = "Tillbaka till första sidan";
+$PMF_LANG["msgBack2Home"] = "Tillbaka till fÃ¶rsta sidan";
 
-// Innehåll
+// InnehÃ¥ll
 $PMF_LANG["msgFullCategories"] = "Kategorier";
 $PMF_LANG["msgFullCategoriesIn"] = "Kategorier ";
 $PMF_LANG["msgSubCategories"] = "Underkategori";
-$PMF_LANG["msgEntries"] = "Frågor";
-$PMF_LANG["msgEntriesIn"] = "Frågor i ";
-$PMF_LANG["msgViews"] = "besök";
+$PMF_LANG["msgEntries"] = "FrÃ¥gor";
+$PMF_LANG["msgEntriesIn"] = "FrÃ¥gor i ";
+$PMF_LANG["msgViews"] = "besÃ¶k";
 $PMF_LANG["msgPage"] = "Sida ";
 $PMF_LANG["msgPages"] = "Sidor";
-$PMF_LANG["msgPrevious"] = "föregående";
-$PMF_LANG["msgNext"] = "nästa";
+$PMF_LANG["msgPrevious"] = "fÃ¶regÃ¥ende";
+$PMF_LANG["msgNext"] = "nÃ¤sta";
 $PMF_LANG["msgCategoryUp"] = "upp en kategori";
 $PMF_LANG["msgLastUpdateArticle"] = "Senast uppdaterad: ";
-$PMF_LANG["msgAuthor"] = "Författare: ";
-$PMF_LANG["msgPrinterFriendly"] = "Utskriftsvänlig version";
-$PMF_LANG["msgPrintArticle"] = "Skriv ut den här frågan";
+$PMF_LANG["msgAuthor"] = "FÃ¶rfattare: ";
+$PMF_LANG["msgPrinterFriendly"] = "UtskriftsvÃ¤nlig version";
+$PMF_LANG["msgPrintArticle"] = "Skriv ut den hÃ¤r frÃ¥gan";
 $PMF_LANG["msgMakeXMLExport"] = "Exportera till XML-Fil";
-$PMF_LANG["msgAverageVote"] = "Resultat av röstning:";
-$PMF_LANG["msgVoteUseability"] = "Rösta på den här frågan:";
-$PMF_LANG["msgVoteFrom"] = "Från";
-$PMF_LANG["msgVoteBad"] = "helt värdelös";
-$PMF_LANG["msgVoteGood"] = "högst värdefull";
-$PMF_LANG["msgVotings"] = "Röster ";
-$PMF_LANG["msgVoteSubmit"] = "Rösta";
-$PMF_LANG["msgVoteThanks"] = "Tack för din röst!";
+$PMF_LANG["msgAverageVote"] = "Resultat av rÃ¶stning:";
+$PMF_LANG["msgVoteUseability"] = "RÃ¶sta pÃ¥ den hÃ¤r frÃ¥gan:";
+$PMF_LANG["msgVoteFrom"] = "FrÃ¥n";
+$PMF_LANG["msgVoteBad"] = "helt vÃ¤rdelÃ¶s";
+$PMF_LANG["msgVoteGood"] = "hÃ¶gst vÃ¤rdefull";
+$PMF_LANG["msgVotings"] = "RÃ¶ster ";
+$PMF_LANG["msgVoteSubmit"] = "RÃ¶sta";
+$PMF_LANG["msgVoteThanks"] = "Tack fÃ¶r din rÃ¶st!";
 $PMF_LANG["msgYouCan"] = "Du kan ";
-$PMF_LANG["msgWriteComment"] = "kommentera den här frågan";
-$PMF_LANG["msgShowCategory"] = "Innehållsöversikt: ";
+$PMF_LANG["msgWriteComment"] = "kommentera den hÃ¤r frÃ¥gan";
+$PMF_LANG["msgShowCategory"] = "InnehÃ¥llsÃ¶versikt: ";
 $PMF_LANG["msgCommentBy"] = "Kommentar av ";
-$PMF_LANG["msgCommentHeader"] = "Kommentera frågan";
+$PMF_LANG["msgCommentHeader"] = "Kommentera frÃ¥gan";
 $PMF_LANG["msgYourComment "] = "Din kommentar:";
-$PMF_LANG["msgCommentThanks"] = "Tack för din kommentar!";
-$PMF_LANG["msgSeeXMLFile"] = "Öppna XML-Fil";
-$PMF_LANG["msgSend2Friend"] = "Skicka till en vän";
+$PMF_LANG["msgCommentThanks"] = "Tack fÃ¶r din kommentar!";
+$PMF_LANG["msgSeeXMLFile"] = "Ã–ppna XML-Fil";
+$PMF_LANG["msgSend2Friend"] = "Skicka till en vÃ¤n";
 $PMF_LANG["msgS2FName"] = "Ditt namn:";
 $PMF_LANG["msgS2FEMail"] = "Din e-postadress:";
-$PMF_LANG["msgS2FFriends"] = "Dina vänners:";
+$PMF_LANG["msgS2FFriends"] = "Dina vÃ¤nners:";
 $PMF_LANG["msgS2FEMails"] = ". e-postadress:";
-$PMF_LANG["msgS2FText"] = "Följande text kommer att skickas:";
-$PMF_LANG["msgS2FText2"] = "Här hittar du en intressant fråga:";
-$PMF_LANG["msgS2FMessage"] = "Egen hälsning:";
+$PMF_LANG["msgS2FText"] = "FÃ¶ljande text kommer att skickas:";
+$PMF_LANG["msgS2FText2"] = "HÃ¤r hittar du en intressant frÃ¥ga:";
+$PMF_LANG["msgS2FMessage"] = "Egen hÃ¤lsning:";
 $PMF_LANG["msgS2FButton"] = "Skicka";
-$PMF_LANG["msgS2FThx"] = "Tack för din rekommendation!";
-$PMF_LANG["msgS2FMailSubject"] = "Rekommendation från ";
+$PMF_LANG["msgS2FThx"] = "Tack fÃ¶r din rekommendation!";
+$PMF_LANG["msgS2FMailSubject"] = "Rekommendation frÃ¥n ";
 
-// Sök
+// SÃ¶k
 $PMF_LANG["msgSearchWord"] = "Nyckelord";
-$PMF_LANG["msgSearchFind"] = "Sökresultat för ";
-$PMF_LANG["msgSearchAmount"] = " sökresultat";
-$PMF_LANG["msgSearchAmounts"] = " sökresultat";
+$PMF_LANG["msgSearchFind"] = "SÃ¶kresultat fÃ¶r ";
+$PMF_LANG["msgSearchAmount"] = " sÃ¶kresultat";
+$PMF_LANG["msgSearchAmounts"] = " sÃ¶kresultat";
 $PMF_LANG["msgSearchCategory"] = "Kategori: ";
-$PMF_LANG["msgSearchContent"] = "Fråga: ";
+$PMF_LANG["msgSearchContent"] = "FrÃ¥ga: ";
 
-// Lägg till fråga
-$PMF_LANG["msgNewContentHeader"] = "Lägg till fråga";
-$PMF_LANG["msgNewContentAddon"] = "Ditt förlag kommer att behandlas av kontrollpanelen, och kommer vid godkännande att publiceras. Nödvändig information är <strong>ditt namn</strong>, <strong>din email</strong>, <strong>kategori</strong>, <strong>rubrik</strong> och <strong>ditt förslag</strong>. Separera nyckelorden med (endast) mellanslag.";
+// LÃ¤gg till frÃ¥ga
+$PMF_LANG["msgNewContentHeader"] = "LÃ¤gg till frÃ¥ga";
+$PMF_LANG["msgNewContentAddon"] = "Ditt fÃ¶rlag kommer att behandlas av kontrollpanelen, och kommer vid godkÃ¤nnande att publiceras. NÃ¶dvÃ¤ndig information Ã¤r <strong>ditt namn</strong>, <strong>din email</strong>, <strong>kategori</strong>, <strong>rubrik</strong> och <strong>ditt fÃ¶rslag</strong>. Separera nyckelorden med (endast) mellanslag.";
 $PMF_LANG["msgNewContentName"] = "Ditt namn:";
 $PMF_LANG["msgNewContentMail"] = "Din e-postadress:";
 $PMF_LANG["msgNewContentCategory"] = "Kategori?";
 $PMF_LANG["msgNewContentTheme"] = "Rubrik:";
-$PMF_LANG["msgNewContentArticle"] = "Fråga/svar:";
+$PMF_LANG["msgNewContentArticle"] = "FrÃ¥ga/svar:";
 $PMF_LANG["msgNewContentKeywords"] = "Nyckelord:";
-$PMF_LANG["msgNewContentLink"] = "Länk med mer information";
+$PMF_LANG["msgNewContentLink"] = "LÃ¤nk med mer information";
 $PMF_LANG["msgNewContentSubmit"] = "Skicka";
 $PMF_LANG["msgInfo"] = "Mer information: ";
-$PMF_LANG["msgNewContentThanks"] = "Tack för ditt förslag!";
-$PMF_LANG["msgNoQuestionsAvailable"] = "Det finns inga obesvarade/öppna frågor.";
+$PMF_LANG["msgNewContentThanks"] = "Tack fÃ¶r ditt fÃ¶rslag!";
+$PMF_LANG["msgNoQuestionsAvailable"] = "Det finns inga obesvarade/Ã¶ppna frÃ¥gor.";
 
-// Ställ en fråga
-$PMF_LANG["msgNewQuestion"] = "Ställ din fråga nedan:";
+// StÃ¤ll en frÃ¥ga
+$PMF_LANG["msgNewQuestion"] = "StÃ¤ll din frÃ¥ga nedan:";
 $PMF_LANG["msgAskCategory"] = "Kategori";
-$PMF_LANG["msgAskYourQuestion"] = "Din fråga:";
-$PMF_LANG["msgAskThx4Mail"] = "<h2>Tack för din fråga!</h2>";
-$PMF_LANG["msgDate_User"] = "Datum / Besökare";
-$PMF_LANG["msgQuestion2"] = "Fråga";
+$PMF_LANG["msgAskYourQuestion"] = "Din frÃ¥ga:";
+$PMF_LANG["msgAskThx4Mail"] = "<h2>Tack fÃ¶r din frÃ¥ga!</h2>";
+$PMF_LANG["msgDate_User"] = "Datum / BesÃ¶kare";
+$PMF_LANG["msgQuestion2"] = "FrÃ¥ga";
 $PMF_LANG["msg2answer"] = "Svara";
-$PMF_LANG["msgQuestionText"] = "Här finns obesvarade/öppna frågor som du kan besvara. Om kontrollpanelen godkänner ditt svar, publiceras det.";
+$PMF_LANG["msgQuestionText"] = "HÃ¤r finns obesvarade/Ã¶ppna frÃ¥gor som du kan besvara. Om kontrollpanelen godkÃ¤nner ditt svar, publiceras det.";
 
-// Hjälp
-$PMF_LANG["msgHelpText"] = "<p>Hitta svaret på din fråga genom att antingen navigera med hjälp av <strong><a href=\"?action=show\">kategorierna</a></strong> eller söka efter nyckelord med <strong><a href=\"?action=search\">sökmotorn.</a></strong></p>";
+// HjÃ¤lp
+$PMF_LANG["msgHelpText"] = "<p>Hitta svaret pÃ¥ din frÃ¥ga genom att antingen navigera med hjÃ¤lp av <strong><a href=\"?action=show\">kategorierna</a></strong> eller sÃ¶ka efter nyckelord med <strong><a href=\"?action=search\">sÃ¶kmotorn.</a></strong></p>";
 
 // Kontakt
 $PMF_LANG["msgContactEMail"] = "Skicka e-post till kontrollpanelen:";
@@ -129,120 +129,120 @@ $PMF_LANG["msgMessage"] = "Ditt meddelande:";
 $PMF_LANG["msgNews"] = " Nyheter";
 $PMF_LANG["msgTopTen"] = "TOP 10";
 $PMF_LANG["msgHomeThereAre"] = "Det finns ";
-$PMF_LANG["msgHomeArticlesOnline"] = " besvarade frågor";
-$PMF_LANG["msgNoNews"] = "Inga nyheter är bra nyheter :)";
-$PMF_LANG["msgLatestArticles"] = "De fem senast besvarade frågorna:";
+$PMF_LANG["msgHomeArticlesOnline"] = " besvarade frÃ¥gor";
+$PMF_LANG["msgNoNews"] = "Inga nyheter Ã¤r bra nyheter :)";
+$PMF_LANG["msgLatestArticles"] = "De fem senast besvarade frÃ¥gorna:";
 
 // E-postmeddelande
-$PMF_LANG["msgMailThanks"] = "Tack för ditt förslag!.";
-$PMF_LANG["msgMailCheck"] = "En ny fråga på phpMyFAQ! Logga in på kontrollpanelen";
+$PMF_LANG["msgMailThanks"] = "Tack fÃ¶r ditt fÃ¶rslag!.";
+$PMF_LANG["msgMailCheck"] = "En ny frÃ¥ga pÃ¥ phpMyFAQ!\n Logga in pÃ¥ kontrollpanelen";
 $PMF_LANG["msgMailContact"] = "Ditt meddelande har blivit skickat till kontrollpanelen.";
 
 // Felmeddelande
 $PMF_LANG["err_noDatabase"] = "Ingen databaskoppling finns.";
 $PMF_LANG["err_noHeaders"] = "Inga kategorier.";
-$PMF_LANG["err_noArticles"] = "<p>Inga frågor funna.</p>";
+$PMF_LANG["err_noArticles"] = "<p>Inga frÃ¥gor funna.</p>";
 $PMF_LANG["err_badID"] = "<p>Fel ID.</p>";
 $PMF_LANG["err_noTopTen"] = "<p>Det finns ingen tio-i-topp lista.</p>";
-$PMF_LANG["err_nothingFound"] = "<p>Inga frågor funna.</p>";
-$PMF_LANG["err_SaveEntries"] = "Nödvändiga fält är <strong>ditt namn</strong>, <strong>din email</strong>, <strong>kategori</strong>, <strong>rubrik</strong> och <strong>din fråga/svar</strong>!<br><br><a href=\"javascript:history.back();\">Backa</a><br><br>";
-$PMF_LANG["err_SaveComment"] = "Nödvändiga fält är <strong>ditt namn</strong>, <strong>din email</strong> och <strong>din kommentar</strong>!<br><br><a href=\"javascript:history.back();\">Backa</a><br><br>";
-$PMF_LANG["err_VoteTooMuch"] = "<p>Vi räknar inte dubbla röster.<a href=\"javascript:history.back();\">Klicka här</a> för att gå tillbaka.</p>";
-$PMF_LANG["err_noVote"] = "<p><strong>Du röstade inte på frågan!</strong> <a href=\"javascript:history.back();\">Klicka här</a>, för att rösta.</p>";
-$PMF_LANG["err_noMailAdress"] = "Din email är inte korrekt.<br /><a href=\"javascript:history.back();\">Backa</a>";
-$PMF_LANG["err_sendMail"] = "Nödvändiga fält är <strong>ditt namn</strong>, <strong>din email</strong> och <strong>din fråga</strong>!<br><br><a href=\"javascript:history.back();\">Backa</a><br><br>";
+$PMF_LANG["err_nothingFound"] = "<p>Inga frÃ¥gor funna.</p>";
+$PMF_LANG["err_SaveEntries"] = "NÃ¶dvÃ¤ndiga fÃ¤lt Ã¤r <strong>ditt namn</strong>, <strong>din email</strong>, <strong>kategori</strong>, <strong>rubrik</strong> och <strong>din frÃ¥ga/svar</strong>!<br><br>\n<a href=\"javascript:history.back();\">Backa</a><br><br>\n";
+$PMF_LANG["err_SaveComment"] = "NÃ¶dvÃ¤ndiga fÃ¤lt Ã¤r <strong>ditt namn</strong>, <strong>din email</strong> och <strong>din kommentar</strong>!<br><br>\n<a href=\"javascript:history.back();\">Backa</a><br><br>\n";
+$PMF_LANG["err_VoteTooMuch"] = "<p>Vi rÃ¤knar inte dubbla rÃ¶ster.<a href=\"javascript:history.back();\">Klicka hÃ¤r</a> fÃ¶r att gÃ¥ tillbaka.</p>";
+$PMF_LANG["err_noVote"] = "<p><strong>Du rÃ¶stade inte pÃ¥ frÃ¥gan!</strong> <a href=\"javascript:history.back();\">Klicka hÃ¤r</a>, fÃ¶r att rÃ¶sta.</p>";
+$PMF_LANG["err_noMailAdress"] = "Din email Ã¤r inte korrekt.<br /><a href=\"javascript:history.back();\">Backa</a>";
+$PMF_LANG["err_sendMail"] = "NÃ¶dvÃ¤ndiga fÃ¤lt Ã¤r <strong>ditt namn</strong>, <strong>din email</strong> och <strong>din frÃ¥ga</strong>!<br><br>\n<a href=\"javascript:history.back();\">Backa</a><br><br>\n";
 
-// Sökhjälp
-$PMF_LANG["help_search"] = "<p><strong>Sök efter frågor/svar:</strong><br />Med ett innehåll likt: <strong style=\"color: Red;\">ord1 ord2</strong> du kan göra en relevanssökning (i fallande ordning), med två eller fler sökkriterier.</p><p><strong>Obs:</strong> Ditt sökkriterium måste vara minst 4 tecken långt.</p>";
+// SÃ¶khjÃ¤lp
+$PMF_LANG["help_search"] = "<p><strong>SÃ¶k efter frÃ¥gor/svar:</strong><br />Med ett innehÃ¥ll likt: <strong style=\"color: Red;\">ord1 ord2</strong> du kan gÃ¶ra en relevanssÃ¶kning (i fallande ordning), med tvÃ¥ eller fler sÃ¶kkriterier.</p><p><strong>Obs:</strong> Ditt sÃ¶kkriterium mÃ¥ste vara minst 4 tecken lÃ¥ngt.</p>";
 
 // Admin-Meny
 $PMF_LANG["ad"] = "ADMIN SECTION";
-$PMF_LANG["ad_menu_user_administration"] = "Administrera användare";
-$PMF_LANG["ad_menu_entry_aprove"] = "Godkänn svar";
-$PMF_LANG["ad_menu_entry_edit"] = "Ändra frågor/svar";
-$PMF_LANG["ad_menu_categ_add"] = "Lägg till kategori";
-$PMF_LANG["ad_menu_categ_edit"] = "Ändra kategori";
-$PMF_LANG["ad_menu_news_add"] = "Lägg till nyheter";
+$PMF_LANG["ad_menu_user_administration"] = "Administrera anvÃ¤ndare";
+$PMF_LANG["ad_menu_entry_aprove"] = "GodkÃ¤nn svar";
+$PMF_LANG["ad_menu_entry_edit"] = "Ã„ndra frÃ¥gor/svar";
+$PMF_LANG["ad_menu_categ_add"] = "LÃ¤gg till kategori";
+$PMF_LANG["ad_menu_categ_edit"] = "Ã„ndra kategori";
+$PMF_LANG["ad_menu_news_add"] = "LÃ¤gg till nyheter";
 $PMF_LANG["ad_menu_news_edit"] = "Nyheter";
-$PMF_LANG["ad_menu_open"] = "Obesvarade frågor";
+$PMF_LANG["ad_menu_open"] = "Obesvarade frÃ¥gor";
 $PMF_LANG["ad_menu_stat"] = "Statistik";
 $PMF_LANG["ad_menu_cookie"] = "Cookies";
 $PMF_LANG["ad_menu_session"] = "Visa sessioner";
 $PMF_LANG["ad_menu_adminlog"] = "Visa Adminloggen";
-$PMF_LANG["ad_menu_passwd"] = "Ändra lösenord";
+$PMF_LANG["ad_menu_passwd"] = "Ã„ndra lÃ¶senord";
 $PMF_LANG["ad_menu_logout"] = "Logga ut";
 $PMF_LANG["ad_menu_startpage"] = "Startsida";
 
 // Admin - anvisningar
 $PMF_LANG["ad_msg_identify"] = "Identifiera dig.";
-$PMF_LANG["ad_msg_passmatch"] = "Båda lösenorden måste <strong>matcha</strong>!";
-$PMF_LANG["ad_msg_savedsuc_1"] = "Profilen för";
+$PMF_LANG["ad_msg_passmatch"] = "BÃ¥da lÃ¶senorden mÃ¥ste <strong>matcha</strong>!";
+$PMF_LANG["ad_msg_savedsuc_1"] = "Profilen fÃ¶r";
 $PMF_LANG["ad_msg_savedsuc_2"] = "sparades korrekt .";
-$PMF_LANG["ad_msg_mysqlerr"] = "På grund av ett <strong>databasfel</strong> kunde inte profilen sparas.";
-$PMF_LANG["ad_msg_noauth"] = "Du är inte behörig.";
+$PMF_LANG["ad_msg_mysqlerr"] = "PÃ¥ grund av ett <strong>databasfel</strong> kunde inte profilen sparas.";
+$PMF_LANG["ad_msg_noauth"] = "Du Ã¤r inte behÃ¶rig.";
 
-// Allmänt
+// AllmÃ¤nt
 $PMF_LANG["ad_gen_page"] = "Sida";
 $PMF_LANG["ad_gen_of"] = "av";
-$PMF_LANG["ad_gen_lastpage"] = "Föregående sida";
-$PMF_LANG["ad_gen_nextpage"] = "Nästa sida";
+$PMF_LANG["ad_gen_lastpage"] = "FÃ¶regÃ¥ende sida";
+$PMF_LANG["ad_gen_nextpage"] = "NÃ¤sta sida";
 $PMF_LANG["ad_gen_save"] = "Spara";
-$PMF_LANG["ad_gen_reset"] = "Återställ";
+$PMF_LANG["ad_gen_reset"] = "Ã…terstÃ¤ll";
 $PMF_LANG["ad_gen_yes"] = "Ja";
 $PMF_LANG["ad_gen_no"] = "Nej";
 $PMF_LANG["ad_gen_top"] = "Till toppen av sidan";
 $PMF_LANG["ad_gen_ncf"] = "Ingen kategori funnen!";
 $PMF_LANG["ad_gen_delete"] = "Ta bort";
 
-// Admin - användarkonton
-$PMF_LANG["ad_user"] = "Administrera användare";
-$PMF_LANG["ad_user_username"] = "Registrerade användare";
-$PMF_LANG["ad_user_rights"] = "Behörigheter för användare";
-$PMF_LANG["ad_user_edit"] = "ändra";
+// Admin - anvÃ¤ndarkonton
+$PMF_LANG["ad_user"] = "Administrera anvÃ¤ndare";
+$PMF_LANG["ad_user_username"] = "Registrerade anvÃ¤ndare";
+$PMF_LANG["ad_user_rights"] = "BehÃ¶righeter fÃ¶r anvÃ¤ndare";
+$PMF_LANG["ad_user_edit"] = "Ã¤ndra";
 $PMF_LANG["ad_user_delete"] = "ta bort";
-$PMF_LANG["ad_user_add"] = "Lägg till användare";
-$PMF_LANG["ad_user_profou"] = "Profil för användare:";
+$PMF_LANG["ad_user_add"] = "LÃ¤gg till anvÃ¤ndare";
+$PMF_LANG["ad_user_profou"] = "Profil fÃ¶r anvÃ¤ndare:";
 $PMF_LANG["ad_user_name"] = "Namn";
-$PMF_LANG["ad_user_password"] = "Lösenord";
-$PMF_LANG["ad_user_confirm"] = "Bekräfta lösenord";
-$PMF_LANG["ad_user_rights"] = "Behörigheter";
-$PMF_LANG["ad_user_del_1"] = "Användaren";
+$PMF_LANG["ad_user_password"] = "LÃ¶senord";
+$PMF_LANG["ad_user_confirm"] = "BekrÃ¤fta lÃ¶senord";
+$PMF_LANG["ad_user_rights"] = "BehÃ¶righeter";
+$PMF_LANG["ad_user_del_1"] = "AnvÃ¤ndaren";
 $PMF_LANG["ad_user_del_2"] = "kommer att tas bort!";
-$PMF_LANG["ad_user_del_3"] = "Är du säker?";
-$PMF_LANG["ad_user_deleted"] = "Användaren är borttagen.";
+$PMF_LANG["ad_user_del_3"] = "Ã„r du sÃ¤ker?";
+$PMF_LANG["ad_user_deleted"] = "AnvÃ¤ndaren Ã¤r borttagen.";
 $PMF_LANG["ad_user_checkall"] = "Markera alla";
 
-// Admin - fråga-svar
-$PMF_LANG["ad_entry_aor"] = "Administrera frågor/svar";
+// Admin - frÃ¥ga-svar
+$PMF_LANG["ad_entry_aor"] = "Administrera frÃ¥gor/svar";
 $PMF_LANG["ad_entry_id"] = "ID";
 $PMF_LANG["ad_entry_topic"] = "Topic";
-$PMF_LANG["ad_entry_action"] = "Händelse";
-$PMF_LANG["ad_entry_edit_1"] = "Ändra fråga/svar";
+$PMF_LANG["ad_entry_action"] = "HÃ¤ndelse";
+$PMF_LANG["ad_entry_edit_1"] = "Ã„ndra frÃ¥ga/svar";
 $PMF_LANG["ad_entry_edit_2"] = "";
-$PMF_LANG["ad_entry_theme"] = "Tema/kort fråga:";
-$PMF_LANG["ad_entry_content"] = "Fråga/svar:";
+$PMF_LANG["ad_entry_theme"] = "Tema/kort frÃ¥ga:";
+$PMF_LANG["ad_entry_content"] = "FrÃ¥ga/svar:";
 $PMF_LANG["ad_entry_keywords"] = "Nyckelord:";
-$PMF_LANG["ad_entry_author"] = "Författare:";
+$PMF_LANG["ad_entry_author"] = "FÃ¶rfattare:";
 $PMF_LANG["ad_entry_category"] = "Kategori:";
 $PMF_LANG["ad_entry_active"] = "Aktiv?";
 $PMF_LANG["ad_entry_date"] = "Datum:";
-$PMF_LANG["ad_entry_changed"] = "Ändringsnoteringar?";
-$PMF_LANG["ad_entry_changelog"] = "Ändringslogg:";
+$PMF_LANG["ad_entry_changed"] = "Ã„ndringsnoteringar?";
+$PMF_LANG["ad_entry_changelog"] = "Ã„ndringslogg:";
 $PMF_LANG["ad_entry_commentby 	"] = "Kommentar av";
 $PMF_LANG["ad_entry_comment"] = "Kommentarer:";
 $PMF_LANG["ad_entry_save"] = "Spara";
 $PMF_LANG["ad_entry_delete"] = "ta bort";
-$PMF_LANG["ad_entry_delcom_1"] = "Är du säker på att kommentaren från";
+$PMF_LANG["ad_entry_delcom_1"] = "Ã„r du sÃ¤ker pÃ¥ att kommentaren frÃ¥n";
 $PMF_LANG["ad_entry_delcom_2"] = "ska tas bort?";
-$PMF_LANG["ad_entry_commentdelsuc"] = "Kommentaren är borttagen.";
+$PMF_LANG["ad_entry_commentdelsuc"] = "Kommentaren Ã¤r borttagen.";
 $PMF_LANG["ad_entry_back"] = "Tillbaks till artikeln";
 $PMF_LANG["ad_entry_commentdelfail"] = "Kommentaren blev <strong>inte</strong> borttagen.";
-$PMF_LANG["ad_entry_savedsuc"] = "Ändringarna utföreds och sparades <strong>korrekt</strong>.";
-$PMF_LANG["ad_entry_savedfail 	"] = "Tyvärr har ett <strong>databasfel</strong> uppstått.";
-$PMF_LANG["ad_entry_del_1"] = "Är du säker på att ämnet";
+$PMF_LANG["ad_entry_savedsuc"] = "Ã„ndringarna utfÃ¶reds och sparades <strong>korrekt</strong>.";
+$PMF_LANG["ad_entry_savedfail 	"] = "TyvÃ¤rr har ett <strong>databasfel</strong> uppstÃ¥tt.";
+$PMF_LANG["ad_entry_del_1"] = "Ã„r du sÃ¤ker pÃ¥ att Ã¤mnet";
 $PMF_LANG["ad_entry_del_2"] = "av";
 $PMF_LANG["ad_entry_del_3"] = "ska tas bort?";
-$PMF_LANG["ad_entry_delsuc"] = "Objektet är borttaget.";
+$PMF_LANG["ad_entry_delsuc"] = "Objektet Ã¤r borttaget.";
 $PMF_LANG["ad_entry_delfail"] = "Objektet blev <strong>inte</strong> borttaget!";
 $PMF_LANG["ad_entry_back"] = "Tillbaka";
 
@@ -250,85 +250,85 @@ $PMF_LANG["ad_entry_back"] = "Tillbaka";
 // Admin - nyheter
 $PMF_LANG["ad_news_header"] = "Artikel rubrik";
 $PMF_LANG["ad_news_text"] = "Text";
-$PMF_LANG["ad_news_link_url"] = "Länk: (<strong>utan http://</strong>)!";
-$PMF_LANG["ad_news_link_title"] = "Länktext:";
-$PMF_LANG["ad_news_link_target"] = "Mål för länken";
-$PMF_LANG["ad_news_link_window"] = "Länken öpnnas i nytt fönster";
-$PMF_LANG["ad_news_link_faq"] = "Länken öppnas i samma fönster";
-$PMF_LANG["ad_news_add"] = "Lägg till nyheter";
+$PMF_LANG["ad_news_link_url"] = "LÃ¤nk: (<strong>utan http://</strong>)!";
+$PMF_LANG["ad_news_link_title"] = "LÃ¤nktext:";
+$PMF_LANG["ad_news_link_target"] = "MÃ¥l fÃ¶r lÃ¤nken";
+$PMF_LANG["ad_news_link_window"] = "LÃ¤nken Ã¶pnnas i nytt fÃ¶nster";
+$PMF_LANG["ad_news_link_faq"] = "LÃ¤nken Ã¶ppnas i samma fÃ¶nster";
+$PMF_LANG["ad_news_add"] = "LÃ¤gg till nyheter";
 $PMF_LANG["ad_news_id"] = "#";
 $PMF_LANG["ad_news_headline"] = "Rubrik";
 $PMF_LANG["ad_news_date"] = "Datum";
-$PMF_LANG["ad_news_action"] = "Händelse";
+$PMF_LANG["ad_news_action"] = "HÃ¤ndelse";
 $PMF_LANG["ad_news_update"] = "uppdatera";
 $PMF_LANG["ad_news_delete"] = "ta bort";
 $PMF_LANG["ad_news_nodata"] = "Ingen data funnen i databasen";
-$PMF_LANG["ad_news_updatesuc"] = "Nyheterna är uppdaterade.";
-$PMF_LANG["ad_news_del"] = "Är du säker på att du vill ta bort denna nyhet?";
+$PMF_LANG["ad_news_updatesuc"] = "Nyheterna Ã¤r uppdaterade.";
+$PMF_LANG["ad_news_del"] = "Ã„r du sÃ¤ker pÃ¥ att du vill ta bort denna nyhet?";
 $PMF_LANG["ad_news_yesdelete"] = "ja, ta bort!";
 $PMF_LANG["ad_news_nodelete"] = "nej!";
-$PMF_LANG["ad_news_delsuc"] = "Nyheten är borttagen.";
+$PMF_LANG["ad_news_delsuc"] = "Nyheten Ã¤r borttagen.";
 $PMF_LANG["ad_news_updatenews"] = "Uppdatera nyheter";
 
 // Admin - kategorier
-$PMF_LANG["ad_categ_new"] = "Lägg till kategori";
+$PMF_LANG["ad_categ_new"] = "LÃ¤gg till kategori";
 $PMF_LANG["ad_categ_catnum"] = "Kategorinummer:";
 $PMF_LANG["ad_categ_subcatnum"] = "Underkategorinummer:";
-$PMF_LANG["ad_categ_nya"] = "<em>Inte tillgänglig ännu!</em>";
+$PMF_LANG["ad_categ_nya"] = "<em>Inte tillgÃ¤nglig Ã¤nnu!</em>";
 $PMF_LANG["ad_categ_titel"] = "Kategorititel:";
-$PMF_LANG["ad_categ_add"] = "Lägg till kategori";
+$PMF_LANG["ad_categ_add"] = "LÃ¤gg till kategori";
 $PMF_LANG["ad_categ_existing"] = "Befintliga kategorier";
 $PMF_LANG["ad_categ_id"] = "#";
 $PMF_LANG["ad_categ_categ"] = "Kategori";
 $PMF_LANG["ad_categ_subcateg"] = "Underkategori";
 $PMF_LANG["ad_categ_titel"] = "Kategorititel";
-$PMF_LANG["ad_categ_action"] = "Händelse";
+$PMF_LANG["ad_categ_action"] = "HÃ¤ndelse";
 $PMF_LANG["ad_categ_update"] = "uppdatera";
 $PMF_LANG["ad_categ_delete"] = "ta bort";
 $PMF_LANG["ad_categ_updatecateg"] = "Uppdatera kategori";
 $PMF_LANG["ad_categ_nodata"] = "Ingen data funnen i databas";
-$PMF_LANG["ad_categ_remark"] = "Notera att befintliga frågor/svar inte kommer att finnas kvar om du tar bort kategorin. Du måste byta kategori för frågorna/svaren innan du tar bort kategorin.";
-$PMF_LANG["ad_categ_edit_1"] = "Ändra";
+$PMF_LANG["ad_categ_remark"] = "Notera att befintliga frÃ¥gor/svar inte kommer att finnas kvar om du tar bort kategorin. Du mÃ¥ste byta kategori fÃ¶r frÃ¥gorna/svaren innan du tar bort kategorin.";
+$PMF_LANG["ad_categ_edit_1"] = "Ã„ndra";
 $PMF_LANG["ad_categ_edit_2"] = "Kategori";
-$PMF_LANG["ad_categ_add"] = "Lägg till kategori";
-$PMF_LANG["ad_categ_added"] = "Kategorin är skapad.";
-$PMF_LANG["ad_categ_updated"] = "Kategorin är uppdaterad.";
+$PMF_LANG["ad_categ_add"] = "LÃ¤gg till kategori";
+$PMF_LANG["ad_categ_added"] = "Kategorin Ã¤r skapad.";
+$PMF_LANG["ad_categ_updated"] = "Kategorin Ã¤r uppdaterad.";
 $PMF_LANG["ad_categ_del_yes"] = "ja, ta bort!";
 $PMF_LANG["ad_categ_del_no"] = "nej!";
-$PMF_LANG["ad_categ_deletesure"] = "Är du säker på att du vill ta bort denna kategori?";
+$PMF_LANG["ad_categ_deletesure"] = "Ã„r du sÃ¤ker pÃ¥ att du vill ta bort denna kategori?";
 $PMF_LANG["ad_categ_deleted"] = "Kategori borttagen.";
 
 // Cookies
-$PMF_LANG["ad_cookie_cookiesuc 	"] = "Cookien är  <strong>korrekt</strong> sparad.";
-$PMF_LANG["ad_cookie_already"] = "Det finns redan en cookie, du har nu följande alternativ:";
-$PMF_LANG["ad_cookie_again"] = "Lägg till cookien igen";
+$PMF_LANG["ad_cookie_cookiesuc 	"] = "Cookien Ã¤r  <strong>korrekt</strong> sparad.";
+$PMF_LANG["ad_cookie_already"] = "Det finns redan en cookie, du har nu fÃ¶ljande alternativ:";
+$PMF_LANG["ad_cookie_again"] = "LÃ¤gg till cookien igen";
 $PMF_LANG["ad_cookie_delete"] = "ta bort cookie";
-$PMF_LANG["ad_cookie_no"] = "Du har ingen cookie sparad. Med en cookie behöver du inte komma ihåg dina inloggningsuppgifter. Du har nu följande alternativ:";
+$PMF_LANG["ad_cookie_no"] = "Du har ingen cookie sparad. Med en cookie behÃ¶ver du inte komma ihÃ¥g dina inloggningsuppgifter. Du har nu fÃ¶ljande alternativ:";
 $PMF_LANG["ad_cookie_set"] = "Spara cookie";
-$PMF_LANG["ad_cookie_deleted"] = "Cookien är borttagen.";
+$PMF_LANG["ad_cookie_deleted"] = "Cookien Ã¤r borttagen.";
 
 // Adminlog
 $PMF_LANG["ad_adminlog"] = "Adminlogg";
 
-// Lösenord
-$PMF_LANG["ad_passwd_cop"] = "Ändra ditt lösenord";
-$PMF_LANG["ad_passwd_old"] = "Gammalt lösenord:";
-$PMF_LANG["ad_passwd_new"] = "Nytt lösenord:";
-$PMF_LANG["ad_passwd_con"] = "Bekräfta lösenordet:";
-$PMF_LANG["ad_passwd_change"] = "Ändra lösenord";
-$PMF_LANG["ad_passwd_suc"] = "Lösenordet är ändrat.";
-$PMF_LANG["ad_passwd_remark"] = "<strong>OBS:</strong><br />Cookie måste sparas på nytt!";
-$PMF_LANG["ad_passwd_fail"] = "Det gamla lösenordet <strong>måste</strong> anges korrekt och båda nya måste <strong>matcha</strong>.";
+// LÃ¶senord
+$PMF_LANG["ad_passwd_cop"] = "Ã„ndra ditt lÃ¶senord";
+$PMF_LANG["ad_passwd_old"] = "Gammalt lÃ¶senord:";
+$PMF_LANG["ad_passwd_new"] = "Nytt lÃ¶senord:";
+$PMF_LANG["ad_passwd_con"] = "BekrÃ¤fta lÃ¶senordet:";
+$PMF_LANG["ad_passwd_change"] = "Ã„ndra lÃ¶senord";
+$PMF_LANG["ad_passwd_suc"] = "LÃ¶senordet Ã¤r Ã¤ndrat.";
+$PMF_LANG["ad_passwd_remark"] = "<strong>OBS:</strong><br />Cookie mÃ¥ste sparas pÃ¥ nytt!";
+$PMF_LANG["ad_passwd_fail"] = "Det gamla lÃ¶senordet <strong>mÃ¥ste</strong> anges korrekt och bÃ¥da nya mÃ¥ste <strong>matcha</strong>.";
 
-// Lägga till anv.
-$PMF_LANG["ad_adus_adduser"] = "Lägg till användare";
+// LÃ¤gga till anv.
+$PMF_LANG["ad_adus_adduser"] = "LÃ¤gg till anvÃ¤ndare";
 $PMF_LANG["ad_adus_name"] = "Id:";
-$PMF_LANG["ad_adus_password"] = "Lösenord:";
-$PMF_LANG["ad_adus_add"] = "Lägg till användare";
-$PMF_LANG["ad_adus_suc"] = "Användare skapad.";
-$PMF_LANG["ad_adus_edit"] = "Ändra profil";
+$PMF_LANG["ad_adus_password"] = "LÃ¶senord:";
+$PMF_LANG["ad_adus_add"] = "LÃ¤gg till anvÃ¤ndare";
+$PMF_LANG["ad_adus_suc"] = "AnvÃ¤ndare skapad.";
+$PMF_LANG["ad_adus_edit"] = "Ã„ndra profil";
 $PMF_LANG["ad_adus_dberr"] = "<strong>Databasfel</strong>";
-$PMF_LANG["ad_adus_exerr"] = "Användarnamnet är <strong>upptaget</strong>.";
+$PMF_LANG["ad_adus_exerr"] = "AnvÃ¤ndarnamnet Ã¤r <strong>upptaget</strong>.";
 
 // Sessioner
 $PMF_LANG["ad_sess_id"] = "ID";
@@ -336,132 +336,132 @@ $PMF_LANG["ad_sess_sid"] = "Sessions ID";
 $PMF_LANG["ad_sess_ip"] = "IP";
 $PMF_LANG["ad_sess_time"] = "Tid";
 $PMF_LANG["ad_sess_pageviews"] = "Sidvisningar";
-$PMF_LANG["ad_sess_search"] = "Sök";
-$PMF_LANG["ad_sess_sfs"] = "Sök sessioner";
+$PMF_LANG["ad_sess_search"] = "SÃ¶k";
+$PMF_LANG["ad_sess_sfs"] = "SÃ¶k sessioner";
 $PMF_LANG["ad_sess_s_ip"] = "IP:";
-$PMF_LANG["ad_sess_s_minct"] = "min. händelser:";
+$PMF_LANG["ad_sess_s_minct"] = "min. hÃ¤ndelser:";
 $PMF_LANG["ad_sess_s_date"] = "Datum";
 $PMF_LANG["ad_sess_s_after"] = "efter";
-$PMF_LANG["ad_sess_s_before"] = "före";
-$PMF_LANG["ad_sess_s_search"] = "Sök";
+$PMF_LANG["ad_sess_s_before"] = "fÃ¶re";
+$PMF_LANG["ad_sess_s_search"] = "SÃ¶k";
 $PMF_LANG["ad_sess_session"] = "Session";
-$PMF_LANG["ad_sess_r"] = "Sökresultat för";
+$PMF_LANG["ad_sess_r"] = "SÃ¶kresultat fÃ¶r";
 $PMF_LANG["ad_sess_referer"] = "Referens:";
 $PMF_LANG["ad_sess_browser"] = "Browser:";
 $PMF_LANG["ad_sess_ai_rubrik"] = "Kategori:";
-$PMF_LANG["ad_sess_ai_artikel"] = "Fråga/svar:";
-$PMF_LANG["ad_sess_ai_sb"] = "Sök-strängar:";
+$PMF_LANG["ad_sess_ai_artikel"] = "FrÃ¥ga/svar:";
+$PMF_LANG["ad_sess_ai_sb"] = "SÃ¶k-strÃ¤ngar:";
 $PMF_LANG["ad_sess_ai_sid"] = "Sessions ID:";
 $PMF_LANG["ad_sess_back"] = "Backa";
 
 // Statistik
-$PMF_LANG["ad_rs"] = "Omröstningsstatistik";
-$PMF_LANG["ad_rs_rating_1"] = "Rankingen för";
+$PMF_LANG["ad_rs"] = "OmrÃ¶stningsstatistik";
+$PMF_LANG["ad_rs_rating_1"] = "Rankingen fÃ¶r";
 $PMF_LANG["ad_rs_rating_2"] = "visningar:";
-$PMF_LANG["ad_rs_red"] = "Röd";
-$PMF_LANG["ad_rs_green"] = "Grön";
-$PMF_LANG["ad_rs_altt"] = "med ett medel lägre än 2";
-$PMF_LANG["ad_rs_ahtf"] = "med ett medel högre än 4";
+$PMF_LANG["ad_rs_red"] = "RÃ¶d";
+$PMF_LANG["ad_rs_green"] = "GrÃ¶n";
+$PMF_LANG["ad_rs_altt"] = "med ett medel lÃ¤gre Ã¤n 2";
+$PMF_LANG["ad_rs_ahtf"] = "med ett medel hÃ¶gre Ã¤n 4";
 $PMF_LANG["ad_rs_no"] = "Ingen statistik finns";
 
 // Inloggning
-$PMF_LANG["ad_auth_insert"] = "Ange ditt användarnamn och lösenord.";
-$PMF_LANG["ad_auth_user"] = "Användarnamn:";
-$PMF_LANG["ad_auth_passwd"] = "Lösenord:";
+$PMF_LANG["ad_auth_insert"] = "Ange ditt anvÃ¤ndarnamn och lÃ¶senord.";
+$PMF_LANG["ad_auth_user"] = "AnvÃ¤ndarnamn:";
+$PMF_LANG["ad_auth_passwd"] = "LÃ¶senord:";
 $PMF_LANG["ad_auth_ok"] = "OK";
-$PMF_LANG["ad_auth_reset"] = "Återställ";
-$PMF_LANG["ad_auth_fail"] = "Användarnamn eller lösenord är inte korrekt.";
-$PMF_LANG["ad_auth_sess"] = "Sessionens ID är förbi.";
+$PMF_LANG["ad_auth_reset"] = "Ã…terstÃ¤ll";
+$PMF_LANG["ad_auth_fail"] = "AnvÃ¤ndarnamn eller lÃ¶senord Ã¤r inte korrekt.";
+$PMF_LANG["ad_auth_sess"] = "Sessionens ID Ã¤r fÃ¶rbi.";
 
-// Admin - Inställningar,ändra, bilagor
-$PMF_LANG["ad_config_edit"] = "Ändra inställningar";
-$PMF_LANG["ad_config_save"] = "Spara inställningar";
-$PMF_LANG["ad_config_reset"] = "Återställ";
-$PMF_LANG["ad_config_saved"] = "Inställningarna har sparats.";
-$PMF_LANG["ad_menu_editconfig"] = "Ändra inställningar";
+// Admin - InstÃ¤llningar,Ã¤ndra, bilagor
+$PMF_LANG["ad_config_edit"] = "Ã„ndra instÃ¤llningar";
+$PMF_LANG["ad_config_save"] = "Spara instÃ¤llningar";
+$PMF_LANG["ad_config_reset"] = "Ã…terstÃ¤ll";
+$PMF_LANG["ad_config_saved"] = "InstÃ¤llningarna har sparats.";
+$PMF_LANG["ad_menu_editconfig"] = "Ã„ndra instÃ¤llningar";
 $PMF_LANG["ad_att_none"] = "Det finns inga bilagor";
 $PMF_LANG["ad_att_att"] = "Bilagor:";
 $PMF_LANG["ad_att_add"] = "Bifoga fil (bilaga)";
-$PMF_LANG["ad_entryins_suc"] = "Fråga/svar sparat.";
+$PMF_LANG["ad_entryins_suc"] = "FrÃ¥ga/svar sparat.";
 $PMF_LANG["ad_entryins_fail"] = "Ett fel uppstod.";
 $PMF_LANG["ad_att_del"] = "Ta bort";
-$PMF_LANG["ad_att_nope"] = "Bilagor kan endast läggas till när frågan är i ändringsläge.";
-$PMF_LANG["ad_att_delsuc"] = "Bilagan är borttagen.";
-$PMF_LANG["ad_att_delfail"] = "Ett fel uppstod när bilagan skulle tas bort.";
-$PMF_LANG["ad_entry_add"] = "Skapa fråga/svar";
+$PMF_LANG["ad_att_nope"] = "Bilagor kan endast lÃ¤ggas till nÃ¤r frÃ¥gan Ã¤r i Ã¤ndringslÃ¤ge.";
+$PMF_LANG["ad_att_delsuc"] = "Bilagan Ã¤r borttagen.";
+$PMF_LANG["ad_att_delfail"] = "Ett fel uppstod nÃ¤r bilagan skulle tas bort.";
+$PMF_LANG["ad_entry_add"] = "Skapa frÃ¥ga/svar";
 
 // Admin - backup
-$PMF_LANG["ad_csv_make"] = "En backup är en fullständig kopia innehålet i databsen. En backup bör göras MINST en gång i månaden. Formatet för backupen är en MySQL överförbar fil, vilken kan bli importerad med hjälp av phpMyAdmin eller kommandoraden i mysql klienten.";
+$PMF_LANG["ad_csv_make"] = "En backup Ã¤r en fullstÃ¤ndig kopia innehÃ¥let i databsen. En backup bÃ¶r gÃ¶ras MINST en gÃ¥ng i mÃ¥naden. Formatet fÃ¶r backupen Ã¤r en MySQL Ã¶verfÃ¶rbar fil, vilken kan bli importerad med hjÃ¤lp av phpMyAdmin eller kommandoraden i mysql klienten.";
 $PMF_LANG["ad_csv_link"] = "Ladda ner backupen";
-$PMF_LANG["ad_csv_head"] = "Gör en backup";
+$PMF_LANG["ad_csv_head"] = "GÃ¶r en backup";
 $PMF_LANG["ad_att_addto"] = "Bifoga en bilaga";
 $PMF_LANG["ad_att_addto_2"] = "";
 $PMF_LANG["ad_att_att"] = "Fil:";
 $PMF_LANG["ad_att_butt"] = "OK";
-$PMF_LANG["ad_att_suc"] = "Bilagan är tillagd.";
-$PMF_LANG["ad_att_fail"] = "Ett fel uppstod när bilagan skulle läggas till.";
-$PMF_LANG["ad_att_close"] = "Stäng detta fönster";
+$PMF_LANG["ad_att_suc"] = "Bilagan Ã¤r tillagd.";
+$PMF_LANG["ad_att_fail"] = "Ett fel uppstod nÃ¤r bilagan skulle lÃ¤ggas till.";
+$PMF_LANG["ad_att_close"] = "StÃ¤ng detta fÃ¶nster";
 
-// Admin - återställa från backup
-$PMF_LANG["ad_csv_restore"] = "Här kan du återställa innehållet i databasen, genom att använda en backup skapad av phpMyFAQ. <strong>OBS! Befintlig data kommer att skrivas över.</strong>";
+// Admin - Ã¥terstÃ¤lla frÃ¥n backup
+$PMF_LANG["ad_csv_restore"] = "HÃ¤r kan du Ã¥terstÃ¤lla innehÃ¥llet i databasen, genom att anvÃ¤nda en backup skapad av phpMyFAQ. <strong>OBS! Befintlig data kommer att skrivas Ã¶ver.</strong>";
 $PMF_LANG["ad_csv_file"] = "Fil";
 $PMF_LANG["ad_csv_ok"] = "OK";
-$PMF_LANG["ad_csv_linklog"] = "Gör en backup på Loggarna";
-$PMF_LANG["ad_csv_linkdat"] = "Gör en backup på data";
-$PMF_LANG["ad_csv_head2"] = "Återställ";
-$PMF_LANG["ad_csv_no"] = "Det här verkar inte vara en backup av phpMyFAQ.";
-$PMF_LANG["ad_csv_prepare"] = "Förbereder databasinstruktionerna...";
+$PMF_LANG["ad_csv_linklog"] = "GÃ¶r en backup pÃ¥ Loggarna";
+$PMF_LANG["ad_csv_linkdat"] = "GÃ¶r en backup pÃ¥ data";
+$PMF_LANG["ad_csv_head2"] = "Ã…terstÃ¤ll";
+$PMF_LANG["ad_csv_no"] = "Det hÃ¤r verkar inte vara en backup av phpMyFAQ.";
+$PMF_LANG["ad_csv_prepare"] = "FÃ¶rbereder databasinstruktionerna...";
 $PMF_LANG["ad_csv_process"] = "Instruktionerna...";
 $PMF_LANG["ad_csv_of"] = "av";
-$PMF_LANG["ad_csv_suc"] = "utfördes korrekt.";
+$PMF_LANG["ad_csv_suc"] = "utfÃ¶rdes korrekt.";
 $PMF_LANG["ad_csv_backup"] = "Backup";
-$PMF_LANG["ad_csv_rest"] = "Återställ en backup";
+$PMF_LANG["ad_csv_rest"] = "Ã…terstÃ¤ll en backup";
 
 // Admin
 $PMF_LANG["ad_menu_backup"] = "Backup";
 $PMF_LANG["ad_logout"] = "Sessionen avslutades korrekt.";
-$PMF_LANG["ad_news_add"] = "Lägg till nyheter";
-$PMF_LANG["ad_news_edit"] = "ändra nyheter";
+$PMF_LANG["ad_news_add"] = "LÃ¤gg till nyheter";
+$PMF_LANG["ad_news_edit"] = "Ã¤ndra nyheter";
 $PMF_LANG["ad_cookie"] = "Cookies";
 $PMF_LANG["ad_sess_head"] = "Visa sessioner";
 
 // Admin
 $PMF_LANG["ad_menu_categ_edit"] = "Administrera kategorier";
-$PMF_LANG["ad_menu_stat"] = "Statistik för omröstningar";
-$PMF_LANG["ad_kateg_add"] = "Lägg till kategori";
+$PMF_LANG["ad_menu_stat"] = "Statistik fÃ¶r omrÃ¶stningar";
+$PMF_LANG["ad_kateg_add"] = "LÃ¤gg till kategori";
 $PMF_LANG["ad_kateg_rename"] = "Byt namn";
 $PMF_LANG["ad_adminlog_date"] = "Datum";
-$PMF_LANG["ad_adminlog_user"] = "Användare";
+$PMF_LANG["ad_adminlog_user"] = "AnvÃ¤ndare";
 $PMF_LANG["ad_adminlog_ip"] = "IP-adress";
 
 $PMF_LANG["ad_stat_sess"] = "Sessioner";
 $PMF_LANG["ad_stat_days"] = "Dagar";
-$PMF_LANG["ad_stat_vis"] = "Sessioner (Besök)";
-$PMF_LANG["ad_stat_vpd"] = "Besök per dag";
-$PMF_LANG["ad_stat_fien"] = "Första loggen";
+$PMF_LANG["ad_stat_vis"] = "Sessioner (BesÃ¶k)";
+$PMF_LANG["ad_stat_vpd"] = "BesÃ¶k per dag";
+$PMF_LANG["ad_stat_fien"] = "FÃ¶rsta loggen";
 $PMF_LANG["ad_stat_laen"] = "Sista loggen";
-$PMF_LANG["ad_stat_browse"] = "Välj session";
+$PMF_LANG["ad_stat_browse"] = "VÃ¤lj session";
 $PMF_LANG["ad_stat_ok"] = "OK";
 
 $PMF_LANG["ad_sess_time"] = "Tid";
 $PMF_LANG["ad_sess_sid"] = "Session-ID";
 $PMF_LANG["ad_sess_ip"] = "IP-adress";
 
-$PMF_LANG["ad_ques_take"] = "Besvara fråga";
+$PMF_LANG["ad_ques_take"] = "Besvara frÃ¥ga";
 $PMF_LANG["no_cats"] = "Ingen kategori funnen.";
 
 // Admin - meddelande
-$PMF_LANG["ad_log_lger"] = "Felaktigt användarnamn eller lösenord.";
-$PMF_LANG["ad_log_sess"] = "Sessionen är utgången.";
-$PMF_LANG["ad_log_edit"] = "\"Ändra \"-Formulär för följande användare: ";
-$PMF_LANG["ad_log_crea"] = "\"Ny artikel\" formulär.";
-$PMF_LANG["ad_log_crsa"] = "Ny fråga/svar skapad.";
-$PMF_LANG["ad_log_ussa"] = "Uppdatera data för följande användare: ";
-$PMF_LANG["ad_log_usde"] = "Följande användare borttagen: ";
-$PMF_LANG["ad_log_beed"] = "Ändringsformulär för följande användare: ";
-$PMF_LANG["ad_log_bede"] = "Följande data togs bort: ";
+$PMF_LANG["ad_log_lger"] = "Felaktigt anvÃ¤ndarnamn eller lÃ¶senord.";
+$PMF_LANG["ad_log_sess"] = "Sessionen Ã¤r utgÃ¥ngen.";
+$PMF_LANG["ad_log_edit"] = "\"Ã„ndra \"-FormulÃ¤r fÃ¶r fÃ¶ljande anvÃ¤ndare: ";
+$PMF_LANG["ad_log_crea"] = "\"Ny artikel\" formulÃ¤r.";
+$PMF_LANG["ad_log_crsa"] = "Ny frÃ¥ga/svar skapad.";
+$PMF_LANG["ad_log_ussa"] = "Uppdatera data fÃ¶r fÃ¶ljande anvÃ¤ndare: ";
+$PMF_LANG["ad_log_usde"] = "FÃ¶ljande anvÃ¤ndare borttagen: ";
+$PMF_LANG["ad_log_beed"] = "Ã„ndringsformulÃ¤r fÃ¶r fÃ¶ljande anvÃ¤ndare: ";
+$PMF_LANG["ad_log_bede"] = "FÃ¶ljande data togs bort: ";
 
-$PMF_LANG["ad_start_visits"] = "Besök";
+$PMF_LANG["ad_start_visits"] = "BesÃ¶k";
 $PMF_LANG["ad_start_articles"] = "Artiklar";
 $PMF_LANG["ad_start_comments"] = "Kommentarer";
 
@@ -472,161 +472,161 @@ $PMF_LANG["ad_categ_cut"] = "klipp ut";
 $PMF_LANG["ad_categ_copy"] = "kopiera";
 $PMF_LANG["ad_categ_process"] = "Bearbetar kategorier...";
 
-// Admin - Obehörig anv.
-$PMF_LANG["err_NotAuth"] = "<strong>Du har inte behörighet!</strong>";
+// Admin - ObehÃ¶rig anv.
+$PMF_LANG["err_NotAuth"] = "<strong>Du har inte behÃ¶righet!</strong>";
 
 // Admin - navigering
-$PMF_LANG["msgPreviusPage"] = "föregående sida";
-$PMF_LANG["msgNextPage"] = "nästa sida";
+$PMF_LANG["msgPreviusPage"] = "fÃ¶regÃ¥ende sida";
+$PMF_LANG["msgNextPage"] = "nÃ¤sta sida";
 $PMF_LANG["msgPageDoublePoint"] = "Sida: ";
 $PMF_LANG["msgMainCategory"] = "Huvudkategori";
 
-// Admin - lösenord ändrat
-$PMF_LANG["ad_passwdsuc"] = "Ditt lösenord har ändrats.";
+// Admin - lÃ¶senord Ã¤ndrat
+$PMF_LANG["ad_passwdsuc"] = "Ditt lÃ¶senord har Ã¤ndrats.";
 
-// Admin - XML, PDF, språk
+// Admin - XML, PDF, sprÃ¥k
 $PMF_LANG["msgPDF"] = "Visa som pdf-fil";
 $PMF_LANG["ad_xml_head"] = "XML-Backup";
 $PMF_LANG["ad_xml_hint"] = "Spara all data i en XML-fil.";
 $PMF_LANG["ad_xml_gen"] = "skapa XML-fil";
-$PMF_LANG["ad_entry_locale"] = "Språk";
-$PMF_LANG["msgLangaugeSubmit"] = "Ändra språk";
+$PMF_LANG["ad_entry_locale"] = "SprÃ¥k";
+$PMF_LANG["msgLangaugeSubmit"] = "Ã„ndra sprÃ¥k";
 
 // Admin - exportera, bifoga
-$PMF_LANG["ad_entry_preview"] = "Förhandsgranskning";
-$PMF_LANG["ad_attach_1"] = "Välj en katalog för bilagor i inställningar först.";
-$PMF_LANG["ad_attach_2"] = "Väl en länk för bilagor i inställningar först.";
-$PMF_LANG["ad_attach_3"] = "Filen attachment.php kan inte öppnas utan korrekt behörighet.";
-$PMF_LANG["ad_attach_4"] = "Den bifogade filen måste vara mindre än %s Bytes.";
+$PMF_LANG["ad_entry_preview"] = "FÃ¶rhandsgranskning";
+$PMF_LANG["ad_attach_1"] = "VÃ¤lj en katalog fÃ¶r bilagor i instÃ¤llningar fÃ¶rst.";
+$PMF_LANG["ad_attach_2"] = "VÃ¤l en lÃ¤nk fÃ¶r bilagor i instÃ¤llningar fÃ¶rst.";
+$PMF_LANG["ad_attach_3"] = "Filen attachment.php kan inte Ã¶ppnas utan korrekt behÃ¶righet.";
+$PMF_LANG["ad_attach_4"] = "Den bifogade filen mÃ¥ste vara mindre Ã¤n %s Bytes.";
 $PMF_LANG["ad_menu_export"] = "Exportera phpMyFAQ";
 $PMF_LANG["ad_export_1"] = "Skapat RSS-Feed den";
 $PMF_LANG["ad_export_2"] = ".";
 $PMF_LANG["ad_export_file"] = "Fel: Kan inte skriva fil.";
 $PMF_LANG["ad_export_news"] = "Nyheter RSS-Feed";
 $PMF_LANG["ad_export_topten"] = "Top 10 RSS-Feed";
-$PMF_LANG["ad_export_latest"] = "5 senaste frågorna RSS-Feed";
-$PMF_LANG["ad_export_pdf"] = "PDF-Exportera alla frågor/svar";
+$PMF_LANG["ad_export_latest"] = "5 senaste frÃ¥gorna RSS-Feed";
+$PMF_LANG["ad_export_pdf"] = "PDF-Exportera alla frÃ¥gor/svar";
 $PMF_LANG["ad_export_generate"] = "skapa RSS-Feed";
 
-// Admin - behörigtsnivå
-$PMF_LANG["rightsLanguage"]['adduser'] = "Skapa ny användare";
-$PMF_LANG["rightsLanguage"]['edituser'] = "Ändra behörigheter för användare";
-$PMF_LANG["rightsLanguage"]['deluser'] = "Ta bort användare";
-$PMF_LANG["rightsLanguage"]['addbt'] = "Lägga till fråga/svar";
-$PMF_LANG["rightsLanguage"]['editbt'] = "Ändra fråga/svar";
-$PMF_LANG["rightsLanguage"]['delbt'] = "Ta bort fråga/svar";
+// Admin - behÃ¶rigtsnivÃ¥
+$PMF_LANG["rightsLanguage"]['adduser'] = "Skapa ny anvÃ¤ndare";
+$PMF_LANG["rightsLanguage"]['edituser'] = "Ã„ndra behÃ¶righeter fÃ¶r anvÃ¤ndare";
+$PMF_LANG["rightsLanguage"]['deluser'] = "Ta bort anvÃ¤ndare";
+$PMF_LANG["rightsLanguage"]['addbt'] = "LÃ¤gga till frÃ¥ga/svar";
+$PMF_LANG["rightsLanguage"]['editbt'] = "Ã„ndra frÃ¥ga/svar";
+$PMF_LANG["rightsLanguage"]['delbt'] = "Ta bort frÃ¥ga/svar";
 $PMF_LANG["rightsLanguage"]['viewlog'] = "Visa logg";
 $PMF_LANG["rightsLanguage"]['adminlog'] = "Visa adminloggen";
 $PMF_LANG["rightsLanguage"]['delcomment'] = "Ta bort kommentarer";
 $PMF_LANG["rightsLanguage"]['addnews'] = "Skapa nyheter";
-$PMF_LANG["rightsLanguage"]['editnews'] = "Ändra nyheter";
+$PMF_LANG["rightsLanguage"]['editnews'] = "Ã„ndra nyheter";
 $PMF_LANG["rightsLanguage"]['delnews'] = "Ta bort nyheter";
 $PMF_LANG["rightsLanguage"]['addcateg'] = "Skapa kategori";
-$PMF_LANG["rightsLanguage"]['editcateg'] = "Ändra kategori";
+$PMF_LANG["rightsLanguage"]['editcateg'] = "Ã„ndra kategori";
 $PMF_LANG["rightsLanguage"]['delcateg'] = "Ta bort kategori";
-$PMF_LANG["rightsLanguage"]['passwd'] = "Ändra lösenord";
-$PMF_LANG["rightsLanguage"]['editconfig'] = "Ändra inställningar";
+$PMF_LANG["rightsLanguage"]['passwd'] = "Ã„ndra lÃ¶senord";
+$PMF_LANG["rightsLanguage"]['editconfig'] = "Ã„ndra instÃ¤llningar";
 $PMF_LANG["rightsLanguage"]['addatt'] = "Bifoga filer";
 $PMF_LANG["rightsLanguage"]['delatt'] = "Ta bort bilagor";
 $PMF_LANG["rightsLanguage"]['backup'] = "Skapa backup";
-$PMF_LANG["rightsLanguage"]['restore'] = "Återställa backup";
-$PMF_LANG["rightsLanguage"]['delquestion'] = "Ta bort obesvarade frågor";
+$PMF_LANG["rightsLanguage"]['restore'] = "Ã…terstÃ¤lla backup";
+$PMF_LANG["rightsLanguage"]['delquestion'] = "Ta bort obesvarade frÃ¥gor";
 
 $PMF_LANG["msgAttachedFiles"] = "Bifogade filer:";
 
 // Admin
-$PMF_LANG["ad_user_action"] = "händelse";
+$PMF_LANG["ad_user_action"] = "hÃ¤ndelse";
 $PMF_LANG["ad_entry_email"] = "e-post:";
-$PMF_LANG["ad_entry_allowComments"] = "Tillåt kommentarer";
-$PMF_LANG["msgWriteNoComment"] = "Du kan inte kommentera den här frågan";
+$PMF_LANG["ad_entry_allowComments"] = "TillÃ¥t kommentarer";
+$PMF_LANG["msgWriteNoComment"] = "Du kan inte kommentera den hÃ¤r frÃ¥gan";
 $PMF_LANG["ad_user_realname"] = "Riktigt namn:";
 $PMF_LANG["ad_export_generate_pdf"] = "Skapa pdf-fil";
 $PMF_LANG["ad_export_full_faq"] = "phpMyFAQ som pdf-fil: ";
-$PMF_LANG["err_bannedIP"] = "Din IP-adress har blivit blockad, du är inte behörig att besöka denna sida.";
-$PMF_LANG["err_SaveQuestion"] = "Obligatoriska fält är <strong>ditt namn</strong>, <strong>din e-post</strong> och <strong>din fråga</strong>.<br /><br /><a href=\"javascript:history.back();\">tillbaka</a><br /><br />";
+$PMF_LANG["err_bannedIP"] = "Din IP-adress har blivit blockad, du Ã¤r inte behÃ¶rig att besÃ¶ka denna sida.";
+$PMF_LANG["err_SaveQuestion"] = "Obligatoriska fÃ¤lt Ã¤r <strong>ditt namn</strong>, <strong>din e-post</strong> och <strong>din frÃ¥ga</strong>.<br /><br /><a href=\"javascript:history.back();\">tillbaka</a><br /><br />\n";
 
 // Admin - font
-$PMF_LANG["ad_entry_fontcolor"] = "Teckensnitt, färg: ";
+$PMF_LANG["ad_entry_fontcolor"] = "Teckensnitt, fÃ¤rg: ";
 $PMF_LANG["ad_entry_fontsize"] = "Teckensnitt, storlek: ";
 
-// Admin - inställningar
-$LANG_CONF['main.language'] = array(0 => "select", 1 => "Språk-fil");
-$LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Automatisk språkdetektering");
-$LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => "Titel på FAQ");
+// Admin - instÃ¤llningar
+$LANG_CONF['main.language'] = array(0 => "select", 1 => "SprÃ¥k-fil");
+$LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Automatisk sprÃ¥kdetektering");
+$LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => "Titel pÃ¥ FAQ");
 $LANG_CONF['main.currentVersion'] = array(0 => "print", 1 => "FAQ Version");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Beskrivning av sidan");
-$LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Nyckelord för spiders");
-$LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Namn på ansvarig");
+$LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Nyckelord fÃ¶r spiders");
+$LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Namn pÃ¥ ansvarig");
 $LANG_CONF["adminmail"] = array(0 => "input", 1 => "Emailadress till admin");
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Kontaktinformation");
-$LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Text för skicka-till-en-vän-sidan");
-$LANG_CONF["attmax"] = array(0 => "input", 1 => "Maximal storlek på bilagor (max. %sByte)");
-$LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "Länka bilagorna under frågorna?");
-$LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "Spårning?");
+$LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Text fÃ¶r skicka-till-en-vÃ¤n-sidan");
+$LANG_CONF["attmax"] = array(0 => "input", 1 => "Maximal storlek pÃ¥ bilagor (max. %sByte)");
+$LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => "LÃ¤nka bilagorna under frÃ¥gorna?");
+$LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "SpÃ¥rning?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "Adminlogg?");
-$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Kolla IP:n när UIN kollas i admin.php?");
+$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => "Kolla IP:n nÃ¤r UIN kollas i admin.php?");
 $LANG_CONF["main.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Antal visade rubriker per sida");
 $LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Antal nyhetsartiklar");
 $LANG_CONF["main.bannedIPs"] = array(0 => "area", 1 => "Blocka dessa IP-adresser");
-$LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Aktivera stöd för mod_rewrite? (förvalt: inaktivt)");
-$LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Vill du aktivera stöd för LDAP? (förvalt: inaktivt)");
+$LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Aktivera stÃ¶d fÃ¶r mod_rewrite? (fÃ¶rvalt: inaktivt)");
+$LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => "Vill du aktivera stÃ¶d fÃ¶r LDAP? (fÃ¶rvalt: inaktivt)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "Som ny huvudkategori";
-$PMF_LANG["ad_categ_paste_error"] = "Att flytta denna kategori är inte möjligt.";
+$PMF_LANG["ad_categ_paste_error"] = "Att flytta denna kategori Ã¤r inte mÃ¶jligt.";
 $PMF_LANG["ad_categ_move"] = "flytta kategori";
-$PMF_LANG["ad_categ_lang"] = "Språk";
-$PMF_LANG["ad_categ_desc"] = "Förklaring";
-$PMF_LANG["ad_categ_change"] = "Ändra med";
+$PMF_LANG["ad_categ_lang"] = "SprÃ¥k";
+$PMF_LANG["ad_categ_desc"] = "FÃ¶rklaring";
+$PMF_LANG["ad_categ_change"] = "Ã„ndra med";
 
-$PMF_LANG["lostPassword"] = "har du glömt ditt lösenord? Klicka här.";
-$PMF_LANG["lostpwd_err_1"] = "Fel: Användarnamn och e-post hittades inte.";
+$PMF_LANG["lostPassword"] = "har du glÃ¶mt ditt lÃ¶senord? Klicka hÃ¤r.";
+$PMF_LANG["lostpwd_err_1"] = "Fel: AnvÃ¤ndarnamn och e-post hittades inte.";
 $PMF_LANG["lostpwd_err_2"] = "Fel: Felaktiga uppgifter!";
-$PMF_LANG["lostpwd_text_1"] = "Här är dina uppgifter från phpMyFAQ";
-$PMF_LANG["lostpwd_text_2"] = "Glöm inte att byta ditt lösenord när du loggat in.";
+$PMF_LANG["lostpwd_text_1"] = "HÃ¤r Ã¤r dina uppgifter frÃ¥n phpMyFAQ";
+$PMF_LANG["lostpwd_text_2"] = "GlÃ¶m inte att byta ditt lÃ¶senord nÃ¤r du loggat in.";
 $PMF_LANG["lostpwd_mail_okay"] = "E-Post har skickats.";
 
 $PMF_LANG["ad_xmlrpc_button"] = "Kolla senaste phpMyFAQ versionen via webben";
-$PMF_LANG["ad_xmlrpc_latest"] = "Senaste version finns på";
+$PMF_LANG["ad_xmlrpc_latest"] = "Senaste version finns pÃ¥";
 
 // added v1.5.0 - 2005-07-31 by Thorsten
-$PMF_LANG['ad_categ_select'] = 'Välj språk för kategorin';
+$PMF_LANG['ad_categ_select'] = 'VÃ¤lj sprÃ¥k fÃ¶r kategorin';
 
 // added v1.5.1 - 2005-09-06 by Thorsten
 $PMF_LANG['msgSitemap'] = 'Webbplatskarta';
 
 // added v1.5.2 - 2005-09-23 by Lars
-$PMF_LANG['err_inactiveArticle'] = 'Denna post är under omarbetning och kan därför inte visas.';
-$PMF_LANG['msgArticleCategories'] = 'Kategorier för denna post';
+$PMF_LANG['err_inactiveArticle'] = 'Denna post Ã¤r under omarbetning och kan dÃ¤rfÃ¶r inte visas.';
+$PMF_LANG['msgArticleCategories'] = 'Kategorier fÃ¶r denna post';
 
 // added v1.6.0 - 2006-02-02 by Thorsten
-$PMF_LANG['ad_entry_solution_id'] = 'Unikt lösnings-ID';
+$PMF_LANG['ad_entry_solution_id'] = 'Unikt lÃ¶snings-ID';
 $PMF_LANG['ad_entry_faq_record'] = 'FAQ post';
 $PMF_LANG['ad_entry_new_revision'] = 'Skapa ny version?';
 $PMF_LANG['ad_entry_record_administration'] = 'Post administration';
-$PMF_LANG['ad_entry_changelog'] = 'Ändringslogg';
+$PMF_LANG['ad_entry_changelog'] = 'Ã„ndringslogg';
 $PMF_LANG['ad_entry_revision'] = 'Ny version';
-$PMF_LANG['ad_changerev'] = 'Välj version';
-$PMF_LANG['msgCaptcha'] = "Var vänlig skriv in bokstäverna du ser i bilden";
-$PMF_LANG['msgSelectCategories'] = 'Sök i ...';
+$PMF_LANG['ad_changerev'] = 'VÃ¤lj version';
+$PMF_LANG['msgCaptcha'] = "Var vÃ¤nlig skriv in bokstÃ¤verna du ser i bilden";
+$PMF_LANG['msgSelectCategories'] = 'SÃ¶k i ...';
 $PMF_LANG['msgAllCategories'] = '... alla kategorier';
-$PMF_LANG['ad_you_should_update'] = 'Din phpMyFAQ installation är gammal. Du bör uppdatera till den senaste versionen.';
-$PMF_LANG['msgAdvancedSearch'] = 'Avancerad sökning';
+$PMF_LANG['ad_you_should_update'] = 'Din phpMyFAQ installation Ã¤r gammal. Du bÃ¶r uppdatera till den senaste versionen.';
+$PMF_LANG['msgAdvancedSearch'] = 'Avancerad sÃ¶kning';
 
-// added v1.6.1 - 2006-04-25 by Matteo and Thorsten
-$PMF_LANG['spamControlCenter'] = 'Spam-skyddsinställningar';
-$LANG_CONF["spam.enableSafeEmail"] = array(0 => "checkbox", 1 => "Visa epost-adresser säkert (standard: på).");
-$LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "Kontrollera det publika formuläret mot listan på förbjudna ord (standard: på).");
-$LANG_CONF["spam.enableCatpchaCode"] = array(0 => "checkbox", 1 => "Använd grafisk kod (catpcha ) för det publika formuläret (standard: på).");
-$PMF_LANG['ad_session_expiring'] = 'Din session går ut om %d minuter: vill du fortsätta arbeta?';
+// added v1.6.1 - 2006-04-25 by MatteoÂ andÂ Thorsten
+$PMF_LANG['spamControlCenter'] = 'Spam-skyddsinstÃ¤llningar';
+$LANG_CONF["spam.enableSafeEmail"] = array(0 => "checkbox", 1 => "Visa epost-adresser sÃ¤kert (standard: pÃ¥).");
+$LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "Kontrollera det publika formulÃ¤ret mot listan pÃ¥ fÃ¶rbjudna ord (standard: pÃ¥).");
+$LANG_CONF["spam.enableCatpchaCode"] = array(0 => "checkbox", 1 => "AnvÃ¤nd grafisk kod (catpcha ) fÃ¶r det publika formulÃ¤ret (standard: pÃ¥).");
+$PMF_LANG['ad_session_expiring'] = 'Din session gÃ¥r ut om %d minuter: vill du fortsÃ¤tta arbeta?';
 
 // added v1.6.2 - 2006-06-13 by Matteo
 $PMF_LANG['ad_stat_management'] = 'Sessionshantering';
-$PMF_LANG['ad_stat_choose'] = 'Välj månad';
+$PMF_LANG['ad_stat_choose'] = 'VÃ¤lj mÃ¥nad';
 $PMF_LANG['ad_stat_delete'] = 'Radera valda sessioner omedelbart';
 
 // added v2.0.0 - 2005-09-15 by Thorsten and by Minoru TODA
 $PMF_LANG['ad_menu_glossary'] = 'Ordlista';
-$PMF_LANG['ad_glossary_add'] = 'Lägg till post i ordlistan';
+$PMF_LANG['ad_glossary_add'] = 'LÃ¤gg till post i ordlistan';
 $PMF_LANG['ad_glossary_edit'] = 'Editera post i ordlistan';
 $PMF_LANG['ad_glossary_item'] = 'Post';
 $PMF_LANG['ad_glossary_definition'] = 'Definition';
@@ -639,76 +639,76 @@ $PMF_LANG['ad_glossary_update_error'] = 'Ett fel uppstod som gjorde att posten i
 $PMF_LANG['ad_glossary_delete'] = 'Radera post';
 $PMF_LANG['ad_glossary_delete_success'] = 'Post i ordlistan raderad!';
 $PMF_LANG['ad_glossary_delete_error'] = 'Ett fel uppstod som gjorde att posten i ordlistan inte kunde raderas.';
-$PMF_LANG['ad_linkcheck_noReferenceURL'] = 'Automatisk verifiering av länkar avslagen (bas-länk för länk-verifiering saknas)';
-$PMF_LANG['ad_linkcheck_noAllowUrlOpen'] = 'Automatisk verifiering av länkar avslagen (PHP option allow_url_fopen ej aktiverad)';
-$PMF_LANG['ad_linkcheck_checkResult'] = 'Resultat av automatiskt länk-verifiering';
+$PMF_LANG['ad_linkcheck_noReferenceURL'] = 'Automatisk verifiering av lÃ¤nkar avslagen (bas-lÃ¤nk fÃ¶r lÃ¤nk-verifiering saknas)';
+$PMF_LANG['ad_linkcheck_noAllowUrlOpen'] = 'Automatisk verifiering av lÃ¤nkar avslagen (PHP option allow_url_fopen ej aktiverad)';
+$PMF_LANG['ad_linkcheck_checkResult'] = 'Resultat av automatiskt lÃ¤nk-verifiering';
 $PMF_LANG['ad_linkcheck_checkSuccess'] = 'OK';
 $PMF_LANG['ad_linkcheck_checkFailed'] = 'Misslyckades';
 $PMF_LANG['ad_linkcheck_failReason'] = 'Anledning(ar) till misslyckandet:';
-$PMF_LANG['ad_linkcheck_noLinksFound'] = 'Hittade inga länkar som fungerar med funktionen för länk-verifiering.';
-$PMF_LANG['ad_linkcheck_searchbadonly'] = 'Bara med dåliga länkar';
+$PMF_LANG['ad_linkcheck_noLinksFound'] = 'Hittade inga lÃ¤nkar som fungerar med funktionen fÃ¶r lÃ¤nk-verifiering.';
+$PMF_LANG['ad_linkcheck_searchbadonly'] = 'Bara med dÃ¥liga lÃ¤nkar';
 $PMF_LANG['ad_linkcheck_infoReason'] = 'Ytterligare information:';
 $PMF_LANG['ad_linkcheck_openurl_infoprefix'] = 'Hittades under testning <strong>%s</strong>: ';
-$PMF_LANG['ad_linkcheck_openurl_notready'] = 'Länkverifierare ej klar.';
-$PMF_LANG['ad_linkcheck_openurl_maxredirect'] = 'Har överstigit maximalt antal omdirigeringar <strong>%d</strong>.';
-$PMF_LANG['ad_linkcheck_openurl_urlisblank'] = 'Leder till blank länk.';
-$PMF_LANG['ad_linkcheck_openurl_tooslow'] = 'Värd <strong>%s</strong> är långsam eller svarar ej.';
-$PMF_LANG['ad_linkcheck_openurl_nodns'] = 'DNS-uppslag av värd <strong>%s</strong> är långsam eller misslyckades pga problem med DNS, lokalt eller på annan plats.';
+$PMF_LANG['ad_linkcheck_openurl_notready'] = 'LÃ¤nkverifierare ej klar.';
+$PMF_LANG['ad_linkcheck_openurl_maxredirect'] = 'Har Ã¶verstigit maximalt antal omdirigeringar <strong>%d</strong>.';
+$PMF_LANG['ad_linkcheck_openurl_urlisblank'] = 'Leder till blank lÃ¤nk.';
+$PMF_LANG['ad_linkcheck_openurl_tooslow'] = 'VÃ¤rd <strong>%s</strong> Ã¤r lÃ¥ngsam eller svarar ej.';
+$PMF_LANG['ad_linkcheck_openurl_nodns'] = 'DNS-uppslag av vÃ¤rd <strong>%s</strong> Ã¤r lÃ¥ngsam eller misslyckades pga problem med DNS, lokalt eller pÃ¥ annan plats.';
 $PMF_LANG['ad_linkcheck_openurl_redirected'] = 'URL var omdirigerad till <strong>%s</strong>.';
 $PMF_LANG['ad_linkcheck_openurl_ambiguous'] = 'Otydlig HTTP status <strong>%s</strong> returnerades.';
-$PMF_LANG['ad_linkcheck_openurl_not_allowed'] = '<em>HEAD</em> metoden stöds inte av värden <strong>%s</strong>, tillåtna metoder: <strong>%s</strong>.';
-$PMF_LANG['ad_linkcheck_openurl_not_found'] = 'Denna resurs kan inte hittas hos värd <strong>%s</strong>.';
-$PMF_LANG['ad_linkcheck_protocol_unsupported'] = '%s protokoll stöds inte av den automatiska funktionen för länk-verifiering.';
-$PMF_LANG['ad_menu_linkconfig'] = 'Länkverifierare';
-$PMF_LANG['ad_linkcheck_config_title'] = 'Inställningar för länkverifiering';
-$PMF_LANG['ad_linkcheck_config_disabled'] = 'Länkverifiering avslagen';
-$PMF_LANG['ad_linkcheck_config_warnlist'] = 'Länkar att varna för';
-$PMF_LANG['ad_linkcheck_config_ignorelist'] = 'Länkar att ignorera';
+$PMF_LANG['ad_linkcheck_openurl_not_allowed'] = '<em>HEAD</em> metoden stÃ¶ds inte av vÃ¤rden <strong>%s</strong>, tillÃ¥tna metoder: <strong>%s</strong>.';
+$PMF_LANG['ad_linkcheck_openurl_not_found'] = 'Denna resurs kan inte hittas hos vÃ¤rd <strong>%s</strong>.';
+$PMF_LANG['ad_linkcheck_protocol_unsupported'] = '%s protokoll stÃ¶ds inte av den automatiska funktionen fÃ¶r lÃ¤nk-verifiering.';
+$PMF_LANG['ad_menu_linkconfig'] = 'LÃ¤nkverifierare';
+$PMF_LANG['ad_linkcheck_config_title'] = 'InstÃ¤llningar fÃ¶r lÃ¤nkverifiering';
+$PMF_LANG['ad_linkcheck_config_disabled'] = 'LÃ¤nkverifiering avslagen';
+$PMF_LANG['ad_linkcheck_config_warnlist'] = 'LÃ¤nkar att varna fÃ¶r';
+$PMF_LANG['ad_linkcheck_config_ignorelist'] = 'LÃ¤nkar att ignorera';
 
-$PMF_LANG['ad_linkcheck_config_warnlist_description'] = 'Länkar som inleds med poster nedan kommer att ge varning oberoende om de är giltiga.<br />Använd denna funktion för att detektera länkar som snart kommer att sluta fungera.';
-$PMF_LANG['ad_linkcheck_config_ignorelist_description'] = 'Länkar listade nedan kommer att antas vara giltiga utan verifiering.<br />Använd denna funktion för att ignorera länkar som inte går att validera med länk-verifieraren.';
+$PMF_LANG['ad_linkcheck_config_warnlist_description'] = 'LÃ¤nkar som inleds med poster nedan kommer att ge varning oberoende om de Ã¤r giltiga.<br />AnvÃ¤nd denna funktion fÃ¶r att detektera lÃ¤nkar som snart kommer att sluta fungera.';
+$PMF_LANG['ad_linkcheck_config_ignorelist_description'] = 'LÃ¤nkar listade nedan kommer att antas vara giltiga utan verifiering.<br />AnvÃ¤nd denna funktion fÃ¶r att ignorera lÃ¤nkar som inte gÃ¥r att validera med lÃ¤nk-verifieraren.';
 $PMF_LANG['ad_linkcheck_config_th_id'] = 'ID#';
 $PMF_LANG['ad_linkcheck_config_th_url'] = 'URL att validera';
 $PMF_LANG['ad_linkcheck_config_th_reason'] = 'Anledning till validering';
-$PMF_LANG['ad_linkcheck_config_th_owner'] = 'Ägare till posten';
-$PMF_LANG['ad_linkcheck_config_th_enabled'] = 'Sätt för att aktivera post';
-$PMF_LANG['ad_linkcheck_config_th_locked'] = 'Sätt för att låsa ägande';
-$PMF_LANG['ad_linkcheck_config_th_chown'] = 'Sätt för att erhålla ägande';
-$PMF_LANG['msgNewQuestionVisible'] = 'Frågan måste granskas innan den publiceras.';
-$PMF_LANG['msgQuestionsWaiting'] = 'Väntar på publicering av administratörerna: ';
+$PMF_LANG['ad_linkcheck_config_th_owner'] = 'Ã„gare till posten';
+$PMF_LANG['ad_linkcheck_config_th_enabled'] = 'SÃ¤tt fÃ¶r att aktivera post';
+$PMF_LANG['ad_linkcheck_config_th_locked'] = 'SÃ¤tt fÃ¶r att lÃ¥sa Ã¤gande';
+$PMF_LANG['ad_linkcheck_config_th_chown'] = 'SÃ¤tt fÃ¶r att erhÃ¥lla Ã¤gande';
+$PMF_LANG['msgNewQuestionVisible'] = 'FrÃ¥gan mÃ¥ste granskas innan den publiceras.';
+$PMF_LANG['msgQuestionsWaiting'] = 'VÃ¤ntar pÃ¥ publicering av administratÃ¶rerna: ';
 $PMF_LANG['ad_entry_visibility'] = 'Publicera?';
 
 // added v2.0.0 - 2006-01-02 by Lars
-$PMF_LANG['ad_user_error_password'] =  "Skriv in ett lösenord. ";
-$PMF_LANG['ad_user_error_passwordsDontMatch'] =  "Lösenorden överensstämmer inte. ";
-$PMF_LANG['ad_user_error_loginInvalid'] =  "Det angivna användarnamnet är ogiltigt.";
+$PMF_LANG['ad_user_error_password'] =  "Skriv in ett lÃ¶senord. ";
+$PMF_LANG['ad_user_error_passwordsDontMatch'] =  "LÃ¶senorden Ã¶verensstÃ¤mmer inte. ";
+$PMF_LANG['ad_user_error_loginInvalid'] =  "Det angivna anvÃ¤ndarnamnet Ã¤r ogiltigt.";
 $PMF_LANG['ad_user_error_noEmail'] =  "Skriv in en giltig e-postadress. ";
 $PMF_LANG['ad_user_error_noRealName'] =  "Skriv in ditt riktiga namn. ";
-$PMF_LANG['ad_user_error_delete'] =  "Användarkontot kunde inte raderas. ";
+$PMF_LANG['ad_user_error_delete'] =  "AnvÃ¤ndarkontot kunde inte raderas. ";
 $PMF_LANG['ad_user_error_noId'] =  "Inget ID angett. ";
-$PMF_LANG['ad_user_error_protectedAccount'] =  "Användarkontot är skyddat. ";
-$PMF_LANG['ad_user_deleteUser'] = "Radera användare";
+$PMF_LANG['ad_user_error_protectedAccount'] =  "AnvÃ¤ndarkontot Ã¤r skyddat. ";
+$PMF_LANG['ad_user_deleteUser'] = "Radera anvÃ¤ndare";
 $PMF_LANG['ad_user_status'] = "Status:";
-$PMF_LANG['ad_user_lastModified'] = "senast ändrad:";
+$PMF_LANG['ad_user_lastModified'] = "senast Ã¤ndrad:";
 $PMF_LANG['ad_gen_cancel'] = "Makulera";
 $PMF_LANG["rightsLanguage"]['addglossary'] = "addera post till ordlista";
 $PMF_LANG["rightsLanguage"]['editglossary'] = "editera post i ordlista";
 $PMF_LANG["rightsLanguage"]['delglossary'] = "radera post i ordlista";
 $PMF_LANG["ad_menu_group_administration"] = "Grupper";
-$PMF_LANG['ad_user_loggedin'] = 'Du är inloggad som ';
+$PMF_LANG['ad_user_loggedin'] = 'Du Ã¤r inloggad som ';
 
-$PMF_LANG['ad_group_details'] = "Parametrar för grupp";
+$PMF_LANG['ad_group_details'] = "Parametrar fÃ¶r grupp";
 $PMF_LANG['ad_group_add'] = "Adddera grupp";
 $PMF_LANG['ad_group_add_link'] = "Addera grupp";
 $PMF_LANG['ad_group_name'] = "Namn:";
 $PMF_LANG['ad_group_description'] = "Beskrivning:";
-$PMF_LANG['ad_group_autoJoin'] = "Lägg ihop automatiskt:";
+$PMF_LANG['ad_group_autoJoin'] = "LÃ¤gg ihop automatiskt:";
 $PMF_LANG['ad_group_suc'] = "Grupp adderad.";
 $PMF_LANG['ad_group_error_noName'] = "Skriv in ett gruppnamn. ";
 $PMF_LANG['ad_group_error_delete'] = "Gruppen kunde inte raderas. ";
 $PMF_LANG['ad_group_deleted'] = "Gruppen har raderats.";
 $PMF_LANG['ad_group_deleteGroup'] = "Radera grupp";
-$PMF_LANG['ad_group_deleteQuestion'] = "Är du säker på att denna grupp skall raderas?";
+$PMF_LANG['ad_group_deleteQuestion'] = "Ã„r du sÃ¤ker pÃ¥ att denna grupp skall raderas?";
 $PMF_LANG['ad_user_uncheckall'] = "Unselect All";
 $PMF_LANG['ad_group_membership'] = "Gruppmedlemsskap";
 $PMF_LANG['ad_group_members'] = "Medlemmar";
@@ -716,10 +716,10 @@ $PMF_LANG['ad_group_addMember'] = "+";
 $PMF_LANG['ad_group_removeMember'] = "-";
 
 // added v2.0.0 - 2006-07-20 by Matteo
-$PMF_LANG['ad_export_which_cat'] = 'Begränsa FAQ-datan som skall exporteras (frivilligt)';
-$PMF_LANG['ad_export_cat_downwards'] = 'Neråt?';
+$PMF_LANG['ad_export_which_cat'] = 'BegrÃ¤nsa FAQ-datan som skall exporteras (frivilligt)';
+$PMF_LANG['ad_export_cat_downwards'] = 'NerÃ¥t?';
 $PMF_LANG['ad_export_type'] = 'Exportformat';
-$PMF_LANG['ad_export_type_choose'] = 'Välj ett av de format som stöds:';
+$PMF_LANG['ad_export_type_choose'] = 'VÃ¤lj ett av de format som stÃ¶ds:';
 $PMF_LANG['ad_export_download_view'] = 'Ladda ner eller granska infogat?';
 $PMF_LANG['ad_export_download'] = 'Ladda ner';
 $PMF_LANG['ad_export_view'] = 'Granska infogat';
@@ -727,16 +727,16 @@ $PMF_LANG['ad_export_gen_xhtml'] = 'Skapa XHTML-fil';
 $PMF_LANG['ad_export_gen_docbook'] = 'Skapa Docbook-fil';
 
 // added v2.0.0 - 2006-07-22 by Matteo
-$PMF_LANG['ad_news_data'] = 'Data för nyhet';
-$PMF_LANG['ad_news_author_name'] = 'Författare namn:';
-$PMF_LANG['ad_news_author_email'] = 'Författare e-post:';
+$PMF_LANG['ad_news_data'] = 'Data fÃ¶r nyhet';
+$PMF_LANG['ad_news_author_name'] = 'FÃ¶rfattare namn:';
+$PMF_LANG['ad_news_author_email'] = 'FÃ¶rfattare e-post:';
 $PMF_LANG['ad_news_set_active'] = 'Aktivera:';
-$PMF_LANG['ad_news_allowComments'] = 'Tillåt kommentarer:';
-$PMF_LANG['ad_news_expiration_window'] = 'Tid då nyheten går ut (frivilligt)';
-$PMF_LANG['ad_news_from'] = 'Från:';
+$PMF_LANG['ad_news_allowComments'] = 'TillÃ¥t kommentarer:';
+$PMF_LANG['ad_news_expiration_window'] = 'Tid dÃ¥ nyheten gÃ¥r ut (frivilligt)';
+$PMF_LANG['ad_news_from'] = 'FrÃ¥n:';
 $PMF_LANG['ad_news_to'] = 'Till:';
-$PMF_LANG['ad_news_insertfail'] = 'Ett fel uppstod då nyheten skulle infogas i databasen.';
-$PMF_LANG['ad_news_updatefail'] = 'Ett fel uppstod då nyheten skulle uppdateras i databasen.';
+$PMF_LANG['ad_news_insertfail'] = 'Ett fel uppstod dÃ¥ nyheten skulle infogas i databasen.';
+$PMF_LANG['ad_news_updatefail'] = 'Ett fel uppstod dÃ¥ nyheten skulle uppdateras i databasen.';
 $PMF_LANG['newsShowCurrent'] = 'Visa aktuella nyheter.';
 $PMF_LANG['newsShowArchive'] = 'Visa arkiverade nyheter.';
 $PMF_LANG['newsArchive'] = ' Nyhetsarkiv';
@@ -744,23 +744,23 @@ $PMF_LANG['newsWriteComment'] = 'kommentera denna post';
 $PMF_LANG['newsCommentDate'] = 'Inlagd den: ';
 
 // added v2.0.0 - 2006-07-29 by Matteo & Thorsten
-$PMF_LANG['ad_record_expiration_window'] = 'Tid då post går ut (frivilligt)';
+$PMF_LANG['ad_record_expiration_window'] = 'Tid dÃ¥ post gÃ¥r ut (frivilligt)';
 $PMF_LANG['admin_mainmenu_home'] = 'Hem';
-$PMF_LANG['admin_mainmenu_users'] = 'Användare';
-$PMF_LANG['admin_mainmenu_content'] = 'Innehåll';
+$PMF_LANG['admin_mainmenu_users'] = 'AnvÃ¤ndare';
+$PMF_LANG['admin_mainmenu_content'] = 'InnehÃ¥ll';
 $PMF_LANG['admin_mainmenu_statistics'] = 'Statistik';
 $PMF_LANG['admin_mainmenu_exports'] = 'Exporter';
-$PMF_LANG['admin_mainmenu_backup'] = 'Säkerhetskopiera';
-$PMF_LANG['admin_mainmenu_configuration'] = 'Inställningar';
+$PMF_LANG['admin_mainmenu_backup'] = 'SÃ¤kerhetskopiera';
+$PMF_LANG['admin_mainmenu_configuration'] = 'InstÃ¤llningar';
 $PMF_LANG['admin_mainmenu_logout'] = 'Logga ut';
 
 // added v2.0.0 - 2006-08-15 by Thorsten and Matteo
-$PMF_LANG["ad_categ_owner"] = 'Kategori-ägare';
+$PMF_LANG["ad_categ_owner"] = 'Kategori-Ã¤gare';
 $PMF_LANG['adminSection'] = 'Administration';
-$PMF_LANG['err_expiredArticle'] = 'Denna post är utgången och kan inte visas';
-$PMF_LANG['err_expiredNews'] = 'Denna nyhet är utgången och kan inte visas';
-$PMF_LANG['err_inactiveNews'] = 'Denna nyhet är under bearbetning och kan inte visas';
-$PMF_LANG['msgSearchOnAllLanguages'] = 'Sök igenom alla språk:';
+$PMF_LANG['err_expiredArticle'] = 'Denna post Ã¤r utgÃ¥ngen och kan inte visas';
+$PMF_LANG['err_expiredNews'] = 'Denna nyhet Ã¤r utgÃ¥ngen och kan inte visas';
+$PMF_LANG['err_inactiveNews'] = 'Denna nyhet Ã¤r under bearbetning och kan inte visas';
+$PMF_LANG['msgSearchOnAllLanguages'] = 'SÃ¶k igenom alla sprÃ¥k:';
 $PMF_LANG['ad_entry_tags'] = 'Taggar';
 $PMF_LANG['msg_tags'] = 'Taggar';
 
@@ -770,11 +770,11 @@ $PMF_LANG['ad_linkcheck_feedback_url-batch2'] = 'Kontrollerar...';
 $PMF_LANG['ad_linkcheck_feedback_url-batch3'] = 'Kontrollerar...';
 $PMF_LANG['ad_linkcheck_feedback_url-checking'] = 'Kontrollerar...';
 $PMF_LANG['ad_linkcheck_feedback_url-disabled'] = 'Disabled';
-$PMF_LANG['ad_linkcheck_feedback_url-linkbad'] = 'Länkar ej OK';
-$PMF_LANG['ad_linkcheck_feedback_url-linkok'] = 'Länkar OK';
-$PMF_LANG['ad_linkcheck_feedback_url-noaccess'] = 'Ingen åtkomst';
+$PMF_LANG['ad_linkcheck_feedback_url-linkbad'] = 'LÃ¤nkar ej OK';
+$PMF_LANG['ad_linkcheck_feedback_url-linkok'] = 'LÃ¤nkar OK';
+$PMF_LANG['ad_linkcheck_feedback_url-noaccess'] = 'Ingen Ã¥tkomst';
 $PMF_LANG['ad_linkcheck_feedback_url-noajax'] = 'Ingen AJAX';
-$PMF_LANG['ad_linkcheck_feedback_url-nolinks'] = 'Inga länkar';
+$PMF_LANG['ad_linkcheck_feedback_url-nolinks'] = 'Inga lÃ¤nkar';
 $PMF_LANG['ad_linkcheck_feedback_url-noscript'] = 'Inget script';
 
 // added v2.0.0 - 2006-09-02 by Thomas
@@ -782,62 +782,62 @@ $PMF_LANG['msg_related_articles'] = 'Relaterade poster';
 $LANG_CONF['records.numberOfRelatedArticles'] = array(0 => "input", 1 => "Antal relaterade poster");
 
 // added v2.0.0 - 2006-09-09 by Rudi
-$PMF_LANG['ad_categ_trans_1'] = 'Översätt';
+$PMF_LANG['ad_categ_trans_1'] = 'Ã–versÃ¤tt';
 $PMF_LANG['ad_categ_trans_2'] = 'Kategori';
-$PMF_LANG['ad_categ_translatecateg'] = 'Översätt kategori';
-$PMF_LANG['ad_categ_translate'] = 'Översätt';
-$PMF_LANG['ad_categ_transalready'] = 'Redan översatt i: ';
-$PMF_LANG["ad_categ_deletealllang"] = 'Radera i alla språkversioner?';
-$PMF_LANG["ad_categ_deletethislang"] = 'Radera endast i detta språk?';
-$PMF_LANG["ad_categ_translated"] = "Denna kategori är översatt.";
+$PMF_LANG['ad_categ_translatecateg'] = 'Ã–versÃ¤tt kategori';
+$PMF_LANG['ad_categ_translate'] = 'Ã–versÃ¤tt';
+$PMF_LANG['ad_categ_transalready'] = 'Redan Ã¶versatt i: ';
+$PMF_LANG["ad_categ_deletealllang"] = 'Radera i alla sprÃ¥kversioner?';
+$PMF_LANG["ad_categ_deletethislang"] = 'Radera endast i detta sprÃ¥k?';
+$PMF_LANG["ad_categ_translated"] = "Denna kategori Ã¤r Ã¶versatt.";
 
 // added v2.0.0 - 2006-09-21 by Rudi
-$PMF_LANG["ad_categ_show"] = "Översikt";
-$PMF_LANG['ad_menu_categ_structure'] = "Kategoriöversikt inklusive språk";
+$PMF_LANG["ad_categ_show"] = "Ã–versikt";
+$PMF_LANG['ad_menu_categ_structure'] = "KategoriÃ¶versikt inklusive sprÃ¥k";
 
 // added v2.0.0 - 2006-09-26 by Thorsten
-$PMF_LANG['ad_entry_userpermission'] = 'Användarbehörigheter:';
-$PMF_LANG['ad_entry_grouppermission'] = 'Gruppbehörigheter:';
-$PMF_LANG['ad_entry_all_users'] = 'Behörigheter för alla användare';
-$PMF_LANG['ad_entry_restricted_users'] = 'Begränsad behörighet till';
-$PMF_LANG['ad_entry_all_groups'] = 'Behörigheter för alla grupper';
-$PMF_LANG['ad_entry_restricted_groups'] = 'Begränsad behörighet till';
-$PMF_LANG['ad_session_expiration'] = 'Tid till dess att din session går ut';
+$PMF_LANG['ad_entry_userpermission'] = 'AnvÃ¤ndarbehÃ¶righeter:';
+$PMF_LANG['ad_entry_grouppermission'] = 'GruppbehÃ¶righeter:';
+$PMF_LANG['ad_entry_all_users'] = 'BehÃ¶righeter fÃ¶r alla anvÃ¤ndare';
+$PMF_LANG['ad_entry_restricted_users'] = 'BegrÃ¤nsad behÃ¶righet till';
+$PMF_LANG['ad_entry_all_groups'] = 'BehÃ¶righeter fÃ¶r alla grupper';
+$PMF_LANG['ad_entry_restricted_groups'] = 'BegrÃ¤nsad behÃ¶righet till';
+$PMF_LANG['ad_session_expiration'] = 'Tid till dess att din session gÃ¥r ut';
 $PMF_LANG['ad_user_active'] = 'aktiv';
 $PMF_LANG['ad_user_blocked'] = 'blockerad';
 $PMF_LANG['ad_user_protected'] = 'skyddad';
 
 // added v2.0.0 - 2006-10-07 by Matteo
-$PMF_LANG['ad_entry_intlink'] = 'Välj en FAQ-post för att infoga som länk...';
+$PMF_LANG['ad_entry_intlink'] = 'VÃ¤lj en FAQ-post fÃ¶r att infoga som lÃ¤nk...';
 
 //added 2.0.0 - 2006-10-10 by Rudi
 $PMF_LANG["ad_categ_paste2"] = "Klistra in efter";
-$PMF_LANG["ad_categ_remark_move"] = "Utbyte av två kategorier är bara möjligt inom samma nivå.";
-$PMF_LANG["ad_categ_remark_overview"] = "Den korrekta ordningen för kategorier kommer att visas när alla kategorier är definierade för det aktuella språket (första kolumnen).";
+$PMF_LANG["ad_categ_remark_move"] = "Utbyte av tvÃ¥ kategorier Ã¤r bara mÃ¶jligt inom samma nivÃ¥.";
+$PMF_LANG["ad_categ_remark_overview"] = "Den korrekta ordningen fÃ¶r kategorier kommer att visas nÃ¤r alla kategorier Ã¤r definierade fÃ¶r det aktuella sprÃ¥ket (fÃ¶rsta kolumnen).";
 
 // added v2.0.0 - 2006-10-15 by Matteo
-$PMF_LANG['msgUsersOnline'] = ' :: %d Gäster och %d Registrerade';
-$PMF_LANG['ad_adminlog_del_older_30d'] = 'Radera loggar äldre än 30 dagar direkt';
-$PMF_LANG['ad_adminlog_delete_success'] = 'Äldre loggar raderade.';
+$PMF_LANG['msgUsersOnline'] = ' :: %d GÃ¤ster och %d Registrerade';
+$PMF_LANG['ad_adminlog_del_older_30d'] = 'Radera loggar Ã¤ldre Ã¤n 30 dagar direkt';
+$PMF_LANG['ad_adminlog_delete_success'] = 'Ã„ldre loggar raderade.';
 $PMF_LANG['ad_adminlog_delete_failure'] = 'Inga loggar raderade: ett fel uppstod under operationen.';
 
 // added 2.0.0 - 2006-11-19 by Thorsten
-$PMF_LANG['opensearch_plugin_install'] = 'lägg till sök-plugin';
-$PMF_LANG['ad_quicklinks'] = 'Snabblänkar';
-$PMF_LANG['ad_quick_category'] = 'Lägg till ny kategori';
-$PMF_LANG['ad_quick_record'] = 'Lägg till ny FAQ-post';
-$PMF_LANG['ad_quick_user'] = 'Lägg till ny användare';
-$PMF_LANG['ad_quick_group'] = 'Lägg till ny grupp';
+$PMF_LANG['opensearch_plugin_install'] = 'lÃ¤gg till sÃ¶k-plugin';
+$PMF_LANG['ad_quicklinks'] = 'SnabblÃ¤nkar';
+$PMF_LANG['ad_quick_category'] = 'LÃ¤gg till ny kategori';
+$PMF_LANG['ad_quick_record'] = 'LÃ¤gg till ny FAQ-post';
+$PMF_LANG['ad_quick_user'] = 'LÃ¤gg till ny anvÃ¤ndare';
+$PMF_LANG['ad_quick_group'] = 'LÃ¤gg till ny grupp';
 
 // added v2.0.0 - 2006-12-30 by Matteo
-$PMF_LANG['msgNewTranslationHeader'] = 'Förslag till översättning';
-$PMF_LANG['msgNewTranslationAddon'] = 'Ditt förslag publiceras inte direkt utan först då en administratör har granskat det. Obligatoriska fält är <strong>ditt Namn</strong>, <strong>din e-post</strong>, <strong>din översättning av rubriken</strong> och <strong>din faq översättning</strong>. Vänligen använd bara mellanslag för att separera nyckelorden.';
+$PMF_LANG['msgNewTranslationHeader'] = 'FÃ¶rslag till Ã¶versÃ¤ttning';
+$PMF_LANG['msgNewTranslationAddon'] = 'Ditt fÃ¶rslag publiceras inte direkt utan fÃ¶rst dÃ¥ en administratÃ¶r har granskat det. Obligatoriska fÃ¤lt Ã¤r <strong>ditt Namn</strong>, <strong>din e-post</strong>, <strong>din Ã¶versÃ¤ttning av rubriken</strong> och <strong>din faq Ã¶versÃ¤ttning</strong>. VÃ¤nligen anvÃ¤nd bara mellanslag fÃ¶r att separera nyckelorden.';
 $PMF_LANG['msgNewTransSourcePane'] = 'Orginalpanel';
-$PMF_LANG['msgNewTranslationPane'] = 'Översättningspanel';
+$PMF_LANG['msgNewTranslationPane'] = 'Ã–versÃ¤ttningspanel';
 $PMF_LANG['msgNewTranslationName'] = "Your Name:";
 $PMF_LANG['msgNewTranslationMail'] = "Your email address:";
 $PMF_LANG['msgNewTranslationKeywords'] = "Keywords:";
-$PMF_LANG['msgNewTranslationSubmit'] = 'Skicka in ditt förslag';
-$PMF_LANG['msgTranslate'] = 'Föreslå en översättning för';
-$PMF_LANG['msgTranslateSubmit'] = 'Starta översättning...';
-$PMF_LANG['msgNewTranslationThanks'] = "Tack för ditt förslag till översättning!";
+$PMF_LANG['msgNewTranslationSubmit'] = 'Skicka in ditt fÃ¶rslag';
+$PMF_LANG['msgTranslate'] = 'FÃ¶reslÃ¥ en Ã¶versÃ¤ttning fÃ¶r';
+$PMF_LANG['msgTranslateSubmit'] = 'Starta Ã¶versÃ¤ttning...';
+$PMF_LANG['msgNewTranslationThanks'] = "Tack fÃ¶r ditt fÃ¶rslag till Ã¶versÃ¤ttning!";

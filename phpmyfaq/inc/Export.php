@@ -129,7 +129,7 @@ class PMF_Export
         $xhtml .= '<head>';
         $xhtml .= '    <title>'.PMF_htmlentities($PMF_CONF['main.titleFAQ'], ENT_QUOTES, $PMF_LANG['metaCharset']).'</title>';
         $xhtml .= '    <meta http-equiv="Content-Type" content="application/xhtml+xml; charset='.$PMF_LANG['metaCharset'].'" />';
-        $xhtml .= '    <meta name="title" content="'.htmlspecialchars($PMF_CONF['main.titleFAQ']).'" />';
+        $xhtml .= '    <meta name="title" content="'.PMF_String::htmlspecialchars($PMF_CONF['main.titleFAQ']).'" />';
         $xhtml .= '</head>';
         $xhtml .= '<body dir="'.$PMF_LANG['dir'].'">';
 
@@ -195,7 +195,7 @@ class PMF_Export
                 $xml_thema    = $faq['topic'];
                 $xml_keywords = $faq['keywords'];
                 // Take care of XML entities
-                $xml_content  = strip_tags(htmlspecialchars($xml_content, ENT_QUOTES, $PMF_LANG['metaCharset']));
+                $xml_content  = strip_tags(PMF_String::htmlspecialchars($xml_content, ENT_QUOTES, $PMF_LANG['metaCharset']));
                 $xml_rubrik   = PMF_htmlentities(strip_tags($xml_rubrik), ENT_QUOTES, $PMF_LANG['metaCharset']);
                 $xml_thema    = strip_tags($xml_thema);
                 // Build the <article/> node
@@ -241,7 +241,7 @@ class PMF_Export
         $export->delete_file();
 
         // Set the FAQ title
-        $faqtitel = htmlspecialchars($PMF_CONF['main.titleFAQ']);
+        $faqtitel = PMF_String::htmlspecialchars($PMF_CONF['main.titleFAQ']);
 
         // Print the title of the FAQ
         $export-> xmlContent='<?xml version="1.0" encoding="'.$PMF_LANG['metaCharset'].'"?>'

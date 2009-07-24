@@ -241,14 +241,14 @@ class PMF_Captcha
      */
     public function validateCaptchaCode($captchaCode)
     {
-        $captchaCode = strtoupper($captchaCode);
+        $captchaCode = PMF_String::strtoupper($captchaCode);
         // Help the user: treat "0" (ASCII 48) like "O" (ASCII 79)
         //                if "0" is not in the realm of captcha code letters
         if (!in_array("0", $this->letters)) {
             $captchaCode = str_replace("0", "O", $captchaCode);
         }
         // Sanity check
-        for ($i = 0; $i < strlen( $captchaCode ); $i++) {
+        for ($i = 0; $i < PMF_String::strlen( $captchaCode ); $i++) {
             if (!in_array($captchaCode[$i], $this->letters)) {
                 return false;
             }
@@ -341,7 +341,7 @@ class PMF_Captcha
      */
     private function drawText()
     {
-        $len = strlen($this->code);
+        $len = PMF_String::strlen($this->code);
         $w1  = 15;
         $w2  = $this->width / ($len + 1);
 

@@ -5,7 +5,7 @@
 * Euskera language file
 *
 * @author       Jokin Lacalle Usabiaga<jlacalle@ordizia.ikastola.net>
-* @author       Maite Goñi Eizmendi<mgoni@ordizia.ikastola.net>
+* @author       Maite GoÃ±i Eizmendi<mgoni@ordizia.ikastola.net>
 * @since        2005-12-28
 * @copyright    (c) 2005-2006 phpMyFAQ Team
 *
@@ -20,7 +20,7 @@
 * under the License.
 */
 
-$PMF_LANG["metaCharset"] = "iso-8859-1";
+$PMF_LANG["metaCharset"] = "UTF-8";
 $PMF_LANG["metaLanguage"] = "eu";
 $PMF_LANG["language"] = "Basque";
 // ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
@@ -147,8 +147,8 @@ $PMF_LANG["err_noArticles"] = "<p>Ez dago sarrerarik.</p>";
 $PMF_LANG["err_badID"] = "<p>ID okerra!</p>";
 $PMF_LANG["err_noTopTen"] = "<p>Oraindik ez dago TOP Ten-ik.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>Ez da sarrerarik aurkitu.</p>";
-$PMF_LANG["err_SaveEntries"] = "Beharrezko eremuak dira: <strong>zure izena</strong>, <strong>zure posta elektronikoaren helbidea</strong>, <strong>kategoria</strong>, <strong>goiburua</strong> eta <strong>zure erregistroa </strong>!<br /><br /><a href=\"javascript:history.back();\">atzera itzuli</a><br /><br />";
-$PMF_LANG["err_SaveComment"] = "Beharrezko eremuak dira <strong>zure izena </strong>, <strong>zure posta elektronikoaren helbidea</strong> eta <strong>zure iruzkinak</strong>!<br /><br /><a href=\"javascript:history.back();\">itzuli volver atrás</a><br /><br />";
+$PMF_LANG["err_SaveEntries"] = "Beharrezko eremuak dira: <strong>zure izena</strong>, <strong>zure posta elektronikoaren helbidea</strong>, <strong>kategoria</strong>, <strong>goiburua</strong> eta <strong>zure erregistroa </strong>!<br /><br />\n<a href=\"javascript:history.back();\">atzera itzuli</a><br /><br />\n";
+$PMF_LANG["err_SaveComment"] = "Beharrezko eremuak dira <strong>zure izena </strong>, <strong>zure posta elektronikoaren helbidea</strong> eta <strong>zure iruzkinak</strong>!<br /><br />\n<a href=\"javascript:history.back();\">itzuli volver atrÃ¡s</a><br /><br />\n";
 $PMF_LANG["err_VoteTooMuch"] = "<p>Bi aldiz bozkatzen baduzu, ez da zenbatuko<a href=\"javascript:history.back();\">Klikatu hemen</a>, itzultzeko.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>Ez da ebaluatu!</strong> <a href=\"javascript:history.back();\">Mesedez, sakatu hemen</a>, bozkatzeko.</p>";
 $PMF_LANG["err_noMailAdress"] = "Zure posta elektronikoa ez da zuzena.<br /><a href=\"javascript:history.back();\">itzuli</a>";
@@ -157,7 +157,7 @@ $PMF_LANG["err_sendMail"] = "Beharrezko eremuak dira <strong>zure izena</strong>
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>Erregistro bilaketa:</strong><br /></p>";
 
-// Menú
+// MenÃº
 $PMF_LANG["ad"] = "ADMINSTRATZAILEAREN ATALA";
 $PMF_LANG["ad_menu_user_administration"] = "Erabiltzaileen administrazioa";
 $PMF_LANG["ad_menu_entry_aprove"] = "Erregistroak onetsi";
@@ -412,8 +412,8 @@ $PMF_LANG["ad_csv_linklog"] = "LOGak gorde";
 $PMF_LANG["ad_csv_linkdat"] = "Datuak gorde";
 $PMF_LANG["ad_csv_head2"] = "Berrezarri";
 $PMF_LANG["ad_csv_no"] = "Ez dirudi phpMyFAQ-eko backup bat denik.";
-$PMF_LANG["ad_csv_prepare"] = "Datu-basea prestatzen…";
-$PMF_LANG["ad_csv_process"] = "Kontsultatzen…";
+$PMF_LANG["ad_csv_prepare"] = "Datu-basea prestatzenÂ…";
+$PMF_LANG["ad_csv_process"] = "KontsultatzenÂ…";
 $PMF_LANG["ad_csv_of"] = "";
 $PMF_LANG["ad_csv_suc"] = "zuzena izan da.";
 $PMF_LANG["ad_csv_backup"] = "Backup";
@@ -546,7 +546,7 @@ $PMF_LANG["ad_export_full_faq"] = "Zure FAQa PDF fitxategi gisa: ";
 $PMF_LANG["err_bannedIP"] = "Zure IPa blokeatu egin da.";
 $PMF_LANG["err_SaveQuestion"] = "Beharrezko eremuak dira <strong>Zure izena</strong>, <strong>Posta elektronikoa</strong> eta  <strong>zure galdera </strong>!<br /><br /><a href=\"javascript:history.back();\">itzuli</a><br /><br />";
 
-// added v1.3.4 - 23.07.2003 – Thorsten
+// added v1.3.4 - 23.07.2003 Â– Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Letraren kolorea: ";
 $PMF_LANG["ad_entry_fontsize"] = "Letraren tamaina: ";
 

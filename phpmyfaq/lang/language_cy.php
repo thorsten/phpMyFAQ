@@ -19,15 +19,15 @@
 * under the License.
 */
 
-$PMF_LANG["metaCharset"] = "iso-8859-1";
+$PMF_LANG["metaCharset"] = "UTF-8";
 $PMF_LANG["metaLanguage"] = "cy";
 $PMF_LANG["language"] = "cymraeg";
 // ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
 $PMF_LANG["dir"] = "ltr";
 
 // Navigation
-$PMF_LANG["msgCategory"] = "Categorïau";
-$PMF_LANG["msgShowAllCategories"] = "Dangos yr holl gategorïau";
+$PMF_LANG["msgCategory"] = "CategorÃ¯au";
+$PMF_LANG["msgShowAllCategories"] = "Dangos yr holl gategorÃ¯au";
 $PMF_LANG["msgSearch"] = "chwilio";
 $PMF_LANG["msgAddContent"] = "Ychwanegu cynnwys";
 $PMF_LANG["msgQuestion"] = "Gofyn cwestiwn";
@@ -38,12 +38,12 @@ $PMF_LANG["msgHome"] = "Hafan";
 $PMF_LANG["msgNews"] = "Cwestiynau Cyffredin - Newyddion";
 $PMF_LANG["msgUserOnline"] = " Defnyddwyr ar-lein";
 $PMF_LANG["msgXMLExport"] = "Ffeil-XML";
-$PMF_LANG["msgBack2Home"] = "Nôl i'r hafan";
+$PMF_LANG["msgBack2Home"] = "NÃ´l i'r hafan";
 
 // Contentpages
-$PMF_LANG["msgFullCategories"] = "Categorïau gyda chofnodion";
-$PMF_LANG["msgFullCategoriesIn"] = "Categorïau gyda chofnodion yn ";
-$PMF_LANG["msgSubCategories"] = "Isgategorïau";
+$PMF_LANG["msgFullCategories"] = "CategorÃ¯au gyda chofnodion";
+$PMF_LANG["msgFullCategoriesIn"] = "CategorÃ¯au gyda chofnodion yn ";
+$PMF_LANG["msgSubCategories"] = "IsgategorÃ¯au";
 $PMF_LANG["msgEntries"] = "Cofnodion";
 $PMF_LANG["msgEntriesIn"] = "Cwestiynau yn ";
 $PMF_LANG["msgViews"] = "safbwyntiau";
@@ -95,7 +95,7 @@ $PMF_LANG["msgSearchContent"] = "Cynnwys: ";
 
 // new Content
 $PMF_LANG["msgNewContentHeader"] = "Cynigion ar gyfer Cwestiynau Cyffredin";
-$PMF_LANG["msgNewContentAddon"] = "Ni chaiff eich cynnig ei gyhoeddi ar unwaith, ond caiff ei ryddhau gan y gweinyddwr ar ôl ei dderbyn. Y meysydd gofynnol yw <strong> eich Enw </strong>, eich cyfeiriad e-bost </strong>,<strong>categori</strong>, <strong>pennawd</strong> ac <strong>eich cofnod</strong>. Rhowch ofod tab rhwng y geiriau allweddol yn unig.";
+$PMF_LANG["msgNewContentAddon"] = "Ni chaiff eich cynnig ei gyhoeddi ar unwaith, ond caiff ei ryddhau gan y gweinyddwr ar Ã´l ei dderbyn. Y meysydd gofynnol yw <strong> eich Enw </strong>, eich cyfeiriad e-bost </strong>,<strong>categori</strong>, <strong>pennawd</strong> ac <strong>eich cofnod</strong>. Rhowch ofod tab rhwng y geiriau allweddol yn unig.";
 $PMF_LANG["msgNewContentName"] = "Eich Enw:";
 $PMF_LANG["msgNewContentMail"] = "Eich cyfeiriad e-bost:";
 $PMF_LANG["msgNewContentCategory"] = "Pa gategori i'w ddewis?";
@@ -119,7 +119,7 @@ $PMF_LANG["msg2answer"] = "Ateb";
 $PMF_LANG["msgQuestionText"] = "Gallwch weld cwestiynau a ofynnwyd gan ddefnyddwyr eraill yma. Os byddwch yn ateb y cwestiynau hyn, efallai caiff eich atebion eu cynnwys yn y Cwestiynau Cyffredin.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>Mae strwythur CC (Cwestiynau Cyffredin) yn eithaf syml. Gallwch naill ai chwilio’r <strong><a href=\"?action=show\">Categorïau</a></strong> neu adael i <strong><a href=\"?action=search\">beiriant chwilio CC</a></strong> chwilio am eiriau allweddol.</p>";
+$PMF_LANG["msgHelpText"] = "<p>Mae strwythur CC (Cwestiynau Cyffredin) yn eithaf syml. Gallwch naill ai chwilioÂ’r <strong><a href=\"?action=show\">CategorÃ¯au</a></strong> neu adael i <strong><a href=\"?action=search\">beiriant chwilio CC</a></strong> chwilio am eiriau allweddol.</p>";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "e-bostio at y gwefeistr:";
@@ -145,17 +145,17 @@ $PMF_LANG["err_noArticles"] = "<p>Dim cofnodion ar gael.</p>";
 $PMF_LANG["err_badID"] = "<p>Gwybodaeth adnabod anghywir.</p>";
 $PMF_LANG["err_noTopTen"] = "<p>Does dim Deg Uchaf ar gael eto.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>Ni chafwyd cofnod.</p>";
-$PMF_LANG["err_SaveEntries"] = " Y meysydd gofynnol yw <strong>eich enw</strong>, <strong> eich cyfeiriad e-bost</strong>, <strong>categori</strong>, <strong>pennawd</strong>, <strong> eich cofnod </strong> a phan ofynnir amdano, <strong>Captcha Code</strong>!<br /><br /><a href=\"javascript:history.back();\">un dudalen yn ôl</a><br /><br />";
-$PMF_LANG["err_SaveComment"] = " Y meysydd gofynnol yw <strong> eich enw </strong>, <strong> eich cyfeiriad e-bost </strong>, <strong> eich sylwadau</strong> a phan ofynnir amdano, <strong>Captcha Code</strong>!<br /><br /><a href=\"javascript:history.back();\">un dudalen yn ôl </a><br /><br />";
-$PMF_LANG["err_VoteTooMuch"] = "<p> nid ydym yn cyfrif pleidleisio ddwywaith. <a href=\"javascript:history.back();\">Cliciwch yma </a>, i fynd yn ôl.</p>";
+$PMF_LANG["err_SaveEntries"] = " Y meysydd gofynnol yw <strong>eich enw</strong>, <strong> eich cyfeiriad e-bost</strong>, <strong>categori</strong>, <strong>pennawd</strong>, <strong> eich cofnod </strong> a phan ofynnir amdano, <strong>Captcha Code</strong>!<br /><br />\n<a href=\"javascript:history.back();\">un dudalen yn Ã´l</a><br /><br />\n";
+$PMF_LANG["err_SaveComment"] = " Y meysydd gofynnol yw <strong> eich enw </strong>, <strong> eich cyfeiriad e-bost </strong>, <strong> eich sylwadau</strong> a phan ofynnir amdano, <strong>Captcha Code</strong>!<br /><br />\n<a href=\"javascript:history.back();\">un dudalen yn Ã´l </a><br /><br />\n";
+$PMF_LANG["err_VoteTooMuch"] = "<p> nid ydym yn cyfrif pleidleisio ddwywaith. <a href=\"javascript:history.back();\">Cliciwch yma </a>, i fynd yn Ã´l.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong> ni wnaethoch ateb y cwestiwn hwn!</strong> <a href=\"javascript:history.back();\">Cliciwch yma </a>, to vote.</p>";
 $PMF_LANG["err_noMailAdress"] = " nid yw eich cyfeiriad e-bost yn gywir.<br /><a href=\"javascript:history.back();\">back</a>";
-$PMF_LANG["err_sendMail"] = " Y meysydd gofynnol yw <strong> eich enw </strong>, <strong> eich cyfeiriad e-bost </strong>, <strong> eich cwestiwn</strong> a phan ofynnir amdano, <strong>Captcha Code</strong>!<br /><br /><a href=\"javascript:history.back();\">un dudalen yn ôl </a><br /><br />";
+$PMF_LANG["err_sendMail"] = " Y meysydd gofynnol yw <strong> eich enw </strong>, <strong> eich cyfeiriad e-bost </strong>, <strong> eich cwestiwn</strong> a phan ofynnir amdano, <strong>Captcha Code</strong>!<br /><br />\n<a href=\"javascript:history.back();\">un dudalen yn Ã´l </a><br /><br />\n";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "<p><strong> chwilio’r cofnodion:</strong><br /> Gyda chofnod fel <strong style=\"color: Red;\"> gair1 gair2</strong> gallwch wneud chwiliad yn ôl perthnasedd ar gyfer dau faen prawf chwilio neu fwy.</p><p><strong> Sylwer:</strong> rhaid i’ch maen prawf chwilio fod o leiaf 4 llythyren neu fel arall bydd eich cais yn cael ei wrthod.</p>";
+$PMF_LANG["help_search"] = "<p><strong> chwilioÂ’r cofnodion:</strong><br /> Gyda chofnod fel <strong style=\"color: Red;\"> gair1 gair2</strong> gallwch wneud chwiliad yn Ã´l perthnasedd ar gyfer dau faen prawf chwilio neu fwy.</p><p><strong> Sylwer:</strong> rhaid iÂ’ch maen prawf chwilio fod o leiaf 4 llythyren neu fel arall bydd eich cais yn cael ei wrthod.</p>";
 
-// Menü
+// MenÃ¼
 $PMF_LANG["ad"] = "ADRAN WEINYDDOL";
 $PMF_LANG["ad_menu_user_administration"] = "Gweinyddiaeth y Defnyddiwr";
 $PMF_LANG["ad_menu_entry_aprove"] = "Cymeradwyo Cofnodion";
@@ -179,7 +179,7 @@ $PMF_LANG["ad_msg_passmatch"] = "Rhaid i'r ddau gyfrinair <strong>gyd-fynd</stro
 $PMF_LANG["ad_msg_savedsuc_1"] = "Proffil";
 $PMF_LANG["ad_msg_savedsuc_2"] = "cadwyd yn llwyddiannus.";
 $PMF_LANG["ad_msg_mysqlerr"] = "Oherwydd <strong>gwall cronfa ddata</strong>, ni ellir cadw'r proffil.";
-$PMF_LANG["ad_msg_noauth"] = "Nid oes gennych ganiatâd.";
+$PMF_LANG["ad_msg_noauth"] = "Nid oes gennych ganiatÃ¢d.";
 
 // Allgemein
 $PMF_LANG["ad_gen_page"] = "Tudalen";
@@ -209,7 +209,7 @@ $PMF_LANG["ad_user_rights"] = "Hawliau";
 $PMF_LANG["ad_user_del_1"] = "Y Defnyddiwr";
 $PMF_LANG["ad_user_del_2"] = "dileu?";
 $PMF_LANG["ad_user_del_3"] = "Ydych chi'n siwr?";
-$PMF_LANG["ad_user_deleted"] = "Dilëwyd y defnyddiwr yn llwyddiannus.";
+$PMF_LANG["ad_user_deleted"] = "DilÃ«wyd y defnyddiwr yn llwyddiannus.";
 $PMF_LANG["ad_user_checkall"] = "Dewis oll";
 
 // Beitragsverwaltung
@@ -234,18 +234,18 @@ $PMF_LANG["ad_entry_save"] = "Cadw";
 $PMF_LANG["ad_entry_delete"] = "dileu";
 $PMF_LANG["ad_entry_delcom_1"] = "Ydych chi'n siwr dylid dileu sylw'r defnyddiwr";
 $PMF_LANG["ad_entry_delcom_2"] = " Dylid ei ddileu?";
-$PMF_LANG["ad_entry_commentdelsuc"] = "Dilëwyd y sylw yn <strong>llwyddiannus</strong>.";
-$PMF_LANG["ad_entry_back"] = "Yn ôl i'r erthygl";
-$PMF_LANG["ad_entry_commentdelfail"] = "Ni <strong>ddilëwyd</strong> y sylw.";
+$PMF_LANG["ad_entry_commentdelsuc"] = "DilÃ«wyd y sylw yn <strong>llwyddiannus</strong>.";
+$PMF_LANG["ad_entry_back"] = "Yn Ã´l i'r erthygl";
+$PMF_LANG["ad_entry_commentdelfail"] = "Ni <strong>ddilÃ«wyd</strong> y sylw.";
 $PMF_LANG["ad_entry_savedsuc"] = "Cadwyd y newidiadau yn <strong>llwyddiannus</strong>.";
 $PMF_LANG["ad_entry_savedfail"] = "Yn anffodus, roedd gwall yn y gronfa ddata.";
 $PMF_LANG["ad_entry_del_1"] = "Ydych chi'n siwr dylid dileu'r pwnc";
 $PMF_LANG["ad_entry_del_2"] = "of";
 $PMF_LANG["ad_entry_del_3"] = " Dylid ei ddileu
 ?";
-$PMF_LANG["ad_entry_delsuc"] = " y mater <strong> yn llwyddiannus </strong> Dilëwyd.";
-$PMF_LANG["ad_entry_delfail"] = "Dilëwyd y mater yn llwyddiannus!";
-$PMF_LANG["ad_entry_back"] = "Yn ôl";
+$PMF_LANG["ad_entry_delsuc"] = " y mater <strong> yn llwyddiannus </strong> DilÃ«wyd.";
+$PMF_LANG["ad_entry_delfail"] = "DilÃ«wyd y mater yn llwyddiannus!";
+$PMF_LANG["ad_entry_back"] = "Yn Ã´l";
 
 
 // Newsverwaltung
@@ -266,9 +266,9 @@ $PMF_LANG["ad_news_delete"] = "dileu";
 $PMF_LANG["ad_news_nodata"] = "Ni chafwyd data yn y gronfa ddata";
 $PMF_LANG["ad_news_updatesuc"] = "Diweddarwyd y Newyddion.";
 $PMF_LANG["ad_news_del"] = "Ydych chi'n siwr eich bod am ddileu'r eitem newyddion hon?";
-$PMF_LANG["ad_news_yesdelete"] = "ydw, dilëwch!";
+$PMF_LANG["ad_news_yesdelete"] = "ydw, dilÃ«wch!";
 $PMF_LANG["ad_news_nodelete"] = "nac ydw!";
-$PMF_LANG["ad_news_delsuc"] = "Dilëwyd yr eitem newyddion.";
+$PMF_LANG["ad_news_delsuc"] = "DilÃ«wyd yr eitem newyddion.";
 $PMF_LANG["ad_news_updatenews"] = "Diweddaru'r newyddion";
 
 // Kategorieverwaltung
@@ -278,7 +278,7 @@ $PMF_LANG["ad_categ_subcatnum"] = "Rhif Isgategori:";
 $PMF_LANG["ad_categ_nya"] = "<em>ddim ar gael eto!</em>";
 $PMF_LANG["ad_categ_titel"] = "Tetil y Categori:";
 $PMF_LANG["ad_categ_add"] = "Ychwanegu Categori";
-$PMF_LANG["ad_categ_existing"] = "Categorïau Presennol";
+$PMF_LANG["ad_categ_existing"] = "CategorÃ¯au Presennol";
 $PMF_LANG["ad_categ_id"] = "#";
 $PMF_LANG["ad_categ_categ"] = "Categori";
 $PMF_LANG["ad_categ_subcateg"] = "Isgategori";
@@ -294,10 +294,10 @@ $PMF_LANG["ad_categ_edit_2"] = "Categori";
 $PMF_LANG["ad_categ_add"] = "ychwanegu Categori";
 $PMF_LANG["ad_categ_added"] = "Ychwanegwyd y categori.";
 $PMF_LANG["ad_categ_updated"] = "Diweddarwyd y categori.";
-$PMF_LANG["ad_categ_del_yes"] = "ie, dilëwch!";
+$PMF_LANG["ad_categ_del_yes"] = "ie, dilÃ«wch!";
 $PMF_LANG["ad_categ_del_no"] = "na!";
 $PMF_LANG["ad_categ_deletesure"] = "Ydych chi'n siwr eich bod am ddileu'r categori hwn?";
-$PMF_LANG["ad_categ_deleted"] = "Dilëwyd y categori.";
+$PMF_LANG["ad_categ_deleted"] = "DilÃ«wyd y categori.";
 
 // Cookies
 $PMF_LANG["ad_cookie_cookiesuc 	"] = "Gosodwyd y cwci'n llwyddiannus.";
@@ -306,7 +306,7 @@ $PMF_LANG["ad_cookie_again"] = "Gosod cwci eto";
 $PMF_LANG["ad_cookie_delete"] = "dileu cwci";
 $PMF_LANG["ad_cookie_no"] = "Nid oes cwci wedi'i gadw eto. Gyda chwci gallech gadw eich sgript mewngofnodi a bydd dim rhaid i chi gofio eich manylion mewngofnodi eto. Mae gennych y dewisiadau canlynol:";
 $PMF_LANG["ad_cookie_set"] = "Gosod cwci";
-$PMF_LANG["ad_cookie_deleted"] = "Dilëwyd cwci'n llwyddiannus.";
+$PMF_LANG["ad_cookie_deleted"] = "DilÃ«wyd cwci'n llwyddiannus.";
 
 // Adminlog
 $PMF_LANG["ad_adminlog"] = "Log gweinyddol";
@@ -342,7 +342,7 @@ $PMF_LANG["ad_sess_sfs"] = "Chwilio am sesiynau";
 $PMF_LANG["ad_sess_s_ip"] = "IP:";
 $PMF_LANG["ad_sess_s_minct"] = "gweithredoedd lleiaf:";
 $PMF_LANG["ad_sess_s_date"] = "Dyddiad";
-$PMF_LANG["ad_sess_s_after"] = "ar ôl";
+$PMF_LANG["ad_sess_s_after"] = "ar Ã´l";
 $PMF_LANG["ad_sess_s_before"] = "Chwilio";
 $PMF_LANG["ad_sess_session"] = "Sesiwn";
 $PMF_LANG["ad_sess_r"] = "Cyfeiriwr:";
@@ -350,7 +350,7 @@ $PMF_LANG["ad_sess_browser"] = "Categori:";
 $PMF_LANG["ad_sess_ai_artikel"] = "Cofnod:";
 $PMF_LANG["ad_sess_ai_sb"] = "Chwilio-Llinynnau:";
 $PMF_LANG["ad_sess_ai_sid"] = "Gwybodaeth adnabod sesiwn:";
-$PMF_LANG["ad_sess_back"] = "Yn ôl";
+$PMF_LANG["ad_sess_back"] = "Yn Ã´l";
 
 // Statistik
 $PMF_LANG["ad_rs"] = "Ystadegau Cyfraddau";
@@ -384,7 +384,7 @@ $PMF_LANG["ad_entryins_suc"] = "Cadwyd y cofnod yn llwyddiannus.";
 $PMF_LANG["ad_entryins_fail"] = "Gwall.";
 $PMF_LANG["ad_att_del"] = "Dileu";
 $PMF_LANG["ad_att_nope"] = "Gellir ychwanegu atodiadau wrth olygu yn unig.";
-$PMF_LANG["ad_att_delsuc"] = "Dilëwyd yr atodiad yn llwyddiannus.";
+$PMF_LANG["ad_att_delsuc"] = "DilÃ«wyd yr atodiad yn llwyddiannus.";
 $PMF_LANG["ad_att_delfail"] = "Roedd gwall wrth ddileu'r atodiad.";
 $PMF_LANG["ad_entry_add"] = "Creu Cofnod";
 
@@ -445,18 +445,18 @@ $PMF_LANG["ad_sess_sid"] = "Gwybodaeth adnabod sesiwn";
 $PMF_LANG["ad_sess_ip"] = "Cyfeiriad IP";
 
 $PMF_LANG["ad_ques_take"] = "Cymryd cwestiwn a'i olygu";
-$PMF_LANG["no_cats"] = "Ni chafwyd unrhyw gategorïau.";
+$PMF_LANG["no_cats"] = "Ni chafwyd unrhyw gategorÃ¯au.";
 
 // Added v1.1 - 17.01.2002 - Bastian
 $PMF_LANG["ad_log_lger"] = "Defnyddiwr neu gyfrinair annilys.";
 $PMF_LANG["ad_log_sess"] = "Amser sesiwn wedi dod i ben.";
 $PMF_LANG["ad_log_edit"] = "\"Golygu Defnyddiwr\"-Ffurflen ar gyfer y defnyddiwr canlynol: ";
 $PMF_LANG["ad_log_crea"] = "\"Erthygl newydd\" Ffurflen.";
-$PMF_LANG["ad_log_crsa"] = "Crëwyd cofnod newydd.";
+$PMF_LANG["ad_log_crsa"] = "CrÃ«wyd cofnod newydd.";
 $PMF_LANG["ad_log_ussa"] = "Diweddaru data ar gyfer y defnyddiwr canlynol: ";
-$PMF_LANG["ad_log_usde"] = "Dilëwyd y defnyddiwr canlynol: ";
+$PMF_LANG["ad_log_usde"] = "DilÃ«wyd y defnyddiwr canlynol: ";
 $PMF_LANG["ad_log_beed"] = "Golygu ffurflen ar gyfer y defnyddiwr canlynol: ";
-$PMF_LANG["ad_log_bede"] = "Dilëwyd y cofnod canlynol: ";
+$PMF_LANG["ad_log_bede"] = "DilÃ«wyd y cofnod canlynol: ";
 
 $PMF_LANG["ad_start_visits"] = "Ymweliadau";
 $PMF_LANG["ad_start_articles"] = "Erthyglau";
@@ -466,11 +466,11 @@ $PMF_LANG["ad_start_comments"] = "Sylwadau";
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "pastio";
 $PMF_LANG["ad_categ_cut"] = "torri";
-$PMF_LANG["ad_categ_copy"] = "copïo";
-$PMF_LANG["ad_categ_process"] = "Prosesu categorïau...";
+$PMF_LANG["ad_categ_copy"] = "copÃ¯o";
+$PMF_LANG["ad_categ_process"] = "Prosesu categorÃ¯au...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten
-$PMF_LANG["err_NotAuth"] = "<strong>Nid oes caniatâd gennych.</strong>";
+$PMF_LANG["err_NotAuth"] = "<strong>Nid oes caniatÃ¢d gennych.</strong>";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
 $PMF_LANG["msgPreviusPage"] = "tudalen blaenorol";
@@ -534,13 +534,13 @@ $PMF_LANG["msgAttachedFiles"] = "ffeiliau atodedig:";
 // Added v1.3.3 - 27.05.2003 - Thorsten
 $PMF_LANG["ad_user_action"] = "gweithred";
 $PMF_LANG["ad_entry_email"] = "cyfeiriad e-bost:";
-$PMF_LANG["ad_entry_allowComments"] = "caniatáu sylwadau";
+$PMF_LANG["ad_entry_allowComments"] = "caniatÃ¡u sylwadau";
 $PMF_LANG["msgWriteNoComment"] = "Ni allwch gyflwyno sylw ar y cofnod hwn";
 $PMF_LANG["ad_user_realname"] = "enw cywir:";
 $PMF_LANG["ad_export_generate_pdf"] = "cynhyrchu ffeil PDf";
 $PMF_LANG["ad_export_full_faq"] = "Eich Cwestiynau Cyffredin fel ffeil PDF: ";
 $PMF_LANG["err_bannedIP"] = "Mae eich cyfeiriad IP wedi'i wahardd.";
-$PMF_LANG["err_SaveQuestion"] = " Y meysydd gofynnol yw <strong>eich enw</strong>, <strong> eich cyfeiriad e-bost </strong>, <strong> eich cwestiwn</strong> a phan ofynnir amdano, <strong>Captcha Code</strong>.<br /><br /><a href=\"javascript:history.back();\">un dudalen yn ôl </a><br /><br />";
+$PMF_LANG["err_SaveQuestion"] = " Y meysydd gofynnol yw <strong>eich enw</strong>, <strong> eich cyfeiriad e-bost </strong>, <strong> eich cwestiwn</strong> a phan ofynnir amdano, <strong>Captcha Code</strong>.<br /><br /><a href=\"javascript:history.back();\">un dudalen yn Ã´l </a><br /><br />\n";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Lliw'r ffont : ";
@@ -551,21 +551,21 @@ $LANG_CONF['main.language'] = array(0 => "select", 1 => " Iaith-Ffeil");
 $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => " Galluogi trafod cynnwys awtomatig");
 $LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => " Teitl y CC");
 $LANG_CONF['main.currentVersion'] = array(0 => "print", 1 => " Fersiwn y CC");
-$LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => " Disgrifiad o’r Dudalen");
+$LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => " Disgrifiad oÂ’r Dudalen");
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => " Geiriau allweddol ar gyfer Corynod");
-$LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => " Enw’r Cyhoeddwr");
+$LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => " EnwÂ’r Cyhoeddwr");
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => " Cyfeiriad e-bost Gweinyddol");
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => " Gwybodaeth gyswllt");
 $LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => " Testun ar gyfer y dudalen anfonatffrind");
 $LANG_CONF['main.maxAttachmentSize'] = array(0 => "input", 1 => " Uchafswm maint ar gyfer atodiadau mewn Beitiau(max. %sByte)");
-$LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => " Cysylltu’r atodiadau islaw’r cofnodion?");
+$LANG_CONF["main.disableAttachments"] = array(0 => "checkbox", 1 => " CysylltuÂ’r atodiadau islawÂ’r cofnodion?");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => " Defnyddio tracio?");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => " defnyddio cofnod gweinyddol?");
-$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => " Ydych chi am i’r IP gael ei wirio wrth wirio UINs yn admin.php?");
+$LANG_CONF["main.ipCheck"] = array(0 => "checkbox", 1 => " Ydych chi am iÂ’r IP gael ei wirio wrth wirio UINs yn admin.php?");
 $LANG_CONF["main.numberOfRecordsPerPage"] = array(0 => "input", 1 => " Nifer y pynciau a ddangosir fesul tudalen");
 $LANG_CONF["main.numberOfShownNewsEntries"] = array(0 => "input", 1 => " Nifer yr erthyglau newyddion");
 $LANG_CONF['main.bannedIPs'] = array(0 => "area", 1 => " Gwahardd yr Ips hyn");
-$LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => " Actifadu mod_ailysgrifennu’r gefnogaeth? (diofyn: analluogi)");
+$LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => " Actifadu mod_ailysgrifennuÂ’r gefnogaeth? (diofyn: analluogi)");
 $LANG_CONF["main.ldapSupport"] = array(0 => "checkbox", 1 => " Hoffech chi osod cefnogaeth LDAP? (default: disabled)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "fel prif gategori newydd";
@@ -593,7 +593,7 @@ $PMF_LANG['msgSitemap'] = 'Map or safle';
 
 // added v1.5.2 - 2005-09-23 by Lars
 $PMF_LANG['err_inactiveArticle'] = 'Maer cofnod hwn yn cael ei adolygu ac nid oes modd ei ddangos.';
-$PMF_LANG['msgArticleCategories'] = 'Categorïau ar gyfer y cofnod hwn';
+$PMF_LANG['msgArticleCategories'] = 'CategorÃ¯au ar gyfer y cofnod hwn';
 
 // added v1.6.0 - 2006-02-02 by Thorsten
 $PMF_LANG['ad_entry_solution_id'] = 'Gwybodaeth adnabod ateb unigryw';
@@ -609,14 +609,14 @@ $PMF_LANG['msgAllCategories'] = '... mhob categori';
 $PMF_LANG['ad_you_should_update'] = 'Mae eich gosodiad phpMyFAQ yn hen.  Dylech ei ddiweddaru ir fersiwn ddiweddaraf sydd ar gael.';
 $PMF_LANG['msgAdvancedSearch'] = 'Chwiliad manwl';
 
-// added v1.6.1 - 2006-04-25 by Matteo and Thorsten
+// added v1.6.1 - 2006-04-25 by MatteoÂ andÂ Thorsten
 $PMF_LANG['spamControlCenter'] = 'Canolfan rheoli sbam';
 $LANG_CONF["spam.enableSafeEmail"] = array(0 => "checkbox", 1 => " Argraffu e-bost defnyddiwr mewn ffordd ddiogel (default: enabled).");
 $LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => " Cynnwys ffurflen gyhoeddus yn erbyn geiriau a waharddwyd (default: enabled).");
-$LANG_CONF["spam.enableCatpchaCode"] = array(0 => "checkbox", 1 => " Defnyddio côd catpcha i gyflwyno ffurflen gyhoeddus (default: enabled).");
+$LANG_CONF["spam.enableCatpchaCode"] = array(0 => "checkbox", 1 => " Defnyddio cÃ´d catpcha i gyflwyno ffurflen gyhoeddus (default: enabled).");
 $PMF_LANG['ad_session_expiring'] = 'Bydd eich sesiwn yn dod i ben mewn %d munud: hoffech chi barhau i weithio?';
 
 // added v1.6.2 - 2006-06-13 by Matteo
 $PMF_LANG['ad_stat_management'] = 'Rheoli sesiynau';
 $PMF_LANG['ad_stat_choose'] = 'Dewiswch y mis';
-$PMF_LANG['ad_stat_delete'] = 'Dilëwch y sesiynau a ddewiswyd ar unwaith';
+$PMF_LANG['ad_stat_delete'] = 'DilÃ«wch y sesiynau a ddewiswyd ar unwaith';

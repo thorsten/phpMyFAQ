@@ -132,7 +132,7 @@ class PMF_Glossary
         foreach($this->getAllGlossaryItems() as $item) {
             $this->definition = $item['definition'];
             $item['item'] = preg_quote($item['item'], '/');
-            $content = preg_replace_callback(
+            $content = PMF_String::preg_replace_callback(
                 '/'
                 // a. the glossary item could be an attribute name
                 .'('.$item['item'].'="[^"]*")|'

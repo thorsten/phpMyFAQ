@@ -184,7 +184,7 @@ class PMF_Tags
             $taglisting      .= $oLink->toHtmlAnchor().', ';
         }
 
-        return '' == $taglisting ? '-' : substr($taglisting, 0, -2);
+        return '' == $taglisting ? '-' : PMF_String::substr($taglisting, 0, -2);
     }
 
     /**
@@ -208,8 +208,8 @@ class PMF_Tags
         // Store tags and references for the faq record
         foreach ($tags as $tagging_name) {
             $tagging_name = trim($tagging_name);
-            if (strlen($tagging_name) > 0) {
-                if (!in_array(strtolower($tagging_name), array_map('strtolower', $current_tags))) {
+            if (PMF_String::strlen($tagging_name) > 0) {
+                if (!in_array(PMF_String::strtolower($tagging_name), array_map(array('PMF_String', 'strtolower'), $current_tags))) {
                     // Create the new tag
                     $new_tagging_id = $this->db->nextID(SQLPREFIX.'faqtags', 'tagging_id');
                     $query = sprintf("
@@ -244,7 +244,7 @@ class PMF_Tags
                         (%d, %d)",
                         SQLPREFIX,
                         $record_id,
-                        array_search(strtolower($tagging_name), array_map('strtolower', $current_tags)));
+                        array_search(PMF_String::strtolower($tagging_name), array_map(array('PMF_String', 'strtolower'), $current_tags)));
                     $this->db->query($query);
                 }
             }
@@ -306,7 +306,7 @@ class PMF_Tags
                 COUNT(d.record_id) = %d",
             SQLPREFIX,
             SQLPREFIX,
-            substr(implode("', '", $arrayOfTags), 0, -2),
+            PMF_String::substr(implode("', '", $arrayOfTags), 0, -2),
             count($arrayOfTags)
         );
 
@@ -344,7 +344,7 @@ class PMF_Tags
                 d.record_id",
             SQLPREFIX,
             SQLPREFIX,
-            substr(implode("', '", $arrayOfTags), 0, -2)
+            PMF_String::substr(implode("', '", $arrayOfTags), 0, -2)
         );
 
         $records = array();

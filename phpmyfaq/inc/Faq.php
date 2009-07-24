@@ -2865,40 +2865,32 @@ class PMF_Faq
      * Builds the PDF delivery for the given faq.
      * 
      * @param  integer $currentCategory The category under which we want the PDF to be created.
-     * @param  string $filename The path to the PDF file. Optional, default: pdf/<faq_id>.pdf.
-     * @return mixed The PDF filename if successful, false otherwise.
-     * @access public
-     * @since  2009-05-02
+     * @param  string  $pdfFile         The path to the PDF file. Optional, default: pdf/<faq_id>.pdf.
+     * @return mixed
      */
-    public function buildPDFFile($currentCategory, $filename = null)
+    public function buildPDFFile($currentCategory, $pdfFile = null)
     {
-        global $faqconfig, $PMF_LANG;
+        global $PMF_LANG;
 
         // Sanity check: stop here if getRecord() has not been called yet
         if (empty($this->faqRecord)) {
             return false;
         }
         
-        $pdfFile = $filename;
-        $category = new PMF_Category();
+        $faqconfig = PMF_Configuration::getInstance();
+        $category  = new PMF_Category();
 
         // Default filename: pdf/<faq_id>.pdf
         if (empty($pdfFile)) {
             $pdfFile = 'pdf/'.$this->faqRecord['id'].'.pdf';
         }
+        
         // Cleanup any file
         if (file_exists($pdfFile)) {
             @unlink($pdfFile);
         }
-
-        $pdf = new PMF_Export_Pdf(
-            $currentCategory,
-            $this->faqRecord['title'],
-            $category->categoryName,
-            $orientation = 'P',
-            $unit = 'mm',
-            $format = 'A4'
-        );
+        
+        $pdf      = new PMF_Export_Pdf($currentCategory, $this->faqRecord['title'], $category->categoryName);
         $pdf->faq = $this->faqRecord;
 
         // Start building PDF...
@@ -2908,19 +2900,19 @@ class PMF_Faq
         $pdf->SetCreator($faqconfig->get('main.titleFAQ').' - powered by phpMyFAQ '.$faqconfig->get('main.currentVersion'));
         $pdf->AliasNbPages();
         $pdf->AddPage();
-        $pdf->SetFont('Helvetica', '', 12);
+        $pdf->SetFont('dejavusans', '', 12);
         $pdf->SetDisplayMode('real');
-        $pdf->WriteHTML(str_replace('../', '', $this->faqRecord['content']));
+        $pdf->Ln();
+        $pdf->WriteHTML(str_replace('../', '', $this->faqRecord['content']), true);
         $pdf->Ln();
         $pdf->Ln();
-        $pdf->SetStyle('I', true);
-        $pdf->Write(5, html_entity_decode($PMF_LANG['ad_entry_solution_id']).': #'.$this->faqRecord['solution_id']);
+        $pdf->SetFont('dejavusans', '', 11);
+        $pdf->Write(5, $PMF_LANG['ad_entry_solution_id'].': #'.$this->faqRecord['solution_id']);
         $pdf->SetAuthor($this->faqRecord['author']);
         $pdf->Ln();
-        $pdf->Write(5, html_entity_decode($PMF_LANG['msgAuthor']).$this->faqRecord['author']);
+        $pdf->Write(5, $PMF_LANG['msgAuthor'].$this->faqRecord['author']);
         $pdf->Ln();
-        $pdf->Write(5, html_entity_decode($PMF_LANG['msgLastUpdateArticle']).$this->faqRecord['date']);
-        $pdf->SetStyle('I', false);
+        $pdf->Write(5, $PMF_LANG['msgLastUpdateArticle'].$this->faqRecord['date']);
         // Build it
         $pdf->Output($pdfFile);
 

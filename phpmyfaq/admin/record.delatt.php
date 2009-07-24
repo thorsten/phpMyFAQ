@@ -36,7 +36,7 @@ if ($permission["delatt"]) {
     $filename    = realpath($record_path . DIRECTORY_SEPARATOR . $record_file);
     $file_okay   = true;
     
-    if (!$filename || strpos($filename, realpath($record_path)) !== 0) {
+    if (!$filename || PMF_String::strpos($filename, realpath($record_path)) !== 0) {
     	$file_okay = false;
     }
     

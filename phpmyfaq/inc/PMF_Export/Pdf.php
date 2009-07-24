@@ -12,6 +12,7 @@
  * @license    Mozilla Public License 1.1
  * @version    SVN: $Id$
  * @copyright  2004-2009 phpMyFAQ Team
+ * @copyright  2004-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -24,10 +25,168 @@
  * under the License.
  */
 
-define('FPDF_FONTPATH', dirname(dirname(dirname(__FILE__))).'/font/');
-require_once(dirname(dirname(__FILE__)).'/libs/fpdf.php');
+define('K_PATH_URL', 'localhost');
 
-class PMF_Export_Pdf extends FPDF
+/**
+ * path to TCPDF
+ * 
+ */
+define('K_PATH_MAIN', dirname(dirname(__FILE__)) . '/libs/tcpdf/');
+
+/**
+ * path for PDF fonts
+ * use K_PATH_MAIN.'fonts/old/' for old non-UTF8 fonts
+ */
+define('K_PATH_FONTS', K_PATH_MAIN . 'fonts/');
+
+/**
+ * cache directory for temporary files (full path)
+ */
+define('K_PATH_CACHE', K_PATH_MAIN . 'cache/');
+
+/**
+ * cache directory for temporary files (url path)
+ */
+define('K_PATH_URL_CACHE', K_PATH_URL . 'cache/');
+
+/**
+ * images directory
+ */
+define('K_PATH_IMAGES', K_PATH_MAIN . 'images/');
+
+/**
+ * blank image
+ */
+define('K_BLANK_IMAGE', K_PATH_IMAGES . '_blank.png');
+
+/**
+ * page format
+ */
+define('PDF_PAGE_FORMAT', 'A4');
+
+/**
+ * page orientation (P=portrait, L=landscape)
+ */
+define('PDF_PAGE_ORIENTATION', 'P');
+
+/**
+ * document creator
+ */
+define('PDF_CREATOR', 'TCPDF');
+
+/**
+ * document author
+ */
+define('PDF_AUTHOR', 'TCPDF');
+
+/**
+ * header title
+ */
+define('PDF_HEADER_TITLE', 'phpMyFAQ');
+
+/**
+ * header description string
+ */
+define('PDF_HEADER_STRING', "by phpMyFAQ - www.phpmyfaq.de");
+
+/**
+ * image logo
+ */
+define('PDF_HEADER_LOGO', 'tcpdf_logo.jpg');
+
+/**
+ * header logo image width [mm]
+ */
+define('PDF_HEADER_LOGO_WIDTH', 30);
+
+/**
+ *  document unit of measure [pt=point, mm=millimeter, cm=centimeter, in=inch]
+ */
+define('PDF_UNIT', 'mm');
+
+/**
+ * header margin
+ */
+define('PDF_MARGIN_HEADER', 5);
+
+/**
+ * footer margin
+ */
+define('PDF_MARGIN_FOOTER', 10);
+
+/**
+ * top margin
+ */
+define('PDF_MARGIN_TOP', 27);
+
+/**
+ * bottom margin
+ */
+define('PDF_MARGIN_BOTTOM', 25);
+
+/**
+ * left margin
+ */
+define('PDF_MARGIN_LEFT', 15);
+
+/**
+ * right margin
+ */
+define('PDF_MARGIN_RIGHT', 15);
+
+/**
+ * default main font name
+ */
+define('PDF_FONT_NAME_MAIN', 'DejaVuSans');
+
+/**
+ * default main font size
+ */
+define('PDF_FONT_SIZE_MAIN', 10);
+
+/**
+ * default data font name
+ */
+define('PDF_FONT_NAME_DATA', 'DejaVuSans');
+
+/**
+ * default data font size
+ */
+define('PDF_FONT_SIZE_DATA', 8);
+
+/**
+ * default monospaced font name
+ */
+define('PDF_FONT_MONOSPACED', 'courier');
+
+/**
+ * ratio used to adjust the conversion of pixels to user units
+ */
+define('PDF_IMAGE_SCALE_RATIO', 1);
+
+/**
+ * magnification factor for titles
+ */
+define('HEAD_MAGNIFICATION', 1.1);
+
+/**
+ * height of cell repect font height
+ */
+define('K_CELL_HEIGHT_RATIO', 1.25);
+
+/**
+ * title magnification respect main font size
+ */
+define('K_TITLE_MAGNIFICATION', 1.3);
+
+/**
+ * reduction factor for small font
+ */
+define('K_SMALL_RATIO', 2 / 3);
+
+require dirname(dirname(__FILE__)) . '/libs/tcpdf/tcpdf.php';
+
+class PMF_Export_Pdf extends TCPDF
 {
     /**
     * <b> and <strong> for bold strings
@@ -62,7 +221,7 @@ class PMF_Export_Pdf extends FPDF
     *
     * @var string
     */
-    private $HREF;
+    protected $HREF;
 
     /**
     * <pre> for code examples
@@ -139,14 +298,14 @@ class PMF_Export_Pdf extends FPDF
     * 
     * @var array
     */
-    private $outlines = array();
+    protected $outlines = array();
 
     /**
     * Outline root
     * 
     * @var string
     */
-    private $OutlineRoot;
+    protected $OutlineRoot;
 
     /**
      * Supported image MIME types
@@ -180,18 +339,17 @@ class PMF_Export_Pdf extends FPDF
     * @param  array  $category    Current category
     * @param  string $thema       The title of the FAQ record
     * @param  array  $categories  The array with all category names
-    * @param  string $orientation The orientation of the created PDF file
-    * @param  string $unit        The unit of the created PDF file
-    * @param  string $format      The format of the created PDF file
     * @return void
     */
-    public function __construct($category = '', $thema = '', $categories = array(), $orientation = "P", $unit = "mm", $format = "A4")
+    public function __construct($category = '', $thema = '', $categories = array())
     {
+        global $PMF_LANG;
+        
         $this->category   = $category;
         $this->thema      = $thema;
         $this->categories = $categories;
         
-        parent::__construct($orientation, $unit, $format);
+        parent::__construct(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         $this->B = 0;
         $this->I = 0;
         $this->U = 0;
@@ -205,124 +363,55 @@ class PMF_Export_Pdf extends FPDF
         $this->tdheight = 0;
         $this->tdalign = "L";
         $this->tdbgcolor = false;
-    }
-
-    // PUBLIC
-
-    /**
-    * The main (X)HTML parser
-    *
-    * @param    string
-    * @access   public
-    * @return   void
-    */
-    public function WriteHTML($html)
-    {
-        // save (X)HTML and XML code ...
-        $htmlSearch  = array('&quot;', '&lt;', '&gt;', '&nbsp;', '&amp;', '\n', '&bdquo;', '&ldquo');
-        $htmlReplace = array('"', '<', '>', ' ', '&', '<br />', '"', '"');
-        $html        = str_replace($htmlSearch, $htmlReplace, $html);
-
-        $a = preg_split("/<(.*)>/U", $html, -1, PREG_SPLIT_DELIM_CAPTURE);
-        foreach($a as $i => $e) {
-            if ($i % 2 == 0) {
-                if ($this->HREF) {
-                    $this->PutLink($this->HREF,$e);
-                } elseif ($this->SRC) {
-                    $this->AddImage($this->SRC);
-                    $this->SRC = "";
-                } elseif ($this->CENTER) {
-                    $this->MultiCell(0, 1, $e, 0, "L");
-                } elseif ($this->tdbegin) {
-                    if (trim($e) != '' && $e != "&nbsp;") {
-                        $this->Cell($this->tdwidth, $this->tdheight, $e, $this->tableborder, '', $this->tdalign, $this->tdbgcolor);
-                    } elseif ($e == "&nbsp;") {
-                        $this->Cell($this->tdwidth, $this->tdheight, '', $this->tableborder, '' ,$this->tdalign, $this->tdbgcolor);
-                    }
-                } else {
-                    $this->Write(5,$e);
-                }
-            } else {
-                if ($e{0} == "/") {
-                    $this->CloseTag(strtoupper(substr($e,1)));
-                } else {
-                    $a2 = explode(" ",$e);
-                    $tag = strtoupper(array_shift($a2));
-                    $attr = array();
-                    foreach ($a2 as $v) {
-                        if (ereg('^([^=]*)=["\']?([^"\']*)["\']?$',$v,$a3)) {
-                            $attr[strtoupper($a3[1])]=$a3[2];
-                        }
-                    }
-                    $this->OpenTag($tag,$attr);
-                }
-            }
+        // Check on RTL
+        if ('rtl' == $PMF_LANG['dir']) {
+            $this->setRTL(true);
         }
     }
-
-    /**
-    * Combines the PDF bookmarks
-    *
-    * @param    string
-    * @param    int
-    * @param    int
-    * @return   void
-    * @access   public
-    */
-    function Bookmark($txt, $level = 0, $y = 0)
-    {
-        if ($y == -1) {
-            $y = $this->GetY();
-        }
-        // Add a bookmark entry once per faq, even if the faq is taking more than 1 page
-        if ((0 == count($this->outlines)) || ($this->outlines[count($this->outlines)-1]["t"] != $txt)) {
-            $this->outlines[] = array("t" => $txt, "l" => $level, "y" => $y, "p" => $this->PageNo());
-        }
-    }
-
-    // PRIVATE
 
     /**
      * The header of the PDF file
      *
-     * @return   void
-     * @access   private
+     * @return void
      */
-    function Header()
+    public function Header()
     {
         $title            = $this->categories[$this->category]['name'].': '.$this->thema;
         $currentTextColor = $this->TextColor;
         
         $this->SetTextColor(0,0,0);
-        $this->SetFont('Helvetica', 'I', 18);
+        $this->SetFont('dejavusans', 'B', 18);
         $this->MultiCell(0, 9, $title, 0, 'C', 0);
-        $this->Ln(8);
         if ($this->enableBookmarks) {
             $this->Bookmark(PMF_Utils::makeShorterText($this->thema, 5));
         }
         
         $this->TextColor = $currentTextColor;
+        $this->SetMargins(PDF_MARGIN_LEFT, $this->getLastH() + 5, PDF_MARGIN_RIGHT);
     }
 
     /**
-    * The footer of the PDF file
-    *
-    * @return   void
-    * @access   private
-    */
-    function Footer() {
-        global $cat, $PMF_CONF, $PMF_LANG;
+     * The footer of the PDF file
+     *
+     * @return void
+     */
+    public function Footer() 
+    {
+        global $PMF_LANG;
+        
+        $faqconfig = PMF_Configuration::getInstance();
+        
         $currentTextColor = $this->TextColor;
         $this->SetTextColor(0,0,0);
         $this->SetY(-25);
-        $this->SetFont("Helvetica", "I", 10);
-        $this->Cell(0, 10, $PMF_LANG["ad_gen_page"]." ".$this->PageNo()."/{nb}",0,0,"C");
+        $this->SetFont('dejavusans', '', 10);
+        $this->Cell(0, 10, $PMF_LANG['ad_gen_page'] . ' ' . $this->PageNo() . ' / ' . $this->getAliasNbPages(), 0, 0, 'C');
         $this->SetY(-20);
-        $this->SetFont("Helvetica", "B", 8);
-        $this->Cell(0, 10, "(c) ".date("Y")." ".$PMF_CONF["main.metaPublisher"]." <".$PMF_CONF['main.administrationMail'].">",0,1,"C");
+        $this->SetFont('dejavusans', 'B', 8);
+        $this->Cell(0, 10, "(c) ".date("Y")." ".$faqconfig->get('main.metaPublisher')." <".$faqconfig->get('main.administrationMail').">",0,1,"C");
         if ($this->enableBookmarks == false) {
             $this->SetY(-15);
-            $this->SetFont("Helvetica", "", 8);
+            $this->SetFont('dejavusans', '', 8);
             $baseUrl = '/index.php';
             if (is_array($this->faq) && !empty($this->faq)) {
                 $baseUrl .= '?action=artikel&amp;cat='.$this->categories[$this->category]['id'];
@@ -336,150 +425,6 @@ class PMF_Export_Pdf extends FPDF
             $this->Cell(0, 10, 'URL: '.$_url, 0, 1, 'C', 0, $_url);
         }
         $this->TextColor = $currentTextColor;
-    }
-
-    /**
-    * Locate the supported tags and set, what to do next
-    *
-    * @param    string
-    * @param    array
-    * @return   void
-    * @access   private
-    */
-    function OpenTag($tag, $attr)
-    {
-        switch ($tag) {
-            case "STRONG":
-            case "B":       $this->SetStyle('B', true);
-                            break;
-            case "EM":
-            case "I":       $this->SetStyle('I', true);
-                            break;
-            case "U":       $this->SetStyle('U', true);
-                            break;
-            case "CODE":
-            case "PRE":     $this->SetFont("Courier", "", 10);
-                            $this->SetTextColor(0,0,255);
-                            break;
-            case "A":       if (isset($attr["HREF"])) {
-                                $this->HREF = $attr["HREF"];
-                            }
-                            break;
-            case "IMG":     $this->SRC = $attr["SRC"];
-                            break;
-            case "DIV":     if (isset($attr['ALIGN']) && $attr["ALIGN"] != "justify") {
-                                $this->CENTER = $attr["ALIGN"];
-                            }
-                            break;
-            case 'OL':
-            case 'UL':      $this->SetLeftMargin($this->lMargin + 10);
-                            break;
-            case 'LI':      $this->SetX($this->GetX() - 10);
-                            $this->Cell(10, 5, chr(149), 0, 0, 'C');
-                            break;
-            case "P":
-            case "BR":      $this->Ln(5);
-                            break;
-            case "TABLE":   if (isset($attr['BORDER']) && $attr['BORDER'] != "") {
-                                $this->tableborder = $attr['BORDER'];
-                            } else {
-                                $this->tableborder = 0;
-                            }
-                            break;
-            case "TD":      if (isset($attr['WIDTH']) && $attr['WIDTH'] != "") {
-                                $this->tdwidth = ($attr['WIDTH'] / 4);
-                            } else {
-                                $this->tdwidth = 40;
-                            }
-                            if (isset($attr['HEIGHT']) && $attr['HEIGHT'] != "") {
-                                $this->tdheight = ($attr['HEIGHT'] / 6);
-                            } else {
-                                $this->tdheight = 6;
-                            }
-                            if (isset($attr['ALIGN']) && $attr['ALIGN'] != "") {
-                                $align = $attr['ALIGN'];
-                                if ($align == "LEFT") {
-                                    $this->tdalign = "L";
-                                }
-                                if ($align == "CENTER") {
-                                    $this->tdalign = "C";
-                                }
-                                if ($align == "RIGHT") {
-                                    $this->tdalign = "R";
-                                }
-                            } else {
-                                $this->tdalign = "L";
-                            }
-                            if (isset($attr['BGCOLOR']) && $attr['BGCOLOR'] != "") {
-                                $color = $this->hex2dec($attr['BGCOLOR']);
-                                $this->SetFillColor($color['R'], $color['G'], $color['B']);
-                                $this->tdbgcolor = true;
-                            }
-                            $this->tdbegin = true;
-                            break;
-            case "HR":      $this->Ln(2);
-                            $this->Line($this->GetX(), $this->GetY(), $this->GetX() + 187, $this->GetY());
-                            $this->Ln(3);
-                            break;
-            case "SUP":     $this->subWrite(true, 3);
-                            break;
-            case "SUB":     $this->subWrite(true, -3);
-                            break;
-            default:        break;
-        }
-    }
-
-    /**
-    * Finish what to do with a (X)HTML tag
-    *
-    * @param    string
-    * @return   void
-    * @access   private
-    */
-    function CloseTag($tag)
-    {
-        switch ($tag) {
-
-            case "B":
-            case "I":
-            case "U":       $this->SetStyle($tag, false);
-                            break;
-            case "STRONG":  $this->SetStyle("B", false);
-                            break;
-            case "EM":      $this->SetStyle("I", false);
-                            break;
-            case "CODE":
-            case "PRE":     $this->SetFont("Helvetica", "", 12);
-                            $this->SetTextColor(0,0,0);
-                            break;
-            case "A":       $this->HREF = "";
-                            break;
-            case "DIV":     $this->CENTER = "";
-                            break;
-            case 'OL':
-            case 'UL':      $this->SetLeftMargin($this->lMargin - 10);
-                            $this->Ln();
-                            break;
-            case 'LI':      $this->Ln();
-                            break;
-            case "TD":      $this->tdbegin = false;
-                            $this->tdwidth = 0;
-                            $this->tdheight = 0;
-                            $this->tdalign = "L";
-                            $this->tdbgcolor = false;
-                            break;
-            case "TR";      $this->Ln();
-                            break;
-            case "TABLE";   $this->tableborder = 0;
-                            break;
-            case "P":       $this->Ln(5);
-                            break;
-            case "SUP":     $this->subWrite(false, 3);
-                            break;
-            case "SUB":     $this->subWrite(false, -3);
-                            break;
-            default:        break;
-        }
     }
 
     /**
@@ -503,29 +448,6 @@ class PMF_Export_Pdf extends FPDF
     }
 
     /**
-    * Sets a link to an URL
-    *
-    * @param  string $url URL
-    * @param  string $txt the title of the link
-    * @return void
-    */
-    private function PutLink($url, $txt)
-    {
-        if (!strpos($url, 'http://')) {
-            $url = 'http://' . $_SERVER['HTTP_HOST'] . EndSlash(dirname($_SERVER['PHP_SELF'])) . $url;
-        }
-        if ($this->isFullExport) {
-            $url = str_replace('admin/', '', $url);
-        }
-
-        $this->SetTextColor(0, 0, 255);
-        $this->SetStyle('U', true);
-        $this->Write(5, $txt, $url);
-        $this->SetStyle('U', false);
-        $this->SetTextColor(0);
-    }
-
-    /**
     * Adds a image
     *
     * @param    string  path to the image
@@ -535,7 +457,7 @@ class PMF_Export_Pdf extends FPDF
     function AddImage($image)
     {
         // Check, if image is stored locally or not
-        if ('http' != substr($image, 0, 4)) {
+        if ('http' != PMF_String::substr($image, 0, 4)) {
             // Please note that the image must be accessible by HTTP NOT ONLY by HTTPS
              $image = 'http://' . EndSlash($_SERVER['HTTP_HOST']) . $image; 
         }
@@ -597,144 +519,4 @@ class PMF_Export_Pdf extends FPDF
         // Unset the friendly User Agent restoring the original UA
         ini_set('user_agent', $ua);
     }
-
-    /**
-    * Place a string at a superscripted or subscripted position.
-    *
-    * @param    boolean
-    * @param    int         superscripted or subscripted position
-    * @return   void
-    * @access   private
-    */
-    function subWrite($replace = false, $offset = 0)
-    {
-        if ($replace == true) {
-            $this->SetFontSize(6);
-            $offset = (((-6) / $this->k) * 0.3) + ($offset / $this->k);
-            $subX = $this->x;
-            $subY = $this->y;
-            $this->SetXY($subX, $subY - $offset);
-        } elseif ($replace == false) {
-            $subX = $this->x;
-            $subY = $this->y;
-            $this->SetXY($subX, $subY + $offset);
-            $this->SetFontSize(12);
-        }
-    }
-
-    /**
-    *
-    *
-    * @return   void
-    * @access   private
-    */
-    function _putbookmarks()
-    {
-        $nb = count($this->outlines);
-        if ($nb == 0) {
-            return;
-        }
-        $lru = array();
-        $level = 0;
-        foreach ($this->outlines as $i=>$o) {
-            if ($o['l'] > 0) {
-                $parent = $lru[$o['l']-1];
-                $this->outlines[$i]['parent'] = $parent;
-                $this->outlines[$parent]['last'] = $i;
-                if ($o['l'] > $level) {
-                    $this->outlines[$parent]['first'] = $i;
-                }
-            } else {
-                $this->outlines[$i]['parent'] = $nb;
-            }
-            if($o['l'] <= $level and $i > 0) {
-                //Set prev and next pointers
-                $prev = $lru[$o['l']];
-                $this->outlines[$prev]['next'] = $i;
-                $this->outlines[$i]['prev'] = $prev;
-            }
-            $lru[$o['l']] = $i;
-            $level = $o['l'];
-        }
-
-        //Outline items
-        $n = $this->n + 1;
-        foreach($this->outlines as $i=>$o) {
-            $this->_newobj();
-            $this->_out('<</Title '.$this->_textstring($o['t']));
-            $this->_out('/Parent '.($n+$o['parent']).' 0 R');
-            if (isset($o['prev'])) {
-                $this->_out('/Prev '.($n+$o['prev']).' 0 R');
-            }
-            if (isset($o['next'])) {
-                $this->_out('/Next '.($n+$o['next']).' 0 R');
-            }
-            if (isset($o['first'])) {
-                $this->_out('/First '.($n+$o['first']).' 0 R');
-            }
-            if (isset($o['last'])) {
-                $this->_out('/Last '.($n+$o['last']).' 0 R');
-            }
-            $this->_out(sprintf('/Dest [%d 0 R /XYZ 0 %.2f null]', 1 + 2 * $o['p'], $this->h * $this->k));
-            $this->_out('/Count 0>>');
-            $this->_out('endobj');
-        }
-
-        //Outline root
-        $this->_newobj();
-        $this->OutlineRoot = $this->n;
-        $this->_out('<</Type /Outlines /First '.$n.' 0 R');
-        $this->_out('/Last '.($n + $lru[0]).' 0 R>>');
-        $this->_out('endobj');
-    }
-
-    /**
-    *
-    *
-    * @return   void
-    * @access   private
-    */
-    function _putresources()
-    {
-        parent::_putresources();
-        $this->_putbookmarks();
-    }
-
-    /**
-    *
-    *
-    * @return   void
-    * @access   private
-    */
-    function _putcatalog()
-    {
-        parent::_putcatalog();
-        if(count($this->outlines) > 0) {
-            $this->_out('/Outlines '.$this->OutlineRoot.' 0 R');
-            $this->_out('/PageMode /UseOutlines');
-        }
-    }
-
-    /**
-    * Converts hex colors to decimal rgb numbers
-    *
-    * @param    string
-    * @return   array
-    * @access   private
-    */
-    function hex2dec($color = "#000000")
-    {
-        $R = substr($color, 1, 2);
-        $red = hexdec($R);
-        $G = substr($color, 3, 2);
-        $green = hexdec($G);
-        $B = substr($color, 5, 2);
-        $blue = hexdec($B);
-        $tbl_color = array();
-        $tbl_color['R'] = $red;
-        $tbl_color['G'] = $green;
-        $tbl_color['B'] = $blue;
-        return $tbl_color;
-    }
-
 }

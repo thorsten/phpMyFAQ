@@ -5,7 +5,7 @@
  * @package    phpMyFAQ
  * @subpackage PMF_DB
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author     Johannes Schlüter <johannes@php.net>
+ * @author     Johannes Schlï¿½ter <johannes@php.net>
  * @since      2005-06-27
  * @copyright  2005-2009 phpMyFAQ Team
  * @version    SVN: $Id$
@@ -216,10 +216,10 @@ class PMF_DB_Sqlite implements PMF_DB_Driver
             foreach ($joinAssoc as $joinedFields) {
                 $join .= $joinedFields.' AND ';
                 }
-            $joined .= substr($join, 0, -4);
+            $joined .= PMF_String::substr($join, 0, -4);
         }
 
-        $keys = preg_split("/\s+/", $string);
+        $keys = PMF_String::preg_split("/\s+/", $string);
         $numKeys = count($keys);
         $numMatch = count($match);
 

@@ -19,7 +19,7 @@
  * under the License.
  */
 
-$PMF_LANG["metaCharset"] = "iso-8859-1";
+$PMF_LANG["metaCharset"] = "UTF-8";
 $PMF_LANG["metaLanguage"] = "id";
 $PMF_LANG["language"] = "indonesian";
 // ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
@@ -194,7 +194,7 @@ atau lebih.</p><p><strong>Perhatian:</strong> Kriteria masukan anda harus
 mempunyai minimal 4 karakter, jika tidak permintaan pencarian anda akan
 ditolak.</p>";
 
-// Men�
+// Menï¿½
 $PMF_LANG["ad"] = "BAGIAN ADMINISTRASI";
 $PMF_LANG["ad_menu_user_administration"] = "Administrasi Pengguna";
 $PMF_LANG["ad_menu_entry_aprove"] = "Persetujuan Materi";

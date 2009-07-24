@@ -187,7 +187,7 @@ class PMF_Utils
      */
     public static function makeShorterText($str, $char)
     {
-        $str = preg_replace('/\s+/', ' ', $str);
+        $str = PMF_String::preg_replace('/\s+/', ' ', $str);
         $arrStr = explode(' ', $str);
         $shortStr = '';
         $num = count($arrStr);

@@ -35,7 +35,7 @@ $question = PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRIPPED
 $code     = PMF_Filter::filterInput(INPUT_POST, 'captcha', FILTER_SANITIZE_STRING);
 
 if (!is_null($name) && !is_null($email) && !is_null($question) && IPCheck($_SERVER['REMOTE_ADDR']) && 
-    checkBannedWord(htmlspecialchars($question)) && $captcha->checkCaptchaCode($code)) {
+    checkBannedWord(PMF_String::htmlspecialchars($question)) && $captcha->checkCaptchaCode($code)) {
 
     $mail = new PMF_Mail();
     $mail->unsetFrom();

@@ -20,7 +20,7 @@
  * under the License.
  */
 
-$PMF_LANG["metaCharset"] = "iso-8859-1";
+$PMF_LANG["metaCharset"] = "UTF-8";
 $PMF_LANG["metaLanguage"] = "pt";
 $PMF_LANG["language"] = "Portuguese";
 // ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
@@ -613,7 +613,7 @@ $PMF_LANG['msgAllCategories'] = '... todas as categorias';
 $PMF_LANG['ad_you_should_update'] = 'O seu phpMyFAQ est&aacute; desactualizado. Deve actualizar para a &uacute;ltima vers&atilde;o dispon&iacute;vel.';
 $PMF_LANG['msgAdvancedSearch'] = 'Pesquisa avan&ccedil;ada';
 
-// added v1.6.1 - 2006-04-25 by Matteo and Thorsten
+// added v1.6.1 - 2006-04-25 by MatteoÂ andÂ Thorsten
 $PMF_LANG['spamControlCenter'] = 'Centro de controlo de Spam';
 $LANG_CONF["spam.enableSafeEmail"] = array(0 => "checkbox", 1 => "Mostrar email do utilizador de forma segura (por defeito: activado).");
 $LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "Verificar conte&uacute;do de formul&aacute;rios p&uacute;blicos por palavras banidas (por defeito: activado).");

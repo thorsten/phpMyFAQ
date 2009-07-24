@@ -555,10 +555,10 @@ function checkBannedWord($content)
 
     $bannedWords = getBannedWords();
     // We just search a match of, at least, one banned word into $content
-    $content = strtolower($content);
+    $content = PMF_String::strtolower($content);
     if (is_array($bannedWords)) {
         foreach ($bannedWords as $bannedWord) {
-            if (strpos($content, strtolower($bannedWord)) !== false) {
+            if (PMF_String::strpos($content, PMF_String::strtolower($bannedWord)) !== false) {
                 return false;
             }
         }
@@ -615,7 +615,7 @@ function getHighlightedBannedWords($content)
     }
     // Use the CSS "highlight" class to highlight the banned words
     if (count($bannedHTMLHiliWords)>0) {
-        return preg_replace($bannedHTMLHiliWords, "<span class=\"highlight\">\\1</span>", $content);
+        return PMF_String::preg_replace($bannedHTMLHiliWords, "<span class=\"highlight\">\\1</span>", $content);
     }
     else {
         return $content;
@@ -650,8 +650,8 @@ function hilight($content)
     $string = str_replace("&nbsp;", " ", $string);
 
     // Making the PHP generated stuff XHTML compatible
-    $string = preg_replace('/<FONT COLOR="/i', '<span style="color:', $string);
-    $string = preg_replace('/<\/FONT>/i', '</span>', $string);
+    $string = PMF_String::preg_replace('/<FONT COLOR="/i', '<span style="color:', $string);
+    $string = PMF_String::preg_replace('/<\/FONT>/i', '</span>', $string);
 
     return $string;
 }
@@ -736,7 +736,7 @@ function getUsersOnline($activityTimeWindow = 300)
  */
 function EndSlash($string)
 {
-    if (substr($string, strlen($string)-1, 1) != "/" ) {
+    if (PMF_String::substr($string, PMF_String::strlen($string)-1, 1) != "/" ) {
         $string .= "/";
     }
     return $string;
@@ -769,27 +769,27 @@ if (!function_exists('quoted_printable_encode')) {
 	function quoted_printable_encode($return = '')
 	{
 	    // Ersetzen der lt. RFC 1521 noetigen Zeichen
-	    $return = preg_replace('/([^\t\x20\x2E\041-\074\076-\176])/ie', "sprintf('=%2X',ord('\\1'))", $return);
-	    $return = preg_replace('!=\ ([A-F0-9])!', '=0\\1', $return);
+	    $return = PMF_String::preg_replace('/([^\t\x20\x2E\041-\074\076-\176])/ie', "sprintf('=%2X',ord('\\1'))", $return);
+	    $return = PMF_String::preg_replace('!=\ ([A-F0-9])!', '=0\\1', $return);
 	    // Einfuegen von QP-Breaks (=\r\n)
-	    if (strlen($return) > 75) {
-		$length = strlen($return); $offset = 0;
+	    if (PMF_String::strlen($return) > 75) {
+		$length = PMF_String::strlen($return); $offset = 0;
 		do {
 		    $step = 76;
 		    $add_mode = (($offset+$step) < $length) ? 1 : 0;
-		    $auszug = substr($return, $offset, $step);
-		    if (preg_match('!\=$!', $auszug))   $step = 75;
-		    if (preg_match('!\=.$!', $auszug))  $step = 74;
-		    if (preg_match('!\=..$!', $auszug)) $step = 73;
-		    $auszug = substr($return, $offset, $step);
+		    $auszug = PMF_String::substr($return, $offset, $step);
+		    if (PMF_String::preg_match('!\=$!', $auszug))   $step = 75;
+		    if (PMF_String::preg_match('!\=.$!', $auszug))  $step = 74;
+		    if (PMF_String::preg_match('!\=..$!', $auszug)) $step = 73;
+		    $auszug = PMF_String::substr($return, $offset, $step);
 		    $offset += $step;
 		    $schachtel .= $auszug;
 		    if (1 == $add_mode) $schachtel.= '='."\r\n";
 		    } while ($offset < $length);
 		$return = $schachtel;
 		}
-	    $return = preg_replace('!\.$!', '. ', $return);
-	    return preg_replace('!(\r\n|\r|\n)$!', '', $return)."\r\n";
+	    $return = PMF_String::preg_replace('!\.$!', '. ', $return);
+	    return PMF_String::preg_replace('!(\r\n|\r|\n)$!', '', $return)."\r\n";
 	}
 }
 
@@ -874,11 +874,11 @@ function getSearchData($searchterm, $asResource = false, $cat = '%', $allLanguag
     }
 
     if (0 == $num) {
-        $keys = preg_split("/\s+/", $searchterm);
+        $keys = PMF_String::preg_split("/\s+/", $searchterm);
         $numKeys = count($keys);
         $where = '';
         for ($i = 0; $i < $numKeys; $i++) {
-            if (strlen($where) != 0 ) {
+            if (PMF_String::strlen($where) != 0 ) {
                 $where = $where." OR ";
             }
             $where = $where.'('.SQLPREFIX."faqdata.thema LIKE '%".$keys[$i]."%' OR ".SQLPREFIX."faqdata.content LIKE '%".$keys[$i]."%' OR ".SQLPREFIX."faqdata.keywords LIKE '%".$keys[$i]."%')";
@@ -1002,17 +1002,17 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
                 $searchterm = preg_quote($searchterm, '/');
                 $searchItems = explode(' ', $searchterm);
 
-                if (strlen($searchItems[0]) > 1) {
+                if (PMF_String::strlen($searchItems[0]) > 1) {
                     foreach ($searchItems as $item) {
-                        if (strlen($item) > 2) {
-                            $thema = preg_replace_callback('/'
+                        if (PMF_String::strlen($item) > 2) {
+                            $thema = PMF_String::preg_replace_callback('/'
                                 .'('.$item.'="[^"]*")|'
                                 .'((href|src|title|alt|class|style|id|name|dir|onclick|ondblclick|onmousedown|onmouseup|onmouseover|onmousemove|onmouseout|onkeypress|onkeydown|onkeyup)="[^"]*'.$item.'[^"]*")|'
                                 .'('.$item.')'
                                 .'/mis',
                                 "highlight_no_links",
                                 $thema );
-                            $content = preg_replace_callback('/'
+                            $content = PMF_String::preg_replace_callback('/'
                                 .'('.$item.'="[^"]*")|'
                                 .'((href|src|title|alt|class|style|id|name|dir|onclick|ondblclick|onmousedown|onmouseup|onmouseover|onmousemove|onmouseout|onkeypress|onkeydown|onkeyup)="[^"]*'.$item.'[^"]*")|'
                                 .'('.$item.')'
@@ -1363,10 +1363,10 @@ function PageSpan($code, $start, $end, $akt)
  */
 function FileToDate($file, $endOfDay = false)
 {
-    if (strlen($file) >= 16) {
-        $tag = substr($file, 8, 2);
-        $mon = substr($file, 10, 2);
-        $yea = substr($file, 12, 4);
+    if (PMF_String::strlen($file) >= 16) {
+        $tag = PMF_String::substr($file, 8, 2);
+        $mon = PMF_String::substr($file, 10, 2);
+        $yea = PMF_String::substr($file, 12, 4);
         if (!$endOfDay) {
             $tim = mktime(0, 0, 0, $mon, $tag, $yea);
         } else {
@@ -1461,7 +1461,7 @@ function build_insert($query, $table)
 function safeSQL($string)
 {
     $str = "";
-    $length = strlen($string);
+    $length = PMF_String::strlen($string);
     for ($i = 0; $i < $length; $i++) {
         $char = $string[$i];
         switch ($char) {

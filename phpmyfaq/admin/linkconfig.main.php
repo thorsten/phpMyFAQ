@@ -309,10 +309,10 @@ showListTypeSelection();
         #<?php print $row->id; ?></td>
 
         <!-- URL to match -->
-        <td><input type="text" name="url[<?php print $id; ?>]"  value="<?php print htmlspecialchars($row->url); ?>"  <?php print ($_owner ? '' : 'disabled'); ?>  ></td>
+        <td><input type="text" name="url[<?php print $id; ?>]"  value="<?php print PMF_String::htmlspecialchars($row->url); ?>"  <?php print ($_owner ? '' : 'disabled'); ?>  ></td>
 
         <!-- Reason to warn/ignore -->
-        <td><input type="text" name="reason[<?php print $id; ?>]" value="<?php print htmlspecialchars($row->reason); ?>"  <?php print ($_owner ? '' : 'disabled'); ?>  ></td>
+        <td><input type="text" name="reason[<?php print $id; ?>]" value="<?php print PMF_String::htmlspecialchars($row->reason); ?>"  <?php print ($_owner ? '' : 'disabled'); ?>  ></td>
 
         <!-- Lock entry / chown entry -->
         <td>

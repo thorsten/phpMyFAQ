@@ -22,7 +22,7 @@
  * under the License.
  */
 
-$PMF_LANG["metaCharset"] = "iso-8859-15";
+$PMF_LANG["metaCharset"] = "UTF-8";
 $PMF_LANG["metaLanguage"] = "it";
 $PMF_LANG["language"] = "Italian";
 // ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
@@ -119,7 +119,7 @@ $PMF_LANG["msgAskThx4Mail"] = "<h2>Grazie per aver inviato la tua domanda!</h2>"
 $PMF_LANG["msgDate_User"] = "Data / Utente";
 $PMF_LANG["msgQuestion2"] = "Domanda";
 $PMF_LANG["msg2answer"] = "Rispondi";
-$PMF_LANG["msgQuestionText"] = "Qui puoi vedere le domande fatte da altri utenti. Puoi rispondere a queste domande perchÈ la risposta potrebbe essere inserita nelle FAQ.";
+$PMF_LANG["msgQuestionText"] = "Qui puoi vedere le domande fatte da altri utenti. Puoi rispondere a queste domande perch√© la risposta potrebbe essere inserita nelle FAQ.";
 
 // Help
 $PMF_LANG["msgHelpText"] = "<p>L'accesso alle FAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions, in italiano le <em>Domande Pi&ugrave; frequenti</em>) &egrave; semplice. Puoi effettuare ricerche tramite:<ul><li>le <strong><a href=\"?action=show\">categorie</a></strong>;</li><li>il <strong><a href=\"?action=search\">motore di ricerca</a></strong>, usando opportune parole chiave.</li></ul></p>";
@@ -619,12 +619,12 @@ $PMF_LANG['msgAllCategories'] = 'Tutte le categorie';
 $PMF_LANG['ad_you_should_update'] = 'La tua installazione di phpMyFAQ non &egrave; aggiornata. Dovresti aggiornarla all\'ultima versione disponibile.';
 $PMF_LANG['msgAdvancedSearch'] = 'Ricerca avanzata';
 
-// added v1.6.1 - 2006-04-25 by Matteo†and†Thorsten
+// added v1.6.1 - 2006-04-25 by Matteo¬†and¬†Thorsten
 $PMF_LANG['spamControlCenter'] = 'Centro di controllo contro lo Spam';
 $LANG_CONF['spam.enableSafeEmail'] = array(0 => 'checkbox', 1 => 'Stampa l\'email dell\'utente in maniera sicura (predefinito: abilitato).');
 $LANG_CONF['spam.checkBannedWords'] = array(0 => 'checkbox', 1 => 'Controlla se il testo delle form pubbliche contenga parole vietate (predefinito: abilitato).');
 $LANG_CONF['spam.enableCatpchaCode'] = array(0 => 'checkbox', 1 => 'Usa un codice <a href="http://it.wikipedia.org/wiki/Captcha" title="Vai alla definizione di Wikipedia" target="_blank">captcha</a> per permettere la sottomissione delle form pubbliche (predefinito: abilitato).');
-$PMF_LANG['ad_session_expiring'] = 'Questa sessione scadr‡ tra %d minuti: vuoi continuare a lavorare?';
+$PMF_LANG['ad_session_expiring'] = 'Questa sessione scadr√† tra %d minuti: vuoi continuare a lavorare?';
 
 // added v1.6.2 - 2006-06-13 by Matteo
 $PMF_LANG['ad_stat_management'] = 'Gestione delle sessioni';
@@ -677,8 +677,8 @@ $PMF_LANG['ad_linkcheck_config_th_url'] = 'URL';
 $PMF_LANG['ad_linkcheck_config_th_reason'] = 'Motivo';
 $PMF_LANG['ad_linkcheck_config_th_owner'] = 'Responsabile della voce';
 $PMF_LANG['ad_linkcheck_config_th_enabled'] = 'Spunta per ablitare questa URL';
-$PMF_LANG['ad_linkcheck_config_th_locked'] = 'Spunta per avere la responsabilit‡ esclusiva.';
-$PMF_LANG['ad_linkcheck_config_th_chown'] = 'Spunta per ottenere la responsabilit‡.';
+$PMF_LANG['ad_linkcheck_config_th_locked'] = 'Spunta per avere la responsabilit√† esclusiva.';
+$PMF_LANG['ad_linkcheck_config_th_chown'] = 'Spunta per ottenere la responsabilit√†.';
 $PMF_LANG['msgNewQuestionVisible'] = 'La domanda deve essere verificata prima di essere pubblicata.';
 $PMF_LANG['msgQuestionsWaiting'] = 'In attesa di essere pubblicate dagli amministratori: ';
 $PMF_LANG['ad_entry_visibility'] = 'Pubblica';
@@ -791,10 +791,10 @@ $PMF_LANG['ad_categ_trans_1'] = 'Traduci la categoria ';
 $PMF_LANG['ad_categ_trans_2'] = '';
 $PMF_LANG['ad_categ_translatecateg'] = 'Traduci questa categoria';
 $PMF_LANG['ad_categ_translate'] = 'Traduci';
-$PMF_LANG['ad_categ_transalready'] = 'Gi‡ tradotta in: ';
+$PMF_LANG['ad_categ_transalready'] = 'Gi√† tradotta in: ';
 $PMF_LANG["ad_categ_deletealllang"] = 'Cancellare in tutte le lingue?';
 $PMF_LANG["ad_categ_deletethislang"] = 'Cancellare solo questa lingua?';
-$PMF_LANG["ad_categ_translated"] = "La categoria Ë stata tradotta.";
+$PMF_LANG["ad_categ_translated"] = "La categoria √® stata tradotta.";
 
 // added v2.0.0 - 2006-09-21 by Rudi
 $PMF_LANG["ad_categ_show"] = "Sommario";
@@ -817,7 +817,7 @@ $PMF_LANG['ad_entry_intlink'] = 'Seleziona una FAQ per aggiungerla come link...'
 
 //added 2.0.0 - 2006-10-10 by Rudi
 $PMF_LANG["ad_categ_paste2"] = 'Incolla dopo';
-$PMF_LANG["ad_categ_remark_move"] = 'Lo scambio di due categorie Ë possibile solo con elementi dello stesso livello.';
+$PMF_LANG["ad_categ_remark_move"] = 'Lo scambio di due categorie √® possibile solo con elementi dello stesso livello.';
 $PMF_LANG["ad_categ_remark_overview"] = "Viene mostrato l'ordine corretto delle categorie se sono state definite tutte le categorie per la lingua corrente (vedi prima colonna).";
 
 // added v2.0.0 - 2006-10-15 by Matteo
@@ -894,12 +894,12 @@ $PMF_LANG['ad_system_info'] = 'Informazioni di sistema';
 // added 2.5.0-alpha - 2008-01-25 by Elger
 $PMF_LANG['msgRegisterUser'] = 'Vuoi registrarti?';
 $PMF_LANG["ad_user_loginname"] = 'Pseudonimo:';
-$PMF_LANG['errorRegistration'] = 'Questo campo Ë necessario!';
+$PMF_LANG['errorRegistration'] = 'Questo campo √® necessario!';
 $PMF_LANG['submitRegister'] = 'Registrati';
 $PMF_LANG['msgUserData'] = 'Informazioni richieste per la registrazione';
 $PMF_LANG['captchaError'] = 'Inserisci il <strong>codice <a href=\"http://it.wikipedia.org/wiki/Captcha\" title=\"Vai alla definizione di Wikipedia\" target=\"_blank\">captcha</a> corretto</strong>!';
 $PMF_LANG['msgRegError'] = 'Questi gli errori trovati, correggili:';
-$PMF_LANG['successMessage'] = 'La tua registrazione Ë stata effettuata! Riceverai una email di conferma con i tuoi dati di accesso dopo l\'approvazione!';
+$PMF_LANG['successMessage'] = 'La tua registrazione √® stata effettuata! Riceverai una email di conferma con i tuoi dati di accesso dopo l\'approvazione!';
 $PMF_LANG['msgRegThankYou'] = 'Grazie per esserti registrato';
 $PMF_LANG['emailRegSubject'] = '[%sitename%] Registrazione nuovo utente';
 

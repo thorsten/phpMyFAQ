@@ -19,7 +19,7 @@
  * under the License.
  */
 
-$PMF_LANG["metaCharset"] = "iso-8859-2";
+$PMF_LANG["metaCharset"] = "UTF-8";
 $PMF_LANG["metaLanguage"] = "sr";
 $PMF_LANG["language"] = "Serbian";
 // ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
@@ -123,8 +123,8 @@ $PMF_LANG["msgQuestionText"] = "Ovde mo&#382;ete videti pitanja postavljena od s
 $PMF_LANG["msgHelpText"] = "<strong>Struktura FAQ-a je jednostavna. Mo&#382;ete pregledati <strong><a href=\"?action=show\">kategorije</a></strong>, ili iskoristiti <strong><a href=\"?action=search\">FAQ pretra&#382;iva&#269;</a></strong> da na&#273;ete odre&#269;ene re&#269;i";
 
 // Contact
-$PMF_LANG["msgContactEMail"] = "pošaljite webmasteru:";
-$PMF_LANG["msgMessage"] = "Vaša poruka:";
+$PMF_LANG["msgContactEMail"] = "poÂšaljite webmasteru:";
+$PMF_LANG["msgMessage"] = "VaÂša poruka:";
 
 // Startseite
 $PMF_LANG["msgNews"] = " Novosti";
@@ -814,9 +814,9 @@ $PMF_LANG["ad_categ_remark_overview"] = "Ta&#269;an red kategorija &#269;e biti 
 
 // added v2.0.0 - 2006-10-15 by Matteo
 $PMF_LANG['msgUsersOnline'] = ' :: %d Gostiju i %d Registrovanih';
-$PMF_LANG['ad_adminlog_del_older_30d'] = 'Obriši odmah logove starije od 30 dana';
+$PMF_LANG['ad_adminlog_del_older_30d'] = 'ObriÂši odmah logove starije od 30 dana';
 $PMF_LANG['ad_adminlog_delete_success'] = 'Stariji logovi obrisani.';
-$PMF_LANG['ad_adminlog_delete_failure'] = 'Pojavila se greška.';
+$PMF_LANG['ad_adminlog_delete_failure'] = 'Pojavila se greÂška.';
 
 // added 2.0.0 - 2006-11-19 by Thorsten
 $PMF_LANG['opensearch_plugin_install'] = 'Dodaj ovu pretragu u Firefox';
@@ -828,21 +828,21 @@ $PMF_LANG['ad_quick_group'] = 'Dodaj novu grupu';
 
 // added v2.0.0 - 2006-12-30 by Matteo
 $PMF_LANG['msgNewTranslationHeader'] = 'Predlog prevoda';
-$PMF_LANG['msgNewTranslationAddon'] = 'Vaš prevod nece odmah biti objavljen, ali ce ga daministrator objaviti posle revizije. Zahtevana polja su <strong>Vaše Ime</strong>, <strong>Vaša email adresa</strong>, <strong>naslov prevoda</strong> i <strong>Vaš faq prevod</strong>. Molimo odvojute kljucne reci samo razmakom.';
+$PMF_LANG['msgNewTranslationAddon'] = 'VaÂš prevod nece odmah biti objavljen, ali ce ga daministrator objaviti posle revizije. Zahtevana polja su <strong>VaÂše Ime</strong>, <strong>VaÂša email adresa</strong>, <strong>naslov prevoda</strong> i <strong>VaÂš faq prevod</strong>. Molimo odvojute kljucne reci samo razmakom.';
 $PMF_LANG['msgNewTransSourcePane'] = 'Original';
 $PMF_LANG['msgNewTranslationPane'] = 'Prevod';
 $PMF_LANG['msgNewTranslationName'] = "Your Name:";
 $PMF_LANG['msgNewTranslationMail'] = "Your email address:";
 $PMF_LANG['msgNewTranslationKeywords'] = "Keywords:";
-$PMF_LANG['msgNewTranslationSubmit'] = 'Pošaljite predlog';
-$PMF_LANG['msgTranslate'] = 'Predložite prevod za';
+$PMF_LANG['msgNewTranslationSubmit'] = 'PoÂšaljite predlog';
+$PMF_LANG['msgTranslate'] = 'PredloÂžite prevod za';
 $PMF_LANG['msgTranslateSubmit'] = 'Krenite sa prevodenjem...';
-$PMF_LANG['msgNewTranslationThanks'] = "Hvala Vam za Vaš predloženi predlog!";
+$PMF_LANG['msgNewTranslationThanks'] = "Hvala Vam za VaÂš predloÂženi predlog!";
 
 // added v2.0.0 - 2007-02-27 by Matteo
 $PMF_LANG["rightsLanguage"]['addgroup'] = "dodajte grupne naloge";
 $PMF_LANG["rightsLanguage"]['editgroup'] = "izmenite grupne naloge";
-$PMF_LANG["rightsLanguage"]['delgroup'] = "obrišite grupne naloge";
+$PMF_LANG["rightsLanguage"]['delgroup'] = "obriÂšite grupne naloge";
 
 // added v2.0.0 - 2007-02-27 by Thorsten
 $PMF_LANG['ad_news_link_parent'] = 'Link se otvara u parent prozoru';

@@ -241,7 +241,7 @@ class PMF_Link
     {
         $itemTitle = trim($this->itemTitle);
         // Lower the case (aesthetic)
-        $itemTitle = strtolower($itemTitle);
+        $itemTitle = PMF_String::strtolower($itemTitle);
         // Use '_' for some other characters for:
         // 1. avoiding regexp match break;
         // 2. improving the reading.
@@ -249,17 +249,17 @@ class PMF_Link
                                  '_', $itemTitle);
         // 1. Remove any CR LF sequence
         // 2. Use a '-' for the words separation
-        $itemTitle = preg_replace('/\s/m', '-', $itemTitle);
+        $itemTitle = PMF_String::preg_replace('/\s/m', '-', $itemTitle);
         // Hack: remove some chars for having a better readable title
         $itemTitle = str_replace(array('+', ',', ';', ':', '.', '?', '!', '"', '(', ')', '[', ']', '{', '}', '<', '>'),
                                  '',
                                  $itemTitle);
         // Hack: move some chars to "similar" but plain ASCII chars
-        $itemTitle = str_replace(array('à', 'è', 'é', 'ì', 'ò', 'ù', 'ä', 'ö', 'ü', 'ß', 'Ä', 'Ö', 'Ü'),
+        $itemTitle = str_replace(array('Ã ', 'Ã¨', 'Ã©', 'Ã¬', 'Ã²', 'Ã¹', 'Ã¤', 'Ã¶', 'Ã¼', 'ÃŸ', 'Ã„', 'Ã–', 'Ãœ'),
                                  array('a', 'e', 'e', 'i', 'o', 'u', 'ae', 'oe', 'ue', 'ss', 'Ae', 'Oe', 'Ue'),
                                  $itemTitle);
         // Clean up
-        $itemTitle = preg_replace('/-[\-]+/m', '-', $itemTitle);
+        $itemTitle = PMF_String::preg_replace('/-[\-]+/m', '-', $itemTitle);
 
         return rawurlencode($itemTitle);
     }
@@ -363,7 +363,7 @@ class PMF_Link
             $htmlAnchor .= ' class="'.$this->class.'"';
         }
         if (!empty($this->tooltip)) {
-            $htmlAnchor .= ' title="'.htmlspecialchars($this->tooltip).'"';
+            $htmlAnchor .= ' title="'.PMF_String::htmlspecialchars($this->tooltip).'"';
         }
         if (!empty($this->name)) {
                 $htmlAnchor .= ' name="'.$this->name.'"';

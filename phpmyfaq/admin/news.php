@@ -41,8 +41,8 @@ if ('addnews' == $action && $permission["addnews"]) {
         <label class="lefteditor" for="header"><?php print $PMF_LANG['ad_news_header']; ?></label>
         <textarea name="header" style="width: 390px; height: 50px;" cols="2" rows="50"></textarea><br />
 
-        <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
-        <textarea id="content" name="content" cols="84" rows="5"></textarea><br />
+        <label for="content"><?php print $PMF_LANG['ad_news_text']; ?></label>
+        <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript><textarea id="content" name="content" cols="84" rows="5"></textarea><br />
 
         <label class="lefteditor" for="authorName"><?php print $PMF_LANG['ad_news_author_name']; ?></label>
         <input type="text" name="authorName" style="width: 390px;" value="<?php print $user->getUserData('display_name'); ?>"/><br />
@@ -126,8 +126,8 @@ if ('addnews' == $action && $permission["addnews"]) {
         <label class="lefteditor" for="header"><?php print $PMF_LANG['ad_news_header']; ?></label>
         <textarea name="header" style="width: 390px; height: 50px;" cols="2" rows="50"><?php if (isset($newsData['header'])) { print $newsData['header']; } ?></textarea><br />
 
-        <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
-        <textarea id="content" name="content" cols="84" rows="5"><?php if (isset($newsData['content'])) { print htmlspecialchars($newsData['content'], ENT_QUOTES); } ?></textarea><br />
+        <label for="content"><?php print $PMF_LANG['ad_news_text']; ?></label>
+        <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript><textarea id="content" name="content" cols="84" rows="5"><?php if (isset($newsData['content'])) { print htmlspecialchars($newsData['content'], ENT_QUOTES); } ?></textarea><br />
 
         <label class="lefteditor" for="authorName"><?php print $PMF_LANG['ad_news_author_name']; ?></label>
         <input type="text" name="authorName" style="width: 390px;" value="<?php print $newsData['authorName']; ?>" /><br />
@@ -183,7 +183,7 @@ if ('addnews' == $action && $permission["addnews"]) {
     $dateStart = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING, '00000000000000');
     $dateEnd   = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING, '99991231235959');
     $header    = PMF_Filter::filterInput(INPUT_POST, 'header', FILTER_SANITIZE_STRIPPED);
-    $content   = PMF_Filter::filterInput(INPUT_POST, 'content', FILTER_SANITIZE_SPECIAL_CHARS);
+    $content   = PMF_Filter::filterInput(INPUT_POST, 'content', FILTER_SANITIZE_STRIPPED);
     $author    = PMF_Filter::filterInput(INPUT_POST, 'authorName', FILTER_SANITIZE_STRIPPED);
     $email     = PMF_Filter::filterInput(INPUT_POST, 'authorEmail', FILTER_VALIDATE_EMAIL);
     $active    = PMF_Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_STRING);
@@ -194,8 +194,8 @@ if ('addnews' == $action && $permission["addnews"]) {
     
     $newsData = array(
         'lang'          => $LANGCODE,
-        'header'        => html_entity_decode($header),
-        'content'       => html_entity_decode($content),
+        'header'        => $header,
+        'content'       => $content,
         'authorName'    => $author,
         'authorEmail'   => $email,
         'active'        => (is_null($active)) ? 'n' : 'y',
@@ -217,7 +217,7 @@ if ('addnews' == $action && $permission["addnews"]) {
     $dateStart = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING, '00000000000000');
     $dateEnd   = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING, '99991231235959');
     $header    = PMF_Filter::filterInput(INPUT_POST, 'header', FILTER_SANITIZE_STRIPPED);
-    $content   = PMF_Filter::filterInput(INPUT_POST, 'content', FILTER_SANITIZE_SPECIAL_CHARS);
+    $content   = PMF_Filter::filterInput(INPUT_POST, 'content', FILTER_SANITIZE_STRIPPED);
     $author    = PMF_Filter::filterInput(INPUT_POST, 'authorName', FILTER_SANITIZE_STRIPPED);
     $email     = PMF_Filter::filterInput(INPUT_POST, 'authorEmail', FILTER_VALIDATE_EMAIL);
     $active    = PMF_Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_STRING);
@@ -228,8 +228,8 @@ if ('addnews' == $action && $permission["addnews"]) {
     
     $newsData = array(
         'lang'          => $LANGCODE,
-        'header'        => html_entity_decode($header),
-        'content'       => html_entity_decode($content),
+        'header'        => $header,
+        'content'       => $content,
         'authorName'    => $author,
         'authorEmail'   => $email,
         'active'        => (is_null($active)) ? 'n' : 'y',

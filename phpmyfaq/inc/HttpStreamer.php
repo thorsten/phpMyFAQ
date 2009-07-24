@@ -219,7 +219,7 @@ class PMF_HttpStreamer
              isset($_SERVER["HTTP_USER_AGENT"]) && !(strpos($_SERVER["HTTP_USER_AGENT"], "MSIE") === false)) {
             header("Content-Type: application/force-download");
         }
-        // RFC2616, §19.5.1: $filename must be a quoted-string
+        // RFC2616, ï¿½19.5.1: $filename must be a quoted-string
         header("Content-Disposition: ".$this->disposition."; filename=\"".PMF_Export::getExportTimestamp()."_".$filename."\"");
         if (!empty($description)) {
             header("Content-Description: ".$description);

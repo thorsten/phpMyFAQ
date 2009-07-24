@@ -48,7 +48,7 @@ if ($permission["addcateg"]) {
         printf("<p>%s: %s (%s)</p>",
             $PMF_LANG["msgMainCategory"],
             $category->categoryName[$parent_id]["name"],
-            $languageCodes[strtoupper($category->categoryName[$parent_id]["lang"])]);
+            $languageCodes[PMF_String::strtoupper($category->categoryName[$parent_id]["lang"])]);
     }
 ?>
     <label class="left"><?php print $PMF_LANG["ad_categ_titel"]; ?>:</label>

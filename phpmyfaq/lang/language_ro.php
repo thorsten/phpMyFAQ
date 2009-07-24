@@ -18,7 +18,7 @@
  * under the License.
  ******************************************************************************/
 
-$PMF_LANG["metaCharset"] = "iso-8859-2";
+$PMF_LANG["metaCharset"] = "UTF-8";
 $PMF_LANG["metaLanguage"] = "ro";
 $PMF_LANG["language"] = "romanian";
 // ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
@@ -154,7 +154,7 @@ $PMF_LANG["err_sendMail"] = "Campuri obligatorii <strong>numele tau</strong>, <s
 // Hilfe zur Suche
 $PMF_LANG["help_search"] = "<p><strong>Cauta inregistrarile:</strong><br />care contin cuvintele <strong style=\"color: Red;\">cuvant1 cuvant2</strong> poti avea ordonarea dupa relevanta pentru doua sa mai multe criterii de cautare.</p><p><strong>Nota:</strong> Criteriile tale de cautare rtebuie sa fie de minimum 4 caractere, in caz contrar cautarea nu poate fi efectuata.</p>";
 
-// Menü
+// MenÃ¼
 $PMF_LANG["ad"] = "ADMIN SECTION";
 $PMF_LANG["ad_menu_user_administration"] = "Administrare useri";
 $PMF_LANG["ad_menu_entry_aprove"] = "Aproba inregistrari";
