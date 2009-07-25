@@ -10,6 +10,7 @@ Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.5.0:
+- Added Lithuanian translation (Aurimas Fiseras)
 - minor bugfixes (Thorsten)
 
 For known issues please take a look at KNOWNBUGS.txt
