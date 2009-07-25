@@ -18,7 +18,7 @@
 <!-- start of documentation -->
 <div id="doc">
     <a id="top"></a>
-    <h3>[ phpMyFAQ 2.5.x Documentation ]</h3>
+    <h3>[ phpMyFAQ 2.6.x Documentation ]</h3>
     <ol class="main">
         <li><strong><a href="#1">Introduction</a></strong>
         <ol class="alpha">
@@ -44,10 +44,10 @@
         </ol></li>
         <li><strong><a href="#3">Upgrading</a></strong>
         <ol class="alpha">
-            <li><a href="#3a">Upgrading from phpMyFAQ 1.6.x</a></li>
-            <li><a href="#3b">Upgrading from phpMyFAQ 2.0.x</a></li>
-            <li><a href="#3c">Upgrading phpMyFAQ 2.5.x versions</a></li>
-            <li><a href="#3d">Modifying templates for phpMyFAQ 2.5.x</a></li>
+            <li><a href="#3a">Upgrading from phpMyFAQ 2.0.x</a></li>
+            <li><a href="#3b">Upgrading from phpMyFAQ 2.5.x</a></li>
+            <li><a href="#3c">Upgrading phpMyFAQ 2.6.x versions</a></li>
+            <li><a href="#3d">Modifying templates for phpMyFAQ 2.6.x</a></li>
         </ol></li>
         <li><strong><a href="#4">Frontend</a></strong>
         <ol class="alpha">
@@ -432,37 +432,19 @@
 
     <hr style="width: 90%; height: 1px;"  />
     <p><a name="3"></a><strong>3. Upgrading</strong></p>
-    <p>Upgrading to phpMyFAQ 2.5.x is possible from the following versions:</p>
+    <p>Upgrading to phpMyFAQ 2.6.x is possible from the following versions:</p>
     <ul>
-        <li>phpMyFAQ 1.6.x</li>
         <li>phpMyFAQ 2.0.x</li>
+        <li>phpMyFAQ 2.5.x</li>
     </ul>
     <p>If you're running an older version of phpMyFAQ we recommend a new and fresh 
     install. </p>
     <p><a href="#top">back to top</a></p>
 
-    <hr style="width: 90%; height: 1px;"  />
-    <p><a name="3a"></a><strong>3.a. Upgrading from phpMyFAQ 1.6.x</strong></p>
-    <p>Upgrading from 1.6.x to 2.5.x is a really major upgrade. Please make a full 
-    backup before you run the upgrade! Nevertheless the update from phpMyFAQ 1.6.x 
-    to the current release is fairly simple. First you have to delete all files 
-    <strong>except</strong>:</p>
-    <ul>
-        <li>the files <strong>data.php</strong> and <strong>config.php</strong> 
-        in the directory <strong>inc/</strong> </li>
-        <li>all files in the <strong>template/</strong> directory</li>
-    </ul>
-    <p>Open the following URL in your browser:</p>
-    <pre>http://www.example.com/faq/install/update.php</pre>
-    <p>Choose your installed phpMyFAQ version and click the button of the update 
-    script, your version will automatically be updated.. You have to update some 
-    of your template files due to the new, enhanced template engine.</p>
-    <p><a href="#top">back to top</a></p>
-
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><a name="3b"></a><strong>3.b. Upgrading from phpMyFAQ 2.0.x</strong></p>
-    <p>Upgrading from 2.0.x to 2.5.x is a major upgrade. Please make a full backup 
+    <p><a name="3a"></a><strong>3.a. Upgrading from phpMyFAQ 2.0.x</strong></p>
+    <p>Upgrading from 2.0.x to 2.6.x is a major upgrade. Please make a full backup 
     before you run the upgrade! Nevertheless the update from phpMyFAQ 2.0.x to the 
     current release is fairly simple. First you have to delete all files 
     <strong>except</strong>:</p>
@@ -477,9 +459,25 @@
     your template files due to the new, enhanced template engine.</p>
     <p><a href="#top">back to top</a></p>
 
+    <hr style="width: 90%; height: 1px;"  />
+    <p><a name="3b"></a><strong>3.b. Upgrading from phpMyFAQ 2.5.x</strong></p>
+    <p>Upgrading from 2.5.x to 2.6.x is a minor upgrade. Please make a full backup 
+    before you run the upgrade! First you have to delete all files 
+    <strong>except</strong>:</p>
+    <ul>
+        <li>the files <strong>data.php</strong> in the directory <strong>inc/</strong> </li>
+        <li>all files in the <strong>template/</strong> directory</li>
+    </ul>
+    <p>Open the following URL in your browser:</p>
+    <pre>http://www.example.com/faq/install/update.php</pre>
+    <p>Choose your installed phpMyFAQ version and click the button of the update 
+    script, your version will automatically be updated. You have to update some of 
+    your template files due to the new, enhanced template engine.</p>
+    <p><a href="#top">back to top</a></p>
+
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><a name="3c"></a><strong>3.c. Upgrading phpMyFAQ 2.5.x</strong></p>
+    <p><a name="3c"></a><strong>3.c. Upgrading phpMyFAQ 2.6.x</strong></p>
     <p>Updating phpMyFAQ 2.5.x is fairly simple. Via FTP copy all new files from 
     the phpMyFAQ package <strong>except</strong>:</p>
     <ul>
@@ -496,11 +494,9 @@
 
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><a name="3d"></a><strong>3.d. Modifying templates for phpMyFAQ 2.5.x</strong></p>
-    <p>The 1.4.x and 1.5.x templates are partly compatible with phpMyFAQ 2.5.x, 
-    so you have to edit them and add some new placeholders for example for the 
-    captcha support and some other improvements. The 1.6.x and 2.0.x templates are 
-    mostly compatible with phpMyFAQ 2.0, if your layout is completly based on CSS, 
+    <p><a name="3d"></a><strong>3.d. Modifying templates for phpMyFAQ 2.6.x</strong></p>
+    <p>The 2.0.x templates are 
+    mostly compatible with phpMyFAQ 2.6, if your layout is completly based on CSS, 
     you only have to change the .tpl files listed in <em>docs/CHANGEDFILES.txt</em>. 
     If you need help to integrate phpMyFAQ into your website feel free to contact us.</p>
     <p><a href="#top">back to top</a></p>

@@ -1,6 +1,6 @@
 $Id$
 
-phpMyFAQ 2.6.0-dev
+phpMyFAQ 2.6.0-alpha
 Codename "Portia"
 
 Installation/Update:
@@ -18,18 +18,22 @@ For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.6.0-dev - 2009-06-
+Version 2.6.0-alpha - 2009-09-
 - moved all language files to UTF-8 (Anatoliy)
 - added TCPDF as replacement for FPDF library (Thorsten)
 -
 
-Version 2.5.0-RC - 2009-06-
+Version 2.5.1 - 2009-08-
+- minor bugfixes (Thorsten)
+
+Version 2.5.0 - 2009-07-21
 - changed PHP requirement to PHP 5.2 (Thorsten)
 - dropped support for MySQL 4.0 and MaxDB (Thorsten)
 - dropped support for XML-RPC (Thorsten)
 - refactored complete code base to PHP 5.2+ (Thorsten, Matteo)
 - added new and improved new basic layout theme (Charles A. Landemaine)
 - added new administration layout (Thorsten)
+- added new Image Manager in administration backend (Thorsten)
 - added RSS feed for every category (Thorsten)
 - added ability to copy and duplicate FAQ entries (Thorsten)
 - added support for blocks in template engine (Jan Mergler)
@@ -43,14 +47,29 @@ Version 2.5.0-RC - 2009-06-
 - added sticky FAQ records (Anatoliy Belsky)
 - added smart answering for user questions (Anatoliy Belsky)
 - added string wrapper for better UTF-8 handling (Anatoliy Belsky)
+- added translation frontend (Anatoliy Belsky)
 - added jQuery 1.3 as replacement for Prototype/Script.aculo.us (Thorsten)
+- added configurable attachment directory (Anatoliy Belsky)
+- added approval permission for FAQs (Anatoliy Belsky)
+- added Hindi translation (Sumeet Raj Aggarwal)
 - improved user administration frontend (Sarah Hermann)
 - improved performance (Thorsten)
 - improved language files (Anatoliy Belsky, Thorsten)
 - ajaxified comment and record administration (Thorsten)
 - updated bundled Net_IDNA to version 0.6.3 (Thorsten)
-- updated bundled TinyMCE editor component to version 3.2.2.3 (Thorsten)
+- updated bundled TinyMCE editor component to version 3.2.5 (Thorsten)
 - updated bundled FPDF library to version 1.6 (Thorsten)
+- updated Turkish translation (Evren Yurtesen)
+
+Version 2.0.15 - 2009-06-02
+- fixed XSS vulnerability (Thorsten)
+
+Version 2.0.14 - 2009-05-21
+- updated Vietnamese translation (Julien Petitperrin)
+- improved tagging implementation (Thorsten)
+- fixed authentication bypass (Thorsten)
+- fixed content type for RSS feeds (Thorsten)
+- minor bugfixes (Thorsten)
 
 Version 2.0.13 - 2009-04-20
 - added new blocked words for spam protection (Kai)
