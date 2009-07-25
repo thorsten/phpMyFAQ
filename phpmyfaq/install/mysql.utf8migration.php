@@ -79,6 +79,7 @@ $query[] = "ALTER TABLE ".SQLPREFIX."faqconfig MODIFY COLUMN config_value VARCHA
 $query[] = "ALTER TABLE ".SQLPREFIX."faqconfig MODIFY COLUMN config_value VARCHAR(255) CHARACTER SET utf8";
 
 // Table faqdata
+$query[] = "ALTER TABLE ".SQLPREFIX."faqdata DROP INDEX keywords";
 $query[] = "ALTER TABLE ".SQLPREFIX."faqdata MODIFY COLUMN lang VARCHAR(5) CHARACTER SET BINARY";
 $query[] = "ALTER TABLE ".SQLPREFIX."faqdata MODIFY COLUMN lang VARCHAR(5) CHARACTER SET utf8";
 $query[] = "ALTER TABLE ".SQLPREFIX."faqdata MODIFY COLUMN active VARCHAR(3) CHARACTER SET BINARY";
@@ -101,6 +102,7 @@ $query[] = "ALTER TABLE ".SQLPREFIX."faqdata MODIFY COLUMN date_start VARCHAR(14
 $query[] = "ALTER TABLE ".SQLPREFIX."faqdata MODIFY COLUMN date_start VARCHAR(14) CHARACTER SET utf8";
 $query[] = "ALTER TABLE ".SQLPREFIX."faqdata MODIFY COLUMN date_end VARCHAR(14) CHARACTER SET BINARY";
 $query[] = "ALTER TABLE ".SQLPREFIX."faqdata MODIFY COLUMN date_end VARCHAR(14) CHARACTER SET utf8";
+$query[] = "ALTER TABLE ".SQLPREFIX."faqdata ADD FULLTEXT (keywords, thema, content)";
 
 // Table faqdata_revisions
 $query[] = "ALTER TABLE ".SQLPREFIX."faqdata_revisions MODIFY COLUMN lang VARCHAR(5) CHARACTER SET BINARY";
