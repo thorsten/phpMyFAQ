@@ -58,7 +58,7 @@ switch($ajax_action) {
             $line             = fgets($fh);
             $newFileContents .= $line;
         }
-        while ('*/' != trim($line));
+        while ('*/' != substr(trim($line), -2));
         fclose($fh);
         
         /**
