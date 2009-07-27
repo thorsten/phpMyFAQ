@@ -925,7 +925,7 @@ function searchEngine($searchterm, $cat = '%', $allLanguages = true, $hasMore = 
     $num         = 0;
     $searchItems = array();
     $langs       = (true == $allLanguages) ? '&amp;langs=all' : '';
-    $seite       = PMF_Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 0);
+    $seite       = PMF_Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);
     $db          = PMF_Db::getInstance();
     $faqconfig   = PMF_Configuration::getInstance();
 

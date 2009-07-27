@@ -3,6 +3,7 @@ CHANGED FILES FROM 2.5.0 -> 2.5.1
 ./inc/record.save.php
 ./inc/Faq.php
 ./inc/Filter.php
+./inc/functions.php
 ./install/installer.php
 ./install/update.php
 ./lang/language_lt.php added
