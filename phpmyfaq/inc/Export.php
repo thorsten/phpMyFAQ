@@ -107,7 +107,7 @@ class PMF_Export
                 $author          = $arrAuthor[$key];
                 $pdf->AddPage();
                 $pdf->SetFont("Arial", "", 12);
-                $pdf->WriteHTML(html_entity_decode($value));
+                $pdf->WriteHTML($value);
             }
 
             return $pdf->Output('', 'S');
@@ -236,6 +236,7 @@ class PMF_Export
         $rubrik       = 0;
         $sql          = '';
         $selectString = '';
+        $db           = PMF_Db::getInstance();
 
         $export = new PMF_Export_Docbook();
         $export->delete_file();
