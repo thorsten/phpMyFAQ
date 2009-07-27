@@ -440,7 +440,7 @@ class PMF_Export_Docbook
   			$xmlEntry = $xmlObject->content;
 
   				while($xmlEntry != ''){
-  					$xmlEntry = $this->TableImageText(trim(ereg_replace('<br />','',$xmlEntry)));
+  					$xmlEntry = $this->TableImageText(trim(@ereg_replace('<br />','',$xmlEntry)));
   				}
 
   		$this->xmlContent .='</simplesect>';
