@@ -8,8 +8,8 @@
  * @author     Thomas Melchinger <t.melchinger@uni.de>
  * @author     Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @since      2002-01-10
- * @copyright  2002-2009 phpMyFAQ Team
  * @version    SVN: $Id$
+ * @copyright  2002-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -25,6 +25,12 @@
 define('NEWVERSION', '2.5.1');
 define('COPYRIGHT', '&copy; 2001-2009 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
+
+if (version_compare(PHP_VERSION, '5.2.0', '<')) {
+    print "<p class=\"center\">You need PHP 5.2.0 or later!</p>\n";
+    HTMLFooter();
+    die();
+}
 
 require_once PMF_ROOT_DIR.'/inc/autoLoader.php';
 require_once PMF_ROOT_DIR.'/inc/constants.php';
@@ -190,11 +196,6 @@ if (!@is_readable(PMF_ROOT_DIR.'/inc/data.php')) {
     HTMLFooter();
     die();
 }
-if (version_compare(PHP_VERSION, '5.2.0', '<')) {
-    print '<p class="center">You need PHP 5.2.0 or later!</p>';
-    HTMLFooter();
-    die();
-}
 
 require PMF_ROOT_DIR . '/inc/data.php';
 require PMF_ROOT_DIR . '/inc/functions.php';
@@ -239,7 +240,8 @@ if ($step == 1) {
     <option value="2.5.0-beta">phpMyFAQ 2.5.0-beta</option>
     <option value="2.5.0-RC">phpMyFAQ 2.5.0-RC and later</option>
     <option value="2.5.0-RC3">phpMyFAQ 2.5.0-RC3</option>
-    <option value="2.5.0">phpMyFAQ 2.5.0 and later</option>
+    <option value="2.5.0">phpMyFAQ 2.5.0</option>
+    <option value="2.5.1">phpMyFAQ 2.5.1 and later</option>
 </select>
 
 <p class="center"><input type="submit" value="Go to step 2 of 4" class="button" /></p>
@@ -1360,6 +1362,15 @@ if ($step == 4) {
         $query[] = "INSERT INTO ".SQLPREFIX."faquser_right (user_id, right_id) VALUES (1, 33)";
         
         $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.attachmentsPath', 'attachments')";
+    }
+    
+    //
+    // UPDATES FROM 2.5.1
+    //
+    if (version_compare($version, '2.5.1', '<')) {
+    	// Truncate table and re-import all stopwords with the new Lithuanian ones
+        $query[] = "DELETE FROM ".SQLPREFIX."faqstopwords";
+        require 'stopwords.sql.php';
     }
     
     // Perform the queries for updating/migrating the database from 2.x
