@@ -246,11 +246,11 @@ class PMF_Export_Pdf extends FPDF
                 if ($e{0} == "/") {
                     $this->CloseTag(strtoupper(substr($e,1)));
                 } else {
-                    $a2 = explode(" ",$e);
-                    $tag = strtoupper(array_shift($a2));
+                    $a2   = explode(" ",$e);
+                    $tag  = strtoupper(array_shift($a2));
                     $attr = array();
                     foreach ($a2 as $v) {
-                        if (ereg('^([^=]*)=["\']?([^"\']*)["\']?$',$v,$a3)) {
+                        if (@ereg('^([^=]*)=["\']?([^"\']*)["\']?$',$v,$a3)) {
                             $attr[strtoupper($a3[1])]=$a3[2];
                         }
                     }
