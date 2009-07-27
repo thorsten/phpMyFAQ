@@ -266,7 +266,6 @@ class PMF_Faq
                     $visits = $row->visits;
                 }
 
-                $title = PMF_htmlentities($row->thema, ENT_QUOTES, $this->pmf_lang['metaCharset']);
                 $url   = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                             $sids,
                             $row->category_id,
@@ -275,8 +274,8 @@ class PMF_Faq
                         );
                 $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
                 $oLink->itemTitle = $row->thema;
-                $oLink->text = $title;
-                $oLink->tooltip = $title;
+                $oLink->text      = $title;
+                $oLink->tooltip   = $title;
 
                 $faqdata[] = array(
                     'record_id'      => $row->id,
@@ -422,7 +421,7 @@ class PMF_Faq
                     $visits = $row->visits;
                 }
 
-                $title = PMF_htmlentities($row->thema, ENT_QUOTES, $this->pmf_lang['metaCharset']);
+                $title = $row->thema;
                 $url   = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                             $sids,
                             $row->category_id,
@@ -431,8 +430,8 @@ class PMF_Faq
                         );
                 $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
                 $oLink->itemTitle = $row->thema;
-                $oLink->text = $title;
-                $oLink->tooltip = $title;
+                $oLink->text      = $title;
+                $oLink->tooltip   = $title;
                 $listItem = sprintf('<li>%s<br /><span class="little">(%d %s)</span>%s</li>',
                     $oLink->toHtmlAnchor(),
                     $visits,
@@ -625,7 +624,7 @@ class PMF_Faq
                     $visits = $row->visits;
                 }
 
-                $title = PMF_htmlentities($row->thema, ENT_QUOTES, $this->pmf_lang['metaCharset']);
+                $title = $row->thema;
                 $url   = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                             $sids,
                             $row->category_id,
@@ -634,8 +633,8 @@ class PMF_Faq
                         );
                 $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
                 $oLink->itemTitle = $row->thema;
-                $oLink->text = $title;
-                $oLink->tooltip = $title;
+                $oLink->text      = $title;
+                $oLink->tooltip   = $title;
                 $listItem = sprintf('<li>%s<br /><span class="little">(%d %s)</span></li>',
                     $oLink->toHtmlAnchor(),
                     $visits,
@@ -1333,7 +1332,7 @@ class PMF_Faq
                 'active'        => $row->active,
                 'sticky'        => $row->sticky,
                 'keywords'      => $row->keywords,
-                'title'         => PMF_htmlentities($row->thema, ENT_QUOTES, $this->pmf_lang['metaCharset']),
+                'title'         => $row->thema,
                 'content'       => $content,
                 'author'        => $row->author,
                 'email'         => $row->email,
@@ -1351,10 +1350,10 @@ class PMF_Faq
      * @param  bool    $encode Fix html special chars? (default, true)
      * @return string
      */
-    public function getRecordTitle($id, $encode = true)
+    public function getRecordTitle($id)
     {
         if (isset($this->faqRecord['id']) && ($this->faqRecord['id'] == $id)) {
-            return ($encode ? PMF_htmlentities($this->faqRecord['title'], ENT_QUOTES, $this->pmf_lang['metaCharset']) : $this->faqRecord['title']);
+            return $this->faqRecord['title'];
         }
 
         $query = sprintf(
@@ -1372,11 +1371,7 @@ class PMF_Faq
 
         if ($this->db->num_rows($result) > 0) {
             while ($row = $this->db->fetch_object($result)) {
-                if ($encode) {
-                    $output = PMF_htmlentities($row->thema, ENT_QUOTES, $this->pmf_lang['metaCharset']);
-                } else {
-                    $output = $row->thema;
-                }
+                $output = $row->thema;
             }
         } else {
             $output = $this->pmf_lang['no_cats'];
@@ -1568,9 +1563,7 @@ class PMF_Faq
         if (count($result) > 0) {
             foreach ($result as $row) {
 
-                $shortTitle = PMF_Utils::makeShorterText(PMF_htmlentities($row['thema'],
-                                                         ENT_QUOTES,
-                                                         $this->pmf_lang['metaCharset']), 8);
+                $shortTitle = PMF_Utils::makeShorterText($row['thema'], 8);
 
                 $output['title'][]  = $shortTitle;
                 $output['url'][]    = $row['url'];
@@ -1596,7 +1589,7 @@ class PMF_Faq
 
         if (count ($result) > 0) {
             foreach ($result as $row) {
-                $shortTitle = PMF_Utils::makeShorterText(PMF_htmlentities($row['thema'], ENT_QUOTES, $this->pmf_lang['metaCharset']), 8);
+                $shortTitle = PMF_Utils::makeShorterText($row['thema'], 8);
                 
                 $output['url'][]   =  $row['url'];
                 $output['title'][] = $shortTitle;
@@ -1776,12 +1769,12 @@ class PMF_Faq
         $oldId = 0;
         while (($row = $this->db->fetch_object($result)) && $i <= $count) {
             if ($oldId != $row->id) {
-                $data['visits'] = $row->visits;
-                $data['thema'] = $row->thema;
-                $data['date'] = $row->datum;
+                $data['visits']     = $row->visits;
+                $data['thema']      = $row->thema;
+                $data['date']       = $row->datum;
                 $data['last_visit'] = $row->last_visit;
 
-                $title = PMF_htmlentities($row->thema, ENT_QUOTES, $this->pmf_lang['metaCharset']);
+                $title = $row->thema;
                 $url   = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                         $sids,
                         $row->category_id,
@@ -1879,12 +1872,12 @@ class PMF_Faq
         $oldId = 0;
         while (($row = $this->db->fetch_object($result)) && $i < $count ) {
             if ($oldId != $row->id) {
-                $data['datum'] = $row->datum;
-                $data['thema'] = $row->thema;
+                $data['datum']   = $row->datum;
+                $data['thema']   = $row->thema;
                 $data['content'] = $row->content;
-                $data['visits'] = $row->visits;
+                $data['visits']  = $row->visits;
 
-                $title = PMF_htmlentities($row->thema, ENT_QUOTES, $this->pmf_lang['metaCharset']);
+                $title = $row->thema;
                 $url   = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                         $sids,
                         $row->category_id,
@@ -2603,20 +2596,18 @@ class PMF_Faq
         $output = '<ul class="phpmyfaq_ul">';
 
         while (($row = $this->db->fetch_object($result))) {
-            $title = PMF_htmlentities($row->thema, ENT_NOQUOTES, $this->pmf_lang['metaCharset']);
-                            $url   = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                            $sids,
-                            $row->category_id,
-                            $row->id,
-                            $row->lang
-                        );
+            $title = $row->thema;
+            $url   = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                        $sids,
+                        $row->category_id,
+                        $row->id,
+                        $row->lang);
                 $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
                 $oLink->itemTitle = $row->thema;
-                $oLink->text = $title;
-                $oLink->tooltip = $title;
-                $listItem = sprintf('<li>%s</li>',
-                    $oLink->toHtmlAnchor(),
-                    $this->pmf_lang['msgViews']);
+                $oLink->text      = $title;
+                $oLink->tooltip   = $title;
+                
+                $listItem = sprintf('<li>%s</li>', $oLink->toHtmlAnchor(), $this->pmf_lang['msgViews']);
                 $listItem = '<li>'.$oLink->toHtmlAnchor().'</li>';
 
                 $output .= $listItem;
@@ -2817,7 +2808,7 @@ class PMF_Faq
             if ($oldId != $row->id) {
                 $data['thema'] = $row->thema;
 
-                $title = PMF_htmlentities($row->thema, ENT_QUOTES, $this->pmf_lang['metaCharset']);
+                $title = $row->thema;
                 $url   = sprintf('%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                             $sids,
                             $row->category_id,
@@ -2825,8 +2816,8 @@ class PMF_Faq
                             $row->lang);
                 $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url);
                 $oLink->itemTitle = $row->thema;
-                $oLink->tooltip = $title;
-                $data['url'] = $oLink->toString();
+                $oLink->tooltip   = $title;
+                $data['url']      = $oLink->toString();
 
                 $sticky[] = $data;
             }
@@ -2848,9 +2839,7 @@ class PMF_Faq
 
         if (count($result) > 0) {
             foreach ($result as $row) {
-                $shortTitle = PMF_Utils::makeShorterText(PMF_htmlentities($row['thema'],
-                                                         ENT_QUOTES,
-                                                         $this->pmf_lang['metaCharset']), 8);
+                $shortTitle         = PMF_Utils::makeShorterText($row['thema'], 8);
                 $output['title'][]  = $shortTitle;
                 $output['url'][]    = $row['url'];
             }
