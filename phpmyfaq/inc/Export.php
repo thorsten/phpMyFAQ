@@ -236,7 +236,8 @@ class PMF_Export
         $rubrik       = 0;
         $sql          = '';
         $selectString = '';
-
+        $db           = PMF_Db::getInstance();
+        
         $export = new PMF_Export_Docbook();
         $export->delete_file();
 
