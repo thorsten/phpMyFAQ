@@ -43,7 +43,7 @@ if (isset($auth)) {
 
 <?php
     if (isset($auth) && (('takequestion' == $action) || ('editentry'    == $action) || ('editpreview'  == $action) ||
-                         ('addnews'      == $action) || ('editnews'     == $action))) {
+                         ('addnews'      == $action) || ('editnews'     == $action) || ('copyentry'  == $action))) {
     
         if ($faqconfig->get('main.enableWysiwygEditor') == true) {
 ?>

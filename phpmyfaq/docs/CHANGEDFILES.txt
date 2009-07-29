@@ -1,5 +1,6 @@
 CHANGED FILES FROM 2.5.0 -> 2.5.1
 
+./admin/footer.php
 ./inc/record.save.php
 ./inc/Export.php
 ./inc/Faq.php
