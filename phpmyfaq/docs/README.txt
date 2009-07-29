@@ -14,6 +14,7 @@ Changes since 2.0.15:
 - fixed problem with visible questions (Thorsten)
 - fixed bug with broken category permission settings (Thorsten)
 - fixed some Oracle issues (Thorsten)
+- improved svn2package script (Rene Treffer)
 - minor bugfixes (Thorsten)
 
 For known issues please take a look at KNOWNBUGS.txt
@@ -25,6 +26,7 @@ Version 2.0.16 - 2009-07-
 - fixed problem with visible questions (Thorsten)
 - fixed bug with broken category permission settings (Thorsten)
 - fixed some Oracle issues (Thorsten)
+- improved SVN export script (Rene Treffer) 
 - minor bugfixes (Thorsten)
 
 Version 2.0.15 - 2009-06-02
