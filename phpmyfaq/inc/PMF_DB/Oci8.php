@@ -1,13 +1,13 @@
 <?php
 /**
- * The db_oracle class provides methods and functions for a Oracle database
+ * The PMF_DB_Oci8 class provides methods and functions for a Oracle database
  *
  * @package    phpMyFAQ
  * @subpackage PMF_DB
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
  * @package    2005-09-20
- * @copyright  2005-2009 phpMyFAQ Team
  * @version    SVN: $Id$
+ * @copyright  2005-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -20,6 +20,16 @@
  * under the License.
  */
 
+/**
+ * PMF_DB_Oci8
+ *
+ * @package    phpMyFAQ
+ * @subpackage PMF_DB
+ * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package    2005-09-20
+ * @version    SVN: $Id$
+ * @copyright  2005-2009 phpMyFAQ Team
+ */
 class PMF_DB_Oracle implements PMF_DB_Driver
 {
     /**

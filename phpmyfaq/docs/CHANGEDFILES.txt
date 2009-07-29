@@ -9,6 +9,8 @@ CHANGED FILES FROM 2.5.0 -> 2.5.1
 ./inc/functions.php
 ./inc/String.php
 ./inc/Tags.php
+./inc/PMF_DB/Oracle.php deleted
+./inc/PMF_DB/Oci8.php added
 ./inc/PMF_Export/Docbook.php
 ./inc/PMF_Export/Pdf.php
 ./install/installer.php
