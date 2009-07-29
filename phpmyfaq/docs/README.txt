@@ -13,6 +13,7 @@ Changes since 2.0.15:
 - updated French translation (Klaus Gapp)
 - fixed problem with visible questions (Thorsten)
 - fixed bug with broken category permission settings (Thorsten)
+- fixed some Oracle issues (Thorsten)
 - minor bugfixes (Thorsten)
 
 For known issues please take a look at KNOWNBUGS.txt
@@ -23,6 +24,7 @@ Version 2.0.16 - 2009-07-
 - updated French translation (Klaus Gapp)
 - fixed problem with visible questions (Thorsten)
 - fixed bug with broken category permission settings (Thorsten)
+- fixed some Oracle issues (Thorsten)
 - minor bugfixes (Thorsten)
 
 Version 2.0.15 - 2009-06-02
