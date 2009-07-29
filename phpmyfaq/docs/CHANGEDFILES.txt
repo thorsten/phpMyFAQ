@@ -7,6 +7,7 @@ CHANGED FILES FROM 2.0.15 -> 2.0.16
 ./admin/category.translate.php
 ./admin/record.delquestion.php
 ./inc/Faq.php
+./inc/Tags.php
 ./install/installer.php
 ./install/update.php
 ./lang/language_fr.php
