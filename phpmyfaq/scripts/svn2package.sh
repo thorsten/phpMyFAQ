@@ -40,7 +40,15 @@
 
 # PMF Version
 if [ "x${PMF_VERSION}" = "x" ]; then
-	PMF_VERSION="2.6.0-dev"
+	PMF_VERSION="2.6.0-alpha"
+fi
+
+if [ "x${MD5BIN}" = "x" ]; then
+    if which md5 > /dev/null; then
+        MD5BIN="$(which md5)"
+    else
+        MD5BIN="$(which md5sum)"
+    fi
 fi
 
 # Build folder
@@ -76,11 +84,11 @@ fi
 
     # Build TAR.GZ Package
     tar zcf "${PMF_PACKAGE_FOLDER}.tar.gz" "${PMF_PACKAGE_FOLDER}"
-    md5 "${PMF_PACKAGE_FOLDER}.tar.gz" > "${PMF_PACKAGE_FOLDER}.tar.gz.md5"
+    $MD5BIN "${PMF_PACKAGE_FOLDER}.tar.gz" > "${PMF_PACKAGE_FOLDER}.tar.gz.md5"
 
     # Build ZIP Package
     zip -r "${PMF_PACKAGE_FOLDER}.zip" "${PMF_PACKAGE_FOLDER}"
-    md5 "${PMF_PACKAGE_FOLDER}.zip" > "${PMF_PACKAGE_FOLDER}.zip.md5"
+    $MD5BIN "${PMF_PACKAGE_FOLDER}.zip" > "${PMF_PACKAGE_FOLDER}.zip.md5"
 
     # Remove the code folder
     rm -rf "${PMF_PACKAGE_FOLDER}"
