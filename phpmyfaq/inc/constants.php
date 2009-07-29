@@ -175,10 +175,9 @@ $supported_databases = array(
     'mysqli'    => array('5.0.0', 'MySQL 4.1 / 5.x / 6.x (PHP 5)'),
     'sqlite'    => array('5.0.0', 'SQLite'),
     'ibm_db2'   => array('4.3.0', 'IBM DB2 Universal Database 8.2 / 9.1'),
-    'oracle'    => array('5.0.0', 'Oracle 8i and later (experimental)'),
+    'oci8'      => array('5.0.0', 'Oracle 8i and later (experimental)'),
     'ibase'     => array('4.3.0', 'Interbase/Firebird (experimental)'),
-    'maxdb'     => array('4.3.0', 'MaxDB 7.5 and later (experimental)')
-    );
+    'maxdb'     => array('4.3.0', 'MaxDB 7.5 and later (experimental)'));
 
 /* allowed 'action' varibales for GET - DO NOT CHANGE! */
 $allowedVariables = array(
