@@ -467,12 +467,12 @@ class PMF_Tags
             FROM
                 %sfaqdata_tags d, %sfaqtags t
             WHERE
-                    t.tagging_id = d.tagging_id
-                AND t.tagging_name = '%s'",
+                t.tagging_id = d.tagging_id
+            AND 
+                t.tagging_name = '%s'",
             SQLPREFIX,
             SQLPREFIX,
-            $tagName
-        );
+            $this->db->escape_string($tagName));
 
         $records = array();
         $result = $this->db->query($query);
