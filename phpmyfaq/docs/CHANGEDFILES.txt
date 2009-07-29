@@ -9,6 +9,8 @@ CHANGED FILES FROM 2.0.15 -> 2.0.16
 ./inc/constants.php
 ./inc/Faq.php
 ./inc/Tags.php
+./inc/PMF_DB/Oracle.php deleted
+./inc/PMF_DB/Oci8.php added
 ./install/installer.php
 ./install/update.php
 ./lang/language_fr.php
