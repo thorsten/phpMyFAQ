@@ -421,6 +421,7 @@ if ($step == 4) {
     //
     if (version_compare($version, '2.6.0-alpha', '<')) {
         
+    	// UTF-8 Migration
         switch($DB['type']) {
 
             case 'mysql':
@@ -436,6 +437,7 @@ if ($step == 4) {
                 break; 
         }
         
+        $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.enableUpdate', 'false')";
     }
     
     // Perform the queries for updating/migrating the database from 2.x
