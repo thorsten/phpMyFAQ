@@ -29,7 +29,7 @@
  * @package    2005-09-20
  * @version    SVN: $Id$
  * @copyright  2005-2009 phpMyFAQ Team
- *
+ */
 class PMF_DB_Oci8 implements PMF_DB_Driver
 {
     /**
