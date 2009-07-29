@@ -12,6 +12,8 @@ CHANGED FILES FROM 2.0.15 -> 2.0.16
 ./inc/PMF_DB/Oracle.php deleted
 ./inc/PMF_DB/Oci8.php added
 ./install/installer.php
+./install/oracle.sql.php deleted
+./install/oci8.sql.php added
 ./install/update.php
 ./lang/language_fr.php
 ,/scripts/svn2package.sh
