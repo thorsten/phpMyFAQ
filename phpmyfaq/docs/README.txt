@@ -12,6 +12,7 @@ Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 Changes since 2.5.0:
 - Added Lithuanian translation (Aurimas Fiseras)
 - fixed some Oracle issues (Thorsten)
+- improved svn2package script (Rene Treffer)
 - many minor bugfixes (Thorsten)
 
 For known issues please take a look at KNOWNBUGS.txt
@@ -21,6 +22,7 @@ CHANGELOG:
 Version 2.5.1 - 2009-08-
 - Added Lithuanian translation (Aurimas Fiseras)
 - fixed some Oracle issues (Thorsten)
+- improved svn2package script (Rene Treffer)
 - many minor bugfixes (Thorsten)
 
 Version 2.5.0 - 2009-07-21

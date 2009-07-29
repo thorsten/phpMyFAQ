@@ -17,5 +17,6 @@ CHANGED FILES FROM 2.5.0 -> 2.5.1
 ./install/stopwords.sql.php
 ./install/update.php
 ./lang/language_lt.php added
+,/scripts/svn2package.sh
 ./main.php
 ./show.php
