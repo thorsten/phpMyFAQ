@@ -92,6 +92,8 @@ class PMF_DB_Oracle implements PMF_DB_Driver
         $this->sqllog .= pmf_debug($query);
         $stmt = oci_parse($this->conn, $query);
         oci_execute($stmt, OCI_DEFAULT);
+        
+        return $stmt;
     }
 
     /**
