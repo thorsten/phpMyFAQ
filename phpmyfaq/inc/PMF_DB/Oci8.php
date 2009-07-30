@@ -92,6 +92,8 @@ class db_oci8
         $this->sqllog .= pmf_debug($query);
         $stmt = oci_parse($this->conn, $query);
         oci_execute($stmt, OCI_DEFAULT);
+        
+        return $stmt;
     }
 
     /**
