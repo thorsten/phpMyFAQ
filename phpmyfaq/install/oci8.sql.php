@@ -4,6 +4,7 @@
  *
  * CREATE TABLE instruction for Oracle databases
  *
+ * 
  * @author      Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since       2007-02-24
  * @copyright   (c) 2007 phpMyFAQ Team
@@ -83,11 +84,11 @@ PRIMARY KEY (id, lang))";
 //faqcategoryrelations
 $query[] = "CREATE TABLE ".$sqltblpre."faqcategoryrelations (
 category_id INTEGER NOT NULL,
-category_lang VARCHAR(5) NOT NULL default '',
+category_lang VARCHAR(5) NOT NULL,
 record_id INTEGER NOT NULL,
-record_lang VARCHAR(5) NOT NULL default '',
-PRIMARY KEY  (category_id, category_lang, record_id, record_lang)
-)";
+record_lang VARCHAR(5) NOT NULL,
+PRIMARY KEY (category_id, category_lang, record_id, record_lang))";
+
 $query[] = "CREATE INDEX ".$sqltblpre."idx_records ON ".$sqltblpre."faqcategoryrelations
 (record_id, record_lang)";
 
@@ -128,7 +129,7 @@ PRIMARY KEY (id_comment))";
 
 //faqconfig
 $query[] = "CREATE TABLE ".$sqltblpre."faqconfig (
-config_name VARCHAR(255) NOT NULL default '',
+config_name VARCHAR(255) NOT NULL,
 config_value VARCHAR(255) DEFAULT NULL,
 PRIMARY KEY (config_name))";
 
@@ -208,29 +209,26 @@ name VARCHAR(25) NULL,
 description CLOB NULL,
 auto_join INTEGER NULL,
 PRIMARY KEY(group_id),
-UNIQUE INDEX name(name)
-)";
+UNIQUE INDEX name(name))";
 
 //faqgroup_right
 $query[] = "CREATE TABLE ".$sqltblpre."faqgroup_right (
-group_id INT(11) NOT NULL,
-right_id INT(11) NOT NULL,
-PRIMARY KEY(group_id, right_id)
-)";
+group_id INTEGER NOT NULL,
+right_id INTEGER NOT NULL,
+PRIMARY KEY(group_id, right_id))";
 
 //faqlinkverifyrules
 $query[] = "CREATE TABLE ".$sqltblpre."faqlinkverifyrules (
-id int(11) NOT NULL default '0',
+id INTEGER NOT NULL default '0',
 type VARCHAR(6) NOT NULL default '',
 url VARCHAR(255) NOT NULL default '',
 reason VARCHAR(255) NOT NULL default '',
-enabled enum('y','n') NOT NULL default 'y',
-locked enum('y','n') NOT NULL default 'n',
+enabled VARCHAR(1) NOT NULL default 'y',
+locked VARCHAR(1) NOT NULL default 'n',
 owner VARCHAR(255) NOT NULL default '',
 dtInsertDate VARCHAR(15) NOT NULL default '',
 dtUpdateDate VARCHAR(15) NOT NULL default '',
-PRIMARY KEY (id)
-)";
+PRIMARY KEY (id))";
 
 //faqnews
 $query[] = "CREATE TABLE ".$sqltblpre."faqnews (
@@ -263,13 +261,12 @@ PRIMARY KEY (id))";
 
 //faqright
 $query[] = "CREATE TABLE ".$sqltblpre."faqright (
-right_id INTEGER UNSIGNED NOT NULL,
+right_id INTEGER NOT NULL,
 name VARCHAR(50) NULL,
 description CLOB NULL,
 for_users INTEGER NULL DEFAULT 1,
 for_groups INTEGER NULL DEFAULT 1,
-PRIMARY KEY (right_id)
-)";
+PRIMARY KEY (right_id))";
 
 //faqsearches
 $query[] = "CREATE TABLE ".$sqltblpre."faqsearches (
@@ -277,8 +274,7 @@ id INTEGER NOT NULL ,
 lang VARCHAR(5) NOT NULL ,
 searchterm VARCHAR(255) NOT NULL ,
 searchdate TIMESTAMP,
-PRIMARY KEY (id, lang)
-)";
+PRIMARY KEY (id, lang))";
 
 //faqsessions
 $query[] = "CREATE TABLE ".$sqltblpre."faqsessions (
@@ -300,8 +296,7 @@ PRIMARY KEY (id, lang))";
 $query[] = "CREATE TABLE ".$sqltblpre."faqtags (
 tagging_id INTEGER NOT NULL,
 tagging_name VARCHAR(255) NOT NULL ,
-PRIMARY KEY (tagging_id, tagging_name)
-)";
+PRIMARY KEY (tagging_id, tagging_name))";
 
 //faquser
 $query[] = "CREATE TABLE ".$sqltblpre."faquser (
@@ -314,37 +309,32 @@ account_status VARCHAR(50) NULL,
 last_login VARCHAR(14) NULL,
 auth_source VARCHAR(100) NULL,
 member_since VARCHAR(14) NULL,
-PRIMARY KEY (user_id)
-)";
+PRIMARY KEY (user_id))";
 
 //faquserdata
 $query[] = "CREATE TABLE ".$sqltblpre."faquserdata (
 user_id INTEGER NOT NULL,
-last_modified VARCHAR(14)(14) NULL,
+last_modified VARCHAR(14) NULL,
 display_name VARCHAR(50) NULL,
-email VARCHAR(100) NULL
-)";
+email VARCHAR(100) NULL)";
 
 //faquserlogin
 $query[] = "CREATE TABLE ".$sqltblpre."faquserlogin (
 login VARCHAR(25) NOT NULL,
 pass VARCHAR(25) NULL,
-PRIMARY KEY (login)
-)";
+PRIMARY KEY (login))";
 
 //faquser_group
 $query[] = "CREATE TABLE ".$sqltblpre."faquser_group (
 user_id INTEGER NOT NULL,
 group_id INTEGER NOT NULL,
-PRIMARY KEY (user_id, group_id)
-)";
+PRIMARY KEY (user_id, group_id))";
 
 //faquser_right
 $query[] = "CREATE TABLE ".$sqltblpre."faquser_right (
 user_id INTEGER NOT NULL,
 right_id INTEGER NOT NULL,
-PRIMARY KEY (user_id, right_id)
-)";
+PRIMARY KEY (user_id, right_id))";
 
 //faqvisits
 $query[] = "CREATE TABLE ".$sqltblpre."faqvisits (
