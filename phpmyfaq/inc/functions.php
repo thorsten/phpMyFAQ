@@ -1237,24 +1237,31 @@ function addMenuEntry($restrictions = '', $action = '', $caption = '', $active =
  * Parse and check a permission string
  * 
  * Permissions are glued with each other as follows
- * - ',' stands for 'or'
+ * - '+' stands for 'or'
  * - '*' stands for 'and'
+ * 
+ * No braces will be parsed, only simple expressions
+ * @example right1*right2+right3+right4*right5
  * 
  * @author Anatoliy Belsky <anatoliy.belsky@mayflower.de>
  * @param string $restrictions
  * 
  * @return boolean
- * 
- * TODO make '+' for 'or', like in boolean logic
- *      make it to parse more complex structures
  */
 function evalPermStr($restrictions)
 {
     global $permission;
     
-    $retval = strlen($restrictions) > 0;
-    
-    if(false !== strpos($restrictions, '*')) {
+    if(false !== strpos($restrictions, '+')) {
+    	$retval = false;
+        foreach (explode('+', $restrictions) as $_restriction) {
+			$retval = $retval || evalPermStr($_restriction);
+			if($retval) {
+				break;
+			}
+        }        
+    } else if(false !== strpos($restrictions, '*')) {
+    	$retval = true;
         foreach (explode('*', $restrictions) as $_restriction) {
             if(!isset($permission[$_restriction]) || !$permission[$_restriction]) {
                 $retval = false;
@@ -1262,12 +1269,7 @@ function evalPermStr($restrictions)
             }
         }  
     } else {
-        foreach (explode(',', $restrictions) as $_restriction) {
-            if (isset($permission[$_restriction]) && $permission[$_restriction]) {
-                $retval = true;
-                break;
-            }
-        }        
+    	$retval = strlen($restrictions) > 0 && isset($permission[$restrictions]) && $permission[$restrictions];
     }
     
     return $retval;

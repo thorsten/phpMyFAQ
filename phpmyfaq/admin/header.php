@@ -106,9 +106,9 @@ header("Vary: Negotiate,Accept");
         case 'passwd':
         case 'cookies':
             $secLevelHeader   = $PMF_LANG['admin_mainmenu_users'];
-            $secLevelEntries .= addMenuEntry('adduser,edituser,deluser', 'user', 'ad_menu_user_administration', $action);
+            $secLevelEntries .= addMenuEntry('adduser+edituser+deluser', 'user', 'ad_menu_user_administration', $action);
             if ($groupSupport) {
-                $secLevelEntries .= addMenuEntry('adduser,edituser,deluser', 'group', 'ad_menu_group_administration', $action);
+                $secLevelEntries .= addMenuEntry('adduser+edituser+deluser', 'group', 'ad_menu_group_administration', $action);
             }
             $secLevelEntries .= addMenuEntry('passwd', 'passwd', 'ad_menu_passwd', $action);
             break;
@@ -142,14 +142,14 @@ header("Vary: Negotiate,Accept");
         case 'question':
         case 'comments':
             $secLevelHeader   = $PMF_LANG['admin_mainmenu_content'];
-            $secLevelEntries .= addMenuEntry('addcateg,editcateg,delcateg', 'category', 'ad_menu_categ_edit', $action);
+            $secLevelEntries .= addMenuEntry('addcateg+editcateg+delcateg', 'category', 'ad_menu_categ_edit', $action);
             $secLevelEntries .= addMenuEntry('addbt', 'editentry', 'ad_entry_add', $action);
-            $secLevelEntries .= addMenuEntry('editbt,delbt', 'view', 'ad_menu_entry_edit', $action);
+            $secLevelEntries .= addMenuEntry('editbt+delbt', 'view', 'ad_menu_entry_edit', $action);
             $secLevelEntries .= addMenuEntry('editbt*approverec', 'accept', 'ad_menu_entry_aprove', $action);
             $secLevelEntries .= addMenuEntry('delcomment', 'comments', 'ad_menu_comments', $action);
             $secLevelEntries .= addMenuEntry('delquestion', 'question', 'ad_menu_open', $action);
-            $secLevelEntries .= addMenuEntry('addglossary,editglossary,delglossary', 'glossary', 'ad_menu_glossary', $action);
-            $secLevelEntries .= addMenuEntry('addnews,editnews,delnews', 'news', 'ad_menu_news_edit', $action);
+            $secLevelEntries .= addMenuEntry('addglossary+editglossary+delglossary', 'glossary', 'ad_menu_glossary', $action);
+            $secLevelEntries .= addMenuEntry('addnews+editnews+delnews', 'news', 'ad_menu_news_edit', $action);
             break;
         case 'statistics':
         case 'viewsessions':
@@ -175,17 +175,17 @@ header("Vary: Negotiate,Accept");
         case 'transadd':
             $secLevelHeader   = $PMF_LANG['admin_mainmenu_configuration'];
             $secLevelEntries .= addMenuEntry('editconfig', 'config', 'ad_menu_editconfig', $action);
-            $secLevelEntries .= addMenuEntry('editconfig,editbt,delbt', 'linkconfig', 'ad_menu_linkconfig', $action);
+            $secLevelEntries .= addMenuEntry('editconfig+editbt+delbt', 'linkconfig', 'ad_menu_linkconfig', $action);
             $secLevelEntries .= addMenuEntry('editconfig', 'stopwordsconfig', 'ad_menu_stopwordsconfig', $action);
-            $secLevelEntries .= addMenuEntry('edittranslation,addtranslation,deltranslation', 'translist', 'ad_menu_translations', $action);
+            $secLevelEntries .= addMenuEntry('edittranslation+addtranslation+deltranslation', 'translist', 'ad_menu_translations', $action);
             break;
         default:
             $secLevelHeader   = $PMF_LANG['admin_mainmenu_home'];
-            $secLevelEntries .= addMenuEntry('addcateg,editcateg,delcateg', 'addcategory', 'ad_quick_category');
+            $secLevelEntries .= addMenuEntry('addcateg+editcateg+delcateg', 'addcategory', 'ad_quick_category');
             $secLevelEntries .= addMenuEntry('addbt', 'editentry', 'ad_quick_record');
-            $secLevelEntries .= addMenuEntry('adduser,edituser,deluser', 'user&amp;user_action=add', 'ad_quick_user');
+            $secLevelEntries .= addMenuEntry('adduser+edituser+deluser', 'user&amp;user_action=add', 'ad_quick_user');
             if ($groupSupport) {
-                $secLevelEntries .= addMenuEntry('adduser,edituser,deluser', 'group&amp;group_action=add', 'ad_quick_group');
+                $secLevelEntries .= addMenuEntry('adduser+edituser+deluser', 'group&amp;group_action=add', 'ad_quick_group');
             }
             break;
     }
