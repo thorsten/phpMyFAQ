@@ -83,7 +83,11 @@
             <li><a href="#6b">The file template/style.css</a></li>
             <li><a href="#6c">More Templates</a></li>
         </ol></li>
-        <li><strong><a href="#7">One more thing</a></strong></li>
+        <li><strong><a href="#7">Customising phpMyFAQ 2.6.x</a></strong>
+        <ol class="alpha">
+            <li><a href="#7a">Creating custom layout</a></li>
+        </ol></li>
+        <li><strong><a href="#8">One more thing</a></strong></li>
     </ol>
 
 
@@ -959,7 +963,25 @@
     <p><a href="#top">back to top</a></p>
 
     <hr style="width: 90%; height: 1px;"  />
-    <p><strong><a name="7"></a>7. One more thing</strong></p>
+    <p><strong><a name="7"></a>7. Customising phpMyFAQ 2.6.x</strong></p>
+    <p>With phpMyFAQ v2.6.x users become even more customization opportunities. The
+    key feature is the user choosable template sets. From the v2.6.x on there is 
+    templates/default folder where the default layouts get shipped.</p>
+    <p><a href="#top">back to top</a></p>
+
+    <hr style="width: 90%; height: 1px;"  />
+    <p><strong><a name="7a"></a>7.a. Creating custom layout</strong></p>
+    Follow this steps to create a custom template set:<ul>
+    <li>copy the folder templates/default to templates/&lt;custom_template_set&gt;</li>
+    <li>adjust template files in templates/&lt;custom_template_set&gt; to fit your needs</li>
+    <li>activate &lt;custom_template_set&gt; within Admin->Config->Main</li>
+    </ul>    
+    <p><strong>Note:</strong> There is a magic variable <em>{tplSetName}</em> containing the name
+    of the actual layout availiable in each template file.</p>
+    <p><a href="#top">back to top</a></p>
+
+    <hr style="width: 90%; height: 1px;"  />
+    <p><strong><a name="8"></a>8. One more thing</strong></p>
     <p>Thank you for using phpMyFAQ! :-)</p>
     <p>
     Author: Thorsten Rinne<br />
