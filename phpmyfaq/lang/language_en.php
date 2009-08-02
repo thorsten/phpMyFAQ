@@ -987,3 +987,6 @@ $LANG_CONF['main.attachmentsPath'] = array(0 => "input", 1 => "Path where attach
 
 // added 2.5.0-RC3 - 2009-06-24 by Anatoliy
 $PMF_LANG['msgAttachmentNotFound'] = "The file you're trying to download was not found on this server";
+
+// added 2.6.0-alpha - 2009-08-02 by Anatoliy
+$LANG_CONF['main.templateSet'] = array(0 => "select", 1 => "Template set to be used");

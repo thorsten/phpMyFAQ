@@ -87,6 +87,18 @@ function printInputFieldByType($key, $type)
                 case 'main.permLevel':
                     print PMF_Perm::permOptions($faqconfig->get($key));
                     break;
+                    
+                case "main.templateSet":
+                	/**
+                	 * TODO: do get availiable template sets in the PMF_Template
+                	 */
+                	foreach(new DirectoryIterator('../template') as $item) {
+			    		if(!$item->isDot() && $item->isDir()) {
+			    			$selected = PMF_Template::getTplSetName() == $item ? " selected" : "";
+			    			print "<option$selected>$item</option>";
+			    		}
+			    	}
+                	break;
             }
             
             print "</select>\n<br />\n";
