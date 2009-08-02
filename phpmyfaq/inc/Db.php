@@ -106,8 +106,8 @@ class PMF_Db
         print "    <title>phpMyFAQ Error</title>\n";
         print "    <meta http-equiv=\"content-type\" content=\"application/xhtml+xml; charset=utf-8\" />\n";
         print "    <style type=\"text/css\" media=\"screen\"> /*<![CDATA[*/ <!--\n";
-        print "    @import url(template/style.css);\n";
-        print "    @import url(template/colors.css);\n";
+        print "    @import url(template/default/style.css);\n";
+        print "    @import url(template/default/colors.css);\n";
         print "    --> /*]]>*/ </style>\n";
         print "</head>\n";
         print "<body>\n";

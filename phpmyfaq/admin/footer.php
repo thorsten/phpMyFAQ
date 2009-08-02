@@ -75,7 +75,7 @@ tinyMCE.init({
     file_browser_callback : "ajaxfilemanager",
 
     // Example content CSS (should be your site CSS)
-    content_css : "../template/style.css",
+    content_css : "../template/<?php echo PMF_Template::getTplSetName(); ?>/style.css",
 
     // Drop lists for link/image/media/template dialogs
     template_external_list_url : "js/template_list.js",

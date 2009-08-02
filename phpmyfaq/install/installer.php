@@ -162,8 +162,8 @@ function cleanInstallation()
 <head>
     <title>phpMyFAQ <?php print VERSION; ?> Installation</title>
     <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=iso-8859-1" />
-    <link rel="shortcut icon" href="../template/favicon.ico" type="image/x-icon" />
-    <link rel="icon" href="../template/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="../template/default/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="../template/default/favicon.ico" type="image/x-icon" />
     <script language="javascript" type="text/javascript">
     /*<![CDATA[*/
     // <!--

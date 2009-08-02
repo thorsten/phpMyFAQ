@@ -40,10 +40,10 @@ header("Vary: Negotiate,Accept");
     <meta name="copyright" content="(c) 2001-2009 phpMyFAQ Team" />
     <meta http-equiv="Content-Type" content="text/html; charset=<?php print $PMF_LANG["metaCharset"]; ?>" />
     
-    <link rel="shortcut icon" href="../template/favicon.ico" type="image/x-icon" />
-    <link rel="icon" href="../template/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="../template/<?php echo PMF_Template::getTplSetName(); ?>/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="../template/<?php echo PMF_Template::getTplSetName(); ?>/favicon.ico" type="image/x-icon" />
     
-    <style type="text/css"> @import url(../template/admin.css); </style>
+    <style type="text/css"> @import url(../template/<?php echo PMF_Template::getTplSetName(); ?>/admin.css); </style>
     <style type="text/css"> @import url(../inc/js/plugins/autocomplete/jquery.autocomplete.css); </style>
     <style type="text/css"> @import url(../inc/js/plugins/datePicker/datePicker.css); </style>
     

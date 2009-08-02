@@ -63,19 +63,29 @@ class PMF_Template
      */
     private $blocksTouched = array();
 
+    /**
+     * Name of active template set
+     * 
+     * @var string
+     */
+    private static $tplSetName;
 
     /**
      * Constructor
      *
      * Combine all template files into the main templates array
      *
-     * @param  array $myTemplate Templates
+     * @param array  $myTemplate Templates
+     * @param string $tplSetName active template set name
+     * 
      * @return void
      */
-    public function __construct(Array $myTemplate)
+    public function __construct(Array $myTemplate, $tplSetName = 'default')
     {
+    	self::$tplSetName = $tplSetName;
+    	
         foreach ($myTemplate as $templateName => $filename) {
-            $this->templates[$templateName] = $this->readTemplate($filename, $templateName);
+            $this->templates[$templateName] = $this->readTemplate("template/$tplSetName/$filename", $templateName);
         }
     }
 
@@ -130,6 +140,9 @@ class PMF_Template
             }
         }
 
+        // add magic variables for each template
+        $tmp = str_replace('{tplSetName}', self::$tplSetName, $tmp);
+        
         if (isset($this->outputs[$templateName])) {
             $this->outputs[$templateName] .= $tmp;
         } else {
@@ -332,5 +345,27 @@ class PMF_Template
         }
 
         return $content;
+    }
+    
+    /**
+     * Set the template set name to use
+     * 
+     * @param $tplSetName
+     * 
+     * @return null
+     */
+    public static function setTplSetName($tplSetName)
+    {
+    	self::$tplSetName = $tplSetName;
+    }
+    
+    /**
+     * Get name of the actual template set
+     * 
+     * @return string
+     */
+    public static function getTplSetName()
+    {
+    	return self::$tplSetName;	
     }
 }

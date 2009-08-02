@@ -16,12 +16,12 @@
     <meta name="robots" content="INDEX, FOLLOW" />
     <meta name="revisit-after" content="7 days" />
     <meta name="MSSmartTagsPreventParsing" content="true" />    
-    <style type="text/css" media="screen">@import url(template/{stylesheet}.css);</style>
-    <style type="text/css" media="print">@import url(template/print.css);</style>
+    <style type="text/css" media="screen">@import url(template/{tplSetName}/{stylesheet}.css);</style>
+    <style type="text/css" media="print">@import url(template/{tplSetName}/print.css);</style>
     <script type="text/javascript" src="inc/js/functions.js"></script>
     <script type="text/javascript" src="inc/js/jquery.min.js"></script>
-    <link rel="shortcut icon" href="template/favicon.ico" type="image/x-icon" />
-    <link rel="icon" href="template/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="template/{tplSetName}/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="template/{tplSetName}/favicon.ico" type="image/x-icon" />
     <link rel="alternate" title="News RSS Feed" type="application/rss+xml" href="feed/news/rss.php" />
     <link rel="alternate" title="TopTen RSS Feed" type="application/rss+xml" href="feed/topten/rss.php" />
     <link rel="alternate" title="Latest FAQ Records RSS Feed" type="application/rss+xml" href="feed/latest/rss.php" />

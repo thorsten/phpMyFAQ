@@ -51,8 +51,8 @@ function HTMLFooter()
 <head>
     <title>phpMyFAQ <?php print NEWVERSION; ?> Update</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-    <link rel="shortcut icon" href="../template/favicon.ico" type="image/x-icon" />
-    <link rel="icon" href="../template/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="../template/default/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="../template/default/favicon.ico" type="image/x-icon" />
     <style type="text/css"><!--
     body {
         margin: 10px;
@@ -438,6 +438,7 @@ if ($step == 4) {
         }
         
         $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.enableUpdate', 'false')";
+        $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.templateSet', 'default')";
     }
     
     // Perform the queries for updating/migrating the database from 2.x

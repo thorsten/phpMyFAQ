@@ -68,6 +68,11 @@ if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE)) {
 //
 PMF_String::init($PMF_LANG["metaCharset"], $LANGCODE);
 
+/**
+ * Set actual template set name
+ */
+PMF_Template::setTplSetName($faqconfig->get('main.templateSet'));
+
 //
 // Create a new FAQ object
 //

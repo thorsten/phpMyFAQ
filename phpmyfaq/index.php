@@ -317,21 +317,21 @@ if (preg_match("=/=", $action) && !isset($allowedVariables[$action])) {
 // Select the template for the requested page
 //
 if (isset($auth)) {
-    $login_tpl = 'template/loggedin.tpl';
+    $login_tpl = 'loggedin.tpl';
 } else {
-    $login_tpl = 'template/loginbox.tpl';
+    $login_tpl = 'loginbox.tpl';
 }
 if ($action != 'main') {
-    $inc_tpl         = 'template/' . $action . '.tpl';
+    $inc_tpl         = $action . '.tpl';
     $inc_php         = $action.".php";
     $writeLangAdress = "?".str_replace("&", "&amp;",$_SERVER["QUERY_STRING"]);
 } else {
     if (isset($solution_id) && is_numeric($solution_id)) {
         // show the record with the solution ID
-        $inc_tpl = 'template/artikel.tpl';
+        $inc_tpl = 'artikel.tpl';
         $inc_php = 'artikel.php';
     } else {
-        $inc_tpl = 'template/main.tpl';
+        $inc_tpl = 'main.tpl';
         $inc_php = 'main.php';
     }
     $writeLangAdress = '?'.$sids;
@@ -343,19 +343,19 @@ if ($action != 'main') {
 // Check in any tags with at leat one entry exist
 $hasTags = $oTag->existTagRelations();
 if ($hasTags && (($action == 'artikel') || ($action == 'show'))) {
-    $right_tpl = $action == 'artikel' ? 'template/catandtag.tpl' : 'template/tagcloud.tpl';
+    $right_tpl = $action == 'artikel' ? 'catandtag.tpl' : 'tagcloud.tpl';
 } else {
-    $right_tpl = 'template/startpage.tpl';
+    $right_tpl = 'startpage.tpl';
 }
 
 //
 // Load template files and set template variables
 //
-$tpl = new PMF_Template (array(
-    'index'        => 'template/index.tpl',
-    'loginBox'     => $login_tpl,
-    'rightBox'     => $right_tpl,
-    'writeContent' => $inc_tpl));
+$tpl = new PMF_Template (array('index'        => 'index.tpl',
+                               'loginBox'     => $login_tpl,
+                               'rightBox'     => $right_tpl,
+                               'writeContent' => $inc_tpl),
+                         $faqconfig->get('main.templateSet'));
 
 $usersOnLine    = getUsersOnline();
 $totUsersOnLine = $usersOnLine[0] + $usersOnLine[1];

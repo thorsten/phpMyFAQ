@@ -66,7 +66,7 @@ if (count(ob_list_handlers()) > 0) {
     <title><?php print PMF_htmlentities($PMF_CONF['main.titleFAQ'], ENT_QUOTES, $PMF_LANG['metaCharset']); ?> - powered by phpMyFAQ</title>
     <meta name="copyright" content="(c) 2001-2009 phpMyFAQ Team" />
     <meta http-equiv="Content-Type" content="text/html; charset=<?php print $PMF_LANG["metaCharset"]; ?>" />
-    <style type="text/css"> @import url(../template/admin.css); </style>
+    <style type="text/css"> @import url(../template/<?php echo PMF_Template::getTplSetName(); ?>/admin.css); </style>
     <script type="text/javascript" src="../inc/js/jquery.min.js"></script>
 </head>
 <body id="body" dir="<?php print $PMF_LANG["dir"]; ?>">

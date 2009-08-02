@@ -101,11 +101,11 @@ if (is_null($currentAction) || !is_null($currentSave)) {
     <meta name="copyright" content="(c) 2001-2009 phpMyFAQ Team" />
     <meta http-equiv="Content-Type" content="text/html; charset=<?php print $PMF_LANG["metaCharset"]; ?>" />
 
-    <link rel="shortcut icon" href="../template/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="../template/<?php echo PMF_Template::getTplSetName(); ?>/favicon.ico" type="image/x-icon" />
 
-    <link rel="icon" href="../template/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="../template/<?php echo PMF_Template::getTplSetName(); ?>/favicon.ico" type="image/x-icon" />
     <style type="text/css">
-    @import url(../template/admin.css);
+    @import url(../template/<?php echo PMF_Template::getTplSetName(); ?>/admin.css);
     body { margin: 5px; }
     </style>
     <script type="text/javascript" src="../inc/js/functions.js"></script>
