@@ -29,7 +29,7 @@
  */
 
 /*	General	*/
-body { font: .8em 'Trebuchet MS', 'Nimbus Sans L', sans-serif; padding: 1em; margin: 0; background: url(../images/background.png) repeat-x; }
+body { font: .8em 'Trebuchet MS', 'Nimbus Sans L', sans-serif; padding: 1em; margin: 0; background: url(../../images/background.png) repeat-x; }
 td { font-size: .8em; }
 a:link, a:visited { color: #191970; border-bottom: 1px dotted #bbb; text-decoration: none; }
 h3 a:link, h3 a:visited { border: 0;}
