@@ -92,10 +92,12 @@ function printInputFieldByType($key, $type)
                 	/**
                 	 * TODO: do get availiable template sets in the PMF_Template
                 	 */
-                	foreach(new DirectoryIterator('../template') as $item) {
+                	foreach (new DirectoryIterator('../template') as $item) {
 			    		if(!$item->isDot() && $item->isDir()) {
-			    			$selected = PMF_Template::getTplSetName() == $item ? " selected" : "";
-			    			print "<option$selected>$item</option>";
+			    			$selected = PMF_Template::getTplSetName() == $item ? ' selected="selected"' : '';
+			    			printf ("<option%s>%s</option>",
+			    			  $selected,
+			    			  $item);
 			    		}
 			    	}
                 	break;
