@@ -275,7 +275,7 @@ $(document).ready(
  					<li ><a href="#" id="actionZip"><span>Zip</span></a><li>
 					<li ><a href="#" id="actionUnzip"><span>Unzip</span></a><li>-->
 				</ul>    
-<form action="" method="POST" name="formAction" id="formAction"><input type="hidden" name="currentFolderPath" id="currentFolderPathVal" value="" /><select name="selectedDoc[]" id="selectedDoc" style="display:none;" multiple="multiple"></select><input type="hidden" name="action_value" value="" id="action_value" /></form>				  
+<form action="" method="post" name="formAction" id="formAction"><input type="hidden" name="currentFolderPath" id="currentFolderPathVal" value="" /><select name="selectedDoc[]" id="selectedDoc" style="display:none;" multiple="multiple"></select><input type="hidden" name="action_value" value="" id="action_value" /></form>				  
     </div>
     
     <div id="body">
@@ -508,7 +508,7 @@ $(document).ready(
   			<a href="#" onclick="tb_remove();"><?php echo LBL_ACTION_CLOSE; ?></a>
   		</div>
   		<div class="jqmBody">
-		  	<form id="formUpload" name="formUpload" method="POST" enctype="multipart/form-data" action="">
+		  	<form id="formUpload" name="formUpload" method="post" enctype="multipart/form-data" action="">
 		  	<table class="tableForm" cellpadding="0" cellspacing="0">
 		  		<thead>
 		  			<tr>
@@ -539,7 +539,7 @@ $(document).ready(
   			<a href="#" onclick="tb_remove();"><?php echo LBL_ACTION_CLOSE; ?></a>
   		</div>
   		<div class="jqmBody">
-	    	<form id="formNewFolder" name="formNewFolder" method="POST" action="">
+	    	<form id="formNewFolder" name="formNewFolder" method="post" action="">
 	  	<input type="hidden" name="currentFolderPath" value="" id="currentNewfolderPath" />
 	  	<table class="tableForm" cellpadding="0" cellspacing="0">
 	  		<thead>
@@ -585,7 +585,7 @@ $(document).ready(
   			<a href="#" onclick="tb_remove();"><?php echo LBL_ACTION_CLOSE; ?></a>
   		</div>
   		<div class="jqmBody">
-		  	<form id="formRename" name="formRename" method="POST" action="">
+		  	<form id="formRename" name="formRename" method="post" action="">
 		  	<input type="hidden" name="original_path" id="original_path" />
 		  	<input type="hidden" name="num" id="renameNum" value="" />
 		  	<table class="tableForm" cellpadding="0" cellspacing="0">
