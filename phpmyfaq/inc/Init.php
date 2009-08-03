@@ -354,6 +354,27 @@ class PMF_Init
     }
 
     /**
+     * True if the language is supported by the bundled TinyMCE editor
+     *
+     * @param   string  $langcode
+     * @return  bool
+     * @access  public
+     * @since   2009-08-02
+     * @author  Aurimas Fišeras <aurimas@gmail.com>
+     */
+    public static function isASupportedTinyMCELanguage($langcode)
+    {
+        // TinyMCE Language is supported if there is a language file present in
+        // PMF_ROOT/admin/editor/langs/$langcode.js
+
+        // TinyMCE language packs can be downloaded from
+        // http://tinymce.moxiecode.com/download_i18n.php
+        // and extracted to PMF_ROOT/admin/editor
+
+        return file_exists(dirname(dirname(__FILE__)).'/admin/editor/langs/'.$langcode.'.js');
+    }
+
+    /**
      * Sets the current language for phpMyFAQ user session
      *
      * @param   bool    $config_detection Configuration detection

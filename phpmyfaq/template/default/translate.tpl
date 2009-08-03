@@ -50,6 +50,7 @@
     <!--
         tinyMCE.init({
             mode : "exact",
+            language : "{tinyMCELanguage}",
             elements : "translated_content",
             editor_deselector : "mceNoEditor",
             theme : "simple"

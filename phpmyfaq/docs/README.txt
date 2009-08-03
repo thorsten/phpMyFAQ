@@ -21,6 +21,7 @@ CHANGELOG:
 Version 2.6.0-alpha - 2009-09-
 - moved all language files to UTF-8 (Anatoliy)
 - added TCPDF as replacement for FPDF library (Thorsten)
+- added support for TinyMCE translations (Aurimas Fišeras)
 -
 
 Version 2.5.1 - 2009-08-

@@ -68,7 +68,9 @@ $tpl->processTemplate('writeContent', array(
     'msgNewTranslationKeywords' => $PMF_LANG['msgNewTranslationKeywords'],
     'writeTransFaqLanguage'     => $translationLanguage,
     'captchaFieldset'           => printCaptchaFieldset($PMF_LANG['msgCaptcha'], $captcha->printCaptcha('translate'), $captcha->caplength),
-    'msgNewTranslationSubmit'   => $PMF_LANG['msgNewTranslationSubmit'])
+    'msgNewTranslationSubmit'   => $PMF_LANG['msgNewTranslationSubmit'],
+    'tinyMCELanguage'           => (PMF_Init::isASupportedTinyMCELanguage($LANGCODE) ? $LANGCODE : 'en'))
     );
 
 $tpl->includeTemplate('writeContent', 'index');
+
