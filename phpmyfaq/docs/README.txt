@@ -9,10 +9,11 @@ Please read the documentation (documentation.en.html) carefully.
 Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
-Changes since 2.5.0:
+Changes since 2.5.x:
 - moved all language files to UTF-8 (Anatoliy)
 - added TCPDF as replacement for FPDF library (Thorsten)
--
+- added support for TinyMCE translations (Aurimas Fišeras)
+- added support for multi-language news (Thorsten)
 
 For known issues please take a look at KNOWNBUGS.txt
 
@@ -22,7 +23,7 @@ Version 2.6.0-alpha - 2009-09-
 - moved all language files to UTF-8 (Anatoliy)
 - added TCPDF as replacement for FPDF library (Thorsten)
 - added support for TinyMCE translations (Aurimas Fišeras)
--
+- added support for multi-language news (Thorsten)
 
 Version 2.5.1 - 2009-08-
 - minor bugfixes (Thorsten)
