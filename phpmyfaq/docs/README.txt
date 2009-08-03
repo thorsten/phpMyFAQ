@@ -14,6 +14,7 @@ Changes since 2.5.x:
 - added TCPDF as replacement for FPDF library (Thorsten)
 - added support for TinyMCE translations (Aurimas Fišeras)
 - added support for multi-language news (Thorsten)
+- user adjustable template sets and styles (Anaotliy)
 
 For known issues please take a look at KNOWNBUGS.txt
 
@@ -24,6 +25,7 @@ Version 2.6.0-alpha - 2009-09-
 - added TCPDF as replacement for FPDF library (Thorsten)
 - added support for TinyMCE translations (Aurimas Fišeras)
 - added support for multi-language news (Thorsten)
+- user adjustable template sets and styles (Anaotliy)
 
 Version 2.5.1 - 2009-08-
 - minor bugfixes (Thorsten)
