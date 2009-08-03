@@ -89,16 +89,20 @@ class PMF_News
             FROM
                 %sfaqnews
             WHERE
-                    date_start <= '%s'
-                AND date_end   >= '%s'
-                %s
+                date_start <= '%s'
+            AND 
+                date_end   >= '%s'
+            %s
+            AND
+                lang = '%s'
             ORDER BY
                 datum DESC",
             SQLPREFIX,
             $now,
             $now,
-            $active ? "AND active = 'y'" : ''
-            );
+            $active ? "AND active = 'y'" : '',
+            $this->language);
+            
         $result = $this->db->query($query);
 
         if ($faqconfig->get('main.numberOfShownNewsEntries') > 0 && $this->db->num_rows($result) > 0) {
@@ -194,9 +198,12 @@ class PMF_News
                 id, datum, lang, header, active, date_start, date_end
             FROM
                 %sfaqnews
+            WHERE
+                lang = '%s'
             ORDER BY
                 datum DESC",
-            SQLPREFIX);
+            SQLPREFIX,
+            $this->language);
             
         $result = $this->db->query($query);
 
@@ -233,9 +240,13 @@ class PMF_News
             FROM
                 %sfaqnews
             WHERE
-                id = %d",
+                id = %d
+            AND
+                lang = '%s'",
             SQLPREFIX,
-            $id);
+            $id,
+            $this->language);
+            
         $result = $this->db->query($query);
 
         if ($this->db->num_rows($result) > 0) {
@@ -402,12 +413,17 @@ class PMF_News
             DELETE FROM
                 %sfaqnews
             WHERE
-                id = %d",
+                id = %d
+            AND
+                lang = '%s'",
             SQLPREFIX,
-            (int)$id);
+            $id,
+            $this->language);
+            
         if (!$this->db->query($query)) {
             return false;
         }
+        
         return true;
     }
 }
