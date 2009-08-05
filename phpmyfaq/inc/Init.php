@@ -107,7 +107,8 @@ ini_set('url_rewriter.tags', '');
 // Connect to LDAP server, when LDAP support is enabled
 //
 if ($faqconfig->get('main.ldapSupport') && file_exists(PMF_INCLUDE_DIR . '/dataldap.php')) {
-    require_once PMF_INCLUDE_DIR . '/dataldap.php';
+    require PMF_INCLUDE_DIR . '/dataldap.php';
+    require PMF_INCLUDE_DIR . '/constants_ldap.php';
 } else {
     $ldap = null;
 }
