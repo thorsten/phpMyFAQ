@@ -114,6 +114,21 @@ class PMF_User_CurrentUser extends PMF_User
      */
     public function login($login, $pass)
     {
+    	// ToDo: the option should be in the configuration of the DB
+        //   instead of inc/dataldap.php
+        global $PMF_LDAP;
+        
+        $optData = array();
+        if ($PMF_LDAP['ldap_use_domain_prefix']) {
+            if (($pos = strpos($login, '\\')) !== false) {
+                if ($pos != 0) {
+                    $optData['domain'] = substr($login, 0, $pos);
+                }
+
+                $login = substr($login, $pos+1);
+            }
+        }
+    	
         // authenticate user by login and password
         $login_error = 0;
         $pass_error  = 0;
@@ -128,12 +143,12 @@ class PMF_User_CurrentUser extends PMF_User
                 continue;
             }
             // $login does not exist, so continue
-            if (!$auth->checkLogin($login)) {
+            if (!$auth->checkLogin($login, $optData)) {
                 $login_error++;
                 continue;
             }
             // $login exists, but $pass is incorrect, so stop!
-            if (!$auth->checkPassword($login, $pass)) {
+            if (!$auth->checkPassword($login, $pass, $optData)) {
                 $pass_error++;
                 // Don't stop, as other auth method could work:
                 continue;

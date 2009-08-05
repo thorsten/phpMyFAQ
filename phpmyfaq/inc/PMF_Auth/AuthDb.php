@@ -84,7 +84,7 @@ class PMF_Auth_AuthDb extends PMF_Auth implements PMF_Auth_AuthDriver
         $add   = $this->db->query($add);
         $error = $this->db->error();
         
-        if (PMF_String::strlen($error) > 0) {
+        if (strlen($error) > 0) {
             $this->errors[] = PMF_User::ERROR_USER_ADD . 'error(): ' . $error;
             return false;
         }
@@ -123,7 +123,7 @@ class PMF_Auth_AuthDb extends PMF_Auth implements PMF_Auth_AuthDriver
         $change = $this->db->query($change);
         $error  = $this->db->error();
         
-        if (PMF_String::strlen($error) > 0) {
+        if (strlen($error) > 0) {
             $this->errors[] =  PMF_User::ERROR_USER_CHANGE . 'error(): ' . $error;
             return false;
         }
@@ -157,7 +157,7 @@ class PMF_Auth_AuthDb extends PMF_Auth implements PMF_Auth_AuthDriver
         $delete = $this->db->query($delete);
         $error  = $this->db->error();
         
-        if (PMF_String::strlen($error) > 0) {
+        if (strlen($error) > 0) {
             $this->errors[] = PMF_User::ERROR_USER_DELETE . 'error(): ' . $error;
             return false;
         }
@@ -177,9 +177,10 @@ class PMF_Auth_AuthDb extends PMF_Auth implements PMF_Auth_AuthDriver
      *
      * @param  string $login Loginname
      * @param  string $pass  Password
+     * @param  array  $optionlData Optional data
      * @return boolean
      */
-    public function checkPassword($login, $pass)
+    public function checkPassword($login, $pass, Array $optionlData = array())
     {
         $check = sprintf("
             SELECT
@@ -194,7 +195,7 @@ class PMF_Auth_AuthDb extends PMF_Auth implements PMF_Auth_AuthDriver
         $check = $this->db->query($check);
         $error = $this->db->error();
         
-        if (PMF_String::strlen($error) > 0) {
+        if (strlen($error) > 0) {
             $this->errors[] = PMF_User::ERROR_USER_NOT_FOUND . 'error(): ' . $error;
             return false;
         }
@@ -222,9 +223,10 @@ class PMF_Auth_AuthDb extends PMF_Auth implements PMF_Auth_AuthDriver
      * Checks the number of entries of given login name
      *
      * @param  string $login Loginname
+     * @param  array  $optionlData Optional data
      * @return integer
      */
-    public function checkLogin($login)
+    public function checkLogin($login, Array $optionlData = array())
     {
         $check = sprintf("
             SELECT
@@ -239,7 +241,7 @@ class PMF_Auth_AuthDb extends PMF_Auth implements PMF_Auth_AuthDriver
         $check = $this->db->query($check);
         $error = $this->db->error();
         
-        if (PMF_String::strlen($error) > 0) {
+        if (strlen($error) > 0) {
             $this->errors[] = $error;
             return 0;
         }

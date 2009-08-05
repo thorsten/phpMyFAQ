@@ -5,6 +5,7 @@
  * @package    phpMyFAQ 
  * @subpackage PMF_Auth
  * @author     Alberto Cabello <alberto@unex.es>
+ * @author     Lars Scheithauer <larsscheithauer@googlemail.com>
  * @since      2009-03-01
  * @copyright  2009 phpMyFAQ Team
  * @version    SVN: $Id: AuthDb.php 3790 2009-02-10 20:43:36Z thorsten $ 
@@ -27,6 +28,7 @@
  * @package    phpMyFAQ 
  * @subpackage PMF_Auth
  * @author     Alberto Cabello <alberto@unex.es>
+ * @author     Lars Scheithauer <larsscheithauer@googlemail.com>
  * @since      2009-03-01
  * @copyright  2009 phpMyFAQ Team
  * @version    SVN: $Id: AuthDb.php 3790 2009-02-10 20:43:36Z thorsten $ 
@@ -49,7 +51,19 @@ class PMF_Auth_AuthLdap extends PMF_Auth implements PMF_Auth_AuthDriver
      */
     public function __construct($enctype = 'none', $read_only = false)
     {
+    	global $PMF_LDAP;
+    	
         parent::__construct($enctype, $read_only);
+        
+        $this->ldap = new PMF_Ldap($PMF_LDAP['ldap_server'],
+                                   $PMF_LDAP['ldap_port'],
+                                   $PMF_LDAP['ldap_base'],
+                                   $PMF_LDAP['ldap_user'], 
+                                   $PMF_LDAP['ldap_password']);
+
+        if ($this->ldap->error) {
+            $this->errors[] = PMF_USERERROR_INCORRECT_PASSWORD;
+        } 
     }
 
     /**
@@ -109,13 +123,21 @@ class PMF_Auth_AuthLdap extends PMF_Auth implements PMF_Auth_AuthDriver
      * @param  string $pass  Password
      * @return boolean
      */
-    public function checkPassword($login, $pass)
+    public function checkPassword($login, $pass, $options=null)
     {
         global $PMF_LDAP;
+        
+       $bindLogin = $login;
+       if ($PMF_LDAP['ldap_use_domain_prefix']) {
+           if (array_key_exists('domain', $options)) {
+               $bindLogin = $options['domain']."\\".$login;
+           }
+       }
+
         $this->ldap = new PMF_Ldap($PMF_LDAP['ldap_server'],
                                    $PMF_LDAP['ldap_port'],
                                    $PMF_LDAP['ldap_base'],
-                                   $login, 
+                                   $bindLogin, 
                                    $pass);
         if ($this->ldap->error) {
             $this->errors[] = PMF_USERERROR_INCORRECT_PASSWORD;

@@ -79,17 +79,19 @@ interface PMF_Auth_AuthDriver
      * This function is only called when local authentication has failed, so
      * we are about to create user account.
      *
-     * @param  string $login Loginname
-     * @param  string $pass  Password
+     * @param  string $login       Loginname
+     * @param  string $pass        Password
+     * @param  array  $optionlData Optional data
      * @return boolean
      */
-    public function checkPassword($login, $pass);
+    public function checkPassword($login, $pass, Array $optionlData = array());
 
     /**
      * Does nothing. A function required to be a valid auth.
      *
      * @param  string $login Loginname
+     * @param  array  $optionlData Optional data
      * @return integer
      */
-    public function checkLogin($login);
+    public function checkLogin($login, Array $optionlData = array());
 }
