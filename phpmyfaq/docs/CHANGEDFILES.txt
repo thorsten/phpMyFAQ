@@ -13,11 +13,13 @@ CHANGED FILES FROM 2.5.0 -> 2.5.1
 ./inc/PMF_Export/Pdf.php
 ./inc/PMF_User/CurrentUser.php
 ./inc/constants.php
+./inc/constants_ldap.php added
 ./inc/record.save.php
 ./inc/Export.php
 ./inc/Faq.php
 ./inc/Filter.php
 ./inc/functions.php
+./inc/Init.php
 ./inc/Ldap.php
 ./inc/String.php
 ./inc/Tags.php
