@@ -2,18 +2,26 @@ CHANGED FILES FROM 2.5.0 -> 2.5.1
 
 ./admin/footer.php
 ./docs/documentation.en.html
+./inc/PMF_Auth/AuthDb.php
+./inc/PMF_Auth/AuthDriver.php
+./inc/PMF_Auth/AuthHttp.php
+./inc/PMF_Auth/AuthLdap.php
+./inc/PMF_Enc/Enc.php added
+./inc/PMF_DB/Oracle.php deleted
+./inc/PMF_DB/Oci8.php added
+./inc/PMF_Export/Docbook.php
+./inc/PMF_Export/Pdf.php
+./inc/PMF_User/CurrentUser.php
 ./inc/constants.php
 ./inc/record.save.php
 ./inc/Export.php
 ./inc/Faq.php
 ./inc/Filter.php
 ./inc/functions.php
+./inc/Ldap.php
 ./inc/String.php
 ./inc/Tags.php
-./inc/PMF_DB/Oracle.php deleted
-./inc/PMF_DB/Oci8.php added
-./inc/PMF_Export/Docbook.php
-./inc/PMF_Export/Pdf.php
+./inc/User.php
 ./install/installer.php
 ./install/oracle.sql.php deleted
 ./install/oci8.sql.php added

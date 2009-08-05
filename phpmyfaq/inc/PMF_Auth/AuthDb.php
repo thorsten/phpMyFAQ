@@ -177,9 +177,10 @@ class PMF_Auth_AuthDb extends PMF_Auth implements PMF_Auth_AuthDriver
      *
      * @param  string $login Loginname
      * @param  string $pass  Password
+     * @param  array  $optionlData Optional data
      * @return boolean
      */
-    public function checkPassword($login, $pass)
+    public function checkPassword($login, $pass, Array $optionlData = array())
     {
         $check = sprintf("
             SELECT
@@ -222,9 +223,10 @@ class PMF_Auth_AuthDb extends PMF_Auth implements PMF_Auth_AuthDriver
      * Checks the number of entries of given login name
      *
      * @param  string $login Loginname
+     * @param  array  $optionlData Optional data
      * @return integer
      */
-    public function checkLogin($login)
+    public function checkLogin($login, Array $optionlData = array())
     {
         $check = sprintf("
             SELECT

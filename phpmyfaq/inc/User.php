@@ -61,6 +61,7 @@ class PMF_User
     const ERROR_USER_NO_USERLOGINDATA = 'No user login data found. ';
     const ERROR_USER_NOT_FOUND = 'User account could not be found. ';
     const ERROR_USER_NOWRITABLE = 'No authentication object is writable. ';
+    const ERROR_USER_NO_LOGIN_DATA = 'A username and password must be provided. ';
 
     const STATUS_USER_PROTECTED = 'User account is protected. ';
     const STATUS_USER_BLOCKED = 'User account is blocked. ';

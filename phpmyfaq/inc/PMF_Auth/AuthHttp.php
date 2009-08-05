@@ -90,9 +90,10 @@ class PMF_Auth_AuthHttp extends PMF_Auth implements PMF_Auth_AuthDriver
      *
      * @param  string $login Loginname
      * @param  string $pass  Password
+     * @param  array  $optionlData Optional data
      * @return boolean
      */
-    public function checkPassword($login, $pass)
+    public function checkPassword($login, $pass, Array $optionlData = array())
     {
     	if (!isset($_SERVER['PHP_AUTH_USER']) && $_SERVER['PHP_AUTH_PW']) {
     		return false;
@@ -109,9 +110,10 @@ class PMF_Auth_AuthHttp extends PMF_Auth implements PMF_Auth_AuthDriver
      * Does nothing. A function required to be a valid auth.
      *
      * @param  string $login Loginname
+     * @param  array  $optionlData Optional data
      * @return integer
      */
-    public function checkLogin($login)
+    public function checkLogin($login, Array $optionlData = array())
     {
     	return isset($_SERVER['PHP_AUTH_USER']) ? true : false;
     }

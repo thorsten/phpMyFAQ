@@ -7,6 +7,7 @@
  * @author     Adam Greene <phpmyfaq@skippy.fastmail.fm>
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author     Alberto Cabello Sánchez <alberto@unex.es>
+ * @author     Lars Scheithauer <larsscheithauer@googlemail.com>
  * @since      2004-12-16
  * @copyright  2004-2009 phpMyFAQ Team
  * @version    SVN: $Id$
@@ -30,6 +31,7 @@
  * @author     Adam Greene <phpmyfaq@skippy.fastmail.fm>
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author     Alberto Cabello Sánchez <alberto@unex.es>
+ * @author     Lars Scheithauer <larsscheithauer@googlemail.com>
  * @since      2004-12-16
  * @copyright  2004-2009 phpMyFAQ Team
  * @version    SVN: $Id$
@@ -54,6 +56,13 @@ class PMF_Ldap
      * @var string
      */
     public $error = null;
+    
+    /**
+     * LDAP error number
+     * 
+     * @var integer
+     */
+    public $errno = null;
 
     /**
      * Constructor
@@ -69,6 +78,8 @@ class PMF_Ldap
      */
     public function __construct($ldap_server, $ldap_port, $ldap_base, $ldap_user = '', $ldap_password = '')
     {
+    	global $PMF_LDAP;
+    	
         $this->base = $ldap_base;
 
         if (!isset($ldap_user) || !isset($ldap_server) || $ldap_server == "" || !isset($ldap_port) || $ldap_port == "" || !isset($ldap_base) || $ldap_base == "" || !isset($ldap_password)) {
@@ -78,12 +89,24 @@ class PMF_Ldap
         $this->ds = ldap_connect($ldap_server, $ldap_port);
         if (!$this->ds) {
             $this->error = 'Unable to connect to LDAP server (Error: '.ldap_error($this->ds).')';
+            $this->errno = ldap_errno($this->ds);
+        }
+
+        // optionally set Bind version
+        foreach ($PMF_LDAP['ldap_options'] as $key => $value) { 
+            if (!ldap_set_option($this->ds, $key, $value)) {
+                $this->error = 'Unable to set LDAP option "'.$key.'" to "'.$value.'" (Error: '.ldap_error($this->ds).')';
+                $this->errno = ldap_errno($this->ds);
+            }
         }
 
         $ldapbind = ldap_bind($this->ds, $ldap_user, $ldap_password);
+
         if (!$ldapbind) {
             $this->error = 'Unable to bind to LDAP server (Error: '.ldap_error($this->ds).')';
-        }
+            $this->errno = ldap_errno($this->ds);
+            $this->ds = false;
+         }
     }
 
     /**
@@ -94,38 +117,18 @@ class PMF_Ldap
      */
     public function getMail($username)
     {
-        if (!$this->ds) {
-            return '';
-        }
-
-        $sr = ldap_search($this->ds, $this->base, $username, array('mail'));
-        if (!$sr) {
-            $this->error = 'Unable to search for "'.$username.'" (Error: '.ldap_error($this->ds).')';
-        }
-        $entryId = ldap_first_entry($this->ds, $sr);
-        $values  = ldap_get_values($this->ds, $entryId, 'mail');
-        return $values[0];
+        return $this->getLdapData($username, 'mail');
     }
 
     /**
-     * Returns the user's email address from LDAP
+     * Returns the user's full name from LDAP
      *
      * @param  string $username Username
      * @return string
      */
     public function getCompleteName($username)
     {
-        if (!$this->ds) {
-            return '';
-        }
-
-        $sr = ldap_search($this->ds, $this->base, $username, array('cn'));
-        if (!$sr) {
-            $this->error = 'Unable to search for "'.$username.'" (Error: '.ldap_error($this->ds).')';
-        }
-        $entryId = ldap_first_entry($this->ds, $sr);
-        $values  = ldap_get_values($this->ds, $entryId, 'cn');
-        return $values[0];
+        return $this->getLdapData($username, "name");
     }
 
     /**
@@ -133,8 +136,43 @@ class PMF_Ldap
      *
      * @return string
      */
-    public function error()
+    public function error($ds = null)
     {
-        return ldap_error($this->ds);
+        if ($ds === null) {
+            $ds = $this->ds;
+        }
+        return ldap_error($ds);
     }
+    
+    /**
+     * Returns specific data from LDAP
+     * 
+     * @param  string $username Username
+     * @param  string $data     MapKey
+     * @return string
+     */
+    private function getLdapData($username, $data)
+    {
+        global $PMF_LDAP;
+       
+        if (!array_key_exists($data, $PMF_LDAP['ldap_mapping'])) {
+            $this->error = 'requested datafield "'.$data.'" does not exist in $PMF_LDAP["ldap_mapping"].';
+            return '';
+        }
+ 
+        $filter = "(" . $PMF_LDAP['ldap_mapping']['username'] . "=" . $username . ")";
+        $fields = array($PMF_LDAP['ldap_mapping'][$data]);
+        
+         $sr = ldap_search($this->ds, $this->base, $filter, $fields);
+         if (!$sr) {
+            $this->errno = ldap_errno($this->ds);
+            $this->error = 'Unable to search for "'.$username.'" (Error: '.ldap_error($this->ds).')';
+         }
+         
+         $entryId = ldap_first_entry($this->ds, $sr);
+         $values  = ldap_get_values($this->ds, $entryId, $fields[0]);
+         
+         return $values[0];
+    }
+    
 }

@@ -10,7 +10,11 @@ Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.5.0:
+- added support for LDAP-datamapping, e.g. against an Active Directory Server (Lars Scheithauer)
+- added support for multi-domain-authentication, e.g. against an ADS-Global Catalog (Lars Scheithauer)
+- added support for PHP LDAP options (Lars Scheithauer)
 - Added Lithuanian translation (Aurimas Fiseras)
+- fixed LDAP issues (Lars Scheithauer)
 - fixed some Oracle issues (Thorsten)
 - improved svn2package script (Rene Treffer)
 - many minor bugfixes (Thorsten)
@@ -20,7 +24,11 @@ For known issues please take a look at KNOWNBUGS.txt
 CHANGELOG:
 
 Version 2.5.1 - 2009-08-
+- added support for LDAP-datamapping, e.g. against an Active Directory Server (Lars Scheithauer)
+- added support for multi-domain-authentication, e.g. against an ADS-Global Catalog (Lars Scheithauer)
+- added support for PHP LDAP options (Lars Scheithauer)
 - Added Lithuanian translation (Aurimas Fiseras)
+- fixed LDAP issues (Lars Scheithauer)
 - fixed some Oracle issues (Thorsten)
 - improved svn2package script (Rene Treffer)
 - many minor bugfixes (Thorsten)
