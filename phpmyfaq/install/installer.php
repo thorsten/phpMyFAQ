@@ -165,9 +165,10 @@ function cleanInstallation()
     <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=iso-8859-1" />
     <link rel="shortcut icon" href="../template/favicon.ico" type="image/x-icon" />
     <link rel="icon" href="../template/favicon.ico" type="image/x-icon" />
+    <script type="text/javascript" src="../inc/js/jquery.min.js"></script>
     <script language="javascript" type="text/javascript">
     /*<![CDATA[*/
-    <!--+
+    <!--
     function cssAddClass(ele, className) {
         if (typeof ele == 'string') {
             ele = document.getElementById(ele);
@@ -1039,8 +1040,8 @@ function iframeUpdated() {
         return;
     }
 
-    hide("questionnaireForm");
-    show("questionnaireThanks");
+    $('questionnaireForm').hide();
+    $('#questionnaireThanks').show();;
 }
 
 function hide(item) {
