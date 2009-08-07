@@ -1,6 +1,7 @@
 CHANGED FILES FROM 2.5.0 -> 2.5.1
 
 ./admin/footer.php
+./admin/pwd.change.php
 ./docs/documentation.en.html
 ./inc/PMF_Auth/AuthDb.php
 ./inc/PMF_Auth/AuthDriver.php

@@ -39,7 +39,7 @@ if ($permission["passwd"]) {
         // Define the (Local/Current) Authentication Source
         $_authSource = PMF_Auth::selectAuth($user->auth_data['authSource']['name']);
         $_authSource->selectEncType($user->auth_data['encType']);
-        $_authSource->read_only($user->auth_data['readOnly']);
+        $_authSource->setReadOnly($user->auth_data['readOnly']);
         
         $opasswd = PMF_Filter::filterInput(INPUT_POST, 'opass', FILTER_SANITIZE_STRING);
         $npasswd = PMF_Filter::filterInput(INPUT_POST, 'npass', FILTER_SANITIZE_STRING);
