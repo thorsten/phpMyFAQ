@@ -61,7 +61,7 @@ $PMF_LANG["msgVoteUseability"] = "Įvertinti šį DUK:";
 $PMF_LANG["msgVoteFrom"] = "iš";
 $PMF_LANG["msgVoteBad"] = "visiškai nenaudingas";
 $PMF_LANG["msgVoteGood"] = "labai vertingas";
-$PMF_LANG["msgVotings"] = "Balsai ";
+$PMF_LANG["msgVotings"] = "balsai ";
 $PMF_LANG["msgVoteSubmit"] = "Balsuoti";
 $PMF_LANG["msgVoteThanks"] = "Labai ačiū už jūsų balsą!";
 $PMF_LANG["msgYouCan"] = "Jūs galite ";
@@ -913,7 +913,7 @@ $PMF_LANG['ad_searchstats_search_term_percentage'] = 'Procentai';
 // added 2.5.0-beta - 2009-03-31 by Anatoliy
 $PMF_LANG['ad_record_sticky'] = 'Lipnus';
 $PMF_LANG['ad_entry_sticky'] = 'Lipnus';
-$PMF_LANG['stickyRecordsHeader'] = 'Lipnus DUK';
+$PMF_LANG['stickyRecordsHeader'] = 'Lipnūs DUK';
 
 // added 2.5.0-beta - 2009-04-01 by Anatoliy
 $PMF_LANG['ad_menu_stopwordsconfig'] = 'Atmetiniai';
@@ -969,3 +969,7 @@ $LANG_CONF['main.attachmentsPath'] = array(0 => "input", 1 => "Kelias, kur bus s
 
 // added 2.5.0-RC3 - 2009-06-24 by Anatoliy
 $PMF_LANG['msgAttachmentNotFound'] = "Failas, kurį mėginate atsisiųsti buvo nerastas serveryje";
+
+// added 2.6.0-alpha - 2009-08-02 by Anatoliy
+$LANG_CONF['main.templateSet'] = array(0 => "select", 1 => "Naudojamas šablonų rinkinys");
+
