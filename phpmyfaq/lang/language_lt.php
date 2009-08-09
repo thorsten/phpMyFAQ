@@ -25,6 +25,21 @@ $PMF_LANG["language"] = "lietuvių";
 // ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
 $PMF_LANG["dir"] = "ltr";
 
+//number of plural forms in a language
+//for examples see http://www.gnu.org/software/gettext/manual/gettext.html#Plural-forms
+$PMF_LANG["nplurals"] = 3;
+
+//helper function to determine correct plural form
+//for examples see http://www.gnu.org/software/gettext/manual/gettext.html#Plural-forms
+//expression is of the same form as in Po files
+//function name must be plural_ + language code as defined above in $PMF_LANG["metaLanguage"]
+function plural_lt($n)
+{
+    //return ($n%10 == 1 && $n%100 != 11 ? 0 : $n%10 >= 2 && ($n%100 < 10 || $n%100 >= 20) ? 1 : 2);
+    //TODO why does php need extra braces, since operator precedence is the same as in C???
+    return ($n%10 == 1 && $n%100 != 11 ? 0 : ($n%10 >= 2 && ($n%100 < 10 || $n%100 >= 20) ? 1 : 2));
+}
+
 // Navigation
 $PMF_LANG["msgCategory"] = "Grupės";
 $PMF_LANG["msgShowAllCategories"] = "Visos grupės";
@@ -61,7 +76,7 @@ $PMF_LANG["msgVoteUseability"] = "Įvertinti šį DUK:";
 $PMF_LANG["msgVoteFrom"] = "iš";
 $PMF_LANG["msgVoteBad"] = "visiškai nenaudingas";
 $PMF_LANG["msgVoteGood"] = "labai vertingas";
-$PMF_LANG["msgVotings"] = "Balsai ";
+$PMF_LANG["msgVotings"] = "balsai ";
 $PMF_LANG["msgVoteSubmit"] = "Balsuoti";
 $PMF_LANG["msgVoteThanks"] = "Labai ačiū už jūsų balsą!";
 $PMF_LANG["msgYouCan"] = "Jūs galite ";
@@ -913,7 +928,7 @@ $PMF_LANG['ad_searchstats_search_term_percentage'] = 'Procentai';
 // added 2.5.0-beta - 2009-03-31 by Anatoliy
 $PMF_LANG['ad_record_sticky'] = 'Lipnus';
 $PMF_LANG['ad_entry_sticky'] = 'Lipnus';
-$PMF_LANG['stickyRecordsHeader'] = 'Lipnus DUK';
+$PMF_LANG['stickyRecordsHeader'] = 'Lipnūs DUK';
 
 // added 2.5.0-beta - 2009-04-01 by Anatoliy
 $PMF_LANG['ad_menu_stopwordsconfig'] = 'Atmetiniai';
@@ -969,3 +984,8 @@ $LANG_CONF['main.attachmentsPath'] = array(0 => "input", 1 => "Kelias, kur bus s
 
 // added 2.5.0-RC3 - 2009-06-24 by Anatoliy
 $PMF_LANG['msgAttachmentNotFound'] = "Failas, kurį mėginate atsisiųsti buvo nerastas serveryje";
+
+// added 2.6.0-alpha - 2009-07-30 by Aurimas Fišeras (plural messages test)
+$PMF_LANG["plmsgUserOnline"][0] = "%d prisijungęs naudotojas"; //"One User online" is also possible, since sprintf just ignores extra args
+$PMF_LANG["plmsgUserOnline"][1] = "%d prisijungę naudotojai";
+$PMF_LANG["plmsgUserOnline"][2] = "%d prisijungusių naudotojų";
