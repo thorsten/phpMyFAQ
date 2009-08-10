@@ -70,6 +70,9 @@ if (isset($LANGCODE) && PMF_Init::isASupportedLanguage($LANGCODE) && is_null($sh
     $LANGCODE = 'en';
 }
 
+//Load plurals support for selected language
+$plr = new PMF_Language_Plurals($PMF_LANG);
+
 //
 // Initalizing static string wrapper
 //
@@ -381,7 +384,7 @@ $main_template_vars = array(
     'languageBox'         => $PMF_LANG['msgLangaugeSubmit'],
     'writeLangAdress'     => $writeLangAdress,
     'switchLanguages'     => selectLanguages($LANGCODE, true),
-    'userOnline'          => $totUsersOnLine.$PMF_LANG['msgUserOnline'].
+    'userOnline'          => sprintf($plr->getMsg('plmsgUserOnline',$totUsersOnLine), $totUsersOnLine).
                              sprintf($PMF_LANG['msgUsersOnline'],
                              $usersOnLine[0],
                              $usersOnLine[1]),
