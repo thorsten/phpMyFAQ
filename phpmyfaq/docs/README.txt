@@ -23,7 +23,7 @@ For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.5.1 - 2009-08-
+Version 2.5.1 - 2009-08-10
 - added support for LDAP-datamapping, e.g. against an Active Directory Server (Lars Scheithauer)
 - added support for multi-domain-authentication, e.g. against an ADS-Global Catalog (Lars Scheithauer)
 - added support for PHP LDAP options (Lars Scheithauer)
