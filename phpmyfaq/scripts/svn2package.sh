@@ -45,7 +45,7 @@ fi
 
 # PMF Version
 if [ "x${PMF_VERSION}" = "x" ]; then
-	PMF_VERSION="2.5.1"
+	PMF_VERSION="2.5.2"
 fi
 
 if [ "x${MD5BIN}" = "x" ]; then

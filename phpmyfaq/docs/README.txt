@@ -9,19 +9,15 @@ Please read the documentation (documentation.en.html) carefully.
 Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
-Changes since 2.5.0:
-- added support for LDAP-datamapping, e.g. against an Active Directory Server (Lars Scheithauer)
-- added support for multi-domain-authentication, e.g. against an ADS-Global Catalog (Lars Scheithauer)
-- added support for PHP LDAP options (Lars Scheithauer)
-- Added Lithuanian translation (Aurimas Fiseras)
-- fixed LDAP issues (Lars Scheithauer)
-- fixed some Oracle issues (Thorsten)
-- improved svn2package script (Rene Treffer)
-- many minor bugfixes (Thorsten)
+Changes since 2.5.1:
+- 
 
 For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
+
+Version 2.5.2 - 2009-09-
+-
 
 Version 2.5.1 - 2009-08-10
 - added support for LDAP-datamapping, e.g. against an Active Directory Server (Lars Scheithauer)
@@ -32,6 +28,14 @@ Version 2.5.1 - 2009-08-10
 - fixed some Oracle issues (Thorsten)
 - improved svn2package script (Rene Treffer)
 - many minor bugfixes (Thorsten)
+
+Version 2.0.16 - 2009-08-10
+- updated French translation (Klaus Gapp)
+- fixed problem with visible questions (Thorsten)
+- fixed bug with broken category permission settings (Thorsten)
+- fixed some Oracle issues (Thorsten)
+- improved SVN export script (Rene Treffer) 
+- minor bugfixes (Thorsten)
 
 Version 2.5.0 - 2009-07-21
 - changed PHP requirement to PHP 5.2 (Thorsten)

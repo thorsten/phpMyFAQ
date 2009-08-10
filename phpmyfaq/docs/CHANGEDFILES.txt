@@ -1,3 +1,12 @@
+$Id$
+
+CHANGED FILES FROM 2.5.1 -> 2.5.2
+
+./install/installer.php
+./install/update.php
+
+
+
 CHANGED FILES FROM 2.5.0 -> 2.5.1
 
 ./admin/footer.php
