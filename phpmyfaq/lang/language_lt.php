@@ -25,21 +25,6 @@ $PMF_LANG["language"] = "lietuvių";
 // ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
 $PMF_LANG["dir"] = "ltr";
 
-//number of plural forms in a language
-//for examples see http://www.gnu.org/software/gettext/manual/gettext.html#Plural-forms
-$PMF_LANG["nplurals"] = 3;
-
-//helper function to determine correct plural form
-//for examples see http://www.gnu.org/software/gettext/manual/gettext.html#Plural-forms
-//expression is of the same form as in Po files
-//function name must be plural_ + language code as defined above in $PMF_LANG["metaLanguage"]
-function plural_lt($n)
-{
-    //return ($n%10 == 1 && $n%100 != 11 ? 0 : $n%10 >= 2 && ($n%100 < 10 || $n%100 >= 20) ? 1 : 2);
-    //TODO why does php need extra braces, since operator precedence is the same as in C???
-    return ($n%10 == 1 && $n%100 != 11 ? 0 : ($n%10 >= 2 && ($n%100 < 10 || $n%100 >= 20) ? 1 : 2));
-}
-
 // Navigation
 $PMF_LANG["msgCategory"] = "Grupės";
 $PMF_LANG["msgShowAllCategories"] = "Visos grupės";
