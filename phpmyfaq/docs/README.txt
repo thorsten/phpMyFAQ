@@ -21,7 +21,7 @@ For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
-Version 2.0.16 - 2009-07-
+Version 2.0.16 - 2009-08-10
 - updated French translation (Klaus Gapp)
 - fixed problem with visible questions (Thorsten)
 - fixed bug with broken category permission settings (Thorsten)
