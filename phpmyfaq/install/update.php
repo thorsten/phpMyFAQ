@@ -32,6 +32,7 @@ require_once PMF_ROOT_DIR.'/inc/constants.php';
 $step    = PMF_Filter::filterInput(INPUT_GET, 'step', FILTER_VALIDATE_INT, 1);
 $version = PMF_Filter::filterInput(INPUT_POST, 'version', FILTER_SANITIZE_STRING);
 $query   = array();
+$templateDir = '../template';
 
 /**
  * Print out the HTML Footer
@@ -185,7 +186,11 @@ if ($step == 1) {
     <li>phpMyFAQ 1.x</li>
 </ul>
 <p><strong>Please make a full backup of your SQL tables before running this update.</strong></p>
-
+<?php 
+if (version_compare($version, '2.6.0-alpha', '<') && !is_writeable($templateDir)) {
+	echo "<p><strong>Please make the dir $templateDir and its contents writeable (777 on unix).</strong></p>";
+}
+?>
 <h3 align="center">Your current phpMyFAQ version: <?php print $version; ?></p>
 <input name="version" type="hidden" value="<?php print $version; ?>"/>
 
@@ -211,8 +216,29 @@ if ($step == 2) {
         $test2 = 1;
     }
 
+    $notWritableFiles = array();
+    foreach(new DirectoryIterator($templateDir) as $item) {
+    	if($item->isFile() && !$item->isWritable()) {
+    		$notWritableFiles[] = "$templateDir/{$item->getFilename()}";
+    	}
+    }
+	if (version_compare($version, '2.6.0-alpha', '<') &&
+	    (!is_writeable($templateDir) || !empty($notWritableFiles))) {
+	    if (!is_writeable($templateDir)) {
+			echo "<p><strong>The dir $templateDir isn't writeable.</strong></p>";
+	    }
+	    if(!empty($notWritableFiles)) {
+	    	foreach($notWritableFiles as $item) {
+	    		echo "<p><strong>The file $item isn't writeable.</strong></p>";
+	    	}
+	    }
+	    
+	} else {
+		$test3 = 1;
+	}
+    
     // is everything is okay?
-    if ($test1 == 1 && $test2  == 1) {
+    if ($test1 == 1 && $test2  == 1 && $test3 == 1) {
 ?>
 <form action="update.php?step=3" method="post">
 <input type="hidden" name="version" value="<?php print $version; ?>" />
@@ -439,6 +465,26 @@ if ($step == 4) {
         
         $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.enableUpdate', 'false')";
         $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.templateSet', 'default')";
+        
+        /**
+         * We did check in the first and second steps,
+         * if the $templateDir and its contents are writable,
+         * so now lets just backup existing templates
+         */
+        $templateBackupDir = "$templateDir/backup";
+        while(file_exists($templateBackupDir)) {
+        	$templateBackupDir = $templateBackupDir . mt_rand();
+        }
+
+        if(!mkdir($templateBackupDir, 0777)) {
+        	die("Couldn't create the templates backup dir.");
+        }
+        
+        foreach(new DirectoryIterator($templateDir) as $item) {
+	    	if($item->isFile() && $item->isWritable()) {
+	    		rename("$templateDir/{$item->getFilename()}", "$templateBackupDir/{$item->getFilename()}");
+	    	}
+    	}
     }
     
     // Perform the queries for updating/migrating the database from 2.x
