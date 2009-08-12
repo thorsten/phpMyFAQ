@@ -29,9 +29,9 @@ define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 require_once PMF_ROOT_DIR.'/inc/autoLoader.php';
 require_once PMF_ROOT_DIR.'/inc/constants.php';
 
-$step    = PMF_Filter::filterInput(INPUT_GET, 'step', FILTER_VALIDATE_INT, 1);
-$version = PMF_Filter::filterInput(INPUT_POST, 'version', FILTER_SANITIZE_STRING);
-$query   = array();
+$step        = PMF_Filter::filterInput(INPUT_GET, 'step', FILTER_VALIDATE_INT, 1);
+$version     = PMF_Filter::filterInput(INPUT_POST, 'version', FILTER_SANITIZE_STRING);
+$query       = array();
 $templateDir = '../template';
 
 /**
@@ -217,19 +217,18 @@ if ($step == 2) {
     }
 
     $notWritableFiles = array();
-    foreach(new DirectoryIterator($templateDir) as $item) {
-    	if($item->isFile() && !$item->isWritable()) {
+    foreach (new DirectoryIterator($templateDir) as $item) {
+    	if ($item->isFile() && !$item->isWritable()) {
     		$notWritableFiles[] = "$templateDir/{$item->getFilename()}";
     	}
     }
-	if (version_compare($version, '2.6.0-alpha', '<') &&
-	    (!is_writeable($templateDir) || !empty($notWritableFiles))) {
+	if (version_compare($version, '2.6.0-alpha', '<') && (!is_writeable($templateDir) || !empty($notWritableFiles))) {
 	    if (!is_writeable($templateDir)) {
-			echo "<p><strong>The dir $templateDir isn't writeable.</strong></p>";
+			printf("<p><strong>The dir %s isn't writeable.</strong></p>\n", $templateDir);
 	    }
-	    if(!empty($notWritableFiles)) {
-	    	foreach($notWritableFiles as $item) {
-	    		echo "<p><strong>The file $item isn't writeable.</strong></p>";
+	    if (!empty($notWritableFiles)) {
+	    	foreach ($notWritableFiles as $item) {
+	    		printf("<p><strong>The file %s isn't writeable.</strong></p>\n", $item);
 	    	}
 	    }
 	    
@@ -472,16 +471,16 @@ if ($step == 4) {
          * so now lets just backup existing templates
          */
         $templateBackupDir = "$templateDir/backup";
-        while(file_exists($templateBackupDir)) {
+        while (file_exists($templateBackupDir)) {
         	$templateBackupDir = $templateBackupDir . mt_rand();
         }
 
-        if(!mkdir($templateBackupDir, 0777)) {
+        if (!mkdir($templateBackupDir, 0777)) {
         	die("Couldn't create the templates backup dir.");
         }
         
-        foreach(new DirectoryIterator($templateDir) as $item) {
-	    	if($item->isFile() && $item->isWritable()) {
+        foreach (new DirectoryIterator($templateDir) as $item) {
+	    	if ($item->isFile() && $item->isWritable()) {
 	    		rename("$templateDir/{$item->getFilename()}", "$templateBackupDir/{$item->getFilename()}");
 	    	}
     	}
