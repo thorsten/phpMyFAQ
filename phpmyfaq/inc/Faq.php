@@ -2901,7 +2901,7 @@ class PMF_Faq
         $pdf->Write(5, $PMF_LANG['ad_entry_solution_id'].': #'.$this->faqRecord['solution_id']);
         $pdf->SetAuthor($this->faqRecord['author']);
         $pdf->Ln();
-        $pdf->Write(5, $PMF_LANG['msgAuthor'].$this->faqRecord['author']);
+        $pdf->Write(5, $PMF_LANG['msgAuthor'].': '.$this->faqRecord['author']);
         $pdf->Ln();
         $pdf->Write(5, $PMF_LANG['msgLastUpdateArticle'].$this->faqRecord['date']);
         // Build it
