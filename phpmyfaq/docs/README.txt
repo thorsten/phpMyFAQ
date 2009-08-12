@@ -10,14 +10,14 @@ Found a bug?
 Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 
 Changes since 2.5.1:
-- 
+- many minor bugfixes (Thorsten)
 
 For known issues please take a look at KNOWNBUGS.txt
 
 CHANGELOG:
 
 Version 2.5.2 - 2009-09-
--
+- many minor bugfixes (Thorsten)
 
 Version 2.5.1 - 2009-08-10
 - added support for LDAP-datamapping, e.g. against an Active Directory Server (Lars Scheithauer)
