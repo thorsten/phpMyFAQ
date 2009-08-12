@@ -1041,7 +1041,7 @@ function iframeUpdated() {
     }
 
     $('questionnaireForm').hide();
-    $('#questionnaireThanks').show();;
+    $('#questionnaireThanks').show();
 }
 
 function hide(item) {
