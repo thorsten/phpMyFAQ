@@ -1040,7 +1040,7 @@ function iframeUpdated() {
         return;
     }
 
-    $('questionnaireForm').hide();
+    $('#questionnaireForm').hide();
     $('#questionnaireThanks').show();
 }
 
