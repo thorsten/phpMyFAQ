@@ -1,10 +1,10 @@
     <div id="register">
         <h2>Register new User</h2>
 
-        To register please enter your name [realname] your nick [loginname] and a valid email adress!
+        To register please enter your name [realname] your nick [loginname] and a valid email address!
         <br />
-        After successful registration you will receive an awnser soon after Administration has
-        authoriziesed your registration.
+        After successful registration you will receive an anwser soon after Administration has
+        authorized your registration.
         <br />
         <br />
 
