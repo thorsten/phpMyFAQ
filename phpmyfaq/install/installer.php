@@ -359,7 +359,7 @@ if (!phpmyfaq_check()) {
     die();
 }
 
-$dirs = array('/attachments', '/data', '/images/Image', '/inc', '/pdf', '/xml',);
+$dirs       = array('/attachments', '/config', '/data', '/inc', '/pdf', '/xml',);
 $faileddirs = array();
 foreach ($dirs as $dir) {
     if (!@is_dir(PMF_ROOT_DIR.$dir)) {
@@ -685,7 +685,7 @@ foreach ($permLevels as $level => $desc) {
     $permLevel = PMF_Filter::filterInput(INPUT_POST, 'permLevel', FILTER_SANITIZE_STRING, 'basic');
     
     // Write the DB variables in data.php
-    $datafile = PMF_ROOT_DIR . '/inc/data.php';
+    $datafile = PMF_ROOT_DIR . '/config/setup_database.php';
     $ret = file_put_contents($datafile, "<?php\n\$DB[\"server\"] = '".$sql_server."';\n\$DB[\"user\"] = '".$sql_user."';\n\$DB[\"password\"] = '".$sql_passwort."';\n\$DB[\"db\"] = '".$sql_db."';\n\$DB[\"prefix\"] = '".$sqltblpre."';\n\$DB[\"type\"] = '".$sql_type."';", LOCK_EX);
     if (!$ret) {
         print "<p class=\"error\"><strong>Error:</strong> Cannot write to data.php.</p>";
@@ -696,7 +696,7 @@ foreach ($permLevels as $level => $desc) {
 
     // check LDAP if available
     if (extension_loaded('ldap') && !is_null($ldap_enabled)) {
-        $datafile = PMF_ROOT_DIR . '/inc/dataldap.php';
+        $datafile = PMF_ROOT_DIR . '/config/setup_ldap.php';
         $ret = file_put_contents($datafile, "<?php\n\$PMF_LDAP[\"ldap_server\"] = '".$ldap_server."';\n\$PMF_LDAP[\"ldap_port\"] = '".$ldap_port."';\n\$PMF_LDAP[\"ldap_user\"] = '".$ldap_user."';\n\$PMF_LDAP[\"ldap_password\"] = '".$ldap_password."';\n\$PMF_LDAP[\"ldap_base\"] = '".$ldap_base."';", LOCK_EX);
         if (!$ret) {
             print "<p class=\"error\"><strong>Error:</strong> Cannot write to dataldap.php.</p>";
@@ -707,9 +707,9 @@ foreach ($permLevels as $level => $desc) {
     }
 
     // connect to the database using inc/data.php
-    require PMF_ROOT_DIR . '/inc/data.php';
+    require PMF_ROOT_DIR . '/config/setup_database.php';
     $db = PMF_Db::dbSelect($sql_type);
-    $db->connect($DB["server"], $DB["user"], $DB["password"], $DB["db"]);
+    $db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db']);
     if (!$db) {
         print "<p class=\"error\"><strong>DB Error:</strong> ".$db->error()."</p>\n";
         HTMLFooter();
@@ -760,8 +760,7 @@ foreach ($permLevels as $level => $desc) {
     $admin->setStatus('protected');
     $adminData = array(
         'display_name' => $realname,
-        'email' => $email
-    );
+        'email'        => $email);
     $admin->setUserData($adminData);
     $adminID = $admin->getUserId();
     // add rights
@@ -1001,22 +1000,18 @@ foreach ($permLevels as $level => $desc) {
     $anonymous->setStatus('protected');
     $anonymousData = array(
         'display_name' => 'Anonymous User',
-        'email' => null
-    );
+        'email'        => null);
     $anonymous->setUserData($anonymousData);
 
     $oConf = PMF_Configuration::getInstance();
     $oConf->getAll();
     $configs = $oConf->config;
-    // Disable Captcha if GD is not available
     $configs['spam.enableCatpchaCode'] = (extension_loaded('gd') ? 'true' : 'false');
-    // Set the link verification base url
-    $configs['main.referenceURL'] = PMF_Link::getSystemUri('/install/installer.php');
-    // Create a unique identifier for this installation
-    $configs['main.phpMyFAQToken'] = md5(uniqid(rand()));
+    $configs['main.referenceURL']      = PMF_Link::getSystemUri('/install/installer.php');
+    $configs['main.phpMyFAQToken']     = md5(uniqid(rand()));
     $oConf->update($configs);
+    
     print "</p>\n";
-
     print "<p class=\"center\">All database tables were successfully created.</p>\n";
     print "<p class=\"center\">Congratulation! Everything seems to be okay.</p>\n";
 ?>
@@ -1029,8 +1024,8 @@ function iframeUpdated() {
         return;
     }
 
-    hide("questionnaireForm");
-    show("questionnaireThanks");
+    $('questionnaireForm').hide();
+    $('#questionnaireThanks').show();
 }
 
 function hide(item) {
