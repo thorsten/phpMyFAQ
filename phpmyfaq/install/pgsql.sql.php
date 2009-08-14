@@ -47,6 +47,7 @@ $uninst[] = "DROP TABLE ".$sqltblpre."faqsessions CASCADE";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqstopwords CASCADE";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqtags CASCADE";
 $uninst[] = "DROP TABLE ".$sqltblpre."faquser CASCADE";
+$uninst[] = "DROP SEQUENCE ".$sqltblpre."faquser_user_id_seq";
 $uninst[] = "DROP TABLE ".$sqltblpre."faquserdata CASCADE";
 $uninst[] = "DROP TABLE ".$sqltblpre."faquserlogin CASCADE";
 $uninst[] = "DROP TABLE ".$sqltblpre."faquser_group CASCADE";
@@ -55,7 +56,11 @@ $uninst[] = "DROP TABLE ".$sqltblpre."faqvisits CASCADE";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqvoting CASCADE";
 
 
+
+
 //faquser
+$query[] = "CREATE SEQUENCE ".$sqltblpre."faquser_user_id_seq START WITH 2";
+
 $query[] = "CREATE TABLE ".$sqltblpre."faquser (
 user_id SERIAL NOT NULL,
 login varchar(25) NOT NULL,
