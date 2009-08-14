@@ -47,6 +47,7 @@ $uninst[] = "DROP TABLE ".$sqltblpre."faqsessions CASCADE";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqstopwords CASCADE";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqtags CASCADE";
 $uninst[] = "DROP TABLE ".$sqltblpre."faquser CASCADE";
+$uninst[] = "DROP SEQUENCE ".$sqltblpre."faquser_user_id_seq";
 $uninst[] = "DROP TABLE ".$sqltblpre."faquserdata CASCADE";
 $uninst[] = "DROP TABLE ".$sqltblpre."faquserlogin CASCADE";
 $uninst[] = "DROP TABLE ".$sqltblpre."faquser_group CASCADE";
@@ -55,7 +56,11 @@ $uninst[] = "DROP TABLE ".$sqltblpre."faqvisits CASCADE";
 $uninst[] = "DROP TABLE ".$sqltblpre."faqvoting CASCADE";
 
 
+
+
 //faquser
+$query[] = "CREATE SEQUENCE ".$sqltblpre."faquser_user_id_seq START WITH 2";
+
 $query[] = "CREATE TABLE ".$sqltblpre."faquser (
 user_id SERIAL NOT NULL,
 login varchar(25) NOT NULL,
@@ -91,7 +96,7 @@ PRIMARY KEY (id))";
 $query[] = "CREATE TABLE ".$sqltblpre."faqcaptcha (
 id varchar(6) NOT NULL,
 useragent varchar(255) NOT NULL,
-language varchar(5) NOT NULL,
+language varchar(2) NOT NULL,
 ip varchar(64) NOT NULL,
 captcha_time int4 NOT NULL,
 PRIMARY KEY (id))";
@@ -222,7 +227,7 @@ PRIMARY KEY (record_id, user_id))";
 //faqglossary
 $query[] = "CREATE TABLE ".$sqltblpre."faqglossary (
 id SERIAL NOT NULL,
-lang VARCHAR(5) NOT NULL,
+lang VARCHAR(2) NOT NULL,
 item VARCHAR(255) NOT NULL,
 definition TEXT NOT NULL,
 PRIMARY KEY (id, lang))";
