@@ -25,14 +25,18 @@ if (!defined('IS_VALID_PHPMYFAQ_ADMIN')) {
     exit();
 }
 
-$transDir = new DirectoryIterator(PMF_ROOT_DIR . "/lang");
-$tt       = new PMF_TransTool;
+clearstatcache();
+
+$langDir            = PMF_ROOT_DIR . DIRECTORY_SEPARATOR . "lang";
+$transDir           = new DirectoryIterator($langDir);
+$isTransDirWritable = is_writable($langDir);
+$tt                 = new PMF_TransTool;
 
 printf('<h2>%s</h2>', $PMF_LANG['ad_menu_translations']);
 ?>
 <?php echo $PMF_LANG['msgChooseLanguageToTranslate'] ?>: <br />
 <table cellspacing="7">
-<?php if(!$transDir->isWritable()):
+<?php if(!$isTransDirWritable):
     echo '<tr><td colspan="5"><font color="red">'. $PMF_LANG['msgLangDirIsntWritable'] . "</font></tr></td>";
 endif; ?>
 <?php if($permission["addtranslation"]): ?>
@@ -64,27 +68,35 @@ endif; ?>
     }
     
     sort($sortedLangList);
-    while (list(,$lang) = each($sortedLangList)) {           
+    
+    while (list(,$lang) = each($sortedLangList)) { 
+		$isLangFileWritable = is_writable($langDir . DIRECTORY_SEPARATOR . "language_$lang.php");
+		$showActions        = $isTransDirWritable && $isLangFileWritable;
         ?>
         <tr class="lang_<?php echo $lang ?>_container">
         <td><?php echo $languageCodes[strtoupper($lang)] ?></td>
-        <?php if($permission["edittranslation"]): ?>
+        <?php if($permission["edittranslation"] && $showActions): ?>
         <td>[<a href="?action=transedit&amp;translang=<?php print $lang ?>" ><?php echo $PMF_LANG['msgEdit'] ?></a>]</td>
         <?php else: ?>
-        <td>&nbsp;</td>
+        <td>[<?php echo $PMF_LANG['msgEdit'] ?>]</td>
         <?php endif; ?>
-        <?php if($permission["deltranslation"]): ?>
+        <?php if($permission["deltranslation"] && $showActions): ?>
         <td>[<a href="javascript: del('<?php print $lang ?>');" ><?php echo $PMF_LANG['msgDelete'] ?></a>]</td>
         <?php else: ?>
-        <td>&nbsp;</td>
+        <td>[<?php echo $PMF_LANG['msgDelete'] ?>]</td>
         <?php endif; ?>
+        <?php if($permission["edittranslation"] && $showActions): ?>
         <td>[<a href="javascript: sendToTeam('<?php print $lang ?>');" ><?php echo $PMF_LANG['msgTransToolSendToTeam'] ?></a>]</td>
-        <?php if(is_writable(PMF_ROOT_DIR . "/lang/language_$lang.php")): ?>
+        <?php else: ?>
+        <td>[<?php echo $PMF_LANG['msgTransToolSendToTeam'] ?>]</td>
+        <?php endif;?>
+        <?php if($isLangFileWritable): ?>
         <td><font color="green"><?php echo $PMF_LANG['msgYes'] ?></font></td>
         <?php else: ?>
         <td><font color="red"><?php echo $PMF_LANG['msgNo'] ?></font></td>
         <?php endif; ?>
-        <td><?php echo$tt->getTranslatedPercentage(PMF_ROOT_DIR . "/lang/language_en.php", PMF_ROOT_DIR . "/lang/language_$lang.php"); ?>%</td>
+        <td><?php echo $tt->getTranslatedPercentage($langDir . DIRECTORY_SEPARATOR . "language_en.php",
+                                                    $langDir . DIRECTORY_SEPARATOR . "language_$lang.php"); ?>%</td>
         </tr>
         <?php 
     }
