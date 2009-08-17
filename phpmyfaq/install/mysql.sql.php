@@ -367,3 +367,14 @@ usr int(11) unsigned NOT NULL,
 datum varchar(20) NOT NULL default '',
 ip varchar(15) NOT NULL default '',
 PRIMARY KEY (id))";
+
+//faqattachment
+$query[] = "CREATE TABLE " . $sqltblpre . "faqattachment (
+id int(11) NOT NULL,
+record_id int(11) NOT NULL,
+record_lang varchar(5) NOT NULL,
+hash char(33) NOT NULL,
+filename varchar(255) NOT NULL,
+file_contents blob,
+encrypted tinyint,
+PRIMARY KEY (id))";

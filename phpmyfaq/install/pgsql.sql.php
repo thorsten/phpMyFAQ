@@ -96,7 +96,7 @@ PRIMARY KEY (id))";
 $query[] = "CREATE TABLE ".$sqltblpre."faqcaptcha (
 id varchar(6) NOT NULL,
 useragent varchar(255) NOT NULL,
-language varchar(2) NOT NULL,
+language varchar(5) NOT NULL,
 ip varchar(64) NOT NULL,
 captcha_time int4 NOT NULL,
 PRIMARY KEY (id))";
@@ -227,7 +227,7 @@ PRIMARY KEY (record_id, user_id))";
 //faqglossary
 $query[] = "CREATE TABLE ".$sqltblpre."faqglossary (
 id SERIAL NOT NULL,
-lang VARCHAR(2) NOT NULL,
+lang VARCHAR(5) NOT NULL,
 item VARCHAR(255) NOT NULL,
 definition TEXT NOT NULL,
 PRIMARY KEY (id, lang))";
@@ -369,4 +369,15 @@ vote int4 NOT NULL,
 usr int4 NOT NULL,
 datum varchar(20) NOT NULL default '',
 ip varchar(15) NOT NULL default '',
+PRIMARY KEY (id))";
+
+//faqattachment
+$query[] = "CREATE TABLE " . $sqltblpre . "faqattachment (
+id SERIAL NOT NULL,
+record_id int4 NOT NULL,
+record_lang varchar(5) NOT NULL,
+hash char(33) NOT NULL,
+filename varchar(255) NOT NULL,
+file_contents bytea,
+encrypted boolean,
 PRIMARY KEY (id))";

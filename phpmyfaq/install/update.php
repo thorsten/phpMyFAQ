@@ -484,6 +484,54 @@ if ($step == 4) {
 	    		rename("$templateDir/{$item->getFilename()}", "$templateBackupDir/{$item->getFilename()}");
 	    	}
     	}
+    	
+    	/**
+    	 * Attachments stuff
+    	 */
+    	$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.attachmentsStorageType', '0')";
+		$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.enableAttachmentEncryption', 'false')";
+		$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.defaultAttachmentEncKey', '')";
+    	switch($DB['type']) {
+    		case 'pgsql':
+				$query[] = "CREATE TABLE " . $sqltblpre . "faqattachment (
+					id SERIAL NOT NULL,
+					record_id int4 NOT NULL,
+					record_lang varchar(5) NOT NULL,
+					hash char(33) NOT NULL,
+					filename varchar(255) NOT NULL,
+					file_contents bytea,
+					encrypted boolean,
+					PRIMARY KEY (id))";
+    			break;
+    			
+    		case 'mysqli':
+    		case 'mysql':
+				$query[] = "CREATE TABLE " . $sqltblpre . "faqattachment (
+					id int(11) NOT NULL,
+					record_id int(11) NOT NULL,
+					record_lang varchar(5) NOT NULL,
+					hash char(33) NOT NULL,
+					filename varchar(255) NOT NULL,
+					file_contents blob,
+					encrypted tinyint,
+					PRIMARY KEY (id))";
+    			break;
+    			
+    		default:
+    			/**
+    			 * Just try standard SQL and hope for the best
+    			 */
+				$query[] = "CREATE TABLE " . $sqltblpre . "faqattachment (
+					id int NOT NULL,
+					record_id int NOT NULL,
+					record_lang varchar(5) NOT NULL,
+					hash char(33) NOT NULL,
+					filename varchar(255) NOT NULL,
+					file_contents blob,
+					encrypted int,
+					PRIMARY KEY (id))";
+    			break;
+    	}
     }
     
     // Perform the queries for updating/migrating the database from 2.x

@@ -58,3 +58,6 @@ $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('spam.enableCatpchaCode'
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('spam.enableSafeEmail', 'true')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.attachmentsPath', 'attachments')";
 $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.templateSet', 'default')";
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.attachmentsStorageType', '0')";
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.enableAttachmentEncryption', 'false')";
+$query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.defaultAttachmentEncKey', '')";
