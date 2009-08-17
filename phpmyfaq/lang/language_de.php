@@ -939,22 +939,22 @@ $PMF_LANG['ad_menu_translations'] = '√úbersetzung';
 $PMF_LANG['ad_start_notactive'] = 'Wartend auf Freischaltung';
 
 // added 2.5.0-RC - 2009-05-20 by Anatoliy
-$PMF_LANG['msgTransToolAddNewTranslation'] = 'Neue ‹bersetzung hinzuf¸gen';
+$PMF_LANG['msgTransToolAddNewTranslation'] = 'Neue √úbersetzung hinzuf√ºgen';
 $PMF_LANG['msgTransToolLanguage'] = 'Sprache';
 $PMF_LANG['msgTransToolActions'] = 'Aktionen';
 $PMF_LANG['msgTransToolWritable'] = 'Beschreibbar';
 $PMF_LANG['msgEdit'] = 'Bearbeiten';
-$PMF_LANG['msgDelete'] = 'Lˆschen';
+$PMF_LANG['msgDelete'] = 'L√∂schen';
 $PMF_LANG['msgYes'] = 'ja';
 $PMF_LANG['msgNo'] = 'nnein';
-$PMF_LANG['msgTransToolSureDeleteFile'] = 'Wollen Sie diese Sprachdatei wirklich lˆschen?';
-$PMF_LANG['msgTransToolFileRemoved'] = 'Sprachdatei erfolgreich gelˆscht';
-$PMF_LANG['msgTransToolErrorRemovingFile'] = 'Fehler beim Lˆschen der Sprachdatei';
+$PMF_LANG['msgTransToolSureDeleteFile'] = 'Wollen Sie diese Sprachdatei wirklich l√∂schen?';
+$PMF_LANG['msgTransToolFileRemoved'] = 'Sprachdatei erfolgreich gel√∂scht';
+$PMF_LANG['msgTransToolErrorRemovingFile'] = 'Fehler beim L√∂schen der Sprachdatei';
 $PMF_LANG['msgVariable'] = 'Variable';
 $PMF_LANG['msgCancel'] = 'Abbrechen';
 $PMF_LANG['msgSave'] = 'Speichern';
 $PMF_LANG['msgSaving3Dots'] = 'speichern ...';
-$PMF_LANG['msgRemoving3Dots'] = 'lˆschen ...';
+$PMF_LANG['msgRemoving3Dots'] = 'l√∂schen ...';
 $PMF_LANG['msgTransToolFileSaved'] = 'Sprachdatei erfolgreich gespeichert';
 $PMF_LANG['msgTransToolErrorSavingFile'] = 'Fehler beim Speichern der Sprachdatei';
 $PMF_LANG['msgLanguage'] = 'Sprache';
@@ -962,19 +962,32 @@ $PMF_LANG['msgTransToolLanguageCharset'] = 'Zeichensatz';
 $PMF_LANG['msgTransToolLanguageDir'] = 'Schriftrichtung';
 $PMF_LANG['msgTransToolLanguageDesc'] = 'Sprachbeschreibung';
 $PMF_LANG['msgAuthor'] = 'Autor';
-$PMF_LANG['msgTransToolAddAuthor'] = 'Autor hinzuf¸gen';
-$PMF_LANG['msgTransToolCreateTranslation'] = 'Neue ‹bersetzung hinzuf¸gen';
-$PMF_LANG['msgTransToolTransCreated'] = 'Neue ‹bersetzung erfolgreich erstellt.';
-$PMF_LANG['msgTransToolCouldntCreateTrans'] = 'Neue ‹bersetzung konnte nicht erstellt werden.';
-$PMF_LANG['msgAdding3Dots'] = 'hinzuf¸gen ...';
+$PMF_LANG['msgTransToolAddAuthor'] = 'Autor hinzuf√ºgen';
+$PMF_LANG['msgTransToolCreateTranslation'] = 'Neue √úbersetzung hinzuf√ºgen';
+$PMF_LANG['msgTransToolTransCreated'] = 'Neue √úbersetzung erfolgreich erstellt.';
+$PMF_LANG['msgTransToolCouldntCreateTrans'] = 'Neue √úbersetzung konnte nicht erstellt werden.';
+$PMF_LANG['msgAdding3Dots'] = 'hinzuf√ºgen ...';
 $PMF_LANG['msgTransToolSendToTeam'] = 'An das phpMyFAQ Team senden';
 $PMF_LANG['msgSending3Dots'] = 'versende ...';
-$PMF_LANG['msgTransToolFileSent'] = 'Die Sprachdatei wurde erfolgreich an das phpMyFAQ Team gesendet. Vielen Dank daf¸r!';
+$PMF_LANG['msgTransToolFileSent'] = 'Die Sprachdatei wurde erfolgreich an das phpMyFAQ Team gesendet. Vielen Dank daf√ºr!';
 $PMF_LANG['msgTransToolErrorSendingFile'] = 'Beim Versenden der Sprachdatei ist ein Fehler aufgetreten.';
-$PMF_LANG['msgTransToolPercent'] = 'Vollst‰ndigkeit';
+$PMF_LANG['msgTransToolPercent'] = 'Vollst√§ndigkeit';
 
 // added 2.5.0-RC3 - 2009-06-23 by Anatoliy
-$LANG_CONF['main.attachmentsPath'] = array(0 => "input", 1 => "Pfad zum Speichern der Anh‰nge.<br /><small>Relativer Pfad wird ab Webroot gesucht</small>");
+$LANG_CONF['main.attachmentsPath'] = array(0 => "input", 1 => "Pfad zum Speichern der Anh√§nge.<br /><small>Relativer Pfad wird ab Webroot gesucht</small>");
 
 // added 2.5.0-RC3 - 2009-06-24 by Anatoliy
 $PMF_LANG['msgAttachmentNotFound'] = "Die Datei wurde auf dem Server nicht gefunden";
+
+// added 2.6.0-alpha - 2009-07-30 by Aurimas Fi≈°eras (plural messages test)
+$PMF_LANG["plmsgUserOnline"][0] = "%d Besucher online"; //"One User online" is also possible, since sprintf just ignores extra args
+
+// added 2.6.0-alpha - 2009-08-02 by Anatoliy
+$LANG_CONF['main.templateSet'] = array(0 => "select", 1 => "ausgew√§hltes Template");
+
+// added 2.6.0-alpha - 2009-08-16 by Aurimas Fi≈°eras
+$PMF_LANG['msgTransToolRemove'] = 'Entfernen';
+$PMF_LANG["msgTransToolLanguageNumberOfPlurals"] = "Anzahl der Pluralformen";
+$PMF_LANG['msgTransToolLanguageOnePlural'] = 'Diese Sprache hat nur eine Pluralform';
+$PMF_LANG['msgTransToolLanguagePluralNotSet'] = "F√ºr %s ist die Unterst√ºtzung f√ºr Pluralformen deaktiviert (nplurals nicht gesetzt).";
+
