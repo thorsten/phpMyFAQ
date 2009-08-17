@@ -71,7 +71,7 @@ class PMF_Filter
 	public static function filterVar($variable, $filter, $default = null)
 	{
 		$return = filter_var($variable, $filter);
-        
-        return is_null($return) ? $default : $return;
+
+        return ($return === false) ? $default : $return;
 	}
 }

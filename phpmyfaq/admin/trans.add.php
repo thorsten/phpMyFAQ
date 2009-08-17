@@ -42,8 +42,8 @@ foreach ($languageCodes as $langCode => $langName):
 <option value="<?php echo $langCode ?>"><?php echo $langName ?></option>
 <?php endif; endforeach; ?>
 </select></td></tr>
-<tr><td><?php echo $PMF_LANG['msgTransToolLanguageCharset'] ?></td><td><input name="langcharset" /></td></tr>
 <tr><td><?php echo $PMF_LANG['msgTransToolLanguageDir'] ?></td><td><select name="langdir"><option>ltr</option><option>rtl</option></select></td></tr>
+<tr><td><?php echo $PMF_LANG['msgTransToolLanguageNumberOfPlurals'] ?></td><td><input name="langnplurals" /></td></tr>
 <tr><td><?php echo $PMF_LANG['msgTransToolLanguageDesc'] ?></td><td><textarea name="langdesc"></textarea></td></tr>
 <tr class="author_1_container"><td><?php echo $PMF_LANG['msgAuthor'] ?></td><td><input name="author[]" /></td></tr>
 <tr><td colspan="2"><a href="javascript: addAuthorContainer();"><?php echo $PMF_LANG['msgTransToolAddAuthor'] ?></a></td></tr>
@@ -63,7 +63,7 @@ function addAuthorContainer()
     var next_author_html = '<tr class="author_' + next_max_author + '_container">' +
                             '<td>Author</td><td><input name="author[]" />' +
                             '<a href="javascript: delAuthorContainer(\'author_' + next_max_author + '_container\');void(0);" >' +
-                            'Remove</a></td></tr>';
+                            ' <?php echo $PMF_LANG['msgTransToolRemove']?></a></td></tr>';
     $('.author_' + max_author + '_container').after(next_author_html);
     max_author++
 }

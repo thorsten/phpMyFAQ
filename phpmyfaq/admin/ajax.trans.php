@@ -149,8 +149,9 @@ switch($ajax_action) {
         
         $langCode    = PMF_Filter::filterInput(INPUT_POST, 'translang', FILTER_SANITIZE_STRING);
         $langName    = @$languageCodes[$langCode];
-        $langCharset = PMF_Filter::filterInput(INPUT_POST, 'langcharset', FILTER_SANITIZE_STRING);
+        $langCharset = "UTF-8";
         $langDir     = PMF_Filter::filterInput(INPUT_POST, 'langdir', FILTER_SANITIZE_STRING);
+        $langNPlurals= strval(PMF_Filter::filterVar(@$_POST['langnplurals'], FILTER_VALIDATE_INT, -1));
         $langDesc    = PMF_Filter::filterInput(INPUT_POST, 'langdesc', FILTER_SANITIZE_STRING);
         $author      = (array) @$_POST['author'];
         
@@ -185,7 +186,8 @@ switch($ajax_action) {
 \$PMF_LANG['metaCharset'] = '%s';
 \$PMF_LANG['metaLanguage'] = '%s';
 \$PMF_LANG['language'] = '%s';
-\$PMF_LANG['dir'] = '%s';        
+\$PMF_LANG['dir'] = '%s';
+\$PMF_LANG['nplurals'] = '%s';
 FILE;
 
         $authorTpl = '';
@@ -194,7 +196,7 @@ FILE;
         }
         
         $fileTpl = sprintf($fileTpl, $langDesc, $authorTpl, date('Y-m-d'), $langCode, date('Y'),
-                                     $langCharset, strtolower($langCode), $langName, $langDir);
+                                     $langCharset, strtolower($langCode), $langName, $langDir, $langNPlurals);
 
         $retval = @file_put_contents(PMF_ROOT_DIR . '/lang/language_' . strtolower($langCode) . '.php', $fileTpl);
         print intval($retval);

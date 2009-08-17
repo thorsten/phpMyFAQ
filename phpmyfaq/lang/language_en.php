@@ -1001,3 +1001,7 @@ $PMF_LANG['msgAttachmentNotFound'] = "The file you're trying to download was not
 
 // added 2.6.0-alpha - 2009-08-02 by Anatoliy
 $LANG_CONF['main.templateSet'] = array(0 => "select", 1 => "Template set to be used");
+
+// added 2.6.0-alpha - 2009-08-16 by Aurimas Fišeras
+$PMF_LANG['msgTransToolRemove'] = 'Remove';
+$PMF_LANG["msgTransToolLanguageNumberOfPlurals"] = "Number of plural forms";
