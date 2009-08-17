@@ -592,26 +592,20 @@ class PMF_User
             $this->errors[] = self::ERROR_USER_INVALID_STATUS;
             return false;
         }
-        // check user-ID
-        $user_id = $this->getUserId();
-        if (!$user_id) {
-            $this->errors[] = self::ERROR_USER_NO_USERID;
-            return false;
-        }
         
         // update status
         $this->status = $status;
         $update       = sprintf("
             UPDATE
-                ".SQLPREFIX."faquser
+                %sfaquser
             SET
-                account_status = '".$status."'
+                account_status = '%s'
             WHERE
                 user_id = %d",
             SQLPREFIX,
             $this->db->escape_string($status),
-            $user_id);
-            
+            $this->user_id);
+        
         $res = $this->db->query($update);
         
         if ($res) {
