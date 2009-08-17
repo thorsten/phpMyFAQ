@@ -175,12 +175,12 @@ class PMF_Auth_AuthDb extends PMF_Auth implements PMF_Auth_AuthDriver
      * is correct, otherwise false.
      * Error messages are added to the array errors.
      *
-     * @param  string $login Loginname
-     * @param  string $pass  Password
-     * @param  array  $optionlData Optional data
+     * @param  string $login        Loginname
+     * @param  string $pass         Password
+     * @param  array  $optionslData Optional data
      * @return boolean
      */
-    public function checkPassword($login, $pass, Array $optionlData = array())
+    public function checkPassword($login, $pass, Array $optionalData = null)
     {
         $check = sprintf("
             SELECT
@@ -222,11 +222,11 @@ class PMF_Auth_AuthDb extends PMF_Auth implements PMF_Auth_AuthDriver
     /**
      * Checks the number of entries of given login name
      *
-     * @param  string $login Loginname
-     * @param  array  $optionlData Optional data
+     * @param  string $login        Loginname
+     * @param  array  $optionslData Optional data
      * @return integer
      */
-    public function checkLogin($login, Array $optionlData = array())
+    public function checkLogin($login, Array $optionalData = null)
     {
         $check = sprintf("
             SELECT

@@ -88,12 +88,12 @@ class PMF_Auth_AuthHttp extends PMF_Auth implements PMF_Auth_AuthDriver
      * This function is only called when local authentication has failed, so
      * we are about to create user account.
      *
-     * @param  string $login Loginname
-     * @param  string $pass  Password
-     * @param  array  $optionlData Optional data
+     * @param  string $login        Loginname
+     * @param  string $pass         Password
+     * @param  array  $optionslData Optional data
      * @return boolean
      */
-    public function checkPassword($login, $pass, Array $optionlData = array())
+    public function checkPassword($login, $pass, Array $optionalData = null)
     {
     	if (!isset($_SERVER['PHP_AUTH_USER']) && $_SERVER['PHP_AUTH_PW']) {
     		return false;
@@ -109,11 +109,11 @@ class PMF_Auth_AuthHttp extends PMF_Auth implements PMF_Auth_AuthDriver
     /**
      * Does nothing. A function required to be a valid auth.
      *
-     * @param  string $login Loginname
-     * @param  array  $optionlData Optional data
+     * @param  string $login        Loginname
+     * @param  array  $optionslData Optional data
      * @return integer
      */
-    public function checkLogin($login, Array $optionlData = array())
+    public function checkLogin($login, Array $optionalData = null)
     {
     	return isset($_SERVER['PHP_AUTH_USER']) ? true : false;
     }

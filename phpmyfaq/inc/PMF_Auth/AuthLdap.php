@@ -119,18 +119,19 @@ class PMF_Auth_AuthLdap extends PMF_Auth implements PMF_Auth_AuthDriver
 	 * This function is only called when local authentication has failed, so
 	 * we are about to create user account.
      *
-     * @param  string $login Loginname
-     * @param  string $pass  Password
+     * @param  string $login        Loginname
+     * @param  string $pass         Password
+     * @param  array  $optionslData Optional data
      * @return boolean
      */
-    public function checkPassword($login, $pass, $options=null)
+    public function checkPassword($login, $pass, Array $optionalData = null)
     {
         global $PMF_LDAP;
         
        $bindLogin = $login;
        if ($PMF_LDAP['ldap_use_domain_prefix']) {
-           if (array_key_exists('domain', $options)) {
-               $bindLogin = $options['domain']."\\".$login;
+           if (array_key_exists('domain', $optionalData)) {
+               $bindLogin = $optionalData['domain']."\\".$login;
            }
        }
 
@@ -151,10 +152,11 @@ class PMF_Auth_AuthLdap extends PMF_Auth implements PMF_Auth_AuthDriver
     /**
      * Does nothing. A function required to be a valid auth.
      *
-     * @param  string $login Loginname
+     * @param  string $login        Loginname
+     * @param  array  $optionslData Optional data
      * @return integer
      */
-    public function checkLogin($login)
+    public function checkLogin($login, Array $optionalData = null)
     {
         return $this->ldap->getCompleteName($login);
     }
