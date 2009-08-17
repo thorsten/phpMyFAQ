@@ -174,7 +174,7 @@ if (!is_null($currentAction) && ('savedcontent' == $currentAction) && $auth && $
         $tablenames .= $table . ' ';
     }
 
-    $text[] = "-- pmf2.5: " . $tablenames;
+    $text[] = "-- pmf2.6: " . $tablenames;
     $text[] = "-- DO NOT REMOVE THE FIRST LINE!";
     $text[] = "-- pmftableprefix: ".SQLPREFIX;
     $text[] = "-- DO NOT REMOVE THE LINES ABOVE!";

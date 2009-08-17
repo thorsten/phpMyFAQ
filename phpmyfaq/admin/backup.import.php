@@ -6,8 +6,8 @@
  * @subpackage Administration
  * @author     Thorsten Rinne <thorsten@rinne.info>
  * @since      2003-02-24
- * @copyright  2003-2009 phpMyFAQ Team
  * @version    SVN: $Id$ 
+ * @copyright  2003-2009 phpMyFAQ Team
  *
  * The contents of this file are subject to the Mozilla Public License
  * Version 1.1 (the "License"); you may not use this file except in
@@ -34,7 +34,7 @@ if ($permission["restore"]) {
         $handle = fopen($_FILES['userfile']['tmp_name'], 'r');
         $dat    = fgets($handle, 65536);
 
-        if (PMF_String::substr($dat, 0, 9) != '-- pmf2.5') {
+        if (PMF_String::substr($dat, 0, 9) != '-- pmf2.6') {
             print $PMF_LANG["ad_csv_no"];
             $ok = 0;
         } else {
