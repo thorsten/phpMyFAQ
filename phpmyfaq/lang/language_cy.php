@@ -24,15 +24,6 @@ $PMF_LANG["metaLanguage"] = "cy";
 $PMF_LANG["language"] = "cymraeg";
 // ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
 $PMF_LANG["dir"] = "ltr";
-// @todo confirm that 2 is a correct number. Google search suggests anything from 1 to 5!
-$PMF_LANG["nplurals"] = 2;
-/**
- * Check inc/PMF_Language/Plurals.php to see if this language has plural form support.
- * If it doesn't English plural messages will be used.
- * You can add support for this language by editing the function plural()
- * and adding the correct expression for this language.
- * If you need any help, please contact phpMyFAQ team.
- */
 
 $PMF_LANG["nplurals"] = "4";
 /**

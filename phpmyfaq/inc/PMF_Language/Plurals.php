@@ -143,11 +143,10 @@ class PMF_Language_Plurals
                 return ($n == 0) ? 0 : ($n == 1 ? 1 : ($n == 2 ? 2 : (($n%100 >= 3 && $n%100 <= 10) ? 3 : (($n%100 >= 11 && $n%100 <= 99) || ($n%100 == 1) || ($n%100 == 2) ? 4 : 5))));
             case 'bn':
                 return 0;
-            // @todo confirm that 2 is a correct number of forms for 'cy'. Google search suggests anything from 1 to 5!
             case 'cy':
-                return $n == 2;
+                return ($n == 1) ? 0 : ($n == 2 ? 1 : (($n != 8 && $n != 11) ? 2 : 3));
             case 'cs':
-                return ($n == 1) ? 0 : ((n>=2 && n<=4) ? 1 : 2);
+                return ($n == 1) ? 0 : (($n >= 2 && $n <= 4) ? 1 : 2);
             case 'da':
                 return $n != 1;
             case 'de':
