@@ -624,23 +624,6 @@ function EndSlash($string)
 }
 
 /**
- * Function to remove all HTML tags but not <strong>, <em>, <u>, und <a>
- *
- * @param   string  $html
- * @return  string  $html
- * @access  public
- * @since   2003-02-23
- * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
- */
-function safeHTML($html)
-{
-    $html = strip_tags($html, "<strong><em><i><u><a><br>");
-    $html = str_replace('<a ', '<a rel="nofollow" ', $html);
-    return $html;
-}
-
-
-/**
  * Decode MIME header elements in e-mails | @@ Matthias Sommerfeld
  * (c) 2001-2004 blue birdy, Berlin (http://bluebirdy.de)
  * used with permission
@@ -1022,22 +1005,14 @@ function chopString($string, $words)
 /**
  * This is a wrapper for htmlspecialchars() with a check on valid charsets.
  *
- * @param   string
- * @param   string
- * @param   string
- * @return  string
- * @access  private
- * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @param  string $string      String
+ * @param  string $quote_style Quote style
+ * @param  string $charset     Charset
+ * @return string
  */
-function PMF_htmlentities($string, $quote_style = ENT_QUOTES, $charset = 'iso-8859-1')
+function PMF_htmlentities($string, $quote_style = ENT_QUOTES, $charset = 'UTF-8')
 {
-    $acceptedCharsets = array('iso-8859-1', 'iso-8859-15', 'utf-8', 'cp866', 'ibm866', '866', 'cp1251', 'windows-1251', 'win-1251', '1251', 'cp1252', 'windows-1252', '1252', 'koi8-r', 'koi8-ru', 'koi8r', 'big5', '950', 'gb2312', '936', 'big5-hkscs', 'shift_jis', 'sjis', '932', 'euc-jp', 'eucjp');
-
-    if (in_array(strtolower($charset), $acceptedCharsets)) {
-        return htmlspecialchars($string, $quote_style, $charset);
-    } else {
-        return htmlspecialchars($string);
-    }
+    return htmlspecialchars($string, $quote_style, $charset);
 }
 
 /**
@@ -1088,7 +1063,7 @@ function isAttachmentDirOk($id)
  */
 function addMenuEntry($restrictions = '', $action = '', $caption = '', $active = '')
 {
-    global $permission, $PMF_LANG;
+    global $PMF_LANG;
 
     $class = '';
     if ($active == $action) {
@@ -1338,27 +1313,6 @@ function build_insert($query, $table)
 }
 
 /**
- * Funktion zum Escapen von SQL Queries | @@ Thorsten, 2003-11-13
- * Last Update: @@ Thorsten, 2004-07-07
- */
-function safeSQL($string)
-{
-    $str = "";
-    $length = PMF_String::strlen($string);
-    for ($i = 0; $i < $length; $i++) {
-        $char = $string[$i];
-        switch ($char) {
-            case "'":   $str .= "\'"; break;
-            case "\\":  $str .= "\\\\"; break;
-            case "\n":  $str .= "\\n"; break;
-            case "\r":  $str .= "\\r"; break;
-            default:    $str .= $char;
-        }
-    }
-    return $str;
-}
-
-/**
  * Align the prefix of the table name used in the PMF backup file,
  * from the (old) value of the system upon which the backup was performed
  * to the (new) prefix of the system upon which the backup will be restored.
@@ -1410,26 +1364,3 @@ function alignTablePrefix($query, $oldvalue, $newvalue)
 
     return $query;
 }
-
-//
-// LDAP FUNCTIONS
-//
-/**
- * Returns the user name from REMOTE_USER
- *
- * @return  string
- * @access  public
- * @author  Adam Greene <phpmyfaq@skippy.fastmail.fm>
- * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
- */
-function getShortUserName()
-{
-    if (isset($_ENV['REMOTE_USER'])) {
-        return $_ENV['REMOTE_USER'];
-    } elseif (isset($_SERVER['REMOTE_USER'])) {
-        return $_SERVER['REMOTE_USER'];
-    } else {
-        return '';
-    }
-}
-
