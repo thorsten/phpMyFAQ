@@ -22,6 +22,16 @@ $PMF_LANG['metaCharset'] = 'UTF-8';
 $PMF_LANG['metaLanguage'] = 'ru';
 $PMF_LANG['language'] = 'Russian';
 $PMF_LANG['dir'] = 'ltr';
+
+$PMF_LANG["nplurals"] = 3;
+/**
+ * Check inc/PMF_Language/Plurals.php to see if this language has plural form support.
+ * If it doesn't English plural messages will be used.
+ * You can add support for this language by editing the function plural()
+ * and adding the correct expression for this language.
+ * If you need any help, please contact phpMyFAQ team.
+ */
+
 $PMF_LANG['msgCategory'] = 'Разделы';
 $PMF_LANG['msgShowAllCategories'] = 'Показать все разделы';
 $PMF_LANG['msgSearch'] = 'Поиск';
