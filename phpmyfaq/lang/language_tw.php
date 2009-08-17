@@ -790,3 +790,4 @@ $LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "啟動一
 $LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "允許評論的新紀錄 (預設: disallowed)");
 $LANG_CONF['main.enableWysiwygEditor'] = array(0 => "checkbox", 1 => "啟用WYSIWYG 編輯 (預設: enabled)");
 $LANG_CONF['main.attachmentsPath'] = array(0 => "input", 1 => "儲存附件的路徑.<br /><small>相對路徑於網站上的根目錄</small>");
+

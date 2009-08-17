@@ -43,12 +43,14 @@ $PMF_LANG["language"] = "english";
 // ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
 $PMF_LANG["dir"] = "ltr";
 
-$PMF_LANG["nplurals"] = 2;
+$PMF_LANG["nplurals"] = "2";
 /**
- * Check inc/PMF_Language/Plurals.php to see if this language has plural form support.
- * If it doesn't English plural messages will be used.
- * You can add support for this language by editing the function plural()
- * and adding the correct expression for this language.
+ * This parameter is used with the function 'plural' from inc/PMF_Language/Plurals.php
+ * If this parameter and function are not in sync plural form support will be broken.
+ *
+ * If you add a translation for a new language, correct plural form support will be missing
+ * (English plural messages will be used) until you add a correct expression to the function
+ * 'plural' mentioned above.
  * If you need any help, please contact phpMyFAQ team.
  */
 

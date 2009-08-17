@@ -123,7 +123,8 @@ class PMF_TransTool
         $keyIgnore = array('PMF_LANG[metaCharset]',
                            'PMF_LANG[metaLanguage]',
                            'PMF_LANG[language]',
-                           'PMF_LANG[dir]');
+                           'PMF_LANG[dir]',
+                           'PMF_LANG[nplurals]');
 
         return in_array($key, $keyIgnore);
     }

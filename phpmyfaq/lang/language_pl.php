@@ -26,6 +26,12 @@ $PMF_LANG["language"] = "polski";
 // ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
 $PMF_LANG["dir"] = "ltr";
 
+$PMF_LANG["nplurals"] = "3";
+/**
+ * This parameter is used with the function 'plural' from inc/PMF_Language/Plurals.php
+ * If this parameter and function are not in sync plural form support will be broken.
+ */
+
 $PMF_LANG["nplurals"] = 3;
 /**
  * Check inc/PMF_Language/Plurals.php to see if this language has plural form support.
@@ -913,3 +919,4 @@ $PMF_LANG['spamControlCenter'] = 'Centrum kontroli spamu';
 $PMF_LANG['submitRegister'] = 'Rejestruj';
 $PMF_LANG['successMessage'] = 'Zostałeś poprawnie zarejestrowany. Wkrótce otrzymasz e-mail w celu potwierdzenia Twoich danych.';
 $PMF_LANG['admin_mainmenu_worklog'] = 'Historia';
+

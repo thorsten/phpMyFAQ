@@ -36,6 +36,12 @@ $PMF_LANG["nplurals"] = 2;
  * If you need any help, please contact phpMyFAQ team.
  */
 
+$PMF_LANG["nplurals"] = "2";
+/**
+ * This parameter is used with the function 'plural' from inc/PMF_Language/Plurals.php
+ * If this parameter and function are not in sync plural form support will be broken.
+ */
+
 // Navigation
 $PMF_LANG["msgCategory"] = "Catégories";
 $PMF_LANG["msgShowAllCategories"] = "Voir toutes les catégories";
