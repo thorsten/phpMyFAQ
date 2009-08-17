@@ -1005,3 +1005,5 @@ $LANG_CONF['main.templateSet'] = array(0 => "select", 1 => "Template set to be u
 // added 2.6.0-alpha - 2009-08-16 by Aurimas Fišeras
 $PMF_LANG['msgTransToolRemove'] = 'Remove';
 $PMF_LANG["msgTransToolLanguageNumberOfPlurals"] = "Number of plural forms";
+$PMF_LANG['msgTransToolLanguageOnePlural'] = 'This language has only one plural form';
+$PMF_LANG['msgTransToolLanguagePluralNotSet'] = "Plural form support for language %s is disabled (nplurals not set)";

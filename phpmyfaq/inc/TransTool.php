@@ -88,17 +88,38 @@ class PMF_TransTool
     {
         $exemplary = $this->getVars($filepathExemplary);
         $toCheck   = $this->getVars($filepathToCheck);
-        
+
+        // Number of plural forms in both languages
+        $exemplaryNPlurals  = intval($exemplary['PMF_LANG[nplurals]']);
+        $toCheckNPlurals    = intval($toCheck['PMF_LANG[nplurals]']);
+        // One English plural form is equal to (xx/en) of xx plural forms (1/2, 2/2, 3/2,..,6/2..)
+        $pluralsRatio       = ($toCheckNPlurals != -1) ? ($toCheckNPlurals/$exemplaryNPlurals) : 1;
+
         $retval = $countAll = $countTranslated = 0;
         
         if ($exemplary) {
             while (list($key, $val) = each($exemplary)) {
                 if (!$this->isKeyIgnorable($key) && !$this->isValIgnorable($val)) {
-                    if (isset($toCheck[$key]) && $toCheck[$key] != $val) {
-                        $countTranslated++;
+                    if ($this->isKeyAFirstPluralForm($key)) {
+                        if ($toCheckNPlurals != -1 && isset($toCheck[$key]) && $toCheck[$key] != $val) {
+                            $countTranslated++;
+                        }
+                        $countAll += $pluralsRatio;
+                    } elseif ($this->isKeyASecondPluralForm($key)) {
+                        // Don't count plural translations if plural forms are not supported
+                        for ($i = 1; $i < $toCheckNPlurals; $i++) {
+                            $keyI = str_replace('[1]', "[$i]", $key);
+                            if (isset($toCheck[$keyI]) && $toCheck[$keyI] != $val) {
+                                $countTranslated++;
+                            }
+                        }
+                        $countAll += $pluralsRatio;
+                    } else {
+                        if (isset($toCheck[$key]) && $toCheck[$key] != $val) {
+                            $countTranslated++;
+                        }
+                        $countAll++;
                     }
-                    
-                    $countAll++;
                 }
             }
             
@@ -128,7 +149,31 @@ class PMF_TransTool
 
         return in_array($key, $keyIgnore);
     }
-    
+
+    /**
+     * Check if the key is a first plural form
+     *
+     * @param string $key Key
+     *
+     * @return boolean
+     */
+    public function isKeyAFirstPluralForm($key)
+    {
+        return (PMF_String::strpos($key, '[0]') !== false);
+    }
+
+    /**
+     * Check if the key is a second plural form
+     *
+     * @param string $key Key
+     *
+     * @return boolean
+     */
+    public function isKeyASecondPluralForm($key)
+    {
+        return (PMF_String::strpos($key, '[1]') !== false);
+    }
+
     /**
      * Check if we can ignore a value while comparing. Actually
      * catching empty and non alphanumeric strings
