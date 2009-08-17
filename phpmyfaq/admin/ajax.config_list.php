@@ -63,9 +63,9 @@ function printInputFieldByType($key, $type)
             switch ($key) {
                 
             	case 'main.language':
-                    $languages = getAvailableLanguages();
+                    $languages = PMF_Language::getAvailableLanguages();
                     if (count($languages) > 0) {
-                        print languageOptions(str_replace(array("language_", ".php"), "", $faqconfig->get('main.language')), false, true);
+                        print PMF_Language::languageOptions(str_replace(array("language_", ".php"), "", $faqconfig->get('main.language')), false, true);
                     } else {
                         print '<option value="language_en.php">English</option>';
                     }

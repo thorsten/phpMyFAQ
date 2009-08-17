@@ -383,7 +383,7 @@ $main_template_vars = array(
     'searchBox'           => $PMF_LANG['msgSearch'],
     'languageBox'         => $PMF_LANG['msgLangaugeSubmit'],
     'writeLangAdress'     => $writeLangAdress,
-    'switchLanguages'     => selectLanguages($LANGCODE, true),
+    'switchLanguages'     => PMF_Language::selectLanguages($LANGCODE, true),
     'userOnline'          => sprintf($plr->getMsg('plmsgUserOnline',$totUsersOnLine), $totUsersOnLine).
                              sprintf($PMF_LANG['msgUsersOnline'],
                              $usersOnLine[0],

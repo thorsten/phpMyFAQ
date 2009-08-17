@@ -261,11 +261,11 @@ if ($maxVisits - $minVisits > 0) {
 $faqPopularity = $currVisits.'/'.(int)$percentage.'%';
 
 $translationForm = '';
-if (count($arrLanguage) < count(getAvailableLanguages())) {
+if (count($arrLanguage) < count(PMF_Language::getAvailableLanguages())) {
     $translationUrl = sprintf(str_replace('%', '%%', PMF_Link::getSystemRelativeUri('index.php')).'index.php?%saction=translate&amp;cat=%s&amp;id=%d&amp;srclang=%s', $sids, $currentCategory, $record_id, $lang);
     $translationForm = '
         <form action="'.$translationUrl.'" method="post" style="display: inline;">
-            <img src="images/translate.gif" alt="'.$PMF_LANG['msgTranslate'].'" title="'.$PMF_LANG['msgTranslate'].'" width="16" height="16" border="0" /> '.$PMF_LANG['msgTranslate'].' '.selectLanguages($LANGCODE, false, $arrLanguage, 'translation').' <input class="submit" type="submit" name="submit" value="'.$PMF_LANG['msgTranslateSubmit'].'" />
+            <img src="images/translate.gif" alt="'.$PMF_LANG['msgTranslate'].'" title="'.$PMF_LANG['msgTranslate'].'" width="16" height="16" border="0" /> '.$PMF_LANG['msgTranslate'].' '.PMF_Language::selectLanguages($LANGCODE, false, $arrLanguage, 'translation').' <input class="submit" type="submit" name="submit" value="'.$PMF_LANG['msgTranslateSubmit'].'" />
         </form>';
 }
 

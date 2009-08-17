@@ -65,7 +65,7 @@ header("Vary: Negotiate,Accept");
         <?php if (isset($auth) && is_null($action)) { ?>
             <form action="index.php<?php print (isset($action) ? '?action=' . $action : ''); ?>" method="post">
             <label for="language"><?php print $PMF_LANG['msgLangaugeSubmit']; ?>: </label>
-            <?php print selectLanguages($LANGCODE, true); ?>
+            <?php print PMF_Language::selectLanguages($LANGCODE, true); ?>
             </form>
         <?php } ?>
         </div>

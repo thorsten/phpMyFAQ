@@ -1370,7 +1370,7 @@ class PMF_Category
         $output       = "";
         $existcatlang = PMF_Utils::languageAvailable($category_id, 'faqcategories');
 
-        foreach (getAvailableLanguages() as $lang => $langname) {
+        foreach (PMF_Language::getAvailableLanguages() as $lang => $langname) {
            if (!in_array(strtolower($lang),$existcatlang)) {
               $output .= "\t<option value=\"".strtolower($lang)."\"";
               if ($lang == $selected_lang) {

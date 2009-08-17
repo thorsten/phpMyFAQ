@@ -277,7 +277,7 @@ if ($permission["editbt"] && !emptyTable(SQLPREFIX."faqcategories")) {
     <legend><?php print $PMF_LANG['ad_entry_record_administration']; ?></legend>
 
     <label class="left" for="language"><?php print $PMF_LANG["ad_entry_locale"]; ?>:</label>
-    <?php print selectLanguages($faqData['lang']); ?><br />
+    <?php print PMF_Language::selectLanguages($faqData['lang']); ?><br />
 
     <label class="left" for="solution_id"><?php print $PMF_LANG['ad_entry_solution_id']; ?>:</label>
     <input name="solution_id" id="solution_id" style="width: 50px; text-align: right;" value="<?php print (isset($faqData['solution_id']) ? $faqData['solution_id'] : $faq->getSolutionId()); ?>" size="5" readonly="readonly" /><br />
