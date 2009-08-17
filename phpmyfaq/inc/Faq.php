@@ -1353,7 +1353,7 @@ class PMF_Faq
     public function getRecordTitle($id)
     {
         if (isset($this->faqRecord['id']) && ($this->faqRecord['id'] == $id)) {
-            return ($encode ? PMF_htmlentities($this->faqRecord['title'], ENT_QUOTES, $this->pmf_lang['metaCharset']) : $this->faqRecord['title']);
+            return $this->faqRecord['title'];
         }
 
         $query = sprintf(
