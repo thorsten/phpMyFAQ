@@ -19,7 +19,7 @@
  * under the License.
  */
 
-$PMF_LANG["metaCharset"] = "iso-8859-2";
+$PMF_LANG["metaCharset"] = "windows-1250";
 $PMF_LANG["metaLanguage"] = "cs";
 $PMF_LANG["language"] = "Czech";
 // ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)

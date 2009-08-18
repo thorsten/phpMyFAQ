@@ -67,7 +67,8 @@ class PMF_String
     {
         if (!self::$instance) {
             $encoding = 'utf8' == strtolower($encoding) ? 'utf-8' : $encoding;
-            if (extension_loaded('mbstring') && function_exists('mb_regex_encoding')) {
+            if (extension_loaded('mbstring') && function_exists('mb_regex_encoding') && 
+                in_array($encoding, mb_list_encodings())) {
                 self::$instance = PMF_String_Mbstring::getInstance($encoding, $language);
             } else if($encoding == 'utf-8' && self::isLangUTF8ToLatinConvertable($language)) {
                 self::$instance = PMF_String_UTF8ToLatinConvertable::getInstance($encoding, $language);
