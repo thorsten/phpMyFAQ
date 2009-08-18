@@ -488,12 +488,12 @@ if ($step == 4) {
         /**
          * Attachments stuff
          */
-        $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.attachmentsStorageType', '0')";
-        $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.enableAttachmentEncryption', 'false')";
-        $query[] = "INSERT INTO ".$sqltblpre."faqconfig VALUES ('main.defaultAttachmentEncKey', '')";
+        $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.attachmentsStorageType', '0')";
+        $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.enableAttachmentEncryption', 'false')";
+        $query[] = "INSERT INTO ".SQLPREFIX."faqconfig VALUES ('main.defaultAttachmentEncKey', '')";
         switch($DB['type']) {
             case 'pgsql':
-                $query[] = "CREATE TABLE " . $sqltblpre . "faqattachment (
+                $query[] = "CREATE TABLE " . SQLPREFIX . "faqattachment (
                     id SERIAL NOT NULL,
                     record_id int4 NOT NULL,
                     record_lang varchar(5) NOT NULL,
@@ -506,7 +506,7 @@ if ($step == 4) {
                 
             case 'mysqli':
             case 'mysql':
-                $query[] = "CREATE TABLE " . $sqltblpre . "faqattachment (
+                $query[] = "CREATE TABLE " . SQLPREFIX . "faqattachment (
                     id int(11) NOT NULL,
                     record_id int(11) NOT NULL,
                     record_lang varchar(5) NOT NULL,
@@ -521,7 +521,7 @@ if ($step == 4) {
                 /**
                  * Just try standard SQL and hope for the best
                  */
-                $query[] = "CREATE TABLE " . $sqltblpre . "faqattachment (
+                $query[] = "CREATE TABLE " . SQLPREFIX . "faqattachment (
                     id int NOT NULL,
                     record_id int NOT NULL,
                     record_lang varchar(5) NOT NULL,
