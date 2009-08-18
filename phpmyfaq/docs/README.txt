@@ -12,6 +12,7 @@ Please report the bug at our site http://bugs.phpmyfaq.de! Thanks a lot!
 Changes since 2.5.1:
 - updated Polish language file (Dariusz Grzesista)
 - updated Chinese language file
+- fixed problem with Czech translation (Anatoliy)
 - many minor bugfixes (Thorsten)
 
 For known issues please take a look at KNOWNBUGS.txt
@@ -21,6 +22,7 @@ CHANGELOG:
 Version 2.5.2 - 2009-09-
 - updated Polish language file (Dariusz Grzesista)
 - updated Chinese language file
+- fixed problem with Czech translation (Anatoliy)
 - many minor bugfixes (Thorsten)
 
 Version 2.5.1 - 2009-08-10

@@ -7,8 +7,11 @@ CHANGED FILES FROM 2.5.1 -> 2.5.2
 ./inc/PMF_Auth/AuthHttp.php
 ./inc/PMF_Auth/AuthLdap.php
 ./inc/Faq.php
+./inc/String.php
+./lang/language_cs.php
 ./install/installer.php
 ./install/update.php
+./lang/language_cs.php
 ./lang/language_pl.php
 ./lang/language_tw.php
 ./template/register.tpl
