@@ -233,6 +233,13 @@ $diggItUrl = sprintf('%s?cat=%s&amp;id=%d&amp;lang=%s&amp;title=%s',
     $lang,
     urlencode($thema));
 
+// Build Facebook URL
+$facebookUrl = sprintf('%s?cat=%s&amp;id=%d&amp;lang=%s',
+    PMF_Link::getSystemUri(),
+    $currentCategory,
+    $record_id,
+    $lang);
+
 // Create commented out HTML for microsummary
 $allVisitsData  = $faqvisits->getAllData();
 $faqPopularity  = '';
@@ -288,6 +295,8 @@ $tpl->processTemplate ("writeContent", array(
     'editThisEntry'                 => $editThisEntry,
     'writeDiggMsgTag'               => 'Digg it!',
     'link_digg'                     => sprintf('http://digg.com/submit?phase=2&amp;url=%s', urlencode($diggItUrl)),
+    'writeFacebookMsgTag'           => 'Share on Facebook',
+    'link_facebook'                 => sprintf('http://www.facebook.com/sharer.php?u=%s', urlencode($facebookUrl)),
     'link_email'                    => sprintf(str_replace('%', '%%', PMF_Link::getSystemRelativeUri('index.php')).'index.php?%saction=send2friend&amp;cat=%d&amp;id=%d&amp;artlang=%s', $sids, $currentCategory, $record_id, $lang),
     'link_pdf'                      => sprintf(str_replace('%', '%%', PMF_Link::getSystemRelativeUri('index.php')).'pdf.php?cat=%d&amp;id=%d&amp;artlang=%s', $currentCategory, $record_id, $lang),
     'writePDFTag'                   => $PMF_LANG['msgPDF'],
