@@ -38,7 +38,7 @@ if ($permission['delcomment']) {
     $category->buildTree();
     $faqcomments = $comment->getAllComments('faq');
 
-    printf("<p><strong>%s</strong></p>\n", $PMF_LANG['ad_comment_faqs']);
+    printf("<h3>%s</h3>\n", $PMF_LANG['ad_comment_faqs']);
     if (count($faqcomments)) {
 ?>
     <form id="commentSelection" name="commentSelection" method="post">
@@ -48,7 +48,6 @@ if ($permission['delcomment']) {
     <thead>
     <tr>
         <th class="listhead" width="20"></th>
-        <th class="listhead" width="100"></th>
         <th class="listhead">&nbsp;</th>
     </tr>
     </thead>
@@ -63,8 +62,17 @@ if ($permission['delcomment']) {
 ?>
     <tr id="comments_<?php print $faqcomment['comment_id']; ?>">
         <td class="list"><input name="faq_comments[<?php print $faqcomment['record_id']; ?>]" value="<?php print $faqcomment['comment_id']; ?>" type="checkbox" /></td>
-        <td class="list"><a href="mailto:<?php print $faqcomment['email']; ?>"><?php print $faqcomment['user']; ?></a></td>
-        <td class="list"><?php print $faqcomment['content']; ?></td>
+        <td class="list">
+            <span style="font-weight: bold;">
+                <a href="mailto:<?php print $faqcomment['email']; ?>"><?php print $faqcomment['user']; ?></a>
+                | <?php print date("Y-m-d", $faqcomment['date']); ?>
+                | <a href="<?php printf("../?action=artikel&cat=%d&id=%d&artlang=%s", 
+                   $faqcomment['category_id'],
+                   $faqcomment['record_id'], 
+                   $LANGCODE); ?>"><?php print $faq->getRecordTitle($faqcomment['record_id']); ?></a>
+            </span><br/>         
+            <?php print PMF_String::htmlspecialchars($faqcomment['content']); ?>
+        </td>
     </tr>
 <?php
         }
@@ -78,14 +86,13 @@ if ($permission['delcomment']) {
 
     $newscomments = $comment->getAllComments('news');
 
-    printf("<p><strong>%s</strong></p>\n", $PMF_LANG['ad_comment_news']);
+    printf("<h3>%s</h3>\n", $PMF_LANG['ad_comment_news']);
     if (count($newscomments)) {
 ?>
     <table class="listrecords">
     <thead>
     <tr>
         <th class="listhead" width="20"></th>
-        <th class="listhead" width="100"></th>
         <th class="listhead">&nbsp;</th>
     </tr>
     </thead>
@@ -100,8 +107,12 @@ if ($permission['delcomment']) {
 ?>
     <tr id="comments_<?php print $newscomment['comment_id']; ?>">
         <td class="list"><input name="news_comments[<?php print $faqcomment['record_id']; ?>]" value="<?php print $faqcomment['comment_id']; ?>" type="checkbox" /></td>
-        <td class="list"><a href="mailto:<?php print $newscomment['email']; ?>"><?php print $newscomment['user']; ?></a></td>
-        <td class="list"><?php print $newscomment['content']; ?></td>
+        <td class="list">
+            <span style="font-weight: bold;">
+                <a href="mailto:<?php print $newscomment['email']; ?>"><?php print $newscomment['user']; ?></a>
+            </span><br/>
+            <?php print PMF_String::htmlspecialchars($newscomment['content']); ?>
+        </td>
     </tr>
 <?php
         }
