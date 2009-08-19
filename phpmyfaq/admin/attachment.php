@@ -35,25 +35,10 @@ PMF_Init::cleanRequest();
 session_name(PMF_COOKIE_NAME_AUTH.trim($faqconfig->get('main.phpMyFAQToken')));
 session_start();
 
-$currentAction = filter_input(INPUT_GET,  'action', FILTER_SANITIZE_STRING);
 $currentSave   = filter_input(INPUT_POST, 'save',   FILTER_SANITIZE_STRING);
-
-if ($currentAction == 'savedcontent' || $currentAction == 'savedlogs') {
-    header('Content-Type: application/octet-stream');
-    switch($currentAction) {
-    case 'savedcontent':
-        header('Content-Disposition: attachment; filename="phpmyfaq-data.'.date("Y-m-d-H-i-s").'.sql');
-        break;
-    case 'savedlogs':
-        header('Content-Disposition: attachment; filename="phpmyfaq-logs.'.date("Y-m-d-H-i-s").'.sql');
-        break;
-    }
-    header('Pragma: no-cache');
- }
-
-
-$pmf      = new PMF_Init();
-$LANGCODE = $pmf->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
+$currentAction = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
+$pmf           = new PMF_Init();
+$LANGCODE      = $pmf->setLanguage($faqconfig->get('main.languageDetection'), $faqconfig->get('main.language'));
 
 require_once PMF_ROOT_DIR . '/lang/language_en.php';
 
@@ -68,9 +53,8 @@ $user = PMF_User_CurrentUser::getFromSession($faqconfig->get('main.ipCheck'));
 if ($user) {
     $auth = true;
 } else {
-    // error
     $error = $PMF_LANG['ad_auth_sess'];
-    $user = null;
+    $user  = null;
     unset($user);
 }
 
@@ -100,12 +84,10 @@ if (is_null($currentAction) || !is_null($currentSave)) {
     <title><?php print PMF_htmlentities($faqconfig->get('main.titleFAQ'), ENT_QUOTES, $PMF_LANG['metaCharset']); ?> - powered by phpMyFAQ</title>
     <meta name="copyright" content="(c) 2001-2009 phpMyFAQ Team" />
     <meta http-equiv="Content-Type" content="text/html; charset=<?php print $PMF_LANG["metaCharset"]; ?>" />
-
     <link rel="shortcut icon" href="../template/<?php echo PMF_Template::getTplSetName(); ?>/favicon.ico" type="image/x-icon" />
-
     <link rel="icon" href="../template/<?php echo PMF_Template::getTplSetName(); ?>/favicon.ico" type="image/x-icon" />
     <style type="text/css">
-    @import url(../template/<?php echo PMF_Template::getTplSetName(); ?>/admin.css);
+    @import url(style/admin.css);
     body { margin: 5px; }
     </style>
     <script type="text/javascript" src="../inc/js/functions.js"></script>
@@ -163,53 +145,6 @@ if (!is_null($currentSave) && $currentSave == true && $auth && $permission["adda
 }
 if (!is_null($currentSave) && $currentSave == true && $auth && !$permission["addatt"]) {
     print $PMF_LANG["err_NotAuth"];
-    die();
-}
-
-if (!is_null($currentAction) && ('savedcontent' == $currentAction) && $auth && $permission['backup']) {
-    // Get all table names
-    $db->getTableNames(SQLPREFIX);
-    $tablenames = '';
-    foreach ($db->tableNames as $table) {
-        $tablenames .= $table . ' ';
-    }
-
-    $text[] = "-- pmf2.6: " . $tablenames;
-    $text[] = "-- DO NOT REMOVE THE FIRST LINE!";
-    $text[] = "-- pmftableprefix: ".SQLPREFIX;
-    $text[] = "-- DO NOT REMOVE THE LINES ABOVE!";
-    $text[] = "-- Otherwise this backup will be broken.";
-    foreach ($db->tableNames as $table) {
-       print implode("\r\n", $text);
-       $text = build_insert("SELECT * FROM ".$table, $table);
-    }
-} elseif (!is_null($currentAction) && ('savedcontent' == $currentAction) && $auth && !$permission['backup']) {
-    print $PMF_LANG['err_NotAuth'];
-    die();
-}
-
-if (!is_null($currentAction) && ('savedlogs' == $currentAction) && $auth && $permission['backup']) {
-    // Get all table names
-    $db->getTableNames(SQLPREFIX);
-    $tablenames = '';
-    foreach ($db->tableNames as $table) {
-        if (SQLPREFIX.'faqadminlog' == $table || SQLPREFIX.'faqsessions' ==  $table) {
-            $tablenames .= $table . ' ';
-        }
-    }
-    $text[] = "-- pmf2.6: " . $tablenames;
-    $text[] = "-- DO NOT REMOVE THE FIRST LINE!";
-    $text[] = "-- pmftableprefix: ".SQLPREFIX;
-    $text[] = "-- DO NOT REMOVE THE LINES ABOVE!";
-    $text[] = "-- Otherwise this backup will be broken.";
-    foreach ($db->tableNames as $table) {
-        if (SQLPREFIX.'faqadminlog' == $table || SQLPREFIX.'faqsessions' ==  $table) {
-            print implode("\r\n", $text);
-            $text = build_insert("SELECT * FROM ".$table, $table);
-        }
-    }
-} elseif (!is_null($currentAction) && ('savedlogs' == $currentAction) && $auth && !$permission['backup']) {
-    print $PMF_LANG['err_NotAuth'];
     die();
 }
 
