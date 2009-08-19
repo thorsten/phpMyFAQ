@@ -16,6 +16,7 @@ Changes since 2.5.x:
 - added support for multi-language news (Thorsten)
 - added user adjustable template sets and styles (Anaotliy)
 - added support plurals in translations (Aurimas Fišeras)
+- added share on Facebook link (Thorsten)
 
 For known issues please take a look at KNOWNBUGS.txt
 
@@ -28,6 +29,7 @@ Version 2.6.0-alpha - 2009-09-
 - added support for multi-language news (Thorsten)
 - added user adjustable template sets and styles (Anaotliy)
 - added support plurals in translations (Aurimas Fišeras)
+- added share on Facebook link (Thorsten)
 
 Version 2.5.1 - 2009-08-
 - minor bugfixes (Thorsten)
