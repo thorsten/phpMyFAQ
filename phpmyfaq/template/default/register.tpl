@@ -10,9 +10,9 @@
 
         <div class="error">
         {regErrors}
-        </div>
-
-        <form method="post" action="index.php?action=register" >
+        </div>    
+    
+        <form method="post" action="index.php?action=register">
         <fieldset><legend>{msgUserData}</legend>
         <div class="required">
             <label for="lastname">{lastname} {name_errorRegistration}</label>
@@ -30,7 +30,8 @@
 
         {captchaFieldset}
 
-        <br />
-        <input type="submit" name="" value="{submitRegister}" />
+        <div style="text-align:center;">
+            <input class="submit" type="submit" name="submit" value="{submitRegister}" />
+        </div>
         </form>
     </div>
