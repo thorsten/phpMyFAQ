@@ -75,13 +75,16 @@ function sendAskedQuestion($username, $usermail, $usercat, $content)
         $oUser = new PMF_User();
         $oUser->getUserById($userId);
 
+        $userEmail      = $oUser->getUserData('email');
+        $mainAdminEmail = $faqconfig->get('main.administrationMail');
+        
         $mail = new PMF_Mail();
         $mail->unsetFrom();
         $mail->setFrom($questionData['ask_usermail'], $questionData['ask_username']);
-        $mail->addTo($faqconfig->get('main.administrationMail'));
+        $mail->addTo($mainAdminEmail);
         // Let the category owner get a copy of the message
-        if ($faqconfig->get('main.administrationMail') != $oUser->getUserData('email')) {
-            $mail->addCc($oUser->getUserData('email'));
+        if ($userEmail && $mainAdminEmail != $userEmail) {
+            $mail->addCc($userEmail);
         }
         $mail->subject = '%sitename%';
         $mail->message = $questionMail;
