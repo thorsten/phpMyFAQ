@@ -203,18 +203,30 @@ if (version_compare($version, '2.6.0-alpha', '<') && !is_writeable($templateDir)
 
 /**************************** STEP 2 OF 4 ***************************/
 if ($step == 2) {
-    $test1 = $test2 = 0;
 
-    if (!@is_writeable(PMF_ROOT_DIR."/inc/data.php")) {
-        print "<p class=\"error\"><strong>Error:</strong> The file ../inc/data.php or the directory ../inc is not writeable. Please correct this!</p>";
+    $checkDatabaseSetupFile = $checkLdapSetupFile = $checkTemplateDirectory = false;
+    
+    // First backup old inc/data.php, then backup new config/bak.database.php and copy inc/data.php 
+    // to config/database.php
+    if (!@copy(PMF_ROOT_DIR . '/inc/data.php', PMF_ROOT_DIR . '/config/bak.database.php') &&
+        !@copy(PMF_ROOT_DIR . '/inc/data.php', PMF_ROOT_DIR . '/config/database.php')) {
+        print "<p class=\"error\"><strong>Error:</strong> The backup file ../config/bak.database.php could " .
+              "not be written. Please correct this!</p>";
     } else {
-        $test1 = 1;
+        $checkDatabaseSetupFile = true;
     }
-    if (!@copy(PMF_ROOT_DIR."/inc/data.php", PMF_ROOT_DIR."/inc/data.bak.php")) {
-        print "<p class=\"error\"><strong>Error:</strong> The backup file ../inc/data.bak.php could not be written. Please correct this!</p>";
-    } else {
-        $test2 = 1;
+    
+    // Now backup and move LDAP setup if available
+    if (file_exists(PMF_ROOT_DIR . '/inc/dataldap.php')) {
+        if (!@copy(PMF_ROOT_DIR . '/inc/dataldap.php', PMF_ROOT_DIR . '/config/bak.ldap.php') &&
+            !@copy(PMF_ROOT_DIR . '/inc/dataldap.php', PMF_ROOT_DIR . '/config/ldap.php')) {
+            print "<p class=\"error\"><strong>Error:</strong> The backup file ../config/bak.ldap.php could " .
+                  "not be written. Please correct this!</p>";
+        } else {
+            $checkLdapSetupFile = true;
+        }
     }
+    
 
     $notWritableFiles = array();
     foreach (new DirectoryIterator($templateDir) as $item) {
@@ -233,11 +245,11 @@ if ($step == 2) {
 	    }
 	    
 	} else {
-		$test3 = 1;
+		$checkTemplateDirectory = true;
 	}
     
     // is everything is okay?
-    if ($test1 == 1 && $test2  == 1 && $test3 == 1) {
+    if ($checkDatabaseSetupFile && $checkTemplateDirectory) {
 ?>
 <form action="update.php?step=3" method="post">
 <input type="hidden" name="version" value="<?php print $version; ?>" />
