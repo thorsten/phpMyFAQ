@@ -527,7 +527,7 @@ foreach ($permLevels as $level => $desc) {
 <?php
     HTMLFooter();
 } else {
-
+    
     // Ckeck table prefix
     $sqltblpre = PMF_Filter::filterInput(INPUT_POST, 'sqltblpre', FILTER_SANITIZE_STRING, '');
     if (!defined('SQLPREFIX')) {
@@ -665,7 +665,7 @@ foreach ($permLevels as $level => $desc) {
         die();
     }
     
-    if (PMF_String::strlen($password) <= 5 || PMF_String::strlen($password_retyped) <= 5) {
+    if (strlen($password) <= 5 || strlen($password_retyped) <= 5) {
         print "<p class=\"error\"><strong>Error:</strong> Your password and retyped password are too short. Please set your password and your retyped password with a minimum of 6 characters.</p>\n";
         HTMLFooter();
         die();
